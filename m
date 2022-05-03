@@ -2,134 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE317518516
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 15:06:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71B8E518517
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 15:06:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235899AbiECNJt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 09:09:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49858 "EHLO
+        id S235946AbiECNJ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 09:09:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235903AbiECNIp (ORCPT
+        with ESMTP id S235286AbiECNJh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 09:08:45 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FC4739168
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 06:05:06 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id g6so33357058ejw.1
-        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 06:05:06 -0700 (PDT)
+        Tue, 3 May 2022 09:09:37 -0400
+Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F170EDF08
+        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 06:06:00 -0700 (PDT)
+Received: by mail-yb1-xb34.google.com with SMTP id y2so30914408ybi.7
+        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 06:06:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=YVZd3VX5yDYHZFsgN5vgd0V6QUlWGwER/REYExEMMg0=;
-        b=csNpYjc4eRvrfqmATKfLTAmBvnvnCMLWE/GsmHyi6IhYJC98WztvFdjZffp5n3FDS2
-         7EckGJqAWC/FlT/DzCFuRjoog4OHIRo4npSQUqjgopM9lf9Atxn+T9s8kJttJxf3tmif
-         qkZJhdGaMA2f/H2eFtgin8YaIY97Sc7RR04ek4Q7m6NCTsDrDBYNnRfEp8Z0PkLMJKT1
-         83X5i7OeJSSZ/qmcYY/xdH83H19Z32A/N+U0w0RwLWMVCCYbG0IfqOJTSn4xsInkEehg
-         WzX9xycipOxRnlfkXk8vEIXkTPrKWO7xDk09UosYpR8K4DhEJgNCRh5YAM3WyKjwITH3
-         +zkw==
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=QqOKqosLnTIysETfUoo3k9YZKo+wVelCjriYi+CdH/w=;
+        b=OKL0gLF8Dq+3houx4Ob/d9UDHyjdgeQRQ+uroYP82+WKwhgLZhwA5R456tDw3jtena
+         7JKJEWd9r1Jzv6u1B3b+q9InqxflX/XATipqT4KriGM3inL1ZdDwOL/6XlrLIj9jxKtf
+         ONwcBPRZ8jLAblwm/reG1EcEYq9Ne/DeRZx2pTz0fVfIdgQ7n41+uxBh5yhLkC9IknAU
+         /Ia3fCIcMKbNnLG3xci7K4shhCs+S0xBM+sZ/3wmnmmXHAmuOPb4H0n32F1+zbasZoZN
+         gmH1xJkfQsp0XekryVdWgnUYVgOpVgpdzYlH5EkR/FZ8M4NM/K+SRiPqCfCeydeWGsNy
+         wA2Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=YVZd3VX5yDYHZFsgN5vgd0V6QUlWGwER/REYExEMMg0=;
-        b=mFqemvjnHALbk2VxAtrEGO/e+Gj3VhUBRQtPcxGiE5RcyTmwIHWT9WdzslCGoCQAuw
-         Msxx9DxqySge+dDaqNwCeAaYpUpdIr2D9eBku+w6NXo+VVR99q9Z0Us7YqxvVaBmAzHg
-         6/8OKs98anCLx/NIQcX9eFvbMj63nBCQ2i5v2OjkP0HazXQjDu8DqmSDl3xa5dbzsYf6
-         d+WMSj19+VNhyfUn0uoppgLiILaKg1sNBmC9XFJXBevdFeR0ydzQeSdXK1MmL7Vx8UZP
-         qvi/jw/vxLiSFyGW5z4/IesVffir0yC5i7U91OktxoChPMBV0DifSOGgo/GsjUyeXCn0
-         u3Qw==
-X-Gm-Message-State: AOAM532Mom2xs2EDcjJV7zD7gMr7cRnQs6cyAuiBDRi6pmUWleoILcHU
-        V/rRtEBNEddI7F3osWCWcq452A==
-X-Google-Smtp-Source: ABdhPJxFX2C0kYEgEZ+7lW5XsDBQeItTn6bDarTIf1+s0VuH4ATzexJD24XtSi3M+wHrQMVybYQLZQ==
-X-Received: by 2002:a17:907:d22:b0:6f4:8766:2042 with SMTP id gn34-20020a1709070d2200b006f487662042mr3434137ejc.259.1651583105046;
-        Tue, 03 May 2022 06:05:05 -0700 (PDT)
-Received: from prec5560.. (freifunk-gw.bsa1-cpe1.syseleven.net. [176.74.57.43])
-        by smtp.gmail.com with ESMTPSA id y13-20020aa7cccd000000b0042617ba639asm7868782edt.36.2022.05.03.06.05.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 May 2022 06:05:04 -0700 (PDT)
-From:   Robert Foss <robert.foss@linaro.org>
-To:     bjorn.andersson@linaro.org, agross@kernel.org,
-        mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
-        krzk+dt@kernel.org, jonathan@marek.ca, tdas@codeaurora.org,
-        anischal@codeaurora.org, linux-arm-msm@vger.kernel.org,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Robert Foss <robert.foss@linaro.org>
-Subject: [PATCH v2 8/8] arm64: dts: qcom: sm8350: Add DISPCC node
-Date:   Tue,  3 May 2022 15:04:48 +0200
-Message-Id: <20220503130448.520470-8-robert.foss@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220503130448.520470-1-robert.foss@linaro.org>
-References: <20220503130448.520470-1-robert.foss@linaro.org>
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=QqOKqosLnTIysETfUoo3k9YZKo+wVelCjriYi+CdH/w=;
+        b=cvU4AVxziqQvql0LmjWy7G95OPJGRxcoKuWqboSe5vwKu5tBYrnhi5ptChvOqC0N31
+         0mYGhUL/sbyusZXMDJRxpo+siwFFpgpRYPTsxyGXsucQG/QJqgmT3K5IjVOSgenAlGT3
+         rgyMdsSzpAgfDM01uFJ3HUi2WU5D3wppr0ix9bn1mFoMMI2pJCF4TlqZAM+Q5tbmqZ/O
+         ANX/kTz3PAQS54i35l7u5msb58oQLK4Y9pJepiYRRFcLBLrU6xAYdiOybd0aE+IgTBRu
+         H7FgH/fNUqcqyg0e9s6wrxzlkdRCu16uwiMrcGWZttavBjzsjeqpeF1jbH1Ef3vJl1bp
+         tAaQ==
+X-Gm-Message-State: AOAM530A+Cx0atinyU8Cj6RdF8tQNxVj8IIxCZl1CfwvIRJxEfIFZqKR
+        4iNB+F+1nhFvo6xh7TRkw3jqo9VPWwcUKM6svgM=
+X-Google-Smtp-Source: ABdhPJwXJ/TFqT7IR3LbncUDDuwDnajWBXr0ai10w86tu9525KgbAMu3NWJyGQpaBOvnHKh6gprm8uSCA2bXeyRVqnc=
+X-Received: by 2002:a5b:f8d:0:b0:628:620c:a45f with SMTP id
+ q13-20020a5b0f8d000000b00628620ca45fmr12791829ybh.17.1651583159760; Tue, 03
+ May 2022 06:05:59 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+Received: by 2002:a05:7010:5827:b0:28b:3af5:e708 with HTTP; Tue, 3 May 2022
+ 06:05:59 -0700 (PDT)
+Reply-To: rgicompanyltd1@gmail.com
+From:   Synvoy Company <synvoyvaitservices@gmail.com>
+Date:   Tue, 3 May 2022 21:05:59 +0800
+Message-ID: <CALiB83eo0xUOK2UCkUXnhCZeC1sb8riCYoLaD3s5RrW7zEo1rw@mail.gmail.com>
+Subject: Greetings
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=7.2 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNDISC_FREEM,UNDISC_MONEY autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:b34 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [rgicompanyltd1[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [synvoyvaitservices[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  3.5 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+        *  1.9 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+X-Spam-Level: *******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the dispcc clock-controller DT node for sm8350.
-
-Signed-off-by: Robert Foss <robert.foss@linaro.org>
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
----
- arch/arm64/boot/dts/qcom/sm8350.dtsi | 27 +++++++++++++++++++++++++++
- 1 file changed, 27 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/qcom/sm8350.dtsi b/arch/arm64/boot/dts/qcom/sm8350.dtsi
-index 52428b6df64e..94c2519e9f48 100644
---- a/arch/arm64/boot/dts/qcom/sm8350.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm8350.dtsi
-@@ -3,7 +3,9 @@
-  * Copyright (c) 2020, Linaro Limited
-  */
- 
-+#include <dt-bindings/interconnect/qcom,sm8350.h>
- #include <dt-bindings/interrupt-controller/arm-gic.h>
-+#include <dt-bindings/clock/qcom,dispcc-sm8350.h>
- #include <dt-bindings/clock/qcom,gcc-sm8350.h>
- #include <dt-bindings/clock/qcom,rpmh.h>
- #include <dt-bindings/dma/qcom-gpi.h>
-@@ -2525,6 +2527,31 @@ usb_2_dwc3: usb@a800000 {
- 			};
- 		};
- 
-+		dispcc: clock-controller@af00000 {
-+			compatible = "qcom,sm8350-dispcc";
-+			reg = <0 0x0af00000 0 0x10000>;
-+			clocks = <&rpmhcc RPMH_CXO_CLK>,
-+				 <0>,
-+				 <0>,
-+				 <0>,
-+				 <0>,
-+				 <0>,
-+				 <0>;
-+			clock-names = "bi_tcxo",
-+				      "dsi0_phy_pll_out_byteclk",
-+				      "dsi0_phy_pll_out_dsiclk",
-+				      "dsi1_phy_pll_out_byteclk",
-+				      "dsi1_phy_pll_out_dsiclk",
-+				      "dp_phy_pll_link_clk",
-+				      "dp_phy_pll_vco_div_clk";
-+			#clock-cells = <1>;
-+			#reset-cells = <1>;
-+			#power-domain-cells = <1>;
-+
-+			power-domains = <&rpmhpd SM8350_MMCX>;
-+			power-domain-names = "mmcx";
-+		};
-+
- 		adsp: remoteproc@17300000 {
- 			compatible = "qcom,sm8350-adsp-pas";
- 			reg = <0 0x17300000 0 0x100>;
 -- 
-2.34.1
+From: RGI Company Ltd
+Address, Netherlands
+Call:+3197005033311
+03/05/2022
 
+Attention:
+
+RGI Genealogical Investigators specializes in probate research to locate
+missing funds, inherited funds around the world. We can also help you find
+wills, obtain copies of certificates.
+
+Recently a woman from the Rothschild family, one of the famous families in
+Europe contacted our company that we should contact a business minded
+person who is capable of investing her funds in a lucrative business.
+
+Our service fee is 2% of the funds and we will be paid after you receive
+the funds. The funds transfer process should take just a matter of days as
+we have the mechanism and expertise to get this done quickly. Please if you
+find this letter offensive ignore it and accept our apologies
+
+Warmest Regards,
+
+Dr. J.T Woods, CEO
+RGI Genealogical

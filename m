@@ -2,141 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAC97518127
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 11:38:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E152518128
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 11:38:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233504AbiECJlg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 05:41:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51786 "EHLO
+        id S233500AbiECJlY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 05:41:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233520AbiECJlb (ORCPT
+        with ESMTP id S233475AbiECJlS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 05:41:31 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 578A536E30
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 02:37:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651570677; x=1683106677;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=JqAREk8vnvLu8bKhdmebDQaF1iMe+9wlfQ11DH7NkhU=;
-  b=QAL2Ln5f4wKTkmwedtvaDbf+SSZqPP/zVMYy5W0B51XS9tiFu7ReKj/l
-   Wm2qx0tWXdBJW/vB7fjjFZIlw2kM+Z9cxjmHc+F+e+dUqkeqN++vz9qBS
-   E53P20vgkZ9pD7DjeLMIfDqhr+yBOeVl21ngocNYS6kVSqbqbBo6SMEOe
-   oc3Y1lyXEn/lIqxNpLM/N+cz4W08D+pwhi3+Hm0HF0najbYL18cMR1cRp
-   qXYkhL/Hre9duPfXZqLb6s05Ah6o3SU+TKKoqekG4rbykwdbv8h7qCzjo
-   Mm4rbHQjvKAr62d05aAh0wikysFfAegT/T+ebMC/EK29ZEDpxripzn62e
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10335"; a="353878972"
-X-IronPort-AV: E=Sophos;i="5.91,194,1647327600"; 
-   d="scan'208";a="353878972"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2022 02:36:59 -0700
-X-IronPort-AV: E=Sophos;i="5.91,194,1647327600"; 
-   d="scan'208";a="562145028"
-Received: from doshaugh-mobl.ger.corp.intel.com (HELO [10.213.236.211]) ([10.213.236.211])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2022 02:36:57 -0700
-Message-ID: <4e3525db-5aa4-fec8-a496-749e08b5f257@linux.intel.com>
-Date:   Tue, 3 May 2022 10:36:55 +0100
+        Tue, 3 May 2022 05:41:18 -0400
+Received: from mail-qt1-f173.google.com (mail-qt1-f173.google.com [209.85.160.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD06032052;
+        Tue,  3 May 2022 02:37:46 -0700 (PDT)
+Received: by mail-qt1-f173.google.com with SMTP id h3so8318979qtn.4;
+        Tue, 03 May 2022 02:37:46 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=mJS2PbQaE+cZgUG4vlX1mlz4wtA8LAYNn+L6mZu2IK4=;
+        b=IkdKWMoXT0EFYliFo4gJNdonVyaOubKyISyZJifOlDW0LHPJ9PGrxDiFT4egHkKXBz
+         fz4y2Y7NBWp6wDFkjYurjzfq/vp1D2rrkSlcQX45N1G2sxvfVVzFzRxfNKxlqe3vQgCL
+         dqe/7wXUk1W6OZTxzmgNlKWRsm+qsHKaeT4CDqRDMg5teI8Mw7sCcL14pEl+saOF0zFo
+         P/7ymh31h++4Y5xKiNs2/vTmM7q/6KqXJoe5lnY7CVyy2z521XP/vTqTNoEppfuhdBAh
+         H73BjeSLMT6vToymZdDnR+sjz0+UaOgF1BCNT6h2wf3rodxKUZ/Wbfo6p/TnT+OK8zw/
+         RqPA==
+X-Gm-Message-State: AOAM5309Ahcjzkla0KuP2y6O0C0ctbFw4hDD22KtcvjRejlfT6dC8q6W
+        UEKDeG4kD5KrlLsW/OE34sc/Rm3VqypazA==
+X-Google-Smtp-Source: ABdhPJzrZppVyLXFTNKY5hW5T0HmM/K6t//7bK71b2VkBzGFbwCPBlpt0D1+I/SvQ4jZiiNP8u4n7w==
+X-Received: by 2002:a05:622a:20a:b0:2f3:aa7d:626d with SMTP id b10-20020a05622a020a00b002f3aa7d626dmr5204636qtx.270.1651570665618;
+        Tue, 03 May 2022 02:37:45 -0700 (PDT)
+Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com. [209.85.128.173])
+        by smtp.gmail.com with ESMTPSA id j6-20020a05620a146600b0069fc13ce217sm5511059qkl.72.2022.05.03.02.37.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 03 May 2022 02:37:44 -0700 (PDT)
+Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-2f7d19cac0bso173261257b3.13;
+        Tue, 03 May 2022 02:37:44 -0700 (PDT)
+X-Received: by 2002:a81:547:0:b0:2f8:6e8:19d7 with SMTP id 68-20020a810547000000b002f806e819d7mr14558872ywf.383.1651570664082;
+ Tue, 03 May 2022 02:37:44 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [Intel-gfx] [PATCH v2] drm/i915: Fix race in
- __i915_vma_remove_closed
-Content-Language: en-US
-To:     Karol Herbst <kherbst@redhat.com>, linux-kernel@vger.kernel.org
-Cc:     intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        Chris Wilson <chris@chris-wilson.co.uk>
-References: <20220420095720.3331609-1-kherbst@redhat.com>
-From:   Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
-Organization: Intel Corporation UK Plc
-In-Reply-To: <20220420095720.3331609-1-kherbst@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,
-        NICE_REPLY_A,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220429134143.628428-1-herve.codina@bootlin.com>
+ <20220429134143.628428-4-herve.codina@bootlin.com> <29ba3db6-e5c7-06d3-29d9-918ee5b34555@linaro.org>
+ <CAMuHMdWN_ni_V+e3QipWH2qKXeNPkEcVpHpb5iBYw1YQSAnCDA@mail.gmail.com>
+ <YnA0id1rXlNHNz+N@robh.at.kernel.org> <CAMuHMdWktaRAw8Y6TR93_rH8v4mPR2yt3wGqeXeTA2p_Dh--wA@mail.gmail.com>
+ <5a89e9bf-1004-500a-75e1-995732629937@linaro.org>
+In-Reply-To: <5a89e9bf-1004-500a-75e1-995732629937@linaro.org>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 3 May 2022 11:37:31 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdVv-qCTyMQzr8ALCP-UmojZe9=NOrExPieJNV2300yzbQ@mail.gmail.com>
+Message-ID: <CAMuHMdVv-qCTyMQzr8ALCP-UmojZe9=NOrExPieJNV2300yzbQ@mail.gmail.com>
+Subject: Re: [PATCH v5 2/6] dt-bindings: PCI: renesas,pci-rcar-gen2: Add
+ device tree support for r9a06g032
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Rob Herring <robh@kernel.org>,
+        Herve Codina <herve.codina@bootlin.com>,
+        Marek Vasut <marek.vasut+renesas@gmail.com>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
+        linux-pci <linux-pci@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Clement Leger <clement.leger@bootlin.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Krzysztof,
 
-On 20/04/2022 10:57, Karol Herbst wrote:
-> i915_vma_reopen checked if the vma is closed before without taking the
-> lock. So multiple threads could attempt removing the vma.
-> 
-> Instead the lock needs to be taken before actually checking.
-> 
-> v2: move struct declaration
+On Tue, May 3, 2022 at 11:29 AM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+> On 03/05/2022 08:51, Geert Uytterhoeven wrote:
+> >>>> This should not be a reason why a property is or is not required. Either
+> >>>> this is required for device operation or not. If it is required, should
+> >>>> be in the bindings. Otherwise what are you going to do in the future?
+> >>>> Add a required property breaking the ABI?
+> >>>
+> >>> The problem is that there are no bindings for the reset controller
+> >>> (actually the reset controller feature of the system-controller) yet.
+> >>> Yeah, we can just add #reset-cells = <1> to the system-controller
+> >>> device node, but we cannot add the actual resets properties to the
+> >>> consumers, until the actual cell values are defined.
+> >>
+> >> Sounds like you should implement providers first. Or just live with the
+> >> warning as a reminder to implement the reset provider?
+> >
+> > I'd go for the latter. The upstream r9a06g032.dtsi is still under active
+> > development. Until very recently, the only device supported was the
+> > serial console.
+>
+> For clocks we use in such cases fixed-clock placeholders or empty
+> phandles. Maybe something like that would work here as well?
 
-Fix looks correct to me. In which case it seems breakage was introduced 
-with:
+I don't think that works for resets.
+Besides, the driver doesn't need or use the reset anyway.
 
-Fixes: 155ab8836caa ("drm/i915: Move object close under its own lock")
-Cc: Matthew Auld <matthew.auld@intel.com>
-Cc: <stable@vger.kernel.org> # v5.3+
+Gr{oetje,eeting}s,
 
-AFAICT at least. I will add these tags and pull it in unless someone 
-shouts a correction.
+                        Geert
 
-Regards,
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-Tvrtko
-
-> Cc: Chris Wilson <chris@chris-wilson.co.uk>
-> Cc: intel-gfx@lists.freedesktop.org
-> Cc: dri-devel@lists.freedesktop.org
-> Closes: https://gitlab.freedesktop.org/drm/intel/-/issues/5732
-> Signed-off-by: Karol Herbst <kherbst@redhat.com>
-> ---
->   drivers/gpu/drm/i915/i915_vma.c | 11 +++++++----
->   1 file changed, 7 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/i915/i915_vma.c b/drivers/gpu/drm/i915/i915_vma.c
-> index 162e8d83691b..2efdad2b43fa 100644
-> --- a/drivers/gpu/drm/i915/i915_vma.c
-> +++ b/drivers/gpu/drm/i915/i915_vma.c
-> @@ -1615,17 +1615,17 @@ void i915_vma_close(struct i915_vma *vma)
->   
->   static void __i915_vma_remove_closed(struct i915_vma *vma)
->   {
-> -	struct intel_gt *gt = vma->vm->gt;
-> -
-> -	spin_lock_irq(&gt->closed_lock);
->   	list_del_init(&vma->closed_link);
-> -	spin_unlock_irq(&gt->closed_lock);
->   }
->   
->   void i915_vma_reopen(struct i915_vma *vma)
->   {
-> +	struct intel_gt *gt = vma->vm->gt;
-> +
-> +	spin_lock_irq(&gt->closed_lock);
->   	if (i915_vma_is_closed(vma))
->   		__i915_vma_remove_closed(vma);
-> +	spin_unlock_irq(&gt->closed_lock);
->   }
->   
->   static void force_unbind(struct i915_vma *vma)
-> @@ -1641,6 +1641,7 @@ static void force_unbind(struct i915_vma *vma)
->   static void release_references(struct i915_vma *vma, bool vm_ddestroy)
->   {
->   	struct drm_i915_gem_object *obj = vma->obj;
-> +	struct intel_gt *gt = vma->vm->gt;
->   
->   	GEM_BUG_ON(i915_vma_is_active(vma));
->   
-> @@ -1651,7 +1652,9 @@ static void release_references(struct i915_vma *vma, bool vm_ddestroy)
->   
->   	spin_unlock(&obj->vma.lock);
->   
-> +	spin_lock_irq(&gt->closed_lock);
->   	__i915_vma_remove_closed(vma);
-> +	spin_unlock_irq(&gt->closed_lock);
->   
->   	if (vm_ddestroy)
->   		i915_vm_resv_put(vma->vm);
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

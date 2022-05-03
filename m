@@ -2,102 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1BF5517FBE
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 10:28:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87BD5517FC1
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 10:30:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232808AbiECIc2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 04:32:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44842 "EHLO
+        id S232842AbiECIdb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 04:33:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232814AbiECIcY (ORCPT
+        with ESMTP id S231897AbiECIdZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 04:32:24 -0400
-Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49F8232065
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 01:28:52 -0700 (PDT)
-Received: by mail-yb1-xb2d.google.com with SMTP id i38so29851976ybj.13
-        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 01:28:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=imkzOOm11fZfVhhu7YTad+xkt2EA3V5dXbkEnDE5CzQ=;
-        b=OB6FeGakm9xfiRTee7LE/PcQtegVqt0O+d2RTupQPpCUuuqa66t7cWtvMJxdeirwKU
-         pp6QLJ9U8UYvOZYqzLiImEDweSXTPMDtF61oRV58b0fKRyfcMWZFAlVcmuIjjqqJCnZg
-         dohAfdMN2u3Ml9xW6qqJ58OeD8O1G5TP+FGqEyHKmHUEbG0JO9ImzDbmhh2NQi4KYf1K
-         F0sxP+yLe6vHwsoDMbt9rAdl7f7Z/pf4ADIWytFr7iETicZnUXyMBaDw0Rab0mIvZG7G
-         hFImabd1scnfPrAzQgmzJb1Wg+Rfo3FKMylEpkKU3oZ3moMtx92SHhoAWi1BWHIJHswL
-         2Kqg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=imkzOOm11fZfVhhu7YTad+xkt2EA3V5dXbkEnDE5CzQ=;
-        b=YRl1Gqcs/ChyfIBR3TpvD6C7IxnKap0gTG4aZJ3DmpIFGDgBTrmH+Necm4ac4I1dDf
-         Lgi9ftSCJPpBXiTeW+iA+NjZDFGi5yTUL9WcslSuS7mX/MGtZiuuTxs27dB74iZUKMI+
-         93eAJOFOwVhe1p8kgnVPasBKBQ6KPvYcWRU4QryzgU5mbWTKhqnmhv0uV/+0Ptx8zLy9
-         8B+Tan7IRIQSKfXMrzIDvovTLmkVCJA+t1B9it5IES5Uk4De+OWxwDS9DaCffZ0w9edT
-         yG0vJLz4PfhZWyKXml7bwsr7yARJOkhUYX4JWZg+d18SzEPrAaJ6K9X5Eq+4tltuP/EJ
-         fTxg==
-X-Gm-Message-State: AOAM533bMK5Qz8Vsi2DNibINpNLj/LlLBm7IvI+vI6+X7sZtu5abJ/4v
-        B+/zd0xu251FCOQBrPcmW74iH7l3wZMhDwEFuzs=
-X-Google-Smtp-Source: ABdhPJzfuFmTkrOU7h0ujfk9tMY1oJ4PICZa4P5mIxjjskNbBdXJgMlkAhLuOu5oz03Fl50Z0tBC+aBOaxMr68f51Y0=
-X-Received: by 2002:a25:cfc5:0:b0:647:39d4:49f5 with SMTP id
- f188-20020a25cfc5000000b0064739d449f5mr13034064ybg.595.1651566531457; Tue, 03
- May 2022 01:28:51 -0700 (PDT)
+        Tue, 3 May 2022 04:33:25 -0400
+Received: from gardel.0pointer.net (gardel.0pointer.net [IPv6:2a01:238:43ed:c300:10c3:bcf3:3266:da74])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A37E532058;
+        Tue,  3 May 2022 01:29:52 -0700 (PDT)
+Received: from gardel-login.0pointer.net (gardel-mail [85.214.157.71])
+        by gardel.0pointer.net (Postfix) with ESMTP id 74F43E804AA;
+        Tue,  3 May 2022 10:29:50 +0200 (CEST)
+Received: by gardel-login.0pointer.net (Postfix, from userid 1000)
+        id 8B74A160011; Tue,  3 May 2022 10:29:49 +0200 (CEST)
+Date:   Tue, 3 May 2022 10:29:49 +0200
+From:   Lennart Poettering <mzxreary@0pointer.de>
+To:     Alexander Graf <graf@amazon.com>
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Theodore Ts'o <tytso@mit.edu>,
+        Colm MacCarthaigh <colmmacc@amazon.com>,
+        Torben Hansen <htorben@amazon.co.uk>,
+        Jann Horn <jannh@google.com>
+Subject: Re: [PATCH 2/2] random: add fork_event sysctl for polling VM forks
+Message-ID: <YnDn/d6iB0aUZkWJ@gardel-login>
+References: <20220502140602.130373-1-Jason@zx2c4.com>
+ <20220502140602.130373-2-Jason@zx2c4.com>
+ <Ym/7UlgQ5VjjC76P@gardel-login>
+ <YnAC00VtU8MGb7vO@zx2c4.com>
+ <YnAMBzhcJhGR5XOK@gardel-login>
+ <7a1cfd1c-9f0e-f134-e544-83ee6d3cd9c9@amazon.com>
 MIME-Version: 1.0
-Received: by 2002:a05:7110:7019:b0:173:e2d7:681d with HTTP; Tue, 3 May 2022
- 01:28:51 -0700 (PDT)
-Reply-To: katelordloancompany90@gmail.com
-From:   kate lord <katelordloancompany90@gmail.com>
-Date:   Tue, 3 May 2022 01:28:51 -0700
-Message-ID: <CAG1K+31AsNfLRgFqGedAX+ZaqXx4W57ftY-0LVB6XT8zZZ8NWA@mail.gmail.com>
-Subject: =?UTF-8?B?0J7RhNC10YDRgtCwINC30LAg0LfQsNC10Lw=?=
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <7a1cfd1c-9f0e-f134-e544-83ee6d3cd9c9@amazon.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-0JfQtNGA0LDQstC10LnRgtC1Lg0KDQrQotC+0LLQsCDQuNC80LAg0LfQsCDRhtC10Lsg0LTQsCDQ
-uNC90YTQvtGA0LzQuNGA0LAg0YjQuNGA0L7QutCw0YLQsCDQvtCx0YnQtdGB0YLQstC10L3QvtGB
-0YIsINGH0LUgTXJzLkthdGUgTG9yZCwNCtGH0LDRgdGC0LXQvSDQt9Cw0LXQvCDQvtGCINC60YDQ
-tdC00LjRgtC+0YAsINC+0YLQstC+0YDQuCDQuNC60L7QvdC+0LzQuNGH0LXRgdC60LAg0LLRitC3
-0LzQvtC20L3QvtGB0YIg0LfQsCDRgtC10LfQuCwg0LrQvtC40YLQvg0K0YHQtSDQvdGD0LbQtNCw
-0Y/RgiDQvtGCINGE0LjQvdCw0L3RgdC+0LLQsCDQv9C+0LzQvtGJLiDQndC40LUg0L7RgtC/0YPR
-gdC60LDQvNC1INC30LDQtdC80Lgg0L3QsCDRhNC40LfQuNGH0LXRgdC60Lgg0LvQuNGG0LAsDQrR
-hNC40YDQvNC4INC4INGE0LjRgNC80Lgg0L/RgNC4INGP0YHQvdC4INC4INGA0LDQt9Cx0LjRgNCw
-0LXQvNC4INGD0YHQu9C+0LLQuNGPINGBINC70LjRhdCy0LAg0L7RgiDRgdCw0LzQviAzJS4NCtGB
-0LLRitGA0LbQtdGC0LUg0YHQtSDRgSDQvdCw0YEg0LTQvdC10YEg0YfRgNC10Lcg0LjQvNC10LnQ
-uzogKCBrYXRlbG9yZGxvYW5jb21wYW55OTBAZ21haWwuY29tKSwNCtC30LAg0LTQsCDQvNC+0LbQ
-tdC8INC00LAg0LLQuCDQv9GA0LXQtNC+0YHRgtCw0LLQuNC8INC90LDRiNC40YLQtSDRg9GB0LvQ
-vtCy0LjRjyDQt9CwINC30LDQtdC8Lg0KDQrQmNCd0KTQntCg0JzQkNCm0JjQryDQutGK0Lwg0LrR
-gNC10LTQuNGC0L7Qv9C+0LvRg9GH0LDRgtC10LvRjw0KDQoxKSDQmNC80LU6IC4uLi4uLi4uLi4u
-Li4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLiAuLi4uDQoNCjIpINCU0YrRgNC2
-0LDQstCwOiAuLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uIC4N
-Cg0KMykg0JDQtNGA0LXRgTogLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4u
-Li4uLi4uLiAuDQoNCjQpINCf0L7QuzogLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4u
-Li4uLi4uLi4uLi4uLi4uIC4uLi4uDQoNCjUpINCh0LXQvNC10LnQvdC+INC/0L7Qu9C+0LbQtdC9
-0LjQtTogLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLg0KDQo2KSDQn9GA
-0L7RhNC10YHQuNGPOiAuLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4u
-Li4uLi4uDQoNCjcpINCi0LXQu9C10YTQvtC9OiAuLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4u
-Li4uLi4uLi4uLi4uLi4uLi4uLi4NCg0KOCkg0JrQsNC90LTQuNC00LDRgtGB0YLQstCw0LvQuCDQ
-u9C4INGB0YLQtSDQv9GA0LXQtNC4IC4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLg0K
-DQo5KSDQnNC10YHQtdGH0LXQvSDQtNC+0YXQvtC0OiAuLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4u
-Li4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uDQoNCjEwKSDQndC10L7QsdGF0L7QtNC40LzQsCDRgdGD
-0LzQsCDQvdCwINC30LDQtdC80LA6IC4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4u
-DQoNCjExKSDQn9GA0L7QtNGK0LvQttC40YLQtdC70L3QvtGB0YIg0L3QsCDQt9Cw0LXQvNCwOiAu
-Li4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uDQoNCjEyKSDQptC1
-0Lsg0L3QsCDQt9Cw0LXQvNCwOiAuLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4u
-Li4uLi4uLi4uLi4NCg0KMTMpINCg0LXQu9C40LPQuNGPOiAuLi4uLi4uLi4uLi4uLi4uLi4uLi4u
-Li4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uIC4NCg0K0JfQsCDQstGA0YrQt9C60LA6ICgga2F0ZWxv
-cmRsb2FuY29tcGFueTkwQGdtYWlsLmNvbSApIHdoYXRzYXBwOyArMjM0NzAzMjkwOTcyOA0KDQoN
-CtCR0LvQsNCz0L7QtNCw0YDRjywNCtCTLdC20LAg0JrQtdC50YIg0JvQvtGA0LQNCg==
+On Mo, 02.05.22 19:59, Alexander Graf (graf@amazon.com) wrote:
+
+> Lennart, looking at the current sysctl proposal, systemd could poll() on the
+> fork file. It would then be able to generate a /run/fork-id file which it
+> can use for the flow above, right?
+
+I am not to keen on making sytemd such a proxy. Sounds like something
+the kernel could do on its own, better and resulting in an ultimately
+simpler system...
+
+If systemd its the proxy this adds in extra raciness. i.e. in a ideal
+world, if we have some form of notification fd, then it would be great
+if that fd is guaranteed to have POLLIN set and its contents updated
+the instant the clone happened. But if we proxy this through
+userspace, there's necessarily a latency involved that it it takes
+userspace to catch up and effect the POLLIN and updated contents
+towards its client apps.
+
+I understand the underlying VM hypervisor APIs currently are designed
+to always imply some notification latency. Which sucks, but I think we
+should be very careful with replicating this design mistake with any
+userspace APIs we add.
+
+i.e. I am pretty sure that even if the underlying VM hypervisor
+primitive isn't as good as we wanted, the Linux kernel→userspace API
+should be built so that if one day a better VM hypervisor interface
+exists it can be plugged behind it without such limitations.
+
+> Overall, it sounds to me like the sysctl poll based kernel interface in this
+> patch in combination with systemd inhibitors gives us an answer to most of
+> the flows above.
+
+As mentioned earlier, I am not convinced sysctl is the right place for
+this. sysctls are understood by most people as being the place for
+tweaking kernel settings. This is not a kernel setting, but a
+notification concept, and the way Jason defined it there's nothing to
+read nor write, which strongly suggests to move it elsewhere, but not
+/proc/sys/.
+
+Use /sys/kernel/ or so. Or maybe O_NOTIFICATION_PIPE or whatever, but
+/proc/sys/ looks really wrong.
+
+> I can see attractiveness in providing the /run/fork-id directly from the
+> kernel though, to remove the dependency on systemd for poll-less
+> notification of libraries.
+
+I agree.
+
+Lennart
+
+--
+Lennart Poettering, Berlin

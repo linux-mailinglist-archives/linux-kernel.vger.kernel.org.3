@@ -2,120 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 362845188AA
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 17:35:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B22DE5188B8
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 17:36:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238737AbiECPjQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 11:39:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50896 "EHLO
+        id S238629AbiECPkE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 11:40:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238615AbiECPip (ORCPT
+        with ESMTP id S238616AbiECPkC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 11:38:45 -0400
-Received: from mail-il1-x135.google.com (mail-il1-x135.google.com [IPv6:2607:f8b0:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EBFCB7C
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 08:35:12 -0700 (PDT)
-Received: by mail-il1-x135.google.com with SMTP id o5so9973120ils.11
-        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 08:35:12 -0700 (PDT)
+        Tue, 3 May 2022 11:40:02 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37F3D2F383;
+        Tue,  3 May 2022 08:36:29 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id ba17so235126edb.5;
+        Tue, 03 May 2022 08:36:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=0FsDSj/gYms8H9/x7f/lo1swpziM40WrdI9xhy57C3M=;
-        b=T+1w+41qi/SUDALtKFt5pALUPTwdTk3xL6e2vcdgxWaYXP8KJCATmyp6AB5/XG2R2n
-         cxttGDxrpTrugEQTya0kvYSuTkOZB1gTsbf6SCSBFv8Ju68fEv9fI1LHVIa6ZhlOMkew
-         aDkzgsQDFYdieq/KdrXWnc4F+7LcvhIMoJbC8=
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=6jGlMaGnRuy7SzW1gLK1rbP4ej3ug9RnCTQFRGlHRyo=;
+        b=k1cvzlWbzJU8ceSBKJcWDzW0Rt1lFQMFQKVuSCBM3rRWHrMhjM93dBr7Kq5lU0DvTl
+         gbTjaLTtl4VmPNk5Z5JWAqcRuDz2iknBnFZTG9u4VGtucmjmowjC4Hvremce1a80qEax
+         kD0NsQpDJ7Hv2kHfmJm4OTzKnwb3OSFR+GgGRkNUr6ZEB4KEuTs5uV7fJlymK3iKlS1u
+         BR/5m8Gd4J4TgxIgY3r3tN4HmF610knePaGAp1XcMLakR2v0olaRFFjyl5a3aY1J0HAc
+         dOGmtIpRnS8Ta+37qxbPbRatYSSBCdX8549G4WzJhj81Y9A9N6G/yjEaXHXoaw3P5JqU
+         ZHvA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=0FsDSj/gYms8H9/x7f/lo1swpziM40WrdI9xhy57C3M=;
-        b=zx1/JSosvkE5IQ+qQ9fKLogcWjXwrBxlQW56VCLaNWprE9hx2RWUzqm528KCmwSl5Z
-         aLUax3V/WY2gKtal+j8yoGpN9AwO9/v4LcKHgg0cUCPHWAkoT44hprv+LXF5uDZxvkzH
-         /Llq2G/ir7JJz9fMphVsWJdQ6Q5AwcKi2ycggRFHlNuq9W078Uk3Omt/tt9Icob5Pd4z
-         IdihHcXMTxU9cxrnAZSbde1CoWqzkfrmshhs6l/hxkvZOeMAjigqFfEt9B5lgg/QLOY2
-         gcdJyl5OpxYoTRz2D/2NV4TA+TGl7Df9vTN/hXE+MmMg1gsk5QVs3Erxj3i+yJ1saqzD
-         rAwg==
-X-Gm-Message-State: AOAM533OSjTFC6PEGGNLsPd6GB5TH6AWcl47qYyYgU9DgOUdCoWCSytQ
-        Clww52Y0d3txnoYnp1UCpFUT7KlxxOYuD92a
-X-Google-Smtp-Source: ABdhPJzwq7OVo7+aKGQ6e1XQbkZPpDpIuq3AJDbM+1G6/PYLGizh69fHq162zWaVu24lkQGr9YDoXg==
-X-Received: by 2002:a92:c56f:0:b0:2cf:2e4d:5610 with SMTP id b15-20020a92c56f000000b002cf2e4d5610mr2227088ilj.253.1651592111905;
-        Tue, 03 May 2022 08:35:11 -0700 (PDT)
-Received: from mail-il1-f170.google.com (mail-il1-f170.google.com. [209.85.166.170])
-        by smtp.gmail.com with ESMTPSA id n42-20020a02716a000000b0032b3a7817e3sm3932337jaf.167.2022.05.03.08.35.11
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 03 May 2022 08:35:11 -0700 (PDT)
-Received: by mail-il1-f170.google.com with SMTP id y11so9965742ilp.4
-        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 08:35:11 -0700 (PDT)
-X-Received: by 2002:a05:6e02:b23:b0:2cd:89db:f685 with SMTP id
- e3-20020a056e020b2300b002cd89dbf685mr7200200ilu.296.1651592110840; Tue, 03
- May 2022 08:35:10 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=6jGlMaGnRuy7SzW1gLK1rbP4ej3ug9RnCTQFRGlHRyo=;
+        b=f4fx6Q1U1qaN8ykrzpO7NtgnlMRvsfYSvgVU/+pgMrdrh0pbkf6DqtLFZH8yIeO6Rl
+         DXufUBgBnte8CyCLdCvk6KskljDGK4KocKaadE99b8MNDANFoIAdqJi3DqiFBlTXBkBW
+         +XCFe+NhP+a3cKP9cakZfjwEihAIIhjlTcKbWEzVnt4yLar1ubTb2HlPQMG2thNwFiD0
+         2gTeJetM79vGUE8Avd/mqEtASyNROOCd6t1RkHuNdNYjY0iZ5lD4IDEXoBfXFLTuEBvI
+         5/OocEDNDDhBA6iR3NpJ86HlU9fmg7Funjsf9Lmbl0gTIqGi03g5/3guGK3DOSVs1IHu
+         gg+Q==
+X-Gm-Message-State: AOAM530vmBbCwOrqdpdn4S7kGYTAjetzjgdEay2PbiwmVdeL3ihNPHMV
+        vS0Q/zYTgHvKpOC8hNXnehA=
+X-Google-Smtp-Source: ABdhPJyTFc/zQzQ81G0V89Dfk2X3An9GVbXM/816WyBRdOjFt/CNHHrblwAty6XZ+6wMwEmWC2eJeA==
+X-Received: by 2002:a05:6402:458:b0:418:78a4:ac3f with SMTP id p24-20020a056402045800b0041878a4ac3fmr18245732edw.196.1651592187493;
+        Tue, 03 May 2022 08:36:27 -0700 (PDT)
+Received: from localhost.lan (ip-194-187-74-233.konfederacka.maverick.com.pl. [194.187.74.233])
+        by smtp.gmail.com with ESMTPSA id yl1-20020a17090693e100b006f3ef214dd1sm4693395ejb.55.2022.05.03.08.36.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 May 2022 08:36:27 -0700 (PDT)
+From:   =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Pavel Machek <pavel@ucw.cz>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
+        devicetree@vger.kernel.org, netdev@vger.kernel.org,
+        linux-leds@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        bcm-kernel-feedback-list@broadcom.com,
+        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>
+Subject: [PATCH 1/4] dt-bindings: net: add bitfield defines for Ethernet speeds
+Date:   Tue,  3 May 2022 17:36:10 +0200
+Message-Id: <20220503153613.15320-1-zajec5@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20220430011402.1.If7c3471db53bea55213f7bcf17e9043084d3ac0c@changeid>
- <20220430011402.3.Ic20d0c002ac5406b880cbdf9824739f38740926c@changeid> <dbcb45d6-d495-1e5d-b7ad-963096e5fe9d@linaro.org>
-In-Reply-To: <dbcb45d6-d495-1e5d-b7ad-963096e5fe9d@linaro.org>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Tue, 3 May 2022 08:34:58 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=WhAqQnxwNaW4kfq9Wuwsz6YYzBgSn=KX9Se_5o2mkcsA@mail.gmail.com>
-Message-ID: <CAD=FV=WhAqQnxwNaW4kfq9Wuwsz6YYzBgSn=KX9Se_5o2mkcsA@mail.gmail.com>
-Subject: Re: [PATCH 3/5] arm64: dts: qcom: sc7180: Add quackingstick dts files
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     "Joseph S. Barrera III" <joebar@chromium.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Alexandru M Stan <amstan@chromium.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+From: Rafał Miłecki <rafal@milecki.pl>
 
-On Tue, May 3, 2022 at 8:31 AM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> On 30/04/2022 10:15, Joseph S. Barrera III wrote:
-> > Quackingstick is a trogdor-based board. These dts files are copies from
-> > the downstream Chrome OS 5.4 kernel, but with downstream bits removed.
-> >
-> > Signed-off-by: Joseph S. Barrera III <joebar@chromium.org>
->
-> (...)
->
-> > +/*
-> > + * Google Quackingstick board device tree source
-> > + *
-> > + * Copyright 2021 Google LLC.
-> > + *
-> > + * SKU: 0x601 => 1537
-> > + *  - bits 11..8: Panel ID: 0x6 (AUO)
-> > + */
-> > +
-> > +#include "sc7180-trogdor-quackingstick.dtsi"
-> > +
-> > +/ {
-> > +     model = "Google Quackingstick (rev0+)";
-> > +     compatible = "google,quackingstick-sku1537", "qcom,sc7180";
->
-> Here and in other patches you keep adding undocumented board compatibles.
+This allows specifying multiple Ethernet speeds in a single DT uint32
+value.
 
-Sure, but perhaps we could continue the conversation at:
+Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
+---
+ include/dt-bindings/net/eth.h | 27 +++++++++++++++++++++++++++
+ 1 file changed, 27 insertions(+)
+ create mode 100644 include/dt-bindings/net/eth.h
 
-https://lore.kernel.org/r/CAD=FV=W_SA-3PfDFi-Gkjk9pew5bchFNjQhXX8MkZyuy5UohEQ@mail.gmail.com/
+diff --git a/include/dt-bindings/net/eth.h b/include/dt-bindings/net/eth.h
+new file mode 100644
+index 000000000000..89caff09179b
+--- /dev/null
++++ b/include/dt-bindings/net/eth.h
+@@ -0,0 +1,27 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/*
++ * Device Tree constants for the Ethernet
++ */
++
++#ifndef _DT_BINDINGS_ETH_H
++#define _DT_BINDINGS_ETH_H
++
++#define SPEED_UNSPEC		0
++#define SPEED_10		(1 << 0)
++#define SPEED_100		(1 << 1)
++#define SPEED_1000		(1 << 2)
++#define SPEED_2000		(1 << 3)
++#define SPEED_2500		(1 << 4)
++#define SPEED_5000		(1 << 5)
++#define SPEED_10000		(1 << 6)
++#define SPEED_14000		(1 << 7)
++#define SPEED_20000		(1 << 8)
++#define SPEED_25000		(1 << 9)
++#define SPEED_40000		(1 << 10)
++#define SPEED_50000		(1 << 11)
++#define SPEED_56000		(1 << 12)
++#define SPEED_100000		(1 << 13)
++#define SPEED_200000		(1 << 14)
++#define SPEED_400000		(1 << 15)
++
++#endif
+-- 
+2.34.1
 
-...to avoid forking it and losing all the context.
-
--Doug

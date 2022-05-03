@@ -2,133 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEED5518459
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 14:31:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 337C051845D
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 14:32:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235346AbiECMfJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 08:35:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46520 "EHLO
+        id S235362AbiECMgV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 08:36:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232602AbiECMfB (ORCPT
+        with ESMTP id S232602AbiECMgT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 08:35:01 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B625E1EAC0;
-        Tue,  3 May 2022 05:31:28 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id g20so19651433edw.6;
-        Tue, 03 May 2022 05:31:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=8YM2dc3Lj2iqFmnWMin0ar9E2yzV5t6KJp8upB+s4PM=;
-        b=oxm5Dbh7bnrEcep/5H5IbdiNiqPOec5bdXe+GKf8c6LL0zS/nrqHVxNgh+yCSbGdzU
-         WGCzuwY1oXA6zsoLzYgZspCQKJcxclHsOgfU494LpsHGGeEVCDG2KcmXoHZY3yi/WslV
-         Q9I+RpAlbkWs8/jAkY7lOBpb1rX/1g68NAyzG7B3eRSCQIZD6K8LGQU65MZL2MCQ6tac
-         A7j1rA5VfHj/YQ02dzBquSIAwGjigNJ3ZJ9ii/60hollhY6yFD/o3DX5UQGOCkgOXrR+
-         arUg+HJvdhbCSGlGZcvt5m8QmdL7tNeeflxuISuKa+w/z025KGCi70TGqSRLd2lKcxmE
-         istw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=8YM2dc3Lj2iqFmnWMin0ar9E2yzV5t6KJp8upB+s4PM=;
-        b=aSZIeBVFE4gyUTim7Kk0RWc5FTYCgmPOYDw7JBnajdrBZV7MXCOYL97zHjY22x893y
-         EtPwxCkUYv5pMh61C3A7H6Fs6WRvYGVTYlQKSF2taNejZj+7iTT7tsIw4+Qp0IpN9Wu7
-         OCNxtw6v4xzvPGeF+AIJZk8cciUatzDZC+2o0v0By57YfOqRNLzVEEYB9yoYuGe6vJRa
-         0iymlurNdkcAkkzikyMDMqktk95IJ6/JbLKtPfRTjJAiGip+bbiU3C3Fc9vvuR1Ys0SV
-         jaI9kf4EZn7/oskhiH6OZ2QtQqB32LmAh5wGKqDi77MZcJ6qZBbHB5Y64Dn+LFfMYt+S
-         sEDA==
-X-Gm-Message-State: AOAM530c0st0k/WWoUCD41Y+orZs3ANvH7Afipq8XTc+ej4kY93bVsLI
-        dXIjcn2+UwvH4+tcaDRbFuM=
-X-Google-Smtp-Source: ABdhPJwL01DktolWLuTqjgKLl4GybEuGnHg3PPyHsnp4FL0NxG7V9tWDzk7OuCu6uK3vQXkjHD+4Lg==
-X-Received: by 2002:a05:6402:3711:b0:425:d3d6:2b65 with SMTP id ek17-20020a056402371100b00425d3d62b65mr18102385edb.328.1651581087167;
-        Tue, 03 May 2022 05:31:27 -0700 (PDT)
-Received: from anparri (host-79-49-65-106.retail.telecomitalia.it. [79.49.65.106])
-        by smtp.gmail.com with ESMTPSA id dq9-20020a170907734900b006f3ef214de3sm4571504ejc.73.2022.05.03.05.31.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 May 2022 05:31:26 -0700 (PDT)
-Date:   Tue, 3 May 2022 14:30:46 +0200
-From:   Andrea Parri <parri.andrea@gmail.com>
-To:     Michael Kelley <mikelley@microsoft.com>
-Cc:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
-        wei.liu@kernel.org, linux-kernel@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, vkuznets@redhat.com,
-        decui@microsoft.com, drawat.floss@gmail.com, airlied@linux.ie,
-        daniel@ffwll.ch, jejb@linux.ibm.com, martin.petersen@oracle.com,
-        deller@gmx.de, dri-devel@lists.freedesktop.org,
-        linux-scsi@vger.kernel.org, linux-fbdev@vger.kernel.org
-Subject: Re: [PATCH 0/4] Remove support for Hyper-V 2008 and 2008R2/Win7
-Message-ID: <20220503123046.GA448894@anparri>
-References: <1651509391-2058-1-git-send-email-mikelley@microsoft.com>
+        Tue, 3 May 2022 08:36:19 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C7071EAC0;
+        Tue,  3 May 2022 05:32:48 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id 451221F42C92
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1651581166;
+        bh=qxbwIud/z0dkgi/rqpCFxK4Db8RLK0j+LCYn27SBNtA=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=DE56hFw4/S2R6lSczDYKbM/I2R4smmMDXxQaukD7P9b0dzmlXOfvp1JgQMUu8IYJB
+         D4nUan73wyKjV6sD6Wz15zOrCrfJ5Uk8yxJRPQJLXqXYgFR8g9mR8zW7jazlvQoXI/
+         tiNSxB96wtyzwh0smXgCyuU67mJ8iTsIun1yEc+9UECcZO106YtWzZoUoICl3ZTQm6
+         xSdobzynER0B41xDE4UuPPEsCWvSr1LKx7WCwu75muaNWliR5P5AcZWS9AnKZ/qqbV
+         +1YyyR3BFyLvIkIPSDSEWUvkDYhWIqwT4+byLxnFD6noQ3E/qedtKEJg1qpEdz/oSV
+         +RoNpDORyJ3fw==
+Message-ID: <07889dc4-4198-086b-4df6-e02b65daff10@collabora.com>
+Date:   Tue, 3 May 2022 14:32:44 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1651509391-2058-1-git-send-email-mikelley@microsoft.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 2/2] dt-bindings: pinctrl: Add MediaTek MT6795 pinctrl
+ bindings
+Content-Language: en-US
+To:     Rob Herring <robh@kernel.org>
+Cc:     linux-gpio@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-kernel@vger.kernel.org, sean.wang@kernel.org,
+        matthias.bgg@gmail.com, linus.walleij@linaro.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        nfraprado@collabora.com, kernel@collabora.com
+References: <20220503105317.54696-1-angelogioacchino.delregno@collabora.com>
+ <20220503105317.54696-3-angelogioacchino.delregno@collabora.com>
+ <1651579140.664800.3296827.nullmailer@robh.at.kernel.org>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <1651579140.664800.3296827.nullmailer@robh.at.kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 02, 2022 at 09:36:27AM -0700, Michael Kelley wrote:
-> Linux code for running as a Hyper-V guest includes special cases for the
-> first released versions of Hyper-V: 2008 and 2008R2/Windows 7. These
-> versions were very thinly used for running Linux guests when first
-> released more than 12 years ago, and they are now out of support
-> (except for extended security updates). As initial versions, they
-> lack the performance features needed for effective production usage
-> of Linux guests. In total, there's no need to continue to support
-> the latest Linux kernels on these versions of Hyper-V.
+Il 03/05/22 13:59, Rob Herring ha scritto:
+> On Tue, 03 May 2022 12:53:17 +0200, AngeloGioacchino Del Regno wrote:
+>> Add devicetree and pinfunc bindings for MediaTek Helio X10 MT6795.
+>>
+>> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+>> ---
+>>   .../pinctrl/mediatek,pinctrl-mt6795.yaml      | 224 +++++
+>>   include/dt-bindings/pinctrl/mt6795-pinfunc.h  | 908 ++++++++++++++++++
+>>   2 files changed, 1132 insertions(+)
+>>   create mode 100644 Documentation/devicetree/bindings/pinctrl/mediatek,pinctrl-mt6795.yaml
+>>   create mode 100644 include/dt-bindings/pinctrl/mt6795-pinfunc.h
+>>
 > 
-> Simplify the code for running on Hyper-V by removing the special
-> cases. This includes removing the negotiation of the VMbus protocol
-> versions for 2008 and 2008R2, and the special case code based on
-> those VMbus protocol versions. Changes are in the core VMbus code and
-> several drivers for synthetic VMbus devices.
+> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+> on your patch (DT_CHECKER_FLAGS is new in v5.13):
 > 
-> Some drivers have driver-specific protocols with the Hyper-V host and
-> may have versions of those protocols that are limited to 2008 and
-> 2008R2. This patch set does the clean-up only for the top-level
-> VMbus protocol versions, and not the driver-specific protocols.
-> Cleaning up the driver-specific protocols can be done with
-> follow-on patches.
+> yamllint warnings/errors:
+> ./Documentation/devicetree/bindings/pinctrl/mediatek,pinctrl-mt6795.yaml:100:14: [error] syntax error: expected <block end>, but found '<block mapping start>' (syntax)
 > 
-> There's no specific urgency to removing the special case code for
-> 2008 and 2008R2, so if the broader Linux kernel community surfaces
-> a reason why this clean-up should not be done now, we can wait.
-> But I think we want to eventually stop carrying around this extra
-> baggage, and based on discussions with the Hyper-V team within
-> Microsoft, we're already past the point that it has any value.
-> 
-> Michael Kelley (4):
->   Drivers: hv: vmbus: Remove support for Hyper-V 2008 and Hyper-V
->     2008R2/Win7
->   scsi: storvsc: Remove support for Hyper-V 2008 and 2008R2/Win7
->   video: hyperv_fb: Remove support for Hyper-V 2008 and 2008R2/Win7
->   drm/hyperv: Remove support for Hyper-V 2008 and 2008R2/Win7
 
-For the series,
+Oops. I'm sorry for that, apparently I've sent the wrong version of this series.
+Luckily, only the yaml file had issues in that version.
 
-Reviewed-by: Andrea Parri (Microsoft) <parri.andrea@gmail.com>
+I'll send a v2 soon. Sorry for the noise.
 
-Thanks,
-  Andrea
-
-
->  drivers/gpu/drm/hyperv/hyperv_drm_proto.c | 23 ++++--------
->  drivers/hv/channel_mgmt.c                 | 29 ++++++---------
->  drivers/hv/connection.c                   |  6 ++--
->  drivers/hv/vmbus_drv.c                    | 60 +++++++------------------------
->  drivers/scsi/storvsc_drv.c                | 36 +++++--------------
->  drivers/video/fbdev/hyperv_fb.c           | 23 ++----------
->  include/linux/hyperv.h                    | 10 ++++--
->  7 files changed, 52 insertions(+), 135 deletions(-)
-> 
-> -- 
-> 1.8.3.1
-> 
+Regards,
+Angelo

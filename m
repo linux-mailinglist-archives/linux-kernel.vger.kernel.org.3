@@ -2,193 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FA72518232
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 12:22:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 417A4518265
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 12:33:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234162AbiECKZ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 06:25:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42104 "EHLO
+        id S234190AbiECKgs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 06:36:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231666AbiECKZV (ORCPT
+        with ESMTP id S232986AbiECKgq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 06:25:21 -0400
-Received: from nautica.notk.org (nautica.notk.org [91.121.71.147])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E44FA55AB;
-        Tue,  3 May 2022 03:21:48 -0700 (PDT)
-Received: by nautica.notk.org (Postfix, from userid 108)
-        id 60B20C022; Tue,  3 May 2022 12:21:47 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
-        t=1651573307; bh=dsiFLdFkeDL9R7Ag/77dSPiK8kJjT3gJ12I5PBBLWMk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mFQkW6uZqX0RIsVpCmxgtFaUBLIe/wq7Bxpf8DXliUeePzWc3mMO1f4YxrhArGXFN
-         ATtI2HtMfiJNISQAy0UMZV+sIQWDrjFFC0VH1TAvPSpvpzUEZDDashpFXTrtnZYY0a
-         qvXrwQW8sE+/UNt4yQ8in2q8loGdi1Z6jzd45UyJ2GW6RNMEnvi9y18TyHgjSaCpWV
-         ju0q7OA4zXoQTGfcxQs3MWQHHKutjW+Visb89A1jZ3lmgJ1DoaPtxhLaAd94pGllx4
-         og6oQBGu4oq1LKI9jrMn2vkVyK4KLQj+CUfYQJ2Uxj044xnOeYQJbQK8LZ8JrO5vvN
-         Y/ch8TWqJlZxg==
+        Tue, 3 May 2022 06:36:46 -0400
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DC461FA67;
+        Tue,  3 May 2022 03:33:14 -0700 (PDT)
+Received: by mail-pg1-x52a.google.com with SMTP id i62so13710238pgd.6;
+        Tue, 03 May 2022 03:33:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=muzTKDXHxre739JwDPLn6W0CCP4JY3KIRqvskM6X8vM=;
+        b=FBWGNVXMbpvfke8TdnuLjHwzsu+ynQgTTlyROkGSap+8QLTHjZDJmK7cIafOr0Hi1O
+         dNfRvuICGuXh508Kxf5D7N5kCiO6jBN9sS350BoHpyImp/N6U4z23xV8lhdZFaSlWag3
+         XmoX5yRmhNkyuPOoe4dXf1JBavuVMDXdVFPdQEQpBvVbtXcS7zsPGWvfUw8FhaAWzC9f
+         jBEfZlDqtye3UEMHwLOEbV21LJZCx/hRQSDxC4vZej9r6w4K09H/NO/klSYZMw1+C69q
+         RYUsPpmJf1SDLOzUJI7b+lBvPpvzuQrfslR4Y2RsaYBGfY+bkehb4ELqBCijWTEjjS2S
+         FK3w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=muzTKDXHxre739JwDPLn6W0CCP4JY3KIRqvskM6X8vM=;
+        b=gUE95QbD2yRvUg9M74ik3I4Pyn7v+OSrRkzclLzYcyZBPkaIsFH8U8Rc/UZ1knYFOJ
+         xb1MhlTcuDi8UfZyo04b488vHe/QjoJ97vx1k2L5KTdnBnmeiPH70QoaGCQjgwh72Fso
+         JCr4TtH4eWWvJtmigWB0/zrb87RZtlePKIhiH/APM1us7ioyr+u6qfmC6vfPp0bGXYSG
+         EaXfQCgOS0uRofKL9luDSQKtmW9P7Yb6BoiBWNXa2TBC+BQgiB/VeIC5lyPUUGm3pId3
+         RlO5TsR+gkqhR1c4BdPF3VBmj4BelpeEyQCJRB1D4hKvKiQnuiMSs4M5NFwRU7AZsz5y
+         I52A==
+X-Gm-Message-State: AOAM530IhtYbjiTKVxy58lQg2ysY8f0IWkEz1JMWArsAxxqToO91S9MG
+        Eziz/B4yxKulnSs2U9XXYwzNzmiLZkU=
+X-Google-Smtp-Source: ABdhPJxDy7q//uBK9EK/lcQ9h4a/dMMi9ej11sgl909BEOF+gp398rwtS4myrfXHQPjKOxB/CPx7TA==
+X-Received: by 2002:a63:d2:0:b0:3c2:57a7:a11f with SMTP id 201-20020a6300d2000000b003c257a7a11fmr4966660pga.583.1651573993801;
+        Tue, 03 May 2022 03:33:13 -0700 (PDT)
+Received: from localhost.localdomain (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
+        by smtp.gmail.com with ESMTPSA id j2-20020a17090a734200b001d0ec9c93fesm1101476pjs.12.2022.05.03.03.33.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 May 2022 03:33:13 -0700 (PDT)
+From:   Akira Yokosawa <akiyks@gmail.com>
+To:     Jonathan Corbet <corbet@lwn.net>
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 0/5] docs/ja_JP/SubmittingPatches: Trace changes in English docs, take 1
+Date:   Tue,  3 May 2022 19:24:30 +0900
+Message-Id: <20220503102429.48304-1-akiyks@gmail.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-Received: from odin.codewreck.org (localhost [127.0.0.1])
-        by nautica.notk.org (Postfix) with ESMTPS id 4D1AAC01A;
-        Tue,  3 May 2022 12:21:42 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
-        t=1651573305; bh=dsiFLdFkeDL9R7Ag/77dSPiK8kJjT3gJ12I5PBBLWMk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=WjYR2HkYno4RqtWouAgZjnwfO53ln561f/qJOCTV8qucrvXcGNvatLLjcmqN1F8jn
-         WZQAnp8lROzBTVR/BQrN6rjcZ0HaBBTGMFxPGBKx44ZDQZCmRwRLAvoYgGvtYhDsa0
-         +vlabBqj+Xb1oelf6JaPbImmChLqGkKUVz0gNPhvBykA9nyAzPJMvdWIsA33ViBCQC
-         QnGkmJfHYDZUyskqwy2wBEKM2qNuJSSww4X59nJeR7chXaGN64yGg0YXYN3wOpHdXF
-         p5HLSgg8N1PnirV1BPLNF2mmBY378T9TTl2WValg9GC3Q5F8fFDeEJNcgWQ8HFDtSa
-         M+nJpPvqm+gCA==
-Received: from localhost (odin.codewreck.org [local])
-        by odin.codewreck.org (OpenSMTPD) with ESMTPA id 861edad9;
-        Tue, 3 May 2022 10:21:38 +0000 (UTC)
-Date:   Tue, 3 May 2022 19:21:23 +0900
-From:   asmadeus@codewreck.org
-To:     Christian Schoenebeck <linux_oss@crudebyte.com>
-Cc:     David Howells <dhowells@redhat.com>,
-        David Kahurani <k.kahurani@gmail.com>, davem@davemloft.net,
-        ericvh@gmail.com, kuba@kernel.org, linux-kernel@vger.kernel.org,
-        lucho@ionkov.net, netdev@vger.kernel.org,
-        v9fs-developer@lists.sourceforge.net, Greg Kurz <groug@kaod.org>
-Subject: Re: 9p EBADF with cache enabled (Was: 9p fs-cache tests/benchmark
- (was: 9p fscache Duplicate cookie detected))
-Message-ID: <YnECI2+EAzgQExOn@codewreck.org>
-References: <YmKp68xvZEjBFell@codewreck.org>
- <1817268.LulUJvKFVv@silver>
- <3174158.1650895816@warthog.procyon.org.uk>
- <1817722.O6u07f4CCs@silver>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <1817722.O6u07f4CCs@silver>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sorry for the delay.
+Hi,
 
-Christian Schoenebeck wrote on Tue, Apr 26, 2022 at 05:38:30PM +0200:
-> On Montag, 25. April 2022 16:10:16 CEST David Howells wrote:
-> > There may be a quick and dirty workaround.  I think the problem is that
-> > unless the O_APPEND read starts at the beginning of a page, netfs is going
-> > to enforce a read.  Does the attached patch fix the problem?  (note that
-> > it's untested)
+This is the first batch of updates attempting to modernize Japanese
+SubmittingPatches.  Conversion to ReST will be done later when the
+corresponding commit doing the conversion is reached.  Pending list
+of commits is quite long (about 90) and this effort is expected to
+produce dozens of series.
 
-It might work for this particular case (O_APPEND), but what about an
-arbitrary pwrite or seek+write in the middle of a file?
-e.g.
+List of commits for English (then) SubmittingPatches:
 
-$ dd if=/dev/zero of=test bs=1M count=1
-$ chmod 400 test
-# drop cache or remound
-$ dd if=/dev/urandom of=test bs=102 seek=2 count=1 conv=notrunc
-dd: error writing 'test': Bad file descriptor
+ - f5039935ac68 ("Documentation: update GregKH links")
+ - e52d2e1f25f0 ("Documentation/SubmittingPatches: suggested the use of scripts/get_maintainer.pl")
+ - 755727b7fb1e ("Randy has moved")
+ - 8543ae1296f6 ("checkpatch: add Suggested-by as a standard signature")
+ - 0af5270324cc ("Documentation/SubmittingPatches: Request summaries for commit references")
 
+Note: Commit db12fb833a88 ("Documentation: fix spelling error in
+SubmittingPatches") does not affect Japanese translation.
 
-Silly question, how does that work on ceph or AFS? the read back
-callback always works regardless of permission?
+        Thanks, Akira
+--
+Akira Yokosawa (5):
+  docs/ja_JP/SubmittingPatches: Update GregKH links
+  docs/ja_JP/SubmittingPatches: Suggest the use of
+    scripts/get_maintainer.pl
+  docs/ja_JP/SubmittingPatches: Randy has moved
+  docs/ja_JP/SubmittingPatches: Add Suggested-by as a standard signature
+  docs/ja_JP/SubmittingPatches: Request summaries for commit references
 
-Basically I think we really only have two choices there:
- - make the readback call work regardless of open mode, e.g. make it use
-the writeback fid if it wasn't, and make that writeback_fid all-able
-
-Now I'm looking, v9fs_writeback_fid() calls
-v9fs_fid_lookup_with_uid(GLOBAL_ROOT_UID) and opens with O_RDWR, so it
-shoud be a root fid we can read regardles of file perm !
-
-The more I think about it and the more I think that's the way to go and
-probably how it used to work, I'll look into why this isn't working
-(main fid used or writeback fid not root)
+ .../translations/ja_JP/SubmittingPatches      | 36 ++++++++++++++-----
+ 1 file changed, 27 insertions(+), 9 deletions(-)
 
 
- - add some complex code to track the exact byte range that got updated
-in some conditions e.g. WRONLY or read fails?
-That'd still be useful depending on how the backend tracks file mode,
-qemu as user with security_model=mapped-file keeps files 600 but with
-passthrough or none qemu wouldn't be able to read the file regardless of
-what we do on client...
-Christian, if you still have an old kernel around did that use to work?
-
-
-> Patch doesn't apply for me on master:
-
-It applies on fscache-next
-https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git/log/?h=fscache-next
-
-But on that branch with the patch (works fine without) I get another
-problem just writing normally:
-[   94.327094] ------------[ cut here ]------------
-[   94.327809] WARNING: CPU: 0 PID: 93 at mm/page-writeback.c:2498 __folio_mark_dirty+0x397/0x510
-[   94.329191] Modules linked in:
-[   94.329491] CPU: 0 PID: 93 Comm: cat Not tainted 5.18.0-rc1+ #56
-[   94.330195] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.15.0-0-g2dd4b9b3f840-prebuilt.qemu.org 04/01/2014
-[   94.331709] RIP: 0010:__folio_mark_dirty+0x397/0x510
-[   94.332312] Code: 14 02 48 89 f8 83 e0 07 83 c0 03 38 d0 7c 08 84 d2 0f 85 14 01 00 00 44 8b 7b 5c 44 89 3c 24 4c 89 fd 49 63 d7 e9 4d fe ff ff <0f> 0b e9 c0 fc ff f0
-[   94.335341] RSP: 0018:ffffc90000257ad0 EFLAGS: 00010046
-[   94.336031] RAX: 4000000000000009 RBX: ffffea0001ffb080 RCX: ffffffff815144cc
-[   94.336937] RDX: 1ffffd40003ff610 RSI: 0000000000000008 RDI: ffffea0001ffb080
-[   94.337749] RBP: ffff8880056c4488 R08: 0000000000000000 R09: ffffea0001ffb087
-[   94.338612] R10: fffff940003ff610 R11: 0000000000000001 R12: 0000000000000246
-[   94.339551] R13: ffff8880056c4490 R14: 0000000000000001 R15: 0000000000000068
-[   94.340487] FS:  00007f18dbc1eb80(0000) GS:ffff88806ca00000(0000) knlGS:0000000000000000
-[   94.341558] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[   94.342369] CR2: 00007f18dbbfd000 CR3: 000000000b5b4000 CR4: 00000000000006b0
-[   94.343613] Call Trace:
-[   94.343856]  <TASK>
-[   94.344052]  filemap_dirty_folio+0x73/0xc0
-[   94.344646]  v9fs_write_end+0x18f/0x300
-[   94.345195]  generic_perform_write+0x2bd/0x4a0
-[   94.345834]  ? __bpf_trace_file_check_and_advance_wb_err+0x10/0x10
-[   94.346807]  ? discard_new_inode+0x100/0x100
-[   94.347398]  ? generic_write_checks+0x1e8/0x360
-[   94.347926]  __generic_file_write_iter+0x247/0x3d0
-[   94.348420]  generic_file_write_iter+0xbe/0x1d0
-[   94.348885]  new_sync_write+0x2f0/0x540
-[   94.349250]  ? new_sync_read+0x530/0x530
-[   94.349634]  vfs_write+0x517/0x7b0
-[   94.349939]  ksys_write+0xed/0x1c0
-[   94.350318]  ? __ia32_sys_read+0xb0/0xb0
-[   94.350817]  do_syscall_64+0x43/0x90
-[   94.351257]  entry_SYSCALL_64_after_hwframe+0x44/0xae
-[   94.351955] RIP: 0033:0x7f18dbe0eea3
-[   94.352438] Code: 54 ff ff 48 83 c4 58 c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 64 8b 04 25 18 00 00 00 85 c0 75 14 b8 01 00 00 00 0f 05 <48> 3d 00 f0 ff ff 75
-[   94.355597] RSP: 002b:00007fffdf4661d8 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
-[   94.356520] RAX: ffffffffffffffda RBX: 0000000000000068 RCX: 00007f18dbe0eea3
-[   94.357392] RDX: 0000000000000068 RSI: 00007f18dbbfd000 RDI: 0000000000000001
-[   94.358287] RBP: 00007f18dbbfd000 R08: 00007f18dbbfc010 R09: 0000000000000000
-[   94.359318] R10: 0000000000000022 R11: 0000000000000246 R12: 0000000000000001
-[   94.360349] R13: 0000000000000001 R14: 0000000000000000 R15: 0000000000020000
-[   94.361295]  </TASK>
-[   94.361462] ---[ end trace 0000000000000000 ]---
-
-got it with cat but dd with bs >=2 also reproduces, the second write
-fails with EBADF:
-
-110   openat(AT_FDCWD, "bar", O_WRONLY|O_CREAT|O_TRUNC, 0666) = 3
-110   dup2(3, 1)                        = 1
-110   close(3)                          = 0
-110   execve("/run/current-system/sw/bin/cat", ["cat"], 0x12e1010 /* 10 vars */) = 0
-110   read(0, "[   94.327094] ------------[ cut"..., 131072) = 52
-110   write(1, "[   94.327094] ------------[ cut"..., 52) = 52
-110   read(0, "[   94.327809] WARNING: CPU: 0 P"..., 131072) = 98
-110   write(1, "[   94.327809] WARNING: CPU: 0 P"..., 98) = -1 EBADF (Bad file descriptor)
-
-I'm sure that could be fixed, but as said above I don't think it's the
-right approach.
-
-> > Also, can you get the contents of /proc/fs/fscache/stats from after
-> > reproducing the problem?
-> 
-> FS-Cache statistics
-
-(He probably wanted to confirm the new trace he added got hit with the
-workaround pattern, I didn't get that far as I couldn't compile my
-reproducer on that fs...)
-
+base-commit: 81c653659d34ec253fba7f5d0f430813fe0f643d
 -- 
-Dominique
+2.25.1
+

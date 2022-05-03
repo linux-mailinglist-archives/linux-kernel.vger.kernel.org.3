@@ -2,53 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20C0B517DFD
+	by mail.lfdr.de (Postfix) with ESMTP id 6A980517DFE
 	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 09:01:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231444AbiECHDx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 03:03:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55288 "EHLO
+        id S231431AbiECHEv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 03:04:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231358AbiECHDh (ORCPT
+        with ESMTP id S231508AbiECHEL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 03:03:37 -0400
-Received: from out203-205-221-231.mail.qq.com (out203-205-221-231.mail.qq.com [203.205.221.231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36D5B38BDF
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 00:00:03 -0700 (PDT)
+        Tue, 3 May 2022 03:04:11 -0400
+Received: from out162-62-57-137.mail.qq.com (out162-62-57-137.mail.qq.com [162.62.57.137])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0F871B7BD
+        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 00:00:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1651561202;
-        bh=WUuXmnaF/R6rnyYX09RCsMehb8Gv/6PLDTINxf8HBCU=;
+        s=s201512; t=1651561232;
+        bh=QRkNuBkF5XE2H7BEdwudvlrpu6AQPC0+t6IpEKE88Yk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=etrAyIoPHMEy655DThI8SVZBHZrBjVWa9VzrWlrwUR2c4vtQHo7mcilzM3bI4BX7R
-         RSWw9r7A2mjgYLVZMzHjPjwEEIQOs+7xmt+fO3pHxjN/RmpXJUOUQf1lDNWPEFOXyq
-         Bz5k7lk9o8nK9ldnGq4W3mMOszMz/xYQUWy23KKc=
+        b=EfpNplBfvp4WQ+Azech1n24cD0kNOjnp54IQHZJPYibdOLUkFPFutvB9pHOgCxsYL
+         eqU8CImUXe3fOBgQCgBRpglghGOBjBkwHdiB0m1J85q7Gf/Vr3aSQKlLI1MVyOjEBw
+         fcYpsm+KzIrz67LLiwE1tXtTEw60NIiOgm9W/fhU=
 Received: from localhost.localdomain ([59.172.176.242])
-        by newxmesmtplogicsvrszc6.qq.com (NewEsmtp) with SMTP
-        id EFB38681; Tue, 03 May 2022 14:59:59 +0800
-X-QQ-mid: xmsmtpt1651561199tlfdp4ine
-Message-ID: <tencent_49C483592237812380A228DC4089EC3F0D05@qq.com>
-X-QQ-XMAILINFO: N7h1OCCDntujs8ai0G1RB9JQjHqN5g5ZrifwohCLIhVyMafDClFi/iYqvRl2W2
-         bRmU42XIdbD1t6rVfnUvoBZYV5a6laQpbODiVBKvuBSAH1CaKPeHDT/8qL8+KixO03cKG9fEnsHy
-         r6Ttz0wNfG8xc8VNhyK4SHARPRxYfbovRhn7J8+7EKCg1fXn/6A8UwnQsfyJeUmJqKISPh+7Srck
-         v42KUpKKyWwB/Zm/YfNuhofKzU3uPbcQFFMFDRCLY5fZL7pPyE2If70Lpt1pdLZn1KiPEcfIO+jA
-         wh/umjpsEB013CdrP1cdL+ts6QrhI+YTLx3g0aVut6muYijrukDk4/v6wCOpSuejMcr4cgOnXROY
-         sQDsNfg3nSwrDgvXg75m5uTfscV2DbrY4SzLck4I4JqwM8pw71Dp76CyXfAnUSZELkpT3u0/3XNb
-         DMsVYEv0eIrr1WoARAZ771HOZZlmtiVi3OdKGeGaZDboWafwvKZ6/0WhSxzZ59je8IWwYcfcj+A9
-         trvsd3I0wtAIN+hSrlfldVZsgxxwxbuxHnm3SwENJj8D+ewaOEVfSqtlsVu5RjyXot0X/LojmTXy
-         SWhdVD4UAkR0a0mUzKfj6HvZ/KpxS5au31SMYV1x6VwNSRgCwBnk/glNBX0IXvqpM/bZlh0kZBcG
-         wixFBIEGQhO0iywmakRr3Df75E7iNHAYl6hH83hxSC8SH1gM+eQY3PL6bw1ZXEyx/58+cwJXe38y
-         WMpJxDr2w4tV1iwkzJIwf4sLazDRx9xbOL0E806YhHTcnFLei27nLnsOtodE9r4gEo/UhYod/yzd
-         TqrGWmJOcUFc80TKQyjfH/YyWRHkma8R7dNKW3lpWUyc+ct59k/Ps/jHziVMlFEYKUDC7pn4Q3Z6
-         3nLbgS7iq1dJ+UnO4552SC6tOMUUu0TyhuZtRKoso5P82ctjV3hY+YEFPc83AoMBgkZbwIJNvoG2
-         upb5t888D4pVF15l1kpQ==
+        by newxmesmtplogicsvrsza5.qq.com (NewEsmtp) with SMTP
+        id 1DA9EE8; Tue, 03 May 2022 15:00:29 +0800
+X-QQ-mid: xmsmtpt1651561229twbm4qg8j
+Message-ID: <tencent_EDB91F1C5E14F3E1B14A63FF4D202FCC7008@qq.com>
+X-QQ-XMAILINFO: MB5+LsFw85NouSJI/9w3WXMYhhspe9vkOVPan+0xABV6NkrarpA0UeaoUHrYHd
+         N2HEJNI9HOMUdhi3FGz/lchkIxG0AX60GOR5E+we5ZbNFAlfABS455yXFWttgaTd4qrIA+T5QoZz
+         QXy3jdcevgVtjac8Bbm6fRW9p84zyA+YcEbk5TWUb1dRKVlUKIFsy6HdzMv4NHXMG7yXM1e/ztrj
+         9TUAy8AUUTkr47ooDf8W2kTbN8Orwd3Nurx/dsR6Ksy0fycYBaUgfC1H0I7i9oszpQCsH0gC5PbN
+         H0kg6yZ9A9b+rDljeKhyB0AtfYJvBqE05suLcxOCFsHQalFD1fKnlAJHY1ChiSNyeFhpYHm7KYxc
+         4TVB4E9Adbcvej+m5O9PdYu64yc3yRggoibbhhhjqSdlZGV04/WX8emhCaNkTgy5Eq0t0aIVYjLr
+         xboo4bhVaAFqXZhLZeAH57yZTXQTFre2G/MlledldKPBV0MBMq4ZYQjWwegmec3VfEtj0YqhppCH
+         0HAg7oflIUrRZ0HpE+h6YFePyFxQTBZSZNCXyx7C1NWqRo09YZjVPadPr7tXQeQ1P0p8P/etV2qW
+         v4t9pRD986+c1ryinsozLaFnDRmhuRMylQQNLobLPZKUqSdZZfKiTaAhSeMWbgUnxpx5ijfFZLL0
+         5+0X3s1pFCDAOwnKSfn2hznb1oWRLB0e/RntczqxlnUcORuXyFojD5bZPdTxSu76pQqs7Bo5yceE
+         mCDIprIpwW251cpQzr+7g0AtSRJT0btBzLNLGEF0N+k3Hmu9R3sDMirJ7CrD5miP6RwyL17fKbcx
+         GqWmPBMAQWXdup9omUwqsxaPfiNL8aaOecGmGi/LlqP2bLOxxSHmr8no7ccfZd14VSuelV2WBwjE
+         gOJC2fliV8mR41hAfMttvFWOKJayezqG/5+dshR2P2XYFI0pq13BNqKldgQZJycc4nOgACvrx2rz
+         5XB6HRWgSTmHdT03tdFKToDHHgCZZm
 From:   xkernel.wang@foxmail.com
-To:     Larry.Finger@lwfinger.net, florian.c.schilhabel@googlemail.com,
-        gregkh@linuxfoundation.org
+To:     gregkh@linuxfoundation.org
 Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
         Xiaoke Wang <xkernel.wang@foxmail.com>
-Subject: [PATCH 05/12] staging: rtl8712: add two validation check in r8712_init_drv_sw()
-Date:   Tue,  3 May 2022 14:59:49 +0800
-X-OQ-MSGID: <20220503065949.3262-1-xkernel.wang@foxmail.com>
+Subject: [PATCH 06/12] staging: rtl8723bs: fix a potential memory leak in rtw_init_cmd_priv()
+Date:   Tue,  3 May 2022 15:00:16 +0800
+X-OQ-MSGID: <20220503070016.3283-1-xkernel.wang@foxmail.com>
 In-Reply-To: <tencent_A80380E4306BE7BA73E450F084232B4DFC0A@qq.com>
 References: <tencent_A80380E4306BE7BA73E450F084232B4DFC0A@qq.com>
 MIME-Version: 1.0
@@ -66,38 +65,67 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Xiaoke Wang <xkernel.wang@foxmail.com>
 
-_r8712_init_xmit_priv() or _r8712_init_recv_priv() returns -ENOMEM
-when some allocations inside it failed.
-However, the caller, i.e., r8712_init_drv_sw(), does not properly
-validate their return status, which may lead to potential wrong memory
-access in the future.
+In rtw_init_cmd_priv(), if `pcmdpriv->rsp_allocated_buf` is allocated
+in failure, then `pcmdpriv->cmd_allocated_buf` will be not properly
+released. Besides, considering there are only two error paths and the
+first one can directly return, so we do not need implicitly jump to the
+`exit` tag to execute the error handler.
 
-Therefore, this patch adds two validation check for their return status
-and properly jump to the corresponding error hanlding code if failures
-happen.
+So this patch added `kfree(pcmdpriv->cmd_allocated_buf);` on the error
+path to release the resource and simplified the return logic of
+rtw_init_cmd_priv().
 
 Signed-off-by: Xiaoke Wang <xkernel.wang@foxmail.com>
 ---
- drivers/staging/rtl8712/os_intfs.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ drivers/staging/rtl8723bs/core/rtw_cmd.c | 17 +++++++----------
+ 1 file changed, 7 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/staging/rtl8712/os_intfs.c b/drivers/staging/rtl8712/os_intfs.c
-index 43a7953..3d79d24 100644
---- a/drivers/staging/rtl8712/os_intfs.c
-+++ b/drivers/staging/rtl8712/os_intfs.c
-@@ -308,8 +308,12 @@ int r8712_init_drv_sw(struct _adapter *padapter)
- 	ret = r8712_init_mlme_priv(padapter);
- 	if (ret)
- 		goto free_evt_priv;
--	_r8712_init_xmit_priv(&padapter->xmitpriv, padapter);
--	_r8712_init_recv_priv(&padapter->recvpriv, padapter);
-+	ret = _r8712_init_xmit_priv(&padapter->xmitpriv, padapter);
-+	if (ret)
-+		goto free_mlme_priv;
-+	ret = _r8712_init_recv_priv(&padapter->recvpriv, padapter);
-+	if (ret)
-+		goto free_xmit_priv;
- 	memset((unsigned char *)&padapter->securitypriv, 0,
- 	       sizeof(struct security_priv));
- 	timer_setup(&padapter->securitypriv.tkip_timer,
+diff --git a/drivers/staging/rtl8723bs/core/rtw_cmd.c b/drivers/staging/rtl8723bs/core/rtw_cmd.c
+index b4170f6..0a35142 100644
+--- a/drivers/staging/rtl8723bs/core/rtw_cmd.c
++++ b/drivers/staging/rtl8723bs/core/rtw_cmd.c
+@@ -161,8 +161,6 @@ static struct cmd_hdl wlancmds[] = {
+ 
+ int rtw_init_cmd_priv(struct	cmd_priv *pcmdpriv)
+ {
+-	int res = 0;
+-
+ 	init_completion(&pcmdpriv->cmd_queue_comp);
+ 	init_completion(&pcmdpriv->terminate_cmdthread_comp);
+ 
+@@ -175,18 +173,17 @@ int rtw_init_cmd_priv(struct	cmd_priv *pcmdpriv)
+ 
+ 	pcmdpriv->cmd_allocated_buf = rtw_zmalloc(MAX_CMDSZ + CMDBUFF_ALIGN_SZ);
+ 
+-	if (!pcmdpriv->cmd_allocated_buf) {
+-		res = -ENOMEM;
+-		goto exit;
+-	}
++	if (!pcmdpriv->cmd_allocated_buf)
++		return -ENOMEM;
+ 
+ 	pcmdpriv->cmd_buf = pcmdpriv->cmd_allocated_buf  +  CMDBUFF_ALIGN_SZ - ((SIZE_PTR)(pcmdpriv->cmd_allocated_buf) & (CMDBUFF_ALIGN_SZ-1));
+ 
+ 	pcmdpriv->rsp_allocated_buf = rtw_zmalloc(MAX_RSPSZ + 4);
+ 
+ 	if (!pcmdpriv->rsp_allocated_buf) {
+-		res = -ENOMEM;
+-		goto exit;
++		kfree(pcmdpriv->cmd_allocated_buf);
++		pcmdpriv->cmd_allocated_buf = NULL;
++		return -ENOMEM;
+ 	}
+ 
+ 	pcmdpriv->rsp_buf = pcmdpriv->rsp_allocated_buf  +  4 - ((SIZE_PTR)(pcmdpriv->rsp_allocated_buf) & 3);
+@@ -196,8 +193,8 @@ int rtw_init_cmd_priv(struct	cmd_priv *pcmdpriv)
+ 	pcmdpriv->rsp_cnt = 0;
+ 
+ 	mutex_init(&pcmdpriv->sctx_mutex);
+-exit:
+-	return res;
++
++	return 0;
+ }
+ 
+ static void c2h_wk_callback(struct work_struct *work);
 -- 

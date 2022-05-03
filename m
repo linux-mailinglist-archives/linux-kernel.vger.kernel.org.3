@@ -2,59 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2596518011
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 10:49:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E63D518012
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 10:49:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232977AbiECIxH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 04:53:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32938 "EHLO
+        id S233013AbiECIxM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 04:53:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231958AbiECIxD (ORCPT
+        with ESMTP id S232859AbiECIxE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 04:53:03 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F196220CA
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 01:49:31 -0700 (PDT)
+        Tue, 3 May 2022 04:53:04 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6338F27B37
+        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 01:49:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651567771; x=1683103771;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=LmE6upOavE1RXU9aw5uXcrjSqvaKF0NkfkbYeYXWhH4=;
-  b=BOKmtWQ9s8zeCWlLpeZ1scVHLGfoOsca+H1sq4mA1odKrKgzZmK9+3P2
-   XU4a/be9SetU57m5ywhbtO+NoaJCms8Dfw6pEf1k4HLFv4SrKDZ8ha1Q1
-   vhtEiCE1Ka/b5gfDCO8QsG7Q1W3SPolayQ/6mxOpzM7HxJgcJgDnOFcji
-   KI6Z9VlBn9PIR7NromHsO3SNjtRKbOd1lYiRaNioMwf16B88Mdqdlp1XG
-   HxNN/I5Mvxs3z9XUV83mw6bue+yUFLgfj+sMHKEn0rTK6rENSe9wXGkMD
-   3zlfOJPVVxOZpso+PmJVRSHiDgrKMMHTvC8e2/Nps0mFn5KazX8wLmLcd
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10335"; a="266276759"
+  t=1651567772; x=1683103772;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=DmzcaiLRqqiyo8PYpg9kyWYjjUJjoZ8e2OsQMfbGjZM=;
+  b=OpfUUp0O9e4f3uRBdQT14SaB0pxBc7PLO90p51We2bMvdMpm++UiI+E8
+   wQHoslAbZgClp86K/FIrVO+bHo8YVVQuBfhVgob1qVhd6ROXvua4kzudL
+   lGGFR62raHvIHodb4Wi+stBcABYWOwS0yObD1KyvuYA17knTnXKcvxGMW
+   uF4e/u9IRpU4lXMvLLaqQ73AjnmeezKnPJfnDWsLamgsJvuEuReDw7G0r
+   IcDLwH/1V+zvWlkK+j4/Htep3zgCVtgmvIgkbbVk1qJo8jrwwU6Vb2U5h
+   iHWrLZi1t5xvHlpg9OTja1FaGWGsQ08I+6AwSUjkS9h1PEKmu6QjYk6TO
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10335"; a="267588789"
 X-IronPort-AV: E=Sophos;i="5.91,194,1647327600"; 
-   d="scan'208";a="266276759"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2022 01:49:31 -0700
+   d="scan'208";a="267588789"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2022 01:49:31 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,194,1647327600"; 
-   d="scan'208";a="567560241"
+   d="scan'208";a="888298048"
 Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 03 May 2022 01:49:29 -0700
+  by fmsmga005.fm.intel.com with ESMTP; 03 May 2022 01:49:29 -0700
 Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
         (envelope-from <lkp@intel.com>)
-        id 1nloDp-000AIx-1R;
+        id 1nloDp-000AJ2-3P;
         Tue, 03 May 2022 08:49:29 +0000
-Date:   Tue, 3 May 2022 16:48:32 +0800
+Date:   Tue, 3 May 2022 16:48:34 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Hector Martin <marcan@marcan.st>
+To:     Minchan Kim <minchan@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
 Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [asahilinux:bits/110-smc 11/14]
- drivers/power/reset/macsmc-reboot.c:142:37: warning: declaration of 'struct
- power_off_data' will not be visible outside of this function
-Message-ID: <202205031650.5NKbmyGx-lkp@intel.com>
+        Linux Memory Management List <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        John Hubbard <jhubbard@nvidia.com>,
+        John Dias <joaodias@google.com>,
+        Minchan Kim <minchan@kernel.org>
+Subject: Re: [PATCH] mm: fix is_pinnable_page against on cma page
+Message-ID: <202205031644.EtLKbqIX-lkp@intel.com>
+References: <20220502173558.2510641-1-minchan@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+In-Reply-To: <20220502173558.2510641-1-minchan@kernel.org>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -63,238 +69,107 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/AsahiLinux/linux bits/110-smc
-head:   dc3db43287ff1d44b447fff8ed6386b28b339f1c
-commit: c65d40d51ad43c1cb61a2e8658005340a622b826 [11/14] power: reset: macsmc-reboot: Add driver for rebooting via Apple SMC
-config: arm64-randconfig-r034-20220501 (https://download.01.org/0day-ci/archive/20220503/202205031650.5NKbmyGx-lkp@intel.com/config)
+Hi Minchan,
+
+I love your patch! Perhaps something to improve:
+
+[auto build test WARNING on hnaz-mm/master]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Minchan-Kim/mm-fix-is_pinnable_page-against-on-cma-page/20220503-013733
+base:   https://github.com/hnaz/linux-mm master
+config: hexagon-randconfig-r034-20220501 (https://download.01.org/0day-ci/archive/20220503/202205031644.EtLKbqIX-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 363b3a645a1e30011cc8da624f13dac5fd915628)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/AsahiLinux/linux/commit/c65d40d51ad43c1cb61a2e8658005340a622b826
-        git remote add asahilinux https://github.com/AsahiLinux/linux
-        git fetch --no-tags asahilinux bits/110-smc
-        git checkout c65d40d51ad43c1cb61a2e8658005340a622b826
+        # https://github.com/intel-lab-lkp/linux/commit/1b8636710c31d44310f1d344e337c207562b851d
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Minchan-Kim/mm-fix-is_pinnable_page-against-on-cma-page/20220503-013733
+        git checkout 1b8636710c31d44310f1d344e337c207562b851d
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/input/misc/ drivers/power/reset/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
-   drivers/power/reset/macsmc-reboot.c:54:25: error: field has incomplete type 'struct sys_off_handler'
-           struct sys_off_handler sys_off;
-                                  ^
-   drivers/power/reset/macsmc-reboot.c:54:9: note: forward declaration of 'struct sys_off_handler'
-           struct sys_off_handler sys_off;
-                  ^
->> drivers/power/reset/macsmc-reboot.c:142:37: warning: declaration of 'struct power_off_data' will not be visible outside of this function [-Wvisibility]
-   static void macsmc_power_off(struct power_off_data *data)
-                                       ^
-   drivers/power/reset/macsmc-reboot.c:144:37: error: incomplete definition of type 'struct power_off_data'
-           struct macsmc_reboot *reboot = data->cb_data;
-                                          ~~~~^
-   drivers/power/reset/macsmc-reboot.c:142:37: note: forward declaration of 'struct power_off_data'
-   static void macsmc_power_off(struct power_off_data *data)
-                                       ^
->> drivers/power/reset/macsmc-reboot.c:156:35: warning: declaration of 'struct restart_data' will not be visible outside of this function [-Wvisibility]
-   static void macsmc_restart(struct restart_data *data)
-                                     ^
-   drivers/power/reset/macsmc-reboot.c:158:37: error: incomplete definition of type 'struct restart_data'
-           struct macsmc_reboot *reboot = data->cb_data;
-                                          ~~~~^
-   drivers/power/reset/macsmc-reboot.c:156:35: note: forward declaration of 'struct restart_data'
-   static void macsmc_restart(struct restart_data *data)
-                                     ^
->> drivers/power/reset/macsmc-reboot.c:170:42: warning: declaration of 'struct reboot_prep_data' will not be visible outside of this function [-Wvisibility]
-   static void macsmc_reboot_prepare(struct reboot_prep_data *data)
-                                            ^
-   drivers/power/reset/macsmc-reboot.c:172:37: error: incomplete definition of type 'struct reboot_prep_data'
-           struct macsmc_reboot *reboot = data->cb_data;
-                                          ~~~~^
-   drivers/power/reset/macsmc-reboot.c:170:42: note: forward declaration of 'struct reboot_prep_data'
-   static void macsmc_reboot_prepare(struct reboot_prep_data *data)
-                                            ^
-   drivers/power/reset/macsmc-reboot.c:176:14: error: incomplete definition of type 'struct reboot_prep_data'
-           switch (data->mode) {
-                   ~~~~^
-   drivers/power/reset/macsmc-reboot.c:170:42: note: forward declaration of 'struct reboot_prep_data'
-   static void macsmc_reboot_prepare(struct reboot_prep_data *data)
-                                            ^
-   drivers/power/reset/macsmc-reboot.c:289:37: error: use of undeclared identifier 'RESTART_PRIO_HIGH'
-           reboot->sys_off.restart_priority = RESTART_PRIO_HIGH;
-                                              ^
-   drivers/power/reset/macsmc-reboot.c:292:8: error: call to undeclared function 'devm_register_sys_off_handler'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           ret = devm_register_sys_off_handler(&pdev->dev, &reboot->sys_off);
-                 ^
-   3 warnings and 7 errors generated.
+   In file included from fs/statfs.c:2:
+   In file included from include/linux/syscalls.h:88:
+   In file included from include/trace/syscall.h:7:
+   In file included from include/linux/trace_events.h:6:
+   In file included from include/linux/ring_buffer.h:5:
+   include/linux/mm.h:1630:47: error: use of undeclared identifier 'MIGRATE_CMA'; did you mean 'MIGRATE_SYNC'?
+           return !(is_zone_movable_page(page) || mt == MIGRATE_CMA ||
+                                                        ^~~~~~~~~~~
+                                                        MIGRATE_SYNC
+   include/linux/migrate_mode.h:18:2: note: 'MIGRATE_SYNC' declared here
+           MIGRATE_SYNC,
+           ^
+   In file included from fs/statfs.c:2:
+   In file included from include/linux/syscalls.h:88:
+   In file included from include/trace/syscall.h:7:
+   In file included from include/linux/trace_events.h:6:
+   In file included from include/linux/ring_buffer.h:5:
+   include/linux/mm.h:1631:9: error: use of undeclared identifier 'MIGRATE_ISOLATE'; did you mean 'MIGRATE_MOVABLE'?
+                   mt == MIGRATE_ISOLATE || is_zero_pfn(page_to_pfn(page)));
+                         ^~~~~~~~~~~~~~~
+                         MIGRATE_MOVABLE
+   include/linux/mmzone.h:44:2: note: 'MIGRATE_MOVABLE' declared here
+           MIGRATE_MOVABLE,
+           ^
+>> fs/statfs.c:131:3: warning: 'memcpy' will always overflow; destination buffer has size 64, but size argument is 88 [-Wfortify-source]
+                   memcpy(&buf, st, sizeof(*st));
+                   ^
+   1 warning and 2 errors generated.
 
 
-vim +142 drivers/power/reset/macsmc-reboot.c
+vim +/memcpy +131 fs/statfs.c
 
-    50	
-    51	struct macsmc_reboot {
-    52		struct device *dev;
-    53		struct apple_smc *smc;
-  > 54		struct sys_off_handler sys_off;
-    55	
-    56		union {
-    57			struct macsmc_reboot_nvmem nvm;
-    58			struct nvmem_cell *nvm_cells[ARRAY_SIZE(nvmem_names)];
-    59		};
-    60	};
-    61	
-    62	/* Helpers to read/write a u8 given a struct nvmem_cell */
-    63	static int nvmem_cell_get_u8(struct nvmem_cell *cell)
-    64	{
-    65		size_t len;
-    66		u8 val;
-    67		void *ret = nvmem_cell_read(cell, &len);
-    68	
-    69		if (IS_ERR(ret))
-    70			return PTR_ERR(ret);
-    71	
-    72		if (len < 1) {
-    73			kfree(ret);
-    74			return -EINVAL;
-    75		}
-    76	
-    77		val = *(u8 *)ret;
-    78		kfree(ret);
-    79		return val;
-    80	}
-    81	
-    82	static int nvmem_cell_set_u8(struct nvmem_cell *cell, u8 val)
-    83	{
-    84		return nvmem_cell_write(cell, &val, sizeof(val));
-    85	}
-    86	
-    87	static ssize_t macsmc_ac_power_mode_store(struct device *dev, struct device_attribute *attr,
-    88						  const char *buf, size_t n)
-    89	{
-    90		struct macsmc_reboot *reboot = dev_get_drvdata(dev);
-    91		int mode;
-    92		int ret;
-    93	
-    94		mode = sysfs_match_string(ac_power_modes, buf);
-    95		if (mode < 0)
-    96			return mode;
-    97	
-    98		ret = nvmem_cell_set_u8(reboot->nvm.pm_setting, ac_power_mode_map[mode]);
-    99		if (ret < 0)
-   100			return ret;
-   101	
-   102		return n;
-   103	}
-   104	
-   105	static ssize_t macsmc_ac_power_mode_show(struct device *dev,
-   106						 struct device_attribute *attr, char *buf)
-   107	{
-   108		struct macsmc_reboot *reboot = dev_get_drvdata(dev);
-   109		int len = 0;
-   110		int i;
-   111		int mode = nvmem_cell_get_u8(reboot->nvm.pm_setting);
-   112	
-   113		if (mode < 0)
-   114			return mode;
-   115	
-   116		for (i = 0; i < ARRAY_SIZE(ac_power_mode_map); i++)
-   117			if (mode == ac_power_mode_map[i])
-   118				len += scnprintf(buf+len, PAGE_SIZE-len,
-   119						 "[%s] ", ac_power_modes[i]);
-   120			else
-   121				len += scnprintf(buf+len, PAGE_SIZE-len,
-   122						 "%s ", ac_power_modes[i]);
-   123		buf[len-1] = '\n';
-   124		return len;
-   125	}
-   126	static DEVICE_ATTR(ac_power_mode, 0644, macsmc_ac_power_mode_show,
-   127			   macsmc_ac_power_mode_store);
-   128	
-   129	/*
-   130	 * SMC 'MBSE' key actions:
-   131	 *
-   132	 * 'offw' - shutdown warning
-   133	 * 'slpw' - sleep warning
-   134	 * 'rest' - restart warning
-   135	 * 'off1' - shutdown (needs PMU bit set to stay on)
-   136	 * 'susp' - suspend
-   137	 * 'phra' - restart ("PE Halt Restart Action"?)
-   138	 * 'panb' - panic beginning
-   139	 * 'pane' - panic end
-   140	 */
-   141	
- > 142	static void macsmc_power_off(struct power_off_data *data)
-   143	{
-   144		struct macsmc_reboot *reboot = data->cb_data;
-   145	
-   146		dev_info(reboot->dev, "Issuing power off (off1)\n");
-   147	
-   148		if (apple_smc_write_u32_atomic(reboot->smc, SMC_KEY(MBSE), SMC_KEY(off1)) < 0) {
-   149			dev_err(reboot->dev, "Failed to issue MBSE = off1 (power_off)\n");
-   150		} else {
-   151			mdelay(100);
-   152			WARN_ON(1);
-   153		}
-   154	}
-   155	
- > 156	static void macsmc_restart(struct restart_data *data)
-   157	{
-   158		struct macsmc_reboot *reboot = data->cb_data;
-   159	
-   160		dev_info(reboot->dev, "Issuing restart (phra)\n");
-   161	
-   162		if (apple_smc_write_u32_atomic(reboot->smc, SMC_KEY(MBSE), SMC_KEY(phra)) < 0) {
-   163			dev_err(reboot->dev, "Failed to issue MBSE = phra (restart)\n");
-   164		} else {
-   165			mdelay(100);
-   166			WARN_ON(1);
-   167		}
-   168	}
-   169	
- > 170	static void macsmc_reboot_prepare(struct reboot_prep_data *data)
-   171	{
-   172		struct macsmc_reboot *reboot = data->cb_data;
-   173		u32 val;
-   174		u8 shutdown_flag;
-   175	
-   176		switch (data->mode) {
-   177			case SYS_RESTART:
-   178				val = SMC_KEY(rest);
-   179				shutdown_flag = 0;
-   180				break;
-   181			case SYS_POWER_OFF:
-   182				val = SMC_KEY(offw);
-   183				shutdown_flag = 1;
-   184				break;
-   185			default:
-   186				return;
-   187		}
-   188	
-   189		dev_info(reboot->dev, "Preparing for reboot (%p4ch)\n", &val);
-   190	
-   191		/* On the Mac Mini, this will turn off the LED for power off */
-   192		if (apple_smc_write_u32(reboot->smc, SMC_KEY(MBSE), val) < 0)
-   193			dev_err(reboot->dev, "Failed to issue MBSE = %p4ch (reboot_prepare)\n", &val);
-   194	
-   195		/* Set the boot_stage to 0, which means we're doing a clean shutdown/reboot. */
-   196		if (reboot->nvm.boot_stage &&
-   197		    nvmem_cell_set_u8(reboot->nvm.boot_stage, BOOT_STAGE_SHUTDOWN) < 0)
-   198			dev_err(reboot->dev, "Failed to write boot_stage\n");
-   199	
-   200		/*
-   201		 * Set the PMU flag to actually reboot into the off state.
-   202		 * Without this, the device will just reboot. We make it optional in case it is no longer
-   203		 * necessary on newer hardware.
-   204		 */
-   205		if (reboot->nvm.shutdown_flag &&
-   206		    nvmem_cell_set_u8(reboot->nvm.shutdown_flag, shutdown_flag) < 0)
-   207			dev_err(reboot->dev, "Failed to write shutdown_flag\n");
-   208	
+c8b91accfa1059 Al Viro 2011-03-12  125  
+c8b91accfa1059 Al Viro 2011-03-12  126  static int do_statfs_native(struct kstatfs *st, struct statfs __user *p)
+c8b91accfa1059 Al Viro 2011-03-12  127  {
+c8b91accfa1059 Al Viro 2011-03-12  128  	struct statfs buf;
+7ed1ee6118ae77 Al Viro 2010-03-23  129  
+c8b91accfa1059 Al Viro 2011-03-12  130  	if (sizeof(buf) == sizeof(*st))
+c8b91accfa1059 Al Viro 2011-03-12 @131  		memcpy(&buf, st, sizeof(*st));
+7ed1ee6118ae77 Al Viro 2010-03-23  132  	else {
+c8b91accfa1059 Al Viro 2011-03-12  133  		if (sizeof buf.f_blocks == 4) {
+c8b91accfa1059 Al Viro 2011-03-12  134  			if ((st->f_blocks | st->f_bfree | st->f_bavail |
+c8b91accfa1059 Al Viro 2011-03-12  135  			     st->f_bsize | st->f_frsize) &
+7ed1ee6118ae77 Al Viro 2010-03-23  136  			    0xffffffff00000000ULL)
+7ed1ee6118ae77 Al Viro 2010-03-23  137  				return -EOVERFLOW;
+7ed1ee6118ae77 Al Viro 2010-03-23  138  			/*
+7ed1ee6118ae77 Al Viro 2010-03-23  139  			 * f_files and f_ffree may be -1; it's okay to stuff
+7ed1ee6118ae77 Al Viro 2010-03-23  140  			 * that into 32 bits
+7ed1ee6118ae77 Al Viro 2010-03-23  141  			 */
+c8b91accfa1059 Al Viro 2011-03-12  142  			if (st->f_files != -1 &&
+c8b91accfa1059 Al Viro 2011-03-12  143  			    (st->f_files & 0xffffffff00000000ULL))
+7ed1ee6118ae77 Al Viro 2010-03-23  144  				return -EOVERFLOW;
+c8b91accfa1059 Al Viro 2011-03-12  145  			if (st->f_ffree != -1 &&
+c8b91accfa1059 Al Viro 2011-03-12  146  			    (st->f_ffree & 0xffffffff00000000ULL))
+7ed1ee6118ae77 Al Viro 2010-03-23  147  				return -EOVERFLOW;
+7ed1ee6118ae77 Al Viro 2010-03-23  148  		}
+7ed1ee6118ae77 Al Viro 2010-03-23  149  
+c8b91accfa1059 Al Viro 2011-03-12  150  		buf.f_type = st->f_type;
+c8b91accfa1059 Al Viro 2011-03-12  151  		buf.f_bsize = st->f_bsize;
+c8b91accfa1059 Al Viro 2011-03-12  152  		buf.f_blocks = st->f_blocks;
+c8b91accfa1059 Al Viro 2011-03-12  153  		buf.f_bfree = st->f_bfree;
+c8b91accfa1059 Al Viro 2011-03-12  154  		buf.f_bavail = st->f_bavail;
+c8b91accfa1059 Al Viro 2011-03-12  155  		buf.f_files = st->f_files;
+c8b91accfa1059 Al Viro 2011-03-12  156  		buf.f_ffree = st->f_ffree;
+c8b91accfa1059 Al Viro 2011-03-12  157  		buf.f_fsid = st->f_fsid;
+c8b91accfa1059 Al Viro 2011-03-12  158  		buf.f_namelen = st->f_namelen;
+c8b91accfa1059 Al Viro 2011-03-12  159  		buf.f_frsize = st->f_frsize;
+c8b91accfa1059 Al Viro 2011-03-12  160  		buf.f_flags = st->f_flags;
+c8b91accfa1059 Al Viro 2011-03-12  161  		memset(buf.f_spare, 0, sizeof(buf.f_spare));
+c8b91accfa1059 Al Viro 2011-03-12  162  	}
+c8b91accfa1059 Al Viro 2011-03-12  163  	if (copy_to_user(p, &buf, sizeof(buf)))
+c8b91accfa1059 Al Viro 2011-03-12  164  		return -EFAULT;
+7ed1ee6118ae77 Al Viro 2010-03-23  165  	return 0;
+7ed1ee6118ae77 Al Viro 2010-03-23  166  }
+7ed1ee6118ae77 Al Viro 2010-03-23  167  
 
 -- 
 0-DAY CI Kernel Test Service

@@ -2,92 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30270518436
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 14:24:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BACFE518444
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 14:26:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235217AbiECM2A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 08:28:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39000 "EHLO
+        id S235259AbiECM3z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 08:29:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235211AbiECM17 (ORCPT
+        with ESMTP id S235260AbiECM3w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 08:27:59 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06BAA34640
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 05:24:26 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id i19so33046497eja.11
-        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 05:24:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:from:in-reply-to:content-transfer-encoding;
-        bh=w9o0rBeMZgbyZNfjsand+DV95cYIbRGcLKUJTazXViA=;
-        b=W2aKOb/2Tc1fpuAQsg7RvuxPlQlrrS8ruvjZO6rUZpp4kUl00VKyXwaJx0MIHG2kvI
-         heLPjclGBJccHqUG5hh4RLxjnCRZznTq8GwiJEvdFSmDxymY1d2wgXJGjeKv8iVxZXlf
-         UXU/w28NNMY0CFulyplEnBtKgX4PBA0cFWrsTfHHqiy6Qn4ZyJrzdVvPmW9Lp3jTjrvd
-         K1kYT8y3ggiOMF2jl3X4YPNNWGK7SBnnXSAuh4n3DSavBZbbi/T0d3ssestvKgSSpRPv
-         CcGpWKfq+GyIrSOzqNnmt0Q50hsAmuVZ6ZpVZItF9/AwfvQpbW3gxOzkbnHbwQuTtceX
-         erfg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=w9o0rBeMZgbyZNfjsand+DV95cYIbRGcLKUJTazXViA=;
-        b=B2ZXrwvbSPj4EOPFuB+QURe997qlHQVPmXTA2lHgkuOiZfxUuNLOY6ag0lTZQ108D7
-         NuIhDNmA3gqgcOhFkTJ+ajN0pKKaC0B3sgz7Mln7N994Ilx1VBFwqeuX9pvJrkytn/IQ
-         Dpdy2UKd2/fZB4VGQ9keUpCuTjFt1WwlRkyNcWT4T93bN7rzPDHLhWKYjsw/9ggwFnmH
-         fHB4VKyH32hj/NxY0iQgAVg8nzcpOUllAGZad8CPW25lDVWia60wDm7OoKcbhDRmcig3
-         MrsbxfGbMpsqcgSc8J45dYByJdH7eMFnakrNRQLtniK1SANuJTj8Dex/tza02IG22XiW
-         OtBg==
-X-Gm-Message-State: AOAM533nDVYls8aupQXAXM30nl+Cwn7qcxGTYVX+FjZyymkwhy1Rrn5P
-        ekEEdRVC6+tjzVlAJwJOS7xXwQ==
-X-Google-Smtp-Source: ABdhPJyKajV9ilKveoq5L48oCAR7Q4JiNkU+MhDU3QDF2vhyzefmg5COkXV+PHo19Afvibh2l9BjdQ==
-X-Received: by 2002:a17:907:160c:b0:6f4:4b2c:8e53 with SMTP id hb12-20020a170907160c00b006f44b2c8e53mr9152631ejc.10.1651580664641;
-        Tue, 03 May 2022 05:24:24 -0700 (PDT)
-Received: from [192.168.0.203] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id d2-20020a170907272200b006f3ef214e1esm4583195ejl.132.2022.05.03.05.24.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 03 May 2022 05:24:24 -0700 (PDT)
-Message-ID: <f136a711-846c-be7d-b39e-71825d59a987@linaro.org>
-Date:   Tue, 3 May 2022 14:24:23 +0200
+        Tue, 3 May 2022 08:29:52 -0400
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C1D337A9D;
+        Tue,  3 May 2022 05:26:18 -0700 (PDT)
+Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2438jkLk016074;
+        Tue, 3 May 2022 14:25:40 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=47vTGwiYTxtIa15R2nQGwX54FUlIo/9LF6dDi/n3mKI=;
+ b=vKnMCjo7utP6wU8DFbsi5wQm1OujYfjcHwuwdKU7Rn8JxDWCQW7ZwTZ2hk9C7lU/KdFd
+ QJkO8LorREmPY21saT52zUS1Fz7UKRQHkGeE4yzyP2mkn9msd9eaRlBJx5OLNZpXPHKT
+ QT3BnksozOemq9DoZkeCUaunnbEoE0AX73mf7GugWo1jOzcvsYUhtPas35tjKA1Lo+y4
+ 9ExSbuHZ0MUv5NHqZw5syiDCLaItxuxpt53weqR/K5oqDyfOau8y4JvoSxUSnSICAEk7
+ P0is1jfGp0mTuxZ/EGYfBNfQufaK+vwbYe8gs40jSxiRsSsfdXOMIa1pvempEHgUN0Uy kA== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3frv0g6yda-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 03 May 2022 14:25:40 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id C01DE100034;
+        Tue,  3 May 2022 14:25:39 +0200 (CEST)
+Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id B921721BF66;
+        Tue,  3 May 2022 14:25:39 +0200 (CEST)
+Received: from [10.48.1.102] (10.75.127.49) by SFHDAG2NODE2.st.com
+ (10.75.127.5) with Microsoft SMTP Server (TLS) id 15.0.1497.26; Tue, 3 May
+ 2022 14:25:38 +0200
+Message-ID: <28627ccb-21ef-1b86-e5d7-460daf672d6d@foss.st.com>
+Date:   Tue, 3 May 2022 14:25:37 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] arm64: dts: intel: add device tree for n6000
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v1 1/1] iio: trigger: stm32-lptimer-trigger: Make use of
+ device properties
 Content-Language: en-US
-To:     matthew.gerlach@linux.intel.com, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, dinguyen@vger.kernel.org,
-        robh+dt@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org
-References: <20220502165818.4002157-1-matthew.gerlach@linux.intel.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220502165818.4002157-1-matthew.gerlach@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Jonathan Cameron <jic23@kernel.org>
+CC:     <linux-iio@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>
+References: <20220413185656.21994-1-andriy.shevchenko@linux.intel.com>
+ <20220428193304.016c46a3@jic23-huawei> <YnEB97YfPYpe2aCn@smile.fi.intel.com>
+From:   Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+In-Reply-To: <YnEB97YfPYpe2aCn@smile.fi.intel.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Originating-IP: [10.75.127.49]
+X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SFHDAG2NODE2.st.com
+ (10.75.127.5)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-03_03,2022-05-02_03,2022-02-23_01
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02/05/2022 18:58, matthew.gerlach@linux.intel.com wrote:
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/intel/socfpga_agilex_n6000.dts
-> @@ -0,0 +1,77 @@
-> +// SPDX-License-Identifier:     GPL-2.0
-> +/*
-> + * Copyright (C) 2021-2022, Intel Corporation
-> + */
-> +#include "socfpga_agilex.dtsi"
-> +
-> +/ {
-> +	model = "SoCFPGA Agilex n6000";
 
-Where is the compatible?
 
-Best regards,
-Krzysztof
+On 5/3/22 12:20, Andy Shevchenko wrote:
+> On Thu, Apr 28, 2022 at 07:33:04PM +0100, Jonathan Cameron wrote:
+>> On Wed, 13 Apr 2022 21:56:56 +0300
+>> Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
+>>
+>>> Convert the module to be property provider agnostic and allow
+>>> it to be used on non-OF platforms.
+>>>
+>>> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+>>
+>> MAINTAINERS entry for this one uses extensive wild cards so may
+>> escape scripts...
+>>
+>> +CC Fabrice.
+> 
+> Thanks!
+> 
+> Not sure it might break anything, it's quite straightforward conversion.
+
+Hi Andy, Jonathan,
+
+You can add my:
+Reviewed-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+
+Thanks,
+Best Regards,
+Fabrice
+
+> 

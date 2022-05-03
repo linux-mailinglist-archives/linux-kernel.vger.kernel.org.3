@@ -2,66 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81B58517ED5
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 09:24:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE562517ED1
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 09:24:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232181AbiECH0U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 03:26:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39298 "EHLO
+        id S232241AbiECH1E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 03:27:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232186AbiECHZ4 (ORCPT
+        with ESMTP id S232244AbiECH0g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 03:25:56 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1AB127164;
-        Tue,  3 May 2022 00:22:08 -0700 (PDT)
-Received: from mail-yw1-f172.google.com ([209.85.128.172]) by
- mrelayeu.kundenserver.de (mreue010 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1N3KgE-1nuy3Y2gPy-010Hes; Tue, 03 May 2022 09:22:06 +0200
-Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-2f7b815ac06so171033297b3.3;
-        Tue, 03 May 2022 00:22:06 -0700 (PDT)
-X-Gm-Message-State: AOAM531PW4WfhALUGYWaRQ5GaiKb8wrevqIqQOC+ZkhwdWF101mrKAUN
-        NcsF1AfuAVCwXUZFnINvuZDKarmyUMKW3uFURD8=
-X-Google-Smtp-Source: ABdhPJwPr9q0sZe+e8UxYUbigcUnaa5Xa3a0oSwktBFYt4HYrPBnPD483wlKn2ZH53xnNpxMcJ15XBtdVqESN+RJUXQ=
-X-Received: by 2002:a81:9213:0:b0:2f6:eaae:d22f with SMTP id
- j19-20020a819213000000b002f6eaaed22fmr14551172ywg.249.1651562525321; Tue, 03
- May 2022 00:22:05 -0700 (PDT)
+        Tue, 3 May 2022 03:26:36 -0400
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F97F3917D
+        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 00:23:01 -0700 (PDT)
+Received: by mail-pl1-x631.google.com with SMTP id x18so3114041plg.6
+        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 00:23:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=dYOKOnX/ag89Q7FWf4mTvhnDEvPe9ePWto1EYZGs+OQ=;
+        b=kJL+2m3UswGuMwUa2ADnBKx9k7XiM5W2DhfJJnyiYigWx/2+gpJi9pNp+p5CwvOkpJ
+         VUs9E5GM/VNuRj1ZxO3KHDcQDVZ/O7X1IQTsVeiD6MMn+j7VYSU0CRis9H7/hjkkpL4s
+         oXCheS3gL/+nL90EFP4hNrVHEIc+hFzauf2IHKpXBZe1VylWQJRily8n9UdrzAIvTr0H
+         OTZGXUk1E0WqjSRV3FVBRhf8r/mlL4/IMfyAF+5X0eLOyyWaiHrpT/q08sNGvSH5LI4g
+         A/wd7jyOlLmL2UMjYCalSQaZzL2YMi50+eCTCQdcE2A9V8pxHd68kL7swWWc1y6oZvq6
+         Hz0g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=dYOKOnX/ag89Q7FWf4mTvhnDEvPe9ePWto1EYZGs+OQ=;
+        b=XG6V4WUO8tu+0qKaFjT46uAV5dKLh7D6p5kJlWutEUP31HkRKrjemFwGmGrr95oNWy
+         Qjelw/bQP75dlrNGHyA2exP6pD8lbHfyODc6Js8/PDjsT22DkAPlvVnMBiMoO5SCWYry
+         vUKV2EtoB0Zse4g9h3xOrEBNGX63yJZUy+PSAbxCtAax3oLYRxchNRWKQBRT0rbhPloQ
+         bK/Nb5XvkErEaKAnYu5BTHSajRykPtYZEB5ItVxNfhFlvxJIl9Q8np6wVsrv7zCQ7X7H
+         PX9XUAjpsENqReANqTNNlxwseYYsKu17cqj7zE/b77ROj458NwGD7JE1QfOIy0vXiKwd
+         Ffow==
+X-Gm-Message-State: AOAM531ReYcJxFFyFivHphjtJqi3WPiKapW4gaQ4+EB+VURTPHv2gTRV
+        iTg68lCNgLiJR0s1977U2/uFeHi0ir0pvWW4VOLPcQ==
+X-Google-Smtp-Source: ABdhPJw1s1JswARQvRGebofKaxoOTfTVyYJCUT38LUSf+snPURnEtm8yFrO3id35Fi7bWxmtCBqqpDNYEc7nKS57z0E=
+X-Received: by 2002:a17:902:70cb:b0:158:424e:a657 with SMTP id
+ l11-20020a17090270cb00b00158424ea657mr15285007plt.6.1651562580619; Tue, 03
+ May 2022 00:23:00 -0700 (PDT)
 MIME-Version: 1.0
-References: <202205031017.4TwMan3l-lkp@intel.com> <YnCXTPrbLhvfRVDm@e3a974050dc4>
-In-Reply-To: <YnCXTPrbLhvfRVDm@e3a974050dc4>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Tue, 3 May 2022 09:21:49 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a1xMeLa72YKMufdej6KguDwiSXtZmMqRxOt5B05x_fx3A@mail.gmail.com>
-Message-ID: <CAK8P3a1xMeLa72YKMufdej6KguDwiSXtZmMqRxOt5B05x_fx3A@mail.gmail.com>
-Subject: Re: [PATCH] ARM: dove: fix returnvar.cocci warnings
-To:     kernel test robot <lkp@intel.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>, kbuild-all@lists.01.org,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Tony Lindgren <tony@atomide.com>,
-        Russell King <linux@armlinux.org.uk>,
-        linux-omap <linux-omap@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20220503024349.4486-1-slark_xiao@163.com>
+In-Reply-To: <20220503024349.4486-1-slark_xiao@163.com>
+From:   Loic Poulain <loic.poulain@linaro.org>
+Date:   Tue, 3 May 2022 09:22:24 +0200
+Message-ID: <CAMZdPi-F96cLTXjCvVEQ7udpbk7KOBsqpMD3E03bE_A+Pkx8JA@mail.gmail.com>
+Subject: Re: [PATCH v2] bus: mhi: host: Add support for Foxconn T99W373 and T99W368
+To:     Slark Xiao <slark_xiao@163.com>
+Cc:     mani@kernel.org, quic_hemantk@quicinc.com,
+        gregkh@linuxfoundation.org, bbhatt@codeaurora.org,
+        christophe.jaillet@wanadoo.fr, mhi@lists.linux.dev,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:KBcmf8L+L6p/whd/P8ba85SiL61sT4pvbWzzB3TTUwYaT4iudsB
- WX/5N7nENNe1TewNk5ab96T2a9ZlV/gizqjJ9QQyArl0Ny9oVqGJjLM7ZdsPGz83iTqbMEK
- U/cpyXVLIYuCJ6RyNjiXW0Tl5XZ8Q5R5l8hAXPQEXjmEvFdWveY2fCBNVS2SNYBihl7CtJD
- iHzLJjA2j+Nbp489PmINg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:iQd+zec01aY=:f5iMHfS5U4pzqZdIp0fqY+
- Y6WdcyOJiGWgqe5lilgTB6y+MjEmPnP3StTreSrVA9T2YpZIECmh458DX0kBTl4q81hpk96o+
- FWiMlQuzHuW/S10Tv4J58XhjJF9sDWMWBvm8jSjlua0u8PLsI7hwobUjarNdYR4QCPLgTnSkd
- Q7kzR8XFq/JOVAQCN4Ku45efxA0a0/bvW/sK0j5+A81JjlMmrQi5u4wjbJkzBVlFnZsIV/wyT
- f3GznbdHwPK2uQluAhYZdaA+sB3VdSpyi82B6Hjf7Nbh2LP/vL+mFg1EgcOGbserp5yh3up/d
- nySq3oe4UgbGGZqpCxXJ832K/7X5E4YSerp1RST6luT34WW8aVvTNyK3Ct8iFFCkbarqx2WoD
- dmlrc7ytFixkTldf5SHuXOYA0VHglBTh9jhgzaRfouD7Z5BbKFjG326u8QEhRK87fD2+Z5Bs0
- 0lCWQSRFnvxv+cGeIC20Z7HEz9YJNA3EPKr36Rkm1EdU9nphzme9rXziHTFbU0/8mkDiidUWV
- 3tv66vAZcx+glMLTEfikIZkHVk+Km50LVUFwqLq8oD8AFyIDUNVe4tP1w/olWO5wVFBLxszFT
- 6QvMuexZfPY7461Lgio7/z/TFMbibgm4P59QsIDeAWO4dWThu9gOPgtqJVjIl0G9VNiRu24H9
- 493j/8AY7FVwu+p9GAk2lnrPgTrOxJJOsByvegxi4ivAxh3dxcPMNuQmoatMQ3K6ZWd4/h+j6
- v3GrlMubPjaqlY19vOFldHutSHblVU61DSGtmePtuSkvf/EBauo2W2HqnMb2fA5HyKoJX20Cs
- wcKaynjoYaT997ZXvxeiqVn3v9fVPBNGJXchUeg7QpewbrQ7nM=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,23 +68,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 3, 2022 at 4:45 AM kernel test robot <lkp@intel.com> wrote:
+On Tue, 3 May 2022 at 05:03, Slark Xiao <slark_xiao@163.com> wrote:
 >
-> From: kernel test robot <lkp@intel.com>
+> Product's enumeration align with previous Foxconn
+> SDX55, so T99W373(SDX62)/T99W368(SDX65) would use
+>  the same config as Foxconn SDX55.
+> Remove fw and edl for this new commit.
 >
-> arch/arm/mach-omap2/dma.c:82:10-16: Unneeded variable: "errata". Return "0" on line 161
->
->
->  Remove unneeded variable used to store return value.
->
-> Generated by: scripts/coccinelle/misc/returnvar.cocci
->
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Slark Xiao <slark_xiao@163.com>
+> Reviewed-by: Manivannan Sadhasivam <mani@kernel.org>
 
-I checked the patch, and unfortunately it is wrong, the current code
-needs to stay.
-The problem is the SET_DMA_ERRATA() macro that accesses the
-local 'errata' variable.
-
-         Arnd
+Reviewed-by: Loic Poulain <loic.poulain@linaro.org>

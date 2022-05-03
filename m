@@ -2,60 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33B57518AE8
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 19:19:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C76A518AEB
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 19:19:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240204AbiECRWf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 13:22:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37180 "EHLO
+        id S240085AbiECRXR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 13:23:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232716AbiECRWc (ORCPT
+        with ESMTP id S240212AbiECRXO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 13:22:32 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D8F422BEF;
-        Tue,  3 May 2022 10:18:55 -0700 (PDT)
-X-UUID: ce9a7978bb5e4c5490f9d6ec351fac8e-20220504
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.4,REQID:6ad70994-0b93-4c29-b97c-0c2157893154,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:0
-X-CID-META: VersionHash:faefae9,CLOUDID:ff1c912f-6199-437e-8ab4-9920b4bc5b76,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,File:nil,QS:0,BEC:nil
-X-UUID: ce9a7978bb5e4c5490f9d6ec351fac8e-20220504
-Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
-        (envelope-from <miles.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 16904984; Wed, 04 May 2022 01:18:50 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
- Wed, 4 May 2022 01:18:48 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
- mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.792.3 via Frontend Transport; Wed, 4 May 2022 01:18:48 +0800
-From:   Miles Chen <miles.chen@mediatek.com>
-To:     <yf.wang@mediatek.com>
-CC:     <Libo.Kang@mediatek.com>, <Yong.Wu@mediatek.com>,
-        <iommu@lists.linux-foundation.org>, <isaacm@codeaurora.org>,
-        <joro@8bytes.org>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>, <matthias.bgg@gmail.com>,
-        <ning.li@mediatek.com>, <quic_c_gdjako@quicinc.com>,
-        <robin.murphy@arm.com>, <stable@vger.kernel.org>,
-        <sven@svenpeter.dev>, <will@kernel.org>,
-        <wsd_upstream@mediatek.com>
-Subject: Re: [PATCH 1/2] iommu/io-pgtable-arm-v7s: Add a quirk to support TTBR up to 35bit for MediaTek
-Date:   Wed, 4 May 2022 01:18:48 +0800
-Message-ID: <20220503171848.24992-1-miles.chen@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20220429143411.7640-2-yf.wang@mediatek.com>
-References: <20220429143411.7640-2-yf.wang@mediatek.com>
-MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham
+        Tue, 3 May 2022 13:23:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 756161EEC4;
+        Tue,  3 May 2022 10:19:41 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DF22260BD6;
+        Tue,  3 May 2022 17:19:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 4E076C385B0;
+        Tue,  3 May 2022 17:19:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651598380;
+        bh=U0CBZeqndkqDdISAr6ltxVXuk5Deu1J5DRVMOf7h9yA=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=uQNohu/V+tqFdVrHLdwZYyeoSvIn9Rt5idrtWvpASpNA7HU054Pmh+n+BeINUGbHj
+         mqeYp3HAbgnd4A7BT4nsiPbpOl/RjTqLXSoW2+4W00/Vq6uMQbVevsZVfOnJc7VhRD
+         0kzoROlY37j4eUmUIo7x/ju3lAgEaqNqxh2+10epA7ZujeFRgEoRvK9DhzMFCxDxzw
+         y/RMXjlEX5ibO6P+LSS92jFPuRaZ2WBi9T8O0yBBuMN7fGZvEYan3C29G9npJEUTTv
+         8ceZlfhUgP7X/nNCtpejgZh3obn2jQXwWb08hdOAZiBltmfI0gc9mETSfhq++0agia
+         drcO+3/SlBSEA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 3A8FDF03848;
+        Tue,  3 May 2022 17:19:40 +0000 (UTC)
+Subject: Re: [GIT PULL] hwmon fixes for v5.18-rc6
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20220503060000.2839547-1-linux@roeck-us.net>
+References: <20220503060000.2839547-1-linux@roeck-us.net>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20220503060000.2839547-1-linux@roeck-us.net>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v5.18-rc6
+X-PR-Tracked-Commit-Id: 08da09f028043fed9653331ae75bc310411f72e6
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: ef8e4d3c2ab1f47f63b6c7e578266b7e5cc9cd1b
+Message-Id: <165159838023.8156.6094364623234823410.pr-tracker-bot@kernel.org>
+Date:   Tue, 03 May 2022 17:19:40 +0000
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,129 +61,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi YF,
+The pull request you sent on Mon,  2 May 2022 23:00:00 -0700:
 
-> The calling to kmem_cache_alloc for level 2 page table allocation may
-> run in atomic context, and it fails sometimes when DMA32 zone runs out
-> of memory.
-> 
-> Since Mediatek IOMMU hardware support at most 35bit PA in page table,
+> git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v5.18-rc6
 
-s/Mediatek/MediaTek/
-s/support/supports/
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/ef8e4d3c2ab1f47f63b6c7e578266b7e5cc9cd1b
 
-> so add a quirk to allow the PA of level 2 pgtable support bit35.
+Thank you!
 
-35bits PA, right?
-
->
-> 
-
-...snip...
-
->  
->  	phys = virt_to_phys(table);
-> -	if (phys != (arm_v7s_iopte)phys) {
-> +	if (phys != (arm_v7s_iopte)phys &&
-> +	    !(cfg->quirks & IO_PGTABLE_QUIRK_ARM_MTK_TTBR_EXT)) {
-
-I have one question while reading this.
-
-If IO_PGTABLE_QUIRK_ARM_MTK_TTBR_EXT is set, it means that the phys can be up to 35 bits.
-In aarch64, kmalloc() could return up to 52 bits PA (e.g., ARM64_PA_BITS_52=y)
-
-How do we guarantee that phys is safe (<= 35 bits) in this case?
-For example:
-When IO_PGTABLE_QUIRK_ARM_MTK_TTBR_EXT is set, the platform guarantees its PAs are at most
-35 bits?
-
-
-Thanks,
-Miles
->  		/* Doesn't fit in PTE */
->  		dev_err(dev, "Page table does not fit in PTE: %pa", &phys);
->  		goto out_free;
-> @@ -457,9 +464,14 @@ static arm_v7s_iopte arm_v7s_install_table(arm_v7s_iopte *table,
->  					   arm_v7s_iopte curr,
->  					   struct io_pgtable_cfg *cfg)
->  {
-> +	phys_addr_t phys = virt_to_phys(table);
->  	arm_v7s_iopte old, new;
->  
-> -	new = virt_to_phys(table) | ARM_V7S_PTE_TYPE_TABLE;
-> +	new = phys | ARM_V7S_PTE_TYPE_TABLE;
-> +
-> +	if (cfg->quirks & IO_PGTABLE_QUIRK_ARM_MTK_TTBR_EXT)
-> +		new = to_iopte_mtk(phys, new, cfg);
-> +
->  	if (cfg->quirks & IO_PGTABLE_QUIRK_ARM_NS)
->  		new |= ARM_V7S_ATTR_NS_TABLE;
->  
-> @@ -778,6 +790,7 @@ static phys_addr_t arm_v7s_iova_to_phys(struct io_pgtable_ops *ops,
->  static struct io_pgtable *arm_v7s_alloc_pgtable(struct io_pgtable_cfg *cfg,
->  						void *cookie)
->  {
-> +	slab_flags_t slab_flag = ARM_V7S_TABLE_SLAB_FLAGS;
->  	struct arm_v7s_io_pgtable *data;
->  
->  	if (cfg->ias > (arm_v7s_is_mtk_enabled(cfg) ? 34 : ARM_V7S_ADDR_BITS))
-> @@ -788,7 +801,8 @@ static struct io_pgtable *arm_v7s_alloc_pgtable(struct io_pgtable_cfg *cfg,
->  
->  	if (cfg->quirks & ~(IO_PGTABLE_QUIRK_ARM_NS |
->  			    IO_PGTABLE_QUIRK_NO_PERMS |
-> -			    IO_PGTABLE_QUIRK_ARM_MTK_EXT))
-> +			    IO_PGTABLE_QUIRK_ARM_MTK_EXT |
-> +			    IO_PGTABLE_QUIRK_ARM_MTK_TTBR_EXT))
->  		return NULL;
->  
->  	/* If ARM_MTK_4GB is enabled, the NO_PERMS is also expected. */
-> @@ -801,10 +815,12 @@ static struct io_pgtable *arm_v7s_alloc_pgtable(struct io_pgtable_cfg *cfg,
->  		return NULL;
->  
->  	spin_lock_init(&data->split_lock);
-> +	if (cfg->quirks & IO_PGTABLE_QUIRK_ARM_MTK_TTBR_EXT)
-> +		slab_flag = 0;
->  	data->l2_tables = kmem_cache_create("io-pgtable_armv7s_l2",
->  					    ARM_V7S_TABLE_SIZE(2, cfg),
->  					    ARM_V7S_TABLE_SIZE(2, cfg),
-> -					    ARM_V7S_TABLE_SLAB_FLAGS, NULL);
-> +					    slab_flag, NULL);
->  	if (!data->l2_tables)
->  		goto out_free_data;
->  
-> diff --git a/include/linux/io-pgtable.h b/include/linux/io-pgtable.h
-> index 86af6f0a00a2..7ed15ad4710c 100644
-> --- a/include/linux/io-pgtable.h
-> +++ b/include/linux/io-pgtable.h
-> @@ -74,17 +74,22 @@ struct io_pgtable_cfg {
->  	 *	to support up to 35 bits PA where the bit32, bit33 and bit34 are
->  	 *	encoded in the bit9, bit4 and bit5 of the PTE respectively.
->  	 *
-> +	 * IO_PGTABLE_QUIRK_ARM_MTK_TTBR_EXT: (ARM v7s format) MediaTek IOMMUs
-> +	 *	extend the translation table support up to 35 bits PA, the
-> +	 *	encoding format is same with IO_PGTABLE_QUIRK_ARM_MTK_EXT.
-> +	 *
->  	 * IO_PGTABLE_QUIRK_ARM_TTBR1: (ARM LPAE format) Configure the table
->  	 *	for use in the upper half of a split address space.
->  	 *
->  	 * IO_PGTABLE_QUIRK_ARM_OUTER_WBWA: Override the outer-cacheability
->  	 *	attributes set in the TCR for a non-coherent page-table walker.
->  	 */
-> -	#define IO_PGTABLE_QUIRK_ARM_NS		BIT(0)
-> -	#define IO_PGTABLE_QUIRK_NO_PERMS	BIT(1)
-> -	#define IO_PGTABLE_QUIRK_ARM_MTK_EXT	BIT(3)
-> -	#define IO_PGTABLE_QUIRK_ARM_TTBR1	BIT(5)
-> -	#define IO_PGTABLE_QUIRK_ARM_OUTER_WBWA	BIT(6)
-> +	#define IO_PGTABLE_QUIRK_ARM_NS			BIT(0)
-> +	#define IO_PGTABLE_QUIRK_NO_PERMS		BIT(1)
-> +	#define IO_PGTABLE_QUIRK_ARM_MTK_EXT		BIT(3)
-> +	#define IO_PGTABLE_QUIRK_ARM_MTK_TTBR_EXT	BIT(4)
-> +	#define IO_PGTABLE_QUIRK_ARM_TTBR1		BIT(5)
-> +	#define IO_PGTABLE_QUIRK_ARM_OUTER_WBWA		BIT(6)
->  	unsigned long			quirks;
->  	unsigned long			pgsize_bitmap;
->  	unsigned int			ias;
-> -- 
-> 2.18.0
-> 
-> 
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html

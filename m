@@ -2,155 +2,344 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B60C1517E08
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 09:04:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B864517E09
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 09:04:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231474AbiECHGR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 03:06:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60190 "EHLO
+        id S231460AbiECHGb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 03:06:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231247AbiECHGP (ORCPT
+        with ESMTP id S231454AbiECHG1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 03:06:15 -0400
-Received: from out162-62-57-87.mail.qq.com (out162-62-57-87.mail.qq.com [162.62.57.87])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 409932317D
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 00:02:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1651561359;
-        bh=XiIvMOgCUkVPzFs1Jv918EjANrq4vNn2+a1QvQJivL4=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=XOzrAutbu47h56lltPaRFAyOPGgu9LSWOObmAZF3cAws1zcUsACOthkkcMGXK6f8Q
-         Qn5HzZzSWnvdXffIu7eayPKhxpRTHfHqpJzHoeqieC28lYqOscIXXcCMTVlrMUS4z8
-         UZ8vdwwAYZU+WNfFU4rrBHNlNINhCblvUUU1Tpas=
-Received: from localhost.localdomain ([59.172.176.242])
-        by newxmesmtplogicsvrsza9.qq.com (NewEsmtp) with SMTP
-        id A524095; Tue, 03 May 2022 15:02:37 +0800
-X-QQ-mid: xmsmtpt1651561357tl0c7siwz
-Message-ID: <tencent_DF81E22E7C4C49E5FF15C497B9257785A305@qq.com>
-X-QQ-XMAILINFO: NC/J3CrDtaBbw3fV/L4WSPM2RTpgTPismn0/Spg/HCb+rfIIOtHgstRNOAQo6L
-         QY6mcaY8Q+9D3SZbOLbqtFcGM7Yn8998Y7czqeISC+ftVICX8BhnvVv2fh9mquWaOF9fh3SmJbL5
-         tqGV8WNoHjt8x6TFZApR2pKw4flV07L1e/brsj+1f1XqmeRCp4VWlOxy9AsyXZc2Q8NbLyuImlbx
-         jvrmYxKPiOlnHFitKZVNqbHlPP2VbRs/s17wCCv/hPTRqD6JAgazE0QVG6fHf0HdGcio5zgfHfHs
-         UntnRX2HsJWm2aq1wL8qX3mDBpmm5vYCmUWjUiX3XEjPW9e7WxufLhOA/6vtxhqnBZMCHcmQQnOH
-         EhYO4J9fWqSMuHPDdXOXP7UdzwRUkPAwxm3b7DB1jsLrJhoin9gRV8VKqiRZjpuRRZqJXClmiiE7
-         YmovqB4JxtI/SzWlaT7aIe6t7X9IJPMmdwnvXFQVuPKkIlbnSa19+wp+10NDQUtUpniT88LTXiUQ
-         Jlrmp5GC3gdKqPV4BDggRNDS4h8H4ftS9aRc6+3SWD7a8RHh0ZMMNNou60opjhC1NEWq9xmrV0XW
-         qyxWO22Wp1Q4mP5xiyq1XjTG+XS92jJLVqWmFwozYDk6WNnieXOjlH+GR4EUR5AMWr2DcH+8rJiU
-         sJTMW+lrL6w4/N2/IbZVzE8lk5jOjZPckvAKohqo3N06DwVhZJDjUc1umXS1t4anFAWIjaamV7Vl
-         Zfj8bKEG6rX4Kkz/B/vOoT4s2aAWtuMdOJIAxfqExjCsHS+sAC3SPrVQ53y6pi4IlNc+Nd+9+TyC
-         27wimbFbOLCpBEG0irJdselsE3ZB4PeAlvQk2aDSmLfjTMr14fQp+MAUdyQHwAYZUtSP8JRFB6Ck
-         PvZKEvPNVnK8NFb6ayAighxfanlvbaXyjs6zFjozjVJY7+TA+EYfEpbdpTSX0lxurKOTlvxS6v7y
-         xUL0+j7cDnBjIQzeoHPvp7pYduDqENK4LjsNvtIqEkjXQORrRSBREdau5J5p+4
-From:   xkernel.wang@foxmail.com
-To:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
-        gregkh@linuxfoundation.org
-Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Xiaoke Wang <xkernel.wang@foxmail.com>
-Subject: [PATCH 11/12] staging: r8188eu: fix potential memory leak in _rtw_init_xmit_priv()
-Date:   Tue,  3 May 2022 15:02:24 +0800
-X-OQ-MSGID: <20220503070225.3390-1-xkernel.wang@foxmail.com>
-In-Reply-To: <tencent_A80380E4306BE7BA73E450F084232B4DFC0A@qq.com>
-References: <tencent_A80380E4306BE7BA73E450F084232B4DFC0A@qq.com>
+        Tue, 3 May 2022 03:06:27 -0400
+Received: from mail-vs1-xe2f.google.com (mail-vs1-xe2f.google.com [IPv6:2607:f8b0:4864:20::e2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB96C23171
+        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 00:02:55 -0700 (PDT)
+Received: by mail-vs1-xe2f.google.com with SMTP id q2so15609124vsr.5
+        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 00:02:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=YRa5FtHK50FQisB4IvadQi9eX727llxqdD3BBf/n9f0=;
+        b=VS1NwEq8gwn3D9X7poQgyObo6azyEzgnLHdKqX6T/NHRiEGjJkYV3TUQq6af9uOMnx
+         MHk/iY4oQ0cerdpjGLIZ4qpgU+URewg+avzSQP+djRuFuL9+Zm32Uhh4qmPYSKrQcfrA
+         C6O3KKVcRvZVhOs5KPmtgI/G8WoGKB6FMyq7sU1jtAkVJL8DrWzOniMDmwilmmA3asgJ
+         +ly9ph+Fj3YJ7KKABa70m6BiVHCXYnSDKxtK63ZgRvMBde1HJ5sDU+2NBhBR8ZjTFCXk
+         c0aqIenkMUdHZp3FoFsrdIl5k/PuTV14AM7q9VcN/95wXQUgecYVMSfbmzRGPu8aC6Yn
+         xQPw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=YRa5FtHK50FQisB4IvadQi9eX727llxqdD3BBf/n9f0=;
+        b=XB99FD/k3BOpzZZJuAAqETFSuF0JzMR4WZ/o8EvfKIMm41HOy9XayYDZKPLYQD09+s
+         Oa1/b61388nHdIq+83cO2qb+8XpZzC4xLEvwQ0ETuXeD2hcAaiL0oyKLLE7QDT9FHCZD
+         UnYNkOZxysLYJmIu85p6TiRnBnB8NY0xswGhIwJslsBi+UnZYFb95SU6BkoVjbFcq4c1
+         Z73ZrOoaJ/3SGPis9E57u6ZvkJCJifsNFT1ma2gwWey3TppxOdc1H6ph2P1dkWOdobuf
+         z/ussAcYmRvcp4vpcgD515AlAxZQsu+f4nJKksZNfiUXdxawDFUv8Nelv7nin6HP0MhY
+         Pbiw==
+X-Gm-Message-State: AOAM533qmb71vtbMSewVmXuQi2gkdwlPvAJnmcHyFbQNvl83bUASBCD6
+        tT8oZv9l7eTFcgZlr44D7iZRtP6c0i+b073q4zbeOA==
+X-Google-Smtp-Source: ABdhPJyKchgAvdO4C5OT6vhSPVpJY0blx+1tImcyVue+4SF8wwvFGIahDftRES3uX0zg9eAtlGsDi8HCu20tAFbSFo0=
+X-Received: by 2002:a67:ed88:0:b0:328:27d9:1381 with SMTP id
+ d8-20020a67ed88000000b0032827d91381mr4403354vsp.12.1651561374947; Tue, 03 May
+ 2022 00:02:54 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RDNS_DYNAMIC,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+References: <CAAPL-u9sVx94ACSuCVN8V0tKp+AMxiY89cro0japtyB=xNfNBw@mail.gmail.com>
+ <87ilqov4bc.fsf@linux.ibm.com>
+In-Reply-To: <87ilqov4bc.fsf@linux.ibm.com>
+From:   Wei Xu <weixugc@google.com>
+Date:   Tue, 3 May 2022 00:02:43 -0700
+Message-ID: <CAAPL-u9G=oojWT82mSuAfJGdDjf8GSAW1=xhFgY+ce9K7xNnKA@mail.gmail.com>
+Subject: Re: RFC: Memory Tiering Kernel Interfaces
+To:     "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Huang Ying <ying.huang@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Yang Shi <shy828301@gmail.com>, Linux MM <linux-mm@kvack.org>,
+        Greg Thelen <gthelen@google.com>,
+        Jagdish Gediya <jvgediya@linux.ibm.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Alistair Popple <apopple@nvidia.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Michal Hocko <mhocko@kernel.org>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Brice Goglin <brice.goglin@gmail.com>,
+        Feng Tang <feng.tang@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xiaoke Wang <xkernel.wang@foxmail.com>
+On Sun, May 1, 2022 at 11:25 PM Aneesh Kumar K.V
+<aneesh.kumar@linux.ibm.com> wrote:
+>
+> Wei Xu <weixugc@google.com> writes:
+>
+> ....
+>
+> >
+> > Tiering Hierarchy Initialization
+> > ================================
+> >
+> > By default, all memory nodes are in the top tier (N_TOPTIER_MEMORY).
+> >
+> > A device driver can remove its memory nodes from the top tier, e.g.
+> > a dax driver can remove PMEM nodes from the top tier.
+>
+> Should we look at the tier in which to place the memory an option that
+> device drivers like dax driver can select? Or dax driver just selects
+> the desire to mark a specific memory only numa node as demotion target
+> and won't explicity specify the tier in which it should be placed. I
+> would like to go for the later and choose the tier details based on the
+> current memory tiers and the NUMA distance value (even HMAT at some
+> point in the future).
 
-In _rtw_init_xmit_priv(), there are several error paths for allocation
-failures just jump to the `exit` section. However, there is no action
-will be performed, so the allocated resources are not properly released,
-which leads to various memory leaks.
+This is what has been proposed here.  The driver doesn't determine
+which particular tier the node should be placed in.  It just removes
+the node from the top-tier (i.e. making the node a demotion target).
+The actual tier of the node is determined based on all the nodes and
+their NUMA distance values.
 
-To properly release them, this patch unifies the error handling code and
-several error handling paths are added.
-According to the allocation sequence, if the validation fails, it will
-jump to its corresponding error tag to release the resources.
+> The challenge with NUMA distance though is which
+> distance value we will pick. For example, in your example1.
+>
+>  node   0    1    2    3
+>     0  10   20   30   40
+>     1  20   10   40   30
+>     2  30   40   10   40
+>     3  40   30   40   10
+>
+> When Node3 is registered, how do we decide to create a Tier2 or add it
+> to Tier1? .
 
-Signed-off-by: Xiaoke Wang <xkernel.wang@foxmail.com>
----
- drivers/staging/r8188eu/core/rtw_xmit.c | 32 ++++++++++++++++++-------
- 1 file changed, 24 insertions(+), 8 deletions(-)
+This proposal assumes a breadth-first search in tier construction,
+which is also how the current implementation works.  In this example,
+the top-tier nodes are [0,1].  We then find a best demotion node for
+each of [0,1] and get [0->2, 1->3]. Now we have two tiers: [0,1],
+[2,3], and the search terminates.
 
-diff --git a/drivers/staging/r8188eu/core/rtw_xmit.c b/drivers/staging/r8188eu/core/rtw_xmit.c
-index d086812..4c54647 100644
---- a/drivers/staging/r8188eu/core/rtw_xmit.c
-+++ b/drivers/staging/r8188eu/core/rtw_xmit.c
-@@ -112,7 +112,7 @@ s32	_rtw_init_xmit_priv(struct xmit_priv *pxmitpriv, struct adapter *padapter)
- 
- 	if (!pxmitpriv->pallocated_xmitbuf) {
- 		res = _FAIL;
--		goto exit;
-+		goto free_frame_buf;
- 	}
- 
- 	pxmitpriv->pxmitbuf = (u8 *)N_BYTE_ALIGMENT((size_t)(pxmitpriv->pallocated_xmitbuf), 4);
-@@ -134,7 +134,7 @@ s32	_rtw_init_xmit_priv(struct xmit_priv *pxmitpriv, struct adapter *padapter)
- 			msleep(10);
- 			res = rtw_os_xmit_resource_alloc(padapter, pxmitbuf, (MAX_XMITBUF_SZ + XMITBUF_ALIGN_SZ));
- 			if (res == _FAIL)
--				goto exit;
-+				goto free_xmitbuf;
- 		}
- 
- 		pxmitbuf->flags = XMIT_VO_QUEUE;
-@@ -152,7 +152,7 @@ s32	_rtw_init_xmit_priv(struct xmit_priv *pxmitpriv, struct adapter *padapter)
- 
- 	if (!pxmitpriv->pallocated_xmit_extbuf) {
- 		res = _FAIL;
--		goto exit;
-+		goto free_xmitbuf;
- 	}
- 
- 	pxmitpriv->pxmit_extbuf = (u8 *)N_BYTE_ALIGMENT((size_t)(pxmitpriv->pallocated_xmit_extbuf), 4);
-@@ -167,10 +167,8 @@ s32	_rtw_init_xmit_priv(struct xmit_priv *pxmitpriv, struct adapter *padapter)
- 		pxmitbuf->ext_tag = true;
- 
- 		res = rtw_os_xmit_resource_alloc(padapter, pxmitbuf, max_xmit_extbuf_size + XMITBUF_ALIGN_SZ);
--		if (res == _FAIL) {
--			res = _FAIL;
--			goto exit;
--		}
-+		if (res == _FAIL)
-+			goto free_xmit_extbuf;
- 
- 		list_add_tail(&pxmitbuf->list, &pxmitpriv->free_xmit_extbuf_queue.queue);
- 		pxmitbuf++;
-@@ -200,8 +198,26 @@ s32	_rtw_init_xmit_priv(struct xmit_priv *pxmitpriv, struct adapter *padapter)
- 
- 	rtl8188eu_init_xmit_priv(padapter);
- 
--exit:
-+	return _SUCCESS;
- 
-+free_xmit_extbuf:
-+	pxmitbuf = (struct xmit_buf *)pxmitpriv->pxmit_extbuf;
-+	while (i-- > 0) {
-+		rtw_os_xmit_resource_free(padapter, pxmitbuf, (max_xmit_extbuf_size + XMITBUF_ALIGN_SZ));
-+		pxmitbuf++;
-+	}
-+	vfree(pxmitpriv->pallocated_xmit_extbuf);
-+	i = NR_XMITBUFF;
-+free_xmitbuf:
-+	pxmitbuf = (struct xmit_buf *)pxmitpriv->pxmitbuf;
-+	while (i-- > 0) {
-+		rtw_os_xmit_resource_free(padapter, pxmitbuf, (MAX_XMITBUF_SZ + XMITBUF_ALIGN_SZ));
-+		pxmitbuf++;
-+	}
-+	vfree(pxmitpriv->pallocated_xmitbuf);
-+free_frame_buf:
-+	vfree(pxmitpriv->pallocated_frame_buf);
-+exit:
- 	return res;
- }
- 
--- 
+But this algorithm doesn't work if there is no node 1 and we still
+want node 2 & 3 in the same tier.  Without the additional hardware
+information such as HMAT, we will need a way to override the default
+tier definition.
+
+> We could say devices that wish to be placed in the same tier
+> will have same distance as the existing tier device ie, for the above
+> case,
+>
+> node_distance[2][2] == node_distance[2][3] ? Can we expect the firmware
+> to have distance value like that?
+
+node_distance[2][2] is local, which should be smaller than
+node_distance[2][3].  I expect that this should be the case in normal
+firmwares.
+
+> >
+> > The kernel builds the memory tiering hierarchy and per-node demotion
+> > order tier-by-tier starting from N_TOPTIER_MEMORY.  For a node N, the
+> > best distance nodes in the next lower tier are assigned to
+> > node_demotion[N].preferred and all the nodes in the next lower tier
+> > are assigned to node_demotion[N].allowed.
+> >
+> > node_demotion[N].preferred can be empty if no preferred demotion node
+> > is available for node N.
+> >
+> > If the userspace overrides the tiers via the memory_tiers sysfs
+> > interface, the kernel then only rebuilds the per-node demotion order
+> > accordingly.
+> >
+> > Memory tiering hierarchy is rebuilt upon hot-add or hot-remove of a
+> > memory node, but is NOT rebuilt upon hot-add or hot-remove of a CPU
+> > node.
+> >
+> >
+> > Memory Allocation for Demotion
+> > ==============================
+> >
+> > When allocating a new demotion target page, both a preferred node
+> > and the allowed nodemask are provided to the allocation function.
+> > The default kernel allocation fallback order is used to allocate the
+> > page from the specified node and nodemask.
+> >
+> > The memopolicy of cpuset, vma and owner task of the source page can
+> > be set to refine the demotion nodemask, e.g. to prevent demotion or
+> > select a particular allowed node as the demotion target.
+> >
+> >
+> > Examples
+> > ========
+> >
+> > * Example 1:
+> >   Node 0 & 1 are DRAM nodes, node 2 & 3 are PMEM nodes.
+> >
+> >   Node 0 has node 2 as the preferred demotion target and can also
+> >   fallback demotion to node 3.
+> >
+> >   Node 1 has node 3 as the preferred demotion target and can also
+> >   fallback demotion to node 2.
+> >
+> >   Set mempolicy to prevent cross-socket demotion and memory access,
+> >   e.g. cpuset.mems=0,2
+> >
+> > node distances:
+> > node   0    1    2    3
+> >    0  10   20   30   40
+> >    1  20   10   40   30
+> >    2  30   40   10   40
+> >    3  40   30   40   10
+> >
+> > /sys/devices/system/node/memory_tiers
+> > 0-1
+> > 2-3
+>
+> How can I make Node3 the demotion target for Node2 in this case? Can
+> we have one file for each tier? ie, we start with
+> /sys/devices/system/node/memory_tier0. Removing a node with memory from
+> the above file/list results in the creation of new tiers.
+>
+> /sys/devices/system/node/memory_tier0
+> 0-1
+> /sys/devices/system/node/memory_tier1
+> 2-3
+>
+> echo 2 > /sys/devices/system/node/memory_tier1
+> /sys/devices/system/node/memory_tier1
+> 2
+> /sys/devices/system/node/memory_tier2
+> 3
+
+The proposal does something similar, except using a single file: memory_tiers.
+
+Another idea is to pass the tier override from a kernel boot argument,
+though it is challenging to deal with hot-plugged nodes.
+
+> >
+> > N_TOPTIER_MEMORY: 0-1
+> >
+> > node_demotion[]:
+> >   0: [2], [2-3]
+> >   1: [3], [2-3]
+> >   2: [],  []
+> >   3: [],  []
+> >
+> > * Example 2:
+> >   Node 0 & 1 are DRAM nodes.
+> >   Node 2 is a PMEM node and closer to node 0.
+> >
+> >   Node 0 has node 2 as the preferred and only demotion target.
+> >
+> >   Node 1 has no preferred demotion target, but can still demote
+> >   to node 2.
+> >
+> >   Set mempolicy to prevent cross-socket demotion and memory access,
+> >   e.g. cpuset.mems=0,2
+> >
+> > node distances:
+> > node   0    1    2
+> >    0  10   20   30
+> >    1  20   10   40
+> >    2  30   40   10
+> >
+> > /sys/devices/system/node/memory_tiers
+> > 0-1
+> > 2
+> >
+> > N_TOPTIER_MEMORY: 0-1
+> >
+> > node_demotion[]:
+> >   0: [2], [2]
+> >   1: [],  [2]
+> >   2: [],  []
+> >
+> >
+> > * Example 3:
+> >   Node 0 & 1 are DRAM nodes.
+> >   Node 2 is a PMEM node and has the same distance to node 0 & 1.
+> >
+> >   Node 0 has node 2 as the preferred and only demotion target.
+> >
+> >   Node 1 has node 2 as the preferred and only demotion target.
+> >
+> > node distances:
+> > node   0    1    2
+> >    0  10   20   30
+> >    1  20   10   30
+> >    2  30   30   10
+> >
+> > /sys/devices/system/node/memory_tiers
+> > 0-1
+> > 2
+> >
+> > N_TOPTIER_MEMORY: 0-1
+> >
+> > node_demotion[]:
+> >   0: [2], [2]
+> >   1: [2], [2]
+> >   2: [],  []
+> >
+> >
+> > * Example 4:
+> >   Node 0 & 1 are DRAM nodes, Node 2 is a memory-only DRAM node.
+> >
+> >   All nodes are top-tier.
+> >
+> > node distances:
+> > node   0    1    2
+> >    0  10   20   30
+> >    1  20   10   30
+> >    2  30   30   10
+> >
+> > /sys/devices/system/node/memory_tiers
+> > 0-2
+> >
+> > N_TOPTIER_MEMORY: 0-2
+> >
+> > node_demotion[]:
+> >   0: [],  []
+> >   1: [],  []
+> >   2: [],  []
+> >
+> >
+> > * Example 5:
+> >   Node 0 is a DRAM node with CPU.
+> >   Node 1 is a HBM node.
+> >   Node 2 is a PMEM node.
+> >
+> >   With userspace override, node 1 is the top tier and has node 0 as
+> >   the preferred and only demotion target.
+> >
+> >   Node 0 is in the second tier, tier 1, and has node 2 as the
+> >   preferred and only demotion target.
+> >
+> >   Node 2 is in the lowest tier, tier 2, and has no demotion targets.
+> >
+> > node distances:
+> > node   0    1    2
+> >    0  10   21   30
+> >    1  21   10   40
+> >    2  30   40   10
+> >
+> > /sys/devices/system/node/memory_tiers (userspace override)
+> > 1
+> > 0
+> > 2
+> >
+> > N_TOPTIER_MEMORY: 1
+> >
+> > node_demotion[]:
+> >   0: [2], [2]
+> >   1: [0], [0]
+> >   2: [],  []
+> >
+> > -- Wei

@@ -2,59 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B5195194E7
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 03:57:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49D2651961B
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 05:38:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343949AbiEDCAY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 22:00:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39442 "EHLO
+        id S1344415AbiEDDmC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 23:42:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344074AbiEDB7L (ORCPT
+        with ESMTP id S1344366AbiEDDly (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 21:59:11 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96F8249FA5
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 18:53:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651629215; x=1683165215;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=JDxQddswnaAtAEe6Yd2ih6qHUHQiMwv8N9U0jVI8plg=;
-  b=c37yO31caGrTAYuZ9exPASDTyji7fEXeY07J4g/qwIFeANMQ5PQ/QGVE
-   OuEAq5FpLssIyIOwTMLtMZPekiJq3sE4zP+JkXU9rNrIYCDf9S7SCL7dJ
-   M1/YSTQgJ/AgYRlHSfQDCsEjJRr7o+YH0fDjBLVMVxg2aSL5t507rEa6u
-   P6hC+OqBLsYy/T2ec2GYHAXp9RgcKw5ZTUDAGa+l1PZOjMKQsewPzEGtK
-   W95SV4GwLtBlLu6hucz1zabACu/TspcujxWVm0zhGoIhRCVCszDPzhmh5
-   9wS/NSwPzRLNpmPo/GcJgMgvdfaBKFMQJCHIF5RYA5A3pxY6aISL6mugI
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10336"; a="248180730"
-X-IronPort-AV: E=Sophos;i="5.91,196,1647327600"; 
-   d="scan'208";a="248180730"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2022 18:53:35 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,196,1647327600"; 
-   d="scan'208";a="734182002"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 03 May 2022 18:53:33 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nm4Cr-000AxP-98;
-        Wed, 04 May 2022 01:53:33 +0000
-Date:   Wed, 4 May 2022 09:52:34 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Ville =?iso-8859-1?Q?Syrj=E4l=E4?= <ville.syrjala@linux.intel.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [vsyrjala:crtc_clock_compute_8 10/26]
- drivers/gpu/drm/i915/display/intel_ddi.c:325:5: warning: no previous
- prototype for function 'intel_crtc_dotclock'
-Message-ID: <202205040931.3Rt8hNR2-lkp@intel.com>
+        Tue, 3 May 2022 23:41:54 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACE0B27FE1;
+        Tue,  3 May 2022 20:38:20 -0700 (PDT)
+Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 242MCRCl030007;
+        Tue, 3 May 2022 00:51:58 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-type : content-transfer-encoding; s=corp-2021-07-09;
+ bh=co1HKWWIuvqZK5K23IbCWayVwEyZTYw1u2eKWn80D5Y=;
+ b=FwFL/J/c9I5g3ahWu7vrXF2J/PeooBeLfKe7CpwYI22QQEOd0RDNh1BiiK+Wxj0TA9kP
+ JtcfAa2EmSk6Oeknbvt5bzZK5iQe1er+/u8RGI7yT0rq+PCGb9jHaeTnq1MbTd6fEvhU
+ 1SNUdBqVZNlN5uRzQ5ryh3KGkA2dt05PDZCglyMz3snCRjyCW2+PVysTadMDhGsGhGLF
+ QKYAjXIGSpx1fp1uEAX8gYO6ZKJ82K+Vcn7IBM/BHh4CbBuGERgVuR09syWTqs5FgQlI
+ lII4nCw3ge0V6my7yXWyRtHeq8pmdnFiV8w52c9ooEo9jj6hoijolfmmpY64OGNzYdlx og== 
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3fruq0cp5k-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 03 May 2022 00:51:57 +0000
+Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 2430ooiZ008905;
+        Tue, 3 May 2022 00:51:56 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3fruj83x8d-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 03 May 2022 00:51:56 +0000
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 2430pljS010389;
+        Tue, 3 May 2022 00:51:56 GMT
+Received: from ca-mkp.mkp.ca.oracle.com (ca-mkp.ca.oracle.com [10.156.108.201])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3fruj83x4g-16;
+        Tue, 03 May 2022 00:51:56 +0000
+From:   "Martin K. Petersen" <martin.petersen@oracle.com>
+To:     cgel.zte@gmail.com, james.smart@broadcom.com
+Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
+        linux-kernel@vger.kernel.org, jejb@linux.ibm.com,
+        Zeal Robot <zealci@zte.com.cn>,
+        Changcheng Deng <deng.changcheng@zte.com.cn>,
+        linux-scsi@vger.kernel.org, dick.kennedy@broadcom.com
+Subject: Re: [PATCH] scsi: lpfc: Remove unneeded variable
+Date:   Mon,  2 May 2022 20:51:26 -0400
+Message-Id: <165153836362.24053.10060021441010287017.b4-ty@oracle.com>
+X-Mailer: git-send-email 2.35.2
+In-Reply-To: <20220419065750.2573861-1-deng.changcheng@zte.com.cn>
+References: <20220419065750.2573861-1-deng.changcheng@zte.com.cn>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-ORIG-GUID: zLpwvjFFXZwgsdli8mx19IOIUys6xj_-
+X-Proofpoint-GUID: zLpwvjFFXZwgsdli8mx19IOIUys6xj_-
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -63,63 +72,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/vsyrjala/linux.git crtc_clock_compute_8
-head:   aee27a93a2e9c552d016d4eadaff5aa87dccce13
-commit: eb839775996f072098b810f91bc34757d1ea008e [10/26] drm/i915: Extract intel_crtc_dotclock()
-config: x86_64-randconfig-a005 (https://download.01.org/0day-ci/archive/20220504/202205040931.3Rt8hNR2-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 363b3a645a1e30011cc8da624f13dac5fd915628)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/vsyrjala/linux/commit/eb839775996f072098b810f91bc34757d1ea008e
-        git remote add vsyrjala https://github.com/vsyrjala/linux.git
-        git fetch --no-tags vsyrjala crtc_clock_compute_8
-        git checkout eb839775996f072098b810f91bc34757d1ea008e
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/gpu/drm/i915/
+On Tue, 19 Apr 2022 06:57:50 +0000, cgel.zte@gmail.com wrote:
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+> From: Changcheng Deng <deng.changcheng@zte.com.cn>
+> 
+> Remove unneeded variable used to store return value.
+> 
+> 
 
-All warnings (new ones prefixed by >>):
+Applied to 5.19/scsi-queue, thanks!
 
->> drivers/gpu/drm/i915/display/intel_ddi.c:325:5: warning: no previous prototype for function 'intel_crtc_dotclock' [-Wmissing-prototypes]
-   int intel_crtc_dotclock(const struct intel_crtc_state *pipe_config)
-       ^
-   drivers/gpu/drm/i915/display/intel_ddi.c:325:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int intel_crtc_dotclock(const struct intel_crtc_state *pipe_config)
-   ^
-   static 
-   1 warning generated.
-
-
-vim +/intel_crtc_dotclock +325 drivers/gpu/drm/i915/display/intel_ddi.c
-
-   324	
- > 325	int intel_crtc_dotclock(const struct intel_crtc_state *pipe_config)
-   326	{
-   327		int dotclock;
-   328	
-   329		if (intel_crtc_has_dp_encoder(pipe_config))
-   330			dotclock = intel_dotclock_calculate(pipe_config->port_clock,
-   331							    &pipe_config->dp_m_n);
-   332		else if (pipe_config->has_hdmi_sink && pipe_config->pipe_bpp > 24)
-   333			dotclock = pipe_config->port_clock * 24 / pipe_config->pipe_bpp;
-   334		else
-   335			dotclock = pipe_config->port_clock;
-   336	
-   337		if (pipe_config->output_format == INTEL_OUTPUT_FORMAT_YCBCR420 &&
-   338		    !intel_crtc_has_dp_encoder(pipe_config))
-   339			dotclock *= 2;
-   340	
-   341		if (pipe_config->pixel_multiplier)
-   342			dotclock /= pipe_config->pixel_multiplier;
-   343	
-   344		return dotclock;
-   345	}
-   346	
+[1/1] scsi: lpfc: Remove unneeded variable
+      https://git.kernel.org/mkp/scsi/c/a346f28ad231
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Martin K. Petersen	Oracle Linux Engineering

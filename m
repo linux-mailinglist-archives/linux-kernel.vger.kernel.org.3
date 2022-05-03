@@ -2,135 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DED9E518742
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 16:52:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B75FA518749
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 16:53:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237431AbiECOzm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 10:55:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50470 "EHLO
+        id S237451AbiECO51 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 10:57:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237424AbiECOzk (ORCPT
+        with ESMTP id S229767AbiECO5Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 10:55:40 -0400
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18E4A2529C;
-        Tue,  3 May 2022 07:52:05 -0700 (PDT)
-Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 243A1AJQ000434;
-        Tue, 3 May 2022 16:51:44 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=1U+jXKnIsS7rQlKgrVn1pp4mv3sRe9hTsUCKKNCqfto=;
- b=GmEUOW+Omwl9ECrQ4aSWCN+wUS1ns/MiHuUtTxn1vi6+s7j4SO5dteDkZVaVFHAaOI7D
- 9DBmZjMSn7e04juYoU10HjwBfAPcTJe0HFSIyYEB1ArCrq92VWmCBQJ2CbQo6bz5K4hV
- 5gMMz+lTJ380vvbmiJLEQjEGm7a7jizPEjV4NBCTHNgUnXHpzG4DggZ+Qp5LbLCfhbxa
- KrQmGDFJPDfFQetLwbOKq1UmLF39XqORx7JwcyY3prHeB+S5oYc/+7qNdWXImOKb9wV8
- M2ZbHl7Vp1u3f/vwTM1EIIFiL4HCf8FW7G/7KDM1e02OFGJMwZDT8RwzuuEB1FqQ+31q 7Q== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3frt88r2ah-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 03 May 2022 16:51:44 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 2FC2910002A;
-        Tue,  3 May 2022 16:51:40 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id C54BE2248D5;
-        Tue,  3 May 2022 16:51:40 +0200 (CEST)
-Received: from [10.201.21.93] (10.75.127.47) by SHFDAG1NODE1.st.com
- (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2308.20; Tue, 3 May
- 2022 16:51:39 +0200
-Message-ID: <25ed3a16-c277-5170-3feb-51484f744de1@foss.st.com>
-Date:   Tue, 3 May 2022 16:51:38 +0200
+        Tue, 3 May 2022 10:57:24 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A22721E39;
+        Tue,  3 May 2022 07:53:51 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B923560C8E;
+        Tue,  3 May 2022 14:53:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F25B5C385A4;
+        Tue,  3 May 2022 14:53:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1651589630;
+        bh=w4Xoznwtn3tyLr1cRCPJ8Tdo2kOlrKOwvD7MSq9598s=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=IyWn4OGCKIQfCoxx32JI1GCwxVovGVNz6H+TT+Vmx1nsr80YfM9XlxGM+qPZ4Vjcf
+         vutt68+pESkS+B05T6D76+md0K1qTXmBrG5Xw6qAeJb+comkTppxOC4FYmH6777Img
+         LPA/+W66303oz14RM5evehJfP/n/hn5hy981rZDI=
+Date:   Tue, 3 May 2022 16:53:49 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Amir Goldstein <amir73il@gmail.com>
+Cc:     Miklos Szeredi <miklos@szeredi.hu>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Dave Chinner <david@fromorbit.com>,
+        Theodore Ts'o <tytso@mit.edu>, Karel Zak <kzak@redhat.com>,
+        Christian Brauner <brauner@kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Linux API <linux-api@vger.kernel.org>,
+        linux-man <linux-man@vger.kernel.org>,
+        LSM <linux-security-module@vger.kernel.org>,
+        Ian Kent <raven@themaw.net>,
+        David Howells <dhowells@redhat.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <christian@brauner.io>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>
+Subject: Re: [RFC PATCH] getting misc stats/attributes via xattr API
+Message-ID: <YnFB/ct2Q/yYBnm8@kroah.com>
+References: <YnEeuw6fd1A8usjj@miu.piliscsaba.redhat.com>
+ <CAOQ4uxim+JmFbXPQcasELDEgRDP-spdPtJrLuhvSiyxErSUkvw@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 0/8] Add SCMI version of ST boards
-Content-Language: en-US
-To:     <arnd@arndb.de>, <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>, <soc@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-kernel@vger.kernel.org>, Marek Vasut <marex@denx.de>,
-        Ahmad Fatoum <a.fatoum@pengutronix.de>,
-        <etienne.carriere@st.com>
-References: <20220422150952.20587-1-alexandre.torgue@foss.st.com>
-From:   Alexandre TORGUE <alexandre.torgue@foss.st.com>
-In-Reply-To: <20220422150952.20587-1-alexandre.torgue@foss.st.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.75.127.47]
-X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-03_06,2022-05-02_03,2022-02-23_01
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAOQ4uxim+JmFbXPQcasELDEgRDP-spdPtJrLuhvSiyxErSUkvw@mail.gmail.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/22/22 17:09, Alexandre Torgue wrote:
-> The aim of this series is to add OPTEE and SCMI support for STM32 boards in
-> order to enable secure services for clocks and resets. New boards have been added
-> to enable this support in order to not break boot of current STM32 boards users.
+On Tue, May 03, 2022 at 05:39:46PM +0300, Amir Goldstein wrote:
+> On Tue, May 3, 2022 at 3:23 PM Miklos Szeredi <miklos@szeredi.hu> wrote:
+> >
+> > This is a simplification of the getvalues(2) prototype and moving it to the
+> > getxattr(2) interface, as suggested by Dave.
+> >
+> > The patch itself just adds the possibility to retrieve a single line of
+> > /proc/$$/mountinfo (which was the basic requirement from which the fsinfo
+> > patchset grew out of).
+> >
+> > But this should be able to serve Amir's per-sb iostats, as well as a host of
+> > other cases where some statistic needs to be retrieved from some object.  Note:
+> > a filesystem object often represents other kinds of objects (such as processes
+> > in /proc) so this is not limited to fs attributes.
+> >
+> > This also opens up the interface to setting attributes via setxattr(2).
+> >
+> > After some pondering I made the namespace so:
+> >
+> > : - root
+> > bar - an attribute
+> > foo: - a folder (can contain attributes and/or folders)
+> >
+> > The contents of a folder is represented by a null separated list of names.
+> >
+> > Examples:
+> >
+> > $ getfattr -etext -n ":" .
+> > # file: .
+> > :="mnt:\000mntns:"
+> >
+> > $ getfattr -etext -n ":mnt:" .
+> > # file: .
+> > :mnt:="info"
+> >
+> > $ getfattr -etext -n ":mnt:info" .
+> > # file: .
+> > :mnt:info="21 1 254:0 / / rw,relatime - ext4 /dev/root rw\012"
+> >
+> > $ getfattr -etext -n ":mntns:" .
+> > # file: .
+> > :mntns:="21:\00022:\00024:\00025:\00023:\00026:\00027:\00028:\00029:\00030:\00031:"
+> >
+> > $ getfattr -etext -n ":mntns:28:" .
+> > # file: .
+> > :mntns:28:="info"
+> >
+> > Comments?
+> >
 > 
-> This series targets only boards provided by ST which are:
-> -STM32MP157A-DK1
-> -STM32MP157C-DK2
-> -STM32MP157C-ED1
-> -STM32MP157C-EV1
+> I like that :)
 > 
-> Some modifications in bindings files (yaml and .h) was needed and OPTEE/TEE
-> configs are now enabled by default for ARCH_STM32 architecture.
-> 
-> Note that patch [1] "dt-bindings: rcc: Add optional external ethernet RX clock
-> properties" done by Marek has been already merged in Rob tree.
-> 
-> Thanks
-> Alex
-> 
-> Alexandre Torgue (7):
->    dt-bindings: clock: stm32mp1: describes clocks if
->      "st,stm32mp1-rcc-secure"
->    dt-bindings: clock: stm32mp15: rename CK_SCMI define
->    dt-bindings: reset: stm32mp15: rename RST_SCMI define
->    ARM: stm32: select OPTEE on MPU family
->    ARM: dts: stm32: enable optee firmware and SCMI support on STM32MP15
->    dt-bindings: arm: stm32: Add SCMI version of STM32 boards
->      (DK1/DK2/ED1/EV1)
->    ARM: dts: stm32: Add SCMI version of STM32 boards (DK1/DK2/ED1/EV1)
-> 
-> Marek Vasut (1):
->    dt-bindings: rcc: Add optional external ethernet RX clock properties
-> 
->   .../devicetree/bindings/arm/stm32/stm32.yaml  |  17 +++
->   .../bindings/clock/st,stm32mp1-rcc.yaml       |  34 ++++++
->   arch/arm/boot/dts/Makefile                    |   4 +
->   arch/arm/boot/dts/stm32mp151.dtsi             |  41 +++++++
->   arch/arm/boot/dts/stm32mp157a-dk1-scmi.dts    |  86 +++++++++++++++
->   arch/arm/boot/dts/stm32mp157c-dk2-scmi.dts    |  95 +++++++++++++++++
->   arch/arm/boot/dts/stm32mp157c-ed1-scmi.dts    |  91 ++++++++++++++++
->   arch/arm/boot/dts/stm32mp157c-ev1-scmi.dts    | 100 ++++++++++++++++++
->   arch/arm/mach-stm32/Kconfig                   |   2 +
->   include/dt-bindings/clock/stm32mp1-clks.h     |  46 ++++----
->   include/dt-bindings/reset/stm32mp1-resets.h   |  24 ++---
->   11 files changed, 503 insertions(+), 37 deletions(-)
->   create mode 100644 arch/arm/boot/dts/stm32mp157a-dk1-scmi.dts
->   create mode 100644 arch/arm/boot/dts/stm32mp157c-dk2-scmi.dts
->   create mode 100644 arch/arm/boot/dts/stm32mp157c-ed1-scmi.dts
->   create mode 100644 arch/arm/boot/dts/stm32mp157c-ev1-scmi.dts
-> 
+> It should be noted that while this API mandates text keys,
+> it does not mandate text values, so for example, sb iostats could be
+> exported as text or as binary struct, or as individual text/binary records or
+> all of the above.
 
-Series applied on stm32-next. Patch[5] has been dropped.
+Ugh, no, that would be a total mess.  Don't go exporting random binary
+structs depending on the file, that's going to be completely
+unmaintainable.  As it is, this is going to be hard enough with random
+text fields.
 
-Alex
+As for this format, it needs to be required to be documented in
+Documentation/ABI/ for each entry and key type so that we have a chance
+of knowing what is going on and tracking how things are working and
+validating stuff.
+
+thanks,
+
+greg k-h

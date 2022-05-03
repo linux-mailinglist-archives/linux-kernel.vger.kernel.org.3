@@ -2,148 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CCCC518126
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 11:37:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4ACB8518135
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 11:39:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233484AbiECJlV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 05:41:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51428 "EHLO
+        id S232311AbiECJmo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 05:42:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233468AbiECJlS (ORCPT
+        with ESMTP id S233488AbiECJmh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 05:41:18 -0400
-Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00FEB3204F
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 02:37:45 -0700 (PDT)
-Received: from epcas2p1.samsung.com (unknown [182.195.41.53])
-        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20220503093743epoutp0300d7405c4eca8cbd60da9764cf069036~rjsSxe_wK0773207732epoutp03K
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 09:37:43 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20220503093743epoutp0300d7405c4eca8cbd60da9764cf069036~rjsSxe_wK0773207732epoutp03K
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1651570663;
-        bh=eZPCA5Ld61CjuQcfpKdQrmY+FdOllgiJ6OejF1D7514=;
-        h=From:To:In-Reply-To:Subject:Date:References:From;
-        b=dhZAx9C0XSzZVEuHcp9Gs/Hkm0FNzvD3jpPzYCjMsaw0xth3MGi5LkW18avHZG8RB
-         PdwF6hDQlcdrXD2klFioXw3CtIjMeDwFveyU20Mx/AcXAE0qe3vY6YExxvbBtUmcXF
-         F2YWo0DT5+MTP3rtoQUDLlOiaPWLBmRDpa7iW7D8=
-Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
-        epcas2p2.samsung.com (KnoxPortal) with ESMTP id
-        20220503093742epcas2p284bf0d52e1dbb7404ba5ca1ccf50c3d5~rjsR-cuhb0806408064epcas2p2w;
-        Tue,  3 May 2022 09:37:42 +0000 (GMT)
-Received: from epsmges2p1.samsung.com (unknown [182.195.36.102]) by
-        epsnrtp3.localdomain (Postfix) with ESMTP id 4KsvyF0cjcz4x9Q1; Tue,  3 May
-        2022 09:37:41 +0000 (GMT)
-Received: from epcas2p4.samsung.com ( [182.195.41.56]) by
-        epsmges2p1.samsung.com (Symantec Messaging Gateway) with SMTP id
-        F3.C6.10069.4E7F0726; Tue,  3 May 2022 18:37:40 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas2p3.samsung.com (KnoxPortal) with ESMTPA id
-        20220503093740epcas2p327ab7c0718b4cd1effda87f106ceeebd~rjsPwTRTO1761517615epcas2p3S;
-        Tue,  3 May 2022 09:37:40 +0000 (GMT)
-Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
-        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20220503093740epsmtrp1fa65665fc1c16dae8f6b4711ac6b85aa~rjsPvfdIb2127221272epsmtrp1c;
-        Tue,  3 May 2022 09:37:40 +0000 (GMT)
-X-AuditID: b6c32a45-a79ff70000002755-22-6270f7e499f2
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        EC.DE.08853.4E7F0726; Tue,  3 May 2022 18:37:40 +0900 (KST)
-Received: from KORCO082417 (unknown [10.229.8.121]) by epsmtip2.samsung.com
-        (KnoxPortal) with ESMTPA id
-        20220503093740epsmtip21eafc03609f612cdeef5581012b9e420~rjsPhIF2k2820728207epsmtip20;
-        Tue,  3 May 2022 09:37:40 +0000 (GMT)
-From:   "Chanho Park" <chanho61.park@samsung.com>
-To:     "'Krzysztof Kozlowski'" <krzysztof.kozlowski@linaro.org>,
-        "'Rob Herring'" <robh+dt@kernel.org>,
-        "'Krzysztof Kozlowski'" <krzysztof.kozlowski+dt@linaro.org>,
-        "'Alim Akhtar'" <alim.akhtar@samsung.com>,
-        <devicetree@vger.kernel.org>,
+        Tue, 3 May 2022 05:42:37 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5907832052;
+        Tue,  3 May 2022 02:39:05 -0700 (PDT)
+X-UUID: 73bde449d5bb49b78b8d6c6aba1f035e-20220503
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.4,REQID:b6f99d21-0f3b-4246-92cf-f3dfee816cba,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:-20,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,AC
+        TION:release,TS:-20
+X-CID-META: VersionHash:faefae9,CLOUDID:20e4872f-6199-437e-8ab4-9920b4bc5b76,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,File:nil,QS:0,BEC:nil
+X-UUID: 73bde449d5bb49b78b8d6c6aba1f035e-20220503
+Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw01.mediatek.com
+        (envelope-from <rex-bc.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 942032099; Tue, 03 May 2022 17:38:59 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Tue, 3 May 2022 17:38:58 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.792.3 via Frontend Transport; Tue, 3 May 2022 17:38:58 +0800
+From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
+To:     <mturquette@baylibre.com>, <sboyd@kernel.org>,
+        <matthias.bgg@gmail.com>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>
+CC:     <p.zabel@pengutronix.de>,
+        <angelogioacchino.delregno@collabora.com>,
+        <chun-jie.chen@mediatek.com>, <wenst@chromium.org>,
+        <runyang.chen@mediatek.com>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-clk@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
-        <linux-samsung-soc@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-In-Reply-To: <20220503092631.174713-1-krzysztof.kozlowski@linaro.org>
-Subject: RE: [PATCH] arm64: dts: exynos: move XTCXO clock frequency to board
- in Exynos Auto v9
-Date:   Tue, 3 May 2022 18:37:40 +0900
-Message-ID: <02a301d85ed1$6e942cd0$4bbc8670$@samsung.com>
+        <linux-mediatek@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        Rex-BC Chen <rex-bc.chen@mediatek.com>
+Subject: [PATCH v6 00/16] Cleanup MediaTek clk reset drivers and support MT8192/MT8195
+Date:   Tue, 3 May 2022 17:38:40 +0800
+Message-ID: <20220503093856.22250-1-rex-bc.chen@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Outlook 16.0
-Thread-Index: AQM0AewJ+A1wrOc8leVM2OSm1bsp/wEgrbzdqkyYVfA=
-Content-Language: ko
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprFJsWRmVeSWpSXmKPExsWy7bCmhe6T7wVJBsf/mVo8mLeNzWL+kXOs
-        Fn0vHjJb7H29ld1i0+NrrBaXd81hs5hxfh+TReveI+wOHB6bVnWyedy5tofNY/OSeo++LasY
-        PT5vkgtgjcq2yUhNTEktUkjNS85PycxLt1XyDo53jjc1MzDUNbS0MFdSyEvMTbVVcvEJ0HXL
-        zAE6RUmhLDGnFCgUkFhcrKRvZ1OUX1qSqpCRX1xiq5RakJJTYF6gV5yYW1yal66Xl1piZWhg
-        YGQKVJiQnfHt+XKmgsfsFa9W/2NvYDzJ1sXIySEhYCLxZcJUli5GLg4hgR2MEp277jFBOJ8Y
-        JZrm7IbKfGOUWDCzgQWmZWXrIUaIxF5GiWd/QVo4gZwXjBKTXzmA2GwC+hIvO7axghSJCNxn
-        kvj8dR4rSIJTwFXi5awfQA0cHMICCRKvF9qAhFkEVCQaT61iBrF5BSwlHjyDsQUlTs58AraY
-        WUBeYvvbOcwQRyhI/Hy6DGykiICVxOJlV5khakQkZne2MYPslRCYyCFxbspdqEddJL5+/Qn1
-        gbDEq+Nb2CFsKYmX/W1QdrHE0lmfmCCaGxglLm/7BdVsLDHrWTsjyNHMApoS63fpg5gSAsoS
-        R25B3cYn0XH4LztEmFeio00IolFd4sD26VBbZSW653xmhSjxkOj5wj2BUXEWkidnIXlyFpJn
-        ZiGsXcDIsopRLLWgODc9tdiowBAe18n5uZsYwYlUy3UH4+S3H/QOMTJxMB5ilOBgVhLhdV5a
-        kCTEm5JYWZValB9fVJqTWnyI0RQY7BOZpUST84GpPK8k3tDE0sDEzMzQ3MjUwFxJnNcrZUOi
-        kEB6YklqdmpqQWoRTB8TB6dUA1PPtKfLHmULCwt/+z1xuzqX1S3F3nTdLft3RsdtqHvYe0g2
-        7JR/ru3RjyVzDkrvmi11RGa7iL/0gdxvb1mM1tlJsfovjlv3p/Ju0ddlpzaJn92d9dhrTZsQ
-        p9YyMwVJjq8rzSp2ZfX8YJMLS0y74md8O9D7zTb1uxPNY0vFN2337tmxie/5h4Mmk7bUvhe/
-        J7pgeWzatV/eEyXy37KzN35+m/3Qrorf8JYZs7pOzOmCR99L5wlNL/12dsofg6VrfWcb9q7u
-        y3vwSz1QRfJkxOE6sUdPcier7D01x0pz7gRTud5o7m1fBHOKtiXtyZyeXX+4+4/S9FPMR2uP
-        rxbp+LnmQ3tN5o7deXsdRb+XSj9UYinOSDTUYi4qTgQAKPiuNS0EAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrNLMWRmVeSWpSXmKPExsWy7bCSvO6T7wVJBksWSFk8mLeNzWL+kXOs
-        Fn0vHjJb7H29ld1i0+NrrBaXd81hs5hxfh+TReveI+wOHB6bVnWyedy5tofNY/OSeo++LasY
-        PT5vkgtgjeKySUnNySxLLdK3S+DK+PZ8OVPBY/aKV6v/sTcwnmTrYuTkkBAwkVjZeoixi5GL
-        Q0hgN6PEzgt7oBKyEs/e7WCHsIUl7rccYYUoesYo8ehGJ1gRm4C+xMuObWAJEYHHTBLN/z5B
-        jZrGKLGyoYERpIpTwFXi5awfTCC2sECcxKlzq8DGsgioSDSeWsUMYvMKWEo8eAZjC0qcnPmE
-        pYuRg4NZQE+ibSPYGGYBeYntb+cwQ1ykIPHz6TJWEFtEwEpi8bKrzBA1IhKzO9uYJzAKzUIy
-        aRbCpFlIJs1C0rGAkWUVo2RqQXFuem6xYYFhXmq5XnFibnFpXrpecn7uJkZw/Ghp7mDcvuqD
-        3iFGJg7GQ4wSHMxKIrzOSwuShHhTEiurUovy44tKc1KLDzFKc7AoifNe6DoZLySQnliSmp2a
-        WpBaBJNl4uCUamCyvnNolaoMVxRTt4PWmv5DPXUBseUaU7naA9kqrh+w++f1zntHuiTHBfd9
-        r3LUXI4+nDgp+9+Zg0/vc3xk0Mq8stPwfNz2LTHLilfNOfUmyev5l6n2SaLZ4kY/uDN/Z6+d
-        sEgsnWNxgKWv0TLpC9ors8yfJvb7JF8Ila/5s34zS//2bZdjxWt6ey/orVvtfmKP+tR6Kc2f
-        JcwVNj/cNu1hudbbtzjVMUJV3KvRLNnTyKfywOIjKjuercztWLploXOp6U7N77cmWmxdO+dW
-        /5Qdq1YfeykdUChw6kNnNG+ox+QVC7/4ztP7FSUsJDtHxsxcXmPXl97fyyvuP3p62cROYIod
-        6+ronVespE+03QlQYinOSDTUYi4qTgQAjnpmng4DAAA=
-X-CMS-MailID: 20220503093740epcas2p327ab7c0718b4cd1effda87f106ceeebd
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-CMS-TYPE: 102P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220503092638epcas2p368d663b2d309b1fe8ed68b8465c5ff69
-References: <CGME20220503092638epcas2p368d663b2d309b1fe8ed68b8465c5ff69@epcas2p3.samsung.com>
-        <20220503092631.174713-1-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> -----Original Message-----
-> From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Sent: Tuesday, May 3, 2022 6:27 PM
-> To: Rob Herring <robh+dt@kernel.org>; Krzysztof Kozlowski
-> <krzysztof.kozlowski+dt@linaro.org>; Alim Akhtar
-<alim.akhtar@samsung.com>;
-> devicetree@vger.kernel.org; linux-arm-kernel@lists.infradead.org; linux-
-> samsung-soc@vger.kernel.org; linux-kernel@vger.kernel.org
-> Cc: Chanho Park <chanho61.park@samsung.com>; Krzysztof Kozlowski
-> <krzysztof.kozlowski@linaro.org>
-> Subject: [PATCH] arm64: dts: exynos: move XTCXO clock frequency to board
-> in Exynos Auto v9
-> 
-> The external oscillator - XTCXO - is an input to the SoC.  It is defined
-> in the Exynos Auto v9 SoC DTSI, because all boards will provide it and
-> clock controller bindings expect it, however the actual frequency of the
-> clock should be determined by the board.
+In this series, we cleanup MediaTek clock reset drivers in clk/mediatek
+folder. MediaTek clock reset driver is used to provide reset control
+of modules controlled in clk, like infra_ao.
 
-Thanks for the update.
-Reviewed-by: Chanho Park <chanho61.park@samsung.com>
+Changes for v6:
+1. Add a new patch to support inuput argument index mode.
+2. Revise definition in reset.h to index.
 
-Best Regards,
-Chanho Park
+Changes for V5:
+1. Add all infra reset bits for MT8192 and MT8195.
+2. Fix reviewers' comments.
+
+Changes for V4:
+1. Abandon the implementation of reset-cell = 2, and use reset index to
+   determine which reset bit is used.
+2. Add documentation for enum/structure/function in reset.h.
+3. Combine binding/drvier support patch for MT8192 and MT8195.
+4. The MT8195 DTS is accepted by Matthias, and I add new DTS patch to
+   support infracfg_ao reset for MT8195. The DTS of MT8195 is still
+   not merged into mainline. Please refer to [1].
+
+[1]: https://git.kernel.org/pub/scm/linux/kernel/git/matthias.bgg/linux.git/commit/?h=for-next&id=37f2582883be7218dc69f9af135959a8e93de223
+
+Changes for V3:
+1. Modify drivers for reviewers' comments.
+2. Add dt-binding patch for MT8192/MT8195 infra.
+3. Add reset property of infra node for MT8192.
+4. Use original function for simple operation.
+
+Changes for V2:
+1. Modify drivers for reviewers' comments.
+2. Use simple reset to replace v1.
+3. Recover v2 to set_clr.
+4. Separate error handling to another patch.
+5. Add support for input offset and bit from DT.
+6. Add support for MT8192 and MT8195.
+
+Rex-BC Chen (16):
+  clk: mediatek: reset: Add reset.h
+  clk: mediatek: reset: Fix written reset bit offset
+  clk: mediatek: reset: Refine and reorder functions in reset.c
+  clk: mediatek: reset: Extract common drivers to update function
+  clk: mediatek: reset: Merge and revise reset register function
+  clk: mediatek: reset: Revise structure to control reset register
+  clk: mediatek: reset: Support nonsequence base offsets of reset
+    registers
+  clk: mediatek: reset: Support inuput argument index mode
+  clk: mediatek: reset: Change return type for clock reset register
+    function
+  clk: mediatek: reset: Add new register reset function with device
+  clk: mediatek: reset: Add reset support for simple probe
+  dt-bindings: arm: mediatek: Add #reset-cells property for
+    MT8192/MT8195
+  dt-bindings: reset: mediatek: Add infra_ao reset index for
+    MT8192/MT8195
+  clk: mediatek: reset: Add infra_ao reset support for MT8192/MT8195
+  arm64: dts: mediatek: Add infra #reset-cells property for MT8192
+  arm64: dts: mediatek: Add infra #reset-cells property for MT8195
+
+ .../mediatek/mediatek,mt8192-sys-clock.yaml   |   3 +
+ .../mediatek/mediatek,mt8195-sys-clock.yaml   |   3 +
+ arch/arm64/boot/dts/mediatek/mt8192.dtsi      |   1 +
+ arch/arm64/boot/dts/mediatek/mt8195.dtsi      |  13 +-
+ drivers/clk/mediatek/clk-mt2701-eth.c         |  10 +-
+ drivers/clk/mediatek/clk-mt2701-g3d.c         |  10 +-
+ drivers/clk/mediatek/clk-mt2701-hif.c         |  10 +-
+ drivers/clk/mediatek/clk-mt2701.c             |  22 +-
+ drivers/clk/mediatek/clk-mt2712.c             |  22 +-
+ drivers/clk/mediatek/clk-mt7622-eth.c         |  10 +-
+ drivers/clk/mediatek/clk-mt7622-hif.c         |  12 +-
+ drivers/clk/mediatek/clk-mt7622.c             |  22 +-
+ drivers/clk/mediatek/clk-mt7629-eth.c         |  10 +-
+ drivers/clk/mediatek/clk-mt7629-hif.c         |  12 +-
+ drivers/clk/mediatek/clk-mt8135.c             |  22 +-
+ drivers/clk/mediatek/clk-mt8173.c             |  22 +-
+ drivers/clk/mediatek/clk-mt8183.c             |  18 +-
+ drivers/clk/mediatek/clk-mt8192.c             |  29 +++
+ drivers/clk/mediatek/clk-mt8195-infra_ao.c    |  24 +++
+ drivers/clk/mediatek/clk-mtk.c                |   7 +
+ drivers/clk/mediatek/clk-mtk.h                |   9 +-
+ drivers/clk/mediatek/reset.c                  | 198 +++++++++++++-----
+ drivers/clk/mediatek/reset.h                  |  82 ++++++++
+ include/dt-bindings/reset/mt8192-resets.h     |   8 +
+ include/dt-bindings/reset/mt8195-resets.h     |   6 +
+ 25 files changed, 491 insertions(+), 94 deletions(-)
+ create mode 100644 drivers/clk/mediatek/reset.h
+
+-- 
+2.18.0
 

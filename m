@@ -2,69 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B4D05184AA
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 14:57:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 048B25184AC
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 14:58:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235649AbiECNBH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 09:01:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40608 "EHLO
+        id S235657AbiECNCJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 09:02:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235671AbiECNBE (ORCPT
+        with ESMTP id S230133AbiECNCH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 09:01:04 -0400
-Received: from mail-il1-x136.google.com (mail-il1-x136.google.com [IPv6:2607:f8b0:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A35338D8F
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 05:57:31 -0700 (PDT)
-Received: by mail-il1-x136.google.com with SMTP id l15so4307548ilh.3
-        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 05:57:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=digitalocean.com; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=k3hjIGc98aGiWVuDcDXHBqc9tZBRnu/2US5kxHnNwy0=;
-        b=g1CaqJLilGnqsQUIk3eHeGaaAVDveaj9E472eEvs7gveopLPlzYMXVU2zvLL8PAj2i
-         cOMCwsKCg22v4EjYs3tMGvPcip11/JxTYXpGGQLL7Yc2O4JfKRLke/Mm5W/qGI7Fiex4
-         7fFqZbO7Y5C/wIbDpafoslf2Dp2ZCd8FCVQ+8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=k3hjIGc98aGiWVuDcDXHBqc9tZBRnu/2US5kxHnNwy0=;
-        b=mnFqAlzXCZsZx/xIfxDlh3cvjTt0w37uPd7qlNv7UadEbA6enPQYrFiX+g7P5IOOkT
-         9+HF3Q3YaOYy/rc99uk9b/vc6c/5GNDwZLIzwwSqJ2EB9ThgY7J9YmoKU8Vmb2G7aM8Q
-         npTMXSUomeeGTmwPzAzffykOlzfjW/ML6AFY3EXE/a68/Ka0ILTCV0s4VoUgRBj3990Z
-         zVyX83ZDj9HaCJHCtSiSzWyS91ifchJ2UYqnGTaDXXZpYuMKrQuJu9EL6TkVnYEVa0x/
-         dLz9HJW9kxdVCy4b1HRip8gFO3A6p1xgNzObWRhPP6yvVf7EKyYxayKDhD+bdypRDD1I
-         RlXw==
-X-Gm-Message-State: AOAM533bIitJYLln8fyem8T5Cb+li13m03Kl1cKMcvMsZqro1hT80tDf
-        KrTOcmG1u6qHD97nK1ijcrEdmZSGSV4Jhw==
-X-Google-Smtp-Source: ABdhPJxz20K24XHCZ9JE+Zxs7lTLTqtutf6zphBovISBhMDYZIjwu43VFPOB/45pWi/dbA9pnSFaXA==
-X-Received: by 2002:a05:6e02:11ad:b0:2cd:f8ad:de1b with SMTP id 13-20020a056e0211ad00b002cdf8adde1bmr6355724ilj.159.1651582650865;
-        Tue, 03 May 2022 05:57:30 -0700 (PDT)
-Received: from localhost ([2605:a601:ac0f:820:80d8:f53c:c84d:deaa])
-        by smtp.gmail.com with ESMTPSA id f13-20020a056e020c6d00b002cde6e352ccsm3419323ilj.22.2022.05.03.05.57.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 May 2022 05:57:30 -0700 (PDT)
-From:   Seth Forshee <sforshee@digitalocean.com>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andy Lutomirski <luto@kernel.org>
-Cc:     Josh Poimboeuf <jpoimboe@redhat.com>,
-        Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Petr Mladek <pmladek@suse.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        linux-kernel@vger.kernel.org, live-patching@vger.kernel.org,
-        kvm@vger.kernel.org
-Subject: [PATCH] entry/kvm: Make vCPU tasks exit to userspace when a livepatch is pending
-Date:   Tue,  3 May 2022 07:57:29 -0500
-Message-Id: <20220503125729.2556498-1-sforshee@digitalocean.com>
-X-Mailer: git-send-email 2.32.0
+        Tue, 3 May 2022 09:02:07 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E1F133A20;
+        Tue,  3 May 2022 05:58:35 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id B82D81F44301
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1651582714;
+        bh=x3OQ1oHSHfYp4EWTit5w0xva4dWoTSyHlpVA/f0sBc8=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=oE4Gzqh7OQZobIVPBHen/agv7mJlYdisUly3VljCB4nzrklgVosKcpjP/KQOtoNfk
+         DAMgQab7UjiiKvjE3rCyi2RSCQQQWkTKn4wGCfOX6CXlnWkLGX0mBI8thk68jbVXjk
+         HzzCj5qWKP6/ZkqopFTk/2M9IexLWkJfU9KS/YD/nygGcXa8XFDSDlUV9EQVpnk6k5
+         LMf45muBV7e0FDFb/S9UQzm4bmQWbn9z1HXyrS4ZaG6uaoROVu/6/GbcMEhT26IQCo
+         A6df+5G40WYA9IITkq57SlpR9v/ftM3fPD2jB+bwwc4jIsaDQbkWXna/+MEW8XMP+C
+         MvmEEtEa0xFAg==
+Message-ID: <64129cb4-f33f-6017-4923-63f67f7067fa@collabora.com>
+Date:   Tue, 3 May 2022 14:58:31 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 1/2] dt-bindings: power: Add MediaTek Helio X10 MT6795
+ power domains
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        robh+dt@kernel.org
+Cc:     krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
+        chun-jie.chen@mediatek.com, weiyi.lu@mediatek.com,
+        mbrugger@suse.com, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, kernel@collabora.com,
+        nfraprado@collabora.com
+References: <20220503105436.54901-1-angelogioacchino.delregno@collabora.com>
+ <20220503105436.54901-2-angelogioacchino.delregno@collabora.com>
+ <ac774c74-4577-3dfc-7bf4-3c180d45b420@linaro.org>
+ <94dbb7ee-764a-5568-a044-80dbfe77c29a@collabora.com>
+ <d371fff5-0d45-b827-2696-3862b3c5fd59@linaro.org>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <d371fff5-0d45-b827-2696-3862b3c5fd59@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,45 +64,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A livepatch migration for a task can only happen when the task is
-sleeping or it exits to userspace. This may happen infrequently for a
-heavily loaded vCPU task, leading to livepatch transition failures.
+Il 03/05/22 14:57, Krzysztof Kozlowski ha scritto:
+> On 03/05/2022 14:43, AngeloGioacchino Del Regno wrote:
+>>>
+>>> If it is not a derivative work, should be GPL-2.0 OR BSD
+>>>
+>>
+>> On that, I agree with you, fully.
+>>
+>> Though, all of the mt(xxxx)-power.h headers provide this license tag and I
+>> wanted to follow that to give the same.
+>>
+>> Should I change it to (GPL-2.0-only OR BSD-2-Clause)?
+> 
+> Yes, please, for this one.
+> 
+> For the other bindings - you would need acks from people involved.
+> 
 
-Fake signals will be sent to tasks which fail to migrate via stack
-checking. This will cause running vCPU tasks to exit guest mode, but
-since no signal is pending they return to guest execution without
-exiting to userspace. Fix this by treating a pending livepatch migration
-like a pending signal, exiting to userspace with EINTR. This allows the
-migration to complete, and userspace should re-excecute KVM_RUN to
-resume guest execution.
-
-In my testing, systems where livepatching would timeout after 60 seconds
-were able to load livepatches within a couple of seconds with this
-change.
-
-Signed-off-by: Seth Forshee <sforshee@digitalocean.com>
----
- kernel/entry/kvm.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
-
-diff --git a/kernel/entry/kvm.c b/kernel/entry/kvm.c
-index 9d09f489b60e..efe4b791c253 100644
---- a/kernel/entry/kvm.c
-+++ b/kernel/entry/kvm.c
-@@ -14,7 +14,12 @@ static int xfer_to_guest_mode_work(struct kvm_vcpu *vcpu, unsigned long ti_work)
- 				task_work_run();
- 		}
- 
--		if (ti_work & _TIF_SIGPENDING) {
-+		/*
-+		 * When a livepatch migration is pending, force an exit to
-+		 * userspace as though a signal is pending to allow the
-+		 * migration to complete.
-+		 */
-+		if (ti_work & (_TIF_SIGPENDING | _TIF_PATCH_PENDING)) {
- 			kvm_handle_signal_exit(vcpu);
- 			return -EINTR;
- 		}
--- 
-2.32.0
+I'm glad to read this. I'll change it in the next version. Thank you!
 

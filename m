@@ -2,603 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DE0D5186F1
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 16:40:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8A1F5186FA
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 16:40:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237224AbiECOnf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 10:43:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36976 "EHLO
+        id S237255AbiECOoO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 10:44:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237204AbiECOnc (ORCPT
+        with ESMTP id S237226AbiECOoD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 10:43:32 -0400
-Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB13F35A92;
-        Tue,  3 May 2022 07:39:58 -0700 (PDT)
-Received: by mail-qt1-x82e.google.com with SMTP id t16so13525826qtr.9;
-        Tue, 03 May 2022 07:39:58 -0700 (PDT)
+        Tue, 3 May 2022 10:44:03 -0400
+Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 393622F02D
+        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 07:40:29 -0700 (PDT)
+Received: by mail-oi1-x230.google.com with SMTP id a10so18349357oif.9
+        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 07:40:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=V0jzBpg9roTe7BBwPN9eMkTB1fJj3skMOYpgRpVlT6g=;
-        b=JNDuk7qDjsdLd6SEP1KNxNh62bY4L86arO13ezzQpCYHPpG+70HO4BmxgZH5sSlCL0
-         CtRFUGiqJoLuIvVnKq83ESD0Op0HTyFUPhOVGO6gZl0gUVm/+Iz6B0dUoNBKiOzmspCk
-         kkgMsyUF9Qrb4Cbix1UyoMQXlKD8MmI4UCjqzmjg4ZaztCEtfuLlz7+QXuqQlHCSBtzJ
-         gMft2L4yPFtgqUirHofQ1Uc3A39gxRU/8WhYVBCJvRfA5Cac/fzPGRHR1/4LIwKrTJpo
-         Y9dl9Ah+mqc1NYqanswcO2IQSE9TCcg6CTFNW8Zj43SOzAq+jIuWztj9njvnMlyNsX12
-         a4Og==
+        d=vanguardiasur-com-ar.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=viN1JYge3+LHciwoVBbOpqiLqa/EK2bPoOneumYYZLg=;
+        b=b50ZOtv06fY2ONdrxcFWf5Z0AFhe0E8sPjWlPc2xcHNe+ho1Wa8O8HfHI9hkthqr5s
+         4qqs1/GvXQFR4ml032gxWR9Tkknovy0PW5jebzxJbNjpIHXhorpY3dEa86pD0bwGmXxd
+         gQXPtCU2diExYL9iZgBEgC7vE0uBL3YqHSYA1f0uyRE2ADJZ4f6ZaClA5lQxToA7RZLO
+         EfP+PFqTsWfY1D7v9R/5xQyZd2ENdUzzWIKYWlrAYMfWf3oqr6XdV1pPNrpxjJN5fpUR
+         fTAl1C+sQsIkoKN++lVkAfccK0vcbmoIiqQgyC5vVDXkLl2f5QW/TTnehL2uQGZvpRHa
+         t9OQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=V0jzBpg9roTe7BBwPN9eMkTB1fJj3skMOYpgRpVlT6g=;
-        b=zyGK0K1q1YE9uG6yCfcQcV4NcKgD6vlqBLqJXcibhqD0/9ZZdLT40lb5w7mGpmnqU6
-         g0dxa/SyFGkQatw1uXNigSGuuzhv6oFVmFLlQwVW1QbyiQIPRQ7uG2APzauGXROUbH19
-         Qi/TcTkK60H+0QhcmK1MvQVfiSsbdjTD3H00Q4mL6swsN1Z7QKvI4tRsz/P2Q13KsWHe
-         ozXEVs5EzTRAuYckbD9vwqciZt4/rSU9rr5UQsEHpEM9ZcPIS/UW8fHlcbBhQ15912df
-         KQlOIcFXFu+3rU+o9RJvFulgt4+O1cQca8JiYsCRqOzxVvyj/WwqvobxGwFOyJL9ic86
-         N63g==
-X-Gm-Message-State: AOAM533NfT8+XUqRSaA2gZzicuZ6F3rwEsyjauKDkZAbtzR2aXmive8q
-        AoHt3Hi0rdSO/ZfuqisK9ZSyEeOJmDqKXuZnLh187uIDodSkUA==
-X-Google-Smtp-Source: ABdhPJzdt3vCZ36Tw3Wwn3f53hel8lm55FD5zb58pkcTDoCHC8jd0dfsRk3vUwdgQBrUqK0cwQcMkq1ISMx91RJ+ToE=
-X-Received: by 2002:ac8:5cc7:0:b0:2f3:5996:7667 with SMTP id
- s7-20020ac85cc7000000b002f359967667mr14953801qta.2.1651588797601; Tue, 03 May
- 2022 07:39:57 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=viN1JYge3+LHciwoVBbOpqiLqa/EK2bPoOneumYYZLg=;
+        b=qcktdThrGmatl6HV0VMn8StxDsrr08GNpaSJcTFVHl+EckcgB6W9GrvKiPzqG6QYFj
+         5FBI5ZUZ0bd0ljT5nCgJLcFYNOMWd9ZNgryOCHsQUUdEWvm5Z53f8o8O9xZ8USY9kQFG
+         73VYIbwpjW2ecIGtWX4bx/3e4mS0Vh/R5AjoSwBS64jvyjQHU30SDlvc/gkI7aB7fbRa
+         iOqQpx63z0WqXqWF3/Hxow2r4rGhiluyjk9x63Cm6temBls5uIyPAH15sntj0kV+FSlp
+         lorqBVqkekDJ9rnx/yvmWhU8NXY6EKXeYjhuSB55lkXIIfQ0THAK+2mArV/TVR8p0qSQ
+         d7xg==
+X-Gm-Message-State: AOAM531fpgkouxZhcTocPyYkzCDfz5AiRwEpMfQ8uPzlMEPOsAJc2tvd
+        8lWquepit2xBJbOEeXoQuOEYzl46qgmBNw==
+X-Google-Smtp-Source: ABdhPJxsY5i8IkdgwMEIWLtrRmICgIPPpYv3zOcomHxIHyRk5iJSqb0tgtnLbyk9Hfosv2RiIv0gkw==
+X-Received: by 2002:a05:6808:1a22:b0:325:be76:f246 with SMTP id bk34-20020a0568081a2200b00325be76f246mr1904502oib.74.1651588828558;
+        Tue, 03 May 2022 07:40:28 -0700 (PDT)
+Received: from eze-laptop ([2803:9800:98c2:8470:9f4:8e2a:88e5:ec01])
+        by smtp.gmail.com with ESMTPSA id x6-20020a4ae786000000b0035eb4e5a6c1sm4980824oov.23.2022.05.03.07.40.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 May 2022 07:40:27 -0700 (PDT)
+Date:   Tue, 3 May 2022 11:40:22 -0300
+From:   Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+To:     Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Cc:     p.zabel@pengutronix.de, mchehab@kernel.org,
+        gregkh@linuxfoundation.org, linux-media@vger.kernel.org,
+        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org, jon@nanocrew.net, aford173@gmail.com,
+        kernel@collabora.com
+Subject: Re: [PATCH v2] media: hantro: HEVC: Fix reference frames management
+Message-ID: <YnE+1mgOnWxaVpfg@eze-laptop>
+References: <20220503135138.678677-1-benjamin.gaignard@collabora.com>
 MIME-Version: 1.0
-References: <YnEeuw6fd1A8usjj@miu.piliscsaba.redhat.com>
-In-Reply-To: <YnEeuw6fd1A8usjj@miu.piliscsaba.redhat.com>
-From:   Amir Goldstein <amir73il@gmail.com>
-Date:   Tue, 3 May 2022 17:39:46 +0300
-Message-ID: <CAOQ4uxim+JmFbXPQcasELDEgRDP-spdPtJrLuhvSiyxErSUkvw@mail.gmail.com>
-Subject: Re: [RFC PATCH] getting misc stats/attributes via xattr API
-To:     Miklos Szeredi <miklos@szeredi.hu>
-Cc:     linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Dave Chinner <david@fromorbit.com>,
-        "Theodore Ts'o" <tytso@mit.edu>, Karel Zak <kzak@redhat.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Christian Brauner <brauner@kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Linux API <linux-api@vger.kernel.org>,
-        linux-man <linux-man@vger.kernel.org>,
-        LSM <linux-security-module@vger.kernel.org>,
-        Ian Kent <raven@themaw.net>,
-        David Howells <dhowells@redhat.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <christian@brauner.io>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220503135138.678677-1-benjamin.gaignard@collabora.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 3, 2022 at 3:23 PM Miklos Szeredi <miklos@szeredi.hu> wrote:
->
-> This is a simplification of the getvalues(2) prototype and moving it to the
-> getxattr(2) interface, as suggested by Dave.
->
-> The patch itself just adds the possibility to retrieve a single line of
-> /proc/$$/mountinfo (which was the basic requirement from which the fsinfo
-> patchset grew out of).
->
-> But this should be able to serve Amir's per-sb iostats, as well as a host of
-> other cases where some statistic needs to be retrieved from some object.  Note:
-> a filesystem object often represents other kinds of objects (such as processes
-> in /proc) so this is not limited to fs attributes.
->
-> This also opens up the interface to setting attributes via setxattr(2).
->
-> After some pondering I made the namespace so:
->
-> : - root
-> bar - an attribute
-> foo: - a folder (can contain attributes and/or folders)
->
-> The contents of a folder is represented by a null separated list of names.
->
-> Examples:
->
-> $ getfattr -etext -n ":" .
-> # file: .
-> :="mnt:\000mntns:"
->
-> $ getfattr -etext -n ":mnt:" .
-> # file: .
-> :mnt:="info"
->
-> $ getfattr -etext -n ":mnt:info" .
-> # file: .
-> :mnt:info="21 1 254:0 / / rw,relatime - ext4 /dev/root rw\012"
->
-> $ getfattr -etext -n ":mntns:" .
-> # file: .
-> :mntns:="21:\00022:\00024:\00025:\00023:\00026:\00027:\00028:\00029:\00030:\00031:"
->
-> $ getfattr -etext -n ":mntns:28:" .
-> # file: .
-> :mntns:28:="info"
->
-> Comments?
->
+On Tue, May 03, 2022 at 03:51:38PM +0200, Benjamin Gaignard wrote:
+> PoC shall be int the range of -2^31 to 2^31 -1
+> (HEVC spec section 8.3.1 Decoding process for picture order count).
+> The current way to know if an entry in reference picture array is free
+> is to test if PoC = UNUSED_REF. Since UNUSED_REF is defined as '-1' that
+> could lead to decode issue if one PoC also equal '-1'.
+> PoC with value = '-1' exists in conformance test SLIST_B_Sony_9.
+> 
+> Change the way unused entries are managed in reference pictures array to
+> avoid using PoC to detect then.
+> 
+> This patch doesn't change fluster HEVC score.
+> 
+> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
 
-I like that :)
-
-It should be noted that while this API mandates text keys,
-it does not mandate text values, so for example, sb iostats could be
-exported as text or as binary struct, or as individual text/binary records or
-all of the above.
-
-We can relive this sort of discussion for every property that we add. Fun!
-
-Folks interested in this discussion are welcome to join the Zoom
-discussion on LSFMM tomorrow, Wed at 11AM PDT:
-https://zoom.us/j/99394450657?pwd=ZHE2TzdXV2MzWE9yVnpLYzJNZDBuUT09
-
-Folks who did not get an invite and would like to participate, please
-email me in private.
+Good catch!
 
 Thanks,
-Amir.
 
+Reviewed-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
 
->
 > ---
->  fs/Makefile            |    2
->  fs/mount.h             |    8 +
->  fs/namespace.c         |   15 ++-
->  fs/pnode.h             |    2
->  fs/proc_namespace.c    |   15 ++-
->  fs/values.c            |  242 +++++++++++++++++++++++++++++++++++++++++++++++++
->  fs/xattr.c             |   16 ++-
->  include/linux/values.h |   11 ++
->  8 files changed, 295 insertions(+), 16 deletions(-)
->
-> --- a/fs/Makefile
-> +++ b/fs/Makefile
-> @@ -16,7 +16,7 @@ obj-y :=      open.o read_write.o file_table.
->                 pnode.o splice.o sync.o utimes.o d_path.o \
->                 stack.o fs_struct.o statfs.o fs_pin.o nsfs.o \
->                 fs_types.o fs_context.o fs_parser.o fsopen.o init.o \
-> -               kernel_read_file.o remap_range.o
-> +               kernel_read_file.o remap_range.o values.o
->
->  ifeq ($(CONFIG_BLOCK),y)
->  obj-y +=       buffer.o direct-io.o mpage.o
-> --- a/fs/mount.h
-> +++ b/fs/mount.h
-> @@ -148,3 +148,11 @@ static inline bool is_anon_ns(struct mnt
->  }
->
->  extern void mnt_cursor_del(struct mnt_namespace *ns, struct mount *cursor);
-> +
-> +struct mount *mnt_list_next(struct mnt_namespace *ns, struct list_head *p);
-> +extern void namespace_lock_read(void);
-> +extern void namespace_unlock_read(void);
-> +extern int show_mountinfo_root(struct seq_file *m, struct vfsmount *mnt,
-> +                              struct path *root);
-> +extern bool is_path_reachable(struct mount *, struct dentry *,
-> +                             const struct path *root);
-> --- a/fs/namespace.c
-> +++ b/fs/namespace.c
-> @@ -1332,9 +1332,7 @@ struct vfsmount *mnt_clone_internal(cons
->         return &p->mnt;
->  }
->
-> -#ifdef CONFIG_PROC_FS
-> -static struct mount *mnt_list_next(struct mnt_namespace *ns,
-> -                                  struct list_head *p)
-> +struct mount *mnt_list_next(struct mnt_namespace *ns, struct list_head *p)
+>  .../staging/media/hantro/hantro_g2_hevc_dec.c |  6 ++---
+>  drivers/staging/media/hantro/hantro_hevc.c    | 27 +++----------------
+>  drivers/staging/media/hantro/hantro_hw.h      |  2 +-
+>  3 files changed, 6 insertions(+), 29 deletions(-)
+> 
+> diff --git a/drivers/staging/media/hantro/hantro_g2_hevc_dec.c b/drivers/staging/media/hantro/hantro_g2_hevc_dec.c
+> index 0a8c01ff2fa7..b7835bbf5e98 100644
+> --- a/drivers/staging/media/hantro/hantro_g2_hevc_dec.c
+> +++ b/drivers/staging/media/hantro/hantro_g2_hevc_dec.c
+> @@ -473,8 +473,8 @@ static int set_ref(struct hantro_ctx *ctx)
+>  
+>  	set_ref_pic_list(ctx);
+>  
+> -	/* We will only keep the references picture that are still used */
+> -	ctx->hevc_dec.ref_bufs_used = 0;
+> +	/* We will only keep the references pictures that are still used */
+> +	hantro_hevc_ref_init(ctx);
+>  
+>  	/* Set up addresses of DPB buffers */
+>  	dpb_longterm_e = 0;
+> @@ -515,8 +515,6 @@ static int set_ref(struct hantro_ctx *ctx)
+>  	hantro_write_addr(vpu, G2_OUT_CHROMA_ADDR, chroma_addr);
+>  	hantro_write_addr(vpu, G2_OUT_MV_ADDR, mv_addr);
+>  
+> -	hantro_hevc_ref_remove_unused(ctx);
+> -
+>  	for (; i < V4L2_HEVC_DPB_ENTRIES_NUM_MAX; i++) {
+>  		hantro_write_addr(vpu, G2_REF_LUMA_ADDR(i), 0);
+>  		hantro_write_addr(vpu, G2_REF_CHROMA_ADDR(i), 0);
+> diff --git a/drivers/staging/media/hantro/hantro_hevc.c b/drivers/staging/media/hantro/hantro_hevc.c
+> index 7d4b1d72255c..7fdec50dc853 100644
+> --- a/drivers/staging/media/hantro/hantro_hevc.c
+> +++ b/drivers/staging/media/hantro/hantro_hevc.c
+> @@ -25,15 +25,11 @@
+>  #define MAX_TILE_COLS 20
+>  #define MAX_TILE_ROWS 22
+>  
+> -#define UNUSED_REF	-1
+> -
+> -static void hantro_hevc_ref_init(struct hantro_ctx *ctx)
+> +void hantro_hevc_ref_init(struct hantro_ctx *ctx)
 >  {
->         struct mount *mnt, *ret = NULL;
->
-> @@ -1351,6 +1349,7 @@ static struct mount *mnt_list_next(struc
->         return ret;
+>  	struct hantro_hevc_dec_hw_ctx *hevc_dec = &ctx->hevc_dec;
+> -	int i;
+>  
+> -	for (i = 0;  i < NUM_REF_PICTURES; i++)
+> -		hevc_dec->ref_bufs_poc[i] = UNUSED_REF;
+> +	hevc_dec->ref_bufs_used = 0;
 >  }
->
-> +#ifdef CONFIG_PROC_FS
->  /* iterator; we want it to have access to namespace_sem, thus here... */
->  static void *m_start(struct seq_file *m, loff_t *pos)
+>  
+>  dma_addr_t hantro_hevc_get_ref_buf(struct hantro_ctx *ctx,
+> @@ -60,7 +56,7 @@ int hantro_hevc_add_ref_buf(struct hantro_ctx *ctx, int poc, dma_addr_t addr)
+>  
+>  	/* Add a new reference buffer */
+>  	for (i = 0; i < NUM_REF_PICTURES; i++) {
+> -		if (hevc_dec->ref_bufs_poc[i] == UNUSED_REF) {
+> +		if (!(hevc_dec->ref_bufs_used & 1 << i)) {
+>  			hevc_dec->ref_bufs_used |= 1 << i;
+>  			hevc_dec->ref_bufs_poc[i] = poc;
+>  			hevc_dec->ref_bufs[i].dma = addr;
+> @@ -71,23 +67,6 @@ int hantro_hevc_add_ref_buf(struct hantro_ctx *ctx, int poc, dma_addr_t addr)
+>  	return -EINVAL;
+>  }
+>  
+> -void hantro_hevc_ref_remove_unused(struct hantro_ctx *ctx)
+> -{
+> -	struct hantro_hevc_dec_hw_ctx *hevc_dec = &ctx->hevc_dec;
+> -	int i;
+> -
+> -	/* Just tag buffer as unused, do not free them */
+> -	for (i = 0;  i < NUM_REF_PICTURES; i++) {
+> -		if (hevc_dec->ref_bufs_poc[i] == UNUSED_REF)
+> -			continue;
+> -
+> -		if (hevc_dec->ref_bufs_used & (1 << i))
+> -			continue;
+> -
+> -		hevc_dec->ref_bufs_poc[i] = UNUSED_REF;
+> -	}
+> -}
+> -
+>  static int tile_buffer_reallocate(struct hantro_ctx *ctx)
 >  {
-> @@ -1507,6 +1506,16 @@ static inline void namespace_lock(void)
->         down_write(&namespace_sem);
->  }
->
-> +void namespace_lock_read(void)
-> +{
-> +       down_read(&namespace_sem);
-> +}
-> +
-> +void namespace_unlock_read(void)
-> +{
-> +       up_read(&namespace_sem);
-> +}
-> +
->  enum umount_tree_flags {
->         UMOUNT_SYNC = 1,
->         UMOUNT_PROPAGATE = 2,
-> --- a/fs/pnode.h
-> +++ b/fs/pnode.h
-> @@ -50,7 +50,5 @@ void mnt_set_mountpoint(struct mount *,
->  void mnt_change_mountpoint(struct mount *parent, struct mountpoint *mp,
->                            struct mount *mnt);
->  struct mount *copy_tree(struct mount *, struct dentry *, int);
-> -bool is_path_reachable(struct mount *, struct dentry *,
-> -                        const struct path *root);
->  int count_mounts(struct mnt_namespace *ns, struct mount *mnt);
->  #endif /* _LINUX_PNODE_H */
-> --- a/fs/proc_namespace.c
-> +++ b/fs/proc_namespace.c
-> @@ -132,9 +132,9 @@ static int show_vfsmnt(struct seq_file *
->         return err;
->  }
->
-> -static int show_mountinfo(struct seq_file *m, struct vfsmount *mnt)
-> +int show_mountinfo_root(struct seq_file *m, struct vfsmount *mnt,
-> +                       struct path *root)
+>  	struct hantro_dev *vpu = ctx->dev;
+> diff --git a/drivers/staging/media/hantro/hantro_hw.h b/drivers/staging/media/hantro/hantro_hw.h
+> index 9f31cce609d6..5de558386179 100644
+> --- a/drivers/staging/media/hantro/hantro_hw.h
+> +++ b/drivers/staging/media/hantro/hantro_hw.h
+> @@ -337,9 +337,9 @@ int hantro_hevc_dec_init(struct hantro_ctx *ctx);
+>  void hantro_hevc_dec_exit(struct hantro_ctx *ctx);
+>  int hantro_g2_hevc_dec_run(struct hantro_ctx *ctx);
+>  int hantro_hevc_dec_prepare_run(struct hantro_ctx *ctx);
+> +void hantro_hevc_ref_init(struct hantro_ctx *ctx);
+>  dma_addr_t hantro_hevc_get_ref_buf(struct hantro_ctx *ctx, s32 poc);
+>  int hantro_hevc_add_ref_buf(struct hantro_ctx *ctx, int poc, dma_addr_t addr);
+> -void hantro_hevc_ref_remove_unused(struct hantro_ctx *ctx);
+>  
+>  static inline unsigned short hantro_vp9_num_sbs(unsigned short dimension)
 >  {
-> -       struct proc_mounts *p = m->private;
->         struct mount *r = real_mount(mnt);
->         struct super_block *sb = mnt->mnt_sb;
->         struct path mnt_path = { .dentry = mnt->mnt_root, .mnt = mnt };
-> @@ -152,7 +152,7 @@ static int show_mountinfo(struct seq_fil
->         seq_putc(m, ' ');
->
->         /* mountpoints outside of chroot jail will give SEQ_SKIP on this */
-> -       err = seq_path_root(m, &mnt_path, &p->root, " \t\n\\");
-> +       err = seq_path_root(m, &mnt_path, root, " \t\n\\");
->         if (err)
->                 goto out;
->
-> @@ -164,7 +164,7 @@ static int show_mountinfo(struct seq_fil
->                 seq_printf(m, " shared:%i", r->mnt_group_id);
->         if (IS_MNT_SLAVE(r)) {
->                 int master = r->mnt_master->mnt_group_id;
-> -               int dom = get_dominating_id(r, &p->root);
-> +               int dom = get_dominating_id(r, root);
->                 seq_printf(m, " master:%i", master);
->                 if (dom && dom != master)
->                         seq_printf(m, " propagate_from:%i", dom);
-> @@ -194,6 +194,13 @@ static int show_mountinfo(struct seq_fil
->         return err;
->  }
->
-> +static int show_mountinfo(struct seq_file *m, struct vfsmount *mnt)
-> +{
-> +       struct proc_mounts *p = m->private;
-> +
-> +       return show_mountinfo_root(m, mnt, &p->root);
-> +}
-> +
->  static int show_vfsstat(struct seq_file *m, struct vfsmount *mnt)
->  {
->         struct proc_mounts *p = m->private;
-> --- /dev/null
-> +++ b/fs/values.c
-> @@ -0,0 +1,242 @@
-> +#include <linux/values.h>
-> +#include <linux/fs_struct.h>
-> +#include <linux/seq_file.h>
-> +#include <linux/nsproxy.h>
-> +#include "../lib/kstrtox.h"
-> +#include "mount.h"
-> +
-> +struct val_string {
-> +       const char *str;
-> +       size_t len;
-> +};
-> +
-> +struct val_iter {
-> +       struct val_string name;
-> +       struct seq_file seq;
-> +       int error;
-> +};
-> +
-> +struct val_desc {
-> +       struct val_string name;
-> +       union {
-> +               u64 idx;
-> +               int (*get)(struct val_iter *vi, const struct path *path);
-> +       };
-> +};
-> +
-> +#define VAL_STRING(x) { .str = x, .len = sizeof(x) - 1 }
-> +#define VD_NAME(x) .name = VAL_STRING(x)
-> +
-> +static int val_err(struct val_iter *vi, int err)
-> +{
-> +       vi->error = err;
-> +       return 0;
-> +}
-> +
-> +static int val_end_seq(struct val_iter *vi)
-> +{
-> +       if (vi->seq.count == vi->seq.size)
-> +               return -EOVERFLOW;
-> +
-> +       return 0;
-> +}
-> +
-> +static inline void val_string_skip(struct val_string *s, size_t count)
-> +{
-> +       WARN_ON(s->len < count);
-> +       s->str += count;
-> +       s->len -= count;
-> +}
-> +
-> +static bool val_string_prefix(const struct val_string *p,
-> +                             const struct val_string *s)
-> +{
-> +       return s->len >= p->len && !memcmp(s->str, p->str, p->len);
-> +}
-> +
-> +static struct val_desc *val_lookup(struct val_iter *vi, struct val_desc *vd)
-> +{
-> +       for (; vd->name.len; vd++) {
-> +               if (val_string_prefix(&vd->name, &vi->name)) {
-> +                       val_string_skip(&vi->name, vd->name.len);
-> +                       break;
-> +               }
-> +       }
-> +       return vd;
-> +}
-> +
-> +static int val_get_group(struct val_iter *vi, struct val_desc *vd)
-> +{
-> +       for (; vd->name.len; vd++)
-> +               seq_write(&vi->seq, vd->name.str, vd->name.len + 1);
-> +
-> +       return val_end_seq(vi);
-> +}
-> +
-> +enum {
-> +       VAL_MNT_INFO,
-> +};
-> +
-> +static struct val_desc val_mnt_group[] = {
-> +       { VD_NAME("info"),              .idx = VAL_MNT_INFO             },
-> +       { }
-> +};
-> +
-> +static int val_mnt_show(struct val_iter *vi, struct vfsmount *mnt)
-> +{
-> +       struct val_desc *vd = val_lookup(vi, val_mnt_group);
-> +       struct path root;
-> +
-> +       if (!vd->name.str)
-> +               return val_err(vi, -ENOENT);
-> +
-> +       switch(vd->idx) {
-> +       case VAL_MNT_INFO:
-> +               get_fs_root(current->fs, &root);
-> +               show_mountinfo_root(&vi->seq, mnt, &root);
-> +               path_put(&root);
-> +               break;
-> +       }
-> +
-> +       return 0;
-> +}
-> +
-> +static int val_mnt_get(struct val_iter *vi, const struct path *path)
-> +{
-> +       int err;
-> +
-> +       if (!vi->name.len)
-> +               return val_get_group(vi, val_mnt_group);
-> +
-> +       namespace_lock_read();
-> +       err = val_mnt_show(vi, path->mnt);
-> +       namespace_unlock_read();
-> +
-> +       return err;
-> +}
-> +
-> +/* called with namespace_sem held for read */
-> +static struct vfsmount *mnt_lookup_by_id(struct mnt_namespace *ns,
-> +                                        struct path *root, int id)
-> +{
-> +       struct mount *m;
-> +
-> +       for (m = mnt_list_next(ns, &ns->list); m; m = mnt_list_next(ns, &m->mnt_list)) {
-> +               if (m->mnt_id == id) {
-> +                       if (is_path_reachable(m, m->mnt.mnt_root, root))
-> +                               return mntget(&m->mnt);
-> +                       else
-> +                               return NULL;
-> +               }
-> +       }
-> +       return NULL;
-> +}
-> +
-> +static void seq_mnt_list(struct seq_file *seq, struct mnt_namespace *ns,
-> +                        struct path *root)
-> +{
-> +       struct mount *m;
-> +
-> +       namespace_lock_read();
-> +       for (m = mnt_list_next(ns, &ns->list); m; m = mnt_list_next(ns, &m->mnt_list)) {
-> +               if (is_path_reachable(m, m->mnt.mnt_root, root)) {
-> +                       seq_printf(seq, "%i:", m->mnt_id);
-> +                       seq_putc(seq, '\0');
-> +               }
-> +       }
-> +       namespace_unlock_read();
-> +}
-> +
-> +static int val_mntns_get(struct val_iter *vi, const struct path *path)
-> +{
-> +       struct mnt_namespace *mnt_ns = current->nsproxy->mnt_ns;
-> +       struct vfsmount *mnt;
-> +       struct path root;
-> +       unsigned long long mnt_id;
-> +       unsigned int end;
-> +       int err;
-> +
-> +       if (!vi->name.len) {
-> +               get_fs_root(current->fs, &root);
-> +               seq_mnt_list(&vi->seq, mnt_ns, &root);
-> +               path_put(&root);
-> +               return val_end_seq(vi);
-> +       }
-> +
-> +       end = _parse_integer(vi->name.str, 10, &mnt_id);
-> +       if (end & KSTRTOX_OVERFLOW)
-> +               return val_err(vi, -ENOENT);
-> +       if (vi->name.str[end] != VAL_SEP)
-> +               return val_err(vi, -ENOENT);
-> +       val_string_skip(&vi->name, end + 1);
-> +
-> +       namespace_lock_read();
-> +       get_fs_root(current->fs, &root);
-> +       mnt = mnt_lookup_by_id(mnt_ns, &root, mnt_id);
-> +       path_put(&root);
-> +       if (!mnt) {
-> +               namespace_unlock_read();
-> +               return val_err(vi, -ENOENT);
-> +       }
-> +       if (vi->name.len)
-> +               err = val_mnt_show(vi, mnt);
-> +       else
-> +               err = val_get_group(vi, val_mnt_group);
-> +
-> +       namespace_unlock_read();
-> +       mntput(mnt);
-> +
-> +       return err;
-> +}
-> +
-> +
-> +
-> +static struct val_desc val_toplevel_group[] = {
-> +       { VD_NAME("mnt:"),      .get = val_mnt_get,     },
-> +       { VD_NAME("mntns:"),    .get = val_mntns_get,   },
-> +       { },
-> +};
-> +
-> +static int getvalues(struct val_iter *vi, const struct path *path)
-> +{
-> +       struct val_desc *vd;
-> +       int err;
-> +
-> +       if (!vi->name.len)
-> +               return val_get_group(vi, val_toplevel_group);
-> +
-> +       vd = val_lookup(vi, val_toplevel_group);
-> +       if (!vd->name.len)
-> +               err = val_err(vi, -ENOENT);
-> +       else
-> +               err = vd->get(vi, path);
-> +
-> +       return err ?: vi->error;
-> +}
-> +
-> +ssize_t val_getxattr(struct path *path, const char *name, size_t namelen,
-> +                    void __user *value, size_t size)
-> +{
-> +       int err;
-> +       char val[1024];
-> +       struct val_iter vi = {
-> +               .name = { .str = name, .len = namelen },
-> +               .seq = { .buf = val, .size = min(sizeof(val), size) },
-> +       };
-> +
-> +       if (!size)
-> +               return sizeof(val);
-> +
-> +       val_string_skip(&vi.name, 1);
-> +
-> +       err = getvalues(&vi, path);
-> +       if (err < 0)
-> +               return err;
-> +
-> +       WARN_ON(vi.seq.count > size);
-> +       if (copy_to_user(value, vi.seq.buf, vi.seq.count))
-> +               return -EFAULT;
-> +
-> +       return vi.seq.count;
-> +}
-> +
-> --- a/fs/xattr.c
-> +++ b/fs/xattr.c
-> @@ -22,6 +22,7 @@
->  #include <linux/audit.h>
->  #include <linux/vmalloc.h>
->  #include <linux/posix_acl_xattr.h>
-> +#include <linux/values.h>
->
->  #include <linux/uaccess.h>
->
-> @@ -643,12 +644,13 @@ SYSCALL_DEFINE5(fsetxattr, int, fd, cons
->   * Extended attribute GET operations
->   */
->  static ssize_t
-> -getxattr(struct user_namespace *mnt_userns, struct dentry *d,
-> -        const char __user *name, void __user *value, size_t size)
-> +getxattr(struct path *path, const char __user *name,
-> +        void __user *value, size_t size)
->  {
->         ssize_t error;
->         void *kvalue = NULL;
->         char kname[XATTR_NAME_MAX + 1];
-> +       struct user_namespace *mnt_userns = mnt_user_ns(path->mnt);
->
->         error = strncpy_from_user(kname, name, sizeof(kname));
->         if (error == 0 || error == sizeof(kname))
-> @@ -656,6 +658,9 @@ getxattr(struct user_namespace *mnt_user
->         if (error < 0)
->                 return error;
->
-> +       if (kname[0] == VAL_SEP)
-> +               return val_getxattr(path, kname, error, value, size);
-> +
->         if (size) {
->                 if (size > XATTR_SIZE_MAX)
->                         size = XATTR_SIZE_MAX;
-> @@ -664,7 +669,7 @@ getxattr(struct user_namespace *mnt_user
->                         return -ENOMEM;
->         }
->
-> -       error = vfs_getxattr(mnt_userns, d, kname, kvalue, size);
-> +       error = vfs_getxattr(mnt_userns, path->dentry, kname, kvalue, size);
->         if (error > 0) {
->                 if ((strcmp(kname, XATTR_NAME_POSIX_ACL_ACCESS) == 0) ||
->                     (strcmp(kname, XATTR_NAME_POSIX_ACL_DEFAULT) == 0))
-> @@ -693,7 +698,7 @@ static ssize_t path_getxattr(const char
->         error = user_path_at(AT_FDCWD, pathname, lookup_flags, &path);
->         if (error)
->                 return error;
-> -       error = getxattr(mnt_user_ns(path.mnt), path.dentry, name, value, size);
-> +       error = getxattr(&path, name, value, size);
->         path_put(&path);
->         if (retry_estale(error, lookup_flags)) {
->                 lookup_flags |= LOOKUP_REVAL;
-> @@ -723,8 +728,7 @@ SYSCALL_DEFINE4(fgetxattr, int, fd, cons
->         if (!f.file)
->                 return error;
->         audit_file(f.file);
-> -       error = getxattr(file_mnt_user_ns(f.file), f.file->f_path.dentry,
-> -                        name, value, size);
-> +       error = getxattr(&f.file->f_path, name, value, size);
->         fdput(f);
->         return error;
->  }
-> --- /dev/null
-> +++ b/include/linux/values.h
-> @@ -0,0 +1,11 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +
-> +#include <linux/types.h>
-> +
-> +#define VAL_SEP ':'
-> +
-> +struct path;
-> +
-> +ssize_t val_getxattr(struct path *path, const char *name, size_t namelen,
-> +                    void __user *value, size_t size);
-> +
+> -- 
+> 2.32.0
+> 

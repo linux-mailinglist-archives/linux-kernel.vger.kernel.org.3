@@ -2,197 +2,333 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8A1F5186FA
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 16:40:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E28925186F8
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 16:40:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237255AbiECOoO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 10:44:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38102 "EHLO
+        id S237245AbiECOoG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 10:44:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237226AbiECOoD (ORCPT
+        with ESMTP id S237204AbiECOoC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 10:44:03 -0400
-Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 393622F02D
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 07:40:29 -0700 (PDT)
-Received: by mail-oi1-x230.google.com with SMTP id a10so18349357oif.9
-        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 07:40:29 -0700 (PDT)
+        Tue, 3 May 2022 10:44:02 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 419A32F027
+        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 07:40:28 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id n10so16455350ejk.5
+        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 07:40:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=vanguardiasur-com-ar.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=viN1JYge3+LHciwoVBbOpqiLqa/EK2bPoOneumYYZLg=;
-        b=b50ZOtv06fY2ONdrxcFWf5Z0AFhe0E8sPjWlPc2xcHNe+ho1Wa8O8HfHI9hkthqr5s
-         4qqs1/GvXQFR4ml032gxWR9Tkknovy0PW5jebzxJbNjpIHXhorpY3dEa86pD0bwGmXxd
-         gQXPtCU2diExYL9iZgBEgC7vE0uBL3YqHSYA1f0uyRE2ADJZ4f6ZaClA5lQxToA7RZLO
-         EfP+PFqTsWfY1D7v9R/5xQyZd2ENdUzzWIKYWlrAYMfWf3oqr6XdV1pPNrpxjJN5fpUR
-         fTAl1C+sQsIkoKN++lVkAfccK0vcbmoIiqQgyC5vVDXkLl2f5QW/TTnehL2uQGZvpRHa
-         t9OQ==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=T7KD58LLGLoFWa1xXxvp0DQeF4I0gKOPKSSTJE1ESIQ=;
+        b=r2joUbDnOfo04iaxwxKpn34xLPcue03BKA2xcR5i6N7cXrYk8Rp+cHm+ylEj63RZ7g
+         YpFFjyP8UeUmqalv1YTMVlSARi5ZFXr9TbF8X8oeR0NBj4Hhs7smfuO81RHuPMnIXYRf
+         zKzq7mrmCVczsefNa6APBEA52mivnPWENS3N5kqDum5p4JCY0nXPDiIUyRzJmYBZXmz6
+         LgCZg2m2o2Gg0SRfSigRTbB2pz5oIU3B5PJ/Tu7u7xq1VjIuTRsSjz6VN4cfe3n6X4lg
+         n9DQ1KzazDTcWYkcmCGvMi0FDb1ckLs3KarUQu2Mo0tpSTajVmZuZtMF8kPXPulH/cXC
+         aTkA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=viN1JYge3+LHciwoVBbOpqiLqa/EK2bPoOneumYYZLg=;
-        b=qcktdThrGmatl6HV0VMn8StxDsrr08GNpaSJcTFVHl+EckcgB6W9GrvKiPzqG6QYFj
-         5FBI5ZUZ0bd0ljT5nCgJLcFYNOMWd9ZNgryOCHsQUUdEWvm5Z53f8o8O9xZ8USY9kQFG
-         73VYIbwpjW2ecIGtWX4bx/3e4mS0Vh/R5AjoSwBS64jvyjQHU30SDlvc/gkI7aB7fbRa
-         iOqQpx63z0WqXqWF3/Hxow2r4rGhiluyjk9x63Cm6temBls5uIyPAH15sntj0kV+FSlp
-         lorqBVqkekDJ9rnx/yvmWhU8NXY6EKXeYjhuSB55lkXIIfQ0THAK+2mArV/TVR8p0qSQ
-         d7xg==
-X-Gm-Message-State: AOAM531fpgkouxZhcTocPyYkzCDfz5AiRwEpMfQ8uPzlMEPOsAJc2tvd
-        8lWquepit2xBJbOEeXoQuOEYzl46qgmBNw==
-X-Google-Smtp-Source: ABdhPJxsY5i8IkdgwMEIWLtrRmICgIPPpYv3zOcomHxIHyRk5iJSqb0tgtnLbyk9Hfosv2RiIv0gkw==
-X-Received: by 2002:a05:6808:1a22:b0:325:be76:f246 with SMTP id bk34-20020a0568081a2200b00325be76f246mr1904502oib.74.1651588828558;
-        Tue, 03 May 2022 07:40:28 -0700 (PDT)
-Received: from eze-laptop ([2803:9800:98c2:8470:9f4:8e2a:88e5:ec01])
-        by smtp.gmail.com with ESMTPSA id x6-20020a4ae786000000b0035eb4e5a6c1sm4980824oov.23.2022.05.03.07.40.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 May 2022 07:40:27 -0700 (PDT)
-Date:   Tue, 3 May 2022 11:40:22 -0300
-From:   Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-To:     Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Cc:     p.zabel@pengutronix.de, mchehab@kernel.org,
-        gregkh@linuxfoundation.org, linux-media@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org, jon@nanocrew.net, aford173@gmail.com,
-        kernel@collabora.com
-Subject: Re: [PATCH v2] media: hantro: HEVC: Fix reference frames management
-Message-ID: <YnE+1mgOnWxaVpfg@eze-laptop>
-References: <20220503135138.678677-1-benjamin.gaignard@collabora.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=T7KD58LLGLoFWa1xXxvp0DQeF4I0gKOPKSSTJE1ESIQ=;
+        b=ioUfjLt5OjFdE+kkmb2OawLi4mEvR/n7yld0IGBJEyRCA7isbSORktwccJ5prlVPQ4
+         B2GUb42sV3RLG9ioiym4hIGE4c1n7V+C9pljD14sEwusjXKykh4WnIyQkn2lwnCMEtNu
+         isj9zS0bjH5737O83kyE3wXNBl+kp82idR1QwckgOF9UTjI6kml7XIFZbe9vCNHLTJQq
+         Sol+SeoddYpzl8q39cMMVGaD+4szPk9tVDW8iuuVlirQesJxCGl8ugY+cpbGX8IKaX3m
+         fAiAwip8YfJnOd40uciWOfd4/ljOzrgDUPeKey/UkbDr33h9UX8BWyJ56BJYwLOBBxDF
+         xYWg==
+X-Gm-Message-State: AOAM530KTzR5+8G8AUByF/LIXgx0Yw+Pq4M1rVD9uYXiMpu9a5m4O0cz
+        6FZfyk6QbpK3OKT4m4m3ZrRUwQ==
+X-Google-Smtp-Source: ABdhPJzUyOBnA5pwtFQm/3gpADNDDdDrjOagJfn2AvJ5rgaqlRv3q7PRI9wdbo+5IzmEMk/kzkE2Rg==
+X-Received: by 2002:a17:907:1c0f:b0:6f3:edd8:85d5 with SMTP id nc15-20020a1709071c0f00b006f3edd885d5mr15468515ejc.397.1651588826696;
+        Tue, 03 May 2022 07:40:26 -0700 (PDT)
+Received: from [192.168.0.203] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id gz19-20020a170907a05300b006f3ef214ddasm4612992ejc.64.2022.05.03.07.40.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 03 May 2022 07:40:26 -0700 (PDT)
+Message-ID: <10770ff5-c9b1-7364-4276-05fa0c393d3b@linaro.org>
+Date:   Tue, 3 May 2022 16:40:24 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220503135138.678677-1-benjamin.gaignard@collabora.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: Aw: Re: [RFC v1] dt-bindings: net: dsa: convert binding for
+ mediatek switches
+Content-Language: en-US
+To:     Frank Wunderlich <frank-w@public-files.de>,
+        Greg Ungerer <gerg@kernel.org>,
+        =?UTF-8?Q?Ren=c3=a9_van_Dorst?= <opensource@vdorst.com>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+Cc:     Frank Wunderlich <linux@fw-web.de>, Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20220502153238.85090-1-linux@fw-web.de>
+ <d29637f8-87ff-b5f0-9604-89b51a2ba7c1@linaro.org>
+ <trinity-cda3b94f-8556-4b83-bc34-d2c215f93bcd-1651587032669@3c-app-gmx-bap25>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <trinity-cda3b94f-8556-4b83-bc34-d2c215f93bcd-1651587032669@3c-app-gmx-bap25>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 03, 2022 at 03:51:38PM +0200, Benjamin Gaignard wrote:
-> PoC shall be int the range of -2^31 to 2^31 -1
-> (HEVC spec section 8.3.1 Decoding process for picture order count).
-> The current way to know if an entry in reference picture array is free
-> is to test if PoC = UNUSED_REF. Since UNUSED_REF is defined as '-1' that
-> could lead to decode issue if one PoC also equal '-1'.
-> PoC with value = '-1' exists in conformance test SLIST_B_Sony_9.
+On 03/05/2022 16:10, Frank Wunderlich wrote:
+> Hi,
 > 
-> Change the way unused entries are managed in reference pictures array to
-> avoid using PoC to detect then.
+> thank you for first review.
 > 
-> This patch doesn't change fluster HEVC score.
+>> Gesendet: Dienstag, 03. Mai 2022 um 14:05 Uhr
+>> Von: "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>
+>> Betreff: Re: [RFC v1] dt-bindings: net: dsa: convert binding for mediatek switches
+>>
+>> On 02/05/2022 17:32, Frank Wunderlich wrote:
+>>> From: Frank Wunderlich <frank-w@public-files.de>
+>>>
+>>> Convert txt binding to yaml binding for Mediatek switches.
+>>>
+>>> Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
+>>> ---
+>>>  .../devicetree/bindings/net/dsa/mediatek.yaml | 435 ++++++++++++++++++
+>>>  .../devicetree/bindings/net/dsa/mt7530.txt    | 327 -------------
+>>>  2 files changed, 435 insertions(+), 327 deletions(-)
+>>>  create mode 100644 Documentation/devicetree/bindings/net/dsa/mediatek.yaml
+>>>  delete mode 100644 Documentation/devicetree/bindings/net/dsa/mt7530.txt
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/net/dsa/mediatek.yaml b/Documentation/devicetree/bindings/net/dsa/mediatek.yaml
+>>> new file mode 100644
+>>> index 000000000000..c1724809d34e
+>>> --- /dev/null
+>>> +++ b/Documentation/devicetree/bindings/net/dsa/mediatek.yaml
+>>
+>> Specific name please, so previous (with vendor prefix) was better:
+>> mediatek,mt7530.yaml
 > 
-> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+> ok, named it mediatek only because mt7530 is only one possible chip and driver handles 3 different "variants".
+> 
+>>> @@ -0,0 +1,435 @@
+>>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>>
+>> You should CC previous contributors and get their acks on this. You
+>> copied here a lot of description.
+> 
+> added 3 Persons that made commits to txt before to let them know about this change
+> 
+> and yes, i tried to define at least the phy-mode requirement as yaml-depency, but failed because i cannot match
+> compatible in subnode.
 
-Good catch!
+I don't remember such syntax.
 
-Thanks,
+(...)
 
-Reviewed-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-
-> ---
->  .../staging/media/hantro/hantro_g2_hevc_dec.c |  6 ++---
->  drivers/staging/media/hantro/hantro_hevc.c    | 27 +++----------------
->  drivers/staging/media/hantro/hantro_hw.h      |  2 +-
->  3 files changed, 6 insertions(+), 29 deletions(-)
 > 
-> diff --git a/drivers/staging/media/hantro/hantro_g2_hevc_dec.c b/drivers/staging/media/hantro/hantro_g2_hevc_dec.c
-> index 0a8c01ff2fa7..b7835bbf5e98 100644
-> --- a/drivers/staging/media/hantro/hantro_g2_hevc_dec.c
-> +++ b/drivers/staging/media/hantro/hantro_g2_hevc_dec.c
-> @@ -473,8 +473,8 @@ static int set_ref(struct hantro_ctx *ctx)
->  
->  	set_ref_pic_list(ctx);
->  
-> -	/* We will only keep the references picture that are still used */
-> -	ctx->hevc_dec.ref_bufs_used = 0;
-> +	/* We will only keep the references pictures that are still used */
-> +	hantro_hevc_ref_init(ctx);
->  
->  	/* Set up addresses of DPB buffers */
->  	dpb_longterm_e = 0;
-> @@ -515,8 +515,6 @@ static int set_ref(struct hantro_ctx *ctx)
->  	hantro_write_addr(vpu, G2_OUT_CHROMA_ADDR, chroma_addr);
->  	hantro_write_addr(vpu, G2_OUT_MV_ADDR, mv_addr);
->  
-> -	hantro_hevc_ref_remove_unused(ctx);
-> -
->  	for (; i < V4L2_HEVC_DPB_ENTRIES_NUM_MAX; i++) {
->  		hantro_write_addr(vpu, G2_REF_LUMA_ADDR(i), 0);
->  		hantro_write_addr(vpu, G2_REF_CHROMA_ADDR(i), 0);
-> diff --git a/drivers/staging/media/hantro/hantro_hevc.c b/drivers/staging/media/hantro/hantro_hevc.c
-> index 7d4b1d72255c..7fdec50dc853 100644
-> --- a/drivers/staging/media/hantro/hantro_hevc.c
-> +++ b/drivers/staging/media/hantro/hantro_hevc.c
-> @@ -25,15 +25,11 @@
->  #define MAX_TILE_COLS 20
->  #define MAX_TILE_ROWS 22
->  
-> -#define UNUSED_REF	-1
-> -
-> -static void hantro_hevc_ref_init(struct hantro_ctx *ctx)
-> +void hantro_hevc_ref_init(struct hantro_ctx *ctx)
->  {
->  	struct hantro_hevc_dec_hw_ctx *hevc_dec = &ctx->hevc_dec;
-> -	int i;
->  
-> -	for (i = 0;  i < NUM_REF_PICTURES; i++)
-> -		hevc_dec->ref_bufs_poc[i] = UNUSED_REF;
-> +	hevc_dec->ref_bufs_used = 0;
->  }
->  
->  dma_addr_t hantro_hevc_get_ref_buf(struct hantro_ctx *ctx,
-> @@ -60,7 +56,7 @@ int hantro_hevc_add_ref_buf(struct hantro_ctx *ctx, int poc, dma_addr_t addr)
->  
->  	/* Add a new reference buffer */
->  	for (i = 0; i < NUM_REF_PICTURES; i++) {
-> -		if (hevc_dec->ref_bufs_poc[i] == UNUSED_REF) {
-> +		if (!(hevc_dec->ref_bufs_used & 1 << i)) {
->  			hevc_dec->ref_bufs_used |= 1 << i;
->  			hevc_dec->ref_bufs_poc[i] = poc;
->  			hevc_dec->ref_bufs[i].dma = addr;
-> @@ -71,23 +67,6 @@ int hantro_hevc_add_ref_buf(struct hantro_ctx *ctx, int poc, dma_addr_t addr)
->  	return -EINVAL;
->  }
->  
-> -void hantro_hevc_ref_remove_unused(struct hantro_ctx *ctx)
-> -{
-> -	struct hantro_hevc_dec_hw_ctx *hevc_dec = &ctx->hevc_dec;
-> -	int i;
-> -
-> -	/* Just tag buffer as unused, do not free them */
-> -	for (i = 0;  i < NUM_REF_PICTURES; i++) {
-> -		if (hevc_dec->ref_bufs_poc[i] == UNUSED_REF)
-> -			continue;
-> -
-> -		if (hevc_dec->ref_bufs_used & (1 << i))
-> -			continue;
-> -
-> -		hevc_dec->ref_bufs_poc[i] = UNUSED_REF;
-> -	}
-> -}
-> -
->  static int tile_buffer_reallocate(struct hantro_ctx *ctx)
->  {
->  	struct hantro_dev *vpu = ctx->dev;
-> diff --git a/drivers/staging/media/hantro/hantro_hw.h b/drivers/staging/media/hantro/hantro_hw.h
-> index 9f31cce609d6..5de558386179 100644
-> --- a/drivers/staging/media/hantro/hantro_hw.h
-> +++ b/drivers/staging/media/hantro/hantro_hw.h
-> @@ -337,9 +337,9 @@ int hantro_hevc_dec_init(struct hantro_ctx *ctx);
->  void hantro_hevc_dec_exit(struct hantro_ctx *ctx);
->  int hantro_g2_hevc_dec_run(struct hantro_ctx *ctx);
->  int hantro_hevc_dec_prepare_run(struct hantro_ctx *ctx);
-> +void hantro_hevc_ref_init(struct hantro_ctx *ctx);
->  dma_addr_t hantro_hevc_get_ref_buf(struct hantro_ctx *ctx, s32 poc);
->  int hantro_hevc_add_ref_buf(struct hantro_ctx *ctx, int poc, dma_addr_t addr);
-> -void hantro_hevc_ref_remove_unused(struct hantro_ctx *ctx);
->  
->  static inline unsigned short hantro_vp9_num_sbs(unsigned short dimension)
->  {
-> -- 
-> 2.32.0
+>>> if defined, indicates that either MT7530 is the part
+>>> +      on multi-chip module belong to MT7623A has or the remotely standalone
+>>> +      chip as the function MT7623N reference board provided for.
+>>> +
+>>> +  reset-gpios:
+>>> +    description: |
+>>> +      Should be a gpio specifier for a reset line.
+>>> +    maxItems: 1
+>>> +
+>>> +  reset-names:
+>>> +    description: |
+>>> +      Should be set to "mcm".
+>>> +    const: mcm
+>>> +
+>>> +  resets:
+>>> +    description: |
+>>> +      Phandle pointing to the system reset controller with
+>>> +      line index for the ethsys.
+>>> +    maxItems: 1
+>>> +
+>>> +required:
+>>> +  - compatible
+>>> +  - reg
+>>
+>> What about address/size cells?
 > 
+> you're right even if they are const to a value they need to be set
+> 
+>>> +
+>>> +allOf:
+>>> +  - $ref: "dsa.yaml#"
+>>> +  - if:
+>>> +      required:
+>>> +        - mediatek,mcm
+>>
+>> Original bindings had this reversed.
+> 
+> i know, but i think it is better readable and i will drop the else-part later.
+> Driver supports optional reset ("mediatek,mcm" unset and without reset-gpios)
+> as this is needed if there is a shared reset-line for gmac and switch like on R2 Pro.
+> 
+> i left this as separate commit to be posted later to have a nearly 1:1 conversion here.
+
+Ah, I missed that actually your syntax is better. No need to
+reverse/negate and the changes do not have to be strict 1:1.
+
+> 
+>>> +    then:
+>>> +      required:
+>>> +        - resets
+>>> +        - reset-names
+>>> +    else:
+>>> +      required:
+>>> +        - reset-gpios
+>>> +
+>>> +  - if:
+>>> +      required:
+>>> +        - interrupt-controller
+>>> +    then:
+>>> +      required:
+>>> +        - "#interrupt-cells"
+>>
+>> This should come from dt schema already...
+> 
+> so i should drop (complete block for interrupt controller)?
+
+The interrupts you need. What I mean, you can skip requirement of cells.
+
+> 
+>>> +        - interrupts
+>>> +
+>>> +  - if:
+>>> +      properties:
+>>> +        compatible:
+>>> +          items:
+>>> +            - const: mediatek,mt7530
+>>> +    then:
+>>> +      required:
+>>> +        - core-supply
+>>> +        - io-supply
+>>> +
+>>> +
+>>> +patternProperties:
+>>> +  "^ports$":
+>>
+>> It''s not a pattern, so put it under properties, like regular property.
+> 
+> can i then make the subnodes match? so the full block will move above required between "mediatek,mcm" and "reset-gpios"
+
+Yes, subnodes stay with patternProperties.
+
+> 
+>   ports:
+>     type: object
+> 
+>     patternProperties:
+>       "^port@[0-9]+$":
+>         type: object
+>         description: Ethernet switch ports
+> 
+>         properties:
+>           reg:
+>             description: |
+>               Port address described must be 5 or 6 for CPU port and from 0 to 5 for user ports.
+> 
+>         unevaluatedProperties: false
+> 
+>         allOf:
+>           - $ref: dsa-port.yaml#
+>           - if:
+> ....
+> 
+> basicly this "ports"-property should be required too, right?
+
+Previous binding did not enforce it, I think, but it is reasonable to
+require ports.
+
+> 
+> 
+>>> +    type: object
+>>> +
+>>> +    patternProperties:
+>>> +      "^port@[0-9]+$":
+>>> +        type: object
+>>> +        description: Ethernet switch ports
+>>> +
+>>> +        $ref: dsa-port.yaml#
+>>
+>> This should go to allOf below.
+> 
+> see above
+> 
+>>> +
+>>> +        properties:
+>>> +          reg:
+>>> +            description: |
+>>> +              Port address described must be 6 for CPU port and from 0 to 5 for user ports.
+>>> +
+>>> +        unevaluatedProperties: false
+>>> +
+>>> +        allOf:
+>>> +          - if:
+>>> +              properties:
+>>> +                label:
+>>> +                  items:
+>>> +                    - const: cpu
+>>> +            then:
+>>> +              required:
+>>> +                - reg
+>>> +                - phy-mode
+>>> +
+>>> +unevaluatedProperties: false
+>>> +
+>>> +examples:
+>>> +  - |
+>>> +    mdio0 {
+>>
+>> Just mdio
+> 
+> ok
+> 
+>>> +        #address-cells = <1>;
+>>> +        #size-cells = <0>;
+>>> +        switch@0 {
+>>> +            compatible = "mediatek,mt7530";
+>>> +            #address-cells = <1>;
+>>> +            #size-cells = <0>;
+>>> +            reg = <0>;
+>>> +
+>>> +            core-supply = <&mt6323_vpa_reg>;
+>>> +            io-supply = <&mt6323_vemc3v3_reg>;
+>>> +            reset-gpios = <&pio 33 0>;
+>>
+>> Use GPIO flag define/constant.
+> 
+> this example seems to be taken from bpi-r2 (i had taken it from the txt). In dts for this board there are no
+> constants too.
+> 
+> i guess
+> include/dt-bindings/gpio/gpio.h:14:#define GPIO_ACTIVE_HIGH 0
+> 
+> for 33 there seem no constant..all other references to pio node are with numbers too and there seem no binding
+> header defining the gpio pins (only functions in include/dt-bindings/pinctrl/mt7623-pinfunc.h)
+
+ok, then my comment
+
+
+Best regards,
+Krzysztof

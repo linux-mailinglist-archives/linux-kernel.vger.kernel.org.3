@@ -2,94 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E34A5519007
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 23:23:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B1BC519025
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 23:36:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241154AbiECV0W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 17:26:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40714 "EHLO
+        id S235567AbiECV1E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 17:27:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237718AbiECV0U (ORCPT
+        with ESMTP id S237718AbiECV1C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 17:26:20 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 273954161C
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 14:22:47 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id iq10so16469115pjb.0
-        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 14:22:47 -0700 (PDT)
+        Tue, 3 May 2022 17:27:02 -0400
+Received: from mail.baikalelectronics.ru (mail.baikalelectronics.com [87.245.175.226])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7201C4161F;
+        Tue,  3 May 2022 14:23:26 -0700 (PDT)
+Received: from mail.baikalelectronics.ru (unknown [192.168.51.25])
+        by mail.baikalelectronics.ru (Postfix) with ESMTP id 27ADB16A9;
+        Wed,  4 May 2022 00:23:59 +0300 (MSK)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.baikalelectronics.ru 27ADB16A9
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=6A2AVhB3i38hjuJtf8B4kMF2LM5SwI8v95owoTGlIsU=;
-        b=UC8VXG9FGdX/1g+XOAF13irYs/uk+mdl7nSt8x98nbXKE0wpWdXE6gYGpBwNpWxu98
-         jMjyJU4+N/hc/02fCPsPrCvuAOssY4pwc24mkepgMOTYXM3RLqsFzJ09JHMeol3bbdmw
-         zOlPc9Q/5bpqP5fW5PD4OMa10kxdUMtmzK3mc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=6A2AVhB3i38hjuJtf8B4kMF2LM5SwI8v95owoTGlIsU=;
-        b=Pt49tSiGoQccKDOuDN57bCLykhPBKm0tfa5k3e9RYjCsLAewpK2yTTqL2qTKurX1AW
-         MtLntgbdftZ6cemva6Gzwh+qCuGQZriUU2RF9Dv6gOR8G4K67Ng7mUOfYBs8uG1uVlKW
-         TLjMUVY4QxTItKaQ0bbbIvKZGk6xcM3MsuB3tHfbyxi55y5dsNkojT+wWPpbDiVDMPIx
-         oF7jdNNM9A2nlSjMhFra+d53/o55IsRyBRX/rrIFHWGmdlvUfhrN5KIKw7PIhPtb9Bae
-         7qujpwYTK9i9mwgRG6SqG5N+WXU2g1boVP97eHvs1gSAo7jmQBZN5L2IaES28lhIGi0B
-         yrIw==
-X-Gm-Message-State: AOAM532SZ6/ji/IXOZfQS/2gxIc0GeVGoYNwjHniXkOm3s8na5izFBX7
-        88JWh+PgimJrLYh8HzSWkyUPzQ==
-X-Google-Smtp-Source: ABdhPJwH9lF9KQCbmuD8slVOXedC8OmP9j4blY1Jned8m/4YkGG9MTBcrnge2aG6a+EkUXBBDPEPvA==
-X-Received: by 2002:a17:903:248:b0:155:e8c6:8770 with SMTP id j8-20020a170903024800b00155e8c68770mr17930962plh.129.1651612966688;
-        Tue, 03 May 2022 14:22:46 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id g20-20020aa78194000000b0050dc762818fsm6786947pfi.105.2022.05.03.14.22.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 May 2022 14:22:46 -0700 (PDT)
-From:   Kees Cook <keescook@chromium.org>
-To:     linux-kernel@vger.kernel.org, sargun@sargun.me,
-        containers@lists.linux.dev
-Cc:     Kees Cook <keescook@chromium.org>, wad@chromium.org,
-        rodrigo@kinvolk.io, gscrivan@redhat.com, luto@amacapital.net,
-        alban@kinvolk.io, tycho@tycho.pizza,
-        Christian Brauner <brauner@kernel.org>
-Subject: Re: [PATCH v4 0/3] Handle seccomp notification preemption
-Date:   Tue,  3 May 2022 14:22:30 -0700
-Message-Id: <165161294755.3926933.6572056353019699340.b4-ty@chromium.org>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220503080958.20220-1-sargun@sargun.me>
-References: <20220503080958.20220-1-sargun@sargun.me>
+        d=baikalelectronics.ru; s=mail; t=1651613039;
+        bh=MWL5jX04ZCFiBmuggxzKjSwz2cxc4Q3dVldm8/4eMZM=;
+        h=From:To:CC:Subject:Date:From;
+        b=GWNLZU3iNBImx+APlBp73LKzKMmtiouPRBfnWOl6NmjeXNa/D5LoOVBeGfFINU5Yx
+         QlzzE8IvuyvV//m9fYGRAt1PNKug4scf6xQHDsvHNjUtqZg2OQvuLdtuUpO2RyUrtV
+         ld+kS3knrIHsO+I88LDjy27sYirmY0Bn90fnOT84=
+Received: from localhost (192.168.53.207) by mail (192.168.51.25) with
+ Microsoft SMTP Server (TLS) id 15.0.1395.4; Wed, 4 May 2022 00:23:25 +0300
+From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
+To:     Jingoo Han <jingoohan1@gmail.com>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Rob Herring <robh@kernel.org>,
+        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
+        Frank Li <Frank.Li@nxp.com>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        <linux-pci@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH v2 00/13] PCI: dwc: Various fixes and cleanups
+Date:   Wed, 4 May 2022 00:22:47 +0300
+Message-ID: <20220503212300.30105-1-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 3 May 2022 01:09:55 -0700, Sargun Dhillon wrote:
-> This patchset addresses a race condition we've dealt with recently with
-> seccomp. Specifically programs interrupting syscalls while they're in
-> progress. This was exacerbated by Golang's[1] recent adoption of
-> "Non-cooperative goroutine preemption", in which they try to interrupt any
-> syscall that's been running for more than 10ms. During certain syscalls,
-> it's non-trivial to write them in a reetrant manner in userspace (mount).
-> 
-> [...]
+This patchset is a second one in the series created in the framework of
+my Baikal-T1 PCIe/eDMA-related work:
 
-Applied to for-next/seccomp, thanks!
+[1: In-progress v3] clk: Baikal-T1 DDR/PCIe resets and some xGMAC fixes
+Link: https://lore.kernel.org/linux-pci/20220503205722.24755-1-Sergey.Semin@baikalelectronics.ru/
+[2: In-progress v2] PCI: dwc: Various fixes and cleanups
+Link: https://lore.kernel.org/linux-pci/20220324012524.16784-1-Sergey.Semin@baikalelectronics.ru/
+[3: In-progress v1] PCI: dwc: Add dma-ranges/YAML-schema/Baikal-T1 support
+Link: https://lore.kernel.org/linux-pci/20220324013734.18234-1-Sergey.Semin@baikalelectronics.ru/
+[4: In-progress v1] dmaengine: dw-edma: Add RP/EP local DMA controllers support
+Link: https://lore.kernel.org/linux-pci/20220324014836.19149-1-Sergey.Semin@baikalelectronics.ru/
 
-[1/3] seccomp: Add wait_killable semantic to seccomp user notifier
-      https://git.kernel.org/kees/c/c2aa2dfef243
-[2/3] selftests/seccomp: Refactor get_proc_stat to split out file reading code
-      https://git.kernel.org/kees/c/922a1b520c5f
-[3/3] selftests/seccomp: Add test for wait killable notifier
-      https://git.kernel.org/kees/c/3b96a9c522b2
+Note it is very recommended to merge the patchsets in the same order as
+they are placed in the list above in order to prevent possible merge/build
+conflicts. Nothing prevents them from being reviewed synchronously though.
+
+As it can be easily inferred from the patchset title, this series is about
+the DW PCIe Root Port/End-point driver fixes and the code cleanups, where
+fixes come before the cleanup patches. The patchset starts with adding the
+stop_link() platform-specific method invocation in case of the PCIe host
+probe procedure errors. It has been missing in the cleanup-on-error path
+of the DW PCIe Host initialization method. After that there is a patch
+which fixes the host own cfg-space accessors for the case of the
+platform-specific DBI implementation. Third the unrolled CSRs layout is
+added to the iATU disable procedure. Fourth the disable iATU procedure is
+fixed to be called only for the internal ATU as being specific for the
+internal ATU implementation. Last but no least the outbound iATU extended
+region setup procedure is fixed to have the INCREASE_REGION_SIZE flag set
+based on the limit-address - not the region size one.
+
+Afterwards there is a series of cleanups. It concerns the changes like
+adding braces to the multi-line if-else constructions, trailing new-lines
+to the print format-string, dropping unnecessary version checking, and
+various code simplifications and optimizations.
+
+New features like adding two-level DT bindings abstraction, adding better
+structured IP-core version interface, adding iATU regions size detection
+and the PCIe regions verification procedure, adding dma-ranges support,
+introducing a set of generic platform clocks and resets and finally adding
+Baikal-T1 PCIe interface support will be submitted in the next part of the
+series.
+
+Link: https://lore.kernel.org/linux-pci/20220324012524.16784-1-Sergey.Semin@baikalelectronics.ru/
+Changelog v2:
+- Fix the end address of the example in the patch log with
+  the INCREASE_REGION_SIZE flag usage fixup. It should be
+  0x1000FFFF and not 0x0000FFFF (@Manivannan).
+- Add the cleanup-on-error path to the dw_pcie_ep_init() function.
+  (@Manivannan)
+
+Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
+Cc: Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>
+Cc: Rob Herring <robh@kernel.org>
+Cc: "Krzysztof Wilczyński" <kw@linux.com>
+Cc: Frank Li <Frank.Li@nxp.com>
+Cc: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc: linux-pci@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+
+Serge Semin (13):
+  PCI: dwc: Stop link in the host init error and de-initialization
+  PCI: dwc: Don't use generic IO-ops for DBI-space access
+  PCI: dwc: Add unroll iATU space support to the regions disable method
+  PCI: dwc: Disable outbound windows for controllers with iATU
+  PCI: dwc: Set INCREASE_REGION_SIZE flag based on limit address
+  PCI: dwc: Add braces to the multi-line if-else statements
+  PCI: dwc: Add trailing new-line literals to the log messages
+  PCI: dwc: Discard IP-core version checking on unrolled iATU detection
+  PCI: dwc: Convert Link-up status method to using dw_pcie_readl_dbi()
+  PCI: dwc: Deallocate EPC memory on EP init error
+  PCI: dwc-plat: Simplify the probe method return value handling
+  PCI: dwc-plat: Discard unused regmap pointer
+  PCI: dwc-plat: Drop dw_plat_pcie_of_match forward declaration
+
+ .../pci/controller/dwc/pcie-designware-ep.c   | 22 +++++--
+ .../pci/controller/dwc/pcie-designware-host.c | 66 +++++++++++++++----
+ .../pci/controller/dwc/pcie-designware-plat.c | 13 ++--
+ drivers/pci/controller/dwc/pcie-designware.c  | 48 +++++++++-----
+ 4 files changed, 109 insertions(+), 40 deletions(-)
 
 -- 
-Kees Cook
+2.35.1
 

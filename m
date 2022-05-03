@@ -2,163 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C596E518A35
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 18:41:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07836518A3A
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 18:41:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239680AbiECQpH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 12:45:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37458 "EHLO
+        id S239694AbiECQp2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 12:45:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231324AbiECQpG (ORCPT
+        with ESMTP id S231324AbiECQpZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 12:45:06 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4E5DF1A07B
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 09:41:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651596092;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=pahes7C/tmc6/DL1WldFW1GN6sPT/c4aOjyuB4GyOjo=;
-        b=dIXyraVRoTPf01vJm5a1/gQ32dATrVAeJ1E/KDvwq1DRYaFWa38mN4CdrxW6feIIK8L+ZS
-        Dxe5gEiwthNwlSLLntHo4keLDKaAAsVt1KPOJZkBsRqD+LvYiJ7O7r2MWVWB6Cv0896wxQ
-        ilGKtv2iUx/tL70GuCaiGmlM+k+qMeg=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-491-WQkx191tM5KaVMuB7t7ogw-1; Tue, 03 May 2022 12:41:30 -0400
-X-MC-Unique: WQkx191tM5KaVMuB7t7ogw-1
-Received: by mail-wm1-f72.google.com with SMTP id c125-20020a1c3583000000b0038e3f6e871aso6077795wma.8
-        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 09:41:29 -0700 (PDT)
+        Tue, 3 May 2022 12:45:25 -0400
+Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8A2E2B195;
+        Tue,  3 May 2022 09:41:52 -0700 (PDT)
+Received: by mail-oi1-x230.google.com with SMTP id v65so18711744oig.10;
+        Tue, 03 May 2022 09:41:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=DWGsTojyGQoSPIdCEDVzeXxH9jCGYkBR9JrUFgAvz6M=;
+        b=p767NOvM44rw4/Z1xJXqfTr4LYOq/GvY9Lw7UYjhoP+9u9avKmVoxs/2O/Wfq9cmhJ
+         BBHuhb897jNPkSzDbGcoeaGJnVNIqaL9iEK/BELMw87Grt3no7yCxXzEuEi8esgf3QmI
+         ytnHenRgWyoHBDXpcUPqN32TElN9llRMcSp9DpDk9TI6CqgK1fliIuJxkKTwCXpb/mUX
+         g3LW+QeThDOgP3kAF/JoR8pdj0ZGKYrxr5GsT5gENPpp1PsrPaYDuRbEOWftcXnDmJiF
+         LB37DalfuKyofh/XbMxcuwLhfxQN5/bicyz/SfRkPUrwz44Henks2SoMA4QEugdKcphc
+         uSDQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=pahes7C/tmc6/DL1WldFW1GN6sPT/c4aOjyuB4GyOjo=;
-        b=IU8ENrQbHRrsc/Jfb3b8tVwZQpx7aGNqxpMSaBBMtwFrzfA3Dx9iXSfDn4atKVGOxT
-         jiSPuTcCnhh8+toKfKXfLDduGvbCkkv/GN/xFAQanJNGoWwojySrNNbgQHAbqAYSQzS7
-         Veab3nBdC01f07vCtKsNvjJ4yeXoUAmIh8dNibpb9s0/WiHVZPyei0PTAUynAUZWXizH
-         ClIN+Fc+6X5vFCWZFmg942heAdn29Au12vMDAko4e0FUhgU/g5E58WR/e2szUpRIZt2C
-         hSGAP31/upnm3/aaFdIlk+QzEff95Tb5Kk/Td74sbbpyutUHeoUXixFvsxH8cVvTfXKH
-         gCLQ==
-X-Gm-Message-State: AOAM531FHz/dY0z0rNM/LQX6R75dSs2R0MwpRXnxeGNclB+Ro10qZPAJ
-        O7FFVKRvICAI/o5fB9yVFNx/p4TbXsIhYWywXH4/lZQvatzhV0BUzUwItFZcbSsBpxHWQmr80PQ
-        b0ZLrTI3epHm+dJaBP2/YdY0xJRXWcVNiEeuzLYSU
-X-Received: by 2002:a05:6000:1848:b0:20c:713b:8e1e with SMTP id c8-20020a056000184800b0020c713b8e1emr4687686wri.640.1651596088858;
-        Tue, 03 May 2022 09:41:28 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwxlxZdFgCAiHMVbSw5lczeYImaUCvF2aHBlyYw8A/WTq0Zy6Np8DioP/9GtXIjN4YifBEpw2oAXSUJWziXL2w=
-X-Received: by 2002:a05:6000:1848:b0:20c:713b:8e1e with SMTP id
- c8-20020a056000184800b0020c713b8e1emr4687668wri.640.1651596088626; Tue, 03
- May 2022 09:41:28 -0700 (PDT)
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=DWGsTojyGQoSPIdCEDVzeXxH9jCGYkBR9JrUFgAvz6M=;
+        b=sT04GqMPjzDbU3/m672xBhtLwiAZdXJRVnYk6Xr+VqkKX0R+cKJtTetjBjXnQRVJCf
+         S97UmrWtRUPNWfLxeV7z9SXhWgjsP+Tkye9sbO3upO1/Ok29BkwypRS9eqJHi4gRctu+
+         PPBa/vTy3SJIapKGM8cAVzvtTFJCHYgacbhEj3Q/jNEu0rVA44O8fs+5NbczkstES11c
+         ZbPN3V8H3Cc5cjBSK7VdI4AvUYwNlSCSC/CGiST/3d9lMDS03dBXrkwzLj1AD6AjQuzi
+         nhIUdgk660Z2z1sxQfbDOqL1X/XzEE/K/+vbf6tSnOQBHInRbANokLkwro7Ll/4QK9wH
+         xdoA==
+X-Gm-Message-State: AOAM532d2Ku3WSD6+uv0FRyjLRsj0inEJ1bL9djhHSgw5WaVdz1xcsNZ
+        CqllqymWjAEV9mhsZrJt6mI=
+X-Google-Smtp-Source: ABdhPJxJQtL3i+X4QSSL5pl008gbPgE0+t0O5LHQEsorzC2juhySNzwgMdnPmSQ4NNbM+0aj0KlJcg==
+X-Received: by 2002:a05:6808:2107:b0:325:b9df:a6f8 with SMTP id r7-20020a056808210700b00325b9dfa6f8mr2233422oiw.164.1651596111758;
+        Tue, 03 May 2022 09:41:51 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id e10-20020aca130a000000b00325cda1ffa6sm3475308oii.37.2022.05.03.09.41.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 03 May 2022 09:41:50 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <fd8f1f86-1fb3-b4de-61f7-b7ec5aa2f95c@roeck-us.net>
+Date:   Tue, 3 May 2022 09:41:48 -0700
 MIME-Version: 1.0
-References: <20220426145445.2282274-1-agruenba@redhat.com> <CAHk-=wi7o+fHYBTuCQQdHD112YHQtO21Y3+wxNYypjdo8feKFg@mail.gmail.com>
- <CAHc6FU48681X8aUK+g7UUN7q5b6rkVBzTP7h_zbE4XqZYAiw3g@mail.gmail.com>
- <CAHk-=wjMB1-xCOCBtsSMmQuFV9G+vNyCY1O_LsoqOd=0QS4yYg@mail.gmail.com>
- <CAHc6FU5Bag5W2t79+WzUq=NibtEF+7z6=jyNCkLMMp9Yqvpmqw@mail.gmail.com>
- <CAHk-=whaz-g_nOOoo8RRiWNjnv2R+h6_xk2F1J4TuSRxk1MtLw@mail.gmail.com>
- <CAHc6FU5654k7QBU97g_Ubj8cJEWuA_bXPuXOPpBBYoXVPMJG=g@mail.gmail.com>
- <CAHk-=wgSYSNc5sF2EVxhjbSc+c4LTs90aYaK2wavNd_m2bUkGg@mail.gmail.com>
- <CAHc6FU69E4ke4Xg3zQ2MqjLbfM65D9ZajdY5MRDLN0azZOGmVQ@mail.gmail.com>
- <CAHk-=whQxvMvty8SjiGMh+gM4VmCYvqn6EAwmrDXJaHT2Aa+UA@mail.gmail.com>
- <CAHk-=wicJdoCjPLu7FhaErr6Z3UaW820U2b+F-8P4qwSFUZ0mg@mail.gmail.com>
- <CAHc6FU7GkXLkns5PONLvsSi6HB+rjaNSyFeQFS034tKL-JueMw@mail.gmail.com>
- <CAHk-=wg4ypnZUA5BOHAF1miKvOhW2yQSruuBKNXMDR=dTmp+ww@mail.gmail.com>
- <CAHc6FU6VgQDO7HT5f4S_4f=9hczKGRDQ6SbQ5kNHMi4i-6rxVA@mail.gmail.com>
- <CAHk-=whL74iP6v2P+OafGO0H72ag4wt42k+Kc_01boLP8aqUNQ@mail.gmail.com>
- <CAHc6FU77KGn76B4ieu9Tn895deK-1yV4y=8ou4gTfUf=7C-4XQ@mail.gmail.com> <CAHk-=whfP+m6--NtUeOm5XTuhBGHkyoqd00ypW6v3RkzMFLU8g@mail.gmail.com>
-In-Reply-To: <CAHk-=whfP+m6--NtUeOm5XTuhBGHkyoqd00ypW6v3RkzMFLU8g@mail.gmail.com>
-From:   Andreas Gruenbacher <agruenba@redhat.com>
-Date:   Tue, 3 May 2022 18:41:17 +0200
-Message-ID: <CAHc6FU4JeMHUrJbbTwEsMiPPyinQpX9fW-hz21GdjgVsvYRZkw@mail.gmail.com>
-Subject: Re: [GIT PULL] gfs2 fix
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        Dave Chinner <dchinner@redhat.com>,
-        cluster-devel <cluster-devel@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH 4.19 00/12] 4.19.241-rc1 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+References: <20220429104048.459089941@linuxfoundation.org>
+ <20220503141652.GA3698419@roeck-us.net> <YnE7aX7p4iQvOrZf@kroah.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <YnE7aX7p4iQvOrZf@kroah.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 3, 2022 at 6:19 PM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> On Tue, May 3, 2022 at 1:56 AM Andreas Gruenbacher <agruenba@redhat.com> wrote:
-> >
-> > We still get data corruption with the patch applied. The
-> > WARN_ON_ONCE(!bytes) doesn't trigger.
->
-> Oh well. I was so sure that I'd finally found something.. That partial
-> write case has had bugs before.
->
-> > As an additional experiment, I've added code to check the iterator
-> > position that iomap_file_buffered_write() returns, and it's all
-> > looking good as well: an iov_iter_advance(orig_from, written) from the
-> > original position always gets us to the same iterator.
->
-> Yeah, I've looked at the iterator parts (and iov_iter_revert() in
-> particular) multiple times, because that too is an area where we've
-> had bugs before.
->
-> That too may be easy to get wrong, but I couldn't for the life of me
-> see any issues there.
->
-> > This points at gfs2 getting things wrong after a short write, for
-> > example, marking a page / folio uptodate that isn't. But the uptodate
-> > handling happens at the iomap layer, so this doesn't leave me with an
-> > immediate suspect.
->
-> Yeah, the uptodate setting looked safe, particularly with that "if we
-> copied less than we thought we would, and it wasn't uptodate, just
-> claim we didn't do anything at all".
->
-> That said, I now have a *new* suspect: the 'iter->pos' handling in
-> iomap_write_iter().
->
-> In particular, let's look at iomap_file_buffered_write(), which does:
->
->         while ((ret = iomap_iter(&iter, ops)) > 0)
->                 iter.processed = iomap_write_iter(&iter, i);
->
-> and then look at what happens to iter.pos here.
->
-> iomap_write_iter() does this:
->
->         loff_t pos = iter->pos;
->         ...
->                 pos += status;
->
-> but it never seems to write the updated position back to the iterator.
->
-> So what happens next time iomap_write_iter() gets called?
->
-> This looks like such a huge bug that I'm probably missing something,
-> but I wonder if this is normally hidden by the fact that usually
-> iomap_write_iter() consumes the whole 'iter', so despite the 'while()'
-> loop, it's actually effectively only called once.
->
-> Except if it gets a short write due to an unhandled page fault..
->
-> Am I entirely blind, and that 'iter.pos' is updated somewhere and I
-> just missed it?
+On 5/3/22 07:25, Greg Kroah-Hartman wrote:
+> On Tue, May 03, 2022 at 07:16:52AM -0700, Guenter Roeck wrote:
+>> On Fri, Apr 29, 2022 at 12:41:17PM +0200, Greg Kroah-Hartman wrote:
+>>> This is the start of the stable review cycle for the 4.19.241 release.
+>>> There are 12 patches in this series, all will be posted as a response
+>>> to this one.  If anyone has any issues with these being applied, please
+>>> let me know.
+>>>
+>>> Responses should be made by Sun, 01 May 2022 10:40:41 +0000.
+>>> Anything received after that time might be too late.
+>>>
+>>
+>> No cc this time ?
+> 
+> You and Pavel said this, yet I see your response here:
+> 	https://lore.kernel.org/r/20220429234822.GB2444503@roeck-us.net
+> that you sent on Friday.
+> 
+> Did some old email get unstuck and resent somehow?
+> 
+> 4.19.241 was released on Sunday, I have not sent out new -rc
+> announcements yet.
+> 
+> confused,
+> 
 
-That's happening in iomap_file_buffered_write() and iomap_iter():
+No, it is me who is confused. I saw Pavel's e-mail, checked stable,
+found this announcement, and thought it was a new one since lore
+reordered it after Pavel's reply.
 
-        while ((ret = iomap_iter(&iter, ops)) > 0)
-                iter.processed = iomap_write_iter(&iter, i);
+The problem I reported is for v4.19.241-49-g667276a8c00e,
+but is also affects v4.14.y.queue and v4.9.y.queue.
 
-Here, iomap_write_iter() returns how much progress it has made, which
-is stored in iter.processed, and iomap_iter() -> iomap_iter_advance()
-then updates iter.pos and iter.len based on iter.processed.
+Sorry for the noise.
 
-Andreas
-
+Guenter

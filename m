@@ -2,186 +2,279 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC4BA517CD4
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 07:37:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3F0F517CD9
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 07:37:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231442AbiECFiz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 01:38:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53998 "EHLO
+        id S231450AbiECFkv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 01:40:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231342AbiECFiw (ORCPT
+        with ESMTP id S231428AbiECFku (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 01:38:52 -0400
-Received: from smtp2.axis.com (smtp2.axis.com [195.60.68.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12616193EC;
-        Mon,  2 May 2022 22:35:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=axis.com; q=dns/txt; s=axis-central1; t=1651556119;
-  x=1683092119;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=FDNCOyDkPsbFfbn+trYTC4isEG90cns5AJa5K9K08yk=;
-  b=UXLHE8LxsEW3TuBKebqA/hNGJaxSRZxHpujgAypBryPAjW4CR8nTPIVP
-   SFKOH7rhZjiFiYqqjIcWA/KSC6GhuVU+rUjpC5Mz+xxT0z7Xh0S1AovcY
-   lAG/3LbkvIQHthYFCkXODcO8gssnA7B7laoRNkUFfBB8iV6zG3mnQRomy
-   fnv4yYe6gS3Nopmb5ucgZVymWOF3DM5MSmPzW6z9cYxsIpJfm7bnmhA7P
-   kO3z/+JwxZRSlCuAebV1qjlVd4Ew9/1wvkaUGxwiCSJyCuNFoO3aySyOC
-   P5nYXkMGlC/ClvkcsZS9lMjmoN4oM7cIwAb8Yqd8tE5sjLCezBI4Imrzt
-   Q==;
-Message-ID: <3dc9a0e3-124e-759e-8229-9088c079cecf@axis.com>
-Date:   Tue, 3 May 2022 07:35:15 +0200
+        Tue, 3 May 2022 01:40:50 -0400
+Received: from smtp.smtpout.orange.fr (smtp04.smtpout.orange.fr [80.12.242.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74E1B39B85
+        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 22:37:17 -0700 (PDT)
+Received: from [192.168.1.18] ([86.243.180.246])
+        by smtp.orange.fr with ESMTPA
+        id llDknVYrJPp5ullDknY45n; Tue, 03 May 2022 07:37:14 +0200
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
+X-ME-Date: Tue, 03 May 2022 07:37:14 +0200
+X-ME-IP: 86.243.180.246
+Message-ID: <c40c2f81-008a-06cf-8de3-d0bb787a9889@wanadoo.fr>
+Date:   Tue, 3 May 2022 07:37:12 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [PATCH v2] hwmon: (tmp401) Add of_match_table
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v8 1/2] thermal: Add thermal driver for Sunplus
 Content-Language: en-US
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Vincent Whitchurch <Vincent.Whitchurch@axis.com>
-CC:     Camel Guo <Camel.Guo@axis.com>, Jean Delvare <jdelvare@suse.com>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        kernel <kernel@axis.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20220502091942.1083067-1-camel.guo@axis.com>
- <a2e81680-e62c-dddd-ee58-6f5aa3664d2f@roeck-us.net>
- <20220502145800.GA21695@axis.com>
- <25e2dc90-ab01-ab19-ffde-1b709dbebad4@roeck-us.net>
-From:   Camel Guo <camelg@axis.com>
-In-Reply-To: <25e2dc90-ab01-ab19-ffde-1b709dbebad4@roeck-us.net>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+To:     krzk@kernel.org, rafael@kernel.org, daniel.lezcano@linaro.org,
+        amitk@kernel.org, rui.zhang@intel.com, robh+dt@kernel.org,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Li-hao Kuo <lhjeff911@gmail.com>
+References: <cover.1651543731.git.lhjeff911@gmail.com>
+ <febcaf8229a33217b4bfb3654d6f0bfe7f55a84d.1651543731.git.lhjeff911@gmail.com>
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <febcaf8229a33217b4bfb3654d6f0bfe7f55a84d.1651543731.git.lhjeff911@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.0.5.60]
-X-ClientProxiedBy: se-mail07w.axis.com (10.20.40.13) To se-mail03w.axis.com
- (10.20.40.9)
-X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/2/22 18:16, Guenter Roeck wrote:
-> On 5/2/22 07:58, Vincent Whitchurch wrote:
->> On Mon, May 02, 2022 at 03:57:50PM +0200, Guenter Roeck wrote:
->>> On 5/2/22 02:19, Camel Guo wrote:
->>>> When tmp401 is built as kernel module, it won't be automatically loaded
->>>> even through there is a device node in the devicetree. e.g:
->>>>       i2c {
->>>>         #address-cells = <1>;
->>>>         #size-cells = <0>;
->>>>
->>>>         sensor@4c {
->>>>           compatible = "ti,tmp401";
->>>>           reg = <0x4c>;
->>>>         };
->>>>       };
->>>> In order to make sure it is loaded automatically, this commit adds
->>>> of_match_table for tmp401.
->>>>
->>>
->>> As mentioned before, historically i2c devices would instantiate based
->>> on the i2c match table. You are claiming that this is no longer the case.
->> 
->> Note that while the commit message in the first version of the patch did
->> wrongly claim that probe would not work without the of_match_table, this
->> corrected description in v2 does mention the actual problem: that the
->> module will not be automatically loaded without the of_match_table.  (If
->> the module is loaded manually or the driver is built-in to the kernel,
->> there is no problem.)
->> 
-> 
-> No, it doesn't. None of the information you provided below is mentioned
-> in the description, but is essential to understand your patch and the
-> reason for it.
-> 
->> See commit 72fc64c68decf119466 ("hwmon: (tmp103) Add OF device ID
->> table") or commit 98b16a09861aa85d6 ("hwmon: (max31785) Add OF device ID
->> table") for similar changes to other hwmon drivers.
->> 
-> 
-> Those commits provide a valid and acceptable explanation.
+Hi,
 
-Now, I just copied this commit message.
+Le 03/05/2022 à 04:13, Li-hao Kuo a écrit :
+> Add thermal driver for Sunplus.
+> 
+> Signed-off-by: Li-hao Kuo <lhjeff911-Re5JQEeQqe8AvxtiuMwx3w@public.gmane.org>
+> ---
+> Changes in v8:
+>   - Modify yaml file.
+>     modify the setting compatible
+>   - Change yaml file name.
+>   - Modify driver.
+>     mosdify and simply the nvmem setting and remove valiable
+> 
+>   MAINTAINERS                       |   6 ++
+>   drivers/thermal/Kconfig           |  10 +++
+>   drivers/thermal/Makefile          |   1 +
+>   drivers/thermal/sunplus_thermal.c | 135 ++++++++++++++++++++++++++++++++++++++
+>   4 files changed, 152 insertions(+)
+>   create mode 100644 drivers/thermal/sunplus_thermal.c
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index edc96cd..82143ff 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -18896,6 +18896,12 @@ S:	Maintained
+>   F:	Documentation/devicetree/bindings/spi/spi-sunplus-sp7021.yaml
+>   F:	drivers/spi/spi-sunplus-sp7021.c
+>   
+> +SUNPLUS THERMAL DRIVER
+> +M:	Li-hao Kuo <lhjeff911-Re5JQEeQqe8AvxtiuMwx3w@public.gmane.org>
+> +L:	linux-pm-u79uwXL29TY76Z2rM5mHXA@public.gmane.org
+> +S:	Maintained
+> +F:	drivers/thermal/sunplus_thermal.c
+> +
+>   SUNPLUS UART DRIVER
+>   M:	Hammer Hsieh <hammerh0314-Re5JQEeQqe8AvxtiuMwx3w@public.gmane.org>
+>   S:	Maintained
+> diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig
+> index 0e5cc94..595f507 100644
+> --- a/drivers/thermal/Kconfig
+> +++ b/drivers/thermal/Kconfig
+> @@ -504,4 +504,14 @@ config KHADAS_MCU_FAN_THERMAL
+>   	  If you say yes here you get support for the FAN controlled
+>   	  by the Microcontroller found on the Khadas VIM boards.
+>   
+> +config SUNPLUS_THERMAL
+> +	tristate "Sunplus thermal drivers"
+> +	depends on SOC_SP7021 || COMPILE_TEST
+> +	help
+> +	  This the Sunplus SP7021 thermal driver, which supports the primitive
+> +	  temperature sensor embedded in Sunplus SP7021 SoC.
+> +
+> +	  If you have a Sunplus SP7021 platform say Y here and enable this option
+> +	  to have support for thermal management
+> +
+>   endif
+> diff --git a/drivers/thermal/Makefile b/drivers/thermal/Makefile
+> index f0c36a1..38a76f9 100644
+> --- a/drivers/thermal/Makefile
+> +++ b/drivers/thermal/Makefile
+> @@ -61,3 +61,4 @@ obj-$(CONFIG_UNIPHIER_THERMAL)	+= uniphier_thermal.o
+>   obj-$(CONFIG_AMLOGIC_THERMAL)     += amlogic_thermal.o
+>   obj-$(CONFIG_SPRD_THERMAL)	+= sprd_thermal.o
+>   obj-$(CONFIG_KHADAS_MCU_FAN_THERMAL)	+= khadas_mcu_fan.o
+> +obj-$(CONFIG_SUNPLUS_THERMAL)	+= sunplus_thermal.o
+> diff --git a/drivers/thermal/sunplus_thermal.c b/drivers/thermal/sunplus_thermal.c
+> new file mode 100644
+> index 0000000..d4e22fc
+> --- /dev/null
+> +++ b/drivers/thermal/sunplus_thermal.c
+> @@ -0,0 +1,135 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Copyright (c) Sunplus Inc.
+> + * Author: Li-hao Kuo <lhjeff911-Re5JQEeQqe8AvxtiuMwx3w@public.gmane.org>
+> + */
+> +
+> +#include <linux/bitfield.h>
+> +#include <linux/clk.h>
+> +#include <linux/delay.h>
+> +#include <linux/io.h>
+> +#include <linux/module.h>
+> +#include <linux/nvmem-consumer.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/reset.h>
+> +#include <linux/thermal.h>
+> +
+> +#define ENABLE_THERMAL		BIT(31)
+> +#define SP_THERMAL_MASK		GENMASK(10, 0)
+> +
+> +#define TEMP_RATE		608
+> +#define TEMP_BASE		3500
+> +#define TEMP_OTP_BASE		1518
+> +
+> +#define SP_THERMAL_CTL0_REG	0x0000
+> +#define SP_THERMAL_STS0_REG	0x0030
+> +
+> +/* common data structures */
+> +struct sp_thermal_data {
+> +	struct thermal_zone_device *pcb_tz;
+> +	void __iomem *regs;
+> +	int *otp_temp0;
+> +};
+> +
+> +static int sunplus_get_otp_temp_coef(struct sp_thermal_data *sp_data, struct device *dev)
+> +{
+> +	struct nvmem_cell *cell;
+> +	ssize_t otp_l;
+> +
+> +	cell = nvmem_cell_get(dev, "calib");
+> +	if (IS_ERR(cell))
+> +		return PTR_ERR(cell);
+> +
+> +	sp_data->otp_temp0 = nvmem_cell_read(cell, &otp_l);
+> +	nvmem_cell_put(cell);
+> +
+> +	if (*sp_data->otp_temp0 == 0)
+> +		*sp_data->otp_temp0 = TEMP_OTP_BASE;
+> +
+> +	return 0;
+> +}
+> +
+> +/*
+> + * There is a thermal sensor instance for SUNPLUS Soc
+> + * T_CODE is the ADC of the thermal sensor
+> + * T_CODE : 11 digits in total
+> + * When remanufacturing, the 35 degree T_CODE will be read and stored in nvcell.
+> + * otp_temp0 is the 35 degree T_CODE obtained from nvcell
+> + * The function will get 35 degree T_CODE for thermal calibration.
+> + * TEMP_RATE is the SUNPLUS thermal temperature slope.
+> + */
+> +
+> +static int sp_thermal_get_sensor_temp(void *data, int *temp)
+> +{
+> +	struct sp_thermal_data *sp_data = data;
+> +	int t_code;
+> +
+> +	t_code = readl(sp_data->regs + SP_THERMAL_STS0_REG);
+> +	t_code = FIELD_GET(SP_THERMAL_MASK, t_code);
+> +	*temp = ((*sp_data->otp_temp0 - t_code) * 10000 / TEMP_RATE) + TEMP_BASE;
+> +	*temp *= 10;
+> +	return 0;
+> +}
+> +
+> +static const struct thermal_zone_of_device_ops sp_of_thermal_ops = {
+> +	.get_temp = sp_thermal_get_sensor_temp,
+> +};
+> +
+> +static int sunplus_thermal_probe(struct platform_device *pdev)
+> +{
+> +	struct sp_thermal_data *sp_data;
+> +	int ret;
+> +
+> +	sp_data = devm_kzalloc(&pdev->dev, sizeof(*sp_data), GFP_KERNEL);
+> +	if (!sp_data)
+> +		return -ENOMEM;
+> +
+> +	sp_data->regs = devm_platform_ioremap_resource(pdev, 0);
+> +	if (IS_ERR(sp_data->regs)) {
+> +		dev_err(&pdev->dev, "resource get fail\n");
+> +		return PTR_ERR(sp_data->regs);
+> +	}
+> +
+> +	writel(ENABLE_THERMAL, sp_data->regs + SP_THERMAL_CTL0_REG);
+> +
+> +	platform_set_drvdata(pdev, sp_data);
+> +	ret = sunplus_get_otp_temp_coef(sp_data, &pdev->dev);
+> +	if (ret)
+> +		return ret;
+> +
+> +	sp_data->pcb_tz = devm_thermal_zone_of_sensor_register(&pdev->dev,
+> +							    0,
+> +							    sp_data, &sp_of_thermal_ops);
 
-> 
->> The potential future change mentioned in the commit messages of
->> 72fc64c68decf119466 and 98b16a09861aa85d6 happened in commit
->> af503716ac1444db61d80 ("i2c: core: report OF style module alias for
->> devices registered via OF").  The commit message of
->> af503716ac1444db61d80 has a lot of details about the change being made,
->> and while it says that all in-tree drivers had been converted, it looks
->> like some of them, like tmp401, were missed.
->> 
-> 
-> And this is the missing link. If you provide that information
-> in the commit log I have no problems. Please also provide a Fixes:
-> tag.
-> 
-> Fixes: af503716ac14 ("i2c: core: report OF style module alias for 
-> devices registered via OF")
+sp_data->pcb_tz is the result of devm_thermal_zone_of_sensor_register() 
+and devm_ functions usually don't need any clean-up. It is done 
+automagically by the kernel itself.
 
-It is added in v3
 
-> 
-> Thanks,
-> Guenter
-> 
->>> The above is no evidence; that would require a log output on an affected
->>> system showing that the sensors are not or no longer longer instantiated.
->> 
->> A log would simply show nothing happening so that's probably not going
->> to be that useful, but here is what the modaliases look like.  As you
->> can see, the modalias of the device in sysfs does not match any of the
->> alias patterns of the module without this patch:
->> 
->> $ cat /sys/bus/i2c/devices/4-004c/modalias
->> of:Ntemperature-sensorT<NULL>Cti,tmp431
->> 
->> modinfo without this patch:
->> 
->> $ modinfo ./modules/lib/modules/5.18.0-rc1/kernel/drivers/hwmon/tmp401.ko
->> filename:       /storage2/femfyra/linux-2.6/.roadtest/./modules/lib/modules/5.18.0-rc1/kernel/drivers/hwmon/tmp401.ko
->> license:        GPL
->> description:    Texas Instruments TMP401 temperature sensor driver
->> author:         Hans de Goede <hdegoede@redhat.com>
->> alias:          i2c:tmp435
->> alias:          i2c:tmp432
->> alias:          i2c:tmp431
->> alias:          i2c:tmp411
->> alias:          i2c:tmp401
->> depends:
->> intree:         Y
->> name:           tmp401
->> vermagic:       5.18.0-rc1 mod_unload
->> 
->> modinfo after this patch:
->> 
->> $ modinfo ./modules/lib/modules/5.18.0-rc1/kernel/drivers/hwmon/tmp401.ko
->> filename:       /storage2/femfyra/linux-2.6/./.roadtest/modules/lib/modules/5.18.0-rc1/kernel/drivers/hwmon/tmp401.ko
->> license:        GPL
->> description:    Texas Instruments TMP401 temperature sensor driver
->> author:         Hans de Goede <hdegoede@redhat.com>
->> alias:          i2c:tmp435
->> alias:          i2c:tmp432
->> alias:          i2c:tmp431
->> alias:          i2c:tmp411
->> alias:          i2c:tmp401
->> alias:          of:N*T*Cti,tmp435C*
->> alias:          of:N*T*Cti,tmp435
->> alias:          of:N*T*Cti,tmp432C*
->> alias:          of:N*T*Cti,tmp432
->> alias:          of:N*T*Cti,tmp431C*
->> alias:          of:N*T*Cti,tmp431
->> alias:          of:N*T*Cti,tmp411C*
->> alias:          of:N*T*Cti,tmp411
->> alias:          of:N*T*Cti,tmp401C*
->> alias:          of:N*T*Cti,tmp401
->> depends:
->> intree:         Y
->> name:           tmp401
->> vermagic:       5.18.0-rc1 mod_unload
-> 
+> +	if (IS_ERR_OR_NULL(sp_data->pcb_tz))
+> +		return PTR_ERR(sp_data->pcb_tz);
+> +
+> +	return ret;
+> +}
+> +
+> +static int sunplus_thermal_remove(struct platform_device *pdev)
+> +{
+> +	struct sp_thermal_data *sp_data = platform_get_drvdata(pdev);
+> +
+> +	thermal_zone_device_unregister(sp_data->pcb_tz);
 
-All commits have been fixed in v3, please review that one instead.
+But here it is unregistered.
+
+1) I would have expected that no unregister function is needed.
+2) Should one be there, based on naming, 
+thermal_zone_of_sensor_unregister() would look more consistent.
+
+I know nothing about the thermal API, so don't take this comment too 
+seriously. It just look odd to me when I gave it a look.
+
+Just my 2c,
+
+CJ
+
+
+> +	return 0;
+> +}
+> +
+> +static const struct of_device_id of_sunplus_thermal_ids[] = {
+> +	{ .compatible = "sunplus,thermal" },
+> +	{ /* sentinel */ }
+> +};
+> +MODULE_DEVICE_TABLE(of, of_sunplus_thermal_ids);
+> +
+> +static struct platform_driver sunplus_thermal_driver = {
+> +	.probe	= sunplus_thermal_probe,
+> +	.remove = sunplus_thermal_remove,
+> +	.driver	= {
+> +		.name	= "sunplus-thermal",
+> +		.of_match_table = of_sunplus_thermal_ids,
+> +		},
+> +};
+> +module_platform_driver(sunplus_thermal_driver);
+> +
+> +MODULE_AUTHOR("Li-hao Kuo <lhjeff911-Re5JQEeQqe8AvxtiuMwx3w@public.gmane.org>");
+> +MODULE_DESCRIPTION("Thermal driver for sunplus SoC");
+> +MODULE_LICENSE("GPL");
+

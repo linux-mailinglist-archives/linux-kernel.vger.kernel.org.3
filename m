@@ -2,219 +2,229 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B2CD518BF3
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 20:10:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D959518BF1
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 20:09:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241079AbiECSN1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 14:13:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33174 "EHLO
+        id S241059AbiECSNR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 14:13:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241062AbiECSNW (ORCPT
+        with ESMTP id S237310AbiECSNQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 14:13:22 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1B923EBB9
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 11:09:48 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id dk23so34955406ejb.8
-        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 11:09:48 -0700 (PDT)
+        Tue, 3 May 2022 14:13:16 -0400
+Received: from mail-vs1-xe2e.google.com (mail-vs1-xe2e.google.com [IPv6:2607:f8b0:4864:20::e2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03EF23EAB1
+        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 11:09:43 -0700 (PDT)
+Received: by mail-vs1-xe2e.google.com with SMTP id u205so17227442vsu.6
+        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 11:09:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=9gjEyY8o65rJfUi2R/5q726th223KCfR89ZxIyy7Kvw=;
-        b=ZNqaq/uE1FvHcpZ723NGH4mJuGNVsmIWAFT1HzkYo+YbUPOssbd8ZiZtdVi99Hsm+D
-         ftZ0CpOSqPqAmBbDjy5WSC8rKUrwO/pDLOzEPkMG9MBpWKlCDLE+9eiBnOswGbhRYPO7
-         k4Ec6IWtjWfqKNpTKPBJ+bgZkFotwJSXkFohEHaZdGkeKCbRuFmG1RDCtEtOPzdqO7Tz
-         2z8wJ3hQgSS6Hna69kwpTbOTtAd1dOXSkBI9ApHUuummyXmXKYoiZ+EiHj6TTfe7G0y/
-         b86duNQGCx1bfFEPhDi+0RqyNIm+SdQ9dpA/VzRzj7pnDVf4/ddErdeYhQrO0h8WQoxe
-         0R+A==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=M8nY19u4veOpo6Bxv0M47ojfyeOfPUMIsmBfYZ+FyzU=;
+        b=FxwJrBTP5gth5vjkfbyk/kOOebvrVjl4f928LwhFUhDnq1z6k1q8zcZwpjExRHjLDB
+         VAxx9ktRfLqf6nap2v1PJsvolaaXas4G1Vw7bENJ8666FZa+KahKgjBon1+zUH4y+Vvr
+         6g0AYK5RWQh1yPsN5Fss/eNFtAAnKjyQn6G0r0OU8G2cZivMaPZa2awqu7n1gOeiVKgP
+         A03cf6DkmlA50FYwovCer8G8OBed8NBY96YDHFfR6ZjU7XpBPE0x3vETtGF99RGKL5ZV
+         GvdyX+LAMgIzgnSlpPZP2+RJLo1mPnYbPWWzZO4zHU0JayiqXy9oSbop1vETOYmBwoZl
+         ujvQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=9gjEyY8o65rJfUi2R/5q726th223KCfR89ZxIyy7Kvw=;
-        b=1JQnpAy2cY11PSzXuLQTXsp2yvgKSmT+mmr9McHvdVw8HQrAEToNM0m69jPES9oVgV
-         MSwZl8LeoCm23YpX1TuoGDCcaaT77YuILKjeTEjYlP0CLaxoDABycEFty6VnKtrbcLyf
-         tdioagkIc7E6mrokf7IWv9tJsZocrn/64ANwgjPtELF7N4nAW66wY965RlGWqTYgCS5/
-         Dm3jHEv+iVxVrzn7Lakk5jQ9WZLull5bTwcVpmyBw8JIgj8OcOrWLlyrwhhBIvd0bjov
-         oWSUjb0ckAZyBQ0QvHqc+CZfMgg68ar2y97kl7DmPFNkvylLVqcAQw/RV/yQiBhjSJVg
-         PK2A==
-X-Gm-Message-State: AOAM531wCOxcYQlRhVRRMC92lK2VZD/UwnhLdL5dbIVkrRv0kGrua25C
-        xoJSxMGiVVswOC+FFEQeFL4Yiw==
-X-Google-Smtp-Source: ABdhPJzYXKl6dp62p9Rbi2ZyThioE95HacheutFqLriaESUvTzwQS+VWO2cmCUDs03Vv6PniXk/ZdA==
-X-Received: by 2002:a17:906:a08b:b0:6b9:2e20:f139 with SMTP id q11-20020a170906a08b00b006b92e20f139mr17550173ejy.463.1651601387539;
-        Tue, 03 May 2022 11:09:47 -0700 (PDT)
-Received: from myrica (cpc92880-cmbg19-2-0-cust679.5-4.cable.virginm.net. [82.27.106.168])
-        by smtp.gmail.com with ESMTPSA id s8-20020aa7cb08000000b0042617ba638csm8058733edt.22.2022.05.03.11.09.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 May 2022 11:09:46 -0700 (PDT)
-Date:   Tue, 3 May 2022 19:09:22 +0100
-From:   Jean-Philippe Brucker <jean-philippe@linaro.org>
-To:     Lu Baolu <baolu.lu@linux.intel.com>
-Cc:     Joerg Roedel <joro@8bytes.org>, Jason Gunthorpe <jgg@nvidia.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Eric Auger <eric.auger@redhat.com>,
-        Liu Yi L <yi.l.liu@intel.com>,
-        Jacob jun Pan <jacob.jun.pan@intel.com>,
-        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 04/12] iommu/sva: Basic data structures for SVA
-Message-ID: <YnFv0ps0Ad8v+7uH@myrica>
-References: <20220502014842.991097-1-baolu.lu@linux.intel.com>
- <20220502014842.991097-5-baolu.lu@linux.intel.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=M8nY19u4veOpo6Bxv0M47ojfyeOfPUMIsmBfYZ+FyzU=;
+        b=XTc9ElxiCtHzmwBzZk/Vejq2RJw4qzYa+oBMCrXB6v/q2CiXgPr3lg8Ecm1cUcnqwr
+         mmpuaBD0wA7fkBI9dex4+42vL4ZAyh4SAazBuiRbP4Dr/O2C3ar+ndiwc84PgBxVIXRB
+         KXAGQswQQOGItPe/z6pXvr1OSAGwiyS01cQqAeyFHfOrx5gYV2GOiXz26Hixn1qLIgFp
+         WjhUzbI908vGc9vvA3nDXqg9w1UxdmqjeKl6v5Qnn9vQ3TBMk9diTbqtyntpRlm+9VL3
+         VR9vZ4bM/sgIazU6XIVEpIWVzepqZJ4ncygbWGcXW4zq6HqMMGxn5KXRqXSynxd0HD1F
+         z2sw==
+X-Gm-Message-State: AOAM532vZpJrj6Bha7F+8e9iFGiPi8WrBnX0YWemWIFqgMNrJf6AsviC
+        idkA/0NWz0CRSPbv3TbwvY4JLX+buKlGfWux1E1HYQ==
+X-Google-Smtp-Source: ABdhPJxpIW3ejOW0FbBRaJ2iZvjl6KlHzBjfy6XcnIffQA7XHgJzbOCQ+yd/N/qTtcfu5ScTLho8ER/8p5XWGbiha4U=
+X-Received: by 2002:a67:df11:0:b0:32c:ba04:cf9a with SMTP id
+ s17-20020a67df11000000b0032cba04cf9amr5698621vsk.18.1651601381903; Tue, 03
+ May 2022 11:09:41 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220502014842.991097-5-baolu.lu@linux.intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220422162402.147958-1-adrian.hunter@intel.com>
+In-Reply-To: <20220422162402.147958-1-adrian.hunter@intel.com>
+From:   Ian Rogers <irogers@google.com>
+Date:   Tue, 3 May 2022 11:09:30 -0700
+Message-ID: <CAP-5=fUHJqRhB4sf0WUUVWcJUDPi0EE93PKQ8ur0S00odwZWzQ@mail.gmail.com>
+Subject: Re: [PATCH RFC 00/21] perf intel-pt: Better support for perf record --cpu
+To:     Adrian Hunter <adrian.hunter@intel.com>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Leo Yan <leo.yan@linaro.org>, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 02, 2022 at 09:48:34AM +0800, Lu Baolu wrote:
-> Use below data structures for SVA implementation in the IOMMU core:
-> 
-> - struct iommu_sva_ioas
->   Represent the I/O address space shared with an application CPU address
->   space. This structure has a 1:1 relationship with an mm_struct. It
->   grabs a "mm->mm_count" refcount during creation and drop it on release.
+On Fri, Apr 22, 2022 at 9:24 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
+>
+> Hi
+>
+> Here are patches to support capturing Intel PT sideband events such as
+> mmap, task, context switch, text poke etc, on every CPU even when tracing
+> selected user_requested_cpus.  That is, when using the perf record -C or
+>  --cpu option.
+>
+> This is needed for:
+> 1. text poke: a text poke on any CPU affects all CPUs
+> 2. tracing user space: a user space process can migrate between CPUs so
+> mmap events that happen on a different CPU can be needed to decode a
+> user_requested_cpus CPU.
+>
+> For example:
+>
+>         Trace on CPU 1:
+>
+>         perf record --kcore -C 1 -e intel_pt// &
+>
+>         Start a task on CPU 0:
+>
+>         taskset 0x1 testprog &
+>
+>         Migrate it to CPU 1:
+>
+>         taskset -p 0x2 <testprog pid>
+>
+>         Stop tracing:
+>
+>         kill %1
+>
+>         Prior to these changes there will be errors decoding testprog
+>         in userspace because the comm and mmap events for testprog will not
+>         have been captured.
+>
+> There is quite a bit of preparation:
+>
+> The first 5 patches stop auxtrace mixing up mmap idx between evlist and
+> evsel.  That is going to matter when
+> evlist->all_cpus != evlist->user_requested_cpus != evsel->cpus:
+>
+>       libperf evsel: Factor out perf_evsel__ioctl()
+>       libperf evsel: Add perf_evsel__enable_thread()
+>       perf evlist: Use libperf functions in evlist__enable_event_idx()
+>       perf auxtrace: Move evlist__enable_event_idx() to auxtrace.c
+>       perf auxtrace: Do not mix up mmap idx
+>
+> The next 6 patches stop attempts to auxtrace mmap when it is not an
+> auxtrace event e.g. when mmapping the CPUs on which only sideband is
+> captured:
+>
+>       libperf evlist: Remove ->idx() per_cpu parameter
+>       libperf evlist: Move ->idx() into mmap_per_evsel()
+>       libperf evlist: Add evsel as a parameter to ->idx()
+>       perf auxtrace: Record whether an auxtrace mmap is needed
+>       perf auxctrace: Add mmap_needed to auxtrace_mmap_params
+>       perf auxtrace: Remove auxtrace_mmap_params__set_idx() per_cpu parameter
+>
+> The next 5 patches switch to setting up dummy event maps before adding the
+> evsel so that the evsel is subject to map propagation, primarily to cause
+> addition of the evsel's CPUs to all_cpus.
+>
+>       perf evlist: Factor out evlist__dummy_event()
+>       perf evlist: Add evlist__add_system_wide_dummy()
+>       perf record: Use evlist__add_system_wide_dummy() in record__config_text_poke()
+>       perf intel-pt: Use evlist__add_system_wide_dummy() for switch tracking
+>       perf intel-pt: Track sideband system-wide when needed
+>
+> The remaining 5 patches make more significant changes.
+>
+> First change from using user_requested_cpus to using all_cpus where necessary:
+>
+>       perf tools: Allow all_cpus to be a superset of user_requested_cpus
+>
+> Secondly, mmap all per-thread and all per-cpu events:
+>
+>       libperf evlist: Allow mixing per-thread and per-cpu mmaps
+>
+> Stop using system_wide flag for uncore because it will not work anymore:
+>
+>       perf stat: Add per_cpu_only flag for uncore
+>
+> Finally change map propagation so that system-wide events retain their cpus and
+> (dummy) threads:
+>
+>       perf tools: Allow system-wide events to keep their own CPUs
+>       perf tools: Allow system-wide events to keep their own threads
+>
+>
+> Adrian Hunter (21):
+>       libperf evsel: Factor out perf_evsel__ioctl()
+>       libperf evsel: Add perf_evsel__enable_thread()
+>       perf evlist: Use libperf functions in evlist__enable_event_idx()
+>       perf auxtrace: Move evlist__enable_event_idx() to auxtrace.c
+>       perf auxtrace: Do not mix up mmap idx
+>       libperf evlist: Remove ->idx() per_cpu parameter
+>       libperf evlist: Move ->idx() into mmap_per_evsel()
+>       libperf evlist: Add evsel as a parameter to ->idx()
+>       perf auxtrace: Record whether an auxtrace mmap is needed
+>       perf auxctrace: Add mmap_needed to auxtrace_mmap_params
+>       perf auxtrace: Remove auxtrace_mmap_params__set_idx() per_cpu parameter
+>       perf evlist: Factor out evlist__dummy_event()
+>       perf evlist: Add evlist__add_system_wide_dummy()
+>       perf record: Use evlist__add_system_wide_dummy() in record__config_text_poke()
+>       perf intel-pt: Use evlist__add_system_wide_dummy() for switch tracking
+>       perf intel-pt: Track sideband system-wide when needed
+>       perf tools: Allow all_cpus to be a superset of user_requested_cpus
+>       libperf evlist: Allow mixing per-thread and per-cpu mmaps
+>       perf stat: Add per_cpu_only flag for uncore
+>       perf tools: Allow system-wide events to keep their own CPUs
+>       perf tools: Allow system-wide events to keep their own threads
+>
+>  tools/lib/perf/evlist.c                  |  67 +++++++------------
+>  tools/lib/perf/evsel.c                   |  29 +++++++--
+>  tools/lib/perf/include/internal/evlist.h |   3 +-
+>  tools/lib/perf/include/internal/evsel.h  |   1 +
+>  tools/lib/perf/include/perf/evsel.h      |   1 +
+>  tools/perf/arch/arm/util/cs-etm.c        |   1 +
+>  tools/perf/arch/arm64/util/arm-spe.c     |   1 +
+>  tools/perf/arch/s390/util/auxtrace.c     |   1 +
+>  tools/perf/arch/x86/util/intel-bts.c     |   1 +
+>  tools/perf/arch/x86/util/intel-pt.c      |  32 ++++------
+>  tools/perf/builtin-record.c              |  39 +++++-------
+>  tools/perf/builtin-stat.c                |   5 +-
+>  tools/perf/util/auxtrace.c               |  31 +++++++--
+>  tools/perf/util/auxtrace.h               |   8 ++-
+>  tools/perf/util/evlist.c                 | 106 +++++++++++++++----------------
+>  tools/perf/util/evlist.h                 |   7 +-
+>  tools/perf/util/evsel.c                  |   1 +
+>  tools/perf/util/evsel.h                  |   1 +
+>  tools/perf/util/mmap.c                   |   4 +-
+>  tools/perf/util/parse-events.c           |   2 +-
+>  20 files changed, 176 insertions(+), 165 deletions(-)
+>
+>
+> Regards
+> Adrian
 
-Do we actually need this structure?  At the moment it only keeps track of
-bonds, which we can move to struct dev_iommu. Replacing it by a mm pointer
-in struct iommu_domain simplifies the driver and seems to work
+Thanks Adrian, I'm very much in favor of this patch set. Can we add
+some tests for intel-pt? They could be part of the 'perf record' shell
+test:
+https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/tree/tools/perf/tests/shell/record.sh?h=perf/core
+but probably better as there own thing. A command line broken prior to
+this change would be great!
+
+Aside from testing, we should clean up what dummy CPUs in the cpu maps
+means. As per:
+https://lore.kernel.org/linux-perf-users/CAP-5=fWfs2td9nZLGdEBD+C5s=upa_7SORab8tQ7qH=jX--F7w@mail.gmail.com/
+
+I also think landing:
+https://lore.kernel.org/linux-perf-users/20220503041757.2365696-3-irogers@google.com/
+will help as it avoids the all_cpus map containing references to CPUs
+from PMU sysfs that had been overridden.
 
 Thanks,
-Jean
-
-> 
-> - struct iommu_domain (IOMMU_DOMAIN_SVA type)
->   Represent a hardware pagetable that the IOMMU hardware could use for
->   SVA translation. Multiple iommu domains could be bound with an SVA ioas
->   and each grabs a refcount from ioas in order to make sure ioas could
->   only be freed after all domains have been unbound.
-> 
-> - struct iommu_sva
->   Represent a bond relationship between an SVA ioas and an iommu domain.
->   If a bond already exists, it's reused and a reference is taken.
-> 
-> Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
-> ---
->  include/linux/iommu.h         | 14 +++++++++++++-
->  drivers/iommu/iommu-sva-lib.h |  1 +
->  drivers/iommu/iommu-sva-lib.c | 18 ++++++++++++++++++
->  3 files changed, 32 insertions(+), 1 deletion(-)
-> 
-> diff --git a/include/linux/iommu.h b/include/linux/iommu.h
-> index ab36244d4e94..f582f434c513 100644
-> --- a/include/linux/iommu.h
-> +++ b/include/linux/iommu.h
-> @@ -42,6 +42,7 @@ struct notifier_block;
->  struct iommu_sva;
->  struct iommu_fault_event;
->  struct iommu_dma_cookie;
-> +struct iommu_sva_ioas;
->  
->  /* iommu fault flags */
->  #define IOMMU_FAULT_READ	0x0
-> @@ -64,6 +65,9 @@ struct iommu_domain_geometry {
->  #define __IOMMU_DOMAIN_PT	(1U << 2)  /* Domain is identity mapped   */
->  #define __IOMMU_DOMAIN_DMA_FQ	(1U << 3)  /* DMA-API uses flush queue    */
->  
-> +#define __IOMMU_DOMAIN_SHARED	(1U << 4)  /* Page table shared from CPU  */
-> +#define __IOMMU_DOMAIN_HOST_VA	(1U << 5)  /* Host CPU virtual address */
-> +
->  /*
->   * This are the possible domain-types
->   *
-> @@ -86,6 +90,8 @@ struct iommu_domain_geometry {
->  #define IOMMU_DOMAIN_DMA_FQ	(__IOMMU_DOMAIN_PAGING |	\
->  				 __IOMMU_DOMAIN_DMA_API |	\
->  				 __IOMMU_DOMAIN_DMA_FQ)
-> +#define IOMMU_DOMAIN_SVA	(__IOMMU_DOMAIN_SHARED |	\
-> +				 __IOMMU_DOMAIN_HOST_VA)
->  
->  struct iommu_domain {
->  	unsigned type;
-> @@ -95,6 +101,7 @@ struct iommu_domain {
->  	void *handler_token;
->  	struct iommu_domain_geometry geometry;
->  	struct iommu_dma_cookie *iova_cookie;
-> +	struct iommu_sva_ioas *sva_ioas;
->  };
->  
->  static inline bool iommu_is_dma_domain(struct iommu_domain *domain)
-> @@ -628,7 +635,12 @@ struct iommu_fwspec {
->   * struct iommu_sva - handle to a device-mm bond
->   */
->  struct iommu_sva {
-> -	struct device			*dev;
-> +	struct device		*dev;
-> +	struct iommu_sva_ioas	*sva_ioas;
-> +	struct iommu_domain	*domain;
-> +	/* Link to sva ioas's bonds list */
-> +	struct list_head	node;
-> +	refcount_t		users;
->  };
->  
->  int iommu_fwspec_init(struct device *dev, struct fwnode_handle *iommu_fwnode,
-> diff --git a/drivers/iommu/iommu-sva-lib.h b/drivers/iommu/iommu-sva-lib.h
-> index 8909ea1094e3..9c5e108e2c8a 100644
-> --- a/drivers/iommu/iommu-sva-lib.h
-> +++ b/drivers/iommu/iommu-sva-lib.h
-> @@ -10,6 +10,7 @@
->  
->  int iommu_sva_alloc_pasid(struct mm_struct *mm, ioasid_t min, ioasid_t max);
->  struct mm_struct *iommu_sva_find(ioasid_t pasid);
-> +struct mm_struct *iommu_sva_domain_mm(struct iommu_domain *domain);
->  
->  /* I/O Page fault */
->  struct device;
-> diff --git a/drivers/iommu/iommu-sva-lib.c b/drivers/iommu/iommu-sva-lib.c
-> index 106506143896..d524a402be3b 100644
-> --- a/drivers/iommu/iommu-sva-lib.c
-> +++ b/drivers/iommu/iommu-sva-lib.c
-> @@ -3,6 +3,8 @@
->   * Helpers for IOMMU drivers implementing SVA
->   */
->  #include <linux/mutex.h>
-> +#include <linux/iommu.h>
-> +#include <linux/slab.h>
->  #include <linux/sched/mm.h>
->  
->  #include "iommu-sva-lib.h"
-> @@ -10,6 +12,22 @@
->  static DEFINE_MUTEX(iommu_sva_lock);
->  static DECLARE_IOASID_SET(iommu_sva_pasid);
->  
-> +struct iommu_sva_ioas {
-> +	struct mm_struct *mm;
-> +	ioasid_t pasid;
-> +
-> +	/* Counter of domains attached to this ioas. */
-> +	refcount_t users;
-> +
-> +	/* All bindings are linked here. */
-> +	struct list_head bonds;
-> +};
-> +
-> +struct mm_struct *iommu_sva_domain_mm(struct iommu_domain *domain)
-> +{
-> +	return domain->sva_ioas->mm;
-> +}
-> +
->  /**
->   * iommu_sva_alloc_pasid - Allocate a PASID for the mm
->   * @mm: the mm
-> -- 
-> 2.25.1
-> 
+Ian

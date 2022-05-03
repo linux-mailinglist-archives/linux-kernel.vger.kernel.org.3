@@ -2,110 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE8725190FD
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 00:07:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B53645190DE
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 00:07:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243451AbiECWFq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 18:05:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48002 "EHLO
+        id S243457AbiECWFv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 18:05:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243318AbiECWFn (ORCPT
+        with ESMTP id S239749AbiECWFt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 18:05:43 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A822424A4;
-        Tue,  3 May 2022 15:02:10 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 86416CE22C8;
-        Tue,  3 May 2022 22:02:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7CC68C385A4;
-        Tue,  3 May 2022 22:02:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651615326;
-        bh=nNwLfZyICjcyMLgHH7iT+5XX5lVbO1RBfjuW/N6BTLI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Vg4d5xX0/qdcvR5lRmnj3/L4Wyo04ZFQjaTlgojfJ0e5N9gLePT64Yw0B7/baxn2S
-         jhdS7Mbam/fYH81IBAq6s82Jcqg0giJI9qb7Ilvk1YjW/G0PTePrrLsJXOLSxRBB4E
-         LXSr7qMDU9V1gMHhdMu95RB+QaZDROUkdOEpSwGRyj5/zeAoUSbstruGAC412K+Y/b
-         mRM7Zv63L5h6tCcERHZpwcehSRn2+5MLOluVTqc2QHet/SdjwTPal892P7kCgrjxik
-         FoTI3zrrhAXSPWYJ87Wjkzeet1XeNQJupzMaoE1YH3rPHQ9hqJTEdauQCyFL33jYpN
-         fgtutnJexEuCg==
-Received: by pali.im (Postfix)
-        id 2F8BD98A; Wed,  4 May 2022 00:02:03 +0200 (CEST)
-Date:   Wed, 4 May 2022 00:02:02 +0200
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
+        Tue, 3 May 2022 18:05:49 -0400
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0174D424B8;
+        Tue,  3 May 2022 15:02:15 -0700 (PDT)
+Received: by mail-pf1-x429.google.com with SMTP id a11so15829831pff.1;
+        Tue, 03 May 2022 15:02:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=BML3fCwKAkemWPuJ7hEIxFoVzk3CNeF2ywdelTSnmIQ=;
+        b=owiQWKJ4ZQJAcwCHFiQaYjtX3YmVXpcq8zcYGfq/c9VRE6z6kbjmjaRH1GrbY3bjrq
+         m/dKA+gBL/bv5dD9qStTUM1WA6v3jrmw9ghlDfVH7F0L9aZ05LSHkJkuBDxtL7nTITSE
+         t1xYE14wP20tl3mvkN7YTu5TdPyyPYvgPWEg1icBb/BeYxWjdD4KzNcSCeC0YRAam2EM
+         AZ1IQJoMrXOVmYDPutlC/o/3kQbYTEmpXY5lq1Cyt3X9b0OKlagbWAjVp0GO+vlqEnWF
+         SnGjLXHe46VAqMbWCyDdHS082T8hCuIX1Oip0+RLYnJHxB4wUAajIR07X2DAgx+wB+6K
+         /40Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=BML3fCwKAkemWPuJ7hEIxFoVzk3CNeF2ywdelTSnmIQ=;
+        b=Vk8xLZW74JpiTYM8z3AU9aRU9dYc4em/t1t7ES6hxg30wBM6pfIlqdvpeB++nZc3+B
+         2pGF0MAF5GvSStI90f+5Y3EkIKreNz+AeGSlckyokDLq2sBWbOZJ6c6X6U0xmzDfFpx+
+         0stALtd3eDMT2/ZXWYUTMn8hX7gPXtWgM7DUTAx7OT/j/A+9C/h+bW9FRU1JMQVnG7PY
+         5+BE4TzkAqNGEuZR40RTz0LNmdMEf9Y0oLXrZD9Oc16WIk+9I/7NstHPyrtg1iff0bAm
+         yDvdJWOBybMKXkG4pNhlsIi16xmyNCXiQLIqZv9niXy74CpKitzgn9CRugC5M0Yrzpv5
+         9FoA==
+X-Gm-Message-State: AOAM5337/NocdfktCye+EcyV2yu7LJoAX/0/kGLWqnPSwDd42dMUCAxY
+        hemq9TzAiqZoHB+70Qx4yNo=
+X-Google-Smtp-Source: ABdhPJzP6mUzXABdoFH1ZVeSaq/TMAPgJIb1k9QSNLAFmv5nzlKhGgUDeL8CPA1fwrylMwXwwXOOJg==
+X-Received: by 2002:a63:cc53:0:b0:372:7d69:49fb with SMTP id q19-20020a63cc53000000b003727d6949fbmr15398440pgi.21.1651615334498;
+        Tue, 03 May 2022 15:02:14 -0700 (PDT)
+Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id t5-20020a170902b20500b0015e8d4eb29asm6794268plr.228.2022.05.03.15.02.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 May 2022 15:02:14 -0700 (PDT)
+From:   Florian Fainelli <f.fainelli@gmail.com>
+To:     bcm-kernel-feedback-list@broadcom.com,
+        SHIMAMOTO Takayoshi <takayoshi.shimamoto.360@gmail.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        soc@kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        =?iso-8859-2?q?Rafa=B3_Mi=B3ecki?= <zajec5@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] dt-bindings: watchdog: max63xx: Add GPIO binding
-Message-ID: <20220503220202.ksxq65sbacxvituy@pali>
-References: <20220429131349.21229-1-pali@kernel.org>
- <YnGj6eZGx+8gVKGW@robh.at.kernel.org>
+Subject: Re: [PATCH] ARM: dts: BCM5301X: Add DT for WZR-1166DHP,DHP2
+Date:   Tue,  3 May 2022 15:02:12 -0700
+Message-Id: <20220503220212.1676263-1-f.fainelli@gmail.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220421151055.6851-1-takayoshi.shimamoto.360@gmail.com>
+References: <20220421151055.6851-1-takayoshi.shimamoto.360@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <YnGj6eZGx+8gVKGW@robh.at.kernel.org>
-User-Agent: NeoMutt/20180716
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tuesday 03 May 2022 16:51:37 Rob Herring wrote:
-> On Fri, Apr 29, 2022 at 03:13:48PM +0200, Pali Rohár wrote:
-> > GPIO is optional and used for WDI logic.
+On Fri, 22 Apr 2022 00:10:54 +0900, SHIMAMOTO Takayoshi <takayoshi.shimamoto.360@gmail.com> wrote:
+>   Buffalo WZR-1166DHP/WZR-1166DHP2  wireless router with
 > 
-> Nowhere is WDI defined.
+>     - BCM4708A0
+>     - 128MiB NAND flash
+>     - 2T2R 11ac/a/b/g/n Wi-Fi
+>     - 4x 10/100/1000M ethernet switch
+>     - 1x USB 3.0 port
 > 
-> > 
-> > Signed-off-by: Pali Rohár <pali@kernel.org>
-> > ---
-> >  Documentation/devicetree/bindings/watchdog/maxim,max63xx.yaml | 4 ++++
-> >  1 file changed, 4 insertions(+)
-> > 
-> > diff --git a/Documentation/devicetree/bindings/watchdog/maxim,max63xx.yaml b/Documentation/devicetree/bindings/watchdog/maxim,max63xx.yaml
-> > index ab9641e845db..a97aa0135ef9 100644
-> > --- a/Documentation/devicetree/bindings/watchdog/maxim,max63xx.yaml
-> > +++ b/Documentation/devicetree/bindings/watchdog/maxim,max63xx.yaml
-> > @@ -27,6 +27,10 @@ properties:
-> >      description: This is a 1-byte memory-mapped address
-> >      maxItems: 1
-> >  
-> > +  gpios:
+>   WZR-1166DHP and WZR-1166DHP2 have different memory capacity.
 > 
-> Usually, we want a name here. Maybe wdi-gpios, but I don't know what WDI 
-> is nor have I read the pin name in the datasheet for inspiration.
+>   WZR-1166DHP
+>     - 512 MiB DDR2 SDRAM
+> 
+>   WZR-1166DHP2
+>     - 256 MiB DDR2 SDRAM
+> 
+>   These hardware components are very similar to the WZR-1750DHP
+>    except for the number of antennas.
+> 
+> Signed-off-by: SHIMAMOTO Takayoshi <takayoshi.shimamoto.360@gmail.com>
+> ---
 
-WDI is name of logic used in the datasheet, it is abbreviation of
-WatchDog Input (meaning that from watchdog chip this GPIO has input
-direction).
-
-I'm not sure if we need to put gpio direction into the property name or
-also word watchdog (or its some abbrev) into name. As node is already
-named "watchdog" and direction depends on point of view (chip vs CPU),
-which can be in DTS misleading (because DTS describe direction from CPU
-point of view).
-
-What for sure makes sense is extending description by explaining WDI
-abbreviation.
-
-> > +    description: Optional GPIO used for controlling WDI when WDI bit is not mapped to memory
-> > +    maxItems: 1
-> > +
-> >  required:
-> >    - compatible
-> >    - reg
-> > -- 
-> > 2.20.1
-> > 
-> > 
+Applied to https://github.com/Broadcom/stblinux/commits/devicetree/next, thanks!
+--
+Florian

@@ -2,223 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F599518600
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 16:03:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97FA5518608
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 16:04:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236589AbiECOHA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 10:07:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50364 "EHLO
+        id S236617AbiECOHa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 10:07:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235030AbiECOG4 (ORCPT
+        with ESMTP id S236613AbiECOHT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 10:06:56 -0400
-Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CBB91B79E;
-        Tue,  3 May 2022 07:03:24 -0700 (PDT)
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-        by localhost (Postfix) with ESMTP id 4Kt1rp48Bmz9sT9;
-        Tue,  3 May 2022 16:03:22 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id RhOOOXYqV50a; Tue,  3 May 2022 16:03:22 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase2.c-s.fr (Postfix) with ESMTP id 4Kt1rp30xWz9sT8;
-        Tue,  3 May 2022 16:03:22 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 4DB408B77B;
-        Tue,  3 May 2022 16:03:22 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id VIfoSnOpUyFD; Tue,  3 May 2022 16:03:22 +0200 (CEST)
-Received: from [192.168.202.20] (unknown [192.168.202.20])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 2975E8B763;
-        Tue,  3 May 2022 16:03:21 +0200 (CEST)
-Message-ID: <8e1e4a9c-6ef8-a1a7-ad1f-84b5bf2a0b7d@csgroup.eu>
-Date:   Tue, 3 May 2022 16:03:20 +0200
+        Tue, 3 May 2022 10:07:19 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD96C1EAF3
+        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 07:03:45 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id w4so23480322wrg.12
+        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 07:03:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=4yiLw/VEdaYl/NlOASUjlFdrhZcltSNhm4gz6dSd34k=;
+        b=kCtauluC6RPbNDvBY/JRShpAYoymIwgUaaCYj9BWRXXiDuSIf815m2lptCT+0twyJN
+         X4OB7viRH2mwmEUlxrFWYCtI9+2svNvzxoIR3GJPkMGlaeyd1pssEWQ2N//CeWRcYzvA
+         0JBUfSyzB7M6zvr8T+fT6HLcpFP1uJ4hL92VDWdFWZzB623LS1Uqvn3mXeH5MhvrDaDG
+         5cPmHZUfOd8THiO3Re830/MRm8rHK1nY9fEGJiq7uw4JN7EXPGRuN8jQBitKt/YDjzAU
+         ZwcIXfUnN7qeNVhXUSKi3QdJJc7JWbobyEF9Te24ClW2Ok8MDJW+1Daa+WBHTIByn3xS
+         QVeQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=4yiLw/VEdaYl/NlOASUjlFdrhZcltSNhm4gz6dSd34k=;
+        b=o5lVhyUv6y4WE00BMUGY7IjcHledvA0LzzG/hzV/aY7Ki8Y79eNd8/BD6XBzTCBC2E
+         w/ZSc1g7u06JjFOxBpueJXEM1gm9UW9dDd6jL//JeayAcuSwLCMiwiGJRDWuXGJ4H80c
+         6xGsDf8dHqiRVL3+9KzrkaQK+mpqg78E6QNHn2PDrPq3ZCvtBnYnU1r0xMYJrB4lzhIC
+         2LnMMJ3Ot9mUK/eR9LMxblSNGQavtO9rijCcFCsSXPLY5NJjliH2DZ19GL0UDSwPXOLO
+         lz6qvFEvOFCE8aa0kWbjvET2vMwIxGYipPaEgmHAzYmS81JG8A3EE4+DU/uzyci4Zh01
+         wSUA==
+X-Gm-Message-State: AOAM530XvLZeLDPilYFXgNoXHxIoImo8uwU8rK2z/T7ffukFYjvf2a+a
+        4Qy/U7cZvhsprM086FSzomvJLZBQTMVib05ya+FeGw==
+X-Google-Smtp-Source: ABdhPJxIIXls0cRITSkASA+TT9aqYlg/XlcuvPUcKW+mcEfUrgFZ/oTWBOFcSD7nbqFc8D8kKLu+Cze+GzwbCbeog/c=
+X-Received: by 2002:adf:f30a:0:b0:20a:e193:6836 with SMTP id
+ i10-20020adff30a000000b0020ae1936836mr13028706wro.654.1651586623927; Tue, 03
+ May 2022 07:03:43 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [next] powerpc: multiple definition of `____cacheline_aligned';
- sound/core/oss/pcm_oss.o:(.bss+0x40): first defined here
-Content-Language: fr-FR
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        lkft-triage@lists.linaro.org, Peter Collingbourne <pcc@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Baoquan He <bhe@redhat.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        aul Mackerras <paulus@samba.org>,
-        Christoph Hellwig <hch@lst.de>
-References: <CA+G9fYvSqtsOMEiL7_kffPKnnO-Snhe2cup6g3qRngiwRO+RfA@mail.gmail.com>
- <e3c8b2bf-b55d-4c2c-a1cf-d5e9941e26b0@csgroup.eu>
-In-Reply-To: <e3c8b2bf-b55d-4c2c-a1cf-d5e9941e26b0@csgroup.eu>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220503041757.2365696-1-irogers@google.com> <20220503041757.2365696-5-irogers@google.com>
+ <b94f3863-c690-e0f7-5cde-18fbf24143e5@intel.com>
+In-Reply-To: <b94f3863-c690-e0f7-5cde-18fbf24143e5@intel.com>
+From:   Ian Rogers <irogers@google.com>
+Date:   Tue, 3 May 2022 07:03:31 -0700
+Message-ID: <CAP-5=fWfs2td9nZLGdEBD+C5s=upa_7SORab8tQ7qH=jX--F7w@mail.gmail.com>
+Subject: Re: [PATCH v5 4/6] perf cpumap: Handle dummy maps as empty in subset
+To:     Adrian Hunter <adrian.hunter@intel.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        John Garry <john.garry@huawei.com>,
+        Will Deacon <will@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        James Clark <james.clark@arm.com>,
+        German Gomez <german.gomez@arm.com>,
+        Riccardo Mancini <rickyman7@gmail.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
+        Alexander Antonov <alexander.antonov@linux.intel.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Stephane Eranian <eranian@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, May 3, 2022 at 12:43 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
+>
+> On 3/05/22 07:17, Ian Rogers wrote:
+> > perf_cpu_map__empty is true for empty and dummy maps. Make is_subset
+> > respect that.
+>
+> As I wrote before, I am not keen on this because it prevents -1, as a
+> valid 3rd parameter to perf_event_open(), from being represented
+> in merged evsel cpu maps.
+>
+> Why do you want this?
 
+Thanks Adrian, could you give me a test case (command line) where the
+differing dummy and empty behavior matters? Normally cpus/own_cpus are
+set to null during parsing. They may get replaced with
+user_requested_cpus:
+https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/tree/tools/lib/perf/evlist.c?h=perf/core#n44
+https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/tree/tools/lib/perf/evlist.c?h=perf/core#n45
+(should it be on line 45 that !empty is expected?)
 
-Le 03/05/2022 à 15:10, Christophe Leroy a écrit :
-> 
-> 
-> Le 29/04/2022 à 16:45, Naresh Kamboju a écrit :
->> Following powerpc builds failed on Linux next-20220428 and next-20220429.
->>
->> Regressions found on powerpc:
->>     - gcc-11-ppc64e_defconfig
->>     - gcc-10-ppc64e_defconfig
->>     - gcc-9-ppc64e_defconfig
->>     - gcc-8-ppc64e_defconfig
->>     - clang-14-ppc64e_defconfig
->>     - clang-nightly-ppc64e_defconfig
->>     - clang-13-ppc64e_defconfig
->>
->>
->> Build error:
->> -------------
->> Error: Section .bss not empty in prom_init.c
->> make[3]: *** [arch/powerpc/kernel/Makefile:191:
->> arch/powerpc/kernel/prom_init_check] Error 1
->> make[3]: Target '__build' not remade because of errors.
->> make[2]: *** [scripts/Makefile.build:595: arch/powerpc/kernel] Error 2
->> make[2]: Target '__build' not remade because of errors.
->> make[1]: *** [Makefile:1996: arch/powerpc] Error 2
->> powerpc64le-linux-gnu-ld: sound/core/oss/pcm_plugin.o:(.bss+0x0):
->> multiple definition of `____cacheline_aligned';
->> sound/core/oss/pcm_oss.o:(.bss+0x40): first defined here
->> make[4]: *** [scripts/Makefile.build:530: 
->> sound/core/oss/snd-pcm-oss.o] Error 1
->> make[4]: Target '__build' not remade because of errors.
->> make[3]: *** [scripts/Makefile.build:595: sound/core/oss] Error 2
->> powerpc64le-linux-gnu-ld: sound/core/seq/seq_clientmgr.o:(.bss+0x900):
->> multiple definition of `____cacheline_aligned';
->> sound/core/seq/seq_lock.o:(.bss+0x0): first defined here
->> powerpc64le-linux-gnu-ld: sound/core/seq/seq_memory.o:(.bss+0x0):
->> multiple definition of `____cacheline_aligned';
->> sound/core/seq/seq_lock.o:(.bss+0x0): first defined here
->> powerpc64le-linux-gnu-ld: sound/core/seq/seq_queue.o:(.bss+0x140):
->> multiple definition of `____cacheline_aligned';
->> sound/core/seq/seq_lock.o:(.bss+0x0): first defined here
->> powerpc64le-linux-gnu-ld: sound/core/seq/seq_fifo.o:(.bss+0x0):
->> multiple definition of `____cacheline_aligned';
->> sound/core/seq/seq_lock.o:(.bss+0x0): first defined here
->> powerpc64le-linux-gnu-ld: sound/core/seq/seq_timer.o:(.bss+0x0):
->> multiple definition of `____cacheline_aligned';
->> sound/core/seq/seq_lock.o:(.bss+0x0): first defined here
->> powerpc64le-linux-gnu-ld: sound/core/seq/seq_system.o:(.bss+0x0):
->> multiple definition of `____cacheline_aligned';
->> sound/core/seq/seq_lock.o:(.bss+0x0): first defined here
->> powerpc64le-linux-gnu-ld: sound/core/seq/seq_ports.o:(.bss+0x0):
->> multiple definition of `____cacheline_aligned';
->> sound/core/seq/seq_lock.o:(.bss+0x0): first defined here
->> powerpc64le-linux-gnu-ld: sound/core/seq/seq_info.o:(.bss+0x40):
->> multiple definition of `____cacheline_aligned';
->> sound/core/seq/seq_lock.o:(.bss+0x0): first defined here
->> make[4]: *** [scripts/Makefile.build:530: sound/core/seq/snd-seq.o] 
->> Error 1
->> make[4]: Target '__build' not remade because of errors.
->>
->>
->> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
->>
->>
->> steps to reproduce:
->> -------------------
->> # To install tuxmake on your system globally:
->> # sudo pip3 install -U tuxmake
->>
->> tuxmake --runtime podman --target-arch powerpc --toolchain gcc-11
->> --kconfig ppc64e_defconfig
->>
->> -- 
->> Linaro LKFT
->> https://lkft.linaro.org
->>
->> [1] https://builds.tuxbuild.com/28Sn15hB2la1PweieGMLrUdbFMQ/
-> 
-> Bisected to:
-> 
-> 366e7b61ca1f115d38138236467068d8aacabcbc is the first bad commit
-> commit 366e7b61ca1f115d38138236467068d8aacabcbc
-> Author: Peter Collingbourne <pcc@google.com>
-> Date:   Fri Apr 29 14:42:51 2022 -0700
-> 
->      printk: stop including cache.h from printk.h
-> 
->      An inclusion of cache.h in printk.h was added in 2014 in commit
->      c28aa1f0a847 ("printk/cache: mark printk_once test variable
->      __read_mostly") in order to bring in the definition of 
-> __read_mostly.  The
->      usage of __read_mostly was later removed in commit 3ec25826ae33 
-> ("printk:
->      Tie printk_once / printk_deferred_once into .data.once for reset") 
-> which
->      made the inclusion of cache.h unnecessary, so remove it.
-> 
->      We have a small amount of code that depended on the inclusion of 
-> cache.h
->      from printk.h; fix that code to include the appropriate header.
-> 
->      This fixes a circular inclusion on arm64 (linux/printk.h -> 
-> linux/cache.h
->      -> asm/cache.h -> linux/kasan-enabled.h -> linux/static_key.h ->
->      linux/jump_label.h -> linux/bug.h -> asm/bug.h -> linux/printk.h) that
->      would otherwise be introduced by the next patch.
-> 
->      Build tested using {allyesconfig,defconfig} x {arm64,x86_64}.
-> 
->      Link: 
-> https://linux-review.googlesource.com/id/I8fd51f72c9ef1f2d6afd3b2cbc875aa4792c1fba 
-> 
->      Link: 
-> https://lkml.kernel.org/r/20220427195820.1716975-1-pcc@google.com
->      Signed-off-by: Peter Collingbourne <pcc@google.com>
->      Cc: Alexander Potapenko <glider@google.com>
->      Cc: Andrey Konovalov <andreyknvl@gmail.com>
->      Cc: Andrey Ryabinin <ryabinin.a.a@gmail.com>
->      Cc: Catalin Marinas <catalin.marinas@arm.com>
->      Cc: David Rientjes <rientjes@google.com>
->      Cc: Dmitry Vyukov <dvyukov@google.com>
->      Cc: Eric W. Biederman <ebiederm@xmission.com>
->      Cc: Herbert Xu <herbert@gondor.apana.org.au>
->      Cc: Hyeonggon Yoo <42.hyeyoo@gmail.com>
->      Cc: Joonsoo Kim <iamjoonsoo.kim@lge.com>
->      Cc: Kees Cook <keescook@chromium.org>
->      Cc: Pekka Enberg <penberg@kernel.org>
->      Cc: Roman Gushchin <roman.gushchin@linux.dev>
->      Cc: Vlastimil Babka <vbabka@suse.cz>
->      Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-> 
->   arch/arm64/include/asm/mte-kasan.h | 1 +
->   arch/arm64/include/asm/percpu.h    | 1 +
->   arch/csky/include/asm/processor.h  | 2 +-
->   drivers/firmware/smccc/kvm_guest.c | 1 +
->   include/linux/printk.h             | 1 -
->   kernel/bpf/bpf_lru_list.h          | 1 +
->   6 files changed, 5 insertions(+), 2 deletions(-)
+During merge the null/empty all_cpus drops this value, which doesn't
+matter as the behavior with empty is the same as dummy:
+https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/tree/tools/lib/perf/evsel.c?h=perf/core#n119
 
+What's concerning me is the definition of empty:
+https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/tree/tools/lib/perf/cpumap.c?h=perf/core#n279
+```
+return map ? map->map[0].cpu == -1 : true;
+```
+If the first entry can be -1 and there can be other CPUs merged after
+then that cpu map will be empty by the definition above. Perhaps it
+should be:
+```
+return map ? (map->nr == 1 && map->map[0].cpu == -1) : true;
+```
+but it seems you prefer:
+```
+return (map == NULL) ? true : false;
+```
 
-I think you need to fix all files that use ____cacheline_aligned without 
-including linux/cache.h
+You'd asked what the behavior with a dummy is and clearly it is
+somewhat muddy. That is what this patch and unit test is trying to
+clean up.
 
-You can locate them with:
+Thanks,
+Ian
 
-	git grep -L linux/cache.h `git grep -l ____cacheline_aligned `
-
-
-Christophe
+> >
+> > Signed-off-by: Ian Rogers <irogers@google.com>
+> > ---
+> >  tools/lib/perf/cpumap.c   |  4 ++--
+> >  tools/perf/tests/cpumap.c | 10 +++++++++-
+> >  2 files changed, 11 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/tools/lib/perf/cpumap.c b/tools/lib/perf/cpumap.c
+> > index 384d5e076ee4..9c83675788c2 100644
+> > --- a/tools/lib/perf/cpumap.c
+> > +++ b/tools/lib/perf/cpumap.c
+> > @@ -322,9 +322,9 @@ struct perf_cpu perf_cpu_map__max(struct perf_cpu_map *map)
+> >  /** Is 'b' a subset of 'a'. */
+> >  bool perf_cpu_map__is_subset(const struct perf_cpu_map *a, const struct perf_cpu_map *b)
+> >  {
+> > -     if (a == b || !b)
+> > +     if (a == b || perf_cpu_map__empty(b))
+> >               return true;
+> > -     if (!a || b->nr > a->nr)
+> > +     if (perf_cpu_map__empty(a) || b->nr > a->nr)
+> >               return false;
+> >
+> >       for (int i = 0, j = 0; i < a->nr; i++) {
+> > diff --git a/tools/perf/tests/cpumap.c b/tools/perf/tests/cpumap.c
+> > index f94929ebb54b..d52b58395385 100644
+> > --- a/tools/perf/tests/cpumap.c
+> > +++ b/tools/perf/tests/cpumap.c
+> > @@ -128,13 +128,21 @@ static int test__cpu_map_merge(struct test_suite *test __maybe_unused, int subte
+> >       struct perf_cpu_map *a = perf_cpu_map__new("4,2,1");
+> >       struct perf_cpu_map *b = perf_cpu_map__new("4,5,7");
+> >       struct perf_cpu_map *c = perf_cpu_map__merge(a, b);
+> > +     struct perf_cpu_map *d = perf_cpu_map__dummy_new();
+> > +     struct perf_cpu_map *e = perf_cpu_map__merge(b, d);
+> >       char buf[100];
+> >
+> >       TEST_ASSERT_VAL("failed to merge map: bad nr", perf_cpu_map__nr(c) == 5);
+> >       cpu_map__snprint(c, buf, sizeof(buf));
+> >       TEST_ASSERT_VAL("failed to merge map: bad result", !strcmp(buf, "1-2,4-5,7"));
+> > -     perf_cpu_map__put(b);
+> > +
+> > +     TEST_ASSERT_VAL("failed to merge map: bad nr", perf_cpu_map__nr(e) == 3);
+> > +     cpu_map__snprint(e, buf, sizeof(buf));
+> > +     TEST_ASSERT_VAL("failed to merge map: bad result", !strcmp(buf, "4-5,7"));
+> > +
+> >       perf_cpu_map__put(c);
+> > +     perf_cpu_map__put(d);
+> > +     perf_cpu_map__put(e);
+> >       return 0;
+> >  }
+> >
+>

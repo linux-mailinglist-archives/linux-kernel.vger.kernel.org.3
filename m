@@ -2,95 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA9BF517E05
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 09:04:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B60C1517E08
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 09:04:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230372AbiECHGG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 03:06:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59816 "EHLO
+        id S231474AbiECHGR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 03:06:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231623AbiECHF5 (ORCPT
+        with ESMTP id S231247AbiECHGP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 03:05:57 -0400
-Received: from mail-qk1-f169.google.com (mail-qk1-f169.google.com [209.85.222.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4654522293;
-        Tue,  3 May 2022 00:02:26 -0700 (PDT)
-Received: by mail-qk1-f169.google.com with SMTP id j6so12993535qkp.9;
-        Tue, 03 May 2022 00:02:26 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=hSeOpGTWqeqaJ05xwK7hbvzXrVoyzqa0yoZQ8B3RFC8=;
-        b=4Uy1+tbI/THbs14zNjeL1pIvxBKXmodlGrblbrWoSsHAqOBpmMWUbqBrUx5ay1ClQe
-         OnGCDYVKUMexJo1XMzxqGRwiQtUOSunQ13Um/GpPIw9zfJzC/joIYiSQf15KAjSOclbv
-         n2hHTeORVVBAEMhYhBLZZFVR3/pKTm9Qhi9rt5mZSv/Zi96AHX/4Dm4+x5Gh42XrqN8T
-         PmAnW+l+1SVbQUf+s3I/VJZrreCQmSNZ3mED8N0LQFbpp2TWQEhFrKhguLCz+gj/SWuG
-         I72Bpld2owFj9IYSnS+fxwMPumKRZ8dVfyCrcGvp9Ds09OJsIgC3/Nv8rRZeDD9qec/D
-         z6WQ==
-X-Gm-Message-State: AOAM530dmMgW8ZB+f+pMIk+f0hc9YLObeGBrGc5IlT65P3sc6U2tEWUG
-        Hpbq8zZYV4f6BDW44w5O8tXVJI66GrGWdg==
-X-Google-Smtp-Source: ABdhPJy77pWp0ojqYVlqQubLtoCJp5QQzLlFugoCo+5U7Jp2XCmml/O1I8wLPbx9zsWQZQQ4RQf91A==
-X-Received: by 2002:a05:620a:1a97:b0:69e:b83e:bb9a with SMTP id bl23-20020a05620a1a9700b0069eb83ebb9amr11181772qkb.711.1651561345137;
-        Tue, 03 May 2022 00:02:25 -0700 (PDT)
-Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com. [209.85.128.175])
-        by smtp.gmail.com with ESMTPSA id a140-20020ae9e892000000b0069fc13ce1e1sm5582504qkg.18.2022.05.03.00.02.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 03 May 2022 00:02:24 -0700 (PDT)
-Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-2f7d7e3b5bfso170447047b3.5;
-        Tue, 03 May 2022 00:02:23 -0700 (PDT)
-X-Received: by 2002:a81:547:0:b0:2f8:6e8:19d7 with SMTP id 68-20020a810547000000b002f806e819d7mr14236459ywf.383.1651561343489;
- Tue, 03 May 2022 00:02:23 -0700 (PDT)
+        Tue, 3 May 2022 03:06:15 -0400
+Received: from out162-62-57-87.mail.qq.com (out162-62-57-87.mail.qq.com [162.62.57.87])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 409932317D
+        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 00:02:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+        s=s201512; t=1651561359;
+        bh=XiIvMOgCUkVPzFs1Jv918EjANrq4vNn2+a1QvQJivL4=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=XOzrAutbu47h56lltPaRFAyOPGgu9LSWOObmAZF3cAws1zcUsACOthkkcMGXK6f8Q
+         Qn5HzZzSWnvdXffIu7eayPKhxpRTHfHqpJzHoeqieC28lYqOscIXXcCMTVlrMUS4z8
+         UZ8vdwwAYZU+WNfFU4rrBHNlNINhCblvUUU1Tpas=
+Received: from localhost.localdomain ([59.172.176.242])
+        by newxmesmtplogicsvrsza9.qq.com (NewEsmtp) with SMTP
+        id A524095; Tue, 03 May 2022 15:02:37 +0800
+X-QQ-mid: xmsmtpt1651561357tl0c7siwz
+Message-ID: <tencent_DF81E22E7C4C49E5FF15C497B9257785A305@qq.com>
+X-QQ-XMAILINFO: NC/J3CrDtaBbw3fV/L4WSPM2RTpgTPismn0/Spg/HCb+rfIIOtHgstRNOAQo6L
+         QY6mcaY8Q+9D3SZbOLbqtFcGM7Yn8998Y7czqeISC+ftVICX8BhnvVv2fh9mquWaOF9fh3SmJbL5
+         tqGV8WNoHjt8x6TFZApR2pKw4flV07L1e/brsj+1f1XqmeRCp4VWlOxy9AsyXZc2Q8NbLyuImlbx
+         jvrmYxKPiOlnHFitKZVNqbHlPP2VbRs/s17wCCv/hPTRqD6JAgazE0QVG6fHf0HdGcio5zgfHfHs
+         UntnRX2HsJWm2aq1wL8qX3mDBpmm5vYCmUWjUiX3XEjPW9e7WxufLhOA/6vtxhqnBZMCHcmQQnOH
+         EhYO4J9fWqSMuHPDdXOXP7UdzwRUkPAwxm3b7DB1jsLrJhoin9gRV8VKqiRZjpuRRZqJXClmiiE7
+         YmovqB4JxtI/SzWlaT7aIe6t7X9IJPMmdwnvXFQVuPKkIlbnSa19+wp+10NDQUtUpniT88LTXiUQ
+         Jlrmp5GC3gdKqPV4BDggRNDS4h8H4ftS9aRc6+3SWD7a8RHh0ZMMNNou60opjhC1NEWq9xmrV0XW
+         qyxWO22Wp1Q4mP5xiyq1XjTG+XS92jJLVqWmFwozYDk6WNnieXOjlH+GR4EUR5AMWr2DcH+8rJiU
+         sJTMW+lrL6w4/N2/IbZVzE8lk5jOjZPckvAKohqo3N06DwVhZJDjUc1umXS1t4anFAWIjaamV7Vl
+         Zfj8bKEG6rX4Kkz/B/vOoT4s2aAWtuMdOJIAxfqExjCsHS+sAC3SPrVQ53y6pi4IlNc+Nd+9+TyC
+         27wimbFbOLCpBEG0irJdselsE3ZB4PeAlvQk2aDSmLfjTMr14fQp+MAUdyQHwAYZUtSP8JRFB6Ck
+         PvZKEvPNVnK8NFb6ayAighxfanlvbaXyjs6zFjozjVJY7+TA+EYfEpbdpTSX0lxurKOTlvxS6v7y
+         xUL0+j7cDnBjIQzeoHPvp7pYduDqENK4LjsNvtIqEkjXQORrRSBREdau5J5p+4
+From:   xkernel.wang@foxmail.com
+To:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
+        gregkh@linuxfoundation.org
+Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Xiaoke Wang <xkernel.wang@foxmail.com>
+Subject: [PATCH 11/12] staging: r8188eu: fix potential memory leak in _rtw_init_xmit_priv()
+Date:   Tue,  3 May 2022 15:02:24 +0800
+X-OQ-MSGID: <20220503070225.3390-1-xkernel.wang@foxmail.com>
+In-Reply-To: <tencent_A80380E4306BE7BA73E450F084232B4DFC0A@qq.com>
+References: <tencent_A80380E4306BE7BA73E450F084232B4DFC0A@qq.com>
 MIME-Version: 1.0
-References: <2584ba18-9653-9310-efc1-8b3b3e221eea@omp.ru> <11021433-66c0-3c56-42bd-207a5ae8d267@physik.fu-berlin.de>
- <2ebef1ac-e5c5-980c-9413-22a6cccdfa1d@landley.net> <CAMuHMdWN0vRYhK7O0MgOSCtisw3RDvp4vxSS2VF-9uGDdOEb7g@mail.gmail.com>
- <2a3f8b4c-2c0d-28bc-8dcd-c56c7b8a2bb4@landley.net>
-In-Reply-To: <2a3f8b4c-2c0d-28bc-8dcd-c56c7b8a2bb4@landley.net>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 3 May 2022 09:02:11 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdUZ-fTKPk1kXodjg1yi5vm3RZJ=wO9o5afA81yNvt0KYA@mail.gmail.com>
-Message-ID: <CAMuHMdUZ-fTKPk1kXodjg1yi5vm3RZJ=wO9o5afA81yNvt0KYA@mail.gmail.com>
-Subject: Re: [PATCH v3] sh: avoid using IRQ0 on SH3/4
-To:     Rob Landley <rob@landley.net>
-Cc:     John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Rich Felker <dalias@libc.org>,
-        Linux-sh list <linux-sh@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RDNS_DYNAMIC,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rob,
+From: Xiaoke Wang <xkernel.wang@foxmail.com>
 
-On Mon, May 2, 2022 at 10:02 PM Rob Landley <rob@landley.net> wrote:
-> Sounds like it's now outside of the IRQ range allocation, but I can't find where
-> that's requested when registering the controller? (What is a "swizzle" anyway?)
+In _rtw_init_xmit_priv(), there are several error paths for allocation
+failures just jump to the `exit` section. However, there is no action
+will be performed, so the allocated resources are not properly released,
+which leads to various memory leaks.
 
-PCI slots have 4 interrupts (#A, #B, #C, #D). In machines with
-multiple slots, the interrupts lines are "swizzled", to avoid that all cards
-using a single interrupt are mapped to the same host interrupt.
+To properly release them, this patch unifies the error handling code and
+several error handling paths are added.
+According to the allocation sequence, if the validation fails, it will
+jump to its corresponding error tag to release the resources.
 
-Typically, the mapping is:
+Signed-off-by: Xiaoke Wang <xkernel.wang@foxmail.com>
+---
+ drivers/staging/r8188eu/core/rtw_xmit.c | 32 ++++++++++++++++++-------
+ 1 file changed, 24 insertions(+), 8 deletions(-)
 
-    host_irq = bus_irqs[(slot + irq_pin) % 4];
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+diff --git a/drivers/staging/r8188eu/core/rtw_xmit.c b/drivers/staging/r8188eu/core/rtw_xmit.c
+index d086812..4c54647 100644
+--- a/drivers/staging/r8188eu/core/rtw_xmit.c
++++ b/drivers/staging/r8188eu/core/rtw_xmit.c
+@@ -112,7 +112,7 @@ s32	_rtw_init_xmit_priv(struct xmit_priv *pxmitpriv, struct adapter *padapter)
+ 
+ 	if (!pxmitpriv->pallocated_xmitbuf) {
+ 		res = _FAIL;
+-		goto exit;
++		goto free_frame_buf;
+ 	}
+ 
+ 	pxmitpriv->pxmitbuf = (u8 *)N_BYTE_ALIGMENT((size_t)(pxmitpriv->pallocated_xmitbuf), 4);
+@@ -134,7 +134,7 @@ s32	_rtw_init_xmit_priv(struct xmit_priv *pxmitpriv, struct adapter *padapter)
+ 			msleep(10);
+ 			res = rtw_os_xmit_resource_alloc(padapter, pxmitbuf, (MAX_XMITBUF_SZ + XMITBUF_ALIGN_SZ));
+ 			if (res == _FAIL)
+-				goto exit;
++				goto free_xmitbuf;
+ 		}
+ 
+ 		pxmitbuf->flags = XMIT_VO_QUEUE;
+@@ -152,7 +152,7 @@ s32	_rtw_init_xmit_priv(struct xmit_priv *pxmitpriv, struct adapter *padapter)
+ 
+ 	if (!pxmitpriv->pallocated_xmit_extbuf) {
+ 		res = _FAIL;
+-		goto exit;
++		goto free_xmitbuf;
+ 	}
+ 
+ 	pxmitpriv->pxmit_extbuf = (u8 *)N_BYTE_ALIGMENT((size_t)(pxmitpriv->pallocated_xmit_extbuf), 4);
+@@ -167,10 +167,8 @@ s32	_rtw_init_xmit_priv(struct xmit_priv *pxmitpriv, struct adapter *padapter)
+ 		pxmitbuf->ext_tag = true;
+ 
+ 		res = rtw_os_xmit_resource_alloc(padapter, pxmitbuf, max_xmit_extbuf_size + XMITBUF_ALIGN_SZ);
+-		if (res == _FAIL) {
+-			res = _FAIL;
+-			goto exit;
+-		}
++		if (res == _FAIL)
++			goto free_xmit_extbuf;
+ 
+ 		list_add_tail(&pxmitbuf->list, &pxmitpriv->free_xmit_extbuf_queue.queue);
+ 		pxmitbuf++;
+@@ -200,8 +198,26 @@ s32	_rtw_init_xmit_priv(struct xmit_priv *pxmitpriv, struct adapter *padapter)
+ 
+ 	rtl8188eu_init_xmit_priv(padapter);
+ 
+-exit:
++	return _SUCCESS;
+ 
++free_xmit_extbuf:
++	pxmitbuf = (struct xmit_buf *)pxmitpriv->pxmit_extbuf;
++	while (i-- > 0) {
++		rtw_os_xmit_resource_free(padapter, pxmitbuf, (max_xmit_extbuf_size + XMITBUF_ALIGN_SZ));
++		pxmitbuf++;
++	}
++	vfree(pxmitpriv->pallocated_xmit_extbuf);
++	i = NR_XMITBUFF;
++free_xmitbuf:
++	pxmitbuf = (struct xmit_buf *)pxmitpriv->pxmitbuf;
++	while (i-- > 0) {
++		rtw_os_xmit_resource_free(padapter, pxmitbuf, (MAX_XMITBUF_SZ + XMITBUF_ALIGN_SZ));
++		pxmitbuf++;
++	}
++	vfree(pxmitpriv->pallocated_xmitbuf);
++free_frame_buf:
++	vfree(pxmitpriv->pallocated_frame_buf);
++exit:
+ 	return res;
+ }
+ 
+-- 

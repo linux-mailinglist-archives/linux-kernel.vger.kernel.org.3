@@ -2,73 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E14E518910
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 17:51:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21C0B518917
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 17:52:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238697AbiECPzX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 11:55:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39242 "EHLO
+        id S238995AbiECPz2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 11:55:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238114AbiECPzU (ORCPT
+        with ESMTP id S232627AbiECPzY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 11:55:20 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F4E931DF3
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 08:51:47 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id j15so24006722wrb.2
-        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 08:51:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=3XVNWTw//x2P33682v6NyS3MKzAVxlenoKtyup9T5mU=;
-        b=p2dTj+s6tGOxAoKO+MFD+GzBNaogbuyHxrxkpY07zY697prCUCqky699LgqJ06/1lm
-         wbkSRWIGPurtaYNjrH7fNLFd1iehUhpUL+dlSLLzCWYQwCSToUjbDtvVWWME2R4qPJMw
-         WDs/rif5E67LjXwCzr/JnS5SHYzpH2wJAiEtv6ZvX1yGETTMYQJ39qIsD3JuqMZmSwuv
-         +/fYl/EwsSyjIK/3w2a2d0wBsv2GGbkhKeeK/UpZj2vOGaiG2QbbRYD4jsDt9gFLKlBH
-         qyMERdd66eTw2xIAuuIvYSY/QVsp2xaYxUl5WNH0+/BKLMQc7bHOBeCATaad3J3/Lnt+
-         +uUA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=3XVNWTw//x2P33682v6NyS3MKzAVxlenoKtyup9T5mU=;
-        b=o39hQLgdhm+mUZ5q1q0KU7eJrXQ55p1Hrv9xyvvDv1AazjRUhn6DQyRtqJvAA75VYS
-         K5f47A8jyExYNX6PZGl8/M3tuvuY+iLc4akj2oJvtewBEb24dnSKiw4aBUV0ZN7rPfwT
-         Jj/R+f479GbodoiIAgTmyZDtm5oeS7zzuRQGkx0LujOT4ZRgEtf1Y246xpmywvUPBN8x
-         ooGtLBbdq6J+8CZh2H6NIGm1fKyss7EE9rNP+LR6lUPmm6QxgZPeIXt1rqsTv3zSpaog
-         j0u0wWdL6AiX+d73U6Un/qgM0tYVohrRPv/2PfKFUP1osUCmWjzgfJk7hjbBAXm6Sz5d
-         iC6A==
-X-Gm-Message-State: AOAM533TNED/FJklfjUltj9nSpcoMcNB1DEKw6J6OoyVblFmL0AAge6R
-        kPY1++z0btouut4lB2USVVXzi51uZRtXv1AMclo=
-X-Google-Smtp-Source: ABdhPJzf5uVzicYMnLTOJWrC/r+9FRMRD1XT6VAvs3qBP/hlXXXqZ7PjLfCoesHxEvB53kiD/OOdZA==
-X-Received: by 2002:adf:cc83:0:b0:20a:ca0c:ca1 with SMTP id p3-20020adfcc83000000b0020aca0c0ca1mr13084027wrj.553.1651593105974;
-        Tue, 03 May 2022 08:51:45 -0700 (PDT)
-Received: from vmu1804.lan ([2a06:a004:d009:c8fa:102c:912a:a6e3:41ea])
-        by smtp.googlemail.com with ESMTPSA id bi26-20020a05600c3d9a00b003942a244f37sm1828549wmb.16.2022.05.03.08.51.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 May 2022 08:51:45 -0700 (PDT)
-From:   Mikhail Zhilkin <csharper2005@gmail.com>
-To:     Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>
-Cc:     Mikhail Zhilkin <csharper2005@gmail.com>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        NOGUCHI Hiroshi <drvlabo@gmail.com>,
-        INAGAKI Hiroshi <musashino.open@gmail.com>,
+        Tue, 3 May 2022 11:55:24 -0400
+Received: from mx-out1.startmail.com (mx-out1.startmail.com [145.131.90.139])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA4C431DF3;
+        Tue,  3 May 2022 08:51:50 -0700 (PDT)
+Date:   Tue, 3 May 2022 10:51:41 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=startmail.com;
+        s=2020-07; t=1651593109;
+        bh=56w8flPoDdgtjGA9GvUtnG3sqpiIHyKUNGbNmd5gImM=;
+        h=Date:From:To:Subject:Message-ID:References:MIME-Version:
+         Content-Type:Content-Disposition:In-Reply-To:From:Subject:To:Date:
+         Sender:Content-Type:Content-Transfer-Encoding:Content-Disposition:
+         Mime-Version:Reply-To:In-Reply-To:References:Message-Id:Autocrypt;
+        b=FJ/tEpdv1e0AuZ2nIJUUELwcGzM69tunHMFCt/HJJxNPkq0+GLUD7oGrkdQv1N5aR
+         ICOLWOni4cGw7aGWG2xZwEcDa7cjAlB9LLALDEAGMXaOUu/JkTRnU/F9QQTVa7bOd0
+         G4FnPjmo1K+W+bvexKlIWTUOrwfBiDYoBl+3LJecTvSVxHtcWciit4OQG+CO4pl4xx
+         MvyYEOSsDrphfcfamqZiiba2CXoCEn6/uwkqbgStr9bgyRavR0vs6Btag1xitnqWc+
+         GxsXWRPYBMI+Sb4bPX8lbOl1oODzhC36nRyiGkllsZSZ9EIsbDG+BqjPpBJIg/at6N
+         /lUwBdI9uSSMg==
+From:   "Marty E. Plummer" <hanetzer@startmail.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     arnd@arndb.de, cai.huoqing@linux.dev, christian.koenig@amd.com,
+        devicetree@vger.kernel.org, gengdongjiu@huawei.com,
+        krzysztof.kozlowski+dt@linaro.org,
+        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-mtd@lists.infradead.org,
-        Karim <Karimdplay@gmail.com>, M <x1@disroot.org>
-Subject: [PATCH v3 3/3] mtd: parsers: add support for Sercomm partitions
-Date:   Tue,  3 May 2022 15:51:40 +0000
-Message-Id: <20220503155140.2339899-1-csharper2005@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220503154254.2339744-1-csharper2005@gmail.com>
-References: <20220503154254.2339744-1-csharper2005@gmail.com>
+        linux@armlinux.org.uk, michael@walle.cc, miquel.raynal@bootlin.com,
+        mturquette@baylibre.com, novikov@ispras.ru, olof@lixom.net,
+        p.yadav@ti.com, rdunlap@infradead.org, richard@nod.at,
+        robh+dt@kernel.org, sboyd@kernel.org, soc@kernel.org,
+        sumit.semwal@linaro.org, tudor.ambarus@microchip.com,
+        vigneshr@ti.com, xuwei5@hisilicon.com
+Subject: Re: [RFC v2 2/2] arm: hisi: enable Hi3521a soc
+Message-ID: <20220503155141.ekbysx6fjom5el2h@proprietary-killer>
+References: <20220501054440.2434247-1-hanetzer@startmail.com>
+ <20220501173423.2473093-1-hanetzer@startmail.com>
+ <20220501173423.2473093-3-hanetzer@startmail.com>
+ <4cda3645-c4e8-1b3c-bd80-891afd56449a@linaro.org>
+ <20220503134459.pplgvhcckja4ivcg@proprietary-killer>
+ <75a48dfa-6fc9-aed9-b00e-d928bd9f33af@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <75a48dfa-6fc9-aed9-b00e-d928bd9f33af@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,300 +63,152 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This adds an MTD partition parser for the Sercomm partition table that
-is used in some Beeline, Netgear and Sercomm routers.
-
-The Sercomm partition map table contains real partition offsets, which
-may differ from device to device depending on the number and location of
-bad blocks on NAND.
-
-This is essentially the same code as proposed by NOGUCHI Hiroshi:
-Link: https://github.com/openwrt/openwrt/pull/1318#issuecomment-420607394
-
-Signed-off-by: NOGUCHI Hiroshi <drvlabo@gmail.com>
-Signed-off-by: Mikhail Zhilkin <csharper2005@gmail.com>
----
- drivers/mtd/parsers/Kconfig  |   9 ++
- drivers/mtd/parsers/Makefile |   1 +
- drivers/mtd/parsers/scpart.c | 240 +++++++++++++++++++++++++++++++++++
- 3 files changed, 250 insertions(+)
- create mode 100644 drivers/mtd/parsers/scpart.c
-
-diff --git a/drivers/mtd/parsers/Kconfig b/drivers/mtd/parsers/Kconfig
-index 23763d16e4f9..851f4670d89b 100644
---- a/drivers/mtd/parsers/Kconfig
-+++ b/drivers/mtd/parsers/Kconfig
-@@ -186,3 +186,12 @@ config MTD_QCOMSMEM_PARTS
- 	help
- 	  This provides support for parsing partitions from Shared Memory (SMEM)
- 	  for NAND and SPI flash on Qualcomm platforms.
-+
-+config MTD_SERCOMM_PARTS
-+	tristate "Sercomm partition table parser"
-+	depends on MTD
-+	help
-+	  This provides partitions table parser for devices with Sercomm
-+	  partition map. This partition table contains real partition
-+	  offsets, which may differ from device to device depending on the
-+	  number and location of bad blocks on NAND.
-diff --git a/drivers/mtd/parsers/Makefile b/drivers/mtd/parsers/Makefile
-index 2e98aa048278..2fcf0ab9e7da 100644
---- a/drivers/mtd/parsers/Makefile
-+++ b/drivers/mtd/parsers/Makefile
-@@ -10,6 +10,7 @@ ofpart-$(CONFIG_MTD_OF_PARTS_LINKSYS_NS)+= ofpart_linksys_ns.o
- obj-$(CONFIG_MTD_PARSER_IMAGETAG)	+= parser_imagetag.o
- obj-$(CONFIG_MTD_AFS_PARTS)		+= afs.o
- obj-$(CONFIG_MTD_PARSER_TRX)		+= parser_trx.o
-+obj-$(CONFIG_MTD_SERCOMM_PARTS)		+= scpart.o
- obj-$(CONFIG_MTD_SHARPSL_PARTS)		+= sharpslpart.o
- obj-$(CONFIG_MTD_REDBOOT_PARTS)		+= redboot.o
- obj-$(CONFIG_MTD_QCOMSMEM_PARTS)	+= qcomsmempart.o
-diff --git a/drivers/mtd/parsers/scpart.c b/drivers/mtd/parsers/scpart.c
-new file mode 100644
-index 000000000000..d7bb736c9f2a
---- /dev/null
-+++ b/drivers/mtd/parsers/scpart.c
-@@ -0,0 +1,240 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ *    drivers/mtd/scpart.c: Sercomm Partition Parser
-+ *
-+ *    Copyright (C) 2018 NOGUCHI Hiroshi
-+ *    Copyright (C) 2022 Mikhail Zhilkin
-+ */
-+
-+#include <linux/kernel.h>
-+#include <linux/slab.h>
-+#include <linux/mtd/mtd.h>
-+#include <linux/mtd/partitions.h>
-+#include <linux/module.h>
-+
-+#define	MOD_NAME	"scpart"
-+
-+#ifdef pr_fmt
-+#undef pr_fmt
-+#endif
-+
-+#define pr_fmt(fmt) MOD_NAME ": " fmt
-+
-+static const char sc_part_magic[] = {
-+	'S', 'C', 'F', 'L', 'M', 'A', 'P', 'O', 'K', '\0',
-+};
-+#define	PART_MAGIC_LEN	sizeof(sc_part_magic)
-+
-+/* assumes that all fields are set by CPU native endian */
-+struct sc_part_desc {
-+	uint32_t	part_id;
-+	uint32_t	part_offs;
-+	uint32_t	part_bytes;
-+};
-+#define	ID_ALREADY_FOUND	0xFFFFFFFFUL
-+
-+#define	MAP_OFFS_IN_BLK	0x800
-+
-+#define	MAP_MIRROR_NUM	2
-+
-+static int scpart_desc_is_valid(struct sc_part_desc *pdesc)
-+{
-+	return ((pdesc->part_id != 0xFFFFFFFFUL) &&
-+		(pdesc->part_offs != 0xFFFFFFFFUL) &&
-+		(pdesc->part_bytes != 0xFFFFFFFFUL));
-+}
-+
-+static int scpart_scan_partmap(struct mtd_info *master, loff_t partmap_offs,
-+			       struct sc_part_desc **ppdesc)
-+{
-+	uint8_t *buf;
-+	loff_t offs;
-+	size_t retlen;
-+	struct sc_part_desc *pdesc = NULL;
-+	struct sc_part_desc *tmpdesc;
-+	int cnt = 0;
-+	int res2;
-+	int res = 0;
-+
-+	buf = kzalloc(master->erasesize, GFP_KERNEL);
-+	if (!buf) {
-+		res = -ENOMEM;
-+		goto out;
-+	}
-+
-+	res2 = mtd_read(master, partmap_offs, master->erasesize, &retlen, buf);
-+	if (res2 || retlen != master->erasesize) {
-+		res = -EIO;
-+		goto free;
-+	}
-+
-+	offs = MAP_OFFS_IN_BLK;
-+	while (offs < (master->erasesize - sizeof(*tmpdesc))) {
-+		tmpdesc = (struct sc_part_desc *)&(buf[offs]);
-+		if (!scpart_desc_is_valid(tmpdesc))
-+			break;
-+		cnt++;
-+		offs += sizeof(*tmpdesc);
-+	}
-+
-+	if (cnt > 0) {
-+		int bytes = cnt * sizeof(*pdesc);
-+
-+		pdesc = kcalloc(cnt, sizeof(*pdesc), GFP_KERNEL);
-+		if (!pdesc) {
-+			res = -ENOMEM;
-+			goto free;
-+		}
-+		memcpy(pdesc, &(buf[MAP_OFFS_IN_BLK]), bytes);
-+
-+		*ppdesc = pdesc;
-+		res = cnt;
-+	}
-+
-+free:
-+	kfree(buf);
-+
-+out:
-+	return res;
-+}
-+
-+static int scpart_find_partmap(struct mtd_info *master,
-+			       struct sc_part_desc **ppdesc)
-+{
-+	loff_t offs;
-+	uint8_t rdbuf[PART_MAGIC_LEN];
-+	size_t retlen;
-+	int magic_found = 0;
-+	int res2;
-+	int res = 0;
-+
-+	offs = 0;
-+	while ((magic_found < MAP_MIRROR_NUM) &&
-+			(offs < master->size) && !mtd_block_isbad(master, offs)) {
-+		res2 = mtd_read(master, offs, PART_MAGIC_LEN, &retlen, rdbuf);
-+		if (res2 || (retlen != PART_MAGIC_LEN)) {
-+			res = -EIO;
-+			goto out;
-+		}
-+		if (!memcmp(rdbuf, sc_part_magic, PART_MAGIC_LEN)) {
-+			pr_debug("Signature found at 0x%llx\n", offs);
-+			magic_found++;
-+			res = scpart_scan_partmap(master, offs, ppdesc);
-+			if (res > 0)
-+				goto out;
-+		}
-+		offs += master->erasesize;
-+	}
-+
-+out:
-+	if (res > 0)
-+		pr_info("Valid 'SC PART MAP' (%d partitions) found at 0x%llx\n", res, offs);
-+	else
-+		pr_info("No valid 'SC PART MAP' was found\n");
-+
-+	return res;
-+}
-+
-+static int scpart_parse(struct mtd_info *master,
-+			const struct mtd_partition **pparts,
-+			struct mtd_part_parser_data *data)
-+{
-+	struct sc_part_desc *scpart_map = NULL;
-+	struct mtd_partition *parts = NULL;
-+	struct device_node *mtd_node;
-+	struct device_node *ofpart_node;
-+	struct device_node *pp;
-+	const char *partname;
-+	int nr_scparts;
-+	int nr_parts = 0;
-+	int n;
-+	int res = 0;
-+
-+	mtd_node = mtd_get_of_node(master);
-+	if (!mtd_node)
-+		goto out;
-+
-+	ofpart_node = of_get_child_by_name(mtd_node, "partitions");
-+	if (!ofpart_node)
-+		goto out;
-+
-+	nr_scparts = scpart_find_partmap(master, &scpart_map);
-+	if (nr_scparts <= 0) {
-+		res = nr_scparts;
-+		goto free;
-+	}
-+
-+	parts = kcalloc(of_get_child_count(ofpart_node), sizeof(*parts),
-+		GFP_KERNEL);
-+	if (!parts) {
-+		res = -ENOMEM;
-+		goto out;
-+	}
-+
-+	for_each_child_of_node(ofpart_node, pp) {
-+		u32 scpart_id;
-+
-+		if (of_property_read_u32(pp, "sercomm,scpart-id", &scpart_id))
-+			continue;
-+
-+		for (n = 0 ; n < nr_scparts ; n++)
-+			if ((scpart_map[n].part_id != ID_ALREADY_FOUND) &&
-+					(scpart_id == scpart_map[n].part_id))
-+				break;
-+		if (n >= nr_scparts)
-+			/* not match */
-+			continue;
-+
-+		/* add the partition found in OF into MTD partition array */
-+		parts[nr_parts].offset = scpart_map[n].part_offs;
-+		parts[nr_parts].size = scpart_map[n].part_bytes;
-+		parts[nr_parts].of_node = pp;
-+
-+		if (!of_property_read_string(pp, "label", &partname))
-+			parts[nr_parts].name = partname;
-+		if (of_property_read_bool(pp, "read-only"))
-+			parts[nr_parts].mask_flags |= MTD_WRITEABLE;
-+		if (of_property_read_bool(pp, "lock"))
-+			parts[nr_parts].mask_flags |= MTD_POWERUP_LOCK;
-+
-+		/* mark as 'done' */
-+		scpart_map[n].part_id = ID_ALREADY_FOUND;
-+
-+		nr_parts++;
-+	}
-+
-+	if (nr_parts > 0) {
-+		*pparts = parts;
-+		res = nr_parts;
-+	} else
-+		pr_info("No partition in OF matches partition ID with 'SC PART MAP'.\n");
-+
-+	of_node_put(pp);
-+
-+free:
-+	kfree(scpart_map);
-+	if (res <= 0)
-+		kfree(parts);
-+
-+out:
-+	return res;
-+}
-+
-+static const struct of_device_id scpart_parser_of_match_table[] = {
-+	{ .compatible = "sercomm,sc-partitions" },
-+	{},
-+};
-+MODULE_DEVICE_TABLE(of, scpart_parser_of_match_table);
-+
-+static struct mtd_part_parser scpart_parser = {
-+	.parse_fn = scpart_parse,
-+	.name = "scpart",
-+	.of_match_table = scpart_parser_of_match_table,
-+};
-+module_mtd_part_parser(scpart_parser);
-+
-+/* mtd parsers will request the module by parser name */
-+MODULE_ALIAS("scpart");
-+MODULE_LICENSE("GPL");
-+MODULE_AUTHOR("NOGUCHI Hiroshi <drvlabo@gmail.com>");
-+MODULE_DESCRIPTION("Sercomm partition parser");
--- 
-2.25.1
-
+On Tue, May 03, 2022 at 04:55:23PM +0200, Krzysztof Kozlowski wrote:
+> On 03/05/2022 15:44, Marty E. Plummer wrote:
+> > On Tue, May 03, 2022 at 01:47:01PM +0200, Krzysztof Kozlowski wrote:
+> >> On 01/05/2022 19:34, Marty E. Plummer wrote:
+> >>> Enable Hisilicon Hi3521A/Hi3520DCV300 SoC. This SoC series includes
+> >>> hardware mutlimedia codec cores, commonly used in consumer cctv/dvr
+> >>> security systems and ipcameras. The arm core is a Cortex A7.
+> >>>
+> >>> Add hi3521a.dtsi and hi3521a-rs-dm290e.dts for RaySharp CCTV systems,
+> >>> marketed under the name Samsung SDR-B74301N.
+> >>
+> >> Thank you for your patch. There is something to discuss/improve.
+> >>
+> >>>
+> >>> Signed-off-by: Marty E. Plummer <hanetzer@startmail.com>
+> >>> ---
+> >>>  arch/arm/boot/dts/Makefile              |   2 +
+> >>>  arch/arm/boot/dts/hi3521a-rs-dm290e.dts | 134 ++++++++
+> >>>  arch/arm/boot/dts/hi3521a.dtsi          | 423 ++++++++++++++++++++++++
+> >>
+> >> DTSes go to separate patches.
+> > Do you mean dts and dtsi need to be separate patches?
+> 
+> I mean that any changes to "arch/arm/boot/dts/" have to be separate from
+> other changes. These can be still one patch. See other examples on
+> mailing lists.
+> 
+> >>
+> >>>  arch/arm/mach-hisi/Kconfig              |   9 +
+> >>>  4 files changed, 568 insertions(+)
+> >>>  create mode 100644 arch/arm/boot/dts/hi3521a-rs-dm290e.dts
+> >>>  create mode 100644 arch/arm/boot/dts/hi3521a.dtsi
+> >>>
+> >>> diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+> >>> index 7c16f8a2b738..535cef3b14ab 100644
+> >>> --- a/arch/arm/boot/dts/Makefile
+> >>> +++ b/arch/arm/boot/dts/Makefile
+> >>> @@ -242,6 +242,8 @@ dtb-$(CONFIG_ARCH_GEMINI) += \
+> >>>  	gemini-ssi1328.dtb \
+> >>>  	gemini-wbd111.dtb \
+> >>>  	gemini-wbd222.dtb
+> >>> +dtb-$(CONFIG_ARCH_HI3521A) += \
+> >>> +	hi3521a-rs-dm290e.dtb
+> >>>  dtb-$(CONFIG_ARCH_HI3xxx) += \
+> >>>  	hi3620-hi4511.dtb
+> >>>  dtb-$(CONFIG_ARCH_HIGHBANK) += \
+> >>> diff --git a/arch/arm/boot/dts/hi3521a-rs-dm290e.dts b/arch/arm/boot/dts/hi3521a-rs-dm290e.dts
+> >>> new file mode 100644
+> >>> index 000000000000..b24fcf2ca85e
+> >>> --- /dev/null
+> >>> +++ b/arch/arm/boot/dts/hi3521a-rs-dm290e.dts
+> >>> @@ -0,0 +1,134 @@
+> >>> +// SPDX-License-Identifier: GPL-2.0-or-later
+> >>> +/*
+> >>> + * Copyright (C) 2017-2022 Marty Plummer <hanetzer@startmail.com>
+> >>> + */
+> >>> +
+> >>> +#include "hi3521a.dtsi"
+> >>> +
+> >>> +/ {
+> >>> +	model = "RaySharp RS-DM-290E DVR Board";
+> >>> +	compatible = "raysharp,rs-dm-290e", "hisilicon,hi3521a";
+> >>
+> >> Please run checkpatch and fix the warnings.
+> >>
+> > sunova. I could have sworn I had my editor setup right for whitespace
+> > and such.
+> 
+> It's not about whitespace but:
+> 
+ah. Well, I'm not certain what we'll even call the board in the end,
+kind of a placeholder for now. What do you even name devices which are
+generic consumer hardware that they never intended to be tinkered with
+this way? the board is whiteboxed by several different vendors.
+> WARNING: DT compatible string "raysharp,rs-dm-290e" appears
+> un-documented -- check ./Documentation/devicetree/bindings/
+> 
+> 
+> WARNING: DT compatible string vendor "raysharp" appears un-documented --
+> check ./Documentation/devicetree/bindings/vendor-prefixes.yaml
+> 
+> 
+> (...)
+> 
+> > Ah gotcha.
+> >>> +	};
+> >>> +
+> >>> +	xtal24m: xtal24m {
+> >>
+> >> Generic node names, so one of: "clock-0" "clock-xtal24m"
+> >>
+> > Will do.
+> >>> +		compatible = "fixed-clock";
+> >>> +		#clock-cells = <0>;
+> >>> +		clock-frequency = <24000000>;
+> >>
+> >> This does not look like property of the SoC, so should be defined by boards.
+> >>
+> > SoC requires a 24Mhz osc (and a 32khz one as well), so it'll always be
+> > present regardless.
+> 
+> Sure, but DTS/DTSI describes hardware. If the clock is not in the SoC
+> but on the board, it should be in the board DTSI. Many times such clocks
+> are put partially in DTSI and only their specific parts - frequency - in
+> the board DTS, to indicate that implementation is relevant to the board,
+> not SoC.
+> 
+Ah ok, that makes sense I guess.
+> >>> +	};
+> >>> +
+> >>> +	clk_3m: clk_3m {
+> >>
+> >> No underscores in node names, generic node name (see above).
+> >>
+> > early debugging clock, will be removed.
+> >>> +		compatible = "fixed-clock";
+> >>> +		#clock-cells = <0>;
+> >>> +		clock-frequency = <3000000>;
+> >>
+> >> This does not look like property of the SoC, so should be defined by boards.
+> 
+> (...)
+> 
+> >>
+> >>> +			status = "disabled";
+> >>> +		};
+> >>> +
+> >>> +		dual_timer0: timer@12000000 {
+> >>> +			compatible = "arm,sp804", "arm,primecell";
+> >>> +			interrupts = <GIC_SPI 1 IRQ_TYPE_LEVEL_HIGH>,
+> >>> +				     <GIC_SPI 1 IRQ_TYPE_LEVEL_HIGH>;
+> >>
+> >> A bit weird interrupts... the same?
+> >>
+> > Yes, though I am aware that some sp804 timers do have a separate
+> > interrupts per pair.
+> 
+> They have also separate interrupts, one combined interrupt or one sole
+> interrupt. However what you described here is one interrupt line
+> physically connected to two separate pins on the device yet still not
+> being somehow shared (shared as "combined interrupt"). I don't think it
+> is your case...
+> 
+Unsure. datasheet just says '33 | Timer0/Timer1'. I don't think these
+timers are attached to pins, however.
+> 
+> 
+> Best regards,
+> Krzysztof

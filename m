@@ -2,92 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55A27517F32
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 09:52:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24ADE517CF4
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 08:02:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232466AbiECHzn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 03:55:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60496 "EHLO
+        id S229595AbiECGFx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 02:05:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232493AbiECHxp (ORCPT
+        with ESMTP id S229509AbiECGFm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 03:53:45 -0400
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD2C9B1;
-        Tue,  3 May 2022 00:50:11 -0700 (PDT)
-Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2430TJqj004092;
-        Tue, 3 May 2022 00:52:08 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type : content-transfer-encoding; s=corp-2021-07-09;
- bh=rMhmyDAWAAQBe/N24LM8za9MtKczC9UpeK3Jvgs3Gsc=;
- b=Y6kbJsVuY4A1HZIad0JCerTR5spbyya6N3GL14AXgAX0+DZQum4Z6rNmqKgs1/+XuktY
- GtNmHwV8jWHLN6IHYjX+6qtkxcTXusp1AKB2U9Vahg89rLjccSjF/Dtw+nlVQpPTEg3n
- 5Agjw1CoODs+IFqj+TtVaVkTq/hveb+aRs6lDwt3jpKlq2+MwbgD4y7mDP9VHgPOYmj0
- MnLdyGhepKcBnsrB1WYxZCL4kI3vvPXK+PJkHvGLr7k1cwtwmoU+6L1L/XNH+7T9GuVx
- tmDAPo4WOVwFrAD4CYQfhQ69d+Q9imU0IS8Nd6w9TEYAub/EXfQvorNALPQlxAmCy6T+ Xg== 
-Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3frw0amhjq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 03 May 2022 00:52:08 +0000
-Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 2430op0H008959;
-        Tue, 3 May 2022 00:52:07 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3fruj83xcj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 03 May 2022 00:52:07 +0000
-Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 2430plk6010389;
-        Tue, 3 May 2022 00:52:06 GMT
-Received: from ca-mkp.mkp.ca.oracle.com (ca-mkp.ca.oracle.com [10.156.108.201])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3fruj83x4g-35;
-        Tue, 03 May 2022 00:52:06 +0000
-From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-To:     jejb@linux.ibm.com, Xiaomeng Tong <xiam0nd.tong@gmail.com>,
-        dc395x@twibble.org, aliakc@web.de, lenehan@twibble.org,
-        oliver@neukum.org
-Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        stable@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-scsi@vger.kernel.org
-Subject: Re: [RESEND][PATCH] scsi: dc395x: fix a missing check on list iterator
-Date:   Mon,  2 May 2022 20:51:45 -0400
-Message-Id: <165153836363.24053.2716522783006312499.b4-ty@oracle.com>
-X-Mailer: git-send-email 2.35.2
-In-Reply-To: <20220414040231.2662-1-xiam0nd.tong@gmail.com>
-References: <20220414040231.2662-1-xiam0nd.tong@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-GUID: a7lEWuHbrGWRMaXgoBhaOwyPP_XH7bL1
-X-Proofpoint-ORIG-GUID: a7lEWuHbrGWRMaXgoBhaOwyPP_XH7bL1
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 3 May 2022 02:05:42 -0400
+Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35CF33334F
+        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 23:02:09 -0700 (PDT)
+Received: by mail-pg1-x549.google.com with SMTP id 64-20020a630843000000b0039d909676d5so7974907pgi.16
+        for <linux-kernel@vger.kernel.org>; Mon, 02 May 2022 23:02:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=kTAg03mTTCXeCcuJ04g4+/5QXg1dJs7XUUQ18YoBJb4=;
+        b=rYqaf7w+n9R8fMyETNl8zks1oz19oMgwwIZFfSNhYFA2UP8u5AzxkwgHYcSPkBooid
+         p+G9GcN5huLi7FPuX4EGni+svFvcJv16TOswggp82WXCVi9Eq/Ldj9PhDQxyIFba+VAF
+         1cPMhaUJZ1KNjVL1I0dJQamZV5GPFbe9gHtBUloFbWxpJGKBsP9tjFzDKI8pYho5i1bP
+         bLvoa5N6qESOumCtzSx2A3GHpXLNQ8uD2Hjx1yGC2LUWMosQW/bjTcStClrRuu1u7YeH
+         952Svo9e0nL45s/DKWKHkm8/KzZj/+7M/RXUnSqcy080vsTzroFDfMi+Az3NuzVBU8Jv
+         l7DA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=kTAg03mTTCXeCcuJ04g4+/5QXg1dJs7XUUQ18YoBJb4=;
+        b=DFirq44PA7R78HLBlf5EQjUFnpLbppHU2nHgF278XuXb67j5s9+DEuK+xg+5s7NeyA
+         nvkX6AZvDxoqYVQnqNVdnGleTswilFH5sk9Ei+7iV7L+ppxY/Jhz0+FFOsLAv7uaEk1v
+         iFYIsRuDNGwLJ4JDFMztQ7PAiZmd1GGeLTLGiFV8+tU2NzPNAqSUClGBUmCSD9CoihcH
+         eUjdTVSuagEF22DwByqwMAcG0tmR7nIQGb1QEm7DzNjYdk+ITfQLcaNNuGhsKW+rMR/3
+         si9V5vz/6BwoM8z7/JkNbQSHvsXkFrlT/PMEtpgLs35kgmCMQriNaDMldMEVwcBB9LHP
+         +teA==
+X-Gm-Message-State: AOAM5326Ecekc8BN49FiQMTQSNCSZScNsFVj70e9dsGqiCLG0WgWLB1H
+        a+od8AA9xjKvA0tXyc+oC3zwwIctbcY=
+X-Google-Smtp-Source: ABdhPJzUW8Zgn8Un8J9KldDH91O2q0lgCYaxF4H1EN1LSeVf5TqYyQZd5GZhdrxDdg37sAXbWxGDWZSODGs=
+X-Received: from oupton3.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:21eb])
+ (user=oupton job=sendgmr) by 2002:aa7:91c8:0:b0:50c:d1d5:3525 with SMTP id
+ z8-20020aa791c8000000b0050cd1d53525mr14936138pfa.50.1651557728500; Mon, 02
+ May 2022 23:02:08 -0700 (PDT)
+Date:   Tue,  3 May 2022 06:01:58 +0000
+Message-Id: <20220503060205.2823727-1-oupton@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.36.0.464.gb9c8b46e94-goog
+Subject: [PATCH v4 0/7] KVM: arm64: Limit feature register reads from AArch32
+From:   Oliver Upton <oupton@google.com>
+To:     kvmarm@lists.cs.columbia.edu
+Cc:     kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, maz@kernel.org, james.morse@arm.com,
+        alexandru.elisei@arm.com, suzuki.poulose@arm.com,
+        reijiw@google.com, ricarkol@google.com,
+        Oliver Upton <oupton@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 14 Apr 2022 12:02:31 +0800, Xiaomeng Tong wrote:
+KVM/arm64 does not restrict the guest's view of the AArch32 feature
+registers when read from AArch32. HCR_EL2.TID3 is cleared for AArch32
+guests, meaning that register reads come straight from hardware. This is
+problematic as KVM relies on read_sanitised_ftr_reg() to expose a set of
+features consistent for a particular system.
 
-> The bug is here:
-> 	p->target_id, p->target_lun);
-> 
-> The list iterator 'p' will point to a bogus position containing
-> HEAD if the list is empty or no element is found. This case must
-> be checked before any use of the iterator, otherwise it will
-> lead to a invalid memory access.
-> 
-> [...]
+Appropriate handlers must first be put in place for CP10 and CP15 ID
+register accesses before setting TID3. Rather than exhaustively
+enumerating each of the encodings for CP10 and CP15 registers, take the
+lazy route and aim the register accesses at the AArch64 system register
+table.
 
-Applied to 5.19/scsi-queue, thanks!
+Patches 1-2 are small cleanups to how we handle register emulation
+failure. No functional change for current KVM, but required to do
+register emulation correctly in this series.
 
-[1/1] scsi: dc395x: fix a missing check on list iterator
-      https://git.kernel.org/mkp/scsi/c/036a45aa587a
+Patch 3 reroutes the CP15 registers into the AArch64 table, taking care
+to immediately RAZ undefined ranges of registers. This is done to avoid
+possibly conflicting with encodings for future AArch64 registers.
+
+Patch 4 installs an exit handler for the CP10 ID registers and also
+relies on the general AArch64 register handler to implement reads.
+
+Patch 5 actually sets TID3 for AArch32 guests, providing known-safe
+values for feature register accesses.
+
+Patch 6 makes KVM UNDEF the guest on an unsupported PMU reg access.
+Finally, patch 7 drops the intermediate fix of returning early from
+register accesses if the PMU is disabled.
+
+There is an argument that the series is in fact a bug fix for running
+AArch32 VMs on heterogeneous systems. To that end, it could be
+blamed/backported to when we first knew better:
+
+  93390c0a1b20 ("arm64: KVM: Hide unsupported AArch64 CPU features from
+  guests")
+
+But I left that tag off as in the aforementioned change skipping
+AArch32 was intentional. Up to you, Marc, if you want to call it a
+bugfix ;-)
+
+Applies cleanly to 5.18-rc5.
+
+Tested with AArch32 kvm-unit-tests and booting an AArch32 debian guest
+on a Raspberry Pi 4. Additionally, I tested AArch32 kvm-unit-tests w/
+pmu={on,off} and saw no splat, as Alex had discovered [1]. The test
+correctly skips with the PMU feature bit disabled now.
+
+Furthermore, I hacked up the test even more to ignore ID_DFR0.PerfMon to
+verify that the guest UNDEFs when the PMU is disabled (and doesn't blow
+up the host kernel).
+
+[1]: https://lore.kernel.org/r/20220425145530.723858-1-alexandru.elisei@arm.com
+
+v1: https://lore.kernel.org/kvmarm/20220329011301.1166265-1-oupton@google.com/
+v2: https://lore.kernel.org/r/20220401010832.3425787-1-oupton@google.com
+v3: https://lore.kernel.org/kvmarm/20220425235342.3210912-1-oupton@google.com
+
+v3 -> v4:
+  - Grab Alex's patch for using pmu_visibility() to hide PMU regs
+  - Revert Alex's intermediate fix of silently sinking PMU reg
+    read/writes
+
+v2 -> v3:
+  - Collect R-b from Reiji (thanks!)
+  - Adopt Marc's suggestion for CP15 register handling
+  - Avoid writing to Rt when emulation fails (Marc)
+  - Print some debug info on an unexpected CP10 register access (Reiji)
+
+v1 -> v2:
+  - Actually set TID3! Oops.
+  - Refactor kvm_emulate_cp15_id_reg() to check preconditions before
+    proceeding to emulation (Reiji)
+  - Tighten up comment on kvm_is_cp15_id_reg() to indicate that the only
+    other trapped ID register (CTR) is already handled in the cp15
+
+Alexandru Elisei (1):
+  KVM/arm64: Hide AArch32 PMU registers when not available
+
+Oliver Upton (6):
+  KVM: arm64: Return a bool from emulate_cp()
+  KVM: arm64: Don't write to Rt unless sys_reg emulation succeeds
+  KVM: arm64: Wire up CP15 feature registers to their AArch64
+    equivalents
+  KVM: arm64: Plumb cp10 ID traps through the AArch64 sysreg handler
+  KVM: arm64: Start trapping ID registers for 32 bit guests
+  Revert "KVM/arm64: Don't emulate a PMU for 32-bit guests if feature
+    not set"
+
+ arch/arm64/include/asm/kvm_arm.h     |   3 +-
+ arch/arm64/include/asm/kvm_emulate.h |   7 -
+ arch/arm64/include/asm/kvm_host.h    |   1 +
+ arch/arm64/kvm/handle_exit.c         |   1 +
+ arch/arm64/kvm/pmu-emul.c            |  23 +--
+ arch/arm64/kvm/sys_regs.c            | 257 +++++++++++++++++++++------
+ arch/arm64/kvm/sys_regs.h            |   9 +-
+ 7 files changed, 211 insertions(+), 90 deletions(-)
 
 -- 
-Martin K. Petersen	Oracle Linux Engineering
+2.36.0.464.gb9c8b46e94-goog
+

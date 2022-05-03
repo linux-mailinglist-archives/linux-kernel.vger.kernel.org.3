@@ -2,147 +2,382 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D7A75187CA
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 17:03:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05DC85187D9
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 17:06:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237749AbiECPGf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 11:06:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60292 "EHLO
+        id S237875AbiECPJ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 11:09:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237740AbiECPGb (ORCPT
+        with ESMTP id S237919AbiECPJK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 11:06:31 -0400
-Received: from mail-oa1-x2c.google.com (mail-oa1-x2c.google.com [IPv6:2001:4860:4864:20::2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF4703A193
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 08:02:58 -0700 (PDT)
-Received: by mail-oa1-x2c.google.com with SMTP id 586e51a60fabf-ed9ac77cbbso6849682fac.1
-        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 08:02:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=gQLzkke3mAD6r/LF03DB/YtaShDebAvgN9C8Yr2tvxQ=;
-        b=pEO2gBgz8m+NCeMczhVBvPhu22BV0XIfYT8yEGOwHAJesP6vo4gLVHDPyZENviv8uO
-         FJ9sYwagICWrZOKPqaunpmUbY8Ee3IYIzTb51rhiftaHBQdcWjaXqk1nlhtR10jf77eU
-         tt39+/4E4Y8XA2DfUYMEgG+OlUaNoGa0nIykYox9y2tS/ejplAvlEzLcCI3vGlCoIk26
-         y4+81KlsfpnvLqPlb8YJaWGKd/Ze1j34ZstzmzktulR1thxIu62lKh6t6FUM7xhxM0/t
-         4h7fZV/dfPfiLAZV5iSCkzk5CfKspdvvLhrJnG3n6NmKl3tw97hReYlKP8RvVew9p4Fm
-         pTiQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=gQLzkke3mAD6r/LF03DB/YtaShDebAvgN9C8Yr2tvxQ=;
-        b=YH0A6WCF0cKpTvWK7Vk+sxV8UQxJ3yMzdPcKHYBZjHWAPzgWykd+ekhyRrMby3qBZS
-         erJUjbzxl8aD4jX6oGpfEPZFAkFA32HyGr2ulWe6yPZvhNq9c48984IKA1b08Zxiyw3z
-         85lqFIZfm4yykMmXTlifRpG+y2zOyT4ZhZGe3BT0mimpa7uSzOPoQN2p7FNG1RS8mO2N
-         L5HeiN9tsHtFTsySEFlb/dWql8+ekaCyOoNBQFLownzbdvdo1yDT8Md8jblHQ1yfAXnw
-         dw7cYlCexa5EIx7i3udw0Nw4azu7cfhDink0xQAP5yxrl4c994OWUdylq9WuP7tfaHuw
-         e+bA==
-X-Gm-Message-State: AOAM531tTr/ZpCCGYK7Zt8oIhNlerEcQrxbfa3+Q0hpB2LAwZaoFdNG5
-        BRu8zlPQUebrfvzNXhk5/umBQQ==
-X-Google-Smtp-Source: ABdhPJwVRcQPpPZBizpnHmcx7jLJeBLPtgfMHJLo4IdMsx7TVzgfl0A5BWi8V0xE/3rw2ahHAwYj+w==
-X-Received: by 2002:a05:6870:d1d4:b0:e9:c135:2730 with SMTP id b20-20020a056870d1d400b000e9c1352730mr1947852oac.77.1651590177928;
-        Tue, 03 May 2022 08:02:57 -0700 (PDT)
-Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id j5-20020a9d7685000000b006060322125asm4154673otl.42.2022.05.03.08.02.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 May 2022 08:02:56 -0700 (PDT)
-Date:   Tue, 3 May 2022 10:02:51 -0500
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Robert Foss <robert.foss@linaro.org>
-Cc:     agross@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
-        robh+dt@kernel.org, krzk+dt@kernel.org, jonathan@marek.ca,
-        tdas@codeaurora.org, anischal@codeaurora.org,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Subject: Re: [PATCH v2 2/8] clk: Introduce CLK_ASSUME_ENABLED_WHEN_UNUSED
-Message-ID: <YnFEGzTQMsNpczai@builder.lan>
-References: <20220503130448.520470-1-robert.foss@linaro.org>
- <20220503130448.520470-2-robert.foss@linaro.org>
+        Tue, 3 May 2022 11:09:10 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F79C2A265;
+        Tue,  3 May 2022 08:05:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1651590197;
+        bh=OcpafLIt0jbneUh+lh/+Hat5tB4rpXqh9esglhCE1PA=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=J+keRjufRwAUUf2PcbgLNwiW6Tczw23s5ydI8twe+7t3Mv59Ff6aSzKs9u07oxywi
+         Wk6ZesMMLwLbGHLKaxKQcEO3xbbnQOkAAWWAqyLeoKc4BgJa2uyq4unTIvuXPVb/gp
+         783cO9vUh9S4925R1yr4Im5fSD4PSBBq1AyF9Tkw=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [80.245.79.168] ([80.245.79.168]) by web-mail.gmx.net
+ (3c-app-gmx-bap25.server.lan [172.19.172.95]) (via HTTP); Tue, 3 May 2022
+ 17:03:17 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220503130448.520470-2-robert.foss@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Message-ID: <trinity-213ab6b1-ccff-4429-b76c-623c529f6f73-1651590197578@3c-app-gmx-bap25>
+From:   Frank Wunderlich <frank-w@public-files.de>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Greg Ungerer <gerg@kernel.org>,
+        =?UTF-8?Q?Ren=C3=A9_van_Dorst?= <opensource@vdorst.com>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        Frank Wunderlich <linux@fw-web.de>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: Aw: Re:  Re: [RFC v1] dt-bindings: net: dsa: convert binding for
+ mediatek switches
+Content-Type: text/plain; charset=UTF-8
+Date:   Tue, 3 May 2022 17:03:17 +0200
+Importance: normal
+Sensitivity: Normal
+In-Reply-To: <10770ff5-c9b1-7364-4276-05fa0c393d3b@linaro.org>
+References: <20220502153238.85090-1-linux@fw-web.de>
+ <d29637f8-87ff-b5f0-9604-89b51a2ba7c1@linaro.org>
+ <trinity-cda3b94f-8556-4b83-bc34-d2c215f93bcd-1651587032669@3c-app-gmx-bap25>
+ <10770ff5-c9b1-7364-4276-05fa0c393d3b@linaro.org>
+X-UI-Message-Type: mail
+X-Priority: 3
+X-Provags-ID: V03:K1:412/kqjZIklGXFr8Vb2bmPU4hB0IuTBE1tkzXvY79SrJpQxz416SoaFKK9pphNaVQjsGu
+ +NYzxSyHxPy7LiC3qq3uB3vzyIBI/nY/NfEzZyMlGIwwT90CqICKvGnqSx2s6zIXRIiOJ8QI2/e1
+ 0AVFBKhNZu99fXfWQjowWBjl5KXHacNsn4d+6nRmUVcNxmQVnhQDg/5UXTyyTknC7Z8NEcXChH58
+ z+P1lQU2p3e+hftjX6Fgx1aFIdzbOG8cw/GnDmhl74bqbMwBQIzuxngEO2+m7vQk8+u+o8ZBDfrs
+ fY=
+X-UI-Out-Filterresults: notjunk:1;V03:K0:G5iULIMJIC8=:XNcQJK0m65jKrYRh25eIDF
+ vOw5QoWubiN+Zt1sI06nKCoJpcZhNCUK481x7/qfN/hGPMMlVdQaT86tx9UfubYPZie4vGvtv
+ wnZ5Mms/fLO6JJniRxh2Pu7jpf9eGUNf95XWtaRTX7X4PonWaQO8iHAv01/PtNRpeRO29Dh0L
+ vIZ44nsJemkhKfLEjqtKnV4us0ziwZT5QPrXsND3oxu4CFCDG3yphLmvc1RiwaAlDU+oo8tSA
+ BJMiZ7q1m84x1JwU50qkDWneljoJNkVWFFLCxalfYvRByUaIU5pEfUUKLgn1XGNic+Gc9Ee+l
+ 1Oxa0Nbn6kJtpCAuo92BVrUFJbdOQr++ObLshQMJjmWwvXCMyWwiInfaouS0/eknxAtskf0y8
+ 25Bn1anR2lzhSHYyNgyIlSP3meNQGALOoUzI3rs0ytYL+wfsKZefI2uHFuHh0I8D31X+ba2TH
+ TADCSQMPc/yOoD+I6Ph2LgtQTbMvzWl3GChFNAAglSzimsUjrnFjljKsEx/kj2IjJH3whV8Xs
+ RxSqenpWcSt49bOg6VOYhNWfYmTYGzhTDDFJjgCrPBGrTa8JCEHpnjN6Tyj5RIR4jga/pDbp8
+ p8h5dBGmbNZ3xZ3VL02DCQ4e4ayNke/7dBgMeS1fQ+T/w/Fz3ZMNQanfLH5xd5XOiosneuxBC
+ BPtn6fm4McxhXhaFmvfLxzZvuB71tW8n507yRlYeqDHUOhMOFstIl0a3X8HQAx24v4FJJ0qMM
+ oRM99ONN3VmdVN3VrQmNlF9yL+eBwKeTHHOfw0sDOBC9h3MoMxv5XNfjhJu4N9G0EOXTyP0c2
+ /+xbhxqNS5NfALhHs01R7/gvKbOl3G5A7u4HAy1oLEDUYsCwVPt7ZmImJatya7TizhSbZ9UuV
+ lzs4ytH07TRehx8rDqiw==
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue 03 May 08:04 CDT 2022, Robert Foss wrote:
+Hi,
 
-> From: Bjorn Andersson <bjorn.andersson@linaro.org>
-> 
-> Some clock implementations doesn't provide means of implementing
-> is_enabled(), but still requires to be explicitly disabled when found
-> unused as part of clk_disable_unused().
-> 
-> One such set of clocks are Qualcomm's display RCGs. These can be enabled
-> and disabled automatically by the hardware, so it's not possible to
-> reliably query their configuration. Further more, these clocks need to
-> be disabled when unused, to allow them to be "parked" onto a safe
-> parent. Failure to disable the RCG results in the hardware locking up as
-> clk_disable_unused() traverses up the tree and turns off its source
-> clocks.
-> 
-> Add a new flag, CLK_ASSUME_ENABLED_BOOT, which clock drivers can use to
-> signal that these clocks should be disabled even if they don't implement
-> the is_enabled() ops.
-> 
-> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> ---
-> 
+> Gesendet: Dienstag, 03. Mai 2022 um 16:40 Uhr
+> Von: "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>
+> Betreff: Re: Aw: Re: [RFC v1] dt-bindings: net: dsa: convert binding for=
+ mediatek switches
+>
+> On 03/05/2022 16:10, Frank Wunderlich wrote:
+> > Hi,
+> >
+> > thank you for first review.
+> >
+> >> Gesendet: Dienstag, 03. Mai 2022 um 14:05 Uhr
+> >> Von: "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>
+> >> Betreff: Re: [RFC v1] dt-bindings: net: dsa: convert binding for medi=
+atek switches
+> >>
+> >> On 02/05/2022 17:32, Frank Wunderlich wrote:
+> >>> From: Frank Wunderlich <frank-w@public-files.de>
+> >>>
+> >>> Convert txt binding to yaml binding for Mediatek switches.
+> >>>
+> >>> Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
+> >>> ---
+> >>>  .../devicetree/bindings/net/dsa/mediatek.yaml | 435 +++++++++++++++=
++++
+> >>>  .../devicetree/bindings/net/dsa/mt7530.txt    | 327 -------------
+> >>>  2 files changed, 435 insertions(+), 327 deletions(-)
+> >>>  create mode 100644 Documentation/devicetree/bindings/net/dsa/mediat=
+ek.yaml
+> >>>  delete mode 100644 Documentation/devicetree/bindings/net/dsa/mt7530=
+.txt
+> >>>
+> >>> diff --git a/Documentation/devicetree/bindings/net/dsa/mediatek.yaml=
+ b/Documentation/devicetree/bindings/net/dsa/mediatek.yaml
+> >>> new file mode 100644
+> >>> index 000000000000..c1724809d34e
+> >>> --- /dev/null
+> >>> +++ b/Documentation/devicetree/bindings/net/dsa/mediatek.yaml
+> >>
+> >> Specific name please, so previous (with vendor prefix) was better:
+> >> mediatek,mt7530.yaml
+> >
+> > ok, named it mediatek only because mt7530 is only one possible chip an=
+d driver handles 3 different "variants".
+> >
+> >>> @@ -0,0 +1,435 @@
+> >>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> >>
+> >> You should CC previous contributors and get their acks on this. You
+> >> copied here a lot of description.
+> >
+> > added 3 Persons that made commits to txt before to let them know about=
+ this change
+> >
+> > and yes, i tried to define at least the phy-mode requirement as yaml-d=
+epency, but failed because i cannot match
+> > compatible in subnode.
+>
+> I don't remember such syntax.
+>
+> (...)
 
-I discussed this with Stephen a while ago and we agreed that in a
-sufficiently complex system with kernel modules booting without
-clk_ignore_unused simply isn't supported.
+have not posted this version as it was failing in dtbs_check, this was how=
+ i tried:
 
-We will have to design something better. So please drop this patch from
-the series.
+https://github.com/frank-w/BPI-R2-4.14/blob/8f2033eb6fcae273580263c3f0b31f=
+0d48821740/Documentation/devicetree/bindings/net/dsa/mediatek.yaml#L177
 
-Regards,
-Bjorn
 
-> Changes since v1
->  - Removed Vinods r-b
-> 
-> 
->  drivers/clk/clk.c            | 2 +-
->  include/linux/clk-provider.h | 2 ++
->  2 files changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/clk/clk.c b/drivers/clk/clk.c
-> index ed119182aa1b..9789ec137219 100644
-> --- a/drivers/clk/clk.c
-> +++ b/drivers/clk/clk.c
-> @@ -1284,7 +1284,7 @@ static void __init clk_disable_unused_subtree(struct clk_core *core)
->  	 * sequence.  call .disable_unused if available, otherwise fall
->  	 * back to .disable
->  	 */
-> -	if (clk_core_is_enabled(core)) {
-> +	if (clk_core_is_enabled(core) || core->flags & CLK_ASSUME_ENABLED_WHEN_UNUSED) {
->  		trace_clk_disable(core);
->  		if (core->ops->disable_unused)
->  			core->ops->disable_unused(core->hw);
-> diff --git a/include/linux/clk-provider.h b/include/linux/clk-provider.h
-> index c10dc4c659e2..9038022ffebd 100644
-> --- a/include/linux/clk-provider.h
-> +++ b/include/linux/clk-provider.h
-> @@ -32,6 +32,8 @@
->  #define CLK_OPS_PARENT_ENABLE	BIT(12)
->  /* duty cycle call may be forwarded to the parent clock */
->  #define CLK_DUTY_CYCLE_PARENT	BIT(13)
-> +/* assume clock is enabled if found unused in late init */
-> +#define CLK_ASSUME_ENABLED_WHEN_UNUSED	BIT(14)
->  
->  struct clk;
->  struct clk_hw;
-> -- 
-> 2.34.1
-> 
+> >>> if defined, indicates that either MT7530 is the part
+> >>> +      on multi-chip module belong to MT7623A has or the remotely st=
+andalone
+> >>> +      chip as the function MT7623N reference board provided for.
+> >>> +
+> >>> +  reset-gpios:
+> >>> +    description: |
+> >>> +      Should be a gpio specifier for a reset line.
+> >>> +    maxItems: 1
+> >>> +
+> >>> +  reset-names:
+> >>> +    description: |
+> >>> +      Should be set to "mcm".
+> >>> +    const: mcm
+> >>> +
+> >>> +  resets:
+> >>> +    description: |
+> >>> +      Phandle pointing to the system reset controller with
+> >>> +      line index for the ethsys.
+> >>> +    maxItems: 1
+> >>> +
+> >>> +required:
+> >>> +  - compatible
+> >>> +  - reg
+> >>
+> >> What about address/size cells?
+> >
+> > you're right even if they are const to a value they need to be set
+> >
+> >>> +
+> >>> +allOf:
+> >>> +  - $ref: "dsa.yaml#"
+> >>> +  - if:
+> >>> +      required:
+> >>> +        - mediatek,mcm
+> >>
+> >> Original bindings had this reversed.
+> >
+> > i know, but i think it is better readable and i will drop the else-par=
+t later.
+> > Driver supports optional reset ("mediatek,mcm" unset and without reset=
+-gpios)
+> > as this is needed if there is a shared reset-line for gmac and switch =
+like on R2 Pro.
+> >
+> > i left this as separate commit to be posted later to have a nearly 1:1=
+ conversion here.
+>
+> Ah, I missed that actually your syntax is better. No need to
+> reverse/negate and the changes do not have to be strict 1:1.
+
+yes, but a conversion implies same meaning, so changing things later ;)
+
+> >>> +    then:
+> >>> +      required:
+> >>> +        - resets
+> >>> +        - reset-names
+> >>> +    else:
+> >>> +      required:
+> >>> +        - reset-gpios
+> >>> +
+> >>> +  - if:
+> >>> +      required:
+> >>> +        - interrupt-controller
+> >>> +    then:
+> >>> +      required:
+> >>> +        - "#interrupt-cells"
+> >>
+> >> This should come from dt schema already...
+> >
+> > so i should drop (complete block for interrupt controller)?
+>
+> The interrupts you need. What I mean, you can skip requirement of cells.
+
+ok, i drop only the #interrupt-cells
+
+> >>> +        - interrupts
+> >>> +
+> >>> +  - if:
+> >>> +      properties:
+> >>> +        compatible:
+> >>> +          items:
+> >>> +            - const: mediatek,mt7530
+> >>> +    then:
+> >>> +      required:
+> >>> +        - core-supply
+> >>> +        - io-supply
+> >>> +
+> >>> +
+> >>> +patternProperties:
+> >>> +  "^ports$":
+> >>
+> >> It''s not a pattern, so put it under properties, like regular propert=
+y.
+> >
+> > can i then make the subnodes match? so the full block will move above =
+required between "mediatek,mcm" and "reset-gpios"
+>
+> Yes, subnodes stay with patternProperties.
+>
+> >
+> >   ports:
+> >     type: object
+> >
+> >     patternProperties:
+> >       "^port@[0-9]+$":
+> >         type: object
+> >         description: Ethernet switch ports
+> >
+> >         properties:
+> >           reg:
+> >             description: |
+> >               Port address described must be 5 or 6 for CPU port and f=
+rom 0 to 5 for user ports.
+> >
+> >         unevaluatedProperties: false
+> >
+> >         allOf:
+> >           - $ref: dsa-port.yaml#
+> >           - if:
+> > ....
+> >
+> > basicly this "ports"-property should be required too, right?
+>
+> Previous binding did not enforce it, I think, but it is reasonable to
+> require ports.
+
+basicly it is required in dsa.yaml, so it will be redundant here
+
+https://elixir.bootlin.com/linux/v5.18-rc5/source/Documentation/devicetree=
+/bindings/net/dsa/dsa.yaml#L55
+
+this defines it as pattern "^(ethernet-)?ports$" and should be processed b=
+y dsa-core. so maybe changing it to same pattern instead of moving up as n=
+ormal property?
+
+> >>> +    type: object
+> >>> +
+> >>> +    patternProperties:
+> >>> +      "^port@[0-9]+$":
+> >>> +        type: object
+> >>> +        description: Ethernet switch ports
+> >>> +
+> >>> +        $ref: dsa-port.yaml#
+> >>
+> >> This should go to allOf below.
+> >
+> > see above
+> >
+> >>> +
+> >>> +        properties:
+> >>> +          reg:
+> >>> +            description: |
+> >>> +              Port address described must be 6 for CPU port and fro=
+m 0 to 5 for user ports.
+> >>> +
+> >>> +        unevaluatedProperties: false
+> >>> +
+> >>> +        allOf:
+> >>> +          - if:
+> >>> +              properties:
+> >>> +                label:
+> >>> +                  items:
+> >>> +                    - const: cpu
+> >>> +            then:
+> >>> +              required:
+> >>> +                - reg
+> >>> +                - phy-mode
+> >>> +
+> >>> +unevaluatedProperties: false
+> >>> +
+> >>> +examples:
+> >>> +  - |
+> >>> +    mdio0 {
+> >>
+> >> Just mdio
+> >
+> > ok
+> >
+> >>> +        #address-cells =3D <1>;
+> >>> +        #size-cells =3D <0>;
+> >>> +        switch@0 {
+> >>> +            compatible =3D "mediatek,mt7530";
+> >>> +            #address-cells =3D <1>;
+> >>> +            #size-cells =3D <0>;
+> >>> +            reg =3D <0>;
+> >>> +
+> >>> +            core-supply =3D <&mt6323_vpa_reg>;
+> >>> +            io-supply =3D <&mt6323_vemc3v3_reg>;
+> >>> +            reset-gpios =3D <&pio 33 0>;
+> >>
+> >> Use GPIO flag define/constant.
+> >
+> > this example seems to be taken from bpi-r2 (i had taken it from the tx=
+t). In dts for this board there are no
+> > constants too.
+> >
+> > i guess
+> > include/dt-bindings/gpio/gpio.h:14:#define GPIO_ACTIVE_HIGH 0
+> >
+> > for 33 there seem no constant..all other references to pio node are wi=
+th numbers too and there seem no binding
+> > header defining the gpio pins (only functions in include/dt-bindings/p=
+inctrl/mt7623-pinfunc.h)
+>
+> ok, then my comment
+
+you mean adding a comment to the example that GPIO-flags/constants should =
+be used instead of magic numbers?
+
+> Best regards,
+> Krzysztof
+
+this is how it looks like without the port-property-change:
+https://github.com/frank-w/BPI-R2-4.14/blob/5.18-mt7531-mainline/Documenta=
+tion/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
+
+regards Frank
+

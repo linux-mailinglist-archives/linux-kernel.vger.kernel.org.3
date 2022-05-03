@@ -2,102 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFA28518BCB
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 20:04:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32E5B518BD2
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 20:04:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240935AbiECSHy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 14:07:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57742 "EHLO
+        id S240952AbiECSIH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 14:08:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240820AbiECSHr (ORCPT
+        with ESMTP id S240820AbiECSIF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 14:07:47 -0400
-Received: from mail-oa1-x2a.google.com (mail-oa1-x2a.google.com [IPv6:2001:4860:4864:20::2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 505123EA8E
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 11:04:14 -0700 (PDT)
-Received: by mail-oa1-x2a.google.com with SMTP id 586e51a60fabf-d39f741ba0so17935679fac.13
-        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 11:04:14 -0700 (PDT)
+        Tue, 3 May 2022 14:08:05 -0400
+Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52F173EA8E
+        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 11:04:32 -0700 (PDT)
+Received: by mail-oi1-x236.google.com with SMTP id e189so18961208oia.8
+        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 11:04:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=R4/K6aedIUl9MohMPOlkW7bX2DydtcwCMb+CydErQh0=;
-        b=CJu9kW5FihxnTA4wr5HdIEfymEuuekA79aJVNMM2F6kdV2+CmmuoX8R9fhQ+4vfzGu
-         cwr0+95tIZHFde4YyKyVQIEU1uoccXZ0Wre6iNf7ZQo6N8EA9gsX+jTvyEJvXCE49T6e
-         235jqkHQ/du2SkGvAqn3TvfA6e2cYQxB3dcEA=
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=nGkSI+NXkk/TIaUfMbTS5LjDSixkddXSIamGkNlZLuI=;
+        b=HqABJwqMfzZsj7GebOh4wS7vXKe4wQnSUTGFHifFQFAQFw3yciwClN7+rNvine68Ur
+         SZwBLHGJHHMl6ow3HZfJ6qpG9G2kURPx49/ASJPY22WmWEt1ZV6NkgL5kgY54d54R/Ci
+         ZdcGGIbC2rBpNoL8kc1VzyKUOLx+imv6fSRN4UbtMMDQcjskmMq30u6FqIT/TWFVtRia
+         QSs9Jf3KDis5zmMMTZkU7OWyZWfz8wQdqRDkOtuACocG/jvi5oiM7B4228sE9e/nYRO0
+         OsjvDn3Uv65buZkbSBhVJdAWyramIINDBfH3TgmI2zr/158e6I7WTm2y+IYgv18oXo15
+         Y78g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=R4/K6aedIUl9MohMPOlkW7bX2DydtcwCMb+CydErQh0=;
-        b=BrU3llrG50ez8ogtfDgA9uxJJeasxvuACSdH7YHmeodqpGRn+y3YhXrVQg4m/F5xw0
-         7ttcUcbCB6qifSw0y+9XnSShIhdKoFV0ibSI8LPQgKrLxvZaiSCsAcAy7rUi/x3DKxT4
-         iGb4QuaLfNohPtp6ZXKL+jGbQHrod3UFyFBVL6hne0ycLb5pR7DjebR+N2UwZvv/6MWg
-         oEHoLNoEQKQf7Un3rhiPjy8BVpNUMVdRnt1gCz2J4Pc8BRugoy2qDEyk9ZcWJLkk+VpC
-         eGO2zW/sKSmQ4uZ8tEeU9GPQRWtXKf8RZM6zD0kgnbM5i7qsCZMDAQmav3YkujfEiGLf
-         N30w==
-X-Gm-Message-State: AOAM531PO3XmZay8fIjYWG9ImC0yDiMBXO8bp5BzCcf1p8nSZpqAV2dR
-        6sNPAnEpiO6EXeBo/mTYofUN4iPdl+2pcQ==
-X-Google-Smtp-Source: ABdhPJwrji1Dat31i1jONwFr9KKUbs+JzJo24iynFxxB59c5uf2QTGW8Te0Sg9cUPyr/oFmIKr+gAw==
-X-Received: by 2002:a05:6870:6097:b0:e1:a94d:9a38 with SMTP id t23-20020a056870609700b000e1a94d9a38mr2281215oae.191.1651601053762;
-        Tue, 03 May 2022 11:04:13 -0700 (PDT)
-Received: from mail-oi1-f181.google.com (mail-oi1-f181.google.com. [209.85.167.181])
-        by smtp.gmail.com with ESMTPSA id u7-20020a056808000700b0032647f4e437sm148260oic.45.2022.05.03.11.04.13
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 03 May 2022 11:04:13 -0700 (PDT)
-Received: by mail-oi1-f181.google.com with SMTP id r8so18986204oib.5
-        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 11:04:13 -0700 (PDT)
-X-Received: by 2002:a05:6808:d50:b0:322:fb1d:319d with SMTP id
- w16-20020a0568080d5000b00322fb1d319dmr2350498oik.174.1651601052906; Tue, 03
- May 2022 11:04:12 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=nGkSI+NXkk/TIaUfMbTS5LjDSixkddXSIamGkNlZLuI=;
+        b=aZ9g+NXJ+k1eBGnhsAJ2tDdoTxQshbWAO5nmnrmoeK5EVWY7tSRBi8q+cmq+YI2UfX
+         xMhxL1/LxP3HI/uBwTUeG22cyk9JGpyO597Z7+OWj9Z+x0c9w/ZK5xKSfuH2AGw0lyeR
+         yOSPVEXQMRQ63dsfGY1n2t6QbC4jlgBop2KUuznDFC+XS4Hu51SD8uSFyD92cfvt2Wn1
+         LpXRj1TtiFl9umAEc02IxyRfKcGh/3FtUcPVo0qLSdbEHzj1/uAJBh4M9tROHwrxlfR1
+         DAhFN0Um9aliVV3ktf3ZRBR6nGPWpfUHgkjaFFaDZyy/guo+OIfE687ozxsS5kieUWkB
+         muIA==
+X-Gm-Message-State: AOAM531iea1vmj1Yv3fpPxo/j+vcRrl6nFXS17lWtgOo94EQcycJ6npX
+        xRAgIMAA8lsSROcwXaEYNm4Z5g==
+X-Google-Smtp-Source: ABdhPJwOR7cuH3Lr5GL3MW4mj80jqAeRSqQF0RECo7ESQmRtP9ETU6jus8olppiLtanbeXKpylin9g==
+X-Received: by 2002:a54:4505:0:b0:325:e50c:a71 with SMTP id l5-20020a544505000000b00325e50c0a71mr2298779oil.70.1651601070242;
+        Tue, 03 May 2022 11:04:30 -0700 (PDT)
+Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id q23-20020a4adc57000000b0035eb4e5a6c7sm5138862oov.29.2022.05.03.11.04.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 May 2022 11:04:29 -0700 (PDT)
+Date:   Tue, 3 May 2022 13:04:27 -0500
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Souradeep Chowdhury <quic_schowdhu@quicinc.com>
+Cc:     Andy Gross <agross@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Alex Elder <elder@ieee.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        Sai Prakash Ranjan <quic_saipraka@quicinc.com>,
+        Sibi Sankar <quic_sibis@quicinc.com>,
+        Rajendra Nayak <quic_rjendra@codeaurora.org>, vkoul@kernel.org
+Subject: Re: [PATCH V7 3/7] MAINTAINERS: Add the entry for DCC(Data Capture
+ and Compare) driver support
+Message-ID: <YnFuq7h110fuMp5U@builder.lan>
+References: <cover.1646285069.git.quic_schowdhu@quicinc.com>
+ <141df53b42681ba3488f6db60983d4cdb6493f49.1646285069.git.quic_schowdhu@quicinc.com>
 MIME-Version: 1.0
-References: <20220427224924.592546-1-gpiccoli@igalia.com> <20220427224924.592546-5-gpiccoli@igalia.com>
-In-Reply-To: <20220427224924.592546-5-gpiccoli@igalia.com>
-From:   Evan Green <evgreen@chromium.org>
-Date:   Tue, 3 May 2022 11:03:37 -0700
-X-Gmail-Original-Message-ID: <CAE=gft5Pq25L4KFoPWbftkPF-JN1ex2yws77mMJ4GQnn9W0L2g@mail.gmail.com>
-Message-ID: <CAE=gft5Pq25L4KFoPWbftkPF-JN1ex2yws77mMJ4GQnn9W0L2g@mail.gmail.com>
-Subject: Re: [PATCH 04/30] firmware: google: Convert regular spinlock into
- trylock on panic path
-To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>, bhe@redhat.com,
-        pmladek@suse.com, kexec@lists.infradead.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        bcm-kernel-feedback-list@broadcom.com, coresight@lists.linaro.org,
-        linuxppc-dev@lists.ozlabs.org, linux-alpha@vger.kernel.org,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        linux-edac@vger.kernel.org, linux-hyperv@vger.kernel.org,
-        linux-leds@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, Linux PM <linux-pm@vger.kernel.org>,
-        linux-remoteproc@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-um@lists.infradead.org,
-        linux-xtensa@linux-xtensa.org, netdev@vger.kernel.org,
-        openipmi-developer@lists.sourceforge.net, rcu@vger.kernel.org,
-        sparclinux@vger.kernel.org, xen-devel@lists.xenproject.org,
-        x86@kernel.org, kernel-dev@igalia.com, kernel@gpiccoli.net,
-        halves@canonical.com, fabiomirmar@gmail.com,
-        alejandro.j.jimenez@oracle.com,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Jonathan Corbet <corbet@lwn.net>, d.hatayama@jp.fujitsu.com,
-        dave.hansen@linux.intel.com, dyoung@redhat.com,
-        feng.tang@intel.com,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
-        jgross@suse.com, john.ogness@linutronix.de,
-        Kees Cook <keescook@chromium.org>, luto@kernel.org,
-        mhiramat@kernel.org, mingo@redhat.com, paulmck@kernel.org,
-        peterz@infradead.org, rostedt@goodmis.org,
-        senozhatsky@chromium.org, Alan Stern <stern@rowland.harvard.edu>,
-        Thomas Gleixner <tglx@linutronix.de>, vgoyal@redhat.com,
-        vkuznets@redhat.com, Will Deacon <will@kernel.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        David Gow <davidgow@google.com>,
-        Julius Werner <jwerner@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <141df53b42681ba3488f6db60983d4cdb6493f49.1646285069.git.quic_schowdhu@quicinc.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -106,60 +77,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 27, 2022 at 3:51 PM Guilherme G. Piccoli
-<gpiccoli@igalia.com> wrote:
->
-> Currently the gsmi driver registers a panic notifier as well as
-> reboot and die notifiers. The callbacks registered are called in
-> atomic and very limited context - for instance, panic disables
-> preemption, local IRQs and all other CPUs that aren't running the
-> current panic function.
->
-> With that said, taking a spinlock in this scenario is a
-> dangerous invitation for a deadlock scenario. So, we fix
-> that in this commit by changing the regular spinlock with
-> a trylock, which is a safer approach.
->
-> Fixes: 74c5b31c6618 ("driver: Google EFI SMI")
-> Cc: Ard Biesheuvel <ardb@kernel.org>
-> Cc: David Gow <davidgow@google.com>
-> Cc: Evan Green <evgreen@chromium.org>
-> Cc: Julius Werner <jwerner@chromium.org>
-> Signed-off-by: Guilherme G. Piccoli <gpiccoli@igalia.com>
+On Thu 03 Mar 00:27 CST 2022, Souradeep Chowdhury wrote:
+
+> Added the entries for all the files added as a part of driver support for
+> DCC(Data Capture and Compare).
+> 
+> Signed-off-by: Souradeep Chowdhury <quic_schowdhu@quicinc.com>
+
+Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+
 > ---
->  drivers/firmware/google/gsmi.c | 6 +++++-
->  1 file changed, 5 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/firmware/google/gsmi.c b/drivers/firmware/google/gsmi.c
-> index adaa492c3d2d..b01ed02e4a87 100644
-> --- a/drivers/firmware/google/gsmi.c
-> +++ b/drivers/firmware/google/gsmi.c
-> @@ -629,7 +629,10 @@ static int gsmi_shutdown_reason(int reason)
->         if (saved_reason & (1 << reason))
->                 return 0;
->
-> -       spin_lock_irqsave(&gsmi_dev.lock, flags);
-> +       if (!spin_trylock_irqsave(&gsmi_dev.lock, flags)) {
-> +               rc = -EBUSY;
-> +               goto out;
-> +       }
-
-gsmi_shutdown_reason() is a common function called in other scenarios
-as well, like reboot and thermal trip, where it may still make sense
-to wait to acquire a spinlock. Maybe we should add a parameter to
-gsmi_shutdown_reason() so that you can get your change on panic, but
-we don't convert other callbacks into try-fail scenarios causing us to
-miss logs.
-
-Though thinking more about it, is this really a Good Change (TM)? The
-spinlock itself already disables interrupts, meaning the only case
-where this change makes a difference is if the panic happens from
-within the function that grabbed the spinlock (in which case the
-callback is also likely to panic), or in an NMI that panics within
-that window. The downside of this change is that if one core was
-politely working through an event with the lock held, and another core
-panics, we now might lose the panic log, even though it probably would
-have gone through fine assuming the other core has a chance to
-continue.
-
--Evan
+>  MAINTAINERS | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index a61f4f3..e57d927 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -5146,6 +5146,14 @@ F:	include/linux/tfrc.h
+>  F:	include/uapi/linux/dccp.h
+>  F:	net/dccp/
+>  
+> +DCC QTI DRIVER
+> +M:	Souradeep Chowdhury <quic_schowdhu@quicinc.com>
+> +L:	linux-arm-msm@vger.kernel.org
+> +S:	Maintained
+> +F:	Documentation/ABI/testing/debugfs-driver-dcc
+> +F:	Documentation/devicetree/bindings/arm/msm/qcom,dcc.yaml
+> +F:	drivers/soc/qcom/dcc.c
+> +
+>  DECnet NETWORK LAYER
+>  L:	linux-decnet-user@lists.sourceforge.net
+>  S:	Orphan
+> -- 
+> 2.7.4
+> 

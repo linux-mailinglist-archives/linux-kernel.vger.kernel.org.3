@@ -2,148 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A500517C34
+	by mail.lfdr.de (Postfix) with ESMTP id BEEB9517C36
 	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 05:27:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230371AbiECDYk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 23:24:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33114 "EHLO
+        id S230311AbiECDYJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 23:24:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230340AbiECDY3 (ORCPT
+        with ESMTP id S230267AbiECDYC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 23:24:29 -0400
-Received: from mail.marcansoft.com (marcansoft.com [IPv6:2a01:298:fe:f::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2128F29836;
-        Mon,  2 May 2022 20:20:55 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: marcan@marcan.st)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id 539AB41DF4;
-        Tue,  3 May 2022 03:20:51 +0000 (UTC)
-Message-ID: <2615501d-7569-41cb-7039-46e690689f1f@marcan.st>
-Date:   Tue, 3 May 2022 12:20:48 +0900
+        Mon, 2 May 2022 23:24:02 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9352F10FD8
+        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 20:20:28 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id iq2-20020a17090afb4200b001d93cf33ae9so1094453pjb.5
+        for <linux-kernel@vger.kernel.org>; Mon, 02 May 2022 20:20:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=h50XDSyKixSxM+z0LW5l4U/wJvmofE6DIDaRFzdf6Ag=;
+        b=TcyGN4xpYSuKm3q0wZOEg+HeSREDfAnufCFQNhVFSWhXs94V5KYhHXeTUKxksz1U66
+         0ngEAjWO0uP/V9MLW1RZ4Ws73T6nudcrpJtckG6I0SIQV4wkyc+Nq4e6rr+0oYIUuZV8
+         ins6WCIjSEFo+4CyzxjLyBrPeAynz3puz8iIBaNDOE8bYjGa9j5wa0nBKka6vfuRctNb
+         JhaL4KfEMdb5iWeyOxUsLJegogB7JQbR4BwVBoID+iHzq0zrpsjT5MfT18BPBlupzmOq
+         YMxLSWm90/7oL+P88aZJz2IExiGwl6yrANB4R6SWVPkXT4/gQh6RreqlfkXbQKXk6Iov
+         imiA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=h50XDSyKixSxM+z0LW5l4U/wJvmofE6DIDaRFzdf6Ag=;
+        b=nQk3Q/wNR4/FgPYs/FIq6Kfh47X4L6ey35ZEYoop6z4y25OZqRqVYdgiH81EqoQLYU
+         RcIJaLhQBfZNg8zpck78LPkqZzkPYj1pGgVP4HTIXGJ5meSFneWQJWn9TNng5GPgBi/w
+         tf8vPMXXKqiAPC9GgTKAkuBYyEgmIfiwoZf/QiHgH06e5vODixin3T8j0RibUFrrWpAV
+         ah31p7pW8H8veLb4IqLXOyCkNl6hhTq2MfEcNT1MWsDuu+6qOc142PTYW+amlS1GNK7u
+         2iXtfs94pinBNZInC3WZilt+Dtcd8hqWk746OI2IJfrBCWWz2HIxTleDCWiwQMDwUTYj
+         Yg7w==
+X-Gm-Message-State: AOAM533juDZLlcPPmza9SzrLHTA29ZSRUJSKT9wgSHyRmAZZ432uTkMR
+        BcZH2j79CIA1PKBFY+Lh0PgEtYzeh4k=
+X-Google-Smtp-Source: ABdhPJwPfhJOlINjCLaBHIOYM70opmaVw9A2E1c0+iVw5s+ao5qlt2gDM7aX/za+klXta6RgcDcWyw==
+X-Received: by 2002:a17:902:778a:b0:158:da0f:f299 with SMTP id o10-20020a170902778a00b00158da0ff299mr14692035pll.29.1651548027881;
+        Mon, 02 May 2022 20:20:27 -0700 (PDT)
+Received: from localhost ([47.251.4.198])
+        by smtp.gmail.com with ESMTPSA id n19-20020a6563d3000000b003c14af5063dsm12047310pgv.85.2022.05.02.20.20.26
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 02 May 2022 20:20:27 -0700 (PDT)
+From:   Lai Jiangshan <jiangshanlai@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Borislav Petkov <bp@alien8.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Juergen Gross <jgross@suse.com>, x86@kernel.org,
+        Lai Jiangshan <jiangshan.ljs@antgroup.com>
+Subject: [PATCH V7 0/6] x86/entry: Clean up entry code
+Date:   Tue,  3 May 2022 11:21:01 +0800
+Message-Id: <20220503032107.680190-1-jiangshanlai@gmail.com>
+X-Mailer: git-send-email 2.19.1.6.gb485710b
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Content-Language: es-ES
-From:   Hector Martin <marcan@marcan.st>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Marc Zyngier <maz@kernel.org>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Sven Peter <sven@svenpeter.dev>,
-        PCI <linux-pci@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20220502093832.32778-1-marcan@marcan.st>
- <20220502093832.32778-4-marcan@marcan.st>
- <CAL_Jsq+_cWZUXtJVXC_cwhmADj0NQc95v1sqgFioMsfEX6OqGg@mail.gmail.com>
- <0ccc44cd-21aa-3670-24b3-4ee051dd3c12@marcan.st>
-Subject: Re: [PATCH 3/3] PCI: apple: Add support for optional PWREN GPIO
-In-Reply-To: <0ccc44cd-21aa-3670-24b3-4ee051dd3c12@marcan.st>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/05/2022 00.32, Hector Martin wrote:
-> On 03/05/2022 00.14, Rob Herring wrote:
->> On Mon, May 2, 2022 at 4:39 AM Hector Martin <marcan@marcan.st> wrote:
->>>
->>> WiFi and SD card devices on M1 Macs have a separate power enable GPIO.
->>> Add support for this to the PCIe controller. This is modeled after how
->>> pcie-fu740 does it.
->>
->> It did, but it's not ideal really. The problem is the GPIO is really
->> associated with the device (WiFi/SD) rather than the PCI host and
->> therefore should be part of a WiFi or SD node. You probably don't have
->> one (yet), but I would suspect that SD will need one for all the
->> standard MMC/SD DT properties. The secondary issue is we'll end up
->> adding more power sequencing properties to control ordering and timing
->> for different devices. The exception here is standard PCI slot
->> properties like perst#, clkreq, and standard voltage rails can go in
->> the host bridge (and for new bindings, those should really be in the
->> root port node). For a complicated example, see Hikey960 or 970.
->>
->> Of course with power control related properties there's a chicken or
->> egg issue that the PCI device is not discoverable until the device is
->> powered on. This issue comes up over and over with various hacky
->> solutions in the bindings. The PCI subsystem needs to solve this. My
->> suggestion is that if the firmware says there is a device on the bus
->> and it wasn't probed, then we should force probing (or add a pre-probe
->> hook for drivers). That is what MDIO bus does for example.
->>
-> 
-> I agree with the premise. Right now macOS does not actually power down
-> these devices as far as I know (except maybe sleep mode? not sure what
-> goes on then yet), but I think the hardware actually has an SD card
-> detect GPIO hookup that would allow us to entirely power down the SD
-> controller when no card is inserted. That would obviously be ideal.
-> 
-> FWIW, we do have the device nodes downstream [1]. I did in fact have to
-> add the SD one for the CD/WP inversion flags (and had to add driver
-> support for that too).
-> 
-> That said, as for how to make this happen in the PCI subsystem
-> properly... I think I'll defer to the maintainers' opinion there before
-> trying to hack something up ;)
-> 
-> Meanwhile, I guess I better get PCIe hotplug working, since doing it in
-> the driver isn't going to work without that first...
-> 
-> [1]
-> https://github.com/AsahiLinux/linux/blob/bits/000-devicetree/arch/arm64/boot/dts/apple/t600x-j314-j316.dtsi#L222
+From: Lai Jiangshan <jiangshan.ljs@antgroup.com>
 
-Thinking about this some more, I think it still makes sense to have the
-power enable GPIO in the PCI root port node. A generic power enable GPIO
-still makes sense there (think "slot power"). The PCI core could handle
-it properly by default, including turning it on prior to initial probing
-and shutting it down when the device should go into whatever the PCI
-core's idea of D3cold is. AIUI this already happens on some platforms
-via firmware, right? Since D3cold is supposed to be a state where the
-device receives no power after all.
+This patchset moves the stack-switch code to the place where
+error_entry() return, unravels error_entry() from XENpv and makes
+entry_INT80_compat() uses idtentry macro.
 
-Obviously this can't handle funky power sequencing requirements, but we
-don't have any of those here and we don't know if we ever will (at least
-Apple seems to be a fan of throwing little CPLDs on their boards for
-fine grained power sequencing, driven by a single IO). If we do, then
-that would be the time to have GPIOs in the device node.
+This patchset is highly related to XENpv, because it does the extra
+cleanup to convert SWAPGS to swapgs after major cleanup is done.
 
-In addition, sometimes a single power enable is shared between multiple
-functions of one device. This is the case with WiFi/BT, which is a combo
-chip with two functions. Coordinating GPIO usage between both drivers
-would be problematic if they both try to own it.
+The patches are the 7th version to pick patches from the patchset
+https://lore.kernel.org/lkml/20211126101209.8613-1-jiangshanlai@gmail.com/
+which converts ASM code to C code.  These patches are prepared for that
+purpose.  But this patchset has it own value: it simplifies the stack
+switch, avoids leaving the old stack inside a function call, and
+separates XENpv code with native code without adding new code.
 
-The individual device drivers still need to have some kind of API to be
-able to put devices into a low-power state. For example, the WiFi driver
-could outright power down the device when it is wholly unused and the
-interface is down (same for BT, and the PCI core should only put the
-slot GPIO into powerdown if both functions say they should be off).
-Similarly, the SD driver needs to support an external SD detect GPIO,
-and have a mode where it tells the PCI core to shut down the device when
-no SD is inserted, and power it back up on insertion. This all allows
-the devices to behave a users might expect, with the device nodes
-existing and the PCI devices "visible" even when they are powered down
-behind the scenes, until they are needed. AIUI this is already how e.g.
-hybrid graphics power management works, where power is outright yanked
-from the secondary card when it is not needed even though it is still
-visible from the userspace point of view (and it is automatically
-powered and reinitialized on use).
+Peter said in V3:
+>	So AFAICT these patches are indeed correct.
+>
+>	I'd love for some of the other x86 people to also look at this,
+>	but a tentative ACK on this.
 
-I'm not super familiar with PCI device power states (making brcmfmac
-sleep work properly on these platforms is on my TODO list...) so I'd
-love to get some feedback from the PCI folks on what they think about
-this whole issue.
+[V6]: https://lore.kernel.org/lkml/20220421141055.316239-1-jiangshanlai@gmail.com/
+[V5]: https://lore.kernel.org/lkml/20220412121541.4595-1-jiangshanlai@gmail.com/
+[V4]: https://lore.kernel.org/lkml/20220318143016.124387-1-jiangshanlai@gmail.com/
+[V3]: https://lore.kernel.org/lkml/20220315073949.7541-1-jiangshanlai@gmail.com/
+[V2]: https://lore.kernel.org/lkml/20220303035434.20471-1-jiangshanlai@gmail.com/
+[V1]: https://lore.kernel.org/lkml/20211208110833.65366-1-jiangshanlai@gmail.com/
+
+
+Changed from V6:
+	(no code changed)
+
+	Update the changelog of patch3 and patch6
+
+	Drop patch7 and patch8 of the V6.  The patch7/8 are nice cleanup
+	patches but they are not required to convert error_entry() to C.
+	The changelog of patch8 is also updated locally to avoid ambiguity
+	that tglx questioned, and it will be sent separately after PeterZ's
+	change to entry_INT80_compat() merged to avoid confliction.
+
+Changed from V5:
+	Add a new ASM function to wrap PUSH_AND_CLEAR_REGS rather than
+	inline it in the marco idtentry to reduce text size.
+
+	Remove the branch in sync_regs() (pick it from V1 and update
+	the changelog a little)
+
+Changed from V4:
+	Update changelog largely of patch 1 and patch 2
+	Update changelog slightly of other patches
+	Unbreak the line of fixup_bad_iret() in patch1
+
+	Add Reviewed-by from Juergen Gross <jgross@suse.com> in patch 6
+	since he gave the Reviewed-by in one of the squashed patches.
+
+Changed from V3:
+	Only reorder the int80 thing as the last patch to make patches
+	ordering more natural. (Both orders are correct)
+
+Other interactions in V3:
+	Peter raised several questions and I think I answered them and I
+	don't think the code need to be updated unless I missed some
+	points. (Except reordering the patches)
+
+	Josh asked to remove UNWIND_HINT_REGS in patch5, but I think
+	UNWIND_HINT_REGS is old code before this patchset and I don't
+	want to do a cleanup that is not relate to preparing converting
+	ASM code C code in this patchset.  He also asked to remove
+	ENCODE_FRAME_POINTER in xenpv case, and I think it just
+	complicates the code for just optimizing out a single assignment
+	to %rbp.  I would not always stick to these reasons of mine,
+	but I just keep the code unchanged since he hasn't emphasized it
+	again nor other people has requested it.
+
+Changed from V2:
+	Make the patch of folding int80 thing as the first patch
+	Add more changelog in "Switch the stack after error_entry() returns"
+
+Changed from V1
+	Squash cleanup patches converting SWAPGS to swapgs into one patch
+
+	Use my official email address (Ant Group).  The work is backed
+	by my company and I was incorrectly misunderstood that
+	XXX@linux.alibaba.com is the only portal for opensource work
+	in the corporate group.
+
+
+Lai Jiangshan (6):
+  x86/traps: Move pt_regs only in fixup_bad_iret()
+  x86/entry: Switch the stack after error_entry() returns
+  x86/entry: Move PUSH_AND_CLEAR_REGS out of error_entry()
+  x86/entry: Move cld to the start of idtentry macro
+  x86/entry: Don't call error_entry() for XENPV
+  x86/entry: Convert SWAPGS to swapgs and remove the definition of
+    SWAPGS
+
+ arch/x86/entry/entry_64.S        | 53 ++++++++++++++++++++++----------
+ arch/x86/entry/entry_64_compat.S |  2 +-
+ arch/x86/include/asm/irqflags.h  |  8 -----
+ arch/x86/include/asm/traps.h     |  2 +-
+ arch/x86/kernel/traps.c          | 18 ++++-------
+ 5 files changed, 44 insertions(+), 39 deletions(-)
 
 -- 
-Hector Martin (marcan@marcan.st)
-Public Key: https://mrcn.st/pub
+2.19.1.6.gb485710b
+

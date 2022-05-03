@@ -2,364 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BF4B518D4F
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 21:41:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACA8A518D51
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 21:41:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234272AbiECTpC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 15:45:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40280 "EHLO
+        id S242006AbiECTpV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 15:45:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242001AbiECTo5 (ORCPT
+        with ESMTP id S240258AbiECTpS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 15:44:57 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8F0037AAD;
-        Tue,  3 May 2022 12:41:23 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id p18so21005010edr.7;
-        Tue, 03 May 2022 12:41:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=+9JX3y8IaqlCXj5IWV//z2uRp23lIuvJxUg7SiEiGuI=;
-        b=kzaQfR2YFUsbNNZxqp1mnk4+AFG88lyR3POakO2mLh9Uh/O4syItvLaCWFSoWgs9VM
-         vimniSS8/GSud2Jl+WjnNqNhgv8LZKorx9AhfKBOx1UR5Dat4Iff/CV19mP+7FyBrK3l
-         mYCeijEPwOIoc4iBK4y1hPOuiDuQ67JLy9uryZtUBxPylC//8B/3EJB4EHRFUpT2Rfj5
-         ckOm+KAn4tjRZg/Bi6OjvjvuD4KErUx45wgv5E+a5GU4Wg3/YA7wUN4BVKAcWvSAxHAr
-         KcudMyDNqMq7beKhMpk12s2wp0tDy3QT4MA4G5m/S7mVpOLVkQ1Z3dya2tulF4+mUoPC
-         887w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=+9JX3y8IaqlCXj5IWV//z2uRp23lIuvJxUg7SiEiGuI=;
-        b=iPVe4NhVnC5vb8VWRVLQOoIhNEiw+uPt0FXBSYGtccdWf4zvYmSLUg3CRfEsf1ooqr
-         2HnFEqUuGvG6VobrMz23OM8dIGcGI2WTKjfqUMYawccr69urE5KrIYz80FKUKHBV1bTA
-         /AbfVxzfLRGBNT/j60tEutivRqJ2NPV+jUGqYU6YJkL0z2+8AjBBIm9LtylFaGUCo/CB
-         8b0FI7V+FysYiExrtngDiVTCPWkoK9D5gLgjqT65Hf3+T2JM3/0FOPWVNXMdjq/Pv3SX
-         K2Si2jvLEl9/gJql3bqcLn5hQE02XNxxoNBuU4eM96e4XVK0BODaHwA+NJVHxXrfA1YA
-         C3ng==
-X-Gm-Message-State: AOAM5311OmrJz/uX2z8H7RJp/WD+qU+wesYnBUGqgBWMnu4ZhxURmuTu
-        GNmW4e5zDmr772jffPDO3cE=
-X-Google-Smtp-Source: ABdhPJws2LTHm0qvCA3N5Xhz0+SB57jiBQ1ihhQnzf+2g6rFPzKw8hWxUAA+7calG/lyVeGZ1bv8qA==
-X-Received: by 2002:a50:fb83:0:b0:425:cb1f:dc57 with SMTP id e3-20020a50fb83000000b00425cb1fdc57mr19626557edq.150.1651606882335;
-        Tue, 03 May 2022 12:41:22 -0700 (PDT)
-Received: from kista.localnet (cpe1-3-76.cable.triera.net. [213.161.3.76])
-        by smtp.gmail.com with ESMTPSA id p14-20020a056402154e00b0042617ba63a8sm8147584edx.50.2022.05.03.12.41.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 May 2022 12:41:22 -0700 (PDT)
-From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
-To:     Samuel Holland <samuel@sholland.org>, Chen-Yu Tsai <wens@csie.org>,
-        Andre Przywara <andre.przywara@arm.com>
-Cc:     Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Icenowy Zheng <icenowy@aosc.io>,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v11 5/6] arm64: dts: allwinner: h616: Add OrangePi Zero 2 board support
-Date:   Tue, 03 May 2022 21:41:21 +0200
-Message-ID: <7374416.EvYhyI6sBW@kista>
-In-Reply-To: <20220428230933.15262-6-andre.przywara@arm.com>
-References: <20220428230933.15262-1-andre.przywara@arm.com> <20220428230933.15262-6-andre.przywara@arm.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 3 May 2022 15:45:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C23A822B22
+        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 12:41:45 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5EA0D61982
+        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 19:41:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ADB6DC385A9;
+        Tue,  3 May 2022 19:41:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651606904;
+        bh=NG94txh+wND3OC7140pcpYGPVjRs1x+nXgpG24yMmfU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=fTc7B894+zfEF/Ma2g4dJtQhjrNeMsFOCFlDcVHnbmYQlPjq9DBbryPnkvZkEfuzB
+         3ARA0WYl34O10FIHYd5USTMbmpatTX+aMY7kzUfDGjTjuxIhRDqpFwRChhoIuSsh4R
+         DT5+VArmkueWsGt9Wl7oYB6w6Nz6+vX4dZAx5ikEvcUAIUkZfTFkAGF843wnMmf0MB
+         U0o2KAQsUd87BVjwthgDbo6TQFl6RhPGjN6AW14/mVIHKM410kIzHlzHfPV8lx9PDn
+         Bpt7man9BxvlvvodgvhLUOD9UwCdyAp/8gpQeWsIfn0JgNLXG4pcdgJRw22ahidhU2
+         MC4D5gJh2farQ==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nlyP0-008jAx-4W; Tue, 03 May 2022 20:41:42 +0100
+Date:   Tue, 03 May 2022 20:41:41 +0100
+Message-ID: <87a6byietm.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Kalesh Singh <kaleshsingh@google.com>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        James Morse <james.morse@arm.com>,
+        Fuad Tabba <tabba@google.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Suren Baghdasaryan <surenb@google.com>,
+        kvmarm <kvmarm@lists.cs.columbia.edu>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        "moderated list:ARM64 PORT (AARCH64 ARCHITECTURE)" 
+        <linux-arm-kernel@lists.infradead.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Will Deacon <will@kernel.org>,
+        Quentin Perret <qperret@google.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        Changbin Du <changbin.du@intel.com>,
+        "Cc: Android Kernel" <kernel-team@android.com>,
+        Nathan Chancellor <nathan@kernel.org>
+Subject: Re: [PATCH v8 0/6] KVM: arm64: Hypervisor stack enhancements
+In-Reply-To: <CAC_TJve+n8gXbG_XY_rb+DC7399SSmP6BRc5x7X=cvht50XLYA@mail.gmail.com>
+References: <20220420214317.3303360-1-kaleshsingh@google.com>
+        <165117574186.3115452.6818682378273681624.b4-ty@kernel.org>
+        <CAC_TJve+n8gXbG_XY_rb+DC7399SSmP6BRc5x7X=cvht50XLYA@mail.gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: kaleshsingh@google.com, catalin.marinas@arm.com, mark.rutland@arm.com, james.morse@arm.com, tabba@google.com, masahiroy@kernel.org, surenb@google.com, kvmarm@lists.cs.columbia.edu, suzuki.poulose@arm.com, linux-arm-kernel@lists.infradead.org, ardb@kernel.org, will@kernel.org, qperret@google.com, linux-kernel@vger.kernel.org, alexandru.elisei@arm.com, yuzenghui@huawei.com, changbin.du@intel.com, kernel-team@android.com, nathan@kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dne petek, 29. april 2022 ob 01:09:32 CEST je Andre Przywara napisal(a):
-> The OrangePi Zero 2 is a development board with the new H616 SoC. It
-> comes with the following features:
->   - Four ARM Cortex-A53 cores, Mali-G31 MP2 GPU
->   - 512MiB/1GiB DDR3 DRAM
->   - AXP305 PMIC
->   - Raspberry-Pi-1 compatible GPIO header
->   - extra 13 pin expansion header, exposing pins for 2x USB 2.0 ports
->   - 1 USB 2.0 host port
->   - 1 USB 2.0 type C port (power supply + OTG)
->   - MicroSD slot
->   - on-board 2MiB bootable SPI NOR flash
->   - 1Gbps Ethernet port (via RTL8211F PHY)
->   - micro-HDMI port
->   - unsupported Allwinner WiFi/BT chip
+On Mon, 02 May 2022 17:54:45 +0100,
+Kalesh Singh <kaleshsingh@google.com> wrote:
 > 
-> For more details see: https://linux-sunxi.org/Orange_Pi_Zero_2
-
-Please no external links.
-
+> On Thu, Apr 28, 2022 at 12:55 PM Marc Zyngier <maz@kernel.org> wrote:
+> >
+> > On Wed, 20 Apr 2022 14:42:51 -0700, Kalesh Singh wrote:
+> > > This is v8 of the nVHE hypervisor stack enhancements. This version is based
+> > > on 5.18-rc3.
+> > >
+> > > Previous versions can be found at:
+> > > v7: https://lore.kernel.org/r/20220408200349.1529080-1-kaleshsingh@google.com/
+> > > v6: https://lore.kernel.org/r/20220314200148.2695206-1-kaleshsingh@google.com/
+> > > v5: https://lore.kernel.org/r/20220307184935.1704614-1-kaleshsingh@google.com/
+> > > v4: https://lore.kernel.org/r/20220225033548.1912117-1-kaleshsingh@google.com/
+> > > v3: https://lore.kernel.org/r/20220224051439.640768-1-kaleshsingh@google.com/
+> > > v2: https://lore.kernel.org/r/20220222165212.2005066-1-kaleshsingh@google.com/
+> > > v1: https://lore.kernel.org/r/20220210224220.4076151-1-kaleshsingh@google.com/
+> > >
+> > > [...]
+> >
+> > Applied to next, thanks!
+> >
+> > [1/6] KVM: arm64: Introduce hyp_alloc_private_va_range()
+> >       commit: 92abe0f81e1385afd8f1dc66206b5be9a514899b
+> > [2/6] KVM: arm64: Introduce pkvm_alloc_private_va_range()
+> >       commit: f922c13e778d6d5343d4576be785a8204c595113
+> > [3/6] KVM: arm64: Add guard pages for KVM nVHE hypervisor stack
+> >       commit: ce3354318a57875dc59f4bb841662e95bfba03db
+> > [4/6] KVM: arm64: Add guard pages for pKVM (protected nVHE) hypervisor stack
+> >       commit: 1a919b17ef012ca0572bae759c27e5ea02bfb47f
+> > [5/6] KVM: arm64: Detect and handle hypervisor stack overflows
+> >       commit: 66de19fad9ef47c5376a99bb2b00661f1c788a94
+> > [6/6] KVM: arm64: Symbolize the nVHE HYP addresses
+> >       commit: 6ccf9cb557bd32073b0d68baed97f1bd8a40ff1d
 > 
-> Signed-off-by: Andre Przywara <andre.przywara@arm.com>
-> ---
->  arch/arm64/boot/dts/allwinner/Makefile        |   1 +
->  .../allwinner/sun50i-h616-orangepi-zero2.dts  | 203 ++++++++++++++++++
->  2 files changed, 204 insertions(+)
->  create mode 100644 arch/arm64/boot/dts/allwinner/sun50i-h616-orangepi-
-zero2.dts
+> Thanks for applying these Marc.
 > 
-> diff --git a/arch/arm64/boot/dts/allwinner/Makefile b/arch/arm64/boot/dts/
-allwinner/Makefile
-> index 8fa5c060a4fe..df2214e6d946 100644
-> --- a/arch/arm64/boot/dts/allwinner/Makefile
-> +++ b/arch/arm64/boot/dts/allwinner/Makefile
-> @@ -38,3 +38,4 @@ dtb-$(CONFIG_ARCH_SUNXI) += sun50i-h6-pine-h64.dtb
->  dtb-$(CONFIG_ARCH_SUNXI) += sun50i-h6-pine-h64-model-b.dtb
->  dtb-$(CONFIG_ARCH_SUNXI) += sun50i-h6-tanix-tx6.dtb
->  dtb-$(CONFIG_ARCH_SUNXI) += sun50i-h6-tanix-tx6-mini.dtb
-> +dtb-$(CONFIG_ARCH_SUNXI) += sun50i-h616-orangepi-zero2.dtb
-> diff --git a/arch/arm64/boot/dts/allwinner/sun50i-h616-orangepi-zero2.dts b/
-arch/arm64/boot/dts/allwinner/sun50i-h616-orangepi-zero2.dts
-> new file mode 100644
-> index 000000000000..ca07cae698ce
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/allwinner/sun50i-h616-orangepi-zero2.dts
-> @@ -0,0 +1,203 @@
-> +// SPDX-License-Identifier: (GPL-2.0+ or MIT)
-> +/*
-> + * Copyright (C) 2020 Arm Ltd.
+> I was wondering if instead of taking these through kvm-arm64/next,
+> could Catalin consolidated these in arm64 for-next/core with Mark
+> Ruthland's and Madhavan's stacktrace patches[1]? This avoids conflict
+> and would allow for the hypervisor unwinding changes[2] to apply
+> cleanly.
 
-2022?
+So far, there hasn't been any reported conflict. If Catalin needs to
+merge the branch or part of it, it is stable anyway and can be pulled
+from anywhere.
 
-> + */
-> +
-> +/dts-v1/;
-> +
-> +#include "sun50i-h616.dtsi"
-> +
-> +#include <dt-bindings/gpio/gpio.h>
-> +#include <dt-bindings/interrupt-controller/arm-gic.h>
-> +#include <dt-bindings/leds/common.h>
-> +
-> +/ {
-> +	model = "OrangePi Zero2";
-> +	compatible = "xunlong,orangepi-zero2", "allwinner,sun50i-h616";
-> +
-> +	aliases {
-> +		ethernet0 = &emac0;
-> +		serial0 = &uart0;
-> +	};
-> +
-> +	chosen {
-> +		stdout-path = "serial0:115200n8";
-> +	};
-> +
-> +	leds {
-> +		compatible = "gpio-leds";
-> +
-> +		led-0 {
-> +			function = LED_FUNCTION_POWER;
-> +			color = <LED_COLOR_ID_RED>;
-> +			gpios = <&pio 2 12 GPIO_ACTIVE_HIGH>; /* PC12 
-*/
-> +			default-state = "on";
-> +		};
-> +
-> +		led-1 {
-> +			function = LED_FUNCTION_STATUS;
-> +			color = <LED_COLOR_ID_GREEN>;
-> +			gpios = <&pio 2 13 GPIO_ACTIVE_HIGH>; /* PC13 
-*/
-> +		};
-> +	};
-> +
-> +	reg_vcc5v: vcc5v {
-> +		/* board wide 5V supply directly from the USB-C socket 
-*/
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "vcc-5v";
-> +		regulator-min-microvolt = <5000000>;
-> +		regulator-max-microvolt = <5000000>;
-> +		regulator-always-on;
-> +	};
-> +};
-> +
-> +&emac0 {
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&ext_rgmii_pins>;
-> +	phy-mode = "rgmii";
-> +	phy-handle = <&ext_rgmii_phy>;
-> +	phy-supply = <&reg_dcdce>;
-> +	allwinner,rx-delay-ps = <3100>;
-> +	allwinner,tx-delay-ps = <700>;
-> +	status = "okay";
-> +};
-> +
-> +&mdio0 {
-> +	ext_rgmii_phy: ethernet-phy@1 {
-> +		compatible = "ethernet-phy-ieee802.3-c22";
-> +		reg = <1>;
-> +	};
-> +};
-> +
-> +&mmc0 {
-> +	vmmc-supply = <&reg_dcdce>;
-> +	cd-gpios = <&pio 5 6 GPIO_ACTIVE_LOW>;	/* PF6 */
-> +	bus-width = <4>;
-> +	status = "okay";
-> +};
-> +
-> +&r_rsb {
-> +	status = "okay";
-> +
-> +	axp305: pmic@745 {
-> +		compatible = "x-powers,axp305", "x-powers,axp805",
-> +			     "x-powers,axp806";
-> +		interrupt-controller;
-> +		#interrupt-cells = <1>;
-> +		reg = <0x745>;
-> +
-> +		x-powers,self-working-mode;
-> +		vina-supply = <&reg_vcc5v>;
-> +		vinb-supply = <&reg_vcc5v>;
-> +		vinc-supply = <&reg_vcc5v>;
-> +		vind-supply = <&reg_vcc5v>;
-> +		vine-supply = <&reg_vcc5v>;
-> +		aldoin-supply = <&reg_vcc5v>;
-> +		bldoin-supply = <&reg_vcc5v>;
-> +		cldoin-supply = <&reg_vcc5v>;
-> +
-> +		regulators {
-> +			reg_aldo1: aldo1 {
-> +				regulator-always-on;
-> +				regulator-min-microvolt = 
-<3300000>;
-> +				regulator-max-microvolt = 
-<3300000>;
-> +				regulator-name = "vcc-sys";
-> +			};
-> +
-> +			reg_aldo2: aldo2 {	/* 3.3V on headers 
-*/
-> +				regulator-always-on;
-> +				regulator-min-microvolt = 
-<3300000>;
-> +				regulator-max-microvolt = 
-<3300000>;
-> +				regulator-name = "vcc3v3-ext";
-> +			};
-> +
-> +			reg_aldo3: aldo3 {	/* 3.3V on headers 
-*/
-> +				regulator-always-on;
-> +				regulator-min-microvolt = 
-<3300000>;
-> +				regulator-max-microvolt = 
-<3300000>;
-> +				regulator-name = "vcc3v3-ext2";
-> +			};
-> +
-> +			reg_bldo1: bldo1 {
-> +				regulator-always-on;
-> +				regulator-min-microvolt = 
-<1800000>;
-> +				regulator-max-microvolt = 
-<1800000>;
-> +				regulator-name = "vcc1v8";
-> +			};
-> +
-> +			bldo2 {
-> +				/* unused */
-> +			};
-> +
-> +			bldo3 {
-> +				/* unused */
-> +			};
-> +
-> +			bldo4 {
-> +				/* unused */
-> +			};
-> +
-> +			cldo1 {
-> +				/* reserved */
-> +			};
-> +
-> +			cldo2 {
-> +				/* unused */
-> +			};
-> +
-> +			cldo3 {
-> +				/* unused */
-> +			};
-> +
-> +			reg_dcdca: dcdca {
-> +				regulator-always-on;
-> +				regulator-min-microvolt = 
-<810000>;
-> +				regulator-max-microvolt = 
-<1080000>;
-> +				regulator-name = "vdd-cpu";
-> +			};
-> +
-> +			reg_dcdcc: dcdcc {
-> +				regulator-always-on;
-> +				regulator-min-microvolt = 
-<810000>;
-> +				regulator-max-microvolt = 
-<1080000>;
-> +				regulator-name = "vdd-gpu-sys";
-> +			};
-> +
-> +			reg_dcdcd: dcdcd {
-> +				regulator-always-on;
-> +				regulator-min-microvolt = 
-<1500000>;
-> +				regulator-max-microvolt = 
-<1500000>;
-> +				regulator-name = "vdd-dram";
-> +			};
-> +
-> +			reg_dcdce: dcdce {
-> +				regulator-boot-on;
+As for the rest of the stacktrace stuff, I haven't had a look yet.
 
-As discussed in the past, this will cause reboot issues because Linux will 
-turn down above regulator and thus SD card will stop working. This should be 
-always on.
+Thanks,
 
-And please add pio regulators, this is something we always add later...
+	M.
 
-Best regards,
-Jernej
-
-> +				regulator-min-microvolt = 
-<3300000>;
-> +				regulator-max-microvolt = 
-<3300000>;
-> +				regulator-name = "vcc-eth-mmc";
-> +			};
-> +
-> +			sw {
-> +				/* unused */
-> +			};
-> +		};
-> +	};
-> +};
-> +
-> +&spi0  {
-> +	status = "okay";
-> +
-> +	flash@0 {
-> +		#address-cells = <1>;
-> +		#size-cells = <1>;
-> +		compatible = "jedec,spi-nor";
-> +		reg = <0>;
-> +		spi-max-frequency = <40000000>;
-> +	};
-> +};
-> +
-> +&uart0 {
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&uart0_ph_pins>;
-> +	status = "okay";
-> +};
-> -- 
-> 2.35.3
-> 
-> 
-
-
+-- 
+Without deviation from the norm, progress is not possible.

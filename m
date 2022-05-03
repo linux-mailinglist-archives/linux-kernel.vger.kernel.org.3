@@ -2,163 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F04CA518CD2
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 21:03:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF950518CD5
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 21:04:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241732AbiECTGr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 15:06:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36150 "EHLO
+        id S241664AbiECTH4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 15:07:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239531AbiECTGq (ORCPT
+        with ESMTP id S232372AbiECTHz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 15:06:46 -0400
-Received: from mail1.bemta33.messagelabs.com (mail1.bemta33.messagelabs.com [67.219.247.3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCE293B3F8;
-        Tue,  3 May 2022 12:03:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=motorola.com;
-        s=Selector; t=1651604588; i=@motorola.com;
-        bh=XtyFhq7Q1eLkmO9etWjYMVijdPQniE2mXV3LOdbh9Pg=;
-        h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-         Content-Type:In-Reply-To;
-        b=X8gXWvfYvtpN9Y8wXs/LTzcvtTJDGxvpZO67Zz8ySvDUGxNv7bZjUkjl+Gw87xz23
-         eaO6tRNli8JZ0rQcPnlpMxlwacMGc33IonO3CRaZfUakhLNe/u921CYFKRZGvM2qeP
-         a+1J6xnouQT5Ggq/TWpsbsQ1B4EpO+fdLo/AuU5oFU7S3DwxhpJVhtBNo4q6Q8WDkV
-         X2pS716a4Z/YVCTzfpFXhq6StmG6TebUJfBeqXuvOLG3ZhCJR4A+SNOT5lnxvjq9eA
-         cokamfylIDA1VRRIWPcxWA/FKYfeMr+HMCsUFjcMkphAI3h9F3hWIC6VK7MEYiOv13
-         YwnmoTn1AaYBw==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrEIsWRWlGSWpSXmKPExsUyYU+Ds25OTWG
-  SwZoGIYtjbU/YLZoXr2ez6Jy4hN3i8q45bBaLlrUyO7B6zO6YyeqxaVUnm8f+uWvYPT5vkgtg
-  iWLNzEvKr0hgzVi8aTZTwS7xisWXrrE3MD4R6mLk4hASmMYkMW3aFmYIZxGTROPOg4xdjBwcL
-  AIqEutXxXQxcnKwCahJLHi9ihnEFhEwlug/O4sdpJ5ZYAqjxPvDKxhBEsICgRItc26wgNi8As
-  oSvw4eZAOxhQT6GCU27c2BiAtKnJz5BKyGWUBL4sa/l0wgu5gFpCWW/+MACXMKaEqcOdXDPoG
-  RdxaSjllIOmYhdCxgZF7FaJVUlJmeUZKbmJmja2hgoGtoaKJrDqL0Eqt0E/VKi3VTE4tLdI30
-  EsuL9VKLi/WKK3OTc1L08lJLNjECgzelyI17B+PZlT/1DjFKcjApifKqlRQmCfEl5adUZiQWZ
-  8QXleakFh9ilOHgUJLgPVoGlBMsSk1PrUjLzAFGEkxagoNHSYSXFxhNQrzFBYm5xZnpEKlTjL
-  oclw5d2cssxJKXn5cqJc7rVw1UJABSlFGaBzcCFtWXGGWlhHkZGRgYhHgKUotyM0tQ5V8xinM
-  wKgnz1oJM4cnMK4Hb9AroCCagI47Fgx1RkoiQkmpgmunec2t66bTdsecuHLNfMPlj64Mj2fHF
-  HgVczmfC5FIW3V+r++Bt+2uh7LzuoEMfUx3XrG3Ul1ZXFde4stnoYvuq2R/+NwdtDPxivjpY4
-  V/IoXYZj6Oy29ec/eHtdk5ePjbGV+b5vLi9B5W/5cuc2Tx7i6S7Qw9vQmh9z4blzwS69vgGmN
-  yzF4/wKLfZtvmo2PmMDA8Xr+s3lzG/VZE6Ifhh2zRVhx8vgw8+8eNVYyi+abhXl/9Jmfpl5Yn
-  fPCwvvf5xR6fh3hStnIni0iqPZdVtWdeo3xTuvuF0vnv6tIPBR+dHM+z5yRXd9MPEwrqB6eID
-  YYHjSXZ3Tq8M7Zslf9c39tBtwd3yBYKnPp8QVGIpzkg01GIuKk4EAP0UuL1lAwAA
-X-Env-Sender: w36195@motorola.com
-X-Msg-Ref: server-15.tower-715.messagelabs.com!1651604587!94122!1
-X-Originating-IP: [144.188.128.67]
-X-SYMC-ESS-Client-Auth: outbound-route-from=pass
-X-StarScan-Received: 
-X-StarScan-Version: 9.86.4; banners=-,-,-
-X-VirusChecked: Checked
-Received: (qmail 6841 invoked from network); 3 May 2022 19:03:08 -0000
-Received: from unknown (HELO ilclpfpp01.lenovo.com) (144.188.128.67)
-  by server-15.tower-715.messagelabs.com with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP; 3 May 2022 19:03:08 -0000
-Received: from va32lmmrp02.lenovo.com (va32lmmrp02.mot.com [10.62.176.191])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by ilclpfpp01.lenovo.com (Postfix) with ESMTPS id 4Kt8Vg5p1VzfBZq;
-        Tue,  3 May 2022 19:03:07 +0000 (UTC)
-Received: from p1g3 (unknown [10.45.5.51])
+        Tue, 3 May 2022 15:07:55 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBC233B3F8;
+        Tue,  3 May 2022 12:04:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: w36195)
-        by va32lmmrp02.lenovo.com (Postfix) with ESMTPSA id 4Kt8Vg31Nmzf6WS;
-        Tue,  3 May 2022 19:03:07 +0000 (UTC)
-Date:   Tue, 3 May 2022 14:02:58 -0500
-From:   Dan Vacura <w36195@motorola.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Felipe Balbi <balbi@kernel.org>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: gadget: uvc: allow for application to cleanly
- shutdown
-Message-ID: <YnF8YmKqFm5oONkB@p1g3>
-References: <20220429192001.385636-1-w36195@motorola.com>
- <YmzrwgiEO2hoKM4U@kroah.com>
- <Ym9Z+BfHcwDKlwjy@p1g3>
- <Ym/En8EjfkpIVm+a@kroah.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id A3420B81D9D;
+        Tue,  3 May 2022 19:04:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A07BC385A9;
+        Tue,  3 May 2022 19:04:17 +0000 (UTC)
+Date:   Tue, 3 May 2022 15:04:10 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     LKML <linux-kernel@vger.kernel.org>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Peter Zijlstra <peterz@infradead.org>, x86@kernel.org
+Subject: : [PATCH] ftrace/x86: Add FTRACE_MCOUNT_MAX_OFFSET to avoid adding
+ weak functions
+Message-ID: <20220503150410.2d9e88aa@rorschach.local.home>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Ym/En8EjfkpIVm+a@kroah.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
+From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
 
-Thanks for the feedback.
+If an unused weak function was traced, it's call to fentry will still
+exist, which gets added into the __mcount_loc table. Ftrace will use
+kallsyms to retrieve the name for each location in __mcount_loc to display
+it in the available_filter_functions and used to enable functions via the
+name matching in set_ftrace_filter/notrace. Enabling these functions do
+nothing but enable an unused call to ftrace_caller. If a traced weak
+function is overridden, the symbol of the function would be used for it,
+which will either created duplicate names, or if the previous function was
+not traced, it would be incorrectly listed in available_filter_functions
+as a function that can be traced.
 
-On Mon, May 02, 2022 at 01:46:39PM +0200, Greg Kroah-Hartman wrote:
-> On Sun, May 01, 2022 at 11:11:36PM -0500, Dan Vacura wrote:
-> > On Sat, Apr 30, 2022 at 09:56:50AM +0200, Greg Kroah-Hartman wrote:
-> > > On Fri, Apr 29, 2022 at 02:20:01PM -0500, Dan Vacura wrote:
-> > > > diff --git a/drivers/usb/gadget/function/f_uvc.c b/drivers/usb/gadget/function/f_uvc.c
-> > > > index 50e6e7a58b41..3cc8cf24a7c7 100644
-> > > > --- a/drivers/usb/gadget/function/f_uvc.c
-> > > > +++ b/drivers/usb/gadget/function/f_uvc.c
-> > > > @@ -892,13 +892,36 @@ static void uvc_function_unbind(struct usb_configuration *c,
-> > > >  {
-> > > >  	struct usb_composite_dev *cdev = c->cdev;
-> > > >  	struct uvc_device *uvc = to_uvc(f);
-> > > > +	int wait_ret = 1;
-> > > >  
-> > > >  	uvcg_info(f, "%s()\n", __func__);
-> > > 
-> > > Ick, wait, is that in the kernel?  That needs to be removed, ftrace can
-> > > do that for you.
-> > 
-> > Yes, part of the kernel, and tbh, I find it to be quite helpful in
-> > debugging field issues from customers, where enabling ftrace isn't
-> > practical.
-> 
-> Why isn't ftrace ok to enable in a running kernel?
+This became an issue with BPF[1] as there are tooling that enables the
+direct callers via ftrace but then checks to see if the functions were
+actually enabled. The case of one function that was marked notrace, but
+was followed by an unused weak function that was traced. The unused
+function's call to fentry was added to the __mcount_loc section, and
+kallsyms retrieved the untraced function's symbol as the weak function was
+overridden. Since the untraced function would not get traced, the BPF
+check would detect this and fail.
 
-ftrace is totally fine to enable. I should've said convenient instead of
-practical, from my experience there's a bit more offline/developer
-overhead for setup and integrating the trace logs with a panic or kmsg,
-then bundling that with the bug reports we get.
+The real fix would be to fix kallsyms to not show address of weak
+functions as the function before it. But that would require adding code in
+the build to add function size to kallsyms so that it can know when the
+function ends instead of just using the start of the next known symbol.
 
-> 
-> Worst case, this should be dev_dbg(), right?
-> 
-> > If you still want to remove, there are other locations in
-> > this gadget driver that log function entry. Perhaps it'd be better to
-> > do a separate change that cleans up logging a bit or do you prefer to
-> > just refactor this one now?
-> 
-> This commit is fine, it's a separate issue, I just noticed it as it was
-> in the context of this change.
-> 
-> > > > +	/* If we know we're connected via v4l2, then there should be a cleanup
-> > > > +	 * of the device from userspace either via UVC_EVENT_DISCONNECT or
-> > > > +	 * though the video device removal uevent. Allow some time for the
-> > > > +	 * application to close out before things get deleted.
-> > > > +	 */
-> > > > +	if (uvc->func_connected) {
-> > > > +		uvcg_info(f, "%s waiting for clean disconnect\n", __func__);
-> > > > +		wait_ret = wait_event_interruptible_timeout(uvc->func_connected_queue,
-> > > > +				uvc->func_connected == false, msecs_to_jiffies(500));
-> > > > +		uvcg_info(f, "%s done waiting with ret: %u\n", __func__, wait_ret);
-> > > 
-> > > Please remove debugging code before submitting patches.
-> > 
-> > Will do.
-> 
-> But this should be removed :)
-> 
-> Feel free to change it to dev_dbg(), which gives you the __func__
-> automatically without anything extra needed.
+In the mean time, this is a work around. Add a FTRACE_MCOUNT_MAX_OFFSET
+macro that if defined, ftrace will ignore any function that has its call
+to fentry/mcount that has an offset from the symbol that is greater than
+FTRACE_MCOUNT_MAX_OFFSET.
 
-Yes, I'll go with this approach, as it doesn't make sense to always
-print, but is good to have when developing or debugging. The timeouts
-seem reasonable to me and work for our setup, but I was expecting some
-comments about them or a suggestion for a different approach.
+If CONFIG_HAVE_FENTRY is defined for x86, define FTRACE_MCOUNT_MAX_OFFSET
+to zero, which will have ftrace ignore all locations that are not at the
+start of the function.
 
-Thanks,
+[1] https://lore.kernel.org/all/20220412094923.0abe90955e5db486b7bca279@kernel.org/
 
-Dan
+Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+---
+ arch/x86/include/asm/ftrace.h |  5 ++++
+ kernel/trace/ftrace.c         | 50 +++++++++++++++++++++++++++++++++--
+ 2 files changed, 53 insertions(+), 2 deletions(-)
+
+diff --git a/arch/x86/include/asm/ftrace.h b/arch/x86/include/asm/ftrace.h
+index 024d9797646e..70c88d49bf45 100644
+--- a/arch/x86/include/asm/ftrace.h
++++ b/arch/x86/include/asm/ftrace.h
+@@ -9,6 +9,11 @@
+ # define MCOUNT_ADDR		((unsigned long)(__fentry__))
+ #define MCOUNT_INSN_SIZE	5 /* sizeof mcount call */
+ 
++/* Ignore unused weak functions which will have non zero offsets */
++#ifdef CONFIG_HAVE_FENTRY
++# define FTRACE_MCOUNT_MAX_OFFSET	0
++#endif
++
+ #ifdef CONFIG_DYNAMIC_FTRACE
+ #define ARCH_SUPPORTS_FTRACE_OPS 1
+ #endif
+diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
+index 5c465e70d146..3529c44ab9db 100644
+--- a/kernel/trace/ftrace.c
++++ b/kernel/trace/ftrace.c
+@@ -3665,6 +3665,31 @@ static void add_trampoline_func(struct seq_file *m, struct ftrace_ops *ops,
+ 		seq_printf(m, " ->%pS", ptr);
+ }
+ 
++#ifdef FTRACE_MCOUNT_MAX_OFFSET
++static int print_rec(struct seq_file *m, unsigned long ip)
++{
++	unsigned long offset;
++	char str[KSYM_SYMBOL_LEN];
++	char *modname;
++	int ret;
++
++	ret = kallsyms_lookup(ip, NULL, &offset, &modname, str);
++	if (!ret || offset > FTRACE_MCOUNT_MAX_OFFSET)
++		return -1;
++
++	seq_puts(m, str);
++	if (modname)
++		seq_printf(m, " [%s]", modname);
++	return 0;
++}
++#else
++static int print_rec(struct seq_file *m, unsigned long ip)
++{
++	seq_printf(m, "%ps", (void *)ip);
++	return 0;
++}
++#endif
++
+ static int t_show(struct seq_file *m, void *v)
+ {
+ 	struct ftrace_iterator *iter = m->private;
+@@ -3689,7 +3714,9 @@ static int t_show(struct seq_file *m, void *v)
+ 	if (!rec)
+ 		return 0;
+ 
+-	seq_printf(m, "%ps", (void *)rec->ip);
++	if (print_rec(m, rec->ip))
++		return 0;
++
+ 	if (iter->flags & FTRACE_ITER_ENABLED) {
+ 		struct ftrace_ops *ops;
+ 
+@@ -4007,6 +4034,24 @@ add_rec_by_index(struct ftrace_hash *hash, struct ftrace_glob *func_g,
+ 	return 0;
+ }
+ 
++#ifdef FTRACE_MCOUNT_MAX_OFFSET
++static int lookup_ip(unsigned long ip, char **modname, char *str)
++{
++	unsigned long offset;
++
++	kallsyms_lookup(ip, NULL, &offset, modname, str);
++	if (offset > FTRACE_MCOUNT_MAX_OFFSET)
++		return -1;
++	return 0;
++}
++#else
++static int lookup_ip(unsigned long ip, char **modname, char *str)
++{
++	kallsyms_lookup(ip, NULL, NULL, modname, str);
++	return 0;
++}
++#endif
++
+ static int
+ ftrace_match_record(struct dyn_ftrace *rec, struct ftrace_glob *func_g,
+ 		struct ftrace_glob *mod_g, int exclude_mod)
+@@ -4014,7 +4059,8 @@ ftrace_match_record(struct dyn_ftrace *rec, struct ftrace_glob *func_g,
+ 	char str[KSYM_SYMBOL_LEN];
+ 	char *modname;
+ 
+-	kallsyms_lookup(rec->ip, NULL, NULL, &modname, str);
++	if (lookup_ip(rec->ip, &modname, str))
++		return 0;
+ 
+ 	if (mod_g) {
+ 		int mod_matches = (modname) ? ftrace_match(modname, mod_g) : 0;
+-- 
+2.35.1
+

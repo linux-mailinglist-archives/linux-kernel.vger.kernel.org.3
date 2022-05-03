@@ -2,120 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D538251815F
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 11:41:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C4CF518180
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 11:43:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233987AbiECJoF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 05:44:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52822 "EHLO
+        id S233743AbiECJpw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 05:45:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233558AbiECJmq (ORCPT
+        with ESMTP id S233699AbiECJpk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 05:42:46 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C1DB836E02
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 02:39:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651570749;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=3Vl3zBaptlkLi2pN2YFgVBOvYXnkT8yd21wK9z5rSdc=;
-        b=RoD2LUvWVjLcJ+TxPOMiJJusK8sAf3o6xv1wnJ33KxJADIssOKnJjxc3tg+J59Wo4u/Np7
-        ilhNOK+r8E0zvbTG+2nYx07QiTmrDA3excn+dNTxtx1de5/XIqAfVohwNCNdP1wZiEQ3/f
-        VRi1AAn+aNIoAlK7GcayDbl2JloZem0=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-67-bTHVz4OzOEij_FIPh_Qdbg-1; Tue, 03 May 2022 05:39:08 -0400
-X-MC-Unique: bTHVz4OzOEij_FIPh_Qdbg-1
-Received: by mail-wm1-f70.google.com with SMTP id 26-20020a05600c021a00b003940660c053so5482896wmi.2
-        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 02:39:08 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=3Vl3zBaptlkLi2pN2YFgVBOvYXnkT8yd21wK9z5rSdc=;
-        b=4IazLuhhCPipEDLRdLhdkCNxbum2sbyS3BVwKp6OPl/eLIu+XYtR1cDjZJBjwJF7Cv
-         F+9k75L8cH2zoXzAjZ/syhxOok1o6vtzRoE/+HhzFVMq5HmmfQGLHP63pZgcwJ6mXsBo
-         /qRVm3YELggxBG7KwpQrctLZ8dxgqZbytBikzM7s+r0jJZ5Q2Erxfdp+65tUBA+PHld1
-         0hwCSCqvtZDTs3so+D2yYaM3ChJQEoIlyVmft2mnsTAA/V/pvi6rHTfOVEWmECblv1gS
-         pTlsMb8jMqHL8Z16FS+qGTqq5Z0CUkOipO1YqSUE3jDzWyJ5Ipg27pI9CZps7dMpq+ie
-         dQGw==
-X-Gm-Message-State: AOAM530vtPfvLl1OMqPU/HmuxG/z35ngxEnKe4sD+RPU9h2wR51cNAyD
-        flvdEukphqM2d9wMgOKOxZwG01igUJqdGqHST8b5f5fqrQ2FU4xFlvaTHDeRy4RCh3ILNWkokTo
-        DATiBYIcteavuhZjC/GVL8hwC
-X-Received: by 2002:a05:6000:2a5:b0:20c:520a:a12e with SMTP id l5-20020a05600002a500b0020c520aa12emr11875129wry.629.1651570747248;
-        Tue, 03 May 2022 02:39:07 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxA6L/WATVBozXOB3fYrHpsCfnZqDpiLrJbyUtPkvN0RR1QELlYfoMEoyThVwbkvsuFsTfwJw==
-X-Received: by 2002:a05:6000:2a5:b0:20c:520a:a12e with SMTP id l5-20020a05600002a500b0020c520aa12emr11875112wry.629.1651570747058;
-        Tue, 03 May 2022 02:39:07 -0700 (PDT)
-Received: from [10.32.181.74] (nat-pool-mxp-t.redhat.com. [149.6.153.186])
-        by smtp.googlemail.com with ESMTPSA id u2-20020adfa182000000b0020c5253d915sm8918771wru.97.2022.05.03.02.39.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 03 May 2022 02:39:06 -0700 (PDT)
-Message-ID: <f0e633b3-38ea-f288-c74d-487387cefddc@redhat.com>
-Date:   Tue, 3 May 2022 11:39:04 +0200
+        Tue, 3 May 2022 05:45:40 -0400
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 897AB393C6;
+        Tue,  3 May 2022 02:41:39 -0700 (PDT)
+Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2434gpKd023329;
+        Tue, 3 May 2022 11:41:29 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=selector1;
+ bh=KtBi0bALfEZJ6PQMsbUtfysms3YLQRmfgj7UlOPq0hk=;
+ b=PUAr2Q7EfoXFm8Lc4uTFRWghK4eiPObCkAE+tPkKFC/FgNNAcFENuocVCZ4BI/NfoyzF
+ 8HsAHAdQ1B3C8y0OIprOzHg2IcxpGddW9fBGkFHJN9heeQR5VpQ3KNZAlUD02kz6Vbny
+ kvoITw8WGVd2AsgNi98OpXeUqMzK7tHb0h2iQ10S2Qe319JT5j5m+cO+l4IcSSmYBZWW
+ Yr8RQEOUHT07Jc8ztNbBrnrj3u03k6GugKkORTg488G3Tby8/vOGfrxUR3GjJpKrIOG3
+ Wc4G00BqXNQH2lgfy1CPY/BPHjf9LSvNCjO2iYb6Lgzq9nBEJ2vqQvb42xtwYrQk9ZFN sg== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3frthjnf9t-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 03 May 2022 11:41:29 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id E734710002A;
+        Tue,  3 May 2022 11:41:28 +0200 (CEST)
+Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id DF36C21514F;
+        Tue,  3 May 2022 11:41:28 +0200 (CEST)
+Received: from localhost (10.75.127.47) by SFHDAG2NODE2.st.com (10.75.127.5)
+ with Microsoft SMTP Server (TLS) id 15.0.1497.26; Tue, 3 May 2022 11:41:28
+ +0200
+From:   Fabien Dessenne <fabien.dessenne@foss.st.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        <devicetree@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     Fabien Dessenne <fabien.dessenne@foss.st.com>
+Subject: [PATCH 1/2] ARM: dts: stm32: add blue led (Linux heartbeat) on stm32mp135f-dk
+Date:   Tue, 3 May 2022 11:41:24 +0200
+Message-ID: <20220503094124.502416-1-fabien.dessenne@foss.st.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v9 0/9] IPI virtualization support for VM
-Content-Language: en-US
-To:     Zeng Guang <guang.zeng@intel.com>,
-        "Christopherson,, Sean" <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "Luck, Tony" <tony.luck@intel.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Kim Phillips <kim.phillips@amd.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jethro Beekman <jethro@fortanix.com>,
-        "Huang, Kai" <kai.huang@intel.com>
-Cc:     "x86@kernel.org" <x86@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Hu, Robert" <robert.hu@intel.com>,
-        "Gao, Chao" <chao.gao@intel.com>
-References: <20220419153155.11504-1-guang.zeng@intel.com>
- <2d33b71a-13e5-d377-abc2-c20958526497@redhat.com>
- <cf178428-8c98-e7b3-4317-8282938976fd@intel.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <cf178428-8c98-e7b3-4317-8282938976fd@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.75.127.47]
+X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SFHDAG2NODE2.st.com
+ (10.75.127.5)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-03_03,2022-05-02_03,2022-02-23_01
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/3/22 09:32, Zeng Guang wrote:
-> 
-> I don't see "[PATCH v9 4/9] KVM: VMX: Report tertiary_exec_control field in
-> dump_vmcs()" in kvm/queue. Does it not need ?
+The blue led (Linux heartbeat) is connected to the PA14 pin of the
+stm32mp135f-dk board.
 
-Added now (somehow the patches were not threaded, so I had to catch them 
-one by one from lore).
+Signed-off-by: Fabien Dessenne <fabien.dessenne@foss.st.com>
+---
+ arch/arm/boot/dts/stm32mp135f-dk.dts | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
 
-> Selftests for KVM_CAP_MAX_VCPU_ID is posted in V2 which is revised on top of
-> kvm/queue.
-> ([PATCH v2] kvm: selftests: Add KVM_CAP_MAX_VCPU_ID cap test - Zeng 
-> Guang (kernel.org) 
-> <https://lore.kernel.org/lkml/20220503064037.10822-1-guang.zeng@intel.com/>)
-
-Queued, thanks.
-
-Paolo
+diff --git a/arch/arm/boot/dts/stm32mp135f-dk.dts b/arch/arm/boot/dts/stm32mp135f-dk.dts
+index aefa25ee897d..65acee0f68b7 100644
+--- a/arch/arm/boot/dts/stm32mp135f-dk.dts
++++ b/arch/arm/boot/dts/stm32mp135f-dk.dts
+@@ -6,6 +6,8 @@
+ 
+ /dts-v1/;
+ 
++#include <dt-bindings/gpio/gpio.h>
++#include <dt-bindings/leds/common.h>
+ #include "stm32mp135.dtsi"
+ #include "stm32mp13xf.dtsi"
+ #include "stm32mp13-pinctrl.dtsi"
+@@ -23,6 +25,18 @@ memory@c0000000 {
+ 		reg = <0xc0000000 0x20000000>;
+ 	};
+ 
++	leds {
++		compatible = "gpio-leds";
++
++		led-blue {
++			function = LED_FUNCTION_HEARTBEAT;
++			color = <LED_COLOR_ID_BLUE>;
++			gpios = <&gpioa 14 GPIO_ACTIVE_LOW>;
++			linux,default-trigger = "heartbeat";
++			default-state = "off";
++		};
++	};
++
+ 	vdd_sd: vdd-sd {
+ 		compatible = "regulator-fixed";
+ 		regulator-name = "vdd_sd";
+-- 
+2.25.1
 

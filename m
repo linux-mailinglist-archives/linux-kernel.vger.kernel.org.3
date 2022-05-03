@@ -2,95 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4652C518398
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 13:55:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E82B5183B6
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 14:00:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234961AbiECL7P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 07:59:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39936 "EHLO
+        id S235043AbiECMEV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 08:04:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231882AbiECL7N (ORCPT
+        with ESMTP id S235017AbiECMES (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 07:59:13 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6F0EB7F1;
-        Tue,  3 May 2022 04:55:41 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 433176164E;
-        Tue,  3 May 2022 11:55:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 902D0C385A9;
-        Tue,  3 May 2022 11:55:39 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="iwmrY2Q1"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1651578938;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=OmnpymFgrKna+sorYsF9uO7087ZOoY3Nagqmgfgtvyw=;
-        b=iwmrY2Q1Z5D2rGVAA265kMFcIFN0uJku1PhjnGHwvIhDRbrtY5xC0tE8RmF9AHg2cdbv7X
-        w59MpGC2fCz7GMwqv2ef6Sdw1MNYtmmiBTK0+d7veygZHmULjs9O1XX1mOc32pN4ewyMF8
-        YoCyXu/14vRA+o3aNNd5wpIVEN/3Yn8=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 8fcc1fbf (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Tue, 3 May 2022 11:55:38 +0000 (UTC)
-Date:   Tue, 3 May 2022 13:55:35 +0200
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Lennart Poettering <mzxreary@0pointer.de>
-Cc:     Alexander Graf <graf@amazon.com>, linux-kernel@vger.kernel.org,
-        linux-crypto@vger.kernel.org,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Theodore Ts'o <tytso@mit.edu>,
-        Colm MacCarthaigh <colmmacc@amazon.com>,
-        Torben Hansen <htorben@amazon.co.uk>,
-        Jann Horn <jannh@google.com>
-Subject: Re: [PATCH 2/2] random: add fork_event sysctl for polling VM forks
-Message-ID: <YnEYN+Q3q76NVX3Q@zx2c4.com>
-References: <20220502140602.130373-1-Jason@zx2c4.com>
- <20220502140602.130373-2-Jason@zx2c4.com>
- <Ym/7UlgQ5VjjC76P@gardel-login>
- <YnAC00VtU8MGb7vO@zx2c4.com>
- <YnAMBzhcJhGR5XOK@gardel-login>
- <7a1cfd1c-9f0e-f134-e544-83ee6d3cd9c9@amazon.com>
- <YnDn/d6iB0aUZkWJ@gardel-login>
+        Tue, 3 May 2022 08:04:18 -0400
+Received: from relmlie6.idc.renesas.com (relmlor2.renesas.com [210.160.252.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CBE332ED49;
+        Tue,  3 May 2022 05:00:44 -0700 (PDT)
+X-IronPort-AV: E=Sophos;i="5.91,195,1647270000"; 
+   d="scan'208";a="119861684"
+Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
+  by relmlie6.idc.renesas.com with ESMTP; 03 May 2022 21:00:44 +0900
+Received: from localhost.localdomain (unknown [10.226.92.6])
+        by relmlir6.idc.renesas.com (Postfix) with ESMTP id 4BEAB42268E6;
+        Tue,  3 May 2022 21:00:39 +0900 (JST)
+From:   Phil Edworthy <phil.edworthy@renesas.com>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Phil Edworthy <phil.edworthy@renesas.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Chris Paterson <Chris.Paterson2@renesas.com>,
+        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v3 00/12] Add new Renesas RZ/V2M SoC and Renesas RZ/V2M EVK support
+Date:   Tue,  3 May 2022 12:55:45 +0100
+Message-Id: <20220503115557.53370-1-phil.edworthy@renesas.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <YnDn/d6iB0aUZkWJ@gardel-login>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 03, 2022 at 10:29:49AM +0200, Lennart Poettering wrote:
-> As mentioned earlier, I am not convinced sysctl is the right place for
-> this. sysctls are understood by most people as being the place for
-> tweaking kernel settings. This is not a kernel setting, but a
-> notification concept, and the way Jason defined it there's nothing to
-> read nor write, which strongly suggests to move it elsewhere, but not
-> /proc/sys/.
+Hello,
 
-I think I'm coming around to this view that having a sysctl return
--ENODATA is weird. It makes `sysctl -a` always complain to stderr, for
-example, which seems bad.
+RZ/V2M has a dual-core Cortex-A53 (1.0 GHz) CPU and built-in AI
+accelerator "DRP-AI" for vision, which is Renesas' original technology.
+It also has a 32-bit LPDDR4 interface and video codec (H.264).
 
-> > I can see attractiveness in providing the /run/fork-id directly from the
-> > kernel though, to remove the dependency on systemd for poll-less
-> > notification of libraries.
-> 
-> I agree.
+The RZ/V2M is used with ISP firmware that runs on one of the Cortex-A53
+cores. The firmware is an integral part of the SoC such that the HW
+User's Manual documents which of the peripheral modules are used by the
+firmware.
 
-I'm still not convinced there's value in having a counter or a UUID, but
-if you had to choose, would you prefer a counter or a UUID? It sounds
-like the former, because you see a use for distinguishing between zero
-and non-zero? Or did you finally agree with me that vmgenid isn't
-granular enough for that?
+Initial patches enables minimal peripherals on Renesas RZ/V2M EVK board
+and booted via nfs. Ethernet is broadly compatible with the
+etheravb-rcar-gen3 driver, but interrupts need some work so it's not
+been included in this patch set.
 
-Jason
+Below blocks are enabled on Renesas RZ/V2M EVK board:
+- memory
+- External input clock
+- CPG
+- UART
+
+Links for SoC and EVK:
+[*] https://www.renesas.com/us/en/products/microcontrollers-microprocessors/rz-cortex-a-mpus/rzv2m-dual-cortex-a53-lpddr4x32bit-ai-accelerator-isp-4k-video-codec-4k-camera-input-fhd-display-output
+
+
+Sorry for cross posting the patches to multiple subsystems, as these are
+just the dt-binding patches included as part of initial bringup patches.
+
+v3:
+ * Feedback addressed
+ * Added patch [0001] for renesas,em-uart dt-bindings RZ/V2M clock for the regs
+ * Added patch [0004] for arm,arch_timer dt-bindings optional clock and reset
+ * Added patch [0005] for rzg2l clk to move the DEF_MUX array size calc into the macro
+ * Added patch [0006] for rzg2l clk to add read-only versions of the macros
+
+v2:
+ * Removed SYS dt-bindings patch and corresponding SoC identification
+   as we only used the LSI version register. This can be dealt with
+   later on.
+ * Fixed em-uart dt-bindings.
+ * Included reviewed-by tags.
+
+Thanks
+Phil

@@ -2,238 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8947517CBF
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 07:00:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AE87517CC2
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 07:07:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231331AbiECE5c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 00:57:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42648 "EHLO
+        id S231406AbiECFFQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 01:05:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231252AbiECE5a (ORCPT
+        with ESMTP id S231407AbiECFFM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 00:57:30 -0400
-Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 647F43EB82;
-        Mon,  2 May 2022 21:53:58 -0700 (PDT)
-Received: by mail-qk1-x72b.google.com with SMTP id c1so12858540qkf.13;
-        Mon, 02 May 2022 21:53:58 -0700 (PDT)
+        Tue, 3 May 2022 01:05:12 -0400
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6170A3EB85
+        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 22:01:40 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id c11so3845574plg.13
+        for <linux-kernel@vger.kernel.org>; Mon, 02 May 2022 22:01:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=2AL/JKHLZMiDrdtYYPFneIU29x/Fvo6xQuo1PE3Elwk=;
-        b=mAsS7cKNG2PcNpkIxfZGdFnsrTzZ1+XVZ5/f1toViYts+E+bjdP4sEBqlsxmF1TWOk
-         O3YrZ/gM18x/N07rTZ9oT06xFXzhPpPF/o1E216+MTax+Poncw8+a2BIym8xhmdM8l/6
-         MdpeGFauQi3zUvv93bedj18NbkrGjFSCrsZ1QmCYCmpVKDebQFdUXyNnR4Q5vkJZZCe9
-         3TId3IazbL/n9U9wPkrxOJ3fVc3U8ehSzIz071HGJ+qGWAwoUqBT7V8NDRuPRYDC9HI8
-         T00uArG6Nl94iE/Vi0hKBERItx4k7G/0nST+3nEuj/MtjOLrAax2H0GPSoVmQz5k+XBN
-         SGnA==
+        d=kylehuey.com; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=EnEoLxNESFUTI46rXZ49NiSZqFRgdh8+36EAvyHGQns=;
+        b=gd+RFqIrUmVYueZ4Bw6793FFqgcHp4mHcQbLos/DbvQXnZz8eUFvcHxvIkvGnUGo74
+         /cnoBUkC53CVEEz6O/hV9GLnxN6IM2eyZA7oZ6pCGT7cnPzdacr9X7afPAgMe+3UbzKq
+         oQD6FpyOTUMVZOhQ8/gXizwELs7An1vrq32aK/PdpIEvgE2pvUjsJB7iph3PToDaYsjt
+         A2wQkEU9zPSAjUl7Yr20MEKVr7fNJYZQ7flnKP12PGnI27d2E5wJK2oQhkcCKbx1d+Tf
+         DI3zZbZ/YV0Nbo1XUI3uEBcFYCLZuARDBXf6OxRInIKL/7r4LQcwKbjVbQhL7WXxDS+K
+         MbLw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=2AL/JKHLZMiDrdtYYPFneIU29x/Fvo6xQuo1PE3Elwk=;
-        b=ER9t6yWD2H6h90N/CxaoduYu0p/0WBzkM1Di9IP9Gmgz60PphSBro7FQNRxtWT8iMD
-         jTTe85/u5YYDlgOvehFXGdrApbQBR7xoo+mQKDP5rCjK98Pa8ijUU93O0Ks3aAo9nGDZ
-         xheJwfzWU3BN4e76dD1k+R6fQrdP7kpk+i7mtVG8gja04FmrT6fdP1TbmvlZ/eKHawpl
-         XOCmAheVXJFlLRGlJBiqXzQaAX0iSeCW7uqmHVGArYLk8JKCtMsJUaYue23triiVQ5Kv
-         /xePc7KZSoDMLUwQYIUuUNxfpL6ASIAIqcViV+KTfpMEFRyAEwAX2eGJ8+tQkGKrX+rS
-         5hOQ==
-X-Gm-Message-State: AOAM530E/VQ+C5eTO/FH0f3QdEMnwu5Ib/inDsbCKo68nTWoG6DsYvA9
-        Wp7ERTMbHeG+b8vgy1O5g8m0Sxw6Ui9cgKYsrCitdfJeuog=
-X-Google-Smtp-Source: ABdhPJxh/EMgybZ61mkZgKwbyOrk5nhF7HHNj5cj5Uh/FQaAgfMFW9AIxqS8YCnNLqNtXnjQqCFP0CvEnSb6ZyV5YpE=
-X-Received: by 2002:a37:b886:0:b0:69f:c337:7bb with SMTP id
- i128-20020a37b886000000b0069fc33707bbmr9823558qkf.74.1651553637547; Mon, 02
- May 2022 21:53:57 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=EnEoLxNESFUTI46rXZ49NiSZqFRgdh8+36EAvyHGQns=;
+        b=nJMe/E0j5PB49mGrMBOPp0fasNH6/D5QDrMR/xL8QwcbalCKqP3Cd/ysnBhSs8Fqva
+         eB2XNvSYJAkXS5U3h+QzzCok6zReKt+l+th2lDI51xJoGqIN5NtrVR0Fv8NcMy4mnZwI
+         jARQNgYJ9iKlCj8iFN66BQkgRuWBh78KXfSIst50IB+eOuC6D647opTiqFeVDYXP3p8n
+         /8Ovu1rvYAelsUBISbcq9htUPa+YxWZS8UGY0dU4XtH1g6G6v6ev/lqtex2jDc8y5/wx
+         jr7LSnVZw8/tZX+jI8QBPiu6gYGZkeU7yqfQRFnD0GBb/8xYxzf94Fe4u2bT8dnkCRMb
+         JZgg==
+X-Gm-Message-State: AOAM530uLWhcfds1RvWF43rX0hYJheWjyW6p7JvRuUjDBL3LohGYygI9
+        oQw5P+4R/h462NdQQVMoboe6/L4bXPIbonsf
+X-Google-Smtp-Source: ABdhPJxRPzN58QziFP/ngC1wLLm0Rp2I/CIWsVaWLrSIL+s77G48MTmB7eQ5OUnmhLU0KxaMgROmzA==
+X-Received: by 2002:a17:903:189:b0:15e:9584:fbe7 with SMTP id z9-20020a170903018900b0015e9584fbe7mr12153547plg.65.1651554099135;
+        Mon, 02 May 2022 22:01:39 -0700 (PDT)
+Received: from minbar.home.kylehuey.com (c-71-198-251-229.hsd1.ca.comcast.net. [71.198.251.229])
+        by smtp.gmail.com with ESMTPSA id 3-20020aa79143000000b0050dc76281e6sm5519416pfi.192.2022.05.02.22.01.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 May 2022 22:01:38 -0700 (PDT)
+From:   Kyle Huey <me@kylehuey.com>
+X-Google-Original-From: Kyle Huey <khuey@kylehuey.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, kvm@vger.kernel.org,
+        Robert O'Callahan <robert@ocallahan.org>,
+        Keno Fischer <keno@juliacomputing.com>,
+        Kyle Huey <me@kylehuey.com>
+Subject: [PATCH] KVM: x86/svm: Account for family 17h event renumberings in amd_pmc_perf_hw_id
+Date:   Mon,  2 May 2022 22:01:36 -0700
+Message-Id: <20220503050136.86298-1-khuey@kylehuey.com>
+X-Mailer: git-send-email 2.36.0
 MIME-Version: 1.0
-References: <20220428125610.66647-1-gengcixi@gmail.com>
-In-Reply-To: <20220428125610.66647-1-gengcixi@gmail.com>
-From:   Baolin Wang <baolin.wang7@gmail.com>
-Date:   Tue, 3 May 2022 12:54:31 +0800
-Message-ID: <CADBw62r8eGRNcXH1cAZvYQdKCgBjxUVnxhLsa=Oyzs-uwavRTA@mail.gmail.com>
-Subject: Re: [PATCH v2] power: supply: Add enable the primary charger interface
-To:     Cixi Geng <gengcixi@gmail.com>
-Cc:     Sebastian Reichel <sre@kernel.org>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>, chenyongzhi811@gmail.com,
-        Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 28, 2022 at 8:56 PM Cixi Geng <gengcixi@gmail.com> wrote:
->
-> From: Chen Yongzhi <Yongzhi.Chen@unisoc.com>
->
-> In the case of charging multiple charging ICs,the primary
-> charging IC often needs to be turned off in the fast
-> charging stage, and only using the charger pump to charge,
-> need to add a new power_supply_property attribute.
+From: Kyle Huey <me@kylehuey.com>
 
-I'm still confused why introducing a new
-POWER_SUPPLY_PROP_CHARGE_ENABLED property to control the charging, but
-you already controlled the charging by POWER_SUPPLY_PROP_STATUS?
+Zen renumbered some of the performance counters that correspond to the
+well known events in perf_hw_id. This code in KVM was never updated for
+that, so guest that attempt to use counters on Zen that correspond to the
+pre-Zen perf_hw_id values will silently receive the wrong values.
 
->
-> Signed-off-by: Chen Yongzhi <Yongzhi.Chen@unisoc.com>
-> Reported-by: kernel test robot <lkp@intel.com>
-> Link: https://lore.kernel.org/all/202204230206.9TgyhSb1-lkp@intel.com
-> Signed-off-by: Cixi Geng <cixi.geng1@unisoc.com>
-> ---
->  drivers/power/supply/sc2731_charger.c | 52 +++++++++++++++++++++++++--
->  include/linux/power_supply.h          |  1 +
->  2 files changed, 50 insertions(+), 3 deletions(-)
->
-> diff --git a/drivers/power/supply/sc2731_charger.c b/drivers/power/supply/sc2731_charger.c
-> index 9ac17cf7a126..c15f9b75e6a8 100644
-> --- a/drivers/power/supply/sc2731_charger.c
-> +++ b/drivers/power/supply/sc2731_charger.c
-> @@ -1,5 +1,5 @@
->  // SPDX-License-Identifier: GPL-2.0
-> -// Copyright (C) 2018 Spreadtrum Communications Inc.
-> +// Copyright (C) 2022 Spreadtrum Communications Inc.
+This has been observed in the wild with rr[0] when running in Zen 3
+guests. rr uses the retired conditional branch counter 00d1 which is
+incorrectly recognized by KVM as PERF_COUNT_HW_STALLED_CYCLES_BACKEND.
 
-Do not add unrelated changes.
+[0] https://rr-project.org/
 
->
->  #include <linux/module.h>
->  #include <linux/platform_device.h>
-> @@ -146,6 +146,24 @@ static int sc2731_charger_get_status(struct sc2731_charger_info *info)
->         return POWER_SUPPLY_STATUS_CHARGING;
->  }
->
-> +static int sc2731_charger_set_status(struct sc2731_charger_info *info, int val)
-> +{
-> +       int ret = 0;
-> +
-> +       if (!val && info->charging) {
-> +               sc2731_charger_stop_charge(info);
-> +               info->charging = false;
-> +       } else if (val && !info->charging) {
-> +               ret = sc2731_charger_start_charge(info);
-> +               if (ret)
-> +                       dev_err(info->dev, "start charge failed\n");
+Signed-off-by: Kyle Huey <me@kylehuey.com>
+---
+ arch/x86/kvm/svm/pmu.c | 28 +++++++++++++++++++++++++---
+ 1 file changed, 25 insertions(+), 3 deletions(-)
 
-Duplicate error information, since you already print errors in
-sc2731_charger_usb_set_property()
-
-> +               else
-> +                       info->charging = true;
-> +       }
-> +
-> +       return ret;
-> +}
-> +
->  static int sc2731_charger_get_current(struct sc2731_charger_info *info,
->                                       u32 *cur)
->  {
-> @@ -204,7 +222,7 @@ sc2731_charger_usb_set_property(struct power_supply *psy,
->                                 const union power_supply_propval *val)
->  {
->         struct sc2731_charger_info *info = power_supply_get_drvdata(psy);
-> -       int ret;
-> +       int ret = 0;
->
->         mutex_lock(&info->lock);
->
-> @@ -214,6 +232,12 @@ sc2731_charger_usb_set_property(struct power_supply *psy,
->         }
->
->         switch (psp) {
-> +       case POWER_SUPPLY_PROP_STATUS:
-> +               ret = sc2731_charger_set_status(info, val->intval);
-> +               if (ret < 0)
-> +                       dev_err(info->dev, "set charge status failed\n");
-> +               break;
-> +
->         case POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT:
->                 ret = sc2731_charger_set_current(info, val->intval / 1000);
->                 if (ret < 0)
-> @@ -227,6 +251,15 @@ sc2731_charger_usb_set_property(struct power_supply *psy,
->                         dev_err(info->dev, "set input current limit failed\n");
->                 break;
->
-> +       case POWER_SUPPLY_PROP_CHARGE_ENABLED:
-> +               if (val->intval == true) {
-> +                       ret = sc2731_charger_start_charge(info);
-> +                       if (ret)
-> +                               dev_err(info->dev, "start charge failed\n");
-> +               } else if (val->intval == false) {
-> +                       sc2731_charger_stop_charge(info);
-> +               }
-> +               break;
->         default:
->                 ret = -EINVAL;
->         }
-> @@ -241,7 +274,7 @@ static int sc2731_charger_usb_get_property(struct power_supply *psy,
->  {
->         struct sc2731_charger_info *info = power_supply_get_drvdata(psy);
->         int ret = 0;
-> -       u32 cur;
-> +       u32 cur, enabled;
->
->         mutex_lock(&info->lock);
->
-> @@ -277,6 +310,16 @@ static int sc2731_charger_usb_get_property(struct power_supply *psy,
->                 }
->                 break;
->
-> +       case POWER_SUPPLY_PROP_CHARGE_ENABLED:
-> +               ret = regmap_read(info->regmap, info->base + SC2731_CHG_CFG0, &enabled);
-> +               if (ret) {
-> +                       dev_err(info->dev, "get sc2731 charge enabled failed\n");
-> +                       goto out;
-> +               }
-> +
-> +               val->intval = enabled & SC2731_CHARGER_PD;
-> +
-> +               break;
->         default:
->                 ret = -EINVAL;
->         }
-> @@ -292,8 +335,10 @@ static int sc2731_charger_property_is_writeable(struct power_supply *psy,
->         int ret;
->
->         switch (psp) {
-> +       case POWER_SUPPLY_PROP_STATUS:
->         case POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT:
->         case POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT:
-> +       case POWER_SUPPLY_PROP_CHARGE_ENABLED:
->                 ret = 1;
->                 break;
->
-> @@ -308,6 +353,7 @@ static enum power_supply_property sc2731_usb_props[] = {
->         POWER_SUPPLY_PROP_STATUS,
->         POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT,
->         POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT,
-> +       POWER_SUPPLY_PROP_CHARGE_ENABLED,
->  };
->
->  static const struct power_supply_desc sc2731_charger_desc = {
-> diff --git a/include/linux/power_supply.h b/include/linux/power_supply.h
-> index cb380c1d9459..1dfe194d8a5e 100644
-> --- a/include/linux/power_supply.h
-> +++ b/include/linux/power_supply.h
-> @@ -167,6 +167,7 @@ enum power_supply_property {
->         POWER_SUPPLY_PROP_PRECHARGE_CURRENT,
->         POWER_SUPPLY_PROP_CHARGE_TERM_CURRENT,
->         POWER_SUPPLY_PROP_CALIBRATE,
-> +       POWER_SUPPLY_PROP_CHARGE_ENABLED,
->         POWER_SUPPLY_PROP_MANUFACTURE_YEAR,
->         POWER_SUPPLY_PROP_MANUFACTURE_MONTH,
->         POWER_SUPPLY_PROP_MANUFACTURE_DAY,
-> --
-> 2.25.1
->
-
-
+diff --git a/arch/x86/kvm/svm/pmu.c b/arch/x86/kvm/svm/pmu.c
+index b14860863c39..43d24746c0a7 100644
+--- a/arch/x86/kvm/svm/pmu.c
++++ b/arch/x86/kvm/svm/pmu.c
+@@ -45,6 +45,22 @@ static struct kvm_event_hw_type_mapping amd_event_mapping[] = {
+ 	[7] = { 0xd1, 0x00, PERF_COUNT_HW_STALLED_CYCLES_BACKEND },
+ };
+ 
++/* duplicated from amd_f17h_perfmon_event_map. */
++static struct kvm_event_hw_type_mapping amd_f17h_event_mapping[] = {
++	[0] = { 0x76, 0x00, PERF_COUNT_HW_CPU_CYCLES },
++	[1] = { 0xc0, 0x00, PERF_COUNT_HW_INSTRUCTIONS },
++	[2] = { 0x60, 0xff, PERF_COUNT_HW_CACHE_REFERENCES },
++	[3] = { 0x64, 0x09, PERF_COUNT_HW_CACHE_MISSES },
++	[4] = { 0xc2, 0x00, PERF_COUNT_HW_BRANCH_INSTRUCTIONS },
++	[5] = { 0xc3, 0x00, PERF_COUNT_HW_BRANCH_MISSES },
++	[6] = { 0x87, 0x02, PERF_COUNT_HW_STALLED_CYCLES_FRONTEND },
++	[7] = { 0x87, 0x01, PERF_COUNT_HW_STALLED_CYCLES_BACKEND },
++};
++
++/* amd_pmc_perf_hw_id depends on these being the same size */
++static_assert(ARRAY_SIZE(amd_event_mapping) ==
++	     ARRAY_SIZE(amd_f17h_event_mapping));
++
+ static unsigned int get_msr_base(struct kvm_pmu *pmu, enum pmu_type type)
+ {
+ 	struct kvm_vcpu *vcpu = pmu_to_vcpu(pmu);
+@@ -140,6 +156,7 @@ static inline struct kvm_pmc *get_gp_pmc_amd(struct kvm_pmu *pmu, u32 msr,
+ 
+ static unsigned int amd_pmc_perf_hw_id(struct kvm_pmc *pmc)
+ {
++	struct kvm_event_hw_type_mapping *event_mapping;
+ 	u8 event_select = pmc->eventsel & ARCH_PERFMON_EVENTSEL_EVENT;
+ 	u8 unit_mask = (pmc->eventsel & ARCH_PERFMON_EVENTSEL_UMASK) >> 8;
+ 	int i;
+@@ -148,15 +165,20 @@ static unsigned int amd_pmc_perf_hw_id(struct kvm_pmc *pmc)
+ 	if (WARN_ON(pmc_is_fixed(pmc)))
+ 		return PERF_COUNT_HW_MAX;
+ 
++	if (boot_cpu_data.x86 >= 0x17)
++		event_mapping = amd_f17h_event_mapping;
++	else
++		event_mapping = amd_event_mapping;
++
+ 	for (i = 0; i < ARRAY_SIZE(amd_event_mapping); i++)
+-		if (amd_event_mapping[i].eventsel == event_select
+-		    && amd_event_mapping[i].unit_mask == unit_mask)
++		if (event_mapping[i].eventsel == event_select
++		    && event_mapping[i].unit_mask == unit_mask)
+ 			break;
+ 
+ 	if (i == ARRAY_SIZE(amd_event_mapping))
+ 		return PERF_COUNT_HW_MAX;
+ 
+-	return amd_event_mapping[i].event_type;
++	return event_mapping[i].event_type;
+ }
+ 
+ /* check if a PMC is enabled by comparing it against global_ctrl bits. Because
 -- 
-Baolin Wang
+2.36.0
+

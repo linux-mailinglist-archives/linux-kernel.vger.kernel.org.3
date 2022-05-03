@@ -2,132 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C1F751897E
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 18:16:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAE1F518982
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 18:16:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239290AbiECQTb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 12:19:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59574 "EHLO
+        id S239291AbiECQUA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 12:20:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239167AbiECQT3 (ORCPT
+        with ESMTP id S239174AbiECQT5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 12:19:29 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E5451FA47
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 09:15:56 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CEC09616F8
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 16:15:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7AB23C385A4;
-        Tue,  3 May 2022 16:15:54 +0000 (UTC)
-Date:   Tue, 3 May 2022 12:15:46 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Marco Elver <elver@google.com>
-Cc:     John Ogness <john.ogness@linutronix.de>,
-        Petr Mladek <pmladek@suse.com>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Johannes Berg <johannes.berg@intel.com>,
-        Alexander Potapenko <glider@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Linux Kernel Functional Testing <lkft@linaro.org>
-Subject: Re: [PATCH -printk] printk, tracing: fix console tracepoint
-Message-ID: <20220503121546.614ad6a8@rorschach.local.home>
-In-Reply-To: <20220503073844.4148944-1-elver@google.com>
-References: <20220503073844.4148944-1-elver@google.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Tue, 3 May 2022 12:19:57 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB0901FA47
+        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 09:16:24 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id l7so34451994ejn.2
+        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 09:16:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=oU0gNOmApxV0Y7ahlTC+ZO77cG/p3zhJM/T1yrF7v5Y=;
+        b=F+dNGWv77Wmd0QgNj4t9OR2FM1cNz0M7TsCPrF2ZsdtitJNLVc0o+I5AhkCej72eCp
+         y4vtCZo0/bovmckK91ixaQnV1mx59K61ZEtPpFcwTIFDz3Lo1x+SNyqDV04OqV6GqMW0
+         H5u5uQEap5RRUXl17YeaccpRrcnXKRBDWLLY8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=oU0gNOmApxV0Y7ahlTC+ZO77cG/p3zhJM/T1yrF7v5Y=;
+        b=FHC5udTrOF+HA7vLeDYFbTJKTO4hPANX06XPSUxoG3Yle/tqNzte0s8O2YLgkKE+ET
+         Gy3T3NEuaZqrjett24ZLRc/gTeTAJdwzrGNDRM78yDL3fszyKp2PucRFmoiULQtKQU6H
+         uwERfjegBJKncVCAH0S2aA42lK+6K6LW+l+EM7hh0ahD1MXRra+X67ubNpG0uvLY0YFN
+         yWqd/w5RRb7odK/L3nzFr7mPaLLrBl7+ACUTPdrp0h9b0Ym9KAJ4aOzNRzfNaXQLK38T
+         KdQum0XY+uKHhKKgzwxBefa3CiKFsmZD0qIlOoc1AhVcsu+EZ3V94xHplgCQS3FjWulv
+         GS2A==
+X-Gm-Message-State: AOAM530PrSSR054G3hFUtrh57doCzUlvQ6VnjKS80SJc+6w/Rbfy9IfV
+        FILJhQaRgji6GDXYoLIUjNC3dZAU1rW7SDyd
+X-Google-Smtp-Source: ABdhPJwTJYklQB4tJwk8fl25y8350P5fPiIJ5RHRlAoA+tjVztVCS2QuuwSP8e52XdhhA2BmvsoBwg==
+X-Received: by 2002:a17:906:3e05:b0:6f3:a14a:fd3f with SMTP id k5-20020a1709063e0500b006f3a14afd3fmr15625821eji.640.1651594583172;
+        Tue, 03 May 2022 09:16:23 -0700 (PDT)
+Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com. [209.85.221.47])
+        by smtp.gmail.com with ESMTPSA id qr48-20020a1709068cb000b006f3ef214e0bsm4834328ejc.113.2022.05.03.09.16.22
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 03 May 2022 09:16:22 -0700 (PDT)
+Received: by mail-wr1-f47.google.com with SMTP id x18so24108243wrc.0
+        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 09:16:22 -0700 (PDT)
+X-Received: by 2002:a05:6000:2c1:b0:20c:5e37:3ed1 with SMTP id
+ o1-20020a05600002c100b0020c5e373ed1mr9011909wry.342.1651594581793; Tue, 03
+ May 2022 09:16:21 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220430011402.1.If7c3471db53bea55213f7bcf17e9043084d3ac0c@changeid>
+ <20220430011402.3.Ic20d0c002ac5406b880cbdf9824739f38740926c@changeid>
+ <dbcb45d6-d495-1e5d-b7ad-963096e5fe9d@linaro.org> <CAD=FV=WhAqQnxwNaW4kfq9Wuwsz6YYzBgSn=KX9Se_5o2mkcsA@mail.gmail.com>
+ <e321d8c2-950c-a194-04a3-1fe2659749e9@linaro.org>
+In-Reply-To: <e321d8c2-950c-a194-04a3-1fe2659749e9@linaro.org>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Tue, 3 May 2022 09:16:08 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=Usp=uMj+aupFsiBEqPp1M5cgJOOPLxeSujrbm3V0obQg@mail.gmail.com>
+Message-ID: <CAD=FV=Usp=uMj+aupFsiBEqPp1M5cgJOOPLxeSujrbm3V0obQg@mail.gmail.com>
+Subject: Re: [PATCH 3/5] arm64: dts: qcom: sc7180: Add quackingstick dts files
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     "Joseph S. Barrera III" <joebar@chromium.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Alexandru M Stan <amstan@chromium.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue,  3 May 2022 09:38:44 +0200
-Marco Elver <elver@google.com> wrote:
+Hi,
 
-> The original intent of the 'console' tracepoint per 95100358491a
-> ("printk/tracing: Add console output tracing") had been to "[...] record
-> any printk messages into the trace, regardless of the current console
-> loglevel. This can help correlate (existing) printk debugging with other
-> tracing."
-> 
-> Petr points out [1] that calling trace_console_rcuidle() in
-> call_console_driver() had been the wrong thing for a while, because
-> "printk() always used console_trylock() and the message was flushed to
-> the console only when the trylock succeeded. And it was always deferred
-> in NMI or when printed via printk_deferred()."
-> 
-> With 09c5ba0aa2fc ("printk: add kthread console printers"), things only
-> got worse, and calls to call_console_driver() no longer happen with
-> typical printk() calls but always appear deferred [2].
-> 
-> As such, the tracepoint can no longer serve its purpose to clearly
-> correlate printk() calls and other tracing, as well as breaks usecases
-> that expect every printk() call to result in a callback of the console
-> tracepoint. Notably, the KFENCE and KCSAN test suites, which want to
-> capture console output and assume a printk() immediately gives us a
-> callback to the console tracepoint.
-> 
-> Fix the console tracepoint by moving it into printk_sprint() [3].
-> 
-> One notable difference is that by moving tracing into printk_sprint(),
-> the 'text' will no longer include the "header" (loglevel and timestamp),
-> but only the raw message. Arguably this is less of a problem now that
-> the console tracepoint happens on the printk() call and isn't delayed.
-> 
+On Tue, May 3, 2022 at 8:55 AM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> On 03/05/2022 17:34, Doug Anderson wrote:
+> > Hi,
+> >
+> > On Tue, May 3, 2022 at 8:31 AM Krzysztof Kozlowski
+> > <krzysztof.kozlowski@linaro.org> wrote:
+> >>
+> >> On 30/04/2022 10:15, Joseph S. Barrera III wrote:
+> >>> Quackingstick is a trogdor-based board. These dts files are copies from
+> >>> the downstream Chrome OS 5.4 kernel, but with downstream bits removed.
+> >>>
+> >>> Signed-off-by: Joseph S. Barrera III <joebar@chromium.org>
+> >>
+> >> (...)
+> >>
+> >>> +/*
+> >>> + * Google Quackingstick board device tree source
+> >>> + *
+> >>> + * Copyright 2021 Google LLC.
+> >>> + *
+> >>> + * SKU: 0x601 => 1537
+> >>> + *  - bits 11..8: Panel ID: 0x6 (AUO)
+> >>> + */
+> >>> +
+> >>> +#include "sc7180-trogdor-quackingstick.dtsi"
+> >>> +
+> >>> +/ {
+> >>> +     model = "Google Quackingstick (rev0+)";
+> >>> +     compatible = "google,quackingstick-sku1537", "qcom,sc7180";
+> >>
+> >> Here and in other patches you keep adding undocumented board compatibles.
+> >
+> > Sure, but perhaps we could continue the conversation at:
+> >
+> > https://lore.kernel.org/r/CAD=FV=W_SA-3PfDFi-Gkjk9pew5bchFNjQhXX8MkZyuy5UohEQ@mail.gmail.com/
+> >
+> > ...to avoid forking it and losing all the context.
+>
+> It's not that close to that discussion because none of compatibles here
+> are documented and we discussed about documenting specific revisions.
 
-I'm OK with this change, but I don't know everyone that uses the trace
-printk feature. I am worried that this could cause regressions in
-people's workloads.
+It is strongly related, though, since we later might need to add
+revision info to these boards. These are still Chrome OS devices and
+they still have a bootloader looking at revision strappings. In this
+case, though, all the changes between revisions (so far) have been
+invisible to software.
 
-I'd like to hear more feedback from others, but for me:
-
-Acked-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-
--- Steve
-
-
-> Link: https://lore.kernel.org/all/Ym+WqKStCg%2FEHfh3@alley/ [1]
-> Link: https://lore.kernel.org/all/CA+G9fYu2kS0wR4WqMRsj2rePKV9XLgOU1PiXnMvpT+Z=c2ucHA@mail.gmail.com/ [2]
-> Link: https://lore.kernel.org/all/87fslup9dx.fsf@jogness.linutronix.de/ [3]
-> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> Signed-off-by: Marco Elver <elver@google.com>
-> Cc: John Ogness <john.ogness@linutronix.de>
-> Cc: Petr Mladek <pmladek@suse.com>
-> ---
->  kernel/printk/printk.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/kernel/printk/printk.c b/kernel/printk/printk.c
-> index f66d6e72a642..a3e1035929b0 100644
-> --- a/kernel/printk/printk.c
-> +++ b/kernel/printk/printk.c
-> @@ -2064,8 +2064,6 @@ static void call_console_driver(struct console *con, const char *text, size_t le
->  {
->  	size_t dropped_len;
->  
-> -	trace_console_rcuidle(text, len);
-> -
->  	if (con->dropped && dropped_text) {
->  		dropped_len = snprintf(dropped_text, DROPPED_TEXT_MAX,
->  				       "** %lu printk messages dropped **\n",
-> @@ -2240,6 +2238,8 @@ static u16 printk_sprint(char *text, u16 size, int facility,
->  		}
->  	}
->  
-> +	trace_console_rcuidle(text, text_len);
-> +
->  	return text_len;
->  }
->  
-
+-Doug

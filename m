@@ -2,46 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F641518CCE
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 21:02:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F04CA518CD2
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 21:03:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241716AbiECTGE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 15:06:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35550 "EHLO
+        id S241732AbiECTGr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 15:06:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241711AbiECTGB (ORCPT
+        with ESMTP id S239531AbiECTGq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 15:06:01 -0400
-Received: from smtp.smtpout.orange.fr (smtp09.smtpout.orange.fr [80.12.242.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B8843F897
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 12:02:27 -0700 (PDT)
-Received: from [192.168.1.18] ([86.243.180.246])
-        by smtp.orange.fr with ESMTPA
-        id lxmynCNbVqoKwlxmyn5d1e; Tue, 03 May 2022 21:02:25 +0200
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
-X-ME-Date: Tue, 03 May 2022 21:02:25 +0200
-X-ME-IP: 86.243.180.246
-Message-ID: <6e8386fe-3b22-6f54-5636-bdc946beab59@wanadoo.fr>
-Date:   Tue, 3 May 2022 21:02:24 +0200
+        Tue, 3 May 2022 15:06:46 -0400
+Received: from mail1.bemta33.messagelabs.com (mail1.bemta33.messagelabs.com [67.219.247.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCE293B3F8;
+        Tue,  3 May 2022 12:03:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=motorola.com;
+        s=Selector; t=1651604588; i=@motorola.com;
+        bh=XtyFhq7Q1eLkmO9etWjYMVijdPQniE2mXV3LOdbh9Pg=;
+        h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+         Content-Type:In-Reply-To;
+        b=X8gXWvfYvtpN9Y8wXs/LTzcvtTJDGxvpZO67Zz8ySvDUGxNv7bZjUkjl+Gw87xz23
+         eaO6tRNli8JZ0rQcPnlpMxlwacMGc33IonO3CRaZfUakhLNe/u921CYFKRZGvM2qeP
+         a+1J6xnouQT5Ggq/TWpsbsQ1B4EpO+fdLo/AuU5oFU7S3DwxhpJVhtBNo4q6Q8WDkV
+         X2pS716a4Z/YVCTzfpFXhq6StmG6TebUJfBeqXuvOLG3ZhCJR4A+SNOT5lnxvjq9eA
+         cokamfylIDA1VRRIWPcxWA/FKYfeMr+HMCsUFjcMkphAI3h9F3hWIC6VK7MEYiOv13
+         YwnmoTn1AaYBw==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrEIsWRWlGSWpSXmKPExsUyYU+Ds25OTWG
+  SwZoGIYtjbU/YLZoXr2ez6Jy4hN3i8q45bBaLlrUyO7B6zO6YyeqxaVUnm8f+uWvYPT5vkgtg
+  iWLNzEvKr0hgzVi8aTZTwS7xisWXrrE3MD4R6mLk4hASmMYkMW3aFmYIZxGTROPOg4xdjBwcL
+  AIqEutXxXQxcnKwCahJLHi9ihnEFhEwlug/O4sdpJ5ZYAqjxPvDKxhBEsICgRItc26wgNi8As
+  oSvw4eZAOxhQT6GCU27c2BiAtKnJz5BKyGWUBL4sa/l0wgu5gFpCWW/+MACXMKaEqcOdXDPoG
+  RdxaSjllIOmYhdCxgZF7FaJVUlJmeUZKbmJmja2hgoGtoaKJrDqL0Eqt0E/VKi3VTE4tLdI30
+  EsuL9VKLi/WKK3OTc1L08lJLNjECgzelyI17B+PZlT/1DjFKcjApifKqlRQmCfEl5adUZiQWZ
+  8QXleakFh9ilOHgUJLgPVoGlBMsSk1PrUjLzAFGEkxagoNHSYSXFxhNQrzFBYm5xZnpEKlTjL
+  oclw5d2cssxJKXn5cqJc7rVw1UJABSlFGaBzcCFtWXGGWlhHkZGRgYhHgKUotyM0tQ5V8xinM
+  wKgnz1oJM4cnMK4Hb9AroCCagI47Fgx1RkoiQkmpgmunec2t66bTdsecuHLNfMPlj64Mj2fHF
+  HgVczmfC5FIW3V+r++Bt+2uh7LzuoEMfUx3XrG3Ul1ZXFde4stnoYvuq2R/+NwdtDPxivjpY4
+  V/IoXYZj6Oy29ec/eHtdk5ePjbGV+b5vLi9B5W/5cuc2Tx7i6S7Qw9vQmh9z4blzwS69vgGmN
+  yzF4/wKLfZtvmo2PmMDA8Xr+s3lzG/VZE6Ifhh2zRVhx8vgw8+8eNVYyi+abhXl/9Jmfpl5Yn
+  fPCwvvf5xR6fh3hStnIni0iqPZdVtWdeo3xTuvuF0vnv6tIPBR+dHM+z5yRXd9MPEwrqB6eID
+  YYHjSXZ3Tq8M7Zslf9c39tBtwd3yBYKnPp8QVGIpzkg01GIuKk4EAP0UuL1lAwAA
+X-Env-Sender: w36195@motorola.com
+X-Msg-Ref: server-15.tower-715.messagelabs.com!1651604587!94122!1
+X-Originating-IP: [144.188.128.67]
+X-SYMC-ESS-Client-Auth: outbound-route-from=pass
+X-StarScan-Received: 
+X-StarScan-Version: 9.86.4; banners=-,-,-
+X-VirusChecked: Checked
+Received: (qmail 6841 invoked from network); 3 May 2022 19:03:08 -0000
+Received: from unknown (HELO ilclpfpp01.lenovo.com) (144.188.128.67)
+  by server-15.tower-715.messagelabs.com with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP; 3 May 2022 19:03:08 -0000
+Received: from va32lmmrp02.lenovo.com (va32lmmrp02.mot.com [10.62.176.191])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by ilclpfpp01.lenovo.com (Postfix) with ESMTPS id 4Kt8Vg5p1VzfBZq;
+        Tue,  3 May 2022 19:03:07 +0000 (UTC)
+Received: from p1g3 (unknown [10.45.5.51])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: w36195)
+        by va32lmmrp02.lenovo.com (Postfix) with ESMTPSA id 4Kt8Vg31Nmzf6WS;
+        Tue,  3 May 2022 19:03:07 +0000 (UTC)
+Date:   Tue, 3 May 2022 14:02:58 -0500
+From:   Dan Vacura <w36195@motorola.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Felipe Balbi <balbi@kernel.org>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: gadget: uvc: allow for application to cleanly
+ shutdown
+Message-ID: <YnF8YmKqFm5oONkB@p1g3>
+References: <20220429192001.385636-1-w36195@motorola.com>
+ <YmzrwgiEO2hoKM4U@kroah.com>
+ <Ym9Z+BfHcwDKlwjy@p1g3>
+ <Ym/En8EjfkpIVm+a@kroah.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH v8 1/2] thermal: Add thermal driver for Sunplus
-Content-Language: en-US
-References: <cover.1651543731.git.lhjeff911@gmail.com>
- <febcaf8229a33217b4bfb3654d6f0bfe7f55a84d.1651543731.git.lhjeff911@gmail.com>
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     krzk@kernel.org, rafael@kernel.org, daniel.lezcano@linaro.org,
-        amitk@kernel.org, rui.zhang@intel.com, robh+dt@kernel.org,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Li-hao Kuo <lhjeff911@gmail.com>
-In-Reply-To: <febcaf8229a33217b4bfb3654d6f0bfe7f55a84d.1651543731.git.lhjeff911@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Ym/En8EjfkpIVm+a@kroah.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -49,235 +89,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hi Greg,
 
-below, some additional nitpick.
+Thanks for the feedback.
 
-CJ
-
-Le 03/05/2022 à 04:13, Li-hao Kuo a écrit :
-> Add thermal driver for Sunplus.
+On Mon, May 02, 2022 at 01:46:39PM +0200, Greg Kroah-Hartman wrote:
+> On Sun, May 01, 2022 at 11:11:36PM -0500, Dan Vacura wrote:
+> > On Sat, Apr 30, 2022 at 09:56:50AM +0200, Greg Kroah-Hartman wrote:
+> > > On Fri, Apr 29, 2022 at 02:20:01PM -0500, Dan Vacura wrote:
+> > > > diff --git a/drivers/usb/gadget/function/f_uvc.c b/drivers/usb/gadget/function/f_uvc.c
+> > > > index 50e6e7a58b41..3cc8cf24a7c7 100644
+> > > > --- a/drivers/usb/gadget/function/f_uvc.c
+> > > > +++ b/drivers/usb/gadget/function/f_uvc.c
+> > > > @@ -892,13 +892,36 @@ static void uvc_function_unbind(struct usb_configuration *c,
+> > > >  {
+> > > >  	struct usb_composite_dev *cdev = c->cdev;
+> > > >  	struct uvc_device *uvc = to_uvc(f);
+> > > > +	int wait_ret = 1;
+> > > >  
+> > > >  	uvcg_info(f, "%s()\n", __func__);
+> > > 
+> > > Ick, wait, is that in the kernel?  That needs to be removed, ftrace can
+> > > do that for you.
+> > 
+> > Yes, part of the kernel, and tbh, I find it to be quite helpful in
+> > debugging field issues from customers, where enabling ftrace isn't
+> > practical.
 > 
-> Signed-off-by: Li-hao Kuo <lhjeff911-Re5JQEeQqe8AvxtiuMwx3w@public.gmane.org>
-> ---
-> Changes in v8:
->   - Modify yaml file.
->     modify the setting compatible
->   - Change yaml file name.
->   - Modify driver.
->     mosdify and simply the nvmem setting and remove valiable
+> Why isn't ftrace ok to enable in a running kernel?
+
+ftrace is totally fine to enable. I should've said convenient instead of
+practical, from my experience there's a bit more offline/developer
+overhead for setup and integrating the trace logs with a panic or kmsg,
+then bundling that with the bug reports we get.
+
 > 
->   MAINTAINERS                       |   6 ++
->   drivers/thermal/Kconfig           |  10 +++
->   drivers/thermal/Makefile          |   1 +
->   drivers/thermal/sunplus_thermal.c | 135 ++++++++++++++++++++++++++++++++++++++
->   4 files changed, 152 insertions(+)
->   create mode 100644 drivers/thermal/sunplus_thermal.c
+> Worst case, this should be dev_dbg(), right?
 > 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index edc96cd..82143ff 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -18896,6 +18896,12 @@ S:	Maintained
->   F:	Documentation/devicetree/bindings/spi/spi-sunplus-sp7021.yaml
->   F:	drivers/spi/spi-sunplus-sp7021.c
->   
-> +SUNPLUS THERMAL DRIVER
-> +M:	Li-hao Kuo <lhjeff911-Re5JQEeQqe8AvxtiuMwx3w@public.gmane.org>
-> +L:	linux-pm-u79uwXL29TY76Z2rM5mHXA@public.gmane.org
-> +S:	Maintained
-> +F:	drivers/thermal/sunplus_thermal.c
-> +
->   SUNPLUS UART DRIVER
->   M:	Hammer Hsieh <hammerh0314-Re5JQEeQqe8AvxtiuMwx3w@public.gmane.org>
->   S:	Maintained
-> diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig
-> index 0e5cc94..595f507 100644
-> --- a/drivers/thermal/Kconfig
-> +++ b/drivers/thermal/Kconfig
-> @@ -504,4 +504,14 @@ config KHADAS_MCU_FAN_THERMAL
->   	  If you say yes here you get support for the FAN controlled
->   	  by the Microcontroller found on the Khadas VIM boards.
->   
-> +config SUNPLUS_THERMAL
-> +	tristate "Sunplus thermal drivers"
-> +	depends on SOC_SP7021 || COMPILE_TEST
-> +	help
-> +	  This the Sunplus SP7021 thermal driver, which supports the primitive
+> > If you still want to remove, there are other locations in
+> > this gadget driver that log function entry. Perhaps it'd be better to
+> > do a separate change that cleans up logging a bit or do you prefer to
+> > just refactor this one now?
+> 
+> This commit is fine, it's a separate issue, I just noticed it as it was
+> in the context of this change.
+> 
+> > > > +	/* If we know we're connected via v4l2, then there should be a cleanup
+> > > > +	 * of the device from userspace either via UVC_EVENT_DISCONNECT or
+> > > > +	 * though the video device removal uevent. Allow some time for the
+> > > > +	 * application to close out before things get deleted.
+> > > > +	 */
+> > > > +	if (uvc->func_connected) {
+> > > > +		uvcg_info(f, "%s waiting for clean disconnect\n", __func__);
+> > > > +		wait_ret = wait_event_interruptible_timeout(uvc->func_connected_queue,
+> > > > +				uvc->func_connected == false, msecs_to_jiffies(500));
+> > > > +		uvcg_info(f, "%s done waiting with ret: %u\n", __func__, wait_ret);
+> > > 
+> > > Please remove debugging code before submitting patches.
+> > 
+> > Will do.
+> 
+> But this should be removed :)
+> 
+> Feel free to change it to dev_dbg(), which gives you the __func__
+> automatically without anything extra needed.
 
-Missing word?
-This *enables* the... ?
+Yes, I'll go with this approach, as it doesn't make sense to always
+print, but is good to have when developing or debugging. The timeouts
+seem reasonable to me and work for our setup, but I was expecting some
+comments about them or a suggestion for a different approach.
 
-> +	  temperature sensor embedded in Sunplus SP7021 SoC.
-> +
-> +	  If you have a Sunplus SP7021 platform say Y here and enable this option
-> +	  to have support for thermal management
-> +
->   endif
-> diff --git a/drivers/thermal/Makefile b/drivers/thermal/Makefile
-> index f0c36a1..38a76f9 100644
-> --- a/drivers/thermal/Makefile
-> +++ b/drivers/thermal/Makefile
-> @@ -61,3 +61,4 @@ obj-$(CONFIG_UNIPHIER_THERMAL)	+= uniphier_thermal.o
->   obj-$(CONFIG_AMLOGIC_THERMAL)     += amlogic_thermal.o
->   obj-$(CONFIG_SPRD_THERMAL)	+= sprd_thermal.o
->   obj-$(CONFIG_KHADAS_MCU_FAN_THERMAL)	+= khadas_mcu_fan.o
-> +obj-$(CONFIG_SUNPLUS_THERMAL)	+= sunplus_thermal.o
-> diff --git a/drivers/thermal/sunplus_thermal.c b/drivers/thermal/sunplus_thermal.c
-> new file mode 100644
-> index 0000000..d4e22fc
-> --- /dev/null
-> +++ b/drivers/thermal/sunplus_thermal.c
-> @@ -0,0 +1,135 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Copyright (c) Sunplus Inc.
-> + * Author: Li-hao Kuo <lhjeff911-Re5JQEeQqe8AvxtiuMwx3w@public.gmane.org>
-> + */
-> +
-> +#include <linux/bitfield.h>
-> +#include <linux/clk.h>
-> +#include <linux/delay.h>
-> +#include <linux/io.h>
-> +#include <linux/module.h>
-> +#include <linux/nvmem-consumer.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/reset.h>
-> +#include <linux/thermal.h>
-> +
-> +#define ENABLE_THERMAL		BIT(31)
-> +#define SP_THERMAL_MASK		GENMASK(10, 0)
-> +
-> +#define TEMP_RATE		608
-> +#define TEMP_BASE		3500
-> +#define TEMP_OTP_BASE		1518
-> +
-> +#define SP_THERMAL_CTL0_REG	0x0000
-> +#define SP_THERMAL_STS0_REG	0x0030
-> +
-> +/* common data structures */
-> +struct sp_thermal_data {
-> +	struct thermal_zone_device *pcb_tz;
-> +	void __iomem *regs;
-> +	int *otp_temp0;
-> +};
-> +
-> +static int sunplus_get_otp_temp_coef(struct sp_thermal_data *sp_data, struct device *dev)
-> +{
-> +	struct nvmem_cell *cell;
-> +	ssize_t otp_l;
-> +
-> +	cell = nvmem_cell_get(dev, "calib");
-> +	if (IS_ERR(cell))
-> +		return PTR_ERR(cell);
-> +
-> +	sp_data->otp_temp0 = nvmem_cell_read(cell, &otp_l);
-> +	nvmem_cell_put(cell);
-> +
-> +	if (*sp_data->otp_temp0 == 0)
-> +		*sp_data->otp_temp0 = TEMP_OTP_BASE;
-> +
-> +	return 0;
-> +}
-> +
-> +/*
-> + * There is a thermal sensor instance for SUNPLUS Soc
+Thanks,
 
-I don't know what is the best, but if you want to be consistent, other 
-places are about Sunplus, not SUNPLUS.
-
-> + * T_CODE is the ADC of the thermal sensor
-> + * T_CODE : 11 digits in total
-> + * When remanufacturing, the 35 degree T_CODE will be read and stored in nvcell.
-> + * otp_temp0 is the 35 degree T_CODE obtained from nvcell
-> + * The function will get 35 degree T_CODE for thermal calibration.
-> + * TEMP_RATE is the SUNPLUS thermal temperature slope.
-
-Same here.
-
-> + */
-> +
-> +static int sp_thermal_get_sensor_temp(void *data, int *temp)
-> +{
-> +	struct sp_thermal_data *sp_data = data;
-> +	int t_code;
-> +
-> +	t_code = readl(sp_data->regs + SP_THERMAL_STS0_REG);
-> +	t_code = FIELD_GET(SP_THERMAL_MASK, t_code);
-> +	*temp = ((*sp_data->otp_temp0 - t_code) * 10000 / TEMP_RATE) + TEMP_BASE;
-> +	*temp *= 10;
-> +	return 0;
-> +}
-> +
-> +static const struct thermal_zone_of_device_ops sp_of_thermal_ops = {
-> +	.get_temp = sp_thermal_get_sensor_temp,
-> +};
-> +
-> +static int sunplus_thermal_probe(struct platform_device *pdev)
-> +{
-> +	struct sp_thermal_data *sp_data;
-> +	int ret;
-> +
-> +	sp_data = devm_kzalloc(&pdev->dev, sizeof(*sp_data), GFP_KERNEL);
-> +	if (!sp_data)
-> +		return -ENOMEM;
-> +
-> +	sp_data->regs = devm_platform_ioremap_resource(pdev, 0);
-> +	if (IS_ERR(sp_data->regs)) {
-> +		dev_err(&pdev->dev, "resource get fail\n");
-> +		return PTR_ERR(sp_data->regs);
-> +	}
-> +
-> +	writel(ENABLE_THERMAL, sp_data->regs + SP_THERMAL_CTL0_REG);
-> +
-> +	platform_set_drvdata(pdev, sp_data);
-> +	ret = sunplus_get_otp_temp_coef(sp_data, &pdev->dev);
-> +	if (ret)
-> +		return ret;
-> +
-> +	sp_data->pcb_tz = devm_thermal_zone_of_sensor_register(&pdev->dev,
-> +							    0,
-> +							    sp_data, &sp_of_thermal_ops);
-> +	if (IS_ERR_OR_NULL(sp_data->pcb_tz))
-
-I don't think that devm_thermal_zone_of_sensor_register() can return NULL.
-
-> +		return PTR_ERR(sp_data->pcb_tz);
-> +
-> +	return ret;
-> +}
-> +
-> +static int sunplus_thermal_remove(struct platform_device *pdev)
-> +{
-> +	struct sp_thermal_data *sp_data = platform_get_drvdata(pdev);
-> +
-> +	thermal_zone_device_unregister(sp_data->pcb_tz);
-> +	return 0;
-> +}
-> +
-> +static const struct of_device_id of_sunplus_thermal_ids[] = {
-> +	{ .compatible = "sunplus,thermal" },
-> +	{ /* sentinel */ }
-> +};
-> +MODULE_DEVICE_TABLE(of, of_sunplus_thermal_ids);
-> +
-> +static struct platform_driver sunplus_thermal_driver = {
-> +	.probe	= sunplus_thermal_probe,
-> +	.remove = sunplus_thermal_remove,
-> +	.driver	= {
-> +		.name	= "sunplus-thermal",
-> +		.of_match_table = of_sunplus_thermal_ids,
-> +		},
-
-The }, should be aligned on .driver (1 less tabulation)
-
-> +};
-> +module_platform_driver(sunplus_thermal_driver);
-> +
-> +MODULE_AUTHOR("Li-hao Kuo <lhjeff911-Re5JQEeQqe8AvxtiuMwx3w@public.gmane.org>");
-> +MODULE_DESCRIPTION("Thermal driver for sunplus SoC");
-
-Other places are about Sunplus, not sunplus
-
-> +MODULE_LICENSE("GPL");
-
+Dan

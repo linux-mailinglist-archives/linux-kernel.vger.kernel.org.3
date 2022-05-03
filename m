@@ -2,67 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D27E518D45
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 21:39:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BA1A518D49
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 21:40:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241982AbiECTnX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 15:43:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37156 "EHLO
+        id S240580AbiECToI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 15:44:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241955AbiECTnQ (ORCPT
+        with ESMTP id S236024AbiECToB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 15:43:16 -0400
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 949532FE4E
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 12:39:43 -0700 (PDT)
-Received: by mail-pg1-x536.google.com with SMTP id t13so14779852pgn.8
-        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 12:39:43 -0700 (PDT)
+        Tue, 3 May 2022 15:44:01 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9647717051
+        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 12:40:27 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id p12so32070206lfs.5
+        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 12:40:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=68lFLMzdFWYn9TeG84Yby4hphKM/OE0fXGXg6JYNJHo=;
-        b=agSMD0mYwrZLWQyFktPHTmNxr53miZI5xh2A9CFUj0Az4lEqJsxLWnRfcf1ufjt+je
-         Zucdf6ioUwE19NKX9ek1d7dHI8J5djCxnSjKovvFKd9LFWUGxd3shtjXIgIfyxSo3Iup
-         ABMsV/xz75KORtZpf4o9dpjoIbuxouEpDtrKo=
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to:cc;
+        bh=PpcOEiHsSXEXVeVpcZFgM2SND6CCz4/z5LeJtfm4WzU=;
+        b=JdhHrL0tSQx+VnBMXyJMkfaRUySUx/ACO57L/wJDoQ6hulsCVqtglcHHgih4Q3kmWB
+         3CWzf46Zy1MeOKLYeZzswIF+wEnjJBRPpE3pmZ2QhPHij539PYuP5KlSOKO4sB25qGnI
+         Nb9EjW+AFVgg4jiksSHD0Uox8x4081Yibnv+U=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=68lFLMzdFWYn9TeG84Yby4hphKM/OE0fXGXg6JYNJHo=;
-        b=E03wlEIw1BZHljnxwRVL/QlMscHu/kvs8HfFGbK+mJBIxeuf4xcWKJB83kLDkHkqFu
-         Mn1tD3yjiW/LQkHHSyau/xdj1x3jRcA6pdLJaInM3rSUu7ikOE4zIBgBeqltHGM0PPnD
-         +LKcy/maLEER1q/k2iBIci4NHxDRJXb1kFKkD4CT+iBbNGuV4saNgoI+j5TF03HsLa7n
-         TKW+iD23PY5W0RN816sUeTyEBMt3q1agMQGz4+r4FtGwSpzOA5wFaD9LZp+lcIE4Mk34
-         SXDx6zFOQbTgde6WsCRDEs3wPzIF+6DJa5d7KS93pHYT4sbpLakVQ9LU7TM368JKt5Po
-         8hEQ==
-X-Gm-Message-State: AOAM530gV+JsXvn0rkVicRNMCPA6erCWWry5XrIu8LE9CoMT6iQtYPtg
-        EeVXA5usbLjtJ+EXbKEoyASnfA==
-X-Google-Smtp-Source: ABdhPJwFb7VzKWz+rdPmAaYShya3oSzctVjAj8WRQ+y2WP3ynoKaRoLCqu7NRGV+8xoWFiqDNGLFPA==
-X-Received: by 2002:a63:5551:0:b0:3ab:84c3:1a0 with SMTP id f17-20020a635551000000b003ab84c301a0mr15295935pgm.604.1651606783136;
-        Tue, 03 May 2022 12:39:43 -0700 (PDT)
-Received: from smtp.gmail.com ([2620:15c:202:201:15e:c760:9a04:7fbe])
-        by smtp.gmail.com with ESMTPSA id e25-20020aa78c59000000b0050dc7628154sm6680804pfd.46.2022.05.03.12.39.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 May 2022 12:39:42 -0700 (PDT)
-From:   Stephen Boyd <swboyd@chromium.org>
-To:     Jonathan Cameron <jic23@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
-        devicetree@vger.kernel.org, linux-iio@vger.kernel.org,
-        Gwendal Grignou <gwendal@chromium.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>
-Subject: [PATCH v2 2/2] iio: sx9324: Add setting for CS idle mode
-Date:   Tue,  3 May 2022 12:39:37 -0700
-Message-Id: <20220503193937.3794477-3-swboyd@chromium.org>
-X-Mailer: git-send-email 2.36.0.464.gb9c8b46e94-goog
-In-Reply-To: <20220503193937.3794477-1-swboyd@chromium.org>
-References: <20220503193937.3794477-1-swboyd@chromium.org>
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to:cc;
+        bh=PpcOEiHsSXEXVeVpcZFgM2SND6CCz4/z5LeJtfm4WzU=;
+        b=qLQ/FvHA8Zv6rjFPYZUNzAS9r/sulFjo2P7sEGF9H7Quo8Zwoo7KjvgTwbOrrvHbEC
+         4Cux5d7jg/WDS/GEQKggWSKYWwi6ivdXgBCesMAFhLd2BbMQ15NCksKEndmiOCmK+sKm
+         SkxT5lwdyOe3gg/uyMcx1Sx/aBOInWPh2ICLDNIS70XrO1gP1OloLZgGgZezW3fhQc1X
+         GudRaqIgRtleRHgbmVz7Z+bahz4MjeuAJWXLnNVW2Pv1hom6sKPX2wsptRD5X1svAGdv
+         ooYaaKEiwWLwGnRphJ/O5froNdb5oCSs2dQEzFmThHOBGVgSzRsVQNjXW84GdjVMDKQD
+         KeJQ==
+X-Gm-Message-State: AOAM5306nKQUAwTcGBJRXORHfpZl55XjBb17dIIID+G4bxTHmzOSKkXg
+        bjoZeC+zeKut1+ALK+i52EwybmVKnawtmm8IPLoS4A==
+X-Google-Smtp-Source: ABdhPJwZ7rKvRJvg+003hnWPuIibNwH4Vp3fTUxcsMHvkAcJNe7sssEHH+Dttxg/YTKAx2walPqk4DPnLgN+bztMLrU=
+X-Received: by 2002:a19:ac42:0:b0:448:1f15:4b18 with SMTP id
+ r2-20020a19ac42000000b004481f154b18mr12222327lfc.32.1651606825945; Tue, 03
+ May 2022 12:40:25 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Tue, 3 May 2022 12:40:23 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAD=FV=V8kfRYidvQRmx_XmGm8X3XHR_GxTkKvxkqUHdqJ5CMNg@mail.gmail.com>
+References: <20220503042242.3597561-1-swboyd@chromium.org> <20220503042242.3597561-2-swboyd@chromium.org>
+ <CAD=FV=V8kfRYidvQRmx_XmGm8X3XHR_GxTkKvxkqUHdqJ5CMNg@mail.gmail.com>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Tue, 3 May 2022 12:40:23 -0700
+Message-ID: <CAE-0n53540_=76amOxOQ0YhutOUke+ZxSaTHCuyAHUGfAVkKKQ@mail.gmail.com>
+Subject: Re: [PATCH v3 1/2] dt-bindings: google,cros-ec-keyb: Introduce
+ switches only compatible
+To:     Doug Anderson <dianders@chromium.org>
+Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>, patches@lists.linux.dev,
+        chrome-platform@lists.linux.dev,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        "Joseph S. Barrera III" <joebar@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,55 +75,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Based on device tree setting, set the CS idle mode.
+Quoting Doug Anderson (2022-05-03 08:09:04)
+> Hi,
+>
+> On Mon, May 2, 2022 at 9:22 PM Stephen Boyd <swboyd@chromium.org> wrote:
+> >
+> > @@ -113,3 +135,56 @@ examples:
+> >              /* UP      LEFT    */
+> >              0x070b0067 0x070c0069>;
+> >      };
+> > +
+> > +  - |
+> > +    keyboard-controller {
+> > +        compatible = "google,cros-ec-keyb-switches", "google,cros-ec-keyb";
+> > +        /* Matrix keymap properties are allowed but ignored */
+>
+> nit: s/allowed/required/
 
-Reviewed-by: Gwendal Grignou <gwendal@chromium.org>
-Signed-off-by: Stephen Boyd <swboyd@chromium.org>
----
- drivers/iio/proximity/sx9324.c | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+Ok. I will roll it in and resend.
 
-diff --git a/drivers/iio/proximity/sx9324.c b/drivers/iio/proximity/sx9324.c
-index 7f367f63e362..c7fc75f7badc 100644
---- a/drivers/iio/proximity/sx9324.c
-+++ b/drivers/iio/proximity/sx9324.c
-@@ -57,6 +57,11 @@
- 	GENMASK(SX9324_REG_AFE_CTRL0_RINT_SHIFT + 1, \
- 		SX9324_REG_AFE_CTRL0_RINT_SHIFT)
- #define SX9324_REG_AFE_CTRL0_RINT_LOWEST	0x00
-+#define SX9324_REG_AFE_CTRL0_CSIDLE_SHIFT	4
-+#define SX9324_REG_AFE_CTRL0_CSIDLE_MASK \
-+	GENMASK(SX9324_REG_AFE_CTRL0_CSIDLE_SHIFT + 1, \
-+		SX9324_REG_AFE_CTRL0_CSIDLE_SHIFT)
-+#define SX9324_REG_AFE_CTRL0_RINT_LOWEST	0x00
- #define SX9324_REG_AFE_CTRL1		0x21
- #define SX9324_REG_AFE_CTRL2		0x22
- #define SX9324_REG_AFE_CTRL3		0x23
-@@ -872,6 +877,8 @@ sx9324_get_default_reg(struct device *dev, int idx,
- {
- 	static const char * const sx9324_rints[] = { "lowest", "low", "high",
- 		"highest" };
-+	static const char * const sx9324_csidle[] = { "hi-z", "hi-z", "gnd",
-+		"vdd" };
- #define SX9324_PIN_DEF "semtech,ph0-pin"
- #define SX9324_RESOLUTION_DEF "semtech,ph01-resolution"
- #define SX9324_PROXRAW_DEF "semtech,ph01-proxraw-strength"
-@@ -901,6 +908,15 @@ sx9324_get_default_reg(struct device *dev, int idx,
- 		reg_def->def = raw;
- 		break;
- 	case SX9324_REG_AFE_CTRL0:
-+		ret = device_property_read_string(dev,
-+				"semtech,cs-idle-sleep", &res);
-+		if (!ret)
-+			ret = match_string(sx9324_csidle, ARRAY_SIZE(sx9324_csidle), res);
-+		if (ret >= 0) {
-+			reg_def->def &= ~SX9324_REG_AFE_CTRL0_CSIDLE_MASK;
-+			reg_def->def |= ret << SX9324_REG_AFE_CTRL0_CSIDLE_SHIFT;
-+		}
-+
- 		ret = device_property_read_string(dev,
- 				"semtech,int-comp-resistor", &res);
- 		if (ret)
--- 
-https://chromeos.dev
+>
+> This now looks reasonable and well explained to me.
+>
+> Reviewed-by: Douglas Anderson <dianders@chromium.org>
 
+Thanks.

@@ -2,137 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B7B1518B87
+	by mail.lfdr.de (Postfix) with ESMTP id 39B41518B86
 	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 19:50:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240727AbiECRxs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 13:53:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42842 "EHLO
+        id S240680AbiECRxn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 13:53:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240643AbiECRxh (ORCPT
+        with ESMTP id S240692AbiECRxi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 13:53:37 -0400
-Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDA6C3B3F8
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 10:50:04 -0700 (PDT)
-Received: by mail-il1-x12c.google.com with SMTP id r17so10207962iln.9
-        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 10:50:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=digitalocean.com; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=gw+un10uJqUNP/SbL+e25B/lzjHm7kiGfOYsGY9F7XM=;
-        b=IQ5l1Tw0QCU5PbCxVcnsc+tTDYVs0hkTHeCetz8NmOg+tc+WmC7hJ9Db1EH0ffn3vt
-         lWg5GdxzYnone+VZISJSZcdXLdgw+/rkq0ScHAzuDlP8aaHL8YJrpDCusQSa2CwLTYVQ
-         5kiLmnnxp6CBthc47Q1I3FP1g2FAl3KmjJcy0=
+        Tue, 3 May 2022 13:53:38 -0400
+Received: from mail-ot1-f49.google.com (mail-ot1-f49.google.com [209.85.210.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D18F529813;
+        Tue,  3 May 2022 10:50:05 -0700 (PDT)
+Received: by mail-ot1-f49.google.com with SMTP id 88-20020a9d0ee1000000b005d0ae4e126fso12121741otj.5;
+        Tue, 03 May 2022 10:50:05 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=gw+un10uJqUNP/SbL+e25B/lzjHm7kiGfOYsGY9F7XM=;
-        b=HCy3pL/DA0n+6MyldMtpRt7CWfd8FtRoBnRPuckYSFFxmdGzUsNKU+CtOJrbrd9Fzh
-         9MEsL9m7mtdh/HR4cP2b9jC+n38BUe2EWnyI5JebObBv4X2zyJCIOYSuJ9po6c+48J5m
-         biodR+eENRmPZDMi2L8uKc4EwRd9RWnONL49qrJKAa3quBK+jpP6t8FK99o+7oRSxcWb
-         RDjkLqh9O2fNjdhUADr4A/EZMexrbN4O0sLAz1hpxtq5ucBMaMItRa+cttIRui8Egawe
-         LGxtABS28A36THLk3iisxs98i15oZXutKNXfhnfKrSLYEjw5o4/Pw9MUHCXIcJ7DZp/i
-         O1tQ==
-X-Gm-Message-State: AOAM530c9ZdqiVNI7W2yjhJxWXaAFtOyozZqwM5yI077yC3D9zPJ3E+1
-        NC15enmiBpZXJqa8zyS1zxBkyw==
-X-Google-Smtp-Source: ABdhPJzh+zb6aoHIl3yp5z+2hS5YP62Z1ngPLTw5+X3w+daEd6SSNy6hBReYVKdBs4/XoKgoLBqttA==
-X-Received: by 2002:a05:6e02:20e4:b0:2cc:4535:9d22 with SMTP id q4-20020a056e0220e400b002cc45359d22mr7443763ilv.195.1651600203864;
-        Tue, 03 May 2022 10:50:03 -0700 (PDT)
-Received: from localhost ([2605:a601:ac0f:820:80d8:f53c:c84d:deaa])
-        by smtp.gmail.com with ESMTPSA id u6-20020a02aa86000000b0032b3a78176dsm4049997jai.49.2022.05.03.10.49.39
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=vhN5KYczMmv9TNqtRlooIo1ReYjcW4rlopTFOjfZfxg=;
+        b=Q+3X+Ho1oeRngLCagsyeDyi1D+8FD57AJRmgSonq9QkSnjHmUWIjEqSef/roiVnNAO
+         bOqrcM8BB4UYK+yPnIEcRmfSs4y3sRJwYM1iYUc6wkc7lVPvympLK+Wi1uL04nJhGGuP
+         kyX/2hhqU8iggnGnSTEIPlXfMq/4QxqJpZzAb0N3umraKaCImuo+1cfH1CutccUT/Psu
+         UqmfpBPE8BYVMNSjwHfKctwa5mTTg2EUfJfuVnxZjpryivliTqlGzifOCM69Z8PNuBXT
+         yVVkhCBbpDYQpe8qGLCkdEVrkxSBQnH/2AobuX1Cc94Ori4FajeMiedFzypiPTS8nXli
+         6MDw==
+X-Gm-Message-State: AOAM531TZJwoNQla8e1kKac9dsXdAJpoAm8YicTBG2UHJ4Yi0gaUoDt8
+        VyUzzYtnjgZy46JnvqkYaA==
+X-Google-Smtp-Source: ABdhPJwzR+vsrHG/iK5QzquHREpyKtDwFyhoKABv6B6DjZnIdhtBOWnkv7gmbbHlpz7BD8FJ9Gq8cw==
+X-Received: by 2002:a9d:19a3:0:b0:605:9af6:225c with SMTP id k32-20020a9d19a3000000b006059af6225cmr6226688otk.195.1651600205064;
+        Tue, 03 May 2022 10:50:05 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id i5-20020a9d68c5000000b0060603221236sm4179544oto.6.2022.05.03.10.50.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 May 2022 10:49:48 -0700 (PDT)
-From:   Seth Forshee <sforshee@digitalocean.com>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andy Lutomirski <luto@kernel.org>
-Cc:     Josh Poimboeuf <jpoimboe@redhat.com>,
-        Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Petr Mladek <pmladek@suse.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        linux-kernel@vger.kernel.org, live-patching@vger.kernel.org,
-        kvm@vger.kernel.org
-Subject: [PATCH v2] entry/kvm: Make vCPU tasks exit to userspace when a livepatch is pending
-Date:   Tue,  3 May 2022 12:49:34 -0500
-Message-Id: <20220503174934.2641605-1-sforshee@digitalocean.com>
-X-Mailer: git-send-email 2.32.0
+        Tue, 03 May 2022 10:50:04 -0700 (PDT)
+Received: (nullmailer pid 3948010 invoked by uid 1000);
+        Tue, 03 May 2022 17:50:04 -0000
+Date:   Tue, 3 May 2022 12:50:04 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Li-hao Kuo <lhjeff911@gmail.com>
+Cc:     krzk@kernel.org, rafael@kernel.org, daniel.lezcano@linaro.org,
+        amitk@kernel.org, rui.zhang@intel.com, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v8 2/2] dt-bindings:thermal: Add Sunplus schema
+Message-ID: <YnFrTAqRJziPeo5T@robh.at.kernel.org>
+References: <cover.1651543731.git.lhjeff911@gmail.com>
+ <e9f65ca9a2b3205b91210398d743415f6c799d90.1651543731.git.lhjeff911@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e9f65ca9a2b3205b91210398d743415f6c799d90.1651543731.git.lhjeff911@gmail.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A task can be livepatched only when it is sleeping or it exits to
-userspace. This may happen infrequently for a heavily loaded vCPU task,
-leading to livepatch transition failures.
+On Tue, May 03, 2022 at 10:13:08AM +0800, Li-hao Kuo wrote:
+> Add bindings for Sunplus thermal driver
+> 
+> Signed-off-by: Li-hao Kuo <lhjeff911@gmail.com>
+> ---
+> Changes in v8:
+>  - Modify yaml file.
+>    modify the setting compatible
+>  - Change yaml file name.
+>  - Modify driver.
+>    mosdify and simply the nvmem setting and remove valiable
+> 
+>  .../bindings/thermal/sunplus,thermal.yaml          | 43 ++++++++++++++++++++++
+>  MAINTAINERS                                        |  1 +
+>  2 files changed, 44 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/thermal/sunplus,thermal.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/thermal/sunplus,thermal.yaml b/Documentation/devicetree/bindings/thermal/sunplus,thermal.yaml
+> new file mode 100644
+> index 0000000..1ecf6f6
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/thermal/sunplus,thermal.yaml
+> @@ -0,0 +1,43 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +# Copyright (C) Sunplus Co., Ltd.
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/thermal/sunplus,thermal.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Sunplus Thermal controller
+> +
+> +maintainers:
+> +  - Li-hao Kuo <lhjeff911@gmail.com>
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - sunplus,thermal
 
-Fake signals will be sent to tasks which fail patching via stack
-checking. This will cause running vCPU tasks to exit guest mode, but
-since no signal is pending they return to guest execution without
-exiting to userspace. Fix this by treating a pending livepatch migration
-like a pending signal, exiting to userspace with EINTR. This allows the
-task to be patched, and userspace should re-excecute KVM_RUN to resume
-guest execution.
+I don't think is is what was suggested. This must be SoC specific.
 
-In my testing, systems where livepatching would timeout after 60 seconds
-were able to load livepatches within a couple of seconds with this
-change.
-
-Signed-off-by: Seth Forshee <sforshee@digitalocean.com>
----
-Changes in v2:
- - Added _TIF_SIGPENDING to XFER_TO_GUEST_MODE_WORK
- - Reworded commit message and comments to avoid confusion around the
-   term "migrate"
-
- include/linux/entry-kvm.h | 4 ++--
- kernel/entry/kvm.c        | 7 ++++++-
- 2 files changed, 8 insertions(+), 3 deletions(-)
-
-diff --git a/include/linux/entry-kvm.h b/include/linux/entry-kvm.h
-index 6813171afccb..bf79e4cbb5a2 100644
---- a/include/linux/entry-kvm.h
-+++ b/include/linux/entry-kvm.h
-@@ -17,8 +17,8 @@
- #endif
- 
- #define XFER_TO_GUEST_MODE_WORK						\
--	(_TIF_NEED_RESCHED | _TIF_SIGPENDING | _TIF_NOTIFY_SIGNAL |	\
--	 _TIF_NOTIFY_RESUME | ARCH_XFER_TO_GUEST_MODE_WORK)
-+	(_TIF_NEED_RESCHED | _TIF_SIGPENDING | _TIF_PATCH_PENDING |	\
-+	 _TIF_NOTIFY_SIGNAL | _TIF_NOTIFY_RESUME | ARCH_XFER_TO_GUEST_MODE_WORK)
- 
- struct kvm_vcpu;
- 
-diff --git a/kernel/entry/kvm.c b/kernel/entry/kvm.c
-index 9d09f489b60e..98439dfaa1a0 100644
---- a/kernel/entry/kvm.c
-+++ b/kernel/entry/kvm.c
-@@ -14,7 +14,12 @@ static int xfer_to_guest_mode_work(struct kvm_vcpu *vcpu, unsigned long ti_work)
- 				task_work_run();
- 		}
- 
--		if (ti_work & _TIF_SIGPENDING) {
-+		/*
-+		 * When a livepatch is pending, force an exit to userspace
-+		 * as though a signal is pending to allow the task to be
-+		 * patched.
-+		 */
-+		if (ti_work & (_TIF_SIGPENDING | _TIF_PATCH_PENDING)) {
- 			kvm_handle_signal_exit(vcpu);
- 			return -EINTR;
- 		}
--- 
-2.32.0
-
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  nvmem-cells:
+> +    maxItems: 1
+> +
+> +  nvmem-cell-names:
+> +    const: calib
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - nvmem-cells
+> +  - nvmem-cell-names
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    thermal@9c000280 {
+> +        compatible = "sunplus,thermal";
+> +        reg = <0x9c000280 0xc>;
+> +        nvmem-cells = <&calib>;
+> +        nvmem-cell-names = "calib";
+> +    };
+> +...
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 82143ff..ff49023 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -18900,6 +18900,7 @@ SUNPLUS THERMAL DRIVER
+>  M:	Li-hao Kuo <lhjeff911@gmail.com>
+>  L:	linux-pm@vger.kernel.org
+>  S:	Maintained
+> +F:	Documentation/devicetree/bindings/thermal/sunplus,thermal.yaml
+>  F:	drivers/thermal/sunplus_thermal.c
+>  
+>  SUNPLUS UART DRIVER
+> -- 
+> 2.7.4
+> 
+> 

@@ -2,63 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B998F518D0A
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 21:15:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 897A9518D0B
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 21:16:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240207AbiECTTI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 15:19:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48054 "EHLO
+        id S239652AbiECTUG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 15:20:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237094AbiECTTE (ORCPT
+        with ESMTP id S237094AbiECTUE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 15:19:04 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5483C32ED5
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 12:15:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651605331; x=1683141331;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=eh+UDDARYDIccIec6Kv8Mbf14Mzr9J6fFwI8Z7JunYE=;
-  b=AwEEhdDvXHjwvVq5B+SEiJGVqPklStmU9eUR/h8XhmwQOaNEUOxqa/hX
-   zGavoUhSFYY0b+uoHp8CMs5++h51dFTk1v7o3z9x+Wuc8lfoKhfaDHBrI
-   QsJOr7vzV94P5jmjgOoH8hxWYfT8Ld9WTIhvW+N/bB5GMnaXf/hTIciiI
-   eGDLuNowD2kafmaXTtQ5yOjtht2fXnGKMMkzDgcRwRnxhX+9nQf9zvb8M
-   KoLOd2ttAUk/d7RBi56O01e32cF9k2pzqo9hLhnYqAg8rOxq4EGuEV3im
-   PQTU2m24T0Xny+az+Pg113YY87+s0zbGluWOMCpz/GdvpN7nkmFjCWb+6
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10336"; a="247472747"
-X-IronPort-AV: E=Sophos;i="5.91,196,1647327600"; 
-   d="scan'208";a="247472747"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2022 12:15:30 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,196,1647327600"; 
-   d="scan'208";a="562345430"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 03 May 2022 12:15:28 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nlxzW-000AjR-G8;
-        Tue, 03 May 2022 19:15:22 +0000
-Date:   Wed, 4 May 2022 03:15:09 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Sasha Levin <sashal@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: [linux-stable-rc:queue/5.4 83/83] fs/hugetlbfs/inode.c:211:40:
- error: implicit declaration of function 'arch_get_mmap_end'
-Message-ID: <202205040323.boErRvCI-lkp@intel.com>
+        Tue, 3 May 2022 15:20:04 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7C7D3FBCD
+        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 12:16:30 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id i10so3923117lfg.13
+        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 12:16:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
+        bh=wPTnR2Zu/nMupXPED8+6zfG3R03kfxI0ufpTxQT+s40=;
+        b=tjQdxT++eBAtCciDu2vU3NoUP4QW6qBmdwluJN7ZqTxj5rCLdpDXoPA48gZOr5T9JR
+         Te40XWsMzEhOWZumvQ0tidKpqGFo+dZmA84nwmchSTzMnxyLvAWfAxhk6KmTExqHOZ2w
+         BNXaoBlUSVt/2a+kA8BScws+d2nLejwqepBJLd/c4n84GvLJRoqcAge0xcRpuNsjcHKC
+         MKHJmMwbkmyHpazMg6NuqL52MS88IhStwuUzr6I/+6NP9KepZ1guoda30WFcSYGasBnk
+         Z6MdIzaa3k9WdCnxWtr/DghvKxLTu8EFbc/vLdy5GHAALvnLBG2KuGJAvwIqoSo0QOZ/
+         fbkg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=wPTnR2Zu/nMupXPED8+6zfG3R03kfxI0ufpTxQT+s40=;
+        b=r+ayzIDKpS0U1ZjN3TsNio5hjFgmTRwYLKCbqbQFdRFyR88E5909H0w2+QcVw9IoA9
+         QxGWS8BY1hBMKxM7FDw3CnxB8OwrzYXiw+YmTe4bB9tD6E1guRuGrEn4VKJLFgByVMzC
+         DgDvwqmPeedsDX2f+gjnH9hvruNXxf3cEfT+4nevE8qflfxuotXgtxpiRh3AabinKtRt
+         z3gXWIWDPKcF6DcFY4xxnOZRleKOskZ5Vd19jW/BE3dREgo2zVKaNEEStHEYMBNHbc8d
+         95pUem9DxDmFUfOiUy4aunujxkNifmL8wHWjWpGaEWkb7fhtsvoL9s6rFNWEMaYhfR9D
+         yzHg==
+X-Gm-Message-State: AOAM531+QvgR2bKVPI+S8beX6yalPFVMj/FHaHl18Ztg2+GZB67WtGtn
+        W4tqmknYTez6esAkciyMUm6W3A==
+X-Google-Smtp-Source: ABdhPJwPzzX7IVXeDUZKXs6KdmMPkgA7AOVPSzXGlSNues3oWyX7bzj63hV8upZvkAXNMXk0YzSTWQ==
+X-Received: by 2002:a05:6512:3f88:b0:44f:567f:8715 with SMTP id x8-20020a0565123f8800b0044f567f8715mr11912202lfa.609.1651605389115;
+        Tue, 03 May 2022 12:16:29 -0700 (PDT)
+Received: from jade (h-79-136-84-253.A175.priv.bahnhof.se. [79.136.84.253])
+        by smtp.gmail.com with ESMTPSA id d10-20020a05651221ca00b0047255d2119bsm1013800lft.202.2022.05.03.12.16.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 May 2022 12:16:28 -0700 (PDT)
+Date:   Tue, 3 May 2022 21:16:26 +0200
+From:   Jens Wiklander <jens.wiklander@linaro.org>
+To:     arm@kernel.org, soc@kernel.org
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        op-tee@lists.trustedfirmware.org
+Subject: [GIT PULL] TEE menu for v5.19
+Message-ID: <20220503191626.GA3278203@jade>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,82 +67,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git queue/5.4
-head:   2d723d526f735966b904f52c02d035793882b005
-commit: 2d723d526f735966b904f52c02d035793882b005 [83/83] mm, hugetlb: allow for "high" userspace addresses
-config: riscv-allmodconfig (https://download.01.org/0day-ci/archive/20220504/202205040323.boErRvCI-lkp@intel.com/config)
-compiler: riscv64-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=2d723d526f735966b904f52c02d035793882b005
-        git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-        git fetch --no-tags linux-stable-rc queue/5.4
-        git checkout 2d723d526f735966b904f52c02d035793882b005
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash fs/
+Hello arm-soc maintainers,
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Please pull this small patch which combines the config and menu for TEE's
+menuconfig into one line.
 
-All errors (new ones prefixed by >>):
+Thanks,
+Jens
 
-   fs/hugetlbfs/inode.c: In function 'hugetlb_get_unmapped_area':
->> fs/hugetlbfs/inode.c:211:40: error: implicit declaration of function 'arch_get_mmap_end' [-Werror=implicit-function-declaration]
-     211 |         const unsigned long mmap_end = arch_get_mmap_end(addr);
-         |                                        ^~~~~~~~~~~~~~~~~
-   cc1: some warnings being treated as errors
+The following changes since commit 3123109284176b1532874591f7c81f3837bbdc17:
 
+  Linux 5.18-rc1 (2022-04-03 14:08:21 -0700)
 
-vim +/arch_get_mmap_end +211 fs/hugetlbfs/inode.c
+are available in the Git repository at:
 
-   197	
-   198	/*
-   199	 * Called under down_write(mmap_sem).
-   200	 */
-   201	
-   202	#ifndef HAVE_ARCH_HUGETLB_UNMAPPED_AREA
-   203	static unsigned long
-   204	hugetlb_get_unmapped_area(struct file *file, unsigned long addr,
-   205			unsigned long len, unsigned long pgoff, unsigned long flags)
-   206	{
-   207		struct mm_struct *mm = current->mm;
-   208		struct vm_area_struct *vma;
-   209		struct hstate *h = hstate_file(file);
-   210		struct vm_unmapped_area_info info;
- > 211		const unsigned long mmap_end = arch_get_mmap_end(addr);
-   212	
-   213		if (len & ~huge_page_mask(h))
-   214			return -EINVAL;
-   215		if (len > TASK_SIZE)
-   216			return -ENOMEM;
-   217	
-   218		if (flags & MAP_FIXED) {
-   219			if (prepare_hugepage_range(file, addr, len))
-   220				return -EINVAL;
-   221			return addr;
-   222		}
-   223	
-   224		if (addr) {
-   225			addr = ALIGN(addr, huge_page_size(h));
-   226			vma = find_vma(mm, addr);
-   227			if (mmap_end - len >= addr &&
-   228			    (!vma || addr + len <= vm_start_gap(vma)))
-   229				return addr;
-   230		}
-   231	
-   232		info.flags = 0;
-   233		info.length = len;
-   234		info.low_limit = TASK_UNMAPPED_BASE;
-   235		info.high_limit = arch_get_mmap_end(addr);
-   236		info.align_mask = PAGE_MASK & ~huge_page_mask(h);
-   237		info.align_offset = 0;
-   238		return vm_unmapped_area(&info);
-   239	}
-   240	#endif
-   241	
+  https://git.linaro.org/people/jens.wiklander/linux-tee.git tags/tee-menu-for-v5.19
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+for you to fetch changes up to a4b75fe8e1c15c96c4eb083e211ccbbfd56599f9:
+
+  tee: combine "config" and "menu" for TEE's menuconfig (2022-04-05 07:32:23 +0200)
+
+----------------------------------------------------------------
+Combine TEE config and menu in one line
+
+----------------------------------------------------------------
+Jan Engelhardt (1):
+      tee: combine "config" and "menu" for TEE's menuconfig
+
+ drivers/tee/Kconfig | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)

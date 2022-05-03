@@ -2,60 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EBBF518821
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 17:18:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9A92518850
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 17:21:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238092AbiECPVc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 11:21:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50636 "EHLO
+        id S238409AbiECPX2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 11:23:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237990AbiECPV1 (ORCPT
+        with ESMTP id S238464AbiECPXR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 11:21:27 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37BC93A5D1
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 08:17:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651591075; x=1683127075;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=+Xz6Ln5q443Z2ALPSncn4/b7gf6beXhMjiot51vykZg=;
-  b=iWOoYLEju16jjDvfRCJJEBaAxSXq8cYiySZOBJ1Gxpi1uulLe3xA+ECr
-   +9kcC+bTAgpXryIXd7vKZFlWmOJbwpFy/iDmiPtpDpYq+r+gttrTjVp5b
-   a1JLgG3b77pn4uGut7bFxbEVQtZbW7xIlSItMtADgpndgU+fChm+PuYsj
-   0nht4Aeut0sUFhWpv4jAV6oI8VTPaRfcePxisOp4+SlXfOG9mq5Tr6Hp8
-   82hzDfhQ2kxOQGoAJS6me2k/OsVZRy6ZRylHNjYVCl4uWLFA8VE24EoFt
-   h2ZiDwT0Koquqhi4dF6bWF/YQFSLzEzFZPRKwjHgjkSKywk8wyNR8/KQo
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10336"; a="267380539"
-X-IronPort-AV: E=Sophos;i="5.91,195,1647327600"; 
-   d="scan'208";a="267380539"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2022 08:17:54 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,195,1647327600"; 
-   d="scan'208";a="733951527"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 03 May 2022 08:17:53 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nluHg-000AYx-SM;
-        Tue, 03 May 2022 15:17:52 +0000
-Date:   Tue, 3 May 2022 23:17:24 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Janne Grunau <j@jannau.net>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Hector Martin <marcan@marcan.st>
-Subject: [asahilinux:bits/090-spi-hid 11/11]
- drivers/hid/spi-hid/spi-hid-apple-core.c:259:22: warning: no previous
- prototype for 'spihid_get_data'
-Message-ID: <202205032332.JmX0xZHq-lkp@intel.com>
+        Tue, 3 May 2022 11:23:17 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 667933DDF6;
+        Tue,  3 May 2022 08:19:36 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: benjamin.gaignard)
+        with ESMTPSA id A99681F43FFB
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1651591175;
+        bh=Lzclz0U3PP1cu2Zk2o7bgbp4dAMVqW5utV/LmtxRt/8=;
+        h=From:To:Cc:Subject:Date:From;
+        b=No+GYtV7o4MzLGjC8LKJubPV8clRjS7feBQujvJ4NGgRzHhV+lf68pxiYSotIiQbh
+         4qz6KfqEnD4DoCvAQg66QA2ysWV2wWaYMyzyv/Do+3SfucSYp7G4U1bZNBOqI6bC7O
+         ABgqCgJuOA/+0tSxLTUNhMGOcZaEtpxBiBGMEnxkGSFAd+XzFhxGGHrL/w8gfl2IDh
+         7GqLB81jS6KJO/dZKrnauPLzmG+pf9z61YcuQHgdVgJv0MpKYFSOfS+2XjrB7jj5ZR
+         g8DX4a1zeh4eGdD336KDNAhixfR6gBKCJzQIJH4q7jX47PYvqrZFavOVbxbYvd9Onf
+         8MgcZuAeSB40g==
+From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
+To:     ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
+        mchehab@kernel.org, gregkh@linuxfoundation.org
+Cc:     linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        jon@nanocrew.net, aford173@gmail.com, kernel@collabora.com,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Subject: [PATCH v4] media: hantro: HEVC: unconditionnaly set pps_{cb/cr}_qp_offset values
+Date:   Tue,  3 May 2022 17:19:20 +0200
+Message-Id: <20220503151920.802417-1-benjamin.gaignard@collabora.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,102 +51,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/AsahiLinux/linux bits/090-spi-hid
-head:   11b586fd5cff82ad72e9a281c0deb27959d16857
-commit: 11b586fd5cff82ad72e9a281c0deb27959d16857 [11/11] WIP: HID: transport: spi: add Apple SPI transport
-config: h8300-allmodconfig (https://download.01.org/0day-ci/archive/20220503/202205032332.JmX0xZHq-lkp@intel.com/config)
-compiler: h8300-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/AsahiLinux/linux/commit/11b586fd5cff82ad72e9a281c0deb27959d16857
-        git remote add asahilinux https://github.com/AsahiLinux/linux
-        git fetch --no-tags asahilinux bits/090-spi-hid
-        git checkout 11b586fd5cff82ad72e9a281c0deb27959d16857
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=h8300 SHELL=/bin/bash drivers/hid/spi-hid/ drivers/platform/
+Always set pps_cb_qp_offset and pps_cr_qp_offset values in Hantro/G2
+register whatever is V4L2_HEVC_PPS_FLAG_PPS_SLICE_CHROMA_QP_OFFSETS_PRESENT
+flag value.
+The vendor code does the same to set these values.
+This fixes conformance test CAINIT_G_SHARP_3.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Fluster HEVC score is increase by one with this patch.
 
-All warnings (new ones prefixed by >>):
+Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Reviewed-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+---
+This patch has been tested with these branches:
+- GStreamer: https://gitlab.freedesktop.org/benjamin.gaignard1/gstreamer/-/tree/HEVC_aligned_with_kernel_5.15
+- Linux: https://gitlab.collabora.com/benjamin.gaignard/for-upstream/-/tree/WIP_HEVC_UAPI_V6
 
-   In file included from include/uapi/linux/swab.h:6,
-                    from include/linux/swab.h:5,
-                    from include/uapi/linux/byteorder/big_endian.h:14,
-                    from include/linux/byteorder/big_endian.h:5,
-                    from arch/h8300/include/asm/byteorder.h:5,
-                    from include/asm-generic/unaligned.h:10,
-                    from ./arch/h8300/include/generated/asm/unaligned.h:1,
-                    from drivers/hid/spi-hid/spi-hid-apple-core.c:19:
-   include/linux/scatterlist.h: In function 'sg_set_buf':
-   include/asm-generic/page.h:89:51: warning: ordered comparison of pointer with null pointer [-Wextra]
-      89 | #define virt_addr_valid(kaddr)  (((void *)(kaddr) >= (void *)PAGE_OFFSET) && \
-         |                                                   ^~
-   include/linux/compiler.h:78:45: note: in definition of macro 'unlikely'
-      78 | # define unlikely(x)    __builtin_expect(!!(x), 0)
-         |                                             ^
-   include/linux/scatterlist.h:160:9: note: in expansion of macro 'BUG_ON'
-     160 |         BUG_ON(!virt_addr_valid(buf));
-         |         ^~~~~~
-   include/linux/scatterlist.h:160:17: note: in expansion of macro 'virt_addr_valid'
-     160 |         BUG_ON(!virt_addr_valid(buf));
-         |                 ^~~~~~~~~~~~~~~
-   drivers/hid/spi-hid/spi-hid-apple-core.c: At top level:
->> drivers/hid/spi-hid/spi-hid-apple-core.c:259:22: warning: no previous prototype for 'spihid_get_data' [-Wmissing-prototypes]
-     259 | struct spihid_apple *spihid_get_data(struct spihid_interface *idev)
-         |                      ^~~~~~~~~~~~~~~
---
-   In file included from include/asm-generic/div64.h:27,
-                    from ./arch/h8300/include/generated/asm/div64.h:1,
-                    from include/linux/math.h:6,
-                    from include/linux/delay.h:22,
-                    from drivers/hid/spi-hid/spi-hid-apple-of.c:9:
-   include/linux/scatterlist.h: In function 'sg_set_buf':
-   include/asm-generic/page.h:89:51: warning: ordered comparison of pointer with null pointer [-Wextra]
-      89 | #define virt_addr_valid(kaddr)  (((void *)(kaddr) >= (void *)PAGE_OFFSET) && \
-         |                                                   ^~
-   include/linux/compiler.h:78:45: note: in definition of macro 'unlikely'
-      78 | # define unlikely(x)    __builtin_expect(!!(x), 0)
-         |                                             ^
-   include/linux/scatterlist.h:160:9: note: in expansion of macro 'BUG_ON'
-     160 |         BUG_ON(!virt_addr_valid(buf));
-         |         ^~~~~~
-   include/linux/scatterlist.h:160:17: note: in expansion of macro 'virt_addr_valid'
-     160 |         BUG_ON(!virt_addr_valid(buf));
-         |                 ^~~~~~~~~~~~~~~
-   drivers/hid/spi-hid/spi-hid-apple-of.c: At top level:
->> drivers/hid/spi-hid/spi-hid-apple-of.c:24:5: warning: no previous prototype for 'spihid_apple_of_power_on' [-Wmissing-prototypes]
-      24 | int spihid_apple_of_power_on(struct spihid_apple_ops *ops)
-         |     ^~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/hid/spi-hid/spi-hid-apple-of.c:40:5: warning: no previous prototype for 'spihid_apple_of_power_off' [-Wmissing-prototypes]
-      40 | int spihid_apple_of_power_off(struct spihid_apple_ops *ops)
-         |     ^~~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/hid/spi-hid/spi-hid-apple-of.c:50:5: warning: no previous prototype for 'spihid_apple_of_enable_irq' [-Wmissing-prototypes]
-      50 | int spihid_apple_of_enable_irq(struct spihid_apple_ops *ops)
-         |     ^~~~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/hid/spi-hid/spi-hid-apple-of.c:59:5: warning: no previous prototype for 'spihid_apple_of_disable_irq' [-Wmissing-prototypes]
-      59 | int spihid_apple_of_disable_irq(struct spihid_apple_ops *ops)
-         |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+It is the setup used to prepare version 6 of the patches to move HEVC
+uAPI to stable.
 
+Fluster score was 77/147 before these series of patches and is now
+124/147.
 
-vim +/spihid_get_data +259 drivers/hid/spi-hid/spi-hid-apple-core.c
+ drivers/staging/media/hantro/hantro_g2_hevc_dec.c | 9 ++-------
+ 1 file changed, 2 insertions(+), 7 deletions(-)
 
-   258	
- > 259	struct spihid_apple *spihid_get_data(struct spihid_interface *idev)
-   260	{
-   261		switch (idev->id) {
-   262		case SPIHID_DEVICE_ID_KBD:
-   263			return container_of(idev, struct spihid_apple, kbd);
-   264		case SPIHID_DEVICE_ID_TP:
-   265			return container_of(idev, struct spihid_apple, tp);
-   266		default:
-   267			return NULL;
-   268		}
-   269	}
-   270	
-
+diff --git a/drivers/staging/media/hantro/hantro_g2_hevc_dec.c b/drivers/staging/media/hantro/hantro_g2_hevc_dec.c
+index 6deb31b7b993..503f4b028bc5 100644
+--- a/drivers/staging/media/hantro/hantro_g2_hevc_dec.c
++++ b/drivers/staging/media/hantro/hantro_g2_hevc_dec.c
+@@ -194,13 +194,8 @@ static void set_params(struct hantro_ctx *ctx)
+ 		hantro_reg_write(vpu, &g2_max_cu_qpd_depth, 0);
+ 	}
+ 
+-	if (pps->flags & V4L2_HEVC_PPS_FLAG_PPS_SLICE_CHROMA_QP_OFFSETS_PRESENT) {
+-		hantro_reg_write(vpu, &g2_cb_qp_offset, pps->pps_cb_qp_offset);
+-		hantro_reg_write(vpu, &g2_cr_qp_offset, pps->pps_cr_qp_offset);
+-	} else {
+-		hantro_reg_write(vpu, &g2_cb_qp_offset, 0);
+-		hantro_reg_write(vpu, &g2_cr_qp_offset, 0);
+-	}
++	hantro_reg_write(vpu, &g2_cb_qp_offset, pps->pps_cb_qp_offset);
++	hantro_reg_write(vpu, &g2_cr_qp_offset, pps->pps_cr_qp_offset);
+ 
+ 	hantro_reg_write(vpu, &g2_filt_offset_beta, pps->pps_beta_offset_div2);
+ 	hantro_reg_write(vpu, &g2_filt_offset_tc, pps->pps_tc_offset_div2);
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.32.0
+

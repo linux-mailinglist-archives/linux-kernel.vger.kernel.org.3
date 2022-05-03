@@ -2,51 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B328D519169
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 00:28:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F23451915E
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 00:28:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243649AbiECW2k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 18:28:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41528 "EHLO
+        id S243589AbiECWaN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 18:30:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235020AbiECW2g (ORCPT
+        with ESMTP id S235020AbiECWaK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 18:28:36 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FF57424AF;
-        Tue,  3 May 2022 15:25:03 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C221261743;
-        Tue,  3 May 2022 22:25:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED467C385A9;
-        Tue,  3 May 2022 22:25:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651616702;
-        bh=Gq/fueWpXLku85WUlyGq7Fe4Dx3APSdMq6q4gayT7PM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Xxr/MaWDJqiadPMG7VGDJpekoL14jhrzBzbHxiLQ0q8CJwi41o1G230jImRmQRWdx
-         Q4of6lxctHxejbnevqTjyFSWGWlqx7WF26O4p2/ardn6n47tByAcpnrSwT/xAhUF8C
-         kXsxoBdtCnANrlpHbzxETth9Jymp/8ZEsHhRYCcb3NS6uA+qW96HXjlSMLpiP8IIv8
-         yEoSuzPl4+HDUkZJzvalQpQj5lkvIaL7RjIWYEG4M/4khabFgFU2Tu+7U38VdPEXz/
-         HkaU/+5LSTiwE0VVWJcqXyYQb/k3F91/VIgTC/Lug2NH89VIeK7ad87/JhHlmIUeCu
-         zoJjGr5G5ybGQ==
-Date:   Tue, 3 May 2022 15:25:00 -0700
-From:   Jaegeuk Kim <jaegeuk@kernel.org>
-To:     Chao Yu <chao@kernel.org>
-Cc:     linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Ming Yan <yanming@tju.edu.cn>, Chao Yu <chao.yu@oppo.com>
-Subject: Re: [PATCH] f2fs: fix deadloop in foreground GC
-Message-ID: <YnGrvEjxgaXDnxxi@google.com>
-References: <20220429204631.7241-1-chao@kernel.org>
+        Tue, 3 May 2022 18:30:10 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1BC925C63;
+        Tue,  3 May 2022 15:26:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1651616796; x=1683152796;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=q2lfP6lL4V6JxT4T08VZfjVMMWww9jkNTtb6NsjN4dU=;
+  b=xeNoWUws0dXt7yo3kbpif2LQTKzNcQTDwv5vVscivt8kkKCfZyCy2rxm
+   eJWyTtm+zEediZKzgUF3/6zmg/lyNn5dY2WqUZkaeEOyLO4wyzMXYVaEQ
+   pqZbRPchFsaa2puOb4eCeik2epVQz+lDUpZyjAOPGGvscOnM1PtN0YHWx
+   o=;
+Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
+  by alexa-out.qualcomm.com with ESMTP; 03 May 2022 15:26:35 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2022 15:26:34 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Tue, 3 May 2022 15:26:33 -0700
+Received: from qian (10.80.80.8) by nalasex01a.na.qualcomm.com (10.47.209.196)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Tue, 3 May 2022
+ 15:26:31 -0700
+Date:   Tue, 3 May 2022 18:26:29 -0400
+From:   Qian Cai <quic_qiancai@quicinc.com>
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>
+CC:     Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        linux-mm <linux-mm@kvack.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        <lkft-triage@lists.linaro.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Arnd Bergmann <arnd@arndb.de>, "Zi Yan" <ziy@nvidia.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        "David Hildenbrand" <david@redhat.com>,
+        Eric Ren <renzhengeek@gmail.com>,
+        "kernel test robot" <lkp@intel.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        "Mike Rapoport" <rppt@linux.ibm.com>,
+        Minchan Kim <minchan@kernel.org>,
+        "Oscar Salvador" <osalvador@suse.de>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Chen Wandun <chenwandun@huawei.com>, NeilBrown <neilb@suse.de>,
+        <joao.m.martins@oracle.com>, <mawupeng1@huawei.com>,
+        Wei Yang <richard.weiyang@gmail.com>,
+        Song Liu <song@kernel.org>
+Subject: Re: [next] mm: libhugetlbfs: WARNING: at mm/page_alloc.c:5368
+ __alloc_pages
+Message-ID: <YnGsFS5C1bi5TCHN@qian>
+References: <CA+G9fYveMF-NU-rvrsbaora2g2QWxrkF7AWViuDrJyN9mNScJg@mail.gmail.com>
+ <20220429160317.GA71@qian>
+ <CA+G9fYui9OuyFbg7SV8D_4ueC_Jc=71ybbhBeif0bczo957Hqg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20220429204631.7241-1-chao@kernel.org>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+In-Reply-To: <CA+G9fYui9OuyFbg7SV8D_4ueC_Jc=71ybbhBeif0bczo957Hqg@mail.gmail.com>
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -55,90 +84,9 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/30, Chao Yu wrote:
-> As Yanming reported in bugzilla:
-> 
-> https://bugzilla.kernel.org/show_bug.cgi?id=215914
-> 
-> The root cause is: in a very small sized image, it's very easy to
-> exceed threshold of foreground GC, if we calculate free space and
-> dirty data based on section granularity, in corner case,
-> has_not_enough_free_secs() will always return true, result in
-> deadloop in f2fs_gc().
+On Sat, Apr 30, 2022 at 03:41:41AM +0530, Naresh Kamboju wrote:
+> The reported kernel warning was not solved by reverted above patches.
 
-Performance regression was reported. Can we check this for very small sized
-image only?
+FYI, we found the sucker.
 
-> 
-> So this patch refactors has_not_enough_free_secs() as below to fix
-> this issue:
-> 1. calculate needed space based on block granularity, and separate
-> all blocks to two parts, section part, and block part, comparing
-> section part to free section, and comparing block part to free space
-> in openned log.
-> 2. account F2FS_DIRTY_NODES, F2FS_DIRTY_IMETA and F2FS_DIRTY_DENTS
-> as node block consumer;
-> 3. account F2FS_DIRTY_DENTS as data block consumer;
-> 
-> Cc: stable@vger.kernel.org
-> Reported-by: Ming Yan <yanming@tju.edu.cn>
-> Signed-off-by: Chao Yu <chao.yu@oppo.com>
-> ---
->  fs/f2fs/segment.h | 30 +++++++++++++++++-------------
->  1 file changed, 17 insertions(+), 13 deletions(-)
-> 
-> diff --git a/fs/f2fs/segment.h b/fs/f2fs/segment.h
-> index 8a591455d796..28f7aa9b40bf 100644
-> --- a/fs/f2fs/segment.h
-> +++ b/fs/f2fs/segment.h
-> @@ -575,11 +575,10 @@ static inline int reserved_sections(struct f2fs_sb_info *sbi)
->  	return GET_SEC_FROM_SEG(sbi, reserved_segments(sbi));
->  }
->  
-> -static inline bool has_curseg_enough_space(struct f2fs_sb_info *sbi)
-> +static inline bool has_curseg_enough_space(struct f2fs_sb_info *sbi,
-> +			unsigned int node_blocks, unsigned int dent_blocks)
->  {
-> -	unsigned int node_blocks = get_pages(sbi, F2FS_DIRTY_NODES) +
-> -					get_pages(sbi, F2FS_DIRTY_DENTS);
-> -	unsigned int dent_blocks = get_pages(sbi, F2FS_DIRTY_DENTS);
-> +
->  	unsigned int segno, left_blocks;
->  	int i;
->  
-> @@ -605,19 +604,24 @@ static inline bool has_curseg_enough_space(struct f2fs_sb_info *sbi)
->  static inline bool has_not_enough_free_secs(struct f2fs_sb_info *sbi,
->  					int freed, int needed)
->  {
-> -	int node_secs = get_blocktype_secs(sbi, F2FS_DIRTY_NODES);
-> -	int dent_secs = get_blocktype_secs(sbi, F2FS_DIRTY_DENTS);
-> -	int imeta_secs = get_blocktype_secs(sbi, F2FS_DIRTY_IMETA);
-> +	unsigned int total_node_blocks = get_pages(sbi, F2FS_DIRTY_NODES) +
-> +					get_pages(sbi, F2FS_DIRTY_DENTS) +
-> +					get_pages(sbi, F2FS_DIRTY_IMETA);
-> +	unsigned int total_dent_blocks = get_pages(sbi, F2FS_DIRTY_DENTS);
-> +	unsigned int node_secs = total_node_blocks / BLKS_PER_SEC(sbi);
-> +	unsigned int dent_secs = total_dent_blocks / BLKS_PER_SEC(sbi);
-> +	unsigned int node_blocks = total_node_blocks % BLKS_PER_SEC(sbi);
-> +	unsigned int dent_blocks = total_dent_blocks % BLKS_PER_SEC(sbi);
->  
->  	if (unlikely(is_sbi_flag_set(sbi, SBI_POR_DOING)))
->  		return false;
->  
-> -	if (free_sections(sbi) + freed == reserved_sections(sbi) + needed &&
-> -			has_curseg_enough_space(sbi))
-> -		return false;
-> -	return (free_sections(sbi) + freed) <=
-> -		(node_secs + 2 * dent_secs + imeta_secs +
-> -		reserved_sections(sbi) + needed);
-> +	if (free_sections(sbi) + freed <=
-> +			node_secs + dent_secs + reserved_sections(sbi) + needed)
-> +		return true;
-> +	if (!has_curseg_enough_space(sbi, node_blocks, dent_blocks))
-> +		return true;
-> +	return false;
->  }
->  
->  static inline bool f2fs_is_checkpoint_ready(struct f2fs_sb_info *sbi)
-> -- 
-> 2.32.0
+https://lore.kernel.org/all/YnGrbEt3oBBTly7u@qian/

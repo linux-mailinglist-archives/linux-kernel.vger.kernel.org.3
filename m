@@ -2,137 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B2C4518BBB
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 20:02:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0534B518BBF
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 20:03:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240898AbiECSFb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 14:05:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55708 "EHLO
+        id S240678AbiECSG2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 14:06:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239160AbiECSFX (ORCPT
+        with ESMTP id S239160AbiECSGX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 14:05:23 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 002893E5FB
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 11:01:49 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id q23so24431980wra.1
-        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 11:01:49 -0700 (PDT)
+        Tue, 3 May 2022 14:06:23 -0400
+Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B47233EA8E
+        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 11:02:50 -0700 (PDT)
+Received: by mail-qk1-x72f.google.com with SMTP id j9so14374718qkg.1
+        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 11:02:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=6I56eRd5y2rFRWielfkZ72wjiNM/15nuDK8Xp9LuUiA=;
-        b=LeUrUBx3+db/PS5S8Zl9a/7ysiWTMWnx2IFEV8j1tYja232PRSz2YRlblgMUrGvB/W
-         0FEWQG7JQEqqf/ukzbvoKaNlsNhncgc1BtQVUD+1EVyP7P5SieqGYzMQn04cDVxyGw3g
-         NTIQmL4vdlbY7bOF8v88M79mO1iCIa2jQ+SNb04C7a5wJfuXZzZKLx12Sniyd1T9Hals
-         Lu8e6Hh8NW0GTd+x6o8zjhxACENigwkDFGChAto5x4L98s3SfaMjOp8fskfcx8fN05QM
-         HX+XQ73d20GyNcZ2qI08juIxFkkSmi3cVpfiqLfDoRGiq6CFuKdbNNODLmAlvFFtk3+p
-         pUKw==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Uyl9FgqCpk0Nf843k4+zgAZBrShtUTws+zDSvi2LfUM=;
+        b=HASzNM8N5KvGdhci2AiFzKOaJQwN9mxfIDe/lkZJ5ShoUtwlUdYMfOFqvjDXyIJbF4
+         yaCwBO/1X43osNrP+A0r7dVcuxLftUPcVym8xAbVVku9NRSgvrtT3UelMCZeHJLzuNfL
+         /5clZPtUWO33c4TklN3NmqsrqPCjOhgAcTCkIEOzaMYJ+wD9Tt0duo4/8BLzMAiOuNdH
+         Th8ElVEgO5wkiBNqADw6YU6YJxaC9PMmi42uZc7tbY4rLb7pZRcZVhFjQU2SahZBEiCr
+         HiDdRYiv2HnjeJQfP+uXqwRIbMnNmiSSP232+3Utj39UgC6S/OvJYFIF+2Ox/UbleRkj
+         /E0g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=6I56eRd5y2rFRWielfkZ72wjiNM/15nuDK8Xp9LuUiA=;
-        b=uQhNbs3swBQzzDGdgRslYFufZtUKXDPA0M2KUzD/4Oi0CD92Kb9WNyQMzBHwSJw6BP
-         lncEQxyjBRmaRF8BMTmL49QuaLmU72dgN93eC9ox7lrFxdke9ZdMvIbYxiaGTaLQNhSS
-         gonGL6OZgxewtAJscvUd0oz2kjBJMVJ2qeyBy7x2Qum2cxQ+MBopsVZejVdR2x0GOCJE
-         kz9yb6gmeO5uTht4bNruni7wdhkWEgJUMy6w1qdJ8pO1Z8hCcl0EX+DbOEQzvhTn2+Cl
-         hKaSpVH4YzCAhOZLt4s1Vp88R0lptuW3BmD3PKrZv67LNeFe5S+rpWk9OgQHVEOB8xAw
-         t2jQ==
-X-Gm-Message-State: AOAM530X9+UsOmYAcGO7h01MLhjld+p3T6yueTUgiqswz5R7e2GFuoBK
-        zfxIWchHx3D902Ae3oOqRRtH67P+/nUcvdrQ00Rk
-X-Google-Smtp-Source: ABdhPJzOYaIKJriOfQ51PZIzy/4t+eFQw20nyazLGGtO0jsTxUXlAPL2qurCkEYSbki5xSMZuC2hUQuj5/QaNLkYRq4=
-X-Received: by 2002:a5d:4e05:0:b0:20a:d4a6:32b1 with SMTP id
- p5-20020a5d4e05000000b0020ad4a632b1mr13335404wrt.174.1651600908421; Tue, 03
- May 2022 11:01:48 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Uyl9FgqCpk0Nf843k4+zgAZBrShtUTws+zDSvi2LfUM=;
+        b=RASqUQEDlP9lNqPJ9DRYXcL96hyOfLFQ3zdZAalNxL8+RwmVxM62jauJU2nSAFhm0A
+         wgpSpuw4BMLnklKtzGHbC5bRjTUlFKpBExegr8L+uCZLzcvd+0i3uHxATKIud/jnySLt
+         k9wZHdUBdXBHuei5spNskSYMmQL/evNdZpovzHnGhv1u0swSBDk8H3sowUVXDCEkmdqL
+         wv6ybQzfVkB5oLqYWVoRqB55f98pHjxpZmBUMdcMckOwU0dP54bkk2xvyOCNFEmmU5DF
+         rlQroyQOUmPzTL+k+VtLmE7XJMySr9fo1HryHjc6iobBoHkRUUNMIg5jGf2RKupPo67v
+         Op0Q==
+X-Gm-Message-State: AOAM5309Qx1SJ15esAW5k2IVXf5tp7IzkSOgBnBzww2VrcTbt8KwSkMz
+        dJqX64aQ1Z5WwBRqxsfSc5l3gA==
+X-Google-Smtp-Source: ABdhPJy6ETxhDfU1H18vwQw8SjcmvvfRmmnBdOiKVkVcmW4w4SWSAwiUMPGahiMaZ41Ml+rD4xkWVw==
+X-Received: by 2002:a05:620a:414a:b0:69f:d123:6011 with SMTP id k10-20020a05620a414a00b0069fd1236011mr9378899qko.89.1651600969861;
+        Tue, 03 May 2022 11:02:49 -0700 (PDT)
+Received: from myrica (cpc92880-cmbg19-2-0-cust679.5-4.cable.virginm.net. [82.27.106.168])
+        by smtp.gmail.com with ESMTPSA id b24-20020ac86bd8000000b002f39b99f67esm6180531qtt.24.2022.05.03.11.02.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 May 2022 11:02:49 -0700 (PDT)
+Date:   Tue, 3 May 2022 19:02:22 +0100
+From:   Jean-Philippe Brucker <jean-philippe@linaro.org>
+To:     Lu Baolu <baolu.lu@linux.intel.com>
+Cc:     Joerg Roedel <joro@8bytes.org>, Jason Gunthorpe <jgg@nvidia.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Eric Auger <eric.auger@redhat.com>,
+        Liu Yi L <yi.l.liu@intel.com>,
+        Jacob jun Pan <jacob.jun.pan@intel.com>,
+        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 02/12] iommu: Add pasid_bits field in struct dev_iommu
+Message-ID: <YnFuLsvWcjjKBWNy@myrica>
+References: <20220502014842.991097-1-baolu.lu@linux.intel.com>
+ <20220502014842.991097-3-baolu.lu@linux.intel.com>
 MIME-Version: 1.0
-References: <20220502134850.28372-1-cgzones@googlemail.com>
-In-Reply-To: <20220502134850.28372-1-cgzones@googlemail.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Tue, 3 May 2022 14:01:37 -0400
-Message-ID: <CAHC9VhRkDsCR2gyVamYktvx_8LoPKox__YOv+-F4cYZjitCbdw@mail.gmail.com>
-Subject: Re: [PATCH] selinux: resolve checkpatch errors
-To:     =?UTF-8?Q?Christian_G=C3=B6ttsche?= <cgzones@googlemail.com>
-Cc:     selinux@vger.kernel.org,
-        Stephen Smalley <stephen.smalley.work@gmail.com>,
-        Eric Paris <eparis@parisplace.org>,
-        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Xiu Jianfeng <xiujianfeng@huawei.com>,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220502014842.991097-3-baolu.lu@linux.intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 2, 2022 at 9:49 AM Christian G=C3=B6ttsche
-<cgzones@googlemail.com> wrote:
->
-> Reported by checkpatch:
->
->     security/selinux/nlmsgtab.c
->     ---------------------------
->     ERROR: that open brace { should be on the previous line
->     #29: FILE: security/selinux/nlmsgtab.c:29:
->     +static const struct nlmsg_perm nlmsg_route_perms[] =3D
->     +{
->
->     ERROR: that open brace { should be on the previous line
->     #97: FILE: security/selinux/nlmsgtab.c:97:
->     +static const struct nlmsg_perm nlmsg_tcpdiag_perms[] =3D
->     +{
->
->     ERROR: that open brace { should be on the previous line
->     #105: FILE: security/selinux/nlmsgtab.c:105:
->     +static const struct nlmsg_perm nlmsg_xfrm_perms[] =3D
->     +{
->
->     ERROR: that open brace { should be on the previous line
->     #134: FILE: security/selinux/nlmsgtab.c:134:
->     +static const struct nlmsg_perm nlmsg_audit_perms[] =3D
->     +{
->
->     security/selinux/ss/policydb.c
->     ------------------------------
->     ERROR: that open brace { should be on the previous line
->     #318: FILE: security/selinux/ss/policydb.c:318:
->     +static int (*destroy_f[SYM_NUM]) (void *key, void *datum, void *data=
-p) =3D
->     +{
->
->     ERROR: that open brace { should be on the previous line
->     #674: FILE: security/selinux/ss/policydb.c:674:
->     +static int (*index_f[SYM_NUM]) (void *key, void *datum, void *datap)=
- =3D
->     +{
->
->     ERROR: that open brace { should be on the previous line
->     #1643: FILE: security/selinux/ss/policydb.c:1643:
->     +static int (*read_f[SYM_NUM]) (struct policydb *p, struct symtab *s,=
- void *fp) =3D
->     +{
->
->     ERROR: that open brace { should be on the previous line
->     #3246: FILE: security/selinux/ss/policydb.c:3246:
->     +                               void *datap) =3D
->     +{
->
-> Signed-off-by: Christian G=C3=B6ttsche <cgzones@googlemail.com>
+On Mon, May 02, 2022 at 09:48:32AM +0800, Lu Baolu wrote:
+> Use this field to save the pasid/ssid bits that a device is able to
+> support with its IOMMU hardware. It is a generic attribute of a device
+> and lifting it into the per-device dev_iommu struct makes it possible
+> to allocate a PASID for device without calls into the IOMMU drivers.
+> Any iommu driver which suports PASID related features should set this
+> field before features are enabled on the devices.
+> 
+> For initialization of this field in the VT-d driver, the
+> info->pasid_supported is only set for PCI devices. So the status is
+> that non-PCI SVA hasn't been supported yet. Setting this field only for
+> PCI devices has no functional change.
+> 
+> Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
+
+Reviewed-by: Jean-Philippe Brucker <jean-philippe@linaro.org>
+
 > ---
->  security/selinux/include/initial_sid_to_string.h |  3 +--
->  security/selinux/nlmsgtab.c                      | 12 ++++--------
->  security/selinux/ss/policydb.c                   | 12 ++++--------
->  3 files changed, 9 insertions(+), 18 deletions(-)
-
-I generally dislike checkpatch-only patches, but you've been fixing a
-lot of other things so I'll go ahead and merge this into selinux/next.
-
---=20
-paul-moore.com
+>  include/linux/iommu.h                       | 1 +
+>  drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c | 2 ++
+>  drivers/iommu/intel/iommu.c                 | 5 ++++-
+>  3 files changed, 7 insertions(+), 1 deletion(-)
+> 
+> diff --git a/include/linux/iommu.h b/include/linux/iommu.h
+> index 5e1afe169549..b8ffaf2cb1d0 100644
+> --- a/include/linux/iommu.h
+> +++ b/include/linux/iommu.h
+> @@ -373,6 +373,7 @@ struct dev_iommu {
+>  	struct iommu_fwspec		*fwspec;
+>  	struct iommu_device		*iommu_dev;
+>  	void				*priv;
+> +	unsigned int			pasid_bits;
+>  };
+>  
+>  int iommu_device_register(struct iommu_device *iommu,
+> diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
+> index 627a3ed5ee8f..afc63fce6107 100644
+> --- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
+> +++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
+> @@ -2681,6 +2681,8 @@ static struct iommu_device *arm_smmu_probe_device(struct device *dev)
+>  	    smmu->features & ARM_SMMU_FEAT_STALL_FORCE)
+>  		master->stall_enabled = true;
+>  
+> +	dev->iommu->pasid_bits = master->ssid_bits;
+> +
+>  	return &smmu->iommu;
+>  
+>  err_free_master:
+> diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
+> index cf43e8f9091b..170eb777d57b 100644
+> --- a/drivers/iommu/intel/iommu.c
+> +++ b/drivers/iommu/intel/iommu.c
+> @@ -4611,8 +4611,11 @@ static struct iommu_device *intel_iommu_probe_device(struct device *dev)
+>  			if (pasid_supported(iommu)) {
+>  				int features = pci_pasid_features(pdev);
+>  
+> -				if (features >= 0)
+> +				if (features >= 0) {
+>  					info->pasid_supported = features | 1;
+> +					dev->iommu->pasid_bits =
+> +						fls(pci_max_pasids(pdev)) - 1;
+> +				}
+>  			}
+>  
+>  			if (info->ats_supported && ecap_prs(iommu->ecap) &&
+> -- 
+> 2.25.1
+> 

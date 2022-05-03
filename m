@@ -2,66 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2ABF251803A
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 10:55:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE2B2518042
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 10:56:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233043AbiECI7U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 04:59:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37698 "EHLO
+        id S233079AbiECJAI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 05:00:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233105AbiECI7B (ORCPT
+        with ESMTP id S229854AbiECJAH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 04:59:01 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B727205DE
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 01:55:29 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1nloJK-0007st-3e; Tue, 03 May 2022 10:55:10 +0200
-Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id C97AA74A84;
-        Tue,  3 May 2022 08:55:06 +0000 (UTC)
-Date:   Tue, 3 May 2022 10:55:06 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Pavel Pisa <pisa@cmp.felk.cvut.cz>
-Cc:     Andrew Dennison <andrew.dennison@motec.com.au>,
-        linux-can@vger.kernel.org,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        David Miller <davem@davemloft.net>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Marin Jerabek <martin.jerabek01@gmail.com>,
-        Ondrej Ille <ondrej.ille@gmail.com>,
-        Jiri Novak <jnovak@fel.cvut.cz>,
-        Jaroslav Beran <jara.beran@gmail.com>,
-        Petr Porazil <porazil@pikron.com>, Pavel Machek <pavel@ucw.cz>,
-        Carsten Emde <c.emde@osadl.org>,
-        Drew Fustini <pdp7pdp7@gmail.com>,
-        Matej Vasilevski <matej.vasilevski@gmail.com>
-Subject: Re: [PATCH v1 0/4] can: ctucanfd: clenup acoording to the actual
- rules and documentation linking
-Message-ID: <20220503085506.d5v4xtpumr7gm7hy@pengutronix.de>
-References: <cover.1650816929.git.pisa@cmp.felk.cvut.cz>
- <CAHQrW0_bxDyTf7pNHgXwcO=-0YRWtsxscOSWWU4fDmNYo8d-9Q@mail.gmail.com>
- <20220503064626.lcc7nl3rze5txive@pengutronix.de>
- <202205030927.15558.pisa@cmp.felk.cvut.cz>
+        Tue, 3 May 2022 05:00:07 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1CBDA36161
+        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 01:56:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1651568195;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=hsMPfZ7YVBXiceEKvCyPHJHbSrWBVzhicBQJ3xEfcUM=;
+        b=gX1Dg5ycF+P446ejNkfzJy/5+zkxuFJ38YB5/LUvxP8zWUINnl3nOou/rOl3LkBHWS4GVh
+        kDoKAj7mQ8DDRCRGgiXqTIpPXamM+iqXJv/sSPi34mXt+/GmMNeLrxrMo2wSnZT2ospw2e
+        IuFvElErLUv3cOzMvEn5JMVYzrEyqgk=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-517-2xyudkatOPuReOMD9dXRWA-1; Tue, 03 May 2022 04:56:33 -0400
+X-MC-Unique: 2xyudkatOPuReOMD9dXRWA-1
+Received: by mail-wm1-f70.google.com with SMTP id t184-20020a1c46c1000000b00394209f54f1so3240858wma.4
+        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 01:56:33 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=hsMPfZ7YVBXiceEKvCyPHJHbSrWBVzhicBQJ3xEfcUM=;
+        b=qJT/Kzh6wI2UmPz5H8UoMcftL+QG+5Wpn7S5VMKnL4kWdT/Y9zXfCkTePCND8v0FAg
+         TqGpYYYfI2bMl7NtiLQ35br5YQxWI3pii1/G2E86uldJ+WX/rxf0vRMcfacJuG1VUYGA
+         WiAmd215x1um8ToZgGci0LAepEbWQrr6uhUbx5vpasLi++lBylTV7mEdoOqqGJ9WpV/s
+         EGYk1TjTl4BiXmco2AEVbHhtosX/+RKaKOERufYoIXd2Fg1tJXkHr6fww3SRvEspVRUE
+         tScOluVuNiA/IOKKjivczIEM4mNouMrOE+H5pBJvo+A0PfhBaciqLlY7pgbrIBs6sm4A
+         PgMQ==
+X-Gm-Message-State: AOAM5310k8DXGnV6OY94Li91N18eONJX8R0kjWnhtZuyAxB5XTkTE6OJ
+        aS6aIELKofe+W6MxddbZFdIvtzrfHNoDCRjSsV59BM7JtZGc1PLE/oUc39X08HykbpVPYshinSO
+        9dGbpVp2B2UOxAJYZ0geAvY8dmbj5re4O7Jpgr5r9
+X-Received: by 2002:a05:600c:9:b0:393:ea67:1c68 with SMTP id g9-20020a05600c000900b00393ea671c68mr2482279wmc.92.1651568192646;
+        Tue, 03 May 2022 01:56:32 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzYtLR8VvhbzJcDjhUtSyg5TLLMizsYb225WJMv+RYxsAzrnZVWzwvB4t0FHDEztk89AxGCkD5/dkHUmR0hilI=
+X-Received: by 2002:a05:600c:9:b0:393:ea67:1c68 with SMTP id
+ g9-20020a05600c000900b00393ea671c68mr2482267wmc.92.1651568192413; Tue, 03 May
+ 2022 01:56:32 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ec4ogvkdtzy55sz6"
-Content-Disposition: inline
-In-Reply-To: <202205030927.15558.pisa@cmp.felk.cvut.cz>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+References: <20220426145445.2282274-1-agruenba@redhat.com> <CAHk-=wi7o+fHYBTuCQQdHD112YHQtO21Y3+wxNYypjdo8feKFg@mail.gmail.com>
+ <CAHc6FU48681X8aUK+g7UUN7q5b6rkVBzTP7h_zbE4XqZYAiw3g@mail.gmail.com>
+ <CAHk-=wjMB1-xCOCBtsSMmQuFV9G+vNyCY1O_LsoqOd=0QS4yYg@mail.gmail.com>
+ <CAHc6FU5Bag5W2t79+WzUq=NibtEF+7z6=jyNCkLMMp9Yqvpmqw@mail.gmail.com>
+ <CAHk-=whaz-g_nOOoo8RRiWNjnv2R+h6_xk2F1J4TuSRxk1MtLw@mail.gmail.com>
+ <CAHc6FU5654k7QBU97g_Ubj8cJEWuA_bXPuXOPpBBYoXVPMJG=g@mail.gmail.com>
+ <CAHk-=wgSYSNc5sF2EVxhjbSc+c4LTs90aYaK2wavNd_m2bUkGg@mail.gmail.com>
+ <CAHc6FU69E4ke4Xg3zQ2MqjLbfM65D9ZajdY5MRDLN0azZOGmVQ@mail.gmail.com>
+ <CAHk-=whQxvMvty8SjiGMh+gM4VmCYvqn6EAwmrDXJaHT2Aa+UA@mail.gmail.com>
+ <CAHk-=wicJdoCjPLu7FhaErr6Z3UaW820U2b+F-8P4qwSFUZ0mg@mail.gmail.com>
+ <CAHc6FU7GkXLkns5PONLvsSi6HB+rjaNSyFeQFS034tKL-JueMw@mail.gmail.com>
+ <CAHk-=wg4ypnZUA5BOHAF1miKvOhW2yQSruuBKNXMDR=dTmp+ww@mail.gmail.com>
+ <CAHc6FU6VgQDO7HT5f4S_4f=9hczKGRDQ6SbQ5kNHMi4i-6rxVA@mail.gmail.com> <CAHk-=whL74iP6v2P+OafGO0H72ag4wt42k+Kc_01boLP8aqUNQ@mail.gmail.com>
+In-Reply-To: <CAHk-=whL74iP6v2P+OafGO0H72ag4wt42k+Kc_01boLP8aqUNQ@mail.gmail.com>
+From:   Andreas Gruenbacher <agruenba@redhat.com>
+Date:   Tue, 3 May 2022 10:56:20 +0200
+Message-ID: <CAHc6FU77KGn76B4ieu9Tn895deK-1yV4y=8ou4gTfUf=7C-4XQ@mail.gmail.com>
+Subject: Re: [GIT PULL] gfs2 fix
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        "Darrick J. Wong" <djwong@kernel.org>,
+        Dave Chinner <dchinner@redhat.com>,
+        cluster-devel <cluster-devel@redhat.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,175 +87,131 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
---ec4ogvkdtzy55sz6
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On 03.05.2022 09:27:15, Pavel Pisa wrote:
-> Hello Marc and Andrew,
->=20
-> On Tuesday 03 of May 2022 08:46:26 Marc Kleine-Budde wrote:
-> > On 03.05.2022 16:32:32, Andrew Dennison wrote:
-> > > > > When value is configurable then for (uncommon) number
-> > > > > of buffers which is not power of two, there will be likely
-> > > > > a problem with way how buffers queue is implemented
-> > >
-> > > Only power of 2 makes sense to me: I didn't consider those corner
-> > > cases but the driver could just round down to the next power of 2 and
-> > > warn about a misconfiguration of the IP core.
+On Mon, May 2, 2022 at 8:32 PM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+> On Thu, Apr 28, 2022 at 10:39 AM Andreas Gruenbacher <agruenba@redhat.com> wrote:
 > >
-> > +1
->=20
-> Then (n-1) mask be used instead of modulo which is what I used for these
-> kind of queues.
->=20
-> https://sourceforge.net/p/ulan/ulut/ci/master/tree/ulut/ul_dqfifo.h
+> > Yes, but note that it's gfs2_file_buffered_write() that fails. When
+> > the pagefault_disable/enable() around iomap_file_buffered_write() is
+> > removed, the corruption goes away.
+>
+> I looked some more at this on and off, and ended up even more confused.
+>
+> For some reason, I'd mostly looked at the read case, because I had
+> mis-read some of your emails and thought it was the buffered reads
+> that caused problems.
+>
+> Then I went back more carefully, and realized you had always said
+> gfs2_file_buffered_write() was where the issues happened, and looked
+> at that path more, and that confused me even *MORE*.
+>
+> Because that case has always done the copy from user space with page
+> faults disabled, because of the traditional deadlock with reading from
+> user space while holding the page lock on the target page cache page.
+>
+> So that is not really about the new deadlock with filesystem locks,
+> that was fixed by 00bfe02f4796 ("gfs2: Fix mmap + page fault deadlocks
+> for buffered I/O").
+>
+> So now that I'm looking at the right function (maybe) I'm going "huh",
+> because it's none of the complex cases that would seem to fail, it's
+> literally just the fault_in_iov_iter_readable() that we've always done
+> in iomap_write_iter() that presumably starts failing.
+>
+> But *that* old code seems bogus too. It's doing
+>
+>                 if (unlikely(fault_in_iov_iter_readable(i, bytes) == bytes)) {
+>                         status = -EFAULT;
+>                         break;
+>                 }
+>
+> which on the face of it is sane: it's saying "if we can't fault in any
+> bytes, then stop trying".
+>
+> And it's good, and correct, but it does leave one case open.
+>
+> Because what if the result is "we can fault things in _partially_"?
+>
+> The code blithely goes on and tries to do the whole 'bytes' range _anyway_.
+>
+> Now, with a bug-free filesystem, this really shouldn't matter, since
+> the later copy_page_from_iter_atomic() thing should then DTRT anyway,
+> but this does mean that one fundamental thing that that commit
+> 00bfe02f4796 changed is that it basically disabled that
+> fault_in_iov_iter_readable() that *used* to fault in the whole range,
+> and now potentially only faults in a small area.
+>
+> That, in turn, means that in practice it *used* to do "write_end()"
+> with a fully successful range, ie when it did that
+>
+>                 status = a_ops->write_end(file, mapping, pos, bytes, copied,
+>                                                 page, fsdata);
+>
+> then "bytes" and "copied" were the same.
+>
+> But now that commit 00bfe02f4796 added the "disable_pagefault()"
+> around the whole thing, fault_in_iov_iter_readable() will easily fail
+> half-way instead of bringing the next page in, and then that
+> ->write_begin() to ->write_end() sequence will see the copy in the
+> middle failing half-way too, and you'll have that write_end()
+> condition with the write _partially_ succeeding.
+>
+> Which is the complex case for write_end() that you practically
+> speaking never saw before (it *could* happen with a race with swap-out
+> or similar, but it was not really something you could trigger in real
+> life.
+>
+> And I suspect this is what bites you with gfs2
+>
+> To *test* that hypothesis, how about you try this attached patch? The
+> generic_perform_write() function in mm/filemap.c has the same exact
+> pattern, but as mentioned, a filesystem really needs to be able to
+> handle the partial write_end() case, so it's not a *bug* in that code,
+> but it migth be triggering a bug in gfs2.
+>
+> And gfs2 only uses the iomap_write_iter() case, I think. So that's the
+> only case this attached patch changes.
+>
+> Again - I think the unpatched iomap_write_iter() code is fine, but I
+> think it may be what then triggers the real bug in gfs2. So this patch
+> is not wrong per se, but this patch is basically a "hide the problem"
+> patch, and it would be very interesting to hear if it does indeed fix
+> your test-case.
 
-ACK
+We still get data corruption with the patch applied. The
+WARN_ON_ONCE(!bytes) doesn't trigger.
 
-> > > I added the dynamic detection because the IP core default had changed
-> > > to 2 TX buffers and this broke some hard coded assumptions in the
-> > > driver in a rather obscure way that had me debugging for a bit...
-> >
-> > The mainline driver uses a hard coded default of 4 still... Can you
-> > provide that patch soonish?
->=20
-> We discuss with Ondrej Ille final location of the bits with queue
-> length information etc... The version 3.0 of the core is in
-> development still. So I do not like to introduce something which would
-> break compatability with future revisions.
+As an additional experiment, I've added code to check the iterator
+position that iomap_file_buffered_write() returns, and it's all
+looking good as well: an iov_iter_advance(orig_from, written) from the
+original position always gets us to the same iterator.
 
-Makes sense. I'm a bit nervous, as Andrew said the default number of TX
-buffers changed to 2 in the hardware.
+This points at gfs2 getting things wrong after a short write, for
+example, marking a page / folio uptodate that isn't. But the uptodate
+handling happens at the iomap layer, so this doesn't leave me with an
+immediate suspect.
 
-> Yes, we can check for version reported by IP core but when it is
-> possible I would not introduce such logic... So if it gets to 5.19 it
-> would be great but if we should risk incompatible changes or too
-> cluttered logic then it will be 5.20 material. Other option is to add
-> Kconfig option to specify maximal number of TX buffers used by the
-> driver for now.
+We're on filesystems with block size == page size, so none of the
+struct iomap_page uptodata handling should be involved, either.
 
-No Kconfig option please! The hardware should be introspectable,
-preferred a register holds the number of TX buffers. If this is not
-available use a version register and hard code the number per version.
+> Because that would pinpoint exactly what the bug is.
+>
+> I'm adding Christoph and Darrick as iomap maintainers here to the
+> participants (and Dave Chinner in case he's also the temporary
+> maintainer because Darrick is doing reviews) not because they
+> necessarily care, but just because this test-patch obviously involves
+> the iomap code.
+>
+> NOTE! This patch is entirely untested. I also didn't actually yet go
+> look at what gfs2 does when 'bytes' and 'copied' are different. But
+> since I finally think I figured out what might be going on, I decided
+> I'd send this out sooner rather than later.
+>
+> Because this is the first thing that makes me go "Aaahh.. This might
+> explain it".
+>
+>                    Linus
 
-> > > > You can make use of more TX buffers, if you implement (fully
-> > > > hardware based) TX IRQ coalescing (=3D=3D handle more than one TX
-> > > > complete interrupt at a time) like in the mcp251xfd driver, or BQL
-> > > > support (=3D=3D send more than one TX CAN frame at a time). I've pl=
-ayed
-> > > > a bit with BQL support on the mcp251xfd driver (which is attached by
-> > > > SPI), but with mixed results. Probably an issue with proper
-> > > > configuration.
-> > >
-> > > Reducing CAN IRQ load would be good.
-> >
-> > IRQ coalescing comes at the price of increased latency, but if you have
-> > a timeout in hardware you can configure the latencies precisely.
->=20
-> HW coalescing not considered yet. Generally my intention for CAN use
-> is usually robotic and motion control and there is CAN and even CAN FD
-> on edge with its latencies already and SocketCAN layer adds yet
-> another level due common tasklets and threads with other often dense
-> and complex protocols on ETHERNET so to lover CPU load by IRQ
-> coalescing is not my priority.
+Thanks,
+Andreas
 
-For MMIO attached hardware IRQ load is a far less problem than slow
-busses like SPI.
-
-> We have done latencies evaluation of SocketCAN, LinCAN and RTEMS years
-> ago on Oliver Hartkopp's requests on standard and fully-preemptive
-> kernels on more targets (x86, PowerPC, ...) and I hope that we revive
-> CAN Bench project on Xilinx Zynq based MZ_APO again, see Martin
-> Jerabek's theses FPGA Based CAN Bus Channels Mutual Latency Tester and
-> Evaluation, 2016
->=20
-> https://gitlab.fel.cvut.cz/canbus/zynq/zynq-can-sja1000-top/wikis/uploads=
-/56b4d27d8f81ae390fc98bdce803398f/F3-BP-2016-Jerabek-Martin-Jerabek-thesis-=
-2016.pdf
-
-Meanwhile you can configure the NAPI to be handled in per interface
-kernel thread, which can be prioritized. This should reduce latencies
-introduced by NAPI of other network cards using the global soft IRQ.
-
-> It is actual work of Matej Vasilevski. So I hope to have again more
-> insight into latencies on CAN. By the way, I plan to speak with
-> Carsten Emde on Embedded World if these is interrest to add
-> continuous HW timestamping based CAN latencies testing into OSADL
-> QA Farm
->=20
-> https://www.osadl.org/OSADL-QA-Farm-Real-time.linux-real-time.0.html
->=20
-> Other option is to setup system and run it locally at CTU
-> as we run complete CI on CTU CAN FD.
->=20
-> > > > > We need 2 * priv->ntxbufs range to distinguish empty and full
-> > > > > queue... But modulo is not nice either so I probably come with
-> > > > > some other solution in a longer term. In the long term, I want to
-> > > > > implement virtual queues to allow multiqueue to use dynamic Tx
-> > > > > priority of up to 8 the buffers...
-> > > >
-> > > > ACK, multiqueue TX support would be nice for things like the
-> > > > Earliest TX Time First scheduler (ETF). 1 TX queue for ETF, the
-> > > > other for bulk messages.
-> > >
-> > > Would be nice, I have multi-queue in the CAN layer I wrote for a
-> > > little RTOS (predates socketcan) and have used for a while.
-> >
-> > Out of interest:
-> > What are the use cases? How did you decide which queue to use?
->=20
-> For example for CAN open there should be at least three queues
-> to prevent CAN Tx priority inversion. one for NMT (network
-> management), one for PDO (process data objects) and least priority
-> for SDO (service data objects). That such applications works
-> somehow with single queue is only matter of luck and low
-> level of the link bandwidth utilization.
->=20
-> We have done research how to use Linux networking infrastructure
-> to route application send CAN messages into multiple queues
-> according to the CAN ID priorities. There are some results in mainline
-> from that work
->=20
-> Rostislav Lisovy 2014: can: Propagate SO_PRIORITY of raw sockets to skbs
-> Rostislav Lisovy 2012: net: em_canid: Ematch rule to match CAN frames=20
-> according to their identifiers
->=20
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/n=
-et/sched/em_canid.c
->=20
-> So some enhancements and testing in this direction belongs
-> between my long horizon goals. But low priority now because
-> my company and even studnets at university are paid from
-> other projects (silicon-heaven, ESA, Bluetooth-monitoring,
-> NuttX etc.) so Linux CAN is hobby only at this moment.
-> But others have contracts for CTU CAN FD, Skoda Auto
-> testers etc. there...
-
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---ec4ogvkdtzy55sz6
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmJw7ecACgkQrX5LkNig
-011wggf9GDMsb66itcciOLFHd0+MqYRA8A21qlVvPRAiiBNxjeBGA4x6ZqPy7Vps
-XZ7TvSHspYnaRyTvWHfJV762vr6teMVozTxV6hPoSfmHQqHVGwiCAU5Ia1bigcCb
-1OuuKnOw5BUGqUkRHJUVi4ZEGp9TnhuTGLdCd6HpeIZNtAgxtye38y21c34qQ3jm
-yfVxHUfCvI3Vo8UMeixV8ug4pEJo/KWYisZchO3VPVjj5Aiqyrvuroap9LEPXSHv
-Ffj9LLtN3DSYWW6ERe8SAN2UjSBDnFThtJlNUn9TMYDRNOEV6/T5YVrJKkK0Yu0A
-/IhLsR1TfiSFnWAKjwBAIM6z0miHZQ==
-=zLxL
------END PGP SIGNATURE-----
-
---ec4ogvkdtzy55sz6--

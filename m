@@ -2,100 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1384F5186E4
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 16:38:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD65E5186E7
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 16:39:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237164AbiECOmJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 10:42:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36424 "EHLO
+        id S237191AbiECOmd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 10:42:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235833AbiECOl6 (ORCPT
+        with ESMTP id S235833AbiECOma (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 10:41:58 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C0EA735244
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 07:38:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651588703;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=3jvW9O8FtNByur9xmyT+4fDeABWXYnCsciURT7bZp4c=;
-        b=dFRHK14VQdrOgdiJnTqysL19Wmxj3KNuaNJJByycrZ3/JrTJbzwxFOAh4WozQj8AZl2AB7
-        6rKHKcRE0z9r86GcTDRpUoNEMzKZ2cgMFAOjOAx8IVeyc1mgiK/8wANDVgc6+aAs9XMFHe
-        9b82H9k2O81tmW2EMmh/trBSzYEFRgw=
-Received: from mail-lj1-f197.google.com (mail-lj1-f197.google.com
- [209.85.208.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-659--GP6IOWzPlS2l9pIV5MeEw-1; Tue, 03 May 2022 10:38:19 -0400
-X-MC-Unique: -GP6IOWzPlS2l9pIV5MeEw-1
-Received: by mail-lj1-f197.google.com with SMTP id l13-20020a2e868d000000b0024f078d7ea0so4293296lji.4
-        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 07:38:18 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=3jvW9O8FtNByur9xmyT+4fDeABWXYnCsciURT7bZp4c=;
-        b=SCpA2BMlYaHIprEiGOIpFNjF7clamqJIDxXOr2V+n+5cNOpviDnP8v0IXP398rhs0L
-         oSrY6Ztlz8006+m9xXVvphDdZnfLh1oRMBkttK5xxQt6ZtTNdJTrqtv/fsnK6GXq5RMT
-         eTvy0RPpvrmoVnMcOsXPULxAAIiynFnMRtrEUmAHmhlZogm+1QRlh9urXvHqt3pUApO4
-         tSF8/rFaVc56YLy+DYDgVMKjoLmBdH4Rv9TmsJD02Tj+mUhZRm5Cg2zHyNhH5MAleRTd
-         AFhRi3xO2ZlSbmeiXG2JbW12wLybSCrhz5pVrg43+te1+XLKAK/jrnGCaGvbpunNotrv
-         ntpA==
-X-Gm-Message-State: AOAM531BpQ3+V0xqpquAcg9hnvxaUJOuKqdgNSWl3XHiFB52A9wU59F0
-        shYea4fjfOfuEbVSKpRS2DFOZLGzFrU/q/JC0fAnFEOu2SRaA14QwIsd6VMpNH1LPSPSimDDSNs
-        Uiqlr7TtfPFUu9yZrWg3YTnFTUDcdG2w7fqtgXSkv
-X-Received: by 2002:a2e:9889:0:b0:24f:4e49:6e71 with SMTP id b9-20020a2e9889000000b0024f4e496e71mr8179560ljj.190.1651588697217;
-        Tue, 03 May 2022 07:38:17 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwhy5xUPuEo02RrBNyg+U6WuEpzG1Gi9D+wS3+mSNyDxKVUGEkv2cnCkkhLzQA4eMUD7+l0LFiAjvCHa2ufNoo=
-X-Received: by 2002:a2e:9889:0:b0:24f:4e49:6e71 with SMTP id
- b9-20020a2e9889000000b0024f4e496e71mr8179543ljj.190.1651588697029; Tue, 03
- May 2022 07:38:17 -0700 (PDT)
+        Tue, 3 May 2022 10:42:30 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCFB83585B;
+        Tue,  3 May 2022 07:38:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651588737; x=1683124737;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=N2zi+YIjSNLlSlsGyRm3N+vojMMVHkuZGiENMvXNw4o=;
+  b=VytaN1algBuJI9mZEfb9VquNk9cbFKm56rHbfZlzOBmpghGDMqirpurc
+   A0icsd0Vz7MectDZFkJw99HdW62g8cmw9XaQuktEv4P8ICqsSnpmY3H8W
+   A+eklRgUXWRPoPwwsgV1t6aUxuovy8yrCuU9v3Z27tHh1FNyydvlOCE13
+   9apPv5rdQyBkz/zvyX8lu5RL1TTmHnlXEWi+h+LmMEXaIwuzrk7DJ2zif
+   1tpm8+a9V+dbKTnQcLdlH+EyuTjBZBTEpmpqOvovzUXUYExPv76G+uF6E
+   2+u2PORAP4Fm+CCdQ2IP3XIFa5LS6Ug3druyscuN26fBFYFvh1+VMb34G
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10336"; a="267084742"
+X-IronPort-AV: E=Sophos;i="5.91,195,1647327600"; 
+   d="scan'208";a="267084742"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2022 07:38:57 -0700
+X-IronPort-AV: E=Sophos;i="5.91,195,1647327600"; 
+   d="scan'208";a="536357275"
+Received: from rhweight-wrk1.ra.intel.com ([137.102.106.43])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2022 07:38:57 -0700
+Date:   Tue, 3 May 2022 07:38:57 -0700 (PDT)
+From:   matthew.gerlach@linux.intel.com
+X-X-Sender: mgerlach@rhweight-WRK1
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        dinguyen@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org
+Subject: Re: [PATCH] arm64: dts: intel: add device tree for n6000
+In-Reply-To: <896ea19b-6dc1-a635-0dd6-c7f9494487e8@linaro.org>
+Message-ID: <alpine.DEB.2.22.394.2205030737190.244936@rhweight-WRK1>
+References: <20220502165818.4002157-1-matthew.gerlach@linux.intel.com> <896ea19b-6dc1-a635-0dd6-c7f9494487e8@linaro.org>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
 MIME-Version: 1.0
-References: <20220501183500.2242828-1-sathyanarayanan.kuppuswamy@linux.intel.com>
- <20220501183500.2242828-2-sathyanarayanan.kuppuswamy@linux.intel.com>
- <5473f606bd8e60dd7b8d58a540285d126a1361bd.camel@intel.com>
- <e5aed619-20ce-7eb3-22a3-64b51de9cce3@linux.intel.com> <b8eadd3079101a2cf93ee87d36dbedf93d8a2725.camel@intel.com>
- <e673ea3d-ae4f-39ed-33a5-c6480e58c6d8@linux.intel.com>
-In-Reply-To: <e673ea3d-ae4f-39ed-33a5-c6480e58c6d8@linux.intel.com>
-From:   Wander Costa <wander@redhat.com>
-Date:   Tue, 3 May 2022 11:38:05 -0300
-Message-ID: <CAAq0SU=TPHQ4q8Dj583m0yfVytygN81BTEe8vU5GCOoFau+LWw@mail.gmail.com>
-Subject: Re: [PATCH v5 1/3] x86/tdx: Add TDX Guest attestation interface driver
-To:     Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-Cc:     Kai Huang <kai.huang@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII; format=flowed
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 2, 2022 at 8:17 PM Sathyanarayanan Kuppuswamy
-<sathyanarayanan.kuppuswamy@linux.intel.com> wrote:
 
-> > [...]
+
+On Tue, 3 May 2022, Krzysztof Kozlowski wrote:
+
+> On 02/05/2022 18:58, matthew.gerlach@linux.intel.com wrote:
+>> From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+>>
+>> Add a device tree for the n6000 instantiation of Agilex
+>> Hard Processor System (HPS).
 >
-> I don't want to pollute the dmesg logs if possible. For IOCTL use case,
-> the return value can be used to understand the failure reason from user
-> code. But for initcall failure, pr_err message is required to understand
-> the failure reason.
+> Please also use scripts/get_maintainer.pl to get the addresses. You
+> cc-ed here several wrong emails, so no one would pick up this patch.
+>
+> Actually only my email is correct (except lists)...
 
-How often is this call expected to fail?
+I did run scripts/get_maintain.pl, but I still managed to mangle Dinh's 
+and Rob's email addresses.  I will be extra, extra careful on the v2 
+submission.
 
+Matthew
+
+>
+> Best regards,
+> Krzysztof
+>

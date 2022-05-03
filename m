@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6460D517C38
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 05:27:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89B8A517C32
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 05:27:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230347AbiECDYc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 23:24:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60866 "EHLO
+        id S230353AbiECDYg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 23:24:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230337AbiECDYX (ORCPT
+        with ESMTP id S230338AbiECDY3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 23:24:23 -0400
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B2E533E0A
-        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 20:20:52 -0700 (PDT)
-Received: by mail-pf1-x42f.google.com with SMTP id h1so13739739pfv.12
-        for <linux-kernel@vger.kernel.org>; Mon, 02 May 2022 20:20:52 -0700 (PDT)
+        Mon, 2 May 2022 23:24:29 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B18AF35255
+        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 20:20:58 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id j8-20020a17090a060800b001cd4fb60dccso974162pjj.2
+        for <linux-kernel@vger.kernel.org>; Mon, 02 May 2022 20:20:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=x61TjLKwnlPP/1Q/z1UHB85PFlxeFJXks6RYgmVkwuc=;
-        b=iXYClFs+HWZ4g95as2fyx9dN6umKDVfdPfMOgeeXq1YD+Crki+bpt7fhpQ4rcCe/VX
-         mADF6JsQl3FLiqepNL/BA7AB0vXrUxTtOGj9Z/sSEqtKqbyMifwxk47RG0ZTnWxSzHJe
-         bZ4XgjrHfcNMlq/Y+Ao2ao8wNz1pb8PWjdFtbDbnYxwKRdHn6u6BbZ4cqr7XOSh4Jj1B
-         KpxrPqAnTsSP2aUHBAlewzK2SwgqHEItUjSD3FT4vjsHkU1DZOWb3sGomgCatb76wBrn
-         Bh4YC2ryd9RNUBhjXRJXelmWBk8ct2Mhbc3Llxzmhb4s4RN+8gIDRpZXXXxyb3nNNUBw
-         Ex6A==
+        bh=xotWSQoi2wlC3vMI8lQ8RpO96nR6JNjKt6GYA46wjrE=;
+        b=j2TkGrSUFai8FQ8ertrRrE8Ty6ZPlVq1zCXtVp+22pyjlvLpM7dE7qX6I+rdhB8I32
+         Z4T+adbpQ3dtQJMCuFGFf4Oig+WmhCOI//Se09Q4L4fmiTimRII7dclbz0/haNaYHlsE
+         NMHlx1+8ORo0wu/APD+tMPNoVXaaAqJh+cXCSdcAOLiTAp5OoY76FJ8f4jjljHuDB/ML
+         yjHJ8ZuEYlLhvaEeVwDkrWyp9TnGmcBQMOgRv1FQGGxUit7cGzXx+QsqgDAyaBHHAJ36
+         Ic3ubzDoUpyX8c1mjUV13OUdwMj4jfC5Hr4ZckXWAl6kyZ0QyIsqRrUyhXGJsv2KHAiW
+         1XCw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=x61TjLKwnlPP/1Q/z1UHB85PFlxeFJXks6RYgmVkwuc=;
-        b=aSHhkWdovUVGoW4t5qQFH3BqfmRLfDOXbtSk6R78ZQvAkMF4MHVRCX/2ZRgpQYiWyX
-         jiaXREEuBCxS6dsjJsSSoHhIacId9f2j3MyhPCBt2susRPB13ZacqOG4TYZUCD2s6Ael
-         P4NRHsfvlJlJx8S1mP0xiPfSEptT6SgxBJskJ4Co8RC+0SxgoU8VxxEAEaJoZ0ZYy7QG
-         Taikgtr1r9t18fJXf6w9zS1fdECAOCu77pRYk2FWlZlnVWn0K4zy9eQCdi8rb5IlRiaZ
-         zWe2ID8PEZ9aqIxwmiAjmL/ZojpkerfBPdIE8VIeI7UFApbpgwTapGx1gPe5FvRwbgcK
-         uxPQ==
-X-Gm-Message-State: AOAM5313kMKI/vOK5dqGxPSxF9M+/DiTqkCTku4X3mvQNLIqDZ5wMEad
-        VnfA+8SCIt+HWQ3ccNSKoT3x4hTVfkw=
-X-Google-Smtp-Source: ABdhPJwIJaYiXyDx8XCMWi6AiESvXSZzHhrbf5VnJ2C4/dkUn4HNJwq/+9PI8RUCXpaA6TSn/z+jPw==
-X-Received: by 2002:a05:6a00:1352:b0:50d:ecff:f06c with SMTP id k18-20020a056a00135200b0050decfff06cmr7592097pfu.6.1651548051873;
-        Mon, 02 May 2022 20:20:51 -0700 (PDT)
+        bh=xotWSQoi2wlC3vMI8lQ8RpO96nR6JNjKt6GYA46wjrE=;
+        b=nL/7bp4Wd62cLEyQ9NGfjWhmxqX0jVrZa58JA6I3sxknVREOuh/Wlr45IMSXeV/jXO
+         DOdTBOx8f2jUBKeOn0k/us1krZyidsfLFOFrhgTzPHWAYZ13bP+QnoOdNI7+PAbvdokt
+         E8FGMHoNuLdeXWl958CGc4wKWT7bS9KLmvYlHZWsrrlxu89M59V781geVekhwehJVogt
+         5NRnvxujLUlcW8xd75WwPUCsKpixEDO4L+ONGGtIT1+FNN+dRDkyM/VyfjIDXX1jMc4m
+         r6fpPG7llje9ZP0dKvALSDmVfBPp0nNNzYUZT8X4slOgd2N7WjmUSfiFO9FEzNWGmxGA
+         AcAA==
+X-Gm-Message-State: AOAM530i1nLhNnjEQzEMI94muhVkJdiYqQPBJr/5BjmH6GlcDp6mHFkn
+        /NjUawmJdthmLCfVRrirWLN/RcoFTdo=
+X-Google-Smtp-Source: ABdhPJzmp6UBaLfASoGK81unwVdXeaJ+Sk4uU9HjWwtSBuFgFdJH66RGjL9tXeLPF7LkY2H8y7aMkw==
+X-Received: by 2002:a17:902:f684:b0:15e:8c4a:c54b with SMTP id l4-20020a170902f68400b0015e8c4ac54bmr14463764plg.21.1651548058099;
+        Mon, 02 May 2022 20:20:58 -0700 (PDT)
 Received: from localhost ([47.251.4.198])
-        by smtp.gmail.com with ESMTPSA id z21-20020aa791d5000000b0050dc76281ddsm5395704pfa.183.2022.05.02.20.20.50
+        by smtp.gmail.com with ESMTPSA id n5-20020a170902f60500b0015e8d4eb206sm5392698plg.80.2022.05.02.20.20.56
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 02 May 2022 20:20:51 -0700 (PDT)
+        Mon, 02 May 2022 20:20:57 -0700 (PDT)
 From:   Lai Jiangshan <jiangshanlai@gmail.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Borislav Petkov <bp@alien8.de>,
@@ -60,9 +60,9 @@ Cc:     Borislav Petkov <bp@alien8.de>,
         Ingo Molnar <mingo@redhat.com>,
         Dave Hansen <dave.hansen@linux.intel.com>,
         "H. Peter Anvin" <hpa@zytor.com>
-Subject: [PATCH V7 3/6] x86/entry: Move PUSH_AND_CLEAR_REGS out of error_entry()
-Date:   Tue,  3 May 2022 11:21:04 +0800
-Message-Id: <20220503032107.680190-4-jiangshanlai@gmail.com>
+Subject: [PATCH V7 4/6] x86/entry: Move cld to the start of idtentry macro
+Date:   Tue,  3 May 2022 11:21:05 +0800
+Message-Id: <20220503032107.680190-5-jiangshanlai@gmail.com>
 X-Mailer: git-send-email 2.19.1.6.gb485710b
 In-Reply-To: <20220503032107.680190-1-jiangshanlai@gmail.com>
 References: <20220503032107.680190-1-jiangshanlai@gmail.com>
@@ -80,69 +80,82 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Lai Jiangshan <jiangshan.ljs@antgroup.com>
 
-The macro idtentry calls error_entry() unconditionally even on XENPV.
-But the code XENPV needs in error_entry() is PUSH_AND_CLEAR_REGS only.
+Make it next to CLAC
 
-And PUSH_AND_CLEAR_REGS in error_entry() makes the stack not return to
-its original place when the function returns, which means it is not
-possible to convert it to a C function.
-
-Move PUSH_AND_CLEAR_REGS out of error_entry(), add a function to wrap
-PUSH_AND_CLEAR_REGS and call it before error_entry().
-
-It will allow for error_entry() to be not called on XENPV and for
-error_entry() to be converted to C code.
-
-Cc: Juergen Gross <jgross@suse.com>
+Suggested-by: Peter Zijlstra <peterz@infradead.org>
 Signed-off-by: Lai Jiangshan <jiangshan.ljs@antgroup.com>
 ---
- arch/x86/entry/entry_64.S | 15 ++++++++++++---
- 1 file changed, 12 insertions(+), 3 deletions(-)
+ arch/x86/entry/entry_64.S | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
 diff --git a/arch/x86/entry/entry_64.S b/arch/x86/entry/entry_64.S
-index ca3e99e08a44..b1cef3b0a7ab 100644
+index b1cef3b0a7ab..ab6ab6d3dab5 100644
 --- a/arch/x86/entry/entry_64.S
 +++ b/arch/x86/entry/entry_64.S
-@@ -318,6 +318,14 @@ SYM_CODE_END(ret_from_fork)
- #endif
- .endm
+@@ -371,6 +371,7 @@ SYM_CODE_START(\asmsym)
+ 	UNWIND_HINT_IRET_REGS offset=\has_error_code*8
+ 	ENDBR
+ 	ASM_CLAC
++	cld
  
-+/* Save all registers in pt_regs */
-+SYM_CODE_START_LOCAL(push_and_clear_regs)
-+	UNWIND_HINT_FUNC
-+	PUSH_AND_CLEAR_REGS save_ret=1
-+	ENCODE_FRAME_POINTER 8
-+	RET
-+SYM_CODE_END(push_and_clear_regs)
-+
- /**
-  * idtentry_body - Macro to emit code calling the C function
-  * @cfunc:		C function to be called
-@@ -325,6 +333,9 @@ SYM_CODE_END(ret_from_fork)
+ 	.if \has_error_code == 0
+ 		pushq	$-1			/* ORIG_RAX: no syscall to restart */
+@@ -439,6 +440,7 @@ SYM_CODE_START(\asmsym)
+ 	UNWIND_HINT_IRET_REGS
+ 	ENDBR
+ 	ASM_CLAC
++	cld
+ 
+ 	pushq	$-1			/* ORIG_RAX: no syscall to restart */
+ 
+@@ -495,6 +497,7 @@ SYM_CODE_START(\asmsym)
+ 	UNWIND_HINT_IRET_REGS
+ 	ENDBR
+ 	ASM_CLAC
++	cld
+ 
+ 	/*
+ 	 * If the entry is from userspace, switch stacks and treat it as
+@@ -557,6 +560,7 @@ SYM_CODE_START(\asmsym)
+ 	UNWIND_HINT_IRET_REGS offset=8
+ 	ENDBR
+ 	ASM_CLAC
++	cld
+ 
+ 	/* paranoid_entry returns GS information for paranoid_exit in EBX. */
+ 	call	paranoid_entry
+@@ -882,7 +886,6 @@ SYM_CODE_END(xen_failsafe_callback)
   */
- .macro idtentry_body cfunc has_error_code:req
+ SYM_CODE_START_LOCAL(paranoid_entry)
+ 	UNWIND_HINT_FUNC
+-	cld
+ 	PUSH_AND_CLEAR_REGS save_ret=1
+ 	ENCODE_FRAME_POINTER 8
  
-+	call push_and_clear_regs
-+	UNWIND_HINT_REGS
-+
- 	call	error_entry
- 	movq	%rax, %rsp			/* switch to the task stack if from userspace */
- 	ENCODE_FRAME_POINTER
-@@ -985,13 +996,11 @@ SYM_CODE_START_LOCAL(paranoid_exit)
- SYM_CODE_END(paranoid_exit)
- 
- /*
-- * Save all registers in pt_regs, and switch GS if needed.
-+ * Switch GS and CR3 if needed.
+@@ -1000,7 +1003,6 @@ SYM_CODE_END(paranoid_exit)
   */
  SYM_CODE_START_LOCAL(error_entry)
  	UNWIND_HINT_FUNC
- 	cld
--	PUSH_AND_CLEAR_REGS save_ret=1
--	ENCODE_FRAME_POINTER 8
+-	cld
  	testb	$3, CS+8(%rsp)
  	jz	.Lerror_kernelspace
  
+@@ -1134,6 +1136,7 @@ SYM_CODE_START(asm_exc_nmi)
+ 	 */
+ 
+ 	ASM_CLAC
++	cld
+ 
+ 	/* Use %rdx as our temp variable throughout */
+ 	pushq	%rdx
+@@ -1153,7 +1156,6 @@ SYM_CODE_START(asm_exc_nmi)
+ 	 */
+ 
+ 	swapgs
+-	cld
+ 	FENCE_SWAPGS_USER_ENTRY
+ 	SWITCH_TO_KERNEL_CR3 scratch_reg=%rdx
+ 	movq	%rsp, %rdx
 -- 
 2.19.1.6.gb485710b
 

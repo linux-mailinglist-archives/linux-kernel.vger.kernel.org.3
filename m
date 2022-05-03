@@ -2,84 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A83E517CCF
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 07:37:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D1CE517CD8
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 07:37:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231416AbiECFdQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 01:33:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47256 "EHLO
+        id S231434AbiECFh3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 01:37:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231342AbiECFdN (ORCPT
+        with ESMTP id S231423AbiECFh1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 01:33:13 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DED0387A7;
-        Mon,  2 May 2022 22:29:42 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 27A966154D;
-        Tue,  3 May 2022 05:29:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52CF5C385A9;
-        Tue,  3 May 2022 05:29:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651555781;
-        bh=yMBoWF0nvWgsPkJx/J8zK0TimF5+YRey0fH4qHkvjTA=;
-        h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
-        b=ufVas6kp1YoKwK8wNMl2zHcgQceNACHjhAi67pGAK/YEWI7m68RI4dhVVgq0YSfvf
-         Mh6jU5Rn2VA8jT730/Uis9SxmWGAQzOTtsovLx0wrsZ58d9ekkM1xfUHTF8QGZydN0
-         IbKqc/rT2nDRNugFw+Vt5dXbRUTXHTpomfPW35pLm08MjNo+kyCSxNS8j/EStfJGHl
-         AJKvIl2A0AotfnkG/ry4EQYC39FYs2z0vyqxxLwVwWtDGlqcXW0kqPcA0yOgGdPObh
-         hMBcNqRUCA9qxBz3jSg1j+cxLgjSAOCKYxCc22GLnQa6BGl1PkmmAG5qc8nUWPGwtN
-         msbtKXyW0VwQQ==
-Content-Type: text/plain; charset="utf-8"
+        Tue, 3 May 2022 01:37:27 -0400
+Received: from smtp1.axis.com (smtp1.axis.com [195.60.68.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 607D16383;
+        Mon,  2 May 2022 22:33:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=axis.com; q=dns/txt; s=axis-central1; t=1651556036;
+  x=1683092036;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=na8TtpW8KsQrZ7tPnXTOPhZeejAWFUwNJUtTdfgCeJI=;
+  b=CN9RAKcJRyiIktZnsRIqypeBd5jGnLGApFGEzUDCyPKpI7udHq2XQud1
+   nQXr1NLWU4corsK0qCCtQXhE4/SEnWey8RDlOMBmYBkAbnWwE/RriNbKD
+   /9GmdSYKOtIBQSmMnq6xrHJTDfQFs2nZbwffQ7YitH5D7pNBkr4fPiTm1
+   xtXkkhieiAXAJWqLA61mlWiUGieyjN2Vr2Aihgivi3eCEQlFh30fzI3AB
+   8faKPVwXEjXcr0CGlflB0Rvb8DNnrFoC7QqJbJT+5ntriAOLxrk7gA9qD
+   8jnrziWPDwPrQ/ACxcr6V9BDDwhUjXbPjKuBOwVNcAkhKhMGUtDBPBpxJ
+   A==;
+From:   Camel Guo <camel.guo@axis.com>
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>
+CC:     Camel Guo <camel.guo@axis.com>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Wolfram Sang <wsa@kernel.org>, <linux-hwmon@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <kernel@axis.com>
+Subject: [PATCH v3] hwmon: (tmp401) Add OF device ID table
+Date:   Tue, 3 May 2022 07:33:50 +0200
+Message-ID: <20220503053350.598031-1-camel.guo@axis.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Subject: Re: [PATCH] [v4] plfxlc: fix le16_to_cpu warning for beacon_interval
-From:   Kalle Valo <kvalo@kernel.org>
-In-Reply-To: <20220502150133.6052-1-srini.raju@purelifi.com>
-References: <20220502150133.6052-1-srini.raju@purelifi.com>
-To:     Srinivasan Raju <srini.raju@purelifi.com>
-Cc:     unlisted-recipients:; (no To-header on input)
-        Srinivasan Raju <srini.raju@purelifi.com>,
-        kernel test robot <lkp@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        linux-wireless@vger.kernel.org (open list:PURELIFI PLFXLC DRIVER),
-        netdev@vger.kernel.org (open list:NETWORKING DRIVERS),
-        linux-kernel@vger.kernel.org (open list)
-Illegal-Object: Syntax error in Cc: address found on vger.kernel.org:
-        Cc:     unlisted-recipients:; (no To-header on input)Srinivasan Raju <srini.raju@purelifi.com>
-                                                                     ^-missing end of address
-User-Agent: pwcli/0.1.0-git (https://github.com/kvalo/pwcli/) Python/3.7.3
-Message-ID: <165155576592.23375.9180707873462805854.kvalo@kernel.org>
-Date:   Tue,  3 May 2022 05:29:39 +0000 (UTC)
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Srinivasan Raju <srini.raju@purelifi.com> wrote:
+The driver doesn't have a struct of_device_id table but supported devices
+are registered via Device Trees. This is working on the assumption that a
+I2C device registered via OF will always match a legacy I2C device ID and
+that the MODALIAS reported will always be of the form i2c:<device>.
 
-> Fix the following sparse warnings:
-> drivers/net/wireless/purelifi/plfxlc/chip.c:36:31: sparse: expected unsigned short [usertype] beacon_interval
-> drivers/net/wireless/purelifi/plfxlc/chip.c:36:31: sparse: got restricted __le16 [usertype]
-> 
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: Srinivasan Raju <srini.raju@purelifi.com>
+But this could change in the future so the correct approach is to have an
+OF device ID table if the devices are registered via OF.
 
-Patch applied to wireless-next.git, thanks.
+Fixes: af503716ac14 ("i2c: core: report OF style module alias for devices registered via OF")
+Signed-off-by: Camel Guo <camel.guo@axis.com>
+---
 
-ccc915e7dd7e plfxlc: fix le16_to_cpu warning for beacon_interval
+Notes:
+    v3:
+     - Copy commit message from commit 72fc64c68decf119466 ("hwmon: (tmp103)
+       Add OF device ID table")
+     - Add Fixes tag
+    v2:
+     - Put evidence and circumstances in commit message
 
+ drivers/hwmon/tmp401.c | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
+
+diff --git a/drivers/hwmon/tmp401.c b/drivers/hwmon/tmp401.c
+index b86d9df7105d..52c9e7d3f2ae 100644
+--- a/drivers/hwmon/tmp401.c
++++ b/drivers/hwmon/tmp401.c
+@@ -708,10 +708,21 @@ static int tmp401_probe(struct i2c_client *client)
+ 	return 0;
+ }
+ 
++static const struct of_device_id __maybe_unused tmp4xx_of_match[] = {
++	{ .compatible = "ti,tmp401", },
++	{ .compatible = "ti,tmp411", },
++	{ .compatible = "ti,tmp431", },
++	{ .compatible = "ti,tmp432", },
++	{ .compatible = "ti,tmp435", },
++	{ },
++};
++MODULE_DEVICE_TABLE(of, tmp4xx_of_match);
++
+ static struct i2c_driver tmp401_driver = {
+ 	.class		= I2C_CLASS_HWMON,
+ 	.driver = {
+ 		.name	= "tmp401",
++		.of_match_table = of_match_ptr(tmp4xx_of_match),
+ 	},
+ 	.probe_new	= tmp401_probe,
+ 	.id_table	= tmp401_id,
+
+base-commit: 38d741cb70b30741c0e802cbed7bd9cf4fd15fa4
 -- 
-https://patchwork.kernel.org/project/linux-wireless/patch/20220502150133.6052-1-srini.raju@purelifi.com/
-
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+2.30.2
 

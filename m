@@ -2,69 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F9CC518B2B
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 19:33:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE517518B2F
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 19:35:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240444AbiECRhW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 13:37:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49764 "EHLO
+        id S240566AbiECRjN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 13:39:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232024AbiECRhU (ORCPT
+        with ESMTP id S240544AbiECRjD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 13:37:20 -0400
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A85B439152
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 10:33:47 -0700 (PDT)
-Received: by mail-lj1-x234.google.com with SMTP id y19so22908181ljd.4
-        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 10:33:47 -0700 (PDT)
+        Tue, 3 May 2022 13:39:03 -0400
+Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFBE5205CD
+        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 10:35:30 -0700 (PDT)
+Received: by mail-ot1-x336.google.com with SMTP id h10-20020a056830400a00b00605e92cc450so10128367ots.11
+        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 10:35:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=Hz/bqAR1VTUVL5l3DAmDLN9BEMftF3aR7puUQsMw+hw=;
-        b=ZHJoJgd2LnOUBbF4UDXKb78neDeR25xDiPOaGPDRRJQ49eGwDIyDDJhCu+lRuitRCu
-         jThEoTJB+F1ejX3j1xn71dN1B9Up+ZRBQgTYGcTqirt5X+0AtRCuvFJw7pDONNaiU31b
-         HQRUnXyIIVmwgrrS8pdqwWBQfaEXGoGjQS58OmpbPx1004O75K4fMLwQbB9Ct/h69UG6
-         gAjPjiU4pQ0ZPgsIMI7ZEGyvRoovMxC5IF1CAnK3IZ+IFNM0T8uLAa3iOIcXZoJcsCMP
-         VKIIUU13zPlW1FwDi5sZsLQkG0QAEzTrWCya8bZhVg57oqyhXa7ORUBLq1mjDcVHrrNb
-         5e8Q==
+        d=kali.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=QfFh0JorF10YS8jRL4ot/BDPWmDj6EZaL7oZvjv3Y4g=;
+        b=ZmPQGGxZ1xNN/3ZnxABfH+S4dxGHSOp4xV35ALw7zVi0fEbQqhjvdLL33LibysCLc6
+         gndVhg10yKBFoPGn++Q1Bjr1fGYAHLH89H69AumHDYCEvZRTJkLZcFWHu1rS6kS4yt/H
+         YNtgfRTi1E3KvA/oPx/GVRJbBIYkaRYcUNaf8iq16nd6zoyd3HL9LbytMd4ijZ/qh6Qb
+         +JLlP7UrqDZMTfq7gBD/ige/UEfSJ2LGEGUUSGqjNmG2qNuwFB0M0hJO/mgp78zhmprQ
+         E/RjYf8s4qXceb2u7XoFE4QwO1sKpOYyOUSz+epbIY/4EcjmqfjflN10M/9hu4sOOPSf
+         euXg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=Hz/bqAR1VTUVL5l3DAmDLN9BEMftF3aR7puUQsMw+hw=;
-        b=iPOzli0fBYrB8jc1BCsm+u8MT5yogAyAblJiGXbQVSuoFULFfOFQyHY7HzgRaC1wO7
-         /ejdwMNdJpY8xui8u5n3A+xujvDo5ol2KThoc7cuKwG324pWodNRTh44Pik2/CRlh3HB
-         hCXeLlcgGeEaQgaTxaz/jQ+2J5XU8sboBgN4vStxlbeufsm+8CVRBeySubfSYu2IWEA8
-         Qf4OjAqR8dPOpbBX+8GOVgYuqQ3G5nAJluq7C+zkihc9UASXhEAYsOOH6Lrt1iYa1Exa
-         2zAzaxeAFZDjrRQVxX7H/6SWzJGhboOWIcsoBX8tZwJHzvpA4cDxBHWbDFAlnrmapE/D
-         Ty9A==
-X-Gm-Message-State: AOAM532DdnuopwmM5g260UH7SmAWVE/7pw4z8jsOs2/QPzpGuhRPdpLd
-        oWUadUc4L6XGvvSuk/x4OJlKU5Xsu2+BbrWDFPQ=
-X-Google-Smtp-Source: ABdhPJyf8OS8N7i7/l5uOAWQG8D/DOtwTnDILdJuMpPaViUYDE7yrw1A6SgU7/6R3wO4W7EpKc/rhiRB7BgHsjStCpo=
-X-Received: by 2002:a2e:a547:0:b0:250:5da5:e660 with SMTP id
- e7-20020a2ea547000000b002505da5e660mr4768377ljn.208.1651599226066; Tue, 03
- May 2022 10:33:46 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=QfFh0JorF10YS8jRL4ot/BDPWmDj6EZaL7oZvjv3Y4g=;
+        b=ejXy32EgXrr06xIKhS3f0kpmkIuAjzI/LxQdt1cL+FLW3PuxlGeDSiZe2yjY8MPHMm
+         dZJC/ifwPhvUpogkr9OAZa+E5r/Ajzbi3TyIwcw8AXgCzV1tc1uFIiQ1YUkvffkRhBse
+         qwY/XF3ThqDt/mjchsglXdK/i5KFSnRG+DLgYDn8PYXE7lsvcVibmcw5KiNldd+EfeWn
+         VIgy0+hl+pLuxGGnjRI+1vPUzu1DnVq7kk4/IwC3ILnESCoBYOPU87tkcWbkOEBhf4/D
+         0VxihgtlX941W67TU6Y17/VNDc/RYWQi54MI57DkgG6wFKfjtYqi5cbSdBmHAQ0TNarx
+         yDVQ==
+X-Gm-Message-State: AOAM532+tsQjMP2RXuwrc11bbYc7f85DWE8XN1+O+wD+D6QJcLXJsg1Y
+        9YSFPsT9qIpjjMcHLuClVA7zbg==
+X-Google-Smtp-Source: ABdhPJxT1Ilrm5hn2NJmQeaKaOKr12fYEZTHVrzNifiz+9FWtgnvvqVNJXC95vLYjSotHlZFpe8Z6w==
+X-Received: by 2002:a9d:480e:0:b0:606:59b:2b2 with SMTP id c14-20020a9d480e000000b00606059b02b2mr5490428otf.277.1651599329952;
+        Tue, 03 May 2022 10:35:29 -0700 (PDT)
+Received: from [192.168.11.16] (cpe-173-173-107-246.satx.res.rr.com. [173.173.107.246])
+        by smtp.gmail.com with ESMTPSA id p203-20020acaf1d4000000b00325cda1ffacsm3507693oih.43.2022.05.03.10.35.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 03 May 2022 10:35:29 -0700 (PDT)
+Message-ID: <c9da618b-8910-d878-cb78-6304c687f725@kali.org>
+Date:   Tue, 3 May 2022 12:35:27 -0500
 MIME-Version: 1.0
-Received: by 2002:a05:6512:102e:0:0:0:0 with HTTP; Tue, 3 May 2022 10:33:45
- -0700 (PDT)
-From:   Amadeo Giannini <greennrodriguez1@gmail.com>
-Date:   Tue, 3 May 2022 10:33:45 -0700
-Message-ID: <CAN4yompttZ5JyagCWbLC3M_C9NgXtyHgHJhXfs85QnOvGMecmA@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=1.5 required=5.0 tests=BAYES_40,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SCC_BODY_URI_ONLY,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: *
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.8.1
+Subject: Re: [PATCH] PCI: qcom: Remove ddrss_sf_tbu clock from sc8180x
+Content-Language: en-US
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Stanimir Varbanov <svarbanov@mm-sol.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220331013415.592748-1-bjorn.andersson@linaro.org>
+From:   Steev Klimaszewski <steev@kali.org>
+In-Reply-To: <20220331013415.592748-1-bjorn.andersson@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
--- 
-ATTENTION; We render short and long term loan The terms are 2%
-interest rate per annul, time duration is 10 year and 1 year grace
-period.how much do you need, apply with in
+
+On 3/30/22 8:34 PM, Bjorn Andersson wrote:
+> The Qualcomm SC8180X platform was piggy backing on the SM8250
+> qcom_pcie_cfg, but the platform doesn't have the ddrss_sf_tbu clock, so
+> it now fails to probe due to the missing clock.
+>
+> Give SC8180X its own qcom_pcie_cfg, without the ddrss_sf_tbu flag set.
+>
+> Fixes: 0614f98bbb9f ("PCI: qcom: Add ddrss_sf_tbu flag")
+> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> ---
+>   drivers/pci/controller/dwc/pcie-qcom.c | 7 ++++++-
+>   1 file changed, 6 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
+> index 6ab90891801d..816028c0f6ed 100644
+> --- a/drivers/pci/controller/dwc/pcie-qcom.c
+> +++ b/drivers/pci/controller/dwc/pcie-qcom.c
+> @@ -1550,6 +1550,11 @@ static const struct qcom_pcie_cfg sc7280_cfg = {
+>   	.pipe_clk_need_muxing = true,
+>   };
+>   
+> +static const struct qcom_pcie_cfg sc8180x_cfg = {
+> +	.ops = &ops_1_9_0,
+> +	.has_tbu_clk = true,
+> +};
+> +
+>   static const struct dw_pcie_ops dw_pcie_ops = {
+>   	.link_up = qcom_pcie_link_up,
+>   	.start_link = qcom_pcie_start_link,
+> @@ -1656,7 +1661,7 @@ static const struct of_device_id qcom_pcie_match[] = {
+>   	{ .compatible = "qcom,pcie-qcs404", .data = &ipq4019_cfg },
+>   	{ .compatible = "qcom,pcie-sdm845", .data = &sdm845_cfg },
+>   	{ .compatible = "qcom,pcie-sm8250", .data = &sm8250_cfg },
+> -	{ .compatible = "qcom,pcie-sc8180x", .data = &sm8250_cfg },
+> +	{ .compatible = "qcom,pcie-sc8180x", .data = &sc8180x_cfg },
+>   	{ .compatible = "qcom,pcie-sm8450-pcie0", .data = &sm8450_pcie0_cfg },
+>   	{ .compatible = "qcom,pcie-sm8450-pcie1", .data = &sm8450_pcie1_cfg },
+>   	{ .compatible = "qcom,pcie-sc7280", .data = &sc7280_cfg },
+
+Hi Bjorn,
+
+Tested on the Lenovo Flex 5G and fixes the issue I saw.
+
+Tested-by: Steev Klimaszewski <steev@kali.org>
+

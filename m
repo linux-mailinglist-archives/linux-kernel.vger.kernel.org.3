@@ -2,155 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87241518A69
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 18:48:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B1F8518A79
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 18:51:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239869AbiECQvg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 12:51:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42918 "EHLO
+        id S239870AbiECQzT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 12:55:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239852AbiECQve (ORCPT
+        with ESMTP id S236361AbiECQzR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 12:51:34 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2323F3969F;
-        Tue,  3 May 2022 09:48:01 -0700 (PDT)
-Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 243GjgMr003403;
-        Tue, 3 May 2022 16:47:55 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=CxVsWtTvFkYal173lcotmZNmg84/NZG0ajF0yqrAyQI=;
- b=ExADnrR2O80MeWVSBUVg7ZXHTnl8hCtGbKukI3kGivcX2jh/x+uMavdFMMidyhKCVVgy
- xWy0rp0d0DScy1EUhwZ1BCktg0HvzGUMdn/v9iB18nVjcXiUx2GddwEC4RdCfmXRaU31
- 23OKu2z8ia+20KkERevScWLbeuGNR1j4KCT4dLGFg6gvNhG5ap2mdVRHSDxhznr4Ony3
- 23tYg6Ggee6UPsVYlIP+zLJ0xpRGMPei0TzUAZwsP+09PvCho416WY+VA/E47kA1xtD+
- 5H/MyjkNKLxJq63/dXZRjES5C50VSW2DRV2z3afe8yzaZoSAmsmtac89NtCvhMiWoQ+m 0w== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fu86v80s1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 03 May 2022 16:47:54 +0000
-Received: from m0098394.ppops.net (m0098394.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 243GlsdR011678;
-        Tue, 3 May 2022 16:47:54 GMT
-Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fu86v80rd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 03 May 2022 16:47:54 +0000
-Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
-        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 243GWLkc020534;
-        Tue, 3 May 2022 16:47:51 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma03fra.de.ibm.com with ESMTP id 3fscdk2xhf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 03 May 2022 16:47:51 +0000
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 243Glnaw55378326
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 3 May 2022 16:47:49 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E7593A4051;
-        Tue,  3 May 2022 16:47:48 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A5ADCA404D;
-        Tue,  3 May 2022 16:47:48 +0000 (GMT)
-Received: from [9.145.187.31] (unknown [9.145.187.31])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue,  3 May 2022 16:47:48 +0000 (GMT)
-Message-ID: <60195753-93fc-ced7-c250-da65c05508af@linux.ibm.com>
-Date:   Tue, 3 May 2022 18:47:48 +0200
+        Tue, 3 May 2022 12:55:17 -0400
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B479B2A260
+        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 09:51:44 -0700 (PDT)
+Received: by mail-lj1-x234.google.com with SMTP id m23so22730447ljb.8
+        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 09:51:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=fQQ4M4gauRgvjGonaZz8I2LViquH62bNFXTFnYfFmTQ=;
+        b=ZZ79PTvSiDix/BT4/4BoV+H6PAAni2xSl2bjFp4DgWFtS9ryzY8pV9lWjf47cE1vt/
+         zhSi0WFHtNS22XehNn4RxeoPYQY4DuLZ5cNGUb+2JAlUhk1DPffdt31zGBUpHubSHe0L
+         lXMbpa2lOnhtnfKl8xwne8VDfa23amnXkKbh4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=fQQ4M4gauRgvjGonaZz8I2LViquH62bNFXTFnYfFmTQ=;
+        b=ipLP8o+f+PvWOsL6ED+eD5dkPBCL29masgndF5Xa+iwkMNxBoNECmWfHJ8QQwaHcug
+         jiaZaOnbtNUkIGjpArut6d89cXpGGGRdUeWcoTyD6wY/I9oUYjvs9ZSI5k2Bodj4D5sQ
+         TmWDVZd4EkqKxfQVIfUijmHnVqdWimAG8l2d6aQFuIYLTXQzQpxjL4mrhdVOX8QIsQ1X
+         fji+kzqXmdH4fEU7BaLyzA/ndDw/IRMZukGnI2frKHOtaXgSnV0GJyExBPGHXo8Ops46
+         YgKIUF6bEXDC0Qsk3DoRDICEBO0Vh71r2s7/jGloouFSu+k/rjvl+F1n1KcXWX7p8JSB
+         0RIg==
+X-Gm-Message-State: AOAM531RWavb9YM/4cK+Gk6u+7ZgbgfYo1PJofQFz0Vw2z25CvCl2VyR
+        sl2WpP2RpMvml7XXgUwlIrpfJR33PSIwO4iy
+X-Google-Smtp-Source: ABdhPJx/2zHwYD40X2zQgd5C5TWEdPGYtY9kQg+izTqgW1Ly60QEh0DkeJcbuA8+pLMp34iqfWlyvg==
+X-Received: by 2002:a05:651c:b0d:b0:24f:4ff1:6b23 with SMTP id b13-20020a05651c0b0d00b0024f4ff16b23mr8489193ljr.420.1651596703112;
+        Tue, 03 May 2022 09:51:43 -0700 (PDT)
+Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com. [209.85.167.43])
+        by smtp.gmail.com with ESMTPSA id c26-20020ac244ba000000b0047255d210eesm985375lfm.29.2022.05.03.09.50.45
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 03 May 2022 09:51:09 -0700 (PDT)
+Received: by mail-lf1-f43.google.com with SMTP id x17so31284327lfa.10
+        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 09:50:45 -0700 (PDT)
+X-Received: by 2002:a05:6512:6cb:b0:472:5e24:de05 with SMTP id
+ u11-20020a05651206cb00b004725e24de05mr9332378lff.542.1651596636487; Tue, 03
+ May 2022 09:50:36 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.8.1
-Subject: Re: [PATCH v2] powerpc/rtas: Keep MSR[RI] set when calling RTAS
-Content-Language: en-US
-To:     Fabiano Rosas <farosas@linux.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>
-Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, Nicholas Piggin <npiggin@gmail.com>
-References: <20220401140634.65726-1-ldufour@linux.ibm.com>
- <87r15aveny.fsf@mpe.ellerman.id.au> <87levia8wy.fsf@linux.ibm.com>
-From:   Laurent Dufour <ldufour@linux.ibm.com>
-In-Reply-To: <87levia8wy.fsf@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: HEqTFP_YAgNxXj63s2ag0XDrOL6IrJ-2
-X-Proofpoint-ORIG-GUID: 8UGGQGk9pWhzfZpD1bl5k9xjZx7Y_Ib_
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-03_07,2022-05-02_03,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 phishscore=0
- mlxlogscore=999 mlxscore=0 clxscore=1015 lowpriorityscore=0
- priorityscore=1501 bulkscore=0 spamscore=0 impostorscore=0 adultscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2205030110
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220426145445.2282274-1-agruenba@redhat.com> <CAHk-=wi7o+fHYBTuCQQdHD112YHQtO21Y3+wxNYypjdo8feKFg@mail.gmail.com>
+ <CAHc6FU48681X8aUK+g7UUN7q5b6rkVBzTP7h_zbE4XqZYAiw3g@mail.gmail.com>
+ <CAHk-=wjMB1-xCOCBtsSMmQuFV9G+vNyCY1O_LsoqOd=0QS4yYg@mail.gmail.com>
+ <CAHc6FU5Bag5W2t79+WzUq=NibtEF+7z6=jyNCkLMMp9Yqvpmqw@mail.gmail.com>
+ <CAHk-=whaz-g_nOOoo8RRiWNjnv2R+h6_xk2F1J4TuSRxk1MtLw@mail.gmail.com>
+ <CAHc6FU5654k7QBU97g_Ubj8cJEWuA_bXPuXOPpBBYoXVPMJG=g@mail.gmail.com>
+ <CAHk-=wgSYSNc5sF2EVxhjbSc+c4LTs90aYaK2wavNd_m2bUkGg@mail.gmail.com>
+ <CAHc6FU69E4ke4Xg3zQ2MqjLbfM65D9ZajdY5MRDLN0azZOGmVQ@mail.gmail.com>
+ <CAHk-=whQxvMvty8SjiGMh+gM4VmCYvqn6EAwmrDXJaHT2Aa+UA@mail.gmail.com>
+ <CAHk-=wicJdoCjPLu7FhaErr6Z3UaW820U2b+F-8P4qwSFUZ0mg@mail.gmail.com>
+ <CAHc6FU7GkXLkns5PONLvsSi6HB+rjaNSyFeQFS034tKL-JueMw@mail.gmail.com>
+ <CAHk-=wg4ypnZUA5BOHAF1miKvOhW2yQSruuBKNXMDR=dTmp+ww@mail.gmail.com>
+ <CAHc6FU6VgQDO7HT5f4S_4f=9hczKGRDQ6SbQ5kNHMi4i-6rxVA@mail.gmail.com>
+ <CAHk-=whL74iP6v2P+OafGO0H72ag4wt42k+Kc_01boLP8aqUNQ@mail.gmail.com>
+ <CAHc6FU77KGn76B4ieu9Tn895deK-1yV4y=8ou4gTfUf=7C-4XQ@mail.gmail.com>
+ <CAHk-=whfP+m6--NtUeOm5XTuhBGHkyoqd00ypW6v3RkzMFLU8g@mail.gmail.com> <CAHc6FU4JeMHUrJbbTwEsMiPPyinQpX9fW-hz21GdjgVsvYRZkw@mail.gmail.com>
+In-Reply-To: <CAHc6FU4JeMHUrJbbTwEsMiPPyinQpX9fW-hz21GdjgVsvYRZkw@mail.gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Tue, 3 May 2022 09:50:20 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wipNXcy2qRF5d+oqO-LN+bR7Bmz+Vtvcapo_WigOzLirA@mail.gmail.com>
+Message-ID: <CAHk-=wipNXcy2qRF5d+oqO-LN+bR7Bmz+Vtvcapo_WigOzLirA@mail.gmail.com>
+Subject: Re: [GIT PULL] gfs2 fix
+To:     Andreas Gruenbacher <agruenba@redhat.com>
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        "Darrick J. Wong" <djwong@kernel.org>,
+        Dave Chinner <dchinner@redhat.com>,
+        cluster-devel <cluster-devel@redhat.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/05/2022, 18:16:29, Fabiano Rosas wrote:
-> Michael Ellerman <mpe@ellerman.id.au> writes:
-> 
->>> diff --git a/arch/powerpc/kernel/entry_64.S b/arch/powerpc/kernel/entry_64.S
->>> index 9581906b5ee9..65cb14b56f8d 100644
->>> --- a/arch/powerpc/kernel/entry_64.S
->>> +++ b/arch/powerpc/kernel/entry_64.S
->>> @@ -330,22 +330,18 @@ _GLOBAL(enter_rtas)
->>>  	clrldi	r4,r4,2			/* convert to realmode address */
->>>         	mtlr	r4
->>>  
->>> -	li	r0,0
->>> -	ori	r0,r0,MSR_EE|MSR_SE|MSR_BE|MSR_RI
->>> -	andc	r0,r6,r0
->>> -	
->>> -        li      r9,1
->>> -        rldicr  r9,r9,MSR_SF_LG,(63-MSR_SF_LG)
->>> -	ori	r9,r9,MSR_IR|MSR_DR|MSR_FE0|MSR_FE1|MSR_FP|MSR_RI|MSR_LE
->>> -	andc	r6,r0,r9
->>  
->> One advantage of the old method is it can adapt to new MSR bits being
->> set by the kernel.
->>
->> For example we used to use RTAS on powernv, and this code didn't need
->> updating to cater to MSR_HV being set. We will probably never use RTAS
->> on bare-metal again, so that's OK.
->>
->> But your change might break secure virtual machines, because it clears
->> MSR_S whereas the old code didn't. I think SVMs did use RTAS, but I
->> don't know whether it matters if it's called with MSR_S set or not?
->>
->> Not sure if anyone will remember, or has a working setup they can test.
->> Maybe for now we just copy MSR_S from the kernel MSR the way the
->> current code does.
-> 
-> Would the kernel even be able to change the bit? I think only urfid can
-> clear MSR_S.
+On Tue, May 3, 2022 at 9:41 AM Andreas Gruenbacher <agruenba@redhat.com> wrote:
+>
+> That's happening in iomap_file_buffered_write() and iomap_iter():
+>
+>         while ((ret = iomap_iter(&iter, ops)) > 0)
+>                 iter.processed = iomap_write_iter(&iter, i);
+>
+> Here, iomap_write_iter() returns how much progress it has made, which
+> is stored in iter.processed, and iomap_iter() -> iomap_iter_advance()
+> then updates iter.pos and iter.len based on iter.processed.
 
-That's a good point, thanks Fabiano!
+Ahh. I even had that file open in my editor in another window, but missed it.
 
-The POWER ISA programming note about MSR[S] is explicit:
-"MSR[S] can be set to 1 only by the System Call instruction and some
-interrupts. It can be set to 0 only by urfid."
+So much for that theory.
 
-Since RTAS is entered using rfid, MSR[S] should remain whatever is the
-value in SRR1.
-
-And that's what POWER ISA is saying about the rfid instruction, in the
-synopsis of the instruction the bit 41 of the resulting MSR (aka MSR[S]) is
-not impacted.
-
-So there is no need to take care of this MSR bit in our code, but for sure,
-this should be well commented.
-
-Michael, do you agree?
-
-Cheers,
-Laurent.
+              Linus

@@ -2,155 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E204518329
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 13:20:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 741AA518333
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 13:22:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234474AbiECLYK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 07:24:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60632 "EHLO
+        id S234455AbiECLZk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 07:25:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234691AbiECLX5 (ORCPT
+        with ESMTP id S233389AbiECLZh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 07:23:57 -0400
-Received: from FRA01-PR2-obe.outbound.protection.outlook.com (mail-eopbgr120072.outbound.protection.outlook.com [40.107.12.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BD76615B
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 04:20:25 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=R4bPh7lLjHxavNrx3KXZXIDiat76Rgh75t+j1I7XjSfeK7m6V+4d5GnWgczP7rJEVkTYcWlUudEp/0jZmiJNBBKzSSd7nxU4uoC/0W24eav6nX9JICgc2Yr/1cGK8CYbAXytki0fqQfsX2UJOPnz3exnlTtwEfHy4FLpvMPYSZVDRYMVkxi0G2hN2GFBTVSDgsPaFRMWFMs/1xAN90T4oQ67lk1arFqVTApdNTbsZ/lXTw7V1wTupYwNvuwh6tBUzsIc4YG1Jn3FcoV8elSjVCWDOKGlyTvLawDuRbmcmwEKUh2Lo/Ppu2jjyahYS5Bb4fpOKoVQhIBdoF7fQbQ8bA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=7QhDVUh5DMjnuahmVxIbVCX0cZIAz1JZc+sNWpdikA8=;
- b=ED5FGZmDPK1UOLIx3pCTCpj0MHy4/tzYzelljtWIjdc80WMOI510okmZqzyyB4ryHYGVbVpfGoonc8fOW3P9M6NUYsQHFN+mKRcEa0/orzGqH7B++tlqhIYn0yA9fCqsWlhpGdxMdU0KcRdchbwbL36YrZwQZt5qXQgs7jZJTW/l3WXg0Ge592xHkAFNUwQKIAq0R/Puty19eMWwpXYq4eo4yLtYMKk/1idY7+jPV+0QWwW2L51YziYBFkQ0YfTEgFYZjJlq9vzkO06Du4t9Z14QIltjqmMIWhOjUBJvmztSrLe6fjGf7Dpk4ISSFSS1ZoDybU/3oiIVp0JKAkw3Qg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
- dkim=pass header.d=csgroup.eu; arc=none
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
- by PR0P264MB2343.FRAP264.PROD.OUTLOOK.COM (2603:10a6:102:1e2::24) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5206.24; Tue, 3 May
- 2022 11:20:22 +0000
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::d572:ae3f:9e0c:3c6]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::d572:ae3f:9e0c:3c6%7]) with mapi id 15.20.5206.024; Tue, 3 May 2022
- 11:20:22 +0000
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Steven Rostedt <rostedt@goodmis.org>
-CC:     "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>,
-        "llvm@lists.linux.dev" <llvm@lists.linux.dev>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
-Subject: Re: [PATCH 2/2] recordmcount: Handle sections with no non-weak
- symbols
-Thread-Topic: [PATCH 2/2] recordmcount: Handle sections with no non-weak
- symbols
-Thread-Index: AQHYWhpl5ryAcxR0pEGOg1yZCKWDp60DyFuAgAErRACAAGpbAIAGVDIAgACZFoCAAMAVAA==
-Date:   Tue, 3 May 2022 11:20:22 +0000
-Message-ID: <6d5ff91a-560e-56ea-0047-175f712872c2@csgroup.eu>
-References: <cover.1651047542.git.naveen.n.rao@linux.vnet.ibm.com>
- <1b9566f0e7185fb8fd8ef2535add7a081501ccc8.1651047542.git.naveen.n.rao@linux.vnet.ibm.com>
- <20220427095415.594e5120@gandalf.local.home>
- <1651129169.fpixr00hgx.naveen@linux.ibm.com>
- <20220428100602.7b215e52@gandalf.local.home>
- <819939e3-285b-2a65-9c4c-85640d2a3a02@csgroup.eu>
- <20220502195251.5d862365@rorschach.local.home>
-In-Reply-To: <20220502195251.5d862365@rorschach.local.home>
-Accept-Language: fr-FR, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=csgroup.eu;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 9e50eafe-d54c-4745-52d8-08da2cf6e9c4
-x-ms-traffictypediagnostic: PR0P264MB2343:EE_
-x-microsoft-antispam-prvs: <PR0P264MB2343A78EF4EE0632A427DCA9EDC09@PR0P264MB2343.FRAP264.PROD.OUTLOOK.COM>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: QaHcT8HSZy/9RnygBx4tv0UziPsLbBrs+nYn83pRKNLRNGkBesd8i/MtDg6J0JAUPTAvvJG+w6fnIiH4XzD77BEaCGykAQi1ETzWa/ko4WJKj9iodV5E/jSsEyq1f+rOb8YFVmSJk4ZVQ0fa0xm77t3QW0RY+QDcs80qQ8Nsds+ZgdjpHijhJGN4SVRbrgYV6IcNRE2WK/YPGd39W0hN8jT8VwmxPOapwM6QX/tDlrW9a02U1fNV8fQsE7ZU98Z3ypCj1GDsScUN6Iq+9tTHOQ8ZZaiF9qGCna1gKTunFK8Cj4//ieQB4sKbmfg945EOJry8ZyKrSIG8F9ZSpc2UHAsJaixVXC/CxfYGKNsHtbpc+e7yjQcgZmH1GzLlewEBXdHmphoHJQccucev0exHpiCgZhXVfI4guTP50C/OSSkgpGLpgaYFbJvsuogQqTppM79lMKhr3Fimn9aP2q2wlm7WMgbbDolVkOGnDbr30W7ppr/7ApZiJCSaA2r3N5efUc3Y2XnEiUYAAUNz0FvsZWcNhB/0v0BggMv6eXXLE/NIZxjzkE8CheIzszaJ66fka8ACuWEYpxCpGN9/hCDX4vDK4+2RycEyseflor0wlZ2BiRUly3SjOtX/MkqRoH4T0wNx6jnWrm/rQymoAC+7ZWb/DBPrwXcsvlBvtAch63Pcm5M3O0KMStkCmmPAXSbQ4TMWBFUGksO1NfCQD4XC65vAFuvgx/zgiP9thesD0QjH5oCjy564eaqd4Rbwc7In1Y4LylBFk3ukoBcyAttUag==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(66946007)(5660300002)(2906002)(8676002)(4326008)(508600001)(38070700005)(76116006)(66556008)(66476007)(8936002)(91956017)(66446008)(64756008)(44832011)(122000001)(6486002)(186003)(4744005)(38100700002)(71200400001)(86362001)(31686004)(66574015)(2616005)(36756003)(26005)(83380400001)(6916009)(6512007)(316002)(31696002)(54906003)(6506007)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?ZTBFRHhLS3lSMlIxL3AvcXd4MHFrTE5IdEpWbm5JTG5tQWlpVVluUitZS1pv?=
- =?utf-8?B?TTlaVXR5dDlEN3NSRm1EcjY4Z0VCbmY2dHlvZmJSQzEvQ1V2czhkcm1OMmtM?=
- =?utf-8?B?NDJKdVUxZnFXMmVWbXYveFNKWkhDMi9hbUZXTlRpWWpMV1crdk9vZCtieWpu?=
- =?utf-8?B?bm5TWkUzUXgwVGMwdlp2THdjLzZNRlpmYi9rMUc5RDlCYi8wYjJGSVQ0cktz?=
- =?utf-8?B?MTU3NE45VTlVRUE5ZTRGMzNoOWxUMllIeXlKT3lZQVoydzJ3SUU2K3hBTEx3?=
- =?utf-8?B?RzVYWmNmZk9qb3hYSXZQZThGakZjT1hqRFcyU2toak1TVVdKbUFMa0FycU5n?=
- =?utf-8?B?bTR6QVl2NGluRWtlSENEUFFGZjdPVS9Iekwya0VaUit1L09aU2RzbUlvUmlr?=
- =?utf-8?B?U3YwWDRYdVVYOXBHVDM5eEMzNGs0b1Z5NXgrbjBQNTFHTnB4Vjl2cmM5OEs3?=
- =?utf-8?B?RUhhcm5MMWVzZnBaVVRnYk9SaGJjUkdjN2dpVUhjdkJjbjBpL3BRZXV6MlNV?=
- =?utf-8?B?UW5FMnN3MnF1aGZDc29hMmVEdEFmSDczcU0zSU9oWm9uSGcvRmZIQVpSVjlp?=
- =?utf-8?B?R1dTSkE5ZWs0dVlqekE4OExjR3NFVTFmeHVnMFM5VklvNzRtaUxndmt0bjlI?=
- =?utf-8?B?c1FXb01XRGlTQXVXVXZlaVhmaVVOYTR6U1E3RkxwckFYc2RkYVJ6YnZTY1Jz?=
- =?utf-8?B?N3M4emthYlRwYlYzRHFKcHlMNEY4QzhqWWFaZ20xNlZUd2RxNVEraXNFQm1j?=
- =?utf-8?B?QVF4QWVpYXl3Qis5OVBVMk9MU2V3QnBlcXVmV0lzMmpLZ1JNbFBGQ0VkS0la?=
- =?utf-8?B?c0U3SXJxNUlHR3lJNG5yZUZPZnlvMlp4cS9FOHkvdXJCZzZDTjdOWGs4ZmRY?=
- =?utf-8?B?UDRVZ3IrUWp6b3QxYmUwS2lPNllEbnI5R2RiVnZ0ejZ1SnhFdVpaN2hkS3BI?=
- =?utf-8?B?cnZuTUlCYkhuVWQzaVdFMWd6ZGpPMXo0cko4ZzdwNkFqUjFSSXVFa1pFa1V3?=
- =?utf-8?B?RklobEVDZ0JadXVNWjlFVGE5UzVsVm9lS3pOaXEramVPYndPb01nSEROalRI?=
- =?utf-8?B?TnU3NmpOZ1hQeXZGcmM5M1FhUzRWUXFWalFrSHFYTXlkNk5weWRpSzlsQm80?=
- =?utf-8?B?QkE4RlVSZmNiWExLM2RDeW44ZTd6am4rS3EvS0hZbFpZSEZBWEZNNldabWVl?=
- =?utf-8?B?MDNKSUlKQTFHSGRuMll3KzlORll6VjdjV2xlSld0QzJqSGlPczNjbkYvOXU1?=
- =?utf-8?B?ajNib1ltdkVIYXI5N3FqTCtjTzBvazhJRWhNWmFaaVdiZ3BmekptZWp1V0pQ?=
- =?utf-8?B?eFZtZFVQUHRWaW9BT1QwbVNDallCOXRnTUtsd0tpSkJJUFY0TXpkLy9MWVYr?=
- =?utf-8?B?a09ndXJRdGtqTjBDN3hFODl6bFdvMzcvRkVJbnVXUm04SktwcGd2dk5oaStP?=
- =?utf-8?B?TTliZkVZOXUvN3cwMlc5cmhrcnJkdUQwRGNkanZ5OHIySitIKzVTcUZZNldm?=
- =?utf-8?B?aHV3ZVJyT0xnL1RRY0ZXZG1abFdNL1ZhK2N0T3F6b3liK0ZjVUJZSVJWUC82?=
- =?utf-8?B?VitLbzA5L0lkY3g5VnpGeG1VN1p0Si9Cdjd6bmhEc1lyWERyK0huY09QVWxI?=
- =?utf-8?B?ekkvQlpDK1hMdDlRd3BFZWZhbWtrVDNVcy9HN2ZVTklqTHd1enBydTBvTGl3?=
- =?utf-8?B?VlFoczJhSS95Yllac3dLZWxhUklJZSsxSVV4V0dRSTZMSHByRnJYMkx6S00w?=
- =?utf-8?B?aWVWSFhoQXFkMzdEZlhXSW5LbkRBVkRsYXA1RU5ZWG41bDVVNk1wM25Cc3Bk?=
- =?utf-8?B?YURjZElxc1A0VmdscTFydFlmUFp0L285TEdBMFhldE1uakpQbld1L3BtK3kx?=
- =?utf-8?B?c0dFOTNEZEt6MXZxdm9ucTJhUERNWGNLVVhValNPSW53UHhxdlR0MTI0TGFC?=
- =?utf-8?B?MVJUbWVMSEJ4aSs4ajNTL1ZpTk85TnkraWVMeU1kT0NNc1hsVUtDT2U0eDh3?=
- =?utf-8?B?cVcrc1Y1clRibGpOSkxCTnN4VVJXNXhOblI5bUxhd2JUMTdGN1NFWERnRllh?=
- =?utf-8?B?bG42N2k2YWU0SHFXR2duYnhCUm5EZ0dicGFtUXFiRHFXdjVFdFhUcVhoZ0dy?=
- =?utf-8?B?ZDBvZ0JNMHZVekNGbEs3S28raVIxL0RKRkV3SFhKWTY3blNucThVdlNRVVEy?=
- =?utf-8?B?d0U5STVTOVVjUmZlMDFqaU9zNXBnbUVQRFEvVytQWTA1MTVVdWpXM3dKeXlU?=
- =?utf-8?B?b3paNUdSbDJzN3orcTVjcjcyNEdCWG5rM2xGLzBhZlV5L2JzOVdHdndpdHpn?=
- =?utf-8?B?YTRaRHdUSzVFWFh2SFNZYkpaeGM2NFVtNE51aExjbWNmZmJJME4wS0NnTFFr?=
- =?utf-8?Q?j7kJ2YbQSoPrB1GKnS3Ab9s64iu9ayjXYwQvr?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <71EFCC732E1C3D42BBF648768A37BDCE@FRAP264.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: base64
+        Tue, 3 May 2022 07:25:37 -0400
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5137417AA4;
+        Tue,  3 May 2022 04:22:05 -0700 (PDT)
+Received: by mail-wm1-f51.google.com with SMTP id l62-20020a1c2541000000b0038e4570af2fso1084986wml.5;
+        Tue, 03 May 2022 04:22:05 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=YiY0dGoIC8096MJoLsSBb1qNLHmagfKwvPsd98SImSg=;
+        b=a0vixKdvtLv2O3//vtKss4jlgL8e/Gv+Cnvveuw82Z2bXYk08ZfM099wL9y9cdDOM0
+         qohzpZu3t2pXzdNDrE/Sk1JXEi/vfWL7RTkGunyeM/pZubjD/8j+9REc2IeCwaZx+juU
+         tYXbu5uzWQDa3tcawBAmwO44VXB8yv7/o0CHfh36DYTwnCbZ1UF8ZGYNyf1Z+uI6OVID
+         ymqxlTw0vaVej9AqdE8j8wZqpB7MgGSPcVryknFcPV0DnM3UFefg9lO6pZMMaQePFIJf
+         IwehEKrWXlbpxtreo8yksbrzjY+Htc6/hFX6YmfsbKi20Jo1jOcCxob1FIpIc1oZlVF4
+         NBjQ==
+X-Gm-Message-State: AOAM533K9wdI6sTRcRPnfjNINXNE9RMNENXvqu3ViL2fIgpRpu36KkBv
+        L0mUck9gGVL5+M8Z3HzAhwI=
+X-Google-Smtp-Source: ABdhPJxm1zYhvfWARYcqdPYfX+WBZx31HBYYbX9BTSG4b89PfKyAhJee2ZJz/esokNnR95scu5noYQ==
+X-Received: by 2002:a05:600c:3b14:b0:394:1f06:37eb with SMTP id m20-20020a05600c3b1400b003941f0637ebmr2920891wms.193.1651576923857;
+        Tue, 03 May 2022 04:22:03 -0700 (PDT)
+Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
+        by smtp.gmail.com with ESMTPSA id bd10-20020a05600c1f0a00b003942a244ec6sm1465936wmb.11.2022.05.03.04.22.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 May 2022 04:22:03 -0700 (PDT)
+Date:   Tue, 3 May 2022 11:22:01 +0000
+From:   Wei Liu <wei.liu@kernel.org>
+To:     Michael Kelley <mikelley@microsoft.com>
+Cc:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
+        wei.liu@kernel.org, linux-kernel@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, vkuznets@redhat.com,
+        decui@microsoft.com, drawat.floss@gmail.com, airlied@linux.ie,
+        daniel@ffwll.ch, jejb@linux.ibm.com, martin.petersen@oracle.com,
+        deller@gmx.de, dri-devel@lists.freedesktop.org,
+        linux-scsi@vger.kernel.org, linux-fbdev@vger.kernel.org
+Subject: Re: [PATCH 0/4] Remove support for Hyper-V 2008 and 2008R2/Win7
+Message-ID: <20220503112201.hwzenitojimrgz3f@liuwe-devbox-debian-v2>
+References: <1651509391-2058-1-git-send-email-mikelley@microsoft.com>
 MIME-Version: 1.0
-X-OriginatorOrg: csgroup.eu
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9e50eafe-d54c-4745-52d8-08da2cf6e9c4
-X-MS-Exchange-CrossTenant-originalarrivaltime: 03 May 2022 11:20:22.1256
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: oNEGJx2CB8eq4H8//3BXPzvUsC4/qHT2dDf6jXvUwVLtGciqaceWhzUdq/IgkNcjmubKrSNH3sZLQpojtlO5qaf6HEd2VMlQPSLQwMMps9c=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR0P264MB2343
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1651509391-2058-1-git-send-email-mikelley@microsoft.com>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQoNCkxlIDAzLzA1LzIwMjIgw6AgMDE6NTIsIFN0ZXZlbiBSb3N0ZWR0IGEgw6ljcml0wqA6DQo+
-IE9uIE1vbiwgMiBNYXkgMjAyMiAxNDo0NDo1NiArMDAwMA0KPiBDaHJpc3RvcGhlIExlcm95IDxj
-aHJpc3RvcGhlLmxlcm95QGNzZ3JvdXAuZXU+IHdyb3RlOg0KPiANCj4+IElmIHdlIGRvIHRoYXQg
-YWZ0ZXIgdGhlIGxpbmtpbmcsIHdvbid0IGl0IGJlIGEgbmlnaHRtYXJlIHdpdGggdGhlDQo+PiB0
-cmFtcG9saW5lcyBpbnN0YWxsZWQgYnkgdGhlIGxpbmtlciB3aGVuIHRoZSBkZXN0aW5hdGlvbiBp
-cyBvdmVyIHRoZSAyNA0KPj4gYml0cyBsaW1pdCA/DQo+IA0KPiBOb3Qgc3VyZSB3aGF0IHlvdSBt
-ZWFuLiBUaGUgbG9jYXRpb25zIEknbSB0YWxraW5nIGFib3V0IGlzIHRoZSBmdWxsDQo+IGFkZHJl
-c3Mgc2F2ZWQgaW4gdGhlIF9fbWNvdW50X2xvYyB0YWJsZSAoZGF0YSBzZWN0aW9uKS4NCj4gDQoN
-Ck1heWJlIEkgbWlzdW5kZXJzdG9vZC4gV2hlbiB5b3Ugc2F5ICdhZnRlciBsaW5raW5nJywgZG8g
-eW91IG1lYW4gdm1saW51eCANCm9yIHZtbGludXgubyA/DQoNCkluIHZtbGludXgsIHRoZSBhZGRy
-ZXNzZXMgdG8gYmUgc2F2ZWQgaW4gX19tY291bnRfbG9jIHRhYmxlIG1pZ2h0IG5vdCANCmNvbnRh
-aW4gYW55bW9yZSBhIGNhbGwgdG8gX21jb3VudCBidXQgYSBjYWxsIHRvIGEgdHJhbXBvbGluZSB0
-aGF0IGp1bXBzIA0KdG8gX21jb3VudCwgaW4gY2FzZSBfbWNvdW50IGlzIHRvbyBmYXIgZnJvbSB0
-aGUgc2FpZCBsb2NhdGlvbiBhdCBsaW5rIA0KdGltZS4gVGhhdCdzIHdoYXQgSSBtZWFudC4NCg0K
-Q2hyaXN0b3BoZQ==
+On Mon, May 02, 2022 at 09:36:27AM -0700, Michael Kelley wrote:
+> Linux code for running as a Hyper-V guest includes special cases for the
+> first released versions of Hyper-V: 2008 and 2008R2/Windows 7. These
+> versions were very thinly used for running Linux guests when first
+> released more than 12 years ago, and they are now out of support
+> (except for extended security updates). As initial versions, they
+> lack the performance features needed for effective production usage
+> of Linux guests. In total, there's no need to continue to support
+> the latest Linux kernels on these versions of Hyper-V.
+> 
+> Simplify the code for running on Hyper-V by removing the special
+> cases. This includes removing the negotiation of the VMbus protocol
+> versions for 2008 and 2008R2, and the special case code based on
+> those VMbus protocol versions. Changes are in the core VMbus code and
+> several drivers for synthetic VMbus devices.
+> 
+> Some drivers have driver-specific protocols with the Hyper-V host and
+> may have versions of those protocols that are limited to 2008 and
+> 2008R2. This patch set does the clean-up only for the top-level
+> VMbus protocol versions, and not the driver-specific protocols.
+> Cleaning up the driver-specific protocols can be done with
+> follow-on patches.
+> 
+> There's no specific urgency to removing the special case code for
+> 2008 and 2008R2, so if the broader Linux kernel community surfaces
+> a reason why this clean-up should not be done now, we can wait.
+> But I think we want to eventually stop carrying around this extra
+> baggage, and based on discussions with the Hyper-V team within
+> Microsoft, we're already past the point that it has any value.
+> 
+
+I will wait for a week for people to voice their opinions. If I hear no
+objection I will apply this series to hyperv-next.
+
+Thanks,
+Wei.
+
+> Michael Kelley (4):
+>   Drivers: hv: vmbus: Remove support for Hyper-V 2008 and Hyper-V
+>     2008R2/Win7
+>   scsi: storvsc: Remove support for Hyper-V 2008 and 2008R2/Win7
+>   video: hyperv_fb: Remove support for Hyper-V 2008 and 2008R2/Win7
+>   drm/hyperv: Remove support for Hyper-V 2008 and 2008R2/Win7
+> 
+>  drivers/gpu/drm/hyperv/hyperv_drm_proto.c | 23 ++++--------
+>  drivers/hv/channel_mgmt.c                 | 29 ++++++---------
+>  drivers/hv/connection.c                   |  6 ++--
+>  drivers/hv/vmbus_drv.c                    | 60 +++++++------------------------
+>  drivers/scsi/storvsc_drv.c                | 36 +++++--------------
+>  drivers/video/fbdev/hyperv_fb.c           | 23 ++----------
+>  include/linux/hyperv.h                    | 10 ++++--
+>  7 files changed, 52 insertions(+), 135 deletions(-)
+> 
+> -- 
+> 1.8.3.1
+> 

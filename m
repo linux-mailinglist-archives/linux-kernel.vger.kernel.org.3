@@ -2,145 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0EEC51834E
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 13:33:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFE7F51836A
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 13:43:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234704AbiECLgw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 07:36:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43038 "EHLO
+        id S234825AbiECLqx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 07:46:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230514AbiECLgu (ORCPT
+        with ESMTP id S234783AbiECLqw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 07:36:50 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5209C261C;
-        Tue,  3 May 2022 04:33:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1651577597; x=1683113597;
-  h=from:to:cc:subject:date:message-id:mime-version;
-  bh=o23VYzBAw21sFAspLxcuTiAZCy5akFiprfgj/fLVtaE=;
-  b=cg64EZ6rPVx0PAjVS/V3Q7vXwmpZchuxJgRrW/aEtQCTxtTUAdpAKW+A
-   AQvjrZCoNVF3pQh1ANORaJvVTV+1YCkPVYb0Fn9fADy+EzmXnj3jbF9pF
-   4ZhZQz2KkUBA9xDN4W1gDCPk78nJfiaCXLAWwb1vo+TEkHDp35kOj3Gyc
-   k=;
-Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
-  by alexa-out.qualcomm.com with ESMTP; 03 May 2022 04:33:17 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2022 04:33:16 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Tue, 3 May 2022 04:33:16 -0700
-Received: from hu-tdas-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Tue, 3 May 2022 04:33:13 -0700
-From:   Taniya Das <quic_tdas@quicinc.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-CC:     Douglas Anderson <dianders@chromium.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        <devicetree@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, Taniya Das <quic_tdas@quicinc.com>
-Subject: [PATCH v4] arm64: dts: qcom: sc7280: Add lpasscore & lpassaudio clock controllers
-Date:   Tue, 3 May 2022 17:02:46 +0530
-Message-ID: <20220503113246.13857-1-quic_tdas@quicinc.com>
-X-Mailer: git-send-email 2.17.1
+        Tue, 3 May 2022 07:46:52 -0400
+X-Greylist: delayed 400 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 03 May 2022 04:43:17 PDT
+Received: from read.uberspace.de (read.uberspace.de [185.26.156.133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68ED91F617
+        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 04:43:17 -0700 (PDT)
+Received: (qmail 5983 invoked by uid 990); 3 May 2022 11:36:34 -0000
+Authentication-Results: read.uberspace.de;
+        auth=pass (plain)
+From:   Florian Rommel <mail@florommel.de>
+To:     airlied@linux.ie, daniel@ffwll.ch, ray.huang@amd.com,
+        akpm@linux-foundation.org
+Cc:     Felix.Kuehling@amd.com, alexander.deucher@amd.com,
+        christian.koenig@amd.com, Xinhui.Pan@amd.com,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        kernel-janitors@vger.kernel.org, Florian Rommel <mail@florommel.de>
+Subject: [PATCH] mmap locking API: Fix missed mmap_sem references in comments
+Date:   Tue,  3 May 2022 13:33:33 +0200
+Message-Id: <20220503113333.214124-1-mail@florommel.de>
+X-Mailer: git-send-email 2.36.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Rspamd-Bar: -
+X-Rspamd-Report: R_MISSING_CHARSET(0.5) MIME_GOOD(-0.1) MID_CONTAINS_FROM(1) BAYES_HAM(-2.999999)
+X-Rspamd-Score: -1.599999
+Received: from unknown (HELO unkown) (::1)
+        by read.uberspace.de (Haraka/2.8.28) with ESMTPSA; Tue, 03 May 2022 13:36:34 +0200
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        MSGID_FROM_MTA_HEADER,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the low pass audio clock controller device nodes. Keep the lpasscc
-clock node disabled and enabled for lpass pil based devices.
+Commit c1e8d7c6a7a6 ("mmap locking API: convert mmap_sem comments") missed
+replacing some references of mmap_sem by mmap_lock due to misspelling
+(mm_sem instead of mmap_sem).
 
-Signed-off-by: Taniya Das <quic_tdas@quicinc.com>
+Signed-off-by: Florian Rommel <mail@florommel.de>
 ---
-[v4]
- * Mark lpasscc[lpasscc@3000000] device node as "disabled".
+ drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_gfx_v7.c | 2 +-
+ drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_gfx_v8.c | 2 +-
+ drivers/gpu/drm/ttm/ttm_bo_vm.c                   | 2 +-
+ mm/mmap.c                                         | 4 ++--
+ 4 files changed, 5 insertions(+), 5 deletions(-)
 
-[v3]
- * Fix unwanted extra spaces in reg property.
- * Fix lpass_aon node clock phandle <&lpasscc> to <&lpasscore>
-
- arch/arm64/boot/dts/qcom/sc7280.dtsi | 44 ++++++++++++++++++++++++++++
- 1 file changed, 44 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-index f0b64be63c21..477a754741a1 100644
---- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-@@ -8,6 +8,8 @@
- #include <dt-bindings/clock/qcom,dispcc-sc7280.h>
- #include <dt-bindings/clock/qcom,gcc-sc7280.h>
- #include <dt-bindings/clock/qcom,gpucc-sc7280.h>
-+#include <dt-bindings/clock/qcom,lpassaudiocc-sc7280.h>
-+#include <dt-bindings/clock/qcom,lpasscorecc-sc7280.h>
- #include <dt-bindings/clock/qcom,rpmh.h>
- #include <dt-bindings/clock/qcom,videocc-sc7280.h>
- #include <dt-bindings/gpio/gpio.h>
-@@ -1978,6 +1980,48 @@
- 			clocks = <&gcc GCC_CFG_NOC_LPASS_CLK>;
- 			clock-names = "iface";
- 			#clock-cells = <1>;
-+			status = "disabled";
-+		};
-+
-+		lpass_audiocc: clock-controller@3300000 {
-+			compatible = "qcom,sc7280-lpassaudiocc";
-+			reg = <0 0x03300000 0 0x30000>;
-+			clocks = <&rpmhcc RPMH_CXO_CLK>,
-+			       <&lpass_aon LPASS_AON_CC_MAIN_RCG_CLK_SRC>;
-+			clock-names = "bi_tcxo", "lpass_aon_cc_main_rcg_clk_src";
-+			power-domains = <&lpass_aon LPASS_AON_CC_LPASS_AUDIO_HM_GDSC>;
-+			#clock-cells = <1>;
-+			#power-domain-cells = <1>;
-+		};
-+
-+		lpass_aon: clock-controller@3380000 {
-+			compatible = "qcom,sc7280-lpassaoncc";
-+			reg = <0 0x03380000 0 0x30000>;
-+			clocks = <&rpmhcc RPMH_CXO_CLK>,
-+			       <&rpmhcc RPMH_CXO_CLK_A>,
-+			       <&lpasscore LPASS_CORE_CC_CORE_CLK>;
-+			clock-names = "bi_tcxo", "bi_tcxo_ao", "iface";
-+			#clock-cells = <1>;
-+			#power-domain-cells = <1>;
-+		};
-+
-+		lpasscore: clock-controller@3900000 {
-+			compatible = "qcom,sc7280-lpasscorecc";
-+			reg = <0 0x03900000 0 0x50000>;
-+			clocks =  <&rpmhcc RPMH_CXO_CLK>;
-+			clock-names = "bi_tcxo";
-+			power-domains = <&lpass_hm LPASS_CORE_CC_LPASS_CORE_HM_GDSC>;
-+			#clock-cells = <1>;
-+			#power-domain-cells = <1>;
-+		};
-+
-+		lpass_hm: clock-controller@3c00000 {
-+			compatible = "qcom,sc7280-lpasshm";
-+			reg = <0 0x3c00000 0 0x28>;
-+			clocks = <&rpmhcc RPMH_CXO_CLK>;
-+			clock-names = "bi_tcxo";
-+			#clock-cells = <1>;
-+			#power-domain-cells = <1>;
- 		};
-
- 		lpass_ag_noc: interconnect@3c40000 {
---
-Qualcomm INDIA, on behalf of Qualcomm Innovation Center, Inc.is a member
-of the Code Aurora Forum, hosted by the  Linux Foundation.
+diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_gfx_v7.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_gfx_v7.c
+index 65552bb7d2f2..e83cb1c09610 100644
+--- a/drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_gfx_v7.c
++++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_gfx_v7.c
+@@ -184,7 +184,7 @@ static int kgd_hqd_load(struct amdgpu_device *adev, void *mqd,
+ 
+ 	/* read_user_ptr may take the mm->mmap_lock.
+ 	 * release srbm_mutex to avoid circular dependency between
+-	 * srbm_mutex->mm_sem->reservation_ww_class_mutex->srbm_mutex.
++	 * srbm_mutex->mmap_lock->reservation_ww_class_mutex->srbm_mutex.
+ 	 */
+ 	release_queue(adev);
+ 	valid_wptr = read_user_wptr(mm, wptr, wptr_val);
+diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_gfx_v8.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_gfx_v8.c
+index 9dc5f2a0cc07..870f352837fc 100644
+--- a/drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_gfx_v8.c
++++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_gfx_v8.c
+@@ -208,7 +208,7 @@ static int kgd_hqd_load(struct amdgpu_device *adev, void *mqd,
+ 
+ 	/* read_user_ptr may take the mm->mmap_lock.
+ 	 * release srbm_mutex to avoid circular dependency between
+-	 * srbm_mutex->mm_sem->reservation_ww_class_mutex->srbm_mutex.
++	 * srbm_mutex->mmap_lock->reservation_ww_class_mutex->srbm_mutex.
+ 	 */
+ 	release_queue(adev);
+ 	valid_wptr = read_user_wptr(mm, wptr, wptr_val);
+diff --git a/drivers/gpu/drm/ttm/ttm_bo_vm.c b/drivers/gpu/drm/ttm/ttm_bo_vm.c
+index 5b324f245265..38119311284d 100644
+--- a/drivers/gpu/drm/ttm/ttm_bo_vm.c
++++ b/drivers/gpu/drm/ttm/ttm_bo_vm.c
+@@ -102,7 +102,7 @@ static unsigned long ttm_bo_io_mem_pfn(struct ttm_buffer_object *bo,
+  * @bo: The buffer object
+  * @vmf: The fault structure handed to the callback
+  *
+- * vm callbacks like fault() and *_mkwrite() allow for the mm_sem to be dropped
++ * vm callbacks like fault() and *_mkwrite() allow for the mmap_lock to be dropped
+  * during long waits, and after the wait the callback will be restarted. This
+  * is to allow other threads using the same virtual memory space concurrent
+  * access to map(), unmap() completely unrelated buffer objects. TTM buffer
+diff --git a/mm/mmap.c b/mm/mmap.c
+index d7e120ad5825..7f7d982721b9 100644
+--- a/mm/mmap.c
++++ b/mm/mmap.c
+@@ -1285,7 +1285,7 @@ static int anon_vma_compatible(struct vm_area_struct *a, struct vm_area_struct *
+  * the same as 'old', the other will be the new one that is trying
+  * to share the anon_vma.
+  *
+- * NOTE! This runs with mm_sem held for reading, so it is possible that
++ * NOTE! This runs with mmap_lock held for reading, so it is possible that
+  * the anon_vma of 'old' is concurrently in the process of being set up
+  * by another page fault trying to merge _that_. But that's ok: if it
+  * is being set up, that automatically means that it will be a singleton
+@@ -1299,7 +1299,7 @@ static int anon_vma_compatible(struct vm_area_struct *a, struct vm_area_struct *
+  *
+  * We also make sure that the two vma's are compatible (adjacent,
+  * and with the same memory policies). That's all stable, even with just
+- * a read lock on the mm_sem.
++ * a read lock on the mmap_lock.
+  */
+ static struct anon_vma *reusable_anon_vma(struct vm_area_struct *old, struct vm_area_struct *a, struct vm_area_struct *b)
+ {
+-- 
+2.36.0
 

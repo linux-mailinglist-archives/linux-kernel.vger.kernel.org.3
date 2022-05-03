@@ -2,89 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B589518D08
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 21:14:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B998F518D0A
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 21:15:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240293AbiECTSW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 15:18:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46674 "EHLO
+        id S240207AbiECTTI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 15:19:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231891AbiECTST (ORCPT
+        with ESMTP id S237094AbiECTTE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 15:18:19 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C59F63FBC5
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 12:14:46 -0700 (PDT)
-From:   John Ogness <john.ogness@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1651605285;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=q6tI8vR0YuSpmVwH6PHCfJgGfXuGMuhIaoQrWI4CdGw=;
-        b=nJKRf3Pj9dvK/EarBtS+yl7zuJVIGKBafsjSHGSfGV6ooXPgHTjjoLW2YwmX0bqScFTCMt
-        GtwhyTQmf9gaNKGTK2bZnJi1OQHJ2u3IZfNpjlVvWelgS5jcE/WHWCujpupa9sYhzdUH8s
-        FL16iFJUMBGxlbcE/slkl9sVLTJ8g/ydgaVlgbz6wljgg7AI7k4N9MAD/mYpREI3PMhZ1p
-        bkknx+tkcF0XpC7aAmSjzIAJhdn0Cd0eD3SABQDy4LopbL+NnwU1LO/Kw0paoXc4oft1wf
-        3/Pdo737DoNtTAeiTDPBLMNigNkjYgs7Vds7cig7Zdo5kI6Opo1rb3P2m5XXnA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1651605285;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=q6tI8vR0YuSpmVwH6PHCfJgGfXuGMuhIaoQrWI4CdGw=;
-        b=lIcRAQpKhjnsR49SdKQ/d3gXD31jILuoQ9RGrLkFWGDx96L1Vgfyk3UgaUWy0jE8mW7cKj
-        2eFnA50g7UBtIICA==
-To:     Marco Elver <elver@google.com>, elver@google.com,
-        Petr Mladek <pmladek@suse.com>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Johannes Berg <johannes.berg@intel.com>,
-        Alexander Potapenko <glider@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Linux Kernel Functional Testing <lkft@linaro.org>
-Subject: Re: [PATCH -printk] printk, tracing: fix console tracepoint
-In-Reply-To: <20220503073844.4148944-1-elver@google.com>
-References: <20220503073844.4148944-1-elver@google.com>
-Date:   Tue, 03 May 2022 21:20:44 +0206
-Message-ID: <87r15ae8d7.fsf@jogness.linutronix.de>
+        Tue, 3 May 2022 15:19:04 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5483C32ED5
+        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 12:15:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651605331; x=1683141331;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=eh+UDDARYDIccIec6Kv8Mbf14Mzr9J6fFwI8Z7JunYE=;
+  b=AwEEhdDvXHjwvVq5B+SEiJGVqPklStmU9eUR/h8XhmwQOaNEUOxqa/hX
+   zGavoUhSFYY0b+uoHp8CMs5++h51dFTk1v7o3z9x+Wuc8lfoKhfaDHBrI
+   QsJOr7vzV94P5jmjgOoH8hxWYfT8Ld9WTIhvW+N/bB5GMnaXf/hTIciiI
+   eGDLuNowD2kafmaXTtQ5yOjtht2fXnGKMMkzDgcRwRnxhX+9nQf9zvb8M
+   KoLOd2ttAUk/d7RBi56O01e32cF9k2pzqo9hLhnYqAg8rOxq4EGuEV3im
+   PQTU2m24T0Xny+az+Pg113YY87+s0zbGluWOMCpz/GdvpN7nkmFjCWb+6
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10336"; a="247472747"
+X-IronPort-AV: E=Sophos;i="5.91,196,1647327600"; 
+   d="scan'208";a="247472747"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2022 12:15:30 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,196,1647327600"; 
+   d="scan'208";a="562345430"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 03 May 2022 12:15:28 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nlxzW-000AjR-G8;
+        Tue, 03 May 2022 19:15:22 +0000
+Date:   Wed, 4 May 2022 03:15:09 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Sasha Levin <sashal@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: [linux-stable-rc:queue/5.4 83/83] fs/hugetlbfs/inode.c:211:40:
+ error: implicit declaration of function 'arch_get_mmap_end'
+Message-ID: <202205040323.boErRvCI-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INVALID_DATE_TZ_ABSURD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-05-03, Marco Elver <elver@google.com> wrote:
-> One notable difference is that by moving tracing into printk_sprint(),
-> the 'text' will no longer include the "header" (loglevel and timestamp),
-> but only the raw message. Arguably this is less of a problem now that
-> the console tracepoint happens on the printk() call and isn't delayed.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git queue/5.4
+head:   2d723d526f735966b904f52c02d035793882b005
+commit: 2d723d526f735966b904f52c02d035793882b005 [83/83] mm, hugetlb: allow for "high" userspace addresses
+config: riscv-allmodconfig (https://download.01.org/0day-ci/archive/20220504/202205040323.boErRvCI-lkp@intel.com/config)
+compiler: riscv64-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=2d723d526f735966b904f52c02d035793882b005
+        git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+        git fetch --no-tags linux-stable-rc queue/5.4
+        git checkout 2d723d526f735966b904f52c02d035793882b005
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash fs/
 
-Another slight difference is that messages composed of LOG_CONT pieces
-will trigger the tracepoint for each individual piece and _never_ as a
-complete line.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-It was never guaranteed that all LOG_CONT pieces make it into the final
-printed line anyway, but with this change it will be guaranteed that
-they are always handled separately.
+All errors (new ones prefixed by >>):
 
-I am OK with this change, but like Steven, I agree the the users of that
-tracepoint need to chime in.
+   fs/hugetlbfs/inode.c: In function 'hugetlb_get_unmapped_area':
+>> fs/hugetlbfs/inode.c:211:40: error: implicit declaration of function 'arch_get_mmap_end' [-Werror=implicit-function-declaration]
+     211 |         const unsigned long mmap_end = arch_get_mmap_end(addr);
+         |                                        ^~~~~~~~~~~~~~~~~
+   cc1: some warnings being treated as errors
 
-Acked-by: John Ogness <john.ogness@linutronix.de>
 
-The ongoing printbuf/seq_buf work [0] will hopefully someday do away
-with LOG_CONT altogether.
+vim +/arch_get_mmap_end +211 fs/hugetlbfs/inode.c
 
-John
+   197	
+   198	/*
+   199	 * Called under down_write(mmap_sem).
+   200	 */
+   201	
+   202	#ifndef HAVE_ARCH_HUGETLB_UNMAPPED_AREA
+   203	static unsigned long
+   204	hugetlb_get_unmapped_area(struct file *file, unsigned long addr,
+   205			unsigned long len, unsigned long pgoff, unsigned long flags)
+   206	{
+   207		struct mm_struct *mm = current->mm;
+   208		struct vm_area_struct *vma;
+   209		struct hstate *h = hstate_file(file);
+   210		struct vm_unmapped_area_info info;
+ > 211		const unsigned long mmap_end = arch_get_mmap_end(addr);
+   212	
+   213		if (len & ~huge_page_mask(h))
+   214			return -EINVAL;
+   215		if (len > TASK_SIZE)
+   216			return -ENOMEM;
+   217	
+   218		if (flags & MAP_FIXED) {
+   219			if (prepare_hugepage_range(file, addr, len))
+   220				return -EINVAL;
+   221			return addr;
+   222		}
+   223	
+   224		if (addr) {
+   225			addr = ALIGN(addr, huge_page_size(h));
+   226			vma = find_vma(mm, addr);
+   227			if (mmap_end - len >= addr &&
+   228			    (!vma || addr + len <= vm_start_gap(vma)))
+   229				return addr;
+   230		}
+   231	
+   232		info.flags = 0;
+   233		info.length = len;
+   234		info.low_limit = TASK_UNMAPPED_BASE;
+   235		info.high_limit = arch_get_mmap_end(addr);
+   236		info.align_mask = PAGE_MASK & ~huge_page_mask(h);
+   237		info.align_offset = 0;
+   238		return vm_unmapped_area(&info);
+   239	}
+   240	#endif
+   241	
 
-[0] https://lwn.net/Articles/892611
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

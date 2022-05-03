@@ -2,139 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7361517F10
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 09:39:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FC0B517F17
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 09:42:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232389AbiECHmj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 03:42:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53508 "EHLO
+        id S232406AbiECHqT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 03:46:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231737AbiECHmg (ORCPT
+        with ESMTP id S230514AbiECHqQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 03:42:36 -0400
-Received: from mail-ej1-x64a.google.com (mail-ej1-x64a.google.com [IPv6:2a00:1450:4864:20::64a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96EB436E00
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 00:39:04 -0700 (PDT)
-Received: by mail-ej1-x64a.google.com with SMTP id oz9-20020a1709077d8900b006f3d9488090so6592013ejc.6
-        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 00:39:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=kkO/dWNNM89/72XXalUPVAWHtnC41R6OkxWseT3mGWc=;
-        b=WL2UUkfwdO4ryCSUjlBASSUUnvZKapCEcsX+VvrGnegVID9LMxsVuW9BOvNZPNWkDk
-         FDwPjNWGyvEXEXJPZzWNC7c7hm2J0Vx3TqzLM4mGqbrh9V8nuwEgwzcYbmSFHKF3YPJb
-         h5ptQYmYzK6nTNWIl0RPfcaPrFXnkK9klxhTYl+9xDIA5WTHLwzVDg108qPEMRyeGtnY
-         69YQcozUbZzyHxvW3/4nC0zS1cHfLUXMpflberIk7dO6m/SuK1AbADuej0beiO/1fOmH
-         7AN0GchogfSjBBFm8KGf9ELvmtVCm8iu/xmsRcxCBqQT9ZvsWuz44Gs0hQ0DKQDAE7wG
-         bPOQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=kkO/dWNNM89/72XXalUPVAWHtnC41R6OkxWseT3mGWc=;
-        b=D2GHlLahd2Ah9y+TqP/DPArNTHhS9GcfP/UEwmgJzZuscDILMDB4jIStCB/JmfodRS
-         bHsphRqZCxDnDzAbxqjxjlY0cdx6NJCNzefEIsqOJNFlBegfhzeSgB+/xgmNJ527v/fS
-         4+7ewYb6IcAKspdKMXiwfEsu6cSBe0DbfmABt0uZqtkiIJtb2dTuTJ7JUlKc1KiA6qkd
-         7PxqieHQ1xLH1cGKpc2C5jBmS8LUEFUS+KyQZ011chWLd5LxENG+b007Eeil3VZvRDO4
-         o9ZupSuYeRGT+D8WHhKEIfSjVhSL2/rbUCmtjB3AxgDMR7XPwa4Lsj/39l500sXL9Xkz
-         1KsQ==
-X-Gm-Message-State: AOAM532x15+m3r2LbrhDk7gU0xWu3xRqrLN8wAYzfNc+RaAKztCRaiW6
-        Xq0xDHBh4cJSviIlH0P++QlK2wvcxQ==
-X-Google-Smtp-Source: ABdhPJxeO1zyPodRfmBHxGs6rYL5rBGDNvjmJEK8vxYLBT6/K84BO/kGdkC4+Y8EJ44e5r/dCB29jHmNlw==
-X-Received: from elver.muc.corp.google.com ([2a00:79e0:15:13:bdb8:d8d3:6904:292f])
- (user=elver job=sendgmr) by 2002:a17:906:c0e:b0:6f0:2b1e:9077 with SMTP id
- s14-20020a1709060c0e00b006f02b1e9077mr14448413ejf.411.1651563542771; Tue, 03
- May 2022 00:39:02 -0700 (PDT)
-Date:   Tue,  3 May 2022 09:38:44 +0200
-Message-Id: <20220503073844.4148944-1-elver@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.36.0.464.gb9c8b46e94-goog
-Subject: [PATCH -printk] printk, tracing: fix console tracepoint
-From:   Marco Elver <elver@google.com>
-To:     elver@google.com, John Ogness <john.ogness@linutronix.de>,
-        Petr Mladek <pmladek@suse.com>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Johannes Berg <johannes.berg@intel.com>,
-        Alexander Potapenko <glider@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Linux Kernel Functional Testing <lkft@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 3 May 2022 03:46:16 -0400
+Received: from gardel.0pointer.net (gardel.0pointer.net [85.214.157.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB92537BF0;
+        Tue,  3 May 2022 00:42:43 -0700 (PDT)
+Received: from gardel-login.0pointer.net (gardel-mail [85.214.157.71])
+        by gardel.0pointer.net (Postfix) with ESMTP id 9CEF6E804AA;
+        Tue,  3 May 2022 09:42:41 +0200 (CEST)
+Received: by gardel-login.0pointer.net (Postfix, from userid 1000)
+        id C8309160011; Tue,  3 May 2022 09:42:40 +0200 (CEST)
+Date:   Tue, 3 May 2022 09:42:40 +0200
+From:   Lennart Poettering <mzxreary@0pointer.de>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Theodore Ts'o <tytso@mit.edu>,
+        Alexander Graf <graf@amazon.com>,
+        Colm MacCarthaigh <colmmacc@amazon.com>,
+        Torben Hansen <htorben@amazon.co.uk>,
+        Jann Horn <jannh@google.com>
+Subject: Re: [PATCH 2/2] random: add fork_event sysctl for polling VM forks
+Message-ID: <YnDc8A+oTxsQs/hq@gardel-login>
+References: <20220502140602.130373-1-Jason@zx2c4.com>
+ <20220502140602.130373-2-Jason@zx2c4.com>
+ <Ym/7UlgQ5VjjC76P@gardel-login>
+ <YnAC00VtU8MGb7vO@zx2c4.com>
+ <YnAMBzhcJhGR5XOK@gardel-login>
+ <YnAc4hwPyByF4kZ5@zx2c4.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <YnAc4hwPyByF4kZ5@zx2c4.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The original intent of the 'console' tracepoint per 95100358491a
-("printk/tracing: Add console output tracing") had been to "[...] record
-any printk messages into the trace, regardless of the current console
-loglevel. This can help correlate (existing) printk debugging with other
-tracing."
+On Mo, 02.05.22 20:04, Jason A. Donenfeld (Jason@zx2c4.com) wrote:
 
-Petr points out [1] that calling trace_console_rcuidle() in
-call_console_driver() had been the wrong thing for a while, because
-"printk() always used console_trylock() and the message was flushed to
-the console only when the trylock succeeded. And it was always deferred
-in NMI or when printed via printk_deferred()."
+> > I can just tell you, that in systemd we'd have a usecase for consuming
+> > such a generation counter: we try to provide stable MAC addresses for
+> > synthetic network interfaces managed by networkd, so we hash them from
+> > /etc/machine-id, but otoh people also want them to change when they
+> > clone their VMs. We could very nicely solve this if we had a
+> > generation counter easily accessible from userspace, that starts at 0
+> > initially. Because then we can hash as we always did when the counter
+> > is zero, but otherwise use something else, possibly hashed from the
+> > generation counter.
+>
+> This doesn't work, because you could have memory-A split into memory-A.1
+> and memory-A.2, and both A.2 and A.1 would ++counter, and wind up with
+> the same new value "2".
 
-With 09c5ba0aa2fc ("printk: add kthread console printers"), things only
-got worse, and calls to call_console_driver() no longer happen with
-typical printk() calls but always appear deferred [2].
+Yes, that's why I as vague about what to switch to if the counter is
+non-zero, i.e. "something else, *possibly* hashed…".
 
-As such, the tracepoint can no longer serve its purpose to clearly
-correlate printk() calls and other tracing, as well as breaks usecases
-that expect every printk() call to result in a callback of the console
-tracepoint. Notably, the KFENCE and KCSAN test suites, which want to
-capture console output and assume a printk() immediately gives us a
-callback to the console tracepoint.
+For this MAC address usecase it's entirely sufficient to be able to
+distinguish if the system was closed at all, i.e. if the counter is
+zero or is non-zero. Because that would already be great for a policy
+of "hash it in a stable way from /etc/machine-id, if counter == 0" +
+"use random MAC once counter > 0".
 
-Fix the console tracepoint by moving it into printk_sprint() [3].
+Such a MAC address policy I think should probably even be the new
+default in networkd, if we could implement it. For that we'd need a
+single bit of info from the kernel, indicating whether the sysem was
+cloned at all. i.e. if the vmgenid uuid is different from the one the
+system booted up first.
 
-One notable difference is that by moving tracing into printk_sprint(),
-the 'text' will no longer include the "header" (loglevel and timestamp),
-but only the raw message. Arguably this is less of a problem now that
-the console tracepoint happens on the printk() call and isn't delayed.
+Lennart
 
-Link: https://lore.kernel.org/all/Ym+WqKStCg%2FEHfh3@alley/ [1]
-Link: https://lore.kernel.org/all/CA+G9fYu2kS0wR4WqMRsj2rePKV9XLgOU1PiXnMvpT+Z=c2ucHA@mail.gmail.com/ [2]
-Link: https://lore.kernel.org/all/87fslup9dx.fsf@jogness.linutronix.de/ [3]
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-Signed-off-by: Marco Elver <elver@google.com>
-Cc: John Ogness <john.ogness@linutronix.de>
-Cc: Petr Mladek <pmladek@suse.com>
----
- kernel/printk/printk.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/kernel/printk/printk.c b/kernel/printk/printk.c
-index f66d6e72a642..a3e1035929b0 100644
---- a/kernel/printk/printk.c
-+++ b/kernel/printk/printk.c
-@@ -2064,8 +2064,6 @@ static void call_console_driver(struct console *con, const char *text, size_t le
- {
- 	size_t dropped_len;
- 
--	trace_console_rcuidle(text, len);
--
- 	if (con->dropped && dropped_text) {
- 		dropped_len = snprintf(dropped_text, DROPPED_TEXT_MAX,
- 				       "** %lu printk messages dropped **\n",
-@@ -2240,6 +2238,8 @@ static u16 printk_sprint(char *text, u16 size, int facility,
- 		}
- 	}
- 
-+	trace_console_rcuidle(text, text_len);
-+
- 	return text_len;
- }
- 
--- 
-2.36.0.464.gb9c8b46e94-goog
-
+--
+Lennart Poettering, Berlin

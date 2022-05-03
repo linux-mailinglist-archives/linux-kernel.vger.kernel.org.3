@@ -2,111 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5838A517F2D
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 09:50:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E95E517F33
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 09:52:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232503AbiECHxz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 03:53:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32786 "EHLO
+        id S232509AbiECHzu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 03:55:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232519AbiECHxw (ORCPT
+        with ESMTP id S232473AbiECHzp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 03:53:52 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E16B2BF3
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 00:50:20 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id t5so8318636edw.11
-        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 00:50:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=wp+HuhCzVQcbpzvT/sQrzmDjeIdh00lZI9oDxB6WyTs=;
-        b=MaRFzGoMD1a278grMU14/yYlEhePHu15Lav8QNQrQHkccVbXPqgmvM1VFUtuC9Fjf4
-         uJ3Rgbif7K6L8Ar8zRmKbftuhHKSa1UQ3SwebB9FJsDSmAGIbAM/w9B4Pma+MsXx73Av
-         tBlw/wqeYyPZWnubeZzUsmbpdMPm/M0Fs/b6h3BmrufAJfacj89ELyGunz7ZfLR4dbcQ
-         8fzP9L7Ut+fKZrCPOpNjXsoKndESVxRp91TmVHnheF4t6Z5QCcAfvoUrYdJaBATgzHK4
-         L7wiHAO+Kbyg/3nyOqSVZr5kgTn+lepmUGIj3npYWsgp9O3lwfGl0Qx957ysvk/ZK+xQ
-         ksgA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=wp+HuhCzVQcbpzvT/sQrzmDjeIdh00lZI9oDxB6WyTs=;
-        b=WLv+2Y9PrPJ2x0Cbl/1fSdPwz3JbysVBu82OX/slK4bLzLDX/hWkk3leSFOf+G/F4d
-         SATsKcEBVwydJXX7LpN/UCZic9fEmfHkYWsjRitDLkh9vstZ2lmo2wBwXGJvrCf8sH5+
-         6G+d0oRKhs7F7bdbw2idQSrod7LQLH/G8ZzbXHA/mRGD/+3rgNSGW6u/yk55ILMrSLDX
-         QyrHCe/wCc0HYHqYiPCXRKl7jvKHx0vhFTLNkO/CB69AAV335gHlFdljWcsZgGZJzuoC
-         4TbasBliQ2DLo5heBJYskzWC/qtYfVMScoCmDHItsIfUP//o0rMzWGWWhjbg5PclRLtH
-         0tSA==
-X-Gm-Message-State: AOAM531XnncA5nZA2OlmOH439+Y83c+ICUpUrYQGaohE1AUFF+fstIrH
-        YH8k35TkQtQezyXRimlM2loZxw==
-X-Google-Smtp-Source: ABdhPJyVyq4b/kVlB63u3UarpBNZnJKtF6IDLyaW7pS64uWqHVVg2cH/YhsdXpfIKhYgli0kY9qkQw==
-X-Received: by 2002:a50:f1c5:0:b0:425:dd04:b7a9 with SMTP id y5-20020a50f1c5000000b00425dd04b7a9mr16790672edl.388.1651564218903;
-        Tue, 03 May 2022 00:50:18 -0700 (PDT)
-Received: from myrica (cpc92880-cmbg19-2-0-cust679.5-4.cable.virginm.net. [82.27.106.168])
-        by smtp.gmail.com with ESMTPSA id cw27-20020a056402229b00b0042617ba6387sm7464883edb.17.2022.05.03.00.50.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 May 2022 00:50:18 -0700 (PDT)
-Date:   Tue, 3 May 2022 08:49:52 +0100
-From:   Jean-Philippe Brucker <jean-philippe@linaro.org>
-To:     Baolu Lu <baolu.lu@linux.intel.com>
-Cc:     Fenghua Yu <fenghua.yu@intel.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>,
-        Ravi V Shankar <ravi.v.shankar@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>, robin.murphy@arm.com,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        x86 <x86@kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        iommu <iommu@lists.linux-foundation.org>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>, zhangfei.gao@linaro.org,
-        Thomas Gleixner <tglx@linutronix.de>, will@kernel.org
-Subject: Re: [PATCH v4 05/11] iommu/sva: Assign a PASID to mm on PASID
- allocation and free it on mm exit
-Message-ID: <YnDeoGjv/dZnu+YQ@myrica>
-References: <YmbO/l5IwfBCHrl8@myrica>
- <8c044e49-74bb-df56-8a60-663013c0910e@intel.com>
- <YmgiQZZyFxsJ+9um@myrica>
- <63582490-a794-fd11-0380-44b27cc660b7@intel.com>
- <YmpSv48aPIbVXqGi@myrica>
- <044595e6-e5d0-26c2-af8e-fc9d06906179@linux.intel.com>
- <YmvtVRlwVJjStXc0@fyu1.sc.intel.com>
- <Ymv3fC4xXqe+oMRK@myrica>
- <Ymxke+ihgwNy3BCE@fyu1.sc.intel.com>
- <3ea91623-97ea-f318-70db-55f08922d7ce@linux.intel.com>
+        Tue, 3 May 2022 03:55:45 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB8571FCE0
+        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 00:52:13 -0700 (PDT)
+Received: from mail-yw1-f176.google.com ([209.85.128.176]) by
+ mrelayeu.kundenserver.de (mreue106 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1MxmFk-1o2bcz2H6s-00zHBi for <linux-kernel@vger.kernel.org>; Tue, 03 May
+ 2022 09:52:11 +0200
+Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-2ebf4b91212so171465817b3.8;
+        Tue, 03 May 2022 00:52:11 -0700 (PDT)
+X-Gm-Message-State: AOAM530lAbT0p7sa+dRpcU4mzLt0WgSB7SLjEWtlCytqcbpiuk2RmdSp
+        191B0DlXqa66UB9/Ox5EHPquTWlK8DLeMQnyFZE=
+X-Google-Smtp-Source: ABdhPJy9R7zCTI6Aw7C6jGQ+pq3KbkGI+32nQsK+YuLq9Y0CUx+axnAMLXKfzAkG+VRohcKoFtwX2TBaxszBE6C0NQU=
+X-Received: by 2002:a81:1697:0:b0:2fa:32f9:78c8 with SMTP id
+ 145-20020a811697000000b002fa32f978c8mr3738925yww.135.1651564330419; Tue, 03
+ May 2022 00:52:10 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3ea91623-97ea-f318-70db-55f08922d7ce@linux.intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <FA654A0D-29B7-4B6B-B613-73598A92ADA8@goldelico.com>
+ <YmkBAsa+fKlp/GcV@atomide.com> <CAK8P3a3N9WBWC_ECB0pSRHUCT4iz=tdT+Dt9Cyd5Wh3qEaVqqA@mail.gmail.com>
+ <4CE23DC3-B3E5-45C1-91F3-B88E5444AE7C@goldelico.com> <CAK8P3a3EFfF0gr5kFkboRfJifrY-D+NgHFekBfSePWuY2c8PMA@mail.gmail.com>
+ <11504A17-6B50-4D6C-A9E1-CA943C157C93@goldelico.com> <CAK8P3a2RN77ajZD4xRhKsqozPizneLcLYhm0rTE6qX25-4cJsw@mail.gmail.com>
+ <CAMj1kXHqHCt9G+HEawsWmba2Z=WVbp6wRrivAQvQCn2iph9kXg@mail.gmail.com>
+In-Reply-To: <CAMj1kXHqHCt9G+HEawsWmba2Z=WVbp6wRrivAQvQCn2iph9kXg@mail.gmail.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Tue, 3 May 2022 09:51:54 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a2gxnrY=gnv+e2Ey4bPE30wYtMkqC--Z0X-ZjZT=B9VaA@mail.gmail.com>
+Message-ID: <CAK8P3a2gxnrY=gnv+e2Ey4bPE30wYtMkqC--Z0X-ZjZT=B9VaA@mail.gmail.com>
+Subject: Re: kernel panic with v5.18-rc1 on OpenPandora (only)
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        "H. Nikolaus Schaller" <hns@goldelico.com>,
+        Tony Lindgren <tony@atomide.com>,
+        Discussions about the Letux Kernel 
+        <letux-kernel@openphoenux.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux-OMAP <linux-omap@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:q4596kitnW8xbAvjo4GnHPeAh23Okl2WjFqcrkXALunK3DID6wz
+ UUrYKX0jt0azzdGSCC0jdLoT8TaDY8Yf9mVx3ocnSo8I1Gdx5rKc7I+Ck9lZt4UJoc0RanZ
+ 6lt0thg2ElufEfvcyY5uHpcz5Yb6RLoxnCA9f62ZYTlzHRvuVU6qXfHrdqcMq2LASYu7t/0
+ IVckQQ6L9hdEAB6NiCi6g==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:GE9Dm6wwpqs=:OWjpCq3J6+sTPQGL0MRZMs
+ zDaGimHnlybx01b1lGP7vw7vGpSfWjwhJPCMUd3XCKICIbQGKKQg0aZmduJCdKVAiFEd9b1PD
+ uAOKWY/FGUNECi1Uv8IrKnOZNFJnePMUgeC1+206xRoQbdnisA+Ozww/J7znYx2MK0JQC7l/9
+ TJWqAJL8wn7c6vydqAKLOeQsFuZK6R0KGLTzPUJRDreKTrheLw9Lo64xmAvYaeQIKGsUMtRNM
+ d8xejuKv/A/eeY7gPgPsrDGoksdDwoi6PJqDiftSgcpHN3x3VkNTOFQsZUNnon8Nre1KIpcrA
+ ubmES5Z4f+HOV0ogNDft/6DAgzR/+tElHPBqhZgBM4gjlw5JrUDr6YLPrzG5qn//HfC/qYzIH
+ KWXKu7T8cUqzx1Payrc/wOsEG3GFIFM7xgNSvHQTBzh6ZndrAt6+7xCqlx3R32pB/OAodUfo9
+ yk4gJQoct/RhZDqgg5ZHOPbjH9UryaLZ8aLxGxbAOMaiNSFyO3CIYyLi2nB3F6qQlEF9WjLdc
+ Da+zF1OIpxzAUXW0OaUqY2H2Ycv9A07IzE8bqvQ11ghwFH6C7iiUPd57sO6W7PsLTmiTFLQJp
+ 9FDxuq61kiw6Oa7NgElsHw/p6GeqJ3Qe6n5BHabIyBFqiyAkueMQ8jDyqlf9mfUusdkH2lSyQ
+ Hhf4giXlX7VWxNKS5sNUiT/X6wChvFOpE87nJJC6n4pO8/dtr7jX0/J7S3Mxc6/OLzp5aKZQl
+ c5iu+VWVxHwVZCBEntCtfWht8/KTQpBShOqe/gEPm0rq+fGZKEwfnO6QQdTbehXz5Sep70Cus
+ mMFGlcBY5bDi6pDFyYTmg8IcADlNCqEQvWurXlm69+j8hXiiGQ=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Apr 30, 2022 at 03:33:17PM +0800, Baolu Lu wrote:
-> Jean, another quick question about the iommu_sva_bind_device()
-> 
-> /**
->  * iommu_sva_bind_device() - Bind a process address space to a device
->  * @dev: the device
->  * @mm: the mm to bind, caller must hold a reference to it
->  * @drvdata: opaque data pointer to pass to bind callback
-> 
-> This interface requires the caller to take a reference to mm. Which
-> reference should it take, mm->mm_count or mm->mm_users? It's better to
-> make it explicit in this comment.
+On Tue, May 3, 2022 at 9:28 AM Ard Biesheuvel <ardb@kernel.org> wrote:
+> On Sat, 30 Apr 2022 at 20:48, Arnd Bergmann <arnd@arndb.de> wrote:
+> >
+> > I think what is going on here is that your platform is able to detect
+> > the broken DMA because of the l3 interrupt handler telling the kernel
+> > about it, when on other platforms we would see either silent data corruption
+> > or a DMA that never reaches its target.
+> >
+>
+> I wonder if we could narrow this down by adding the possibility to use
+> IRQ stacks in the linear map, while using vmap'ed task stacks.
 
-Agreed, it's mm_users as required by mmu_notifier_register()
+I don't think we have actual DMA attempts to the IRQ stack, so this should
+not make a difference. What might help is to print some more information
+in omap3_l3_app_irq() that is likely provided by the hardware. The BUG_ON()
+happens for any timeout error, and that is most of the possible errors.
 
-Thanks,
-Jean
+Simply dumping the L3 registers should at least show the exact type of
+timeout, and maybe the DMA master ID and physical address that can
+be traced back into a virtual address.
+Setting CONFIG_DMA_API_DEBUG=y should get the same information
+I think, but it can't hurt to do both.
 
+        Arnd

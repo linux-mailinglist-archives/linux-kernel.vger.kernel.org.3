@@ -2,163 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E49FC518927
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 17:53:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 458EC51892A
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 17:54:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239002AbiECP5M convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 3 May 2022 11:57:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41040 "EHLO
+        id S239011AbiECP5h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 11:57:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238925AbiECP5J (ORCPT
+        with ESMTP id S236407AbiECP5e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 11:57:09 -0400
-Received: from mail-qv1-f42.google.com (mail-qv1-f42.google.com [209.85.219.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 715553B56C;
-        Tue,  3 May 2022 08:53:36 -0700 (PDT)
-Received: by mail-qv1-f42.google.com with SMTP id ke5so12466255qvb.5;
-        Tue, 03 May 2022 08:53:36 -0700 (PDT)
+        Tue, 3 May 2022 11:57:34 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1E133B2BA;
+        Tue,  3 May 2022 08:54:01 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id j8so15296548pll.11;
+        Tue, 03 May 2022 08:54:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=o6MKZ6EdwZOffehvzKxtwmorygtElybKIQWosDARmac=;
+        b=N9wn5tt042Vo6cF/rgCW+QiLyhKSHaRhaGnf/ly5tJzrALccDaY48Pj0CZQcA+XoTM
+         t7Bta1Aox/z58eYkQy4R3M4vjuQd1RrX1oRwofU/CeGJ1oP/ZidYv2zQg43gPbfoYnf9
+         QpANmnxjro+gjCJn7YaJMqXUNkFfVdaLyyfZHem4NmA/mD/uEOzaPLWAyQMDvgXoYfru
+         nFsdRAh7bGHmDPuYe1pcJfWoDz4lELSkKdA02tAn8JQKpBFLM7PRETxc0V9X41d0vzkD
+         S6kGFL0gPIVqKrpb6ciCqfsFzAGSewC4l4Hqly2b6FpsMJcKBb3iVSYmXJWtXWPNQyFl
+         LSMQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=xvR8faQDJaeveOR0Qcn9d2ECF2rJcFcyUs3ADmoPK9I=;
-        b=56vogaJcR0Wkt8tOvJtqtL7jNep1Xf2b8nHgyRXDMYi9MeCBxJFSa6a3kFmZ/scm2T
-         mr9+9T7O5QmRvP6H1XZPSXk16ZHQDD65KOnOQtgDy1l8oZE3/OtpDrNAEeUq5ixvI3fb
-         hVTYKdSit3J6cCm4/gZCCAWOej60Vq7lRMo4sqd1DSHDffU6pte7aMK6KJ2VlwR/4t+f
-         /rta7aa4Y1Y0oGiwwiJLf+YTySHgvvX6+f1wFgRxfE2i+53uFlDbGnvDZR7lSviwY3vN
-         obeB6n5MJt8JRhkuiIt5Ze9rvWpbx5e9HkS09PZkW3sVsh04ispqccdYpkPZvEh1/6KT
-         Rc9w==
-X-Gm-Message-State: AOAM531RFV6c3GoEseuScyNbC/yVNtbmt05hKVOXLv6ZwdyCc3kl2MJs
-        d4NkLYrOmr0Mav/s0M9HAO8YoAPphAHBrQ==
-X-Google-Smtp-Source: ABdhPJw9kdkPNOIfzgKxpe2Cjg7Kc/swj7gKKtIAzrGkm63aCDaCwag8sYqB7aYd0GnVN90s+mrTfA==
-X-Received: by 2002:a0c:fd8d:0:b0:456:3481:603c with SMTP id p13-20020a0cfd8d000000b004563481603cmr14175646qvr.69.1651593215274;
-        Tue, 03 May 2022 08:53:35 -0700 (PDT)
-Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com. [209.85.128.177])
-        by smtp.gmail.com with ESMTPSA id b13-20020a05620a088d00b0069fd2a10ef7sm4325466qka.100.2022.05.03.08.53.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 03 May 2022 08:53:34 -0700 (PDT)
-Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-2f863469afbso160412567b3.0;
-        Tue, 03 May 2022 08:53:34 -0700 (PDT)
-X-Received: by 2002:a81:6588:0:b0:2f8:b75e:1e1a with SMTP id
- z130-20020a816588000000b002f8b75e1e1amr16162028ywb.358.1651593214307; Tue, 03
- May 2022 08:53:34 -0700 (PDT)
+         :message-id:subject:to:cc;
+        bh=o6MKZ6EdwZOffehvzKxtwmorygtElybKIQWosDARmac=;
+        b=RKlkKvIjesY4/w60cr95sZAAwb1u1JoGLZwc5NiS5Eq5j17s9FLeJ5kU1ETPm3YEmR
+         0Sb3BgoyZNSrwu7EqA4a6aTnUNwd6AuI7JW0Na98TVlZv2ppRZJEKgq8KxY8C3SxGgOn
+         tmAJwUl6wQoAyL5dAs/lX729V5ZHMfCd1CA9WZVIE054eU+txXcCuN7qAIXKrz9GH6oN
+         Uznz1sdpvyJSyvRwRNVco1uZP6uitoskTCfmwbIlU0vk0mM2jX4WYMk8rY5q6Iu/cltK
+         kUQ+pUhYVU11tGO0HFm/iGn2WvzjRtKPwY9TkTFKy1LSFbV5mSHYjZWpY8ReI20GaHSI
+         QN9Q==
+X-Gm-Message-State: AOAM530at+QVaTFb8Qa2TF+QpebFmsO+Kcsk1JXjlIUWHJuX4+85L6/u
+        3Kxt0ibD1PUYOiLOBqSSMi08VAm3iOKrz3PeypI=
+X-Google-Smtp-Source: ABdhPJxH2Zx9sWLWrIYKsCaXKwgvdgawQ08skaiwUhzBeEbbEJlNhkElWWFw4EqmfxQMYAQmKl9U7TSQsPYxgvJ+Kdc=
+X-Received: by 2002:a17:902:6ac7:b0:150:24d6:b2ee with SMTP id
+ i7-20020a1709026ac700b0015024d6b2eemr17508346plt.168.1651593241176; Tue, 03
+ May 2022 08:54:01 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220429143505.88208-1-clement.leger@bootlin.com> <20220429143505.88208-5-clement.leger@bootlin.com>
-In-Reply-To: <20220429143505.88208-5-clement.leger@bootlin.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 3 May 2022 17:53:10 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdV1anDky+_hyCnsptuDnCN=eaY6RrsTVU36jujkFr+DqQ@mail.gmail.com>
-Message-ID: <CAMuHMdV1anDky+_hyCnsptuDnCN=eaY6RrsTVU36jujkFr+DqQ@mail.gmail.com>
-Subject: Re: [net-next v2 04/12] net: pcs: add Renesas MII converter driver
-To:     =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
+References: <20220330090947.9100-1-chenxiangrui@huaqin.corp-partner.google.com>
+ <a0eb6bf9-256a-29b1-2211-496df710f531@linaro.org> <CAD=FV=UjyLofXZqnj=bL89fza5JS6O5Np9W-A4V4WK+na0hdrw@mail.gmail.com>
+ <b7ff08b8-60fb-7629-9399-3d5cca46ab9e@linaro.org> <CAD=FV=Vx5g_xTRZGc9wW=ZLnfsOcubTYFcnYQRC5jLm+n3en0w@mail.gmail.com>
+ <606cc762-a0c2-49a4-3e5d-d2dbd4595bc7@linaro.org> <CAD=FV=W_SA-3PfDFi-Gkjk9pew5bchFNjQhXX8MkZyuy5UohEQ@mail.gmail.com>
+In-Reply-To: <CAD=FV=W_SA-3PfDFi-Gkjk9pew5bchFNjQhXX8MkZyuy5UohEQ@mail.gmail.com>
+From:   =?UTF-8?Q?Krzysztof_Koz=C5=82owski?= <k.kozlowski.k@gmail.com>
+Date:   Tue, 3 May 2022 17:53:50 +0200
+Message-ID: <CAJKOXPdt5WTg4VU-TEW3dmPHR76dKg63XVxRQfa7ZSKc_jz6Ag@mail.gmail.com>
+Subject: Re: [PATCH] CHROMIUM: arm64: dts: qcom: Add sc7180-gelarshie
+To:     Doug Anderson <dianders@chromium.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Mars Chen <chenxiangrui@huaqin.corp-partner.google.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Herve Codina <herve.codina@bootlin.com>,
-        =?UTF-8?Q?Miqu=C3=A8l_Raynal?= <miquel.raynal@bootlin.com>,
-        Milan Stevanovic <milan.stevanovic@se.com>,
-        Jimmy Lalande <jimmy.lalande@se.com>,
-        Pascal Eberhard <pascal.eberhard@se.com>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, netdev@vger.kernel.org
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Clément,
+On Tue, 19 Apr 2022 at 18:55, Doug Anderson <dianders@chromium.org> wrote:
 
-On Fri, Apr 29, 2022 at 4:36 PM Clément Léger <clement.leger@bootlin.com> wrote:
-> Add a PCS driver for the MII converter that is present on the Renesas
-> RZ/N1 SoC. This MII converter is reponsible for converting MII to
-> RMII/RGMII or act as a MII pass-trough. Exposing it as a PCS allows to
-> reuse it in both the switch driver and the stmmac driver. Currently,
-> this driver only allows the PCS to be used by the dual Cortex-A7
-> subsystem since the register locking system is not used.
+> > Except shuffling the compatibles in bindings, you are changing the
+> > meaning of final "google,lazor" compatible. The bootloader works as
+> > expected - from most specific (rev5-sku6) to most generic compatible
+> > (google,lazor) but why do you need to advertise the latest rev as
+> > "google,lazor"? Why the bootloader on latest rev (e.g. rev7) cannot bind
+> > to rev7 compatible?
 >
-> Signed-off-by: Clément Léger <clement.leger@bootlin.com>
+> The problem really comes along when a board strapped as -rev8 comes
+> along that is a board spin (and thus a new revision) but "should" be
+> invisible to software. Since it should be invisible to software we
+> want it to boot without any software changes. As per my previous mail,
+> sometimes HW guys make these changes without first consulting software
+> (since it's invisible to SW!) and we want to make sure that they're
+> still going to strap as "-rev8".
 
-> --- a/drivers/net/pcs/Kconfig
-> +++ b/drivers/net/pcs/Kconfig
-> @@ -18,4 +18,11 @@ config PCS_LYNX
->           This module provides helpers to phylink for managing the Lynx PCS
->           which is part of the Layerscape and QorIQ Ethernet SERDES.
+If you want to boot it without any SW changes, do not change the SW.
+Do not change the DTB. If you admit that you want to change DTB, so
+the SW, sure, change it and accept the outcome - you have a new
+compatible. This new compatible can be or might be not compatible with
+rev7. Up to you.
+
 >
-> +config PCS_RZN1_MIIC
-> +       tristate "Renesas RZ/N1 MII converter"
+> So what happens with this -rev8 board? The bootloader will check and
+> it won't see any device tree that advertises "google,lazor-rev8",
+> right?
 
-depends on ARCH_RZN1 || COMPILE_TEST
+Your bootloader looks for a specific rev8, which is not compatible
+with rev7 (or is it? I lost the point of your example), and you ship
+it with a DTB which has rev7, but not rev8. You control both pieces -
+bootloader and DTB. You cannot put incompatible pieces of firmware
+(one behaving entirely different than other) and expect proper output.
+This is why you also have bindings.
 
-> +       help
-> +         This module provides a driver for the MII converter that is available
-> +         on RZ/N1 SoCs. This PCS convert MII to RMII/RGMII or can be set in
+> If _all_ lazor revisions all include the "google,lazor"
+> compatible then the bootloader won't have any way to know which to
+> pick. The bootloader _doesn't_ have the smarts to know that "-rev7" is
+> closest to "-rev8".
 
-converts
+rev7 the next in the compatible list, isn't it? So bootloader picks up
+the fallback...
 
-> +         pass-through mode for MII.
-> +
+> It'll just randomly pick one of the "google,lazor"
+> boards. :( This is why we only advertise "google,lazor" for the newest
+> device tree.
+>
+> Yes, I agree it's not beautiful but it's what we ended up with. I
+> don't think we want to compromise on the ability to boot new revisions
+> without software changes because that will just incentivize people to
+> not increment the board revision. The only other option would be to
+> make the bootloader smart enough to pick the "next revision down" but
+> so far they haven't been willing to do that.
 
-> --- /dev/null
-> +++ b/drivers/net/pcs/pcs-rzn1-miic.c
+Just choose the fallback and follow Devicetree spec...
 
-> +static int miic_probe(struct platform_device *pdev)
-> +{
-> +       struct device *dev = &pdev->dev;
-> +       struct miic *miic;
-> +       u32 mode_cfg;
-> +       int ret;
-> +
-> +       ret = miic_parse_dt(dev, &mode_cfg);
-> +       if (ret < 0)
-> +               return -EINVAL;
-> +
-> +       miic = devm_kzalloc(dev, sizeof(*miic), GFP_KERNEL);
-> +       if (!miic)
-> +               return -ENOMEM;
-> +
-> +       spin_lock_init(&miic->lock);
-> +       miic->dev = dev;
-> +       miic->base = devm_platform_ioremap_resource(pdev, 0);
-> +       if (!miic->base)
-> +               return -EINVAL;
-> +
-> +       miic->nclk = devm_clk_bulk_get_all(dev, &miic->clks);
-> +       if (miic->nclk < 0)
-> +               return miic->nclk;
-> +
-> +       ret = clk_bulk_prepare_enable(miic->nclk, miic->clks);
-> +       if (ret)
-> +               return ret;
+> I guess the question, though, is what action should be taken. I guess
+> options are:
+>
+> 1. Say that the above requirement that new "invisible" HW revs can
+> boot w/ no software changes is not a worthy requirement. Personally, I
+> wouldn't accept this option.
+>
+> 2. Ignore. Don't try to document top level compatible for these devices.
+>
+> 3. Document the compatible and accept that it's going to shuffle around a lot.
+>
+> 4. Try again to get the bootloader to match earlier revisions as fallbacks.
+>
+>
+> > > Now we can certainly argue back and forth above the above scheme and
+> > > how it's terrible and/or great, but it definitely works pretty well
+> > > and it's what we've been doing for a while now. Before that we used to
+> > > proactively add a whole bunch of "future" revisions "just in case".
+> > > That was definitely worse and had the same problem that we'd have to
+> > > shuffle compatibles. See, for instance `rk3288-veyron-jerry.dts`.
+> > >
+> > > One thing we _definitely_ don't want to do is to give HW _any_
+> > > incentive to make board spins _without_ changing the revision. HW
+> > > sometimes makes spins without first involving software and if it
+> > > doesn't boot because they updated the board ID then someone in China
+> > > will just put the old ID in and ship it off. That's bad.
+> > >
+> > > --
+> > >
+> > > But I guess this doesn't answer your question: how can userspace
+> > > identify what board this is running? I don't have an answer to that,
+> > > but I guess I'd say that the top-level "compatible" isn't really it.
+> >
+> > It can, the same as bootloader, by looking at the most specific
+> > compatible (rev7).
+> >
+> > > If nothing else, I think just from the definition it's not guaranteed
+> > > to be right, is it? From the spec: "Specifies a list of platform
+> > > architectures with which this platform is compatible." The key thing
+> > > is "a list". If this can be a list of things then how can you use it
+> > > to uniquely identify what one board you're on?
+> >
+> > The most specific compatible identifies or, like recently Rob confirmed
+> > in case of Renesas, the list of compatibles:
+> > https://lore.kernel.org/linux-devicetree/Yk2%2F0Jf151gLuCGz@robh.at.kernel.org/
+>
+> I'm confused. If the device tree contains the compatibles:
+>
+> "google,lazor-rev4", "google,lazor-rev3", "google,lazor", "qualcomm,sc7180"
+>
+> You want to know what board you're on and you look at the compatible,
+> right? You'll decide that you're on a "google,lazor-rev4" which is the
+> most specific compatible. ...but you could have booted a
+> "google,lazor-rev3". How do you know?
 
-As you don't seem to need any knowledge about the clocks' properties,
-perhaps you can use Runtime PM instead?
+Applying the wrong DTB on the wrong device will always give you the
+wrong answer. You can try too boot google,lazor-rev3 on x86 PC and it
+does not make it a google,lazor-rev3...
 
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Best regards,
+Krzysztof

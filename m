@@ -2,69 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B152E518555
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 15:22:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8987751855D
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 15:22:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236088AbiECNZw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 09:25:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45962 "EHLO
+        id S236120AbiECN0K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 09:26:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236012AbiECNZp (ORCPT
+        with ESMTP id S236100AbiECN0H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 09:25:45 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 714AE36B7F
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 06:22:12 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Tue, 3 May 2022 09:26:07 -0400
+Received: from ssl.serverraum.org (ssl.serverraum.org [176.9.125.105])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBEAC36E25;
+        Tue,  3 May 2022 06:22:34 -0700 (PDT)
+Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id F0C3B1F749;
-        Tue,  3 May 2022 13:22:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1651584131; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
+        by ssl.serverraum.org (Postfix) with ESMTPSA id 1384822249;
+        Tue,  3 May 2022 15:22:33 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1651584153;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=vpkV8V5Y+6Vb55bRfQcavzTocu4t1BaNWLiM7KsOY1Y=;
-        b=ubKL3UxTpmVXRWOdBpBxP1Blc7iCSFjpprMuVtEqjUkNxvt5KgAL1kIcTNjkGyUG/j5v7g
-        eP8pHFW6Rm0suxVOYcYDsv/lL+qGJmUY9KnmCMOK0w391MnS/4uG7jTU1+tHyDmy49tmTD
-        f4U0Tn/Uxnm7o0c9V2tpCWb8OLMoFfk=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6806513ABE;
-        Tue,  3 May 2022 13:22:10 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id iNYLGIIscWIASAAAMHmgww
-        (envelope-from <jgross@suse.com>); Tue, 03 May 2022 13:22:10 +0000
-From:   Juergen Gross <jgross@suse.com>
-To:     xen-devel@lists.xenproject.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, intel-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org
-Cc:     jbeulich@suse.com, Juergen Gross <jgross@suse.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>
-Subject: [PATCH 2/2] x86/pat: add functions to query specific cache mode availability
-Date:   Tue,  3 May 2022 15:22:07 +0200
-Message-Id: <20220503132207.17234-3-jgross@suse.com>
-X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220503132207.17234-1-jgross@suse.com>
-References: <20220503132207.17234-1-jgross@suse.com>
+        bh=MyqmpwcG9NfAtn1s3UbgQocJOvUe8NcEf4lgtMi+A20=;
+        b=hCoRE4nzU3wfE/HOVxOpMuaCmr9Y+uTAxNF7gAEJ0YRJIWAAp2DOiDGrXVyT/W6gAxrp2L
+        DBIUTqj1Gu080JZLvAvamX/TX+E30yamZlGUy88FmXcGi/Fznt9DCoLseGXDWQsXyXGeFi
+        ZqVVdRISEFdzRy78gf+laCH8SZWXG8o=
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Tue, 03 May 2022 15:22:32 +0200
+From:   Michael Walle <michael@walle.cc>
+To:     Rob Herring <robh+dt@kernel.org>
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Horatiu Vultur <horatiu.vultur@microchip.com>,
+        Microchip Linux Driver Support <UNGLinuxDriver@microchip.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        netdev <netdev@vger.kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next 1/2] dt-bindings: net: lan966x: remove PHY reset
+In-Reply-To: <CAL_JsqKmgsErk41D8MBsQxLfmk16UYVu8+Z5SkwJ6W-obhtysQ@mail.gmail.com>
+References: <20220428114049.1456382-1-michael@walle.cc>
+ <20220428114049.1456382-2-michael@walle.cc>
+ <CAL_JsqKmgsErk41D8MBsQxLfmk16UYVu8+Z5SkwJ6W-obhtysQ@mail.gmail.com>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <1b9e64238a5f70392f379560c884f72b@walle.cc>
+X-Sender: michael@walle.cc
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
@@ -75,133 +65,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some drivers are using pat_enabled() in order to test availability of
-special caching modes (WC and UC-). This will lead to false negatives
-in case the system was booted e.g. with the "nopat" variant and the
-BIOS did setup the PAT MSR supporting the queried mode, or if the
-system is running as a Xen PV guest.
+Am 2022-05-03 15:04, schrieb Rob Herring:
+> On Thu, Apr 28, 2022 at 6:40 AM Michael Walle <michael@walle.cc> wrote:
+>> 
+>> The PHY reset was intended to be a phandle for a special PHY reset
+>> driver for the integrated PHYs as well as any external PHYs. It turns
+>> out, that the culprit is how the reset of the switch device is done.
+>> In particular, the switch reset also affects other subsystems like
+>> the GPIO and the SGPIO block and it happens to be the case that the
+>> reset lines of the external PHYs are connected to a common GPIO line.
+>> Thus as soon as the switch issues a reset during probe time, all the
+>> external PHYs will go into reset because all the GPIO lines will
+>> switch to input and the pull-down on that signal will take effect.
+>> 
+>> So even if there was a special PHY reset driver, it (1) won't fix
+>> the root cause of the problem and (2) it won't fix all the other
+>> consumers of GPIO lines which will also be reset.
+>> 
+>> It turns out, the Ocelot SoC has the same weird behavior (or the
+>> lack of a dedicated switch reset) and there the problem is already
+>> solved and all the bits and pieces are already there and this PHY
+>> reset property isn't not needed at all.
+>> 
+>> There are no users of this binding. Just remove it.
+> 
+> Seems there was 1 user:
+> 
+> /builds/robherring/linux-dt/Documentation/devicetree/bindings/net/microchip,lan966x-switch.example.dtb:
+> switch@e0000000: resets: [[4294967295, 0], [4294967295, 0]] is too
+> long
+>  From schema:
+> /builds/robherring/linux-dt/Documentation/devicetree/bindings/net/microchip,lan966x-switch.yaml
+> /builds/robherring/linux-dt/Documentation/devicetree/bindings/net/microchip,lan966x-switch.example.dtb:
+> switch@e0000000: reset-names: ['switch', 'phy'] is too long
+>  From schema:
+> /builds/robherring/linux-dt/Documentation/devicetree/bindings/net/microchip,lan966x-switch.yaml
+> 
+> Please fix as this is now failing in linux-next.
 
-Add test functions for those caching modes instead and use them at the
-appropriate places.
+Sorry. Should be fixed with
+https://lore.kernel.org/netdev/20220503132038.2714128-1-michael@walle.cc/
 
-For symmetry reasons export the already existing x86_has_pat_wp() for
-modules, too.
-
-Fixes: bdd8b6c98239 ("drm/i915: replace X86_FEATURE_PAT with pat_enabled()")
-Fixes: ae749c7ab475 ("PCI: Add arch_can_pci_mmap_wc() macro")
-Signed-off-by: Juergen Gross <jgross@suse.com>
----
- arch/x86/include/asm/memtype.h           |  2 ++
- arch/x86/include/asm/pci.h               |  2 +-
- arch/x86/mm/init.c                       | 25 +++++++++++++++++++++---
- drivers/gpu/drm/i915/gem/i915_gem_mman.c |  8 ++++----
- 4 files changed, 29 insertions(+), 8 deletions(-)
-
-diff --git a/arch/x86/include/asm/memtype.h b/arch/x86/include/asm/memtype.h
-index 9ca760e430b9..d00e0be854d4 100644
---- a/arch/x86/include/asm/memtype.h
-+++ b/arch/x86/include/asm/memtype.h
-@@ -25,6 +25,8 @@ extern void memtype_free_io(resource_size_t start, resource_size_t end);
- extern bool pat_pfn_immune_to_uc_mtrr(unsigned long pfn);
- 
- bool x86_has_pat_wp(void);
-+bool x86_has_pat_wc(void);
-+bool x86_has_pat_uc_minus(void);
- enum page_cache_mode pgprot2cachemode(pgprot_t pgprot);
- 
- #endif /* _ASM_X86_MEMTYPE_H */
-diff --git a/arch/x86/include/asm/pci.h b/arch/x86/include/asm/pci.h
-index f3fd5928bcbb..a5742268dec1 100644
---- a/arch/x86/include/asm/pci.h
-+++ b/arch/x86/include/asm/pci.h
-@@ -94,7 +94,7 @@ int pcibios_set_irq_routing(struct pci_dev *dev, int pin, int irq);
- 
- 
- #define HAVE_PCI_MMAP
--#define arch_can_pci_mmap_wc()	pat_enabled()
-+#define arch_can_pci_mmap_wc()	x86_has_pat_wc()
- #define ARCH_GENERIC_PCI_MMAP_RESOURCE
- 
- #ifdef CONFIG_PCI
-diff --git a/arch/x86/mm/init.c b/arch/x86/mm/init.c
-index 71e182ebced3..b6431f714dc2 100644
---- a/arch/x86/mm/init.c
-+++ b/arch/x86/mm/init.c
-@@ -77,12 +77,31 @@ static uint8_t __pte2cachemode_tbl[8] = {
- 	[__pte2cm_idx(_PAGE_PWT | _PAGE_PCD | _PAGE_PAT)] = _PAGE_CACHE_MODE_UC,
- };
- 
--/* Check that the write-protect PAT entry is set for write-protect */
-+static bool x86_has_pat_mode(unsigned int mode)
-+{
-+	return __pte2cachemode_tbl[__cachemode2pte_tbl[mode]] == mode;
-+}
-+
-+/* Check that PAT supports write-protect */
- bool x86_has_pat_wp(void)
- {
--	return __pte2cachemode_tbl[__cachemode2pte_tbl[_PAGE_CACHE_MODE_WP]] ==
--	       _PAGE_CACHE_MODE_WP;
-+	return x86_has_pat_mode(_PAGE_CACHE_MODE_WP);
-+}
-+EXPORT_SYMBOL_GPL(x86_has_pat_wp);
-+
-+/* Check that PAT supports WC */
-+bool x86_has_pat_wc(void)
-+{
-+	return x86_has_pat_mode(_PAGE_CACHE_MODE_WC);
-+}
-+EXPORT_SYMBOL_GPL(x86_has_pat_wc);
-+
-+/* Check that PAT supports UC- */
-+bool x86_has_pat_uc_minus(void)
-+{
-+	return x86_has_pat_mode(_PAGE_CACHE_MODE_UC_MINUS);
- }
-+EXPORT_SYMBOL_GPL(x86_has_pat_uc_minus);
- 
- enum page_cache_mode pgprot2cachemode(pgprot_t pgprot)
- {
-diff --git a/drivers/gpu/drm/i915/gem/i915_gem_mman.c b/drivers/gpu/drm/i915/gem/i915_gem_mman.c
-index 0c5c43852e24..f43ecf3f63eb 100644
---- a/drivers/gpu/drm/i915/gem/i915_gem_mman.c
-+++ b/drivers/gpu/drm/i915/gem/i915_gem_mman.c
-@@ -76,7 +76,7 @@ i915_gem_mmap_ioctl(struct drm_device *dev, void *data,
- 	if (args->flags & ~(I915_MMAP_WC))
- 		return -EINVAL;
- 
--	if (args->flags & I915_MMAP_WC && !pat_enabled())
-+	if (args->flags & I915_MMAP_WC && !x86_has_pat_wc())
- 		return -ENODEV;
- 
- 	obj = i915_gem_object_lookup(file, args->handle);
-@@ -757,7 +757,7 @@ i915_gem_dumb_mmap_offset(struct drm_file *file,
- 
- 	if (HAS_LMEM(to_i915(dev)))
- 		mmap_type = I915_MMAP_TYPE_FIXED;
--	else if (pat_enabled())
-+	else if (x86_has_pat_wc())
- 		mmap_type = I915_MMAP_TYPE_WC;
- 	else if (!i915_ggtt_has_aperture(to_gt(i915)->ggtt))
- 		return -ENODEV;
-@@ -813,7 +813,7 @@ i915_gem_mmap_offset_ioctl(struct drm_device *dev, void *data,
- 		break;
- 
- 	case I915_MMAP_OFFSET_WC:
--		if (!pat_enabled())
-+		if (!x86_has_pat_wc())
- 			return -ENODEV;
- 		type = I915_MMAP_TYPE_WC;
- 		break;
-@@ -823,7 +823,7 @@ i915_gem_mmap_offset_ioctl(struct drm_device *dev, void *data,
- 		break;
- 
- 	case I915_MMAP_OFFSET_UC:
--		if (!pat_enabled())
-+		if (!x86_has_pat_uc_minus())
- 			return -ENODEV;
- 		type = I915_MMAP_TYPE_UC;
- 		break;
--- 
-2.35.3
-
+-michael

@@ -2,175 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB335517BD5
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 04:15:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBF13517BC8
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 04:15:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229809AbiECCGO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 22:06:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38998 "EHLO
+        id S229904AbiECCKv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 22:10:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbiECCGM (ORCPT
+        with ESMTP id S229489AbiECCKt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 22:06:12 -0400
-Received: from mail-oo1-xc30.google.com (mail-oo1-xc30.google.com [IPv6:2607:f8b0:4864:20::c30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37BF03A737;
-        Mon,  2 May 2022 19:02:41 -0700 (PDT)
-Received: by mail-oo1-xc30.google.com with SMTP id s11-20020a4ab54b000000b0035f0178dfcfso527814ooo.7;
-        Mon, 02 May 2022 19:02:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:content-language:to
-         :cc:references:from:subject:in-reply-to:content-transfer-encoding;
-        bh=GKaIcGp0RhRVxVeOdR17/W0HUq1CPb0cE7q5ZqqYxaM=;
-        b=hkKItu6aecIhk/NoClNIjIXfNHvcfpFH3nuqsFRGYrP3YdsirumZ2LzJ9PNh7NVIGZ
-         VOoIIumKjYVnqK4QXH2epsyXRaDaciIfoH3u/+6O/IkrjlvtLowF5cV8G+7az/aDjXBc
-         v2pXcxkJjDUBdgM9V6HSQRZPiBZK0damBwQTohOvHM1k0pKMATy5/B+bpT4NjnGcz8+i
-         BinW7941XVl1w9G+BMfWoWwrUWINPDYO5KfEn1IFsQMQaXGRyL4vl/PjunXgT7Dru+0L
-         KmBFKsdN5OJ+encck6pPFGutZuvGmDhxFmdVd3B/WpCDIjoQISSRJKmvRmxZ20GJ9Cx/
-         4Hsg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:subject:in-reply-to
-         :content-transfer-encoding;
-        bh=GKaIcGp0RhRVxVeOdR17/W0HUq1CPb0cE7q5ZqqYxaM=;
-        b=lTleMH45+l7ZPXVmVvH7FJlPJHkQqp5IUwLk/lo6G8hNus0nvM/6k+awA9leZ3E34T
-         bjp4dKuee61jK3PpdL0Ff4F0yQ+bLXedL4TOjrwj2K3oJ0EgAh8CFkyTO1GPX1bVITgB
-         u/1MkE+w5+7DLDzPgfOxnjgoGxRo0Tm8iysUIVkDwgosk46eS1d2ur+OXdIf7O97h8F3
-         2KOyIB+btZT9B1tYrB1OtP3yG7anQhH4ozraaDUgMb829P1QqO3NBXBXFkOFryd0nyPN
-         omgBtWgwWUIYTBuBNrVeYW0UVDCiqEVNXSP2aTvnzqyy+PnJVElnQuvb9sK8GrYaWqaD
-         b5mg==
-X-Gm-Message-State: AOAM531Sl6SvIqs18nW7Vr2bmI669rzTqcRPUfnoCvjiHdlyWvLF+WaH
-        L/+BTGgfR19U6nGsAbX5fRI=
-X-Google-Smtp-Source: ABdhPJxaK6/fEsYQoxwG2euqp3NppH7nBXY7mGfszjaFfrhxufHTKgE1HNVh1sbsvF4hLjdsisEEmA==
-X-Received: by 2002:a4a:2cd3:0:b0:35e:99e3:a497 with SMTP id o202-20020a4a2cd3000000b0035e99e3a497mr5071598ooo.86.1651543360153;
-        Mon, 02 May 2022 19:02:40 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 95-20020a9d0668000000b0060626a8e5a4sm1090211otn.74.2022.05.02.19.02.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 02 May 2022 19:02:39 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <4aabfd63-18e2-65c5-d1c2-d7600afc1c40@roeck-us.net>
-Date:   Mon, 2 May 2022 19:02:36 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Content-Language: en-US
-To:     Maxime Ripard <maxime@cerno.tech>, Icenowy Zheng <icenowy@aosc.io>
-Cc:     Ruslan Zalata <rz@fabmicro.ru>, Jean Delvare <jdelvare@suse.com>,
-        Chen-Yu Tsai <wens@csie.org>,
+        Mon, 2 May 2022 22:10:49 -0400
+Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCAE13B3CD;
+        Mon,  2 May 2022 19:07:17 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.west.internal (Postfix) with ESMTP id 1393E32009A6;
+        Mon,  2 May 2022 22:07:15 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute2.internal (MEProxy); Mon, 02 May 2022 22:07:17 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
+        cc:cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm2; t=1651543635; x=
+        1651630035; bh=xUeFWxsF5CLekYiemda/iXJE5D5dmgNKZ4AF9FvZhgI=; b=E
+        YJtIdNUHjcaX7VD3d737fYk7Uf0xE11EuATUuVFFJ5qG4c/VAvH8edQEtc/SHmKf
+        MFje+wEREmXz5jWzpSf7XD3Y/wkdJ6EWCvR5vgeB/+OAys0n7yRtYIg/M86JEVXb
+        I+t/smKJX5u2dFC/tw3BUkxu1Wn/MQZ+1BSF9YxEzOr4xIcg6a9ByQmcz31Km5l5
+        cTXcsdWUBnlxwt55upZgvPEe5R+LuL8hzoOki1cg0Q0LiI/4BDAXklXl+h2efHK6
+        KcTnrriGtiTirch6/cKh9n0TbYyRzjrcEf+sqI8GJfoniLp7J2bZsSdvr4hSsmp7
+        gC1cOUQW5Hl96f/Wti4og==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1651543635; x=1651630035; bh=xUeFWxsF5CLek
+        Yiemda/iXJE5D5dmgNKZ4AF9FvZhgI=; b=N+LfR9m3tsUk8K2rL2GNIh0qSWW4D
+        i2RFLHJ9Ar6EA6cd3xFjs2ZEoqNY8TndJzoum+BM2TJKB+Rq1amHVWNq8NjBw7sX
+        dPp8vTX+5q1iY0OTjqCcSGsCgjYrG+kwOsUV2usHn0qbf/ZYTSi0xmLZmxsAwqeI
+        tiBfudrlGV5w8JFjRVqcFB9nmcSsV9yIpDrXFyyoWxyliMwpUDR82Bd2oH120XeW
+        4atfr6iTUAniCWCohaHjtHqrA6NYEbYyD4qGqIHa7v42PtH82H7J+QaxiVd/+37K
+        Nsv1QDc5wmM+m2Q6gGNFu4lWOEqccKmIpx54sFPNhUsTUFxnVXwVb+SEQ==
+X-ME-Sender: <xms:U45wYoq5kocPCBnMpAf08BwvABmceqh7C23Bm2eVAz_Lk-HLSd5Udw>
+    <xme:U45wYuoXWYvHWne89jJG8pcXNMQiZCBRvUm6TW7BsseN6xaSmlgrt7QTxkRvx81rq
+    YA3RjUUDAWx304mEw>
+X-ME-Received: <xmr:U45wYtPCg0-9Zwrh5JvEZkimzRl-hrwYnYkLEv_jEggmh8eOfnNy4IfBFOi8M3cPb-015w>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdeigdehgecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefuvfevfhfhkffffgggjggtgfesthejredttdefjeenucfhrhhomhepufgrmhhu
+    vghlucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecugg
+    ftrfgrthhtvghrnhepffdtveekvdegkeeuueetgfetffeileevudekuefhheelvdfhiedt
+    heduhfduhefhnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
+    homhepshgrmhhuvghlsehshhholhhlrghnugdrohhrgh
+X-ME-Proxy: <xmx:U45wYv7xihWsWib2z3IrMhV3LfULXb3BnB-s2i2gl6vcK71V9KZ2Mw>
+    <xmx:U45wYn4B_5dU-K559YWtMyTsWaWATVn2hwaCxRTJyJPtlVY6WAzbRw>
+    <xmx:U45wYvhy-feLxdoNLuDpbgIkV9rJN0-KLJ-DMsdaMVJ71G33bDEVFA>
+    <xmx:U45wYrgzMkA2MYR1UT2-SR5Yt5HWBTJITtQjUxmef7bAbpTL1egXxw>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 2 May 2022 22:07:14 -0400 (EDT)
+Subject: Re: [PATCH v11 1/6] clk: sunxi-ng: h6-r: Add RTC gate clock
+To:     Andre Przywara <andre.przywara@arm.com>,
         Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
-References: <20220428210906.29527-1-rz@fabmicro.ru>
- <20220502110010.q7vvdkdpaiz5acjl@houat>
- <7433B295-D896-4BF8-87DF-87EB89D7A550@aosc.io>
- <20220502112112.3ne7zy4b6gggxzoo@houat>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH v2] hwmon: (sun4i-lradc) Add driver for LRADC found on
- Allwinner A13/A20 SoC
-In-Reply-To: <20220502112112.3ne7zy4b6gggxzoo@houat>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Chen-Yu Tsai <wens@csie.org>
+Cc:     Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Icenowy Zheng <icenowy@aosc.io>,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        linux-clk@vger.kernel.org
+References: <20220428230933.15262-1-andre.przywara@arm.com>
+ <20220428230933.15262-2-andre.przywara@arm.com>
+From:   Samuel Holland <samuel@sholland.org>
+Message-ID: <875fc3d6-fb45-903c-e52e-4abf43b46db2@sholland.org>
+Date:   Mon, 2 May 2022 21:06:59 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.6.0
+MIME-Version: 1.0
+In-Reply-To: <20220428230933.15262-2-andre.przywara@arm.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/2/22 04:21, Maxime Ripard wrote:
-> On Mon, May 02, 2022 at 07:15:01PM +0800, Icenowy Zheng wrote:
->>
->>
->> 于 2022年5月2日 GMT+08:00 下午7:00:10, Maxime Ripard <maxime@cerno.tech> 写到:
->>> Hi,
->>>
->>> On Thu, Apr 28, 2022 at 09:09:03PM +0000, Ruslan Zalata wrote:
->>>> Some Allwinner SoCs like A13, A20 or T2 are equipped with two-channel
->>>> low rate (6 bit) ADC that is often used for extra keys. There's a driver
->>>> for that already implementing standard input device, but it has these
->>>> limitations: 1) it cannot be used for general ADC data equisition, and
->>>> 2) it uses only one LRADC channel of two available.
->>>>
->>>> This driver provides basic hwmon interface to both channels of LRADC on
->>>> such Allwinner SoCs.
->>>>
->>>> Signed-off-by: Ruslan Zalata <rz@fabmicro.ru>
->>>> ---
->>>>   MAINTAINERS                       |   6 +
->>>>   drivers/hwmon/Kconfig             |  13 ++
->>>>   drivers/hwmon/Makefile            |   1 +
->>>>   drivers/hwmon/sun4i-lradc-hwmon.c | 280 ++++++++++++++++++++++++++++++
->>>>   4 files changed, 300 insertions(+)
->>>>   create mode 100644 drivers/hwmon/sun4i-lradc-hwmon.c
->>>>
->>>> diff --git a/MAINTAINERS b/MAINTAINERS
->>>> index 5e8c2f61176..d9c71e94133 100644
->>>> --- a/MAINTAINERS
->>>> +++ b/MAINTAINERS
->>>> @@ -18861,6 +18861,12 @@ S:	Maintained
->>>>   F:	Documentation/devicetree/bindings/input/allwinner,sun4i-a10-lradc-keys.yaml
->>>>   F:	drivers/input/keyboard/sun4i-lradc-keys.c
->>>>   
->>>> +SUN4I LOW RES ADC HWMON DRIVER
->>>> +M:	Ruslan Zalata <rz@fabmicro.ru>
->>>> +L:	linux-hwmon@vger.kernel.org
->>>> +S:	Maintained
->>>> +F:	drivers/hwmon/sun4i-lradc-hwmon.c
->>>> +
->>>>   SUNDANCE NETWORK DRIVER
->>>>   M:	Denis Kirjanov <kda@linux-powerpc.org>
->>>>   L:	netdev@vger.kernel.org
->>>> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
->>>> index 68a8a27ab3b..86776488a81 100644
->>>> --- a/drivers/hwmon/Kconfig
->>>> +++ b/drivers/hwmon/Kconfig
->>>> @@ -1691,6 +1691,19 @@ config SENSORS_SIS5595
->>>>   	  This driver can also be built as a module. If so, the module
->>>>   	  will be called sis5595.
->>>>   
->>>> +config SENSORS_SUN4I_LRADC
->>>> +	tristate "Allwinner A13/A20 LRADC hwmon"
->>>> +	depends on ARCH_SUNXI && !KEYBOARD_SUN4I_LRADC
->>>> +	help
->>>> +	  Say y here to support the LRADC found in Allwinner A13/A20 SoCs.
->>>> +	  Both channels are supported.
->>>> +
->>>> +	  This driver can also be built as module. If so, the module
->>>> +	  will be called sun4i-lradc-hwmon.
->>>> +
->>>> +	  This option is not compatible with KEYBOARD_SUN4I_LRADC, one
->>>> +	  of these must be used at a time.
->>>
->>> How do you plan on enforcing that?
->>>
->>> I guess a better path forward would be to either register an hwmon
->>> device in the original driver, or convert that driver to iio and use
->>> iio-hwmon.
->>
->> I think this driver should be use IIO, and then try to probe an IIO input
->> if possible.
+On 4/28/22 6:09 PM, Andre Przywara wrote:
+> The H6 and H616 feature an (undocumented) bus clock gate for accessing
+> the RTC registers. This seems to be enabled at reset (or by the BootROM),
+> so we got away without it so far, but exists regardless.
+> Since the new RTC clock binding for the H616 requires this "bus" clock
+> to be specified in the DT, add this to R_CCU clock driver and expose it
+> on the DT side with a new number.
+> We do this for both the H6 and H616, but mark it as IGNORE_UNUSED, as we
+> cannot reference it in any H6 DTs.
 > 
-> It's been a while, but if I remember well we couldn't use IIO for that
-> driver because it's not generating interrupts all the time but only when
-> it goes over a given threshold:
+> Signed-off-by: Andre Przywara <andre.przywara@arm.com>
+
+Reviewed-by: Samuel Holland <samuel@sholland.org>
+
+One tiny nit below, if you resend.
+
+> ---
+>  drivers/clk/sunxi-ng/ccu-sun50i-h6-r.c      | 5 +++++
+>  drivers/clk/sunxi-ng/ccu-sun50i-h6-r.h      | 2 +-
+>  include/dt-bindings/clock/sun50i-h6-r-ccu.h | 1 +
+>  3 files changed, 7 insertions(+), 1 deletion(-)
 > 
-> https://lore.kernel.org/all/52C5E9F1.9010700@redhat.com/
-> 
-> I'm not sure if it's still relevant, so we might just need to add an
-> hwmon driver to the existing driver
+> diff --git a/drivers/clk/sunxi-ng/ccu-sun50i-h6-r.c b/drivers/clk/sunxi-ng/ccu-sun50i-h6-r.c
+> index 712e103382d8..88509339031e 100644
+> --- a/drivers/clk/sunxi-ng/ccu-sun50i-h6-r.c
+> +++ b/drivers/clk/sunxi-ng/ccu-sun50i-h6-r.c
+> @@ -98,6 +98,8 @@ static SUNXI_CCU_GATE(r_apb1_ir_clk,	"r-apb1-ir",	"r-apb1",
+>  		      0x1cc, BIT(0), 0);
+>  static SUNXI_CCU_GATE(r_apb1_w1_clk,	"r-apb1-w1",	"r-apb1",
+>  		      0x1ec, BIT(0), 0);
+> +static SUNXI_CCU_GATE(r_apb1_rtc_clk,	"r-apb1-rtc",	"r-apb1",
+> +		      0x20c, BIT(0), CLK_IGNORE_UNUSED);
+>  
+>  /* Information of IR(RX) mod clock is gathered from BSP source code */
+>  static const char * const r_mod0_default_parents[] = { "osc32k", "osc24M" };
+> @@ -147,6 +149,7 @@ static struct ccu_common *sun50i_h616_r_ccu_clks[] = {
+>  	&r_apb2_i2c_clk.common,
+>  	&r_apb2_rsb_clk.common,
+>  	&r_apb1_ir_clk.common,
+> +	&r_apb1_rtc_clk.common,
+>  	&ir_clk.common,
+>  };
+>  
+> @@ -163,6 +166,7 @@ static struct clk_hw_onecell_data sun50i_h6_r_hw_clks = {
+>  		[CLK_R_APB2_I2C]	= &r_apb2_i2c_clk.common.hw,
+>  		[CLK_R_APB2_RSB]	= &r_apb2_rsb_clk.common.hw,
+>  		[CLK_R_APB1_IR]		= &r_apb1_ir_clk.common.hw,
+> +		[CLK_R_APB1_RTC]	= &r_apb1_rtc_clk.common.hw,
+>  		[CLK_R_APB1_W1]		= &r_apb1_w1_clk.common.hw,
+
+The new clock should go after CLK_R_APB1_W1 to match the ordering above.
+
+>  		[CLK_IR]		= &ir_clk.common.hw,
+>  		[CLK_W1]		= &w1_clk.common.hw,
+> @@ -179,6 +183,7 @@ static struct clk_hw_onecell_data sun50i_h616_r_hw_clks = {
+>  		[CLK_R_APB2_I2C]	= &r_apb2_i2c_clk.common.hw,
+>  		[CLK_R_APB2_RSB]	= &r_apb2_rsb_clk.common.hw,
+>  		[CLK_R_APB1_IR]		= &r_apb1_ir_clk.common.hw,
+> +		[CLK_R_APB1_RTC]	= &r_apb1_rtc_clk.common.hw,
+>  		[CLK_IR]		= &ir_clk.common.hw,
+>  	},
+>  	.num	= CLK_NUMBER,
+> diff --git a/drivers/clk/sunxi-ng/ccu-sun50i-h6-r.h b/drivers/clk/sunxi-ng/ccu-sun50i-h6-r.h
+> index 7e290b840803..10e9b66afc6a 100644
+> --- a/drivers/clk/sunxi-ng/ccu-sun50i-h6-r.h
+> +++ b/drivers/clk/sunxi-ng/ccu-sun50i-h6-r.h
+> @@ -14,6 +14,6 @@
+>  
+>  #define CLK_R_APB2	3
+>  
+> -#define CLK_NUMBER	(CLK_R_APB2_RSB + 1)
+> +#define CLK_NUMBER	(CLK_R_APB1_RTC + 1)
+>  
+>  #endif /* _CCU_SUN50I_H6_R_H */
+> diff --git a/include/dt-bindings/clock/sun50i-h6-r-ccu.h b/include/dt-bindings/clock/sun50i-h6-r-ccu.h
+> index 890368d252c4..a96087abc86f 100644
+> --- a/include/dt-bindings/clock/sun50i-h6-r-ccu.h
+> +++ b/include/dt-bindings/clock/sun50i-h6-r-ccu.h
+> @@ -22,5 +22,6 @@
+>  #define CLK_W1			12
+>  
+>  #define CLK_R_APB2_RSB		13
+> +#define CLK_R_APB1_RTC		14
+>  
+>  #endif /* _DT_BINDINGS_CLK_SUN50I_H6_R_CCU_H_ */
 > 
 
-So now we have conflicting claims that the hwmon driver would need
-to implement continuous interrupts because the chip otherwise doesn't
-continuously measure ADC input, and that implementing an IIO driver
-isn't possible or doesn't make sense because the chip would not support
-generating continuous interrupts. Which one is it ? Am I missing something ?
-
-Guenter

@@ -2,60 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4182F517DF4
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 08:58:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2ED2517DF6
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 08:59:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231163AbiECHBr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 03:01:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53406 "EHLO
+        id S231185AbiECHCL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 03:02:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230283AbiECHBn (ORCPT
+        with ESMTP id S230283AbiECHCI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 03:01:43 -0400
-Received: from out203-205-221-149.mail.qq.com (out203-205-221-149.mail.qq.com [203.205.221.149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C846D2DA8B
-        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 23:58:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1651561089;
-        bh=DhzTsTCZctDSkn9RQOs6gvHg47wttYi8um9rAMxo+cY=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=LznF8cVRIXSaZmPWQVhNRnycWv8myIBG8oHKmlHrm291yivvhpLx3hNPZcEWx+0wl
-         OWQvLLlYY4ebrm0awvmmDT7kwGsrVOLA5I8PNo3yVDEVe2/IK803YZVJGRB6eT2Yfz
-         ZIthk0+RHx3wSMt67wRJ2Mye7fZvNWkMKbDhqgxg=
-Received: from localhost.localdomain ([59.172.176.242])
-        by newxmesmtplogicsvrszc10.qq.com (NewEsmtp) with SMTP
-        id E868B0BD; Tue, 03 May 2022 14:58:06 +0800
-X-QQ-mid: xmsmtpt1651561086t1cjo9w6a
-Message-ID: <tencent_B08D70242590FF10905466BFDC158E4F0A07@qq.com>
-X-QQ-XMAILINFO: MOZWoti2yOjR1WCeDO5N20RXttkwDHDnYOlFHq8MDHm8z9n2L/UyXvCueM6/dK
-         geQjNkB2reOZcTNmrarqeKwAt95l1M7N2TxmLF3efh1gjT+G6YUnaGLMvfRRu9NwcdhQz4KhWge/
-         +JjEkzMjV79s8n7OKle4m3L4Iveo/SUro36qseFwJ4l8TxdjUEOhqXnqT1wt1xMVrbVLDOvirUwh
-         7D5D+5JFy+zzjFUrlnEpbJA5HFOUNIi771OKgthUY+RZ56gZi6cDnMzBAAFVWqSm22ZZtZOZLYJ0
-         Exc8FpYrSeLKG+rLJ5WJT+VukK7I+yBlCLe6M0mkAJH1fudFvexMVKMI9pvub0R4VQUsJJoDsSZu
-         ZnAL7SW5FcxGRG+ymwMClfADXd5gAoXKkcbiADBr3J2EomR2vzkWzqRv3wrEhQNEDVQji34v1aMM
-         NkSgNSvutoLiF+8/CI0eXxGHAq8qAuManAONCV/pHRhcJwmxAUdCGNCDj/jn3KqZB1dgvCTMc6nY
-         BYRW6SzG63MqM0Zk9l5ILHSbDNPcjObE1Fg9ubyDOs2+QEot4kMxqROOXgZcODC5enS7PEjB4kH/
-         YcdhVJWVIH8vENzoSHVYRmBdWHVIqMdWKLAkb3w4ef0U48voK6xwd24vOFRE+1yFFXJZM1Ot+fZn
-         MqXnobTaA5n/CmKO8QthfwMcIeF3fgYPMLV29Y5Jux3/GMNDYcJ5j4lM0iMsErK3equ8YgLEQhIq
-         QWRxHnSDowsDzkaqu7Frrpup+SVevhCRN+zZGkEcfssigoNzSBN02kzpBW7s8BnpelIiYRQ7sztT
-         IXqV4kPlCD3s+yQ0i0TcFChzjyZOLhkCHmzqWqeZgvAKtCcBrVLW7tfrn22pkRg3SktC4U5f71aO
-         x9zZS8U0uuFFPkbVe78Qb/+0TdJP789zGbkpXTh36upYRbJ/8GFJho9KFs+xegQavoimtqqh9tpm
-         v9fiDvDQsT7+VA5fgRMfplM0PT7TKp
-From:   xkernel.wang@foxmail.com
-To:     Larry.Finger@lwfinger.net, florian.c.schilhabel@googlemail.com,
-        gregkh@linuxfoundation.org
-Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Xiaoke Wang <xkernel.wang@foxmail.com>
-Subject: [PATCH 01/12] staging: rtl8712: fix potential memory leak in r8712_xmit_resource_alloc()
-Date:   Tue,  3 May 2022 14:57:53 +0800
-X-OQ-MSGID: <20220503065753.3174-1-xkernel.wang@foxmail.com>
-In-Reply-To: <tencent_A80380E4306BE7BA73E450F084232B4DFC0A@qq.com>
-References: <tencent_A80380E4306BE7BA73E450F084232B4DFC0A@qq.com>
+        Tue, 3 May 2022 03:02:08 -0400
+Received: from mail-qt1-f178.google.com (mail-qt1-f178.google.com [209.85.160.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1229326D9;
+        Mon,  2 May 2022 23:58:37 -0700 (PDT)
+Received: by mail-qt1-f178.google.com with SMTP id k2so6312041qtp.1;
+        Mon, 02 May 2022 23:58:37 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=AUzmMTUgoKr9MNwCNeWZmLPFdTrfpCaN2IVTJcYaoss=;
+        b=jT7FNUlL2KmKGgUwwiRTCi6RkXeWMwQe6xByLGKyobiAhhComRz0oU4XsXtk1gOMWu
+         wso8eFo7FYLxeDj7pHVVJ5t3qnJr1BUJdJ86cdKsNXXR9UV1JlARi8UQfyOcdmmq3Hey
+         Lbof27+VUBQzOUApSlKF5ItoQUgT8+Y21qxHRlfbB2QQ4nrheQ6MHVgpKur5fmANfYyv
+         FVniyAxIrBPr/ZEbDXUoTEYFdJYX3grpilN6gj3LMkEkpmV9HimDUpV8AjBKD+268JEz
+         zAaIWLLwGfArmv9OiWH+41CN+tdg+znR4SCfZDdQ5yZJ2HjtVf9Kq3SVzexF608Gy2qT
+         SHbw==
+X-Gm-Message-State: AOAM532S9X7kTlE8XXI3RhBggYwSHyhx8PrfAL92kwS5yZff+tChefIs
+        BqEX9342hAxlzAZmUOatJfcgSnxbYW2whg==
+X-Google-Smtp-Source: ABdhPJyen2DRnuIlJmSY/3HLHL85whQ/No7lVhkGL06oylpP7qVa/wv6ESZVJWYngn5pymalpwpl2w==
+X-Received: by 2002:ac8:110a:0:b0:2f1:ea84:b84 with SMTP id c10-20020ac8110a000000b002f1ea840b84mr13444274qtj.463.1651561116480;
+        Mon, 02 May 2022 23:58:36 -0700 (PDT)
+Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com. [209.85.219.170])
+        by smtp.gmail.com with ESMTPSA id fp35-20020a05622a50a300b002f39b99f67asm5206624qtb.20.2022.05.02.23.58.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 02 May 2022 23:58:35 -0700 (PDT)
+Received: by mail-yb1-f170.google.com with SMTP id h10so628893ybc.4;
+        Mon, 02 May 2022 23:58:35 -0700 (PDT)
+X-Received: by 2002:a25:6157:0:b0:645:8d0e:f782 with SMTP id
+ v84-20020a256157000000b006458d0ef782mr13768923ybb.36.1651561115076; Mon, 02
+ May 2022 23:58:35 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RDNS_DYNAMIC,SPF_HELO_NONE,
+References: <2584ba18-9653-9310-efc1-8b3b3e221eea@omp.ru> <11021433-66c0-3c56-42bd-207a5ae8d267@physik.fu-berlin.de>
+ <2ebef1ac-e5c5-980c-9413-22a6cccdfa1d@landley.net> <CAMuHMdWN0vRYhK7O0MgOSCtisw3RDvp4vxSS2VF-9uGDdOEb7g@mail.gmail.com>
+ <59faed1d-3878-ce75-9f62-aaf4338d0ad1@omp.ru>
+In-Reply-To: <59faed1d-3878-ce75-9f62-aaf4338d0ad1@omp.ru>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 3 May 2022 08:58:22 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdWv_DK_h6eoemNbOqbErmWbVuv+r5qTC0=APNwV=vYNzQ@mail.gmail.com>
+Message-ID: <CAMuHMdWv_DK_h6eoemNbOqbErmWbVuv+r5qTC0=APNwV=vYNzQ@mail.gmail.com>
+Subject: Re: [PATCH v3] sh: avoid using IRQ0 on SH3/4
+To:     Sergey Shtylyov <s.shtylyov@omp.ru>
+Cc:     Rob Landley <rob@landley.net>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        Rich Felker <dalias@libc.org>,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -64,33 +72,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xiaoke Wang <xkernel.wang@foxmail.com>
+Hi Sergey,
 
-In r8712_xmit_resource_alloc(), if usb_alloc_urb() fails, there can be
-some explored items are not released before this function returns.
+On Mon, May 2, 2022 at 10:56 PM Sergey Shtylyov <s.shtylyov@omp.ru> wrote:
+> On 5/2/22 11:37 AM, Geert Uytterhoeven wrote:
+> >>>> Using IRQ0 by the platform devices is going to be disallowed soon (see [1])
+> >>>> and even now, when IRQ0 is about to be returned by platfrom_get_irq(), you
+> >>>> see a big warning.  The code supporting SH3/4 SoCs maps the IRQ #s starting
+> >>>> at 0 -- modify that code to start the IRQ #s from 16 instead.
+> >>>>
+> >>>> The patch should mostly affect the AP-SH4A-3A/AP-SH4AD-0A boards as they
+> >>>> indeed use IRQ0 for the SMSC911x compatible Ethernet chip...
+> >
+> >> As I told him in IRC, the problem is still that sh4 never gives me a shell
+> >> prompt with this patch applied. I just reconfirmed it against current git:
+> >>
+> >> Freeing unused kernel image (initmem) memory: 124K
+> >> This architecture does not have kernel memory protection.
+> >> Run /init as init process
+> >> mountpoint: dev/pts: No such file or directory
+> >> 8139cp 0000:00:02.0 eth0: link up, 100Mbps, full-duplex, lpa 0x05E1
+> >>
+> >> It makes it partway through the init script, but it hangs with qemu-system-sh4
+> >> stuck in a CPU-eating loop before finishing. Without the patch, I get a shell
+> >> prompt.
+> >
+> > I regularly test on qemu rts7751r2d, but couldn't produce your
+> > issue.  Until I tried "ifconfig eth0 up", which causes a lock-up.
+> > Interestingly, the 8139 irq was 112 with and without Sergey's patch,
+> > so there must be an irq remapping missing.
+> >
+> > I also test regularly on landisk, where 8139 Ethernet works fine.
+> > Turns out landisk uses arch/sh/drivers/pci/fixups-landisk.c to fixup
+> > the irq...
+> >
+> > arch/sh/include/mach-common/mach/r2d.h has:
+> > #define R2D_FPGA_IRQ_BASE       100
+> > Subtracting 16 here does not help.
+>
+>    Why subtract when you contrariwise need to add? :-)
 
-Therefore, this patch re-explores the allocated items and uses
-usb_free_urb() to release them.
+Thanks, adding 16 here fixed the issue:
 
-Signed-off-by: Xiaoke Wang <xkernel.wang@foxmail.com>
----
- drivers/staging/rtl8712/xmit_linux.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+/ # ifconfig eth0 up
+8139cp 0000:00:02.0 eth0: link up, 100Mbps, full-duplex, lpa 0x05E1
 
-diff --git a/drivers/staging/rtl8712/xmit_linux.c b/drivers/staging/rtl8712/xmit_linux.c
-index 4a93839..034de02 100644
---- a/drivers/staging/rtl8712/xmit_linux.c
-+++ b/drivers/staging/rtl8712/xmit_linux.c
-@@ -113,9 +113,10 @@ int r8712_xmit_resource_alloc(struct _adapter *padapter,
- 		pxmitbuf->pxmit_urb[i] = usb_alloc_urb(0, GFP_KERNEL);
- 		if (!pxmitbuf->pxmit_urb[i]) {
- 			netdev_err(padapter->pnetdev, "pxmitbuf->pxmit_urb[i] == NULL\n");
-+			while (i-- > 0)
-+				usb_free_urb(pxmitbuf->pxmit_urb[i]);
- 			return -ENOMEM;
- 		}
--		kmemleak_not_leak(pxmitbuf->pxmit_urb[i]);
- 	}
- 	return 0;
- }
--- 
+> > With this (gmail-whitespace-damaged) patch:
+> >
+> > --- a/arch/sh/drivers/pci/fixups-rts7751r2d.c
+> > +++ b/arch/sh/drivers/pci/fixups-rts7751r2d.c
+> > @@ -31,9 +31,9 @@ static char lboxre2_irq_tab[] = {
+> >  int pcibios_map_platform_irq(const struct pci_dev *pdev, u8 slot, u8 pin)
+> >  {
+> >         if (mach_is_lboxre2())
+> > -               return lboxre2_irq_tab[slot];
+> > +               return lboxre2_irq_tab[slot] - 16;
+>
+>    This table contains the values #define'd via evt2irq(), so
+> shouldn't need to subtract anything...
+>
+> >         else
+> > -               return rts7751r2d_irq_tab[slot];
+> > +               return rts7751r2d_irq_tab[slot] - 16;
+>
+>    How about + 16?
+
+Doesn't work, but changing R2D_FPGA_IRQ_BASE does work, see
+above.
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

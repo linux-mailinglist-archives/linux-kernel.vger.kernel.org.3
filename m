@@ -2,181 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1031518FBC
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 23:09:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2B26518FCD
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 23:13:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242610AbiECVNV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 17:13:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47372 "EHLO
+        id S242668AbiECVPD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 17:15:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235960AbiECVNP (ORCPT
+        with ESMTP id S229766AbiECVPA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 17:13:15 -0400
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8EB63F8AB
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 14:09:41 -0700 (PDT)
-Received: by mail-yb1-xb31.google.com with SMTP id s30so33224168ybi.8
-        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 14:09:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=4fiXOSargbkmqorI6WusV2qGhD3iqsqBH5PjRfunjuA=;
-        b=YoNJVD72g3AVg+3aeTpK8KNgGmRrdH21U6jGrIF4yTt28emi7xJOvR/HVHHovuFaVi
-         Rd+rn0a8n7qTEglfwFmqhABF0y3SYRRRrmknTwyamT3woWJY7QvpPos6aPXoaNRQJ2oV
-         B2VptOYHCq2ctdiq3rOLXvB7cTCEBFxxlta1hd9rw1xOAdhwINOkLE7bA29UfIHpgFe1
-         Hi91a1cNyIXPOEJMCLjMi/mGqk+JQ7EGfMXLspEaH/MUkinOK6Hl+zjrf4PxxZfQKJdc
-         H7PHfoB0QvVbHEfxf1qjOczuwlVUt+tWhFVrhaqw0qsMVX2ApZ2DOZRrlXestDqBC8FU
-         lZEg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=4fiXOSargbkmqorI6WusV2qGhD3iqsqBH5PjRfunjuA=;
-        b=sHCIC9n9irmB3A50/k1xxQA2WN1z2sGkDM1QDnuTLlTC0L8GfRXaQD6cqtoi0bQjhH
-         rEgxwUm+YohzNMX5xJ6gSkl0wqhk3i28X08l5UoI9/jhRlvEzr3b5qIFVaoc8dWoyVzB
-         cXWAOv00iesi7Xvo4vrcDJS2pQ3r7tFkDza+6+Il4VFmZ/WYtnDo8Z1AC4h1LDHtba5K
-         4SRzFxzRnt5+QSKy62WPi1+KaykStqJMjciU/ZP56Gda82uAKUZzPkk593HTZSudQpkW
-         H2wJUTz2iuuv3eU/BgQ1IzMQ0qJqiKwNA0YVKnmeMBMWM13GTaUWTeQ4pl488ddl1o9r
-         U8mw==
-X-Gm-Message-State: AOAM530HUHIUKKYW7AQijR2uJSDsnlCKaZ6gql8cGLtZ+fSzFp+EBnqM
-        B9A4wUlAb7s9HkJkcDZnu6j1CRYZqHCqqDrC9Bv4oQ==
-X-Google-Smtp-Source: ABdhPJwbHPh4pTxe5Aps2H2tu8JbsnM+d6wHpFw0d/yrdwjO15HqS7ozkDExBWLCf3hEz5mOJ+dkfiEmK/8p91Cr1A4=
-X-Received: by 2002:a25:b095:0:b0:649:d59e:4c07 with SMTP id
- f21-20020a25b095000000b00649d59e4c07mr5306279ybj.627.1651612180307; Tue, 03
- May 2022 14:09:40 -0700 (PDT)
+        Tue, 3 May 2022 17:15:00 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87E0D3587E;
+        Tue,  3 May 2022 14:11:27 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: nfraprado)
+        with ESMTPSA id 613F91F41693
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1651612286;
+        bh=b6/DfUMzFN0FDTboudtmnTW/K0RtsVzlnmRHB0NutEY=;
+        h=From:To:Cc:Subject:Date:From;
+        b=HP96vztyI0eC4J/ls+gpZ/TFO5BN2+VM6gebHlvDI371amS3BySvEreWV+QMIc6yd
+         b2NtPVywkw3RJRFgZdAH5JvlOMI8eCXw5hWdt1Z+yKh3Ee3TJu/gxjeDipTMz48oHO
+         GV1R6cR4urofebnSpAjOORHVzAZsX1pDslrY/J3CbXcwHU8fgYirWmloCSi3y6YceQ
+         KrqgaMuI3N5n+7T3tebwLGrwLm85gx/kt4JEEKWOGpzJJpvOOJMsXjnvj4y/lniGNJ
+         xm1EVbZLC9d0lC7pCGlbn5ugFtv7+DxnCPIq71J0JfgHL7dRUKZWznYz2R5v1RyCgS
+         1URLtOiA07FQw==
+From:   =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
+        <nfraprado@collabora.com>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, kernel@collabora.com,
+        =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
+        <nfraprado@collabora.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Tinghan Shen <tinghan.shen@mediatek.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-remoteproc@vger.kernel.org
+Subject: [PATCH v3 0/2] Mediatek SCP dt-binding tweaks
+Date:   Tue,  3 May 2022 17:11:12 -0400
+Message-Id: <20220503211114.2656099-1-nfraprado@collabora.com>
+X-Mailer: git-send-email 2.36.0
 MIME-Version: 1.0
-References: <20220502233853.1233742-1-rananta@google.com> <878rri8r78.wl-maz@kernel.org>
- <CAJHc60xp=UQT_CX0zoiSjAmkS8JSe+NB5Gr+F5mmybjJAWkUtQ@mail.gmail.com> <878rriicez.wl-maz@kernel.org>
-In-Reply-To: <878rriicez.wl-maz@kernel.org>
-From:   Raghavendra Rao Ananta <rananta@google.com>
-Date:   Tue, 3 May 2022 14:09:29 -0700
-Message-ID: <CAJHc60w1F7RAgJkv5PRuJtKjTw1gUaYmZk885AVhPLF2h6YbkQ@mail.gmail.com>
-Subject: Re: [PATCH v7 0/9] KVM: arm64: Add support for hypercall services selection
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Andrew Jones <drjones@redhat.com>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Peter Shier <pshier@google.com>,
-        Ricardo Koller <ricarkol@google.com>,
-        Oliver Upton <oupton@google.com>,
-        Reiji Watanabe <reijiw@google.com>,
-        Jing Zhang <jingzhangos@google.com>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 3, 2022 at 1:33 PM Marc Zyngier <maz@kernel.org> wrote:
->
-> On Tue, 03 May 2022 19:49:13 +0100,
-> Raghavendra Rao Ananta <rananta@google.com> wrote:
-> >
-> > Hi Marc,
-> >
-> > On Tue, May 3, 2022 at 10:24 AM Marc Zyngier <maz@kernel.org> wrote:
-> > >
-> > > On Tue, 03 May 2022 00:38:44 +0100,
-> > > Raghavendra Rao Ananta <rananta@google.com> wrote:
-> > > >
-> > > > Hello,
-> > > >
-> > > > Continuing the discussion from [1], the series tries to add support
-> > > > for the userspace to elect the hypercall services that it wishes
-> > > > to expose to the guest, rather than the guest discovering them
-> > > > unconditionally. The idea employed by the series was taken from
-> > > > [1] as suggested by Marc Z.
-> > >
-> > > As it took some time to get there, and that there was still a bunch o=
-f
-> > > things to address, I've taken the liberty to apply my own fixes to th=
-e
-> > > series.
-> > >
-> > > Please have a look at [1], and let me know if you're OK with the
-> > > result. If you are, I'll merge the series for 5.19.
-> > >
-> > > Thanks,
-> > >
-> > >         M.
-> > >
-> > Thank you for speeding up the process; appreciate it. However, the
-> > series's selftest patches have a dependency on Oliver's
-> > PSCI_SYSTEM_SUSPEND's selftest patches [1][2]. Can we pull them in
-> > too?
->
-> Urgh... I guess this is the time to set some ground rules:
->
-> - Please don't introduce dependencies between series, that's
->   unmanageable. I really need to see each series independently, and if
->   there is a merge conflict, that's my job to fix (and I don't really
->   mind).
->
-> - If there is a dependency between series, please post a version of
->   the required patches as a prefix to your series, assuming this
->   prefix is itself standalone. If it isn't, then something really is
->   wrong, and the series should be resplit.
->
-> - You also should be basing your series on an *official* tag from
->   Linus' tree (preferably -rc1, -rc2 or -rc3), and not something
->   random like any odd commit from the KVM tree (I had conflicts while
->   applying this on -rc3, probably due to the non-advertised dependency
->   on Oliver's series).
->
-Thanks for picking the dependency patches. I'll keep these mind the
-next time I push changes.
 
-> >
-> > aarch64/hypercalls.c: In function =E2=80=98guest_test_hvc=E2=80=99:
-> > aarch64/hypercalls.c:95:30: error: storage size of =E2=80=98res=E2=80=
-=99 isn=E2=80=99t known
-> >    95 |         struct arm_smccc_res res;
-> >       |                              ^~~
-> > aarch64/hypercalls.c:103:17: warning: implicit declaration of function
-> > =E2=80=98smccc_hvc=E2=80=99 [-Wimplicit-function-declaration]
-> >   103 |                 smccc_hvc(hc_info->func_id, hc_info->arg1, 0,
-> > 0, 0, 0, 0, 0, &res);
-> >       |                 ^~~~~~~~~
-> >
->
-> I've picked the two patches, which means they will most likely appear
-> twice in the history. In the future, please reach out so that we can
-> organise this better.
->
-> > Also, just a couple of readability nits in the fixed version:
-> >
-> > 1. Patch-2/9, hypercall.c:kvm_hvc_call_default_allowed(), in the
-> > 'default' case, do you think we should probably add a small comment
-> > that mentions we are checking for func_id in the PSCI range?
->
-> Dumped a one-liner there.
->
-> > 2. Patch-2/9, arm_hypercall.h, clear all the macros in this patch
-> > itself instead of doing it in increments (unless there's some reason
-> > that I'm missing)?
->
-> Ah, rebasing leftovers, now gone.
->
-> I've pushed an updated branch again, please have a look.
->
-Thanks for addressing these. The series looks good now.
+Two simple patches for the Mediatek SCP dt-binding. The first fixes the
+reg/reg-names property while the second adds a new optional
+memory-region property.
 
-Regards,
-Raghavendra
->         M.
->
-> --
-> Without deviation from the norm, progress is not possible.
+v2: https://lore.kernel.org/all/20220502192420.2548512-1-nfraprado@collabora.com
+v1: https://lore.kernel.org/all/20220429211111.2214119-1-nfraprado@collabora.com
+
+Changes in v3:
+- Made the cfg reg required again. After looking again into the mtk-scp
+  driver, only l1tcm is optional.
+
+Changes in v2:
+- Dropped type and description from memory-region since it's a
+  well-known property
+- Set memory-region maxItems to 1
+
+Nícolas F. R. A. Prado (2):
+  dt-bindings: remoteproc: mediatek: Make l1tcm reg optional for mtk,scp
+  dt-bindings: remoteproc: mediatek: Add optional memory-region to
+    mtk,scp
+
+ .../devicetree/bindings/remoteproc/mtk,scp.yaml          | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
+
+-- 
+2.36.0
+

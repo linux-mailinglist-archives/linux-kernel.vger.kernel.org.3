@@ -2,58 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74C73518876
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 17:25:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 135F9518856
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 17:21:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238412AbiECP2a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 11:28:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33276 "EHLO
+        id S238312AbiECPXZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 11:23:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237485AbiECP22 (ORCPT
+        with ESMTP id S238433AbiECPXQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 11:28:28 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E91C63BBED
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 08:24:55 -0700 (PDT)
+        Tue, 3 May 2022 11:23:16 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1C0C13D1DF
+        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 08:19:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651591495;
+        s=mimecast20190719; t=1651591114;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=d3hGKvDjDhA3A5CPaQDCX7CfmyhvahBgWk3Z2qwaPMg=;
-        b=gehLCKNaXnXVs3Qm+5wF9MhvfCjI/49QD73gXuRpCo3eUY3tvXyWhF5b+YBYmq9TtO+Lkv
-        iHy+XAW/jSlSrTFXCb6zKtzbk/SFaKXZTn5k1VIelKptQLpwOgvcZl1oYS33pQ2p7FbcwR
-        x1m/u1W1jKV3CFp60O/GocbdLDTTFG4=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=fB+GyMb8KaE7uGv5sjOmUbdvZf3IS0zLisgeiZ4V7NY=;
+        b=KE1jdc//PDiDUuYHzUgU7zK8fu0wqfphmXD2DT2Ow/MhCXIeDFHu3HD56vYFX0q6+K3F/w
+        FtlB5UOMukDz1+4jOXqsdjLffGUH+90845DGbWCQK+iLzry4b16NurOVs81GurlcDMjf5q
+        I8t6u3APM2EM8r5Rgq2XmdpuTZGSY2o=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-622-5WN2CR5QOB-ZMM7mWcgrSQ-1; Tue, 03 May 2022 11:24:45 -0400
-X-MC-Unique: 5WN2CR5QOB-ZMM7mWcgrSQ-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4D32FA97710;
-        Tue,  3 May 2022 12:43:01 +0000 (UTC)
-Received: from horse.redhat.com (unknown [10.18.25.210])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 3977340D2820;
-        Tue,  3 May 2022 12:43:01 +0000 (UTC)
-Received: by horse.redhat.com (Postfix, from userid 10451)
-        id E979B22570F; Tue,  3 May 2022 08:43:00 -0400 (EDT)
-Date:   Tue, 3 May 2022 08:43:00 -0400
-From:   Vivek Goyal <vgoyal@redhat.com>
-To:     Dharmendra Singh <dharamhans87@gmail.com>
-Cc:     miklos@szeredi.hu, linux-fsdevel@vger.kernel.org,
-        fuse-devel@lists.sourceforge.net, linux-kernel@vger.kernel.org,
-        bschubert@ddn.com, Dharmendra Singh <dsingh@ddn.com>
-Subject: Re: [PATCH v4 1/3] FUSE: Implement atomic lookup + create
-Message-ID: <YnEjVMTYVd8S1Zbs@redhat.com>
-References: <20220502102521.22875-1-dharamhans87@gmail.com>
- <20220502102521.22875-2-dharamhans87@gmail.com>
+ us-mta-131-oQEIyqTjMkqFzOBWMnv_aA-1; Tue, 03 May 2022 11:18:07 -0400
+X-MC-Unique: oQEIyqTjMkqFzOBWMnv_aA-1
+Received: by mail-wr1-f72.google.com with SMTP id s8-20020adf9788000000b0020adb01dc25so6461031wrb.20
+        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 08:18:06 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=fB+GyMb8KaE7uGv5sjOmUbdvZf3IS0zLisgeiZ4V7NY=;
+        b=rFRmR7mPNB5TrbwUL1hkl4H6c4dl5Lu+LmZjD2+1+BgR4UpRvoxEBOYQiFAzblyOzD
+         +x7VyhqiX2t8AlnQGCw5JAU5nzB7rav1sQW6e5D1WmoRuwn/eX9MaB/IY26ipKPVAAOv
+         xFTrVEy6RKMgfFYq3yhS0PfoMDVxmLvrrw+UhQ77qmaeCE5J72TX68/WUHkt8TkGazCD
+         ClGbDUet9ysk9Byjow7yKoSz+zpgNRsTcJiSe69+kJT7ot+eeEd3ieMOfqOSDoMR88tW
+         +ja9QIvu59ECFkWRS+gSSVw6K0bQXPaV6av+BxPHDJvLbrLXeR4TFH/VRUeLx8D2rMkD
+         w/AQ==
+X-Gm-Message-State: AOAM531j55Yj2cJPqFdA4S0/ya5S4blwtBXoSQmSzWBqO+m1T1uDcf7a
+        wTt9O5CoEEFGfw54ClMnEYzWJV3dzc2QHwm6nELytKL4wzgek8mul47uMY55Np7HsPU5Qc3rny8
+        b8KAP4p39Or4QQGNW+18csvgxtXyLvb+aYHyoJkd8
+X-Received: by 2002:a05:600c:9:b0:393:ea67:1c68 with SMTP id g9-20020a05600c000900b00393ea671c68mr3474355wmc.92.1651584637395;
+        Tue, 03 May 2022 06:30:37 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJw7bH3mc1FPFlDf07JG+TUgh9rQ7tQ4fVJ4ozC/QuGkpTOD2TIrV73xrb2nVvU3PCYuP5d2VRZ3rMe13IvIpZA=
+X-Received: by 2002:a05:600c:9:b0:393:ea67:1c68 with SMTP id
+ g9-20020a05600c000900b00393ea671c68mr3474343wmc.92.1651584637194; Tue, 03 May
+ 2022 06:30:37 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220502102521.22875-2-dharamhans87@gmail.com>
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
+References: <20220426145445.2282274-1-agruenba@redhat.com> <CAHk-=wi7o+fHYBTuCQQdHD112YHQtO21Y3+wxNYypjdo8feKFg@mail.gmail.com>
+ <CAHc6FU48681X8aUK+g7UUN7q5b6rkVBzTP7h_zbE4XqZYAiw3g@mail.gmail.com>
+ <CAHk-=wjMB1-xCOCBtsSMmQuFV9G+vNyCY1O_LsoqOd=0QS4yYg@mail.gmail.com>
+ <CAHc6FU5Bag5W2t79+WzUq=NibtEF+7z6=jyNCkLMMp9Yqvpmqw@mail.gmail.com>
+ <CAHk-=whaz-g_nOOoo8RRiWNjnv2R+h6_xk2F1J4TuSRxk1MtLw@mail.gmail.com>
+ <CAHc6FU5654k7QBU97g_Ubj8cJEWuA_bXPuXOPpBBYoXVPMJG=g@mail.gmail.com>
+ <CAHk-=wgSYSNc5sF2EVxhjbSc+c4LTs90aYaK2wavNd_m2bUkGg@mail.gmail.com>
+ <CAHc6FU69E4ke4Xg3zQ2MqjLbfM65D9ZajdY5MRDLN0azZOGmVQ@mail.gmail.com>
+ <CAHk-=whQxvMvty8SjiGMh+gM4VmCYvqn6EAwmrDXJaHT2Aa+UA@mail.gmail.com>
+ <CAHk-=wicJdoCjPLu7FhaErr6Z3UaW820U2b+F-8P4qwSFUZ0mg@mail.gmail.com>
+ <CAHc6FU7GkXLkns5PONLvsSi6HB+rjaNSyFeQFS034tKL-JueMw@mail.gmail.com>
+ <CAHk-=wg4ypnZUA5BOHAF1miKvOhW2yQSruuBKNXMDR=dTmp+ww@mail.gmail.com>
+ <CAHc6FU6VgQDO7HT5f4S_4f=9hczKGRDQ6SbQ5kNHMi4i-6rxVA@mail.gmail.com>
+ <CAHk-=whL74iP6v2P+OafGO0H72ag4wt42k+Kc_01boLP8aqUNQ@mail.gmail.com> <CAHc6FU77KGn76B4ieu9Tn895deK-1yV4y=8ou4gTfUf=7C-4XQ@mail.gmail.com>
+In-Reply-To: <CAHc6FU77KGn76B4ieu9Tn895deK-1yV4y=8ou4gTfUf=7C-4XQ@mail.gmail.com>
+From:   Andreas Gruenbacher <agruenba@redhat.com>
+Date:   Tue, 3 May 2022 15:30:25 +0200
+Message-ID: <CAHc6FU7i4GJaSodNX+o44VgWyo1LTPdYkBnypYS3GYa1atYAZA@mail.gmail.com>
+Subject: Re: [GIT PULL] gfs2 fix
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        "Darrick J. Wong" <djwong@kernel.org>,
+        Dave Chinner <dchinner@redhat.com>,
+        cluster-devel <cluster-devel@redhat.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -64,254 +88,134 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 02, 2022 at 03:55:19PM +0530, Dharmendra Singh wrote:
-> From: Dharmendra Singh <dsingh@ddn.com>
-> 
-> When we go for creating a file (O_CREAT), we trigger
-> a lookup to FUSE USER SPACE. It is very  much likely
-> that file does not exist yet as O_CREAT is passed to
-> open(). This lookup can be avoided and can be performed
-> as part of create call into libfuse.
-> 
-> This lookup + create in single call to libfuse and finally
-> to USER SPACE has been named as atomic create.
+On Tue, May 3, 2022 at 10:56 AM Andreas Gruenbacher <agruenba@redhat.com> wrote:
+> On Mon, May 2, 2022 at 8:32 PM Linus Torvalds <torvalds@linux-foundation.org> wrote:
+> > On Thu, Apr 28, 2022 at 10:39 AM Andreas Gruenbacher <agruenba@redhat.com> wrote:
+> > >
+> > > Yes, but note that it's gfs2_file_buffered_write() that fails. When
+> > > the pagefault_disable/enable() around iomap_file_buffered_write() is
+> > > removed, the corruption goes away.
+> >
+> > I looked some more at this on and off, and ended up even more confused.
+> >
+> > For some reason, I'd mostly looked at the read case, because I had
+> > mis-read some of your emails and thought it was the buffered reads
+> > that caused problems.
+> >
+> > Then I went back more carefully, and realized you had always said
+> > gfs2_file_buffered_write() was where the issues happened, and looked
+> > at that path more, and that confused me even *MORE*.
+> >
+> > Because that case has always done the copy from user space with page
+> > faults disabled, because of the traditional deadlock with reading from
+> > user space while holding the page lock on the target page cache page.
+> >
+> > So that is not really about the new deadlock with filesystem locks,
+> > that was fixed by 00bfe02f4796 ("gfs2: Fix mmap + page fault deadlocks
+> > for buffered I/O").
+> >
+> > So now that I'm looking at the right function (maybe) I'm going "huh",
+> > because it's none of the complex cases that would seem to fail, it's
+> > literally just the fault_in_iov_iter_readable() that we've always done
+> > in iomap_write_iter() that presumably starts failing.
+> >
+> > But *that* old code seems bogus too. It's doing
+> >
+> >                 if (unlikely(fault_in_iov_iter_readable(i, bytes) == bytes)) {
+> >                         status = -EFAULT;
+> >                         break;
+> >                 }
+> >
+> > which on the face of it is sane: it's saying "if we can't fault in any
+> > bytes, then stop trying".
+> >
+> > And it's good, and correct, but it does leave one case open.
+> >
+> > Because what if the result is "we can fault things in _partially_"?
+> >
+> > The code blithely goes on and tries to do the whole 'bytes' range _anyway_.
+> >
+> > Now, with a bug-free filesystem, this really shouldn't matter, since
+> > the later copy_page_from_iter_atomic() thing should then DTRT anyway,
+> > but this does mean that one fundamental thing that that commit
+> > 00bfe02f4796 changed is that it basically disabled that
+> > fault_in_iov_iter_readable() that *used* to fault in the whole range,
+> > and now potentially only faults in a small area.
+> >
+> > That, in turn, means that in practice it *used* to do "write_end()"
+> > with a fully successful range, ie when it did that
+> >
+> >                 status = a_ops->write_end(file, mapping, pos, bytes, copied,
+> >                                                 page, fsdata);
+> >
+> > then "bytes" and "copied" were the same.
+> >
+> > But now that commit 00bfe02f4796 added the "disable_pagefault()"
+> > around the whole thing, fault_in_iov_iter_readable() will easily fail
+> > half-way instead of bringing the next page in, and then that
+> > ->write_begin() to ->write_end() sequence will see the copy in the
+> > middle failing half-way too, and you'll have that write_end()
+> > condition with the write _partially_ succeeding.
+> >
+> > Which is the complex case for write_end() that you practically
+> > speaking never saw before (it *could* happen with a race with swap-out
+> > or similar, but it was not really something you could trigger in real
+> > life.
+> >
+> > And I suspect this is what bites you with gfs2
+> >
+> > To *test* that hypothesis, how about you try this attached patch? The
+> > generic_perform_write() function in mm/filemap.c has the same exact
+> > pattern, but as mentioned, a filesystem really needs to be able to
+> > handle the partial write_end() case, so it's not a *bug* in that code,
+> > but it migth be triggering a bug in gfs2.
+> >
+> > And gfs2 only uses the iomap_write_iter() case, I think. So that's the
+> > only case this attached patch changes.
+> >
+> > Again - I think the unpatched iomap_write_iter() code is fine, but I
+> > think it may be what then triggers the real bug in gfs2. So this patch
+> > is not wrong per se, but this patch is basically a "hide the problem"
+> > patch, and it would be very interesting to hear if it does indeed fix
+> > your test-case.
+>
+> We still get data corruption with the patch applied. The
+> WARN_ON_ONCE(!bytes) doesn't trigger.
+>
+> As an additional experiment, I've added code to check the iterator
+> position that iomap_file_buffered_write() returns, and it's all
+> looking good as well: an iov_iter_advance(orig_from, written) from the
+> original position always gets us to the same iterator.
+>
+> This points at gfs2 getting things wrong after a short write, for
+> example, marking a page / folio uptodate that isn't. But the uptodate
+> handling happens at the iomap layer, so this doesn't leave me with an
+> immediate suspect.
+>
+> We're on filesystems with block size == page size, so none of the
+> struct iomap_page uptodata handling should be involved, either.
 
-Looking at it and trying to understand if lookup can be avoided. But
-before that this naming of calling it atomic create seems confusing.
+The rounding around the hole punching in gfs2_iomap_end() looks wrong.
+I'm trying a fix now.
 
-We already have fuse_create_open() which we are calling it as 
-"Atomic create+open operation". Now looks like this is extension
-to this operation where we are doing "Atomic lookup + create + open".
-Do I understand it correctly?
-
-Thanks
-Vivek
-
-> It is expected
-> that USER SPACE create the file, open it and fills in the
-> attributes which are then used to make inode stand/revalidate
-> in the kernel cache. Also if file was newly created(does not
-> exist yet by this time) in USER SPACE then it should be indicated
-> in `struct fuse_file_info` by setting a bit which is again used by
-> libfuse to send some flags back to fuse kernel to indicate that
-> that file was newly created. These flags are used by kernel to
-> indicate changes in parent directory.
-> 
-> Fuse kernel automatically detects if atomic create is implemented
-> by libfuse/USER SPACE or not. And depending upon the outcome of
-> this check all further creates are decided to be atomic or non-atomic
-> creates.
-> 
-> If libfuse/USER SPACE has not implemented the atomic create operation
-> then by default behaviour remains same i.e we do not optimize lookup
-> calls which are triggered before create calls into libfuse.
-> 
-> Signed-off-by: Dharmendra Singh <dsingh@ddn.com>
-> ---
->  fs/fuse/dir.c             | 82 +++++++++++++++++++++++++++++++++++----
->  fs/fuse/fuse_i.h          |  3 ++
->  include/uapi/linux/fuse.h |  3 ++
->  3 files changed, 81 insertions(+), 7 deletions(-)
-> 
-> diff --git a/fs/fuse/dir.c b/fs/fuse/dir.c
-> index 656e921f3506..cad3322a007f 100644
-> --- a/fs/fuse/dir.c
-> +++ b/fs/fuse/dir.c
-> @@ -523,7 +523,7 @@ static int get_security_context(struct dentry *entry, umode_t mode,
->   */
->  static int fuse_create_open(struct inode *dir, struct dentry *entry,
->  			    struct file *file, unsigned int flags,
-> -			    umode_t mode)
-> +			    umode_t mode, uint32_t opcode)
->  {
->  	int err;
->  	struct inode *inode;
-> @@ -535,8 +535,10 @@ static int fuse_create_open(struct inode *dir, struct dentry *entry,
->  	struct fuse_entry_out outentry;
->  	struct fuse_inode *fi;
->  	struct fuse_file *ff;
-> +	struct dentry *res = NULL;
->  	void *security_ctx = NULL;
->  	u32 security_ctxlen;
-> +	bool atomic_create = (opcode == FUSE_ATOMIC_CREATE ? true : false);
->  
->  	/* Userspace expects S_IFREG in create mode */
->  	BUG_ON((mode & S_IFMT) != S_IFREG);
-> @@ -566,7 +568,7 @@ static int fuse_create_open(struct inode *dir, struct dentry *entry,
->  		inarg.open_flags |= FUSE_OPEN_KILL_SUIDGID;
->  	}
->  
-> -	args.opcode = FUSE_CREATE;
-> +	args.opcode = opcode;
->  	args.nodeid = get_node_id(dir);
->  	args.in_numargs = 2;
->  	args.in_args[0].size = sizeof(inarg);
-> @@ -613,9 +615,44 @@ static int fuse_create_open(struct inode *dir, struct dentry *entry,
->  		goto out_err;
->  	}
->  	kfree(forget);
-> -	d_instantiate(entry, inode);
-> +	/*
-> +	 * In atomic create, we skipped lookup and it is very much likely that
-> +	 * dentry has DCACHE_PAR_LOOKUP flag set on it so call d_splice_alias().
-> +	 * Note: Only REG file is allowed under create/atomic create.
-> +	 */
-> +	/* There is special case when at very first call where we check if
-> +	 * atomic create is implemented by USER SPACE/libfuse or not, we
-> +	 * skipped lookup. Now, in case where atomic create is not implemented
-> +	 * underlying, we fall back to FUSE_CREATE. here we are required to handle
-> +	 * DCACHE_PAR_LOOKUP flag.
-> +	 */
-> +	if (!atomic_create && !d_in_lookup(entry) && fm->fc->no_atomic_create)
-> +		d_instantiate(entry, inode);
-> +	else {
-> +		res = d_splice_alias(inode, entry);
-> +		if (res) {
-> +			 /* Close the file in user space, but do not unlink it,
-> +			  * if it was created - with network file systems other
-> +			  * clients might have already accessed it.
-> +			  */
-> +			if (IS_ERR(res)) {
-> +				fi = get_fuse_inode(inode);
-> +				fuse_sync_release(fi, ff, flags);
-> +				fuse_queue_forget(fm->fc, forget, outentry.nodeid, 1);
-> +				err = PTR_ERR(res);
-> +				goto out_err;
-> +			}
-> +			/* res is expected to be NULL since its REG file */
-> +			WARN_ON(res);
-> +		}
-> +	}
->  	fuse_change_entry_timeout(entry, &outentry);
-> -	fuse_dir_changed(dir);
-> +	/*
-> +	 * In case of atomic create, we want to indicate directory change
-> +	 * only if USER SPACE actually created the file.
-> +	 */
-> +	if (!atomic_create || (outopen.open_flags & FOPEN_FILE_CREATED))
-> +		fuse_dir_changed(dir);
->  	err = finish_open(file, entry, generic_file_open);
->  	if (err) {
->  		fi = get_fuse_inode(inode);
-> @@ -634,6 +671,29 @@ static int fuse_create_open(struct inode *dir, struct dentry *entry,
->  	return err;
->  }
->  
-> +static int fuse_atomic_create(struct inode *dir, struct dentry *entry,
-> +			      struct file *file, unsigned int flags,
-> +			      umode_t mode)
-> +{
-> +	int err;
-> +	struct fuse_conn *fc = get_fuse_conn(dir);
-> +
-> +	if (fc->no_atomic_create)
-> +		return -ENOSYS;
-> +
-> +	err = fuse_create_open(dir, entry, file, flags, mode,
-> +			       FUSE_ATOMIC_CREATE);
-> +	/* If atomic create is not implemented then indicate in fc so that next
-> +	 * request falls back to normal create instead of going into libufse and
-> +	 * returning with -ENOSYS.
-> +	 */
-> +	if (err == -ENOSYS) {
-> +		if (!fc->no_atomic_create)
-> +			fc->no_atomic_create = 1;
-> +	}
-> +	return err;
-> +}
-> +
->  static int fuse_mknod(struct user_namespace *, struct inode *, struct dentry *,
->  		      umode_t, dev_t);
->  static int fuse_atomic_open(struct inode *dir, struct dentry *entry,
-> @@ -643,11 +703,12 @@ static int fuse_atomic_open(struct inode *dir, struct dentry *entry,
->  	int err;
->  	struct fuse_conn *fc = get_fuse_conn(dir);
->  	struct dentry *res = NULL;
-> +	bool create = flags & O_CREAT ? true : false;
->  
->  	if (fuse_is_bad(dir))
->  		return -EIO;
->  
-> -	if (d_in_lookup(entry)) {
-> +	if ((!create || fc->no_atomic_create) && d_in_lookup(entry)) {
->  		res = fuse_lookup(dir, entry, 0);
->  		if (IS_ERR(res))
->  			return PTR_ERR(res);
-> @@ -656,7 +717,7 @@ static int fuse_atomic_open(struct inode *dir, struct dentry *entry,
->  			entry = res;
->  	}
->  
-> -	if (!(flags & O_CREAT) || d_really_is_positive(entry))
-> +	if (!create || d_really_is_positive(entry))
->  		goto no_open;
->  
->  	/* Only creates */
-> @@ -665,7 +726,13 @@ static int fuse_atomic_open(struct inode *dir, struct dentry *entry,
->  	if (fc->no_create)
->  		goto mknod;
->  
-> -	err = fuse_create_open(dir, entry, file, flags, mode);
-> +	err = fuse_atomic_create(dir, entry, file, flags, mode);
-> +	/* Libfuse/user space has not implemented atomic create, therefore
-> +	 * fall back to normal create.
-> +	 */
-> +	if (err == -ENOSYS)
-> +		err = fuse_create_open(dir, entry, file, flags, mode,
-> +				       FUSE_CREATE);
->  	if (err == -ENOSYS) {
->  		fc->no_create = 1;
->  		goto mknod;
-> @@ -683,6 +750,7 @@ static int fuse_atomic_open(struct inode *dir, struct dentry *entry,
->  }
->  
->  /*
-> +
->   * Code shared between mknod, mkdir, symlink and link
->   */
->  static int create_new_entry(struct fuse_mount *fm, struct fuse_args *args,
-> diff --git a/fs/fuse/fuse_i.h b/fs/fuse/fuse_i.h
-> index e8e59fbdefeb..d577a591ab16 100644
-> --- a/fs/fuse/fuse_i.h
-> +++ b/fs/fuse/fuse_i.h
-> @@ -669,6 +669,9 @@ struct fuse_conn {
->  	/** Is open/release not implemented by fs? */
->  	unsigned no_open:1;
->  
-> +	/** Is atomic create not implemented by fs? */
-> +	unsigned no_atomic_create:1;
-> +
->  	/** Is opendir/releasedir not implemented by fs? */
->  	unsigned no_opendir:1;
->  
-> diff --git a/include/uapi/linux/fuse.h b/include/uapi/linux/fuse.h
-> index d6ccee961891..e4b56004b148 100644
-> --- a/include/uapi/linux/fuse.h
-> +++ b/include/uapi/linux/fuse.h
-> @@ -301,6 +301,7 @@ struct fuse_file_lock {
->   * FOPEN_CACHE_DIR: allow caching this directory
->   * FOPEN_STREAM: the file is stream-like (no file position at all)
->   * FOPEN_NOFLUSH: don't flush data cache on close (unless FUSE_WRITEBACK_CACHE)
-> + * FOPEN_FILE_CREATED: the file was actually created
->   */
->  #define FOPEN_DIRECT_IO		(1 << 0)
->  #define FOPEN_KEEP_CACHE	(1 << 1)
-> @@ -308,6 +309,7 @@ struct fuse_file_lock {
->  #define FOPEN_CACHE_DIR		(1 << 3)
->  #define FOPEN_STREAM		(1 << 4)
->  #define FOPEN_NOFLUSH		(1 << 5)
-> +#define FOPEN_FILE_CREATED	(1 << 6)
->  
->  /**
->   * INIT request/reply flags
-> @@ -537,6 +539,7 @@ enum fuse_opcode {
->  	FUSE_SETUPMAPPING	= 48,
->  	FUSE_REMOVEMAPPING	= 49,
->  	FUSE_SYNCFS		= 50,
-> +	FUSE_ATOMIC_CREATE	= 51,
->  
->  	/* CUSE specific operations */
->  	CUSE_INIT		= 4096,
-> -- 
-> 2.17.1
-> 
+> > Because that would pinpoint exactly what the bug is.
+> >
+> > I'm adding Christoph and Darrick as iomap maintainers here to the
+> > participants (and Dave Chinner in case he's also the temporary
+> > maintainer because Darrick is doing reviews) not because they
+> > necessarily care, but just because this test-patch obviously involves
+> > the iomap code.
+> >
+> > NOTE! This patch is entirely untested. I also didn't actually yet go
+> > look at what gfs2 does when 'bytes' and 'copied' are different. But
+> > since I finally think I figured out what might be going on, I decided
+> > I'd send this out sooner rather than later.
+> >
+> > Because this is the first thing that makes me go "Aaahh.. This might
+> > explain it".
+> >
+> >                    Linus
+>
+> Thanks,
+> Andreas
 

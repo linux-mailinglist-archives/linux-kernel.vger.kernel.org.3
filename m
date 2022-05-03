@@ -2,132 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AC63518951
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 18:07:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83E9C518956
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 18:08:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239136AbiECQLA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 12:11:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51864 "EHLO
+        id S239165AbiECQLf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 12:11:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239116AbiECQKz (ORCPT
+        with ESMTP id S239024AbiECQLb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 12:10:55 -0400
-Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 028AF245B5;
-        Tue,  3 May 2022 09:07:21 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.west.internal (Postfix) with ESMTP id C3F01320090F;
-        Tue,  3 May 2022 12:07:18 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Tue, 03 May 2022 12:07:19 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1651594038; x=1651680438; bh=S6jBLD8l+m
-        Ir0OzRt6qgeH2J1Vwk8FdNOOo2AvGlnGY=; b=JgC0htdr53/McvizUOUop1w8ra
-        AuLKzW+TMwSdIZ9dcpvFAveVzIoEQ1oyzQpV4UbEEcKkJZSgE0flClZhE6XUaO5c
-        JvXgr0JLR55CgDMEr7A0zRicW1gsyejasG75Yyu/cvmmlIy95gV9HLbVH2VROK8Y
-        sSs/r6uI/RhBWZ9Yh0rsCAazxV8gNd8GZbVNFaFAdAUN9Rt1jmuiX84OJiLs6E/1
-        hPUCB1FpT5NovLjp/jSzQFji2W42x9ItMMav9BC4rckpEp/I3W1m1ucYsj5J7ies
-        uAG871iwoViNQSg3ZWKVvSNA6WofWPdoCKwlvIQRX+YZoNE/jm2wdiI2zGRA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1651594038; x=
-        1651680438; bh=S6jBLD8l+mIr0OzRt6qgeH2J1Vwk8FdNOOo2AvGlnGY=; b=X
-        j5+twy5OwmxFkKSCwC9YvG0wzd1S04zkqRgBtdGTgO+UivtzlFLA+UD5X6ZTxyt/
-        fMxAEIR4DPtJld4z5IIvLxIHyuKtK/+rKIwwMYms/bMllDHl7yBJ+q0GLMUc0Cb3
-        KnswFDzG6wnfHevEruUdJlMO8NU1EzDa20PK3gHcq01YQzWeDbwjNvKjQat7mfOA
-        EW9pNy78y7KaTDddDBEz1AhsJcxj12LVwTynw4bGva9N6kxZAgmoJoPu9kqQvNZV
-        +MaiQ2U8xDW2PlZuT3jnG/JbRH4//5xwTNaQoZ78LSwsHaA4F3BWGrRYD94mPIF3
-        KFw2SwHQg+zUhy5Otf5fA==
-X-ME-Sender: <xms:NFNxYq7MW2e4oeOMm-bPtR-r-Zl8kkVZniv6jmT9FFPPXMNoB9KKsQ>
-    <xme:NFNxYj6WWFgYzr6rgVh5Xn8fVovESqHxHwJwHWheeNiJImFOp61WNWY_iEtD7NJjY
-    isX9aZpsUcOz8oCy-U>
-X-ME-Received: <xmr:NFNxYpcEPHGKBllVpD1iT97CFClOajIjwafjWikiw-9fdX8QHi3LsV8kD7Bia0bK8GW3JouqrGkqBARjKhDcUVq5wuyyHtMbicEjUfY>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdejgdeljecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvvefukfhfgggtuggjsehgtderredttddvnecuhfhrohhmpeforgigihhm
-    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
-    htvghrnhepteefffefgfektdefgfeludfgtdejfeejvddttdekteeiffejvdfgheehfffh
-    vedunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepmh
-    grgihimhgvsegtvghrnhhordhtvggthh
-X-ME-Proxy: <xmx:NFNxYnIKxZTY3cT3b-T0BC_i3UNejWx4x2rCHlbrcZXg-z8G-0SHwg>
-    <xmx:NFNxYuKioxjX8tJimduJWAQ47shg_gN3HbSsyIl_JV3S0stvrVfFTw>
-    <xmx:NFNxYowCQicvH7wAEGpXRxNBz9PHhfp1rq346ofnjwwq6Z87tzg53A>
-    <xmx:NlNxYt9AYSRBtZPogH7rtehgAW7qDSdkm-pxska8vyFZkXkkwnK-Nw>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 3 May 2022 12:07:16 -0400 (EDT)
-Date:   Tue, 3 May 2022 18:07:13 +0200
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Ruslan Zalata <rz@fabmicro.ru>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>, Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
-Subject: Re: [PATCH v2] hwmon: (sun4i-lradc) Add driver for LRADC found on
- Allwinner A13/A20 SoC
-Message-ID: <20220503160713.7kdikhd5kkgkotcp@houat>
-References: <20220428210906.29527-1-rz@fabmicro.ru>
- <20220502110010.q7vvdkdpaiz5acjl@houat>
- <6009fbef45a8b77caa4fc137093a1e23@fabmicro.ru>
+        Tue, 3 May 2022 12:11:31 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF9452B24C
+        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 09:07:57 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id j15so24070136wrb.2
+        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 09:07:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=h9qkGkLhyYVuP5NA+EyqoC9Fx6dLw0IZC0J4czMcE3s=;
+        b=Q3kJ8dp+glqL6hrMCvTstBZwmmJPz/CaYGwV/d2xk6xJBAeFfuS9shb832MfGT6Fuq
+         vl08vQTfs4UHQQYYc2UqZf11rgvLU2YvesaMJS5RhCFvNtiW/pwTuiUcPd8Peko6upbq
+         bHB3lt95E7lnHd4R9BBM5jhWGwQ/hlmhJJyqo5l7uNoZQ+IFVLKmDYf5sL+TXof0K0zA
+         JQG/IG5XHWr2bomNbJy5JvGUXC9dBXVhCJnoETdpR6S/zBanM7P/cWxwq81aSLeonEYq
+         /e3VP5qHvXG7fDN198EXXI2Gl3Pfu9oKifURmXEGQHlInf/4en50cV/cARyn9fdyaYs0
+         0PKg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=h9qkGkLhyYVuP5NA+EyqoC9Fx6dLw0IZC0J4czMcE3s=;
+        b=ZtIMUPOf92Jp1p4nDIK7wtKiukDnMf5h3VJbykCJudYqD/X2q6T1pxP20i7l0zlU1b
+         ln/547G2g17b+WysWXPt9Ckci7OTaHvoMMFlSKhGtg8Hy5b7GQRfaK7DkVeVJd1bezja
+         eeQP1uupinld8my+ZH0cCYPmND8dTktA3dEF106aXQpsfjxYHIQftTyHIAu+fKM5Q7SX
+         u3oBbDD0xmrA5uwKpog40y2R4TIkZ3KIt/KJkYPzDdjWLveKzvVn2RNhWsy3uYFCblWq
+         Os1eFmolOATAqK0SFRVT1F5gMeC2wIJzGSDoctjTYJ/Bj0GW6wr2DgC530ifzrrMvcRq
+         kKXA==
+X-Gm-Message-State: AOAM533m6c0b6cF0Sx3YBtmeCs0a0hDZCDmGs/ISFYZGYVN04syWWdXr
+        xG2LMU8XB4FrToHBmYRcW0DY2qFJDEErrbOV2uCD
+X-Google-Smtp-Source: ABdhPJybVow9Pu2mDV8hRgGZZILEuK6b9eT5oZLMJZzrGb8IbCTHvuar2Z5/Ftf+TBLoXXGDuX6+xSauHFiv5ehLslM=
+X-Received: by 2002:a05:6000:80e:b0:20c:5b45:a700 with SMTP id
+ bt14-20020a056000080e00b0020c5b45a700mr9669529wrb.662.1651594076393; Tue, 03
+ May 2022 09:07:56 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="o7q6542x2x5bfqc5"
-Content-Disposition: inline
-In-Reply-To: <6009fbef45a8b77caa4fc137093a1e23@fabmicro.ru>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220503090212.1322050-1-svens@linux.ibm.com>
+In-Reply-To: <20220503090212.1322050-1-svens@linux.ibm.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Tue, 3 May 2022 12:07:45 -0400
+Message-ID: <CAHC9VhQ=Lvvy=tOorGQA0FZwggCPkpEk0dFxWQZPkTLn0K2c4g@mail.gmail.com>
+Subject: Re: [PATCH 1/2] audit: add call argument to socketcall auditing
+To:     Sven Schnelle <svens@linux.ibm.com>
+Cc:     Eric Paris <eparis@redhat.com>, linux-audit@redhat.com,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, May 3, 2022 at 5:02 AM Sven Schnelle <svens@linux.ibm.com> wrote:
+>
+> socketcall auditing misses the call argument:
+>
+> type=SOCKETCALL msg=audit: nargs=3 a0=10 a1=3 a2=c
+>
+> which renders socketcall auditing (almost) useless. Add the call
+> argument so it is possible to decode the actual syscall from the
+> audit log:
+>
+> type=SOCKETCALL msg=audit: call=1 nargs=3 a0=10 a1=3 a2=c
+>
+> Signed-off-by: Sven Schnelle <svens@linux.ibm.com>
+> ---
+>  include/linux/audit.h | 10 +++++-----
+>  kernel/audit.h        |  1 +
+>  kernel/auditsc.c      |  6 ++++--
+>  net/compat.c          |  2 +-
+>  net/socket.c          |  2 +-
+>  5 files changed, 12 insertions(+), 9 deletions(-)
 
---o7q6542x2x5bfqc5
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Hi Sven,
 
-Hi,
+Thanks for catching this, my only guess is that the original code
+assumed that a0 held the socket call number.  In addition to the
+kernel test robot errors that need fixing, I've made some comments
+inline with the patch below ...
 
-On Tue, May 03, 2022 at 01:50:39PM +0500, Ruslan Zalata wrote:
-> > I guess a better path forward would be to either register an hwmon
-> > device in the original driver, or convert that driver to iio and use
-> > iio-hwmon.
->=20
-> My first idea was to add hwmon to sun4i-lradc-keys.c driver. But soon as I
-> began hacking the driver I quickly realized that it would be a mess since
-> keyboard and hwmon belong to two different subsystems.
+> diff --git a/kernel/audit.h b/kernel/audit.h
+> index 58b66543b4d5..34e53b6f0ebb 100644
+> --- a/kernel/audit.h
+> +++ b/kernel/audit.h
+> @@ -153,6 +153,7 @@ struct audit_context {
+>         int type;
+>         union {
+>                 struct {
+> +                       int call;
+>                         int nargs;
+>                         long args[6];
 
-That's not really an issue in itself. There's plenty of drivers in Linux
-that register into two frameworks.
+Not your code, but while you are making changes, perhaps make @args[6]
+and unsigned long to match the network stack's code.
 
-> Besides we would need to invent a way to control which way the driver
-> works (new bindings?).
+>                 } socketcall;
+> diff --git a/kernel/auditsc.c b/kernel/auditsc.c
+> index ea2ee1181921..c856893041c9 100644
+> --- a/kernel/auditsc.c
+> +++ b/kernel/auditsc.c
+> @@ -1399,8 +1399,9 @@ static void show_special(struct audit_context *context, int *call_panic)
+>         switch (context->type) {
+>         case AUDIT_SOCKETCALL: {
+>                 int nargs = context->socketcall.nargs;
+> +               int call = context->socketcall.call;
+>
+> -               audit_log_format(ab, "nargs=%d", nargs);
+> +               audit_log_format(ab, "call=%d nargs=%d", call, nargs);
+>                 for (i = 0; i < nargs; i++)
+>                         audit_log_format(ab, " a%d=%lx", i,
+>                                 context->socketcall.args[i]);
 
-I got confused there, and thought you were adding temperature reading
-that is in another ADC on those SoCs, sorry. Yeah, that doesn't make
-much sense to have both in the same drivers here.
+The approach we take when adding new fields to existing audit records
+is to add them to the end of the record.  Using your example in the
+patch description, we would want to see the following record format
+for SOCKETCALL:
 
-Maxime
+  type=SOCKETCALL msg=audit: nargs=3 a0=10 a1=3 a2=c call=1
 
---o7q6542x2x5bfqc5
-Content-Type: application/pgp-signature; name="signature.asc"
+> @@ -2684,13 +2685,14 @@ void __audit_bprm(struct linux_binprm *bprm)
+>   * @args: args array
+>   *
+>   */
+> -int __audit_socketcall(int nargs, unsigned long *args)
+> +int __audit_socketcall(int call, int nargs, unsigned long *args)
+>  {
+>         struct audit_context *context = audit_context();
+>
+>         if (nargs <= 0 || nargs > AUDITSC_ARGS || !args)
+>                 return -EINVAL;
+>         context->type = AUDIT_SOCKETCALL;
+> +       context->socketcall.call = call;
+>         context->socketcall.nargs = nargs;
+>         memcpy(context->socketcall.args, args, nargs * sizeof(unsigned long));
+>         return 0;
+> diff --git a/net/compat.c b/net/compat.c
+> index 210fc3b4d0d8..0df955019ecc 100644
+> --- a/net/compat.c
+> +++ b/net/compat.c
+> @@ -437,7 +437,7 @@ COMPAT_SYSCALL_DEFINE2(socketcall, int, call, u32 __user *, args)
+>         if (copy_from_user(a, args, len))
+>                 return -EFAULT;
+>
+> -       ret = audit_socketcall_compat(len / sizeof(a[0]), a);
+> +       ret = audit_socketcall_compat(call, len / sizeof(a[0]), a);
 
------BEGIN PGP SIGNATURE-----
+See my note below for the non-compat version of socketcall(2).
 
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYnFTMQAKCRDj7w1vZxhR
-xSoRAP9r204XnvG9FZ4a7NWbYj251o27k2mVVJqIz+t4Sa+vUAEA4W71CIx9ZBaA
-7muZe/5EDx4iJnaVyoBUgq/XK0A4wgQ=
-=tNMn
------END PGP SIGNATURE-----
+> diff --git a/net/socket.c b/net/socket.c
+> index 6887840682bb..ff71f28c96f7 100644
+> --- a/net/socket.c
+> +++ b/net/socket.c
+> @@ -2921,7 +2921,7 @@ SYSCALL_DEFINE2(socketcall, int, call, unsigned long __user *, args)
+>         if (copy_from_user(a, args, len))
+>                 return -EFAULT;
+>
+> -       err = audit_socketcall(nargs[call] / sizeof(unsigned long), a);
+> +       err = audit_socketcall(call, nargs[call] / sizeof(unsigned long), a);
 
---o7q6542x2x5bfqc5--
+I recognize that this isn't your code, but I think it might be better
+to cleanup the arg count calculation passed as the second parameter.
+Something like this not only looks cleaner, but it should be a bit
+more robust against other kernel changes:
+
+  err = audit_socketcall(call, len / AL(1), a);
+
+... it may also help resolve some of the kernel test robot errors you
+are seeing.
+
+-- 
+paul-moore.com

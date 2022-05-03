@@ -2,50 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2781C518E5F
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 22:11:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90EC6518E69
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 22:11:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234581AbiECUOj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 16:14:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48700 "EHLO
+        id S242386AbiECUOn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 16:14:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242213AbiECUNp (ORCPT
+        with ESMTP id S242219AbiECUNq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 16:13:45 -0400
+        Tue, 3 May 2022 16:13:46 -0400
 Received: from mail.baikalelectronics.ru (mail.baikalelectronics.com [87.245.175.226])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1E18D2C112;
-        Tue,  3 May 2022 13:10:11 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6A508403C9;
+        Tue,  3 May 2022 13:10:12 -0700 (PDT)
 Received: from mail.baikalelectronics.ru (unknown [192.168.51.25])
-        by mail.baikalelectronics.ru (Postfix) with ESMTP id 6DECD1E019;
-        Tue,  3 May 2022 23:10:44 +0300 (MSK)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.baikalelectronics.ru 6DECD1E019
+        by mail.baikalelectronics.ru (Postfix) with ESMTP id 90D5EBC0;
+        Tue,  3 May 2022 23:10:45 +0300 (MSK)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.baikalelectronics.ru 90D5EBC0
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baikalelectronics.ru; s=mail; t=1651608644;
-        bh=oH7lfkiEYXF2C7OEv0pADf3awSH8hsOXvowsTPSKNLA=;
+        d=baikalelectronics.ru; s=mail; t=1651608645;
+        bh=zyEGv+36zyeeJ4S0Wls9R252Y4Cs1w7GDhpbUZted1Q=;
         h=From:To:CC:Subject:Date:In-Reply-To:References:From;
-        b=IOXlkGPi1WfxdIOz/nJyq1abhez5oz2c4BTAhgu87BfLW8em6pcTjbAd6M7vfvk76
-         INGFzl0K2eruwt0JftSgcWhafYmbhqpJRwbWhp5G/VmyujXk1ZCawuzILPR/80sxmb
-         MetUNG0Zx293IaiRHYJzbiDJqX4AY8gQTcfdFUQ0=
+        b=g6jrVKhZ7nju7RpINdXasQHUXXpaDxZ3bhf4C1Uq9WLVQn+xFQF2sIELjGYsi1aGB
+         GG3O2BU5JrLX7YnVn+G26nL+f68CijLeAb9heTE5aA3/dhhdD2Hi21ixj8t6ZBT8Ua
+         /PRCzyrgsdaxTxTub2OyUy5dIrpFGC+fRyhg3+Jg=
 Received: from localhost (192.168.53.207) by mail (192.168.51.25) with
- Microsoft SMTP Server (TLS) id 15.0.1395.4; Tue, 3 May 2022 23:10:10 +0300
+ Microsoft SMTP Server (TLS) id 15.0.1395.4; Tue, 3 May 2022 23:10:11 +0300
 From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
 To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
         Hans de Goede <hdegoede@redhat.com>,
-        Jens Axboe <axboe@kernel.dk>
+        Jens Axboe <axboe@kernel.dk>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
 CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
         Serge Semin <fancer.lancer@gmail.com>,
         Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
         Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Rob Herring <robh+dt@kernel.org>, <linux-ide@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>
-Subject: [PATCH v2 11/23] ata: libahci_platform: Introduce reset assertion/deassertion methods
-Date:   Tue, 3 May 2022 23:09:26 +0300
-Message-ID: <20220503200938.18027-12-Sergey.Semin@baikalelectronics.ru>
+        <linux-ide@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>
+Subject: [PATCH v2 12/23] dt-bindings: ata: ahci: Add platform capability properties
+Date:   Tue, 3 May 2022 23:09:27 +0300
+Message-ID: <20220503200938.18027-13-Sergey.Semin@baikalelectronics.ru>
 In-Reply-To: <20220503200938.18027-1-Sergey.Semin@baikalelectronics.ru>
 References: <20220503200938.18027-1-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
 X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
@@ -56,179 +57,153 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently the ACHI-platform library supports only the assert and deassert
-reset signals and ignores the platforms with self-deasserting reset lines.
-That prone to having the platforms with self-deasserting reset method
-misbehaviour when it comes to resuming from sleep state after the clocks
-have been fully disabled. For such cases the controller needs to be fully
-reset all over after the reference clocks are enabled and stable,
-otherwise the controller state machine might be in an undetermined state.
-
-The best solution would be to auto-detect which reset method is supported
-by the particular platform and use it implicitly in the framework of the
-ahci_platform_enable_resources()/ahci_platform_disable_resources()
-methods. Alas it can't be implemented due to the AHCI-platform library
-already supporting the shared reset control lines. As [1] says in such
-case we have to use only one of the next methods:
-+ reset_control_assert()/reset_control_deassert();
-+ reset_control_reset()/reset_control_rearm().
-If the driver had an exclusive control over the reset lines we could have
-been able to manipulate the lines with no much limitation and just used
-the combination of the methods above to cover all the possible
-reset-control cases. Since the shared reset control has already been
-advertised and couldn't be changed with no risk to breaking the platforms
-relying on it, we have no choice but to make the platform drivers to
-determine which reset methods the platform reset system supports.
-
-In order to implement both types of reset control support we suggest to
-introduce the new AHCI-platform flag: AHCI_PLATFORM_RST_TRIGGER, which
-when passed to the ahci_platform_get_resources() method together with the
-AHCI_PLATFORM_GET_RESETS flag will indicate that the reset lines are
-self-deasserting thus the reset_control_reset()/reset_control_rearm() will
-be used to control the reset state. Otherwise the
-reset_control_deassert()/reset_control_assert() methods will be utilized.
-
-[1] Documentation/driver-api/reset.rst
+In case if the platform doesn't have BIOS or a comprehensive firmware
+installed then the HBA capability flags will be left uninitialized. As a
+good alternative we can define a set AHCI DT-node properties to describe
+all of HW-init capabilities flags. Luckily there aren't too many of them.
+SSS - Staggered Spin-up support and MPS - Mechanical Presence Switch
+support determine the corresponding feature availability for whole HBA by
+means of the "hba-sss" and "hba-smps" properties.  Each port can have the
+"hba-{hpcp,mpsp,cpd,esp,fbscp}" defined indicatating that the port
+supports the next functionality: HPCP - HotPlug capable port, MPSP -
+Mechanical Presence Switch attached to a port, CPD - Cold Plug detection,
+ESP - External SATA Port (eSATA), FBSCP - FIS-based switching capable
+port.
 
 Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
 
 ---
 
-Changelog v2:
-- Convert the ahci_platform_assert_rsts() method to returning int status
-  (@Damien).
-- Fix some grammar mistakes in the ahci_platform_deassert_rsts() doc
-  (@Damien).
+Alternatively we could define them as a bitfield, but having a set of
+boolean properties seemed a better idea since in that case we can
+implement a simple inter-dependency rules for them, which can't be done
+should we take the bitfields path.
 ---
- drivers/ata/ahci.h             |  1 +
- drivers/ata/libahci_platform.c | 50 ++++++++++++++++++++++++++++++----
- include/linux/ahci_platform.h  |  5 +++-
- 3 files changed, 50 insertions(+), 6 deletions(-)
+ .../devicetree/bindings/ata/ahci-common.yaml  | 66 +++++++++++++++++++
+ .../bindings/ata/ahci-platform.yaml           | 11 ++++
+ 2 files changed, 77 insertions(+)
 
-diff --git a/drivers/ata/ahci.h b/drivers/ata/ahci.h
-index c3770a19781b..7d834deefeb9 100644
---- a/drivers/ata/ahci.h
-+++ b/drivers/ata/ahci.h
-@@ -340,6 +340,7 @@ struct ahci_host_priv {
- 	bool			got_runtime_pm; /* Did we do pm_runtime_get? */
- 	unsigned int		n_clks;
- 	struct clk_bulk_data	*clks;		/* Optional */
-+	unsigned int		f_rsts;
- 	struct reset_control	*rsts;		/* Optional */
- 	struct regulator	**target_pwrs;	/* Optional */
- 	struct regulator	*ahci_regulator;/* Optional */
-diff --git a/drivers/ata/libahci_platform.c b/drivers/ata/libahci_platform.c
-index f7f9cac10cb1..f5ee2f9d014b 100644
---- a/drivers/ata/libahci_platform.c
-+++ b/drivers/ata/libahci_platform.c
-@@ -150,6 +150,44 @@ void ahci_platform_disable_clks(struct ahci_host_priv *hpriv)
- }
- EXPORT_SYMBOL_GPL(ahci_platform_disable_clks);
+diff --git a/Documentation/devicetree/bindings/ata/ahci-common.yaml b/Documentation/devicetree/bindings/ata/ahci-common.yaml
+index 70f915748270..371f5bd90639 100644
+--- a/Documentation/devicetree/bindings/ata/ahci-common.yaml
++++ b/Documentation/devicetree/bindings/ata/ahci-common.yaml
+@@ -75,6 +75,19 @@ properties:
+   phy-names:
+     const: sata-phy
  
-+/**
-+ * ahci_platform_deassert_rsts - Deassert/trigger platform resets
-+ * @hpriv: host private area to store config values
-+ *
-+ * This function deasserts or triggers all the reset lines found for
-+ * the AHCI device.
-+ *
-+ * RETURNS:
-+ * 0 on success otherwise a negative error code
-+ */
-+int ahci_platform_deassert_rsts(struct ahci_host_priv *hpriv)
-+{
-+	if (hpriv->f_rsts & AHCI_PLATFORM_RST_TRIGGER)
-+		return reset_control_reset(hpriv->rsts);
++  hba-sss:
++    type: boolean
++    description:
++      Staggered Spin-up Support. Indicates whether the HBA supports the
++      staggered spin-up on its ports, for use in balancing power spikes.
 +
-+	return reset_control_deassert(hpriv->rsts);
-+}
-+EXPORT_SYMBOL_GPL(ahci_platform_deassert_rsts);
++  hba-smps:
++    type: boolean
++    description:
++      Mechanical Presence Switch Support. Indicates whether the HBA supports
++      mechanical presence switches on its ports for use in hot plug
++      operations.
 +
-+/**
-+ * ahci_platform_assert_rsts - Assert/rearm platform resets
-+ * @hpriv: host private area to store config values
-+ *
-+ * This function asserts or rearms (for self-deasserting resets) all
-+ * the reset controls found for the AHCI device.
-+ *
-+ * RETURNS:
-+ * 0 on success otherwise a negative error code
-+ */
-+int ahci_platform_assert_rsts(struct ahci_host_priv *hpriv)
-+{
-+	if (hpriv->f_rsts & AHCI_PLATFORM_RST_TRIGGER)
-+		return reset_control_rearm(hpriv->rsts);
+   ports-implemented:
+     $ref: '/schemas/types.yaml#/definitions/uint32'
+     description:
+@@ -97,6 +110,40 @@ patternProperties:
+         minimum: 0
+         maximum: 31
+ 
++      hba-hpcp:
++        type: boolean
++        description:
++          Hot Plug Capable Port. Indicates that this port’s signal and power
++          connectors are externally accessible via a joint signal and power
++          connector for blindmate device hot plug. It is mutually exclusive
++          with the ESP feature.
 +
-+	return reset_control_assert(hpriv->rsts);
-+}
-+EXPORT_SYMBOL_GPL(ahci_platform_assert_rsts);
++      hba-mpsp:
++        type: boolean
++        description:
++          Mechanical Presence Switch Attached to Port. Indicates whether
++          the platform an mechanical presence switch attached to this
++          port.
 +
- /**
-  * ahci_platform_enable_regulators - Enable regulators
-  * @hpriv: host private area to store config values
-@@ -247,18 +285,18 @@ int ahci_platform_enable_resources(struct ahci_host_priv *hpriv)
- 	if (rc)
- 		goto disable_regulator;
- 
--	rc = reset_control_deassert(hpriv->rsts);
-+	rc = ahci_platform_deassert_rsts(hpriv);
- 	if (rc)
- 		goto disable_clks;
- 
- 	rc = ahci_platform_enable_phys(hpriv);
- 	if (rc)
--		goto disable_resets;
-+		goto disable_rsts;
- 
- 	return 0;
- 
--disable_resets:
--	reset_control_assert(hpriv->rsts);
-+disable_rsts:
-+	ahci_platform_assert_rsts(hpriv);
- 
- disable_clks:
- 	ahci_platform_disable_clks(hpriv);
-@@ -285,7 +323,7 @@ void ahci_platform_disable_resources(struct ahci_host_priv *hpriv)
- {
- 	ahci_platform_disable_phys(hpriv);
- 
--	reset_control_assert(hpriv->rsts);
-+	ahci_platform_assert_rsts(hpriv);
- 
- 	ahci_platform_disable_clks(hpriv);
- 
-@@ -478,6 +516,8 @@ struct ahci_host_priv *ahci_platform_get_resources(struct platform_device *pdev,
- 			rc = PTR_ERR(hpriv->rsts);
- 			goto err_out;
- 		}
++      hba-cpd:
++        type: boolean
++        description:
++          Cold Presence Detection. Indicates whether the platform supports
++          cold presence detection on this port.
 +
-+		hpriv->f_rsts = flags & AHCI_PLATFORM_RST_TRIGGER;
- 	}
++      hba-esp:
++        type: boolean
++        description:
++          External SATA Port. Indicates that this port’s signal connector
++          is externally accessible on a signal only connector (e.g. eSATA
++          connector).
++
++      hba-fbscp:
++        type: boolean
++        description:
++          FIS-based Switching Capable Port. Indicates whether this port
++          supports Port Multiplier FIS-based switching.
++
+       phys:
+         description: Individual AHCI SATA port PHY
+         maxItems: 1
+@@ -111,6 +158,25 @@ patternProperties:
+     required:
+       - reg
  
- 	/*
-diff --git a/include/linux/ahci_platform.h b/include/linux/ahci_platform.h
-index fd964e6a68d6..3418980b0341 100644
---- a/include/linux/ahci_platform.h
-+++ b/include/linux/ahci_platform.h
-@@ -26,6 +26,8 @@ struct clk *
- ahci_platform_find_clk(struct ahci_host_priv *hpriv, const char *con_id);
- int ahci_platform_enable_clks(struct ahci_host_priv *hpriv);
- void ahci_platform_disable_clks(struct ahci_host_priv *hpriv);
-+int ahci_platform_deassert_rsts(struct ahci_host_priv *hpriv);
-+int ahci_platform_assert_rsts(struct ahci_host_priv *hpriv);
- int ahci_platform_enable_regulators(struct ahci_host_priv *hpriv);
- void ahci_platform_disable_regulators(struct ahci_host_priv *hpriv);
- int ahci_platform_enable_resources(struct ahci_host_priv *hpriv);
-@@ -44,6 +46,7 @@ int ahci_platform_resume_host(struct device *dev);
- int ahci_platform_suspend(struct device *dev);
- int ahci_platform_resume(struct device *dev);
++    # eSATA can't be enabled together with the HotPlug capability
++    oneOf:
++      - required:
++          - hba-hpcp
++      - required:
++          - hba-esp
++      - not:
++          anyOf:
++            - required:
++                - hba-hpcp
++            - required:
++                - hba-esp
++
++    # HotPlug capability must be enabled together with Cold Plug
++    # Detection and Mechanical Presence Switching.
++    dependencies:
++      hba-cpd: ["hba-hpcp"]
++      hba-mpsp: ["hba-hpcp"]
++
+     additionalProperties: true
  
--#define AHCI_PLATFORM_GET_RESETS	0x01
-+#define AHCI_PLATFORM_GET_RESETS	BIT(0)
-+#define AHCI_PLATFORM_RST_TRIGGER	BIT(1)
+ required:
+diff --git a/Documentation/devicetree/bindings/ata/ahci-platform.yaml b/Documentation/devicetree/bindings/ata/ahci-platform.yaml
+index 76075d3c8987..6cad7e86f3bb 100644
+--- a/Documentation/devicetree/bindings/ata/ahci-platform.yaml
++++ b/Documentation/devicetree/bindings/ata/ahci-platform.yaml
+@@ -117,14 +117,25 @@ examples:
+         #address-cells = <1>;
+         #size-cells = <0>;
  
- #endif /* _AHCI_PLATFORM_H */
++        hba-smps;
++
+         sata0: sata-port@0 {
+             reg = <0>;
++
++            hba-fbscp;
++            hba-esp;
++
+             phys = <&sata_phy 0>;
+             target-supply = <&reg_sata0>;
+         };
+ 
+         sata1: sata-port@1 {
+             reg = <1>;
++
++            hba-fbscp;
++            hba-hpcp;
++            hba-mpsp;
++
+             phys = <&sata_phy 1>;
+             target-supply = <&reg_sata1>;
+         };
 -- 
 2.35.1
 

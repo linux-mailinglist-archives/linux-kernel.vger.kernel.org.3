@@ -2,185 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83E9C518956
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 18:08:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CDC4518958
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 18:09:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239165AbiECQLf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 12:11:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52252 "EHLO
+        id S239171AbiECQMk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 12:12:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239024AbiECQLb (ORCPT
+        with ESMTP id S236264AbiECQMi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 12:11:31 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF9452B24C
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 09:07:57 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id j15so24070136wrb.2
-        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 09:07:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=h9qkGkLhyYVuP5NA+EyqoC9Fx6dLw0IZC0J4czMcE3s=;
-        b=Q3kJ8dp+glqL6hrMCvTstBZwmmJPz/CaYGwV/d2xk6xJBAeFfuS9shb832MfGT6Fuq
-         vl08vQTfs4UHQQYYc2UqZf11rgvLU2YvesaMJS5RhCFvNtiW/pwTuiUcPd8Peko6upbq
-         bHB3lt95E7lnHd4R9BBM5jhWGwQ/hlmhJJyqo5l7uNoZQ+IFVLKmDYf5sL+TXof0K0zA
-         JQG/IG5XHWr2bomNbJy5JvGUXC9dBXVhCJnoETdpR6S/zBanM7P/cWxwq81aSLeonEYq
-         /e3VP5qHvXG7fDN198EXXI2Gl3Pfu9oKifURmXEGQHlInf/4en50cV/cARyn9fdyaYs0
-         0PKg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=h9qkGkLhyYVuP5NA+EyqoC9Fx6dLw0IZC0J4czMcE3s=;
-        b=ZtIMUPOf92Jp1p4nDIK7wtKiukDnMf5h3VJbykCJudYqD/X2q6T1pxP20i7l0zlU1b
-         ln/547G2g17b+WysWXPt9Ckci7OTaHvoMMFlSKhGtg8Hy5b7GQRfaK7DkVeVJd1bezja
-         eeQP1uupinld8my+ZH0cCYPmND8dTktA3dEF106aXQpsfjxYHIQftTyHIAu+fKM5Q7SX
-         u3oBbDD0xmrA5uwKpog40y2R4TIkZ3KIt/KJkYPzDdjWLveKzvVn2RNhWsy3uYFCblWq
-         Os1eFmolOATAqK0SFRVT1F5gMeC2wIJzGSDoctjTYJ/Bj0GW6wr2DgC530ifzrrMvcRq
-         kKXA==
-X-Gm-Message-State: AOAM533m6c0b6cF0Sx3YBtmeCs0a0hDZCDmGs/ISFYZGYVN04syWWdXr
-        xG2LMU8XB4FrToHBmYRcW0DY2qFJDEErrbOV2uCD
-X-Google-Smtp-Source: ABdhPJybVow9Pu2mDV8hRgGZZILEuK6b9eT5oZLMJZzrGb8IbCTHvuar2Z5/Ftf+TBLoXXGDuX6+xSauHFiv5ehLslM=
-X-Received: by 2002:a05:6000:80e:b0:20c:5b45:a700 with SMTP id
- bt14-20020a056000080e00b0020c5b45a700mr9669529wrb.662.1651594076393; Tue, 03
- May 2022 09:07:56 -0700 (PDT)
+        Tue, 3 May 2022 12:12:38 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 976F43191E
+        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 09:09:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651594145; x=1683130145;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=8wxgvauVYuf841d+tdRlrdA6sWSp7DMEF+fhN9R82Qw=;
+  b=PPfyR1tghkzhuIF05arIlUweSVfwsun29GUu8ahdNuBAbxVhaPN+9uJI
+   fiULeobXYxitlEduqRXLsSVxUFjwScXANAU92W5FihbA0Hl50cOiOwF27
+   TktPs8pa0li6SfIzot1V+gSJ2OMbtqVrPmvFng7yUOTAngQInrz2b9UbX
+   A0zmGXpmEoe0vudvoA9knhM6MOVV7Rb9awZwN3Zur+heXmox3ptX/Biju
+   swr753IMoiRW/dpMdKrbGwsbUJ2NrlhH9KQCszunA5Ho51U6zv+8ZHSoL
+   OrLCUFpBIlC5hIPyV4KkkvQv8sLSDffqJfnDQdLUljhRamkWc1CdaXZvW
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10336"; a="267671918"
+X-IronPort-AV: E=Sophos;i="5.91,195,1647327600"; 
+   d="scan'208";a="267671918"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2022 09:09:05 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,195,1647327600"; 
+   d="scan'208";a="631565347"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 03 May 2022 09:09:04 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nlv5D-000AbJ-NM;
+        Tue, 03 May 2022 16:09:03 +0000
+Date:   Wed, 4 May 2022 00:08:29 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Hector Martin <marcan@marcan.st>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [asahilinux:bits/130-cpufreq 3/4]
+ drivers/cpufreq/apple-soc-cpufreq.c:67:19: error: implicit declaration of
+ function 'readq_relaxed'; did you mean 'readl_relaxed'?
+Message-ID: <202205040029.C0d0tIsn-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220503090212.1322050-1-svens@linux.ibm.com>
-In-Reply-To: <20220503090212.1322050-1-svens@linux.ibm.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Tue, 3 May 2022 12:07:45 -0400
-Message-ID: <CAHC9VhQ=Lvvy=tOorGQA0FZwggCPkpEk0dFxWQZPkTLn0K2c4g@mail.gmail.com>
-Subject: Re: [PATCH 1/2] audit: add call argument to socketcall auditing
-To:     Sven Schnelle <svens@linux.ibm.com>
-Cc:     Eric Paris <eparis@redhat.com>, linux-audit@redhat.com,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 3, 2022 at 5:02 AM Sven Schnelle <svens@linux.ibm.com> wrote:
->
-> socketcall auditing misses the call argument:
->
-> type=SOCKETCALL msg=audit: nargs=3 a0=10 a1=3 a2=c
->
-> which renders socketcall auditing (almost) useless. Add the call
-> argument so it is possible to decode the actual syscall from the
-> audit log:
->
-> type=SOCKETCALL msg=audit: call=1 nargs=3 a0=10 a1=3 a2=c
->
-> Signed-off-by: Sven Schnelle <svens@linux.ibm.com>
-> ---
->  include/linux/audit.h | 10 +++++-----
->  kernel/audit.h        |  1 +
->  kernel/auditsc.c      |  6 ++++--
->  net/compat.c          |  2 +-
->  net/socket.c          |  2 +-
->  5 files changed, 12 insertions(+), 9 deletions(-)
+tree:   https://github.com/AsahiLinux/linux bits/130-cpufreq
+head:   b7105141d60ddab11c03955ae5389fc7f2a369da
+commit: 3580ed2b7ae9f66539990a47a90aa71308dab079 [3/4] cpufreq: apple-soc: Add new driver to control Apple SoC CPU P-states
+config: arm-allyesconfig (https://download.01.org/0day-ci/archive/20220504/202205040029.C0d0tIsn-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/AsahiLinux/linux/commit/3580ed2b7ae9f66539990a47a90aa71308dab079
+        git remote add asahilinux https://github.com/AsahiLinux/linux
+        git fetch --no-tags asahilinux bits/130-cpufreq
+        git checkout 3580ed2b7ae9f66539990a47a90aa71308dab079
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
 
-Hi Sven,
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Thanks for catching this, my only guess is that the original code
-assumed that a0 held the socket call number.  In addition to the
-kernel test robot errors that need fixing, I've made some comments
-inline with the patch below ...
+All errors (new ones prefixed by >>):
 
-> diff --git a/kernel/audit.h b/kernel/audit.h
-> index 58b66543b4d5..34e53b6f0ebb 100644
-> --- a/kernel/audit.h
-> +++ b/kernel/audit.h
-> @@ -153,6 +153,7 @@ struct audit_context {
->         int type;
->         union {
->                 struct {
-> +                       int call;
->                         int nargs;
->                         long args[6];
+   drivers/cpufreq/apple-soc-cpufreq.c: In function 'apple_soc_cpufreq_get_rate':
+>> drivers/cpufreq/apple-soc-cpufreq.c:67:19: error: implicit declaration of function 'readq_relaxed'; did you mean 'readl_relaxed'? [-Werror=implicit-function-declaration]
+      67 |         u64 reg = readq_relaxed(priv->reg_base + APPLE_DVFS_STATUS);
+         |                   ^~~~~~~~~~~~~
+         |                   readl_relaxed
+   In file included from drivers/cpufreq/apple-soc-cpufreq.c:18:
+   drivers/cpufreq/apple-soc-cpufreq.c: In function 'apple_soc_cpufreq_set_target':
+>> include/linux/iopoll.h:165:35: error: implicit declaration of function 'readq'; did you mean 'readl'? [-Werror=implicit-function-declaration]
+     165 |         readx_poll_timeout_atomic(readq, addr, val, cond, delay_us, timeout_us)
+         |                                   ^~~~~
+   include/linux/iopoll.h:88:25: note: in definition of macro 'read_poll_timeout_atomic'
+      88 |                 (val) = op(args); \
+         |                         ^~
+   include/linux/iopoll.h:165:9: note: in expansion of macro 'readx_poll_timeout_atomic'
+     165 |         readx_poll_timeout_atomic(readq, addr, val, cond, delay_us, timeout_us)
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/cpufreq/apple-soc-cpufreq.c:87:13: note: in expansion of macro 'readq_poll_timeout_atomic'
+      87 |         if (readq_poll_timeout_atomic(priv->reg_base + APPLE_DVFS_CMD, reg,
+         |             ^~~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/cpufreq/apple-soc-cpufreq.c:98:9: error: implicit declaration of function 'writeq_relaxed'; did you mean 'writeb_relaxed'? [-Werror=implicit-function-declaration]
+      98 |         writeq_relaxed(reg, priv->reg_base + APPLE_DVFS_CMD);
+         |         ^~~~~~~~~~~~~~
+         |         writeb_relaxed
+   drivers/cpufreq/apple-soc-cpufreq.c: At top level:
+   drivers/cpufreq/apple-soc-cpufreq.c:291:27: warning: initialized field overwritten [-Woverride-init]
+     291 |         .attr           = apple_soc_cpufreq_hw_attr,
+         |                           ^~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/cpufreq/apple-soc-cpufreq.c:291:27: note: (near initialization for 'apple_soc_cpufreq_driver.attr')
+   cc1: some warnings being treated as errors
 
-Not your code, but while you are making changes, perhaps make @args[6]
-and unsigned long to match the network stack's code.
 
->                 } socketcall;
-> diff --git a/kernel/auditsc.c b/kernel/auditsc.c
-> index ea2ee1181921..c856893041c9 100644
-> --- a/kernel/auditsc.c
-> +++ b/kernel/auditsc.c
-> @@ -1399,8 +1399,9 @@ static void show_special(struct audit_context *context, int *call_panic)
->         switch (context->type) {
->         case AUDIT_SOCKETCALL: {
->                 int nargs = context->socketcall.nargs;
-> +               int call = context->socketcall.call;
->
-> -               audit_log_format(ab, "nargs=%d", nargs);
-> +               audit_log_format(ab, "call=%d nargs=%d", call, nargs);
->                 for (i = 0; i < nargs; i++)
->                         audit_log_format(ab, " a%d=%lx", i,
->                                 context->socketcall.args[i]);
+vim +67 drivers/cpufreq/apple-soc-cpufreq.c
 
-The approach we take when adding new fields to existing audit records
-is to add them to the end of the record.  Using your example in the
-patch description, we would want to see the following record format
-for SOCKETCALL:
-
-  type=SOCKETCALL msg=audit: nargs=3 a0=10 a1=3 a2=c call=1
-
-> @@ -2684,13 +2685,14 @@ void __audit_bprm(struct linux_binprm *bprm)
->   * @args: args array
->   *
->   */
-> -int __audit_socketcall(int nargs, unsigned long *args)
-> +int __audit_socketcall(int call, int nargs, unsigned long *args)
->  {
->         struct audit_context *context = audit_context();
->
->         if (nargs <= 0 || nargs > AUDITSC_ARGS || !args)
->                 return -EINVAL;
->         context->type = AUDIT_SOCKETCALL;
-> +       context->socketcall.call = call;
->         context->socketcall.nargs = nargs;
->         memcpy(context->socketcall.args, args, nargs * sizeof(unsigned long));
->         return 0;
-> diff --git a/net/compat.c b/net/compat.c
-> index 210fc3b4d0d8..0df955019ecc 100644
-> --- a/net/compat.c
-> +++ b/net/compat.c
-> @@ -437,7 +437,7 @@ COMPAT_SYSCALL_DEFINE2(socketcall, int, call, u32 __user *, args)
->         if (copy_from_user(a, args, len))
->                 return -EFAULT;
->
-> -       ret = audit_socketcall_compat(len / sizeof(a[0]), a);
-> +       ret = audit_socketcall_compat(call, len / sizeof(a[0]), a);
-
-See my note below for the non-compat version of socketcall(2).
-
-> diff --git a/net/socket.c b/net/socket.c
-> index 6887840682bb..ff71f28c96f7 100644
-> --- a/net/socket.c
-> +++ b/net/socket.c
-> @@ -2921,7 +2921,7 @@ SYSCALL_DEFINE2(socketcall, int, call, unsigned long __user *, args)
->         if (copy_from_user(a, args, len))
->                 return -EFAULT;
->
-> -       err = audit_socketcall(nargs[call] / sizeof(unsigned long), a);
-> +       err = audit_socketcall(call, nargs[call] / sizeof(unsigned long), a);
-
-I recognize that this isn't your code, but I think it might be better
-to cleanup the arg count calculation passed as the second parameter.
-Something like this not only looks cleaner, but it should be a bit
-more robust against other kernel changes:
-
-  err = audit_socketcall(call, len / AL(1), a);
-
-... it may also help resolve some of the kernel test robot errors you
-are seeing.
+    62	
+    63	static unsigned int apple_soc_cpufreq_get_rate(unsigned int cpu)
+    64	{
+    65		struct cpufreq_policy *policy = cpufreq_cpu_get_raw(cpu);
+    66		struct apple_cpu_priv *priv = policy->driver_data;
+  > 67		u64 reg = readq_relaxed(priv->reg_base + APPLE_DVFS_STATUS);
+    68		unsigned int pstate = FIELD_GET(APPLE_DVFS_STATUS_CUR_PS, reg);
+    69		unsigned int i;
+    70	
+    71		for (i = 0; policy->freq_table[i].frequency != CPUFREQ_TABLE_END; i++)
+    72			if (policy->freq_table[i].driver_data == pstate)
+    73				return policy->freq_table[i].frequency;
+    74	
+    75		dev_err(priv->cpu_dev, "could not find frequency for pstate %d\n",
+    76			pstate);
+    77		return 0;
+    78	}
+    79	
+    80	static int apple_soc_cpufreq_set_target(struct cpufreq_policy *policy,
+    81						unsigned int index)
+    82	{
+    83		struct apple_cpu_priv *priv = policy->driver_data;
+    84		unsigned int pstate = policy->freq_table[index].driver_data;
+    85		u64 reg;
+    86	
+    87		if (readq_poll_timeout_atomic(priv->reg_base + APPLE_DVFS_CMD, reg,
+    88					      !(reg & APPLE_DVFS_CMD_BUSY), 2,
+    89					      APPLE_DVFS_TRANSITION_TIMEOUT)) {
+    90			return -EIO;
+    91		}
+    92	
+    93		reg &= ~(APPLE_DVFS_CMD_PS1 | APPLE_DVFS_CMD_PS2);
+    94		reg |= FIELD_PREP(APPLE_DVFS_CMD_PS1, pstate);
+    95		reg |= FIELD_PREP(APPLE_DVFS_CMD_PS2, pstate);
+    96		reg |= APPLE_DVFS_CMD_SET;
+    97	
+  > 98		writeq_relaxed(reg, priv->reg_base + APPLE_DVFS_CMD);
+    99	
+   100		return 0;
+   101	}
+   102	
 
 -- 
-paul-moore.com
+0-DAY CI Kernel Test Service
+https://01.org/lkp

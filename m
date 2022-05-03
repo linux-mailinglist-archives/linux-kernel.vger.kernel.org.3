@@ -2,112 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9B84518307
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 13:05:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46010518315
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 13:11:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234580AbiECLIj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 07:08:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46496 "EHLO
+        id S234601AbiECLPM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 07:15:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233840AbiECLIh (ORCPT
+        with ESMTP id S233641AbiECLPK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 07:08:37 -0400
-Received: from mail.schwermer.no (mail.schwermer.no [49.12.228.226])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 689513389C;
-        Tue,  3 May 2022 04:05:02 -0700 (PDT)
-X-Virus-Scanned: Yes
-From:   Sven Schwermer <sven@svenschwermer.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=svenschwermer.de;
-        s=mail; t=1651575899;
-        bh=2uuu+yuJXc4Y3si40nnMPwy4Mz/cdP0i8l5Ix0V6TVU=;
-        h=From:To:Cc:Subject:In-Reply-To:References;
-        b=cqrRFVXpIDOxvl2xIXy+L8TKjfcSyYT+ZsI6epH0Bf0y9GeOBVyMGqhr0+Ts4zgCl
-         L38rDk2Alw8QfFhwGj1eBa8ZPjVv2OrJtspfv7vY50opl1LrAeGpsUHQ4yX2V+hGTW
-         ozkK1O8A7ntkEovZ3T2/h+1/gyTKAN9nYBhcUQQTKkWoMw/Ou4qQTH8TR/E9GyCz8N
-         wFvZQM8660dPi4U8lm0tzfRySovjEwiM6eSm2AbFD7mHomCK9sX9TgbSx5D9WmVTzG
-         h4G7yGnO1zmDUwgRHwuaRJIhCW9peCETVb3xcAxUbZpXxo8mxUfq5Q9tVfB3X7AOyK
-         kFxklU3WYKwIw==
-To:     linux-leds@vger.kernel.org, linux-kernel@vger.kernel.org,
-        pavel@ucw.cz, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, dmurphy@ti.com,
-        devicetree@vger.kernel.org
-Cc:     Sven Schwermer <sven.schwermer@disruptive-technologies.com>
-Subject: [PATCH v1 2/2] leds: multicolor: Read default-intensities property
-Date:   Tue,  3 May 2022 13:04:51 +0200
-Message-Id: <03decec200aa7550f66be8454438eb3db6a2378a.1651575831.git.sven.schwermer@disruptive-technologies.com>
-In-Reply-To: <364df52a196fa0ae5db07e599995fcf8dfafb43e.1651575831.git.sven.schwermer@disruptive-technologies.com>
-References: <364df52a196fa0ae5db07e599995fcf8dfafb43e.1651575831.git.sven.schwermer@disruptive-technologies.com>
-Mime-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 3 May 2022 07:15:10 -0400
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98A583464A;
+        Tue,  3 May 2022 04:11:38 -0700 (PDT)
+Received: by mail-wm1-f49.google.com with SMTP id n126-20020a1c2784000000b0038e8af3e788so1076660wmn.1;
+        Tue, 03 May 2022 04:11:38 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=GsogsT9bhJS0azISfSjF4/Gdtg2bL/l2CaKN/yJOq2U=;
+        b=KMTJX39ow68qWmWxgO+TP55iaLnuVRVItcxZCM/jcq0PDeUUkyUlH2Ta5j4TiY67tq
+         YyUyAMb3Va1AMjWmF8veGu5qMzZuUjBWGmNXmavS8exzwHLMsfphZzNnHv2ppX2DHFjZ
+         wMCFdHKhTnBTJDc+HnHyIg5mAyEKqcGkF1IjVvMxczSXu5Nl194gOsaLXz/yfa8eqPBi
+         B//FIZKXozbu4IwJcrJQ4EjqDdaiUPqt0C6ZAyB0frYn6IpTJxD3LnsDjsQGVM0fmCXj
+         xtXbsXGZ9QNFMU8E2k/CCy7e3Vr1Sf3p/kRAVjemRTqynn+o+ZwOzfGnuLNBPSchnqqQ
+         LkXA==
+X-Gm-Message-State: AOAM5309pMk1fKYbLOTgnX3bNOJrvnHBQ21xbEnFeozjTcrWu2epPEk2
+        JQ7nHJLhhBeWCp+/+HoX3EM=
+X-Google-Smtp-Source: ABdhPJyhUyArLZ6U7eQ4wiMgOJiKkSAK1pVUfdJy3Bn7VLBKr52ZTx0gXisXtzzC4SGwFA0Yn97PTA==
+X-Received: by 2002:a1c:770b:0:b0:394:3fae:ab79 with SMTP id t11-20020a1c770b000000b003943faeab79mr2884315wmi.200.1651576297176;
+        Tue, 03 May 2022 04:11:37 -0700 (PDT)
+Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
+        by smtp.gmail.com with ESMTPSA id n21-20020a7bc5d5000000b003942a244f47sm1708601wmk.32.2022.05.03.04.11.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 May 2022 04:11:36 -0700 (PDT)
+Date:   Tue, 3 May 2022 11:11:34 +0000
+From:   Wei Liu <wei.liu@kernel.org>
+To:     Vitaly Kuznetsov <vkuznets@redhat.com>
+Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Siddharth Chandrasekaran <sidcha@amazon.de>,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Wei Liu <wei.liu@kernel.org>
+Subject: Re: [PATCH v3 07/34] x86/hyperv: Introduce
+ HV_MAX_SPARSE_VCPU_BANKS/HV_VCPUS_PER_SPARSE_BANK constants
+Message-ID: <20220503111134.zuzidhqfmac2csfm@liuwe-devbox-debian-v2>
+References: <20220414132013.1588929-1-vkuznets@redhat.com>
+ <20220414132013.1588929-8-vkuznets@redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220414132013.1588929-8-vkuznets@redhat.com>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sven Schwermer <sven.schwermer@disruptive-technologies.com>
+On Thu, Apr 14, 2022 at 03:19:46PM +0200, Vitaly Kuznetsov wrote:
+> It may not come clear from where the magical '64' value used in
+> __cpumask_to_vpset() come from. Moreover, '64' means both the maximum
+> sparse bank number as well as the number of vCPUs per bank. Add defines
+> to make things clear. These defines are also going to be used by KVM.
+> 
+> No functional change.
+> 
+> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
 
-This allows to assign intensity values taken from the firmware interface
-(if available) to the indivisual sub LEDs (colors) at driver probe time,
-i.e. most commonly at kernel boot time. This is crucial for setting a
-specific color and early in the boot process. While it would be possible
-to set a static color in the bootloader, this mechanism allows setting a
-pattern (e.g. blinking) at a specific color.
-
-Signed-off-by: Sven Schwermer <sven.schwermer@disruptive-technologies.com>
----
- drivers/leds/led-class-multicolor.c | 21 +++++++++++++++++++++
- 1 file changed, 21 insertions(+)
-
-diff --git a/drivers/leds/led-class-multicolor.c b/drivers/leds/led-class-multicolor.c
-index e317408583df..eb7f11345ec1 100644
---- a/drivers/leds/led-class-multicolor.c
-+++ b/drivers/leds/led-class-multicolor.c
-@@ -9,6 +9,7 @@
- #include <linux/module.h>
- #include <linux/slab.h>
- #include <linux/uaccess.h>
-+#include <linux/property.h>
- 
- #include "leds.h"
- 
-@@ -116,6 +117,23 @@ static struct attribute *led_multicolor_attrs[] = {
- };
- ATTRIBUTE_GROUPS(led_multicolor);
- 
-+static void multi_load_default_intensities(struct device *parent,
-+					   struct led_classdev_mc *mcled_cdev,
-+					   struct fwnode_handle *fwnode)
-+{
-+	u32 intensities[LED_COLOR_ID_MAX];
-+	int ret;
-+	int i;
-+
-+	ret = fwnode_property_read_u32_array(fwnode, "default-intensities",
-+					     intensities, mcled_cdev->num_colors);
-+	if (ret < 0 && ret != -ENODATA)
-+		dev_warn(parent, "failed to read default-intensities property: %d", ret);
-+
-+	for (i = 0; i < ret; i++)
-+		mcled_cdev->subled_info[i].intensity = intensities[i];
-+}
-+
- int led_classdev_multicolor_register_ext(struct device *parent,
- 				     struct led_classdev_mc *mcled_cdev,
- 				     struct led_init_data *init_data)
-@@ -134,6 +152,9 @@ int led_classdev_multicolor_register_ext(struct device *parent,
- 	led_cdev = &mcled_cdev->led_cdev;
- 	mcled_cdev->led_cdev.groups = led_multicolor_groups;
- 
-+	if (init_data && init_data->fwnode)
-+		multi_load_default_intensities(parent, mcled_cdev, init_data->fwnode);
-+
- 	return led_classdev_register_ext(parent, led_cdev, init_data);
- }
- EXPORT_SYMBOL_GPL(led_classdev_multicolor_register_ext);
--- 
-2.36.0
-
+Acked-by: Wei Liu <wei.liu@kernel.org>

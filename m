@@ -2,139 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55B84517E0A
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 09:04:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD6F7517E0E
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 09:06:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231511AbiECHGk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 03:06:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60572 "EHLO
+        id S231487AbiECHKB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 03:10:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231477AbiECHGd (ORCPT
+        with ESMTP id S230427AbiECHJ7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 03:06:33 -0400
-Received: from out162-62-57-64.mail.qq.com (out162-62-57-64.mail.qq.com [162.62.57.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FA722229D
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 00:03:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1651561378;
-        bh=h/u8mB+P2I1PeYBUyXJQEYLg+PcOwclXueD7WQy5lFA=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=SEh4wPDdeb4Ml5kzQJsPNuoLNzzbnVv0v/JcyYGD72jabxX8KsJdbolHD3+wvFZQz
-         +09AaHmn9a6tgt6u/Icac0DgZ24NfL2zbUWsjZK4do9x07P1Y69kattQGlNjaDaFtM
-         DWz2Ns6iGiurmM20jFRr5mDVjHPim0iq9pCR32Sc=
-Received: from localhost.localdomain ([59.172.176.242])
-        by newxmesmtplogicsvrszb6.qq.com (NewEsmtp) with SMTP
-        id B78109E; Tue, 03 May 2022 15:02:55 +0800
-X-QQ-mid: xmsmtpt1651561375tmbgzldl9
-Message-ID: <tencent_702C3C4AA9F65F0EE48859211795E3800205@qq.com>
-X-QQ-XMAILINFO: NhUkPfKlCtQwc4l6nqpQb1iMLkQctnwhVMfSaVNQH3tIKaOtuOrS2GkY1bdbOA
-         d8ivVbHxH890WZrwNDxxhmvYF2wq/kNNfSD1eRsXRQkK3U2DVkdFc0rYxe5ZSpk729KMxyJ8gqsj
-         8WjKwFdyXECu7d/tL6jihMwl2dk5PES+ZhCPDbSOORzEk9ntGdM2lXalXaBQQnQTg/S+Ovt8kU68
-         Rn58N78PRC0cGH+7Wich1/JDSmwLD/AOOj/PQkHYyfjwxo0wBNaikvUzx6fTW+u9BI/R2Uyp5ySs
-         w+iDexUlkz8fQZagX8lMboOBhmtrAdASyu+hgJe1ZwbQw2qKoK9TIpLY38SkPBVK5Y8OBiuigk68
-         gHzFhdd7iHTw6m6NTEGDo6S4gp6RVk73/OxJGUInWrnr7oN0s/9Co4CQRUIo0Clx83FIpouCfgM1
-         xYd5m2RsuFKQhB0aVJSkLjKDv8XKj47RcKXj6bnYNTUyYI/Rh/qKwhJmF8GFKf05qVqg/OIgYqSX
-         HMKWM4Itb9L2msmhWv9HRUOPyLzAJY4UVn769bgw+7RoW6DesaopPp9eYb5gT75B/EHLm+7aNzOs
-         x3g87NB2XjGgwZ56zZ8oEXLPoAd7McZJZ3YRN7ncSFvXce5zLBCchSsd4Jn2av/R2V0Owo26E9xs
-         3GLCeEprFtDpjJYUI5wrsCaWLDh4c4rhNkn4kcT1dkQBNX3BInSGd3bwWN4mtZDLhRf76eWy9Gzf
-         m2C+Uy69N88+tYRDK16L0LvBFuBIyZxZg2jp3/QoMKD6yVASKjiQPRWvWhzEVt8YBzVdS8bvsTYp
-         UzDBJQcdtSIgIdCLMctwl/PqmsqV2MylmiN06pPUhlgaEjO2Tonz70UoZ+gAaE9igN6O7dNnLbU5
-         Xv5Zz/ZTUhSXjgqI3IEJRy1lqQXtIA9kAhfb0D9XD9add/MIFok7L9MIH1Y8JrXM9KDzeuR/PVvx
-         R4VZFV69Tcn9s98Mv+l9EIaCO3OjHRDUvt09JfHeg2CWEJUZaLNKAe4hW8BQ3w
-From:   xkernel.wang@foxmail.com
-To:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
-        gregkh@linuxfoundation.org
-Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Xiaoke Wang <xkernel.wang@foxmail.com>
-Subject: [PATCH 12/12] staging: r8188eu: check the return of kzalloc()
-Date:   Tue,  3 May 2022 15:02:46 +0800
-X-OQ-MSGID: <20220503070246.3411-1-xkernel.wang@foxmail.com>
-In-Reply-To: <tencent_A80380E4306BE7BA73E450F084232B4DFC0A@qq.com>
-References: <tencent_A80380E4306BE7BA73E450F084232B4DFC0A@qq.com>
+        Tue, 3 May 2022 03:09:59 -0400
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF2522AC4D
+        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 00:06:27 -0700 (PDT)
+Received: by mail-il1-f198.google.com with SMTP id j16-20020a056e02125000b002cc39632ab9so8477826ilq.9
+        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 00:06:27 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=CitJ2jAIqYvqUc9ni5kUYdgty2ChYsOADDS45Ei2Eac=;
+        b=SNc0w6XQbMRzrJuz5h8XPEU2T3B4/NpZlDiVqPfvh/SIEBoj15gfG9u/jYgEAfQW1F
+         rwOPxDuy1x079jEEk6pUj15K/9M0cAoCcDkV1Z4S1cCNzyJvXNpnSV///zM6NJGu593n
+         ytohCZQBX/tBOmpuZa/UmYpGnQgW8TETjJ9wiGW6xgoOH9ai5tnxGSQUmgOkAnXn1R3/
+         P4OT6Q7x7tTjSiJ5OjFeHf3HltMOaGs8nXVtpsw4X24H9MbSFn0J4kxNbIED73akYUGW
+         xkUmCODTk2M7o5cLUs7zPwYh6U/JQmQJ0y8lQ+9/BkmfocvUn1sEqYLWGiQR0gIsbQS6
+         +evg==
+X-Gm-Message-State: AOAM5315RVXvyP+IVSRRwSg840TBQXR6odulpk22yJCFg3DoIVuzEkbH
+        7NMBv8hmGl6MXTqHBFqQN3v68EiRWI0WxDFxkomO3a43SWQd
+X-Google-Smtp-Source: ABdhPJyUiKVWB9F68ylOJOw81KBHZ/vUOjCHaezWuOkXL34CuGFOWMvNH9d3Tx2ovlFiOBwOHvgz6khC2TMiN5Hmn6xhPnsadMRf
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RDNS_DYNAMIC,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+X-Received: by 2002:a05:6638:1392:b0:32b:8496:2c83 with SMTP id
+ w18-20020a056638139200b0032b84962c83mr476408jad.136.1651561587282; Tue, 03
+ May 2022 00:06:27 -0700 (PDT)
+Date:   Tue, 03 May 2022 00:06:27 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000bc1eab05de1625c4@google.com>
+Subject: [syzbot] KASAN: global-out-of-bounds Read in mac802154_header_create
+From:   syzbot <syzbot+f4751c2cc423e56e9e79@syzkaller.appspotmail.com>
+To:     alex.aring@gmail.com, davem@davemloft.net, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, linux-wpan@vger.kernel.org,
+        netdev@vger.kernel.org, pabeni@redhat.com,
+        stefan@datenfreihafen.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xiaoke Wang <xkernel.wang@foxmail.com>
+Hello,
 
-kzalloc() is a memory allocation function which can return NULL when
-some internal memory errors happen. So it is better to handle the return
-of it to prevent potential wrong memory access.
+syzbot found the following issue on:
 
-Besides, to propagate the error to the caller, the type of
-rtw_alloc_hwxmits() is changed to `int` and another check is added to
-its caller.
-Then if kzalloc() fails, the caller will properly jump to the
-corresponding error hanlding code.
+HEAD commit:    8f4dd16603ce Merge branch 'akpm' (patches from Andrew)
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=110ecc12f00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=d21a72f6016e37e8
+dashboard link: https://syzkaller.appspot.com/bug?extid=f4751c2cc423e56e9e79
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
-Signed-off-by: Xiaoke Wang <xkernel.wang@foxmail.com>
+Unfortunately, I don't have any reproducer for this issue yet.
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+f4751c2cc423e56e9e79@syzkaller.appspotmail.com
+
+==================================================================
+BUG: KASAN: global-out-of-bounds in get_unaligned_be64 include/asm-generic/unaligned.h:67 [inline]
+BUG: KASAN: global-out-of-bounds in ieee802154_be64_to_le64 include/net/mac802154.h:367 [inline]
+BUG: KASAN: global-out-of-bounds in mac802154_header_create+0x4f6/0x530 net/mac802154/iface.c:455
+Read of size 8 at addr ffffffff8a597460 by task dhcpcd/3342
+
+CPU: 3 PID: 3342 Comm: dhcpcd Not tainted 5.18.0-rc4-syzkaller-00064-g8f4dd16603ce #0
+Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-2 04/01/2014
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ print_address_description.constprop.0.cold+0xf/0x467 mm/kasan/report.c:313
+ print_report mm/kasan/report.c:429 [inline]
+ kasan_report.cold+0xf4/0x1c6 mm/kasan/report.c:491
+ get_unaligned_be64 include/asm-generic/unaligned.h:67 [inline]
+ ieee802154_be64_to_le64 include/net/mac802154.h:367 [inline]
+ mac802154_header_create+0x4f6/0x530 net/mac802154/iface.c:455
+ dev_hard_header include/linux/netdevice.h:2983 [inline]
+ vlan_dev_hard_header+0x13d/0x510 net/8021q/vlan_dev.c:82
+ dev_hard_header include/linux/netdevice.h:2983 [inline]
+ lapbeth_data_transmit+0x29f/0x350 drivers/net/wan/lapbether.c:257
+ lapb_data_transmit+0x8f/0xc0 net/lapb/lapb_iface.c:447
+ lapb_transmit_buffer+0x183/0x390 net/lapb/lapb_out.c:149
+ lapb_send_control+0x1c7/0x370 net/lapb/lapb_subr.c:251
+ lapb_establish_data_link+0xe7/0x110 net/lapb/lapb_out.c:163
+ lapb_device_event+0x395/0x560 net/lapb/lapb_iface.c:512
+ notifier_call_chain+0xb5/0x200 kernel/notifier.c:84
+ call_netdevice_notifiers_info+0xb5/0x130 net/core/dev.c:1938
+ call_netdevice_notifiers_extack net/core/dev.c:1976 [inline]
+ call_netdevice_notifiers net/core/dev.c:1990 [inline]
+ __dev_notify_flags+0x110/0x2b0 net/core/dev.c:8471
+ dev_change_flags+0x112/0x170 net/core/dev.c:8509
+ devinet_ioctl+0x15d1/0x1ca0 net/ipv4/devinet.c:1148
+ inet_ioctl+0x1e6/0x320 net/ipv4/af_inet.c:969
+ sock_do_ioctl+0xcc/0x230 net/socket.c:1122
+ sock_ioctl+0x2f1/0x640 net/socket.c:1239
+ vfs_ioctl fs/ioctl.c:51 [inline]
+ __do_sys_ioctl fs/ioctl.c:870 [inline]
+ __se_sys_ioctl fs/ioctl.c:856 [inline]
+ __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:856
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x7f934e09d0e7
+Code: 3c 1c e8 1c ff ff ff 85 c0 79 87 49 c7 c4 ff ff ff ff 5b 5d 4c 89 e0 41 5c c3 66 0f 1f 84 00 00 00 00 00 b8 10 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d 61 9d 0c 00 f7 d8 64 89 01 48
+RSP: 002b:00007ffc98450468 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+RAX: ffffffffffffffda RBX: 00007f934dfaf6c8 RCX: 00007f934e09d0e7
+RDX: 00007ffc98460658 RSI: 0000000000008914 RDI: 0000000000000008
+RBP: 00007ffc98470808 R08: 00007ffc98460618 R09: 00007ffc984605c8
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007ffc98460658 R14: 0000000000000028 R15: 0000000000008914
+ </TASK>
+
+The buggy address belongs to the variable:
+ bcast_addr+0x0/0x14a0
+
+Memory state around the buggy address:
+ ffffffff8a597300: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+ ffffffff8a597380: 00 00 00 00 00 00 00 00 00 f9 f9 f9 f9 f9 f9 f9
+>ffffffff8a597400: 00 00 00 00 00 00 f9 f9 f9 f9 f9 f9 06 f9 f9 f9
+                                                       ^
+ ffffffff8a597480: f9 f9 f9 f9 00 00 00 00 00 06 f9 f9 f9 f9 f9 f9
+ ffffffff8a597500: 03 f9 f9 f9 f9 f9 f9 f9 00 00 00 00 00 f9 f9 f9
+==================================================================
+
+
 ---
- drivers/staging/r8188eu/core/rtw_xmit.c    | 10 ++++++++--
- drivers/staging/r8188eu/include/rtw_xmit.h |  2 +-
- 2 files changed, 9 insertions(+), 3 deletions(-)
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-diff --git a/drivers/staging/r8188eu/core/rtw_xmit.c b/drivers/staging/r8188eu/core/rtw_xmit.c
-index 4c54647..7d1fa52 100644
---- a/drivers/staging/r8188eu/core/rtw_xmit.c
-+++ b/drivers/staging/r8188eu/core/rtw_xmit.c
-@@ -176,7 +176,9 @@ s32	_rtw_init_xmit_priv(struct xmit_priv *pxmitpriv, struct adapter *padapter)
- 
- 	pxmitpriv->free_xmit_extbuf_cnt = num_xmit_extbuf;
- 
--	rtw_alloc_hwxmits(padapter);
-+	res = rtw_alloc_hwxmits(padapter);
-+	if (res == _FAIL)
-+		goto free_xmit_extbuf;
- 	rtw_init_hwxmits(pxmitpriv->hwxmits, pxmitpriv->hwxmit_entry);
- 
- 	for (i = 0; i < 4; i++)
-@@ -1487,7 +1489,7 @@ s32 rtw_xmit_classifier(struct adapter *padapter, struct xmit_frame *pxmitframe)
- 	return res;
- }
- 
--void rtw_alloc_hwxmits(struct adapter *padapter)
-+int rtw_alloc_hwxmits(struct adapter *padapter)
- {
- 	struct hw_xmit *hwxmits;
- 	struct xmit_priv *pxmitpriv = &padapter->xmitpriv;
-@@ -1495,6 +1497,8 @@ void rtw_alloc_hwxmits(struct adapter *padapter)
- 	pxmitpriv->hwxmit_entry = HWXMIT_ENTRY;
- 
- 	pxmitpriv->hwxmits = kzalloc(sizeof(struct hw_xmit) * pxmitpriv->hwxmit_entry, GFP_KERNEL);
-+	if (!pxmitpriv->hwxmits)
-+		return _FAIL;
- 
- 	hwxmits = pxmitpriv->hwxmits;
- 
-@@ -1511,6 +1515,8 @@ void rtw_alloc_hwxmits(struct adapter *padapter)
- 		hwxmits[3] .sta_queue = &pxmitpriv->bk_pending;
- 	} else {
- 	}
-+
-+	return _SUCCESS;
- }
- 
- void rtw_free_hwxmits(struct adapter *padapter)
-diff --git a/drivers/staging/r8188eu/include/rtw_xmit.h b/drivers/staging/r8188eu/include/rtw_xmit.h
-index 54c2bdf..034a9f8 100644
---- a/drivers/staging/r8188eu/include/rtw_xmit.h
-+++ b/drivers/staging/r8188eu/include/rtw_xmit.h
-@@ -341,7 +341,7 @@ s32 rtw_txframes_sta_ac_pending(struct adapter *padapter,
- void rtw_init_hwxmits(struct hw_xmit *phwxmit, int entry);
- s32 _rtw_init_xmit_priv(struct xmit_priv *pxmitpriv, struct adapter *padapter);
- void _rtw_free_xmit_priv(struct xmit_priv *pxmitpriv);
--void rtw_alloc_hwxmits(struct adapter *padapter);
-+int rtw_alloc_hwxmits(struct adapter *padapter);
- void rtw_free_hwxmits(struct adapter *padapter);
- s32 rtw_xmit(struct adapter *padapter, struct sk_buff **pkt);
- 
--- 
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

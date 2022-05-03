@@ -2,54 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FBFD518D57
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 21:42:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42694518D5A
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 21:42:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242026AbiECTqB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 15:46:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41150 "EHLO
+        id S242065AbiECTqJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 15:46:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240258AbiECTp5 (ORCPT
+        with ESMTP id S242013AbiECTp6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 15:45:57 -0400
+        Tue, 3 May 2022 15:45:58 -0400
 Received: from JPN01-OS0-obe.outbound.protection.outlook.com (mail-os0jpn01on2110.outbound.protection.outlook.com [40.107.113.110])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FAF722B22;
-        Tue,  3 May 2022 12:42:24 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75BC43525F;
+        Tue,  3 May 2022 12:42:25 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=U/w5v3cR/brmWC7JJKJsv2bBJ6tiW4F1U38vh+2r+RSUkCL4mpAkSye3FcPn1Aa7YorNW8OmN/FNqauo97dhMhzg/N3xOLFzXg0VzvK3su0v1SUyltgc6IPRtuwfk9D28KTNkTu5n7x6ZDh9llJfZJyPQYDf4IQjiT2BR39Jr3aHx2MEUXiQ9mfqY+jTh3KZ1wt78+DP/rn79DUbvUL4YxpC/M+5wwnrHLmQ27m8l4urwga7YXezZ1sdIHHOKoZ4vBb3e/+hrr3Yc3DU5bRT+4f1ykgD7mTfjVBZ2j00NJTLe0ZccKWpWIFAVelEKeDveR4geknOd0tkYXWrmWw6Ig==
+ b=dzoEpypc7GFDigDbkr+ifwr1/4PUwrerfSPB+etJXcrQ5iIKwprvxRQLNTfwYYQ9utQvGr8hyk1hvkQYik4lykvSUkgCk3ceZAqn9/ZEArZoz8nCca5wzET4Ie+rMjZ+e+xJrvMbp0Eb2OGtyEoMZANO/o1RO0LUsZwfdxR9gh/9aH6DbJXcTGr8Hf2SKkP8VB8heJFlsvUUqQj+ciBT9pmnJ7Nj7lpckXnGCwxzZZTQjQCq4Gp4Ieywchmc+otPYvnnMtESOkq23f9MRznsw7CrzPCpFwFCEmL0CDQMySZ4fS+k61DeM/T23tbnIb3YcFP27hQI0eZ5epMT8LM19Q==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=QsoIgtx3dUDOKFyexVc5asUh0EBP7LBeZ9J4ePnmzTw=;
- b=fF30d22lQ+IU9UHWYdrPzm92uCqa5Pi3qt7SSe2wbAhrCyU4bs8q6CFOZmdcwfHXjKqjYJExMQ29dVJHLcfYNWofOZyqY+lsdut16kCFyvpeI0fpsKNCaQUW0ekTOI1bVSzmeNxETGobqI+RAf2pqFVu1jsq88IJHPnn8msWv8IczhZ8OLuvmarT7/lPlPCxvH2fAy+P9E3fNpkhZHqY/E0W8f1LrTpE4/FRSJTEhIch94bdfO+gtLst6xXSraf0p0Xn0qLRkWZP1UL1bsrfv/ZiskQj+BnzTCWs6T/suhwGe9hzpxNJNgE8WJweEuGpVwzoC7tu3t/wB9Gn6+1rqQ==
+ bh=x8vtGgRLuv3nRyP88JXO6ZK6yZKrqIXDuyBIUjFkNfA=;
+ b=PAg1Rx9lDhKQ64c7sdJvhbhnldaqyHC0D1LBihb2lI524+mCI6eAO67OPW1ulbVnjgbQzs2hBJWYMkjxW0Xiz/rgtxbaUgJJa9rNOPnWp4zAZ1zYfrrSrss5L4OzWeqNfo0dFYFHZp6XipWqw7ko5v/7+KAsjG56M0LGJNwLDHhTt5fpLGgR35LsHvzX2LisTolQixZ9piKvazd6wte2oUGaiSK4J0D8X+HSfcDkXX05TUA/Mu7FjOM4AFjmWrRTOrNMlL/ElMUmWVEMWIrzvco/+of8K0uegdknVQxBG+qWGA/LSwG+EXmfP0b6HSCKGMfybAKtQRGzL5wK0v2Puw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=renesas.com; dmarc=pass action=none header.from=renesas.com;
  dkim=pass header.d=renesas.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=renesas.com;
  s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=QsoIgtx3dUDOKFyexVc5asUh0EBP7LBeZ9J4ePnmzTw=;
- b=A+PZPiMGORddeZN62gHUKQXZ6y5Mqb2wCgKW7d++sQDD0tl4IMNcHWyBhnJa6rLsdHdOUBYjjax9ASz1agtKfiYiX0FBOHQvd7cZtS32Pb3zHbKAYACsS0CtRvE66MGABgCikIBvpJNjGdKPmgveTpUOwa/8/tt+QZOLBy7o5MM=
+ bh=x8vtGgRLuv3nRyP88JXO6ZK6yZKrqIXDuyBIUjFkNfA=;
+ b=Gg9ypdHkgBXvwka89rcQP52ni31O61f8DrQzZy0jbsi6o/usuuDAoN72AcGWQwAmMVs7ibzZ2TXW8vsFlQUIKXvyEwh4dGUTjeMCgMIe5RYnnGDeqLcQwXySkDrl81NF1gcKt/IyfGaA8206TW71lzf1xaVwwt6SfX4bgCsP7Os=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=renesas.com;
 Received: from OSAPR01MB3892.jpnprd01.prod.outlook.com (2603:1096:604:5b::23)
  by OS3PR01MB8115.jpnprd01.prod.outlook.com (2603:1096:604:171::9) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5206.13; Tue, 3 May
- 2022 19:42:21 +0000
+ 2022 19:42:22 +0000
 Received: from OSAPR01MB3892.jpnprd01.prod.outlook.com
  ([fe80::fdcb:b853:c0a7:8d58]) by OSAPR01MB3892.jpnprd01.prod.outlook.com
  ([fe80::fdcb:b853:c0a7:8d58%4]) with mapi id 15.20.5206.024; Tue, 3 May 2022
- 19:42:20 +0000
+ 19:42:22 +0000
 From:   Alex Helms <alexander.helms.jy@renesas.com>
 To:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
         linux-clk@vger.kernel.org
 Cc:     robh+dt@kernel.org, sboyd@kernel.org, mturquette@baylibre.com,
         alexander.helms.jy@renesas.com, michal.simek@xilinx.com
-Subject: [PATCH 0/2] Renesas Versaclock7 Bindings and Clock Driver
-Date:   Tue,  3 May 2022 12:41:59 -0700
-Message-Id: <20220503194201.25714-1-alexander.helms.jy@renesas.com>
+Subject: [PATCH 1/2] dt-bindings: Renesas versaclock7 device tree bindings
+Date:   Tue,  3 May 2022 12:42:00 -0700
+Message-Id: <20220503194201.25714-2-alexander.helms.jy@renesas.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220503194201.25714-1-alexander.helms.jy@renesas.com>
+References: <20220503194201.25714-1-alexander.helms.jy@renesas.com>
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 X-ClientProxiedBy: SJ0PR03CA0374.namprd03.prod.outlook.com
@@ -57,82 +59,165 @@ X-ClientProxiedBy: SJ0PR03CA0374.namprd03.prod.outlook.com
  (2603:1096:604:5b::23)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: af5e766f-4404-45cf-0f6d-08da2d3d0996
+X-MS-Office365-Filtering-Correlation-Id: 6d9f7799-c08d-48ad-103a-08da2d3d0ac0
 X-MS-TrafficTypeDiagnostic: OS3PR01MB8115:EE_
-X-Microsoft-Antispam-PRVS: <OS3PR01MB8115B5363BDF127CC70E9F46C8C09@OS3PR01MB8115.jpnprd01.prod.outlook.com>
+X-Microsoft-Antispam-PRVS: <OS3PR01MB81159DD81AFC7EDF31683302C8C09@OS3PR01MB8115.jpnprd01.prod.outlook.com>
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Td2E62pB6UMjiE/29XRr+ukjxiF3ttt0fycxz7BULwkF4D7KN+pylTE7UhbXeQid2js6v0UyKEXKqhb/UWoVE6tQaI+hDnp+prLudwj8lD3nawr3AYV0WBgKC2h0mOnzQHnFhB8jD5iWohuxFGLz8wtspsWJ3LBgjm3Q4IsNZtNvTgv1vnrz98dzl46h9bpD/n+WkBqX0F0M39CRM0X24V1dd9kSQtHd5o0ORhsq2oMKl7yvtl8r1Kizo3tGrZtPT/2sCJmicI+5az/zbV7afaRxHaTkTinLH+c5wCV8z23OxjfC3pnCFKl+UGHKzDwvdc7wY77NyMLfn203aggjU3OBP/Dxwe5cuMai6sMAWv6NMvJKW/gnT1C8yej8TybYmh8D7OE6yA5gBvarh9YS9OWoJiefRvMl+vmi69syeU8mSlvKuqdODh3fPdRdUhzlYcfxAPYOtjM2D0DiBqvnvZ82X9qUyTWabHJuFh934fZ7LXBDmIILCDsLrdL3ymI0veqyBqlFMv/csmuVH4VkdBXMY3dSABqMXf6TFf6QSmuiCHQYPYxJJ4cm0eF1W/jDSy+qFJtTBk7OdzGveM7yS56ROFkAwRd2alwWTe2DI0ZeO70n5HY/cn97WTyW2cSWn+coxB7XFuOIkaRlvKyVKhN4CoOcAIO2mm05cjsAZBCL2rUkxfxtoW21i2iOkmx+59qyzdTasEA+kbTCt3idoQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:OSAPR01MB3892.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(186003)(36756003)(2906002)(316002)(4744005)(6506007)(6666004)(1076003)(86362001)(52116002)(38100700002)(38350700002)(8936002)(103116003)(83380400001)(508600001)(5660300002)(66946007)(66556008)(66476007)(8676002)(2616005)(4326008)(6486002)(6512007)(26005);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam-Message-Info: +lLBGVofe6qH8PB69nLfthm0Z7LDHsYFcjJVa692ZftS1bTAt2yJBR8D/UhyzIC61quIvFtz0DbG4uegAivarsRYO/CMzknfKuCsTnalBwengmQBWU7ZARxb4ptPrre9uKHPFS3K32VB+FuAkPKf5p87EdZGM+b2XwQTh1WqkBEyppiEMuL9SN3zU/e/u85U8qeS44LJFOJtCsRFHeN2+eqJ3EYEndCd9OirNXV+0Cq3vCq5QrRCY0yIMnZW93+VFUQUwfwVlENpCNBCYH2ERgDF1O9lQ76a+DyEvT7D0s7i5RiiMva3e1BVeDWmU9zlRcUL9mD4FUi4xy2uIDTNqWCubjGfPIhoQRAXduaiQM0URuk8/dHRSPaFitRe7CXHCc2BY8MmQxv8uIGktMjDKqsHFABIJQQPlRILDgRZms9RNmlLokR16yy4nTkDybGMDB1RjbPM2vih+RpYKqljDxDKSTwxTxCbSVo7ZUSf1y57f9fnQSqEG3/sIwoEmexF+JWcQoLl38SfvAtdU7C+Eg16a6RCcTM+sADCnFplg/BK2JPIRgpCThGflZ24pKxJkCOPH/qNH2seFR+oyetn0FBSyRASj1gqktMqD8tmK4XgLKyGmyMpGts0ZfDmurM9qx7oUsWEEW6NwOvS21qj7ifSnK5irBRK3wqpfI1dItfrKCiL7FxKbyZkRQ7PLAMmD7d32zvrquslemnnN/4knPIj6CvKaRrP83p1cxNsikCiYpk6qyNVFu0hKgJM6AWAjNHOi01+fggf+sngVTQBmXMrKY/KnTdbq9D1baZ+RqgjUC1Io9WdNUHvrGGuHQrh2F3IgH3B/CDzAvlHvAOpvg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:OSAPR01MB3892.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(186003)(36756003)(2906002)(316002)(6506007)(6666004)(1076003)(86362001)(52116002)(38100700002)(38350700002)(8936002)(103116003)(83380400001)(508600001)(5660300002)(66946007)(66556008)(66476007)(966005)(8676002)(2616005)(4326008)(6486002)(6512007)(26005);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?EUh62HJoGYgUOM1c2Q8HRsWKTbxlBGoyG5eVwCYiav/gsyLg5dQ9aiiYq1km?=
- =?us-ascii?Q?yxq+HmFKQFkDK0ZffSamYC/sTF4KMk52GFfPTSZ4XoQFO2adBTELpyjrbhVA?=
- =?us-ascii?Q?u21eyR+cvsTVNNRN/bBThzGsnjPB1+CZqrju6qA96U8o56adbTDvT5rrFLI3?=
- =?us-ascii?Q?yU59MKx2X3KCGDTILCv1766WI4/5UOT9C7gXTLjhtrb010b/d6ZUYKXbHT6E?=
- =?us-ascii?Q?8f+5+Q9wAFVTmsmchS6ENT6ndZfVB0ThS/VWv+kwRtkiVBXF46awnJclZhEQ?=
- =?us-ascii?Q?KAy8tiacjqe7yu5ZKP4huM0684qDCrxRqAuW4MmtCDP/oTpbu3zQxtkIVsJd?=
- =?us-ascii?Q?h2hcfWmgCk+99yrsxDX8NHyUYNNgnN867ML9MFpG3ufQG4h4sXQNZ88vU6eW?=
- =?us-ascii?Q?8jn2NCsPvbo3YA/fPl7sKlzxCs3LuxMS8H8fNSD/+HlBnAFgLJi6cTLXxRY3?=
- =?us-ascii?Q?hkmvofI7bY6I+uXA3uhOjHxS9yM6aY3cKMKOpgU+wY1Vj0Ky8LtSueyoDpru?=
- =?us-ascii?Q?4Mc58kcZYbcFfxI4iIbob9HKzJNu6Sm788bSYQtoAlqstBy0f+8zXd+HCqFE?=
- =?us-ascii?Q?tyy4iHRNTvEfoHwGqHIKujHjh36Ex4hHYM/jqs0V1bMNJqDhwiPf2ZGGNyXe?=
- =?us-ascii?Q?cKv1GhKQohu0cpPGA87L+mWzEXp+fkOQ6zwHD8+uJvgl01mmv3NeGxn4wDRd?=
- =?us-ascii?Q?CKldqZ+7L1gq2MfnvbV+pDB2cxa1xQRKo3EKhF72ABUA1V5tHLEH6y33tamS?=
- =?us-ascii?Q?JdpjY4SqDUpYDB0cuUnCxiEKbLNc5ENCMcFPbBrLm7+dcBfkz+qrPcIPsMIf?=
- =?us-ascii?Q?x7fCIsR2OPelu4C176RJkAhDTR6AetwwqKAdSF3lYPf4H0nOkqfWJ//vXUJC?=
- =?us-ascii?Q?oP68Pz1UUl6cgn8Qmqi9C1FltFoenb3m+3BZjrswjmOyKvxXIDLMssuOwXRf?=
- =?us-ascii?Q?xeNn2ngc6k48V1I6Kg4c3BOyUX9vUXuHOCvPgDjz1i5HeesQUsV4ooX9NRnX?=
- =?us-ascii?Q?7pdTgC3LYSIfBWLdJC0Domo5++BRh4rzXIoLWs5M2Z9HPMWAj4Ehq0tjsAMk?=
- =?us-ascii?Q?Ux3YMAqN+38ac+CMMk4t6j5J2hIJoUYuh8FBJBESLftJd3RROgzD0nvm+Q2m?=
- =?us-ascii?Q?trPNr3G6LTK7p9/0fLCbzgckPcR5uRhxzaibfLGk4ODDd0HWXQ+/L2x7BFx3?=
- =?us-ascii?Q?eGvFHJVaQaKkz9TB08cbVMeQzYq9m9QrCAWLhpp7MsJ3T90EmFA/uAEUCSEH?=
- =?us-ascii?Q?qDhZ8kpnkHjNpgbuqlgX/EbDrmDCTbjArJPHz136q8/BKrzlEBt5w+ijiA3D?=
- =?us-ascii?Q?KvQBTmKl51Nbb6mqGB0mMBGfSKZSIrPo/4bucaK5duBqK5Al2Rf1pgzL9Dg7?=
- =?us-ascii?Q?p8MzHia9h6NT2oTRzv8WDB2a8QXU5CKh+cDFiZz5nxgt2MGGV2ZNQWxeJate?=
- =?us-ascii?Q?2ImUjoPgC94/FKylZFqeqOgxHwrcLcZV8VNKYRBuAH7bsEje8F/p5Qf7qzrN?=
- =?us-ascii?Q?RPwM3uIyjfDvhlC26aLsm9nthX1oJ0EpSQZmgqjSAnAPJmIQ0FdlA3aaV1B6?=
- =?us-ascii?Q?oSMWJcn3wBhcJbu4J65TBSNt7wDm4XdjymhDoAEd5fi2J1ZTSAeC5yWXKR6H?=
- =?us-ascii?Q?lZwm1NCnboO6X11gRueikzzuOgK+LbFd7UfsPxZrCyH+2sMOc0aDwExrPXEc?=
- =?us-ascii?Q?eS6t1P/6z4dEZaYsbs4p9MfgkxOBtvOB1NjJmiFqDU84PAjJhfEuYsjUdbgp?=
- =?us-ascii?Q?dcZqGYwvGDKjymfYvPRg43fnebVbX537fXnlUZ9zlYdoYGKmKKSR?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?NZidBU9tWHC27ARUzGKdyT+KPrqfkwfLhOI1CLH6+DaSoJoK2ryHfYxk2DVD?=
+ =?us-ascii?Q?k/m9n29BGopqXNEGZFVoCb2XNA7OdHzncnRzi29X0eV3n5YSbGJSOinvcQga?=
+ =?us-ascii?Q?Llu/zFg8LfCMJyqpsBZe3cnhvRe6AQlFuKQYGxyuhIf3mXmJ0V7YG7DStQMK?=
+ =?us-ascii?Q?pzDwX2rl5uEPafjq4tmLEWlUmJbM4aUaxlVOSq8AnSAT949CxG4PO3IcbUKV?=
+ =?us-ascii?Q?vqRloul6ik24X7OcXvOha8a00bOssJo+oLrTZETkw5Xd3E2qEalgCcUJmC23?=
+ =?us-ascii?Q?SLqxoaFI9nOgCAby0MJR9bFbB9zYB6f/SJAhFXUhR5edVoS+/5RmVMCCcd1R?=
+ =?us-ascii?Q?Rb5B9Whd4S4fpiQmTzqEwZV7IM59r6kiii80uDMLjRTLdFhQl/z7+Tza0aaj?=
+ =?us-ascii?Q?n3YrWpd48ngJ62oM1L/e8vG6AG/dG0tDALEvtmgQD7d672pwCH2tXKaHS4AY?=
+ =?us-ascii?Q?i6lJ6aznSkEXI4y/8qxpi7IaltQI+TxQafUqK+XL6fraFm4UoLJLgSXhwioS?=
+ =?us-ascii?Q?n+w+UyMR1mi108vfneq3vZN5ZUsxpI2bqBd2OOD+EPACvSbVI8pqbJCe5CWA?=
+ =?us-ascii?Q?4dqNjkDuUuLdUc/iTQPM2SoIkBz4lQ9cqPuAkhfvlA7U9CKawfRQNGbq2we2?=
+ =?us-ascii?Q?DrKeicBJmkU5mWB2TcjOrDZkiM66UywKC5zsbjaLo4trSo9wg7Hoa440YLql?=
+ =?us-ascii?Q?TZTN/lddCBuzxkCvvfwft0lKjzxfnhi1+DDdcE6WL3d+HT5tfmNJivmYhBlv?=
+ =?us-ascii?Q?Y+WFn5N0tBE1t8K0Iah3p00ZH/5CstdQ2LpfAbtLNvoLUjf9AhLVEla4gaoz?=
+ =?us-ascii?Q?QU3YNoRv7Zuz54yu8hq2wbe22L4fwcUplqWPfnfA5U8/eO62Wh83cqdVJHfb?=
+ =?us-ascii?Q?xn3OxeVo+7bnTobBxIqI6Iliw7xdvT7SsmP7aUntSC3AnAwJPbyi+gxf4tA6?=
+ =?us-ascii?Q?9+m0v74eeFSzuqnfWiQJOQZM3aiPV8RPKyBfJ70QSmAU5k7bHUW5BFyX9/O8?=
+ =?us-ascii?Q?O3iAGPfr6IwN+xcCid95m8NBEBk0tQXPSfQl9WvWElL0JpvGBsoMf4IGUfSt?=
+ =?us-ascii?Q?eSfQemmbOU3R2LE4Xx6JqmKknISZDufnTQvQPGEvO4xXBeGGXwoUoHk3heam?=
+ =?us-ascii?Q?2GWIwTCHYmYPLU+aIcgHpYkl17Lrr/wwZbTDQRoCaacL87l1mrr0jvZxpy2X?=
+ =?us-ascii?Q?yX+bvSRaIxJUOsWS8aWOj8wg1BGoFPd7GZAC8vB/ry0JyLON7ISUWmyqzQLj?=
+ =?us-ascii?Q?qTWa4PR8Jk84brx9HZNUpt5T+GmcuMzKoMibjqGaqS2sHMsh9P2kzPK1qIjw?=
+ =?us-ascii?Q?bBV5yP4iajbGE8Ck3vhU0uxPSQENuGrSK2xW5sZecGSRuUeZYXGOgWz06A01?=
+ =?us-ascii?Q?e88z5yCR8L1S7xRKBKmeoOJokDyvBSRnzat6abu0fd0/rxBM//lIuO1QHkl+?=
+ =?us-ascii?Q?iQybbWZv0ce3omvddgU0I80b0rSlI0bgzy7QJaKRUAX1ndDK356+o60hdywQ?=
+ =?us-ascii?Q?zLSjaGljSfvi4DWyBamCblbhT6ocX4709w8PNcHY9/j7tkmMrH1fM/v2acbr?=
+ =?us-ascii?Q?S8cTDZxP8y9n/Y/SJrptxPf/0fyOm2vbO1xa3P4CeomrXKbZMimuAiPV9m5O?=
+ =?us-ascii?Q?5mJ6Xu/JWnu3wpHYg+cLUjmzL6FnvzRtCyyJtBEOAnXs77X86NO3O0DkjPel?=
+ =?us-ascii?Q?rKiPvA9VSvi41Wf6GYQRRi1p/spxMI+jeEd/4bVxFY6aN9yL0ZzD+RrMe2em?=
+ =?us-ascii?Q?+/1xK5o2TZtZ+0eDmbYUiutdNVNl4/m7eoy0lIrZ1Hq+53jkZ5Fp?=
 X-OriginatorOrg: renesas.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: af5e766f-4404-45cf-0f6d-08da2d3d0996
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6d9f7799-c08d-48ad-103a-08da2d3d0ac0
 X-MS-Exchange-CrossTenant-AuthSource: OSAPR01MB3892.jpnprd01.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 May 2022 19:42:20.6243
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 May 2022 19:42:22.3741
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 53d82571-da19-47e4-9cb4-625a166a4a2a
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: GNdb1DVRoZBB8X2z6eT727qKc88M/FYHnxKkLJewUwWklUUuNgR1ToDEJ5/aqXevOnSiJe+mswGMukWkX7znSP/+7NVsjUjw5wXIitTj6rY=
+X-MS-Exchange-CrossTenant-UserPrincipalName: VdmNOG2cuhcr330Mq8wxhqhgUD6e8Izlp887E62QEXHm1Tbx6ug7xZlNUwzKjIRhbB4gu1mHvECGp7bvGWVU+sIVbYnOr4thcOwPFvGwKuA=
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: OS3PR01MB8115
-X-Spam-Status: No, score=0.9 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Device tree bindings and a common clock framework device driver
-for the Renesas VersaClock7 clock generator family.
+Renesas Versaclock7 is a family of configurable clock generator ICs
+with fractional and integer dividers. This driver has basic support
+for the RC21008A device, a clock synthesizer with a crystal input and
+8 outputs. The supports changing the FOD and IOD rates, and each
+output can be gated.
 
-Alex Helms (2):
-  dt-bindings: Renesas versaclock7 device tree bindings
-  clk: Renesas versaclock7 ccf device driver
-
- .../bindings/clock/renesas,versaclock7.yaml   |   64 +
- MAINTAINERS                                   |    6 +
- drivers/clk/Kconfig                           |    9 +
- drivers/clk/Makefile                          |    1 +
- drivers/clk/clk-versaclock7.c                 | 1273 +++++++++++++++++
- 5 files changed, 1353 insertions(+)
+Signed-off-by: Alex Helms <alexander.helms.jy@renesas.com>
+---
+ .../bindings/clock/renesas,versaclock7.yaml   | 64 +++++++++++++++++++
+ MAINTAINERS                                   |  5 ++
+ 2 files changed, 69 insertions(+)
  create mode 100644 Documentation/devicetree/bindings/clock/renesas,versaclock7.yaml
- create mode 100644 drivers/clk/clk-versaclock7.c
 
+diff --git a/Documentation/devicetree/bindings/clock/renesas,versaclock7.yaml b/Documentation/devicetree/bindings/clock/renesas,versaclock7.yaml
+new file mode 100644
+index 000000000..cc099d9e1
+--- /dev/null
++++ b/Documentation/devicetree/bindings/clock/renesas,versaclock7.yaml
+@@ -0,0 +1,64 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/clock/renesas,versaclock7.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Renesas Versaclock7 Programmable Clock Device Tree Bindings
++
++maintainers:
++  - Alex Helms <alexander.helms.jy@renesas.com>
++
++description: |
++  Renesas Versaclock7 is a family of configurable clock generator and
++  jitter attenuator ICs with fractional and integer dividers.
++
++properties:
++  '#clock-cells':
++    const: 1
++
++  compatible:
++    enum:
++      - renesas,rc21008a
++
++  reg:
++    maxItems: 1
++
++  clocks:
++    items:
++      - description: External crystal or oscillator
++
++  clock-names:
++    items:
++      - const: xin
++
++required:
++  - '#clock-cells'
++  - compatible
++  - reg
++  - clocks
++  - clock-names
++
++additionalProperties: false
++
++examples:
++  - |
++    vc7_xin: vc7_xin {
++        compatible = "fixed-clock";
++        #clock-cells = <0>;
++        clock-frequency = <49152000>;
++    };
++
++    i2c@0 {
++        reg = <0x0 0x100>;
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        vc7: vc7@9 {
++            compatible = "renesas,rc21008a";
++            reg = <0x9>;
++            #clock-cells = <1>;
++            clocks = <&vc7_xin>;
++            clock-names = "xin";
++        };
++    };
+diff --git a/MAINTAINERS b/MAINTAINERS
+index cd0f68d4a..8a23ea619 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -16536,6 +16536,11 @@ S:	Maintained
+ F:	Documentation/devicetree/bindings/mtd/renesas-nandc.yaml
+ F:	drivers/mtd/nand/raw/renesas-nand-controller.c
+ 
++RENESAS VERSACLOCK 7 CLOCK DRIVER
++M:	Alex Helms <alexander.helms.jy@renesas.com>
++S:	Maintained
++F:	Documentation/devicetree/bindings/clock/renesas,versaclock7.yaml
++
+ RESET CONTROLLER FRAMEWORK
+ M:	Philipp Zabel <p.zabel@pengutronix.de>
+ S:	Maintained
 
 base-commit: f443e374ae131c168a065ea1748feac6b2e76613
 -- 

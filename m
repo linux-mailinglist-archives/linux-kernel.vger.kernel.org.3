@@ -2,116 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2507518D24
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 21:24:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77BA5518D29
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 21:28:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241893AbiECT1f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 15:27:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54062 "EHLO
+        id S241901AbiECTbc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 15:31:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239819AbiECT1d (ORCPT
+        with ESMTP id S230245AbiECTb3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 15:27:33 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 823162C641;
-        Tue,  3 May 2022 12:24:00 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id cq17-20020a17090af99100b001dc0386cd8fso2821565pjb.5;
-        Tue, 03 May 2022 12:24:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=waJvQWBR1alX6Q1gmx++PicUkAKKCsRDo2BEpHmI3CM=;
-        b=KNRkHglMvsUHD2w2hXTXkhCyHJFhz5D5H1odFL0c7kdonoPYNm1FhaVcmZ7rH7+T9U
-         7lrE5OcJycDJ4ZIJ03uyjCPci/1sV952aRy1QpYwSp48um8p5teG4Q/54Gc3Kl4Z05DX
-         k+77Lj7AuO4cI7BFhvD9VnuK2kT2hfDA0lBRB++cnaupgbAQU3kcWCxDyGffU6BZtPs5
-         CLN/7K1wlrZNOAyI3XmVBLaFpfIApDUp50W9QS77df61jR/Uf+GqJRTmaHz2nObIfswF
-         Uzv9OxuiVfJ9lU5NouzMa+ZpxmwnSW/Inp9MTRXrI+OOdIuNkk5ebjPGI9KXk14bmSpa
-         fpgA==
+        Tue, 3 May 2022 15:31:29 -0400
+Received: from mail-ot1-f47.google.com (mail-ot1-f47.google.com [209.85.210.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 439192AE37;
+        Tue,  3 May 2022 12:27:56 -0700 (PDT)
+Received: by mail-ot1-f47.google.com with SMTP id s18-20020a056830149200b006063fef3e17so773187otq.12;
+        Tue, 03 May 2022 12:27:56 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=waJvQWBR1alX6Q1gmx++PicUkAKKCsRDo2BEpHmI3CM=;
-        b=0uTF+GOjc5OEQppdF01/JaD5W09hA+mK9dbUVslnUj4w4EaGqDW/bcVUqLxJoZYUsA
-         B5ENInCRr1vRVeJZkOAv7nx/NJsCc7VGmrLvRDCoG1k6a81ZoJGIBAksc+iuXrrJnswg
-         kupa9F8BzyT5xPjEVqjz8BiJYcisG8PEcalKZyCH6BSmane5s1MRIlhrfU8Ougo5PJVL
-         QkFnT/5dtdApEWRvMmsmOyoggA84oQpkHZzL/f0lYa0JqyS4aWZdnGDVEGjnMcfggUQL
-         AA16u+ANbOWJU2/6tOWY6XQhurEZD3aUIgdT2zHjDz/q+XjA+RWtNwfdC/GQrKwzNU0d
-         XsQg==
-X-Gm-Message-State: AOAM530L9Jg8qxQjF+lZPdhADJwXiZe3ib9/YcBV8CKS0WNlJ9u8sgF2
-        mlqIukqaIJ1/r5cWS5uuErY=
-X-Google-Smtp-Source: ABdhPJw6m4614+CLkWNykf0AiBv5TZxYQnG9Nsilb13UOqvfRmRH/FGUJeBPA4caMLsQgMLt2X8jZA==
-X-Received: by 2002:a17:902:7009:b0:158:3bcf:b774 with SMTP id y9-20020a170902700900b001583bcfb774mr17816605plk.103.1651605839945;
-        Tue, 03 May 2022 12:23:59 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id h19-20020a170902f2d300b0015e8d4eb243sm6634006plc.141.2022.05.03.12.23.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 03 May 2022 12:23:59 -0700 (PDT)
-Message-ID: <d9156159-8320-4242-13bf-b1e7f5bbabdd@gmail.com>
-Date:   Tue, 3 May 2022 12:23:56 -0700
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=t1DI1S/v8x5uneeqAGDnC3X0//kX6nybz2VF5VcS0xQ=;
+        b=kvCkQXqku1yLbumeSuy/n5/C1HsZMm4inMMPkrCePG+HYSse0k14VlzpJCLYKtcSkv
+         J3CgmCkOD68PYwaVhiUNk3s7iCccsXns/z3o/EFXHNPZkUEoEtybl6u6SO3mIRiOnBVf
+         LFJK5QfK7jJrRp7JdCdfZzbbdMPvpTqNHQRssOnOA+iYboCNUrXfrLR5qH2hEEx5uHGf
+         wzDgHUMV7yGmQpHRUx6S2LUG+bfTpnGoF1FINo+10Hx0Xt/e0a67PANz42xy63l6f/9g
+         a7jXZeWvWp+HOh5HIn6RdXyjLz1O/FHiJKC3ZcViSdiXc/6zaDyBP6Mz7c2Gu5DPS0x9
+         rD6A==
+X-Gm-Message-State: AOAM5319GrXZi7C5eeW0ol/h8R7Adpqh8hHMnG0LR+MQIb+fu0zkSEye
+        Pt1ZKHFwMmqydeJ2G9zdHiyJZL8XAw==
+X-Google-Smtp-Source: ABdhPJwkw8I3jDkzvOLRxpoNBfoWnNUdw9YKkm55Bo6yfaZ9Jb8d/fRbqPQodVHJoHwlFT2tWSaaxg==
+X-Received: by 2002:a05:6830:4027:b0:606:2d9:c0d3 with SMTP id i7-20020a056830402700b0060602d9c0d3mr6441347ots.260.1651606075551;
+        Tue, 03 May 2022 12:27:55 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id 7-20020a4a0607000000b0035ed382fb5asm4189066ooj.15.2022.05.03.12.27.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 May 2022 12:27:55 -0700 (PDT)
+Received: (nullmailer pid 4086471 invoked by uid 1000);
+        Tue, 03 May 2022 19:27:54 -0000
+Date:   Tue, 3 May 2022 14:27:54 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Cixi Geng <gengcixi@gmail.com>
+Cc:     robh+dt@kernel.org, mturquette@baylibre.com, lee.jones@linaro.org,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, sboyd@kernel.org,
+        baolin.wang7@gmail.com, zhang.lyra@gmail.com, orsonzhai@gmail.com,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH V4 1/4] dt-bindings: clk: sprd: Add bindings for ums512
+ clock controller
+Message-ID: <YnGCOm86jtxBJ6Jo@robh.at.kernel.org>
+References: <20220427100848.3525710-1-gengcixi@gmail.com>
+ <20220427100848.3525710-2-gengcixi@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [Patch net-next v12 02/13] dt-bindings: net: dsa: dt bindings for
- microchip lan937x
-Content-Language: en-US
-To:     Arun Ramadoss <arun.ramadoss@microchip.com>, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        netdev@vger.kernel.org
-Cc:     KP Singh <kpsingh@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Yonghong Song <yhs@fb.com>, Song Liu <songliubraving@fb.com>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>, UNGLinuxDriver@microchip.com,
-        Woojung Huh <woojung.huh@microchip.com>,
-        Rob Herring <robh@kernel.org>
-References: <20220502155848.30493-1-arun.ramadoss@microchip.com>
- <20220502155848.30493-3-arun.ramadoss@microchip.com>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20220502155848.30493-3-arun.ramadoss@microchip.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220427100848.3525710-2-gengcixi@gmail.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/2/22 08:58, Arun Ramadoss wrote:
-> From: Prasanna Vengateshan <prasanna.vengateshan@microchip.com>
+On Wed, 27 Apr 2022 18:08:45 +0800, Cixi Geng wrote:
+> From: Cixi Geng <cixi.geng1@unisoc.com>
 > 
-> Documentation in .yaml format and updates to the MAINTAINERS
-> Also 'make dt_binding_check' is passed.
+> Add a new bindings to describe ums512 clock compatible string.
 > 
-> RGMII internal delay values for the mac is retrieved from
-> rx-internal-delay-ps & tx-internal-delay-ps as per the feedback from
-> v3 patch series.
-> https://lore.kernel.org/netdev/20210802121550.gqgbipqdvp5x76ii@skbuf/
+> Signed-off-by: Chunyan Zhang <chunyan.zhang@unisoc.com>
+> Signed-off-by: Cixi Geng <cixi.geng1@unisoc.com>
+> ---
+>  .../bindings/clock/sprd,ums512-clk.yaml       | 71 +++++++++++++++++++
+>  1 file changed, 71 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/clock/sprd,ums512-clk.yaml
 > 
-> It supports only the delay value of 0ns and 2ns.
-> 
-> Signed-off-by: Prasanna Vengateshan <prasanna.vengateshan@microchip.com>
-> Signed-off-by: Arun Ramadoss <arun.ramadoss@microchip.com>
-> Reviewed-by: Rob Herring <robh@kernel.org>
 
-Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
--- 
-Florian
+Reviewed-by: Rob Herring <robh@kernel.org>

@@ -2,157 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3747517BF7
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 04:40:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DFB5517C0D
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 04:50:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230152AbiECCmi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 22:42:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54092 "EHLO
+        id S230188AbiECCvX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 22:51:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229660AbiECCmg (ORCPT
+        with ESMTP id S229660AbiECCvR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 22:42:36 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 009BD3633E
-        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 19:39:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651545545; x=1683081545;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=y3Zle4T8/437UxAnWC+mgnGd4rivsPIeZXtuI0xWNvk=;
-  b=LRxf+QDeoiFrn+54vjfjmMsljtJUVkZwM2idmUnqVJPoEeZZ4eoQNRBU
-   HXsu8+t5Mz5vWW9K4CwOgVWk8CSnDdKgX5Am1h1GfxWb1PV6QhZDGR8n3
-   VzDjBuAA7R982qAMSyen9qw746CtEsGtFC+0vu5f0tprh8MGagBhozHYt
-   Nx4niV4yvG4iF5bP/10Cq3RmHg5ixjPH7bkz0GWmfrNCOOFXFfg6rmH1Q
-   3x4cGOmG4n7dJTXwXaIvI79i0J5JhambBOzVftBCg51qhwWpyQK7IMXS7
-   8h2754M7GsFjBJk0uzGxljeQm5AfPh2TT6sjSh+Q58LogynsXiEGSML4D
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10335"; a="249363501"
-X-IronPort-AV: E=Sophos;i="5.91,193,1647327600"; 
-   d="scan'208";a="249363501"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2022 19:39:05 -0700
-X-IronPort-AV: E=Sophos;i="5.91,193,1647327600"; 
-   d="scan'208";a="584007104"
-Received: from wahmed-mobl.amr.corp.intel.com (HELO [10.209.71.202]) ([10.209.71.202])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2022 19:39:05 -0700
-Message-ID: <ac299f99-7ef6-7fc2-a9fe-7ed2586b9b09@linux.intel.com>
-Date:   Mon, 2 May 2022 19:39:04 -0700
+        Mon, 2 May 2022 22:51:17 -0400
+Received: from mail-m975.mail.163.com (mail-m975.mail.163.com [123.126.97.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C330135864;
+        Mon,  2 May 2022 19:47:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=bLBOG
+        DgcmNltK6UF/fMVaVtqnF7C3zMmNOYidlKN9Rk=; b=B1e2Fxc1Zm6MuCdZqEX8F
+        BZFFiFweM51pGDkYTn3vN4Vc62+vzBSRGoMBotMOuhkMtZvUBucXTkbfcz/ADnSU
+        w5nvXLIkUNS0s+aB6UIkl6GrEHZalttD+mFF7cIm99k8XWzHPpVl0bztNoALaGms
+        TRwAE/dMvSD/gtY9TBT4Jo=
+Received: from localhost.localdomain (unknown [112.97.63.58])
+        by smtp5 (Coremail) with SMTP id HdxpCgBX2zgil3BiSChTAg--.9943S2;
+        Tue, 03 May 2022 10:44:52 +0800 (CST)
+From:   Slark Xiao <slark_xiao@163.com>
+To:     mani@kernel.org, quic_hemantk@quicinc.com
+Cc:     gregkh@linuxfoundation.org, loic.poulain@linaro.org,
+        slark_xiao@163.com, bbhatt@codeaurora.org,
+        christophe.jaillet@wanadoo.fr, mhi@lists.linux.dev,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] bus: mhi: host: Add support for Foxconn T99W373 and T99W368
+Date:   Tue,  3 May 2022 10:43:49 +0800
+Message-Id: <20220503024349.4486-1-slark_xiao@163.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.7.0
-Subject: Re: [PATCH v5 3/3] x86/tdx: Add Quote generation support
-Content-Language: en-US
-To:     Kai Huang <kai.huang@intel.com>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Wander Lairson Costa <wander@redhat.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
-        linux-kernel@vger.kernel.org
-References: <20220501183500.2242828-1-sathyanarayanan.kuppuswamy@linux.intel.com>
- <20220501183500.2242828-4-sathyanarayanan.kuppuswamy@linux.intel.com>
- <243e918c523320ba3d216cbe22d24fe5ce33f370.camel@intel.com>
- <20220503012721.ok7fbvxmnvsr6qny@box.shutemov.name>
- <4cf22a0799cc13fa6f09ffbf0e5d83ed7eeb32ad.camel@intel.com>
-From:   Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-In-Reply-To: <4cf22a0799cc13fa6f09ffbf0e5d83ed7eeb32ad.camel@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: HdxpCgBX2zgil3BiSChTAg--.9943S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7Aw4DWr1ftF4kWF1DKr4xXrb_yoW8Cr4xpF
+        4SvrWjyFWkJF45t3ykA39ruas5uan3Ary3KF1xGw1a9w4qy3yYqrn2gw129FyYv398XFW3
+        tFyDWFyag3WDKFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0p_WlydUUUUU=
+X-Originating-IP: [112.97.63.58]
+X-CM-SenderInfo: xvod2y5b0lt0i6rwjhhfrp/xtbBAwb1ZGB0KLK3cgAAsf
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Product's enumeration align with previous Foxconn
+SDX55, so T99W373(SDX62)/T99W368(SDX65) would use
+ the same config as Foxconn SDX55.
+Remove fw and edl for this new commit.
 
+Signed-off-by: Slark Xiao <slark_xiao@163.com>
+Reviewed-by: Manivannan Sadhasivam <mani@kernel.org>
+---
+ drivers/bus/mhi/host/pci_generic.c | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
 
-On 5/2/22 7:18 PM, Kai Huang wrote:
-> On Tue, 2022-05-03 at 04:27 +0300, Kirill A. Shutemov wrote:
->> On Mon, May 02, 2022 at 02:40:26PM +1200, Kai Huang wrote:
->>>
->>>> +
->>>> +	/* Get order for Quote buffer page allocation */
->>>> +	order = get_order(quote_req.len);
->>>> +
->>>> +	/*
->>>> +	 * Allocate buffer to get TD Quote from the VMM.
->>>> +	 * Size needs to be 4KB aligned (which is already
->>>> +	 * met in page allocation).
->>>> +	 */
->>>> +	tdquote = (void *)__get_free_pages(GFP_KERNEL | __GFP_ZERO, order);
->>>> +	if (!tdquote) {
->>>> +		ret = -ENOMEM;
->>>> +		goto quote_failed;
->>>> +	}
->>>
->>> You can use alloc_pages_exact().
->>>
->>>> +
->>>> +	/*
->>>> +	 * Since this buffer will be shared with the VMM via GetQuote
->>>> +	 * hypercall, decrypt it.
->>>> +	 */
->>>> +	ret = set_memory_decrypted((unsigned long)tdquote, 1UL << order);
->>>> +	if (ret)
->>>> +		goto quote_failed;
->>>
->>>
->>> Again, Dave and Andi already commented you should use vmap() to avoid breaking
->>> up the direct-mapping.  Please use vmap() instead.
->>>
->>> https://lore.kernel.org/all/ce0feeec-a949-35f8-3010-b0d69acbbc2e@linux.intel.com/
->>>
->>> Will review the rest later.
->>
->> I would rather convert it to use DMA API for memory allocation. It will
->> tap into swiotlb buffer that already converted and there's no need to
->> touch direct mapping. Both allocation and freeing such memory is cheaper
->> because of that.
->>
-> 
-> Does each DMA allocation and free internally do the actual private/shared
-> conversion?  Or the swiotlb is converted at the beginning at boot and DMA
-> allocation will always get the shared buffer automatically?
-
-DMA allocation will always return shared buffer.
-
-> 
-> The problem of using DMA API is it will need to bring additional code to use
-> platform device, which isn't necessary.
-
-Yes.
-
-> 
-> Using vmap() we can still (almost) avoid private/shared conversion at IOCTL time
-> by allocating a default size buffer (which is large enough to cover 99% cases,
-> etc) at driver initialization time:
-
-Allocating fixed size buffer pool will work for dma buffer allocation
-as well.
-
-So the comparison is between platform driver boilerplate code vs vmap
-and shared/unshared code addition. It is arguable which is better. I
-think it is about preference.
-
-> 
-> https://lore.kernel.org/lkml/20220422233418.1203092-2-sathyanarayanan.kuppuswamy@linux.intel.com/T/#maf7e5f6894548972c5de71f607199a79645856ff
-> 
-> 
-
+diff --git a/drivers/bus/mhi/host/pci_generic.c b/drivers/bus/mhi/host/pci_generic.c
+index 24c94c23d78b..6fbc5915ea36 100644
+--- a/drivers/bus/mhi/host/pci_generic.c
++++ b/drivers/bus/mhi/host/pci_generic.c
+@@ -371,6 +371,15 @@ static const struct mhi_pci_dev_info mhi_foxconn_sdx55_info = {
+ 	.sideband_wake = false,
+ };
+ 
++static const struct mhi_pci_dev_info mhi_foxconn_sdx65_info = {
++	.name = "foxconn-sdx65",
++	.config = &modem_foxconn_sdx55_config,
++	.bar_num = MHI_PCI_DEFAULT_BAR_NUM,
++	.dma_data_width = 32,
++	.mru_default = 32768,
++	.sideband_wake = false,
++};
++
+ static const struct mhi_channel_config mhi_mv3x_channels[] = {
+ 	MHI_CHANNEL_CONFIG_UL(0, "LOOPBACK", 64, 0),
+ 	MHI_CHANNEL_CONFIG_DL(1, "LOOPBACK", 64, 0),
+@@ -560,6 +569,12 @@ static const struct pci_device_id mhi_pci_id_table[] = {
+ 	/* T99W175 (sdx55), Based on Qualcomm new baseline */
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_FOXCONN, 0xe0bf),
+ 		.driver_data = (kernel_ulong_t) &mhi_foxconn_sdx55_info },
++	/* T99W368 (sdx65) */
++	{ PCI_DEVICE(PCI_VENDOR_ID_FOXCONN, 0xe0d8),
++		.driver_data = (kernel_ulong_t) &mhi_foxconn_sdx65_info },
++	/* T99W373 (sdx62) */
++	{ PCI_DEVICE(PCI_VENDOR_ID_FOXCONN, 0xe0d9),
++		.driver_data = (kernel_ulong_t) &mhi_foxconn_sdx65_info },
+ 	/* MV31-W (Cinterion) */
+ 	{ PCI_DEVICE(0x1269, 0x00b3),
+ 		.driver_data = (kernel_ulong_t) &mhi_mv31_info },
 -- 
-Sathyanarayanan Kuppuswamy
-Linux Kernel Developer
+2.25.1
+

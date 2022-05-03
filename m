@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E5FF518584
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 15:33:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA87E518583
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 15:32:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236220AbiECNgX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 09:36:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54178 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236197AbiECNgT (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S236206AbiECNgT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Tue, 3 May 2022 09:36:19 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D81AA338BD
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54172 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236198AbiECNgS (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 3 May 2022 09:36:18 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0A963388F
         for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 06:32:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1651584766; x=1683120766;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=P6lksBlkSRkUq3MUiei8a63i/FmrG1lA59W1lUgCuUc=;
-  b=BqQy6/NPEVB2qZ23qQNN++QzRXTX7ibUe024vZy4dGFhoY/VAJ3uyy8o
-   5Ho0MNZwS+5aSX0ykLf0pI//QdpojrdoZK4gEZKDOTLbOEMOLe3m8OzFI
-   0RwhUN8JsOYDBUNBnGVoEIKTvXk6EOgqUg1eQecxHkk8S1Q/UCGnMMxf+
-   VNyc6xnjGDzEs758ald7wEd9seyDRRlTkcz2c57kQmoL8/g8zg/e8AuBc
-   W+eBwC65Wn9Z5iIJj7E9lQXm/GAFYkWuktsjtNxQSq1w9MBRKmGhRbZ53
-   zV7YtSGBuX0Y9dt+7igxwzIZ4o538kHs0J6eoRKuNJoN9ceDKYFEjPpon
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10335"; a="248021251"
+  bh=KOfK7zf5QeWpOtGSjy9RSCuufoPzv9zOHllZZURoFt8=;
+  b=XdF1nshb16ckmN9guVw0NOVrwFuNCiKTkk1mOY819tNjTkCcZZlGYmh0
+   4YZjVtW7eQAXiWb/U0YaBkxj8S5RXGSAV6esSVB9A5Vax8t5TBAC1nM36
+   9aojdjrjihLDRtxp+t1QLwgksCWlLYVG1xQ9hwUh7LISNQnMPfBDyysao
+   tdTS1DA/YXV+xH2TQSXbnN3MQVyHbqovF6ScxDrwtLl8MN/hJJ+BTXpOf
+   JAT/VMlxW/OVBkKP3nPWr40RfncAEnLLpxQJ/wFTm/H/PoXZWY0djU/Vo
+   hQFxl0JZWtH0WtB+JVJhXdA/D/lBn9IgkZog2yN2Hs0WY9jot5OAkQGTI
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10335"; a="328017527"
 X-IronPort-AV: E=Sophos;i="5.91,195,1647327600"; 
-   d="scan'208";a="248021251"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2022 06:32:46 -0700
+   d="scan'208";a="328017527"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2022 06:32:46 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,195,1647327600"; 
-   d="scan'208";a="692153323"
+   d="scan'208";a="663976902"
 Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 03 May 2022 06:32:44 -0700
+  by fmsmga002.fm.intel.com with ESMTP; 03 May 2022 06:32:44 -0700
 Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
         (envelope-from <lkp@intel.com>)
-        id 1nlsdv-000AUk-Gd;
+        id 1nlsdv-000AUh-Fv;
         Tue, 03 May 2022 13:32:43 +0000
-Date:   Tue, 3 May 2022 21:32:23 +0800
+Date:   Tue, 3 May 2022 21:32:25 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     Sven Schnelle <svens@linux.ibm.com>,
         Paul Moore <paul@paul-moore.com>,
         Eric Paris <eparis@redhat.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-audit@redhat.com, linux-kernel@vger.kernel.org
+Cc:     kbuild-all@lists.01.org, linux-audit@redhat.com,
+        linux-kernel@vger.kernel.org
 Subject: Re: [PATCH 1/2] audit: add call argument to socketcall auditing
-Message-ID: <202205032119.La0IM2Sw-lkp@intel.com>
+Message-ID: <202205032108.vBdGwIXf-lkp@intel.com>
 References: <20220503090212.1322050-1-svens@linux.ibm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <20220503090212.1322050-1-svens@linux.ibm.com>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -78,37 +78,46 @@ https://git-scm.com/docs/git-format-patch]
 
 url:    https://github.com/intel-lab-lkp/linux/commits/Sven-Schnelle/audit-add-call-argument-to-socketcall-auditing/20220503-170442
 base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 9050ba3a61a4b5bd84c2cde092a100404f814f31
-config: x86_64-randconfig-a014 (https://download.01.org/0day-ci/archive/20220503/202205032119.La0IM2Sw-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 363b3a645a1e30011cc8da624f13dac5fd915628)
+config: x86_64-randconfig-a013 (https://download.01.org/0day-ci/archive/20220503/202205032108.vBdGwIXf-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.2.0-20) 11.2.0
 reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
         # https://github.com/intel-lab-lkp/linux/commit/b89caaec1c1bd3382c6cef08d08beadbaf808513
         git remote add linux-review https://github.com/intel-lab-lkp/linux
         git fetch --no-tags linux-review Sven-Schnelle/audit-add-call-argument-to-socketcall-auditing/20220503-170442
         git checkout b89caaec1c1bd3382c6cef08d08beadbaf808513
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All error/warnings (new ones prefixed by >>):
 
-   net/socket.c:2206:6: warning: variable 'max_optlen' set but not used [-Wunused-but-set-variable]
-           int max_optlen;
-               ^
->> net/socket.c:2924:68: error: too many arguments to function call, expected 2, have 3
-           err = audit_socketcall(call, nargs[call] / sizeof(unsigned long), a);
-                 ~~~~~~~~~~~~~~~~                                            ^
-   include/linux/audit.h:643:19: note: 'audit_socketcall' declared here
-   static inline int audit_socketcall(int nargs, unsigned long *args)
-                     ^
-   1 warning and 1 error generated.
+   net/socket.c: In function '__sys_getsockopt':
+   net/socket.c:2206:13: warning: variable 'max_optlen' set but not used [-Wunused-but-set-variable]
+    2206 |         int max_optlen;
+         |             ^~~~~~~~~~
+   net/socket.c: In function '__do_sys_socketcall':
+>> net/socket.c:2924:50: warning: passing argument 2 of 'audit_socketcall' makes pointer from integer without a cast [-Wint-conversion]
+    2924 |         err = audit_socketcall(call, nargs[call] / sizeof(unsigned long), a);
+         |                                      ~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~
+         |                                                  |
+         |                                                  long unsigned int
+   In file included from net/socket.c:82:
+   include/linux/audit.h:643:62: note: expected 'long unsigned int *' but argument is of type 'long unsigned int'
+     643 | static inline int audit_socketcall(int nargs, unsigned long *args)
+         |                                               ~~~~~~~~~~~~~~~^~~~
+>> net/socket.c:2924:15: error: too many arguments to function 'audit_socketcall'
+    2924 |         err = audit_socketcall(call, nargs[call] / sizeof(unsigned long), a);
+         |               ^~~~~~~~~~~~~~~~
+   In file included from net/socket.c:82:
+   include/linux/audit.h:643:19: note: declared here
+     643 | static inline int audit_socketcall(int nargs, unsigned long *args)
+         |                   ^~~~~~~~~~~~~~~~
 
 
-vim +2924 net/socket.c
+vim +/audit_socketcall +2924 net/socket.c
 
   2896	
   2897	/*

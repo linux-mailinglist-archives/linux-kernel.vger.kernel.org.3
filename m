@@ -2,50 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45408518885
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 17:27:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A463518881
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 17:26:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238464AbiECPa5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 11:30:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41498 "EHLO
+        id S238440AbiECPaT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 11:30:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238439AbiECPay (ORCPT
+        with ESMTP id S238439AbiECPaR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 11:30:54 -0400
-Received: from skyrocket.fabmicro.ru (skyrocket.fabmicro.ru [217.116.57.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2347D24587
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 08:27:20 -0700 (PDT)
-Received: from mail.fabmicro.ru (skyrocket.fabmicro.ru [217.116.57.130])
-        by skyrocket.fabmicro.ru (8.14.9/8.14.9) with ESMTP id 243FQIbs075026;
-        Tue, 3 May 2022 15:26:18 GMT
-        (envelope-from rz@fabmicro.ru)
+        Tue, 3 May 2022 11:30:17 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED30225C69
+        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 08:26:44 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id iq10so15652880pjb.0
+        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 08:26:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=B6qlSDLxLCXUGUr/KLSuzX/SdSd4Bh+SQDNoC/TYzmE=;
+        b=a9V1c+m8xen4XNysutPq9ZRoIjmYYTYB9zba7iFQsLjRQ5MiUhT5H1qYIaKTKEow5g
+         g9zhI4udB18LnnSUbJC5H1ywxlNfBz4X7yaZ8BADGRV+iRcj0JZq3Fm/qBAO6m68Qut/
+         AsJU2WGQtlHRz7VNCx51AWV6y2nJwJmwinUnui4K7TiD0ENxQJzmmZjbbVHUjMITpxZT
+         PCeKS+fagLNIbu8JPK0wy/eJA8AJFD7CaTgVx/EbTbJ8xEFAke8CSHQ2Vu1NHxhErYrH
+         VPvsy6+1CXi21U2hs3zBJz6FSetzVDDUjj+SNc5Gp7V9EaORt0dxjzkzNv0W+UQ9i0kd
+         JIvg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=B6qlSDLxLCXUGUr/KLSuzX/SdSd4Bh+SQDNoC/TYzmE=;
+        b=cNU4WD7NLdHa6W/qQYXz4fYXU7dbKv0YqKGWnWuKLXGlwUufFhw8s6ZTrNcC/zsKLO
+         fEepQueyl8a/NAAA2+53vOWSy3NHDvo4kdUyvLGvg5pZ2kvkTiXEIzJMEUtS1iR1q3vX
+         sjWeM+eR9WZkir4D+OuiACKG3Kvql4JZLCnGQxXyf8lmIugXzoUeBam1l2ibKjeQ1xj3
+         KBSqy3rLXwQ0RKtrWEaCmP50fZi/PFBE+8Hq34uQ7pkSPkLXdpm5ugr5eXuYfzfBts2X
+         AG2W6yQBiUwM6HNWX/a+nFIH+fXGf0kt45Ylq8xRma6B9JrPY26Uv6B0h05iJerljo8f
+         ndKQ==
+X-Gm-Message-State: AOAM5320yIY2nj3uVM5AArZMf6E44VWsW9SElmYUMyMLfLGlzGMSPNp3
+        /nOVr9WpasyzzB96Y+W9p+s=
+X-Google-Smtp-Source: ABdhPJwtiCZaJcqzn0puTvFvsxn7j4SOqY0XuNO5Zm+mP9J/jRiQPjvKxr56epNb5EBBYr132XSONQ==
+X-Received: by 2002:a17:90a:7e94:b0:1da:3b47:b00e with SMTP id j20-20020a17090a7e9400b001da3b47b00emr5365604pjl.222.1651591604398;
+        Tue, 03 May 2022 08:26:44 -0700 (PDT)
+Received: from google.com ([2620:15c:211:201:8998:54e:9def:1e7c])
+        by smtp.gmail.com with ESMTPSA id m19-20020a17090a7f9300b001cd60246575sm1489865pjl.17.2022.05.03.08.26.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 May 2022 08:26:43 -0700 (PDT)
+Sender: Minchan Kim <minchan.kim@gmail.com>
+Date:   Tue, 3 May 2022 08:26:42 -0700
+From:   Minchan Kim <minchan@kernel.org>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        linux-mm <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        John Hubbard <jhubbard@nvidia.com>,
+        John Dias <joaodias@google.com>
+Subject: Re: [PATCH] mm: fix is_pinnable_page against on cma page
+Message-ID: <YnFJss0doXGCmq3w@google.com>
+References: <20220502173558.2510641-1-minchan@kernel.org>
+ <29d0c1c3-a44e-4573-7e7e-32be07544dbe@redhat.com>
+ <YnAhaRNjmIhtGUjk@google.com>
+ <08e9855c-395d-f40c-de3d-1ec8b644bfe8@redhat.com>
 MIME-Version: 1.0
-Date:   Tue, 03 May 2022 20:26:18 +0500
-From:   Ruslan Zalata <rz@fabmicro.ru>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Maxime Ripard <maxime@cerno.tech>, Icenowy Zheng <icenowy@aosc.io>,
-        Jean Delvare <jdelvare@suse.com>, Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
-Subject: Re: [PATCH v2] hwmon: (sun4i-lradc) Add driver for LRADC found on
- Allwinner A13/A20 SoC
-In-Reply-To: <4aabfd63-18e2-65c5-d1c2-d7600afc1c40@roeck-us.net>
-References: <20220428210906.29527-1-rz@fabmicro.ru>
- <20220502110010.q7vvdkdpaiz5acjl@houat>
- <7433B295-D896-4BF8-87DF-87EB89D7A550@aosc.io>
- <20220502112112.3ne7zy4b6gggxzoo@houat>
- <4aabfd63-18e2-65c5-d1c2-d7600afc1c40@roeck-us.net>
-User-Agent: Roundcube Webmail/1.4.3
-Message-ID: <97e3af18e947492b1ac968c058ba509f@fabmicro.ru>
-X-Sender: rz@fabmicro.ru
-Organization: Fabmicro, LLC.
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <08e9855c-395d-f40c-de3d-1ec8b644bfe8@redhat.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,125 +78,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Guenter,
-
-LRADC does generate continuous interrupts as long as input voltage is 
-below LevelB threshold. The max possible LevelB is 0x3C which in case of 
-A20 SoC is close to 1.90V and that's what my driver sets LevelB to. 
-Perhaps this needs to be documented more thoroughly.
-
-It is possible to implement this same driver for IIO subsystem, but I 
-would prefer to keep it in hwmon along with many other simple ADC 
-drivers used for temp and battery status monitoring.
-
-If we talk about IIO, it will be necessary to implement serialization of 
-reads and updates which brings up some complexity I would try to avoid 
-at the moment. :)
-
----
-Regards,
-Ruslan.
-
-Fabmicro, LLC.
-
-On 2022-05-03 07:02, Guenter Roeck wrote:
-> On 5/2/22 04:21, Maxime Ripard wrote:
->> On Mon, May 02, 2022 at 07:15:01PM +0800, Icenowy Zheng wrote:
->>> 
->>> 
->>> 于 2022年5月2日 GMT+08:00 下午7:00:10, Maxime Ripard <maxime@cerno.tech> 
->>> 写到:
->>>> Hi,
->>>> 
->>>> On Thu, Apr 28, 2022 at 09:09:03PM +0000, Ruslan Zalata wrote:
->>>>> Some Allwinner SoCs like A13, A20 or T2 are equipped with 
->>>>> two-channel
->>>>> low rate (6 bit) ADC that is often used for extra keys. There's a 
->>>>> driver
->>>>> for that already implementing standard input device, but it has 
->>>>> these
->>>>> limitations: 1) it cannot be used for general ADC data equisition, 
->>>>> and
->>>>> 2) it uses only one LRADC channel of two available.
->>>>> 
->>>>> This driver provides basic hwmon interface to both channels of 
->>>>> LRADC on
->>>>> such Allwinner SoCs.
->>>>> 
->>>>> Signed-off-by: Ruslan Zalata <rz@fabmicro.ru>
->>>>> ---
->>>>>   MAINTAINERS                       |   6 +
->>>>>   drivers/hwmon/Kconfig             |  13 ++
->>>>>   drivers/hwmon/Makefile            |   1 +
->>>>>   drivers/hwmon/sun4i-lradc-hwmon.c | 280 
->>>>> ++++++++++++++++++++++++++++++
->>>>>   4 files changed, 300 insertions(+)
->>>>>   create mode 100644 drivers/hwmon/sun4i-lradc-hwmon.c
->>>>> 
->>>>> diff --git a/MAINTAINERS b/MAINTAINERS
->>>>> index 5e8c2f61176..d9c71e94133 100644
->>>>> --- a/MAINTAINERS
->>>>> +++ b/MAINTAINERS
->>>>> @@ -18861,6 +18861,12 @@ S:	Maintained
->>>>>   
->>>>> F:	Documentation/devicetree/bindings/input/allwinner,sun4i-a10-lradc-keys.yaml
->>>>>   F:	drivers/input/keyboard/sun4i-lradc-keys.c
->>>>>   +SUN4I LOW RES ADC HWMON DRIVER
->>>>> +M:	Ruslan Zalata <rz@fabmicro.ru>
->>>>> +L:	linux-hwmon@vger.kernel.org
->>>>> +S:	Maintained
->>>>> +F:	drivers/hwmon/sun4i-lradc-hwmon.c
->>>>> +
->>>>>   SUNDANCE NETWORK DRIVER
->>>>>   M:	Denis Kirjanov <kda@linux-powerpc.org>
->>>>>   L:	netdev@vger.kernel.org
->>>>> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
->>>>> index 68a8a27ab3b..86776488a81 100644
->>>>> --- a/drivers/hwmon/Kconfig
->>>>> +++ b/drivers/hwmon/Kconfig
->>>>> @@ -1691,6 +1691,19 @@ config SENSORS_SIS5595
->>>>>   	  This driver can also be built as a module. If so, the module
->>>>>   	  will be called sis5595.
->>>>>   +config SENSORS_SUN4I_LRADC
->>>>> +	tristate "Allwinner A13/A20 LRADC hwmon"
->>>>> +	depends on ARCH_SUNXI && !KEYBOARD_SUN4I_LRADC
->>>>> +	help
->>>>> +	  Say y here to support the LRADC found in Allwinner A13/A20 
->>>>> SoCs.
->>>>> +	  Both channels are supported.
->>>>> +
->>>>> +	  This driver can also be built as module. If so, the module
->>>>> +	  will be called sun4i-lradc-hwmon.
->>>>> +
->>>>> +	  This option is not compatible with KEYBOARD_SUN4I_LRADC, one
->>>>> +	  of these must be used at a time.
->>>> 
->>>> How do you plan on enforcing that?
->>>> 
->>>> I guess a better path forward would be to either register an hwmon
->>>> device in the original driver, or convert that driver to iio and use
->>>> iio-hwmon.
->>> 
->>> I think this driver should be use IIO, and then try to probe an IIO 
->>> input
->>> if possible.
->> 
->> It's been a while, but if I remember well we couldn't use IIO for that
->> driver because it's not generating interrupts all the time but only 
->> when
->> it goes over a given threshold:
->> 
->> https://lore.kernel.org/all/52C5E9F1.9010700@redhat.com/
->> 
->> I'm not sure if it's still relevant, so we might just need to add an
->> hwmon driver to the existing driver
->> 
+On Tue, May 03, 2022 at 03:15:24AM +0200, David Hildenbrand wrote:
 > 
-> So now we have conflicting claims that the hwmon driver would need
-> to implement continuous interrupts because the chip otherwise doesn't
-> continuously measure ADC input, and that implementing an IIO driver
-> isn't possible or doesn't make sense because the chip would not support
-> generating continuous interrupts. Which one is it ? Am I missing 
-> something ?
+> >>>> However, I assume we have the same issue right now already with
+> >> ZONE_MOVABLE and MIGRATE_CMA when trying to pin a page residing on these
+> > 
+> > ZONE_MOVALBE is also changed dynamically?
+> > 
 > 
-> Guenter
+> Sorry, with "same issue" I meant failing to pin if having to migrate and
+> the page is temporarily unmovable.
+> 
+> >> there are temporarily unmovable and we fail to migrate. But it would now
+> >> apply even without ZONE_MOVABLE or MIGRATE_CMA. Hm...
+> > 
+> > Didn't parse your last mention.
+> 
+> On a system that neither uses ZONE_MOVABLE nor MIGRATE_CMA we might have
+> to migrate now when pinning.
+
+I don't understand your point. My problem is pin_user_pages with
+FOLL_LONGTERM. It shouldn't pin a page from ZONE_MOVABLE and cma area
+without migrating page out of movable zone or CMA area.
+That's why try_grab_folio checks whether target page stays in those
+movable areas. However, to check CMA area, is_migrate_cma_page is
+racy so the FOLL_LONGTERM flag semantic is broken right now.
+
+Do you see any problem of the fix?
+
+A thing to get some attention is whether we need READ_ONCE or not
+for the local variable mt.

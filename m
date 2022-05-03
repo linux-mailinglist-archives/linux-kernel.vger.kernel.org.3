@@ -2,70 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C4FE51913F
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 00:21:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF44151915A
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 00:28:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243581AbiECWWg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 18:22:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33660 "EHLO
+        id S243629AbiECWZ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 18:25:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243568AbiECWWc (ORCPT
+        with ESMTP id S235378AbiECWZ0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 18:22:32 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A4E33ED27;
-        Tue,  3 May 2022 15:18:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=5nRXX6634CQNLfZ6ipk0BQhlHcwJJYgAi8oMmRtAiuU=; b=CTRSbushjLoNRV4SKIDr693kYb
-        zHLnUihRmklsiEH8B82ZMzVhj0/P+4RdrYcCYHn3kx32ctc3EbUQAwT7VGk71WOLRjhZZtFntsmfK
-        81GeRGBWO9ESaFiQX39VzUDSTG2EHPythdbDVdKWYGP1UmHx5USfIU/HgK5Lc4EzsBeA=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1nm0r1-0016xO-It; Wed, 04 May 2022 00:18:47 +0200
-Date:   Wed, 4 May 2022 00:18:47 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Matthew Hagan <mnhagan88@gmail.com>
-Cc:     Russell King <linux@armlinux.org.uk>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] net: sfp: Add tx-fault workaround for Huawei MA5671A
- SFP ONT
-Message-ID: <YnGqR2fMdk/dglm7@lunn.ch>
-References: <20220502223315.1973376-1-mnhagan88@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220502223315.1973376-1-mnhagan88@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 3 May 2022 18:25:26 -0400
+Received: from mail-oa1-f48.google.com (mail-oa1-f48.google.com [209.85.160.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AE9F3ED27;
+        Tue,  3 May 2022 15:21:53 -0700 (PDT)
+Received: by mail-oa1-f48.google.com with SMTP id 586e51a60fabf-e5e433d66dso18588773fac.5;
+        Tue, 03 May 2022 15:21:53 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=jAs3NAScHrB+A6PvNOqiGT3WbTZEZfZCmF0rQVevpas=;
+        b=yfjDKngGMfZhKpch3hkbOXWfoJlowgw37QGOGr/63bGg77SG9qQRXWdIG/uBR6bKuk
+         1CAeXGPP/ULc34xNYGW1KClu3Qn6uJgveokJrD8fvLXQnnVUJMx+8SNC6xUwLd4SWO91
+         Qy7Uoo02Jo8ALJW2qKk7V7mizrESY9SPub9IlWfDNaq+nJJ4ME6zGAXWzi5liOFdiH7E
+         emvkeIRLDx+fA2Gsko9722ZcH3xJfgR0RilwAd1pUgtFCFbao2NEkSBcOS6Ddy97DcFu
+         iXklSm5Hhc0G9s9MlNmYxQpMgTg0oLOM9QmgyyaNt09EKKV2xdKrw6P9jslZTct50q12
+         63jA==
+X-Gm-Message-State: AOAM530IarVrb4Qn/nBiKD3BLfwveaG5zp0sVSLcfBwMZTsC/nC3i2po
+        WCSsaXWwLKDHRqRhJELVHA==
+X-Google-Smtp-Source: ABdhPJx2qP8TkucEjD8msix8TxJmAarK1uRUmwgXHNb7Lqk2i56Bbhv9jE2reUKzQAmq1Z3/bzYMhw==
+X-Received: by 2002:a05:6870:548c:b0:ed:aa94:fd33 with SMTP id f12-20020a056870548c00b000edaa94fd33mr2629803oan.84.1651616512493;
+        Tue, 03 May 2022 15:21:52 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id t21-20020a056871055500b000e92d5a54ffsm7323349oal.26.2022.05.03.15.21.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 May 2022 15:21:52 -0700 (PDT)
+Received: (nullmailer pid 139785 invoked by uid 1000);
+        Tue, 03 May 2022 22:21:51 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>
+Cc:     Kavyasree.Kotagiri@microchip.com, peda@axentia.se,
+        devicetree@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        nicolas.ferre@microchip.com, UNGLinuxDriver@microchip.com,
+        Manohar.Puri@microchip.com, linux-kernel@vger.kernel.org,
+        lee.jones@linaro.org, alexandre.belloni@bootlin.com,
+        claudiu.beznea@microchip.com, linux-arm-kernel@lists.infradead.org,
+        linux@armlinux.org.uk
+In-Reply-To: <20220503105528.12824-2-kavyasree.kotagiri@microchip.com>
+References: <20220503105528.12824-1-kavyasree.kotagiri@microchip.com> <20220503105528.12824-2-kavyasree.kotagiri@microchip.com>
+Subject: Re: [PATCH 1/4] dt-bindings: mfd: atmel,flexcom: Convert to json-schema
+Date:   Tue, 03 May 2022 17:21:51 -0500
+Message-Id: <1651616511.149012.139784.nullmailer@robh.at.kernel.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 02, 2022 at 11:33:15PM +0100, Matthew Hagan wrote:
-> As noted elsewhere, various GPON SFP modules exhibit non-standard
-> TX-fault behaviour. In the tested case, the Huawei MA5671A, when used
-> in combination with a Marvell mv88e6085 switch, was found to
-> persistently assert TX-fault, resulting in the module being disabled.
+On Tue, 03 May 2022 16:25:25 +0530, Kavyasree Kotagiri wrote:
+> Convert the Atmel flexcom device tree bindings to json schema.
 > 
-> This patch adds a quirk to ignore the SFP_F_TX_FAULT state, allowing the
-> module to function.
+> Signed-off-by: Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>
+> ---
+>  .../bindings/mfd/atmel,flexcom.yaml           | 68 +++++++++++++++++++
+>  .../devicetree/bindings/mfd/atmel-flexcom.txt | 63 -----------------
+>  2 files changed, 68 insertions(+), 63 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/mfd/atmel,flexcom.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/mfd/atmel-flexcom.txt
 > 
-> Change from v1: removal of erroneous return statment (Andrew Lunn)
-> 
-> Signed-off-by: Matthew Hagan <mnhagan88@gmail.com>
 
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-    Andrew
+yamllint warnings/errors:
+
+dtschema/dtc warnings/errors:
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mfd/atmel,flexcom.yaml: properties:reg: 'oneOf' conditional failed, one must be fixed:
+	[{'description': 'Flexcom registers'}] is too short
+	False schema does not allow 1
+	hint: "minItems" is only needed if less than the "items" list length
+	from schema $id: http://devicetree.org/meta-schemas/items.yaml#
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mfd/atmel,flexcom.yaml: ignoring, error in schema: properties: reg
+Documentation/devicetree/bindings/mfd/atmel,flexcom.example.dtb:0:0: /example-0/flexcom@f8034000: failed to match any schema with compatible: ['atmel,sama5d2-flexcom']
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/patch/
+
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
+

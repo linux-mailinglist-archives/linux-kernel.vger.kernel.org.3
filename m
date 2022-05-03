@@ -2,109 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 021B75188E0
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 17:43:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFF5C5188E6
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 17:43:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238717AbiECPrD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 11:47:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59256 "EHLO
+        id S238764AbiECPrH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 11:47:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233626AbiECPrB (ORCPT
+        with ESMTP id S233626AbiECPrE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 11:47:01 -0400
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C80902D1C6;
-        Tue,  3 May 2022 08:43:28 -0700 (PDT)
-Received: by mail-wm1-x334.google.com with SMTP id c190-20020a1c35c7000000b0038e37907b5bso1639250wma.0;
-        Tue, 03 May 2022 08:43:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=cDRsFXOwSjFyheRf7X8Ao9DHLOFKA24q9h+KTiwDV0I=;
-        b=ltwqrEm9oTa8rQE4hyHa3WE6OHpLPVxWC0GPdC+pt5u+pcdgfiXouVFdeGxLhCLcPW
-         ZrNdvzIuMJA4ipYxZ78e1va4fhIDbPq7Yki00W2CpHTx8Ybs0Eu4eHu5I/SC5sZazUgM
-         8Pt1NQwJf/c+spyJ52x+bpCrkTZzyA583vwVEWJWdHMMVzq73hZaBcESP+CHkj26wXf6
-         uMHZv1EKVL0GoYMqFPMbPPbk6/T7gVd+AEEEBZM4cpZbXq5buc7JhjuEjfnTFuAkTOTc
-         O/2IEC2C4Ih14963WwgQp5B+ed44pAc6jWbMzruU4uSuu9wowL2DFGTVCWW04E/o2RMD
-         w4zw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=cDRsFXOwSjFyheRf7X8Ao9DHLOFKA24q9h+KTiwDV0I=;
-        b=kiA9iLPv9EcrrY0zUEFApJm8jqnMCVMOAQ4nBEColpvCTCeISjzGPlHeUpe2lxz/hr
-         B6C9lSki7HkgJogZyx+K+D6iV8xxhGoQl+ipzn6jjoYGof0VsUA+5kgmQziC9rgy6AwE
-         dK45iuSfGJC/Lj+EFjnlqsBhzXcLx7q3Gpz+jC3Lb0OCkgE2rCE9r9mC7qhg2Uatw65d
-         Cr602OkbDs3qkJaPEsgV9AWF8h8vHigMtaTTNwTfVm8gxlWFsxJO5BEEl1esL+lwCG8f
-         ohVxu05V3M2FLCzI69PtAX8OAxzITS3yp7kURlzv5UptjUk7dbE2RrpqB3WxVAjKYVJh
-         +BpQ==
-X-Gm-Message-State: AOAM532Slw7RuEPVDzqrjuc1y17ZQdavcPlw5rDUAWOidsKMthU9d+Qv
-        moeM7DlGPapK6P98C/magRA=
-X-Google-Smtp-Source: ABdhPJzppyR4INFUGT75DtjAs3oxm7d+Z9BwGCumSgCdVVuDEp5F34+RwxOinhQoVLSlOtY3aLLd6Q==
-X-Received: by 2002:a1c:ac44:0:b0:38e:a7df:3179 with SMTP id v65-20020a1cac44000000b0038ea7df3179mr3994322wme.61.1651592607267;
-        Tue, 03 May 2022 08:43:27 -0700 (PDT)
-Received: from vmu1804.lan ([2a06:a003:501a:a7ce::887])
-        by smtp.googlemail.com with ESMTPSA id l20-20020a05600c1d1400b003942a244ed1sm2254912wms.22.2022.05.03.08.43.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 May 2022 08:43:26 -0700 (PDT)
-From:   Mikhail Zhilkin <csharper2005@gmail.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mtd@lists.infradead.org, Karim <Karimdplay@gmail.com>,
-        M <x1@disroot.org>, Mikhail Zhilkin <csharper2005@gmail.com>
-Subject: [PATCH v3 0/3] mtd: parsers: add support for Sercomm partitions
-Date:   Tue,  3 May 2022 15:42:54 +0000
-Message-Id: <20220503154254.2339744-1-csharper2005@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Tue, 3 May 2022 11:47:04 -0400
+Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [IPv6:2001:4b98:dc4:8::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 115102D1C6;
+        Tue,  3 May 2022 08:43:30 -0700 (PDT)
+Received: (Authenticated sender: foss@0leil.net)
+        by mail.gandi.net (Postfix) with ESMTPSA id D5FC324000C;
+        Tue,  3 May 2022 15:43:25 +0000 (UTC)
+From:   Quentin Schulz <foss+kernel@0leil.net>
+Cc:     shawnx.tu@intel.com, mchehab@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-media@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Quentin Schulz <quentin.schulz@theobroma-systems.com>,
+        Quentin Schulz <foss+kernel@0leil.net>
+Subject: [PATCH 1/3] media: dt-bindings: ov5675: document YAML binding
+Date:   Tue,  3 May 2022 17:42:57 +0200
+Message-Id: <20220503154259.1166203-1-foss+kernel@0leil.net>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch series add support for Sercomm mtd partition table parser. It's
-used in some Beeline, Netgear and Sercomm routers. The Sercomm partition
-map table contains real partition offsets, which may differ from device to
-device depending on the number and location of bad blocks on NAND.
+From: Quentin Schulz <quentin.schulz@theobroma-systems.com>
 
-Changes since:
-v2:
- - Fix mistakes in dt-binding
- - Add patch for new vendor prefix
- - Add vendor prefix to scpart-id property
+This patch adds documentation of device tree in YAML schema for the
+OV5675 CMOS image sensor from Omnivision.
 
-v1:
- - Add dt-binding in a separate patch
- - Remove redundant braces and logical NOT operator
- - Define pr_fmt
- - Replace kcalloc by kzalloc
- - Use of_get_child_count() and alloc big enough array before the
-   for_each_child_of_node()
+Cc: Quentin Schulz <foss+kernel@0leil.net>
+Signed-off-by: Quentin Schulz <quentin.schulz@theobroma-systems.com>
+---
+ .../bindings/media/i2c/ovti,ov5675.yaml       | 137 ++++++++++++++++++
+ MAINTAINERS                                   |   1 +
+ 2 files changed, 138 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/media/i2c/ovti,ov5675.yaml
 
-Mikhail Zhilkin (3):
-  dt-bindings: Add Sercomm (Suzhou) Corporation vendor prefix
-  dt-bindings: mtd: partitions: Extend fixed-partitions binding
-  mtd: parsers: add support for Sercomm partitions
-
- .../mtd/partitions/fixed-partitions.yaml      |  55 +++-
- .../devicetree/bindings/vendor-prefixes.yaml  |   2 +
- drivers/mtd/parsers/Kconfig                   |   9 +
- drivers/mtd/parsers/Makefile                  |   1 +
- drivers/mtd/parsers/scpart.c                  | 240 ++++++++++++++++++
- 5 files changed, 305 insertions(+), 2 deletions(-)
- create mode 100644 drivers/mtd/parsers/scpart.c
-
+diff --git a/Documentation/devicetree/bindings/media/i2c/ovti,ov5675.yaml b/Documentation/devicetree/bindings/media/i2c/ovti,ov5675.yaml
+new file mode 100644
+index 000000000000..d009cba539a0
+--- /dev/null
++++ b/Documentation/devicetree/bindings/media/i2c/ovti,ov5675.yaml
+@@ -0,0 +1,137 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++# Copyright (c) 2022 Theobroma Systems Design und Consulting GmbH
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/media/i2c/ov5675.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Omnivision OV5675 CMOS Sensor Device Tree Bindings
++
++maintainers:
++  - Quentin Schulz <quentin.schulz@theobroma-systems.com>
++
++description: |-
++  The Omnivision OV5675 is a high performance, 1/5-inch, 5 megapixel, CMOS
++  image sensor that delivers 2592x1944 at 30fps. It provides full-frame,
++  sub-sampled, and windowed 10-bit MIPI images in various formats via the
++  Serial Camera Control Bus (SCCB) interface. This chip is programmable
++  through I2C and two-wire SCCB. The sensor output is available via CSI-2
++  serial data output (up to 2-lane).
++
++properties:
++  compatible:
++    const: ovti,ov5675
++
++  reg:
++    maxItems: 1
++
++  clocks:
++    maxItems: 1
++
++  clock-names:
++    description:
++      Input clock for the sensor.
++    items:
++      - const: xvclk
++
++  clock-frequency:
++    description:
++      Frequency of the xvclk clock in Hertz.
++
++  dovdd-supply:
++    description:
++      Definition of the regulator used as interface power supply.
++
++  avdd-supply:
++    description:
++      Definition of the regulator used as analog power supply.
++
++  dvdd-supply:
++    description:
++      Definition of the regulator used as digital power supply.
++
++  reset-gpios:
++    description:
++      The phandle and specifier for the GPIO that controls sensor reset.
++      This corresponds to the hardware pin XSHUTDOWN which is physically
++      active low.
++
++  port:
++    type: object
++    additionalProperties: false
++    description:
++      A node containing an output port node with an endpoint definition
++      as documented in
++      Documentation/devicetree/bindings/media/video-interfaces.txt
++
++    properties:
++      endpoint:
++        type: object
++
++        properties:
++          data-lanes:
++            description: |-
++              The driver only supports 2-lane operation.
++            items:
++              - const: 1
++              - const: 2
++
++          link-frequencies:
++            $ref: /schemas/types.yaml#/definitions/uint64-array
++            description:
++              Allowed data bus frequencies. 450000000Hz is supported by the driver.
++
++        required:
++          - link-frequencies
++
++    required:
++      - endpoint
++
++required:
++  - compatible
++  - reg
++  - clocks
++  - clock-names
++  - clock-frequency
++  - dovdd-supply
++  - avdd-supply
++  - dvdd-supply
++  - port
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/gpio/gpio.h>
++
++    i2c {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        ov5675: camera@36 {
++            compatible = "ovti,ov5675";
++            reg = <0x36>;
++
++            reset-gpios = <&gpio2 RK_PB1 GPIO_ACTIVE_LOW>;
++            pinctrl-names = "default";
++            pinctrl-0 = <&cif_clkout_m0>;
++
++            clocks = <&cru SCLK_CIF_OUT>;
++            clock-names = "xvclk";
++            clock-frequency = <19200000>;
++
++            avdd-supply = <&vcc_1v8>;
++            dvdd-supply = <&vcc_1v8>;
++            dovdd-supply = <&vcc_2v8>;
++
++            port {
++                ucam_out: endpoint {
++                    remote-endpoint = <&mipi_in_ucam>;
++                    data-lanes = <1 2>;
++                    link-frequencies = /bits/ 64 <450000000>;
++                };
++            };
++        };
++    };
++...
++
+diff --git a/MAINTAINERS b/MAINTAINERS
+index edc96cdb85e8..94ff31268c3d 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -14550,6 +14550,7 @@ M:	Shawn Tu <shawnx.tu@intel.com>
+ L:	linux-media@vger.kernel.org
+ S:	Maintained
+ T:	git git://linuxtv.org/media_tree.git
++F:	Documentation/devicetree/bindings/media/i2c/ovti,ov5675.yaml
+ F:	drivers/media/i2c/ov5675.c
+ 
+ OMNIVISION OV5693 SENSOR DRIVER
 -- 
-2.25.1
+2.35.1
 

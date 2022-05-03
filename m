@@ -2,43 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F331751925B
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 01:38:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD8FA51925F
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 01:38:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244276AbiECXlf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 19:41:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54480 "EHLO
+        id S244309AbiECXln (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 19:41:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234374AbiECXld (ORCPT
+        with ESMTP id S234374AbiECXlk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 19:41:33 -0400
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 789ED403FA;
-        Tue,  3 May 2022 16:37:58 -0700 (PDT)
-Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=phil.localnet)
-        by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <heiko@sntech.de>)
-        id 1nm25a-0004bi-Jq; Wed, 04 May 2022 01:37:54 +0200
-From:   Heiko Stuebner <heiko@sntech.de>
-To:     krzk+dt@kernel.org, palmer@dabbelt.com, robh+dt@kernel.org,
-        linux-riscv@lists.infradead.org
-Cc:     conor.dooley@microchip.com, Cyril.Jean@microchip.com,
-        daire.mcnamara@microchip.com, paul.walmsley@sifive.com,
-        aou@eecs.berkeley.edu, palmer@rivosinc.com, arnd@arndb.de,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, Rob Herring <robh@kernel.org>,
-        Conor Dooley <mail@conchuod.ie>
-Subject: Re: [PATCH v3 2/8] riscv: dts: microchip: move sysctrlr out of soc bus
-Date:   Wed, 04 May 2022 01:37:53 +0200
-Message-ID: <3166309.aeNJFYEL58@phil>
-In-Reply-To: <20220501192557.2631936-3-mail@conchuod.ie>
-References: <20220501192557.2631936-1-mail@conchuod.ie> <20220501192557.2631936-3-mail@conchuod.ie>
+        Tue, 3 May 2022 19:41:40 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2D0E42EC0;
+        Tue,  3 May 2022 16:38:06 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7D7EC617EB;
+        Tue,  3 May 2022 23:38:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A049EC385A4;
+        Tue,  3 May 2022 23:38:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651621085;
+        bh=TddFjYfs0IlmmoRmRJhIId5AulGG33VI0BNiobU2CvQ=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=lEN+VqFrouY3qh8AlZeGsjaIYP0MaQQQlhpXsVSepSP9KdbbBSuXXKMiHLEGcG9YZ
+         kiZVWt1yUF8om4fV1V8DpcIuYczrnTa/4b9S4l4qMfx98ZdlWVXUqC6Md/EEiGLSJY
+         KmL5Ho4NK6WdEIEFfRJiIl3SDFAzZC0xxXGbt8FVF3D878jtS1HJvdkr9mIHxvzsiO
+         Gbcpz/nIeL/ouVLq+qNZZfmm9k/mgKWcedPUj+SqRF/VWCcngli20fhii3vDanQdh+
+         iJ3Gfe6PQzcXpbh6gCpOYr8U+0Xlwh/BOSR0C+nOsyPy5wsLVcd7sem18wia46moP9
+         dB5xoO03WTSFQ==
+Date:   Tue, 3 May 2022 18:38:02 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Niklas Schnelle <schnelle@linux.ibm.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-pci@vger.kernel.org,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Arnd Bergmann <arnd@kernel.org>
+Subject: Re: [RFC v2 25/39] pcmcia: add HAS_IOPORT dependencies
+Message-ID: <20220503233802.GA420374@bhelgaas>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220429135108.2781579-44-schnelle@linux.ibm.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -46,60 +57,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Sonntag, 1. Mai 2022, 21:25:53 CEST schrieb Conor Dooley:
-> From: Conor Dooley <conor.dooley@microchip.com>
+On Fri, Apr 29, 2022 at 03:50:41PM +0200, Niklas Schnelle wrote:
+> In a future patch HAS_IOPORT=n will result in inb()/outb() and friends
+> not being declared. PCMCIA devices are either LEGACY_PCI devices
+> which implies HAS_IOPORT or require HAS_IOPORT.
 > 
-> The MPFS system controller has no registers of its own, so move it out
-> of the soc node to avoid dtbs_check warnings:
-> arch/riscv/boot/dts/microchip/microchip-mpfs-icicle-kit.dtb: soc: syscontroller: {'compatible': ['microchip,mpfs-sys-controller'], 'mboxes': [[15, 0]], 'status': ['okay']} should not be valid under {'type': 'object'}
-> 
-> Reported-by: Palmer Dabbelt <palmer@rivosinc.com>
-> Suggested-by: Rob Herring <robh@kernel.org>
-> Fixes: 528a5b1f2556 ("riscv: dts: microchip: add new peripherals to icicle kit device tree")
-> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
-
-What function does the "soc-bus" have at all?
-I.e. mailbox@37020000 also looks like a peripheral
-of the chip but is outside it.
-
-And I remember getting the suggestion to not use soc-"busses"
-over in arm-land years ago [0].
-
-[0] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=c3030d30d9c99c057b5ddfa289cffa637a2775f5
-
+> Acked-by: Dominik Brodowski <linux@dominikbrodowski.net>
+> Co-developed-by: Arnd Bergmann <arnd@kernel.org>
+> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
 > ---
->  arch/riscv/boot/dts/microchip/microchip-mpfs.dtsi | 10 +++++-----
->  1 file changed, 5 insertions(+), 5 deletions(-)
+>  drivers/pcmcia/Kconfig | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/arch/riscv/boot/dts/microchip/microchip-mpfs.dtsi b/arch/riscv/boot/dts/microchip/microchip-mpfs.dtsi
-> index 746c4d4e7686..bf21a2edd180 100644
-> --- a/arch/riscv/boot/dts/microchip/microchip-mpfs.dtsi
-> +++ b/arch/riscv/boot/dts/microchip/microchip-mpfs.dtsi
-> @@ -146,6 +146,11 @@ refclk: mssrefclk {
->  		#clock-cells = <0>;
->  	};
+> diff --git a/drivers/pcmcia/Kconfig b/drivers/pcmcia/Kconfig
+> index 2ce261cfff8e..32b5cd324c58 100644
+> --- a/drivers/pcmcia/Kconfig
+> +++ b/drivers/pcmcia/Kconfig
+> @@ -5,7 +5,7 @@
 >  
-> +	syscontroller: syscontroller {
-> +		compatible = "microchip,mpfs-sys-controller";
-> +		mboxes = <&mbox 0>;
-> +	};
-> +
->  	soc {
->  		#address-cells = <2>;
->  		#size-cells = <2>;
-> @@ -446,10 +451,5 @@ mbox: mailbox@37020000 {
->  			#mbox-cells = <1>;
->  			status = "disabled";
->  		};
-> -
-> -		syscontroller: syscontroller {
-> -			compatible = "microchip,mpfs-sys-controller";
-> -			mboxes = <&mbox 0>;
-> -		};
->  	};
->  };
+>  menuconfig PCCARD
+>  	tristate "PCCard (PCMCIA/CardBus) support"
+> -	depends on !UML
+> +	depends on HAS_IOPORT
+
+I don't know much about PC Card.  Is there a requirement that these
+devices must use I/O port space?  If so, can you include a spec
+reference in the commit log?
+
+I do see the PC Card spec, r8.1, sec 5.5.4.2.2 says:
+
+  All CardBus PC Card adapters must support either memory-mapped I/O
+  or both memory-mapped I/O and I/O space. The selection will depend
+  largely on the system architecture the adapter is intended to be
+  used in. The requirement to also support memory-mapped I/O, if I/O
+  space is supported, is driven by the potential emergence of
+  memory-mapped I/O only cards. Supporting both modes may also
+  position the adapter to be sold into multiple system architectures.
+
+which sounds like I/O space is optional.
+
+>  	help
+>  	  Say Y here if you want to attach PCMCIA- or PC-cards to your Linux
+>  	  computer.  These are credit-card size devices such as network cards,
+> -- 
+> 2.32.0
 > 
-
-
-
-

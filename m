@@ -2,208 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AD2B518C1F
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 20:19:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B11AC518C23
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 20:20:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241216AbiECSWe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 14:22:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40304 "EHLO
+        id S241217AbiECSYJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 14:24:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241184AbiECSWc (ORCPT
+        with ESMTP id S241275AbiECSXv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 14:22:32 -0400
-Received: from mail-qk1-x72d.google.com (mail-qk1-x72d.google.com [IPv6:2607:f8b0:4864:20::72d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E8A53EAB7;
-        Tue,  3 May 2022 11:18:59 -0700 (PDT)
-Received: by mail-qk1-x72d.google.com with SMTP id j9so14412524qkg.1;
-        Tue, 03 May 2022 11:18:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=spnn+q8TrCXO+IkFYKXUusDYogbgo9s6L1zJCpp5TCU=;
-        b=PNLMlGltCnL18Npgw9YraobHTN/rKVDLZuJyqL85R8HLKuf8oqHSBnfX8dQHOPmZiP
-         aarS9uVpVGxzYOfxFA3Gw70jW91DD54EXyBHYJ69Vh6R8rTtijhUg8CPY7BXamu29zJ0
-         FUvfTLhvlIXT+XGIvS4f/TBbaefYEfndO/tg6eLNcg/BdW18Pc9RhVMz39DMPaM9STQi
-         cPX8Jqi80F+MrGski65Dgjsp7Y9fdw3dQVMLjC5XgMZtLT/OQTQIkupdfXvIvKO0jdqu
-         m+HnLFxlWvq53WlyBtHBbDbOHXmy4TSg/jNNe3W7j3HTwl/IO7CIaI6/sLph5oxg5Dxi
-         P6fA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=spnn+q8TrCXO+IkFYKXUusDYogbgo9s6L1zJCpp5TCU=;
-        b=Wuhq/cATYnZseC8Lz1yQL1lF99pLlWE85pTuSJE8YM8Uja5JkfKTN4MZufDUafbepe
-         lXCwUFTsBGjJkUVe8jnBQ4tGmqdVer60C8hLzoweWpRpErcQro3wRKxIXnllieAl0pII
-         vg5xTkLxj0Tu4MwT6mnNYstqX99fUkC0btSAnRe3l+VoT7D0m+3BI6/zwGhl0ar9Obet
-         OIwc2Fi1/yhEn3Ohncha7nkbZLzr+WQVHDNVIVWFhIglgQHB4gAcxoAywtKGZQ5GYuc5
-         IkOWyu29KBoyRY/5Dp8kF7zC3fvUPfj5iw+8Eu+kE15UX0tMuXqIdHPZ6HcLiS8q4iI8
-         vbTw==
-X-Gm-Message-State: AOAM530k/oyuyJChKAXMHvdpu7IX3XNBdio9V7I9Qhizbv5FDiUkNx1b
-        CppKLgzR5oSaYEChsd1NDaU=
-X-Google-Smtp-Source: ABdhPJwBrg7LhR7U5VoEkeRrAZ3cCPybGO2VL1rpu95WON/xwJVhqheWdJsp4TmZt4hKVD/qJIjL5Q==
-X-Received: by 2002:a05:620a:e01:b0:69f:6042:7fa3 with SMTP id y1-20020a05620a0e0100b0069f60427fa3mr12383818qkm.524.1651601938329;
-        Tue, 03 May 2022 11:18:58 -0700 (PDT)
-Received: from jaehee-ThinkPad-X1-Extreme ([4.34.18.218])
-        by smtp.gmail.com with ESMTPSA id b25-20020a05620a127900b0069fc13ce1f6sm6194868qkl.39.2022.05.03.11.18.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 May 2022 11:18:57 -0700 (PDT)
-Date:   Tue, 3 May 2022 14:18:53 -0400
-From:   Jaehee Park <jhpark1013@gmail.com>
-To:     =?iso-8859-1?B?Suly9G1l?= Pouiller <jerome.pouiller@silabs.com>
-Cc:     Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
-        outreachy@lists.linux.dev, Stefano Brivio <sbrivio@redhat.com>
-Subject: Re: [PATCH] wfx: use container_of() to get vif
-Message-ID: <20220503181853.GA886315@jaehee-ThinkPad-X1-Extreme>
-References: <20220418035110.GA937332@jaehee-ThinkPad-X1-Extreme>
- <22643645.6Emhk5qWAg@pc-42>
+        Tue, 3 May 2022 14:23:51 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.73])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A66FF0D;
+        Tue,  3 May 2022 11:20:17 -0700 (PDT)
+Received: from mail-wm1-f43.google.com ([209.85.128.43]) by
+ mrelayeu.kundenserver.de (mreue107 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1N2mWA-1ny6Ed2AJw-0138ux; Tue, 03 May 2022 20:20:15 +0200
+Received: by mail-wm1-f43.google.com with SMTP id 125-20020a1c1983000000b003941f354c62so1743521wmz.0;
+        Tue, 03 May 2022 11:20:15 -0700 (PDT)
+X-Gm-Message-State: AOAM530YD1h5v1azA72O6Mqa+tfzNkHhqmZ5OXPlvW5kwsjCWJc0yBTC
+        rwwwuLSPN/fFv4Si/tKZG7WMLpn+fYyI3lDgT6w=
+X-Google-Smtp-Source: ABdhPJzdLAi6LusGzpUmQqAEN7Ep7tmyrMxpq73q7upJ6tCWBfIvFV42Z7BCJneune7LbBwSqLK48yMk9eyVnxECpN8=
+X-Received: by 2002:a05:600c:3798:b0:394:454a:df74 with SMTP id
+ o24-20020a05600c379800b00394454adf74mr4515023wmr.174.1651602015176; Tue, 03
+ May 2022 11:20:15 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <22643645.6Emhk5qWAg@pc-42>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220502204050.88316-1-nick.hawkins@hpe.com> <20220502204050.88316-7-nick.hawkins@hpe.com>
+ <CAK8P3a2rzmVrpnf2r73iXB=T06OMOsgwyq1i8z7swuOW-q88eQ@mail.gmail.com> <PH0PR84MB17180215774D59A3EC277B1388C09@PH0PR84MB1718.NAMPRD84.PROD.OUTLOOK.COM>
+In-Reply-To: <PH0PR84MB17180215774D59A3EC277B1388C09@PH0PR84MB1718.NAMPRD84.PROD.OUTLOOK.COM>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Tue, 3 May 2022 20:19:58 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a1q6pJ6pdZav0rWJFR2dAWwz8mpiFRO6vc+TA+L-Sk5uQ@mail.gmail.com>
+Message-ID: <CAK8P3a1q6pJ6pdZav0rWJFR2dAWwz8mpiFRO6vc+TA+L-Sk5uQ@mail.gmail.com>
+Subject: Re: [PATCH v6 7/8] ARM: dts: Introduce HPE GXP Device tree
+To:     "Hawkins, Nick" <nick.hawkins@hpe.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        "Verdun, Jean-Marie" <verdun@hpe.com>,
+        Joel Stanley <joel@jms.id.au>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Olof Johansson <olof@lixom.net>, SoC Team <soc@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        DTML <devicetree@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:zjREcXZbYFvUQ1Kcbd5k/VaOHL6Q2KrD6PF5KfRSnLW1L2b2Fh5
+ yz1+YwcGsnuBr/eXzkR0U6igH5/MgIIIETMATAzWAW3pKErbc1y9GyXMgNYy7qcDD9WaZ0f
+ 76z2wBb58xn9uq1yIXo0iv5vmNmvb78F7i8bAdbRBwgVp5gw6L4/+K78PxKC2/gMyU3oXAJ
+ YnLlzdxjcg7HtkiEzsUig==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:PpOT044kYBY=:EqwI11zsy6OWP5gNaK00fW
+ PczSOBKHmK7isX5ou14NFqidxhe4xUIJDVm3GUILOE/zZNyfIES2CPoGTm/G0XKM0RQR8+iza
+ 9f2IkzA4Tdsh87yars3y1GooHHBrid5AWLXCWdyvYWqnk0XClqmYBfgf1/aYV55vGWYh/fVHS
+ lPo1982p+btuo3UF785FUp+Lnh31i9XyoroXgRv2N5pCcTAEqcOXrxL5cElWuloaeg3o7nK3e
+ L7rWOCx9pUEQNtC8+/+7PHtZjd5ghd1qWDh0wPwMuzt4IsI07nV0pM4PbG6hyzYSt/D5mNve/
+ 1/PRXnWLMIIknbJ5e7fBVHZ7fTM5Bsb3xLDF5mAXA8sJdgzNrl1fZqKUCHlBg8+vXI04qi+Gc
+ y36k/UmkJSNk3+/J5LCQIn2Odgm/iaqri3CQTbLVeZgV0cZtOau3yGoeoFnLqFLXf1ZiKZET9
+ t4ZGb1yqJtyvDT6PvHK7xjaYxkK85uyVJAYDxnmVldqHdhAvrx8P3IUNrkUPw8Cx4Qmj7YZem
+ 1L039uRgZ+JrMG+vIwIU3/yjm7bQ76Xfz1DQ/lyMIb5DiG2aAGHOXuoeyYUsDcY7E1og23bMp
+ d29JAyuLRH6pebs2FbTsGl2UEhr7hJBbwIsb5GmfWnKZAcmTqcLX1zS546yucP41oLCCDGJsq
+ EVP1xlUuaheVyQDZm1XIg7xCleGwEJRUdzPC/s93nyYYsaQi958fR+gE540x0LA/Nvc4=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 19, 2022 at 03:39:19PM +0200, Jérôme Pouiller wrote:
-> On Monday 18 April 2022 05:51:10 CEST Jaehee Park wrote:
-> > 
-> > Currently, upon virtual interface creation, wfx_add_interface() stores
-> > a reference to the corresponding struct ieee80211_vif in private data,
-> > for later usage. This is not needed when using the container_of
-> > construct. This construct already has all the info it needs to retrieve
-> > the reference to the corresponding struct from the offset that is
-> > already available, inherent in container_of(), between its type and
-> > member inputs (struct ieee80211_vif and drv_priv, respectively).
-> > Remove vif (which was previously storing the reference to the struct
-> > ieee80211_vif) from the struct wfx_vif, define a function
-> > wvif_to_vif(wvif) for container_of(), and replace all wvif->vif with
-> > the newly defined container_of construct.
-> > 
-> > Signed-off-by: Jaehee Park <jhpark1013@gmail.com>
-> > ---
-> > 
-> > Changes from staging to wireless-next tree
-> > - changed macro into function and named it back to wvif_to_vif
-> > - fit all lines in patch to 80 columns
-> > - decared a reference to vif at the beginning of the functions
-> > 
-> > NOTE: Jérôme is going to be testing this patch on his hardware
-> 
-> Don't forget to increment the version number of your submission (option
-> -v of git send-email).
-> 
-> >  drivers/net/wireless/silabs/wfx/wfx.h     |  6 +-
-> >  drivers/net/wireless/silabs/wfx/data_rx.c |  5 +-
-> >  drivers/net/wireless/silabs/wfx/data_tx.c |  3 +-
-> >  drivers/net/wireless/silabs/wfx/key.c     |  4 +-
-> >  drivers/net/wireless/silabs/wfx/queue.c   |  3 +-
-> >  drivers/net/wireless/silabs/wfx/scan.c    |  9 ++-
-> >  drivers/net/wireless/silabs/wfx/sta.c     | 69 ++++++++++++++---------
-> >  7 files changed, 63 insertions(+), 36 deletions(-)
-> > 
-> > diff --git a/drivers/net/wireless/silabs/wfx/wfx.h b/drivers/net/wireless/silabs/wfx/wfx.h
-> > index 6594cc647c2f..718693a4273d 100644
-> > --- a/drivers/net/wireless/silabs/wfx/wfx.h
-> > +++ b/drivers/net/wireless/silabs/wfx/wfx.h
-> > @@ -61,7 +61,6 @@ struct wfx_dev {
-> > 
-> >  struct wfx_vif {
-> >         struct wfx_dev             *wdev;
-> > -       struct ieee80211_vif       *vif;
-> >         struct ieee80211_channel   *channel;
-> >         int                        id;
-> > 
-> > @@ -91,6 +90,11 @@ struct wfx_vif {
-> >         struct completion          set_pm_mode_complete;
-> >  };
-> > 
-> > +static inline struct ieee80211_vif *wvif_to_vif(struct wfx_vif *wvif)
-> > +{
-> > +       return container_of((void *)wvif, struct ieee80211_vif, drv_priv);
-> > +}
-> > +
-> >  static inline struct wfx_vif *wdev_to_wvif(struct wfx_dev *wdev, int vif_id)
-> >  {
-> >         if (vif_id >= ARRAY_SIZE(wdev->vif)) {
-> > diff --git a/drivers/net/wireless/silabs/wfx/data_rx.c b/drivers/net/wireless/silabs/wfx/data_rx.c
-> > index a4b5ffe158e4..342b9cd0e74c 100644
-> > --- a/drivers/net/wireless/silabs/wfx/data_rx.c
-> > +++ b/drivers/net/wireless/silabs/wfx/data_rx.c
-> > @@ -16,6 +16,7 @@
-> >  static void wfx_rx_handle_ba(struct wfx_vif *wvif, struct ieee80211_mgmt *mgmt)
-> >  {
-> >         int params, tid;
-> > +       struct ieee80211_vif *vif = wvif_to_vif(wvif);
-> 
-> When you can, try to place the longest declaration first ("reverse
-> Christmas tree order").
+On Tue, May 3, 2022 at 5:07 PM Hawkins, Nick <nick.hawkins@hpe.com> wrote:
+> On Mon, May 2, 2022 at 10:40 PM <nick.hawkins@hpe.com> wrote:
+> > > +++ b/arch/arm/boot/dts/hpe-bmc-dl360gen10.dts
+>
+> > In the board specific file, you normally have "aliases", "chosen" and "memory"
+> > nodes that define e.g. which uart is used for the console.
+>
+> This is what I have come up with.
+>
+> / {
+>         #address-cells = <1>;
+>         #size-cells = <1>;
+>         compatible = "hpe,gxp-dl360gen10", "hpe,gxp";
+>         model = "Hewlett Packard Enterprise ProLiant dl360 Gen10";
+>
+>         aliases {
+>                 serial2 = &uartc;
+>         };
 
-Thanks Jerome, I have a new version of the patch I'm going to send today
-with this edit.
+It's a bit unusual to have a serial2 uart when there is no serial0 or serial1.
+Most boards that only have a single uart label it either '0' or '1'.
+>
+>         chosen {
+>                 bootargs = "console=ttyS2,115200";
+>         };
 
-> 
-> [...]
-> > diff --git a/drivers/net/wireless/silabs/wfx/sta.c b/drivers/net/wireless/silabs/wfx/sta.c
-> > index 3297d73c327a..97fcbad23c94 100644
-> > --- a/drivers/net/wireless/silabs/wfx/sta.c
-> > +++ b/drivers/net/wireless/silabs/wfx/sta.c
-> [...]
-> > @@ -152,19 +153,28 @@ static int wfx_get_ps_timeout(struct wfx_vif *wvif, bool *enable_ps)
-> >  {
-> >         struct ieee80211_channel *chan0 = NULL, *chan1 = NULL;
-> >         struct ieee80211_conf *conf = &wvif->wdev->hw->conf;
-> > +       struct ieee80211_vif *vif = wvif_to_vif(wvif);
-> > 
-> > -       WARN(!wvif->vif->bss_conf.assoc && enable_ps,
-> > +       WARN(!vif->bss_conf.assoc && enable_ps,
-> >              "enable_ps is reliable only if associated");
-> > -       if (wdev_to_wvif(wvif->wdev, 0))
-> > -               chan0 = wdev_to_wvif(wvif->wdev, 0)->vif->bss_conf.chandef.chan;
-> > -       if (wdev_to_wvif(wvif->wdev, 1))
-> > -               chan1 = wdev_to_wvif(wvif->wdev, 1)->vif->bss_conf.chandef.chan;
-> > -       if (chan0 && chan1 && wvif->vif->type != NL80211_IFTYPE_AP) {
-> > +       if (wdev_to_wvif(wvif->wdev, 0)) {
-> > +               struct wfx_vif *wvif_ch0 = wdev_to_wvif(wvif->wdev, 0);
-> > +               struct ieee80211_vif *vif_ch0 = wvif_to_vif(wvif_ch0);
-> > +
-> > +               chan0 = vif_ch0->bss_conf.chandef.chan;
-> > +       }
-> > +       if (wdev_to_wvif(wvif->wdev, 1)) {
-> > +               struct wfx_vif *wvif_ch1 = wdev_to_wvif(wvif->wdev, 1);
-> > +               struct ieee80211_vif *vif_ch1 = wvif_to_vif(wvif_ch1);
-> > +
-> > +               chan1 = vif_ch1->bss_conf.chandef.chan;
-> > +       }
-> 
-> I think this code could be simplified into:
-> 
->        if (wvif->wdev->vif[1])
->                chan1 = wvif->wdev->vif[1]->bss_conf.chandef.chan;
-> 
-> (If you choose this way, I suggest to place this change in a separate
-> patch)
-> 
+Use 'stdout-path' to pick the console device here, not the argument
+string.
 
-Ok I'll send your suggested edit in a separate patch after this patch
-gets through.
+>
+>         memory@40000000 {
+>                 device_type = "memory";
+>                 reg = <0x40000000 0x20000000>;
+>         };
+> };
 
-> [...]
-> 
-> -- 
-> Jérôme Pouiller
-> 
-> 
+
+> > > +       memory@40000000 {
+> > > +               device_type = "memory";
+> > > +               reg = <0x40000000 0x20000000>;
+> > > +       };
+>
+> > If the memory is outside of the SoC, it should not be here.
+>
+> It is part of the SoC. Should I put it in the axi bus instead? If so would
+> I need to create an axi for the .dts as well?
+
+That's fine then. The memory node has to be at the root of the DT, not in a
+child node. It's just that most SoCs have the memory in a separate chip
+on the board, rather than inside of the SoC itself, so it would be part
+of the board file. If the gxp package includes the memory and it's not
+an option for the board design, you can leave it in the .dtsi file.
+
+         Arnd

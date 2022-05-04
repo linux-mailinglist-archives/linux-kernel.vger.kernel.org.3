@@ -2,62 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D3CC51A3CB
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 17:21:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F399F51A3CA
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 17:21:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352412AbiEDPYq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 11:24:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48566 "EHLO
+        id S1352417AbiEDPYw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 11:24:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352360AbiEDPYe (ORCPT
+        with ESMTP id S1352309AbiEDPYi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 11:24:34 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2823443CD
-        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 08:20:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651677640; x=1683213640;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=dJIYLg7h/Q2ldxRvg4MeqMb9Yi/SXMhu0fJoO84kF6w=;
-  b=lTt1SOXV97GnZsD3Dkp5l1radovx1owFuprhEg/0OAjCazsO9ZrJibrj
-   116Pho5E4M4lev9x1i/9XuHKvU5A5hSDATm5sEH73NR+Ic0jo21aOaLoP
-   SKkysd+EgaKC0itblpwnSsFDfgCxVgaTqIZQWDZCYGLv3dBnOPeyi332r
-   4J9GS47H1wTV6p6FoIFSjGxNd53Sw2oWzb2Cs45e2SmSaNmyvRgWH+tYw
-   cjJWAs4+wSOkGl/RORIeOMQWt0UBdldM1DsMP3su+Nnc+7JBIeTBI7Yr5
-   c6gV0rRJzsZNpYd8VPoiLg/snlGxK3aACcIxrtvCHHEO9reRi9tDMFF8V
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10337"; a="255263050"
-X-IronPort-AV: E=Sophos;i="5.91,198,1647327600"; 
-   d="scan'208";a="255263050"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2022 08:20:40 -0700
-X-IronPort-AV: E=Sophos;i="5.91,198,1647327600"; 
-   d="scan'208";a="664511899"
-Received: from gidaly-mobl1.ger.corp.intel.com (HELO [10.213.236.183]) ([10.213.236.183])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2022 08:20:38 -0700
-Message-ID: <1ff8137a-7ae6-5162-525d-70373a7170db@linux.intel.com>
-Date:   Wed, 4 May 2022 16:20:37 +0100
+        Wed, 4 May 2022 11:24:38 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA8984504E;
+        Wed,  4 May 2022 08:20:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F15E8B82577;
+        Wed,  4 May 2022 15:20:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 875CBC385AA;
+        Wed,  4 May 2022 15:20:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651677645;
+        bh=uSRT9TT40g2mc7fJtjGOYIkn9JajbEXDHdNZ3BlhJM0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=L3cbOZVGidkfkFpOzCbx9cIJ4onYvPy7EL2N/Gyis6ae/Ds1Yd0y1FdQhosNAh+sl
+         fVdqUFFXS6WjF/BqNbCOgxYmP1AlM0SgY+GkPnJe4ulonv0mn+PDKTu8o9OoQ8XWH4
+         OZhfdOldDCpwEDYorMut1k6l8SihpQX+H/gbwRHPvB+i1RULqWlbtBixaxLulq7R53
+         tuT9Qh/dHVApga2TPsCt1ww6oW6/yOiBSQKIqINfzAA/mv2TD0e/qXYG1w7ZpoK2lo
+         Tmi/uSDIOvUlj757wCOhNk2DFqBAnllV2hBsyI0OhbWzmeiZcOISraaqnwwq6yYwxf
+         Q9zlsj8RMZ6fw==
+Date:   Wed, 4 May 2022 16:20:40 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-spi@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] spi: dt-bindings: qcom,spi-geni-qcom: allow three
+ interconnects
+Message-ID: <YnKZyCogvngR7zfc@sirena.org.uk>
+References: <20220504125119.190526-1-krzysztof.kozlowski@linaro.org>
+ <YnKVLxmz0hhQGNzI@sirena.org.uk>
+ <cfba178d-ff36-910b-3067-ce32b701b643@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [Intel-gfx] [PATCH v2] drm/i915: Fix race in
- __i915_vma_remove_closed
-Content-Language: en-US
-To:     Karol Herbst <kherbst@redhat.com>, linux-kernel@vger.kernel.org
-Cc:     intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        Chris Wilson <chris@chris-wilson.co.uk>
-References: <20220420095720.3331609-1-kherbst@redhat.com>
-From:   Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
-Organization: Intel Corporation UK Plc
-In-Reply-To: <20220420095720.3331609-1-kherbst@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,
-        NICE_REPLY_A,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="YBOfv8KL6MSYdhjS"
+Content-Disposition: inline
+In-Reply-To: <cfba178d-ff36-910b-3067-ce32b701b643@linaro.org>
+X-Cookie: Mother is the invention of necessity.
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,71 +64,39 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On 20/04/2022 10:57, Karol Herbst wrote:
-> i915_vma_reopen checked if the vma is closed before without taking the
-> lock. So multiple threads could attempt removing the vma.
-> 
-> Instead the lock needs to be taken before actually checking.
-> 
-> v2: move struct declaration
-> 
-> Cc: Chris Wilson <chris@chris-wilson.co.uk>
-> Cc: intel-gfx@lists.freedesktop.org
-> Cc: dri-devel@lists.freedesktop.org
-> Closes: https://gitlab.freedesktop.org/drm/intel/-/issues/5732
-> Signed-off-by: Karol Herbst <kherbst@redhat.com>
+--YBOfv8KL6MSYdhjS
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Reviewed-by: Tvrtko Ursulin <tvrtko.ursulin@intel.com>
+On Wed, May 04, 2022 at 05:14:19PM +0200, Krzysztof Kozlowski wrote:
+> On 04/05/2022 17:01, Mark Brown wrote:
+> > On Wed, May 04, 2022 at 02:51:19PM +0200, Krzysztof Kozlowski wrote:
 
-Regards,
+> >> Recent Qualcomm Geni SPI nodes, e.g. on SM8450, come with three
+> >> interconnects.  This fixes dtbs_check warnings like:
 
-Tvrtko
+> > This doesn't apply against current code, please check and resend.
 
-> ---
->   drivers/gpu/drm/i915/i915_vma.c | 11 +++++++----
->   1 file changed, 7 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/i915/i915_vma.c b/drivers/gpu/drm/i915/i915_vma.c
-> index 162e8d83691b..2efdad2b43fa 100644
-> --- a/drivers/gpu/drm/i915/i915_vma.c
-> +++ b/drivers/gpu/drm/i915/i915_vma.c
-> @@ -1615,17 +1615,17 @@ void i915_vma_close(struct i915_vma *vma)
->   
->   static void __i915_vma_remove_closed(struct i915_vma *vma)
->   {
-> -	struct intel_gt *gt = vma->vm->gt;
-> -
-> -	spin_lock_irq(&gt->closed_lock);
->   	list_del_init(&vma->closed_link);
-> -	spin_unlock_irq(&gt->closed_lock);
->   }
->   
->   void i915_vma_reopen(struct i915_vma *vma)
->   {
-> +	struct intel_gt *gt = vma->vm->gt;
-> +
-> +	spin_lock_irq(&gt->closed_lock);
->   	if (i915_vma_is_closed(vma))
->   		__i915_vma_remove_closed(vma);
-> +	spin_unlock_irq(&gt->closed_lock);
->   }
->   
->   static void force_unbind(struct i915_vma *vma)
-> @@ -1641,6 +1641,7 @@ static void force_unbind(struct i915_vma *vma)
->   static void release_references(struct i915_vma *vma, bool vm_ddestroy)
->   {
->   	struct drm_i915_gem_object *obj = vma->obj;
-> +	struct intel_gt *gt = vma->vm->gt;
->   
->   	GEM_BUG_ON(i915_vma_is_active(vma));
->   
-> @@ -1651,7 +1652,9 @@ static void release_references(struct i915_vma *vma, bool vm_ddestroy)
->   
->   	spin_unlock(&obj->vma.lock);
->   
-> +	spin_lock_irq(&gt->closed_lock);
->   	__i915_vma_remove_closed(vma);
-> +	spin_unlock_irq(&gt->closed_lock);
->   
->   	if (vm_ddestroy)
->   		i915_vm_resv_put(vma->vm);
+> Thanks Mark, but as explained in commit below "---" - this is a fix for
+> commit in Qualcomm/Bjorn tree. Could you ack it instead?
+
+I was expecting this to be a fix for some change in the DTs in the
+Qualcomm tree.  Why is there a change to the SPI bindings in there?  I
+don't seem to have reviewed it...
+
+--YBOfv8KL6MSYdhjS
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmJymccACgkQJNaLcl1U
+h9D7bAf+PFPeIWb+e/4IYQW+dqHjAocqb2u1PfWlz6tbtBUUSNu9PFA95jrYF4AL
+4KdnoDeTfyuthCxzW4q4Np5u9FZMdc93nTT/3LSjonuzPr5O7QktowRlHwS/eZvM
+SVTqtemG8x1udnsaOrE3FAr5d3zv3TuPa8rM3VXgWxD8PMnwTFQzmNmF7VvgD8UR
+5vP8tzmXTArqQCrgeovKwe0uBQ9yzeOmyzDC7A0PB+DvAYzXIrQXM0cCzU8uDKO+
+ok/b1TAfvwE7n09omLqhHOVJhH7f+YVoiNyNvK3yGrANCb23K08aycGR+qCJv3Xm
+JGJTgxOx84fyI2OL/ctJfD4kRL+XHA==
+=X7pn
+-----END PGP SIGNATURE-----
+
+--YBOfv8KL6MSYdhjS--

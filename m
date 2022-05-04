@@ -2,44 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9F2551AAEC
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:34:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13A4D51A6ED
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 18:58:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235359AbiEDRhg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 13:37:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38748 "EHLO
+        id S1354997AbiEDQ7g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 12:59:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356875AbiEDRJr (ORCPT
+        with ESMTP id S1354154AbiEDQxx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 13:09:47 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECF37443C4;
-        Wed,  4 May 2022 09:56:13 -0700 (PDT)
+        Wed, 4 May 2022 12:53:53 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FB1D483A2;
+        Wed,  4 May 2022 09:49:09 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9EBEAB82795;
-        Wed,  4 May 2022 16:56:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46A49C385AA;
-        Wed,  4 May 2022 16:56:11 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4EDFF61771;
+        Wed,  4 May 2022 16:49:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9AFCAC385AF;
+        Wed,  4 May 2022 16:49:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651683371;
-        bh=64AJ4qdk/b55bLZ0FpkDpOa0tmr6z4FH7U3T6pElt1k=;
+        s=korg; t=1651682948;
+        bh=QYfJ4jy1pgwenIxzQh04z03IUEVKov1C1SpEawfBfwY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ensa036+atoGZTJviQHo2iM1J12ZYwlz2Ng20RjMEC8li/gJHk8OtjDV6vCatxt+Y
-         FNyEnNoX5OEbniRLLLrjaJpTKAjjksXuuEnCFXLIoAh2PorKzfSeLiMlAOo9LHLY4G
-         PKfrGFsPYunNlrTGVDR8ydoLybOHJejFf6zSIXpg=
+        b=rUVYtX+ze2P4xidoB9AT84jQr3RQgyj5NLODRop8XUjlZovIpJfc+rbItByzWJbSg
+         ovyuSLnMvO8D7U7IHxeppEbD0Q4twWnH0r6e7lazAxke8RKLgsytHissV6puesj7QP
+         jYpmo1Vl8V01cCDfYbcGFh5Po8ODf5JNsLXOpIpY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hemant Kumar <quic_hemantk@quicinc.com>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Subject: [PATCH 5.17 042/225] bus: mhi: host: pci_generic: Add missing poweroff() PM callback
+        stable@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Samuel Holland <samuel@sholland.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 59/84] bus: sunxi-rsb: Fix the return value of sunxi_rsb_device_create()
 Date:   Wed,  4 May 2022 18:44:40 +0200
-Message-Id: <20220504153113.904051485@linuxfoundation.org>
+Message-Id: <20220504152931.950244281@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220504153110.096069935@linuxfoundation.org>
-References: <20220504153110.096069935@linuxfoundation.org>
+In-Reply-To: <20220504152927.744120418@linuxfoundation.org>
+References: <20220504152927.744120418@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,42 +57,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 
-commit e64d5fa5044f225ac87d96a7e4be11389999c4c6 upstream.
+[ Upstream commit fff8c10368e64e7f8960f149375c12ca5f3b30af ]
 
-During hibernation process, once thaw() stage completes, the MHI endpoint
-devices will be in M0 state post recovery. After that, the devices will be
-powered down so that the system can enter the target sleep state. During
-this stage, the PCI core will put the devices in D3hot. But this transition
-is allowed by the MHI spec. The devices can only enter D3hot when it is in
-M3 state.
+This code is really spurious.
+It always returns an ERR_PTR, even when err is known to be 0 and calls
+put_device() after a successful device_register() call.
 
-So for fixing this issue, let's add the poweroff() callback that will get
-executed before putting the system in target sleep state during
-hibernation. This callback will power down the device properly so that it
-could be restored during restore() or thaw() stage.
+It is likely that the return statement in the normal path is missing.
+Add 'return rdev;' to fix it.
 
-Cc: stable@vger.kernel.org
-Fixes: 5f0c2ee1fe8d ("bus: mhi: pci-generic: Fix hibernation")
-Reported-by: Hemant Kumar <quic_hemantk@quicinc.com>
-Suggested-by: Hemant Kumar <quic_hemantk@quicinc.com>
-Link: https://lore.kernel.org/r/20220405125907.5644-1-manivannan.sadhasivam@linaro.org
-Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: d787dcdb9c8f ("bus: sunxi-rsb: Add driver for Allwinner Reduced Serial Bus")
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Reviewed-by: Samuel Holland <samuel@sholland.org>
+Tested-by: Samuel Holland <samuel@sholland.org>
+Signed-off-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+Link: https://lore.kernel.org/r/ef2b9576350bba4c8e05e669e9535e9e2a415763.1650551719.git.christophe.jaillet@wanadoo.fr
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/bus/mhi/pci_generic.c |    1 +
- 1 file changed, 1 insertion(+)
+ drivers/bus/sunxi-rsb.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
---- a/drivers/bus/mhi/pci_generic.c
-+++ b/drivers/bus/mhi/pci_generic.c
-@@ -1085,6 +1085,7 @@ static const struct dev_pm_ops mhi_pci_p
- 	.resume = mhi_pci_resume,
- 	.freeze = mhi_pci_freeze,
- 	.thaw = mhi_pci_restore,
-+	.poweroff = mhi_pci_freeze,
- 	.restore = mhi_pci_restore,
- #endif
- };
+diff --git a/drivers/bus/sunxi-rsb.c b/drivers/bus/sunxi-rsb.c
+index 1bb00a959c67..9b1a5e62417c 100644
+--- a/drivers/bus/sunxi-rsb.c
++++ b/drivers/bus/sunxi-rsb.c
+@@ -224,6 +224,8 @@ static struct sunxi_rsb_device *sunxi_rsb_device_create(struct sunxi_rsb *rsb,
+ 
+ 	dev_dbg(&rdev->dev, "device %s registered\n", dev_name(&rdev->dev));
+ 
++	return rdev;
++
+ err_device_add:
+ 	put_device(&rdev->dev);
+ 
+-- 
+2.35.1
+
 
 

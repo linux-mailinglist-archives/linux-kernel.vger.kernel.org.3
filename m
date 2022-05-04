@@ -2,99 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DCDB519EBC
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 13:59:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22404519EBA
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 13:59:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349198AbiEDMDY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 08:03:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40320 "EHLO
+        id S1349194AbiEDMDP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 08:03:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349203AbiEDMDU (ORCPT
+        with ESMTP id S234431AbiEDMDN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 08:03:20 -0400
-Received: from out162-62-57-252.mail.qq.com (out162-62-57-252.mail.qq.com [162.62.57.252])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38FD31D0D6;
-        Wed,  4 May 2022 04:59:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1651665576;
-        bh=qGHD1viJbziYFStGKq39fNCCso+OQcti79hBaKlzEuc=;
-        h=From:To:Cc:Subject:Date;
-        b=AbahLkADFXJ1IKNHg9WdGxcadGrmd/Kew5XuNrTKQe2+IPDwGzoMbDOxECdBP/4GO
-         J1f+qDMdsTcL1Gtzxro88VbU+wDfetAlxbbPiF66rcykiHHgM2MtLCVQHuaeF9SiIL
-         dOmfjUH/K4WBrd0ytniNQbAC4zoJIGJ/NlIP4SmY=
-Received: from huazheng-ThinkPad-X230 ([123.118.173.243])
-        by newxmesmtplogicsvrsza8.qq.com (NewEsmtp) with SMTP
-        id EE221EC3; Wed, 04 May 2022 19:59:34 +0800
-X-QQ-mid: xmsmtpt1651665574tr0gbru5w
-Message-ID: <tencent_70C1308DDA794C81CAEF389049055BACEC09@qq.com>
-X-QQ-XMAILINFO: NnA3IMNPwBd+IxCjkbKaQkuHTVOHIcl4UXLtypL6wLupqxkQn/xCCUJTFpojHt
-         +ufGNVQJsNA7nuS6+2mdk141ConobYSWk3Kj9jgsOPkw8C450NnG45Kz4fc40vTFaZL4zH91fMxF
-         eCKJpiL88i8X7uTz0J+qFiuEdxI6L2aDmttqeMARhWd3vkWWO5z6H/oIX7O0kyc2R84bL+LTjCyZ
-         pf9vP1SJjI1qA+1v54r0yjK2pPf9UvhDpa3JZ4lbseor47qT7iUx52hG6TqFhvQVWPXK5AV9XFTu
-         sa7c16xQAs3BrtamykTsw9et6g/Le64bE05hdTNCN4pjWkXI5CvZvSCoi9IpnA/l7oj70R3s5sI8
-         YTdW6/b8beGrpLFnYsjYE9ALrXGP5H1A7IALzt4/VgpXBYacNSOgHiX5EoG5VCsxgeiqkBP9haj9
-         Cn+XNYKQZe4amdBBmjfVxfRpNhI+qSLp+s6H+rJJSQBEDJYt0Yaj20yJtnLy4ZG9g0Pa1OhddWgs
-         KRLbqolshIqWc0+BV0va6pLdDBBQxtFnZ/BKQO4O2P6vMTTgJmyUh7Hsb+0N2gMfUwS9ympfvE1S
-         A7yalFc97kpnGeSq0OkgbZiOQL1eTa1cwl4WdvQ7lVN6jPXtCBse5VvjIlFmC4mU97eQyXkk3rt8
-         oHj6ENeKG+x90rsimXzWeHdqkeJDrmC9nK3PLlvlXto1NcjRGC/3J9GjRmxW2BufZeCDbqiZi75K
-         j8/Jd7uQUk2UHKpExiT2thmXBkfanGawjZe7hwMBkMIGTxnvnNk169jg6jS2Cg1rlDE0gZ8eFN9E
-         8qd/rv9fdazyDmNlkdmAy+LqDvlQGMY6YPR/3Eup1K3MWAhX6h9ZAmnHfLQ/yHRNsVgbsTkLd1SF
-         wYgShtP7fibkTwPKtpajmEMnzE1ATY0tc/ri5aXhhyPpgHblJk8mLkLFEjD6O6yf0diIIeA6fB27
-         84Fr2i6FvRSkgMbh85XNAezEvFfokMfGzIJFuM7XfOb4ppJaVftbzhUiVryEXl
-From:   IotaHydrae <writeforever@foxmail.com>
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org
-Cc:     IotaHydrae <writeforever@foxmail.com>
-Subject: [PATCH] arm: sunxi: fix f1c100s pinctrl function.
-Date:   Wed,  4 May 2022 19:59:04 +0800
-X-OQ-MSGID: <20220504115904.2553938-1-writeforever@foxmail.com>
-X-Mailer: git-send-email 2.32.0
+        Wed, 4 May 2022 08:03:13 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F35AE18B0E
+        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 04:59:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1651665577;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=Hdaz9MpZoIlHo5W6Yr3E01ttRcC4gjvc5tNziIXBlcs=;
+        b=E6Q6UW0fnBFWwyBX+4YjzfAHsOPnK72iQ709cHYdMVVK8ucpfUGkQyJE8AgrVCDb0y6/qU
+        Dsakzw/4nLfAX1gCrN5VW2bFRpGyjEKEYsRwJKGfU1hzeZYdmYClbbQejlZW7n3S0L+boC
+        xJ12P7ZnifrETV2Z75Qp1KtQ6IDB85s=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-177-ztTNp3W4NkGra9RmB5uXSQ-1; Wed, 04 May 2022 07:59:33 -0400
+X-MC-Unique: ztTNp3W4NkGra9RmB5uXSQ-1
+Received: by mail-wm1-f69.google.com with SMTP id h65-20020a1c2144000000b0038e9ce3b29cso2920666wmh.2
+        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 04:59:33 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Hdaz9MpZoIlHo5W6Yr3E01ttRcC4gjvc5tNziIXBlcs=;
+        b=eeSufTsUH/iQTtVaL4PHHvEAxvNZOKQrAOtl5q9korYnPUdBocuIMHo3zCheBwyEZg
+         O572Uv8fdOVb8OeNcRsUFz3xDQBFATj58FwERFEchSYiZlzwlP/COCpX+S5PJI43mlMZ
+         45N91RNQETFjFTJOU3GZgeMIUPrF9QlezvX7z7NYRmNwzjQ1d3wlLfIkwFYONA1VneNT
+         wB5wPvHl94wz3QcYOIdQ4YEwebzqNeVghadako9XqjJ3YBsmk57ZXwpkA9zOo6TvUW+o
+         jirDhjByPov+zC7ZQ63qooqbAVgQMUq4FsWdMgVMJXtmNQbmDuxcsOez/PdL6kTzg9Do
+         54kg==
+X-Gm-Message-State: AOAM531g4EmwaI0Vk72HTySyHjFhJ4+cANViD7M3OYTEeTJmzQstmBpT
+        Q/303ldJkTkii9T9/xAUTqu+YnccYKgjD9CrloeiEJna/ZXuTRXozBfSj4JNTS9GR/6TreQFXA1
+        Dgfm5J/xq/dU0DjGGDY2KsqD8OmiwO80oMuEYMV8Vxs45FlY7V1sZrZKYQjBCq7KNl1npuxuFOa
+        s=
+X-Received: by 2002:a05:6000:1844:b0:20c:5672:9573 with SMTP id c4-20020a056000184400b0020c56729573mr15065540wri.538.1651665572032;
+        Wed, 04 May 2022 04:59:32 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxgDtpAe/DLUybOoXaFzCCcl0wELARIERg8DV6OtPnYk2dBjPP7wFdtw5kHDTnYHSwd136yIw==
+X-Received: by 2002:a05:6000:1844:b0:20c:5672:9573 with SMTP id c4-20020a056000184400b0020c56729573mr15065508wri.538.1651665571647;
+        Wed, 04 May 2022 04:59:31 -0700 (PDT)
+Received: from minerva.home (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id n32-20020a05600c3ba000b003943a559b3fsm3765344wms.8.2022.05.04.04.59.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 May 2022 04:59:31 -0700 (PDT)
+From:   Javier Martinez Canillas <javierm@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Thomas Zimmermann <tzimmermann@suse.de>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Daniel Vetter <daniel@ffwll.ch>, Helge Deller <deller@gmx.de>,
+        dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org
+Subject: [PATCH v2] Revert "fbdev: Make fb_release() return -ENODEV if fbdev was unregistered"
+Date:   Wed,  4 May 2022 13:59:17 +0200
+Message-Id: <20220504115917.758787-1-javierm@redhat.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RDNS_DYNAMIC,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-1. change suniv f1c100s pinctrl,PD14 multiplexing function lvds1 to uart2
+This reverts commit aafa025c76dcc7d1a8c8f0bdefcbe4eb480b2f6a. That commit
+attempted to fix a NULL pointer dereference, caused by the struct fb_info
+associated with a framebuffer device to not longer be valid when the file
+descriptor was closed.
 
-When the pin PD13 and PD14 is setting up to uart2 function in dts,
-there's an error occurred:
-1c20800.pinctrl: unsupported function uart2 on pin PD14
+The issue was exposed by commit 27599aacbaef ("fbdev: Hot-unplug firmware
+fb devices on forced removal"), which added a new path that goes through
+the struct device removal instead of directly unregistering the fb.
 
-Because 'uart2' is not any one multiplexing option of PD14,
-and pinctrl don't know how to configure it.
+Most fbdev drivers have issues with the fb_info lifetime, because call to
+framebuffer_release() from their driver's .remove callback, rather than
+doing from fbops.fb_destroy callback. This meant that due to this switch,
+the fb_info was now destroyed too early, while references still existed,
+while before it was simply leaked.
 
-So change the pin PD14 lvds1 function to uart2.
+The patch we're reverting here reinstated that leak, hence "fixed" the
+regression. But the proper solution is to fix the drivers to not release
+the fb_info too soon.
 
-Signed-off-by: IotaHydrae <writeforever@foxmail.com>
+Suggested-by: Daniel Vetter <daniel.vetter@ffwll.ch>
+Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
+Reviewed-by: Daniel Vetter <daniel.vetter@ffwll.ch>
 ---
- drivers/pinctrl/sunxi/pinctrl-suniv-f1c100s.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/pinctrl/sunxi/pinctrl-suniv-f1c100s.c b/drivers/pinctrl/sunxi/pinctrl-suniv-f1c100s.c
-index 2801ca706273..68a5b627fb9b 100644
---- a/drivers/pinctrl/sunxi/pinctrl-suniv-f1c100s.c
-+++ b/drivers/pinctrl/sunxi/pinctrl-suniv-f1c100s.c
-@@ -204,7 +204,7 @@ static const struct sunxi_desc_pin suniv_f1c100s_pins[] = {
- 		  SUNXI_FUNCTION(0x0, "gpio_in"),
- 		  SUNXI_FUNCTION(0x1, "gpio_out"),
- 		  SUNXI_FUNCTION(0x2, "lcd"),		/* D20 */
--		  SUNXI_FUNCTION(0x3, "lvds1"),		/* RX */
-+		  SUNXI_FUNCTION(0x3, "uart2"),		/* RX */
- 		  SUNXI_FUNCTION_IRQ_BANK(0x6, 0, 14)),
- 	SUNXI_PIN(SUNXI_PINCTRL_PIN(D, 15),
- 		  SUNXI_FUNCTION(0x0, "gpio_in"),
+Changes in v2:
+- Add more info in the commit message about why it's crashing and how
+  the reverted commit was papering over the issue (Daniel Vetter).
+- Add Daniel Vetter's Reviewed-by tag.
+
+ drivers/video/fbdev/core/fbmem.c | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
+
+diff --git a/drivers/video/fbdev/core/fbmem.c b/drivers/video/fbdev/core/fbmem.c
+index 97eb0dee411c..a6bb0e438216 100644
+--- a/drivers/video/fbdev/core/fbmem.c
++++ b/drivers/video/fbdev/core/fbmem.c
+@@ -1434,10 +1434,7 @@ fb_release(struct inode *inode, struct file *file)
+ __acquires(&info->lock)
+ __releases(&info->lock)
+ {
+-	struct fb_info * const info = file_fb_info(file);
+-
+-	if (!info)
+-		return -ENODEV;
++	struct fb_info * const info = file->private_data;
+ 
+ 	lock_fb_info(info);
+ 	if (info->fbops->fb_release)
 -- 
-2.32.0
+2.35.1
 

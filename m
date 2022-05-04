@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7D9751A3F7
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 17:25:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA9E851A3F4
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 17:25:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352373AbiEDP2b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 11:28:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53164 "EHLO
+        id S1352433AbiEDP2g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 11:28:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351814AbiEDP2W (ORCPT
+        with ESMTP id S1352075AbiEDP2X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 11:28:22 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46FE344A04;
-        Wed,  4 May 2022 08:24:46 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id x18so2549191wrc.0;
-        Wed, 04 May 2022 08:24:46 -0700 (PDT)
+        Wed, 4 May 2022 11:28:23 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DCBB44A08;
+        Wed,  4 May 2022 08:24:47 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id u3so2521277wrg.3;
+        Wed, 04 May 2022 08:24:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=HQbqkKFVhO0oYTCViggW509ZlaV6AfefEm9f3k12+eg=;
-        b=I3V5xwc9mmJq9PbDd0vvDdHFo49dVPjTOVRWlp22XUQElQp0zzIOBiGS7b0ynHNI5Y
-         BwjGbVvkEMSmalnyMryP7nneYZhAcm6vHowvvYE6n0fJ8K5HDt88esL6adDs7OOPw7sG
-         mPK767DkFjwK1lK6DRPOiY3bhlBTG5l37G7dA2OEPfK3sDrnMU5t0fLAkItQ8teLwhqC
-         ZpR67GAX9dKU16IKNP6/2WUsB2aVJ7ehlNOP9/mLj4rtzv6YyEBRMnJ4dVrwDZwmz4JZ
-         OU1iw8EeAu+71o96y9De7kEeWsNyQO/1bKKe1eYPzZAQJSxDDex47/QpG8NvZKDFKD44
-         R7Ig==
+        bh=Kc5mcOct0oUOKk+U4jtRUliz/FH5+TKvkz3rnonQevw=;
+        b=M5OerQS/g1OAy8dhJWns5hn2/kBwqRnvELSPqnDascuvrHXdsCYPC+eeAXr9wMUWZ1
+         BaOPdI09tKFF1m1/6NL12WRJPI1TXKB4BPCNaGlp/UQOY2R2mjvYyZ6yzFjThDU925HG
+         DiMC1xzdgbs78MN4UJ+ym3PjMFXlf9Ml2rN/ucBqz+Gg5gvaszYv10KpceI3DarE7kCl
+         R6NGYxMzhv/zpVymVBqOhpGacmAqvGOAig0WUZq8xk0IzCL7b3m2NXXN9msijGgwLtC2
+         QLzEuQdphbqc4Y2fLO9b8cPdrsGWeb3rZQtQ0mIjuMIBIge56WHkas29sdr2wAp8Njga
+         I0Ig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=HQbqkKFVhO0oYTCViggW509ZlaV6AfefEm9f3k12+eg=;
-        b=CD/IJWzJRkPNEMfr6ordz1MGtUZbalOSjOjuEv9StPFu2httFxzS7DsDAdUunN7Gg9
-         y9JJqhGi5mPPyVBJqwppKjxoIhwMHI5rheIe0KCoQLs4LSGGuUKckN27Rx5CUi0SeGSo
-         T8nAndGpuqu3S78jbJ8cxWTocdm4G0ClKwBdm8U7JDCn4YcQ9DzM/pRZeeRSuROdUybt
-         CmoRWQflb7RENcpVP5VI8Z4Ca1g3fLNThcG/OVPhSwNFp5MA/TR0qRnf+Y8BX++EZ028
-         PAZvxy5sCfrKl1W2Fi9OPJXm8tw4B9F+KiyOgQiLMUWnbcgQoykNfEZWXpOxvVdO6WiK
-         JCFg==
-X-Gm-Message-State: AOAM5321hHb71tKIgWIHwlolmwVa5L8Sn56Kw9OIytBVAZ5kXDdQwzfh
-        yIUmPp/jaLWctMrkvRtWxYmOv3gUqZM=
-X-Google-Smtp-Source: ABdhPJx1+G9RDiWmcUyMeC6S39k0ed5r/nxqS1nrwlLkRDOPOUOrL74l7Ui9N2K4sanMxhRsUk7IQA==
-X-Received: by 2002:a5d:6dac:0:b0:20c:5fbf:5c4d with SMTP id u12-20020a5d6dac000000b0020c5fbf5c4dmr12489091wrs.548.1651677884735;
-        Wed, 04 May 2022 08:24:44 -0700 (PDT)
+        bh=Kc5mcOct0oUOKk+U4jtRUliz/FH5+TKvkz3rnonQevw=;
+        b=ccAr/6Abm5HIN6jLt0FmoU72TR/353arjmVr6t1VTjrphFF0K2yNntkNP0dTl1Fu33
+         n1kkeQj5GOWBnrFsmvN+rkPSleFVe/+krz33svYwHmPuBGlLd+pqA7ZMLVovem3gWsne
+         K7HVJjdF9rRzRoJiOPHUsVSKfdMBOiUME5kFDbfcq7wHNUB1Xul+jvTW4SHLze5IM2JV
+         bGsRKWdSi6BOpeoqVymfdF8K2gxSexCTxkB6JuTR9r1gcy5Y30s9Xawr9H40spP4IhDU
+         yJNOc7I1oXYaL0fO9DWIUYTsDkoy3kZRd5F35lZzUiTjwcfFimun8pvBF/r6JhZDvjC7
+         S7iQ==
+X-Gm-Message-State: AOAM530ZAUoZWxjNfUuCgOAKAWHPstGBDtPSz6+W7UcWYOC69GD/qq/L
+        YzMhM3j4KPljq0CK9X0MKA/yOoKgpTE=
+X-Google-Smtp-Source: ABdhPJy5xEHkSlk48t7udQi38eCM+wUHzZKt73nfAymRjVCJgVFj7xoAfLUxKNwnLQyLNZPWAdk+GA==
+X-Received: by 2002:adf:f4d2:0:b0:20c:59b9:37bd with SMTP id h18-20020adff4d2000000b0020c59b937bdmr14286679wrp.677.1651677886125;
+        Wed, 04 May 2022 08:24:46 -0700 (PDT)
 Received: from nergzd-desktop.localdomain ([194.39.226.133])
-        by smtp.gmail.com with ESMTPSA id s14-20020adfa28e000000b0020c5253d91csm11541041wra.104.2022.05.04.08.24.43
+        by smtp.gmail.com with ESMTPSA id s14-20020adfa28e000000b0020c5253d91csm11541041wra.104.2022.05.04.08.24.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 May 2022 08:24:44 -0700 (PDT)
+        Wed, 04 May 2022 08:24:45 -0700 (PDT)
 From:   Markuss Broks <markuss.broks@gmail.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
@@ -58,9 +58,9 @@ Cc:     phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Henrik Rydberg <rydberg@bitmath.org>,
         linux-input@vger.kernel.org, devicetree@vger.kernel.org
-Subject: [PATCH 1/3] input/touchscreen: imagis: Correct the maximum touch area value
-Date:   Wed,  4 May 2022 18:24:03 +0300
-Message-Id: <20220504152406.8730-2-markuss.broks@gmail.com>
+Subject: [PATCH 2/3] dt-bindings: input/touchscreen: Add compatible for IST3038B
+Date:   Wed,  4 May 2022 18:24:04 +0300
+Message-Id: <20220504152406.8730-3-markuss.broks@gmail.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220504152406.8730-1-markuss.broks@gmail.com>
 References: <20220504152406.8730-1-markuss.broks@gmail.com>
@@ -76,27 +76,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As specified in downstream IST3038B driver and proved by testing,
-the correct maximum reported value of touch area is 16.
+Imagis IST3038B is a variant (firmware?) of Imagis IST3038 IC,
+add the compatible for it to the IST3038C bindings.
 
 Signed-off-by: Markuss Broks <markuss.broks@gmail.com>
 ---
- drivers/input/touchscreen/imagis.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ .../devicetree/bindings/input/touchscreen/imagis,ist3038c.yaml   | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/input/touchscreen/imagis.c b/drivers/input/touchscreen/imagis.c
-index e2697e6c6d2a..b667914a44f1 100644
---- a/drivers/input/touchscreen/imagis.c
-+++ b/drivers/input/touchscreen/imagis.c
-@@ -210,7 +210,7 @@ static int imagis_init_input_dev(struct imagis_ts *ts)
+diff --git a/Documentation/devicetree/bindings/input/touchscreen/imagis,ist3038c.yaml b/Documentation/devicetree/bindings/input/touchscreen/imagis,ist3038c.yaml
+index e3a2b871e50c..a283040cd2aa 100644
+--- a/Documentation/devicetree/bindings/input/touchscreen/imagis,ist3038c.yaml
++++ b/Documentation/devicetree/bindings/input/touchscreen/imagis,ist3038c.yaml
+@@ -18,6 +18,7 @@ properties:
  
- 	input_set_capability(input_dev, EV_ABS, ABS_MT_POSITION_X);
- 	input_set_capability(input_dev, EV_ABS, ABS_MT_POSITION_Y);
--	input_set_abs_params(input_dev, ABS_MT_TOUCH_MAJOR, 0, 255, 0, 0);
-+	input_set_abs_params(input_dev, ABS_MT_TOUCH_MAJOR, 0, 16, 0, 0);
+   compatible:
+     enum:
++      - imagis,ist3038b
+       - imagis,ist3038c
  
- 	touchscreen_parse_properties(input_dev, true, &ts->prop);
- 	if (!ts->prop.max_x || !ts->prop.max_y) {
+   reg:
 -- 
 2.35.1
 

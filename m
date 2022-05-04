@@ -2,161 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E08451AC08
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 20:01:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E74DE51AC0B
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 20:02:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359471AbiEDSEn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 14:04:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41832 "EHLO
+        id S1376384AbiEDSFh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 14:05:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376518AbiEDSES (ORCPT
+        with ESMTP id S1376311AbiEDSFM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 14:04:18 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AE75F4EF41
-        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 10:18:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651684737;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=3t8epFEjcxVGinupv1KfUngZ1NH7mCjOSa22VqDXFR0=;
-        b=X1+4HlfZBhTqWCgP1r5i8asWa5k/8KZqFkILiwIgoa/ebK0fILBDn1kv2Q+C+UexoTywc6
-        FBnzZpoeCmKvxJAGs3b46jz3mnI4xhrpKPeTL61tszjksPi2yodu0urO3g+YI27F+F/3Sa
-        AyKObawJMjlCsttouj9uXen+WzX3vDo=
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
- [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-119-Ery-n5ncOS6qLJNL6PCdeg-1; Wed, 04 May 2022 13:18:56 -0400
-X-MC-Unique: Ery-n5ncOS6qLJNL6PCdeg-1
-Received: by mail-ej1-f69.google.com with SMTP id gn26-20020a1709070d1a00b006f453043956so1209023ejc.15
-        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 10:18:56 -0700 (PDT)
+        Wed, 4 May 2022 14:05:12 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C7D96A01F
+        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 10:19:35 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id kq17so4181780ejb.4
+        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 10:19:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=53tRH3Jax00x2MRGmAnmpVFoogtTBVaQBwRaJB/MSqI=;
+        b=ZpE/QIW7kna1o4IhzQQmp2637K1w9UcjrBWQkFmB3KeaXGJhRew5Qrrm4nVBxQuM5K
+         WxvhUYOlh8rWIuTX2aM0865lrsFa3LgNJmonYVw5QJ5TWtJ8GDZTmeKTt6ABumWC0QC1
+         ab5RGTAVBbqKEoK4b/TnHXAunRyIDb4UtS/WiYRpJvoKPoGFBe/xxsjE1LJ0+w1IU9lY
+         PawaTzdNF1YTKYIh5MvHjBCSHId3sE7LkENrHud89JTEUmJh7bVKtkqT2eRSPldXBLZc
+         Hy/1AeX5w6TUxiRTh+7aDA0ELWkG6xjnd2RXfENi04bsD7m5bd6YKUkx+vX1cIkHwdrw
+         TrCA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=3t8epFEjcxVGinupv1KfUngZ1NH7mCjOSa22VqDXFR0=;
-        b=vcWZ5HrvDbgzP69BRJqW++r7DOcU68uBxW6KAW/eAg20HYnt+quCywh+j7kNT/XuyB
-         d1wRkVbqdbGFDduAiOV88lttTO6UKNT5qD2yvER79jmZ6x53+QNQynoHXufCxaImt7UX
-         bZYPb8/ynX/gWPiVszC6Ooq713OcQQc/pxoiPBhzbI53QZbp2l/aR2McqntZohdRCFKK
-         1ZvwJ8u/83FtG6J+HobriEtxlMP+HgaWP/BUdKKG+r2l9TKTo0WuTKvvBGu3aO8GULVt
-         tTocvscLxdwyiA5axSV9gjEMwsw32iMVxBx2zsfH2WdYSqsM93+4ehbhhz/AU+MvOWu/
-         jz6w==
-X-Gm-Message-State: AOAM530TOdUyag62rM49PThbWSN36HqmskMSozpvxJwJhWvfci4vAwEA
-        BrYrJ+igIxP1VJLr200GoYjf4lRlef4pkvObI7eItcFyBB+UfO2H8nnXwQahkKJly+Y1XCSGij2
-        1IoGh32f+fbgHUae/YlkpOg540gd2+5IsFA7hzA4bfSfCV06LZ4CwA1xQFlejisF83aVoAczpoD
-        dm
-X-Received: by 2002:a17:907:a407:b0:6f4:3f14:7707 with SMTP id sg7-20020a170907a40700b006f43f147707mr16222527ejc.351.1651684735025;
-        Wed, 04 May 2022 10:18:55 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxeNLSEO6aMZEJmeSDZvOrdtsRQbX4QDRaEAbooQf77kraL3riqlGTEh69XjibmoSyspABsDQ==
-X-Received: by 2002:a17:907:a407:b0:6f4:3f14:7707 with SMTP id sg7-20020a170907a40700b006f43f147707mr16222496ejc.351.1651684734772;
-        Wed, 04 May 2022 10:18:54 -0700 (PDT)
-Received: from fedora.nat2.vcit.vutbr.net (nat2.vcit.vutbr.net. [185.62.108.68])
-        by smtp.gmail.com with ESMTPSA id bf16-20020a0564021a5000b0042617ba63aesm9492598edb.56.2022.05.04.10.18.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 May 2022 10:18:54 -0700 (PDT)
-From:   Mark Menzynski <mmenzyns@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Mark Menzynski <mmenzyns@redhat.com>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        Karol Herbst <kherbst@redhat.com>,
-        Lyude Paul <lyude@redhat.com>, David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
-        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org
-Subject: [PATCH] drm/nouveau: reorder nouveau_drm_device_fini
-Date:   Wed,  4 May 2022 19:18:51 +0200
-Message-Id: <20220504171851.17188-1-mmenzyns@redhat.com>
-X-Mailer: git-send-email 2.32.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=53tRH3Jax00x2MRGmAnmpVFoogtTBVaQBwRaJB/MSqI=;
+        b=NW5R7N+Jh2og3ERLOF7amqez/ybOWOlqZblUaVOYbIxRMo8TY6Nb1S3/a9mZ4v4/xU
+         dwJAxYbboKuow2XNze8lD2BeUoq62hM5bMw5lKzQmCmD1QsWF9IBqnU7a1wkKOtX90uh
+         l/RNF/3ruAnPLmUaNaKiYKq9lJYmbrwLVYTWR3dVBO0OYwlR1KDlLu9zOuXcFceh8tbh
+         ArMvE5PMZfBV1wbTrvuLjfLIuqen7SS8x4ZOyyHd3LKAJYYDLUaeuoFojrPQGCgBugMV
+         Db4VmCZuimXmk5EYcq7GTfb+WjDrQgCzkrb0rIU7loEEDcV6HltgPco97gAwrCQn+pU2
+         feBg==
+X-Gm-Message-State: AOAM531yaJG7CC7+qYeO5ZvcJMCsA87MuhnWb8WhWe8brqp6aRH6W2mE
+        QJ5lkOvQPy6Z1K69lacg8Chy3oeEdIwN88pg6Osqvg==
+X-Google-Smtp-Source: ABdhPJzYz0aK430SRVDxLl+B+OuSgn1cw903dQC7G1sXXHkRu7glc7gEEQOV/ft7a8r9UmYDzaVlBuVy0a6wROfL2lA=
+X-Received: by 2002:a17:907:971e:b0:6f3:ff27:ebf7 with SMTP id
+ jg30-20020a170907971e00b006f3ff27ebf7mr21159148ejc.159.1651684771561; Wed, 04
+ May 2022 10:19:31 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20220502231944.3891435-1-tjmercier@google.com>
+ <20220502231944.3891435-3-tjmercier@google.com> <20220504122558.GB24172@blackbody.suse.cz>
+In-Reply-To: <20220504122558.GB24172@blackbody.suse.cz>
+From:   "T.J. Mercier" <tjmercier@google.com>
+Date:   Wed, 4 May 2022 10:19:20 -0700
+Message-ID: <CABdmKX2DJy0i3XAP7xTduZ8KFVKtgto24w714YJNUb_=pfYiKw@mail.gmail.com>
+Subject: Re: [PATCH v6 2/6] cgroup: gpu: Add a cgroup controller for allocator
+ attribution of GPU memory
+To:     =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>
+Cc:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Hridya Valsaraju <hridya@google.com>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        John Stultz <jstultz@google.com>,
+        Todd Kjos <tkjos@android.com>,
+        Carlos Llamas <cmllamas@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Kalesh Singh <kaleshsingh@google.com>, Kenny.Ho@amd.com,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        kernel-team@android.com, linux-kernel@vger.kernel.org,
+        cgroups@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Resources needed for output poll workers are destroyed in
-nouveau_fbcon_fini() before output poll workers are cleared in
-nouveau_display_fini(). This means there is a time between fbcon_fini
-and display_fini, where if output poll happens, it crashes.
+On Wed, May 4, 2022 at 5:26 AM Michal Koutn=C3=BD <mkoutny@suse.com> wrote:
+>
+> Hello.
+>
+> On Mon, May 02, 2022 at 11:19:36PM +0000, "T.J. Mercier" <tjmercier@googl=
+e.com> wrote:
+> > This patch adds APIs to:
+> > -allow a device to register for memory accounting using the GPU cgroup
+> > controller.
+> > -charge and uncharge allocated memory to a cgroup.
+>
+> Is this API for separately built consumers?
+> The respective functions should be exported (EXPORT_SYMBOL_GPL) if I
+> haven't missed anything.
+>
+As the only users are dmabuf heaps and dmabuf, and those cannot be
+built as modules I did not export the symbols here. However these
+definitely would need to be exported to support use by modules, and I
+have had to do that in one of my device test trees for this change.
+Should I export these now for this series?
 
-BUG: KASAN: use-after-free in
-__drm_fb_helper_initial_config_and_unlock.cold+0x1f3/0x291
-[drm_kms_helper]
+> > +#ifdef CONFIG_CGROUP_GPU
+> > + /* The GPU cgroup controller data structure */
+> > +struct gpucg {
+> > +     struct cgroup_subsys_state css;
+> > +
+> > +     /* list of all resource pools that belong to this cgroup */
+> > +     struct list_head rpools;
+> > +};
+> > +
+> > +/* A named entity representing bucket of tracked memory. */
+> > +struct gpucg_bucket {
+> > +     /* list of various resource pools in various cgroups that the buc=
+ket is part of */
+> > +     struct list_head rpools;
+> > +
+> > +     /* list of all buckets registered for GPU cgroup accounting */
+> > +     struct list_head bucket_node;
+> > +
+> > +     /* string to be used as identifier for accounting and limit setti=
+ng */
+> > +     const char *name;
+> > +};
+>
+> Do these struct have to be defined "publicly"?
+> I.e. the driver code could just work with gpucg and gpucg_bucket
+> pointers.
+>
+> > +int gpucg_register_bucket(struct gpucg_bucket *bucket, const char *nam=
+e)
+>
+> ...and the registration function would return a pointer to newly
+> (internally) allocated gpucg_bucket.
+>
+No, except maybe the gpucg_bucket name which I can add an accessor
+function for. Won't this mean depending on LTO for potential inlining
+of the functions currently implemented in the header? I'm happy to
+make this change, but I wonder why some parts of the kernel take this
+approach and others do not.
 
-Cc: Ben Skeggs <bskeggs@redhat.com>
-Cc: Karol Herbst <kherbst@redhat.com>
-Cc: Lyude Paul <lyude@redhat.com>
-Cc: David Airlie <airlied@linux.ie>
-Cc: Daniel Vetter <daniel@ffwll.ch>
-Cc: Sumit Semwal <sumit.semwal@linaro.org>
-Cc: "Christian König" <christian.koenig@amd.com>
-Cc: dri-devel@lists.freedesktop.org
-Cc: nouveau@lists.freedesktop.org
-Cc: linux-kernel@vger.kernel.org
-Cc: linux-media@vger.kernel.org
-Cc: linaro-mm-sig@lists.linaro.org
-Signed-off-by: Mark Menzynski <mmenzyns@redhat.com>
----
- drivers/gpu/drm/nouveau/nouveau_drm.c | 17 ++++++++---------
- 1 file changed, 8 insertions(+), 9 deletions(-)
-
-diff --git a/drivers/gpu/drm/nouveau/nouveau_drm.c b/drivers/gpu/drm/nouveau/nouveau_drm.c
-index 561309d447e0..773efdd20d2f 100644
---- a/drivers/gpu/drm/nouveau/nouveau_drm.c
-+++ b/drivers/gpu/drm/nouveau/nouveau_drm.c
-@@ -588,12 +588,6 @@ nouveau_drm_device_init(struct drm_device *dev)
- 	if (ret)
- 		goto fail_dispctor;
- 
--	if (dev->mode_config.num_crtc) {
--		ret = nouveau_display_init(dev, false, false);
--		if (ret)
--			goto fail_dispinit;
--	}
--
- 	nouveau_debugfs_init(drm);
- 	nouveau_hwmon_init(dev);
- 	nouveau_svm_init(drm);
-@@ -601,6 +595,12 @@ nouveau_drm_device_init(struct drm_device *dev)
- 	nouveau_fbcon_init(dev);
- 	nouveau_led_init(dev);
- 
-+	if (dev->mode_config.num_crtc) {
-+		ret = nouveau_display_init(dev, false, false);
-+		if (ret)
-+			goto fail_dispinit;
-+	}
-+
- 	if (nouveau_pmops_runtime()) {
- 		pm_runtime_use_autosuspend(dev->dev);
- 		pm_runtime_set_autosuspend_delay(dev->dev, 5000);
-@@ -641,15 +641,14 @@ nouveau_drm_device_fini(struct drm_device *dev)
- 		pm_runtime_forbid(dev->dev);
- 	}
- 
-+	if (dev->mode_config.num_crtc)
-+		nouveau_display_fini(dev, false, false);
- 	nouveau_led_fini(dev);
- 	nouveau_fbcon_fini(dev);
- 	nouveau_dmem_fini(drm);
- 	nouveau_svm_fini(drm);
- 	nouveau_hwmon_fini(dev);
- 	nouveau_debugfs_fini(drm);
--
--	if (dev->mode_config.num_crtc)
--		nouveau_display_fini(dev, false, false);
- 	nouveau_display_destroy(dev);
- 
- 	nouveau_accel_fini(drm);
--- 
-2.32.0
-
+> Regards,
+> Michal

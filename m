@@ -2,182 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28CA8519E85
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 13:49:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40CC4519E88
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 13:51:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349094AbiEDLx0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 07:53:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59898 "EHLO
+        id S1348979AbiEDLyb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 07:54:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234461AbiEDLxY (ORCPT
+        with ESMTP id S234461AbiEDLy3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 07:53:24 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5C85022532
-        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 04:49:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651664988;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=lKJAHoOloyDONNdaSYjDVBT2BKN9t8wZnDduhidYecg=;
-        b=iiOdvzqEa6lYYDGVYfOHt/7hVBRkYftiDB2peLBeftoiKDFLz37ITCjFsBwq1QIqgILuza
-        2kuNSIOaBMFA4vU72Xn04YF/xIgGi4SVkHxLLw6ZIuxfuAXb3uoHTeXokYOia40sxJxlHm
-        phm4CW3/UP8fgHbwVhPe/FTFGeniBys=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-512-iBXNNrykP5as9MJnw2wrMA-1; Wed, 04 May 2022 07:49:45 -0400
-X-MC-Unique: iBXNNrykP5as9MJnw2wrMA-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BB7FB1C04B47;
-        Wed,  4 May 2022 11:49:44 +0000 (UTC)
-Received: from starship (unknown [10.40.192.26])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id A42EEC44AE2;
-        Wed,  4 May 2022 11:49:42 +0000 (UTC)
-Message-ID: <8be586dab3a80d96c88018a1919d01f2163b595d.camel@redhat.com>
-Subject: Re: [PATCH v2 08/12] KVM: SVM: Update AVIC settings when changing
- APIC mode
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Cc:     pbonzini@redhat.com, seanjc@google.com, joro@8bytes.org,
-        jon.grimm@amd.com, wei.huang2@amd.com, terry.bowman@amd.com
-Date:   Wed, 04 May 2022 14:49:41 +0300
-In-Reply-To: <8a0b27436239a97cc486d8460662febb6b155069.camel@redhat.com>
-References: <20220412115822.14351-1-suravee.suthikulpanit@amd.com>
-         <20220412115822.14351-9-suravee.suthikulpanit@amd.com>
-         <abb93e2d73b7ada6cbabcd3ebbf7b38e4701ec57.camel@redhat.com>
-         <9307c734-3473-0bdc-57be-c39e96bca4d8@amd.com>
-         <24b74f5bd8810c7f79777ed6898baeaf47bfe3e3.camel@redhat.com>
-         <3196873f-0047-3411-d434-56d96ca31298@amd.com>
-         <8a0b27436239a97cc486d8460662febb6b155069.camel@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+        Wed, 4 May 2022 07:54:29 -0400
+Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4207F21E37
+        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 04:50:51 -0700 (PDT)
+Received: by mail-qk1-x72b.google.com with SMTP id a22so724985qkl.5
+        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 04:50:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:reply-to:mime-version
+         :content-disposition;
+        bh=N0qLrMUdkmKBPfEziSX/hNCjhprklRfQLQvu1qWvrOo=;
+        b=iUmsmI1WPaZ54LUDWEqIywg7fvqroLNmgjvybdiVRqPyfsMUOuBWQT0+S8RWPgcmBN
+         +sqcSzJZuWhbx/U6T+e96xXMGNTF7ubkK5xelVEe040su7wFbYo9NJMxtP6NYcPT/8Fz
+         oPd6XKBGMGkobGVScnwvq+g6OmxxrvfpkSDTCbZLRhLeEACHVfOQRvImSgfXhO8KyufY
+         ENMZvDvoeJXtisCOLFTxOMXSUmzbgS+aAwDr42H++7qEZrsQK7ZzFO2MI9WNUTa8S1sU
+         gVymct8fIfOIPncDv1Cbzl9tQJZVMiEU/xpRPmG5Y66m0w++ZcRXA7UecQELGsriVXU1
+         mb2w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :reply-to:mime-version:content-disposition;
+        bh=N0qLrMUdkmKBPfEziSX/hNCjhprklRfQLQvu1qWvrOo=;
+        b=zwlHDlH2C+eG2U0a5TAZ8m6bYiDRRpdJ3IhdyGummovO2I25gyM/st+lk0PBx77rrq
+         0cfOFqZWnZtSeVf5EV21Q7J6YTdFWU/RhEtYxtNpy/KS9LJrJoLwe3X/qfGcJ9MNcjGS
+         FrFCbiadX211/b2/iQQp6Jz1amP7wAwilvuFRedXVIBdV5dVMxQId0bLJYGPvT0qhzhu
+         U+2XrMYAtA7r0A+Qo1qGigHCBiCjmxAZ+eSOYeQ38O0eviB7AZd2Jrgclx669Nw2Bo/B
+         nH304Gz8HfaW3In3N+kMoNtJeDYvjiRhBl0p1sQkrtsNTk0tvR+nctebQu3pp09BnHf6
+         w1hA==
+X-Gm-Message-State: AOAM532y3/ylGX+IZiS7NXQKuFCJuvV4IGQ6vAppxNMsbUVEhJVb2GOU
+        A7tARybOH6gYD504rwqiEQ==
+X-Google-Smtp-Source: ABdhPJy1syGyi7DFFq9iQSqT+hdshiI7n/y8gA/XAUshBDHkdBYidKapwbKZ4B8B4Pt/jmtVjRILZQ==
+X-Received: by 2002:a05:620a:24c5:b0:69e:e777:4323 with SMTP id m5-20020a05620a24c500b0069ee7774323mr15575616qkn.465.1651665050240;
+        Wed, 04 May 2022 04:50:50 -0700 (PDT)
+Received: from serve.minyard.net ([47.184.144.75])
+        by smtp.gmail.com with ESMTPSA id t11-20020a05620a004b00b0069fc13ce231sm7206864qkt.98.2022.05.04.04.50.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 May 2022 04:50:49 -0700 (PDT)
+Sender: Corey Minyard <tcminyard@gmail.com>
+Received: from minyard.net (unknown [IPv6:2001:470:b8f6:1b:149c:2dc6:c0ab:4341])
+        by serve.minyard.net (Postfix) with ESMTPSA id 6F3511800BD;
+        Wed,  4 May 2022 11:50:48 +0000 (UTC)
+Date:   Wed, 4 May 2022 06:50:47 -0500
+From:   Corey Minyard <minyard@acm.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
+        openipmi-developer@lists.sourceforge.net
+Subject: [GIT PULL] IPMI bug fixes for 5.17 (second set)
+Message-ID: <20220504115047.GC3767252@minyard.net>
+Reply-To: minyard@acm.org
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-05-04 at 14:46 +0300, Maxim Levitsky wrote:
-> On Tue, 2022-05-03 at 20:04 +0700, Suravee Suthikulpanit wrote:
-> > Maxim,
-> > 
-> > On 5/3/22 12:13 AM, Maxim Levitsky wrote:
-> > > > In the kvm/queue branch, I found a regression on nested SVM guest, where L2 guest cannot
-> > > > launch. The bad commit is:
-> > > > 
-> > > > commit a4cfff3f0f8c07f1f7873a82bdeb3995807dac8c (bisect)
-> > > > Merge: 42dcbe7d8bac 8d5678a76689
-> > > > Author: Paolo Bonzini<pbonzini@redhat.com>
-> > > > Date:   Fri Apr 8 12:43:40 2022 -0400
-> > > > 
-> > > >       Merge branch 'kvm-older-features' into HEAD
-> > > > 
-> > > >       Merge branch for features that did not make it into 5.18:
-> > > > 
-> > > >       * New ioctls to get/set TSC frequency for a whole VM
-> > > > 
-> > > >       * Allow userspace to opt out of hypercall patching
-> > > > 
-> > > >       Nested virtualization improvements for AMD:
-> > > > 
-> > > >       * Support for "nested nested" optimizations (nested vVMLOAD/VMSAVE,
-> > > >         nested vGIF)
-> > > > 
-> > > >       * Allow AVIC to co-exist with a nested guest running
-> > > > 
-> > > >       * Fixes for LBR virtualizations when a nested guest is running,
-> > > >         and nested LBR virtualization support
-> > > > 
-> > > >       * PAUSE filtering for nested hypervisors
-> > > > 
-> > > >       Guest support:
-> > > > 
-> > > >       * Decoupling of vcpu_is_preempted from PV spinlocks
-> > > > 
-> > > >       Signed-off-by: Paolo Bonzini<pbonzini@redhat.com>
-> > > > 
-> > > > I am still working on the bisect into the merge commits.
-> > > > 
-> > > > Regards,
-> > > > Suravee
-> > > > 
-> > > What happens when the guest can't launch? It sure works for me for kvm/queue
-> > > from yesterday.
-> > > 
-> > > I'll test again tomorrow.
-> > 
-> > I have bisected it to this commit:
-> > 
-> > commit 74fd41ed16fd71725e69e2cb90b755505326c2e6
-> > Author: Maxim Levitsky <mlevitsk@redhat.com>
-> > Date:   Tue Mar 22 19:40:47 2022 +0200
-> > 
-> >      KVM: x86: nSVM: support PAUSE filtering when L0 doesn't intercept PAUSE
-> > 
-> >      Expose the pause filtering and threshold in the guest CPUID
-> >      and support PAUSE filtering when possible:
-> > 
-> >      - If the L0 doesn't intercept PAUSE (cpu_pm=on), then allow L1 to
-> >        have full control over PAUSE filtering.
-> > 
-> >      - if the L1 doesn't intercept PAUSE, use host values and update
-> >        the adaptive count/threshold even when running nested.
-> > 
-> >      - Otherwise always exit to L1; it is not really possible to merge
-> >        the fields correctly.  It is expected that in this case, userspace
-> >        will not enable this feature in the guest CPUID, to avoid having the
-> >        guest update both fields pointlessly.
-> > 
-> >      Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
-> >      Message-Id: <20220322174050.241850-4-mlevitsk@redhat.com>
-> >      Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-> > 
-> > I can revert this one or specify pause_filter_count=0 pause_filter_thresh=0,
-> > and then I can boot the L2 guest.
-> > 
-> > Regards,
-> > Suravee
-> > 
-> 
-> This is really wierd.
-> 
-> Could you share the qemu command line for L1 and L2 guest, and as much as possible
-> info on what happens when you boot L2? I tested latest kvm/queue and I don't see
-> any issues with booting nested guest.
-> 
-> Which hardware you test on? I test on Zen2 (3970X) mostly.
-> 
-> How many vCPUs L2 has? Could you do a kvm trace of the L2, from L1,
-> to see what it does prior to hang?
+The following changes since commit ae085d7f9365de7da27ab5c0d16b12d51ea7fca9:
 
+  mm: kfence: fix missing objcg housekeeping for SLAB (2022-03-27 18:47:00 -0700)
 
-Also assuming that you boot the L2 with -cpu host, could you not expose these two
-features to it?
+are available in the Git repository at:
 
--cpu host,pause-filter=off,pfthreshold=off
+  https://github.com/cminyard/linux-ipmi.git tags/for-linus-5.17-2
 
-Best regards,
-	Maxim Levitsky
+for you to fetch changes up to 9cc3aac42566a0021e0ab7c4e9b31667ad75b1e3:
 
+  ipmi:ipmi_ipmb: Fix null-ptr-deref in ipmi_unregister_smi() (2022-04-29 10:06:52 -0500)
 
-> 
-> 
-> Best regards,
-> 	Maxim Levitsky
-> 
-> 
+----------------------------------------------------------------
+Fix some issues that were reported
 
+This has been in for-next for a bit (longer than the times would
+indicate, I had to rebase to add some text to the headers) and these are
+fixes that need to go in.
 
+----------------------------------------------------------------
+Corey Minyard (2):
+      ipmi: When handling send message responses, don't process the message
+      ipmi:ipmi_ipmb: Fix null-ptr-deref in ipmi_unregister_smi()
+
+ drivers/char/ipmi/ipmi_msghandler.c | 7 ++++++-
+ drivers/char/ipmi/ipmi_si_intf.c    | 5 +----
+ 2 files changed, 7 insertions(+), 5 deletions(-)

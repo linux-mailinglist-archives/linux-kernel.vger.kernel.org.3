@@ -2,155 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AA36519FE9
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 14:46:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D9D0519FD9
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 14:46:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349959AbiEDMuK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 08:50:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35938 "EHLO
+        id S1349949AbiEDMto convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 4 May 2022 08:49:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235732AbiEDMuI (ORCPT
+        with ESMTP id S1349939AbiEDMtm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 08:50:08 -0400
-Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 447452CE37;
-        Wed,  4 May 2022 05:46:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=UDxTzr/LbFPHIhZF1U36kLmGFtpbBGYhm6tD7CfQBjM=; b=KDrxDW8Mnr1qToRh0yGaDv25Fu
-        TWpgQRScRF3dRjjU3pakegMZLqUHmycIdjATA6DbY60uPfya2zQOAwJ0e5erFJc5BJn7o3eV3sQ41
-        Tox4yunn4/jA8a3IjyUJT/sI3KcoYtb2p2FNUwcMM3f1g/ex9W0DrY0odKixjZjudGtrtbA3G1JPw
-        m7Nny7DVsQFLh+HpvU/q7Yc8/k1hRGwJeSWIAUBYmqnc5ZdThCMVxiKgVNOsyAMWZdrNHmIgXn40c
-        w6AF2HzVr+D+OvvIusg4XzuOUWHoF2AYp44ZOOo2CAb1BDljEp1qf8qc23J8WoJ9sqhtbxFJxmFVB
-        8aeUFBag==;
-Received: from [179.113.53.197] (helo=[192.168.1.60])
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-        id 1nmEOH-0003Ke-Oi; Wed, 04 May 2022 14:46:02 +0200
-Message-ID: <9581851d-6c61-a2ef-a3c4-6e2ce05eab12@igalia.com>
-Date:   Wed, 4 May 2022 09:45:31 -0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH 04/30] firmware: google: Convert regular spinlock into
- trylock on panic path
-Content-Language: en-US
-To:     Evan Green <evgreen@chromium.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>, bhe@redhat.com,
-        pmladek@suse.com, kexec@lists.infradead.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        bcm-kernel-feedback-list@broadcom.com,
-        linuxppc-dev@lists.ozlabs.org, linux-alpha@vger.kernel.org,
-        linux-edac@vger.kernel.org, linux-hyperv@vger.kernel.org,
-        linux-leds@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, Linux PM <linux-pm@vger.kernel.org>,
-        linux-remoteproc@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-um@lists.infradead.org,
-        linux-xtensa@linux-xtensa.org, netdev@vger.kernel.org,
-        openipmi-developer@lists.sourceforge.net, rcu@vger.kernel.org,
-        sparclinux@vger.kernel.org, xen-devel@lists.xenproject.org,
-        x86@kernel.org, kernel-dev@igalia.com, kernel@gpiccoli.net,
-        halves@canonical.com, fabiomirmar@gmail.com,
-        alejandro.j.jimenez@oracle.com,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Jonathan Corbet <corbet@lwn.net>, d.hatayama@jp.fujitsu.com,
-        dave.hansen@linux.intel.com, dyoung@redhat.com,
-        feng.tang@intel.com,
+        Wed, 4 May 2022 08:49:42 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8398736170
+        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 05:46:02 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-321-6Zv0gshzMsK-8vWOOuH8bg-1; Wed, 04 May 2022 13:45:59 +0100
+X-MC-Unique: 6Zv0gshzMsK-8vWOOuH8bg-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.32; Wed, 4 May 2022 13:45:58 +0100
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.033; Wed, 4 May 2022 13:45:58 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     "'Maciej W. Rozycki'" <macro@orcam.me.uk>
+CC:     'Linus Walleij' <linus.walleij@linaro.org>,
+        William Breathitt Gray <william.gray@linaro.org>,
+        Niklas Schnelle <schnelle@linux.ibm.com>,
+        "Arnd Bergmann" <arnd@arndb.de>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
-        jgross@suse.com, john.ogness@linutronix.de,
-        Kees Cook <keescook@chromium.org>, luto@kernel.org,
-        mhiramat@kernel.org, mingo@redhat.com, paulmck@kernel.org,
-        peterz@infradead.org, rostedt@goodmis.org,
-        senozhatsky@chromium.org, Alan Stern <stern@rowland.harvard.edu>,
-        Thomas Gleixner <tglx@linutronix.de>, vgoyal@redhat.com,
-        vkuznets@redhat.com, Will Deacon <will@kernel.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        David Gow <davidgow@google.com>,
-        Julius Werner <jwerner@chromium.org>
-References: <20220427224924.592546-1-gpiccoli@igalia.com>
- <20220427224924.592546-5-gpiccoli@igalia.com>
- <CAE=gft5Pq25L4KFoPWbftkPF-JN1ex2yws77mMJ4GQnn9W0L2g@mail.gmail.com>
- <adcf6d0e-c37c-6ede-479e-29959d03d8c0@igalia.com>
- <CAE=gft623NxqetRssrZnaRmJLSP4BT5=-sVVwtYoHuspO_gULQ@mail.gmail.com>
-From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-In-Reply-To: <CAE=gft623NxqetRssrZnaRmJLSP4BT5=-sVVwtYoHuspO_gULQ@mail.gmail.com>
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        Arnd Bergmann <arnd@kernel.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>
+Subject: RE: [RFC v2 10/39] gpio: add HAS_IOPORT dependencies
+Thread-Topic: [RFC v2 10/39] gpio: add HAS_IOPORT dependencies
+Thread-Index: AQHYXaY4HSGVKKYe1UmuRZfv/6NY/a0NHk4QgAFu34CAABvB8A==
+Date:   Wed, 4 May 2022 12:45:58 +0000
+Message-ID: <7bb4d0286f44462581d96320cfe105d6@AcuMS.aculab.com>
+References: <20220429135108.2781579-1-schnelle@linux.ibm.com>
+ <20220429135108.2781579-19-schnelle@linux.ibm.com> <Ymv3DnS1vPMY8QIg@fedora>
+ <f006229ae056d4cdcf57fc5722a695ad4c257182.camel@linux.ibm.com>
+ <YmwGLrh4U+pVJo0m@fedora>
+ <CACRpkdaha37y-ZNSqYSbf=TvsJNcvbH1Y=N0JkVCewB-Lvf81Q@mail.gmail.com>
+ <c3a3cdd99d4645e2bbbe082808cbb2a5@AcuMS.aculab.com>
+ <alpine.DEB.2.21.2205041226160.64942@angie.orcam.me.uk>
+In-Reply-To: <alpine.DEB.2.21.2205041226160.64942@angie.orcam.me.uk>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
+MIME-Version: 1.0
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/05/2022 18:56, Evan Green wrote:
-> Hi Guilherme,
-> [...] 
->> Do you agree with that, or prefer really a parameter in
->> gsmi_shutdown_reason() ? I'll follow your choice =)
+From: Maciej W. Rozycki
+> Sent: 04 May 2022 12:47
 > 
-> I'm fine with either, thanks for the link. Mostly I want to make sure
-> other paths to gsmi_shutdown_reason() aren't also converted to a try.
-
-Hi Evan, thanks for the prompt response! So, I'll proceed like I did in
-s390, for consistency.
-
-> [...]
->> Reasoning: the problem with your example is that, by default, secondary
->> CPUs are disabled in the panic path, through an IPI mechanism. IPIs take
->> precedence and interrupt the work in these CPUs, effectively
->> interrupting the "polite work" with the lock held heh
+> On Tue, 3 May 2022, David Laight wrote:
 > 
-> The IPI can only interrupt a CPU with irqs disabled if the IPI is an
-> NMI. I haven't looked before to see if we use NMI IPIs to corral the
-> other CPUs on panic. On x86, I grepped my way down to
-> native_stop_other_cpus(), which looks like it does a normal IPI, waits
-> 1 second, then does an NMI IPI. So, if a secondary CPU has the lock
-> held, on x86 it has roughly 1s to finish what it's doing and re-enable
-> interrupts before smp_send_stop() brings the NMI hammer down. I think
-> this should be more than enough time for the secondary CPU to get out
-> and release the lock.
+> > > > There is such a thing as ISA DMA, but you'll still need to initialize
+> > > > the device via the IO Port bus first, so perhaps setting HAS_IOPORT for
+> > > > "config ISA" is the right thing to do: all ISA devices are expected to
+> > > > communicate in some way via ioport.
+> > >
+> > > Adding that dependency seems like the right solution to me.
+> >
+> > I think it all depends on what HAS_IOPORT is meant to mean and
+> > how portable kernel binaries need to be.
+> >
+> > x86 is (probably) the only architecture that actually has 'in'
+> > and 'out' instructions - but that doesn't mean that some other
+> > cpu (and I mean cpu+pcb not architecture) have the ability to
+> > generate 'IO' bus cycles on a specific physical bus.
 > 
-> So then it makes sense to me that you're fixing cases where we
-> panicked with the lock held, or hung with the lock held. Given the 1
-> second grace period x86 gives us, I'm on board, as that helps mitigate
-> the risk that we bailed out early with the try and should have spun a
-> bit longer instead. Thanks.
+>  I am fairly sure IA-64 has some form of IN/OUT machine instructions too.
 > 
-> -Evan
+> > While the obvious case is a physical address window that generates
+> > PCI(e) IO cycles from normal memory cycles it isn't the only one.
+> >
+> > I've used sparc cpu systems that have pcmcia card slots.
+> > These are pretty much ISA and the drivers might expect to
+> > access port 0x300 (etc) - certainly that would be right on x86.
+> >
+> > In this case is isn't so much that the ISA_BUS depends on support
+> > for in/out but that presence of the ISA bus provides the required
+> > in/out support.
+> 
+>  Well, one can implement a pluggable PCI/e expansion card with a PCI-ISA
+> bridge on it and a backplane to plug ISA cards into.  Without support for
+> issuing I/O cycles to PCI from the host however you won't be able to make
+> use of the ISA backplane except maybe for some ancient ISA memory cards.
+> So logically I think CONFIG_ISA should depend on CONFIG_HAS_IOPORT and
+> CONFIG_HAS_IOPORT ought to be selected by platform configurations.
 
-Well, in the old path without "crash_kexec_post_notifiers", we indeed
-end-up relying on native_stop_other_cpus() for x86 as you said, and the
-"1s rule" makes sense. But after this series (or even before, if the
-kernel parameter "crash_kexec_post_notifiers" was used) the function
-used to stop CPUs in the panic path is crash_smp_send_stop(), and the
-call chain is like:
+But generating a PCI(e) I/O cycle doesn't need the cpu to be able to
+generate an I/O cycle on its local bus interface.
+All that required is for the PCI(e) host bridge to determine that it
+needs to relevant kind of cycle on the target bus.
+This can easily be based on the physical address.
 
-Main CPU:
-crash_smp_send_stop()
---kdump_nmi_shootdown_cpus()
-----nmi_shootdown_cpus()
+Many years ago I used a system with the strongarm SA1100/1101 pair.
+(Not running Linux, but I think that it could have - slowly.)
+Two (adjacent?) areas of the physical address map generated memory
+and I/O cycles to a pair of pcmcia slots.
+What you end up with is definitely ISA, but ARM definitely doesn't
+have in/out instructions.
 
-Then, in each CPU (except the main one, running panic() path),
-we execute kdump_nmi_callback() in NMI context.
+Now, while this is rather hypothetical, a 'generic' arm kernel running
+on that hardware would be able to support drivers that expect an ISA bus.
+But on different hardware the same generic kernel would have nowhere
+to 'attach' the same drivers - but they could still be part of the kernel
+(maybe as modules).
 
-So, we seem to indeed interrupt any context (even with IRQs disabled),
-increasing the likelihood of the potential lockups due to stopped CPUs
-holding the locks heheh
+What you should probably be doing is (outside of 'platform' code)
+change the drivers to use ioread8() instead of inb().
+Then adding in the required calls to get the correct 'token' to
+pass to ioread8() to perform an I/O cycle on the correct target bus.
 
-Thanks again for the good discussion, let me know if anything I'm saying
-doesn't make sense - this crash path is a bit convoluted, specially in
-x86, I might have understood something wrongly =)
-Cheers,
+It is really the attachment of the driver that can't succeed, not the
+compilation.
 
+	David
 
-Guilherme
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
+

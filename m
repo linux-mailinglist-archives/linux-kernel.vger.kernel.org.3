@@ -2,47 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C230551AA83
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:27:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A07F51A6BE
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 18:55:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357260AbiEDRXt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 13:23:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51470 "EHLO
+        id S1354524AbiEDQ6a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 12:58:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356474AbiEDRFR (ORCPT
+        with ESMTP id S1354450AbiEDQyW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 13:05:17 -0400
+        Wed, 4 May 2022 12:54:22 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 613935131F;
-        Wed,  4 May 2022 09:54:13 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 665B049255;
+        Wed,  4 May 2022 09:49:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8D2A0B827A9;
-        Wed,  4 May 2022 16:54:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2EA53C385A4;
-        Wed,  4 May 2022 16:54:10 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E19EFB827A2;
+        Wed,  4 May 2022 16:49:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 879FDC385AA;
+        Wed,  4 May 2022 16:49:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651683250;
-        bh=nU9hRqmoG+NR1e6QcNT5Gtc/DQw+zQxCB3nckjInEu0=;
+        s=korg; t=1651682972;
+        bh=6+rjE9zh4GATjXkM46Hk/BnlVF8MeLJ7vpypB9Ynn/I=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LcXBsBwzk2hLfSszzASHxFBSly8+5H/HMXhCO7BxDm0M1fnEdtAr0U7zIEWQqhWqh
-         vY7RWVBpbuMT4RtLt12tNTjvZys62RaA2D3gBSv7gubmNzU2hAjgre6ntYuAmnYKaB
-         zec4ZgwFOuga9niPQOIBu63W1/l4pGoJG2DDGbYg=
+        b=sZQG5Glp4x2tobHD0Xz6NIahIfO2QOLs8jl0q+jXdABU2wgf8QziwZb6kDLlwuznz
+         n4WVFTTMiHgiGBUh8MVa5FSr4Cpt/3dSYBQBf/y7E7pqUhSMDnJoA4kroix7JXwYxM
+         ABpGyzzMGKlZy4mgbYGEGWt66fvXhZOLX2b5fMps=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Samuel Holland <samuel@sholland.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 103/177] bus: sunxi-rsb: Fix the return value of sunxi_rsb_device_create()
+        stable@vger.kernel.org, Daniel Starke <daniel.starke@siemens.com>
+Subject: [PATCH 5.4 75/84] tty: n_gsm: fix wrong signal octet encoding in convergence layer type 2
 Date:   Wed,  4 May 2022 18:44:56 +0200
-Message-Id: <20220504153102.408014748@linuxfoundation.org>
+Message-Id: <20220504152933.399385984@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220504153053.873100034@linuxfoundation.org>
-References: <20220504153053.873100034@linuxfoundation.org>
+In-Reply-To: <20220504152927.744120418@linuxfoundation.org>
+References: <20220504152927.744120418@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,43 +53,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+From: Daniel Starke <daniel.starke@siemens.com>
 
-[ Upstream commit fff8c10368e64e7f8960f149375c12ca5f3b30af ]
+commit 06d5afd4d640eea67f5623e76cd5fc03359b7f3c upstream.
 
-This code is really spurious.
-It always returns an ERR_PTR, even when err is known to be 0 and calls
-put_device() after a successful device_register() call.
+n_gsm is based on the 3GPP 07.010 and its newer version is the 3GPP 27.010.
+See https://portal.3gpp.org/desktopmodules/Specifications/SpecificationDetails.aspx?specificationId=1516
+The changes from 07.010 to 27.010 are non-functional. Therefore, I refer to
+the newer 27.010 here. Chapter 5.5.2 describes that the signal octet in
+convergence layer type 2 can be either one or two bytes. The length is
+encoded in the EA bit. This is set 1 for the last byte in the sequence.
+gsmtty_modem_update() handles this correctly but gsm_dlci_data_output()
+fails to set EA to 1. There is no case in which we encode two signal octets
+as there is no case in which we send out a break signal.
+Therefore, always set the EA bit to 1 for the signal octet to fix this.
 
-It is likely that the return statement in the normal path is missing.
-Add 'return rdev;' to fix it.
-
-Fixes: d787dcdb9c8f ("bus: sunxi-rsb: Add driver for Allwinner Reduced Serial Bus")
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Reviewed-by: Samuel Holland <samuel@sholland.org>
-Tested-by: Samuel Holland <samuel@sholland.org>
-Signed-off-by: Jernej Skrabec <jernej.skrabec@gmail.com>
-Link: https://lore.kernel.org/r/ef2b9576350bba4c8e05e669e9535e9e2a415763.1650551719.git.christophe.jaillet@wanadoo.fr
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: e1eaea46bb40 ("tty: n_gsm line discipline")
+Cc: stable@vger.kernel.org
+Signed-off-by: Daniel Starke <daniel.starke@siemens.com>
+Link: https://lore.kernel.org/r/20220414094225.4527-5-daniel.starke@siemens.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/bus/sunxi-rsb.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/tty/n_gsm.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/bus/sunxi-rsb.c b/drivers/bus/sunxi-rsb.c
-index 4566e730ef2b..60b082fe2ed0 100644
---- a/drivers/bus/sunxi-rsb.c
-+++ b/drivers/bus/sunxi-rsb.c
-@@ -227,6 +227,8 @@ static struct sunxi_rsb_device *sunxi_rsb_device_create(struct sunxi_rsb *rsb,
- 
- 	dev_dbg(&rdev->dev, "device %s registered\n", dev_name(&rdev->dev));
- 
-+	return rdev;
-+
- err_device_add:
- 	put_device(&rdev->dev);
- 
--- 
-2.35.1
-
+--- a/drivers/tty/n_gsm.c
++++ b/drivers/tty/n_gsm.c
+@@ -823,7 +823,7 @@ static int gsm_dlci_data_output(struct g
+ 			break;
+ 		case 2:	/* Unstructed with modem bits.
+ 		Always one byte as we never send inline break data */
+-			*dp++ = gsm_encode_modem(dlci);
++			*dp++ = (gsm_encode_modem(dlci) << 1) | EA;
+ 			break;
+ 		}
+ 		WARN_ON(kfifo_out_locked(dlci->fifo, dp , len, &dlci->lock) != len);
 
 

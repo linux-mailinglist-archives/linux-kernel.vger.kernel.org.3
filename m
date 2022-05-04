@@ -2,43 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F16D251A939
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:16:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F357F51AA61
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:27:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355942AbiEDRNI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 13:13:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36000 "EHLO
+        id S1357192AbiEDR1E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 13:27:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354466AbiEDRCF (ORCPT
+        with ESMTP id S1346734AbiEDRF7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 13:02:05 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 370FB4CD6B;
-        Wed,  4 May 2022 09:52:25 -0700 (PDT)
+        Wed, 4 May 2022 13:05:59 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A363A4755D;
+        Wed,  4 May 2022 09:54:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2041FB82552;
-        Wed,  4 May 2022 16:52:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BCD70C385A5;
-        Wed,  4 May 2022 16:52:17 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8B55A618DF;
+        Wed,  4 May 2022 16:54:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB661C385AF;
+        Wed,  4 May 2022 16:54:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651683137;
-        bh=qH3JgpvYRFgkCgh016EPkIru8QSUXjk+ltVqA/8dK2Q=;
+        s=korg; t=1651683259;
+        bh=5Vle1qWJnQKV1VFtVFlv7ED24OJaCLIdTzacdmZoabs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lMkAcEPpF44bUfbJXjWeI5oRu/PrMdjBV5dd5swizaIMGUAuWNAWoAd6BxwsHLxZY
-         IQQnw5m4GlOkIFLWwsuYLYlNaJTBpvN/EBUxSIgy6KHd6qF8mKloB2tW+g8eIWS9z+
-         HG1sqOPqDC/p5w57ITgOy3U+X9JDwlob7j71pGaM=
+        b=l+VS8OvSkrC9ozjwHI4UATcUd4b71tIyPQ5zeuiiBcmW3JN3VxssE43oDb5ky974M
+         BbO4Egfp1B4UAjXr7o7hEYX/tGlr6tgqO32zkSN6tNhmJsKOK8uQOLkigFqzvdWVK5
+         636zOZeQSW9BGek/1r06baWX3JyupMXJGvPhVoTc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Daniel Starke <daniel.starke@siemens.com>
-Subject: [PATCH 5.10 125/129] tty: n_gsm: fix wrong command frame length field encoding
+        stable@vger.kernel.org, Raed Salem <raeds@nvidia.com>,
+        Leon Romanovsky <leonro@nvidia.com>,
+        Shannon Nelson <snelson@pensando.io>,
+        Konrad Jankowski <konrad0.jankowski@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 124/177] ixgbe: ensure IPsec VF<->PF compatibility
 Date:   Wed,  4 May 2022 18:45:17 +0200
-Message-Id: <20220504153031.445962178@linuxfoundation.org>
+Message-Id: <20220504153104.222961804@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220504153021.299025455@linuxfoundation.org>
-References: <20220504153021.299025455@linuxfoundation.org>
+In-Reply-To: <20220504153053.873100034@linuxfoundation.org>
+References: <20220504153053.873100034@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,76 +59,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Daniel Starke <daniel.starke@siemens.com>
+From: Leon Romanovsky <leonro@nvidia.com>
 
-commit 398867f59f956985f4c324f173eff7b946e14bd8 upstream.
+[ Upstream commit f049efc7f7cd2f3c419f55040928eaefb13b3636 ]
 
-n_gsm is based on the 3GPP 07.010 and its newer version is the 3GPP 27.010.
-See https://portal.3gpp.org/desktopmodules/Specifications/SpecificationDetails.aspx?specificationId=1516
-The changes from 07.010 to 27.010 are non-functional. Therefore, I refer to
-the newer 27.010 here. Chapter 5.4.6.1 states that each command frame shall
-be made up from type, length and value. Looking for example in chapter
-5.4.6.3.5 at the description for the encoding of a flow control on command
-it becomes obvious, that the type and length field is always present
-whereas the value may be zero bytes long. The current implementation omits
-the length field if the value is not present. This is wrong.
-Correct this by always sending the length in gsm_control_transmit().
-So far only the modem status command (MSC) has included a value and encoded
-its length directly. Therefore, also change gsmtty_modem_update().
+The VF driver can forward any IPsec flags and such makes the function
+is not extendable and prone to backward/forward incompatibility.
 
-Fixes: e1eaea46bb40 ("tty: n_gsm line discipline")
-Cc: stable@vger.kernel.org
-Signed-off-by: Daniel Starke <daniel.starke@siemens.com>
-Link: https://lore.kernel.org/r/20220414094225.4527-12-daniel.starke@siemens.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+If new software runs on VF, it won't know that PF configured something
+completely different as it "knows" only XFRM_OFFLOAD_INBOUND flag.
+
+Fixes: eda0333ac293 ("ixgbe: add VF IPsec management")
+Reviewed-by: Raed Salem <raeds@nvidia.com>
+Signed-off-by: Leon Romanovsky <leonro@nvidia.com>
+Reviewed-by: Shannon Nelson <snelson@pensando.io>
+Tested-by: Konrad Jankowski <konrad0.jankowski@intel.com>
+Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
+Link: https://lore.kernel.org/r/20220427173152.443102-1-anthony.l.nguyen@intel.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/tty/n_gsm.c |   23 +++++++++++------------
- 1 file changed, 11 insertions(+), 12 deletions(-)
+ drivers/net/ethernet/intel/ixgbe/ixgbe_ipsec.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
---- a/drivers/tty/n_gsm.c
-+++ b/drivers/tty/n_gsm.c
-@@ -1297,11 +1297,12 @@ static void gsm_control_response(struct
- 
- static void gsm_control_transmit(struct gsm_mux *gsm, struct gsm_control *ctrl)
- {
--	struct gsm_msg *msg = gsm_data_alloc(gsm, 0, ctrl->len + 1, gsm->ftype);
-+	struct gsm_msg *msg = gsm_data_alloc(gsm, 0, ctrl->len + 2, gsm->ftype);
- 	if (msg == NULL)
- 		return;
--	msg->data[0] = (ctrl->cmd << 1) | 2 | EA;	/* command */
--	memcpy(msg->data + 1, ctrl->data, ctrl->len);
-+	msg->data[0] = (ctrl->cmd << 1) | CR | EA;	/* command */
-+	msg->data[1] = (ctrl->len << 1) | EA;
-+	memcpy(msg->data + 2, ctrl->data, ctrl->len);
- 	gsm_data_queue(gsm->dlci[0], msg);
- }
- 
-@@ -2882,19 +2883,17 @@ static struct tty_ldisc_ops tty_ldisc_pa
- 
- static int gsmtty_modem_update(struct gsm_dlci *dlci, u8 brk)
- {
--	u8 modembits[5];
-+	u8 modembits[3];
- 	struct gsm_control *ctrl;
- 	int len = 2;
- 
--	if (brk)
-+	modembits[0] = (dlci->addr << 2) | 2 | EA;  /* DLCI, Valid, EA */
-+	modembits[1] = (gsm_encode_modem(dlci) << 1) | EA;
-+	if (brk) {
-+		modembits[2] = (brk << 4) | 2 | EA; /* Length, Break, EA */
- 		len++;
--
--	modembits[0] = len << 1 | EA;		/* Data bytes */
--	modembits[1] = dlci->addr << 2 | 3;	/* DLCI, EA, 1 */
--	modembits[2] = gsm_encode_modem(dlci) << 1 | EA;
--	if (brk)
--		modembits[3] = brk << 4 | 2 | EA;	/* Valid, EA */
--	ctrl = gsm_control_send(dlci->gsm, CMD_MSC, modembits, len + 1);
-+	}
-+	ctrl = gsm_control_send(dlci->gsm, CMD_MSC, modembits, len);
- 	if (ctrl == NULL)
- 		return -ENOMEM;
- 	return gsm_control_wait(dlci->gsm, ctrl);
+diff --git a/drivers/net/ethernet/intel/ixgbe/ixgbe_ipsec.c b/drivers/net/ethernet/intel/ixgbe/ixgbe_ipsec.c
+index e596e1a9fc75..69d11ff7677d 100644
+--- a/drivers/net/ethernet/intel/ixgbe/ixgbe_ipsec.c
++++ b/drivers/net/ethernet/intel/ixgbe/ixgbe_ipsec.c
+@@ -903,7 +903,8 @@ int ixgbe_ipsec_vf_add_sa(struct ixgbe_adapter *adapter, u32 *msgbuf, u32 vf)
+ 	/* Tx IPsec offload doesn't seem to work on this
+ 	 * device, so block these requests for now.
+ 	 */
+-	if (!(sam->flags & XFRM_OFFLOAD_INBOUND)) {
++	sam->flags = sam->flags & ~XFRM_OFFLOAD_IPV6;
++	if (sam->flags != XFRM_OFFLOAD_INBOUND) {
+ 		err = -EOPNOTSUPP;
+ 		goto err_out;
+ 	}
+-- 
+2.35.1
+
 
 

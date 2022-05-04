@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1AA351A997
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:18:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0951851A6EF
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 18:58:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356629AbiEDRSW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 13:18:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55354 "EHLO
+        id S1355362AbiEDQ7z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 12:59:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356099AbiEDREx (ORCPT
+        with ESMTP id S1354378AbiEDQyT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 13:04:53 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34B7E50455;
-        Wed,  4 May 2022 09:53:49 -0700 (PDT)
+        Wed, 4 May 2022 12:54:19 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B403C48E65;
+        Wed,  4 May 2022 09:49:25 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C5679B8279F;
-        Wed,  4 May 2022 16:53:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78E1FC385A5;
-        Wed,  4 May 2022 16:53:47 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 23088B82554;
+        Wed,  4 May 2022 16:49:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97C74C385A4;
+        Wed,  4 May 2022 16:49:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651683227;
-        bh=IiuLVqn+41hK/TvtV51P7ny7tLaJWsoNCR7nCU1SY98=;
+        s=korg; t=1651682962;
+        bh=7UGrPbkL3mYLsjzscYcZE/zfktti2BswDX5yf8bg4RM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KukplC2U0TZ6FMtV794VfOiEzd24mYzXeww5Q/J43MsDrY29RDxevypEHk3Nujlct
-         njDZF0qq3t7U0sQuPWfa/Jgh25c695dXl92GtHeD0YoFJPt88hfG0K+4zyaXC7lFOG
-         zyQvRT+JVTNOK0806JdvnsaLNXJbKsP1R0winnUk=
+        b=2MJMpZ+JP8qk6wRFR4KHBJRMtSdLl4LUHagS+EX42joG0SoFGkG7MjFUfl51YX7gO
+         KsRlo9cwm29Ne0Oc2DZCs2KPhpKWO7cN3DaIjuKi4irjJu3Ngj00tElDIe5xJHkeRY
+         J6qDUDLaWkOX+w+vkXcOWG57o5iBOZMX7QDFyIyU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Xiaobing Luo <luoxiaobing0926@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
+        stable@vger.kernel.org, Maxim Mikityanskiy <maximmi@nvidia.com>,
+        Tariq Toukan <tariqt@nvidia.com>,
+        Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 092/177] cpufreq: fix memory leak in sun50i_cpufreq_nvmem_probe
+Subject: [PATCH 5.4 64/84] tls: Skip tls_append_frag on zero copy size
 Date:   Wed,  4 May 2022 18:44:45 +0200
-Message-Id: <20220504153101.347699471@linuxfoundation.org>
+Message-Id: <20220504152932.352464759@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220504153053.873100034@linuxfoundation.org>
-References: <20220504153053.873100034@linuxfoundation.org>
+In-Reply-To: <20220504152927.744120418@linuxfoundation.org>
+References: <20220504152927.744120418@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,62 +56,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xiaobing Luo <luoxiaobing0926@gmail.com>
+From: Maxim Mikityanskiy <maximmi@nvidia.com>
 
-[ Upstream commit 1aa24a8f3b5133dae4bc1e57427e345445f3e902 ]
+[ Upstream commit a0df71948e9548de819a6f1da68f5f1742258a52 ]
 
---------------------------------------------
-unreferenced object 0xffff000010742a00 (size 128):
-  comm "swapper/0", pid 1, jiffies 4294902015 (age 1187.652s)
-  hex dump (first 32 bytes):
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<00000000b4dfebaa>] __kmalloc+0x338/0x474
-    [<00000000d6e716db>] sun50i_cpufreq_nvmem_probe+0xc4/0x36c
-    [<000000007d6082a0>] platform_probe+0x98/0x11c
-    [<00000000c990f549>] really_probe+0x234/0x5a0
-    [<000000002d9fecc6>] __driver_probe_device+0x194/0x224
-    [<00000000cf0b94fa>] driver_probe_device+0x64/0x13c
-    [<00000000f238e4cf>] __device_attach_driver+0xf8/0x180
-    [<000000006720e418>] bus_for_each_drv+0xf8/0x160
-    [<00000000df4f14f6>] __device_attach+0x174/0x29c
-    [<00000000782002fb>] device_initial_probe+0x20/0x30
-    [<00000000c2681b06>] bus_probe_device+0xfc/0x110
-    [<00000000964cf3bd>] device_add+0x5f0/0xcd0
-    [<000000004b9264e3>] platform_device_add+0x198/0x390
-    [<00000000fa82a9d0>] platform_device_register_full+0x178/0x210
-    [<000000009a5daf13>] sun50i_cpufreq_init+0xf8/0x168
-    [<000000000377cc7c>] do_one_initcall+0xe4/0x570
---------------------------------------------
+Calling tls_append_frag when max_open_record_len == record->len might
+add an empty fragment to the TLS record if the call happens to be on the
+page boundary. Normally tls_append_frag coalesces the zero-sized
+fragment to the previous one, but not if it's on page boundary.
 
-if sun50i_cpufreq_get_efuse failed, then opp_tables leak.
+If a resync happens then, the mlx5 driver posts dump WQEs in
+tx_post_resync_dump, and the empty fragment may become a data segment
+with byte_count == 0, which will confuse the NIC and lead to a CQE
+error.
 
-Fixes: f328584f7bff ("cpufreq: Add sun50i nvmem based CPU scaling driver")
-Signed-off-by: Xiaobing Luo <luoxiaobing0926@gmail.com>
-Reviewed-by: Samuel Holland <samuel@sholland.org>
-Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+This commit fixes the described issue by skipping tls_append_frag on
+zero size to avoid adding empty fragments. The fix is not in the driver,
+because an empty fragment is hardly the desired behavior.
+
+Fixes: e8f69799810c ("net/tls: Add generic NIC offload infrastructure")
+Signed-off-by: Maxim Mikityanskiy <maximmi@nvidia.com>
+Reviewed-by: Tariq Toukan <tariqt@nvidia.com>
+Link: https://lore.kernel.org/r/20220426154949.159055-1-maximmi@nvidia.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/cpufreq/sun50i-cpufreq-nvmem.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ net/tls/tls_device.c | 12 +++++++-----
+ 1 file changed, 7 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/cpufreq/sun50i-cpufreq-nvmem.c b/drivers/cpufreq/sun50i-cpufreq-nvmem.c
-index 2deed8d8773f..75e1bf3a08f7 100644
---- a/drivers/cpufreq/sun50i-cpufreq-nvmem.c
-+++ b/drivers/cpufreq/sun50i-cpufreq-nvmem.c
-@@ -98,8 +98,10 @@ static int sun50i_cpufreq_nvmem_probe(struct platform_device *pdev)
- 		return -ENOMEM;
+diff --git a/net/tls/tls_device.c b/net/tls/tls_device.c
+index 0f034c3bc37d..abb93f7343c5 100644
+--- a/net/tls/tls_device.c
++++ b/net/tls/tls_device.c
+@@ -470,11 +470,13 @@ static int tls_push_data(struct sock *sk,
+ 		copy = min_t(size_t, size, (pfrag->size - pfrag->offset));
+ 		copy = min_t(size_t, copy, (max_open_record_len - record->len));
  
- 	ret = sun50i_cpufreq_get_efuse(&speed);
--	if (ret)
-+	if (ret) {
-+		kfree(opp_tables);
- 		return ret;
-+	}
+-		rc = tls_device_copy_data(page_address(pfrag->page) +
+-					  pfrag->offset, copy, msg_iter);
+-		if (rc)
+-			goto handle_error;
+-		tls_append_frag(record, pfrag, copy);
++		if (copy) {
++			rc = tls_device_copy_data(page_address(pfrag->page) +
++						  pfrag->offset, copy, msg_iter);
++			if (rc)
++				goto handle_error;
++			tls_append_frag(record, pfrag, copy);
++		}
  
- 	snprintf(name, MAX_NAME_LEN, "speed%d", speed);
- 
+ 		size -= copy;
+ 		if (!size) {
 -- 
 2.35.1
 

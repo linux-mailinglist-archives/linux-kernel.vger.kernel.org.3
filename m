@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6996E51AB0C
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:40:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DAB4351A99D
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:18:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238449AbiEDRiU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 13:38:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39888 "EHLO
+        id S1356654AbiEDRSa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 13:18:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356855AbiEDRJq (ORCPT
+        with ESMTP id S1356098AbiEDREx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 13:09:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E34AA41325;
-        Wed,  4 May 2022 09:56:01 -0700 (PDT)
+        Wed, 4 May 2022 13:04:53 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25B855045B;
+        Wed,  4 May 2022 09:53:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C491A61851;
-        Wed,  4 May 2022 16:56:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C95AC385A5;
-        Wed,  4 May 2022 16:56:01 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C13CFB82552;
+        Wed,  4 May 2022 16:53:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F751C385AA;
+        Wed,  4 May 2022 16:53:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651683361;
-        bh=+J6mkW7g7FZT8T1bJ9fP3KdetTDCgArgqcBdHrc4ShY=;
+        s=korg; t=1651683228;
+        bh=A2o3xRMLahnM5/Rwk8Z3lvIF60qHPVcFm3ug6Q4zMXA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UAucvXpYbpmvldG4iJ0xOw/Z3wwLfeQgKaqJB/fFYRENh88UATYFpRm33KNZDKrNN
-         JMUOTcZCnTZd2h+tRRzu+Uj6GyNb88iKN1ZFvY6tyjG4wvas07Ms/a5O0w0RS1amRv
-         bEuxTa3BlhZm6MouXBNpNWPHjIvKTd4CI0kkLZpk=
+        b=iG5IiGhbEsR1YbvINW8cBXVJvK1baSIxct7c96D5HW9M8nQIYammYdZQbBFOeF0/4
+         YB06t7N3RfvCMv9cktvfwwacueW1gubRxCkXDYpBWNqsqPjlgJRAaIJ5dVgqFn0IzK
+         tZ1rGMlxZ9CKAZ1j+e1G1Cc49KURMr2exXA2YLbk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Mikulas Patocka <mpatocka@redhat.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: [PATCH 5.17 048/225] hex2bin: fix access beyond string end
+        stable@vger.kernel.org, Jian Shen <shenjian15@huawei.com>,
+        Guangbin Huang <huangguangbin2@huawei.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 093/177] net: hns3: clear inited state and stop client after failed to register netdev
 Date:   Wed,  4 May 2022 18:44:46 +0200
-Message-Id: <20220504153114.387555140@linuxfoundation.org>
+Message-Id: <20220504153101.428868255@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220504153110.096069935@linuxfoundation.org>
-References: <20220504153110.096069935@linuxfoundation.org>
+In-Reply-To: <20220504153053.873100034@linuxfoundation.org>
+References: <20220504153053.873100034@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,48 +56,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mikulas Patocka <mpatocka@redhat.com>
+From: Jian Shen <shenjian15@huawei.com>
 
-commit e4d8a29997731b3bb14059024b24df9f784288d0 upstream.
+[ Upstream commit e98365afc1e94ea1609268866a44112b3572c58b ]
 
-If we pass too short string to "hex2bin" (and the string size without
-the terminating NUL character is even), "hex2bin" reads one byte after
-the terminating NUL character.  This patch fixes it.
+If failed to register netdev, it needs to clear INITED state and stop
+client in case of cause problem when concurrency with uninitialized
+process of driver.
 
-Note that hex_to_bin returns -1 on error and hex2bin return -EINVAL on
-error - so we can't just return the variable "hi" or "lo" on error.
-This inconsistency may be fixed in the next merge window, but for the
-purpose of fixing this bug, we just preserve the existing behavior and
-return -1 and -EINVAL.
-
-Signed-off-by: Mikulas Patocka <mpatocka@redhat.com>
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-Fixes: b78049831ffe ("lib: add error checking to hex2bin")
-Cc: stable@vger.kernel.org
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: a289a7e5c1d4 ("net: hns3: put off calling register_netdev() until client initialize complete")
+Signed-off-by: Jian Shen <shenjian15@huawei.com>
+Signed-off-by: Guangbin Huang <huangguangbin2@huawei.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- lib/hexdump.c |    9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+ drivers/net/ethernet/hisilicon/hns3/hns3_enet.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
---- a/lib/hexdump.c
-+++ b/lib/hexdump.c
-@@ -63,10 +63,13 @@ EXPORT_SYMBOL(hex_to_bin);
- int hex2bin(u8 *dst, const char *src, size_t count)
+diff --git a/drivers/net/ethernet/hisilicon/hns3/hns3_enet.c b/drivers/net/ethernet/hisilicon/hns3/hns3_enet.c
+index 16cbd146ad06..818a028703c6 100644
+--- a/drivers/net/ethernet/hisilicon/hns3/hns3_enet.c
++++ b/drivers/net/ethernet/hisilicon/hns3/hns3_enet.c
+@@ -5092,6 +5092,13 @@ static void hns3_state_init(struct hnae3_handle *handle)
+ 		set_bit(HNS3_NIC_STATE_RXD_ADV_LAYOUT_ENABLE, &priv->state);
+ }
+ 
++static void hns3_state_uninit(struct hnae3_handle *handle)
++{
++	struct hns3_nic_priv *priv  = handle->priv;
++
++	clear_bit(HNS3_NIC_STATE_INITED, &priv->state);
++}
++
+ static int hns3_client_init(struct hnae3_handle *handle)
  {
- 	while (count--) {
--		int hi = hex_to_bin(*src++);
--		int lo = hex_to_bin(*src++);
-+		int hi, lo;
+ 	struct pci_dev *pdev = handle->pdev;
+@@ -5209,7 +5216,9 @@ static int hns3_client_init(struct hnae3_handle *handle)
+ 	return ret;
  
--		if ((hi < 0) || (lo < 0))
-+		hi = hex_to_bin(*src++);
-+		if (unlikely(hi < 0))
-+			return -EINVAL;
-+		lo = hex_to_bin(*src++);
-+		if (unlikely(lo < 0))
- 			return -EINVAL;
- 
- 		*dst++ = (hi << 4) | lo;
+ out_reg_netdev_fail:
++	hns3_state_uninit(handle);
+ 	hns3_dbg_uninit(handle);
++	hns3_client_stop(handle);
+ out_client_start:
+ 	hns3_free_rx_cpu_rmap(netdev);
+ 	hns3_nic_uninit_irq(priv);
+-- 
+2.35.1
+
 
 

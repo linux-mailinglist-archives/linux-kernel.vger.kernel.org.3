@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35691519F93
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 14:33:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F94A519F94
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 14:33:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349737AbiEDMhB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 08:37:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48936 "EHLO
+        id S1349686AbiEDMhI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 08:37:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349678AbiEDMgl (ORCPT
+        with ESMTP id S1349723AbiEDMgr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 08:36:41 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A38A326E2;
-        Wed,  4 May 2022 05:33:05 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id l18so2584950ejc.7;
-        Wed, 04 May 2022 05:33:05 -0700 (PDT)
+        Wed, 4 May 2022 08:36:47 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA5A3340C9;
+        Wed,  4 May 2022 05:33:10 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id kq17so2601715ejb.4;
+        Wed, 04 May 2022 05:33:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=c4IPakMiBG8qMu0eZo70xqgp2PUHni7/ktt8LMUY1Go=;
-        b=m2F3pyQcK4IPVHZeQQykxgWkJZ1MtrhVtyc+P5bf0ZH9Jgjrd9slbkr6T10zzXsT+O
-         SKHQFHHdY5qa4+N6+extiji2ToJUpU1QA7nhtiokTSthTdyYP9uF5yhEBM0crd8gZ+dm
-         rT/ivTV8NWMtSG8uX/h7nhs7t5a3n3Ocz+G+nyiJl350Oxj7dTJgCkCqKmvRnn3E2fR8
-         tzepYb9AVE4tY1GqMS9N3OXMIeHUJkUVJRwihnqxrpyP9eI4Vw2JoS6zCxZik3rzoOtG
-         8X7VyjxXcZxIDjOIiqt69uuL8B3dcep7tExY6hoe+MUvVqvC1Dniu2r8BN23G9TUleMQ
-         0mUg==
+        bh=bqWHfh4DenBhYZWygCRQbAilVjZPwr6A8uSbGQA4n4g=;
+        b=EZzaLJio+J3mjbbdhdVzx9o+zyM0yUBmXhCHYMUe6sKGiZiRW+p2IPAa4xWiey50Yj
+         CZA/rkUSAR3XnRJmilJxvBcro6ohrkcqM5V31qy35yeG1jUaNWkfH3OZEzB5aE22Fqvm
+         qK0drlQdJC5dK0OpNtbGrjEnX+WD/M1fLvHKcgQ32xvorx4antbKnPiXByg/y2fZhJwg
+         StOIjjopQ9QfPL0WfTtMkA/lnTHUSomeZcwtAvqr3gLaEWjwG/BRJQWAQEjCE4/V1kEm
+         KmK5I/BRyRr0KEATiU6yNSY1N+AP74b1yWLPzlnzdEQ4WuvPb+IHNojcmh49oGarhL+F
+         r6Ag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=c4IPakMiBG8qMu0eZo70xqgp2PUHni7/ktt8LMUY1Go=;
-        b=KEcLiFryISsinVwZpclHSXdQDz2utN1SpDpogTWpjUE4KFybeQudC4TMspEO2FvPFK
-         ZdiYhFDu6cCnvtUBuRgvE7RSZHXXFkpEIZdBBp8jRZH7iZM/cW/9qa11DiTvJnIjuEGD
-         xEB/dl95RLrq+OEVL7pHQQUMpdPpIqQT65czbKqVGYfmFauiuLnowyZ5eHuXzGZrYz7l
-         9Dhe280y/ykZlOdS8oJbaS9Ln5s10abvi+NLKDCCOGjMdImi4bUnNj7wzokrLTLPY10J
-         LpiImKhZm++3H+0tHcNRytUMRMfjSENa+wnIuVgirdct2NRF+lB3tbU7UHHx1mqPXQT+
-         VbgQ==
-X-Gm-Message-State: AOAM531ErurJ/TbYGHcUZZhqF3YBxHuqJF+hCVIUGHxDl30V0SNhuud5
-        Hxh7V107OHUld7QA6OkAarR5e2uYEjc=
-X-Google-Smtp-Source: ABdhPJzjBn9KrdvJXPPoHERPbtQfki+JAaYMq/RQlJZ15Om95MsCxhMPcv/ncYAS2F1IyQC4vW+3dQ==
-X-Received: by 2002:a17:906:a2c2:b0:6e7:efc2:17f2 with SMTP id by2-20020a170906a2c200b006e7efc217f2mr19194685ejb.542.1651667583997;
-        Wed, 04 May 2022 05:33:03 -0700 (PDT)
+        bh=bqWHfh4DenBhYZWygCRQbAilVjZPwr6A8uSbGQA4n4g=;
+        b=8BovGrIJYdrHifARh9rd1e7L5WBE8DUDkIHQuvs97ZfLOsMAO4CIMKNkoJxy4TkNwu
+         PCI8ND0kTyWzTR5FlXMmJDGaDy8L2/b8THbydCz+1faE/vqR+cy2ou69B1Ulllzf3Kdf
+         1p8IesUDnmqoOEm7bfkIgls4VZGqUlZp93MPUmpe7b4ErV8hFpuPYxqO39Ag4Gk8CmWZ
+         vUZfWEHcfIxcuEtXPHvLUQE719G8e2qjH3SapNmzt8M+myuekOAMQPKEyatszGHIcH2d
+         /reQ9V7vnkVGKqZ1PkF5/wJODmQg/hRhNeTV2X1/4Yx0OdxzYJ9bVXRk4BuefnEKTE6Q
+         wnsg==
+X-Gm-Message-State: AOAM530GT0wh/7x+DZA6/RvJPBhVSCuKVXa7EkFPO0FNnJ4hWwFkbYEH
+        DeAqPSDLM6qKIAVBsg7oB/A=
+X-Google-Smtp-Source: ABdhPJxbSCmy6aDiEsDO0UJSjgrOhwaYA7A0tZ1JNTIpOydZSEMbnGEGdNrmCdIAjrEcL2PW8p2vaQ==
+X-Received: by 2002:a17:906:2ac9:b0:6ce:dc0f:9139 with SMTP id m9-20020a1709062ac900b006cedc0f9139mr19979129eje.206.1651667589400;
+        Wed, 04 May 2022 05:33:09 -0700 (PDT)
 Received: from localhost.localdomain (185-177-124-12.hosted-by-worldstream.net. [185.177.124.12])
-        by smtp.gmail.com with ESMTPSA id ig1-20020a1709072e0100b006f3ef214e7asm5688693ejc.224.2022.05.04.05.32.59
+        by smtp.gmail.com with ESMTPSA id ig1-20020a1709072e0100b006f3ef214e7asm5688693ejc.224.2022.05.04.05.33.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 May 2022 05:33:03 -0700 (PDT)
+        Wed, 04 May 2022 05:33:09 -0700 (PDT)
 From:   Yassine Oudjana <yassine.oudjana@gmail.com>
 X-Google-Original-From: Yassine Oudjana <y.oudjana@protonmail.com>
 To:     Matthias Brugger <matthias.bgg@gmail.com>,
@@ -71,9 +71,9 @@ Cc:     Yassine Oudjana <y.oudjana@protonmail.com>,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-clk@vger.kernel.org, linux-mediatek@lists.infradead.org,
         linux-arm-kernel@lists.infradead.org
-Subject: [PATCH 10/13] clk: mediatek: reset: Return mtk_reset pointer on register
-Date:   Wed,  4 May 2022 16:25:59 +0400
-Message-Id: <20220504122601.335495-11-y.oudjana@protonmail.com>
+Subject: [PATCH 11/13] clk: mediatek: reset: Implement mtk_unregister_reset_controller() API
+Date:   Wed,  4 May 2022 16:26:00 +0400
+Message-Id: <20220504122601.335495-12-y.oudjana@protonmail.com>
 X-Mailer: git-send-email 2.36.0
 In-Reply-To: <20220504122601.335495-1-y.oudjana@protonmail.com>
 References: <20220504122601.335495-1-y.oudjana@protonmail.com>
@@ -91,96 +91,45 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Yassine Oudjana <y.oudjana@protonmail.com>
 
-Return a struct mtk_reset* when registering a reset controller
-in preparation for adding an unregister helper that will take
-it as an argument.
+Add a function to unregister a reset controller previously
+registered with mtk_register_reset_controller() or
+mtk_register_reset_controller_set_clr(), and do the necessary cleanup.
 
 Signed-off-by: Yassine Oudjana <y.oudjana@protonmail.com>
 ---
- drivers/clk/mediatek/clk-mtk.h |  6 +++---
- drivers/clk/mediatek/reset.c   | 22 ++++++++++++----------
- 2 files changed, 15 insertions(+), 13 deletions(-)
+ drivers/clk/mediatek/clk-mtk.h | 2 ++
+ drivers/clk/mediatek/reset.c   | 7 +++++++
+ 2 files changed, 9 insertions(+)
 
 diff --git a/drivers/clk/mediatek/clk-mtk.h b/drivers/clk/mediatek/clk-mtk.h
-index bf6565aa7319..317905ec4a36 100644
+index 317905ec4a36..1a0462d9c20b 100644
 --- a/drivers/clk/mediatek/clk-mtk.h
 +++ b/drivers/clk/mediatek/clk-mtk.h
-@@ -190,10 +190,10 @@ void mtk_free_clk_data(struct clk_onecell_data *clk_data);
- struct clk *mtk_clk_register_ref2usb_tx(const char *name,
- 			const char *parent_name, void __iomem *reg);
- 
--void mtk_register_reset_controller(struct device_node *np,
--			unsigned int num_regs, int regofs);
-+struct mtk_reset *mtk_register_reset_controller(struct device_node *np,
-+	unsigned int num_regs, int regofs);
- 
--void mtk_register_reset_controller_set_clr(struct device_node *np,
-+struct mtk_reset *mtk_register_reset_controller_set_clr(struct device_node *np,
+@@ -196,6 +196,8 @@ struct mtk_reset *mtk_register_reset_controller(struct device_node *np,
+ struct mtk_reset *mtk_register_reset_controller_set_clr(struct device_node *np,
  	unsigned int num_regs, int regofs);
  
++void mtk_unregister_reset_controller(struct mtk_reset *data);
++
  struct mtk_clk_desc {
+ 	const struct mtk_gate *clks;
+ 	size_t num_clks;
 diff --git a/drivers/clk/mediatek/reset.c b/drivers/clk/mediatek/reset.c
-index 6c2effe6afef..f853bc8a7092 100644
+index f853bc8a7092..7201e1f5e07b 100644
 --- a/drivers/clk/mediatek/reset.c
 +++ b/drivers/clk/mediatek/reset.c
-@@ -90,9 +90,9 @@ static const struct reset_control_ops mtk_reset_ops_set_clr = {
- 	.reset = mtk_reset_set_clr,
- };
- 
--static void mtk_register_reset_controller_common(struct device_node *np,
--			unsigned int num_regs, int regofs,
--			const struct reset_control_ops *reset_ops)
-+static struct mtk_reset *mtk_register_reset_controller_common(
-+	struct device_node *np,	unsigned int num_regs, int regofs,
-+	const struct reset_control_ops *reset_ops)
- {
- 	struct mtk_reset *data;
- 	int ret;
-@@ -101,12 +101,12 @@ static void mtk_register_reset_controller_common(struct device_node *np,
- 	regmap = device_node_to_regmap(np);
- 	if (IS_ERR(regmap)) {
- 		pr_err("Cannot find regmap for %pOF: %pe\n", np, regmap);
--		return;
-+		return (struct mtk_reset *)regmap;
- 	}
- 
- 	data = kzalloc(sizeof(*data), GFP_KERNEL);
- 	if (!data)
--		return;
-+		return ERR_PTR(-ENOMEM);
- 
- 	data->regmap = regmap;
- 	data->regofs = regofs;
-@@ -119,22 +119,24 @@ static void mtk_register_reset_controller_common(struct device_node *np,
- 	if (ret) {
- 		pr_err("could not register reset controller: %d\n", ret);
- 		kfree(data);
--		return;
-+		return ERR_PTR(ret);
- 	}
-+
-+	return data;
- }
- 
--void mtk_register_reset_controller(struct device_node *np,
-+struct mtk_reset *mtk_register_reset_controller(struct device_node *np,
- 	unsigned int num_regs, int regofs)
- {
--	mtk_register_reset_controller_common(np, num_regs, regofs,
-+	return mtk_register_reset_controller_common(np, num_regs, regofs,
- 		&mtk_reset_ops);
- }
- EXPORT_SYMBOL_GPL(mtk_register_reset_controller);
- 
--void mtk_register_reset_controller_set_clr(struct device_node *np,
-+struct mtk_reset *mtk_register_reset_controller_set_clr(struct device_node *np,
- 	unsigned int num_regs, int regofs)
- {
--	mtk_register_reset_controller_common(np, num_regs, regofs,
-+	return mtk_register_reset_controller_common(np, num_regs, regofs,
- 		&mtk_reset_ops_set_clr);
+@@ -141,4 +141,11 @@ struct mtk_reset *mtk_register_reset_controller_set_clr(struct device_node *np,
  }
  EXPORT_SYMBOL_GPL(mtk_register_reset_controller_set_clr);
+ 
++void mtk_unregister_reset_controller(struct mtk_reset *data)
++{
++	reset_controller_unregister(&data->rcdev);
++	kfree(data);
++}
++EXPORT_SYMBOL_GPL(mtk_unregister_reset_controller);
++
+ MODULE_LICENSE("GPL");
 -- 
 2.36.0
 

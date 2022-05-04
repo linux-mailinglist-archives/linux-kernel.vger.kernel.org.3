@@ -2,56 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5BDA51A37D
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 17:15:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A6BC51A380
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 17:15:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352068AbiEDPTP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 11:19:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40854 "EHLO
+        id S1352084AbiEDPTW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 11:19:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349604AbiEDPTM (ORCPT
+        with ESMTP id S1351868AbiEDPTM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 4 May 2022 11:19:12 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A2B219C0E
-        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 08:15:35 -0700 (PDT)
-Date:   Wed, 04 May 2022 15:15:33 -0000
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6B3E2228E
+        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 08:15:36 -0700 (PDT)
+Date:   Wed, 04 May 2022 15:15:34 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1651677334;
+        s=2020; t=1651677335;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=fZqIEsKT9Zu6NO/pBulsbc3rEN8EU/Ulaw6RKaaHptA=;
-        b=gWtI66eCe2vwHYggtSql36hPFeHO7cQDZs4QWfkTSgWgzqgAe0qWxHZjivxbrE8WwGZ4+k
-        EZ9HDnQ4oyAtCVQ8mMcfUVCkUxfYaraQ4UsmszwV2XYVBq1rFua+QqRSC5sD16dZlyxYjQ
-        mQWyXYockSkXVIBznt76X3vF0aH7nxPlFjTjw77qNYOMJEsQWZsvFz+qWFavOthY8Yd6uh
-        TNVA5pycWRMbcBu6tHXEPrySloeQO99e6uxn17O8CV886S6QPv8qjNLQ1uaK85hBnFCYD0
-        wTINhApHCJX1KtW5eEbQiHILeNdFZyZZfBpwJ5NBTfyUql6TdQY0g6qkil51HA==
+        bh=pzyZzBGugltXzd+rtqnKrQcgpmKWUQxjUBUOBkblgtA=;
+        b=H1+O79jPDLAS8HgqqLmOutoPUgkQGPc9jvw0AjIzO1XKoZj/NZzjsYxFatYunPcEJA9LzF
+        al7U6o+zq1anAENGWb8FqKR/lAAylmHtaDQtKC2GLICVHsoRCw20seuTuzbJshXj6vAu1P
+        veH2aeGdhKNFX3rglaoepmWLFOWAAJS59UQXDN6e/tTSjVJPGPy0rnPYDRjtzBjlsJ843d
+        GsWBzAR6Ek5i5mEJLnTZeh0TKgHfedo3hQbYA4ILBrbVrZiFf18qpOazMEktfWHIdJ+3Ey
+        Lx2ttVGYfGiuuwjKnzOPz7Mk+RfahBntjgVEmEGWvjbN4F/mcpo7c3vB0meqCA==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1651677334;
+        s=2020e; t=1651677335;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=fZqIEsKT9Zu6NO/pBulsbc3rEN8EU/Ulaw6RKaaHptA=;
-        b=auiYGtS6t9heHVHy5HEcvoOHalQWSOkAVdNHoq5JEiTWqr1c/bq6h5M6FQci9oat27QkI5
-        Or3Yi05+vCiwJNAQ==
-From:   "irqchip-bot for Robin Murphy" <tip-bot2@linutronix.de>
+        bh=pzyZzBGugltXzd+rtqnKrQcgpmKWUQxjUBUOBkblgtA=;
+        b=RDjmAQkvFrAk1JCb2nEYOUSn8mzFgmbEnZZ6kfM9si5mxXC8SYvwZx7Romux00wZEouseS
+        zErD4jeC6gdwiVAQ==
+From:   "irqchip-bot for Marc Zyngier" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-kernel@vger.kernel.org
-Subject: [irqchip: irq/irqchip-next] irqchip/gic-v3: Claim iomem resources
-Cc:     Robin Murphy <robin.murphy@arm.com>, Marc Zyngier <maz@kernel.org>,
+Subject: [irqchip: irq/irqchip-next] dt-bindings: interrupt-controller:
+ arm,gic-v3: Make the v2 compat requirements explicit
+Cc:     Marc Zyngier <maz@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         tglx@linutronix.de
-In-Reply-To: =?utf-8?q?=3Cc534c2a458a3bf94ccdae8abc6edc3d45a689c30=2E16497?=
- =?utf-8?q?77295=2Egit=2Erobin=2Emurphy=40arm=2Ecom=3E?=
-References: =?utf-8?q?=3Cc534c2a458a3bf94ccdae8abc6edc3d45a689c30=2E164977?=
- =?utf-8?q?7295=2Egit=2Erobin=2Emurphy=40arm=2Ecom=3E?=
+In-Reply-To: <20220409101617.268796-1-maz@kernel.org>
+References: <20220409101617.268796-1-maz@kernel.org>
 MIME-Version: 1.0
-Message-ID: <165167733320.4207.764034784360525411.tip-bot2@tip-bot2>
+Message-ID: <165167733426.4207.15524217061479058702.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -68,86 +69,61 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the irq/irqchip-next branch of irqchip:
 
-Commit-ID:     2b2cd74a06c38cc26b2a17854f5e42f7270438eb
-Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms/2b2cd74a06c38cc26b2a17854f5e42f7270438eb
-Author:        Robin Murphy <robin.murphy@arm.com>
-AuthorDate:    Tue, 12 Apr 2022 16:28:15 +01:00
+Commit-ID:     4053b6b43fae126bea0654493fe512d364ee9fc1
+Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms/4053b6b43fae126bea0654493fe512d364ee9fc1
+Author:        Marc Zyngier <maz@kernel.org>
+AuthorDate:    Sat, 09 Apr 2022 11:16:17 +01:00
 Committer:     Marc Zyngier <maz@kernel.org>
-CommitterDate: Wed, 04 May 2022 15:46:03 +01:00
+CommitterDate: Wed, 04 May 2022 15:43:12 +01:00
 
-irqchip/gic-v3: Claim iomem resources
+dt-bindings: interrupt-controller: arm,gic-v3: Make the v2 compat requirements explicit
 
-As a simple quality-of-life tweak, claim our MMIO regions when mapping
-them, such that the GIC shows up in /proc/iomem. No effort is spent on
-trying to release them, since frankly if the GIC fails to probe then
-it's never getting a second try anyway.
+A common mistake when writing a device tree for a platform that is using
+GICv3 with ancient CPUs is to overlook the MMIO frames that implement
+the GICv2 compatibility feature, because this feature is implemented by
+the CPUs and not by the GIC itself.
 
-Signed-off-by: Robin Murphy <robin.murphy@arm.com>
+The compatibility feature itself is optional (all the modern
+implementations have dropped it), but is present in all the ARM Ltd
+implementations of the ARMv8.0 architecture (A3x, A53, A57, A72, A73),
+and many others from various implementers.
+
+Make it explicit that GICC, GICH and GICV are required for these CPUs.
+Also take this opportunity to update my email address, as people keep
+sending them to the wrong place...
+
 Signed-off-by: Marc Zyngier <maz@kernel.org>
-Link: https://lore.kernel.org/r/c534c2a458a3bf94ccdae8abc6edc3d45a689c30.1649777295.git.robin.murphy@arm.com
+Cc: Rob Herring <robh+dt@kernel.org>
+Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Link: https://lore.kernel.org/r/20220409101617.268796-1-maz@kernel.org
 ---
- drivers/irqchip/irq-gic-v3.c | 15 +++++++++------
- 1 file changed, 9 insertions(+), 6 deletions(-)
+ Documentation/devicetree/bindings/interrupt-controller/arm,gic-v3.yaml | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/irqchip/irq-gic-v3.c b/drivers/irqchip/irq-gic-v3.c
-index b802684..9d220c6 100644
---- a/drivers/irqchip/irq-gic-v3.c
-+++ b/drivers/irqchip/irq-gic-v3.c
-@@ -1990,10 +1990,10 @@ static int __init gic_of_init(struct device_node *node, struct device_node *pare
- 	u32 nr_redist_regions;
- 	int err, i;
+diff --git a/Documentation/devicetree/bindings/interrupt-controller/arm,gic-v3.yaml b/Documentation/devicetree/bindings/interrupt-controller/arm,gic-v3.yaml
+index b7197f7..3912a89 100644
+--- a/Documentation/devicetree/bindings/interrupt-controller/arm,gic-v3.yaml
++++ b/Documentation/devicetree/bindings/interrupt-controller/arm,gic-v3.yaml
+@@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ title: ARM Generic Interrupt Controller, version 3
  
--	dist_base = of_iomap(node, 0);
--	if (!dist_base) {
-+	dist_base = of_io_request_and_map(node, 0, "GICD");
-+	if (IS_ERR(dist_base)) {
- 		pr_err("%pOF: unable to map gic dist registers\n", node);
--		return -ENXIO;
-+		return PTR_ERR(dist_base);
- 	}
+ maintainers:
+-  - Marc Zyngier <marc.zyngier@arm.com>
++  - Marc Zyngier <maz@kernel.org>
  
- 	err = gic_validate_dist_version(dist_base);
-@@ -2017,8 +2017,8 @@ static int __init gic_of_init(struct device_node *node, struct device_node *pare
- 		int ret;
+ description: |
+   AArch64 SMP cores are often associated with a GICv3, providing Private
+@@ -78,7 +78,11 @@ properties:
+       - GIC Hypervisor interface (GICH)
+       - GIC Virtual CPU interface (GICV)
  
- 		ret = of_address_to_resource(node, 1 + i, &res);
--		rdist_regs[i].redist_base = of_iomap(node, 1 + i);
--		if (ret || !rdist_regs[i].redist_base) {
-+		rdist_regs[i].redist_base = of_io_request_and_map(node, 1 + i, "GICR");
-+		if (ret || IS_ERR(rdist_regs[i].redist_base)) {
- 			pr_err("%pOF: couldn't map region %d\n", node, i);
- 			err = -ENODEV;
- 			goto out_unmap_rdist;
-@@ -2044,7 +2044,7 @@ static int __init gic_of_init(struct device_node *node, struct device_node *pare
+-      GICC, GICH and GICV are optional.
++      GICC, GICH and GICV are optional, but must be described if the CPUs
++      support them. Examples of such CPUs are ARM's implementations of the
++      ARMv8.0 architecture such as Cortex-A32, A34, A35, A53, A57, A72 and
++      A73 (this list is not exhaustive).
++
+     minItems: 2
+     maxItems: 4096   # Should be enough?
  
- out_unmap_rdist:
- 	for (i = 0; i < nr_redist_regions; i++)
--		if (rdist_regs[i].redist_base)
-+		if (rdist_regs[i].redist_base && !IS_ERR(rdist_regs[i].redist_base))
- 			iounmap(rdist_regs[i].redist_base);
- 	kfree(rdist_regs);
- out_unmap_dist:
-@@ -2091,6 +2091,7 @@ gic_acpi_parse_madt_redist(union acpi_subtable_headers *header,
- 		pr_err("Couldn't map GICR region @%llx\n", redist->base_address);
- 		return -ENOMEM;
- 	}
-+	request_mem_region(redist->base_address, redist->length, "GICR");
- 
- 	gic_acpi_register_redist(redist->base_address, redist_base);
- 	return 0;
-@@ -2113,6 +2114,7 @@ gic_acpi_parse_madt_gicc(union acpi_subtable_headers *header,
- 	redist_base = ioremap(gicc->gicr_base_address, size);
- 	if (!redist_base)
- 		return -ENOMEM;
-+	request_mem_region(gicc->gicr_base_address, size, "GICR");
- 
- 	gic_acpi_register_redist(gicc->gicr_base_address, redist_base);
- 	return 0;
-@@ -2314,6 +2316,7 @@ gic_acpi_init(union acpi_subtable_headers *header, const unsigned long end)
- 		pr_err("Unable to map GICD registers\n");
- 		return -ENOMEM;
- 	}
-+	request_mem_region(dist->base_address, ACPI_GICV3_DIST_MEM_SIZE, "GICD");
- 
- 	err = gic_validate_dist_version(acpi_data.dist_base);
- 	if (err) {

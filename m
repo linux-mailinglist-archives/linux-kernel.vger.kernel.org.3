@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2742F51A94B
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:17:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B14F251A7B9
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:04:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358237AbiEDRPr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 13:15:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54974 "EHLO
+        id S1355202AbiEDRGK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 13:06:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355589AbiEDREb (ORCPT
+        with ESMTP id S1354956AbiEDQ7e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 13:04:31 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC4054EDFE;
-        Wed,  4 May 2022 09:53:08 -0700 (PDT)
+        Wed, 4 May 2022 12:59:34 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F92F48E65;
+        Wed,  4 May 2022 09:51:11 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7873861852;
-        Wed,  4 May 2022 16:53:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3652C385B1;
-        Wed,  4 May 2022 16:53:07 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A9830B827A0;
+        Wed,  4 May 2022 16:51:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D2CAC385A5;
+        Wed,  4 May 2022 16:51:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651683187;
-        bh=5GWk5saE8ROutlKatYR8WyVxS3TvtOnNOKqy6FRw5l8=;
+        s=korg; t=1651683068;
+        bh=NfrxoOtdQe79uQ08LcEZjboGA4HW467EvA84KGmxlpI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=h8BBGiN06BFMaoRbFE2hOK4IaU/RvgkeNFnD5VFHd0VFhtlmZ6N5iFKge2BTAX3RC
-         dSnKQB0M2Dg6a0DTI4PGulYHIrDk6/qXPaY1YCt6vVURaAeNGb5DANyzsf0Cfpe6bx
-         cAdklCP2VpNC8341v1xcYii9CnSwiwS/3HExMB7s=
+        b=mh0HRzPp5plVLgrTUdvpFakhf65AuzcMMDADqR+92Syyn4Zu+Eu2VxfqhACox4cet
+         xu0nB+uHamoY345ebQyChQOH+HVoTvj9UsOME3fwKiJfrECqgeiz1Tmy8zQIHq0A4q
+         mk+dOTvN8jVAUUKbyLP1dphdavCAnGcddzfk3Xjs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 052/177] xsk: Fix l2fwd for copy mode + busy poll combo
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        Vinod Koul <vkoul@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 053/129] phy: ti: Add missing pm_runtime_disable() in serdes_am654_probe
 Date:   Wed,  4 May 2022 18:44:05 +0200
-Message-Id: <20220504153057.659319163@linuxfoundation.org>
+Message-Id: <20220504153025.241669066@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220504153053.873100034@linuxfoundation.org>
-References: <20220504153053.873100034@linuxfoundation.org>
+In-Reply-To: <20220504153021.299025455@linuxfoundation.org>
+References: <20220504153021.299025455@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,53 +54,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-[ Upstream commit 8de8b71b787f38983d414d2dba169a3bfefa668a ]
+[ Upstream commit ce88613e5bd579478653a028291098143f2a5bdf ]
 
-While checking AF_XDP copy mode combined with busy poll, strange
-results were observed. rxdrop and txonly scenarios worked fine, but
-l2fwd broke immediately.
+The pm_runtime_enable() will increase power disable depth.
+If the probe fails, we should use pm_runtime_disable() to balance
+pm_runtime_enable().
+Add missing pm_runtime_disable() for serdes_am654_probe().
 
-After a deeper look, it turned out that for l2fwd, Tx side was exiting
-early due to xsk_no_wakeup() returning true and in the end
-xsk_generic_xmit() was never called. Note that AF_XDP Tx in copy mode
-is syscall steered, so the current behavior is broken.
-
-Txonly scenario only worked due to the fact that
-sk_mark_napi_id_once_xdp() was never called - since Rx side is not in
-the picture for this case and mentioned function is called in
-xsk_rcv_check(), sk::sk_napi_id was never set, which in turn meant that
-xsk_no_wakeup() was returning false (see the sk->sk_napi_id >=
-MIN_NAPI_ID check in there).
-
-To fix this, prefer busy poll in xsk_sendmsg() only when zero copy is
-enabled on a given AF_XDP socket. By doing so, busy poll in copy mode
-would not exit early on Tx side and eventually xsk_generic_xmit() will
-be called.
-
-Fixes: a0731952d9cd ("xsk: Add busy-poll support for {recv,send}msg()")
-Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Link: https://lore.kernel.org/bpf/20220406155804.434493-1-maciej.fijalkowski@intel.com
+Fixes: 71e2f5c5c224 ("phy: ti: Add a new SERDES driver for TI's AM654x SoC")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Link: https://lore.kernel.org/r/20220301025853.1911-1-linmq006@gmail.com
+Signed-off-by: Vinod Koul <vkoul@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/xdp/xsk.c | 2 +-
+ drivers/phy/ti/phy-am654-serdes.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
-index 426e287431d2..444ad0bc0908 100644
---- a/net/xdp/xsk.c
-+++ b/net/xdp/xsk.c
-@@ -655,7 +655,7 @@ static int __xsk_sendmsg(struct socket *sock, struct msghdr *m, size_t total_len
- 	if (sk_can_busy_loop(sk))
- 		sk_busy_loop(sk, 1); /* only support non-blocking sockets */
+diff --git a/drivers/phy/ti/phy-am654-serdes.c b/drivers/phy/ti/phy-am654-serdes.c
+index 2ff56ce77b30..21c0088f5ca9 100644
+--- a/drivers/phy/ti/phy-am654-serdes.c
++++ b/drivers/phy/ti/phy-am654-serdes.c
+@@ -838,7 +838,7 @@ static int serdes_am654_probe(struct platform_device *pdev)
  
--	if (xsk_no_wakeup(sk))
-+	if (xs->zc && xsk_no_wakeup(sk))
- 		return 0;
+ clk_err:
+ 	of_clk_del_provider(node);
+-
++	pm_runtime_disable(dev);
+ 	return ret;
+ }
  
- 	pool = xs->pool;
 -- 
 2.35.1
 

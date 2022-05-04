@@ -2,99 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 663F751ABDC
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:53:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40BB251ABEE
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:54:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350350AbiEDRzy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 13:55:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54852 "EHLO
+        id S231479AbiEDRzq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 13:55:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359534AbiEDRkI (ORCPT
+        with ESMTP id S1359713AbiEDRkP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 13:40:08 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C8081C92B;
-        Wed,  4 May 2022 10:05:52 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Wed, 4 May 2022 13:40:15 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CF4947558
+        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 10:06:52 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 20602210E5;
-        Wed,  4 May 2022 17:05:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1651683951; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=2SoIBM/nGSHi+WngO6YgR90ctoJWllnH/TF3i7GxVO8=;
-        b=p5zbZTkWhtPC3vy3viiBUzgbyqi/1aOv58+1cxw6mwolzGFfy/tpzq2731Bc/BMlt7ZxrT
-        1QKBkof3+l9oDOX/H6sBjXCZciMZUf+HD975co/WRx+iLleo17GGz+XE1dPBMBv07BSw6C
-        3Nsl5NOp+fGDKp6pZrxcHtkLUOz2+8w=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1651683951;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=2SoIBM/nGSHi+WngO6YgR90ctoJWllnH/TF3i7GxVO8=;
-        b=muWArSGJSIncH7RiBuU9uWp1WWtpL9L0sGY6fNwZwAwYLNrI06XVl/hunISR2toeTXkRHy
-        SFIFZilv5c/39PAw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id BB891131BD;
-        Wed,  4 May 2022 17:05:45 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id nh+DI2mycmIuWQAAMHmgww
-        (envelope-from <hare@suse.de>); Wed, 04 May 2022 17:05:45 +0000
-Message-ID: <e6f61c1d-ca8a-7570-a30d-c91f211d4593@suse.de>
-Date:   Wed, 4 May 2022 10:05:44 -0700
+        by ams.source.kernel.org (Postfix) with ESMTPS id 62488B827B3
+        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 17:06:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B65FFC385B4;
+        Wed,  4 May 2022 17:06:48 +0000 (UTC)
+Date:   Wed, 4 May 2022 13:06:42 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>,
+        "llvm@lists.linux.dev" <llvm@lists.linux.dev>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
+Subject: Re: [PATCH 2/2] recordmcount: Handle sections with no non-weak
+ symbols
+Message-ID: <20220504130642.7b9a301d@rorschach.local.home>
+In-Reply-To: <72d17597-874c-f3a3-9398-0cc944350c5b@csgroup.eu>
+References: <cover.1651047542.git.naveen.n.rao@linux.vnet.ibm.com>
+        <1b9566f0e7185fb8fd8ef2535add7a081501ccc8.1651047542.git.naveen.n.rao@linux.vnet.ibm.com>
+        <20220427095415.594e5120@gandalf.local.home>
+        <1651129169.fpixr00hgx.naveen@linux.ibm.com>
+        <20220428100602.7b215e52@gandalf.local.home>
+        <819939e3-285b-2a65-9c4c-85640d2a3a02@csgroup.eu>
+        <20220502195251.5d862365@rorschach.local.home>
+        <6d5ff91a-560e-56ea-0047-175f712872c2@csgroup.eu>
+        <20220503122533.6033647e@rorschach.local.home>
+        <72d17597-874c-f3a3-9398-0cc944350c5b@csgroup.eu>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH 06/16] nvmet: use blk_queue_zone_no()
-Content-Language: en-US
-References: <20220427160255.300418-1-p.raghav@samsung.com>
- <CGME20220427160302eucas1p1aaba7a309778d3440c3315ad899e4035@eucas1p1.samsung.com>
- <20220427160255.300418-7-p.raghav@samsung.com>
-From:   Hannes Reinecke <hare@suse.de>
-To:     undisclosed-recipients:;
-In-Reply-To: <20220427160255.300418-7-p.raghav@samsung.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/27/22 09:02, Pankaj Raghav wrote:
-> From: Luis Chamberlain <mcgrof@kernel.org>
-> 
-> Instead of open coding the number of zones given a sector, use the helper
-> blk_queue_zone_no(). This let's us make modifications to the math if
-> needed in one place and adds now support for npo2 zone devices.
-> 
-> Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
-> Signed-off-by: Pankaj Raghav <p.raghav@samsung.com>
-> ---
->   drivers/nvme/target/zns.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-Reviewed-by: Hannes Reinecke <hare@suse.de>
+On Wed, 4 May 2022 16:50:58 +0000
+Christophe Leroy <christophe.leroy@csgroup.eu> wrote:
 
-Cheers,
+> In vmlinux, relocations are resolved, trampolines are installed for 
+> unreachable destinations and you don't anymore have a section with all 
+> the relocations to mcount. It means 'recordmcount' or whatever tool we 
+> use will have to read the code to find all direct calls to mcount, then 
+> find all trampolines to mcount then find all calls to those trampolines.
 
-Hannes
--- 
-Dr. Hannes Reinecke                Kernel Storage Architect
-hare@suse.de                              +49 911 74053 688
-SUSE Software Solutions GmbH, Maxfeldstr. 5, 90409 Nürnberg
-HRB 36809 (AG Nürnberg), Geschäftsführer: Felix Imendörffer
+OK, so what you are saying is that in the object file, we can see the
+site that calls mcount, but when it is linked, it may not call mcount,
+but instead it will call a trampoline that will call mcount, thus the
+tool will need to find these calls to the trampolines that call mcount
+as well as the locations that call mcount directly.
 
+Did I get that right?
+
+-- Steve

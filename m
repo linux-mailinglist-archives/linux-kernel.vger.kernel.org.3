@@ -2,117 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3581D51A0C7
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 15:21:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CC5151A0D5
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 15:23:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350583AbiEDNZJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 09:25:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34880 "EHLO
+        id S1350486AbiEDN0m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 09:26:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350532AbiEDNYk (ORCPT
+        with ESMTP id S1350567AbiEDN0J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 09:24:40 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA8F841339;
-        Wed,  4 May 2022 06:20:05 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1651670403;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=QrZdXSiMuCobYvYSpsrOQ7STvgiRilriNe6RKeWUt1A=;
-        b=0gERZxvgUmEb2yLnoczRMdHSKmOhphnWGgVmH2y7JNgmMuOPX8POrOioAV4RZc1seuqVV2
-        tcbOqswbmMLhVLnJNCHUZzwFeEAtfExlbt9KjoBcA5RBvyWR0g3VInUea3O3qaeChQeHNt
-        qmH/hn94pzwew6tbi8qF3L8axaXlrwBiHuPDLwjUtb+5P47expQbOyQ2Zfe6RnpCjU9DTI
-        6nc1j16YhkdLYg6r8oEYduudDP8RBJUNNVc9WbO8eU16ADAIo3SHIwa7ekCltS+WBPsuSZ
-        VznAYxxAsb2RMnllZDpJp4xfQ6e/Hx7Ox8WG3dQCJ56xP5mTboVvHOYND1dpFA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1651670403;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=QrZdXSiMuCobYvYSpsrOQ7STvgiRilriNe6RKeWUt1A=;
-        b=WfCTZqDwmX6SIcf/TVUfvjWKsChb735lpRJuJ7kNUr0IDUVy/WS8OP8VME/zq0MLg5UfJb
-        RdFxX1xkmtBg8eBw==
-To:     Marcelo Tosatti <mtosatti@redhat.com>,
-        Christoph Lameter <cl@gentwo.de>
-Cc:     linux-kernel@vger.kernel.org, Nitesh Lal <nilal@redhat.com>,
-        Nicolas Saenz Julienne <nsaenzju@redhat.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Alex Belits <abelits@belits.com>, Peter Xu <peterx@redhat.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Oscar Shiang <oscar0225@livemail.tw>,
-        linux-rdma@vger.kernel.org
-Subject: Re: [patch v12 00/13] extensible prctl task isolation interface and
- vmstat sync
-In-Reply-To: <YnF7CjzYBhASi1Eo@fuller.cnet>
-References: <20220315153132.717153751@fedora.localdomain>
- <alpine.DEB.2.22.394.2204271049050.159551@gentwo.de>
- <YnF7CjzYBhASi1Eo@fuller.cnet>
-Date:   Wed, 04 May 2022 15:20:03 +0200
-Message-ID: <87h765juyk.ffs@tglx>
+        Wed, 4 May 2022 09:26:09 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 434AD4505A
+        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 06:21:34 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 141F21042;
+        Wed,  4 May 2022 06:21:34 -0700 (PDT)
+Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E5FA33FA49;
+        Wed,  4 May 2022 06:21:32 -0700 (PDT)
+Date:   Wed, 4 May 2022 14:21:30 +0100
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org,
+        Cristian Marussi <cristian.marussi@arm.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Liang Chen <cl@rock-chips.com>, linux-kernel@vger.kernel.org,
+        Kever Yang <kever.yang@rock-chips.com>
+Subject: Re: [BUG] New arm scmi check in linux-next causing rk3568 not to
+ boot due to firmware bug
+Message-ID: <20220504132130.wmmmge6qjc675jw6@bogus>
+References: <1698297.NAKyZzlH2u@archbook>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1698297.NAKyZzlH2u@archbook>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 03 2022 at 15:57, Marcelo Tosatti wrote:
-> On Wed, Apr 27, 2022 at 11:19:02AM +0200, Christoph Lameter wrote:
->> I could modify busyloop() in ib2roce.c to use the oneshot mode via prctl
->> provided by this patch instead of the NOHZ_FULL.
->> 
->> What kind of metric could I be using to show the difference in idleness of
->> the quality of the cpu isolation?
++ Cristian
+
+Hi Nicolas,
+
+Thanks for the formal report.
+
+On Wed, May 04, 2022 at 02:49:07PM +0200, Nicolas Frattaroli wrote:
+> Good day,
+> 
+> a user on the #linux-rockchip channel on the Libera.chat IRC network
+> reported that their RK3568 was no longer getting a CPU and GPU clock
+> from scmi and consequently not booting when using linux-next. This
+> was bisected down to the following commit:
+> 
+> https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/drivers/firmware/arm_scmi/base.c?h=next-20220503&id=3b0041f6e10e5bdbb646d98172be43e88734ed62
+> 
+> The error message in the log is as follows:
+> 
+> arm-scmi firmware:scmi: Malformed reply - real_sz:8  calc_sz:4, t->rx.len is 12, sizeof(u32) is 4, loop_num_ret is 3
+> 
+> The rockchip firmware (bl31) being used was v1.32, from here:
+> 
+> https://github.com/JeffyCN/rockchip_mirrors/blob/rkbin/bin/rk35/rk3568_bl31_v1.32.elf
 >
-> Interruption length and frequencies:
+
+So this platform is not supported in upstream TF-A like its predecessors ?
+
+> This seems like a non-fatal firmware bug, for which a kernel workaround is
+> certainly possible, but it would be good if rockchip could fix this in their
+> firmware.
 >
-> -------|xxxxx|---------------|xxx|---------
-> 	 5us 		      3us
+
+Indeed, we added this check finding issue in one of our tests. Luckily
+it helped to unearth the same issue on this platform, but due to the
+nature of its f/w release, it is bit unfortunate that it can't be fixed
+easily and quickly. But I really wish this gets fixed in the firmware.
+Are there any other f/w bugs reported so far ? If so how are they fixed
+as I don't expect all such bugs can be worked around in the kernel though
+this might be. I would like to hear details there if possible.
+
+> The user going by "amazingfate" reported that commenting out the
+>   ret = -EPROTO; break;
+> fixes the issue for them.
 >
-> which is what should be reported by oslat ?
 
-How is oslat helpful there? That's running artifical workload benchmarks
-which are not necessarily representing the actual
-idle->interrupt->idle... timing sequence of the real world usecase.
+Sure, or we could relax the check as calc_sz <= real_sz or something so
+that the reverse is still caught and handled as OS might read junk data in
+the later case.
 
-> Inheritance is an attempt to support unmodified binaries like so:
+> I'm writing here to get the discussion started on how we can resolve this
+> before the Linux 5.19 release.
 >
-> 1) configure task isolation parameters (eg sync per-CPU vmstat to global
-> stats on system call returns).
-> 2) enable inheritance (so that task isolation configuration and
-> activation states are copied across to child processes).
-> 3) enable task isolation.
-> 4) execv(binary, params)
 
-What for? If an application has isolation requirements, then the
-specific requirements are part of the application design and not of some
-arbitrary wrapper. Can we please focus on the initial problem of
-providing a sensible isolation mechanism with well defined semantics?
+Agreed, I just sent by pull request for this literally few hours ago.
 
-Inheritance is an orthogonal problem and there is no reason to have this
-initially.
-
->> Special handling when the scheduler
->> switches a task? If tasks are being switched that requires them to be low
->> latency and undisturbed then something went very very wrong with the
->> system configuration and the only thing I would suggest is to issue some
->> kernel warning that this is not the way one should configure the system.
+> Sudeep Holla has already told me they'll gladly add a workaround before
+> the 5.19 release, but would rather see this fixed in the vendor firmware
+> first. Would rockchip be able and willing to fix it and publish a new
+> bl31 for rk3568?
 >
-> Trying to provide mechanisms, not policy? 
 
-This preemption notifier is not a mechanism, it's simply mindless
-hackery as I told you already.
+Indeed and as mentioned above details on how other such f/w bugs are dealt
+in general esp that the firmware is blob release and one can't fix it easily.
+Do we have a bugzilla kind of setup to report and get the bugs fixed ?
 
-Thanks,
-
-        tglx
+-- 
+Regards,
+Sudeep

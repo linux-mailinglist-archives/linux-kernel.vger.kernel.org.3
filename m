@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D7AD51A645
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 18:51:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0400551AAA0
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:27:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353813AbiEDQys (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 12:54:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51380 "EHLO
+        id S1357152AbiEDRbE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 13:31:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353848AbiEDQxe (ORCPT
+        with ESMTP id S1356822AbiEDRJp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 12:53:34 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C658047AEC;
-        Wed,  4 May 2022 09:48:57 -0700 (PDT)
+        Wed, 4 May 2022 13:09:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50587220D0;
+        Wed,  4 May 2022 09:55:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F415DB82737;
-        Wed,  4 May 2022 16:48:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5C62C385A5;
-        Wed,  4 May 2022 16:48:54 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E02DA616F8;
+        Wed,  4 May 2022 16:55:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37142C385AA;
+        Wed,  4 May 2022 16:55:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651682934;
-        bh=Vv8esSM2GXxjqp29nDHcWRb6ej6W2N0J0PRGsVfzTGI=;
+        s=korg; t=1651683349;
+        bh=RxD54wOIf+gtesh7VHfBEjiXkcaf7g6pr7I4+AwcUM8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pHiSKk42XCDDyF00DdzJfWukP7H/kIz07mEWKX+gG0puOGQQ1lcZgH51oSeK/7VD1
-         hjwe/0C8GlDx2S/efSZ9nhwTxQ2n+k4GsoKUE9u+PeFUhzebezJqQ6fofh7p1OoStA
-         XpjC5qiAhFapHjp3muBWQIThmCdHb16IOBycgtK0=
+        b=PmmLH9MD5cPnUF+CNIlgo3DUUq533LWFz3zv/hea2WdPZKnW+PCWyaM5216N41SRO
+         dOscUOsUM8QxHwTF/EIRg1YpvbWgFl/+NIN0LhnPZP+xxq39va9rlvY3dj/cKiWqbQ
+         MaYjTSOBEce7J7XyL+qaeF6fShRpINsI02/fojbc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zeal Robot <zealci@zte.com.cn>,
-        Lv Ruyi <lv.ruyi@zte.com.cn>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 53/84] pinctrl: pistachio: fix use of irq_of_parse_and_map()
+        stable@vger.kernel.org, "Maciej W. Rozycki" <macro@orcam.me.uk>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>
+Subject: [PATCH 5.17 036/225] serial: 8250: Also set sticky MCR bits in console restoration
 Date:   Wed,  4 May 2022 18:44:34 +0200
-Message-Id: <20220504152931.528646211@linuxfoundation.org>
+Message-Id: <20220504153113.425360432@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220504152927.744120418@linuxfoundation.org>
-References: <20220504152927.744120418@linuxfoundation.org>
+In-Reply-To: <20220504153110.096069935@linuxfoundation.org>
+References: <20220504153110.096069935@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,43 +54,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lv Ruyi <lv.ruyi@zte.com.cn>
+From: Maciej W. Rozycki <macro@orcam.me.uk>
 
-[ Upstream commit 0c9843a74a85224a89daa81fa66891dae2f930e1 ]
+commit 6e6eebdf5e2455f089ccd000754a0deaeb79af82 upstream.
 
-The irq_of_parse_and_map() function returns 0 on failure, and does not
-return an negative value.
+Sticky MCR bits are lost in console restoration if console suspending
+has been disabled.  This currently affects the AFE bit, which works in
+combination with RTS which we set, so we want to make sure the UART
+retains control of its FIFO where previously requested.  Also specific
+drivers may need other bits in the future.
 
-Fixes: cefc03e5995e ("pinctrl: Add Pistachio SoC pin control driver")
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Lv Ruyi <lv.ruyi@zte.com.cn>
-Link: https://lore.kernel.org/r/20220424031430.3170759-1-lv.ruyi@zte.com.cn
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Maciej W. Rozycki <macro@orcam.me.uk>
+Fixes: 4516d50aabed ("serial: 8250: Use canary to restart console after suspend")
+Cc: stable@vger.kernel.org # v4.0+
+Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+Link: https://lore.kernel.org/r/alpine.DEB.2.21.2204181518490.9383@angie.orcam.me.uk
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/pinctrl/pinctrl-pistachio.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/tty/serial/8250/8250_port.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/pinctrl/pinctrl-pistachio.c b/drivers/pinctrl/pinctrl-pistachio.c
-index 379e9a6a6d89..5f381e4c7577 100644
---- a/drivers/pinctrl/pinctrl-pistachio.c
-+++ b/drivers/pinctrl/pinctrl-pistachio.c
-@@ -1370,10 +1370,10 @@ static int pistachio_gpio_register(struct pistachio_pinctrl *pctl)
- 		}
+--- a/drivers/tty/serial/8250/8250_port.c
++++ b/drivers/tty/serial/8250/8250_port.c
+@@ -3340,7 +3340,7 @@ static void serial8250_console_restore(s
  
- 		irq = irq_of_parse_and_map(child, 0);
--		if (irq < 0) {
--			dev_err(pctl->dev, "No IRQ for bank %u: %d\n", i, irq);
-+		if (!irq) {
-+			dev_err(pctl->dev, "No IRQ for bank %u\n", i);
- 			of_node_put(child);
--			ret = irq;
-+			ret = -EINVAL;
- 			goto err;
- 		}
+ 	serial8250_set_divisor(port, baud, quot, frac);
+ 	serial_port_out(port, UART_LCR, up->lcr);
+-	serial8250_out_MCR(up, UART_MCR_DTR | UART_MCR_RTS);
++	serial8250_out_MCR(up, up->mcr | UART_MCR_DTR | UART_MCR_RTS);
+ }
  
--- 
-2.35.1
-
+ /*
 
 

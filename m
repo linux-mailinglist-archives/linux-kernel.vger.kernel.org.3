@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 479EB51AAE1
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:34:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3818851AA95
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:27:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358819AbiEDRfT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 13:35:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38862 "EHLO
+        id S1356749AbiEDR24 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 13:28:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357062AbiEDRJz (ORCPT
+        with ESMTP id S1356172AbiEDRJD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 13:09:55 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA83D47571;
-        Wed,  4 May 2022 09:56:58 -0700 (PDT)
+        Wed, 4 May 2022 13:09:03 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCF4452B3D;
+        Wed,  4 May 2022 09:54:55 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 65D0F618DF;
-        Wed,  4 May 2022 16:56:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7AD6C385C2;
-        Wed,  4 May 2022 16:56:57 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 17C16617BD;
+        Wed,  4 May 2022 16:54:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67F23C385AF;
+        Wed,  4 May 2022 16:54:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651683417;
-        bh=eidVBpEHpfCZhtqWZN0t3L727DuGTceR+6ii9207lXE=;
+        s=korg; t=1651683294;
+        bh=puxZb8keBI0MxGWFKEJg7XUlq5HvNRAXuB4e6S/Tg5E=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DQeJO8cMOMA5jNK5Rvc24NFJtJp0R55vUBGGtnoReL3Pq9nYOGgozpH7Ivs25o3pD
-         kzcEXSCDGJkTaqj14FXCmUKCSC75wQoEefiHRQyEugCyb8SRrburcFq/qG8SgBfsEr
-         pm7U6phfpKPlGmoGkkuHQEDP1xdRh2P3GpZtdjrQ=
+        b=ANc/UoNJSpvX2Amep1G8sXwWqRHuEs859iBDeJJjSydfZuLwku17sFIlhsnO/NG6Q
+         q/KIOyEl63t2A8Le6x2ZmnS+UGmDZ0Pu3EtrCrQQzSj0RurzyWSlv0nBz5zKk7Bvco
+         B2WZPQwp8a9sg7LH+Pqujb9wYUvcltzaY4cNBUl8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Pablo Neira Ayuso <pablo@netfilter.org>,
-        Stefano Brivio <sbrivio@redhat.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 102/225] netfilter: nft_set_rbtree: overlap detection with element re-addition after deletion
-Date:   Wed,  4 May 2022 18:45:40 +0200
-Message-Id: <20220504153119.811799595@linuxfoundation.org>
+        stable@vger.kernel.org, Dinh Nguyen <dinguyen@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 5.15 148/177] net: ethernet: stmmac: fix write to sgmii_adapter_base
+Date:   Wed,  4 May 2022 18:45:41 +0200
+Message-Id: <20220504153106.556326710@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220504153110.096069935@linuxfoundation.org>
-References: <20220504153110.096069935@linuxfoundation.org>
+In-Reply-To: <20220504153053.873100034@linuxfoundation.org>
+References: <20220504153053.873100034@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,48 +54,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pablo Neira Ayuso <pablo@netfilter.org>
+From: Dinh Nguyen <dinguyen@kernel.org>
 
-[ Upstream commit babc3dc9524f0bcb5a0ec61f3c3639b11508fad6 ]
+commit 5fd1fe4807f91ea0cca043114d929faa11bd4190 upstream.
 
-This patch fixes spurious EEXIST errors.
+I made a mistake with the commit a6aaa0032424 ("net: ethernet: stmmac:
+fix altr_tse_pcs function when using a fixed-link"). I should have
+tested against both scenario of having a SGMII interface and one
+without.
 
-Extend d2df92e98a34 ("netfilter: nft_set_rbtree: handle element
-re-addition after deletion") to deal with elements with same end flags
-in the same transation.
+Without the SGMII PCS TSE adpater, the sgmii_adapter_base address is
+NULL, thus a write to this address will fail.
 
-Reset the overlap flag as described by 7c84d41416d8 ("netfilter:
-nft_set_rbtree: Detect partial overlaps on insertion").
-
-Fixes: 7c84d41416d8 ("netfilter: nft_set_rbtree: Detect partial overlaps on insertion")
-Fixes: d2df92e98a34 ("netfilter: nft_set_rbtree: handle element re-addition after deletion")
-Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
-Reviewed-by: Stefano Brivio <sbrivio@redhat.com>
-Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Cc: stable@vger.kernel.org
+Fixes: a6aaa0032424 ("net: ethernet: stmmac: fix altr_tse_pcs function when using a fixed-link")
+Signed-off-by: Dinh Nguyen <dinguyen@kernel.org>
+Link: https://lore.kernel.org/r/20220420152345.27415-1-dinguyen@kernel.org
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/netfilter/nft_set_rbtree.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ drivers/net/ethernet/stmicro/stmmac/dwmac-socfpga.c |   12 +++++++-----
+ 1 file changed, 7 insertions(+), 5 deletions(-)
 
-diff --git a/net/netfilter/nft_set_rbtree.c b/net/netfilter/nft_set_rbtree.c
-index d600a566da32..7325bee7d144 100644
---- a/net/netfilter/nft_set_rbtree.c
-+++ b/net/netfilter/nft_set_rbtree.c
-@@ -349,7 +349,11 @@ static int __nft_rbtree_insert(const struct net *net, const struct nft_set *set,
- 				*ext = &rbe->ext;
- 				return -EEXIST;
- 			} else {
--				p = &parent->rb_left;
-+				overlap = false;
-+				if (nft_rbtree_interval_end(rbe))
-+					p = &parent->rb_left;
-+				else
-+					p = &parent->rb_right;
- 			}
- 		}
+--- a/drivers/net/ethernet/stmicro/stmmac/dwmac-socfpga.c
++++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-socfpga.c
+@@ -65,8 +65,9 @@ static void socfpga_dwmac_fix_mac_speed(
+ 	struct phy_device *phy_dev = ndev->phydev;
+ 	u32 val;
  
--- 
-2.35.1
-
+-	writew(SGMII_ADAPTER_DISABLE,
+-	       sgmii_adapter_base + SGMII_ADAPTER_CTRL_REG);
++	if (sgmii_adapter_base)
++		writew(SGMII_ADAPTER_DISABLE,
++		       sgmii_adapter_base + SGMII_ADAPTER_CTRL_REG);
+ 
+ 	if (splitter_base) {
+ 		val = readl(splitter_base + EMAC_SPLITTER_CTRL_REG);
+@@ -88,10 +89,11 @@ static void socfpga_dwmac_fix_mac_speed(
+ 		writel(val, splitter_base + EMAC_SPLITTER_CTRL_REG);
+ 	}
+ 
+-	writew(SGMII_ADAPTER_ENABLE,
+-	       sgmii_adapter_base + SGMII_ADAPTER_CTRL_REG);
+-	if (phy_dev)
++	if (phy_dev && sgmii_adapter_base) {
++		writew(SGMII_ADAPTER_ENABLE,
++		       sgmii_adapter_base + SGMII_ADAPTER_CTRL_REG);
+ 		tse_pcs_fix_mac_speed(&dwmac->pcs, phy_dev, speed);
++	}
+ }
+ 
+ static int socfpga_dwmac_parse_data(struct socfpga_dwmac *dwmac, struct device *dev)
 
 

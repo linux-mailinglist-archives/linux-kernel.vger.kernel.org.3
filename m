@@ -2,165 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5B60519638
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 06:03:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6170451963F
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 06:09:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231710AbiEDEGe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 00:06:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59928 "EHLO
+        id S1344495AbiEDENN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 00:13:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344456AbiEDEGa (ORCPT
+        with ESMTP id S235940AbiEDENJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 00:06:30 -0400
-Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DDEA1A393;
-        Tue,  3 May 2022 21:02:55 -0700 (PDT)
-Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-2f7d19cac0bso2986207b3.13;
-        Tue, 03 May 2022 21:02:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=W3/oD3hhUgmP5e/isgUbw7+g1PPBvghdLqlobIHop/4=;
-        b=VLwwz523wVa5T9+YMAiWIa2hQHB+9nrcrvf6MxAWFdvLCo0x1OnGKzj1cFBLowgXMa
-         F45SzWgIU3s+cSzh6BKHqDYlqYUoOTlP/DSwTzBpXDEpugMjFGpv5L5yL1nWB2xwnQJD
-         EeuRYbdH8HBV17g62T1SShvp34T9BuYwrJThnLnDnLJhdGSa0nZK8W8UurXcxl8Ll3aI
-         CuFmoN3Ew3mEJT3PjNLT1g9uvz9IyHrcrnUAfAPHzOOpxOGBnh1C8FOhSOJQF400AJeW
-         WMnxtjNXFOq3SFw9wIAD4v+TZIaajPa6RX6TP2zKpwNrgXwk+AxEfopbLgEXRwClGZVE
-         vz0g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=W3/oD3hhUgmP5e/isgUbw7+g1PPBvghdLqlobIHop/4=;
-        b=twBu9CF423epoCsB4SI7ml13eOKvfyAV70hxGZbC4D4mPNidsK/JNLUzts8Y56s1Hj
-         G4PYA0XA3PrMcpoTAzdKu2gTx/GXSkEBGNj4b2IYf7n94ZUKzOHMEsxlZRgQ4EEBjE7f
-         mgMMoGIekSFA+Q2bJI3uDkzgK9LBPnYUG2vEsCIrOEaxIvFYEtAfOsZESEZVjF39yUmu
-         djcu/bG0IQpOjhxPZFHHyDtk6sVOWmYkyidHiZ5yNxnLUyF6U90WHTwfjs4iXjIPTl47
-         jE4uZea5iAfRjsj5uzAsKcijJvmQwT0F6eV7aGaUzC8/+drhj1OXm+bKfHkHQZGYcwLx
-         K8TQ==
-X-Gm-Message-State: AOAM533ppJVRTubUJtPhG+loDC0wc3vHfvKJnXR5zHP07AeA5+X/ZZia
-        2CBcFeuvGeWmbyTtgZQgMtIsgnJ2W6RaPfJRbs0=
-X-Google-Smtp-Source: ABdhPJwwVfviWqFjK/Glcs4mY8hURf2iUgeAvKOXOZreMUDCs5xJ8WBeFHrhRnAuZFlZ+hOGuZ9iZ95Q7xe95PrG0k4=
-X-Received: by 2002:a05:690c:9e:b0:2e9:b625:1be2 with SMTP id
- be30-20020a05690c009e00b002e9b6251be2mr18279825ywb.48.1651636974377; Tue, 03
- May 2022 21:02:54 -0700 (PDT)
+        Wed, 4 May 2022 00:13:09 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2A2F2180E;
+        Tue,  3 May 2022 21:09:34 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 77DA461994;
+        Wed,  4 May 2022 04:09:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5DD95C385A4;
+        Wed,  4 May 2022 04:09:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651637373;
+        bh=MRs4nB2lV3N57W1w2TRtVbdRp6xHsxyYRmRSSLkKL2o=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=lLoLN7zvcgI3p2rlMEzh94MwRo/MGTXspasaHzXxS+BKIine0R1Tkxqo4EgUB3HF1
+         WtoOUg3KyEDnqMYjn0sV5sX9M35eVG3FOwsXse5PDa2bHemurz3+YREgfijN3c+6Yh
+         6652LILOHFoSJAbXfU0/258qoVj1uoIupKHEEOl2n6kIQxGf3KVq/1id8kO91zVunU
+         +C+UGmBoXbxY+ObC2OAT/lg7ea8E86lJ3OYBvHDXqNjsad/NG6g5B2Ffe2ul3KVl06
+         S4bOEqs16yD2FyBDDFNwzX8M3mWlTZmUWhxdNXPA5BcXLjcKKtIywdEZsTQWRB6tMp
+         LdU3t7OEmnOPw==
+Date:   Wed, 4 May 2022 07:08:08 +0300
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Pankaj Gupta <pankaj.gupta@nxp.com>
+Cc:     Ahmad Fatoum <a.fatoum@pengutronix.de>,
+        Horia Geanta <horia.geanta@nxp.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        James Bottomley <jejb@linux.ibm.com>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        David Howells <dhowells@redhat.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Steffen Trumtrar <s.trumtrar@pengutronix.de>,
+        Jan Luebbe <j.luebbe@pengutronix.de>,
+        David Gstir <david@sigma-star.at>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Richard Weinberger <richard@nod.at>,
+        Franck Lenormand <franck.lenormand@nxp.com>,
+        Sumit Garg <sumit.garg@linaro.org>,
+        Andreas Rammhold <andreas@rammhold.de>,
+        "tharvey@gateworks.com" <tharvey@gateworks.com>,
+        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>
+Subject: Re: [EXT] [PATCH v7 0/6] KEYS: trusted: Introduce support for NXP
+ CAAM-based trusted keys
+Message-ID: <YnH8KGGubFFMcRRU@kernel.org>
+References: <20220415205647.46056-1-a.fatoum@pengutronix.de>
+ <DU2PR04MB86306B75C018C7CAB9FFA57195FD9@DU2PR04MB8630.eurprd04.prod.outlook.com>
 MIME-Version: 1.0
-References: <1651509391-2058-1-git-send-email-mikelley@microsoft.com> <1651509391-2058-5-git-send-email-mikelley@microsoft.com>
-In-Reply-To: <1651509391-2058-5-git-send-email-mikelley@microsoft.com>
-From:   Deepak Rawat <drawat.floss@gmail.com>
-Date:   Tue, 3 May 2022 21:02:44 -0700
-Message-ID: <CAHFnvW3TDTh_iRpF5zH4uPKnB+_AisniVgam=Fj_Gog6KOfKrQ@mail.gmail.com>
-Subject: Re: [PATCH 4/4] drm/hyperv: Remove support for Hyper-V 2008 and 2008R2/Win7
-To:     Michael Kelley <mikelley@microsoft.com>
-Cc:     K Y Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-hyperv@vger.kernel.org,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Dexuan Cui <decui@microsoft.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, deller@gmx.de,
-        dri-devel@lists.freedesktop.org, linux-scsi@vger.kernel.org,
-        linux-fbdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <DU2PR04MB86306B75C018C7CAB9FFA57195FD9@DU2PR04MB8630.eurprd04.prod.outlook.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 2, 2022 at 9:37 AM Michael Kelley <mikelley@microsoft.com> wrote:
->
-> The DRM Hyper-V driver has special case code for running on the first
-> released versions of Hyper-V: 2008 and 2008 R2/Windows 7.  These versions
-> are now out of support (except for extended security updates) and lack
-> support for performance features that are needed for effective production
-> usage of Linux guests.
->
-> The negotiation of the VMbus protocol versions required by these old
-> Hyper-V versions has been removed from the VMbus driver.  So now remove
-> the handling of these VMbus protocol versions from the DRM Hyper-V
-> driver.
->
-> Signed-off-by: Michael Kelley <mikelley@microsoft.com>
-> ---
->  drivers/gpu/drm/hyperv/hyperv_drm_proto.c | 23 +++++++----------------
->  1 file changed, 7 insertions(+), 16 deletions(-)
->
-> diff --git a/drivers/gpu/drm/hyperv/hyperv_drm_proto.c b/drivers/gpu/drm/hyperv/hyperv_drm_proto.c
-> index c0155c6..76a182a 100644
-> --- a/drivers/gpu/drm/hyperv/hyperv_drm_proto.c
-> +++ b/drivers/gpu/drm/hyperv/hyperv_drm_proto.c
-> @@ -18,16 +18,16 @@
->  #define SYNTHVID_VERSION(major, minor) ((minor) << 16 | (major))
->  #define SYNTHVID_VER_GET_MAJOR(ver) (ver & 0x0000ffff)
->  #define SYNTHVID_VER_GET_MINOR(ver) ((ver & 0xffff0000) >> 16)
-> +
-> +/* Support for VERSION_WIN7 is removed. #define is retained for reference. */
->  #define SYNTHVID_VERSION_WIN7 SYNTHVID_VERSION(3, 0)
->  #define SYNTHVID_VERSION_WIN8 SYNTHVID_VERSION(3, 2)
->  #define SYNTHVID_VERSION_WIN10 SYNTHVID_VERSION(3, 5)
->
-> -#define SYNTHVID_DEPTH_WIN7 16
->  #define SYNTHVID_DEPTH_WIN8 32
-> -#define SYNTHVID_FB_SIZE_WIN7 (4 * 1024 * 1024)
-> +#define SYNTHVID_WIDTH_WIN8 1600
-> +#define SYNTHVID_HEIGHT_WIN8 1200
->  #define SYNTHVID_FB_SIZE_WIN8 (8 * 1024 * 1024)
-> -#define SYNTHVID_WIDTH_MAX_WIN7 1600
-> -#define SYNTHVID_HEIGHT_MAX_WIN7 1200
->
->  enum pipe_msg_type {
->         PIPE_MSG_INVALID,
-> @@ -496,12 +496,6 @@ int hyperv_connect_vsp(struct hv_device *hdev)
->         case VERSION_WIN8:
->         case VERSION_WIN8_1:
->                 ret = hyperv_negotiate_version(hdev, SYNTHVID_VERSION_WIN8);
-> -               if (!ret)
-> -                       break;
-> -               fallthrough;
-> -       case VERSION_WS2008:
-> -       case VERSION_WIN7:
-> -               ret = hyperv_negotiate_version(hdev, SYNTHVID_VERSION_WIN7);
->                 break;
->         default:
->                 ret = hyperv_negotiate_version(hdev, SYNTHVID_VERSION_WIN10);
-> @@ -513,18 +507,15 @@ int hyperv_connect_vsp(struct hv_device *hdev)
->                 goto error;
->         }
->
-> -       if (hv->synthvid_version == SYNTHVID_VERSION_WIN7)
-> -               hv->screen_depth = SYNTHVID_DEPTH_WIN7;
-> -       else
-> -               hv->screen_depth = SYNTHVID_DEPTH_WIN8;
-> +       hv->screen_depth = SYNTHVID_DEPTH_WIN8;
->
->         if (hyperv_version_ge(hv->synthvid_version, SYNTHVID_VERSION_WIN10)) {
->                 ret = hyperv_get_supported_resolution(hdev);
->                 if (ret)
->                         drm_err(dev, "Failed to get supported resolution from host, use default\n");
->         } else {
-> -               hv->screen_width_max = SYNTHVID_WIDTH_MAX_WIN7;
-> -               hv->screen_height_max = SYNTHVID_HEIGHT_MAX_WIN7;
-> +               hv->screen_width_max = SYNTHVID_WIDTH_WIN8;
-> +               hv->screen_height_max = SYNTHVID_HEIGHT_WIN8;
->         }
->
->         hv->mmio_megabytes = hdev->channel->offermsg.offer.mmio_megabytes;
+On Thu, Apr 28, 2022 at 12:50:50PM +0000, Pankaj Gupta wrote:
+> Hi Ahmad,
+> 
+> I have tested the patch-set.
+> It is working as expected even when CAAM is compiled as kernel module.
+> 
+> Reviewed-by: Pankaj Gupta <pankaj.gupta@nxp.com>
+> Tested-by: Pankaj Gupta <pankaj.gupta@nxp.com>
 
-Do we need a new version for Windows 11? If the synthetic device
-version is decoupled from Windows version, then I guess we can rename
-the macro to reflect that.
+1. Please do not top-post.
+2. Tag the exact patches you tested.
 
-Reviewed-by: Deepak Rawat <drawat.floss@gmail.com>
-
-> --
-> 1.8.3.1
->
+BR, Jarkko

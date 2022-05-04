@@ -2,107 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 207E1519BEC
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 11:34:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8589E519C09
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 11:38:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347598AbiEDJgk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 05:36:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41824 "EHLO
+        id S1343899AbiEDJli (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 05:41:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347432AbiEDJgK (ORCPT
+        with ESMTP id S1347210AbiEDJl3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 05:36:10 -0400
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::222])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A73227147;
-        Wed,  4 May 2022 02:31:51 -0700 (PDT)
-Received: (Authenticated sender: clement.leger@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id A6E9A4001C;
-        Wed,  4 May 2022 09:31:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1651656710;
+        Wed, 4 May 2022 05:41:29 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DC0C82655A
+        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 02:37:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1651657072;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=0f9OuIqnKWeX+OGZsEpXifhCvbt8Y6SEkR4j7N0Js9U=;
-        b=Sjcw+PjsAzOmxGlvUsaJ7BeujYxDyRTETAWhccRn2Z+gu595uhugCY7X86KNktUWRg03+i
-        1PqAkMKeJ6ZRm6rRBSTAxDWgUuMY1CprQYXcghZ1hkarkVNBLmAAAvI+eneqFLmiEW7x9N
-        vupVwhYmG7eNE6jJDKQigTwM+0uroz8AMLUMt3EkXmsB/5YcoY3hnXC660z08UHX38FAIs
-        BO+IhCBS4IsLjF3WKK+whL9GniDeYz6t6QQkFey/9t3qi7ofXugPsTtMlGt/w4WCgz1JgZ
-        ALT+rQIpCE/1hgTCqMmgIIj5zNuwKJPv6zegYnkIE2CGxMqP/1U/1LnyoJF6oA==
-From:   =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <clement.leger@bootlin.com>
-To:     Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>
-Cc:     =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <clement.leger@bootlin.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Herve Codina <herve.codina@bootlin.com>,
-        =?UTF-8?q?Miqu=C3=A8l=20Raynal?= <miquel.raynal@bootlin.com>,
-        Milan Stevanovic <milan.stevanovic@se.com>,
-        Jimmy Lalande <jimmy.lalande@se.com>,
-        Pascal Eberhard <pascal.eberhard@se.com>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, netdev@vger.kernel.org
-Subject: [PATCH net-next v3 12/12] MAINTAINERS: add Renesas RZ/N1 switch related driver entry
-Date:   Wed,  4 May 2022 11:30:00 +0200
-Message-Id: <20220504093000.132579-13-clement.leger@bootlin.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220504093000.132579-1-clement.leger@bootlin.com>
-References: <20220504093000.132579-1-clement.leger@bootlin.com>
+        bh=g6g2UJy+0nwhmO5/tF8oPdW8Lnfz1wSfTmKwEMghbcA=;
+        b=T/VXQNCPNAdlx4RkVdgXv17XMb38Cx9VrRlHQUIG7gayHM8kBQ9SRSZXTRrxrT6L4Uc9iH
+        bWUJu3N5K4IKdhQHT8myWTtaYeoFzWvRCajyWBjW2IrlMIwZ6NtTWix9isfKs/3p6g66iS
+        A0HTYkqqY6nMQsyZb5Bwn12w1bO8VOg=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-617-cYQkRTP8PcGROPRa6OaIdg-1; Wed, 04 May 2022 05:37:52 -0400
+X-MC-Unique: cYQkRTP8PcGROPRa6OaIdg-1
+Received: by mail-wm1-f71.google.com with SMTP id c62-20020a1c3541000000b0038ec265155fso2747017wma.6
+        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 02:37:52 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=g6g2UJy+0nwhmO5/tF8oPdW8Lnfz1wSfTmKwEMghbcA=;
+        b=fc8USh/qqb4uW+JNY1qXXP4S4vO7biXjWnOZu3HQVi6IrBenM2OA0fXZpGNdGBWnzT
+         8MoJMSyYDnYX8UxF7+VGC2wnAX4AmDkF8keMuC9xL2KfHbt1BsOfODmgq3b1E4Hj1Nq+
+         I7tbxTMOjNe/roQf19C3Ogj7en+7Oto70nzJ9GBphzcxA3dKEUTVICMJmA5SdEKEFMC/
+         AgHXgGaQXETU+F51lGZ8squxUMvhs013lBCN8A8xGFBE1d8wiIe0a7FHY4tHWo1MRG7b
+         kOl84qhftW7NkSWfbPx/t35TM7ZocqT274Y9esCyAfpr4w7hUSq1Iua1sg7l3bfJlL0P
+         wj+g==
+X-Gm-Message-State: AOAM5328nlZsKI6RmKJli1rMEZRUaIluI3CQjpeXKRotnNvrvfBmj2Wh
+        ZuGTZ7SdH95MZdoUX7fKkaZb7idORVthCpKEropA2OF/dJow0nQk45l3MlomZmrTraSt7AqAQHf
+        LksaIkqbilbQdaPLGEQ1beIQ=
+X-Received: by 2002:a05:600c:4ecc:b0:394:3250:d88c with SMTP id g12-20020a05600c4ecc00b003943250d88cmr6688131wmq.105.1651656752836;
+        Wed, 04 May 2022 02:32:32 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzO+pbxaczdRjaRn57aZ40kzSJJ6kjffsdlMDg10f1bqbYBn8iIHq0NrVydrrKVdtoougHgAA==
+X-Received: by 2002:a05:600c:4ecc:b0:394:3250:d88c with SMTP id g12-20020a05600c4ecc00b003943250d88cmr6688115wmq.105.1651656752625;
+        Wed, 04 May 2022 02:32:32 -0700 (PDT)
+Received: from localhost (cpc111743-lutn13-2-0-cust979.9-3.cable.virginm.net. [82.17.115.212])
+        by smtp.gmail.com with ESMTPSA id j28-20020a05600c1c1c00b003942a244f39sm3382841wms.18.2022.05.04.02.32.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 May 2022 02:32:31 -0700 (PDT)
+Date:   Wed, 4 May 2022 10:32:30 +0100
+From:   Aaron Tomlin <atomlin@redhat.com>
+To:     Marcelo Tosatti <mtosatti@redhat.com>
+Cc:     frederic@kernel.org, cl@linux.com, tglx@linutronix.de,
+        mingo@kernel.org, peterz@infradead.org, pauld@redhat.com,
+        neelx@redhat.com, oleksandr@natalenko.name,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [RFC PATCH v3] tick/sched: Ensure quiet_vmstat() is called when
+ the idle tick was stopped too
+Message-ID: <20220504093230.xmksdyagcpgs7sjt@ava.usersys.com>
+X-PGP-Key: http://pgp.mit.edu/pks/lookup?search=atomlin%40redhat.com
+X-PGP-Fingerprint: 7906 84EB FA8A 9638 8D1E  6E9B E2DE 9658 19CC 77D6
+References: <20220422193647.3808657-1-atomlin@redhat.com>
+ <YmrYfSSepamn5fVc@fuller.cnet>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <YmrYfSSepamn5fVc@fuller.cnet>
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-After contributing the drivers, volunteer for maintenance and add
-myself as the maintainer for Renesas RZ/N1 switch related drivers.
+On Thu 2022-04-28 15:10 -0300, Marcelo Tosatti wrote:
+> So you are syncing the vmstats on every system call return:
 
-Signed-off-by: Clément Léger <clement.leger@bootlin.com>
----
- MAINTAINERS | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+Hi Marcelo,
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index fa6896e8b2d8..9e1d2647f8bc 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -16872,6 +16872,17 @@ S:	Supported
- F:	Documentation/devicetree/bindings/iio/adc/renesas,rzg2l-adc.yaml
- F:	drivers/iio/adc/rzg2l_adc.c
- 
-+RENESAS RZ/N1 A5PSW SWITCH DRIVER
-+M:	Clément Léger <clement.leger@bootlin.com>
-+S:	Maintained
-+F:	Documentation/devicetree/bindings/net/dsa/renesas,rzn1-a5psw.yaml
-+F:	Documentation/devicetree/bindings/net/pcs/renesas,rzn1-miic.yaml
-+F:	drivers/net/dsa/rzn1_a5psw*
-+F:	drivers/net/pcs/pcs-rzn1-miic.c
-+F:	include/dt-bindings/net/pcs-rzn1-miic.h
-+F:	include/linux/pcs-rzn1-miic.h
-+F:	net/dsa/tag_rzn1_a5psw.c
-+
- RENESAS R-CAR GEN3 & RZ/N1 NAND CONTROLLER DRIVER
- M:	Miquel Raynal <miquel.raynal@bootlin.com>
- L:	linux-mtd@lists.infradead.org
+Sorry about the delay!
+
+No - indeed, that would be too expensive. If I understand correctly,
+Peter Zijlstra's feedback was in response to a previous suggestion made:
+
+	"Could we *always* fold the vmstat counters when entering
+	 idle mode? ..."
+
+I think an exception should be made for the adaptive-tick mode/or a
+nohz_full CPU case when the scheduling-clock tick is stopped. Also, I feel
+correctness is key, as previously indicated since a significant divergence
+can impact memory reclaim code.
+
+> Have you measured performance of any system call heavy application
+> with this change?
+
+Unfortunately not. That being said, the aforementioned test and work will
+only take place under a nohz_full CPU and if the tick is stopped.
+So this should be somewhat limited, no?
+
+> Then the comment on why its so slow:
+> 
+> "This loop is quite heavy. Maybe reducing the data necessary to be read
+> to a couple of cachelines would improve it considerably."
+> 
+> The comment:
+> 
+> "Is there anything that prevents a nohz full CPU from running an
+> application with short and frequent idling?"
+> 
+> Is confusing and can be ignored.
+
+Understood.
+
+
+
+Kind regards,
+
 -- 
-2.34.1
+Aaron Tomlin
 

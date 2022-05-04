@@ -2,127 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB22251ABF1
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:58:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DD5551ABFE
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:58:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359534AbiEDSB7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 14:01:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42060 "EHLO
+        id S1359764AbiEDSCZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 14:02:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377378AbiEDSAx (ORCPT
+        with ESMTP id S1377452AbiEDSA4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 14:00:53 -0400
-Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com [209.85.219.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D57F6631A;
-        Wed,  4 May 2022 10:15:36 -0700 (PDT)
-Received: by mail-yb1-f172.google.com with SMTP id m128so3508242ybm.5;
-        Wed, 04 May 2022 10:15:36 -0700 (PDT)
+        Wed, 4 May 2022 14:00:56 -0400
+Received: from mail-oa1-f46.google.com (mail-oa1-f46.google.com [209.85.160.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8D451C12B;
+        Wed,  4 May 2022 10:15:51 -0700 (PDT)
+Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-e5e433d66dso1825981fac.5;
+        Wed, 04 May 2022 10:15:51 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=OFV/p74juyEoPxSYXHrzkAx2l6TnhNSxPpzNHi+zhs4=;
-        b=4+b1SFPFX4jUr8n7X41dAVG7CcgfqSCIxnhZGEjv+FtmCuDSmycDybFkrhdgaHGWEU
-         4QTrUmd8XHulaAZP1oVgWJh814JGp6K+D7qRLtWMbAvwKVZ96RjnL4n9x1Zgcdw8ZZuy
-         ABd/nH8sXqXK0XE8KP+359Hewt9LfoRhl46gWAmwJlfm1qf5W9nvvwTeMgtFxR1OKSgQ
-         EYJjerXyqkf6m9i68ubaJltVS2p0Kwl4a0n7FJTiGoI0O5gw4uO4lXvZwLe0DtUeB6yN
-         D/KuDUO440NYwp50eVnvg2fjxLPuaLsIKVfeuXRHSH6aEWb5HJi5PIZ4oD62y4Ow4Kve
-         WVIw==
-X-Gm-Message-State: AOAM530JkiU2tX7wjZDuLau/eoMpoEHmyvO/JjFNtIuCMNoEFZ/17d1a
-        MN8yh3dvLnbiHDzAEJ9c1Nn3htugiE46rJWv/C8=
-X-Google-Smtp-Source: ABdhPJzjRfM0DpouS6xdyXwR/B26C26P2+1p0G7fDh2ZXfbBTY+AxBBIPZjUd3fdQqUDpXtFohq4/YXNynsvaWYmFMg=
-X-Received: by 2002:a05:6902:187:b0:63d:9c95:edca with SMTP id
- t7-20020a056902018700b0063d9c95edcamr17647508ybh.81.1651684535365; Wed, 04
- May 2022 10:15:35 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=/sZFoGSuVJsC2wZ9dNCc4JLrQrkFZcqEG47d9JqV1Gg=;
+        b=Wr9U25nWL8PG6OO8do93gYbUy0N/ihRqkK/bG7hG7rdAZvds4bbbFujaJWEU5A1wdH
+         mqR5n3zR+FV6pcTyCAMwXPkipvbJXkQyMKX4BRGQXdrkvQnbS5rD72dILnM2Lcc+C4/g
+         UP4u/ZMql1p9cg7qM1vsYvlhxieblw8PXaVIK7UBmegsd/SJpYkfHRohDVqtTWgvG++M
+         aEhmU8Ty17KjYU/nBbylIOBrEYFCjoE02eXMz3nz3+1Il9hKZcY5G5pt4TvulFiuOlQe
+         jN79sSn3V3ZFmk6DC7n+fxK1sIPVekN6c3TOAJrkIr7bLpe7iFyGRY5Qq0fbue7tE7BG
+         U9+A==
+X-Gm-Message-State: AOAM531NQFsr89tMQ6FUmSMRh7QTq34GytN4hDYBDwebMZ1yCHmuxfPM
+        j055A1eAbtZnsdIcJnFvHg==
+X-Google-Smtp-Source: ABdhPJz/D0e0enLqOyhRaOxOcEe96JkZ+yUVLWBCkpaNez82JEr/wX3grMMHjSAk9p5UL5gCadvo6Q==
+X-Received: by 2002:a05:6870:9a05:b0:e6:589e:1ec5 with SMTP id fo5-20020a0568709a0500b000e6589e1ec5mr240831oab.203.1651684550678;
+        Wed, 04 May 2022 10:15:50 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id f6-20020a4ad806000000b0035eb4e5a6c4sm6234126oov.26.2022.05.04.10.15.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 May 2022 10:15:49 -0700 (PDT)
+Received: (nullmailer pid 1896703 invoked by uid 1000);
+        Wed, 04 May 2022 17:15:48 -0000
+Date:   Wed, 4 May 2022 12:15:48 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Ansuel Smith <ansuelsmth@gmail.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>, Pavel Machek <pavel@ucw.cz>,
+        John Crispin <john@phrozen.org>, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-leds@vger.kernel.org
+Subject: Re: [RFC PATCH v6 11/11] dt-bindings: net: dsa: qca8k: add LEDs
+ definition example
+Message-ID: <YnK0xHOkfXI+rgzs@robh.at.kernel.org>
+References: <20220503151633.18760-1-ansuelsmth@gmail.com>
+ <20220503151633.18760-12-ansuelsmth@gmail.com>
 MIME-Version: 1.0
-References: <YnFtjzGYwe28tVAA@dev-arch.thelio-3990X> <20220504165409.GA453565@bhelgaas>
-In-Reply-To: <20220504165409.GA453565@bhelgaas>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 4 May 2022 19:15:24 +0200
-Message-ID: <CAJZ5v0g7oN534uyNh4YBeArH8xqGxYCXrrqAz2jiH=D4cyx=+w@mail.gmail.com>
-Subject: Re: [PATCH v3 4/9] PCI/PM: Rework changing power states of PCI devices
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Nathan Chancellor <nathan@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Anders Roxell <anders.roxell@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220503151633.18760-12-ansuelsmth@gmail.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 4, 2022 at 7:03 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
->
-> [+cc Anders]
->
-> On Tue, May 03, 2022 at 10:59:43AM -0700, Nathan Chancellor wrote:
-> > On Thu, Apr 14, 2022 at 03:11:21PM +0200, Rafael J. Wysocki wrote:
-> > > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > >
-> > > There are some issues related to changing power states of PCI
-> > > devices, mostly related to carrying out unnecessary actions in some
-> > > places, and the code is generally hard to follow.
-> > >
-> > >  1. pci_power_up() has two callers, pci_set_power_state() and
-> > >     pci_pm_default_resume_early().  The latter updates the current
-> > >     power state of the device right after calling pci_power_up()
-> > >     and it restores the entire config space of the device right
-> > >     after that, so pci_power_up() itself need not read the
-> > >     PCI_PM_CTRL register or restore the BARs after programming the
-> > >     device into D0 in that case.
-> > >
-> > >  2. It is generally hard to get a clear view of the pci_power_up()
-> > >     code flow, especially in some corner cases, due to all of the
-> > >     involved PCI_PM_CTRL register reads and writes occurring in
-> > >     pci_platform_power_transition() and in pci_raw_set_power_state(),
-> > >     some of which are redundant.
-> > >
-> > >  3. The transitions from low-power states to D0 and the other way
-> > >     around are unnecessarily tangled in pci_raw_set_power_state()
-> > >     which causes it to use a redundant local variable and makes it
-> > >     rather hard to follow.
-> > >
-> > > To address the above shortcomings, make the following changes:
-> > >
-> > >  a. Remove the code handling transitions into D0
-> > >     from pci_raw_set_power_state() and rename it as
-> > >     pci_set_low_power_state().
-> > >
-> > >  b. Add the code handling transitions into D0 directly
-> > >     to pci_power_up() and to a new wrapper function
-> > >     pci_set_full_power_state() calling it internally that is
-> > >     only used in pci_set_power_state().
-> > >
-> > >  c. Make pci_power_up() avoid redundant PCI_PM_CTRL register reads
-> > >     and make it work in the same way for transitions from any
-> > >     low-power states (transitions from D1 and D2 are handled
-> > >     slightly differently before the change).
-> > >
-> > >  d. Put the restoration of the BARs and the PCI_PM_CTRL
-> > >     register read confirming the power state change into
-> > >     pci_set_full_power_state() to avoid doing that in
-> > >     pci_pm_default_resume_early() unnecessarily.
-> > >
-> > > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > > Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
-> >
-> > This change as commit 5bffe4c611f5 ("PCI/PM: Rework changing power
-> > states of PCI devices") causes my AMD-based system to fail to fully
-> > boot.
->
-> I dropped 5bffe4c611f5 and subsequent pci/pm patches temporarily while
-> this gets worked out.
+On Tue, May 03, 2022 at 05:16:33PM +0200, Ansuel Smith wrote:
+> Add LEDs definition example for qca8k using the offload trigger as the
+> default trigger and add all the supported offload triggers by the
+> switch.
+> 
+> Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
+> ---
+>  .../devicetree/bindings/net/dsa/qca8k.yaml    | 20 +++++++++++++++++++
+>  1 file changed, 20 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/net/dsa/qca8k.yaml b/Documentation/devicetree/bindings/net/dsa/qca8k.yaml
+> index f3c88371d76c..9b46ef645a2d 100644
+> --- a/Documentation/devicetree/bindings/net/dsa/qca8k.yaml
+> +++ b/Documentation/devicetree/bindings/net/dsa/qca8k.yaml
+> @@ -65,6 +65,8 @@ properties:
+>                   internal mdio access is used.
+>                   With the legacy mapping the reg corresponding to the internal
+>                   mdio is the switch reg with an offset of -1.
+> +                 Each phy have at least 3 LEDs connected and can be declared
 
-OK
+s/at least/up to/ ?
 
-It looks like I missed something subtle that triggers on a subset of
-systems only.
+Or your example is wrong with only 2.
+
+> +                 using the standard LEDs structure.
+>  
+>  patternProperties:
+>    "^(ethernet-)?ports$":
+> @@ -287,6 +289,24 @@ examples:
+>  
+>                  internal_phy_port1: ethernet-phy@0 {
+>                      reg = <0>;
+> +
+> +                    leds {
+> +                        led@0 {
+> +                            reg = <0>;
+> +                            color = <LED_COLOR_ID_WHITE>;
+> +                            function = LED_FUNCTION_LAN;
+> +                            function-enumerator = <1>;
+> +                            linux,default-trigger = "netdev";
+> +                        };
+> +
+> +                        led@1 {
+> +                            reg = <1>;
+> +                            color = <LED_COLOR_ID_AMBER>;
+> +                            function = LED_FUNCTION_LAN;
+> +                            function-enumerator = <1>;
+> +                            linux,default-trigger = "netdev";
+> +                        };
+> +                    };
+>                  };
+>  
+>                  internal_phy_port2: ethernet-phy@1 {
+> -- 
+> 2.34.1
+> 
+> 

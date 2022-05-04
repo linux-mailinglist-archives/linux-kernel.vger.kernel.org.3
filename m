@@ -2,34 +2,34 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D710151B111
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 23:36:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C770C51B133
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 23:38:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378821AbiEDViM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 17:38:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48198 "EHLO
+        id S1378763AbiEDVm0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 17:42:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378650AbiEDVgm (ORCPT
+        with ESMTP id S234995AbiEDVmX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 17:36:42 -0400
+        Wed, 4 May 2022 17:42:23 -0400
 Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1ED55131A;
-        Wed,  4 May 2022 14:33:02 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABEEA1FCC7;
+        Wed,  4 May 2022 14:38:46 -0700 (PDT)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: sre)
-        with ESMTPSA id 695F81F44BE4
+        with ESMTPSA id 5EB351F44BA3
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1651699980;
-        bh=jvWlCqU5BM5uSfYkfGx9KIBVQnJo5rwQWZiOEIDmon8=;
+        s=mail; t=1651700325;
+        bh=uyAo5zR8dw2G1PXvLBzX4kEvbmbHh0MqtTGpkAws0D4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MdPuIIeZWYeMSIgJd1Opz7ab7G2fZdI/z0515K9zE6Cxp51bWVmcTBn4XUY7wYzWb
-         Fa7/oLxckC7J1pW7p/Syb5ZEJPPel+FGbXjrLC9egcj1s862t/+EtItN/CYPo0IbQ9
-         ytXOM1Pa8fxrrb73gSTR26UGTPrQHUCjsf4m/q8/UPgWNZM+sZTZaGfi+NlBw7vIby
-         odk8yJ+RM1E/uOB/pJgYqtBPw32Se4gkONQ+Lhtp4BZVoVSLWVqo57oI+rFCOzM/CX
-         O8lHJp84UZX+LhJ7lW7PLKbQz7YhM/SbXHboqEfI8qH3Tz+POotft66+BgoxCgveAr
-         hocrE8MtVAMug==
+        b=inO3cIE1rPZA0GCZu1aeQjV6iYnIhJF7h5w1UFxljkHcfOzGjt/6e5AdBubBBgtIM
+         ajmxEAcAv39U4TWCq65xRt6fgS3edehSQWe4qaRsOdFO9zh1ashxBv8zRK6Pxuzgfv
+         SHFhC5xjcldM/blagI01VYnA/89Kb0LqmEcwP0UVYbWDN4egDfBHNJJlxle7E+B1lB
+         9sgE5lUg0g+9o+0F1H4raLBx+AptayB4wW/evyWF101Ccxlh6bEqEaSoMey2HTE++k
+         pQsYojZ7YVTxhxQEdIOpTsXGFuvbDOoeTcq93eoRIilIvm0AdFzUhDe9TAjknHu4pj
+         x65BHNCyOY8wQ==
 Received: by jupiter.universe (Postfix, from userid 1000)
-        id 573344819D6; Wed,  4 May 2022 23:32:53 +0200 (CEST)
+        id 598FE4819D7; Wed,  4 May 2022 23:32:53 +0200 (CEST)
 From:   Sebastian Reichel <sebastian.reichel@collabora.com>
 To:     Heiko Stuebner <heiko@sntech.de>
 Cc:     Rob Herring <robh+dt@kernel.org>,
@@ -47,9 +47,9 @@ Cc:     Rob Herring <robh+dt@kernel.org>,
         linux-kernel@vger.kernel.org, kernel@lists.collabora.co.uk,
         Sebastian Reichel <sebastian.reichel@collabora.com>,
         kernel@collabora.com
-Subject: [PATCHv2 17/21] dt-bindings: gpio: rockchip: add gpio-ranges
-Date:   Wed,  4 May 2022 23:32:47 +0200
-Message-Id: <20220504213251.264819-18-sebastian.reichel@collabora.com>
+Subject: [PATCHv2 18/21] dt-bindings: pinctrl: rockchip: increase max amount of device functions
+Date:   Wed,  4 May 2022 23:32:48 +0200
+Message-Id: <20220504213251.264819-19-sebastian.reichel@collabora.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220504213251.264819-1-sebastian.reichel@collabora.com>
 References: <20220504213251.264819-1-sebastian.reichel@collabora.com>
@@ -65,28 +65,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Allow usage of gpio-ranges with the rockchip gpio controller. The driver
-already had support for this since it has been added to the mainline kernel
-in the first place.
+RK3588 can have 10 different device functions, so increase the maximum
+amount appropriately. Considering rockchip uses auto-generated pinmux
+files, adding a quite complex if construct to increase the limit just
+for rk3588 does not seem to be worth the effort.
 
 Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 ---
- Documentation/devicetree/bindings/gpio/rockchip,gpio-bank.yaml | 2 ++
- 1 file changed, 2 insertions(+)
+ Documentation/devicetree/bindings/pinctrl/rockchip,pinctrl.yaml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/gpio/rockchip,gpio-bank.yaml b/Documentation/devicetree/bindings/gpio/rockchip,gpio-bank.yaml
-index d4e42c2b995b..affd823c881d 100644
---- a/Documentation/devicetree/bindings/gpio/rockchip,gpio-bank.yaml
-+++ b/Documentation/devicetree/bindings/gpio/rockchip,gpio-bank.yaml
-@@ -27,6 +27,8 @@ properties:
-       - description: APB interface clock source
-       - description: GPIO debounce reference clock source
- 
-+  gpio-ranges: true
-+
-   gpio-controller: true
- 
-   gpio-line-names: true
+diff --git a/Documentation/devicetree/bindings/pinctrl/rockchip,pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/rockchip,pinctrl.yaml
+index e62fb5e9db76..68339082571f 100644
+--- a/Documentation/devicetree/bindings/pinctrl/rockchip,pinctrl.yaml
++++ b/Documentation/devicetree/bindings/pinctrl/rockchip,pinctrl.yaml
+@@ -130,7 +130,7 @@ additionalProperties:
+               description:
+                 Pin bank index.
+             - minimum: 0
+-              maximum: 6
++              maximum: 10
+               description:
+                 Mux 0 means GPIO and mux 1 to N means
+                 the specific device function.
 -- 
 2.35.1
 

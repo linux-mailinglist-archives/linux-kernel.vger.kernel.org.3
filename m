@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9108D519B9D
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 11:24:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF0E0519B95
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 11:24:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347237AbiEDJ1h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 05:27:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33428 "EHLO
+        id S1347247AbiEDJ1b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 05:27:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347137AbiEDJ1C (ORCPT
+        with ESMTP id S1347139AbiEDJ1C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 4 May 2022 05:27:02 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B1AF222B3;
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F297C25588;
         Wed,  4 May 2022 02:23:26 -0700 (PDT)
-Date:   Wed, 04 May 2022 09:23:23 -0000
+Date:   Wed, 04 May 2022 09:23:24 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1651656204;
+        s=2020; t=1651656205;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=apvhUqgA5fesdTmfgsR6JbCSnigppljrynuw0Qm14eI=;
-        b=KS6UHbto2JE2reO2sq0uFPMcc6nbYeMC14cK//1I6NEw5QEDtqwfFmUZhLdgbXIv+EvIBx
-        j1P9UPxvh7RR4HEZj2fFucHWgR+OyFVhUblANtDi9C/PLb0MN1l3FpE4QyIkiy7MDMZsuc
-        ygFrennY2hPvjTrnWqsokrqSCDiMZNaBQruN8h3/L+89ngMNwHplj1cVRZDU/IspZsLnew
-        FI4kG+3Nb6ksH7Nq6rikYU8Gg5zkRix4FxHUluZLBkz94fkDfDA0PDitkKsK46fojuer92
-        EjlxoFKLGxQGr0udtKDguFawC5evVkVsR1KGb8Qg6DquRpNtbRV6WiGX3A4k0A==
+        bh=kCr57As/F1D1GMOOsBnOm34lXvRi/2Awdnv2aHw9C90=;
+        b=PrB1qik3+Kvvp4+C7jg8KSCK06Ngs3K1Bb4YWJf38VYLrvUGQVrshC5fe88d4x+UpR84Nk
+        2Z1jsAOF6qTt5tm/qleOoPkZ3WoznLsR/JYgagRxED2rO5cdGePv8Xj4kaNQEaRXTWVa+2
+        2mMEmVcb2IieTk7WCeo1NBqI2q9BZuYxrgPCvYEZ9ukiiPZyGnDLo/ncHfsxcQ4xUrrY6a
+        l05AlMbSePxce9Iu8s13Sd4GMOSLyUkLg5uwS95pGHg8YTGsTt727Up/T9NbWzD+TYnrFb
+        KNa0BsSe7/cR7zs4F/68meaGrlbHSrHmpoNjA+Gk37gPWAyUipITmkYsNAXoTA==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1651656204;
+        s=2020e; t=1651656205;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=apvhUqgA5fesdTmfgsR6JbCSnigppljrynuw0Qm14eI=;
-        b=097yVG1zcUxlTR8sxMmoporuMreq+OBZk7C7STF6PZ5E4UjX3bxs5ir01tz0+pRt4Bs+Ma
-        D+EJ63I095qVxXAg==
+        bh=kCr57As/F1D1GMOOsBnOm34lXvRi/2Awdnv2aHw9C90=;
+        b=TigEsgmew1ZTuO7JwoefahZCkJcOCkA0NRFgSIfk75aP1UKHgzm4AeGH4tahkB3RD8PTol
+        /6M1R3RvGorjsgAw==
 From:   "tip-bot2 for Sandipan Das" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: perf/core] perf/x86/amd/core: Detect PerfMonV2 support
+Subject: [tip: perf/core] x86/msr: Add PerfCntrGlobal* registers
 Cc:     Sandipan Das <sandipan.das@amd.com>,
         "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: =?utf-8?q?=3Cdc8672ecbddff394e088ca8abf94b089b8ecc2e7=2E16505?=
+In-Reply-To: =?utf-8?q?=3Ccdc0d8f75bd519848731b5c64d924f5a0619a573=2E16505?=
  =?utf-8?q?15382=2Egit=2Esandipan=2Edas=40amd=2Ecom=3E?=
-References: =?utf-8?q?=3Cdc8672ecbddff394e088ca8abf94b089b8ecc2e7=2E165051?=
+References: =?utf-8?q?=3Ccdc0d8f75bd519848731b5c64d924f5a0619a573=2E165051?=
  =?utf-8?q?5382=2Egit=2Esandipan=2Edas=40amd=2Ecom=3E?=
 MIME-Version: 1.0
-Message-ID: <165165620357.4207.13021265622696818819.tip-bot2@tip-bot2>
+Message-ID: <165165620446.4207.5734722623404646306.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -69,98 +69,51 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the perf/core branch of tip:
 
-Commit-ID:     21d59e3e2c403c83ba196a5857d517054124168e
-Gitweb:        https://git.kernel.org/tip/21d59e3e2c403c83ba196a5857d517054124168e
+Commit-ID:     089be16d5992dd0bc6df15ef12042fd1023ded9a
+Gitweb:        https://git.kernel.org/tip/089be16d5992dd0bc6df15ef12042fd1023ded9a
 Author:        Sandipan Das <sandipan.das@amd.com>
-AuthorDate:    Thu, 21 Apr 2022 11:16:55 +05:30
+AuthorDate:    Thu, 21 Apr 2022 11:16:54 +05:30
 Committer:     Peter Zijlstra <peterz@infradead.org>
 CommitterDate: Wed, 04 May 2022 11:18:26 +02:00
 
-perf/x86/amd/core: Detect PerfMonV2 support
+x86/msr: Add PerfCntrGlobal* registers
 
-AMD Performance Monitoring Version 2 (PerfMonV2) introduces
-some new Core PMU features such as detection of the number
-of available PMCs and managing PMCs using global registers
-namely, PerfCntrGlobalCtl and PerfCntrGlobalStatus.
+Add MSR definitions that will be used to enable the new AMD
+Performance Monitoring Version 2 (PerfMonV2) features. These
+include:
 
-Clearing PerfCntrGlobalCtl and PerfCntrGlobalStatus ensures
-that all PMCs are inactive and have no pending overflows
-when CPUs are onlined or offlined.
+  * Performance Counter Global Control (PerfCntrGlobalCtl)
+  * Performance Counter Global Status (PerfCntrGlobalStatus)
+  * Performance Counter Global Status Clear (PerfCntrGlobalStatusClr)
 
-The PMU version (x86_pmu.version) now indicates PerfMonV2
-support and will be used to bypass the new features on
-unsupported processors.
+The new Performance Counter Global Control and Status MSRs
+provide an interface for enabling or disabling multiple
+counters at the same time and for testing overflow without
+probing the individual registers for each PMC.
+
+The availability of these registers is indicated through the
+PerfMonV2 feature bit of CPUID leaf 0x80000022 EAX.
 
 Signed-off-by: Sandipan Das <sandipan.das@amd.com>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lkml.kernel.org/r/dc8672ecbddff394e088ca8abf94b089b8ecc2e7.1650515382.git.sandipan.das@amd.com
+Link: https://lkml.kernel.org/r/cdc0d8f75bd519848731b5c64d924f5a0619a573.1650515382.git.sandipan.das@amd.com
 ---
- arch/x86/events/amd/core.c | 27 +++++++++++++++++++++++++++
- 1 file changed, 27 insertions(+)
+ arch/x86/include/asm/msr-index.h | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/arch/x86/events/amd/core.c b/arch/x86/events/amd/core.c
-index 8e1e818..b70dfa0 100644
---- a/arch/x86/events/amd/core.c
-+++ b/arch/x86/events/amd/core.c
-@@ -19,6 +19,9 @@ static unsigned long perf_nmi_window;
- #define AMD_MERGE_EVENT ((0xFULL << 32) | 0xFFULL)
- #define AMD_MERGE_EVENT_ENABLE (AMD_MERGE_EVENT | ARCH_PERFMON_EVENTSEL_ENABLE)
+diff --git a/arch/x86/include/asm/msr-index.h b/arch/x86/include/asm/msr-index.h
+index 8179ea3..58a44dc 100644
+--- a/arch/x86/include/asm/msr-index.h
++++ b/arch/x86/include/asm/msr-index.h
+@@ -524,6 +524,11 @@
+ #define AMD_CPPC_DES_PERF(x)		(((x) & 0xff) << 16)
+ #define AMD_CPPC_ENERGY_PERF_PREF(x)	(((x) & 0xff) << 24)
  
-+/* PMC Enable and Overflow bits for PerfCntrGlobal* registers */
-+static u64 amd_pmu_global_cntr_mask __read_mostly;
++/* AMD Performance Counter Global Status and Control MSRs */
++#define MSR_AMD64_PERF_CNTR_GLOBAL_STATUS	0xc0000300
++#define MSR_AMD64_PERF_CNTR_GLOBAL_CTL		0xc0000301
++#define MSR_AMD64_PERF_CNTR_GLOBAL_STATUS_CLR	0xc0000302
 +
- static __initconst const u64 amd_hw_cache_event_ids
- 				[PERF_COUNT_HW_CACHE_MAX]
- 				[PERF_COUNT_HW_CACHE_OP_MAX]
-@@ -578,6 +581,18 @@ static struct amd_nb *amd_alloc_nb(int cpu)
- 	return nb;
- }
+ /* Fam 17h MSRs */
+ #define MSR_F17H_IRPERF			0xc00000e9
  
-+static void amd_pmu_cpu_reset(int cpu)
-+{
-+	if (x86_pmu.version < 2)
-+		return;
-+
-+	/* Clear enable bits i.e. PerfCntrGlobalCtl.PerfCntrEn */
-+	wrmsrl(MSR_AMD64_PERF_CNTR_GLOBAL_CTL, 0);
-+
-+	/* Clear overflow bits i.e. PerfCntrGLobalStatus.PerfCntrOvfl */
-+	wrmsrl(MSR_AMD64_PERF_CNTR_GLOBAL_STATUS_CLR, amd_pmu_global_cntr_mask);
-+}
-+
- static int amd_pmu_cpu_prepare(int cpu)
- {
- 	struct cpu_hw_events *cpuc = &per_cpu(cpu_hw_events, cpu);
-@@ -625,6 +640,7 @@ static void amd_pmu_cpu_starting(int cpu)
- 	cpuc->amd_nb->refcnt++;
- 
- 	amd_brs_reset();
-+	amd_pmu_cpu_reset(cpu);
- }
- 
- static void amd_pmu_cpu_dead(int cpu)
-@@ -644,6 +660,8 @@ static void amd_pmu_cpu_dead(int cpu)
- 
- 		cpuhw->amd_nb = NULL;
- 	}
-+
-+	amd_pmu_cpu_reset(cpu);
- }
- 
- /*
-@@ -1185,6 +1203,15 @@ static int __init amd_core_pmu_init(void)
- 	x86_pmu.eventsel	= MSR_F15H_PERF_CTL;
- 	x86_pmu.perfctr		= MSR_F15H_PERF_CTR;
- 	x86_pmu.num_counters	= AMD64_NUM_COUNTERS_CORE;
-+
-+	/* Check for Performance Monitoring v2 support */
-+	if (boot_cpu_has(X86_FEATURE_PERFMON_V2)) {
-+		/* Update PMU version for later usage */
-+		x86_pmu.version = 2;
-+
-+		amd_pmu_global_cntr_mask = (1ULL << x86_pmu.num_counters) - 1;
-+	}
-+
- 	/*
- 	 * AMD Core perfctr has separate MSRs for the NB events, see
- 	 * the amd/uncore.c driver.

@@ -2,356 +2,477 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E46EB5196BC
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 07:12:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B488F5196BD
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 07:13:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242696AbiEDFPX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 01:15:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54886 "EHLO
+        id S1344670AbiEDFQq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 01:16:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235420AbiEDFPU (ORCPT
+        with ESMTP id S235420AbiEDFQo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 01:15:20 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A9A91A385
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 22:11:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651641105; x=1683177105;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=oE11qf1XArmoDWayXpIsHMto/I6WkBT+suFEyyKP9Ik=;
-  b=XI14hcO1n5A9ZkATx0gb1xg90UoTE+ELaJTOdeTVFqyMEU5LdmcpYNFB
-   3GKhF0IlJodsv45hL7u5n8GuJPW+zTQJaBg+CzMBbqPFoEfm+e+R5OqDJ
-   QBGFNCJAlFE2CJDn1Lh86B2LyAueg+iI3OUYveu6uMj/DECfxNo8KCBfM
-   eIFX9k/IFHtXBj5Ohns4L05V4/tlj6J6GBipjkBEG6soW6IoijwhFEbsG
-   7dPfTLJUKti1oW1mt8R8UH4/v0/YwdDpdYr6OIU3ZgZT1JaoaddEhvPDY
-   Iqx1/vyOT9MDV5ovN0Dq1P/iVSIQLxnCOLDk9y5ZFLwEsNLsOB4sS3/wJ
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10336"; a="265253053"
-X-IronPort-AV: E=Sophos;i="5.91,196,1647327600"; 
-   d="scan'208";a="265253053"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2022 22:11:45 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,196,1647327600"; 
-   d="scan'208";a="516867093"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 03 May 2022 22:11:43 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nm7Ic-000B5b-Ue;
-        Wed, 04 May 2022 05:11:42 +0000
-Date:   Wed, 04 May 2022 13:11:02 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [paulmck-rcu:rcu/next] BUILD SUCCESS
- 4ccb27d8a0f234aef439d44865d51218ab51eb5a
-Message-ID: <62720ae6.tUGchCJaMqcqpdg+%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Wed, 4 May 2022 01:16:44 -0400
+Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F9031A387
+        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 22:13:07 -0700 (PDT)
+Received: from fsav120.sakura.ne.jp (fsav120.sakura.ne.jp [27.133.134.247])
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 2445CjBd006088;
+        Wed, 4 May 2022 14:12:45 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Received: from www262.sakura.ne.jp (202.181.97.72)
+ by fsav120.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav120.sakura.ne.jp);
+ Wed, 04 May 2022 14:12:45 +0900 (JST)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav120.sakura.ne.jp)
+Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
+        (authenticated bits=0)
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 2445Cjs2006082
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
+        Wed, 4 May 2022 14:12:45 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Message-ID: <a58edafc-0a60-2eee-4058-8d69e5f1310b@I-love.SAKURA.ne.jp>
+Date:   Wed, 4 May 2022 14:12:45 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [syzbot] INFO: task hung in hci_dev_close_sync
+Content-Language: en-US
+To:     Johannes Berg <johannes.berg@intel.com>, Tejun Heo <tj@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, Dmitry Vyukov <dvyukov@google.com>,
+        syzkaller-bugs@googlegroups.com, Hillf Danton <hdanton@sina.com>,
+        syzbot <syzbot+c56f6371c48cad0420f9@syzkaller.appspotmail.com>
+References: <20220504044800.4966-1-hdanton@sina.com>
+From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+In-Reply-To: <20220504044800.4966-1-hdanton@sina.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git rcu/next
-branch HEAD: 4ccb27d8a0f234aef439d44865d51218ab51eb5a  rcutorture: Simplify rcu_torture_read_exit_child() loop
+Hello, Johannes.
 
-elapsed time: 8796m
+This seems to be a question regarding commit 87915adc3f0acdf0 ("workqueue: re-add lockdep dependencies for flushing").
 
-configs tested: 267
-configs skipped: 5
+On 2022/05/04 13:48, Hillf Danton wrote:
+> On Tue, 03 May 2022 09:59:16 -0700
+>> Hello,
+>>
+>> syzbot found the following issue on:
+>>
+>> HEAD commit:    9f9b9a2972eb Add linux-next specific files for 20220502
+>> git tree:       linux-next
+>> console output: https://syzkaller.appspot.com/x/log.txt?x=1304f300f00000
+>> kernel config:  https://syzkaller.appspot.com/x/.config?x=db7d696bedca61f5
+>> dashboard link: https://syzkaller.appspot.com/bug?extid=c56f6371c48cad0420f9
+>> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+>>
+>> Unfortunately, I don't have any reproducer for this issue yet.
+>>
+>> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+>> Reported-by: syzbot+c56f6371c48cad0420f9@syzkaller.appspotmail.com
+>>
+>> INFO: task kworker/u5:1:3691 blocked for more than 143 seconds.
+>>       Not tainted 5.18.0-rc5-next-20220502-syzkaller #0
+>> "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+>> task:kworker/u5:1    state:D stack:27464 pid: 3691 ppid:     2 flags:0x00004000
+>> Workqueue: hci4 hci_power_on
+>> Call Trace:
+>>  <TASK>
+>>  context_switch kernel/sched/core.c:5106 [inline]
+>>  __schedule+0xa9a/0x4cc0 kernel/sched/core.c:6421
+>>  schedule+0xd2/0x1f0 kernel/sched/core.c:6493
+>>  schedule_timeout+0x1db/0x2a0 kernel/time/timer.c:1883
+>>  do_wait_for_common kernel/sched/completion.c:85 [inline]
+>>  __wait_for_common+0x378/0x530 kernel/sched/completion.c:106
+>>  __flush_work+0x56c/0xb10 kernel/workqueue.c:3098
+>>  __cancel_work_timer+0x3f9/0x570 kernel/workqueue.c:3185
+>>  hci_dev_close_sync+0x8d/0x1150 net/bluetooth/hci_sync.c:4092
+>>  hci_dev_do_close+0x32/0x70 net/bluetooth/hci_core.c:553
+>>  hci_power_on+0x1c0/0x630 net/bluetooth/hci_core.c:981
+>>  process_one_work+0x996/0x1610 kernel/workqueue.c:2289
+>>  worker_thread+0x665/0x1080 kernel/workqueue.c:2436
+>>  kthread+0x2e9/0x3a0 kernel/kthread.c:376
+>>  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:298
+>>  </TASK>
+>> INFO: task kworker/u5:2:3694 blocked for more than 143 seconds.
+>>       Not tainted 5.18.0-rc5-next-20220502-syzkaller #0
+>> "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+>> task:kworker/u5:2    state:D stack:27688 pid: 3694 ppid:     2 flags:0x00004000
+>> Workqueue: hci1 hci_power_on
+>> Call Trace:
+>>  <TASK>
+>>  context_switch kernel/sched/core.c:5106 [inline]
+>>  __schedule+0xa9a/0x4cc0 kernel/sched/core.c:6421
+>>  schedule+0xd2/0x1f0 kernel/sched/core.c:6493
+>>  schedule_timeout+0x1db/0x2a0 kernel/time/timer.c:1883
+>>  do_wait_for_common kernel/sched/completion.c:85 [inline]
+>>  __wait_for_common+0x378/0x530 kernel/sched/completion.c:106
+>>  __flush_work+0x56c/0xb10 kernel/workqueue.c:3098
+>>  __cancel_work_timer+0x3f9/0x570 kernel/workqueue.c:3185
+>>  hci_dev_close_sync+0x8d/0x1150 net/bluetooth/hci_sync.c:4092
+>>  hci_dev_do_close+0x32/0x70 net/bluetooth/hci_core.c:553
+>>  hci_power_on+0x1c0/0x630 net/bluetooth/hci_core.c:981
+>>  process_one_work+0x996/0x1610 kernel/workqueue.c:2289
+>>  worker_thread+0x665/0x1080 kernel/workqueue.c:2436
+>>  kthread+0x2e9/0x3a0 kernel/kthread.c:376
+>>  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:298
+>>  </TASK>
+>> INFO: task kworker/u5:3:3696 blocked for more than 143 seconds.
+>>       Not tainted 5.18.0-rc5-next-20220502-syzkaller #0
+>> "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+>> task:kworker/u5:3    state:D stack:27192 pid: 3696 ppid:     2 flags:0x00004000
+>> Workqueue: hci2 hci_power_on
+>> Call Trace:
+>>  <TASK>
+>>  context_switch kernel/sched/core.c:5106 [inline]
+>>  __schedule+0xa9a/0x4cc0 kernel/sched/core.c:6421
+>>  schedule+0xd2/0x1f0 kernel/sched/core.c:6493
+>>  schedule_timeout+0x1db/0x2a0 kernel/time/timer.c:1883
+>>  do_wait_for_common kernel/sched/completion.c:85 [inline]
+>>  __wait_for_common+0x378/0x530 kernel/sched/completion.c:106
+>>  __flush_work+0x56c/0xb10 kernel/workqueue.c:3098
+>>  __cancel_work_timer+0x3f9/0x570 kernel/workqueue.c:3185
+>>  hci_dev_close_sync+0x8d/0x1150 net/bluetooth/hci_sync.c:4092
+>>  hci_dev_do_close+0x32/0x70 net/bluetooth/hci_core.c:553
+>>  hci_power_on+0x1c0/0x630 net/bluetooth/hci_core.c:981
+>>  process_one_work+0x996/0x1610 kernel/workqueue.c:2289
+>>  worker_thread+0x665/0x1080 kernel/workqueue.c:2436
+>>  kthread+0x2e9/0x3a0 kernel/kthread.c:376
+>>  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:298
+>>  </TASK>
+>> INFO: task kworker/u5:5:5430 blocked for more than 144 seconds.
+>>       Not tainted 5.18.0-rc5-next-20220502-syzkaller #0
+>> "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+>> task:kworker/u5:5    state:D stack:27536 pid: 5430 ppid:     2 flags:0x00004000
+>> Workqueue: hci0 hci_power_on
+>> Call Trace:
+>>  <TASK>
+>>  context_switch kernel/sched/core.c:5106 [inline]
+>>  __schedule+0xa9a/0x4cc0 kernel/sched/core.c:6421
+>>  schedule+0xd2/0x1f0 kernel/sched/core.c:6493
+>>  schedule_timeout+0x1db/0x2a0 kernel/time/timer.c:1883
+>>  do_wait_for_common kernel/sched/completion.c:85 [inline]
+>>  __wait_for_common+0x378/0x530 kernel/sched/completion.c:106
+>>  __flush_work+0x56c/0xb10 kernel/workqueue.c:3098
+> 
+> This is the problem, see below.
+> 
+>>  __cancel_work_timer+0x3f9/0x570 kernel/workqueue.c:3185
+>>  hci_dev_close_sync+0x8d/0x1150 net/bluetooth/hci_sync.c:4092
+>>  hci_dev_do_close+0x32/0x70 net/bluetooth/hci_core.c:553
+>>  hci_power_on+0x1c0/0x630 net/bluetooth/hci_core.c:981
+>>  process_one_work+0x996/0x1610 kernel/workqueue.c:2289
+>>  worker_thread+0x665/0x1080 kernel/workqueue.c:2436
+>>  kthread+0x2e9/0x3a0 kernel/kthread.c:376
+>>  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:298
+>>  </TASK>
+>> INFO: task syz-executor.5:5786 blocked for more than 144 seconds.
+>>       Not tainted 5.18.0-rc5-next-20220502-syzkaller #0
+>> "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+>> task:syz-executor.5  state:D stack:28408 pid: 5786 ppid:     1 flags:0x00000000
+>> Call Trace:
+>>  <TASK>
+>>  context_switch kernel/sched/core.c:5106 [inline]
+>>  __schedule+0xa9a/0x4cc0 kernel/sched/core.c:6421
+>>  schedule+0xd2/0x1f0 kernel/sched/core.c:6493
+>>  schedule_timeout+0x1db/0x2a0 kernel/time/timer.c:1883
+>>  do_wait_for_common kernel/sched/completion.c:85 [inline]
+>>  __wait_for_common+0x378/0x530 kernel/sched/completion.c:106
+>>  flush_workqueue+0x44e/0x1440 kernel/workqueue.c:2884
+>>  hci_dev_open+0xdb/0x300 net/bluetooth/hci_core.c:526
+>>  hci_sock_ioctl+0x62c/0x910 net/bluetooth/hci_sock.c:1027
+>>  sock_do_ioctl+0xcc/0x230 net/socket.c:1131
+>>  sock_ioctl+0x2f1/0x640 net/socket.c:1248
+>>  vfs_ioctl fs/ioctl.c:51 [inline]
+>>  __do_sys_ioctl fs/ioctl.c:870 [inline]
+>>  __se_sys_ioctl fs/ioctl.c:856 [inline]
+>>  __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:856
+>>  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>>  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+>>  entry_SYSCALL_64_after_hwframe+0x44/0xae
+>> RIP: 0033:0x7f13b1488ea7
+>> RSP: 002b:00007ffeca7dc868 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+>> RAX: ffffffffffffffda RBX: 00007ffeca7dcf28 RCX: 00007f13b1488ea7
+>> RDX: 0000000000000000 RSI: 00000000400448c9 RDI: 0000000000000003
+>> RBP: 0000000000000003 R08: 00007f13b0bff700 R09: 00007f13b0bff700
+>> R10: 00007f13b0bff9d0 R11: 0000000000000246 R12: 0000000000000003
+>> R13: 00007ffeca7dc9c0 R14: 00007f13b159c9b8 R15: 000000000000000c
+>>  </TASK>
+>> INFO: task syz-executor.3:5903 blocked for more than 144 seconds.
+>>       Not tainted 5.18.0-rc5-next-20220502-syzkaller #0
+>> "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+>> task:syz-executor.3  state:D stack:28408 pid: 5903 ppid:     1 flags:0x00004000
+>> Call Trace:
+>>  <TASK>
+>>  context_switch kernel/sched/core.c:5106 [inline]
+>>  __schedule+0xa9a/0x4cc0 kernel/sched/core.c:6421
+>>  schedule+0xd2/0x1f0 kernel/sched/core.c:6493
+>>  schedule_timeout+0x1db/0x2a0 kernel/time/timer.c:1883
+>>  do_wait_for_common kernel/sched/completion.c:85 [inline]
+>>  __wait_for_common+0x378/0x530 kernel/sched/completion.c:106
+>>  flush_workqueue+0x44e/0x1440 kernel/workqueue.c:2884
+>>  hci_dev_open+0xdb/0x300 net/bluetooth/hci_core.c:526
+>>  hci_sock_ioctl+0x62c/0x910 net/bluetooth/hci_sock.c:1027
+>>  sock_do_ioctl+0xcc/0x230 net/socket.c:1131
+>>  sock_ioctl+0x2f1/0x640 net/socket.c:1248
+>>  vfs_ioctl fs/ioctl.c:51 [inline]
+>>  __do_sys_ioctl fs/ioctl.c:870 [inline]
+>>  __se_sys_ioctl fs/ioctl.c:856 [inline]
+>>  __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:856
+>>  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>>  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+>>  entry_SYSCALL_64_after_hwframe+0x44/0xae
+>> RIP: 0033:0x7ffbbf688ea7
+>> RSP: 002b:00007fffc1092908 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+>> RAX: ffffffffffffffda RBX: 00007fffc1092fc8 RCX: 00007ffbbf688ea7
+>> RDX: 0000000000000001 RSI: 00000000400448c9 RDI: 0000000000000003
+>> RBP: 0000000000000003 R08: 00007ffbbedff700 R09: 00007ffbbedff700
+>> R10: 00007ffbbedff9d0 R11: 0000000000000246 R12: 0000000000000003
+>> R13: 00007fffc1092a60 R14: 00007ffbbf79c9b8 R15: 000000000000000c
+>>  </TASK>
+>> INFO: task syz-executor.2:6048 blocked for more than 144 seconds.
+>>       Not tainted 5.18.0-rc5-next-20220502-syzkaller #0
+>> "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+>> task:syz-executor.2  state:D stack:28408 pid: 6048 ppid:     1 flags:0x00004000
+>> Call Trace:
+>>  <TASK>
+>>  context_switch kernel/sched/core.c:5106 [inline]
+>>  __schedule+0xa9a/0x4cc0 kernel/sched/core.c:6421
+>>  schedule+0xd2/0x1f0 kernel/sched/core.c:6493
+>>  schedule_timeout+0x1db/0x2a0 kernel/time/timer.c:1883
+>>  do_wait_for_common kernel/sched/completion.c:85 [inline]
+>>  __wait_for_common+0x378/0x530 kernel/sched/completion.c:106
+>>  flush_workqueue+0x44e/0x1440 kernel/workqueue.c:2884
+>>  hci_dev_open+0xdb/0x300 net/bluetooth/hci_core.c:526
+>>  hci_sock_ioctl+0x62c/0x910 net/bluetooth/hci_sock.c:1027
+>>  sock_do_ioctl+0xcc/0x230 net/socket.c:1131
+>>  sock_ioctl+0x2f1/0x640 net/socket.c:1248
+>>  vfs_ioctl fs/ioctl.c:51 [inline]
+>>  __do_sys_ioctl fs/ioctl.c:870 [inline]
+>>  __se_sys_ioctl fs/ioctl.c:856 [inline]
+>>  __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:856
+>>  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>>  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+>>  entry_SYSCALL_64_after_hwframe+0x44/0xae
+>> RIP: 0033:0x7ff9c0e88ea7
+>> RSP: 002b:00007ffed3e82ed8 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+>> RAX: ffffffffffffffda RBX: 00007ffed3e83598 RCX: 00007ff9c0e88ea7
+>> RDX: 0000000000000004 RSI: 00000000400448c9 RDI: 0000000000000003
+>> RBP: 0000000000000003 R08: 00007ff9c05ff700 R09: 00007ff9c05ff700
+>> R10: 00007ff9c05ff9d0 R11: 0000000000000246 R12: 0000000000000003
+>> R13: 00007ffed3e83030 R14: 00007ff9c0f9c9b8 R15: 000000000000000c
+>>  </TASK>
+>> INFO: task syz-executor.0:6305 blocked for more than 145 seconds.
+>>       Not tainted 5.18.0-rc5-next-20220502-syzkaller #0
+>> "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+>> task:syz-executor.0  state:D stack:28408 pid: 6305 ppid:     1 flags:0x00000000
+>> Call Trace:
+>>  <TASK>
+>>  context_switch kernel/sched/core.c:5106 [inline]
+>>  __schedule+0xa9a/0x4cc0 kernel/sched/core.c:6421
+>>  schedule+0xd2/0x1f0 kernel/sched/core.c:6493
+>>  schedule_timeout+0x1db/0x2a0 kernel/time/timer.c:1883
+>>  do_wait_for_common kernel/sched/completion.c:85 [inline]
+>>  __wait_for_common+0x378/0x530 kernel/sched/completion.c:106
+>>  flush_workqueue+0x44e/0x1440 kernel/workqueue.c:2884
+>>  hci_dev_open+0xdb/0x300 net/bluetooth/hci_core.c:526
+>>  hci_sock_ioctl+0x62c/0x910 net/bluetooth/hci_sock.c:1027
+>>  sock_do_ioctl+0xcc/0x230 net/socket.c:1131
+>>  sock_ioctl+0x2f1/0x640 net/socket.c:1248
+>>  vfs_ioctl fs/ioctl.c:51 [inline]
+>>  __do_sys_ioctl fs/ioctl.c:870 [inline]
+>>  __se_sys_ioctl fs/ioctl.c:856 [inline]
+>>  __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:856
+>>  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>>  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+>>  entry_SYSCALL_64_after_hwframe+0x44/0xae
+>> RIP: 0033:0x7fe7a4488ea7
+>> RSP: 002b:00007ffcc64117a8 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+>> RAX: ffffffffffffffda RBX: 00007ffcc6411e68 RCX: 00007fe7a4488ea7
+>> RDX: 0000000000000002 RSI: 00000000400448c9 RDI: 0000000000000003
+>> RBP: 0000000000000003 R08: 00007fe7a3bff700 R09: 00007fe7a3bff700
+>> R10: 00007fe7a3bff9d0 R11: 0000000000000246 R12: 0000000000000003
+>> R13: 00007ffcc6411900 R14: 00007fe7a459c9b8 R15: 000000000000000c
+>>  </TASK>
+>>
+>> Showing all locks held in the system:
+>> 1 lock held by rcu_tasks_kthre/12:
+>>  #0: ffffffff8bd84cd0 (rcu_tasks.tasks_gp_mutex){+.+.}-{3:3}, at: rcu_tasks_one_gp+0x26/0xc70 kernel/rcu/tasks.h:502
+>> 1 lock held by rcu_tasks_trace/13:
+>>  #0: ffffffff8bd84950 (rcu_tasks_trace.tasks_gp_mutex){+.+.}-{3:3}, at: rcu_tasks_one_gp+0x26/0xc70 kernel/rcu/tasks.h:502
+>> 1 lock held by khungtaskd/29:
+>>  #0: ffffffff8bd85820 (rcu_read_lock){....}-{1:2}, at: debug_show_all_locks+0x53/0x260 kernel/locking/lockdep.c:6491
+>> 2 locks held by getty/3356:
+>>  #0: ffff88814bb09098 (&tty->ldisc_sem){++++}-{0:0}, at: tty_ldisc_ref_wait+0x22/0x80 drivers/tty/tty_ldisc.c:244
+>>  #1: ffffc90002ce62e8 (&ldata->atomic_read_lock){+.+.}-{3:3}, at: n_tty_read+0xe50/0x13c0 drivers/tty/n_tty.c:2118
+>> 3 locks held by kworker/u5:1/3691:
+>>  #0: ffff88802520a938 ((wq_completion)hci4){+.+.}-{0:0}, at: arch_atomic64_set arch/x86/include/asm/atomic64_64.h:34 [inline]
+>>  #0: ffff88802520a938 ((wq_completion)hci4){+.+.}-{0:0}, at: arch_atomic_long_set include/linux/atomic/atomic-long.h:41 [inline]
+>>  #0: ffff88802520a938 ((wq_completion)hci4){+.+.}-{0:0}, at: atomic_long_set include/linux/atomic/atomic-instrumented.h:1280 [inline]
+>>  #0: ffff88802520a938 ((wq_completion)hci4){+.+.}-{0:0}, at: set_work_data kernel/workqueue.c:636 [inline]
+>>  #0: ffff88802520a938 ((wq_completion)hci4){+.+.}-{0:0}, at: set_work_pool_and_clear_pending kernel/workqueue.c:663 [inline]
+>>  #0: ffff88802520a938 ((wq_completion)hci4){+.+.}-{0:0}, at: process_one_work+0x87a/0x1610 kernel/workqueue.c:2260
+>>  #1: ffffc90002f5fda8 ((work_completion)(&hdev->power_on)){+.+.}-{0:0}, at: process_one_work+0x8ae/0x1610 kernel/workqueue.c:2264
+>>  #2: ffff88801e529048 (&hdev->req_lock){+.+.}-{3:3}, at: hci_dev_do_close+0x2a/0x70 net/bluetooth/hci_core.c:551
+>> 3 locks held by kworker/u5:2/3694:
+>>  #0: ffff88807eb0f138 ((wq_completion)hci1){+.+.}-{0:0}, at: arch_atomic64_set arch/x86/include/asm/atomic64_64.h:34 [inline]
+>>  #0: ffff88807eb0f138 ((wq_completion)hci1){+.+.}-{0:0}, at: arch_atomic_long_set include/linux/atomic/atomic-long.h:41 [inline]
+>>  #0: ffff88807eb0f138 ((wq_completion)hci1){+.+.}-{0:0}, at: atomic_long_set include/linux/atomic/atomic-instrumented.h:1280 [inline]
+>>  #0: ffff88807eb0f138 ((wq_completion)hci1){+.+.}-{0:0}, at: set_work_data kernel/workqueue.c:636 [inline]
+>>  #0: ffff88807eb0f138 ((wq_completion)hci1){+.+.}-{0:0}, at: set_work_pool_and_clear_pending kernel/workqueue.c:663 [inline]
+>>  #0: ffff88807eb0f138 ((wq_completion)hci1){+.+.}-{0:0}, at: process_one_work+0x87a/0x1610 kernel/workqueue.c:2260
+>>  #1: ffffc9000307fda8 ((work_completion)(&hdev->power_on)){+.+.}-{0:0}, at: process_one_work+0x8ae/0x1610 kernel/workqueue.c:2264
+>>  #2: ffff88801e165048 (&hdev->req_lock){+.+.}-{3:3}, at: hci_dev_do_close+0x2a/0x70 net/bluetooth/hci_core.c:551
+>> 3 locks held by kworker/u5:3/3696:
+>>  #0: ffff88807ad37938 ((wq_completion)hci2){+.+.}-{0:0}, at: arch_atomic64_set arch/x86/include/asm/atomic64_64.h:34 [inline]
+>>  #0: ffff88807ad37938 ((wq_completion)hci2){+.+.}-{0:0}, at: arch_atomic_long_set include/linux/atomic/atomic-long.h:41 [inline]
+>>  #0: ffff88807ad37938 ((wq_completion)hci2){+.+.}-{0:0}, at: atomic_long_set include/linux/atomic/atomic-instrumented.h:1280 [inline]
+>>  #0: ffff88807ad37938 ((wq_completion)hci2){+.+.}-{0:0}, at: set_work_data kernel/workqueue.c:636 [inline]
+>>  #0: ffff88807ad37938 ((wq_completion)hci2){+.+.}-{0:0}, at: set_work_pool_and_clear_pending kernel/workqueue.c:663 [inline]
+>>  #0: ffff88807ad37938 ((wq_completion)hci2){+.+.}-{0:0}, at: process_one_work+0x87a/0x1610 kernel/workqueue.c:2260
+>>  #1: ffffc9000309fda8 ((work_completion)(&hdev->power_on)){+.+.}-{0:0}, at: process_one_work+0x8ae/0x1610 kernel/workqueue.c:2264
+>>  #2: ffff88807d985048 (&hdev->req_lock){+.+.}-{3:3}, at: hci_dev_do_close+0x2a/0x70 net/bluetooth/hci_core.c:551
+>> 3 locks held by kworker/u5:5/5430:
+>>  #0: ffff88805b8c0938 ((wq_completion)hci0){+.+.}-{0:0}, at: arch_atomic64_set arch/x86/include/asm/atomic64_64.h:34 [inline]
+>>  #0: ffff88805b8c0938 ((wq_completion)hci0){+.+.}-{0:0}, at: arch_atomic_long_set include/linux/atomic/atomic-long.h:41 [inline]
+>>  #0: ffff88805b8c0938 ((wq_completion)hci0){+.+.}-{0:0}, at: atomic_long_set include/linux/atomic/atomic-instrumented.h:1280 [inline]
+>>  #0: ffff88805b8c0938 ((wq_completion)hci0){+.+.}-{0:0}, at: set_work_data kernel/workqueue.c:636 [inline]
+>>  #0: ffff88805b8c0938 ((wq_completion)hci0){+.+.}-{0:0}, at: set_work_pool_and_clear_pending kernel/workqueue.c:663 [inline]
+>>  #0: ffff88805b8c0938 ((wq_completion)hci0){+.+.}-{0:0}, at: process_one_work+0x87a/0x1610 kernel/workqueue.c:2260
+>>  #1: ffffc90002e3fda8 ((work_completion)(&hdev->power_on)){+.+.}-{0:0}, at: process_one_work+0x8ae/0x1610 kernel/workqueue.c:2264
+>>  #2: ffff888075741048 (&hdev->req_lock){+.+.}-{3:3}, at: hci_dev_do_close+0x2a/0x70 net/bluetooth/hci_core.c:551
+>>
+>> =============================================
+>>
+>> NMI backtrace for cpu 0
+>> CPU: 0 PID: 29 Comm: khungtaskd Not tainted 5.18.0-rc5-next-20220502-syzkaller #0
+>> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+>> Call Trace:
+>>  <TASK>
+>>  __dump_stack lib/dump_stack.c:88 [inline]
+>>  dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+>>  nmi_cpu_backtrace.cold+0x47/0x144 lib/nmi_backtrace.c:111
+>>  nmi_trigger_cpumask_backtrace+0x1e6/0x230 lib/nmi_backtrace.c:62
+>>  trigger_all_cpu_backtrace include/linux/nmi.h:146 [inline]
+>>  check_hung_uninterruptible_tasks kernel/hung_task.c:220 [inline]
+>>  watchdog+0xc22/0xf90 kernel/hung_task.c:378
+>>  kthread+0x2e9/0x3a0 kernel/kthread.c:376
+>>  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:298
+>>  </TASK>
+>> Sending NMI from CPU 0 to CPUs 1:
+>> NMI backtrace for cpu 1
+>> CPU: 1 PID: 8 Comm: kworker/u4:0 Not tainted 5.18.0-rc5-next-20220502-syzkaller #0
+>> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+>> Workqueue: events_unbound toggle_allocation_gate
+>> RIP: 0010:__lock_acquire+0xd51/0x5660 kernel/locking/lockdep.c:5063
+>> Code: 03 0f b6 04 02 84 c0 74 0d 3c 03 7f 09 48 8b 3c 24 e8 63 78 69 00 41 8b 85 58 0a 00 00 83 c0 01 83 f8 2f 41 89 85 58 0a 00 00 <0f> 87 eb 0b 00 00 3b 05 53 e2 1e 0e 41 be 01 00 00 00 0f 86 c8 00
+>> RSP: 0018:ffffc900000d7748 EFLAGS: 00000097
+>> RAX: 0000000000000006 RBX: ffffffff8f3c6c00 RCX: ffffffff815ddcee
+>> RDX: 1ffff110021e1c5b RSI: 0000000000000001 RDI: ffffffff8f3c6c18
+>> RBP: 000000000000f5e5 R08: 0000000000000000 R09: ffffffff9007b897
+>> R10: fffffbfff200f712 R11: 0000000000000001 R12: ffff888010f0e3a8
+>> R13: ffff888010f0d880 R14: 0000000000000000 R15: d4985ce4c67f0360
+>> FS:  0000000000000000(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
+>> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+>> CR2: 000000c001d7d000 CR3: 000000000ba8e000 CR4: 00000000003506e0
+>> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+>> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+>> Call Trace:
+>>  <TASK>
+>>  lock_acquire kernel/locking/lockdep.c:5665 [inline]
+>>  lock_acquire+0x1ab/0x570 kernel/locking/lockdep.c:5630
+>>  __raw_spin_lock include/linux/spinlock_api_smp.h:133 [inline]
+>>  _raw_spin_lock+0x2a/0x40 kernel/locking/spinlock.c:154
+>>  spin_lock include/linux/spinlock.h:354 [inline]
+>>  __get_locked_pte+0x154/0x270 mm/memory.c:1830
+>>  get_locked_pte include/linux/mm.h:2127 [inline]
+>>  __text_poke+0x1ae/0x8c0 arch/x86/kernel/alternative.c:1038
+>>  text_poke arch/x86/kernel/alternative.c:1121 [inline]
+>>  text_poke_bp_batch+0x433/0x6b0 arch/x86/kernel/alternative.c:1436
+>>  text_poke_flush arch/x86/kernel/alternative.c:1542 [inline]
+>>  text_poke_flush arch/x86/kernel/alternative.c:1539 [inline]
+>>  text_poke_finish+0x16/0x30 arch/x86/kernel/alternative.c:1549
+>>  arch_jump_label_transform_apply+0x13/0x20 arch/x86/kernel/jump_label.c:146
+>>  jump_label_update+0x32f/0x410 kernel/jump_label.c:830
+>>  static_key_disable_cpuslocked+0x152/0x1b0 kernel/jump_label.c:207
+>>  static_key_disable+0x16/0x20 kernel/jump_label.c:215
+>>  toggle_allocation_gate mm/kfence/core.c:809 [inline]
+>>  toggle_allocation_gate+0x183/0x390 mm/kfence/core.c:787
+>>  process_one_work+0x996/0x1610 kernel/workqueue.c:2289
+>>  worker_thread+0x665/0x1080 kernel/workqueue.c:2436
+>>  kthread+0x2e9/0x3a0 kernel/kthread.c:376
+>>  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:298
+>>  </TASK>
+>> ----------------
+>> Code disassembly (best guess):
+>>    0:	03 0f                	add    (%rdi),%ecx
+>>    2:	b6 04                	mov    $0x4,%dh
+>>    4:	02 84 c0 74 0d 3c 03 	add    0x33c0d74(%rax,%rax,8),%al
+>>    b:	7f 09                	jg     0x16
+>>    d:	48 8b 3c 24          	mov    (%rsp),%rdi
+>>   11:	e8 63 78 69 00       	callq  0x697879
+>>   16:	41 8b 85 58 0a 00 00 	mov    0xa58(%r13),%eax
+>>   1d:	83 c0 01             	add    $0x1,%eax
+>>   20:	83 f8 2f             	cmp    $0x2f,%eax
+>>   23:	41 89 85 58 0a 00 00 	mov    %eax,0xa58(%r13)
+>> * 2a:	0f 87 eb 0b 00 00    	ja     0xc1b <-- trapping instruction
+>>   30:	3b 05 53 e2 1e 0e    	cmp    0xe1ee253(%rip),%eax        # 0xe1ee289
+>>   36:	41 be 01 00 00 00    	mov    $0x1,%r14d
+>>   3c:	0f                   	.byte 0xf
+>>   3d:	86 c8                	xchg   %cl,%al
+>>
+>>
+>> ---
+>> This report is generated by a bot. It may contain errors.
+>> See https://goo.gl/tpsmEJ for more information about syzbot.
+>> syzbot engineers can be reached at syzkaller@googlegroups.com.
+>>
+>> syzbot will keep track of this issue. See:
+>> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+>>
+> 
+> Given the call trace reported,
+> 
+> 	process_one_work
+> 	  lock_map_acquire(&pwq->wq->lockdep_map);
+> 	  lock_map_acquire(&lockdep_map);
+> 	  hci_power_on
+> 	    hci_dev_do_close
+> 	      hci_req_sync_lock(hdev);
+> 	      hci_dev_close_sync(hdev);
+> 	        cancel_work_sync(&hdev->power_on);
+> 		  __cancel_work_timer()
+> 		    __flush_work(work, true);
+> 			if (!from_cancel) {
+> 				lock_map_acquire(&work->lockdep_map);
+> 				lock_map_release(&work->lockdep_map);
+> 			}
+> 	      hci_req_sync_unlock(hdev);
+> 
+> 
+> syzbot should have been able to catch cancel_work_sync() in work context
+> by checking lockdep_map in __flush_work() for both flush and cancel.
+> 
+> Hillf
+> 
+> --- y/kernel/workqueue.c
+> +++ x/kernel/workqueue.c
+> @@ -3075,10 +3075,10 @@ static bool __flush_work(struct work_str
+>  	if (WARN_ON(!work->func))
+>  		return false;
+>  
+> -	if (!from_cancel) {
+> +	//if (!from_cancel) {
+>  		lock_map_acquire(&work->lockdep_map);
+>  		lock_map_release(&work->lockdep_map);
+> -	}
+> +	//}
+>  
+>  	if (start_flush_work(work, &barr, from_cancel)) {
+>  		wait_for_completion(&barr.done);
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-arm64                               defconfig
-arm64                            allyesconfig
-arm                              allmodconfig
-arm                                 defconfig
-arm                              allyesconfig
-i386                          randconfig-c001
-mips                         tb0226_defconfig
-powerpc                      cm5200_defconfig
-powerpc                       holly_defconfig
-xtensa                           allyesconfig
-powerpc                         ps3_defconfig
-arc                     haps_hs_smp_defconfig
-arc                            hsdk_defconfig
-arm                         vf610m4_defconfig
-s390                       zfcpdump_defconfig
-arm                        realview_defconfig
-arm                       multi_v4t_defconfig
-xtensa                  nommu_kc705_defconfig
-sparc64                          alldefconfig
-sh                        sh7763rdp_defconfig
-mips                           ci20_defconfig
-parisc                              defconfig
-sh                         microdev_defconfig
-powerpc                  iss476-smp_defconfig
-powerpc                     tqm8541_defconfig
-riscv                            allmodconfig
-arc                        nsimosci_defconfig
-powerpc                      arches_defconfig
-powerpc                 linkstation_defconfig
-sh                     sh7710voipgw_defconfig
-sh                        edosk7705_defconfig
-mips                           ip32_defconfig
-arm                          lpd270_defconfig
-riscv                            allyesconfig
-sh                           se7619_defconfig
-mips                  maltasmvp_eva_defconfig
-sh                   secureedge5410_defconfig
-sh                            shmin_defconfig
-sh                          r7780mp_defconfig
-powerpc                     taishan_defconfig
-sparc                       sparc64_defconfig
-h8300                               defconfig
-sh                          rsk7264_defconfig
-sparc                            alldefconfig
-arm                      integrator_defconfig
-microblaze                          defconfig
-mips                         cobalt_defconfig
-powerpc                      ep88xc_defconfig
-arm                           imxrt_defconfig
-powerpc                    klondike_defconfig
-m68k                       m5208evb_defconfig
-arc                              alldefconfig
-powerpc                   currituck_defconfig
-powerpc                 mpc837x_mds_defconfig
-xtensa                       common_defconfig
-powerpc                    amigaone_defconfig
-microblaze                      mmu_defconfig
-sh                          polaris_defconfig
-xtensa                    smp_lx200_defconfig
-arm                          gemini_defconfig
-sh                        apsh4ad0a_defconfig
-m68k                       m5275evb_defconfig
-sh                         ap325rxa_defconfig
-powerpc                mpc7448_hpc2_defconfig
-xtensa                              defconfig
-parisc                generic-64bit_defconfig
-sh                          lboxre2_defconfig
-sparc64                             defconfig
-arm                           sunxi_defconfig
-powerpc                       maple_defconfig
-m68k                        m5272c3_defconfig
-sh                             shx3_defconfig
-sh                           se7780_defconfig
-mips                      maltasmvp_defconfig
-arc                     nsimosci_hs_defconfig
-arm                       omap2plus_defconfig
-mips                  decstation_64_defconfig
-sh                          kfr2r09_defconfig
-alpha                            alldefconfig
-mips                      fuloong2e_defconfig
-nios2                         3c120_defconfig
-m68k                        stmark2_defconfig
-xtensa                         virt_defconfig
-powerpc                      mgcoge_defconfig
-powerpc                   motionpro_defconfig
-m68k                       m5475evb_defconfig
-m68k                       bvme6000_defconfig
-powerpc64                           defconfig
-sh                        edosk7760_defconfig
-s390                          debug_defconfig
-sh                      rts7751r2d1_defconfig
-sh                   sh7724_generic_defconfig
-sh                        sh7785lcr_defconfig
-mips                         db1xxx_defconfig
-m68k                          multi_defconfig
-arm                          exynos_defconfig
-powerpc                 mpc834x_mds_defconfig
-arc                         haps_hs_defconfig
-arm                        cerfcube_defconfig
-mips                     decstation_defconfig
-powerpc                         wii_defconfig
-powerpc                 mpc8540_ads_defconfig
-powerpc                     sequoia_defconfig
-powerpc                     mpc83xx_defconfig
-mips                         rt305x_defconfig
-ia64                             alldefconfig
-arm                         nhk8815_defconfig
-sh                             sh03_defconfig
-sh                             espt_defconfig
-openrisc                            defconfig
-sh                          urquell_defconfig
-powerpc                      ppc40x_defconfig
-arm                            lart_defconfig
-riscv             nommu_k210_sdcard_defconfig
-mips                             allyesconfig
-h8300                       h8s-sim_defconfig
-sh                           sh2007_defconfig
-arm                     eseries_pxa_defconfig
-mips                    maltaup_xpa_defconfig
-openrisc                    or1ksim_defconfig
-sh                          landisk_defconfig
-powerpc                      ppc6xx_defconfig
-i386                                defconfig
-powerpc                     asp8347_defconfig
-mips                       bmips_be_defconfig
-sh                           se7206_defconfig
-sh                   rts7751r2dplus_defconfig
-parisc64                            defconfig
-m68k                             allmodconfig
-arm                        oxnas_v6_defconfig
-sh                           se7721_defconfig
-sh                           se7705_defconfig
-arm                        keystone_defconfig
-alpha                            allyesconfig
-x86_64                        randconfig-c001
-arm                  randconfig-c002-20220428
-arm                  randconfig-c002-20220501
-x86_64               randconfig-c001-20220502
-i386                 randconfig-c001-20220502
-arm                  randconfig-c002-20220502
-ia64                                defconfig
-ia64                             allmodconfig
-ia64                             allyesconfig
-m68k                             allyesconfig
-m68k                                defconfig
-nios2                               defconfig
-arc                              allyesconfig
-csky                                defconfig
-nios2                            allyesconfig
-alpha                               defconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-s390                                defconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-s390                             allyesconfig
-sparc                               defconfig
-sparc                            allyesconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-i386                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                           allnoconfig
-powerpc                          allmodconfig
-x86_64               randconfig-a006-20220502
-x86_64               randconfig-a001-20220502
-x86_64               randconfig-a003-20220502
-x86_64                        randconfig-a006
-x86_64                        randconfig-a004
-x86_64                        randconfig-a002
-i386                 randconfig-a004-20220502
-i386                 randconfig-a006-20220502
-i386                 randconfig-a002-20220502
-i386                 randconfig-a003-20220502
-i386                 randconfig-a001-20220502
-x86_64                        randconfig-a011
-x86_64                        randconfig-a013
-x86_64                        randconfig-a015
-i386                          randconfig-a012
-i386                          randconfig-a014
-i386                          randconfig-a016
-arc                  randconfig-r043-20220501
-s390                 randconfig-r044-20220501
-riscv                randconfig-r042-20220501
-riscv                               defconfig
-riscv                    nommu_virt_defconfig
-riscv                          rv32_defconfig
-riscv                    nommu_k210_defconfig
-riscv                             allnoconfig
-x86_64                    rhel-8.3-kselftests
-um                           x86_64_defconfig
-um                             i386_defconfig
-x86_64                          rhel-8.3-func
-x86_64                           rhel-8.3-syz
-x86_64                                  kexec
-x86_64                              defconfig
-x86_64                         rhel-8.3-kunit
-x86_64                               rhel-8.3
-x86_64                           allyesconfig
-
-clang tested configs:
-riscv                randconfig-c006-20220428
-mips                 randconfig-c004-20220428
-x86_64                        randconfig-c007
-i386                          randconfig-c001
-arm                  randconfig-c002-20220428
-powerpc              randconfig-c003-20220428
-powerpc              randconfig-c003-20220501
-riscv                randconfig-c006-20220501
-mips                 randconfig-c004-20220501
-arm                  randconfig-c002-20220501
-riscv                randconfig-c006-20220429
-mips                 randconfig-c004-20220429
-arm                  randconfig-c002-20220429
-powerpc              randconfig-c003-20220429
-mips                     loongson2k_defconfig
-arm                   milbeaut_m10v_defconfig
-powerpc                    ge_imp3a_defconfig
-mips                   sb1250_swarm_defconfig
-arm64                            allyesconfig
-powerpc                     tqm8540_defconfig
-riscv                    nommu_virt_defconfig
-powerpc                  mpc866_ads_defconfig
-mips                  cavium_octeon_defconfig
-arm                          ep93xx_defconfig
-arm                        neponset_defconfig
-arm                          moxart_defconfig
-powerpc                 mpc832x_rdb_defconfig
-mips                     cu1830-neo_defconfig
-powerpc                      walnut_defconfig
-arm                              alldefconfig
-mips                            e55_defconfig
-powerpc                  mpc885_ads_defconfig
-arm                       cns3420vb_defconfig
-powerpc                        fsp2_defconfig
-powerpc                   microwatt_defconfig
-mips                       lemote2f_defconfig
-arm                         bcm2835_defconfig
-arm                       netwinder_defconfig
-mips                          ath25_defconfig
-arm                            dove_defconfig
-powerpc                      pmac32_defconfig
-powerpc                     ksi8560_defconfig
-powerpc                      katmai_defconfig
-powerpc                 mpc8560_ads_defconfig
-riscv                          rv32_defconfig
-mips                malta_qemu_32r6_defconfig
-arm                                 defconfig
-powerpc               mpc834x_itxgp_defconfig
-arm                        multi_v5_defconfig
-powerpc                     kmeter1_defconfig
-x86_64                        randconfig-a005
-x86_64                        randconfig-a003
-x86_64                        randconfig-a001
-i386                          randconfig-a002
-i386                          randconfig-a006
-i386                          randconfig-a004
-x86_64                        randconfig-a012
-x86_64                        randconfig-a014
-x86_64                        randconfig-a016
-x86_64               randconfig-a015-20220502
-x86_64               randconfig-a012-20220502
-x86_64               randconfig-a016-20220502
-x86_64               randconfig-a014-20220502
-x86_64               randconfig-a013-20220502
-x86_64               randconfig-a011-20220502
-hexagon              randconfig-r045-20220502
-riscv                randconfig-r042-20220502
-hexagon              randconfig-r041-20220502
-hexagon              randconfig-r041-20220428
-riscv                randconfig-r042-20220428
-hexagon              randconfig-r045-20220428
-hexagon              randconfig-r045-20220501
-hexagon              randconfig-r041-20220501
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp

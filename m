@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1ED251AB12
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:40:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 347C651A845
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:07:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348449AbiEDRlt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 13:41:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40514 "EHLO
+        id S1357162AbiEDRKA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 13:10:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356861AbiEDRJq (ORCPT
+        with ESMTP id S1355612AbiEDRAS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 13:09:46 -0400
+        Wed, 4 May 2022 13:00:18 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B374275E6;
-        Wed,  4 May 2022 09:56:06 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E00D4B437;
+        Wed,  4 May 2022 09:51:55 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 05FE4617A6;
-        Wed,  4 May 2022 16:56:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4ED0EC385A5;
-        Wed,  4 May 2022 16:56:05 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B25C661794;
+        Wed,  4 May 2022 16:51:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F36B1C385A4;
+        Wed,  4 May 2022 16:51:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651683365;
-        bh=NEBsSG0/XWJf6FprfNFMo2p3cGJLwBZ8OJmNqMRtIGY=;
+        s=korg; t=1651683100;
+        bh=bgToEcgNzqSGduzPEvX5C+xMWm9pac0XloT9o040au0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mLbjDECkTDndE1NZkmDq+Jk3BjRs+Gq/6huVdS3k2fw+32fmQBEOtUQXMTsHtuRWI
-         mkBm8Ihegu78DBqdrJmxfHqEBVPmD+g5+VPJ2fErrivpVu9ONf8tPLSXseG9NrX8tb
-         eBcgpcyY3K/l6yUikNnSnOwYIxmDrNER67E4+CWc=
+        b=Cba9Obf/3bVh9UzdWeR629wbEQWEbeFbk4NDzG70UybFqBcWYUy0XjDzvE+O4dBSe
+         ubeonkjrmkJa88DDGoV8UOF5wZ1Gpx3jeSdmAZQKFdP1U7SrF7QDghtL/lzRx2w4U7
+         04BM9GkLoqOonMVznUMF86on/iLazjKtectjVp+A=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>,
-        Guo Ren <guoren@kernel.org>,
-        Palmer Dabbelt <palmer@rivosinc.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>
-Subject: [PATCH 5.17 050/225] riscv: patch_text: Fixup last cpu should be master
+        stable@vger.kernel.org, Lijun Pan <lijunp213@gmail.com>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 096/129] ibmvnic: fix miscellaneous checks
 Date:   Wed,  4 May 2022 18:44:48 +0200
-Message-Id: <20220504153114.601300055@linuxfoundation.org>
+Message-Id: <20220504153028.558964269@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220504153110.096069935@linuxfoundation.org>
-References: <20220504153110.096069935@linuxfoundation.org>
+In-Reply-To: <20220504153021.299025455@linuxfoundation.org>
+References: <20220504153021.299025455@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,39 +56,106 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Guo Ren <guoren@linux.alibaba.com>
+From: Lijun Pan <lijunp213@gmail.com>
 
-commit 8ec1442953c66a1d8462cccd8c20b7ba561f5915 upstream.
+[ Upstream commit 91dc5d2553fbf20e2e8384ac997f278a50c70561 ]
 
-These patch_text implementations are using stop_machine_cpuslocked
-infrastructure with atomic cpu_count. The original idea: When the
-master CPU patch_text, the others should wait for it. But current
-implementation is using the first CPU as master, which couldn't
-guarantee the remaining CPUs are waiting. This patch changes the
-last CPU as the master to solve the potential risk.
+Fix the following checkpatch checks:
+CHECK: Macro argument 'off' may be better as '(off)' to
+avoid precedence issues
+CHECK: Alignment should match open parenthesis
+CHECK: multiple assignments should be avoided
+CHECK: Blank lines aren't necessary before a close brace '}'
+CHECK: Please use a blank line after function/struct/union/enum
+declarations
+CHECK: Unnecessary parentheses around 'rc != H_FUNCTION'
 
-Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-Signed-off-by: Guo Ren <guoren@kernel.org>
-Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
-Reviewed-by: Masami Hiramatsu <mhiramat@kernel.org>
-Fixes: 043cb41a85de ("riscv: introduce interfaces to patch kernel code")
-Cc: stable@vger.kernel.org
-Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Lijun Pan <lijunp213@gmail.com>
+Reviewed-by: Saeed Mahameed <saeedm@nvidia.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/riscv/kernel/patch.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/net/ethernet/ibm/ibmvnic.c | 17 +++++++++--------
+ 1 file changed, 9 insertions(+), 8 deletions(-)
 
---- a/arch/riscv/kernel/patch.c
-+++ b/arch/riscv/kernel/patch.c
-@@ -104,7 +104,7 @@ static int patch_text_cb(void *data)
- 	struct patch_insn *patch = data;
- 	int ret = 0;
+diff --git a/drivers/net/ethernet/ibm/ibmvnic.c b/drivers/net/ethernet/ibm/ibmvnic.c
+index 95bee3d91593..2cd849215913 100644
+--- a/drivers/net/ethernet/ibm/ibmvnic.c
++++ b/drivers/net/ethernet/ibm/ibmvnic.c
+@@ -117,7 +117,7 @@ struct ibmvnic_stat {
  
--	if (atomic_inc_return(&patch->cpu_count) == 1) {
-+	if (atomic_inc_return(&patch->cpu_count) == num_online_cpus()) {
- 		ret =
- 		    patch_text_nosync(patch->addr, &patch->insn,
- 					    GET_INSN_LENGTH(patch->insn));
+ #define IBMVNIC_STAT_OFF(stat) (offsetof(struct ibmvnic_adapter, stats) + \
+ 			     offsetof(struct ibmvnic_statistics, stat))
+-#define IBMVNIC_GET_STAT(a, off) (*((u64 *)(((unsigned long)(a)) + off)))
++#define IBMVNIC_GET_STAT(a, off) (*((u64 *)(((unsigned long)(a)) + (off))))
+ 
+ static const struct ibmvnic_stat ibmvnic_stats[] = {
+ 	{"rx_packets", IBMVNIC_STAT_OFF(rx_packets)},
+@@ -2063,14 +2063,14 @@ static int do_reset(struct ibmvnic_adapter *adapter,
+ 			rc = reset_tx_pools(adapter);
+ 			if (rc) {
+ 				netdev_dbg(adapter->netdev, "reset tx pools failed (%d)\n",
+-						rc);
++					   rc);
+ 				goto out;
+ 			}
+ 
+ 			rc = reset_rx_pools(adapter);
+ 			if (rc) {
+ 				netdev_dbg(adapter->netdev, "reset rx pools failed (%d)\n",
+-						rc);
++					   rc);
+ 				goto out;
+ 			}
+ 		}
+@@ -2331,7 +2331,8 @@ static int ibmvnic_reset(struct ibmvnic_adapter *adapter,
+ 
+ 	if (adapter->state == VNIC_PROBING) {
+ 		netdev_warn(netdev, "Adapter reset during probe\n");
+-		ret = adapter->init_done_rc = EAGAIN;
++		adapter->init_done_rc = EAGAIN;
++		ret = EAGAIN;
+ 		goto err;
+ 	}
+ 
+@@ -2744,7 +2745,6 @@ static int ibmvnic_set_channels(struct net_device *netdev,
+ 			    channels->rx_count, channels->tx_count,
+ 			    adapter->req_rx_queues, adapter->req_tx_queues);
+ 	return ret;
+-
+ }
+ 
+ static void ibmvnic_get_strings(struct net_device *dev, u32 stringset, u8 *data)
+@@ -2833,8 +2833,8 @@ static void ibmvnic_get_ethtool_stats(struct net_device *dev,
+ 		return;
+ 
+ 	for (i = 0; i < ARRAY_SIZE(ibmvnic_stats); i++)
+-		data[i] = be64_to_cpu(IBMVNIC_GET_STAT(adapter,
+-						ibmvnic_stats[i].offset));
++		data[i] = be64_to_cpu(IBMVNIC_GET_STAT
++				      (adapter, ibmvnic_stats[i].offset));
+ 
+ 	for (j = 0; j < adapter->req_tx_queues; j++) {
+ 		data[i] = adapter->tx_stats_buffers[j].packets;
+@@ -2874,6 +2874,7 @@ static int ibmvnic_set_priv_flags(struct net_device *netdev, u32 flags)
+ 
+ 	return 0;
+ }
++
+ static const struct ethtool_ops ibmvnic_ethtool_ops = {
+ 	.get_drvinfo		= ibmvnic_get_drvinfo,
+ 	.get_msglevel		= ibmvnic_get_msglevel,
+@@ -3119,7 +3120,7 @@ static int enable_scrq_irq(struct ibmvnic_adapter *adapter,
+ 		/* H_EOI would fail with rc = H_FUNCTION when running
+ 		 * in XIVE mode which is expected, but not an error.
+ 		 */
+-		if (rc && (rc != H_FUNCTION))
++		if (rc && rc != H_FUNCTION)
+ 			dev_err(dev, "H_EOI FAILED irq 0x%llx. rc=%ld\n",
+ 				val, rc);
+ 	}
+-- 
+2.35.1
+
 
 

@@ -2,43 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EC6D51AB22
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:40:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F25E151AB18
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:40:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358470AbiEDRmU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 13:42:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38574 "EHLO
+        id S1349665AbiEDRmY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 13:42:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356509AbiEDRJR (ORCPT
+        with ESMTP id S1355684AbiEDRKa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 13:09:17 -0400
+        Wed, 4 May 2022 13:10:30 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C070F5372E;
-        Wed,  4 May 2022 09:55:12 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ACF44B1CC;
+        Wed,  4 May 2022 09:57:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 687EFB827A3;
-        Wed,  4 May 2022 16:55:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A3A1C385AF;
-        Wed,  4 May 2022 16:55:11 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 143F5B8279C;
+        Wed,  4 May 2022 16:57:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A503CC385AA;
+        Wed,  4 May 2022 16:57:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651683311;
-        bh=NyBwdZm7ykRxzUtmVqHq3ACRJ6KDv4OPUpqmtzgH9OE=;
+        s=korg; t=1651683439;
+        bh=jhyR9RXkZ2+e+QzykSGU0mZlLp+bE0xng8lr5Et+poA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NuTn81ChmWQJulGcXgXm7iEv+AWsf8UFlxQfkdZzIOrqGrYzUDhzKeNfdQBZqvqq2
-         CJzSCzI7+d3Rrdhl3hRM5JI/K3C/BZM4CnobU4bTgr6CY1VffX0r5Y0EimBJXHBzXn
-         JlPzrBXlyCiFO6CiXKOExNK2ANJJrI1xFhoEZqtA=
+        b=rnEXA8VMlggDPCvuDPbtSwVidtmbbFNd4nGs7/l5ZySA1sxU2f814dlG6Yc+rOZ1W
+         gd+Q05wSyrtspIOtagQCrlM/G/sgzz/6OciMc7fuxFWJWPmxR3253pKlrhkUl41WZA
+         RijnNYpod6o0iH1pJsLspm7lrtnnoda/b78Sv5s0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Daniel Starke <daniel.starke@siemens.com>
-Subject: [PATCH 5.15 163/177] tty: n_gsm: fix insufficient txframe size
-Date:   Wed,  4 May 2022 18:45:56 +0200
-Message-Id: <20220504153108.090989874@linuxfoundation.org>
+        stable@vger.kernel.org, liuyacan <liuyacan@corp.netease.com>,
+        Tony Lu <tonylu@linux.alibaba.com>,
+        Karsten Graul <kgraul@linux.ibm.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 119/225] net/smc: sync err code when tcp connection was refused
+Date:   Wed,  4 May 2022 18:45:57 +0200
+Message-Id: <20220504153121.118828571@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220504153053.873100034@linuxfoundation.org>
-References: <20220504153053.873100034@linuxfoundation.org>
+In-Reply-To: <20220504153110.096069935@linuxfoundation.org>
+References: <20220504153110.096069935@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,52 +57,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Daniel Starke <daniel.starke@siemens.com>
+From: liuyacan <liuyacan@corp.netease.com>
 
-commit 535bf600de75a859698892ee873521a48d289ec1 upstream.
+[ Upstream commit 4e2e65e2e56c6ceb4ea1719360080c0af083229e ]
 
-n_gsm is based on the 3GPP 07.010 and its newer version is the 3GPP 27.010.
-See https://portal.3gpp.org/desktopmodules/Specifications/SpecificationDetails.aspx?specificationId=1516
-The changes from 07.010 to 27.010 are non-functional. Therefore, I refer to
-the newer 27.010 here. Chapter 5.7.2 states that the maximum frame size
-(N1) refers to the length of the information field (i.e. user payload).
-However, 'txframe' stores the whole frame including frame header, checksum
-and start/end flags. We also need to consider the byte stuffing overhead.
-Define constant for the protocol overhead and adjust the 'txframe' size
-calculation accordingly to reserve enough space for a complete mux frame
-including byte stuffing for advanced option mode. Note that no byte
-stuffing is applied to the start and end flag.
-Also use MAX_MTU instead of MAX_MRU as this buffer is used for data
-transmission.
+In the current implementation, when TCP initiates a connection
+to an unavailable [ip,port], ECONNREFUSED will be stored in the
+TCP socket, but SMC will not. However, some apps (like curl) use
+getsockopt(,,SO_ERROR,,) to get the error information, which makes
+them miss the error message and behave strangely.
 
-Fixes: e1eaea46bb40 ("tty: n_gsm line discipline")
-Cc: stable@vger.kernel.org
-Signed-off-by: Daniel Starke <daniel.starke@siemens.com>
-Link: https://lore.kernel.org/r/20220414094225.4527-8-daniel.starke@siemens.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 50717a37db03 ("net/smc: nonblocking connect rework")
+Signed-off-by: liuyacan <liuyacan@corp.netease.com>
+Reviewed-by: Tony Lu <tonylu@linux.alibaba.com>
+Acked-by: Karsten Graul <kgraul@linux.ibm.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/tty/n_gsm.c |    4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ net/smc/af_smc.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
---- a/drivers/tty/n_gsm.c
-+++ b/drivers/tty/n_gsm.c
-@@ -73,6 +73,8 @@ module_param(debug, int, 0600);
-  */
- #define MAX_MRU 1500
- #define MAX_MTU 1500
-+/* SOF, ADDR, CTRL, LEN1, LEN2, ..., FCS, EOF */
-+#define PROT_OVERHEAD 7
- #define	GSM_NET_TX_TIMEOUT (HZ*10)
- 
- /*
-@@ -2199,7 +2201,7 @@ static struct gsm_mux *gsm_alloc_mux(voi
- 		kfree(gsm);
- 		return NULL;
- 	}
--	gsm->txframe = kmalloc(2 * MAX_MRU + 2, GFP_KERNEL);
-+	gsm->txframe = kmalloc(2 * (MAX_MTU + PROT_OVERHEAD - 1), GFP_KERNEL);
- 	if (gsm->txframe == NULL) {
- 		kfree(gsm->buf);
- 		kfree(gsm);
+diff --git a/net/smc/af_smc.c b/net/smc/af_smc.c
+index 68cd110722a4..fd9d9cfd0f3d 100644
+--- a/net/smc/af_smc.c
++++ b/net/smc/af_smc.c
+@@ -1357,6 +1357,8 @@ static void smc_connect_work(struct work_struct *work)
+ 		smc->sk.sk_state = SMC_CLOSED;
+ 		if (rc == -EPIPE || rc == -EAGAIN)
+ 			smc->sk.sk_err = EPIPE;
++		else if (rc == -ECONNREFUSED)
++			smc->sk.sk_err = ECONNREFUSED;
+ 		else if (signal_pending(current))
+ 			smc->sk.sk_err = -sock_intr_errno(timeo);
+ 		sock_put(&smc->sk); /* passive closing */
+-- 
+2.35.1
+
 
 

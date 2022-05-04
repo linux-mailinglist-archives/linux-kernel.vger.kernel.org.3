@@ -2,353 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3D05519BB2
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 11:29:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29D26519BBF
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 11:31:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347317AbiEDJdB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 05:33:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39188 "EHLO
+        id S1347397AbiEDJfP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 05:35:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347309AbiEDJcz (ORCPT
+        with ESMTP id S245754AbiEDJfG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 05:32:55 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8176E25EA2
-        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 02:29:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651656559; x=1683192559;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=HF6/toeKJzY3vv0eTRFPw9nkYRPugh+z7iO7/NTEyJc=;
-  b=exH2uyGY96mLwCGgjqF6GihiZe45TGaywyHUWtrdKNsoxYJxUplBkzQU
-   CTWh5VfI+iEPdwblbQS09p5jiedaynJUAauOZK4XnZW+a1ST9DeXjzI2M
-   cJOkgCuBsEdiUZsyUhrIOc5V5flcRQXIQClatBxtH/B/P2j7CR8H5S2vU
-   ujUAO1I68BiGPGcqM4Tj1HjQOLXkiwNHsD4Uy1ba65SNtfCcDuXZMdNHA
-   jMJxC0VmTM3gz+Jpb5b4L5q/h/WYIV56kPrX+Vjhhha1/MzlhDfmkZLmq
-   9lDkd7855pMnT3hUQuMEv9j1/cd8BSE/vzsWg61AW1o5fmIU7wcckaB0C
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10336"; a="267309602"
-X-IronPort-AV: E=Sophos;i="5.91,197,1647327600"; 
-   d="scan'208";a="267309602"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2022 02:29:19 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,197,1647327600"; 
-   d="scan'208";a="548531298"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga002.jf.intel.com with ESMTP; 04 May 2022 02:29:16 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 57F5D1A5; Wed,  4 May 2022 12:29:17 +0300 (EEST)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Gaston Gonzalez <gascoar@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-staging@lists.linux.dev,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Broadcom Kernel Team <bcm-kernel-feedback-list@broadcom.com>,
+        Wed, 4 May 2022 05:35:06 -0400
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::222])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35D3A20BF1;
+        Wed,  4 May 2022 02:31:29 -0700 (PDT)
+Received: (Authenticated sender: clement.leger@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 3790E40006;
+        Wed,  4 May 2022 09:31:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1651656688;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=YfS2uF+ICNTRe6Flzquf4GuU6MKFWg01yDIcRiXDy6Q=;
+        b=ROk52wt1rQfp/9HtttBUNEzkHjGM0nEkyzLYwPCKWxLRv5voIEitSXl5lkr5JXoi9gE8hX
+        p6uYYKlLZY37N2QHWvOw3tEbukqrNEJ2biOAbdJZrZJsLyaDBwNgdcFbqNk+wEAy86NuHC
+        45H7mSjCM/asUzikyuZtM0Dw/DCQE33ffSLiVJvQXGYg4zYi4+9B8gzhBpLi6BSmqHfxyj
+        jlGu70Sg8pejl1rV7ce2jRUHeKttL9MMGNIqw3z2FC440dEEF7UE916TOv1NymfowthCrq
+        /M/2x3iUi5K04TyAHBXkJ+quOnXGpmleq6/m2EdlvjGoq9YQy4EJZ11f2BjD8A==
+From:   =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <clement.leger@bootlin.com>
+To:     Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
         Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>
-Subject: [PATCH v2 1/1] staging: vc04_services: Re-use generic struct s32_fract
-Date:   Wed,  4 May 2022 12:29:15 +0300
-Message-Id: <20220504092915.72021-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>
+Cc:     =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <clement.leger@bootlin.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Herve Codina <herve.codina@bootlin.com>,
+        =?UTF-8?q?Miqu=C3=A8l=20Raynal?= <miquel.raynal@bootlin.com>,
+        Milan Stevanovic <milan.stevanovic@se.com>,
+        Jimmy Lalande <jimmy.lalande@se.com>,
+        Pascal Eberhard <pascal.eberhard@se.com>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, netdev@vger.kernel.org
+Subject: [PATCH net-next v3 00/12] add support for Renesas RZ/N1 ethernet subsystem devices
+Date:   Wed,  4 May 2022 11:29:48 +0200
+Message-Id: <20220504093000.132579-1-clement.leger@bootlin.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Instead of custom data type re-use generic struct s32_fract.
-No changes intended.
+The Renesas RZ/N1 SoCs features an ethernet subsystem which contains
+(most notably) a switch, two GMACs, and a MII converter [1]. This
+series adds support for the switch and the MII converter.
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
-v2: fixed typo (LKP)
- .../bcm2835-camera/bcm2835-camera.c           | 24 +++++++-------
- .../vc04_services/bcm2835-camera/controls.c   | 33 ++++++++++---------
- .../vchiq-mmal/mmal-msg-common.h              |  7 ++--
- .../vchiq-mmal/mmal-msg-format.h              |  6 ++--
- .../vchiq-mmal/mmal-parameters.h              | 15 ++++-----
- .../vc04_services/vchiq-mmal/mmal-vchiq.c     | 10 +++---
- 6 files changed, 46 insertions(+), 49 deletions(-)
+The MII converter present on this SoC has been represented as a PCS
+which sit between the MACs and the PHY. This PCS driver is probed from
+the device-tree since it requires to be configured. Indeed the MII
+converter also contains the registers that are handling the muxing of
+ports (Switch, MAC, HSR, RTOS, etc) internally to the SoC.
 
-diff --git a/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c b/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c
-index 88b1878854e0..fd456d1f7061 100644
---- a/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c
-+++ b/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c
-@@ -1033,9 +1033,9 @@ static int mmal_setup_video_component(struct bcm2835_mmal_dev *dev,
- 	preview_port->es.video.crop.y = 0;
- 	preview_port->es.video.crop.width = f->fmt.pix.width;
- 	preview_port->es.video.crop.height = f->fmt.pix.height;
--	preview_port->es.video.frame_rate.num =
-+	preview_port->es.video.frame_rate.numerator =
- 				  dev->capture.timeperframe.denominator;
--	preview_port->es.video.frame_rate.den =
-+	preview_port->es.video.frame_rate.denominator =
- 				  dev->capture.timeperframe.numerator;
- 	ret = vchiq_mmal_port_set_format(dev->instance, preview_port);
- 
-@@ -1084,9 +1084,9 @@ static int mmal_setup_encode_component(struct bcm2835_mmal_dev *dev,
- 	port->es.video.crop.y = 0;
- 	port->es.video.crop.width = f->fmt.pix.width;
- 	port->es.video.crop.height = f->fmt.pix.height;
--	port->es.video.frame_rate.num =
-+	port->es.video.frame_rate.numerator =
- 		  dev->capture.timeperframe.denominator;
--	port->es.video.frame_rate.den =
-+	port->es.video.frame_rate.denominator =
- 		  dev->capture.timeperframe.numerator;
- 
- 	port->format.encoding = mfmt->mmal;
-@@ -1225,8 +1225,8 @@ static int mmal_setup_components(struct bcm2835_mmal_dev *dev,
- 	camera_port->es.video.crop.y = 0;
- 	camera_port->es.video.crop.width = f->fmt.pix.width;
- 	camera_port->es.video.crop.height = f->fmt.pix.height;
--	camera_port->es.video.frame_rate.num = 0;
--	camera_port->es.video.frame_rate.den = 1;
-+	camera_port->es.video.frame_rate.numerator = 0;
-+	camera_port->es.video.frame_rate.denominator = 1;
- 	camera_port->es.video.color_space = MMAL_COLOR_SPACE_JPEG_JFIF;
- 
- 	ret = vchiq_mmal_port_set_format(dev->instance, camera_port);
-@@ -1629,8 +1629,8 @@ static int mmal_init(struct bcm2835_mmal_dev *dev)
- 	format->es->video.crop.y = 0;
- 	format->es->video.crop.width = 1024;
- 	format->es->video.crop.height = 768;
--	format->es->video.frame_rate.num = 0; /* Rely on fps_range */
--	format->es->video.frame_rate.den = 1;
-+	format->es->video.frame_rate.numerator = 0; /* Rely on fps_range */
-+	format->es->video.frame_rate.denominator = 1;
- 
- 	format = &camera->output[CAM_PORT_VIDEO].format;
- 
-@@ -1643,8 +1643,8 @@ static int mmal_init(struct bcm2835_mmal_dev *dev)
- 	format->es->video.crop.y = 0;
- 	format->es->video.crop.width = 1024;
- 	format->es->video.crop.height = 768;
--	format->es->video.frame_rate.num = 0; /* Rely on fps_range */
--	format->es->video.frame_rate.den = 1;
-+	format->es->video.frame_rate.numerator = 0; /* Rely on fps_range */
-+	format->es->video.frame_rate.denominator = 1;
- 
- 	format = &camera->output[CAM_PORT_CAPTURE].format;
- 
-@@ -1656,8 +1656,8 @@ static int mmal_init(struct bcm2835_mmal_dev *dev)
- 	format->es->video.crop.y = 0;
- 	format->es->video.crop.width = 2592;
- 	format->es->video.crop.height = 1944;
--	format->es->video.frame_rate.num = 0; /* Rely on fps_range */
--	format->es->video.frame_rate.den = 1;
-+	format->es->video.frame_rate.numerator = 0; /* Rely on fps_range */
-+	format->es->video.frame_rate.denominator = 1;
- 
- 	dev->capture.width = format->es->video.width;
- 	dev->capture.height = format->es->video.height;
-diff --git a/drivers/staging/vc04_services/bcm2835-camera/controls.c b/drivers/staging/vc04_services/bcm2835-camera/controls.c
-index eb722f16fb91..5644d1d457b9 100644
---- a/drivers/staging/vc04_services/bcm2835-camera/controls.c
-+++ b/drivers/staging/vc04_services/bcm2835-camera/controls.c
-@@ -154,13 +154,13 @@ static int ctrl_set_rational(struct bcm2835_mmal_dev *dev,
- 			     struct v4l2_ctrl *ctrl,
- 			     const struct bcm2835_mmal_v4l2_ctrl *mmal_ctrl)
- {
--	struct mmal_parameter_rational rational_value;
-+	struct s32_fract rational_value;
- 	struct vchiq_mmal_port *control;
- 
- 	control = &dev->component[COMP_CAMERA]->control;
- 
--	rational_value.num = ctrl->val;
--	rational_value.den = 100;
-+	rational_value.numerator = ctrl->val;
-+	rational_value.denominator = 100;
- 
- 	return vchiq_mmal_port_parameter_set(dev->instance, control,
- 					     mmal_ctrl->mmal_id,
-@@ -489,9 +489,10 @@ static int ctrl_set_awb_gains(struct bcm2835_mmal_dev *dev,
- 	else if (ctrl->id == V4L2_CID_BLUE_BALANCE)
- 		dev->blue_gain = ctrl->val;
- 
--	gains.r_gain.num = dev->red_gain;
--	gains.b_gain.num = dev->blue_gain;
--	gains.r_gain.den = gains.b_gain.den = 1000;
-+	gains.r_gain.numerator = dev->red_gain;
-+	gains.r_gain.denominator = 1000;
-+	gains.b_gain.numerator = dev->blue_gain;
-+	gains.b_gain.denominator = 1000;
- 
- 	return vchiq_mmal_port_parameter_set(dev->instance, control,
- 					     mmal_ctrl->mmal_id,
-@@ -1271,26 +1272,26 @@ int set_framerate_params(struct bcm2835_mmal_dev *dev)
- 	struct mmal_parameter_fps_range fps_range;
- 	int ret;
- 
--	fps_range.fps_high.num = dev->capture.timeperframe.denominator;
--	fps_range.fps_high.den = dev->capture.timeperframe.numerator;
-+	fps_range.fps_high.numerator = dev->capture.timeperframe.denominator;
-+	fps_range.fps_high.denominator = dev->capture.timeperframe.numerator;
- 
- 	if ((dev->exposure_mode_active != MMAL_PARAM_EXPOSUREMODE_OFF) &&
- 	    (dev->exp_auto_priority)) {
- 		/* Variable FPS. Define min FPS as 1fps. */
--		fps_range.fps_low.num = 1;
--		fps_range.fps_low.den = 1;
-+		fps_range.fps_low.numerator = 1;
-+		fps_range.fps_low.denominator = 1;
- 	} else {
- 		/* Fixed FPS - set min and max to be the same */
--		fps_range.fps_low.num = fps_range.fps_high.num;
--		fps_range.fps_low.den = fps_range.fps_high.den;
-+		fps_range.fps_low.numerator = fps_range.fps_high.numerator;
-+		fps_range.fps_low.denominator = fps_range.fps_high.denominator;
- 	}
- 
- 	v4l2_dbg(1, bcm2835_v4l2_debug, &dev->v4l2_dev,
- 		 "Set fps range to %d/%d to %d/%d\n",
--		 fps_range.fps_low.num,
--		 fps_range.fps_low.den,
--		 fps_range.fps_high.num,
--		 fps_range.fps_high.den);
-+		 fps_range.fps_low.numerator,
-+		 fps_range.fps_low.denominator,
-+		 fps_range.fps_high.numerator,
-+		 fps_range.fps_high.denominator);
- 
- 	ret = vchiq_mmal_port_parameter_set(dev->instance,
- 					    &dev->component[COMP_CAMERA]->output[CAM_PORT_PREVIEW],
-diff --git a/drivers/staging/vc04_services/vchiq-mmal/mmal-msg-common.h b/drivers/staging/vc04_services/vchiq-mmal/mmal-msg-common.h
-index d77e15f25dda..492d4c5dca08 100644
---- a/drivers/staging/vc04_services/vchiq-mmal/mmal-msg-common.h
-+++ b/drivers/staging/vc04_services/vchiq-mmal/mmal-msg-common.h
-@@ -14,6 +14,8 @@
- #ifndef MMAL_MSG_COMMON_H
- #define MMAL_MSG_COMMON_H
- 
-+#include <linux/types.h>
-+
- enum mmal_msg_status {
- 	MMAL_MSG_STATUS_SUCCESS = 0, /**< Success */
- 	MMAL_MSG_STATUS_ENOMEM,      /**< Out of memory */
-@@ -40,9 +42,4 @@ struct mmal_rect {
- 	s32 height; /**< height */
- };
- 
--struct mmal_rational {
--	s32 num;    /**< Numerator */
--	s32 den;    /**< Denominator */
--};
--
- #endif /* MMAL_MSG_COMMON_H */
-diff --git a/drivers/staging/vc04_services/vchiq-mmal/mmal-msg-format.h b/drivers/staging/vc04_services/vchiq-mmal/mmal-msg-format.h
-index 1e996d8cd283..5569876d8c7d 100644
---- a/drivers/staging/vc04_services/vchiq-mmal/mmal-msg-format.h
-+++ b/drivers/staging/vc04_services/vchiq-mmal/mmal-msg-format.h
-@@ -14,6 +14,8 @@
- #ifndef MMAL_MSG_FORMAT_H
- #define MMAL_MSG_FORMAT_H
- 
-+#include <linux/math.h>
-+
- #include "mmal-msg-common.h"
- 
- /* MMAL_ES_FORMAT_T */
-@@ -30,8 +32,8 @@ struct mmal_video_format {
- 	u32 width;		/* Width of frame in pixels */
- 	u32 height;		/* Height of frame in rows of pixels */
- 	struct mmal_rect crop;	/* Visible region of the frame */
--	struct mmal_rational frame_rate;	/* Frame rate */
--	struct mmal_rational par;		/* Pixel aspect ratio */
-+	struct s32_fract frame_rate;	/* Frame rate */
-+	struct s32_fract par;		/* Pixel aspect ratio */
- 
- 	/*
- 	 * FourCC specifying the color space of the video stream. See the
-diff --git a/drivers/staging/vc04_services/vchiq-mmal/mmal-parameters.h b/drivers/staging/vc04_services/vchiq-mmal/mmal-parameters.h
-index 2277e05b1e31..a0cdd28101f2 100644
---- a/drivers/staging/vc04_services/vchiq-mmal/mmal-parameters.h
-+++ b/drivers/staging/vc04_services/vchiq-mmal/mmal-parameters.h
-@@ -22,6 +22,8 @@
- #ifndef MMAL_PARAMETERS_H
- #define MMAL_PARAMETERS_H
- 
-+#include <linux/math.h>
-+
- /** Common parameter ID group, used with many types of component. */
- #define MMAL_PARAMETER_GROUP_COMMON		(0 << 16)
- /** Camera-specific parameter ID group. */
-@@ -223,11 +225,6 @@ enum mmal_parameter_camera_type {
- 	MMAL_PARAMETER_CUSTOM_AWB_GAINS,
- };
- 
--struct mmal_parameter_rational {
--	s32 num;    /**< Numerator */
--	s32 den;    /**< Denominator */
--};
--
- enum mmal_parameter_camera_config_timestamp_mode {
- 	MMAL_PARAM_TIMESTAMP_MODE_ZERO = 0, /* Always timestamp frames as 0 */
- 	MMAL_PARAM_TIMESTAMP_MODE_RAW_STC,  /* Use the raw STC value
-@@ -243,9 +240,9 @@ enum mmal_parameter_camera_config_timestamp_mode {
- 
- struct mmal_parameter_fps_range {
- 	/**< Low end of the permitted framerate range */
--	struct mmal_parameter_rational	fps_low;
-+	struct s32_fract	fps_low;
- 	/**< High end of the permitted framerate range */
--	struct mmal_parameter_rational	fps_high;
-+	struct s32_fract	fps_high;
- };
- 
- /* camera configuration parameter */
-@@ -350,8 +347,8 @@ enum MMAL_PARAM_FLICKERAVOID {
- };
- 
- struct mmal_parameter_awbgains {
--	struct mmal_parameter_rational r_gain;	/**< Red gain */
--	struct mmal_parameter_rational b_gain;	/**< Blue gain */
-+	struct s32_fract r_gain;	/**< Red gain */
-+	struct s32_fract b_gain;	/**< Blue gain */
- };
- 
- /** Manner of video rate control */
-diff --git a/drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.c b/drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.c
-index 249dd3e30c2f..845b20e4d05a 100644
---- a/drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.c
-+++ b/drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.c
-@@ -744,9 +744,9 @@ static void dump_port_info(struct vchiq_mmal_port *port)
- 			 port->es.video.crop.y,
- 			 port->es.video.crop.width, port->es.video.crop.height);
- 		pr_debug("		 : framerate %d/%d  aspect %d/%d\n",
--			 port->es.video.frame_rate.num,
--			 port->es.video.frame_rate.den,
--			 port->es.video.par.num, port->es.video.par.den);
-+			 port->es.video.frame_rate.numerator,
-+			 port->es.video.frame_rate.denominator,
-+			 port->es.video.par.numerator, port->es.video.par.denominator);
- 	}
- }
- 
-@@ -1549,8 +1549,8 @@ int vchiq_mmal_port_connect_tunnel(struct vchiq_mmal_instance *instance,
- 	dst->es.video.crop.y = src->es.video.crop.y;
- 	dst->es.video.crop.width = src->es.video.crop.width;
- 	dst->es.video.crop.height = src->es.video.crop.height;
--	dst->es.video.frame_rate.num = src->es.video.frame_rate.num;
--	dst->es.video.frame_rate.den = src->es.video.frame_rate.den;
-+	dst->es.video.frame_rate.numerator = src->es.video.frame_rate.numerator;
-+	dst->es.video.frame_rate.denominator = src->es.video.frame_rate.denominator;
- 
- 	/* set new format */
- 	ret = port_info_set(instance, dst);
+The switch driver is based on DSA and exposes 4 ports + 1 CPU
+management port. It include basic bridging support as well as FDB and
+statistics support.
+
+This series needs commits bcfb459b25b8 and 542d5835e4f6 which are on
+the renesas-devel tree in order to enable generic power domain on
+RZ/N1.
+
+Link: [1] https://www.renesas.com/us/en/document/mah/rzn1d-group-rzn1s-group-rzn1l-group-users-manual-r-engine-and-ethernet-peripherals
+
+-----
+Changes in V3:
+- PCS:
+  - Fixed reverse christmas tree declaration
+  - Remove spurious pr_err
+  - Use pm_runtime functions
+- Tag driver:
+  - Remove packed attribute from the tag struct
+  - Fix comment about packet size
+- Switch:
+  - Fix missing spin_unlock in fdb_dump in case of error
+  - Add static qualifier to dsa_switch_ops
+  - Add missing documentation for hclk and clk members of struct a5psw
+  - Changed types of fdb_entry to u16 to discard GCC note on char
+    packed bitfields and add reserved field
+- Added Reviewed-by tag from Florian Fainelli
+
+Changes in V2:
+- PCS:
+  - Fix Reverse Christmas tree declaration
+  - Removed stray newline
+  - Add PCS remove function and disable clocks in them
+  - Fix miic_validate function to return correct values
+  - Split PCS CONV_MODE definition
+  - Reordered phylink_pcs_ops in definition order
+  - Remove interface setting in miic_link_up
+  - Remove useless checks for invalid interface/speed and error prints
+  - Replace phylink_pcs_to_miic_port macro by a static function
+  - Add comment in miic_probe about platform_set_drvdata
+- Bindings:
+ - Fix wrong path for mdio.yaml $ref
+ - Fix yamllint errors
+- Tag driver:
+  - Squashed commit that added tag value with tag driver
+  - Add BUILD_BUG_ON for tag size
+  - Split control_data2 in 2 16bits values
+- Switch:
+  - Use .phylink_get_caps instead of .phylink_validate and fill
+    supported_interface correctly
+  - Use fixed size (ETH_GSTRING_LEN) string for stats and use memcpy
+  - Remove stats access locking since RTNL lock is used in upper layers
+  - Check for non C45 addresses in mdio_read/write and return
+    -EOPNOTSUPP
+  - Add get_eth_mac_stats, get_eth_mac_ctrl_stat, get_rmon_stats
+  - Fix a few indentation problems
+  - Remove reset callback from MDIO bus operation
+  - Add phy/mac/rmon stats
+- Add get_rmon_stat to dsa_ops
+
+Clément Léger (12):
+  net: dsa: add support for ethtool get_rmon_stats()
+  net: dsa: add Renesas RZ/N1 switch tag driver
+  dt-bindings: net: pcs: add bindings for Renesas RZ/N1 MII converter
+  net: pcs: add Renesas MII converter driver
+  dt-bindings: net: dsa: add bindings for Renesas RZ/N1 Advanced 5 port
+    switch
+  net: dsa: rzn1-a5psw: add Renesas RZ/N1 advanced 5 port switch driver
+  net: dsa: rzn1-a5psw: add statistics support
+  net: dsa: rzn1-a5psw: add FDB support
+  ARM: dts: r9a06g032: describe MII converter
+  ARM: dts: r9a06g032: describe GMAC2
+  ARM: dts: r9a06g032: describe switch
+  MAINTAINERS: add Renesas RZ/N1 switch related driver entry
+
+ .../bindings/net/dsa/renesas,rzn1-a5psw.yaml  |  132 ++
+ .../bindings/net/pcs/renesas,rzn1-miic.yaml   |  162 +++
+ MAINTAINERS                                   |   11 +
+ arch/arm/boot/dts/r9a06g032.dtsi              |   64 +
+ drivers/net/dsa/Kconfig                       |    9 +
+ drivers/net/dsa/Makefile                      |    1 +
+ drivers/net/dsa/rzn1_a5psw.c                  | 1057 +++++++++++++++++
+ drivers/net/dsa/rzn1_a5psw.h                  |  260 ++++
+ drivers/net/pcs/Kconfig                       |    8 +
+ drivers/net/pcs/Makefile                      |    1 +
+ drivers/net/pcs/pcs-rzn1-miic.c               |  502 ++++++++
+ include/dt-bindings/net/pcs-rzn1-miic.h       |   33 +
+ include/linux/pcs-rzn1-miic.h                 |   18 +
+ include/net/dsa.h                             |    5 +
+ net/dsa/Kconfig                               |    7 +
+ net/dsa/Makefile                              |    1 +
+ net/dsa/slave.c                               |   13 +
+ net/dsa/tag_rzn1_a5psw.c                      |  114 ++
+ 18 files changed, 2398 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/net/dsa/renesas,rzn1-a5psw.yaml
+ create mode 100644 Documentation/devicetree/bindings/net/pcs/renesas,rzn1-miic.yaml
+ create mode 100644 drivers/net/dsa/rzn1_a5psw.c
+ create mode 100644 drivers/net/dsa/rzn1_a5psw.h
+ create mode 100644 drivers/net/pcs/pcs-rzn1-miic.c
+ create mode 100644 include/dt-bindings/net/pcs-rzn1-miic.h
+ create mode 100644 include/linux/pcs-rzn1-miic.h
+ create mode 100644 net/dsa/tag_rzn1_a5psw.c
+
 -- 
-2.35.1
+2.34.1
 

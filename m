@@ -2,48 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00EB4519708
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 07:47:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66B8E519714
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 07:56:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344731AbiEDFub (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 01:50:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56828 "EHLO
+        id S1344769AbiEDGAH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 02:00:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230474AbiEDFua (ORCPT
+        with ESMTP id S230149AbiEDGAE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 01:50:30 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AADB2AC4C
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 22:46:54 -0700 (PDT)
-Received: from [2a02:8108:963f:de38:1b3c:6996:5378:f253]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1nm7qX-0004GI-Qd; Wed, 04 May 2022 07:46:45 +0200
-Message-ID: <f4b00553-4e77-84bc-e25c-01383d7e92dd@leemhuis.info>
-Date:   Wed, 4 May 2022 07:46:45 +0200
+        Wed, 4 May 2022 02:00:04 -0400
+X-Greylist: delayed 572 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 03 May 2022 22:56:28 PDT
+Received: from smtp2.math.uni-bielefeld.de (smtp2.math.uni-bielefeld.de [129.70.45.13])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DE69201BC;
+        Tue,  3 May 2022 22:56:28 -0700 (PDT)
+Received: from math.uni-bielefeld.de (kvm01.math.uni-bielefeld.de [129.70.45.15])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by smtp2.math.uni-bielefeld.de (Postfix) with ESMTPSA id 72BA360213;
+        Wed,  4 May 2022 07:46:53 +0200 (CEST)
+Date:   Wed, 4 May 2022 07:46:52 +0200
+From:   Jean Rene Dawin <jdawin@math.uni-bielefeld.de>
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     "H . Nikolaus Schaller" <hns@goldelico.com>,
+        Huijin Park <huijin.park@samsung.com>,
+        linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org
+Subject: Re: [PATCH] mmc: core: Restore (almost) the busy polling for
+ MMC_SEND_OP_COND
+Message-ID: <20220504054652.GA7851@math.uni-bielefeld.de>
+References: <20220304105656.149281-1-ulf.hansson@linaro.org>
+ <CAPDyKFr1PzSaiKqB4ZoqTS_8bGsEH=aB3ARhxyGu+cYeRqeBew@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Content-Language: en-US
-References: <YnHK1Z3o99eMXsVK@mail-itl>
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
-Cc:     regressions@lists.linux.dev,
-        =?UTF-8?Q?Marek_Marczykowski-G=c3=b3recki?= 
-        <marmarek@invisiblethingslab.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        intel-gfx <intel-gfx@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: Xorg SEGV in Xen PV dom0 after updating from 5.16.18 to 5.17.5
-To:     Lucas De Marchi <lucas.demarchi@intel.com>
-In-Reply-To: <YnHK1Z3o99eMXsVK@mail-itl>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1651643214;fa53666c;
-X-HE-SMSGID: 1nm7qX-0004GI-Qd
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAPDyKFr1PzSaiKqB4ZoqTS_8bGsEH=aB3ARhxyGu+cYeRqeBew@mail.gmail.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,86 +46,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, this is your Linux kernel regression tracker. Sending this just to
-CC the developers of the culprit mentioned below (bdd8b6c98239cad
-("drm/i915: replace X86_FEATURE_PAT with pat_enabled()")) and the
-maintainers for the subsystem.
+Ulf Hansson wrote on Mon  7/03/22 13:17:
+> On Fri, 4 Mar 2022 at 11:57, Ulf Hansson <ulf.hansson@linaro.org> wrote:
+> >
+> > Commit 76bfc7ccc2fa ("mmc: core: adjust polling interval for CMD1"),
+> > significantly decreased the polling period from ~10-12ms into just a couple
+> > of us. The purpose was to decrease the total time spent in the busy polling
+> > loop, but unfortunate it has lead to problems, that causes eMMC cards to
+> > never gets out busy and thus fails to be initialized.
+> >
+> > To fix the problem, but also to try to keep some of the new improved
+> > behaviour, let's start by using a polling period of 1-2ms, which then
+> > increases for each loop, according to common polling loop in
+> > __mmc_poll_for_busy().
+> >
+> > Reported-by: Jean Rene Dawin <jdawin@math.uni-bielefeld.de>
+> > Reported-by: H. Nikolaus Schaller <hns@goldelico.com>
+> > Cc: Huijin Park <huijin.park@samsung.com>
+> > Fixes: 76bfc7ccc2fa ("mmc: core: adjust polling interval for CMD1")
+> > Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+> > ---
+> > 
+> > Jean Rene and H. Nikolaus, if this doesn't work, please try extending the
+> > the MMC_OP_COND_PERIOD_US a bit, to so see if we can find a value that always
+> > works.
+> > 
+> > Kind regards
+> > Uffe
 
-While at it a quick note: I wonder if this is problem a similar to one
-that recently turned up with amdgpu and is fixed by this problem:
-https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=78b12008f20
+> 
+> Applied for fixes and by adding two tested-by tags from you, thanks!
+> 
+> Kind regards
+> Uffe
 
-Ciao, Thorsten
+Hi,
 
-On 04.05.22 02:37, Marek Marczykowski-Górecki wrote:
-> 
-> After updating from 5.16.18 to 5.17.5 in Xen PV dom0, my Xorg started
-> crashing when displaying any window mapped from a guest (domU) system.
-> This is 100% reproducible.
-> The system is Qubes OS, and it uses a trick that maps windows content
-> from other guests using Xen grant tables, wrapped as "shared memory"
-> from Xorg point of view (so, the memory that Xorg mmaps is not just from
-> another process, but from another VM). That's the ShmPutImage you can
-> see on the stack trace below.
-> 
-> Stack trace of thread 12858:
-> #0  0x00007f80029e17d5 raise (libc.so.6 + 0x3c7d5)
-> #1  0x00007f80029ca895 abort (libc.so.6 + 0x25895)
-> #2  0x00005b3469ace0e0 OsAbort (Xorg + 0x1c60e0)
-> #3  0x00005b3469ad3959 AbortServer (Xorg + 0x1cb959)
-> #4  0x00005b3469ad46aa FatalError (Xorg + 0x1cc6aa)
-> #5  0x00005b3469acb450 OsSigHandler (Xorg + 0x1c3450)
-> #6  0x00007f8002b85a90 __restore_rt (libpthread.so.0 + 0x14a90)
-> #7  0x00007f8002b0a2a1 __memmove_avx_unaligned_erms (libc.so.6 + 0x1652a1)
-> #8  0x00007f80015dfcc9 linear_to_xtiled_faster (iris_dri.so + 0xc91cc9)
-> #9  0x00007f80015e3477 _isl_memcpy_linear_to_tiled (iris_dri.so + 0xc95477)
-> #10 0x00007f8001468440 iris_texture_subdata (iris_dri.so + 0xb1a440)
-> #11 0x00007f8000a76107 st_TexSubImage (iris_dri.so + 0x128107)
-> #12 0x00007f8000be9a47 texture_sub_image (iris_dri.so + 0x29ba47)
-> #13 0x00007f8000becd0c texsubimage_err (iris_dri.so + 0x29ed0c)
-> #14 0x00007f8000bf2939 _mesa_TexSubImage2D (iris_dri.so + 0x2a4939)
-> #15 0x00007f800213831f glamor_upload_boxes (libglamoregl.so + 0x1e31f)
-> #16 0x00007f800213856f glamor_upload_region (libglamoregl.so + 0x1e56f)
-> #17 0x00007f800212aea6 glamor_put_image (libglamoregl.so + 0x10ea6)
-> #18 0x00005b3469a4d79c damagePutImage (Xorg + 0x14579c)
-> #19 0x00005b3469a00a7e ProcShmPutImage (Xorg + 0xf8a7e)
-> #20 0x00005b3469965a2b Dispatch (Xorg + 0x5da2b)
-> #21 0x00005b3469969b04 dix_main (Xorg + 0x61b04)
-> #22 0x00007f80029cc082 __libc_start_main (libc.so.6 + 0x27082)
-> #23 0x00005b3469952e6e _start (Xorg + 0x4ae6e)
-> 
-> Disassembly of the surrounding code:
-> 
->    0x00007596ae8c82fb <+123>:	ja     0x7596ae8c8338 <__memmove_avx_unaligned_erms+184>
->    0x00007596ae8c82fd <+125>:	jb     0x7596ae8c8304 <__memmove_avx_unaligned_erms+132>
->    0x00007596ae8c82ff <+127>:	movzbl (%rsi),%ecx
->    0x00007596ae8c8302 <+130>:	mov    %cl,(%rdi)
->    0x00007596ae8c8304 <+132>:	retq   
->    0x00007596ae8c8305 <+133>:	vmovdqu (%rsi),%xmm0
->    0x00007596ae8c8309 <+137>:	vmovdqu -0x10(%rsi,%rdx,1),%xmm1
-> => 0x00007596ae8c830f <+143>:	vmovdqu %xmm0,(%rdi)
->    0x00007596ae8c8313 <+147>:	vmovdqu %xmm1,-0x10(%rdi,%rdx,1)
->    0x00007596ae8c8319 <+153>:	retq
-> 
-> 
-> I don't see any related kernel or Xen messages at this time. Xorg's SEGV
-> handler prints also:
-> 
->     (EE) Segmentation fault at address 0x3c010
-> 
-> Git bisect says it's bdd8b6c98239cad ("drm/i915: replace X86_FEATURE_PAT
-> with pat_enabled()"), and indeed with this commit reverted on top of
-> 5.17.5 everything works fine.
-> 
-> I guess this part of dom0's boot dmesg may be relevant:
-> 
-> [    0.000949] x86/PAT: MTRRs disabled, skipping PAT initialization too.
-> [    0.000953] x86/PAT: Configuration [0-7]: WB  WT  UC- UC  WC  WP  UC  UC  
-> 
-> Originally reported at
-> https://github.com/QubesOS/qubes-issues/issues/7479
-> 
->  
-> #regzbot introduced bdd8b6c98239cad
-> #regzbot monitor: https://github.com/QubesOS/qubes-issues/issues/7479
-> 
+with the current value of MMC_OP_COND_PERIOD_US = 1ms I still see
+
+mmc1: Card stuck being busy! __mmc_poll_for_busy
+mmc1: error -110 doing runtime resume
+
+regularly. The same with 2ms. Setting it to 4ms makes the messages go
+away. Would it be ok to increase MMC_OP_COND_PERIOD_US to 4ms?
+
+
+---
+ drivers/mmc/core/mmc_ops.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/mmc/core/mmc_ops.c b/drivers/mmc/core/mmc_ops.c
+index 180d7e9d3400..1fd57f342842 100644
+--- a/drivers/mmc/core/mmc_ops.c
++++ b/drivers/mmc/core/mmc_ops.c
+@@ -21,7 +21,7 @@
+
+ #define MMC_BKOPS_TIMEOUT_MS           (120 * 1000) /* 120s */
+ #define MMC_SANITIZE_TIMEOUT_MS                (240 * 1000) /* 240s */
+-#define MMC_OP_COND_PERIOD_US          (1 * 1000) /* 1ms */
++#define MMC_OP_COND_PERIOD_US          (4 * 1000) /* 1ms */
+ #define MMC_OP_COND_TIMEOUT_MS         1000 /* 1s */
+
+ static const u8 tuning_blk_pattern_4bit[] = {
+--
+2.35.1
+
+
+Regards,
+Jean Rene

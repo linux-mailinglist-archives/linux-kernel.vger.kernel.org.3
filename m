@@ -2,48 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE58D51AAF2
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:34:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E67D51AA6C
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:27:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359433AbiEDRgA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 13:36:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40390 "EHLO
+        id S1344702AbiEDR2E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 13:28:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356961AbiEDRJv (ORCPT
+        with ESMTP id S1355756AbiEDRIu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 13:09:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A590A47064;
-        Wed,  4 May 2022 09:56:44 -0700 (PDT)
+        Wed, 4 May 2022 13:08:50 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93133515A5;
+        Wed,  4 May 2022 09:54:32 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4107061808;
-        Wed,  4 May 2022 16:56:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B8C1C385A5;
-        Wed,  4 May 2022 16:56:43 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0BBBCB827A5;
+        Wed,  4 May 2022 16:54:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9FD6EC385A4;
+        Wed,  4 May 2022 16:54:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651683403;
-        bh=BQI/BWu84cGIr7wcJBUztzbUZxXOZxMAvC14UpLb+8g=;
+        s=korg; t=1651683269;
+        bh=bRQrtA7Sj1ZggibkRz6ZFK9KJkXGdhVaf5iHCb6wSws=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BUICga2oEMWDUXYCMYCl38HKVxngh+WHFIDklI0dx7nJLuonOm9Q1ZrdtNVKjJU58
-         lMHz+3jDDAgLZ92d9xuX+bEFJjXKaceQ7cwJDrGr+CMax32xTBiDNwWzwXNMyu3QCM
-         rPVeq18C4ag5AGU2a4mUzN8+4Gxx1I7jLv58z0Rc=
+        b=eXY4ksjVQkqH97LIz4owDIvDmY777u3yRqnXpOa/t/zCijpG8fiqjKicaj+O5RxST
+         MHvCiwD/yyIkwqdwzmEwKY/UYQ7s0ZLAE5a6+BlIEqlr/Bdtwl7RgfUCB/Uz05hQeB
+         1Rfw1c5RvodkQjnwqeHdmw1KXxUr9WCawQ7JjHSQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Marek Vasut <marex@denx.de>,
-        Adam Ford <aford173@gmail.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Peng Fan <peng.fan@nxp.com>, Shawn Guo <shawnguo@kernel.org>,
-        NXP Linux Team <linux-imx@nxp.com>,
+        stable@vger.kernel.org, Andreas Gruenbacher <agruenba@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 074/225] arm64: dts: imx8mn: Fix SAI nodes
+Subject: [PATCH 5.15 119/177] gfs2: Prevent endless loops in gfs2_file_buffered_write
 Date:   Wed,  4 May 2022 18:45:12 +0200
-Message-Id: <20220504153118.004201715@linuxfoundation.org>
+Message-Id: <20220504153103.816946873@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220504153110.096069935@linuxfoundation.org>
-References: <20220504153110.096069935@linuxfoundation.org>
+In-Reply-To: <20220504153053.873100034@linuxfoundation.org>
+References: <20220504153053.873100034@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,78 +54,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Marek Vasut <marex@denx.de>
+From: Andreas Gruenbacher <agruenba@redhat.com>
 
-[ Upstream commit 574518b7ccbaef74cb89eb1a1a0da88afa1e0113 ]
+[ Upstream commit 554c577cee95bdc1d03d9f457e57dc96eb791845 ]
 
-The most specific compatible string element should be "fsl,imx8mn-sai"
-on i.MX8M Nano, fix it from current "fsl,imx8mm-sai" (two Ms, likely
-due to copy-paste error from i.MX8M Mini).
+Currently, instead of performing a short write,
+iomap_file_buffered_write will fail when part of its iov iterator cannot
+be read.  In contrast, gfs2_file_buffered_write will loop around if it
+can read part of the iov iterator, so we can end up in an endless loop.
 
-Fixes: 9e9860069725f ("arm64: dts: imx8mn: Add SAI nodes")
-Signed-off-by: Marek Vasut <marex@denx.de>
-Cc: Adam Ford <aford173@gmail.com>
-Cc: Fabio Estevam <festevam@gmail.com>
-Cc: Peng Fan <peng.fan@nxp.com>
-Cc: Shawn Guo <shawnguo@kernel.org>
-Cc: NXP Linux Team <linux-imx@nxp.com>
-To: linux-arm-kernel@lists.infradead.org
-Reviewed-by: Adam Ford <aford173@gmail.com>
-Signed-off-by: Shawn Guo <shawnguo@kernel.org>
+This should be fixed in iomap_file_buffered_write (and also
+generic_perform_write), but this comes a bit late in the 5.16
+development cycle, so work around it in the filesystem by
+trimming the iov iterator to the known-good size for now.
+
+Signed-off-by: Andreas Gruenbacher <agruenba@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm64/boot/dts/freescale/imx8mn.dtsi | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ fs/gfs2/file.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/freescale/imx8mn.dtsi b/arch/arm64/boot/dts/freescale/imx8mn.dtsi
-index b8d49d5f2668..98bfb53491fc 100644
---- a/arch/arm64/boot/dts/freescale/imx8mn.dtsi
-+++ b/arch/arm64/boot/dts/freescale/imx8mn.dtsi
-@@ -291,7 +291,7 @@ spba2: spba-bus@30000000 {
- 				ranges;
+diff --git a/fs/gfs2/file.c b/fs/gfs2/file.c
+index 247b8d95b5ef..97e2793e22d7 100644
+--- a/fs/gfs2/file.c
++++ b/fs/gfs2/file.c
+@@ -1021,6 +1021,7 @@ static ssize_t gfs2_file_buffered_write(struct kiocb *iocb,
+ 	struct gfs2_sbd *sdp = GFS2_SB(inode);
+ 	struct gfs2_holder *statfs_gh = NULL;
+ 	size_t prev_count = 0, window_size = 0;
++	size_t orig_count = iov_iter_count(from);
+ 	size_t read = 0;
+ 	ssize_t ret;
  
- 				sai2: sai@30020000 {
--					compatible = "fsl,imx8mm-sai", "fsl,imx8mq-sai";
-+					compatible = "fsl,imx8mn-sai", "fsl,imx8mq-sai";
- 					reg = <0x30020000 0x10000>;
- 					interrupts = <GIC_SPI 96 IRQ_TYPE_LEVEL_HIGH>;
- 					clocks = <&clk IMX8MN_CLK_SAI2_IPG>,
-@@ -305,7 +305,7 @@ sai2: sai@30020000 {
- 				};
+@@ -1065,6 +1066,7 @@ static ssize_t gfs2_file_buffered_write(struct kiocb *iocb,
+ 	if (inode == sdp->sd_rindex)
+ 		gfs2_glock_dq_uninit(statfs_gh);
  
- 				sai3: sai@30030000 {
--					compatible = "fsl,imx8mm-sai", "fsl,imx8mq-sai";
-+					compatible = "fsl,imx8mn-sai", "fsl,imx8mq-sai";
- 					reg = <0x30030000 0x10000>;
- 					interrupts = <GIC_SPI 50 IRQ_TYPE_LEVEL_HIGH>;
- 					clocks = <&clk IMX8MN_CLK_SAI3_IPG>,
-@@ -319,7 +319,7 @@ sai3: sai@30030000 {
- 				};
++	from->count = orig_count - read;
+ 	if (should_fault_in_pages(ret, from, &prev_count, &window_size)) {
+ 		size_t leftover;
  
- 				sai5: sai@30050000 {
--					compatible = "fsl,imx8mm-sai", "fsl,imx8mq-sai";
-+					compatible = "fsl,imx8mn-sai", "fsl,imx8mq-sai";
- 					reg = <0x30050000 0x10000>;
- 					interrupts = <GIC_SPI 90 IRQ_TYPE_LEVEL_HIGH>;
- 					clocks = <&clk IMX8MN_CLK_SAI5_IPG>,
-@@ -335,7 +335,7 @@ sai5: sai@30050000 {
- 				};
- 
- 				sai6: sai@30060000 {
--					compatible = "fsl,imx8mm-sai", "fsl,imx8mq-sai";
-+					compatible = "fsl,imx8mn-sai", "fsl,imx8mq-sai";
- 					reg = <0x30060000  0x10000>;
- 					interrupts = <GIC_SPI 90 IRQ_TYPE_LEVEL_HIGH>;
- 					clocks = <&clk IMX8MN_CLK_SAI6_IPG>,
-@@ -392,7 +392,7 @@ spdif1: spdif@30090000 {
- 				};
- 
- 				sai7: sai@300b0000 {
--					compatible = "fsl,imx8mm-sai", "fsl,imx8mq-sai";
-+					compatible = "fsl,imx8mn-sai", "fsl,imx8mq-sai";
- 					reg = <0x300b0000 0x10000>;
- 					interrupts = <GIC_SPI 111 IRQ_TYPE_LEVEL_HIGH>;
- 					clocks = <&clk IMX8MN_CLK_SAI7_IPG>,
+@@ -1072,6 +1074,7 @@ static ssize_t gfs2_file_buffered_write(struct kiocb *iocb,
+ 		leftover = fault_in_iov_iter_readable(from, window_size);
+ 		gfs2_holder_disallow_demote(gh);
+ 		if (leftover != window_size) {
++			from->count = min(from->count, window_size - leftover);
+ 			if (!gfs2_holder_queued(gh)) {
+ 				if (read)
+ 					goto out_uninit;
 -- 
 2.35.1
 

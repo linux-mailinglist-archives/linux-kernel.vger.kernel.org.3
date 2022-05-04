@@ -2,162 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04B70519E45
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 13:43:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5E3F519E4C
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 13:44:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348940AbiEDLqt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 07:46:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53152 "EHLO
+        id S1348948AbiEDLsK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 07:48:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348038AbiEDLqp (ORCPT
+        with ESMTP id S232957AbiEDLsH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 07:46:45 -0400
-Received: from FRA01-MR2-obe.outbound.protection.outlook.com (mail-eopbgr90044.outbound.protection.outlook.com [40.107.9.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B06F32B1A7
-        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 04:43:07 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Y5cVvaZJaqqpBDkzEAMtX12BcpFpxnke0lc1kvlYBvy/xIQb5/KO/JufQucZ3KZ68CggzPk2vXh8/sl6nZR3zZuxKtdRrgMYuytvGaVd0+0dsUkdTCeYcq1HIfHxl4EhUAgrm8/xCHLKbIEnQvqNIqCA0HjBSF6xB8dRO4tlvd+AC+HIKCNocaRlpkqrTxAKNEGPct5wAoH3uTYJuI8XbN7MbTHZx4B0h8GFL3gNr5+Z/YugglNIggOfw9OWpvay8mN1MUCzeneGOjbTPdlj5FlCNF8h3WEsJD6RBAcwmtamZO7+fm32wOKUdz0gFaS4ps1BY2POn9TbUK9Cbg04ZA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=dACDaUka53SaiA3gF8dxskCZP9GIsufSSk/0Uv2e/FE=;
- b=T/bjIFdUf7X/7GtIgIIpR6KbdHb/4P4niZun1ap4oxLJ8Wv5MD5KW9RUww1VbLuaD4bu4nV1AJlV/3ufPRHfK5RTF5bLiD9aded3nuh4nstYOO/rkREd83ONDdEyypuvof18lh+6dl7E3cHm59b+Cq0nN2lGdNSS6wUQRL770Y4ju84yxZWbuXjJTAb5QEOP/K8v5WILhjrPhDuFZN2E2wXHaBU9MME/oSU8p12objfAtSC6ep/ur5VL1+ez80p/GQxqdQ1pPSxarBY2q2cuPgEzKwPOT43dn9gDiMcCv2RfCGq/gDiBp9PgkTd28XgvqEtqDH3IbY/iTdyKqB+hww==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
- dkim=pass header.d=csgroup.eu; arc=none
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
- by MRZP264MB2347.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:1c::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5206.13; Wed, 4 May
- 2022 11:43:05 +0000
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::d572:ae3f:9e0c:3c6]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::d572:ae3f:9e0c:3c6%7]) with mapi id 15.20.5206.025; Wed, 4 May 2022
- 11:43:05 +0000
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Paul Mackerras <paulus@samba.org>,
-        Steven Rostedt <rostedt@goodmis.org>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
-Subject: Re: [PATCH v1 06/22] powerpc/ftrace: Inline ftrace_modify_code()
-Thread-Topic: [PATCH v1 06/22] powerpc/ftrace: Inline ftrace_modify_code()
-Thread-Index: AQHYP4vJ69BycAo/wk2nwxR2peJst6z1Vg0AgBmDFgA=
-Date:   Wed, 4 May 2022 11:43:05 +0000
-Message-ID: <1bacf92b-2ad1-9ebe-f332-4ee9dd147088@csgroup.eu>
-References: <cover.1648131740.git.christophe.leroy@csgroup.eu>
- <3b651381f4c53988ede62f4a1505e7e8ccab56b4.1648131740.git.christophe.leroy@csgroup.eu>
- <1650261933.e8kr43zvw0.naveen@linux.ibm.com>
-In-Reply-To: <1650261933.e8kr43zvw0.naveen@linux.ibm.com>
-Accept-Language: fr-FR, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=csgroup.eu;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: da137498-463a-4c5a-e139-08da2dc3409d
-x-ms-traffictypediagnostic: MRZP264MB2347:EE_
-x-microsoft-antispam-prvs: <MRZP264MB23471ED0AB8D90B9013FA5A5EDC39@MRZP264MB2347.FRAP264.PROD.OUTLOOK.COM>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: zJFJPkwV8vZpdDuJsPF+IiDVSEzGb1ZHiLsNgJko/9hPz0+p7QH6Qu61lReaRDdimz/UMLtCk1xobKDcTI0Wf31O+HwqlYRCK+kv1HtdNwVCXjcs0CUokR8qRAhm3pXRv5SlICzIVgWok9MJRReqE1o0tSPSKMZA6ts+JQk7rNCl6UWTPfDTiSqhmTU4H3dEtXwMRb12jbqGCy+/1CRYfyc5dCvUh4q8StD25WgE+uvOU7JSgLnA5NF0CQb2ZAGMmcIZPTTOqLlZ+NtI6t2znOMnS+jlwOKrIKVXvQ9DY5ZdkRPl8hqTDSfzFHNI1kW9YsElAuNj9n0inLq2U3RwqgpByruh141zHyfnvIL7qyEV7WRLOX3X531zgMGC6ZV16yTZK4H47XNmNbYJMus3NDj4StJelfLpGuvBNZxq8Im5/9dY5qAOR73DjuWN1dJrZDOJkddjZmgwafIywE2CQsnENIJyf2l4zYewbgCkZMBI6LmwWRmD4LaRvcFaGaRVxjJbt3i1/uOeGGdzhCutSwRDVsfd6SSMudJo71HKHx3GhMKkeVcKhYWEiHfX9XZY3LRthNo5m0j1xsnAwyAgkf0nZAR+eAWR4z1GZfvq2D/UGBq2rN4LjfGOSjt6svBfUbVY50XZxyNWnok4Pj8UInwEW6mT5C+NnhUlFc0ybJ4+4yhBiXcA2lWoNqtDpYu5eWM9941bPTj9b9izMXwHByuwRNCBQnaS0CXow/SirXzEb9ThQXmvkGb654WVSM898ytMOJA5c8Ipog1R6aq+wA==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(186003)(66574015)(36756003)(6506007)(2616005)(26005)(6512007)(2906002)(122000001)(38100700002)(38070700005)(83380400001)(5660300002)(66556008)(54906003)(66476007)(66946007)(76116006)(91956017)(316002)(66446008)(110136005)(8676002)(8936002)(4326008)(31686004)(64756008)(508600001)(6486002)(44832011)(86362001)(31696002)(71200400001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?bGxqKzNGSDJXd3lmbWZmSjJpRTdVVEJaU3VBL1Zqb29QSk5PZFNvWU5iRjhJ?=
- =?utf-8?B?WWlqbWRwR3ltQzBhZncyakxvSEdQUTlRZzZ0VjdMRE1mSDlpL2dtQ0tFM2wr?=
- =?utf-8?B?YWZPWHM5SjVSSkJidGZnQkpycit3R2xiTlI0dy91b2l1ZUluRmJuL3VVb29P?=
- =?utf-8?B?OXJEUGNteGR2K1ROTXVoOEhkZkNzVFM5VWlSK3JKemFYR0RPOHdYZHZ2TEdX?=
- =?utf-8?B?RHlhRXFqMVBUaXAvWHoreE9tU05DMUdudTU1MlZsaDhNUENnYzU4SlE4OS83?=
- =?utf-8?B?cVB2RVQ4R0FWT3RCRTQvL1lsVVU5aEJxdlJibGVmMXlxRkltMXJ5azVadDVj?=
- =?utf-8?B?bW83RzlCVXRlM1lxTVZUUEFPTlViQ2pwZlpZVkJyNWl4Wkw2RFRkaXdxNVUr?=
- =?utf-8?B?N2ljeU9RQ3plUHNZMHN0SmZzZitkSitodHE1VDk3N29oY0J6K3hLL2FtcTBV?=
- =?utf-8?B?NnVOZFZtVFBaR1NBWFljZkZaV1ZGdzJFV3dpZEJsckdtYkdFWVEzeTVSd0JT?=
- =?utf-8?B?cDFJVUhVTkJoMk0wNm1hUXlOMUtQYk1SU1FKd05WSVJIY25TYWVSTlA3TjZO?=
- =?utf-8?B?SEU3cmlKZUV2dXhOK2ZZUTJES0pKbHRpRStLc3prZjgveXU0U0lQSXBpU1JZ?=
- =?utf-8?B?RHRhYjRya1NJZjFEZVFOV2MxcWVoZzQvSEw0ZTdmd3cxUlBpaThjRENpb2JG?=
- =?utf-8?B?Y2FDZG9McDNZejFBNDU3OEtPQTl4ZXpCalhwUGhhWkUzRVFOOHZjUDMvSW5i?=
- =?utf-8?B?cGEzU0tuOE1NdHZCajBuZkQ2SERpK1RpY2xzbWxvWXVWcWVqQkc4SDhxYUdu?=
- =?utf-8?B?ckJ5a3UxY25TdDl6NnQwQ0NvMFBJazg1LzJtMUc5c0E3eUpPbVkvVnVvVTNW?=
- =?utf-8?B?bFdCK01ub3ZxMmlNS2JoejNNZ3dGcXI4Wmd1ak5hWDRoSE01Y1k2NlNYTUh0?=
- =?utf-8?B?UnRyUVpVYS81bk8zd1UvMUt5RXNMSE1hcFRlZm5QNVl2VWVhVU93QXlMcCs5?=
- =?utf-8?B?ajd3aWZGNTRDcDZVRmpjNnZqUmhrS1NFYnU5SmRmS2o2Sy9VaWk3VmRBSDV2?=
- =?utf-8?B?eDJwcnNWeTBBS29SQmJGSlRvc3VhUTFGeTBJTzdoNGpxZStwYUpuckxwTVRS?=
- =?utf-8?B?YVVNczlxUmZQeDBzTmNDaExjYUdZMS9hdmpYVjlJeDlrZjdaRXNwR3lOYmRE?=
- =?utf-8?B?Y1grSHhKdHRXaFdXd1NQQ01vZEJEVkMwQWVrajR5RmxNc21RYmM4Q084TWhT?=
- =?utf-8?B?THZCeTkzZjFSeFNLWTgvVFM2RlVGRENlcFA1aHQvMiszOWFrUmhpOC9sbnZL?=
- =?utf-8?B?ZWhRa2hjM2pGVUF2WWl0V3ZmREltdkJBcWpjZ2Vyd1RQWWYvUG9sdUhUbHg3?=
- =?utf-8?B?WGlpS050VDl4bWt1Q2FqZEF5cW0xaFY1djQ4czZESGNtOEJlcDhsYWoweEdX?=
- =?utf-8?B?UWh4ckw0cG9hZURBbzl2UldvY04xL0lhWFpxMzJMNmVMMDVvak9KblZHZ0pR?=
- =?utf-8?B?dHBrRmZGQnlNZXFERGV2bTRtZ29zb0xCcWhqZG1tZDJNd3dWeVRxTHNqUTk0?=
- =?utf-8?B?VlU5dnRUZkxURDI0TkN2MUZGcFo3cysyQVdmYU1YdEp0QllHU0MrUVpJbGor?=
- =?utf-8?B?RjU0UTJKNXh5M2NuRk1ZYlFpQ1VHbHFRclVKaWRkeW8xOHRFNmpHT0RQUEdM?=
- =?utf-8?B?TmV3Vi9VZ0lDNW95ZEJsRmx1THlCajg3bmVsbnJ6aUpnaUFHbERRdnNneU1o?=
- =?utf-8?B?WVhlcVhGcEZQc0VBdnphWG5pbnQzWlI1SFM5OG5vNCtWazNwU3l0cDAySFFE?=
- =?utf-8?B?cmU2dit5VVA3QytNbXZnbFhsRnFyUCt6MFV3SzhrV096QTVScDhFblpjQW1C?=
- =?utf-8?B?REpXZWNpVG1QVjl0Z1FoV3JEbTE2VG1JRkdRTWh4bnllYVJEelR3RzA3dy9X?=
- =?utf-8?B?WDhGNkF5azlicWpzZDhJR2RiNEdKR21QcHZIcVpRQmwxMjBCSFNvdkRtTldi?=
- =?utf-8?B?OEowL1dNU3lZT08xd2x4RmJETDlocjUxMGJ5NjJLNDNNVWhYZ0NkT3JaN0Mr?=
- =?utf-8?B?UHVmZ3BVcURGOS81LzJzWWQ3dHRRK082T3FldXYxQU9EVjNYQ2xzazAyK2NN?=
- =?utf-8?B?alE2NjlZdUJlcXdxNzMxc200MTRySlU3Q3luWG5RdTR3RFhaS3lUUUpIaHAw?=
- =?utf-8?B?Szh2azgxa29lRzVjdnNLN2RNQkc5UjB0VmJQZXNMeTVpc01XeFJhSlBoZFlP?=
- =?utf-8?B?UzMwV2htTUF0MkZobFFkdjByYTVHZ2Y3Y0RMdDhaVGJNSFl4V3g5NXJiRHhC?=
- =?utf-8?B?eHljUzBMT2VRRHBDc0NzMzJaaXdIMlY0bVZYejl2WGRzZnFPNmFkMHdZRi9p?=
- =?utf-8?Q?K8xwp0VgphwoJjLdxn3KGvQIzR/RONDdDzSC5?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <2227DFFAE44586458481A87993B50D14@FRAP264.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: base64
+        Wed, 4 May 2022 07:48:07 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F29052B1A7;
+        Wed,  4 May 2022 04:44:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1651664672; x=1683200672;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=HUmOySrek83JyA60T2ruN8YBYq+9g1QPXzAagsL8W7U=;
+  b=d6qXcdphK0fPVj2+0exJILZKc8/jp9NPKr+8WU6I3UpOE0T2zAWkKRY0
+   /egXRZtafJegVLz+TJNoEhn+Fa4OTJCDmXhj2LSA1cHL+2IgrPMm9MAsd
+   9BKW0WrRLgWjh60b2rO7C0wmSApLBaxZKcFmKf6KAN296olH6Sj/rEKKH
+   I=;
+Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 04 May 2022 04:44:31 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2022 04:44:31 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Wed, 4 May 2022 04:44:31 -0700
+Received: from hu-srivasam-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Wed, 4 May 2022 04:44:27 -0700
+From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+To:     <agross@kernel.org>, <bjorn.andersson@linaro.org>,
+        <robh+dt@kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <quic_rohkumar@quicinc.com>, <srinivas.kandagatla@linaro.org>,
+        <dianders@chromium.org>, <swboyd@chromium.org>,
+        <judyhsiao@chromium.org>
+CC:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+Subject: [PATCH v11 00/12] Add soundcard support for sc7280 based platforms.
+Date:   Wed, 4 May 2022 17:13:57 +0530
+Message-ID: <1651664649-25290-1-git-send-email-quic_srivasam@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-X-OriginatorOrg: csgroup.eu
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: da137498-463a-4c5a-e139-08da2dc3409d
-X-MS-Exchange-CrossTenant-originalarrivaltime: 04 May 2022 11:43:05.1839
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: dLrfOVb8K8tsiZYNZRgKTnIn4zjCKMaRQNySOs66K9IXSFur4fLDzO2cPRwsRajJpJQuPQYtuAAcxIZUY24b3bo7cy3mmfHVpN6S70pd+O0=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MRZP264MB2347
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQoNCkxlIDE4LzA0LzIwMjIgw6AgMDg6MDcsIE5hdmVlbiBOLiBSYW8gYSDDqWNyaXTCoDoNCj4g
-Q2hyaXN0b3BoZSBMZXJveSB3cm90ZToNCj4+IElubGluaW5nIGZ0cmFjZV9tb2RpZnlfY29kZSgp
-LCBpdCBpbmNyZWFzZXMgYSBiaXQgdGhlDQo+PiBzaXplIG9mIGZ0cmFjZSBjb2RlIGJ1dCBicmlu
-Z3MgNSUgaW1wcm92bWVudCBvbiBmdHJhY2UNCj4+IGFjdGl2YXRpb24uDQo+Pg0KPj4gU2lnbmVk
-LW9mZi1ieTogQ2hyaXN0b3BoZSBMZXJveSA8Y2hyaXN0b3BoZS5sZXJveUBjc2dyb3VwLmV1Pg0K
-Pj4gLS0tDQo+PiDCoGFyY2gvcG93ZXJwYy9rZXJuZWwvdHJhY2UvZnRyYWNlLmMgfCAyICstDQo+
-PiDCoDEgZmlsZSBjaGFuZ2VkLCAxIGluc2VydGlvbigrKSwgMSBkZWxldGlvbigtKQ0KPj4NCj4+
-IGRpZmYgLS1naXQgYS9hcmNoL3Bvd2VycGMva2VybmVsL3RyYWNlL2Z0cmFjZS5jIA0KPj4gYi9h
-cmNoL3Bvd2VycGMva2VybmVsL3RyYWNlL2Z0cmFjZS5jDQo+PiBpbmRleCA0MWM0NWI5YzdmMzku
-Ljk4ZTgyZmE0OTgwZiAxMDA2NDQNCj4+IC0tLSBhL2FyY2gvcG93ZXJwYy9rZXJuZWwvdHJhY2Uv
-ZnRyYWNlLmMNCj4+ICsrKyBiL2FyY2gvcG93ZXJwYy9rZXJuZWwvdHJhY2UvZnRyYWNlLmMNCj4+
-IEBAIC01Myw3ICs1Myw3IEBAIGZ0cmFjZV9jYWxsX3JlcGxhY2UodW5zaWduZWQgbG9uZyBpcCwg
-dW5zaWduZWQgbG9uZyANCj4+IGFkZHIsIGludCBsaW5rKQ0KPj4gwqDCoMKgwqAgcmV0dXJuIG9w
-Ow0KPj4gwqB9DQo+Pg0KPj4gLXN0YXRpYyBpbnQNCj4+ICtzdGF0aWMgaW5saW5lIGludA0KPj4g
-wqBmdHJhY2VfbW9kaWZ5X2NvZGUodW5zaWduZWQgbG9uZyBpcCwgcHBjX2luc3RfdCBvbGQsIHBw
-Y19pbnN0X3QgbmV3KQ0KPj4gwqB7DQo+PiDCoMKgwqDCoCBwcGNfaW5zdF90IHJlcGxhY2VkOw0K
-PiANCj4gSSB0aG91Z2h0IGdjYyB3YXMgZnJlZSB0byBpbmxpbmUgZnVuY3Rpb25zIHdpdGhvdXQg
-dGhlIG5lZWQgZm9yIA0KPiAnaW5saW5lJy4gRG9uJ3QgeW91IHNlZSB0aGlzIGJlaW5nIGlubGlu
-ZWQgb3RoZXJ3aXNlPw0KDQpZZXAsIGdjYyBpcyBmcmVlIHRvIGlubGluZSwgYnV0IGluIHRoYXQg
-Y2FzZSBpdCBkb2Vzbid0IGlubGluZSB1bmxlc3MgDQp5b3Ugc3VnZ2VzdCBpdCB0byBkbyBzby4N
-Cg0KPiANCj4gT24gdGhlIGZsaXAgc2lkZSwgZG9uJ3Qgd2UgbmVlZCBfX2Fsd2F5c19pbmxpbmUg
-aWYgd2Ugd2FudCB0byBmb3JjZSANCj4gaW5saW5pbmc/DQoNClRoZSBxdWVzdGlvbiBpcywgZG8g
-d2Ugd2FudCB0byBmb3JjZSBpbmxpbmluZywgZXZlbiB3aXRoIA0KQ09ORklHX0NDX09QVElNSVpF
-X0ZPUl9TSVpFID8NCg0KV2l0aCAnaW5saW5lJywgZ2NjIHNlZW1zIHRvIG5vdyBpbmxpbmUgaXQg
-d2l0aCANCkNPTkZJR19DQ19PUFRJTUlaRV9GT1JfU1BFRUQgYW5kIHN0aWxsIGtlZXAgaXQgb3V0
-IG9mIGxpbmUgd2l0aCANCkNPTkZJR19DQ19PUFRJTUlaRV9GT1JfU0laRS4NCg0KQ2hyaXN0b3Bo
-ZQ==
+This patch set is to add bolero digital macros, WCD and maxim codecs nodes
+for audio on sc7280 based platforms.
+
+This patch set depends on:
+    -- https://patchwork.kernel.org/project/linux-arm-msm/list/?series=638259
+    -- https://patchwork.kernel.org/project/linux-arm-msm/list/?series=601249
+    -- https://patchwork.kernel.org/project/linux-arm-msm/list/?series=634597
+    -- https://patchwork.kernel.org/project/linux-clk/list/?series=637999
+    -- https://patchwork.kernel.org/project/linux-arm-msm/list/?series=638002
+
+Changes Since V10:
+    -- Modify digital macro codecs pin control labels.
+    -- Updated dependency list.
+Changes Since V9:
+    -- Move wcd codec and digital codec nodes to sc7280-qcard file.
+    -- Modify the reg property as per link number in sound node.
+    -- Fix the us-euro pin control usage in wcd codec node.
+    -- Move wcd pin control nodes to specific crd board files.
+    -- Sort max98360a codec node in alphabetical order.
+    -- Modify the commit messages.
+Changes Since V8:
+    -- Split patches as per sc7280 CRD revision 3, 4 and 5 boards.
+    -- Add corresponding dt nodes for herobrine crd boards.
+    -- Update dai-link node names as per dt-bindings in sound node.
+    -- Add reg property in sound node as per dt-bindings which was removed in previous series.
+    -- Fix typo errors.
+    -- Update wcd codec pin control properties in board specific files.
+Changes Since V7:
+    -- Remove redundant interrupt names in soundwire node.
+    -- Fix typo errors.
+    -- Remove redundant reg property in sound node.
+    -- Rebased on top of latest kernel tip.
+Changes Since V6:
+    -- Modify link-names and audio routing in a sound node.
+    -- Move amp_en pin control node to appropriate consumer patch.
+    -- Split patches as per digital macro codecs and board specific codecs and sort it.
+    -- Modify label and node names to lpass specific.
+Changes Since V5:
+    -- Move soc specific bolero digital codec nodes to soc specific file.
+    -- Bring wcd938x codec reset pin control and US/EURO HS selection nodes from other series.
+    -- Change node name and remove redundant status property in sound node.
+Changes Since V4:
+    -- Update nodes in sorting order.
+    -- Update DTS node names as per dt-bindings.
+    -- Update Node properties in proper order.
+    -- Update missing pinctrl properties like US/EURO HS selection, wcd reset control.
+    -- Remove redundant labels.
+    -- Remove unused size cells and address cells in tx macro node.
+    -- Keep all same nodes at one place, which are defined in same file.
+    -- Add max98360a codec node to herobrine board specific targets.
+Changes Since V3:
+    -- Move digital codec macro nodes to board specific dtsi file.
+    -- Update pin controls in lpass cpu node.
+    -- Update dependency patch list.
+    -- Create patches on latest kernel.
+Changes Since V2:
+    -- Add power domains to digital codec macro nodes.
+    -- Change clock node usage in lpass cpu node.
+    -- Add codec mem clock to lpass cpu node.
+    -- Modify the node names to be generic.
+    -- Move sound and codec nodes to root node.
+    -- sort dai links as per reg.
+    -- Fix typo errors.
+Changes Since V1:
+    -- Update the commit message of cpu node patch.
+    -- Add gpio control property to support Euro headset in wcd938x node.
+    -- Fix clock properties in lpass cpu and digital codec macro node.
+
+Srinivasa Rao Mandadapu (12):
+  arm64: dts: qcom: sc7280: Add nodes for soundwire and va tx rx digital
+    macro codecs
+  arm64: dts: qcom: sc7280: Enable digital codecs and soundwire for CRD
+    1.0/2.0 and IDP boards
+  arm64: dts: qcom: sc7280: Enable digital codecs and soundwire for CRD
+    3.0/3.1
+  arm64: dts: qcom: sc7280: Add wcd9385 codec node for CRD 1.0/2.0 and
+    IDP boards
+  arm64: dts: qcom: sc7280: Add wcd9385 codec node for CRD 3.0/3.1
+  arm64: dts: qcom: sc7280: Add max98360a codec for CRD 1.0/2.0 and IDP
+    boards
+  arm64: dts: qcom: sc7280: herobrine: Add max98360a codec node
+  arm64: dts: qcom: sc7280: Add lpass cpu node
+  arm64: dts: qcom: sc7280: Enable lpass cpu node for CRD 1.0/2.0 and
+    IDP boards.
+  arm64: dts: qcom: sc7280: Enable lpass cpu node for CRD 3.0/3.1
+  arm64: dts: qcom: sc7280: Add sound node for CRD 1.0/2.0 and IDP
+    boards
+  arm64: dts: qcom: sc7280: Add sound node for CRD 3.0/3.1
+
+ arch/arm64/boot/dts/qcom/sc7280-crd-r3.dts        |  37 ++++
+ arch/arm64/boot/dts/qcom/sc7280-herobrine-crd.dts | 150 +++++++++++++++
+ arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi    |   8 +
+ arch/arm64/boot/dts/qcom/sc7280-idp.dtsi          | 218 ++++++++++++++++++++++
+ arch/arm64/boot/dts/qcom/sc7280-qcard.dtsi        |  75 ++++++++
+ arch/arm64/boot/dts/qcom/sc7280.dtsi              | 190 +++++++++++++++++++
+ 6 files changed, 678 insertions(+)
+
+-- 
+2.7.4
+

@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F52C51A954
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:17:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DE8651A621
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 18:49:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356213AbiEDRMA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 13:12:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37700 "EHLO
+        id S1353921AbiEDQxK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 12:53:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354992AbiEDQ7g (ORCPT
+        with ESMTP id S1353717AbiEDQwK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 12:59:36 -0400
+        Wed, 4 May 2022 12:52:10 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1890148E7A;
-        Wed,  4 May 2022 09:51:12 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6F1C47051;
+        Wed,  4 May 2022 09:48:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B8A24B82792;
-        Wed,  4 May 2022 16:51:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 674ACC385AA;
-        Wed,  4 May 2022 16:51:09 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 74768B82752;
+        Wed,  4 May 2022 16:48:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2AB6CC385AF;
+        Wed,  4 May 2022 16:48:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651683069;
-        bh=qKRNoo6AJog9cupwDJH/dQVPuRBuUHh+anIhDpvOv7E=;
+        s=korg; t=1651682907;
+        bh=iypGbHUqKNPjX1KE1w7HRQ7UqHetEHKTylAsXoN+91w=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1JyxlVpUNRxjW7yERoGRhtZQw69jeedMy0oMmFspSb8NbvZqbyDYfNOPKdrvuZP5i
-         gwGJ3y8ZmSrZIqfwYWhIbW/dqXvnUb0KDG4YoNcgq4A1N2ayjztA4Iwj6yCVHxzq1z
-         N5cQm4uVCb9Y1n6o6vtaSuQGoUq2UXQ1sCOQLnjc=
+        b=z/hjg8hdjE1pLubKysSmJPt8OfTMzo0neMvvro8Slepd+qvlSoz3HAAfJVPuN7YEf
+         I5yEdYmZHFBTF16/NKXSsTaIAGdcgKePZ0aEDBzUDtUSHlZJYEXEUhJpKXFPhLKYOh
+         +Ch8HewrTq/hBWOrXceBIrJORkgykHynRxrymKcE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, "H. Nikolaus Schaller" <hns@goldelico.com>,
-        Tony Lindgren <tony@atomide.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 054/129] ARM: dts: Fix mmc order for omap3-gta04
+        stable@vger.kernel.org, "Maciej W. Rozycki" <macro@orcam.me.uk>,
+        stable <stable@kernel.org>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>
+Subject: [PATCH 5.4 25/84] serial: 8250: Correct the clock for EndRun PTP/1588 PCIe device
 Date:   Wed,  4 May 2022 18:44:06 +0200
-Message-Id: <20220504153025.338409370@linuxfoundation.org>
+Message-Id: <20220504152929.563712981@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220504153021.299025455@linuxfoundation.org>
-References: <20220504153021.299025455@linuxfoundation.org>
+In-Reply-To: <20220504152927.744120418@linuxfoundation.org>
+References: <20220504152927.744120418@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,38 +55,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: H. Nikolaus Schaller <hns@goldelico.com>
+From: Maciej W. Rozycki <macro@orcam.me.uk>
 
-[ Upstream commit 09269dd050094593fc747f2a5853d189fefcb6b5 ]
+commit 637674fa40059cddcc3ad2212728965072f62ea3 upstream.
 
-Commit a1ebdb374199 ("ARM: dts: Fix swapped mmc order for omap3")
-introduces general mmc aliases. Let's tailor them to the need
-of the GTA04 board which does not make use of mmc2 and mmc3 interfaces.
+The EndRun PTP/1588 dual serial port device is based on the Oxford
+Semiconductor OXPCIe952 UART device with the PCI vendor:device ID set
+for EndRun Technologies and is therefore driven by a fixed 62.5MHz clock
+input derived from the 100MHz PCI Express clock.  The clock rate is
+divided by the oversampling rate of 16 as it is supplied to the baud
+rate generator, yielding the baud base of 3906250.
 
-Fixes: a1ebdb374199 ("ARM: dts: Fix swapped mmc order for omap3")
-Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
-Message-Id: <dc9173ee3d391d9e92b7ab8ed4f84b29f0a21c83.1646744420.git.hns@goldelico.com>
-Signed-off-by: Tony Lindgren <tony@atomide.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Replace the incorrect baud base of 4000000 with the right value of
+3906250 then, complementing commit 6cbe45d8ac93 ("serial: 8250: Correct
+the clock for OxSemi PCIe devices").
+
+Signed-off-by: Maciej W. Rozycki <macro@orcam.me.uk>
+Cc: stable <stable@kernel.org>
+Fixes: 1bc8cde46a159 ("8250_pci: Added driver for Endrun Technologies PTP PCIe card.")
+Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+Link: https://lore.kernel.org/r/alpine.DEB.2.21.2204181515270.9383@angie.orcam.me.uk
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/arm/boot/dts/omap3-gta04.dtsi | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/tty/serial/8250/8250_pci.c |    8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/arch/arm/boot/dts/omap3-gta04.dtsi b/arch/arm/boot/dts/omap3-gta04.dtsi
-index 80c9e5e34136..cc8a378dd076 100644
---- a/arch/arm/boot/dts/omap3-gta04.dtsi
-+++ b/arch/arm/boot/dts/omap3-gta04.dtsi
-@@ -31,6 +31,8 @@ chosen {
- 	aliases {
- 		display0 = &lcd;
- 		display1 = &tv0;
-+		/delete-property/ mmc2;
-+		/delete-property/ mmc3;
- 	};
- 
- 	ldo_3v3: fixedregulator {
--- 
-2.35.1
-
+--- a/drivers/tty/serial/8250/8250_pci.c
++++ b/drivers/tty/serial/8250/8250_pci.c
+@@ -2907,7 +2907,7 @@ enum pci_board_num_t {
+ 	pbn_panacom2,
+ 	pbn_panacom4,
+ 	pbn_plx_romulus,
+-	pbn_endrun_2_4000000,
++	pbn_endrun_2_3906250,
+ 	pbn_oxsemi,
+ 	pbn_oxsemi_1_4000000,
+ 	pbn_oxsemi_2_4000000,
+@@ -3434,10 +3434,10 @@ static struct pciserial_board pci_boards
+ 	* signal now many ports are available
+ 	* 2 port 952 Uart support
+ 	*/
+-	[pbn_endrun_2_4000000] = {
++	[pbn_endrun_2_3906250] = {
+ 		.flags		= FL_BASE0,
+ 		.num_ports	= 2,
+-		.base_baud	= 4000000,
++		.base_baud	= 3906250,
+ 		.uart_offset	= 0x200,
+ 		.first_offset	= 0x1000,
+ 	},
+@@ -4345,7 +4345,7 @@ static const struct pci_device_id serial
+ 	*/
+ 	{	PCI_VENDOR_ID_ENDRUN, PCI_DEVICE_ID_ENDRUN_1588,
+ 		PCI_ANY_ID, PCI_ANY_ID, 0, 0,
+-		pbn_endrun_2_4000000 },
++		pbn_endrun_2_3906250 },
+ 	/*
+ 	 * Quatech cards. These actually have configurable clocks but for
+ 	 * now we just use the default.
 
 

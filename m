@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21F5451A37F
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 17:15:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 982CB51A385
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 17:16:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352079AbiEDPT3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 11:19:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40872 "EHLO
+        id S1352086AbiEDPTf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 11:19:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352062AbiEDPTO (ORCPT
+        with ESMTP id S1352067AbiEDPTP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 11:19:14 -0400
+        Wed, 4 May 2022 11:19:15 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3F3219C0E
-        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 08:15:37 -0700 (PDT)
-Date:   Wed, 04 May 2022 15:15:35 -0000
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A63E52228E
+        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 08:15:38 -0700 (PDT)
+Date:   Wed, 04 May 2022 15:15:36 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1651677336;
+        s=2020; t=1651677337;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=1tQ2JT09/XLdjvRDwIz8c1xien+ZU4hYMIiu5EaQdR4=;
-        b=KdnVZuv1MMA1BJsTv8m6eZnUfaQfrGq8zGBNp54P0SUy3USkuBSw2RBh0votLGIIan1/Oz
-        ffo23P/YAikLEBknG5NB2naHEHTGrklOeT8BzNb79oaBI4IOLR3xC6/ufLN/xHojihBaKH
-        nTtOoWJypN78/TWQUp7ILF/F+obXvEjHMmkpJBTj3oS+AIf7fTUVOISEqEQe8wdkC2YF1v
-        9IssH+80VXIP+PdJb1V6kFUqc8gei3M+37jMBm+0ABdPhgRMx3YMpXSU0u4RelsGImaBek
-        wLVZedi1GbXVax9AWiVcUQF87sbjib7ay0TuwgqicQjIl4y/8J5fhHlX9UlU0Q==
+        bh=QpDHPKG2vy1NwdO1Fvbhcfs3wbgBmuiDUKgBAk+wPmY=;
+        b=qrr6J/k8dGH+lGGF6SGpubHYeQ2FIpO0P4fZ8dv94Rhwcv/Mpp5z69+rWETfpDF7E824IW
+        jt7miNJ9W0ufvRX1RKa1qL8I2c/tFixMsglzwFKt/frJRxbGKDXRius1F+QflyDErR6jwi
+        HSI3V44W2SsAOGQgtT2FtwP+UbJ52zgQOGVhLVFBulvfETLkUjesaxJFz99bjcGRiLDQHF
+        85JtgXYAu2V2XFB1gMCvkajAdUQlgLVJVructHxb3mkjsrA3pcWqCMaO+RA5phHa19OMvj
+        SNNUdlK5hg4ejPgMJBJzcfgvRrFLQwl6Nx8FbjqyKL0LzdLBE+lZyxDYHgs9Lw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1651677336;
+        s=2020e; t=1651677337;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=1tQ2JT09/XLdjvRDwIz8c1xien+ZU4hYMIiu5EaQdR4=;
-        b=RLpc0eoHy5lmvhKKGj5BZVc1TjoS9JOzrcGK8hjmVsK57up2EMAyJ+BekeWDfgbiOQeLfp
-        /Zq3tx5CbwE2nkBQ==
+        bh=QpDHPKG2vy1NwdO1Fvbhcfs3wbgBmuiDUKgBAk+wPmY=;
+        b=FfzEJi0Zn4LLUjnekAWLhsdbIs1XakWd5ws4yUlP9P/nHHrUlwKhn94Ldix99tgGiI3AXD
+        f6T4VSbg9Y8AcHBQ==
 From:   "irqchip-bot for Marc Zyngier" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-kernel@vger.kernel.org
-Subject: [irqchip: irq/irqchip-next] irqchip/gic-v3: Relax polling of
- GIC{R,D}_CTLR.RWP
+Subject: [irqchip: irq/irqchip-next] irqchip/gic-v3: Detect LPI invalidation
+ MMIO registers
 Cc:     Marc Zyngier <maz@kernel.org>, tglx@linutronix.de
-In-Reply-To: <20220405183857.205960-4-maz@kernel.org>
-References: <20220405183857.205960-4-maz@kernel.org>
+In-Reply-To: <20220405183857.205960-3-maz@kernel.org>
+References: <20220405183857.205960-3-maz@kernel.org>
 MIME-Version: 1.0
-Message-ID: <165167733533.4207.6753839602204006581.tip-bot2@tip-bot2>
+Message-ID: <165167733627.4207.16018760009857162875.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -66,145 +66,86 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the irq/irqchip-next branch of irqchip:
 
-Commit-ID:     63f13483f0689a4de20fbfd847866ab39bec736f
-Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms/63f13483f0689a4de20fbfd847866ab39bec736f
+Commit-ID:     a837ed362e7070d48b6064138d3b61eb75eb9fd9
+Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms/a837ed362e7070d48b6064138d3b61eb75eb9fd9
 Author:        Marc Zyngier <maz@kernel.org>
-AuthorDate:    Tue, 05 Apr 2022 19:38:57 +01:00
+AuthorDate:    Tue, 05 Apr 2022 19:38:56 +01:00
 Committer:     Marc Zyngier <maz@kernel.org>
 CommitterDate: Wed, 04 May 2022 15:38:55 +01:00
 
-irqchip/gic-v3: Relax polling of GIC{R,D}_CTLR.RWP
+irqchip/gic-v3: Detect LPI invalidation MMIO registers
 
-Recent work on the KVM GIC emulation has revealed that the GICv3
-driver is a bit RWP-happy, as it polls this bit for each and
-every write MMIO access involving a single interrupt.
+Since GICv4.1, an implementation can offer the same MMIO-based
+implementation as DirectLPI, only with an ITS. Given that this
+can be hugely beneficial for workloads that are very LPI masking
+heavy (although these workloads are admitedly a bit odd).
 
-As it turns out, polling RWP is only required when:
-- Disabling an SGI, PPI or SPI
-- Disabling LPIs at the redistributor level
-- Disabling groups
-- Enabling ARE
-- Dealing with DPG*
+Interestingly, this is independent of RVPEI, which only *implies*
+the functionnality.
 
-Simplify the driver by removing all the other instances of RWP
-polling, and add the one that was missing when enabling the distributor
-(as that's where we set ARE).
+So let's detect whether the implementation has GICR_CTLR.IR set,
+and propagate this as DirectLPI to the ITS driver.
+
+While we're at it, repaint the GICv3 banner so that we advertise
+the various capabilities at boot time to be slightly less invasive.
 
 Signed-off-by: Marc Zyngier <maz@kernel.org>
-Link: https://lore.kernel.org/r/20220405183857.205960-4-maz@kernel.org
+Link: https://lore.kernel.org/r/20220405183857.205960-3-maz@kernel.org
 ---
- drivers/irqchip/irq-gic-v3.c | 38 ++++++++++++++++-------------------
- 1 file changed, 18 insertions(+), 20 deletions(-)
+ drivers/irqchip/irq-gic-v3.c | 20 ++++++++++++++++----
+ 1 file changed, 16 insertions(+), 4 deletions(-)
 
 diff --git a/drivers/irqchip/irq-gic-v3.c b/drivers/irqchip/irq-gic-v3.c
-index f98651e..b802684 100644
+index b252d55..f98651e 100644
 --- a/drivers/irqchip/irq-gic-v3.c
 +++ b/drivers/irqchip/irq-gic-v3.c
-@@ -352,28 +352,27 @@ static int gic_peek_irq(struct irq_data *d, u32 offset)
- 
- static void gic_poke_irq(struct irq_data *d, u32 offset)
+@@ -919,6 +919,7 @@ static int __gic_update_rdist_properties(struct redist_region *region,
+ 					 void __iomem *ptr)
  {
--	void (*rwp_wait)(void);
- 	void __iomem *base;
- 	u32 index, mask;
+ 	u64 typer = gic_read_typer(ptr + GICR_TYPER);
++	u32 ctlr = readl_relaxed(ptr + GICR_CTLR);
  
- 	offset = convert_offset_index(d, offset, &index);
- 	mask = 1 << (index % 32);
+ 	/* Boot-time cleanip */
+ 	if ((typer & GICR_TYPER_VLPIS) && (typer & GICR_TYPER_RVPEID)) {
+@@ -938,9 +939,18 @@ static int __gic_update_rdist_properties(struct redist_region *region,
  
--	if (gic_irq_in_rdist(d)) {
-+	if (gic_irq_in_rdist(d))
- 		base = gic_data_rdist_sgi_base();
--		rwp_wait = gic_redist_wait_for_rwp;
--	} else {
-+	else
- 		base = gic_data.dist_base;
--		rwp_wait = gic_dist_wait_for_rwp;
--	}
+ 	gic_data.rdists.has_vlpis &= !!(typer & GICR_TYPER_VLPIS);
  
- 	writel_relaxed(mask, base + offset + (index / 32) * 4);
--	rwp_wait();
- }
+-	/* RVPEID implies some form of DirectLPI, no matter what the doc says... :-/ */
++	/*
++	 * TYPER.RVPEID implies some form of DirectLPI, no matter what the
++	 * doc says... :-/ And CTLR.IR implies another subset of DirectLPI
++	 * that the ITS driver can make use of for LPIs (and not VLPIs).
++	 *
++	 * These are 3 different ways to express the same thing, depending
++	 * on the revision of the architecture and its relaxations over
++	 * time. Just group them under the 'direct_lpi' banner.
++	 */
+ 	gic_data.rdists.has_rvpeid &= !!(typer & GICR_TYPER_RVPEID);
+ 	gic_data.rdists.has_direct_lpi &= (!!(typer & GICR_TYPER_DirectLPIS) |
++					   !!(ctlr & GICR_CTLR_IR) |
+ 					   gic_data.rdists.has_rvpeid);
+ 	gic_data.rdists.has_vpend_valid_dirty &= !!(typer & GICR_TYPER_DIRTY);
  
- static void gic_mask_irq(struct irq_data *d)
- {
- 	gic_poke_irq(d, GICD_ICENABLER);
-+	if (gic_irq_in_rdist(d))
-+		gic_redist_wait_for_rwp();
-+	else
-+		gic_dist_wait_for_rwp();
- }
+@@ -962,7 +972,11 @@ static void gic_update_rdist_properties(void)
+ 	gic_iterate_rdists(__gic_update_rdist_properties);
+ 	if (WARN_ON(gic_data.ppi_nr == UINT_MAX))
+ 		gic_data.ppi_nr = 0;
+-	pr_info("%d PPIs implemented\n", gic_data.ppi_nr);
++	pr_info("GICv3 features: %d PPIs%s%s\n",
++		gic_data.ppi_nr,
++		gic_data.has_rss ? ", RSS" : "",
++		gic_data.rdists.has_direct_lpi ? ", DirectLPI" : "");
++
+ 	if (gic_data.rdists.has_vlpis)
+ 		pr_info("GICv4 features: %s%s%s\n",
+ 			gic_data.rdists.has_direct_lpi ? "DirectLPI " : "",
+@@ -1803,8 +1817,6 @@ static int __init gic_init_bases(void __iomem *dist_base,
+ 	irq_domain_update_bus_token(gic_data.domain, DOMAIN_BUS_WIRED);
  
- static void gic_eoimode1_mask_irq(struct irq_data *d)
-@@ -420,7 +419,11 @@ static int gic_irq_set_irqchip_state(struct irq_data *d,
- 		break;
+ 	gic_data.has_rss = !!(typer & GICD_TYPER_RSS);
+-	pr_info("Distributor has %sRange Selector support\n",
+-		gic_data.has_rss ? "" : "no ");
  
- 	case IRQCHIP_STATE_MASKED:
--		reg = val ? GICD_ICENABLER : GICD_ISENABLER;
-+		if (val) {
-+			gic_mask_irq(d);
-+			return 0;
-+		}
-+		reg = GICD_ISENABLER;
- 		break;
- 
- 	default:
-@@ -574,7 +577,6 @@ static int gic_set_type(struct irq_data *d, unsigned int type)
- {
- 	enum gic_intid_range range;
- 	unsigned int irq = gic_irq(d);
--	void (*rwp_wait)(void);
- 	void __iomem *base;
- 	u32 offset, index;
- 	int ret;
-@@ -590,17 +592,14 @@ static int gic_set_type(struct irq_data *d, unsigned int type)
- 	    type != IRQ_TYPE_LEVEL_HIGH && type != IRQ_TYPE_EDGE_RISING)
- 		return -EINVAL;
- 
--	if (gic_irq_in_rdist(d)) {
-+	if (gic_irq_in_rdist(d))
- 		base = gic_data_rdist_sgi_base();
--		rwp_wait = gic_redist_wait_for_rwp;
--	} else {
-+	else
- 		base = gic_data.dist_base;
--		rwp_wait = gic_dist_wait_for_rwp;
--	}
- 
- 	offset = convert_offset_index(d, GICD_ICFGR, &index);
- 
--	ret = gic_configure_irq(index, type, base + offset, rwp_wait);
-+	ret = gic_configure_irq(index, type, base + offset, NULL);
- 	if (ret && (range == PPI_RANGE || range == EPPI_RANGE)) {
- 		/* Misconfigured PPIs are usually not fatal */
- 		pr_warn("GIC: PPI INTID%d is secure or misconfigured\n", irq);
-@@ -807,8 +806,8 @@ static void __init gic_dist_init(void)
- 	for (i = 0; i < GIC_ESPI_NR; i += 4)
- 		writel_relaxed(GICD_INT_DEF_PRI_X4, base + GICD_IPRIORITYRnE + i);
- 
--	/* Now do the common stuff, and wait for the distributor to drain */
--	gic_dist_config(base, GIC_LINE_NR, gic_dist_wait_for_rwp);
-+	/* Now do the common stuff */
-+	gic_dist_config(base, GIC_LINE_NR, NULL);
- 
- 	val = GICD_CTLR_ARE_NS | GICD_CTLR_ENABLE_G1A | GICD_CTLR_ENABLE_G1;
- 	if (gic_data.rdists.gicd_typer2 & GICD_TYPER2_nASSGIcap) {
-@@ -816,8 +815,9 @@ static void __init gic_dist_init(void)
- 		val |= GICD_CTLR_nASSGIreq;
- 	}
- 
--	/* Enable distributor with ARE, Group1 */
-+	/* Enable distributor with ARE, Group1, and wait for it to drain */
- 	writel_relaxed(val, base + GICD_CTLR);
-+	gic_dist_wait_for_rwp();
- 
- 	/*
- 	 * Set all global interrupts to the boot CPU only. ARE must be
-@@ -1298,8 +1298,6 @@ static int gic_set_affinity(struct irq_data *d, const struct cpumask *mask_val,
- 	 */
- 	if (enabled)
- 		gic_unmask_irq(d);
--	else
--		gic_dist_wait_for_rwp();
- 
- 	irq_data_update_effective_affinity(d, cpumask_of(cpu));
- 
+ 	if (typer & GICD_TYPER_MBIS) {
+ 		err = mbi_init(handle, gic_data.domain);

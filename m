@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47E5E51A78E
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:04:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9195851AA4C
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:19:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354587AbiEDRHT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 13:07:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38238 "EHLO
+        id S1356286AbiEDRXZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 13:23:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355297AbiEDQ7w (ORCPT
+        with ESMTP id S1355753AbiEDREl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 12:59:52 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D5B2496AD;
-        Wed,  4 May 2022 09:51:29 -0700 (PDT)
+        Wed, 4 May 2022 13:04:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 488F84F9D2;
+        Wed,  4 May 2022 09:53:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EF957617E7;
-        Wed,  4 May 2022 16:51:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45BB8C385A5;
-        Wed,  4 May 2022 16:51:25 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2A066618A9;
+        Wed,  4 May 2022 16:53:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76DFAC385A4;
+        Wed,  4 May 2022 16:53:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651683085;
-        bh=1NXmhjDJG8sVMXeuR7P7595+33BQJhz9J+Aca7pXwWs=;
+        s=korg; t=1651683200;
+        bh=ND4TvuaQfIW/5AgPmtvCsaRACYMDAT08gszoo/ScmM8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bqJG6Rl3LrJzhG/CRDPc4E2jhUKvt/FSyjSD/a6tDtA71mL697TsILmw7qKwZGi8C
-         lj/gK4wJz3smLx5ea9HEA10vBVjpiO1x43mK4xCM/rvUt2ZbO5u6bCT+dAW+m2jPLc
-         9q173br2Y5JEpm/oLlKdg7DmbRSY+fTnXmpslBwc=
+        b=rblendjv+W8RZGlKRI/41EeHOwsNYwhjSxBWamVS9EIbN2CyosXh6qKl+8c3N+45m
+         htyKxrYccaw4HJfhMkoyB+drYGL/ouTuexmAieLgcUVbTKpCaeNWH78rWis7PsyaVB
+         gfJ1/O7G5QCm/+y8QS4hW1YjFmATtPJsQOqhnol4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
+        stable@vger.kernel.org,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 066/129] pinctrl: rockchip: fix RK3308 pinmux bits
+Subject: [PATCH 5.15 065/177] ARM: dts: at91: sama5d4_xplained: fix pinctrl phandle name
 Date:   Wed,  4 May 2022 18:44:18 +0200
-Message-Id: <20220504153026.508369870@linuxfoundation.org>
+Message-Id: <20220504153058.816269298@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220504153021.299025455@linuxfoundation.org>
-References: <20220504153021.299025455@linuxfoundation.org>
+In-Reply-To: <20220504153053.873100034@linuxfoundation.org>
+References: <20220504153053.873100034@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,160 +56,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Luca Ceresoli <luca.ceresoli@bootlin.com>
+From: Claudiu Beznea <claudiu.beznea@microchip.com>
 
-[ Upstream commit 1f3e25a068832f8892a5ff71467622d012f5bc9f ]
+[ Upstream commit 5c8b49852910caffeebb1ce541fdd264ffc691b8 ]
 
-Some of the pinmuxing bits described in rk3308_mux_recalced_data are wrong,
-pointing to non-existing registers.
+Pinctrl phandle is for spi1 so rename it to reflect this.
 
-Fix the entire table.
-
-Also add a comment in front of each entry with the same string that appears
-in the datasheet to make the table easier to compare with the docs.
-
-This fix has been tested on real hardware for the gpio3b3_sel entry.
-
-Fixes: 7825aeb7b208 ("pinctrl: rockchip: add rk3308 SoC support")
-Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
-Reviewed-by: Heiko Stuebner <heiko@sntech.de>
-Link: https://lore.kernel.org/r/20220420142432.248565-1-luca.ceresoli@bootlin.com
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
+Signed-off-by: Nicolas Ferre <nicolas.ferre@microchip.com>
+Link: https://lore.kernel.org/r/20220331141323.194355-1-claudiu.beznea@microchip.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/pinctrl/pinctrl-rockchip.c | 45 ++++++++++++++++++++----------
- 1 file changed, 30 insertions(+), 15 deletions(-)
+ arch/arm/boot/dts/at91-sama5d4_xplained.dts | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/pinctrl/pinctrl-rockchip.c b/drivers/pinctrl/pinctrl-rockchip.c
-index 9df48e0cf4cb..07b1204174bf 100644
---- a/drivers/pinctrl/pinctrl-rockchip.c
-+++ b/drivers/pinctrl/pinctrl-rockchip.c
-@@ -663,95 +663,110 @@ static  struct rockchip_mux_recalced_data rk3128_mux_recalced_data[] = {
+diff --git a/arch/arm/boot/dts/at91-sama5d4_xplained.dts b/arch/arm/boot/dts/at91-sama5d4_xplained.dts
+index d241c24f0d83..accb92cfac44 100644
+--- a/arch/arm/boot/dts/at91-sama5d4_xplained.dts
++++ b/arch/arm/boot/dts/at91-sama5d4_xplained.dts
+@@ -82,7 +82,7 @@ usart4: serial@fc010000 {
  
- static struct rockchip_mux_recalced_data rk3308_mux_recalced_data[] = {
- 	{
-+		/* gpio1b6_sel */
- 		.num = 1,
- 		.pin = 14,
- 		.reg = 0x28,
- 		.bit = 12,
- 		.mask = 0xf
- 	}, {
-+		/* gpio1b7_sel */
- 		.num = 1,
- 		.pin = 15,
- 		.reg = 0x2c,
- 		.bit = 0,
- 		.mask = 0x3
- 	}, {
-+		/* gpio1c2_sel */
- 		.num = 1,
- 		.pin = 18,
- 		.reg = 0x30,
- 		.bit = 4,
- 		.mask = 0xf
- 	}, {
-+		/* gpio1c3_sel */
- 		.num = 1,
- 		.pin = 19,
- 		.reg = 0x30,
- 		.bit = 8,
- 		.mask = 0xf
- 	}, {
-+		/* gpio1c4_sel */
- 		.num = 1,
- 		.pin = 20,
- 		.reg = 0x30,
- 		.bit = 12,
- 		.mask = 0xf
- 	}, {
-+		/* gpio1c5_sel */
- 		.num = 1,
- 		.pin = 21,
- 		.reg = 0x34,
- 		.bit = 0,
- 		.mask = 0xf
- 	}, {
-+		/* gpio1c6_sel */
- 		.num = 1,
- 		.pin = 22,
- 		.reg = 0x34,
- 		.bit = 4,
- 		.mask = 0xf
- 	}, {
-+		/* gpio1c7_sel */
- 		.num = 1,
- 		.pin = 23,
- 		.reg = 0x34,
- 		.bit = 8,
- 		.mask = 0xf
- 	}, {
-+		/* gpio3b4_sel */
- 		.num = 3,
- 		.pin = 12,
- 		.reg = 0x68,
- 		.bit = 8,
- 		.mask = 0xf
- 	}, {
-+		/* gpio3b5_sel */
- 		.num = 3,
- 		.pin = 13,
- 		.reg = 0x68,
- 		.bit = 12,
- 		.mask = 0xf
- 	}, {
-+		/* gpio2a2_sel */
- 		.num = 2,
- 		.pin = 2,
--		.reg = 0x608,
--		.bit = 0,
--		.mask = 0x7
-+		.reg = 0x40,
-+		.bit = 4,
-+		.mask = 0x3
- 	}, {
-+		/* gpio2a3_sel */
- 		.num = 2,
- 		.pin = 3,
--		.reg = 0x608,
--		.bit = 4,
--		.mask = 0x7
-+		.reg = 0x40,
-+		.bit = 6,
-+		.mask = 0x3
- 	}, {
-+		/* gpio2c0_sel */
- 		.num = 2,
- 		.pin = 16,
--		.reg = 0x610,
--		.bit = 8,
--		.mask = 0x7
-+		.reg = 0x50,
-+		.bit = 0,
-+		.mask = 0x3
- 	}, {
-+		/* gpio3b2_sel */
- 		.num = 3,
- 		.pin = 10,
--		.reg = 0x610,
--		.bit = 0,
--		.mask = 0x7
-+		.reg = 0x68,
-+		.bit = 4,
-+		.mask = 0x3
- 	}, {
-+		/* gpio3b3_sel */
- 		.num = 3,
- 		.pin = 11,
--		.reg = 0x610,
--		.bit = 4,
--		.mask = 0x7
-+		.reg = 0x68,
-+		.bit = 6,
-+		.mask = 0x3
- 	},
- };
- 
+ 			spi1: spi@fc018000 {
+ 				pinctrl-names = "default";
+-				pinctrl-0 = <&pinctrl_spi0_cs>;
++				pinctrl-0 = <&pinctrl_spi1_cs>;
+ 				cs-gpios = <&pioB 21 0>;
+ 				status = "okay";
+ 			};
+@@ -140,7 +140,7 @@ pinctrl_macb0_phy_irq: macb0_phy_irq_0 {
+ 						atmel,pins =
+ 							<AT91_PIOE 1 AT91_PERIPH_GPIO AT91_PINCTRL_PULL_UP_DEGLITCH>;
+ 					};
+-					pinctrl_spi0_cs: spi0_cs_default {
++					pinctrl_spi1_cs: spi1_cs_default {
+ 						atmel,pins =
+ 							<AT91_PIOB 21 AT91_PERIPH_GPIO AT91_PINCTRL_NONE>;
+ 					};
 -- 
 2.35.1
 

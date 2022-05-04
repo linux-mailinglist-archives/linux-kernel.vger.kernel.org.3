@@ -2,67 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFA8651AC6A
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 20:09:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C30F51AC8C
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 20:15:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376604AbiEDSNa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 14:13:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58120 "EHLO
+        id S1376800AbiEDSTJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 14:19:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376826AbiEDSNT (ORCPT
+        with ESMTP id S1376796AbiEDSSp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 14:13:19 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 956BB7FF6B
-        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 10:31:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651685474;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=joehKCGQgUtB5bm9SSiCyxnpdmxIgMPc6V/OebR+v8M=;
-        b=C5AJcstFFPYdyUe4tcA3IjnrYqT0Da2LH/jURefGvwUlSmJIa5FGlhs0tzRL9FuYff83pv
-        dLqHaund8jr5GXOD8Qv60Z6fjTpKINe72Qf3l6vTjUDdf9yk/q24po34dNjCm5hSlvOnFy
-        0ZDLKs0BkRonXrcBbe+Xb0C/+zf8XZc=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-393-rk43vzTnOBWIVmvA9gJnVw-1; Wed, 04 May 2022 13:31:11 -0400
-X-MC-Unique: rk43vzTnOBWIVmvA9gJnVw-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8CE0E380451D;
-        Wed,  4 May 2022 17:31:09 +0000 (UTC)
-Received: from horse.redhat.com (unknown [10.22.16.200])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 45A0A111DCF2;
-        Wed,  4 May 2022 17:31:09 +0000 (UTC)
-Received: by horse.redhat.com (Postfix, from userid 10451)
-        id 094EC220463; Wed,  4 May 2022 13:31:09 -0400 (EDT)
-Date:   Wed, 4 May 2022 13:31:08 -0400
-From:   Vivek Goyal <vgoyal@redhat.com>
-To:     Bernd Schubert <bschubert@ddn.com>
-Cc:     Dharmendra Hans <dharamhans87@gmail.com>,
-        Miklos Szeredi <miklos@szeredi.hu>,
-        linux-fsdevel@vger.kernel.org,
-        fuse-devel <fuse-devel@lists.sourceforge.net>,
-        linux-kernel@vger.kernel.org, Dharmendra Singh <dsingh@ddn.com>
-Subject: Re: [PATCH v4 1/3] FUSE: Implement atomic lookup + create
-Message-ID: <YnK4XIk0M3Dx5RP+@redhat.com>
-References: <20220502102521.22875-1-dharamhans87@gmail.com>
- <20220502102521.22875-2-dharamhans87@gmail.com>
- <YnGIUOP2BezDAb1k@redhat.com>
- <CACUYsyGoX+o19u41cZyF92eDBO-9rFN_EEWBvWBGrEMuNn29Mw@mail.gmail.com>
- <YnKR9CFYPXT1bM1F@redhat.com>
- <8003098d-6b17-5cdf-866d-06fefdf1ca31@ddn.com>
+        Wed, 4 May 2022 14:18:45 -0400
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0E948BF2F
+        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 10:39:18 -0700 (PDT)
+Received: by mail-lj1-x231.google.com with SMTP id m23so2606095ljc.0
+        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 10:39:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=29ruKVriy2g3lqz65t1H7qVG6banp+GDlpPZFrL2iUc=;
+        b=gF9qfuK094RIWE4ckvIjXHamdtau6Old+ZMLvhHQGM/jmWVdnoEtdDj9wuwAQdCn5h
+         EN/s6w0wLYchhFEQ9Fd9x0JOQ1TjEockG/YeQyz2oJ1YAbjyXrsLW0YOSe65+7bfkYlF
+         /bM15nq7BKavjFDEnmkc5+uKpYArSpbky/rXU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=29ruKVriy2g3lqz65t1H7qVG6banp+GDlpPZFrL2iUc=;
+        b=s7O6vBih68eRNx5UdV2FvhhU2rdKDkhLw+g+GSlDGBkx6/1rQNk7e1iwHKGXiC3NNo
+         A/F1PGV+Hb9MF/zM8jT4lIxBp/6riPhC+nvzM1Uh+mxnxUE8/WpipB0huiso0AyBAbCf
+         fzk2DwR5HFkx1jxn1jpM60cvqMiGpRQavTzCIqAAq1Ru1Q5ZQgZUi5iuqJG3iQTz+F6F
+         DQXqFvlMzRVCGWwy0RUjQaNOExPNhCgE5+1/LfSmQ0sdldV6MVTCcV1C3YbUCGT01A8a
+         CdHTgDojf6y+T99gODSNsuDfRGYJn4QppWXdVaAMgIJssQPAfz4npemzfMNDFyqW9vM9
+         mqBw==
+X-Gm-Message-State: AOAM532zOvQFaE7Jg39ujIIMB7PvjfaIBhdCrz39mXjMrw3EqBRloeri
+        u8Hvd9+2xvFY718mrtAByhh+5iSj2fsdaL9ptLk=
+X-Google-Smtp-Source: ABdhPJxh4lr3Ab748GfRHzIIO/vfCGjfyknx2tAMdCrvFo1rff/EIW/tuSNtxtKVA9e6ESU0sycPXQ==
+X-Received: by 2002:a05:651c:2cd:b0:24f:1731:ee09 with SMTP id f13-20020a05651c02cd00b0024f1731ee09mr12709798ljo.253.1651685956441;
+        Wed, 04 May 2022 10:39:16 -0700 (PDT)
+Received: from mail-lj1-f179.google.com (mail-lj1-f179.google.com. [209.85.208.179])
+        by smtp.gmail.com with ESMTPSA id r1-20020a056512102100b0047255d21171sm1266345lfr.160.2022.05.04.10.39.16
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 04 May 2022 10:39:16 -0700 (PDT)
+Received: by mail-lj1-f179.google.com with SMTP id s27so2587618ljd.2
+        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 10:39:16 -0700 (PDT)
+X-Received: by 2002:a05:6000:c7:b0:20a:d8c1:d044 with SMTP id
+ q7-20020a05600000c700b0020ad8c1d044mr17464094wrx.422.1651685538029; Wed, 04
+ May 2022 10:32:18 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8003098d-6b17-5cdf-866d-06fefdf1ca31@ddn.com>
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.3
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20220426124053.v2.1.Iedd71976a78d53c301ce0134832de95a989c9195@changeid>
+In-Reply-To: <20220426124053.v2.1.Iedd71976a78d53c301ce0134832de95a989c9195@changeid>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Wed, 4 May 2022 10:32:04 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=UUTVZPzJvC-S6=p_xRpoW+7EtupDYobgu7aQPWvR6XmA@mail.gmail.com>
+Message-ID: <CAD=FV=UUTVZPzJvC-S6=p_xRpoW+7EtupDYobgu7aQPWvR6XmA@mail.gmail.com>
+Subject: Re: [PATCH v2] arm64: dts: qcom: sc7280: eDP for herobrine boards
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        Rob Clark <robdclark@chromium.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Sankeerth Billakanti <quic_sbillaka@quicinc.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        quic_kalyant <quic_kalyant@quicinc.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Andy Gross <agross@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,71 +85,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 04, 2022 at 05:46:27PM +0200, Bernd Schubert wrote:
-> 
-> 
-> On 5/4/22 16:47, Vivek Goyal wrote:
-> 
-> > Ok, naming is little confusing. I think we will have to put it in
-> > commit message and where you define FUSE_ATOMIC_CREATE that what's
-> > the difference between FUSE_CREATE and FUSE_ATOMIC_CREATE. This is
-> > ATOMIC w.r.t what?
-> > 
-> > May be atomic here means that "lookup + create + open" is a single operation.
-> > But then even FUSE_CREATE is atomic because "creat + open" is a single
-> > operation.
-> > 
-> > In fact FUSE_CREATE does lookup anyway and returns all the information
-> > in fuse_entry_out.
-> > 
-> > IIUC, only difference between FUSE_CREATE and FUSE_ATOMIC_CREATE is that
-> > later also carries information in reply whether file was actually created
-> > or not (FOPEN_FILE_CREATED). This will be set if file did not exist
-> > already and it was created indeed. Is that right?
-> > 
-> > I see FOPEN_FILE_CREATED is being used to avoid calling
-> > fuse_dir_changed(). That sounds like a separate optimization and probably
-> > should be in a separate patch.
-> > 
-> > IOW, I think this patch should be broken in to multiple pieces. First
-> > piece seems to be avoiding lookup() and given the way it is implemented,
-> > looks like we can avoid lookup() even by using existing FUSE_CREATE
-> > command. We don't necessarily need FUSE_ATOMIC_CREATE. Is that right?
-> 
-> The initial non-published patches had that, but I had actually asked not to
-> go that route, because I'm scared that some user space file system
-> implementations might get broken.
+Bjorn,,
 
-> Right now there is always a lookup before
-> fuse_create_open() and when the resulting dentry is positive
-> fuse_create_open/FUSE_CREATE is bypassed. I.e. user space implementations
-> didn't need to handle existing files.
+On Tue, Apr 26, 2022 at 12:41 PM Douglas Anderson <dianders@chromium.org> wrote:
+>
+> Add eDP support to herobrine boards, splitting up amongst the
+> different files as makes sense. Rationale for the current split of
+> things:
+> * The eDP connector itself is on qcard. However, not all devices with
+>   a qcard will use an eDP panel. Some might use MIPI and, presumably,
+>   someone could build a device with qcard that had no display at all.
+> * The qcard provides a PWM for backlight that goes to the eDP
+>   connector. This PWM is also provided to the board and it's expected
+>   that it would be used as the backlight PWM even for herobrine
+>   devices with MIPI displays.
+> * It's currently assumed that all herobrine boards will have some sort
+>   of display, either MIPI or eDP (but not both).
+> * We will assume herobrine-rev1 has eDP. The schematics allow for a
+>   MIPI panel to be hooked up but, aside from some testing, nobody is
+>   doing this and most boards don't have all the parts stuffed for
+>   it. The two panels would also share a PWM for backlight, which is
+>   weird.
+> * herobrine-villager and herobrine-hoglin (crd) also have eDP.
+> * herobrine-hoglin (crd) has slightly different regulator setup for
+>   the backlight. It's expected that this is unique to this board. See
+>   comments in the dts file.
+> * There are some regulators that are defined in the qcard schematic
+>   but provided by the board like "vreg_edp_bl" and
+>   "vreg_edp_3p3". While we could put references to these regulators
+>   straight in the qcard.dtsi file, this would force someone using
+>   qcard that didn't provide those regulators to provide a dummy or do
+>   an ugly /delete-node/. Instead, we'll add references in
+>   herobrine.dtsi.
+>
+> Signed-off-by: Douglas Anderson <dianders@chromium.org>
+> ---
+> This patch most directly depends on ("arm64: dts: qcom: pm8350c: Add
+> pwm support") [1] and it won't even compile without that. To be
+> functional, of course, we also need the driver support for the PWM to
+> land.
+>
+> In order for this patch to function we also need Sankeerth's eDP
+> series [2] to land.
+>
+> To be schema happy, this patch also relies on my patch to add
+> regulators into the schema for the PHY an the eDP controller [3].
+> Several other device tree files reference these supplies without being
+> in the schema, though, so we'll have to decide whether to block on
+> those bindings landing. It does sound as if the regulator names may
+> not be exactly correct right now, though. :(
+>
+> In theory, I could break this patch up into separate patches adding
+> the basic support to the qcard, then to herobrine.dtsi, and then one
+> patch each for herobrine-r1, villager, and crd. Doing so didn't seem
+> to make sense to me--I think it's easier to make sense of the change
+> as one patch. However, if someone feels strongly that it should be
+> broken up I'm happy to do so.
+>
+> I've managed to get the display on my herobrine-rev1 up and running on
+> today's linuxnext (next-20220422) with this series. For whatever
+> reason the eDP PHY wouldn't probe unless I hacked `fw_devlink=off` in
+> the config. I don't believe that problem is related to this patch,
+> though.
+>
+> [1] https://lore.kernel.org/r/1645509309-16142-4-git-send-email-quic_c_skakit@quicinc.com
+> [2] https://lore.kernel.org/r/1650887072-16652-1-git-send-email-quic_sbillaka@quicinc.com/
+> [3] https://lore.kernel.org/r/20220425210643.2420919-1-dianders@chromium.org
+>
+> Changes in v2:
+> - Commit message and comment cleanups from Stephen.
+>
+>  .../boot/dts/qcom/sc7280-herobrine-crd.dts    | 40 ++++++++++++++
+>  .../qcom/sc7280-herobrine-herobrine-r1.dts    |  8 +++
+>  .../dts/qcom/sc7280-herobrine-villager-r0.dts |  8 +++
+>  .../arm64/boot/dts/qcom/sc7280-herobrine.dtsi | 24 +++++++++
+>  arch/arm64/boot/dts/qcom/sc7280-qcard.dtsi    | 54 +++++++++++++++++++
+>  5 files changed, 134 insertions(+)
 
-Hmm..., So if dentry is positive, we will call FUSE_OPEN instead in 
-current code.
+Since you're landing patches, I'm curious what you think about this
+one. I believe that the dependencies have all landed except for [3],
+but we the drivers are already expecting these regulators and other
+dts files provide them despite the fact that they're not in the
+bindings.
 
-Now with this change, we will call FUSE_CREATE and file could still
-be present. If it is a shared filesystem, file could be created by
-another client anyway after lookup() completed and returned a non-existent
-file. So server can still get FUSE_CREATE and file could be there.
+Thanks!
 
-But I understand that risk of regression is not zero. 
-
-Given we are going to implement FUSE_CREATE_EXT in the same patch
-series, I guess we could fix it easily by switching to FUSE_CREATE_EXT.
-
-So that's my take. I will be willing to take this chance. Until and
-unless ofcourse Miklos disagrees. :-)
-
-Thanks
-Vivek
-
-> Out of the sudden user space
-> implementations might need to handle it and some of them might get broken
-> with that kernel update. I guess even a single broken user space
-> implementation would count as regression.
-> So I had asked to change the patch to require a user space flag.
-> 
-> -- Bernd
-> 
-
+-Doug

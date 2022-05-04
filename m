@@ -2,145 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC4A051ABDE
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:53:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CF6051ABE3
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:53:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376937AbiEDRza (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 13:55:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34864 "EHLO
+        id S1377020AbiEDRzd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 13:55:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359048AbiEDRfk (ORCPT
+        with ESMTP id S1359299AbiEDRf4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 13:35:40 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF2BE5BE71;
-        Wed,  4 May 2022 10:04:03 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 54385210E6;
-        Wed,  4 May 2022 17:03:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1651683831; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=r48NN8K17+Vaycp2fcoUaY8PZRHqW5yBueK7iYcVfJY=;
-        b=u0Oe4gfc1OhFZsT1UUyMuMt08draDSwEqD3AdD9jt9/qwYg9acWkqsrrpzW0WvJ4UDM6lE
-        fFO3SASX2LtgEe4r0IVMUg78LBBRhVHEBvaFggznA1XDSGAr3gl99IR6AeUBYaOZFdVTnh
-        MsqkFs2WaX9f9VkewxprCasGCDulyqU=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1651683831;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=r48NN8K17+Vaycp2fcoUaY8PZRHqW5yBueK7iYcVfJY=;
-        b=WL7Mwjzvc7qZd7CxcdYyzSZtHL135g1bMXjbrTJTi51amF5aezAaa5HJ0UGqmtv/m5zq6L
-        MC+BAh7W/YAJU5Cw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A3897131BD;
-        Wed,  4 May 2022 17:03:45 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id Ob9+GvGxcmJMWAAAMHmgww
-        (envelope-from <hare@suse.de>); Wed, 04 May 2022 17:03:45 +0000
-Message-ID: <6a1c06e8-bedd-47b0-2a3f-9c51468fc029@suse.de>
-Date:   Wed, 4 May 2022 10:03:43 -0700
+        Wed, 4 May 2022 13:35:56 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E34D65C670
+        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 10:04:15 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id i1so1954823plg.7
+        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 10:04:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Uj6YMBCZWAjWY8ro19VauUXc0fzSyeDEeGTwnyspmvk=;
+        b=jFw/YtuAuY8zOu6CBZwrP8/qTS38T5FgjRy6M7i4aX08fnI6fVbU4nJp+GZWb2X/Oi
+         5jA20ZVdF1pc2KkJPGk1ZQI0ASmLV2xvybvi+wq5eEX1tHfMhwWyCaaMegbUUXPvCMid
+         XmP2uUvXaBb+17kdYgA8aF5HDIHfLFUmZvBEQbJmOVOQFNnEjIWtfcTF/0h2q0y9h7xv
+         etMVkh8gaL5cLlgEAODxlKfUa9G8mG51A5Nu5ItKpNLHd9AyJ6QmM+CijTcIlU/TJt8/
+         yDHWs26N40Nz6YMgWLFMJQ+5fI/lH5MVmOp0CMxNNdVYu/al9dbglBGJTaQ5ewqoYy9v
+         J2xw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Uj6YMBCZWAjWY8ro19VauUXc0fzSyeDEeGTwnyspmvk=;
+        b=dcUfhNzALtg/0UBhBKVVQEr8xFXkzhJy2DHDdhxrDy52czREFJUCA0LTLVqfcMEMjb
+         FohGV5i+ttuSLxc5GudrbuAMzned2uYuYj52FuiFVVHXTCk7/4D7Ti9lRAbzM1Vc2sMW
+         n10u1LgX/WH+BWwr8JsMTgmuK7SPm4BEHrxNt5ThUOAeTtsK53oFSeriMx+2wOxUf3oN
+         lP9So6L58Qe8JzAZzi+tJ0RzPicgxPCGyiXNWfbOlmJj5CUPGWfyq1CvlIOnHTEGtrmS
+         Ogfbhr9Llo/aLEGQq0dvXzDVtf75mL3wFn7uWqp8CHzTaI/faqV4pvie9gwP0zZmFFjs
+         80Xw==
+X-Gm-Message-State: AOAM533IBZOYgEzeINz/l1KQk3bFODCjZU6QisbI2lFHM+3eV7esK3N/
+        65FCAsWUXbg5Ek57GE7RjA5z7A==
+X-Google-Smtp-Source: ABdhPJwQhJX1Wntu7nztS9/CKxmjFCDWW3e5W7Ktqn6IS03XXkrCVf3vv40N8CYVtf+Hw6G24CphUQ==
+X-Received: by 2002:a17:90b:1bc3:b0:1dc:61fd:7ea4 with SMTP id oa3-20020a17090b1bc300b001dc61fd7ea4mr473665pjb.31.1651683852263;
+        Wed, 04 May 2022 10:04:12 -0700 (PDT)
+Received: from google.com ([2620:15c:2ce:200:c1b7:7a5:89b8:a6c6])
+        by smtp.gmail.com with ESMTPSA id t9-20020a17090340c900b0015e8d4eb222sm8437874pld.108.2022.05.04.10.04.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 May 2022 10:04:11 -0700 (PDT)
+Date:   Wed, 4 May 2022 10:04:02 -0700
+From:   Peter Collingbourne <pcc@google.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Josh Poimboeuf <jpoimboe@redhat.com>,
+        Joao Moreira <joao@overdrivepizza.com>,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
+        andrew.cooper3@citrix.com, keescook@chromium.org,
+        samitolvanen@google.com, mark.rutland@arm.com, hjl.tools@gmail.com,
+        alyssa.milburn@linux.intel.com, ndesaulniers@google.com,
+        gabriel.gomes@linux.intel.com, rick.p.edgecombe@intel.com
+Subject: Re: [RFC PATCH 01/11] x86: kernel FineIBT
+Message-ID: <YnKx5a9WvJ1UhWPm@google.com>
+References: <20220420004241.2093-1-joao@overdrivepizza.com>
+ <20220420004241.2093-2-joao@overdrivepizza.com>
+ <20220429013704.4n4lmadpstdioe7a@treble>
+ <d82459b887bcaf9181ad836051e2d16b@overdrivepizza.com>
+ <20220503220244.vyz5flk3gg3y6rbw@treble>
+ <YnJTYzralOhGGmED@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH 05/16] nvme: zns: Allow ZNS drives that have
- non-power_of_2 zone size
-Content-Language: en-US
-References: <20220427160255.300418-1-p.raghav@samsung.com>
- <CGME20220427160301eucas1p147d0dced70946e20dd2dd046b94b8224@eucas1p1.samsung.com>
- <20220427160255.300418-6-p.raghav@samsung.com>
-From:   Hannes Reinecke <hare@suse.de>
-To:     undisclosed-recipients:;
-In-Reply-To: <20220427160255.300418-6-p.raghav@samsung.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YnJTYzralOhGGmED@hirez.programming.kicks-ass.net>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/27/22 09:02, Pankaj Raghav wrote:
-> Remove the condition which disallows non-power_of_2 zone size ZNS drive
-> to be updated and use generic method to calculate number of zones
-> instead of relying on log and shift based calculation on zone size.
+On Wed, May 04, 2022 at 12:20:19PM +0200, Peter Zijlstra wrote:
+> On Tue, May 03, 2022 at 03:02:44PM -0700, Josh Poimboeuf wrote:
 > 
-> The power_of_2 calculation has been replaced directly with generic
-> calculation without special handling. Both modified functions are not
-> used in hot paths, they are only used during initialization &
-> revalidation of the ZNS device.
+> > I'm not really qualified to comment on this too directly since I haven't
+> > looked very much at the variations on FineIBT/CFI/KCFI, and what the
+> > protections and drawbacks are for each approach, and when it might even
+> > make sense to combine them for a "paranoid user".
+> > 
+> > Since we have multiple similar and possibly competing technologies being
+> > discussed, one thing I do want to warn against is that we as kernel
+> > developers tend to err on the side of giving people too many choices and
+> > combinations which *never* get used.
 > 
-> Reviewed-by: Luis Chamberlain <mcgrof@kernel.org>
-> Signed-off-by: Pankaj Raghav <p.raghav@samsung.com>
-> ---
->   drivers/nvme/host/zns.c | 11 ++---------
->   1 file changed, 2 insertions(+), 9 deletions(-)
+> So I don't think there's going to be a user choice here. If there's
+> hardware support, FineIBT makes more sense. That also means that kCFI no
+> longer needs to worry about IBT.
 > 
-> diff --git a/drivers/nvme/host/zns.c b/drivers/nvme/host/zns.c
-> index 9f81beb4df4e..2087de0768ee 100644
-> --- a/drivers/nvme/host/zns.c
-> +++ b/drivers/nvme/host/zns.c
-> @@ -101,13 +101,6 @@ int nvme_update_zone_info(struct nvme_ns *ns, unsigned lbaf)
->   	}
->   
->   	ns->zsze = nvme_lba_to_sect(ns, le64_to_cpu(id->lbafe[lbaf].zsze));
-> -	if (!is_power_of_2(ns->zsze)) {
-> -		dev_warn(ns->ctrl->device,
-> -			"invalid zone size:%llu for namespace:%u\n",
-> -			ns->zsze, ns->head->ns_id);
-> -		status = -ENODEV;
-> -		goto free_data;
-> -	}
->   
->   	blk_queue_set_zoned(ns->disk, BLK_ZONED_HM);
->   	blk_queue_flag_set(QUEUE_FLAG_ZONE_RESETALL, q);
-> @@ -129,7 +122,7 @@ static void *nvme_zns_alloc_report_buffer(struct nvme_ns *ns,
->   				   sizeof(struct nvme_zone_descriptor);
->   
->   	nr_zones = min_t(unsigned int, nr_zones,
-> -			 get_capacity(ns->disk) >> ilog2(ns->zsze));
-> +			 div64_u64(get_capacity(ns->disk), ns->zsze));
->   
-Same here; please add a helper calculating the number of zones for a 
-given disk.
+> If we do something like:
+> 
+> 
+>         kCFI                                            FineIBT
+> 
+> __cfi_\sym:                                     __cfi_\sym:
+>         endbr                           # 4             endbr                   # 4
+>         sub $hash, %r10                 # 7             sub $hash, %r10         # 7
+>         je \sym                         # 2             je \sym                 # 2
+>         ud2                             # 2             ud2                     # 2
+> \sym:                                           \sym:
+> 
+> 
+> caller:                                         caller:
+>         cmpl $hash, -8(%r11)            # 8             movl $hash, %r10d       # 6
+>         je 1f                           # 2             sub 15, %r11            # 4
+>         ud2                             # 2             call *%r11              # 3
+> 1:      call __x86_indirect_thunk_r11   # 5             .nop 4                  # 4 (could even fix up r11 again)
+> 
+> 
+> Then, all that's required is a slight tweak to apply_retpolines() to
+> rewrite a little more text.
+> 
+> Note that this also does away with having to fix up the linker, since
+> all direct call will already point at \sym. It's just the IBT indirect
+> calls that need to frob the pointer in order to hit the ENDBR.
+> 
+> On top of that, we no longer have to special case the objtool
+> instruction decoder, the prelude are proper instructions now.
 
->   	bufsize = sizeof(struct nvme_zone_report) +
->   		nr_zones * sizeof(struct nvme_zone_descriptor);
-> @@ -197,7 +190,7 @@ int nvme_ns_report_zones(struct nvme_ns *ns, sector_t sector,
->   	c.zmr.zrasf = NVME_ZRASF_ZONE_REPORT_ALL;
->   	c.zmr.pr = NVME_REPORT_ZONE_PARTIAL;
->   
-> -	sector &= ~(ns->zsze - 1);
-> +	sector = rounddown(sector, ns->zsze);
->   	while (zone_idx < nr_zones && sector < get_capacity(ns->disk)) {
->   		memset(report, 0, buflen);
->   
-Please be a bit more consistent. In the previous patches you always had 
-a condition to check if it's a power_of_2 zone size, but here you are 
-using the same calculation for each disk.
-So please use the check in all locations, or add a comment why the 
-generic calculation is okay to use here.
+For kCFI this brings back the gadget problem that I mentioned here:
+https://lore.kernel.org/all/Yh7fLRYl8KgMcOe5@google.com/
 
-Cheers,
+because the hash at the call site is 8 bytes before the call
+instruction.
 
-Hannes
--- 
-Dr. Hannes Reinecke                Kernel Storage Architect
-hare@suse.de                              +49 911 74053 688
-SUSE Software Solutions GmbH, Maxfeldstr. 5, 90409 Nürnberg
-HRB 36809 (AG Nürnberg), Geschäftsführer: Felix Imendörffer
+Peter

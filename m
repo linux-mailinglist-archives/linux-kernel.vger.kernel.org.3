@@ -2,65 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D82551AF39
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 22:33:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38DE551AF3B
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 22:33:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378106AbiEDUgn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 16:36:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42286 "EHLO
+        id S1356581AbiEDUgx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 16:36:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378062AbiEDUgd (ORCPT
+        with ESMTP id S1378117AbiEDUgs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 16:36:33 -0400
-Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7659A4F448;
-        Wed,  4 May 2022 13:32:56 -0700 (PDT)
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1nmLg4-0003MI-01; Wed, 04 May 2022 22:32:52 +0200
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id B9C09C01D0; Wed,  4 May 2022 22:32:24 +0200 (CEST)
-Date:   Wed, 4 May 2022 22:32:24 +0200
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-Cc:     akpm@linux-foundation.org, bhe@redhat.com, pmladek@suse.com,
-        kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
-        bcm-kernel-feedback-list@broadcom.com, coresight@lists.linaro.org,
-        linuxppc-dev@lists.ozlabs.org, linux-alpha@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, linux-leds@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        linux-s390@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
-        netdev@vger.kernel.org, openipmi-developer@lists.sourceforge.net,
-        rcu@vger.kernel.org, sparclinux@vger.kernel.org,
-        xen-devel@lists.xenproject.org, x86@kernel.org,
-        kernel-dev@igalia.com, kernel@gpiccoli.net, halves@canonical.com,
-        fabiomirmar@gmail.com, alejandro.j.jimenez@oracle.com,
-        andriy.shevchenko@linux.intel.com, arnd@arndb.de, bp@alien8.de,
-        corbet@lwn.net, d.hatayama@jp.fujitsu.com,
-        dave.hansen@linux.intel.com, dyoung@redhat.com,
-        feng.tang@intel.com, gregkh@linuxfoundation.org,
-        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
-        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
-        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
-        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
-        senozhatsky@chromium.org, stern@rowland.harvard.edu,
-        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
-        will@kernel.org
-Subject: Re: [PATCH 07/30] mips: ip22: Reword PANICED to PANICKED and remove
- useless header
-Message-ID: <20220504203224.GA23475@alpha.franken.de>
-References: <20220427224924.592546-1-gpiccoli@igalia.com>
- <20220427224924.592546-8-gpiccoli@igalia.com>
+        Wed, 4 May 2022 16:36:48 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEE5150448;
+        Wed,  4 May 2022 13:33:08 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 993B4B828CC;
+        Wed,  4 May 2022 20:33:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3BAAC385A5;
+        Wed,  4 May 2022 20:33:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651696386;
+        bh=vXTYk+3aszdO2rzyIDTdT5z/Wbvp6+A1bvIq0k3UvbY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=OPgq40SNq7gJaguRYkkjMVj9iayuns37TLq7WTtexVmYo96BawSe0bOR4K/D2W4FJ
+         42rN29mW3xrdhxkvu7lWr7VsGAIamcDlPWsSKqOnvCAAEGsOZSwPm2QUfFxc3OVICk
+         MHADMwhuww1L+AX5R+xcXsNXSlOhZ/Ql6Svj83FYkgylGkBHsQZyLx8SsL1hTOcXKL
+         rn9h2WZzmZctmPgJT1E6bwcdPStMKaWknN8GS1U+Um4XIT6wjYjAEOhLWfA6Ovwrl+
+         C1co2ZH00Lzg1gXRPOskNjAgyRINLwlHU+ml/UYW8ArR9WWCcnlx0o32XwDk2GZI5k
+         Jw4G+FQbFQRHw==
+Date:   Wed, 4 May 2022 22:32:56 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-i2c@vger.kernel.org
+Subject: Re: [PATCH] i2c: powermac: Prepare cleanup of powerpc's asm/prom.h
+Message-ID: <YnLi+E+UsgzPUxLJ@kunai>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-i2c@vger.kernel.org
+References: <f1785f7b2b9f79bb41525e3b5c3e06894852414f.1648833430.git.christophe.leroy@csgroup.eu>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="6Fhrsg5OnubBpYb0"
 Content-Disposition: inline
-In-Reply-To: <20220427224924.592546-8-gpiccoli@igalia.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+In-Reply-To: <f1785f7b2b9f79bb41525e3b5c3e06894852414f.1648833430.git.christophe.leroy@csgroup.eu>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,20 +59,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 27, 2022 at 07:49:01PM -0300, Guilherme G. Piccoli wrote:
-> Many other place in the kernel prefer the latter, so let's keep
-> it consistent in MIPS code as well. Also, removes a useless header.
-> 
-> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-> Signed-off-by: Guilherme G. Piccoli <gpiccoli@igalia.com>
-> ---
->  arch/mips/sgi-ip22/ip22-reset.c | 11 +++++------
->  1 file changed, 5 insertions(+), 6 deletions(-)
 
-applied to mips-next.
+--6Fhrsg5OnubBpYb0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Thomas.
+On Sat, Apr 02, 2022 at 12:06:59PM +0200, Christophe Leroy wrote:
+> powerpc's asm/prom.h brings some headers that it doesn't
+> need itself.
+>=20
+> In order to clean it up, first add missing headers in
+> users of asm/prom.h
+>=20
+> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
 
--- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+Applied to for-next, thanks!
+
+
+--6Fhrsg5OnubBpYb0
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmJy4vgACgkQFA3kzBSg
+KbaXpA//d/536N+cHqZzpvwBcWQbwtNpU/Cq/yyV3bsMD4Dtlo6DBSiMr8992OBz
+O9lO9ovmg8cVSl5h3zgvwErKd1wLi0YEYkUUmGsaqw+YZ0ReGhEoyZCMVLz2dnTk
+oNQ30UiLFdXxi2SbGEPXlMB7mJNpMFioCc/8xPSE2y4deuk3+gWUEoHmHmq9hP1Y
+Y+UXfFOIxu2bkJLmOmDvMWoWS/RhzdfHt8Cq8LMOFnsDzhGMvO1UqcLEu8B+rf+l
+sWddki6CLeMIHufhGcqDWBIu2oQNfeTPU8+fAaxh/Lu3QBzxoSnQEh3Px0pc3V6C
+GAFFu5Les9nYapcXLdTMe3dRajKlHIPBz8HbQ1nlcS9VPoOa/obAmP8J+6eAPseV
+py0rxQXjNjAiFrxStkp5fODk7b7FSI3/JvVBpZGTxbSdsDpFM22Tf23PmStdKxST
+gmwOXstxkJnv99xmbKmX5ih8hhM/0kjlFTE4MDCo33O2bI2425siWo+VfSpc3NgJ
+3i/q0RzwlWJqknZuyNjwYnLZZC57Kh738LDaM56WWl4KHSebsFU3Zihxgj5uJhmC
+zYNwJYe3fgpWsXDSiIgkeTkJ1oKEeVWG9n3sXNXVhNVO04exzBHZcOxnfIUbWOso
+W2Js0uf2MzcnqHk4hcbj5TCr37i2FsRsFToG3bA03mHNgJGCfBo=
+=mCzu
+-----END PGP SIGNATURE-----
+
+--6Fhrsg5OnubBpYb0--

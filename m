@@ -2,61 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF60E51A35D
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 17:12:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A9EC51A361
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 17:12:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351980AbiEDPQM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 11:16:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37564 "EHLO
+        id S1351882AbiEDPQ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 11:16:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351829AbiEDPQJ (ORCPT
+        with ESMTP id S1350363AbiEDPQ1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 11:16:09 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A90FB3EBAD
-        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 08:12:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651677151;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Y2TfkwOU8uXwJ9BRTtS6GzgXalAIQnLSQtYSV+f+g0g=;
-        b=JJBGBixC+GHU7irum/HJSaPnGhumCqV8KXBHCSW8IyYGCsx8KDBP29KC9FuukNHnD0oC88
-        9O5iI7i48SJys/PPNdsdrzBTV/UFYFXZLrb+29EFee4zafsM4ZNDk4sz4Ep1wT1pHeCpsE
-        casj9UHfnVV03zvB/C5elVG3arYKZ0c=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-662-7VvvhpghO5iaxAedgRVMyw-1; Wed, 04 May 2022 11:12:28 -0400
-X-MC-Unique: 7VvvhpghO5iaxAedgRVMyw-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 45B803C02B65;
-        Wed,  4 May 2022 15:12:28 +0000 (UTC)
-Received: from horse.redhat.com (unknown [10.22.16.200])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 2EB17400D277;
-        Wed,  4 May 2022 15:12:28 +0000 (UTC)
-Received: by horse.redhat.com (Postfix, from userid 10451)
-        id E0C3A220463; Wed,  4 May 2022 11:12:27 -0400 (EDT)
-Date:   Wed, 4 May 2022 11:12:27 -0400
-From:   Vivek Goyal <vgoyal@redhat.com>
-To:     Dharmendra Singh <dharamhans87@gmail.com>
-Cc:     miklos@szeredi.hu, linux-fsdevel@vger.kernel.org,
-        fuse-devel@lists.sourceforge.net, linux-kernel@vger.kernel.org,
-        bschubert@ddn.com, Dharmendra Singh <dsingh@ddn.com>
-Subject: Re: [PATCH v3 1/3] FUSE: Implement atomic lookup + create
-Message-ID: <YnKX2wsvsafp/uw3@redhat.com>
-References: <20220502054628.25826-1-dharamhans87@gmail.com>
- <20220502054628.25826-2-dharamhans87@gmail.com>
+        Wed, 4 May 2022 11:16:27 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADE7542ED2
+        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 08:12:51 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id q23so2479023wra.1
+        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 08:12:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=Q8t/4zs15J+WUhbyzSWnk3xMYZcOI1/gRBqoDJhXob4=;
+        b=wi7jEkVHGAPE3FymCXSvLN550cRUAYn+sygWU7mIu1v6VRG1s7mhDZ07dA1iYbxg13
+         R/Rytjl94JyOgat26pA99xa6NJJXkv9o8ASXXJYmqwBgsrHKO3jCpvBch3BMVUTuDO1s
+         q182c5/7F7N1xv3HFPXMc6ERzEdT2cGvJ23dvQsQVG5u2qZcYxQWdOxvuyGnd0wgv1rm
+         jOtd0psyDJ6F3bYSbcUzFT3fyQMQjq6hOacnH0TDmwlF3DbqtXcxLn4134sRyQ0CpcbQ
+         dw3aG43dPDYrPKEsWqb3ILdVMpegh45O6gw08q0NqQjG90e9fZ7T2uG62sX6t8YmbqSY
+         bw/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Q8t/4zs15J+WUhbyzSWnk3xMYZcOI1/gRBqoDJhXob4=;
+        b=VRBMtGZqb5g/qbf6B3nsH267SZza/ZSl9hW0cSuBjVCvSveiRkDtjDsFKNqRDj1I7z
+         l4CkgoSIJO7rrRTIuksZX+24Sst8c1Jm8GxVimY06jwb+1MzJt5bNwcJ9FGKj3Idwx2L
+         gjvUjOcm0MfDo5pZfSWQKi2boCYljcKJw5F2+r9l5GiOKMpNEuRYEBf3pUg4HAxlIaIr
+         uKFpXlT9AW4CAJyiznv24pCeSk18xIMExVtWc7Ypm19MVES2HE9NtyAc68lrJ+xc83LE
+         kvfoS9ZIdS6AnSAnzZBaGRA+Iebp3KMHJNgqm0+7jSfEJAdaFpR/Gdr8E/w6TCsLsN79
+         Iyzg==
+X-Gm-Message-State: AOAM533gcCkWsuFugNwOoaAZg0H36jiHtZtEHNS6l6fAxfcuN4tamTuN
+        Kmlp95Mg+roSoAKVW54ImL46+Q==
+X-Google-Smtp-Source: ABdhPJwfIvkgE9/1fAnUpjs8I+PHo/RnrTFjwqbemJe3+1Lvhwupfj7uVRIPK/HVf99hbq90HZ3bMA==
+X-Received: by 2002:a5d:598f:0:b0:20c:83c9:b05b with SMTP id n15-20020a5d598f000000b0020c83c9b05bmr2172834wri.343.1651677170300;
+        Wed, 04 May 2022 08:12:50 -0700 (PDT)
+Received: from [192.168.0.215] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id v1-20020a05600c15c100b003942a244ecfsm3898263wmf.20.2022.05.04.08.12.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 04 May 2022 08:12:49 -0700 (PDT)
+Message-ID: <6b231701-0c76-e7a8-bcd3-8a9c5cdc7a0f@linaro.org>
+Date:   Wed, 4 May 2022 17:12:48 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220502054628.25826-2-dharamhans87@gmail.com>
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH V4 2/4] dt-bindings: mfd: sprd: Add bindings for ums512
+ global registers
+Content-Language: en-US
+To:     Cixi Geng <gengcixi@gmail.com>, mturquette@baylibre.com,
+        sboyd@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, orsonzhai@gmail.com,
+        baolin.wang7@gmail.com, zhang.lyra@gmail.com, lee.jones@linaro.org
+Cc:     linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220427100848.3525710-1-gengcixi@gmail.com>
+ <20220427100848.3525710-3-gengcixi@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220427100848.3525710-3-gengcixi@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,257 +79,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 02, 2022 at 11:16:26AM +0530, Dharmendra Singh wrote:
-> From: Dharmendra Singh <dsingh@ddn.com>
+On 27/04/2022 12:08, Cixi Geng wrote:
+> From: Chunyan Zhang <chunyan.zhang@unisoc.com>
 > 
-> When we go for creating a file (O_CREAT), we trigger
-> a lookup to FUSE USER SPACE. It is very  much likely
-> that file does not exist yet as O_CREAT is passed to
-> open(). This lookup can be avoided and can be performed
-> as part of create call into libfuse.
+> Add bindings for Unisoc system global register which provide register map
+> for clocks.
 > 
-> This lookup + create in single call to libfuse and finally
-> to USER SPACE has been named as atomic create. It is expected
-> that USER SPACE create the file, open it and fills in the
-> attributes which are then used to make inode stand/revalidate
-> in the kernel cache. Also if file was newly created(does not
-> exist yet by this time) in USER SPACE then it should be indicated
-> in `struct fuse_file_info` by setting a bit which is again used by
-> libfuse to send some flags back to fuse kernel to indicate that
-> that file was newly created. These flags are used by kernel to
-> indicate changes in parent directory.
-> 
-> Fuse kernel automatically detects if atomic create is implemented
-> by libfuse/USER SPACE or not. And depending upon the outcome of
-> this check all further creates are decided to be atomic or non-atomic
-> creates.
-> 
-> If libfuse/USER SPACE has not implemented the atomic create operation
-> then by default behaviour remains same i.e we do not optimize lookup
-> calls which are triggered before create calls into libfuse.
-> 
-> Signed-off-by: Dharmendra Singh <dsingh@ddn.com>
+> Signed-off-by: Chunyan Zhang <chunyan.zhang@unisoc.com>
+> Signed-off-by: Cixi Geng <cixi.geng1@unisoc.com>
 > ---
->  fs/fuse/dir.c             | 82 +++++++++++++++++++++++++++++++++++----
->  fs/fuse/fuse_i.h          |  3 ++
->  include/uapi/linux/fuse.h |  3 ++
->  3 files changed, 81 insertions(+), 7 deletions(-)
+>  .../bindings/mfd/sprd,ums512-glbreg.yaml      | 68 +++++++++++++++++++
+>  1 file changed, 68 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/mfd/sprd,ums512-glbreg.yaml
 > 
-> diff --git a/fs/fuse/dir.c b/fs/fuse/dir.c
-> index 656e921f3506..cad3322a007f 100644
-> --- a/fs/fuse/dir.c
-> +++ b/fs/fuse/dir.c
-> @@ -523,7 +523,7 @@ static int get_security_context(struct dentry *entry, umode_t mode,
->   */
->  static int fuse_create_open(struct inode *dir, struct dentry *entry,
->  			    struct file *file, unsigned int flags,
-> -			    umode_t mode)
-> +			    umode_t mode, uint32_t opcode)
->  {
->  	int err;
->  	struct inode *inode;
-> @@ -535,8 +535,10 @@ static int fuse_create_open(struct inode *dir, struct dentry *entry,
->  	struct fuse_entry_out outentry;
->  	struct fuse_inode *fi;
->  	struct fuse_file *ff;
-> +	struct dentry *res = NULL;
->  	void *security_ctx = NULL;
->  	u32 security_ctxlen;
-> +	bool atomic_create = (opcode == FUSE_ATOMIC_CREATE ? true : false);
->  
->  	/* Userspace expects S_IFREG in create mode */
->  	BUG_ON((mode & S_IFMT) != S_IFREG);
-> @@ -566,7 +568,7 @@ static int fuse_create_open(struct inode *dir, struct dentry *entry,
->  		inarg.open_flags |= FUSE_OPEN_KILL_SUIDGID;
->  	}
->  
-> -	args.opcode = FUSE_CREATE;
-> +	args.opcode = opcode;
->  	args.nodeid = get_node_id(dir);
->  	args.in_numargs = 2;
->  	args.in_args[0].size = sizeof(inarg);
-> @@ -613,9 +615,44 @@ static int fuse_create_open(struct inode *dir, struct dentry *entry,
->  		goto out_err;
->  	}
->  	kfree(forget);
-> -	d_instantiate(entry, inode);
-> +	/*
-> +	 * In atomic create, we skipped lookup and it is very much likely that
-> +	 * dentry has DCACHE_PAR_LOOKUP flag set on it so call d_splice_alias().
-> +	 * Note: Only REG file is allowed under create/atomic create.
-> +	 */
-> +	/* There is special case when at very first call where we check if
-> +	 * atomic create is implemented by USER SPACE/libfuse or not, we
-> +	 * skipped lookup. Now, in case where atomic create is not implemented
-> +	 * underlying, we fall back to FUSE_CREATE. here we are required to handle
-> +	 * DCACHE_PAR_LOOKUP flag.
-> +	 */
-> +	if (!atomic_create && !d_in_lookup(entry) && fm->fc->no_atomic_create)
-> +		d_instantiate(entry, inode);
-> +	else {
-> +		res = d_splice_alias(inode, entry);
-> +		if (res) {
-> +			 /* Close the file in user space, but do not unlink it,
-> +			  * if it was created - with network file systems other
-> +			  * clients might have already accessed it.
-> +			  */
-> +			if (IS_ERR(res)) {
-> +				fi = get_fuse_inode(inode);
-> +				fuse_sync_release(fi, ff, flags);
-> +				fuse_queue_forget(fm->fc, forget, outentry.nodeid, 1);
-> +				err = PTR_ERR(res);
-> +				goto out_err;
-> +			}
-> +			/* res is expected to be NULL since its REG file */
-> +			WARN_ON(res);
-
-This WARN_ON(res) is strange. We enter if (res) block only if res is
-non null. So effectively we are doing this.
-
-if (res) {
-   WARN_ON(res);
-}
-
-Will it not trigger all the time?
-
-I think I already asked the question in previous email that what's the
-difference between d_instanatiate() and d_splice_alias() and why we
-need d_splice_alias() in this case instead.
-
-Thanks
-Vivek
-> +		}
-> +	}
->  	fuse_change_entry_timeout(entry, &outentry);
-> -	fuse_dir_changed(dir);
-> +	/*
-> +	 * In case of atomic create, we want to indicate directory change
-> +	 * only if USER SPACE actually created the file.
-> +	 */
-> +	if (!atomic_create || (outopen.open_flags & FOPEN_FILE_CREATED))
-> +		fuse_dir_changed(dir);
->  	err = finish_open(file, entry, generic_file_open);
->  	if (err) {
->  		fi = get_fuse_inode(inode);
-> @@ -634,6 +671,29 @@ static int fuse_create_open(struct inode *dir, struct dentry *entry,
->  	return err;
->  }
->  
-> +static int fuse_atomic_create(struct inode *dir, struct dentry *entry,
-> +			      struct file *file, unsigned int flags,
-> +			      umode_t mode)
-> +{
-> +	int err;
-> +	struct fuse_conn *fc = get_fuse_conn(dir);
+> diff --git a/Documentation/devicetree/bindings/mfd/sprd,ums512-glbreg.yaml b/Documentation/devicetree/bindings/mfd/sprd,ums512-glbreg.yaml
+> new file mode 100644
+> index 000000000000..3522f3d2d8de
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/mfd/sprd,ums512-glbreg.yaml
+> @@ -0,0 +1,68 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/mfd/sprd,ums512-glbreg.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
-> +	if (fc->no_atomic_create)
-> +		return -ENOSYS;
-> +
-> +	err = fuse_create_open(dir, entry, file, flags, mode,
-> +			       FUSE_ATOMIC_CREATE);
-> +	/* If atomic create is not implemented then indicate in fc so that next
-> +	 * request falls back to normal create instead of going into libufse and
-> +	 * returning with -ENOSYS.
-> +	 */
-> +	if (err == -ENOSYS) {
-> +		if (!fc->no_atomic_create)
-> +			fc->no_atomic_create = 1;
-> +	}
-> +	return err;
-> +}
-> +
->  static int fuse_mknod(struct user_namespace *, struct inode *, struct dentry *,
->  		      umode_t, dev_t);
->  static int fuse_atomic_open(struct inode *dir, struct dentry *entry,
-> @@ -643,11 +703,12 @@ static int fuse_atomic_open(struct inode *dir, struct dentry *entry,
->  	int err;
->  	struct fuse_conn *fc = get_fuse_conn(dir);
->  	struct dentry *res = NULL;
-> +	bool create = flags & O_CREAT ? true : false;
->  
->  	if (fuse_is_bad(dir))
->  		return -EIO;
->  
-> -	if (d_in_lookup(entry)) {
-> +	if ((!create || fc->no_atomic_create) && d_in_lookup(entry)) {
->  		res = fuse_lookup(dir, entry, 0);
->  		if (IS_ERR(res))
->  			return PTR_ERR(res);
-> @@ -656,7 +717,7 @@ static int fuse_atomic_open(struct inode *dir, struct dentry *entry,
->  			entry = res;
->  	}
->  
-> -	if (!(flags & O_CREAT) || d_really_is_positive(entry))
-> +	if (!create || d_really_is_positive(entry))
->  		goto no_open;
->  
->  	/* Only creates */
-> @@ -665,7 +726,13 @@ static int fuse_atomic_open(struct inode *dir, struct dentry *entry,
->  	if (fc->no_create)
->  		goto mknod;
->  
-> -	err = fuse_create_open(dir, entry, file, flags, mode);
-> +	err = fuse_atomic_create(dir, entry, file, flags, mode);
-> +	/* Libfuse/user space has not implemented atomic create, therefore
-> +	 * fall back to normal create.
-> +	 */
-> +	if (err == -ENOSYS)
-> +		err = fuse_create_open(dir, entry, file, flags, mode,
-> +				       FUSE_CREATE);
->  	if (err == -ENOSYS) {
->  		fc->no_create = 1;
->  		goto mknod;
-> @@ -683,6 +750,7 @@ static int fuse_atomic_open(struct inode *dir, struct dentry *entry,
->  }
->  
->  /*
-> +
->   * Code shared between mknod, mkdir, symlink and link
->   */
->  static int create_new_entry(struct fuse_mount *fm, struct fuse_args *args,
-> diff --git a/fs/fuse/fuse_i.h b/fs/fuse/fuse_i.h
-> index e8e59fbdefeb..d577a591ab16 100644
-> --- a/fs/fuse/fuse_i.h
-> +++ b/fs/fuse/fuse_i.h
-> @@ -669,6 +669,9 @@ struct fuse_conn {
->  	/** Is open/release not implemented by fs? */
->  	unsigned no_open:1;
->  
-> +	/** Is atomic create not implemented by fs? */
-> +	unsigned no_atomic_create:1;
-> +
->  	/** Is opendir/releasedir not implemented by fs? */
->  	unsigned no_opendir:1;
->  
-> diff --git a/include/uapi/linux/fuse.h b/include/uapi/linux/fuse.h
-> index d6ccee961891..e4b56004b148 100644
-> --- a/include/uapi/linux/fuse.h
-> +++ b/include/uapi/linux/fuse.h
-> @@ -301,6 +301,7 @@ struct fuse_file_lock {
->   * FOPEN_CACHE_DIR: allow caching this directory
->   * FOPEN_STREAM: the file is stream-like (no file position at all)
->   * FOPEN_NOFLUSH: don't flush data cache on close (unless FUSE_WRITEBACK_CACHE)
-> + * FOPEN_FILE_CREATED: the file was actually created
->   */
->  #define FOPEN_DIRECT_IO		(1 << 0)
->  #define FOPEN_KEEP_CACHE	(1 << 1)
-> @@ -308,6 +309,7 @@ struct fuse_file_lock {
->  #define FOPEN_CACHE_DIR		(1 << 3)
->  #define FOPEN_STREAM		(1 << 4)
->  #define FOPEN_NOFLUSH		(1 << 5)
-> +#define FOPEN_FILE_CREATED	(1 << 6)
->  
->  /**
->   * INIT request/reply flags
-> @@ -537,6 +539,7 @@ enum fuse_opcode {
->  	FUSE_SETUPMAPPING	= 48,
->  	FUSE_REMOVEMAPPING	= 49,
->  	FUSE_SYNCFS		= 50,
-> +	FUSE_ATOMIC_CREATE	= 51,
->  
->  	/* CUSE specific operations */
->  	CUSE_INIT		= 4096,
-> -- 
-> 2.17.1
-> 
+> +title: Unisoc System Global Register Device Tree Bindings
 
+Thanks for removing "Device Tree Bindings" from first patch, but such
+comment applies everywhere. Please clean up all your patches (also
+future) based on received comments, so we do not have to repeat the same.
+
+
+> +maintainers:
+> +  - Orson Zhai <orsonzhai@gmail.com>
+> +  - Baolin Wang <baolin.wang7@gmail.com>
+> +  - Chunyan Zhang <zhang.lyra@gmail.com>
+> +
+> +description:
+> +  Unisoc system global registers provide register map
+> +  for clocks and some multimedia modules of the SoC.
+> +
+> +properties:
+> +  "#address-cells": true
+> +  "#size-cells": true
+> +
+> +  compatible:
+
+Put the compatible as first in the properties.
+
+> +    items:
+> +      - const: sprd,ums512-glbregs
+> +      - const: syscon
+> +      - const: simple-mfd
+> +
+> +  ranges:
+> +    maxItems: 1
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +patternProperties:
+> +  "^.*@[0-9a-f]+$":
+
+The name should be specific - "clock-controller" - so this can be in
+"properties".
+
+> +    # Child node
+
+Comment does not help.
+
+
+Best regards,
+Krzysztof

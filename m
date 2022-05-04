@@ -2,143 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EE8751973C
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 08:09:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F109251973E
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 08:09:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344802AbiEDGNN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 02:13:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41924 "EHLO
+        id S1344846AbiEDGNW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 02:13:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232965AbiEDGNL (ORCPT
+        with ESMTP id S233641AbiEDGNU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 02:13:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 597D014006;
-        Tue,  3 May 2022 23:09:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E1B3D6122E;
-        Wed,  4 May 2022 06:09:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D33EC385A4;
-        Wed,  4 May 2022 06:09:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651644575;
-        bh=N6t+QKrUH1bipYHnngO3FWlGNQptDbFS7bpC/zRcyR4=;
-        h=From:To:Cc:Subject:Date:From;
-        b=ocl16qj/RVszFhnHrjRHyWhFSbhZezxnhP2jdAguVrCxdDy/HgrQry5cFItiSyyCr
-         B3/zZ8TjM/zLrt4tNY7l/+MdP/sKDBMzbB7u9d8egBR0xgU63q8cNNYTMfi77fBc8I
-         tuULaFMw0TDqDUF5gFGUMOuHRvXyCX9I01Gjb4UZVqeG2zVR8tBtvUJiG7sq7EzOhI
-         4j1yfwmUTs0PBvwBPqOHJmcqleJKOQgEw0Dbx2vK71pwadwsPryxaIikVi+RGReFE/
-         YWtBaaJkoVhOBtw/VVm9USTe69NfxmBMuQD10j0PglSlSfDQtyDF2oeJXviRKBObIp
-         k42XFAY5V+ypw==
-From:   Chao Yu <chao@kernel.org>
-To:     jaegeuk@kernel.org
-Cc:     linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, Chao Yu <chao@kernel.org>,
-        stable@vger.kernel.org, Ming Yan <yanming@tju.edu.cn>,
-        Chao Yu <chao.yu@oppo.com>
-Subject: [PATCH v3] f2fs: fix deadloop in foreground GC
-Date:   Wed,  4 May 2022 14:09:22 +0800
-Message-Id: <20220504060922.3527354-1-chao@kernel.org>
-X-Mailer: git-send-email 2.25.1
+        Wed, 4 May 2022 02:13:20 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B14541EC4C
+        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 23:09:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=mLg1H11s7vwLj6tClFSIgTh3DOgfbrxxwGziAtkuLp4=; b=eV214LHb/UZi0ZSrWlQMcNMG5g
+        DpH8mozghTyqroVmN4m8MymM9ejFV7R7x1XGd2y2XZJo3SfvtSUk3uEK6blqWeZru7CfRlYp0ez60
+        yzagl3xaydH9tu6MXX5z3UgbRnoh+xQSHer9aTuu3hlAslwES1f17TClD9b91jMbZeIA0XqhByXEb
+        6nMQ9lqfQj4d85bDzJGPWQzhOH3mldD8Z91WJoSOyRDZ9QP8SVeSkSyRc8qCk3WlX19Zu5vfuedcL
+        dZqvWdZzZa91CLaP5gE2DAPaKVWXCh0qta43j9P6e8qu5i0isgyKXisYBB1CndthS8VV7RRLlGcBI
+        MJcnUMTQ==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nm8Cf-00GHkz-9X; Wed, 04 May 2022 06:09:37 +0000
+Date:   Wed, 4 May 2022 07:09:37 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Minchan Kim <minchan@kernel.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-mm <linux-mm@kvack.org>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Michal Hocko <mhocko@suse.com>,
+        John Dias <joaodias@google.com>,
+        Tim Murray <timmurray@google.com>
+Subject: Re: [PATCH] mm: don't be stuck to rmap lock on reclaim path
+Message-ID: <YnIYofrw/GGEvc0U@casper.infradead.org>
+References: <20220503170341.1413961-1-minchan@kernel.org>
+ <YnHzvV2Uz2ynENnG@casper.infradead.org>
+ <YnIBbjRYACzvuZpp@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YnIBbjRYACzvuZpp@google.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As Yanming reported in bugzilla:
+On Tue, May 03, 2022 at 09:30:38PM -0700, Minchan Kim wrote:
+> On Wed, May 04, 2022 at 04:32:13AM +0100, Matthew Wilcox wrote:
+> > On Tue, May 03, 2022 at 10:03:41AM -0700, Minchan Kim wrote:
+> > > -void rmap_walk(struct folio *folio, const struct rmap_walk_control *rwc);
+> > > -void rmap_walk_locked(struct folio *folio, const struct rmap_walk_control *rwc);
+> > > +void rmap_walk(struct folio *folio, struct rmap_walk_control *rwc);
+> > > +void rmap_walk_locked(struct folio *folio, struct rmap_walk_control *rwc);
+> > 
+> > I see the build bot already beat me to pointing out why this is wrong,
+> > but do you not look at git log to figure out why code was changed to be
+> > the way it is now, before you change it back?
+> 
+> This patch added a new field as out param like compact_control so
+> the rmap_walk_control is not immutable.
 
-https://bugzilla.kernel.org/show_bug.cgi?id=215914
-
-The root cause is: in a very small sized image, it's very easy to
-exceed threshold of foreground GC, if we calculate free space and
-dirty data based on section granularity, in corner case,
-has_not_enough_free_secs() will always return true, result in
-deadloop in f2fs_gc().
-
-So this patch refactors has_not_enough_free_secs() as below to fix
-this issue:
-1. calculate needed space based on block granularity, and separate
-all blocks to two parts, section part, and block part, comparing
-section part to free section, and comparing block part to free space
-in openned log.
-2. account F2FS_DIRTY_NODES, F2FS_DIRTY_IMETA and F2FS_DIRTY_DENTS
-as node block consumer;
-3. account F2FS_DIRTY_DENTS as data block consumer;
-
-Cc: stable@vger.kernel.org
-Reported-by: Ming Yan <yanming@tju.edu.cn>
-Signed-off-by: Chao Yu <chao.yu@oppo.com>
----
-v3:
-- fix incorrect calculation of 'need_upper' variable.
- fs/f2fs/segment.h | 32 ++++++++++++++++++++------------
- 1 file changed, 20 insertions(+), 12 deletions(-)
-
-diff --git a/fs/f2fs/segment.h b/fs/f2fs/segment.h
-index 8a591455d796..b1951bd30efa 100644
---- a/fs/f2fs/segment.h
-+++ b/fs/f2fs/segment.h
-@@ -575,11 +575,10 @@ static inline int reserved_sections(struct f2fs_sb_info *sbi)
- 	return GET_SEC_FROM_SEG(sbi, reserved_segments(sbi));
- }
- 
--static inline bool has_curseg_enough_space(struct f2fs_sb_info *sbi)
-+static inline bool has_curseg_enough_space(struct f2fs_sb_info *sbi,
-+			unsigned int node_blocks, unsigned int dent_blocks)
- {
--	unsigned int node_blocks = get_pages(sbi, F2FS_DIRTY_NODES) +
--					get_pages(sbi, F2FS_DIRTY_DENTS);
--	unsigned int dent_blocks = get_pages(sbi, F2FS_DIRTY_DENTS);
-+
- 	unsigned int segno, left_blocks;
- 	int i;
- 
-@@ -605,19 +604,28 @@ static inline bool has_curseg_enough_space(struct f2fs_sb_info *sbi)
- static inline bool has_not_enough_free_secs(struct f2fs_sb_info *sbi,
- 					int freed, int needed)
- {
--	int node_secs = get_blocktype_secs(sbi, F2FS_DIRTY_NODES);
--	int dent_secs = get_blocktype_secs(sbi, F2FS_DIRTY_DENTS);
--	int imeta_secs = get_blocktype_secs(sbi, F2FS_DIRTY_IMETA);
-+	unsigned int total_node_blocks = get_pages(sbi, F2FS_DIRTY_NODES) +
-+					get_pages(sbi, F2FS_DIRTY_DENTS) +
-+					get_pages(sbi, F2FS_DIRTY_IMETA);
-+	unsigned int total_dent_blocks = get_pages(sbi, F2FS_DIRTY_DENTS);
-+	unsigned int node_secs = total_node_blocks / BLKS_PER_SEC(sbi);
-+	unsigned int dent_secs = total_dent_blocks / BLKS_PER_SEC(sbi);
-+	unsigned int node_blocks = total_node_blocks % BLKS_PER_SEC(sbi);
-+	unsigned int dent_blocks = total_dent_blocks % BLKS_PER_SEC(sbi);
-+	unsigned int free, need_lower, need_upper;
- 
- 	if (unlikely(is_sbi_flag_set(sbi, SBI_POR_DOING)))
- 		return false;
- 
--	if (free_sections(sbi) + freed == reserved_sections(sbi) + needed &&
--			has_curseg_enough_space(sbi))
-+	free = free_sections(sbi) + freed;
-+	need_lower = node_secs + dent_secs + reserved_sections(sbi) + needed;
-+	need_upper = need_lower + (node_blocks ? 1 : 0) + (dent_blocks ? 1 : 0);
-+
-+	if (free > need_upper)
- 		return false;
--	return (free_sections(sbi) + freed) <=
--		(node_secs + 2 * dent_secs + imeta_secs +
--		reserved_sections(sbi) + needed);
-+	else if (free <= need_lower)
-+		return true;
-+	return !has_curseg_enough_space(sbi, node_blocks, dent_blocks);
- }
- 
- static inline bool f2fs_is_checkpoint_ready(struct f2fs_sb_info *sbi)
--- 
-2.25.1
-
+... but we have a user which treats it as if it is.

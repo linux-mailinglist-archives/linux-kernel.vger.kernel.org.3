@@ -2,48 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2209051A025
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 15:02:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E3EA51A02F
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 15:04:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350136AbiEDNGI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 09:06:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48704 "EHLO
+        id S1350168AbiEDNH2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 09:07:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241199AbiEDNGF (ORCPT
+        with ESMTP id S237497AbiEDNH0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 09:06:05 -0400
-Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2837235DE7;
-        Wed,  4 May 2022 06:02:29 -0700 (PDT)
-Received: by angie.orcam.me.uk (Postfix, from userid 500)
-        id 3B7EF92009C; Wed,  4 May 2022 15:02:28 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by angie.orcam.me.uk (Postfix) with ESMTP id 3198792009B;
-        Wed,  4 May 2022 14:02:28 +0100 (BST)
-Date:   Wed, 4 May 2022 14:02:28 +0100 (BST)
-From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
-To:     David Laight <David.Laight@ACULAB.COM>
-cc:     'Linus Walleij' <linus.walleij@linaro.org>,
-        William Breathitt Gray <william.gray@linaro.org>,
-        Niklas Schnelle <schnelle@linux.ibm.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        Arnd Bergmann <arnd@kernel.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>
-Subject: RE: [RFC v2 10/39] gpio: add HAS_IOPORT dependencies
-In-Reply-To: <7bb4d0286f44462581d96320cfe105d6@AcuMS.aculab.com>
-Message-ID: <alpine.DEB.2.21.2205041352520.9548@angie.orcam.me.uk>
-References: <20220429135108.2781579-1-schnelle@linux.ibm.com> <20220429135108.2781579-19-schnelle@linux.ibm.com> <Ymv3DnS1vPMY8QIg@fedora> <f006229ae056d4cdcf57fc5722a695ad4c257182.camel@linux.ibm.com> <YmwGLrh4U+pVJo0m@fedora>
- <CACRpkdaha37y-ZNSqYSbf=TvsJNcvbH1Y=N0JkVCewB-Lvf81Q@mail.gmail.com> <c3a3cdd99d4645e2bbbe082808cbb2a5@AcuMS.aculab.com> <alpine.DEB.2.21.2205041226160.64942@angie.orcam.me.uk> <7bb4d0286f44462581d96320cfe105d6@AcuMS.aculab.com>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+        Wed, 4 May 2022 09:07:26 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 877E2377E0
+        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 06:03:50 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1651669429;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=qnTydrMS1ksmehjR1Sl6xajLYwWe+zoyDgYNW/GZj1w=;
+        b=RO2BH/TcggPsRNijCcOP8zR+Lo8UVQQ0WcBGQQ/AxGOcA/VecEAn7o+osJsn81GlCUVOB4
+        b8W0jiLwk8gz2TW1ST2HNCfZ9cnHW/o7t9BiKRVbUDTmP2VONzBwTuxCe8hS0EPtmnpljB
+        /BEQkR/pUkO8tEoEktLRKgbHv+aY+qdPFGu64mJwbLqiFKFA5OJV5S5K0eCO1gTDNv/+rh
+        2JLbGmvjfHY39k9xE19cA2WrCcC4QodI2NoXAhSnRvyAI3yULTj86MmNJMH4dMs70zMyRc
+        Kxuq9678kGZncg0zbeyhWcWHSh7Jf+IlEATiA0UNV+jW4YSEE/0/jere4EMztQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1651669429;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=qnTydrMS1ksmehjR1Sl6xajLYwWe+zoyDgYNW/GZj1w=;
+        b=Eyd/snTxo2U0d7A7rEeZjUIVMAZ6f+1uWn05fdJ1zNJyUxFJyfUIRXpa6uolhIJsaU0SBF
+        lxshDIpJBoLXkADQ==
+To:     Marcelo Tosatti <mtosatti@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, Nitesh Lal <nilal@redhat.com>,
+        Nicolas Saenz Julienne <nsaenzju@redhat.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Christoph Lameter <cl@linux.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Alex Belits <abelits@belits.com>, Peter Xu <peterx@redhat.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Oscar Shiang <oscar0225@livemail.tw>
+Subject: Re: [patch v12 13/13] task isolation: only TIF_TASK_ISOL if task
+ isolation is enabled
+In-Reply-To: <YnF+lbxJXiQMbS/a@fuller.cnet>
+References: <20220315153132.717153751@fedora.localdomain>
+ <20220315153314.333646565@fedora.localdomain> <87zgk7x93h.ffs@tglx>
+ <YnF+lbxJXiQMbS/a@fuller.cnet>
+Date:   Wed, 04 May 2022 15:03:48 +0200
+Message-ID: <87k0b1jvpn.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,38 +65,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 4 May 2022, David Laight wrote:
+On Tue, May 03 2022 at 16:12, Marcelo Tosatti wrote:
+> On Wed, Apr 27, 2022 at 09:45:54AM +0200, Thomas Gleixner wrote:
+> It seems to be inline with the remaining TIF_ bits:
+>
+>                 if (ti_work & _TIF_NOTIFY_RESUME)
+>                         tracehook_notify_resume(regs);
+>
+> +               if (ti_work & _TIF_TASK_ISOL)
+> +                       task_isol_exit_to_user_mode();
+> +
+>
+>
+> And there is even:
 
-> >  Well, one can implement a pluggable PCI/e expansion card with a PCI-ISA
-> > bridge on it and a backplane to plug ISA cards into.  Without support for
-> > issuing I/O cycles to PCI from the host however you won't be able to make
-> > use of the ISA backplane except maybe for some ancient ISA memory cards.
-> > So logically I think CONFIG_ISA should depend on CONFIG_HAS_IOPORT and
-> > CONFIG_HAS_IOPORT ought to be selected by platform configurations.
-> 
-> But generating a PCI(e) I/O cycle doesn't need the cpu to be able to
-> generate an I/O cycle on its local bus interface.
-> All that required is for the PCI(e) host bridge to determine that it
-> needs to relevant kind of cycle on the target bus.
-> This can easily be based on the physical address.
+I know that the bit is defined, but that does still not make an argument.
 
- Sure, you can encode address spaces however you like (there are no 
-special machine instructions either for PCI/e configuration space access 
-that I would know of in any CPU architecture), but the host bridge must be 
-willing to issue those PCI/e I/O cycles in the first place (see my other 
-message on POWER9 in this thread).
+> By looking at the code, we see the sites where this bit is set are:
 
-> What you should probably be doing is (outside of 'platform' code)
-> change the drivers to use ioread8() instead of inb().
-> Then adding in the required calls to get the correct 'token' to
-> pass to ioread8() to perform an I/O cycle on the correct target bus.
+Again. I'm able to read the patches myself.
 
- Yes, probably.
+> Would you prefer an explanation, in words, when these bits are set, when
+> they are cleared?
 
-> It is really the attachment of the driver that can't succeed, not the
-> compilation.
+No. The point is that contrary to TIF_NOTIFY_RESUME and other TIF bits,
+this is going to end up being sprinkled all over the place.
 
- Except it makes no sense to offer those drivers for platforms known not 
-to provide for port I/O on PCI/e.
+With the current vmstat quiesce that's limited, but it's bound to
+increase and spread simply because the whole thing has no semantics and
+it's all headed to be adhoc cure for the isolation itch of the day.
 
-  Maciej
+Thanks,
+
+        tglx
+

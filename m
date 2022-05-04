@@ -2,75 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8E7351B11F
+	by mail.lfdr.de (Postfix) with ESMTP id 708B351B11E
 	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 23:36:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378770AbiEDVjw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 17:39:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48556 "EHLO
+        id S1347125AbiEDVjp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 17:39:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379237AbiEDVjN (ORCPT
+        with ESMTP id S1379273AbiEDVjO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 17:39:13 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25FF052E62;
-        Wed,  4 May 2022 14:35:09 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 4 May 2022 17:39:14 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E70E326CA
+        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 14:35:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1651700103;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=3s3JJtjWkXdQIeMB4qwH1W143SmCevkLkyYdal6KkRA=;
+        b=fL0m2/wZPYvHvQ+x6xFfyPKxPIDpOC1haH/HdKelgxBevUzv1c/ee4IuO8fc1H+8zrUsuh
+        kmHC3j3qd52nLfagUkQaoxxEqUFuTMloHOUiXuToDpP0PeQ+0X0cIv7lZUHHAn2zhMGWYn
+        X550d7KZmhXEYCQrZ7Gj+9EcmxMigP4=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-605-UJvtXuB8OTG_3ShMvXL0sA-1; Wed, 04 May 2022 17:35:00 -0400
+X-MC-Unique: UJvtXuB8OTG_3ShMvXL0sA-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5327161A94;
-        Wed,  4 May 2022 21:35:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD914C385B3;
-        Wed,  4 May 2022 21:35:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651700107;
-        bh=Ag6z4UsMQi45DT6LEixpyNi3v4/oCDHforErc0WKpkg=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=jT9J069rPUQBqanuRgdVPUVzvqR76Z3AXmb1hQ28qWhElNA1xUTHs3Wg7OhG9knRF
-         nYE2UWXrL/ob801JQe8XQgqI1Kr5RsyzXhwyetM1ZZi0rIbPnGzwearHlnR6Qfquff
-         tmzjarVjC3PqWuwS80M3Fd5InHZ68Hp3bwCF1etSdQ0MSnbYYriGQX+NLsE9AfqkdH
-         7/EKJkbQAEr+iIvA+6iLOrTHR9aqBtmxjAtueAdO8QW1Z6FnqbYc4rxI0pUpNJ5tRE
-         JvlHkOYjKrKaoI1CEiBVPrDKFlt4LVaM2/XCtNdPH7opp1rdAmnJW6mfXH2/uOHTQ2
-         cu2b9KpQuuzpw==
-Received: by mail-wr1-f49.google.com with SMTP id e2so3664216wrh.7;
-        Wed, 04 May 2022 14:35:07 -0700 (PDT)
-X-Gm-Message-State: AOAM530pBHbnZSOSTyUCza1fPiWVN2lBZNR4lkAY/EgAC4I4P/05qMG+
-        frBHMNGA7bvWwmagJhQ0r1SM6Wvq+3RFipji/AE=
-X-Google-Smtp-Source: ABdhPJyJdqNhgHXeC5+qWnrrqqXwN5Jjvbj+o5B4nexQNKTcbVdNE9ExlHhPkDOn3OnkIrCgsPdFpKkMocrgnUpCXpM=
-X-Received: by 2002:adf:e106:0:b0:20a:b31b:213d with SMTP id
- t6-20020adfe106000000b0020ab31b213dmr17567886wrz.219.1651700105974; Wed, 04
- May 2022 14:35:05 -0700 (PDT)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9DABD80418A;
+        Wed,  4 May 2022 21:34:59 +0000 (UTC)
+Received: from jsavitz-csb.redhat.com (unknown [10.22.8.120])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 3452F400F75F;
+        Wed,  4 May 2022 21:34:59 +0000 (UTC)
+From:   Joel Savitz <jsavitz@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Joel Savitz <jsavitz@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Sandipan Das <sandipan@linux.ibm.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Nico Pache <npache@redhat.com>, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org
+Subject: [PATCH] selftests: vm: Makefile: rename TARGETS to VMTARGETS
+Date:   Wed,  4 May 2022 17:34:54 -0400
+Message-Id: <20220504213454.1282532-1-jsavitz@redhat.com>
 MIME-Version: 1.0
-References: <20220429135108.2781579-54-schnelle@linux.ibm.com> <20220504204231.GA463295@bhelgaas>
-In-Reply-To: <20220504204231.GA463295@bhelgaas>
-From:   Arnd Bergmann <arnd@kernel.org>
-Date:   Wed, 4 May 2022 23:34:48 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a0=HgkkSJ2edZxMDbyuTyNZK98oSi4rc6CL_b6RHAQ-OQ@mail.gmail.com>
-Message-ID: <CAK8P3a0=HgkkSJ2edZxMDbyuTyNZK98oSi4rc6CL_b6RHAQ-OQ@mail.gmail.com>
-Subject: Re: [RFC v2 30/39] scsi: add HAS_IOPORT dependencies
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Niklas Schnelle <schnelle@linux.ibm.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Hannes Reinecke <hare@suse.com>,
-        Kashyap Desai <kashyap.desai@broadcom.com>,
-        Sumit Saxena <sumit.saxena@broadcom.com>,
-        Shivasharan S <shivasharan.srikanteshwara@broadcom.com>,
-        Nilesh Javali <njavali@marvell.com>,
-        "supporter:QLOGIC QLA2XXX FC-SCSI DRIVER" 
-        <GR-QLogic-Storage-Upstream@marvell.com>,
-        "open list:SCSI SUBSYSTEM" <linux-scsi@vger.kernel.org>,
-        "open list:MEGARAID SCSI/SAS DRIVERS" 
-        <megaraidlinux.pdl@broadcom.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,28 +62,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 4, 2022 at 10:42 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
->
-> On Fri, Apr 29, 2022 at 03:50:51PM +0200, Niklas Schnelle wrote:
-> > In a future patch HAS_IOPORT=n will result in inb()/outb() and friends
-> > not being declared. We thus need to add HAS_IOPORT as dependency for
-> > those drivers using them.
->
-> Some of these drivers support devices using either I/O ports or MMIO.
-> Adding the HAS_IOPORT dependency means MMIO devices that *could* work
-> on systems without I/O ports, won't work.
->
-> Even the MMIO-only devices are probably old and not of much interest.
-> But if you want to disable them even though they *could* work, I think
-> that's worth mentioning in the commit log.
+The tools/testing/selftests/vm/Makefile uses the variable TARGETS
+internally to generate a list of platform-specific binary build targets
+suffixed with _{32,64}. When building the selftests using its own
+Makefile directly, such as via the following command run in a kernel
+tree:
 
-I think this would again make more sense with the original CONFIG_LEGACY_PCI
-conditional than the generic HAS_IOPORT one. I don't remember what the
-objection was to that symbol.
+One receives an error such as the following:
 
-I think the presence of inb()/outb() is a good indication that a driver is for
-obsolete hardware, though of course there are important exceptions to this
-that instead need to have the conditional in the code itself (8250,
-vga, ipmi, ...)
+make: Entering directory '/root/linux/tools/testing/selftests'
+make --no-builtin-rules ARCH=x86 -C ../../.. headers_install
+make[1]: Entering directory '/root/linux'
+  INSTALL ./usr/include
+make[1]: Leaving directory '/root/linux'
+make[1]: Entering directory '/root/linux/tools/testing/selftests/vm'
+make[1]: *** No rule to make target 'vm.c', needed by '/root/linux/tools/testing/selftests/vm/vm_64'.  Stop.
+make[1]: Leaving directory '/root/linux/tools/testing/selftests/vm'
+make: *** [Makefile:175: all] Error 2
+make: Leaving directory '/root/linux/tools/testing/selftests'
 
-       Arnd
+The TARGETS variable passed to tools/testing/selftests/Makefile collides
+with the TARGETS used in tools/testing/selftests/vm/Makefile, so rename
+the latter to VMTARGETS, eliminating the collision with no functional
+change.
+
+Fixes: f21fda8f6453 ("selftests: vm: pkeys: fix multilib builds for
+x86")
+
+Signed-off-by: Joel Savitz <jsavitz@redhat.com>
+---
+ tools/testing/selftests/vm/Makefile | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/tools/testing/selftests/vm/Makefile b/tools/testing/selftests/vm/Makefile
+index 04a49e876a46..5b1ecd00695b 100644
+--- a/tools/testing/selftests/vm/Makefile
++++ b/tools/testing/selftests/vm/Makefile
+@@ -57,9 +57,9 @@ CAN_BUILD_I386 := $(shell ./../x86/check_cc.sh "$(CC)" ../x86/trivial_32bit_prog
+ CAN_BUILD_X86_64 := $(shell ./../x86/check_cc.sh "$(CC)" ../x86/trivial_64bit_program.c)
+ CAN_BUILD_WITH_NOPIE := $(shell ./../x86/check_cc.sh "$(CC)" ../x86/trivial_program.c -no-pie)
+ 
+-TARGETS := protection_keys
+-BINARIES_32 := $(TARGETS:%=%_32)
+-BINARIES_64 := $(TARGETS:%=%_64)
++VMTARGETS := protection_keys
++BINARIES_32 := $(VMTARGETS:%=%_32)
++BINARIES_64 := $(VMTARGETS:%=%_64)
+ 
+ ifeq ($(CAN_BUILD_WITH_NOPIE),1)
+ CFLAGS += -no-pie
+@@ -112,7 +112,7 @@ $(BINARIES_32): CFLAGS += -m32 -mxsave
+ $(BINARIES_32): LDLIBS += -lrt -ldl -lm
+ $(BINARIES_32): $(OUTPUT)/%_32: %.c
+ 	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) $(notdir $^) $(LDLIBS) -o $@
+-$(foreach t,$(TARGETS),$(eval $(call gen-target-rule-32,$(t))))
++$(foreach t,$(VMTARGETS),$(eval $(call gen-target-rule-32,$(t))))
+ endif
+ 
+ ifeq ($(CAN_BUILD_X86_64),1)
+@@ -120,7 +120,7 @@ $(BINARIES_64): CFLAGS += -m64 -mxsave
+ $(BINARIES_64): LDLIBS += -lrt -ldl
+ $(BINARIES_64): $(OUTPUT)/%_64: %.c
+ 	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) $(notdir $^) $(LDLIBS) -o $@
+-$(foreach t,$(TARGETS),$(eval $(call gen-target-rule-64,$(t))))
++$(foreach t,$(VMTARGETS),$(eval $(call gen-target-rule-64,$(t))))
+ endif
+ 
+ # x86_64 users should be encouraged to install 32-bit libraries
+-- 
+2.27.0
+

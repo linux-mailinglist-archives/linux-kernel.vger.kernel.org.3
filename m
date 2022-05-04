@@ -2,154 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1814A519CB0
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 12:15:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5809519CB3
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 12:15:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347775AbiEDKSr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 06:18:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58846 "EHLO
+        id S1347976AbiEDKTR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 06:19:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347878AbiEDKSl (ORCPT
+        with ESMTP id S1348057AbiEDKTN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 06:18:41 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B988415A2E
-        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 03:15:05 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id m20so1918833ejj.10
-        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 03:15:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=date:from:to:cc:subject:message-id:mail-followup-to:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=DtdZXt+SmpFrTqYzesf1kphNYf64qbUXNNBxD4Vh4gg=;
-        b=NQ/nVH3+I5wmrMuaf5Igp+9JPz9VnJMklXL6usvarWEUcE3q01DMETuxdCABgYWZS9
-         Fv81L2lH1UnnY8DSTyCyRtENnwA25rykS9Z3g+xZo51wLgykM1xR/OX9neUeC2wl+HyV
-         DR57VBOYRIBwPpXhDOeFBoq0Q9HL6+wFidm5g=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id
-         :mail-followup-to:references:mime-version:content-disposition
-         :in-reply-to;
-        bh=DtdZXt+SmpFrTqYzesf1kphNYf64qbUXNNBxD4Vh4gg=;
-        b=LH2yWYbdvjCPw9oeIB+GCPwKPySx6LurLgc1O8A05ohHiQiKnQ5lr7uxMPJDzl8JLT
-         ODlNZbrHgQuP0actr/hSLG2AXOCwjIEHLQjE6KY4RRjzyNOSKIfxL92ySTao2xJ3ZEVS
-         DrAsmPzdyEyhLRpLrvUkD7Bib98FtqksoWPLoRUJDsmbv4p2/sdAdTP8UOx9sVOKaCFw
-         tgZwfAlTVxrjN+P1xG2yOUNUNbbRadiwnQQ6gKkQ5gQ4q4gKR7mhWPTQZuKe7pZx19TZ
-         0uscYNS02bSxrNqudjp89cuWsSu6VHBcTCYAUQQmTW+Or/El+OaxCdJmDeeVqef3SXdi
-         UZxw==
-X-Gm-Message-State: AOAM531sNAOtpIjJB+b+QMFVbyKF8e2F3pUMArRqulYnSVfKYuBfZELj
-        MpGCimbfkiAeRBozuPAlCmZ6rw==
-X-Google-Smtp-Source: ABdhPJz0H56c29EX1eI0wf0rZke27JXxOA9/8s1bZYMKsmv1nfRfAWELn2LuYxHYEzxR1YOIACFKBQ==
-X-Received: by 2002:a17:906:eb82:b0:6f3:9044:5fba with SMTP id mh2-20020a170906eb8200b006f390445fbamr19213483ejb.715.1651659304347;
-        Wed, 04 May 2022 03:15:04 -0700 (PDT)
-Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
-        by smtp.gmail.com with ESMTPSA id gx4-20020a1709068a4400b006f3ef214dc1sm5591621ejc.39.2022.05.04.03.15.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 May 2022 03:15:04 -0700 (PDT)
-Date:   Wed, 4 May 2022 12:15:02 +0200
-From:   Daniel Vetter <daniel@ffwll.ch>
-To:     Javier Martinez Canillas <javierm@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, Maxime Ripard <maxime@cerno.tech>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Changcheng Deng <deng.changcheng@zte.com.cn>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Helge Deller <deller@gmx.de>, Sam Ravnborg <sam@ravnborg.org>,
-        Zhen Lei <thunder.leizhen@huawei.com>,
-        Zheyu Ma <zheyuma97@gmail.com>,
-        dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org
-Subject: Re: [PATCH 2/2] fbdev: Make fb_release() return -ENODEV if fbdev was
- unregistered
-Message-ID: <YnJSJideWoEF+ZE0@phenom.ffwll.local>
-Mail-Followup-To: Javier Martinez Canillas <javierm@redhat.com>,
-        linux-kernel@vger.kernel.org, Maxime Ripard <maxime@cerno.tech>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Changcheng Deng <deng.changcheng@zte.com.cn>,
-        Guenter Roeck <linux@roeck-us.net>, Helge Deller <deller@gmx.de>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Zhen Lei <thunder.leizhen@huawei.com>,
-        Zheyu Ma <zheyuma97@gmail.com>, dri-devel@lists.freedesktop.org,
-        linux-fbdev@vger.kernel.org
-References: <20220502130944.363776-1-javierm@redhat.com>
- <20220502130944.363776-3-javierm@redhat.com>
- <YnJLzY7Yiax/AwMx@phenom.ffwll.local>
- <8a4d6469-d3c0-833d-40c8-3a786d04eba4@redhat.com>
+        Wed, 4 May 2022 06:19:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 047511C129;
+        Wed,  4 May 2022 03:15:38 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 952BA61ACF;
+        Wed,  4 May 2022 10:15:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97614C385A4;
+        Wed,  4 May 2022 10:15:35 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="ZXttSzmZ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1651659334;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=0NDvnCek1kbw8v3M1u2ks8T9tYgYwuJSuSlmeWt9wN4=;
+        b=ZXttSzmZ40auAREQDE82/7bmboma7RQf04mBPFZe+rWGuQOTcK+aebW02DlqRb2c9GGHUr
+        5TNV+OrdpQ/Q8w85dgDXh3mDwdY0j5/ymG/Fb8wxDTLO082CrtIyox2MsGnHiuixjeP2ZJ
+        UmpoHzECaHVOGW3ShZV3kEj91gz9ph4=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 5c3caf4c (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Wed, 4 May 2022 10:15:33 +0000 (UTC)
+Date:   Wed, 4 May 2022 12:15:31 +0200
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Andy Shevchenko <andriy.shevchenko@intel.com>
+Cc:     Stafford Horne <shorne@gmail.com>,
+        Mikulas Patocka <mpatocka@redhat.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andy Shevchenko <andy@kernel.org>,
+        device-mapper development <dm-devel@redhat.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Mike Snitzer <msnitzer@redhat.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Milan Broz <gmazyland@gmail.com>
+Subject: Re: [PATCH v2] hex2bin: make the function hex_to_bin constant-time
+Message-ID: <YnJSQ3jJyvhmIstD@zx2c4.com>
+References: <alpine.LRH.2.02.2204241648270.17244@file01.intranet.prod.int.rdu2.redhat.com>
+ <CAHk-=wh+Z+OKH3jRttWGHbWSQq2wVMtdnA=ntDiadZu=VxAC7w@mail.gmail.com>
+ <alpine.LRH.2.02.2204250723120.26714@file01.intranet.prod.int.rdu2.redhat.com>
+ <YnI7hE4cIfjsdKSF@antec>
+ <YnJI4Ru0AlUgrr9C@zx2c4.com>
+ <YnJOCbLtdATzC+jn@zx2c4.com>
+ <YnJQXr3igEMTqY3+@smile.fi.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <8a4d6469-d3c0-833d-40c8-3a786d04eba4@redhat.com>
-X-Operating-System: Linux phenom 5.10.0-8-amd64 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <YnJQXr3igEMTqY3+@smile.fi.intel.com>
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 04, 2022 at 12:09:57PM +0200, Javier Martinez Canillas wrote:
-> Hello Daniel,
-> 
-> On 5/4/22 11:47, Daniel Vetter wrote:
-> > On Mon, May 02, 2022 at 03:09:44PM +0200, Javier Martinez Canillas wrote:
-> >> A reference to the framebuffer device struct fb_info is stored in the file
-> >> private data, but this reference could no longer be valid and must not be
-> >> accessed directly. Instead, the file_fb_info() accessor function must be
-> >> used since it does sanity checking to make sure that the fb_info is valid.
-> >>
-> >> This can happen for example if the fbdev driver was one that is using a
-> >> framebuffer provided by the system firmware. In that case, the fbdev core
-> >> could unregister the framebuffer device if a real video driver is probed.
-> >>
-> >> Reported-by: Maxime Ripard <maxime@cerno.tech>
-> >> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
+On Wed, May 04, 2022 at 01:07:26PM +0300, Andy Shevchenko wrote:
+> On Wed, May 04, 2022 at 11:57:29AM +0200, Jason A. Donenfeld wrote:
+> > On Wed, May 04, 2022 at 11:42:27AM +0200, Jason A. Donenfeld wrote:
+> > > So more likely is that this patch just helps unmask a real issue
+> > > elsewhere -- linker, compiler, or register restoration after preemption.
+> > > I don't think there's anything to do with regards to the patch of this
+> > > thread, as it's clearly fine. 
 > > 
-> > Doesn't this mean we just leak the references? Also anything the driver
-> > might refcount in fb_open would be leaked too.
-> >
+> > The problem even goes away if I just add a nop...
 > 
-> It maybe result in leaks, that's true. But I don't think we can do anything
-> at this point since the fb_info just went away and the file->private_data
-> reference is no longer valid...
->  
-> > I'm not sure what exactly you're trying to fix here, but this looks a bit
-> > wrong.
-> >
-> 
-> This is fixing a NULL pointer deref that at least 3 people reported, i.e:
-> 
-> https://github.com/raspberrypi/linux/issues/5011
-> 
-> Because if a real DRM driver is probed, then the registered framebuffer
-> is unregistered and the fb_info just freed. But user-space has no way to
-> know and on close the kernel will try to dereference a NULL pointer.
+> Alignment? Compiler bug? HW issue?
 
-The fb_info shouldn't go boom because that's refcounted with
-get/put_fb_info. Maybe we go boom on something else, but the fb_info
-itself should work out ok. If it doesn't work, then there's a bug and
-papering over it by just leaking it all isn't a solution.
+Probably one of those, yea. Removing the instruction addresses, the only
+difference between the two compiles is: https://xn--4db.cc/Rrn8usaX/diff#line-440
 
-> > Maybe stepping back what fbdev would need, but doesn't have (see the
-> > commit reference I dropped on the previous version) is drm_dev_enter/exit
-> > around hw access. the file_fb_info check essentially provides that, but
-> > with races and everything.
-> >
-> 
-> Yes, but I don't know how that could work since user-space can just open
-> the fbdev, mmap it, write to the mmap'ed memory and then close it. The
-> only way that this could be done safely AFAICT is if we prevent the real
-> video drivers to be registered if the fbdev is currently mmap'ed.
-> 
-> Otherwise, the firmware initialized framebuffer will go away anyways and
-> things will break for the user-space process that's currently using it.
+So either there's some alignment going on here, a compiler thing I
+haven't spotted yet, or some very fragile interrupt/preemption behavior
+that's interacting with this, either on the kernel side or the QEMU
+side.
 
-We should probably nuke the mmap and make it SIGBUS. This is essentially
-the hotunplug problem, and fixing it properly is very nasty.
--Daniel
--- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+(I've never touched real HW for this; I just got nerd sniped when
+wondering why my wireguard CI was failing...)
+ 
+Jason

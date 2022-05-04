@@ -2,107 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21ACA519DE5
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 13:24:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A210519DEA
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 13:26:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348723AbiEDL12 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 07:27:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37572 "EHLO
+        id S1348728AbiEDL3b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 07:29:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234974AbiEDL1X (ORCPT
+        with ESMTP id S237916AbiEDL33 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 07:27:23 -0400
-Received: from mxout04.lancloud.ru (mxout04.lancloud.ru [45.84.86.114])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E63A5140BE;
-        Wed,  4 May 2022 04:23:44 -0700 (PDT)
-Received: from LanCloud
-DKIM-Filter: OpenDKIM Filter v2.11.0 mxout04.lancloud.ru 2E7B02130938
-Received: from LanCloud
-Received: from LanCloud
-Received: from LanCloud
-Subject: Re: [PATCH RFC v6 16/21] dept: Distinguish each work from another
-To:     Byungchul Park <byungchul.park@lge.com>,
-        <torvalds@linux-foundation.org>
-CC:     <damien.lemoal@opensource.wdc.com>, <linux-ide@vger.kernel.org>,
-        <adilger.kernel@dilger.ca>, <linux-ext4@vger.kernel.org>,
-        <mingo@redhat.com>, <linux-kernel@vger.kernel.org>,
-        <peterz@infradead.org>, <will@kernel.org>, <tglx@linutronix.de>,
-        <rostedt@goodmis.org>, <joel@joelfernandes.org>,
-        <sashal@kernel.org>, <daniel.vetter@ffwll.ch>,
-        <chris@chris-wilson.co.uk>, <duyuyang@gmail.com>,
-        <johannes.berg@intel.com>, <tj@kernel.org>, <tytso@mit.edu>,
-        <willy@infradead.org>, <david@fromorbit.com>, <amir73il@gmail.com>,
-        <bfields@fieldses.org>, <gregkh@linuxfoundation.org>,
-        <kernel-team@lge.com>, <linux-mm@kvack.org>,
-        <akpm@linux-foundation.org>, <mhocko@kernel.org>,
-        <minchan@kernel.org>, <hannes@cmpxchg.org>,
-        <vdavydov.dev@gmail.com>, <sj@kernel.org>, <jglisse@redhat.com>,
-        <dennis@kernel.org>, <cl@linux.com>, <penberg@kernel.org>,
-        <rientjes@google.com>, <vbabka@suse.cz>, <ngupta@vflare.org>,
-        <linux-block@vger.kernel.org>, <paolo.valente@linaro.org>,
-        <josef@toxicpanda.com>, <linux-fsdevel@vger.kernel.org>,
-        <viro@zeniv.linux.org.uk>, <jack@suse.cz>, <jack@suse.com>,
-        <jlayton@kernel.org>, <dan.j.williams@intel.com>,
-        <hch@infradead.org>, <djwong@kernel.org>,
-        <dri-devel@lists.freedesktop.org>, <airlied@linux.ie>,
-        <rodrigosiqueiramelo@gmail.com>, <melissa.srw@gmail.com>,
-        <hamohammed.sa@gmail.com>, <42.hyeyoo@gmail.com>
-References: <1651652269-15342-1-git-send-email-byungchul.park@lge.com>
- <1651652269-15342-17-git-send-email-byungchul.park@lge.com>
-From:   Sergey Shtylyov <s.shtylyov@omp.ru>
-Organization: Open Mobile Platform
-Message-ID: <24e4d6db-9dc9-f113-f655-9af3a51723d4@omp.ru>
-Date:   Wed, 4 May 2022 14:23:39 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        Wed, 4 May 2022 07:29:29 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E72FF1ADA8
+        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 04:25:53 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id z5-20020a17090a468500b001d2bc2743c4so1011521pjf.0
+        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 04:25:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=5mO6F1EOrQXM0niTfrnYByiFhvGDeihM4EKAM1KLnBE=;
+        b=qd/tf+lgyDOp6PwSYhwcCPZg/ueUtY5F6beEU8PGWzlKMUyyqWdDN4WlCy7UXmxOO0
+         zhxNXbjXsHsShD+r7OjaNob9/d4ikbBnB+QatUmSmRI/yPgTZNEQQsRHYMyCcfcV6dbD
+         ESKy6b3a1lbd1AhEAEAvHbB9pP91pVGwRXiCAZEqdMvtgbehdvOcj8D2tQMxPKMXNG0d
+         6bVCQQCYwlxEh9n30XhR1Lis+RzLSpFaZRzKGAM+JARolal1HzSbVBCHDfkyeMy38I1T
+         GIEeuxjQai51T2mtz5pBczpa5quGZycMKAUr8cABRWK+iU8k9gVCbd9VMBZAilVNcWT7
+         P/tA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=5mO6F1EOrQXM0niTfrnYByiFhvGDeihM4EKAM1KLnBE=;
+        b=TzJyjJLJGq+0C+KEkg1vcQyVEYiZrl7/As9Lf+kDl8iNVFw2PcEna+Oy0DO7wpJs4u
+         CSAe76QydH0WSIS476bWWgoQ5OR/5df1IIV3W6NVokriciE+AkUPOjUByV4QvhHguDc+
+         gXMXq1ywnCeeCFun6L5V0YmeIVK3CoyD1UCcUzP3VuaA1b8UqZyhg7AC3UAFpaCN7CQU
+         2fgHHe45KnfJGpsT3pzlVj95P4+IzvJ69fvL8ksKxnlqB1kEzcgiA97q0FT9txjkqNXM
+         VENEXLerorzRbYjI0jMDXGc/YYLmc/P8d5YS9Il/Y/UJDn01Nn7PsGz60j/2FL8JM/AV
+         ZCPw==
+X-Gm-Message-State: AOAM532vz89hZVyx7ZMlsp1XbupQpEVgdN6BmpVFiF3rTsS9htN21Yws
+        tGNLLCwJ/u+uo2CtuxoqeYaMLhAqEMfz0Q==
+X-Google-Smtp-Source: ABdhPJxqqqrvzTPqgyL2pdh/okD59AmwKigCkPQUbGkQFASydql8esLb16vUQyp7oCaCmJJy6DxtJw==
+X-Received: by 2002:a17:902:d505:b0:15e:8b5c:bbe3 with SMTP id b5-20020a170902d50500b0015e8b5cbbe3mr20725950plg.38.1651663553340;
+        Wed, 04 May 2022 04:25:53 -0700 (PDT)
+Received: from [192.168.4.166] (cpe-72-132-29-68.dc.res.rr.com. [72.132.29.68])
+        by smtp.gmail.com with ESMTPSA id v21-20020a631515000000b003c14af50603sm14807220pgl.27.2022.05.04.04.25.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 04 May 2022 04:25:52 -0700 (PDT)
+Message-ID: <a4844963-3887-ffe6-d219-efee3e859356@kernel.dk>
+Date:   Wed, 4 May 2022 05:25:51 -0600
 MIME-Version: 1.0
-In-Reply-To: <1651652269-15342-17-git-send-email-byungchul.park@lge.com>
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: linux-next: build failure after merge of the block tree
 Content-Language: en-US
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Christoph Hellwig <hch@lst.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20220504114031.40747e03@canb.auug.org.au>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <20220504114031.40747e03@canb.auug.org.au>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [192.168.11.198]
-X-ClientProxiedBy: LFEXT01.lancloud.ru (fd00:f066::141) To
- LFEX1907.lancloud.ru (fd00:f066::207)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello!
-
-On 5/4/22 11:17 AM, Byungchul Park wrote:
-
-> Workqueue already provides concurrency control. By that, any wait in a
-> work doesn't prevents events in other works with the control enabled.
-> Thus, each work would better be considered a different context.
+On 5/3/22 7:40 PM, Stephen Rothwell wrote:
+> Hi all,
 > 
-> So let Dept assign a different context id to each work.
+> After merging the block tree, today's linux-next build (x86_64
+> allmodconfig) failed like this:
 > 
-> Signed-off-by: Byungchul Park <byungchul.park@lge.com>
-[...]
-> diff --git a/kernel/dependency/dept.c b/kernel/dependency/dept.c
-> index 18e5951..6707313 100644
-> --- a/kernel/dependency/dept.c
-> +++ b/kernel/dependency/dept.c
-> @@ -1844,6 +1844,16 @@ void dept_enirq_transition(unsigned long ip)
->  	dept_exit(flags);
->  }
->  
-> +/*
-> + * Assign a different context id to each work.
-> + */
-> +void dept_work_enter(void)
-> +{
-> +	struct dept_task *dt = dept_task();
-> +
-> +	dt->cxt_id[DEPT_CXT_PROCESS] += (1UL << DEPT_CXTS_NR);
+> drivers/block/xen-blkback/xenbus.c: In function 'xen_blkbk_discard':
+> drivers/block/xen-blkback/xenbus.c:578:31: error: unused variable 'q' [-Werror=unused-variable]
+>   578 |         struct request_queue *q = bdev_get_queue(bdev);
+>       |                               ^
+> cc1: all warnings being treated as errors
+> 
+> Caused by commit
+> 
+>   c899b2353386 ("xen-blkback: use bdev_discard_alignment")
 
-   Parens around << unnecessary...
+Thanks, folded in the fix.
 
-[...]
+-- 
+Jens Axboe
 
-MBR, Sergey

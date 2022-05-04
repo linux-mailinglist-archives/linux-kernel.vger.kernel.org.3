@@ -2,59 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83B7D51B2C7
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 01:24:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E655F51B32D
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 01:27:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356155AbiEDXEu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 19:04:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45536 "EHLO
+        id S1381871AbiEDXFc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 19:05:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235475AbiEDW5m (ORCPT
+        with ESMTP id S1379676AbiEDW6J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 18:57:42 -0400
-Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47C9B53722
-        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 15:52:00 -0700 (PDT)
-Received: by mail-pj1-x104a.google.com with SMTP id r16-20020a17090b051000b001db302efed7so1089297pjz.2
-        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 15:52:00 -0700 (PDT)
+        Wed, 4 May 2022 18:58:09 -0400
+Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3198753B49
+        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 15:52:04 -0700 (PDT)
+Received: by mail-pg1-x54a.google.com with SMTP id y17-20020a637d11000000b003ab06870074so1336701pgc.15
+        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 15:52:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=reply-to:date:in-reply-to:message-id:mime-version:references
          :subject:from:to:cc;
-        bh=Hx8sCbhJvCh5cLdAhmGu8wLUB1jVDA/mxGjlfX4jDqM=;
-        b=tfLtI6sfhovJRsf3jGIwzoV9D3TJaeV+YvUAEkJIwJSxaewRMzz53Llw7lmWCI0j4K
-         eUOSQ31RJ6XLelenIebss22NvfTU3D+X7Tt0X81MZenpjuKsgQulvOZP7MJ9UYP+Y6zr
-         3Lx1LOG1Aldt32RQMvbzPmu8gFeqV4vTHHkLlrKDG0dZLMgc4WHpXI9qVGdJW2zX7XAi
-         3gqd340xVwC3KBfYI3zro5OT4LTZKR5gbWOSuAHlA9FaoheMSe6OA62TW0rRctwSVvYm
-         XMGsPLfguqtHE6tKbO5tUvlN8G5KWIGfOtrKXLvTm6AAdIgd2OmOnR/Qh23Vku0QYZrr
-         h1Ew==
+        bh=JuSB6I15ZhVqlzJm9dB6xmEsKq4c3QIfjVdXnbIX1uc=;
+        b=f+sE+6mGX/smmSPNXPjARqw/YAoc+kPcExZzb7PZZ4ZLPERBNyRyt4chK9qVK0Mq2G
+         R27dsT7UAp9Amh4eZyMdMptcUg+PzehAOVisNmgAoWTFINhBSwisJQF305pONj0zqLez
+         c07e2v63pE3qtdgT7uxg5QJnhQF1gZV2D/9Oq20pS2bvZm3w8LZ7SOXbGTn4REB3tQAQ
+         K2n8pn7yjiuc7Ghf10qYjVvj4F3/LMlGDZCaAiaQMyiw6R8YoA9xwmhkOL58Q/18SmTt
+         kgTbD/mEbe5oTDMaa5IXb0oo8SZ+cDfERJsQAI0n88w1xxtEyA9tpbcCev9d4ZHha5wH
+         2hxQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:reply-to:date:in-reply-to:message-id
          :mime-version:references:subject:from:to:cc;
-        bh=Hx8sCbhJvCh5cLdAhmGu8wLUB1jVDA/mxGjlfX4jDqM=;
-        b=Uljrx8FoO9FcHeO9YIKmHqMAK08SwhbqIBlokQixOU62Jew2MON7IPMdLPFZ1yvQ+V
-         U5NO7AGKSRFdSGjn+KeZgvkSjAK0YbzMnIMzC0gfHh49hkLKWCd/rqSNGtaljNtn/Rrf
-         f0RS5iqXJM7notRcqqR6WCetMf+SCoWKbGEfld/PXjIWpar2SyfYk3ujk9fGcStADGr7
-         nKXBbx/RaXheHKzvtWU718J0yk7YNXndiTW7+Wr7lpHYFbUZZ/ZsUnbntvNp6Di+AFOv
-         /5vA1CD8hvzPE280qS5mBc8AWb2hU6eW5updoKIn1VkpNJ8vqAJadu/irIa8gNy4b5zP
-         +f+A==
-X-Gm-Message-State: AOAM5331b9Q+AL/SIzgvXH2d3+4etOyNkijtM2sU4PVZ8fRoU+OK+Jyr
-        GjNTD9IoFrhtfF+2vRvzYEIXiJors7w=
-X-Google-Smtp-Source: ABdhPJyQwjqPyAPUvRIzb7J6XsuFaPqeZRZSGX1w+CRJDk08taZEW9zNDQzFxttZ7zMLtPTHM+ir5HkkoEU=
+        bh=JuSB6I15ZhVqlzJm9dB6xmEsKq4c3QIfjVdXnbIX1uc=;
+        b=GonmXAysmqwGa44RQtfG4fnhWrnjCHfJgkcTDhTRjS1mHgF5MLEZMQbUNZvoVMcl56
+         eQ3/vmuMyrSsBT7xbTZSBNsU1iK8XR82RZrOx3grpG39eB4rxirEyOM0dnNEd+05rybB
+         33nNIac8ixKCr/yG8vNAsUFlADYHYwv/Dj44CnzWpYUx8R1wxleVD7ZF0vWxiURL5Vqi
+         zecYRP/XZqewMPdF7Itzc2boFiPjU0iN1u9Ng+cle5ien870pDee2pYAwGfOqeyQ+ZmA
+         rNPB7XO+wioBG+Bur01SzH9W1IGCOM0uAAyQKP3cE8SrL+z+Dx0n5sTugMUAIIkUve7Q
+         8xbw==
+X-Gm-Message-State: AOAM530ESnHAbm7OPwVCkJ4SJDUu4788lBN+u4YEXurQDuMuKzLhLT9Q
+        xUV5gd015KbufbSBi9lppfGI3bZ+Jyo=
+X-Google-Smtp-Source: ABdhPJxruw3LauMi/kdqcd0a1xbkf42wJZ3sPtgbnfUtrwW4m7ceco7H0S2yw+oYuIIOwZ56ISyiBqA0Dus=
 X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
- (user=seanjc job=sendgmr) by 2002:a05:6a00:1784:b0:50d:d8cb:7a4f with SMTP id
- s4-20020a056a00178400b0050dd8cb7a4fmr19715916pfg.23.1651704719268; Wed, 04
- May 2022 15:51:59 -0700 (PDT)
+ (user=seanjc job=sendgmr) by 2002:a17:90a:e510:b0:1d9:ee23:9fa1 with SMTP id
+ t16-20020a17090ae51000b001d9ee239fa1mr140465pjy.0.1651704720721; Wed, 04 May
+ 2022 15:52:00 -0700 (PDT)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Wed,  4 May 2022 22:48:32 +0000
+Date:   Wed,  4 May 2022 22:48:33 +0000
 In-Reply-To: <20220504224914.1654036-1-seanjc@google.com>
-Message-Id: <20220504224914.1654036-87-seanjc@google.com>
+Message-Id: <20220504224914.1654036-88-seanjc@google.com>
 Mime-Version: 1.0
 References: <20220504224914.1654036-1-seanjc@google.com>
 X-Mailer: git-send-email 2.36.0.464.gb9c8b46e94-goog
-Subject: [PATCH 086/128] KVM: selftests: Convert xapic_state_test away from
- hardcoded vCPU ID
+Subject: [PATCH 087/128] KVM: selftests: Convert debug-exceptions away from VCPU_ID
 From:   Sean Christopherson <seanjc@google.com>
 To:     Paolo Bonzini <pbonzini@redhat.com>
 Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
@@ -68,148 +67,80 @@ Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert xapic_state_test to use vm_create_with_one_vcpu() and pass around
-a 'struct kvm_vcpu' object instead of the raw vCPU ID.
+Convert debug-exceptions to use vm_create_with_one_vcpu() and pass around
+a 'struct kvm_vcpu' object instead of using a global VCPU_ID.
 
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- .../selftests/kvm/x86_64/xapic_state_test.c   | 48 ++++++++++---------
- 1 file changed, 25 insertions(+), 23 deletions(-)
+ .../selftests/kvm/aarch64/debug-exceptions.c    | 17 ++++++++---------
+ 1 file changed, 8 insertions(+), 9 deletions(-)
 
-diff --git a/tools/testing/selftests/kvm/x86_64/xapic_state_test.c b/tools/testing/selftests/kvm/x86_64/xapic_state_test.c
-index 9d8393b6ec75..56301ee1adee 100644
---- a/tools/testing/selftests/kvm/x86_64/xapic_state_test.c
-+++ b/tools/testing/selftests/kvm/x86_64/xapic_state_test.c
-@@ -12,7 +12,7 @@
- #include "test_util.h"
+diff --git a/tools/testing/selftests/kvm/aarch64/debug-exceptions.c b/tools/testing/selftests/kvm/aarch64/debug-exceptions.c
+index 63b2178210c4..b69db0942169 100644
+--- a/tools/testing/selftests/kvm/aarch64/debug-exceptions.c
++++ b/tools/testing/selftests/kvm/aarch64/debug-exceptions.c
+@@ -3,8 +3,6 @@
+ #include <kvm_util.h>
+ #include <processor.h>
  
- struct xapic_vcpu {
--	uint32_t id;
-+	struct kvm_vcpu *vcpu;
- 	bool is_x2apic;
- };
- 
-@@ -47,8 +47,9 @@ static void x2apic_guest_code(void)
- 	} while (1);
+-#define VCPU_ID 0
+-
+ #define MDSCR_KDE	(1 << 13)
+ #define MDSCR_MDE	(1 << 15)
+ #define MDSCR_SS	(1 << 0)
+@@ -240,27 +238,28 @@ static void guest_svc_handler(struct ex_regs *regs)
+ 	svc_addr = regs->pc;
  }
  
--static void ____test_icr(struct kvm_vm *vm, struct xapic_vcpu *vcpu, uint64_t val)
-+static void ____test_icr(struct kvm_vm *vm, struct xapic_vcpu *x, uint64_t val)
+-static int debug_version(struct kvm_vm *vm)
++static int debug_version(struct kvm_vcpu *vcpu)
  {
-+	struct kvm_vcpu *vcpu = x->vcpu;
- 	struct kvm_lapic_state xapic;
- 	struct ucall uc;
- 	uint64_t icr;
-@@ -70,28 +71,29 @@ static void ____test_icr(struct kvm_vm *vm, struct xapic_vcpu *vcpu, uint64_t va
- 	vcpu_ioctl(vm, vcpu->id, KVM_GET_LAPIC, &xapic);
- 	icr = (u64)(*((u32 *)&xapic.regs[APIC_ICR])) |
- 	      (u64)(*((u32 *)&xapic.regs[APIC_ICR2])) << 32;
--	if (!vcpu->is_x2apic)
-+	if (!x->is_x2apic)
- 		val &= (-1u | (0xffull << (32 + 24)));
- 	ASSERT_EQ(icr, val & ~APIC_ICR_BUSY);
- }
+ 	uint64_t id_aa64dfr0;
  
--static void __test_icr(struct kvm_vm *vm, struct xapic_vcpu *vcpu, uint64_t val)
-+static void __test_icr(struct kvm_vm *vm, struct xapic_vcpu *x, uint64_t val)
- {
--	____test_icr(vm, vcpu, val | APIC_ICR_BUSY);
--	____test_icr(vm, vcpu, val & ~(u64)APIC_ICR_BUSY);
-+	____test_icr(vm, x, val | APIC_ICR_BUSY);
-+	____test_icr(vm, x, val & ~(u64)APIC_ICR_BUSY);
- }
- 
--static void test_icr(struct kvm_vm *vm, struct xapic_vcpu *vcpu)
-+static void test_icr(struct kvm_vm *vm, struct xapic_vcpu *x)
- {
-+	struct kvm_vcpu *vcpu = x->vcpu;
- 	uint64_t icr, i, j;
- 
- 	icr = APIC_DEST_SELF | APIC_INT_ASSERT | APIC_DM_FIXED;
- 	for (i = 0; i <= 0xff; i++)
--		__test_icr(vm, vcpu, icr | i);
-+		__test_icr(vm, x, icr | i);
- 
- 	icr = APIC_INT_ASSERT | APIC_DM_FIXED;
- 	for (i = 0; i <= 0xff; i++)
--		__test_icr(vm, vcpu, icr | i);
-+		__test_icr(vm, x, icr | i);
- 
- 	/*
- 	 * Send all flavors of IPIs to non-existent vCPUs.  TODO: use number of
-@@ -100,32 +102,32 @@ static void test_icr(struct kvm_vm *vm, struct xapic_vcpu *vcpu)
- 	icr = APIC_INT_ASSERT | 0xff;
- 	for (i = vcpu->id + 1; i < 0xff; i++) {
- 		for (j = 0; j < 8; j++)
--			__test_icr(vm, vcpu, i << (32 + 24) | APIC_INT_ASSERT | (j << 8));
-+			__test_icr(vm, x, i << (32 + 24) | APIC_INT_ASSERT | (j << 8));
- 	}
- 
- 	/* And again with a shorthand destination for all types of IPIs. */
- 	icr = APIC_DEST_ALLBUT | APIC_INT_ASSERT;
- 	for (i = 0; i < 8; i++)
--		__test_icr(vm, vcpu, icr | (i << 8));
-+		__test_icr(vm, x, icr | (i << 8));
- 
- 	/* And a few garbage value, just make sure it's an IRQ (blocked). */
--	__test_icr(vm, vcpu, 0xa5a5a5a5a5a5a5a5 & ~APIC_DM_FIXED_MASK);
--	__test_icr(vm, vcpu, 0x5a5a5a5a5a5a5a5a & ~APIC_DM_FIXED_MASK);
--	__test_icr(vm, vcpu, -1ull & ~APIC_DM_FIXED_MASK);
-+	__test_icr(vm, x, 0xa5a5a5a5a5a5a5a5 & ~APIC_DM_FIXED_MASK);
-+	__test_icr(vm, x, 0x5a5a5a5a5a5a5a5a & ~APIC_DM_FIXED_MASK);
-+	__test_icr(vm, x, -1ull & ~APIC_DM_FIXED_MASK);
+-	get_reg(vm, VCPU_ID, KVM_ARM64_SYS_REG(SYS_ID_AA64DFR0_EL1), &id_aa64dfr0);
++	get_reg(vcpu->vm, vcpu->id, KVM_ARM64_SYS_REG(SYS_ID_AA64DFR0_EL1), &id_aa64dfr0);
+ 	return id_aa64dfr0 & 0xf;
  }
  
  int main(int argc, char *argv[])
  {
--	struct xapic_vcpu vcpu = {
--		.id = 0,
-+	struct xapic_vcpu x = {
-+		.vcpu = NULL,
- 		.is_x2apic = true,
- 	};
- 	struct kvm_cpuid2 *cpuid;
++	struct kvm_vcpu *vcpu;
  	struct kvm_vm *vm;
- 	int i;
+ 	struct ucall uc;
+ 	int stage;
  
--	vm = vm_create_default(vcpu.id, 0, x2apic_guest_code);
--	test_icr(vm, &vcpu);
-+	vm = vm_create_with_one_vcpu(&x.vcpu, x2apic_guest_code);
-+	test_icr(vm, &x);
- 	kvm_vm_free(vm);
+-	vm = vm_create_default(VCPU_ID, 0, guest_code);
++	vm = vm_create_with_one_vcpu(&vcpu, guest_code);
+ 	ucall_init(vm, NULL);
  
- 	/*
-@@ -133,18 +135,18 @@ int main(int argc, char *argv[])
- 	 * the guest in order to test AVIC.  KVM disallows changing CPUID after
- 	 * KVM_RUN and AVIC is disabled if _any_ vCPU is allowed to use x2APIC.
- 	 */
--	vm = vm_create_default(vcpu.id, 0, xapic_guest_code);
--	vcpu.is_x2apic = false;
-+	vm = vm_create_with_one_vcpu(&x.vcpu, xapic_guest_code);
-+	x.is_x2apic = false;
+ 	vm_init_descriptor_tables(vm);
+-	vcpu_init_descriptor_tables(vm, VCPU_ID);
++	vcpu_init_descriptor_tables(vm, vcpu->id);
  
--	cpuid = vcpu_get_cpuid(vm, vcpu.id);
-+	cpuid = vcpu_get_cpuid(vm, x.vcpu->id);
- 	for (i = 0; i < cpuid->nent; i++) {
- 		if (cpuid->entries[i].function == 1)
- 			break;
- 	}
- 	cpuid->entries[i].ecx &= ~BIT(21);
--	vcpu_set_cpuid(vm, vcpu.id, cpuid);
-+	vcpu_set_cpuid(vm, x.vcpu->id, cpuid);
+-	if (debug_version(vm) < 6) {
++	if (debug_version(vcpu) < 6) {
+ 		print_skip("Armv8 debug architecture not supported.");
+ 		kvm_vm_free(vm);
+ 		exit(KSFT_SKIP);
+@@ -278,9 +277,9 @@ int main(int argc, char *argv[])
+ 				ESR_EC_SVC64, guest_svc_handler);
  
- 	virt_pg_map(vm, APIC_DEFAULT_GPA, APIC_DEFAULT_GPA);
--	test_icr(vm, &vcpu);
-+	test_icr(vm, &x);
- 	kvm_vm_free(vm);
- }
+ 	for (stage = 0; stage < 11; stage++) {
+-		vcpu_run(vm, VCPU_ID);
++		vcpu_run(vm, vcpu->id);
+ 
+-		switch (get_ucall(vm, VCPU_ID, &uc)) {
++		switch (get_ucall(vm, vcpu->id, &uc)) {
+ 		case UCALL_SYNC:
+ 			TEST_ASSERT(uc.args[1] == stage,
+ 				"Stage %d: Unexpected sync ucall, got %lx",
 -- 
 2.36.0.464.gb9c8b46e94-goog
 

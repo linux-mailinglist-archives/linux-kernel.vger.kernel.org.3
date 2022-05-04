@@ -2,91 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0B7051AB08
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:40:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1740D51AAA3
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:27:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359661AbiEDRkN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 13:40:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38894 "EHLO
+        id S1357447AbiEDRbZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 13:31:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356793AbiEDRJo (ORCPT
+        with ESMTP id S1356862AbiEDRJr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 13:09:44 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 205BA1D33C
-        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 09:55:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=Vxwk6Ijca/aYX+YfbJBlvvvvNjiuUacuBmt+5rQYXNM=; b=oDQFuDC/CbyMdA5t8SUc6eRJ5k
-        GEy0MMahpBfiLT+xl7o9H01Qis311BLD46CZS9dMm7n5XRUJFMaXMXzkClGlxtydgQr54gPBNVGt9
-        8nD5LiI1/nxKXZJJV/mUAuquq7yTPIrQ/W+3+CbW8U6WzHb00I8BssP90tik+BOuze4dVKJeJ3+wm
-        t/BswQz/9H3KUGwY5SXMVPasHKpjQ+zM1t+wrjYHk3qlbRQhjX2iG13ZM+u4oPBj95KXNxtVD6tfy
-        Aylv4xN3syksY8sOchC55gU3Snt3/+JrP2ZgG+FcoXg8brg/Pyx4gpwLgwo6ibQIgGlSTiGE9q5Rv
-        oxXvVO9w==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nmIHl-00GkfM-On; Wed, 04 May 2022 16:55:33 +0000
-Date:   Wed, 4 May 2022 17:55:33 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Minchan Kim <minchan@kernel.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-mm <linux-mm@kvack.org>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Michal Hocko <mhocko@suse.com>,
-        John Dias <joaodias@google.com>,
-        Tim Murray <timmurray@google.com>
-Subject: Re: [PATCH] mm: don't be stuck to rmap lock on reclaim path
-Message-ID: <YnKwBeRAWwIlEVqy@casper.infradead.org>
-References: <20220503170341.1413961-1-minchan@kernel.org>
- <YnHzvV2Uz2ynENnG@casper.infradead.org>
- <YnIBbjRYACzvuZpp@google.com>
- <YnIYofrw/GGEvc0U@casper.infradead.org>
- <YnKhLX+jzJc+2KwB@google.com>
+        Wed, 4 May 2022 13:09:47 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADA4F434BE;
+        Wed,  4 May 2022 09:56:07 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 04B9F210EC;
+        Wed,  4 May 2022 16:56:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1651683366; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=pXPYJ+fgOV1Zl5Qb/eENI/cPV1QeM/WC1l9xJtBkjrM=;
+        b=eG5CTnel4TjKB2USY2SAJ9eCwNU8e67BmdrokSpRYoTmgLAzzmsUHj1oj9PZ7Y21Kz3Jxl
+        rNcQrR/iu03Ksv9UDz2DiOX+OExKEGybsXHUSvXQhuMNJUSykJBVAVQQAxBu7tmS7abwqO
+        2BNB990G7wlwcuuGKAan3tNmNGDC/Nc=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1651683366;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=pXPYJ+fgOV1Zl5Qb/eENI/cPV1QeM/WC1l9xJtBkjrM=;
+        b=CESc2MRtGMZZ4cBcssfZJruJS58Pp5zWKoK94jfLH5Ha6vbCUnmI1ZdLYnm5zvXU0kF351
+        9woB0nHfywC6X0DA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7B2C8131BD;
+        Wed,  4 May 2022 16:56:00 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id RAGMEyCwcmJAVQAAMHmgww
+        (envelope-from <hare@suse.de>); Wed, 04 May 2022 16:56:00 +0000
+Message-ID: <1286b88c-7068-d23a-1d0e-bb71efbb1258@suse.de>
+Date:   Wed, 4 May 2022 09:55:57 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YnKhLX+jzJc+2KwB@google.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH 03/16] block: add bdev_zone_no helper
+Content-Language: en-US
+References: <20220427160255.300418-1-p.raghav@samsung.com>
+ <CGME20220427160259eucas1p25aab0637fec229cd1140e6aa08678f38@eucas1p2.samsung.com>
+ <20220427160255.300418-4-p.raghav@samsung.com>
+From:   Hannes Reinecke <hare@suse.de>
+To:     undisclosed-recipients:;
+In-Reply-To: <20220427160255.300418-4-p.raghav@samsung.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 04, 2022 at 08:52:13AM -0700, Minchan Kim wrote:
-> On Wed, May 04, 2022 at 07:09:37AM +0100, Matthew Wilcox wrote:
-> > On Tue, May 03, 2022 at 09:30:38PM -0700, Minchan Kim wrote:
-> > > On Wed, May 04, 2022 at 04:32:13AM +0100, Matthew Wilcox wrote:
-> > > > On Tue, May 03, 2022 at 10:03:41AM -0700, Minchan Kim wrote:
-> > > > > -void rmap_walk(struct folio *folio, const struct rmap_walk_control *rwc);
-> > > > > -void rmap_walk_locked(struct folio *folio, const struct rmap_walk_control *rwc);
-> > > > > +void rmap_walk(struct folio *folio, struct rmap_walk_control *rwc);
-> > > > > +void rmap_walk_locked(struct folio *folio, struct rmap_walk_control *rwc);
-> > > > 
-> > > > I see the build bot already beat me to pointing out why this is wrong,
-> > > > but do you not look at git log to figure out why code was changed to be
-> > > > the way it is now, before you change it back?
-> > > 
-> > > This patch added a new field as out param like compact_control so
-> > > the rmap_walk_control is not immutable.
-> > 
-> > ... but we have a user which treats it as if it is.
+On 4/27/22 09:02, Pankaj Raghav wrote:
+> Many places in the filesystem for zoned devices open code this function
+> to find the zone number for a given sector with power of 2 assumption.
+> This generic helper can be used to calculate zone number for a given
+> sector in a block device
 > 
-> True. I don't think it will show sizable benefit on runtime overhead
-> since rmap_walk is already one of the most expensive operation in MM.
+> This helper internally uses blk_queue_zone_no to find the zone number.
 > 
-> I could reintroduce the typecast for page_idle_clear_pte_refs to remove
-> the const as we had several years.
+> Reviewed-by: Luis Chamberlain <mcgrof@kernel.org>
+> Signed-off-by: Pankaj Raghav <p.raghav@samsung.com>
+> ---
+>   include/linux/blkdev.h | 9 +++++++++
+>   1 file changed, 9 insertions(+)
 > 
-> If your concern was to make rmap_walk_control mutable back, I could
-> change rmap_walk function having return value or adding a addtional
-> new out param. However, I thought rmap_walk_control is more readable/
-> easier than them.
+Reviewed-by: Hannes Reinecke <hare@suse.de>
 
-I haven't thought deeply about it, but I suspect the right approach is
-to remove the rather dubious optimisation in page_idle_clear_pte_refs().
+Cheers,
+
+Hannes
+-- 
+Dr. Hannes Reinecke                Kernel Storage Architect
+hare@suse.de                              +49 911 74053 688
+SUSE Software Solutions GmbH, Maxfeldstr. 5, 90409 Nürnberg
+HRB 36809 (AG Nürnberg), Geschäftsführer: Felix Imendörffer

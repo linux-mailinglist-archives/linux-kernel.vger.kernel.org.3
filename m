@@ -2,180 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 225095195A5
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 04:52:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6765F5195A8
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 04:54:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344155AbiEDC4N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 22:56:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59944 "EHLO
+        id S1344160AbiEDC6T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 22:58:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344128AbiEDC4G (ORCPT
+        with ESMTP id S245718AbiEDC6P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 22:56:06 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E4FC1A3AF
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 19:52:31 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-2f7ee6bc6ddso2564687b3.1
-        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 19:52:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc:content-transfer-encoding;
-        bh=/Q4saw0fsQI0XrMOLhFqHHv+cO7ddF3QCmobj7JaRns=;
-        b=XDSsX88KFKTwe5aZ2ZygvEyfXf6FHBoUmIND30OXzKzox6Yo4WbD+Pib1a8WASGJFc
-         VKoB+1qEoxW/ocNGMHpCSJdqwB/kxMi5PpKlNqoHCck12QUuGBsjRJ2RwQNNnNRz28MI
-         L/i68IP34jt0MDy22Q02kFVBboJ23S/jl5UKdFJDmAEYQiG0cxfOdP7IrG3S48MBshm3
-         WfamIMCBPifcEb0cMcK4AIWAnq7MpTyxpE/siLw7uDH6Y6r0z1+cLIqVyElVlDvd/Y+l
-         lUHv7iKG6inlf+ZCzt3F1xpivIkgtJJprPHKeUwi/d1h02ZZN/0Z6CfFppt6C2jh5wnW
-         as5Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc:content-transfer-encoding;
-        bh=/Q4saw0fsQI0XrMOLhFqHHv+cO7ddF3QCmobj7JaRns=;
-        b=lH8NJwkUuSaGXx54VdytWAEOuQAmjJRMLMtURlcqS4Dnp4BInGBw86VxMgY7qDrHTb
-         05aXkMTPDoEHVDodCOCo++g/bFIfkx5YhtfUTTLKcKHaLa62q3iDdWAWJ/IVIJK9TSyu
-         FhgY5PYmrJR7564OtWYVuyEW7ThCTc3GihCHTtK5uFARy/OZVNYl3NHhBUmP3g/1WYn8
-         1LBsL8Dc/GiY+6g9l2gvBarDNQaiSxcPJHwLzXClSkrlEErQMFL+Ox8aIJv/nyxpluwk
-         cLMx9djvXscmNpjU9rX6M62LrSb0FtWHoatONPwD7ZsMOvs5XQhVU+RtCH7KOfihj0Ng
-         sJfA==
-X-Gm-Message-State: AOAM533Sqo7P8EBD3ZUNzwW28M44Am0AZa7FZZUQAEAQ1WM9pKSi28/w
-        DW5Lh9bFfzQXlaYDjtpiu4+SwriwJza4
-X-Google-Smtp-Source: ABdhPJwgqMmO3z4Ub4tTjcRRDmxDpIXiHM0sdXbEV85BmMgIbTmhyi4FKMfTTz6HgzM6dTN9ZPEFS8XrY+W9
-X-Received: from irogers.svl.corp.google.com ([2620:15c:2cd:202:51c7:3b17:aa10:ed9b])
- (user=irogers job=sendgmr) by 2002:a81:78ce:0:b0:2f8:fbad:c446 with SMTP id
- t197-20020a8178ce000000b002f8fbadc446mr6711945ywc.498.1651632750619; Tue, 03
- May 2022 19:52:30 -0700 (PDT)
-Date:   Tue,  3 May 2022 19:52:20 -0700
-In-Reply-To: <20220504025220.2754910-1-irogers@google.com>
-Message-Id: <20220504025220.2754910-3-irogers@google.com>
-Mime-Version: 1.0
-References: <20220504025220.2754910-1-irogers@google.com>
-X-Mailer: git-send-email 2.36.0.464.gb9c8b46e94-goog
-Subject: [PATCH 3/3] perf vendor events: Update events for Jaketown to v21
-From:   Ian Rogers <irogers@google.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Xing Zhengjun <zhengjun.xing@linux.intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        John Garry <john.garry@huawei.com>,
-        James Clark <james.clark@arm.com>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org
-Cc:     Ian Rogers <irogers@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Tue, 3 May 2022 22:58:15 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F4171A3AD;
+        Tue,  3 May 2022 19:54:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651632881; x=1683168881;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=fsWFIBdCiaIZnDpi6aLAm3yjd4bu5P5ackQ3H9N6o+U=;
+  b=LyuBzcbt/VRsVKbrombq5Xd7yIRL0C+KNyhdqhk88NFsoACw7KKRqyvb
+   e0eOOvCdMK5lkYfTedkITQMYsiw2mt+D1yPbcBpXrAk/Pvv+hifCtOCUA
+   AXWGmjLDFPuZD4Ww6PdlvPIi6HEC2YCyPDssiBy8iJGiFQKjAzQwZMmHT
+   0h28pPUrez/W/MlvFYiTqkqxzA246mYnf3d2hGrR9eVRHFCdxxWf0FJQ7
+   hKzsUxXvkeB1+tNCJXfKh1Bj9qYyz8jsmnr855HrhtgtAvDL94EQ9QSzj
+   rcRnfFfXqDHX9yUpuUM3RUzTf3KFA3anw9j0GCcT3ahyjLSxZpXPyuH2k
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10336"; a="267528048"
+X-IronPort-AV: E=Sophos;i="5.91,196,1647327600"; 
+   d="scan'208";a="267528048"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2022 19:54:40 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,196,1647327600"; 
+   d="scan'208";a="548155712"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 03 May 2022 19:54:35 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nm59u-000AzT-FF;
+        Wed, 04 May 2022 02:54:34 +0000
+Date:   Wed, 4 May 2022 10:53:43 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     frowand.list@gmail.com, Rob Herring <robh+dt@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        pantelis.antoniou@konsulko.com, Tim Harvey <tharvey@gateworks.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        Li Yang <leoyang.li@nxp.com>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Michal Simek <monstr@monstr.eu>,
+        Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     kbuild-all@lists.01.org, Krzysztof Kozlowski <krzk@kernel.org>,
+        Michael Walle <michael@walle.cc>,
+        Alex Marginean <alexandru.marginean@nxp.com>,
+        Ioana Ciornei <ioana.ciornei@nxp.com>,
+        Dong Aisheng <aisheng.dong@nxp.com>,
+        Jason Liu <jason.hui.liu@nxp.com>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-pci@vger.kernel.org
+Subject: Re: [PATCH v2 1/1] of: overlay: rename overlay source files from
+ .dts to .dtso
+Message-ID: <202205041054.U5pUx0xQ-lkp@intel.com>
+References: <20220503211954.1428919-1-frowand.list@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220503211954.1428919-1-frowand.list@gmail.com>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Events are version 21:
-    https://download.01.org/perfmon/JKT
-Json files generated by the latest code at:
-    https://github.com/intel/event-converter-for-linux-perf
+Hi,
 
-Signed-off-by: Ian Rogers <irogers@google.com>
----
- .../pmu-events/arch/x86/jaketown/pipeline.json   | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
+I love your patch! Yet something to improve:
 
-diff --git a/tools/perf/pmu-events/arch/x86/jaketown/pipeline.json b/tools/=
-perf/pmu-events/arch/x86/jaketown/pipeline.json
-index 87737c92c067..61a3db4d67d5 100644
---- a/tools/perf/pmu-events/arch/x86/jaketown/pipeline.json
-+++ b/tools/perf/pmu-events/arch/x86/jaketown/pipeline.json
-@@ -410,8 +410,8 @@
-     },
-     {
-         "BriefDescription": "Reference cycles when the core is not in halt=
- state.",
--        "Counter": "Fixed counter 3",
--        "CounterHTOff": "Fixed counter 3",
-+        "Counter": "Fixed counter 2",
-+        "CounterHTOff": "Fixed counter 2",
-         "EventName": "CPU_CLK_UNHALTED.REF_TSC",
-         "PublicDescription": "This event counts the number of reference cy=
-cles when the core is not in a halt state. The core enters the halt state w=
-hen it is running the HLT instruction or the MWAIT instruction. This event =
-is not affected by core frequency changes (for example, P states, TM2 trans=
-itions) but has the same incrementing frequency as the time stamp counter. =
-This event can approximate elapsed time while the core was not in a halt st=
-ate. This event has a constant ratio with the CPU_CLK_UNHALTED.REF_XCLK eve=
-nt. It is counted on a dedicated fixed counter, leaving the four (eight whe=
-n Hyperthreading is disabled) programmable counters available for other eve=
-nts.",
-         "SampleAfterValue": "2000003",
-@@ -439,8 +439,8 @@
-     },
-     {
-         "BriefDescription": "Core cycles when the thread is not in halt st=
-ate.",
--        "Counter": "Fixed counter 2",
--        "CounterHTOff": "Fixed counter 2",
-+        "Counter": "Fixed counter 1",
-+        "CounterHTOff": "Fixed counter 1",
-         "EventName": "CPU_CLK_UNHALTED.THREAD",
-         "PublicDescription": "This event counts the number of core cycles =
-while the thread is not in a halt state. The thread enters the halt state w=
-hen it is running the HLT instruction. This event is a component in many ke=
-y event ratios. The core frequency may change from time to time due to tran=
-sitions associated with Enhanced Intel SpeedStep Technology or TM2. For thi=
-s reason this event may have a changing ratio with regards to time. When th=
-e core frequency is constant, this event can approximate elapsed time while=
- the core was not in the halt state. It is counted on a dedicated fixed cou=
-nter, leaving the four (eight when Hyperthreading is disabled) programmable=
- counters available for other events.",
-         "SampleAfterValue": "2000003",
-@@ -542,8 +542,8 @@
-     },
-     {
-         "BriefDescription": "Instructions retired from execution.",
--        "Counter": "Fixed counter 1",
--        "CounterHTOff": "Fixed counter 1",
-+        "Counter": "Fixed counter 0",
-+        "CounterHTOff": "Fixed counter 0",
-         "EventName": "INST_RETIRED.ANY",
-         "PublicDescription": "This event counts the number of instructions=
- retired from execution. For instructions that consist of multiple micro-op=
-s, this event counts the retirement of the last micro-op of the instruction=
-. Counting continues during hardware interrupts, traps, and inside interrup=
-t handlers.",
-         "SampleAfterValue": "2000003",
-@@ -599,7 +599,7 @@
-         "UMask": "0x3"
-     },
-     {
--        "BriefDescription": "Number of occurences waiting for the checkpoi=
-nts in Resource Allocation Table (RAT) to be recovered after Nuke due to al=
-l other cases except JEClear (e.g. whenever a ucode assist is needed like S=
-SE exception, memory disambiguation, etc...).",
-+        "BriefDescription": "Number of occurrences waiting for the checkpo=
-ints in Resource Allocation Table (RAT) to be recovered after Nuke due to a=
-ll other cases except JEClear (e.g. whenever a ucode assist is needed like =
-SSE exception, memory disambiguation, etc...).",
-         "Counter": "0,1,2,3",
-         "CounterHTOff": "0,1,2,3,4,5,6,7",
-         "CounterMask": "1",
-@@ -1199,4 +1199,4 @@
-         "SampleAfterValue": "2000003",
-         "UMask": "0x1"
-     }
--]
-\ No newline at end of file
-+]
---=20
-2.36.0.464.gb9c8b46e94-goog
+[auto build test ERROR on robh/for-next]
+[also build test ERROR on next-20220503]
+[cannot apply to masahiroy-kbuild/for-next v5.18-rc5]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
+url:    https://github.com/intel-lab-lkp/linux/commits/frowand-list-gmail-com/of-overlay-rename-overlay-source-files-from-dts-to-dtso/20220504-052106
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
+config: arc-randconfig-m031-20220501 (https://download.01.org/0day-ci/archive/20220504/202205041054.U5pUx0xQ-lkp@intel.com/config)
+compiler: arceb-elf-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/53969d905002b16289e1524e691435a64652db0d
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review frowand-list-gmail-com/of-overlay-rename-overlay-source-files-from-dts-to-dtso/20220504-052106
+        git checkout 53969d905002b16289e1524e691435a64652db0d
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> make[4]: *** No rule to make target 'drivers/of/unittest-data/static_base_1.dtb', needed by 'drivers/of/unittest-data/static_test_1.dtb'.
+>> make[4]: *** No rule to make target 'drivers/of/unittest-data/static_base_2.dtb', needed by 'drivers/of/unittest-data/static_test_2.dtb'.
+   make[4]: Target '__build' not remade because of errors.
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

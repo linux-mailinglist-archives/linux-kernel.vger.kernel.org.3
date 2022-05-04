@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9195851AA4C
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:19:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 512D751A6F0
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 18:58:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356286AbiEDRXZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 13:23:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50152 "EHLO
+        id S1354794AbiEDQ7H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 12:59:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355753AbiEDREl (ORCPT
+        with ESMTP id S1353809AbiEDQxR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 13:04:41 -0400
+        Wed, 4 May 2022 12:53:17 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 488F84F9D2;
-        Wed,  4 May 2022 09:53:21 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2F6A47ACD;
+        Wed,  4 May 2022 09:48:51 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2A066618A9;
-        Wed,  4 May 2022 16:53:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76DFAC385A4;
-        Wed,  4 May 2022 16:53:20 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5B9A161789;
+        Wed,  4 May 2022 16:48:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A99D1C385AA;
+        Wed,  4 May 2022 16:48:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651683200;
-        bh=ND4TvuaQfIW/5AgPmtvCsaRACYMDAT08gszoo/ScmM8=;
+        s=korg; t=1651682930;
+        bh=1Vi5lNYXaB4VTTLQ+lFez2oNueieHQTfkFWql+43bVk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rblendjv+W8RZGlKRI/41EeHOwsNYwhjSxBWamVS9EIbN2CyosXh6qKl+8c3N+45m
-         htyKxrYccaw4HJfhMkoyB+drYGL/ouTuexmAieLgcUVbTKpCaeNWH78rWis7PsyaVB
-         gfJ1/O7G5QCm/+y8QS4hW1YjFmATtPJsQOqhnol4=
+        b=PJ5Ui6TUmAC0s5BJRo3kgonS+QHt5wUarKrDBtFMGO+cV2BWlUPYUmS3aiVaG5062
+         lCpcwR2pNBkFwbegX6/VN6A1EXaed4Xvm+4noiKTwXPBE5XTQLtRd2IWBwidLxOojQ
+         +dXc0zLDVqYgFN6VTI5RGj/3H3fC8kBJX/R+giMc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        Tony Lindgren <tony@atomide.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 065/177] ARM: dts: at91: sama5d4_xplained: fix pinctrl phandle name
+Subject: [PATCH 5.4 37/84] ARM: OMAP2+: Fix refcount leak in omap_gic_of_init
 Date:   Wed,  4 May 2022 18:44:18 +0200
-Message-Id: <20220504153058.816269298@linuxfoundation.org>
+Message-Id: <20220504152930.449088261@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220504153053.873100034@linuxfoundation.org>
-References: <20220504153053.873100034@linuxfoundation.org>
+In-Reply-To: <20220504152927.744120418@linuxfoundation.org>
+References: <20220504152927.744120418@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,42 +55,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Claudiu Beznea <claudiu.beznea@microchip.com>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-[ Upstream commit 5c8b49852910caffeebb1ce541fdd264ffc691b8 ]
+[ Upstream commit 0f83e6b4161617014017a694888dd8743f46f071 ]
 
-Pinctrl phandle is for spi1 so rename it to reflect this.
+The of_find_compatible_node() function returns a node pointer with
+refcount incremented, We should use of_node_put() on it when done
+Add the missing of_node_put() to release the refcount.
 
-Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
-Signed-off-by: Nicolas Ferre <nicolas.ferre@microchip.com>
-Link: https://lore.kernel.org/r/20220331141323.194355-1-claudiu.beznea@microchip.com
+Fixes: fd1c07861491 ("ARM: OMAP4: Fix the init code to have OMAP4460 errata available in DT build")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Message-Id: <20220309104302.18398-1-linmq006@gmail.com>
+Signed-off-by: Tony Lindgren <tony@atomide.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm/boot/dts/at91-sama5d4_xplained.dts | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ arch/arm/mach-omap2/omap4-common.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/arch/arm/boot/dts/at91-sama5d4_xplained.dts b/arch/arm/boot/dts/at91-sama5d4_xplained.dts
-index d241c24f0d83..accb92cfac44 100644
---- a/arch/arm/boot/dts/at91-sama5d4_xplained.dts
-+++ b/arch/arm/boot/dts/at91-sama5d4_xplained.dts
-@@ -82,7 +82,7 @@ usart4: serial@fc010000 {
+diff --git a/arch/arm/mach-omap2/omap4-common.c b/arch/arm/mach-omap2/omap4-common.c
+index 5c3845730dbf..0b80f8bcd304 100644
+--- a/arch/arm/mach-omap2/omap4-common.c
++++ b/arch/arm/mach-omap2/omap4-common.c
+@@ -314,10 +314,12 @@ void __init omap_gic_of_init(void)
  
- 			spi1: spi@fc018000 {
- 				pinctrl-names = "default";
--				pinctrl-0 = <&pinctrl_spi0_cs>;
-+				pinctrl-0 = <&pinctrl_spi1_cs>;
- 				cs-gpios = <&pioB 21 0>;
- 				status = "okay";
- 			};
-@@ -140,7 +140,7 @@ pinctrl_macb0_phy_irq: macb0_phy_irq_0 {
- 						atmel,pins =
- 							<AT91_PIOE 1 AT91_PERIPH_GPIO AT91_PINCTRL_PULL_UP_DEGLITCH>;
- 					};
--					pinctrl_spi0_cs: spi0_cs_default {
-+					pinctrl_spi1_cs: spi1_cs_default {
- 						atmel,pins =
- 							<AT91_PIOB 21 AT91_PERIPH_GPIO AT91_PINCTRL_NONE>;
- 					};
+ 	np = of_find_compatible_node(NULL, NULL, "arm,cortex-a9-gic");
+ 	gic_dist_base_addr = of_iomap(np, 0);
++	of_node_put(np);
+ 	WARN_ON(!gic_dist_base_addr);
+ 
+ 	np = of_find_compatible_node(NULL, NULL, "arm,cortex-a9-twd-timer");
+ 	twd_base = of_iomap(np, 0);
++	of_node_put(np);
+ 	WARN_ON(!twd_base);
+ 
+ skip_errata_init:
 -- 
 2.35.1
 

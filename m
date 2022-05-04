@@ -2,88 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51B7451C53A
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 18:36:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98CD051C646
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 19:40:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382086AbiEEQjO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 12:39:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33472 "EHLO
+        id S1382755AbiEERn3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 13:43:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243243AbiEEQiz (ORCPT
+        with ESMTP id S1382358AbiEERnZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 12:38:55 -0400
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79254D4C;
-        Thu,  5 May 2022 09:35:15 -0700 (PDT)
-Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 242MuHJu018680;
-        Tue, 3 May 2022 00:52:05 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type : content-transfer-encoding; s=corp-2021-07-09;
- bh=YDpybZyMtUto8vzB7am4iv3VtisKb3L6fXgrRs5sN9s=;
- b=xxIyeuW5EZadlLJb3Kn928Omyai87Hz6btNX6PGK9Ya5irtQo6toZxvB5IH58cg5gPX4
- 5sB+duHYXCJvGyUBSwCcesmTF/wpLCGWCwd0jgPxwrktRxPZbyg0ZS0CDahAO8Ta9jOO
- x1A7/EXyAqIokZ+PoL7zRg7Xl625MHGPlC5LJx+/MkrVvqcEgyUH8KuSYPb3rovdmzg+
- 9Fef3o0M3FimBH1g1TbKg/ZnY0AvIAFttHDFq4Eah9B2Pl4fiVTEFWpw4tiwbK6gmkmQ
- ojbW/Ep3+cUc6IsItoRpJIUjbxSMG5FnYGp2/41KhpTXrlrmzoyxfI6dUF8Ov/7eqE8U 4g== 
-Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3frwnt4kx7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 03 May 2022 00:52:05 +0000
-Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 2430orCC009030;
-        Tue, 3 May 2022 00:52:04 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3fruj83xbb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 03 May 2022 00:52:04 +0000
-Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 2430plju010389;
-        Tue, 3 May 2022 00:52:03 GMT
-Received: from ca-mkp.mkp.ca.oracle.com (ca-mkp.ca.oracle.com [10.156.108.201])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3fruj83x4g-30;
-        Tue, 03 May 2022 00:52:03 +0000
-From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-To:     Enze Li <lienze@kylinos.cn>, jejb@linux.ibm.com
-Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org
-Subject: Re: [PATCH v2] scsi: sr: add handling of memory allocation failures when calling get_capabilities
-Date:   Mon,  2 May 2022 20:51:40 -0400
-Message-Id: <165153836364.24053.1228657933500703944.b4-ty@oracle.com>
-X-Mailer: git-send-email 2.35.2
-In-Reply-To: <20220427025647.298358-1-lienze@kylinos.cn>
-References: <20220413100008.522912-1-lienze@kylinos.cn> <20220427025647.298358-1-lienze@kylinos.cn>
+        Thu, 5 May 2022 13:43:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A22AC5A2C8;
+        Thu,  5 May 2022 10:39:45 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 40FD461DC8;
+        Thu,  5 May 2022 17:39:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 926ECC385A4;
+        Thu,  5 May 2022 17:39:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1651772384;
+        bh=51RmuxsLCb5IZMOE7TRcGZprdeB6vu+ht+bajlN+wb0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ddliANIBdN9v47GuQ4HXO589wVvW3sKVS/E1qO/5XBne5KQ0d3ZHQ+MiL27yhL1Eo
+         ZcMKlpKdJGij3JYs2tcGsp1GHwOUlaYmVBxKlaupK6ovRnvxmB6M2iD8UkIR+MnbyG
+         i13vPZXKAosK+Qjp8TF5fAfUva0eJeblgAa9IXoA=
+Date:   Wed, 4 May 2022 20:24:00 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Frank Wunderlich <linux@fw-web.de>
+Cc:     linux-pm@vger.kernel.org,
+        Frank Wunderlich <frank-w@public-files.de>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-kernel@vger.kernel.org
+Subject: Re: [RFC v1] opp: add config option for debug
+Message-ID: <YnLEwEIOqnLGxFjJ@kroah.com>
+References: <20220504174823.156709-1-linux@fw-web.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-ORIG-GUID: DFm3DGdgo6sAmZIKJAHLWD1d82YL0M0b
-X-Proofpoint-GUID: DFm3DGdgo6sAmZIKJAHLWD1d82YL0M0b
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220504174823.156709-1-linux@fw-web.de>
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DATE_IN_PAST_12_24,
+        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 27 Apr 2022 10:56:47 +0800, Enze Li wrote:
-
-> The function get_capabilities() has the possibility of failing to
-> allocate transfer buffer, but it does not currently handle this, which
-> may lead to exceptions when accessing the buffer.
+On Wed, May 04, 2022 at 07:48:23PM +0200, Frank Wunderlich wrote:
+> From: Frank Wunderlich <frank-w@public-files.de>
 > 
-> This patch adds handling when memory allocation fails.
+> Currently OPP debug is enabled by DEBUG_DRIVER option. This is generic
+> driver debug and opp floods serial console. This is annoying if opp is
+> not needed so give it an additional config-key.
 > 
+> Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
+> ---
+>  drivers/base/Kconfig | 1 +
+>  drivers/opp/Kconfig  | 7 +++++++
+>  drivers/opp/Makefile | 2 +-
+>  3 files changed, 9 insertions(+), 1 deletion(-)
 > 
-> [...]
+> diff --git a/drivers/base/Kconfig b/drivers/base/Kconfig
+> index 6f04b831a5c0..8ae826c95d5f 100644
+> --- a/drivers/base/Kconfig
+> +++ b/drivers/base/Kconfig
+> @@ -130,6 +130,7 @@ config DEV_COREDUMP
+>  config DEBUG_DRIVER
+>  	bool "Driver Core verbose debug messages"
+>  	depends on DEBUG_KERNEL
+> +	imply DEBUG_OPP
 
-Applied to 5.19/scsi-queue, thanks!
+This should not be needed, otherwise we would have to do that for all
+random driver subsystem in the kernel.
 
-[1/1] scsi: sr: add handling of memory allocation failures when calling get_capabilities
-      https://git.kernel.org/mkp/scsi/c/ebc95c790653
+>  	help
+>  	  Say Y here if you want the Driver core to produce a bunch of
+>  	  debug messages to the system log. Select this if you are having a
+> diff --git a/drivers/opp/Kconfig b/drivers/opp/Kconfig
+> index e8ce47b32735..6a2d2c6c1143 100644
+> --- a/drivers/opp/Kconfig
+> +++ b/drivers/opp/Kconfig
+> @@ -12,3 +12,10 @@ config PM_OPP
+>  	  representing individual voltage domains and provides SOC
+>  	  implementations a ready to use framework to manage OPPs.
+>  	  For more information, read <file:Documentation/power/opp.rst>
+> +
+> +menu "Operating Performance Points (OPP)"
+> +config DEBUG_OPP
+> +	bool "Debug Operating Performance Points"
+> +	help
+> +	  enable opp debugging
+> +endmenu
+> diff --git a/drivers/opp/Makefile b/drivers/opp/Makefile
+> index f65ed5985bb4..2589915eef95 100644
+> --- a/drivers/opp/Makefile
+> +++ b/drivers/opp/Makefile
+> @@ -1,5 +1,5 @@
+>  # SPDX-License-Identifier: GPL-2.0-only
+> -ccflags-$(CONFIG_DEBUG_DRIVER)	:= -DDEBUG
+> +ccflags-$(CONFIG_DEBUG_OPP)	:= -DDEBUG
 
--- 
-Martin K. Petersen	Oracle Linux Engineering
+This feels wrong, you shouldn't need a -DDEBUG for anything if all is
+going correctly.  Why is opp so odd this way?  Just use the normal
+dev_dbg() macros and all will be fine, nothing special should be needed
+at all.
+
+And don't use a config option for it either, no one will turn it on, it
+needs to "just work" for all systems.
+
+thanks,
+
+greg k-h

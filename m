@@ -2,274 +2,267 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23531519996
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 10:19:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 786C451999E
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 10:21:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229818AbiEDIW2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 04:22:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49584 "EHLO
+        id S239255AbiEDIYV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 04:24:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346220AbiEDIWM (ORCPT
+        with ESMTP id S229963AbiEDIYP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 04:22:12 -0400
+        Wed, 4 May 2022 04:24:15 -0400
 Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CDE822BCC;
-        Wed,  4 May 2022 01:18:32 -0700 (PDT)
-Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 244686hJ026114;
-        Wed, 4 May 2022 08:18:25 GMT
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B98C20F6A
+        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 01:20:39 -0700 (PDT)
+Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24489DtC013665;
+        Wed, 4 May 2022 08:20:35 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : content-type : in-reply-to : mime-version;
- s=corp-2021-07-09; bh=nWgvasDGMO+xsuiYbJatyXA8aSwx87XO4qsP6g9fvSw=;
- b=Fvm4b1Z6oJwFTmq1sMDG49QyvLx2Mm/Nmcfw2/b8p9KHg6wka91O9S1YMxc1bVKdk3Aj
- lCNoOYe+2B7+wAGDfXx2mlN5y16gO7qzS1jNRiI3cpyM+xmNvA5nem3gFkQw1JxmFCas
- tI5ZgwioCS60XvVR0NkU8zEIlDQtzJuiPl0c5bwozIJHiZoiN0Ay4qWYQRY42rn2SaFd
- CONG4uf7ISEnVVKPFzd/bJOJbWwIigdYh0qqmYJ09ZKIJJGnPBdnHWygl7wyrC+H0CjF
- uV4MNFcT5YAJJDWfE3nHz6UVpLbicDJ9TUqcb1EV1LAORWvI4JiOgcQVpr0AOKbC3c4R /A== 
-Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3fruhc7mm2-1
+ : subject : message-id : content-type : mime-version; s=corp-2021-07-09;
+ bh=aGaAsXMh4xMGXkq6h932lHu9RhOkkAoQfCiMAKJPfAs=;
+ b=zEseRr6wcvBy7PJARZVjOeYL0qBwNkYzPXf0qKjjQsUIeKyowtS7gnmf5vfpWqs+zZJs
+ iNp3obhM+gXZGQr1xYpf9EqOUtmInmL2pMxSb1h4U9lFZyXcrpl0xdpcP0GN2II5QSpo
+ 3G4DN2F+l2dghFKUQDhLiGFBv+1HPVY0qsLSzX0WrKpWIyIzUXnI+p7hhrQHz4+QhXJC
+ CLjaMEndNKaJ5kCWD4JqmXUXOx2oKcBl4tK/V4aCTaHnZ5pzagOyJUyixp4ymX+A19t3
+ 4Tl1e+zkOdcCr7v6vIcjx3KAKIo0RjCuUMpw2N6raBQ+IWnaOEOud4kKY5hvc4TkvxXa NQ== 
+Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3frvqsfrqw-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 04 May 2022 08:18:24 +0000
-Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 2448BLCw028277;
-        Wed, 4 May 2022 08:18:23 GMT
-Received: from nam02-bn1-obe.outbound.protection.outlook.com (mail-bn1nam07lp2048.outbound.protection.outlook.com [104.47.51.48])
-        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com with ESMTP id 3fs1a5g3b1-1
+        Wed, 04 May 2022 08:20:34 +0000
+Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 2448ASmc010464;
+        Wed, 4 May 2022 08:20:34 GMT
+Received: from nam04-mw2-obe.outbound.protection.outlook.com (mail-mw2nam08lp2174.outbound.protection.outlook.com [104.47.73.174])
+        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com with ESMTP id 3fruj35hk0-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 04 May 2022 08:18:23 +0000
+        Wed, 04 May 2022 08:20:33 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=eyTUZUXuSURypX+m7ehDSj+jI+DR+R3+90ufqq2gdMpBMbIS7INP9BnKwkQW+xpkBNX5Mxd5BxiV0Yjw2klpjEuka4kgoVQQSXDlDgisRQw3c2Hvlf/FgmdWUMGjB7PyDL3XmFoR6jNJ6+AVNpk5vBIA/EqKZHg2fwvgctiZD17f534hXbJRao/pVnOJGwqSdhOblXoKyKgd+7PZfQT/X0BsT8p++Y0t85VN/7oZ+r6jywEouWFATmWZP4xN6MsAE5bn8JCj4txOOPEhvpynQanZWYL+LL7SPXHq4UzbnTSUgqJyI5Xd9RrxZDyFYKxAPIiPv3A4SpODVOIG56pEHw==
+ b=Y37IVo1vAX/8K2D+NEcC8e3UCFgBHhOrNRE/2Mc2clev/sr+fhQ3ESrJ1c/XLTOZpfgfyIjmDAPBR3y/VDpVVesdeZMH0iVQJ40b81EYvdjdqExRIPMu9yiHyW/6V3wjmePjWOlgisB0OSJ9h5W1IhI+kbGcKxZS1NjmiIIisREIorA0XkzvV96mVUN9vBRp3SPBB5StBo8RWWcqSNLc/4aOtwoqOAz8+0lz6pD9j6tTOb8Z445AMyEM+cDxI7vwHQyNy/rgDp3Etu9X0YNMmsPqMGkqdWGkaHWxg0TFwWU9ITwJpTv1jOkKiUhLjAYy8rUfZ4y/y6fLCRXMCFudVQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=nWgvasDGMO+xsuiYbJatyXA8aSwx87XO4qsP6g9fvSw=;
- b=LKOdwlfJV+3p9xpWg7UvVZ7ctvCxiRF3ApzYFfAPKFfzCxe+w3ee9PmjnHVWXeMTpjShKR/hRphau0D+zVUcwALlSzRO4ftHqBBNrsHAzkcDV8rIB/KVEznv1BqWozf9LQ4mGECqWD1D+mEeb188KDuxklICd3vHTxE4I/ZA+JRqyjMCma6OgpSSoiFq5ySgmY7e6GsGIBw2NcEFgGWivP7EziitbbXHxtJ4rrD+ECMuevUIpjfHV7k8DGrE40Za/sddWToZtokZ4lotY16boO4HZZs+V4sUWUiTR8Ywv0DfV2zJn9TvPC9IEuZ4P2gCzqQ150wKa+dsWH1N7viKeA==
+ bh=aGaAsXMh4xMGXkq6h932lHu9RhOkkAoQfCiMAKJPfAs=;
+ b=c7B7XE9GXg9uvjMU5gUvkOoa70ASZ4OQcXCIDmyPqRifqnVSFkZbuWFdQHaDfBKZpedoMoCJpkziEL2rTcqYa+JBobU86a5QbY83/6TwRNJvXIxp1fQQ2Tze3Meuf1uTwV32DnKwJDJY+0HxJrKc+9eZAuOadAHzHDsFg5z4LX6k/YxHTm2zHY3F21eU86o0vJn2YSmJarVbzx1hQutITv/9GX0BhWBOX/S9m9HD+yaSfFT99DOcHHfSItgPvI2q/iMa4D9KPjfqlxIuG8OkKhmK8eHjpNi31wOBa6C64IpNmtWkzSjB4JYWGBiAhteeyjO6kGdcZ8d11VLE5SjbxA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
  dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=nWgvasDGMO+xsuiYbJatyXA8aSwx87XO4qsP6g9fvSw=;
- b=KDBJKgsTrE0WZfzw1QrFdMebf+4WAdU9UNp0XFmZ7FE0HLnKaOSAlXhue3VFvlKtrDxGUnPLUXO0LShyLXomBubhSrlu/Aw9ZXyel2UwC30P1hmDXOQcK05dWADpcQ10yFbGDE6zNllEfSB1QUoX70hC8GzMzqxPemPijP+x/lY=
+ bh=aGaAsXMh4xMGXkq6h932lHu9RhOkkAoQfCiMAKJPfAs=;
+ b=EoDEAzBX0sik2885QqNnW2Gy4gMjydTDg4Jb1k3mKphSWEd443jZgWkbG5WjzS7BP2e7lCjjQm4H+wQAmISU6InLGoepfKTIluhybE12RHynluK0I4If/TxdRl8QqP2NCCZSCxUk5kBGJW+r4glDRJ6xe+F8bTtI8Rtk5tv48Wg=
 Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
- (2603:10b6:301:2d::28) by DM5PR10MB1532.namprd10.prod.outlook.com
- (2603:10b6:3:10::11) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5206.24; Wed, 4 May
- 2022 08:18:18 +0000
+ (2603:10b6:301:2d::28) by BN8PR10MB3507.namprd10.prod.outlook.com
+ (2603:10b6:408:b1::19) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.18; Wed, 4 May
+ 2022 08:20:31 +0000
 Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
  ([fe80::b5d5:7b39:ca2d:1b87]) by MWHPR1001MB2365.namprd10.prod.outlook.com
  ([fe80::b5d5:7b39:ca2d:1b87%5]) with mapi id 15.20.5164.025; Wed, 4 May 2022
- 08:18:18 +0000
-Date:   Wed, 4 May 2022 11:18:05 +0300
+ 08:20:31 +0000
+Date:   Wed, 4 May 2022 11:20:12 +0300
 From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     kbuild@lists.01.org, Daniel Lezcano <daniel.lezcano@linexp.org>,
-        rafael@kernel.org, daniel.lezcano@linaro.org
-Cc:     lkp@intel.com, kbuild-all@lists.01.org, khilman@baylibre.com,
-        abailon@baylibre.com, linux-pm@vger.kernel.org,
+To:     kbuild@lists.01.org, Thierry Reding <treding@nvidia.com>
+Cc:     lkp@intel.com, kbuild-all@lists.01.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 15/15] thermal/of: Initialize trip points separately
-Message-ID: <202205031504.J62WedEw-lkp@intel.com>
+Subject: drivers/gpu/drm/tegra/gem.c:153 tegra_bo_pin() error: 'map->sgt'
+ dereferencing possible ERR_PTR()
+Message-ID: <202205031734.WXoZd12a-lkp@intel.com>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220426221523.3056696-16-daniel.lezcano@linexp.org>
 User-Agent: Mutt/1.9.4 (2018-02-28)
-X-ClientProxiedBy: MRXP264CA0037.FRAP264.PROD.OUTLOOK.COM
- (2603:10a6:500:14::25) To MWHPR1001MB2365.namprd10.prod.outlook.com
- (2603:10b6:301:2d::28)
+X-ClientProxiedBy: JNAP275CA0068.ZAFP275.PROD.OUTLOOK.COM (2603:1086:0:4f::16)
+ To MWHPR1001MB2365.namprd10.prod.outlook.com (2603:10b6:301:2d::28)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: fa6a6220-b3b4-4514-655b-08da2da6a4c2
-X-MS-TrafficTypeDiagnostic: DM5PR10MB1532:EE_
-X-Microsoft-Antispam-PRVS: <DM5PR10MB1532F691189B0A6CC110D4558EC39@DM5PR10MB1532.namprd10.prod.outlook.com>
+X-MS-Office365-Filtering-Correlation-Id: 9cc28ab9-3b00-4659-cef6-08da2da6f43d
+X-MS-TrafficTypeDiagnostic: BN8PR10MB3507:EE_
+X-Microsoft-Antispam-PRVS: <BN8PR10MB35074DF8BA488C012503C45F8EC39@BN8PR10MB3507.namprd10.prod.outlook.com>
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: XumaED94lSk9YDpaMy+OeZApJHlsKJhaxF0VrrQst5hrojxa5lJjOAU2ey7KSvg2NcHcrmtJrpnYIbYt8tlvqReQTozhAlYjKRRSiYohZIPWA6ArjKpOyBGmK7CbmXEzT30GRKulLluX8p1Zp3YaEUe72KYASyDYIYCSs1jc0lM60tz5EFZJ8sNTDWgsyAbp718XMzaebx90wk8hp4f/1fEFArfv0gXRxVZx67MYBkvXt4USHBe8aBcH6jzUUsIl8RLkd+7qVx6TK/Maz9v5HiGPjn+B0fym2AqeMb4J7phTpxs1q0reR2bvND2MpjC61xqczCrZWagm7yMA8Je03t/WmSg2W5rpvBSTGcPXluAb0sijgP8L9t1lz1BgV9Atc0icYSr4aLqfZMPt9nAHdyyNZr8QJB6jCpCXlYy7+IZQkl9hZQIED5T+vt9yIXG9ZeUbxrUHWOt/Tc6/iZzO5APw+Ymydk/+7iL8xCNFKzVIDIP323ukc8Jrbfe63cvgTc8jdN5bE9wjNZKsOidwF+ddVpIc69jIxlLcPS+E2AzNDj9mYaTytvBXRpmxiXISvGh9UB8D+y21eq2iMXMPKTdtVj+p6BCLYNCzPxHj/fs4V/Z3Ue+kuXN7OvT3FF+8b7Wl7OfW45y3hKZUkURnOBGmAOSv3qwriW342RMvUsTiXwlUVvptS5V1DcDiJmqu2ylIVjJgY9PBE0cC32hQ/+T3e4dCOdW1wSnRxUDKQJvzmKjTAxL0DhmgO4P2Jb1TVgec/v+VZNqIqAfLmbdsqgC7ISTQx6AEb5VkCStIO/PJ+vAe3t1FlrzePIMWRLWb/HSN+Ltm43G5yNyhu5Kk9A==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2365.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(316002)(2906002)(38350700002)(38100700002)(30864003)(44832011)(5660300002)(508600001)(966005)(7416002)(6666004)(6486002)(36756003)(83380400001)(86362001)(52116002)(186003)(6506007)(9686003)(6512007)(26005)(8936002)(66556008)(66946007)(8676002)(66476007)(4326008)(1076003);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: lweA+kwPllokCdWzQE8C4NSi/cbDfU6NUXJmwSgFcyxKZUVHW+IYE2sQANT1GKB0siAdqik1aCsQCrCqE3p1aj/iegESgojWa2OP1kE4We+q2/40DR27pN9+kDzYe+I9bFscdF3TDCbBCH2uDy2D3IRL4rkZ4qAbK8PrvjwvZ3TgzQuA9DOzb5LBb+XSNr1JNqtNK/kJhtAwRyvK/sXwEwjHq9PfNvohbPZHV4tRJUnnct6Y1Dax8atb30ws8ORmQCSMtqgA58jAgs4n5ZOvcBX+Ajqex+YCaKGe2IGHDDAF65NO6D/wKHADD2oWwxP8yIECqjZ4PuilD/pxVI7/GLGUnbfjH9XlHd7NOnu1rvOjKYxarmIm6k7xIcIdAKQmR7FUupwswpLKjcr6pFCYvXUQpahUNCfzIljiqpYlnna1V3WqhX6QvqtfaCyhEZKqSwSz19vDvC0gD3YqEFuXYohsm1jnybBnjglCyRVDCz5L3Jbe99cF2EZyAdrmJnYKMDHPuKApiXbqOTsJiBFoE8LhrbkcK+H0LTfdGjHwj0h5tgi7dnRxALH/62iEJDrhvL4LFs9y79ZjyboddnVc6S0dXSafhICgHjbA2k0jKQuyqGYzVEXCHX3vYxCeEBXx/X5Y5IAMl7LGhBMp9i1JOn4jeudQCrG5L5N5KNcDJEfxMjMAaXQJKVnzF2O3KvyMwIny+8sktARZbojJzi6qWub9jinVXeOkLa0CBlABoGvFnPRQGZmQ2LlpluVutEXtSJsI9JBEm5oTuNVHqysRCgQC5cfQsFoQGgPOQkolpUhvSb7MKn4lQFxMtuSHVFeeIsZFjPIau6sn/OMXlw6E/qn15V89+KnUqjS5yegUDTg=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2365.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(66556008)(66476007)(5660300002)(8676002)(2906002)(4326008)(66946007)(36756003)(38350700002)(186003)(6486002)(1076003)(38100700002)(508600001)(26005)(6916009)(4001150100001)(6666004)(9686003)(6512007)(316002)(52116002)(6506007)(966005)(8936002)(83380400001)(30864003)(44832011)(86362001)(357404004);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?rELhNxUQFT3GsRpXpWoOmhs80CWzYIZajAk2C1wtrBnyfjCuiDC1Ve+PCSmE?=
- =?us-ascii?Q?TFA1a8oRqk4HTzMShxaIcwI6QcUQ8nTMQ4yyhqAvPWXG+0dethdTJ6lR6M4/?=
- =?us-ascii?Q?m/VHaWuibVwvpIGSha8RrGR2bvwIq8MBCRgWYIX/rOV6YdKLLYYmf30ReuPT?=
- =?us-ascii?Q?Kr0grdz6/V+GJ16hdhuBS1wlJLTty9XOpUAvu9hfcNpTparPlyGWJES7TSmR?=
- =?us-ascii?Q?JJupdSJEAdNuXf9MJ/ovmB31a5sIWNDu2+Ttps4zJhHl5Jpl/INYW/C//16B?=
- =?us-ascii?Q?4jiyTsobCJ9h1hZDdjNYTV2SaBAjbl1Var5fn5bHb2JEtbeKiH5pL0qRQAw7?=
- =?us-ascii?Q?+uf9i27EDMu3NqQf4EV3x1vCCwSwc5g8XHJJu86N3I/F84RqZ5w/c7p162A2?=
- =?us-ascii?Q?HkUvihzXxgRlJlTEcBgA+cfS2Dl+OO9My42XOIt6EFVv/dz4f1ziyPoVZEh9?=
- =?us-ascii?Q?jiaNMuuThvq/ZWgvEfssrK5IAcuMx3ZkAxV+ouHriV6bwoLIWuDoilLxJcMg?=
- =?us-ascii?Q?LUxe4dzeEn7PRwei9c9G+nZargqVEOxpg0bBQYqDPp7YOFVI6Qhq/7n+wgdG?=
- =?us-ascii?Q?swEkRIyjhUfZCv+q6kdg3FBgdg7eN35CtCxmQAUWeI+1Ha3ljMfYjZJb9qLU?=
- =?us-ascii?Q?7+bsarO8rhY4ur0IeckmUQHOGPOVe7+U08lWZDZLWIUyhcFcYo1edCQ9gXL0?=
- =?us-ascii?Q?9HjrKWnqiwy8aY6pAN3rfrLnRtHJ4pAsoFSZGizRF+781OpQei+tplpgiia5?=
- =?us-ascii?Q?pDrqDgN3fCLQGZjrDe067AB1dfMvDtedbhfX6Isy1cRpsPYRgQCxcth2lN7r?=
- =?us-ascii?Q?9DKmZB+pttvMsBlwsSJpd/lxodblvOo6L7Y1Ib4TxZJUro5Cy4M/x5L4DSLY?=
- =?us-ascii?Q?lFqwV67e7G8VZN6BmWP8reIsxU0MXoijPODb8r9QD0SNzVQ0D7x2ZLG/ypIW?=
- =?us-ascii?Q?7E6ybo4ACH7FoIjQSfawbHYSnbihq8X+bWLDbODdRKZVl7zL2eYeBYw/T5Jg?=
- =?us-ascii?Q?drlSzUxm6vuvoLtJJRyX3PAPhoBGFWXl4e+em9t96aVkDnP72qzTiCLJEvGi?=
- =?us-ascii?Q?JYaMFzVAgzHLvbDrosZRroqUavFf0fEePETmcF8iNRaqw0xQu80WJ4g0TmSo?=
- =?us-ascii?Q?IkaVdvncWZ6MPUc35n2TN6KoF1a1cvDUfHO8E1je1q5kR5R8f/p8E+gfaScM?=
- =?us-ascii?Q?CwdN25sH0sAl5SPFcygm57R1l8ak6T1dIuw43RPyoBtQgVquyZCj+1BoYgyj?=
- =?us-ascii?Q?8Kwfr2NaoxspkoMukPl3mGCU94LGo+r2Hvmr9oHw/372HLU7UEHiQjtLakWn?=
- =?us-ascii?Q?2f6C8sopDNQaEwaZMVbfz7faFfQ/JDGCAfl/skj0H0LOrHBg9FvQ/LbSjUW3?=
- =?us-ascii?Q?k9EhS5ymjSF1adAO33DzJNE8tx25DMev9RxeOtmX06n5Tn1XB8Ip5+razdjt?=
- =?us-ascii?Q?1sSaUUPIq0RWoZhfFmZFJqtMFRCQstzCTsgujJj3u2aeTQOMVdhyLUz8U+7o?=
- =?us-ascii?Q?SeLGiRqSJkEOwgrPy3MqDMuYJYJIbictM96Qamgwd47Gp7u7OH5EiQe7Ngry?=
- =?us-ascii?Q?8VnDBLKyY3R62bWgBoXaj9U6bLaV7+V6S3YBJDQGzeBOjPaehKmc4DcA6ej1?=
- =?us-ascii?Q?r/scs+fTjxNq4EBhKxtbX/cncA96yFW7v+1fS85iH0RSigGuMqBz+bnI01+h?=
- =?us-ascii?Q?jBXlSFsVHL2F/vK06Ojf1HiyY6MfmeCNvzzxXOcynHiyfWf53aMTa264Bm71?=
- =?us-ascii?Q?w1La9xUWGZKlP+iMxt1FhJ8hSf6wCl8=3D?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?TElOxbudDC1kT/B2+IKSAbRSV3IzfCcpnvk0UjoTxGdAvN9a+pqGYLpfh04k?=
+ =?us-ascii?Q?mxBi3wDHAiT+IQwazu8IOvL8ehVFCLu2m7y8if4mTa6ex2DAVjS+95NssgRz?=
+ =?us-ascii?Q?OxR2oK5T5W0n+oZJ1yIageDR9jIXzHjA/Ee3GF6EC+AMf6HNZAjgyqq1JfNS?=
+ =?us-ascii?Q?Y83uWV8bX2QeTfsY/8O2QrUFAvQ4VfT/TmRQgoT27ztBAWF2PE4YCus1gfq5?=
+ =?us-ascii?Q?qj1V3kGWqAWi0wokCzOICTqP0RYFuSN0QlxQxzMXg2+QvFtvRaWGepAdgpt3?=
+ =?us-ascii?Q?HryG/lt87JoCd6mK2gXtelRboAHjNvLd5GNAOq4fwnwpeLc+UCYVfOEGJUe5?=
+ =?us-ascii?Q?5pO7sMMNAGXdwavu1+MmV0uylcZhoWW9eUNwG4qnEo2yUPvf5ZoXK/9v7W3y?=
+ =?us-ascii?Q?vUbKODPZL7022T2UEuRCIgFylQZXmntyLqwrYv3+WuqVCtv44421azdkvpyS?=
+ =?us-ascii?Q?9HDe1XOTAJbq/+q1Amk6T9utJo5iuhG++KiHyldhfOQigO+5udvcrX9Aiodv?=
+ =?us-ascii?Q?9vsHHOyDeQlNtWj2Bbo4G4CWYMrJLREzODJaFo0UqGa4fvT2SShV1pB0gDxf?=
+ =?us-ascii?Q?fxENmRX1tcIaJtp9RQYyj7DAgGfyx4Kx2Nehwv4yl8sb2WLu2T67VgnR9bQB?=
+ =?us-ascii?Q?nUZaEY2CHNQvL8PYr+3mUqC/KhXl47zq13e4HWUwHaGrJP0VR20sTBCoONPM?=
+ =?us-ascii?Q?T3b7JRB2fBKdaPmXg7bvPrM9GwROG1PHHyTZO4B/8iA11ATME8bnqDQDvgDn?=
+ =?us-ascii?Q?W8pERXiVITQxXllWmuAo4yuxrCjCTYlt2XozxYpYokzSzVnE4TlXvs8aP19H?=
+ =?us-ascii?Q?wuEyF/CelbncvhPiOD/VQqbmu5j9wlXt/vAa1ED5CVVijLVIEPp4jDtggPTh?=
+ =?us-ascii?Q?+nNPO1US2DMOBjy5+uoPuJWMsMYsKwkgfp6boBX2Nlv1PQaYaGxOdV8buiHy?=
+ =?us-ascii?Q?skPT5wveTStwh40DlNY58VtbLYLJEshJxCvakfPW2kagwjdnztO8OrL78cmD?=
+ =?us-ascii?Q?54OnCeJhdjwOP/QwkNKaPGIWJ+ReMhrdHPjgxmtJv8fR+cZGpaYIJ81Z1ngU?=
+ =?us-ascii?Q?eO/sBS8qUCe2O5aEdV3CYqS9HgAcDEvACOLeuhjT1ob2F9lP3juh2NCrc3HU?=
+ =?us-ascii?Q?L2J+UoBF+aINI+XsLXBEqRHXXz0+/Ipyg8+oa5QMZZBp2mKSmTstd03LQPpg?=
+ =?us-ascii?Q?Yuw9nzsFNvpnjJHZzDBZYJ4acD/aTjeZsuiFnz5+bmiLhzfb1zJ41YTHlnRd?=
+ =?us-ascii?Q?KcF8lHaxPET0gXAo+q4rMNOCBNxLnaS0bnz+gnc/P2m2C1UeGsKBEH+O7wb4?=
+ =?us-ascii?Q?7oBwqAajD/PCoeVfU0kXENHnneBb8wfaj+JB7X8DRvcL9VxaKHAcIAyD8cxX?=
+ =?us-ascii?Q?a8J80jTb0GjhxZRaoSM0ToatrCAR2OISm4v6Io0eX36x+66IQpK5NpeYNtcX?=
+ =?us-ascii?Q?AzoQuURVInA1G1sSIrRcDbO7W6PZ5RRPMpp7OS1qqvEm4ZE3chJYhVLWTcTB?=
+ =?us-ascii?Q?nNVNNv2zpX9UFUX1cpzkd6vIUpLVL9bfLzzZisd1YL5kd76Bcxf/mSqlvXGU?=
+ =?us-ascii?Q?tnXn9kibq2/C2rwYoncbQxzhL0ucg4HkE2583Zu+aAgyVPDGsOJ5NqIs22M8?=
+ =?us-ascii?Q?7ll0DbwebzFQ9i61u2S81papRK3VEefE/smE4qni2zrEixPR5e6ynWySGSEk?=
+ =?us-ascii?Q?iCm9Lss9ZRhP7U5tgI93nqpzj92Prm+GVAJklZND842u5omcLA/WD5d1HUc0?=
+ =?us-ascii?Q?2ExdPt6M9g/Zq5hiZzZL6zrShK2gak4=3D?=
 X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: fa6a6220-b3b4-4514-655b-08da2da6a4c2
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9cc28ab9-3b00-4659-cef6-08da2da6f43d
 X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2365.namprd10.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 May 2022 08:18:18.0558
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 May 2022 08:20:31.3421
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: m1HJRHmG0Azv+rGBNIc4DO2vZvqZ5TVLSP6wgjMvTsW1tSFX4BsIYw4TYInRexlUp3XvBXzozfGy2T7H2LOpiv2pYOLJWEQLLoWGGreAqdA=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR10MB1532
+X-MS-Exchange-CrossTenant-UserPrincipalName: IAPLngmlpkkXvzK+7U5YsN8nm1Ks3luja+3Yo7N87evAX9B+DJnRlNuEvNOuE/RgITS2D1NXUrZtM6jxNEH/tK9bcRB6irliqFmKkf5uZa4=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR10MB3507
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.486,18.0.858
  definitions=2022-05-04_02:2022-05-02,2022-05-04 signatures=0
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 bulkscore=0 malwarescore=0
- spamscore=0 mlxlogscore=999 mlxscore=0 suspectscore=0 phishscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
- definitions=main-2205040055
-X-Proofpoint-GUID: rVLFUJjVAT81p_X8a-xeGBL3Tp9fCFuM
-X-Proofpoint-ORIG-GUID: rVLFUJjVAT81p_X8a-xeGBL3Tp9fCFuM
-X-Spam-Status: No, score=-0.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FAKE_REPLY_C,HEXHASH_WORD,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 suspectscore=0
+ mlxlogscore=999 spamscore=0 bulkscore=0 mlxscore=0 phishscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2205040055
+X-Proofpoint-GUID: 5USXKz9GlXW9xkIxOSLNn7cb3SXJgLOL
+X-Proofpoint-ORIG-GUID: 5USXKz9GlXW9xkIxOSLNn7cb3SXJgLOL
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Daniel,
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Daniel-Lezcano/thermal-OF-rework/20220427-061937
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git for-next
-config: i386-randconfig-m021 (https://download.01.org/0day-ci/archive/20220503/202205031504.J62WedEw-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.2.0-20) 11.2.0
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   9050ba3a61a4b5bd84c2cde092a100404f814f31
+commit: c6aeaf56f468a565f6d2f27325fc07d35cdcd3cb drm/tegra: Implement correct DMA-BUF semantics
+config: arm-randconfig-m031-20220427 (https://download.01.org/0day-ci/archive/20220503/202205031734.WXoZd12a-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 11.3.0
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
 
 smatch warnings:
-drivers/thermal/thermal_of.c:996 thermal_of_build_thermal_zone() error: uninitialized symbol 'gchild'.
+drivers/gpu/drm/tegra/gem.c:153 tegra_bo_pin() error: 'map->sgt' dereferencing possible ERR_PTR()
 
-vim +/gchild +996 drivers/thermal/thermal_of.c
+vim +153 drivers/gpu/drm/tegra/gem.c
 
-c0ff8aaae36955 drivers/thermal/of-thermal.c Julia Lawall       2016-04-19   902  static struct __thermal_zone
-c0ff8aaae36955 drivers/thermal/of-thermal.c Julia Lawall       2016-04-19   903  __init *thermal_of_build_thermal_zone(struct device_node *np)
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   904  {
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   905  	struct device_node *child = NULL, *gchild;
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   906  	struct __thermal_zone *tz;
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   907  	int ret, i;
-a46dbae8abe5cd drivers/thermal/of-thermal.c Eduardo Valentin   2015-05-11   908  	u32 prop, coef[2];
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   909  
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   910  	if (!np) {
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   911  		pr_err("no thermal zone np\n");
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   912  		return ERR_PTR(-EINVAL);
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   913  	}
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   914  
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   915  	tz = kzalloc(sizeof(*tz), GFP_KERNEL);
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   916  	if (!tz)
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   917  		return ERR_PTR(-ENOMEM);
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   918  
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   919  	ret = of_property_read_u32(np, "polling-delay-passive", &prop);
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   920  	if (ret < 0) {
-3079f340caa72a drivers/thermal/of-thermal.c Amit Kucheria      2019-01-21   921  		pr_err("%pOFn: missing polling-delay-passive property\n", np);
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   922  		goto free_tz;
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   923  	}
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   924  	tz->passive_delay = prop;
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   925  
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   926  	ret = of_property_read_u32(np, "polling-delay", &prop);
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   927  	if (ret < 0) {
-3079f340caa72a drivers/thermal/of-thermal.c Amit Kucheria      2019-01-21   928  		pr_err("%pOFn: missing polling-delay property\n", np);
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   929  		goto free_tz;
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   930  	}
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   931  	tz->polling_delay = prop;
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   932  
-a46dbae8abe5cd drivers/thermal/of-thermal.c Eduardo Valentin   2015-05-11   933  	/*
-a46dbae8abe5cd drivers/thermal/of-thermal.c Eduardo Valentin   2015-05-11   934  	 * REVIST: for now, the thermal framework supports only
-a46dbae8abe5cd drivers/thermal/of-thermal.c Eduardo Valentin   2015-05-11   935  	 * one sensor per thermal zone. Thus, we are considering
-a46dbae8abe5cd drivers/thermal/of-thermal.c Eduardo Valentin   2015-05-11   936  	 * only the first two values as slope and offset.
-a46dbae8abe5cd drivers/thermal/of-thermal.c Eduardo Valentin   2015-05-11   937  	 */
-a46dbae8abe5cd drivers/thermal/of-thermal.c Eduardo Valentin   2015-05-11   938  	ret = of_property_read_u32_array(np, "coefficients", coef, 2);
-a46dbae8abe5cd drivers/thermal/of-thermal.c Eduardo Valentin   2015-05-11   939  	if (ret == 0) {
-a46dbae8abe5cd drivers/thermal/of-thermal.c Eduardo Valentin   2015-05-11   940  		tz->slope = coef[0];
-a46dbae8abe5cd drivers/thermal/of-thermal.c Eduardo Valentin   2015-05-11   941  		tz->offset = coef[1];
-a46dbae8abe5cd drivers/thermal/of-thermal.c Eduardo Valentin   2015-05-11   942  	} else {
-a46dbae8abe5cd drivers/thermal/of-thermal.c Eduardo Valentin   2015-05-11   943  		tz->slope = 1;
-a46dbae8abe5cd drivers/thermal/of-thermal.c Eduardo Valentin   2015-05-11   944  		tz->offset = 0;
-a46dbae8abe5cd drivers/thermal/of-thermal.c Eduardo Valentin   2015-05-11   945  	}
-a46dbae8abe5cd drivers/thermal/of-thermal.c Eduardo Valentin   2015-05-11   946  
-b446fa392d1d9f drivers/thermal/thermal_of.c Daniel Lezcano     2022-04-27   947  	tz->trips = thermal_of_trips_init(np, &tz->ntrips);
-b446fa392d1d9f drivers/thermal/thermal_of.c Daniel Lezcano     2022-04-27   948  	if (IS_ERR(tz->trips)) {
-b446fa392d1d9f drivers/thermal/thermal_of.c Daniel Lezcano     2022-04-27   949  		ret = PTR_ERR(tz->trips);
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   950  		goto finish;
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   951  	}
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   952  
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   953  	/* cooling-maps */
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   954  	child = of_get_child_by_name(np, "cooling-maps");
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   955  
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   956  	/* cooling-maps not provided */
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   957  	if (!child)
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   958  		goto finish;
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   959  
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   960  	tz->num_tbps = of_get_child_count(child);
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   961  	if (tz->num_tbps == 0)
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   962  		goto finish;
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   963  
-6396bb221514d2 drivers/thermal/of-thermal.c Kees Cook          2018-06-12   964  	tz->tbps = kcalloc(tz->num_tbps, sizeof(*tz->tbps), GFP_KERNEL);
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   965  	if (!tz->tbps) {
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   966  		ret = -ENOMEM;
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   967  		goto free_trips;
+c6aeaf56f468a56 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2021-09-09   58  static struct host1x_bo_mapping *tegra_bo_pin(struct device *dev, struct host1x_bo *bo,
+c6aeaf56f468a56 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2021-09-09   59  					      enum dma_data_direction direction)
+1f16deac766926f drivers/gpu/drm/tegra/gem.c  Thierry Reding  2019-12-03   60  {
+c6aeaf56f468a56 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2021-09-09   61  	struct tegra_bo *obj = host1x_to_tegra_bo(bo);
+c6aeaf56f468a56 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2021-09-09   62  	struct drm_gem_object *gem = &obj->gem;
+c6aeaf56f468a56 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2021-09-09   63  	struct host1x_bo_mapping *map;
+1f16deac766926f drivers/gpu/drm/tegra/gem.c  Thierry Reding  2019-12-03   64  	int err;
+1f16deac766926f drivers/gpu/drm/tegra/gem.c  Thierry Reding  2019-12-03   65  
+c6aeaf56f468a56 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2021-09-09   66  	map = kzalloc(sizeof(*map), GFP_KERNEL);
+c6aeaf56f468a56 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2021-09-09   67  	if (!map)
+c6aeaf56f468a56 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2021-09-09   68  		return ERR_PTR(-ENOMEM);
+1f16deac766926f drivers/gpu/drm/tegra/gem.c  Thierry Reding  2019-12-03   69  
+c6aeaf56f468a56 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2021-09-09   70  	map->bo = host1x_bo_get(bo);
+c6aeaf56f468a56 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2021-09-09   71  	map->direction = direction;
+c6aeaf56f468a56 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2021-09-09   72  	map->dev = dev;
+1f16deac766926f drivers/gpu/drm/tegra/gem.c  Thierry Reding  2019-12-03   73  
+c6aeaf56f468a56 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2021-09-09   74  	/*
+c6aeaf56f468a56 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2021-09-09   75  	 * Imported buffers need special treatment to satisfy the semantics of DMA-BUF.
+c6aeaf56f468a56 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2021-09-09   76  	 */
+c6aeaf56f468a56 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2021-09-09   77  	if (gem->import_attach) {
+c6aeaf56f468a56 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2021-09-09   78  		struct dma_buf *buf = gem->import_attach->dmabuf;
+c6aeaf56f468a56 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2021-09-09   79  
+c6aeaf56f468a56 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2021-09-09   80  		map->attach = dma_buf_attach(buf, dev);
+c6aeaf56f468a56 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2021-09-09   81  		if (IS_ERR(map->attach)) {
+c6aeaf56f468a56 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2021-09-09   82  			err = PTR_ERR(map->attach);
+c6aeaf56f468a56 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2021-09-09   83  			goto free;
+1f16deac766926f drivers/gpu/drm/tegra/gem.c  Thierry Reding  2019-12-03   84  		}
+1f16deac766926f drivers/gpu/drm/tegra/gem.c  Thierry Reding  2019-12-03   85  
+c6aeaf56f468a56 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2021-09-09   86  		map->sgt = dma_buf_map_attachment(map->attach, direction);
+c6aeaf56f468a56 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2021-09-09   87  		if (IS_ERR(map->sgt)) {
+c6aeaf56f468a56 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2021-09-09   88  			dma_buf_detach(buf, map->attach);
+c6aeaf56f468a56 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2021-09-09   89  			err = PTR_ERR(map->sgt);
+c6aeaf56f468a56 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2021-09-09   90  			goto free;
+                                                                                                ^^^^^^^^^^
 
-"gchild" not initialized on this path.
+1f16deac766926f drivers/gpu/drm/tegra/gem.c  Thierry Reding  2019-12-03   91  		}
+1f16deac766926f drivers/gpu/drm/tegra/gem.c  Thierry Reding  2019-12-03   92  
+c6aeaf56f468a56 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2021-09-09   93  		err = sgt_dma_count_chunks(map->sgt);
+c6aeaf56f468a56 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2021-09-09   94  		map->size = gem->size;
+de2ba664c30fcdb drivers/gpu/host1x/drm/gem.c Arto Merilainen 2013-03-22   95  
+c6aeaf56f468a56 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2021-09-09   96  		goto out;
+af1cbfb9bf0fe07 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2019-10-28   97  	}
+585ee0f27ef7b8d drivers/gpu/drm/tegra/gem.c  Mikko Perttunen 2016-11-08   98  
+af1cbfb9bf0fe07 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2019-10-28   99  	/*
+af1cbfb9bf0fe07 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2019-10-28  100  	 * If we don't have a mapping for this buffer yet, return an SG table
+af1cbfb9bf0fe07 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2019-10-28  101  	 * so that host1x can do the mapping for us via the DMA API.
+af1cbfb9bf0fe07 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2019-10-28  102  	 */
+c6aeaf56f468a56 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2021-09-09  103  	map->sgt = kzalloc(sizeof(*map->sgt), GFP_KERNEL);
+c6aeaf56f468a56 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2021-09-09  104  	if (!map->sgt) {
+c6aeaf56f468a56 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2021-09-09  105  		err = -ENOMEM;
+c6aeaf56f468a56 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2021-09-09  106  		goto free;
+c6aeaf56f468a56 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2021-09-09  107  	}
+80327ce3d4edaa9 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2019-10-28  108  
+80327ce3d4edaa9 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2019-10-28  109  	if (obj->pages) {
+1f16deac766926f drivers/gpu/drm/tegra/gem.c  Thierry Reding  2019-12-03  110  		/*
+1f16deac766926f drivers/gpu/drm/tegra/gem.c  Thierry Reding  2019-12-03  111  		 * If the buffer object was allocated from the explicit IOMMU
+1f16deac766926f drivers/gpu/drm/tegra/gem.c  Thierry Reding  2019-12-03  112  		 * API code paths, construct an SG table from the pages.
+1f16deac766926f drivers/gpu/drm/tegra/gem.c  Thierry Reding  2019-12-03  113  		 */
+c6aeaf56f468a56 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2021-09-09  114  		err = sg_alloc_table_from_pages(map->sgt, obj->pages, obj->num_pages, 0, gem->size,
+c6aeaf56f468a56 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2021-09-09  115  						GFP_KERNEL);
+1f16deac766926f drivers/gpu/drm/tegra/gem.c  Thierry Reding  2019-12-03  116  		if (err < 0)
+1f16deac766926f drivers/gpu/drm/tegra/gem.c  Thierry Reding  2019-12-03  117  			goto free;
+80327ce3d4edaa9 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2019-10-28  118  	} else {
+1f16deac766926f drivers/gpu/drm/tegra/gem.c  Thierry Reding  2019-12-03  119  		/*
+1f16deac766926f drivers/gpu/drm/tegra/gem.c  Thierry Reding  2019-12-03  120  		 * If the buffer object had no pages allocated and if it was
+1f16deac766926f drivers/gpu/drm/tegra/gem.c  Thierry Reding  2019-12-03  121  		 * not imported, it had to be allocated with the DMA API, so
+1f16deac766926f drivers/gpu/drm/tegra/gem.c  Thierry Reding  2019-12-03  122  		 * the DMA API helper can be used.
+1f16deac766926f drivers/gpu/drm/tegra/gem.c  Thierry Reding  2019-12-03  123  		 */
+c6aeaf56f468a56 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2021-09-09  124  		err = dma_get_sgtable(dev, map->sgt, obj->vaddr, obj->iova, gem->size);
+80327ce3d4edaa9 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2019-10-28  125  		if (err < 0)
+80327ce3d4edaa9 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2019-10-28  126  			goto free;
+80327ce3d4edaa9 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2019-10-28  127  	}
+80327ce3d4edaa9 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2019-10-28  128  
+c6aeaf56f468a56 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2021-09-09  129  	err = dma_map_sgtable(dev, map->sgt, direction, 0);
+c6aeaf56f468a56 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2021-09-09  130  	if (err)
+c6aeaf56f468a56 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2021-09-09  131  		goto free_sgt;
+80327ce3d4edaa9 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2019-10-28  132  
+c6aeaf56f468a56 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2021-09-09  133  out:
+c6aeaf56f468a56 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2021-09-09  134  	/*
+c6aeaf56f468a56 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2021-09-09  135  	 * If we've manually mapped the buffer object through the IOMMU, make sure to return the
+c6aeaf56f468a56 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2021-09-09  136  	 * existing IOVA address of our mapping.
+c6aeaf56f468a56 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2021-09-09  137  	 */
+c6aeaf56f468a56 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2021-09-09  138  	if (!obj->mm) {
+c6aeaf56f468a56 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2021-09-09  139  		map->phys = sg_dma_address(map->sgt->sgl);
+c6aeaf56f468a56 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2021-09-09  140  		map->chunks = err;
+c6aeaf56f468a56 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2021-09-09  141  	} else {
+c6aeaf56f468a56 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2021-09-09  142  		map->phys = obj->iova;
+c6aeaf56f468a56 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2021-09-09  143  		map->chunks = 1;
+c6aeaf56f468a56 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2021-09-09  144  	}
+c6aeaf56f468a56 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2021-09-09  145  
+c6aeaf56f468a56 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2021-09-09  146  	map->size = gem->size;
+c6aeaf56f468a56 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2021-09-09  147  
+c6aeaf56f468a56 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2021-09-09  148  	return map;
+c6aeaf56f468a56 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2021-09-09  149  
+c6aeaf56f468a56 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2021-09-09  150  free_sgt:
+c6aeaf56f468a56 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2021-09-09  151  	sg_free_table(map->sgt);
+80327ce3d4edaa9 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2019-10-28  152  free:
+c6aeaf56f468a56 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2021-09-09 @153  	kfree(map->sgt);
+                                                                                      ^^^^^^^^
+This is an error pointer so it will crash.
 
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   968  	}
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   969  
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   970  	i = 0;
-ca9521b770c988 drivers/thermal/of-thermal.c Stephen Boyd       2014-06-18   971  	for_each_child_of_node(child, gchild) {
-b446fa392d1d9f drivers/thermal/thermal_of.c Daniel Lezcano     2022-04-27   972  		ret = thermal_of_populate_bind_params(np, gchild, &tz->tbps[i++]);
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   973  		if (ret)
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   974  			goto free_tbps;
-
-Better to do the of_node_put(gchild); before the goto anyway.
-
-ca9521b770c988 drivers/thermal/of-thermal.c Stephen Boyd       2014-06-18   975  	}
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   976  
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   977  finish:
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   978  	of_node_put(child);
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   979  
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   980  	return tz;
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   981  
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   982  free_tbps:
-a92bab8919e3fb drivers/thermal/of-thermal.c Viresh Kumar       2018-08-08   983  	for (i = i - 1; i >= 0; i--) {
-a92bab8919e3fb drivers/thermal/of-thermal.c Viresh Kumar       2018-08-08   984  		struct __thermal_bind_params *tbp = tz->tbps + i;
-a92bab8919e3fb drivers/thermal/of-thermal.c Viresh Kumar       2018-08-08   985  		int j;
-a92bab8919e3fb drivers/thermal/of-thermal.c Viresh Kumar       2018-08-08   986  
-a92bab8919e3fb drivers/thermal/of-thermal.c Viresh Kumar       2018-08-08   987  		for (j = 0; j < tbp->count; j++)
-a92bab8919e3fb drivers/thermal/of-thermal.c Viresh Kumar       2018-08-08   988  			of_node_put(tbp->tcbp[j].cooling_device);
-a92bab8919e3fb drivers/thermal/of-thermal.c Viresh Kumar       2018-08-08   989  
-a92bab8919e3fb drivers/thermal/of-thermal.c Viresh Kumar       2018-08-08   990  		kfree(tbp->tcbp);
-a92bab8919e3fb drivers/thermal/of-thermal.c Viresh Kumar       2018-08-08   991  	}
-a92bab8919e3fb drivers/thermal/of-thermal.c Viresh Kumar       2018-08-08   992  
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   993  	kfree(tz->tbps);
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   994  free_trips:
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   995  	kfree(tz->trips);
-c2aad93c7edd5e drivers/thermal/of-thermal.c Vladimir Zapolskiy 2014-09-29  @996  	of_node_put(gchild);
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   997  free_tz:
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   998  	kfree(tz);
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   999  	of_node_put(child);
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03  1000  
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03  1001  	return ERR_PTR(ret);
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03  1002  }
+c6aeaf56f468a56 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2021-09-09  154  	kfree(map);
+80327ce3d4edaa9 drivers/gpu/drm/tegra/gem.c  Thierry Reding  2019-10-28  155  	return ERR_PTR(err);
+de2ba664c30fcdb drivers/gpu/host1x/drm/gem.c Arto Merilainen 2013-03-22  156  }
 
 -- 
 0-DAY CI Kernel Test Service

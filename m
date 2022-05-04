@@ -2,62 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8AF5519F13
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 14:15:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B1BB519F1A
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 14:18:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349361AbiEDMSl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 08:18:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53620 "EHLO
+        id S1349365AbiEDMVu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 08:21:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243515AbiEDMSk (ORCPT
+        with ESMTP id S243515AbiEDMVs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 08:18:40 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CCB012317D
-        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 05:15:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651666503;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=FBRyJXLztH87HDqVQ7jOiNiao+kchEB62aGeLVwy9Q4=;
-        b=PBOx3d6sO1LuKKnHpbTfDmO6oLGJ6Gi2UDgZZjcWz+cwt0ZaxRNHRsrhDLXSYylmXa/MfT
-        b4Z0An/sEfEAH4dLEcGjUmjcmV0+Ajc6LmjE0VZBDV1wsG2/13lHkVHfej0OlgYojyp6U3
-        Q5cBTVwEwlo4r0kOmgDy5TE5qzpwU9A=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-516-t65CNjJgNHyo1FKz6cqmIw-1; Wed, 04 May 2022 08:15:00 -0400
-X-MC-Unique: t65CNjJgNHyo1FKz6cqmIw-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Wed, 4 May 2022 08:21:48 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FD712CC90;
+        Wed,  4 May 2022 05:18:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 5B9BB3C021A3;
-        Wed,  4 May 2022 12:15:00 +0000 (UTC)
-Received: from starship (unknown [10.40.192.26])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 270F5400F75F;
-        Wed,  4 May 2022 12:14:57 +0000 (UTC)
-Message-ID: <0f17a0151f575434cf26579de05f102d51b41605.camel@redhat.com>
-Subject: Re: [PATCH v3 07/14] KVM: SVM: Adding support for configuring
- x2APIC MSRs interception
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Cc:     pbonzini@redhat.com, seanjc@google.com, joro@8bytes.org,
-        jon.grimm@amd.com, wei.huang2@amd.com, terry.bowman@amd.com
-Date:   Wed, 04 May 2022 15:14:57 +0300
-In-Reply-To: <20220504073128.12031-8-suravee.suthikulpanit@amd.com>
-References: <20220504073128.12031-1-suravee.suthikulpanit@amd.com>
-         <20220504073128.12031-8-suravee.suthikulpanit@amd.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        by ams.source.kernel.org (Postfix) with ESMTPS id DAB26B8239E;
+        Wed,  4 May 2022 12:18:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7681BC385AF;
+        Wed,  4 May 2022 12:18:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651666689;
+        bh=6C67VGLCuUaGiRz3EE0II5UI9nzEfV+Tp+DmoxgCEGg=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=ACd0jXZ5o+Ptqt8JtK31bPHENHFd6SfUCS/sRLZ7z7knqdiObE2hhUEqsUXtWIbNv
+         QpJAjd9CQP84+itG/b9gNycw6K9Qr0Pd7TlB9TldaAl0zqjOyVXF0iJZZHUn6jRB21
+         Px2mPlvsMeI85f5zscA0KoCUICAqb2Unwz3tV+8Iem59HqIeEVPPS91HVylmb24d+e
+         vymCz2mBuTPKPS3ZbfUawFtBd9Q08wifc9ieYDtaFigixnn5uVyWI9ZBcmDRwtpDKC
+         83SR175Dlnem25Oo0FQeDLer9diUzOD+x2maEnGNC6x7DOZabxp0rFTnwUV8IkjAKo
+         Ep5xqNxdiZZYA==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nmDxH-008taa-4Z; Wed, 04 May 2022 13:18:07 +0100
+Date:   Wed, 04 May 2022 13:18:07 +0100
+Message-ID: <875yml8pa8.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Christoffer Dall <cdall@cs.columbia.edu>,
+        Raghavendra Rao Ananta <rananta@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build warning after merge of the kvm-arm tree
+In-Reply-To: <20220504205627.18f46380@canb.auug.org.au>
+References: <20220504205627.18f46380@canb.auug.org.au>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: sfr@canb.auug.org.au, cdall@cs.columbia.edu, rananta@google.com, linux-kernel@vger.kernel.org, linux-next@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,78 +67,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-05-04 at 02:31 -0500, Suravee Suthikulpanit wrote:
-> When enabling x2APIC virtualization (x2AVIC), the interception of
-> x2APIC MSRs must be disabled to let the hardware virtualize guest
-> MSR accesses.
+On Wed, 04 May 2022 11:56:27 +0100,
+Stephen Rothwell <sfr@canb.auug.org.au> wrote:
 > 
-> Current implementation keeps track of list of MSR interception state
-> in the svm_direct_access_msrs array. Therefore, extends the array to
-> include x2APIC MSRs.
+> Hi all,
 > 
-> Signed-off-by: Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
-> ---
->  arch/x86/kvm/svm/svm.c | 25 +++++++++++++++++++++++++
->  arch/x86/kvm/svm/svm.h |  4 ++--
->  2 files changed, 27 insertions(+), 2 deletions(-)
+> After merging the kvm-arm tree, today's linux-next build (htmldocs)
+> produced this warning:
 > 
-> diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-> index 74e6f86f5dc3..314628b6bff4 100644
-> --- a/arch/x86/kvm/svm/svm.c
-> +++ b/arch/x86/kvm/svm/svm.c
-> @@ -100,6 +100,31 @@ static const struct svm_direct_access_msrs {
->  	{ .index = MSR_IA32_CR_PAT,			.always = false },
->  	{ .index = MSR_AMD64_SEV_ES_GHCB,		.always = true  },
->  	{ .index = MSR_TSC_AUX,				.always = false },
-> +	{ .index = (APIC_BASE_MSR + APIC_ID),		.always = false },
-> +	{ .index = (APIC_BASE_MSR + APIC_LVR),		.always = false },
-> +	{ .index = (APIC_BASE_MSR + APIC_TASKPRI),	.always = false },
-> +	{ .index = (APIC_BASE_MSR + APIC_ARBPRI),	.always = false },
-> +	{ .index = (APIC_BASE_MSR + APIC_PROCPRI),	.always = false },
-> +	{ .index = (APIC_BASE_MSR + APIC_EOI),		.always = false },
-> +	{ .index = (APIC_BASE_MSR + APIC_RRR),		.always = false },
-> +	{ .index = (APIC_BASE_MSR + APIC_LDR),		.always = false },
-> +	{ .index = (APIC_BASE_MSR + APIC_DFR),		.always = false },
-> +	{ .index = (APIC_BASE_MSR + APIC_SPIV),		.always = false },
-> +	{ .index = (APIC_BASE_MSR + APIC_ISR),		.always = false },
-> +	{ .index = (APIC_BASE_MSR + APIC_TMR),		.always = false },
-> +	{ .index = (APIC_BASE_MSR + APIC_IRR),		.always = false },
-> +	{ .index = (APIC_BASE_MSR + APIC_ESR),		.always = false },
-> +	{ .index = (APIC_BASE_MSR + APIC_ICR),		.always = false },
-> +	{ .index = (APIC_BASE_MSR + APIC_ICR2),		.always = false },
-> +	{ .index = (APIC_BASE_MSR + APIC_LVTT),		.always = false },
-> +	{ .index = (APIC_BASE_MSR + APIC_LVTTHMR),	.always = false },
-> +	{ .index = (APIC_BASE_MSR + APIC_LVTPC),	.always = false },
-> +	{ .index = (APIC_BASE_MSR + APIC_LVT0),		.always = false },
-> +	{ .index = (APIC_BASE_MSR + APIC_LVT1),		.always = false },
-> +	{ .index = (APIC_BASE_MSR + APIC_LVTERR),	.always = false },
-> +	{ .index = (APIC_BASE_MSR + APIC_TMICT),	.always = false },
-> +	{ .index = (APIC_BASE_MSR + APIC_TMCCT),	.always = false },
-> +	{ .index = (APIC_BASE_MSR + APIC_TDCR),		.always = false },
->  	{ .index = MSR_INVALID,				.always = false },
->  };
->  
-> diff --git a/arch/x86/kvm/svm/svm.h b/arch/x86/kvm/svm/svm.h
-> index 678fc7757fe4..5ed958863b81 100644
-> --- a/arch/x86/kvm/svm/svm.h
-> +++ b/arch/x86/kvm/svm/svm.h
-> @@ -29,8 +29,8 @@
->  #define	IOPM_SIZE PAGE_SIZE * 3
->  #define	MSRPM_SIZE PAGE_SIZE * 2
->  
-> -#define MAX_DIRECT_ACCESS_MSRS	21
-> -#define MSRPM_OFFSETS	16
-> +#define MAX_DIRECT_ACCESS_MSRS	46
-> +#define MSRPM_OFFSETS	32
->  extern u32 msrpm_offsets[MSRPM_OFFSETS] __read_mostly;
->  extern bool npt_enabled;
->  extern int vgif;
+> Documentation/virt/kvm/arm/index.rst:7: WARNING: toctree contains reference to nonexisting document 'virt/kvm/arm/psci'
+> Documentation/virt/kvm/arm/hypercalls.rst: WARNING: document isn't included in any toctree
+> 
+> Introduced by commit
+> 
+>   f1ced23a9be5 ("Docs: KVM: Rename psci.rst to hypercalls.rst")
+> 
 
+Thanks for the heads up, I have now pushed out a fix.
 
-Looks good.
+	M.
 
-Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
-
-Best regards,
-	Maxim Levitsky
-
+-- 
+Without deviation from the norm, progress is not possible.

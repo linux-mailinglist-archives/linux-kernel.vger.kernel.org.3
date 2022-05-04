@@ -2,46 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3602551AABB
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:29:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1AFC51A856
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:07:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358028AbiEDRdO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 13:33:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38974 "EHLO
+        id S1355578AbiEDRK1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 13:10:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356954AbiEDRJv (ORCPT
+        with ESMTP id S1355617AbiEDRAS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 13:09:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32317473AE;
-        Wed,  4 May 2022 09:56:42 -0700 (PDT)
+        Wed, 4 May 2022 13:00:18 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFFA24BB83;
+        Wed,  4 May 2022 09:51:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 12E39617A6;
-        Wed,  4 May 2022 16:56:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 605A4C385AA;
-        Wed,  4 May 2022 16:56:41 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6349FB827AB;
+        Wed,  4 May 2022 16:51:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D6E2C385AF;
+        Wed,  4 May 2022 16:51:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651683401;
-        bh=hdoWo2RhsqsWgZIRmPbb7DxC3aFuG2ViZhr8JO9X6t8=;
+        s=korg; t=1651683115;
+        bh=ajlyHJlXLFrefqDuXU+8CxL6cuBrNIB29dSZeCj6OZs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TfI2kci8w3n/CelDbJEuhjXDVi7WZVLr2gWrl6ZzJ6twWj7zbmMuASsQytOzgBk6o
-         StMfh58fCKuyH3A1O0a6S/jUCwnOX+o93IW92k13sVTY38iKubzqIcsXJbMh/J4UVD
-         fuSBuf4FvA2qrjMcDtSs5xT5dWvP5FJn0FDR5mrk=
+        b=eGJOJGwQP/yVY0YGYMeuj7BYKX7ef47nKhKMEpxX4F7fnx8En8DRoUFpf3Im7aYIF
+         tyX/Hr0mEelRCV95nelyWM7J75nFFUgYv8sOvPvch7Fp2Q/w2nxM6N8s/H06tRfKvn
+         VMJ5eEBIOTUKwsKT0DHaxdJLWdV8Av8/pUNzDSqQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
-        =?UTF-8?q?Nuno=20S=C3=A1?= <nuno.sa@analog.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 072/225] iio:dac:ad3552r: Fix an IS_ERR() vs NULL check
-Date:   Wed,  4 May 2022 18:45:10 +0200
-Message-Id: <20220504153117.893992445@linuxfoundation.org>
+        stable@vger.kernel.org, Daniel Starke <daniel.starke@siemens.com>
+Subject: [PATCH 5.10 119/129] tty: n_gsm: fix malformed counter for out of frame data
+Date:   Wed,  4 May 2022 18:45:11 +0200
+Message-Id: <20220504153030.815398172@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220504153110.096069935@linuxfoundation.org>
-References: <20220504153110.096069935@linuxfoundation.org>
+In-Reply-To: <20220504153021.299025455@linuxfoundation.org>
+References: <20220504153021.299025455@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,42 +53,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dan Carpenter <dan.carpenter@oracle.com>
+From: Daniel Starke <daniel.starke@siemens.com>
 
-[ Upstream commit de3b9fe9609a05d3c354c6718ca657962d11d9fe ]
+commit a24b4b2f660b7ddf3f484b37600bba382cb28a9d upstream.
 
-The fwnode_get_named_child_node() function does not return error
-pointers.  It returns NULL.  Update the check accordingly.
+The gsm_mux field 'malformed' represents the number of malformed frames
+received. However, gsm1_receive() also increases this counter for any out
+of frame byte.
+Fix this by ignoring out of frame data for the malformed counter.
 
-Fixes: 8f2b54824b28 ("drivers:iio:dac: Add AD3552R driver support")
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-Reviewed-by: Nuno Sá <nuno.sa@analog.com>
-Link: https://lore.kernel.org/r/20220404114244.GA19201@kili
-Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: e1eaea46bb40 ("tty: n_gsm line discipline")
+Cc: stable@vger.kernel.org
+Signed-off-by: Daniel Starke <daniel.starke@siemens.com>
+Link: https://lore.kernel.org/r/20220414094225.4527-7-daniel.starke@siemens.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/iio/dac/ad3552r.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/tty/n_gsm.c |    3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/iio/dac/ad3552r.c b/drivers/iio/dac/ad3552r.c
-index e0a93b27e0e8..d5ea1a1be122 100644
---- a/drivers/iio/dac/ad3552r.c
-+++ b/drivers/iio/dac/ad3552r.c
-@@ -809,10 +809,10 @@ static int ad3552r_configure_custom_gain(struct ad3552r_desc *dac,
- 
- 	gain_child = fwnode_get_named_child_node(child,
- 						 "custom-output-range-config");
--	if (IS_ERR(gain_child)) {
-+	if (!gain_child) {
- 		dev_err(dev,
- 			"mandatory custom-output-range-config property missing\n");
--		return PTR_ERR(gain_child);
-+		return -EINVAL;
- 	}
- 
- 	dac->ch_data[ch].range_override = 1;
--- 
-2.35.1
-
+--- a/drivers/tty/n_gsm.c
++++ b/drivers/tty/n_gsm.c
+@@ -1968,7 +1968,8 @@ static void gsm1_receive(struct gsm_mux
+ 		}
+ 		/* Any partial frame was a runt so go back to start */
+ 		if (gsm->state != GSM_START) {
+-			gsm->malformed++;
++			if (gsm->state != GSM_SEARCH)
++				gsm->malformed++;
+ 			gsm->state = GSM_START;
+ 		}
+ 		/* A SOF in GSM_START means we are still reading idling or
 
 

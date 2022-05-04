@@ -2,112 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44330519D70
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 12:54:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C1B6519D73
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 12:56:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348445AbiEDK5j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 06:57:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32960 "EHLO
+        id S1343618AbiEDK7m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 06:59:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348365AbiEDK5M (ORCPT
+        with ESMTP id S234997AbiEDK7j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 06:57:12 -0400
-Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-eopbgr60073.outbound.protection.outlook.com [40.107.6.73])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF1252613A;
-        Wed,  4 May 2022 03:53:35 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=P2sUzPuZtI7EYwyUTiI5mNCQ48dIc+Xv5cbTXMiR3/zOyxnDC1g1PYQwHVACZTpyDMfmoHhAMYDsQ3qukgD6O4rBdcXmYvWJ1u/H32G3GNIvNZ4DL/QTHQ6jAcAZu4cx9v1g508BV1k0oevRvEGiy6mJzrwn8npeqjQ1dmd3JASJ/ZKTwjG0XwcGzqM77L55RuNGXQ/KkmUc/IoEXONe8NO1VTYkJI32kS+jNsU6LOApHtamLak1S3t/2Kqbl/cAriaQX6MWBTdjho6RawoNPLYWg0bNia1jhRvN7MEWJXY6ef3rLsyXl+gcSyEJHgEinr8fgB/ZPOvtkgA4ZKZ5FQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Rg4ruBWX8xAgoRwabWOQbPrfznvfyIHfENU/osYJm1I=;
- b=HkYoyQXsXU/MISXIPORfoUrUw02PamflsdOic1jPzIWhPVPIr0h0Fb+4dZFVObg4qEE7nOAHbQ+AzRgryM7nbs0GOnvyGqaO4Yt/9nCk1fl2IwuKRsB9EeJ3F46b39Jpnsvh06MIeWDtvp4tMMFYQjczmdfu66Wpy6QF4dogtQa5PZXJy5s1JqnTK1/2G2NJWy08E3MBvCfFWJApgpNW0hOto2b5eba81FrwxnCwT6I5Lf4TsnTBGJmvo3NE/DOMu+bStx3nRrPozdUZur+u9YKdPzMC3sQUeI/0u8opvjQs+dmwV8ZZ9E5WBka1FvXElu4g3JbVKIve3m9yrbye0Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 139.15.153.199) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=in.bosch.com;
- dmarc=pass (p=reject sp=none pct=100) action=none header.from=in.bosch.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=in.bosch.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Rg4ruBWX8xAgoRwabWOQbPrfznvfyIHfENU/osYJm1I=;
- b=TfMKFKvyv3jJ7pTjc5en21OApjPal6pEGVrmgIMxivi0Crae52T5I24SMA7UNiLgZ9+0+YR1aSsTtJe4IqLRkVIEbyYxNN4R+p7z/s5/0qui+KL9p94WXmmpqBN9sVoy0LOifJSB/3XkksuXtOaQ+U5+3mzj/1ci4CDaoG+HX+w=
-Received: from DU2PR04CA0058.eurprd04.prod.outlook.com (2603:10a6:10:234::33)
- by AS4PR10MB5521.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:20b:4ff::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5206.13; Wed, 4 May
- 2022 10:53:33 +0000
-Received: from DBAEUR03FT052.eop-EUR03.prod.protection.outlook.com
- (2603:10a6:10:234:cafe::19) by DU2PR04CA0058.outlook.office365.com
- (2603:10a6:10:234::33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5206.25 via Frontend
- Transport; Wed, 4 May 2022 10:53:33 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 139.15.153.199)
- smtp.mailfrom=in.bosch.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=in.bosch.com;
-Received-SPF: Pass (protection.outlook.com: domain of in.bosch.com designates
- 139.15.153.199 as permitted sender) receiver=protection.outlook.com;
- client-ip=139.15.153.199; helo=eop.bosch-org.com;
-Received: from eop.bosch-org.com (139.15.153.199) by
- DBAEUR03FT052.mail.protection.outlook.com (100.127.142.144) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5227.15 via Frontend Transport; Wed, 4 May 2022 10:53:33 +0000
-Received: from FE-EXCAS2001.de.bosch.com (10.139.217.200) by eop.bosch-org.com
- (139.15.153.199) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2375.24; Wed, 4 May
- 2022 12:53:27 +0200
-Received: from SI-HUB2000.de.bosch.com (10.4.103.108) by
- FE-EXCAS2001.de.bosch.com (10.139.217.200) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.24; Wed, 4 May 2022 12:53:27 +0200
-Received: from localhost.localdomain (10.167.1.123) by SI-HUB2000.de.bosch.com
- (10.4.103.108) with Microsoft SMTP Server id 15.1.2375.24; Wed, 4 May 2022
- 12:53:23 +0200
-From:   <Gireesh.Hiremath@in.bosch.com>
-To:     <linux-omap@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-input@vger.kernel.org>,
-        <bcousson@baylibre.com>, <tony@atomide.com>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <dmitry.torokhov@gmail.com>,
-        <mkorpershoek@baylibre.com>, <davidgow@google.com>,
-        <m.felsch@pengutronix.de>, <swboyd@chromium.org>,
-        <fengping.yu@mediatek.com>, <y.oudjana@protonmail.com>,
-        <rdunlap@infradead.org>, <colin.king@intel.com>,
-        <Gireesh.Hiremath@in.bosch.com>
-CC:     <sjoerd.simons@collabora.co.uk>, <VinayKumar.Shettar@in.bosch.com>,
-        <Govindaraji.Sivanantham@in.bosch.com>,
-        <anaclaudia.dias@de.bosch.com>
-Subject: [PATCH 4/4] dt-bindings: input: mt-matrix-keypad: add guardian mt matrix keypad bindings definition
-Date:   Wed, 4 May 2022 10:52:54 +0000
-Message-ID: <20220504105254.1576-4-Gireesh.Hiremath@in.bosch.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20220504105254.1576-1-Gireesh.Hiremath@in.bosch.com>
-References: <20220504105254.1576-1-Gireesh.Hiremath@in.bosch.com>
+        Wed, 4 May 2022 06:59:39 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 608A91C13E
+        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 03:56:01 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id ba17so1255424edb.5
+        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 03:56:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ffwll.ch; s=google;
+        h=date:from:to:cc:subject:message-id:mail-followup-to:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=BwmxO4LfRKvng41X4d9TcCe1iGtUUpTYikAKxiB/Gus=;
+        b=Swq9OPFU/H4vH2Zso3oK+hWWf8Zk79dtPwZyJxnvxTO27XQ0mCO4ki2l3dD/76/HIg
+         qrBoZeeReTzGg60P5BDnT9yXTZoUZfB+sXY6JI9sADjoNhJgBEUCy4Jh5L06/nx3e18+
+         tdoPGenpO+xOsuPdsCP52sWU6g9Vh4J1Lvc3E=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id
+         :mail-followup-to:references:mime-version:content-disposition
+         :in-reply-to;
+        bh=BwmxO4LfRKvng41X4d9TcCe1iGtUUpTYikAKxiB/Gus=;
+        b=GcBx4l7IuwhLvLNgNj4MwIZK61JSfmXwqrvJ3eY4XcR1+QV7hFc18/pdItbSW9sol7
+         99YQFSUtonps2a/Dss5UZedZOX1bwMiqS6iVB8tSACSmd4IQdfWuGPRK2s3I/ID4JSfJ
+         ntUcZK+Hw3vId7j90YOdZBIZykgEK05XN9GTPMLaU9C+9luOoLS0xzK3BI1cNNpnBa5B
+         9jEV1Sd+dAjwB7jgeJqd/4S/rHS75rc88u1u5sdNn2eJ2jrCKp+SKMVhUP9jBFZo0i+U
+         WnWFnQP2r2PVxlNOMKlvPLL7ftpxebFgp1ZDzhCAIB/uJPBG30lhwCm5lwMYgph85yAI
+         RDnw==
+X-Gm-Message-State: AOAM530cqnviaGnFwym78I93LXRYePvm7CClA0GHNDF7DJ6DDUgAqCx2
+        xVTWlXc4pTJiAWVeC3Hp/ejZADoT2xnTBw==
+X-Google-Smtp-Source: ABdhPJy+B5Wk9GR7mKblkgeRGx069oBIqEL+VbT3G8TD0KUPLgPlnzfCa6TvbjeSkUISaS9jyUFQkw==
+X-Received: by 2002:a05:6402:42c3:b0:427:d0e6:77e4 with SMTP id i3-20020a05640242c300b00427d0e677e4mr11472180edc.49.1651661759975;
+        Wed, 04 May 2022 03:55:59 -0700 (PDT)
+Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
+        by smtp.gmail.com with ESMTPSA id qx16-20020a170907b59000b006f3ef214e60sm5568170ejc.198.2022.05.04.03.55.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 May 2022 03:55:59 -0700 (PDT)
+Date:   Wed, 4 May 2022 12:55:57 +0200
+From:   Daniel Vetter <daniel@ffwll.ch>
+To:     Javier Martinez Canillas <javierm@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        Junxiao Chang <junxiao.chang@intel.com>,
+        dri-devel@lists.freedesktop.org, Maxime Ripard <maxime@cerno.tech>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Sam Ravnborg <sam@ravnborg.org>
+Subject: Re: [PATCH v2] fbdev: Use helper to get fb_info in all file
+ operations
+Message-ID: <YnJbvb5TlHs4ckPM@phenom.ffwll.local>
+Mail-Followup-To: Javier Martinez Canillas <javierm@redhat.com>,
+        linux-kernel@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        Junxiao Chang <junxiao.chang@intel.com>,
+        dri-devel@lists.freedesktop.org, Maxime Ripard <maxime@cerno.tech>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Sam Ravnborg <sam@ravnborg.org>
+References: <20220503201934.681276-1-javierm@redhat.com>
+ <YnJBGpvlViLV+0/a@phenom.ffwll.local>
+ <038f8365-b23b-9d81-f7b2-8f8c6eb3a065@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.167.1.123]
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 413c6887-de9d-4c4e-0d8e-08da2dbc5559
-X-MS-TrafficTypeDiagnostic: AS4PR10MB5521:EE_
-X-Microsoft-Antispam-PRVS: <AS4PR10MB5521E4328127F3DBE9A9FC98A6C39@AS4PR10MB5521.EURPRD10.PROD.OUTLOOK.COM>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: JqqqRLpxPIaDnLiMEidM6NnVu8FT0BWkWfM7wIno40y7NiuX5iE+V68YGdG+DgvjXYiVuOZTbBxrRSlktlGoroR630/jufbvATbEBlq4ask30bN6vF070IpqnWe3khmLEpjvGRFgoInBBrfcOJAPVsJke/WvP6y879WgVrMbn7GvJAgAHSvltrJXcAi4pxihL5E8k9zz7W3q1+qKTQ2sODMS2arlNUfWOfcltVzcwi6lszKg+DVl2uMBxPTepp721rQNUqPhYrLyVNHdRQHuiPxH1pc8IWblveKZj49L03Gxn5ZQz7BvyDV0p9BknJoQL1w2cjbh9abMLpwQsZg9xtvTK1A01zPL+QZWeaDKNeKeVHJ8Pz5mSC927i2eccLXk96KQZCdp4FWUIQzwJU8V9q31qjO7jnYY/v3XhL0zY97+hvBTVxZN4LHBvO+E2O37e6TRBMBwpk18QbKaKI0FxdkmlmSlJkk0eS3jYatMnTK8kagdlmosmJ7MmIBuWeTbJbvpYcgFdXaVtseXZAE+kVmmWZ5RL/4QF6sAu6vkSGWVxPWLyOlzuWoBvmqjM8OLjfQytcI4B7MiS4Rv6ycVj+KV3JPmqHNZsmznsg0Ct6IDzKw2+rOh/u4lWqTVK7kEJrBe90HfjXm/VH25+DQhbtWuPYi912Pqr0hkEn1KH4+Yx1TB2SQiWNKU2t9T2hToyQ41gGqbPuuvI0zViJeL7xciV9/fTp1XjjSU4SEn+272MLxgyyJBcv9zHPTloP3l3Zk7F3cTuA8tZ211HddMVtmjxkpblnxRi5w+duuLNoXlB7IzkNOvluTYnMQcKVX
-X-Forefront-Antispam-Report: CIP:139.15.153.199;CTRY:DE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:eop.bosch-org.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(40470700004)(46966006)(4326008)(40460700003)(16526019)(36860700001)(2906002)(921005)(70206006)(8676002)(70586007)(2876002)(356005)(82960400001)(6666004)(7416002)(86362001)(5660300002)(26005)(2616005)(8936002)(966005)(508600001)(47076005)(54906003)(316002)(107886003)(110136005)(186003)(7049001)(336012)(1076003)(81166007)(82310400005)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: in.bosch.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 May 2022 10:53:33.4253
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 413c6887-de9d-4c4e-0d8e-08da2dbc5559
-X-MS-Exchange-CrossTenant-Id: 0ae51e19-07c8-4e4b-bb6d-648ee58410f4
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=0ae51e19-07c8-4e4b-bb6d-648ee58410f4;Ip=[139.15.153.199];Helo=[eop.bosch-org.com]
-X-MS-Exchange-CrossTenant-AuthSource: DBAEUR03FT052.eop-EUR03.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS4PR10MB5521
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <038f8365-b23b-9d81-f7b2-8f8c6eb3a065@redhat.com>
+X-Operating-System: Linux phenom 5.10.0-8-amd64 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -115,157 +81,85 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Gireesh Hiremath <Gireesh.Hiremath@in.bosch.com>
+On Wed, May 04, 2022 at 11:28:07AM +0200, Javier Martinez Canillas wrote:
+> Hello Daniel,
+> 
+> On 5/4/22 11:02, Daniel Vetter wrote:
+> > On Tue, May 03, 2022 at 10:19:34PM +0200, Javier Martinez Canillas wrote:
+> >> A reference to the framebuffer device struct fb_info is stored in the file
+> >> private data, but this reference could no longer be valid and must not be
+> >> accessed directly. Instead, the file_fb_info() accessor function must be
+> >> used since it does sanity checking to make sure that the fb_info is valid.
+> >>
+> >> This can happen for example if the registered framebuffer device is for a
+> >> driver that just uses a framebuffer provided by the system firmware. In
+> >> that case, the fbdev core would unregister the framebuffer device when a
+> >> real video driver is probed and ask to remove conflicting framebuffers.
+> >>
+> >> Most fbdev file operations already use the helper to get the fb_info but
+> >> get_fb_unmapped_area() and fb_deferred_io_fsync() don't. Fix those two.
+> >>
+> >> Since fb_deferred_io_fsync() is not in fbmem.o, the helper has to be
+> >> exported. Rename it and add a fb_ prefix to denote that is public now.
+> >>
+> >> Reported-by: Junxiao Chang <junxiao.chang@intel.com>
+> >> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
+> > 
+> > Note that fb_file_info is hilariously racy since there's nothing
+> > preventing a concurrenct framebuffer_unregister. Or at least I'm not
+> > seeing anything. See cf4a3ae4ef33 ("fbdev: lock_fb_info cannot fail") for
+> > context, maybe reference that commit here in your patch.
+> >
+> > Either way this doesn't really make anything worse, so
+> > Acked-by: Daniel Vetter <daniel.vetter@ffwll.ch>
+> >
+> 
+> Yes, I noticed is racy but at least checking this makes less likely to
+> occur. And thanks, I'll reference that commit in the description of v3.
+> 
+> BTW, I also noticed that the same race that happens with open(),read(),
+> close(), etc happens with the VM operations:
+> 
+> int fb_deferred_io_mmap(struct fb_info *info, struct vm_area_struct *vma)
+> {
+> ...
+> 	vma->vm_private_data = info;
+> ...
+> }
+> 
+> static vm_fault_t fb_deferred_io_fault(struct vm_fault *vmf)
+> {
+> ...
+> 	struct fb_info *info = vmf->vma->vm_private_data;
+> ...
+> }
+> 
+> static vm_fault_t fb_deferred_io_mkwrite(struct vm_fault *vmf)
+> {
+> ...
+> 	struct fb_info *info = vmf->vma->vm_private_data;
+> ...
+> }
+> 
+> So something similar to fb_file_fb_info() is needed to check if
+> the vm_private_data is still valid. I guess that could be done
+> by using the vmf->vma->vm_file and attempting the same trick that
+> fb_file_fb_info() does ?
 
-Add binding definition for the support of the Guardian
-mt matrix keypad driver.
+Yeah should work, except if the ptes are set up already there's kinda not
+much that this will prevent. We'd need to tear down mappings and SIGBUS or
+alternatively have something else in place there so userspace doesn't blow
+up in funny ways (which is what we're doing on the drm side, or at least
+trying to).
 
-Signed-off-by: Gireesh Hiremath <Gireesh.Hiremath@in.bosch.com>
----
- .../bindings/input/mt-matrix-keypad.yaml      | 134 ++++++++++++++++++
- 1 file changed, 134 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/input/mt-matrix-keypad.yaml
+I'm also not sure how much we should care, since ideally for drm drivers
+this is all taken care of by drm_dev_enter in the right places. It does
+mean though that fbdev mmap either needs to have it's own memory or be
+fully redirected to the drm gem mmap.
 
-diff --git a/Documentation/devicetree/bindings/input/mt-matrix-keypad.yaml b/Documentation/devicetree/bindings/input/mt-matrix-keypad.yaml
-new file mode 100644
-index 000000000000..b52cd478f638
---- /dev/null
-+++ b/Documentation/devicetree/bindings/input/mt-matrix-keypad.yaml
-@@ -0,0 +1,134 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/input/mt-matrix-keypad.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: GPIO driven mt matrix keypad device tree bindings
-+
-+maintainers:
-+  - vinay <VinayKumar.Shettar@in.bosch.com>
-+
-+description: |
-+  GPIO driven mt matrix keypad is used to interface a SoC with a mt matrix
-+  keypad. The mt matrix keypad supports multiple gpio line, all gpio line act
-+  as row as wel as column lines, a key can be placed at each intersection
-+  of a unique row number not equal to a unique column and they are diagonally
-+  symmetric.
-+
-+  Example- For 5 gpio lines, possible matrix is 5x5 and maximum possible
-+        keys are 10.
-+
-+        Sample matrix table for 7 button and 5 gpio line
-+
-+        ------------------------------------------------------
-+        |Row\Col |GPIO 0 | GPIO 1 | GPIO 2 | GPIO 3 | GPIO 4 |
-+        ------------------------------------------------------
-+        | GPIO 0 |  X    | KEY_9  | KEY_2  |   X    | KEY_1  |
-+        ------------------------------------------------------
-+        | GPIO 1 | KEY_9 |  X     | KEY_6  |   X    |  X     |
-+        ------------------------------------------------------
-+        | GPIO 2 | KEY_2 | KEY_6  |  X     | KEY_4  | KEY_7  |
-+        ------------------------------------------------------
-+        | GPIO 3 |  X    |  X     | KEY_4  |  X     | KEY_8  |
-+        ------------------------------------------------------
-+        | GPIO 4 | KEY_1 |  X     | KEY_7  | KEY_8  |  X     |
-+        ------------------------------------------------------
-+        X - invalid key
-+        KEY_x - preferred key code
-+
-+  The mt matrix keypad can sense a key-press and key-release by means of GPIO
-+  lines and report the event using GPIO interrupts to the cpu.
-+
-+properties:
-+  compatible:
-+    oneOf:
-+      - const: gpio-mt-matrix-keypad
-+      - items:
-+          - enum:
-+              - gpio-mt-matrix-keypad
-+          - const: gpio-mt-matrix-keypad
-+
-+  debounce-delay-ms:
-+    description: Delay after the first bounce of button.
-+    default: 0
-+
-+  col-scan-delay-us:
-+    description: Delay before scanning next active line.
-+    default: 0
-+
-+  number-of-button:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    description: Number of button connected to the keypad controller.
-+
-+  linux,no-autorepeat:
-+    description: |
-+      Disable the Linux input system's autorepeat feature on the input device.
-+
-+  gpio-activelow:
-+    description: Gpio line are active low.
-+
-+  line-gpios:
-+    description: |
-+      Gpio lines connected to keypad controller.
-+      all gpio line act as row as wel as column lines.
-+
-+  linux,keymap:
-+    $ref: '/schemas/types.yaml#/definitions/uint32-array'
-+    description: |
-+      An array of packed 1-cell entries containing the equivalent of row,
-+      column and linux key-code. The 32-bit big endian cell is packed as:
-+          row << 24 | column << 16 | key-code
-+
-+required:
-+  - compatible
-+  - number-of-button
-+  - line-gpios
-+  - linux,keymap
-+
-+additionalProperties: true
-+
-+examples:
-+  - |
-+    mt_matrix_keypad {
-+        compatible = "gpio-mt-matrix-keypad";
-+        debounce-delay-ms = <10>;
-+        col-scan-delay-us = <2>;
-+        number-of-button = <7>;
-+        linux,no-autorepeat;
-+        gpio-activelow;
-+        line-gpios = <
-+                &gpio1 24 1     /*gpio_56*/
-+                &gpio1 23 1     /*gpio_55*/
-+                &gpio1 22 1     /*gpio_54*/
-+                &gpio1 20 1     /*gpio_52*/
-+                &gpio1 16 1     /*gpio_48*/
-+        >;
-+        linux,keymap = <
-+                0x00000000 /* row 0, col 0, KEY_RESERVED/invalid key */
-+                0x0001000a /* row 0, col 1, KEY_9 */
-+                0x00020003 /* row 0, col 2, KEY_2 */
-+                0x00030000 /* row 0, col 3, KEY_RESERVED/invalid key */
-+                0x00040002 /* row 0, col 4, KEY_1 */
-+                0x0100000a /* row 1, col 0, KEY_9 */
-+                0x01010000 /* row 1, col 1, KEY_RESERVED/invalid key */
-+                0x01020007 /* row 1, col 2, KEY_6 */
-+                0x01030000 /* row 1, col 3, KEY_RESERVED/invalid key */
-+                0x01040000 /* row 1, col 4, KEY_RESERVED/invalid key */
-+                0x02000003 /* row 2, col 0, KEY_2 */
-+                0x02010007 /* row 2, col 1, KEY_6 */
-+                0x02020000 /* row 2, col 2, KEY_RESERVED/invalid key */
-+                0x02030005 /* row 2, col 3, KEY_4 */
-+                0x02040008 /* row 2, col 4, KEY_7 */
-+                0x03000000 /* row 3, col 0, KEY_RESERVED/invalid key */
-+                0x03010000 /* row 3, col 1, KEY_RESERVED/invalid key */
-+                0x03020005 /* row 3, col 2, KEY_4 */
-+                0x03030000 /* row 3, col 3, KEY_RESERVED/invalid key */
-+                0x03040009 /* row 3, col 4, KEY_8 */
-+                0x04000002 /* row 4, col 0, KEY_1 */
-+                0x04010000 /* row 4, col 1, KEY_RESERVED/invalid key */
-+                0x04020008 /* row 4, col 2, KEY_7 */
-+                0x04030009 /* row 4, col 3, KEY_8 */
-+                0x04040000 /* row 4, col 4, KEY_RESERVED/invalid key */
-+        >;
-+    };
+And then we can afford to just not care to fix fbdev itself.
+-Daniel
 -- 
-2.20.1
-
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch

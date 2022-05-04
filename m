@@ -2,44 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E056751AA8A
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:27:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA67E51A875
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:07:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355741AbiEDR1S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 13:27:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52262 "EHLO
+        id S1347704AbiEDRLI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 13:11:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355349AbiEDRG1 (ORCPT
+        with ESMTP id S1355691AbiEDRAU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 13:06:27 -0400
+        Wed, 4 May 2022 13:00:20 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 971AB5131E;
-        Wed,  4 May 2022 09:54:23 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0089C4BFC8;
+        Wed,  4 May 2022 09:52:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5FFA461505;
-        Wed,  4 May 2022 16:54:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD18EC385AA;
-        Wed,  4 May 2022 16:54:22 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id ADB3B617C4;
+        Wed,  4 May 2022 16:52:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E85D4C385AF;
+        Wed,  4 May 2022 16:52:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651683262;
-        bh=WfMlLysEVKrPRgRRFepAQTUpFSGJd3MAjR8Aqdb97Iw=;
+        s=korg; t=1651683122;
+        bh=B3OU/Dc5PItCyg7JoGSjeRsJh2nM50qhJ13FxIdp3lY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hVy/T9A8JJLG5tnWYL9NNHNnQHo5rz/vgvllZiWAlSLrDIrIfi+tOi0mlvbT7M9ll
-         ZaX+s7Mo43ydvraVSwNnHvtQkF++5kDJ2JJ+iW/9Kcf11NDkTEtcy7rM1Zid5dcgu3
-         ibw8cYeEq3uvaJjLULjfjTWQOblxrWO8QUCugznM=
+        b=LHSGODLy+CSA5K6g/bn13r9/COaFzSZBHyftxdqza+ToK3p/HVbXBCGTACk1qBrOe
+         AcoDqjj+AJpwrixSrXHLse4Je0ceeiwdSQtXjWiiur0hNOO/JAN6B/QMWK34F7aSXR
+         YouNCvIGaiOQicSpPTD52xAQZoyoGzVU2GNq8YFI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 112/177] io_uring: check reserved fields for recv/recvmsg
+        stable@vger.kernel.org, Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Ingo Molnar <mingo@kernel.org>, Jiri Olsa <jolsa@kernel.org>,
+        John Garry <john.garry@huawei.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Michael Petlan <mpetlan@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Song Liu <songliubraving@fb.com>,
+        Will Deacon <will@kernel.org>, linux-s390@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org,
+        Arnaldo Carvalho de Melo <acme@redhat.com>
+Subject: [PATCH 5.10 113/129] perf symbol: Pass is_kallsyms to symbols__fixup_end()
 Date:   Wed,  4 May 2022 18:45:05 +0200
-Message-Id: <20220504153103.234734066@linuxfoundation.org>
+Message-Id: <20220504153030.273179134@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220504153053.873100034@linuxfoundation.org>
-References: <20220504153053.873100034@linuxfoundation.org>
+In-Reply-To: <20220504153021.299025455@linuxfoundation.org>
+References: <20220504153021.299025455@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,35 +68,99 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jens Axboe <axboe@kernel.dk>
+From: Namhyung Kim <namhyung@kernel.org>
 
-[ Upstream commit 5a1e99b61b0c81388cde0c808b3e4173907df19f ]
+commit 838425f2defe5262906b698752d28fd2fca1aac2 upstream.
 
-We should check unused fields for non-zero and -EINVAL if they are set,
-making it consistent with other opcodes.
+The symbol fixup is necessary for symbols in kallsyms since they don't
+have size info.  So we use the next symbol's address to calculate the
+size.  Now it's also used for user binaries because sometimes they miss
+size for hand-written asm functions.
 
-Fixes: aa1fa28fc73e ("io_uring: add support for recvmsg()")
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+There's a arch-specific function to handle kallsyms differently but
+currently it cannot distinguish kallsyms from others.  Pass this
+information explicitly to handle it properly.  Note that those arch
+functions will be moved to the generic function so I didn't added it to
+the arch-functions.
+
+Fixes: 3cf6a32f3f2a4594 ("perf symbols: Fix symbol size calculation condition")
+Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+Acked-by: Ian Rogers <irogers@google.com>
+Cc: Heiko Carstens <hca@linux.ibm.com>
+Cc: Ingo Molnar <mingo@kernel.org>
+Cc: Jiri Olsa <jolsa@kernel.org>
+Cc: John Garry <john.garry@huawei.com>
+Cc: Leo Yan <leo.yan@linaro.org>
+Cc: Mark Rutland <mark.rutland@arm.com>
+Cc: Masami Hiramatsu <mhiramat@kernel.org>
+Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
+Cc: Michael Ellerman <mpe@ellerman.id.au>
+Cc: Michael Petlan <mpetlan@redhat.com>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Song Liu <songliubraving@fb.com>
+Cc: Will Deacon <will@kernel.org>
+Cc: linux-s390@vger.kernel.org
+Cc: linuxppc-dev@lists.ozlabs.org
+Link: https://lore.kernel.org/r/20220416004048.1514900-2-namhyung@kernel.org
+Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/io_uring.c | 2 ++
- 1 file changed, 2 insertions(+)
+ tools/perf/util/symbol-elf.c |    2 +-
+ tools/perf/util/symbol.c     |    7 ++++---
+ tools/perf/util/symbol.h     |    2 +-
+ 3 files changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/fs/io_uring.c b/fs/io_uring.c
-index 48c9a550e48c..7aad4bde92e9 100644
---- a/fs/io_uring.c
-+++ b/fs/io_uring.c
-@@ -5009,6 +5009,8 @@ static int io_recvmsg_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
+--- a/tools/perf/util/symbol-elf.c
++++ b/tools/perf/util/symbol-elf.c
+@@ -1245,7 +1245,7 @@ int dso__load_sym(struct dso *dso, struc
+ 	 * For misannotated, zeroed, ASM function sizes.
+ 	 */
+ 	if (nr > 0) {
+-		symbols__fixup_end(&dso->symbols);
++		symbols__fixup_end(&dso->symbols, false);
+ 		symbols__fixup_duplicate(&dso->symbols);
+ 		if (kmap) {
+ 			/*
+--- a/tools/perf/util/symbol.c
++++ b/tools/perf/util/symbol.c
+@@ -217,7 +217,8 @@ again:
+ 	}
+ }
  
- 	if (unlikely(req->ctx->flags & IORING_SETUP_IOPOLL))
- 		return -EINVAL;
-+	if (unlikely(sqe->addr2 || sqe->file_index))
-+		return -EINVAL;
+-void symbols__fixup_end(struct rb_root_cached *symbols)
++void symbols__fixup_end(struct rb_root_cached *symbols,
++			bool is_kallsyms __maybe_unused)
+ {
+ 	struct rb_node *nd, *prevnd = rb_first_cached(symbols);
+ 	struct symbol *curr, *prev;
+@@ -1456,7 +1457,7 @@ int __dso__load_kallsyms(struct dso *dso
+ 	if (kallsyms__delta(kmap, filename, &delta))
+ 		return -1;
  
- 	sr->umsg = u64_to_user_ptr(READ_ONCE(sqe->addr));
- 	sr->len = READ_ONCE(sqe->len);
--- 
-2.35.1
-
+-	symbols__fixup_end(&dso->symbols);
++	symbols__fixup_end(&dso->symbols, true);
+ 	symbols__fixup_duplicate(&dso->symbols);
+ 
+ 	if (dso->kernel == DSO_SPACE__KERNEL_GUEST)
+@@ -1651,7 +1652,7 @@ int dso__load_bfd_symbols(struct dso *ds
+ #undef bfd_asymbol_section
+ #endif
+ 
+-	symbols__fixup_end(&dso->symbols);
++	symbols__fixup_end(&dso->symbols, false);
+ 	symbols__fixup_duplicate(&dso->symbols);
+ 	dso->adjust_symbols = 1;
+ 
+--- a/tools/perf/util/symbol.h
++++ b/tools/perf/util/symbol.h
+@@ -192,7 +192,7 @@ void __symbols__insert(struct rb_root_ca
+ 		       bool kernel);
+ void symbols__insert(struct rb_root_cached *symbols, struct symbol *sym);
+ void symbols__fixup_duplicate(struct rb_root_cached *symbols);
+-void symbols__fixup_end(struct rb_root_cached *symbols);
++void symbols__fixup_end(struct rb_root_cached *symbols, bool is_kallsyms);
+ void maps__fixup_end(struct maps *maps);
+ 
+ typedef int (*mapfn_t)(u64 start, u64 len, u64 pgoff, void *data);
 
 

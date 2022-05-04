@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3053151A825
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:07:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71B1951AA71
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:27:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231344AbiEDRIQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 13:08:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37618 "EHLO
+        id S1354242AbiEDR01 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 13:26:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355591AbiEDRAQ (ORCPT
+        with ESMTP id S1353151AbiEDRFU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 13:00:16 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E32164B874;
-        Wed,  4 May 2022 09:51:53 -0700 (PDT)
+        Wed, 4 May 2022 13:05:20 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E75850E16;
+        Wed,  4 May 2022 09:54:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 77FAAB827A6;
-        Wed,  4 May 2022 16:51:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1D82C385A5;
-        Wed,  4 May 2022 16:51:51 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9A69AB827AD;
+        Wed,  4 May 2022 16:54:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26102C385A5;
+        Wed,  4 May 2022 16:54:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651683112;
-        bh=xCiJZCZ9ZeZ92LkRF+pni1gvqdOIeeTL+TY9tYDqNAY=;
+        s=korg; t=1651683251;
+        bh=vzEX6Tq9n68EdutGIw5T+UJNk47l/3TGbuch2cwKSbs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KURyQIF84kvsTJXdB8Nz0wM35PgyOwHEHM6A3xNXz+FKfEBwt8wF948HaYmLh/x7C
-         4ljtzyDPhHneNb5Sm9E6PNSpdAJNn/tlNNFrejO+uUX8liqThOkMtnEcuH2FBKWnQd
-         nZIHGgW6P1nxKMTRczJNA1n/nA7I9QHbUr2/hWtY=
+        b=Y71IOSKfQjSk+KpJQJBtc9NT637Hka7ODM+v+Z88h43YF/xwbBkwUNpQLVNByefE8
+         ZlO+OIRdmy5QlEju4W4DbkVLrbzhiRR4RPwElxa85F3cj8NQFGHVxXvOIprxBD06zp
+         InwOoOEcbZekOy+8KZXBrjVXyfFXEKNqC3SkcCig=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Duoming Zhou <duoming@zju.edu.cn>,
-        Paolo Abeni <pabeni@redhat.com>,
+        stable@vger.kernel.org, Yang Yingliang <yangyingliang@huawei.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 104/129] drivers: net: hippi: Fix deadlock in rr_close()
-Date:   Wed,  4 May 2022 18:44:56 +0200
-Message-Id: <20220504153029.226780565@linuxfoundation.org>
+Subject: [PATCH 5.15 104/177] clk: sunxi: sun9i-mmc: check return value after calling platform_get_resource()
+Date:   Wed,  4 May 2022 18:44:57 +0200
+Message-Id: <20220504153102.499192036@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220504153021.299025455@linuxfoundation.org>
-References: <20220504153021.299025455@linuxfoundation.org>
+In-Reply-To: <20220504153053.873100034@linuxfoundation.org>
+References: <20220504153053.873100034@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,51 +56,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Duoming Zhou <duoming@zju.edu.cn>
+From: Yang Yingliang <yangyingliang@huawei.com>
 
-[ Upstream commit bc6de2878429e85c1f1afaa566f7b5abb2243eef ]
+[ Upstream commit f58ca215cda1975f77b2b762903684a3c101bec9 ]
 
-There is a deadlock in rr_close(), which is shown below:
+It will cause null-ptr-deref if platform_get_resource() returns NULL,
+we need check the return value.
 
-   (Thread 1)                |      (Thread 2)
-                             | rr_open()
-rr_close()                   |  add_timer()
- spin_lock_irqsave() //(1)   |  (wait a time)
- ...                         | rr_timer()
- del_timer_sync()            |  spin_lock_irqsave() //(2)
- (wait timer to stop)        |  ...
-
-We hold rrpriv->lock in position (1) of thread 1 and
-use del_timer_sync() to wait timer to stop, but timer handler
-also need rrpriv->lock in position (2) of thread 2.
-As a result, rr_close() will block forever.
-
-This patch extracts del_timer_sync() from the protection of
-spin_lock_irqsave(), which could let timer handler to obtain
-the needed lock.
-
-Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
-Link: https://lore.kernel.org/r/20220417125519.82618-1-duoming@zju.edu.cn
-Signed-off-by: Paolo Abeni <pabeni@redhat.com>
+Fixes: 7a6fca879f59 ("clk: sunxi: Add driver for A80 MMC config clocks/resets")
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+Reviewed-by: Samuel Holland <samuel@sholland.org>
+Signed-off-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+Link: https://lore.kernel.org/r/20220421134308.2885094-1-yangyingliang@huawei.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/hippi/rrunner.c | 2 ++
+ drivers/clk/sunxi/clk-sun9i-mmc.c | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/drivers/net/hippi/rrunner.c b/drivers/net/hippi/rrunner.c
-index 22010384c4a3..b9646b369f8e 100644
---- a/drivers/net/hippi/rrunner.c
-+++ b/drivers/net/hippi/rrunner.c
-@@ -1353,7 +1353,9 @@ static int rr_close(struct net_device *dev)
+diff --git a/drivers/clk/sunxi/clk-sun9i-mmc.c b/drivers/clk/sunxi/clk-sun9i-mmc.c
+index 542b31d6e96d..636bcf2439ef 100644
+--- a/drivers/clk/sunxi/clk-sun9i-mmc.c
++++ b/drivers/clk/sunxi/clk-sun9i-mmc.c
+@@ -109,6 +109,8 @@ static int sun9i_a80_mmc_config_clk_probe(struct platform_device *pdev)
+ 	spin_lock_init(&data->lock);
  
- 	rrpriv->fw_running = 0;
- 
-+	spin_unlock_irqrestore(&rrpriv->lock, flags);
- 	del_timer_sync(&rrpriv->timer);
-+	spin_lock_irqsave(&rrpriv->lock, flags);
- 
- 	writel(0, &regs->TxPi);
- 	writel(0, &regs->IpRxPi);
+ 	r = platform_get_resource(pdev, IORESOURCE_MEM, 0);
++	if (!r)
++		return -EINVAL;
+ 	/* one clock/reset pair per word */
+ 	count = DIV_ROUND_UP((resource_size(r)), SUN9I_MMC_WIDTH);
+ 	data->membase = devm_ioremap_resource(&pdev->dev, r);
 -- 
 2.35.1
 

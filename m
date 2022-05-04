@@ -2,113 +2,214 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 216C951B25D
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 00:51:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83B7D51B2C7
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 01:24:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378669AbiEDWxL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 18:53:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40474 "EHLO
+        id S1356155AbiEDXEu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 19:04:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234521AbiEDWxI (ORCPT
+        with ESMTP id S235475AbiEDW5m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 18:53:08 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07DB2527F3
-        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 15:49:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651704570; x=1683240570;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=5P/PrMYYu3/0Y8TeBq+/Mcp8ybxA6LS0+AwYjUJWd44=;
-  b=XxSNKsxhDKExbn7qncrezveQQW3LVBsyHiB2DAfiDmm3CtK5SPsGpBDh
-   CKij6apwE3WioG8+S6fMmnZWmYyx3xHktufEk5Gr+BVMXUsTwuMBOCIlb
-   kY4xaNXGUn31VOrGhe8BPFWlOhpQHqBP9UxsfVlE6hRm1bfjn4Pnkde4H
-   YPGjF9IrlCzlCiFcvEhIj4jEDKB1mfb4B0q/CA1vLe/DzbsJpBoJ93qpO
-   8kJRkxT8hBfogISaAxPH4FE1iw1rUVes/pP3Btaf8xxwybwDUFGI9YZtu
-   bwtk08l5e0KFBKj41y7SspVFBlKaqBJJL/ldtdnkIwLvo7WRnmWidGIaw
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10337"; a="268075016"
-X-IronPort-AV: E=Sophos;i="5.91,199,1647327600"; 
-   d="scan'208";a="268075016"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2022 15:49:19 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,199,1647327600"; 
-   d="scan'208";a="734620159"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 04 May 2022 15:49:15 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nmNo2-000Brq-TI;
-        Wed, 04 May 2022 22:49:14 +0000
-Date:   Thu, 5 May 2022 06:48:31 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Manjunatha Venkatesh <manjunatha.venkatesh@nxp.com>,
-        linux-kernel@vger.kernel.org, gregkh@linuxfoundation.org,
-        will@kernel.org, axboe@kernel.dk
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org, mb@lightnvm.io,
-        ckeepax@opensource.cirrus.com, manjunatha.venkatesh@nxp.com,
-        mst@redhat.com, javier@javigon.com, mikelley@microsoft.com,
-        jasowang@redhat.com, sunilmut@microsoft.com,
-        bjorn.andersson@linaro.org, rvmanjumce@gmail.com,
-        ashish.deshpande@nxp.com
-Subject: Re: [PATCH v3] [PATCH v3] uwb: nxp: sr1xx: UWB driver support for
- sr1xx series chip
-Message-ID: <202205050656.HCzWfiw2-lkp@intel.com>
-References: <20220504171337.3416983-1-manjunatha.venkatesh@nxp.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220504171337.3416983-1-manjunatha.venkatesh@nxp.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 4 May 2022 18:57:42 -0400
+Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47C9B53722
+        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 15:52:00 -0700 (PDT)
+Received: by mail-pj1-x104a.google.com with SMTP id r16-20020a17090b051000b001db302efed7so1089297pjz.2
+        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 15:52:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=reply-to:date:in-reply-to:message-id:mime-version:references
+         :subject:from:to:cc;
+        bh=Hx8sCbhJvCh5cLdAhmGu8wLUB1jVDA/mxGjlfX4jDqM=;
+        b=tfLtI6sfhovJRsf3jGIwzoV9D3TJaeV+YvUAEkJIwJSxaewRMzz53Llw7lmWCI0j4K
+         eUOSQ31RJ6XLelenIebss22NvfTU3D+X7Tt0X81MZenpjuKsgQulvOZP7MJ9UYP+Y6zr
+         3Lx1LOG1Aldt32RQMvbzPmu8gFeqV4vTHHkLlrKDG0dZLMgc4WHpXI9qVGdJW2zX7XAi
+         3gqd340xVwC3KBfYI3zro5OT4LTZKR5gbWOSuAHlA9FaoheMSe6OA62TW0rRctwSVvYm
+         XMGsPLfguqtHE6tKbO5tUvlN8G5KWIGfOtrKXLvTm6AAdIgd2OmOnR/Qh23Vku0QYZrr
+         h1Ew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:reply-to:date:in-reply-to:message-id
+         :mime-version:references:subject:from:to:cc;
+        bh=Hx8sCbhJvCh5cLdAhmGu8wLUB1jVDA/mxGjlfX4jDqM=;
+        b=Uljrx8FoO9FcHeO9YIKmHqMAK08SwhbqIBlokQixOU62Jew2MON7IPMdLPFZ1yvQ+V
+         U5NO7AGKSRFdSGjn+KeZgvkSjAK0YbzMnIMzC0gfHh49hkLKWCd/rqSNGtaljNtn/Rrf
+         f0RS5iqXJM7notRcqqR6WCetMf+SCoWKbGEfld/PXjIWpar2SyfYk3ujk9fGcStADGr7
+         nKXBbx/RaXheHKzvtWU718J0yk7YNXndiTW7+Wr7lpHYFbUZZ/ZsUnbntvNp6Di+AFOv
+         /5vA1CD8hvzPE280qS5mBc8AWb2hU6eW5updoKIn1VkpNJ8vqAJadu/irIa8gNy4b5zP
+         +f+A==
+X-Gm-Message-State: AOAM5331b9Q+AL/SIzgvXH2d3+4etOyNkijtM2sU4PVZ8fRoU+OK+Jyr
+        GjNTD9IoFrhtfF+2vRvzYEIXiJors7w=
+X-Google-Smtp-Source: ABdhPJyQwjqPyAPUvRIzb7J6XsuFaPqeZRZSGX1w+CRJDk08taZEW9zNDQzFxttZ7zMLtPTHM+ir5HkkoEU=
+X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
+ (user=seanjc job=sendgmr) by 2002:a05:6a00:1784:b0:50d:d8cb:7a4f with SMTP id
+ s4-20020a056a00178400b0050dd8cb7a4fmr19715916pfg.23.1651704719268; Wed, 04
+ May 2022 15:51:59 -0700 (PDT)
+Reply-To: Sean Christopherson <seanjc@google.com>
+Date:   Wed,  4 May 2022 22:48:32 +0000
+In-Reply-To: <20220504224914.1654036-1-seanjc@google.com>
+Message-Id: <20220504224914.1654036-87-seanjc@google.com>
+Mime-Version: 1.0
+References: <20220504224914.1654036-1-seanjc@google.com>
+X-Mailer: git-send-email 2.36.0.464.gb9c8b46e94-goog
+Subject: [PATCH 086/128] KVM: selftests: Convert xapic_state_test away from
+ hardcoded vCPU ID
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Andrew Jones <drjones@redhat.com>,
+        David Matlack <dmatlack@google.com>,
+        Ben Gardon <bgardon@google.com>,
+        Oliver Upton <oupton@google.com>,
+        Sean Christopherson <seanjc@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Manjunatha,
+Convert xapic_state_test to use vm_create_with_one_vcpu() and pass around
+a 'struct kvm_vcpu' object instead of the raw vCPU ID.
 
-Thank you for the patch! Yet something to improve:
+Signed-off-by: Sean Christopherson <seanjc@google.com>
+---
+ .../selftests/kvm/x86_64/xapic_state_test.c   | 48 ++++++++++---------
+ 1 file changed, 25 insertions(+), 23 deletions(-)
 
-[auto build test ERROR on char-misc/char-misc-testing]
-[also build test ERROR on linux/master linus/master v5.18-rc5 next-20220504]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Manjunatha-Venkatesh/uwb-nxp-sr1xx-UWB-driver-support-for-sr1xx-series-chip/20220505-020126
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/char-misc.git 35a7609639c49f76f13f206402cbf692c4ae3e4e
-config: x86_64-randconfig-a014-20220502 (https://download.01.org/0day-ci/archive/20220505/202205050656.HCzWfiw2-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 363b3a645a1e30011cc8da624f13dac5fd915628)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/037b22462c3f4715f0a04e1be05cd12986880d21
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Manjunatha-Venkatesh/uwb-nxp-sr1xx-UWB-driver-support-for-sr1xx-series-chip/20220505-020126
-        git checkout 037b22462c3f4715f0a04e1be05cd12986880d21
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 prepare
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> error: include/uapi/misc/sr1xx.h: missing "WITH Linux-syscall-note" for SPDX-License-Identifier
-   make[2]: *** [scripts/Makefile.headersinst:63: usr/include/misc/sr1xx.h] Error 1
-   make[2]: Target '__headers' not remade because of errors.
-   make[1]: *** [Makefile:1280: headers] Error 2
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:219: __sub-make] Error 2
-   make: Target 'prepare' not remade because of errors.
-
+diff --git a/tools/testing/selftests/kvm/x86_64/xapic_state_test.c b/tools/testing/selftests/kvm/x86_64/xapic_state_test.c
+index 9d8393b6ec75..56301ee1adee 100644
+--- a/tools/testing/selftests/kvm/x86_64/xapic_state_test.c
++++ b/tools/testing/selftests/kvm/x86_64/xapic_state_test.c
+@@ -12,7 +12,7 @@
+ #include "test_util.h"
+ 
+ struct xapic_vcpu {
+-	uint32_t id;
++	struct kvm_vcpu *vcpu;
+ 	bool is_x2apic;
+ };
+ 
+@@ -47,8 +47,9 @@ static void x2apic_guest_code(void)
+ 	} while (1);
+ }
+ 
+-static void ____test_icr(struct kvm_vm *vm, struct xapic_vcpu *vcpu, uint64_t val)
++static void ____test_icr(struct kvm_vm *vm, struct xapic_vcpu *x, uint64_t val)
+ {
++	struct kvm_vcpu *vcpu = x->vcpu;
+ 	struct kvm_lapic_state xapic;
+ 	struct ucall uc;
+ 	uint64_t icr;
+@@ -70,28 +71,29 @@ static void ____test_icr(struct kvm_vm *vm, struct xapic_vcpu *vcpu, uint64_t va
+ 	vcpu_ioctl(vm, vcpu->id, KVM_GET_LAPIC, &xapic);
+ 	icr = (u64)(*((u32 *)&xapic.regs[APIC_ICR])) |
+ 	      (u64)(*((u32 *)&xapic.regs[APIC_ICR2])) << 32;
+-	if (!vcpu->is_x2apic)
++	if (!x->is_x2apic)
+ 		val &= (-1u | (0xffull << (32 + 24)));
+ 	ASSERT_EQ(icr, val & ~APIC_ICR_BUSY);
+ }
+ 
+-static void __test_icr(struct kvm_vm *vm, struct xapic_vcpu *vcpu, uint64_t val)
++static void __test_icr(struct kvm_vm *vm, struct xapic_vcpu *x, uint64_t val)
+ {
+-	____test_icr(vm, vcpu, val | APIC_ICR_BUSY);
+-	____test_icr(vm, vcpu, val & ~(u64)APIC_ICR_BUSY);
++	____test_icr(vm, x, val | APIC_ICR_BUSY);
++	____test_icr(vm, x, val & ~(u64)APIC_ICR_BUSY);
+ }
+ 
+-static void test_icr(struct kvm_vm *vm, struct xapic_vcpu *vcpu)
++static void test_icr(struct kvm_vm *vm, struct xapic_vcpu *x)
+ {
++	struct kvm_vcpu *vcpu = x->vcpu;
+ 	uint64_t icr, i, j;
+ 
+ 	icr = APIC_DEST_SELF | APIC_INT_ASSERT | APIC_DM_FIXED;
+ 	for (i = 0; i <= 0xff; i++)
+-		__test_icr(vm, vcpu, icr | i);
++		__test_icr(vm, x, icr | i);
+ 
+ 	icr = APIC_INT_ASSERT | APIC_DM_FIXED;
+ 	for (i = 0; i <= 0xff; i++)
+-		__test_icr(vm, vcpu, icr | i);
++		__test_icr(vm, x, icr | i);
+ 
+ 	/*
+ 	 * Send all flavors of IPIs to non-existent vCPUs.  TODO: use number of
+@@ -100,32 +102,32 @@ static void test_icr(struct kvm_vm *vm, struct xapic_vcpu *vcpu)
+ 	icr = APIC_INT_ASSERT | 0xff;
+ 	for (i = vcpu->id + 1; i < 0xff; i++) {
+ 		for (j = 0; j < 8; j++)
+-			__test_icr(vm, vcpu, i << (32 + 24) | APIC_INT_ASSERT | (j << 8));
++			__test_icr(vm, x, i << (32 + 24) | APIC_INT_ASSERT | (j << 8));
+ 	}
+ 
+ 	/* And again with a shorthand destination for all types of IPIs. */
+ 	icr = APIC_DEST_ALLBUT | APIC_INT_ASSERT;
+ 	for (i = 0; i < 8; i++)
+-		__test_icr(vm, vcpu, icr | (i << 8));
++		__test_icr(vm, x, icr | (i << 8));
+ 
+ 	/* And a few garbage value, just make sure it's an IRQ (blocked). */
+-	__test_icr(vm, vcpu, 0xa5a5a5a5a5a5a5a5 & ~APIC_DM_FIXED_MASK);
+-	__test_icr(vm, vcpu, 0x5a5a5a5a5a5a5a5a & ~APIC_DM_FIXED_MASK);
+-	__test_icr(vm, vcpu, -1ull & ~APIC_DM_FIXED_MASK);
++	__test_icr(vm, x, 0xa5a5a5a5a5a5a5a5 & ~APIC_DM_FIXED_MASK);
++	__test_icr(vm, x, 0x5a5a5a5a5a5a5a5a & ~APIC_DM_FIXED_MASK);
++	__test_icr(vm, x, -1ull & ~APIC_DM_FIXED_MASK);
+ }
+ 
+ int main(int argc, char *argv[])
+ {
+-	struct xapic_vcpu vcpu = {
+-		.id = 0,
++	struct xapic_vcpu x = {
++		.vcpu = NULL,
+ 		.is_x2apic = true,
+ 	};
+ 	struct kvm_cpuid2 *cpuid;
+ 	struct kvm_vm *vm;
+ 	int i;
+ 
+-	vm = vm_create_default(vcpu.id, 0, x2apic_guest_code);
+-	test_icr(vm, &vcpu);
++	vm = vm_create_with_one_vcpu(&x.vcpu, x2apic_guest_code);
++	test_icr(vm, &x);
+ 	kvm_vm_free(vm);
+ 
+ 	/*
+@@ -133,18 +135,18 @@ int main(int argc, char *argv[])
+ 	 * the guest in order to test AVIC.  KVM disallows changing CPUID after
+ 	 * KVM_RUN and AVIC is disabled if _any_ vCPU is allowed to use x2APIC.
+ 	 */
+-	vm = vm_create_default(vcpu.id, 0, xapic_guest_code);
+-	vcpu.is_x2apic = false;
++	vm = vm_create_with_one_vcpu(&x.vcpu, xapic_guest_code);
++	x.is_x2apic = false;
+ 
+-	cpuid = vcpu_get_cpuid(vm, vcpu.id);
++	cpuid = vcpu_get_cpuid(vm, x.vcpu->id);
+ 	for (i = 0; i < cpuid->nent; i++) {
+ 		if (cpuid->entries[i].function == 1)
+ 			break;
+ 	}
+ 	cpuid->entries[i].ecx &= ~BIT(21);
+-	vcpu_set_cpuid(vm, vcpu.id, cpuid);
++	vcpu_set_cpuid(vm, x.vcpu->id, cpuid);
+ 
+ 	virt_pg_map(vm, APIC_DEFAULT_GPA, APIC_DEFAULT_GPA);
+-	test_icr(vm, &vcpu);
++	test_icr(vm, &x);
+ 	kvm_vm_free(vm);
+ }
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.36.0.464.gb9c8b46e94-goog
+

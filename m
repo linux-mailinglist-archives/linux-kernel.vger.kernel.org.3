@@ -2,119 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EAC251AFBA
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 22:49:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E572451AFC3
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 22:51:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378362AbiEDUxA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 16:53:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39952 "EHLO
+        id S1378366AbiEDUyY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 16:54:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235304AbiEDUw6 (ORCPT
+        with ESMTP id S237697AbiEDUyW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 16:52:58 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 495904F9EE;
-        Wed,  4 May 2022 13:49:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4E02DB82984;
-        Wed,  4 May 2022 20:49:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 229DEC385A5;
-        Wed,  4 May 2022 20:49:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651697357;
-        bh=uAn1jx4nc/AyBKpUGArQO9zmKvmz3TirIiMxZEWuzcw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=azIP2rCeokqKbAzsWLeh/51f72I2r/dtxufFiQT1RPrFaPBYSqj/s5pkOUM5GmsQV
-         nrQM+zGGqt4HRLNoTaaPKnVTVceTC+7XgOV4PkrmXeM4DkT9UaVUBlFHafejXpLhRY
-         arLbbxLrx+rL0Q1WHeG2FHnKcBsN8OFkEgHRjhaqLNCyMeO2bybTg/lO8iUzwsjxfJ
-         2BfMNwBbm1EF1B6IXsbTgFNCyoq7p6yNtWJQYiAxKNgIyEFGPEKOCPNOW6n/v2uKmA
-         YYChYKS8chwl6Dj0bV9jmrItxddT2tuFiF5Si96tvZF9eBBnePoKXHKqdq8tt+sJ53
-         D/FNXZ5sQxacA==
-Date:   Wed, 4 May 2022 21:49:12 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Zev Weiss <zev@bewilderbeest.net>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        openbmc@lists.ozlabs.org
-Subject: Re: [PATCH 2/6] dt-bindings: regulator: Add reg-external-output
- binding
-Message-ID: <YnLmyHwMGnRL18LD@sirena.org.uk>
-References: <20220504065252.6955-1-zev@bewilderbeest.net>
- <20220504065252.6955-2-zev@bewilderbeest.net>
- <YnJ32bG4IkSrRtHV@sirena.org.uk>
- <YnLjNn9WVhvd4izZ@hatter.bewilderbeest.net>
+        Wed, 4 May 2022 16:54:22 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 803D11A386;
+        Wed,  4 May 2022 13:50:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=LUcWUXDVgRzdq1jJHmWhPb5IAqTKtI0mu9qnJVWCZic=; b=rp3tULafgJwVBqrzXLuxhcy/Cp
+        Wr2a2vR1oJIDTyhyFZkUrOdOCxirZ2u/G22uY4Av/ItDlm8otE7VnKe2fXojanNUlEyWaoabC/Dwf
+        J00DWqbXLn8bndSSTnYoI7TYITG2H1IuBQTQDwOBB2xkJ54dCtWZaJdGf7tPVNYb2Vv/DytdhX/9G
+        mkkKPJFcyJNGSDSfFKs5+TawT4xG+qSCMyicGkYx7J42cZLKgWN8TXYzigWCjfDrJU+N1CBm8rp3Q
+        9Nhb3PnTxJBMO3I7UEL15fBIw8+A+jwvNz2yOFgwpv22O76MwcP35joAhD4t8jR+dnFu06TC+1DRI
+        1otRHafw==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nmLxJ-00CgNR-Mt; Wed, 04 May 2022 20:50:41 +0000
+Date:   Wed, 4 May 2022 13:50:41 -0700
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Vasily Averin <vvs@openvz.org>
+Cc:     Shakeel Butt <shakeelb@google.com>, kernel@openvz.org,
+        Florian Westphal <fw@strlen.de>, linux-kernel@vger.kernel.org,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Michal Hocko <mhocko@suse.com>, cgroups@vger.kernel.org,
+        netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Kees Cook <keescook@chromium.org>,
+        Iurii Zaikin <yzaikin@google.com>,
+        linux-fsdevel@vger.kernel.org
+Subject: Re: [PATCH memcg v2] memcg: accounting for objects allocated for new
+ netdevice
+Message-ID: <YnLnIXmamiEuQAo3@bombadil.infradead.org>
+References: <53613f02-75f2-0546-d84c-a5ed989327b6@openvz.org>
+ <354a0a5f-9ec3-a25c-3215-304eab2157bc@openvz.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="66W6v/kA9l7TTEWD"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YnLjNn9WVhvd4izZ@hatter.bewilderbeest.net>
-X-Cookie: Mother is the invention of necessity.
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <354a0a5f-9ec3-a25c-3215-304eab2157bc@openvz.org>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, May 02, 2022 at 03:15:51PM +0300, Vasily Averin wrote:
+> Creating a new netdevice allocates at least ~50Kb of memory for various
+> kernel objects, but only ~5Kb of them are accounted to memcg. As a result,
+> creating an unlimited number of netdevice inside a memcg-limited container
+> does not fall within memcg restrictions, consumes a significant part
+> of the host's memory, can cause global OOM and lead to random kills of
+> host processes.
+> 
+> The main consumers of non-accounted memory are:
+>  ~10Kb   80+ kernfs nodes
+>  ~6Kb    ipv6_add_dev() allocations
+>   6Kb    __register_sysctl_table() allocations
+>   4Kb    neigh_sysctl_register() allocations
+>   4Kb    __devinet_sysctl_register() allocations
+>   4Kb    __addrconf_sysctl_register() allocations
+> 
+> Accounting of these objects allows to increase the share of memcg-related
+> memory up to 60-70% (~38Kb accounted vs ~54Kb total for dummy netdevice
+> on typical VM with default Fedora 35 kernel) and this should be enough
+> to somehow protect the host from misuse inside container.
+> 
+> Other related objects are quite small and may not be taken into account
+> to minimize the expected performance degradation.
+> 
+> It should be separately mentonied ~300 bytes of percpu allocation
+> of struct ipstats_mib in snmp6_alloc_dev(), on huge multi-cpu nodes
+> it can become the main consumer of memory.
+> 
+> This patch does not enables kernfs accounting as it affects
+> other parts of the kernel and should be discussed separately.
+> However, even without kernfs, this patch significantly improves the
+> current situation and allows to take into account more than half
+> of all netdevice allocations.
+> 
+> Signed-off-by: Vasily Averin <vvs@openvz.org>
+> ---
+> v2: 1) kernfs accounting moved into separate patch, suggested by
+>     Shakeel and mkoutny@.
+>     2) in ipv6_add_dev() changed original "sizeof(struct inet6_dev)"
+>     to "sizeof(*ndev)", according to checkpath.pl recommendation:
+>       CHECK: Prefer kzalloc(sizeof(*ndev)...) over kzalloc(sizeof
+>         (struct inet6_dev)...)
+> ---
+>  fs/proc/proc_sysctl.c | 2 +-
 
---66W6v/kA9l7TTEWD
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+for proc_sysctl:
 
-On Wed, May 04, 2022 at 01:33:58PM -0700, Zev Weiss wrote:
-> On Wed, May 04, 2022 at 05:55:53AM PDT, Mark Brown wrote:
+Acked-by: Luis Chamberlain <mcgrof@kernel.org>
 
-> > I think at a minimum anything like this would need some sort of
-> > representation of how the output physically appears so that people can
-> > work out how outputs are mapped to the hardware they see.
-
-> I don't quite understand what you're describing here -- could you elaborate
-> on what you mean by "how the output physically appears", and what that might
-> look like in a DT binding?
-
-For example if the output comes out on a socket then that socket should
-be described.
-
-> > However we
-> > already have a subsystem for external connectors - extcon.  Perhaps this
-> > should be a regulator client in the extcon API?  It's common for
-> > connectors to include some sort of power provision so it seems like this
-> > would fit right in.
-
-> Interesting -- I wasn't previously aware of the extcon subsystem, thanks for
-> the pointer.  However, after looking at it a bit, I'm not sure I see how
-> it'd be applicable here, since it looks like it's built to handle hardware
-> that's at least sophisticated enough for software to tell whether or not
-> something's plugged in, which isn't the case here.  The connector is just a
-> ground pin and +12VDC pin, no presence-detection mechanism or anything else.
-> Outside of the regulator itself there's really no "device" there for
-> software to talk to or otherwise interact with at all.
-
-Sure, but there's no reason why it can't scale down to something
-simpler.  It's easier to support something simpler than have to extend
-to support something more complicated.
-
---66W6v/kA9l7TTEWD
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmJy5sgACgkQJNaLcl1U
-h9B35Af+PHHkp2wfo6G66nqsy/m9SQn1PAVUGFZ0DrivXUKk7YOodvsS0HglBDu2
-gkBV/c4Kdp3RrS3MYpqsGRRCdkRMiEO98WLKhnIW7LVqs4fB+BMi6TbFUyJX4IVS
-S86d8/3j97F7mA/EzmITT3naxTPMnym23r2wDfL1BTf7MuQGwRbchmQfwxArsz4c
-Vh+CbfhYTk4b7X4sG8AddkqRvRG0yuHtokGbIqBFOiPZbgulVrqWPPKLYgIzqYKY
-LTo2IeGwL5pRTtzfqNDNfWsMfFo879rPIzeOCUvzraToQRABMPanKEyP/LYI7eWA
-c9LJQhPk8fhLuDunH6clBkWd1m1CBg==
-=lUz7
------END PGP SIGNATURE-----
-
---66W6v/kA9l7TTEWD--
+  Luis

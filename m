@@ -2,99 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E3F351AFF8
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 23:00:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9490451B00D
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 23:04:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378479AbiEDVDs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 17:03:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49686 "EHLO
+        id S1350061AbiEDVHx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 17:07:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343672AbiEDVDo (ORCPT
+        with ESMTP id S235258AbiEDVHv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 17:03:44 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBB3A517FD;
-        Wed,  4 May 2022 14:00:07 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 96C5FB8293F;
-        Wed,  4 May 2022 21:00:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4714DC385A4;
-        Wed,  4 May 2022 21:00:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651698005;
-        bh=5Nf3iyTvgGnwT20t1hf3sHDL9Ia6CNjfhok9FG1zJ9Y=;
-        h=From:To:In-Reply-To:References:Subject:Date:From;
-        b=aiFVKPs62c0odAocD0BRu2jLYyKCUrTTOPiJvbDNsUrPmaaG13/o+l14i0ovljyNe
-         mSBkFdQgO6z4Ocz6x/poZ4hRcYR8J/bK5UkxqFiTXtgqdpFMqjKPDkdNSKte7GUE6F
-         dqva4pjX5ji5KNg8Z6Cok/D68R+QLrQ0cfUbZbPDxwflGV11D82H2qv2xiVqrjU/MF
-         Roiz18j6W3OYH+VxsqZfdYg0Kt9Av+46hCRcnHbZnp5v/hsIVCBnbxNH7sdIj886s6
-         HsZSOtr3QcXrRp6zBQdy70ybPeVcuJ6Vtsn5guB4vSJTZJLJ6F6bRG0CCqcz6Usa7h
-         EBhLOWD71+d2A==
-From:   Mark Brown <broonie@kernel.org>
-To:     linux-kernel@vger.kernel.org, krzysztof.kozlowski@linaro.org,
-        linux-arm-msm@vger.kernel.org, lgirdwood@gmail.com,
-        devicetree@vger.kernel.org, robh+dt@kernel.org, agross@kernel.org,
-        bjorn.andersson@linaro.org, krzysztof.kozlowski+dt@linaro.org
-In-Reply-To: <20220426105501.73200-1-krzysztof.kozlowski@linaro.org>
-References: <20220426105501.73200-1-krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH v3 0/3] regulator: dt-bindings: qcom,rpmh: minor cleanups and extend supplies
-Message-Id: <165169800298.1752583.17813272460576782096.b4-ty@kernel.org>
-Date:   Wed, 04 May 2022 22:00:02 +0100
+        Wed, 4 May 2022 17:07:51 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D2095132C;
+        Wed,  4 May 2022 14:04:14 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1651698253;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=yscU3WybghtmL24CPVhfe3Npv35TWeHhUhbLPNB/baI=;
+        b=2o4PulypsEzEaBWVKXUxymwhkYsJP/KTJPjb8FRZr+Ih3SjC7rNRe3gMTZ62Zhxqe08LUl
+        Prn+Gl88cMnO4fy59CKk9MWSFjSSblnj75szVkZXRS/pw218lyTttRm8hs69hlbqvD5+4r
+        j7Spi2zSB+/qZi6XUycE2WBtWCrd759FD1kpHPRuXmY/gpuftQmIGEQRFXTcEd9Llm67b4
+        VvIdre3I7NblZMLPy0gpoT6K7GeJsxSeVK3liXZ5Ry0rAF7vzYZhWyNs3AmbfDo3ov9PGt
+        jIaFLQEVGPftCkXx7bujbixeFC6j2mpTed3UhJijSNvnblLacC+JRVzZhTCuqQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1651698253;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=yscU3WybghtmL24CPVhfe3Npv35TWeHhUhbLPNB/baI=;
+        b=XRJx8U7T2flBHP2xUg1gwUnEZLffldEyfEe3a60XlUALYx+birhCBL4LUAs3gFlFAAI227
+        Vi33mqjq76SNcODQ==
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Borislav Petkov <bp@alien8.de>,
+        LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
+        Filipe Manana <fdmanana@suse.com>, linux-crypto@vger.kernel.org
+Subject: Re: [patch 3/3] x86/fpu: Make FPU protection more robust
+In-Reply-To: <YnLOXZp6WgH7ULVU@zx2c4.com>
+References: <20220501192740.203963477@linutronix.de>
+ <20220501193102.704267030@linutronix.de> <Ym/sHqKqmLOJubgE@zn.tnic>
+ <87k0b4lydr.ffs@tglx> <YnDwjjdiSQ5Yml6E@hirez.programming.kicks-ass.net>
+ <87fslpjomx.ffs@tglx> <YnKh96isoB7jiFrv@zx2c4.com> <87czgtjlfq.ffs@tglx>
+ <YnLOXZp6WgH7ULVU@zx2c4.com>
+Date:   Wed, 04 May 2022 23:04:12 +0200
+Message-ID: <87wnf1huwj.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 26 Apr 2022 12:54:58 +0200, Krzysztof Kozlowski wrote:
-> Extend the RPMH regulator bindings with minor fixes and adding narrow supply
-> matching.
-> 
-> Changes since v2
-> ================
-> 1. Remove "defs" method, because schema nows allows unevaluatedProperties
->    without references to other schemas.
-> 2. Include maintainer change patch, previously sent separately.
-> 
-> [...]
+Jason,
 
-Applied to
+On Wed, May 04 2022 at 21:05, Jason A. Donenfeld wrote:
+> The other stance is that these input/disk events are relatively rare --
+> compared to, say, a storm of interrupts from a NIC -- so mixing into the
+> input pool from there isn't actually a problem, and we benefit from the
+> quasi domain-specific accounting and the superior mixing function,
+> there, so keep it around. And the non-raw spinlock on the input pool
+> won't negatively affect RT from this context, because all its callers on
+> RT should be threaded.
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git for-next
+I'm not worried about RT here.
 
-Thanks!
+> The second stance seems easier and more conservative from a certain
+> perspective -- we don't need to change anything -- so I'm more inclined
+> toward it.
 
-[1/3] regulator: dt-bindings: qcom,rpmh: update maintainers
-      commit: a6d889a8fdbb8cb4b0d01f30f93357f3ffd61f06
-[2/3] regulator: dt-bindings: qcom,rpmh: document supplies per variant
-      commit: ba5d99609a5e6a3d0d9ac2574250208457d839cc
-[3/3] regulator: dt-bindings: qcom,rpmh: document vdd-l7-bob-supply on PMR735A
-      commit: e84f3c41a583408c7c67ed7824a7ff14ff40d045
+That's not conservative, that's lazy and lame. Staying with the status
+quo and piling more stuff on top because we can is just increasing
+technical debt. Works for a while by some definition of works.
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+> And given that you've fixed the bug now, it sounds like that's fine
+> with you too. But if you're thinking about it differently in fact, let
+> me know.
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+That still does not address my observation that using the FPU for this
+mixing, which is handling a couple of bytes per invocation, is not
+really benefitial.
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
+Which in turn bears the question, why we have to maintain an asymmetric
+FPU protection mechanism in order to support hard interrupt FPU usage
+for no or questionable benefit.
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
+The current implementation, courtesy to hard interrupt support, has the
+following downside:
+
+  Any FPU usage in task context where soft interrupts are enabled will
+  prevent FPU usage in soft interrupt processing when the interrupt hits
+  into the FPU usage region. That means the softirq processing has to
+  fall back to the generic implementations.
+
+Sure, the protection could be context dependent, but that's generally
+frowned upon. If we go there, then there has to be a really convincing
+technical argument.
 
 Thanks,
-Mark
+
+        tglx

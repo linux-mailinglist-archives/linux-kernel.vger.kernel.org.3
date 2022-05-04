@@ -2,122 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A7F3519FF0
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 14:48:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38823519FF2
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 14:49:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349987AbiEDMwI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 08:52:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37116 "EHLO
+        id S1350001AbiEDMws (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 08:52:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349759AbiEDMwG (ORCPT
+        with ESMTP id S1349977AbiEDMwq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 08:52:06 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A09C35DE6;
-        Wed,  4 May 2022 05:48:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=G93hoWAPSx2gLrCey5jzHvD7tboB7igd9XdDDKC0XOc=; b=dLbUb9vPSlvjkgncUmlNID8eiE
-        i96aCAHEy+tXMqpVzPbNp+W5UwFi4geobZUMi5AqYY8WIVj8pCAt9AbW+HWsFM8dy9YGAHMD58b05
-        zH5ycR+77iQFUvCpydzLzmsayDlAHI2GjJ7VsZWgIqSTBSIobbzZEjA1k2jsIA2rMkTU=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1nmEQY-001DBD-AY; Wed, 04 May 2022 14:48:22 +0200
-Date:   Wed, 4 May 2022 14:48:22 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     Heiner Kallweit <hkallweit1@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, kernel@pengutronix.de,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH net-next v2 2/2] net: phy: dp83td510: Add support for the
- DP83TD510 Ethernet PHY
-Message-ID: <YnJ2Fvux5ZE9zqyT@lunn.ch>
-References: <20220504110655.1470008-1-o.rempel@pengutronix.de>
- <20220504110655.1470008-3-o.rempel@pengutronix.de>
+        Wed, 4 May 2022 08:52:46 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DC10366AE
+        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 05:49:10 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id dk23so2664616ejb.8
+        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 05:49:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=bZOr4HtGpaWrCWq6twhnfSIMm+TDbavFaWLE4oY5Z9c=;
+        b=nDXrvhpETmVWGr629uSMqiX19ijYfRXKXMhGz8o5tIvCP8S9zxByN1mXXSY4xpoyTF
+         jIY9vEofi63VivguJwzrnZNRqBW7uDuHVGNtAWDnzg4vNj4H2/zyrb0QptxtKV8gLC1F
+         dv0FOA9BnfulRLlZab66QXb6HOMz27lWvJIcOv3yF31liu7NCeh+j9BrInw3No6No0Uz
+         d9qp5fioReOska3ktJXacTPQ6LTbdnbYSe4vg2Fe96CAXuIjRPmUXLKUB9znlaVBAAot
+         UW6WNL/GzCT1Ezrs0i+ltz9xZUWqgynEtu3Y55k7MXOS1CqpSn6V6FWrEpjaVq8skmIW
+         9LlA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=bZOr4HtGpaWrCWq6twhnfSIMm+TDbavFaWLE4oY5Z9c=;
+        b=UwUziZx6xk4DSWxOazpkeK0psl20SiAQcF0wNhAo3yihWatgyLFam6LWszUUaGKTLw
+         J4Gr8NTxhMz5fSAY3rgzzPFbGky75YYSFOKZF440EHS4Cvc5hsht0sqHbMePp2FpGfiB
+         e39o+/9ZOPxXtM36Mus0Unaxpkcq9oIwWCJtEcjhncaqwhkcG1VDSX+8r5HNU8uGurlk
+         iROcoOOMnZPSotVNGlyPK2TeGfE84Jzzq/UKBp/NRoMMGnxZ/YrFbrV74AdBksUQhZVI
+         X+1vulF9PeCSBOlvz+bMK4L8pwX/xj+m9iaxc0XIg0nAeCuQxzESvhdIg+BJDnmY/Ady
+         olbw==
+X-Gm-Message-State: AOAM533nnosoNjGdlu5tKej7hanO2NqSSN1LKB/DqM/Wya2jJ0uFpKjC
+        LBwQqp6LF8phRAzthKlfg5k=
+X-Google-Smtp-Source: ABdhPJx71yCTi6az8xLbfEKhVrgKgdLuPPk5NgAYoOUVtjv92KGGf6NaeuVDVDWbkMzcbOmU89I5iQ==
+X-Received: by 2002:a17:907:2d24:b0:6f4:3152:3d1a with SMTP id gs36-20020a1709072d2400b006f431523d1amr15972250ejc.324.1651668549151;
+        Wed, 04 May 2022 05:49:09 -0700 (PDT)
+Received: from archbook.localnet (84-72-105-84.dclient.hispeed.ch. [84.72.105.84])
+        by smtp.gmail.com with ESMTPSA id qr48-20020a1709068cb000b006f3ef214e0bsm5768686ejc.113.2022.05.04.05.49.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 May 2022 05:49:08 -0700 (PDT)
+From:   Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
+To:     linux-arm-kernel@lists.infradead.org
+Cc:     linux-rockchip@lists.infradead.org,
+        Heiko Stuebner <heiko@sntech.de>,
+        Liang Chen <cl@rock-chips.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        linux-kernel@vger.kernel.org,
+        Kever Yang <kever.yang@rock-chips.com>
+Subject: [BUG] New arm scmi check in linux-next causing rk3568 not to boot due to firmware bug
+Date:   Wed, 04 May 2022 14:49:07 +0200
+Message-ID: <1698297.NAKyZzlH2u@archbook>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220504110655.1470008-3-o.rempel@pengutronix.de>
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 04, 2022 at 01:06:55PM +0200, Oleksij Rempel wrote:
-> The DP83TD510E is an ultra-low power Ethernet physical layer transceiver
-> that supports 10M single pair cable.
-> 
-> This driver was tested with NXP SJA1105, STMMAC and ASIX AX88772B USB Ethernet
-> controller.
-> 
-> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+Good day,
 
-Thanks for the re-write. This looks a lot better.
+a user on the #linux-rockchip channel on the Libera.chat IRC network
+reported that their RK3568 was no longer getting a CPU and GPU clock
+from scmi and consequently not booting when using linux-next. This
+was bisected down to the following commit:
 
-> +		ret = phy_read_mmd(phydev, MDIO_MMD_AN, MDIO_AN_T1_ADV_L);
-> +		if (ret < 0)
-> +			return ret;
-> +
-> +		cfg = phy_read_mmd(phydev, MDIO_MMD_AN, MDIO_AN_T1_ADV_M);
-> +		if (cfg < 0)
-> +			return cfg;
-> +
-> +		if (ret & MDIO_AN_T1_ADV_L_FORCE_MS) {
-> +			if (cfg & MDIO_AN_T1_ADV_M_MST)
-> +				phydev->master_slave_get =
-> +					MASTER_SLAVE_CFG_MASTER_FORCE;
-> +			else
-> +				phydev->master_slave_get =
-> +					MASTER_SLAVE_CFG_SLAVE_FORCE;
-> +		} else {
-> +			if (cfg & MDIO_AN_T1_ADV_M_MST)
-> +				phydev->master_slave_get =
-> +					MASTER_SLAVE_CFG_MASTER_PREFERRED;
-> +			else
-> +				phydev->master_slave_get =
-> +					MASTER_SLAVE_CFG_SLAVE_PREFERRED;
-> +		}
+https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/drivers/firmware/arm_scmi/base.c?h=next-20220503&id=3b0041f6e10e5bdbb646d98172be43e88734ed62
 
-Is this identical to genphy_c45_baset1_read_status()? I don't think
-there are any odd vendor registers here. So i suggest exporting it and
-making use of it.
+The error message in the log is as follows:
 
-> +static int dp83td510_config_master_slave(struct phy_device *phydev)
-> +{
-> +	int ctl = 0;
-> +
-> +	switch (phydev->master_slave_set) {
-> +	case MASTER_SLAVE_CFG_MASTER_PREFERRED:
-> +	case MASTER_SLAVE_CFG_MASTER_FORCE:
-> +		ctl = MDIO_PMA_PMD_BT1_CTRL_CFG_MST;
-> +		break;
-> +	case MASTER_SLAVE_CFG_SLAVE_FORCE:
-> +	case MASTER_SLAVE_CFG_SLAVE_PREFERRED:
-> +		break;
-> +	case MASTER_SLAVE_CFG_UNKNOWN:
-> +	case MASTER_SLAVE_CFG_UNSUPPORTED:
-> +		return 0;
-> +	default:
-> +		phydev_warn(phydev, "Unsupported Master/Slave mode\n");
-> +		return -EOPNOTSUPP;
-> +	}
-> +
-> +	return phy_modify_mmd(phydev, MDIO_MMD_PMAPMD, MDIO_PMA_PMD_BT1_CTRL,
-> +			     MDIO_PMA_PMD_BT1_CTRL_CFG_MST, ctl);
+arm-scmi firmware:scmi: Malformed reply - real_sz:8  calc_sz:4, t->rx.len is 12, sizeof(u32) is 4, loop_num_ret is 3
 
-Is this identical to what is in genphy_c45_pma_setup_forced()? If so,
-i would pull that code out into a helper and make use of it.
+The rockchip firmware (bl31) being used was v1.32, from here:
+
+https://github.com/JeffyCN/rockchip_mirrors/blob/rkbin/bin/rk35/rk3568_bl31_v1.32.elf
+
+This seems like a non-fatal firmware bug, for which a kernel workaround is
+certainly possible, but it would be good if rockchip could fix this in their
+firmware.
+
+The user going by "amazingfate" reported that commenting out the
+  ret = -EPROTO; break;
+fixes the issue for them.
+
+I'm writing here to get the discussion started on how we can resolve this
+before the Linux 5.19 release.
+
+Sudeep Holla has already told me they'll gladly add a workaround before
+the 5.19 release, but would rather see this fixed in the vendor firmware
+first. Would rockchip be able and willing to fix it and publish a new
+bl31 for rk3568?
+
+Regards,
+Nicolas Frattaroli
 
 
-Thanks
-	Andrew

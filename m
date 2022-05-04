@@ -2,53 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A0D7519CDD
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 12:25:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B07AE519CDE
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 12:26:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348049AbiEDK22 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 06:28:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38894 "EHLO
+        id S1348056AbiEDKaG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 06:30:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235181AbiEDK20 (ORCPT
+        with ESMTP id S235181AbiEDKaC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 06:28:26 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3627524F27
-        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 03:24:51 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id F32C5ED1;
-        Wed,  4 May 2022 03:24:50 -0700 (PDT)
-Received: from FVFF77S0Q05N (unknown [10.57.65.138])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id F138B3FA50;
-        Wed,  4 May 2022 03:24:48 -0700 (PDT)
-Date:   Wed, 4 May 2022 11:24:43 +0100
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Wang ShaoBo <bobo.shaobowang@huawei.com>,
-        cj.chengjian@huawei.com, huawei.libin@huawei.com,
-        xiexiuqi@huawei.com, liwei391@huawei.com,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        catalin.marinas@arm.com, will@kernel.org, zengshun.wu@outlook.com
-Subject: Re: [RFC PATCH -next v2 3/4] arm64/ftrace: support dynamically
- allocated trampolines
-Message-ID: <YnJUTuOIX9YoJq23@FVFF77S0Q05N>
-References: <YmFXrBG5AmX3+4f8@lakrids>
- <20220421100639.03c0d123@gandalf.local.home>
- <YmF0xYpTMoWOIl00@lakrids>
- <20220421114201.21228eeb@gandalf.local.home>
- <YmGF/OpIhAF8YeVq@lakrids>
- <20220421130648.56b21951@gandalf.local.home>
- <YmJ/l4vJoEpFt68l@FVFF77S0Q05N>
- <20220422114541.34d71ad9@gandalf.local.home>
- <YmLlmaXF00hPkOID@lakrids>
- <20220426174749.b5372c5769af7bf901649a05@kernel.org>
+        Wed, 4 May 2022 06:30:02 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CB63220ED
+        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 03:26:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651659986; x=1683195986;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=G/1h0mmCAHI89NJ6RpqHgx6tx+fF5K9lyD9FgLSW6Fk=;
+  b=CBOcyxt8Bl4hvttPi3mRTamaaZaHyj41DWjH2bRcM1tj1uX8ymfp1omd
+   gy5quDSuf6GJal8uqs0a9WUlHn3kWdzixhgefHcZEfDPp2uYW9jMVnbTd
+   rfgE3Hg5hWELzIlCES8LSWQgI8xf9QekcK+NRj6qEnjvKzF7Paz6ALYNz
+   NrPInZtvDcz2HElsL7q5fd4czG9ZULAG4S3UMhjg2HWbreombDFNOLWy1
+   SidULxCvFWfc1sTDqqg77IH7w0pd50Xu7X5jyFott7ZEVp4+1T9XCd9U1
+   HaXdCexv1cDNjFCFehLG2Q68Vv9EokwJJfX6ceOTHwzUTGfyl0+7Hrn1u
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10336"; a="267605550"
+X-IronPort-AV: E=Sophos;i="5.91,197,1647327600"; 
+   d="scan'208";a="267605550"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2022 03:26:25 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,197,1647327600"; 
+   d="scan'208";a="548586220"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 04 May 2022 03:26:24 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nmCD9-000BJB-HE;
+        Wed, 04 May 2022 10:26:23 +0000
+Date:   Wed, 4 May 2022 18:25:52 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Kuogee Hsieh <quic_khsieh@quicinc.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+Subject: [andersson:wip/sc8180x-next-20220502 4/29]
+ drivers/gpu/drm/msm/adreno/adreno_gpu.o:(.opd+0x30): multiple definition of
+ `msm_dp_wide_bus_enable'; powerpc64-linux-ld: DWARF error: could not find
+ abbrev number 175673006
+Message-ID: <202205041823.i34hnSbf-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220426174749.b5372c5769af7bf901649a05@kernel.org>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,136 +64,160 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 26, 2022 at 05:47:49PM +0900, Masami Hiramatsu wrote:
-> Hi Mark,
-> 
-> On Fri, 22 Apr 2022 18:27:53 +0100
-> Mark Rutland <mark.rutland@arm.com> wrote:
-> 
-> > On Fri, Apr 22, 2022 at 11:45:41AM -0400, Steven Rostedt wrote:
-> > > On Fri, 22 Apr 2022 11:12:39 +0100
-> > > Mark Rutland <mark.rutland@arm.com> wrote:
-> > > 
-> > > > As an aside, I'd also love to remove the REGS/!REGs distinction, and always
-> > > > save a minimum amount of state (like ARGS, but never saving a full pt_regs),
-> > > > since on arm64 the extra state stored for the REGS case isn't useful (and we
-> > > > can't reliably capture all of the pt_regs state anyway, so bits of it are made
-> > > > up or not filled in).
-> > > 
-> > > Note, the reason for the addition of REGS was a requirement of kprobes.
-> > > Because before ftrace, kprobes would be triggered at the start of a
-> > > function by a breakpoint that would load in all the regs. And for backward
-> > > compatibility, Masami wanted to make sure that kprobes coming from ftrace
-> > > had all the regs just like it had when coming from a breakpoint.
-> 
-> Yes. Since this kprobes->ftrace conversion is done by kprobes transparently,
-> user doesn't know their kprobe handler is called from sw break or ftrace.
+tree:   https://github.com/andersson/kernel wip/sc8180x-next-20220502
+head:   6199153320a3b7d1dce23ad1ea4d894a86793cb6
+commit: 8e86e795739e6289d19ee78a32cf28b605a2416f [4/29] drm/msm/dp: enable widebus feature for display port
+config: powerpc64-randconfig-r015-20220501 (https://download.01.org/0day-ci/archive/20220504/202205041823.i34hnSbf-lkp@intel.com/config)
+compiler: powerpc64-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/andersson/kernel/commit/8e86e795739e6289d19ee78a32cf28b605a2416f
+        git remote add andersson https://github.com/andersson/kernel
+        git fetch --no-tags andersson wip/sc8180x-next-20220502
+        git checkout 8e86e795739e6289d19ee78a32cf28b605a2416f
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash
 
-The big problem is that on arm64 kprobes and ftrace are *very* different, and
-we can't do that transparently (unless both had a mode which just provided the
-ARGS).
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-> > > IIUC, kprobes is the only reason we have the "regs" variant (all other use
-> > > cases could get by with the ARGS version).
-> > 
-> > I see. FWIW, we don't have KPROBES_ON_FTRACE on arm64.
-> 
-> Right. Since x86 fentry puts the entry on function address, I need such
-> compatibility.
-> 
-> But on arm64, ftrace leads some preparation instructions, kprobes can put
-> the sw break on the function address there. And may not need to put the
-> kprobes on it. So it depends on arch. I would like to keep the kprobes 
-> available at the function address so that it can trace any registers.
-> (like debugger usage)
-> 
-> > Also, the same problems apply to KRETPROBES: the synthetic `pstate`
-> > value is bogus and we don't fill in other bits of the regs (e.g. the PMR
-> > value), so it's not a "real" pt_regs, and things like
-> > interrupts_enabled(regs) won't work correctly.
-> 
-> Would you mean the process which kprobes_save/restore_local_irqflag() does?
-> Is the regs->pstate saved correctly in sw break or ftrace? (sorry, I missed
-> the context)
+All error/warnings (new ones prefixed by >>):
 
-For `BRK` (SW break) instructions we take an exception, PSTATE (and all of the
-struct pt_regs) is saved correctly.
+   In file included from drivers/gpu/drm/msm/msm_kms.h:14,
+                    from drivers/gpu/drm/msm/disp/msm_disp_snapshot.h:27,
+                    from drivers/gpu/drm/msm/disp/msm_disp_snapshot_util.c:10:
+>> drivers/gpu/drm/msm/msm_drv.h:410:6: warning: no previous prototype for 'msm_dp_wide_bus_enable' [-Wmissing-prototypes]
+     410 | bool msm_dp_wide_bus_enable(struct msm_dp *dp_display)
+         |      ^~~~~~~~~~~~~~~~~~~~~~
+--
+   In file included from drivers/gpu/drm/msm/msm_fence.c:9:
+>> drivers/gpu/drm/msm/msm_drv.h:410:6: warning: no previous prototype for 'msm_dp_wide_bus_enable' [-Wmissing-prototypes]
+     410 | bool msm_dp_wide_bus_enable(struct msm_dp *dp_display)
+         |      ^~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/msm/msm_fence.c: In function 'msm_fence_context_alloc':
+   drivers/gpu/drm/msm/msm_fence.c:25:9: warning: 'strncpy' specified bound 32 equals destination size [-Wstringop-truncation]
+      25 |         strncpy(fctx->name, name, sizeof(fctx->name));
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+--
+   In file included from drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c:17:
+>> drivers/gpu/drm/msm/msm_drv.h:410:6: warning: no previous prototype for 'msm_dp_wide_bus_enable' [-Wmissing-prototypes]
+     410 | bool msm_dp_wide_bus_enable(struct msm_dp *dp_display)
+         |      ^~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c: In function 'dpu_encoder_virt_atomic_check':
+   drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c:566:40: warning: variable 'mode' set but not used [-Wunused-but-set-variable]
+     566 |         const struct drm_display_mode *mode;
+         |                                        ^~~~
+--
+   powerpc64-linux-ld: powerpc64-linux-ld: DWARF error: could not find abbrev number 2
+>> drivers/gpu/drm/msm/adreno/adreno_gpu.o:(.opd+0x30): multiple definition of `msm_dp_wide_bus_enable'; powerpc64-linux-ld: DWARF error: could not find abbrev number 175673006
+   drivers/gpu/drm/msm/adreno/adreno_device.o:(.opd+0xd8): first defined here
+   powerpc64-linux-ld: drivers/gpu/drm/msm/adreno/adreno_gpu.o: in function `.msm_dp_wide_bus_enable':
+>> adreno_gpu.c:(.text+0xc0): multiple definition of `.msm_dp_wide_bus_enable'; drivers/gpu/drm/msm/adreno/adreno_device.o:adreno_device.c:(.text+0x7c0): first defined here
+   powerpc64-linux-ld: powerpc64-linux-ld: DWARF error: could not find abbrev number 12301
+>> drivers/gpu/drm/msm/adreno/a2xx_gpu.o:(.opd+0xf0): multiple definition of `msm_dp_wide_bus_enable'; drivers/gpu/drm/msm/adreno/adreno_device.o:(.opd+0xd8): first defined here
+   powerpc64-linux-ld: drivers/gpu/drm/msm/adreno/a2xx_gpu.o: in function `.msm_dp_wide_bus_enable':
+   a2xx_gpu.c:(.text+0x2700): multiple definition of `.msm_dp_wide_bus_enable'; drivers/gpu/drm/msm/adreno/adreno_device.o:adreno_device.c:(.text+0x7c0): first defined here
+   powerpc64-linux-ld: powerpc64-linux-ld: DWARF error: could not find abbrev number 111
+   drivers/gpu/drm/msm/adreno/a3xx_gpu.o:(.opd+0xd8): multiple definition of `msm_dp_wide_bus_enable'; drivers/gpu/drm/msm/adreno/adreno_device.o:(.opd+0xd8): first defined here
+   powerpc64-linux-ld: drivers/gpu/drm/msm/adreno/a3xx_gpu.o: in function `.msm_dp_wide_bus_enable':
+   a3xx_gpu.c:(.text+0x35c0): multiple definition of `.msm_dp_wide_bus_enable'; drivers/gpu/drm/msm/adreno/adreno_device.o:adreno_device.c:(.text+0x7c0): first defined here
+   powerpc64-linux-ld: powerpc64-linux-ld: DWARF error: could not find abbrev number 78
+   drivers/gpu/drm/msm/adreno/a4xx_gpu.o:(.opd+0x150): multiple definition of `msm_dp_wide_bus_enable'; drivers/gpu/drm/msm/adreno/adreno_device.o:(.opd+0xd8): first defined here
+   powerpc64-linux-ld: drivers/gpu/drm/msm/adreno/a4xx_gpu.o: in function `.msm_dp_wide_bus_enable':
+   a4xx_gpu.c:(.text+0x3c00): multiple definition of `.msm_dp_wide_bus_enable'; drivers/gpu/drm/msm/adreno/adreno_device.o:adreno_device.c:(.text+0x7c0): first defined here
+   powerpc64-linux-ld: powerpc64-linux-ld: DWARF error: could not find abbrev number 104
+   drivers/gpu/drm/msm/adreno/a5xx_gpu.o:(.opd+0x198): multiple definition of `msm_dp_wide_bus_enable'; drivers/gpu/drm/msm/adreno/adreno_device.o:(.opd+0xd8): first defined here
+   powerpc64-linux-ld: drivers/gpu/drm/msm/adreno/a5xx_gpu.o: in function `.msm_dp_wide_bus_enable':
+   a5xx_gpu.c:(.text+0x3740): multiple definition of `.msm_dp_wide_bus_enable'; drivers/gpu/drm/msm/adreno/adreno_device.o:adreno_device.c:(.text+0x7c0): first defined here
+   powerpc64-linux-ld: powerpc64-linux-ld: DWARF error: could not find abbrev number 123
+   drivers/gpu/drm/msm/adreno/a5xx_power.o:(.opd+0x48): multiple definition of `msm_dp_wide_bus_enable'; drivers/gpu/drm/msm/adreno/adreno_device.o:(.opd+0xd8): first defined here
+   powerpc64-linux-ld: drivers/gpu/drm/msm/adreno/a5xx_power.o: in function `.msm_dp_wide_bus_enable':
+   a5xx_power.c:(.text+0xf00): multiple definition of `.msm_dp_wide_bus_enable'; drivers/gpu/drm/msm/adreno/adreno_device.o:adreno_device.c:(.text+0x7c0): first defined here
+   powerpc64-linux-ld: powerpc64-linux-ld: DWARF error: could not find abbrev number 72
+   drivers/gpu/drm/msm/adreno/a5xx_preempt.o:(.opd+0x48): multiple definition of `msm_dp_wide_bus_enable'; drivers/gpu/drm/msm/adreno/adreno_device.o:(.opd+0xd8): first defined here
+   powerpc64-linux-ld: drivers/gpu/drm/msm/adreno/a5xx_preempt.o: in function `.msm_dp_wide_bus_enable':
+   a5xx_preempt.c:(.text+0x380): multiple definition of `.msm_dp_wide_bus_enable'; drivers/gpu/drm/msm/adreno/adreno_device.o:adreno_device.c:(.text+0x7c0): first defined here
+   powerpc64-linux-ld: powerpc64-linux-ld: DWARF error: could not find abbrev number 6620
+   drivers/gpu/drm/msm/adreno/a6xx_gpu.o:(.opd+0x2d0): multiple definition of `msm_dp_wide_bus_enable'; drivers/gpu/drm/msm/adreno/adreno_device.o:(.opd+0xd8): first defined here
+   powerpc64-linux-ld: drivers/gpu/drm/msm/adreno/a6xx_gpu.o: in function `.msm_dp_wide_bus_enable':
+   a6xx_gpu.c:(.text+0x7d00): multiple definition of `.msm_dp_wide_bus_enable'; drivers/gpu/drm/msm/adreno/adreno_device.o:adreno_device.c:(.text+0x7c0): first defined here
+   powerpc64-linux-ld: powerpc64-linux-ld: DWARF error: could not find abbrev number 41
+   drivers/gpu/drm/msm/adreno/a6xx_gmu.o:(.opd+0x180): multiple definition of `msm_dp_wide_bus_enable'; drivers/gpu/drm/msm/adreno/adreno_device.o:(.opd+0xd8): first defined here
+   powerpc64-linux-ld: drivers/gpu/drm/msm/adreno/a6xx_gmu.o: in function `.msm_dp_wide_bus_enable':
+   a6xx_gmu.c:(.text+0x4180): multiple definition of `.msm_dp_wide_bus_enable'; drivers/gpu/drm/msm/adreno/adreno_device.o:adreno_device.c:(.text+0x7c0): first defined here
+   powerpc64-linux-ld: powerpc64-linux-ld: DWARF error: could not find abbrev number 1301
+   drivers/gpu/drm/msm/adreno/a6xx_hfi.o:(.opd+0x90): multiple definition of `msm_dp_wide_bus_enable'; drivers/gpu/drm/msm/adreno/adreno_device.o:(.opd+0xd8): first defined here
+   powerpc64-linux-ld: drivers/gpu/drm/msm/adreno/a6xx_hfi.o: in function `.msm_dp_wide_bus_enable':
+   a6xx_hfi.c:(.text+0x1280): multiple definition of `.msm_dp_wide_bus_enable'; drivers/gpu/drm/msm/adreno/adreno_device.o:adreno_device.c:(.text+0x7c0): first defined here
+   powerpc64-linux-ld: powerpc64-linux-ld: DWARF error: could not find abbrev number 1479059
+   drivers/gpu/drm/msm/hdmi/hdmi.o:(.opd+0x120): multiple definition of `msm_dp_wide_bus_enable'; drivers/gpu/drm/msm/adreno/adreno_device.o:(.opd+0xd8): first defined here
+   powerpc64-linux-ld: drivers/gpu/drm/msm/hdmi/hdmi.o: in function `.msm_dp_wide_bus_enable':
+   hdmi.c:(.text+0x1640): multiple definition of `.msm_dp_wide_bus_enable'; drivers/gpu/drm/msm/adreno/adreno_device.o:adreno_device.c:(.text+0x7c0): first defined here
+   powerpc64-linux-ld: powerpc64-linux-ld: DWARF error: could not find abbrev number 10140
+   drivers/gpu/drm/msm/hdmi/hdmi_audio.o:(.opd+0x18): multiple definition of `msm_dp_wide_bus_enable'; drivers/gpu/drm/msm/adreno/adreno_device.o:(.opd+0xd8): first defined here
+   powerpc64-linux-ld: drivers/gpu/drm/msm/hdmi/hdmi_audio.o: in function `.msm_dp_wide_bus_enable':
+   hdmi_audio.c:(.text+0x0): multiple definition of `.msm_dp_wide_bus_enable'; drivers/gpu/drm/msm/adreno/adreno_device.o:adreno_device.c:(.text+0x7c0): first defined here
+   powerpc64-linux-ld: powerpc64-linux-ld: DWARF error: could not find abbrev number 1574408
+   drivers/gpu/drm/msm/hdmi/hdmi_bridge.o:(.opd+0x108): multiple definition of `msm_dp_wide_bus_enable'; drivers/gpu/drm/msm/adreno/adreno_device.o:(.opd+0xd8): first defined here
+   powerpc64-linux-ld: drivers/gpu/drm/msm/hdmi/hdmi_bridge.o: in function `.msm_dp_wide_bus_enable':
+   hdmi_bridge.c:(.text+0x1440): multiple definition of `.msm_dp_wide_bus_enable'; drivers/gpu/drm/msm/adreno/adreno_device.o:adreno_device.c:(.text+0x7c0): first defined here
+   powerpc64-linux-ld: powerpc64-linux-ld: DWARF error: could not find abbrev number 1399925
+   drivers/gpu/drm/msm/hdmi/hdmi_hpd.o:(.opd+0x48): multiple definition of `msm_dp_wide_bus_enable'; drivers/gpu/drm/msm/adreno/adreno_device.o:(.opd+0xd8): first defined here
+   powerpc64-linux-ld: drivers/gpu/drm/msm/hdmi/hdmi_hpd.o: in function `.msm_dp_wide_bus_enable':
+   hdmi_hpd.c:(.text+0x440): multiple definition of `.msm_dp_wide_bus_enable'; drivers/gpu/drm/msm/adreno/adreno_device.o:adreno_device.c:(.text+0x7c0): first defined here
+   powerpc64-linux-ld: powerpc64-linux-ld: DWARF error: could not find abbrev number 3599
+   drivers/gpu/drm/msm/hdmi/hdmi_i2c.o:(.opd+0x60): multiple definition of `msm_dp_wide_bus_enable'; drivers/gpu/drm/msm/adreno/adreno_device.o:(.opd+0xd8): first defined here
+   powerpc64-linux-ld: drivers/gpu/drm/msm/hdmi/hdmi_i2c.o: in function `.msm_dp_wide_bus_enable':
+   hdmi_i2c.c:(.text+0x1080): multiple definition of `.msm_dp_wide_bus_enable'; drivers/gpu/drm/msm/adreno/adreno_device.o:adreno_device.c:(.text+0x7c0): first defined here
+   powerpc64-linux-ld: powerpc64-linux-ld: DWARF error: could not find abbrev number 54
+   drivers/gpu/drm/msm/hdmi/hdmi_phy.o:(.opd+0x48): multiple definition of `msm_dp_wide_bus_enable'; drivers/gpu/drm/msm/adreno/adreno_device.o:(.opd+0xd8): first defined here
+   powerpc64-linux-ld: drivers/gpu/drm/msm/hdmi/hdmi_phy.o: in function `.msm_dp_wide_bus_enable':
+   hdmi_phy.c:(.text+0x440): multiple definition of `.msm_dp_wide_bus_enable'; drivers/gpu/drm/msm/adreno/adreno_device.o:adreno_device.c:(.text+0x7c0): first defined here
+   powerpc64-linux-ld: powerpc64-linux-ld: DWARF error: could not find abbrev number 53
+   drivers/gpu/drm/msm/hdmi/hdmi_phy_8960.o:(.opd+0x48): multiple definition of `msm_dp_wide_bus_enable'; drivers/gpu/drm/msm/adreno/adreno_device.o:(.opd+0xd8): first defined here
+   powerpc64-linux-ld: drivers/gpu/drm/msm/hdmi/hdmi_phy_8960.o: in function `.msm_dp_wide_bus_enable':
+   hdmi_phy_8960.c:(.text+0x600): multiple definition of `.msm_dp_wide_bus_enable'; drivers/gpu/drm/msm/adreno/adreno_device.o:adreno_device.c:(.text+0x7c0): first defined here
+   powerpc64-linux-ld: powerpc64-linux-ld: DWARF error: could not find abbrev number 53
+   drivers/gpu/drm/msm/hdmi/hdmi_phy_8996.o:(.opd+0xd8): multiple definition of `msm_dp_wide_bus_enable'; drivers/gpu/drm/msm/adreno/adreno_device.o:(.opd+0xd8): first defined here
+   powerpc64-linux-ld: drivers/gpu/drm/msm/hdmi/hdmi_phy_8996.o: in function `.msm_dp_wide_bus_enable':
+   hdmi_phy_8996.c:(.text+0x2e40): multiple definition of `.msm_dp_wide_bus_enable'; drivers/gpu/drm/msm/adreno/adreno_device.o:adreno_device.c:(.text+0x7c0): first defined here
+   powerpc64-linux-ld: powerpc64-linux-ld: DWARF error: could not find abbrev number 9665
+   drivers/gpu/drm/msm/hdmi/hdmi_phy_8x60.o:(.opd+0x48): multiple definition of `msm_dp_wide_bus_enable'; drivers/gpu/drm/msm/adreno/adreno_device.o:(.opd+0xd8): first defined here
+   powerpc64-linux-ld: drivers/gpu/drm/msm/hdmi/hdmi_phy_8x60.o: in function `.msm_dp_wide_bus_enable':
+   hdmi_phy_8x60.c:(.text+0xa00): multiple definition of `.msm_dp_wide_bus_enable'; drivers/gpu/drm/msm/adreno/adreno_device.o:adreno_device.c:(.text+0x7c0): first defined here
+   powerpc64-linux-ld: powerpc64-linux-ld: DWARF error: could not find abbrev number 7226
+   drivers/gpu/drm/msm/hdmi/hdmi_phy_8x74.o:(.opd+0x48): multiple definition of `msm_dp_wide_bus_enable'; drivers/gpu/drm/msm/adreno/adreno_device.o:(.opd+0xd8): first defined here
+   powerpc64-linux-ld: drivers/gpu/drm/msm/hdmi/hdmi_phy_8x74.o: in function `.msm_dp_wide_bus_enable':
+   hdmi_phy_8x74.c:(.text+0x440): multiple definition of `.msm_dp_wide_bus_enable'; drivers/gpu/drm/msm/adreno/adreno_device.o:adreno_device.c:(.text+0x7c0): first defined here
+   powerpc64-linux-ld: powerpc64-linux-ld: DWARF error: could not find abbrev number 13735
+   drivers/gpu/drm/msm/hdmi/hdmi_pll_8960.o:(.opd+0x90): multiple definition of `msm_dp_wide_bus_enable'; drivers/gpu/drm/msm/adreno/adreno_device.o:(.opd+0xd8): first defined here
+   powerpc64-linux-ld: drivers/gpu/drm/msm/hdmi/hdmi_pll_8960.o: in function `.msm_dp_wide_bus_enable':
+   hdmi_pll_8960.c:(.text+0xe40): multiple definition of `.msm_dp_wide_bus_enable'; drivers/gpu/drm/msm/adreno/adreno_device.o:adreno_device.c:(.text+0x7c0): first defined here
+   powerpc64-linux-ld: powerpc64-linux-ld: DWARF error: could not find abbrev number 9530
+   drivers/gpu/drm/msm/disp/mdp_format.o:(.opd+0x18): multiple definition of `msm_dp_wide_bus_enable'; drivers/gpu/drm/msm/adreno/adreno_device.o:(.opd+0xd8): first defined here
+   powerpc64-linux-ld: drivers/gpu/drm/msm/disp/mdp_format.o: in function `.msm_dp_wide_bus_enable':
+   mdp_format.c:(.text+0x0): multiple definition of `.msm_dp_wide_bus_enable'; drivers/gpu/drm/msm/adreno/adreno_device.o:adreno_device.c:(.text+0x7c0): first defined here
+   powerpc64-linux-ld: powerpc64-linux-ld: DWARF error: could not find abbrev number 255057774
+   drivers/gpu/drm/msm/disp/mdp_kms.o:(.opd+0x48): multiple definition of `msm_dp_wide_bus_enable'; drivers/gpu/drm/msm/adreno/adreno_device.o:(.opd+0xd8): first defined here
+   powerpc64-linux-ld: drivers/gpu/drm/msm/disp/mdp_kms.o: in function `.msm_dp_wide_bus_enable':
+   mdp_kms.c:(.text+0x180): multiple definition of `.msm_dp_wide_bus_enable'; drivers/gpu/drm/msm/adreno/adreno_device.o:adreno_device.c:(.text+0x7c0): first defined here
+   powerpc64-linux-ld: powerpc64-linux-ld: DWARF error: could not find abbrev number 1723001
+   drivers/gpu/drm/msm/disp/mdp4/mdp4_crtc.o:(.opd+0x198): multiple definition of `msm_dp_wide_bus_enable'; drivers/gpu/drm/msm/adreno/adreno_device.o:(.opd+0xd8): first defined here
+   powerpc64-linux-ld: drivers/gpu/drm/msm/disp/mdp4/mdp4_crtc.o: in function `.msm_dp_wide_bus_enable':
+   mdp4_crtc.c:(.text+0x2a40): multiple definition of `.msm_dp_wide_bus_enable'; drivers/gpu/drm/msm/adreno/adreno_device.o:adreno_device.c:(.text+0x7c0): first defined here
+   powerpc64-linux-ld: powerpc64-linux-ld: DWARF error: could not find abbrev number 81
+   drivers/gpu/drm/msm/disp/mdp4/mdp4_dtv_encoder.o:(.opd+0x78): multiple definition of `msm_dp_wide_bus_enable'; drivers/gpu/drm/msm/adreno/adreno_device.o:(.opd+0xd8): first defined here
+   powerpc64-linux-ld: drivers/gpu/drm/msm/disp/mdp4/mdp4_dtv_encoder.o: in function `.msm_dp_wide_bus_enable':
+   mdp4_dtv_encoder.c:(.text+0xd40): multiple definition of `.msm_dp_wide_bus_enable'; drivers/gpu/drm/msm/adreno/adreno_device.o:adreno_device.c:(.text+0x7c0): first defined here
+   powerpc64-linux-ld: powerpc64-linux-ld: DWARF error: could not find abbrev number 5
+   drivers/gpu/drm/msm/disp/mdp4/mdp4_lcdc_encoder.o:(.opd+0x90): multiple definition of `msm_dp_wide_bus_enable'; drivers/gpu/drm/msm/adreno/adreno_device.o:(.opd+0xd8): first defined here
+   powerpc64-linux-ld: drivers/gpu/drm/msm/disp/mdp4/mdp4_lcdc_encoder.o: in function `.msm_dp_wide_bus_enable':
+   mdp4_lcdc_encoder.c:(.text+0x1740): multiple definition of `.msm_dp_wide_bus_enable'; drivers/gpu/drm/msm/adreno/adreno_device.o:adreno_device.c:(.text+0x7c0): first defined here
+   powerpc64-linux-ld: powerpc64-linux-ld: DWARF error: could not find abbrev number 3
+   drivers/gpu/drm/msm/disp/mdp4/mdp4_lvds_connector.o:(.opd+0x78): multiple definition of `msm_dp_wide_bus_enable'; drivers/gpu/drm/msm/adreno/adreno_device.o:(.opd+0xd8): first defined here
 
-For ftrace, PSTATE (and other bits of pt_regs) are not saved correctly.
-Practically speaking it's not feasible to do so reliably without taking an
-exception, which is why I'd like to reduce ftrace down to just the ARGs.
-
-> > In addition, as
-> > KRETPROBES only hooks function entry/exit and x9-x17 + x19-x28 are
-> > meaningless at those times, no-one's going to care what they contain
-> > anyway.
-> 
-> It depends on what bug they are trying to trace. C source level bug
-> will not need such information, but assembly level bug (or compiler
-> level bug) may need such registers. Anyway, this also depends on user.
-> I just won't like limit the usage.
-
-If that's how kretprobes are intended to be used, then I think they must
-*always* use a BRK as that's the only way to reliably get a complete struct
-pt_regs.
-
-I've implemented that:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git/commit/?h=arm64/kprobes/kretprobe-brk-trampoline&id=80be4ccbf47b0294a02b05b797cbff36364bc435
-
-... and can send that out as a patch shortly.
-
-> > The state we can correctly snapshot (and that would be useful)
-> > is the same as ARGS.
-> > 
-> > It'd be nice if KRETPROBES could just use ARGS, but a standard KPROBE
-> > that traps could provide regs (since it actually gets "real" regs, and
-> > within a function the other GPRs could be important).
-> 
-> Here, the KRETPROBES means the exit handler, or including entry handler?
-> Since kretprobes uses a standard kprobe to trap the function entry.
-
-I'm suggesting that (if there are cases where kretprobes are only used to
-acquire arguments and return vaalues, and not other state), we change things so
-that kretprobes can use a different entry handler from a regular kprobe, and
-that new handler only has to acquire the arguments and return values, matching
-the ftrace ARGS.
-
-That way we can have:
-
-a) A regular kprobe, which uses BRK as today, and gets a full pt_regs
-
-b) A regular kretprobe, which uses BRK for both entry/exit, and gets a full
-   pt_regs in both cases.
-
-c) An args-only kretprobe, where the entry/exit handlers only present the ARGS
-   to the registered handlers.
-
-If kretprobes always needs the full pt_regs, then (c) isn't necessary, and we
-don't need to change anything more than the kretprobes trampoline, as above.
-
-What I really want to get away from it kretprobes and ftrace having an
-incomplete pt_regs, and the two ways of doing that are:
-
-1) Save/restore the full pt_regs by taking an exception.
-
-2) Save/restore a minimal ARGS structure, and ensure the interfaces don't have
-   to pass a struct pt_regs pointer.
-
-For kretprobes I can implement either, but for ftrace (2) is the only real
-option.
-
-Thanks,
-Mark.
-
-> If you talk about fprobes (ftrace probe interface), it will only use the
-> ftrace. Thus your idea is acceptable for it (because fprobe is different
-> from kprobes *).
-> 
-> * Of course we have to talk with BPF people so that they will only access
-> ARGS from BPF program on fprobes.
-> 
-> Thank you,
-> 
-> -- 
-> Masami Hiramatsu <mhiramat@kernel.org>
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

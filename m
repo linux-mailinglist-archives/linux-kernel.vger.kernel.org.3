@@ -2,43 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EED2251AAE5
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:34:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B20D751AAE2
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:34:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357750AbiEDRgx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 13:36:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38958 "EHLO
+        id S1357931AbiEDRhA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 13:37:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356947AbiEDRJu (ORCPT
+        with ESMTP id S1356944AbiEDRJu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 4 May 2022 13:09:50 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D253A473A3;
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A5EF4739E;
         Wed,  4 May 2022 09:56:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 89DECB82737;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E9676616B8;
         Wed,  4 May 2022 16:56:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42FBDC385A4;
-        Wed,  4 May 2022 16:56:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45116C385A5;
+        Wed,  4 May 2022 16:56:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651683395;
-        bh=sCjBYryfbrDNUGqpThNG1E4jFTg2IH/IIsr3Om6bE/U=;
+        s=korg; t=1651683396;
+        bh=psSx/hJhNkKZta6oyg74GJXmr7g/fVmHB0hUjFTOrEs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=K6/1ni9l1DxkjupGcSw0iZsWWzJTumbJUQz5gOdgtNGXm1YiRGbs00s78gvnFIMYo
-         2p4wZuHKu15SHthIbAiZeALFVPl36nkt/eTBRSXzV7ZUTWOysQ4SEP0x8nZVK+VziU
-         VzNiQT1Ry9wFbboHslwRXRKS69+3M8fIQFTvktWw=
+        b=qRLt3g2pYlLuFxs2/LxC/W0ZWOaBUAQT6AqslWEcRcHDJwiBTzqU4JzXynLAwTP8e
+         m2G77Z90y45lOeku3EgTRz4hs7Cc0XjqJNhxHfxEyngfzhHeU/IAUCinkCKxfoWmrU
+         p5P7uSSi3cOYFU0QyFvro1orpOwOmOqVNXILwb5k=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Benoit Parrot <bparrot@ti.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Tony Lindgren <tony@atomide.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 080/225] ARM: dts: dra7: Fix suspend warning for vpe powerdomain
-Date:   Wed,  4 May 2022 18:45:18 +0200
-Message-Id: <20220504153118.338546818@linuxfoundation.org>
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        Vinod Koul <vkoul@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 081/225] phy: ti: omap-usb2: Fix error handling in omap_usb2_enable_clocks
+Date:   Wed,  4 May 2022 18:45:19 +0200
+Message-Id: <20220504153118.397717447@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
 In-Reply-To: <20220504153110.096069935@linuxfoundation.org>
 References: <20220504153110.096069935@linuxfoundation.org>
@@ -56,52 +54,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tony Lindgren <tony@atomide.com>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-[ Upstream commit 8d2453d9a307c2eafd21242dd73f35f05fb7ce74 ]
+[ Upstream commit 3588060befff75ff39fab7122b94c6fb3148fcda ]
 
-We currently are getting the following warning after a system suspend:
+The corresponding API for clk_prepare_enable is clk_disable_unprepare.
+Make sure that the clock is unprepared on exit by changing clk_disable
+to clk_disable_unprepare.
 
-Powerdomain (vpe_pwrdm) didn't enter target state 0
-
-Looks like this is because the STANDBYMODE bit for SMART_IDLE should
-not be used. The TRM "Table 12-348. VPE_SYSCONFIG" says that the value
-for SMART_IDLE is "0x2: Same behavior as bit-field value of 0x1". But
-if the SMART_IDLE value is used, PM_VPE_PWRSTST LASTPOWERSTATEENTERED
-bits always show value of 3.
-
-Let's fix the issue by dropping SMART_IDLE for vpe. And let's also add
-the missing the powerdomain for vpe.
-
-Fixes: 1a2095160594 ("ARM: dts: dra7: Add ti-sysc node for VPE")
-Cc: Benoit Parrot <bparrot@ti.com>
-Reported-by: Kevin Hilman <khilman@baylibre.com>
-Reviewed-by: Kevin Hilman <khilman@baylibre.com>
-Tested-by: Kevin Hilman <khilman@baylibre.com>
-Signed-off-by: Tony Lindgren <tony@atomide.com>
+Fixes: ed31ee7cf1fe ("phy: ti: usb2: Fix logic on -EPROBE_DEFER")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Link: https://lore.kernel.org/r/20220318105748.19532-1-linmq006@gmail.com
+Signed-off-by: Vinod Koul <vkoul@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm/boot/dts/dra7-l4.dtsi | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/phy/ti/phy-omap-usb2.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm/boot/dts/dra7-l4.dtsi b/arch/arm/boot/dts/dra7-l4.dtsi
-index 0a11bacffc1f..5733e3a4ea8e 100644
---- a/arch/arm/boot/dts/dra7-l4.dtsi
-+++ b/arch/arm/boot/dts/dra7-l4.dtsi
-@@ -4188,11 +4188,11 @@ target-module@1d0010 {			/* 0x489d0000, ap 27 30.0 */
- 			reg = <0x1d0010 0x4>;
- 			reg-names = "sysc";
- 			ti,sysc-midle = <SYSC_IDLE_FORCE>,
--					<SYSC_IDLE_NO>,
--					<SYSC_IDLE_SMART>;
-+					<SYSC_IDLE_NO>;
- 			ti,sysc-sidle = <SYSC_IDLE_FORCE>,
- 					<SYSC_IDLE_NO>,
- 					<SYSC_IDLE_SMART>;
-+			power-domains = <&prm_vpe>;
- 			clocks = <&vpe_clkctrl DRA7_VPE_VPE_CLKCTRL 0>;
- 			clock-names = "fck";
- 			#address-cells = <1>;
+diff --git a/drivers/phy/ti/phy-omap-usb2.c b/drivers/phy/ti/phy-omap-usb2.c
+index 3a505fe5715a..31a775877f6e 100644
+--- a/drivers/phy/ti/phy-omap-usb2.c
++++ b/drivers/phy/ti/phy-omap-usb2.c
+@@ -215,7 +215,7 @@ static int omap_usb2_enable_clocks(struct omap_usb *phy)
+ 	return 0;
+ 
+ err1:
+-	clk_disable(phy->wkupclk);
++	clk_disable_unprepare(phy->wkupclk);
+ 
+ err0:
+ 	return ret;
 -- 
 2.35.1
 

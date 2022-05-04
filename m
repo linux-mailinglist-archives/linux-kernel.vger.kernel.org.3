@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D87D51AADA
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:34:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28A4151AB47
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:42:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358395AbiEDReY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 13:34:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40010 "EHLO
+        id S1359224AbiEDRn7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 13:43:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357170AbiEDRKB (ORCPT
+        with ESMTP id S1355967AbiEDRI5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 13:10:01 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 879F149684;
-        Wed,  4 May 2022 09:57:08 -0700 (PDT)
+        Wed, 4 May 2022 13:08:57 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 433E5522FD;
+        Wed,  4 May 2022 09:54:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 7EBDECE28AD;
-        Wed,  4 May 2022 16:57:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ADD2CC385BF;
-        Wed,  4 May 2022 16:57:04 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D6DD6B82795;
+        Wed,  4 May 2022 16:54:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8905AC385AA;
+        Wed,  4 May 2022 16:54:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651683424;
-        bh=iTB9JNJEb9ck5CWcUWb4vwLwVA4YMk20n9F3/mIWVCU=;
+        s=korg; t=1651683283;
+        bh=D393BtSYLwAHXD0I165NpZZJKw/jq3qoPsQLyLfQj3U=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kuCxX4/lUage7gq4QyvziTXLAD9kGOutPuP+K05O8salhCB7nFmiVmkrz1fetXmLR
-         yh9ijn7Vt/+nJrn5SlAJ0BFNQKTZLSpCgkesEMsu0F8Rqs7Qp2V047DZtjjSI4TdB/
-         ltLfstYYQ1gMvxZe9P6weYY5ZWNXvRrhFVk0Ses0=
+        b=uAcpCgZhwWUPI1AWEfpcBejEv+Nrv6wNwIikBNm14p+3zkme+5OnNGULiuhcfEAHK
+         517qUEalIo17qgZoIuNV4fKFpuvzMSzn+sOGTWShBmlqW5MGFhyOh3bVXAmmSg6X2D
+         JosxiN8dbC6gdHY+xv5Tx7yZAcowYrpZOw7olkw0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, "H. Nikolaus Schaller" <hns@goldelico.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Tony Lindgren <tony@atomide.com>,
+        stable@vger.kernel.org, Duoming Zhou <duoming@zju.edu.cn>,
+        Paolo Abeni <pabeni@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 090/225] ARM: dts: am33xx-l4: Add missing touchscreen clock properties
-Date:   Wed,  4 May 2022 18:45:28 +0200
-Message-Id: <20220504153118.928897792@linuxfoundation.org>
+Subject: [PATCH 5.15 136/177] drivers: net: hippi: Fix deadlock in rr_close()
+Date:   Wed,  4 May 2022 18:45:29 +0200
+Message-Id: <20220504153105.388616683@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220504153110.096069935@linuxfoundation.org>
-References: <20220504153110.096069935@linuxfoundation.org>
+In-Reply-To: <20220504153053.873100034@linuxfoundation.org>
+References: <20220504153053.873100034@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,56 +55,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miquel Raynal <miquel.raynal@bootlin.com>
+From: Duoming Zhou <duoming@zju.edu.cn>
 
-[ Upstream commit c21a7434d6cc216a910dd35632617850f1751f4c ]
+[ Upstream commit bc6de2878429e85c1f1afaa566f7b5abb2243eef ]
 
-When adding support for TI magadc (Magnetic Stripe Reader and ADC), the
-MFD driver common to the touchscreen and the ADC got updated to ease the
-insertion of a new DT node for the ADC, with its own compatible, clocks,
-etc. Commit 235a96e92c16 ("mfd: ti_am335x_tscadc: Don't search the tree
-for our clock") removed one compatible specific information which was
-the clock name, because the clock was looked up from scratch in the DT
-while this hardware block was only fed by a single clock, already
-defined and properly filled in the DT.
+There is a deadlock in rr_close(), which is shown below:
 
-Problem is, this change was only validated with an am437x-based board,
-where the clocks are effectively correctly defined and referenced. But
-on am33xx, the ADC clock is also correctly defined but is not referenced
-with a clock phandle as it ought to be.
+   (Thread 1)                |      (Thread 2)
+                             | rr_open()
+rr_close()                   |  add_timer()
+ spin_lock_irqsave() //(1)   |  (wait a time)
+ ...                         | rr_timer()
+ del_timer_sync()            |  spin_lock_irqsave() //(2)
+ (wait timer to stop)        |  ...
 
-The touchscreen bindings clearly state that the clocks/clock-names
-properties are mandatory, but they have been forgotten in one DTSI. This
-was probably not noticed in the first place because of the clock
-actually existing and the clk_get() call going through all the tree
-anyway.
+We hold rrpriv->lock in position (1) of thread 1 and
+use del_timer_sync() to wait timer to stop, but timer handler
+also need rrpriv->lock in position (2) of thread 2.
+As a result, rr_close() will block forever.
 
-Add the missing clock phandles in the am33xx touchscreen description.
+This patch extracts del_timer_sync() from the protection of
+spin_lock_irqsave(), which could let timer handler to obtain
+the needed lock.
 
-Reported-by: H. Nikolaus Schaller <hns@goldelico.com>
-Fixes: 235a96e92c16 ("mfd: ti_am335x_tscadc: Don't search the tree for our clock")
-Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
-Tested-by: H. Nikolaus Schaller <hns@goldelico.com>
-Message-Id: <20220314163445.79807-1-miquel.raynal@bootlin.com>
-Signed-off-by: Tony Lindgren <tony@atomide.com>
+Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
+Link: https://lore.kernel.org/r/20220417125519.82618-1-duoming@zju.edu.cn
+Signed-off-by: Paolo Abeni <pabeni@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm/boot/dts/am33xx-l4.dtsi | 2 ++
+ drivers/net/hippi/rrunner.c | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/arch/arm/boot/dts/am33xx-l4.dtsi b/arch/arm/boot/dts/am33xx-l4.dtsi
-index c9629cb5ccd1..7da42a5b959c 100644
---- a/arch/arm/boot/dts/am33xx-l4.dtsi
-+++ b/arch/arm/boot/dts/am33xx-l4.dtsi
-@@ -263,6 +263,8 @@ tscadc: tscadc@0 {
- 				compatible = "ti,am3359-tscadc";
- 				reg = <0x0 0x1000>;
- 				interrupts = <16>;
-+				clocks = <&adc_tsc_fck>;
-+				clock-names = "fck";
- 				status = "disabled";
- 				dmas = <&edma 53 0>, <&edma 57 0>;
- 				dma-names = "fifo0", "fifo1";
+diff --git a/drivers/net/hippi/rrunner.c b/drivers/net/hippi/rrunner.c
+index 7661dbb31162..50e4bea46d67 100644
+--- a/drivers/net/hippi/rrunner.c
++++ b/drivers/net/hippi/rrunner.c
+@@ -1353,7 +1353,9 @@ static int rr_close(struct net_device *dev)
+ 
+ 	rrpriv->fw_running = 0;
+ 
++	spin_unlock_irqrestore(&rrpriv->lock, flags);
+ 	del_timer_sync(&rrpriv->timer);
++	spin_lock_irqsave(&rrpriv->lock, flags);
+ 
+ 	writel(0, &regs->TxPi);
+ 	writel(0, &regs->IpRxPi);
 -- 
 2.35.1
 

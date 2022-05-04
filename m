@@ -2,54 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C424C51AA85
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:27:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E99A51AB0B
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:40:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353314AbiEDRZs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 13:25:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52244 "EHLO
+        id S1357055AbiEDRkw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 13:40:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354579AbiEDRFT (ORCPT
+        with ESMTP id S1356672AbiEDRJh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 13:05:19 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F0ED5132B;
-        Wed,  4 May 2022 09:54:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 4 May 2022 13:09:37 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC032DFC0;
+        Wed,  4 May 2022 09:55:21 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D5CD4B827AC;
-        Wed,  4 May 2022 16:54:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50683C385B1;
-        Wed,  4 May 2022 16:54:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651683251;
-        bh=c6+7Ne4K8yZ0+BKb8IfJNxGJ6ZxxOYXvDdFYiQ0PJqM=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=uh7kUaXix6SXNpSHxcQafJqyVWArJKQx6BIJfPPwMl8cluoqPN3qGBf87C0JFYMh6
-         aUOJawCMaS6sZ7ndt9v8Sf0sPtPEJqffnJVQsm7THm2CtvsHU2AX9qaBlyBS7vDP9m
-         bBpyKzWp23iRlbBOwpNx9iabOCVxCVRLsMlixJ8MgdAvsYok1P1GsQzwz6toDlNjFg
-         KrvGLi8oVTmLGLVxGdCLImBEWD9YebI+IfxvCA9qRXcAtAjfXqKVEBuGQ4JmeWHHtg
-         LTOlrf0DOG1SdR1yVvMgg4/hfJrfgI4FtzUcCeKB1h1s2iF5k/INugSy7H0797WFSM
-         pkT9fnIfhu9NQ==
-Date:   Wed, 4 May 2022 11:54:09 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Anders Roxell <anders.roxell@linaro.org>
-Subject: Re: [PATCH v3 4/9] PCI/PM: Rework changing power states of PCI
- devices
-Message-ID: <20220504165409.GA453565@bhelgaas>
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 56CEC1F38D;
+        Wed,  4 May 2022 16:55:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1651683320; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=vIH8khGfsWQr/G8XxJBCff3FHm1s2U5cIJcIUqX8z74=;
+        b=fxvMs/oy3r+8L1n1MFQIapG73Ibm3O6/tat7+NP9WW1TW8r09Du8uoO6rocjdXzlpyGvwk
+        C5hEla1QoB9EEgtab/YDHaB2tVq7238KrlBol0zAj2Qjbef06pxxIesMIcT6fEQSxkR9D/
+        BoZBGUCuzL5vXw3JnF4pK4+YU3x97Ok=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1651683320;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=vIH8khGfsWQr/G8XxJBCff3FHm1s2U5cIJcIUqX8z74=;
+        b=ZP5QPuSU+43VPlOkMbFvUEvnny6lgfp5xqVC+flR2XZPgdo+xyxM/1E7KQx4QYaM3MKY3Z
+        0aJBeF5beNC5vnAw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id ED96A131BD;
+        Wed,  4 May 2022 16:55:14 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id dlZdLvKvcmLmVAAAMHmgww
+        (envelope-from <hare@suse.de>); Wed, 04 May 2022 16:55:14 +0000
+Message-ID: <f25bdfcb-d01a-2bd0-6d7b-7d58205a2df6@suse.de>
+Date:   Wed, 4 May 2022 09:55:12 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YnFtjzGYwe28tVAA@dev-arch.thelio-3990X>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH 02/16] block: add blk_queue_zone_aligned and
+ bdev_zone_aligned helper
+Content-Language: en-US
+References: <20220427160255.300418-1-p.raghav@samsung.com>
+ <CGME20220427160258eucas1p19548a7094f67b4c9f340add776f60082@eucas1p1.samsung.com>
+ <20220427160255.300418-3-p.raghav@samsung.com>
+From:   Hannes Reinecke <hare@suse.de>
+To:     undisclosed-recipients:;
+In-Reply-To: <20220427160255.300418-3-p.raghav@samsung.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -58,64 +75,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[+cc Anders]
-
-On Tue, May 03, 2022 at 10:59:43AM -0700, Nathan Chancellor wrote:
-> On Thu, Apr 14, 2022 at 03:11:21PM +0200, Rafael J. Wysocki wrote:
-> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > 
-> > There are some issues related to changing power states of PCI
-> > devices, mostly related to carrying out unnecessary actions in some
-> > places, and the code is generally hard to follow.
-> > 
-> >  1. pci_power_up() has two callers, pci_set_power_state() and
-> >     pci_pm_default_resume_early().  The latter updates the current
-> >     power state of the device right after calling pci_power_up()
-> >     and it restores the entire config space of the device right
-> >     after that, so pci_power_up() itself need not read the
-> >     PCI_PM_CTRL register or restore the BARs after programming the
-> >     device into D0 in that case.
-> >  
-> >  2. It is generally hard to get a clear view of the pci_power_up()
-> >     code flow, especially in some corner cases, due to all of the
-> >     involved PCI_PM_CTRL register reads and writes occurring in
-> >     pci_platform_power_transition() and in pci_raw_set_power_state(),
-> >     some of which are redundant.
-> > 
-> >  3. The transitions from low-power states to D0 and the other way
-> >     around are unnecessarily tangled in pci_raw_set_power_state()
-> >     which causes it to use a redundant local variable and makes it
-> >     rather hard to follow.
-> > 
-> > To address the above shortcomings, make the following changes:
-> > 
-> >  a. Remove the code handling transitions into D0
-> >     from pci_raw_set_power_state() and rename it as
-> >     pci_set_low_power_state().
-> > 
-> >  b. Add the code handling transitions into D0 directly
-> >     to pci_power_up() and to a new wrapper function
-> >     pci_set_full_power_state() calling it internally that is
-> >     only used in pci_set_power_state().
-> > 
-> >  c. Make pci_power_up() avoid redundant PCI_PM_CTRL register reads
-> >     and make it work in the same way for transitions from any
-> >     low-power states (transitions from D1 and D2 are handled
-> >     slightly differently before the change).
-> > 
-> >  d. Put the restoration of the BARs and the PCI_PM_CTRL
-> >     register read confirming the power state change into
-> >     pci_set_full_power_state() to avoid doing that in
-> >     pci_pm_default_resume_early() unnecessarily.
-> > 
-> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+On 4/27/22 09:02, Pankaj Raghav wrote:
+> Checking if a given sector is aligned to a zone is a very common
+> operation that is performed for zoned devices. Add
+> blk_queue_zone_aligned helper to check for this instead of opencoding it
+> everywhere.
 > 
-> This change as commit 5bffe4c611f5 ("PCI/PM: Rework changing power
-> states of PCI devices") causes my AMD-based system to fail to fully
-> boot.
+> The helper is made to be generic so that it can also check for alignment
+> for non non-power-of-2 zone size devices.
+> 
+> As the existing deployments of zoned devices had power-of-2
+> assumption, power-of-2 optimized calculation is done for devices with
+> power-of-2 zone size
+> 
+> Reviewed-by: Luis Chamberlain <mcgrof@kernel.org>
+> Signed-off-by: Pankaj Raghav <p.raghav@samsung.com>
+> ---
+>   include/linux/blkdev.h | 31 +++++++++++++++++++++++++++++++
+>   1 file changed, 31 insertions(+)
+> 
+Reviewed-by: Hannes Reinecke <hare@suse.de>
 
-I dropped 5bffe4c611f5 and subsequent pci/pm patches temporarily while
-this gets worked out.
+Cheers,
 
-Bjorn
+Hannes
+-- 
+Dr. Hannes Reinecke                Kernel Storage Architect
+hare@suse.de                              +49 911 74053 688
+SUSE Software Solutions GmbH, Maxfeldstr. 5, 90409 Nürnberg
+HRB 36809 (AG Nürnberg), Geschäftsführer: Felix Imendörffer

@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0766451A675
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 18:52:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5976151A956
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:17:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354059AbiEDQxs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 12:53:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52142 "EHLO
+        id S1358154AbiEDRPn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 13:15:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353797AbiEDQw3 (ORCPT
+        with ESMTP id S1355577AbiEDREa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 12:52:29 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0E05473A6;
-        Wed,  4 May 2022 09:48:39 -0700 (PDT)
+        Wed, 4 May 2022 13:04:30 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88F814E3A7;
+        Wed,  4 May 2022 09:53:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6C0A9B82552;
-        Wed,  4 May 2022 16:48:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0496AC385B0;
-        Wed,  4 May 2022 16:48:36 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0D4A1B8278E;
+        Wed,  4 May 2022 16:53:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5DE7C385A4;
+        Wed,  4 May 2022 16:53:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651682917;
-        bh=dR2rosQz0KUtee7nTyTCC27JjP3MR6tspTPQM5RkkMY=;
+        s=korg; t=1651683186;
+        bh=CcXclnoaMbvLi/yOBd80z4yzXjNgQ6mNIp3awybkVnw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=z4TofSUHkVkCnk+3MPI++WadavhJrWFa9M8lx1Advn6a2e+O0Y00SNUUnJlC/dt/m
-         Dp8mUi9KZ3QyyoJ4X/yKe1YQcuC4s45hpnqpL6FgUvM3r/sPL6JROB+L62c/XkJN0i
-         d4GLJXwod2wRqZi4SjngBXuC440VHYpdZuG39fMY=
+        b=Toc/JXOsFX3yKjY+yx4UPtpiHxWGP+ETNcukBa4hOuQAk60n9XEVwNHMf6icUn2Mh
+         TSVAoCq/uhalxJvmnqc4FF8GEV9J7YBeAK89PoQDwUZr6/JPK6B5MZcgSsfkOaaYCs
+         rxWOv5IGgI9fUzyGaECFMNNgG9sm5geE+G8r6JRE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Johan Hovold <johan@kernel.org>
-Subject: [PATCH 5.4 23/84] serial: imx: fix overrun interrupts in DMA mode
+        stable@vger.kernel.org, Chuanhong Guo <gch981213@gmail.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 051/177] mtd: rawnand: fix ecc parameters for mt7622
 Date:   Wed,  4 May 2022 18:44:04 +0200
-Message-Id: <20220504152929.410802997@linuxfoundation.org>
+Message-Id: <20220504153057.573056075@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220504152927.744120418@linuxfoundation.org>
-References: <20220504152927.744120418@linuxfoundation.org>
+In-Reply-To: <20220504153053.873100034@linuxfoundation.org>
+References: <20220504153053.873100034@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,42 +55,99 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Johan Hovold <johan@kernel.org>
+From: Chuanhong Guo <gch981213@gmail.com>
 
-commit 3ee82c6e41f3d2212647ce0bc5a05a0f69097824 upstream.
+[ Upstream commit 9fe4e0d3cbfe90152137963cc024ecb63db6e8e6 ]
 
-Commit 76821e222c18 ("serial: imx: ensure that RX irqs are off if RX is
-off") accidentally enabled overrun interrupts unconditionally when
-deferring DMA enable until after the receiver has been enabled during
-startup.
+According to the datasheet, mt7622 only has 5 ECC capabilities instead
+of 7, and the decoding error register is arranged  as follows:
++------+---------+---------+---------+---------+
+| Bits |  19:15  |  14:10  |   9:5   |   4:0   |
++------+---------+---------+---------+---------+
+| Name | ERRNUM3 | ERRNUM2 | ERRNUM1 | ERRNUM0 |
++------+---------+---------+---------+---------+
+This means err_mask should be 0x1f instead of 0x3f and the number of
+bits shifted in mtk_ecc_get_stats should be 5 instead of 8.
 
-Fix this by using the DMA-initialised instead of DMA-enabled flag to
-determine whether overrun interrupts should be enabled.
+This commit introduces err_shift for the difference in this register
+and fix other existing parameters.
 
-Note that overrun interrupts are already accounted for in
-imx_uart_clear_rx_errors() when using DMA since commit 41d98b5da92f
-("serial: imx-serial - update RX error counters when DMA is used").
+Public MT7622 reference manual can be found on [0] and the info this
+commit is based on is from page 656 and page 660.
 
-Fixes: 76821e222c18 ("serial: imx: ensure that RX irqs are off if RX is off")
-Cc: stable@vger.kernel.org      # 4.17
-Cc: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-Signed-off-by: Johan Hovold <johan@kernel.org>
-Link: https://lore.kernel.org/r/20220411081957.7846-1-johan@kernel.org
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+[0]: https://wiki.banana-pi.org/Banana_Pi_BPI-R64#Documents
+
+Fixes: 98dea8d71931 ("mtd: nand: mtk: Support MT7622 NAND flash controller.")
+Signed-off-by: Chuanhong Guo <gch981213@gmail.com>
+Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
+Link: https://lore.kernel.org/linux-mtd/20220402160315.919094-1-gch981213@gmail.com
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/tty/serial/imx.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/mtd/nand/raw/mtk_ecc.c | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
 
---- a/drivers/tty/serial/imx.c
-+++ b/drivers/tty/serial/imx.c
-@@ -1401,7 +1401,7 @@ static int imx_uart_startup(struct uart_
- 	imx_uart_writel(sport, ucr1, UCR1);
+diff --git a/drivers/mtd/nand/raw/mtk_ecc.c b/drivers/mtd/nand/raw/mtk_ecc.c
+index c437d97debb8..ec9d1fb07006 100644
+--- a/drivers/mtd/nand/raw/mtk_ecc.c
++++ b/drivers/mtd/nand/raw/mtk_ecc.c
+@@ -43,6 +43,7 @@
  
- 	ucr4 = imx_uart_readl(sport, UCR4) & ~UCR4_OREN;
--	if (!sport->dma_is_enabled)
-+	if (!dma_is_inited)
- 		ucr4 |= UCR4_OREN;
- 	imx_uart_writel(sport, ucr4, UCR4);
+ struct mtk_ecc_caps {
+ 	u32 err_mask;
++	u32 err_shift;
+ 	const u8 *ecc_strength;
+ 	const u32 *ecc_regs;
+ 	u8 num_ecc_strength;
+@@ -76,7 +77,7 @@ static const u8 ecc_strength_mt2712[] = {
+ };
  
+ static const u8 ecc_strength_mt7622[] = {
+-	4, 6, 8, 10, 12, 14, 16
++	4, 6, 8, 10, 12
+ };
+ 
+ enum mtk_ecc_regs {
+@@ -221,7 +222,7 @@ void mtk_ecc_get_stats(struct mtk_ecc *ecc, struct mtk_ecc_stats *stats,
+ 	for (i = 0; i < sectors; i++) {
+ 		offset = (i >> 2) << 2;
+ 		err = readl(ecc->regs + ECC_DECENUM0 + offset);
+-		err = err >> ((i % 4) * 8);
++		err = err >> ((i % 4) * ecc->caps->err_shift);
+ 		err &= ecc->caps->err_mask;
+ 		if (err == ecc->caps->err_mask) {
+ 			/* uncorrectable errors */
+@@ -449,6 +450,7 @@ EXPORT_SYMBOL(mtk_ecc_get_parity_bits);
+ 
+ static const struct mtk_ecc_caps mtk_ecc_caps_mt2701 = {
+ 	.err_mask = 0x3f,
++	.err_shift = 8,
+ 	.ecc_strength = ecc_strength_mt2701,
+ 	.ecc_regs = mt2701_ecc_regs,
+ 	.num_ecc_strength = 20,
+@@ -459,6 +461,7 @@ static const struct mtk_ecc_caps mtk_ecc_caps_mt2701 = {
+ 
+ static const struct mtk_ecc_caps mtk_ecc_caps_mt2712 = {
+ 	.err_mask = 0x7f,
++	.err_shift = 8,
+ 	.ecc_strength = ecc_strength_mt2712,
+ 	.ecc_regs = mt2712_ecc_regs,
+ 	.num_ecc_strength = 23,
+@@ -468,10 +471,11 @@ static const struct mtk_ecc_caps mtk_ecc_caps_mt2712 = {
+ };
+ 
+ static const struct mtk_ecc_caps mtk_ecc_caps_mt7622 = {
+-	.err_mask = 0x3f,
++	.err_mask = 0x1f,
++	.err_shift = 5,
+ 	.ecc_strength = ecc_strength_mt7622,
+ 	.ecc_regs = mt7622_ecc_regs,
+-	.num_ecc_strength = 7,
++	.num_ecc_strength = 5,
+ 	.ecc_mode_shift = 4,
+ 	.parity_bits = 13,
+ 	.pg_irq_sel = 0,
+-- 
+2.35.1
+
 
 

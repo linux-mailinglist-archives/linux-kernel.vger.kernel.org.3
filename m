@@ -2,151 +2,319 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CD3351A35B
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 17:12:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF60E51A35D
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 17:12:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351976AbiEDPPs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 11:15:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37288 "EHLO
+        id S1351980AbiEDPQM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 11:16:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351829AbiEDPPo (ORCPT
+        with ESMTP id S1351829AbiEDPQJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 11:15:44 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 271A741325
-        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 08:12:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651677128; x=1683213128;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=azBmu/lR3NWJpuubsX5xRpD8NmunoaWmUaThrpZSyp8=;
-  b=Kl8UXq3ky7/OYRqnBgAaLKLNZ66iijFruqk+rz/ZF6VTUGLiwWRzmarZ
-   lwnJMdmLA3tMPlxBPjuepnjCYpv1NU4EOwtIK2o2gt9DQ8HmDoKsp8aG6
-   4QYY4BDl3PlzGiZd+Tpv69uDgK/2QMPx04MuDd100qf0EGZ6g3kGvU46w
-   vy7Io+G1GHOaCR10nqzgut2M9zrVuBMclYgJBkvkTs2Z1bDk77P8ka+dw
-   BsmXVZYiqUeR1cDGHWZvDWbc5ZdL3aaDLcApn1ogd0I8KdA0tZBj2Xes+
-   hLWOlMwmCOaNCLkGVyxbWZaHchgvDcHPxDpQuXZNEMzsZQzly464ewnuY
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10337"; a="266637049"
-X-IronPort-AV: E=Sophos;i="5.91,198,1647327600"; 
-   d="scan'208";a="266637049"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2022 08:12:07 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,198,1647327600"; 
-   d="scan'208";a="536870654"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 04 May 2022 08:12:06 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nmGfd-000BTH-RG;
-        Wed, 04 May 2022 15:12:05 +0000
-Date:   Wed, 4 May 2022 23:11:35 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Jiri Slaby <jslaby@suse.cz>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [jirislaby:devel 53/73] drivers/video/console/vgacon.c:371:35:
- warning: comparison of distinct pointer types lacks a cast
-Message-ID: <202205042318.pbCvFqrn-lkp@intel.com>
+        Wed, 4 May 2022 11:16:09 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A90FB3EBAD
+        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 08:12:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1651677151;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Y2TfkwOU8uXwJ9BRTtS6GzgXalAIQnLSQtYSV+f+g0g=;
+        b=JJBGBixC+GHU7irum/HJSaPnGhumCqV8KXBHCSW8IyYGCsx8KDBP29KC9FuukNHnD0oC88
+        9O5iI7i48SJys/PPNdsdrzBTV/UFYFXZLrb+29EFee4zafsM4ZNDk4sz4Ep1wT1pHeCpsE
+        casj9UHfnVV03zvB/C5elVG3arYKZ0c=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-662-7VvvhpghO5iaxAedgRVMyw-1; Wed, 04 May 2022 11:12:28 -0400
+X-MC-Unique: 7VvvhpghO5iaxAedgRVMyw-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 45B803C02B65;
+        Wed,  4 May 2022 15:12:28 +0000 (UTC)
+Received: from horse.redhat.com (unknown [10.22.16.200])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 2EB17400D277;
+        Wed,  4 May 2022 15:12:28 +0000 (UTC)
+Received: by horse.redhat.com (Postfix, from userid 10451)
+        id E0C3A220463; Wed,  4 May 2022 11:12:27 -0400 (EDT)
+Date:   Wed, 4 May 2022 11:12:27 -0400
+From:   Vivek Goyal <vgoyal@redhat.com>
+To:     Dharmendra Singh <dharamhans87@gmail.com>
+Cc:     miklos@szeredi.hu, linux-fsdevel@vger.kernel.org,
+        fuse-devel@lists.sourceforge.net, linux-kernel@vger.kernel.org,
+        bschubert@ddn.com, Dharmendra Singh <dsingh@ddn.com>
+Subject: Re: [PATCH v3 1/3] FUSE: Implement atomic lookup + create
+Message-ID: <YnKX2wsvsafp/uw3@redhat.com>
+References: <20220502054628.25826-1-dharamhans87@gmail.com>
+ <20220502054628.25826-2-dharamhans87@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220502054628.25826-2-dharamhans87@gmail.com>
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jirislaby/linux.git devel
-head:   fab642eca5e0ca41e656c8a0685cadf975b7ff88
-commit: 9aaf33513f7cd36e3ac26196731192e7d7d92a99 [53/73] vt: rename and document struct uni_pagedir
-config: alpha-defconfig (https://download.01.org/0day-ci/archive/20220504/202205042318.pbCvFqrn-lkp@intel.com/config)
-compiler: alpha-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/jirislaby/linux.git/commit/?id=9aaf33513f7cd36e3ac26196731192e7d7d92a99
-        git remote add jirislaby https://git.kernel.org/pub/scm/linux/kernel/git/jirislaby/linux.git
-        git fetch --no-tags jirislaby devel
-        git checkout 9aaf33513f7cd36e3ac26196731192e7d7d92a99
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=alpha SHELL=/bin/bash drivers/video/console/
+On Mon, May 02, 2022 at 11:16:26AM +0530, Dharmendra Singh wrote:
+> From: Dharmendra Singh <dsingh@ddn.com>
+> 
+> When we go for creating a file (O_CREAT), we trigger
+> a lookup to FUSE USER SPACE. It is very  much likely
+> that file does not exist yet as O_CREAT is passed to
+> open(). This lookup can be avoided and can be performed
+> as part of create call into libfuse.
+> 
+> This lookup + create in single call to libfuse and finally
+> to USER SPACE has been named as atomic create. It is expected
+> that USER SPACE create the file, open it and fills in the
+> attributes which are then used to make inode stand/revalidate
+> in the kernel cache. Also if file was newly created(does not
+> exist yet by this time) in USER SPACE then it should be indicated
+> in `struct fuse_file_info` by setting a bit which is again used by
+> libfuse to send some flags back to fuse kernel to indicate that
+> that file was newly created. These flags are used by kernel to
+> indicate changes in parent directory.
+> 
+> Fuse kernel automatically detects if atomic create is implemented
+> by libfuse/USER SPACE or not. And depending upon the outcome of
+> this check all further creates are decided to be atomic or non-atomic
+> creates.
+> 
+> If libfuse/USER SPACE has not implemented the atomic create operation
+> then by default behaviour remains same i.e we do not optimize lookup
+> calls which are triggered before create calls into libfuse.
+> 
+> Signed-off-by: Dharmendra Singh <dsingh@ddn.com>
+> ---
+>  fs/fuse/dir.c             | 82 +++++++++++++++++++++++++++++++++++----
+>  fs/fuse/fuse_i.h          |  3 ++
+>  include/uapi/linux/fuse.h |  3 ++
+>  3 files changed, 81 insertions(+), 7 deletions(-)
+> 
+> diff --git a/fs/fuse/dir.c b/fs/fuse/dir.c
+> index 656e921f3506..cad3322a007f 100644
+> --- a/fs/fuse/dir.c
+> +++ b/fs/fuse/dir.c
+> @@ -523,7 +523,7 @@ static int get_security_context(struct dentry *entry, umode_t mode,
+>   */
+>  static int fuse_create_open(struct inode *dir, struct dentry *entry,
+>  			    struct file *file, unsigned int flags,
+> -			    umode_t mode)
+> +			    umode_t mode, uint32_t opcode)
+>  {
+>  	int err;
+>  	struct inode *inode;
+> @@ -535,8 +535,10 @@ static int fuse_create_open(struct inode *dir, struct dentry *entry,
+>  	struct fuse_entry_out outentry;
+>  	struct fuse_inode *fi;
+>  	struct fuse_file *ff;
+> +	struct dentry *res = NULL;
+>  	void *security_ctx = NULL;
+>  	u32 security_ctxlen;
+> +	bool atomic_create = (opcode == FUSE_ATOMIC_CREATE ? true : false);
+>  
+>  	/* Userspace expects S_IFREG in create mode */
+>  	BUG_ON((mode & S_IFMT) != S_IFREG);
+> @@ -566,7 +568,7 @@ static int fuse_create_open(struct inode *dir, struct dentry *entry,
+>  		inarg.open_flags |= FUSE_OPEN_KILL_SUIDGID;
+>  	}
+>  
+> -	args.opcode = FUSE_CREATE;
+> +	args.opcode = opcode;
+>  	args.nodeid = get_node_id(dir);
+>  	args.in_numargs = 2;
+>  	args.in_args[0].size = sizeof(inarg);
+> @@ -613,9 +615,44 @@ static int fuse_create_open(struct inode *dir, struct dentry *entry,
+>  		goto out_err;
+>  	}
+>  	kfree(forget);
+> -	d_instantiate(entry, inode);
+> +	/*
+> +	 * In atomic create, we skipped lookup and it is very much likely that
+> +	 * dentry has DCACHE_PAR_LOOKUP flag set on it so call d_splice_alias().
+> +	 * Note: Only REG file is allowed under create/atomic create.
+> +	 */
+> +	/* There is special case when at very first call where we check if
+> +	 * atomic create is implemented by USER SPACE/libfuse or not, we
+> +	 * skipped lookup. Now, in case where atomic create is not implemented
+> +	 * underlying, we fall back to FUSE_CREATE. here we are required to handle
+> +	 * DCACHE_PAR_LOOKUP flag.
+> +	 */
+> +	if (!atomic_create && !d_in_lookup(entry) && fm->fc->no_atomic_create)
+> +		d_instantiate(entry, inode);
+> +	else {
+> +		res = d_splice_alias(inode, entry);
+> +		if (res) {
+> +			 /* Close the file in user space, but do not unlink it,
+> +			  * if it was created - with network file systems other
+> +			  * clients might have already accessed it.
+> +			  */
+> +			if (IS_ERR(res)) {
+> +				fi = get_fuse_inode(inode);
+> +				fuse_sync_release(fi, ff, flags);
+> +				fuse_queue_forget(fm->fc, forget, outentry.nodeid, 1);
+> +				err = PTR_ERR(res);
+> +				goto out_err;
+> +			}
+> +			/* res is expected to be NULL since its REG file */
+> +			WARN_ON(res);
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+This WARN_ON(res) is strange. We enter if (res) block only if res is
+non null. So effectively we are doing this.
 
-All warnings (new ones prefixed by >>):
+if (res) {
+   WARN_ON(res);
+}
 
-   drivers/video/console/vgacon.c: In function 'vgacon_init':
-   drivers/video/console/vgacon.c:370:11: error: assignment to 'struct uni_pagedir *' from incompatible pointer type 'struct uni_pagedict *' [-Werror=incompatible-pointer-types]
-     370 |         p = *c->vc_uni_pagedir_loc;
-         |           ^
->> drivers/video/console/vgacon.c:371:35: warning: comparison of distinct pointer types lacks a cast
-     371 |         if (c->vc_uni_pagedir_loc != &vgacon_uni_pagedir) {
-         |                                   ^~
-   drivers/video/console/vgacon.c:373:39: error: assignment to 'struct uni_pagedict **' from incompatible pointer type 'struct uni_pagedir **' [-Werror=incompatible-pointer-types]
-     373 |                 c->vc_uni_pagedir_loc = &vgacon_uni_pagedir;
-         |                                       ^
-   cc1: some warnings being treated as errors
+Will it not trigger all the time?
 
+I think I already asked the question in previous email that what's the
+difference between d_instanatiate() and d_splice_alias() and why we
+need d_splice_alias() in this case instead.
 
-vim +371 drivers/video/console/vgacon.c
+Thanks
+Vivek
+> +		}
+> +	}
+>  	fuse_change_entry_timeout(entry, &outentry);
+> -	fuse_dir_changed(dir);
+> +	/*
+> +	 * In case of atomic create, we want to indicate directory change
+> +	 * only if USER SPACE actually created the file.
+> +	 */
+> +	if (!atomic_create || (outopen.open_flags & FOPEN_FILE_CREATED))
+> +		fuse_dir_changed(dir);
+>  	err = finish_open(file, entry, generic_file_open);
+>  	if (err) {
+>  		fi = get_fuse_inode(inode);
+> @@ -634,6 +671,29 @@ static int fuse_create_open(struct inode *dir, struct dentry *entry,
+>  	return err;
+>  }
+>  
+> +static int fuse_atomic_create(struct inode *dir, struct dentry *entry,
+> +			      struct file *file, unsigned int flags,
+> +			      umode_t mode)
+> +{
+> +	int err;
+> +	struct fuse_conn *fc = get_fuse_conn(dir);
+> +
+> +	if (fc->no_atomic_create)
+> +		return -ENOSYS;
+> +
+> +	err = fuse_create_open(dir, entry, file, flags, mode,
+> +			       FUSE_ATOMIC_CREATE);
+> +	/* If atomic create is not implemented then indicate in fc so that next
+> +	 * request falls back to normal create instead of going into libufse and
+> +	 * returning with -ENOSYS.
+> +	 */
+> +	if (err == -ENOSYS) {
+> +		if (!fc->no_atomic_create)
+> +			fc->no_atomic_create = 1;
+> +	}
+> +	return err;
+> +}
+> +
+>  static int fuse_mknod(struct user_namespace *, struct inode *, struct dentry *,
+>  		      umode_t, dev_t);
+>  static int fuse_atomic_open(struct inode *dir, struct dentry *entry,
+> @@ -643,11 +703,12 @@ static int fuse_atomic_open(struct inode *dir, struct dentry *entry,
+>  	int err;
+>  	struct fuse_conn *fc = get_fuse_conn(dir);
+>  	struct dentry *res = NULL;
+> +	bool create = flags & O_CREAT ? true : false;
+>  
+>  	if (fuse_is_bad(dir))
+>  		return -EIO;
+>  
+> -	if (d_in_lookup(entry)) {
+> +	if ((!create || fc->no_atomic_create) && d_in_lookup(entry)) {
+>  		res = fuse_lookup(dir, entry, 0);
+>  		if (IS_ERR(res))
+>  			return PTR_ERR(res);
+> @@ -656,7 +717,7 @@ static int fuse_atomic_open(struct inode *dir, struct dentry *entry,
+>  			entry = res;
+>  	}
+>  
+> -	if (!(flags & O_CREAT) || d_really_is_positive(entry))
+> +	if (!create || d_really_is_positive(entry))
+>  		goto no_open;
+>  
+>  	/* Only creates */
+> @@ -665,7 +726,13 @@ static int fuse_atomic_open(struct inode *dir, struct dentry *entry,
+>  	if (fc->no_create)
+>  		goto mknod;
+>  
+> -	err = fuse_create_open(dir, entry, file, flags, mode);
+> +	err = fuse_atomic_create(dir, entry, file, flags, mode);
+> +	/* Libfuse/user space has not implemented atomic create, therefore
+> +	 * fall back to normal create.
+> +	 */
+> +	if (err == -ENOSYS)
+> +		err = fuse_create_open(dir, entry, file, flags, mode,
+> +				       FUSE_CREATE);
+>  	if (err == -ENOSYS) {
+>  		fc->no_create = 1;
+>  		goto mknod;
+> @@ -683,6 +750,7 @@ static int fuse_atomic_open(struct inode *dir, struct dentry *entry,
+>  }
+>  
+>  /*
+> +
+>   * Code shared between mknod, mkdir, symlink and link
+>   */
+>  static int create_new_entry(struct fuse_mount *fm, struct fuse_args *args,
+> diff --git a/fs/fuse/fuse_i.h b/fs/fuse/fuse_i.h
+> index e8e59fbdefeb..d577a591ab16 100644
+> --- a/fs/fuse/fuse_i.h
+> +++ b/fs/fuse/fuse_i.h
+> @@ -669,6 +669,9 @@ struct fuse_conn {
+>  	/** Is open/release not implemented by fs? */
+>  	unsigned no_open:1;
+>  
+> +	/** Is atomic create not implemented by fs? */
+> +	unsigned no_atomic_create:1;
+> +
+>  	/** Is opendir/releasedir not implemented by fs? */
+>  	unsigned no_opendir:1;
+>  
+> diff --git a/include/uapi/linux/fuse.h b/include/uapi/linux/fuse.h
+> index d6ccee961891..e4b56004b148 100644
+> --- a/include/uapi/linux/fuse.h
+> +++ b/include/uapi/linux/fuse.h
+> @@ -301,6 +301,7 @@ struct fuse_file_lock {
+>   * FOPEN_CACHE_DIR: allow caching this directory
+>   * FOPEN_STREAM: the file is stream-like (no file position at all)
+>   * FOPEN_NOFLUSH: don't flush data cache on close (unless FUSE_WRITEBACK_CACHE)
+> + * FOPEN_FILE_CREATED: the file was actually created
+>   */
+>  #define FOPEN_DIRECT_IO		(1 << 0)
+>  #define FOPEN_KEEP_CACHE	(1 << 1)
+> @@ -308,6 +309,7 @@ struct fuse_file_lock {
+>  #define FOPEN_CACHE_DIR		(1 << 3)
+>  #define FOPEN_STREAM		(1 << 4)
+>  #define FOPEN_NOFLUSH		(1 << 5)
+> +#define FOPEN_FILE_CREATED	(1 << 6)
+>  
+>  /**
+>   * INIT request/reply flags
+> @@ -537,6 +539,7 @@ enum fuse_opcode {
+>  	FUSE_SETUPMAPPING	= 48,
+>  	FUSE_REMOVEMAPPING	= 49,
+>  	FUSE_SYNCFS		= 50,
+> +	FUSE_ATOMIC_CREATE	= 51,
+>  
+>  	/* CUSE specific operations */
+>  	CUSE_INIT		= 4096,
+> -- 
+> 2.17.1
+> 
 
-^1da177e4c3f41 Linus Torvalds     2005-04-16  342  
-^1da177e4c3f41 Linus Torvalds     2005-04-16  343  static void vgacon_init(struct vc_data *c, int init)
-^1da177e4c3f41 Linus Torvalds     2005-04-16  344  {
-e4bdab70dd07d8 Takashi Iwai       2014-05-13  345  	struct uni_pagedir *p;
-^1da177e4c3f41 Linus Torvalds     2005-04-16  346  
-50ec42edd9784f Antonino A. Daplas 2006-06-26  347  	/*
-3dfac26e2ef29f Maciej W. Rozycki  2021-10-26  348  	 * We cannot be loaded as a module, therefore init will be 1
-3dfac26e2ef29f Maciej W. Rozycki  2021-10-26  349  	 * if we are the default console, however if we are a fallback
-3dfac26e2ef29f Maciej W. Rozycki  2021-10-26  350  	 * console, for example if fbcon has failed registration, then
-3dfac26e2ef29f Maciej W. Rozycki  2021-10-26  351  	 * init will be 0, so we need to make sure our boot parameters
-3dfac26e2ef29f Maciej W. Rozycki  2021-10-26  352  	 * have been copied to the console structure for vgacon_resize
-3dfac26e2ef29f Maciej W. Rozycki  2021-10-26  353  	 * ultimately called by vc_resize.  Any subsequent calls to
-3dfac26e2ef29f Maciej W. Rozycki  2021-10-26  354  	 * vgacon_init init will have init set to 0 too.
-50ec42edd9784f Antonino A. Daplas 2006-06-26  355  	 */
-^1da177e4c3f41 Linus Torvalds     2005-04-16  356  	c->vc_can_do_color = vga_can_do_color;
-3dfac26e2ef29f Maciej W. Rozycki  2021-10-26  357  	c->vc_scan_lines = vga_scan_lines;
-3dfac26e2ef29f Maciej W. Rozycki  2021-10-26  358  	c->vc_font.height = c->vc_cell_height = vga_video_font_height;
-50ec42edd9784f Antonino A. Daplas 2006-06-26  359  
-50ec42edd9784f Antonino A. Daplas 2006-06-26  360  	/* set dimensions manually if init != 0 since vc_resize() will fail */
-50ec42edd9784f Antonino A. Daplas 2006-06-26  361  	if (init) {
-^1da177e4c3f41 Linus Torvalds     2005-04-16  362  		c->vc_cols = vga_video_num_columns;
-^1da177e4c3f41 Linus Torvalds     2005-04-16  363  		c->vc_rows = vga_video_num_lines;
-50ec42edd9784f Antonino A. Daplas 2006-06-26  364  	} else
-50ec42edd9784f Antonino A. Daplas 2006-06-26  365  		vc_resize(c, vga_video_num_columns, vga_video_num_lines);
-50ec42edd9784f Antonino A. Daplas 2006-06-26  366  
-^1da177e4c3f41 Linus Torvalds     2005-04-16  367  	c->vc_complement_mask = 0x7700;
-a40920b42ae232 Bill Nottingham    2005-05-01  368  	if (vga_512_chars)
-a40920b42ae232 Bill Nottingham    2005-05-01  369  		c->vc_hi_font_mask = 0x0800;
-^1da177e4c3f41 Linus Torvalds     2005-04-16  370  	p = *c->vc_uni_pagedir_loc;
-0f2893f0d1acff Takashi Iwai       2014-05-13 @371  	if (c->vc_uni_pagedir_loc != &vgacon_uni_pagedir) {
-^1da177e4c3f41 Linus Torvalds     2005-04-16  372  		con_free_unimap(c);
-0f2893f0d1acff Takashi Iwai       2014-05-13  373  		c->vc_uni_pagedir_loc = &vgacon_uni_pagedir;
-0f2893f0d1acff Takashi Iwai       2014-05-13  374  		vgacon_refcount++;
-0f2893f0d1acff Takashi Iwai       2014-05-13  375  	}
-0f2893f0d1acff Takashi Iwai       2014-05-13  376  	if (!vgacon_uni_pagedir && p)
-^1da177e4c3f41 Linus Torvalds     2005-04-16  377  		con_set_default_unimap(c);
-f6c06b6807ff92 Matthew Garrett    2009-11-13  378  
-b434a680a29424 Matthew Garrett    2009-11-13  379  	/* Only set the default if the user didn't deliberately override it */
-b434a680a29424 Matthew Garrett    2009-11-13  380  	if (global_cursor_default == -1)
-b434a680a29424 Matthew Garrett    2009-11-13  381  		global_cursor_default =
-b434a680a29424 Matthew Garrett    2009-11-13  382  			!(screen_info.flags & VIDEO_FLAGS_NOCURSOR);
-^1da177e4c3f41 Linus Torvalds     2005-04-16  383  }
-^1da177e4c3f41 Linus Torvalds     2005-04-16  384  
-
-:::::: The code at line 371 was first introduced by commit
-:::::: 0f2893f0d1acff4bb1677b60c0486adc0075cb99 vgacon: Fix & cleanup refcounting
-
-:::::: TO: Takashi Iwai <tiwai@suse.de>
-:::::: CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp

@@ -2,47 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79A4151AB42
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:42:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 477A551AA62
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:27:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359024AbiEDRnh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 13:43:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39182 "EHLO
+        id S1357901AbiEDR30 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 13:29:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356126AbiEDRJD (ORCPT
+        with ESMTP id S1356160AbiEDRJD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 4 May 2022 13:09:03 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F042152B26;
-        Wed,  4 May 2022 09:54:53 -0700 (PDT)
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DE3A527DB;
+        Wed,  4 May 2022 09:54:55 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 15D96616B8;
+        by ams.source.kernel.org (Postfix) with ESMTPS id CB6A8B8278E;
+        Wed,  4 May 2022 16:54:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D6B9C385A5;
         Wed,  4 May 2022 16:54:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59758C385AF;
-        Wed,  4 May 2022 16:54:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651683292;
-        bh=Sy62exZXu8SRxZ/3J0m2mUEFPA7eyvrWDncm6gmgQGQ=;
+        s=korg; t=1651683293;
+        bh=sIcdSQKIIDNNFM/w9Updax0ffwrvLpzihuIATxAFl1g=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=E1Xgnr15qnmFlwl5UxrV6gXfA6RfyKUZoHmcOYMu4tazJxn27WPnSg+baqL1aDj8e
-         Drc+zPxp498cbbxT6LgxopnVKCRIBAWQkaN+R5QspxcA9XU5ZJPzvIwTfZh6r19Fjr
-         DN11cuFPe9wwgG4xqy+P9j4ClLteQjVh8AelPcv8=
+        b=QnPx14KT7XLjFf+bhymLHWFN3gjI/glrZD7F8ckrIA0pTu3qrZ3+FmOwIntdloACE
+         H/VfjzZV2A8peEdukMzKWTcMN3IC4OZqj9vMWZfHTSX1j5QXV8o5MTI0w7qie4hKO6
+         oJDi0wg6EhTPdpcbs1G6JULWHdcbwZFO6Ssj2rGY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Lyude Paul <lyude@redhat.com>,
-        Mika Kahola <mika.kahola@intel.com>,
-        Jani Nikula <jani.nikula@intel.com>,
-        Filippo Falezza <filippo.falezza@outlook.it>,
-        =?UTF-8?q?Jouni=20H=C3=B6gander?= <jouni.hogander@intel.com>,
-        =?UTF-8?q?Ville=20Syrj=C3=A4l=C3=A4?= 
-        <ville.syrjala@linux.intel.com>,
+        stable@vger.kernel.org,
+        =?UTF-8?q?Jos=C3=A9=20Roberto=20de=20Souza?= <jose.souza@intel.com>,
+        Imre Deak <imre.deak@intel.com>,
         Joonas Lahtinen <joonas.lahtinen@linux.intel.com>
-Subject: [PATCH 5.15 146/177] drm/i915: Check EDID for HDR static metadata when choosing blc
-Date:   Wed,  4 May 2022 18:45:39 +0200
-Message-Id: <20220504153106.360987392@linuxfoundation.org>
+Subject: [PATCH 5.15 147/177] drm/i915: Fix SEL_FETCH_PLANE_*(PIPE_B+) register addresses
+Date:   Wed,  4 May 2022 18:45:40 +0200
+Message-Id: <20220504153106.457815410@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
 In-Reply-To: <20220504153053.873100034@linuxfoundation.org>
 References: <20220504153053.873100034@linuxfoundation.org>
@@ -60,100 +56,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jouni Högander <jouni.hogander@intel.com>
+From: Imre Deak <imre.deak@intel.com>
 
-commit c05d8332f5d23fa3b521911cbe55a2b67fb21248 upstream.
+commit 4ae4dd2e26fdfebf0b8c6af6c325383eadfefdb4 upstream.
 
-We have now seen panel (XMG Core 15 e21 laptop) advertizing support
-for Intel proprietary eDP backlight control via DPCD registers, but
-actually working only with legacy pwm control.
+Fix typo in the _SEL_FETCH_PLANE_BASE_1_B register base address.
 
-This patch adds panel EDID check for possible HDR static metadata and
-Intel proprietary eDP backlight control is used only if that exists.
-Missing HDR static metadata is ignored if user specifically asks for
-Intel proprietary eDP backlight control via enable_dpcd_backlight
-parameter.
-
-v2 :
-- Ignore missing HDR static metadata if Intel proprietary eDP
-  backlight control is forced via i915.enable_dpcd_backlight
-- Printout info message if panel is missing HDR static metadata and
-  support for Intel proprietary eDP backlight control is detected
-
-Fixes: 4a8d79901d5b ("drm/i915/dp: Enable Intel's HDR backlight interface (only SDR for now)")
-Closes: https://gitlab.freedesktop.org/drm/intel/-/issues/5284
-Cc: Lyude Paul <lyude@redhat.com>
-Cc: Mika Kahola <mika.kahola@intel.com>
-Cc: Jani Nikula <jani.nikula@intel.com>
-Cc: Filippo Falezza <filippo.falezza@outlook.it>
-Cc: stable@vger.kernel.org
-Signed-off-by: Jouni Högander <jouni.hogander@intel.com>
-Signed-off-by: Ville Syrjälä <ville.syrjala@linux.intel.com>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220413082826.120634-1-jouni.hogander@intel.com
-Reviewed-by: Lyude Paul <lyude@redhat.com>
-(cherry picked from commit b4b157577cb1de13bee8bebc3576f1de6799a921)
+Fixes: a5523e2ff074a5 ("drm/i915: Add PSR2 selective fetch registers")
+Cc: José Roberto de Souza <jose.souza@intel.com>
+Cc: <stable@vger.kernel.org> # v5.9+
+Signed-off-by: Imre Deak <imre.deak@intel.com>
+Reviewed-by: José Roberto de Souza <jose.souza@intel.com>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220421162221.2261895-1-imre.deak@intel.com
+(cherry picked from commit af2cbc6ef967f61711a3c40fca5366ea0bc7fecc)
 Signed-off-by: Joonas Lahtinen <joonas.lahtinen@linux.intel.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/i915/display/intel_dp_aux_backlight.c |   34 +++++++++++++-----
- 1 file changed, 26 insertions(+), 8 deletions(-)
+ drivers/gpu/drm/i915/i915_reg.h |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/gpu/drm/i915/display/intel_dp_aux_backlight.c
-+++ b/drivers/gpu/drm/i915/display/intel_dp_aux_backlight.c
-@@ -96,6 +96,14 @@
+--- a/drivers/gpu/drm/i915/i915_reg.h
++++ b/drivers/gpu/drm/i915/i915_reg.h
+@@ -7458,7 +7458,7 @@ enum {
+ #define _SEL_FETCH_PLANE_BASE_6_A		0x70940
+ #define _SEL_FETCH_PLANE_BASE_7_A		0x70960
+ #define _SEL_FETCH_PLANE_BASE_CUR_A		0x70880
+-#define _SEL_FETCH_PLANE_BASE_1_B		0x70990
++#define _SEL_FETCH_PLANE_BASE_1_B		0x71890
  
- #define INTEL_EDP_BRIGHTNESS_OPTIMIZATION_1                            0x359
- 
-+enum intel_dp_aux_backlight_modparam {
-+	INTEL_DP_AUX_BACKLIGHT_AUTO = -1,
-+	INTEL_DP_AUX_BACKLIGHT_OFF = 0,
-+	INTEL_DP_AUX_BACKLIGHT_ON = 1,
-+	INTEL_DP_AUX_BACKLIGHT_FORCE_VESA = 2,
-+	INTEL_DP_AUX_BACKLIGHT_FORCE_INTEL = 3,
-+};
-+
- /* Intel EDP backlight callbacks */
- static bool
- intel_dp_aux_supports_hdr_backlight(struct intel_connector *connector)
-@@ -125,6 +133,24 @@ intel_dp_aux_supports_hdr_backlight(stru
- 		return false;
- 	}
- 
-+	/*
-+	 * If we don't have HDR static metadata there is no way to
-+	 * runtime detect used range for nits based control. For now
-+	 * do not use Intel proprietary eDP backlight control if we
-+	 * don't have this data in panel EDID. In case we find panel
-+	 * which supports only nits based control, but doesn't provide
-+	 * HDR static metadata we need to start maintaining table of
-+	 * ranges for such panels.
-+	 */
-+	if (i915->params.enable_dpcd_backlight != INTEL_DP_AUX_BACKLIGHT_FORCE_INTEL &&
-+	    !(connector->base.hdr_sink_metadata.hdmi_type1.metadata_type &
-+	      BIT(HDMI_STATIC_METADATA_TYPE1))) {
-+		drm_info(&i915->drm,
-+			 "Panel is missing HDR static metadata. Possible support for Intel HDR backlight interface is not used. If your backlight controls don't work try booting with i915.enable_dpcd_backlight=%d. needs this, please file a _new_ bug report on drm/i915, see " FDO_BUG_URL " for details.\n",
-+			 INTEL_DP_AUX_BACKLIGHT_FORCE_INTEL);
-+		return false;
-+	}
-+
- 	panel->backlight.edp.intel.sdr_uses_aux =
- 		tcon_cap[2] & INTEL_EDP_SDR_TCON_BRIGHTNESS_AUX_CAP;
- 
-@@ -373,14 +399,6 @@ static const struct intel_panel_bl_funcs
- 	.get = intel_dp_aux_vesa_get_backlight,
- };
- 
--enum intel_dp_aux_backlight_modparam {
--	INTEL_DP_AUX_BACKLIGHT_AUTO = -1,
--	INTEL_DP_AUX_BACKLIGHT_OFF = 0,
--	INTEL_DP_AUX_BACKLIGHT_ON = 1,
--	INTEL_DP_AUX_BACKLIGHT_FORCE_VESA = 2,
--	INTEL_DP_AUX_BACKLIGHT_FORCE_INTEL = 3,
--};
--
- int intel_dp_aux_init_backlight_funcs(struct intel_connector *connector)
- {
- 	struct drm_device *dev = connector->base.dev;
+ #define _SEL_FETCH_PLANE_BASE_A(plane) _PICK(plane, \
+ 					     _SEL_FETCH_PLANE_BASE_1_A, \
 
 

@@ -2,135 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6829C51AED5
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 22:12:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32C1351AEDC
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 22:15:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377930AbiEDUP7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 16:15:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49608 "EHLO
+        id S1377931AbiEDUTM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 16:19:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377927AbiEDUP5 (ORCPT
+        with ESMTP id S1377953AbiEDUSz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 16:15:57 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 194574F470;
-        Wed,  4 May 2022 13:12:18 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id c1-20020a17090a558100b001dca2694f23so2051516pji.3;
-        Wed, 04 May 2022 13:12:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=qRWAIQw/IQGnxhtZ+qeDmVqe+g63JTPwUddID9hVwPc=;
-        b=HsTg9eY80xoBzua87OWPfgLBMWs7DAv4sFiQ/NmfrLFELHdPbgHvH4VD8HXlXdG1k9
-         UtPWzM0CzBSY6Gm//ZROtTDY1A+Iic1UPbfntLMmDMUm9iJbrPnp51q4b3LEQu4XygzG
-         ZyVHUyTykEeN0+GxAxqTGRrHNlY3S3Du59/nxud6x8sKx0yPOtVooc32/g8MCwGgvXG6
-         vsFdkIci3LA+UbZFy2Exkvw8yX3g/9rVy4wM0kX0X4NfTXcc0ouJ5+zrGi3rmFiTU1i0
-         h436xL2b4o16wIFrHTrA2LOqfZ9HlnHZcP9+JOTwiud3UKhhTELl4J98yT2wE2kZpfV9
-         cghw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=qRWAIQw/IQGnxhtZ+qeDmVqe+g63JTPwUddID9hVwPc=;
-        b=IBMsxAWtu0dOUbWp1J4FGe1yAIgSoxPR+kk0nmuI4JNGw8rP3U3qTsi6ihkk/xXiOo
-         RnyD2HG+x9zqI6a29tc2bRRub25osaIZnoIZQRMSbK1E2tSAjaXthYGyUE66GlM0awm8
-         7LoGKemplRNtndFfWHfJNpS5VKnGyUYNAHkryeck0X5A6yeBrepqVzNOwnhTblwUnACQ
-         S0Yqybam1VwX7fzIZd1PWJwd14jgj04tT5MQBzUdUjVNzHLylNf8w8w325LUQYrJCeSy
-         KH1bogvC7cOfn1RuY1HpV3KqgiOj1kYeDvKLNjRbPqis9KPD/XhTp147dl9NwV2N2DjF
-         XSXA==
-X-Gm-Message-State: AOAM5326MT3fXuTUKZ0mexEGd4Y1dPwLDAXMXclEvO3OAVFKdnYJ/WWj
-        Br8gl/kOQv/LFsxtSzFh+28=
-X-Google-Smtp-Source: ABdhPJw0eygHe7YDsvldepG8YCfg1Ft4sqoT4+TIh/1Abp3rkY+dD00P8oCCOu/eRtbyjmdTUMzUug==
-X-Received: by 2002:a17:902:ec8c:b0:15e:a371:ad7d with SMTP id x12-20020a170902ec8c00b0015ea371ad7dmr16837828plg.12.1651695137514;
-        Wed, 04 May 2022 13:12:17 -0700 (PDT)
-Received: from localhost ([2409:10:24a0:4700:e8ad:216a:2a9d:6d0c])
-        by smtp.gmail.com with ESMTPSA id kz2-20020a17090b210200b001cd4989febasm3668308pjb.6.2022.05.04.13.12.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 May 2022 13:12:16 -0700 (PDT)
-Date:   Thu, 5 May 2022 05:12:15 +0900
-From:   Stafford Horne <shorne@gmail.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Andy Shevchenko <andriy.shevchenko@intel.com>,
-        Mikulas Patocka <mpatocka@redhat.com>,
-        Andy Shevchenko <andy@kernel.org>,
-        device-mapper development <dm-devel@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Mike Snitzer <msnitzer@redhat.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Milan Broz <gmazyland@gmail.com>
-Subject: Re: [PATCH v2] hex2bin: make the function hex_to_bin constant-time
-Message-ID: <YnLeH7kBImX5XLNn@antec>
-References: <alpine.LRH.2.02.2204250723120.26714@file01.intranet.prod.int.rdu2.redhat.com>
- <YnI7hE4cIfjsdKSF@antec>
- <YnJI4Ru0AlUgrr9C@zx2c4.com>
- <YnJOCbLtdATzC+jn@zx2c4.com>
- <YnJQXr3igEMTqY3+@smile.fi.intel.com>
- <YnJSQ3jJyvhmIstD@zx2c4.com>
- <CAHk-=wgb_eBdjM_mzEvXfRG2EhrSK5MHNGyAj7=4vxvN4U9Rug@mail.gmail.com>
- <CAHmME9q_-nfGxp8_VCqaritm4N8v8g67AzRjXs9du846JhhpoQ@mail.gmail.com>
- <CAHk-=wiaj8SMSQTWAx2cUFqzRWRqBspO5YV=qA8M+QOC2vDorw@mail.gmail.com>
- <CAHk-=witNAEG7rRsbxD0-4mxhtijRT8fwSc3QCi5HN1sR=0YcA@mail.gmail.com>
+        Wed, 4 May 2022 16:18:55 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81BB662FB;
+        Wed,  4 May 2022 13:15:17 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1651695314;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=2oJD7k+4DnOtUc+hYYmeV/3FEHnovMfe+24BdevlrYw=;
+        b=ESY3+67uixkgq/KnTmlbfh/J1esj5LQdSZff0zyIDPvxmM6KQcWk26aEmRWKHmLLWFurHQ
+        a5jUnBetFH+EW1367CNQoH+OSRAiVtzbTpfKIoKjBegg5eDD41Ytux9Ne2C4glXX1lWC6Q
+        JT6Ucq3++D0XX/AVNFoZA2NsjBq4Qs9+fk7EqgfgEC84QKUTjWV8/pzJEWjwA6vZAMMegI
+        6TO4CQZGYW1g07XBCFkEdX4YoAcdlMgxNgQH4qw5ZQOQZcVL7mwFmzYBslK12slf+cmmqH
+        mCaSyJttDTbQMmzawol2JsQDZnRzNWQZXTjxOLxtnUIhtJiKRtrXWRlOPnLAFA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1651695315;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=2oJD7k+4DnOtUc+hYYmeV/3FEHnovMfe+24BdevlrYw=;
+        b=z7V/iS1I/z0AcRhPiegimDhqSc9oxg7BG2knHRxNmH83LE8hyYBQpG6IbzvBjXno08JE75
+        xn7/LaaLV0qUHqBg==
+To:     Marcelo Tosatti <mtosatti@redhat.com>
+Cc:     Christoph Lameter <cl@gentwo.de>, linux-kernel@vger.kernel.org,
+        Nitesh Lal <nilal@redhat.com>,
+        Nicolas Saenz Julienne <nsaenzju@redhat.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Alex Belits <abelits@belits.com>, Peter Xu <peterx@redhat.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Oscar Shiang <oscar0225@livemail.tw>,
+        linux-rdma@vger.kernel.org
+Subject: Re: [patch v12 00/13] extensible prctl task isolation interface and
+ vmstat sync
+In-Reply-To: <YnLMc5X8MZElk0NT@fuller.cnet>
+References: <20220315153132.717153751@fedora.localdomain>
+ <alpine.DEB.2.22.394.2204271049050.159551@gentwo.de>
+ <YnF7CjzYBhASi1Eo@fuller.cnet> <87h765juyk.ffs@tglx>
+ <YnLMc5X8MZElk0NT@fuller.cnet>
+Date:   Wed, 04 May 2022 22:15:14 +0200
+Message-ID: <871qx9jbql.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAHk-=witNAEG7rRsbxD0-4mxhtijRT8fwSc3QCi5HN1sR=0YcA@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_FILL_THIS_FORM_SHORT,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 04, 2022 at 01:00:36PM -0700, Linus Torvalds wrote:
-> On Wed, May 4, 2022 at 12:51 PM Linus Torvalds
-> <torvalds@linux-foundation.org> wrote:
-> >
-> > But I don't think that it's the browser, actually. Even 'nslookup'
-> > refuses to touch it with
-> >
-> >    ** server can't find א.cc: SERVFAIL
-> >
-> > and it seems it's literally the local dns caching (dnsmasq?)
-> 
-> Looks like Fedora builds dnsmasq with 'no-i18n', although "dnsmasq -v"
-> also shows "IDN2", so who knows.. Maybe it's some default config issue
-> rather than the build configuration.
-> 
->                   Linus
+On Wed, May 04 2022 at 15:56, Marcelo Tosatti wrote:
+> On Wed, May 04, 2022 at 03:20:03PM +0200, Thomas Gleixner wrote:
+>> Can we please focus on the initial problem of
+>> providing a sensible isolation mechanism with well defined semantics?
+>
+> Case 2, however, was implicitly suggested by you (or at least i
+> understood that):
+>
+> "Summary: The problem to be solved cannot be restricted to
+>
+>     self_defined_important_task(OWN_WORLD);
+>
+> Policy is not a binary on/off problem. It's manifold across all levels
+> of the stack and only a kernel problem when it comes down to the last
+> line of defence.
+>
+> Up to the point where the kernel puts the line of last defence, policy
+> is defined by the user/admin via mechanims provided by the kernel.
+>
+> Emphasis on "mechanims provided by the kernel", aka. user API.
+>
+> Just in case, I hope that I don't have to explain what level of scrunity
+> and thought this requires."
 
-Which version of Fedora? I use a pretty vanilla Fedora 34 install and it seems to
-be working ok for me.
+Correct. This reasoning is still valid and I haven't changed my opinion
+on that since then.
 
-    shorne@antec $ dig +short א.cc
-    147.75.79.213
-    shorne@antec $ nslookup א.cc
-    Server:         127.0.0.53
-    Address:        127.0.0.53#53
+My main objections against the proposed solution back then were the all
+or nothing approach and the implicit hard coded policies.
 
-    Non-authoritative answer:
-    Name:   א.cc
-    Address: 147.75.79.213
-    Name:   א.cc
-    Address: 2604:1380:1:4d00::5
+> The idea, as i understood was that certain task isolation features (or
+> they parameters) might have to be changed at runtime (which depends on
+> the task isolation features themselves, and the plan is to create
+> an extensible interface).
 
-    shorne@antec $ /lib64/ld-linux-x86-64.so.2 --version
-    ld.so (GNU libc) release release version 2.33.
-    Copyright (C) 2021 Free Software Foundation, Inc.
-    This is free software; see the source for copying conditions.
-    There is NO warranty; not even for MERCHANTABILITY or FITNESS FOR A
-    PARTICULAR PURPOSE.
+Again. I'm not against useful controls to select the isolation an
+application requires. I'm neither against extensible interfaces.
 
-    shorne@antec $ cat /etc/redhat-release
-    Fedora release 34 (Thirty Four)
+But I'm against overengineered implementations which lack any form of
+sensible design and have ill defined semantics at the user ABI.
 
--Stafford
+Designing user space ABI is _hard_ and needs a lot of thoughts. It's not
+done with throwing something 'extensible' at the kernel and hope it
+sticks. As I showed you in the review, the ABI is inconsistent in
+itself, it has ill defined semantics and lacks any form of justification
+of the approach taken.
+
+Can we please take a step back and:
+
+  1) Define what is trying to be solved and what are the pieces known
+     today which need to be controlled in order to achieve the desired
+     isolation properties.
+
+  2) Describe the usage scenarios and the resulting constraints.
+
+  3) Describe the requirements for features on top, e.g. inheritance
+     or external control.
+
+Once we have that, we can have a discussion about the desired control
+granularity and how to support the extra features in a consistent and
+well defined way.
+
+A good and extensible UABI design comes with well defined functionality
+for the start and an obvious and maintainable extension path. The most
+important part is the well defined functionality.
+
+There have been enough examples in the past how well received approaches
+are, which lack the well defined part. Linus really loves to get a pull
+request for something which cannot be described what it does, but could
+be used for cool things in the future.
+
+> So for case 2, all you'd have to do is to modify the application only
+> once and allow the admin to configure the features.
+
+That's still an orthogonal problem, which can be solved once a sensible
+mechanism to control the isolation and handle it at the transition
+points is in place. You surely want to consider it when designing the
+UABI, but it's not required to create the real isolation mechanism in
+the first place.
+
+Problem decomposition is not an entirely new concept, really.
+
+Thanks,
+
+        tglx

@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BB1551A9EC
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:19:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DEBE751A662
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 18:51:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357921AbiEDRUM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 13:20:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51436 "EHLO
+        id S1354092AbiEDQy7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 12:54:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356137AbiEDREz (ORCPT
+        with ESMTP id S1354035AbiEDQxr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 13:04:55 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5B4A50073;
-        Wed,  4 May 2022 09:53:53 -0700 (PDT)
+        Wed, 4 May 2022 12:53:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8A3847054;
+        Wed,  4 May 2022 09:48:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E00D8B827A6;
-        Wed,  4 May 2022 16:53:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7ACD9C385A5;
-        Wed,  4 May 2022 16:53:51 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 679B661720;
+        Wed,  4 May 2022 16:48:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B338DC385A4;
+        Wed,  4 May 2022 16:48:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651683231;
-        bh=+zsxUrdCriv/HUEE0NzYrokSTVzd+971nHkaK5R5ooY=;
+        s=korg; t=1651682938;
+        bh=XJ36Ncq/NTi/l4xpfsFV75yso6rXe2+OwlqkmuHYyW8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LWJb/H4r92G3LxN0v1lFNTqcTTQ3HsQ00PnDnN/x0Z4qg7LXixW/xitJ5dzdNs1YL
-         0OuVoWts9h9T8yTV8ExbGH2i2Smj4F2JiZT5myCHQ08iLDfej1GbEvx1ny5nMAddHx
-         YHECfjfHJzk2o0Ffuv8sYKnEJ5WRJUd1Mjx7ZL90=
+        b=tsMAtBJvbtcoWkwxQWlhqI8mzhfWu1X57lg/yxXtfcJtrmf0Wjm66UpSjOzQoUO06
+         5wC07iPMyXBGpRGdnSIsbf/OXRR4heOkhgsgFPhoLrKq/rMHg3E0uFe+LvA2HRviRc
+         R609IDvI6XE/IH0fJvRtXVBJIckWRjh/CYz/yLvc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Francesco Ruggeri <fruggeri@arista.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
+        stable@vger.kernel.org, Peilin Ye <peilin.ye@bytedance.com>,
+        William Tu <u9012063@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 084/177] tcp: md5: incorrect tcp_header_len for incoming connections
-Date:   Wed,  4 May 2022 18:44:37 +0200
-Message-Id: <20220504153100.626141326@linuxfoundation.org>
+Subject: [PATCH 5.4 57/84] ip_gre: Make o_seqno start from 0 in native mode
+Date:   Wed,  4 May 2022 18:44:38 +0200
+Message-Id: <20220504152931.827925795@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220504153053.873100034@linuxfoundation.org>
-References: <20220504153053.873100034@linuxfoundation.org>
+In-Reply-To: <20220504152927.744120418@linuxfoundation.org>
+References: <20220504152927.744120418@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,38 +56,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Francesco Ruggeri <fruggeri@arista.com>
+From: Peilin Ye <peilin.ye@bytedance.com>
 
-[ Upstream commit 5b0b9e4c2c895227c8852488b3f09839233bba54 ]
+[ Upstream commit ff827beb706ed719c766acf36449801ded0c17fc ]
 
-In tcp_create_openreq_child we adjust tcp_header_len for md5 using the
-remote address in newsk. But that address is still 0 in newsk at this
-point, and it is only set later by the callers (tcp_v[46]_syn_recv_sock).
-Use the address from the request socket instead.
+For GRE and GRETAP devices, currently o_seqno starts from 1 in native
+mode.  According to RFC 2890 2.2., "The first datagram is sent with a
+sequence number of 0."  Fix it.
 
-Fixes: cfb6eeb4c860 ("[TCP]: MD5 Signature Option (RFC2385) support.")
-Signed-off-by: Francesco Ruggeri <fruggeri@arista.com>
-Reviewed-by: Eric Dumazet <edumazet@google.com>
-Link: https://lore.kernel.org/r/20220421005026.686A45EC01F2@us226.sjc.aristanetworks.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+It is worth mentioning that o_seqno already starts from 0 in collect_md
+mode, see gre_fb_xmit(), where tunnel->o_seqno is passed to
+gre_build_header() before getting incremented.
+
+Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+Signed-off-by: Peilin Ye <peilin.ye@bytedance.com>
+Acked-by: William Tu <u9012063@gmail.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/ipv4/tcp_minisocks.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ net/ipv4/ip_gre.c | 8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
 
-diff --git a/net/ipv4/tcp_minisocks.c b/net/ipv4/tcp_minisocks.c
-index 0a4f3f16140a..13783fc58e03 100644
---- a/net/ipv4/tcp_minisocks.c
-+++ b/net/ipv4/tcp_minisocks.c
-@@ -538,7 +538,7 @@ struct sock *tcp_create_openreq_child(const struct sock *sk,
- 	newtp->tsoffset = treq->ts_off;
- #ifdef CONFIG_TCP_MD5SIG
- 	newtp->md5sig_info = NULL;	/*XXX*/
--	if (newtp->af_specific->md5_lookup(sk, newsk))
-+	if (treq->af_specific->req_md5_lookup(sk, req_to_sk(req)))
- 		newtp->tcp_header_len += TCPOLEN_MD5SIG_ALIGNED;
- #endif
- 	if (skb->len >= TCP_MSS_DEFAULT + newtp->tcp_header_len)
+diff --git a/net/ipv4/ip_gre.c b/net/ipv4/ip_gre.c
+index f67f1d27f565..5b38d03f6d79 100644
+--- a/net/ipv4/ip_gre.c
++++ b/net/ipv4/ip_gre.c
+@@ -432,14 +432,12 @@ static void __gre_xmit(struct sk_buff *skb, struct net_device *dev,
+ 		       __be16 proto)
+ {
+ 	struct ip_tunnel *tunnel = netdev_priv(dev);
+-
+-	if (tunnel->parms.o_flags & TUNNEL_SEQ)
+-		tunnel->o_seqno++;
++	__be16 flags = tunnel->parms.o_flags;
+ 
+ 	/* Push GRE header. */
+ 	gre_build_header(skb, tunnel->tun_hlen,
+-			 tunnel->parms.o_flags, proto, tunnel->parms.o_key,
+-			 htonl(tunnel->o_seqno));
++			 flags, proto, tunnel->parms.o_key,
++			 (flags & TUNNEL_SEQ) ? htonl(tunnel->o_seqno++) : 0);
+ 
+ 	ip_tunnel_xmit(skb, dev, tnl_params, tnl_params->protocol);
+ }
 -- 
 2.35.1
 

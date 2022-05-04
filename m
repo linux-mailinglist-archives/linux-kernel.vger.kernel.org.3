@@ -2,242 +2,245 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFDE851A159
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 15:50:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0A0951A15F
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 15:52:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350856AbiEDNyR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 09:54:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42618 "EHLO
+        id S1350915AbiEDNyF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 09:54:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350730AbiEDNyN (ORCPT
+        with ESMTP id S1350901AbiEDNyB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 09:54:13 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A8E53614F;
-        Wed,  4 May 2022 06:50:36 -0700 (PDT)
-Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 244D89Ej032359;
-        Wed, 4 May 2022 13:49:59 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=WafK932ObesQwXzcMhdlCMkFPACyb1XIUSZ459VPeVM=;
- b=GfNGckMlqMq+2bwhPleFOSC33RhhJ4vd/ZnUwSi1ry8ZxLv9Yo+pDia/vvw1tHK/DaxP
- Fsn6sVF3RuRsKPBKZqkXjJJcUWUhDepRETNGVGGdk5k809wM9QCCUUyFZBdxEFYqrXic
- HIafOhw9ohW58LZ/tmo+XT9XMWPIVw0XnFoO1TPkuU22oLtiPCnQ9BSxS4e6LimOYvEe
- 9Onef2st/5I3f3Y8skTfSEVheahP2ryE4xDJWzuQ2ZJDPv2fQvKsAGP8yzUn5rZNeisX
- UEV0wobi3Y8gi966n79xFGkpFkmTGatgFNcCFOaTxj5QMHTOlhS250/UlfMJV1Wpodbb Gg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fusjwhps8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 04 May 2022 13:49:58 +0000
-Received: from m0098394.ppops.net (m0098394.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 244DAc7l005951;
-        Wed, 4 May 2022 13:49:58 GMT
-Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fusjwhpra-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 04 May 2022 13:49:58 +0000
-Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
-        by ppma04fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 244DmGHn003903;
-        Wed, 4 May 2022 13:49:55 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma04fra.de.ibm.com with ESMTP id 3frvr8vm3t-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 04 May 2022 13:49:55 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 244DnoXO26018096
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 4 May 2022 13:49:50 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 14F0F42041;
-        Wed,  4 May 2022 13:49:53 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 833B442045;
-        Wed,  4 May 2022 13:49:51 +0000 (GMT)
-Received: from sig-9-65-73-150.ibm.com (unknown [9.65.73.150])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed,  4 May 2022 13:49:51 +0000 (GMT)
-Message-ID: <bbd6886aa5575765b5c223e1b4f5aab336fe4350.camel@linux.ibm.com>
-Subject: Re: [PATCH v2] Carry forward IMA measurement log on kexec on x86_64
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Jonathan McDowell <noodles@fb.com>
+        Wed, 4 May 2022 09:54:01 -0400
+Received: from mail-ot1-x333.google.com (mail-ot1-x333.google.com [IPv6:2607:f8b0:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 560A6101E0
+        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 06:50:24 -0700 (PDT)
+Received: by mail-ot1-x333.google.com with SMTP id i25-20020a9d6259000000b00605df9afea7so944599otk.1
+        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 06:50:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=digitalocean.com; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=XTovCgkI7WQYcs4fLS6xIfFtD2h0peXWgmZW9ZWgM9c=;
+        b=flt+V7uaIJ+YxK5IOF4TGv7uUZlvJNKb8RHlDGPj2YXYMGKQE+Mlfon7uJK7cbPsMP
+         YEWEa9uogbpfQgI5ZYT5HhLmRnlhv2bIFi3hppkc080Wt1W6A6Otk7CKT9/6KAdivNzT
+         BJBf8Otrn7TCDTqcQuZE2VK0k0Q38sASs+ieM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=XTovCgkI7WQYcs4fLS6xIfFtD2h0peXWgmZW9ZWgM9c=;
+        b=U+3OCA0A+rjqjfyPbDYIj62JyhC8V7aLEwJF/v91C3p0uXnuJchaV3FUtsSo7OaN6K
+         Wu/eHXH5PYT6RXWB3EoQH4t8UFcMDGIWa+/mPn6sDq8DXRBdFUPBxgz8Qvmtf4ilxJ1c
+         Ioe75u+i4Cu0eyArNs4nM5ZDB9dLtBCq2MCYEyfRawCVrJjuo2EcgpU9cjZ0CmOWVLiX
+         72gp6XdlzLqi5aQHJ1F94/jlP5biOVgqqGb99z+pCWDpOdM4EKVzzGoJC8bS9PJPIlt4
+         ImGAz5+HguPg9uGOogFzqXr3mOnB13e0WfHXgbZYIwbqLRVRCqFV7y8ZRoTgXH6iVwTG
+         7lJA==
+X-Gm-Message-State: AOAM531pzr5fmcPGbXRerf3mP1KwcHQ2kvfX0w+M3Z4Y3FrzCYQN1psy
+        nxE8uGM84zcgtvzHv7Xxi+0DGQ==
+X-Google-Smtp-Source: ABdhPJyT5OX5yA19yATjCMLSUzSorq5bTuRHKqrZICyhSWRgYn3BomUvxWCq1zrZojng3tnvWVym2w==
+X-Received: by 2002:a05:6830:1098:b0:605:4550:d51c with SMTP id y24-20020a056830109800b006054550d51cmr7120007oto.135.1651672223502;
+        Wed, 04 May 2022 06:50:23 -0700 (PDT)
+Received: from localhost ([2605:a601:ac0f:820:373b:a889:93d6:e756])
+        by smtp.gmail.com with ESMTPSA id p4-20020a0568301d4400b0060603221248sm5184523oth.24.2022.05.04.06.50.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 May 2022 06:50:23 -0700 (PDT)
+Date:   Wed, 4 May 2022 08:50:22 -0500
+From:   Seth Forshee <sforshee@digitalocean.com>
+To:     Petr Mladek <pmladek@suse.com>
 Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>
-Date:   Wed, 04 May 2022 09:49:51 -0400
-In-Reply-To: <YnEZtisrvO0AhrAz@noodles-fedora.dhcp.thefacebook.com>
-References: <YmgjXZphkmDKgaOA@noodles-fedora-PC23Y6EG>
-         <7d7fa18d396439d98e26890f647fffdc9e7d8b20.camel@linux.ibm.com>
-         <YnEZtisrvO0AhrAz@noodles-fedora.dhcp.thefacebook.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: qoBAfW7MCTZ_vV3jXf2EyNBLgbNTv_mQ
-X-Proofpoint-ORIG-GUID: zljCZxrC8b6iSRP8V_WObcC03bkZCfeI
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-04_04,2022-05-04_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 adultscore=0
- suspectscore=0 priorityscore=1501 spamscore=0 mlxscore=0
- lowpriorityscore=0 mlxlogscore=999 impostorscore=0 clxscore=1015
- phishscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2202240000 definitions=main-2205040086
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Peter Zijlstra <peterz@infradead.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Sean Christopherson <seanjc@google.com>,
+        linux-kernel@vger.kernel.org, live-patching@vger.kernel.org,
+        kvm@vger.kernel.org
+Subject: Re: [PATCH v2] entry/kvm: Make vCPU tasks exit to userspace when a
+ livepatch is pending
+Message-ID: <YnKEnqfxSyVmSGYx@do-x1extreme>
+References: <20220503174934.2641605-1-sforshee@digitalocean.com>
+ <20220504130753.GB8069@pathway.suse.cz>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220504130753.GB8069@pathway.suse.cz>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-05-03 at 12:02 +0000, Jonathan McDowell wrote:
-> On Fri, Apr 29, 2022 at 05:30:10PM -0400, Mimi Zohar wrote:
-> > > diff --git a/security/integrity/ima/ima_kexec.c b/security/integrity/ima/ima_kexec.c
-> > > index 13753136f03f..419c50cfe6b9 100644
-> > > --- a/security/integrity/ima/ima_kexec.c
-> > > +++ b/security/integrity/ima/ima_kexec.c
-> > > @@ -10,6 +10,7 @@
-> > >  #include <linux/seq_file.h>
-> > >  #include <linux/vmalloc.h>
-> > >  #include <linux/kexec.h>
-> > > +#include <linux/memblock.h>
-> > >  #include <linux/of.h>
-> > >  #include <linux/ima.h>
-> > >  #include "ima.h"
-> > > @@ -134,10 +135,66 @@ void ima_add_kexec_buffer(struct kimage *image)
-> > >  }
-> > >  #endif /* IMA_KEXEC */
-> > >  
-> > > +#ifndef CONFIG_OF
-> > > +static phys_addr_t ima_early_kexec_buffer_phys;
-> > > +static size_t ima_early_kexec_buffer_size;
-> > > +
-> > > +void __init ima_set_kexec_buffer(phys_addr_t phys_addr, size_t size)
-> > > +{
-> > > +	if (size == 0)
-> > > +		return;
-> > > +
-> > > +	ima_early_kexec_buffer_phys = phys_addr;
-> > > +	ima_early_kexec_buffer_size = size;
-> > > +}
-> > > +
-> > > +int __init ima_free_kexec_buffer(void)
-> > > +{
-> > > +	int rc;
-> > > +
-> > > +	if (!IS_ENABLED(CONFIG_HAVE_IMA_KEXEC))
-> > > +		return -ENOTSUPP;
-> > > +
-> > > +	if (ima_early_kexec_buffer_size == 0)
-> > > +		return -ENOENT;
-> > > +
-> > > +	rc = memblock_phys_free(ima_early_kexec_buffer_phys,
-> > > +				ima_early_kexec_buffer_size);
-> > > +	if (rc)
-> > > +		return rc;
-> > > +
-> > > +	ima_early_kexec_buffer_phys = 0;
-> > > +	ima_early_kexec_buffer_size = 0;
-> > > +
-> > > +	return 0;
-> > > +}
-> > > +
-> > > +int __init ima_get_kexec_buffer(void **addr, size_t *size)
-> > > +{
-> > > +	if (!IS_ENABLED(CONFIG_HAVE_IMA_KEXEC))
-> > > +		return -ENOTSUPP;
+On Wed, May 04, 2022 at 03:07:53PM +0200, Petr Mladek wrote:
+> On Tue 2022-05-03 12:49:34, Seth Forshee wrote:
+> > A task can be livepatched only when it is sleeping or it exits to
+> > userspace. This may happen infrequently for a heavily loaded vCPU task,
+> > leading to livepatch transition failures.
+> 
+> This is misleading.
+> 
+> First, the problem is not a loaded CPU. The problem is that the
+> task might spend very long time in the kernel when handling
+> some syscall.
 
-The Kconfig conditionally compiles ima_kexec.c based on
-CONFIG_HAVE_IMA_KEXEC.  This test should be removed from here and from
-ima_get_kexec_buffer().
+It's a fully loaded vCPU, which yes to the host looks like spending a
+very long time in the ioctl(KVM_RUN) syscall. I can reword to clarify.
 
-CONFIG_IMA_KEXEC controls whether or not to carry the measurement list
-to the next kernel, not whether the measurement list should be
-restored.  Notice that ima_load_kexec_buffer() is not within the ifdef
-CONFIG_IMA_KEXEC.
+> Second, there is no timeout for the transition in the kernel code.
+> It might take very long time but it will not fail.
 
-> > > +
-> > > +	if (ima_early_kexec_buffer_size == 0)
-> > > +		return -ENOENT;
+I suppose the timeout is in kpatch then. I didn't check what implemented
+the timeout. I'll remove the statement about timing out.
 
-There should always be at least one measurement - the boot_aggregate.
+> > Fake signals will be sent to tasks which fail patching via stack
+> > checking. This will cause running vCPU tasks to exit guest mode, but
+> > since no signal is pending they return to guest execution without
+> > exiting to userspace. Fix this by treating a pending livepatch migration
+> > like a pending signal, exiting to userspace with EINTR. This allows the
+> > task to be patched, and userspace should re-excecute KVM_RUN to resume
+> > guest execution.
+> 
+> It seems that the patch works as expected but it is far from clear.
+> And the above description helps only partially. Let me try to
+> explain it for dummies like me ;-)
+> 
+> <explanation>
+> The problem was solved by sending a fake signal, see the commit
+> 0b3d52790e1cfd6b80b826 ("livepatch: Remove signal sysfs attribute").
+> It was achieved by calling signal_wake_up(). It set TIF_SIGPENDING
+> and woke the task. It interrupted the syscall and the task was
+> transitioned when leaving to the userspace.
+> 
+> signal_wake_up() was later replaced by set_notify_signal(),
+> see the commit 8df1947c71ee53c7e21 ("livepatch: Replace
+> the fake signal sending with TIF_NOTIFY_SIGNAL infrastructure").
+> The difference is that set_notify_signal() uses TIF_NOTIFY_SIGNAL
+> instead of TIF_SIGPENDING.
+> 
+> The effect is the same when running on a real hardware. The syscall
+> gets interrupted and exit_to_user_mode_loop() is called where
+> the livepatch state is updated (task migrated).
+> 
+> But it works a different way in kvm where the task works are
+> called in the guest mode and the task does not return into
+> the user space in the host mode.
+> </explanation>
 
-> > > +
-> > > +	*addr = __va(ima_early_kexec_buffer_phys);
-> > > +	*size = ima_early_kexec_buffer_size;
-> > > +
-> > > +	return 0;
-> > > +}
-> > > +
+Thanks, I can update the commit message to include more of this
+background.
+
+> 
+> The solution provided by this patch is a bit weird, see below.
+> 
+> 
+> > In my testing, systems where livepatching would timeout after 60 seconds
+> > were able to load livepatches within a couple of seconds with this
+> > change.
 > > 
-> > Originally both ima_get_kexec_buffer() and ima_free_kexec_buffer() were
-> > architecture specific.  Refer to commit 467d27824920 ("powerpc: ima:
-> > get the kexec buffer passed by the previous kernel").  Is there any
-> > need for defining them here behind an "#ifndef CONFIG_OF"?
-> 
-> Commit fee3ff99bc67 (powerpc: Move arch independent ima kexec functions
-> to drivers/of/kexec.c) moved those functions to drivers/of/kexec.c as a
-> more generic implementation so that ARM64 could use them too.
-> 
-> I think for platforms that use device tree that's the way to go, but the
-> functions to generically set + get the IMA buffer for non device tree
-> systems were useful enough to put in the IMA code rather than being x86
-> specific. If you disagree I can move them under arch/x86/ (assuming the
-> x86 folk agree using setup_data is the right way to go, I haven't seen
-> any of them comment on this approach yet).
-
-So other architectures will need to define CONFIG_HAVE_IMA_KEXEC, a
-function to call ima_set_kexec_buffer() to restore the measurement
-list, and a function equivalent to ima_setup_state().
-
-After removing the unnecessary tests mentioned above, consider whether
-there is still any benefit to defining these functions.
-
-> > > +#else
-> > > +
-> > > +void __init ima_set_kexec_buffer(phys_addr_t phys_addr, size_t size)
-> > > +{
-> > > +	pr_warn("CONFIG_OF enabled, ignoring call to set buffer details.\n");
-> > > +}
-> > > +#endif /* CONFIG_OF */
-> > > +
+> > Signed-off-by: Seth Forshee <sforshee@digitalocean.com>
+> > ---
+> > Changes in v2:
+> >  - Added _TIF_SIGPENDING to XFER_TO_GUEST_MODE_WORK
+> >  - Reworded commit message and comments to avoid confusion around the
+> >    term "migrate"
 > > 
-> > Only when "HAVE_IMA_KEXEC" is defined is this file included.  Why is
-> > this warning needed?
+> >  include/linux/entry-kvm.h | 4 ++--
+> >  kernel/entry/kvm.c        | 7 ++++++-
+> >  2 files changed, 8 insertions(+), 3 deletions(-)
+> > 
+> > diff --git a/include/linux/entry-kvm.h b/include/linux/entry-kvm.h
+> > index 6813171afccb..bf79e4cbb5a2 100644
+> > --- a/include/linux/entry-kvm.h
+> > +++ b/include/linux/entry-kvm.h
+> > @@ -17,8 +17,8 @@
+> >  #endif
+> >  
+> >  #define XFER_TO_GUEST_MODE_WORK						\
+> > -	(_TIF_NEED_RESCHED | _TIF_SIGPENDING | _TIF_NOTIFY_SIGNAL |	\
+> > -	 _TIF_NOTIFY_RESUME | ARCH_XFER_TO_GUEST_MODE_WORK)
+> > +	(_TIF_NEED_RESCHED | _TIF_SIGPENDING | _TIF_PATCH_PENDING |	\
+> > +	 _TIF_NOTIFY_SIGNAL | _TIF_NOTIFY_RESUME | ARCH_XFER_TO_GUEST_MODE_WORK)
+> >  
+> >  struct kvm_vcpu;
+> >  
+> > diff --git a/kernel/entry/kvm.c b/kernel/entry/kvm.c
+> > index 9d09f489b60e..98439dfaa1a0 100644
+> > --- a/kernel/entry/kvm.c
+> > +++ b/kernel/entry/kvm.c
+> > @@ -14,7 +14,12 @@ static int xfer_to_guest_mode_work(struct kvm_vcpu *vcpu, unsigned long ti_work)
+> >  				task_work_run();
+> >  		}
+> >  
+> > -		if (ti_work & _TIF_SIGPENDING) {
+> > +		/*
+> > +		 * When a livepatch is pending, force an exit to userspace
+> > +		 * as though a signal is pending to allow the task to be
+> > +		 * patched.
+> > +		 */
+> > +		if (ti_work & (_TIF_SIGPENDING | _TIF_PATCH_PENDING)) {
+> >  			kvm_handle_signal_exit(vcpu);
+> >  			return -EINTR;
+> >  		}
 > 
-> x86 *can* have device tree enabled, but the only platform I'm aware that
-> did it was OLPC and I haven't seen any of the distros enable it. I put
-> this in so there's a warning if we have CONFIG_OF enabled on x86 and
-> tried to pass the IMA log via setup_data. Can remove (or fold into the
-> x86 code if we go that way).
-
-Thanks for the explanation.
-
-> > >  /*
-> > >   * Restore the measurement list from the previous kernel.
-> > >   */
-> > > -void ima_load_kexec_buffer(void)
-> > > +void __init ima_load_kexec_buffer(void)
-> > >  {
-> > >  	void *kexec_buffer = NULL;
-> > >  	size_t kexec_buffer_size = 0;
+> This looks strange:
 > 
-> J.
+>   + klp_send_signals() calls set_notify_signal(task) that sets
+>     TIF_NOTIFY_SIGNAL
+> 
+>   + xfer_to_guest_mode_work() handles TIF_NOTIFY_SIGNAL by calling
+>     task_work_run().
+> 
+>   + This patch calls kvm_handle_signal_exit(vcpu) when
+>     _TIF_PATCH_PENDING is set. It probably causes the guest
+>     to call exit_to_user_mode_loop() because TIF_PATCH_PENDING
+>     bit is set. But neither TIF_NOTIFY_SIGNAL not TIF_NOTIFY_SIGNAL
+>     is set so that it works different way than on the real hardware.
+> 
+> 
+> Question:
+> 
+> Does xfer_to_guest_mode_work() interrupts the syscall running
+> on the guest?
 
-thanks,
+xfer_to_guest_mode_work() is called as part of a loop to execute kvm
+guests (for example, on x86 see vcpu_run() in arch/x86/kvm/x86.c). When
+guest execution is interrupted (in the livepatch case it is interrupted
+when set_notify_signal() is called for the vCPU task)
+xfer_to_guest_mode_work() is called if there is pending work, and if it
+returns non-zero the loop does not immediately re-enter guest execution
+but instead returns to userspace.
 
-Mimi
+> If "yes" then we do not need to call kvm_handle_signal_exit(vcpu).
+> It will be enough to call:
+> 
+> 		if (ti_work & _TIF_PATCH_PENDING)
+> 			klp_update_patch_state(current);
 
+What if the task's call stack contains a function being patched?
+
+> 
+> If "no" then I do not understand why TIF_NOTIFY_SIGNAL interrupts
+> the syscall on the real hardware and not in kvm.
+
+It does interrupt, but xfer_to_guest_mode_handle_work() concludes it's
+not necessary to return to userspace and resumes guest execution.
+
+Thanks,
+Seth
+
+> Anyway, we either should make sure that TIF_NOTIFY_SIGNAL has the same
+> effect on the real hardware and in kvm. Or we need another interface
+> for the fake signal used by livepatching.
+> 
+> Adding Jens Axboe and Eric into Cc.
+> 
+> Best Regards,
+> Petr

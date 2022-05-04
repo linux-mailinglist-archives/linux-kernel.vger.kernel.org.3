@@ -2,291 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DBC551A457
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 17:42:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75E7751A458
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 17:42:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352643AbiEDPp6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 11:45:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40828 "EHLO
+        id S1352689AbiEDPqG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 11:46:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352614AbiEDPpp (ORCPT
+        with ESMTP id S1352615AbiEDPpt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 11:45:45 -0400
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03E801BE86;
-        Wed,  4 May 2022 08:42:07 -0700 (PDT)
-Received: (Authenticated sender: clement.leger@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 092EC40003;
-        Wed,  4 May 2022 15:42:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1651678926;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=syVh6bmaMn5ntdtGN7GpyAnxiKbIllExQJN9dKGkNJ0=;
-        b=c6C+7W6XFAo/WW8FtCv6SSTsY/cs+sDCqpqwwTuow7Lz0ga7x4bSWSHJOLdnPyiHyfHhDI
-        vOeXRsUNeXFEJTswTiSC+HliR3Y0CF/L6v0eqC1vT9WlWO61Vq2+4T4xvK4oUaRhrgysqw
-        nrO/ooCzJJvXJzZr+/vF3Dpwfa9cUmTeJWqLBL1ydy6/qNM8u6IqQPyEAeDkk7LQvKfF5I
-        wX9BNb9qbwfUSDvBpVg+S90rtW5Y2N75WrIsr4fF0wKBGYlfxNJqzbgL0HLZdM9CtB5RSA
-        PuclVajdpob5X8Yg/J/Wc+M3clTTtw/WpRde9qzfG9MDLG1Dm4m82/0hNrPI7g==
-From:   =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <clement.leger@bootlin.com>
-To:     Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Nathan Lynch <nathanl@linux.ibm.com>,
-        Laurent Dufour <ldufour@linux.ibm.com>,
-        Daniel Henrique Barboza <danielhb413@gmail.com>,
-        David Gibson <david@gibson.dropbear.id.au>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Hildenbrand <david@redhat.com>,
-        Ohhoon Kwon <ohoono.kwon@samsung.com>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        YueHaibing <yuehaibing@huawei.com>
-Cc:     =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <clement.leger@bootlin.com>,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        Allan Nielsen <allan.nielsen@microchip.com>,
-        Horatiu Vultur <horatiu.vultur@microchip.com>,
-        Steen Hegelund <steen.hegelund@microchip.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: [PATCH 3/3] powerpc/pseries: use of_property_*() and of_node_*() functions
-Date:   Wed,  4 May 2022 17:40:33 +0200
-Message-Id: <20220504154033.750511-4-clement.leger@bootlin.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220504154033.750511-1-clement.leger@bootlin.com>
-References: <20220504154033.750511-1-clement.leger@bootlin.com>
+        Wed, 4 May 2022 11:45:49 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97220403C1
+        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 08:42:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651678933; x=1683214933;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=NO8tAeiPK3K0Hr9frV1lRTE+HO29ZdSEd0GGtR88tZE=;
+  b=NwE+3dn2xosw+cu/cS4SfBxVi3/oyXU8tDt/UzbCqsCvMbZxmPZ7D0gk
+   wnynnRKzq6JUK43c78FWfeQ/43ZgrbNeNis1SoKkP094eEP9b4nnuU/Nb
+   C/C6cnPk/4DAJg6ZAhl5YBVVlU4wZw+xEgY4Ppov6jmKhQYUrrIf+X8g/
+   n8kIaE+xqyZQzRu9G69PuGnBX2IFiMG1a3iXllEQlhbRGO7SJXSRuH9mt
+   WGamJw93QoC7eMSBdZI6ouhsXWFZhcu6JWcc3ZWOVTwbtUmNf4TMjUaq7
+   LFU10hpMyaGmhKmhj4SwTwILQfLQCwZaZnM1iwLyJ1bk1OC8nZmL1P0KC
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10337"; a="255269516"
+X-IronPort-AV: E=Sophos;i="5.91,198,1647327600"; 
+   d="scan'208";a="255269516"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2022 08:42:10 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,198,1647327600"; 
+   d="scan'208";a="653770696"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 04 May 2022 08:42:08 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nmH8i-000BVj-0h;
+        Wed, 04 May 2022 15:42:08 +0000
+Date:   Wed, 4 May 2022 23:42:04 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Jiri Slaby <jslaby@suse.cz>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [jirislaby:devel 53/73] drivers/video/console/vgacon.c:370:4: error:
+ incompatible pointer types assigning to 'struct uni_pagedir *' from 'struct
+ uni_pagedict *'
+Message-ID: <202205042336.F5kLAB1t-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use of_property_alloc/free() and of_node_alloc/free() to create and free
-device-tree nodes and properties.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jirislaby/linux.git devel
+head:   fab642eca5e0ca41e656c8a0685cadf975b7ff88
+commit: 9aaf33513f7cd36e3ac26196731192e7d7d92a99 [53/73] vt: rename and document struct uni_pagedir
+config: hexagon-randconfig-r045-20220501 (https://download.01.org/0day-ci/archive/20220504/202205042336.F5kLAB1t-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 363b3a645a1e30011cc8da624f13dac5fd915628)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/jirislaby/linux.git/commit/?id=9aaf33513f7cd36e3ac26196731192e7d7d92a99
+        git remote add jirislaby https://git.kernel.org/pub/scm/linux/kernel/git/jirislaby/linux.git
+        git fetch --no-tags jirislaby devel
+        git checkout 9aaf33513f7cd36e3ac26196731192e7d7d92a99
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/video/console/
 
-Signed-off-by: Clément Léger <clement.leger@bootlin.com>
----
- arch/powerpc/platforms/pseries/dlpar.c        | 51 +++----------------
- .../platforms/pseries/hotplug-memory.c        | 27 +---------
- arch/powerpc/platforms/pseries/reconfig.c     | 44 ++++------------
- 3 files changed, 20 insertions(+), 102 deletions(-)
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-diff --git a/arch/powerpc/platforms/pseries/dlpar.c b/arch/powerpc/platforms/pseries/dlpar.c
-index b1f01ac0c29e..ebecde6c7256 100644
---- a/arch/powerpc/platforms/pseries/dlpar.c
-+++ b/arch/powerpc/platforms/pseries/dlpar.c
-@@ -39,61 +39,25 @@ struct cc_workarea {
- 	__be32	prop_offset;
- };
- 
--void dlpar_free_cc_property(struct property *prop)
--{
--	kfree(prop->name);
--	kfree(prop->value);
--	kfree(prop);
--}
--
- static struct property *dlpar_parse_cc_property(struct cc_workarea *ccwa)
- {
--	struct property *prop;
--	char *name;
--	char *value;
--
--	prop = kzalloc(sizeof(*prop), GFP_KERNEL);
--	if (!prop)
--		return NULL;
-+	int length;
-+	char *name, *value;
- 
- 	name = (char *)ccwa + be32_to_cpu(ccwa->name_offset);
--	prop->name = kstrdup(name, GFP_KERNEL);
--	if (!prop->name) {
--		dlpar_free_cc_property(prop);
--		return NULL;
--	}
--
--	prop->length = be32_to_cpu(ccwa->prop_length);
-+	length = be32_to_cpu(ccwa->prop_length);
- 	value = (char *)ccwa + be32_to_cpu(ccwa->prop_offset);
--	prop->value = kmemdup(value, prop->length, GFP_KERNEL);
--	if (!prop->value) {
--		dlpar_free_cc_property(prop);
--		return NULL;
--	}
- 
--	return prop;
-+	return of_property_alloc(name, value, length, length, GFP_KERNEL);
- }
- 
- static struct device_node *dlpar_parse_cc_node(struct cc_workarea *ccwa)
- {
--	struct device_node *dn;
- 	const char *name;
- 
--	dn = kzalloc(sizeof(*dn), GFP_KERNEL);
--	if (!dn)
--		return NULL;
--
- 	name = (const char *)ccwa + be32_to_cpu(ccwa->name_offset);
--	dn->full_name = kstrdup(name, GFP_KERNEL);
--	if (!dn->full_name) {
--		kfree(dn);
--		return NULL;
--	}
--
--	of_node_set_flag(dn, OF_DYNAMIC);
--	of_node_init(dn);
- 
--	return dn;
-+	return of_node_alloc(name, GFP_KERNEL);
- }
- 
- static void dlpar_free_one_cc_node(struct device_node *dn)
-@@ -103,11 +67,10 @@ static void dlpar_free_one_cc_node(struct device_node *dn)
- 	while (dn->properties) {
- 		prop = dn->properties;
- 		dn->properties = prop->next;
--		dlpar_free_cc_property(prop);
-+		of_property_free(prop);
- 	}
- 
--	kfree(dn->full_name);
--	kfree(dn);
-+	of_node_free(dn);
- }
- 
- void dlpar_free_cc_nodes(struct device_node *dn)
-diff --git a/arch/powerpc/platforms/pseries/hotplug-memory.c b/arch/powerpc/platforms/pseries/hotplug-memory.c
-index 91cf23495ccb..591727b05f36 100644
---- a/arch/powerpc/platforms/pseries/hotplug-memory.c
-+++ b/arch/powerpc/platforms/pseries/hotplug-memory.c
-@@ -70,34 +70,11 @@ unsigned long pseries_memory_block_size(void)
- 	return memblock_size;
- }
- 
--static void dlpar_free_property(struct property *prop)
--{
--	kfree(prop->name);
--	kfree(prop->value);
--	kfree(prop);
--}
--
- static struct property *dlpar_clone_property(struct property *prop,
- 					     u32 prop_size)
- {
--	struct property *new_prop;
--
--	new_prop = kzalloc(sizeof(*new_prop), GFP_KERNEL);
--	if (!new_prop)
--		return NULL;
--
--	new_prop->name = kstrdup(prop->name, GFP_KERNEL);
--	new_prop->value = kzalloc(prop_size, GFP_KERNEL);
--	if (!new_prop->name || !new_prop->value) {
--		dlpar_free_property(new_prop);
--		return NULL;
--	}
--
--	memcpy(new_prop->value, prop->value, prop->length);
--	new_prop->length = prop_size;
--
--	of_property_set_flag(new_prop, OF_DYNAMIC);
--	return new_prop;
-+	return of_property_alloc(prop->name, prop->value, prop->length,
-+				 prop_size, GFP_KERNEL);
- }
- 
- static bool find_aa_index(struct device_node *dr_node,
-diff --git a/arch/powerpc/platforms/pseries/reconfig.c b/arch/powerpc/platforms/pseries/reconfig.c
-index 7f7369fec46b..08c2f9088537 100644
---- a/arch/powerpc/platforms/pseries/reconfig.c
-+++ b/arch/powerpc/platforms/pseries/reconfig.c
-@@ -25,17 +25,9 @@ static int pSeries_reconfig_add_node(const char *path, struct property *proplist
- 	struct device_node *np;
- 	int err = -ENOMEM;
- 
--	np = kzalloc(sizeof(*np), GFP_KERNEL);
-+	np = of_node_alloc(kbasename(path), GFP_KERNEL);
- 	if (!np)
--		goto out_err;
--
--	np->full_name = kstrdup(kbasename(path), GFP_KERNEL);
--	if (!np->full_name)
--		goto out_err;
--
--	np->properties = proplist;
--	of_node_set_flag(np, OF_DYNAMIC);
--	of_node_init(np);
-+		return -ENOMEM;
- 
- 	np->parent = pseries_of_derive_parent(path);
- 	if (IS_ERR(np->parent)) {
-@@ -56,8 +48,7 @@ static int pSeries_reconfig_add_node(const char *path, struct property *proplist
- out_err:
- 	if (np) {
- 		of_node_put(np->parent);
--		kfree(np->full_name);
--		kfree(np);
-+		of_node_free(np);
- 	}
- 	return err;
- }
-@@ -92,9 +83,7 @@ static void release_prop_list(const struct property *prop)
- 	struct property *next;
- 	for (; prop; prop = next) {
- 		next = prop->next;
--		kfree(prop->name);
--		kfree(prop->value);
--		kfree(prop);
-+		of_property_free(prop);
- 	}
- 
- }
-@@ -168,27 +157,16 @@ static char * parse_next_property(char *buf, char *end, char **name, int *length
- static struct property *new_property(const char *name, const int length,
- 				     const unsigned char *value, struct property *last)
- {
--	struct property *new = kzalloc(sizeof(*new), GFP_KERNEL);
-+	struct property *prop;
- 
--	if (!new)
-+	prop = of_property_alloc(name, value, length, length + 1, GFP_KERNEL);
-+	if (!prop)
- 		return NULL;
- 
--	if (!(new->name = kstrdup(name, GFP_KERNEL)))
--		goto cleanup;
--	if (!(new->value = kmalloc(length + 1, GFP_KERNEL)))
--		goto cleanup;
--
--	memcpy(new->value, value, length);
--	*(((char *)new->value) + length) = 0;
--	new->length = length;
--	new->next = last;
--	return new;
--
--cleanup:
--	kfree(new->name);
--	kfree(new->value);
--	kfree(new);
--	return NULL;
-+	*(((char *)prop->value) + length) = 0;
-+	prop->next = last;
-+
-+	return prop;
- }
- 
- static int do_add_node(char *buf, size_t bufsize)
+All error/warnings (new ones prefixed by >>):
+
+>> drivers/video/console/vgacon.c:370:4: error: incompatible pointer types assigning to 'struct uni_pagedir *' from 'struct uni_pagedict *' [-Werror,-Wincompatible-pointer-types]
+           p = *c->vc_uni_pagedir_loc;
+             ^ ~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/video/console/vgacon.c:371:28: warning: comparison of distinct pointer types ('struct uni_pagedict **' and 'struct uni_pagedir **') [-Wcompare-distinct-pointer-types]
+           if (c->vc_uni_pagedir_loc != &vgacon_uni_pagedir) {
+               ~~~~~~~~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~~~~~~
+>> drivers/video/console/vgacon.c:373:25: error: incompatible pointer types assigning to 'struct uni_pagedict **' from 'struct uni_pagedir **' [-Werror,-Wincompatible-pointer-types]
+                   c->vc_uni_pagedir_loc = &vgacon_uni_pagedir;
+                                         ^ ~~~~~~~~~~~~~~~~~~~
+   1 warning and 2 errors generated.
+
+
+vim +370 drivers/video/console/vgacon.c
+
+^1da177e4c3f41 Linus Torvalds     2005-04-16  342  
+^1da177e4c3f41 Linus Torvalds     2005-04-16  343  static void vgacon_init(struct vc_data *c, int init)
+^1da177e4c3f41 Linus Torvalds     2005-04-16  344  {
+e4bdab70dd07d8 Takashi Iwai       2014-05-13  345  	struct uni_pagedir *p;
+^1da177e4c3f41 Linus Torvalds     2005-04-16  346  
+50ec42edd9784f Antonino A. Daplas 2006-06-26  347  	/*
+3dfac26e2ef29f Maciej W. Rozycki  2021-10-26  348  	 * We cannot be loaded as a module, therefore init will be 1
+3dfac26e2ef29f Maciej W. Rozycki  2021-10-26  349  	 * if we are the default console, however if we are a fallback
+3dfac26e2ef29f Maciej W. Rozycki  2021-10-26  350  	 * console, for example if fbcon has failed registration, then
+3dfac26e2ef29f Maciej W. Rozycki  2021-10-26  351  	 * init will be 0, so we need to make sure our boot parameters
+3dfac26e2ef29f Maciej W. Rozycki  2021-10-26  352  	 * have been copied to the console structure for vgacon_resize
+3dfac26e2ef29f Maciej W. Rozycki  2021-10-26  353  	 * ultimately called by vc_resize.  Any subsequent calls to
+3dfac26e2ef29f Maciej W. Rozycki  2021-10-26  354  	 * vgacon_init init will have init set to 0 too.
+50ec42edd9784f Antonino A. Daplas 2006-06-26  355  	 */
+^1da177e4c3f41 Linus Torvalds     2005-04-16  356  	c->vc_can_do_color = vga_can_do_color;
+3dfac26e2ef29f Maciej W. Rozycki  2021-10-26  357  	c->vc_scan_lines = vga_scan_lines;
+3dfac26e2ef29f Maciej W. Rozycki  2021-10-26  358  	c->vc_font.height = c->vc_cell_height = vga_video_font_height;
+50ec42edd9784f Antonino A. Daplas 2006-06-26  359  
+50ec42edd9784f Antonino A. Daplas 2006-06-26  360  	/* set dimensions manually if init != 0 since vc_resize() will fail */
+50ec42edd9784f Antonino A. Daplas 2006-06-26  361  	if (init) {
+^1da177e4c3f41 Linus Torvalds     2005-04-16  362  		c->vc_cols = vga_video_num_columns;
+^1da177e4c3f41 Linus Torvalds     2005-04-16  363  		c->vc_rows = vga_video_num_lines;
+50ec42edd9784f Antonino A. Daplas 2006-06-26  364  	} else
+50ec42edd9784f Antonino A. Daplas 2006-06-26  365  		vc_resize(c, vga_video_num_columns, vga_video_num_lines);
+50ec42edd9784f Antonino A. Daplas 2006-06-26  366  
+^1da177e4c3f41 Linus Torvalds     2005-04-16  367  	c->vc_complement_mask = 0x7700;
+a40920b42ae232 Bill Nottingham    2005-05-01  368  	if (vga_512_chars)
+a40920b42ae232 Bill Nottingham    2005-05-01  369  		c->vc_hi_font_mask = 0x0800;
+^1da177e4c3f41 Linus Torvalds     2005-04-16 @370  	p = *c->vc_uni_pagedir_loc;
+0f2893f0d1acff Takashi Iwai       2014-05-13 @371  	if (c->vc_uni_pagedir_loc != &vgacon_uni_pagedir) {
+^1da177e4c3f41 Linus Torvalds     2005-04-16  372  		con_free_unimap(c);
+0f2893f0d1acff Takashi Iwai       2014-05-13 @373  		c->vc_uni_pagedir_loc = &vgacon_uni_pagedir;
+0f2893f0d1acff Takashi Iwai       2014-05-13  374  		vgacon_refcount++;
+0f2893f0d1acff Takashi Iwai       2014-05-13  375  	}
+0f2893f0d1acff Takashi Iwai       2014-05-13  376  	if (!vgacon_uni_pagedir && p)
+^1da177e4c3f41 Linus Torvalds     2005-04-16  377  		con_set_default_unimap(c);
+f6c06b6807ff92 Matthew Garrett    2009-11-13  378  
+b434a680a29424 Matthew Garrett    2009-11-13  379  	/* Only set the default if the user didn't deliberately override it */
+b434a680a29424 Matthew Garrett    2009-11-13  380  	if (global_cursor_default == -1)
+b434a680a29424 Matthew Garrett    2009-11-13  381  		global_cursor_default =
+b434a680a29424 Matthew Garrett    2009-11-13  382  			!(screen_info.flags & VIDEO_FLAGS_NOCURSOR);
+^1da177e4c3f41 Linus Torvalds     2005-04-16  383  }
+^1da177e4c3f41 Linus Torvalds     2005-04-16  384  
+
+:::::: The code at line 370 was first introduced by commit
+:::::: 1da177e4c3f41524e886b7f1b8a0c1fc7321cac2 Linux-2.6.12-rc2
+
+:::::: TO: Linus Torvalds <torvalds@ppc970.osdl.org>
+:::::: CC: Linus Torvalds <torvalds@ppc970.osdl.org>
+
 -- 
-2.34.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

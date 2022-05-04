@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8244851AACA
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:34:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11A2851AA66
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:27:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357468AbiEDRds (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 13:33:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40758 "EHLO
+        id S1355576AbiEDR2n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 13:28:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357039AbiEDRJx (ORCPT
+        with ESMTP id S1356199AbiEDRJD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 13:09:53 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46AB0488B2;
-        Wed,  4 May 2022 09:57:01 -0700 (PDT)
+        Wed, 4 May 2022 13:09:03 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5657652E4E;
+        Wed,  4 May 2022 09:54:58 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F1F50B8279C;
-        Wed,  4 May 2022 16:57:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6F76C385AF;
-        Wed,  4 May 2022 16:56:59 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B7B6FB82792;
+        Wed,  4 May 2022 16:54:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D55EC385A5;
+        Wed,  4 May 2022 16:54:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651683419;
-        bh=bb87NXccFjNGXVz0LjQzmsRxE/zwFSQhn2e5pASPlBY=;
+        s=korg; t=1651683296;
+        bh=ioCklDfM/c7f+A49wR/jj5HbJspAmX8Z9JJJOKPcJbQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UFe++QmYxEgOdzvJmCPs5Y5/JENx8e6DY+S8LZfn6tXDXLX9O4rN8Vngn6avw9wIb
-         PkAHUBNEO8OnJ2RPjnPaAdWvoCHn0vHUpdaNyFKlZJORg2+vmQYN531aHRmz0WyA6N
-         hyO9wyZk2wtUX9nlgRrvbOlOeVUGKeH1HZBFkxNM=
+        b=FIeOwpME2buOnt7ecIrwWLs0dLjix/lZ5LB6fNE+IL641++OMgDZ0p1tMF74bco5r
+         zcXWU/25TWwNxGuOwBPRZduMfCE7bM8hRISbhumtsbI9jmb8KhFBwYswesTXZiVjdD
+         r0cfZRJdS+bzFjQXunaFaHLf5Gxv1Xh1v09kpL1M=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 104/225] pinctrl: rockchip: fix RK3308 pinmux bits
-Date:   Wed,  4 May 2022 18:45:42 +0200
-Message-Id: <20220504153119.962530496@linuxfoundation.org>
+        stable@vger.kernel.org, Kees Cook <keescook@chromium.org>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Joao Moreira <joao@overdrivepizza.com>
+Subject: [PATCH 5.15 150/177] thermal: int340x: Fix attr.show callback prototype
+Date:   Wed,  4 May 2022 18:45:43 +0200
+Message-Id: <20220504153106.756396583@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220504153110.096069935@linuxfoundation.org>
-References: <20220504153110.096069935@linuxfoundation.org>
+In-Reply-To: <20220504153053.873100034@linuxfoundation.org>
+References: <20220504153053.873100034@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,162 +55,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Luca Ceresoli <luca.ceresoli@bootlin.com>
+From: Kees Cook <keescook@chromium.org>
 
-[ Upstream commit 1f3e25a068832f8892a5ff71467622d012f5bc9f ]
+commit d0f6cfb2bd165b0aa307750e07e03420859bd554 upstream.
 
-Some of the pinmuxing bits described in rk3308_mux_recalced_data are wrong,
-pointing to non-existing registers.
+Control Flow Integrity (CFI) instrumentation of the kernel noticed that
+the caller, dev_attr_show(), and the callback, odvp_show(), did not have
+matching function prototypes, which would cause a CFI exception to be
+raised. Correct the prototype by using struct device_attribute instead
+of struct kobj_attribute.
 
-Fix the entire table.
-
-Also add a comment in front of each entry with the same string that appears
-in the datasheet to make the table easier to compare with the docs.
-
-This fix has been tested on real hardware for the gpio3b3_sel entry.
-
-Fixes: 7825aeb7b208 ("pinctrl: rockchip: add rk3308 SoC support")
-Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
-Reviewed-by: Heiko Stuebner <heiko@sntech.de>
-Link: https://lore.kernel.org/r/20220420142432.248565-1-luca.ceresoli@bootlin.com
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Reported-and-tested-by: Joao Moreira <joao@overdrivepizza.com>
+Link: https://lore.kernel.org/lkml/067ce8bd4c3968054509831fa2347f4f@overdrivepizza.com/
+Fixes: 006f006f1e5c ("thermal/int340x_thermal: Export OEM vendor variables")
+Cc: 5.8+ <stable@vger.kernel.org> # 5.8+
+Signed-off-by: Kees Cook <keescook@chromium.org>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/pinctrl/pinctrl-rockchip.c | 45 ++++++++++++++++++++----------
- 1 file changed, 30 insertions(+), 15 deletions(-)
+ drivers/thermal/intel/int340x_thermal/int3400_thermal.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/pinctrl/pinctrl-rockchip.c b/drivers/pinctrl/pinctrl-rockchip.c
-index a1b598b86aa9..65fa305b5f59 100644
---- a/drivers/pinctrl/pinctrl-rockchip.c
-+++ b/drivers/pinctrl/pinctrl-rockchip.c
-@@ -457,95 +457,110 @@ static  struct rockchip_mux_recalced_data rk3128_mux_recalced_data[] = {
- 
- static struct rockchip_mux_recalced_data rk3308_mux_recalced_data[] = {
- 	{
-+		/* gpio1b6_sel */
- 		.num = 1,
- 		.pin = 14,
- 		.reg = 0x28,
- 		.bit = 12,
- 		.mask = 0xf
- 	}, {
-+		/* gpio1b7_sel */
- 		.num = 1,
- 		.pin = 15,
- 		.reg = 0x2c,
- 		.bit = 0,
- 		.mask = 0x3
- 	}, {
-+		/* gpio1c2_sel */
- 		.num = 1,
- 		.pin = 18,
- 		.reg = 0x30,
- 		.bit = 4,
- 		.mask = 0xf
- 	}, {
-+		/* gpio1c3_sel */
- 		.num = 1,
- 		.pin = 19,
- 		.reg = 0x30,
- 		.bit = 8,
- 		.mask = 0xf
- 	}, {
-+		/* gpio1c4_sel */
- 		.num = 1,
- 		.pin = 20,
- 		.reg = 0x30,
- 		.bit = 12,
- 		.mask = 0xf
- 	}, {
-+		/* gpio1c5_sel */
- 		.num = 1,
- 		.pin = 21,
- 		.reg = 0x34,
- 		.bit = 0,
- 		.mask = 0xf
- 	}, {
-+		/* gpio1c6_sel */
- 		.num = 1,
- 		.pin = 22,
- 		.reg = 0x34,
- 		.bit = 4,
- 		.mask = 0xf
- 	}, {
-+		/* gpio1c7_sel */
- 		.num = 1,
- 		.pin = 23,
- 		.reg = 0x34,
- 		.bit = 8,
- 		.mask = 0xf
- 	}, {
-+		/* gpio3b4_sel */
- 		.num = 3,
- 		.pin = 12,
- 		.reg = 0x68,
- 		.bit = 8,
- 		.mask = 0xf
- 	}, {
-+		/* gpio3b5_sel */
- 		.num = 3,
- 		.pin = 13,
- 		.reg = 0x68,
- 		.bit = 12,
- 		.mask = 0xf
- 	}, {
-+		/* gpio2a2_sel */
- 		.num = 2,
- 		.pin = 2,
--		.reg = 0x608,
--		.bit = 0,
--		.mask = 0x7
-+		.reg = 0x40,
-+		.bit = 4,
-+		.mask = 0x3
- 	}, {
-+		/* gpio2a3_sel */
- 		.num = 2,
- 		.pin = 3,
--		.reg = 0x608,
--		.bit = 4,
--		.mask = 0x7
-+		.reg = 0x40,
-+		.bit = 6,
-+		.mask = 0x3
- 	}, {
-+		/* gpio2c0_sel */
- 		.num = 2,
- 		.pin = 16,
--		.reg = 0x610,
--		.bit = 8,
--		.mask = 0x7
-+		.reg = 0x50,
-+		.bit = 0,
-+		.mask = 0x3
- 	}, {
-+		/* gpio3b2_sel */
- 		.num = 3,
- 		.pin = 10,
--		.reg = 0x610,
--		.bit = 0,
--		.mask = 0x7
-+		.reg = 0x68,
-+		.bit = 4,
-+		.mask = 0x3
- 	}, {
-+		/* gpio3b3_sel */
- 		.num = 3,
- 		.pin = 11,
--		.reg = 0x610,
--		.bit = 4,
--		.mask = 0x7
-+		.reg = 0x68,
-+		.bit = 6,
-+		.mask = 0x3
- 	},
+--- a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
++++ b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
+@@ -67,7 +67,7 @@ static int evaluate_odvp(struct int3400_
+ struct odvp_attr {
+ 	int odvp;
+ 	struct int3400_thermal_priv *priv;
+-	struct kobj_attribute attr;
++	struct device_attribute attr;
  };
  
--- 
-2.35.1
-
+ static ssize_t data_vault_read(struct file *file, struct kobject *kobj,
+@@ -272,7 +272,7 @@ static int int3400_thermal_run_osc(acpi_
+ 	return result;
+ }
+ 
+-static ssize_t odvp_show(struct kobject *kobj, struct kobj_attribute *attr,
++static ssize_t odvp_show(struct device *dev, struct device_attribute *attr,
+ 			 char *buf)
+ {
+ 	struct odvp_attr *odvp_attr;
 
 

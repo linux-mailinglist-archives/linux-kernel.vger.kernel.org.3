@@ -2,106 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2D1751A498
+	by mail.lfdr.de (Postfix) with ESMTP id 6B1B751A497
 	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 17:54:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352888AbiEDP5k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 11:57:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53880 "EHLO
+        id S1352906AbiEDP5q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 11:57:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352591AbiEDP5d (ORCPT
+        with ESMTP id S1352867AbiEDP5g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 11:57:33 -0400
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E3234614D;
-        Wed,  4 May 2022 08:53:57 -0700 (PDT)
-Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 244EghZP001510;
-        Wed, 4 May 2022 17:53:41 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=selector1;
- bh=mzzwNarX6y/uXSlhjavJ8tl8qTIckcIr1Wld2u6gD7I=;
- b=Oy5HHofgB19KxswbY1DM0SRBCX3W4aKIrv/JHpB3oCMB+K15LVs8mz/3J03PrPd0wdi8
- NXNxtWx176SxFvxUpXn3xTkqm8jeOP9uchRH1UH5Mo0WzJi841GNf7kHGTThJGVj9bDB
- MwxnanbmY4RB0r9w0EjpI+We+l4laLndbdA4PHnu8WXjgiJK14t7OKZ+Ym7Y/esMzLKY
- YAMlNc2qrsHDqHT1HefW970F3KiFf9/xyTLshVeTEPNkTGIFhw6CxsOkvjSNicnRqF3C
- VFV5rz0yjk5tYTjK4L0mILNzj1dcFi5UrQfPXp6fxy0WjK1zzAtvxjQOShOjIk7Br8Mz Fg== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3frv0gecft-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 04 May 2022 17:53:41 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 900D810002A;
-        Wed,  4 May 2022 17:53:40 +0200 (CEST)
-Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 8987D22A6E3;
-        Wed,  4 May 2022 17:53:40 +0200 (CEST)
-Received: from localhost (10.75.127.47) by SFHDAG2NODE2.st.com (10.75.127.5)
- with Microsoft SMTP Server (TLS) id 15.0.1497.26; Wed, 4 May 2022 17:53:39
- +0200
-From:   Amelie Delaunay <amelie.delaunay@foss.st.com>
-To:     Vinod Koul <vkoul@kernel.org>,
+        Wed, 4 May 2022 11:57:36 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 432A24614D;
+        Wed,  4 May 2022 08:54:00 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EBBF8B82751;
+        Wed,  4 May 2022 15:53:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83F8BC385AA;
+        Wed,  4 May 2022 15:53:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651679637;
+        bh=hK42V1qXW9Nw4EnqpcwFRHqPBSMsE7i8nQ7Y1H2QoT0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=dYeDsO2bObVMEcwHDRrmcgXv+V9LVaJY5FUnS8ipZwc/8wbB9oE7w0T2cWk7dW8ZC
+         d5RHD8vMtM8ezIuMrevjbVUT779098e6XvSLnrIqnp3S80GGU6os4V6catUU3zKasD
+         i/GbbfvuHGrK3+5d40fS1S6PE88gJqqg9FLiNcOpuigybU5PHhIJsURXKASY2A9fm2
+         i9IQ2kwrMUQTR7xUVq5uXjlcSwyvIZclYMSaQmrqh8ODXR/Q8T9K8HL6rFNzOcCEz5
+         QHQfgglDhtRqz3p9TUwjl2lTF0wxAheYUTF0mhcYZITIzqsigLCFi2MGVA6EkWFIME
+         rDqAniHWcaqZQ==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 0092C400B1; Wed,  4 May 2022 12:53:54 -0300 (-03)
+Date:   Wed, 4 May 2022 12:53:54 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Ian Rogers <irogers@google.com>
+Cc:     "Liang, Kan" <kan.liang@linux.intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
         Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>
-CC:     <dmaengine@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        Amelie Delaunay <amelie.delaunay@foss.st.com>
-Subject: [PATCH 3/3] dmaengine: stm32-mdma: use dev_dbg on non-busy channel spurious it
-Date:   Wed, 4 May 2022 17:53:22 +0200
-Message-ID: <20220504155322.121431-4-amelie.delaunay@foss.st.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220504155322.121431-1-amelie.delaunay@foss.st.com>
-References: <20220504155322.121431-1-amelie.delaunay@foss.st.com>
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Xing Zhengjun <zhengjun.xing@linux.intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        John Garry <john.garry@huawei.com>,
+        James Clark <james.clark@arm.com>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org
+Subject: Re: [PATCH 1/7] perf vendor events intel: Update CLX events to v1.15
+Message-ID: <YnKhkv+BVT47Hph7@kernel.org>
+References: <20220428075730.797727-1-irogers@google.com>
+ <96b5c9f4-f0a0-0019-8059-3e833c95b011@linux.intel.com>
+ <YmqXGCMbBOLcd261@kernel.org>
+ <CAP-5=fWQMVVFZ=4WLWJkojZARHnmYp+AgTOodG_W=qqNZFw6iA@mail.gmail.com>
+ <YnKgvLxcRhu6i53j@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.75.127.47]
-X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SFHDAG2NODE2.st.com
- (10.75.127.5)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-04_04,2022-05-04_02,2022-02-23_01
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YnKgvLxcRhu6i53j@kernel.org>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If interrupt occurs while !chan->busy, it means channel has been disabled
-between the raise of the interruption and the read of status and ien, so,
-spurious interrupt can be silently discarded.
+Em Wed, May 04, 2022 at 12:50:20PM -0300, Arnaldo Carvalho de Melo escreveu:
+> Em Tue, May 03, 2022 at 12:47:25PM -0700, Ian Rogers escreveu:
+> > On Thu, Apr 28, 2022 at 6:31 AM Arnaldo Carvalho de Melo
+> > <acme@kernel.org> wrote:
+> > >
+> > > Em Thu, Apr 28, 2022 at 09:12:26AM -0400, Liang, Kan escreveu:
+> > > >
+> > > >
+> > > > On 4/28/2022 3:57 AM, Ian Rogers wrote:
+> > > > > Events are generated for CascadeLake Server v1.15 with
+> > > > > events from:
+> > > > > https://download.01.org/perfmon/CLX/
+> > > > >
+> > > > > Using the scripts at:
+> > > > > https://github.com/intel/event-converter-for-linux-perf/
+> > > > >
+> > > > > This change updates descriptions, adds INST_DECODED.DECODERS and
+> > > > > corrects a counter mask in UOPS_RETIRED.TOTAL_CYCLES.
+> > > > >
+> > > > > Signed-off-by: Ian Rogers<irogers@google.com>
+> > > >
+> > > > Thanks Ian. For the whole series,
+> > > >
+> > > > Reviewed-by: Kan Liang <kan.liang@linux.intel.com>
+> > >
+> > > Thanks, applied.
+> > >
+> > > - Arnaldo
+> > 
+> > Thanks Arnaldo, it looks like CLX was accidentally skipped.
+> 
+> Checking, I usually take these using b4...
 
-Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
----
- drivers/dma/stm32-mdma.c | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+Got it now, checked the other 6 patches are in.
 
-diff --git a/drivers/dma/stm32-mdma.c b/drivers/dma/stm32-mdma.c
-index a5cbfbbb93d1..caf0cce8f528 100644
---- a/drivers/dma/stm32-mdma.c
-+++ b/drivers/dma/stm32-mdma.c
-@@ -1345,9 +1345,12 @@ static irqreturn_t stm32_mdma_irq_handler(int irq, void *devid)
- 
- 	if (!(status & ien)) {
- 		spin_unlock(&chan->vchan.lock);
--		dev_warn(chan2dev(chan),
--			 "spurious it (status=0x%04x, ien=0x%04x)\n",
--			 status, ien);
-+		if (chan->busy)
-+			dev_warn(chan2dev(chan),
-+				 "spurious it (status=0x%04x, ien=0x%04x)\n", status, ien);
-+		else
-+			dev_dbg(chan2dev(chan),
-+				"spurious it (status=0x%04x, ien=0x%04x)\n", status, ien);
- 		return IRQ_NONE;
- 	}
- 
--- 
-2.25.1
+Thanks for pointing this out.
 
+- Arnaldo

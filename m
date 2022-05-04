@@ -2,56 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63E0051A52B
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 18:16:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 942B751A529
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 18:16:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353273AbiEDQTj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 12:19:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50860 "EHLO
+        id S1353297AbiEDQTm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 12:19:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353247AbiEDQSw (ORCPT
+        with ESMTP id S1353255AbiEDQSw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 4 May 2022 12:18:52 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 311AFD94
-        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 09:15:15 -0700 (PDT)
-Date:   Wed, 04 May 2022 16:15:12 -0000
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7772CF1A;
+        Wed,  4 May 2022 09:15:16 -0700 (PDT)
+Date:   Wed, 04 May 2022 16:15:13 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1651680913;
+        s=2020; t=1651680914;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=4to5n7sOJdQwEe8TV7DhguB3iQQ4hTVBK/b43Hwks5g=;
-        b=NlE76ENgA8f6RIifz5J+d2/SfviePDlHNQOKPlBbAq4E6qm/o2Huuqw5dUgaBlz2C2I5OO
-        4Nbq210L+UQ/jeh5smdOKCc3xNR2i2MbjH86akN6dadSlX0pUFawM387dUgiT2waWqlTwU
-        qP7dP13mLtJR8eQUIKqOxqVe3D3/PAb7hq/qqAUP20FpaSwmfQvJB3NRm6VAOBsGB1kLff
-        cj4ZrA1KF5VqFnR1k7PZUImIo7XE1isGqhnC0DheESBCSfVc942QYR4zrzdfymBOlKP962
-        Uh00AgVhG244unScGANqlApZA73c5DZodA2Gr78kn2w8vxmRPneshdqI+nT2Aw==
+        bh=qSkxNoLoTWt5gxztnJFu/bozk0kevl2CiKD8B3IjPtA=;
+        b=gGmPTEAtzAu9bws8mpM9ve2mZf13HiO92k0cTzjN62/Ddv0pnq8iKCcRlKjWxS2XcqM9PG
+        XhIaLHNB2WkjQhPAspmD+26TKZ13x4B5bMHXbNl1VC7rpYGe69SYPSbiS+sxa3KC1TZqHY
+        ACf9qbJBo09+Y91jxrbZtGsNL/engbaDiYGaJjz2/aA5dCPmGMSMaHzacQPLI4ab4TFtVE
+        KhI1ahGoVkgcttkYEy2X+17bQvXjwNM6mQlT17LT1tX1v1rdBSqeoiQ+t5EvX3eDUpnGvH
+        wFjVH/53HrkIICM1/FpGNjkCM3QnUm4fFKfmsNc4YRE+DZp4qRPnQQfmtUMPbw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1651680913;
+        s=2020e; t=1651680914;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=4to5n7sOJdQwEe8TV7DhguB3iQQ4hTVBK/b43Hwks5g=;
-        b=A9xxra6XzuMb5pVzXTRChtbahpwgQeIthFWRmJD0uvwvgfq0qM/K7ax+HAaEXMRGxBD+u0
-        yhauRmAqboyFq/Bw==
-From:   "irqchip-bot for Samuel Holland" <tip-bot2@linutronix.de>
+        bh=qSkxNoLoTWt5gxztnJFu/bozk0kevl2CiKD8B3IjPtA=;
+        b=GKvGmYLr8XYCbl6ZlD7qs2M+BNAEyMqdQVE5AAEtlLxzwNGYiJHhLAI69k7bHfMCzi6HTW
+        thZWPzs37GTbl6Cw==
+From:   "irqchip-bot for Max Filippov" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-kernel@vger.kernel.org
-Subject: [irqchip: irq/irqchip-next] irqchip/sun6i-r: Use NULL for chip_data
-Cc:     kernel test robot <lkp@intel.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
+Subject: [irqchip: irq/irqchip-next] irqchip/xtensa-mx: Fix initial IRQ
+ affinity in non-SMP setup
+Cc:     stable@vger.kernel.org, Max Filippov <jcmvbkbc@gmail.com>,
         Marc Zyngier <maz@kernel.org>, tglx@linutronix.de
-In-Reply-To: <20220424173952.36591-1-samuel@sholland.org>
-References: <20220424173952.36591-1-samuel@sholland.org>
+In-Reply-To: <20220426161912.1113784-1-jcmvbkbc@gmail.com>
+References: <20220426161912.1113784-1-jcmvbkbc@gmail.com>
 MIME-Version: 1.0
-Message-ID: <165168091269.4207.6786695383349559922.tip-bot2@tip-bot2>
+Message-ID: <165168091368.4207.10786680163387255992.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -68,43 +67,68 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the irq/irqchip-next branch of irqchip:
 
-Commit-ID:     1b2eb89ccf4ffff2ea83c41451b3fed709cd3fc8
-Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms/1b2eb89ccf4ffff2ea83c41451b3fed709cd3fc8
-Author:        Samuel Holland <samuel@sholland.org>
-AuthorDate:    Sun, 24 Apr 2022 12:39:51 -05:00
+Commit-ID:     168f633b1722597673e5aa5a6c7721191a9d221f
+Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms/168f633b1722597673e5aa5a6c7721191a9d221f
+Author:        Max Filippov <jcmvbkbc@gmail.com>
+AuthorDate:    Tue, 26 Apr 2022 09:19:12 -07:00
 Committer:     Marc Zyngier <maz@kernel.org>
-CommitterDate: Wed, 04 May 2022 16:36:59 +01:00
+CommitterDate: Wed, 04 May 2022 16:35:38 +01:00
 
-irqchip/sun6i-r: Use NULL for chip_data
+irqchip/xtensa-mx: Fix initial IRQ affinity in non-SMP setup
 
-sparse complains about using an integer as a NULL pointer.
+When irq-xtensa-mx chip is used in non-SMP configuration its
+irq_set_affinity callback is not called leaving IRQ affinity set empty.
+As a result IRQ delivery does not work in that configuration.
+Initialize IRQ affinity of the xtensa MX interrupt distributor to CPU 0
+for all external IRQ lines.
 
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Samuel Holland <samuel@sholland.org>
-Reviewed-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+Cc: stable@vger.kernel.org
+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
 Signed-off-by: Marc Zyngier <maz@kernel.org>
-Link: https://lore.kernel.org/r/20220424173952.36591-1-samuel@sholland.org
+Link: https://lore.kernel.org/r/20220426161912.1113784-1-jcmvbkbc@gmail.com
 ---
- drivers/irqchip/irq-sun6i-r.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ drivers/irqchip/irq-xtensa-mx.c | 18 ++++++++++++++----
+ 1 file changed, 14 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/irqchip/irq-sun6i-r.c b/drivers/irqchip/irq-sun6i-r.c
-index 4cd3e53..a01e440 100644
---- a/drivers/irqchip/irq-sun6i-r.c
-+++ b/drivers/irqchip/irq-sun6i-r.c
-@@ -249,11 +249,13 @@ static int sun6i_r_intc_domain_alloc(struct irq_domain *domain,
- 	for (i = 0; i < nr_irqs; ++i, ++hwirq, ++virq) {
- 		if (hwirq == nmi_hwirq) {
- 			irq_domain_set_hwirq_and_chip(domain, virq, hwirq,
--						      &sun6i_r_intc_nmi_chip, 0);
-+						      &sun6i_r_intc_nmi_chip,
-+						      NULL);
- 			irq_set_handler(virq, handle_fasteoi_ack_irq);
- 		} else {
- 			irq_domain_set_hwirq_and_chip(domain, virq, hwirq,
--						      &sun6i_r_intc_wakeup_chip, 0);
-+						      &sun6i_r_intc_wakeup_chip,
-+						      NULL);
- 		}
- 	}
+diff --git a/drivers/irqchip/irq-xtensa-mx.c b/drivers/irqchip/irq-xtensa-mx.c
+index 2793333..8c581c9 100644
+--- a/drivers/irqchip/irq-xtensa-mx.c
++++ b/drivers/irqchip/irq-xtensa-mx.c
+@@ -151,14 +151,25 @@ static struct irq_chip xtensa_mx_irq_chip = {
+ 	.irq_set_affinity = xtensa_mx_irq_set_affinity,
+ };
  
++static void __init xtensa_mx_init_common(struct irq_domain *root_domain)
++{
++	unsigned int i;
++
++	irq_set_default_host(root_domain);
++	secondary_init_irq();
++
++	/* Initialize default IRQ routing to CPU 0 */
++	for (i = 0; i < XCHAL_NUM_EXTINTERRUPTS; ++i)
++		set_er(1, MIROUT(i));
++}
++
+ int __init xtensa_mx_init_legacy(struct device_node *interrupt_parent)
+ {
+ 	struct irq_domain *root_domain =
+ 		irq_domain_add_legacy(NULL, NR_IRQS - 1, 1, 0,
+ 				&xtensa_mx_irq_domain_ops,
+ 				&xtensa_mx_irq_chip);
+-	irq_set_default_host(root_domain);
+-	secondary_init_irq();
++	xtensa_mx_init_common(root_domain);
+ 	return 0;
+ }
+ 
+@@ -168,8 +179,7 @@ static int __init xtensa_mx_init(struct device_node *np,
+ 	struct irq_domain *root_domain =
+ 		irq_domain_add_linear(np, NR_IRQS, &xtensa_mx_irq_domain_ops,
+ 				&xtensa_mx_irq_chip);
+-	irq_set_default_host(root_domain);
+-	secondary_init_irq();
++	xtensa_mx_init_common(root_domain);
+ 	return 0;
+ }
+ IRQCHIP_DECLARE(xtensa_mx_irq_chip, "cdns,xtensa-mx", xtensa_mx_init);

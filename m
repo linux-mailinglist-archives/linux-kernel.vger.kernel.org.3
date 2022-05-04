@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB73051A5F1
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 18:48:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65C9551A602
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 18:48:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353643AbiEDQv4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 12:51:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50698 "EHLO
+        id S1353669AbiEDQwM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 12:52:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353613AbiEDQvt (ORCPT
+        with ESMTP id S1353629AbiEDQvx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 12:51:49 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7C9EFD2B;
-        Wed,  4 May 2022 09:48:13 -0700 (PDT)
+        Wed, 4 May 2022 12:51:53 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DB072ED5A;
+        Wed,  4 May 2022 09:48:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 654A361744;
+        by ams.source.kernel.org (Postfix) with ESMTPS id E3023B82554;
+        Wed,  4 May 2022 16:48:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9AEFFC385A4;
         Wed,  4 May 2022 16:48:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0DE3C385AF;
-        Wed,  4 May 2022 16:48:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651682892;
-        bh=8lm3thwt99G1i9oKsvxb5K2n7Qp9sOJOBnjoL2NNz4E=;
+        s=korg; t=1651682893;
+        bh=C/gXfNrYbGLHuBQ+TwO+vWYrZdeXwcdlqQuLpZRmc6Y=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UiGUrBjZm+sdk3z4AKmo0A+fipQMfNUrScjSFjQYIFjB3i7yVAT7yJGXcikteTRyw
-         rb+df+/5oXibXrCIgphtwfFBGk431ovBfrZ/qm7CMkJwlTV/bMrMGc7qLeQdt+fd98
-         U1ew7z9jvm6jKTOLl3hC8SnlH1mocAHA+yQhMjzc=
+        b=KVlI2CRPwZ2tyCht13Lsv3z1TWSNFDNKudgLc1jHgAqiPsahgLQP8LmbA9V0Wsa6k
+         P2vfGviWMwzH9queFs+imK0ZX5PWuVnvz105D18EwnC+BhmEyvFY571mji6ONOCLHs
+         db27namMGf3vfDSeXAr0UAWYSt6nwAmMEWCSbX6A=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Daniele Palmas <dnlplm@gmail.com>,
-        Johan Hovold <johan@kernel.org>
-Subject: [PATCH 5.4 11/84] USB: serial: option: add Telit 0x1057, 0x1058, 0x1075 compositions
-Date:   Wed,  4 May 2022 18:43:52 +0200
-Message-Id: <20220504152928.542086416@linuxfoundation.org>
+        stable@vger.kernel.org, Henry Lin <henryl@nvidia.com>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: [PATCH 5.4 12/84] xhci: stop polling roothubs after shutdown
+Date:   Wed,  4 May 2022 18:43:53 +0200
+Message-Id: <20220504152928.618662308@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
 In-Reply-To: <20220504152927.744120418@linuxfoundation.org>
 References: <20220504152927.744120418@linuxfoundation.org>
@@ -54,46 +54,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Daniele Palmas <dnlplm@gmail.com>
+From: Henry Lin <henryl@nvidia.com>
 
-commit f32c5a0423400e01f4d7c607949fa3a1f006e8fa upstream.
+commit dc92944a014cd6a6f6c94299aaa36164dd2c238a upstream.
 
-Add support for the following Telit FN980 and FN990 compositions:
+While rebooting, XHCI controller and its bus device will be shut down
+in order by .shutdown callback. Stopping roothubs polling in
+xhci_shutdown() can prevent XHCI driver from accessing port status
+after its bus device shutdown.
 
-0x1057: tty, adb, rmnet, tty, tty, tty, tty, tty
-0x1058: tty, adb, tty, tty, tty, tty, tty
-0x1075: adb, tty
+Take PCIe XHCI controller as example, if XHCI driver doesn't stop roothubs
+polling, XHCI driver may access PCIe BAR register for port status after
+parent PCIe root port driver is shutdown and cause PCIe bus error.
 
-Signed-off-by: Daniele Palmas <dnlplm@gmail.com>
-Link: https://lore.kernel.org/r/20220406141408.580669-1-dnlplm@gmail.com
+[check shared hcd exist before stopping its roothub polling -Mathias]
+
 Cc: stable@vger.kernel.org
-Signed-off-by: Johan Hovold <johan@kernel.org>
+Signed-off-by: Henry Lin <henryl@nvidia.com>
+Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+Link: https://lore.kernel.org/r/20220408134823.2527272-3-mathias.nyman@linux.intel.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/usb/serial/option.c |    6 ++++++
- 1 file changed, 6 insertions(+)
+ drivers/usb/host/xhci.c |   11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
---- a/drivers/usb/serial/option.c
-+++ b/drivers/usb/serial/option.c
-@@ -1219,6 +1219,10 @@ static const struct usb_device_id option
- 	  .driver_info = NCTRL(0) | RSVD(1) },
- 	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x1056, 0xff),	/* Telit FD980 */
- 	  .driver_info = NCTRL(2) | RSVD(3) },
-+	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x1057, 0xff),	/* Telit FN980 */
-+	  .driver_info = NCTRL(0) | RSVD(1) | RSVD(2) },
-+	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x1058, 0xff),	/* Telit FN980 (PCIe) */
-+	  .driver_info = NCTRL(0) | RSVD(1) },
- 	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x1060, 0xff),	/* Telit LN920 (rmnet) */
- 	  .driver_info = NCTRL(0) | RSVD(1) | RSVD(2) },
- 	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x1061, 0xff),	/* Telit LN920 (MBIM) */
-@@ -1235,6 +1239,8 @@ static const struct usb_device_id option
- 	  .driver_info = NCTRL(2) | RSVD(3) },
- 	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x1073, 0xff),	/* Telit FN990 (ECM) */
- 	  .driver_info = NCTRL(0) | RSVD(1) },
-+	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x1075, 0xff),	/* Telit FN990 (PCIe) */
-+	  .driver_info = RSVD(0) },
- 	{ USB_DEVICE(TELIT_VENDOR_ID, TELIT_PRODUCT_ME910),
- 	  .driver_info = NCTRL(0) | RSVD(1) | RSVD(3) },
- 	{ USB_DEVICE(TELIT_VENDOR_ID, TELIT_PRODUCT_ME910_DUAL_MODEM),
+--- a/drivers/usb/host/xhci.c
++++ b/drivers/usb/host/xhci.c
+@@ -779,6 +779,17 @@ void xhci_shutdown(struct usb_hcd *hcd)
+ 	if (xhci->quirks & XHCI_SPURIOUS_REBOOT)
+ 		usb_disable_xhci_ports(to_pci_dev(hcd->self.sysdev));
+ 
++	/* Don't poll the roothubs after shutdown. */
++	xhci_dbg(xhci, "%s: stopping usb%d port polling.\n",
++			__func__, hcd->self.busnum);
++	clear_bit(HCD_FLAG_POLL_RH, &hcd->flags);
++	del_timer_sync(&hcd->rh_timer);
++
++	if (xhci->shared_hcd) {
++		clear_bit(HCD_FLAG_POLL_RH, &xhci->shared_hcd->flags);
++		del_timer_sync(&xhci->shared_hcd->rh_timer);
++	}
++
+ 	spin_lock_irq(&xhci->lock);
+ 	xhci_halt(xhci);
+ 	/* Workaround for spurious wakeups at shutdown with HSW */
 
 

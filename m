@@ -2,101 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F399F51A3CA
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 17:21:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02DF151A3D6
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 17:22:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352417AbiEDPYw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 11:24:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48232 "EHLO
+        id S1352353AbiEDPZV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 11:25:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352309AbiEDPYi (ORCPT
+        with ESMTP id S1352451AbiEDPYs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 11:24:38 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA8984504E;
-        Wed,  4 May 2022 08:20:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F15E8B82577;
-        Wed,  4 May 2022 15:20:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 875CBC385AA;
-        Wed,  4 May 2022 15:20:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651677645;
-        bh=uSRT9TT40g2mc7fJtjGOYIkn9JajbEXDHdNZ3BlhJM0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=L3cbOZVGidkfkFpOzCbx9cIJ4onYvPy7EL2N/Gyis6ae/Ds1Yd0y1FdQhosNAh+sl
-         fVdqUFFXS6WjF/BqNbCOgxYmP1AlM0SgY+GkPnJe4ulonv0mn+PDKTu8o9OoQ8XWH4
-         OZhfdOldDCpwEDYorMut1k6l8SihpQX+H/gbwRHPvB+i1RULqWlbtBixaxLulq7R53
-         tuT9Qh/dHVApga2TPsCt1ww6oW6/yOiBSQKIqINfzAA/mv2TD0e/qXYG1w7ZpoK2lo
-         Tmi/uSDIOvUlj757wCOhNk2DFqBAnllV2hBsyI0OhbWzmeiZcOISraaqnwwq6yYwxf
-         Q9zlsj8RMZ6fw==
-Date:   Wed, 4 May 2022 16:20:40 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Andy Gross <agross@kernel.org>,
+        Wed, 4 May 2022 11:24:48 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BF6245529;
+        Wed,  4 May 2022 08:21:07 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id l18so3534087ejc.7;
+        Wed, 04 May 2022 08:21:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=LAHAvyI6ZnoSXv+X/gfsslQYBTBEo6ls5kRk7sRimNQ=;
+        b=d2zLTEfxiFW8IHkGbm+yF8OyirFjLdhxSjhT022lHH3p4j3lqZegdJRmOF7k73ramv
+         BMogGRR85t5Rl95au7I8Hes3qTx+i+viaO6tKgMdx4rG9HPoX5gKwW1oPK3d162VkOGo
+         Mis72JEjdTrJMjrO/iTgIm/uQ6MrgEahwrVodKf9deWDreacy5g3h/GK9jtxofo0Q3OZ
+         TlAM4Y4eoZs/iuLUkSRGzxIdXzsU0QS2V6t6H0495LmLh9lMOQfKEe/HTR4YC3+cQQk+
+         Mw2OPi89yh5BJu8O3Zay0fyQJThboCs8+JiEGPG60JVHUYrhRcXNJ+EJFqrOLQbBGkr2
+         rSLQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=LAHAvyI6ZnoSXv+X/gfsslQYBTBEo6ls5kRk7sRimNQ=;
+        b=BL+mj6jQWedHeJ7Vg+GsYnAeG2tjxS5TLKMXUqt4zsLryy/oIPooZ5lMqQMOYKPyjM
+         f11z1FDwyfO28yAo5wV1f2wPpyJQmXWD9YZoQ4PxNLNhFXePjiozFxYMB9LnHL67HavB
+         OYNnonyHA3GT/DqlATguB4odbFnn6GOVlSfgVi0dokaR5e+MScLR+/nl10rHXEbngmI1
+         bQaDaVgtaO4+AKVcAYm41izz1u0IYo3YHW6iohrbJ5KTzaZu2lz6UAGph2fL7r97Mg0o
+         sbKcr3kCStMnJU1NosBNuvyzWoLkJNvQou2fIvTguZ+Td295RhWkw2FILg2Q+RXSeGeq
+         OmPQ==
+X-Gm-Message-State: AOAM531GcYiAIWnsBAGtFeVMScpY9xuVd6QbvSBNvY1BpoanBsD09sIF
+        nGtm9gXmw8rqow1km5Z6KIE=
+X-Google-Smtp-Source: ABdhPJytXMsaNpSUTjcFGT9EV1QZ2w1xoQzIzDdeblj/sRBxFnmF0qT47s3Tb29DCb7pIUYkg6tCWw==
+X-Received: by 2002:a17:907:7e91:b0:6f4:3b93:1f6e with SMTP id qb17-20020a1709077e9100b006f43b931f6emr16167776ejc.91.1651677665407;
+        Wed, 04 May 2022 08:21:05 -0700 (PDT)
+Received: from skbuf ([188.25.160.86])
+        by smtp.gmail.com with ESMTPSA id ca19-20020aa7cd73000000b0042617ba63c3sm9264323edb.77.2022.05.04.08.21.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 May 2022 08:21:04 -0700 (PDT)
+Date:   Wed, 4 May 2022 18:21:02 +0300
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Frank Wunderlich <linux@fw-web.de>
+Cc:     linux-mediatek@lists.infradead.org,
+        linux-rockchip@lists.infradead.org,
+        Frank Wunderlich <frank-w@public-files.de>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-spi@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] spi: dt-bindings: qcom,spi-geni-qcom: allow three
- interconnects
-Message-ID: <YnKZyCogvngR7zfc@sirena.org.uk>
-References: <20220504125119.190526-1-krzysztof.kozlowski@linaro.org>
- <YnKVLxmz0hhQGNzI@sirena.org.uk>
- <cfba178d-ff36-910b-3067-ce32b701b643@linaro.org>
+        Heiko Stuebner <heiko@sntech.de>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Peter Geis <pgwipeout@gmail.com>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: Re: [RFC v2 1/4] net: dsa: mt7530: rework mt7530_hw_vlan_{add,del}
+Message-ID: <20220504152102.cj3fwae5anahthku@skbuf>
+References: <20220430130347.15190-1-linux@fw-web.de>
+ <20220430130347.15190-2-linux@fw-web.de>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="YBOfv8KL6MSYdhjS"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <cfba178d-ff36-910b-3067-ce32b701b643@linaro.org>
-X-Cookie: Mother is the invention of necessity.
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220430130347.15190-2-linux@fw-web.de>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sat, Apr 30, 2022 at 03:03:44PM +0200, Frank Wunderlich wrote:
+> From: Frank Wunderlich <frank-w@public-files.de>
+> 
+> Rework vlan_add/vlan_del functions in preparation for dynamic cpu port.
+> 
+> Currently BIT(MT7530_CPU_PORT) is added to new_members, even though
+> mt7530_port_vlan_add() will be called on the CPU port too.
+> 
+> Let DSA core decide when to call port_vlan_add for the CPU port, rather
+> than doing it implicitly.
+> 
+> We can do autonomous forwarding in a certain VLAN, but not add br0 to that
+> VLAN and avoid flooding the CPU with those packets, if software knows it
+> doesn't need to process them.
+> 
+> Suggested-by: Vladimir Oltean <olteanv@gmail.com>
+> Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
+> ---
 
---YBOfv8KL6MSYdhjS
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-
-On Wed, May 04, 2022 at 05:14:19PM +0200, Krzysztof Kozlowski wrote:
-> On 04/05/2022 17:01, Mark Brown wrote:
-> > On Wed, May 04, 2022 at 02:51:19PM +0200, Krzysztof Kozlowski wrote:
-
-> >> Recent Qualcomm Geni SPI nodes, e.g. on SM8450, come with three
-> >> interconnects.  This fixes dtbs_check warnings like:
-
-> > This doesn't apply against current code, please check and resend.
-
-> Thanks Mark, but as explained in commit below "---" - this is a fix for
-> commit in Qualcomm/Bjorn tree. Could you ack it instead?
-
-I was expecting this to be a fix for some change in the DTs in the
-Qualcomm tree.  Why is there a change to the SPI bindings in there?  I
-don't seem to have reviewed it...
-
---YBOfv8KL6MSYdhjS
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmJymccACgkQJNaLcl1U
-h9D7bAf+PFPeIWb+e/4IYQW+dqHjAocqb2u1PfWlz6tbtBUUSNu9PFA95jrYF4AL
-4KdnoDeTfyuthCxzW4q4Np5u9FZMdc93nTT/3LSjonuzPr5O7QktowRlHwS/eZvM
-SVTqtemG8x1udnsaOrE3FAr5d3zv3TuPa8rM3VXgWxD8PMnwTFQzmNmF7VvgD8UR
-5vP8tzmXTArqQCrgeovKwe0uBQ9yzeOmyzDC7A0PB+DvAYzXIrQXM0cCzU8uDKO+
-ok/b1TAfvwE7n09omLqhHOVJhH7f+YVoiNyNvK3yGrANCb23K08aycGR+qCJv3Xm
-JGJTgxOx84fyI2OL/ctJfD4kRL+XHA==
-=X7pn
------END PGP SIGNATURE-----
-
---YBOfv8KL6MSYdhjS--
+Reviewed-by: Vladimir Oltean <olteanv@gmail.com>

@@ -2,67 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 624B8519569
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 04:14:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E047651956B
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 04:15:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343897AbiEDCSZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 22:18:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35692 "EHLO
+        id S1344014AbiEDCSc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 22:18:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343873AbiEDCSY (ORCPT
+        with ESMTP id S1343984AbiEDCS3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 22:18:24 -0400
-Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C50F92A72F
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 19:14:49 -0700 (PDT)
-Received: by mail-yb1-xb2c.google.com with SMTP id j2so245387ybu.0
-        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 19:14:49 -0700 (PDT)
+        Tue, 3 May 2022 22:18:29 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99DF32A72F;
+        Tue,  3 May 2022 19:14:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=atishpatra.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=cI3EnEiByhbyzhbmPT2Do41vovNa54bp0yAEgXmkBD8=;
-        b=mmI6KLpp+c3z+QrHZdFKRJi6VoSF3GbpLtggCsIulsB7AubvolFrXmPGCEXTxlZANN
-         f3DhMSm2PnbBoAetcz8hC4H9bKeaHz8TGfKNNSG94OErYzJkMD2FdlSJfm7Xj0+v6vUA
-         nsviC93U75RbKSwrPBpYDtKRlXaAU8h4VESOo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=cI3EnEiByhbyzhbmPT2Do41vovNa54bp0yAEgXmkBD8=;
-        b=AtZVsIWygMr4oa9kKrE4jfxbtOAKR5XIEIDpOQ70AtgeDxrLzoH//G0lNIOWXsNggM
-         uCZ7vBnAkI/4Tk96+cDJivgk1NwumVl6hhzXBXzeG7pT3eMxZ7xLByui7BxHNY+7fFkd
-         ZKhMQTZbEJeWCK/ulgMFNVvLuFraUTZrXHErZG9MKZB6JNhpzVNgnWwe4PC6Hsj+mmdv
-         s6IIAJn6VfeenXbfo32+KN6zI7G9W0lnA7p5k7e93wzXg9E8OIIzyMJqvZsw1S2BFEYR
-         D8tMnWbeOhmwFqEI2qis0RrvmWRR6BGZk11r7HPaLY+MO2Nfl4zkSLwwOzYPexRaCsoE
-         j5aw==
-X-Gm-Message-State: AOAM533Rg46m4DPzajo++Q7iqlh5TJKQ6lleIeCvxN/42jiQb8HXcTC1
-        2qjOp47KyXsHfrPIimwCmC02AFYNluOyBtm6t+HP
-X-Google-Smtp-Source: ABdhPJzutpVfXiertcAqEmQCd3u67RbEUlBKorJvKcoQ99nnjZTFxngHiLoSZ+nRRmPEImrirNk0UXweW8E5SV84HvY=
-X-Received: by 2002:a25:9247:0:b0:645:ddd5:a182 with SMTP id
- e7-20020a259247000000b00645ddd5a182mr16046065ybo.289.1651630489026; Tue, 03
- May 2022 19:14:49 -0700 (PDT)
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1651630495; x=1683166495;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=rMNGehIgiXmPL/7MJwr9CxJwJzaRTJNO1ROWw9C2U2I=;
+  b=j+SuCXxwHeHbm1a4T4cgY9AIH09Okp28ye4afXU7iIemtIbkXtOKfJsE
+   mHKGkCIIV03etbEgdIyFGnlBezYEu0+ox2wyqeedGOj3Cs9Kcmn5lq2o8
+   /EY1SGFE0S3WwsNi+a/j7Gzf9PfxhQRxPPaP94aN8+ljXoUvaPGdnHeNe
+   g=;
+Received: from unknown (HELO ironmsg02-sd.qualcomm.com) ([10.53.140.142])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 03 May 2022 19:14:55 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg02-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2022 19:14:55 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Tue, 3 May 2022 19:14:54 -0700
+Received: from [10.50.60.188] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Tue, 3 May 2022
+ 19:14:51 -0700
+Message-ID: <13819b2d-26f0-14f4-9cb9-affb6b18f13d@quicinc.com>
+Date:   Wed, 4 May 2022 07:44:47 +0530
 MIME-Version: 1.0
-References: <20220420112450.155624-1-apatel@ventanamicro.com> <20220420112450.155624-4-apatel@ventanamicro.com>
-In-Reply-To: <20220420112450.155624-4-apatel@ventanamicro.com>
-From:   Atish Patra <atishp@atishpatra.org>
-Date:   Tue, 3 May 2022 19:14:38 -0700
-Message-ID: <CAOnJCU+sDbJERnrcTUiLowvpfRDJ=-YPkc2dxzbfsD+qFBMUKw@mail.gmail.com>
-Subject: Re: [PATCH v2 3/7] RISC-V: KVM: Treat SBI HFENCE calls as NOPs
-To:     Anup Patel <apatel@ventanamicro.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Alistair Francis <Alistair.Francis@wdc.com>,
-        Anup Patel <anup@brainfault.org>,
-        KVM General <kvm@vger.kernel.org>,
-        kvm-riscv@lists.infradead.org,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH] soc: qcom: socinfo: Add another ID for sc7180
+Content-Language: en-US
+To:     Douglas Anderson <dianders@chromium.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+CC:     <matvore@chromium.org>,
+        "Reviewed-by : Stephen Boyd" <swboyd@chromium.org>,
+        Andy Gross <agross@kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20220502173338.1.I26eca1856f99e6160d30de6d50ecab60e6226354@changeid>
+From:   Sai Prakash Ranjan <quic_saipraka@quicinc.com>
+In-Reply-To: <20220502173338.1.I26eca1856f99e6160d30de6d50ecab60e6226354@changeid>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,40 +69,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 20, 2022 at 4:25 AM Anup Patel <apatel@ventanamicro.com> wrote:
+Hi,
+
+On 5/3/2022 6:03 AM, Douglas Anderson wrote:
+> It appears the some sc7180 devices, like the one in my
+> sc7180-trogdor-homestar, report an ID of 407 instead of 425. Add
+> another ID into the list.
 >
-> We should treat SBI HFENCE calls as NOPs until nested virtualization
-> is supported by KVM RISC-V. This will help us test booting a hypervisor
-> under KVM RISC-V.
->
-> Signed-off-by: Anup Patel <apatel@ventanamicro.com>
+> Signed-off-by: Douglas Anderson <dianders@chromium.org>
 > ---
->  arch/riscv/kvm/vcpu_sbi_replace.c | 6 +++++-
->  1 file changed, 5 insertions(+), 1 deletion(-)
 >
-> diff --git a/arch/riscv/kvm/vcpu_sbi_replace.c b/arch/riscv/kvm/vcpu_sbi_replace.c
-> index 0f217365c287..3c1dcd38358e 100644
-> --- a/arch/riscv/kvm/vcpu_sbi_replace.c
-> +++ b/arch/riscv/kvm/vcpu_sbi_replace.c
-> @@ -117,7 +117,11 @@ static int kvm_sbi_ext_rfence_handler(struct kvm_vcpu *vcpu, struct kvm_run *run
->         case SBI_EXT_RFENCE_REMOTE_HFENCE_GVMA_VMID:
->         case SBI_EXT_RFENCE_REMOTE_HFENCE_VVMA:
->         case SBI_EXT_RFENCE_REMOTE_HFENCE_VVMA_ASID:
-> -       /* TODO: implement for nested hypervisor case */
-> +               /*
-> +                * Until nested virtualization is implemented, the
-> +                * SBI HFENCE calls should be treated as NOPs
-> +                */
-> +               break;
->         default:
->                 ret = -EOPNOTSUPP;
->         }
-> --
-> 2.25.1
+>   drivers/soc/qcom/socinfo.c | 1 +
+>   1 file changed, 1 insertion(+)
 >
+> diff --git a/drivers/soc/qcom/socinfo.c b/drivers/soc/qcom/socinfo.c
+> index cee579a267a6..2ef1dc2a1dd3 100644
+> --- a/drivers/soc/qcom/socinfo.c
+> +++ b/drivers/soc/qcom/socinfo.c
+> @@ -318,6 +318,7 @@ static const struct soc_id soc_id[] = {
+>   	{ 396, "IPQ8071A" },
+>   	{ 402, "IPQ6018" },
+>   	{ 403, "IPQ6028" },
+> +	{ 407, "SC7180" },
+>   	{ 421, "IPQ6000" },
+>   	{ 422, "IPQ6010" },
+>   	{ 425, "SC7180" },
 
+Hmm, this ID maps to SM6250 which is a mobile variant. Not sure we should
+use it for SC7180 which already has 425 ID assigned, perks of marketing :)
 
-Reviewed-by: Atish Patra <atishp@rivosinc.com>
--- 
-Regards,
-Atish
+Thanks,
+Sai

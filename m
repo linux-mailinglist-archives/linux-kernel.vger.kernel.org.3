@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7433519333
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 03:11:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56BC7519339
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 03:11:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245095AbiEDBMR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 21:12:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44160 "EHLO
+        id S235501AbiEDBMi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 21:12:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244985AbiEDBLy (ORCPT
+        with ESMTP id S244933AbiEDBLy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 3 May 2022 21:11:54 -0400
 Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11896434BE
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 18:08:05 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA0A943AD3
+        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 18:08:06 -0700 (PDT)
 Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 243KnGuM029440;
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 243Kx7f7030616;
         Wed, 4 May 2022 01:07:59 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : subject :
  date : message-id : references : in-reply-to : content-type :
  content-transfer-encoding : mime-version; s=corp-2021-07-09;
- bh=Cv8myIjZOfvIlULL8qjTGQaN76z/ZSIoLC0i+L+fVgQ=;
- b=TEfS1rFM160152Oqoc6Iow8VnJ3p8CREsS89ONSdDoktb+0ezL13nzDgJ8k/VQ7+7HZS
- UG4bS/nYgrPHyDKps1FcUxOTei+zZDRKMz1AMSD+HJ9EE/A6Y+vo3rIF95W3mWuXqARD
- OTnWitA8JhuaUyf+wDvFbo+DzKuGRm1oRC6bmndDYVULr32j7UMSDM2mtfecB2jeyvGA
- YLbU8bJuXCvyiW0vjrX5P8aNslFpd0F71XM2Z0+Px2+S0DODRk37XvpvDsQL3UuOzZsT
- cGXKBpqPE8/+G8tl3u6yAuVUOI6kg0ol66QM+FEhduxT1j/uiWFU8VKybQkF7DGFr5dX 9Q== 
+ bh=r6e6s5WXr/0VM1cmsRGte4ANabZETQpkMzEiSA6pKX8=;
+ b=BD0k0IwVydk/bgG6XQ8qbSMMejgX+FUhgWErRYIIc/o4ROeRxK/eHA8YVz7qw19kwFq6
+ /CiuOnG60jq5yu3gOqUL6yUekgOH17Jen18iHqiQRA4y9nLEzVmNVm93Xo+8787ZdHJ1
+ zMEtP6sFciqn8eyLwqF14Ops0Rd2/JnST5FCLOs0xngcyQTVoKXJv7E3huSpsJAlsITQ
+ jaUhPClQ92Nrk3Nm6eqxadvcE1AUHtC63GH+9fJvVNkFq2VD4oNjNdpCAll00ADF9QOe
+ m4kKg9Ua7/Kvm+b5Kcw3KvIOC+kGfvPX7T2et8hiqi19lWTCOUf/Gne5aBkJHiHow688 gQ== 
 Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3fruq0f5uh-1
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3fruq0f5uj-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 04 May 2022 01:07:58 +0000
+        Wed, 04 May 2022 01:07:59 +0000
 Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 24416SvM039119;
+        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 24416SvN039119;
         Wed, 4 May 2022 01:07:58 GMT
 Received: from nam12-bn8-obe.outbound.protection.outlook.com (mail-bn8nam12lp2176.outbound.protection.outlook.com [104.47.55.176])
-        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com with ESMTP id 3fruj2wdr3-5
+        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com with ESMTP id 3fruj2wdr3-6
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
         Wed, 04 May 2022 01:07:58 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=naDeg44kvXw1yO/goamRQbUvW+4z/floTpmTw8QUNoIX5SrcfVeDlaXZNU4MUgGrA6t1ICJWvB+anjEzhZFJ2jiYVIt6z0KcBKHonVkUxceOHTmDHs+He0xVq1XW/XnlK4Z6B8MezksBCHZi8Z6dhwKGGgtOwJEXHgqlaVWtHrUvwu7BYVkeAvSFUGyv84ELlSDxODv47Nt6SnSjRo2oDML70pI3Q2RFLCRDa23UMnJrMP24DyiFCifO0GhUEE06jTisvGpMEGaFGUurSp/i/I0Wkfl6OTpjwpYZRJrjX8wK836ZTD7lk//lkrLTETLOiet2gAlV99ryh+vA4biz8g==
+ b=mCS9WsJIqlt4Td/wyytcYLXsjPd6Iu1UEYO10HcEfu2A+/aPSHjXmGgI6GvbYL9w+H5imjJB3gH54G866BvBkgH57yNitP3ZEYQgWLHUT/IkDol8vpveEEP8hGrtV1qW2vRZsiqfkO36dGUdUSa4qNbc4I/pdYo496T/CwnWqSoZNUCAS8CdCw7lCxv6qclkxDlh6M/TcLI1Slo4Y6EScpcWV4loRqjs6vGCoJeo6waEW36pSrTm90D/pFoNLegVz8BqQ57/hMn2fP0jU4i0Qmj+1mJu+j+uUYyfCemhfSmeou1f89equtKTYPp+tcH6wTBIbUUOG0KEYD3LiQDwWw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Cv8myIjZOfvIlULL8qjTGQaN76z/ZSIoLC0i+L+fVgQ=;
- b=USwBCrqXvhHzUWN3HlQ8GZXJIrHz1qDCyG6OCCLimwQZpcztY0NxGvqji5sVDd8VdXmyHS3rjbLvyKTAXTxTcrZf20wO1JX70wTcgRG9o5SIPeHPSRN++QhVLcUzZQhpTsGfuojRXWo7ylSJB2+1sguUDV0zyZ5rbAqX1nmcPfmaNzge8UdZyCEekb17QiUk2xAoMZD2KdWgRsH57oidxRlqklhx/859wxdPZ/+NtGwBNKMUotcuRZ6fih98gOqmaUkfOic6S64g6L9OIl44k4RzT7m/2RhfpbqiByHjRS5xxAdbtEp2mGoePl3kErRRCKctpNZHg4EP/yUBRjTJXg==
+ bh=r6e6s5WXr/0VM1cmsRGte4ANabZETQpkMzEiSA6pKX8=;
+ b=ZYMSBYpI6SJraiCvZ92/z96BrzbmJPASEI7AhANgE6eSmPqeeUSl3RKhzcEmfDD2eo9l0IVJdNyTn6KQDfFT1IkjWXMW4Hv6qFBwqXKOp81Ah+pD/vzdFf2tSZ2iRDdaiwXCSBVP/XGttkKgl4k0I0vWByQ1P1Pq2LTY+jfmeu0ltyH4JIEdPrlVBzkXKUaaYLlomPM6QaWkwfkS1ZML1q5UqNnZMTRIxnvRWu7iz7oCrCz4hELesguaHjUIjnFfxtIk0ZexvXIrInW7E3M7EvoSVhISMkhQa8x0SxV1GKTl0JvATKy35W2NHlMHNiVhy8I0N2mL9+mtSBXXYZ8o2Q==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
  dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Cv8myIjZOfvIlULL8qjTGQaN76z/ZSIoLC0i+L+fVgQ=;
- b=FAht91GN3vglIt7FXqLo1xekZ4zqxMIp6VQ3UqcHstZiwWHp+mJ1bopvQ31IH/DfIG+ZjWBdloemKbYxNPY0Lk9qIulXM9CZx+Wzxoc5K7LzXy2JcF/86ycZEFjvGCwGoC6/10YIn+edzN4aEyvjl4Sy4pGrXfpS0YaXT0AaH3k=
+ bh=r6e6s5WXr/0VM1cmsRGte4ANabZETQpkMzEiSA6pKX8=;
+ b=unLlcDrqUI5EJ8/SXcRzFzSBZrRUBU1pDqLVIJEZHZxSq5MfXcpISwc+IKRGoRdjZjJpfwKsGz0Dm6nRfRC+iWplBSvwViNzZv3neZhV0nfLHUEQeJnyQhdx0UDu3ljIxBI+rUcThorvs64XV8foXJ/8jGb5xpEWMg5B0Ep6OXU=
 Received: from SN6PR10MB3022.namprd10.prod.outlook.com (2603:10b6:805:d8::25)
  by CH2PR10MB4214.namprd10.prod.outlook.com (2603:10b6:610:a6::21) with
  Microsoft SMTP Server (version=TLS1_2,
@@ -67,13 +67,12 @@ To:     "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
         "linux-mm@kvack.org" <linux-mm@kvack.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>
-Subject: [PATCH v9 12/69] mm/mmap: use the maple tree for find_vma_prev()
- instead of the rbtree
-Thread-Topic: [PATCH v9 12/69] mm/mmap: use the maple tree for find_vma_prev()
- instead of the rbtree
-Thread-Index: AQHYX1Nh/LTdV4mXI0WB2ARQgN7clw==
+Subject: [PATCH v9 13/69] mm/mmap: use maple tree for unmapped_area{_topdown}
+Thread-Topic: [PATCH v9 13/69] mm/mmap: use maple tree for
+ unmapped_area{_topdown}
+Thread-Index: AQHYX1NiIkHH2uSNo0eVjc5j+stS2A==
 Date:   Wed, 4 May 2022 01:07:53 +0000
-Message-ID: <20220504010716.661115-14-Liam.Howlett@oracle.com>
+Message-ID: <20220504010716.661115-15-Liam.Howlett@oracle.com>
 References: <20220504010716.661115-1-Liam.Howlett@oracle.com>
 In-Reply-To: <20220504010716.661115-1-Liam.Howlett@oracle.com>
 Accept-Language: en-US
@@ -82,59 +81,59 @@ X-MS-Has-Attach:
 X-MS-TNEF-Correlator: 
 x-mailer: git-send-email 2.35.1
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 7515d7c8-2cec-4e84-1454-08da2d6a855c
+x-ms-office365-filtering-correlation-id: 25fb8398-5ccb-4bcf-376f-08da2d6a85a1
 x-ms-traffictypediagnostic: CH2PR10MB4214:EE_
-x-microsoft-antispam-prvs: <CH2PR10MB421459896322F11A5FB09E40FDC39@CH2PR10MB4214.namprd10.prod.outlook.com>
+x-microsoft-antispam-prvs: <CH2PR10MB42143586493739B4FF449ED3FDC39@CH2PR10MB4214.namprd10.prod.outlook.com>
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: ip+1tdmIs3tBhPSPTVL9IrA1xIrKXql/7srkRZL0s0VXiuIyMYajTh5xJvzo2KIb7EI9RNnIA1dNgnq93K5d7jK5hXIPa/BOUc9w4kwg8A2LgE+YaAenLhPU6I3uNS6fC9r8qga9gMi4jAV0XA1xoPcwt+GczRxNPs9i+GSRBoOIBl8EJ87w2wO+Y/WfDEL38wxYRztYeRAo/1QmHfJL0+xKcWDFXZoYFDo0Y+w13TMzFwtZgSuRQHSAp9IaocM1E2SoD9APZ8p9Op8uGWZ9ILwX0CIAo/62usQMG3RjCJycklhCLWGW7/1+nKwJizASCxCYH5jOv71AQp/uGZoeYGqm7K5k5ExQ8031YcbSYfqMYUMGtJKvOfCVkRG7oWcC2TI9WZn3Elz2CJxKqbBAQYrp4tXQaWccaaQpKT9g03qSvN/zV4nCruPrKmQ95VdZWCNR98DZ57Wv2RmGjdTurSBGGOTW4eSP3TeHM8pGe4FJOGFzbm23TaxEIDq8zOehbrbgSb8zmEMERuz2b4GJa4D44V+Vtqi6Pq+Q79aFAKFcP61YmcSOc1kSf6Zwyw2g4p0fqfbcVBtvUs8X5gNfJt5Orf3S36tn+7Nqt5zEZXOaB64OyxshFNXrxx9JhBj6pjFr7R7Yfa44iU5nAZdRhduXj+47E9gcYGKsbJmKcHhYYlMXK7ltORMsEZCiGu05tFfFCQVTuuXSpgoqnWDbpA==
+x-microsoft-antispam-message-info: rv55x2oLp1cYYLGlViBur6SCalfDCDyexa082INlNAWwBGoAJKFU0X5jsWU12KWXYGBWw1AOqXFbSD4HvTcjfBrM21CWPd3ncVOhVZxjLFvNMvLBkuFpvntWjVR+Nkw6McN2Z4c+fUSaCL/2NXphl/20iEglKiOSzBugumqTSW34mL7YVF3w7HUVx28tQTZKcGOUjNYiEE9fr+/BLEpwHropo5hxAfdvv7UOqJy0Cxs5uSD8Je8FjfRMv5FfAudmhlHfTHC47G7p10C5O/FLa5A/b4GkkiCW2j9Df3puyku+omP9cCHenVUN4w8zeZ1kd9E/XiiCyburLjHqmuAsc1otHJlj4MA4lkk70RjHs7yI9AgUcKNyQZhfXk09O986epfu8nQDM2p+wvryF2ezARIbuoFETyOskibyeydwTz+tdiXee/nBf8JeidxaPutAlWkYwXwI/y9Ghl6aK9QjGqITyfclwl48w+SJw9IXd3whXRXd6YktydcqwbUIJ6fVx7m7QAmXbhFR6LqZdEwm0qlZAhpto2OUzkgp0PmHdigtFHoC2YHilzDiET7EDtu2aiwQVzuwQNBFPph9sX7irb4Mq06K9OrYr7IiBRcjJ3QWlHooCHYS8o8NAQ9SgTz4RUr0tWg+COwRf/UEapQFaHhtmibUztQCzQaBuKekfQPwWgyWDyj/756xmOqaE0Zbsu3IESV3y9raj9PavCE18Q==
 x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR10MB3022.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(66446008)(64756008)(66946007)(66556008)(66476007)(8676002)(76116006)(83380400001)(2616005)(110136005)(186003)(1076003)(316002)(6512007)(86362001)(26005)(2906002)(6506007)(71200400001)(36756003)(5660300002)(44832011)(38100700002)(508600001)(8936002)(38070700005)(122000001)(6486002);DIR:OUT;SFP:1101;
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?qljiFkzKMU8JO0nxDjv5KE9L8cKdq6kpMAgCnbGTodHX28mnx3lTxoQVrb?=
- =?iso-8859-1?Q?8ODUrn96RJUroeMh8Tn6JZkCRK3tM3DBqpspS9uQ/z+KMaK5Rb8Fd7F6E7?=
- =?iso-8859-1?Q?PPBKpKa0blfhwJP95NCHC41JAZs3Mer8pdBLePZZKeYVjeAks3S8V8+oqL?=
- =?iso-8859-1?Q?J+HKMS56mzw2KZ+53mpeq3/k/8doVSlku0zsRGW1TEJCnb4pGtFnvcuncC?=
- =?iso-8859-1?Q?jNF9THa89m31/idlPSEqrPHRQX+G/UDtUAzIYDXxyEiY05BMBRwGqSxVHI?=
- =?iso-8859-1?Q?6x3DQLhMGvacnkyUsWQnOMKfE16o674i2LOOAFTteQSzFdzwULFU29jKar?=
- =?iso-8859-1?Q?NDTqpe43i3L76rtXRjG8gj9oCYb/SbNlgdOfTgEJtnCPMAhZ6SODYeLQsM?=
- =?iso-8859-1?Q?/FKXPtrXOHAe0qVeX8tLVyzABat5ymeMskqQQE1zizJDSdrGQA++yYCJSq?=
- =?iso-8859-1?Q?EZwCNZCaOXQoAjPd+dg5xp8532gbgE3Eg42Y4LWPvoTF1It/A0EjdNNXJx?=
- =?iso-8859-1?Q?loxXZ61CD/l06cZ2s7Gdd1BC96DpKufkmlpa8ygUZ7zcaJ1HSE+nlCoUQE?=
- =?iso-8859-1?Q?lcOupQewyXmDtErLwKYJCqRvyydf42epOcrZAwpOL4xpCAkOOEOmjvEGbE?=
- =?iso-8859-1?Q?wI7hbqlLsj6l3IizSsw4X2zkkh1wXhYFr4EaE+AFwL5GQGk+pfTDoAohR6?=
- =?iso-8859-1?Q?VetVPdAKrTyBocVpEJx4pGyuBKHjJT5YmWFyXZLQfhanAM27NP8YlCawCz?=
- =?iso-8859-1?Q?szGD6w+l35FH+nVxs8kFSuYUZt2wi+mRrvE13obYm6RaJQvJBuJsljdSDt?=
- =?iso-8859-1?Q?V0Z+BL/FTBOoTD0ETnqhh82w9Ls4r90I6fr1Qkf13FHjqsvWt6WLwcHh6C?=
- =?iso-8859-1?Q?A3/JOwd0RHY3WCzvPwySV5c0edHMnbf14c7MQAAE8htAByAl6mmJxiJYI9?=
- =?iso-8859-1?Q?UjWQcvQufeKrRgEJWbBTXdNtMh8aomeiDosZabQvcd/UVnXqOmK4Oax+31?=
- =?iso-8859-1?Q?tSmUg7NEUbSXIhAXlbFewJuoxRezSFAotyGcakafL/pgmd7UrQ1J5QorO2?=
- =?iso-8859-1?Q?og/+88pQKjpm1HrSOjJVt0va29DFFaNSiVLctGLY30r1l8SYfZewxNOW7Z?=
- =?iso-8859-1?Q?+FGN+XP994pivhTx6BNtplCxq44ZrcNb41pSVcwzSJeC4opDRkuN1UWwZE?=
- =?iso-8859-1?Q?YSUAwdvswrqxgD5FhD1V890kTKeK70l9DEvrqACL52tZP1CgJSDTptlexb?=
- =?iso-8859-1?Q?vcoOit7iUciExPspDiAUMcuOvWsvzXv3IvK+T6DnDzlRAlGOeE03b3cJOe?=
- =?iso-8859-1?Q?dPYStqEISp6XabBxQYLVBZlC+sonbM/lqzmwvSdOdqKBNVMWOuAYZTl9ro?=
- =?iso-8859-1?Q?AJd6y1XrDfXH6VG9Vf+MWMkCnfvoFZV3M6HSiar21lNYkhZfy7rVrxV9Gn?=
- =?iso-8859-1?Q?nrbkSjOMgyoGPNX7q3nJwu+wUBs+GxeRQ+pfVVdTMHUeJKSUl3n/l9fapk?=
- =?iso-8859-1?Q?oOPUj45X584IeDt/ROEgjKrHcHcdvkvNyoQldK9x2F7kz8dPEjXuoYsz4I?=
- =?iso-8859-1?Q?eP7o5IUgj0pxgW2kIyMaWVZ3SvZ+cLpXiT9Jljs70VT1G5r9oAbN5pTJil?=
- =?iso-8859-1?Q?9fKa12eFXQCAjjkyfm2SGkS+UnOeE1paUVkVUTFvF6uP+MaOceiatA8lKW?=
- =?iso-8859-1?Q?Y8ekSVeEbUo1ycZ9usoHgM3nhR0r6PKUwyre3/MhG2k90TI/PgcBd2QqzP?=
- =?iso-8859-1?Q?/vBgIMVcFzkNcK7jwMeS7ERlGR3pl4V61yfucBKi4mR/XwPQ/OoB2v5+cf?=
- =?iso-8859-1?Q?c0bDjemCj4gs0Z/ijFlSGtrvp1nq8dU=3D?=
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?ff7/Ewe55bcJPdO5ZwoX7xXfDLeObX6MR19Rp3cQPx0VUU2alE+bXyioV4?=
+ =?iso-8859-1?Q?h9QgT2WuoohtXXxl0UNZKlEsyTXruO6li+BTSdD7wavK+AR9v+so94Nnuo?=
+ =?iso-8859-1?Q?NJjc0GoJWGt8V2FyWvykm1ZbPH/EidVhoCltA4RrFcHhpwoKTBZc/dHfCb?=
+ =?iso-8859-1?Q?We/WdL0/aWzcWHN3vHhm4OpH/6SnO6Kzw2rz3XbggGEgTTsTdqdx2D12HA?=
+ =?iso-8859-1?Q?61VNbjgL5vwM2svG5CV/nw5YoEtRpoZYccQocSfYz0J8XBOclN4OGroCGR?=
+ =?iso-8859-1?Q?JI25uZp8d7HD9+yI20p0JnDqP+1bfT9AVTOPkK1K9R6XgasePbjwgAIHit?=
+ =?iso-8859-1?Q?P8TFMBuvA4OqYlm6xaQoh9YiMnVojZ8UjWVq6oaUrSuHR0jAmFIhPpauVV?=
+ =?iso-8859-1?Q?LCIlTWtWrouiadU/IlNbqzm24Y+WQWviuUNAkClRa1ngjz3PyEHFgRyWI4?=
+ =?iso-8859-1?Q?qn4tL5dTUEgOthabCHavPXDhc9+aFJLIFgWXoxY+CgQUy2KiZVQc0pF86H?=
+ =?iso-8859-1?Q?Ls7OL1xqTUmRyjtHUlpatJwtfWG5RE1LY4OH6DzggU5d9/TFLSl5DIzWXY?=
+ =?iso-8859-1?Q?nYncFX4psvSvN6AvFgPpGV6vesCvzd3z/i1fv8XXuMzoA6ub2uK6dIM2lo?=
+ =?iso-8859-1?Q?rPQeApeU2tZ1bKXuTSWaNNSuxXV2vWOdggeD0aQebY0ZxxwjrMK9ouyjfn?=
+ =?iso-8859-1?Q?plCA+wCBt1bta3y4gkCtNq4CGROrE4sXV+q8ooLYhb7iUo/oEzPT2pPrUD?=
+ =?iso-8859-1?Q?O7Qx2cCUAfiqvgNenJspav6EuwcUFYahsTgWNN1C/bssNjEbyjMSiB5sX2?=
+ =?iso-8859-1?Q?8rxDhfnEEr3iMn7qBA333RaLvHneaOPH6jOiiXB+hGd1zjI5Y0Y6JSfghy?=
+ =?iso-8859-1?Q?ETqyw8CVuJKyTufrgy34PqHKtKaA7iRKP1e4IG1O7RRI/TtYcwprTOG7lg?=
+ =?iso-8859-1?Q?/ek80gzzUsaBREKQVVRlzVSUFDdCgTGP9vlgqUaIs9eEWgve0JF6vpwwV8?=
+ =?iso-8859-1?Q?uAMLLynMySL1NL4B0F4jmWFdRAZ6MYcfoUIr7hhtaNd6mbtYwZ04Im6ZU5?=
+ =?iso-8859-1?Q?GUwku1I8gAjV3GvzNHhb5H++PURJIeZBEcXvh3TOD4rMzopS4X+Xwek4Go?=
+ =?iso-8859-1?Q?k7GU0A01AAaBlgrbGxYJKAhSIegTULPZbb1epDM0sYBiRHe09+G26LqN2k?=
+ =?iso-8859-1?Q?/y7OOz1IEen+kTmKdH3VuaV+QqSDzdhXxB3ZMRn0hr4gN3oi7QmeT7oFyB?=
+ =?iso-8859-1?Q?47sdShloroVvLpK1NR5Ar7hcvuCTmO4gNKinoxV4w8LzqRufx9zG5Nnt95?=
+ =?iso-8859-1?Q?NdcuF8+zh4dQLSjHXRRNki+CwtrA868qHWfw+MDTB3rdBMYbFyLpfxOyMA?=
+ =?iso-8859-1?Q?9QjJqLe3QFWXqyAho+izItGkcBiVHI6UtWQ3wiDgXSABrjTcKE5TSi7kS9?=
+ =?iso-8859-1?Q?aAtgGKQom782Bnd+MACh2JSCvERMY+xxtxM0M3uY4jFQcW34B42YnD6Py/?=
+ =?iso-8859-1?Q?UwLiRhAyU5GbmlcA7azwZl/RSjbQZxu7w1EgCRej52hynkpTk2U3TmY07j?=
+ =?iso-8859-1?Q?VjlLXXzrOrxe0xzSzPV2u/C78SiBztnq1ZtMGqGFQbRrLG3FWn+FoS+9Vm?=
+ =?iso-8859-1?Q?lcRDqPupoiV1VWA5GS9/vUjNYWR+vo4jSJ/FpjCuF6oOlfSbtcvkAUAZJh?=
+ =?iso-8859-1?Q?Y2vKDBndD9yehWWCOvjd0fraBel+VHUnAlZtXocvuY/WHBKNwpNLhT26LM?=
+ =?iso-8859-1?Q?qh7hqZsfcGXxgNtjTOzTDC8mpJqXFhKfvRbHQ9c8VfmIZSSH6yTrKy8cON?=
+ =?iso-8859-1?Q?qCrfXnjOeTcUmieSKUag8tPYHoCqJE0=3D?=
 Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
 X-OriginatorOrg: oracle.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-AuthSource: SN6PR10MB3022.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7515d7c8-2cec-4e84-1454-08da2d6a855c
-X-MS-Exchange-CrossTenant-originalarrivaltime: 04 May 2022 01:07:53.6191
+X-MS-Exchange-CrossTenant-Network-Message-Id: 25fb8398-5ccb-4bcf-376f-08da2d6a85a1
+X-MS-Exchange-CrossTenant-originalarrivaltime: 04 May 2022 01:07:54.0409
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: uT0LEq32qW1rHcEZoxqXANgD1P3Y5yhVRgqfV/n75vEWcQIA09XHbOLkyhuNEgljtKhm5sG5/riSWd7YVs1Ypg==
+X-MS-Exchange-CrossTenant-userprincipalname: qY+J9tyD6iCb6z9wp6ocEM/DeSiynePHSwvhwbqzDXtui4uzuT49q2IoF6MnNyuW/X+uqcgMrEo1+XPPCGShGA==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR10MB4214
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.486,18.0.858
  definitions=2022-05-03_10:2022-05-02,2022-05-03 signatures=0
@@ -142,8 +141,8 @@ X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 susp
  mlxlogscore=999 spamscore=0 bulkscore=0 mlxscore=0 phishscore=0
  malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2202240000 definitions=main-2205040005
-X-Proofpoint-ORIG-GUID: oP8_B7MkCzTDu6qOyH7sGP7ZIEqjpTEQ
-X-Proofpoint-GUID: oP8_B7MkCzTDu6qOyH7sGP7ZIEqjpTEQ
+X-Proofpoint-ORIG-GUID: XfrCLsIS3H-naSKtQmN4ZplzSl2cVqPt
+X-Proofpoint-GUID: XfrCLsIS3H-naSKtQmN4ZplzSl2cVqPt
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
         SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
@@ -156,67 +155,309 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: "Liam R. Howlett" <Liam.Howlett@Oracle.com>
 
-Use the maple tree's advanced API and a maple state to walk the tree for
-the entry at the address of the next vma, then use the maple state to walk
-back one entry to find the previous entry.
+The maple tree code was added to find the unmapped area in a previous
+commit and was checked against what the rbtree returned, but the actual
+result was never used.  Start using the maple tree implementation and
+remove the rbtree code.
 
-Add kernel documentation comments for this API.
+Add kernel documentation comment for these functions.
 
 Signed-off-by: Liam R. Howlett <Liam.Howlett@Oracle.com>
-Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
-Acked-by: Vlastimil Babka <vbabka@suse.cz>
 ---
- mm/mmap.c | 27 +++++++++++++++++----------
- 1 file changed, 17 insertions(+), 10 deletions(-)
+ mm/mmap.c | 253 +++++++-----------------------------------------------
+ 1 file changed, 32 insertions(+), 221 deletions(-)
 
 diff --git a/mm/mmap.c b/mm/mmap.c
-index f582478c83b1..7ab07c67da71 100644
+index 7ab07c67da71..ecdedf5191c0 100644
 --- a/mm/mmap.c
 +++ b/mm/mmap.c
-@@ -2489,23 +2489,30 @@ struct vm_area_struct *find_vma(struct mm_struct *m=
-m, unsigned long addr)
+@@ -2047,250 +2047,61 @@ unsigned long mmap_region(struct file *file, unsig=
+ned long addr,
+ 	return error;
  }
- EXPORT_SYMBOL(find_vma);
 =20
--/*
-- * Same as find_vma, but also return a pointer to the previous VMA in *ppr=
-ev.
-+/**
-+ * find_vma_prev() - Find the VMA for a given address, or the next vma and
-+ * set %pprev to the previous VMA, if any.
-+ * @mm: The mm_struct to check
-+ * @addr: The address
-+ * @pprev: The pointer to set to the previous VMA
++/* unmapped_area() Find an area between the low_limit and the high_limit w=
+ith
++ * the correct alignment and offset, all from @info. Note: current->mm is =
+used
++ * for the search.
 + *
-+ * Note that RCU lock is missing here since the external mmap_lock() is us=
-ed
-+ * instead.
++ * @info: The unmapped area information including the range (low_limit -
++ * hight_limit), the alignment offset and mask.
 + *
-+ * Returns: The VMA associated with @addr, or the next vma.
-+ * May return %NULL in the case of no vma at addr or above.
-  */
- struct vm_area_struct *
- find_vma_prev(struct mm_struct *mm, unsigned long addr,
- 			struct vm_area_struct **pprev)
++ * Return: A memory address or -ENOMEM.
++ */
+ static unsigned long unmapped_area(struct vm_unmapped_area_info *info)
  {
- 	struct vm_area_struct *vma;
-+	MA_STATE(mas, &mm->mm_mt, addr, addr);
+-	/*
+-	 * We implement the search by looking for an rbtree node that
+-	 * immediately follows a suitable gap. That is,
+-	 * - gap_start =3D vma->vm_prev->vm_end <=3D info->high_limit - length;
+-	 * - gap_end   =3D vma->vm_start        >=3D info->low_limit  + length;
+-	 * - gap_end - gap_start >=3D length
+-	 */
++	unsigned long length, gap;
 =20
--	vma =3D find_vma(mm, addr);
--	if (vma) {
--		*pprev =3D vma->vm_prev;
--	} else {
--		struct rb_node *rb_node =3D rb_last(&mm->mm_rb);
+-	struct mm_struct *mm =3D current->mm;
+-	struct vm_area_struct *vma;
+-	unsigned long length, low_limit, high_limit, gap_start, gap_end;
+-	unsigned long gap;
+-	MA_STATE(mas, &mm->mm_mt, 0, 0);
++	MA_STATE(mas, &current->mm->mm_mt, 0, 0);
+=20
+ 	/* Adjust search length to account for worst case alignment overhead */
+ 	length =3D info->length + info->align_mask;
+ 	if (length < info->length)
+ 		return -ENOMEM;
+=20
+-	mas_empty_area(&mas, info->low_limit, info->high_limit - 1,
+-			   length);
+-	gap =3D mas.index;
+-	gap +=3D (info->align_offset - gap) & info->align_mask;
 -
--		*pprev =3D rb_node ? rb_entry(rb_node, struct vm_area_struct, vm_rb) : N=
-ULL;
+-	/* Adjust search limits by the desired length */
+-	if (info->high_limit < length)
+-		return -ENOMEM;
+-	high_limit =3D info->high_limit - length;
+-
+-	if (info->low_limit > high_limit)
+-		return -ENOMEM;
+-	low_limit =3D info->low_limit + length;
+-
+-	/* Check if rbtree root looks promising */
+-	if (RB_EMPTY_ROOT(&mm->mm_rb))
+-		goto check_highest;
+-	vma =3D rb_entry(mm->mm_rb.rb_node, struct vm_area_struct, vm_rb);
+-	if (vma->rb_subtree_gap < length)
+-		goto check_highest;
+-
+-	while (true) {
+-		/* Visit left subtree if it looks promising */
+-		gap_end =3D vm_start_gap(vma);
+-		if (gap_end >=3D low_limit && vma->vm_rb.rb_left) {
+-			struct vm_area_struct *left =3D
+-				rb_entry(vma->vm_rb.rb_left,
+-					 struct vm_area_struct, vm_rb);
+-			if (left->rb_subtree_gap >=3D length) {
+-				vma =3D left;
+-				continue;
+-			}
+-		}
+-
+-		gap_start =3D vma->vm_prev ? vm_end_gap(vma->vm_prev) : 0;
+-check_current:
+-		/* Check if current node has a suitable gap */
+-		if (gap_start > high_limit)
+-			return -ENOMEM;
+-		if (gap_end >=3D low_limit &&
+-		    gap_end > gap_start && gap_end - gap_start >=3D length)
+-			goto found;
+-
+-		/* Visit right subtree if it looks promising */
+-		if (vma->vm_rb.rb_right) {
+-			struct vm_area_struct *right =3D
+-				rb_entry(vma->vm_rb.rb_right,
+-					 struct vm_area_struct, vm_rb);
+-			if (right->rb_subtree_gap >=3D length) {
+-				vma =3D right;
+-				continue;
+-			}
+-		}
+-
+-		/* Go back up the rbtree to find next candidate node */
+-		while (true) {
+-			struct rb_node *prev =3D &vma->vm_rb;
+-			if (!rb_parent(prev))
+-				goto check_highest;
+-			vma =3D rb_entry(rb_parent(prev),
+-				       struct vm_area_struct, vm_rb);
+-			if (prev =3D=3D vma->vm_rb.rb_left) {
+-				gap_start =3D vm_end_gap(vma->vm_prev);
+-				gap_end =3D vm_start_gap(vma);
+-				goto check_current;
+-			}
+-		}
 -	}
-+	vma =3D mas_walk(&mas);
-+	*pprev =3D mas_prev(&mas, 0);
-+	if (!vma)
-+		vma =3D mas_next(&mas, ULONG_MAX);
- 	return vma;
+-
+-check_highest:
+-	/* Check highest gap, which does not precede any rbtree node */
+-	gap_start =3D mm->highest_vm_end;
+-	gap_end =3D ULONG_MAX;  /* Only for VM_BUG_ON below */
+-	if (gap_start > high_limit)
++	if (mas_empty_area(&mas, info->low_limit, info->high_limit - 1,
++				  length))
+ 		return -ENOMEM;
+=20
+-found:
+-	/* We found a suitable gap. Clip it with the original low_limit. */
+-	if (gap_start < info->low_limit)
+-		gap_start =3D info->low_limit;
+-
+-	/* Adjust gap address to the desired alignment */
+-	gap_start +=3D (info->align_offset - gap_start) & info->align_mask;
+-
+-	VM_BUG_ON(gap_start + info->length > info->high_limit);
+-	VM_BUG_ON(gap_start + info->length > gap_end);
+-
+-	VM_BUG_ON(gap !=3D gap_start);
+-	return gap_start;
++	gap =3D mas.index;
++	gap +=3D (info->align_offset - gap) & info->align_mask;
++	return gap;
  }
 =20
++/* unmapped_area_topdown() Find an area between the low_limit and the
++ * high_limit with * the correct alignment and offset at the highest avail=
+able
++ * address, all from * @info. Note: current->mm is used for the search.
++ *
++ * @info: The unmapped area information including the range (low_limit -
++ * hight_limit), the alignment offset and mask.
++ *
++ * Return: A memory address or -ENOMEM.
++ */
+ static unsigned long unmapped_area_topdown(struct vm_unmapped_area_info *i=
+nfo)
+ {
+-	struct mm_struct *mm =3D current->mm;
+-	struct vm_area_struct *vma =3D NULL;
+-	unsigned long length, low_limit, high_limit, gap_start, gap_end;
+-	unsigned long gap;
+-
+-	MA_STATE(mas, &mm->mm_mt, 0, 0);
+-	validate_mm_mt(mm);
++	unsigned long length, gap;
+=20
++	MA_STATE(mas, &current->mm->mm_mt, 0, 0);
+ 	/* Adjust search length to account for worst case alignment overhead */
+ 	length =3D info->length + info->align_mask;
+ 	if (length < info->length)
+ 		return -ENOMEM;
+=20
+-	mas_empty_area_rev(&mas, info->low_limit, info->high_limit - 1,
+-		   length);
+-	gap =3D mas.last + 1 - info->length;
+-	gap -=3D (gap - info->align_offset) & info->align_mask;
+-
+-	/*
+-	 * Adjust search limits by the desired length.
+-	 * See implementation comment at top of unmapped_area().
+-	 */
+-	gap_end =3D info->high_limit;
+-	if (gap_end < length)
+-		return -ENOMEM;
+-	high_limit =3D gap_end - length;
+-
+-	if (info->low_limit > high_limit)
++	if (mas_empty_area_rev(&mas, info->low_limit, info->high_limit - 1,
++				length))
+ 		return -ENOMEM;
+-	low_limit =3D info->low_limit + length;
+-
+-	/* Check highest gap, which does not precede any rbtree node */
+-	gap_start =3D mm->highest_vm_end;
+-	if (gap_start <=3D high_limit)
+-		goto found_highest;
+-
+-	/* Check if rbtree root looks promising */
+-	if (RB_EMPTY_ROOT(&mm->mm_rb))
+-		return -ENOMEM;
+-	vma =3D rb_entry(mm->mm_rb.rb_node, struct vm_area_struct, vm_rb);
+-	if (vma->rb_subtree_gap < length)
+-		return -ENOMEM;
+-
+-	while (true) {
+-		/* Visit right subtree if it looks promising */
+-		gap_start =3D vma->vm_prev ? vm_end_gap(vma->vm_prev) : 0;
+-		if (gap_start <=3D high_limit && vma->vm_rb.rb_right) {
+-			struct vm_area_struct *right =3D
+-				rb_entry(vma->vm_rb.rb_right,
+-					 struct vm_area_struct, vm_rb);
+-			if (right->rb_subtree_gap >=3D length) {
+-				vma =3D right;
+-				continue;
+-			}
+-		}
+-
+-check_current:
+-		/* Check if current node has a suitable gap */
+-		gap_end =3D vm_start_gap(vma);
+-		if (gap_end < low_limit)
+-			return -ENOMEM;
+-		if (gap_start <=3D high_limit &&
+-		    gap_end > gap_start && gap_end - gap_start >=3D length)
+-			goto found;
+-
+-		/* Visit left subtree if it looks promising */
+-		if (vma->vm_rb.rb_left) {
+-			struct vm_area_struct *left =3D
+-				rb_entry(vma->vm_rb.rb_left,
+-					 struct vm_area_struct, vm_rb);
+-			if (left->rb_subtree_gap >=3D length) {
+-				vma =3D left;
+-				continue;
+-			}
+-		}
+-
+-		/* Go back up the rbtree to find next candidate node */
+-		while (true) {
+-			struct rb_node *prev =3D &vma->vm_rb;
+-			if (!rb_parent(prev))
+-				return -ENOMEM;
+-			vma =3D rb_entry(rb_parent(prev),
+-				       struct vm_area_struct, vm_rb);
+-			if (prev =3D=3D vma->vm_rb.rb_right) {
+-				gap_start =3D vma->vm_prev ?
+-					vm_end_gap(vma->vm_prev) : 0;
+-				goto check_current;
+-			}
+-		}
+-	}
+-
+-found:
+-	/* We found a suitable gap. Clip it with the original high_limit. */
+-	if (gap_end > info->high_limit)
+-		gap_end =3D info->high_limit;
+-
+-found_highest:
+-	/* Compute highest gap address at the desired alignment */
+-	gap_end -=3D info->length;
+-	gap_end -=3D (gap_end - info->align_offset) & info->align_mask;
+-
+-	VM_BUG_ON(gap_end < info->low_limit);
+-	VM_BUG_ON(gap_end < gap_start);
+-
+-	if (gap !=3D gap_end) {
+-		pr_err("%s: %px Gap was found: mt %lu gap_end %lu\n", __func__,
+-		       mm, gap, gap_end);
+-		pr_err("window was %lu - %lu size %lu\n", info->high_limit,
+-		       info->low_limit, length);
+-		pr_err("mas.min %lu max %lu mas.last %lu\n", mas.min, mas.max,
+-		       mas.last);
+-		pr_err("mas.index %lu align mask %lu offset %lu\n", mas.index,
+-		       info->align_mask, info->align_offset);
+-		pr_err("rb_find_vma find on %lu =3D> %px (%px)\n", mas.index,
+-		       find_vma(mm, mas.index), vma);
+-#if defined(CONFIG_DEBUG_VM_MAPLE_TREE)
+-		mt_dump(&mm->mm_mt);
+-#endif
+-		{
+-			struct vm_area_struct *dv =3D mm->mmap;
+=20
+-			while (dv) {
+-				printk("vma %px %lu-%lu\n", dv, dv->vm_start, dv->vm_end);
+-				dv =3D dv->vm_next;
+-			}
+-		}
+-		VM_BUG_ON(gap !=3D gap_end);
+-	}
+-
+-	return gap_end;
++	gap =3D mas.last + 1 - info->length;
++	gap -=3D (gap - info->align_offset) & info->align_mask;
++	return gap;
+ }
+=20
+ /*
 --=20
 2.35.1

@@ -2,46 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1E7951A83B
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:07:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B30D51A6AF
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 18:54:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356560AbiEDRJ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 13:09:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38292 "EHLO
+        id S1354349AbiEDQ5w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 12:57:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355544AbiEDRAO (ORCPT
+        with ESMTP id S1349590AbiEDQyY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 13:00:14 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2674F4B849;
-        Wed,  4 May 2022 09:51:49 -0700 (PDT)
+        Wed, 4 May 2022 12:54:24 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7531A4968D;
+        Wed,  4 May 2022 09:49:36 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7018AB8279F;
-        Wed,  4 May 2022 16:51:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06BE9C385AA;
-        Wed,  4 May 2022 16:51:41 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 146896174C;
+        Wed,  4 May 2022 16:49:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 653FCC385A4;
+        Wed,  4 May 2022 16:49:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651683102;
-        bh=Q47rXhNzfck/KPKdxhbKGRwmlg2Gb/udeLwxXi3qXtk=;
+        s=korg; t=1651682975;
+        bh=L1Ds1EUngD0M7E8EcZPz2evcTmB11XeoOhit7RNR7g8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HBZj4PHHrugEh2SRi34FqcW/b8hmkp+FEI5UGzszFLb2b8QkA2RXDng6HNIscQziP
-         lQQjnH5EjkCVZDjwDC2f0El7xCzHC0mFzMANoOc3zjVogqqiGTpcE5hNomoxpwadpe
-         kxnHZSpVK7rlexTa2c6e/Jfea3VmOS+mF2zYsOoY=
+        b=ExOx4PC8GMGJev/cSHaKz283lrrtBp6k/9H7Wcssu5qWqP94MMaAz3aFm5V6kyOHN
+         W2EFKHXmkHgbf2FWBopCNsrjsE7M4SgvVE7GFR38s0ZnehJUzbZytD7pvHrpY9KUiq
+         Mq37SPCGjMw0ZZPfRDS2Y9M2TNCSL3yNX0M+chGs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Johannes Thumshirn <johannes.thumshirn@wdc.com>,
-        Hans Holmberg <hans.holmberg@wdc.com>
-Subject: [PATCH 5.10 106/129] zonefs: Fix management of open zones
-Date:   Wed,  4 May 2022 18:44:58 +0200
-Message-Id: <20220504153029.412540267@linuxfoundation.org>
+        stable@vger.kernel.org, Daniel Starke <daniel.starke@siemens.com>
+Subject: [PATCH 5.4 78/84] tty: n_gsm: fix insufficient txframe size
+Date:   Wed,  4 May 2022 18:44:59 +0200
+Message-Id: <20220504152933.672339990@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220504153021.299025455@linuxfoundation.org>
-References: <20220504153021.299025455@linuxfoundation.org>
+In-Reply-To: <20220504152927.744120418@linuxfoundation.org>
+References: <20220504152927.744120418@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,126 +53,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+From: Daniel Starke <daniel.starke@siemens.com>
 
-commit 1da18a296f5ba4f99429e62a7cf4fdbefa598902 upstream.
+commit 535bf600de75a859698892ee873521a48d289ec1 upstream.
 
-The mount option "explicit_open" manages the device open zone
-resources to ensure that if an application opens a sequential file for
-writing, the file zone can always be written by explicitly opening
-the zone and accounting for that state with the s_open_zones counter.
+n_gsm is based on the 3GPP 07.010 and its newer version is the 3GPP 27.010.
+See https://portal.3gpp.org/desktopmodules/Specifications/SpecificationDetails.aspx?specificationId=1516
+The changes from 07.010 to 27.010 are non-functional. Therefore, I refer to
+the newer 27.010 here. Chapter 5.7.2 states that the maximum frame size
+(N1) refers to the length of the information field (i.e. user payload).
+However, 'txframe' stores the whole frame including frame header, checksum
+and start/end flags. We also need to consider the byte stuffing overhead.
+Define constant for the protocol overhead and adjust the 'txframe' size
+calculation accordingly to reserve enough space for a complete mux frame
+including byte stuffing for advanced option mode. Note that no byte
+stuffing is applied to the start and end flag.
+Also use MAX_MTU instead of MAX_MRU as this buffer is used for data
+transmission.
 
-However, if some zones are already open when mounting, the device open
-zone resource usage status will be larger than the initial s_open_zones
-value of 0. Ensure that this inconsistency does not happen by closing
-any sequential zone that is open when mounting.
-
-Furthermore, with ZNS drives, closing an explicitly open zone that has
-not been written will change the zone state to "closed", that is, the
-zone will remain in an active state. Since this can then cause failures
-of explicit open operations on other zones if the drive active zone
-resources are exceeded, we need to make sure that the zone is not
-active anymore by resetting it instead of closing it. To address this,
-zonefs_zone_mgmt() is modified to change a REQ_OP_ZONE_CLOSE request
-into a REQ_OP_ZONE_RESET for sequential zones that have not been
-written.
-
-Fixes: b5c00e975779 ("zonefs: open/close zone on file open/close")
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Reviewed-by: Johannes Thumshirn <johannes.thumshirn@wdc.com>
-Reviewed-by: Hans Holmberg <hans.holmberg@wdc.com>
+Fixes: e1eaea46bb40 ("tty: n_gsm line discipline")
+Cc: stable@vger.kernel.org
+Signed-off-by: Daniel Starke <daniel.starke@siemens.com>
+Link: https://lore.kernel.org/r/20220414094225.4527-8-daniel.starke@siemens.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/zonefs/super.c |   45 ++++++++++++++++++++++++++++++++++++++++-----
- 1 file changed, 40 insertions(+), 5 deletions(-)
+ drivers/tty/n_gsm.c |    4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
---- a/fs/zonefs/super.c
-+++ b/fs/zonefs/super.c
-@@ -32,6 +32,17 @@ static inline int zonefs_zone_mgmt(struc
+--- a/drivers/tty/n_gsm.c
++++ b/drivers/tty/n_gsm.c
+@@ -72,6 +72,8 @@ module_param(debug, int, 0600);
+  */
+ #define MAX_MRU 1500
+ #define MAX_MTU 1500
++/* SOF, ADDR, CTRL, LEN1, LEN2, ..., FCS, EOF */
++#define PROT_OVERHEAD 7
+ #define	GSM_NET_TX_TIMEOUT (HZ*10)
  
- 	lockdep_assert_held(&zi->i_truncate_mutex);
- 
-+	/*
-+	 * With ZNS drives, closing an explicitly open zone that has not been
-+	 * written will change the zone state to "closed", that is, the zone
-+	 * will remain active. Since this can then cause failure of explicit
-+	 * open operation on other zones if the drive active zone resources
-+	 * are exceeded, make sure that the zone does not remain active by
-+	 * resetting it.
-+	 */
-+	if (op == REQ_OP_ZONE_CLOSE && !zi->i_wpoffset)
-+		op = REQ_OP_ZONE_RESET;
-+
- 	ret = blkdev_zone_mgmt(inode->i_sb->s_bdev, op, zi->i_zsector,
- 			       zi->i_zone_size >> SECTOR_SHIFT, GFP_NOFS);
- 	if (ret) {
-@@ -1306,12 +1317,13 @@ static void zonefs_init_dir_inode(struct
- 	inc_nlink(parent);
- }
- 
--static void zonefs_init_file_inode(struct inode *inode, struct blk_zone *zone,
--				   enum zonefs_ztype type)
-+static int zonefs_init_file_inode(struct inode *inode, struct blk_zone *zone,
-+				  enum zonefs_ztype type)
- {
- 	struct super_block *sb = inode->i_sb;
- 	struct zonefs_sb_info *sbi = ZONEFS_SB(sb);
- 	struct zonefs_inode_info *zi = ZONEFS_I(inode);
-+	int ret = 0;
- 
- 	inode->i_ino = zone->start >> sbi->s_zone_sectors_shift;
- 	inode->i_mode = S_IFREG | sbi->s_perm;
-@@ -1336,6 +1348,22 @@ static void zonefs_init_file_inode(struc
- 	sb->s_maxbytes = max(zi->i_max_size, sb->s_maxbytes);
- 	sbi->s_blocks += zi->i_max_size >> sb->s_blocksize_bits;
- 	sbi->s_used_blocks += zi->i_wpoffset >> sb->s_blocksize_bits;
-+
-+	/*
-+	 * For sequential zones, make sure that any open zone is closed first
-+	 * to ensure that the initial number of open zones is 0, in sync with
-+	 * the open zone accounting done when the mount option
-+	 * ZONEFS_MNTOPT_EXPLICIT_OPEN is used.
-+	 */
-+	if (type == ZONEFS_ZTYPE_SEQ &&
-+	    (zone->cond == BLK_ZONE_COND_IMP_OPEN ||
-+	     zone->cond == BLK_ZONE_COND_EXP_OPEN)) {
-+		mutex_lock(&zi->i_truncate_mutex);
-+		ret = zonefs_zone_mgmt(inode, REQ_OP_ZONE_CLOSE);
-+		mutex_unlock(&zi->i_truncate_mutex);
-+	}
-+
-+	return ret;
- }
- 
- static struct dentry *zonefs_create_inode(struct dentry *parent,
-@@ -1345,6 +1373,7 @@ static struct dentry *zonefs_create_inod
- 	struct inode *dir = d_inode(parent);
- 	struct dentry *dentry;
- 	struct inode *inode;
-+	int ret;
- 
- 	dentry = d_alloc_name(parent, name);
- 	if (!dentry)
-@@ -1355,10 +1384,16 @@ static struct dentry *zonefs_create_inod
- 		goto dput;
- 
- 	inode->i_ctime = inode->i_mtime = inode->i_atime = dir->i_ctime;
--	if (zone)
--		zonefs_init_file_inode(inode, zone, type);
--	else
-+	if (zone) {
-+		ret = zonefs_init_file_inode(inode, zone, type);
-+		if (ret) {
-+			iput(inode);
-+			goto dput;
-+		}
-+	} else {
- 		zonefs_init_dir_inode(dir, inode, type);
-+	}
-+
- 	d_add(dentry, inode);
- 	dir->i_size++;
- 
+ /**
+@@ -2209,7 +2211,7 @@ static struct gsm_mux *gsm_alloc_mux(voi
+ 		kfree(gsm);
+ 		return NULL;
+ 	}
+-	gsm->txframe = kmalloc(2 * MAX_MRU + 2, GFP_KERNEL);
++	gsm->txframe = kmalloc(2 * (MAX_MTU + PROT_OVERHEAD - 1), GFP_KERNEL);
+ 	if (gsm->txframe == NULL) {
+ 		kfree(gsm->buf);
+ 		kfree(gsm);
 
 

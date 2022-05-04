@@ -2,123 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D51A651ACE0
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 20:32:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CC5351ACE1
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 20:32:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377153AbiEDSfl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 14:35:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33754 "EHLO
+        id S1376572AbiEDSfp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 14:35:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376981AbiEDSf2 (ORCPT
+        with ESMTP id S1376885AbiEDSfd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 14:35:28 -0400
-Received: from out03.mta.xmission.com (out03.mta.xmission.com [166.70.13.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53A7653B71;
-        Wed,  4 May 2022 11:16:12 -0700 (PDT)
-Received: from in02.mta.xmission.com ([166.70.13.52]:60554)
-        by out03.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1nmJXm-00DeTi-SS; Wed, 04 May 2022 12:16:10 -0600
-Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:36950 helo=email.froward.int.ebiederm.org.xmission.com)
-        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1nmJXl-00F03n-L3; Wed, 04 May 2022 12:16:10 -0600
-From:   "Eric W. Biederman" <ebiederm@xmission.com>
-To:     Seth Forshee <sforshee@digitalocean.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Petr Mladek <pmladek@suse.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Jens Axboe <axboe@kernel.dk>, linux-kernel@vger.kernel.org,
-        live-patching@vger.kernel.org, kvm@vger.kernel.org
-References: <20220504180840.2907296-1-sforshee@digitalocean.com>
-Date:   Wed, 04 May 2022 13:16:02 -0500
-In-Reply-To: <20220504180840.2907296-1-sforshee@digitalocean.com> (Seth
-        Forshee's message of "Wed, 4 May 2022 13:08:40 -0500")
-Message-ID: <878rrhcgf1.fsf@email.froward.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Wed, 4 May 2022 14:35:33 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BC191A3BD;
+        Wed,  4 May 2022 11:17:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=fYp0BOiD+C24TtJjB9MQVKfavo5e/DtHm95cJy4DbxU=; b=jktudGa0GlSGUnEIdc7B/i3nRo
+        aTaP/+FLn4ejbVko9j1F73n/pcrF4T6ASSPXNGzVgzFykrvCNuwponWSaSqcVi3g+hBUAUo38I/X8
+        Q/dbf/KBrXuoJxgDMHgmbzeZL9tDa7t/LmNnIXkyCfU73Yw/pvfBinNEsn2Vw6K6489LC7LtC1h8E
+        Nq0fSQCkMAgGI2rl2yRZ1t6gdj9OFN1XObV1o65leiDFiYRWwtFCss9Zpx+ZVw1bo5BTJVhFy35zg
+        TU03FSjwdoE6QVIEzkT9P4A6R3RuJc/TG+NsWAoLd7DN0RoTthchU7hU8ey1JVsrE9c1e9EtiG6Er
+        bFlGUjSg==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nmJYa-00B8Vh-Jx; Wed, 04 May 2022 18:17:00 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id F22D03003AA;
+        Wed,  4 May 2022 20:16:57 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id CF03A20277373; Wed,  4 May 2022 20:16:57 +0200 (CEST)
+Date:   Wed, 4 May 2022 20:16:57 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Peter Collingbourne <pcc@google.com>
+Cc:     Josh Poimboeuf <jpoimboe@redhat.com>,
+        Joao Moreira <joao@overdrivepizza.com>,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
+        andrew.cooper3@citrix.com, keescook@chromium.org,
+        samitolvanen@google.com, mark.rutland@arm.com, hjl.tools@gmail.com,
+        alyssa.milburn@linux.intel.com, ndesaulniers@google.com,
+        gabriel.gomes@linux.intel.com, rick.p.edgecombe@intel.com
+Subject: Re: [RFC PATCH 01/11] x86: kernel FineIBT
+Message-ID: <YnLDGcJGKfqi5+8w@hirez.programming.kicks-ass.net>
+References: <20220420004241.2093-1-joao@overdrivepizza.com>
+ <20220420004241.2093-2-joao@overdrivepizza.com>
+ <20220429013704.4n4lmadpstdioe7a@treble>
+ <d82459b887bcaf9181ad836051e2d16b@overdrivepizza.com>
+ <20220503220244.vyz5flk3gg3y6rbw@treble>
+ <YnJTYzralOhGGmED@hirez.programming.kicks-ass.net>
+ <YnKx5a9WvJ1UhWPm@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1nmJXl-00F03n-L3;;;mid=<878rrhcgf1.fsf@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=softfail
-X-XM-AID: U2FsdGVkX19xSYDYzW0+xU2ATA3vhYA4gZqv0as7Rxc=
-X-SA-Exim-Connect-IP: 68.227.174.4
-X-SA-Exim-Mail-From: ebiederm@xmission.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YnKx5a9WvJ1UhWPm@google.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
-X-Spam-DCC: XMission; sa08 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: ***;Seth Forshee <sforshee@digitalocean.com>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 627 ms - load_scoreonly_sql: 0.10 (0.0%),
-        signal_user_changed: 13 (2.0%), b_tie_ro: 11 (1.7%), parse: 1.21
-        (0.2%), extract_message_metadata: 22 (3.4%), get_uri_detail_list: 1.97
-        (0.3%), tests_pri_-1000: 34 (5.4%), tests_pri_-950: 1.52 (0.2%),
-        tests_pri_-900: 1.27 (0.2%), tests_pri_-90: 223 (35.6%), check_bayes:
-        214 (34.1%), b_tokenize: 10 (1.7%), b_tok_get_all: 9 (1.4%),
-        b_comp_prob: 2.6 (0.4%), b_tok_touch_all: 186 (29.7%), b_finish: 1.47
-        (0.2%), tests_pri_0: 314 (50.0%), check_dkim_signature: 0.52 (0.1%),
-        check_dkim_adsp: 2.9 (0.5%), poll_dns_idle: 0.98 (0.2%), tests_pri_10:
-        3.0 (0.5%), tests_pri_500: 11 (1.8%), rewrite_mail: 0.00 (0.0%)
-Subject: Re: [PATCH] entry/kvm: Exit to user mode when TIF_NOTIFY_SIGNAL is set
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Seth Forshee <sforshee@digitalocean.com> writes:
+On Wed, May 04, 2022 at 10:04:02AM -0700, Peter Collingbourne wrote:
+> On Wed, May 04, 2022 at 12:20:19PM +0200, Peter Zijlstra wrote:
+> > On Tue, May 03, 2022 at 03:02:44PM -0700, Josh Poimboeuf wrote:
+> > 
+> > > I'm not really qualified to comment on this too directly since I haven't
+> > > looked very much at the variations on FineIBT/CFI/KCFI, and what the
+> > > protections and drawbacks are for each approach, and when it might even
+> > > make sense to combine them for a "paranoid user".
+> > > 
+> > > Since we have multiple similar and possibly competing technologies being
+> > > discussed, one thing I do want to warn against is that we as kernel
+> > > developers tend to err on the side of giving people too many choices and
+> > > combinations which *never* get used.
+> > 
+> > So I don't think there's going to be a user choice here. If there's
+> > hardware support, FineIBT makes more sense. That also means that kCFI no
+> > longer needs to worry about IBT.
+> > 
+> > If we do something like:
+> > 
+> > 
+> >         kCFI                                            FineIBT
+> > 
+> > __cfi_\sym:                                     __cfi_\sym:
+> >         endbr                           # 4             endbr                   # 4
+> >         sub $hash, %r10                 # 7             sub $hash, %r10         # 7
+> >         je \sym                         # 2             je \sym                 # 2
+> >         ud2                             # 2             ud2                     # 2
+> > \sym:                                           \sym:
+> > 
+> > 
+> > caller:                                         caller:
+> >         cmpl $hash, -8(%r11)            # 8             movl $hash, %r10d       # 6
+> >         je 1f                           # 2             sub 15, %r11            # 4
+> >         ud2                             # 2             call *%r11              # 3
+> > 1:      call __x86_indirect_thunk_r11   # 5             .nop 4                  # 4 (could even fix up r11 again)
+> > 
+> > 
+> > Then, all that's required is a slight tweak to apply_retpolines() to
+> > rewrite a little more text.
+> > 
+> > Note that this also does away with having to fix up the linker, since
+> > all direct call will already point at \sym. It's just the IBT indirect
+> > calls that need to frob the pointer in order to hit the ENDBR.
+> > 
+> > On top of that, we no longer have to special case the objtool
+> > instruction decoder, the prelude are proper instructions now.
+> 
+> For kCFI this brings back the gadget problem that I mentioned here:
+> https://lore.kernel.org/all/Yh7fLRYl8KgMcOe5@google.com/
+> 
+> because the hash at the call site is 8 bytes before the call
+> instruction.
 
-> A livepatch transition may stall indefinitely when a kvm vCPU is heavily
-> loaded. To the host, the vCPU task is a user thread which is spending a
-> very long time in the ioctl(KVM_RUN) syscall. During livepatch
-> transition, set_notify_signal() will be called on such tasks to
-> interrupt the syscall so that the task can be transitioned. This
-> interrupts guest execution, but when xfer_to_guest_mode_work() sees that
-> TIF_NOTIFY_SIGNAL is set but not TIF_SIGPENDING it concludes that an
-> exit to user mode is unnecessary, and guest execution is resumed without
-> transitioning the task for the livepatch.
->
-> This handling of TIF_NOTIFY_SIGNAL is incorrect, as set_notify_signal()
-> is expected to break tasks out of interruptible kernel loops and cause
-> them to return to userspace. Change xfer_to_guest_mode_work() to handle
-> TIF_NOTIFY_SIGNAL the same as TIF_SIGPENDING, signaling to the vCPU run
-> loop that an exit to userpsace is needed. Any pending task_work will be
-> run when get_signal() is called from exit_to_user_mode_loop(), so there
-> is no longer any need to run task work from xfer_to_guest_mode_work().
->
-> Suggested-by: "Eric W. Biederman" <ebiederm@xmission.com>
-> Cc: Petr Mladek <pmladek@suse.com>
-> Signed-off-by: Seth Forshee <sforshee@digitalocean.com>
+Damn, I forgot about that. Too subtle :-/
 
-Acked-by: "Eric W. Biederman" <ebiederm@xmission.com>
+So Joao had another crazy idea, lemme diagram that to see if it works.
 
-> ---
->  kernel/entry/kvm.c | 6 ------
->  1 file changed, 6 deletions(-)
->
-> diff --git a/kernel/entry/kvm.c b/kernel/entry/kvm.c
-> index 9d09f489b60e..2e0f75bcb7fd 100644
-> --- a/kernel/entry/kvm.c
-> +++ b/kernel/entry/kvm.c
-> @@ -9,12 +9,6 @@ static int xfer_to_guest_mode_work(struct kvm_vcpu *vcpu, unsigned long ti_work)
->  		int ret;
->  
->  		if (ti_work & (_TIF_SIGPENDING | _TIF_NOTIFY_SIGNAL)) {
-> -			clear_notify_signal();
-> -			if (task_work_pending(current))
-> -				task_work_run();
-> -		}
-> -
-> -		if (ti_work & _TIF_SIGPENDING) {
->  			kvm_handle_signal_exit(vcpu);
->  			return -EINTR;
->  		}
+(sorry I inverted the order by accident)
+
+
+	FineIBT						kCFI
+
+__fineibt_\hash:
+	xor	\hash, %r10	# 7
+	jz	1f		# 2
+	ud2			# 2
+1:	ret			# 1
+	int3			# 1
+
+
+__cfi_\sym:					__cfi_\sym:
+							int3; int3				# 2
+	endbr			# 4			mov	\hash, %eax			# 5
+	call	__fineibt_\hash	# 5			int3; int3				# 2
+\sym:						\sym:
+	...						...
+
+
+caller:						caller:
+	movl	\hash, %r10d	# 6			cmpl	\hash, -6(%r11)			# 8
+	sub	$9, %r11	# 4			je	1f				# 2
+	call	*%r11		# 3			ud2					# 2
+	.nop 4			# 4 (or fixup r11)	call	__x86_indirect_thunk_r11	# 5
+
+
+This way we also need to patch the __cfi_\sym contents, but we get a
+little extra room to place the constant for kCFI in a suitable location.
+
+It seems to preserve the properties of the last one in that direct calls
+will already be correct and we don't need linker fixups, and objtool can
+simply parse the preamble as regular instructions without needing
+further help.

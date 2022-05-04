@@ -2,248 +2,257 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C49551969C
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 06:35:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21E7151969F
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 06:36:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344646AbiEDEjR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 00:39:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34768 "EHLO
+        id S1344613AbiEDEjv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 00:39:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344640AbiEDEjJ (ORCPT
+        with ESMTP id S239660AbiEDEjs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 00:39:09 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC5C7286CE;
-        Tue,  3 May 2022 21:35:33 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        Wed, 4 May 2022 00:39:48 -0400
+Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93CF52AC77
+        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 21:36:12 -0700 (PDT)
+Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KtPC76Bztz4xXS;
-        Wed,  4 May 2022 14:35:31 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1651638932;
-        bh=Lwpt2YAf94ZssHK33ggxc9hH3jIHEy1ocLjWOJ6bvto=;
-        h=Date:From:To:Cc:Subject:From;
-        b=XRgpf6ZtBSYYMQCtPGctIVd469wTiDThSQy0Y2vIcp8ljP/mCFxFBi2DffBiuam22
-         3W/PGzfx+1mZA+QxwpocSYFUvFTmErLB7RPG7PhUPQtTUK/+zCZZBPHAyyEFkTqmVa
-         QZA/8msMN14OLAji5AX+qFtZi3RQ+s9g2oPdlkew8sxX83EpbIaDBaco71W/Ya/7Jo
-         O4HEPErdTk6JdoeYt2Zi4d5ocF/qKkrl1xT41ILifacJpbxC36FWpr/UzEit0bAYj8
-         8uRpHnPaycY4SGtK7+RZmxHlfNvITIsh5y4ut6H58aDl9NAYrDzmj8Gn1q4V/QYTaX
-         5h1Op87kcjOLA==
-Date:   Wed, 4 May 2022 14:35:29 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Christoffer Dall <cdall@cs.columbia.edu>,
-        Marc Zyngier <maz@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>
-Cc:     Alexandru Elisei <alexandru.elisei@arm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Oliver Upton <oupton@google.com>
-Subject: linux-next: manual merge of the kvm-arm tree with the arm64 tree
-Message-ID: <20220504143529.4060ab27@canb.auug.org.au>
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 2F06E2C019D;
+        Wed,  4 May 2022 04:36:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+        s=mail181024; t=1651638969;
+        bh=6FaGZa12henirzB20VLIIITZhWvMCD3N+Hr2xV6HwkA=;
+        h=From:To:Cc:Subject:Date:From;
+        b=pXa8nFmOsz5ACdbxOqrdY831y533w4h6UrXbxl/D8w3rm/qQ+PqjLKwxDAMJl0WDN
+         od0Jg7ct7+n20ItIsmkKlxqWyazL5IQtINwLDr9QqmMepLcaI2VYoGZSESjl52ke5R
+         cDUK1W1t9WR497KMayQ/9+vDlWQDiersV0RrHhbEiohLFwXy+Dp7gqKw5zjsMZTZKG
+         xfpeU6eSCUF1HFVnTli8gvBvvn8WctVNBRIYTIupBLJr7kTNfBz7G3SSuWNYBX/Qk2
+         CKpdunXUtW7GJ1s530f2TTiiV6u2gLTZ0Su7MuhQaAimIQTnPyOXW0QnqhHKsldgrO
+         TufeB7WUjgU6g==
+Received: from pat.atlnz.lc (Not Verified[10.32.16.33]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+        id <B627202b80000>; Wed, 04 May 2022 16:36:08 +1200
+Received: from chrisp-dl.ws.atlnz.lc (chrisp-dl.ws.atlnz.lc [10.33.22.30])
+        by pat.atlnz.lc (Postfix) with ESMTP id E0B4013ED63;
+        Wed,  4 May 2022 16:36:08 +1200 (NZST)
+Received: by chrisp-dl.ws.atlnz.lc (Postfix, from userid 1030)
+        id DAAF02A1FA9; Wed,  4 May 2022 16:36:08 +1200 (NZST)
+From:   Chris Packham <chris.packham@alliedtelesis.co.nz>
+To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, atenart@kernel.org,
+        thomas.petazzoni@free-electrons.com, f.fainelli@gmail.com
+Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Chris Packham <chris.packham@alliedtelesis.co.nz>
+Subject: [PATCH] dt-bindings: net: orion-mdio: Convert to JSON schema
+Date:   Wed,  4 May 2022 16:36:02 +1200
+Message-Id: <20220504043603.949134-1-chris.packham@alliedtelesis.co.nz>
+X-Mailer: git-send-email 2.36.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_//As/j5NUBIcBnypeF6vBGI4";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-SEG-SpamProfiler-Analysis: v=2.3 cv=C7GXNjH+ c=1 sm=1 tr=0 a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=oZkIemNP1mAA:10 a=gEfo2CItAAAA:8 a=VwQbUJbxAAAA:8 a=uP1ucDPQAAAA:8 a=pGLkceISAAAA:8 a=DUOwM17OdgdjODy0UN4A:9 a=sptkURWiP4Gy88Gu7hUp:22 a=AjGcO6oz07-iQ99wixmX:22 a=9a9ggB8z3XFZH39hjkD6:22
+X-SEG-SpamProfiler-Score: 0
+x-atlnz-ls: pat
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_//As/j5NUBIcBnypeF6vBGI4
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Convert the marvell,orion-mdio binding to JSON schema.
 
-Hi all,
+Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
+---
 
-Today's linux-next merge of the kvm-arm tree got a conflict in:
+Notes:
+    Thomas, Antione & Florian I hope you don't mind me putting you as
+    maintainers of the binding. Between you you've written the majority o=
+f
+    the mvmdio.c driver.
+   =20
+    This does throw up the following dtbs_check warnings for turris-mox:
+   =20
+    arch/arm64/boot/dts/marvell/armada-3720-turris-mox.dtb: mdio@32004: s=
+witch0@10:reg: [[16], [0]] is too long
+            From schema: Documentation/devicetree/bindings/net/marvell,or=
+ion-mdio.yaml
+    arch/arm64/boot/dts/marvell/armada-3720-turris-mox.dtb: mdio@32004: s=
+witch0@2:reg: [[2], [0]] is too long
+            From schema: Documentation/devicetree/bindings/net/marvell,or=
+ion-mdio.yaml
+    arch/arm64/boot/dts/marvell/armada-3720-turris-mox.dtb: mdio@32004: s=
+witch1@11:reg: [[17], [0]] is too long
+            From schema: Documentation/devicetree/bindings/net/marvell,or=
+ion-mdio.yaml
+    arch/arm64/boot/dts/marvell/armada-3720-turris-mox.dtb: mdio@32004: s=
+witch1@2:reg: [[2], [0]] is too long
+            From schema: Documentation/devicetree/bindings/net/marvell,or=
+ion-mdio.yaml
+    arch/arm64/boot/dts/marvell/armada-3720-turris-mox.dtb: mdio@32004: s=
+witch2@12:reg: [[18], [0]] is too long
+            From schema: Documentation/devicetree/bindings/net/marvell,or=
+ion-mdio.yaml
+    arch/arm64/boot/dts/marvell/armada-3720-turris-mox.dtb: mdio@32004: s=
+witch2@2:reg: [[2], [0]] is too long
+            From schema: Documentation/devicetree/bindings/net/marvell,or=
+ion-mdio.yaml
+   =20
+    I think they're all genuine but I'm hesitant to leap in and fix them
+    without being able to test them.
+   =20
+    I also need to set unevaluatedProperties: true to cater for the L2
+    switch on turris-mox (and probably others). That might be better tack=
+led
+    in the core mdio.yaml schema but I wasn't planning on touching that.
 
-  arch/arm64/kvm/sys_regs.c
+ .../bindings/net/marvell,orion-mdio.yaml      | 62 +++++++++++++++++++
+ .../bindings/net/marvell-orion-mdio.txt       | 54 ----------------
+ 2 files changed, 62 insertions(+), 54 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/net/marvell,orion-m=
+dio.yaml
+ delete mode 100644 Documentation/devicetree/bindings/net/marvell-orion-m=
+dio.txt
 
-between commit:
-
-  0b12620fddb8 ("KVM: arm64: Treat ESR_EL2 as a 64-bit register")
-
-from the arm64 tree and commits:
-
-  e65197666773 ("KVM: arm64: Wire up CP15 feature registers to their AArch6=
-4 equivalents")
-  9369bc5c5e35 ("KVM: arm64: Plumb cp10 ID traps through the AArch64 sysreg=
- handler")
-
-from the kvm-arm tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
+diff --git a/Documentation/devicetree/bindings/net/marvell,orion-mdio.yam=
+l b/Documentation/devicetree/bindings/net/marvell,orion-mdio.yaml
+new file mode 100644
+index 000000000000..43cd896a0851
+--- /dev/null
++++ b/Documentation/devicetree/bindings/net/marvell,orion-mdio.yaml
+@@ -0,0 +1,62 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/net/marvell,orion-mdio.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Marvell MDIO Ethernet Controller interface
++
++maintainers:
++  - Antoine Tenart <atenart@kernel.org>
++  - Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++  - Florian Fainelli <f.fainelli@gmail.com>
++
++description: |
++  The Ethernet controllers of the Marvel Kirkwood, Dove, Orion5x, MV78xx=
+0,
++  Armada 370, Armada XP, Armada 7k and Armada 8k have an identical unit =
+that
++  provides an interface with the MDIO bus. Additionally, Armada 7k and A=
+rmada
++  8k has a second unit which provides an interface with the xMDIO bus. T=
+his
++  driver handles these interfaces.
++
++allOf:
++  - $ref: "mdio.yaml#"
++
++properties:
++  compatible:
++    enum:
++      - marvell,orion-mdio
++      - marvell,xmdio
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++  clocks:
++    minItems: 1
++    maxItems: 4
++
++required:
++  - compatible
++  - reg
++
++unevaluatedProperties: true
++
++examples:
++  - |
++    mdio@d0072004 {
++      compatible =3D "marvell,orion-mdio";
++      reg =3D <0xd0072004 0x4>;
++      #address-cells =3D <1>;
++      #size-cells =3D <0>;
++      interrupts =3D <30>;
++
++      phy0: ethernet-phy@0 {
++        reg =3D <0>;
++      };
++
++      phy1: ethernet-phy@1 {
++        reg =3D <1>;
++      };
++    };
+diff --git a/Documentation/devicetree/bindings/net/marvell-orion-mdio.txt=
+ b/Documentation/devicetree/bindings/net/marvell-orion-mdio.txt
+deleted file mode 100644
+index 3f3cfc1d8d4d..000000000000
+--- a/Documentation/devicetree/bindings/net/marvell-orion-mdio.txt
++++ /dev/null
+@@ -1,54 +0,0 @@
+-* Marvell MDIO Ethernet Controller interface
+-
+-The Ethernet controllers of the Marvel Kirkwood, Dove, Orion5x,
+-MV78xx0, Armada 370, Armada XP, Armada 7k and Armada 8k have an
+-identical unit that provides an interface with the MDIO bus.
+-Additionally, Armada 7k and Armada 8k has a second unit which
+-provides an interface with the xMDIO bus. This driver handles
+-these interfaces.
+-
+-Required properties:
+-- compatible: "marvell,orion-mdio" or "marvell,xmdio"
+-- reg: address and length of the MDIO registers.  When an interrupt is
+-  not present, the length is the size of the SMI register (4 bytes)
+-  otherwise it must be 0x84 bytes to cover the interrupt control
+-  registers.
+-
+-Optional properties:
+-- interrupts: interrupt line number for the SMI error/done interrupt
+-- clocks: phandle for up to four required clocks for the MDIO instance
+-
+-The child nodes of the MDIO driver are the individual PHY devices
+-connected to this MDIO bus. They must have a "reg" property given the
+-PHY address on the MDIO bus.
+-
+-Example at the SoC level without an interrupt property:
+-
+-mdio {
+-	#address-cells =3D <1>;
+-	#size-cells =3D <0>;
+-	compatible =3D "marvell,orion-mdio";
+-	reg =3D <0xd0072004 0x4>;
+-};
+-
+-Example with an interrupt property:
+-
+-mdio {
+-	#address-cells =3D <1>;
+-	#size-cells =3D <0>;
+-	compatible =3D "marvell,orion-mdio";
+-	reg =3D <0xd0072004 0x84>;
+-	interrupts =3D <30>;
+-};
+-
+-And at the board level:
+-
+-mdio {
+-	phy0: ethernet-phy@0 {
+-		reg =3D <0>;
+-	};
+-
+-	phy1: ethernet-phy@1 {
+-		reg =3D <1>;
+-	};
+-}
 --=20
-Cheers,
-Stephen Rothwell
+2.36.0
 
-diff --cc arch/arm64/kvm/sys_regs.c
-index a4ef986adb5e,031d913cd79e..000000000000
---- a/arch/arm64/kvm/sys_regs.c
-+++ b/arch/arm64/kvm/sys_regs.c
-@@@ -2351,6 -2355,123 +2355,123 @@@ static int kvm_handle_cp_64(struct kvm_
-  	return 1;
-  }
- =20
-+ static bool emulate_sys_reg(struct kvm_vcpu *vcpu, struct sys_reg_params =
-*params);
-+=20
-+ /*
-+  * The CP10 ID registers are architecturally mapped to AArch64 feature
-+  * registers. Abuse that fact so we can rely on the AArch64 handler for a=
-ccesses
-+  * from AArch32.
-+  */
- -static bool kvm_esr_cp10_id_to_sys64(u32 esr, struct sys_reg_params *para=
-ms)
-++static bool kvm_esr_cp10_id_to_sys64(u64 esr, struct sys_reg_params *para=
-ms)
-+ {
-+ 	u8 reg_id =3D (esr >> 10) & 0xf;
-+ 	bool valid;
-+=20
-+ 	params->is_write =3D ((esr & 1) =3D=3D 0);
-+ 	params->Op0 =3D 3;
-+ 	params->Op1 =3D 0;
-+ 	params->CRn =3D 0;
-+ 	params->CRm =3D 3;
-+=20
-+ 	/* CP10 ID registers are read-only */
-+ 	valid =3D !params->is_write;
-+=20
-+ 	switch (reg_id) {
-+ 	/* MVFR0 */
-+ 	case 0b0111:
-+ 		params->Op2 =3D 0;
-+ 		break;
-+ 	/* MVFR1 */
-+ 	case 0b0110:
-+ 		params->Op2 =3D 1;
-+ 		break;
-+ 	/* MVFR2 */
-+ 	case 0b0101:
-+ 		params->Op2 =3D 2;
-+ 		break;
-+ 	default:
-+ 		valid =3D false;
-+ 	}
-+=20
-+ 	if (valid)
-+ 		return true;
-+=20
-+ 	kvm_pr_unimpl("Unhandled cp10 register %s: %u\n",
-+ 		      params->is_write ? "write" : "read", reg_id);
-+ 	return false;
-+ }
-+=20
-+ /**
-+  * kvm_handle_cp10_id() - Handles a VMRS trap on guest access to a 'Media=
- and
-+  *			  VFP Register' from AArch32.
-+  * @vcpu: The vCPU pointer
-+  *
-+  * MVFR{0-2} are architecturally mapped to the AArch64 MVFR{0-2}_EL1 regi=
-sters.
-+  * Work out the correct AArch64 system register encoding and reroute to t=
-he
-+  * AArch64 system register emulation.
-+  */
-+ int kvm_handle_cp10_id(struct kvm_vcpu *vcpu)
-+ {
-+ 	int Rt =3D kvm_vcpu_sys_get_rt(vcpu);
- -	u32 esr =3D kvm_vcpu_get_esr(vcpu);
-++	u64 esr =3D kvm_vcpu_get_esr(vcpu);
-+ 	struct sys_reg_params params;
-+=20
-+ 	/* UNDEF on any unhandled register access */
-+ 	if (!kvm_esr_cp10_id_to_sys64(esr, &params)) {
-+ 		kvm_inject_undefined(vcpu);
-+ 		return 1;
-+ 	}
-+=20
-+ 	if (emulate_sys_reg(vcpu, &params))
-+ 		vcpu_set_reg(vcpu, Rt, params.regval);
-+=20
-+ 	return 1;
-+ }
-+=20
-+ /**
-+  * kvm_emulate_cp15_id_reg() - Handles an MRC trap on a guest CP15 access=
- where
-+  *			       CRn=3D0, which corresponds to the AArch32 feature
-+  *			       registers.
-+  * @vcpu: the vCPU pointer
-+  * @params: the system register access parameters.
-+  *
-+  * Our cp15 system register tables do not enumerate the AArch32 feature
-+  * registers. Conveniently, our AArch64 table does, and the AArch32 system
-+  * register encoding can be trivially remapped into the AArch64 for the f=
-eature
-+  * registers: Append op0=3D3, leaving op1, CRn, CRm, and op2 the same.
-+  *
-+  * According to DDI0487G.b G7.3.1, paragraph "Behavior of VMSAv8-32 32-bit
-+  * System registers with (coproc=3D0b1111, CRn=3D=3Dc0)", read accesses f=
-rom this
-+  * range are either UNKNOWN or RES0. Rerouting remains architectural as we
-+  * treat undefined registers in this range as RAZ.
-+  */
-+ static int kvm_emulate_cp15_id_reg(struct kvm_vcpu *vcpu,
-+ 				   struct sys_reg_params *params)
-+ {
-+ 	int Rt =3D kvm_vcpu_sys_get_rt(vcpu);
-+=20
-+ 	/* Treat impossible writes to RO registers as UNDEFINED */
-+ 	if (params->is_write) {
-+ 		unhandled_cp_access(vcpu, params);
-+ 		return 1;
-+ 	}
-+=20
-+ 	params->Op0 =3D 3;
-+=20
-+ 	/*
-+ 	 * All registers where CRm > 3 are known to be UNKNOWN/RAZ from AArch32.
-+ 	 * Avoid conflicting with future expansion of AArch64 feature registers
-+ 	 * and simply treat them as RAZ here.
-+ 	 */
-+ 	if (params->CRm > 3)
-+ 		params->regval =3D 0;
-+ 	else if (!emulate_sys_reg(vcpu, params))
-+ 		return 1;
-+=20
-+ 	vcpu_set_reg(vcpu, Rt, params->regval);
-+ 	return 1;
-+ }
-+=20
-  /**
-   * kvm_handle_cp_32 -- handles a mrc/mcr trap on a guest CP14/CP15 access
-   * @vcpu: The VCPU pointer
-
---Sig_//As/j5NUBIcBnypeF6vBGI4
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJyApEACgkQAVBC80lX
-0GyNxwgAo1vW8rb6UIQfGrbUWnkRxRABHdELAK09+HbcABM173W614BTrlycH8Pw
-E+h/s0D50pVrUv5va/4pYTbz00OP+iwIeINyo3sDugGUlfGrW3sBzp+qnB8Dnjmr
-IJ6KP0EE20RBoq2nndjjdBcjVtDatWwBctUmsvThTRpgxT3vPlb8sK7edpIjEG8N
-virdOI+HR6e6LPDY+25leJv9/6fwSflo+vN06ANg237Z/8lXnXGoj7wTWtL+IiKd
-ecexjUNdZH3Gi/Jdr+Xolw0SyV1/44VHjINhA+ROydQDsXwDRqVNn0LRxFblkZCQ
-dJbnGo/RD1XjCb3AWSSIawfdlX/r6g==
-=fwCP
------END PGP SIGNATURE-----
-
---Sig_//As/j5NUBIcBnypeF6vBGI4--

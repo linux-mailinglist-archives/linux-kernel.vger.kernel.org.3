@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E68251AB37
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:40:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD97F51AB3B
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:40:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358816AbiEDRn0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 13:43:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39258 "EHLO
+        id S1354126AbiEDRla (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 13:41:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350346AbiEDRLe (ORCPT
+        with ESMTP id S1357353AbiEDRKJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 13:11:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CF0E4B43B;
-        Wed,  4 May 2022 09:57:35 -0700 (PDT)
+        Wed, 4 May 2022 13:10:09 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B463B4AE0F;
+        Wed,  4 May 2022 09:57:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3AFC7618E5;
-        Wed,  4 May 2022 16:57:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84B1EC385A4;
-        Wed,  4 May 2022 16:57:32 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2AE8DB827A4;
+        Wed,  4 May 2022 16:57:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AFCC6C385AA;
+        Wed,  4 May 2022 16:57:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651683452;
-        bh=pW6duUgE0ONp/fmXIFWRgsBD9Qf0/KQK+IF84k6p0Mk=;
+        s=korg; t=1651683436;
+        bh=lhzlZLPEEXYW9Hm9o6P8qfPtCrZcAtQtbZGZWklwKYM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=b0TQMixklXnV9ZfRYaaGFKuEUNRdaiVVevzDgbG2Kc/7ATWzZwwClY/dw9/Dqxa8w
-         QYx6hbqqf03WidKD9Hd3tIIKoEzFq4qrnJQqqskFD3xrMtP+WxPwSs1IOVgakPhR8u
-         3ml7jfaSgN6NWjv87956DYkXta2bGbUYnd3/VmLE=
+        b=KWsTZRF8x8SQYFbTUFbtgLNEcPqB68mQoHTlyEhCFEwYtUGDn+T6q+cmWQSfqxlYa
+         gwE+VROTVvmfUn0cX8xxuuJGc/OgKS8BUjGT4qBj5GqGvnPdfByKeLGWai9N7usHFB
+         3isBLXN1+8/FyzezRwj9/VacC9iQqvyypscyv5K4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Peng Li <lipeng321@huawei.com>,
+        stable@vger.kernel.org, Jie Wang <wangjie125@huawei.com>,
         Guangbin Huang <huangguangbin2@huawei.com>,
         "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 115/225] net: hns3: fix error log of tx/rx tqps stats
-Date:   Wed,  4 May 2022 18:45:53 +0200
-Message-Id: <20220504153120.819339388@linuxfoundation.org>
+Subject: [PATCH 5.17 116/225] net: hns3: modify the return code of hclge_get_ring_chain_from_mbx
+Date:   Wed,  4 May 2022 18:45:54 +0200
+Message-Id: <20220504153120.895110552@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
 In-Reply-To: <20220504153110.096069935@linuxfoundation.org>
 References: <20220504153110.096069935@linuxfoundation.org>
@@ -56,44 +56,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peng Li <lipeng321@huawei.com>
+From: Jie Wang <wangjie125@huawei.com>
 
-[ Upstream commit 123521b6b260d901937d3fb598ab88d260c857a6 ]
+[ Upstream commit 48009e9972974c52a5f649f761862dd67bce3d13 ]
 
-The comments in function hclge_comm_tqps_update_stats is not right,
-so fix it.
+Currently, function hclge_get_ring_chain_from_mbx will return -ENOMEM if
+ring_num is bigger than HCLGE_MBX_MAX_RING_CHAIN_PARAM_NUM. It is better to
+return -EINVAL for the invalid parameter case.
 
-Fixes: 287db5c40d15 ("net: hns3: create new set of common tqp stats APIs for PF and VF reuse")
-Signed-off-by: Peng Li <lipeng321@huawei.com>
+So this patch fixes it by return -EINVAL in this abnormal branch.
+
+Fixes: 5d02a58dae60 ("net: hns3: fix for buffer overflow smatch warning")
+Signed-off-by: Jie Wang <wangjie125@huawei.com>
 Signed-off-by: Guangbin Huang <huangguangbin2@huawei.com>
 Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- .../hisilicon/hns3/hns3_common/hclge_comm_tqp_stats.c         | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_mbx.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/hisilicon/hns3/hns3_common/hclge_comm_tqp_stats.c b/drivers/net/ethernet/hisilicon/hns3/hns3_common/hclge_comm_tqp_stats.c
-index 0c60f41fca8a..f3c9395d8351 100644
---- a/drivers/net/ethernet/hisilicon/hns3/hns3_common/hclge_comm_tqp_stats.c
-+++ b/drivers/net/ethernet/hisilicon/hns3/hns3_common/hclge_comm_tqp_stats.c
-@@ -75,7 +75,7 @@ int hclge_comm_tqps_update_stats(struct hnae3_handle *handle,
- 		ret = hclge_comm_cmd_send(hw, &desc, 1);
- 		if (ret) {
- 			dev_err(&hw->cmq.csq.pdev->dev,
--				"failed to get tqp stat, ret = %d, tx = %u.\n",
-+				"failed to get tqp stat, ret = %d, rx = %u.\n",
- 				ret, i);
- 			return ret;
- 		}
-@@ -89,7 +89,7 @@ int hclge_comm_tqps_update_stats(struct hnae3_handle *handle,
- 		ret = hclge_comm_cmd_send(hw, &desc, 1);
- 		if (ret) {
- 			dev_err(&hw->cmq.csq.pdev->dev,
--				"failed to get tqp stat, ret = %d, rx = %u.\n",
-+				"failed to get tqp stat, ret = %d, tx = %u.\n",
- 				ret, i);
- 			return ret;
- 		}
+diff --git a/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_mbx.c b/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_mbx.c
+index 6799d16de34b..36cbafc5f944 100644
+--- a/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_mbx.c
++++ b/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_mbx.c
+@@ -176,7 +176,7 @@ static int hclge_get_ring_chain_from_mbx(
+ 	ring_num = req->msg.ring_num;
+ 
+ 	if (ring_num > HCLGE_MBX_MAX_RING_CHAIN_PARAM_NUM)
+-		return -ENOMEM;
++		return -EINVAL;
+ 
+ 	for (i = 0; i < ring_num; i++) {
+ 		if (req->msg.param[i].tqp_index >= vport->nic.kinfo.rss_size) {
 -- 
 2.35.1
 

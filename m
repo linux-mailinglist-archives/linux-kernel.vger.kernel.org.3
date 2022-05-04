@@ -2,266 +2,287 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CBF2519918
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 10:02:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6D5F519938
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 10:06:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346006AbiEDIFk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 04:05:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37286 "EHLO
+        id S1346021AbiEDIJu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 04:09:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345990AbiEDIFi (ORCPT
+        with ESMTP id S238588AbiEDIJp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 04:05:38 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A8291FA7E;
-        Wed,  4 May 2022 01:02:03 -0700 (PDT)
-Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2447g8aS001977;
-        Wed, 4 May 2022 08:02:03 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=zYiugQCEbla+glZIGRjMD7avsHWg9fVoRjn5c5kH9KE=;
- b=O+Dbpehv5mJrV0lnlmXn6Db7EpBhRoImkVai5GkRQZm4T1T+vR6WKZBCznpbEU+rufXz
- ImnN+uqXHBoORjA3Rmpnl0Zw+IZHgLzcG5aFO52KVK+tkk4zjBzjYiAqcIp2aCmeS8W+
- 58lvWyUhPAwYwvMRsieW56zH6THc2gHjh7CXAb27o8tzYQQOPe1D+A/ulSCp1JNWnE/x
- UQawT3u3tH+n3YoQK3ExT4Fr5wwRTFrDsVXNQ+m3Zi1nBE9lwHKsT4Z1ykImE8eHLAUu
- w69g8Jpj+qAZhU8/81Wy9+5pRbcWS1/itiTJIZIJ3TlVo3oHecjFSzQQqZIY7htXFS8B qQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3funaw09j7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 04 May 2022 08:02:02 +0000
-Received: from m0098393.ppops.net (m0098393.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2447kUFb016011;
-        Wed, 4 May 2022 08:02:02 GMT
-Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3funaw09h7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 04 May 2022 08:02:02 +0000
-Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
-        by ppma04fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2447qIWl031744;
-        Wed, 4 May 2022 08:02:00 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma04fra.de.ibm.com with ESMTP id 3frvr8v7yj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 04 May 2022 08:01:59 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24481uDM32899378
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 4 May 2022 08:01:56 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5CFD011C050;
-        Wed,  4 May 2022 08:01:56 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A357C11C04A;
-        Wed,  4 May 2022 08:01:55 +0000 (GMT)
-Received: from [9.171.18.44] (unknown [9.171.18.44])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed,  4 May 2022 08:01:55 +0000 (GMT)
-Message-ID: <a76353f4-9bad-ba8d-a899-4b0fbdc9ef5a@linux.ibm.com>
-Date:   Wed, 4 May 2022 10:05:30 +0200
+        Wed, 4 May 2022 04:09:45 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49591220DC;
+        Wed,  4 May 2022 01:06:04 -0700 (PDT)
+X-UUID: cdfc2389b2034d31a6b07f80195c7111-20220504
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.4,REQID:17060d19-c653-499a-879c-289a6448ce38,OB:10,L
+        OB:10,IP:0,URL:8,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,A
+        CTION:release,TS:53
+X-CID-INFO: VERSION:1.1.4,REQID:17060d19-c653-499a-879c-289a6448ce38,OB:10,LOB
+        :10,IP:0,URL:8,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACT
+        ION:release,TS:53
+X-CID-META: VersionHash:faefae9,CLOUDID:1d2ea92f-6199-437e-8ab4-9920b4bc5b76,C
+        OID:a9dbf60cbf27,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,File:nil
+        ,QS:0,BEC:nil
+X-UUID: cdfc2389b2034d31a6b07f80195c7111-20220504
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
+        (envelope-from <rex-bc.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1990241526; Wed, 04 May 2022 16:05:59 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Wed, 4 May 2022 16:05:58 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n2.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
+ Transport; Wed, 4 May 2022 16:05:58 +0800
+Message-ID: <fa84e8e0e71cc483f9bef3714cce1622c17bcfb2.camel@mediatek.com>
+Subject: Re: [PATCH v5 1/4] dt-bindings: display: mediatek: dsi: Convert
+ dsi_dtbinding to .yaml
+From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
+To:     Rob Herring <robh@kernel.org>
+CC:     <krzysztof.kozlowski+dt@linaro.org>, <chunkuang.hu@kernel.org>,
+        <p.zabel@pengutronix.de>, <airlied@linux.ie>, <daniel@ffwll.ch>,
+        <matthias.bgg@gmail.com>, <jitao.shi@mediatek.com>,
+        <xinlei.lee@mediatek.com>, <dri-devel@lists.freedesktop.org>,
+        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+Date:   Wed, 4 May 2022 16:05:58 +0800
+In-Reply-To: <YnFt5vL+6uVioqsf@robh.at.kernel.org>
+References: <20220428133753.8348-1-rex-bc.chen@mediatek.com>
+         <20220428133753.8348-2-rex-bc.chen@mediatek.com>
+         <YnFt5vL+6uVioqsf@robh.at.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH v8 2/2] s390x: KVM: resetting the Topology-Change-Report
-Content-Language: en-US
-To:     David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org
-Cc:     linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
-        borntraeger@de.ibm.com, frankja@linux.ibm.com, cohuck@redhat.com,
-        thuth@redhat.com, imbrenda@linux.ibm.com, hca@linux.ibm.com,
-        gor@linux.ibm.com, wintera@linux.ibm.com, seiden@linux.ibm.com,
-        nrb@linux.ibm.com
-References: <20220420113430.11876-1-pmorel@linux.ibm.com>
- <20220420113430.11876-3-pmorel@linux.ibm.com>
- <22f7742e-c009-c53b-8f14-34156ea1d135@redhat.com>
-From:   Pierre Morel <pmorel@linux.ibm.com>
-In-Reply-To: <22f7742e-c009-c53b-8f14-34156ea1d135@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: slEGLsjrGK4X8D1OnusW0gGVtBf4dm3q
-X-Proofpoint-ORIG-GUID: XwqTH82HUKAcqqNrrE0uKwsXTvckVLRK
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-04_02,2022-05-02_03,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 bulkscore=0
- spamscore=0 impostorscore=0 adultscore=0 mlxlogscore=999
- priorityscore=1501 phishscore=0 clxscore=1015 lowpriorityscore=0
- malwarescore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2205040054
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-MTK:  N
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
+        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, 2022-05-03 at 13:01 -0500, Rob Herring wrote:
+> On Thu, Apr 28, 2022 at 09:37:50PM +0800, Rex-BC Chen wrote:
+> > From: Xinlei Lee <xinlei.lee@mediatek.com>
+> > 
+> > Convert mediatek,dsi.txt to mediatek,dsi.yaml format
+> > 
+> > Signed-off-by: Xinlei Lee <xinlei.lee@mediatek.com>
+> > Signed-off-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
+> > ---
+> >  .../display/mediatek/mediatek,dsi.txt         |  62 ---------
+> >  .../display/mediatek/mediatek,dsi.yaml        | 122
+> > ++++++++++++++++++
+> >  2 files changed, 122 insertions(+), 62 deletions(-)
+> >  delete mode 100644
+> > Documentation/devicetree/bindings/display/mediatek/mediatek,dsi.txt
+> >  create mode 100644
+> > Documentation/devicetree/bindings/display/mediatek/mediatek,dsi.yam
+> > l
+> > 
+> > diff --git
+> > a/Documentation/devicetree/bindings/display/mediatek/mediatek,dsi.t
+> > xt
+> > b/Documentation/devicetree/bindings/display/mediatek/mediatek,dsi.t
+> > xt
+> > deleted file mode 100644
+> > index 36b01458f45c..000000000000
+> > ---
+> > a/Documentation/devicetree/bindings/display/mediatek/mediatek,dsi.t
+> > xt
+> > +++ /dev/null
+> > @@ -1,62 +0,0 @@
+> > -Mediatek DSI Device
+> > -===================
+> > -
+> > -The Mediatek DSI function block is a sink of the display subsystem
+> > and can
+> > -drive up to 4-lane MIPI DSI output. Two DSIs can be synchronized
+> > for dual-
+> > -channel output.
+> > -
+> > -Required properties:
+> > -- compatible: "mediatek,<chip>-dsi"
+> > -- the supported chips are mt2701, mt7623, mt8167, mt8173 and
+> > mt8183.
+> > -- reg: Physical base address and length of the controller's
+> > registers
+> > -- interrupts: The interrupt signal from the function block.
+> > -- clocks: device clocks
+> > -  See Documentation/devicetree/bindings/clock/clock-bindings.txt
+> > for details.
+> > -- clock-names: must contain "engine", "digital", and "hs"
+> > -- phys: phandle link to the MIPI D-PHY controller.
+> > -- phy-names: must contain "dphy"
+> > -- port: Output port node with endpoint definitions as described in
+> > -  Documentation/devicetree/bindings/graph.txt. This port should be
+> > connected
+> > -  to the input port of an attached DSI panel or DSI-to-eDP encoder
+> > chip.
+> > -
+> > -Optional properties:
+> > -- resets: list of phandle + reset specifier pair, as described in
+> > [1].
+> > -
+> > -[1] Documentation/devicetree/bindings/reset/reset.txt
+> > -
+> > -MIPI TX Configuration Module
+> > -============================
+> > -
+> > -See phy/mediatek,dsi-phy.yaml
+> > -
+> > -Example:
+> > -
+> > -mipi_tx0: mipi-dphy@10215000 {
+> > -	compatible = "mediatek,mt8173-mipi-tx";
+> > -	reg = <0 0x10215000 0 0x1000>;
+> > -	clocks = <&clk26m>;
+> > -	clock-output-names = "mipi_tx0_pll";
+> > -	#clock-cells = <0>;
+> > -	#phy-cells = <0>;
+> > -	drive-strength-microamp = <4600>;
+> > -	nvmem-cells= <&mipi_tx_calibration>;
+> > -	nvmem-cell-names = "calibration-data";
+> > -};
+> > -
+> > -dsi0: dsi@1401b000 {
+> > -	compatible = "mediatek,mt8173-dsi";
+> > -	reg = <0 0x1401b000 0 0x1000>;
+> > -	interrupts = <GIC_SPI 192 IRQ_TYPE_LEVEL_LOW>;
+> > -	clocks = <&mmsys MM_DSI0_ENGINE>, <&mmsys MM_DSI0_DIGITAL>,
+> > -		 <&mipi_tx0>;
+> > -	clock-names = "engine", "digital", "hs";
+> > -	resets = <&mmsys MT8173_MMSYS_SW0_RST_B_DISP_DSI0>;
+> > -	phys = <&mipi_tx0>;
+> > -	phy-names = "dphy";
+> > -
+> > -	port {
+> > -		dsi0_out: endpoint {
+> > -			remote-endpoint = <&panel_in>;
+> > -		};
+> > -	};
+> > -};
+> > diff --git
+> > a/Documentation/devicetree/bindings/display/mediatek/mediatek,dsi.y
+> > aml
+> > b/Documentation/devicetree/bindings/display/mediatek/mediatek,dsi.y
+> > aml
+> > new file mode 100644
+> > index 000000000000..2ca9229ef69e
+> > --- /dev/null
+> > +++
+> > b/Documentation/devicetree/bindings/display/mediatek/mediatek,dsi.y
+> > aml
+> > @@ -0,0 +1,122 @@
+> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +$id: 
+> > https://urldefense.com/v3/__http://devicetree.org/schemas/display/mediatek/mediatek,dsi.yaml*__;Iw!!CTRNKA9wMg0ARbw!w60__6oza0dggkQt6zWF-ZnYUKobclO7i3x9kiS1CETGQlCVcifs6UfqytY8vunKIJlM$
+> >  
+> > +$schema: 
+> > https://urldefense.com/v3/__http://devicetree.org/meta-schemas/core.yaml*__;Iw!!CTRNKA9wMg0ARbw!w60__6oza0dggkQt6zWF-ZnYUKobclO7i3x9kiS1CETGQlCVcifs6UfqytY8vns85I56$
+> >  
+> > +
+> > +title: MediaTek DSI Controller Device Tree Bindings
+> > +
+> > +maintainers:
+> > +  - Chun-Kuang Hu <chunkuang.hu@kernel.org>
+> > +  - Philipp Zabel <p.zabel@pengutronix.de>
+> > +  - Jitao Shi <jitao.shi@mediatek.com>
+> > +  - Xinlei Lee <xinlei.lee@mediatek.com>
+> > +
+> > +description: |
+> > +  The MediaTek DSI function block is a sink of the display
+> > subsystem and can
+> > +  drive up to 4-lane MIPI DSI output. Two DSIs can be synchronized
+> > for dual-
+> > +  channel output.
+> > +
+> > +allOf:
+> > +  - $ref: /schemas/display/dsi-controller.yaml#
+> > +
+> > +properties:
+> > +  compatible:
+> > +    enum:
+> > +      - mediatek,mt2701-dsi
+> > +      - mediatek,mt7623-dsi
+> > +      - mediatek,mt8167-dsi
+> > +      - mediatek,mt8173-dsi
+> > +      - mediatek,mt8183-dsi
+> > +
+> > +  reg:
+> > +    maxItems: 1
+> > +
+> > +  interrupts:
+> > +    maxItems: 1
+> > +
+> > +  power-domains:
+> > +    maxItems: 1
+> > +
+> > +  clocks:
+> > +    items:
+> > +      - description: Engine Clock
+> > +      - description: Digital Clock
+> > +      - description: HS Clock
+> > +
+> > +  clock-names:
+> > +    items:
+> > +      - const: engine
+> > +      - const: digital
+> > +      - const: hs
+> > +
+> > +  resets:
+> > +    maxItems: 1
+> > +
+> > +  phys:
+> > +    maxItems: 1
+> > +
+> > +  phy-names:
+> > +    items:
+> > +      - const: dphy
+> > +
+> > +  port:
+> > +    $ref: /schemas/graph.yaml#/properties/port
+> > +    description:
+> > +      Output port node. This port should be connected to the input
+> > +      port of an attached DSI panel or DSI-to-eDP encoder chip.
+> > +
+> > +
+> 
+> 1 blank line
 
+Hello Rob,
 
-On 4/28/22 15:50, David Hildenbrand wrote:
-> On 20.04.22 13:34, Pierre Morel wrote:
->> During a subsystem reset the Topology-Change-Report is cleared.
->> Let's give userland the possibility to clear the MTCR in the case
->> of a subsystem reset.
->>
->> To migrate the MTCR, let's give userland the possibility to
->> query the MTCR state.
->>
->> Signed-off-by: Pierre Morel <pmorel@linux.ibm.com>
->> ---
->>   arch/s390/include/uapi/asm/kvm.h |   9 +++
->>   arch/s390/kvm/kvm-s390.c         | 103 +++++++++++++++++++++++++++++++
->>   2 files changed, 112 insertions(+)
->>
->> diff --git a/arch/s390/include/uapi/asm/kvm.h b/arch/s390/include/uapi/asm/kvm.h
->> index 7a6b14874d65..bb3df6d49f27 100644
->> --- a/arch/s390/include/uapi/asm/kvm.h
->> +++ b/arch/s390/include/uapi/asm/kvm.h
->> @@ -74,6 +74,7 @@ struct kvm_s390_io_adapter_req {
->>   #define KVM_S390_VM_CRYPTO		2
->>   #define KVM_S390_VM_CPU_MODEL		3
->>   #define KVM_S390_VM_MIGRATION		4
->> +#define KVM_S390_VM_CPU_TOPOLOGY	5
->>   
->>   /* kvm attributes for mem_ctrl */
->>   #define KVM_S390_VM_MEM_ENABLE_CMMA	0
->> @@ -171,6 +172,14 @@ struct kvm_s390_vm_cpu_subfunc {
->>   #define KVM_S390_VM_MIGRATION_START	1
->>   #define KVM_S390_VM_MIGRATION_STATUS	2
->>   
->> +/* kvm attributes for cpu topology */
->> +#define KVM_S390_VM_CPU_TOPO_MTR_CLEAR	0
->> +#define KVM_S390_VM_CPU_TOPO_MTR_SET	1
->> +
->> +struct kvm_s390_cpu_topology {
->> +	__u16 mtcr;
->> +};
-> 
-> Just wondering:
-> 
-> 1) Do we really need a struct for that
-> 2) Do we want to leave some room for later expansion?
+Thanks for your review.
 
-Yes it is the goal, if we want to report more topology information for 
-the case the vCPUs are not pin on the real CPUs.
-In this case I think we need to report more information on the vCPU 
-topology to the guest.
-For now I explicitly limited the case to pinned vCPUs.
-
-But the change from a u16 to a structure can be done at that moment.
+ok. I will do this in next version.
 
 > 
->> +
->>   /* for KVM_GET_REGS and KVM_SET_REGS */
->>   struct kvm_regs {
->>   	/* general purpose regs for s390 */
->> diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
->> index 925ccc59f283..755f325c9e70 100644
->> --- a/arch/s390/kvm/kvm-s390.c
->> +++ b/arch/s390/kvm/kvm-s390.c
->> @@ -1756,6 +1756,100 @@ static int kvm_s390_sca_set_mtcr(struct kvm *kvm)
->>   	return 0;
->>   }
->>   
->> +/**
->> + * kvm_s390_sca_clear_mtcr
->> + * @kvm: guest KVM description
->> + *
->> + * Is only relevant if the topology facility is present,
->> + * the caller should check KVM facility 11
->> + *
->> + * Updates the Multiprocessor Topology-Change-Report to signal
->> + * the guest with a topology change.
->> + */
->> +static int kvm_s390_sca_clear_mtcr(struct kvm *kvm)
->> +{
->> +	struct bsca_block *sca = kvm->arch.sca;
->> +	struct kvm_vcpu *vcpu;
->> +	int val;
->> +
->> +	vcpu = kvm_s390_get_first_vcpu(kvm);
->> +	if (!vcpu)
->> +		return -ENODEV;
+> > +  "#address-cells":
+> > +    const: 2
+> > +
+> > +  "#size-cells":
+> > +    const: 2
 > 
-> It would be cleaner to have ipte_lock/ipte_unlock variants that are
-> independent of a vcpu.
-> 
-> Instead of checking for "vcpu->arch.sie_block->eca & ECA_SII" we might
-> just check for sclp.has_siif. Everything else that performs the
-> lock/unlock should be contained in "struct kvm" directly, unless I am
-> missing something.
-
-No you are right, ipte_lock/unlock are independent of the vcpu.
-I already had a patch on this but I did not think about sclp.has_siif 
-and it was still heavy.
-
-> 
-> [...]
-> 
->> +
->> +static int kvm_s390_get_topology(struct kvm *kvm, struct kvm_device_attr *attr)
->> +{
->> +	struct kvm_s390_cpu_topology *topology;
->> +	int ret = 0;
->> +
->> +	if (!test_kvm_facility(kvm, 11))
->> +		return -ENXIO;
->> +
->> +	topology = kzalloc(sizeof(*topology), GFP_KERNEL);
->> +	if (!topology)
->> +		return -ENOMEM;
-> 
-> I'm confused. We're allocating a __u16 to then free it again below? Why
-> not simply use a value on the stack like in kvm_s390_vm_get_migration()?
-
-comes from the idea to bring up more information.
-But done like this it has no point.
-
-
-> 
-> 
-> 
-> u16 mtcr;
-> ...
-> mtcr = kvm_s390_sca_get_mtcr(kvm);
-> 
-> if (copy_to_user((void __user *)attr->addr, &mtcr, sizeof(mtcr)))
-> 	return -EFAULT;
-> return 0;
-
-yes, thanks.
-
-> 
-> 
-> 
->> +
->> +	topology->mtcr =  kvm_s390_sca_get_mtcr(kvm);
-> 
-> s/  / /
-
-yes too
-
-> 
->> +	if (copy_to_user((void __user *)attr->addr, topology,
->> +			 sizeof(struct kvm_s390_cpu_topology)))
->> +		ret = -EFAULT;
->> +
->> +	kfree(topology);
->> +	return ret;
->> +}
->> +
-> 
+> Did you try adding these? Because they are wrong and will contradict 
+> dsi-controller.yaml.
 > 
 
+We have some mistake.
+There will not be any sub node for mediatek dsi, so I will drop this
+modification in next version.
 
-Thanks a lot David,
+BRs,
+Rex
 
-Regards,
-Pierre
+> Rob
 
--- 
-Pierre Morel
-IBM Lab Boeblingen

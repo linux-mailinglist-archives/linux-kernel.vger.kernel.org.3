@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C16CE51A793
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:04:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53ADF51AB21
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:40:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355442AbiEDRE1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 13:04:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35658 "EHLO
+        id S1359725AbiEDRkQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 13:40:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354679AbiEDQ67 (ORCPT
+        with ESMTP id S1356792AbiEDRJo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 12:58:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18187366B9;
-        Wed,  4 May 2022 09:50:52 -0700 (PDT)
+        Wed, 4 May 2022 13:09:44 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA9581D319;
+        Wed,  4 May 2022 09:55:36 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5C62E617CB;
-        Wed,  4 May 2022 16:50:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2D33C385A4;
-        Wed,  4 May 2022 16:50:51 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7328DB8278E;
+        Wed,  4 May 2022 16:55:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2DD48C385A4;
+        Wed,  4 May 2022 16:55:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651683051;
-        bh=mG562RSlp1GIUX/9eUaCxfRcLCFqQjtL0AeviNxO6YI=;
+        s=korg; t=1651683335;
+        bh=8VMbv6k1Ez79dhZYetnG2VPw/IkmhQKJA3RVyKVyfcU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=EJ0rqM8kwWKyAuA8OXkLLh0wVTZM9+NRWRfFhF/NHp3RJn23/nsRsOKWn54i/oor7
-         pubhbrn67mC6yHViszxqY/tUkqyem01CZouMxLgIQ/2/Q1c+2S8DIt7RYpx16PH1+H
-         +hKW+f4YebEnTeR7z6cAfS99q+xlolgfpgLPwK3U=
+        b=yotB2Wj2gVVIpz4NqmAnKLPZLCs+bm4idMcdP+vI8VkDyg6eXcbKyE0ML3fxyNJWZ
+         Y19JjNyRWnv04yp+ND4Cqg0pRuAgPsXxLfQya6ZVnYtC2l6V4cAvUY/WA8yNGMro72
+         3pvf3Yusa2MRmA3g+whD71JJeln0sGGevbmmTMB8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Adam Ford <aford173@gmail.com>,
-        Tony Lindgren <tony@atomide.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 055/129] ARM: dts: am3517-evm: Fix misc pinmuxing
-Date:   Wed,  4 May 2022 18:44:07 +0200
-Message-Id: <20220504153025.406484300@linuxfoundation.org>
+        stable@vger.kernel.org, Evan Green <evgreen@chromium.org>,
+        stable <stable@kernel.org>
+Subject: [PATCH 5.17 010/225] xhci: Enable runtime PM on second Alderlake controller
+Date:   Wed,  4 May 2022 18:44:08 +0200
+Message-Id: <20220504153111.197596636@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220504153021.299025455@linuxfoundation.org>
-References: <20220504153021.299025455@linuxfoundation.org>
+In-Reply-To: <20220504153110.096069935@linuxfoundation.org>
+References: <20220504153110.096069935@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,153 +54,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Adam Ford <aford173@gmail.com>
+From: Evan Green <evgreen@chromium.org>
 
-[ Upstream commit 942da3af32b2288e674736eb159d1fc676261691 ]
+commit d8bfe5091d6cc4b8b8395e4666979ae72a6069ca upstream.
 
-The bootloader for the AM3517 has previously done much of the pin
-muxing, but as the bootloader is moving more and more to a model
-based on the device tree, it may no longer automatically mux the
-pins, so it is necessary to add the pinmuxing to the Linux device
-trees so the respective peripherals can remain functional.
+Alderlake has two XHCI controllers with PCI IDs 0x461e and 0x51ed. We
+had previously added the quirk to default enable runtime PM for 0x461e,
+now add it for 0x51ed as well.
 
-Fixes: 6ed1d7997561 ("ARM: dts: am3517-evm: Add support for UI board and Audio")
-Signed-off-by: Adam Ford <aford173@gmail.com>
-Message-Id: <20220226214820.747847-1-aford173@gmail.com>
-Signed-off-by: Tony Lindgren <tony@atomide.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Evan Green <evgreen@chromium.org>
+Cc: stable <stable@kernel.org>
+Link: https://lore.kernel.org/r/20220408114225.1.Ibcff6b86ed4eacfe4c4bc89c90e18416f3900a3e@changeid
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/arm/boot/dts/am3517-evm.dts  | 45 +++++++++++++++++++++++++++----
- arch/arm/boot/dts/am3517-som.dtsi |  9 +++++++
- 2 files changed, 49 insertions(+), 5 deletions(-)
+ drivers/usb/host/xhci-pci.c |    4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/arch/arm/boot/dts/am3517-evm.dts b/arch/arm/boot/dts/am3517-evm.dts
-index 0d2fac98ce7d..c8b80f156ec9 100644
---- a/arch/arm/boot/dts/am3517-evm.dts
-+++ b/arch/arm/boot/dts/am3517-evm.dts
-@@ -161,6 +161,8 @@ pwm11: dmtimer-pwm@11 {
+--- a/drivers/usb/host/xhci-pci.c
++++ b/drivers/usb/host/xhci-pci.c
+@@ -59,6 +59,7 @@
+ #define PCI_DEVICE_ID_INTEL_TIGER_LAKE_XHCI		0x9a13
+ #define PCI_DEVICE_ID_INTEL_MAPLE_RIDGE_XHCI		0x1138
+ #define PCI_DEVICE_ID_INTEL_ALDER_LAKE_XHCI		0x461e
++#define PCI_DEVICE_ID_INTEL_ALDER_LAKE_PCH_XHCI	0x51ed
  
- 	/* HS USB Host PHY on PORT 1 */
- 	hsusb1_phy: hsusb1_phy {
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&hsusb1_rst_pins>;
- 		compatible = "usb-nop-xceiv";
- 		reset-gpios = <&gpio2 25 GPIO_ACTIVE_LOW>; /* gpio_57 */
- 		#phy-cells = <0>;
-@@ -168,7 +170,9 @@ hsusb1_phy: hsusb1_phy {
- };
+ #define PCI_DEVICE_ID_AMD_RENOIR_XHCI			0x1639
+ #define PCI_DEVICE_ID_AMD_PROMONTORYA_4			0x43b9
+@@ -266,7 +267,8 @@ static void xhci_pci_quirks(struct devic
+ 	     pdev->device == PCI_DEVICE_ID_INTEL_ICE_LAKE_XHCI ||
+ 	     pdev->device == PCI_DEVICE_ID_INTEL_TIGER_LAKE_XHCI ||
+ 	     pdev->device == PCI_DEVICE_ID_INTEL_MAPLE_RIDGE_XHCI ||
+-	     pdev->device == PCI_DEVICE_ID_INTEL_ALDER_LAKE_XHCI))
++	     pdev->device == PCI_DEVICE_ID_INTEL_ALDER_LAKE_XHCI ||
++	     pdev->device == PCI_DEVICE_ID_INTEL_ALDER_LAKE_PCH_XHCI))
+ 		xhci->quirks |= XHCI_DEFAULT_PM_RUNTIME_ALLOW;
  
- &davinci_emac {
--	     status = "okay";
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&ethernet_pins>;
-+	status = "okay";
- };
- 
- &davinci_mdio {
-@@ -193,6 +197,8 @@ dpi_out: endpoint {
- };
- 
- &i2c2 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&i2c2_pins>;
- 	clock-frequency = <400000>;
- 	/* User DIP swithes [1:8] / User LEDS [1:2] */
- 	tca6416: gpio@21 {
-@@ -205,6 +211,8 @@ tca6416: gpio@21 {
- };
- 
- &i2c3 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&i2c3_pins>;
- 	clock-frequency = <400000>;
- };
- 
-@@ -223,6 +231,8 @@ &mmc3 {
- };
- 
- &usbhshost {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&hsusb1_pins>;
- 	port1-mode = "ehci-phy";
- };
- 
-@@ -231,8 +241,35 @@ &usbhsehci {
- };
- 
- &omap3_pmx_core {
--	pinctrl-names = "default";
--	pinctrl-0 = <&hsusb1_rst_pins>;
-+
-+	ethernet_pins: pinmux_ethernet_pins {
-+		pinctrl-single,pins = <
-+			OMAP3_CORE1_IOPAD(0x21fe, PIN_INPUT | MUX_MODE0) /* rmii_mdio_data */
-+			OMAP3_CORE1_IOPAD(0x2200, MUX_MODE0) /* rmii_mdio_clk */
-+			OMAP3_CORE1_IOPAD(0x2202, PIN_INPUT_PULLDOWN | MUX_MODE0) /* rmii_rxd0 */
-+			OMAP3_CORE1_IOPAD(0x2204, PIN_INPUT_PULLDOWN | MUX_MODE0) /* rmii_rxd1 */
-+			OMAP3_CORE1_IOPAD(0x2206, PIN_INPUT_PULLDOWN | MUX_MODE0) /* rmii_crs_dv */
-+			OMAP3_CORE1_IOPAD(0x2208, PIN_OUTPUT_PULLDOWN | MUX_MODE0) /* rmii_rxer */
-+			OMAP3_CORE1_IOPAD(0x220a, PIN_OUTPUT_PULLDOWN | MUX_MODE0) /* rmii_txd0 */
-+			OMAP3_CORE1_IOPAD(0x220c, PIN_OUTPUT_PULLDOWN | MUX_MODE0) /* rmii_txd1 */
-+			OMAP3_CORE1_IOPAD(0x220e, PIN_OUTPUT_PULLDOWN |MUX_MODE0) /* rmii_txen */
-+			OMAP3_CORE1_IOPAD(0x2210, PIN_INPUT_PULLDOWN | MUX_MODE0) /* rmii_50mhz_clk */
-+		>;
-+	};
-+
-+	i2c2_pins: pinmux_i2c2_pins {
-+		pinctrl-single,pins = <
-+			OMAP3_CORE1_IOPAD(0x21be, PIN_INPUT_PULLUP | MUX_MODE0)  /* i2c2_scl */
-+			OMAP3_CORE1_IOPAD(0x21c0, PIN_INPUT_PULLUP | MUX_MODE0)  /* i2c2_sda */
-+		>;
-+	};
-+
-+	i2c3_pins: pinmux_i2c3_pins {
-+		pinctrl-single,pins = <
-+			OMAP3_CORE1_IOPAD(0x21c2, PIN_INPUT_PULLUP | MUX_MODE0)  /* i2c3_scl */
-+			OMAP3_CORE1_IOPAD(0x21c4, PIN_INPUT_PULLUP | MUX_MODE0)  /* i2c3_sda */
-+		>;
-+	};
- 
- 	leds_pins: pinmux_leds_pins {
- 		pinctrl-single,pins = <
-@@ -300,8 +337,6 @@ OMAP3_CORE1_IOPAD(0x20ba, PIN_OUTPUT | MUX_MODE4)	/* gpmc_ncs6.gpio_57 */
- };
- 
- &omap3_pmx_core2 {
--	pinctrl-names = "default";
--	pinctrl-0 = <&hsusb1_pins>;
- 
- 	hsusb1_pins: pinmux_hsusb1_pins {
- 		pinctrl-single,pins = <
-diff --git a/arch/arm/boot/dts/am3517-som.dtsi b/arch/arm/boot/dts/am3517-som.dtsi
-index 8b669e2eafec..f7b680f6c48a 100644
---- a/arch/arm/boot/dts/am3517-som.dtsi
-+++ b/arch/arm/boot/dts/am3517-som.dtsi
-@@ -69,6 +69,8 @@ nand@0,0 {
- };
- 
- &i2c1 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&i2c1_pins>;
- 	clock-frequency = <400000>;
- 
- 	s35390a: s35390a@30 {
-@@ -179,6 +181,13 @@ bluetooth {
- 
- &omap3_pmx_core {
- 
-+	i2c1_pins: pinmux_i2c1_pins {
-+		pinctrl-single,pins = <
-+			OMAP3_CORE1_IOPAD(0x21ba, PIN_INPUT_PULLUP | MUX_MODE0)  /* i2c1_scl */
-+			OMAP3_CORE1_IOPAD(0x21bc, PIN_INPUT_PULLUP | MUX_MODE0)  /* i2c1_sda */
-+		>;
-+	};
-+
- 	wl12xx_buffer_pins: pinmux_wl12xx_buffer_pins {
- 		pinctrl-single,pins = <
- 			OMAP3_CORE1_IOPAD(0x2156, PIN_OUTPUT | MUX_MODE4)  /* mmc1_dat7.gpio_129 */
--- 
-2.35.1
-
+ 	if (pdev->vendor == PCI_VENDOR_ID_ETRON &&
 
 

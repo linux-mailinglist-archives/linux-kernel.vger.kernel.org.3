@@ -2,243 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 402D851ABDF
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:53:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0088C51A706
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 18:58:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350040AbiEDRxJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 13:53:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55472 "EHLO
+        id S1351965AbiEDRBb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 13:01:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358092AbiEDRPj (ORCPT
+        with ESMTP id S1354165AbiEDQzB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 13:15:39 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1171A5641D;
-        Wed,  4 May 2022 09:59:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C6B8761896;
-        Wed,  4 May 2022 16:59:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81476C385B6;
-        Wed,  4 May 2022 16:59:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651683562;
-        bh=yKnOWtATY4DC16zZlNMNi4Gw/btx9FKJS1E7Qi4z6wg=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YhUHrOdtDLvxorn4qc1MVFhI/CxqWL4m8JZxrnxvaPEgGN4hwCsYBT4ViZvb7lbWY
-         bxIP7fZU1LyzUxk4K03xS2kCFOhQKmi40RLEPgIrydR5NfblUEfcFb0egPtQdwJNHL
-         tKc/GPD1s/sQtG4JUIqEbY1ObR7VDoCy6jEfnmMA=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Alexey Kardashevskiy <aik@ozlabs.ru>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nathan Chancellor <nathan@kernel.org>
-Subject: [PATCH 5.17 225/225] powerpc/64: Add UADDR64 relocation support
-Date:   Wed,  4 May 2022 18:47:43 +0200
-Message-Id: <20220504153129.910469913@linuxfoundation.org>
-X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220504153110.096069935@linuxfoundation.org>
-References: <20220504153110.096069935@linuxfoundation.org>
-User-Agent: quilt/0.66
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+        Wed, 4 May 2022 12:55:01 -0400
+Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2117.outbound.protection.outlook.com [40.107.117.117])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C49EA49933
+        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 09:49:49 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Kp9Nu9UobWRZOqvWpeNS0X8U+zuwuQcP5czIXi8FJ6btFNLntE5HiBoCcirfxuLbhyeGFStGIiUz5tCNYUGGZEmJ7bldXarvzWIdOsbiHFlfBXHWV1BDvG19f0bl1jRfbB9xSLSptBTA2WtgkpaG7NgD2eK12zXaFVECXTIQlIYm8XBXCOKEL/2kyIA4gFVNuxhom5cc5kyyscBYOxpweqlQwRuRaTWNyZX+PkDPICJEQmDJBzwe9S0UGeN8VrykZ/QQclODYih0TWYsEBRlOrxv83zBZ+3SWxXTlpD5Q7vWnjZYV7UPKlemBqz0hkCQxhyesAE5Z1eBfHmZPj5oAQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=2oBPpMkz/r0SCCCvodITXRX5xZ/Ic8CkOstXBnXI0VQ=;
+ b=bPdmVIzm6x2kt7fEwYwbi5h/4kx/aSVcaaICBqMFjoKRhGDs731G9/ki06UAb5ofpa3tsem5Rac0sz7lTBE4neRju/RysgMWV4Yhl8rCLbfV/0v9c3HXQ2io2KdTC+N3TOIizFQdTTzoUA5GI7VcOKsI8/5Nuh75Ggi3TmGTTfWQTdwDLUpS8gyw2Bl4BC1Srqar+PvEyfDitpHJ7CUOcowSHOFqPZUNdd+V5Ppup5mhroRSRQa9UT+VScuz+a+kwWgBljDt5a03TPd+oAbz1hPO6kABHL1Q3MUYoVnz6HQHE3n+dYuH+E6JGQfDF5INs+5h3e8F8fk8J6W5lSsPbQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo0.onmicrosoft.com;
+ s=selector2-vivo0-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=2oBPpMkz/r0SCCCvodITXRX5xZ/Ic8CkOstXBnXI0VQ=;
+ b=E2nA5cLbd2p1z2qp12CbBK584Es09Mfrqs/0PXHGKmiu9vg81SGe1esWjanCaVDygXXjlGDaEWk9hbeAc4ceA+nCbY7yo2RrdxudodIxUQskS0/AgA1FMp+EJBG+u8jTrJQhGvpW65D4VaX/ZIw6yMRT4PM9Lq0jt07EV3TRQb4=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from HK2PR06MB3492.apcprd06.prod.outlook.com (2603:1096:202:2f::10)
+ by PS2PR06MB3496.apcprd06.prod.outlook.com (2603:1096:300:64::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5206.12; Wed, 4 May
+ 2022 16:49:47 +0000
+Received: from HK2PR06MB3492.apcprd06.prod.outlook.com
+ ([fe80::88e1:dc04:6851:ad08]) by HK2PR06MB3492.apcprd06.prod.outlook.com
+ ([fe80::88e1:dc04:6851:ad08%7]) with mapi id 15.20.5206.014; Wed, 4 May 2022
+ 16:49:46 +0000
+From:   Guo Zhengkui <guozhengkui@vivo.com>
+To:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        Conor Culhane <conor.culhane@silvaco.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-i3c@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     zhengkui_guo@outlook.com, Guo Zhengkui <guozhengkui@vivo.com>
+Subject: [PATCH] i3c: master: svc: fix returnvar.cocci warning
+Date:   Thu,  5 May 2022 00:49:01 +0800
+Message-Id: <20220504164901.9622-1-guozhengkui@vivo.com>
+X-Mailer: git-send-email 2.20.1
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-ClientProxiedBy: HK2PR0302CA0006.apcprd03.prod.outlook.com
+ (2603:1096:202::16) To HK2PR06MB3492.apcprd06.prod.outlook.com
+ (2603:1096:202:2f::10)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: f836e924-0773-4634-a15a-08da2dee179f
+X-MS-TrafficTypeDiagnostic: PS2PR06MB3496:EE_
+X-Microsoft-Antispam-PRVS: <PS2PR06MB3496CC906A301CC947FCD9D8C7C39@PS2PR06MB3496.apcprd06.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: l55F+MwKx5hlbMjmYJlrPDXEH+YbGdrXTLOFyjjfIltvaX21EShzxivqtsW2KTIHilJOXlL2ZaTR+VF9w3axYkdYZh6p1izi0HYyTrHEdanMgTkUpgXMT2jroHm1tzz48fhvrVmpiiIglesKFh0pEAAiCPWSxomC13PPHhBcl509DYOl3XjUDwI/iSiBpy/YT4cfCOCyJ8EB2BLO77Tu07+hrBdoGgYkLY6rfO7fIqDa3ydi8dex54To3u8y7gGsiXWArx+rIyT9SLfG+yqYjcAa1f990Uqwp77KLUAY2ILBUKAb147aXV9+hq5gVxfu8igQ9lDHNsALeNYoD2DmdOhQNwpF7IEu2XR6hNsMQIYtLYnTyqPMRsgCLtEzB600clGvxqkwRLXxerG/7XIyCVwj/0MqIKRelK0kf1bBWIzyBZTI07hKoVzUT8wsviX55fDREFbRVBYsQAk8CA4rAVopUG+/hOVc92069vGYIKEDZydo/UpFe//gQsg4p9E7Jr2To0TNoVA77rCWOSCWQbwB7NAa42wPy+55MBYl8dY2yRpRAFU8zoa8g8isFD/YUh6/0Xm7uA4FgGPFyJ6wPTUvQIbbjQuo6D0HeMnAvuxII1ghCybSTPq8cHtdPUl0Zp5XBzqj0jSU/ZPeo0n4HmkXl98/0TKyOGrA6EgZzWpnR96Di6gzXvVW/R5J+laGi1be33FSUIZcKKtEHbQ9vw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HK2PR06MB3492.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(2906002)(316002)(83380400001)(110136005)(5660300002)(8936002)(38100700002)(38350700002)(8676002)(4744005)(66556008)(86362001)(66946007)(66476007)(4326008)(6512007)(186003)(508600001)(1076003)(2616005)(107886003)(6666004)(36756003)(6486002)(26005)(6506007)(52116002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?VaYoU+C71Du6c4mW7vkcfvyKOjLktECCZE87655XsPKD3ZlF3QN5cBaQb8lH?=
+ =?us-ascii?Q?mC9U4Mq+e1gKZnDsTUlr+7m2TJYCCMSpo1io2tHRxsoxZcNc0D3LTQRUcqYh?=
+ =?us-ascii?Q?r4OtUmQbP248CrLdC10NmKMDd32xjjc+B+3vOy7ZgC1EPSkR17dcGigmUTzT?=
+ =?us-ascii?Q?hDTf7ezsYBok/h2TnnQUSiEZvGeM0CMzwDCh41duC65Q6eNPZYvpN2U7UkTz?=
+ =?us-ascii?Q?CvsUm4bAp8voMY00hDTVPyekdiebhTIUZ4VM1XeNW1VP7KqE3LnnVg0wizp+?=
+ =?us-ascii?Q?2Qq0m10CWFgG9FeEZqbhp5TNqjos2rhU/VVmsWsu9b3vcns7h6rSSVMMAOdm?=
+ =?us-ascii?Q?Ktfz4GYVmyjAgKtbmeeEw5va9eN9vBaKWR9viaB5WToCBihPOdJZP2TsdD7Y?=
+ =?us-ascii?Q?TYGM475X6bGU19d4zSaSkua+VA5ML8IGqgrqyk+Hfck+LweKOGisBoeh3sij?=
+ =?us-ascii?Q?P6mddHkw4zwFNC4A89jaETobGlBTtDq5hyf0xO32lpwXzSvKAYcMercygW0E?=
+ =?us-ascii?Q?/LSL8f51OaZGSr1TbMycqFSw5cZq/h89NyDsZ5yLJ814Rj+OhOOz3Nhxpl8o?=
+ =?us-ascii?Q?KdmxAtvwMqviRqaJ8kItz7mJNIR49NnCy2gAaOTl5xuM9fXuV9TsQ5eINZ+Z?=
+ =?us-ascii?Q?esjitrAwUI4QsFT+vVzJOeYWYiPtmSAmEVeJ9+QbIQPQ+pmJssJKgw6N0FsV?=
+ =?us-ascii?Q?lNPTD2LMySkt0Jvjqy8yhdNiBJhGnj319yDGtaU2lC8JE9xVxb7JZpwIwbDf?=
+ =?us-ascii?Q?hIC1v6kcK2fuXhivos+nTReSACRpRz/jvRH30CXvNhmaRoN4pyuMmCi1Dde8?=
+ =?us-ascii?Q?15gmGOdU7RD4tY0AdQBpnfwkzAx9TFS2ugvQ1o/YnrVhPRij9gjzd7Tai6ax?=
+ =?us-ascii?Q?P7AwpxZlDHyu3jAA9qWCHywoHgL1ssM5atN/bKtocJOH4QK7TVXAfmp8i7rS?=
+ =?us-ascii?Q?zr8ICli2sIltsjyBiEq0Oi07F4TSMFXSKgEXNlmIeRj/kCOwrclbu6kpRqe/?=
+ =?us-ascii?Q?VAaowZcjPl+pvW5zf+ig4WqgyK5jCJpROzc59V8N22FmkH9MWDcR43mbYc17?=
+ =?us-ascii?Q?0yM8oyIB8mI3Zc59D7NsfjGzQ1dvILsvLFeipGTzO/TGh7x0GNtimiLEu42W?=
+ =?us-ascii?Q?0x/bXQaEu53efr8eCnjKtZ+QSQ2bI/Ru3iNHUyBhZoGoEaKFO0MmGPkNjcpK?=
+ =?us-ascii?Q?nfNXmHbQVhaCbIANZtyODVOHn0M6E1fJgB8ku3gj9Li+8QQ22ve4YE3NuHeH?=
+ =?us-ascii?Q?ltyRgy7ySUdBjUm4uyxh6U1z9NbQrP+0k3Rl9Tt+D1fxxwg6skIoefNVxvvH?=
+ =?us-ascii?Q?IS0WLy+I6VpO/LIPxKrSBegQJIJJqqfUXVM+gVmXO/XOS3BOMtvyqjbqYWhw?=
+ =?us-ascii?Q?YjwI7vmzTtIghEhfJgE5HNv30KRZNNK7Jfr7hGdqOMDSy2ylugCnBn/d3+3c?=
+ =?us-ascii?Q?ZETfOCVucelzWWkP6sE8+2NsgjtJ8A6DW8lKAq+HoQ0Y4eqaQSd/SqTH9Wd/?=
+ =?us-ascii?Q?LIutt1Gtfbp8gt8lrgusQ6cZIEt6rhzc7Lspi0H0ANTpmXiL8nnEUW4yy8pN?=
+ =?us-ascii?Q?rTLj3UcZOBuaU47w6Oe5E2hmwgb5xf/cwzrKHRQzP5wYeFYbNV9GeY5vUS4C?=
+ =?us-ascii?Q?9Xpsg+Z9v5Ox6BmmhsCOJRqXOY/L3L3Yi0WmS71QFSOsmAUAvBNRHKAO/5u7?=
+ =?us-ascii?Q?dQ0f8GDZoaskaLGgJEy2Ncmjd8/5PhyMpqOIuk54jJdWuVStF5fIVAZ34R+1?=
+ =?us-ascii?Q?yFj5+bKxvQ=3D=3D?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f836e924-0773-4634-a15a-08da2dee179f
+X-MS-Exchange-CrossTenant-AuthSource: HK2PR06MB3492.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 May 2022 16:49:46.6431
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: VG88h8gqrBxTs0mYlHOHwW6SRCA7iiLPLXSu5d9HD5w7R8bXhLyVjEUAJGPVcGj+CRUkd5SZuDItw0u1pjx+Xw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PS2PR06MB3496
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alexey Kardashevskiy <aik@ozlabs.ru>
+Fix the following coccicheck warning:
 
-commit d799769188529abc6cbf035a10087a51f7832b6b upstream.
+drivers/i3c/master/svc-i3c-master.c:1600:5-8:
+Unneeded variable: "ret". Return "0" on line 1605.
 
-When ld detects unaligned relocations, it emits R_PPC64_UADDR64
-relocations instead of R_PPC64_RELATIVE. Currently R_PPC64_UADDR64 are
-detected by arch/powerpc/tools/relocs_check.sh and expected not to work.
-Below is a simple chunk to trigger this behaviour (this disables
-optimization for the demonstration purposes only, this also happens with
--O1/-O2 when CONFIG_PRINTK_INDEX=y, for example):
-
-  \#pragma GCC push_options
-  \#pragma GCC optimize ("O0")
-  struct entry {
-          const char *file;
-          int line;
-  } __attribute__((packed));
-  static const struct entry e1 = { .file = __FILE__, .line = __LINE__ };
-  static const struct entry e2 = { .file = __FILE__, .line = __LINE__ };
-  ...
-  prom_printf("e1=%s %lx %lx\n", e1.file, (unsigned long) e1.file, mfmsr());
-  prom_printf("e2=%s %lx\n", e2.file, (unsigned long) e2.file);
-  \#pragma GCC pop_options
-
-This adds support for UADDR64 for 64bit. This reuses __dynamic_symtab
-from the 32bit code which supports more relocation types already.
-
-Because RELACOUNT includes only R_PPC64_RELATIVE, this replaces it with
-RELASZ which is the size of all relocation records.
-
-Signed-off-by: Alexey Kardashevskiy <aik@ozlabs.ru>
-Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-Cc: Nathan Chancellor <nathan@kernel.org>
-Link: https://lore.kernel.org/r/20220309061822.168173-1-aik@ozlabs.ru
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Guo Zhengkui <guozhengkui@vivo.com>
 ---
- arch/powerpc/kernel/reloc_64.S     |   67 +++++++++++++++++++++++++------------
- arch/powerpc/kernel/vmlinux.lds.S  |    2 -
- arch/powerpc/tools/relocs_check.sh |    7 ---
- 3 files changed, 48 insertions(+), 28 deletions(-)
+ drivers/i3c/master/svc-i3c-master.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
---- a/arch/powerpc/kernel/reloc_64.S
-+++ b/arch/powerpc/kernel/reloc_64.S
-@@ -8,8 +8,10 @@
- #include <asm/ppc_asm.h>
+diff --git a/drivers/i3c/master/svc-i3c-master.c b/drivers/i3c/master/svc-i3c-master.c
+index 7550dad64ecf..d6e9ed74cdcf 100644
+--- a/drivers/i3c/master/svc-i3c-master.c
++++ b/drivers/i3c/master/svc-i3c-master.c
+@@ -1597,12 +1597,11 @@ static int __maybe_unused svc_i3c_runtime_suspend(struct device *dev)
+ static int __maybe_unused svc_i3c_runtime_resume(struct device *dev)
+ {
+ 	struct svc_i3c_master *master = dev_get_drvdata(dev);
+-	int ret = 0;
  
- RELA = 7
--RELACOUNT = 0x6ffffff9
-+RELASZ = 8
-+RELAENT = 9
- R_PPC64_RELATIVE = 22
-+R_PPC64_UADDR64 = 43
+ 	pinctrl_pm_select_default_state(dev);
+ 	svc_i3c_master_prepare_clks(master);
  
- /*
-  * r3 = desired final address of kernel
-@@ -25,29 +27,38 @@ _GLOBAL(relocate)
- 	add	r9,r9,r12	/* r9 has runtime addr of .rela.dyn section */
- 	ld	r10,(p_st - 0b)(r12)
- 	add	r10,r10,r12	/* r10 has runtime addr of _stext */
-+	ld	r13,(p_sym - 0b)(r12)
-+	add	r13,r13,r12	/* r13 has runtime addr of .dynsym */
+-	return ret;
++	return 0;
+ }
  
- 	/*
--	 * Scan the dynamic section for the RELA and RELACOUNT entries.
-+	 * Scan the dynamic section for the RELA, RELASZ and RELAENT entries.
- 	 */
- 	li	r7,0
- 	li	r8,0
--1:	ld	r6,0(r11)	/* get tag */
-+.Ltags:
-+	ld	r6,0(r11)	/* get tag */
- 	cmpdi	r6,0
--	beq	4f		/* end of list */
-+	beq	.Lend_of_list		/* end of list */
- 	cmpdi	r6,RELA
- 	bne	2f
- 	ld	r7,8(r11)	/* get RELA pointer in r7 */
--	b	3f
--2:	addis	r6,r6,(-RELACOUNT)@ha
--	cmpdi	r6,RELACOUNT@l
-+	b	4f
-+2:	cmpdi	r6,RELASZ
- 	bne	3f
--	ld	r8,8(r11)	/* get RELACOUNT value in r8 */
--3:	addi	r11,r11,16
--	b	1b
--4:	cmpdi	r7,0		/* check we have both RELA and RELACOUNT */
-+	ld	r8,8(r11)	/* get RELASZ value in r8 */
-+	b	4f
-+3:	cmpdi	r6,RELAENT
-+	bne	4f
-+	ld	r12,8(r11)	/* get RELAENT value in r12 */
-+4:	addi	r11,r11,16
-+	b	.Ltags
-+.Lend_of_list:
-+	cmpdi	r7,0		/* check we have RELA, RELASZ, RELAENT */
- 	cmpdi	cr1,r8,0
--	beq	6f
--	beq	cr1,6f
-+	beq	.Lout
-+	beq	cr1,.Lout
-+	cmpdi	r12,0
-+	beq	.Lout
- 
- 	/*
- 	 * Work out linktime address of _stext and hence the
-@@ -62,23 +73,39 @@ _GLOBAL(relocate)
- 
- 	/*
- 	 * Run through the list of relocations and process the
--	 * R_PPC64_RELATIVE ones.
-+	 * R_PPC64_RELATIVE and R_PPC64_UADDR64 ones.
- 	 */
-+	divd	r8,r8,r12	/* RELASZ / RELAENT */
- 	mtctr	r8
--5:	ld	r0,8(9)		/* ELF64_R_TYPE(reloc->r_info) */
-+.Lrels:	ld	r0,8(r9)		/* ELF64_R_TYPE(reloc->r_info) */
- 	cmpdi	r0,R_PPC64_RELATIVE
--	bne	6f
-+	bne	.Luaddr64
- 	ld	r6,0(r9)	/* reloc->r_offset */
- 	ld	r0,16(r9)	/* reloc->r_addend */
-+	b	.Lstore
-+.Luaddr64:
-+	srdi	r14,r0,32	/* ELF64_R_SYM(reloc->r_info) */
-+	clrldi	r0,r0,32
-+	cmpdi	r0,R_PPC64_UADDR64
-+	bne	.Lnext
-+	ld	r6,0(r9)
-+	ld	r0,16(r9)
-+	mulli	r14,r14,24	/* 24 == sizeof(elf64_sym) */
-+	add	r14,r14,r13	/* elf64_sym[ELF64_R_SYM] */
-+	ld	r14,8(r14)
-+	add	r0,r0,r14
-+.Lstore:
- 	add	r0,r0,r3
- 	stdx	r0,r7,r6
--	addi	r9,r9,24
--	bdnz	5b
--
--6:	blr
-+.Lnext:
-+	add	r9,r9,r12
-+	bdnz	.Lrels
-+.Lout:
-+	blr
- 
- .balign 8
- p_dyn:	.8byte	__dynamic_start - 0b
- p_rela:	.8byte	__rela_dyn_start - 0b
-+p_sym:		.8byte __dynamic_symtab - 0b
- p_st:	.8byte	_stext - 0b
- 
---- a/arch/powerpc/kernel/vmlinux.lds.S
-+++ b/arch/powerpc/kernel/vmlinux.lds.S
-@@ -281,9 +281,7 @@ SECTIONS
- 	. = ALIGN(8);
- 	.dynsym : AT(ADDR(.dynsym) - LOAD_OFFSET)
- 	{
--#ifdef CONFIG_PPC32
- 		__dynamic_symtab = .;
--#endif
- 		*(.dynsym)
- 	}
- 	.dynstr : AT(ADDR(.dynstr) - LOAD_OFFSET) { *(.dynstr) }
---- a/arch/powerpc/tools/relocs_check.sh
-+++ b/arch/powerpc/tools/relocs_check.sh
-@@ -39,6 +39,7 @@ $objdump -R "$vmlinux" |
- 	#	R_PPC_NONE
- 	grep -F -w -v 'R_PPC64_RELATIVE
- R_PPC64_NONE
-+R_PPC64_UADDR64
- R_PPC_ADDR16_LO
- R_PPC_ADDR16_HI
- R_PPC_ADDR16_HA
-@@ -54,9 +55,3 @@ fi
- num_bad=$(echo "$bad_relocs" | wc -l)
- echo "WARNING: $num_bad bad relocations"
- echo "$bad_relocs"
--
--# If we see this type of relocation it's an idication that
--# we /may/ be using an old version of binutils.
--if echo "$bad_relocs" | grep -q -F -w R_PPC64_UADDR64; then
--	echo "WARNING: You need at least binutils >= 2.19 to build a CONFIG_RELOCATABLE kernel"
--fi
-
+ static const struct dev_pm_ops svc_i3c_pm_ops = {
+-- 
+2.20.1
 

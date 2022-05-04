@@ -2,234 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 005FE51AD5C
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 20:56:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DF4151AD61
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 20:56:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377532AbiEDS7e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 14:59:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57788 "EHLO
+        id S1377400AbiEDS7k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 14:59:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377434AbiEDS7R (ORCPT
+        with ESMTP id S1377500AbiEDS71 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 14:59:17 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C791F18381
-        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 11:55:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651690539;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=G5sq7D0GSE1tPNdbO+G8lvLB2O9LGGtgK7KLOXhSz24=;
-        b=Tfa+WD3I8dQOf9HIJTQtBgA8HM2bthXjDFQsBbx+GO3eh3yJzWtna70N43CQHK8nNvWbRN
-        kL1VcvRDZd2p+qUxI8N67YZ3LSH41ILbZQ5rUYnxCmvgWXUb9U0BMJO9/t6wEbnNMFLT9j
-        WB1rxrrz0PU6Iipxy0FpljANXLQJ/6c=
-Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
- [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-64-gG2tQAynO8eC-fBf66G5bw-1; Wed, 04 May 2022 14:55:38 -0400
-X-MC-Unique: gG2tQAynO8eC-fBf66G5bw-1
-Received: by mail-qt1-f200.google.com with SMTP id a24-20020ac81098000000b002e1e06a72aeso1714068qtj.6
-        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 11:55:38 -0700 (PDT)
+        Wed, 4 May 2022 14:59:27 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAFF5205CD;
+        Wed,  4 May 2022 11:55:50 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id kq17so4643389ejb.4;
+        Wed, 04 May 2022 11:55:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=qtj3kM23Q+DPPlGR5wpXCN7V8AfMLAVbykig0+rvwrQ=;
+        b=UH6Ta6W44ExCTUoM11nmWUGcXNzNXr6eSMG6xgz/VLSDuxvHk4TxueHl5IojELPqZq
+         Lt0MDCfaWL8yTjMlJGxbmloy9MPbnQwagScezzZVAoSaVJS32y7cnxqnr+CO51YBQMXZ
+         a2Jy/I9JSm6Ym9Rq8MJ05Iz2Ib6QjEN4vrRl+guWsFneVGcTYF645Lay6TdkmNHXigU2
+         wgimM8GhKfY9N8UckyEqExMZoQzK7+/yp12vcFeyJVDs9UR4sXxbENLIY4mvml7W3sRx
+         exQj7M2e0dMYQW3IOn9dTYDYZuOIB3EjhQyeVTTpDjWRVsEVkawL6JTPrd4pyf8xvuwF
+         n0aA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:organization:user-agent:mime-version
-         :content-transfer-encoding;
-        bh=G5sq7D0GSE1tPNdbO+G8lvLB2O9LGGtgK7KLOXhSz24=;
-        b=3XMDxCvxpH8qFFEEQu+dLVzM30uu1jguLu2QDTUETeo0xc0QW3q8F++zu+SCdRsJNh
-         s3MLzJdorsoQsQEB4Rlg0caUJZ5txE/2TQ3IaJo8dgO3aameIpIQ4GhOb8AyCJOkGWS5
-         58SDMKh9jjvoQiHTfuBZCQLQoXgmhdsRFmNG/yhGC6ljopRdddYpPaopSBXsM0ZkO/a7
-         mWMFzmtBBo0G99sQcqnHmzskD8w3xpMZvuiLvI4Vr5Xkiq7TfMEepzGO2avhaLawUvUs
-         dp2wVweznBjrFFL2slGj3GGMMczzAhDUYKMir731PlhEai60UDcnC3zToAFCHjX2hUut
-         xKmw==
-X-Gm-Message-State: AOAM530BZlT2V0YGdlSUKGCAn1en6DTLSq0PzUxRCU868s4vKXoC5efX
-        edWYP6VwxyVEXN5fFK1JknzrFJkjGy9OL+5Gz4tRSbcUbylf6auY+Is+8FYUZtHxp9xkZiGPTxd
-        Aa8aZvezfHn3XhsrwoGkZPtXf
-X-Received: by 2002:a05:622a:351:b0:2f3:9508:913d with SMTP id r17-20020a05622a035100b002f39508913dmr20929549qtw.591.1651690537893;
-        Wed, 04 May 2022 11:55:37 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwM4NAc3Zu7Pt08jcQZmnlTYfqOQGKWsleikyeCgJL5yw/+oZ/joLQ4Zxedkro6eTP3eBvGsg==
-X-Received: by 2002:a05:622a:351:b0:2f3:9508:913d with SMTP id r17-20020a05622a035100b002f39508913dmr20929536qtw.591.1651690537653;
-        Wed, 04 May 2022 11:55:37 -0700 (PDT)
-Received: from [192.168.8.138] (static-71-184-137-158.bstnma.ftas.verizon.net. [71.184.137.158])
-        by smtp.gmail.com with ESMTPSA id n68-20020a37a447000000b0069fc13ce1edsm8154936qke.30.2022.05.04.11.55.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 May 2022 11:55:36 -0700 (PDT)
-Message-ID: <47305e0aacc88a7a8386e80a9fa291035cb7a282.camel@redhat.com>
-Subject: Re: [PATCH] drm/nouveau/subdev/bus: Ratelimit logging for fault
- errors
-From:   Lyude Paul <lyude@redhat.com>
-To:     Karol Herbst <kherbst@redhat.com>
-Cc:     nouveau <nouveau@lists.freedesktop.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        open list <linux-kernel@vger.kernel.org>
-Date:   Wed, 04 May 2022 14:55:35 -0400
-In-Reply-To: <8c3592767ac4c3d4c3bcb0294d97aff5a7375319.camel@redhat.com>
-References: <20220429195350.85620-1-lyude@redhat.com>
-         <CACO55ttsBxe6V88CTtGZgUj8k+gT+ne+FD_9FD_OxowF1XG5Bg@mail.gmail.com>
-         <8c3592767ac4c3d4c3bcb0294d97aff5a7375319.camel@redhat.com>
-Organization: Red Hat Inc.
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=qtj3kM23Q+DPPlGR5wpXCN7V8AfMLAVbykig0+rvwrQ=;
+        b=rmXGqopftbApLzgJE0IpkShi5eDMIIqsX5ZW3RMh5ThBmvD+x+bcCEZPBxoYlD+CXj
+         JLSo4L48uupzvCoMYGTyQN6Jgr2c8hCS1UCvWdZ4zirlaNZWTP1PaD9iagkuxvJ8MfIZ
+         pxb3GQIZsXJUQ7bxoU8nZYoOJcMetUU/A9aei/HJgjgc0yy6qiKZzy1704KVE+6kQfJ9
+         n4YuVgrhYLYKpYEvIuYbU5pfJrhKBlRihmSIm0BEyMOsL/IsdS2CMcEVq8+E6z2ulMJi
+         OjvzAcgmoTk2drEpzx2fI9o3c+ZSr4ak5/cg9NQQxcdiNVLEt3DdIzf/8TjlM+j/Vs5V
+         hTjA==
+X-Gm-Message-State: AOAM531HCBtHFRcw+DSeeOB0/115udXpzaNqKNPPIyGsdPoeyADfwU2V
+        BY1HxC6RVrw/VbZgwLR1MfxN1iNvjaatXkS4ZIc=
+X-Google-Smtp-Source: ABdhPJxOL8YqtOqnXGwVkqYA2gOLeZnIQddYIpWAjllRDaI2rIW3zYjkOhuqL7tjQzCNdLzkQO+MqfBPgDzp4Xf2/eE=
+X-Received: by 2002:a17:907:1b1b:b0:6e4:7fac:6ce0 with SMTP id
+ mp27-20020a1709071b1b00b006e47fac6ce0mr21594175ejc.617.1651690548672; Wed, 04
+ May 2022 11:55:48 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <1651685100-44687-1-git-send-email-justinpopo6@gmail.com> <1651685100-44687-2-git-send-email-justinpopo6@gmail.com>
+In-Reply-To: <1651685100-44687-2-git-send-email-justinpopo6@gmail.com>
+From:   Justin Chen <justinpopo6@gmail.com>
+Date:   Wed, 4 May 2022 11:55:37 -0700
+Message-ID: <CAJx26kV+15rs0=YcRj6z5ZbKU4=u9MHyuOdo=EfJwAXYKAdbBg@mail.gmail.com>
+Subject: Re: [PATCH 1/2] gpio: pca953xx: Add support for pca6408
+To:     Linus Walleij <linus.walleij@linaro.org>, brgl@bgdev.pl,
+        Rob Herring <robh+dt@kernel.org>,
+        krzysztof.kozlowski+dt@linaro.org
+Cc:     linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, f.fainelli@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Mhhh - looks like it goes far back enough I probably should just Cc it without
-a version tag and see how far it applies for greg. Will do that
+On Wed, May 4, 2022 at 10:25 AM Justin Chen <justinpopo6@gmail.com> wrote:
+>
+> Add support for pca6408 which is the 8-bit version of the pca6416.
+>
+> https://www.nxp.com/docs/en/data-sheet/PCA6408A.pdf
+>
+> Signed-off-by: Justin Chen <justinpopo6@gmail.com>
+> ---
+>  drivers/gpio/gpio-pca953x.c | 2 ++
+>  1 file changed, 2 insertions(+)
+>
+> diff --git a/drivers/gpio/gpio-pca953x.c b/drivers/gpio/gpio-pca953x.c
+> index d2fe76f..2d0b080 100644
+> --- a/drivers/gpio/gpio-pca953x.c
+> +++ b/drivers/gpio/gpio-pca953x.c
+> @@ -71,6 +71,7 @@
+>  #define PCA_CHIP_TYPE(x)       ((x) & PCA_TYPE_MASK)
+>
+>  static const struct i2c_device_id pca953x_id[] = {
+> +       { "pca6408", 8  | PCA953x_TYPE | PCA_INT, },
+Apologies, typo here. Should be capital "x". Will send a v2.
 
-
-On Wed, 2022-05-04 at 14:49 -0400, Lyude Paul wrote:
-> On Tue, 2022-05-03 at 21:23 +0200, Karol Herbst wrote:
-> > not able to hit any error on my machine, but regardless:
-> > 
-> > Reviewed-by: Karol Herbst <kherbst@redhat.com>
-> > 
-> > I suspect there are more places where we could put it, but we can add
-> > those later.
-> > 
-> > Anyway, I think it's valuable to push it through fixes, not sure how
-> > far back we want to CC stable though.
-> 
-> JFYI - dim fixes can figure this out if you just give it the commit that
-> introduced the issue.
-> 
-> Anyway, will push this upstream in a moment
-> 
-> > 
-> > On Fri, Apr 29, 2022 at 9:54 PM Lyude Paul <lyude@redhat.com> wrote:
-> > > 
-> > > There's plenty of ways to fudge the GPU when developing on nouveau by
-> > > mistake, some of which can result in nouveau seriously spamming dmesg
-> > > with
-> > > fault errors. This can be somewhat annoying, as it can quickly overrun
-> > > the
-> > > message buffer (or your terminal emulator's buffer) and get rid of
-> > > actually
-> > > useful feedback from the driver. While working on my new atomic only MST
-> > > branch, I ran into this issue a couple of times.
-> > > 
-> > > So, let's fix this by adding nvkm_error_ratelimited(), and using it to
-> > > ratelimit errors from faults. This should be fine for developers, since
-> > > it's nearly always only the first few faults that we care about seeing.
-> > > Plus, you can turn off rate limiting in the kernel if you really need
-> > > to.
-> > > 
-> > > Signed-off-by: Lyude Paul <lyude@redhat.com>
-> > > ---
-> > >  drivers/gpu/drm/nouveau/include/nvkm/core/subdev.h |  2 ++
-> > >  drivers/gpu/drm/nouveau/nvkm/subdev/bus/gf100.c    | 14 +++++++-------
-> > >  drivers/gpu/drm/nouveau/nvkm/subdev/bus/nv31.c     |  6 +++---
-> > >  drivers/gpu/drm/nouveau/nvkm/subdev/bus/nv50.c     |  6 +++---
-> > >  4 files changed, 15 insertions(+), 13 deletions(-)
-> > > 
-> > > diff --git a/drivers/gpu/drm/nouveau/include/nvkm/core/subdev.h
-> > > b/drivers/gpu/drm/nouveau/include/nvkm/core/subdev.h
-> > > index 1665738948fb..96113c8bee8c 100644
-> > > --- a/drivers/gpu/drm/nouveau/include/nvkm/core/subdev.h
-> > > +++ b/drivers/gpu/drm/nouveau/include/nvkm/core/subdev.h
-> > > @@ -62,4 +62,6 @@ void nvkm_subdev_intr(struct nvkm_subdev *);
-> > >  #define nvkm_debug(s,f,a...) nvkm_printk((s), DEBUG,   info, f, ##a)
-> > >  #define nvkm_trace(s,f,a...) nvkm_printk((s), TRACE,   info, f, ##a)
-> > >  #define nvkm_spam(s,f,a...)  nvkm_printk((s),  SPAM,    dbg, f, ##a)
-> > > +
-> > > +#define nvkm_error_ratelimited(s,f,a...) nvkm_printk((s), ERROR,
-> > > err_ratelimited, f, ##a)
-> > >  #endif
-> > > diff --git a/drivers/gpu/drm/nouveau/nvkm/subdev/bus/gf100.c
-> > > b/drivers/gpu/drm/nouveau/nvkm/subdev/bus/gf100.c
-> > > index 53a6651ac225..80b5aaceeaad 100644
-> > > --- a/drivers/gpu/drm/nouveau/nvkm/subdev/bus/gf100.c
-> > > +++ b/drivers/gpu/drm/nouveau/nvkm/subdev/bus/gf100.c
-> > > @@ -35,13 +35,13 @@ gf100_bus_intr(struct nvkm_bus *bus)
-> > >                 u32 addr = nvkm_rd32(device, 0x009084);
-> > >                 u32 data = nvkm_rd32(device, 0x009088);
-> > > 
-> > > -               nvkm_error(subdev,
-> > > -                          "MMIO %s of %08x FAULT at %06x [ %s%s%s]\n",
-> > > -                          (addr & 0x00000002) ? "write" : "read", data,
-> > > -                          (addr & 0x00fffffc),
-> > > -                          (stat & 0x00000002) ? "!ENGINE " : "",
-> > > -                          (stat & 0x00000004) ? "PRIVRING " : "",
-> > > -                          (stat & 0x00000008) ? "TIMEOUT " : "");
-> > > +               nvkm_error_ratelimited(subdev,
-> > > +                                      "MMIO %s of %08x FAULT at %06x [
-> > > %s%s%s]\n",
-> > > +                                      (addr & 0x00000002) ? "write" :
-> > > "read", data,
-> > > +                                      (addr & 0x00fffffc),
-> > > +                                      (stat & 0x00000002) ? "!ENGINE "
-> > > :
-> > > "",
-> > > +                                      (stat & 0x00000004) ? "PRIVRING "
-> > > :
-> > > "",
-> > > +                                      (stat & 0x00000008) ? "TIMEOUT "
-> > > :
-> > > "");
-> > > 
-> > >                 nvkm_wr32(device, 0x009084, 0x00000000);
-> > >                 nvkm_wr32(device, 0x001100, (stat & 0x0000000e));
-> > > diff --git a/drivers/gpu/drm/nouveau/nvkm/subdev/bus/nv31.c
-> > > b/drivers/gpu/drm/nouveau/nvkm/subdev/bus/nv31.c
-> > > index ad8da523bb22..c75e463f3501 100644
-> > > --- a/drivers/gpu/drm/nouveau/nvkm/subdev/bus/nv31.c
-> > > +++ b/drivers/gpu/drm/nouveau/nvkm/subdev/bus/nv31.c
-> > > @@ -45,9 +45,9 @@ nv31_bus_intr(struct nvkm_bus *bus)
-> > >                 u32 addr = nvkm_rd32(device, 0x009084);
-> > >                 u32 data = nvkm_rd32(device, 0x009088);
-> > > 
-> > > -               nvkm_error(subdev, "MMIO %s of %08x FAULT at %06x\n",
-> > > -                          (addr & 0x00000002) ? "write" : "read", data,
-> > > -                          (addr & 0x00fffffc));
-> > > +               nvkm_error_ratelimited(subdev, "MMIO %s of %08x FAULT at
-> > > %06x\n",
-> > > +                                      (addr & 0x00000002) ? "write" :
-> > > "read", data,
-> > > +                                      (addr & 0x00fffffc));
-> > > 
-> > >                 stat &= ~0x00000008;
-> > >                 nvkm_wr32(device, 0x001100, 0x00000008);
-> > > diff --git a/drivers/gpu/drm/nouveau/nvkm/subdev/bus/nv50.c
-> > > b/drivers/gpu/drm/nouveau/nvkm/subdev/bus/nv50.c
-> > > index 3a1e45adeedc..2055d0b100d3 100644
-> > > --- a/drivers/gpu/drm/nouveau/nvkm/subdev/bus/nv50.c
-> > > +++ b/drivers/gpu/drm/nouveau/nvkm/subdev/bus/nv50.c
-> > > @@ -60,9 +60,9 @@ nv50_bus_intr(struct nvkm_bus *bus)
-> > >                 u32 addr = nvkm_rd32(device, 0x009084);
-> > >                 u32 data = nvkm_rd32(device, 0x009088);
-> > > 
-> > > -               nvkm_error(subdev, "MMIO %s of %08x FAULT at %06x\n",
-> > > -                          (addr & 0x00000002) ? "write" : "read", data,
-> > > -                          (addr & 0x00fffffc));
-> > > +               nvkm_error_ratelimited(subdev, "MMIO %s of %08x FAULT at
-> > > %06x\n",
-> > > +                                      (addr & 0x00000002) ? "write" :
-> > > "read", data,
-> > > +                                      (addr & 0x00fffffc));
-> > > 
-> > >                 stat &= ~0x00000008;
-> > >                 nvkm_wr32(device, 0x001100, 0x00000008);
-> > > --
-> > > 2.35.1
-> > > 
-> > 
-> 
-
--- 
-Cheers,
- Lyude Paul (she/her)
- Software Engineer at Red Hat
-
+Justin
+>         { "pca6416", 16 | PCA953X_TYPE | PCA_INT, },
+>         { "pca9505", 40 | PCA953X_TYPE | PCA_INT, },
+>         { "pca9506", 40 | PCA953X_TYPE | PCA_INT, },
+> @@ -1198,6 +1199,7 @@ static int pca953x_resume(struct device *dev)
+>  #define OF_957X(__nrgpio, __int) (void *)(__nrgpio | PCA957X_TYPE | __int)
+>
+>  static const struct of_device_id pca953x_dt_ids[] = {
+> +       { .compatible = "nxp,pca6408", .data = OF_953X(8, PCA_INT), },
+>         { .compatible = "nxp,pca6416", .data = OF_953X(16, PCA_INT), },
+>         { .compatible = "nxp,pca9505", .data = OF_953X(40, PCA_INT), },
+>         { .compatible = "nxp,pca9506", .data = OF_953X(40, PCA_INT), },
+> --
+> 2.7.4
+>

@@ -2,157 +2,312 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49BC951ABEB
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:53:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E154551ABE5
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:53:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357973AbiEDRwb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 13:52:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58642 "EHLO
+        id S1376338AbiEDRyO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 13:54:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358585AbiEDRQG (ORCPT
+        with ESMTP id S1356619AbiEDRST (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 13:16:06 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6F075710A;
-        Wed,  4 May 2022 09:59:53 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 05D4C1F38D;
-        Wed,  4 May 2022 16:59:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1651683564; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=M1ynRfy64oEaE99W0U91GV/hoBams4/1nT+NWTxLCsQ=;
-        b=VZGykHrH9PSSMgqK3hTmF/6zr3BJ3r3B/lG2XoRcFarNlsb/YW5bqy8ilEs97wwjL1s/by
-        uQWFvneQbmtBuHorjcpfFghMBC+GVahCikUCeLwl0TDEWnUgTGGGbzLXWJfq6GdAZHyoAa
-        +0itVKDGQrfcvFgmZECSat5xUndy+s4=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1651683564;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=M1ynRfy64oEaE99W0U91GV/hoBams4/1nT+NWTxLCsQ=;
-        b=elgT1gUr+0HktGbv9ZyMUBY/unTN/FjM/WgdHkUif2R6BqksXsKIK/Md76HAEnamyrrTjH
-        k6sfByfmM6Ww0uAw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6239E131BD;
-        Wed,  4 May 2022 16:59:18 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id jR9TC+awcmJ8VgAAMHmgww
-        (envelope-from <hare@suse.de>); Wed, 04 May 2022 16:59:18 +0000
-Message-ID: <c76334a9-3d10-ed3c-f4d1-d856f67928e6@suse.de>
-Date:   Wed, 4 May 2022 09:59:15 -0700
+        Wed, 4 May 2022 13:18:19 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D04CF4990E
+        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 10:01:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651683709; x=1683219709;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=2WrdM+/HAHfwQ7ZhweduXwegvWW0ZYY0fbEWdpuIFuQ=;
+  b=LpJ1lc7YG4h4nyUyc5aQm6H9+rbcd/NCYnWhl2T/QpRdGPsFK3c5W8M9
+   QE6bGyNdhFzvI/Gxx/v9tSPHvUFMSlVqe3Ce30Ca7E8vM6pqwYnwTKObz
+   RQNjPkZbJFfjtQLp5R/BI4DyLfx47AgsOZ9TTeJI9dCuupXwm3unQ4ayM
+   fIKKEBnKXE0HCPr2yYM8mvrmopL3HxhW/5mcxkqJ6sEP++4XPjOOyXjud
+   HVzS3zePssAWn8Ye7WJcIMaQHihoTssGfWkgQz5n4zp7J3CxYN6fiX/BW
+   PpL0sIxBWDrazSFR06S8oSNSlBzDYQjnbl45YQXXLBK/haBFEJms+siRg
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10337"; a="267980578"
+X-IronPort-AV: E=Sophos;i="5.91,198,1647327600"; 
+   d="scan'208";a="267980578"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2022 10:01:48 -0700
+X-IronPort-AV: E=Sophos;i="5.91,198,1647327600"; 
+   d="scan'208";a="548930357"
+Received: from schen9-mobl.amr.corp.intel.com ([10.212.140.240])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2022 10:01:47 -0700
+Message-ID: <f6217c9398e252f026db54851080a6f73f3f4da6.camel@linux.intel.com>
+Subject: Re: [patch v12 00/13] extensible prctl task isolation interface and
+ vmstat sync
+From:   Tim Chen <tim.c.chen@linux.intel.com>
+To:     Marcelo Tosatti <mtosatti@redhat.com>, linux-kernel@vger.kernel.org
+Cc:     Nitesh Lal <nilal@redhat.com>,
+        Nicolas Saenz Julienne <nsaenzju@redhat.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Christoph Lameter <cl@linux.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Alex Belits <abelits@belits.com>, Peter Xu <peterx@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Oscar Shiang <oscar0225@livemail.tw>
+Date:   Wed, 04 May 2022 10:01:47 -0700
+In-Reply-To: <20220315153132.717153751@fedora.localdomain>
+References: <20220315153132.717153751@fedora.localdomain>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.4 (3.34.4-1.fc31) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH 04/16] block: allow blk-zoned devices to have
- non-power-of-2 zone size
-Content-Language: en-US
-References: <20220427160255.300418-1-p.raghav@samsung.com>
- <CGME20220427160300eucas1p1470fe30535849de6204bb78d7083cb3a@eucas1p1.samsung.com>
- <20220427160255.300418-5-p.raghav@samsung.com>
-From:   Hannes Reinecke <hare@suse.de>
-To:     undisclosed-recipients:;
-In-Reply-To: <20220427160255.300418-5-p.raghav@samsung.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/27/22 09:02, Pankaj Raghav wrote:
-> Convert the calculations on zone size to be generic instead of relying on
-> power_of_2 based logic in the block layer using the helpers wherever
-> possible.
+On Tue, 2022-03-15 at 12:31 -0300, Marcelo Tosatti wrote:
+> The logic to disable vmstat worker thread, when entering
+> nohz full, does not cover all scenarios. For example, it is possible
+> for the following to happen:
 > 
-> The only hot path affected by this change for power_of_2 zoned devices
-> is in blk_check_zone_append() but the effects should be negligible as the
-> helper blk_queue_zone_aligned() optimizes the calculation for those
-> devices. Note that the append path cannot be accessed by direct raw access
-> to the block device but only through a filesystem abstraction.
+> 1) enter nohz_full, which calls refresh_cpu_vm_stats, syncing the stats.
+> 2) app runs mlock, which increases counters for mlock'ed pages.
+> 3) start -RT loop
 > 
-> Finally, remove the check for power_of_2 zone size requirement in
-> blk-zoned.c
+> Since refresh_cpu_vm_stats from nohz_full logic can happen _before_
+> the mlock, vmstat shepherd can restart vmstat worker thread on
+> the CPU in question.
 > 
-> Reviewed-by: Luis Chamberlain <mcgrof@kernel.org>
-> Signed-off-by: Pankaj Raghav <p.raghav@samsung.com>
-> ---
->   block/blk-core.c  |  3 +--
->   block/blk-zoned.c | 12 ++++++------
->   2 files changed, 7 insertions(+), 8 deletions(-)
+> To fix this, add task isolation prctl interface to quiesce
+> deferred actions when returning to userspace.
 > 
-> diff --git a/block/blk-core.c b/block/blk-core.c
-> index 937bb6b86331..850caf311064 100644
-> --- a/block/blk-core.c
-> +++ b/block/blk-core.c
-> @@ -634,8 +634,7 @@ static inline blk_status_t blk_check_zone_append(struct request_queue *q,
->   		return BLK_STS_NOTSUPP;
->   
->   	/* The bio sector must point to the start of a sequential zone */
-> -	if (pos & (blk_queue_zone_sectors(q) - 1) ||
-> -	    !blk_queue_zone_is_seq(q, pos))
-> +	if (!blk_queue_zone_aligned(q, pos) || !blk_queue_zone_is_seq(q, pos))
->   		return BLK_STS_IOERR;
->   
->   	/*
-> diff --git a/block/blk-zoned.c b/block/blk-zoned.c
-> index 1dff4a8bd51d..f7c7c3bd148d 100644
-> --- a/block/blk-zoned.c
-> +++ b/block/blk-zoned.c
-> @@ -288,10 +288,10 @@ int blkdev_zone_mgmt(struct block_device *bdev, enum req_opf op,
->   		return -EINVAL;
->   
->   	/* Check alignment (handle eventual smaller last zone) */
-> -	if (sector & (zone_sectors - 1))
-> +	if (!blk_queue_zone_aligned(q, sector))
->   		return -EINVAL;
->   
-> -	if ((nr_sectors & (zone_sectors - 1)) && end_sector != capacity)
-> +	if (!blk_queue_zone_aligned(q, nr_sectors) && end_sector != capacity)
->   		return -EINVAL;
->   
->   	/*
-> @@ -489,14 +489,14 @@ static int blk_revalidate_zone_cb(struct blk_zone *zone, unsigned int idx,
->   	 * smaller last zone.
->   	 */
->   	if (zone->start == 0) {
-> -		if (zone->len == 0 || !is_power_of_2(zone->len)) {
-> -			pr_warn("%s: Invalid zoned device with non power of two zone size (%llu)\n",
-> -				disk->disk_name, zone->len);
-> +		if (zone->len == 0) {
-> +			pr_warn("%s: Invalid zoned device size",
-> +				disk->disk_name);
->   			return -ENODEV;
->   		}
->   
->   		args->zone_sectors = zone->len;
-> -		args->nr_zones = (capacity + zone->len - 1) >> ilog2(zone->len);
-> +		args->nr_zones = div64_u64(capacity + zone->len - 1, zone->len);
+> The patchset is based on ideas and code from the
+> task isolation patchset from Alex Belits:
+> https://lwn.net/Articles/816298/
+> 
+> Please refer to Documentation/userspace-api/task_isolation.rst
+> (patch 1) for details. Its attached at the end of this message
 
-This is a different calculation than the one you're using in the first 
-patch. Can you please add a helper such that both are using the same 
-calculation?
+Patch 1 doesn't seem to be the documentation patch but rather is
+in patch 4.
 
-Cheers,
+> 
+> Task isolation prctl interface
+> ******************************
+> 
+> Certain types of applications benefit from running uninterrupted by
+> background OS activities. Realtime systems and high-bandwidth
+> networking applications with user-space drivers can fall into the
+> category.
+> 
+> To create an OS noise free environment for the application, this
+> interface allows userspace to inform the kernel the start and end of
+> the latency sensitive application section (with configurable system
+> behaviour for that section).
+> 
+> Note: the prctl interface is independent of nohz_full=.
+> 
+> The prctl options are:
+> 
+>    * PR_ISOL_FEAT_GET: Retrieve supported features.
+> 
+>    * PR_ISOL_CFG_GET: Retrieve task isolation configuration.
+> 
+>    * PR_ISOL_CFG_SET: Set task isolation configuration.
+> 
+>    * PR_ISOL_ACTIVATE_GET: Retrieve task isolation activation state.
+> 
+>    * PR_ISOL_ACTIVATE_SET: Set task isolation activation state.
+> 
+> Summary of terms:
+> 
+> * feature:
+> 
+>      A distinct attribute or aspect of task isolation. Examples of
+>      features could be logging, new operating modes (eg: syscalls
+>      disallowed), userspace notifications, etc. The only feature
+>      currently available is quiescing.
+> 
+> * configuration:
+> 
+>      A specific choice from a given set of possible choices that
+>      dictate how the particular feature in question should behave.
+> 
+> * activation state:
+> 
+>      The activation state (whether active/inactive) of the task
+>      isolation features (features must be configured before being
+>      activated).
+> 
+> Inheritance of the isolation parameters and state, across fork(2) and
+> clone(2), can be changed via PR_ISOL_CFG_GET/PR_ISOL_CFG_SET.
+> 
+> At a high-level, task isolation is divided in two steps:
+> 
+> 1. Configuration.
+> 
+> 2. Activation.
+> 
+> Section "Userspace support" describes how to use task isolation.
+> 
+> In terms of the interface, the sequence of steps to activate task
+> isolation are:
+> 
+> 1. Retrieve supported task isolation features (PR_ISOL_FEAT_GET).
+> 
+> 2. Configure task isolation features
+>    (PR_ISOL_CFG_GET/PR_ISOL_CFG_SET).
+> 
+> 3. Activate or deactivate task isolation features
+>    (PR_ISOL_ACTIVATE_GET/PR_ISOL_ACTIVATE_SET).
+> 
+> This interface is based on ideas and code from the task isolation
+> patchset from Alex Belits: https://lwn.net/Articles/816298/
+> 
+> Note: if the need arises to configure an individual quiesce feature
+> with its own extensible structure, please add ISOL_F_QUIESCE_ONE to
+> PR_ISOL_CFG_GET/PR_ISOL_CFG_SET (ISOL_F_QUIESCE operates on multiple
+> features per syscall currently).
+> 
+> 
+> Feature description
+> ===================
+> 
+>    * "ISOL_F_QUIESCE"
+> 
+>    This feature allows quiescing selected kernel activities on return
+>    from system calls.
+> 
+> 
+> Interface description
+> =====================
+> 
+> **PR_ISOL_FEAT**:
+> 
+>    Returns the supported features and feature capabilities, as a
+>    bitmask:
+> 
+>       prctl(PR_ISOL_FEAT, feat, arg3, arg4, arg5);
+> 
+>    The 'feat' argument specifies whether to return supported features
+>    (if zero), or feature capabilities (if not zero). Possible values
+>    for 'feat' are:
+> 
+>    * "0":
+> 
+>         Return the bitmask of supported features, in the location
+>         pointed  to  by  "(int *)arg3". The buffer should allow space
+>         for 8 bytes.
+> 
+>    * "ISOL_F_QUIESCE":
+> 
+>         Return a structure containing which kernel activities are
+>         supported for quiescing, in the location pointed to by "(int
+>         *)arg3":
+> 
+>            struct task_isol_quiesce_extensions {
+>                    __u64 flags;
+>                    __u64 supported_quiesce_bits;
+>                    __u64 pad[6];
+>            };
+> 
+>         Where:
+> 
+>         *flags*: Additional flags (should be zero).
+> 
+>         *supported_quiesce_bits*: Bitmask indicating
+>            which features are supported for quiescing.
+> 
+>         *pad*: Additional space for future enhancements.
+> 
+>    Features and its capabilities are defined at
+>    include/uapi/linux/task_isolation.h.
+> 
+> **PR_ISOL_CFG_GET**:
+> 
+>    Retrieve task isolation configuration. The general format is:
+> 
+>       prctl(PR_ISOL_CFG_GET, what, arg3, arg4, arg5);
+> 
+>    The 'what' argument specifies what to configure. Possible values
+>    are:
+> 
+>    * "I_CFG_FEAT":
+> 
+>         Return configuration of task isolation features. The 'arg3'
+>         argument specifies whether to return configured features (if
+>         zero), or individual feature configuration (if not zero), as
+>         follows.
+> 
+>         * "0":
+> 
+>              Return the bitmask of configured features, in the
+>              location pointed  to  by  "(int *)arg4". The buffer
+>              should allow space for 8 bytes.
+> 
+>         * "ISOL_F_QUIESCE":
+> 
+>              If arg4 is QUIESCE_CONTROL, return the control structure
+>              for quiescing of background kernel activities, in the
+>              location pointed to by "(int *)arg5":
+> 
+>                 struct task_isol_quiesce_control {
+>                        __u64 flags;
+>                        __u64 quiesce_mask;
+>                        __u64 quiesce_oneshot_mask;
+>                        __u64 pad[5];
+>                 };
+> 
+>              See PR_ISOL_CFG_SET description for meaning of fields.
+> 
+>    * "I_CFG_INHERIT":
+> 
+>         Retrieve inheritance configuration across fork/clone.
+> 
+>         Return the structure which configures inheritance across
+>         fork/clone, in the location pointed to by "(int *)arg4":
+> 
+>            struct task_isol_inherit_control {
+>                    __u8    inherit_mask;
+>                    __u8    pad[7];
+>            };
+> 
+>         See PR_ISOL_CFG_SET description for meaning of fields.
+> 
+> **PR_ISOL_CFG_SET**:
+> 
+>    Set task isolation configuration. The general format is:
+> 
+>       prctl(PR_ISOL_CFG_SET, what, arg3, arg4, arg5);
+> 
+>    The 'what' argument specifies what to configure. Possible values
+>    are:
+> 
+>    * "I_CFG_FEAT":
+> 
+>         Set configuration of task isolation features. 'arg3' specifies
+>         the feature. Possible values are:
+> 
+>         * "ISOL_F_QUIESCE":
 
-Hannes
--- 
-Dr. Hannes Reinecke                Kernel Storage Architect
-hare@suse.de                              +49 911 74053 688
-SUSE Software Solutions GmbH, Maxfeldstr. 5, 90409 Nürnberg
-HRB 36809 (AG Nürnberg), Geschäftsführer: Felix Imendörffer
+Is it really necessary for such fine grain control for which kernel
+activity to quiesce?  
+
+For most user, all they care about is their
+task is not disturbed by kernel activities and not be bothered about
+setting which particular activities to quiesce.  And in your patches there
+is only ISOL_F_QUIESCE_VMSTATS and nothing else.  I think you could
+probably skip the QUIESCE control for now and add it when there's really
+a true need for fine grain control.  This will make the interface simpler
+for user applications.
+
+Tim
+
+
+
+
+

@@ -2,69 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B1B751A497
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 17:54:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A05651A49C
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 17:54:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352906AbiEDP5q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 11:57:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53924 "EHLO
+        id S1352910AbiEDP6U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 11:58:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352867AbiEDP5g (ORCPT
+        with ESMTP id S1344713AbiEDP6S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 11:57:36 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 432A24614D;
-        Wed,  4 May 2022 08:54:00 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EBBF8B82751;
-        Wed,  4 May 2022 15:53:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83F8BC385AA;
-        Wed,  4 May 2022 15:53:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651679637;
-        bh=hK42V1qXW9Nw4EnqpcwFRHqPBSMsE7i8nQ7Y1H2QoT0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=dYeDsO2bObVMEcwHDRrmcgXv+V9LVaJY5FUnS8ipZwc/8wbB9oE7w0T2cWk7dW8ZC
-         d5RHD8vMtM8ezIuMrevjbVUT779098e6XvSLnrIqnp3S80GGU6os4V6catUU3zKasD
-         i/GbbfvuHGrK3+5d40fS1S6PE88gJqqg9FLiNcOpuigybU5PHhIJsURXKASY2A9fm2
-         i9IQ2kwrMUQTR7xUVq5uXjlcSwyvIZclYMSaQmrqh8ODXR/Q8T9K8HL6rFNzOcCEz5
-         QHQfgglDhtRqz3p9TUwjl2lTF0wxAheYUTF0mhcYZITIzqsigLCFi2MGVA6EkWFIME
-         rDqAniHWcaqZQ==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 0092C400B1; Wed,  4 May 2022 12:53:54 -0300 (-03)
-Date:   Wed, 4 May 2022 12:53:54 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Ian Rogers <irogers@google.com>
-Cc:     "Liang, Kan" <kan.liang@linux.intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Xing Zhengjun <zhengjun.xing@linux.intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        John Garry <john.garry@huawei.com>,
-        James Clark <james.clark@arm.com>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org
-Subject: Re: [PATCH 1/7] perf vendor events intel: Update CLX events to v1.15
-Message-ID: <YnKhkv+BVT47Hph7@kernel.org>
-References: <20220428075730.797727-1-irogers@google.com>
- <96b5c9f4-f0a0-0019-8059-3e833c95b011@linux.intel.com>
- <YmqXGCMbBOLcd261@kernel.org>
- <CAP-5=fWQMVVFZ=4WLWJkojZARHnmYp+AgTOodG_W=qqNZFw6iA@mail.gmail.com>
- <YnKgvLxcRhu6i53j@kernel.org>
+        Wed, 4 May 2022 11:58:18 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E46EB46150
+        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 08:54:41 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id b18so3077782lfv.9
+        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 08:54:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=3H4PHGcmcD+NCKJdcFxPs3wW4ElbujkBimfkF3e+URM=;
+        b=wzPHotuGedh31jRQr6oLxnKSgGm0pUbSOWzlWDVKvf5SurNBXuwBS1zf1XHsku3nYA
+         u2RL+UY64tBWP9RD7n9N1ToLKcsH3HC2S/AjXKAELzKh1pndZXrsDVVXs9LFvt0fX0+C
+         O/boUc5/+cO+IEzvYrD40t0//sxjKTL5enF/byZR54PbSwujJlNYqAJNHXWMa8EwGoHz
+         V9zE5j1uqV8czPzatSQCtM6SWm0RMlMuO9a0a/tU+BirJu9ees19vHh6TxcvNz6d0IXf
+         kv0FBc5LLB2eAOabKAHpVPvVRValB5OEGK7Mu25Qe2NbbajlygGpAcI7Y9eLLqlrPYFR
+         Ak6Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=3H4PHGcmcD+NCKJdcFxPs3wW4ElbujkBimfkF3e+URM=;
+        b=1LdHVpYWmcp1iVH1FVrnVCzEg4oFZ//ykvNXWjXmU9/c18Bart+0diu208klqKYsJ3
+         AUfrAkB8bA0Er+HPcBaoqD7G+LZ63B90M6Orjof34sc0SyRdoLHrmuS6b9mp4abyy2sw
+         FTVj24eQGAuq0/e9yApn+9DmCulNiq38vcv3DeWGVBn90jntmDoqrucf8vUt1LXOcR0r
+         OYR6vcUOUEA/NtPMYEfeYlXwTw/bt7zrBBbaw8bEYAgZU07Y635dHh6O8bU7vCI9BWya
+         m22WCZw1SH4/jnVH7cYBJAlLgLXFGCWcCjaw/uDt63URtiuuoiSOtONWcCsyxRAKAzXA
+         kqwg==
+X-Gm-Message-State: AOAM530f+EjCg8ULUTtEpZm1E89A6yh3cAo9ZbdI2Kt1G41uLTyxxvGj
+        U8/hLoYJ9mWGWT+jiAtQDpM9DA==
+X-Google-Smtp-Source: ABdhPJy2k2HB3KfJRFEQ2j/sT6Uag0ae/waYLlCpHmCdtKQItZhDaV/s17DneFU28x9fkOEDN2jBoQ==
+X-Received: by 2002:a05:6512:234c:b0:473:c3ba:2cf1 with SMTP id p12-20020a056512234c00b00473c3ba2cf1mr1301333lfu.402.1651679680147;
+        Wed, 04 May 2022 08:54:40 -0700 (PDT)
+Received: from mutt (c-9b28e555.07-21-73746f28.bbcust.telenor.se. [85.229.40.155])
+        by smtp.gmail.com with ESMTPSA id b25-20020ac25639000000b0047255d2119dsm1236703lff.204.2022.05.04.08.54.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 May 2022 08:54:39 -0700 (PDT)
+Date:   Wed, 4 May 2022 17:54:36 +0200
+From:   Anders Roxell <anders.roxell@linaro.org>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Nathan Chancellor <nathan@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>
+Subject: Re: [PATCH v3 4/9] PCI/PM: Rework changing power states of PCI
+ devices
+Message-ID: <20220504155435.GB2697452@mutt>
+References: <4419002.LvFx2qVVIh@kreacher>
+ <11975904.O9o76ZdvQC@kreacher>
+ <5838942.lOV4Wx5bFT@kreacher>
+ <3687697.kQq0lBPeGt@kreacher>
+ <YnFtjzGYwe28tVAA@dev-arch.thelio-3990X>
+ <CAJZ5v0i1Ynt54yb7aMJorkYUvqkxhxOqvQJb8AdA7Ps1aBO5tg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <YnKgvLxcRhu6i53j@kernel.org>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+In-Reply-To: <CAJZ5v0i1Ynt54yb7aMJorkYUvqkxhxOqvQJb8AdA7Ps1aBO5tg@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -73,41 +82,99 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Wed, May 04, 2022 at 12:50:20PM -0300, Arnaldo Carvalho de Melo escreveu:
-> Em Tue, May 03, 2022 at 12:47:25PM -0700, Ian Rogers escreveu:
-> > On Thu, Apr 28, 2022 at 6:31 AM Arnaldo Carvalho de Melo
-> > <acme@kernel.org> wrote:
+On 2022-05-04 14:59, Rafael J. Wysocki wrote:
+> On Tue, May 3, 2022 at 7:59 PM Nathan Chancellor <nathan@kernel.org> wrote:
+> >
+> > Hi Rafael,
+> >
+> > On Thu, Apr 14, 2022 at 03:11:21PM +0200, Rafael J. Wysocki wrote:
+> > > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 > > >
-> > > Em Thu, Apr 28, 2022 at 09:12:26AM -0400, Liang, Kan escreveu:
-> > > >
-> > > >
-> > > > On 4/28/2022 3:57 AM, Ian Rogers wrote:
-> > > > > Events are generated for CascadeLake Server v1.15 with
-> > > > > events from:
-> > > > > https://download.01.org/perfmon/CLX/
-> > > > >
-> > > > > Using the scripts at:
-> > > > > https://github.com/intel/event-converter-for-linux-perf/
-> > > > >
-> > > > > This change updates descriptions, adds INST_DECODED.DECODERS and
-> > > > > corrects a counter mask in UOPS_RETIRED.TOTAL_CYCLES.
-> > > > >
-> > > > > Signed-off-by: Ian Rogers<irogers@google.com>
-> > > >
-> > > > Thanks Ian. For the whole series,
-> > > >
-> > > > Reviewed-by: Kan Liang <kan.liang@linux.intel.com>
+> > > There are some issues related to changing power states of PCI
+> > > devices, mostly related to carrying out unnecessary actions in some
+> > > places, and the code is generally hard to follow.
 > > >
-> > > Thanks, applied.
+> > >  1. pci_power_up() has two callers, pci_set_power_state() and
+> > >     pci_pm_default_resume_early().  The latter updates the current
+> > >     power state of the device right after calling pci_power_up()
+> > >     and it restores the entire config space of the device right
+> > >     after that, so pci_power_up() itself need not read the
+> > >     PCI_PM_CTRL register or restore the BARs after programming the
+> > >     device into D0 in that case.
 > > >
-> > > - Arnaldo
-> > 
-> > Thanks Arnaldo, it looks like CLX was accidentally skipped.
+> > >  2. It is generally hard to get a clear view of the pci_power_up()
+> > >     code flow, especially in some corner cases, due to all of the
+> > >     involved PCI_PM_CTRL register reads and writes occurring in
+> > >     pci_platform_power_transition() and in pci_raw_set_power_state(),
+> > >     some of which are redundant.
+> > >
+> > >  3. The transitions from low-power states to D0 and the other way
+> > >     around are unnecessarily tangled in pci_raw_set_power_state()
+> > >     which causes it to use a redundant local variable and makes it
+> > >     rather hard to follow.
+> > >
+> > > To address the above shortcomings, make the following changes:
+> > >
+> > >  a. Remove the code handling transitions into D0
+> > >     from pci_raw_set_power_state() and rename it as
+> > >     pci_set_low_power_state().
+> > >
+> > >  b. Add the code handling transitions into D0 directly
+> > >     to pci_power_up() and to a new wrapper function
+> > >     pci_set_full_power_state() calling it internally that is
+> > >     only used in pci_set_power_state().
+> > >
+> > >  c. Make pci_power_up() avoid redundant PCI_PM_CTRL register reads
+> > >     and make it work in the same way for transitions from any
+> > >     low-power states (transitions from D1 and D2 are handled
+> > >     slightly differently before the change).
+> > >
+> > >  d. Put the restoration of the BARs and the PCI_PM_CTRL
+> > >     register read confirming the power state change into
+> > >     pci_set_full_power_state() to avoid doing that in
+> > >     pci_pm_default_resume_early() unnecessarily.
+> > >
+> > > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > > Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+> >
+> > This change as commit 5bffe4c611f5 ("PCI/PM: Rework changing power
+> > states of PCI devices") causes my AMD-based system to fail to fully
+> > boot. As far as I can tell, this might be NVMe related, which might make
+> > getting a full log difficult, as journalctl won't have anywhere to save
+> > it. I see:
+> >
+> > nvme nvme0: I/O 8 QID 0 timeout, completion polled
+> >
+> > then shortly afterwards:
+> >
+> > nvme nvme0: I/O 24 QID 0 timeout, completion polled
+> > nvme nvme0: missing or invalid SUBNQN field
+> >
+> > then I am dropped into an emergency shell.
 > 
-> Checking, I usually take these using b4...
+> Thanks for the report!
+> 
+> > This is a log from the previous commit, which may give some hints about
+> > the configuration of this particular system.
+> >
+> > https://gist.github.com/nathanchance/8a56f0939410cb187896e904c72e41e7/raw/b47b2620bdd32d43c7a3b209fcfd9e3d4668f058/good-boot.log
+> >
+> > If there is any additional debugging information I can provide or
+> > patches I can try, please let me know!
+> 
+> Please see what happens if the "if (dev->current_state == PCI_D0)"
+> check and the following "return 0" statement in pci_power_up() are
+> commented out.
 
-Got it now, checked the other 6 patches are in.
+I've built an arm64 allmodconfig kernel on linux-next tag next-20220503, and tried to boot it.
+This is the boot error I see [1].
+I bisected down to this patch [2]
 
-Thanks for pointing this out.
+When I revert the following patches [3] the kernel boots fine.
+I also tried next-20220504 and I saw the same issue.
 
-- Arnaldo
+Cheers,
+Anders
+[1] http://ix.io/3WT3
+[2] http://ix.io/3WXT
+[3] http://ix.io/3WXU

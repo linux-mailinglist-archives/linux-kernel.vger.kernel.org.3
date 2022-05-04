@@ -2,225 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D52051AF5B
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 22:36:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7786E51AF21
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 22:31:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378288AbiEDUjo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 16:39:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45756 "EHLO
+        id S1378047AbiEDUe5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 16:34:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378159AbiEDUjC (ORCPT
+        with ESMTP id S1378037AbiEDUez (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 16:39:02 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3AAEB7F0
-        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 13:35:23 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id a14-20020a7bc1ce000000b00393fb52a386so3929108wmj.1
-        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 13:35:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=conchuod.ie; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=fsh4pbs3Reo8M+2WhELoDR9Jgw5waXtKp+zOH5sp9UY=;
-        b=BVwVA9Mihadsw+0aZxp3gkgbyCJ+Dg52FAHNdNppEqfjL91z9zMOjvJwUsz7TtzE9o
-         bLajepeEas5+xQlj67PBRX07sXnY5tkzCXadRDHg+LO7lXwkI3kSJt1qTUfbKNZx9ZqD
-         EjDUg3YXP3yq5wG/qpj4wrbVtoeF/0P/PLIlq3t1kEuEgwYglnpwSKgKeUYxgPOaHKMy
-         wVzLEHX3D7ADUTMrsXbrhFdz1MvvG03zKypEg4SEq5b+2MJNwmOCQuOG8PT53ykhjSTt
-         PzC74e7eqwqrWqNJEAofERfKaHOU5YhAco7aY9P5j7G64a6sDZXZxE5j+3K/DE7rbLsQ
-         dz3A==
+        Wed, 4 May 2022 16:34:55 -0400
+Received: from mail-ot1-f45.google.com (mail-ot1-f45.google.com [209.85.210.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CCBE4F9EB;
+        Wed,  4 May 2022 13:31:18 -0700 (PDT)
+Received: by mail-ot1-f45.google.com with SMTP id l9-20020a056830268900b006054381dd35so1655766otu.4;
+        Wed, 04 May 2022 13:31:18 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=fsh4pbs3Reo8M+2WhELoDR9Jgw5waXtKp+zOH5sp9UY=;
-        b=74Qt4oK64tmHpB9qI5fyJQtN/4m9xurTRTBit2MaLImo764hR4WX0zBOdvqUMGLyQ0
-         1UY1pn6ao3kLWSiNdNIFNdwXZ0E+nReCyN0FDl9LcAjXu8z6HFewJ7KGcXNuOHb22s10
-         YlE3r+q9TYMx0p8jgaFoxbDkyGGGbjN7sUzRodjaH5bCNr3Es/08exfIC9TTStX480+T
-         q1aO+JhF56qEIK7w+cC48ervUbL026nL1ECbXZeAPqRValApwxDtrf2Cz577AvDwNfv2
-         /l1uwlgvnxuDFJGfQtk5xq9jWKOZ185efGzwkI18AukuGW9/AND7cG+WsjPSOcFm6Vb9
-         UApA==
-X-Gm-Message-State: AOAM531bTwYIxoGGR285lx+UJ32POaiHWyUOv/pte/Cu/xuOMmEOCkwp
-        ELeHrdQxrAwN5O0SNinEv9RjiQ==
-X-Google-Smtp-Source: ABdhPJzBd2X1g1vv5U4f2un+q/En59yasOly1MTqtmipkBqEI+cZhShIPdGKAXebzJkRSYAqxPMV1g==
-X-Received: by 2002:a05:600c:9:b0:393:ea67:1c68 with SMTP id g9-20020a05600c000900b00393ea671c68mr1127451wmc.92.1651696522583;
-        Wed, 04 May 2022 13:35:22 -0700 (PDT)
-Received: from henark71.. ([109.77.36.132])
-        by smtp.gmail.com with ESMTPSA id l20-20020adfc794000000b0020c5253d8dfsm13330101wrg.43.2022.05.04.13.35.21
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=eqhMwN4tyN2ECyEbdMTwnZxfCbkUyNiMmIExOF8iPPE=;
+        b=BqsRaXpLPDBV+f7jLdimuAKNgW57BuKTjJw+8KR8iAqMiAXCNy+f1/bOBbQDv93UZc
+         mnP3SxFaxavAmuP0Jg2sxXxOQiaBBD/fzAUHFw8vi9stowEXoT7jTI3jM7n1tshvQJtl
+         +2oTaBITgMAxYQm74x/p51XX5R64tR7Kg6II7RwvKE/52C1t4wDoWjirrKgJG9NrhCGg
+         T+dcf3Ow0ZxQ6Un/9h3j32okmu0eQWYARSVzu36W2zoollCEMqR3Laz8yug4uOnK8Gxa
+         5wsgnUZxUt1Tj4/0JR/076ISJtNtJzjNMdk/i/tulUHg/PlS/jm4BWkJ1pb3uk1M5eRZ
+         9LnA==
+X-Gm-Message-State: AOAM531+XLWdxY/8EeBdYLYuYLTbm4vcKnr22tNiBfM6laZ+RkaKnEpq
+        3pjwl8IysDzWV3cVwZR4xQ==
+X-Google-Smtp-Source: ABdhPJwQywTu4F9RwachS/Z+ymS39mbMLYXQjo/u7vJvvBOE89ll6PcoXARhA7T/H6EuKifCvUSMUQ==
+X-Received: by 2002:a05:6830:14d4:b0:606:cc5:32cd with SMTP id t20-20020a05683014d400b006060cc532cdmr7035362otq.359.1651696277498;
+        Wed, 04 May 2022 13:31:17 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id u36-20020a05687004e400b000e932746d33sm8441359oam.28.2022.05.04.13.31.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 May 2022 13:35:22 -0700 (PDT)
-From:   Conor Dooley <mail@conchuod.ie>
-To:     krzk+dt@kernel.org, palmer@dabbelt.com, robh+dt@kernel.org
-Cc:     conor.dooley@microchip.com, Cyril.Jean@microchip.com,
-        daire.mcnamara@microchip.com, paul.walmsley@sifive.com,
-        aou@eecs.berkeley.edu, palmer@rivosinc.com, arnd@arndb.de,
-        heiko@sntech.de, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
-Subject: [PATCH v4 8/8] riscv: dts: microchip: add the sundance polarberry
-Date:   Wed,  4 May 2022 21:30:52 +0100
-Message-Id: <20220504203051.1210355-9-mail@conchuod.ie>
-X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220504203051.1210355-1-mail@conchuod.ie>
-References: <20220504203051.1210355-1-mail@conchuod.ie>
+        Wed, 04 May 2022 13:31:16 -0700 (PDT)
+Received: (nullmailer pid 2175284 invoked by uid 1000);
+        Wed, 04 May 2022 20:31:15 -0000
+Date:   Wed, 4 May 2022 15:31:15 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Balakrishna Godavarthi <quic_bgodavar@quicinc.com>
+Cc:     agross@kernel.org, bjorn.andersson@linaro.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, marcel@holtmann.org,
+        johan.hedberg@gmail.com, mka@chromium.org,
+        linux-bluetooth@vger.kernel.org, quic_hemantg@quicinc.com,
+        quic_saluvala@quicinc.com, quic_rjliao@quicinc.com,
+        mcchou@chromium.org
+Subject: Re: [PATCH v1 1/3] dt-bindings: net: bluetooth: Add wlan-gpio entry
+ for wcn6750
+Message-ID: <YnLik/JKsHs6yfwc@robh.at.kernel.org>
+References: <1651228073-1999-1-git-send-email-quic_bgodavar@quicinc.com>
+ <1651228073-1999-2-git-send-email-quic_bgodavar@quicinc.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1651228073-1999-2-git-send-email-quic_bgodavar@quicinc.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Conor Dooley <conor.dooley@microchip.com>
+On Fri, Apr 29, 2022 at 03:57:51PM +0530, Balakrishna Godavarthi wrote:
+> This patch adds a wlan-gpio entry and its reference usage for
 
-Add a minimal device tree for the PolarFire SoC based Sundance
-PolarBerry.
+wlan-gpios
 
-Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
----
- arch/riscv/boot/dts/microchip/Makefile        |  1 +
- .../dts/microchip/mpfs-polarberry-fabric.dtsi | 16 +++
- .../boot/dts/microchip/mpfs-polarberry.dts    | 97 +++++++++++++++++++
- 3 files changed, 114 insertions(+)
- create mode 100644 arch/riscv/boot/dts/microchip/mpfs-polarberry-fabric.dtsi
- create mode 100644 arch/riscv/boot/dts/microchip/mpfs-polarberry.dts
+> BT SoC wcn6750.
+> 
+> Signed-off-by: Sai Teja Aluvala <quic_saluvala@quicinc.com>
+> Signed-off-by: Balakrishna Godavarthi <quic_bgodavar@quicinc.com>
+> ---
+>  Documentation/devicetree/bindings/net/qualcomm-bluetooth.yaml | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/net/qualcomm-bluetooth.yaml b/Documentation/devicetree/bindings/net/qualcomm-bluetooth.yaml
+> index f93c6e7..624f957 100644
+> --- a/Documentation/devicetree/bindings/net/qualcomm-bluetooth.yaml
+> +++ b/Documentation/devicetree/bindings/net/qualcomm-bluetooth.yaml
+> @@ -24,6 +24,10 @@ properties:
+>        - qcom,qca6390-bt
+>        - qcom,wcn6750-bt
+>  
+> +  wlan-gpios:
+> +    maxItems: 1
+> +    description: gpio specifier used to wlan chip
 
-diff --git a/arch/riscv/boot/dts/microchip/Makefile b/arch/riscv/boot/dts/microchip/Makefile
-index af3a5059b350..39aae7b04f1c 100644
---- a/arch/riscv/boot/dts/microchip/Makefile
-+++ b/arch/riscv/boot/dts/microchip/Makefile
-@@ -1,3 +1,4 @@
- # SPDX-License-Identifier: GPL-2.0
- dtb-$(CONFIG_SOC_MICROCHIP_POLARFIRE) += mpfs-icicle-kit.dtb
-+dtb-$(CONFIG_SOC_MICROCHIP_POLARFIRE) += mpfs-polarberry.dtb
- obj-$(CONFIG_BUILTIN_DTB) += $(addsuffix .o, $(dtb-y))
-diff --git a/arch/riscv/boot/dts/microchip/mpfs-polarberry-fabric.dtsi b/arch/riscv/boot/dts/microchip/mpfs-polarberry-fabric.dtsi
-new file mode 100644
-index 000000000000..49380c428ec9
---- /dev/null
-+++ b/arch/riscv/boot/dts/microchip/mpfs-polarberry-fabric.dtsi
-@@ -0,0 +1,16 @@
-+// SPDX-License-Identifier: (GPL-2.0 OR MIT)
-+/* Copyright (c) 2020-2022 Microchip Technology Inc */
-+
-+/ {
-+	fabric_clk3: fabric-clk3 {
-+		compatible = "fixed-clock";
-+		#clock-cells = <0>;
-+		clock-frequency = <62500000>;
-+	};
-+
-+	fabric_clk1: fabric-clk1 {
-+		compatible = "fixed-clock";
-+		#clock-cells = <0>;
-+		clock-frequency = <125000000>;
-+	};
-+};
-diff --git a/arch/riscv/boot/dts/microchip/mpfs-polarberry.dts b/arch/riscv/boot/dts/microchip/mpfs-polarberry.dts
-new file mode 100644
-index 000000000000..1cad5b0d42e1
---- /dev/null
-+++ b/arch/riscv/boot/dts/microchip/mpfs-polarberry.dts
-@@ -0,0 +1,97 @@
-+// SPDX-License-Identifier: (GPL-2.0 OR MIT)
-+/* Copyright (c) 2020-2022 Microchip Technology Inc */
-+
-+/dts-v1/;
-+
-+#include "mpfs.dtsi"
-+#include "mpfs-polarberry-fabric.dtsi"
-+
-+/* Clock frequency (in Hz) of the rtcclk */
-+#define MTIMER_FREQ	1000000
-+
-+/ {
-+	model = "Sundance PolarBerry";
-+	compatible = "sundance,polarberry", "microchip,mpfs";
-+
-+	aliases {
-+		ethernet0 = &mac1;
-+		serial0 = &mmuart0;
-+	};
-+
-+	chosen {
-+		stdout-path = "serial0:115200n8";
-+	};
-+
-+	cpus {
-+		timebase-frequency = <MTIMER_FREQ>;
-+	};
-+
-+	ddrc_cache_lo: memory@80000000 {
-+		device_type = "memory";
-+		reg = <0x0 0x80000000 0x0 0x2e000000>;
-+	};
-+
-+	ddrc_cache_hi: memory@1000000000 {
-+		device_type = "memory";
-+		reg = <0x10 0x00000000 0x0 0xC0000000>;
-+	};
-+};
-+
-+/*
-+ * phy0 is connected to mac0, but the port itself is on the (optional) carrier
-+ * board.
-+ */
-+&mac0 {
-+	status = "disabled";
-+	phy-mode = "sgmii";
-+	phy-handle = <&phy0>;
-+};
-+
-+&mac1 {
-+	status = "okay";
-+	phy-mode = "sgmii";
-+	phy-handle = <&phy1>;
-+	phy1: ethernet-phy@5 {
-+		reg = <5>;
-+		ti,fifo-depth = <0x01>;
-+	};
-+	phy0: ethernet-phy@4 {
-+		reg = <4>;
-+		ti,fifo-depth = <0x01>;
-+	};
-+};
-+
-+&mbox {
-+	status = "okay";
-+};
-+
-+&mmc {
-+	bus-width = <4>;
-+	disable-wp;
-+	cap-sd-highspeed;
-+	cap-mmc-highspeed;
-+	card-detect-delay = <200>;
-+	mmc-ddr-1_8v;
-+	mmc-hs200-1_8v;
-+	sd-uhs-sdr12;
-+	sd-uhs-sdr25;
-+	sd-uhs-sdr50;
-+	sd-uhs-sdr104;
-+	status = "okay";
-+};
-+
-+&mmuart0 {
-+	status = "okay";
-+};
-+
-+&refclk {
-+	clock-frequency = <125000000>;
-+};
-+
-+&rtc {
-+	status = "okay";
-+};
-+
-+&syscontroller {
-+	status = "okay";
-+};
--- 
-2.36.0
+How does one 'wlan' a chip?
 
+> +
+>    enable-gpios:
+>      maxItems: 1
+>      description: gpio specifier used to enable chip
+> @@ -123,6 +127,7 @@ allOf:
+>                - qcom,wcn6750-bt
+>      then:
+>        required:
+> +        - wlan-gpios
+>          - enable-gpios
+>          - swctrl-gpios
+>          - vddio-supply
+> @@ -166,6 +171,7 @@ examples:
+>              compatible = "qcom,wcn6750-bt";
+>              pinctrl-names = "default";
+>              pinctrl-0 = <&bt_en_default>;
+> +            wlan-gpios = <&tlmm 84 GPIO_ACTIVE_HIGH>;
+>              enable-gpios = <&tlmm 85 GPIO_ACTIVE_HIGH>;
+>              swctrl-gpios = <&tlmm 86 GPIO_ACTIVE_HIGH>;
+>              vddio-supply = <&vreg_l19b_1p8>;
+> -- 
+> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+> a Linux Foundation Collaborative Project
+> 
+> 

@@ -2,58 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B968951ADE4
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 21:35:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4677B51ADE6
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 21:37:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377560AbiEDTj3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 15:39:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40008 "EHLO
+        id S1352186AbiEDTkn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 15:40:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238694AbiEDTjL (ORCPT
+        with ESMTP id S232529AbiEDTkl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 15:39:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB42E1C13D;
-        Wed,  4 May 2022 12:35:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D2C1361BE3;
-        Wed,  4 May 2022 19:35:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B762DC385A4;
-        Wed,  4 May 2022 19:35:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651692931;
-        bh=wifdIng5C5+zvFOVkWllKXbxxVMnCc1cn//B0XhEpek=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=lzMbrpl1X0/Izn8Dbd/Pgv0Yx4q/r1wmVr7Ln6lHotMVWggcGUiZhSP413k9Y9zMt
-         dwhdbICf8SZ+qiA+cdQy+g/Jyq2to0UQSy36giJfE0cLWlKUiQPNijxiHfEgtQipxB
-         NJkqWR0PjkuOThf5WqfkhkGX1KQKn3IbjZeVd7/Um+iMZvihmnAQTKSer0jwmGJC6+
-         qYdyywA0pFQpyg7E4HwE2Nf161ijabc5PIfgwm5BzMtyXJ7cKcD9jQyWe1IqbC82Za
-         wRJohgmPQp1nIeAsGZBuq/x3p+c7xAFkx4sw6IpcWSKJz2y/PuubWJRr08wWbKQVs1
-         RPu3wb9+BxLcg==
-Date:   Wed, 4 May 2022 12:35:28 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>
-Subject: Re: [PATCH v3 4/9] PCI/PM: Rework changing power states of PCI
- devices
-Message-ID: <YnLVgOqGOPaSrC7G@dev-arch.thelio-3990X>
-References: <4419002.LvFx2qVVIh@kreacher>
- <CAJZ5v0i1Ynt54yb7aMJorkYUvqkxhxOqvQJb8AdA7Ps1aBO5tg@mail.gmail.com>
- <YnKrcFSjLr+W+myL@dev-arch.thelio-3990X>
- <2650302.mvXUDI8C0e@kreacher>
+        Wed, 4 May 2022 15:40:41 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E31363299A;
+        Wed,  4 May 2022 12:37:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1651693025; x=1683229025;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=Jf6tngzF3V71emQN/niHDC62BLbJwpJBRPwYIfhp48s=;
+  b=qR92w7CKCligRE4DAXeGE21xODByXgcd6KR5izmtNC1IdC+0jotvmrdj
+   f0TdKWuTL8IigaCyg4109nun2ITj4r3WgcFMVYpUDgGbRh+47KRkiIlv1
+   s5k4HMpabQvB8hF5mVXGo5BK+lksdDzgzfAm53wZxqYdr46Wk4PxlHZIe
+   Y=;
+Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
+  by alexa-out.qualcomm.com with ESMTP; 04 May 2022 12:37:04 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2022 12:37:04 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Wed, 4 May 2022 12:37:04 -0700
+Received: from hu-mrana-lv.qualcomm.com (10.49.16.6) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Wed, 4 May 2022 12:37:03 -0700
+From:   Mayank Rana <quic_mrana@quicinc.com>
+To:     <peter.chen@kernel.org>, <balbi@kernel.org>,
+        <gregkh@linuxfoundation.org>
+CC:     <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <Thinh.Nguyen@synopsys.com>, <John.Youn@synopsys.com>,
+        <quic_jackp@quicinc.com>, <quic_wcheng@quicinc.com>,
+        Mayank Rana <quic_mrana@quicinc.com>
+Subject: [PATCH] usb: dwc3: Fix ep0 handling when getting reset while doing control transfer
+Date:   Wed, 4 May 2022 12:36:41 -0700
+Message-ID: <1651693001-29891-1-git-send-email-quic_mrana@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2650302.mvXUDI8C0e@kreacher>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Type: text/plain
+X-Originating-IP: [10.49.16.6]
+X-ClientProxiedBy: nalasex01a.na.qualcomm.com (10.47.209.196) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -62,148 +63,127 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 04, 2022 at 08:00:33PM +0200, Rafael J. Wysocki wrote:
-> On Wednesday, May 4, 2022 6:36:00 PM CEST Nathan Chancellor wrote:
-> > On Wed, May 04, 2022 at 02:59:17PM +0200, Rafael J. Wysocki wrote:
-> > > On Tue, May 3, 2022 at 7:59 PM Nathan Chancellor <nathan@kernel.org> wrote:
-> > > >
-> > > > Hi Rafael,
-> > > >
-> > > > On Thu, Apr 14, 2022 at 03:11:21PM +0200, Rafael J. Wysocki wrote:
-> > > > > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > > > >
-> > > > > There are some issues related to changing power states of PCI
-> > > > > devices, mostly related to carrying out unnecessary actions in some
-> > > > > places, and the code is generally hard to follow.
-> > > > >
-> > > > >  1. pci_power_up() has two callers, pci_set_power_state() and
-> > > > >     pci_pm_default_resume_early().  The latter updates the current
-> > > > >     power state of the device right after calling pci_power_up()
-> > > > >     and it restores the entire config space of the device right
-> > > > >     after that, so pci_power_up() itself need not read the
-> > > > >     PCI_PM_CTRL register or restore the BARs after programming the
-> > > > >     device into D0 in that case.
-> > > > >
-> > > > >  2. It is generally hard to get a clear view of the pci_power_up()
-> > > > >     code flow, especially in some corner cases, due to all of the
-> > > > >     involved PCI_PM_CTRL register reads and writes occurring in
-> > > > >     pci_platform_power_transition() and in pci_raw_set_power_state(),
-> > > > >     some of which are redundant.
-> > > > >
-> > > > >  3. The transitions from low-power states to D0 and the other way
-> > > > >     around are unnecessarily tangled in pci_raw_set_power_state()
-> > > > >     which causes it to use a redundant local variable and makes it
-> > > > >     rather hard to follow.
-> > > > >
-> > > > > To address the above shortcomings, make the following changes:
-> > > > >
-> > > > >  a. Remove the code handling transitions into D0
-> > > > >     from pci_raw_set_power_state() and rename it as
-> > > > >     pci_set_low_power_state().
-> > > > >
-> > > > >  b. Add the code handling transitions into D0 directly
-> > > > >     to pci_power_up() and to a new wrapper function
-> > > > >     pci_set_full_power_state() calling it internally that is
-> > > > >     only used in pci_set_power_state().
-> > > > >
-> > > > >  c. Make pci_power_up() avoid redundant PCI_PM_CTRL register reads
-> > > > >     and make it work in the same way for transitions from any
-> > > > >     low-power states (transitions from D1 and D2 are handled
-> > > > >     slightly differently before the change).
-> > > > >
-> > > > >  d. Put the restoration of the BARs and the PCI_PM_CTRL
-> > > > >     register read confirming the power state change into
-> > > > >     pci_set_full_power_state() to avoid doing that in
-> > > > >     pci_pm_default_resume_early() unnecessarily.
-> > > > >
-> > > > > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > > > > Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
-> > > >
-> > > > This change as commit 5bffe4c611f5 ("PCI/PM: Rework changing power
-> > > > states of PCI devices") causes my AMD-based system to fail to fully
-> > > > boot. As far as I can tell, this might be NVMe related, which might make
-> > > > getting a full log difficult, as journalctl won't have anywhere to save
-> > > > it. I see:
-> > > >
-> > > > nvme nvme0: I/O 8 QID 0 timeout, completion polled
-> > > >
-> > > > then shortly afterwards:
-> > > >
-> > > > nvme nvme0: I/O 24 QID 0 timeout, completion polled
-> > > > nvme nvme0: missing or invalid SUBNQN field
-> > > >
-> > > > then I am dropped into an emergency shell.
-> > > 
-> > > Thanks for the report!
-> > > 
-> > > > This is a log from the previous commit, which may give some hints about
-> > > > the configuration of this particular system.
-> > > >
-> > > > https://gist.github.com/nathanchance/8a56f0939410cb187896e904c72e41e7/raw/b47b2620bdd32d43c7a3b209fcfd9e3d4668f058/good-boot.log
-> > > >
-> > > > If there is any additional debugging information I can provide or
-> > > > patches I can try, please let me know!
-> > > 
-> > > Please see what happens if the "if (dev->current_state == PCI_D0)"
-> > > check and the following "return 0" statement in pci_power_up() are
-> > > commented out.
-> > 
-> > If I understand you correctly, this? Unfortunately, that does not help.
-> 
-> Thanks for testing.
-> 
-> Please check if the patch below makes any difference.
+According to the databook ep0 should be in setup phase during reset.
+If host issues reset between control transfers, ep0 will be  in an
+invalid state. Fix this by issuing stall and restart on ep0 if it
+is not in setup phase.
 
-Unfortunately, there is still no difference. Even worse, I thought I
-might be able to get some information from the emergency shell but I
-don't think the HID driver is loaded yet so my keyboard does not work. I
-am not sure of how to get any further information from the problematic
-kernel; if anyone has any ideas, I am happy to test them! I am more than
-happy to continue to test patches or provide information, I just don't
-want to be a waste of time :)
+Also SW needs to complete pending control transfer and setup core for
+next setup stage as per data book. Hence check ep0 state during reset
+interrupt handling and make sure active transfers on ep0 out/in
+endpoint are stopped by queuing ENDXFER command for that endpoint and
+restart ep0 out again to receive next setup packet.
 
-Cheers,
-Nathan
+Signed-off-by: Mayank Rana <quic_mrana@quicinc.com>
+---
+ drivers/usb/dwc3/ep0.c    | 11 ++++++++---
+ drivers/usb/dwc3/gadget.c | 27 +++++++++++++++++++++++++--
+ drivers/usb/dwc3/gadget.h |  2 ++
+ 3 files changed, 35 insertions(+), 5 deletions(-)
 
-> ---
->  drivers/pci/pci.c |   10 ++++++----
->  1 file changed, 6 insertions(+), 4 deletions(-)
-> 
-> Index: linux-pm/drivers/pci/pci.c
-> ===================================================================
-> --- linux-pm.orig/drivers/pci/pci.c
-> +++ linux-pm/drivers/pci/pci.c
-> @@ -1245,7 +1245,7 @@ int pci_power_up(struct pci_dev *dev)
->  
->  	/* There's nothing more to do if current_state is D0 at this point. */
->  	if (dev->current_state == PCI_D0)
-> -		return 0;
-> +		goto done;
->  
->  	/*
->  	 * Program the device into PCI_D0 by forcing the entire word to 0 (this
-> @@ -1260,6 +1260,11 @@ int pci_power_up(struct pci_dev *dev)
->  		udelay(PCI_PM_D2_DELAY);
->  
->  	dev->current_state = PCI_D0;
-> +
-> +done:
-> +	if (dev->bus->self)
-> +		pcie_aspm_pm_state_change(dev->bus->self);
-> +
->  	return 1;
->  
->  fail:
-> @@ -1339,9 +1344,6 @@ static int pci_set_full_power_state(stru
->  		pci_restore_bars(dev);
->  	}
->  
-> -	if (dev->bus->self)
-> -		pcie_aspm_pm_state_change(dev->bus->self);
-> -
->  	return 0;
->  }
->  
-> 
-> 
-> 
+diff --git a/drivers/usb/dwc3/ep0.c b/drivers/usb/dwc3/ep0.c
+index 1064be5..9b6ebc3 100644
+--- a/drivers/usb/dwc3/ep0.c
++++ b/drivers/usb/dwc3/ep0.c
+@@ -218,7 +218,7 @@ int dwc3_gadget_ep0_queue(struct usb_ep *ep, struct usb_request *request,
+ 	return ret;
+ }
+ 
+-static void dwc3_ep0_stall_and_restart(struct dwc3 *dwc)
++void dwc3_ep0_stall_and_restart(struct dwc3 *dwc)
+ {
+ 	struct dwc3_ep		*dep;
+ 
+@@ -1087,13 +1087,18 @@ void dwc3_ep0_send_delayed_status(struct dwc3 *dwc)
+ 	__dwc3_ep0_do_control_status(dwc, dwc->eps[direction]);
+ }
+ 
+-static void dwc3_ep0_end_control_data(struct dwc3 *dwc, struct dwc3_ep *dep)
++void dwc3_ep0_end_control_data(struct dwc3 *dwc, struct dwc3_ep *dep)
+ {
+ 	struct dwc3_gadget_ep_cmd_params params;
+ 	u32			cmd;
+ 	int			ret;
+ 
+-	if (!dep->resource_index)
++	/*
++	 * For status/DATA OUT stage, TRB will be queued on ep0 out
++	 * endpoint for which resource index is zero. Hence allow
++	 * queuing ENDXFER command for ep0 out endpoint.
++	 */
++	if (!dep->resource_index && dep->number)
+ 		return;
+ 
+ 	cmd = DWC3_DEPCMD_ENDTRANSFER;
+diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+index ab725d2..82a210f 100644
+--- a/drivers/usb/dwc3/gadget.c
++++ b/drivers/usb/dwc3/gadget.c
+@@ -882,12 +882,13 @@ static int __dwc3_gadget_ep_enable(struct dwc3_ep *dep, unsigned int action)
+ 		reg |= DWC3_DALEPENA_EP(dep->number);
+ 		dwc3_writel(dwc->regs, DWC3_DALEPENA, reg);
+ 
++		dep->trb_dequeue = 0;
++		dep->trb_enqueue = 0;
++
+ 		if (usb_endpoint_xfer_control(desc))
+ 			goto out;
+ 
+ 		/* Initialize the TRB ring */
+-		dep->trb_dequeue = 0;
+-		dep->trb_enqueue = 0;
+ 		memset(dep->trb_pool, 0,
+ 		       sizeof(struct dwc3_trb) * DWC3_TRB_NUM);
+ 
+@@ -2745,6 +2746,7 @@ static int __dwc3_gadget_start(struct dwc3 *dwc)
+ 
+ 	/* begin to receive SETUP packets */
+ 	dwc->ep0state = EP0_SETUP_PHASE;
++	dwc->ep0_bounced = false;
+ 	dwc->link_state = DWC3_LINK_STATE_SS_DIS;
+ 	dwc->delayed_status = false;
+ 	dwc3_ep0_out_start(dwc);
+@@ -3766,6 +3768,27 @@ static void dwc3_gadget_reset_interrupt(struct dwc3 *dwc)
+ 	}
+ 
+ 	dwc3_reset_gadget(dwc);
++
++	/*
++	 * From SNPS databook section 8.1.2, the EP0 should be in setup
++	 * phase. So ensure that EP0 is in setup phase by issuing a stall
++	 * and restart if EP0 is not in setup phase.
++	 */
++	if (dwc->ep0state != EP0_SETUP_PHASE) {
++		unsigned int	dir;
++
++		dir = !!dwc->ep0_expect_in;
++		if (dwc->ep0state == EP0_DATA_PHASE)
++			dwc3_ep0_end_control_data(dwc, dwc->eps[dir]);
++		else
++			dwc3_ep0_end_control_data(dwc, dwc->eps[!dir]);
++
++		dwc->eps[0]->trb_enqueue = 0;
++		dwc->eps[1]->trb_enqueue = 0;
++
++		dwc3_ep0_stall_and_restart(dwc);
++	}
++
+ 	/*
+ 	 * In the Synopsis DesignWare Cores USB3 Databook Rev. 3.30a
+ 	 * Section 4.1.2 Table 4-2, it states that during a USB reset, the SW
+diff --git a/drivers/usb/dwc3/gadget.h b/drivers/usb/dwc3/gadget.h
+index f763380..55a56cf67 100644
+--- a/drivers/usb/dwc3/gadget.h
++++ b/drivers/usb/dwc3/gadget.h
+@@ -110,6 +110,8 @@ void dwc3_gadget_giveback(struct dwc3_ep *dep, struct dwc3_request *req,
+ void dwc3_ep0_interrupt(struct dwc3 *dwc,
+ 		const struct dwc3_event_depevt *event);
+ void dwc3_ep0_out_start(struct dwc3 *dwc);
++void dwc3_ep0_end_control_data(struct dwc3 *dwc, struct dwc3_ep *dep);
++void dwc3_ep0_stall_and_restart(struct dwc3 *dwc);
+ int __dwc3_gadget_ep0_set_halt(struct usb_ep *ep, int value);
+ int dwc3_gadget_ep0_set_halt(struct usb_ep *ep, int value);
+ int dwc3_gadget_ep0_queue(struct usb_ep *ep, struct usb_request *request,
+-- 
+2.7.4
+

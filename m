@@ -2,110 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F37451A15D
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 15:51:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A715A51A161
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 15:52:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350884AbiEDNyl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 09:54:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43074 "EHLO
+        id S1350761AbiEDNz5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 09:55:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235435AbiEDNyh (ORCPT
+        with ESMTP id S235435AbiEDNzz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 09:54:37 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7751D3E5C1;
-        Wed,  4 May 2022 06:50:58 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0C931619F1;
-        Wed,  4 May 2022 13:50:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D280C385A4;
-        Wed,  4 May 2022 13:50:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651672257;
-        bh=ZHm4zRsrfroy4L8PmGFqSDzG1kyM2WEhmxfXu30nYJ8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=KbD0RzUSQXY1GOpppkVJACC+5dEQ+Oa6BSONKBAqkMFnH24ZxfCh/URltxKrp48hu
-         4ERCzWc5JbR0Dwx1fMhtEe8hFatvMvFPHtXvknO90dVNHnSsAA6DP+s2JitpkPo6At
-         OrCGkGJ4vybphxUx+3TNN39kypMQPCjpbDHgxLrLXO0D0uqMGyeAvQTrEorGKltQZv
-         wSCJGoHL3Xhr/GKJNCePKYdZcNfU+ev30vTx+iFL2IyW2p3nFudZspWTVwNCmrsAwV
-         ZughhxY3oVqmWBH4BVsZrBpYquVzPqjhD+qSdlbeyjbuUILkCdNpx5QMWOQaNicTj7
-         E+esIMj4DGfZQ==
-Date:   Wed, 4 May 2022 14:50:51 +0100
-From:   Will Deacon <will@kernel.org>
-To:     Juergen Gross <jgross@suse.com>
-Cc:     Elliot Berman <quic_eberman@quicinc.com>,
-        "Srivatsa S. Bhat (VMware)" <srivatsa@csail.mit.edu>,
-        Alexey Makhalov <amakhalov@vmware.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>,
-        virtualization@lists.linux-foundation.org, x86@kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Murali Nalajala <quic_mnalajal@quicinc.com>,
-        stable@vger.kernel.org
-Subject: Re: [PATCH v2] arm64: paravirt: Use RCU read locks to guard
- stolen_time
-Message-ID: <20220504135050.GA20470@willie-the-truck>
-References: <20220428183536.2866667-1-quic_eberman@quicinc.com>
- <20220504094507.GA20305@willie-the-truck>
- <c6689e42-e87c-0c0b-c7ff-40134406e080@suse.com>
+        Wed, 4 May 2022 09:55:55 -0400
+Received: from out30-56.freemail.mail.aliyun.com (out30-56.freemail.mail.aliyun.com [115.124.30.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 195F13614F;
+        Wed,  4 May 2022 06:52:18 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R491e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04426;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0VCCCYkP_1651672335;
+Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0VCCCYkP_1651672335)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Wed, 04 May 2022 21:52:16 +0800
+From:   Yang Li <yang.lee@linux.alibaba.com>
+To:     sre@kernel.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Yang Li <yang.lee@linux.alibaba.com>,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: [PATCH -next] power: supply: Remove unnecessary print function dev_err()
+Date:   Wed,  4 May 2022 21:52:14 +0800
+Message-Id: <20220504135214.28901-1-yang.lee@linux.alibaba.com>
+X-Mailer: git-send-email 2.20.1.7.g153144c
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c6689e42-e87c-0c0b-c7ff-40134406e080@suse.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 04, 2022 at 03:38:47PM +0200, Juergen Gross wrote:
-> On 04.05.22 11:45, Will Deacon wrote:
-> > On Thu, Apr 28, 2022 at 11:35:36AM -0700, Elliot Berman wrote:
-> > > diff --git a/arch/arm64/kernel/paravirt.c b/arch/arm64/kernel/paravirt.c
-> > > index 75fed4460407..e724ea3d86f0 100644
-> > > --- a/arch/arm64/kernel/paravirt.c
-> > > +++ b/arch/arm64/kernel/paravirt.c
-> > > @@ -52,7 +52,9 @@ early_param("no-steal-acc", parse_no_stealacc);
-> > >   /* return stolen time in ns by asking the hypervisor */
-> > >   static u64 para_steal_clock(int cpu)
-> > >   {
-> > > +	struct pvclock_vcpu_stolen_time *kaddr = NULL;
-> > >   	struct pv_time_stolen_time_region *reg;
-> > > +	u64 ret = 0;
-> > >   	reg = per_cpu_ptr(&stolen_time_region, cpu);
-> > > @@ -61,28 +63,38 @@ static u64 para_steal_clock(int cpu)
-> > >   	 * online notification callback runs. Until the callback
-> > >   	 * has run we just return zero.
-> > >   	 */
-> > > -	if (!reg->kaddr)
-> > > +	rcu_read_lock();
-> > > +	kaddr = rcu_dereference(reg->kaddr);
-> > > +	if (!kaddr) {
-> > > +		rcu_read_unlock();
-> > >   		return 0;
-> > > +	}
-> > > -	return le64_to_cpu(READ_ONCE(reg->kaddr->stolen_time));
-> > > +	ret = le64_to_cpu(READ_ONCE(kaddr->stolen_time));
-> > 
-> > Is this READ_ONCE() still required now?
-> 
-> Yes, as it might be called for another cpu than the current one.
-> stolen_time might just be updated, so you want to avoid load tearing.
+The print function dev_err() is redundant because
+platform_get_irq() already prints an error.
 
-Ah yes, thanks. The lifetime of the structure is one thing, but the
-stolen time field is updated much more regularly than the kaddr pointer.
+Eliminate the follow coccicheck warning:
+./drivers/power/supply/goldfish_battery.c:225:2-9: line 225 is
+redundant because platform_get_irq() already prints an error
 
-So:
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+---
+ drivers/power/supply/goldfish_battery.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-Acked-by: Will Deacon <will@kernel.org>
+diff --git a/drivers/power/supply/goldfish_battery.c b/drivers/power/supply/goldfish_battery.c
+index bf1754355c9f..a58d713d75ce 100644
+--- a/drivers/power/supply/goldfish_battery.c
++++ b/drivers/power/supply/goldfish_battery.c
+@@ -221,10 +221,8 @@ static int goldfish_battery_probe(struct platform_device *pdev)
+ 	}
+ 
+ 	data->irq = platform_get_irq(pdev, 0);
+-	if (data->irq < 0) {
+-		dev_err(&pdev->dev, "platform_get_irq failed\n");
++	if (data->irq < 0)
+ 		return -ENODEV;
+-	}
+ 
+ 	ret = devm_request_irq(&pdev->dev, data->irq,
+ 			       goldfish_battery_interrupt,
+-- 
+2.20.1.7.g153144c
 
-Cheers,
-
-Will

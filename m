@@ -2,72 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BA3E51A28F
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 16:50:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 599F751A290
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 16:51:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351488AbiEDOxd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 10:53:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38280 "EHLO
+        id S1351618AbiEDOys (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 10:54:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241165AbiEDOxa (ORCPT
+        with ESMTP id S1351497AbiEDOyp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 10:53:30 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4B7213EBE;
-        Wed,  4 May 2022 07:49:53 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id A46F41F745;
-        Wed,  4 May 2022 14:49:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1651675792; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=z7a1tUIqeQwhYVrRkWyPm+b7zgnGEqyjjbvzog71260=;
-        b=B2Zw2g+w9XDRK6G7lxyfk7VvFnVb5A0kVZbGig8g7aedHQR9YwU7CJJrx7wWzjO9AiB1Bi
-        twYb9up37BZf/7I1bz9OpSZ9NWMMbqCD7HQOyvkaG98l9jvIchKtwQOxqcYSK88O1gZlZc
-        Sdgx6ISEP/WAFUiQDP6IBGaA1zbawZE=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1651675792;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=z7a1tUIqeQwhYVrRkWyPm+b7zgnGEqyjjbvzog71260=;
-        b=JfDFAxGNSDITB8tXcxJE223wy+ZesjAzz9qL0Pv/snTnxrRTpMD2dz0P+R1qjfUa4HW/Pq
-        gdl2w1TXFwIFhnCA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7893D131BD;
-        Wed,  4 May 2022 14:49:52 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id oGNQHJCScmKIHwAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Wed, 04 May 2022 14:49:52 +0000
-Message-ID: <e1a4290e-32c9-f3c1-ce8d-7ff56e2063c4@suse.de>
-Date:   Wed, 4 May 2022 16:49:52 +0200
+        Wed, 4 May 2022 10:54:45 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1813120A9
+        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 07:51:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651675868; x=1683211868;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=4PNYnoDcRNW0W0S3itkdcE27uH1+HMSjcwyYOAIa93M=;
+  b=RcyxcWcdJJHDw5R948YWGfKMakFR28n4tBdJKwlb0PAWShHnsjqR3xkb
+   82Zd/gioyibQBc935Dlu/G5rV9ez6pU14dJgOac7tgf0wCZT1UHl6iy9f
+   vwSxA6yWzmRkbKiiwzijgupECkfMpNvaq37OYP99Qd5riGoO6E1Qp3th/
+   9iuQlM3ESOSfxPzzwcbobcU27/Ubm4/KM8pE8ffN2Fz7Y1qwu34NssTuf
+   +jqYIO5thAdjXEA06Ho7PZ1joch5rbFjiwJNDtyaSaKgkkA385mfSltDl
+   GBtEe854aSMb63qGjAEw6K9S57Tj+5AQ3bpGhABs9VoDpy7+gAxw17Z9T
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10337"; a="248327059"
+X-IronPort-AV: E=Sophos;i="5.91,198,1647327600"; 
+   d="scan'208";a="248327059"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2022 07:51:08 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,198,1647327600"; 
+   d="scan'208";a="694119470"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 04 May 2022 07:51:06 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nmGLJ-000BSN-AK;
+        Wed, 04 May 2022 14:51:05 +0000
+Date:   Wed, 4 May 2022 22:51:00 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Jiri Slaby <jslaby@suse.cz>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [jirislaby:devel 57/73] include/linux/consolemap.h:50:16: error: 'c'
+ undeclared; did you mean 'vc'?
+Message-ID: <202205042242.hQmWKqlu-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH] drm/todo: Add entry for using kunit in the subsystem
-Content-Language: en-US
-To:     Javier Martinez Canillas <javierm@redhat.com>,
-        linux-kernel@vger.kernel.org
-Cc:     Jonathan Corbet <corbet@lwn.net>, David Airlie <airlied@linux.ie>,
-        dri-devel@lists.freedesktop.org, linux-doc@vger.kernel.org,
-        Maxime Ripard <maxime@cerno.tech>
-References: <20220504080212.713275-1-javierm@redhat.com>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <20220504080212.713275-1-javierm@redhat.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------S8kgMgY0OsMM915jm8s2l0gf"
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,77 +61,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------S8kgMgY0OsMM915jm8s2l0gf
-Content-Type: multipart/mixed; boundary="------------V00YHOmcYaEUm0RvKjWgIClX";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Javier Martinez Canillas <javierm@redhat.com>,
- linux-kernel@vger.kernel.org
-Cc: Jonathan Corbet <corbet@lwn.net>, David Airlie <airlied@linux.ie>,
- dri-devel@lists.freedesktop.org, linux-doc@vger.kernel.org,
- Maxime Ripard <maxime@cerno.tech>
-Message-ID: <e1a4290e-32c9-f3c1-ce8d-7ff56e2063c4@suse.de>
-Subject: Re: [PATCH] drm/todo: Add entry for using kunit in the subsystem
-References: <20220504080212.713275-1-javierm@redhat.com>
-In-Reply-To: <20220504080212.713275-1-javierm@redhat.com>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jirislaby/linux.git devel
+head:   fab642eca5e0ca41e656c8a0685cadf975b7ff88
+commit: b2c621c008e401176daf2b3a1ca78fa8d6ff01af [57/73] consolemap.h: convert macros to static inlines
+config: i386-tinyconfig (https://download.01.org/0day-ci/archive/20220504/202205042242.hQmWKqlu-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.2.0-20) 11.2.0
+reproduce (this is a W=1 build):
+        # https://git.kernel.org/pub/scm/linux/kernel/git/jirislaby/linux.git/commit/?id=b2c621c008e401176daf2b3a1ca78fa8d6ff01af
+        git remote add jirislaby https://git.kernel.org/pub/scm/linux/kernel/git/jirislaby/linux.git
+        git fetch --no-tags jirislaby devel
+        git checkout b2c621c008e401176daf2b3a1ca78fa8d6ff01af
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
---------------V00YHOmcYaEUm0RvKjWgIClX
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-SGkNCg0KQW0gMDQuMDUuMjIgdW0gMTA6MDIgc2NocmllYiBKYXZpZXIgTWFydGluZXogQ2Fu
-aWxsYXM6DQo+IFRoZSBLZXJuZWwgVW5pdCBUZXN0aW5nIChLVW5pdCkgZnJhbWV3b3JrIHBy
-b3ZpZGVzIGEgY29tbW9uIGZyYW1ld29yayBmb3INCj4gdW5pdCB0ZXN0cyB3aXRoaW4gdGhl
-IExpbnV4IGtlcm5lbC4gSGF2aW5nIGEgdGVzdCBzdWl0ZSB3b3VsZCBhbGxvdyB0bw0KPiBp
-ZGVudGlmeSByZWdyZXNzaW9ucyBlYXJsaWVyLg0KPiANCj4gU2lnbmVkLW9mZi1ieTogSmF2
-aWVyIE1hcnRpbmV6IENhbmlsbGFzIDxqYXZpZXJtQHJlZGhhdC5jb20+DQo+IC0tLQ0KPiAN
-Cj4gICBEb2N1bWVudGF0aW9uL2dwdS90b2RvLnJzdCB8IDE0ICsrKysrKysrKysrKysrDQo+
-ICAgMSBmaWxlIGNoYW5nZWQsIDE0IGluc2VydGlvbnMoKykNCj4gDQo+IGRpZmYgLS1naXQg
-YS9Eb2N1bWVudGF0aW9uL2dwdS90b2RvLnJzdCBiL0RvY3VtZW50YXRpb24vZ3B1L3RvZG8u
-cnN0DQo+IGluZGV4IDEyN2U3NmVlMGIyZC4uMTBiZmI1MDkwOGQxIDEwMDY0NA0KPiAtLS0g
-YS9Eb2N1bWVudGF0aW9uL2dwdS90b2RvLnJzdA0KPiArKysgYi9Eb2N1bWVudGF0aW9uL2dw
-dS90b2RvLnJzdA0KPiBAQCAtNjAzLDYgKzYwMywyMCBAQCBMZXZlbDogQWR2YW5jZWQNCj4g
-ICBCZXR0ZXIgVGVzdGluZw0KPiAgID09PT09PT09PT09PT09DQo+ICAgDQo+ICtBZGQgdW5p
-dCB0ZXN0cyB1c2luZyB0aGUgS2VybmVsIFVuaXQgVGVzdGluZyAoS1VuaXQpIGZyYW1ld29y
-aw0KPiArLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0NCj4gKw0KPiArVGhlIGBLVW5pdCA8aHR0cHM6Ly93d3cua2VybmVs
-Lm9yZy9kb2MvaHRtbC9sYXRlc3QvZGV2LXRvb2xzL2t1bml0L2luZGV4Lmh0bWw+YF8NCj4g
-K3Byb3ZpZGVzIGEgY29tbW9uIGZyYW1ld29yayBmb3IgdW5pdCB0ZXN0cyB3aXRoaW4gdGhl
-IExpbnV4IGtlcm5lbC4gSGF2aW5nIGENCj4gK3Rlc3Qgc3VpdGUgd291bGQgYWxsb3cgdG8g
-aWRlbnRpZnkgcmVncmVzc2lvbnMgZWFybGllci4NCj4gKw0KPiArQSBnb29kIGNhbmRpZGF0
-ZSBmb3IgdGhlIGZpcnN0IHVuaXQgdGVzdHMgYXJlIHRoZSBmb3JtYXQtY29udmVyc2lvbiBo
-ZWxwZXJzIGluDQo+ICtgYGRybV9mb3JtYXRfaGVscGVyLmNgYC4NCj4gKw0KPiArQ29udGFj
-dDogSmF2aWVyIE1hcnRpbmV6IENhbmlsbGFzIDxqYXZpZXJtQHJlZGhhdC5jb20+DQoNCkFj
-a2VkLWJ5OiBUaG9tYXMgWmltbWVybWFubiA8dHppbW1lcm1hbm5Ac3VzZS5kZT4NCg0KPiAr
-DQo+ICtMZXZlbDogSW50ZXJtZWRpYXRlDQo+ICsNCj4gICBFbmFibGUgdHJpbml0eSBmb3Ig
-RFJNDQo+ICAgLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQ0KPiAgIA0KDQotLSANClRob21hcyBa
-aW1tZXJtYW5uDQpHcmFwaGljcyBEcml2ZXIgRGV2ZWxvcGVyDQpTVVNFIFNvZnR3YXJlIFNv
-bHV0aW9ucyBHZXJtYW55IEdtYkgNCk1heGZlbGRzdHIuIDUsIDkwNDA5IE7DvHJuYmVyZywg
-R2VybWFueQ0KKEhSQiAzNjgwOSwgQUcgTsO8cm5iZXJnKQ0KR2VzY2jDpGZ0c2bDvGhyZXI6
-IEl2byBUb3Rldg0K
+All errors (new ones prefixed by >>):
 
---------------V00YHOmcYaEUm0RvKjWgIClX--
+   In file included from include/linux/vt_kern.h:16,
+                    from kernel/panic.c:19:
+   include/linux/consolemap.h: In function 'conv_uni_to_8bit':
+>> include/linux/consolemap.h:50:16: error: 'c' undeclared (first use in this function); did you mean 'vc'?
+      50 |         return c & 0xff;
+         |                ^
+         |                vc
+   include/linux/consolemap.h:50:16: note: each undeclared identifier is reported only once for each function it appears in
+   kernel/panic.c: In function '__warn':
+   kernel/panic.c:617:17: warning: function '__warn' might be a candidate for 'gnu_printf' format attribute [-Wsuggest-attribute=format]
+     617 |                 vprintk(args->fmt, args->args);
+         |                 ^~~~~~~
+   kernel/panic.c: At top level:
+   kernel/panic.c:662:6: warning: no previous prototype for '__warn_printk' [-Wmissing-prototypes]
+     662 | void __warn_printk(const char *fmt, ...)
+         |      ^~~~~~~~~~~~~
+   kernel/panic.c: In function '__warn_printk':
+   kernel/panic.c:669:9: warning: function '__warn_printk' might be a candidate for 'gnu_printf' format attribute [-Wsuggest-attribute=format]
+     669 |         vprintk(fmt, args);
+         |         ^~~~~~~
+--
+   In file included from include/linux/vt_kern.h:16,
+                    from lib/bust_spinlocks.c:17:
+   include/linux/consolemap.h: In function 'conv_uni_to_8bit':
+>> include/linux/consolemap.h:50:16: error: 'c' undeclared (first use in this function); did you mean 'vc'?
+      50 |         return c & 0xff;
+         |                ^
+         |                vc
+   include/linux/consolemap.h:50:16: note: each undeclared identifier is reported only once for each function it appears in
 
---------------S8kgMgY0OsMM915jm8s2l0gf
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
 
------BEGIN PGP SIGNATURE-----
+vim +50 include/linux/consolemap.h
 
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmJykpAFAwAAAAAACgkQlh/E3EQov+D6
-mxAAq7XObyRynI00OE4am3y87JyfCqsp42IrnRyBfArkaH2UnQsc5N5OMV+c8HrcDY2/77kZ3Oba
-mBqrVPl6xa80bynqXdHL8onCcOLrSesWWXgw5UjUK1m1MkxwRetWL3GGCbDt+LDG4UXlhiboVgaf
-FOz8ndPgo0aGUdXF6v1W2HCeWuhI0Lg5ftC73ndVgh95iKPvq62o8UUuaXZhLx2lpz+NO08bq5tg
-xWkBnCwD/pmou1akE9sc1kkgDvUckILyvirXiuVE6G5ukWq9wR31L/E4r0y7r1/VTa6xKiCtq+EC
-y8r4DdjncnGSmWT42atdsl8V/n2TYakh6gOBtioemXpdZNODkLSkoxliI0zPnwifwubHaM23VaXs
-J/V37JXIJDThz66YTMYBjE/+dP54iYLLbJlvNOrMWeqT0WjhHSJ4sK639uEUSgiS+S/yiYdqoIig
-aok0ceAqL3LkLrGD/HAe4I2LXob5/WsIr4KAS9oMTEDATxeKr4/NxPJ4F8sGqrraqyTSWj8RBQXT
-Q3NuTi3zJ0rI1gSiKmt2e4RymHbij8bWWby//uRUEPO34CONJa8lhCpz/Du7k1+zxlytBPo8nfvG
-IjsEPIiuP7bqVnewHFa3lBifIIimJVfpR+Xa9Ss6eHOfHNM329p5gbcjuheM7AmcJcDRI9p7k6Cb
-kf4=
-=2abr
------END PGP SIGNATURE-----
+    47	
+    48	static inline int conv_uni_to_8bit(u32 uni)
+    49	{
+  > 50		return c & 0xff;
+    51	}
+    52	
 
---------------S8kgMgY0OsMM915jm8s2l0gf--
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

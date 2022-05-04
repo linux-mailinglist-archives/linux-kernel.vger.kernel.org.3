@@ -2,46 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A49251A9CE
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:19:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DC9B51A6B4
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 18:54:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357512AbiEDRTm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 13:19:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51332 "EHLO
+        id S1354276AbiEDQ5m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 12:57:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356379AbiEDRFK (ORCPT
+        with ESMTP id S1354430AbiEDQyW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 13:05:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C180F506FD;
-        Wed,  4 May 2022 09:54:05 -0700 (PDT)
+        Wed, 4 May 2022 12:54:22 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A8564925C;
+        Wed,  4 May 2022 09:49:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 163AD616F8;
-        Wed,  4 May 2022 16:54:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6056CC385A5;
-        Wed,  4 May 2022 16:54:04 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D865DB82554;
+        Wed,  4 May 2022 16:49:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E1B3C385AA;
+        Wed,  4 May 2022 16:49:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651683244;
-        bh=IiDFosyBKEsDaEHgStrTUiiJs7CTh4KNL6+mOht+meQ=;
+        s=korg; t=1651682968;
+        bh=e559Bqf6LPnE3jwmAkFfShmHGWGViQtRHK3xguGfn7M=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pSDJ5iyRXm8J/cq26pEAIm42B9zIbR+f16s03aVy8GAqAQbkS+RCPT7mS47gbtp38
-         +PB1SxR0wfQmAihPJ2fh+fTOUSePmAxz1eAeErz8qmfvpDlIqQyz4bm5uFvbp8ZpV2
-         WzFJyCDN07vVJU3TyWqBad7/ReTPJCwhdWvjrXRo=
+        b=JXv9+z4gxvZFprPD9UO9Z0UV/V2mjIRXxUzSS2kdIzkSwu/IKtsxKFY73wakDtrdb
+         xexym6xIUjWBwyGUjAjETJ3UW+zSpY7bNS5ftELKkk07FEAoJYshPFXAQ9BcpBMfUa
+         MAdhajCc3ym8fNffyvwQ9TS/DeSHUNEhDfy+U75M=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 109/177] drm/sun4i: Remove obsolete references to PHYS_OFFSET
-Date:   Wed,  4 May 2022 18:45:02 +0200
-Message-Id: <20220504153102.988331294@linuxfoundation.org>
+        stable@vger.kernel.org, Daniel Starke <daniel.starke@siemens.com>
+Subject: [PATCH 5.4 82/84] tty: n_gsm: fix incorrect UA handling
+Date:   Wed,  4 May 2022 18:45:03 +0200
+Message-Id: <20220504152933.940828231@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220504153053.873100034@linuxfoundation.org>
-References: <20220504153053.873100034@linuxfoundation.org>
+In-Reply-To: <20220504152927.744120418@linuxfoundation.org>
+References: <20220504152927.744120418@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,65 +53,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Samuel Holland <samuel@sholland.org>
+From: Daniel Starke <daniel.starke@siemens.com>
 
-[ Upstream commit dc3ae06c5f2170d879ff58696f629d8c3868aec3 ]
+commit ff9166c623704337bd6fe66fce2838d9768a6634 upstream.
 
-commit b4bdc4fbf8d0 ("soc: sunxi: Deal with the MBUS DMA offsets in a
-central place") added a platform device notifier that sets the DMA
-offset for all of the display engine frontend and backend devices.
+n_gsm is based on the 3GPP 07.010 and its newer version is the 3GPP 27.010.
+See https://portal.3gpp.org/desktopmodules/Specifications/SpecificationDetails.aspx?specificationId=1516
+The changes from 07.010 to 27.010 are non-functional. Therefore, I refer to
+the newer 27.010 here. Chapter 5.4.4.2 states that any received unnumbered
+acknowledgment (UA) with its poll/final (PF) bit set to 0 shall be
+discarded. Currently, all UA frame are handled in the same way regardless
+of the PF bit. This does not comply with the standard.
+Remove the UA case in gsm_queue() to process only UA frames with PF bit set
+to 1 to abide the standard.
 
-The code applying the offset to DMA buffer physical addresses was then
-removed from the backend driver in commit 756668ba682e ("drm/sun4i:
-backend: Remove the MBUS quirks"), but the code subtracting PHYS_OFFSET
-was left in the frontend driver.
-
-As a result, the offset was applied twice in the frontend driver. This
-likely went unnoticed because it only affects specific configurations
-(scaling or certain pixel formats) where the frontend is used, on boards
-with both one of these older SoCs and more than 1 GB of DRAM.
-
-In addition, the references to PHYS_OFFSET prevent compiling the driver
-on architectures where PHYS_OFFSET is not defined.
-
-Fixes: b4bdc4fbf8d0 ("soc: sunxi: Deal with the MBUS DMA offsets in a central place")
-Reviewed-by: Jernej Skrabec <jernej.skrabec@gmail.com>
-Signed-off-by: Samuel Holland <samuel@sholland.org>
-Signed-off-by: Maxime Ripard <maxime@cerno.tech>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220424162633.12369-4-samuel@sholland.org
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: e1eaea46bb40 ("tty: n_gsm line discipline")
+Cc: stable@vger.kernel.org
+Signed-off-by: Daniel Starke <daniel.starke@siemens.com>
+Link: https://lore.kernel.org/r/20220414094225.4527-20-daniel.starke@siemens.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/sun4i/sun4i_frontend.c | 3 ---
- 1 file changed, 3 deletions(-)
+ drivers/tty/n_gsm.c |    1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/sun4i/sun4i_frontend.c b/drivers/gpu/drm/sun4i/sun4i_frontend.c
-index edb60ae0a9b7..faecc2935039 100644
---- a/drivers/gpu/drm/sun4i/sun4i_frontend.c
-+++ b/drivers/gpu/drm/sun4i/sun4i_frontend.c
-@@ -222,13 +222,11 @@ void sun4i_frontend_update_buffer(struct sun4i_frontend *frontend,
- 
- 	/* Set the physical address of the buffer in memory */
- 	paddr = drm_fb_cma_get_gem_addr(fb, state, 0);
--	paddr -= PHYS_OFFSET;
- 	DRM_DEBUG_DRIVER("Setting buffer #0 address to %pad\n", &paddr);
- 	regmap_write(frontend->regs, SUN4I_FRONTEND_BUF_ADDR0_REG, paddr);
- 
- 	if (fb->format->num_planes > 1) {
- 		paddr = drm_fb_cma_get_gem_addr(fb, state, swap ? 2 : 1);
--		paddr -= PHYS_OFFSET;
- 		DRM_DEBUG_DRIVER("Setting buffer #1 address to %pad\n", &paddr);
- 		regmap_write(frontend->regs, SUN4I_FRONTEND_BUF_ADDR1_REG,
- 			     paddr);
-@@ -236,7 +234,6 @@ void sun4i_frontend_update_buffer(struct sun4i_frontend *frontend,
- 
- 	if (fb->format->num_planes > 2) {
- 		paddr = drm_fb_cma_get_gem_addr(fb, state, swap ? 1 : 2);
--		paddr -= PHYS_OFFSET;
- 		DRM_DEBUG_DRIVER("Setting buffer #2 address to %pad\n", &paddr);
- 		regmap_write(frontend->regs, SUN4I_FRONTEND_BUF_ADDR2_REG,
- 			     paddr);
--- 
-2.35.1
-
+--- a/drivers/tty/n_gsm.c
++++ b/drivers/tty/n_gsm.c
+@@ -1813,7 +1813,6 @@ static void gsm_queue(struct gsm_mux *gs
+ 		gsm_response(gsm, address, UA);
+ 		gsm_dlci_close(dlci);
+ 		break;
+-	case UA:
+ 	case UA|PF:
+ 		if (cr == 0 || dlci == NULL)
+ 			break;
 
 

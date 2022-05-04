@@ -2,43 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD0BB51A617
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 18:49:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3086551A8B9
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:14:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353724AbiEDQwr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 12:52:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50926 "EHLO
+        id S1357713AbiEDRPM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 13:15:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353675AbiEDQwB (ORCPT
+        with ESMTP id S1355295AbiEDREQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 12:52:01 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 959EA47043;
-        Wed,  4 May 2022 09:48:23 -0700 (PDT)
+        Wed, 4 May 2022 13:04:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 757874E392;
+        Wed,  4 May 2022 09:52:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 39A35B82553;
-        Wed,  4 May 2022 16:48:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3584C385B2;
-        Wed,  4 May 2022 16:48:20 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 47158617BE;
+        Wed,  4 May 2022 16:52:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90CB9C385AA;
+        Wed,  4 May 2022 16:52:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651682901;
-        bh=iw5r7VXYhZZ7jk1+tRISB95kKILUAHqZqpWpvMsK8Bo=;
+        s=korg; t=1651683170;
+        bh=Exter9JfEyqxzaKEQ7kAEKeLUzK+9ANC15n6zUEY+oU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YTSVEOT65ILm2D6S/rZSfCWHPVElofiQ5N6J0fatR60A+fN+c4Kbo8aE4nlnnwBgg
-         00WQyUvImpEUs3uW5VshpGRkAwJeG+++XxMAHJiDU04+exi5oL9ezZnYe51Al0WX26
-         BHQi4JCZLpAIx+HxPAZmjQtz1qL2FD/L6VFPDWKw=
+        b=RaJnfb0JP9NWqVfYfkJSwdKP/Ns0L2H1WX3Zyyt4p3YPN4voMN1xvU4F+ofKEFwe7
+         KeGFsN67rbQoYBbFbKIvfyyiRi0qth5QwaEgTfmhsEAbmwd+4WgspBuWSraCPh2lPu
+         Su9PkL0yFW30BAw6WMO+8Fwp0VitDnX4qZZZR0bw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Oliver Neukum <oneukum@suse.com>
-Subject: [PATCH 5.4 07/84] USB: quirks: add STRING quirk for VCOM device
+        stable@vger.kernel.org, Hemant Kumar <quic_hemantk@quicinc.com>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Subject: [PATCH 5.15 035/177] bus: mhi: host: pci_generic: Add missing poweroff() PM callback
 Date:   Wed,  4 May 2022 18:43:48 +0200
-Message-Id: <20220504152928.241906856@linuxfoundation.org>
+Message-Id: <20220504153056.110873955@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220504152927.744120418@linuxfoundation.org>
-References: <20220504152927.744120418@linuxfoundation.org>
+In-Reply-To: <20220504153053.873100034@linuxfoundation.org>
+References: <20220504153053.873100034@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,31 +54,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Oliver Neukum <oneukum@suse.com>
+From: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 
-commit ec547af8a9ea6441864bad34172676b5652ceb96 upstream.
+commit e64d5fa5044f225ac87d96a7e4be11389999c4c6 upstream.
 
-This has been reported to stall if queried
+During hibernation process, once thaw() stage completes, the MHI endpoint
+devices will be in M0 state post recovery. After that, the devices will be
+powered down so that the system can enter the target sleep state. During
+this stage, the PCI core will put the devices in D3hot. But this transition
+is allowed by the MHI spec. The devices can only enter D3hot when it is in
+M3 state.
 
-Cc: stable <stable@vger.kernel.org>
-Signed-off-by: Oliver Neukum <oneukum@suse.com>
-Link: https://lore.kernel.org/r/20220414123152.1700-1-oneukum@suse.com
+So for fixing this issue, let's add the poweroff() callback that will get
+executed before putting the system in target sleep state during
+hibernation. This callback will power down the device properly so that it
+could be restored during restore() or thaw() stage.
+
+Cc: stable@vger.kernel.org
+Fixes: 5f0c2ee1fe8d ("bus: mhi: pci-generic: Fix hibernation")
+Reported-by: Hemant Kumar <quic_hemantk@quicinc.com>
+Suggested-by: Hemant Kumar <quic_hemantk@quicinc.com>
+Link: https://lore.kernel.org/r/20220405125907.5644-1-manivannan.sadhasivam@linaro.org
+Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/usb/core/quirks.c |    3 +++
- 1 file changed, 3 insertions(+)
+ drivers/bus/mhi/pci_generic.c |    1 +
+ 1 file changed, 1 insertion(+)
 
---- a/drivers/usb/core/quirks.c
-+++ b/drivers/usb/core/quirks.c
-@@ -511,6 +511,9 @@ static const struct usb_device_id usb_qu
- 	/* DJI CineSSD */
- 	{ USB_DEVICE(0x2ca3, 0x0031), .driver_info = USB_QUIRK_NO_LPM },
- 
-+	/* VCOM device */
-+	{ USB_DEVICE(0x4296, 0x7570), .driver_info = USB_QUIRK_CONFIG_INTF_STRINGS },
-+
- 	/* INTEL VALUE SSD */
- 	{ USB_DEVICE(0x8086, 0xf1a5), .driver_info = USB_QUIRK_RESET_RESUME },
- 
+--- a/drivers/bus/mhi/pci_generic.c
++++ b/drivers/bus/mhi/pci_generic.c
+@@ -1045,6 +1045,7 @@ static const struct dev_pm_ops mhi_pci_p
+ 	.resume = mhi_pci_resume,
+ 	.freeze = mhi_pci_freeze,
+ 	.thaw = mhi_pci_restore,
++	.poweroff = mhi_pci_freeze,
+ 	.restore = mhi_pci_restore,
+ #endif
+ };
 
 

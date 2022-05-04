@@ -2,34 +2,34 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33A4951B10E
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 23:36:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 070D951B0FB
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 23:35:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378656AbiEDVhc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 17:37:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48006 "EHLO
+        id S1378826AbiEDViV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 17:38:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378632AbiEDVgh (ORCPT
+        with ESMTP id S1378751AbiEDVhL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 17:36:37 -0400
+        Wed, 4 May 2022 17:37:11 -0400
 Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D4BF51E59;
-        Wed,  4 May 2022 14:33:00 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB936522CD;
+        Wed,  4 May 2022 14:33:16 -0700 (PDT)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: sre)
-        with ESMTPSA id 7F60D1F44C3A
+        with ESMTPSA id 897471F44C69
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1651699978;
-        bh=Uxbvppcj0Nco5gIMj9zWGbz7ZRjpQiwtkCHwEzgMp30=;
+        s=mail; t=1651699979;
+        bh=IcImFggGEzn5gbEr7rqP/4HgGwGmbwDRuyiWG6oyZ1A=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZS41zhKAtWkUSOTqA5ijbB3q8y610lsyumksjJcCYxXRCecXnwXM41m1ikj87R2IN
-         igqEY7asAWOgS9HfQFy5buA5+Qg4HTkMj2sliHqhXQARGzTaKGUewZwqNIoVKIMUZK
-         AIh1Kepbm4UMBovAccEqvOj0g+wxbfH5sthy0iOxtO7YhWNjRbsUXFDGHweyg2BTqV
-         bsJJjUEpDBGzKqgpVpGtsZJKli0VZfWZFaa9cD4CSsNpHLNaNS2PAu65TyCeN2txx4
-         n8Q7cuFnJ72nn26XJ69zC/YFItkI+ThOFsTxin2Dmera9+zg1gJXe/Wf/ihBYTTY1b
-         I5t9aBC9f4xlA==
+        b=W7NO66XvbVt2GJXUFRRPYNA9x/3kZtc9zykxrYfghsSmvbAgFRZAe4hYixJZmnnih
+         gLDwRb7mqrrfxPljdhNHueO4C04LDGuFwTtuOxssScIxcy5UUoUMZMms1oH5Yi+zYo
+         TI2Q/rwBb0RNiopfrqlo82gDwlfHUtN1KA3NSdPzkI0athEIxBgLDHn3Qjf7POdUMW
+         NmbeJYtYX8e8Wu24lVPdg98cO5JavyubB0O3fPoLs7j5m/XaW153L8VSKF3D87V6bI
+         T5hDXJIufbCLKl4Hhzf4V9I4zYzETKwr/5E56NEkWhciySE2Qi+R5/KAOlUmLabHK+
+         FBuNce4z/WrGg==
 Received: by jupiter.universe (Postfix, from userid 1000)
-        id 43B754819CE; Wed,  4 May 2022 23:32:53 +0200 (CEST)
+        id 461074819CF; Wed,  4 May 2022 23:32:53 +0200 (CEST)
 From:   Sebastian Reichel <sebastian.reichel@collabora.com>
 To:     Heiko Stuebner <heiko@sntech.de>
 Cc:     Rob Herring <robh+dt@kernel.org>,
@@ -45,11 +45,11 @@ Cc:     Rob Herring <robh+dt@kernel.org>,
         linux-arm-kernel@lists.infradead.org,
         linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, kernel@lists.collabora.co.uk,
-        Yifeng Zhao <yifeng.zhao@rock-chips.com>, kernel@collabora.com,
-        Sebastian Reichel <sebastian.reichel@collabora.com>
-Subject: [PATCHv2 09/21] mmc: sdhci-of-dwcmshc: add reset call back for rockchip Socs
-Date:   Wed,  4 May 2022 23:32:39 +0200
-Message-Id: <20220504213251.264819-10-sebastian.reichel@collabora.com>
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        kernel@collabora.com
+Subject: [PATCHv2 10/21] mmc: sdhci-of-dwcmshc: rename rk3568 to rk35xx
+Date:   Wed,  4 May 2022 23:32:40 +0200
+Message-Id: <20220504213251.264819-11-sebastian.reichel@collabora.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220504213251.264819-1-sebastian.reichel@collabora.com>
 References: <20220504213251.264819-1-sebastian.reichel@collabora.com>
@@ -65,86 +65,195 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yifeng Zhao <yifeng.zhao@rock-chips.com>
+Prepare driver for rk3588 support by renaming the internal data
+structures.
 
-The reset function build in the SDHCI will not reset the logic
-circuit related to the tuning function, which may cause data
-reading errors. Resetting the complete SDHCI controller through
-the reset controller fixes the issue.
-
-Signed-off-by: Yifeng Zhao <yifeng.zhao@rock-chips.com>
-[rebase, use optional variant of reset getter]
 Acked-by: Adrian Hunter <adrian.hunter@intel.com>
 Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 ---
- drivers/mmc/host/sdhci-of-dwcmshc.c | 26 +++++++++++++++++++++++++-
- 1 file changed, 25 insertions(+), 1 deletion(-)
+ drivers/mmc/host/sdhci-of-dwcmshc.c | 46 ++++++++++++++---------------
+ 1 file changed, 23 insertions(+), 23 deletions(-)
 
 diff --git a/drivers/mmc/host/sdhci-of-dwcmshc.c b/drivers/mmc/host/sdhci-of-dwcmshc.c
-index bac874ab0b33..3a1b5ba36405 100644
+index 3a1b5ba36405..f5fd88c7adef 100644
 --- a/drivers/mmc/host/sdhci-of-dwcmshc.c
 +++ b/drivers/mmc/host/sdhci-of-dwcmshc.c
-@@ -15,6 +15,7 @@
- #include <linux/module.h>
- #include <linux/of.h>
- #include <linux/of_device.h>
-+#include <linux/reset.h>
- #include <linux/sizes.h>
+@@ -56,14 +56,14 @@
+ #define DLL_LOCK_WO_TMOUT(x) \
+ 	((((x) & DWCMSHC_EMMC_DLL_LOCKED) == DWCMSHC_EMMC_DLL_LOCKED) && \
+ 	(((x) & DWCMSHC_EMMC_DLL_TIMEOUT) == 0))
+-#define RK3568_MAX_CLKS 3
++#define RK35xx_MAX_CLKS 3
  
- #include "sdhci-pltfm.h"
-@@ -63,6 +64,7 @@
- struct rk3568_priv {
+ #define BOUNDARY_OK(addr, len) \
+ 	((addr | (SZ_128M - 1)) == ((addr + len - 1) | (SZ_128M - 1)))
+ 
+-struct rk3568_priv {
++struct rk35xx_priv {
  	/* Rockchip specified optional clocks */
- 	struct clk_bulk_data rockchip_clks[RK3568_MAX_CLKS];
-+	struct reset_control *reset;
+-	struct clk_bulk_data rockchip_clks[RK3568_MAX_CLKS];
++	struct clk_bulk_data rockchip_clks[RK35xx_MAX_CLKS];
+ 	struct reset_control *reset;
  	u8 txclk_tapnum;
  };
- 
-@@ -255,6 +257,21 @@ static void dwcmshc_rk3568_set_clock(struct sdhci_host *host, unsigned int clock
- 	sdhci_writel(host, extra, DWCMSHC_EMMC_DLL_STRBIN);
- }
- 
-+static void rk35xx_sdhci_reset(struct sdhci_host *host, u8 mask)
-+{
-+	struct sdhci_pltfm_host *pltfm_host = sdhci_priv(host);
-+	struct dwcmshc_priv *dwc_priv = sdhci_pltfm_priv(pltfm_host);
+@@ -178,7 +178,7 @@ static void dwcmshc_rk3568_set_clock(struct sdhci_host *host, unsigned int clock
+ {
+ 	struct sdhci_pltfm_host *pltfm_host = sdhci_priv(host);
+ 	struct dwcmshc_priv *dwc_priv = sdhci_pltfm_priv(pltfm_host);
+-	struct rk3568_priv *priv = dwc_priv->priv;
 +	struct rk35xx_priv *priv = dwc_priv->priv;
-+
-+	if (mask & SDHCI_RESET_ALL && priv->reset) {
-+		reset_control_assert(priv->reset);
-+		udelay(1);
-+		reset_control_deassert(priv->reset);
-+	}
-+
-+	sdhci_reset(host, mask);
-+}
-+
- static const struct sdhci_ops sdhci_dwcmshc_ops = {
- 	.set_clock		= sdhci_set_clock,
- 	.set_bus_width		= sdhci_set_bus_width,
-@@ -269,7 +286,7 @@ static const struct sdhci_ops sdhci_dwcmshc_rk3568_ops = {
- 	.set_bus_width		= sdhci_set_bus_width,
- 	.set_uhs_signaling	= dwcmshc_set_uhs_signaling,
- 	.get_max_clock		= sdhci_pltfm_clk_get_max_clock,
--	.reset			= sdhci_reset,
-+	.reset			= rk35xx_sdhci_reset,
+ 	u8 txclk_tapnum = DLL_TXCLK_TAPNUM_DEFAULT;
+ 	u32 extra, reg;
+ 	int err;
+@@ -281,7 +281,7 @@ static const struct sdhci_ops sdhci_dwcmshc_ops = {
  	.adma_write_desc	= dwcmshc_adma_write_desc,
  };
  
-@@ -292,6 +309,13 @@ static int dwcmshc_rk3568_init(struct sdhci_host *host, struct dwcmshc_priv *dwc
- 	int err;
- 	struct rk3568_priv *priv = dwc_priv->priv;
+-static const struct sdhci_ops sdhci_dwcmshc_rk3568_ops = {
++static const struct sdhci_ops sdhci_dwcmshc_rk35xx_ops = {
+ 	.set_clock		= dwcmshc_rk3568_set_clock,
+ 	.set_bus_width		= sdhci_set_bus_width,
+ 	.set_uhs_signaling	= dwcmshc_set_uhs_signaling,
+@@ -296,18 +296,18 @@ static const struct sdhci_pltfm_data sdhci_dwcmshc_pdata = {
+ 	.quirks2 = SDHCI_QUIRK2_PRESET_VALUE_BROKEN,
+ };
  
-+	priv->reset = devm_reset_control_array_get_optional_exclusive(mmc_dev(host->mmc));
-+	if (IS_ERR(priv->reset)) {
-+		err = PTR_ERR(priv->reset);
-+		dev_err(mmc_dev(host->mmc), "failed to get reset control %d\n", err);
-+		return err;
-+	}
-+
+-static const struct sdhci_pltfm_data sdhci_dwcmshc_rk3568_pdata = {
+-	.ops = &sdhci_dwcmshc_rk3568_ops,
++static const struct sdhci_pltfm_data sdhci_dwcmshc_rk35xx_pdata = {
++	.ops = &sdhci_dwcmshc_rk35xx_ops,
+ 	.quirks = SDHCI_QUIRK_CAP_CLOCK_BASE_BROKEN |
+ 		  SDHCI_QUIRK_BROKEN_TIMEOUT_VAL,
+ 	.quirks2 = SDHCI_QUIRK2_PRESET_VALUE_BROKEN |
+ 		   SDHCI_QUIRK2_CLOCK_DIV_ZERO_BROKEN,
+ };
+ 
+-static int dwcmshc_rk3568_init(struct sdhci_host *host, struct dwcmshc_priv *dwc_priv)
++static int dwcmshc_rk35xx_init(struct sdhci_host *host, struct dwcmshc_priv *dwc_priv)
+ {
+ 	int err;
+-	struct rk3568_priv *priv = dwc_priv->priv;
++	struct rk35xx_priv *priv = dwc_priv->priv;
+ 
+ 	priv->reset = devm_reset_control_array_get_optional_exclusive(mmc_dev(host->mmc));
+ 	if (IS_ERR(priv->reset)) {
+@@ -319,14 +319,14 @@ static int dwcmshc_rk3568_init(struct sdhci_host *host, struct dwcmshc_priv *dwc
  	priv->rockchip_clks[0].id = "axi";
  	priv->rockchip_clks[1].id = "block";
  	priv->rockchip_clks[2].id = "timer";
+-	err = devm_clk_bulk_get_optional(mmc_dev(host->mmc), RK3568_MAX_CLKS,
++	err = devm_clk_bulk_get_optional(mmc_dev(host->mmc), RK35xx_MAX_CLKS,
+ 					 priv->rockchip_clks);
+ 	if (err) {
+ 		dev_err(mmc_dev(host->mmc), "failed to get clocks %d\n", err);
+ 		return err;
+ 	}
+ 
+-	err = clk_bulk_prepare_enable(RK3568_MAX_CLKS, priv->rockchip_clks);
++	err = clk_bulk_prepare_enable(RK35xx_MAX_CLKS, priv->rockchip_clks);
+ 	if (err) {
+ 		dev_err(mmc_dev(host->mmc), "failed to enable clocks %d\n", err);
+ 		return err;
+@@ -348,7 +348,7 @@ static int dwcmshc_rk3568_init(struct sdhci_host *host, struct dwcmshc_priv *dwc
+ static const struct of_device_id sdhci_dwcmshc_dt_ids[] = {
+ 	{
+ 		.compatible = "rockchip,rk3568-dwcmshc",
+-		.data = &sdhci_dwcmshc_rk3568_pdata,
++		.data = &sdhci_dwcmshc_rk35xx_pdata,
+ 	},
+ 	{
+ 		.compatible = "snps,dwcmshc-sdhci",
+@@ -371,7 +371,7 @@ static int dwcmshc_probe(struct platform_device *pdev)
+ 	struct sdhci_pltfm_host *pltfm_host;
+ 	struct sdhci_host *host;
+ 	struct dwcmshc_priv *priv;
+-	struct rk3568_priv *rk_priv = NULL;
++	struct rk35xx_priv *rk_priv = NULL;
+ 	const struct sdhci_pltfm_data *pltfm_data;
+ 	int err;
+ 	u32 extra;
+@@ -426,8 +426,8 @@ static int dwcmshc_probe(struct platform_device *pdev)
+ 	host->mmc_host_ops.request = dwcmshc_request;
+ 	host->mmc_host_ops.hs400_enhanced_strobe = dwcmshc_hs400_enhanced_strobe;
+ 
+-	if (pltfm_data == &sdhci_dwcmshc_rk3568_pdata) {
+-		rk_priv = devm_kzalloc(&pdev->dev, sizeof(struct rk3568_priv), GFP_KERNEL);
++	if (pltfm_data == &sdhci_dwcmshc_rk35xx_pdata) {
++		rk_priv = devm_kzalloc(&pdev->dev, sizeof(struct rk35xx_priv), GFP_KERNEL);
+ 		if (!rk_priv) {
+ 			err = -ENOMEM;
+ 			goto err_clk;
+@@ -435,7 +435,7 @@ static int dwcmshc_probe(struct platform_device *pdev)
+ 
+ 		priv->priv = rk_priv;
+ 
+-		err = dwcmshc_rk3568_init(host, priv);
++		err = dwcmshc_rk35xx_init(host, priv);
+ 		if (err)
+ 			goto err_clk;
+ 	}
+@@ -452,7 +452,7 @@ static int dwcmshc_probe(struct platform_device *pdev)
+ 	clk_disable_unprepare(pltfm_host->clk);
+ 	clk_disable_unprepare(priv->bus_clk);
+ 	if (rk_priv)
+-		clk_bulk_disable_unprepare(RK3568_MAX_CLKS,
++		clk_bulk_disable_unprepare(RK35xx_MAX_CLKS,
+ 					   rk_priv->rockchip_clks);
+ free_pltfm:
+ 	sdhci_pltfm_free(pdev);
+@@ -464,14 +464,14 @@ static int dwcmshc_remove(struct platform_device *pdev)
+ 	struct sdhci_host *host = platform_get_drvdata(pdev);
+ 	struct sdhci_pltfm_host *pltfm_host = sdhci_priv(host);
+ 	struct dwcmshc_priv *priv = sdhci_pltfm_priv(pltfm_host);
+-	struct rk3568_priv *rk_priv = priv->priv;
++	struct rk35xx_priv *rk_priv = priv->priv;
+ 
+ 	sdhci_remove_host(host, 0);
+ 
+ 	clk_disable_unprepare(pltfm_host->clk);
+ 	clk_disable_unprepare(priv->bus_clk);
+ 	if (rk_priv)
+-		clk_bulk_disable_unprepare(RK3568_MAX_CLKS,
++		clk_bulk_disable_unprepare(RK35xx_MAX_CLKS,
+ 					   rk_priv->rockchip_clks);
+ 	sdhci_pltfm_free(pdev);
+ 
+@@ -484,7 +484,7 @@ static int dwcmshc_suspend(struct device *dev)
+ 	struct sdhci_host *host = dev_get_drvdata(dev);
+ 	struct sdhci_pltfm_host *pltfm_host = sdhci_priv(host);
+ 	struct dwcmshc_priv *priv = sdhci_pltfm_priv(pltfm_host);
+-	struct rk3568_priv *rk_priv = priv->priv;
++	struct rk35xx_priv *rk_priv = priv->priv;
+ 	int ret;
+ 
+ 	ret = sdhci_suspend_host(host);
+@@ -496,7 +496,7 @@ static int dwcmshc_suspend(struct device *dev)
+ 		clk_disable_unprepare(priv->bus_clk);
+ 
+ 	if (rk_priv)
+-		clk_bulk_disable_unprepare(RK3568_MAX_CLKS,
++		clk_bulk_disable_unprepare(RK35xx_MAX_CLKS,
+ 					   rk_priv->rockchip_clks);
+ 
+ 	return ret;
+@@ -507,7 +507,7 @@ static int dwcmshc_resume(struct device *dev)
+ 	struct sdhci_host *host = dev_get_drvdata(dev);
+ 	struct sdhci_pltfm_host *pltfm_host = sdhci_priv(host);
+ 	struct dwcmshc_priv *priv = sdhci_pltfm_priv(pltfm_host);
+-	struct rk3568_priv *rk_priv = priv->priv;
++	struct rk35xx_priv *rk_priv = priv->priv;
+ 	int ret;
+ 
+ 	ret = clk_prepare_enable(pltfm_host->clk);
+@@ -521,7 +521,7 @@ static int dwcmshc_resume(struct device *dev)
+ 	}
+ 
+ 	if (rk_priv) {
+-		ret = clk_bulk_prepare_enable(RK3568_MAX_CLKS,
++		ret = clk_bulk_prepare_enable(RK35xx_MAX_CLKS,
+ 					      rk_priv->rockchip_clks);
+ 		if (ret)
+ 			return ret;
 -- 
 2.35.1
 

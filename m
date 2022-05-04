@@ -2,51 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACA43519474
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 03:52:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B5195194E7
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 03:57:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343566AbiEDBzu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 21:55:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56808 "EHLO
+        id S1343949AbiEDCAY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 22:00:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343657AbiEDBw4 (ORCPT
+        with ESMTP id S1344074AbiEDB7L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 21:52:56 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE29244A3A;
-        Tue,  3 May 2022 18:48:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 96F9461987;
-        Wed,  4 May 2022 01:48:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 817C5C385A9;
-        Wed,  4 May 2022 01:48:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651628888;
-        bh=1sRYRjLbt8trZsAxQP405ve5/+hZRzhVT+rXdU002IU=;
-        h=From:To:Cc:Subject:Date:From;
-        b=ZIqODaO4EeJ3AGQlFrE98zItIkLii9TzICBsRd4HttDYp3pWa1CS91mDp0ZUG6rw7
-         0CfC61X+QTB8CfkhI0IfKJTrK1XkCVKDbALRtn1/jIDPB5DgnezjcBpdxiqCgiSSQq
-         RYy0Sr5k8tF72NreVxLBMxbHzhHejpdQD7l1ztACPs4V7bzwugXp19PXHC0yLQuLEw
-         Zqphrb0YORYhyJR/9DFSPDwVegg6iCuFN3kzs+NeOaUfToWmH4IvpL7jbcKERBjYhU
-         us+cOa1ec/2irqMEf8UQ3DkvRfQ/CKtyYEZQD26cQhblA2dk3l3Tz1Vrlsmix1UJY1
-         FKD8FhW6pSJqQ==
-From:   Chao Yu <chao@kernel.org>
-To:     jaegeuk@kernel.org
-Cc:     linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, Chao Yu <chao@kernel.org>,
-        stable@vger.kernel.org, Ming Yan <yanming@tju.edu.cn>,
-        Chao Yu <chao.yu@oppo.com>
-Subject: [PATCH v2] f2fs: fix deadloop in foreground GC
-Date:   Wed,  4 May 2022 09:47:55 +0800
-Message-Id: <20220504014755.1727-1-chao@kernel.org>
-X-Mailer: git-send-email 2.32.0
+        Tue, 3 May 2022 21:59:11 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96F8249FA5
+        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 18:53:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651629215; x=1683165215;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=JDxQddswnaAtAEe6Yd2ih6qHUHQiMwv8N9U0jVI8plg=;
+  b=c37yO31caGrTAYuZ9exPASDTyji7fEXeY07J4g/qwIFeANMQ5PQ/QGVE
+   OuEAq5FpLssIyIOwTMLtMZPekiJq3sE4zP+JkXU9rNrIYCDf9S7SCL7dJ
+   M1/YSTQgJ/AgYRlHSfQDCsEjJRr7o+YH0fDjBLVMVxg2aSL5t507rEa6u
+   P6hC+OqBLsYy/T2ec2GYHAXp9RgcKw5ZTUDAGa+l1PZOjMKQsewPzEGtK
+   W95SV4GwLtBlLu6hucz1zabACu/TspcujxWVm0zhGoIhRCVCszDPzhmh5
+   9wS/NSwPzRLNpmPo/GcJgMgvdfaBKFMQJCHIF5RYA5A3pxY6aISL6mugI
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10336"; a="248180730"
+X-IronPort-AV: E=Sophos;i="5.91,196,1647327600"; 
+   d="scan'208";a="248180730"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2022 18:53:35 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,196,1647327600"; 
+   d="scan'208";a="734182002"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 03 May 2022 18:53:33 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nm4Cr-000AxP-98;
+        Wed, 04 May 2022 01:53:33 +0000
+Date:   Wed, 4 May 2022 09:52:34 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Ville =?iso-8859-1?Q?Syrj=E4l=E4?= <ville.syrjala@linux.intel.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [vsyrjala:crtc_clock_compute_8 10/26]
+ drivers/gpu/drm/i915/display/intel_ddi.c:325:5: warning: no previous
+ prototype for function 'intel_crtc_dotclock'
+Message-ID: <202205040931.3Rt8hNR2-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,91 +63,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As Yanming reported in bugzilla:
+tree:   https://github.com/vsyrjala/linux.git crtc_clock_compute_8
+head:   aee27a93a2e9c552d016d4eadaff5aa87dccce13
+commit: eb839775996f072098b810f91bc34757d1ea008e [10/26] drm/i915: Extract intel_crtc_dotclock()
+config: x86_64-randconfig-a005 (https://download.01.org/0day-ci/archive/20220504/202205040931.3Rt8hNR2-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 363b3a645a1e30011cc8da624f13dac5fd915628)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/vsyrjala/linux/commit/eb839775996f072098b810f91bc34757d1ea008e
+        git remote add vsyrjala https://github.com/vsyrjala/linux.git
+        git fetch --no-tags vsyrjala crtc_clock_compute_8
+        git checkout eb839775996f072098b810f91bc34757d1ea008e
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/gpu/drm/i915/
 
-https://bugzilla.kernel.org/show_bug.cgi?id=215914
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-The root cause is: in a very small sized image, it's very easy to
-exceed threshold of foreground GC, if we calculate free space and
-dirty data based on section granularity, in corner case,
-has_not_enough_free_secs() will always return true, result in
-deadloop in f2fs_gc().
+All warnings (new ones prefixed by >>):
 
-So this patch refactors has_not_enough_free_secs() as below to fix
-this issue:
-1. calculate needed space based on block granularity, and separate
-all blocks to two parts, section part, and block part, comparing
-section part to free section, and comparing block part to free space
-in openned log.
-2. account F2FS_DIRTY_NODES, F2FS_DIRTY_IMETA and F2FS_DIRTY_DENTS
-as node block consumer;
-3. account F2FS_DIRTY_DENTS as data block consumer;
+>> drivers/gpu/drm/i915/display/intel_ddi.c:325:5: warning: no previous prototype for function 'intel_crtc_dotclock' [-Wmissing-prototypes]
+   int intel_crtc_dotclock(const struct intel_crtc_state *pipe_config)
+       ^
+   drivers/gpu/drm/i915/display/intel_ddi.c:325:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int intel_crtc_dotclock(const struct intel_crtc_state *pipe_config)
+   ^
+   static 
+   1 warning generated.
 
-Cc: stable@vger.kernel.org
-Reported-by: Ming Yan <yanming@tju.edu.cn>
-Signed-off-by: Chao Yu <chao.yu@oppo.com>
----
-v2:
-- fix performance regression
- fs/f2fs/segment.h | 32 ++++++++++++++++++++------------
- 1 file changed, 20 insertions(+), 12 deletions(-)
 
-diff --git a/fs/f2fs/segment.h b/fs/f2fs/segment.h
-index 8a591455d796..c38263dbc5ca 100644
---- a/fs/f2fs/segment.h
-+++ b/fs/f2fs/segment.h
-@@ -575,11 +575,10 @@ static inline int reserved_sections(struct f2fs_sb_info *sbi)
- 	return GET_SEC_FROM_SEG(sbi, reserved_segments(sbi));
- }
- 
--static inline bool has_curseg_enough_space(struct f2fs_sb_info *sbi)
-+static inline bool has_curseg_enough_space(struct f2fs_sb_info *sbi,
-+			unsigned int node_blocks, unsigned int dent_blocks)
- {
--	unsigned int node_blocks = get_pages(sbi, F2FS_DIRTY_NODES) +
--					get_pages(sbi, F2FS_DIRTY_DENTS);
--	unsigned int dent_blocks = get_pages(sbi, F2FS_DIRTY_DENTS);
-+
- 	unsigned int segno, left_blocks;
- 	int i;
- 
-@@ -605,19 +604,28 @@ static inline bool has_curseg_enough_space(struct f2fs_sb_info *sbi)
- static inline bool has_not_enough_free_secs(struct f2fs_sb_info *sbi,
- 					int freed, int needed)
- {
--	int node_secs = get_blocktype_secs(sbi, F2FS_DIRTY_NODES);
--	int dent_secs = get_blocktype_secs(sbi, F2FS_DIRTY_DENTS);
--	int imeta_secs = get_blocktype_secs(sbi, F2FS_DIRTY_IMETA);
-+	unsigned int total_node_blocks = get_pages(sbi, F2FS_DIRTY_NODES) +
-+					get_pages(sbi, F2FS_DIRTY_DENTS) +
-+					get_pages(sbi, F2FS_DIRTY_IMETA);
-+	unsigned int total_dent_blocks = get_pages(sbi, F2FS_DIRTY_DENTS);
-+	unsigned int node_secs = total_node_blocks / BLKS_PER_SEC(sbi);
-+	unsigned int dent_secs = total_dent_blocks / BLKS_PER_SEC(sbi);
-+	unsigned int node_blocks = total_node_blocks % BLKS_PER_SEC(sbi);
-+	unsigned int dent_blocks = total_dent_blocks % BLKS_PER_SEC(sbi);
-+	unsigned int free, need_lower, need_upper;
- 
- 	if (unlikely(is_sbi_flag_set(sbi, SBI_POR_DOING)))
- 		return false;
- 
--	if (free_sections(sbi) + freed == reserved_sections(sbi) + needed &&
--			has_curseg_enough_space(sbi))
-+	free = free_sections(sbi) + freed;
-+	need_lower = node_secs + dent_secs + reserved_sections(sbi) + needed;
-+	need_upper = need_lower + node_blocks ? 1 : 0 + dent_blocks ? 1 : 0;
-+
-+	if (free > need_upper)
- 		return false;
--	return (free_sections(sbi) + freed) <=
--		(node_secs + 2 * dent_secs + imeta_secs +
--		reserved_sections(sbi) + needed);
-+	else if (free <= need_lower)
-+		return true;
-+	return !has_curseg_enough_space(sbi, node_blocks, dent_blocks);
- }
- 
- static inline bool f2fs_is_checkpoint_ready(struct f2fs_sb_info *sbi)
+vim +/intel_crtc_dotclock +325 drivers/gpu/drm/i915/display/intel_ddi.c
+
+   324	
+ > 325	int intel_crtc_dotclock(const struct intel_crtc_state *pipe_config)
+   326	{
+   327		int dotclock;
+   328	
+   329		if (intel_crtc_has_dp_encoder(pipe_config))
+   330			dotclock = intel_dotclock_calculate(pipe_config->port_clock,
+   331							    &pipe_config->dp_m_n);
+   332		else if (pipe_config->has_hdmi_sink && pipe_config->pipe_bpp > 24)
+   333			dotclock = pipe_config->port_clock * 24 / pipe_config->pipe_bpp;
+   334		else
+   335			dotclock = pipe_config->port_clock;
+   336	
+   337		if (pipe_config->output_format == INTEL_OUTPUT_FORMAT_YCBCR420 &&
+   338		    !intel_crtc_has_dp_encoder(pipe_config))
+   339			dotclock *= 2;
+   340	
+   341		if (pipe_config->pixel_multiplier)
+   342			dotclock /= pipe_config->pixel_multiplier;
+   343	
+   344		return dotclock;
+   345	}
+   346	
+
 -- 
-2.32.0
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

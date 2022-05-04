@@ -2,111 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C364B51B2A5
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 01:23:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A1FA51B3AF
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 01:47:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378687AbiEDXMC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 19:12:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39498 "EHLO
+        id S1382082AbiEDXr1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 19:47:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385531AbiEDXIu (ORCPT
+        with ESMTP id S1381194AbiEDXQV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 19:08:50 -0400
-Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 295CC14084;
-        Wed,  4 May 2022 16:04:52 -0700 (PDT)
-Received: by mail-io1-xd2c.google.com with SMTP id f4so3093440iov.2;
-        Wed, 04 May 2022 16:04:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=ILzkKB4GFyvmkKkoAzfRz5MTJCTm65HgHQFqL1jHiLk=;
-        b=i/gQfgcmMDtibRhSvwUM/ZTpCzqbjQ9Qm2G+7QUIqK1tyPSHWXUmYcN/Qyyui24NE0
-         HDVDSkPwL7WibbfZoOd3aM6z1du7CJosgr+RNPTU6XgV9vYV20xEdNkI61eSuqd+kgSj
-         1BXy+tGggSySRA9yYoXtZ+dRo4Jb5kW5TBtuxiha84iHr75ChX8QCW1Aqt+Ih6bc1GdN
-         BevtIQ2dhC4sZaizEyA1wJIx0mBVjDOiDgYFYHJFxbFCyx1CwVQzoH8C6Pdxx/rr/s42
-         z2GJv+Tl38zc9qWFHAtwvvFEkDodSXj3/0YPzzOTMKKf5LJrERKVHSfp9GmddqY1a8Q8
-         QNiQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=ILzkKB4GFyvmkKkoAzfRz5MTJCTm65HgHQFqL1jHiLk=;
-        b=7USB4VwZmulOhhwvONUG5EBKA0cdVBFQEEfSl5EEcXH8AOA+RWYtf88VmDnpOoO79I
-         BHFqIygWHRNBvipFkaTOe9wd/xxLjiq6jdpLm18zzPjV25VWa/LW6MzClcEwR1NNMtaY
-         dYogMh/4QIOABJW7LHeEFDZHHc1isdr5ZQixanHlVIro7GsNy5hFauMekhQYnTZA1a24
-         2PzOuIiFtLT2EaaTrpn19XLqGKvuybGX6ENUO4rHDlrguEXfXnTmxAn9GP+TFx6OzIz3
-         vVML2keZssOkXEkNCCUq3L7TV5J9/o+MwUv9C3jsN0adJHi1veIK2/I61L/l2aVtJbfM
-         QzIg==
-X-Gm-Message-State: AOAM531mq39Lg2uiOIRiQiy/GOmzekNyxu8wnmBzFJprcQg8IKJ0PI3T
-        +b2Ju5OR6O/Jn+g/Z28/oRM=
-X-Google-Smtp-Source: ABdhPJzKlDN42/enHfqoRythPwvPy3t4d9tW0TI2VEKciXivlkHqQmLUxBKJM0dT2fP8ZO9eepHOjQ==
-X-Received: by 2002:a05:6638:1346:b0:32b:71ec:3a74 with SMTP id u6-20020a056638134600b0032b71ec3a74mr6466213jad.270.1651705491546;
-        Wed, 04 May 2022 16:04:51 -0700 (PDT)
-Received: from ?IPV6:2600:1700:2442:6db0:5871:54:c73e:3c22? ([2600:1700:2442:6db0:5871:54:c73e:3c22])
-        by smtp.gmail.com with ESMTPSA id b35-20020a05663838a300b0032b3a781741sm73199jav.5.2022.05.04.16.04.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 04 May 2022 16:04:51 -0700 (PDT)
-Message-ID: <cca4e4ae-0a37-83ea-c740-1085b59a3e1c@gmail.com>
-Date:   Wed, 4 May 2022 18:04:49 -0500
+        Wed, 4 May 2022 19:16:21 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82E395419E;
+        Wed,  4 May 2022 16:09:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651705772; x=1683241772;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=viWWezEGudsdbLy/fRq7EwiMWwIaZsmyJG8Q+HHJWzE=;
+  b=hMH9DmkEI3OmceNvFXU5LlSEeHnpbp43jUjfXniTp0BbO5FVjmxbxdJK
+   FU2EPHFhq6raFbSPfVdwVF4CCBRP933vVOqD/Fkia5WEP+sJc8XjaFzxq
+   UMluuI5sEcCoUiP7BxKP11gkFyBhNgrhgRPxeae9RjImbdlYCmzFPzQ6A
+   KbOkpwY9L/PrXoCQedorAkHk9lt88B3RT+KJw4Dd3w6B0xR3IAq/acYUX
+   8V2rvR0wny2GxaYX2CjrzXuqyKICzDBQPV7UsYwlJdnAM09oN+LyjhIf6
+   fHZ++5f5b0+Pea+mm8To1FgmEqDFnWW8gnqFgDCLZZg7JC5ITBsthdStQ
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10337"; a="293121901"
+X-IronPort-AV: E=Sophos;i="5.91,199,1647327600"; 
+   d="scan'208";a="293121901"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2022 16:09:19 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,199,1647327600"; 
+   d="scan'208";a="599749810"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 04 May 2022 16:09:16 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nmO7Q-000Bsd-1h;
+        Wed, 04 May 2022 23:09:16 +0000
+Date:   Thu, 5 May 2022 07:09:10 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Justin Chen <justinpopo6@gmail.com>, linus.walleij@linaro.org,
+        brgl@bgdev.pl, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org
+Cc:     kbuild-all@lists.01.org, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        f.fainelli@gmail.com, Justin Chen <justinpopo6@gmail.com>
+Subject: Re: [PATCH 1/2] gpio: pca953xx: Add support for pca6408
+Message-ID: <202205050612.1bwSZpER-lkp@intel.com>
+References: <1651685100-44687-2-git-send-email-justinpopo6@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v2 0/2] begin KTAP spec v2 process
-Content-Language: en-US
-To:     David Gow <davidgow@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Kees Cook <keescook@chromium.org>, Tim.Bird@sony.com,
-        Brendan Higgins <brendanhiggins@google.com>
-Cc:     Jonathan Corbet <corbet@lwn.net>, rmr167@gmail.com,
-        guillaume.tucker@collabora.com, dlatypov@google.com,
-        kernelci@groups.io, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220504225152.1451440-1-frowand.list@gmail.com>
-From:   Frank Rowand <frowand.list@gmail.com>
-In-Reply-To: <20220504225152.1451440-1-frowand.list@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1651685100-44687-2-git-send-email-justinpopo6@gmail.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/4/22 17:51, frowand.list@gmail.com wrote:
-> From: Frank Rowand <frank.rowand@sony.com>
-> 
-> The process to create version 2 of the KTAP Specification is documented
-> in email discussions.  I am attempting to capture this information at
-> 
->    https://elinux.org/Test_Results_Format_Notes#KTAP_version_2
-> 
-> I am already not following the suggested process, which says:
-> "...please try to follow this principal of one major topic per email
-> thread."  I think that is ok in this case because the two patches
-> are related and (hopefully) not controversial.
-> 
-> Changes since patch version 1:
->    - drop patch 1/2.  Jonathan Corbet has already applied this patch
->      into version 1 of the Specification
->    - rename patch 2/2 to patch 1/2, with updated patch comment
->    - add new patch 2/2
-> 
-> Frank Rowand (2):
->   ktap_v2: change version to 2-rc in KTAP specification
->   ktap_v2: change "version 1" to "version 2" in examples
-> 
->  Documentation/dev-tools/ktap.rst | 25 +++++++++++++------------
->  1 file changed, 13 insertions(+), 12 deletions(-)
-> 
+Hi Justin,
 
-I should note that I will be maintaining a branch of the KTAP Specification version 2
-patches and that they will not be submitted to mainline until we agree on the final
-content of version 2.
+Thank you for the patch! Yet something to improve:
+
+[auto build test ERROR on v5.18-rc5]
+[also build test ERROR on next-20220504]
+[cannot apply to linusw-gpio/for-next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Justin-Chen/Add-support-for-NXP-PCA6408/20220505-020844
+base:    672c0c5173427e6b3e2a9bbb7be51ceeec78093a
+config: microblaze-randconfig-r031-20220501 (https://download.01.org/0day-ci/archive/20220505/202205050612.1bwSZpER-lkp@intel.com/config)
+compiler: microblaze-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/d45d7c84e1613b51cb1eb90ef6d92f4112a45925
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Justin-Chen/Add-support-for-NXP-PCA6408/20220505-020844
+        git checkout d45d7c84e1613b51cb1eb90ef6d92f4112a45925
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=microblaze SHELL=/bin/bash drivers/gpio/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> drivers/gpio/gpio-pca953x.c:74:27: error: 'PCA953x_TYPE' undeclared here (not in a function); did you mean 'PCA953X_TYPE'?
+      74 |         { "pca6408", 8  | PCA953x_TYPE | PCA_INT, },
+         |                           ^~~~~~~~~~~~
+         |                           PCA953X_TYPE
+
+
+vim +74 drivers/gpio/gpio-pca953x.c
+
+    72	
+    73	static const struct i2c_device_id pca953x_id[] = {
+  > 74		{ "pca6408", 8  | PCA953x_TYPE | PCA_INT, },
+    75		{ "pca6416", 16 | PCA953X_TYPE | PCA_INT, },
+    76		{ "pca9505", 40 | PCA953X_TYPE | PCA_INT, },
+    77		{ "pca9506", 40 | PCA953X_TYPE | PCA_INT, },
+    78		{ "pca9534", 8  | PCA953X_TYPE | PCA_INT, },
+    79		{ "pca9535", 16 | PCA953X_TYPE | PCA_INT, },
+    80		{ "pca9536", 4  | PCA953X_TYPE, },
+    81		{ "pca9537", 4  | PCA953X_TYPE | PCA_INT, },
+    82		{ "pca9538", 8  | PCA953X_TYPE | PCA_INT, },
+    83		{ "pca9539", 16 | PCA953X_TYPE | PCA_INT, },
+    84		{ "pca9554", 8  | PCA953X_TYPE | PCA_INT, },
+    85		{ "pca9555", 16 | PCA953X_TYPE | PCA_INT, },
+    86		{ "pca9556", 8  | PCA953X_TYPE, },
+    87		{ "pca9557", 8  | PCA953X_TYPE, },
+    88		{ "pca9574", 8  | PCA957X_TYPE | PCA_INT, },
+    89		{ "pca9575", 16 | PCA957X_TYPE | PCA_INT, },
+    90		{ "pca9698", 40 | PCA953X_TYPE, },
+    91	
+    92		{ "pcal6416", 16 | PCA953X_TYPE | PCA_LATCH_INT, },
+    93		{ "pcal6524", 24 | PCA953X_TYPE | PCA_LATCH_INT, },
+    94		{ "pcal9535", 16 | PCA953X_TYPE | PCA_LATCH_INT, },
+    95		{ "pcal9554b", 8  | PCA953X_TYPE | PCA_LATCH_INT, },
+    96		{ "pcal9555a", 16 | PCA953X_TYPE | PCA_LATCH_INT, },
+    97	
+    98		{ "max7310", 8  | PCA953X_TYPE, },
+    99		{ "max7312", 16 | PCA953X_TYPE | PCA_INT, },
+   100		{ "max7313", 16 | PCA953X_TYPE | PCA_INT, },
+   101		{ "max7315", 8  | PCA953X_TYPE | PCA_INT, },
+   102		{ "max7318", 16 | PCA953X_TYPE | PCA_INT, },
+   103		{ "pca6107", 8  | PCA953X_TYPE | PCA_INT, },
+   104		{ "tca6408", 8  | PCA953X_TYPE | PCA_INT, },
+   105		{ "tca6416", 16 | PCA953X_TYPE | PCA_INT, },
+   106		{ "tca6424", 24 | PCA953X_TYPE | PCA_INT, },
+   107		{ "tca9539", 16 | PCA953X_TYPE | PCA_INT, },
+   108		{ "tca9554", 8  | PCA953X_TYPE | PCA_INT, },
+   109		{ "xra1202", 8  | PCA953X_TYPE },
+   110		{ }
+   111	};
+   112	MODULE_DEVICE_TABLE(i2c, pca953x_id);
+   113	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

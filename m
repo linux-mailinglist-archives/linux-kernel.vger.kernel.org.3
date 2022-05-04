@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EA5B51A8F6
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:15:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2028751A6E8
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 18:58:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356251AbiEDRNk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 13:13:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38270 "EHLO
+        id S1354639AbiEDRBR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 13:01:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354396AbiEDRCe (ORCPT
+        with ESMTP id S1354086AbiEDQy7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 13:02:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 986214BFF9;
-        Wed,  4 May 2022 09:52:28 -0700 (PDT)
+        Wed, 4 May 2022 12:54:59 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4570749919;
+        Wed,  4 May 2022 09:49:47 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 93A6261866;
-        Wed,  4 May 2022 16:52:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DBD28C385A5;
-        Wed,  4 May 2022 16:52:23 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 24C656176E;
+        Wed,  4 May 2022 16:49:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6AE81C385A5;
+        Wed,  4 May 2022 16:49:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651683144;
-        bh=iNXzK1WcdnCq/Yq1HO1iylpDNBr+hFpA09E9qtHvPec=;
+        s=korg; t=1651682986;
+        bh=wc3rDHdA1PWnE21lxT4hEmsW7Iuq8hxO5HNjLyXzhN8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YSQarjeDT7NERWvjLm4CAnG0+CMapaS9fpGun86TYN+4y2sur0Y8MSLzvfLYErKoB
-         doCM+cpa+da/2IBrA2JAb2TDKs9D1tnXU0nPng5hN1YTR2enin4lqKkzWvBFX1CyC3
-         XkGmny0PqXhXzqR2pygK5HMv19z2bMHdiLSV0hnE=
+        b=2C7xyjeFgxuKxujsRbJSWh874F6PP7S64vC5YXbOhw0i10CZg0J7EdvAGXh0HRKuG
+         6W9TKxdGRjnkv+GjAn4WJV9g2wXRwBXlVWAPrxhSRPHFVsR64MU3szqaLdNSWt9hl1
+         PusG9PlWsvTQyhKYy7z7cl5KTGR11EeH+S9sK7pc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -36,15 +36,13 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Chunfeng Yun <chunfeng.yun@mediatek.com>,
         Macpaul Lin <macpaul.lin@mediatek.com>,
         Tainping Fang <tianping.fang@mediatek.com>
-Subject: [PATCH 5.15 001/177] usb: mtu3: fix USB 3.0 dual-role-switch from device to host
-Date:   Wed,  4 May 2022 18:43:14 +0200
-Message-Id: <20220504153053.958173430@linuxfoundation.org>
+Subject: [PATCH 5.10 003/129] usb: mtu3: fix USB 3.0 dual-role-switch from device to host
+Date:   Wed,  4 May 2022 18:43:15 +0200
+Message-Id: <20220504153021.616099058@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220504153053.873100034@linuxfoundation.org>
-References: <20220504153053.873100034@linuxfoundation.org>
+In-Reply-To: <20220504153021.299025455@linuxfoundation.org>
+References: <20220504153021.299025455@linuxfoundation.org>
 User-Agent: quilt/0.66
-X-stable: review
-X-Patchwork-Hint: ignore
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -91,7 +89,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
 --- a/drivers/usb/mtu3/mtu3_dr.c
 +++ b/drivers/usb/mtu3/mtu3_dr.c
-@@ -21,10 +21,8 @@ static inline struct ssusb_mtk *otg_sx_t
+@@ -41,10 +41,8 @@ static char *mailbox_state_string(enum m
  
  static void toggle_opstate(struct ssusb_mtk *ssusb)
  {

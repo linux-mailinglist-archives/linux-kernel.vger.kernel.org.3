@@ -2,45 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB09F51AAD2
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:34:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4864B51A8EB
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:15:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359268AbiEDRfz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 13:35:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38574 "EHLO
+        id S1348079AbiEDRKP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 13:10:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356972AbiEDRJw (ORCPT
+        with ESMTP id S1355641AbiEDRAT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 13:09:52 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 599CC47552;
-        Wed,  4 May 2022 09:56:47 -0700 (PDT)
+        Wed, 4 May 2022 13:00:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5E644BB96;
+        Wed,  4 May 2022 09:51:58 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 114F5B82737;
-        Wed,  4 May 2022 16:56:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8CAFCC385A4;
-        Wed,  4 May 2022 16:56:44 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A228D617A6;
+        Wed,  4 May 2022 16:51:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2F17C385A4;
+        Wed,  4 May 2022 16:51:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651683404;
-        bh=vZgK6Y9PLhjhFdFkYNeKjuquI8/FQ9aIPBNEBrVREaw=;
+        s=korg; t=1651683118;
+        bh=bk8oiHo7fAjLCDCB+GgK+zQPJnwtXBeitJ/3OLXIcW4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FJHOABncIv1ezM4Et75KGOMDb1IRIEmbxWt+g1IPx5VP8SvtWVGhC28pch9mPV8UH
-         iK17QHvhaim6gqVbqxYWe1h8IrPOjPBf7b0D8xzgPBRCpX9s8I+MocyuAc9tpST8tb
-         KxksHYmOB54yAYKOPXUcffWJ507n8GcMUaL+6BYw=
+        b=tLFPcbfLakokdhPhOs2vV855XKojdSES34R3eUiYJf6DGsUeaVprX4uHutIntmmCf
+         oXc2vMrTy4vsDxFd3OMkf+TJW8HTFEc5PMyF2mh0Zn7e7js95bz1K19MfQPenazrCi
+         rquMDkZ0QATMjx8AW+B0JvjUm5rXzsHBrlSxntao=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Guillaume Giraudon <ggiraudon@prism19.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 075/225] arm64: dts: meson-sm1-bananapi-m5: fix wrong GPIO pin labeling for CON1
-Date:   Wed,  4 May 2022 18:45:13 +0200
-Message-Id: <20220504153118.060255320@linuxfoundation.org>
+        stable@vger.kernel.org, Daniel Starke <daniel.starke@siemens.com>
+Subject: [PATCH 5.10 122/129] tty: n_gsm: fix wrong DLCI release order
+Date:   Wed,  4 May 2022 18:45:14 +0200
+Message-Id: <20220504153031.140574826@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220504153110.096069935@linuxfoundation.org>
-References: <20220504153110.096069935@linuxfoundation.org>
+In-Reply-To: <20220504153021.299025455@linuxfoundation.org>
+References: <20220504153021.299025455@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,41 +53,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Guillaume Giraudon <ggiraudon@prism19.com>
+From: Daniel Starke <daniel.starke@siemens.com>
 
-[ Upstream commit 962dd65e575dde950ef0844568edc37cfb39f302 ]
+commit deefc58bafb4841df7f0a0d85d89a1c819db9743 upstream.
 
-The labels for lines 61 through 84 on the periphs-banks were offset by 2.
-2 lines are missing in the BOOT GPIO lines (contains 14, should be 16)
-Added 2 empty entries in BOOT to realigned the rest of GPIO labels
-to match the Banana Pi M5 schematics.
+The current DLCI release order starts with the control channel followed by
+the user channels. Reverse this order to keep the control channel open
+until all user channels have been released.
 
-(Thanks to Neil Armstrong for the heads up on the position of the missing pins)
-
-Fixes: 976e920183e4 ("arm64: dts: meson-sm1: add Banana PI BPI-M5 board dts")
-Signed-off-by: Guillaume Giraudon <ggiraudon@prism19.com>
-Reviewed-by: Neil Armstrong <narmstrong@baylibre.com>
-Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
-Link: https://lore.kernel.org/r/20220411144427.874-1-ggiraudon@prism19.com
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: e1eaea46bb40 ("tty: n_gsm line discipline")
+Cc: stable@vger.kernel.org
+Signed-off-by: Daniel Starke <daniel.starke@siemens.com>
+Link: https://lore.kernel.org/r/20220414094225.4527-9-daniel.starke@siemens.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/arm64/boot/dts/amlogic/meson-sm1-bananapi-m5.dts | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/tty/n_gsm.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/amlogic/meson-sm1-bananapi-m5.dts b/arch/arm64/boot/dts/amlogic/meson-sm1-bananapi-m5.dts
-index 5751c48620ed..cadba194b149 100644
---- a/arch/arm64/boot/dts/amlogic/meson-sm1-bananapi-m5.dts
-+++ b/arch/arm64/boot/dts/amlogic/meson-sm1-bananapi-m5.dts
-@@ -437,6 +437,7 @@ &gpio {
- 		"",
- 		"eMMC_RST#", /* BOOT_12 */
- 		"eMMC_DS", /* BOOT_13 */
-+		"", "",
- 		/* GPIOC */
- 		"SD_D0_B", /* GPIOC_0 */
- 		"SD_D1_B", /* GPIOC_1 */
--- 
-2.35.1
-
+--- a/drivers/tty/n_gsm.c
++++ b/drivers/tty/n_gsm.c
+@@ -2073,8 +2073,8 @@ static void gsm_cleanup_mux(struct gsm_m
+ 	/* Finish outstanding timers, making sure they are done */
+ 	del_timer_sync(&gsm->t2_timer);
+ 
+-	/* Free up any link layer users */
+-	for (i = 0; i < NUM_DLCI; i++)
++	/* Free up any link layer users and finally the control channel */
++	for (i = NUM_DLCI - 1; i >= 0; i--)
+ 		if (gsm->dlci[i])
+ 			gsm_dlci_release(gsm->dlci[i]);
+ 	mutex_unlock(&gsm->mutex);
 
 

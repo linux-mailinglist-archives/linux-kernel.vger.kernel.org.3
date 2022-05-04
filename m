@@ -2,201 +2,226 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08BF451AFC8
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 22:51:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C8D251AFD1
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 22:53:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378409AbiEDUzC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 16:55:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42464 "EHLO
+        id S1378379AbiEDU4k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 16:56:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378367AbiEDUyy (ORCPT
+        with ESMTP id S1357266AbiEDU4e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 16:54:54 -0400
-Received: from JPN01-TYC-obe.outbound.protection.outlook.com (mail-tycjpn01on2092.outbound.protection.outlook.com [40.107.114.92])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 440D350E39;
-        Wed,  4 May 2022 13:51:17 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=lC5AOlFMLExwRmA6FKtyKNvMqt0b2Xhxa0M3n9sDqSBXq/QTbWRW6T4fT+VePpOVr1tsANtmYFoUgK3p+vsGDAZ3QqVGJpGZnwpy1mpbVK6woIPPXj+qjLYrUs5hl7Qiyp+JQmhV66y4mz1ScUy9YVuSdDMzW7UCVn++Or6XdM5Ix4J37fiZM35GuPhwdeploG+R6n3bvzNpAGLo+Ko6GnMD5jm91cvz0T809fKtT/3O1usdCWZ47EJSKbhqS9meW0PNo4QkLl0R3BbpdIoumC1GzoXoJJT/d71c/+RHYNfTACMn9gdyv5Kc1sMvyThELSfQJKZF6vDIljKSm/fniQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=eHmW/3NjCsZ+jsLLKTd4YOnktpHtSC/8EXAsz4L1BMg=;
- b=NpCtZJY4a4k5tsSRg0cJwvvG2J/IXtPGMUXfZnZa8K2IsvSGlcW4FyB/Rc+dxz1Z6z2+u7biuANhFGQals4gaw4/r72Vj98coqAeCWcGkwBl89Qw8MvwxZ0P3r2V9fr5mhmGWebXWAmu5hadbK/+QA2Rmk0OzYIs/7WnlvrUaiCnIzBXc0Gz9/qT8v3TAMcC3X4t4PJHBG+z5PzbHGa8zAG2L7RuWX4Dg432KGhm9FLd9iIBwJSfHPhAXgAHo8+vG/D2Mw5XMXEUiFICOD/wJCFiafOsxPoT7QNfEJ97skqC8dXmCt+YhUsZ2/H8lPwpY1NEcz9xny1RFbLVKiso8w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=renesas.com; dmarc=pass action=none header.from=renesas.com;
- dkim=pass header.d=renesas.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=renesas.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=eHmW/3NjCsZ+jsLLKTd4YOnktpHtSC/8EXAsz4L1BMg=;
- b=iRkR1V/0MNtPvrE6xBq6P2z+9jnAlNlBW5W3lGNJL1Ntb3/XpjXFuuQvE43tfIXfTROfHI8VmK3xi0pAPLJs9YFfFqkwlrNLZbUGFJCW1eivRPGalnw3pkl5H8pvb5slrdqcwddGEccUVfQKlx5rNupkQ6i51Ml9+X5dT9CsawE=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=renesas.com;
-Received: from OS3PR01MB6593.jpnprd01.prod.outlook.com (2603:1096:604:101::7)
- by TYAPR01MB4431.jpnprd01.prod.outlook.com (2603:1096:404:12d::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5206.13; Wed, 4 May
- 2022 20:51:15 +0000
-Received: from OS3PR01MB6593.jpnprd01.prod.outlook.com
- ([fe80::a07c:4b38:65f3:6663]) by OS3PR01MB6593.jpnprd01.prod.outlook.com
- ([fe80::a07c:4b38:65f3:6663%9]) with mapi id 15.20.5206.027; Wed, 4 May 2022
- 20:51:15 +0000
-From:   Min Li <min.li.xe@renesas.com>
-To:     richardcochran@gmail.com, lee.jones@linaro.org
-Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        Min Li <min.li.xe@renesas.com>
-Subject: [PATCH net v4 2/2] ptp: ptp_clockmatrix: return -EBUSY if phase pull-in is in progress
-Date:   Wed,  4 May 2022 16:50:55 -0400
-Message-Id: <1651697455-1588-2-git-send-email-min.li.xe@renesas.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1651697455-1588-1-git-send-email-min.li.xe@renesas.com>
-References: <1651697455-1588-1-git-send-email-min.li.xe@renesas.com>
-Content-Type: text/plain
-X-ClientProxiedBy: BN9PR03CA0779.namprd03.prod.outlook.com
- (2603:10b6:408:13a::34) To OS3PR01MB6593.jpnprd01.prod.outlook.com
- (2603:1096:604:101::7)
+        Wed, 4 May 2022 16:56:34 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B563515A6;
+        Wed,  4 May 2022 13:52:57 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id j6so5110149ejc.13;
+        Wed, 04 May 2022 13:52:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:from:to:cc:subject:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=pRe2tTAP4iLVD9RQ1l2haGJ7VnUp8txM+9KQIOzBu28=;
+        b=jILl5MWmUcKv0gRrOEGVXQoMprsX6370Dpkgt5Gb6buyuJg/ZvaC2KanQpr95fUdC5
+         UvKWiCaITL8lsYFF5ONDpgubS/9ThEle+ooWtsY4Fx4Ui6VIfovfQec+SQih7RZsljCq
+         atbMUdd8/iW0Dv4Sobelt7Me5zPNywDn/PB0wLbmDVnG1AggdVP8O9ZVGyB1kM9f7HdN
+         Um9VQRIGzVsKCD6PqVvkByd2VEkmn8bzOVUSLg8HnCJGp0HbxWnQpZP/Lx4ejndyyKDC
+         deU+oM7GjcvGCDZkjbJB5HMlzUMPqryXKCHp9XiJI3cZoWHC1EBzoZ1osAngBZat2lNm
+         lHvw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:from:to:cc:subject:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=pRe2tTAP4iLVD9RQ1l2haGJ7VnUp8txM+9KQIOzBu28=;
+        b=WMC4Dm/xwpmtncCCbHcUwwYMfN9fOL4K35dvMqeMTMJIVZGIn5otPRR8gFNiaJSAKB
+         eL8KjzloRYS0osL+5B1ryfZXoH7Io8n/J4daGy9PixQ7fNF/WEod7Wh0bHld/PTLAVW7
+         8LGm2A7bzd+FW8PaKAeIkV4AaJLT81cJlkKYtEoZWTtdxR++JZl/kGnH2PaAGCD8iw60
+         7M7V2kftqxx6aYmaQRD7YWlyXCoey/MN4jOFd5ZkCTr0r0FFAjwoIV+QDsnyCQ+eTLNk
+         xgwD7fKlMuEcyV2yuneGt3MtJLGGajiIwPK5OQXROT2zqvtA4cTIncoq1tTfj2LgE/Yu
+         cESg==
+X-Gm-Message-State: AOAM533Sm7vhU6V4KQOu/7x5bBxgwqHcGDfcIk5ojNe1D66OWX6PVOrY
+        IE+BC0fqDkwNNRokOheMviw=
+X-Google-Smtp-Source: ABdhPJzUPx5ca3YpEtyRn/Ia/vQI0/QOeBYo6/fu7vmJIzscOdsk6y5HMvEUfYIdkeTSLTjLrQf50Q==
+X-Received: by 2002:a17:907:7247:b0:6f4:ed49:cd3f with SMTP id ds7-20020a170907724700b006f4ed49cd3fmr418987ejc.172.1651697575554;
+        Wed, 04 May 2022 13:52:55 -0700 (PDT)
+Received: from Ansuel-xps. (93-42-70-190.ip85.fastwebnet.it. [93.42.70.190])
+        by smtp.gmail.com with ESMTPSA id ml13-20020a170906cc0d00b006f3ef214e08sm6052832ejb.110.2022.05.04.13.52.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 May 2022 13:52:55 -0700 (PDT)
+Message-ID: <6272e7a7.1c69fb81.dae8f.70aa@mx.google.com>
+X-Google-Original-Message-ID: <YnLnpZhibOjDxC4g@Ansuel-xps.>
+Date:   Wed, 4 May 2022 22:52:53 +0200
+From:   Ansuel Smith <ansuelsmth@gmail.com>
+To:     =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>
+Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RESEND PATCH v3 1/2] dt-bindings: mtd: partitions: Document new
+ partition-dynamic nodes
+References: <20220429124825.21477-1-ansuelsmth@gmail.com>
+ <20220429124825.21477-2-ansuelsmth@gmail.com>
+ <b2d90156-f29d-88a0-58b8-7fb32c08c837@gmail.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 864e2046-3383-41e3-c07c-08da2e0fd44f
-X-MS-TrafficTypeDiagnostic: TYAPR01MB4431:EE_
-X-Microsoft-Antispam-PRVS: <TYAPR01MB443149BD841085F44734536BBAC39@TYAPR01MB4431.jpnprd01.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: S5PsV3Msh6ITmM9SYEHN4VANRQekjeY5q2uwxnF8SJDurVqadWdpjWoukrKb9srBUQ3T6bSdb+4CdBPE+9FBMXbWEAPI9gBrizF2DfS2l8YSnn/YmPAguTAznzdPZuHKvlKkCuhgFlXz9LsJKnQsEFJUKUF2gJJimaZBE8ipcBYrVeyDY6f1D3Ipj5JpAI99gawDOAVGTGqxxKH5bj5B5N8osziIkoZPePvzz/8+HJ94+HhthFgU27RoIr3iJSK2hboCiY4ZNjhBSkM7krGTjupZAcwMvfEX39AKWka6OmgFTPZIYIHAQrkrtLYC+Dwq//qOe2bv7hFE8DOX1zCFANqT2AQVTL9yM+dOjqR+Zl6ZqGpX3wtZIZBS8bq/4dStLXf6w44HPumY2qlu2EEMZa9Ae1b9e4K3UuH3zr7B/wnSygEyZleCYnt5SJO3rXEH7rgwmQdEQAqazqQD3F9T6xmJDBAL6iHrX5M1ODSqdib5FAWwEf3xzIuALXk+Lp929CT7V0fYJQAPQTwJ9Hl2eD/2sfDq9jcly9qHcG9ixRtFf5z23meIqdUGGRm2alsMouUjOKqNZ9NzlacK8XHg/qMbl5+AqP0BDdncpF6tIjRcfUPQW/T5owK3pX8B3PImmP0FfWhZZsBdKTYRjv0yVX7553dOXOOIlyl1sRxTJFJBmpz6Z9ocY+O/thzQB6EJHDhdL75YKxg2KJMgMSr1LA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:OS3PR01MB6593.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(508600001)(36756003)(6486002)(6512007)(52116002)(26005)(6506007)(2906002)(107886003)(38100700002)(2616005)(38350700002)(186003)(316002)(86362001)(8676002)(66946007)(66556008)(66476007)(4326008)(6666004)(83380400001)(8936002)(5660300002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?kGy0GSk/fcHIaXCwjwZR0o+/wNEjKeL5X7s3zOx/tQGMmAF32otffB82MetI?=
- =?us-ascii?Q?Z4nPDvVc97wSgbBtyp2uDryPC0Dh1j4RcfruBQS2h+MmpUGgRbnjRycDxSCo?=
- =?us-ascii?Q?1FC6CXYTq6U9yP3BKx5nKEoE0LKACoFarKe7FOAgcAtKfc61scBlsBf2T9NQ?=
- =?us-ascii?Q?gXPwJSlZVKSTKB9QkQrA8Kyd+9DmOtgm03nysSjAG/3W66igQ3ZtdQ0h93h6?=
- =?us-ascii?Q?MolkJ9kaBwNv6c5MRM+IsbWmFUNV5BtPg4F2L0P/PeJOMZBVbJBl84Gzvo8g?=
- =?us-ascii?Q?+BzQ0uWyZO3mzCtVmyirj7OFBbhwKq6IFXB8N+11fJv+H3rm+MxTZwSad3uO?=
- =?us-ascii?Q?DoRu9S1k0VOwuEQIHjXbvUA3zdcauf9Mg3LdRJ5qCmJv+nsZVBBgWrXkdLXI?=
- =?us-ascii?Q?//8iEH7Rq6R7OLMdaSH2bhLfX8dEd1i0M9bXszHuA1p9h98L0Zb/BgEkokyo?=
- =?us-ascii?Q?ig0oNiP8cPh7J5TANewh1LC9FgcKjqxaxs627GgILZFAmwl5hN8FX8ZA5EXo?=
- =?us-ascii?Q?YPLCnutCIR8kClGNEgTwi5hCBBb9TFhZinPSLOlkItI7lRKLYWiMGUen7ffU?=
- =?us-ascii?Q?zPkZcsn9LcO8BVnov/44Nn+aXus/+37tZbb2pv+MtxjaOxy61OdZWscXBd2o?=
- =?us-ascii?Q?wtNdRx9B1gijyTBcWcn/OcqneqUxr7aWHT/UMBoSXJdyfN2D4vrZnJCGBIQm?=
- =?us-ascii?Q?sbm/iDpdzh+I3RsMwW0EVR3oIJdrUHSw2kO4TQFwUl6JZ/STKW9utlIxkRoN?=
- =?us-ascii?Q?Q3hCk4T+Q1NAv7Bht0AjG7VMmEpDYvuWwpoIRiM0SakchU8evKy3UJYf6jIc?=
- =?us-ascii?Q?pm2qmOw/ZtUZb5hM5CXTZGYR93wo7GCDp/KzeiIs0R8vpQTBuBRblZBVVBGN?=
- =?us-ascii?Q?Pf4k7wv/KckYUXih8HvWtGjVa35iKyv/YnlyjNoKSYSMt7SFmduM1Cd7fvp0?=
- =?us-ascii?Q?yfRhVxPo/5hbzKTwf1EqLtfLVoMKjPUR0eJKfYjIVPFToBIfKdqKdJQltMRt?=
- =?us-ascii?Q?F/t7kKVW4elfe1CrwMVNoAWeZsGvsdcni2bMDJKTMRdytNL7PSiyTDAKtBUS?=
- =?us-ascii?Q?DV7AmEzLxLrMva8tP07f9+nUU4xtGs6/s+tQNNZHmKxdKTYWtBTER84vQIBX?=
- =?us-ascii?Q?xP+shjrAfXasHymUA5vdnl9EWBMyOq9+2DYzKvK/zYPzmkfEoQ+lRfHfBvx4?=
- =?us-ascii?Q?JJrmx3Ox3XuilOiPNxaujsyCqv9Fbpu84zCoHE7tK9lqDxDOwu/xVUhFh45m?=
- =?us-ascii?Q?jLyOSwycujkHvSNnsSNAjUeP6wBctxAs88A4TC9yxNo4RVmMyBwSfZ45QGbJ?=
- =?us-ascii?Q?CrF2M3s3bOeL+y5qE7/v/5+o1eR+Y9w/m5fcKsr5BbmMN+iA61UL63F2xFUl?=
- =?us-ascii?Q?Pw8i7ptAQjR1wARaLAxq1NJ9Cvl/igf5Uelf52nB7pJ3Gvhzf2ArlcCd+YF8?=
- =?us-ascii?Q?Q4Xl4rXISX0Gsm5KzSlyRbv2vWUaH9jiZxEzDsfL+7ARo1vNm2tsZ9cQ9KG3?=
- =?us-ascii?Q?WcDlhSB91xCXAoi45pYo1pXszSk8D2GPp0L/LGeBfULShutEqUUc/N4xvc0r?=
- =?us-ascii?Q?+nm/9n/xkUfWmRv40AWn5amnHSZ3sDcJiZVh+w4o4FvrYKL1ikS4lmkx00Ch?=
- =?us-ascii?Q?z4PvYZwmi1fxazbLS/F2tkFMIdNs7AFfph1Z59gpomRhdrIZ6j6bUvbG3eYU?=
- =?us-ascii?Q?NYKaPI6CunMdlZNjg/lY8jEQ39XoHIWKJKtkk5dAJ/qo9ZN+PhvJVsRmX5XP?=
- =?us-ascii?Q?mbJ+kRheKymlsQSHEeSKHQ59VJxPEx0=3D?=
-X-OriginatorOrg: renesas.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 864e2046-3383-41e3-c07c-08da2e0fd44f
-X-MS-Exchange-CrossTenant-AuthSource: OS3PR01MB6593.jpnprd01.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 May 2022 20:51:15.0230
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 53d82571-da19-47e4-9cb4-625a166a4a2a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: VGSALjVY34NbJ0gId3I2xl5zHardAXuINQunXDBE6chNRq5DwWWM6g4TLPMKA28sLAw2emZnjRUsl16JEES+IA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYAPR01MB4431
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <b2d90156-f29d-88a0-58b8-7fb32c08c837@gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        WEIRD_QUOTING autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Also removes PEROUT_ENABLE_OUTPUT_MASK
+On Wed, May 04, 2022 at 10:39:14PM +0200, Rafał Miłecki wrote:
+> On 29.04.2022 14:48, Ansuel Smith wrote:
+> > Document new partition-dynamic nodes used to provide an OF node for
+> > partition registred at runtime by parsers. This is required for nvmem
+> > system to declare and detect nvmem-cells.
+> > 
+> > With these special partitions, the reg / offset is not required.
+> > The node name must be in the form of "partition name"-dynamic.
+> > If the partition can't be displayed using the node name, it's possible
+> > to use the label binding that will be used instead of the node name.
+> > The node name or the label binding is used to match the partition
+> > allocated by the parser at runtime and the parser will provide reg
+> > and offset of the mtd.
+> > 
+> > NVMEM will use the data from the parser and provide the NVMEM cells
+> > declared in the DTS, "connecting" the dynamic partition with a
+> > static declaration of cells in them.
+> > 
+> > Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
+> > ---
+> >   .../mtd/partitions/partition-dynamic.yaml     | 56 +++++++++++++++++++
+> >   .../mtd/partitions/qcom,smem-part.yaml        |  4 ++
+> >   2 files changed, 60 insertions(+)
+> >   create mode 100644 Documentation/devicetree/bindings/mtd/partitions/partition-dynamic.yaml
+> > 
+> > diff --git a/Documentation/devicetree/bindings/mtd/partitions/partition-dynamic.yaml b/Documentation/devicetree/bindings/mtd/partitions/partition-dynamic.yaml
+> > new file mode 100644
+> > index 000000000000..e0efa58e4fac
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/mtd/partitions/partition-dynamic.yaml
+> > @@ -0,0 +1,56 @@
+> > +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/mtd/partitions/partition-dynamic.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Dynamic Partition
+> 
+> I'm not native but that "Dynamic Partition" sounds pretty natural and
+> I'm wondering if you shouldn't make that binding dynamic-partition.yaml
+> 
+> Any natives to comment on this? :)
+> 
+>
 
-Signed-off-by: Min Li <min.li.xe@renesas.com>
-Acked-by: Richard Cochran <richardcochran@gmail.com>
----
- drivers/ptp/ptp_clockmatrix.c | 32 ++------------------------------
- drivers/ptp/ptp_clockmatrix.h |  2 --
- 2 files changed, 2 insertions(+), 32 deletions(-)
+The naming for the file is used to keep the standard of
+[parser]-partition.yaml. Agree that we should find a better naming for
+all of this.
 
-diff --git a/drivers/ptp/ptp_clockmatrix.c b/drivers/ptp/ptp_clockmatrix.c
-index 70791dc..e9257dd 100644
---- a/drivers/ptp/ptp_clockmatrix.c
-+++ b/drivers/ptp/ptp_clockmatrix.c
-@@ -1355,43 +1355,15 @@ static int idtcm_output_enable(struct idtcm_channel *channel,
- 	return idtcm_write(idtcm, (u16)base, OUT_CTRL_1, &val, sizeof(val));
- }
- 
--static int idtcm_output_mask_enable(struct idtcm_channel *channel,
--				    bool enable)
--{
--	u16 mask;
--	int err;
--	u8 outn;
--
--	mask = channel->output_mask;
--	outn = 0;
--
--	while (mask) {
--		if (mask & 0x1) {
--			err = idtcm_output_enable(channel, enable, outn);
--			if (err)
--				return err;
--		}
--
--		mask >>= 0x1;
--		outn++;
--	}
--
--	return 0;
--}
--
- static int idtcm_perout_enable(struct idtcm_channel *channel,
- 			       struct ptp_perout_request *perout,
- 			       bool enable)
- {
- 	struct idtcm *idtcm = channel->idtcm;
--	unsigned int flags = perout->flags;
- 	struct timespec64 ts = {0, 0};
- 	int err;
- 
--	if (flags == PEROUT_ENABLE_OUTPUT_MASK)
--		err = idtcm_output_mask_enable(channel, enable);
--	else
--		err = idtcm_output_enable(channel, enable, perout->index);
-+	err = idtcm_output_enable(channel, enable, perout->index);
- 
- 	if (err) {
- 		dev_err(idtcm->dev, "Unable to set output enable");
-@@ -1895,7 +1867,7 @@ static int idtcm_adjtime(struct ptp_clock_info *ptp, s64 delta)
- 	int err;
- 
- 	if (channel->phase_pull_in == true)
--		return 0;
-+		return -EBUSY;
- 
- 	mutex_lock(idtcm->lock);
- 
-diff --git a/drivers/ptp/ptp_clockmatrix.h b/drivers/ptp/ptp_clockmatrix.h
-index 4379650..bf1e49409 100644
---- a/drivers/ptp/ptp_clockmatrix.h
-+++ b/drivers/ptp/ptp_clockmatrix.h
-@@ -54,8 +54,6 @@
- #define LOCK_TIMEOUT_MS			(2000)
- #define LOCK_POLL_INTERVAL_MS		(10)
- 
--#define PEROUT_ENABLE_OUTPUT_MASK	(0xdeadbeef)
--
- #define IDTCM_MAX_WRITE_COUNT		(512)
- 
- #define PHASE_PULL_IN_MAX_PPB		(144000)
+> > +description: |
+> > +  This binding describes a single flash partition that is dynamically allocated
+> > +  by a dedicated parser that is not a fixed-partition parser.
+> > +
+> > +  A dynamic partition require the node ending with the "-dynamic" tag and if the
+> > +  dynamic partition name can't be displayed using the node name, the label
+> > +  properties can be used. The node name or the label have to match the dynamic
+> > +  partition allocated by the parser.
+> > +
+> > +  These special partition definition can be used to give a dynamic partition
+> > +  an OF node to declare NVMEM cells. An example is declaring the partition
+> > +  label and all the NVMEM cells in it. The parser will detect the correct reg
+> > +  and offset and the NVMEM will register the cells in it based on the data
+> > +  extracted by the parser.
+> > +
+> > +maintainers:
+> > +  - Ansuel Smith <ansuelsmth@gmail.com>
+> > +
+> > +properties:
+> > +  label:
+> > +    description: The label / name for the partition assigned by the parser at
+> > +      runtime. This is needed for sybsystem like NVMEM to define cells and
+> > +      register with this OF node.
+> > +
+> > +additionalProperties: true
+> > +
+> > +examples:
+> > +  - |
+> > +    flash {
+> > +      partitions {
+> > +        compatible = "qcom,smem-part";
+> > +
+> > +        art-dynamic {
+> > +          compatible = "nvmem-cells";
+> > +          #address-cells = <1>;
+> > +          #size-cells = <1>;
+> > +          label = "0:art";
+> > +
+> > +          macaddr_art_0: macaddr@0 {
+> > +            reg = <0x0 0x6>;
+> > +          };
+> > +
+> > +          macaddr_art_6: macaddr@6 {
+> > +            reg = <0x6 0x6>;
+> > +          };
+> > +        };
+> > +      };
+> > +    };
+> 
+> I see that we need a property (like "label") for storing partition name
+> as it may contain characters not allowed in $nodename.
+> 
+> Is there a reason to play with all that foo-dynamic $nodename then? With
+> fallback from "label" to extracting foo from *-dynamic pattern?
+> 
+
+Honestly the "-dynamic" thing is to correctly handle this ""strange""
+Documentation. At times using the pattern caused tons of problems with
+pattern so I had this bright idea of using the suffix "-dynamic" to
+cleary differentiate these special partition from fixed one.
+
+> Could we just be lazy, keep things simple and require "label" property?
+> 
+
+This is problematic to correctly assign a patternProperties to any user
+or this parser.
+
+> Then we could e.g. require $nodename to be pattern ^partition-[0-9a-f]+$
+> It's what leds-gpio.yaml does for reference.
+> 
+
+Mhhh ok I can totally make this change. My concern is that someone would
+get confused thinking they are fixed partition declared on top of the
+parser. But yhea this can also work... It's really a similar
+implementation of what I already to with dynamic. If you want I can do
+this change and send a v4.
+
+> Example:
+> 
+> partitions {
+> 	compatible = "foo";
+> 
+> 	partition-1 {
+> 		label = "bootloader";
+> 	};
+> 
+> 	partition-2 {
+> 		label = "0:art";
+> 	};
+> };
+
 -- 
-2.7.4
-
+	Ansuel

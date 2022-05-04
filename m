@@ -2,45 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFF8551A6D1
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 18:57:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C81BE51AA47
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:19:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354926AbiEDQ7e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 12:59:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51232 "EHLO
+        id S1356413AbiEDRWh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 13:22:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353933AbiEDQxR (ORCPT
+        with ESMTP id S1355819AbiEDREn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 12:53:17 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3970247AD4;
-        Wed,  4 May 2022 09:48:54 -0700 (PDT)
+        Wed, 4 May 2022 13:04:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9414A4992B;
+        Wed,  4 May 2022 09:53:25 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F1DE8B8279C;
-        Wed,  4 May 2022 16:48:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6D54C385B1;
-        Wed,  4 May 2022 16:48:51 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1509A616F8;
+        Wed,  4 May 2022 16:53:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55454C385AF;
+        Wed,  4 May 2022 16:53:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651682931;
-        bh=Hb0Ps1KMCg8C10a8QkE13mbaG1J1zYAFRiPAOV/CS/k=;
+        s=korg; t=1651683204;
+        bh=6Va1t0xMrqkOyI+YVYgcsaBtCpt0QomG1pI3tWZkQTg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uiKi/f4ga2+saI5ZHYvwijpUbfTSqL0U0ipPSp23H7gMKiS7GVKHx4JBIpWXuZWA0
-         9PvzZXqE9zFjoW5Lr2R8lp3JoSfWIbtC5MUap+fnNhFiQc8a1Htuy3RS2G3vrD1A/b
-         9lxLyDWKxv6QxB+bxcP16VLyt8HyfoRiOpkmiTc8=
+        b=ZdWcbBYxLk3ye8H7/EaAVigXalKasgYZfPSxBg0xrwGjl7CFaE11+kEuYSRCniWOz
+         kX1/T2t7OCUP4zvI5l/bXAWrHN8cYoWz69yJAv2D+F8mjNHK5a28qMhntNgQQemD7e
+         DEibafLaQP2FPqZAm56j4MxnZDl6G01F+YJsUXqU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
+To:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Mikulas Patocka <mpatocka@redhat.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: [PATCH 5.4 28/84] hex2bin: fix access beyond string end
+        stable@vger.kernel.org, Marek Vasut <marex@denx.de>,
+        Adam Ford <aford173@gmail.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Peng Fan <peng.fan@nxp.com>, Shawn Guo <shawnguo@kernel.org>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 056/177] arm64: dts: imx8mn: Fix SAI nodes
 Date:   Wed,  4 May 2022 18:44:09 +0200
-Message-Id: <20220504152929.765626675@linuxfoundation.org>
+Message-Id: <20220504153058.039257167@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220504152927.744120418@linuxfoundation.org>
-References: <20220504152927.744120418@linuxfoundation.org>
+In-Reply-To: <20220504153053.873100034@linuxfoundation.org>
+References: <20220504153053.873100034@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,48 +58,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mikulas Patocka <mpatocka@redhat.com>
+From: Marek Vasut <marex@denx.de>
 
-commit e4d8a29997731b3bb14059024b24df9f784288d0 upstream.
+[ Upstream commit 574518b7ccbaef74cb89eb1a1a0da88afa1e0113 ]
 
-If we pass too short string to "hex2bin" (and the string size without
-the terminating NUL character is even), "hex2bin" reads one byte after
-the terminating NUL character.  This patch fixes it.
+The most specific compatible string element should be "fsl,imx8mn-sai"
+on i.MX8M Nano, fix it from current "fsl,imx8mm-sai" (two Ms, likely
+due to copy-paste error from i.MX8M Mini).
 
-Note that hex_to_bin returns -1 on error and hex2bin return -EINVAL on
-error - so we can't just return the variable "hi" or "lo" on error.
-This inconsistency may be fixed in the next merge window, but for the
-purpose of fixing this bug, we just preserve the existing behavior and
-return -1 and -EINVAL.
-
-Signed-off-by: Mikulas Patocka <mpatocka@redhat.com>
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-Fixes: b78049831ffe ("lib: add error checking to hex2bin")
-Cc: stable@vger.kernel.org
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 9e9860069725f ("arm64: dts: imx8mn: Add SAI nodes")
+Signed-off-by: Marek Vasut <marex@denx.de>
+Cc: Adam Ford <aford173@gmail.com>
+Cc: Fabio Estevam <festevam@gmail.com>
+Cc: Peng Fan <peng.fan@nxp.com>
+Cc: Shawn Guo <shawnguo@kernel.org>
+Cc: NXP Linux Team <linux-imx@nxp.com>
+To: linux-arm-kernel@lists.infradead.org
+Reviewed-by: Adam Ford <aford173@gmail.com>
+Signed-off-by: Shawn Guo <shawnguo@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- lib/hexdump.c |    9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+ arch/arm64/boot/dts/freescale/imx8mn.dtsi | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
---- a/lib/hexdump.c
-+++ b/lib/hexdump.c
-@@ -62,10 +62,13 @@ EXPORT_SYMBOL(hex_to_bin);
- int hex2bin(u8 *dst, const char *src, size_t count)
- {
- 	while (count--) {
--		int hi = hex_to_bin(*src++);
--		int lo = hex_to_bin(*src++);
-+		int hi, lo;
+diff --git a/arch/arm64/boot/dts/freescale/imx8mn.dtsi b/arch/arm64/boot/dts/freescale/imx8mn.dtsi
+index da6c942fb7f9..6d6cbd4c83b8 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mn.dtsi
++++ b/arch/arm64/boot/dts/freescale/imx8mn.dtsi
+@@ -263,7 +263,7 @@ spba2: spba-bus@30000000 {
+ 				ranges;
  
--		if ((hi < 0) || (lo < 0))
-+		hi = hex_to_bin(*src++);
-+		if (unlikely(hi < 0))
-+			return -EINVAL;
-+		lo = hex_to_bin(*src++);
-+		if (unlikely(lo < 0))
- 			return -EINVAL;
+ 				sai2: sai@30020000 {
+-					compatible = "fsl,imx8mm-sai", "fsl,imx8mq-sai";
++					compatible = "fsl,imx8mn-sai", "fsl,imx8mq-sai";
+ 					reg = <0x30020000 0x10000>;
+ 					interrupts = <GIC_SPI 96 IRQ_TYPE_LEVEL_HIGH>;
+ 					clocks = <&clk IMX8MN_CLK_SAI2_IPG>,
+@@ -277,7 +277,7 @@ sai2: sai@30020000 {
+ 				};
  
- 		*dst++ = (hi << 4) | lo;
+ 				sai3: sai@30030000 {
+-					compatible = "fsl,imx8mm-sai", "fsl,imx8mq-sai";
++					compatible = "fsl,imx8mn-sai", "fsl,imx8mq-sai";
+ 					reg = <0x30030000 0x10000>;
+ 					interrupts = <GIC_SPI 50 IRQ_TYPE_LEVEL_HIGH>;
+ 					clocks = <&clk IMX8MN_CLK_SAI3_IPG>,
+@@ -291,7 +291,7 @@ sai3: sai@30030000 {
+ 				};
+ 
+ 				sai5: sai@30050000 {
+-					compatible = "fsl,imx8mm-sai", "fsl,imx8mq-sai";
++					compatible = "fsl,imx8mn-sai", "fsl,imx8mq-sai";
+ 					reg = <0x30050000 0x10000>;
+ 					interrupts = <GIC_SPI 90 IRQ_TYPE_LEVEL_HIGH>;
+ 					clocks = <&clk IMX8MN_CLK_SAI5_IPG>,
+@@ -307,7 +307,7 @@ sai5: sai@30050000 {
+ 				};
+ 
+ 				sai6: sai@30060000 {
+-					compatible = "fsl,imx8mm-sai", "fsl,imx8mq-sai";
++					compatible = "fsl,imx8mn-sai", "fsl,imx8mq-sai";
+ 					reg = <0x30060000  0x10000>;
+ 					interrupts = <GIC_SPI 90 IRQ_TYPE_LEVEL_HIGH>;
+ 					clocks = <&clk IMX8MN_CLK_SAI6_IPG>,
+@@ -364,7 +364,7 @@ spdif1: spdif@30090000 {
+ 				};
+ 
+ 				sai7: sai@300b0000 {
+-					compatible = "fsl,imx8mm-sai", "fsl,imx8mq-sai";
++					compatible = "fsl,imx8mn-sai", "fsl,imx8mq-sai";
+ 					reg = <0x300b0000 0x10000>;
+ 					interrupts = <GIC_SPI 111 IRQ_TYPE_LEVEL_HIGH>;
+ 					clocks = <&clk IMX8MN_CLK_SAI7_IPG>,
+-- 
+2.35.1
+
 
 

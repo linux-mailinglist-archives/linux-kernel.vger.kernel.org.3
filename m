@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 503CF51A799
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:04:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 718E251A6E1
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 18:58:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354833AbiEDRHM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 13:07:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38274 "EHLO
+        id S1355304AbiEDQ7w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 12:59:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355331AbiEDQ7y (ORCPT
+        with ESMTP id S1354328AbiEDQyF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 12:59:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C5584AE16;
-        Wed,  4 May 2022 09:51:32 -0700 (PDT)
+        Wed, 4 May 2022 12:54:05 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F255B48E46;
+        Wed,  4 May 2022 09:49:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DD518617C3;
-        Wed,  4 May 2022 16:51:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3209DC385A5;
-        Wed,  4 May 2022 16:51:28 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 608C66179D;
+        Wed,  4 May 2022 16:49:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A26A7C385B0;
+        Wed,  4 May 2022 16:49:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651683088;
-        bh=8/4Fbs9/GbSJ2Y8kjigEuSA44LNwUjllrxVYoEi/q6k=;
+        s=korg; t=1651682961;
+        bh=VeDrdbpKgken6M7dmn7e+v42X5SlyuaJuNtzQipf8wU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XVTAjgYIRjR7a9G9STfhXY2oVngKlwRjABkrybN6gRBsJWHeffmyAIQ4wQ08aD5C0
-         bhEGKRvzuBzmseRyx6vtY5cp8YdUjKxfDL0i2HAo8GpPcmqAx4PKsmJoZq8XRRq2yI
-         vpNTwOtlVTBGwvDrykdK92t+mINCDJffKoo59uzM=
+        b=TsHHK6G5PPGxmExGukI0PWbXx1PHJsFo84bJCibQ09i49EKBWPtAxtzao+xeS9VEz
+         20b62/mZabD3iVwTSpfcVbNGNu4byJYbmq1ObpbdTkns8GIczbu6A9XgYlAg7zIKIZ
+         e1zq4U67O5R3L4775HLtHawmzzijVRwjPCgkSH2g=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Maxim Mikityanskiy <maximmi@nvidia.com>,
-        Tariq Toukan <tariqt@nvidia.com>,
-        Jakub Kicinski <kuba@kernel.org>,
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 092/129] tls: Skip tls_append_frag on zero copy size
+Subject: [PATCH 5.4 63/84] drm/amd/display: Fix memory leak in dcn21_clock_source_create
 Date:   Wed,  4 May 2022 18:44:44 +0200
-Message-Id: <20220504153028.256636406@linuxfoundation.org>
+Message-Id: <20220504152932.230285389@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220504153021.299025455@linuxfoundation.org>
-References: <20220504153021.299025455@linuxfoundation.org>
+In-Reply-To: <20220504152927.744120418@linuxfoundation.org>
+References: <20220504152927.744120418@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,57 +55,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Maxim Mikityanskiy <maximmi@nvidia.com>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-[ Upstream commit a0df71948e9548de819a6f1da68f5f1742258a52 ]
+[ Upstream commit 65e54987508b6f0771f56bdfa3ee1926d52785ae ]
 
-Calling tls_append_frag when max_open_record_len == record->len might
-add an empty fragment to the TLS record if the call happens to be on the
-page boundary. Normally tls_append_frag coalesces the zero-sized
-fragment to the previous one, but not if it's on page boundary.
+When dcn20_clk_src_construct() fails, we need to release clk_src.
 
-If a resync happens then, the mlx5 driver posts dump WQEs in
-tx_post_resync_dump, and the empty fragment may become a data segment
-with byte_count == 0, which will confuse the NIC and lead to a CQE
-error.
-
-This commit fixes the described issue by skipping tls_append_frag on
-zero size to avoid adding empty fragments. The fix is not in the driver,
-because an empty fragment is hardly the desired behavior.
-
-Fixes: e8f69799810c ("net/tls: Add generic NIC offload infrastructure")
-Signed-off-by: Maxim Mikityanskiy <maximmi@nvidia.com>
-Reviewed-by: Tariq Toukan <tariqt@nvidia.com>
-Link: https://lore.kernel.org/r/20220426154949.159055-1-maximmi@nvidia.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Fixes: 6f4e6361c3ff ("drm/amd/display: Add Renoir resource (v2)")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/tls/tls_device.c | 12 +++++++-----
- 1 file changed, 7 insertions(+), 5 deletions(-)
+ drivers/gpu/drm/amd/display/dc/dcn21/dcn21_resource.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/net/tls/tls_device.c b/net/tls/tls_device.c
-index f718c7346088..1f56225a10e3 100644
---- a/net/tls/tls_device.c
-+++ b/net/tls/tls_device.c
-@@ -483,11 +483,13 @@ static int tls_push_data(struct sock *sk,
- 		copy = min_t(size_t, size, (pfrag->size - pfrag->offset));
- 		copy = min_t(size_t, copy, (max_open_record_len - record->len));
+diff --git a/drivers/gpu/drm/amd/display/dc/dcn21/dcn21_resource.c b/drivers/gpu/drm/amd/display/dc/dcn21/dcn21_resource.c
+index 11a4c4029a90..acc2c307c871 100644
+--- a/drivers/gpu/drm/amd/display/dc/dcn21/dcn21_resource.c
++++ b/drivers/gpu/drm/amd/display/dc/dcn21/dcn21_resource.c
+@@ -1140,6 +1140,7 @@ static struct clock_source *dcn21_clock_source_create(
+ 		return &clk_src->base;
+ 	}
  
--		rc = tls_device_copy_data(page_address(pfrag->page) +
--					  pfrag->offset, copy, msg_iter);
--		if (rc)
--			goto handle_error;
--		tls_append_frag(record, pfrag, copy);
-+		if (copy) {
-+			rc = tls_device_copy_data(page_address(pfrag->page) +
-+						  pfrag->offset, copy, msg_iter);
-+			if (rc)
-+				goto handle_error;
-+			tls_append_frag(record, pfrag, copy);
-+		}
- 
- 		size -= copy;
- 		if (!size) {
++	kfree(clk_src);
+ 	BREAK_TO_DEBUGGER();
+ 	return NULL;
+ }
 -- 
 2.35.1
 

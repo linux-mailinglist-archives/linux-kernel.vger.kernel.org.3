@@ -2,66 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95C96519A2A
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 10:43:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D609D519A34
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 10:43:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346563AbiEDIqj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 04:46:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44128 "EHLO
+        id S1346570AbiEDIrG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 04:47:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346608AbiEDIqa (ORCPT
+        with ESMTP id S1346555AbiEDIqu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 04:46:30 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A93EA24F0E
-        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 01:42:42 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id c1-20020a17090a558100b001dca2694f23so535906pji.3
-        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 01:42:42 -0700 (PDT)
+        Wed, 4 May 2022 04:46:50 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0929024F08
+        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 01:43:08 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id g6so1560943ejw.1
+        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 01:43:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=Up2fAJgMf0kaWNX6KayG2iG4ovLjRNyGdehP+ZCx6XI=;
-        b=HHk0bHFYywL5PAJAJwPZ0gk/mxn9hJlTjL41vCuaNhVHit5I9mPsTeZ8XzcOWQqkXr
-         9ZD5YiD9SDEBjtG+bxFVjBkhe1gxl8cBKvWcRiiUce7JyJ8GrZuOdvkNunKFRmAvhkKp
-         tIpohSy2GqAxbEIZ8KzFVEHa4qWsXVx9v8NQOOe98oOQOw7m6tcozsZFhGDgWAQJfY+i
-         ACxR4TWkNeE6ZTkTTJa/JrP8Ktk36rauMwsPPwv1oTnRFtW3W7QTjFhs5f/RB8ZCeOkG
-         I8NC7rccUW5Fa7M92lNT7Ft6lLuw7R+E4v6tFVatg372Kj5SbChJkZBdG/FAzDhTT3qj
-         FASw==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=kmKpPTh53HGaPGmc2OC1yOa2m+JoLUvELUPD1fQ0byo=;
+        b=SEYSYfVIjrtuu0K54gTH0Wzhwuz014Qzjb5o6h0ki1u4Mzh53usYUNfaiwlwEK9cWZ
+         YOR20fbwuNMy/H7weBRP8GZE/6GAl3Grk/ed8d57NNiZU2dfLoAxnT1/QWw845d0b5XD
+         XV8yPMrUaR29PvVwwl4MFQGjBTe9l98ekMJ0ysO4C1Eeb0ffjbM+xfwHN5ltUOVpMz+P
+         J7NW46ssnuj8QAE7hO7Rh+s9JFQn/K8KgywLrMRhg2JLcu2EichU0Q9RTfYC0BKv85sv
+         RL8oBfPlrl6zlZTSgAe72f47RfKw74m7I3nCtmQV50eFNf7JeX0oqdSdyVGch0hWowoN
+         5t9A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=Up2fAJgMf0kaWNX6KayG2iG4ovLjRNyGdehP+ZCx6XI=;
-        b=FV9m3jrIO1r/h5mHXSwtiSjiyBR+p0Ate/jlPAtMy6oUTDXGNwPn5RMBlMn2nvD3Jn
-         WAL13xXGWtbAeef+U30TB1fsvL9AxfQcJabFv6goZ9GmJ6sKNZTj99Vcbg6OdfJirG/4
-         XOaAMP7dI25o/dDDCJZIFLLSYa89qOjcL5V1dD2l2N2uAI43eeIDdwisuBqyiy4hXnhm
-         DUCb/CZWcU46vqErgdbBUZiQqT3NlrHbcp524C5EjJlw6NqdOLfMzglQ97Z3S9iQqUZl
-         1WBPV4IQMtMGVkrVS5B91Nw1UJ1wS/FM90+C6LtDw9juIeJSVZodv/I0R0zrbdKLk/fq
-         vhyg==
-X-Gm-Message-State: AOAM530rmuktuRApUjQ9ewMMI4yDOxHzfyx3QtA39CifEgPGp15qfORr
-        MhaNNu2c/gyDGTO+LTSpAOOv
-X-Google-Smtp-Source: ABdhPJxlKxetsi90KaLcM4uKZj9hOlXD5OcsWlwJitZdBW2rjKRg25l1Wz7uvsglmvayy3XHnoKW2Q==
-X-Received: by 2002:a17:90b:2311:b0:1d9:277e:edad with SMTP id mt17-20020a17090b231100b001d9277eedadmr9202775pjb.190.1651653762213;
-        Wed, 04 May 2022 01:42:42 -0700 (PDT)
-Received: from localhost.localdomain ([27.111.75.248])
-        by smtp.gmail.com with ESMTPSA id i10-20020a170902c94a00b0015e8d4eb278sm1386561pla.194.2022.05.04.01.42.38
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=kmKpPTh53HGaPGmc2OC1yOa2m+JoLUvELUPD1fQ0byo=;
+        b=pwytdBVCbr7TqWprkKngDuHkHy9pYk6jLevfDU9kDA6Ml80mdkBIy27d/cKdk+3l+Y
+         VwVvdsNhwH5jbzO4UVs0s1AMzqq+1HH8rIBuU3fHpokFGVc8OBTlTRls+PYbstH0pESr
+         +g/mu3bXGLX6c9leEQxC1vFqwbaN8uF7ZvpmDbLWI+T5cbuG7ORTo6deYsLSHzmuq4xO
+         D+dt84V/G9jkqKCbvy4Y5gVO198CZjD+gwSc8k3LCqjyiVhJRusan4zvoUqxfuY976eC
+         w1sM59PL//ksk2dMtOp93TTjN5TRDB4fLRzEYAwOLqe2wR/n4O7NSlJ54Gsj5BePGCQ4
+         bIew==
+X-Gm-Message-State: AOAM531LWiSC0NsVfmUNKKVcjNoQJGgjWI+Uevh4RDTjenorwX3tgGSC
+        kOPcjSqFx0P2rttFHFpTneUNBw==
+X-Google-Smtp-Source: ABdhPJxOON1fkLWxozmqD+lrywo7aHVA2H8luRvjKe6gL0v6Ji/UILgJJ5iHLa6eML1Rrbb6UCNohg==
+X-Received: by 2002:a17:906:6a26:b0:6f4:6bf8:1efe with SMTP id qw38-20020a1709066a2600b006f46bf81efemr9561816ejc.208.1651653786607;
+        Wed, 04 May 2022 01:43:06 -0700 (PDT)
+Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id og47-20020a1709071def00b006f3ef214e79sm5474399ejc.223.2022.05.04.01.43.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 May 2022 01:42:41 -0700 (PDT)
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     martin.petersen@oracle.com, jejb@linux.ibm.com
-Cc:     avri.altman@wdc.com, alim.akhtar@samsung.com,
-        bjorn.andersson@linaro.org, linux-arm-msm@vger.kernel.org,
-        quic_asutoshd@quicinc.com, quic_cang@quicinc.com,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bvanassche@acm.org, ahalaney@redhat.com,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Subject: [PATCH v3 5/5] scsi: ufs: qcom: Enable RPM_AUTOSUSPEND for runtime PM
-Date:   Wed,  4 May 2022 14:12:12 +0530
-Message-Id: <20220504084212.11605-6-manivannan.sadhasivam@linaro.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220504084212.11605-1-manivannan.sadhasivam@linaro.org>
-References: <20220504084212.11605-1-manivannan.sadhasivam@linaro.org>
+        Wed, 04 May 2022 01:43:06 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        - <patches@opensource.cirrus.com>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh@kernel.org>
+Subject: [PATCH v2] dt-bindings: mfd: wlf,arizona: Add spi-max-frequency
+Date:   Wed,  4 May 2022 10:43:04 +0200
+Message-Id: <20220504084304.46173-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -74,31 +71,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In order to allow the block devices to enter autosuspend mode during
-runtime, thereby allowing the ufshcd host driver to also runtime suspend,
-let's make use of the RPM_AUTOSUSPEND flag.
+The Wolfson Microelectronics Arizona audio can be connected via SPI bus
+(e.g. WM5110 on Exynos5433 TM2 board), so allow SPI peripheral
+properties.
 
-Without this flag, userspace needs to enable the autosuspend feature of
-the block devices through sysfs.
+Reported-by: Rob Herring <robh@kernel.org>
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 ---
- drivers/scsi/ufs/ufs-qcom.c | 1 +
+
+Changes since v1:
+1. Allow all SPI properties, not only max-frequency.
+---
+ Documentation/devicetree/bindings/mfd/wlf,arizona.yaml | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/drivers/scsi/ufs/ufs-qcom.c b/drivers/scsi/ufs/ufs-qcom.c
-index b718c38fccc9..358fa8ce51b8 100644
---- a/drivers/scsi/ufs/ufs-qcom.c
-+++ b/drivers/scsi/ufs/ufs-qcom.c
-@@ -876,6 +876,7 @@ static void ufs_qcom_set_caps(struct ufs_hba *hba)
- 	hba->caps |= UFSHCD_CAP_WB_EN;
- 	hba->caps |= UFSHCD_CAP_CRYPTO;
- 	hba->caps |= UFSHCD_CAP_AGGR_POWER_COLLAPSE;
-+	hba->caps |= UFSHCD_CAP_RPM_AUTOSUSPEND;
+diff --git a/Documentation/devicetree/bindings/mfd/wlf,arizona.yaml b/Documentation/devicetree/bindings/mfd/wlf,arizona.yaml
+index 9e762d474218..ea3337dafaf5 100644
+--- a/Documentation/devicetree/bindings/mfd/wlf,arizona.yaml
++++ b/Documentation/devicetree/bindings/mfd/wlf,arizona.yaml
+@@ -14,6 +14,7 @@ description: |
+   range of analogue I/O.
  
- 	if (host->hw_ver.major >= 0x2) {
- 		host->caps = UFS_QCOM_CAP_QUNIPRO |
+ allOf:
++  - $ref: /schemas/spi/spi-peripheral-props.yaml
+   - $ref: /schemas/sound/wlf,arizona.yaml#
+   - $ref: /schemas/regulator/wlf,arizona.yaml#
+   - $ref: /schemas/extcon/wlf,arizona.yaml#
 -- 
-2.25.1
+2.32.0
 

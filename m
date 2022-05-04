@@ -2,135 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4F6651A200
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 16:15:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B763451A205
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 16:16:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351206AbiEDOSa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 10:18:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34508 "EHLO
+        id S1351215AbiEDOTu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 10:19:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351123AbiEDOS0 (ORCPT
+        with ESMTP id S1346912AbiEDOTr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 10:18:26 -0400
-Received: from esa4.hgst.iphmx.com (esa4.hgst.iphmx.com [216.71.154.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C02F342A12
-        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 07:14:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1651673690; x=1683209690;
+        Wed, 4 May 2022 10:19:47 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52736BE2E;
+        Wed,  4 May 2022 07:16:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651673771; x=1683209771;
   h=message-id:date:mime-version:subject:to:cc:references:
    from:in-reply-to:content-transfer-encoding;
-  bh=3gz1SvToUvc61rP9gSGLK3Q0CP+ks8gO3XkKncVaLcU=;
-  b=GcSm1LfOyf/kLxk0L93V8RwZ3L80vHUdD0+N4YKTBzRqk3HSuviyXcZu
-   FiGz1Hgh4hQK3xmvLixusDZ1UAthkgseSULYulIZIqQC3pUb9YlUAacj2
-   CGdhnyC/U9Xyqva7vc6weliXnqSwQqKYBAx9DUVESo15LhPC47Tuqq6sP
-   IczwujfMfH6fNhNT5wAk8MbF9OyUwWgUMzZ4U06NZWsQxKw24KaJP5ghB
-   ct00Vrh+MmO/VuaAIqa/E7wxu2YurgUs/qwj/xgAPg2w/zLXk7QDrxBXB
-   1V3ngPTg4upVb++o8vPnRkFaz+LhB1Aofdfevy+bOV5HOMDeoaNbZizH1
-   g==;
-X-IronPort-AV: E=Sophos;i="5.91,198,1647273600"; 
-   d="scan'208";a="198343923"
-Received: from uls-op-cesaip01.wdc.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
-  by ob1.hgst.iphmx.com with ESMTP; 04 May 2022 22:14:48 +0800
-IronPort-SDR: 4pKKQQcHk496e21+merB4HUnJAWVTjBlQ6ElB/5GirFO84nsIbF5I1urb/2DayfVCzPfYKS+ss
- +xgEGPxGpYV12oNNPPBoupgzZ230bejs5d9GXHouDpXEPFU1MdkQ1yjfr9g030hLAFjIqVHTpM
- p02HLqw26PM8wHeBSLRKt+qVgMUCnsNW+cRsL5HyRsOmlc82ISu5yblIXK36/Q7tN8aoTBUBDJ
- q0TA7hIy3+Mw0JpVX5S6x4emy5N2NIQV0xuD0E040H4w+ZqpaiASy+qfQ3dkka23NU4XbS/Sjv
- WrPuLadn0omSp0ygRgbh/Szt
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 04 May 2022 06:45:29 -0700
-IronPort-SDR: SQy7bESXAFPwemf9DjWsoKqdxMB6gIViJkB4DVipfwkGzg6NpkM0OXDHJHbzGdLfM2C0A2Dz/k
- xhlEXbwc3n0sDt3tNmaUSo2zkNh/zjQpqf4fmK9bWQrHx7TUfmuzMvhLCJMn7KaenczX+BW0E/
- RM/U4F/wmzSojjbaxDmd9Ta+Q1xhaXU0upVTkG+ezuJFkAERjJmMA9KhQwrZ7nOMOO9l2ozzhg
- LNPJKSpXtROyYc5B/PTbENsTfxCt+MQ++zFp1mXgRD07H70EYHjAbsqxt2PMIzCo4m/y27wKmq
- jM4=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 04 May 2022 07:14:49 -0700
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4Ktf3V6rTkz1Rvlx
-        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 07:14:46 -0700 (PDT)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1651673686; x=1654265687; bh=3gz1SvToUvc61rP9gSGLK3Q0CP+ks8gO3Xk
-        KncVaLcU=; b=Irb3PekokvtqFuHO2x930y5RXWVryj/RHb7TPBz8hyKjQQGiEZS
-        PNlDM4PBOewSd6GF6QqDO6PMCeng/9fFLxdgUo2KnanoesyieOuJq7vgIy5+qpxw
-        37+IgA4VWZihtrROBbzcaUPUO/1emO4SxozHORu/HDrxTdhpZr13EOxk5Ls2EfcV
-        /KiQamg4sm9jTZI9nmoP0HkKDzR49F0X1N8WiDmHBLdwWy+qovjqnq5+A1piy09q
-        sFZWZpyq0sV2yJfo6NNJ7PY1KHDv2FMcro0qaeTbOCc//hkT7yDUI4wcYnREho+7
-        1IyVSmCp4iio3QoJKV7OXxGBhwctFUqKhpQ==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id fnAGVotTEbML for <linux-kernel@vger.kernel.org>;
-        Wed,  4 May 2022 07:14:46 -0700 (PDT)
-Received: from [10.225.81.200] (unknown [10.225.81.200])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4Ktf3S0q49z1Rvlc;
-        Wed,  4 May 2022 07:14:44 -0700 (PDT)
-Message-ID: <a3d58159-292d-70e2-d811-e54c9b49c9c8@opensource.wdc.com>
-Date:   Wed, 4 May 2022 23:14:43 +0900
+  bh=MWohxTGSYgiw+QLiiSWOsACclXShwViZvjP92qdVJmo=;
+  b=mO3pgXA/k0owI8ahsvfx4y2Y5jwySnFahkLSqJt968yEFnPS8OyC43rx
+   L7cj446ERnI9CMdHkGC5xxRas5aFpJq5ejo2m6YP/uBd8u2NdFAisyJ6n
+   RlF/5+dw7MQuqvti391hhJSP3HiLYdaIP2uuBRmBRapH15vVgCjzNudXA
+   nZIVay2R3yX5QLXv2GjuI2XO7FRNcxUPJ54+YMaeYqQYFEgeMNsF8Z0IN
+   YYAzsDaxdgyDCih9PvixtqjeI7KL6rhAYdGtQmv1CeLEhFdJOODhWGJrQ
+   nXLkrqxXuvHXdsASxLD036a/yXNifHPLDoXCQODFPHX7KTBsumJi68Nm5
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10337"; a="292966698"
+X-IronPort-AV: E=Sophos;i="5.91,198,1647327600"; 
+   d="scan'208";a="292966698"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2022 07:16:11 -0700
+X-IronPort-AV: E=Sophos;i="5.91,198,1647327600"; 
+   d="scan'208";a="584757563"
+Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.32.90])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2022 07:16:02 -0700
+Message-ID: <9e862a01-b955-70c0-25ae-2efc03f636bf@intel.com>
+Date:   Wed, 4 May 2022 17:15:57 +0300
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.8.1
-Subject: Re: [PATCH v1 2/4] powerpc/mpc5xxx: Switch
- mpc5xxx_get_bus_frequency() to use fwnode
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.8.1
+Subject: Re: [PATCH v5 2/6] perf evlist: Clear all_cpus before propagating
 Content-Language: en-US
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Wolfram Sang <wsa@kernel.org>,
-        Chris Packham <chris.packham@alliedtelesis.co.nz>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        linux-ide@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-serial@vger.kernel.org
-Cc:     Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Anatolij Gustschin <agust@denx.de>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Pantelis Antoniou <pantelis.antoniou@gmail.com>,
-        Mark Brown <broonie@kernel.org>
-References: <20220504134449.64473-1-andriy.shevchenko@linux.intel.com>
- <20220504134449.64473-2-andriy.shevchenko@linux.intel.com>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <20220504134449.64473-2-andriy.shevchenko@linux.intel.com>
+To:     Ian Rogers <irogers@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        John Garry <john.garry@huawei.com>,
+        Will Deacon <will@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        James Clark <james.clark@arm.com>,
+        German Gomez <german.gomez@arm.com>,
+        Riccardo Mancini <rickyman7@gmail.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
+        Alexander Antonov <alexander.antonov@linux.intel.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Stephane Eranian <eranian@google.com>
+References: <20220503041757.2365696-1-irogers@google.com>
+ <20220503041757.2365696-3-irogers@google.com>
+From:   Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <20220503041757.2365696-3-irogers@google.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-10.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/05/04 22:44, Andy Shevchenko wrote:
-> Switch mpc5xxx_get_bus_frequency() to use fwnode in order to help
-> cleaning up other parts of the kernel from OF specific code.
+On 3/05/22 07:17, Ian Rogers wrote:
+> all_cpus is merged into during propagation. Initially all_cpus is set
+> from PMU sysfs. perf_evlist__set_maps will recompute it and change
+> evsel->cpus to user_requested_cpus if they are given. If all_cpus isn't
+> cleared then the union of the user_requested_cpus and PMU sysfs values
+> is set to all_cpus, whereas just user_requested_cpus is necessary. To
+> avoid this make all_cpus empty prior to propagation.
 > 
-> No functional change intended.
+> Signed-off-by: Ian Rogers <irogers@google.com>
+
+Reviewed-by: Adrian Hunter <adrian.hunter@intel.com>
+
+> ---
+>  tools/lib/perf/evlist.c | 4 ++++
+>  1 file changed, 4 insertions(+)
 > 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> diff --git a/tools/lib/perf/evlist.c b/tools/lib/perf/evlist.c
+> index a09315538a30..974b4585f93e 100644
+> --- a/tools/lib/perf/evlist.c
+> +++ b/tools/lib/perf/evlist.c
+> @@ -59,6 +59,10 @@ static void perf_evlist__propagate_maps(struct perf_evlist *evlist)
+>  {
+>  	struct perf_evsel *evsel;
+>  
+> +	/* Recomputing all_cpus, so start with a blank slate. */
+> +	perf_cpu_map__put(evlist->all_cpus);
+> +	evlist->all_cpus = NULL;
+> +
+>  	perf_evlist__for_each_evsel(evlist, evsel)
+>  		__perf_evlist__propagate_maps(evlist, evsel);
+>  }
 
-For the pata bits,
-
-Acked-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
-
--- 
-Damien Le Moal
-Western Digital Research

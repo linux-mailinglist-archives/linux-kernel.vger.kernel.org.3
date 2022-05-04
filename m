@@ -2,76 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CEAE519A3D
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 10:44:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDAE4519A51
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 10:47:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346552AbiEDIry (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 04:47:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45958 "EHLO
+        id S1346582AbiEDIu4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 04:50:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346562AbiEDIrn (ORCPT
+        with ESMTP id S235435AbiEDIuw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 04:47:43 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBA7E24960
-        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 01:44:06 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id kq17so1546742ejb.4
-        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 01:44:06 -0700 (PDT)
+        Wed, 4 May 2022 04:50:52 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A022B24BE0
+        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 01:47:16 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id y3so1508781ejo.12
+        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 01:47:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=date:from:to:cc:subject:message-id:mail-followup-to:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=9yrR8ovN4e3vCdcrotHqbMZyniAFA2hJaExlKiyLR0s=;
-        b=eI7jxaZSMLwCY2OAs01SylkNgsWduEeZXZRm5XGuOXNe3dRTvAwu7GDdoryvNkMaWb
-         t32vu73C4DTnUYXHeOy15quDXT8YG7pcr94Mu224ZzdLXH7iAmKkJMKZK2OlCzKLnD2w
-         moEwaBMKbS7QixK1dbVoRbJ3ewKzg0nKLMboo=
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to:content-transfer-encoding;
+        bh=QmtWwByo/ZIKuv6qy4yEByVOiPKOIaqS2BZn64y92Q4=;
+        b=AL3CjXJc7FL0+ahMAGnCQ7qmyxM+AoFMp+n++syujpzPeLdz3G9e8SumISuj6OAEA0
+         mN+gxfyTym9cCFHXVM2ma5gj6lTOqSS9+fFFVIN9K17+VhI/O5XELTfaBERRbjmSI/Nl
+         vvObVZ+lE/oHjIPDG5c3kZEYjJQEe1NvGt+HsrQ0Q+6yNj+8se8zRPFmuQGMPF5BpxNO
+         +M/mEz0tJP9w1V148yHSRWo5dQEAebdJpQrcp3fpkdmwYxogU+MGAbkl5NmYDLl3m4oe
+         Nv5JLzbG6l6Ef2KxCmwdwW2oy1uCKa2pWneGeT1ndmrmk+5OUccDsfooF869KS0AeRi0
+         oAQg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id
-         :mail-followup-to:references:mime-version:content-disposition
-         :in-reply-to;
-        bh=9yrR8ovN4e3vCdcrotHqbMZyniAFA2hJaExlKiyLR0s=;
-        b=kap1NGgl5GQ7sIoWDD/WrNu0Haks+yqt1G/l+iu4gl3MvRbLckShjTiwaClBho1yXk
-         FECQEJEsy7TR2KSdEDTay1v5UbWF/HVweF5IDurq5Om8ln+cKUp1x7A75lMH+67Rh9qs
-         FmfTrWTvIiooldV8HG1+dEjR3E3Ba7rVxn8TSF+tp6s2amNN6LSzEsFEqZ2FrfYQQxv0
-         ftL5dCRmkNMYc8VCFgkYoh7VmPDASG30Cp4E20cSdgG6Iv1tQkMGGCZPFJYJR5n+clyB
-         aXCKdn7JUwyGLmMe2HMPRYkLrDi4MABQNlxiV6zdWn23wnj4eiXA+lGwMllUjlXTR8vU
-         tOLw==
-X-Gm-Message-State: AOAM530oe0VRrwjwMuhg+q9Phl3uFBkMlRddVeiqlwkMIJWMJIvo3tZm
-        rKjCGfm8Mz7YSpWPkJiiZu5jcw==
-X-Google-Smtp-Source: ABdhPJwdcKXaclQibk4WK6+dvYH/xaBfefFDYZnwUfRYHtNB0ZZItrraRdczZDB+V/3ZPThwsyl9mw==
-X-Received: by 2002:a17:907:d05:b0:6f4:3729:8e36 with SMTP id gn5-20020a1709070d0500b006f437298e36mr13907086ejc.475.1651653845541;
-        Wed, 04 May 2022 01:44:05 -0700 (PDT)
-Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
-        by smtp.gmail.com with ESMTPSA id j12-20020aa7de8c000000b0042617ba63b2sm8859632edv.60.2022.05.04.01.44.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 May 2022 01:44:05 -0700 (PDT)
-Date:   Wed, 4 May 2022 10:44:03 +0200
-From:   Daniel Vetter <daniel@ffwll.ch>
-To:     Raphael Gallais-Pou <raphael.gallais-pou@foss.st.com>
-Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] drm: fix typo in comment
-Message-ID: <YnI809cYMm1Uo20R@phenom.ffwll.local>
-Mail-Followup-To: Raphael Gallais-Pou <raphael.gallais-pou@foss.st.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-References: <20220426131912.3850354-1-raphael.gallais-pou@foss.st.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=QmtWwByo/ZIKuv6qy4yEByVOiPKOIaqS2BZn64y92Q4=;
+        b=HYTYc1wqo7AoCApY4YAUt5SM20n01xtHHdg2kAdYgHRJPPlVUUMCfZbUVkf4+F5Yt7
+         ilgDFOXdJdCoJqxY62nybouFEsrp7Nr4JPGC9kYx78B5L6NGlujc9QGa74gT6BP4Xaor
+         UjTlDQHBEAFRlzmy82xsOmg99lyEF7OvdO9A9hvSgEykPhkiL8QaCKu2JeTGV3EKneEb
+         EnHi5HgbbIMYgvxsEoc0n/eRnQgdP4NZ4Mplaj0G/OqM8GMhG5Y+VOeIhw2rN5MjhWBK
+         h3MA8wkS13MSeSvKCl4qXe9JW/YM0It4fdoBowRnjKBAoTwTSSDFbNhheNc/wrhRBzpp
+         aTRg==
+X-Gm-Message-State: AOAM532MP68JdSKIUCZtwQlBmq5kmLkw4WbD4FQv82Xm5Vu1oS7yGBY8
+        PXduxs+fjK/KcVrquN9LgUppnw==
+X-Google-Smtp-Source: ABdhPJxKi7C4JKAEzHKaoMX1d2sBQ/HwAm7M6aW+7svbe2ak15MPFJVqHU4FxQsE+k7anyG0Uq+cjQ==
+X-Received: by 2002:a17:906:4fc6:b0:6f4:b5c0:aa3f with SMTP id i6-20020a1709064fc600b006f4b5c0aa3fmr2810602ejw.382.1651654035170;
+        Wed, 04 May 2022 01:47:15 -0700 (PDT)
+Received: from [192.168.0.210] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id b6-20020aa7cd06000000b0042617ba63a9sm8799226edw.51.2022.05.04.01.47.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 04 May 2022 01:47:14 -0700 (PDT)
+Message-ID: <38ddc169-7e8d-c8b5-62cb-7fd3de567e91@linaro.org>
+Date:   Wed, 4 May 2022 10:47:13 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220426131912.3850354-1-raphael.gallais-pou@foss.st.com>
-X-Operating-System: Linux phenom 5.10.0-8-amd64 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 2/4] scsi: core: fix white-spaces
+Content-Language: en-US
+To:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Doug Gilbert <dgilbert@interlog.com>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220408103027.311624-1-krzysztof.kozlowski@linaro.org>
+ <20220408103027.311624-2-krzysztof.kozlowski@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220408103027.311624-2-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,36 +78,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 26, 2022 at 03:19:12PM +0200, Raphael Gallais-Pou wrote:
-> Fix typo in a doxygen comment (replaced green by blue) in drm_color_mgmt.c
+On 08/04/2022 12:30, Krzysztof Kozlowski wrote:
+> Remove trailing white-spaces and correct mixed-up indentation.
 > 
-> Signed-off-by: Raphael Gallais-Pou <raphael.gallais-pou@foss.st.com>
-
-Thanks for your patch, applied to drm-misc-next.
--Daniel
-
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 > ---
->  drivers/gpu/drm/drm_color_mgmt.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/gpu/drm/drm_color_mgmt.c b/drivers/gpu/drm/drm_color_mgmt.c
-> index 9079fbe21d2f..17c6c3eefcd6 100644
-> --- a/drivers/gpu/drm/drm_color_mgmt.c
-> +++ b/drivers/gpu/drm/drm_color_mgmt.c
-> @@ -259,7 +259,7 @@ static bool drm_crtc_supports_legacy_gamma(struct drm_crtc *crtc)
->   * @crtc: CRTC object
->   * @red: red correction table
->   * @green: green correction table
-> - * @blue: green correction table
-> + * @blue: blue correction table
->   * @size: size of the tables
->   * @ctx: lock acquire context
->   *
-> -- 
-> 2.25.1
-> 
+>  drivers/scsi/scsi_debug.c         |  2 +-
+>  drivers/scsi/scsi_priv.h          |  4 +--
+>  drivers/scsi/scsi_proc.c          | 14 ++++-----
+>  drivers/scsi/scsi_scan.c          | 10 +++----
+>  drivers/scsi/scsi_sysfs.c         |  4 +--
+>  drivers/scsi/scsi_transport_spi.c | 49 +++++++++++++++----------------
+>  drivers/scsi/scsicam.c            |  6 ++--
+>  include/scsi/scsi_cmnd.h          |  2 +-
+>  include/scsi/scsi_device.h        | 10 +++----
+>  include/scsi/scsi_host.h          | 13 ++++----
+>  include/scsi/scsi_ioctl.h         |  2 +-
+>  include/scsi/scsi_transport.h     |  2 +-
+>  include/scsi/scsi_transport_spi.h |  2 +-
+>  include/scsi/scsicam.h            |  2 +-
+>  include/scsi/sg.h                 |  2 +-
+>  15 files changed, 61 insertions(+), 63 deletions(-)
 
--- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+Hi folks!
+
+I understand that patch #1 in the series is discussed/needs followup,
+but what about patches 2-4? Could you pick them up?
+
+Best regards,
+Krzysztof

@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAD0251A7F3
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:05:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1B0A51A946
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:17:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355832AbiEDREn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 13:04:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38292 "EHLO
+        id S1358945AbiEDRQT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 13:16:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354721AbiEDQ7B (ORCPT
+        with ESMTP id S1355884AbiEDREp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 12:59:01 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42C6A45780;
-        Wed,  4 May 2022 09:50:55 -0700 (PDT)
+        Wed, 4 May 2022 13:04:45 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E92E49C8D;
+        Wed,  4 May 2022 09:53:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 448A6617C3;
-        Wed,  4 May 2022 16:50:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90BD9C385A4;
-        Wed,  4 May 2022 16:50:53 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D106AB827A5;
+        Wed,  4 May 2022 16:53:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A8D9C385BB;
+        Wed,  4 May 2022 16:53:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651683053;
-        bh=1PxZCugPr4DxiBBU19KWct2wANpsU0yR63LGAuaYykk=;
+        s=korg; t=1651683205;
+        bh=vZgK6Y9PLhjhFdFkYNeKjuquI8/FQ9aIPBNEBrVREaw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=eBl5wQ3pe/vCnN8Hiy3FFNFza7LcB4zPjd/8T/Pws9YsFmJWPUhASRAR4/cOFLQws
-         /0Yvpiy6iRFlQ04h+yXQhje2+RKUuvUFBEONW/vAePWMxWoH6ZjXdMU6zq0rDs0d6L
-         wh9sWl/Vx4bXvvpcnk69VcBdNHbkMnZYeHXtmeks=
+        b=ha051dtufBKCLdMXprHQhC1KHgjUlqbakIM9OBq/OSigPtDzyeHKwTOF5SZzDZNNz
+         vHjWbzk+HXpo0qWuzdF30lumSajapRtS/PKN7dxExC+Hn8wAC571HKVo5IgwakELNA
+         b8d/mVEW4rPeQwZuxGBqY8aYOeMUcNYWcws1xcC0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Pengcheng Yang <yangpc@wangsu.com>,
-        Julian Anastasov <ja@ssi.bg>,
-        Simon Horman <horms@verge.net.au>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
+        stable@vger.kernel.org, Guillaume Giraudon <ggiraudon@prism19.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 057/129] ipvs: correctly print the memory size of ip_vs_conn_tab
-Date:   Wed,  4 May 2022 18:44:09 +0200
-Message-Id: <20220504153025.694477131@linuxfoundation.org>
+Subject: [PATCH 5.15 057/177] arm64: dts: meson-sm1-bananapi-m5: fix wrong GPIO pin labeling for CON1
+Date:   Wed,  4 May 2022 18:44:10 +0200
+Message-Id: <20220504153058.119528435@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220504153021.299025455@linuxfoundation.org>
-References: <20220504153021.299025455@linuxfoundation.org>
+In-Reply-To: <20220504153053.873100034@linuxfoundation.org>
+References: <20220504153053.873100034@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,36 +55,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pengcheng Yang <yangpc@wangsu.com>
+From: Guillaume Giraudon <ggiraudon@prism19.com>
 
-[ Upstream commit eba1a872cb73314280d5448d934935b23e30b7ca ]
+[ Upstream commit 962dd65e575dde950ef0844568edc37cfb39f302 ]
 
-The memory size of ip_vs_conn_tab changed after we use hlist
-instead of list.
+The labels for lines 61 through 84 on the periphs-banks were offset by 2.
+2 lines are missing in the BOOT GPIO lines (contains 14, should be 16)
+Added 2 empty entries in BOOT to realigned the rest of GPIO labels
+to match the Banana Pi M5 schematics.
 
-Fixes: 731109e78415 ("ipvs: use hlist instead of list")
-Signed-off-by: Pengcheng Yang <yangpc@wangsu.com>
-Acked-by: Julian Anastasov <ja@ssi.bg>
-Acked-by: Simon Horman <horms@verge.net.au>
-Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
+(Thanks to Neil Armstrong for the heads up on the position of the missing pins)
+
+Fixes: 976e920183e4 ("arm64: dts: meson-sm1: add Banana PI BPI-M5 board dts")
+Signed-off-by: Guillaume Giraudon <ggiraudon@prism19.com>
+Reviewed-by: Neil Armstrong <narmstrong@baylibre.com>
+Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
+Link: https://lore.kernel.org/r/20220411144427.874-1-ggiraudon@prism19.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/netfilter/ipvs/ip_vs_conn.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/arm64/boot/dts/amlogic/meson-sm1-bananapi-m5.dts | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/net/netfilter/ipvs/ip_vs_conn.c b/net/netfilter/ipvs/ip_vs_conn.c
-index 2c467c422dc6..fb67f1ca2495 100644
---- a/net/netfilter/ipvs/ip_vs_conn.c
-+++ b/net/netfilter/ipvs/ip_vs_conn.c
-@@ -1495,7 +1495,7 @@ int __init ip_vs_conn_init(void)
- 	pr_info("Connection hash table configured "
- 		"(size=%d, memory=%ldKbytes)\n",
- 		ip_vs_conn_tab_size,
--		(long)(ip_vs_conn_tab_size*sizeof(struct list_head))/1024);
-+		(long)(ip_vs_conn_tab_size*sizeof(*ip_vs_conn_tab))/1024);
- 	IP_VS_DBG(0, "Each connection entry needs %zd bytes at least\n",
- 		  sizeof(struct ip_vs_conn));
- 
+diff --git a/arch/arm64/boot/dts/amlogic/meson-sm1-bananapi-m5.dts b/arch/arm64/boot/dts/amlogic/meson-sm1-bananapi-m5.dts
+index 5751c48620ed..cadba194b149 100644
+--- a/arch/arm64/boot/dts/amlogic/meson-sm1-bananapi-m5.dts
++++ b/arch/arm64/boot/dts/amlogic/meson-sm1-bananapi-m5.dts
+@@ -437,6 +437,7 @@ &gpio {
+ 		"",
+ 		"eMMC_RST#", /* BOOT_12 */
+ 		"eMMC_DS", /* BOOT_13 */
++		"", "",
+ 		/* GPIOC */
+ 		"SD_D0_B", /* GPIOC_0 */
+ 		"SD_D1_B", /* GPIOC_1 */
 -- 
 2.35.1
 

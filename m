@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E73C51AA23
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:19:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 034C151A8C3
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:14:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354533AbiEDRVo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 13:21:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51462 "EHLO
+        id S1358516AbiEDRQC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 13:16:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355704AbiEDREj (ORCPT
+        with ESMTP id S1355707AbiEDREj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 4 May 2022 13:04:39 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4E2B4F45A;
-        Wed,  4 May 2022 09:53:15 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E70D54EDDB;
+        Wed,  4 May 2022 09:53:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 55CDE616F8;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 566E361866;
+        Wed,  4 May 2022 16:53:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A35DCC385AA;
         Wed,  4 May 2022 16:53:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ACA1FC385AA;
-        Wed,  4 May 2022 16:53:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651683194;
-        bh=2AHMO1rt09lcgtSq7YM7IIDJOOXaAVwLycWd1FnTCxA=;
+        s=korg; t=1651683195;
+        bh=Za0VdiC3YL/IFH8GD9TAZhUplfNPPkWz+O8jG/yfWG4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=n1i7ZbIGgTpEcOjXxyGJne/zTlTB3TvrK+iNXRhJ0MQcEMvyvlXFpdEU42y45RlSp
-         1HPDfGgTSXtv5P6I4Z75MI2c+IvPXohVQ2wUXhXyopC7ojFwBHbKo6pK7hIelqZmWL
-         TdjNBDGCpz2bVZz0EzLFMdrK0E7DT2G3JKjJAlyI=
+        b=Mc/I83SpP/ojGvWEk8t+5jtGrmlXVYOpg+ViWngffrkvQ793WJydgY2+ex2ahiKE/
+         wHz6cQQPAZnCnHKTH/dxbXqwHwrrHoFNvvFaZuFEAniXXlkTcZnKeGcnwdi9RiBYCP
+         j8pcW54kdJFX1lhfpEXVVj+L/e9py6kbcM2p4GZE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Pavel Skripkin <paskripkin@gmail.com>,
-        Helge Deller <deller@gmx.de>, Sasha Levin <sashal@kernel.org>,
-        syzbot+53ce4a4246d0fe0fee34@syzkaller.appspotmail.com
-Subject: [PATCH 5.15 047/177] video: fbdev: udlfb: properly check endpoint type
-Date:   Wed,  4 May 2022 18:44:00 +0200
-Message-Id: <20220504153057.147274575@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Christian Hewitt <christianshewitt@gmail.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 048/177] arm64: dts: meson: remove CPU opps below 1GHz for G12B boards
+Date:   Wed,  4 May 2022 18:44:01 +0200
+Message-Id: <20220504153057.229727054@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
 In-Reply-To: <20220504153053.873100034@linuxfoundation.org>
 References: <20220504153053.873100034@linuxfoundation.org>
@@ -55,90 +56,144 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pavel Skripkin <paskripkin@gmail.com>
+From: Christian Hewitt <christianshewitt@gmail.com>
 
-[ Upstream commit aaf7dbe07385e0b8deb7237eca2a79926bbc7091 ]
+[ Upstream commit 6c4d636bc00dc17c63ffb2a73a0da850240e26e3 ]
 
-syzbot reported warning in usb_submit_urb, which is caused by wrong
-endpoint type.
+Amlogic G12B devices experience CPU stalls and random board wedges when
+the system idles and CPU cores clock down to lower opp points. Recent
+vendor kernels include a change to remove 100-250MHz and other distro
+sources also remove the 500/667MHz points. Unless all 100-667Mhz opps
+are removed or the CPU governor forced to performance stalls are still
+observed, so let's remove them to improve stability and uptime.
 
-This driver uses out bulk endpoint for communication, so
-let's check if this endpoint is present and bail out early if not.
-
-Fail log:
-
-usb 1-1: BOGUS urb xfer, pipe 3 != type 1
-WARNING: CPU: 0 PID: 4822 at drivers/usb/core/urb.c:493 usb_submit_urb+0xd27/0x1540 drivers/usb/core/urb.c:493
-Modules linked in:
-CPU: 0 PID: 4822 Comm: kworker/0:3 Tainted: G        W         5.13.0-syzkaller #0
-...
-Workqueue: usb_hub_wq hub_event
-RIP: 0010:usb_submit_urb+0xd27/0x1540 drivers/usb/core/urb.c:493
-...
-Call Trace:
- dlfb_submit_urb+0x89/0x160 drivers/video/fbdev/udlfb.c:1969
- dlfb_set_video_mode+0x21f0/0x2950 drivers/video/fbdev/udlfb.c:315
- dlfb_ops_set_par+0x2a3/0x840 drivers/video/fbdev/udlfb.c:1110
- dlfb_usb_probe.cold+0x113e/0x1f4a drivers/video/fbdev/udlfb.c:1732
- usb_probe_interface+0x315/0x7f0 drivers/usb/core/driver.c:396
-
-Fixes: 88e58b1a42f8 ("Staging: add udlfb driver")
-Reported-and-tested-by: syzbot+53ce4a4246d0fe0fee34@syzkaller.appspotmail.com
-Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
-Signed-off-by: Helge Deller <deller@gmx.de>
+Fixes: b96d4e92709b ("arm64: dts: meson-g12b: support a311d and s922x cpu operating points")
+Signed-off-by: Christian Hewitt <christianshewitt@gmail.com>
+Reviewed-by: Neil Armstrong <narmstrong@baylibre.com>
+Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
+Link: https://lore.kernel.org/r/20220210100638.19130-2-christianshewitt@gmail.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/video/fbdev/udlfb.c | 14 ++++++++++++--
- 1 file changed, 12 insertions(+), 2 deletions(-)
+ .../boot/dts/amlogic/meson-g12b-a311d.dtsi    | 40 -------------------
+ .../boot/dts/amlogic/meson-g12b-s922x.dtsi    | 40 -------------------
+ 2 files changed, 80 deletions(-)
 
-diff --git a/drivers/video/fbdev/udlfb.c b/drivers/video/fbdev/udlfb.c
-index 90f48b71fd8f..d9eec1b60e66 100644
---- a/drivers/video/fbdev/udlfb.c
-+++ b/drivers/video/fbdev/udlfb.c
-@@ -1649,8 +1649,9 @@ static int dlfb_usb_probe(struct usb_interface *intf,
- 	const struct device_attribute *attr;
- 	struct dlfb_data *dlfb;
- 	struct fb_info *info;
--	int retval = -ENOMEM;
-+	int retval;
- 	struct usb_device *usbdev = interface_to_usbdev(intf);
-+	struct usb_endpoint_descriptor *out;
+diff --git a/arch/arm64/boot/dts/amlogic/meson-g12b-a311d.dtsi b/arch/arm64/boot/dts/amlogic/meson-g12b-a311d.dtsi
+index d61f43052a34..8e9ad1e51d66 100644
+--- a/arch/arm64/boot/dts/amlogic/meson-g12b-a311d.dtsi
++++ b/arch/arm64/boot/dts/amlogic/meson-g12b-a311d.dtsi
+@@ -11,26 +11,6 @@ cpu_opp_table_0: opp-table-0 {
+ 		compatible = "operating-points-v2";
+ 		opp-shared;
  
- 	/* usb initialization */
- 	dlfb = kzalloc(sizeof(*dlfb), GFP_KERNEL);
-@@ -1664,6 +1665,12 @@ static int dlfb_usb_probe(struct usb_interface *intf,
- 	dlfb->udev = usb_get_dev(usbdev);
- 	usb_set_intfdata(intf, dlfb);
+-		opp-100000000 {
+-			opp-hz = /bits/ 64 <100000000>;
+-			opp-microvolt = <731000>;
+-		};
+-
+-		opp-250000000 {
+-			opp-hz = /bits/ 64 <250000000>;
+-			opp-microvolt = <731000>;
+-		};
+-
+-		opp-500000000 {
+-			opp-hz = /bits/ 64 <500000000>;
+-			opp-microvolt = <731000>;
+-		};
+-
+-		opp-667000000 {
+-			opp-hz = /bits/ 64 <667000000>;
+-			opp-microvolt = <731000>;
+-		};
+-
+ 		opp-1000000000 {
+ 			opp-hz = /bits/ 64 <1000000000>;
+ 			opp-microvolt = <761000>;
+@@ -71,26 +51,6 @@ cpub_opp_table_1: opp-table-1 {
+ 		compatible = "operating-points-v2";
+ 		opp-shared;
  
-+	retval = usb_find_common_endpoints(intf->cur_altsetting, NULL, &out, NULL, NULL);
-+	if (retval) {
-+		dev_err(&intf->dev, "Device should have at lease 1 bulk endpoint!\n");
-+		goto error;
-+	}
-+
- 	dev_dbg(&intf->dev, "console enable=%d\n", console);
- 	dev_dbg(&intf->dev, "fb_defio enable=%d\n", fb_defio);
- 	dev_dbg(&intf->dev, "shadow enable=%d\n", shadow);
-@@ -1673,6 +1680,7 @@ static int dlfb_usb_probe(struct usb_interface *intf,
- 	if (!dlfb_parse_vendor_descriptor(dlfb, intf)) {
- 		dev_err(&intf->dev,
- 			"firmware not recognized, incompatible device?\n");
-+		retval = -ENODEV;
- 		goto error;
- 	}
+-		opp-100000000 {
+-			opp-hz = /bits/ 64 <100000000>;
+-			opp-microvolt = <731000>;
+-		};
+-
+-		opp-250000000 {
+-			opp-hz = /bits/ 64 <250000000>;
+-			opp-microvolt = <731000>;
+-		};
+-
+-		opp-500000000 {
+-			opp-hz = /bits/ 64 <500000000>;
+-			opp-microvolt = <731000>;
+-		};
+-
+-		opp-667000000 {
+-			opp-hz = /bits/ 64 <667000000>;
+-			opp-microvolt = <731000>;
+-		};
+-
+ 		opp-1000000000 {
+ 			opp-hz = /bits/ 64 <1000000000>;
+ 			opp-microvolt = <731000>;
+diff --git a/arch/arm64/boot/dts/amlogic/meson-g12b-s922x.dtsi b/arch/arm64/boot/dts/amlogic/meson-g12b-s922x.dtsi
+index 1e5d0ee5d541..44c23c984034 100644
+--- a/arch/arm64/boot/dts/amlogic/meson-g12b-s922x.dtsi
++++ b/arch/arm64/boot/dts/amlogic/meson-g12b-s922x.dtsi
+@@ -11,26 +11,6 @@ cpu_opp_table_0: opp-table-0 {
+ 		compatible = "operating-points-v2";
+ 		opp-shared;
  
-@@ -1686,8 +1694,10 @@ static int dlfb_usb_probe(struct usb_interface *intf,
+-		opp-100000000 {
+-			opp-hz = /bits/ 64 <100000000>;
+-			opp-microvolt = <731000>;
+-		};
+-
+-		opp-250000000 {
+-			opp-hz = /bits/ 64 <250000000>;
+-			opp-microvolt = <731000>;
+-		};
+-
+-		opp-500000000 {
+-			opp-hz = /bits/ 64 <500000000>;
+-			opp-microvolt = <731000>;
+-		};
+-
+-		opp-667000000 {
+-			opp-hz = /bits/ 64 <667000000>;
+-			opp-microvolt = <731000>;
+-		};
+-
+ 		opp-1000000000 {
+ 			opp-hz = /bits/ 64 <1000000000>;
+ 			opp-microvolt = <731000>;
+@@ -76,26 +56,6 @@ cpub_opp_table_1: opp-table-1 {
+ 		compatible = "operating-points-v2";
+ 		opp-shared;
  
- 	/* allocates framebuffer driver structure, not framebuffer memory */
- 	info = framebuffer_alloc(0, &dlfb->udev->dev);
--	if (!info)
-+	if (!info) {
-+		retval = -ENOMEM;
- 		goto error;
-+	}
- 
- 	dlfb->info = info;
- 	info->par = dlfb;
+-		opp-100000000 {
+-			opp-hz = /bits/ 64 <100000000>;
+-			opp-microvolt = <751000>;
+-		};
+-
+-		opp-250000000 {
+-			opp-hz = /bits/ 64 <250000000>;
+-			opp-microvolt = <751000>;
+-		};
+-
+-		opp-500000000 {
+-			opp-hz = /bits/ 64 <500000000>;
+-			opp-microvolt = <751000>;
+-		};
+-
+-		opp-667000000 {
+-			opp-hz = /bits/ 64 <667000000>;
+-			opp-microvolt = <751000>;
+-		};
+-
+ 		opp-1000000000 {
+ 			opp-hz = /bits/ 64 <1000000000>;
+ 			opp-microvolt = <771000>;
 -- 
 2.35.1
 

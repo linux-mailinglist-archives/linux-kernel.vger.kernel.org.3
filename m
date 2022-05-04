@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 418A651AAC7
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:34:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE83D51AA7D
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:27:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351397AbiEDRgK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 13:36:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39254 "EHLO
+        id S1357308AbiEDR1a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 13:27:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356958AbiEDRJv (ORCPT
+        with ESMTP id S1355415AbiEDRHf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 13:09:51 -0400
+        Wed, 4 May 2022 13:07:35 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9BBB473B2;
-        Wed,  4 May 2022 09:56:43 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97EE9517E3;
+        Wed,  4 May 2022 09:54:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 44A72617A6;
-        Wed,  4 May 2022 16:56:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6FFBCC385AA;
-        Wed,  4 May 2022 16:56:42 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 538D8616F8;
+        Wed,  4 May 2022 16:54:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0F97C385AA;
+        Wed,  4 May 2022 16:54:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651683402;
-        bh=++xBQbxL3Ke9frkNEa1dCEr1e2uSlVluJFZQcYF6dU8=;
+        s=korg; t=1651683268;
+        bh=0IiNxe8NdBPwEW6lbGtCQxmIXK0QG7FV5Fx/37V/jR4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=T1yTxdlaBQQzDiNH5xScP2UbOnT5vXiBf2Gwc3rXKktqMm2Q2ssVsCxVLDyO8eNXv
-         4UHczNnVXthGuuRpb02YA6isLCdol9rbfSx8IEO9C6hciCUVKSmbj3hR/l9cOn2cbc
-         6vvp162vz7NJLmLk1IMr2uLBWN2Tgcz/Bjqh3J4w=
+        b=vIRvtHUzlS8WbXYj7CXBnsP7COCxm0N7ESmba+HMT2yfksEaDZ8WsNhMbNa3hr739
+         +Rh3oyVbC3arU1yB3Z97dbwxAtZ6a2KMBhiOf/GcCTA4knRqkntojBuwI1mg/Ntodg
+         UuIRgFAlGghfcSLo9cecw9XfnVnMIv/JQTCRJ6+Q=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
-        Shawn Guo <shawnguo@kernel.org>,
+        stable@vger.kernel.org, Yang Yingliang <yangyingliang@huawei.com>,
+        Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 073/225] arm64: dts: imx8mq-tqma8mq: change the spi-nor tx
+Subject: [PATCH 5.15 118/177] net: fec: add missing of_node_put() in fec_enet_init_stop_mode()
 Date:   Wed,  4 May 2022 18:45:11 +0200
-Message-Id: <20220504153117.948907197@linuxfoundation.org>
+Message-Id: <20220504153103.737095476@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220504153110.096069935@linuxfoundation.org>
-References: <20220504153110.096069935@linuxfoundation.org>
+In-Reply-To: <20220504153053.873100034@linuxfoundation.org>
+References: <20220504153053.873100034@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,34 +55,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alexander Stein <alexander.stein@ew.tq-group.com>
+From: Yang Yingliang <yangyingliang@huawei.com>
 
-[ Upstream commit c7b45c79fb279e539346919a5c196e417925719e ]
+[ Upstream commit d2b52ec056d5bddb055c8f21d7489a23548d0838 ]
 
-This fixes the qspi read command by importing the changes from commit
-04aa946d57b2 ("arm64: dts: imx8: change the spi-nor tx").
+Put device node in error path in fec_enet_init_stop_mode().
 
-Fixes: b186b8b6e770 ("arm64: dts: freescale: add initial device tree for TQMa8Mx with i.MX8M")
-Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
-Signed-off-by: Shawn Guo <shawnguo@kernel.org>
+Fixes: 8a448bf832af ("net: ethernet: fec: move GPR register offset and bit into DT")
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+Link: https://lore.kernel.org/r/20220426125231.375688-1-yangyingliang@huawei.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm64/boot/dts/freescale/imx8mq-tqma8mq.dtsi | 2 +-
+ drivers/net/ethernet/freescale/fec_main.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm64/boot/dts/freescale/imx8mq-tqma8mq.dtsi b/arch/arm64/boot/dts/freescale/imx8mq-tqma8mq.dtsi
-index 8aedcddfeab8..2c63b01e93e0 100644
---- a/arch/arm64/boot/dts/freescale/imx8mq-tqma8mq.dtsi
-+++ b/arch/arm64/boot/dts/freescale/imx8mq-tqma8mq.dtsi
-@@ -253,7 +253,7 @@ flash0: flash@0 {
- 		#address-cells = <1>;
- 		#size-cells = <1>;
- 		spi-max-frequency = <84000000>;
--		spi-tx-bus-width = <4>;
-+		spi-tx-bus-width = <1>;
- 		spi-rx-bus-width = <4>;
- 	};
- };
+diff --git a/drivers/net/ethernet/freescale/fec_main.c b/drivers/net/ethernet/freescale/fec_main.c
+index a3e87e10ee6b..67eb9b671244 100644
+--- a/drivers/net/ethernet/freescale/fec_main.c
++++ b/drivers/net/ethernet/freescale/fec_main.c
+@@ -3726,7 +3726,7 @@ static int fec_enet_init_stop_mode(struct fec_enet_private *fep,
+ 					 ARRAY_SIZE(out_val));
+ 	if (ret) {
+ 		dev_dbg(&fep->pdev->dev, "no stop mode property\n");
+-		return ret;
++		goto out;
+ 	}
+ 
+ 	fep->stop_gpr.gpr = syscon_node_to_regmap(gpr_np);
 -- 
 2.35.1
 

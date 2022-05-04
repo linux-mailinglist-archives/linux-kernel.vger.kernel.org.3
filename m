@@ -2,116 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D11151AE61
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 21:52:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4284651AE63
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 21:54:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377706AbiEDTzv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 15:55:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57610 "EHLO
+        id S1355589AbiEDT56 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 15:57:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356315AbiEDTzs (ORCPT
+        with ESMTP id S233969AbiEDT5z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 15:55:48 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 294864E384
-        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 12:52:10 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id p12so4140252lfs.5
-        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 12:52:10 -0700 (PDT)
+        Wed, 4 May 2022 15:57:55 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D82D14DF78
+        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 12:54:18 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id p18so2901803edr.7
+        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 12:54:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
+        d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=Ruflxs9cgYtfpu+uYRY9OHjS7xb2bTFhKtX7f5MDGy0=;
-        b=diBNaFT6RJQyFbUyjS0yj1S62NtDgDQ/oqU4vbBO3+GpjfpqNEy69JLlmTmH19CK0x
-         tHpOFu35+fkkKowJQ9Uw2Zkc6+DoiqPCJ6FKhYalmvF+3p43xvtmvaN4BIa5DwkTyjVt
-         awUxmk/s7sd/YUL1z68Hl375tvBz/uTcAf4Z4=
+         :cc;
+        bh=JzBKrifr7mkPiYJG21R0/9X6KZhWc9gfTpNCQaGfxR8=;
+        b=PuHMG+DO/TH1jPO9lTz0dH3ySyZK5V/CIBQq40IyvujtcseG/7DfxU0O1ZTDwNiFx7
+         2pItBt7+u2ZGOauSTGoSQhBtVYJU/oSTrw7my3vrpuRc7XaT2YY5u50RnkhEA/ZbFzHd
+         mHyspYVQJGFdhiGe694yZVOqVMbEmj+pI8BZZ2wCjQNmku10olU4vUHLsQ1vyvDSbJDR
+         e1P/pBOtWZD87T8IV8aXvWZGerQDOQ8rLiVvHRSHLjQ8Mbc9cUh//qN28Ue7sfqeShPL
+         kmy0TKX9w0JdyF7drD5sUtAVpbmeV1kKE7KSBicggpTzG7513xQ2rnJtASC4jYrWbX1j
+         1hHQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=Ruflxs9cgYtfpu+uYRY9OHjS7xb2bTFhKtX7f5MDGy0=;
-        b=Nm2SlOZMu8Kif5IkQBcNi9ZjK/rE+GaR9LV+U0peFob+cEVouuoTSvmPtTQGiJBe7i
-         IpUyzk1C1e2AEmTjvTngfzOHflSgavhBMdQg9fDq2wj6iUJsyHtbb8mnguNASW54EUbV
-         8KsPclQ/1CgFNt7QKF+I/PYh69FYz9jd+gvU6Hh4JTFRbAmmWe1wp3ElgOLQGGbvCc06
-         /jjKX01wPj2I2yfnC2xvsTj36fGnOEw7X5JqW6m/Enfc/84FhEIVqmQO7Dpi3qcjIX+l
-         TGCnsWWU36F3FAP2Mezza7l/Kesnh2vP8Eq/WBG9cbPPBjvZ9h0v0KdE4/HgzPTmmj19
-         jxVA==
-X-Gm-Message-State: AOAM532q10mH5QCFo3jguwaE/Lx+eCNWmYvc5xl9fXt2UsGKVi2mBaAl
-        LxJ/puXaLow/BgBfsll1nYttSQhIC8bhp1qyZfc=
-X-Google-Smtp-Source: ABdhPJyPpQ8mD4YzpJrmPtnewNWH/2jWJKajT/ByycZ6jXGAb93DwR5Ce5mM9z9p2NlrcEgDDDMgHQ==
-X-Received: by 2002:a05:6512:321c:b0:46b:b7fd:1eca with SMTP id d28-20020a056512321c00b0046bb7fd1ecamr15114200lfe.481.1651693928140;
-        Wed, 04 May 2022 12:52:08 -0700 (PDT)
-Received: from mail-lj1-f169.google.com (mail-lj1-f169.google.com. [209.85.208.169])
-        by smtp.gmail.com with ESMTPSA id u16-20020ac243d0000000b0047255d21116sm1289781lfl.69.2022.05.04.12.52.05
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 04 May 2022 12:52:06 -0700 (PDT)
-Received: by mail-lj1-f169.google.com with SMTP id m23so3045353ljc.0
-        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 12:52:05 -0700 (PDT)
-X-Received: by 2002:a2e:8245:0:b0:24b:48b1:a1ab with SMTP id
- j5-20020a2e8245000000b0024b48b1a1abmr13338399ljh.152.1651693925440; Wed, 04
- May 2022 12:52:05 -0700 (PDT)
+         :message-id:subject:to:cc;
+        bh=JzBKrifr7mkPiYJG21R0/9X6KZhWc9gfTpNCQaGfxR8=;
+        b=VCBAZlzH0oTMVsF1NrUcGXzrF4joyqEF2NHwNx07j1y6qEZHFLwaie5eZ4kIGfAv+1
+         i84UMAqDMzb4tN3row0TjeCk3Ua/hKI/XfJsEW9y/Qlfz2QTtuucDPLCcDXvdEohQJEQ
+         t0drwbV7UgiZIUzvqmoDD5n2y08Q548p61TYQB12cOke6Kl9rGH4wgsmr+NqqLRzRft5
+         vQrfYgmIuV2LDmawq/ceIlaK3KEfQgjGeb7386ClOo0pPnbGzLcdoR0qNs0iDeu7UAvo
+         Z2e1KeC7BtdbwjlgHa7du2EH7W34odUNHuAGhajE72vM5x31AmUPZGf6X0Rtj5UNnriM
+         zTiw==
+X-Gm-Message-State: AOAM531mCihowJPe5ncMNQRnqS3oOC9uJY5qxLhGvIOnhL59p6BULbFd
+        KRilyxFyk4W25NFydY6WvJOHXr8YW5my3gRHrYo=
+X-Google-Smtp-Source: ABdhPJz9RDsDEQW1vZTDpmWQt9JtrfFaGK06BHhHkG/8Y+pfrinEx1EcQ9NvCauraCZy5Eamm4kKS3YwbmaPzR11kjo=
+X-Received: by 2002:a05:6402:54:b0:419:9b58:e305 with SMTP id
+ f20-20020a056402005400b004199b58e305mr24782167edu.158.1651694057438; Wed, 04
+ May 2022 12:54:17 -0700 (PDT)
 MIME-Version: 1.0
-References: <alpine.LRH.2.02.2204241648270.17244@file01.intranet.prod.int.rdu2.redhat.com>
- <CAHk-=wh+Z+OKH3jRttWGHbWSQq2wVMtdnA=ntDiadZu=VxAC7w@mail.gmail.com>
- <alpine.LRH.2.02.2204250723120.26714@file01.intranet.prod.int.rdu2.redhat.com>
- <YnI7hE4cIfjsdKSF@antec> <YnJI4Ru0AlUgrr9C@zx2c4.com> <YnJOCbLtdATzC+jn@zx2c4.com>
- <YnJQXr3igEMTqY3+@smile.fi.intel.com> <YnJSQ3jJyvhmIstD@zx2c4.com>
- <CAHk-=wgb_eBdjM_mzEvXfRG2EhrSK5MHNGyAj7=4vxvN4U9Rug@mail.gmail.com> <CAHmME9q_-nfGxp8_VCqaritm4N8v8g67AzRjXs9du846JhhpoQ@mail.gmail.com>
-In-Reply-To: <CAHmME9q_-nfGxp8_VCqaritm4N8v8g67AzRjXs9du846JhhpoQ@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Wed, 4 May 2022 12:51:49 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wiaj8SMSQTWAx2cUFqzRWRqBspO5YV=qA8M+QOC2vDorw@mail.gmail.com>
-Message-ID: <CAHk-=wiaj8SMSQTWAx2cUFqzRWRqBspO5YV=qA8M+QOC2vDorw@mail.gmail.com>
-Subject: Re: [PATCH v2] hex2bin: make the function hex_to_bin constant-time
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@intel.com>,
-        Stafford Horne <shorne@gmail.com>,
-        Mikulas Patocka <mpatocka@redhat.com>,
-        Andy Shevchenko <andy@kernel.org>,
-        device-mapper development <dm-devel@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Mike Snitzer <msnitzer@redhat.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Milan Broz <gmazyland@gmail.com>
+References: <202205042019.gOXJsH4f-lkp@intel.com>
+In-Reply-To: <202205042019.gOXJsH4f-lkp@intel.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Wed, 4 May 2022 21:53:41 +0200
+Message-ID: <CAHp75Vf9wUOKpxa5q8=tJNju_3uzTMbEGcQxAr_f14c_wp-jAQ@mail.gmail.com>
+Subject: Re: [chanwoo:devfreq-testing 5/5] include/linux/list.h:638:9:
+ warning: this 'for' clause does not guard...
+To:     kernel test robot <lkp@intel.com>
+Cc:     Chanwoo Choi <cw00.choi@samsung.com>, kbuild-all@lists.01.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 4, 2022 at 12:43 PM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+On Wed, May 4, 2022 at 7:02 PM kernel test robot <lkp@intel.com> wrote:
 >
-> =D7=90.cc is correct. If you can't load it, your browser or something in
-> your stack is broken.
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/linux.git devfreq-testing
+> head:   40eaf97ddb3a7e661942296ccf192af0edd3d77d
+> commit: 40eaf97ddb3a7e661942296ccf192af0edd3d77d [5/5] PM / devfreq: Use cpufreq_policy instead of NR_CPU
+> config: mips-allyesconfig (https://download.01.org/0day-ci/archive/20220504/202205042019.gOXJsH4f-lkp@intel.com/config)
+> compiler: mips-linux-gcc (GCC) 11.3.0
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # https://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/linux.git/commit/?id=40eaf97ddb3a7e661942296ccf192af0edd3d77d
+>         git remote add chanwoo https://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/linux.git
+>         git fetch --no-tags chanwoo devfreq-testing
+>         git checkout 40eaf97ddb3a7e661942296ccf192af0edd3d77d
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/
+>
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
 
-It's just google-chrome.
+Seems like LIST_HEAD_INIT() calls in the above mentioned patch miss the &.
 
-And honestly, the last thing I want to ever see is non-ASCII URL's.
-
-Particularly from a security person. It's a *HORRIBLE* idea with
-homoglyphs, and personally I think any browser that refuses to look it
-up would be doing the right thing.
-
-But I don't think that it's the browser, actually. Even 'nslookup'
-refuses to touch it with
-
-   ** server can't find =D7=90.cc: SERVFAIL
-
-and it seems it's literally the local dns caching (dnsmasq?)
-
-> Choosing a non-ASCII domain like that clearly a
-> bad decision because people with broken stacks can't load it?
-
-No. It's a bad idea. Full stop. Don't do it.
-
-               Linus
+-- 
+With Best Regards,
+Andy Shevchenko

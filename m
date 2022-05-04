@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8927051A63B
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 18:51:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 426AA51A7DB
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:04:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353975AbiEDQxi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 12:53:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51482 "EHLO
+        id S1355145AbiEDRFw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 13:05:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353751AbiEDQwN (ORCPT
+        with ESMTP id S1354885AbiEDQ7b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 12:52:13 -0400
+        Wed, 4 May 2022 12:59:31 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 997384738C;
-        Wed,  4 May 2022 09:48:35 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A4CD48310;
+        Wed,  4 May 2022 09:51:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CACCD61771;
-        Wed,  4 May 2022 16:48:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 225B1C385A4;
-        Wed,  4 May 2022 16:48:34 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1DB0E617C4;
+        Wed,  4 May 2022 16:51:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65C5FC385B1;
+        Wed,  4 May 2022 16:51:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651682914;
-        bh=eFPjMgElhDEszECLNXLR9KghKw55KcyONnperHZm5LM=;
+        s=korg; t=1651683064;
+        bh=JD/ygaqNAPbJJVlFYWXUglaqn74YGk482auv9jzluJA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=USPsLbyeRBhiPBNX7SRzSFnr3aKX1ygyenALc8f0VmL88hHuUTNqNPXrFx1Qh1jSr
-         Tzpz7CuHIlKr1LnhWkrydbiYIwW5k97tHg/Tt4DouA7GmHWIkS/jbl6E+xpVe8ij5U
-         6IACsJ0b5W0zLgsLZQIGZY5zoQO0mmMZe0KB1yZ8=
+        b=pp4e/7fW2bwC94SqE1Qr4EDOdYU2fw3riXJD8gJdWLoPtVAxcB0oWmgqwO5iXSSqe
+         10uTpQ2j/7p5nVvkOFFK1zk4tCAiQ457xAimF9BGJJ0QXgewBO5CddP4VpfJcH26qV
+         5nGRPq3M/BtsMdXbdUKzh2W+CmejguSWGoonvCQM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Vijayavardhan Vennapusa <vvreddy@codeaurora.org>,
-        Dan Vacura <w36195@motorola.com>, stable <stable@kernel.org>
-Subject: [PATCH 5.4 20/84] usb: gadget: configfs: clear deactivation flag in configfs_composite_unbind()
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        Vinod Koul <vkoul@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 049/129] phy: ti: omap-usb2: Fix error handling in omap_usb2_enable_clocks
 Date:   Wed,  4 May 2022 18:44:01 +0200
-Message-Id: <20220504152929.188480953@linuxfoundation.org>
+Message-Id: <20220504153024.984373871@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220504152927.744120418@linuxfoundation.org>
-References: <20220504152927.744120418@linuxfoundation.org>
+In-Reply-To: <20220504153021.299025455@linuxfoundation.org>
+References: <20220504153021.299025455@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,37 +54,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Vijayavardhan Vennapusa <vvreddy@codeaurora.org>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-commit bf95c4d4630c7a2c16e7b424fdea5177d9ce0864 upstream.
+[ Upstream commit 3588060befff75ff39fab7122b94c6fb3148fcda ]
 
-If any function like UVC is deactivating gadget as part of composition
-switch which results in not calling pullup enablement, it is not getting
-enabled after switch to new composition due to this deactivation flag
-not cleared. This results in USB enumeration not happening after switch
-to new USB composition. Hence clear deactivation flag inside gadget
-structure in configfs_composite_unbind() before switch to new USB
-composition.
+The corresponding API for clk_prepare_enable is clk_disable_unprepare.
+Make sure that the clock is unprepared on exit by changing clk_disable
+to clk_disable_unprepare.
 
-Signed-off-by: Vijayavardhan Vennapusa <vvreddy@codeaurora.org>
-Signed-off-by: Dan Vacura <w36195@motorola.com>
-Cc: stable <stable@kernel.org>
-Link: https://lore.kernel.org/r/20220413211038.72797-1-w36195@motorola.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: ed31ee7cf1fe ("phy: ti: usb2: Fix logic on -EPROBE_DEFER")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Link: https://lore.kernel.org/r/20220318105748.19532-1-linmq006@gmail.com
+Signed-off-by: Vinod Koul <vkoul@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/gadget/configfs.c |    2 ++
- 1 file changed, 2 insertions(+)
+ drivers/phy/ti/phy-omap-usb2.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/usb/gadget/configfs.c
-+++ b/drivers/usb/gadget/configfs.c
-@@ -1412,6 +1412,8 @@ static void configfs_composite_unbind(st
- 	usb_ep_autoconfig_reset(cdev->gadget);
- 	spin_lock_irqsave(&gi->spinlock, flags);
- 	cdev->gadget = NULL;
-+	cdev->deactivations = 0;
-+	gadget->deactivated = false;
- 	set_gadget_data(gadget, NULL);
- 	spin_unlock_irqrestore(&gi->spinlock, flags);
- }
+diff --git a/drivers/phy/ti/phy-omap-usb2.c b/drivers/phy/ti/phy-omap-usb2.c
+index 4fec90d2624f..f77ac041d836 100644
+--- a/drivers/phy/ti/phy-omap-usb2.c
++++ b/drivers/phy/ti/phy-omap-usb2.c
+@@ -215,7 +215,7 @@ static int omap_usb2_enable_clocks(struct omap_usb *phy)
+ 	return 0;
+ 
+ err1:
+-	clk_disable(phy->wkupclk);
++	clk_disable_unprepare(phy->wkupclk);
+ 
+ err0:
+ 	return ret;
+-- 
+2.35.1
+
 
 

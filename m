@@ -2,103 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3E6351A1BA
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 16:04:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDF2351A1B0
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 16:03:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239287AbiEDOID (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 10:08:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53632 "EHLO
+        id S1351021AbiEDOGh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 10:06:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351051AbiEDOHy (ORCPT
+        with ESMTP id S1349009AbiEDOGc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 10:07:54 -0400
-Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE3A13BFBF;
-        Wed,  4 May 2022 07:04:18 -0700 (PDT)
-Received: from relay4-d.mail.gandi.net (unknown [217.70.183.196])
-        by mslow1.mail.gandi.net (Postfix) with ESMTP id 4AA4ECAB3F;
-        Wed,  4 May 2022 13:56:04 +0000 (UTC)
-Received: (Authenticated sender: foss@0leil.net)
-        by mail.gandi.net (Postfix) with ESMTPSA id 13B83E0008;
-        Wed,  4 May 2022 13:55:56 +0000 (UTC)
-From:   Quentin Schulz <foss+kernel@0leil.net>
-Cc:     shawnx.tu@intel.com, mchehab@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Quentin Schulz <quentin.schulz@theobroma-systems.com>,
-        Quentin Schulz <foss+kernel@0leil.net>
-Subject: [PATCH v2 3/3] media: i2c: ov5675: parse and register V4L2 device tree properties
-Date:   Wed,  4 May 2022 15:55:43 +0200
-Message-Id: <20220504135543.59522-3-foss+kernel@0leil.net>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220504135543.59522-1-foss+kernel@0leil.net>
-References: <20220504135543.59522-1-foss+kernel@0leil.net>
+        Wed, 4 May 2022 10:06:32 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5DE2C28992
+        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 07:02:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1651672975;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=NWK4ZOfJVM6RjQ4Lfcqx7f0iXv4BQ56O8KCQMl4QeHw=;
+        b=ev160W64NtDRItaio2AQvWWpAA4AnkAk23EvSPnl70s9iQ/bVMl4MLf4iGnQ9Ua0w5QFEE
+        FFVbWd28UQqxqkVhdI0hoHDVm229bDYKLtPinu5P5g5vAPVtd2L2QMeDYGyFrl4xlazIAM
+        FwoKksFn/Ts0g7RrfxZxOEsPElOW3Ws=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-671-lLC0nUZAP4mgPBTEv5ytUg-1; Wed, 04 May 2022 10:02:47 -0400
+X-MC-Unique: lLC0nUZAP4mgPBTEv5ytUg-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1EF9D1C3E988;
+        Wed,  4 May 2022 14:02:46 +0000 (UTC)
+Received: from dhcp-27-174.brq.redhat.com (unknown [10.40.192.152])
+        by smtp.corp.redhat.com (Postfix) with SMTP id CDC8BC52C8A;
+        Wed,  4 May 2022 14:02:40 +0000 (UTC)
+Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
+        oleg@redhat.com; Wed,  4 May 2022 16:02:44 +0200 (CEST)
+Date:   Wed, 4 May 2022 16:02:38 +0200
+From:   Oleg Nesterov <oleg@redhat.com>
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     linux-kernel@vger.kernel.org, rjw@rjwysocki.net, mingo@kernel.org,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, mgorman@suse.de, bigeasy@linutronix.de,
+        Will Deacon <will@kernel.org>, tj@kernel.org,
+        linux-pm@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        linux-um@lists.infradead.org, Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        linux-xtensa@linux-xtensa.org, Kees Cook <keescook@chromium.org>,
+        Jann Horn <jannh@google.com>, linux-ia64@vger.kernel.org
+Subject: Re: [PATCH v2 07/12] ptrace: Don't change __state
+Message-ID: <20220504140210.GA24581@redhat.com>
+References: <87k0b7v9yk.fsf_-_@email.froward.int.ebiederm.org>
+ <20220429214837.386518-7-ebiederm@xmission.com>
+ <20220502153934.GD17276@redhat.com>
+ <87levjrixl.fsf@email.froward.int.ebiederm.org>
+ <20220503134149.GA22999@redhat.com>
+ <877d72l50n.fsf@email.froward.int.ebiederm.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <877d72l50n.fsf@email.froward.int.ebiederm.org>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Quentin Schulz <quentin.schulz@theobroma-systems.com>
+On 05/03, Eric W. Biederman wrote:
+>
+> Oleg Nesterov <oleg@redhat.com> writes:
+>
+> > But why is it bad if the tracee doesn't sleep in schedule ? If it races
+> > with SIGKILL. I still can't understand this.
+> >
+> > Yes, wait_task_inactive() can fail, so you need to remove WARN_ON_ONCE()
+> > in 11/12.
+>
+> >
+> > Why is removing TASK_WAKEKILL from TASK_TRACED and complicating
+> > *signal_wake_up() better?
+>
+> Not changing __state is better because it removes special cases
+> from the scheduler that only apply to ptrace.
 
-Parse V4L2 device tree properties and register controls for them.
+Hmm. But I didn't argue with that? I like the idea of JOBCTL_TASK_FROZEN.
 
-Cc: Quentin Schulz <foss+kernel@0leil.net>
-Signed-off-by: Quentin Schulz <quentin.schulz@theobroma-systems.com>
----
- drivers/media/i2c/ov5675.c | 18 +++++++++++++++++-
- 1 file changed, 17 insertions(+), 1 deletion(-)
+I meant, I do not think that removing KILLABLE from TASK_TRACED (not
+from __state) and complicating *signal_wake_up() (I mean, compared
+to your previous version) is a good idea.
 
-diff --git a/drivers/media/i2c/ov5675.c b/drivers/media/i2c/ov5675.c
-index ccbc8dc506ff..324992fca557 100644
---- a/drivers/media/i2c/ov5675.c
-+++ b/drivers/media/i2c/ov5675.c
-@@ -778,12 +778,14 @@ static const struct v4l2_ctrl_ops ov5675_ctrl_ops = {
- 
- static int ov5675_init_controls(struct ov5675 *ov5675)
- {
-+	struct i2c_client *client = v4l2_get_subdevdata(&ov5675->sd);
- 	struct v4l2_ctrl_handler *ctrl_hdlr;
-+	struct v4l2_fwnode_device_properties props;
- 	s64 exposure_max, h_blank;
- 	int ret;
- 
- 	ctrl_hdlr = &ov5675->ctrl_handler;
--	ret = v4l2_ctrl_handler_init(ctrl_hdlr, 8);
-+	ret = v4l2_ctrl_handler_init(ctrl_hdlr, 10);
- 	if (ret)
- 		return ret;
- 
-@@ -837,9 +839,23 @@ static int ov5675_init_controls(struct ov5675 *ov5675)
- 	if (ctrl_hdlr->error)
- 		return ctrl_hdlr->error;
- 
-+	ret = v4l2_fwnode_device_parse(&client->dev, &props);
-+	if (ret)
-+		goto error;
-+
-+	ret = v4l2_ctrl_new_fwnode_properties(ctrl_hdlr, &ov5675_ctrl_ops,
-+					      &props);
-+	if (ret)
-+		goto error;
-+
- 	ov5675->sd.ctrl_handler = ctrl_hdlr;
- 
- 	return 0;
-+
-+error:
-+	v4l2_ctrl_handler_free(ctrl_hdlr);
-+
-+	return ret;
- }
- 
- static void ov5675_update_pad_format(const struct ov5675_mode *mode,
--- 
-2.35.1
+And. At least in context of this series it is fine if the JOBCTL_TASK_FROZEN
+tracee do not block in schedule(), just you need to remove WARN_ON_ONCE()
+around wait_task_inactive().
+
+> > And even if we need to ensure the tracee will always block after
+> > ptrace_freeze_traced(), we can change signal_pending_state() to
+> > return false if JOBCTL_PTRACE_FROZEN. Much simpler, imo. But still
+> > looks unnecessary to me.
+>
+> We still need to change signal_wake_up in that case.  Possibly
+> signal_wake_up_state.
+
+Of course. See above.
+
+> >> if we depend on wait_task_inactive failing if the process is in the
+> >> wrong state.
+> >
+> > OK, I guess this is what I do not understand. Could you spell please?
+> >
+> > And speaking of RT, wait_task_inactive() still can fail because
+> > cgroup_enter_frozen() takes css_set_lock? And it is called under
+> > preempt_disable() ? I don't understand the plan :/
+>
+> Let me describe his freezer change as that is much easier to get to the
+> final result.  RT has more problems as it turns all spin locks into
+> sleeping locks.  When a task is frozen
+
+[...snip...]
+
+Oh, thanks Eric, but I understand this part. But I still can't understand
+why is it that critical to block in schedule... OK, I need to think about
+it. Lets assume this is really necessary.
+
+Anyway. I'd suggest to not change TASK_TRACED in this series and not
+complicate signal_wake_up() more than you did in your previous version:
+
+	static inline void signal_wake_up(struct task_struct *t, bool resume)
+	{
+		bool wakekill = resume && !(t->jobctl & JOBCTL_DELAY_WAKEKILL);
+		signal_wake_up_state(t, wakekill ? TASK_WAKEKILL : 0);
+	}
+
+JOBCTL_PTRACE_FROZEN is fine.
+
+ptrace_check_attach() can do
+
+	if (!ret && !ignore_state &&
+	    /*
+	     * This can only fail if the frozen tracee races with
+	     * SIGKILL and enters schedule() with fatal_signal_pending
+	     */
+	    !wait_task_inactive(child, __TASK_TRACED))
+		ret = -ESRCH;
+
+	return ret;
+
+
+Now. If/when we really need to ensure that the frozen tracee always
+blocks and wait_task_inactive() never fails, we can just do
+
+	- add the fatal_signal_pending() check into ptrace_stop()
+	  (like this patch does)
+
+	- say, change signal_pending_state:
+
+	static inline int signal_pending_state(unsigned int state, struct task_struct *p)
+	{
+		if (!(state & (TASK_INTERRUPTIBLE | TASK_WAKEKILL)))
+			return 0;
+		if (!signal_pending(p))
+			return 0;
+		if (p->jobctl & JOBCTL_TASK_FROZEN)
+			return 0;
+		return (state & TASK_INTERRUPTIBLE) || __fatal_signal_pending(p);
+	}
+
+in a separate patch which should carefully document the need for this
+change.
+
+> > I didn't look at JOBCTL_PTRACE_SIGNR yet. But this looks minor to me,
+> > I mean, I am not sure it worth the trouble.
+>
+> The immediate problem the JOBCTL_PTRACE_SIGNR patch solves is:
+> - stopping in ptrace_report_syscall.
+> - Not having PT_TRACESYSGOOD set.
+> - The tracee being killed with a fatal signal
+        ^^^^^^
+        tracer ?
+> - The tracee sending SIGTRAP to itself.
+
+Oh, but this is clear. But do we really care? If the tracer exits
+unexpectedly, the tracee can have a lot more problems, I don't think
+that this particular one is that important.
+
+Oleg.
 

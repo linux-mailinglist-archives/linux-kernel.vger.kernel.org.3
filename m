@@ -2,64 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8841B519B38
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 11:10:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE0E9519B3E
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 11:14:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346930AbiEDJNp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 05:13:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51694 "EHLO
+        id S1346985AbiEDJRp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 05:17:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346934AbiEDJNo (ORCPT
+        with ESMTP id S237301AbiEDJRn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 05:13:44 -0400
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D079715724
-        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 02:10:08 -0700 (PDT)
-Received: by mail-yb1-xb32.google.com with SMTP id y2so1312885ybi.7
-        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 02:10:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=Iyk7Telsa6alr1Cm3d9QjTuLw+CTzaW9JeZH/BH2TNU=;
-        b=W3SNX/8e5ew+o7roNgYeqoqKCNiNO5i6OBohb95OASIH6IIgIoiUwPVTmzDHMhv3ah
-         844MQflnz6XRm0nB/R8FZp2PTfr+wOmAfOoR11Wp2ghnp6bOy/0IWWiy1uKOE/yeSfC4
-         yxkuXPwTLxDe3XkO/rrsaYMVbr43AmKmOJWZT+YB+1wS7avZsAjPSuvlxDZckBRLn9s9
-         lmoREYBHs618yp8S564lX+2KSdQ13ogvY54q83OHVWNzqRxb8P9zAW4E0+FNH41QZoqo
-         GkAq4f60PARYlLKb51VkQC0y+uMcal6gsRKQlkK/maM6/dYlBealmJOcdtibxWX/fmPz
-         OXJw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=Iyk7Telsa6alr1Cm3d9QjTuLw+CTzaW9JeZH/BH2TNU=;
-        b=TFvfzIVnl5IE9gGqBFdHfQhkfN3A7qeWLnoArSyss21IDWMHAxZOvXzoGE9HUB70oQ
-         hynY28h4elKvKerizRUr0nqIKJZVB8LbP3SMXX6yitMpntH0KADd2VtLuS20eHEgX8kv
-         rJGpFtJ0aMQDpK6jz36wu/zg3mUOHSnIY1OB1DMj46xAFgIDZA7ONMwCQHjC53plhY9e
-         c+gs3atLbZzFXZ8LbU1FJtD7IkHEz/l3uebzwmndrSrA08p0vzB92yGiBkhu52yHWVOD
-         MHBOLnKKTIU94EOROdbVyMg1utjIxdfZuPyDT8BY8yHc2//fV9iysBrQkKNsPSpOHZw/
-         FWlQ==
-X-Gm-Message-State: AOAM531kdbnYPY4iRh+rThhuwIqtUbtropfzpHKCrhfld+X+dOhV6hzk
-        3LH3H3RUTJflGC73/9dr3R8r4cQnpR0iNm6wN1jjig==
-X-Google-Smtp-Source: ABdhPJzz9y6VhFg+7Jp6RtTE21aDhSqzKXcXHceVn5JEVTRJGve87XN4aq7YfCE4QXFbdNaOnEQgO2ZK0GyYPG0AoeI=
-X-Received: by 2002:a25:c64b:0:b0:649:11d:9db1 with SMTP id
- k72-20020a25c64b000000b00649011d9db1mr16569675ybf.128.1651655407901; Wed, 04
- May 2022 02:10:07 -0700 (PDT)
+        Wed, 4 May 2022 05:17:43 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C88DE186C2
+        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 02:14:05 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 41FF61F745;
+        Wed,  4 May 2022 09:14:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1651655644; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=FAjoNuvoU/e5r+Dhtmbs6y94IojTmAMxzQSPTvQQq3k=;
+        b=mPSdzOe7obE3sdzEwUP7M1b90pyMWlXIHT/sVL28hkQoM3dQFurkrTbvYjJYAZqagWD4YP
+        MqHADrNM/spvAyefN+KPGYz52oXAfwVRD4G+Q67MUc8D6ETmf+JcsUuh7B4eiboE+Wptuf
+        2dNMZSatWeOVbRhy8Nwr2hNr9BfmgJM=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9CEC6132C4;
+        Wed,  4 May 2022 09:14:03 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id Fr3vJNtDcmIqAgAAMHmgww
+        (envelope-from <jgross@suse.com>); Wed, 04 May 2022 09:14:03 +0000
+Message-ID: <0dcb05d0-108f-6252-e768-f75b393a7f5c@suse.com>
+Date:   Wed, 4 May 2022 11:14:03 +0200
 MIME-Version: 1.0
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Wed, 4 May 2022 14:39:56 +0530
-Message-ID: <CA+G9fYtYRVKKRx=W7npj911E8QPY9UObSBCppFyGGkT=wZsXFQ@mail.gmail.com>
-Subject: [next] db410c: WARNING: CPU: 3 PID: 57 at kernel/locking/mutex.c:582 __mutex_lock
-To:     Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        lkft-triage@lists.linaro.org
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Saravana Kannan <saravanak@google.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Content-Language: en-US
+To:     Jan Beulich <jbeulich@suse.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        xen-devel@lists.xenproject.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, intel-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org
+References: <20220503132207.17234-1-jgross@suse.com>
+ <20220503132207.17234-3-jgross@suse.com>
+ <1d86d8ff-6878-5488-e8c4-cbe8a5e8f624@suse.com>
+From:   Juergen Gross <jgross@suse.com>
+Subject: Re: [PATCH 2/2] x86/pat: add functions to query specific cache mode
+ availability
+In-Reply-To: <1d86d8ff-6878-5488-e8c4-cbe8a5e8f624@suse.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------RlLwG6bGfey6DnwJOYNBjCk9"
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -68,81 +81,190 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Following kernel DEBUG_LOCKS_WARN_ON(lock->magic != lock) noticed on arm64
-dragonboard 410c device while booting Linux next-20220502 tag kernel.
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------RlLwG6bGfey6DnwJOYNBjCk9
+Content-Type: multipart/mixed; boundary="------------7BrNe85h4V9tvwH7WRoa05e4";
+ protected-headers="v1"
+From: Juergen Gross <jgross@suse.com>
+To: Jan Beulich <jbeulich@suse.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+ Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
+ "H. Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>,
+ Peter Zijlstra <peterz@infradead.org>,
+ Jani Nikula <jani.nikula@linux.intel.com>,
+ Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+ Rodrigo Vivi <rodrigo.vivi@intel.com>,
+ Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+ David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
+ xen-devel@lists.xenproject.org, x86@kernel.org,
+ linux-kernel@vger.kernel.org, intel-gfx@lists.freedesktop.org,
+ dri-devel@lists.freedesktop.org
+Message-ID: <0dcb05d0-108f-6252-e768-f75b393a7f5c@suse.com>
+Subject: Re: [PATCH 2/2] x86/pat: add functions to query specific cache mode
+ availability
+References: <20220503132207.17234-1-jgross@suse.com>
+ <20220503132207.17234-3-jgross@suse.com>
+ <1d86d8ff-6878-5488-e8c4-cbe8a5e8f624@suse.com>
+In-Reply-To: <1d86d8ff-6878-5488-e8c4-cbe8a5e8f624@suse.com>
 
-warning:
----------
-[    6.052275] ------------[ cut here ]------------
-[    6.052289] DEBUG_LOCKS_WARN_ON(lock->magic != lock)
-[    6.052314] WARNING: CPU: 3 PID: 57 at kernel/locking/mutex.c:582
-__mutex_lock+0x1dc/0x420
-[    6.052345] Modules linked in:
-[    6.052361] CPU: 3 PID: 57 Comm: kworker/u8:2 Not tainted
-5.18.0-rc5-next-20220502 #1
-[    6.052374] Hardware name: Qualcomm Technologies, Inc. APQ 8016 SBC (DT)
-[    6.052384] Workqueue: events_unbound deferred_probe_work_func
-[    6.052408] pstate: 60000005 (nZCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-[    6.052421] pc : __mutex_lock+0x1dc/0x420
-[    6.052434] lr : __mutex_lock+0x1dc/0x420
-[    6.052446] sp : ffff80000c42b9a0
-[    6.052453] x29: ffff80000c42b9a0 x28: ffff80000b314860 x27: ffff00000408810d
-[    6.052481] x26: ffff80000adb4bb8 x25: ffff000005220a74 x24: 0000000000000000
-[    6.052506] x23: 0000000000000000 x22: ffff800008bbef8c x21: 0000000000000002
-[    6.052533] x20: 0000000000000000 x19: ffff00000c1a5110 x18: 0000000000000000
-[    6.052558] x17: ffff800008bbd594 x16: ffff800008bc10f4 x15: ffff80000927b6c4
-[    6.052585] x14: 0000000000000000 x13: 284e4f5f4e524157 x12: 5f534b434f4c5f47
-[    6.052611] x11: 656820747563205b x10: 0000000000000029 x9 : ffff8000081cc7b8
-[    6.052637] x8 : 0000000000000029 x7 : 0000000000000013 x6 : 0000000000000001
-[    6.267204] x5 : ffff80000adb5000 x4 : ffff80000adb54f0 x3 : 0000000000000000
-[    6.274321] x2 : 0000000000000000 x1 : 0000000000000000 x0 : ffff000005265080
-[    6.281439] Call trace:
-[    6.288524]  __mutex_lock+0x1dc/0x420
-[    6.290789]  mutex_lock_nested+0x4c/0x90
-[    6.294610]  driver_set_override+0x12c/0x160
-[    6.298605]  qcom_smd_register_edge+0x2d8/0x52c
-[    6.302860]  qcom_smd_probe+0x64/0x90
-[    6.307106]  platform_probe+0x74/0x100
-[    6.310928]  really_probe+0x1a4/0x3f4
-[    6.314572]  __driver_probe_device+0x124/0x1a0
-[    6.318310]  driver_probe_device+0x44/0x110
-[    6.322648]  __device_attach_driver+0xb0/0x154
-[    6.326730]  bus_for_each_drv+0x84/0xe0
-[    6.331240]  __device_attach+0xe0/0x1d0
-[    6.334974]  device_initial_probe+0x20/0x30
-[    6.338795]  bus_probe_device+0xac/0xb4
-[    6.342958]  deferred_probe_work_func+0xc8/0x120
-[    6.346784]  process_one_work+0x280/0x6e0
-[    6.351641]  worker_thread+0x230/0x434
-[    6.355546]  kthread+0x10c/0x120
-[    6.359188]  ret_from_fork+0x10/0x20
-[    6.362577] irq event stamp: 4049
-[    6.366132] hardirqs last  enabled at (4049): [<ffff8000096ac248>]
-_raw_spin_unlock_irqrestore+0xa8/0xc4
-[    6.369392] hardirqs last disabled at (4048): [<ffff8000096ac968>]
-_raw_spin_lock_irqsave+0xd8/0x170
-[    6.378938] softirqs last  enabled at (1496): [<ffff800008090cd8>]
-__do_softirq+0x528/0x654
-[    6.388046] softirqs last disabled at (1491): [<ffff80000812f99c>]
-__irq_exit_rcu+0x17c/0x1b0
-[    6.396120] ---[ end trace 0000000000000000 ]---
+--------------7BrNe85h4V9tvwH7WRoa05e4
+Content-Type: multipart/mixed; boundary="------------Y00b4gzBImDUVmzy43dMoV6s"
 
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+--------------Y00b4gzBImDUVmzy43dMoV6s
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-metadata:
-  git_ref: master
-  git_repo: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
-  git_sha: 9f9b9a2972eb8dcaad09d826c5c6d7488eaca3e6
-  git_describe: next-20220502
-  kernel_version: 5.18.0-rc5
-  kernel-config: https://builds.tuxbuild.com/28bnDcc7Sy8tyxRNdWwIkoP1qQK/config
-  artifact-location: https://builds.tuxbuild.com/28bnDcc7Sy8tyxRNdWwIkoP1qQK
-  toolchain: gcc-11
+T24gMDQuMDUuMjIgMTA6MzEsIEphbiBCZXVsaWNoIHdyb3RlOg0KPiBPbiAwMy4wNS4yMDIy
+IDE1OjIyLCBKdWVyZ2VuIEdyb3NzIHdyb3RlOg0KPj4gU29tZSBkcml2ZXJzIGFyZSB1c2lu
+ZyBwYXRfZW5hYmxlZCgpIGluIG9yZGVyIHRvIHRlc3QgYXZhaWxhYmlsaXR5IG9mDQo+PiBz
+cGVjaWFsIGNhY2hpbmcgbW9kZXMgKFdDIGFuZCBVQy0pLiBUaGlzIHdpbGwgbGVhZCB0byBm
+YWxzZSBuZWdhdGl2ZXMNCj4+IGluIGNhc2UgdGhlIHN5c3RlbSB3YXMgYm9vdGVkIGUuZy4g
+d2l0aCB0aGUgIm5vcGF0IiB2YXJpYW50IGFuZCB0aGUNCj4+IEJJT1MgZGlkIHNldHVwIHRo
+ZSBQQVQgTVNSIHN1cHBvcnRpbmcgdGhlIHF1ZXJpZWQgbW9kZSwgb3IgaWYgdGhlDQo+PiBz
+eXN0ZW0gaXMgcnVubmluZyBhcyBhIFhlbiBQViBndWVzdC4NCj4gDQo+IFdoaWxlLCBhcyBw
+ZXIgbXkgZWFybGllciBwYXRjaCwgSSBhZ3JlZSB3aXRoIHRoZSBYZW4gUFYgY2FzZSwgSSdt
+IG5vdA0KPiBjb252aW5jZWQgIm5vcGF0IiBpcyBzdXBwb3NlZCB0byBob25vciBmaXJtd2Fy
+ZS1wcm92aWRlZCBzZXR0aW5ncy4gSW4NCj4gZmFjdCBpbiBteSBwYXRjaCBJIGRpZCBhcnJh
+bmdlIGZvciAibm9wYXQiIHRvIGFsc28gdGFrZSBlZmZlY3QgdW5kZXINCj4gWGVuIFBWLg0K
+DQpEZXBlbmRzIG9uIHdoYXQgdGhlIHdhbnRlZCBzZW1hbnRpY3MgZm9yICJub3BhdCIgYXJl
+Lg0KDQpSaWdodCBub3cgIm5vcGF0IiB3aWxsIHJlc3VsdCBpbiB0aGUgUEFUIE1TUiBsZWZ0
+IHVuY2hhbmdlZCBhbmQgdGhlDQpjYWNoZSBtb2RlIHRyYW5zbGF0aW9uIHRhYmxlcyBiZSBp
+bml0aWFsaXplZCBhY2NvcmRpbmdseS4NCg0KU28gZG9lcyAibm9wYXQiIG1lYW4gdGhhdCB0
+aGUgUEFUIE1TUiBzaG91bGRuJ3QgYmUgY2hhbmdlZCwgb3IgdGhhdA0KUEFHRV9CSVRfUEFU
+IHdpbGwgbmV2ZXIgYmUgc2V0Pw0KDQo+PiBBZGQgdGVzdCBmdW5jdGlvbnMgZm9yIHRob3Nl
+IGNhY2hpbmcgbW9kZXMgaW5zdGVhZCBhbmQgdXNlIHRoZW0gYXQgdGhlDQo+PiBhcHByb3By
+aWF0ZSBwbGFjZXMuDQo+Pg0KPj4gRm9yIHN5bW1ldHJ5IHJlYXNvbnMgZXhwb3J0IHRoZSBh
+bHJlYWR5IGV4aXN0aW5nIHg4Nl9oYXNfcGF0X3dwKCkgZm9yDQo+PiBtb2R1bGVzLCB0b28u
+DQo+Pg0KPj4gRml4ZXM6IGJkZDhiNmM5ODIzOSAoImRybS9pOTE1OiByZXBsYWNlIFg4Nl9G
+RUFUVVJFX1BBVCB3aXRoIHBhdF9lbmFibGVkKCkiKQ0KPj4gRml4ZXM6IGFlNzQ5YzdhYjQ3
+NSAoIlBDSTogQWRkIGFyY2hfY2FuX3BjaV9tbWFwX3djKCkgbWFjcm8iKQ0KPj4gU2lnbmVk
+LW9mZi1ieTogSnVlcmdlbiBHcm9zcyA8amdyb3NzQHN1c2UuY29tPg0KPiANCj4gSSB0aGlu
+ayB0aGlzIHdhbnRzIGEgUmVwb3J0ZWQtYnkgYXMgd2VsbC4NCg0KT2theS4NCg0KPiANCj4+
+IC0tLSBhL2FyY2gveDg2L2luY2x1ZGUvYXNtL3BjaS5oDQo+PiArKysgYi9hcmNoL3g4Ni9p
+bmNsdWRlL2FzbS9wY2kuaA0KPj4gQEAgLTk0LDcgKzk0LDcgQEAgaW50IHBjaWJpb3Nfc2V0
+X2lycV9yb3V0aW5nKHN0cnVjdCBwY2lfZGV2ICpkZXYsIGludCBwaW4sIGludCBpcnEpOw0K
+Pj4gICANCj4+ICAgDQo+PiAgICNkZWZpbmUgSEFWRV9QQ0lfTU1BUA0KPj4gLSNkZWZpbmUg
+YXJjaF9jYW5fcGNpX21tYXBfd2MoKQlwYXRfZW5hYmxlZCgpDQo+PiArI2RlZmluZSBhcmNo
+X2Nhbl9wY2lfbW1hcF93YygpCXg4Nl9oYXNfcGF0X3djKCkNCj4gDQo+IEJlc2lkZXMgdGhp
+cyBhbmQgLi4uDQo+IA0KPj4gLS0tIGEvZHJpdmVycy9ncHUvZHJtL2k5MTUvZ2VtL2k5MTVf
+Z2VtX21tYW4uYw0KPj4gKysrIGIvZHJpdmVycy9ncHUvZHJtL2k5MTUvZ2VtL2k5MTVfZ2Vt
+X21tYW4uYw0KPj4gQEAgLTc2LDcgKzc2LDcgQEAgaTkxNV9nZW1fbW1hcF9pb2N0bChzdHJ1
+Y3QgZHJtX2RldmljZSAqZGV2LCB2b2lkICpkYXRhLA0KPj4gICAJaWYgKGFyZ3MtPmZsYWdz
+ICYgfihJOTE1X01NQVBfV0MpKQ0KPj4gICAJCXJldHVybiAtRUlOVkFMOw0KPj4gICANCj4+
+IC0JaWYgKGFyZ3MtPmZsYWdzICYgSTkxNV9NTUFQX1dDICYmICFwYXRfZW5hYmxlZCgpKQ0K
+Pj4gKwlpZiAoYXJncy0+ZmxhZ3MgJiBJOTE1X01NQVBfV0MgJiYgIXg4Nl9oYXNfcGF0X3dj
+KCkpDQo+PiAgIAkJcmV0dXJuIC1FTk9ERVY7DQo+PiAgIA0KPj4gICAJb2JqID0gaTkxNV9n
+ZW1fb2JqZWN0X2xvb2t1cChmaWxlLCBhcmdzLT5oYW5kbGUpOw0KPj4gQEAgLTc1Nyw3ICs3
+NTcsNyBAQCBpOTE1X2dlbV9kdW1iX21tYXBfb2Zmc2V0KHN0cnVjdCBkcm1fZmlsZSAqZmls
+ZSwNCj4+ICAgDQo+PiAgIAlpZiAoSEFTX0xNRU0odG9faTkxNShkZXYpKSkNCj4+ICAgCQlt
+bWFwX3R5cGUgPSBJOTE1X01NQVBfVFlQRV9GSVhFRDsNCj4+IC0JZWxzZSBpZiAocGF0X2Vu
+YWJsZWQoKSkNCj4+ICsJZWxzZSBpZiAoeDg2X2hhc19wYXRfd2MoKSkNCj4+ICAgCQltbWFw
+X3R5cGUgPSBJOTE1X01NQVBfVFlQRV9XQzsNCj4+ICAgCWVsc2UgaWYgKCFpOTE1X2dndHRf
+aGFzX2FwZXJ0dXJlKHRvX2d0KGk5MTUpLT5nZ3R0KSkNCj4+ICAgCQlyZXR1cm4gLUVOT0RF
+VjsNCj4+IEBAIC04MTMsNyArODEzLDcgQEAgaTkxNV9nZW1fbW1hcF9vZmZzZXRfaW9jdGwo
+c3RydWN0IGRybV9kZXZpY2UgKmRldiwgdm9pZCAqZGF0YSwNCj4+ICAgCQlicmVhazsNCj4+
+ICAgDQo+PiAgIAljYXNlIEk5MTVfTU1BUF9PRkZTRVRfV0M6DQo+PiAtCQlpZiAoIXBhdF9l
+bmFibGVkKCkpDQo+PiArCQlpZiAoIXg4Nl9oYXNfcGF0X3djKCkpDQo+PiAgIAkJCXJldHVy
+biAtRU5PREVWOw0KPj4gICAJCXR5cGUgPSBJOTE1X01NQVBfVFlQRV9XQzsNCj4+ICAgCQli
+cmVhazsNCj4+IEBAIC04MjMsNyArODIzLDcgQEAgaTkxNV9nZW1fbW1hcF9vZmZzZXRfaW9j
+dGwoc3RydWN0IGRybV9kZXZpY2UgKmRldiwgdm9pZCAqZGF0YSwNCj4+ICAgCQlicmVhazsN
+Cj4+ICAgDQo+PiAgIAljYXNlIEk5MTVfTU1BUF9PRkZTRVRfVUM6DQo+PiAtCQlpZiAoIXBh
+dF9lbmFibGVkKCkpDQo+PiArCQlpZiAoIXg4Nl9oYXNfcGF0X3VjX21pbnVzKCkpDQo+PiAg
+IAkJCXJldHVybiAtRU5PREVWOw0KPj4gICAJCXR5cGUgPSBJOTE1X01NQVBfVFlQRV9VQzsN
+Cj4+ICAgCQlicmVhazsNCj4gDQo+IC4uLiB0aGVzZSB1c2VzIHRoZXJlIGFyZSBzZXZlcmFs
+IG1vcmUuIFlvdSBzYXkgbm90aGluZyBvbiB3aHkgdGhvc2Ugd2FudA0KPiBsZWF2aW5nIHVu
+YWx0ZXJlZC4gV2hlbiBwcmVwYXJpbmcgbXkgZWFybGllciBwYXRjaCBJIGRpZCBpbnNwZWN0
+IHRoZW0NCj4gYW5kIGNhbWUgdG8gdGhlIGNvbmNsdXNpb24gdGhhdCB0aGVzZSBhbGwgd291
+bGQgYWxzbyBiZXR0ZXIgb2JzZXJ2ZSB0aGUNCj4gYWRqdXN0ZWQgYmVoYXZpb3IgKG9yIGVs
+c2UgSSBjb3VsZG4ndCBoYXZlIGxlZnQgcGF0X2VuYWJsZWQoKSBhcyB0aGUgb25seQ0KPiBw
+cmVkaWNhdGUpLiBJbiBmYWN0LCBhcyBzYWlkIGluIHRoZSBkZXNjcmlwdGlvbiBvZiBteSBl
+YXJsaWVyIHBhdGNoLCBpbg0KPiBteSBkZWJ1Z2dpbmcgSSBkaWQgZmluZCB0aGUgdXNlIGlu
+IGk5MTVfZ2VtX29iamVjdF9waW5fbWFwKCkgdG8gYmUgdGhlDQo+IHByb2JsZW1hdGljIG9u
+ZSwgd2hpY2ggeW91IGxlYXZlIGFsb25lLg0KDQpPaCwgSSBtaXNzZWQgdGhhdCBvbmUsIHNv
+cnJ5Lg0KDQpJIHdhbnRlZCB0byBiZSByYXRoZXIgZGVmZW5zaXZlIGluIG15IGNoYW5nZXMs
+IGJ1dCBJIGFncmVlIGF0IGxlYXN0IHRoZQ0KY2FzZSBpbiBhcmNoX3BoeXNfd2NfYWRkKCkg
+bWlnaHQgd2FudCB0byBiZSBjaGFuZ2VkLCB0b28uDQoNCmt2bV9pc19tbWlvX3BmbigpIHNo
+b3VsZCBub3QgcmVhbGx5IG1hdHRlciBhdCBsZWFzdCBmb3IgdGhlIFhlbiBjYXNlLg0KDQpX
+aXRoIHRoZSBvdGhlciB1c2UgY2FzZXMgaW4gbWVtdHlwZS5jIEknbSByYXRoZXIgb24gdGhl
+IGVkZ2UuDQoNCkluIGNhc2UgdGhlIHg4NiBtYWludGFpbmVycyB0aGluayB0aG9zZSBzaG91
+bGQgYmUgY2hhbmdlZCwgdG9vLCBJIGFncmVlDQp0aGF0IHlvdXIgYXBwcm9hY2ggbWlnaHQg
+YmUgdGhlIGJldHRlciBvbmUuDQoNCg0KSnVlcmdlbg0K
+--------------Y00b4gzBImDUVmzy43dMoV6s
+Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
+Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
+Content-Description: OpenPGP public key
+Content-Transfer-Encoding: quoted-printable
 
+-----BEGIN PGP PUBLIC KEY BLOCK-----
 
---
-Linaro LKFT
-https://lkft.linaro.org
+xsBNBFOMcBYBCACgGjqjoGvbEouQZw/ToiBg9W98AlM2QHV+iNHsEs7kxWhKMjri
+oyspZKOBycWxw3ie3j9uvg9EOB3aN4xiTv4qbnGiTr3oJhkB1gsb6ToJQZ8uxGq2
+kaV2KL9650I1SJvedYm8Of8Zd621lSmoKOwlNClALZNew72NjJLEzTalU1OdT7/i
+1TXkH09XSSI8mEQ/ouNcMvIJNwQpd369y9bfIhWUiVXEK7MlRgUG6MvIj6Y3Am/B
+BLUVbDa4+gmzDC9ezlZkTZG2t14zWPvxXP3FAp2pkW0xqG7/377qptDmrk42GlSK
+N4z76ELnLxussxc7I2hx18NUcbP8+uty4bMxABEBAAHNHEp1ZXJnZW4gR3Jvc3Mg
+PGpnQHBmdXBmLm5ldD7CwHkEEwECACMFAlOMcBYCGwMHCwkIBwMCAQYVCAIJCgsE
+FgIDAQIeAQIXgAAKCRCw3p3WKL8TL0KdB/93FcIZ3GCNwFU0u3EjNbNjmXBKDY4F
+UGNQH2lvWAUy+dnyThpwdtF/jQ6j9RwE8VP0+NXcYpGJDWlNb9/JmYqLiX2Q3Tye
+vpB0CA3dbBQp0OW0fgCetToGIQrg0MbD1C/sEOv8Mr4NAfbauXjZlvTj30H2jO0u
++6WGM6nHwbh2l5O8ZiHkH32iaSTfN7Eu5RnNVUJbvoPHZ8SlM4KWm8rG+lIkGurq
+qu5gu8q8ZMKdsdGC4bBxdQKDKHEFExLJK/nRPFmAuGlId1E3fe10v5QL+qHI3EIP
+tyfE7i9Hz6rVwi7lWKgh7pe0ZvatAudZ+JNIlBKptb64FaiIOAWDCx1SzR9KdWVy
+Z2VuIEdyb3NzIDxqZ3Jvc3NAc3VzZS5jb20+wsB5BBMBAgAjBQJTjHCvAhsDBwsJ
+CAcDAgEGFQgCCQoLBBYCAwECHgECF4AACgkQsN6d1ii/Ey/HmQf/RtI7kv5A2PS4
+RF7HoZhPVPogNVbC4YA6lW7DrWf0teC0RR3MzXfy6pJ+7KLgkqMlrAbN/8Dvjoz7
+8X+5vhH/rDLa9BuZQlhFmvcGtCF8eR0T1v0nC/nuAFVGy+67q2DH8As3KPu0344T
+BDpAvr2uYM4tSqxK4DURx5INz4ZZ0WNFHcqsfvlGJALDeE0LhITTd9jLzdDad1pQ
+SToCnLl6SBJZjDOX9QQcyUigZFtCXFst4dlsvddrxyqT1f17+2cFSdu7+ynLmXBK
+7abQ3rwJY8SbRO2iRulogc5vr/RLMMlscDAiDkaFQWLoqHHOdfO9rURssHNN8WkM
+nQfvUewRz80hSnVlcmdlbiBHcm9zcyA8amdyb3NzQG5vdmVsbC5jb20+wsB5BBMB
+AgAjBQJTjHDXAhsDBwsJCAcDAgEGFQgCCQoLBBYCAwECHgECF4AACgkQsN6d1ii/
+Ey8PUQf/ehmgCI9jB9hlgexLvgOtf7PJnFOXgMLdBQgBlVPO3/D9R8LtF9DBAFPN
+hlrsfIG/SqICoRCqUcJ96Pn3P7UUinFG/I0ECGF4EvTE1jnDkfJZr6jrbjgyoZHi
+w/4BNwSTL9rWASyLgqlA8u1mf+c2yUwcGhgkRAd1gOwungxcwzwqgljf0N51N5Jf
+VRHRtyfwq/ge+YEkDGcTU6Y0sPOuj4Dyfm8fJzdfHNQsWq3PnczLVELStJNdapwP
+OoE+lotufe3AM2vAEYJ9rTz3Cki4JFUsgLkHFqGZarrPGi1eyQcXeluldO3m91NK
+/1xMI3/+8jbO0tsn1tqSEUGIJi7ox80eSnVlcmdlbiBHcm9zcyA8amdyb3NzQHN1
+c2UuZGU+wsB5BBMBAgAjBQJTjHDrAhsDBwsJCAcDAgEGFQgCCQoLBBYCAwECHgEC
+F4AACgkQsN6d1ii/Ey+LhQf9GL45eU5vOowA2u5N3g3OZUEBmDHVVbqMtzwlmNC4
+k9Kx39r5s2vcFl4tXqW7g9/ViXYuiDXb0RfUpZiIUW89siKrkzmQ5dM7wRqzgJpJ
+wK8Bn2MIxAKArekWpiCKvBOB/Cc+3EXE78XdlxLyOi/NrmSGRIov0karw2RzMNOu
+5D+jLRZQd1Sv27AR+IP3I8U4aqnhLpwhK7MEy9oCILlgZ1QZe49kpcumcZKORmzB
+TNh30FVKK1EvmV2xAKDoaEOgQB4iFQLhJCdP1I5aSgM5IVFdn7v5YgEYuJYx37Io
+N1EblHI//x/e2AaIHpzK5h88NEawQsaNRpNSrcfbFmAg987ATQRTjHAWAQgAyzH6
+AOODMBjgfWE9VeCgsrwH3exNAU32gLq2xvjpWnHIs98ndPUDpnoxWQugJ6MpMncr
+0xSwFmHEgnSEjK/PAjppgmyc57BwKII3sV4on+gDVFJR6Y8ZRwgnBC5mVM6JjQ5x
+Dk8WRXljExRfUX9pNhdE5eBOZJrDRoLUmmjDtKzWaDhIg/+1Hzz93X4fCQkNVbVF
+LELU9bMaLPBG/x5q4iYZ2k2ex6d47YE1ZFdMm6YBYMOljGkZKwYde5ldM9mo45mm
+we0icXKLkpEdIXKTZeKDO+Hdv1aqFuAcccTg9RXDQjmwhC3yEmrmcfl0+rPghO0I
+v3OOImwTEe4co3c1mwARAQABwsBfBBgBAgAJBQJTjHAWAhsMAAoJELDendYovxMv
+Q/gH/1ha96vm4P/L+bQpJwrZ/dneZcmEwTbe8YFsw2V/Buv6Z4Mysln3nQK5ZadD
+534CF7TDVft7fC4tU4PONxF5D+/tvgkPfDAfF77zy2AH1vJzQ1fOU8lYFpZXTXIH
+b+559UqvIB8AdgR3SAJGHHt4RKA0F7f5ipYBBrC6cyXJyyoprT10EMvU8VGiwXvT
+yJz3fjoYsdFzpWPlJEBRMedCot60g5dmbdrZ5DWClAr0yau47zpWj3enf1tLWaqc
+suylWsviuGjKGw7KHQd3bxALOknAp4dN3QwBYCKuZ7AddY9yjynVaD5X7nF9nO5B
+jR/i1DG86lem3iBDXzXsZDn8R38=3D
+=3D2wuH
+-----END PGP PUBLIC KEY BLOCK-----
 
-[1] https://lkft.validation.linaro.org/scheduler/job/4978421#L2608
-[2] https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20220502/testrun/9336158/suite/linux-log-parser/test/check-kernel-exception-4978421/log
+--------------Y00b4gzBImDUVmzy43dMoV6s--
+
+--------------7BrNe85h4V9tvwH7WRoa05e4--
+
+--------------RlLwG6bGfey6DnwJOYNBjCk9
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
+
+-----BEGIN PGP SIGNATURE-----
+
+wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmJyQ9sFAwAAAAAACgkQsN6d1ii/Ey8i
+KAgAiuUxDCrW2LM+rNY4P8V/p08F19Eb8X7VjpQHuP5yfA4LSQs5rUcKj45XOxutARuR8yFeQld3
+eFoFiGNjPghf587jgGn5pW+uZ9u8+YvRDzmboUP/QH8dcY63VMyP3pBYCxdcgu3UUeAXVPHgcs66
+og32V5hSHko4rVj1pu2b7/RwjovXodIF/egi/ux8b4kk0U1kfeJYlplx9T9niQDBw/I/B5/kWPuE
+BDbIBSyhKGzF0SPom1rITiC9ugSgz6NX89xrLYaPyXHSeZL8hUqyAJ5Cd9iFJCrYgE7J6a1Luajy
+CYjd+Tc6gPVetmfKKEISEOoRODiMp2kNUxM2ziK9PQ==
+=v/JH
+-----END PGP SIGNATURE-----
+
+--------------RlLwG6bGfey6DnwJOYNBjCk9--

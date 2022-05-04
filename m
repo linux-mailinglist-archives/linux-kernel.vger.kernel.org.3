@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7193051A831
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:07:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F79551A6D5
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 18:57:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352735AbiEDRIh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 13:08:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38286 "EHLO
+        id S1355472AbiEDRAF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 13:00:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355659AbiEDRAT (ORCPT
+        with ESMTP id S1354404AbiEDQyU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 13:00:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50D924BBAE;
-        Wed,  4 May 2022 09:52:00 -0700 (PDT)
+        Wed, 4 May 2022 12:54:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B799F49249;
+        Wed,  4 May 2022 09:49:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C03A0617BE;
-        Wed,  4 May 2022 16:51:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E884C385A5;
-        Wed,  4 May 2022 16:51:50 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3A6AE6179D;
+        Wed,  4 May 2022 16:49:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83B3CC385A5;
+        Wed,  4 May 2022 16:49:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651683110;
-        bh=aEDMA/3oe/qWVXNiG9wL+UoIZG5uPLMm54IzJ4kwM5c=;
+        s=korg; t=1651682967;
+        bh=puxZb8keBI0MxGWFKEJg7XUlq5HvNRAXuB4e6S/Tg5E=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=I31QLYedeNZ9Gwj7V3HEvdclL1C14PmmHal3te25aNJlugBiCF7iFeNAoSk7K7sa1
-         SnoaNX0v/qL3xciRGYFt3Qz+x6a1jXA2woEkidqZlDNwf+gUZM6YUbwNEb5BF12WHu
-         oSwM1rvVRR3msxaWqVT9nkhXwDelZz78roV+583U=
+        b=uRX0KRgDseBXe11G1to8Ou87bjJV8+HIob7Di+COKXKrxQ/wfh/BphX1TfjCgCdGS
+         49FGNd1hM6wJprGHhlQlVTLR4v7UOBVYLcZpBllf01HnfjygwwVbxjDfMg8mwmm7f7
+         NP6etgEE9155+a/g7sNLcQ4TSW8ERqXSSoubQUfo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Mikulas Patocka <mpatocka@redhat.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 102/129] x86: __memcpy_flushcache: fix wrong alignment if size > 2^32
+        stable@vger.kernel.org, Dinh Nguyen <dinguyen@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 5.4 73/84] net: ethernet: stmmac: fix write to sgmii_adapter_base
 Date:   Wed,  4 May 2022 18:44:54 +0200
-Message-Id: <20220504153029.038791063@linuxfoundation.org>
+Message-Id: <20220504152933.142928480@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220504153021.299025455@linuxfoundation.org>
-References: <20220504153021.299025455@linuxfoundation.org>
+In-Reply-To: <20220504152927.744120418@linuxfoundation.org>
+References: <20220504152927.744120418@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,51 +54,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mikulas Patocka <mpatocka@redhat.com>
+From: Dinh Nguyen <dinguyen@kernel.org>
 
-[ Upstream commit a6823e4e360fe975bd3da4ab156df7c74c8b07f3 ]
+commit 5fd1fe4807f91ea0cca043114d929faa11bd4190 upstream.
 
-The first "if" condition in __memcpy_flushcache is supposed to align the
-"dest" variable to 8 bytes and copy data up to this alignment.  However,
-this condition may misbehave if "size" is greater than 4GiB.
+I made a mistake with the commit a6aaa0032424 ("net: ethernet: stmmac:
+fix altr_tse_pcs function when using a fixed-link"). I should have
+tested against both scenario of having a SGMII interface and one
+without.
 
-The statement min_t(unsigned, size, ALIGN(dest, 8) - dest); casts both
-arguments to unsigned int and selects the smaller one.  However, the
-cast truncates high bits in "size" and it results in misbehavior.
+Without the SGMII PCS TSE adpater, the sgmii_adapter_base address is
+NULL, thus a write to this address will fail.
 
-For example:
-
-	suppose that size == 0x100000001, dest == 0x200000002
-	min_t(unsigned, size, ALIGN(dest, 8) - dest) == min_t(0x1, 0xe) == 0x1;
-	...
-	dest += 0x1;
-
-so we copy just one byte "and" dest remains unaligned.
-
-This patch fixes the bug by replacing unsigned with size_t.
-
-Signed-off-by: Mikulas Patocka <mpatocka@redhat.com>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Cc: stable@vger.kernel.org
+Fixes: a6aaa0032424 ("net: ethernet: stmmac: fix altr_tse_pcs function when using a fixed-link")
+Signed-off-by: Dinh Nguyen <dinguyen@kernel.org>
+Link: https://lore.kernel.org/r/20220420152345.27415-1-dinguyen@kernel.org
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/x86/lib/usercopy_64.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/net/ethernet/stmicro/stmmac/dwmac-socfpga.c |   12 +++++++-----
+ 1 file changed, 7 insertions(+), 5 deletions(-)
 
-diff --git a/arch/x86/lib/usercopy_64.c b/arch/x86/lib/usercopy_64.c
-index 508c81e97ab1..f1c0befb62df 100644
---- a/arch/x86/lib/usercopy_64.c
-+++ b/arch/x86/lib/usercopy_64.c
-@@ -121,7 +121,7 @@ void __memcpy_flushcache(void *_dst, const void *_src, size_t size)
+--- a/drivers/net/ethernet/stmicro/stmmac/dwmac-socfpga.c
++++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-socfpga.c
+@@ -65,8 +65,9 @@ static void socfpga_dwmac_fix_mac_speed(
+ 	struct phy_device *phy_dev = ndev->phydev;
+ 	u32 val;
  
- 	/* cache copy and flush to align dest */
- 	if (!IS_ALIGNED(dest, 8)) {
--		unsigned len = min_t(unsigned, size, ALIGN(dest, 8) - dest);
-+		size_t len = min_t(size_t, size, ALIGN(dest, 8) - dest);
+-	writew(SGMII_ADAPTER_DISABLE,
+-	       sgmii_adapter_base + SGMII_ADAPTER_CTRL_REG);
++	if (sgmii_adapter_base)
++		writew(SGMII_ADAPTER_DISABLE,
++		       sgmii_adapter_base + SGMII_ADAPTER_CTRL_REG);
  
- 		memcpy((void *) dest, (void *) source, len);
- 		clean_cache_range((void *) dest, len);
--- 
-2.35.1
-
+ 	if (splitter_base) {
+ 		val = readl(splitter_base + EMAC_SPLITTER_CTRL_REG);
+@@ -88,10 +89,11 @@ static void socfpga_dwmac_fix_mac_speed(
+ 		writel(val, splitter_base + EMAC_SPLITTER_CTRL_REG);
+ 	}
+ 
+-	writew(SGMII_ADAPTER_ENABLE,
+-	       sgmii_adapter_base + SGMII_ADAPTER_CTRL_REG);
+-	if (phy_dev)
++	if (phy_dev && sgmii_adapter_base) {
++		writew(SGMII_ADAPTER_ENABLE,
++		       sgmii_adapter_base + SGMII_ADAPTER_CTRL_REG);
+ 		tse_pcs_fix_mac_speed(&dwmac->pcs, phy_dev, speed);
++	}
+ }
+ 
+ static int socfpga_dwmac_parse_data(struct socfpga_dwmac *dwmac, struct device *dev)
 
 

@@ -2,127 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF35651A284
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 16:47:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7406951A287
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 16:47:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351476AbiEDOu5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 10:50:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36940 "EHLO
+        id S1351495AbiEDOu7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 10:50:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348325AbiEDOuy (ORCPT
+        with ESMTP id S1351485AbiEDOu4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 10:50:54 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C75320F5F
-        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 07:47:18 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id d17so1639700plg.0
-        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 07:47:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=jA2U7X2p/3LAhjnBlGykYcq+8q32UQaHNqJDG7iDoz8=;
-        b=joZ7V/hZQ2CuTxOfNunTc0edKk1WTHwW1o5OkZ8MGaXXI6Mv8BBoA7wO4Abow3tXCJ
-         oMCqCxEikz77nG+WnNKxGpyVDgZTkrcL317GSOAuoCuwuMc44TDRZ22beADxjNX45ebC
-         TdxaH97JHE9e7ZkQnpvEdQI+I1RnGVWsq/4mH0ASU15nV42HY2RVcgcuBKIekswNqVfM
-         f2G2fS2iqH01BVOozgDIht7tJ0Kowm83QO39G8Dj0PRD6yeYgY0vym4JpriVXDLpuwjF
-         SfqgeRVV16sniPZiACP9Mohp3XtDQ8WtX19hsBJYPve0YOv/MPcavC9GB5Jt4ayHWKR6
-         uOzw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=jA2U7X2p/3LAhjnBlGykYcq+8q32UQaHNqJDG7iDoz8=;
-        b=K0JTpfhObd/4Yb7NkbGiy1r0N96b3tNQffgbScyHUbr09tdMyM7r6gvv93FsNr9P39
-         EEfQI2jgQCETq59lYBGqSDEXVV/vuq2k+i3LmMB8PkPA5VJwkJZ9EV7k6HbFp744yh83
-         +I7cQ+jbzrJhQR0ixWFzhsip7OTzrFV+faCbAbnD/sf4TYb5qmMxtKtM4qb7TtvV9AYA
-         LVi7tx8vDpWy/BUATLyfru2YKEYLyrqG6LAYAKExxQskBFcaJVc3VKtnTOCSn8t1laJ1
-         pZtZcxvjkM0rkIoyP7NfA6G7ysqdiqaaqdFdmdMO5KhS3YSfOyUrOfCCIfocrR2dhw74
-         2igw==
-X-Gm-Message-State: AOAM533h1sWe7VSW3bzGr3ENh7kgc2DV/7tTC+9D78/tVI7xP3CUGlSE
-        3nU5BMAQHeV1rM+xEIZz7iFt2A==
-X-Google-Smtp-Source: ABdhPJzrRKFk/Q/08nIi9uR9fkY6YuJ+bC7hVDKCXz3dZK7Pu5WoMf9Zgg7LYQ84T6TO4Kow0A0sgQ==
-X-Received: by 2002:a17:902:f54a:b0:15e:a95a:c0a7 with SMTP id h10-20020a170902f54a00b0015ea95ac0a7mr13675385plf.134.1651675637749;
-        Wed, 04 May 2022 07:47:17 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id gv21-20020a17090b11d500b001cd4989ff41sm3355441pjb.8.2022.05.04.07.47.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 May 2022 07:47:16 -0700 (PDT)
-Date:   Wed, 4 May 2022 14:47:12 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Maxim Levitsky <mlevitsk@redhat.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Ben Gardon <bgardon@google.com>,
-        David Matlack <dmatlack@google.com>
-Subject: Re: [PATCH] KVM: x86/mmu: Do not create SPTEs for GFNs that exceed
- host.MAXPHYADDR
-Message-ID: <YnKR8DYpwJeMVCoe@google.com>
-References: <YmwL87h6klEC4UKV@google.com>
- <ac2001e66957edc8a3af2413b78478c15898f86c.camel@redhat.com>
- <f3ffad3aa8476156f369ff1d4c33f3e127b47d0c.camel@redhat.com>
- <82d1a5364f1cc479da3762b046d22f136db167e3.camel@redhat.com>
- <af15fd31f73e8a956da50db6104e690f9d308dad.camel@redhat.com>
- <YnAMKtfAeoydHr3x@google.com>
- <e11c21e99e7c4ac758b4417e0ae66d3a2f1fe663.camel@redhat.com>
- <cbd4709bb499874c60986083489e17c93b48d003.camel@redhat.com>
- <YnGQyE60lHD7wusA@google.com>
- <42e9431ec2c716f1066fc282ebd97a7a24cbac72.camel@redhat.com>
+        Wed, 4 May 2022 10:50:56 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DFBDA222B6
+        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 07:47:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1651675638;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=83XwaEEfaZ3NQ5qpNsHQ3HrAzlX9bBiaOk5M25qS4NI=;
+        b=X6FlxtdHXusmco+cvyLuVbmZOCnLdM0fxvMAeuHDFTGh+PaIJlLOKSBocFL5fcHsKHoWmA
+        dfpVHd8GL6cC4hTRx0MCo2rTc92b7o+BotbDz+utW4FfPHTi9XDSGxeAjHa61GtGNtLSs6
+        Y3w7saN7BAd/O1BpS+1hzqn1c3HJXDg=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-322-AdMMV6ByMUapoIn0_ZJ4qg-1; Wed, 04 May 2022 10:47:17 -0400
+X-MC-Unique: AdMMV6ByMUapoIn0_ZJ4qg-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 12BC3397968D;
+        Wed,  4 May 2022 14:47:17 +0000 (UTC)
+Received: from horse.redhat.com (unknown [10.22.16.200])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id C4B309E8E;
+        Wed,  4 May 2022 14:47:16 +0000 (UTC)
+Received: by horse.redhat.com (Postfix, from userid 10451)
+        id 7A9B0220463; Wed,  4 May 2022 10:47:16 -0400 (EDT)
+Date:   Wed, 4 May 2022 10:47:16 -0400
+From:   Vivek Goyal <vgoyal@redhat.com>
+To:     Dharmendra Hans <dharamhans87@gmail.com>
+Cc:     Miklos Szeredi <miklos@szeredi.hu>, linux-fsdevel@vger.kernel.org,
+        fuse-devel <fuse-devel@lists.sourceforge.net>,
+        linux-kernel@vger.kernel.org, Bernd Schubert <bschubert@ddn.com>,
+        Dharmendra Singh <dsingh@ddn.com>
+Subject: Re: [PATCH v4 1/3] FUSE: Implement atomic lookup + create
+Message-ID: <YnKR9CFYPXT1bM1F@redhat.com>
+References: <20220502102521.22875-1-dharamhans87@gmail.com>
+ <20220502102521.22875-2-dharamhans87@gmail.com>
+ <YnGIUOP2BezDAb1k@redhat.com>
+ <CACUYsyGoX+o19u41cZyF92eDBO-9rFN_EEWBvWBGrEMuNn29Mw@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <42e9431ec2c716f1066fc282ebd97a7a24cbac72.camel@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <CACUYsyGoX+o19u41cZyF92eDBO-9rFN_EEWBvWBGrEMuNn29Mw@mail.gmail.com>
+X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 04, 2022, Maxim Levitsky wrote:
-> On Tue, 2022-05-03 at 20:30 +0000, Sean Christopherson wrote:
-> > Well, I officially give up, I'm out of ideas to try and repro this on my end.  To
-> > try and narrow the search, maybe try processing "all" possible gfns and see if that
-> > makes the leak go away?
-> > 
-> > diff --git a/arch/x86/kvm/mmu.h b/arch/x86/kvm/mmu.h
-> > index 7e258cc94152..a354490939ec 100644
-> > --- a/arch/x86/kvm/mmu.h
-> > +++ b/arch/x86/kvm/mmu.h
-> > @@ -84,9 +84,7 @@ static inline gfn_t kvm_mmu_max_gfn(void)
-> >          * than hardware's real MAXPHYADDR.  Using the host MAXPHYADDR
-> >          * disallows such SPTEs entirely and simplifies the TDP MMU.
-> >          */
-> > -       int max_gpa_bits = likely(tdp_enabled) ? shadow_phys_bits : 52;
-> > -
-> > -       return (1ULL << (max_gpa_bits - PAGE_SHIFT)) - 1;
-> > +       return (1ULL << (52 - PAGE_SHIFT)) - 1;
-> >  }
-> > 
-> >  static inline u8 kvm_get_shadow_phys_bits(void)
-> > 
+On Wed, May 04, 2022 at 09:56:49AM +0530, Dharmendra Hans wrote:
+> On Wed, May 4, 2022 at 1:24 AM Vivek Goyal <vgoyal@redhat.com> wrote:
+> >
+> > On Mon, May 02, 2022 at 03:55:19PM +0530, Dharmendra Singh wrote:
+> > > From: Dharmendra Singh <dsingh@ddn.com>
+> > >
+> > > When we go for creating a file (O_CREAT), we trigger
+> > > a lookup to FUSE USER SPACE. It is very  much likely
+> > > that file does not exist yet as O_CREAT is passed to
+> > > open(). This lookup can be avoided and can be performed
+> > > as part of create call into libfuse.
+> > >
+> > > This lookup + create in single call to libfuse and finally
+> > > to USER SPACE has been named as atomic create. It is expected
+> > > that USER SPACE create the file, open it and fills in the
+> > > attributes which are then used to make inode stand/revalidate
+> > > in the kernel cache. Also if file was newly created(does not
+> > > exist yet by this time) in USER SPACE then it should be indicated
+> > > in `struct fuse_file_info` by setting a bit which is again used by
+> > > libfuse to send some flags back to fuse kernel to indicate that
+> > > that file was newly created. These flags are used by kernel to
+> > > indicate changes in parent directory.
+> >
+> > Reading the existing code a little bit more and trying to understand
+> > existing semantics. And that will help me unerstand what new is being
+> > done.
+> >
+> > So current fuse_atomic_open() does following.
+> >
+> > A. Looks up dentry (if d_in_lookup() is set).
+> > B. If dentry is positive or O_CREAT is not set, return.
+> > C. If server supports atomic create + open, use that to create file and
+> >    open it as well.
+> > D. If server does not support atomic create + open, just create file
+> >    using "mknod" and return. VFS will take care of opening the file.
+> >
+> > Now with this patch, new flow is.
+> >
+> > A. Look up dentry if d_in_lookup() is set as well as either file is not
+> >    being created or fc->no_atomic_create is set. This basiclally means
+> >    skip lookup if atomic_create is supported and file is being created.
+> >
+> > B. Remains same. if dentry is positive or O_CREATE is not set, return.
+> >
+> > C. If server supports new atomic_create(), use that.
+> >
+> > D. If not, if server supports atomic create + open, use that
+> >
+> > E. If not, fall back to mknod and do not open file.
+> >
+> > So to me this new functionality is basically atomic "lookup + create +
+> > open"?
+> >
+> > Or may be not. I see we check "fc->no_create" and fallback to mknod.
+> >
+> >         if (fc->no_create)
+> >                 goto mknod;
+> >
+> > So fc->no_create is representing both old atomic "create + open" as well
+> > as new "lookup + create + open" ?
+> >
+> > It might be obvious to you, but it is not to me. So will be great if
+> > you shed some light on this.
+> >
 > 
-> Nope, still reproduces.
+> I think you got it right now. New atomic create does what you
+> mentioned as new flow.  It does  lookup + create + open in single call
+> (being called as atomic create) to USER SPACE.mknod is a special case
+
+Ok, naming is little confusing. I think we will have to put it in
+commit message and where you define FUSE_ATOMIC_CREATE that what's
+the difference between FUSE_CREATE and FUSE_ATOMIC_CREATE. This is
+ATOMIC w.r.t what?
+
+May be atomic here means that "lookup + create + open" is a single operation.
+But then even FUSE_CREATE is atomic because "creat + open" is a single
+operation.
+
+In fact FUSE_CREATE does lookup anyway and returns all the information
+in fuse_entry_out. 
+
+IIUC, only difference between FUSE_CREATE and FUSE_ATOMIC_CREATE is that
+later also carries information in reply whether file was actually created
+or not (FOPEN_FILE_CREATED). This will be set if file did not exist
+already and it was created indeed. Is that right?
+
+I see FOPEN_FILE_CREATED is being used to avoid calling
+fuse_dir_changed(). That sounds like a separate optimization and probably
+should be in a separate patch.
+
+IOW, I think this patch should be broken in to multiple pieces. First
+piece seems to be avoiding lookup() and given the way it is implemented,
+looks like we can avoid lookup() even by using existing FUSE_CREATE
+command. We don't necessarily need FUSE_ATOMIC_CREATE. Is that right?
+
+And once that is done, a separate patch should probably should explain
+the problem and say fuse_dir_changed() call can be avoided if we knew
+if file was actually created or it was already existing there. And that's
+when one need to introduce a new command. Given this is just an extension
+of existing FUSE_CREATE command and returns additiona info about
+FOPEN_FILE_CREATED, we probably should simply call it FUSE_CREATE_EXT
+and explain how this operation is different from FUSE_CREATE.
+
+Thanks
+Vivek
+
+> where the file system does not have a create call implemented. I think
+> its legacy probably goes back to Linux 2.4 if I am not wrong. We did
+> not make any changes into that.
+
 > 
-> I'll think on how to trace this, maybe that will give me some ideas.
-> Anything useful to dump from the mmu pages that are still not freed at that point?
+> Second patch avoids lookup for open calls. 3rd patch avoids lookup in
+> de_revalidate() but for non-dir. And only in case when default
+> permissions are not enabled.
+> 
 
-Dumping the role and gfn is most likely to be useful.  Assuming you aren't seeing
-this WARN too:
-
-	WARN_ON(!list_empty(&kvm->arch.tdp_mmu_roots));
-
-then it's not a VM refcounting problem.  The bugs thus far have been tied to the
-gfn in some way, e.g. skipping back-to-back entries, the MAXPHYADDR thing.  But I
-don't have any ideas for why such a simple test would generate unique behavior.
-
-> Also do you test on AMD? I test on my 3970X.
-
-Yep, I've tried Rome and Milan, and CLX (or maybe SKX?) and HSW on the Intel side.

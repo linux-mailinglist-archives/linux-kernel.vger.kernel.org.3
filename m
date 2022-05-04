@@ -2,62 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CEBB51B13F
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 23:41:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF82051B143
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 23:41:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357732AbiEDVoj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 17:44:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34110 "EHLO
+        id S1378833AbiEDVo4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 17:44:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378832AbiEDVoe (ORCPT
+        with ESMTP id S1358617AbiEDVoy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 17:44:34 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 09A3B51E6D
-        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 14:40:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651700456;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=iMLMeNW+kJ88AcyFjLmDqr2VYEnc9XaJ9YWOPx9/32s=;
-        b=a+hgQ5ZUNRDsfDUzQxoCx8RQN26O0TuBFLElEMwcJr6qtbLhDwN+4QOFnh2yP2IB/cVdvt
-        v2iaB/RuQf9NbnPh5kLft4/7TSwSbsNArRiitlfZ1h3m1m+hExhXbgTYwfTM1pA+UyG5fJ
-        vawL2uupydkCLgksOrtFD2672aca32Y=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-471-0II5ikWTMYaSY17X7b4low-1; Wed, 04 May 2022 17:40:53 -0400
-X-MC-Unique: 0II5ikWTMYaSY17X7b4low-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 892D18039D7;
-        Wed,  4 May 2022 21:40:52 +0000 (UTC)
-Received: from jsavitz-csb.redhat.com (unknown [10.22.8.120])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 3A34C40D1B9E;
-        Wed,  4 May 2022 21:40:52 +0000 (UTC)
-From:   Joel Savitz <jsavitz@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Joel Savitz <jsavitz@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Sandipan Das <sandipan@linux.ibm.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Nico Pache <npache@redhat.com>, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org
-Subject: [PATCH] selftests: vm: Makefile: rename TARGETS to VMTARGETS
-Date:   Wed,  4 May 2022 17:40:32 -0400
-Message-Id: <20220504214032.1283777-1-jsavitz@redhat.com>
-In-Reply-To: <20220504213454.1282532-1-jsavitz@redhat.com>
-References: 
+        Wed, 4 May 2022 17:44:54 -0400
+Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DFDA522DD
+        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 14:41:16 -0700 (PDT)
+Received: by mail-yb1-xb31.google.com with SMTP id y76so4670528ybe.1
+        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 14:41:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=0oiHzbsJqFX9OhI8V4cH2L2tOo6dNPXB6PDhxSDo53Q=;
+        b=S/bjx5OcVouafwAfy0YKuRvxqmD69ijjZevEiYqdXHP+hEJ7OwavFW3Ov+lkelgXgA
+         oZaitNbBLT8LJprr3zjadOUPDaeljx2mJgrJSOub4MZyW7ZddooUbNhoEu0ZBO4Hc90l
+         hYlAen4k5/vwfECAfiUbf2ZZnoyufko52bOLrHWFyFIcY17y5gD3SteI17kVgVwmTQU7
+         SRPFuSvVLpZuDdVYRuAeixhTmVJnF8UU3aVymGkJj2Rskx8v9UTI667gS4l1ANux6bKy
+         xqhllm1BYrtJhsEzXdNwttDfhn7lPWRSX79ycLvvJelOPRMgk9vV8NzUIR6ujbBDEstE
+         Khdw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=0oiHzbsJqFX9OhI8V4cH2L2tOo6dNPXB6PDhxSDo53Q=;
+        b=U7ZE5MN6QcIc7Aty/AQDpNCEUrAURUaWvDokBSLAIGdljk3E79rNP+xwKbRHtGQeRs
+         /sdRJAU6zwDqNIxIfHZsSdxfrJM+UQRWIp2TJlxy2wB1bIkBojHDwjh3pOgVsPcFnJ1n
+         EBGPqEqCELxxsUvMmDLmP/jAhlzCra6tLojNkJc59PUP09lBlyjaKywMMWjAzeNfeZm8
+         JWNIVmEQiDhdKpZTn7L8iY4QWg6+DOAYBbe62o/OCOJsYf0npqCaQCP71of8cp/YDuhS
+         hj99W1QezuimgjZnBf5S/wrDs20jxv+T+4PerSEAqsKetsCUYo7gEyNj+S+fASG85k5g
+         nApQ==
+X-Gm-Message-State: AOAM533CXX3DTWURLbCqoKMLpFsFkJkIdQzQYl6G6pmit3SPjWpOhkBD
+        D1ryzbiTyIitDdxhtPx6fodf7lGpHcLCJimxJAO99qXcvk0=
+X-Google-Smtp-Source: ABdhPJyVIOngs+4hYpT+KP01cmUaWQ5B6063XyuvBo8CxmgOqn1Lr06r42GRR4e+pPfqvbzhEmlOo1AvI2lbJsukHuU=
+X-Received: by 2002:a25:aa92:0:b0:649:6b56:5597 with SMTP id
+ t18-20020a25aa92000000b006496b565597mr14164323ybi.295.1651700475736; Wed, 04
+ May 2022 14:41:15 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20220429061332.25135-1-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220429061332.25135-1-krzysztof.kozlowski@linaro.org>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Wed, 4 May 2022 23:41:04 +0200
+Message-ID: <CACRpkda_0feE4074c66m-gYRY7xzW87HHmsNLA2YyQRP6h4_WA@mail.gmail.com>
+Subject: Re: [PATCH] pinctrl: tegra: tegra194: drop unused pin groups
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Prathamesh Shete <pshete@nvidia.com>,
+        linux-gpio@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,75 +70,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The tools/testing/selftests/vm/Makefile uses the variable TARGETS
-internally to generate a list of platform-specific binary build targets
-suffixed with _{32,64}. When building the selftests using its own
-Makefile directly, such as via the following command run in a kernel
-tree:
+On Fri, Apr 29, 2022 at 8:13 AM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
 
-# make -C tools/testing/selftests install TARGETS="vm"
+> The sdmmc1_hv_trim_pins, sdmmc3_hv_trim_pins and sys_reset_n_pins are
+> not defined as pin groups:
+>
+>   drivers/pinctrl/tegra/pinctrl-tegra194.c:1119:27: error: =E2=80=98sdmmc=
+3_hv_trim_pins=E2=80=99 defined but not used [-Werror=3Dunused-const-variab=
+le=3D]
+>    1119 | static const unsigned int sdmmc3_hv_trim_pins[] =3D {
+>
+> Proper fix would be to define them, but this requires knowledge from
+> datasheet.  Removal should not cause any harm and at least it silences
+> the warnings.
+>
+> Fixes: 613c0826081b ("pinctrl: tegra: Add pinmux support for Tegra194")
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-One receives an error such as the following:
+Patch applied. These can certainly be added back easily when they
+have a practical use.
 
-make: Entering directory '/root/linux/tools/testing/selftests'
-make --no-builtin-rules ARCH=x86 -C ../../.. headers_install
-make[1]: Entering directory '/root/linux'
-  INSTALL ./usr/include
-make[1]: Leaving directory '/root/linux'
-make[1]: Entering directory '/root/linux/tools/testing/selftests/vm'
-make[1]: *** No rule to make target 'vm.c', needed by '/root/linux/tools/testing/selftests/vm/vm_64'.  Stop.
-make[1]: Leaving directory '/root/linux/tools/testing/selftests/vm'
-make: *** [Makefile:175: all] Error 2
-make: Leaving directory '/root/linux/tools/testing/selftests'
-
-The TARGETS variable passed to tools/testing/selftests/Makefile collides
-with the TARGETS used in tools/testing/selftests/vm/Makefile, so rename
-the latter to VMTARGETS, eliminating the collision with no functional
-change.
-
-Fixes: f21fda8f6453 ("selftests: vm: pkeys: fix multilib builds for
-x86")
-
-Signed-off-by: Joel Savitz <jsavitz@redhat.com>
----
- tools/testing/selftests/vm/Makefile | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
-
-diff --git a/tools/testing/selftests/vm/Makefile b/tools/testing/selftests/vm/Makefile
-index 04a49e876a46..5b1ecd00695b 100644
---- a/tools/testing/selftests/vm/Makefile
-+++ b/tools/testing/selftests/vm/Makefile
-@@ -57,9 +57,9 @@ CAN_BUILD_I386 := $(shell ./../x86/check_cc.sh "$(CC)" ../x86/trivial_32bit_prog
- CAN_BUILD_X86_64 := $(shell ./../x86/check_cc.sh "$(CC)" ../x86/trivial_64bit_program.c)
- CAN_BUILD_WITH_NOPIE := $(shell ./../x86/check_cc.sh "$(CC)" ../x86/trivial_program.c -no-pie)
- 
--TARGETS := protection_keys
--BINARIES_32 := $(TARGETS:%=%_32)
--BINARIES_64 := $(TARGETS:%=%_64)
-+VMTARGETS := protection_keys
-+BINARIES_32 := $(VMTARGETS:%=%_32)
-+BINARIES_64 := $(VMTARGETS:%=%_64)
- 
- ifeq ($(CAN_BUILD_WITH_NOPIE),1)
- CFLAGS += -no-pie
-@@ -112,7 +112,7 @@ $(BINARIES_32): CFLAGS += -m32 -mxsave
- $(BINARIES_32): LDLIBS += -lrt -ldl -lm
- $(BINARIES_32): $(OUTPUT)/%_32: %.c
- 	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) $(notdir $^) $(LDLIBS) -o $@
--$(foreach t,$(TARGETS),$(eval $(call gen-target-rule-32,$(t))))
-+$(foreach t,$(VMTARGETS),$(eval $(call gen-target-rule-32,$(t))))
- endif
- 
- ifeq ($(CAN_BUILD_X86_64),1)
-@@ -120,7 +120,7 @@ $(BINARIES_64): CFLAGS += -m64 -mxsave
- $(BINARIES_64): LDLIBS += -lrt -ldl
- $(BINARIES_64): $(OUTPUT)/%_64: %.c
- 	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) $(notdir $^) $(LDLIBS) -o $@
--$(foreach t,$(TARGETS),$(eval $(call gen-target-rule-64,$(t))))
-+$(foreach t,$(VMTARGETS),$(eval $(call gen-target-rule-64,$(t))))
- endif
- 
- # x86_64 users should be encouraged to install 32-bit libraries
--- 
-2.27.0
-
+Yours,
+Linus Walleij

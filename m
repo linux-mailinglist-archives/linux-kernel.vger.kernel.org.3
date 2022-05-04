@@ -2,77 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CBCD519C20
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 11:44:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB978519C29
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 11:45:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347672AbiEDJsX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 05:48:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55316 "EHLO
+        id S1347698AbiEDJsq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 05:48:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238227AbiEDJsV (ORCPT
+        with ESMTP id S238227AbiEDJsk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 05:48:21 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C786027152;
-        Wed,  4 May 2022 02:44:45 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8A626B817A7;
-        Wed,  4 May 2022 09:44:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08298C385A4;
-        Wed,  4 May 2022 09:44:41 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="ESm0TNuT"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1651657480;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=k0AKfOp0KFILlr9QrROsIvi4TRs9KZaNQ7cPaY69aZM=;
-        b=ESm0TNuTZOwExi98x1XZP4BViZ+x8/cwEWxuLWdR/3JxTAMq1fGCGaHhZQyXvzFaui8U99
-        7jC+/SB/zUl6yY/G2KxHug/jsycUJCIFBDRtVb9lHJsUcD2IXaD7b6Of0lU8kxOzUoFFYU
-        ikAro6N/jHHTJ8jMoF2gpFlWU2Y/bk8=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 0e40ddb6 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Wed, 4 May 2022 09:44:40 +0000 (UTC)
-Date:   Wed, 4 May 2022 11:44:37 +0200
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Stafford Horne <shorne@gmail.com>
-Cc:     Mikulas Patocka <mpatocka@redhat.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andy Shevchenko <andy@kernel.org>,
-        device-mapper development <dm-devel@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Mike Snitzer <msnitzer@redhat.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Milan Broz <gmazyland@gmail.com>
-Subject: Re: [PATCH v2] hex2bin: make the function hex_to_bin constant-time
-Message-ID: <YnJLBfONnbqZlv6j@zx2c4.com>
-References: <alpine.LRH.2.02.2204241648270.17244@file01.intranet.prod.int.rdu2.redhat.com>
- <CAHk-=wh+Z+OKH3jRttWGHbWSQq2wVMtdnA=ntDiadZu=VxAC7w@mail.gmail.com>
- <alpine.LRH.2.02.2204250723120.26714@file01.intranet.prod.int.rdu2.redhat.com>
- <YnI7hE4cIfjsdKSF@antec>
- <YnJI4Ru0AlUgrr9C@zx2c4.com>
+        Wed, 4 May 2022 05:48:40 -0400
+Received: from relmlie5.idc.renesas.com (relmlor1.renesas.com [210.160.252.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E913A27B29;
+        Wed,  4 May 2022 02:45:04 -0700 (PDT)
+X-IronPort-AV: E=Sophos;i="5.91,197,1647270000"; 
+   d="scan'208";a="118702209"
+Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
+  by relmlie5.idc.renesas.com with ESMTP; 04 May 2022 18:45:04 +0900
+Received: from localhost.localdomain (unknown [10.226.93.27])
+        by relmlir5.idc.renesas.com (Postfix) with ESMTP id 7C5B94009679;
+        Wed,  4 May 2022 18:44:59 +0900 (JST)
+From:   Phil Edworthy <phil.edworthy@renesas.com>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Phil Edworthy <phil.edworthy@renesas.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Chris Paterson <Chris.Paterson2@renesas.com>,
+        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v4 0/2] Add new Renesas RZ/V2M SoC and Renesas RZ/V2M EVK support
+Date:   Wed,  4 May 2022 10:44:54 +0100
+Message-Id: <20220504094456.24386-1-phil.edworthy@renesas.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <YnJI4Ru0AlUgrr9C@zx2c4.com>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 04, 2022 at 11:42:27AM +0200, Jason A. Donenfeld wrote:
-> (which might be semantically better anyway) and then
-> let the function itself do the sign change (see below).
- 
-Actually, probably worse, not better. Didn't realize cu was being used
-after the masking.
+Hello,
+
+RZ/V2M has a dual-core Cortex-A53 (1.0 GHz) CPU and built-in AI
+accelerator "DRP-AI" for vision, which is Renesas' original technology.
+It also has a 32-bit LPDDR4 interface and video codec (H.264).
+
+The RZ/V2M is used with ISP firmware that runs on one of the Cortex-A53
+cores. The firmware is an integral part of the SoC such that the HW
+User's Manual documents which of the peripheral modules are used by the
+firmware.
+
+Initial patches enables minimal peripherals on Renesas RZ/V2M EVK board
+and booted via nfs. Ethernet is broadly compatible with the
+etheravb-rcar-gen3 driver, but interrupts need some work so it's not
+been included in this patch set.
+
+Below blocks are enabled on Renesas RZ/V2M EVK board:
+- memory
+- External input clock
+- CPG
+- UART
+
+Links for SoC and EVK:
+[*] https://www.renesas.com/us/en/products/microcontrollers-microprocessors/rz-cortex-a-mpus/rzv2m-dual-cortex-a53-lpddr4x32bit-ai-accelerator-isp-4k-video-codec-4k-camera-input-fhd-display-output
+
+
+Sorry for cross posting the patches to multiple subsystems, as these are
+just the dt-binding patches included as part of initial bringup patches.
+
+v4:
+ * Removed arm,arch_timer optional clock and reset
+ * Removed "optional" from description of renesas,em-uart clock.
+
+v3:
+ * Feedback addressed
+ * Added patch [0001] for renesas,em-uart dt-bindings RZ/V2M clock for the regs
+ * Added patch [0004] for arm,arch_timer dt-bindings optional clock and reset
+ * Added patch [0005] for rzg2l clk to move the DEF_MUX array size calc into the macro
+ * Added patch [0006] for rzg2l clk to add read-only versions of the macros
+
+v2:
+ * Removed SYS dt-bindings patch and corresponding SoC identification
+   as we only used the LSI version register. This can be dealt with
+   later on.
+ * Fixed em-uart dt-bindings.
+ * Included reviewed-by tags.
+
+Thanks
+Phil

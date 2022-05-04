@@ -2,163 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E89F519D4E
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 12:48:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A76A519D58
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 12:51:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348277AbiEDKwW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 06:52:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57354 "EHLO
+        id S1348291AbiEDKza (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 06:55:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235739AbiEDKwU (ORCPT
+        with ESMTP id S240476AbiEDKz1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 06:52:20 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 838C41E3C7;
-        Wed,  4 May 2022 03:48:45 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1651661324;
+        Wed, 4 May 2022 06:55:27 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A2A9022BE9
+        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 03:51:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1651661510;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Gse6ZyFtiTkctjQAWRHeBSPf14TvnJ2nc5QZOsLjx8k=;
-        b=lbJvplHHyN0WtQuVpu1E8Tgq+Nmvv38AtnIlKnSwvvbO7nwtnoic+LlbTJSp/gPjld2oqp
-        S+SbhlrxQnURvbCl5cEqXb2U6YC85xK+LFCNoFv+64lj/hzST8K1ELo7Zpss0X57K57dQd
-        aOgJXt7b7hbp5NnL2vuu68b7WRlVfj8NtuXxvlaGN0SoDGze70mQ9SVf0iAAMbzaX5gfM/
-        8Tv8n8fFYtwjRG632N7kUkNtIaS+nqvNaXzkEiAYAiruJm8DKFmOHaTjMcjaJ8ZFXOuiXd
-        hSNbXLqN0KPV0kY3I6H2bsP0bOkS47mSL4g6YdH0+5XZNo1L4e1nu8ydHticaQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1651661324;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Gse6ZyFtiTkctjQAWRHeBSPf14TvnJ2nc5QZOsLjx8k=;
-        b=3NLlWMvWQO80kMeVrTyz1icM1GCZMA7nxF6m5u047fQutvMTDwEHsCrTQ4Aic7Ay2TOPtj
-        7UCMBphWcZiq1pBg==
-To:     Tony Luck <tony.luck@intel.com>, hdegoede@redhat.com,
-        markgross@kernel.org
-Cc:     mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        x86@kernel.org, hpa@zytor.com, corbet@lwn.net,
-        gregkh@linuxfoundation.org, andriy.shevchenko@linux.intel.com,
-        jithu.joseph@intel.com, ashok.raj@intel.com, tony.luck@intel.com,
-        rostedt@goodmis.org, dan.j.williams@intel.com,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org, patches@lists.linux.dev,
-        ravi.v.shankar@intel.com
-Subject: Re: [PATCH v5 06/10] platform/x86/intel/ifs: Authenticate and copy
- to secured memory
-In-Reply-To: <20220428153849.295779-7-tony.luck@intel.com>
-References: <20220422200219.2843823-1-tony.luck@intel.com>
- <20220428153849.295779-1-tony.luck@intel.com>
- <20220428153849.295779-7-tony.luck@intel.com>
-Date:   Wed, 04 May 2022 12:48:43 +0200
-Message-ID: <87tua5k1ys.ffs@tglx>
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=NJbghp3+LJBmX5DLTTjlRaPAzEhF/Td/rezzenPMwDw=;
+        b=Sx7+P8Yfn5aRo9SAuikjdcSjMpfmrg61kYl6mvsG3T5qA4kPsXWm5Fe5m68xqpR9HPQxzN
+        KwUohBUlpzm6gLhoQ447q9o5Qr+wr7OUbDrINLHWleY2OBX6xwLWA4z4hye5G4ozgIlfpU
+        Cj1ZHHiBR/PY6P/uVRQ1FjHbf9gWhdE=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-265-zOV74m11MKCFhmS4QqvNyQ-1; Wed, 04 May 2022 06:51:49 -0400
+X-MC-Unique: zOV74m11MKCFhmS4QqvNyQ-1
+Received: by mail-wr1-f71.google.com with SMTP id j21-20020adfa555000000b0020adb9ac14fso251416wrb.13
+        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 03:51:49 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=NJbghp3+LJBmX5DLTTjlRaPAzEhF/Td/rezzenPMwDw=;
+        b=QPmeuZsRQRe87lTvlj4x47opLWECJ9Q708zoCjtnTJzbPTOio4dkHry+m5OESZgkWV
+         sb/DGbB+qb/HQyNoBEhL377zRIgbv9AE09BM/e01p7oc+HEMl/1N8CItRQ9kFgbwn77N
+         Z7p9MBzmPPFI7+R9rQM4lL2JdBzvDg2Hm1BnL7s13Rw7Yl66P99ZkwuSMnGbsaj8cOIf
+         sxhqLPqN+WEVoGG6/uABtbtyLZMvdg/s3l8XCZ3ScEyMcRDV8bJWLYovNDg8s2byQVZl
+         LIrx1kwx5ol5NcStYh74lCTCVxhA7D0fwx9Qpalq9/xfjPKYmKlGkSPqCpI3DBV3rNsq
+         8NKw==
+X-Gm-Message-State: AOAM532p3JjgNVkNiwp5GKMxXYtTB0rjW/D4GLe54elbVR4MRZyM9AeC
+        aKi4QKqJFkk8if8L/ElA0oqsHrwtbMF2RFhcaZLul4+sJira8Uy/5SCtjl4LXxPviCjVdy+qQVr
+        YdH66L4zGM66d93SjwyRuBPhTTbYGZi/arFuYoY1oXg89uG8pPvJDSJhWH3XfLRLgbm3H97WTIF
+        8=
+X-Received: by 2002:a05:600c:3b93:b0:394:57c8:5901 with SMTP id n19-20020a05600c3b9300b0039457c85901mr2728283wms.77.1651661508194;
+        Wed, 04 May 2022 03:51:48 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyHwZYfl8uqgIw+kp7JWSBmK2205DO05PCu90DnmuLlXgv2vl2YCs3ySMEP+CKrlNnqkYViRw==
+X-Received: by 2002:a05:600c:3b93:b0:394:57c8:5901 with SMTP id n19-20020a05600c3b9300b0039457c85901mr2728247wms.77.1651661507884;
+        Wed, 04 May 2022 03:51:47 -0700 (PDT)
+Received: from minerva.home (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id n14-20020adfc60e000000b0020c6a524fd5sm6700603wrg.99.2022.05.04.03.51.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 May 2022 03:51:47 -0700 (PDT)
+From:   Javier Martinez Canillas <javierm@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Maxime Ripard <maxime@cerno.tech>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Daniel Vetter <daniel@ffwll.ch>, Helge Deller <deller@gmx.de>,
+        dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org
+Subject: [PATCH] Revert "fbdev: Make fb_release() return -ENODEV if fbdev was unregistered"
+Date:   Wed,  4 May 2022 12:51:40 +0200
+Message-Id: <20220504105140.746344-1-javierm@redhat.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 28 2022 at 08:38, Tony Luck wrote:
-> The IFS image contains hashes that will be used to authenticate the ifs
-> test chunks. First, use WRMSR to copy the hashes and enumerate the number
-> of test chunks, chunk size and the maximum number of cores that can run
-> scan test simultaneously.
->
-> Next, use WRMSR to authenticate each and every scan test chunk which is
-> also stored in the IFS image. The CPU will check if the test chunks match
+This reverts commit aafa025c76dcc7d1a8c8f0bdefcbe4eb480b2f6a. That commit
+attempted to fix a NULL pointer dereference, caused by the struct fb_info
+associated with a framebuffer device to not longer be valid when the file
+descriptor was closed.
 
-s/also// ?
+But the solution was wrong since it was just papering over the issue, and
+also would leak any resources that might be reference counted in fb_open.
 
-> +
-> +/* MSR_CHUNKS_AUTH_STATUS bit fields */
-> +union ifs_chunks_auth_status {
-> +	u64	data;
-> +	struct {
-> +		u32	valid_chunks	:8;
-> +		u32	total_chunks	:8;
-> +		u32	rsvd1		:16;
-> +		u32	error_code	:8;
-> +		u32	rsvd2		:24;
-> +	};
-> +};
-> +
->  /**
->   * struct ifs_data - attributes related to intel IFS driver
->   * @integrity_cap_bit - MSR_INTEGRITY_CAPS bit enumerating this test
-> + * @loaded_version: stores the currently loaded ifs image version.
-> + * @loaded: If a valid test binary has been loaded into the memory
-> + * @loading_error: Error occurred on another CPU while loading image
-> + * @valid_chunks: number of chunks which could be validated.
->   */
->  struct ifs_data {
->  	int integrity_cap_bit;
-> +	int loaded_version;
-> +	bool loaded;
-> +	bool loading_error;
-> +	int valid_chunks;
+Instead, the fbdev drivers that are releasing the fb_info too soon should
+be fixed to prevent this situation to happen.
 
-The above struct is nicely tabular. Can we have that here too please?
+Suggested-by: Daniel Vetter <daniel.vetter@ffwll.ch>
+Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
+---
 
-> +/*
-> + * IFS requires scan chunks authenticated per each socket in the platform.
-> + * Once the test chunk is authenticated, it is automatically copied to secured memory
-> + * and proceed the authentication for the next chunk.
-> + */
-> +static int scan_chunks_sanity_check(struct device *dev)
-> +{
-> +	int metadata_size, curr_pkg, cpu, ret = -ENOMEM;
-> +	struct ifs_data *ifsd = ifs_get_data(dev);
-> +	bool *package_authenticated;
-> +	char *test_ptr;
-> +
-> +	package_authenticated = kcalloc(topology_max_packages(), sizeof(bool), GFP_KERNEL);
-> +	if (!package_authenticated)
-> +		return ret;
-> +
-> +	metadata_size = ifs_header_ptr->metadata_size;
-> +
-> +	/* Spec says that if the Meta Data Size = 0 then it should be treated as 2000 */
-> +	if (metadata_size == 0)
-> +		metadata_size = 2000;
-> +
-> +	/* Scan chunk start must be 256 byte aligned */
-> +	if ((metadata_size + IFS_HEADER_SIZE) % 256) {
-> +		dev_err(dev, "Scan pattern offset within the binary is not 256 byte aligned\n");
-> +		return -EINVAL;
-> +	}
-> +
-> +	test_ptr = (char *)ifs_header_ptr + IFS_HEADER_SIZE + metadata_size;
-> +	ifsd->loading_error = false;
-> +
-> +	ifs_test_image_ptr = (u64)test_ptr;
-> +	ifsd->loaded_version = ifs_header_ptr->blob_revision;
-> +
-> +	/* copy the scan hash and authenticate per package */
-> +	cpus_read_lock();
-> +	for_each_online_cpu(cpu) {
-> +		curr_pkg = topology_physical_package_id(cpu);
-> +		if (package_authenticated[curr_pkg])
-> +			continue;
-> +		package_authenticated[curr_pkg] = 1;
+ drivers/video/fbdev/core/fbmem.c | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
 
-Setting the authenticated indicator _before_ actually doing the
-authentication is just wrong. It does not matter in this case, but it's
-still making my eyes bleed.
+diff --git a/drivers/video/fbdev/core/fbmem.c b/drivers/video/fbdev/core/fbmem.c
+index 97eb0dee411c..a6bb0e438216 100644
+--- a/drivers/video/fbdev/core/fbmem.c
++++ b/drivers/video/fbdev/core/fbmem.c
+@@ -1434,10 +1434,7 @@ fb_release(struct inode *inode, struct file *file)
+ __acquires(&info->lock)
+ __releases(&info->lock)
+ {
+-	struct fb_info * const info = file_fb_info(file);
+-
+-	if (!info)
+-		return -ENODEV;
++	struct fb_info * const info = file->private_data;
+ 
+ 	lock_fb_info(info);
+ 	if (info->fbops->fb_release)
+-- 
+2.35.1
 
-> +		ret = smp_call_function_single(cpu, copy_hashes_authenticate_chunks,
-> +					       dev, 1);
-
-Why has this to be a smp function call? Just because it's conveniant?
-This is nothing urgent and no hotpath, so this really can use
-queue_work_on().
-
-Thanks,
-
-        tglx

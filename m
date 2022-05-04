@@ -2,49 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDF6A5197A8
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 08:53:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3C575197B1
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 08:56:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229690AbiEDG5S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 02:57:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54546 "EHLO
+        id S241638AbiEDG7Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 02:59:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345111AbiEDG4g (ORCPT
+        with ESMTP id S1345211AbiEDG62 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 02:56:36 -0400
-Received: from thorn.bewilderbeest.net (thorn.bewilderbeest.net [IPv6:2605:2700:0:5::4713:9cab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B30FC20BF5
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 23:53:01 -0700 (PDT)
-Received: from hatter.bewilderbeest.net (174-21-163-222.tukw.qwest.net [174.21.163.222])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: zev)
-        by thorn.bewilderbeest.net (Postfix) with ESMTPSA id 5B216C64;
-        Tue,  3 May 2022 23:53:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bewilderbeest.net;
-        s=thorn; t=1651647181;
-        bh=T+pl3SJCSzXLJOiH4mZIAgFL9b9XXugAhhglLLH5nDw=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mX7+SrYAMIBw0ZLAA5ZzfrgVbR8MjFejgzDqwOnI8FCj2J1NgvmTaWjXI+clUMs0N
-         jR6qTIFaLnCw7hHAh74Z03lX/zB5GpyDTYCtkHc+Z170TfVPhO+XpLSTpxFWKm2z8K
-         qWSrjHbBxfJbard91MS1vaOx+QKoy65660GrjmCg=
-From:   Zev Weiss <zev@bewilderbeest.net>
-To:     Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>
-Cc:     Zev Weiss <zev@bewilderbeest.net>, linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        openbmc@lists.ozlabs.org
-Subject: [PATCH 6/6] regulator: core: Add external-consumer driver
-Date:   Tue,  3 May 2022 23:52:52 -0700
-Message-Id: <20220504065252.6955-6-zev@bewilderbeest.net>
-X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220504065252.6955-1-zev@bewilderbeest.net>
-References: <20220504065252.6955-1-zev@bewilderbeest.net>
+        Wed, 4 May 2022 02:58:28 -0400
+Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A636D21E3B;
+        Tue,  3 May 2022 23:54:17 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id 3872A5C006E;
+        Wed,  4 May 2022 02:54:15 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Wed, 04 May 2022 02:54:15 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=living180.net;
+         h=cc:cc:content-transfer-encoding:content-type:date:date:from
+        :from:in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm2; t=1651647255; x=
+        1651733655; bh=JEqrpWsOY9RdcvSTc4MYhkThrGU1N4YgK93BL3bHbPE=; b=c
+        F3yMJkgUEYFeUdLTCk2bGdHLlYlCFHTImxZqwXzz/CR7BSDiUn4GqfRDHWYF7ltc
+        0J/U5vbn5PD/98NcyUS40xyVNHKBKTIfG3VD/H4k7oYK/hErljYKXM/sYvIKgQn8
+        i6tgpwSXj3gapirV7N6P/0KeBVWOEGrcvTYgF38zxFI4bH43noo/NwOqsP/E7ao+
+        nGpmjt0diqA7xSUdMUdp/WDhzFeoDvMqBBofHBAzUmUAs/aRlwNTDTTTA0ohF5fq
+        IWjDwjQuFb27pQlnjstMYwqDYqhcBcvBQiTHuzVDqyR8ovvHFarK3poyc9KF+qJy
+        lLy4uRKQ7+pylKiKuevMg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1651647255; x=1651733655; bh=JEqrpWsOY9Rdc
+        vSTc4MYhkThrGU1N4YgK93BL3bHbPE=; b=I5pMtQos66KTI2Y+4x47HT0oI5vZQ
+        tV9BjfCHSaXc8Oe4yNuGl7oRZvH1h6+oIdr2gPJAOu+/emYL1tI26osOuLOEq1n9
+        3t4gqBOCGCYFrOegynwmB1ZXkQ7n4sAh+T8L9DA7Gc6BLP3BBFo+DQ3C72J/QqYl
+        g/EpC3bUmZwQUbM0XBqtXSCDd9cHNxXa3KHgm0f6da2Bz69iQcHsb70Qdzk3NcPA
+        P7gOT0235z2recYFQPz/Maiu4z7q4W+v0M02zsPD9Ay7sLYGWsspXUkBVXVzaYys
+        3GVpr2bMi+9PDJxtRlKRnZZ4nY/sepKqBNtEthcdi1Upl0HxyQ9tXERxA==
+X-ME-Sender: <xms:FiNyYsaLyPRtpcxi3FsPm2_bPpzzwNIMEbyvM3az03bkhM5vduQNIQ>
+    <xme:FiNyYnaDdT12vUeBVL2iII9f_hCX0446v4GzLtVVVgThBybQAvVd5tjhYwS_mNuYY
+    xm1ifbGU1_zdw>
+X-ME-Received: <xmr:FiNyYm9VTTv2ZA9gs_hQC_Y-Sm0NkdlRx0dUK2MQhLgYPjy7RqUiYAxvtMMkDQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdekgdduudefucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepkfffgggfuffvvehfhfgjtgfgsehtkeertddtfeejnecuhfhrohhmpeffrghn
+    ihgvlhcujfgrrhguihhnghcuoeguhhgrrhguihhngheslhhivhhinhhgudektddrnhgvth
+    eqnecuggftrfgrthhtvghrnhepfeffjeejffegffeuveekkeffiefghefhtefgvdehveei
+    geeuffegfeeileeihfevnecuffhomhgrihhnpehgihhthhhusgdrtghomhenucevlhhush
+    htvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpeguhhgrrhguihhnghes
+    lhhivhhinhhgudektddrnhgvth
+X-ME-Proxy: <xmx:FiNyYmqG5gM7t1jGGAdFQ_ND0AZnBxv56IVUgA0vJQvuiJRqmG6caA>
+    <xmx:FiNyYno75tc9TP7Octey_F7oXyXIQ8fR1eehoAMRZSXKpLuNLtSuoA>
+    <xmx:FiNyYkSL1edVLok9MB0oTcDBppQs-e-aDAjpnGORSwf0DMDwc8nFUA>
+    <xmx:FyNyYmWVgsbt0pkLT7ninLay_LPpKrKGz_d332sZzcSmI2wrJAcEcQ>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 4 May 2022 02:54:13 -0400 (EDT)
+Message-ID: <12a57dd9-4423-a13d-559b-2b1dd2fb0ef3@living180.net>
+Date:   Wed, 4 May 2022 09:54:10 +0300
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [REGRESSION] lxc-stop hang on 5.17.x kernels
+Content-Language: en-US
+To:     Pavel Begunkov <asml.silence@gmail.com>,
+        Jens Axboe <axboe@kernel.dk>
+Cc:     regressions@lists.linux.dev, io-uring@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <7925e262-e0d4-6791-e43b-d37e9d693414@living180.net>
+ <6ad38ecc-b2a9-f0e9-f7c7-f312a2763f97@kernel.dk>
+ <ccf6cea1-1139-cd73-c4e5-dc9799708bdd@living180.net>
+ <bb283ff5-6820-d096-2fca-ae7679698a50@kernel.dk>
+ <371c01dd-258c-e428-7428-ff390b664752@kernel.dk>
+ <2436d42c-85ca-d060-6508-350c769804f1@gmail.com>
+ <ad9c31e5-ee75-4df2-c16d-b1461be1901a@living180.net>
+ <fb0dbd71-9733-0208-48f2-c5d22ed17510@gmail.com>
+ <a204ba93-7261-5c6e-1baf-e5427e26b124@living180.net>
+ <bd932b5a-9508-e58f-05f8-001503e4bd2b@gmail.com>
+From:   Daniel Harding <dharding@living180.net>
+In-Reply-To: <bd932b5a-9508-e58f-05f8-001503e4bd2b@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,83 +97,132 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-An external consumer is a dummy device representing a device external
-to the system that is supplied by a regulator designated for external
-output.  It is purely a virtual placeholder to instantiate a regulator
-by calling regulator_get() on it from its probe function.
+On 5/3/22 17:14, Pavel Begunkov wrote:
+> On 5/3/22 08:37, Daniel Harding wrote:
+>> [Resend with a smaller trace]
+>>
+>> On 5/3/22 02:14, Pavel Begunkov wrote:
+>>> On 5/2/22 19:49, Daniel Harding wrote:
+>>>> On 5/2/22 20:40, Pavel Begunkov wrote:
+>>>>> On 5/2/22 18:00, Jens Axboe wrote:
+>>>>>> On 5/2/22 7:59 AM, Jens Axboe wrote:
+>>>>>>> On 5/2/22 7:36 AM, Daniel Harding wrote:
+>>>>>>>> On 5/2/22 16:26, Jens Axboe wrote:
+>>>>>>>>> On 5/2/22 7:17 AM, Daniel Harding wrote:
+>>>>>>>>>> I use lxc-4.0.12 on Gentoo, built with io-uring support
+>>>>>>>>>> (--enable-liburing), targeting liburing-2.1.  My kernel 
+>>>>>>>>>> config is a
+>>>>>>>>>> very lightly modified version of Fedora's generic kernel 
+>>>>>>>>>> config. After
+>>>>>>>>>> moving from the 5.16.x series to the 5.17.x kernel series, I 
+>>>>>>>>>> started
+>>>>>>>>>> noticed frequent hangs in lxc-stop.  It doesn't happen 100% 
+>>>>>>>>>> of the
+>>>>>>>>>> time, but definitely more than 50% of the time. Bisecting 
+>>>>>>>>>> narrowed
+>>>>>>>>>> down the issue to commit 
+>>>>>>>>>> aa43477b040251f451db0d844073ac00a8ab66ee:
+>>>>>>>>>> io_uring: poll rework. Testing indicates the problem is still 
+>>>>>>>>>> present
+>>>>>>>>>> in 5.18-rc5. Unfortunately I do not have the expertise with the
+>>>>>>>>>> codebases of either lxc or io-uring to try to debug the problem
+>>>>>>>>>> further on my own, but I can easily apply patches to any of the
+>>>>>>>>>> involved components (lxc, liburing, kernel) and rebuild for 
+>>>>>>>>>> testing or
+>>>>>>>>>> validation.  I am also happy to provide any further 
+>>>>>>>>>> information that
+>>>>>>>>>> would be helpful with reproducing or debugging the problem.
+>>>>>>>>> Do you have a recipe to reproduce the hang? That would make it
+>>>>>>>>> significantly easier to figure out.
+>>>>>>>>
+>>>>>>>> I can reproduce it with just the following:
+>>>>>>>>
+>>>>>>>>      sudo lxc-create --n lxc-test --template download --bdev 
+>>>>>>>> dir --dir /var/lib/lxc/lxc-test/rootfs -- -d ubuntu -r bionic 
+>>>>>>>> -a amd64
+>>>>>>>>      sudo lxc-start -n lxc-test
+>>>>>>>>      sudo lxc-stop -n lxc-test
+>>>>>>>>
+>>>>>>>> The lxc-stop command never exits and the container continues 
+>>>>>>>> running.
+>>>>>>>> If that isn't sufficient to reproduce, please let me know.
+>>>>>>>
+>>>>>>> Thanks, that's useful! I'm at a conference this week and hence have
+>>>>>>> limited amount of time to debug, hopefully Pavel has time to 
+>>>>>>> take a look
+>>>>>>> at this.
+>>>>>>
+>>>>>> Didn't manage to reproduce. Can you try, on both the good and bad
+>>>>>> kernel, to do:
+>>>>>
+>>>>> Same here, it doesn't reproduce for me
+>>>> OK, sorry it wasn't something simple.
+>>>>> # echo 1 > /sys/kernel/debug/tracing/events/io_uring/enable
+>>>>>>
+>>>>>> run lxc-stop
+>>>>>>
+>>>>>> # cp /sys/kernel/debug/tracing/trace ~/iou-trace
+>>>>>>
+>>>>>> so we can see what's going on? Looking at the source, lxc is just 
+>>>>>> using
+>>>>>> plain POLL_ADD, so I'm guessing it's not getting a notification 
+>>>>>> when it
+>>>>>> expects to, or it's POLL_REMOVE not doing its job. If we have a 
+>>>>>> trace
+>>>>>> from both a working and broken kernel, that might shed some light 
+>>>>>> on it.
+>>>> It's late in my timezone, but I'll try to work on getting those 
+>>>> traces tomorrow.
+>>>
+>>> I think I got it, I've attached a trace.
+>>>
+>>> What's interesting is that it issues a multi shot poll but I don't
+>>> see any kind of cancellation, neither cancel requests nor task/ring
+>>> exit. Perhaps have to go look at lxc to see how it's supposed
+>>> to work
+>>
+>> Yes, that looks exactly like my bad trace.  I've attached good trace 
+>> (captured with linux-5.16.19) and a bad trace (captured with 
+>> linux-5.17.5).  These are the differences I noticed with just a 
+>> visual scan:
+>>
+>> * Both traces have three io_uring_submit_sqe calls at the very 
+>> beginning, but in the good trace, there are further 
+>> io_uring_submit_sqe calls throughout the trace, while in the bad 
+>> trace, there are none.
+>> * The good trace uses a mask of c3 for io_uring_task_add much more 
+>> often than the bad trace:  the bad trace uses a mask of c3 only for 
+>> the very last call to io_uring_task_add, but a mask of 41 for the 
+>> other calls.
+>> * In the good trace, many of the io_uring_complete calls have a 
+>> result of 195, while in the bad trace, they all have a result of 1.
+>>
+>> I don't know whether any of those things are significant or not, but 
+>> that's what jumped out at me.
+>>
+>> I have also attached a copy of the script I used to generate the 
+>> traces.  If there is anything further I can to do help debug, please 
+>> let me know.
+>
+> Good observations! thanks for traces.
+>
+> It sounds like multi-shot poll requests were getting downgraded
+> to one-shot, which is a valid behaviour and was so because we
+> didn't fully support some cases. If that's the reason, than
+> the userspace/lxc is misusing the ABI. At least, that's the
+> working hypothesis for now, need to check lxc.
 
-Signed-off-by: Zev Weiss <zev@bewilderbeest.net>
----
- drivers/regulator/Kconfig |  9 +++++++++
- drivers/regulator/core.c  | 28 ++++++++++++++++++++++++++++
- 2 files changed, 37 insertions(+)
+So, I looked at the lxc source code, and it appears to at least try to 
+handle the case of multi-shot being downgraded to one-shot.  I don't 
+know enough to know if the code is actually correct however:
 
-diff --git a/drivers/regulator/Kconfig b/drivers/regulator/Kconfig
-index 5ef2306fce04..5ec390687a81 100644
---- a/drivers/regulator/Kconfig
-+++ b/drivers/regulator/Kconfig
-@@ -56,6 +56,15 @@ config REGULATOR_USERSPACE_CONSUMER
- 
- 	  If unsure, say no.
- 
-+config REGULATOR_EXTERNAL_CONSUMER
-+	bool "External regulator consumer support"
-+	help
-+	  Some regulators supply devices that are entirely external to
-+	  the system.  This driver provides a placeholder consumer
-+	  representing such devices.
-+
-+	  If unsure, say no.
-+
- config REGULATOR_88PG86X
- 	tristate "Marvell 88PG86X voltage regulators"
- 	depends on I2C
-diff --git a/drivers/regulator/core.c b/drivers/regulator/core.c
-index d873606eb41f..4f348b3d5290 100644
---- a/drivers/regulator/core.c
-+++ b/drivers/regulator/core.c
-@@ -19,6 +19,7 @@
- #include <linux/delay.h>
- #include <linux/gpio/consumer.h>
- #include <linux/of.h>
-+#include <linux/platform_device.h>
- #include <linux/regmap.h>
- #include <linux/regulator/of_regulator.h>
- #include <linux/regulator/consumer.h>
-@@ -6070,6 +6071,33 @@ static int regulator_summary_show(struct seq_file *s, void *data)
- DEFINE_SHOW_ATTRIBUTE(regulator_summary);
- #endif /* CONFIG_DEBUG_FS */
- 
-+#ifdef CONFIG_REGULATOR_EXTERNAL_CONSUMER
-+static int regulator_external_output_probe(struct platform_device *pdev)
-+{
-+	struct regulator *reg;
-+
-+	reg = devm_regulator_get_external(&pdev->dev, "vout");
-+	if (IS_ERR(reg))
-+		return PTR_ERR(reg);
-+
-+	return 0;
-+}
-+
-+static const struct of_device_id reg_external_consumer_of_match_table[] = {
-+	{ .compatible = "regulator-external-output" },
-+	{ },
-+};
-+
-+static struct platform_driver reg_external_consumer_driver = {
-+	.driver = {
-+		.name = "reg-external-consumer",
-+		.of_match_table = reg_external_consumer_of_match_table,
-+	},
-+	.probe = regulator_external_output_probe,
-+};
-+builtin_platform_driver(reg_external_consumer_driver);
-+#endif /* CONFIG_REGULATOR_EXTERNAL_CONSUMER */
-+
- static int __init regulator_init(void)
- {
- 	int ret;
+https://github.com/lxc/lxc/blob/7e37cc96bb94175a8e351025d26cc35dc2d10543/src/lxc/mainloop.c#L165-L189
+
+https://github.com/lxc/lxc/blob/7e37cc96bb94175a8e351025d26cc35dc2d10543/src/lxc/mainloop.c#L254
+
+https://github.com/lxc/lxc/blob/7e37cc96bb94175a8e351025d26cc35dc2d10543/src/lxc/mainloop.c#L288-L290
+
 -- 
-2.36.0
+Regards,
 
+Daniel Harding

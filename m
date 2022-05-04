@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B4FF51AA00
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:19:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B647A51A83E
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:07:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344849AbiEDRUq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 13:20:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55100 "EHLO
+        id S1356802AbiEDRJo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 13:09:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356406AbiEDRFL (ORCPT
+        with ESMTP id S1355582AbiEDRAQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 13:05:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBB8350E11;
-        Wed,  4 May 2022 09:54:06 -0700 (PDT)
+        Wed, 4 May 2022 13:00:16 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C1D74B85F;
+        Wed,  4 May 2022 09:51:51 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0BD4061896;
-        Wed,  4 May 2022 16:54:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A181C385AA;
-        Wed,  4 May 2022 16:54:05 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 71005B827AC;
+        Wed,  4 May 2022 16:51:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18E5BC385B0;
+        Wed,  4 May 2022 16:51:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651683245;
-        bh=25ux8NFNKLydnTHHEQeLqGsVmScposqAAuPdXMHZvJU=;
+        s=korg; t=1651683108;
+        bh=McgoWmkYHtizr58/vT6trUUdr52odY6eQseeCgR1VqQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LxioS/J+4QDjDI8uyqLst8p1jswCXJ62U00GeeTH9/DotPWqifHx0gVxC+Gtg4y/j
-         /tH4rATvDEK154MW+w9RoOtjwA8Gd8PGT2GJEfvZRfbDB4UbodZ4Rqtf2zzC1p3LJ0
-         vpl2NNeaNdx5r5qq4ZM9iTTeGfrEYBYRp6nCw4DY=
+        b=ttbYVYXSBZLudPzpCWa3cHsTbvQ+a6pDsbtL3AUZMAKVqpo2TUl05anYqVPbFNsp0
+         TAjAbrrhj7gd2zRx2m2XaJxxHfffUYmoloz2UuC4f3d+ygA3kQsL0OA1yRwDJc/hlR
+         v9suZ4VgiZ34/ZRSkUyMOW5CMJ0A6YIePsTm8sOo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Peilin Ye <peilin.ye@bytedance.com>,
-        William Tu <u9012063@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
+        stable@vger.kernel.org, Zheyu Ma <zheyuma97@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 098/177] ip_gre: Make o_seqno start from 0 in native mode
-Date:   Wed,  4 May 2022 18:44:51 +0200
-Message-Id: <20220504153101.902753048@linuxfoundation.org>
+Subject: [PATCH 5.10 100/129] ASoC: wm8731: Disable the regulator when probing fails
+Date:   Wed,  4 May 2022 18:44:52 +0200
+Message-Id: <20220504153028.878501207@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220504153053.873100034@linuxfoundation.org>
-References: <20220504153053.873100034@linuxfoundation.org>
+In-Reply-To: <20220504153021.299025455@linuxfoundation.org>
+References: <20220504153021.299025455@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,49 +55,88 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peilin Ye <peilin.ye@bytedance.com>
+From: Zheyu Ma <zheyuma97@gmail.com>
 
-[ Upstream commit ff827beb706ed719c766acf36449801ded0c17fc ]
+[ Upstream commit 92ccbf17eeacf510cf1eed9c252d9332ca24f02d ]
 
-For GRE and GRETAP devices, currently o_seqno starts from 1 in native
-mode.  According to RFC 2890 2.2., "The first datagram is sent with a
-sequence number of 0."  Fix it.
+When the driver fails during probing, the driver should disable the
+regulator, not just handle it in wm8731_hw_init().
 
-It is worth mentioning that o_seqno already starts from 0 in collect_md
-mode, see gre_fb_xmit(), where tunnel->o_seqno is passed to
-gre_build_header() before getting incremented.
+The following log reveals it:
 
-Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-Signed-off-by: Peilin Ye <peilin.ye@bytedance.com>
-Acked-by: William Tu <u9012063@gmail.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+[   17.812483] WARNING: CPU: 1 PID: 364 at drivers/regulator/core.c:2257 _regulator_put+0x3ec/0x4e0
+[   17.815958] RIP: 0010:_regulator_put+0x3ec/0x4e0
+[   17.824467] Call Trace:
+[   17.824774]  <TASK>
+[   17.825040]  regulator_bulk_free+0x82/0xe0
+[   17.825514]  devres_release_group+0x319/0x3d0
+[   17.825882]  i2c_device_probe+0x766/0x940
+[   17.829198]  i2c_register_driver+0xb5/0x130
+
+Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
+Link: https://lore.kernel.org/r/20220405121038.4094051-1-zheyuma97@gmail.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/ipv4/ip_gre.c | 8 +++-----
- 1 file changed, 3 insertions(+), 5 deletions(-)
+ sound/soc/codecs/wm8731.c | 19 +++++++++++--------
+ 1 file changed, 11 insertions(+), 8 deletions(-)
 
-diff --git a/net/ipv4/ip_gre.c b/net/ipv4/ip_gre.c
-index e7f3e37e4aa8..4b7d7ed4bab8 100644
---- a/net/ipv4/ip_gre.c
-+++ b/net/ipv4/ip_gre.c
-@@ -459,14 +459,12 @@ static void __gre_xmit(struct sk_buff *skb, struct net_device *dev,
- 		       __be16 proto)
- {
- 	struct ip_tunnel *tunnel = netdev_priv(dev);
+diff --git a/sound/soc/codecs/wm8731.c b/sound/soc/codecs/wm8731.c
+index 304bf725a613..24a009d73f1e 100644
+--- a/sound/soc/codecs/wm8731.c
++++ b/sound/soc/codecs/wm8731.c
+@@ -602,7 +602,7 @@ static int wm8731_hw_init(struct device *dev, struct wm8731_priv *wm8731)
+ 	ret = wm8731_reset(wm8731->regmap);
+ 	if (ret < 0) {
+ 		dev_err(dev, "Failed to issue reset: %d\n", ret);
+-		goto err_regulator_enable;
++		goto err;
+ 	}
+ 
+ 	/* Clear POWEROFF, keep everything else disabled */
+@@ -619,10 +619,7 @@ static int wm8731_hw_init(struct device *dev, struct wm8731_priv *wm8731)
+ 
+ 	regcache_mark_dirty(wm8731->regmap);
+ 
+-err_regulator_enable:
+-	/* Regulators will be enabled by bias management */
+-	regulator_bulk_disable(ARRAY_SIZE(wm8731->supplies), wm8731->supplies);
 -
--	if (tunnel->parms.o_flags & TUNNEL_SEQ)
--		tunnel->o_seqno++;
-+	__be16 flags = tunnel->parms.o_flags;
- 
- 	/* Push GRE header. */
- 	gre_build_header(skb, tunnel->tun_hlen,
--			 tunnel->parms.o_flags, proto, tunnel->parms.o_key,
--			 htonl(tunnel->o_seqno));
-+			 flags, proto, tunnel->parms.o_key,
-+			 (flags & TUNNEL_SEQ) ? htonl(tunnel->o_seqno++) : 0);
- 
- 	ip_tunnel_xmit(skb, dev, tnl_params, tnl_params->protocol);
++err:
+ 	return ret;
  }
+ 
+@@ -766,21 +763,27 @@ static int wm8731_i2c_probe(struct i2c_client *i2c,
+ 		ret = PTR_ERR(wm8731->regmap);
+ 		dev_err(&i2c->dev, "Failed to allocate register map: %d\n",
+ 			ret);
+-		return ret;
++		goto err_regulator_enable;
+ 	}
+ 
+ 	ret = wm8731_hw_init(&i2c->dev, wm8731);
+ 	if (ret != 0)
+-		return ret;
++		goto err_regulator_enable;
+ 
+ 	ret = devm_snd_soc_register_component(&i2c->dev,
+ 			&soc_component_dev_wm8731, &wm8731_dai, 1);
+ 	if (ret != 0) {
+ 		dev_err(&i2c->dev, "Failed to register CODEC: %d\n", ret);
+-		return ret;
++		goto err_regulator_enable;
+ 	}
+ 
+ 	return 0;
++
++err_regulator_enable:
++	/* Regulators will be enabled by bias management */
++	regulator_bulk_disable(ARRAY_SIZE(wm8731->supplies), wm8731->supplies);
++
++	return ret;
+ }
+ 
+ static int wm8731_i2c_remove(struct i2c_client *client)
 -- 
 2.35.1
 

@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DCAD51AAAC
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:29:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0646551A6BB
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 18:54:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352460AbiEDRby (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 13:31:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40792 "EHLO
+        id S1354514AbiEDQ60 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 12:58:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356926AbiEDRJt (ORCPT
+        with ESMTP id S1354447AbiEDQyW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 13:09:49 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E7F94738D;
-        Wed,  4 May 2022 09:56:28 -0700 (PDT)
+        Wed, 4 May 2022 12:54:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 469B54968B;
+        Wed,  4 May 2022 09:49:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DEA72617A6;
-        Wed,  4 May 2022 16:56:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28DC5C385AA;
-        Wed,  4 May 2022 16:56:27 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1E96961701;
+        Wed,  4 May 2022 16:49:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D14EC385A5;
+        Wed,  4 May 2022 16:49:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651683387;
-        bh=2AHMO1rt09lcgtSq7YM7IIDJOOXaAVwLycWd1FnTCxA=;
+        s=korg; t=1651682974;
+        bh=ri5FZx4k/xV0y56XosfN461TREudlontDU4CQIoNdhY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JyUluXrLQfaVwneNAFkOfb/ATq/40wEBpIsLny+ZNk84Htqv6FBJAxayNeXA89z6t
-         Z7gy4280Iu7rtkdZSypTCV8G9JEav3VQEYBorJdU/zbCES/jmkdBMco/7GBVmz91dM
-         Ku2EVgBivokv6gt+VWMJXmj6k1u01M3+M4Nk4scc=
+        b=GA3MboEVM8t3ogjgLkReGoWBWwDKeXqH9SGSfSjTfyAjD/s8w1/GhZer+DWARpCkT
+         +UQDmVqtMBdibfzT49RJ1bpmhXJAMMxc25Ed9mhQL7Feg0OOCbKdqGcqrPlsKi3hoU
+         aRt36VZ2LpyzG/CHsz9Xk8id1EtQspq9Fzh29pGE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Pavel Skripkin <paskripkin@gmail.com>,
-        Helge Deller <deller@gmx.de>, Sasha Levin <sashal@kernel.org>,
-        syzbot+53ce4a4246d0fe0fee34@syzkaller.appspotmail.com
-Subject: [PATCH 5.17 059/225] video: fbdev: udlfb: properly check endpoint type
-Date:   Wed,  4 May 2022 18:44:57 +0200
-Message-Id: <20220504153115.436114773@linuxfoundation.org>
+        stable@vger.kernel.org, Florian Westphal <fw@strlen.de>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
+        Topi Miettinen <toiwoton@gmail.com>
+Subject: [PATCH 5.4 77/84] netfilter: nft_socket: only do sk lookups when indev is available
+Date:   Wed,  4 May 2022 18:44:58 +0200
+Message-Id: <20220504152933.610244490@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220504153110.096069935@linuxfoundation.org>
-References: <20220504153110.096069935@linuxfoundation.org>
+In-Reply-To: <20220504152927.744120418@linuxfoundation.org>
+References: <20220504152927.744120418@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,92 +55,110 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pavel Skripkin <paskripkin@gmail.com>
+From: Florian Westphal <fw@strlen.de>
 
-[ Upstream commit aaf7dbe07385e0b8deb7237eca2a79926bbc7091 ]
+commit 743b83f15d4069ea57c3e40996bf4a1077e0cdc1 upstream.
 
-syzbot reported warning in usb_submit_urb, which is caused by wrong
-endpoint type.
+Check if the incoming interface is available and NFT_BREAK
+in case neither skb->sk nor input device are set.
 
-This driver uses out bulk endpoint for communication, so
-let's check if this endpoint is present and bail out early if not.
+Because nf_sk_lookup_slow*() assume packet headers are in the
+'in' direction, use in postrouting is not going to yield a meaningful
+result.  Same is true for the forward chain, so restrict the use
+to prerouting, input and output.
 
-Fail log:
+Use in output work if a socket is already attached to the skb.
 
-usb 1-1: BOGUS urb xfer, pipe 3 != type 1
-WARNING: CPU: 0 PID: 4822 at drivers/usb/core/urb.c:493 usb_submit_urb+0xd27/0x1540 drivers/usb/core/urb.c:493
-Modules linked in:
-CPU: 0 PID: 4822 Comm: kworker/0:3 Tainted: G        W         5.13.0-syzkaller #0
-...
-Workqueue: usb_hub_wq hub_event
-RIP: 0010:usb_submit_urb+0xd27/0x1540 drivers/usb/core/urb.c:493
-...
-Call Trace:
- dlfb_submit_urb+0x89/0x160 drivers/video/fbdev/udlfb.c:1969
- dlfb_set_video_mode+0x21f0/0x2950 drivers/video/fbdev/udlfb.c:315
- dlfb_ops_set_par+0x2a3/0x840 drivers/video/fbdev/udlfb.c:1110
- dlfb_usb_probe.cold+0x113e/0x1f4a drivers/video/fbdev/udlfb.c:1732
- usb_probe_interface+0x315/0x7f0 drivers/usb/core/driver.c:396
-
-Fixes: 88e58b1a42f8 ("Staging: add udlfb driver")
-Reported-and-tested-by: syzbot+53ce4a4246d0fe0fee34@syzkaller.appspotmail.com
-Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
-Signed-off-by: Helge Deller <deller@gmx.de>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: 554ced0a6e29 ("netfilter: nf_tables: add support for native socket matching")
+Reported-and-tested-by: Topi Miettinen <toiwoton@gmail.com>
+Signed-off-by: Florian Westphal <fw@strlen.de>
+Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/video/fbdev/udlfb.c | 14 ++++++++++++--
- 1 file changed, 12 insertions(+), 2 deletions(-)
+ net/netfilter/nft_socket.c |   52 ++++++++++++++++++++++++++++++++-------------
+ 1 file changed, 38 insertions(+), 14 deletions(-)
 
-diff --git a/drivers/video/fbdev/udlfb.c b/drivers/video/fbdev/udlfb.c
-index 90f48b71fd8f..d9eec1b60e66 100644
---- a/drivers/video/fbdev/udlfb.c
-+++ b/drivers/video/fbdev/udlfb.c
-@@ -1649,8 +1649,9 @@ static int dlfb_usb_probe(struct usb_interface *intf,
- 	const struct device_attribute *attr;
- 	struct dlfb_data *dlfb;
- 	struct fb_info *info;
--	int retval = -ENOMEM;
-+	int retval;
- 	struct usb_device *usbdev = interface_to_usbdev(intf);
-+	struct usb_endpoint_descriptor *out;
+--- a/net/netfilter/nft_socket.c
++++ b/net/netfilter/nft_socket.c
+@@ -14,6 +14,32 @@ struct nft_socket {
+ 	};
+ };
  
- 	/* usb initialization */
- 	dlfb = kzalloc(sizeof(*dlfb), GFP_KERNEL);
-@@ -1664,6 +1665,12 @@ static int dlfb_usb_probe(struct usb_interface *intf,
- 	dlfb->udev = usb_get_dev(usbdev);
- 	usb_set_intfdata(intf, dlfb);
- 
-+	retval = usb_find_common_endpoints(intf->cur_altsetting, NULL, &out, NULL, NULL);
-+	if (retval) {
-+		dev_err(&intf->dev, "Device should have at lease 1 bulk endpoint!\n");
-+		goto error;
++static struct sock *nft_socket_do_lookup(const struct nft_pktinfo *pkt)
++{
++	const struct net_device *indev = nft_in(pkt);
++	const struct sk_buff *skb = pkt->skb;
++	struct sock *sk = NULL;
++
++	if (!indev)
++		return NULL;
++
++	switch (nft_pf(pkt)) {
++	case NFPROTO_IPV4:
++		sk = nf_sk_lookup_slow_v4(nft_net(pkt), skb, indev);
++		break;
++#if IS_ENABLED(CONFIG_NF_TABLES_IPV6)
++	case NFPROTO_IPV6:
++		sk = nf_sk_lookup_slow_v6(nft_net(pkt), skb, indev);
++		break;
++#endif
++	default:
++		WARN_ON_ONCE(1);
++		break;
 +	}
 +
- 	dev_dbg(&intf->dev, "console enable=%d\n", console);
- 	dev_dbg(&intf->dev, "fb_defio enable=%d\n", fb_defio);
- 	dev_dbg(&intf->dev, "shadow enable=%d\n", shadow);
-@@ -1673,6 +1680,7 @@ static int dlfb_usb_probe(struct usb_interface *intf,
- 	if (!dlfb_parse_vendor_descriptor(dlfb, intf)) {
- 		dev_err(&intf->dev,
- 			"firmware not recognized, incompatible device?\n");
-+		retval = -ENODEV;
- 		goto error;
- 	}
++	return sk;
++}
++
+ static void nft_socket_eval(const struct nft_expr *expr,
+ 			    struct nft_regs *regs,
+ 			    const struct nft_pktinfo *pkt)
+@@ -27,20 +53,7 @@ static void nft_socket_eval(const struct
+ 		sk = NULL;
  
-@@ -1686,8 +1694,10 @@ static int dlfb_usb_probe(struct usb_interface *intf,
+ 	if (!sk)
+-		switch(nft_pf(pkt)) {
+-		case NFPROTO_IPV4:
+-			sk = nf_sk_lookup_slow_v4(nft_net(pkt), skb, nft_in(pkt));
+-			break;
+-#if IS_ENABLED(CONFIG_NF_TABLES_IPV6)
+-		case NFPROTO_IPV6:
+-			sk = nf_sk_lookup_slow_v6(nft_net(pkt), skb, nft_in(pkt));
+-			break;
+-#endif
+-		default:
+-			WARN_ON_ONCE(1);
+-			regs->verdict.code = NFT_BREAK;
+-			return;
+-		}
++		sk = nft_socket_do_lookup(pkt);
  
- 	/* allocates framebuffer driver structure, not framebuffer memory */
- 	info = framebuffer_alloc(0, &dlfb->udev->dev);
--	if (!info)
-+	if (!info) {
-+		retval = -ENOMEM;
- 		goto error;
-+	}
+ 	if (!sk) {
+ 		regs->verdict.code = NFT_BREAK;
+@@ -123,6 +136,16 @@ static int nft_socket_dump(struct sk_buf
+ 	return 0;
+ }
  
- 	dlfb->info = info;
- 	info->par = dlfb;
--- 
-2.35.1
-
++static int nft_socket_validate(const struct nft_ctx *ctx,
++			       const struct nft_expr *expr,
++			       const struct nft_data **data)
++{
++	return nft_chain_validate_hooks(ctx->chain,
++					(1 << NF_INET_PRE_ROUTING) |
++					(1 << NF_INET_LOCAL_IN) |
++					(1 << NF_INET_LOCAL_OUT));
++}
++
+ static struct nft_expr_type nft_socket_type;
+ static const struct nft_expr_ops nft_socket_ops = {
+ 	.type		= &nft_socket_type,
+@@ -130,6 +153,7 @@ static const struct nft_expr_ops nft_soc
+ 	.eval		= nft_socket_eval,
+ 	.init		= nft_socket_init,
+ 	.dump		= nft_socket_dump,
++	.validate	= nft_socket_validate,
+ };
+ 
+ static struct nft_expr_type nft_socket_type __read_mostly = {
 
 

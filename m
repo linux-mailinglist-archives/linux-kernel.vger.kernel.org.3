@@ -2,47 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83F0051A08C
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 15:19:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A7EA51A0C4
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 15:21:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350277AbiEDNXF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 09:23:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33856 "EHLO
+        id S1346678AbiEDNY2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 09:24:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232915AbiEDNXC (ORCPT
+        with ESMTP id S1350512AbiEDNXg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 09:23:02 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8CAC2DB;
-        Wed,  4 May 2022 06:19:25 -0700 (PDT)
-Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1nmEuX-0003kL-2U; Wed, 04 May 2022 15:19:21 +0200
-Message-ID: <5fc82f02-be3a-6bb4-0800-aaf19a782655@leemhuis.info>
-Date:   Wed, 4 May 2022 15:19:20 +0200
+        Wed, 4 May 2022 09:23:36 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3385940A2C
+        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 06:19:39 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id z2so1267656ejj.3
+        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 06:19:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=EHKSy8u2AYcSiYwpKMBhG78dGQ0CWmrQswGZWwNmBSE=;
+        b=AII7DZs1qL3ytQ0tKTDDsyRtxKmN7Vo5x4CZZkN5bfopoIpwxt4ZBX8ZdS8qicRwr5
+         dl38rxdZ2WrTVq2Fn32nD7DNHY1pz+0yzJ0lADSWpQQJk+T0R/XgIDyASA6pNhx4FtRN
+         56bMwDlYZf8YkIzocvlX5A14yQX3kYHlMI7zJGpgzx4RU7IJX8UfOnfZjNMwKlolphMz
+         ikLzjP8utgr8hR6rkDXick46xNEXnvNLrkE2p6lCeldmp45ahO7+5VLu1UvMckqQpMeh
+         GmyLPKZ4ST+aaM8t4uBYc6KMkJZrorPI5QTCIsg6P1RhMkv7TR06OTlN++DuKr+b3siK
+         RhoA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=EHKSy8u2AYcSiYwpKMBhG78dGQ0CWmrQswGZWwNmBSE=;
+        b=0ptpZ+ZIaTIp5nyuXp4tAVuVtVKTvRD889DrCoV9qW/53dAGzyZw0AGzjADxmDaCGM
+         zfJD6z/S/sXGazlzrvaTTlaQLf7G1ZppO9LVoflpwjmWUExLhKJbiAP897l4HOKZ4bPC
+         4WfllIwC683V46YLz7BauZBQa8PoK2rTvtTXtnD8boQQSn2ZmeglTFdHT3CBaDGNj45U
+         NuzcV5U2nYV6w9xFgm8tFrM1R7DEfpWbaPfoD+rM9eaboNzA7nTxnIli3n5wspJgfcUi
+         Xk7AO5DARi8WVc95BnYLLJ14EgWVmA5BX+Kd4UgdcpEaFNbcTCZ5di6aLnsQuB7et9+W
+         fC8A==
+X-Gm-Message-State: AOAM532gRx88xtL0vCGL6KVg6tUDVPmxARJzDytMbd/r0TLHwW+mRboE
+        f0ef5N7ZEjWDOWGlqpO3GmOfbA==
+X-Google-Smtp-Source: ABdhPJwpnIZFtYA5xNncFRACp4CyShNQZR9ctDuVvi8Lr3eLD0PfhzP7p/JpHNg8QjkqPiUTvEwUhQ==
+X-Received: by 2002:a17:907:7b92:b0:6db:71f1:fc20 with SMTP id ne18-20020a1709077b9200b006db71f1fc20mr19139977ejc.343.1651670378673;
+        Wed, 04 May 2022 06:19:38 -0700 (PDT)
+Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id gx3-20020a1709068a4300b006f3ef214dc4sm5660924ejc.42.2022.05.04.06.19.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 May 2022 06:19:38 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Manu Gautam <mgautam@codeaurora.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 10/13] arm64: dts: qcom: qcs404: add dedicated qcom,qcs404-dwc3 compatible
+Date:   Wed,  4 May 2022 15:19:20 +0200
+Message-Id: <20220504131923.214367-11-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20220504131923.214367-1-krzysztof.kozlowski@linaro.org>
+References: <20220504131923.214367-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: Regression: CIFS umount fails since 14302ee33 with some servers
- (exit code 32)
-Content-Language: en-US
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
-To:     "Paulo Alcantara (SUSE)" <pc@cjr.nz>,
-        Moritz Duge <duge@pre-sense.de>
-Cc:     "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
-        Aurelien Aptel <aaptel@suse.com>,
-        Ronnie Sahlberg <lsahlber@redhat.com>,
-        Steve French <stfrench@microsoft.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "linux-cifs@vger.kernel.org" <linux-cifs@vger.kernel.org>
-References: <715d745d-5a85-092a-68c2-b9b1dd8ad53e@leemhuis.info>
-In-Reply-To: <715d745d-5a85-092a-68c2-b9b1dd8ad53e@leemhuis.info>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1651670365;372e8ffa;
-X-HE-SMSGID: 1nmEuX-0003kL-2U
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,95 +76,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, this is your Linux kernel regression tracker. Top-posting for once,
-to make this easily accessible to everyone.
+Add dedicated compatible for DWC3 USB node name to allow more accurate
+DT schema matching.
 
-Paul, Moritz, what's the status here? It seems nothing happened at all
-since below mail. Was the issue fixed? Or did it fall through the cracks?
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+ arch/arm64/boot/dts/qcom/qcs404.dtsi | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+diff --git a/arch/arm64/boot/dts/qcom/qcs404.dtsi b/arch/arm64/boot/dts/qcom/qcs404.dtsi
+index 568821259f11..d912166b7552 100644
+--- a/arch/arm64/boot/dts/qcom/qcs404.dtsi
++++ b/arch/arm64/boot/dts/qcom/qcs404.dtsi
+@@ -529,7 +529,7 @@ glink-edge {
+ 		};
+ 
+ 		usb3: usb@7678800 {
+-			compatible = "qcom,dwc3";
++			compatible = "qcom,qcs404-dwc3", "qcom,dwc3";
+ 			reg = <0x07678800 0x400>;
+ 			#address-cells = <1>;
+ 			#size-cells = <1>;
+@@ -558,7 +558,7 @@ usb3_dwc3: usb@7580000 {
+ 		};
+ 
+ 		usb2: usb@79b8800 {
+-			compatible = "qcom,dwc3";
++			compatible = "qcom,qcs404-dwc3", "qcom,dwc3";
+ 			reg = <0x079b8800 0x400>;
+ 			#address-cells = <1>;
+ 			#size-cells = <1>;
+-- 
+2.32.0
 
-P.S.: As the Linux kernel's regression tracker I deal with a lot of
-reports and sometimes miss something important when writing mails like
-this. If that's the case here, don't hesitate to tell me in a public
-reply, it's in everyone's interest to set the public record straight.
-
-#regzbot poke
-
-On 08.04.22 12:08, Thorsten Leemhuis wrote:
-> Hi, this is your Linux kernel regression tracker.
-> 
-> Paul, it seems a commit authored by you causes a regression:
-> 
-> I noticed a regression report in bugzilla.kernel.org that afaics nobody
-> acted upon since it was reported about a week ago, that's why I decided
-> to forward it to the lists and all people that seemed to be relevant
-> here. To quote from
-> https://bugzilla.kernel.org/show_bug.cgi?id=215782
-> 
->>  Moritz Duge 2022-03-31 16:47:35 UTC
->>
->> With upstream kernel 5.16.9 CIFS umount fails when using certain SMB servers.
->>
->> "umount" returns exit code 32 and the "mount" command still lists the mount as being present.
->> See below for the bad commit I've bisected.
->>
->> The bug has been reproduced multiple times with upstream kernel 5.16.9!
->> But additionally I've done much testing with openSUSE kernels.
->> Here's the openSUSE bugreport:
->> https://bugzilla.opensuse.org/show_bug.cgi?id=1194945
->> Additionally with the same servers there's a problem showing the free space with the "df" command. But I haven't been able to find out if this is really related to the umount problem.
->>
->>
->>
->>
->> = SMB Server =
->>
->> I haven't been able to identify the exact server side settings. But this problem occured with at least this SMB server (with upstream kernel 5.16.9):
->> NetApp (Release 9.7P12) with dfs and CIFS mount options "vers=3.1.1,seal"
->> (quota state unknown)
->>
->> Additionally I've verified the bug with the openSUSE kernel 5.3.18-lp152.72-default and this SMB server:
->> Windows Server 2019 with dfs and quota enabled
->> (no explicit "vers" or "seal" mount options)
->>
->> Additionally the bug appeared with another NetApp SMB server (tested upstream 5.16.9) and two unknown servers (tested only openSUSE-15.2 kernels).
->>
->> Also it looks like the bug may need a setup where the user can only read //server/share/username/ but has no permissions to read //server/share/.
->>
->>
->>
->>
->> = Bad Commit =
->>
->> With the openSUSE kernel I bisected the problem down to this commit (6ae27f2b2) between openSUSE-15.2 kernels 5.3.18-lp152.69.1 and 5.3.18-lp152.72.1.
->> https://github.com/SUSE/kernel/commit/6ae27f2b260e91f16583bbc1ded3147e0f7c5d94
->>
->> This commit is also present in the upstream kernel (14302ee33).
->> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?h=14302ee3301b3a77b331cc14efb95bf7184c73cc
->> And it has been merged between 5.11 and 5.12.
->> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?h=d0df9aabefda4d0a64730087f939f53f91e29ee6
->>
->> As said I can't reproduce this with arbitrary SMB servers. And it's always a time consuming procedure for me to do a test with the affected production SMB servers. But if you're really unhappy with the bisect search on the openSUSE kernel, I can repeat the test with the upstream commit 14302ee33 and it's predecessor.
-> 
-> 
-> Could somebody take a look into this? Or was this discussed somewhere
-> else already? Or even fixed?
-> 
-> Anyway, to get this tracked:
-> 
-> #regzbot introduced: 14302ee3301b3a77b331cc14
-> #regzbot from: Moritz Duge <duge@pre-sense.de>
-> #regzbot title: CIFS: umount fails with some servers (exit code 32)
-> #regzbot link: https://bugzilla.kernel.org/show_bug.cgi?id=215782
-> 
-> Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
-> 
-> P.S.: As the Linux kernel's regression tracker I'm getting a lot of
-> reports on my table. I can only look briefly into most of them and lack
-> knowledge about most of the areas they concern. I thus unfortunately
-> will sometimes get things wrong or miss something important. I hope
-> that's not the case here; if you think it is, don't hesitate to tell me
-> in a public reply, it's in everyone's interest to set the public record
-> straight.
-> 

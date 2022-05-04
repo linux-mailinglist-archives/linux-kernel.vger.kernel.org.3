@@ -2,166 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E248C51A45D
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 17:43:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F7D551A460
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 17:44:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352633AbiEDPqk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 11:46:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41348 "EHLO
+        id S1352614AbiEDPrj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 11:47:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352784AbiEDPqc (ORCPT
+        with ESMTP id S230413AbiEDPri (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 11:46:32 -0400
-Received: from mail-oa1-f49.google.com (mail-oa1-f49.google.com [209.85.160.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 409AD46643;
-        Wed,  4 May 2022 08:42:45 -0700 (PDT)
-Received: by mail-oa1-f49.google.com with SMTP id 586e51a60fabf-e2fa360f6dso1569039fac.2;
-        Wed, 04 May 2022 08:42:45 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=tnMRJsbiS8QiP9lDD2I4JzMT/wd9etKoP6P9ura1i48=;
-        b=oCz0VUEXIj3jIuPey1IVqcOAy6vhH24ER0yQnDh7laEqHv0QtcNP23RmSXBJvEMraV
-         0c5UHR+PB+UYkhyXKKFDu8kvG4GraHgY1u7s4CJTP7/x+tHWkDueQ6eVg0G1GQoLBUTt
-         6OCO9zmvTD7Yr6q+XNm5c2k3zJOxm+MQOocnE756wtrCXwphd17dE5wqRsiRWrizf9Os
-         N4TshiCucCCRgotUoINwmoiT81mBiSb/HLFYz3xpvx1ILYqShV0+c38L5rBzjSDOck6I
-         JHpL9SZlPy+sS/knztc/SPwMo7erCd3PTOzsJSqhl0mVsfI+yx9BHu4HRsM5j026OSgY
-         Jqdw==
-X-Gm-Message-State: AOAM5309sUlYqSCAlSEE0zLsHlYgV70CKvJBPg3NZuP9s0I78PZz4jOS
-        IQgNQm7ccjpEc9ZwP2xN+Q==
-X-Google-Smtp-Source: ABdhPJzNz108HgppQ2njmjK7spVH8oSX47FuDf8S/DyT2/BrJzu23fF4n28T9OGduSEoDRg/Cc5k1w==
-X-Received: by 2002:a05:6870:e412:b0:ed:a30a:2248 with SMTP id n18-20020a056870e41200b000eda30a2248mr39162oag.138.1651678964563;
-        Wed, 04 May 2022 08:42:44 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id v4-20020a9d4e84000000b006060322124bsm5279580otk.27.2022.05.04.08.42.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 May 2022 08:42:44 -0700 (PDT)
-Received: (nullmailer pid 1762666 invoked by uid 1000);
-        Wed, 04 May 2022 15:42:40 -0000
-Date:   Wed, 4 May 2022 10:42:40 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Valentin Caron <valentin.caron@foss.st.com>
-Cc:     Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Gabriel Fernandez <gabriel.fernandez@foss.st.com>,
-        Amelie Delaunay <amelie.delaunay@foss.st.com>,
-        linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/6] dt-bindings: rtc: stm32: add alarm A out property to
- select output
-Message-ID: <YnKe8K3FjoaUO2ml@robh.at.kernel.org>
-References: <20220504130233.330983-1-valentin.caron@foss.st.com>
- <20220504130617.331290-1-valentin.caron@foss.st.com>
+        Wed, 4 May 2022 11:47:38 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F36D51AF35;
+        Wed,  4 May 2022 08:44:01 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B958BB8247D;
+        Wed,  4 May 2022 15:44:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4FE12C385A4;
+        Wed,  4 May 2022 15:43:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651679039;
+        bh=jJYVOF65XbY/QhoDeI2ZVjpogs+998okYV/rZf0Ftq0=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=bmZL/dx/IGJNf11PKxL+15uVILHeBJOgSPqdtMJhl9tQauAqRT+okgdFU13AJIP5B
+         q1bu1krQyGOBXokMl2xIgm06STREHQfE0Hkj2tjRyVaJ1dHA9Ohp6bo7nTlhG5h7fk
+         RKU6GLYc7IV5OdERa3QUQQ5QhyZkAjuih1cLEW7IMDhq2w6/MLnKERP9gL59BJCvrJ
+         ML7yHcJ55SjrLTMAOom+YCssrVPijfoeSrNEDn38smDPFVc39TCn1ENP2Vocls2HJF
+         ZzCJixmXuTvNnFhmD1HVgoJ9Qs7kH4JtskiK4Urfeem8aiVI7xNYqsLg8lt1hVjcDv
+         j6OmJVfdd24mg==
+Received: by mail-pj1-f49.google.com with SMTP id w5-20020a17090aaf8500b001d74c754128so5556869pjq.0;
+        Wed, 04 May 2022 08:43:59 -0700 (PDT)
+X-Gm-Message-State: AOAM5308/1Qbif3gU9TmyHO4A5KpGjz3A/OMrAQBWd9hCrebFbIikDRm
+        mjz+8bqRbjpqoF2QEevp5XTqDiRQbJLRdj0jEA==
+X-Google-Smtp-Source: ABdhPJxkucuV8a41LdyYPvaUmw97Bg0ATupEharuX6qajHpWciC7tFXFEfRQjgpryCU/kUyZFOXlbZBrkmbL5LYQf48=
+X-Received: by 2002:a17:902:b694:b0:153:1d9a:11a5 with SMTP id
+ c20-20020a170902b69400b001531d9a11a5mr21806839pls.151.1651679038864; Wed, 04
+ May 2022 08:43:58 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220504130617.331290-1-valentin.caron@foss.st.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20220429130221.32113-1-bharat.kumar.gogada@xilinx.com>
+In-Reply-To: <20220429130221.32113-1-bharat.kumar.gogada@xilinx.com>
+From:   Rob Herring <robh@kernel.org>
+Date:   Wed, 4 May 2022 10:43:47 -0500
+X-Gmail-Original-Message-ID: <CAL_JsqJkHRbXoHdgDYgeF5JhdPgDhjCg=W7YUmCRdBR8xSKz6A@mail.gmail.com>
+Message-ID: <CAL_JsqJkHRbXoHdgDYgeF5JhdPgDhjCg=W7YUmCRdBR8xSKz6A@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: PCI: xilinx-cpm: Change reg property order
+To:     Bharat Kumar Gogada <bharat.kumar.gogada@xilinx.com>
+Cc:     PCI <linux-pci@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        devicetree@vger.kernel.org,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Michal Simek <michals@xilinx.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 04, 2022 at 03:06:13PM +0200, Valentin Caron wrote:
-> STM32 RTC can pulse some SOC pins when an alarm of RTC expires.
-> 
-> This patch adds property to activate alarm A output. The pulse can
-> output on three pins RTC_OUT1, RTC_OUT2, RTC_OUT2_RMP
-> (PC13, PB2, PI8 on stm32mp15) (PC13, PB2, PI1 on stm32mp13).
-> 
-> Signed-off-by: Valentin Caron <valentin.caron@foss.st.com>
+On Fri, Apr 29, 2022 at 8:02 AM Bharat Kumar Gogada
+<bharat.kumar.gogada@xilinx.com> wrote:
+>
+> Describe cpm reg property before cfg reg property to align with
+> node name.
+
+The order is an ABI. If breaking it is okay, explain why here.
+
+>
+> Signed-off-by: Bharat Kumar Gogada <bharat.kumar.gogada@xilinx.com>
 > ---
->  .../devicetree/bindings/rtc/st,stm32-rtc.yaml | 19 ++++++++++++++++++-
->  1 file changed, 18 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/rtc/st,stm32-rtc.yaml b/Documentation/devicetree/bindings/rtc/st,stm32-rtc.yaml
-> index 56d46ea35c5d..71e02604e8de 100644
-> --- a/Documentation/devicetree/bindings/rtc/st,stm32-rtc.yaml
-> +++ b/Documentation/devicetree/bindings/rtc/st,stm32-rtc.yaml
-> @@ -59,6 +59,13 @@ properties:
->        Refer to <include/dt-bindings/rtc/rtc-stm32.h> for the supported values.
->        Pinctrl state named "default" may be defined to reserve pin for RTC output.
->  
-> +  st,alarm:
-> +    $ref: "/schemas/types.yaml#/definitions/uint32"
-> +    description: |
-> +      To select and enable RTC Alarm A output.
-> +      Refer to <include/dt-bindings/rtc/rtc-stm32.h> for the supported values.
-
-No, sorry, you need to define the allowed values as a schema here.
-
-> +      Pinctrl state named "default" may be defined to reserve pin for RTC output.
-> +
->  allOf:
->    - if:
->        properties:
-> @@ -75,6 +82,9 @@ allOf:
->          st,lsco:
->            maxItems: 0
->  
-> +        st,alarm:
-> +          maxItems: 0
-
-st,alarm: false
-
-or:
-
-not:
-  required: [ st,alarm ]
-
-is how you disallow a property.
-
-This should cause a warning, but this patch didn't apply for me.
-
-> +
->          clock-names: false
->  
->        required:
-> @@ -95,6 +105,9 @@ allOf:
->          st,lsco:
->            maxItems: 0
->  
-> +        st,alarm:
-> +          maxItems: 0
-> +
->        required:
->          - clock-names
->          - st,syscfg
-> @@ -117,6 +130,9 @@ allOf:
->          st,lsco:
->            maxItems: 1
->  
-> +        st,alarm:
-> +          maxItems: 1
-
-maxItems applies to arrays, but this is a scalar value. I don't think 
-you need this hunk.
-
-> +
->        required:
->          - clock-names
->  
-> @@ -153,8 +169,9 @@ examples:
->        clocks = <&rcc RTCAPB>, <&rcc RTC>;
->        clock-names = "pclk", "rtc_ck";
->        interrupts = <GIC_SPI 3 IRQ_TYPE_LEVEL_HIGH>;
-> +      st,alarm = <RTC_OUT1>;
->        st,lsco = <RTC_OUT2_RMP>;
-> -      pinctrl-0 = <&rtc_out2_rmp_pins_a>;
-> +      pinctrl-0 = <&rtc_out1_pins_a &rtc_out2_rmp_pins_a>;
->        pinctrl-names = "default";
->      };
->  
-> -- 
-> 2.25.1
-> 
-> 
+>  .../devicetree/bindings/pci/xilinx-versal-cpm.yaml     | 10 +++++-----
+>  1 file changed, 5 insertions(+), 5 deletions(-)
+>
+> diff --git a/Documentation/devicetree/bindings/pci/xilinx-versal-cpm.yaml b/Documentation/devicetree/bindings/pci/xilinx-versal-cpm.yaml
+> index 32f4641085bc..cca395317a4c 100644
+> --- a/Documentation/devicetree/bindings/pci/xilinx-versal-cpm.yaml
+> +++ b/Documentation/devicetree/bindings/pci/xilinx-versal-cpm.yaml
+> @@ -18,13 +18,13 @@ properties:
+>
+>    reg:
+>      items:
+> -      - description: Configuration space region and bridge registers.
+>        - description: CPM system level control and status registers.
+> +      - description: Configuration space region and bridge registers.
+>
+>    reg-names:
+>      items:
+> -      - const: cfg
+>        - const: cpm_slcr
+> +      - const: cfg
+>
+>    interrupts:
+>      maxItems: 1
+> @@ -86,9 +86,9 @@ examples:
+>                         ranges = <0x02000000 0x0 0xe0000000 0x0 0xe0000000 0x0 0x10000000>,
+>                                  <0x43000000 0x80 0x00000000 0x80 0x00000000 0x0 0x80000000>;
+>                         msi-map = <0x0 &its_gic 0x0 0x10000>;
+> -                       reg = <0x6 0x00000000 0x0 0x10000000>,
+> -                             <0x0 0xfca10000 0x0 0x1000>;
+> -                       reg-names = "cfg", "cpm_slcr";
+> +                       reg = <0x0 0xfca10000 0x0 0x1000>,
+> +                             <0x6 0x00000000 0x0 0x10000000>;
+> +                       reg-names = "cpm_slcr", "cfg";
+>                         pcie_intc_0: interrupt-controller {
+>                                 #address-cells = <0>;
+>                                 #interrupt-cells = <1>;
+> --
+> 2.17.1
+>

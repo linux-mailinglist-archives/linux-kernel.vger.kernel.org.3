@@ -2,184 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF8865192CD
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 02:27:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70A8B5192DA
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 02:33:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244680AbiEDAaN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 20:30:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33476 "EHLO
+        id S244696AbiEDAhH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 20:37:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244638AbiEDAaI (ORCPT
+        with ESMTP id S233015AbiEDAhF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 20:30:08 -0400
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 988D218E28
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 17:26:34 -0700 (PDT)
-Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 243KsJW6018676;
-        Wed, 4 May 2022 00:26:30 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : subject :
- date : message-id : references : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=corp-2021-07-09;
- bh=UMVtfXJ0Dlf1aeg6H3yWSnihQ4t5SMLU/QgHB0zb7ck=;
- b=nNvq1G67dkMayRjWXetfV34oIYkJD2KF/2G3khY5CJwViDmipr+0vLPqcMlSCIHsu8St
- u3V9wqXuEVykWREh3cuGqf1ED4NtFU9f6G3phC169pUaUp0Eer90jojUfyKnxTyP20wq
- Ym39/Htu3jJ4zwUQqP0Se1k8WehnS5/3W/CnfwfK+bY2uGQwsetslpKaYOe81RQtpeUL
- q3SPjloOCOIavGgaL7M3CgFWC0xJghXAcZCp6TjvY5kIZFqRo6CLo0RaC8+JaT+8LlPS
- vwMJusfgtrwt4Ih1sPKMocNDYxQkY483q0osUXAa/OZX8MgkBweiNMESP0OiLFh8qMid Ew== 
-Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3frwnt733e-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 04 May 2022 00:26:30 +0000
-Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 2440FRZP031746;
-        Wed, 4 May 2022 00:26:28 GMT
-Received: from nam04-mw2-obe.outbound.protection.outlook.com (mail-mw2nam08lp2169.outbound.protection.outlook.com [104.47.73.169])
-        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3fsvbmu7qk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 04 May 2022 00:26:28 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=lWD5nF1I6K2gcGZzsjDD9QXrzYgP4Sh99wMVTxPpwlA6z1HmwhfZ1/kwnpumNKie+7/LU0berp3havi964ra4u4Sv/DIr30Tyj1kmn9xDH6zGUl1/d2U0xCJ1kmMlXsiTxClnPrGiAj3Lkn6hSz/WkVrd9tC5n7Rnb057zyWeGyP5rGY4NywCQDbJb74dynvJCawRJph47tSS8iYvVE032vlXiONektXskjhdcHDH12T59QBCryAxH8ir1SKw71dq/D1jpExouP4vtdnSzVuo2xZ8DdCqi6xYFjWKSqYhDLh0MSrIwH8EHX/MZGotrcrAoOtQ5DUFm+qikvA9apPug==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=UMVtfXJ0Dlf1aeg6H3yWSnihQ4t5SMLU/QgHB0zb7ck=;
- b=S6Fz6keQf5E0opDFJMYEhENicsCneTyybXJ1GOEK1uxg7ly+R1A2kjYp0OnChPgvZ/uz/yTH54QTdWtxKyTbkOEgpxKRyTRG6pg4LoYYVn4H/wJV0TVJdF9ZUyv2Da2lBHYlD+oN8y3Eo3xKnDjLXU0gjIJgxnCzMNN4PAwa1bNWH0a9JYpQPl1QUoxcB1hYZphE0s0hlhwBgx0eZ0nWaBEIPjLSWrtf90vW8TW1N+il2YJNVfNxdFNHuNm3J2KcGCA0x6mBAR9c4Z3AO45RGm/wY+34pVT7ZZtvtbVWAuieClGDhCZVXWkwn4H8dOu44h5BxxGxkIlLGMKH+KF2Hw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=UMVtfXJ0Dlf1aeg6H3yWSnihQ4t5SMLU/QgHB0zb7ck=;
- b=Uvjy3kI3HCvKUBRxkTrda0PMQcmaNXjbcx7+e6YorIPPZaZRvlSxMKmvKh+GycNmbnQTFaaCMa7WrWX6Lbia1dsOp1Oiuwz3fPdlvsNswXHNacxq0VOfKQ+8TbWk9G7y6tCRmOcS2KXU3MvggPSlQRkyIQ6/WZGD6gCpJnbZtNg=
-Received: from SN6PR10MB3022.namprd10.prod.outlook.com (2603:10b6:805:d8::25)
- by DM6PR10MB3081.namprd10.prod.outlook.com (2603:10b6:5:62::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.17; Wed, 4 May
- 2022 00:26:26 +0000
-Received: from SN6PR10MB3022.namprd10.prod.outlook.com
- ([fe80::318c:d02:2280:c2c]) by SN6PR10MB3022.namprd10.prod.outlook.com
- ([fe80::318c:d02:2280:c2c%7]) with mapi id 15.20.5206.024; Wed, 4 May 2022
- 00:26:26 +0000
-From:   Liam Howlett <liam.howlett@oracle.com>
-To:     "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: [PATCH 1/1] mips: rename mt_init to mips_mt_init
-Thread-Topic: [PATCH 1/1] mips: rename mt_init to mips_mt_init
-Thread-Index: AQHYX02XagZmmFBYlUCIETC2LE4BNg==
-Date:   Wed, 4 May 2022 00:26:26 +0000
-Message-ID: <20220504002554.654642-2-Liam.Howlett@oracle.com>
-References: <20220504002554.654642-1-Liam.Howlett@oracle.com>
-In-Reply-To: <20220504002554.654642-1-Liam.Howlett@oracle.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: git-send-email 2.35.1
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: d3a02a32-211c-4c8a-7bb1-08da2d64ba04
-x-ms-traffictypediagnostic: DM6PR10MB3081:EE_
-x-microsoft-antispam-prvs: <DM6PR10MB30813004BB63EFBD66BB59CBFDC39@DM6PR10MB3081.namprd10.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: B7Vjii1t59xNddnDJ3W8hufJR1VOq6BiB+uVKC0ukOmVL9eZ1ePl826ADPMoA6lXg2phMT7c0OARM0yO8fdI/SzOl8ZuAOnxjwB/WFoy/PDZYtpASmv32/x5JpzSy6wqha2kGuwZJejfm+yio1yxW0hdKEYTHLQWZcI8Gxpsju96oEvoe9EgSFjC1Recj5S1G9x4InaK2A+Oe1FU86tcCqOn+LKC+B22xdQqP0VFDXFUuYDJJBYS6FJwgGp6XttKmbWVY0VQQTFgD2LsC3jPaoru60uLCOEs8ThVy7s/AFeVHJR3NrcPt80Des8Ryy6D4cLA/lVhJlrOgXC0+Qq5unVRrNdhirz7T4T658pNG8vuk/ibnJT+RpKHZBY5RkPTZr2tSIj0dBQKtp00wCotnFsux9rFeScti1eDcB00OetbwuQarl/zko00SpHgmq409aHJOCDvsSdZ8iVvYuB4kr0ZPHKCJACUmG34ZzRyi6f0Mm8Goh1icZtCnu7moRAR/e1cBBT5i6BiHrpjxvGDX3YkRvhWO7/Stt50AF+Pv7EPkFLTa6FVESIOZBVwnP2k7etsTAfFNike2CyCuapD5ZNV3xvgsdqMLQ/DHBLFRgYSyZ8aVW5FGLsNsNgQnAuTH5eGOOIZitpUirmgLZPv6vU7gVLQ/5y76yBfppIgaFLP8DuFf+BOnTq3G2a/1rl/KAAiAc0FiztKXx5I0UMUvg==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR10MB3022.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(36756003)(6486002)(83380400001)(508600001)(66446008)(66946007)(66556008)(66476007)(8676002)(110136005)(71200400001)(76116006)(8936002)(44832011)(4744005)(316002)(5660300002)(64756008)(2616005)(186003)(1076003)(26005)(6512007)(6506007)(2906002)(86362001)(38070700005)(122000001)(38100700002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?tnliE9osGAhUlcNvX27XbbngsY5utv3vCqlkNPAjtl/+ywZ4X+YYYj2U64?=
- =?iso-8859-1?Q?BBI+nAAdqJSLwMXfklIWI5AVQ6z6HFdwPkDV5wBO7I31cMKpEbGyJt9c7E?=
- =?iso-8859-1?Q?0SRBEIpbery52FPwQfvaskdE6YBKHRVRMyVFHw5wAak1l/LotqVeTw1CW0?=
- =?iso-8859-1?Q?l1GTQ3S9630Z5v4hDQ7MG3femuA/nRpMKM/7PKF6FQEu2zDT2rwFQEqLxg?=
- =?iso-8859-1?Q?B/qDshbJpa3+/a8t72CITSVqdxDQPr+Voa6oZ/kkIwzOQiucemACXO1UsG?=
- =?iso-8859-1?Q?v4idQ+4iP++9dW22S9nPFiNw19z6zuWbEcAB4brJ+ZphhkB7djD/Mb+sVl?=
- =?iso-8859-1?Q?C0jswKcMJ+F1kajy02yVD35BJteg+rWXFtKYEGcj0E460DHRy43S5laB6H?=
- =?iso-8859-1?Q?+RzfhYZlouTCMC/nWG0FgMeBs0BCjJ51jgdh8U8QeQyjRDeav1Bih5g6y0?=
- =?iso-8859-1?Q?28QsjhxTmTjS/gVtuY8ZG0JcJInrvRlzzCv5vC+aMTmhW4+PUNj7LYAE/3?=
- =?iso-8859-1?Q?aLN8Guxr2JfYC/H9Z9S/JrmvV7dxyfIpNSd7/10pDU8q3Wvdg+hYHifslq?=
- =?iso-8859-1?Q?Vk6VbXUMYDGfYXC88KkGcFzbAGGlbq/cWv9Ry4COq30UC0NyFD7tRt8g4l?=
- =?iso-8859-1?Q?gQgLZYDSGZxpi0kNigECJXsN/f+IRYSbt8QKLdrgQIJ7M0oXNqg0n+W7VC?=
- =?iso-8859-1?Q?6OfX4KBKD41njnPEFoTog16Gs1GiZ8HHPQwUXEF7LBtzJLKhsplkTc/fqn?=
- =?iso-8859-1?Q?7C2+rwNzD+XCjuz4rlkJ7hockqa5SmKk6FsqbKccKPiuqUOpdLo518CJ8j?=
- =?iso-8859-1?Q?3tX+JIH4CZDPs13wiFUGfMxunzALNrrtjvwBvYBJCk+2jtYk85LrlKgAl9?=
- =?iso-8859-1?Q?g7DEOIZybvOf6wmmh2TAlMQHBguHjMvSq+lgGx8bbUwbfw5r9AeE8pMj28?=
- =?iso-8859-1?Q?Vlhe8gVaOcotGI4VfSI4+H3mN6gzH1ZqGzv9CAqKtCNg5IYRRCl9eHZUg/?=
- =?iso-8859-1?Q?mhYzF5uHCf/pHYXEeMFhgO2deRTsUYC7RNC2kXJxpyrNtNZZOCe1HYGg6T?=
- =?iso-8859-1?Q?WSu75kf9PM9m2golmiF4UqLvJoyO6NQYPgttMShdXqlm+SDbokeuM0ioDa?=
- =?iso-8859-1?Q?JQpICigNjGPriRiqBIh1O7MDhAYy7huJv7IULIpPBARH2+yqPl1dn1MYJq?=
- =?iso-8859-1?Q?VaxbO0KRwtymrxWPR/nmubH2vxqkGh+PeEX1eEn9TFIsbK6judnYImxqdH?=
- =?iso-8859-1?Q?B/A9HPGKX26IOkRu1vfFdpGq2XRxdqAINBvTQ3IuSpd4RnwREhepXZ8NVd?=
- =?iso-8859-1?Q?FCBCSqef8PR97HqAEPFTfHKnw5Lue/5XvShIfwaE6OIogwDZsvRehpM6/U?=
- =?iso-8859-1?Q?uGAZ8LZjLj4ejaQ7V2FDFNpJJpOoe8IWEPpN7Ij9pcsNQQEWcZVU/Cn61r?=
- =?iso-8859-1?Q?0Xw8Cju7OPZOWfn/d3mgxk13bLO4OWLxu8IUvUl0Yvmn3xMjSqRCXT0ugB?=
- =?iso-8859-1?Q?VXEwyqXSa6ETcuNJYrf6qtGXKBpKe9KnoEKwbrymzO6IydLJRJz84rpGYE?=
- =?iso-8859-1?Q?0hHx27LvXXsi+b1cGqR6yGLpJWHZXpt1do+Ziy9b0PsiBxr4zOWXH43WP0?=
- =?iso-8859-1?Q?qpwUFZiIfP5gE8yVrYqgBllWwkDdDJ3fs5g8Y7pc7ugaXuRMEBxqFnKnVX?=
- =?iso-8859-1?Q?0PkPOo3dh7q7ngzCereURKq0EBWVDrgqlZ2G3L5MX/3SJIaY1gTcyWbNNy?=
- =?iso-8859-1?Q?rNc+99RjIUtJRwucKEqNyOtJc85/yMGszMu7aH/mnD0IthedBGmyK4+AoC?=
- =?iso-8859-1?Q?8XyyVK/L0+vqnlxwVinMBb+Ws5LnISM=3D?=
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+        Tue, 3 May 2022 20:37:05 -0400
+Received: from mail-oi1-f174.google.com (mail-oi1-f174.google.com [209.85.167.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD9B71AF03;
+        Tue,  3 May 2022 17:33:31 -0700 (PDT)
+Received: by mail-oi1-f174.google.com with SMTP id a10so19864413oif.9;
+        Tue, 03 May 2022 17:33:31 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=+69jK9IPHtq7eTQpuH4u7DsenSPiOVy1Fxyon9TR9q0=;
+        b=vhsnB7Eu8YLo8GpNYxcBFEh5lQCusz56zGQUCJ1cBvW3tnSXfBRw64jt+49UQA43w1
+         QTCxtK/Q/YZVbYN8l7+/kjP4/Rqh8tbBj+MUz1jq6dshS7zilWmmh8R5/uDviq5Ez0RQ
+         xXHXmJCCBWgP1ZN1CwAFsDLGBAqOh0okp1N1WLQI4QXZh9P9mtHy6BXR9bqhBev8U3V3
+         Hq7XFcTCCQShz6AoHoIY2qFbbiJsssi/gmKM6AuuhX3r0SicyjUVMqNLVVLdsQcqNQoh
+         AyIz004xFtFLU31I9kWFd0u/HsMzqLv9et6U4aFCYI0sq/1LAcgV7w+ZsvVZvSVJQ9/f
+         H5IA==
+X-Gm-Message-State: AOAM530HFwGvcROKT54XTO90P5Y901T/rxW5Hz45o3AcNmSoVEKS+tJj
+        yEqT3Rh7E5jPT4wqb2E8tw==
+X-Google-Smtp-Source: ABdhPJy9hwsgHM6RNU9r1FLK8J2cCGc+iKNimAULdRWWFDNux+5LRT3N6BpBMEvwZ0ZU5BfGCMl4Xg==
+X-Received: by 2002:a05:6808:118f:b0:2d9:a01a:48be with SMTP id j15-20020a056808118f00b002d9a01a48bemr2854191oil.265.1651624411016;
+        Tue, 03 May 2022 17:33:31 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id p6-20020aca4206000000b00325cda1ffbbsm3769396oia.58.2022.05.03.17.33.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 May 2022 17:33:30 -0700 (PDT)
+Received: (nullmailer pid 319775 invoked by uid 1000);
+        Wed, 04 May 2022 00:33:29 -0000
+Date:   Tue, 3 May 2022 19:33:29 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Hector Martin <marcan@marcan.st>
+Cc:     Marc Zyngier <maz@kernel.org>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Sven Peter <sven@svenpeter.dev>,
+        PCI <linux-pci@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 3/3] PCI: apple: Add support for optional PWREN GPIO
+Message-ID: <YnHJ2ZKd2CqhNWrX@robh.at.kernel.org>
+References: <20220502093832.32778-1-marcan@marcan.st>
+ <20220502093832.32778-4-marcan@marcan.st>
+ <CAL_Jsq+_cWZUXtJVXC_cwhmADj0NQc95v1sqgFioMsfEX6OqGg@mail.gmail.com>
+ <0ccc44cd-21aa-3670-24b3-4ee051dd3c12@marcan.st>
+ <2615501d-7569-41cb-7039-46e690689f1f@marcan.st>
 MIME-Version: 1.0
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SN6PR10MB3022.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d3a02a32-211c-4c8a-7bb1-08da2d64ba04
-X-MS-Exchange-CrossTenant-originalarrivaltime: 04 May 2022 00:26:26.6869
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: +270mVuxwDk1myJ65J+9h9wSRCN3X5Rc8qZoPGLk+4454GzN18qHrlvGKQW83LagGXFJdWz1QWQA03Vi8+/xGQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR10MB3081
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.486,18.0.858
- definitions=2022-05-03_10:2022-05-02,2022-05-03 signatures=0
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 bulkscore=0 spamscore=0
- malwarescore=0 adultscore=0 suspectscore=0 mlxscore=0 mlxlogscore=999
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
- definitions=main-2205040000
-X-Proofpoint-ORIG-GUID: UuztD96C5fF1AlTU4I8ecxDUOKQ6VHOU
-X-Proofpoint-GUID: UuztD96C5fF1AlTU4I8ecxDUOKQ6VHOU
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2615501d-7569-41cb-7039-46e690689f1f@marcan.st>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Liam R. Howlett" <Liam.Howlett@Oracle.com>
+On Tue, May 03, 2022 at 12:20:48PM +0900, Hector Martin wrote:
+> On 03/05/2022 00.32, Hector Martin wrote:
+> > On 03/05/2022 00.14, Rob Herring wrote:
+> >> On Mon, May 2, 2022 at 4:39 AM Hector Martin <marcan@marcan.st> wrote:
+> >>>
+> >>> WiFi and SD card devices on M1 Macs have a separate power enable GPIO.
+> >>> Add support for this to the PCIe controller. This is modeled after how
+> >>> pcie-fu740 does it.
+> >>
+> >> It did, but it's not ideal really. The problem is the GPIO is really
+> >> associated with the device (WiFi/SD) rather than the PCI host and
+> >> therefore should be part of a WiFi or SD node. You probably don't have
+> >> one (yet), but I would suspect that SD will need one for all the
+> >> standard MMC/SD DT properties. The secondary issue is we'll end up
+> >> adding more power sequencing properties to control ordering and timing
+> >> for different devices. The exception here is standard PCI slot
+> >> properties like perst#, clkreq, and standard voltage rails can go in
+> >> the host bridge (and for new bindings, those should really be in the
+> >> root port node). For a complicated example, see Hikey960 or 970.
+> >>
+> >> Of course with power control related properties there's a chicken or
+> >> egg issue that the PCI device is not discoverable until the device is
+> >> powered on. This issue comes up over and over with various hacky
+> >> solutions in the bindings. The PCI subsystem needs to solve this. My
+> >> suggestion is that if the firmware says there is a device on the bus
+> >> and it wasn't probed, then we should force probing (or add a pre-probe
+> >> hook for drivers). That is what MDIO bus does for example.
+> >>
+> > 
+> > I agree with the premise. Right now macOS does not actually power down
+> > these devices as far as I know (except maybe sleep mode? not sure what
+> > goes on then yet), but I think the hardware actually has an SD card
+> > detect GPIO hookup that would allow us to entirely power down the SD
+> > controller when no card is inserted. That would obviously be ideal.
+> > 
+> > FWIW, we do have the device nodes downstream [1]. I did in fact have to
+> > add the SD one for the CD/WP inversion flags (and had to add driver
+> > support for that too).
+> > 
+> > That said, as for how to make this happen in the PCI subsystem
+> > properly... I think I'll defer to the maintainers' opinion there before
+> > trying to hack something up ;)
+> > 
+> > Meanwhile, I guess I better get PCIe hotplug working, since doing it in
+> > the driver isn't going to work without that first...
+> > 
+> > [1]
+> > https://github.com/AsahiLinux/linux/blob/bits/000-devicetree/arch/arm64/boot/dts/apple/t600x-j314-j316.dtsi#L222
+> 
+> Thinking about this some more, I think it still makes sense to have the
+> power enable GPIO in the PCI root port node. A generic power enable GPIO
+> still makes sense there (think "slot power"). The PCI core could handle
+> it properly by default, including turning it on prior to initial probing
+> and shutting it down when the device should go into whatever the PCI
+> core's idea of D3cold is. AIUI this already happens on some platforms
+> via firmware, right? Since D3cold is supposed to be a state where the
+> device receives no power after all.
 
-Move mt_init out of the way for the maple tree.  Use mips_mt prefix to
-match the rest of the functions in the file.
+We have put slot stuff in the bridge node. That's because PCI child 
+nodes already have a definition and we didn't define slot nodes up 
+front. We often have started without a slot/connector and then 
+retrofitted nodes in.
 
-Signed-off-by: Liam R. Howlett <Liam.Howlett@oracle.com>
----
- arch/mips/kernel/mips-mt.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+I can think of lots of ways to implement 'slot power' with a single GPIO 
+being just one way. If it's not defined by PCIe specs or defacto 
+standards then I don't think we want to try to do something generic.
 
-diff --git a/arch/mips/kernel/mips-mt.c b/arch/mips/kernel/mips-mt.c
-index d5f7362e8c24..dc023a979803 100644
---- a/arch/mips/kernel/mips-mt.c
-+++ b/arch/mips/kernel/mips-mt.c
-@@ -230,7 +230,7 @@ void mips_mt_set_cpuoptions(void)
-=20
- struct class *mt_class;
-=20
--static int __init mt_init(void)
-+static int __init mips_mt_init(void)
- {
- 	struct class *mtc;
-=20
-@@ -243,4 +243,4 @@ static int __init mt_init(void)
- 	return 0;
- }
-=20
--subsys_initcall(mt_init);
-+subsys_initcall(mips_mt_init);
---=20
-2.35.1
+The other way to model power gpios is as a GPIO regulator. We probably 
+already have PCI examples doing that.
+
+> Obviously this can't handle funky power sequencing requirements, but we
+> don't have any of those here and we don't know if we ever will (at least
+> Apple seems to be a fan of throwing little CPLDs on their boards for
+> fine grained power sequencing, driven by a single IO). If we do, then
+> that would be the time to have GPIOs in the device node.
+> 
+> In addition, sometimes a single power enable is shared between multiple
+> functions of one device. This is the case with WiFi/BT, which is a combo
+> chip with two functions. Coordinating GPIO usage between both drivers
+> would be problematic if they both try to own it.
+
+A GPIO regulator solves this problem as it is reference counted.
+
+> The individual device drivers still need to have some kind of API to be
+> able to put devices into a low-power state. For example, the WiFi driver
+> could outright power down the device when it is wholly unused and the
+> interface is down (same for BT, and the PCI core should only put the
+> slot GPIO into powerdown if both functions say they should be off).
+> Similarly, the SD driver needs to support an external SD detect GPIO,
+> and have a mode where it tells the PCI core to shut down the device when
+> no SD is inserted, and power it back up on insertion. This all allows
+> the devices to behave a users might expect, with the device nodes
+> existing and the PCI devices "visible" even when they are powered down
+> behind the scenes, until they are needed. AIUI this is already how e.g.
+> hybrid graphics power management works, where power is outright yanked
+> from the secondary card when it is not needed even though it is still
+> visible from the userspace point of view (and it is automatically
+> powered and reinitialized on use).
+
+Can it detect a card insertion when powered down?
+
+I think a GPIO regulator solves all this as long as card detect still 
+works.
+
+> I'm not super familiar with PCI device power states (making brcmfmac
+> sleep work properly on these platforms is on my TODO list...) so I'd
+> love to get some feedback from the PCI folks on what they think about
+> this whole issue.
+
+I'm not either. I know there's some backlog of work to rework PCI power 
+management to be more inline with how the rest of kernel drivers work.
+ 
+Isn't D3cold an ACPI thing, not PCI?
+
+Rob

@@ -2,74 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4598D51AFAB
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 22:48:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84BC051AFB5
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 22:48:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378335AbiEDUvv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 16:51:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39114 "EHLO
+        id S1378346AbiEDUwP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 16:52:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238964AbiEDUvt (ORCPT
+        with ESMTP id S235304AbiEDUwL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 16:51:49 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A3214CD6B;
-        Wed,  4 May 2022 13:48:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=tk/LcmTUWVNG5nEkY4lVQG/gc3RdSayOBZ2TCUpRTL8=; b=ApD8MbjkZZSobqnBvKcHlUia9o
-        64LTt/muWOs9fuZ8dgS6Zq87PKcSinTn9vAPJVFLCBUnV8r9D7Jnc+Ls9m1RPMN7MDb++qmzAskKl
-        OjokttisTwYsdjkczTiHjekklL5GALJjszQ8QU/Z9T8M0CS00NnpHwn/auiCYPlXgWqV6feMY5x9g
-        fuYyO8Gq12yxCW26katNTm+nfx18LX+vxbJXWEzzTpxQC+3mMi0sD/7hM8GPGS3pxA5JPKW3E6j34
-        q9itG1vF8V0DCROTBs54WXCM6OHWLSvn+ORK+dtUV5zhZpg3jxxoNIs5Ab8LMMZZwsOpEYwjOzb+0
-        hgqAPa/g==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nmLut-00CfkG-Q2; Wed, 04 May 2022 20:48:11 +0000
-Date:   Wed, 4 May 2022 13:48:11 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Lecopzer Chen <lecopzer.chen@mediatek.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-modules@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        yj.chiang@mediatek.com, atomlin@redhat.com
-Subject: Re: [RESEND PATCH] module: show disallowed symbol name for
- inherit_taint()
-Message-ID: <YnLmi26EBEFJM5aH@bombadil.infradead.org>
-References: <20220427073606.29752-1-lecopzer.chen@mediatek.com>
+        Wed, 4 May 2022 16:52:11 -0400
+Received: from ssl.serverraum.org (ssl.serverraum.org [IPv6:2a01:4f8:151:8464::1:2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61D4E4CD72;
+        Wed,  4 May 2022 13:48:33 -0700 (PDT)
+Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id AEF1D22238;
+        Wed,  4 May 2022 22:48:30 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1651697311;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=MBmoM93KZl6O6Nvu3E3U/9MQsvEY+j8FC370XxC7+FM=;
+        b=D9Cmzjv8WEufanMqx749VJV+6XgkvBDW3jxKYWFUwOutXiv54UcadWuY+aigMeoV2nGCCc
+        GA2+5iYrbmtFg6HenV/cfknQT3g3A7bwMSBoHDz/tElP/H/2YGt9WHur6kUM6j98gN4hvR
+        9yemWHp8WztdjuKcwTv6vwqZUpNr36Y=
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220427073606.29752-1-lecopzer.chen@mediatek.com>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Wed, 04 May 2022 22:48:30 +0200
+From:   Michael Walle <michael@walle.cc>
+To:     Michael Walle <michael@walle.cc>
+Cc:     Codrin Ciubotariu <codrin.ciubotariu@microchip.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] i2c: at91: use dma safe buffers
+In-Reply-To: <YnLgpyvVjcbiCs7m@kunai>
+References: <20220407150828.202513-1-michael@walle.cc>
+ <YnLgpyvVjcbiCs7m@kunai>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <23c66c4077d87ca484c589e1033c26fd@walle.cc>
+X-Sender: michael@walle.cc
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 27, 2022 at 03:36:06PM +0800, Lecopzer Chen wrote:
-> The error log for inherit_taint() doesn't really help to find the
-> symbol which violates GPL rules.
-> 
-> For example,
-> if a module has 300 symbol and includes 50 disallowed symbols,
-> the log only shows the content below and we have no idea what symbol is.
->     AAA: module using GPL-only symbols uses symbols from proprietary module BBB.
-> 
-> It's hard for user who doesn't really know how the symbol was parsing.
-> 
-> This patch add symbol name to tell the offending symbols explicitly.
->     AAA: module using GPL-only symbols uses symbols SSS from proprietary module BBB.
-> 
-> Signed-off-by: Lecopzer Chen <lecopzer.chen@mediatek.com>
+Am 2022-05-04 22:23, schrieb Wolfram Sang:
+> BTW, my name is Wolfram.
 
-Thanks, pushed onto modules-testing. If there are no issues I'll
-eventually push this onto modules-next.
+Sorry :/
 
-  Luis
+-michael

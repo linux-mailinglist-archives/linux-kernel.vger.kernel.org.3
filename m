@@ -2,104 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5033451AD71
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 21:05:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B89E251AD70
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 21:05:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377455AbiEDTJS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 15:09:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35972 "EHLO
+        id S1356044AbiEDTJL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 15:09:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377484AbiEDTI4 (ORCPT
+        with ESMTP id S1356815AbiEDTIr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 15:08:56 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE016DE3;
-        Wed,  4 May 2022 12:05:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C7A33B8282B;
-        Wed,  4 May 2022 19:05:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7A6BC385A5;
-        Wed,  4 May 2022 19:05:12 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="CRGjQoNR"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1651691110;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=IxergFl485EsXY2KxptRvd0tHpmPVRyaJTdUoOrikA0=;
-        b=CRGjQoNRUpEsYavQXvZk051nbB+Z+hM28IoCV9yZxl4KCq5jebxounT6kA8AqSNG3V6tMx
-        D6VP8NroEjouvUCb68yuju53H+hPnkSFxcQVXa73d146I7PpI6icduzs3UMgZiencdkqoG
-        wzLwBHXOqaVomlZjafSWf5AMOS83Ffw=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 93d71f1d (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Wed, 4 May 2022 19:05:10 +0000 (UTC)
-Date:   Wed, 4 May 2022 21:05:01 +0200
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Borislav Petkov <bp@alien8.de>,
-        LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
-        Filipe Manana <fdmanana@suse.com>, linux-crypto@vger.kernel.org
-Subject: Re: [patch 3/3] x86/fpu: Make FPU protection more robust
-Message-ID: <YnLOXZp6WgH7ULVU@zx2c4.com>
-References: <20220501192740.203963477@linutronix.de>
- <20220501193102.704267030@linutronix.de>
- <Ym/sHqKqmLOJubgE@zn.tnic>
- <87k0b4lydr.ffs@tglx>
- <YnDwjjdiSQ5Yml6E@hirez.programming.kicks-ass.net>
- <87fslpjomx.ffs@tglx>
- <YnKh96isoB7jiFrv@zx2c4.com>
- <87czgtjlfq.ffs@tglx>
+        Wed, 4 May 2022 15:08:47 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBA662DAA7
+        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 12:05:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1651691108;
+        bh=4Pe5WsHEIHx7MovZcO6xuY3dg+ajYEFZj5yDXilGQvA=;
+        h=X-UI-Sender-Class:Date:From:To:Subject;
+        b=TfSYIy8xyszJ8O1ZfcYxDpQ1YySE1EAXf3evRd+nkEYr93iiks5zkD+6lc327U/l4
+         HJmEzokDBUMUniH46QLpByNAT2PQ1DMqnC+p8nCN43HrGNNQjP8lXmsgA5kGEOKSkK
+         UAYkB+StoiYnQaPmJFFwgfiqqKpfao8LxP/7+HC8=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.100.20] ([46.142.34.193]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MmlTC-1oDAKg0WwQ-00jre2 for
+ <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 21:05:08 +0200
+Message-ID: <e7c0f742-522b-7e54-db4f-764c72011a86@gmx.de>
+Date:   Wed, 4 May 2022 21:05:07 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <87czgtjlfq.ffs@tglx>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+From:   Ronald Warsow <rwarsow@gmx.de>
+To:     linux-kernel@vger.kernel.org
+Content-Language: de-DE
+Subject: RE: [PATCH 5.17 000/225] 5.17.6-rc1 review
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Provags-ID: V03:K1:GxjLZu+UBxUK+BDuwlB1yujwrpCqhj4rE+uE0AmDVRO976Yl0kd
+ ou0+Col9I3qUHBkyD8DimHET2ydk66CjAipl1ACcJSeZ5XymcEOtjAwgS0uL2a7+E1YsLRU
+ FL3eXK3aADQKLWfz7Ja+wbIYA+VBhpPAtaxMTfwb2ZPHrmDsckxYJQ0lLpo0hIQY7J+uYw+
+ qFsgBbWl5ASl8Suw4H7Vg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:sU6SUE+GEOU=:QI3TYtEqdZktPydAffsjZL
+ 9a/vYle6XkeFg1vXg/0Y1PdN26G0ba6ItQKGoZG64UMT+VWOiY6gVDtj+L+Qmr13L3cXYwg4s
+ 9TwmbjCpplMnz2kvQivDDrBF2AJVuIGADvjO8sy5/0qxxqywJqMvJIH63sU42Qu+YDqWn30R9
+ qIv2ZnR7J9+ZHmw1cayV/0I2nDwGpIIKN61wlxBCc9w4AQVc0a4TtSDhU2SbXVKzWXP3GBOxz
+ nUy7fWA/PDAF9WOjiVJhLGK85z0sU4iiGnC3deMxGcct1yA7+qI5ZDoWXIoUjKpiPx3PNiq98
+ 74Rq5FH/rtolhxW2yEk+Lqe2fdWMwpPABLejvHVBnfi8JgkoR5briWKQULmti+uzGC1UFCT4t
+ fxr38KSoYO2dE6PYZI1xrH07mSxEHMJRsJRmTzjMTXcFI8aDnKhaNKXA6pvG1++GfLTztBdPk
+ apL9eIkSkpMSXS8Zq5mLQrhb1xFXHxBM7S3JzW229cQsjU6pbb0tIFyyJw6nFmDk43MOl6UCd
+ MLN1mpnNiJNLNayR28TW0BqScdkPQfydMAjpi71ATrqZc1d99IKSFqW96z7KnOn2+AxFFo5MJ
+ ocTz81MGzgSep2Y7IY79PJI18oHRceninW4jcr42arKiGzP7Nk6o174/chR0HvB/AZNfYYoqv
+ gZ5Mtg+Vz11Kqg56N43cGuCoC8saAV32E5kA6Z6XkthAOUj12x5SJ6Btbse5oWsBfLPNccXq9
+ uA0pnb4U77N9JUd7zJCoixK+HI7OLMDc1bJKHUt2rR/U313Ua1MX2UwJHobQMVtCMDL9bwaYx
+ J6rbhlL7U5k91dxHMfAoajHBhFW3WxcWEDTfEXgaL/51A4QhBsH4uf0Dus9/Z4eH7U4IRZfe9
+ N32UiryOpcnGWA8eiLX2Dc7hVDXhlvBA6Y5emFXsB3e8EhdKtaGUpvhMWaU/H4AKUKDB+cDbB
+ ezQ3FupiV5ybj2hywjRxO9JQpa8QFTBz42M0EiLxESyhxgyzh7UV1i8ZNOPvqw9K/OghXBFXE
+ AOtdfFxHFG/QJkjGCLHgSEtpj2qnVA87eSQYwcjIG635+SrpwAZq1GBCKsMxH+b6FqUV22ht/
+ zQ4Vn6pZUstFi0=
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hey Thomas,
+hallo Greg
 
-On Wed, May 04, 2022 at 06:45:45PM +0200, Thomas Gleixner wrote:
-> add_disk_randomness() on !RT kernels. That's what made me look into this
-> in the first place as it unearthed the long standing FPU protection
-> bug. See the first patch in this thread.
-> 
-> Possibly add_device_randomness() too, but I haven't seen evidence so far.
+5.17.6-rc1
 
-It looks like it's being hit from add_input_randomness() via
-input_handle_event() too. There are two positions we could take toward
-this:
+compiles, boots and runs here on x86_64
+(Intel i5-11400, Fedora 36 Beta)
 
-One stance to take would be that if an event happens in an interrupt,
-add_interrupt_randomness() should in theory already be siphashing in a
-cycle counter so additional calls to add_{input,disk}_randomness() don't
-contribute substantially (unless you assume the num field has some
-entropic value). If that's compelling, then the next thing to do would
-be adding a `if (in_interrupt()) return;` early on in some function, and
-then we forever after impose a rule, "never mix into the input pool
-directly from an irq".
+Thanks
 
-The other stance is that these input/disk events are relatively rare --
-compared to, say, a storm of interrupts from a NIC -- so mixing into the
-input pool from there isn't actually a problem, and we benefit from the
-quasi domain-specific accounting and the superior mixing function,
-there, so keep it around. And the non-raw spinlock on the input pool
-won't negatively affect RT from this context, because all its callers on
-RT should be threaded.
+Tested-by: Ronald Warsow <rwarsow@gmx.de
 
-The second stance seems easier and more conservative from a certain
-perspective -- we don't need to change anything -- so I'm more inclined
-toward it. And given that you've fixed the bug now, it sounds like
-that's fine with you too. But if you're thinking about it differently in
-fact, let me know.
+Ronald
 
-Jason

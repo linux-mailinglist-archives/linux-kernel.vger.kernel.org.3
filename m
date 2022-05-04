@@ -2,110 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8354C51AD94
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 21:12:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6E5B51ADA2
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 21:15:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376260AbiEDTPo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 15:15:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41746 "EHLO
+        id S1355862AbiEDTT0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 15:19:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350503AbiEDTPk (ORCPT
+        with ESMTP id S1377580AbiEDTTC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 15:15:40 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 274C6488AA
-        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 12:12:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651691519;
+        Wed, 4 May 2022 15:19:02 -0400
+Received: from mx.cjr.nz (mx.cjr.nz [51.158.111.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 926B8E00;
+        Wed,  4 May 2022 12:15:14 -0700 (PDT)
+Received: from authenticated-user (mx.cjr.nz [51.158.111.142])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: pc)
+        by mx.cjr.nz (Postfix) with ESMTPSA id DF7CD7FC20;
+        Wed,  4 May 2022 19:15:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cjr.nz; s=dkim;
+        t=1651691712;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=Hd3MPPhfZEFzLVMyRypDkVk2xJ4qChQYAeQatJK81b8=;
-        b=U1wVnVFGyGRuf1kI2SSHzIjyOaiO2y4wbXnYC/pKvyq0gYTUHcJad91+Rs4z6SO9aD0/Gt
-        xlVcdGTm/OIJ4hiHMd+jBOtvlh0XM5try7DGULkMpx6Mz9VdLJgs0eRglW6O6hXH7iDX21
-        bSx7aAF0bXmI1C6z/iAwhL4MKC4XmLo=
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
- [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-646-uThk9O5tNlG021_ezq5p8w-1; Wed, 04 May 2022 15:11:57 -0400
-X-MC-Unique: uThk9O5tNlG021_ezq5p8w-1
-Received: by mail-ej1-f69.google.com with SMTP id sa1-20020a1709076d0100b006f40d1bfb99so1345626ejc.19
-        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 12:11:57 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Hd3MPPhfZEFzLVMyRypDkVk2xJ4qChQYAeQatJK81b8=;
-        b=Uk7YLAbDBHzzgK/gr0td2HFZ9E/2OClNIKUUZPzqI0C7N6kIR3Qxe0xISyYCpsm2OP
-         J3cNrEP5pAfr8rO0TwddrGcYOBzggCvuFP/1pNduv7TU7Fj/9TwY6dudZD9dqr3VNqac
-         y7il/2gBBcUcdMp3iQY8lYB9jEiJwsNctYwX2ViGazpVPTx5wW3twInvrRxCT1Ddj0XN
-         lhIk4XqHUK232RDjop76bjWgwTCO6BOcyyMqC/21n2j2QtCEuiEkYdWFypcxTFOnnJ71
-         kW5UOAn5UQq/wvAxSy2/noesF2o/eS8Dlrm7+QdWsFwon0INppkNdzoZt5ncuTA/UnwG
-         wqaw==
-X-Gm-Message-State: AOAM531ZWljomI1wlWE+sYyA/4fUZAcIPqcsWpnmwgCTcFq6OHAraS0L
-        4Yh5O6WOTe2IkAYNrFUbbwVQ8LeFh/uPrreVByvytJCo5//aYZH9CWOnwd9AyQmAwcFEZ9WUglw
-        zrp2CTQMPJ5YZqO7HWwoGCfZp
-X-Received: by 2002:a17:907:728d:b0:6f4:5a83:a616 with SMTP id dt13-20020a170907728d00b006f45a83a616mr14064181ejc.297.1651691516001;
-        Wed, 04 May 2022 12:11:56 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyg0JsD7iu2Y23r3GnlIcchSoad40wOMbWKHRukO45v+eQMegv9BK4IGGRz74EZIhhUiWnzCg==
-X-Received: by 2002:a17:907:728d:b0:6f4:5a83:a616 with SMTP id dt13-20020a170907728d00b006f45a83a616mr14064160ejc.297.1651691515824;
-        Wed, 04 May 2022 12:11:55 -0700 (PDT)
-Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
-        by smtp.googlemail.com with ESMTPSA id qz24-20020a170907681800b006f4c82c2b12sm930211ejc.19.2022.05.04.12.11.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 04 May 2022 12:11:55 -0700 (PDT)
-Message-ID: <0ba0b879-cc46-1f60-539a-5bb7e407c01f@redhat.com>
-Date:   Wed, 4 May 2022 21:11:52 +0200
+        bh=BaJ2h06KXXGcmCiOujWVj9YsqY+gCox03xbwF+J59pk=;
+        b=aFCYhP+cswBxx9JoRDFisVOh3HsxN4wUo/VKuW+Yng7YEN+XsdcgLKTmNIBO2zieKZbcbC
+        mt0kau+5Iaq75X02EZvR6vd9chC4qLhNoKXDYUyOGxwMGDVE/ttee8Z5fOHcQrUFoYOUyk
+        Ni5Tof75kkDkYAGdh4NmK0VxSy9w7stDWFugwsldDy0+WZZPJ1Q34LLxiISn45AlkzwLh6
+        dWFyXLllJGvufmPuaaj0GSHLzPt4y2vyii3BPkzt0BroBBOifDZ97odTm0JYe6jhPAu69E
+        jbK8uFIqVQHjPx4DxVsyBj90LusObpkihxl9qpKI98CbKtT12A1wi1yiwlZo3w==
+From:   Paulo Alcantara <pc@cjr.nz>
+To:     Steven French <sfrench@samba.org>,
+        Byron Stanoszek <gandalf@winds.org>,
+        Tom Talpey <tom@talpey.com>
+Cc:     linux-cifs@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: CIFS regression mounting vers=1.0 NTLMSSP when hostname is too
+ long
+In-Reply-To: <7dc6c729-73cd-74be-eec7-ac4a0013f60f@samba.org>
+References: <e6837098-15d9-acb6-7e34-1923cf8c6fe1@winds.org>
+ <878rri2i6o.fsf@cjr.nz> <7dc6c729-73cd-74be-eec7-ac4a0013f60f@samba.org>
+Date:   Wed, 04 May 2022 16:15:07 -0300
+Message-ID: <87tua51550.fsf@cjr.nz>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH] KVM: x86/mmu: Do not create SPTEs for GFNs that exceed
- host.MAXPHYADDR
-Content-Language: en-US
-To:     Maxim Levitsky <mlevitsk@redhat.com>,
-        Sean Christopherson <seanjc@google.com>
-Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Ben Gardon <bgardon@google.com>,
-        David Matlack <dmatlack@google.com>
-References: <Ymv5TR76RNvFBQhz@google.com>
- <e5864cb4-cce8-bd32-04b0-ecb60c058d0b@redhat.com>
- <YmwL87h6klEC4UKV@google.com>
- <ac2001e66957edc8a3af2413b78478c15898f86c.camel@redhat.com>
- <f3ffad3aa8476156f369ff1d4c33f3e127b47d0c.camel@redhat.com>
- <82d1a5364f1cc479da3762b046d22f136db167e3.camel@redhat.com>
- <af15fd31f73e8a956da50db6104e690f9d308dad.camel@redhat.com>
- <YnAMKtfAeoydHr3x@google.com>
- <e11c21e99e7c4ac758b4417e0ae66d3a2f1fe663.camel@redhat.com>
- <cbd4709bb499874c60986083489e17c93b48d003.camel@redhat.com>
- <YnGQyE60lHD7wusA@google.com>
- <42e9431ec2c716f1066fc282ebd97a7a24cbac72.camel@redhat.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <42e9431ec2c716f1066fc282ebd97a7a24cbac72.camel@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/4/22 14:08, Maxim Levitsky wrote:
-> Nope, still reproduces.
-> 
-> I'll think on how to trace this, maybe that will give me some ideas.
-> Anything useful to dump from the mmu pages that are still not freed at that point?
+Hi Steve,
 
-Perhaps you can dump the gpa and TSC of the allocation, and also print 
-the TSC right before destroy_workqueue?
+Steven French <sfrench@samba.org> writes:
 
-Paolo
+> makes sense - do you see anything related in the NTLMSSP doc?
 
+I'll quote some relevant parts from MS-NLMP which make sense to me:
+
+	3.1.5.1.2 Client Receives a CHALLENGE_MESSAGE from the Server
+	...
+	If the NTLMSSP_NEGOTIATE_VERSION flag is set by the client application,
+	the Version field MUST be set to the current version (section 2.2.2.10),
+	and the Workstation field MUST be set to NbMachineName.
+	
+	3.2.1.1 Variables Internal to the Protocol
+	...
+	NbMachineName: A string that indicates the NetBIOS machine name of the
+	server.
+	
+	2.2.2.1 AV_PAIR
+	...
+	MsvAvNbComputerName: The server's NetBIOS computer name. The name MUST
+	be in Unicode, and is not null-terminated. This type of information MUST
+	be present in the AV_pair list.
+
+and indeed we set NTLMSSP_NEGOTIATE_VERSION in
+fs/cifs/sess.c:build_ntlmssp_smb3_negotiate_blob().
+
+Unless I didn't miss anything obvious, I think we should be sending
+NetBIOS name or simply truncate utsname()->nodename to 16 bytes as
+previously proposed by Byron regardless what protocol version is being
+used.
+
+Tom, what is your opinion on that?

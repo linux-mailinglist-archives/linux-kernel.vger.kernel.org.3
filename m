@@ -2,137 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 225695197A0
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 08:51:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6968C5197A2
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 08:52:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345101AbiEDGzX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 02:55:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53344 "EHLO
+        id S245487AbiEDG4I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 02:56:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345108AbiEDGzT (ORCPT
+        with ESMTP id S1345171AbiEDG4E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 02:55:19 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2435220BC7
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 23:51:44 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id m20so1042796ejj.10
-        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 23:51:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=IjvhY+zx5+cDpT9+ShvD2wIBZoNgfMhne2yk1qc9gqc=;
-        b=eic7UFuqSIPHIgZ3jSbVJ+u7i6PpSPVY7e3+WBdyR38qmzv+FWuisIiMkWe2KpzS4R
-         UnwvMe2voQGKKSuW8ZMI5JMcJuI3KmJ8A1rPmi9AAtCmgjaT0GP0zo5gAqixMJ8VDV0A
-         ZWXOYJlyVr6o+MnZZ6r5g2M58A7uEP4AHQtRmLBwEd6U/CAxwh0Rj84HbMsS1dJMUkQe
-         6PXQTqyiXSz90DZ2JHQG9chh1I2MpCxYverENN9RufkpiACPTDTLdX76RjFtceWLbva6
-         Ewux8w8+l0bPoexCeRMh+kTwR6MujG9lElvDL0zkzoJvMFTp3ZomeFypBMZbY7WGWlPH
-         fuBQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=IjvhY+zx5+cDpT9+ShvD2wIBZoNgfMhne2yk1qc9gqc=;
-        b=CRVZyEZv0/sVMi9imKvk4g029v4taLIhhbChmsuBuqjVa0aM7A+cfLoO5QFBbJMmwE
-         9zz+O/VHQWWf2zGFmvfGPYf+QTzKTNP0RrymaiKzjnylUxe///qPv/G1AMPrRPNl9EJQ
-         l/Nv2JUy4y2GANnCdhHOjyA7G/KtLNkrEw9EywB9ECJzoH/9R6WCi2G3wuJ7sSQ5Qpyv
-         R4Of94rMgm8O7Af3gRFCyzZmG3AJ2gYHPidaHETNQySpc/oe1nT+sGIHH5ndEDGeSMDp
-         6nxhT73LVpOi50hJnglhzTwu5BMQxOwr8tEqzCRemShLGM3IHN6VzjlIKwuoVmrkL8Lg
-         HWHw==
-X-Gm-Message-State: AOAM531Dw0F35ZOf3vUbtNsDw8lfj4i0A7TBoOi3+2FgNU4FCKz5jcgG
-        S6lfATdR2mdlCEFe3DhsNsbkXQ==
-X-Google-Smtp-Source: ABdhPJwsbQjpa6yGQ2U7HY/Ae/uny1/EgLYf0Rw+8IrJbKAirCTUtkOfDH52DAkl4hVSuhbxoPgI8w==
-X-Received: by 2002:a17:906:a089:b0:6ef:e9e6:1368 with SMTP id q9-20020a170906a08900b006efe9e61368mr18809029ejy.626.1651647102720;
-        Tue, 03 May 2022 23:51:42 -0700 (PDT)
-Received: from [192.168.0.208] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id el8-20020a170907284800b006f3ef214e0asm5370519ejc.112.2022.05.03.23.51.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 03 May 2022 23:51:42 -0700 (PDT)
-Message-ID: <95aea078-3e85-79c3-79c0-430bd7c0fbae@linaro.org>
-Date:   Wed, 4 May 2022 08:51:41 +0200
+        Wed, 4 May 2022 02:56:04 -0400
+Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2110921244
+        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 23:52:20 -0700 (PDT)
+Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
+        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20220504065214euoutp02fcf35f810fae654b7b73deb0888896ee~r1FGDyJxB1529215292euoutp02j
+        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 06:52:14 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20220504065214euoutp02fcf35f810fae654b7b73deb0888896ee~r1FGDyJxB1529215292euoutp02j
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1651647134;
+        bh=/41Fr4dVW/yKJ7mqPwhKgiCpvp9cjFlMAW/KXfbhKIU=;
+        h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
+        b=VHaa721r793FAjGWukJxMSlnV52l5F03cH1e/UBeuikxdF8XH5LkN6WJ5DSslqh6l
+         4f4A0xC0mrGva/VQhZCoKJK1Z+RA9+Snf3MOrW9EYnew3z9J1lozGsDz5lV2N5FKjA
+         eFFAxZn0NACWuwdx2AYAEc7UiV6QiaO96Xo7NYxM=
+Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
+        20220504065214eucas1p2e451c9d84239955d88f389120c28afd1~r1FFyR28-1104311043eucas1p2f;
+        Wed,  4 May 2022 06:52:14 +0000 (GMT)
+Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
+        eusmges2new.samsung.com (EUCPMTA) with SMTP id 50.06.09887.E9222726; Wed,  4
+        May 2022 07:52:14 +0100 (BST)
+Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
+        20220504065214eucas1p2caed306531082a9d677b4a4a279e4e92~r1FFgLxtv1105111051eucas1p2N;
+        Wed,  4 May 2022 06:52:14 +0000 (GMT)
+Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
+        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20220504065214eusmtrp106195fe16407f8ba3fe987d3d4b9290c~r1FFffxUR3149131491eusmtrp1X;
+        Wed,  4 May 2022 06:52:14 +0000 (GMT)
+X-AuditID: cbfec7f4-45bff7000000269f-91-6272229e2b23
+Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
+        eusmgms1.samsung.com (EUCPMTA) with SMTP id 3B.0C.09522.E9222726; Wed,  4
+        May 2022 07:52:14 +0100 (BST)
+Received: from [106.210.134.192] (unknown [106.210.134.192]) by
+        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20220504065213eusmtip2793e91bcc24acd1c6e86dd5cdb23c1c4~r1FE_Yd6Z3224332243eusmtip2M;
+        Wed,  4 May 2022 06:52:13 +0000 (GMT)
+Message-ID: <3175262f-5d89-1f57-eb27-9df4d9ad8565@samsung.com>
+Date:   Wed, 4 May 2022 08:52:14 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: Aw: Re: Re: [RFC v1] dt-bindings: net: dsa: convert binding for
- mediatek switches
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0)
+        Gecko/20100101 Thunderbird/91.8.0
+Subject: Re: [PATCH printk v5 1/1] printk: extend console_lock for
+ per-console locking
 Content-Language: en-US
-To:     Frank Wunderlich <frank-w@public-files.de>
-Cc:     Greg Ungerer <gerg@kernel.org>,
-        =?UTF-8?Q?Ren=c3=a9_van_Dorst?= <opensource@vdorst.com>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        Frank Wunderlich <linux@fw-web.de>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-References: <20220502153238.85090-1-linux@fw-web.de>
- <d29637f8-87ff-b5f0-9604-89b51a2ba7c1@linaro.org>
- <trinity-cda3b94f-8556-4b83-bc34-d2c215f93bcd-1651587032669@3c-app-gmx-bap25>
- <10770ff5-c9b1-7364-4276-05fa0c393d3b@linaro.org>
- <trinity-213ab6b1-ccff-4429-b76c-623c529f6f73-1651590197578@3c-app-gmx-bap25>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <trinity-213ab6b1-ccff-4429-b76c-623c529f6f73-1651590197578@3c-app-gmx-bap25>
-Content-Type: text/plain; charset=UTF-8
+To:     John Ogness <john.ogness@linutronix.de>,
+        Petr Mladek <pmladek@suse.com>
+Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-amlogic@lists.infradead.org
+From:   Marek Szyprowski <m.szyprowski@samsung.com>
+In-Reply-To: <87pmkton7h.fsf@jogness.linutronix.de>
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrJKsWRmVeSWpSXmKPExsWy7djP87rzlIqSDH5/VbBoXryezWLblfmM
+        Fgtmc1tc3jWHzeL/46+sFvs6HjBZ7N64iM1i86apzA4cHrMbLrJ4tOy7xe7x7tw5do/9c9ew
+        e2xeUu+xfstVFo/Pm+QC2KO4bFJSczLLUov07RK4MpZO+sFacJa74sTnBUwNjNs4uxg5OSQE
+        TCSmNU1l7GLk4hASWMEoce96GzOE84VRYtPlZywQzmdGidWvFjDBtMzsmgDVspxRYuqGXiYI
+        5yOjxP0zO9hBqngF7CQmdX4Cs1kEVCSmLTnNCBEXlDg58wkLiC0qkCQxd989oH0cHMICERJt
+        e0NBwswC4hK3nswHWyYi4C2x6vVedpD5zAJfGSUmT/4PNodNwFCi620XG4jNKWAs0Tr5OiNE
+        s7zE9rdzwH6QEHjDIXGqZwMjxNkuEqdb77FB2MISr45vYYewZSROT+5hATlCQiBf4u8MY4hw
+        hcS112uYIWxriTvnfrGBlDALaEqs36UPEXaUmPKrjx2ik0/ixltBiAv4JCZtm84MEeaV6GgT
+        gqhWk5h1fB3czoMXLjFPYFSahRQms5A8PwvJL7MQ9i5gZFnFKJ5aWpybnlpslJdarlecmFtc
+        mpeul5yfu4kRmJpO/zv+ZQfj8lcf9Q4xMnEwHmKU4GBWEuF1XlqQJMSbklhZlVqUH19UmpNa
+        fIhRmoNFSZw3OXNDopBAemJJanZqakFqEUyWiYNTqoHJgCvvqXH9J1ejtMnFgd5/asKunb9k
+        r8n/c5aXQTZnXAaLzvYFS9ntjEU6gxrnz4w0NU/buYMle247j2nyFEUrjbi50hMWL94psfDh
+        o2LR0qeLEtc8kv3yhS/AzSXg22T/E0cn/1m23vlBwG3/29vVrQpYDE4WdsteWcjEJLS8OYXn
+        zR+nC+vaXpxeNP+V6ZStM7z+3bm5RW3O3a6sAIvbCyMeZDFeO/XBsF8s8d7VNyk6RxqaHyoW
+        60mzfHaL+NrVWvGvaHd0k0zQi2Nz395V3XTrpYKCh9nv5T85Ghfx1r97Vr5xdZ3gtsVGve/d
+        fBYkCCnz71hyK2zq+ZRs6VaR1uY4TuGZjSeDVj+0PtWlxFKckWioxVxUnAgAEoHb+bwDAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrLIsWRmVeSWpSXmKPExsVy+t/xe7rzlIqSDLrvcls0L17PZrHtynxG
+        iwWzuS0u75rDZvH/8VdWi30dD5gsdm9cxGaxedNUZgcOj9kNF1k8WvbdYvd4d+4cu8f+uWvY
+        PTYvqfdYv+Uqi8fnTXIB7FF6NkX5pSWpChn5xSW2StGGFkZ6hpYWekYmlnqGxuaxVkamSvp2
+        NimpOZllqUX6dgl6GUsn/WAtOMtdceLzAqYGxm2cXYycHBICJhIzuyYwdjFycQgJLGWUON7Z
+        xg6RkJE4Oa2BFcIWlvhzrYsNxBYSeM8osWOVEYjNK2AnManzE1g9i4CKxLQlpxkh4oISJ2c+
+        YQGxRQWSJF5sew4U5+AQFoiQeN8LFmYWEJe49WQ+E4gtIuAtser1XnaQG5gFvjJKrP3wDOqg
+        t6wSvy62gA1lEzCU6HoLcQSngLFE6+TrjBCTzCS6tnZB2fIS29/OYZ7AKDQLyR2zkCychaRl
+        FpKWBYwsqxhFUkuLc9Nziw31ihNzi0vz0vWS83M3MQLjcduxn5t3MM579VHvECMTB+MhRgkO
+        ZiURXuelBUlCvCmJlVWpRfnxRaU5qcWHGE2BgTGRWUo0OR+YEPJK4g3NDEwNTcwsDUwtzYyV
+        xHk9CzoShQTSE0tSs1NTC1KLYPqYODilGpjkb0hlNR8rmdsWe26R77eWr+tYS5kDAy/8LZhU
+        oGnYveBOhqfXTcH5Dv5FfMEVV1y6nDfnsLiZf5u9YK+ivccXxv9TN1c3/itQUja4nm4oeqvW
+        acKWO+uTPVy0PuUttejTtZilXsqn9YNPsajwqoyWCbOhw9lJ7o6Hw85cNp8WNrciXMb5z72e
+        p9u+8nLpS1cc96x2PhI5P8ZYvEbZ/twulz3q6w+dFC5dtfrPpvZra3k/31z62TzwybV4ZxUD
+        q09R6grcl79MtpPPcUu9GVe00CVXeb5T4GuNewcjKhc2KG1NmMOv2nw4UGxeO//mTNVmG4Fl
+        TFefpTMt173IEvRAPMFCKev68pRtrw0DlFiKMxINtZiLihMB87Pfg1ADAAA=
+X-CMS-MailID: 20220504065214eucas1p2caed306531082a9d677b4a4a279e4e92
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20220427070833eucas1p27a32ce7c41c0da26f05bd52155f0031c
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20220427070833eucas1p27a32ce7c41c0da26f05bd52155f0031c
+References: <20220421212250.565456-1-john.ogness@linutronix.de>
+        <20220421212250.565456-15-john.ogness@linutronix.de>
+        <878rrs6ft7.fsf@jogness.linutronix.de> <Ymfgis0EAw0Oxoa5@alley>
+        <Ymfwk+X0CHq6ex3s@alley>
+        <CGME20220427070833eucas1p27a32ce7c41c0da26f05bd52155f0031c@eucas1p2.samsung.com>
+        <2a82eae7-a256-f70c-fd82-4e510750906e@samsung.com> <Ymjy3rHRenba7r7R@alley>
+        <b6c1a8ac-c691-a84d-d3a1-f99984d32f06@samsung.com>
+        <87fslyv6y3.fsf@jogness.linutronix.de>
+        <51dfc4a0-f6cf-092f-109f-a04eeb240655@samsung.com>
+        <87k0b6blz2.fsf@jogness.linutronix.de>
+        <32bba8f8-dec7-78aa-f2e5-f62928412eda@samsung.com>
+        <87y1zkkrjy.fsf@jogness.linutronix.de>
+        <601d6979-7462-6f20-0d60-2fcfcf1e405b@samsung.com>
+        <87pmkton7h.fsf@jogness.linutronix.de>
+X-Spam-Status: No, score=-10.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/05/2022 17:03, Frank Wunderlich wrote:
-> 
-> have not posted this version as it was failing in dtbs_check, this was how i tried:
-> 
-> https://github.com/frank-w/BPI-R2-4.14/blob/8f2033eb6fcae273580263c3f0b31f0d48821740/Documentation/devicetree/bindings/net/dsa/mediatek.yaml#L177
+Hi John,
 
-You have mixed up indentation of the second if (and missing -).
+On 04.05.2022 07:56, John Ogness wrote:
+> On 2022-05-03, Marek Szyprowski <m.szyprowski@samsung.com> wrote:
+>>> I suppose if you login via ssh and check /proc/interrupts, then type
+>>> some things over serial, then check /proc/interrupts again, you will
+>>> see there have been no interrupts for the uart. But interrupts for
+>>> other devices are happening. Is this correct?
+>> Right. The counter for ttyAML0 is not increased when lockup happens
+>> and I type something to the uart console.
+> Hmmm. This would imply that the interrupts are disabled fo the UART.
+>
+> Just to be sure that we haven't corrupted something in the driver, if
+> you make the following change, everything works, right?
+>
+> --------- BEGIN PATCH ------
+> diff --git a/kernel/printk/printk.c b/kernel/printk/printk.c
+> index c7973266b176..1eaa323e335c 100644
+> --- a/kernel/printk/printk.c
+> +++ b/kernel/printk/printk.c
+> @@ -3578,7 +3578,7 @@ static int __init printk_activate_kthreads(void)
+>   	struct console *con;
+>   
+>   	console_lock();
+> -	printk_kthreads_available = true;
+> +	//printk_kthreads_available = true;
+>   	for_each_console(con)
+>   		printk_start_kthread(con);
+>   	console_unlock();
+> --------- END PATCH ------
+>
+> The above change will cause the kthreads to not print and instead always
+> fallback to the direct method.
 
-(...)
+With the above change console always works.
 
->>>
->>> basicly this "ports"-property should be required too, right?
->>
->> Previous binding did not enforce it, I think, but it is reasonable to
->> require ports.
-> 
-> basicly it is required in dsa.yaml, so it will be redundant here
-> 
-> https://elixir.bootlin.com/linux/v5.18-rc5/source/Documentation/devicetree/bindings/net/dsa/dsa.yaml#L55
-> 
-> this defines it as pattern "^(ethernet-)?ports$" and should be processed by dsa-core. so maybe changing it to same pattern instead of moving up as normal property?
+Best regards
+-- 
+Marek Szyprowski, PhD
+Samsung R&D Institute Poland
 
-Just keep what is already used in existing DTS.
-
->>> for 33 there seem no constant..all other references to pio node are with numbers too and there seem no binding
->>> header defining the gpio pins (only functions in include/dt-bindings/pinctrl/mt7623-pinfunc.h)
->>
->> ok, then my comment
-> 
-> you mean adding a comment to the example that GPIO-flags/constants should be used instead of magic numbers?
-
-I think something was cut from my reply. I wanted to say:
-"ok, then my comment can be skipped"
-
-But I think your check was not correct. I looked at bpi-r2 DTS (mt7623n)
-and pio controller uses GPIO flags.
-
-Best regards,
-Krzysztof

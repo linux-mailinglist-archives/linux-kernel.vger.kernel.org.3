@@ -2,58 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6FA5519768
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 08:34:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3895A519766
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 08:32:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344971AbiEDGhh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 02:37:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60992 "EHLO
+        id S1344958AbiEDGgB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 02:36:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238996AbiEDGhf (ORCPT
+        with ESMTP id S1344930AbiEDGfx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 02:37:35 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 729D326D5
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 23:34:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651646040; x=1683182040;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=TwHQSjU1r77aWxN/rt0iMIRTOmxL1JDibeYx3vm4ORg=;
-  b=esf6O78eksAhqHEKyogm9tMZjI4U8zuq/2QnlREof0RM+KkXhzEE/emZ
-   xbMtH3MG7BMRKHQuV0ZoEpDf9CP4s5/w8R2m4W3kp8NwTm/a/bGRNDnHA
-   e4jKtFzM6AgLScO/eKkyNBrnvjOEctW9IezfM1TO+aaN4sDPoLt4+/e/E
-   sDOhgAafHWt2vPhKk1+Xu1MBDWcUi6nG5fPqhW3Bk+ZaDMClKoi5IlfJb
-   DAUzV91mbABGC9Kk8X8h3NalwhemnyEY9XFwXXcSXM8aERVV8rNJpRgNQ
-   7lZd1axric0J1u1MKEy9hfL2M49s/JaVokPvKQRu0rWq84m8qkKj34BnJ
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10336"; a="247588003"
-X-IronPort-AV: E=Sophos;i="5.91,197,1647327600"; 
-   d="scan'208";a="247588003"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2022 23:31:54 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,197,1647327600"; 
-   d="scan'208";a="536692166"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 03 May 2022 23:31:53 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nm8YC-000B8d-B8;
-        Wed, 04 May 2022 06:31:52 +0000
-Date:   Wed, 4 May 2022 14:31:06 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [lunn:v5.18-rc4-stacked-bridges 2/2] net/bridge/br_input.c:45:12:
- error: 'struct sk_buff' has no member named 'offload_fwd_mark'
-Message-ID: <202205041457.Jo1Z7eif-lkp@intel.com>
+        Wed, 4 May 2022 02:35:53 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 210AE26D5
+        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 23:32:18 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id l7so1020747ejn.2
+        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 23:32:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=XiGtsn5suJGp364Ut5ARLksbX95MjHeSBk/Ld3aNPvM=;
+        b=tgffE7DIQMbb0Lm82+pVSeeJDjnRZQiPHkxCmhzxOR+i93hkbALu7B+mBcaM7FNY9+
+         5jZYsxbrbSy1LY11HB98ZCkTjxjiHIKIvrTgeZWBs85xODTMNuIMbxradK8zOU7wX6+u
+         MKxdFM/vQ1A4iqRYdDNKB4rKPP16P1mB4SuaCEF2+JipWRTgVRQ6QmATVgIEI2z7X8Xh
+         uwIGbI5/3srkJ3g8t3b3OdDDKHBJBpDQhwTMqgRlffs0Vj6WXuV4L0rTC69t38YlnMZN
+         e17xn4B/858ebq5OX4XduQbGMSr095tRzNxKbOMkEt/6eFqxDl88dG8xnnyoSgHgP+eF
+         vFXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=XiGtsn5suJGp364Ut5ARLksbX95MjHeSBk/Ld3aNPvM=;
+        b=EgL4LpsbL7gxrxLBzQnDJ+YsfeRBGtCv9FeHSN71NHa3m6TfWC9i1G1977je/urQP/
+         meLbYkqMFSSsVMqmXg3BMQJ1CluFnqKaAYKSsyqKExGJQsCGxkWGAzjPmiAemOkZk6cd
+         WIt+6qBAB/5g2YsdpyEAmDjJftY3++T3fYXyvZlXpQldM93fGlTbkjB7eNG1oOXKcmT7
+         92TWcvZyyYzuqFbngxusxv81XYnUArMq0Iz7da2yqhk1e+iMWPanxkYS6D4mIc5/Ngm9
+         O/Gr14YdRhf+MaW8+cmFDOHhVRlIbe0E8KxrKdD4LV1Wi2vVCd+Aqb8AQYI60SPUv6dt
+         BDuw==
+X-Gm-Message-State: AOAM532yU1ilkHqmyk2tuL4msxCz4DFJd7IPei1B/38Ifx1ujeyrWJrK
+        x52OOA+Tn5i0qYqjoyFjhyp0Qg==
+X-Google-Smtp-Source: ABdhPJwP8WWwFvistMPkC2qQxLH44OtID/e9i7s30DIwMGwHZdjsM2Yw6IgfCNrJANUuHATr5IWMVg==
+X-Received: by 2002:a17:907:3e94:b0:6f4:64ad:1e2 with SMTP id hs20-20020a1709073e9400b006f464ad01e2mr10149463ejc.464.1651645936611;
+        Tue, 03 May 2022 23:32:16 -0700 (PDT)
+Received: from [192.168.0.207] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id h20-20020a1709070b1400b006f3ef214db8sm5270851ejl.30.2022.05.03.23.32.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 03 May 2022 23:32:16 -0700 (PDT)
+Message-ID: <6aeef03a-eabb-e6d8-c100-9a74f3506f79@linaro.org>
+Date:   Wed, 4 May 2022 08:32:15 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH net v5 2/2] nfc: nfcmrvl: main: reorder destructive
+ operations in nfcmrvl_nci_unregister_dev to avoid bugs
+Content-Language: en-US
+To:     duoming@zju.edu.cn
+Cc:     linux-kernel@vger.kernel.org, kuba@kernel.org,
+        gregkh@linuxfoundation.org, davem@davemloft.net,
+        edumazet@google.com, pabeni@redhat.com, alexander.deucher@amd.com,
+        akpm@linux-foundation.org, broonie@kernel.org,
+        netdev@vger.kernel.org, linma@zju.edu.cn
+References: <cover.1651194245.git.duoming@zju.edu.cn>
+ <bb2769acc79f42d25d61ed8988c8d240c8585f33.1651194245.git.duoming@zju.edu.cn>
+ <8656d527-94ab-228f-66f1-06e5d533e16a@linaro.org>
+ <73fe1723.69fe.1807498ab4d.Coremail.duoming@zju.edu.cn>
+ <405e3948-7fb2-01de-4c01-29775a21218c@linaro.org>
+ <614ae365.b499.18083a8bb17.Coremail.duoming@zju.edu.cn>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <614ae365.b499.18083a8bb17.Coremail.duoming@zju.edu.cn>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,75 +83,127 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/lunn/linux.git v5.18-rc4-stacked-bridges
-head:   eab6004bc4f6b012db3b6e1fac75f4911662baf5
-commit: eab6004bc4f6b012db3b6e1fac75f4911662baf5 [2/2] net: bridge: Clear offload_fwd_mark when passing frame up bridge interface.
-config: m68k-randconfig-r031-20220501 (https://download.01.org/0day-ci/archive/20220504/202205041457.Jo1Z7eif-lkp@intel.com/config)
-compiler: m68k-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/lunn/linux/commit/eab6004bc4f6b012db3b6e1fac75f4911662baf5
-        git remote add lunn https://github.com/lunn/linux.git
-        git fetch --no-tags lunn v5.18-rc4-stacked-bridges
-        git checkout eab6004bc4f6b012db3b6e1fac75f4911662baf5
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash net/bridge/
+On 02/05/2022 09:25, duoming@zju.edu.cn wrote:
+> 
+> 
+> 
+>> -----原始邮件-----
+>> 发件人: "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>
+>> 发送时间: 2022-05-02 14:34:07 (星期一)
+>> 收件人: duoming@zju.edu.cn
+>> 抄送: linux-kernel@vger.kernel.org, kuba@kernel.org, gregkh@linuxfoundation.org, davem@davemloft.net, edumazet@google.com, pabeni@redhat.com, alexander.deucher@amd.com, akpm@linux-foundation.org, broonie@kernel.org, netdev@vger.kernel.org, linma@zju.edu.cn
+>> 主题: Re: [PATCH net v5 2/2] nfc: nfcmrvl: main: reorder destructive operations in nfcmrvl_nci_unregister_dev to avoid bugs
+>>
+>> On 29/04/2022 11:13, duoming@zju.edu.cn wrote:
+>>> Hello,
+>>>
+>>> On Fri, 29 Apr 2022 09:27:48 +0200 Krzysztof wrote:
+>>>
+>>>>> There are destructive operations such as nfcmrvl_fw_dnld_abort and
+>>>>> gpio_free in nfcmrvl_nci_unregister_dev. The resources such as firmware,
+>>>>> gpio and so on could be destructed while the upper layer functions such as
+>>>>> nfcmrvl_fw_dnld_start and nfcmrvl_nci_recv_frame is executing, which leads
+>>>>> to double-free, use-after-free and null-ptr-deref bugs.
+>>>>>
+>>>>> There are three situations that could lead to double-free bugs.
+>>>>>
+>>>>> The first situation is shown below:
+>>>>>
+>>>>>    (Thread 1)                 |      (Thread 2)
+>>>>> nfcmrvl_fw_dnld_start         |
+>>>>>  ...                          |  nfcmrvl_nci_unregister_dev
+>>>>>  release_firmware()           |   nfcmrvl_fw_dnld_abort
+>>>>>   kfree(fw) //(1)             |    fw_dnld_over
+>>>>>                               |     release_firmware
+>>>>>   ...                         |      kfree(fw) //(2)
+>>>>>                               |     ...
+>>>>>
+>>>>> The second situation is shown below:
+>>>>>
+>>>>>    (Thread 1)                 |      (Thread 2)
+>>>>> nfcmrvl_fw_dnld_start         |
+>>>>>  ...                          |
+>>>>>  mod_timer                    |
+>>>>>  (wait a time)                |
+>>>>>  fw_dnld_timeout              |  nfcmrvl_nci_unregister_dev
+>>>>>    fw_dnld_over               |   nfcmrvl_fw_dnld_abort
+>>>>>     release_firmware          |    fw_dnld_over
+>>>>>      kfree(fw) //(1)          |     release_firmware
+>>>>>      ...                      |      kfree(fw) //(2)
+>>>>
+>>>> How exactly the case here is being prevented?
+>>>>
+>>>> If nfcmrvl_nci_unregister_dev() happens slightly earlier, before
+>>>> fw_dnld_timeout() on the left side (T1), the T1 will still hit it, won't it?
+>>>
+>>> I think it could be prevented. We use nci_unregister_device() to synchronize, if the
+>>> firmware download routine is running, the cleanup routine will wait it to finish. 
+>>> The flag "fw_download_in_progress" will be set to false, if the the firmware download
+>>> routine is finished. 
+>>
+>> fw_download_in_progress is not synchronized in
+>> nfcmrvl_nci_unregister_dev(), so even if fw_dnld_timeout() set it to
+>> true, the nfcmrvl_nci_unregister_dev() happening concurrently will not
+>> see updated fw_download_in_progress.
+> 
+> The fw_download_in_progress is set to false in nfc_fw_download(). The nfc_fw_download() is
+> synchronized with nfc_unregister_device().
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+No, it is not. There is no synchronization primitive in
+nfc_unregister_device(), at least explicitly.
 
-All errors (new ones prefixed by >>):
+> If nfc_fw_download() is running, nfc_unregister_device()
+> will wait nfc_fw_download() to finish. So the nfcmrvl_nci_unregister_dev() could see the updated
+> fw_download_in_progress. The process is shown below:
+> 
+>         (Thread 1)                                         |       (Thread 2)
+>  nfcmrvl_nci_unregister_dev                                | nfc_fw_download
+>    nci_unregister_device                                   |  ...
+>                                                            |  device_lock()
+>      ...                                                   |  dev->fw_download_in_progress = false; //(1)
+>                                                            |  device_unlock()
+>      nfc_unregister_device                                 | 
+>    if (priv->ndev->nfc_dev->fw_download_in_progress) //(2) | 
+>      nfcmrvl_fw_dnld_abort(priv); //not execute            |   
+> 
+> We set fw_download_in_progress to false in position (1) and the check in position (2) will fail,
+> the nfcmrvl_fw_dnld_abort() in nfcmrvl_nci_unregister_dev() will not execute. So the double-free
+> bugs could be prevented.
 
-   net/bridge/br_input.c: In function 'br_pass_frame_up':
->> net/bridge/br_input.c:45:12: error: 'struct sk_buff' has no member named 'offload_fwd_mark'
-      45 |         skb->offload_fwd_mark = false;
-         |            ^~
+You just repeated the same not answering the question. The
+fw_download_in_progress at point (2) can be still true, on that CPU. I
+explain it third time so let me rephrase it - the
+fw_download_in_progress can be reordered by compiler or CPU to:
+
+T1                                          | T2
+nfcmrvl_nci_unregister_dev()
+  nci_unregister_device()
+    var = fw_download_in_progress; (true)
+                                            | nfc_fw_download
+                                            | device_lock
+                                            | dev->fw_download = false;
+                                            | device_unlock
+    if (var)                                |
+      nfcmrvl_fw_dnld_abort(priv);          |
+
+Every write barrier must be paired with read barrier. Every lock on one
+access to variable, must be paired with same lock on other access to
+variable .
+
+> 
+>>> Although the timer handler fw_dnld_timeout() could be running, nfcmrvl_nci_unregister_dev()
+>>> will check the flag "fw_download_in_progress" which is already set to false and nfcmrvl_fw_dnld_abort()
+>>> in nfcmrvl_nci_unregister_dev() will not execute.
+>>
+>> I am sorry, but you cannot move code around hoping it will by itself
+>> solve synchronization issues.
+> 
+> I think this solution sove synchronization issues. If you still have any questions welcome to ask me.
+
+No, you still do not get the pint. You cannot move code around because
+this itself does not solve missing synchronization primitives and
+related issues.
 
 
-vim +45 net/bridge/br_input.c
-
-    32	
-    33	static int br_pass_frame_up(struct sk_buff *skb)
-    34	{
-    35		struct net_device *indev, *brdev = BR_INPUT_SKB_CB(skb)->brdev;
-    36		struct net_bridge *br = netdev_priv(brdev);
-    37		struct net_bridge_vlan_group *vg;
-    38	
-    39		dev_sw_netstats_rx_add(brdev, skb->len);
-    40	
-    41		vg = br_vlan_group_rcu(br);
-    42	
-    43		/* Reset the offload_fwd_mark because there could be a stacked bridge
-    44		 * above. */
-  > 45		skb->offload_fwd_mark = false;
-    46	
-    47		/* Bridge is just like any other port.  Make sure the
-    48		 * packet is allowed except in promisc mode when someone
-    49		 * may be running packet capture.
-    50		 */
-    51		if (!(brdev->flags & IFF_PROMISC) &&
-    52		    !br_allowed_egress(vg, skb)) {
-    53			kfree_skb(skb);
-    54			return NET_RX_DROP;
-    55		}
-    56	
-    57		indev = skb->dev;
-    58		skb->dev = brdev;
-    59		skb = br_handle_vlan(br, NULL, vg, skb);
-    60		if (!skb)
-    61			return NET_RX_DROP;
-    62		/* update the multicast stats if the packet is IGMP/MLD */
-    63		br_multicast_count(br, NULL, skb, br_multicast_igmp_type(skb),
-    64				   BR_MCAST_DIR_TX);
-    65	
-    66		return NF_HOOK(NFPROTO_BRIDGE, NF_BR_LOCAL_IN,
-    67			       dev_net(indev), NULL, skb, indev, NULL,
-    68			       br_netif_receive_skb);
-    69	}
-    70	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Best regards,
+Krzysztof

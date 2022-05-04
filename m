@@ -2,107 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DD76519619
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 05:38:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27B1351961E
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 05:39:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344428AbiEDDlk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 23:41:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44676 "EHLO
+        id S236841AbiEDDna (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 23:43:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344413AbiEDDl0 (ORCPT
+        with ESMTP id S236361AbiEDDnX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 23:41:26 -0400
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9562F28996
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 20:37:46 -0700 (PDT)
-Received: by mail-pg1-x536.google.com with SMTP id t13so155498pgn.8
-        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 20:37:46 -0700 (PDT)
+        Tue, 3 May 2022 23:43:23 -0400
+Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C283F27FE1
+        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 20:39:48 -0700 (PDT)
+Received: by mail-io1-xd2b.google.com with SMTP id e3so323197ios.6
+        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 20:39:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        d=google.com; s=20210112;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=mnH+42aht6yqmG7U5pfKT59kRTusDPAPgC1nDObmhLU=;
-        b=xq0OE+G1oprXqRtC6pQz/5wP42YdYcl3p8QPLJHh1Zo400NXUFiruszN4dZxmb8CKL
-         2rglpn6BJ6BPeW4159iBSgG3jVIhdjiQSMXsqIT6j+sxjiCurYrjcpRORaFCjatHlZY3
-         /jgUT5V7IcFACKZNJTn2kkt54kOyO2x1EhkmUYwXJWRUd9yvhmgQz5snWeCKBlewCfuw
-         uZDdZsC1iAyr/owg+4eguxIJlluL0zrJFNQZu2D5un4lWb8e022BJ4ZXuHPCb54IH6kd
-         nrioLR3t6d5Ko7a/ie9dEa0HCsXJKzjlptJrY91Cx6BR0GyjE+mb+E75bu3DTNTV/twp
-         yk0Q==
+        bh=TKFkaOZkalvLFPXwyy85GYdezcn8X//pTVrKI0zHMyM=;
+        b=OKeMQH51cvKoQfQVe6saCkxUR73NoKar+XZu/9qav85QUB81nfSHCeoHN5ex2uOb//
+         kO1M3kU546nhzKG8drhWWWIUs2t14S730C1HbWkI98KwrAgY1/vgN9VpljYTWsTGpYMT
+         n40EgHXpIz0/SkKO51NFcsULQvGXL6ctkwg5DTTIAS2gYvCpejuSQQ4qph7SlokYXt9s
+         VUvf8WdkLPYjIyQeFT1pil2GnBWaBey1n1lhrl6pQgJvg7/UckiVZ1X7UNBDOqmR4njo
+         LBHY2e3LUD3qHU9CyE4PtJWxl3SB3/EAnWvg4FyKsiXUSQX++UDJY9f7JOtRyg/wBBgS
+         UVsA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=mnH+42aht6yqmG7U5pfKT59kRTusDPAPgC1nDObmhLU=;
-        b=6CYcP9oqRRIzfamsF0fVFNww3gcUQd6U6Vwj2IZ8R4qxV0zDoCAym+C2p7KyS8ZLPT
-         SmuBeRDtFplDJBX+g69JGnmE4U44Quo6NF0UI+H43sUx+rcTLsY7GZDny0QAGX7SUpRq
-         qRExesnu8QERhPlz6BYpE7vpje691+7T+P+mNPelLwfWpZKfpy8Zmq76V57X9GvSYBl6
-         /99HBCsSLYPxUiIPyu3iAAvG7Bo3EDfXMCysa8VkWveATLMqAtilosEspZHvxPhOkWZ1
-         flTMmNvqWirlf7pDbf5VXn1oRL0TLSW5L5BdHbHRNV+paQbH/RNsyQBzOdjzvGjLUCcB
-         Ig/w==
-X-Gm-Message-State: AOAM532ycbcmBUOD44kGSR2SbwkBPz1aD+BC2six+KbpPIKWd6taJBMe
-        Mxa6rMN0rfQvBD1vRrcz2/oGXw==
-X-Google-Smtp-Source: ABdhPJwnrBK2PxUL2wLY3YNmxal8cHQW0OPf/mceeWgk1gF2mGj25P+YfQ8ZF5ZQfsXlWJPDRcm7zg==
-X-Received: by 2002:aa7:848a:0:b0:510:44da:223d with SMTP id u10-20020aa7848a000000b0051044da223dmr263616pfn.66.1651635466035;
-        Tue, 03 May 2022 20:37:46 -0700 (PDT)
-Received: from localhost ([139.177.225.239])
-        by smtp.gmail.com with ESMTPSA id v4-20020a62a504000000b0050dc7628149sm7057285pfm.35.2022.05.03.20.37.45
+        bh=TKFkaOZkalvLFPXwyy85GYdezcn8X//pTVrKI0zHMyM=;
+        b=0MyNiCVw+1UNlO0Pm+KkPBWYH/eBgVq9UaM4VZAs2JGAZw3jI/dhNLS8TlFbTYI+w3
+         it6DP2TKmQLv+PKUhYLm9up/pxHfwYS4mp9qWIkkO3w7UIbooo67djHXJgNPJBIg5Q72
+         9aQvqGFWDElJ/rcZkDFHZ+RpsSIWVocZbiDmJGomu9rnGh+7e4Uh6MnhamChhfyvrkfC
+         xtd14QzedRGvmaZtVDXd613qyPwavjnOmDH6Sgm8UFEq3ENb/E2/jDRGIILmbL+/6Opv
+         OG4o/6PSN3BzKNu5QkFOeE0vTdoxCgdpBhlhsyUajhkB2mklco/8/L1cxLYl2Lvdox0c
+         v4XA==
+X-Gm-Message-State: AOAM533Xfcdy4rGPV6DM3BVWkJdWwfvR0bBFCEktKOdGd0FnhjBK3JaB
+        +5d/RPAl1y1U9yKEuQLuQyWfhQ==
+X-Google-Smtp-Source: ABdhPJwLTXJtAXiJwUCvEWggY3FV+wdRFZMRp+5BJmrk0AvQhZTFxdNQcILItIRCgxyMEkGbhuqhbA==
+X-Received: by 2002:a05:6602:2427:b0:657:b2ff:89c5 with SMTP id g7-20020a056602242700b00657b2ff89c5mr7163783iob.26.1651635587956;
+        Tue, 03 May 2022 20:39:47 -0700 (PDT)
+Received: from google.com (194.225.68.34.bc.googleusercontent.com. [34.68.225.194])
+        by smtp.gmail.com with ESMTPSA id x22-20020a029716000000b0032b3a781750sm4388413jai.20.2022.05.03.20.39.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 May 2022 20:37:45 -0700 (PDT)
-Date:   Wed, 4 May 2022 11:37:43 +0800
-From:   Muchun Song <songmuchun@bytedance.com>
-To:     Mike Kravetz <mike.kravetz@oracle.com>
-Cc:     corbet@lwn.net, akpm@linux-foundation.org, mcgrof@kernel.org,
-        keescook@chromium.org, yzaikin@google.com, osalvador@suse.de,
-        david@redhat.com, masahiroy@kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        duanxiongchun@bytedance.com, smuchun@gmail.com
-Subject: Re: [PATCH v9 2/4] mm: memory_hotplug: override memmap_on_memory
- when hugetlb_free_vmemmap=on
-Message-ID: <YnH1B1Al/oW3rbmu@FVFYT0MHHV2J.usts.net>
-References: <20220429121816.37541-1-songmuchun@bytedance.com>
- <20220429121816.37541-3-songmuchun@bytedance.com>
- <3d040faf-7fc1-80a6-c584-aafeff27af18@oracle.com>
+        Tue, 03 May 2022 20:39:47 -0700 (PDT)
+Date:   Wed, 4 May 2022 03:39:43 +0000
+From:   Oliver Upton <oupton@google.com>
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     Raghavendra Rao Ananta <rananta@google.com>,
+        Andrew Jones <drjones@redhat.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Peter Shier <pshier@google.com>,
+        Ricardo Koller <ricarkol@google.com>,
+        Reiji Watanabe <reijiw@google.com>,
+        Jing Zhang <jingzhangos@google.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Subject: Re: [PATCH v7 0/9] KVM: arm64: Add support for hypercall services
+ selection
+Message-ID: <YnH1f2cXcpdKsA3q@google.com>
+References: <20220502233853.1233742-1-rananta@google.com>
+ <878rri8r78.wl-maz@kernel.org>
+ <CAJHc60xp=UQT_CX0zoiSjAmkS8JSe+NB5Gr+F5mmybjJAWkUtQ@mail.gmail.com>
+ <878rriicez.wl-maz@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <3d040faf-7fc1-80a6-c584-aafeff27af18@oracle.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <878rriicez.wl-maz@kernel.org>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 03, 2022 at 05:23:37PM -0700, Mike Kravetz wrote:
-> On 4/29/22 05:18, Muchun Song wrote:
-> > When "hugetlb_free_vmemmap=on" and "memory_hotplug.memmap_on_memory"
-> > are both passed to boot cmdline, the variable of "memmap_on_memory"
-> > will be set to 1 even if the vmemmap pages will not be allocated from
-> > the hotadded memory since the former takes precedence over the latter.
+On Tue, May 03, 2022 at 09:33:40PM +0100, Marc Zyngier wrote:
+> On Tue, 03 May 2022 19:49:13 +0100,
+> Raghavendra Rao Ananta <rananta@google.com> wrote:
+> > 
+> > Hi Marc,
+> > 
+> > On Tue, May 3, 2022 at 10:24 AM Marc Zyngier <maz@kernel.org> wrote:
+> > >
+> > > On Tue, 03 May 2022 00:38:44 +0100,
+> > > Raghavendra Rao Ananta <rananta@google.com> wrote:
+> > > >
+> > > > Hello,
+> > > >
+> > > > Continuing the discussion from [1], the series tries to add support
+> > > > for the userspace to elect the hypercall services that it wishes
+> > > > to expose to the guest, rather than the guest discovering them
+> > > > unconditionally. The idea employed by the series was taken from
+> > > > [1] as suggested by Marc Z.
+> > >
+> > > As it took some time to get there, and that there was still a bunch of
+> > > things to address, I've taken the liberty to apply my own fixes to the
+> > > series.
+> > >
+> > > Please have a look at [1], and let me know if you're OK with the
+> > > result. If you are, I'll merge the series for 5.19.
+> > >
+> > > Thanks,
+> > >
+> > >         M.
+> > >
+> > Thank you for speeding up the process; appreciate it. However, the
+> > series's selftest patches have a dependency on Oliver's
+> > PSCI_SYSTEM_SUSPEND's selftest patches [1][2]. Can we pull them in
+> > too?
+
+Posted, BTW.
+
+http://lore.kernel.org/kvmarm/20220504032446.4133305-1-oupton@google.com
+
+> > 2. Patch-2/9, arm_hypercall.h, clear all the macros in this patch
+> > itself instead of doing it in increments (unless there's some reason
+> > that I'm missing)?
 > 
-> I had to read that sentence a few times before understanding what it was
-> trying to say.  Not insisting, but how about this instead:
->
-
-Sorry for my poor English.
- 
-> Freeing HugeTLB vmemmap pages is not compatible with allocating memmap on
-> hot added memory. If "hugetlb_free_vmemmap=on" and
-> memory_hotplug.memmap_on_memory" are both passed on the kernel command line,
-> freeing hugetlb pages takes precedence.  However, the global variable
-> memmap_on_memory will still be set to 1, even though we will not try to
-> allocate memmap on hot added memory.
+> Ah, rebasing leftovers, now gone.
 > 
-> Not sure if that is more clear or not.
-> 
+> I've pushed an updated branch again, please have a look.
 
-Clearer than mine.
+Series looks good with your additions. For the pile:
 
-> Acked-by: Mike Kravetz <mike.kravetz@oracle.com>
->
-
-Thanks.
- 
+Reviewed-by: Oliver Upton <oupton@google.com>

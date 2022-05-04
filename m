@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48E0451AA4B
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:19:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D490F51A92B
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:16:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356714AbiEDRXK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 13:23:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51036 "EHLO
+        id S1351180AbiEDRMK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 13:12:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355760AbiEDREl (ORCPT
+        with ESMTP id S1354861AbiEDQ7V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 13:04:41 -0400
+        Wed, 4 May 2022 12:59:21 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CC424F9D7;
-        Wed,  4 May 2022 09:53:22 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3866C48392;
+        Wed,  4 May 2022 09:51:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D368BB8279F;
-        Wed,  4 May 2022 16:53:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C83DC385AF;
-        Wed,  4 May 2022 16:53:19 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C3D5AB82552;
+        Wed,  4 May 2022 16:51:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6CA85C385A5;
+        Wed,  4 May 2022 16:51:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651683199;
-        bh=c9tifztPdtIZMnIZoFYTn8EbVTxFGghKHU5Yrzs7rmg=;
+        s=korg; t=1651683062;
+        bh=lVaJWtKW0Ijh2nupS9UWR8XJmZlkiWdqTf0rNGERKtw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=0wnFtUvvswxQNbZXpkHGOrClT9auogOsyQyUOQeMarSn0yGCd34fc+HFEAaluS3BX
-         KjIdoCxf+LVCfCmNaQv+H7nhBHQNG82W7J+At5n09+Q0IMwfroCVSp7Jw4GvnPpN6U
-         AtsMAw9k2QHFJj4j/6p2d57xPds+QgQmmwG6p0xU=
+        b=TozoR50AMYQ+ZrqFdNK0INY6lnU134dVCr7quz9e2QE7CZfuXMLsgIz3GaN7zExXu
+         NZjk3a8Iy1O3yU5j0V1mtGF/bcBKJx9mowl8np9cvmQaH85dSHs3HWS0OQ858WLrGJ
+         EpocCaP22y6hX4B4UCmWRoIpYK1V++AzV0bhKbuk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Mark Brown <broonie@kernel.org>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        stable@vger.kernel.org, Eyal Birger <eyal.birger@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 064/177] ARM: dts: at91: Map MCLK for wm8731 on at91sam9g20ek
+Subject: [PATCH 5.10 065/129] bpf, lwt: Fix crash when using bpf_skb_set_tunnel_key() from bpf_xmit lwt hook
 Date:   Wed,  4 May 2022 18:44:17 +0200
-Message-Id: <20220504153058.732915149@linuxfoundation.org>
+Message-Id: <20220504153026.441756298@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220504153053.873100034@linuxfoundation.org>
-References: <20220504153053.873100034@linuxfoundation.org>
+In-Reply-To: <20220504153021.299025455@linuxfoundation.org>
+References: <20220504153021.299025455@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,42 +55,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mark Brown <broonie@kernel.org>
+From: Eyal Birger <eyal.birger@gmail.com>
 
-[ Upstream commit 0e486fe341fabd8e583f3d601a874cd394979c45 ]
+[ Upstream commit b02d196c44ead1a5949729be9ff08fe781c3e48a ]
 
-The MCLK of the WM8731 on the AT91SAM9G20-EK board is connected to the
-PCK0 output of the SoC and is expected to be set to 12MHz. Previously
-this was mapped using pre-common clock API calls in the audio machine
-driver but the conversion to the common clock framework broke that so
-describe things in the DT instead.
+xmit_check_hhlen() observes the dst for getting the device hard header
+length to make sure a modified packet can fit. When a helper which changes
+the dst - such as bpf_skb_set_tunnel_key() - is called as part of the
+xmit program the accessed dst is no longer valid.
 
-Fixes: ff78a189b0ae55f ("ARM: at91: remove old at91-specific clock driver")
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Reviewed-by: Claudiu Beznea <claudiu.beznea@microchip.com>
-Signed-off-by: Nicolas Ferre <nicolas.ferre@microchip.com>
-Link: https://lore.kernel.org/r/20220404102806.581374-2-broonie@kernel.org
+This leads to the following splat:
+
+ BUG: kernel NULL pointer dereference, address: 00000000000000de
+ #PF: supervisor read access in kernel mode
+ #PF: error_code(0x0000) - not-present page
+ PGD 0 P4D 0
+ Oops: 0000 [#1] PREEMPT SMP PTI
+ CPU: 0 PID: 798 Comm: ping Not tainted 5.18.0-rc2+ #103
+ Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.14.0-2 04/01/2014
+ RIP: 0010:bpf_xmit+0xfb/0x17f
+ Code: c6 c0 4d cd 8e 48 c7 c7 7d 33 f0 8e e8 42 09 fb ff 48 8b 45 58 48 8b 95 c8 00 00 00 48 2b 95 c0 00 00 00 48 83 e0 fe 48 8b 00 <0f> b7 80 de 00 00 00 39 c2 73 22 29 d0 b9 20 0a 00 00 31 d2 48 89
+ RSP: 0018:ffffb148c0bc7b98 EFLAGS: 00010282
+ RAX: 0000000000000000 RBX: 0000000000240008 RCX: 0000000000000000
+ RDX: 0000000000000010 RSI: 00000000ffffffea RDI: 00000000ffffffff
+ RBP: ffff922a828a4e00 R08: ffffffff8f1350e8 R09: 00000000ffffdfff
+ R10: ffffffff8f055100 R11: ffffffff8f105100 R12: 0000000000000000
+ R13: ffff922a828a4e00 R14: 0000000000000040 R15: 0000000000000000
+ FS:  00007f414e8f0080(0000) GS:ffff922afdc00000(0000) knlGS:0000000000000000
+ CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+ CR2: 00000000000000de CR3: 0000000002d80006 CR4: 0000000000370ef0
+ Call Trace:
+  <TASK>
+  lwtunnel_xmit.cold+0x71/0xc8
+  ip_finish_output2+0x279/0x520
+  ? __ip_finish_output.part.0+0x21/0x130
+
+Fix by fetching the device hard header length before running the BPF code.
+
+Fixes: 3a0af8fd61f9 ("bpf: BPF for lightweight tunnel infrastructure")
+Signed-off-by: Eyal Birger <eyal.birger@gmail.com>
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Link: https://lore.kernel.org/bpf/20220420165219.1755407-1-eyal.birger@gmail.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm/boot/dts/at91sam9g20ek_common.dtsi | 6 ++++++
- 1 file changed, 6 insertions(+)
+ net/core/lwt_bpf.c | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/arch/arm/boot/dts/at91sam9g20ek_common.dtsi b/arch/arm/boot/dts/at91sam9g20ek_common.dtsi
-index 87bb39060e8b..ca03685f0f08 100644
---- a/arch/arm/boot/dts/at91sam9g20ek_common.dtsi
-+++ b/arch/arm/boot/dts/at91sam9g20ek_common.dtsi
-@@ -219,6 +219,12 @@ i2c-gpio-0 {
- 		wm8731: wm8731@1b {
- 			compatible = "wm8731";
- 			reg = <0x1b>;
-+
-+			/* PCK0 at 12MHz */
-+			clocks = <&pmc PMC_TYPE_SYSTEM 8>;
-+			clock-names = "mclk";
-+			assigned-clocks = <&pmc PMC_TYPE_SYSTEM 8>;
-+			assigned-clock-rates = <12000000>;
- 		};
- 	};
+diff --git a/net/core/lwt_bpf.c b/net/core/lwt_bpf.c
+index 2f7940bcf715..3fd207fe1284 100644
+--- a/net/core/lwt_bpf.c
++++ b/net/core/lwt_bpf.c
+@@ -158,10 +158,8 @@ static int bpf_output(struct net *net, struct sock *sk, struct sk_buff *skb)
+ 	return dst->lwtstate->orig_output(net, sk, skb);
+ }
+ 
+-static int xmit_check_hhlen(struct sk_buff *skb)
++static int xmit_check_hhlen(struct sk_buff *skb, int hh_len)
+ {
+-	int hh_len = skb_dst(skb)->dev->hard_header_len;
+-
+ 	if (skb_headroom(skb) < hh_len) {
+ 		int nhead = HH_DATA_ALIGN(hh_len - skb_headroom(skb));
+ 
+@@ -273,6 +271,7 @@ static int bpf_xmit(struct sk_buff *skb)
+ 
+ 	bpf = bpf_lwt_lwtunnel(dst->lwtstate);
+ 	if (bpf->xmit.prog) {
++		int hh_len = dst->dev->hard_header_len;
+ 		__be16 proto = skb->protocol;
+ 		int ret;
+ 
+@@ -290,7 +289,7 @@ static int bpf_xmit(struct sk_buff *skb)
+ 			/* If the header was expanded, headroom might be too
+ 			 * small for L2 header to come, expand as needed.
+ 			 */
+-			ret = xmit_check_hhlen(skb);
++			ret = xmit_check_hhlen(skb, hh_len);
+ 			if (unlikely(ret))
+ 				return ret;
  
 -- 
 2.35.1

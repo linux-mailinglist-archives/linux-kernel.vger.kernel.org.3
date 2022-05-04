@@ -2,180 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E272A51A131
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 15:43:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1D5E51A18A
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 15:56:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350770AbiEDNrV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 09:47:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35574 "EHLO
+        id S1351030AbiEDN7t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 09:59:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350766AbiEDNrS (ORCPT
+        with ESMTP id S1350924AbiEDN7C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 09:47:18 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F14282FFEC
-        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 06:43:30 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id w4so2074781wrg.12
-        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 06:43:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=cBqq6UprR1Yrhinom9y32Umswbttty4rMVtulmJXvwU=;
-        b=RwgLbatbKNiJCxHnjM7Qtw2bcrhGQtkJ2mJ1LvQIS+CuVtI7Syx4no8gmzsYwZbKJD
-         a3aBjdlIhGaCLJoAdPLkhW4Ytsj4crbWLZd2Q948Ce0UPPT7r9/82kla7sNZGl3HrgKB
-         SIZA6dgC45cWOVNxsu1iODyE/b20eOYAjmmZvHjpGASSQ3oecwk5ZGMjoP88JoqQhCPi
-         wAkLJvhDQ+fZDX6NClXKv0wdEMBadBPoFhFHBd13DfYQoyk0PJq6ZcrKHIwrziRSjjI3
-         TBHupHd48/6OCjqE2godf9+MK83C1yK/r51WkrBbzNMOpWtHkD0o9F78PG2rciHgNKau
-         CeRQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=cBqq6UprR1Yrhinom9y32Umswbttty4rMVtulmJXvwU=;
-        b=uRF6Xkmp+Er6v8FjJO8qzwNBwDL2qCJCSHqsOBdOVJ315jwMJX982aXS45JzJu//gn
-         Ykh62MvugQx4GQbhlEiJMLFxgCFKtaMQwnIUZfGUnaeiPF3oSz8EW417Vz5Z+IHaXEtl
-         NF2YXHKsIiUOFTSf+M6+YRATUsZX+BNThO5FqnAuYpOCu7jSboqpzhWr2XktTSTMRauO
-         E9MoI7A70vij/aFa9X4HL/UhAsri4PjtoGPeTzrNqr6zkbvAXoIkooiTeJEm5+WFWtag
-         BCuTFhgEu5oh25t3EUDY7dQ6w4GKb6KFgOo9cVvQ+GY7Jc7RMWABfE2y1r4IdqXXkNUl
-         pulQ==
-X-Gm-Message-State: AOAM530B0h09nRy50NTeJqarX+Ec29I1o/5tOg6cCw2l7YwsBpzdHWbC
-        YUJMoN30n/n4or9ventGgb3/Qc8C0RAM5AjpiThb3Q==
-X-Google-Smtp-Source: ABdhPJxIShXJi12iXrPikJsVYfHCvSYbYkVu2YYgyhehd6U2NWz6myNE5wIeepiDUEPHahK3gZbNP/cw4cb8jbikI0M=
-X-Received: by 2002:a5d:6b0e:0:b0:20a:dd17:e452 with SMTP id
- v14-20020a5d6b0e000000b0020add17e452mr16461520wrw.501.1651671809318; Wed, 04
- May 2022 06:43:29 -0700 (PDT)
+        Wed, 4 May 2022 09:59:02 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B126B1F610;
+        Wed,  4 May 2022 06:55:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651672526; x=1683208526;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=gTnQ3OGhw6j4Yt119Dk2zJnUnlRlTT7JIPHFO5zJ7Fw=;
+  b=TlV5cGDa/a54RMhc+0csFm68XEUKqIF9QXKCp07qo3q+pfRY/LFk/xOu
+   XkQ4xYS2sE0athTlTusuuj3vvaGDtgkBQhecdTwps8Me+0DNIR9TDfu9m
+   4L5XKui82RonqnEBc8mXXjmv+tVsdb2/tGujK2piukkjk7ff4qb69DuZ0
+   nRaXvSQ96yJHRvO5d5T+CtKe+10W2WeKl2u4i2pIAhErLEREsQJ+71/V6
+   Jk0fIJZrMHEcaTrh9JlNBYLhXtsIkCREza7DGeH6ypjTUxGAE/1vRuJyv
+   vWp5VJUq4xC7wi3PXuPSyEHq1HIYDALxOWVpy4dJ2sAlyfFl8tTs/45qr
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10337"; a="266614327"
+X-IronPort-AV: E=Sophos;i="5.91,198,1647327600"; 
+   d="scan'208";a="266614327"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2022 06:55:26 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,198,1647327600"; 
+   d="scan'208";a="620814074"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga008.fm.intel.com with ESMTP; 04 May 2022 06:55:20 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 19FDAD1; Wed,  4 May 2022 16:55:20 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Wolfram Sang <wsa@kernel.org>,
+        Chris Packham <chris.packham@alliedtelesis.co.nz>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        linux-ide@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-serial@vger.kernel.org
+Cc:     Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Anatolij Gustschin <agust@denx.de>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Pantelis Antoniou <pantelis.antoniou@gmail.com>,
+        Mark Brown <broonie@kernel.org>
+Subject: [PATCH v1 1/4] powerpc/52xx: Remove dead code, i.e. mpc52xx_get_xtal_freq()
+Date:   Wed,  4 May 2022 16:44:46 +0300
+Message-Id: <20220504134449.64473-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-References: <20220504070941.2798233-1-elver@google.com>
-In-Reply-To: <20220504070941.2798233-1-elver@google.com>
-From:   David Gow <davidgow@google.com>
-Date:   Wed, 4 May 2022 21:43:18 +0800
-Message-ID: <CABVgOSnkROn18i62+M9ZfRVLO=E28Eiv7oF_RJV+14Ld73axLw@mail.gmail.com>
-Subject: Re: [PATCH -kselftest/kunit] kcsan: test: use new suite_{init,exit} support
-To:     Marco Elver <elver@google.com>
-Cc:     kasan-dev <kasan-dev@googlegroups.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Daniel Latypov <dlatypov@google.com>,
-        Brendan Higgins <brendanhiggins@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 4, 2022 at 3:09 PM Marco Elver <elver@google.com> wrote:
->
-> Use the newly added suite_{init,exit} support for suite-wide init and
-> cleanup. This avoids the unsupported method by which the test used to do
-> suite-wide init and cleanup (avoiding issues such as missing TAP
-> headers, and possible future conflicts).
->
-> Signed-off-by: Marco Elver <elver@google.com>
-> ---
-> This patch should go on the -kselftest/kunit branch, where this new
-> support currently lives, including a similar change to the KFENCE test.
-> ---
+It seems mpc52xx_get_xtal_freq() is not used anywhere. Remove dead code.
 
-Thanks! This is working for me. I ran it as a builtin using kunit_tool
-under (I had to add an x86_64-smp architecture), then use:
-./tools/testing/kunit/kunit.py run --arch=x86_64-smp
---kconfig_add=CONFIG_KCSAN=y --kconfig_add=CONFIG_DEBUG_KERNEL=y
---timeout 900 'kcsan'
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ arch/powerpc/include/asm/mpc52xx.h           |  1 -
+ arch/powerpc/platforms/52xx/mpc52xx_common.c | 37 --------------------
+ 2 files changed, 38 deletions(-)
 
-To add the x86_64 smp architecture, I added a file
-./tools/testing/kunit/qemu_configs/x86_64-smp.py, which was a copy of
-x86_64.py but with 'CONFIG_SMP=y' added to XXXX and '-smp 16' added to
-YYYY.
-It took about 10 minutes on my system, so the default 5 minute timeout
-definitely wasn't enough.
+diff --git a/arch/powerpc/include/asm/mpc52xx.h b/arch/powerpc/include/asm/mpc52xx.h
+index ce1e0aabaa64..ddd80aae1e32 100644
+--- a/arch/powerpc/include/asm/mpc52xx.h
++++ b/arch/powerpc/include/asm/mpc52xx.h
+@@ -274,7 +274,6 @@ extern void mpc52xx_declare_of_platform_devices(void);
+ extern int mpc5200_psc_ac97_gpio_reset(int psc_number);
+ extern void mpc52xx_map_common_devices(void);
+ extern int mpc52xx_set_psc_clkdiv(int psc_id, int clkdiv);
+-extern unsigned int mpc52xx_get_xtal_freq(struct device_node *node);
+ extern void __noreturn mpc52xx_restart(char *cmd);
+ 
+ /* mpc52xx_gpt.c */
+diff --git a/arch/powerpc/platforms/52xx/mpc52xx_common.c b/arch/powerpc/platforms/52xx/mpc52xx_common.c
+index 565e3a83dc9e..4a39e1cb2263 100644
+--- a/arch/powerpc/platforms/52xx/mpc52xx_common.c
++++ b/arch/powerpc/platforms/52xx/mpc52xx_common.c
+@@ -203,43 +203,6 @@ int mpc52xx_set_psc_clkdiv(int psc_id, int clkdiv)
+ }
+ EXPORT_SYMBOL(mpc52xx_set_psc_clkdiv);
+ 
+-/**
+- * mpc52xx_get_xtal_freq - Get SYS_XTAL_IN frequency for a device
+- *
+- * @node: device node
+- *
+- * Returns the frequency of the external oscillator clock connected
+- * to the SYS_XTAL_IN pin, or 0 if it cannot be determined.
+- */
+-unsigned int mpc52xx_get_xtal_freq(struct device_node *node)
+-{
+-	u32 val;
+-	unsigned int freq;
+-
+-	if (!mpc52xx_cdm)
+-		return 0;
+-
+-	freq = mpc5xxx_get_bus_frequency(node);
+-	if (!freq)
+-		return 0;
+-
+-	if (in_8(&mpc52xx_cdm->ipb_clk_sel) & 0x1)
+-		freq *= 2;
+-
+-	val  = in_be32(&mpc52xx_cdm->rstcfg);
+-	if (val & (1 << 5))
+-		freq *= 8;
+-	else
+-		freq *= 4;
+-	if (val & (1 << 6))
+-		freq /= 12;
+-	else
+-		freq /= 16;
+-
+-	return freq;
+-}
+-EXPORT_SYMBOL(mpc52xx_get_xtal_freq);
+-
+ /**
+  * mpc52xx_restart: ppc_md->restart hook for mpc5200 using the watchdog timer
+  */
+-- 
+2.35.1
 
-(It's maybe worth noting that kunit_tool's output is pretty ugly when
-this isn't running on an SMP system, as the skipped subtests -- plus
-the "no tests run" errors -- take up a lot of space on the screen.
-That's possibly something we should consider when we look further into
-how the kunit_tool NO_TEST result works. Not really related to this
-change (or even this test) though.)
-
-No complaints about the patch: I'm just really glad to see things
-migrate off custom init/exit code!
-
-Reviewed-by: David Gow <davidgow@google.com>
-
--- David
-
->  kernel/kcsan/kcsan_test.c | 31 +++++++++++++------------------
->  1 file changed, 13 insertions(+), 18 deletions(-)
->
-> diff --git a/kernel/kcsan/kcsan_test.c b/kernel/kcsan/kcsan_test.c
-> index a36fca063a73..59560b5e1d9c 100644
-> --- a/kernel/kcsan/kcsan_test.c
-> +++ b/kernel/kcsan/kcsan_test.c
-> @@ -1565,14 +1565,6 @@ static void test_exit(struct kunit *test)
->         torture_cleanup_end();
->  }
->
-> -static struct kunit_suite kcsan_test_suite = {
-> -       .name = "kcsan",
-> -       .test_cases = kcsan_test_cases,
-> -       .init = test_init,
-> -       .exit = test_exit,
-> -};
-> -static struct kunit_suite *kcsan_test_suites[] = { &kcsan_test_suite, NULL };
-> -
->  __no_kcsan
->  static void register_tracepoints(struct tracepoint *tp, void *ignore)
->  {
-> @@ -1588,11 +1580,7 @@ static void unregister_tracepoints(struct tracepoint *tp, void *ignore)
->                 tracepoint_probe_unregister(tp, probe_console, NULL);
->  }
->
-> -/*
-> - * We only want to do tracepoints setup and teardown once, therefore we have to
-> - * customize the init and exit functions and cannot rely on kunit_test_suite().
-> - */
-> -static int __init kcsan_test_init(void)
-> +static int kcsan_suite_init(struct kunit_suite *suite)
->  {
->         /*
->          * Because we want to be able to build the test as a module, we need to
-> @@ -1600,18 +1588,25 @@ static int __init kcsan_test_init(void)
->          * won't work here.
->          */
->         for_each_kernel_tracepoint(register_tracepoints, NULL);
-> -       return __kunit_test_suites_init(kcsan_test_suites);
-> +       return 0;
->  }
->
-> -static void kcsan_test_exit(void)
-> +static void kcsan_suite_exit(struct kunit_suite *suite)
->  {
-> -       __kunit_test_suites_exit(kcsan_test_suites);
->         for_each_kernel_tracepoint(unregister_tracepoints, NULL);
->         tracepoint_synchronize_unregister();
->  }
->
-> -late_initcall_sync(kcsan_test_init);
-> -module_exit(kcsan_test_exit);
-> +static struct kunit_suite kcsan_test_suite = {
-> +       .name = "kcsan",
-> +       .test_cases = kcsan_test_cases,
-> +       .init = test_init,
-> +       .exit = test_exit,
-> +       .suite_init = kcsan_suite_init,
-> +       .suite_exit = kcsan_suite_exit,
-> +};
-> +
-> +kunit_test_suites(&kcsan_test_suite);
->
->  MODULE_LICENSE("GPL v2");
->  MODULE_AUTHOR("Marco Elver <elver@google.com>");
-> --
-> 2.36.0.464.gb9c8b46e94-goog
->

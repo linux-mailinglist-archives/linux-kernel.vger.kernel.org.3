@@ -2,48 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE88451AB28
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:40:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E73C51AA23
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:19:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357508AbiEDRkj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 13:40:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40998 "EHLO
+        id S1354533AbiEDRVo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 13:21:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356694AbiEDRJi (ORCPT
+        with ESMTP id S1355704AbiEDREj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 13:09:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD9C315FCE;
-        Wed,  4 May 2022 09:55:23 -0700 (PDT)
+        Wed, 4 May 2022 13:04:39 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4E2B4F45A;
+        Wed,  4 May 2022 09:53:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AD685616F8;
-        Wed,  4 May 2022 16:55:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED0FAC385A4;
-        Wed,  4 May 2022 16:55:22 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 55CDE616F8;
+        Wed,  4 May 2022 16:53:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ACA1FC385AA;
+        Wed,  4 May 2022 16:53:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651683323;
-        bh=SBKgIQI4y/NoN/43vWhJ0+9yEVbhLu4Z6iGuH4BhSzk=;
+        s=korg; t=1651683194;
+        bh=2AHMO1rt09lcgtSq7YM7IIDJOOXaAVwLycWd1FnTCxA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=N2Yf2R1tCFaa9DvOH1O2ZfFB5wSEtTsS+C/UUzIH0SgnXY1g4Kmf7tYzVgIMdiyhU
-         tE3EhbYX7zc/5Ohr8RcRa5zd5GEy7i0UPUi049oGRXFeNQhPVUUPLgCTsSbllZ3bAP
-         2+/sBW/wOb6jB+bjSVfdsPw0DwBs4uSNcIfjVSOA=
+        b=n1i7ZbIGgTpEcOjXxyGJne/zTlTB3TvrK+iNXRhJ0MQcEMvyvlXFpdEU42y45RlSp
+         1HPDfGgTSXtv5P6I4Z75MI2c+IvPXohVQ2wUXhXyopC7ojFwBHbKo6pK7hIelqZmWL
+         TdjNBDGCpz2bVZz0EzLFMdrK0E7DT2G3JKjJAlyI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Minh Yuan <yuanmingbuaa@gmail.com>,
-        syzbot+8e8958586909d62b6840@syzkaller.appspotmail.com,
-        cruise k <cruise4k@gmail.com>, Kyungtae Kim <kt0755@gmail.com>,
-        Linus Torvalds <torvalds@linuxfoundation.org>,
-        Denis Efremov <efremov@linux.com>, Willy Tarreau <w@1wt.eu>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: [PATCH 5.17 002/225] floppy: disable FDRAWCMD by default
+        stable@vger.kernel.org, Pavel Skripkin <paskripkin@gmail.com>,
+        Helge Deller <deller@gmx.de>, Sasha Levin <sashal@kernel.org>,
+        syzbot+53ce4a4246d0fe0fee34@syzkaller.appspotmail.com
+Subject: [PATCH 5.15 047/177] video: fbdev: udlfb: properly check endpoint type
 Date:   Wed,  4 May 2022 18:44:00 +0200
-Message-Id: <20220504153110.354775730@linuxfoundation.org>
+Message-Id: <20220504153057.147274575@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220504153110.096069935@linuxfoundation.org>
-References: <20220504153110.096069935@linuxfoundation.org>
+In-Reply-To: <20220504153053.873100034@linuxfoundation.org>
+References: <20220504153053.873100034@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,141 +55,92 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Willy Tarreau <w@1wt.eu>
+From: Pavel Skripkin <paskripkin@gmail.com>
 
-commit 233087ca063686964a53c829d547c7571e3f67bf upstream.
+[ Upstream commit aaf7dbe07385e0b8deb7237eca2a79926bbc7091 ]
 
-Minh Yuan reported a concurrency use-after-free issue in the floppy code
-between raw_cmd_ioctl and seek_interrupt.
+syzbot reported warning in usb_submit_urb, which is caused by wrong
+endpoint type.
 
-[ It turns out this has been around, and that others have reported the
-  KASAN splats over the years, but Minh Yuan had a reproducer for it and
-  so gets primary credit for reporting it for this fix   - Linus ]
+This driver uses out bulk endpoint for communication, so
+let's check if this endpoint is present and bail out early if not.
 
-The problem is, this driver tends to break very easily and nowadays,
-nobody is expected to use FDRAWCMD anyway since it was used to
-manipulate non-standard formats.  The risk of breaking the driver is
-higher than the risk presented by this race, and accessing the device
-requires privileges anyway.
+Fail log:
 
-Let's just add a config option to completely disable this ioctl and
-leave it disabled by default.  Distros shouldn't use it, and only those
-running on antique hardware might need to enable it.
+usb 1-1: BOGUS urb xfer, pipe 3 != type 1
+WARNING: CPU: 0 PID: 4822 at drivers/usb/core/urb.c:493 usb_submit_urb+0xd27/0x1540 drivers/usb/core/urb.c:493
+Modules linked in:
+CPU: 0 PID: 4822 Comm: kworker/0:3 Tainted: G        W         5.13.0-syzkaller #0
+...
+Workqueue: usb_hub_wq hub_event
+RIP: 0010:usb_submit_urb+0xd27/0x1540 drivers/usb/core/urb.c:493
+...
+Call Trace:
+ dlfb_submit_urb+0x89/0x160 drivers/video/fbdev/udlfb.c:1969
+ dlfb_set_video_mode+0x21f0/0x2950 drivers/video/fbdev/udlfb.c:315
+ dlfb_ops_set_par+0x2a3/0x840 drivers/video/fbdev/udlfb.c:1110
+ dlfb_usb_probe.cold+0x113e/0x1f4a drivers/video/fbdev/udlfb.c:1732
+ usb_probe_interface+0x315/0x7f0 drivers/usb/core/driver.c:396
 
-Link: https://lore.kernel.org/all/000000000000b71cdd05d703f6bf@google.com/
-Link: https://lore.kernel.org/lkml/CAKcFiNC=MfYVW-Jt9A3=FPJpTwCD2PL_ULNCpsCVE5s8ZeBQgQ@mail.gmail.com
-Link: https://lore.kernel.org/all/CAEAjamu1FRhz6StCe_55XY5s389ZP_xmCF69k987En+1z53=eg@mail.gmail.com
-Reported-by: Minh Yuan <yuanmingbuaa@gmail.com>
-Reported-by: syzbot+8e8958586909d62b6840@syzkaller.appspotmail.com
-Reported-by: cruise k <cruise4k@gmail.com>
-Reported-by: Kyungtae Kim <kt0755@gmail.com>
-Suggested-by: Linus Torvalds <torvalds@linuxfoundation.org>
-Tested-by: Denis Efremov <efremov@linux.com>
-Signed-off-by: Willy Tarreau <w@1wt.eu>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 88e58b1a42f8 ("Staging: add udlfb driver")
+Reported-and-tested-by: syzbot+53ce4a4246d0fe0fee34@syzkaller.appspotmail.com
+Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
+Signed-off-by: Helge Deller <deller@gmx.de>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/block/Kconfig  |   16 ++++++++++++++++
- drivers/block/floppy.c |   43 ++++++++++++++++++++++++++++++++-----------
- 2 files changed, 48 insertions(+), 11 deletions(-)
+ drivers/video/fbdev/udlfb.c | 14 ++++++++++++--
+ 1 file changed, 12 insertions(+), 2 deletions(-)
 
---- a/drivers/block/Kconfig
-+++ b/drivers/block/Kconfig
-@@ -33,6 +33,22 @@ config BLK_DEV_FD
- 	  To compile this driver as a module, choose M here: the
- 	  module will be called floppy.
+diff --git a/drivers/video/fbdev/udlfb.c b/drivers/video/fbdev/udlfb.c
+index 90f48b71fd8f..d9eec1b60e66 100644
+--- a/drivers/video/fbdev/udlfb.c
++++ b/drivers/video/fbdev/udlfb.c
+@@ -1649,8 +1649,9 @@ static int dlfb_usb_probe(struct usb_interface *intf,
+ 	const struct device_attribute *attr;
+ 	struct dlfb_data *dlfb;
+ 	struct fb_info *info;
+-	int retval = -ENOMEM;
++	int retval;
+ 	struct usb_device *usbdev = interface_to_usbdev(intf);
++	struct usb_endpoint_descriptor *out;
  
-+config BLK_DEV_FD_RAWCMD
-+	bool "Support for raw floppy disk commands (DEPRECATED)"
-+	depends on BLK_DEV_FD
-+	help
-+	  If you want to use actual physical floppies and expect to do
-+	  special low-level hardware accesses to them (access and use
-+	  non-standard formats, for example), then enable this.
-+
-+	  Note that the code enabled by this option is rarely used and
-+	  might be unstable or insecure, and distros should not enable it.
-+
-+	  Note: FDRAWCMD is deprecated and will be removed from the kernel
-+	  in the near future.
-+
-+	  If unsure, say N.
-+
- config AMIGA_FLOPPY
- 	tristate "Amiga floppy support"
- 	depends on AMIGA
---- a/drivers/block/floppy.c
-+++ b/drivers/block/floppy.c
-@@ -2984,6 +2984,8 @@ static const char *drive_name(int type,
- 		return "(null)";
- }
+ 	/* usb initialization */
+ 	dlfb = kzalloc(sizeof(*dlfb), GFP_KERNEL);
+@@ -1664,6 +1665,12 @@ static int dlfb_usb_probe(struct usb_interface *intf,
+ 	dlfb->udev = usb_get_dev(usbdev);
+ 	usb_set_intfdata(intf, dlfb);
  
-+#ifdef CONFIG_BLK_DEV_FD_RAWCMD
++	retval = usb_find_common_endpoints(intf->cur_altsetting, NULL, &out, NULL, NULL);
++	if (retval) {
++		dev_err(&intf->dev, "Device should have at lease 1 bulk endpoint!\n");
++		goto error;
++	}
 +
- /* raw commands */
- static void raw_cmd_done(int flag)
- {
-@@ -3183,6 +3185,35 @@ static int raw_cmd_ioctl(int cmd, void _
- 	return ret;
- }
+ 	dev_dbg(&intf->dev, "console enable=%d\n", console);
+ 	dev_dbg(&intf->dev, "fb_defio enable=%d\n", fb_defio);
+ 	dev_dbg(&intf->dev, "shadow enable=%d\n", shadow);
+@@ -1673,6 +1680,7 @@ static int dlfb_usb_probe(struct usb_interface *intf,
+ 	if (!dlfb_parse_vendor_descriptor(dlfb, intf)) {
+ 		dev_err(&intf->dev,
+ 			"firmware not recognized, incompatible device?\n");
++		retval = -ENODEV;
+ 		goto error;
+ 	}
  
-+static int floppy_raw_cmd_ioctl(int type, int drive, int cmd,
-+				void __user *param)
-+{
-+	int ret;
-+
-+	pr_warn_once("Note: FDRAWCMD is deprecated and will be removed from the kernel in the near future.\n");
-+
-+	if (type)
-+		return -EINVAL;
-+	if (lock_fdc(drive))
-+		return -EINTR;
-+	set_floppy(drive);
-+	ret = raw_cmd_ioctl(cmd, param);
-+	if (ret == -EINTR)
-+		return -EINTR;
-+	process_fd_request();
-+	return ret;
-+}
-+
-+#else /* CONFIG_BLK_DEV_FD_RAWCMD */
-+
-+static int floppy_raw_cmd_ioctl(int type, int drive, int cmd,
-+				void __user *param)
-+{
-+	return -EOPNOTSUPP;
-+}
-+
-+#endif
-+
- static int invalidate_drive(struct block_device *bdev)
- {
- 	/* invalidate the buffer track to force a reread */
-@@ -3371,7 +3402,6 @@ static int fd_locked_ioctl(struct block_
- {
- 	int drive = (long)bdev->bd_disk->private_data;
- 	int type = ITYPE(drive_state[drive].fd_device);
--	int i;
- 	int ret;
- 	int size;
- 	union inparam {
-@@ -3522,16 +3552,7 @@ static int fd_locked_ioctl(struct block_
- 		outparam = &write_errors[drive];
- 		break;
- 	case FDRAWCMD:
--		if (type)
--			return -EINVAL;
--		if (lock_fdc(drive))
--			return -EINTR;
--		set_floppy(drive);
--		i = raw_cmd_ioctl(cmd, (void __user *)param);
--		if (i == -EINTR)
--			return -EINTR;
--		process_fd_request();
--		return i;
-+		return floppy_raw_cmd_ioctl(type, drive, cmd, (void __user *)param);
- 	case FDTWADDLE:
- 		if (lock_fdc(drive))
- 			return -EINTR;
+@@ -1686,8 +1694,10 @@ static int dlfb_usb_probe(struct usb_interface *intf,
+ 
+ 	/* allocates framebuffer driver structure, not framebuffer memory */
+ 	info = framebuffer_alloc(0, &dlfb->udev->dev);
+-	if (!info)
++	if (!info) {
++		retval = -ENOMEM;
+ 		goto error;
++	}
+ 
+ 	dlfb->info = info;
+ 	info->par = dlfb;
+-- 
+2.35.1
+
 
 

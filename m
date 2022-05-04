@@ -2,88 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6A18519686
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 06:26:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 576C0519688
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 06:26:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237349AbiEDE34 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 00:29:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56488 "EHLO
+        id S1344541AbiEDEaI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 00:30:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233383AbiEDE3x (ORCPT
+        with ESMTP id S1344197AbiEDEaB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 00:29:53 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F110326567;
-        Tue,  3 May 2022 21:26:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 4 May 2022 00:30:01 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED39026572;
+        Tue,  3 May 2022 21:26:25 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A27F6B82280;
-        Wed,  4 May 2022 04:26:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF2C8C385A4;
-        Wed,  4 May 2022 04:26:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651638375;
-        bh=2grO925VY+hSkPAqlv6IbwcYz8VLaRjVf1Oso1qMAqA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=KoCDcdKBjR87YVuMlGi+tTfF8Yy73r2asC5iEP0t8ihdkyU3gx8q5kC/4W0tplzmX
-         6lrgXdW7Mp8r/uzdYEdlVK8mlPiS2ouF7g/Kd7CJsgTeNOOPEz6rJJBNk4qHpmtHZA
-         hLUDP0SLBDO3sFPQXXjLUnE+f/QH7H7axRGU6YtjWSA5M46Z1rVlSsJkp5F33xHC7g
-         BfCuZV9G5dG40HSQqWLROxiQzYQXEmI9zR4l2ybXsGJeQJbSmE1V0WqXKzgdXlF9kP
-         vNoIzW7nptOq68EEoKt/7NnUbAe38hoQ6VkG78n+Ua+wmESgyE9N549sBaMWRBVnFd
-         r+n1FrXYtqwaQ==
-Date:   Wed, 4 May 2022 07:24:50 +0300
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Ahmad Fatoum <a.fatoum@pengutronix.de>
-Cc:     James Bottomley <jejb@linux.ibm.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        David Howells <dhowells@redhat.com>, kernel@pengutronix.de,
-        Pankaj Gupta <pankaj.gupta@nxp.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Horia =?utf-8?Q?Geant=C4=83?= <horia.geanta@nxp.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Biggers <ebiggers@kernel.org>,
-        Jan Luebbe <j.luebbe@pengutronix.de>,
-        David Gstir <david@sigma-star.at>,
-        Richard Weinberger <richard@nod.at>,
-        Franck LENORMAND <franck.lenormand@nxp.com>,
-        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
-        Sumit Garg <sumit.garg@linaro.org>, keyrings@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-Subject: Re: [PATCH v8 6/6] MAINTAINERS: add myself as CAAM trusted key
- maintainer
-Message-ID: <YnIAEmUKfFxoGlwr@kernel.org>
-References: <20220428140145.870527-1-a.fatoum@pengutronix.de>
- <20220428140145.870527-7-a.fatoum@pengutronix.de>
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KtP0b5m2Pz4xXS;
+        Wed,  4 May 2022 14:26:23 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1651638383;
+        bh=SHPPJp31BCnVfYWr5+Sk/nt5ENYH5SkiNTeqxa7MWkY=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=oS+qcGOuDQsWFo5a/KFL13iKvl/FHlFSIqRQKe87QF1I/wEAhS4BFyWU1iX+/MWV1
+         1XRjbEhK9RIFQt/ElLafy/ZRjoiDjT04awFIpDkCUW8PPrmvvR6HDpOdi0lhO51K29
+         D3clEdBXPs3Lzv3ZXmyTGqsn9b6zZuI7/Ugor4vJRONuRUh8xNPQYM0pDnWJ+xqLm8
+         zOHiQ41XsurZ3lZo5onLRtJZyvJRGDH5j7psEXFXaGEwhpnTk0g7qPYfiFg2L+TedW
+         SELKCGQxj5bluHY3tuQFqy+K6kHqCe8s1LAtTqw/HD3HL9xfQYXJy5bFilIXxT/E3N
+         lAw47u2nlVsnQ==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Fabiano Rosas <farosas@linux.ibm.com>,
+        Laurent Dufour <ldufour@linux.ibm.com>
+Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, Nicholas Piggin <npiggin@gmail.com>
+Subject: Re: [PATCH v2] powerpc/rtas: Keep MSR[RI] set when calling RTAS
+In-Reply-To: <87levia8wy.fsf@linux.ibm.com>
+References: <20220401140634.65726-1-ldufour@linux.ibm.com>
+ <87r15aveny.fsf@mpe.ellerman.id.au> <87levia8wy.fsf@linux.ibm.com>
+Date:   Wed, 04 May 2022 14:26:17 +1000
+Message-ID: <87k0b1vs7q.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220428140145.870527-7-a.fatoum@pengutronix.de>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-"MAINTAINERS: add KEYS-TRUSTED-CAAM"
+Fabiano Rosas <farosas@linux.ibm.com> writes:
+> Michael Ellerman <mpe@ellerman.id.au> writes:
+>>> diff --git a/arch/powerpc/kernel/entry_64.S b/arch/powerpc/kernel/entry_64.S
+>>> index 9581906b5ee9..65cb14b56f8d 100644
+>>> --- a/arch/powerpc/kernel/entry_64.S
+>>> +++ b/arch/powerpc/kernel/entry_64.S
+>>> @@ -330,22 +330,18 @@ _GLOBAL(enter_rtas)
+>>>  	clrldi	r4,r4,2			/* convert to realmode address */
+>>>         	mtlr	r4
+>>>  
+>>> -	li	r0,0
+>>> -	ori	r0,r0,MSR_EE|MSR_SE|MSR_BE|MSR_RI
+>>> -	andc	r0,r6,r0
+>>> -	
+>>> -        li      r9,1
+>>> -        rldicr  r9,r9,MSR_SF_LG,(63-MSR_SF_LG)
+>>> -	ori	r9,r9,MSR_IR|MSR_DR|MSR_FE0|MSR_FE1|MSR_FP|MSR_RI|MSR_LE
+>>> -	andc	r6,r0,r9
+>>  
+>> One advantage of the old method is it can adapt to new MSR bits being
+>> set by the kernel.
+>>
+>> For example we used to use RTAS on powernv, and this code didn't need
+>> updating to cater to MSR_HV being set. We will probably never use RTAS
+>> on bare-metal again, so that's OK.
+>>
+>> But your change might break secure virtual machines, because it clears
+>> MSR_S whereas the old code didn't. I think SVMs did use RTAS, but I
+>> don't know whether it matters if it's called with MSR_S set or not?
+>>
+>> Not sure if anyone will remember, or has a working setup they can test.
+>> Maybe for now we just copy MSR_S from the kernel MSR the way the
+>> current code does.
+>
+> Would the kernel even be able to change the bit? I think only urfid can
+> clear MSR_S.
 
-On Thu, Apr 28, 2022 at 04:01:45PM +0200, Ahmad Fatoum wrote:
-> Add myself as maintainer for the just added trusted key integration
-> with the NXP Cryptographic Acceleration and Assurance Module.
+Good point :)
 
-Please, remove "just added". Also what the heck is this integration
-in this context? It's afaik a process and not any sort of asset.
-
-Maybe rephrase the whole paragraph simply:
-
-"Create a maintainer entry for CAAM trusted keys in the Linux keyring."
-
-BR, Jarkko
+cheers

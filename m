@@ -2,49 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5ECFB51AE3E
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 21:45:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A82F351AE3F
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 21:45:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377688AbiEDTs3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 15:48:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49578 "EHLO
+        id S1377680AbiEDTsg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 15:48:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355986AbiEDTsQ (ORCPT
+        with ESMTP id S243353AbiEDTsQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 4 May 2022 15:48:16 -0400
 Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC5294EDD0
-        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 12:44:24 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 221634EDD6
+        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 12:44:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651693464; x=1683229464;
+  t=1651693465; x=1683229465;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=bK2TReCUHfAszgii0Tr9IuDocBndl0lir9IoU+a8Ioo=;
-  b=Dh6D429YfXgKgTl4dgwaitc1WxR4L7eR616ntr5YDQm0gnrNMDzSccNR
-   HN8ZpgsxJaEVEecCIUzO4KDREVuRUAHDn6dET/9TVbPjRv3n2jJVAhAnc
-   PO2fu+uivPGDnZgk7PNJNFyZgNLvKc6YOii3tmIu+cx67TpaG3QWLlnZr
-   ef0SqRKPx+k6eE/Z8qTrcgkCd9HSzpnIC+LD2qt513ge0hW9LNSRIUEQn
-   RweVrhGHPTCUiBq9tlYUmcrFFI15OqExJ/F6b7ir1CIxY2vmTA94Saa1Z
-   3TRRqboRZKlHjtJzSoHHSZKr8ihKeUOr28is1Loye4+HESdebgDPN+gAv
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10337"; a="248416189"
+  bh=6nf0lKo1z8iYj0OyuFjgTRLEeKLGWsY9TcN/zLpMaVQ=;
+  b=JB6ynUfDKHMoftgujtRjtC9OGvdxKD78AGlGzCu7k02BeNaklPIuKgGS
+   c1nohsNklmMIWCLzzdKUlvK9DQbh0kQ6wPbIN62GEJRhldSO+KviAxZv6
+   VZNS5/it9HFCchRRYlWSFXxUMJH+l+LAzJVlNAnaGtaiSxTYEBPgmjeHj
+   2GSHeKAG24hTirB/r2icO/S9mchwFo0eJwsML0lOqQnb1R6PCNmElFA+9
+   9PpM1W/I/ccZjTdI9XQpk09AV29juKdA3fyrqYt2+Z/aZ6ZYiqe4OcOCJ
+   6/tY18VnOqFIoQ7dOgz7SOMph4g5hsG4RmA0S6GaCU4+gtnqqqUxDGjCn
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10337"; a="248416190"
 X-IronPort-AV: E=Sophos;i="5.91,199,1647327600"; 
-   d="scan'208";a="248416189"
+   d="scan'208";a="248416190"
 Received: from orsmga002.jf.intel.com ([10.7.209.21])
   by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2022 12:44:22 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,199,1647327600"; 
-   d="scan'208";a="549003458"
+   d="scan'208";a="549003462"
 Received: from kanliang-dev.jf.intel.com ([10.165.154.102])
   by orsmga002.jf.intel.com with ESMTP; 04 May 2022 12:44:21 -0700
 From:   kan.liang@linux.intel.com
 To:     peterz@infradead.org, mingo@redhat.com,
         linux-kernel@vger.kernel.org
 Cc:     Kan Liang <kan.liang@linux.intel.com>
-Subject: [PATCH 2/5] perf/x86/msr: Add new Alder Lake and Raptor Lake support
-Date:   Wed,  4 May 2022 12:44:10 -0700
-Message-Id: <20220504194413.1003071-2-kan.liang@linux.intel.com>
+Subject: [PATCH 3/5] perf/x86/cstate: Add new Alder Lake and Raptor Lake support
+Date:   Wed,  4 May 2022 12:44:11 -0700
+Message-Id: <20220504194413.1003071-3-kan.liang@linux.intel.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220504194413.1003071-1-kan.liang@linux.intel.com>
 References: <20220504194413.1003071-1-kan.liang@linux.intel.com>
@@ -62,28 +62,28 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Kan Liang <kan.liang@linux.intel.com>
 
-The new Alder Lake N and Raptor Lake P also support PPERF and SMI_COUNT
-MSRs.
+From the perspective of Intel cstate residency counters, there is nothing
+changed for the new Alder Lake N and Raptor Lake P.
 
 Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
 ---
- arch/x86/events/msr.c | 2 ++
+ arch/x86/events/intel/cstate.c | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/arch/x86/events/msr.c b/arch/x86/events/msr.c
-index 6d759f88315c..ac542f98c070 100644
---- a/arch/x86/events/msr.c
-+++ b/arch/x86/events/msr.c
-@@ -103,7 +103,9 @@ static bool test_intel(int idx, void *data)
- 	case INTEL_FAM6_ROCKETLAKE:
- 	case INTEL_FAM6_ALDERLAKE:
- 	case INTEL_FAM6_ALDERLAKE_L:
-+	case INTEL_FAM6_ALDERLAKE_N:
- 	case INTEL_FAM6_RAPTORLAKE:
-+	case INTEL_FAM6_RAPTORLAKE_P:
- 		if (idx == PERF_MSR_SMI || idx == PERF_MSR_PPERF)
- 			return true;
- 		break;
+diff --git a/arch/x86/events/intel/cstate.c b/arch/x86/events/intel/cstate.c
+index 5d7762288a24..0b8d2da31b3e 100644
+--- a/arch/x86/events/intel/cstate.c
++++ b/arch/x86/events/intel/cstate.c
+@@ -681,7 +681,9 @@ static const struct x86_cpu_id intel_cstates_match[] __initconst = {
+ 	X86_MATCH_INTEL_FAM6_MODEL(ROCKETLAKE,		&icl_cstates),
+ 	X86_MATCH_INTEL_FAM6_MODEL(ALDERLAKE,		&adl_cstates),
+ 	X86_MATCH_INTEL_FAM6_MODEL(ALDERLAKE_L,		&adl_cstates),
++	X86_MATCH_INTEL_FAM6_MODEL(ALDERLAKE_N,		&adl_cstates),
+ 	X86_MATCH_INTEL_FAM6_MODEL(RAPTORLAKE,		&adl_cstates),
++	X86_MATCH_INTEL_FAM6_MODEL(RAPTORLAKE_P,	&adl_cstates),
+ 	{ },
+ };
+ MODULE_DEVICE_TABLE(x86cpu, intel_cstates_match);
 -- 
 2.35.1
 

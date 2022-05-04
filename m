@@ -2,98 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02F7D51AD17
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 20:38:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B72F751ACF8
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 20:35:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345817AbiEDSio (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 14:38:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34346 "EHLO
+        id S1377218AbiEDSii (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 14:38:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377180AbiEDSi2 (ORCPT
+        with ESMTP id S1377103AbiEDSiX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 14:38:28 -0400
-Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69F6E4FC67
-        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 11:29:19 -0700 (PDT)
-Received: by mail-pl1-x64a.google.com with SMTP id x4-20020a1709028ec400b0015e84d42eaaso1104395plo.7
-        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 11:29:19 -0700 (PDT)
+        Wed, 4 May 2022 14:38:23 -0400
+Received: from mail-ot1-x331.google.com (mail-ot1-x331.google.com [IPv6:2607:f8b0:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 492372E9D6
+        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 11:28:41 -0700 (PDT)
+Received: by mail-ot1-x331.google.com with SMTP id g11-20020a9d648b000000b00605e4278793so1436340otl.7
+        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 11:28:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=8y34WRUMkXGaI7LiirYCxdfq8R7sMsgfnkBgNzio7vc=;
-        b=izXY7EVw92FzDfdevAMJvFOBnGz+CSM6UkMIvsTglpiKteCgoZp6QifGhzq1D4Dl+i
-         ca0HEhFdNXai4YsJumOdVHvmxKc8ym0x0dz0St7Q6XoPZTF+NO0x7edWwSQNIZpaq8bk
-         kL0iikHDGg++XGlx99/jFSXxot6+qQJ2KhEppwK0hm9hotUM/Sm4GyhPfhts9lB17crq
-         i+vOmM8CMAhyBDy0kvP73FtHqit/Rrrc1kCS1017Jwr9Y/cfzWT4ipdkOFYso7UepntB
-         qK7LSOsDdboMtlc46i27pL7TUpEow9zhMVfNK7WpB8BonYucl67mrDoXR4Wz55RDwe2T
-         CPGw==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=TQPIA3VoumXyz1RrJSRcgA9lX+Pt6VG1KcKf5rCLbxQ=;
+        b=y1IysrpGVOmONLnNwZEc588WNAHRPAVbFpbSh/tJ4Au9pwjAy+vAt6bt+DJFv/wPCj
+         y9n5yzmHwrbKGHGMfUf7W/KJd+IFmpwCMHVhCkYNtZo3mdz1V/opKepzQdrFWSaUWUlt
+         Q70UsdaJdM4/hzlkecq9pUbmdwSoE3i7m7s9GewikuTR9bPIqoPmZXHhpPr+gC72pR/p
+         Z29aM2mn1GTHHp5RBCcB8Wzf5wtwdcen1Du1C6BZYvk2ehSnXJPFYMcW3fAiLbQqiG2a
+         0seyeIzRe4cMUdCb2YpX/yt9KfODo/fC4RvdEplUg9NtsQHmYnhP3ofpAuk4FEYS1i7w
+         YVBA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=8y34WRUMkXGaI7LiirYCxdfq8R7sMsgfnkBgNzio7vc=;
-        b=7v3OrtorRQeojx+ygwPqcP3j6zSJgE8VXzyXfy0BIwMKGIdzr4Y/M6nQkAbHlc0CHa
-         EwQERGFk87kW/Uvrb/RF21Rs7jxo4ex8nc9c1uV6/n5hskMZYMln2SP+0yh9YqDtOOSS
-         4HQAEN0lJH7mJiqmmnz5o6UJ11le4vjzdsIMlv7ufXxEFHV1vC+QZEJGxilq749cnEYu
-         FIAjnx+9DWwJEomaczUueoet0YedQxWxO9wQpK+hJ2iuRdzoAKY7jwD2vHjqVG8v7fJw
-         9Hm7Ht7gE3c0vWyQq3f/7OP+kGj0k0FI2UHvM4vfju7aXiBtTCffWcmq5/RIkZZ7zRPH
-         nL6g==
-X-Gm-Message-State: AOAM531HqI0qUCFWhRhuKah01Oasp+NxGIUtGgrLBYPx4i7leQOI3g6f
-        DeUvyt/6dlFV16Y4aPh2GVVtGUE2fj25
-X-Google-Smtp-Source: ABdhPJz3R/tzVrU+GfQpvY/EakNRjlgGc3rdRnTdOp7XNw4RRoGUgJkJqCBw4Q5RqkYLf56sAroZKd5Rmhyk
-X-Received: from yuanchu.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:1e51])
- (user=yuanchu job=sendgmr) by 2002:aa7:8888:0:b0:50f:2e7a:76b7 with SMTP id
- z8-20020aa78888000000b0050f2e7a76b7mr6455495pfe.48.1651688958824; Wed, 04 May
- 2022 11:29:18 -0700 (PDT)
-Date:   Wed,  4 May 2022 18:29:08 +0000
-In-Reply-To: <20220504001153.119485-1-sj@kernel.org>
-Message-Id: <20220504182908.1322874-1-yuanchu@google.com>
-Mime-Version: 1.0
-References: <20220504001153.119485-1-sj@kernel.org>
-X-Mailer: git-send-email 2.36.0.464.gb9c8b46e94-goog
-Subject: [PATCH v3] selftests/damon: suppress compiler warnings for huge_count_read_write
-From:   Yuanchu Xie <yuanchu@google.com>
-To:     Shuah Khan <shuah@kernel.org>, Markus Boehme <markubo@amazon.de>,
-        SeongJae Park <sj@kernel.org>
-Cc:     rientjes@google.com, Andrew Morton <akpm@linux-foundation.org>,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Yuanchu Xie <yuanchu@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=TQPIA3VoumXyz1RrJSRcgA9lX+Pt6VG1KcKf5rCLbxQ=;
+        b=Dj+eI2W2pU8y71hXJVwKFmEDxW4uHoZ21A4LWREPF2i1B3Ke6jdroC7At1w/S//e10
+         0dZrOgiaNK7D9yro5k1Br2uRO40zmUMS5eE83a5kfLiGzykK5GVdRkvXxfoaKWYq9GNF
+         lSvvXsWPXdk4o8TdvqznVTZ/3CbfBOF8XqAMDO0x4R5+nuv++pu/qAJABP9Yge6T5S/8
+         tQ5hmRJstMvRYbczCPKfdhDGXGeHkNvwN0uSdt/n5h5Dd9CX6hEKI2wQc3eR/i+HEpwz
+         BaMoE7oa8R2dQCQXDygKJsEs1Vn7EATU+W4XNC7gOud7kZ2Dtfi3SY0qa1d1MtFWMTm+
+         xsBA==
+X-Gm-Message-State: AOAM532vUEpMbk+MvqCoxbNru5nNuP28fj8TWCctR/GbQNQy0c1zBqgu
+        M1XLqOHTS1hxtkRY5Smu41pQoQ==
+X-Google-Smtp-Source: ABdhPJxYkiegcJ9IRk6D1ytXYH8Rm5Z9s0sDkK09+L3SZz4yCj9MynlTPJUgbX3gQGvlpBMyFfR0+A==
+X-Received: by 2002:a9d:2621:0:b0:606:254a:bc78 with SMTP id a30-20020a9d2621000000b00606254abc78mr4469271otb.57.1651688920275;
+        Wed, 04 May 2022 11:28:40 -0700 (PDT)
+Received: from ripper (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id y14-20020a0568302a0e00b006060322123fsm3783845otu.15.2022.05.04.11.28.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 May 2022 11:28:39 -0700 (PDT)
+Date:   Wed, 4 May 2022 11:30:25 -0700
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Doug Anderson <dianders@chromium.org>
+Cc:     Sai Prakash Ranjan <quic_saipraka@quicinc.com>,
+        matvore@chromium.org, Andy Gross <agross@kernel.org>,
+        "Reviewed-by : Stephen Boyd" <swboyd@chromium.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>
+Subject: Re: (subset) [PATCH] soc: qcom: socinfo: Add another ID for sc7180
+Message-ID: <YnLGQWPmcJo73vtu@ripper>
+References: <20220502173338.1.I26eca1856f99e6160d30de6d50ecab60e6226354@changeid>
+ <165168485227.3730817.11549721304895378126.b4-ty@linaro.org>
+ <CAD=FV=WkJu8s5EmwJke49TPZ8CU8kD-CMcQi-9a3oUMqz9yBrQ@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAD=FV=WkJu8s5EmwJke49TPZ8CU8kD-CMcQi-9a3oUMqz9yBrQ@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The test case added in commit db7a347b26fe ("mm/damon/dbgfs:
-use '__GFP_NOWARN' for user-specified size buffer allocation")
-intentionally writes and reads with a large count to cause
-allocation failure and check for kernel warnings. We suppress
-the compiler warnings for these calls as they work as intended.
+On Wed 04 May 10:51 PDT 2022, Doug Anderson wrote:
 
-Signed-off-by: Yuanchu Xie <yuanchu@google.com>
----
- tools/testing/selftests/damon/huge_count_read_write.c | 2 ++
- 1 file changed, 2 insertions(+)
+> Hi,
+> 
+> On Wed, May 4, 2022 at 10:21 AM Bjorn Andersson
+> <bjorn.andersson@linaro.org> wrote:
+> >
+> > On Mon, 2 May 2022 17:33:45 -0700, Douglas Anderson wrote:
+> > > It appears the some sc7180 devices, like the one in my
+> > > sc7180-trogdor-homestar, report an ID of 407 instead of 425. Add
+> > > another ID into the list.
+> > >
+> > >
+> >
+> > Applied, thanks!
+> >
+> > [1/1] soc: qcom: socinfo: Add another ID for sc7180
+> >       commit: c35886d605604e0b03cdd835ae3249dc1fe0cc2a
+> 
+> Hmm. Did you see the responses from Sai [1] about this? He seemed to
+> indicate that there might be some issue here because he thought 407
+> was supposed to be a different SoC. Are we sure we want to land this
+> patch while we're sorting it out?
+> 
 
-diff --git a/tools/testing/selftests/damon/huge_count_read_write.c b/tools/testing/selftests/damon/huge_count_read_write.c
-index ad7a6b4cf338..91bd80c75cd9 100644
---- a/tools/testing/selftests/damon/huge_count_read_write.c
-+++ b/tools/testing/selftests/damon/huge_count_read_write.c
-@@ -2,6 +2,8 @@
- /*
-  * Author: SeongJae Park <sj@kernel.org>
-  */
-+#pragma GCC diagnostic ignored "-Wstringop-overflow"
-+#pragma GCC diagnostic ignored "-Wstringop-overread"
- 
- #include <fcntl.h>
- #include <stdlib.h>
--- 
-2.36.0.464.gb9c8b46e94-goog
+I stared at the thread but didn't see his reply for some reason.
 
+Congrats on the getting the random SoC in your device ;) As this was the
+top patch on drivers-for-5.19, I just popped that off and pushed the
+branch again.
+
+Let me know when you've figured the numbering out (and if it turns out
+to be the mobile id I wouldn't mind carrying that in the table)
+
+Regards,
+Bjorn
+
+> [1] https://lore.kernel.org/r/13819b2d-26f0-14f4-9cb9-affb6b18f13d@quicinc.com/

@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C668F51AAD1
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:34:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CEC851AA8C
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:27:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358906AbiEDRfZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 13:35:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40662 "EHLO
+        id S1357601AbiEDR23 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 13:28:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357034AbiEDRJx (ORCPT
+        with ESMTP id S1356181AbiEDRJD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 13:09:53 -0400
+        Wed, 4 May 2022 13:09:03 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45DFA483B7;
-        Wed,  4 May 2022 09:56:59 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 835E452E41;
+        Wed,  4 May 2022 09:54:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 60ECC618E6;
-        Wed,  4 May 2022 16:56:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC60AC385AA;
-        Wed,  4 May 2022 16:56:58 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1F13961794;
+        Wed,  4 May 2022 16:54:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69FA2C385A4;
+        Wed,  4 May 2022 16:54:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651683418;
-        bh=U7CHLa07UFAQueiR4u3l4fMlzXwhdCCICSZBYwXOThI=;
+        s=korg; t=1651683295;
+        bh=TSEPwtreDnFz7e52zYOcOmj3K2cUukjzTzINFygPDPg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OI2vJSEjHlH5i0tcUjGn1FDOT/jIdzfyUhH68DJrK/Wzx6lwqQNStCWfO6pG0MidN
-         AQu6ddrGShX6azolQNqqLZ53H0NuQWVMGDXkY38S62FYpxRkaaKyaJ61NE/wbjd9zL
-         eG9XV8domPckK3Hlsgjb5R7Pm9Mo6VIDgjYazvMQ=
+        b=bvMiQtm6PNi/eFip9l7drEO9FKoFN9Em+kl0t/nK5QR42Zo3r1Yn9oG20iTdDbRQG
+         1TyOUIMjxMUipLkXJFXHGGdUaAw8a9r9f6MP+Vkju7sy5owGZ+o1U7BRzcfHMp+9Qy
+         8a/HiJj8BRRTPHaJiDRs6dEGA2giNnR8JBIlngdg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Eyal Birger <eyal.birger@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 103/225] bpf, lwt: Fix crash when using bpf_skb_set_tunnel_key() from bpf_xmit lwt hook
-Date:   Wed,  4 May 2022 18:45:41 +0200
-Message-Id: <20220504153119.885566519@linuxfoundation.org>
+        stable@vger.kernel.org,
+        =?UTF-8?q?Ville=20Syrj=C3=A4l=C3=A4?= 
+        <ville.syrjala@linux.intel.com>,
+        Woody Suwalski <wsuwalski@gmail.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+Subject: [PATCH 5.15 149/177] ACPI: processor: idle: Avoid falling back to C3 type C-states
+Date:   Wed,  4 May 2022 18:45:42 +0200
+Message-Id: <20220504153106.656086753@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220504153110.096069935@linuxfoundation.org>
-References: <20220504153110.096069935@linuxfoundation.org>
+In-Reply-To: <20220504153053.873100034@linuxfoundation.org>
+References: <20220504153053.873100034@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,87 +57,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eyal Birger <eyal.birger@gmail.com>
+From: Ville Syrjälä <ville.syrjala@linux.intel.com>
 
-[ Upstream commit b02d196c44ead1a5949729be9ff08fe781c3e48a ]
+commit fc45e55ebc58dbf622cb89ddbf797589c7a5510b upstream.
 
-xmit_check_hhlen() observes the dst for getting the device hard header
-length to make sure a modified packet can fit. When a helper which changes
-the dst - such as bpf_skb_set_tunnel_key() - is called as part of the
-xmit program the accessed dst is no longer valid.
+The "safe state" index is used by acpi_idle_enter_bm() to avoid
+entering a C-state that may require bus mastering to be disabled
+on entry in the cases when this is not going to happen.  For this
+reason, it should not be set to point to C3 type of C-states, because
+they may require bus mastering to be disabled on entry in principle.
 
-This leads to the following splat:
+This was broken by commit d6b88ce2eb9d ("ACPI: processor idle: Allow
+playing dead in C3 state") which inadvertently allowed the "safe
+state" index to point to C3 type of C-states.
 
- BUG: kernel NULL pointer dereference, address: 00000000000000de
- #PF: supervisor read access in kernel mode
- #PF: error_code(0x0000) - not-present page
- PGD 0 P4D 0
- Oops: 0000 [#1] PREEMPT SMP PTI
- CPU: 0 PID: 798 Comm: ping Not tainted 5.18.0-rc2+ #103
- Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.14.0-2 04/01/2014
- RIP: 0010:bpf_xmit+0xfb/0x17f
- Code: c6 c0 4d cd 8e 48 c7 c7 7d 33 f0 8e e8 42 09 fb ff 48 8b 45 58 48 8b 95 c8 00 00 00 48 2b 95 c0 00 00 00 48 83 e0 fe 48 8b 00 <0f> b7 80 de 00 00 00 39 c2 73 22 29 d0 b9 20 0a 00 00 31 d2 48 89
- RSP: 0018:ffffb148c0bc7b98 EFLAGS: 00010282
- RAX: 0000000000000000 RBX: 0000000000240008 RCX: 0000000000000000
- RDX: 0000000000000010 RSI: 00000000ffffffea RDI: 00000000ffffffff
- RBP: ffff922a828a4e00 R08: ffffffff8f1350e8 R09: 00000000ffffdfff
- R10: ffffffff8f055100 R11: ffffffff8f105100 R12: 0000000000000000
- R13: ffff922a828a4e00 R14: 0000000000000040 R15: 0000000000000000
- FS:  00007f414e8f0080(0000) GS:ffff922afdc00000(0000) knlGS:0000000000000000
- CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
- CR2: 00000000000000de CR3: 0000000002d80006 CR4: 0000000000370ef0
- Call Trace:
-  <TASK>
-  lwtunnel_xmit.cold+0x71/0xc8
-  ip_finish_output2+0x279/0x520
-  ? __ip_finish_output.part.0+0x21/0x130
+This results in a machine that won't boot past the point when it first
+enters C3. Restore the correct behaviour (either demote to C1/C2, or
+use C3 but also set ARB_DIS=1).
 
-Fix by fetching the device hard header length before running the BPF code.
+I hit this on a Fujitsu Siemens Lifebook S6010 (P3) machine.
 
-Fixes: 3a0af8fd61f9 ("bpf: BPF for lightweight tunnel infrastructure")
-Signed-off-by: Eyal Birger <eyal.birger@gmail.com>
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Link: https://lore.kernel.org/bpf/20220420165219.1755407-1-eyal.birger@gmail.com
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: d6b88ce2eb9d ("ACPI: processor idle: Allow playing dead in C3 state")
+Cc: 5.16+ <stable@vger.kernel.org> # 5.16+
+Signed-off-by: Ville Syrjälä <ville.syrjala@linux.intel.com>
+Tested-by: Woody Suwalski <wsuwalski@gmail.com>
+[ rjw: Subject and changelog adjustments ]
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/core/lwt_bpf.c | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+ drivers/acpi/processor_idle.c |    3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/net/core/lwt_bpf.c b/net/core/lwt_bpf.c
-index 349480ef68a5..8b6b5e72b217 100644
---- a/net/core/lwt_bpf.c
-+++ b/net/core/lwt_bpf.c
-@@ -159,10 +159,8 @@ static int bpf_output(struct net *net, struct sock *sk, struct sk_buff *skb)
- 	return dst->lwtstate->orig_output(net, sk, skb);
- }
- 
--static int xmit_check_hhlen(struct sk_buff *skb)
-+static int xmit_check_hhlen(struct sk_buff *skb, int hh_len)
- {
--	int hh_len = skb_dst(skb)->dev->hard_header_len;
--
- 	if (skb_headroom(skb) < hh_len) {
- 		int nhead = HH_DATA_ALIGN(hh_len - skb_headroom(skb));
- 
-@@ -274,6 +272,7 @@ static int bpf_xmit(struct sk_buff *skb)
- 
- 	bpf = bpf_lwt_lwtunnel(dst->lwtstate);
- 	if (bpf->xmit.prog) {
-+		int hh_len = dst->dev->hard_header_len;
- 		__be16 proto = skb->protocol;
- 		int ret;
- 
-@@ -291,7 +290,7 @@ static int bpf_xmit(struct sk_buff *skb)
- 			/* If the header was expanded, headroom might be too
- 			 * small for L2 header to come, expand as needed.
- 			 */
--			ret = xmit_check_hhlen(skb);
-+			ret = xmit_check_hhlen(skb, hh_len);
- 			if (unlikely(ret))
- 				return ret;
- 
--- 
-2.35.1
-
+--- a/drivers/acpi/processor_idle.c
++++ b/drivers/acpi/processor_idle.c
+@@ -792,7 +792,8 @@ static int acpi_processor_setup_cstates(
+ 		if (cx->type == ACPI_STATE_C1 || cx->type == ACPI_STATE_C2 ||
+ 		    cx->type == ACPI_STATE_C3) {
+ 			state->enter_dead = acpi_idle_play_dead;
+-			drv->safe_state_index = count;
++			if (cx->type != ACPI_STATE_C3)
++				drv->safe_state_index = count;
+ 		}
+ 		/*
+ 		 * Halt-induced C1 is not good for ->enter_s2idle, because it
 
 

@@ -2,158 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4D07519FFA
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 14:51:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFDFA519FFD
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 14:51:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350027AbiEDMyt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 08:54:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39808 "EHLO
+        id S1345771AbiEDMyy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 08:54:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350025AbiEDMyn (ORCPT
+        with ESMTP id S240294AbiEDMyn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 4 May 2022 08:54:43 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68AA3340DF;
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D206634BBC;
         Wed,  4 May 2022 05:51:07 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id l18so2675774ejc.7;
-        Wed, 04 May 2022 05:51:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=4oUj7O1NwJKsfpkZYyH3UkjfTQ0Yjl6gl4HxIj+8zVw=;
-        b=MEb2d+PxSJCuqZOwnllnt/62Wd7GMRUtBYnzNjs1ff4SKu/3pNBjnpeboa0sajWeJp
-         89hF2rFzTdEKo5hnkFVjq2JBX0Ky70LKfZGDIJBiGJljv7pcb8/uvG9JNunt0wq4hgad
-         VYwy9I5C6Ns1qPuCxNbIqi1j6ze7sEueUidGiMDOUpA8eq4eIZ1ew9Qua9CQdsHSllEU
-         nU2g5QaYxUtQe0nvMuD78LLBTlaod7OTxK9wC/P0h/GbJo+x/RBsRQCS/KPTdU0P76ZC
-         zCXARGNTDcY0fTpIK02bJM0KBij9teAtnDVn76mBRYqBcoKf5dUo6O9M25Qcp74HGAvL
-         pl5Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=4oUj7O1NwJKsfpkZYyH3UkjfTQ0Yjl6gl4HxIj+8zVw=;
-        b=oacBXH+TpRFsdA/SE9mykVZ6kKiQJDKAFJgb3/5g4jSVW4nDPId+dRlaUeE0TGErew
-         9OfYovcy3atvhsS8xCR8cC64M4NYEz+zPrd/8klOBVcS44BmGtGt8S+Ws/T+4ETG5JBM
-         tSb7txjqvFFy/AIsuLp+tfp2Gr8QRHT3zk6SdU7cSMSAzlmHQJjQOAMqGAt4VaNDoNMp
-         R2SLfXvcoKQlqS8zPY/O5EMotyNChFqwFdUjXwUESHec3zcWJchO9Q7tXmm5eJ5ZWPSB
-         8PlngQm46ABUnk6RLHdubpbk9v1zY7dgowuCRkljDpIZQ6YJQ2XXTrvcKXOUEu8kt6eP
-         w02w==
-X-Gm-Message-State: AOAM5304yNc6FThkEFZgBfbV1mG/psJFzuk4LRioB6HPCd72dYgkTqKv
-        3lAa76a09mbyybh6u0uVlhc=
-X-Google-Smtp-Source: ABdhPJzKz5xW6gV7XNgNc0HAq4cChXpUz/hEyX9kk5b86BCBFvkIE27EFe9Pe8Mk0bZ1ZMgwJEuCEA==
-X-Received: by 2002:a17:906:8301:b0:6e4:896d:59b1 with SMTP id j1-20020a170906830100b006e4896d59b1mr19397788ejx.396.1651668665762;
-        Wed, 04 May 2022 05:51:05 -0700 (PDT)
-Received: from anparri.mshome.net (host-2-117-178-169.business.telecomitalia.it. [2.117.178.169])
-        by smtp.gmail.com with ESMTPSA id hz7-20020a1709072ce700b006f3ef214dc9sm5743045ejc.47.2022.05.04.05.51.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 May 2022 05:51:05 -0700 (PDT)
-From:   "Andrea Parri (Microsoft)" <parri.andrea@gmail.com>
-To:     KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        Michael Kelley <mikelley@microsoft.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof Wilczynski <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>
-Cc:     linux-hyperv@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        "Andrea Parri (Microsoft)" <parri.andrea@gmail.com>
-Subject: [PATCH 2/2] PCI: hv: Fix synchronization between channel callback and hv_pci_bus_exit()
-Date:   Wed,  4 May 2022 14:50:39 +0200
-Message-Id: <20220504125039.2598-3-parri.andrea@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220504125039.2598-1-parri.andrea@gmail.com>
-References: <20220504125039.2598-1-parri.andrea@gmail.com>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651668667; x=1683204667;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=QViVx1DZnpgHjCekzYN+RthuhzyIH8/WXaQo0oT1cno=;
+  b=WhWGDpT4yEb+vWDtNK7Dl4D7UxCJmc8YaRvgq8RgGc2hucnZ8vw4rpUB
+   1nnoEkmyZ52ydA0QBPUeY/KPGM7hoCZB+BEDQTiomVIcIn4nVAz9rxsVB
+   /pjK2XfMK/Nv8k9VR6w6bDJL1zqRzHZ2mEdNY3GDMHxPigQDPj0XYMQ0q
+   1cmr/SYvcWBTO1ge0f6cESySCfKScGqYyGJ+1Pb+yI38NPkvT2MIxxAvV
+   zF2y/Z25Khps3bMPATWEOLySOcD1wXt0c4PiMFMiMnv4jYP8nPB9kIBYi
+   k7Pv/FhGk2yrvg5/YZpOs1ffQiN2v8z47KSnnd7BA8T5T5JK/tKoQPS72
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10336"; a="255222031"
+X-IronPort-AV: E=Sophos;i="5.91,198,1647327600"; 
+   d="scan'208";a="255222031"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2022 05:51:07 -0700
+X-IronPort-AV: E=Sophos;i="5.91,198,1647327600"; 
+   d="scan'208";a="620792210"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2022 05:51:04 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1nmET7-00BsqV-PJ;
+        Wed, 04 May 2022 15:51:01 +0300
+Date:   Wed, 4 May 2022 15:51:01 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Henning Schild <henning.schild@siemens.com>
+Cc:     Mark Gross <markgross@kernel.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org,
+        linux-watchdog@vger.kernel.org, Enrico Weigelt <lkml@metux.net>,
+        Gerd Haeussler <gerd.haeussler.ext@siemens.com>
+Subject: Re: [PATCH 0/2] simatic-ipc additions to p2sb apl lake gpio
+Message-ID: <YnJ2tYjCpJi7yc4j@smile.fi.intel.com>
+References: <20220131151346.45792-1-andriy.shevchenko@linux.intel.com>
+ <20220308193522.26696-1-henning.schild@siemens.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220308193522.26696-1-henning.schild@siemens.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[ Similarly to commit a765ed47e4516 ("PCI: hv: Fix synchronization
-  between channel callback and hv_compose_msi_msg()"): ]
+On Tue, Mar 08, 2022 at 08:35:20PM +0100, Henning Schild wrote:
+> This switches the simatic-ipc modules to using the p2sb interface
+> introduced by Andy with "platform/x86: introduce p2sb_bar() helper".
+> 
+> It also switches to one apollo lake device to using gpio leds.
+> 
+> I am kind of hoping Andy will take this on top and propose it in his
+> series.
 
-The (on-stack) teardown packet becomes invalid once the completion
-timeout in hv_pci_bus_exit() has expired and hv_pci_bus_exit() has
-returned.  Prevent the channel callback from accessing the invalid
-packet by removing the ID associated to such packet from the VMbus
-requestor in hv_pci_bus_exit().
+First of all, they are not applicable to my current version [1] of the series
+(it maybe something changed in the Simatic drivers upstream, because I have got
+conflicts there. For the record, I'm using Linux Next as a base.
 
-Signed-off-by: Andrea Parri (Microsoft) <parri.andrea@gmail.com>
----
- drivers/pci/controller/pci-hyperv.c | 26 +++++++++++++++++++-------
- 1 file changed, 19 insertions(+), 7 deletions(-)
+Second question is could it be possible to split first patch into three, or it
+has to be in one?
 
-diff --git a/drivers/pci/controller/pci-hyperv.c b/drivers/pci/controller/pci-hyperv.c
-index 9a3e17b682eb7..db4b3f86726b2 100644
---- a/drivers/pci/controller/pci-hyperv.c
-+++ b/drivers/pci/controller/pci-hyperv.c
-@@ -3620,6 +3620,7 @@ static int hv_pci_probe(struct hv_device *hdev,
- static int hv_pci_bus_exit(struct hv_device *hdev, bool keep_devs)
- {
- 	struct hv_pcibus_device *hbus = hv_get_drvdata(hdev);
-+	struct vmbus_channel *chan = hdev->channel;
- 	struct {
- 		struct pci_packet teardown_packet;
- 		u8 buffer[sizeof(struct pci_message)];
-@@ -3627,13 +3628,14 @@ static int hv_pci_bus_exit(struct hv_device *hdev, bool keep_devs)
- 	struct hv_pci_compl comp_pkt;
- 	struct hv_pci_dev *hpdev, *tmp;
- 	unsigned long flags;
-+	u64 trans_id;
- 	int ret;
- 
- 	/*
- 	 * After the host sends the RESCIND_CHANNEL message, it doesn't
- 	 * access the per-channel ringbuffer any longer.
- 	 */
--	if (hdev->channel->rescind)
-+	if (chan->rescind)
- 		return 0;
- 
- 	if (!keep_devs) {
-@@ -3670,16 +3672,26 @@ static int hv_pci_bus_exit(struct hv_device *hdev, bool keep_devs)
- 	pkt.teardown_packet.compl_ctxt = &comp_pkt;
- 	pkt.teardown_packet.message[0].type = PCI_BUS_D0EXIT;
- 
--	ret = vmbus_sendpacket(hdev->channel, &pkt.teardown_packet.message,
--			       sizeof(struct pci_message),
--			       (unsigned long)&pkt.teardown_packet,
--			       VM_PKT_DATA_INBAND,
--			       VMBUS_DATA_PACKET_FLAG_COMPLETION_REQUESTED);
-+	ret = vmbus_sendpacket_getid(chan, &pkt.teardown_packet.message,
-+				     sizeof(struct pci_message),
-+				     (unsigned long)&pkt.teardown_packet,
-+				     &trans_id, VM_PKT_DATA_INBAND,
-+				     VMBUS_DATA_PACKET_FLAG_COMPLETION_REQUESTED);
- 	if (ret)
- 		return ret;
- 
--	if (wait_for_completion_timeout(&comp_pkt.host_event, 10 * HZ) == 0)
-+	if (wait_for_completion_timeout(&comp_pkt.host_event, 10 * HZ) == 0) {
-+		/*
-+		 * The completion packet on the stack becomes invalid after
-+		 * 'return'; remove the ID from the VMbus requestor if the
-+		 * identifier is still mapped to/associated with the packet.
-+		 *
-+		 * Cf. hv_pci_onchannelcallback().
-+		 */
-+		vmbus_request_addr_match(chan, trans_id,
-+					 (unsigned long)&pkt.teardown_packet);
- 		return -ETIMEDOUT;
-+	}
- 
- 	return 0;
- }
+[1]: https://gitlab.com/andy-shev/next/-/tree/topic/p2sb-next
+It would be nice if you can perform another round of testing.
+
+> Henning Schild (2):
+>   simatic-ipc: convert to use common P2SB accessor
+>   leds: simatic-ipc-leds-gpio: add GPIO version of Siemens driver
+> 
+>  drivers/leds/simple/Kconfig                   |  11 ++
+>  drivers/leds/simple/Makefile                  |   3 +-
+>  drivers/leds/simple/simatic-ipc-leds-gpio.c   | 108 ++++++++++++++++++
+>  drivers/leds/simple/simatic-ipc-leds.c        |  77 +------------
+>  drivers/platform/x86/simatic-ipc.c            |  43 +------
+>  drivers/watchdog/Kconfig                      |   1 +
+>  drivers/watchdog/simatic-ipc-wdt.c            |  15 +--
+>  .../platform_data/x86/simatic-ipc-base.h      |   2 -
+>  8 files changed, 139 insertions(+), 121 deletions(-)
+>  create mode 100644 drivers/leds/simple/simatic-ipc-leds-gpio.c
+> 
+> -- 
+> 2.34.1
+> 
+
 -- 
-2.25.1
+With Best Regards,
+Andy Shevchenko
+
 

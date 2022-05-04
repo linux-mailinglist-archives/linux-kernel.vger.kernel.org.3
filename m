@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF0AA51A6DD
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 18:58:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48E0451AA4B
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:19:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354851AbiEDQ7S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 12:59:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52148 "EHLO
+        id S1356714AbiEDRXK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 13:23:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238008AbiEDQwx (ORCPT
+        with ESMTP id S1355760AbiEDREl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 12:52:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD95F47AC7;
-        Wed,  4 May 2022 09:48:50 -0700 (PDT)
+        Wed, 4 May 2022 13:04:41 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CC424F9D7;
+        Wed,  4 May 2022 09:53:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5F7D661756;
-        Wed,  4 May 2022 16:48:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B269BC385A4;
-        Wed,  4 May 2022 16:48:49 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D368BB8279F;
+        Wed,  4 May 2022 16:53:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C83DC385AF;
+        Wed,  4 May 2022 16:53:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651682929;
-        bh=DAKZ+IMFhB3kynJd+4BTivE21C0uCBxfzjW6JzSQ6Go=;
+        s=korg; t=1651683199;
+        bh=c9tifztPdtIZMnIZoFYTn8EbVTxFGghKHU5Yrzs7rmg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lTeX2TR1ArT841mESjsHviw16mK8AEil+U7C+DpqEvc4lDNRTWBjeAhe7uaZPa20F
-         JYYEBKPQBqlfn5CD79oN1V110lGn+fRtRSMtOXKB+t21vba3ptEY4OnlFwe4EgOb/n
-         IgMwM6oZHBDBw3cwI2gUebNIAiBBTgYyoCWd/qJ8=
+        b=0wnFtUvvswxQNbZXpkHGOrClT9auogOsyQyUOQeMarSn0yGCd34fc+HFEAaluS3BX
+         KjIdoCxf+LVCfCmNaQv+H7nhBHQNG82W7J+At5n09+Q0IMwfroCVSp7Jw4GvnPpN6U
+         AtsMAw9k2QHFJj4j/6p2d57xPds+QgQmmwG6p0xU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Vinod Koul <vkoul@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 36/84] phy: samsung: exynos5250-sata: fix missing device put in probe error paths
+        stable@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 064/177] ARM: dts: at91: Map MCLK for wm8731 on at91sam9g20ek
 Date:   Wed,  4 May 2022 18:44:17 +0200
-Message-Id: <20220504152930.341648671@linuxfoundation.org>
+Message-Id: <20220504153058.732915149@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220504152927.744120418@linuxfoundation.org>
-References: <20220504152927.744120418@linuxfoundation.org>
+In-Reply-To: <20220504153053.873100034@linuxfoundation.org>
+References: <20220504153053.873100034@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,74 +56,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+From: Mark Brown <broonie@kernel.org>
 
-[ Upstream commit 5c8402c4db45dd55c2c93c8d730f5dfa7c78a702 ]
+[ Upstream commit 0e486fe341fabd8e583f3d601a874cd394979c45 ]
 
-The actions of of_find_i2c_device_by_node() in probe function should be
-reversed in error paths by putting the reference to obtained device.
+The MCLK of the WM8731 on the AT91SAM9G20-EK board is connected to the
+PCK0 output of the SoC and is expected to be set to 12MHz. Previously
+this was mapped using pre-common clock API calls in the audio machine
+driver but the conversion to the common clock framework broke that so
+describe things in the DT instead.
 
-Fixes: bcff4cba41bc ("PHY: Exynos: Add Exynos5250 SATA PHY driver")
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Reviewed-by: Alim Akhtar <alim.akhtar@samsung.com>
-Link: https://lore.kernel.org/r/20220407091857.230386-2-krzysztof.kozlowski@linaro.org
-Signed-off-by: Vinod Koul <vkoul@kernel.org>
+Fixes: ff78a189b0ae55f ("ARM: at91: remove old at91-specific clock driver")
+Signed-off-by: Mark Brown <broonie@kernel.org>
+Reviewed-by: Claudiu Beznea <claudiu.beznea@microchip.com>
+Signed-off-by: Nicolas Ferre <nicolas.ferre@microchip.com>
+Link: https://lore.kernel.org/r/20220404102806.581374-2-broonie@kernel.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/phy/samsung/phy-exynos5250-sata.c | 20 ++++++++++++++------
- 1 file changed, 14 insertions(+), 6 deletions(-)
+ arch/arm/boot/dts/at91sam9g20ek_common.dtsi | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/drivers/phy/samsung/phy-exynos5250-sata.c b/drivers/phy/samsung/phy-exynos5250-sata.c
-index 5077987570fd..ea46576404b8 100644
---- a/drivers/phy/samsung/phy-exynos5250-sata.c
-+++ b/drivers/phy/samsung/phy-exynos5250-sata.c
-@@ -199,20 +199,21 @@ static int exynos_sata_phy_probe(struct platform_device *pdev)
- 	sata_phy->phyclk = devm_clk_get(dev, "sata_phyctrl");
- 	if (IS_ERR(sata_phy->phyclk)) {
- 		dev_err(dev, "failed to get clk for PHY\n");
--		return PTR_ERR(sata_phy->phyclk);
-+		ret = PTR_ERR(sata_phy->phyclk);
-+		goto put_dev;
- 	}
- 
- 	ret = clk_prepare_enable(sata_phy->phyclk);
- 	if (ret < 0) {
- 		dev_err(dev, "failed to enable source clk\n");
--		return ret;
-+		goto put_dev;
- 	}
- 
- 	sata_phy->phy = devm_phy_create(dev, NULL, &exynos_sata_phy_ops);
- 	if (IS_ERR(sata_phy->phy)) {
--		clk_disable_unprepare(sata_phy->phyclk);
- 		dev_err(dev, "failed to create PHY\n");
--		return PTR_ERR(sata_phy->phy);
-+		ret = PTR_ERR(sata_phy->phy);
-+		goto clk_disable;
- 	}
- 
- 	phy_set_drvdata(sata_phy->phy, sata_phy);
-@@ -220,11 +221,18 @@ static int exynos_sata_phy_probe(struct platform_device *pdev)
- 	phy_provider = devm_of_phy_provider_register(dev,
- 					of_phy_simple_xlate);
- 	if (IS_ERR(phy_provider)) {
--		clk_disable_unprepare(sata_phy->phyclk);
--		return PTR_ERR(phy_provider);
-+		ret = PTR_ERR(phy_provider);
-+		goto clk_disable;
- 	}
- 
- 	return 0;
+diff --git a/arch/arm/boot/dts/at91sam9g20ek_common.dtsi b/arch/arm/boot/dts/at91sam9g20ek_common.dtsi
+index 87bb39060e8b..ca03685f0f08 100644
+--- a/arch/arm/boot/dts/at91sam9g20ek_common.dtsi
++++ b/arch/arm/boot/dts/at91sam9g20ek_common.dtsi
+@@ -219,6 +219,12 @@ i2c-gpio-0 {
+ 		wm8731: wm8731@1b {
+ 			compatible = "wm8731";
+ 			reg = <0x1b>;
 +
-+clk_disable:
-+	clk_disable_unprepare(sata_phy->phyclk);
-+put_dev:
-+	put_device(&sata_phy->client->dev);
-+
-+	return ret;
- }
++			/* PCK0 at 12MHz */
++			clocks = <&pmc PMC_TYPE_SYSTEM 8>;
++			clock-names = "mclk";
++			assigned-clocks = <&pmc PMC_TYPE_SYSTEM 8>;
++			assigned-clock-rates = <12000000>;
+ 		};
+ 	};
  
- static const struct of_device_id exynos_sata_phy_of_match[] = {
 -- 
 2.35.1
 

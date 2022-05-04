@@ -2,50 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 028D151A837
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:07:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7261951AA9A
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:27:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356106AbiEDRJC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 13:09:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39514 "EHLO
+        id S235921AbiEDRam (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 13:30:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354748AbiEDQ7E (ORCPT
+        with ESMTP id S1356807AbiEDRJo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 12:59:04 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 653A0473A9;
-        Wed,  4 May 2022 09:50:58 -0700 (PDT)
+        Wed, 4 May 2022 13:09:44 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26E4B1E3F4;
+        Wed,  4 May 2022 09:55:43 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 32A0E617C7;
-        Wed,  4 May 2022 16:50:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70970C385A4;
-        Wed,  4 May 2022 16:50:57 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AAE94B82795;
+        Wed,  4 May 2022 16:55:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43222C385AF;
+        Wed,  4 May 2022 16:55:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651683057;
-        bh=XGzZl/x6DuyN5GV6irKCEio/3JA41NUH4s4IYRbrICc=;
+        s=korg; t=1651683341;
+        bh=vNutgZLg99oCceQySVS0XrEC6vcgEAMD8t8e62pH2v4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GAI31Kh9HodgOOHnySVYbV36ZlH8oqrwaxdWXzI8ZmvJHVIJosRc7l8KW1wBkaipN
-         F8p/VLOHgT8lBjgPenam1BalavfWvC6QZxzvUfdpjA0yc9taGH/CvKt4VfCVb5k/Az
-         5OebXybDZj3NG5h+WkvNoZ+5iQ7FwuRHkXHtzGIk=
+        b=BnYqe59qdx737bOQSjUPN/1zcv/iTALfvzWOsameRbZNLP/XzU6kUO2sgUv31Q23O
+         VAVlo/bNwZTzo7TPnVvxCO1Uv4VkDnR7roVxHfQzztipHQTAsbPAwRCjSKx4gVCmyZ
+         fsPad2wuShpo5yWJFJo9mTVf2tLE04vp72iQaaeA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org
+To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Marek Vasut <marex@denx.de>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Fabien Dessenne <fabien.dessenne@foss.st.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Marc Zyngier <maz@kernel.org>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 061/129] pinctrl: stm32: Do not call stm32_gpio_get() for edge triggered IRQs in EOI
-Date:   Wed,  4 May 2022 18:44:13 +0200
-Message-Id: <20220504153026.112064367@linuxfoundation.org>
+        stable@vger.kernel.org, Zheyu Ma <zheyuma97@gmail.com>,
+        Stable@vger.kernel.org,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Subject: [PATCH 5.17 016/225] iio: magnetometer: ak8975: Fix the error handling in ak8975_power_on()
+Date:   Wed,  4 May 2022 18:44:14 +0200
+Message-Id: <20220504153111.708620255@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220504153021.299025455@linuxfoundation.org>
-References: <20220504153021.299025455@linuxfoundation.org>
+In-Reply-To: <20220504153110.096069935@linuxfoundation.org>
+References: <20220504153110.096069935@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -60,49 +55,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Marek Vasut <marex@denx.de>
+From: Zheyu Ma <zheyuma97@gmail.com>
 
-[ Upstream commit e74200ebf7c4f6a7a7d1be9f63833ddba251effa ]
+commit 3a26787dacf04257a68b16315c984eb2c340bc5e upstream.
 
-The stm32_gpio_get() should only be called for LEVEL triggered interrupts,
-skip calling it for EDGE triggered interrupts altogether to avoid wasting
-CPU cycles in EOI handler. On this platform, EDGE triggered interrupts are
-the majority and LEVEL triggered interrupts are the exception no less, and
-the CPU cycles are not abundant.
+When the driver fails to enable the regulator 'vid', we will get the
+following splat:
 
-Fixes: 47beed513a85b ("pinctrl: stm32: Add level interrupt support to gpio irq chip")
-Signed-off-by: Marek Vasut <marex@denx.de>
-Cc: Alexandre Torgue <alexandre.torgue@foss.st.com>
-Cc: Fabien Dessenne <fabien.dessenne@foss.st.com>
-Cc: Linus Walleij <linus.walleij@linaro.org>
-Cc: Marc Zyngier <maz@kernel.org>
-Cc: linux-stm32@st-md-mailman.stormreply.com
-Cc: linux-arm-kernel@lists.infradead.org
-To: linux-gpio@vger.kernel.org
-Link: https://lore.kernel.org/r/20220415215410.498349-1-marex@denx.de
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+[   79.955610] WARNING: CPU: 5 PID: 441 at drivers/regulator/core.c:2257 _regulator_put+0x3ec/0x4e0
+[   79.959641] RIP: 0010:_regulator_put+0x3ec/0x4e0
+[   79.967570] Call Trace:
+[   79.967773]  <TASK>
+[   79.967951]  regulator_put+0x1f/0x30
+[   79.968254]  devres_release_group+0x319/0x3d0
+[   79.968608]  i2c_device_probe+0x766/0x940
+
+Fix this by disabling the 'vdd' regulator when failing to enable 'vid'
+regulator.
+
+Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
+Link: https://lore.kernel.org/r/20220409034849.3717231-2-zheyuma97@gmail.com
+Cc: <Stable@vger.kernel.org>
+Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/pinctrl/stm32/pinctrl-stm32.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/iio/magnetometer/ak8975.c |    1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/pinctrl/stm32/pinctrl-stm32.c b/drivers/pinctrl/stm32/pinctrl-stm32.c
-index e13723bb2be4..12d4d92c4a17 100644
---- a/drivers/pinctrl/stm32/pinctrl-stm32.c
-+++ b/drivers/pinctrl/stm32/pinctrl-stm32.c
-@@ -311,6 +311,10 @@ static void stm32_gpio_irq_trigger(struct irq_data *d)
- 	struct stm32_gpio_bank *bank = d->domain->host_data;
- 	int level;
+--- a/drivers/iio/magnetometer/ak8975.c
++++ b/drivers/iio/magnetometer/ak8975.c
+@@ -416,6 +416,7 @@ static int ak8975_power_on(const struct
+ 	if (ret) {
+ 		dev_warn(&data->client->dev,
+ 			 "Failed to enable specified Vid supply\n");
++		regulator_disable(data->vdd);
+ 		return ret;
+ 	}
  
-+	/* Do not access the GPIO if this is not LEVEL triggered IRQ. */
-+	if (!(bank->irq_type[d->hwirq] & IRQ_TYPE_LEVEL_MASK))
-+		return;
-+
- 	/* If level interrupt type then retrig */
- 	level = stm32_gpio_get(&bank->gpio_chip, d->hwirq);
- 	if ((level == 0 && bank->irq_type[d->hwirq] == IRQ_TYPE_LEVEL_LOW) ||
--- 
-2.35.1
-
 
 

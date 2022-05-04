@@ -2,58 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFC9051B2D8
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 01:24:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1344F51B2DF
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 01:24:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244300AbiEDXDk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 19:03:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45588 "EHLO
+        id S1352409AbiEDXDs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 19:03:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379263AbiEDW4E (ORCPT
+        with ESMTP id S1379411AbiEDW4E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 4 May 2022 18:56:04 -0400
-Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8FB054FA9
-        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 15:51:37 -0700 (PDT)
-Received: by mail-pj1-x104a.google.com with SMTP id q14-20020a17090a178e00b001dc970bf587so1944186pja.1
-        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 15:51:37 -0700 (PDT)
+Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ACD054FAE
+        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 15:51:39 -0700 (PDT)
+Received: by mail-pj1-x1049.google.com with SMTP id oo16-20020a17090b1c9000b001c6d21e8c04so3570433pjb.4
+        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 15:51:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=reply-to:date:in-reply-to:message-id:mime-version:references
          :subject:from:to:cc;
-        bh=E8bGK5PVBFzhrYg0aSqyNIfNbUg8lebD5YMo3ihXQFw=;
-        b=ju6DgO2ll2SfG1Q2SHpR1TiItryw2hgtmZj/p0en6P3uzs2vdVd/ZPdjPEc8lOpjZU
-         sI+Za/opR98R/IdVTxXW1okhIWA+Xk4hYlG0O+9SJ+aLU8BXMH1CTvbGl3NXPjhp3O+b
-         sN9sjF8LPvr1hcGz8srPPMzHkUfN2gG2PK5j4lTpbMRG/dy87D8AVQcwgP9/UT1CclfQ
-         r5ocz15hhAhDWHbgRceohMTnb4XzMVTnjt0rlrr5lXoBc9bBsC4xJKDrAEmRKv2t/dqQ
-         seqx5pCTcwThNcFNGHqdRrfQW+v0+dCG1aTeaROOvz7Ps/rv6M0XJd6TVa8VbC0fk7mG
-         xbWA==
+        bh=DA/fDPR7FY+ZNY50Im1yQgf+ht5FfAkOTNmE+ScZpZM=;
+        b=ZeeKreHJWVQz2m2UB7s7FHMq/p8SocWocBELKqSTgZxWUdVZH9FiVQC6OEUi4YzDsE
+         o7tBI44bdbRq2Syko+zPNST2pAXBZyhPKJUiMw1+7LMddY1EtWlstB7Ed+Ya22VFQllv
+         12kpynBaSIJVhJE58RFo2jeuFMLsRaXxKx2sKIBF9qByUxSF5X7Sv+jVN82lIMDzVZ2A
+         MVb+i2MAIf78Xc68hUkpheLlgxcYjWgKLLw7c7zlHIUvdPBuCbwkYOf+Nj0sm2g1FWEW
+         2OG9VQ1m2Oo38e3tamfFz+aCFUD0wOuRjR7HdSHYhp6n94vuU0d6DrvryyLEPCWntLn3
+         WJZQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:reply-to:date:in-reply-to:message-id
          :mime-version:references:subject:from:to:cc;
-        bh=E8bGK5PVBFzhrYg0aSqyNIfNbUg8lebD5YMo3ihXQFw=;
-        b=YvZCQuD+T0wlrp3qKDr0c9O290Q8snXnMd8c6N9XtTlUejbSqp9x4sm/JiiMkF5yzd
-         jzR7X6OxmpE7EV1g90382dAGUOTyVeuiKmtjuttCEPjgwkexYGvCo9WtBoVDWT7gj2GW
-         cwBnPoxnBM0SODyXzIK8F7NW/KyYBtFUWBhRmXuJclEgkwaVNGJmcUpMzaJ5slyy3kTA
-         wFJbPbu+D4jnswJkSof65crnAG1Q5UCz6L9LPRQBIQRHbgxgYPPD9ZYZHDu9XYBk9b8V
-         szZLYHaDSD+uwwLZ9L9fe1c9XJu8qNOGEyvfYqr8l651XKBBj3NNjaYZ3tHTQNtHTGwL
-         KKVQ==
-X-Gm-Message-State: AOAM533oIHA+IdwuHu0nVNTm2Phqu/EGUyBwXHCtduOUkLyHEQKgSztw
-        f6rDFViyVa5rGYcU9DgBUFrYFWELuUE=
-X-Google-Smtp-Source: ABdhPJyVv2gHDUooRrhrjR1Cxdy1ukNh4vqDHRZo5cApp1oPleS+KQOPaPD88ELcqjP5znH58I0nVn+c+n8=
+        bh=DA/fDPR7FY+ZNY50Im1yQgf+ht5FfAkOTNmE+ScZpZM=;
+        b=sT4hY0/EXPDSogp3jFb2TisGetCc7TohEmMVZqqpPAq3eLpIe7DOrDwj1GRihuO4Oc
+         iCNVdQrE08H/74KzIbbMVP654EJ+TB2jBV3BmUo28VDw4l1AO39LlczbVIAW6Jp2mwuT
+         6J2syIVYUEm/DoZAoQJHBzsXbQfQYAtg8i7ke2SWD6ROBzCKrVy4KyvJADa8pBIskwdv
+         UFhhM6UesDuG8clr9LG/kkhCJBdZIDhVX0BnhfGVB7LUFt2i1Sv/0iMB3UG7hLL2gF4J
+         VLzl6wKu4sagvlvDG0x4Q4PDWNBMSmtBKvIsL3Blbb0EOjcfpLwpjaLVQZV8RK9t9TWX
+         vDVw==
+X-Gm-Message-State: AOAM5304VDNiAL/MV2YZ7yvKRxrz0Pyx8bPurgU0N6bmMNDb6YO4HMi1
+        fc9Qw18Z1a4U9bZNHVJLVzLpcFTESXs=
+X-Google-Smtp-Source: ABdhPJwsV64fqomnb3OF++XujEXwHIhvLv6CB3KXiPLjrWBUdu4SQX7+zwuxGApPxUwaO81GXGIRJY5BHHc=
 X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
- (user=seanjc job=sendgmr) by 2002:a05:6a00:1a06:b0:4fc:d6c5:f3d7 with SMTP id
- g6-20020a056a001a0600b004fcd6c5f3d7mr22897547pfv.53.1651704697249; Wed, 04
- May 2022 15:51:37 -0700 (PDT)
+ (user=seanjc job=sendgmr) by 2002:a17:902:cf0a:b0:156:39c9:4c44 with SMTP id
+ i10-20020a170902cf0a00b0015639c94c44mr23849018plg.124.1651704698816; Wed, 04
+ May 2022 15:51:38 -0700 (PDT)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Wed,  4 May 2022 22:48:19 +0000
+Date:   Wed,  4 May 2022 22:48:20 +0000
 In-Reply-To: <20220504224914.1654036-1-seanjc@google.com>
-Message-Id: <20220504224914.1654036-74-seanjc@google.com>
+Message-Id: <20220504224914.1654036-75-seanjc@google.com>
 Mime-Version: 1.0
 References: <20220504224914.1654036-1-seanjc@google.com>
 X-Mailer: git-send-email 2.36.0.464.gb9c8b46e94-goog
-Subject: [PATCH 073/128] KVM: selftests: Convert debug_regs away from VCPU_ID
+Subject: [PATCH 074/128] KVM: selftests: Add proper helper for advancing RIP
+ in debug_regs
 From:   Sean Christopherson <seanjc@google.com>
 To:     Paolo Bonzini <pbonzini@redhat.com>
 Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
@@ -74,160 +75,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert debug_regs to use vm_create_with_one_vcpu() and pass around a
-'struct kvm_vcpu' object instead of using a global VCPU_ID.
-
-Opportunstically drop the CLEAR_DEBUG/APPLY_DEBUG macros as they only
-obfuscate the code, e.g. operating on local variables not "passed" to the
-macro is all kinds of confusing.
+Replace MOVE_RIP+SET_RIP with a proper helper, vcpu_skip_insn(), that is
+more descriptive, doesn't subtly access local variables, and provides
+type safety.
 
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- .../testing/selftests/kvm/x86_64/debug_regs.c | 53 +++++++++----------
- 1 file changed, 25 insertions(+), 28 deletions(-)
+ .../testing/selftests/kvm/x86_64/debug_regs.c | 25 ++++++++++---------
+ 1 file changed, 13 insertions(+), 12 deletions(-)
 
 diff --git a/tools/testing/selftests/kvm/x86_64/debug_regs.c b/tools/testing/selftests/kvm/x86_64/debug_regs.c
-index 5f078db1bcba..b999c9753fc3 100644
+index b999c9753fc3..487d0ae3e75f 100644
 --- a/tools/testing/selftests/kvm/x86_64/debug_regs.c
 +++ b/tools/testing/selftests/kvm/x86_64/debug_regs.c
-@@ -10,8 +10,6 @@
- #include "processor.h"
- #include "apic.h"
- 
--#define VCPU_ID 0
--
- #define DR6_BD		(1 << 13)
- #define DR7_GD		(1 << 13)
- 
-@@ -66,13 +64,11 @@ static void guest_code(void)
- 	GUEST_DONE();
+@@ -65,19 +65,21 @@ static void guest_code(void)
  }
  
--#define  CLEAR_DEBUG()  memset(&debug, 0, sizeof(debug))
--#define  APPLY_DEBUG()  vcpu_set_guest_debug(vm, VCPU_ID, &debug)
  #define  CAST_TO_RIP(v)  ((unsigned long long)&(v))
- #define  SET_RIP(v)  do {				\
--		vcpu_regs_get(vm, VCPU_ID, &regs);	\
-+		vcpu_regs_get(vm, vcpu->id, &regs);	\
- 		regs.rip = (v);				\
--		vcpu_regs_set(vm, VCPU_ID, &regs);	\
-+		vcpu_regs_set(vm, vcpu->id, &regs);	\
- 	} while (0)
- #define  MOVE_RIP(v)  SET_RIP(regs.rip + (v));
+-#define  SET_RIP(v)  do {				\
+-		vcpu_regs_get(vm, vcpu->id, &regs);	\
+-		regs.rip = (v);				\
+-		vcpu_regs_set(vm, vcpu->id, &regs);	\
+-	} while (0)
+-#define  MOVE_RIP(v)  SET_RIP(regs.rip + (v));
++
++static void vcpu_skip_insn(struct kvm_vcpu *vcpu, int insn_len)
++{
++	struct kvm_regs regs;
++
++	vcpu_regs_get(vcpu->vm, vcpu->id, &regs);
++	regs.rip += insn_len;
++	vcpu_regs_set(vcpu->vm, vcpu->id, &regs);
++}
  
-@@ -80,6 +76,7 @@ int main(void)
+ int main(void)
  {
  	struct kvm_guest_debug debug;
  	unsigned long long target_dr6, target_rip;
-+	struct kvm_vcpu *vcpu;
- 	struct kvm_regs regs;
+ 	struct kvm_vcpu *vcpu;
+-	struct kvm_regs regs;
  	struct kvm_run *run;
  	struct kvm_vm *vm;
-@@ -101,14 +98,14 @@ int main(void)
- 		return 0;
- 	}
- 
--	vm = vm_create_default(VCPU_ID, 0, guest_code);
--	run = vcpu_state(vm, VCPU_ID);
-+	vm = vm_create_with_one_vcpu(&vcpu, guest_code);
-+	run = vcpu->run;
- 
- 	/* Test software BPs - int3 */
--	CLEAR_DEBUG();
-+	memset(&debug, 0, sizeof(debug));
- 	debug.control = KVM_GUESTDBG_ENABLE | KVM_GUESTDBG_USE_SW_BP;
--	APPLY_DEBUG();
--	vcpu_run(vm, VCPU_ID);
-+	vcpu_set_guest_debug(vm, vcpu->id, &debug);
-+	vcpu_run(vm, vcpu->id);
- 	TEST_ASSERT(run->exit_reason == KVM_EXIT_DEBUG &&
- 		    run->debug.arch.exception == BP_VECTOR &&
- 		    run->debug.arch.pc == CAST_TO_RIP(sw_bp),
-@@ -119,12 +116,12 @@ int main(void)
+ 	struct ucall uc;
+@@ -112,7 +114,7 @@ int main(void)
+ 		    "INT3: exit %d exception %d rip 0x%llx (should be 0x%llx)",
+ 		    run->exit_reason, run->debug.arch.exception,
+ 		    run->debug.arch.pc, CAST_TO_RIP(sw_bp));
+-	MOVE_RIP(1);
++	vcpu_skip_insn(vcpu, 1);
  
  	/* Test instruction HW BP over DR[0-3] */
  	for (i = 0; i < 4; i++) {
--		CLEAR_DEBUG();
-+		memset(&debug, 0, sizeof(debug));
- 		debug.control = KVM_GUESTDBG_ENABLE | KVM_GUESTDBG_USE_HW_BP;
- 		debug.arch.debugreg[i] = CAST_TO_RIP(hw_bp);
- 		debug.arch.debugreg[7] = 0x400 | (1UL << (2*i+1));
--		APPLY_DEBUG();
--		vcpu_run(vm, VCPU_ID);
-+		vcpu_set_guest_debug(vm, vcpu->id, &debug);
-+		vcpu_run(vm, vcpu->id);
- 		target_dr6 = 0xffff0ff0 | (1UL << i);
- 		TEST_ASSERT(run->exit_reason == KVM_EXIT_DEBUG &&
- 			    run->debug.arch.exception == DB_VECTOR &&
-@@ -141,13 +138,13 @@ int main(void)
+@@ -134,7 +136,7 @@ int main(void)
+ 			    run->debug.arch.dr6, target_dr6);
+ 	}
+ 	/* Skip "nop" */
+-	MOVE_RIP(1);
++	vcpu_skip_insn(vcpu, 1);
  
  	/* Test data access HW BP over DR[0-3] */
  	for (i = 0; i < 4; i++) {
--		CLEAR_DEBUG();
-+		memset(&debug, 0, sizeof(debug));
- 		debug.control = KVM_GUESTDBG_ENABLE | KVM_GUESTDBG_USE_HW_BP;
- 		debug.arch.debugreg[i] = CAST_TO_RIP(guest_value);
- 		debug.arch.debugreg[7] = 0x00000400 | (1UL << (2*i+1)) |
- 		    (0x000d0000UL << (4*i));
--		APPLY_DEBUG();
--		vcpu_run(vm, VCPU_ID);
-+		vcpu_set_guest_debug(vm, vcpu->id, &debug);
-+		vcpu_run(vm, vcpu->id);
- 		target_dr6 = 0xffff0ff0 | (1UL << i);
- 		TEST_ASSERT(run->exit_reason == KVM_EXIT_DEBUG &&
- 			    run->debug.arch.exception == DB_VECTOR &&
-@@ -167,15 +164,15 @@ int main(void)
+@@ -156,15 +158,14 @@ int main(void)
+ 			    run->debug.arch.pc, CAST_TO_RIP(write_data),
+ 			    run->debug.arch.dr6, target_dr6);
+ 		/* Rollback the 4-bytes "mov" */
+-		MOVE_RIP(-7);
++		vcpu_skip_insn(vcpu, -7);
+ 	}
+ 	/* Skip the 4-bytes "mov" */
+-	MOVE_RIP(7);
++	vcpu_skip_insn(vcpu, 7);
+ 
  	/* Test single step */
  	target_rip = CAST_TO_RIP(ss_start);
  	target_dr6 = 0xffff4ff0ULL;
--	vcpu_regs_get(vm, VCPU_ID, &regs);
-+	vcpu_regs_get(vm, vcpu->id, &regs);
+-	vcpu_regs_get(vm, vcpu->id, &regs);
  	for (i = 0; i < (sizeof(ss_size) / sizeof(ss_size[0])); i++) {
  		target_rip += ss_size[i];
--		CLEAR_DEBUG();
-+		memset(&debug, 0, sizeof(debug));
- 		debug.control = KVM_GUESTDBG_ENABLE | KVM_GUESTDBG_SINGLESTEP |
- 				KVM_GUESTDBG_BLOCKIRQ;
- 		debug.arch.debugreg[7] = 0x00000400;
--		APPLY_DEBUG();
--		vcpu_run(vm, VCPU_ID);
-+		vcpu_set_guest_debug(vm, vcpu->id, &debug);
-+		vcpu_run(vm, vcpu->id);
- 		TEST_ASSERT(run->exit_reason == KVM_EXIT_DEBUG &&
- 			    run->debug.arch.exception == DB_VECTOR &&
- 			    run->debug.arch.pc == target_rip &&
-@@ -188,11 +185,11 @@ int main(void)
- 	}
- 
- 	/* Finally test global disable */
--	CLEAR_DEBUG();
-+	memset(&debug, 0, sizeof(debug));
- 	debug.control = KVM_GUESTDBG_ENABLE | KVM_GUESTDBG_USE_HW_BP;
- 	debug.arch.debugreg[7] = 0x400 | DR7_GD;
--	APPLY_DEBUG();
--	vcpu_run(vm, VCPU_ID);
-+	vcpu_set_guest_debug(vm, vcpu->id, &debug);
-+	vcpu_run(vm, vcpu->id);
- 	target_dr6 = 0xffff0ff0 | DR6_BD;
- 	TEST_ASSERT(run->exit_reason == KVM_EXIT_DEBUG &&
- 		    run->debug.arch.exception == DB_VECTOR &&
-@@ -205,12 +202,12 @@ int main(void)
- 			    target_dr6);
- 
- 	/* Disable all debug controls, run to the end */
--	CLEAR_DEBUG();
--	APPLY_DEBUG();
-+	memset(&debug, 0, sizeof(debug));
-+	vcpu_set_guest_debug(vm, vcpu->id, &debug);
- 
--	vcpu_run(vm, VCPU_ID);
-+	vcpu_run(vm, vcpu->id);
- 	TEST_ASSERT(run->exit_reason == KVM_EXIT_IO, "KVM_EXIT_IO");
--	cmd = get_ucall(vm, VCPU_ID, &uc);
-+	cmd = get_ucall(vm, vcpu->id, &uc);
- 	TEST_ASSERT(cmd == UCALL_DONE, "UCALL_DONE");
- 
- 	kvm_vm_free(vm);
+ 		memset(&debug, 0, sizeof(debug));
 -- 
 2.36.0.464.gb9c8b46e94-goog
 

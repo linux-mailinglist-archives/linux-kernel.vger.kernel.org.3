@@ -2,180 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C54BC51929D
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 02:12:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 509E451929F
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 02:13:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244529AbiEDAP7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 20:15:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51724 "EHLO
+        id S244543AbiEDAQb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 20:16:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244504AbiEDAP6 (ORCPT
+        with ESMTP id S243628AbiEDAQ2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 20:15:58 -0400
-Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9806E021
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 17:12:23 -0700 (PDT)
-Received: by mail-pg1-x54a.google.com with SMTP id 16-20020a630010000000b003c5e4be54b2so164053pga.2
-        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 17:12:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=reply-to:date:message-id:mime-version:subject:from:to:cc;
-        bh=Thdv07o77AyCQR2v+zg5M0kWZciZMbIvPbKlk2mT+Pg=;
-        b=aUhtXr5iHqZDJQ3dP7V3pR69p5L2aIpiZK3iLzox1OsFiJ6pnBEij2AfmoWVxNdX8b
-         cYe9WhRwtn7TKjyASaz6Br1IyvLQLj0dcncpHug7Du30glSXEeuY03pcepA+3vN+JZcb
-         Ax1A7fXudNCtFUheSnLKOlXFy8KVcTr4YAfGQhqJLF8N5gvKjpuB+Q6KIINTCZ7Xsvo4
-         et4Sw29rGSz3Ikn5VzbxJL2qIl+jIsnE6qQzMuHsR6KLFferWFZIKu0UHhxZNc+PbiWC
-         gT6218lm/GoPL7Anbe0K6ScmuZHhgTfhvKGuQjsMgt4bdgviiWXUHUdmfg9dqTxOEXeF
-         /u+A==
+        Tue, 3 May 2022 20:16:28 -0400
+Received: from mail-oo1-f49.google.com (mail-oo1-f49.google.com [209.85.161.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DE1912ACF;
+        Tue,  3 May 2022 17:12:54 -0700 (PDT)
+Received: by mail-oo1-f49.google.com with SMTP id m3-20020a4ac683000000b0035f13dde9ccso589853ooq.6;
+        Tue, 03 May 2022 17:12:54 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:reply-to:date:message-id:mime-version:subject
-         :from:to:cc;
-        bh=Thdv07o77AyCQR2v+zg5M0kWZciZMbIvPbKlk2mT+Pg=;
-        b=pqNVRvhrbCgMnTc2OKn3+Y8COEa1/KkveSlhuTYDTFA+g/vDB3lXMiwIZon28OV1zY
-         +shYl2EElBwebV4GZ7u1vtEDeHe3QeP6l7bUixtlByxyxxGvvkLvVZqodYhteMOdHFP5
-         RiaZC/NmOHS/CWuumnVWOlVNJ95naN3yMBmt+R/zMS67OTe3s+Ao0/+dg6x9wpKU8cOb
-         NKouDElroAEkWzisBiRqTklnQbnkLqy1neWNJNn5Q/9f5oqG3A47Q1Jc4qpptnHh/zdJ
-         W45UrbXgS6hj+rxPX60HU9f8eGF1siDYHOXYHhdQPiUC8KPBEdee4P+4IFS81rTns0sg
-         ZkwA==
-X-Gm-Message-State: AOAM531VeR4hI6BU3KmzI6q21D54uQr47KEPOk4y5scNbeYHOzTZ/6Wq
-        YdDpuIhzQdsix+1djoERTneBn2YanKk=
-X-Google-Smtp-Source: ABdhPJyFUyzOUPUqceH9/VHV4kcN1GZrV4bcWzszOTXSgWwJQrayXaApWuomlaJD9MyKXDcXRf64WbGjdKM=
-X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
- (user=seanjc job=sendgmr) by 2002:a05:6a00:164c:b0:50a:472a:6b0a with SMTP id
- m12-20020a056a00164c00b0050a472a6b0amr18559030pfc.77.1651623143199; Tue, 03
- May 2022 17:12:23 -0700 (PDT)
-Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Wed,  4 May 2022 00:12:19 +0000
-Message-Id: <20220504001219.983513-1-seanjc@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.36.0.464.gb9c8b46e94-goog
-Subject: [PATCH] x86/fpu: KVM: Set the base guest FPU uABI size to
- sizeof(struct kvm_xsave)
-From:   Sean Christopherson <seanjc@google.com>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org
-Cc:     "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
-        Zdenek Kaspar <zkaspar82@gmail.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        Sean Christopherson <seanjc@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=NpgcwOXxUIOD9DVencnySKK5YuvmcBy25ONszQmYt3g=;
+        b=W5r0UwBdWk2ChgPxWAHrX+eMgKZyW7tItP4QwYhn49lQJa3pmMcf4o263c7pY4/ME3
+         ZXWTJ3kh1/E4AHyTApLkrbAun4A4M6A2pXAGkhidm6gFiuY9HBgn6HtKTAJc9OGqIFEK
+         2EhHncG1yHPWkGV204AnSgRpTeRCg9+26slTA01pYI5Y9sB+VxhWh/9+WofPsOqgchte
+         CBxwkEr3BGYACV7B7lFSnBszVU6mXZz5gX5Dh9BqREg1iLR1Xc71WgNl7lB28+X6fuee
+         cS3boRPg5czj26BvHQWoHDRB8FdDHL814bum3AtRRNvSemLUH8jbQz1XiKTgAVJeeCSZ
+         y0yA==
+X-Gm-Message-State: AOAM531imGKOsX8OymfQOgC/4RsSM8pAzRdp+Hc1ccu1abVjCYZCjnpc
+        9FkGEjBFsYdaDM4tizYmx6SXACdmXg==
+X-Google-Smtp-Source: ABdhPJyGBo9TWKVr3K3lIp/Txn9XdD6mgw1baqvv55+V+9a5WK6OdIb8Y4bF69xigWn6fvkFAmDQKw==
+X-Received: by 2002:a4a:8783:0:b0:324:b9a2:d605 with SMTP id b3-20020a4a8783000000b00324b9a2d605mr6498711ooi.38.1651623173315;
+        Tue, 03 May 2022 17:12:53 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id q17-20020a9d6651000000b006060322127dsm4487354otm.77.2022.05.03.17.12.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 May 2022 17:12:52 -0700 (PDT)
+Received: (nullmailer pid 290579 invoked by uid 1000);
+        Wed, 04 May 2022 00:12:51 -0000
+Date:   Tue, 3 May 2022 19:12:51 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Jernej =?utf-8?Q?=C5=A0krabec?= <jernej.skrabec@gmail.com>
+Cc:     icenowy@outlook.com, Chen-Yu Tsai <wens@csie.org>,
+        Samuel Holland <samuel@sholland.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Andre Przywara <andre.przywara@arm.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Icenowy Zheng <icenowy@aosc.io>
+Subject: Re: Re: [PATCH 05/12] dt-bindings: clock: sunxi-ng: add bindings for
+ R329 CCUs
+Message-ID: <YnHFA9NKHYDUuLKW@robh.at.kernel.org>
+References: <20220422140902.1058101-1-icenowy@aosc.io>
+ <BYAPR20MB2472A5F7269F56C2C6BB3104BCF79@BYAPR20MB2472.namprd20.prod.outlook.com>
+ <YnBOY2EjW5ZWCAkx@robh.at.kernel.org>
+ <1910544.usQuhbGJ8B@kista>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1910544.usQuhbGJ8B@kista>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Set the starting uABI size of KVM's guest FPU to 'struct kvm_xsave',
-i.e. to KVM's historical uABI size.  When saving FPU state for usersapce,
-KVM (well, now the FPU) sets the FP+SSE bits in the XSAVE header even if
-the host doesn't support XSAVE.  Setting the XSAVE header allows the VM
-to be migrated to a host that does support XSAVE without the new host
-having to handle FPU state that may or may not be compatible with XSAVE.
+On Tue, May 03, 2022 at 09:55:08PM +0200, Jernej Škrabec wrote:
+> Dne ponedeljek, 02. maj 2022 ob 23:34:27 CEST je Rob Herring napisal(a):
+> > On Fri, Apr 22, 2022 at 11:41:08PM +0800, icenowy@outlook.com wrote:
+> > > From: Icenowy Zheng <icenowy@aosc.io>
+> > > 
+> > > R329 has a CPUX CCU and a R-CCU, with all PLLs in R-CCU.
+> > > 
+> > > Add bindings for them, with R-CCU only taking 3 oscillators as input and
+> > > main CCU taking oscillators + PLLs as input.
+> > > 
+> > > Signed-off-by: Icenowy Zheng <icenowy@aosc.io>
+> > > ---
 
-Setting the uABI size to the host's default size results in out-of-bounds
-writes (setting the FP+SSE bits) and data corruption (that is thankfully
-caught by KASAN) when running on hosts without XSAVE, e.g. on Core2 CPUs.
+> > > --- /dev/null
+> > > +++ b/include/dt-bindings/clock/sun50i-r329-ccu.h
+> > > @@ -0,0 +1,73 @@
+> > > +/* SPDX-License-Identifier: GPL-2.0 */
+> > > +/*
+> > > + * Copyright (c) 2021 Sipeed
+> > 
+> > It's 2022.
+> > 
+> > > diff --git a/include/dt-bindings/clock/sun50i-r329-r-ccu.h b/include/dt-
+> bindings/clock/sun50i-r329-r-ccu.h
+> > > new file mode 100644
+> > > index 000000000000..c327d1a1b602
+> > > --- /dev/null
+> > > +++ b/include/dt-bindings/clock/sun50i-r329-r-ccu.h
+> > > @@ -0,0 +1,45 @@
+> > > +/* SPDX-License-Identifier: GPL-2.0 */
+> > 
+> > > diff --git a/include/dt-bindings/reset/sun50i-r329-ccu.h b/include/dt-
+> bindings/reset/sun50i-r329-ccu.h
+> > > new file mode 100644
+> > > index 000000000000..bb704a82443f
+> > > --- /dev/null
+> > > +++ b/include/dt-bindings/reset/sun50i-r329-ccu.h
+> > > @@ -0,0 +1,45 @@
+> > > +/* SPDX-License-Identifier: (GPL-2.0+ or MIT) */
+> > 
+> > > diff --git a/include/dt-bindings/reset/sun50i-r329-r-ccu.h b/include/dt-
+> bindings/reset/sun50i-r329-r-ccu.h
+> > > new file mode 100644
+> > > index 000000000000..40644f2f21c6
+> > > --- /dev/null
+> > > +++ b/include/dt-bindings/reset/sun50i-r329-r-ccu.h
+> > > @@ -0,0 +1,24 @@
+> > > +/* SPDX-License-Identifier: (GPL-2.0+ or MIT) */
+> > 
+> > Why the different licenses? GPL-2.0 OR BSD-2-Clause is preferred. MIT is 
+> > fine if that's what matches the dts files.
+> 
+> Yes, most, if not all, DT files for Allwinner are dual licensed under GPL2+ and 
+> MIT. There are still some files under include/dt-bindings which are dual 
+> licensed under GPL2+ and X11, but I believe those files are for older SoCs.
 
-WARN if the default size is larger than KVM's historical uABI size; all
-features that can push the FPU size beyond the historical size must be
-opt-in.
+Okay. FWIW, the SPDX definition of X11 means copyrighted by Xorg 
+Consortium or something where as MIT is the same license with any other 
+copyright.
 
-  ==================================================================
-  BUG: KASAN: slab-out-of-bounds in fpu_copy_uabi_to_guest_fpstate+0x86/0x130
-  Read of size 8 at addr ffff888011e33a00 by task qemu-build/681
-  CPU: 1 PID: 681 Comm: qemu-build Not tainted 5.18.0-rc5-KASAN-amd64 #1
-  Hardware name:  /DG35EC, BIOS ECG3510M.86A.0118.2010.0113.1426 01/13/2010
-  Call Trace:
-   <TASK>
-   dump_stack_lvl+0x34/0x45
-   print_report.cold+0x45/0x575
-   kasan_report+0x9b/0xd0
-   fpu_copy_uabi_to_guest_fpstate+0x86/0x130
-   kvm_arch_vcpu_ioctl+0x72a/0x1c50 [kvm]
-   kvm_vcpu_ioctl+0x47f/0x7b0 [kvm]
-   __x64_sys_ioctl+0x5de/0xc90
-   do_syscall_64+0x31/0x50
-   entry_SYSCALL_64_after_hwframe+0x44/0xae
-   </TASK>
-  Allocated by task 0:
-  (stack is not available)
-  The buggy address belongs to the object at ffff888011e33800
-   which belongs to the cache kmalloc-512 of size 512
-  The buggy address is located 0 bytes to the right of
-   512-byte region [ffff888011e33800, ffff888011e33a00)
-  The buggy address belongs to the physical page:
-  page:0000000089cd4adb refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x11e30
-  head:0000000089cd4adb order:2 compound_mapcount:0 compound_pincount:0
-  flags: 0x4000000000010200(slab|head|zone=1)
-  raw: 4000000000010200 dead000000000100 dead000000000122 ffff888001041c80
-  raw: 0000000000000000 0000000080100010 00000001ffffffff 0000000000000000
-  page dumped because: kasan: bad access detected
-  Memory state around the buggy address:
-   ffff888011e33900: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-   ffff888011e33980: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-  >ffff888011e33a00: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
-                     ^
-   ffff888011e33a80: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
-   ffff888011e33b00: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
-  ==================================================================
-  Disabling lock debugging due to kernel taint
-
-Fixes: be50b2065dfa ("kvm: x86: Add support for getting/setting expanded xstate buffer")
-Fixes: c60427dd50ba ("x86/fpu: Add uabi_size to guest_fpu")
-Reported-by: Zdenek Kaspar <zkaspar82@gmail.com>
-Cc: Maciej S. Szmigiero <mail@maciej.szmigiero.name>
-Cc: Paolo Bonzini <pbonzini@redhat.com>
-Cc: kvm@vger.kernel.org
-Cc: stable@vger.kernel.org
-Signed-off-by: Sean Christopherson <seanjc@google.com>
----
- arch/x86/kernel/fpu/core.c | 17 ++++++++++++++++-
- 1 file changed, 16 insertions(+), 1 deletion(-)
-
-diff --git a/arch/x86/kernel/fpu/core.c b/arch/x86/kernel/fpu/core.c
-index c049561f373a..99caae7e8b01 100644
---- a/arch/x86/kernel/fpu/core.c
-+++ b/arch/x86/kernel/fpu/core.c
-@@ -14,6 +14,8 @@
- #include <asm/traps.h>
- #include <asm/irq_regs.h>
- 
-+#include <uapi/asm/kvm.h>
-+
- #include <linux/hardirq.h>
- #include <linux/pkeys.h>
- #include <linux/vmalloc.h>
-@@ -247,7 +249,20 @@ bool fpu_alloc_guest_fpstate(struct fpu_guest *gfpu)
- 	gfpu->fpstate		= fpstate;
- 	gfpu->xfeatures		= fpu_user_cfg.default_features;
- 	gfpu->perm		= fpu_user_cfg.default_features;
--	gfpu->uabi_size		= fpu_user_cfg.default_size;
-+
-+	/*
-+	 * KVM sets the FP+SSE bits in the XSAVE header when copying FPU state
-+	 * to userspace, even when XSAVE is unsupported, so that restoring FPU
-+	 * state on a different CPU that does support XSAVE can cleanly load
-+	 * the incoming state using its natural XSAVE.  In other words, KVM's
-+	 * uABI size may be larger than this host's default size.  Conversely,
-+	 * the default size should never be larger than KVM's base uABI size;
-+	 * all features that can expand the uABI size must be opt-in.
-+	 */
-+	gfpu->uabi_size		= sizeof(struct kvm_xsave);
-+	if (WARN_ON_ONCE(fpu_user_cfg.default_size > gfpu->uabi_size))
-+		gfpu->uabi_size = fpu_user_cfg.default_size;
-+
- 	fpu_init_guest_permissions(gfpu);
- 
- 	return true;
-
-base-commit: b91c0922bf1ed15b67a6faa404bc64e3ed532ec2
--- 
-2.36.0.464.gb9c8b46e94-goog
-
+Rob

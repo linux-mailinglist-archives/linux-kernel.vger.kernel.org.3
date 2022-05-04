@@ -2,95 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3EF7519306
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 02:50:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2C2B519311
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 02:54:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232252AbiEDAyV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 20:54:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60122 "EHLO
+        id S244832AbiEDA52 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 20:57:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243242AbiEDAyS (ORCPT
+        with ESMTP id S244835AbiEDA5X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 20:54:18 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18542403F3
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 17:50:44 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id l7so146571ejn.2
-        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 17:50:44 -0700 (PDT)
+        Tue, 3 May 2022 20:57:23 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D73E741617
+        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 17:53:48 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-2dc7bdd666fso700037b3.7
+        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 17:53:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kylehuey.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=cP9uWnOWqzXPA2lSzLL1mbAFP/+AM6E6742CRb8OAEg=;
-        b=Yjw/EnmWU+rVL+X/0xSJrIE/iLh0U6od8A1TLwfTPacJSqDXwPZV94B4OounqLhXTt
-         XEbie7CO8XsBLCGnT2GSkQSDhMY33fcdoRzml/OfqeCHeu3S7+V0lk1hsLS+q2Nbl0kW
-         tdrUbCUFVyLpTgrhfnNqZgd9O1HVEbe+61uNUkEqa2Q2OzlagZasK+g2d0oKPBCx2Xza
-         Q+szFBap2PoKIYJsspidTqqNg9KTzo7s2d5rgheyL6nybU7lGaDXZXyQhkumBnP2Y6Ww
-         gpZ5gLnurnrHBsM4HsCx174BIGZdwfhwPg+xA0zWW10Vt0iE+Xo1HB5u4kbu8vp7l2a+
-         uRJA==
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=Zjy1zldFe0wiYm64BfTZJoZffZUDVwmNgVMbmELSEVA=;
+        b=CDFKPs6JLf14N04jueEBqVgsL/B703C6qgz2wtNjlBiHpL2X2FlbWMs+g4/XvnvaeI
+         NeGhz0HypR8RmipRHsNSU/X4SJP0Lmoq/6IlMWSc4vEUoKTY8WdOSNCi5wV8exM3kBwl
+         kg0amoMbKg4Jn3jwc5qDmdhJKUOFs2ClXmHOREcZgR9B9YJ7AZoRQklzBP5PBbrGlLcg
+         g0NAB80SGMNpCJ5LqGkMJegJXCuQUC7t0LW/qQ7x58UE9kBZISiu+uOA2WzOwf0ANf/W
+         Ko4G3LeR7PMb5EaNT2uqbr4fjGBU4DN81Fu+hy1piTefgLeOOvsI6flaFT5k6Elh5nt/
+         /y5Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=cP9uWnOWqzXPA2lSzLL1mbAFP/+AM6E6742CRb8OAEg=;
-        b=qkyYpYO9CFMvPMA31E+wkAoSpkR3KL2yIRf6b27uJ/keSkGHCoJBpu/NT/G1L+hgUl
-         zYNNl9gdDxIsj9iuPeyRJ8Dz2rAxoEL8wPVS6iH3/9zOOxPFJWn3syBE3FqGTVxVxnmy
-         iUL9YQGn+1nDq2/am/AI8fVSkanwc4XT15zuNDsNwOQlz/PjtnYKp1tnD1yOH25vKOS4
-         PQZskGCkTKSEzxeBz0NMlZc1786LsrUdR7TN4wz/Q4yFXxNnsls1T1Fb3R9D+cAyNeRu
-         VUREeMmKVY6cmtW4Zzp41NxGxcLURRARZcEp6Xwu1dhxbJnmgJD9d3HQ3AFvy9PGcVCC
-         I2lA==
-X-Gm-Message-State: AOAM530mHSaZapzspK9swZNvGS4Zsxy24JdUDWMvwFpYrGtUG4jQuB5h
-        9wRXx9jEFGGD+6w4RJk6vqHWU/VxX4SnHVlSh+cS8Q==
-X-Google-Smtp-Source: ABdhPJzxBsJ/lYcetbRrFJrg1HY5oPGvYeGqgVLu+BDtIgj1hsWIaG4NifJBOTiuYK2RioMqP80W8mL6G+tB3UzytlU=
-X-Received: by 2002:a17:907:7f90:b0:6f3:ee68:d332 with SMTP id
- qk16-20020a1709077f9000b006f3ee68d332mr17124127ejc.114.1651625442639; Tue, 03
- May 2022 17:50:42 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220503050136.86298-1-khuey@kylehuey.com> <20220503094631.1070921-1-pbonzini@redhat.com>
- <CALMp9eTCY3tMGL4=g4UfxGJoVhVB6KGu+vbwL-aDr+HJyaBBcQ@mail.gmail.com> <9085a08b-cbf8-8c79-f75d-61ae03bd92c5@redhat.com>
-In-Reply-To: <9085a08b-cbf8-8c79-f75d-61ae03bd92c5@redhat.com>
-From:   Kyle Huey <me@kylehuey.com>
-Date:   Tue, 3 May 2022 17:50:31 -0700
-Message-ID: <CAP045ApTz4K3QR=CezU2qnO4UfW-x6DTmivQ8xk5euqOAaVNXA@mail.gmail.com>
-Subject: Re: [PATCH] KVM: x86/svm: Account for family 17h event renumberings
- in amd_pmc_perf_hw_id
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Jim Mattson <jmattson@google.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        "H . Peter Anvin" <hpa@zytor.com>, kvm list <kvm@vger.kernel.org>,
-        "Robert O'Callahan" <robert@ocallahan.org>,
-        Keno Fischer <keno@juliacomputing.com>,
-        Like Xu <like.xu.linux@gmail.com>
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=Zjy1zldFe0wiYm64BfTZJoZffZUDVwmNgVMbmELSEVA=;
+        b=IumOzEjMUaTLDSMfzSa7awvvYG1d9eojZUxvGtRTh52M+mqZ3U4KZiO1df/UJMCfNB
+         G+GmqL87joa63YdtKh6a9GGk7qPg29Q4J/+QsO4M9q2EqH5L99HKcuayO7JGz0YDooxj
+         l+k6AdIAb8wj8+RsHjIv5lqgjbahK4QPhJzZ1lqgnjWlujhnPfhaW+Cqm3eynaeWO8t3
+         pEQM0UmEwOwSCHGQ8crud7T5AAa+Ozdr92n3etZrEZx/AgpBtwmgBv/LtWPXTX8x+Qij
+         XL5fzllRbKKJeLrsDq8+JTnSJFbcI9rfj57Kc1dih/AivUZCLcy3E8Iwb0MyMrTtmcAB
+         50Zg==
+X-Gm-Message-State: AOAM531KUWFtb+thNgizSbAZ9J7iascT8fsmPI/l7NKPaKtUEnEuJq7l
+        tNomd/Ceonrk2CBPIsDGfTDQ39k1zZUGJac=
+X-Google-Smtp-Source: ABdhPJzc3WCN5rO4CtJhQBFGtSPSf731hgUQt1rvPpYEeYtPcc5rPO1lQQ2nznwbD+j8M/xq6gNhgmDnmMNhudI=
+X-Received: from saravanak.san.corp.google.com ([2620:15c:2d:3:963:1a62:7ffd:7111])
+ (user=saravanak job=sendgmr) by 2002:a25:a0d4:0:b0:645:77c8:979a with SMTP id
+ i20-20020a25a0d4000000b0064577c8979amr16847021ybm.484.1651625628114; Tue, 03
+ May 2022 17:53:48 -0700 (PDT)
+Date:   Tue,  3 May 2022 17:53:43 -0700
+Message-Id: <20220504005344.117803-1-saravanak@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.36.0.464.gb9c8b46e94-goog
+Subject: [PATCH v1] driver core: Add "*" wildcard support to
+ driver_async_probe cmdline param
+From:   Saravana Kannan <saravanak@google.com>
+To:     Jonathan Corbet <corbet@lwn.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Saravana Kannan <saravanak@google.com>,
+        Alexander Duyck <alexander.h.duyck@linux.intel.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Feng Tang <feng.tang@intel.com>, kernel-team@android.com,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 3, 2022 at 4:50 AM Paolo Bonzini <pbonzini@redhat.com> wrote:
->
-> On 5/3/22 12:00, Jim Mattson wrote:
-> >> Queued, thanks.
-> > Isn't it better to just drop this entirely, as in
-> > https://lore.kernel.org/kvm/20220411093537.11558-12-likexu@tencent.com/?
->
-> I plan to do that on top, this patch is good enough for stable.
->
-> Paolo
+There's currently no way to use driver_async_probe kernel cmdline param
+to enable default async probe for all drivers.  So, add support for "*"
+to match with all driver names.  When "*" is used, all other drivers
+listed in driver_async_probe are drivers that will NOT match the "*".
 
-Yeah, rr will want this on stable, though this patch won't apply cleanly.
+For example:
+* driver_async_probe=drvA,drvB,drvC
+  drvA, drvB and drvC do asynchronous probing.
 
-- Kyle
+* driver_async_probe=*
+  All drivers do asynchronous probing except those that have set
+  PROBE_FORCE_SYNCHRONOUS flag.
+
+* driver_async_probe=*,drvA,drvB,drvC
+  All drivers do asynchronous probing except drvA, drvB, drvC and those
+  that have set PROBE_FORCE_SYNCHRONOUS flag.
+
+Cc: Alexander Duyck <alexander.h.duyck@linux.intel.com>
+Cc: Randy Dunlap <rdunlap@infradead.org>
+Cc: Feng Tang <feng.tang@intel.com>
+Signed-off-by: Saravana Kannan <saravanak@google.com>
+---
+ Documentation/admin-guide/kernel-parameters.txt | 5 ++++-
+ drivers/base/dd.c                               | 9 ++++++++-
+ 2 files changed, 12 insertions(+), 2 deletions(-)
+
+diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+index 3f1cc5e317ed..c7513d01df82 100644
+--- a/Documentation/admin-guide/kernel-parameters.txt
++++ b/Documentation/admin-guide/kernel-parameters.txt
+@@ -1076,7 +1076,10 @@
+ 			driver later using sysfs.
+ 
+ 	driver_async_probe=  [KNL]
+-			List of driver names to be probed asynchronously.
++			List of driver names to be probed asynchronously. *
++			matches with all driver names. If * is specified, the
++			rest of the listed driver names are those that will NOT
++			match the *.
+ 			Format: <driver_name1>,<driver_name2>...
+ 
+ 	drm.edid_firmware=[<connector>:]<file>[,[<connector>:]<file>]
+diff --git a/drivers/base/dd.c b/drivers/base/dd.c
+index 152d3e6bfc06..16bd8957be61 100644
+--- a/drivers/base/dd.c
++++ b/drivers/base/dd.c
+@@ -60,6 +60,7 @@ static bool initcalls_done;
+ /* Save the async probe drivers' name from kernel cmdline */
+ #define ASYNC_DRV_NAMES_MAX_LEN	256
+ static char async_probe_drv_names[ASYNC_DRV_NAMES_MAX_LEN];
++static bool async_probe_default;
+ 
+ /*
+  * In some cases, like suspend to RAM or hibernation, It might be reasonable
+@@ -796,7 +797,11 @@ static int driver_probe_device(struct device_driver *drv, struct device *dev)
+ 
+ static inline bool cmdline_requested_async_probing(const char *drv_name)
+ {
+-	return parse_option_str(async_probe_drv_names, drv_name);
++	bool async_drv;
++
++	async_drv = parse_option_str(async_probe_drv_names, drv_name);
++
++	return (async_probe_default != async_drv);
+ }
+ 
+ /* The option format is "driver_async_probe=drv_name1,drv_name2,..." */
+@@ -806,6 +811,8 @@ static int __init save_async_options(char *buf)
+ 		pr_warn("Too long list of driver names for 'driver_async_probe'!\n");
+ 
+ 	strlcpy(async_probe_drv_names, buf, ASYNC_DRV_NAMES_MAX_LEN);
++	async_probe_default = parse_option_str(async_probe_drv_names, "*");
++
+ 	return 1;
+ }
+ __setup("driver_async_probe=", save_async_options);
+-- 
+2.36.0.464.gb9c8b46e94-goog
+

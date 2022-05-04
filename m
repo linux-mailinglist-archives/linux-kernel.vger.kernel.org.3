@@ -2,133 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 136A151AE6F
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 21:54:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9888A51AE79
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 21:56:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377768AbiEDT6U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 15:58:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58620 "EHLO
+        id S234855AbiEDT7t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 15:59:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377752AbiEDT6H (ORCPT
+        with ESMTP id S238208AbiEDT7q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 15:58:07 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78D2F4ECCE
-        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 12:54:29 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id d17so2420674plg.0
-        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 12:54:29 -0700 (PDT)
+        Wed, 4 May 2022 15:59:46 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAC0062E8;
+        Wed,  4 May 2022 12:56:09 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id p18so2906541edr.7;
+        Wed, 04 May 2022 12:56:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=qM82pLe5LIpNsG3poDlPVKU5bEYefBi/IlcSrVO4JAI=;
-        b=neUBEwGA4kq8JLwN5POTUHELuHm+l5M7u79I7XDLezrivLCU1aE6AFNc57wWU+0ODY
-         9N0fRDhZ0iUfFp3kqga3HicjJzX8kYd9uLjlyBcfk0hPy4NyqkuuifzyrRzn8XzhgtH4
-         CCEL3s0utu1QINUSJ+cZwchHFdenNYLU5VxWI=
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=lHzN/II1cqKG6Dxy3ToqBfroY6UHh0zWNL0Co+wZqsU=;
+        b=XHO7iOq/qqQ21uCUaSIAHFkG/WcxpiKguZE7NqeR4ndEtDqWMXhN9HdlAuEKQZhOZ1
+         VPJ+UbojC9TuiU5u8V4uDbfAehIaGrXYoj8rIXSVOqDS0wTScuqw6Xy6xySDXb2nbg14
+         6pu08x8MpTqBx/iryzQcJHl4dAlxvtzQExPy91oeGkGApKYfxiagVJ4SAl+uaZGpzxCX
+         UUuA7Qc6rpfpCDyR1txQWqsZjTah861eUXNpQk3rJ34jBRvpCBujSVWc3zRP6iK/sLQe
+         nqVR2O2zAPwsUpZkPNLRG/2T+3AXgE4Ehg7+8qr4hQZ8Q5xFRadXN+rbY8jLs7KQjCrM
+         rQ6w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=qM82pLe5LIpNsG3poDlPVKU5bEYefBi/IlcSrVO4JAI=;
-        b=DXvYwFvrZC2TdaSXgVQvBNqooX7g9MjwTXPcMLslO3RIRRl04nBNBULM+R8Kjzd3NM
-         TtCzW61+XY53SfIcNiazZOvPCLFgzasjA2Ad81MapsB4AfNUxfm9PZfnEQi3BRle53CC
-         Txq/3Y8ayMhmHKOpWVc5W1DOlfset/hw+7nw3FOFpUuc1U/U4e8M/5Tsfa0DiGsF8+F9
-         fdmwY5uvqH0D1omLAAWQ6iBM7JfU2Us57MLlIv2Adz8+IAbsvK13N5Y6SA/BJMGYee3w
-         +0EG4u76ixh63PRwWJjR+fTSb57MGQlCSv03WWIVwJ0ZQTazkhHXiGx//jZWBSpBcYvx
-         6Ucw==
-X-Gm-Message-State: AOAM533wZ1/nSN4WtTliXSTOF6XHwTGwiHPuDXaJNIqOTy4cZbZiQL31
-        8ekbUFFIKW7bMp9DV9onOtBcqw==
-X-Google-Smtp-Source: ABdhPJyQN0M+9153jv/w/MlWINhzXu1GoODr13+92d+vbgDekp0dhUhMFOATx1GkA2fDTz3kWcPUcw==
-X-Received: by 2002:a17:903:1249:b0:15e:8b15:b7d2 with SMTP id u9-20020a170903124900b0015e8b15b7d2mr24555926plh.150.1651694068934;
-        Wed, 04 May 2022 12:54:28 -0700 (PDT)
-Received: from localhost ([2620:15c:202:201:35b6:c77b:be04:3bd5])
-        by smtp.gmail.com with UTF8SMTPSA id t3-20020a17090aae0300b001d5e1b124a0sm3727332pjq.7.2022.05.04.12.54.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 04 May 2022 12:54:28 -0700 (PDT)
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Alasdair Kergon <agk@redhat.com>,
-        Mike Snitzer <snitzer@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        James Morris <jmorris@namei.org>,
-        "Serge E . Hallyn" <serge@hallyn.com>
-Cc:     dm-devel@redhat.com, linux-kernel@vger.kernel.org,
-        linux-raid@vger.kernel.org, Song Liu <song@kernel.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        linux-security-module@vger.kernel.org,
-        Matthias Kaehlcke <mka@chromium.org>
-Subject: [PATCH v3 3/3] dm: verity-loadpin: Use CONFIG_SECURITY_LOADPIN_VERITY for conditional compilation
-Date:   Wed,  4 May 2022 12:54:19 -0700
-Message-Id: <20220504125404.v3.3.I5aca2dcc3b06de4bf53696cd21329dce8272b8aa@changeid>
-X-Mailer: git-send-email 2.36.0.464.gb9c8b46e94-goog
-In-Reply-To: <20220504195419.1143099-1-mka@chromium.org>
-References: <20220504195419.1143099-1-mka@chromium.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=lHzN/II1cqKG6Dxy3ToqBfroY6UHh0zWNL0Co+wZqsU=;
+        b=R5xxIQYDG7LTXjkXGbIzUR1maaYtkqOvdqUYWuaJm5bpYeNJK5fXsp3Owey7gAVJhN
+         +pE0qUq/GhChbq9XvdhiGvkLY29rYpcbuV/GBZrvA8klCaO0wissu9XEKPJctnhzifKy
+         b56U5DSAlWca/Z7PZ/2lzxjr8VpZmoe4HxAPMPgkkWwZD3gjYRH/aj4XQnYfK2VpkW9X
+         U3bhz5nFAfSYWUmuOyDq31zzpHtgXKQSvw9M9WPZD2anb/shl5+Q5JnMkaf/snB2Wwm9
+         8nSZ5pRGBwDPU7dv7bc+6xzHqk1edq4/UfZcMqjW9Pj37fWCGH2w3/R4f63Ch9QUZzyO
+         hTbg==
+X-Gm-Message-State: AOAM5319vyDZAJfOfp+6LOZUksgzUYZjFU3qcSW8rEkbHRuW7nwWo+6j
+        guqOZM/y85kmij0rMBHQ4Anmtw48tZJD0OmDRRQ=
+X-Google-Smtp-Source: ABdhPJzoLtDpQCHhg4vioDldJRRTCvYHn7hSBl7b9n91FwSGhv1/4alySP2hCps314zWYRH0QbPJY2cSM6YnoyJrlzQ=
+X-Received: by 2002:aa7:d350:0:b0:425:e029:da56 with SMTP id
+ m16-20020aa7d350000000b00425e029da56mr25311335edr.296.1651694168197; Wed, 04
+ May 2022 12:56:08 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20220504193439.15938-1-markuss.broks@gmail.com>
+ <CAHp75VeMCiwgTFFy5vGBoWYSw4mGQU6623B1eMr7apJZF_L-kg@mail.gmail.com> <20220504195042.GA25790@duo.ucw.cz>
+In-Reply-To: <20220504195042.GA25790@duo.ucw.cz>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Wed, 4 May 2022 21:55:32 +0200
+Message-ID: <CAHp75VeBovr7FvaW3VYhoR=QN0RUSdBEAYoP8jftS30_10vsOA@mail.gmail.com>
+Subject: Re: [PATCH v7 0/2] Make AUX gpio pin optional for ktd2692
+To:     Pavel Machek <pavel@ucw.cz>
+Cc:     Markuss Broks <markuss.broks@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Linux LED Subsystem <linux-leds@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The verity glue for LoadPin is only needed when CONFIG_SECURITY_LOADPIN_VERITY
-is set, use this option for conditional compilation instead of the combo of
-CONFIG_DM_VERITY and CONFIG_SECURITY_LOADPIN.
+On Wed, May 4, 2022 at 9:50 PM Pavel Machek <pavel@ucw.cz> wrote:
+> > > v7:
+> > > - drop the MAINTAINERS part
+> >
+> > I'm not sure why it happened.
+> >
+> > 4) update MAINTAINERS.
+>
+> I asked for that one.
+>
+> If there's no other problem, I can take the series.
 
-Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
----
+Ah, thanks for clarification.
+As I mentioned before, it would be really nice to have a fix-patch
+prepending this series. That said, this series needs to be rebased on
+it.
 
-Changes in v3:
-- none
-
-Changes in v2:
-- none
-
- drivers/md/Makefile               | 7 +------
- include/linux/dm-verity-loadpin.h | 2 +-
- 2 files changed, 2 insertions(+), 7 deletions(-)
-
-diff --git a/drivers/md/Makefile b/drivers/md/Makefile
-index e12cd004d375..a96441752ec7 100644
---- a/drivers/md/Makefile
-+++ b/drivers/md/Makefile
-@@ -83,6 +83,7 @@ obj-$(CONFIG_DM_LOG_WRITES)	+= dm-log-writes.o
- obj-$(CONFIG_DM_INTEGRITY)	+= dm-integrity.o
- obj-$(CONFIG_DM_ZONED)		+= dm-zoned.o
- obj-$(CONFIG_DM_WRITECACHE)	+= dm-writecache.o
-+obj-$(CONFIG_SECURITY_LOADPIN_VERITY)	+= dm-verity-loadpin.o
- 
- ifeq ($(CONFIG_DM_INIT),y)
- dm-mod-objs			+= dm-init.o
-@@ -100,12 +101,6 @@ ifeq ($(CONFIG_IMA),y)
- dm-mod-objs			+= dm-ima.o
- endif
- 
--ifeq ($(CONFIG_DM_VERITY),y)
--ifeq ($(CONFIG_SECURITY_LOADPIN),y)
--dm-mod-objs			+= dm-verity-loadpin.o
--endif
--endif
--
- ifeq ($(CONFIG_DM_VERITY_FEC),y)
- dm-verity-objs			+= dm-verity-fec.o
- endif
-diff --git a/include/linux/dm-verity-loadpin.h b/include/linux/dm-verity-loadpin.h
-index 12a86911d05a..be63ac76f98d 100644
---- a/include/linux/dm-verity-loadpin.h
-+++ b/include/linux/dm-verity-loadpin.h
-@@ -13,7 +13,7 @@ struct trusted_root_digest {
- 	struct list_head node;
- };
- 
--#if IS_ENABLED(CONFIG_SECURITY_LOADPIN) && IS_BUILTIN(CONFIG_DM_VERITY)
-+#if IS_ENABLED(CONFIG_SECURITY_LOADPIN_VERITY)
- void dm_verity_loadpin_set_trusted_root_digests(struct list_head *digests);
- bool dm_verity_loadpin_is_md_trusted(struct mapped_device *md);
- #else
 -- 
-2.36.0.464.gb9c8b46e94-goog
-
+With Best Regards,
+Andy Shevchenko

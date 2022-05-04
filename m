@@ -2,75 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 478C1519FA8
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 14:36:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9DE6519FA9
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 14:36:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349695AbiEDMjm convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 4 May 2022 08:39:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52438 "EHLO
+        id S1349775AbiEDMj4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 08:39:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349818AbiEDMiu (ORCPT
+        with ESMTP id S1349731AbiEDMjv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 08:38:50 -0400
-Received: from mail.holtmann.org (coyote.holtmann.net [212.227.132.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 62AAD326E2;
-        Wed,  4 May 2022 05:35:09 -0700 (PDT)
-Received: from smtpclient.apple (p5b3d276d.dip0.t-ipconnect.de [91.61.39.109])
-        by mail.holtmann.org (Postfix) with ESMTPSA id 83679CED05;
-        Wed,  4 May 2022 14:35:08 +0200 (CEST)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.80.82.1.1\))
-Subject: Re: [PATCH RESEND] Bluetooth: ath3k: Add MODULE_FIRMWARE for patch
- and config files
-From:   Marcel Holtmann <marcel@holtmann.org>
-In-Reply-To: <20220504074606.15505-1-juergh@protonmail.com>
-Date:   Wed, 4 May 2022 14:35:07 +0200
-Cc:     Johan Hedberg <johan.hedberg@gmail.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        BlueZ <linux-bluetooth@vger.kernel.org>,
-        linux-kernel@vger.kernel.org
-Content-Transfer-Encoding: 8BIT
-Message-Id: <6A323366-2AB3-443E-A605-C18EA7A2E161@holtmann.org>
-References: <20220504074606.15505-1-juergh@protonmail.com>
-To:     Juerg Haefliger <juergh@protonmail.com>
-X-Mailer: Apple Mail (2.3696.80.82.1.1)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Wed, 4 May 2022 08:39:51 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55CD32FFF5;
+        Wed,  4 May 2022 05:36:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0F0A2B8239E;
+        Wed,  4 May 2022 12:36:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23B56C385A8;
+        Wed,  4 May 2022 12:36:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651667772;
+        bh=HzGvB9CCpC11C8Cqx5ROkgu5ak8t8rYI3wecQARRh6Y=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=poc+PVxBbj4u1k6ULEs5eDwAqQ0b3vkXKzN21uf55zgCMYaK8iP45Mb/Dxw5wuL5/
+         T7KXxBzq6/o4W0EamSWmTt7VWBQv/P7nBJJZbJO9V+iXyWGMdiXCyA03zc3YLMKVxx
+         cGSzw0TzVpS6BjulxoCpz2Hrk0WJUFxwZAoUqzgOnv29y03Pohfz/xU5Wh9duy40C2
+         llKVCiK23dcgLXjCHRr7p8jiISl6QHccQ54Pwvb+7yC9vq31Mml6v/dM59YArf8XR/
+         +OaKYRn+6A6zy3IalreBpn7gkhaFDS5mXLksecyq0zK4HkW5CQddo0jyRCZ9Xiaips
+         Q6rON2+a8mHDg==
+Date:   Wed, 4 May 2022 13:36:06 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Zev Weiss <zev@bewilderbeest.net>
+Cc:     Liam Girdwood <lgirdwood@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        openbmc@lists.ozlabs.org
+Subject: Re: [PATCH 1/6] dt-bindings: regulator: Add
+ regulator-external-output property
+Message-ID: <YnJzNoM17ZLoQJdk@sirena.org.uk>
+References: <20220504065252.6955-1-zev@bewilderbeest.net>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="dHNaXTnT9yGpJ6h3"
+Content-Disposition: inline
+In-Reply-To: <20220504065252.6955-1-zev@bewilderbeest.net>
+X-Cookie: Mother is the invention of necessity.
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Juerg,
 
-> The ath3k driver loads patch and configuration files so add MODULE_FIRMWARE
-> macros to povide that information via modinfo.
-> 
-> Signed-off-by: Juerg Haefliger <juergh@protonmail.com>
-> ---
-> RESEND:
->  Resend from protonmail email account to please the test bot.
-> ---
-> drivers/bluetooth/ath3k.c | 2 ++
-> 1 file changed, 2 insertions(+)
-> 
-> diff --git a/drivers/bluetooth/ath3k.c b/drivers/bluetooth/ath3k.c
-> index 88262d3a9392..56e9a64177ae 100644
-> --- a/drivers/bluetooth/ath3k.c
-> +++ b/drivers/bluetooth/ath3k.c
-> @@ -538,3 +538,5 @@ MODULE_DESCRIPTION("Atheros AR30xx firmware driver");
-> MODULE_VERSION(VERSION);
-> MODULE_LICENSE("GPL");
-> MODULE_FIRMWARE(ATH3K_FIRMWARE);
-> +MODULE_FIRMWARE("ar3k/AthrBT_0x*.dfu");
-> +MODULE_FIRMWARE("ar3k/ramps_0x*_*.dfu");
+--dHNaXTnT9yGpJ6h3
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-I am still not convinced by the glob file matching. How would that actually work?
+On Tue, May 03, 2022 at 11:52:47PM -0700, Zev Weiss wrote:
+> Some regulators do not provide power to anything within the system
+> described by a device tree, and simply supply an external output.  The
+> regulator-external-output property can now be used to mark such
+> regulators.
 
-Regards
+Why not just add a device representing this output?  Presumably it has
+some other properties (eg, labelling for a connector) and may need some
+integration with some form of control mechanism.
 
-Marcel
+--dHNaXTnT9yGpJ6h3
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmJyczUACgkQJNaLcl1U
+h9DONgf/TnKauW2D2FMve+R72GPbx65yXEI1OuQ2PY8lehkxxXbA8NB22x892fZ5
+evHWspiwPjOpdJ/Rlos9hs8jMgjue6BdSOPIGvzczXAM5PtOpZ8CrklZuiDgxMzu
+SqmK5y15AG73UhkQ8uzoCRXIRgUo4JldAYNe9v1/Eu6RCoxQfJSaR21hLNgbDq0e
+Z1ij5rG8dQe48v9u+VfEhVV1UpG+TQKHrBm+j/V6JS5QVfHcxMXPspi29FehOlOo
+7PGhjjyCxwu121HD6ehHuHQM1LDIEgPNEZYi4b8KtKXjth08Z/hz9GiXRpduCmTr
+yxUyqqpfHogr6Vp9jKJdfvB6UKcXuQ==
+=gOK4
+-----END PGP SIGNATURE-----
+
+--dHNaXTnT9yGpJ6h3--

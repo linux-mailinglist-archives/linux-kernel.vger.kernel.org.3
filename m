@@ -2,47 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF95551AAEA
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:34:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D013851AB5E
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:42:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358713AbiEDRfH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 13:35:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40792 "EHLO
+        id S1376466AbiEDRpD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 13:45:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357212AbiEDRKC (ORCPT
+        with ESMTP id S1355792AbiEDRIv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 13:10:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28247496A0;
-        Wed,  4 May 2022 09:57:10 -0700 (PDT)
+        Wed, 4 May 2022 13:08:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 861B551E73;
+        Wed,  4 May 2022 09:54:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 718AF618E5;
-        Wed,  4 May 2022 16:57:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB672C385C5;
-        Wed,  4 May 2022 16:57:08 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4A4B961851;
+        Wed,  4 May 2022 16:54:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 977CFC385A4;
+        Wed,  4 May 2022 16:54:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651683428;
-        bh=1PxZCugPr4DxiBBU19KWct2wANpsU0yR63LGAuaYykk=;
+        s=korg; t=1651683274;
+        bh=y1D8LeGMgAJ4kn6HvDYXfJHSZWVRSoy07IEQjK7OxQE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=heVUcRPv+0Au/05kyIv6zzUlqUdVmbZA4k6bPi1o/7gHobhEyye3Nj+AbEayfYz9w
-         vJCYjW1cT9YkXgECklBINSt2qKdgYmg3a+vDgMC8YTo0LlYix9e28xkVZ/IA3vxBoJ
-         b3VS2sAXZoLS2L6JfPlyxADI/cxR6UGDmnRWxJo4=
+        b=OH+1C1qVje9NlIWUCtWCDENIq2U7rZeG/OkUXVEiIMC9vkH/4B5IQM2l5fC4oRW79
+         7A3HnhkD+BuIhhmlkYyR+MEsxyGbUWAMfkyPOcPHPpE39hXmX5nhZ6IHkhB+UrR7UY
+         RFBknQ9KI8AeSFydQ156ZJQcqPcOgLtpEl0hTaX4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Pengcheng Yang <yangpc@wangsu.com>,
-        Julian Anastasov <ja@ssi.bg>,
-        Simon Horman <horms@verge.net.au>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 094/225] ipvs: correctly print the memory size of ip_vs_conn_tab
-Date:   Wed,  4 May 2022 18:45:32 +0200
-Message-Id: <20220504153119.205299054@linuxfoundation.org>
+        stable@vger.kernel.org,
+        =?UTF-8?q?Ville=20Syrj=C3=A4l=C3=A4?= 
+        <ville.syrjala@linux.intel.com>,
+        Woody Suwalski <wsuwalski@gmail.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+Subject: [PATCH 5.15 140/177] Revert "ACPI: processor: idle: fix lockup regression on 32-bit ThinkPad T40"
+Date:   Wed,  4 May 2022 18:45:33 +0200
+Message-Id: <20220504153105.772291535@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220504153110.096069935@linuxfoundation.org>
-References: <20220504153110.096069935@linuxfoundation.org>
+In-Reply-To: <20220504153053.873100034@linuxfoundation.org>
+References: <20220504153053.873100034@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,38 +57,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pengcheng Yang <yangpc@wangsu.com>
+From: Ville Syrjälä <ville.syrjala@linux.intel.com>
 
-[ Upstream commit eba1a872cb73314280d5448d934935b23e30b7ca ]
+commit 20e582e16af24b074e583f9551fad557882a3c9d upstream.
 
-The memory size of ip_vs_conn_tab changed after we use hlist
-instead of list.
+This reverts commit bfe55a1f7fd6bfede16078bf04c6250fbca11588.
 
-Fixes: 731109e78415 ("ipvs: use hlist instead of list")
-Signed-off-by: Pengcheng Yang <yangpc@wangsu.com>
-Acked-by: Julian Anastasov <ja@ssi.bg>
-Acked-by: Simon Horman <horms@verge.net.au>
-Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+This was presumably misdiagnosed as an inability to use C3 at
+all when I suspect the real problem is just misconfiguration of
+C3 vs. ARB_DIS.
+
+Signed-off-by: Ville Syrjälä <ville.syrjala@linux.intel.com>
+Cc: 5.16+ <stable@vger.kernel.org> # 5.16+
+Tested-by: Woody Suwalski <wsuwalski@gmail.com>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/netfilter/ipvs/ip_vs_conn.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/acpi/processor_idle.c |    5 -----
+ 1 file changed, 5 deletions(-)
 
-diff --git a/net/netfilter/ipvs/ip_vs_conn.c b/net/netfilter/ipvs/ip_vs_conn.c
-index 2c467c422dc6..fb67f1ca2495 100644
---- a/net/netfilter/ipvs/ip_vs_conn.c
-+++ b/net/netfilter/ipvs/ip_vs_conn.c
-@@ -1495,7 +1495,7 @@ int __init ip_vs_conn_init(void)
- 	pr_info("Connection hash table configured "
- 		"(size=%d, memory=%ldKbytes)\n",
- 		ip_vs_conn_tab_size,
--		(long)(ip_vs_conn_tab_size*sizeof(struct list_head))/1024);
-+		(long)(ip_vs_conn_tab_size*sizeof(*ip_vs_conn_tab))/1024);
- 	IP_VS_DBG(0, "Each connection entry needs %zd bytes at least\n",
- 		  sizeof(struct ip_vs_conn));
+--- a/drivers/acpi/processor_idle.c
++++ b/drivers/acpi/processor_idle.c
+@@ -95,11 +95,6 @@ static const struct dmi_system_id proces
+ 	  DMI_MATCH(DMI_SYS_VENDOR, "ASUSTeK Computer Inc."),
+ 	  DMI_MATCH(DMI_PRODUCT_NAME,"L8400B series Notebook PC")},
+ 	 (void *)1},
+-	/* T40 can not handle C3 idle state */
+-	{ set_max_cstate, "IBM ThinkPad T40", {
+-	  DMI_MATCH(DMI_SYS_VENDOR, "IBM"),
+-	  DMI_MATCH(DMI_PRODUCT_NAME, "23737CU")},
+-	 (void *)2},
+ 	{},
+ };
  
--- 
-2.35.1
-
 
 

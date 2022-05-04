@@ -2,135 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 990075197A1
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 08:52:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 225695197A0
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 08:51:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345137AbiEDGzk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 02:55:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53660 "EHLO
+        id S1345101AbiEDGzX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 02:55:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345123AbiEDGze (ORCPT
+        with ESMTP id S1345108AbiEDGzT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 02:55:34 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72C5C20F44
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 23:51:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651647117; x=1683183117;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=WUdxltnjTGYi8GJimo0jo/o4IQzWZJE09Y0WFyBoURo=;
-  b=fq5SUDa8/kxtta2D4KcNxpzf1rPHcaB81Xy72O0PUm/i/hftadQuI9vN
-   fJRhwix9C/nckXT9lYR6DuV7BV8Scdzsu7YxL+zpMOwNkO1qCRcu4Go0o
-   xLGdtYtooLFGXKbKH3nZu6nkurepqdTSKHtIa0zAunojghZQX1ZOMPLJK
-   +2+niygiNPGrbrnF+tUKh8wea68xpITVwY/Q9nuPRP1nv+w32l5ezwDe3
-   IS6fZ6MwTolPR0IipVZNDdvd32Wkk9PJYGSh279LQWfcdODtnj6zLc6BZ
-   yf1IzmMp7DhJSseghlx1wiStad77zbaN0ssDA8KyII9DRDm2SqW7aVm4E
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10336"; a="249661819"
-X-IronPort-AV: E=Sophos;i="5.91,197,1647327600"; 
-   d="scan'208";a="249661819"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2022 23:51:57 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,197,1647327600"; 
-   d="scan'208";a="599405338"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 03 May 2022 23:51:55 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nm8ra-000B9f-JT;
-        Wed, 04 May 2022 06:51:54 +0000
-Date:   Wed, 4 May 2022 14:51:28 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [lunn:v5.18-rc4-stacked-bridges 2/2] net/bridge/br_input.c:45:7:
- error: no member named 'offload_fwd_mark' in 'struct sk_buff'
-Message-ID: <202205041436.UX6XOeS0-lkp@intel.com>
+        Wed, 4 May 2022 02:55:19 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2435220BC7
+        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 23:51:44 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id m20so1042796ejj.10
+        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 23:51:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=IjvhY+zx5+cDpT9+ShvD2wIBZoNgfMhne2yk1qc9gqc=;
+        b=eic7UFuqSIPHIgZ3jSbVJ+u7i6PpSPVY7e3+WBdyR38qmzv+FWuisIiMkWe2KpzS4R
+         UnwvMe2voQGKKSuW8ZMI5JMcJuI3KmJ8A1rPmi9AAtCmgjaT0GP0zo5gAqixMJ8VDV0A
+         ZWXOYJlyVr6o+MnZZ6r5g2M58A7uEP4AHQtRmLBwEd6U/CAxwh0Rj84HbMsS1dJMUkQe
+         6PXQTqyiXSz90DZ2JHQG9chh1I2MpCxYverENN9RufkpiACPTDTLdX76RjFtceWLbva6
+         Ewux8w8+l0bPoexCeRMh+kTwR6MujG9lElvDL0zkzoJvMFTp3ZomeFypBMZbY7WGWlPH
+         fuBQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=IjvhY+zx5+cDpT9+ShvD2wIBZoNgfMhne2yk1qc9gqc=;
+        b=CRVZyEZv0/sVMi9imKvk4g029v4taLIhhbChmsuBuqjVa0aM7A+cfLoO5QFBbJMmwE
+         9zz+O/VHQWWf2zGFmvfGPYf+QTzKTNP0RrymaiKzjnylUxe///qPv/G1AMPrRPNl9EJQ
+         l/Nv2JUy4y2GANnCdhHOjyA7G/KtLNkrEw9EywB9ECJzoH/9R6WCi2G3wuJ7sSQ5Qpyv
+         R4Of94rMgm8O7Af3gRFCyzZmG3AJ2gYHPidaHETNQySpc/oe1nT+sGIHH5ndEDGeSMDp
+         6nxhT73LVpOi50hJnglhzTwu5BMQxOwr8tEqzCRemShLGM3IHN6VzjlIKwuoVmrkL8Lg
+         HWHw==
+X-Gm-Message-State: AOAM531Dw0F35ZOf3vUbtNsDw8lfj4i0A7TBoOi3+2FgNU4FCKz5jcgG
+        S6lfATdR2mdlCEFe3DhsNsbkXQ==
+X-Google-Smtp-Source: ABdhPJwsbQjpa6yGQ2U7HY/Ae/uny1/EgLYf0Rw+8IrJbKAirCTUtkOfDH52DAkl4hVSuhbxoPgI8w==
+X-Received: by 2002:a17:906:a089:b0:6ef:e9e6:1368 with SMTP id q9-20020a170906a08900b006efe9e61368mr18809029ejy.626.1651647102720;
+        Tue, 03 May 2022 23:51:42 -0700 (PDT)
+Received: from [192.168.0.208] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id el8-20020a170907284800b006f3ef214e0asm5370519ejc.112.2022.05.03.23.51.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 03 May 2022 23:51:42 -0700 (PDT)
+Message-ID: <95aea078-3e85-79c3-79c0-430bd7c0fbae@linaro.org>
+Date:   Wed, 4 May 2022 08:51:41 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: Aw: Re: Re: [RFC v1] dt-bindings: net: dsa: convert binding for
+ mediatek switches
+Content-Language: en-US
+To:     Frank Wunderlich <frank-w@public-files.de>
+Cc:     Greg Ungerer <gerg@kernel.org>,
+        =?UTF-8?Q?Ren=c3=a9_van_Dorst?= <opensource@vdorst.com>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        Frank Wunderlich <linux@fw-web.de>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20220502153238.85090-1-linux@fw-web.de>
+ <d29637f8-87ff-b5f0-9604-89b51a2ba7c1@linaro.org>
+ <trinity-cda3b94f-8556-4b83-bc34-d2c215f93bcd-1651587032669@3c-app-gmx-bap25>
+ <10770ff5-c9b1-7364-4276-05fa0c393d3b@linaro.org>
+ <trinity-213ab6b1-ccff-4429-b76c-623c529f6f73-1651590197578@3c-app-gmx-bap25>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <trinity-213ab6b1-ccff-4429-b76c-623c529f6f73-1651590197578@3c-app-gmx-bap25>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/lunn/linux.git v5.18-rc4-stacked-bridges
-head:   eab6004bc4f6b012db3b6e1fac75f4911662baf5
-commit: eab6004bc4f6b012db3b6e1fac75f4911662baf5 [2/2] net: bridge: Clear offload_fwd_mark when passing frame up bridge interface.
-config: x86_64-randconfig-a011-20220502 (https://download.01.org/0day-ci/archive/20220504/202205041436.UX6XOeS0-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 363b3a645a1e30011cc8da624f13dac5fd915628)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/lunn/linux/commit/eab6004bc4f6b012db3b6e1fac75f4911662baf5
-        git remote add lunn https://github.com/lunn/linux.git
-        git fetch --no-tags lunn v5.18-rc4-stacked-bridges
-        git checkout eab6004bc4f6b012db3b6e1fac75f4911662baf5
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+On 03/05/2022 17:03, Frank Wunderlich wrote:
+> 
+> have not posted this version as it was failing in dtbs_check, this was how i tried:
+> 
+> https://github.com/frank-w/BPI-R2-4.14/blob/8f2033eb6fcae273580263c3f0b31f0d48821740/Documentation/devicetree/bindings/net/dsa/mediatek.yaml#L177
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+You have mixed up indentation of the second if (and missing -).
 
-All errors (new ones prefixed by >>):
+(...)
 
->> net/bridge/br_input.c:45:7: error: no member named 'offload_fwd_mark' in 'struct sk_buff'
-           skb->offload_fwd_mark = false;
-           ~~~  ^
-   1 error generated.
+>>>
+>>> basicly this "ports"-property should be required too, right?
+>>
+>> Previous binding did not enforce it, I think, but it is reasonable to
+>> require ports.
+> 
+> basicly it is required in dsa.yaml, so it will be redundant here
+> 
+> https://elixir.bootlin.com/linux/v5.18-rc5/source/Documentation/devicetree/bindings/net/dsa/dsa.yaml#L55
+> 
+> this defines it as pattern "^(ethernet-)?ports$" and should be processed by dsa-core. so maybe changing it to same pattern instead of moving up as normal property?
 
+Just keep what is already used in existing DTS.
 
-vim +45 net/bridge/br_input.c
+>>> for 33 there seem no constant..all other references to pio node are with numbers too and there seem no binding
+>>> header defining the gpio pins (only functions in include/dt-bindings/pinctrl/mt7623-pinfunc.h)
+>>
+>> ok, then my comment
+> 
+> you mean adding a comment to the example that GPIO-flags/constants should be used instead of magic numbers?
 
-    32	
-    33	static int br_pass_frame_up(struct sk_buff *skb)
-    34	{
-    35		struct net_device *indev, *brdev = BR_INPUT_SKB_CB(skb)->brdev;
-    36		struct net_bridge *br = netdev_priv(brdev);
-    37		struct net_bridge_vlan_group *vg;
-    38	
-    39		dev_sw_netstats_rx_add(brdev, skb->len);
-    40	
-    41		vg = br_vlan_group_rcu(br);
-    42	
-    43		/* Reset the offload_fwd_mark because there could be a stacked bridge
-    44		 * above. */
-  > 45		skb->offload_fwd_mark = false;
-    46	
-    47		/* Bridge is just like any other port.  Make sure the
-    48		 * packet is allowed except in promisc mode when someone
-    49		 * may be running packet capture.
-    50		 */
-    51		if (!(brdev->flags & IFF_PROMISC) &&
-    52		    !br_allowed_egress(vg, skb)) {
-    53			kfree_skb(skb);
-    54			return NET_RX_DROP;
-    55		}
-    56	
-    57		indev = skb->dev;
-    58		skb->dev = brdev;
-    59		skb = br_handle_vlan(br, NULL, vg, skb);
-    60		if (!skb)
-    61			return NET_RX_DROP;
-    62		/* update the multicast stats if the packet is IGMP/MLD */
-    63		br_multicast_count(br, NULL, skb, br_multicast_igmp_type(skb),
-    64				   BR_MCAST_DIR_TX);
-    65	
-    66		return NF_HOOK(NFPROTO_BRIDGE, NF_BR_LOCAL_IN,
-    67			       dev_net(indev), NULL, skb, indev, NULL,
-    68			       br_netif_receive_skb);
-    69	}
-    70	
+I think something was cut from my reply. I wanted to say:
+"ok, then my comment can be skipped"
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+But I think your check was not correct. I looked at bpi-r2 DTS (mt7623n)
+and pio controller uses GPIO flags.
+
+Best regards,
+Krzysztof

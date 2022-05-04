@@ -2,172 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 313025197D9
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 09:06:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9F4A5197DD
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 09:06:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345259AbiEDHJU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 03:09:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35840 "EHLO
+        id S233945AbiEDHJp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 03:09:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345236AbiEDHI6 (ORCPT
+        with ESMTP id S1345307AbiEDHJf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 03:08:58 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F8731F621;
-        Wed,  4 May 2022 00:05:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1651647904;
-        bh=mMc3bKJ5bARSc3IOJZCgKaDycLjp4WC8jucmpRGTgQY=;
-        h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
-        b=lM9mkX7hYWvhmnr6iAClqIJ71Jwrjb4gUNS0z9Huf+Sz9kRr+syTn+MOdxG6DcRwP
-         WE8KnO3lhcs6VGRoETIqirBk+BOsz0HzmXDU+x3ZHTUnllyxeS+KpMdLJIitWsVdWU
-         YhmA8zj1aYqkjZ5mezFGD9JrfR09N6Uu+V5LwrIQ=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [141.30.226.129] ([141.30.226.129]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1N7iCW-1nqBaU2K70-014jMb; Wed, 04
- May 2022 09:05:04 +0200
-Subject: Re: [PATCH 2/2] hwmon: acpi_power_meter: convert to
- hwmon_device_register_with_info
-To:     Guenter Roeck <linux@roeck-us.net>,
-        LABBE Corentin <clabbe@baylibre.com>
-Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220502124249.682058-1-clabbe@baylibre.com>
- <20220502124249.682058-2-clabbe@baylibre.com>
- <0b154a30-7765-e3ac-9980-0ecc7447d7ad@roeck-us.net> <YnAqDxfTU27USQI+@Red>
- <1b2bf215-faa1-649d-5ab4-85fc0b907ec2@gmx.de>
- <dabc2be2-36ce-a9d4-8aa5-ae3f2a57f904@roeck-us.net>
- <72cce35f-a227-cd18-17f0-00eee350bcf4@gmx.de>
- <367acd5f-9130-f071-7146-21212b578043@roeck-us.net>
-From:   Armin Wolf <W_Armin@gmx.de>
-Message-ID: <55fa8f93-e9ac-df87-eb4e-b5e20360658f@gmx.de>
-Date:   Wed, 4 May 2022 09:05:03 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
-MIME-Version: 1.0
-In-Reply-To: <367acd5f-9130-f071-7146-21212b578043@roeck-us.net>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-Content-Language: en-US
-X-Provags-ID: V03:K1:afakAUqS4OtOxwTE5b4XdL7xdVrGAWCIHJ2BZRR2Irz6XZiJVvy
- cN9FHRX5lVvBWFWoXNsUWz/Ac5Q3MGOicxree4vb4hjf5NvpNYsjTNvpfx/e2RnQAXwArW8
- cbWH1itkt97CIlz5gplJ3yD6BZdPpJvd/DLZrRtqP0vE3zttqaw6J9bnh23tCSTOR8Nz+Qy
- 5Das0iIkr8MbEkh/7llWQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:cUoedrbzUKs=:KWeX665n6A3cdcCUbZMt8m
- 7xdljR5kq6TbJR+N6yfRmj54WZrR0SV05px7cimNxdp2PwkZD3Aywe8gYEghrJlfrFraiYjfu
- 8I3azZV8jsfbmWJHYQ88E0OmygHuvifporunCI6FsUZR3wGqmo++BrVU4bekgJcT1DrLTsTNB
- /wKIKEzMKzaILSbYdY8SM/pMQ6FnTnn/nQ+RMYdPMcHm4/zljiowWqIv1vkthmI7P9e9hth2a
- Imwb1s4GBZY3JUEfT1nVTbKPrK4P/37mGEKOuWsORinRgSekTp2+6GN+QBcdguenXAmJKSOrP
- TDMSwgdpwRUUeG2G6nV3Ky3S3Zw05m/1Wg7wQ0dw8/W/maSxMRtIohfhQPO62JN/FfmIJy6s2
- Qf3JDfr28lP4kNh4qqYi+4cYWeBgl20A++kDZaZbH7jxPGuCEJCWpoN/bIEKAPXk9VyAGxrw+
- MIBJwl5iwFt8E6mqqCvPLuJYtHcrnpLJbekDe09Jk0Yd1WPm8Bm77OzxYsPxtAlLAu/e7bejh
- DVT1fYty+9HbRloeq17kkovxIZYToOrg4+LzMMPiatwMoc5j6WfzIL8/Olg01buxB1pMvOz4C
- Pz54PVC329XTX9YuxSd/KqzEWPrBNS1RG4iSzXa7zdAUHwXGKyfSADfK/BfzAqTlbHtunL7bo
- t8wipNn4SlkxofMuBy0j7eNVCG45c5gds6ZY8fcGMG2dMJYffsK5csM/bx4o3XBxXk0+USqFp
- aAD1JEymIeysASlfCbr7lu27p1dQUrOsVFIyX+LaEM+4hwYUj0sX9p6OpmDLBcWEaKcHabw3K
- 2LeJqiIwiRY3CnbtmvmY5T5TBxksydNdLIgU1BC4ytZEP0Nl+F0zQFu9qws8XD5piYP0p8OCf
- pep2Cyt6hYDTB2cj+7Kt/4RWEfdy0rSphMiiKX2dp3A1C6bpGP++FaK8R5CwQIyrZXHMlx7ov
- KRhivA5K3z7w8cMxv3b72jDn/R2ZrYVcV5PxRR4EAcPsNitNP0/fBRFmcdacYL83ZcA/ff6Lz
- KYiyQIS5OEOvfwzJN+y1xJHgYX80aTMq9Uy3LYNjMBI3vARpxaEIzAjMtp4NIfE0kwTsyjdjf
- sIl93Lw6HqtnuA=
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 4 May 2022 03:09:35 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B44223153;
+        Wed,  4 May 2022 00:06:00 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 07ED7B80DB7;
+        Wed,  4 May 2022 07:05:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9693C385A5;
+        Wed,  4 May 2022 07:05:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651647957;
+        bh=PLF8cZci2CLas9CTO5yBNBglie9vUKaC3WIlntvt3Pc=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=mD8c49kfF/nqjr2Ldd5KK0Eb7hoVZTnlH04rqi/ErmVw5pzK1v4ZEfgC4CTFXJiKY
+         Oa757NeHHRz5iyJ3WLLnb/RL2sKk76OxNzBShkfhTgs3U8a8W68JKQrvpdpkJGgRsY
+         Cr3rNCgKsIHrTvuo50jgclfQRyT+Et/0NKZHIaXKnuJrtu8VS/HoJ1oG16wliBLaR+
+         lhwCrs5DYOggbP7rm0G7Tw7FJH3d99iLbvMIxuLwL3krJdvnAsxMu6QYhKkewMPW+5
+         7PkgqmUbW83vAel9TeqHYhiu5KgE6srhsSj2akZbkCWi/xWeIswue4zSNH5K56mlYG
+         zzJjFyDPNaLyw==
+Received: from 82-132-235-80.dab.02.net ([82.132.235.80] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nm958-008pH6-VE; Wed, 04 May 2022 08:05:55 +0100
+Date:   Wed, 04 May 2022 08:06:07 +0100
+Message-ID: <877d71ixpc.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Christoffer Dall <cdall@cs.columbia.edu>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Oliver Upton <oupton@google.com>
+Subject: Re: linux-next: manual merge of the kvm-arm tree with the arm64 tree
+In-Reply-To: <20220504143529.4060ab27@canb.auug.org.au>
+References: <20220504143529.4060ab27@canb.auug.org.au>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 82.132.235.80
+X-SA-Exim-Rcpt-To: sfr@canb.auug.org.au, cdall@cs.columbia.edu, catalin.marinas@arm.com, will@kernel.org, alexandru.elisei@arm.com, linux-kernel@vger.kernel.org, linux-next@vger.kernel.org, oupton@google.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 03.05.22 um 01:43 schrieb Guenter Roeck:
+On Wed, 04 May 2022 05:35:29 +0100,
+Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> 
+> [1  <text/plain; US-ASCII (quoted-printable)>]
+> Hi all,
+> 
+> Today's linux-next merge of the kvm-arm tree got a conflict in:
+> 
+>   arch/arm64/kvm/sys_regs.c
+> 
+> between commit:
+> 
+>   0b12620fddb8 ("KVM: arm64: Treat ESR_EL2 as a 64-bit register")
+> 
+> from the arm64 tree and commits:
+> 
+>   e65197666773 ("KVM: arm64: Wire up CP15 feature registers to their AArch64 equivalents")
+>   9369bc5c5e35 ("KVM: arm64: Plumb cp10 ID traps through the AArch64 sysreg handler")
+> 
+> from the kvm-arm tree.
+> 
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
 
-> On 5/2/22 14:00, Armin Wolf wrote:
->> Am 02.05.22 um 22:42 schrieb Guenter Roeck:
->>> On 5/2/22 13:31, Armin Wolf wrote:
->>>> Am 02.05.22 um 20:59 schrieb LABBE Corentin:
->>>>
->>>>> Le Mon, May 02, 2022 at 06:34:44AM -0700, Guenter Roeck a =C3=A9crit=
- :
->>>>>> On 5/2/22 05:42, Corentin Labbe wrote:
->>>>>>> Booting lead to a hwmon_device_register() is deprecated. Please
->>>>>>> convert the driver to use hwmon_device_register_with_info().
->>>>>>> So let's convert the driver to use
->>>>>>> hwmon_device_register_with_info().
->>>>>>>
->>>>>>> Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
->>>>>>> ---
->>>>>>> =C2=A0=C2=A0 drivers/hwmon/acpi_power_meter.c | 5 ++++-
->>>>>>> =C2=A0=C2=A0 1 file changed, 4 insertions(+), 1 deletion(-)
->>>>>>>
->>>>>>> diff --git a/drivers/hwmon/acpi_power_meter.c
->>>>>>> b/drivers/hwmon/acpi_power_meter.c
->>>>>>> index d2545a1be9fc..98293727f980 100644
->>>>>>> --- a/drivers/hwmon/acpi_power_meter.c
->>>>>>> +++ b/drivers/hwmon/acpi_power_meter.c
->>>>>>> @@ -891,7 +891,10 @@ static int acpi_power_meter_add(struct
->>>>>>> acpi_device *device)
->>>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (res)
->>>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 goto =
-exit_free_capability;
->>>>>>>
->>>>>>> -=C2=A0=C2=A0=C2=A0 resource->hwmon_dev =3D hwmon_device_register(=
-&device->dev);
->>>>>>> +=C2=A0=C2=A0=C2=A0 resource->hwmon_dev =3D
->>>>>>> hwmon_device_register_with_info(&device->dev,
->>>>>>> + ACPI_POWER_METER_DEVICE_NAME,
->>>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 NULL, NULL=
-,
->>>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 NULL);
->>>>>> NACK. That isn't a conversion to the new API, it just abuses the
->>>>>> fact
->>>>>> that the new API has to accept a NULL info pointer for historic
->>>>>> reasons.
->>>>>>
->>>>> Hello
->>>>>
->>>>> I am sorry, I found a driver doing it, so I believed it was okay.
->>>>> Converting seems not to hard but, by using the new API, how can I
->>>>> convert power1_model_number/power1_is_battery attribute ?
->>>>> There are the remaining attributes I dont find how to convert.
->>>>>
->>>>> Regards
->>>>
->>>> Hi,
->>>>
->>>> for allowing the driver to provide nonstandard attributes,
->>>> hwmon_device_register_with_info()
->>>> has the argument "extra_groups" which is an pointer to a list of
->>>> sysfs attribute groups.
->>>> There are some drivers which are using this functionality, maybe you
->>>> can use them as an
->>>> inspiration.
->>>>
->>>> Just a question: what is the name of the driver you originally used
->>>> as an inspiration?
->>>>
->>>
->>> Originally it was for drivers/thermal/thermal_hwmon.c. Now there is
->>> also
->>> drivers/platform/mips/cpu_hwmon.c which is clearly an abuse. I may hav=
-e
->>> missed others.
->>>
->>> Guenter
->> Should we notify the maintainers of cpu_hwmon.c about that?
->> This could potentially prevent such incidents from happening again.
->>
->
-> I am more inclined to create a special API for thermal, call it from
-> the thermal code, and issue a warning with backtrace if anyone else
-> calls hwmon_device_register_with_info() with NULL info pointer.
-> And explain all that in detail in the API documentation.
->
-> Guenter
-Sounds good.
+Thanks Stephen.
 
-Armin Wolf
+I've added a fix to address the 'u32 esr' instances that were
+introduced by Oliver's series. Catalin, do you want me to merge the
+ESR series in the kvm-arm tree in order to avoid the minor conflict?
+
+Cheers,
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.

@@ -2,76 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55EE551ADBF
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 21:26:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34D9851ADC1
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 21:26:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344543AbiEDT3w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 15:29:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57592 "EHLO
+        id S1376857AbiEDTaM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 15:30:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343627AbiEDT3t (ORCPT
+        with ESMTP id S1357259AbiEDTaH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 15:29:49 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E23164A3C5;
-        Wed,  4 May 2022 12:26:12 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id y21so2834716edo.2;
-        Wed, 04 May 2022 12:26:12 -0700 (PDT)
+        Wed, 4 May 2022 15:30:07 -0400
+Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com [IPv6:2607:f8b0:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAE7A4A90C;
+        Wed,  4 May 2022 12:26:30 -0700 (PDT)
+Received: by mail-il1-x12d.google.com with SMTP id h11so1504054ila.5;
+        Wed, 04 May 2022 12:26:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=U4ugFnEHiQMZfrDXCj3ch+k+wAUwvH2FEn+27B1gMn8=;
-        b=b3IHFNU5vyS3CmCibqe8vz7MofuxGI2zN9F6/a91ENRH1Htd7thQmbLBLOEY7Ks4SI
-         /cV8G7CfQwdkOl46mzL6a7KKRYD9T5cRdSKL1ABALGWARV3jJp7DtBOUYjFbrZIF241D
-         fpNgsJsWhTfuhBmIovBY5a/pkIBv3BZvGrJcW0MPGJRF4dCwgbsh+a/rRE7zD1NQB5y8
-         gf8CbZ37kbvhxvVE9LSiBBjltSu4ZaW4kfYXj5S0pyMgmYu0RoFcXPwYnGdiCf6WgLq3
-         TSQkyURrqx/M3vcg9hbyf8O2HtEiBb9z6ZZqs47i1dP2OzujDM8xaN3yLxeTbbXJWzAU
-         H8oA==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=faKNM+qwcArkJmPdQKZUatJOcPW6asWisYRgltgA+bM=;
+        b=VrLn4DXjigrD/Rraqf7CcvlUwmR7BblTWy83YVocIBLYRtnQrXbss03vXrg9mQL2JW
+         JheLYxPbVecLLCpGdrFWJ32cImulwZiUJy/UhNWxROYuDL2Th2jbPXLSVX3EZapQ846X
+         1yoFSHf/bA+P9hUV6to0Q30YZUdUDaLV/iyc7O9JEj3F2xOnh1b1zyV1gQFTAorEuUvj
+         lYS/Y3xdAQh7TtWahQLT5kNe/ISqAEUt5EqSCtmU4MG3cGa5oLweRn5ihIBVeUWcUy5V
+         TVpjBmLGHnx9vXtXGATV6pgXuOfCRGsOJdpYUGEhZ3PoJDO4P4qHU2/80bxp+heODJKA
+         0hsg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=U4ugFnEHiQMZfrDXCj3ch+k+wAUwvH2FEn+27B1gMn8=;
-        b=O8gtTvqYqMJo8FsoVDTIJIt/+Wm/WoqMGITMo+b9dYi2QfQYIxC+qAVEcwKQiDON9d
-         k++6Yk6X5LjP+2aaoxrhBcUrgoSPo/1MGE3lBuyVNh8psXzK9fR2tMgV4nN+6f83rcnO
-         aBvd8pK3JzKT5jBxD3DCyk7pw16CoReFa73WX6qKeamBoJaSoovc10UVabQb0lgEvtAN
-         dJDZUIbzVWtExboFMrUlQlDQIbVOgXtcIj1Pw1/jj23sS46JtEKgjx8v1gL95oF2c1DJ
-         g1bHRZTsuNquocKPmWKhVdbwPVccarXNJx+egVDrwPaeRbNTO/DlM9PJN0uEvW5RbIIu
-         zEYQ==
-X-Gm-Message-State: AOAM533Gyiw45DKxRIyyrUCysC3UJQHNo8SIb7KYSzRnd/Hysw+d0kGs
-        fSmikswQhD75U4pHqzvbjT4=
-X-Google-Smtp-Source: ABdhPJzNYhVKyEWXU83EQ5Wc+8d0ouLMc/N3EANkkzqM3BU/cf3RUZlUmzDzUR2yIzUYxjD95PgmYQ==
-X-Received: by 2002:aa7:dc0e:0:b0:426:af42:6a06 with SMTP id b14-20020aa7dc0e000000b00426af426a06mr24800545edu.307.1651692371247;
-        Wed, 04 May 2022 12:26:11 -0700 (PDT)
-Received: from skbuf ([188.25.160.86])
-        by smtp.gmail.com with ESMTPSA id gv23-20020a1709072bd700b006f3ef214e41sm6015940ejc.167.2022.05.04.12.26.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 May 2022 12:26:10 -0700 (PDT)
-Date:   Wed, 4 May 2022 22:26:09 +0300
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Arun Ramadoss <arun.ramadoss@microchip.com>
-Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        netdev@vger.kernel.org, Russell King <linux@armlinux.org.uk>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Woojung Huh <woojung.huh@microchip.com>,
-        UNGLinuxDriver@microchip.com, Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>
-Subject: Re: [Patch net-next v13 05/13] net: dsa: microchip: add DSA support
- for microchip LAN937x
-Message-ID: <20220504192609.p6bkyghvdluauwag@skbuf>
-References: <20220504151755.11737-1-arun.ramadoss@microchip.com>
- <20220504151755.11737-6-arun.ramadoss@microchip.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=faKNM+qwcArkJmPdQKZUatJOcPW6asWisYRgltgA+bM=;
+        b=T+CjMSgOsCsvykI4hwQMblazD+ZMcWlXazaOp/Qebnze3LbyeY7Lz0122qgpsXSP0B
+         B/LFjYFoC/g88OT/b1A8JIXwaH9BsS3oQN89hh/2CTQoHhmsQF3BFqc1GuHfL6C3HScO
+         SUlTNT704nqU1oAI5QbscY1yVSEHB+pibes9ueS92Ba8nZZHpIO3sOLhntbnvzLqzC/p
+         SmqLixgD2PTmakG4hdMKZ7st+SonwClmXkcdZcFY1h+ejaz7KDURy6nCFJiTL9U9OXEi
+         GmKWSZ5iJNIZtSiDQP6LgSnb/E/Jx6/ygJXErWMjiKdgv6S5enknUa9gqJBBq6LIEXVy
+         KsVg==
+X-Gm-Message-State: AOAM533zgZG1KsrnC/dp303VGx3aqwjBDEhXLjB+8/6DseNaVYWw0F6+
+        TozY2uL2nO4IN8wz6GfaftSSOIPIPk6Rdj1EXeADrnli
+X-Google-Smtp-Source: ABdhPJxcGyP+rY6OJv8/guQBy29cEHbepRX/c2vT1PL3ijrS75hLlWsBEBXK+gtOF0Y7BZqR/JBiiuSjyM8cN6sKhhU=
+X-Received: by 2002:a92:7309:0:b0:2ca:8c9c:752d with SMTP id
+ o9-20020a927309000000b002ca8c9c752dmr9144096ilc.151.1651692390336; Wed, 04
+ May 2022 12:26:30 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220504151755.11737-6-arun.ramadoss@microchip.com>
+References: <20220502093625.GA23225@kernel.org> <CAGS_qxoc=AnkzUtaFpJvF08Z_Z15h9sZxYNQT5-S9C7aM4poEg@mail.gmail.com>
+ <CANiq72m70q+zviHVNSV_AEwOByVBiMuSQL5vyo2UMMpD-vd+_Q@mail.gmail.com> <CABVgOSmkZ9EXijBRx_pvS=Opizb1z2632B5rVsd1WRNOL5o8GA@mail.gmail.com>
+In-Reply-To: <CABVgOSmkZ9EXijBRx_pvS=Opizb1z2632B5rVsd1WRNOL5o8GA@mail.gmail.com>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Wed, 4 May 2022 21:26:19 +0200
+Message-ID: <CANiq72kVLzOu_3UjoUiSp5y+H0tA+SQYNQ=fsuhtg=i6MQe=Fg@mail.gmail.com>
+Subject: Re: [PATCH] kunit: take `kunit_assert` as `const`
+To:     David Gow <davidgow@google.com>
+Cc:     Daniel Latypov <dlatypov@google.com>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -82,27 +72,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 04, 2022 at 08:47:47PM +0530, Arun Ramadoss wrote:
-> Basic DSA driver support for lan937x and the device will be
-> configured through SPI interface.
-> 
-> drivers/net/dsa/microchip/ path is already part of MAINTAINERS &
-> the new files come under this path. Hence no update needed to the
-> MAINTAINERS
-> 
-> Reused KSZ APIs for port_bridge_join() & port_bridge_leave() and
-> added support for port_stp_state_set().
-> 
-> RGMII internal delay values for the mac is retrieved from
-> rx-internal-delay-ps & tx-internal-delay-ps as per the feedback from
-> v3 patch series.
-> https://lore.kernel.org/netdev/20210802121550.gqgbipqdvp5x76ii@skbuf/
-> 
-> It supports standard delay 2ns only. If the property is not found, the
-> value will be forced to 0.
-> 
-> Signed-off-by: Prasanna Vengateshan <prasanna.vengateshan@microchip.com>
-> Signed-off-by: Arun Ramadoss <arun.ramadoss@microchip.com>
-> ---
+Hi David,
 
-Reviewed-by: Vladimir Oltean <olteanv@gmail.com>
+On Wed, May 4, 2022 at 4:05 PM David Gow <davidgow@google.com> wrote:
+>
+> I definitely agree here -- I can't recall any particular plan that
+> would require this to be non-const, and we can always change it back
+> if we really need to.
+
+That is good to know, thanks! Out-of-tree users can always be a surprise... :)
+
+> Very exciting! I assume that's the PR here:
+> https://github.com/Rust-for-Linux/linux/pull/757
+
+Indeed! I hope you like it -- we are taking the documentation tests in
+Rust (which are a very lightweight way of writing examples which
+double as tests) and generating KUnit test cases on the fly. For the
+moment it is just for the `kernel` crate, but the idea is to
+generalize it for modules etc.
+
+By the way, since you saw the PR... do you know if KUnit relies (or
+will rely) on "stack-dumping" functions like `longjmp`?
+
+Cheers,
+Miguel

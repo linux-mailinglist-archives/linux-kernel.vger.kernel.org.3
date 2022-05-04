@@ -2,120 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40FEB51A20C
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 16:17:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8FA351A211
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 16:20:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351233AbiEDOUp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 10:20:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37016 "EHLO
+        id S1351248AbiEDOY2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 10:24:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351159AbiEDOUn (ORCPT
+        with ESMTP id S1345701AbiEDOYZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 10:20:43 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 938D919281
-        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 07:17:07 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4FFDEB825A4
-        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 14:17:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5928DC385A5;
-        Wed,  4 May 2022 14:17:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651673825;
-        bh=bILCd1sxeIvbA+5tD85VdyDhv+PjR1QceeyC4i77F7s=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=PLaT0ROECinBJfleAOFsjO8U4x0scBFNpxF4+15z0Su2w/B7oQ2INoyEjMXkuYAx3
-         T6aZVqJIMp3545+ISNDEKzwef3R0jQu2UIQ+SFoR2onOzlfgD+XwyuFB+mq5lnX1Zd
-         QCnAuTM3BrtCryngmeJs8xrx8xnq+2qre5Ng9L8uFNExQKjA+VYesn4luSRw6BBOE/
-         dJCm9vXCVDiFq4yxNIhYWsot7K+7+/3ZqfZSlW66Gu8GfLrH5F/CTf9d50xAfc5N4h
-         ISyZ5JMtDV2R7x1gI2gs5eNItXAGhDGGNkvxXRu9NZfFwWA39X+eNQarV01lyJKmR5
-         VBoZ6TItaJNTw==
-Date:   Wed, 4 May 2022 15:16:56 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Kalesh Singh <kaleshsingh@google.com>
-Cc:     mark.rutland@arm.com, will@kernel.org, maz@kernel.org,
-        qperret@google.com, tabba@google.com, surenb@google.com,
-        kernel-team@android.com, James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Peter Collingbourne <pcc@google.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>,
-        Andrew Jones <drjones@redhat.com>,
-        Marco Elver <elver@google.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Keir Fraser <keirf@google.com>,
-        Zenghui Yu <yuzenghui@huawei.com>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/5] KVM: arm64: Compile stacktrace.nvhe.o
-Message-ID: <YnKK2IxdbVvcsOC2@sirena.org.uk>
-References: <20220502191222.4192768-1-kaleshsingh@google.com>
- <20220502191222.4192768-3-kaleshsingh@google.com>
+        Wed, 4 May 2022 10:24:25 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D07D11C928;
+        Wed,  4 May 2022 07:20:49 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id k27so1880070edk.4;
+        Wed, 04 May 2022 07:20:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=PDUpqEwsU0g54F2duDLV9Pqr2Yjkf7JgCmsGkPEOp0w=;
+        b=LsrQObZXf1A/KJ3l8fAg9QNyokldjCq9cX5C7y+XIxBlonabohntkTLKb0rJ3mO6ES
+         DlWroY41MZMuGn0G6eM/TINrCGpIqU0VYsy/5y8QrNBn/E0vvJSiXGIOOonTe7PX7wwJ
+         Kr/dUZlao0crAh6cyzm7vJ9wvZQXkXUGl5gJnY6WKF6pf6dww8E3AHlESi0P/yHZ2q5F
+         Bki4i/mXRFF/XI2J7ovTbRnLw4ZJqtR4NOewVfd6Y94CzqGiP1rULXKWxYnGan3Qclxs
+         uPDx/gryb9V0LY+irlYkN/WoifbWSwOPw8d2bWmzgbROezZ2j1qhBrfFqwvyezQ0hqZd
+         Ztww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=PDUpqEwsU0g54F2duDLV9Pqr2Yjkf7JgCmsGkPEOp0w=;
+        b=yCA0xbQpp3xj6eKFuxId0IaP1z61UvE6HS2vfoiq4uKLPZBeY7E1iZDDvyVdQ3Xzof
+         ISPhrC40ToQZ6GPYH1IU6Qi+o1Ql0O2Uqlm2Ua6wmedDrO4WFRFwLeYUzBZVpq/TWWwT
+         ateNDi9VVbi4FokhjI3HwQ3+6FXBHUkYWiyc0XUSMeNLJ06v576Tjeg1ZRu/c1ihqqPf
+         d28LthPl4+yCacBlYKREyZnH64idZ0CDlQ3xPJYLNskJjs0t0jMrem8POuR635pBowPJ
+         NjhSOoKpCP6dROBtTMDTCBJNbVJA3KdkrzbuvICyFX7bm+SsTMFyBYrbdw2MqKaH96tt
+         vA2g==
+X-Gm-Message-State: AOAM530E+5iBuB4DCWaSoXjF9xGWLAL2wPVJWpPg5Kq/g220uKz0by6b
+        mTCYATCRMp5Mm8ciLiXJUpJRaPxr4IU/e/11ydQ=
+X-Google-Smtp-Source: ABdhPJxtzj9zFuQw6N6sVztraiGsQxy5kNW6AXTNcgQlk00LHVmbnO+1P+bByTm7T3zXzTkNai4eTBVZFHT+TvmdkoU=
+X-Received: by 2002:a05:6402:d51:b0:425:d5e1:e9f0 with SMTP id
+ ec17-20020a0564020d5100b00425d5e1e9f0mr23287754edb.125.1651674048120; Wed, 04
+ May 2022 07:20:48 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="/Hx6xiGRCvg0C4uF"
-Content-Disposition: inline
-In-Reply-To: <20220502191222.4192768-3-kaleshsingh@google.com>
-X-Cookie: Mother is the invention of necessity.
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220504133612.604304-1-Qing-wu.Li@leica-geosystems.com.cn> <20220504133612.604304-4-Qing-wu.Li@leica-geosystems.com.cn>
+In-Reply-To: <20220504133612.604304-4-Qing-wu.Li@leica-geosystems.com.cn>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Wed, 4 May 2022 16:20:11 +0200
+Message-ID: <CAHp75VeseZ2ChtbafmbgVavS4KvCvrQ4+XSRkeiJSyqr8__dSw@mail.gmail.com>
+Subject: Re: [PATCH V3 3/5] iio: accel: sca3300: modified to support multi chips
+To:     LI Qingwu <Qing-wu.Li@leica-geosystems.com.cn>
+Cc:     Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Tomas Melin <tomas.melin@vaisala.com>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        Rob Herring <robh@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, May 4, 2022 at 3:36 PM LI Qingwu
+<Qing-wu.Li@leica-geosystems.com.cn> wrote:
+>
+> The drive support sca3300 only.
 
---/Hx6xiGRCvg0C4uF
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+driver supports
 
-On Mon, May 02, 2022 at 12:12:02PM -0700, Kalesh Singh wrote:
+> There are some other similar chips, for instance, SCL3300.
+> Prepare the way for multiple chips and additional channels.
+> Modify the driver to read the device id.
+> Add the tables for the corresponding id to support multiple chips.
+> Add prepares for the addition of extra channels.
+> Add prepares for handling the operation modes for multiple chips.
 
-> Recompile stack unwinding code for use with the nVHE hypervisor. This is
-> a preparatory patch that will allow reusing most of the kernel unwinding
-> logic in the nVHE hypervisor.
+It seems you need to work more on the commit messages in all patches.
 
->  enum stack_type {
-> -	STACK_TYPE_UNKNOWN,
-> +#ifndef __KVM_NVHE_HYPERVISOR__
->  	STACK_TYPE_TASK,
->  	STACK_TYPE_IRQ,
->  	STACK_TYPE_OVERFLOW,
->  	STACK_TYPE_SDEI_NORMAL,
->  	STACK_TYPE_SDEI_CRITICAL,
-> +#endif /* !__KVM_NVHE_HYPERVISOR__ */
-> +	STACK_TYPE_UNKNOWN,
->  	__NR_STACK_TYPES
->  };
+...
 
-I don't immediately see a problem with it but I'm curious as to why
-STACK_TYPE_UNKNOWN got moved to the end of the list here?  It does mean
-that zeroed memory will default to STACK_TYPE_TASK but we're not
-actually relying on that.  Otherwise
+> +struct sca3300_chip_info {
+> +       const struct iio_chan_spec *channels;
+> +       const int (*accel_scale_table)[2];
+> +       const int *accel_scale_modes_map;
+> +       const unsigned long *scan_masks;
+> +       const int *avail_modes_table;
+> +       const int *freq_modes_map;
+> +       const int *freq_table;
+> +       const u8 num_accel_scales;
+> +       const u8 num_avail_modes;
+> +       const u8 num_channels;
+> +       const u8 num_freqs;
+> +       const u8 chip_id;
 
-Reviwed-by: Mark Brown <broonie@kernel.org>
+Why do you have const qualifier on all members?  The last one is
+understandable, but the rest, esp. pointers should be justified.
 
---/Hx6xiGRCvg0C4uF
-Content-Type: application/pgp-signature; name="signature.asc"
+> +       const char *name;
+> +};
 
------BEGIN PGP SIGNATURE-----
+...
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmJyitgACgkQJNaLcl1U
-h9B05gf9He8i0lJSgnAoCwOnWz42y8l46CHTUSZJK53nFwnevW7nvl0Xdf1Rajhv
-b1dBcynlwm2uAAHoeGen9HfX4sL0uj5e+mrg9IzoKq6GbqZfv9J2LNrCnI479gAU
-GURaSasiSq3bEyxogf1eMsH2G4Kkams6LtgdSI7fr/P1JHIU+KItROmRh2zNC2jS
-obAW/wC6HUJfsz1moQrO9/W1VLT8DeqBuYmTOIDZsiyJ3IKQhkZeQb2ztDU/TWeO
-AUvI14Z1BWGgEisgaJx06/Y9x6nlayfkC1kEc2kMcOVPjWqqAoeHEWsL1ZmfLs9U
-wlE20k5QYG+a2rgiqCSjVBtRSExj6Q==
-=JjBs
------END PGP SIGNATURE-----
+> +static int sca3300_set_op_mode(struct sca3300_data *sca_data, int index)
+> +{
+> +       int mode;
+> +
+> +       if ((index < 0) || (index >= sca_data->chip->num_avail_modes))
 
---/Hx6xiGRCvg0C4uF--
+Too many parentheses.
+
+> +               return -EINVAL;
+> +
+> +       mode = sca_data->chip->avail_modes_table[index];
+> +
+> +       return sca3300_write_reg(sca_data, SCA3300_REG_MODE, mode);
+> +}
+
+-- 
+With Best Regards,
+Andy Shevchenko

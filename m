@@ -2,108 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E02E51ACBE
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 20:25:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2394851ACC2
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 20:26:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376912AbiEDS31 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 14:29:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50880 "EHLO
+        id S1376923AbiEDS3i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 14:29:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376846AbiEDS3K (ORCPT
+        with ESMTP id S1376761AbiEDS3N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 14:29:10 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D315E5F72
-        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 11:00:21 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id p10so3641401lfa.12
-        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 11:00:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=X7nnFcBo5MIhDYQNnEavKTW+QBw/a5S/8r1dgvWPgx4=;
-        b=HydzbIEsqYx4gbpn6Of0F/idsQ70FsOBI/yLQ3l1wlbBjcoSGQqp8LilhBOa//uEDx
-         EWnmRcF4BEWKWbTlT+gtSe5/NRwGYnfkr6Qy6WpkKKFSMAkUba/bzP88tFQGiyyP5qzR
-         slNInsc4mTa9BKrS4jYwCcQzeao9bKelEatb4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=X7nnFcBo5MIhDYQNnEavKTW+QBw/a5S/8r1dgvWPgx4=;
-        b=OegFPa0Dmqe7LJrhXq5cCdlrd830bvv3ihsn2UwkSzfaFq2qZKRY9juMpFLaXg4mu7
-         0BT3FUSuhEoqyNJG7xlf+gMiut3UYNEhqGL/FaH/LMvcryc9c3jU7l3gMVLD6EgjzJ39
-         0hNxIadNXPXAy+jfzDjQGSwfQqtRktBn5bt8zp+IazXzrBHkTvSM+PPbxaV+2OZ+jwE4
-         OtIbUCCHRBwWIrGVWVkOK+WfHlUVgTJWcexhURt9HdxdLLOb0My3NWBIiYQBukxmKTpt
-         bQ81wdJCfDBoC4V9CGjzIkUM0RQkcvAK8K2oulQFNnx4Tx+YUO4GW0Uzy3egmKFvKUtk
-         7t2A==
-X-Gm-Message-State: AOAM531U2bzv10UhIzXKQ9d9TAAwFWuxboKOLH55P06/Mu4llCoUV5Vk
-        +uIQ1dwTn3UBSUkuzrOCLXgtICB/YY9dHmIc
-X-Google-Smtp-Source: ABdhPJy26XgB0YuGbz3a6R5b+oAHICvQfjDNYnyCCgiek2b53lKX2wfiGl/7Ch/SKxnOGjMm+60IVA==
-X-Received: by 2002:ac2:4add:0:b0:471:fc6d:a71d with SMTP id m29-20020ac24add000000b00471fc6da71dmr14907779lfp.350.1651687219881;
-        Wed, 04 May 2022 11:00:19 -0700 (PDT)
-Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com. [209.85.167.54])
-        by smtp.gmail.com with ESMTPSA id z19-20020a05651c11d300b0024f3d1daea5sm1736148ljo.45.2022.05.04.11.00.17
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 04 May 2022 11:00:18 -0700 (PDT)
-Received: by mail-lf1-f54.google.com with SMTP id b18so3659759lfv.9
-        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 11:00:17 -0700 (PDT)
-X-Received: by 2002:a05:6512:3c93:b0:44b:4ba:c334 with SMTP id
- h19-20020a0565123c9300b0044b04bac334mr15264136lfv.27.1651687217327; Wed, 04
- May 2022 11:00:17 -0700 (PDT)
+        Wed, 4 May 2022 14:29:13 -0400
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A76BE4757F;
+        Wed,  4 May 2022 11:00:37 -0700 (PDT)
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.0.0)
+ id 51a7cf1e4c0649f0; Wed, 4 May 2022 20:00:35 +0200
+Received: from kreacher.localnet (unknown [213.134.161.219])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by v370.home.net.pl (Postfix) with ESMTPSA id A61BA66C2D7;
+        Wed,  4 May 2022 20:00:34 +0200 (CEST)
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>
+Subject: Re: [PATCH v3 4/9] PCI/PM: Rework changing power states of PCI devices
+Date:   Wed, 04 May 2022 20:00:33 +0200
+Message-ID: <2650302.mvXUDI8C0e@kreacher>
+In-Reply-To: <YnKrcFSjLr+W+myL@dev-arch.thelio-3990X>
+References: <4419002.LvFx2qVVIh@kreacher> <CAJZ5v0i1Ynt54yb7aMJorkYUvqkxhxOqvQJb8AdA7Ps1aBO5tg@mail.gmail.com> <YnKrcFSjLr+W+myL@dev-arch.thelio-3990X>
 MIME-Version: 1.0
-References: <alpine.LRH.2.02.2204241648270.17244@file01.intranet.prod.int.rdu2.redhat.com>
- <CAHk-=wh+Z+OKH3jRttWGHbWSQq2wVMtdnA=ntDiadZu=VxAC7w@mail.gmail.com>
- <alpine.LRH.2.02.2204250723120.26714@file01.intranet.prod.int.rdu2.redhat.com>
- <YnI7hE4cIfjsdKSF@antec> <YnJI4Ru0AlUgrr9C@zx2c4.com> <YnJOCbLtdATzC+jn@zx2c4.com>
- <YnJQXr3igEMTqY3+@smile.fi.intel.com> <YnJSQ3jJyvhmIstD@zx2c4.com>
-In-Reply-To: <YnJSQ3jJyvhmIstD@zx2c4.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Wed, 4 May 2022 11:00:00 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wgb_eBdjM_mzEvXfRG2EhrSK5MHNGyAj7=4vxvN4U9Rug@mail.gmail.com>
-Message-ID: <CAHk-=wgb_eBdjM_mzEvXfRG2EhrSK5MHNGyAj7=4vxvN4U9Rug@mail.gmail.com>
-Subject: Re: [PATCH v2] hex2bin: make the function hex_to_bin constant-time
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@intel.com>,
-        Stafford Horne <shorne@gmail.com>,
-        Mikulas Patocka <mpatocka@redhat.com>,
-        Andy Shevchenko <andy@kernel.org>,
-        device-mapper development <dm-devel@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Mike Snitzer <msnitzer@redhat.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Milan Broz <gmazyland@gmail.com>
+Content-Transfer-Encoding: 7Bit
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+X-CLIENT-IP: 213.134.161.219
+X-CLIENT-HOSTNAME: 213.134.161.219
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedrvdelgdduudelucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgjfhgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepledtieekkeekveeikeetgffgteeuteefjeevjeegudelvdduheeiuedvieehieevnecuffhomhgrihhnpehgihhthhhusgdrtghomhenucfkphepvddufedrudefgedrudeiuddrvdduleenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvudefrddufeegrdduiedurddvudelpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeejpdhrtghpthhtohepnhgrthhhrghnsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehrrghfrggvlheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqphgtihesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdp
+ rhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehhvghlghgrrghssehkvghrnhgvlhdrohhrghdprhgtphhtthhopehmihhkrgdrfigvshhtvghrsggvrhhgsehlihhnuhigrdhinhhtvghlrdgtohhm
+X-DCC--Metrics: v370.home.net.pl 1024; Body=7 Fuz1=7 Fuz2=7
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 4, 2022 at 3:15 AM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
->
-> > Alignment? Compiler bug? HW issue?
->
-> Probably one of those, yea. Removing the instruction addresses, the only
-> difference between the two compiles is: https://xn--4db.cc/Rrn8usaX/diff#=
-line-440
+On Wednesday, May 4, 2022 6:36:00 PM CEST Nathan Chancellor wrote:
+> On Wed, May 04, 2022 at 02:59:17PM +0200, Rafael J. Wysocki wrote:
+> > On Tue, May 3, 2022 at 7:59 PM Nathan Chancellor <nathan@kernel.org> wrote:
+> > >
+> > > Hi Rafael,
+> > >
+> > > On Thu, Apr 14, 2022 at 03:11:21PM +0200, Rafael J. Wysocki wrote:
+> > > > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > > >
+> > > > There are some issues related to changing power states of PCI
+> > > > devices, mostly related to carrying out unnecessary actions in some
+> > > > places, and the code is generally hard to follow.
+> > > >
+> > > >  1. pci_power_up() has two callers, pci_set_power_state() and
+> > > >     pci_pm_default_resume_early().  The latter updates the current
+> > > >     power state of the device right after calling pci_power_up()
+> > > >     and it restores the entire config space of the device right
+> > > >     after that, so pci_power_up() itself need not read the
+> > > >     PCI_PM_CTRL register or restore the BARs after programming the
+> > > >     device into D0 in that case.
+> > > >
+> > > >  2. It is generally hard to get a clear view of the pci_power_up()
+> > > >     code flow, especially in some corner cases, due to all of the
+> > > >     involved PCI_PM_CTRL register reads and writes occurring in
+> > > >     pci_platform_power_transition() and in pci_raw_set_power_state(),
+> > > >     some of which are redundant.
+> > > >
+> > > >  3. The transitions from low-power states to D0 and the other way
+> > > >     around are unnecessarily tangled in pci_raw_set_power_state()
+> > > >     which causes it to use a redundant local variable and makes it
+> > > >     rather hard to follow.
+> > > >
+> > > > To address the above shortcomings, make the following changes:
+> > > >
+> > > >  a. Remove the code handling transitions into D0
+> > > >     from pci_raw_set_power_state() and rename it as
+> > > >     pci_set_low_power_state().
+> > > >
+> > > >  b. Add the code handling transitions into D0 directly
+> > > >     to pci_power_up() and to a new wrapper function
+> > > >     pci_set_full_power_state() calling it internally that is
+> > > >     only used in pci_set_power_state().
+> > > >
+> > > >  c. Make pci_power_up() avoid redundant PCI_PM_CTRL register reads
+> > > >     and make it work in the same way for transitions from any
+> > > >     low-power states (transitions from D1 and D2 are handled
+> > > >     slightly differently before the change).
+> > > >
+> > > >  d. Put the restoration of the BARs and the PCI_PM_CTRL
+> > > >     register read confirming the power state change into
+> > > >     pci_set_full_power_state() to avoid doing that in
+> > > >     pci_pm_default_resume_early() unnecessarily.
+> > > >
+> > > > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > > > Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+> > >
+> > > This change as commit 5bffe4c611f5 ("PCI/PM: Rework changing power
+> > > states of PCI devices") causes my AMD-based system to fail to fully
+> > > boot. As far as I can tell, this might be NVMe related, which might make
+> > > getting a full log difficult, as journalctl won't have anywhere to save
+> > > it. I see:
+> > >
+> > > nvme nvme0: I/O 8 QID 0 timeout, completion polled
+> > >
+> > > then shortly afterwards:
+> > >
+> > > nvme nvme0: I/O 24 QID 0 timeout, completion polled
+> > > nvme nvme0: missing or invalid SUBNQN field
+> > >
+> > > then I am dropped into an emergency shell.
+> > 
+> > Thanks for the report!
+> > 
+> > > This is a log from the previous commit, which may give some hints about
+> > > the configuration of this particular system.
+> > >
+> > > https://gist.github.com/nathanchance/8a56f0939410cb187896e904c72e41e7/raw/b47b2620bdd32d43c7a3b209fcfd9e3d4668f058/good-boot.log
+> > >
+> > > If there is any additional debugging information I can provide or
+> > > patches I can try, please let me know!
+> > 
+> > Please see what happens if the "if (dev->current_state == PCI_D0)"
+> > check and the following "return 0" statement in pci_power_up() are
+> > commented out.
+> 
+> If I understand you correctly, this? Unfortunately, that does not help.
 
-Well, that address doesn't work for me at all. It turns into =D7=90.cc.
+Thanks for testing.
 
-I'd love to see the compiler problem, since I find those fascinating
-(mainly because they scare the hell out of me), but those web
-addresses you use are not working for me.
+Please check if the patch below makes any difference.
 
-It most definitely looks like an OpenRISC compiler bug - that code
-doesn't look like it does anything remotely undefined (and with the
-"unsigned char", nothing implementation-defined either).
+---
+ drivers/pci/pci.c |   10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
-             Linus
+Index: linux-pm/drivers/pci/pci.c
+===================================================================
+--- linux-pm.orig/drivers/pci/pci.c
++++ linux-pm/drivers/pci/pci.c
+@@ -1245,7 +1245,7 @@ int pci_power_up(struct pci_dev *dev)
+ 
+ 	/* There's nothing more to do if current_state is D0 at this point. */
+ 	if (dev->current_state == PCI_D0)
+-		return 0;
++		goto done;
+ 
+ 	/*
+ 	 * Program the device into PCI_D0 by forcing the entire word to 0 (this
+@@ -1260,6 +1260,11 @@ int pci_power_up(struct pci_dev *dev)
+ 		udelay(PCI_PM_D2_DELAY);
+ 
+ 	dev->current_state = PCI_D0;
++
++done:
++	if (dev->bus->self)
++		pcie_aspm_pm_state_change(dev->bus->self);
++
+ 	return 1;
+ 
+ fail:
+@@ -1339,9 +1344,6 @@ static int pci_set_full_power_state(stru
+ 		pci_restore_bars(dev);
+ 	}
+ 
+-	if (dev->bus->self)
+-		pcie_aspm_pm_state_change(dev->bus->self);
+-
+ 	return 0;
+ }
+ 
+
+
+

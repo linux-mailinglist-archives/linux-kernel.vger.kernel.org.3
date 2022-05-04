@@ -2,92 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA99251A37C
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 17:14:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5BDA51A37D
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 17:15:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352024AbiEDPSE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 11:18:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39362 "EHLO
+        id S1352068AbiEDPTP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 11:19:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352007AbiEDPR7 (ORCPT
+        with ESMTP id S1349604AbiEDPTM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 11:17:59 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44FE842EF0
-        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 08:14:22 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id c11so2463030wrn.8
-        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 08:14:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=KM/f7jaQBkBOPOANIitdndZ91PcsmrJZUNaTAD99MtE=;
-        b=VGv/dRbrno6dRtybyhCo6tVYSECgWk/uGSPimj7FJXI3Hd7JHFDss9JMWMtotIZJUL
-         kdOF+HOlvsNH2X7v3TXeRcfJU8WPxezGQJ3KDALwkMEmo36A03BHVQdGT6WCy7SgsjQ7
-         RPrWWn87kswU4wJG6r3QXZAu7E+E9lcNqej+Bi8DButV6oDkSfaRVQmgNC0rT21O6WlY
-         55AqsuGChj8okZP1ncFV+wPM+lyD/OOWfkKKTh1pWCwpLmOhrdhrM1YN/BbGgs0CmAua
-         UkrcJx/LFC1RPDG240qKdmR0bJOIwKXteWHJ/HEBVHoZsPZ/I/QJUE7AhgydZ4MtQ3cC
-         1lJA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=KM/f7jaQBkBOPOANIitdndZ91PcsmrJZUNaTAD99MtE=;
-        b=e5Xo9lVmSi3XzQ5uB3YwxB5H4Ay9DY/ehK5n95OSPC/YGkWDd38bGDTLHJeeTeNYav
-         PGftA8az5MyGX50Soyw2MjjzgvrsjxVkUdSId5ZE3f0mkB65aLDrlraYkYQ5qiusZkVl
-         FAGyVI+sG/1SgE0zsZzIRCwZmEoQP64uvJo7P+PqV6vX+vKP7xM88S6L60yoKzIiIlhv
-         gv0CUlANJbuSE2RqqpRfO1vC/fVHR6DUHGP2HnvXpLsQaVuyoVHb39Mkhn+nrQCEOPwK
-         ylt8CsdTNzvgjWSXFo5n9do+G7hMzGbFSgOmLoSKohgLs+Q+O4SnTquM1Qldf1C8nxEo
-         KuUw==
-X-Gm-Message-State: AOAM532zJl4JsUIj/M/aJNLgAAp0MafhzfFDttVM7nApr9xQdBjE8aBk
-        78zLK5YVQsbbuhFUiFBim+pXAw==
-X-Google-Smtp-Source: ABdhPJzCmKKVgbh2e5QU/zVYFY0v3QjNxas3G4hk2DGXqAw/s2IbQ58xh1hyQJlUzAElG2BcOVMdaA==
-X-Received: by 2002:a5d:6d05:0:b0:20c:64fd:f98a with SMTP id e5-20020a5d6d05000000b0020c64fdf98amr10370797wrq.474.1651677260856;
-        Wed, 04 May 2022 08:14:20 -0700 (PDT)
-Received: from [192.168.0.215] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id v19-20020a1cf713000000b00394431ac1a3sm3904584wmh.17.2022.05.04.08.14.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 04 May 2022 08:14:20 -0700 (PDT)
-Message-ID: <cfba178d-ff36-910b-3067-ce32b701b643@linaro.org>
-Date:   Wed, 4 May 2022 17:14:19 +0200
+        Wed, 4 May 2022 11:19:12 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A2B219C0E
+        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 08:15:35 -0700 (PDT)
+Date:   Wed, 04 May 2022 15:15:33 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1651677334;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=fZqIEsKT9Zu6NO/pBulsbc3rEN8EU/Ulaw6RKaaHptA=;
+        b=gWtI66eCe2vwHYggtSql36hPFeHO7cQDZs4QWfkTSgWgzqgAe0qWxHZjivxbrE8WwGZ4+k
+        EZ9HDnQ4oyAtCVQ8mMcfUVCkUxfYaraQ4UsmszwV2XYVBq1rFua+QqRSC5sD16dZlyxYjQ
+        mQWyXYockSkXVIBznt76X3vF0aH7nxPlFjTjw77qNYOMJEsQWZsvFz+qWFavOthY8Yd6uh
+        TNVA5pycWRMbcBu6tHXEPrySloeQO99e6uxn17O8CV886S6QPv8qjNLQ1uaK85hBnFCYD0
+        wTINhApHCJX1KtW5eEbQiHILeNdFZyZZfBpwJ5NBTfyUql6TdQY0g6qkil51HA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1651677334;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=fZqIEsKT9Zu6NO/pBulsbc3rEN8EU/Ulaw6RKaaHptA=;
+        b=auiYGtS6t9heHVHy5HEcvoOHalQWSOkAVdNHoq5JEiTWqr1c/bq6h5M6FQci9oat27QkI5
+        Or3Yi05+vCiwJNAQ==
+From:   "irqchip-bot for Robin Murphy" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-kernel@vger.kernel.org
+Subject: [irqchip: irq/irqchip-next] irqchip/gic-v3: Claim iomem resources
+Cc:     Robin Murphy <robin.murphy@arm.com>, Marc Zyngier <maz@kernel.org>,
+        tglx@linutronix.de
+In-Reply-To: =?utf-8?q?=3Cc534c2a458a3bf94ccdae8abc6edc3d45a689c30=2E16497?=
+ =?utf-8?q?77295=2Egit=2Erobin=2Emurphy=40arm=2Ecom=3E?=
+References: =?utf-8?q?=3Cc534c2a458a3bf94ccdae8abc6edc3d45a689c30=2E164977?=
+ =?utf-8?q?7295=2Egit=2Erobin=2Emurphy=40arm=2Ecom=3E?=
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH] spi: dt-bindings: qcom,spi-geni-qcom: allow three
- interconnects
-Content-Language: en-US
-To:     Mark Brown <broonie@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-spi@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220504125119.190526-1-krzysztof.kozlowski@linaro.org>
- <YnKVLxmz0hhQGNzI@sirena.org.uk>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <YnKVLxmz0hhQGNzI@sirena.org.uk>
-Content-Type: text/plain; charset=UTF-8
+Message-ID: <165167733320.4207.764034784360525411.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/05/2022 17:01, Mark Brown wrote:
-> On Wed, May 04, 2022 at 02:51:19PM +0200, Krzysztof Kozlowski wrote:
->> Recent Qualcomm Geni SPI nodes, e.g. on SM8450, come with three
->> interconnects.  This fixes dtbs_check warnings like:
-> 
-> This doesn't apply against current code, please check and resend.
+The following commit has been merged into the irq/irqchip-next branch of irqchip:
 
-Thanks Mark, but as explained in commit below "---" - this is a fix for
-commit in Qualcomm/Bjorn tree. Could you ack it instead?
+Commit-ID:     2b2cd74a06c38cc26b2a17854f5e42f7270438eb
+Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms/2b2cd74a06c38cc26b2a17854f5e42f7270438eb
+Author:        Robin Murphy <robin.murphy@arm.com>
+AuthorDate:    Tue, 12 Apr 2022 16:28:15 +01:00
+Committer:     Marc Zyngier <maz@kernel.org>
+CommitterDate: Wed, 04 May 2022 15:46:03 +01:00
 
-Best regards,
-Krzysztof
+irqchip/gic-v3: Claim iomem resources
+
+As a simple quality-of-life tweak, claim our MMIO regions when mapping
+them, such that the GIC shows up in /proc/iomem. No effort is spent on
+trying to release them, since frankly if the GIC fails to probe then
+it's never getting a second try anyway.
+
+Signed-off-by: Robin Murphy <robin.murphy@arm.com>
+Signed-off-by: Marc Zyngier <maz@kernel.org>
+Link: https://lore.kernel.org/r/c534c2a458a3bf94ccdae8abc6edc3d45a689c30.1649777295.git.robin.murphy@arm.com
+---
+ drivers/irqchip/irq-gic-v3.c | 15 +++++++++------
+ 1 file changed, 9 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/irqchip/irq-gic-v3.c b/drivers/irqchip/irq-gic-v3.c
+index b802684..9d220c6 100644
+--- a/drivers/irqchip/irq-gic-v3.c
++++ b/drivers/irqchip/irq-gic-v3.c
+@@ -1990,10 +1990,10 @@ static int __init gic_of_init(struct device_node *node, struct device_node *pare
+ 	u32 nr_redist_regions;
+ 	int err, i;
+ 
+-	dist_base = of_iomap(node, 0);
+-	if (!dist_base) {
++	dist_base = of_io_request_and_map(node, 0, "GICD");
++	if (IS_ERR(dist_base)) {
+ 		pr_err("%pOF: unable to map gic dist registers\n", node);
+-		return -ENXIO;
++		return PTR_ERR(dist_base);
+ 	}
+ 
+ 	err = gic_validate_dist_version(dist_base);
+@@ -2017,8 +2017,8 @@ static int __init gic_of_init(struct device_node *node, struct device_node *pare
+ 		int ret;
+ 
+ 		ret = of_address_to_resource(node, 1 + i, &res);
+-		rdist_regs[i].redist_base = of_iomap(node, 1 + i);
+-		if (ret || !rdist_regs[i].redist_base) {
++		rdist_regs[i].redist_base = of_io_request_and_map(node, 1 + i, "GICR");
++		if (ret || IS_ERR(rdist_regs[i].redist_base)) {
+ 			pr_err("%pOF: couldn't map region %d\n", node, i);
+ 			err = -ENODEV;
+ 			goto out_unmap_rdist;
+@@ -2044,7 +2044,7 @@ static int __init gic_of_init(struct device_node *node, struct device_node *pare
+ 
+ out_unmap_rdist:
+ 	for (i = 0; i < nr_redist_regions; i++)
+-		if (rdist_regs[i].redist_base)
++		if (rdist_regs[i].redist_base && !IS_ERR(rdist_regs[i].redist_base))
+ 			iounmap(rdist_regs[i].redist_base);
+ 	kfree(rdist_regs);
+ out_unmap_dist:
+@@ -2091,6 +2091,7 @@ gic_acpi_parse_madt_redist(union acpi_subtable_headers *header,
+ 		pr_err("Couldn't map GICR region @%llx\n", redist->base_address);
+ 		return -ENOMEM;
+ 	}
++	request_mem_region(redist->base_address, redist->length, "GICR");
+ 
+ 	gic_acpi_register_redist(redist->base_address, redist_base);
+ 	return 0;
+@@ -2113,6 +2114,7 @@ gic_acpi_parse_madt_gicc(union acpi_subtable_headers *header,
+ 	redist_base = ioremap(gicc->gicr_base_address, size);
+ 	if (!redist_base)
+ 		return -ENOMEM;
++	request_mem_region(gicc->gicr_base_address, size, "GICR");
+ 
+ 	gic_acpi_register_redist(gicc->gicr_base_address, redist_base);
+ 	return 0;
+@@ -2314,6 +2316,7 @@ gic_acpi_init(union acpi_subtable_headers *header, const unsigned long end)
+ 		pr_err("Unable to map GICD registers\n");
+ 		return -ENOMEM;
+ 	}
++	request_mem_region(dist->base_address, ACPI_GICV3_DIST_MEM_SIZE, "GICD");
+ 
+ 	err = gic_validate_dist_version(acpi_data.dist_base);
+ 	if (err) {

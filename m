@@ -2,121 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19A3551AD1C
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 20:41:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67AAE51AD2B
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 20:44:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376995AbiEDSow (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 14:44:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42974 "EHLO
+        id S1377169AbiEDSr6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 14:47:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237001AbiEDSot (ORCPT
+        with ESMTP id S1355748AbiEDSrs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 14:44:49 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63788645E
-        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 11:41:12 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id w1so3852596lfa.4
-        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 11:41:12 -0700 (PDT)
+        Wed, 4 May 2022 14:47:48 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D96EA6574
+        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 11:44:08 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id t11-20020a17090ad50b00b001d95bf21996so5956082pju.2
+        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 11:44:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=wTxln7YGVkX89i8PG0IKXfsso9aaC9QMWGmO6EX/EGY=;
-        b=z2Ctxr3w9cDEGS/IXiaRNEtZDn6Wv0POATksyAG9keUZE2UBpjRpqxqEhe03gIVezk
-         JUHIQzyf/0MFa26gN3hi0g8FHd/HHXCynEgpy2M5H7LEO8cPdG9LbSNWy4iMxvJh/joQ
-         KVsH9tDJmcqntkqGTL3cxSgFiPZgi+CX0jvzztvuwLE5KOCWpXjvHU8Nm3OXF7d/+Kop
-         MaDt4RjNKWP6xsVrGhiEed3Zu7Y1eH3v+cMbJ04VzT7yPGJHlsXkTiyp1XYyofqvPaQi
-         QbrsqXxwYv8AvPL0L/DqQxBoG7tz9RBWjz0w9SJu5p2yT+8+8vehbDyH1X46CuUQ+MW9
-         mCgg==
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=oe43FQiG0EzUZSwlDenCMxyLflMORQ+HtlOEqB8VlVA=;
+        b=XnA1TFA9Fh6f4piPiyq/dAyT6o7T0dTKnHiP+r9bZmMi+ttga/YwNQElvol4XlIqg8
+         5afqHEdKCXO8QEpF1JeXagIhRUl2ROvzgixxZYFDTn66biqzPl+4+cGrWlckcxesbs0V
+         PpV6dmWyTSyykxOdOOANji5wyMDUd4cls3uhg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=wTxln7YGVkX89i8PG0IKXfsso9aaC9QMWGmO6EX/EGY=;
-        b=vwUYzepoXX1qkaxy9Bu0xz9hUfcitYXYXQ5FXgqcysf2MUsvqxiiTj+gPnGXWExvjp
-         mMhTyaHN/vM1rbHbLYWlUigwv3ir25DvCDFheXg7fkUALW4RSA9CPWmb4qxak6yMiatr
-         FfWA1Z/EQrJwhN5IVdEH/woq6p3mGoxvuuZOLLjy57dsRX2I9OPPRDlAAVx+LUP7xt0B
-         gI6qhGT24W4c7weBWt/mfnH8gm7IyoSkdHXAMRVdVr1Kbo79EFsVVqI6LCBYW2fTH+Ry
-         rTQ+VMNtdxQ3qJa0jH8T5i256nFECbx0QVqQsLt74QZqs10Xafx7mqrVdQnhViIosPsG
-         lgzQ==
-X-Gm-Message-State: AOAM533XQFG5xiTDWIZXjuc0WzdjsqHgit2VZzRFahtP7l3EUCckgCuo
-        5MdsArDKRdzf95PgB2kBvFTHng==
-X-Google-Smtp-Source: ABdhPJy4zg1hpUl4Auyu5EEfhi6Mx+a0yiiys0cRdUGvJh5KnPLpnHF/RaEZ9+x6pGoF15y0uGxIGA==
-X-Received: by 2002:a05:6512:683:b0:473:a110:e52 with SMTP id t3-20020a056512068300b00473a1100e52mr8290893lfe.412.1651689670755;
-        Wed, 04 May 2022 11:41:10 -0700 (PDT)
-Received: from [192.168.1.211] ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id s15-20020ac25fef000000b0047255d2115esm1274090lfg.141.2022.05.04.11.41.09
+        bh=oe43FQiG0EzUZSwlDenCMxyLflMORQ+HtlOEqB8VlVA=;
+        b=P2NNmjc3PXtd95T0mVMHuZQV7VVPUJY4qDZqgfh63HtNYbHbk+cTmT5t+XpzbNfaZb
+         Rhzgmjuk60qwzgqsDLHuU4tVbtc1xgKiwsV3hgpX6Tr8oMXLplwdNt27ypFGU12Iwowh
+         5ogm+B3gPfMH90kow/XyGwAorNfUurFX8dAnwJBYfExK9fMPYGNy1yQON8OaYeWFVYxn
+         ANI6K9Gf460ckSzV+phm/+kvZLHqnaocPYzkqo30qap1crIeGZFzXfYY4kvuRTccaWNO
+         fhXalMksoBk5vVe9dSOyHlhzR6PaA+lfYSwu7+Oy/148p1lbpDCgib0CQTRIW3FZwx8a
+         BXjw==
+X-Gm-Message-State: AOAM531K0jVx7KBb+PL/ewTchs6ddj0NL6M2LoDA/vEQyhjn/b5axKkO
+        GnMTuvbN7oiWWgtokX5pYSLGMA==
+X-Google-Smtp-Source: ABdhPJygwZxM4lRozsPV6mEjYbV+xHDzUeqet/CyZZIxT24CiVokiYTttmc6WzTwJfsOpKtodAXblA==
+X-Received: by 2002:a17:903:18b:b0:15e:92b9:783 with SMTP id z11-20020a170903018b00b0015e92b90783mr20706653plg.30.1651689848360;
+        Wed, 04 May 2022 11:44:08 -0700 (PDT)
+Received: from [192.168.120.250] (wsip-70-166-189-147.ph.ph.cox.net. [70.166.189.147])
+        by smtp.gmail.com with ESMTPSA id q12-20020a63f94c000000b003c14af50635sm15141662pgk.77.2022.05.04.11.44.07
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 04 May 2022 11:41:10 -0700 (PDT)
-Message-ID: <aa898db3-c52f-61d5-6a55-0d8b836343fb@linaro.org>
-Date:   Wed, 4 May 2022 21:41:09 +0300
+        Wed, 04 May 2022 11:44:07 -0700 (PDT)
+Subject: Re: [PATCH] selftests: mqueue: fix all errors
+To:     Sebin Sebastian <mailmesebin00@gmail.com>
+Cc:     Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20220504101720.5201-1-mailmesebin00@gmail.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <fb86cba0-e9dd-7e66-d3c9-53b8b89d9469@linuxfoundation.org>
+Date:   Wed, 4 May 2022 12:44:05 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH] drm/msm: Limit command submission when no IOMMU
-Content-Language: en-GB
-To:     Rob Clark <robdclark@gmail.com>, dri-devel@lists.freedesktop.org
-Cc:     freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        Luca Weiss <luca@z3ntu.xyz>,
-        Rob Clark <robdclark@chromium.org>,
-        Sean Paul <sean@poorly.run>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20220502172908.3569799-1-robdclark@gmail.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20220502172908.3569799-1-robdclark@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+In-Reply-To: <20220504101720.5201-1-mailmesebin00@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02/05/2022 20:29, Rob Clark wrote:
-> From: Rob Clark <robdclark@chromium.org>
+On 5/4/22 4:17 AM, Sebin Sebastian wrote:
+> All errors and styling issues were fixed.
 > 
-> Running the GPU without an IOMMU is not really a supported (or sane)
-> configuration.  Yet it can be useful during SoC bringup (ie. if the
-> iommu driver doesn't work yet).
-> 
-> Lets limit it to users who already have /dev/mem access, to avoid the
-> chance that a user accidentially configures kernel without IOMMU
-> support.
-> 
-> Signed-off-by: Rob Clark <robdclark@chromium.org>
+> Signed-off-by: Sebin Sebastian <mailmesebin00@gmail.com>
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Please include details on how you found the problems and the log from the tool
 
 > ---
->   drivers/gpu/drm/msm/msm_gem_submit.c | 5 +++++
->   1 file changed, 5 insertions(+)
+>   .../testing/selftests/mqueue/mq_open_tests.c  | 19 ++++++++++++-------
+>   1 file changed, 12 insertions(+), 7 deletions(-)
 > 
-> diff --git a/drivers/gpu/drm/msm/msm_gem_submit.c b/drivers/gpu/drm/msm/msm_gem_submit.c
-> index 23b68bc945f6..9cd8c8708990 100644
-> --- a/drivers/gpu/drm/msm/msm_gem_submit.c
-> +++ b/drivers/gpu/drm/msm/msm_gem_submit.c
-> @@ -734,6 +734,11 @@ int msm_ioctl_gem_submit(struct drm_device *dev, void *data,
->   	if (args->pad)
->   		return -EINVAL;
+> diff --git a/tools/testing/selftests/mqueue/mq_open_tests.c b/tools/testing/selftests/mqueue/mq_open_tests.c
+> index 9403ac01ba11..c3cb40eae1e9 100644
+> --- a/tools/testing/selftests/mqueue/mq_open_tests.c
+> +++ b/tools/testing/selftests/mqueue/mq_open_tests.c
+> @@ -59,12 +59,12 @@ char *default_queue_path = "/test1";
+>   mqd_t queue = -1;
 >   
-> +	if (unlikely(!ctx->aspace) && !capable(CAP_SYS_RAWIO)) {
-> +		DRM_ERROR_RATELIMITED("IOMMU support or CAP_SYS_RAWIO required!\n");
-> +		return -EPERM;
-> +	}
-> +
->   	/* for now, we just have 3d pipe.. eventually this would need to
->   	 * be more clever to dispatch to appropriate gpu module:
->   	 */
+>   static inline void __set(FILE *stream, int value, char *err_msg);
+> -void shutdown(int exit_val, char *err_cause, int line_no);
+> + void shutdown(int exit_val, char *err_cause, int line_no);
+I don't see any change in this line
 
+Including the log helps me understand why these changes are necessary.
 
--- 
-With best wishes
-Dmitry
+thanks,
+-- Shuah

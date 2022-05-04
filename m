@@ -2,114 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0DA651A45A
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 17:42:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E248C51A45D
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 17:43:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352712AbiEDPqN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 11:46:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41204 "EHLO
+        id S1352633AbiEDPqk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 11:46:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352690AbiEDPp7 (ORCPT
+        with ESMTP id S1352784AbiEDPqc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 11:45:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF6F14551E
-        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 08:42:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8A81661CD7
-        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 15:42:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B4B8C385A5;
-        Wed,  4 May 2022 15:42:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651678939;
-        bh=rskwEFdpilIG2nL3FAfN32P0yaiAWDS1OUSeNHtqptc=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=INtG+fMGb7nn1Zj75PcWGN3kXjFhwsGSfawFI+DwWjW2NeRy0kdcyKCtT90EhYi3B
-         ZyTKpnr0E59HrA8b83hNrvDllVJx9BLX5xfrRjTUCyskQHWrYCTMyryHtpXfs37vxr
-         daRw34ELX8rL2Yt8Lz54q6y3LBb+30wfxFt6wDufDeQfmlO0wJ7R7ffhdSNF4jtYwu
-         1lGPe4X4uX69ztu6K5w7ZVAg1SWLoGVywMXqPrinyJNmAIUd+MWOKy8JeJaNDlz50A
-         q/WmfFfoYY2qzgq/lmMZ5V86egwfdvU5YOFgsXwNY/ZwQBO51XtWpcvpHnDOzLlAbp
-         FAWDj+RaQaZqw==
-Date:   Thu, 5 May 2022 00:42:14 +0900
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     Josh Poimboeuf <jpoimboe@redhat.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
-        linux-kernel@vger.kernel.org,
-        Masami Hiramatsu <mhiramat@kernel.org>
-Subject: Re: [PATCH] objtool: Fix STACK_FRAME_NON_STANDARD reloc type
-Message-Id: <20220505004214.1e4e69f5ded3b591112851a0@kernel.org>
-In-Reply-To: <20220502175921.oruktb6dleabvdyx@treble>
-References: <20220429092024.GT2731@worktop.programming.kicks-ass.net>
-        <YmvTbN966XmLSZk+@hirez.programming.kicks-ass.net>
-        <20220429225636.6qm2orq4uwnl33ii@treble>
-        <Ym0hAA66vijBo7iF@hirez.programming.kicks-ass.net>
-        <20220502175921.oruktb6dleabvdyx@treble>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-10.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 4 May 2022 11:46:32 -0400
+Received: from mail-oa1-f49.google.com (mail-oa1-f49.google.com [209.85.160.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 409AD46643;
+        Wed,  4 May 2022 08:42:45 -0700 (PDT)
+Received: by mail-oa1-f49.google.com with SMTP id 586e51a60fabf-e2fa360f6dso1569039fac.2;
+        Wed, 04 May 2022 08:42:45 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=tnMRJsbiS8QiP9lDD2I4JzMT/wd9etKoP6P9ura1i48=;
+        b=oCz0VUEXIj3jIuPey1IVqcOAy6vhH24ER0yQnDh7laEqHv0QtcNP23RmSXBJvEMraV
+         0c5UHR+PB+UYkhyXKKFDu8kvG4GraHgY1u7s4CJTP7/x+tHWkDueQ6eVg0G1GQoLBUTt
+         6OCO9zmvTD7Yr6q+XNm5c2k3zJOxm+MQOocnE756wtrCXwphd17dE5wqRsiRWrizf9Os
+         N4TshiCucCCRgotUoINwmoiT81mBiSb/HLFYz3xpvx1ILYqShV0+c38L5rBzjSDOck6I
+         JHpL9SZlPy+sS/knztc/SPwMo7erCd3PTOzsJSqhl0mVsfI+yx9BHu4HRsM5j026OSgY
+         Jqdw==
+X-Gm-Message-State: AOAM5309sUlYqSCAlSEE0zLsHlYgV70CKvJBPg3NZuP9s0I78PZz4jOS
+        IQgNQm7ccjpEc9ZwP2xN+Q==
+X-Google-Smtp-Source: ABdhPJzNz108HgppQ2njmjK7spVH8oSX47FuDf8S/DyT2/BrJzu23fF4n28T9OGduSEoDRg/Cc5k1w==
+X-Received: by 2002:a05:6870:e412:b0:ed:a30a:2248 with SMTP id n18-20020a056870e41200b000eda30a2248mr39162oag.138.1651678964563;
+        Wed, 04 May 2022 08:42:44 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id v4-20020a9d4e84000000b006060322124bsm5279580otk.27.2022.05.04.08.42.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 May 2022 08:42:44 -0700 (PDT)
+Received: (nullmailer pid 1762666 invoked by uid 1000);
+        Wed, 04 May 2022 15:42:40 -0000
+Date:   Wed, 4 May 2022 10:42:40 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Valentin Caron <valentin.caron@foss.st.com>
+Cc:     Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Gabriel Fernandez <gabriel.fernandez@foss.st.com>,
+        Amelie Delaunay <amelie.delaunay@foss.st.com>,
+        linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/6] dt-bindings: rtc: stm32: add alarm A out property to
+ select output
+Message-ID: <YnKe8K3FjoaUO2ml@robh.at.kernel.org>
+References: <20220504130233.330983-1-valentin.caron@foss.st.com>
+ <20220504130617.331290-1-valentin.caron@foss.st.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220504130617.331290-1-valentin.caron@foss.st.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2 May 2022 10:59:21 -0700
-Josh Poimboeuf <jpoimboe@redhat.com> wrote:
-
-> On Sat, Apr 30, 2022 at 01:44:00PM +0200, Peter Zijlstra wrote:
-> > > > I also don't see any kprobe/optprobe hooks in unwind.h, so what happens
-> > > > if we hit an optprobe?
-> > > 
-> > > Same as for any other generated code, the unwinder will try to fall back
-> > > to frame pointers, and if that doesn't work, the unwind stops.
-> > > 
-> > > That commit didn't change anything since it was already not being
-> > > directly executed anyway, but rather used to generate code on the fly.
-
-Ah, OK. So ORC will not work on the dynamically generated trampoline code.
-Can we generate ORC information entry dynamically?
-(E.g. copying ORC data from the original code)
-
-> > > 
-> > > And before that commit it was being ignored by ORC anyway, thanks to
-> > > STACK_FRAME_NON_STANDARD.  Which can now be removed since this code is
-> > > now data and objtool will no longer try to understand it.
-> > 
-> > Right; but I suppose I'm wondering if we should fix this. It seems a
-> > rather sub-optimal state of affairs.
+On Wed, May 04, 2022 at 03:06:13PM +0200, Valentin Caron wrote:
+> STM32 RTC can pulse some SOC pins when an alarm of RTC expires.
 > 
-> Masami recently fixed some kprobes ORC issues but I don't know if this
-> one was fixed.
-
-I've fixed the kretprobe ORC unwinder issue. I need to check the optprobe
-case too.
-
+> This patch adds property to activate alarm A output. The pulse can
+> output on three pins RTC_OUT1, RTC_OUT2, RTC_OUT2_RMP
+> (PC13, PB2, PI8 on stm32mp15) (PC13, PB2, PI1 on stm32mp13).
 > 
-> As to the whether it's worth fixing, I dunno.  There are trade offs.
+> Signed-off-by: Valentin Caron <valentin.caron@foss.st.com>
+> ---
+>  .../devicetree/bindings/rtc/st,stm32-rtc.yaml | 19 ++++++++++++++++++-
+>  1 file changed, 18 insertions(+), 1 deletion(-)
 > 
-> Depends on how common the stack trace is -- I'm guessing not very, since
-> I've never seen a bug report -- and how important it is to get to full
-> ORC coverage.  If our goal is full coverage, we'd need a way for
-> generated code to add/remove ORC entries.
+> diff --git a/Documentation/devicetree/bindings/rtc/st,stm32-rtc.yaml b/Documentation/devicetree/bindings/rtc/st,stm32-rtc.yaml
+> index 56d46ea35c5d..71e02604e8de 100644
+> --- a/Documentation/devicetree/bindings/rtc/st,stm32-rtc.yaml
+> +++ b/Documentation/devicetree/bindings/rtc/st,stm32-rtc.yaml
+> @@ -59,6 +59,13 @@ properties:
+>        Refer to <include/dt-bindings/rtc/rtc-stm32.h> for the supported values.
+>        Pinctrl state named "default" may be defined to reserve pin for RTC output.
+>  
+> +  st,alarm:
+> +    $ref: "/schemas/types.yaml#/definitions/uint32"
+> +    description: |
+> +      To select and enable RTC Alarm A output.
+> +      Refer to <include/dt-bindings/rtc/rtc-stm32.h> for the supported values.
 
-Agreed, if I can copy the ORC entries for the original code to the entries
-for generated code, I can fix it.
+No, sorry, you need to define the allowed values as a schema here.
 
-Thank you,
+> +      Pinctrl state named "default" may be defined to reserve pin for RTC output.
+> +
+>  allOf:
+>    - if:
+>        properties:
+> @@ -75,6 +82,9 @@ allOf:
+>          st,lsco:
+>            maxItems: 0
+>  
+> +        st,alarm:
+> +          maxItems: 0
 
+st,alarm: false
 
-> 
+or:
+
+not:
+  required: [ st,alarm ]
+
+is how you disallow a property.
+
+This should cause a warning, but this patch didn't apply for me.
+
+> +
+>          clock-names: false
+>  
+>        required:
+> @@ -95,6 +105,9 @@ allOf:
+>          st,lsco:
+>            maxItems: 0
+>  
+> +        st,alarm:
+> +          maxItems: 0
+> +
+>        required:
+>          - clock-names
+>          - st,syscfg
+> @@ -117,6 +130,9 @@ allOf:
+>          st,lsco:
+>            maxItems: 1
+>  
+> +        st,alarm:
+> +          maxItems: 1
+
+maxItems applies to arrays, but this is a scalar value. I don't think 
+you need this hunk.
+
+> +
+>        required:
+>          - clock-names
+>  
+> @@ -153,8 +169,9 @@ examples:
+>        clocks = <&rcc RTCAPB>, <&rcc RTC>;
+>        clock-names = "pclk", "rtc_ck";
+>        interrupts = <GIC_SPI 3 IRQ_TYPE_LEVEL_HIGH>;
+> +      st,alarm = <RTC_OUT1>;
+>        st,lsco = <RTC_OUT2_RMP>;
+> -      pinctrl-0 = <&rtc_out2_rmp_pins_a>;
+> +      pinctrl-0 = <&rtc_out1_pins_a &rtc_out2_rmp_pins_a>;
+>        pinctrl-names = "default";
+>      };
+>  
 > -- 
-> Josh
+> 2.25.1
 > 
-
-
--- 
-Masami Hiramatsu <mhiramat@kernel.org>
+> 

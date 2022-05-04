@@ -2,85 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E69451B07D
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 23:25:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A87C51B08C
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 23:27:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357691AbiEDV3T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 17:29:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41306 "EHLO
+        id S1378587AbiEDVbH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 17:31:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378559AbiEDV2z (ORCPT
+        with ESMTP id S235839AbiEDVbC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 17:28:55 -0400
-Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E503FE6
-        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 14:25:17 -0700 (PDT)
-Received: by mail-yb1-xb2f.google.com with SMTP id j2so4643401ybu.0
-        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 14:25:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=T3d2fYGVCQPH3oUWunAB6fdSYnujJZ2I8+XkzxVQ4R8=;
-        b=ZUiMw8FZnaeQCj4tHgZ+yh927ALKIjlzaflimJl0MTREy3wMDwFDlUqyiKh+Q0oQmI
-         SulmOktwG9BAk7EUbjJV74hALMN8j/QFaOpkyOxpr+KkK2hAX0GJ6t0wnfUO2F/ZG58w
-         WaxiEaxuEOvx82Ufe2v9mdjNMxQC78ish/ZyII2Ls5x881GTkMySDBdhxdL6oQy/aWoG
-         unoZII6R+E4YAj9G19q9N8ia7HohjBVASfVrHPO/W0JJQaPBVUCNuuejVmS4TCTXy2vq
-         fILs3pAeMXJYYbJfkUpD5n/b25B5ffXdA8ulNVYS2I+61x0aJNVMoGewhaYqbgLLKfOa
-         G2dg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=T3d2fYGVCQPH3oUWunAB6fdSYnujJZ2I8+XkzxVQ4R8=;
-        b=23vJD7EpudpO2Hh6f+HAfsxVOBewfXiZ/er+zZM0zsu4V2QmlcLrG5R/RQEtEZr06K
-         X/4HfVgeM4ULbr7W13cNlmR/ZkBPmTjvkKlzuLIf8bnr7Vv6KodO/KPpKaz3rfa+KybS
-         rB+vANebnL3C/xuCa2EUUq7dDrtpZn/ui7oRES6UNefOyTTxbuOnqnSAdiln/iS31Qwc
-         cAcf3AVAi/wwu62JFwFZMEyznAlabdPJGkIG68TxkO9mhuTLW805EL+2f294WLua+oq8
-         kf4mMP3f9KfYAsDCdrjZwkVKKBjQNhHogzjxKoC7ejghs2wgyAwAA/B85A9TRGB0GkH9
-         N9nA==
-X-Gm-Message-State: AOAM531mpFiaDb2JsxtJ7Gl2Ko6MY0UNfaWkyqHTXY+VytlUZFFLtR0f
-        aUuZy82sJalhNNk6TkG0CmJz7238Mdw8W0uGXOADNA==
-X-Google-Smtp-Source: ABdhPJzqvODOYmcQ9TZYyXXRfyQPmMMljGJNRG/LrEqbFLH0+9/ixLSThQOOvYy9Zui0cZ7P+TuQBezYxz3hocfbs3M=
-X-Received: by 2002:a25:2905:0:b0:649:7a2b:ca72 with SMTP id
- p5-20020a252905000000b006497a2bca72mr13176917ybp.492.1651699516824; Wed, 04
- May 2022 14:25:16 -0700 (PDT)
+        Wed, 4 May 2022 17:31:02 -0400
+Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 620E446665;
+        Wed,  4 May 2022 14:27:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=dpN78FnXP8xKsKthCe3ePYGrznnidWC78ijJKGIis+s=; b=VzNshjcWDWgTdIjmwACWbnjJ/H
+        mQcB13lNG3fglzHQC/FUqdo2dvwKWsRAKNIc/TJuBa97Z8kYuf2lpVRvpBu62ga3ovDrsi08aDNiE
+        OlqogXHjD4qsmKbgS2LbXN2AOGnhdCvdtCVo6IDt0imworVavUuV/zNlIT6mNaTQhnLm07TNtoK4m
+        Ihl3ULKYuFP6cuYPQF485CZFlEA6oPcsLGDcH0IfHz/dstflDSmqrZB+ksN5MQ7uiQlVVpBT+K7Ib
+        0RM9kXieFgdNepPjq9LySneGSuViPcHimXjyBUf5+knfLf159kvuFYr1c8xkwmLdvzZ/p8/HjZAHo
+        dOADxIVQ==;
+Received: from [179.113.53.197] (helo=[192.168.1.60])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1nmMWW-0004FF-4B; Wed, 04 May 2022 23:27:04 +0200
+Message-ID: <976c2d62-09e7-9f8d-d978-12749a2f70e6@igalia.com>
+Date:   Wed, 4 May 2022 18:26:28 -0300
 MIME-Version: 1.0
-References: <20220422192139.2592632-1-robh@kernel.org>
-In-Reply-To: <20220422192139.2592632-1-robh@kernel.org>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Wed, 4 May 2022 23:25:05 +0200
-Message-ID: <CACRpkdZcVwvBHrDy-wxPURhJ4OWRMA9TQ1e2vmcXnhEG2HaMDA@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: pinctrl: aspeed: Drop referenced nodes in examples
-To:     Rob Herring <robh@kernel.org>
-Cc:     Andrew Jeffery <andrew@aj.id.au>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Joel Stanley <joel@jms.id.au>, linux-aspeed@lists.ozlabs.org,
-        openbmc@lists.ozlabs.org, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH 07/30] mips: ip22: Reword PANICED to PANICKED and remove
+ useless header
+Content-Language: en-US
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     akpm@linux-foundation.org, bhe@redhat.com, pmladek@suse.com,
+        kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
+        bcm-kernel-feedback-list@broadcom.com,
+        linuxppc-dev@lists.ozlabs.org, linux-alpha@vger.kernel.org,
+        linux-edac@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        linux-leds@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-um@lists.infradead.org,
+        linux-xtensa@linux-xtensa.org, netdev@vger.kernel.org,
+        openipmi-developer@lists.sourceforge.net, rcu@vger.kernel.org,
+        sparclinux@vger.kernel.org, xen-devel@lists.xenproject.org,
+        x86@kernel.org, kernel-dev@igalia.com, kernel@gpiccoli.net,
+        halves@canonical.com, fabiomirmar@gmail.com,
+        alejandro.j.jimenez@oracle.com, andriy.shevchenko@linux.intel.com,
+        arnd@arndb.de, bp@alien8.de, corbet@lwn.net,
+        d.hatayama@jp.fujitsu.com, dave.hansen@linux.intel.com,
+        dyoung@redhat.com, feng.tang@intel.com, gregkh@linuxfoundation.org,
+        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
+        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
+        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
+        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
+        senozhatsky@chromium.org, stern@rowland.harvard.edu,
+        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
+        will@kernel.org
+References: <20220427224924.592546-1-gpiccoli@igalia.com>
+ <20220427224924.592546-8-gpiccoli@igalia.com>
+ <20220504203224.GA23475@alpha.franken.de>
+From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+In-Reply-To: <20220504203224.GA23475@alpha.franken.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 22, 2022 at 9:21 PM Rob Herring <robh@kernel.org> wrote:
+On 04/05/2022 17:32, Thomas Bogendoerfer wrote:
+> [...]
+> 
+> applied to mips-next.
+> 
+> Thomas.
+> 
 
-> The additional nodes in the example referenced from the pinctrl node
-> 'aspeed,external-nodes' properties are either incorrect (aspeed,ast2500-lpc)
-> or not documented with a schema (aspeed,ast2500-gfx). There's no need to
-> show these nodes as part of the pinctrl example, so just remove them.
->
-> Signed-off-by: Rob Herring <robh@kernel.org>
-
-Patch applied. Concerns about lost examples can be solved
-with incremental patches on top adding more schema.
-
-Yours,
-Linus Walleij
+Thanks a bunch Thomas =)

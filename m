@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65C9551A602
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 18:48:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C9AC51A8B2
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:14:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353669AbiEDQwM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 12:52:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50748 "EHLO
+        id S1358071AbiEDRPi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 13:15:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353629AbiEDQvx (ORCPT
+        with ESMTP id S1355475AbiEDRE2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 12:51:53 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DB072ED5A;
-        Wed,  4 May 2022 09:48:16 -0700 (PDT)
+        Wed, 4 May 2022 13:04:28 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA4254EDDC;
+        Wed,  4 May 2022 09:53:04 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E3023B82554;
-        Wed,  4 May 2022 16:48:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9AEFFC385A4;
-        Wed,  4 May 2022 16:48:13 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 898F861505;
+        Wed,  4 May 2022 16:53:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2629C385AA;
+        Wed,  4 May 2022 16:53:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651682893;
-        bh=C/gXfNrYbGLHuBQ+TwO+vWYrZdeXwcdlqQuLpZRmc6Y=;
+        s=korg; t=1651683184;
+        bh=+J6mkW7g7FZT8T1bJ9fP3KdetTDCgArgqcBdHrc4ShY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KVlI2CRPwZ2tyCht13Lsv3z1TWSNFDNKudgLc1jHgAqiPsahgLQP8LmbA9V0Wsa6k
-         P2vfGviWMwzH9queFs+imK0ZX5PWuVnvz105D18EwnC+BhmEyvFY571mji6ONOCLHs
-         db27namMGf3vfDSeXAr0UAWYSt6nwAmMEWCSbX6A=
+        b=EKJZQtLAZNRWK/v83KC4GPQ6jTjUB2hvyODqxhTI5yDbfw55NLq/McCB1iMhfQh6a
+         Aa8FraV3zcplmY2oHMJ/Z/qNKH1mMz99GzMedbvv3yxThzjlBdQC4bf0xMqM0g6ar5
+         910fsZ0O4Jq9o7+4FbAPa29N0IwKRYl8z+dArulI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Henry Lin <henryl@nvidia.com>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: [PATCH 5.4 12/84] xhci: stop polling roothubs after shutdown
+        stable@vger.kernel.org, Mikulas Patocka <mpatocka@redhat.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: [PATCH 5.15 040/177] hex2bin: fix access beyond string end
 Date:   Wed,  4 May 2022 18:43:53 +0200
-Message-Id: <20220504152928.618662308@linuxfoundation.org>
+Message-Id: <20220504153056.515747012@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220504152927.744120418@linuxfoundation.org>
-References: <20220504152927.744120418@linuxfoundation.org>
+In-Reply-To: <20220504153053.873100034@linuxfoundation.org>
+References: <20220504153053.873100034@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,49 +55,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Henry Lin <henryl@nvidia.com>
+From: Mikulas Patocka <mpatocka@redhat.com>
 
-commit dc92944a014cd6a6f6c94299aaa36164dd2c238a upstream.
+commit e4d8a29997731b3bb14059024b24df9f784288d0 upstream.
 
-While rebooting, XHCI controller and its bus device will be shut down
-in order by .shutdown callback. Stopping roothubs polling in
-xhci_shutdown() can prevent XHCI driver from accessing port status
-after its bus device shutdown.
+If we pass too short string to "hex2bin" (and the string size without
+the terminating NUL character is even), "hex2bin" reads one byte after
+the terminating NUL character.  This patch fixes it.
 
-Take PCIe XHCI controller as example, if XHCI driver doesn't stop roothubs
-polling, XHCI driver may access PCIe BAR register for port status after
-parent PCIe root port driver is shutdown and cause PCIe bus error.
+Note that hex_to_bin returns -1 on error and hex2bin return -EINVAL on
+error - so we can't just return the variable "hi" or "lo" on error.
+This inconsistency may be fixed in the next merge window, but for the
+purpose of fixing this bug, we just preserve the existing behavior and
+return -1 and -EINVAL.
 
-[check shared hcd exist before stopping its roothub polling -Mathias]
-
+Signed-off-by: Mikulas Patocka <mpatocka@redhat.com>
+Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+Fixes: b78049831ffe ("lib: add error checking to hex2bin")
 Cc: stable@vger.kernel.org
-Signed-off-by: Henry Lin <henryl@nvidia.com>
-Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
-Link: https://lore.kernel.org/r/20220408134823.2527272-3-mathias.nyman@linux.intel.com
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/usb/host/xhci.c |   11 +++++++++++
- 1 file changed, 11 insertions(+)
+ lib/hexdump.c |    9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
---- a/drivers/usb/host/xhci.c
-+++ b/drivers/usb/host/xhci.c
-@@ -779,6 +779,17 @@ void xhci_shutdown(struct usb_hcd *hcd)
- 	if (xhci->quirks & XHCI_SPURIOUS_REBOOT)
- 		usb_disable_xhci_ports(to_pci_dev(hcd->self.sysdev));
+--- a/lib/hexdump.c
++++ b/lib/hexdump.c
+@@ -63,10 +63,13 @@ EXPORT_SYMBOL(hex_to_bin);
+ int hex2bin(u8 *dst, const char *src, size_t count)
+ {
+ 	while (count--) {
+-		int hi = hex_to_bin(*src++);
+-		int lo = hex_to_bin(*src++);
++		int hi, lo;
  
-+	/* Don't poll the roothubs after shutdown. */
-+	xhci_dbg(xhci, "%s: stopping usb%d port polling.\n",
-+			__func__, hcd->self.busnum);
-+	clear_bit(HCD_FLAG_POLL_RH, &hcd->flags);
-+	del_timer_sync(&hcd->rh_timer);
-+
-+	if (xhci->shared_hcd) {
-+		clear_bit(HCD_FLAG_POLL_RH, &xhci->shared_hcd->flags);
-+		del_timer_sync(&xhci->shared_hcd->rh_timer);
-+	}
-+
- 	spin_lock_irq(&xhci->lock);
- 	xhci_halt(xhci);
- 	/* Workaround for spurious wakeups at shutdown with HSW */
+-		if ((hi < 0) || (lo < 0))
++		hi = hex_to_bin(*src++);
++		if (unlikely(hi < 0))
++			return -EINVAL;
++		lo = hex_to_bin(*src++);
++		if (unlikely(lo < 0))
+ 			return -EINVAL;
+ 
+ 		*dst++ = (hi << 4) | lo;
 
 

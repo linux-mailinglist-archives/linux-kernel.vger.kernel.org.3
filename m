@@ -2,53 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7E5451ACA3
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 20:20:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77E7051ACA8
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 20:22:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377114AbiEDSYb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 14:24:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45810 "EHLO
+        id S1376645AbiEDS0P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 14:26:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377491AbiEDSYV (ORCPT
+        with ESMTP id S1377163AbiEDSZe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 14:24:21 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50695A147A
-        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 10:48:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B899FB827A5
-        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 17:48:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0657C385A5;
-        Wed,  4 May 2022 17:48:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651686529;
-        bh=e8wlpzu01p00GXxLrMBw1AHGF6QBSQftauK15PaYFC0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gC2b/3IjDBS6efhvpKAC0TilIdXJzbZRO8OhUUqPEvXsO6EMbXH8BGOm4RjB9zep8
-         to7WYxb1RsLgb3yWZ4AS3bDWRGfWF9OukK5Daur7tSIy5sPpTI8P6j5hcu7RHxZchE
-         /VrrvbSkirO0gEba/eippVNc9QPjDhJgvMyh16eAJReI5K4iYu/ckCvo3YgUDVmGj9
-         ngktJHd1+E0jdIbzDkoDErhs5s2V9MFdg0Et6WgFPwnetSQNxFnFeysOw0LPdsJyyG
-         NDJExB7hIGD1Xv+SdVG9cnSgy59soykRsHDqUqW5SOikgt1MrdcFxfoUSFf1BwgTvQ
-         b3KcdE/bWryZA==
-Date:   Wed, 4 May 2022 10:48:47 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     kernel test robot <lkp@intel.com>
-Cc:     Leonardo Bras <leobras@redhat.com>, llvm@lists.linux.dev,
-        kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>
-Subject: Re: ld.lld: error: inline assembly requires more registers than
- available at line 523
-Message-ID: <YnK8f7cqMoHxSi0C@dev-arch.thelio-3990X>
-References: <202205020637.JVJo3blw-lkp@intel.com>
+        Wed, 4 May 2022 14:25:34 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C114653B5D
+        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 10:52:00 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id a21so2571690edb.1
+        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 10:52:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=stNpZhjIc0rYI9UDa/dYUY+xIJVUaddvmdhdaTGP+Hg=;
+        b=AAXDrANDKO1uGISazEbDjdomKwAoiXe4Gf0d06N7eRs7Mz6+HySMa2m59aygu7wY1K
+         OshCn5wqPPIx2L71WNiK6uIY+jNs+wk69cCXgGJk9NdybD7+AevrQ/U4PB1f9WASix5r
+         4XbXskNBem/yi8dBdrlsUDvvTw9X1Dx6dC9Oo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=stNpZhjIc0rYI9UDa/dYUY+xIJVUaddvmdhdaTGP+Hg=;
+        b=ta8kI55HnzyHqaIvqJ+qClpobOCMcoRo2PCTAndBxyfFX14EtHZVtg2bp9ATUZ6h/6
+         /dZVclwDDFL56tKBgWGjya1laFTUjeQ8dNmlyXA5D54qjZfsALwc2kFC/Ke0sudmTGZh
+         CET1IlpemjSm7CQNPfs77D9aEVWyEyQWs/QXe0jWiLBEOsUx35oh8FyT4/A1UpiLzuUS
+         UZP2plkF2BLBe471z2UMxW1ioK+d2sW640Oixe8I6xTWO6Ffuv4DuUAp7x/AxMPphw0W
+         k3Q4oNyKXamcXN7CoCG7g6eZkiz28IxPUoOjUzKZsnAWgxaWwyAeCDN48Zh8QAnquvc3
+         459g==
+X-Gm-Message-State: AOAM531KrYQjwaabQpf8KItGpNFExjmgh8oLUP75dFMd/h3n6CI0Ahu1
+        f+U0f46AJMSC2D92xk2ZVhHCTrZJtHD+y80ep0M=
+X-Google-Smtp-Source: ABdhPJzqwdTzmOZkbiWlNrQoIEDtPGkC6WqO7YZ0CQO2sU6ijiLsCNtVGYBiNw+sPvQ8bVday9aWvw==
+X-Received: by 2002:a50:ed0e:0:b0:425:e476:f4ed with SMTP id j14-20020a50ed0e000000b00425e476f4edmr24262591eds.32.1651686719143;
+        Wed, 04 May 2022 10:51:59 -0700 (PDT)
+Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com. [209.85.221.52])
+        by smtp.gmail.com with ESMTPSA id jy13-20020a170907762d00b006f3ef214e1fsm5922830ejc.133.2022.05.04.10.51.58
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 04 May 2022 10:51:58 -0700 (PDT)
+Received: by mail-wr1-f52.google.com with SMTP id v12so3015246wrv.10
+        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 10:51:58 -0700 (PDT)
+X-Received: by 2002:a5d:42c8:0:b0:20a:d91f:87b5 with SMTP id
+ t8-20020a5d42c8000000b0020ad91f87b5mr17565732wrr.301.1651686717659; Wed, 04
+ May 2022 10:51:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202205020637.JVJo3blw-lkp@intel.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20220502173338.1.I26eca1856f99e6160d30de6d50ecab60e6226354@changeid>
+ <165168485227.3730817.11549721304895378126.b4-ty@linaro.org>
+In-Reply-To: <165168485227.3730817.11549721304895378126.b4-ty@linaro.org>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Wed, 4 May 2022 10:51:44 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=WkJu8s5EmwJke49TPZ8CU8kD-CMcQi-9a3oUMqz9yBrQ@mail.gmail.com>
+Message-ID: <CAD=FV=WkJu8s5EmwJke49TPZ8CU8kD-CMcQi-9a3oUMqz9yBrQ@mail.gmail.com>
+Subject: Re: (subset) [PATCH] soc: qcom: socinfo: Add another ID for sc7180
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Sai Prakash Ranjan <quic_saipraka@quicinc.com>,
+        matvore@chromium.org, Andy Gross <agross@kernel.org>,
+        "Reviewed-by : Stephen Boyd" <swboyd@chromium.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,38 +77,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 02, 2022 at 06:29:38AM +0800, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> head:   672c0c5173427e6b3e2a9bbb7be51ceeec78093a
-> commit: ba1f77c546966c12d86220d078e5838dcaeab348 x86/kvm: Fix compilation warning in non-x86_64 builds
-> date:   2 months ago
-> config: i386-randconfig-a012-20220502 (https://download.01.org/0day-ci/archive/20220502/202205020637.JVJo3blw-lkp@intel.com/config)
-> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 09325d36061e42b495d1f4c7e933e260eac260ed)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=ba1f77c546966c12d86220d078e5838dcaeab348
->         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
->         git fetch --no-tags linus master
->         git checkout ba1f77c546966c12d86220d078e5838dcaeab348
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
-> 
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
-> 
-> All errors (new ones prefixed by >>):
-> 
-> >> ld.lld: error: inline assembly requires more registers than available at line 523
-> >> ld.lld: error: inline assembly requires more registers than available at line 523
-> 
+Hi,
 
-I don't think this bisection result is correct; this error is visible at
-v5.17-rc3, which this commit is based on. This is likely the same root
-cause as https://github.com/ClangBuiltLinux/linux/issues/1589, just with
-LTO. I'll reduce something down and comment there if it turns out to be
-different.
+On Wed, May 4, 2022 at 10:21 AM Bjorn Andersson
+<bjorn.andersson@linaro.org> wrote:
+>
+> On Mon, 2 May 2022 17:33:45 -0700, Douglas Anderson wrote:
+> > It appears the some sc7180 devices, like the one in my
+> > sc7180-trogdor-homestar, report an ID of 407 instead of 425. Add
+> > another ID into the list.
+> >
+> >
+>
+> Applied, thanks!
+>
+> [1/1] soc: qcom: socinfo: Add another ID for sc7180
+>       commit: c35886d605604e0b03cdd835ae3249dc1fe0cc2a
 
-Cheers,
-Nathan
+Hmm. Did you see the responses from Sai [1] about this? He seemed to
+indicate that there might be some issue here because he thought 407
+was supposed to be a different SoC. Are we sure we want to land this
+patch while we're sorting it out?
+
+[1] https://lore.kernel.org/r/13819b2d-26f0-14f4-9cb9-affb6b18f13d@quicinc.com/

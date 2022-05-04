@@ -2,95 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A8D051A017
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 14:56:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84F7251A01F
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 14:59:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350114AbiEDM77 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 08:59:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44454 "EHLO
+        id S1350124AbiEDNDG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 09:03:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349930AbiEDM74 (ORCPT
+        with ESMTP id S235988AbiEDNDE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 08:59:56 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDCBB3B023;
-        Wed,  4 May 2022 05:56:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 881F4B824B2;
-        Wed,  4 May 2022 12:56:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79D48C385AF;
-        Wed,  4 May 2022 12:56:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651668978;
-        bh=gdxj5YVJJXTcWteagPD81sMBdc9Aq1VtB4tSVNICDTw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=j4hq9cpxhq7G29FUlZFS8TbG6vfR1K8u5AaC8crxTXMBO8geP2iXkvV5HrxQhV7C2
-         OYV9YCzCTcqQOzl7h21grCFKxuXr81cupttv+s7iGkul7dU+ttNGGKFCzgPUFmyhgM
-         +bPU0LKLn51pn4zYmtEdLgXViWNUnbBPMkKLyv1rWojkcr5RB8qSizIzF1yzkPmeVY
-         JNr3D1amGpASDewu/l9N74CqKXGtuB4AyKI5BX3joIAqmkLDDY02po6BxuqSFqDkWn
-         JQq5VEkE2gBeQzUM0VErYAHoufbIIR/8PLdurA9AugZmb6avbELzkkWOQs7wgfqqAN
-         O2AETqevLiLdQ==
-Date:   Wed, 4 May 2022 13:56:13 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Zev Weiss <zev@bewilderbeest.net>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>, linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, openbmc@lists.ozlabs.org
-Subject: Re: [PATCH 0/6] regulator: core: Add support for external outputs
-Message-ID: <YnJ37QysSaa+gAps@sirena.org.uk>
-References: <20220504065041.6718-1-zev@bewilderbeest.net>
+        Wed, 4 May 2022 09:03:04 -0400
+Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com [209.85.219.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DC703BFBF;
+        Wed,  4 May 2022 05:59:28 -0700 (PDT)
+Received: by mail-yb1-f170.google.com with SMTP id f38so2233591ybi.3;
+        Wed, 04 May 2022 05:59:28 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=gmvxIQHG/ljLt51DjNy57CzPAA1TYfJjkUMDlKRN2cw=;
+        b=SfjjF1dfuEKuRJMWiDZvsj94oyQ0i+I3oOECAT+stn1MnUhZRhDjizIDBibra7sN00
+         DJy1I347O5t54FAyuZ0gkLt5XfITqcKgkxi5aa+78E5xEhFv0HFh/oiaYrO4Yzv8LGf9
+         uApgEeoLrvNEutl0ZluIcIUGwXR87rXKjefJgFmmQQJrKRa+8TXhjleNWnSl+MnTpOqq
+         Jis9meyBZCE9k/UyqSxKFgf6aXFgrIYO2zuzx9CJUjZHVWB7ZPO6NgmZyAnqhertr63X
+         7T+2vzXOpt0crXgvoOKa71bVjssawjhMruTTKL5goxc+X8p6XDWHbW67aIDHI/9+3cMe
+         FyeA==
+X-Gm-Message-State: AOAM531vXSJO8DITv5b9o+tCxMoR2VnX5qDuSD4/R5LgIThCKpvt5j4/
+        I4eb+7d4y3KMGWSs5NFd4bIFlh0IstzvUFYrr1B21oZ39L8=
+X-Google-Smtp-Source: ABdhPJzXVZ/1w3GPYeCO2dkamDxMnp8QXC2QHFPATCMzTrRgP9tKaW861v6nF7Uy5dyU4a+K22nPQzaM4JHk+ZqMOW8=
+X-Received: by 2002:a05:6902:100e:b0:649:7385:5e68 with SMTP id
+ w14-20020a056902100e00b0064973855e68mr11693394ybt.622.1651669167783; Wed, 04
+ May 2022 05:59:27 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="w/VS4GgcCdfjbUlx"
-Content-Disposition: inline
-In-Reply-To: <20220504065041.6718-1-zev@bewilderbeest.net>
-X-Cookie: Your present plans will be successful.
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <4419002.LvFx2qVVIh@kreacher> <11975904.O9o76ZdvQC@kreacher>
+ <5838942.lOV4Wx5bFT@kreacher> <3687697.kQq0lBPeGt@kreacher> <YnFtjzGYwe28tVAA@dev-arch.thelio-3990X>
+In-Reply-To: <YnFtjzGYwe28tVAA@dev-arch.thelio-3990X>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 4 May 2022 14:59:17 +0200
+Message-ID: <CAJZ5v0i1Ynt54yb7aMJorkYUvqkxhxOqvQJb8AdA7Ps1aBO5tg@mail.gmail.com>
+Subject: Re: [PATCH v3 4/9] PCI/PM: Rework changing power states of PCI devices
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, May 3, 2022 at 7:59 PM Nathan Chancellor <nathan@kernel.org> wrote:
+>
+> Hi Rafael,
+>
+> On Thu, Apr 14, 2022 at 03:11:21PM +0200, Rafael J. Wysocki wrote:
+> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> >
+> > There are some issues related to changing power states of PCI
+> > devices, mostly related to carrying out unnecessary actions in some
+> > places, and the code is generally hard to follow.
+> >
+> >  1. pci_power_up() has two callers, pci_set_power_state() and
+> >     pci_pm_default_resume_early().  The latter updates the current
+> >     power state of the device right after calling pci_power_up()
+> >     and it restores the entire config space of the device right
+> >     after that, so pci_power_up() itself need not read the
+> >     PCI_PM_CTRL register or restore the BARs after programming the
+> >     device into D0 in that case.
+> >
+> >  2. It is generally hard to get a clear view of the pci_power_up()
+> >     code flow, especially in some corner cases, due to all of the
+> >     involved PCI_PM_CTRL register reads and writes occurring in
+> >     pci_platform_power_transition() and in pci_raw_set_power_state(),
+> >     some of which are redundant.
+> >
+> >  3. The transitions from low-power states to D0 and the other way
+> >     around are unnecessarily tangled in pci_raw_set_power_state()
+> >     which causes it to use a redundant local variable and makes it
+> >     rather hard to follow.
+> >
+> > To address the above shortcomings, make the following changes:
+> >
+> >  a. Remove the code handling transitions into D0
+> >     from pci_raw_set_power_state() and rename it as
+> >     pci_set_low_power_state().
+> >
+> >  b. Add the code handling transitions into D0 directly
+> >     to pci_power_up() and to a new wrapper function
+> >     pci_set_full_power_state() calling it internally that is
+> >     only used in pci_set_power_state().
+> >
+> >  c. Make pci_power_up() avoid redundant PCI_PM_CTRL register reads
+> >     and make it work in the same way for transitions from any
+> >     low-power states (transitions from D1 and D2 are handled
+> >     slightly differently before the change).
+> >
+> >  d. Put the restoration of the BARs and the PCI_PM_CTRL
+> >     register read confirming the power state change into
+> >     pci_set_full_power_state() to avoid doing that in
+> >     pci_pm_default_resume_early() unnecessarily.
+> >
+> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+>
+> This change as commit 5bffe4c611f5 ("PCI/PM: Rework changing power
+> states of PCI devices") causes my AMD-based system to fail to fully
+> boot. As far as I can tell, this might be NVMe related, which might make
+> getting a full log difficult, as journalctl won't have anywhere to save
+> it. I see:
+>
+> nvme nvme0: I/O 8 QID 0 timeout, completion polled
+>
+> then shortly afterwards:
+>
+> nvme nvme0: I/O 24 QID 0 timeout, completion polled
+> nvme nvme0: missing or invalid SUBNQN field
+>
+> then I am dropped into an emergency shell.
 
---w/VS4GgcCdfjbUlx
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Thanks for the report!
 
-On Tue, May 03, 2022 at 11:50:35PM -0700, Zev Weiss wrote:
+> This is a log from the previous commit, which may give some hints about
+> the configuration of this particular system.
+>
+> https://gist.github.com/nathanchance/8a56f0939410cb187896e904c72e41e7/raw/b47b2620bdd32d43c7a3b209fcfd9e3d4668f058/good-boot.log
+>
+> If there is any additional debugging information I can provide or
+> patches I can try, please let me know!
 
-> The DT bindings changes (patches 1 and 2) consist of a boolean
-> regulator property to mark it as supplying an external output, and a
-> reg-external-output binding to act as a downstream device representing
-> that output.  The redundancy between the two maybe isn't entirely
-> ideal, but it was the cleanest approach I've been able to come up with
-> so far in terms of working with the regulator subsystem; I'm certainly
-> open to suggestions for better ways of going about this.
-
-Nothing in the series articulates what the purpose of the redundancy is
-- your description of this is a consumer, why would the regulator itself
-care what's connected to it?
-
---w/VS4GgcCdfjbUlx
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmJyd+wACgkQJNaLcl1U
-h9BkfQf8C9n7pk9sOlU770h8zAnMrgTZX6YUlmWUCZ20GO3OG+Y9Ufo6DjYIFFMP
-/23xU738nEL1GCU0/vktgE+r09jGXVQNtAXZRILLt2CxulR7Pe2ojiCmxHAOc5Dv
-bBwKwPk+N5L+9dvMQeTQDuLjfTrdbabEE6yEEfv5xu9cqjG2phSuqjvaIS6GA2Nj
-g9AP/t2UHV34bc2xeGRhLdJGcsu02FVjXxP/DPnofadK+p6YwiHBOd6MCxMrpoty
-iKwdy6ruqlM4NURMVpi89+pcwimfcH7M/XiXd6YnV53HAwx6Fsbd7zlk9QyRKxx4
-BOFFM9X5TWf7//qC2U+sIqn35dco7w==
-=dy9O
------END PGP SIGNATURE-----
-
---w/VS4GgcCdfjbUlx--
+Please see what happens if the "if (dev->current_state == PCI_D0)"
+check and the following "return 0" statement in pci_power_up() are
+commented out.

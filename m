@@ -2,254 +2,247 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE86D51B155
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 23:46:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2979251B157
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 23:47:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378893AbiEDVt5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 17:49:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42830 "EHLO
+        id S1378901AbiEDVuj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 17:50:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232308AbiEDVtz (ORCPT
+        with ESMTP id S232308AbiEDVue (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 17:49:55 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E4614D63D
-        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 14:46:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651700778; x=1683236778;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=p2pNxFGflUwXLIt4gyosVcwyl8NOU9tEMOP0RPSlsfE=;
-  b=glE9GvlUv9p/W3SPwQhKbGQQZ2I23G4z4vBCoxijqekQUp+33AMa4yNL
-   S6Je5daac/MQTP8L8ff5exB/bQia3K2HA2qWBQXI0LNqYi4RWPwWLur+L
-   tVXcQH7NQSig7WijpyLYBAddOS6zCkyfjvyvKxEo7Vxssnl48Pv/1qJIb
-   tKDsstscnb3483R2+qKVfOf8Wmf5zgugR0B1juVAuweWi2LinTNRjDujZ
-   cFqxLfkjTEUTJng/mczs5neaKVbmE1GEay639YfOPly0mWFlsVuXj0ndm
-   BAhiSvlpomvjNjMHfQQ/wUlAunLyqT/+xmF1svxwlJ3h7yaS1gvbpKYAp
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10337"; a="265502637"
-X-IronPort-AV: E=Sophos;i="5.91,199,1647327600"; 
-   d="scan'208";a="265502637"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2022 14:46:18 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,199,1647327600"; 
-   d="scan'208";a="734598584"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 04 May 2022 14:46:16 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nmMp5-000Bnv-CD;
-        Wed, 04 May 2022 21:46:15 +0000
-Date:   Thu, 5 May 2022 05:45:32 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Jack Xiao <Jack.Xiao@amd.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Hawking Zhang <Hawking.Zhang@amd.com>
-Subject: [agd5f:drm-next 428/460]
- drivers/gpu/drm/amd/amdgpu/mes_v11_0.c:706:34: error:
- 'CP_HQD_PQ_CONTROL__ENDIAN_SWAP_MASK' undeclared; did you mean
- 'CP_HQD_PQ_CONTROL__PRIV_STATE_MASK'?
-Message-ID: <202205050534.Qm1brRH5-lkp@intel.com>
+        Wed, 4 May 2022 17:50:34 -0400
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54A8C13E09
+        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 14:46:57 -0700 (PDT)
+Received: by mail-lj1-x235.google.com with SMTP id m23so3340595ljb.8
+        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 14:46:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=MNM2HRIr6bEI0LTItUDhTFIXv/Fm3VOKCBmfFT7P67I=;
+        b=LUlsALkwm+C3SzWv0cGRSwaTTRPGUWQQeqagiue8EufkVWQ10J//rVa1HYXgGcc7dz
+         GMYaKFQqB50zLn7junISq+1InZ9RXB+P8Ac0U7S1Dr6fjj2bckysN2Tx/FwjZqs2FMSH
+         Y6JYGGRbBBr1BiKX65ltr1Ntbzt3vR/HliEVOfW6KLEOTQ31CQry8l6wKyeO42qnejaH
+         OfgybvtVXnHlt0klQg089TrYdqIg17RA21dKUe/3m9WOIit2w+kw7ztpitla8m1P/3Rp
+         CHxAkYmyk9z769tBZaZCcgXzblx+gcEBMjPoZ8Ixs1KYwoPhKAvOQ9untJxdTQ5b6i/9
+         Jg7g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=MNM2HRIr6bEI0LTItUDhTFIXv/Fm3VOKCBmfFT7P67I=;
+        b=eAr6m+5psRAc0sX8Th4D9XEVcFQfTxk6AFty+4WlRCWq68oqDsAjAuGekYQUOprnFP
+         saz9f6NxJt2uzlW/wRhaTkOIWqJrx33WzjUyJ6aUXjjowmkrb0Yqm0i0emrT82W+V8Wn
+         MUadr+DNpjhQd+Hp0eLrhpYIL+qEmQ+uQwgnojGwckncHV8hrFj3vHZGWqoaJzksiv/b
+         9Pphr6gDyi98Co2YyIHViOKp1C94K78n6uJI1bJZGzja/wudot9luM7LJ4TSu/WAsW2l
+         Q1seSfskcpKoH4jLGSD/JBUkgIAujyEAJY1rSG7ROZObiPZPMKzkeLXxWvmDyiLIlNB+
+         3mGw==
+X-Gm-Message-State: AOAM531VPIdYbFaemHaQr2AVIwP5XdM+1LSdwf+JoYtqi8NKdSaQ0GYq
+        7aJvGCw6v3ushLxhZnSFjyZhyVWZxe6VDIzK+gnEHg==
+X-Google-Smtp-Source: ABdhPJxSOgOu1pCUnfOYePv47IyMPAIwwjoruyuBH83KKegFGch5B4RyedJ6qCtqomvTkN53BjjrZhuWpv+aSF0J/sU=
+X-Received: by 2002:a2e:9645:0:b0:24f:2e6f:f931 with SMTP id
+ z5-20020a2e9645000000b0024f2e6ff931mr13700489ljh.466.1651700815373; Wed, 04
+ May 2022 14:46:55 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220502181714.3483177-5-zokeefe@google.com> <20220504022511.GC30775@xsang-OptiPlex-9020>
+In-Reply-To: <20220504022511.GC30775@xsang-OptiPlex-9020>
+From:   "Zach O'Keefe" <zokeefe@google.com>
+Date:   Wed, 4 May 2022 14:46:18 -0700
+Message-ID: <CAAa6QmT-DiPHaW7k40=iUwoGcG=dRsY=gFem+H8h5oeFj0+huA@mail.gmail.com>
+Subject: Re: [mm/khugepaged] 0d006aeaf9: BUG:unable_to_handle_page_fault_for_address
+To:     kernel test robot <oliver.sang@intel.com>
+Cc:     0day robot <lkp@intel.com>, LKML <linux-kernel@vger.kernel.org>,
+        lkp@lists.01.org, Alex Shi <alex.shi@linux.alibaba.com>,
+        David Hildenbrand <david@redhat.com>,
+        David Rientjes <rientjes@google.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Michal Hocko <mhocko@suse.com>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Peter Xu <peterx@redhat.com>, SeongJae Park <sj@kernel.org>,
+        Song Liu <songliubraving@fb.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Yang Shi <shy828301@gmail.com>, Zi Yan <ziy@nvidia.com>,
+        linux-mm@kvack.org, Andrea Arcangeli <aarcange@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Chris Kennelly <ckennelly@google.com>,
+        Chris Zankel <chris@zankel.net>, Helge Deller <deller@gmx.de>,
+        Hugh Dickins <hughd@google.com>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matt Turner <mattst88@gmail.com>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Minchan Kim <minchan@kernel.org>,
+        Patrick Xia <patrickx@google.com>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://gitlab.freedesktop.org/agd5f/linux.git drm-next
-head:   d6ffefccf7f04eefddc8e8aa35fb4afe05a42e0c
-commit: 028c3fb37e705b8fa1448c23c42d1c89f48c07c5 [428/460] drm/amdgpu/mes11: initiate mes v11 support
-config: arc-allyesconfig (https://download.01.org/0day-ci/archive/20220505/202205050534.Qm1brRH5-lkp@intel.com/config)
-compiler: arceb-elf-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        git remote add agd5f https://gitlab.freedesktop.org/agd5f/linux.git
-        git fetch --no-tags agd5f drm-next
-        git checkout 028c3fb37e705b8fa1448c23c42d1c89f48c07c5
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash
+Thanks for reporting. Fixed in v5.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   In file included from drivers/gpu/drm/amd/amdgpu/mes_v11_0.c:26:
-   drivers/gpu/drm/amd/amdgpu/mes_v11_0.c: In function 'mes_v11_0_mqd_init':
->> drivers/gpu/drm/amd/amdgpu/mes_v11_0.c:706:34: error: 'CP_HQD_PQ_CONTROL__ENDIAN_SWAP_MASK' undeclared (first use in this function); did you mean 'CP_HQD_PQ_CONTROL__PRIV_STATE_MASK'?
-     706 |         tmp = REG_SET_FIELD(tmp, CP_HQD_PQ_CONTROL, ENDIAN_SWAP, 1);
-         |                                  ^~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/amd/amdgpu/amdgpu.h:1177:36: note: in definition of macro 'REG_FIELD_MASK'
-    1177 | #define REG_FIELD_MASK(reg, field) reg##__##field##_MASK
-         |                                    ^~~
-   drivers/gpu/drm/amd/amdgpu/mes_v11_0.c:706:15: note: in expansion of macro 'REG_SET_FIELD'
-     706 |         tmp = REG_SET_FIELD(tmp, CP_HQD_PQ_CONTROL, ENDIAN_SWAP, 1);
-         |               ^~~~~~~~~~~~~
-   drivers/gpu/drm/amd/amdgpu/mes_v11_0.c:706:34: note: each undeclared identifier is reported only once for each function it appears in
-     706 |         tmp = REG_SET_FIELD(tmp, CP_HQD_PQ_CONTROL, ENDIAN_SWAP, 1);
-         |                                  ^~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/amd/amdgpu/amdgpu.h:1177:36: note: in definition of macro 'REG_FIELD_MASK'
-    1177 | #define REG_FIELD_MASK(reg, field) reg##__##field##_MASK
-         |                                    ^~~
-   drivers/gpu/drm/amd/amdgpu/mes_v11_0.c:706:15: note: in expansion of macro 'REG_SET_FIELD'
-     706 |         tmp = REG_SET_FIELD(tmp, CP_HQD_PQ_CONTROL, ENDIAN_SWAP, 1);
-         |               ^~~~~~~~~~~~~
->> drivers/gpu/drm/amd/amdgpu/mes_v11_0.c:706:34: error: 'CP_HQD_PQ_CONTROL__ENDIAN_SWAP__SHIFT' undeclared (first use in this function); did you mean 'CP_HQD_PQ_CONTROL__PRIV_STATE__SHIFT'?
-     706 |         tmp = REG_SET_FIELD(tmp, CP_HQD_PQ_CONTROL, ENDIAN_SWAP, 1);
-         |                                  ^~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/amd/amdgpu/amdgpu.h:1176:37: note: in definition of macro 'REG_FIELD_SHIFT'
-    1176 | #define REG_FIELD_SHIFT(reg, field) reg##__##field##__SHIFT
-         |                                     ^~~
-   drivers/gpu/drm/amd/amdgpu/mes_v11_0.c:706:15: note: in expansion of macro 'REG_SET_FIELD'
-     706 |         tmp = REG_SET_FIELD(tmp, CP_HQD_PQ_CONTROL, ENDIAN_SWAP, 1);
-         |               ^~~~~~~~~~~~~
-
-
-vim +706 drivers/gpu/drm/amd/amdgpu/mes_v11_0.c
-
-   632	
-   633	static int mes_v11_0_mqd_init(struct amdgpu_ring *ring)
-   634	{
-   635		struct amdgpu_device *adev = ring->adev;
-   636		struct v10_compute_mqd *mqd = ring->mqd_ptr;
-   637		uint64_t hqd_gpu_addr, wb_gpu_addr, eop_base_addr;
-   638		uint32_t tmp;
-   639	
-   640		mqd->header = 0xC0310800;
-   641		mqd->compute_pipelinestat_enable = 0x00000001;
-   642		mqd->compute_static_thread_mgmt_se0 = 0xffffffff;
-   643		mqd->compute_static_thread_mgmt_se1 = 0xffffffff;
-   644		mqd->compute_static_thread_mgmt_se2 = 0xffffffff;
-   645		mqd->compute_static_thread_mgmt_se3 = 0xffffffff;
-   646		mqd->compute_misc_reserved = 0x00000007;
-   647	
-   648		eop_base_addr = ring->eop_gpu_addr >> 8;
-   649		mqd->cp_hqd_eop_base_addr_lo = eop_base_addr;
-   650		mqd->cp_hqd_eop_base_addr_hi = upper_32_bits(eop_base_addr);
-   651	
-   652		/* set the EOP size, register value is 2^(EOP_SIZE+1) dwords */
-   653		tmp = RREG32_SOC15(GC, 0, regCP_HQD_EOP_CONTROL);
-   654		tmp = REG_SET_FIELD(tmp, CP_HQD_EOP_CONTROL, EOP_SIZE,
-   655				(order_base_2(MES_EOP_SIZE / 4) - 1));
-   656	
-   657		mqd->cp_hqd_eop_control = tmp;
-   658	
-   659		/* enable doorbell? */
-   660		tmp = RREG32_SOC15(GC, 0, regCP_HQD_PQ_DOORBELL_CONTROL);
-   661	
-   662		if (ring->use_doorbell) {
-   663			tmp = REG_SET_FIELD(tmp, CP_HQD_PQ_DOORBELL_CONTROL,
-   664					    DOORBELL_OFFSET, ring->doorbell_index);
-   665			tmp = REG_SET_FIELD(tmp, CP_HQD_PQ_DOORBELL_CONTROL,
-   666					    DOORBELL_EN, 1);
-   667			tmp = REG_SET_FIELD(tmp, CP_HQD_PQ_DOORBELL_CONTROL,
-   668					    DOORBELL_SOURCE, 0);
-   669			tmp = REG_SET_FIELD(tmp, CP_HQD_PQ_DOORBELL_CONTROL,
-   670					    DOORBELL_HIT, 0);
-   671		}
-   672		else
-   673			tmp = REG_SET_FIELD(tmp, CP_HQD_PQ_DOORBELL_CONTROL,
-   674					    DOORBELL_EN, 0);
-   675	
-   676		mqd->cp_hqd_pq_doorbell_control = tmp;
-   677	
-   678		/* disable the queue if it's active */
-   679		ring->wptr = 0;
-   680		mqd->cp_hqd_dequeue_request = 0;
-   681		mqd->cp_hqd_pq_rptr = 0;
-   682		mqd->cp_hqd_pq_wptr_lo = 0;
-   683		mqd->cp_hqd_pq_wptr_hi = 0;
-   684	
-   685		/* set the pointer to the MQD */
-   686		mqd->cp_mqd_base_addr_lo = ring->mqd_gpu_addr & 0xfffffffc;
-   687		mqd->cp_mqd_base_addr_hi = upper_32_bits(ring->mqd_gpu_addr);
-   688	
-   689		/* set MQD vmid to 0 */
-   690		tmp = RREG32_SOC15(GC, 0, regCP_MQD_CONTROL);
-   691		tmp = REG_SET_FIELD(tmp, CP_MQD_CONTROL, VMID, 0);
-   692		mqd->cp_mqd_control = tmp;
-   693	
-   694		/* set the pointer to the HQD, this is similar CP_RB0_BASE/_HI */
-   695		hqd_gpu_addr = ring->gpu_addr >> 8;
-   696		mqd->cp_hqd_pq_base_lo = hqd_gpu_addr;
-   697		mqd->cp_hqd_pq_base_hi = upper_32_bits(hqd_gpu_addr);
-   698	
-   699		/* set up the HQD, this is similar to CP_RB0_CNTL */
-   700		tmp = RREG32_SOC15(GC, 0, regCP_HQD_PQ_CONTROL);
-   701		tmp = REG_SET_FIELD(tmp, CP_HQD_PQ_CONTROL, QUEUE_SIZE,
-   702				    (order_base_2(ring->ring_size / 4) - 1));
-   703		tmp = REG_SET_FIELD(tmp, CP_HQD_PQ_CONTROL, RPTR_BLOCK_SIZE,
-   704				    ((order_base_2(AMDGPU_GPU_PAGE_SIZE / 4) - 1) << 8));
-   705	#ifdef __BIG_ENDIAN
- > 706		tmp = REG_SET_FIELD(tmp, CP_HQD_PQ_CONTROL, ENDIAN_SWAP, 1);
-   707	#endif
-   708		tmp = REG_SET_FIELD(tmp, CP_HQD_PQ_CONTROL, UNORD_DISPATCH, 0);
-   709		tmp = REG_SET_FIELD(tmp, CP_HQD_PQ_CONTROL, TUNNEL_DISPATCH, 0);
-   710		tmp = REG_SET_FIELD(tmp, CP_HQD_PQ_CONTROL, PRIV_STATE, 1);
-   711		tmp = REG_SET_FIELD(tmp, CP_HQD_PQ_CONTROL, KMD_QUEUE, 1);
-   712		mqd->cp_hqd_pq_control = tmp;
-   713	
-   714		/* set the wb address whether it's enabled or not */
-   715		wb_gpu_addr = ring->rptr_gpu_addr;;
-   716		mqd->cp_hqd_pq_rptr_report_addr_lo = wb_gpu_addr & 0xfffffffc;
-   717		mqd->cp_hqd_pq_rptr_report_addr_hi =
-   718			upper_32_bits(wb_gpu_addr) & 0xffff;
-   719	
-   720		/* only used if CP_PQ_WPTR_POLL_CNTL.CP_PQ_WPTR_POLL_CNTL__EN_MASK=1 */
-   721		wb_gpu_addr = ring->wptr_gpu_addr;
-   722		mqd->cp_hqd_pq_wptr_poll_addr_lo = wb_gpu_addr & 0xfffffff8;
-   723		mqd->cp_hqd_pq_wptr_poll_addr_hi = upper_32_bits(wb_gpu_addr) & 0xffff;
-   724	
-   725		tmp = 0;
-   726		/* enable the doorbell if requested */
-   727		if (ring->use_doorbell) {
-   728			tmp = RREG32_SOC15(GC, 0, regCP_HQD_PQ_DOORBELL_CONTROL);
-   729			tmp = REG_SET_FIELD(tmp, CP_HQD_PQ_DOORBELL_CONTROL,
-   730					DOORBELL_OFFSET, ring->doorbell_index);
-   731	
-   732			tmp = REG_SET_FIELD(tmp, CP_HQD_PQ_DOORBELL_CONTROL,
-   733					    DOORBELL_EN, 1);
-   734			tmp = REG_SET_FIELD(tmp, CP_HQD_PQ_DOORBELL_CONTROL,
-   735					    DOORBELL_SOURCE, 0);
-   736			tmp = REG_SET_FIELD(tmp, CP_HQD_PQ_DOORBELL_CONTROL,
-   737					    DOORBELL_HIT, 0);
-   738		}
-   739	
-   740		mqd->cp_hqd_pq_doorbell_control = tmp;
-   741	
-   742		/* reset read and write pointers, similar to CP_RB0_WPTR/_RPTR */
-   743		ring->wptr = 0;
-   744		mqd->cp_hqd_pq_rptr = RREG32_SOC15(GC, 0, regCP_HQD_PQ_RPTR);
-   745	
-   746		/* set the vmid for the queue */
-   747		mqd->cp_hqd_vmid = 0;
-   748	
-   749		tmp = RREG32_SOC15(GC, 0, regCP_HQD_PERSISTENT_STATE);
-   750		tmp = REG_SET_FIELD(tmp, CP_HQD_PERSISTENT_STATE, PRELOAD_SIZE, 0x55);
-   751		mqd->cp_hqd_persistent_state = tmp;
-   752	
-   753		/* set MIN_IB_AVAIL_SIZE */
-   754		tmp = RREG32_SOC15(GC, 0, regCP_HQD_IB_CONTROL);
-   755		tmp = REG_SET_FIELD(tmp, CP_HQD_IB_CONTROL, MIN_IB_AVAIL_SIZE, 3);
-   756		mqd->cp_hqd_ib_control = tmp;
-   757	
-   758		/* activate the queue */
-   759		mqd->cp_hqd_active = 1;
-   760		return 0;
-   761	}
-   762	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+On Tue, May 3, 2022 at 7:25 PM kernel test robot <oliver.sang@intel.com> wrote:
+>
+>
+>
+> Greeting,
+>
+> FYI, we noticed the following commit (built with gcc-11):
+>
+> commit: 0d006aeaf99be94a0dcb727cb6540195f13fd9c3 ("[PATCH v4 04/13] mm/khugepaged: make hugepage allocation context-specific")
+> url: https://github.com/intel-lab-lkp/linux/commits/Zach-O-Keefe/mm-khugepaged-record-SCAN_PMD_MAPPED-when-scan_pmd-finds-THP/20220503-031727
+> patch link: https://lore.kernel.org/linux-mm/20220502181714.3483177-5-zokeefe@google.com
+>
+> in testcase: boot
+>
+> on test machine: qemu-system-i386 -enable-kvm -cpu SandyBridge -smp 2 -m 4G
+>
+> caused below changes (please refer to attached dmesg/kmsg for entire log/backtrace):
+>
+>
+>
+> If you fix the issue, kindly add following tag
+> Reported-by: kernel test robot <oliver.sang@intel.com>
+>
+>
+> [   18.854835][   T17] BUG: unable to handle page fault for address: 003c24ca
+> [   18.855169][   T17] #PF: supervisor read access in kernel mode
+> [   18.855395][   T17] #PF: error_code(0x0000) - not-present page
+> [   18.855620][   T17] *pde = 00000000
+> [   18.855763][   T17] Oops: 0000 [#1]
+> [   18.855903][   T17] CPU: 0 PID: 17 Comm: khugepaged Not tainted 5.18.0-rc5-next-20220502-00004-g0d006aeaf99b #1
+> [ 18.856283][ T17] EIP: alloc_charge_hpage (mm/khugepaged.c:951 mm/khugepaged.c:1091)
+> [ 18.856498][ T17] Code: 00 00 00 55 89 e5 6a 07 e8 86 c0 ff ff c9 31 d2 89 d1 c3 55 89 e5 a1 28 e6 fa 59 25 80 00 00 00 83 f8 01 19 c0 25 00 fc ff ff <8b> 80 ca 24 3c 00 85 c0 74 0f 8b 42 08 5d 8b 40 04 b8 01 00 00 00
+> All code
+> ========
+>    0:   00 00                   add    %al,(%rax)
+>    2:   00 55 89                add    %dl,-0x77(%rbp)
+>    5:   e5 6a                   in     $0x6a,%eax
+>    7:   07                      (bad)
+>    8:   e8 86 c0 ff ff          callq  0xffffffffffffc093
+>    d:   c9                      leaveq
+>    e:   31 d2                   xor    %edx,%edx
+>   10:   89 d1                   mov    %edx,%ecx
+>   12:   c3                      retq
+>   13:   55                      push   %rbp
+>   14:   89 e5                   mov    %esp,%ebp
+>   16:   a1 28 e6 fa 59 25 80    movabs 0x802559fae628,%eax
+>   1d:   00 00
+>   1f:   00 83 f8 01 19 c0       add    %al,-0x3fe6fe08(%rbx)
+>   25:   25 00 fc ff ff          and    $0xfffffc00,%eax
+>   2a:*  8b 80 ca 24 3c 00       mov    0x3c24ca(%rax),%eax              <-- trapping instruction
+>   30:   85 c0                   test   %eax,%eax
+>   32:   74 0f                   je     0x43
+>   34:   8b 42 08                mov    0x8(%rdx),%eax
+>   37:   5d                      pop    %rbp
+>   38:   8b 40 04                mov    0x4(%rax),%eax
+>   3b:   b8 01 00 00 00          mov    $0x1,%eax
+>
+> Code starting with the faulting instruction
+> ===========================================
+>    0:   8b 80 ca 24 3c 00       mov    0x3c24ca(%rax),%eax
+>    6:   85 c0                   test   %eax,%eax
+>    8:   74 0f                   je     0x19
+>    a:   8b 42 08                mov    0x8(%rdx),%eax
+>    d:   5d                      pop    %rbp
+>    e:   8b 40 04                mov    0x4(%rax),%eax
+>   11:   b8 01 00 00 00          mov    $0x1,%eax
+> [   18.857217][   T17] EAX: 00000000 EBX: 41172400 ECX: 00000000 EDX: 411d1f7c
+> [   18.857487][   T17] ESI: 411d1f7c EDI: 4117245c EBP: 411d1e64 ESP: 411d1e64
+> [   18.857750][   T17] DS: 007b ES: 007b FS: 0000 GS: 0000 SS: 0068 EFLAGS: 00010246
+> [   18.858036][   T17] CR0: 80050033 CR2: 003c24ca CR3: 112f3000 CR4: 000406d0
+> [   18.858302][   T17] DR0: 00000000 DR1: 00000000 DR2: 00000000 DR3: 00000000
+> [   18.858567][   T17] DR6: fffe0ff0 DR7: 00000400
+> [   18.858743][   T17] Call Trace:
+> [ 18.858871][ T17] ? collapse_huge_page (mm/khugepaged.c:1109)
+> [ 18.859066][ T17] ? find_held_lock (kernel/locking/lockdep.c:5156)
+> [ 18.859245][ T17] ? khugepaged_scan_pmd (mm/khugepaged.c:1400)
+> [ 18.859446][ T17] ? khugepaged_scan_mm_slot (mm/khugepaged.c:2216)
+> [ 18.859657][ T17] ? khugepaged_do_scan (mm/khugepaged.c:2290)
+> [ 18.859854][ T17] ? khugepaged (mm/khugepaged.c:2340)
+> [ 18.860016][ T17] ? khugepaged_defrag_show (mm/khugepaged.c:1076)
+> [ 18.860219][ T17] ? kthread (kernel/kthread.c:376)
+> [ 18.860374][ T17] ? khugepaged_do_scan (mm/khugepaged.c:2328)
+> [ 18.860570][ T17] ? kthread_complete_and_exit (kernel/kthread.c:331)
+> [ 18.860781][ T17] ? ret_from_fork (arch/x86/entry/entry_32.S:772)
+> [   18.860956][   T17] Modules linked in:
+> [   18.861105][   T17] CR2: 00000000003c24ca
+> [   18.861262][   T17] ---[ end trace 0000000000000000 ]---
+> [ 18.861263][ T17] EIP: alloc_charge_hpage (mm/khugepaged.c:951 mm/khugepaged.c:1091)
+> [ 18.861266][ T17] Code: 00 00 00 55 89 e5 6a 07 e8 86 c0 ff ff c9 31 d2 89 d1 c3 55 89 e5 a1 28 e6 fa 59 25 80 00 00 00 83 f8 01 19 c0 25 00 fc ff ff <8b> 80 ca 24 3c 00 85 c0 74 0f 8b 42 08 5d 8b 40 04 b8 01 00 00 00
+> All code
+> ========
+>    0:   00 00                   add    %al,(%rax)
+>    2:   00 55 89                add    %dl,-0x77(%rbp)
+>    5:   e5 6a                   in     $0x6a,%eax
+>    7:   07                      (bad)
+>    8:   e8 86 c0 ff ff          callq  0xffffffffffffc093
+>    d:   c9                      leaveq
+>    e:   31 d2                   xor    %edx,%edx
+>   10:   89 d1                   mov    %edx,%ecx
+>   12:   c3                      retq
+>   13:   55                      push   %rbp
+>   14:   89 e5                   mov    %esp,%ebp
+>   16:   a1 28 e6 fa 59 25 80    movabs 0x802559fae628,%eax
+>   1d:   00 00
+>   1f:   00 83 f8 01 19 c0       add    %al,-0x3fe6fe08(%rbx)
+>   25:   25 00 fc ff ff          and    $0xfffffc00,%eax
+>   2a:*  8b 80 ca 24 3c 00       mov    0x3c24ca(%rax),%eax              <-- trapping instruction
+>   30:   85 c0                   test   %eax,%eax
+>   32:   74 0f                   je     0x43
+>   34:   8b 42 08                mov    0x8(%rdx),%eax
+>   37:   5d                      pop    %rbp
+>   38:   8b 40 04                mov    0x4(%rax),%eax
+>   3b:   b8 01 00 00 00          mov    $0x1,%eax
+>
+> Code starting with the faulting instruction
+> ===========================================
+>    0:   8b 80 ca 24 3c 00       mov    0x3c24ca(%rax),%eax
+>    6:   85 c0                   test   %eax,%eax
+>    8:   74 0f                   je     0x19
+>    a:   8b 42 08                mov    0x8(%rdx),%eax
+>    d:   5d                      pop    %rbp
+>    e:   8b 40 04                mov    0x4(%rax),%eax
+>   11:   b8 01 00 00 00          mov    $0x1,%eax
+>
+>
+> To reproduce:
+>
+>         # build kernel
+>         cd linux
+>         cp config-5.18.0-rc5-next-20220502-00004-g0d006aeaf99b .config
+>         make HOSTCC=gcc-11 CC=gcc-11 ARCH=i386 olddefconfig prepare modules_prepare bzImage modules
+>         make HOSTCC=gcc-11 CC=gcc-11 ARCH=i386 INSTALL_MOD_PATH=<mod-install-dir> modules_install
+>         cd <mod-install-dir>
+>         find lib/ | cpio -o -H newc --quiet | gzip > modules.cgz
+>
+>
+>         git clone https://github.com/intel/lkp-tests.git
+>         cd lkp-tests
+>         bin/lkp qemu -k <bzImage> -m modules.cgz job-script # job-script is attached in this email
+>
+>         # if come across any failure that blocks the test,
+>         # please remove ~/.lkp and /lkp dir to run from a clean state.
+>
+>
+>
+> --
+> 0-DAY CI Kernel Test Service
+> https://01.org/lkp
+>
+>

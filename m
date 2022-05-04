@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9F7D51A66C
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 18:51:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C99C451AB0A
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:40:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354269AbiEDQz0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 12:55:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52224 "EHLO
+        id S1358825AbiEDRjK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 13:39:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354117AbiEDQxv (ORCPT
+        with ESMTP id S1356819AbiEDRJp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 12:53:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F05844831E;
-        Wed,  4 May 2022 09:49:06 -0700 (PDT)
+        Wed, 4 May 2022 13:09:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61F3021809;
+        Wed,  4 May 2022 09:55:47 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4A94761775;
-        Wed,  4 May 2022 16:49:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96FA3C385AA;
-        Wed,  4 May 2022 16:49:05 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F2047617DE;
+        Wed,  4 May 2022 16:55:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 461BBC385A4;
+        Wed,  4 May 2022 16:55:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651682945;
-        bh=gjcUHRuosnRAQAIEo2at6PXscj2jLOjPPqadUR14v30=;
+        s=korg; t=1651683346;
+        bh=jY/z4a730pmHURkZV1MCag3s0fgPGWCDRkatCxnWXwE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=I8QO7a34nRpgqQh8ub3OeqSa8HzP2eNZwt3fRF0NIYBIqsLMLkcESw2VN4zxHQiXp
-         pBYTl90Iyrv4/7KEpDUtwG95y1L+9QnvQfyIDJ59+yymIawKJsXYH37E2ln69al/w/
-         +N89u+i1uDCkgv/GoF8Ouzxg8nHPq9pJR/JytlJE=
+        b=KQ7KogwtH18JTee1Mj1E3E4V1Xh3gvGyHDbRUBx0+uTk9UZ1BI8X7l/3xm4s99oUI
+         JMtmWZYew98iJGOcdW4ldfEObg8p3M0h5MOQVj9rwNbwb0qnljqfhmcKeFQi3ztGRz
+         MZI9PdpuMpEcFQ7u5qMyNMhZqRchgmfMNNJsLkA0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ying Xu <yinxu@redhat.com>,
-        Xin Long <lucien.xin@gmail.com>,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 50/84] sctp: check asoc strreset_chunk in sctp_generate_reconf_event
+        stable@vger.kernel.org, Todd Kjos <tkjos@google.com>,
+        stable <stable@kernel.org>,
+        Alessandro Astone <ales.astone@gmail.com>
+Subject: [PATCH 5.17 033/225] binder: Address corner cases in deferred copy and fixup
 Date:   Wed,  4 May 2022 18:44:31 +0200
-Message-Id: <20220504152931.303190399@linuxfoundation.org>
+Message-Id: <20220504153113.195603183@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220504152927.744120418@linuxfoundation.org>
-References: <20220504152927.744120418@linuxfoundation.org>
+In-Reply-To: <20220504153110.096069935@linuxfoundation.org>
+References: <20220504153110.096069935@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,66 +55,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xin Long <lucien.xin@gmail.com>
+From: Alessandro Astone <ales.astone@gmail.com>
 
-[ Upstream commit 165e3e17fe8fe6a8aab319bc6e631a2e23b9a857 ]
+commit 2d1746e3fda0c3612143d7c06f8e1d1830c13e23 upstream.
 
-A null pointer reference issue can be triggered when the response of a
-stream reconf request arrives after the timer is triggered, such as:
+When handling BINDER_TYPE_FDA object we are pushing a parent fixup
+with a certain skip_size but no scatter-gather copy object, since
+the copy is handled standalone.
+If BINDER_TYPE_FDA is the last children the scatter-gather copy
+loop will never stop to skip it, thus we are left with an item in
+the parent fixup list. This will trigger the BUG_ON().
 
-  send Incoming SSN Reset Request --->
-  CPU0:
-   reconf timer is triggered,
-   go to the handler code before hold sk lock
-                            <--- reply with Outgoing SSN Reset Request
-  CPU1:
-   process Outgoing SSN Reset Request,
-   and set asoc->strreset_chunk to NULL
-  CPU0:
-   continue the handler code, hold sk lock,
-   and try to hold asoc->strreset_chunk, crash!
+This is reproducible in android when playing a video.
+We receive a transaction that looks like this:
+    obj[0] BINDER_TYPE_PTR, parent
+    obj[1] BINDER_TYPE_PTR, child
+    obj[2] BINDER_TYPE_PTR, child
+    obj[3] BINDER_TYPE_FDA, child
 
-In Ying Xu's testing, the call trace is:
-
-  [ ] BUG: kernel NULL pointer dereference, address: 0000000000000010
-  [ ] RIP: 0010:sctp_chunk_hold+0xe/0x40 [sctp]
-  [ ] Call Trace:
-  [ ]  <IRQ>
-  [ ]  sctp_sf_send_reconf+0x2c/0x100 [sctp]
-  [ ]  sctp_do_sm+0xa4/0x220 [sctp]
-  [ ]  sctp_generate_reconf_event+0xbd/0xe0 [sctp]
-  [ ]  call_timer_fn+0x26/0x130
-
-This patch is to fix it by returning from the timer handler if asoc
-strreset_chunk is already set to NULL.
-
-Fixes: 7b9438de0cd4 ("sctp: add stream reconf timer")
-Reported-by: Ying Xu <yinxu@redhat.com>
-Signed-off-by: Xin Long <lucien.xin@gmail.com>
-Acked-by: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: 09184ae9b575 ("binder: defer copies of pre-patched txn data")
+Acked-by: Todd Kjos <tkjos@google.com>
+Cc: stable <stable@kernel.org>
+Signed-off-by: Alessandro Astone <ales.astone@gmail.com>
+Link: https://lore.kernel.org/r/20220415120015.52684-2-ales.astone@gmail.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/sctp/sm_sideeffect.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/android/binder.c |    7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/net/sctp/sm_sideeffect.c b/net/sctp/sm_sideeffect.c
-index 0d225f891b61..8d32229199b9 100644
---- a/net/sctp/sm_sideeffect.c
-+++ b/net/sctp/sm_sideeffect.c
-@@ -458,6 +458,10 @@ void sctp_generate_reconf_event(struct timer_list *t)
- 		goto out_unlock;
+--- a/drivers/android/binder.c
++++ b/drivers/android/binder.c
+@@ -2295,6 +2295,7 @@ static int binder_do_deferred_txn_copies
+ {
+ 	int ret = 0;
+ 	struct binder_sg_copy *sgc, *tmpsgc;
++	struct binder_ptr_fixup *tmppf;
+ 	struct binder_ptr_fixup *pf =
+ 		list_first_entry_or_null(pf_head, struct binder_ptr_fixup,
+ 					 node);
+@@ -2349,7 +2350,11 @@ static int binder_do_deferred_txn_copies
+ 		list_del(&sgc->node);
+ 		kfree(sgc);
  	}
+-	BUG_ON(!list_empty(pf_head));
++	list_for_each_entry_safe(pf, tmppf, pf_head, node) {
++		BUG_ON(pf->skip_size == 0);
++		list_del(&pf->node);
++		kfree(pf);
++	}
+ 	BUG_ON(!list_empty(sgc_head));
  
-+	/* This happens when the response arrives after the timer is triggered. */
-+	if (!asoc->strreset_chunk)
-+		goto out_unlock;
-+
- 	error = sctp_do_sm(net, SCTP_EVENT_T_TIMEOUT,
- 			   SCTP_ST_TIMEOUT(SCTP_EVENT_TIMEOUT_RECONF),
- 			   asoc->state, asoc->ep, asoc,
--- 
-2.35.1
-
+ 	return ret > 0 ? -EINVAL : ret;
 
 

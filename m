@@ -2,169 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F75A51AE46
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 21:45:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E0F151AE48
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 21:45:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377682AbiEDTsv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 15:48:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49580 "EHLO
+        id S1355416AbiEDTtY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 15:49:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377735AbiEDTsQ (ORCPT
+        with ESMTP id S1377848AbiEDTtG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 15:48:16 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F25284EDD9
-        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 12:44:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651693465; x=1683229465;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=LOftJdy/rhu02/2gQDmB7tV4F8Asgc5Ejq17mLWudDI=;
-  b=P745FTELpbJDE/NtPNHEm7vDHagnn8Pm3PN2ghKIgcTUmUUxbqGcHHIA
-   vlFbjfsd+PyAxhuYCm8u0z0XE3B8DuNNb2yY7Ic0yRM2ZpUYAhZJYJqtC
-   2q2vpaRuFKvxCAZgyIRsVSWkwZhG/C6qMMuJYb7rllUz5TK8p62/Ou+h1
-   8mN2cHSRN4CqR34EqeBLc3IHgAOI7uZYKlDjnGoV1grTIW7T7VVik16og
-   fuCsWgAW4+LvutkwL9374OG0qaBTUnLmLVnW01Ai+j2LB7xWTCMZJxk0D
-   thpS2DQ868p9kdqMGR7K23qIvuh1z0y9OB6Xbhj4gGcLafVVdbrFNHd51
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10337"; a="248416192"
-X-IronPort-AV: E=Sophos;i="5.91,199,1647327600"; 
-   d="scan'208";a="248416192"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2022 12:44:22 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,199,1647327600"; 
-   d="scan'208";a="549003467"
-Received: from kanliang-dev.jf.intel.com ([10.165.154.102])
-  by orsmga002.jf.intel.com with ESMTP; 04 May 2022 12:44:22 -0700
-From:   kan.liang@linux.intel.com
-To:     peterz@infradead.org, mingo@redhat.com,
-        linux-kernel@vger.kernel.org
-Cc:     Kan Liang <kan.liang@linux.intel.com>
-Subject: [PATCH 5/5] perf/x86/uncore: Add new Alder Lake and Raptor Lake support
-Date:   Wed,  4 May 2022 12:44:13 -0700
-Message-Id: <20220504194413.1003071-5-kan.liang@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220504194413.1003071-1-kan.liang@linux.intel.com>
-References: <20220504194413.1003071-1-kan.liang@linux.intel.com>
+        Wed, 4 May 2022 15:49:06 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4892E272E;
+        Wed,  4 May 2022 12:45:28 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id g20so2870495edw.6;
+        Wed, 04 May 2022 12:45:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Zns0LKPTUPymGAYU2bdItgulZ/f93Vx+6vSdDM7JqFA=;
+        b=CMbI6xK8GCAA6rz7awKw91AvnRgcICsbmW9dluQjGegkZ1oaBiL+xhtJf+yZRg7oOb
+         T4SXaEmvfv/inhlZh2eFG/jU1J8wD96+7QXh+X9PXxtLbf8dcJ2rfDpl/GFsbjGQ06+a
+         AeAlxQ6Hm1tnYUwR2yjolZ6AfDpG9jCM/7a+oaEEpAb1NJ4ToDfhV1f2Sc2sqBDVY/s/
+         PTK7byMw0pt3LPxtVk5KoJ2lxD+2dxwDkOXnVo0ffUXbntNHnrq1lNEVsj1hvatLWNby
+         KaZUhSXwCAB1eIWcaXGq/VYuEbVJuugLFPVWIaSGQUiC+2GzrfdFD1AnC5wdveOqbFP1
+         mE1g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Zns0LKPTUPymGAYU2bdItgulZ/f93Vx+6vSdDM7JqFA=;
+        b=yQhfRXBQ4njaLfoVSYN4qtM8A8GlWEHrYBbMRgErXshwxBxz1LBpd+VFArG8vCT6za
+         21wX2MX1Pi9H1XVKryVanW2VfwfKJFzkLptHnuE/BLtlAg/JklAsbbOr7RFxX6hZyvkm
+         pNRvFkh7XDEgCYWW0wbrMaGNvH3+h9UzvdWJGSxszaNZAbgoEo2uUTJp0Drd+TKYDShg
+         omhoAMBAZhJ6jvhvgnefFz5iIHDsOc1pSZ9sqaPyY0fIn/NsuTaMu7qth1azGW+xKUAC
+         6hLJuD6rkj7LiSE3rMMzawfaY8w6RuQ+85a3amaWT+7A7EJx2jCQ/KAYZlob2RkXZBns
+         rdLw==
+X-Gm-Message-State: AOAM531dqkFpwAeQ66MlrtZjedyiGYGwAP+4hv8ovQa7HPIChqoGiIlY
+        +IrAv1xCKdpw+xtmEA3r/YaYqy2wj/wbBhqXIGY=
+X-Google-Smtp-Source: ABdhPJyY3FXKKb40yo9NMzwpK2OCm003pCXdK3zIlEoDiapiR82hP9b52sypTg6k4ccA7Lb2mmByV9W1NA6Ke1ndYr0=
+X-Received: by 2002:a50:e696:0:b0:419:998d:5feb with SMTP id
+ z22-20020a50e696000000b00419998d5febmr25431573edm.122.1651693526746; Wed, 04
+ May 2022 12:45:26 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,UPPERCASE_50_75 autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220504193439.15938-1-markuss.broks@gmail.com>
+In-Reply-To: <20220504193439.15938-1-markuss.broks@gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Wed, 4 May 2022 21:44:50 +0200
+Message-ID: <CAHp75VeMCiwgTFFy5vGBoWYSw4mGQU6623B1eMr7apJZF_L-kg@mail.gmail.com>
+Subject: Re: [PATCH v7 0/2] Make AUX gpio pin optional for ktd2692
+To:     Markuss Broks <markuss.broks@gmail.com>
+Cc:     Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Linux LED Subsystem <linux-leds@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kan Liang <kan.liang@linux.intel.com>
+On Wed, May 4, 2022 at 9:35 PM Markuss Broks <markuss.broks@gmail.com> wrote:
+>
+> Some appliances of ktd2692 don't have the AUX pin connected to
+> a GPIO. Specifically, Samsung Galaxy J5 (2015), which uses ktd2692
+> for driving the front flash LED, has the pin not connected anywhere on
+> schematics. Make specifying the AUX pin optional, since it is additional
+> functionality and only affects amount of current going through the LED.
 
-From the perspective of the uncore PMU, there is nothing changed for the
-new Alder Lake N and Raptor Lake P.
+the amount
 
-Add new PCIIDs of IMC.
+> Also convert the txt device-tree bindings to yaml and pick up maintenance
+> over the yaml binding and the driver itself.
 
-Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
----
- arch/x86/events/intel/uncore.c     |  2 ++
- arch/x86/events/intel/uncore_snb.c | 52 ++++++++++++++++++++++++++++++
- 2 files changed, 54 insertions(+)
+...
 
-diff --git a/arch/x86/events/intel/uncore.c b/arch/x86/events/intel/uncore.c
-index 7695dcae280e..db6c31bca809 100644
---- a/arch/x86/events/intel/uncore.c
-+++ b/arch/x86/events/intel/uncore.c
-@@ -1828,7 +1828,9 @@ static const struct x86_cpu_id intel_uncore_match[] __initconst = {
- 	X86_MATCH_INTEL_FAM6_MODEL(ROCKETLAKE,		&rkl_uncore_init),
- 	X86_MATCH_INTEL_FAM6_MODEL(ALDERLAKE,		&adl_uncore_init),
- 	X86_MATCH_INTEL_FAM6_MODEL(ALDERLAKE_L,		&adl_uncore_init),
-+	X86_MATCH_INTEL_FAM6_MODEL(ALDERLAKE_N,		&adl_uncore_init),
- 	X86_MATCH_INTEL_FAM6_MODEL(RAPTORLAKE,		&adl_uncore_init),
-+	X86_MATCH_INTEL_FAM6_MODEL(RAPTORLAKE_P,	&adl_uncore_init),
- 	X86_MATCH_INTEL_FAM6_MODEL(SAPPHIRERAPIDS_X,	&spr_uncore_init),
- 	X86_MATCH_INTEL_FAM6_MODEL(ATOM_TREMONT_D,	&snr_uncore_init),
- 	{},
-diff --git a/arch/x86/events/intel/uncore_snb.c b/arch/x86/events/intel/uncore_snb.c
-index b30890b91137..ce440011cc4e 100644
---- a/arch/x86/events/intel/uncore_snb.c
-+++ b/arch/x86/events/intel/uncore_snb.c
-@@ -79,10 +79,36 @@
- #define PCI_DEVICE_ID_INTEL_ADL_14_IMC		0x4650
- #define PCI_DEVICE_ID_INTEL_ADL_15_IMC		0x4668
- #define PCI_DEVICE_ID_INTEL_ADL_16_IMC		0x4670
-+#define PCI_DEVICE_ID_INTEL_ADL_17_IMC		0x4614
-+#define PCI_DEVICE_ID_INTEL_ADL_18_IMC		0x4617
-+#define PCI_DEVICE_ID_INTEL_ADL_19_IMC		0x4618
-+#define PCI_DEVICE_ID_INTEL_ADL_20_IMC		0x461B
-+#define PCI_DEVICE_ID_INTEL_ADL_21_IMC		0x461C
- #define PCI_DEVICE_ID_INTEL_RPL_1_IMC		0xA700
- #define PCI_DEVICE_ID_INTEL_RPL_2_IMC		0xA702
- #define PCI_DEVICE_ID_INTEL_RPL_3_IMC		0xA706
- #define PCI_DEVICE_ID_INTEL_RPL_4_IMC		0xA709
-+#define PCI_DEVICE_ID_INTEL_RPL_5_IMC		0xA701
-+#define PCI_DEVICE_ID_INTEL_RPL_6_IMC		0xA703
-+#define PCI_DEVICE_ID_INTEL_RPL_7_IMC		0xA704
-+#define PCI_DEVICE_ID_INTEL_RPL_8_IMC		0xA705
-+#define PCI_DEVICE_ID_INTEL_RPL_9_IMC		0xA706
-+#define PCI_DEVICE_ID_INTEL_RPL_10_IMC		0xA707
-+#define PCI_DEVICE_ID_INTEL_RPL_11_IMC		0xA708
-+#define PCI_DEVICE_ID_INTEL_RPL_12_IMC		0xA709
-+#define PCI_DEVICE_ID_INTEL_RPL_13_IMC		0xA70a
-+#define PCI_DEVICE_ID_INTEL_RPL_14_IMC		0xA70b
-+#define PCI_DEVICE_ID_INTEL_RPL_15_IMC		0xA715
-+#define PCI_DEVICE_ID_INTEL_RPL_16_IMC		0xA716
-+#define PCI_DEVICE_ID_INTEL_RPL_17_IMC		0xA717
-+#define PCI_DEVICE_ID_INTEL_RPL_18_IMC		0xA718
-+#define PCI_DEVICE_ID_INTEL_RPL_19_IMC		0xA719
-+#define PCI_DEVICE_ID_INTEL_RPL_20_IMC		0xA71A
-+#define PCI_DEVICE_ID_INTEL_RPL_21_IMC		0xA71B
-+#define PCI_DEVICE_ID_INTEL_RPL_22_IMC		0xA71C
-+#define PCI_DEVICE_ID_INTEL_RPL_23_IMC		0xA728
-+#define PCI_DEVICE_ID_INTEL_RPL_24_IMC		0xA729
-+#define PCI_DEVICE_ID_INTEL_RPL_25_IMC		0xA72A
- 
- 
- #define IMC_UNCORE_DEV(a)						\
-@@ -1192,10 +1218,36 @@ static const struct pci_device_id tgl_uncore_pci_ids[] = {
- 	IMC_UNCORE_DEV(ADL_14),
- 	IMC_UNCORE_DEV(ADL_15),
- 	IMC_UNCORE_DEV(ADL_16),
-+	IMC_UNCORE_DEV(ADL_17),
-+	IMC_UNCORE_DEV(ADL_18),
-+	IMC_UNCORE_DEV(ADL_19),
-+	IMC_UNCORE_DEV(ADL_20),
-+	IMC_UNCORE_DEV(ADL_21),
- 	IMC_UNCORE_DEV(RPL_1),
- 	IMC_UNCORE_DEV(RPL_2),
- 	IMC_UNCORE_DEV(RPL_3),
- 	IMC_UNCORE_DEV(RPL_4),
-+	IMC_UNCORE_DEV(RPL_5),
-+	IMC_UNCORE_DEV(RPL_6),
-+	IMC_UNCORE_DEV(RPL_7),
-+	IMC_UNCORE_DEV(RPL_8),
-+	IMC_UNCORE_DEV(RPL_9),
-+	IMC_UNCORE_DEV(RPL_10),
-+	IMC_UNCORE_DEV(RPL_11),
-+	IMC_UNCORE_DEV(RPL_12),
-+	IMC_UNCORE_DEV(RPL_13),
-+	IMC_UNCORE_DEV(RPL_14),
-+	IMC_UNCORE_DEV(RPL_15),
-+	IMC_UNCORE_DEV(RPL_16),
-+	IMC_UNCORE_DEV(RPL_17),
-+	IMC_UNCORE_DEV(RPL_18),
-+	IMC_UNCORE_DEV(RPL_19),
-+	IMC_UNCORE_DEV(RPL_20),
-+	IMC_UNCORE_DEV(RPL_21),
-+	IMC_UNCORE_DEV(RPL_22),
-+	IMC_UNCORE_DEV(RPL_23),
-+	IMC_UNCORE_DEV(RPL_24),
-+	IMC_UNCORE_DEV(RPL_25),
- 	{ /* end: all zeroes */ }
- };
- 
+> v7:
+> - drop the MAINTAINERS part
+
+I'm not sure why it happened.
+
+What I mentioned is to create a series out of 4 (four) patches:
+1) fix the potential issue with the repetitive message;
+2) update DT;
+3) switch to optional GPIO;
+4) update MAINTAINERS.
+
+
 -- 
-2.35.1
-
+With Best Regards,
+Andy Shevchenko

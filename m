@@ -2,100 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C299B51B319
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 01:25:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C364B51B2A5
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 01:23:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379291AbiEDXLE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 19:11:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39500 "EHLO
+        id S1378687AbiEDXMC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 19:12:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385217AbiEDXIc (ORCPT
+        with ESMTP id S1385531AbiEDXIu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 19:08:32 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ED215713C;
-        Wed,  4 May 2022 16:02:51 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id c1-20020a17090a558100b001dca2694f23so2390981pji.3;
-        Wed, 04 May 2022 16:02:51 -0700 (PDT)
+        Wed, 4 May 2022 19:08:50 -0400
+Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 295CC14084;
+        Wed,  4 May 2022 16:04:52 -0700 (PDT)
+Received: by mail-io1-xd2c.google.com with SMTP id f4so3093440iov.2;
+        Wed, 04 May 2022 16:04:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=1Rr+WgHXJv8rOOI8pvpQMjOVULuqwXfp5l5Kbj5eI/U=;
-        b=SJbLsdWh+UCFEXw+niLLiz84rSSbYf4dPLAlVoObpohxf7hMpHJwLy+enb5HNLi19L
-         hikuHFoIhAekv5BaCwo2WYTlXgCn/q+Gupv5sEAiNrU6fjxuig/xYU0idZMXBF5h1Hq6
-         0ZAvPgRKq7XnRajXONVgln3pi86ViAf0QWeeVNpvuMQwk27O2n4uc5ZPJsmAfPlWdxEN
-         Id2clkYhIv+RqnaBOvtsNszjAuw7gtbk5xGUfg8DxG01lglnPfF+UcUOf2ozvPXDBqTz
-         ASjbas5Lk98Aha7vA5lgZyP7XCn+zrPvJgO2EZGik0wJkBfO8AZnJxxolpUHi5vD+agU
-         +NKA==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=ILzkKB4GFyvmkKkoAzfRz5MTJCTm65HgHQFqL1jHiLk=;
+        b=i/gQfgcmMDtibRhSvwUM/ZTpCzqbjQ9Qm2G+7QUIqK1tyPSHWXUmYcN/Qyyui24NE0
+         HDVDSkPwL7WibbfZoOd3aM6z1du7CJosgr+RNPTU6XgV9vYV20xEdNkI61eSuqd+kgSj
+         1BXy+tGggSySRA9yYoXtZ+dRo4Jb5kW5TBtuxiha84iHr75ChX8QCW1Aqt+Ih6bc1GdN
+         BevtIQ2dhC4sZaizEyA1wJIx0mBVjDOiDgYFYHJFxbFCyx1CwVQzoH8C6Pdxx/rr/s42
+         z2GJv+Tl38zc9qWFHAtwvvFEkDodSXj3/0YPzzOTMKKf5LJrERKVHSfp9GmddqY1a8Q8
+         QNiQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=1Rr+WgHXJv8rOOI8pvpQMjOVULuqwXfp5l5Kbj5eI/U=;
-        b=oifTj7VapLQ1nALggrpE3DnBUNKDsBKEpX6roSaaSf9Q+F/3Yh7xoD9xDo7jmnVaGF
-         CtSQUC81IAyUYrPL6I/pGBWX2iVesNDf0OtT85kdOLcc6NxLI219VUTNb4s39d730SCe
-         H5jPV6cc2SZoukpFFn+jEvbEMdYLPtpqc5QZQd0d3zEeMC3BNTBSvBsUIW1xlGTYjGMO
-         yMEvAmZBNxdzIAH+MBcvk+vtHeaBV90NBk9hhlzf6skW6x/xak3JjkBIn3dK8dsEoHV0
-         Fw3EeoHy0euz1j4aK8bA1SmliG6yLbtUEuRWCFq4KwKqcf1kaE2kzwM1Ct3K+GNuhoRx
-         SjEA==
-X-Gm-Message-State: AOAM531Wa3MeAXX0rOCA3a5H6xjdBDptOkkx3yl4ZGJi3j+/Kl1jewbL
-        dwVpI6o/1+wNyMHjQ2Y3XLA=
-X-Google-Smtp-Source: ABdhPJz5g1/ObcqQ/7zif9FdDIYAQu3KDWw5Ct7spx/oki1o3ZwqqFDirM0depnLfLZRUYIuN/T53w==
-X-Received: by 2002:a17:90b:8d8:b0:1dc:932d:3108 with SMTP id ds24-20020a17090b08d800b001dc932d3108mr2306855pjb.132.1651705370641;
-        Wed, 04 May 2022 16:02:50 -0700 (PDT)
-Received: from google.com ([2620:15c:211:201:8435:b3e7:62fc:4dfa])
-        by smtp.gmail.com with ESMTPSA id u20-20020aa78394000000b0050dc76281a7sm8776540pfm.129.2022.05.04.16.02.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 May 2022 16:02:50 -0700 (PDT)
-Sender: Minchan Kim <minchan.kim@gmail.com>
-Date:   Wed, 4 May 2022 16:02:48 -0700
-From:   Minchan Kim <minchan@kernel.org>
-To:     Alexey Romanov <avromanov@sberdevices.ru>
-Cc:     ngupta@vflare.org, senozhatsky@chromium.org,
-        linux-block@vger.kernel.org, axboe@chromium.org,
-        kernel@sberdevices.ru, linux-kernel@vger.kernel.org,
-        mnitenko@gmail.com, Dmitry Rokosov <ddrokosov@sberdevices.ru>
-Subject: Re: [PATCH v4] zram: remove double compression logic
-Message-ID: <YnMGGMitdYg/5e4z@google.com>
-References: <20220504121243.63407-1-avromanov@sberdevices.ru>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=ILzkKB4GFyvmkKkoAzfRz5MTJCTm65HgHQFqL1jHiLk=;
+        b=7USB4VwZmulOhhwvONUG5EBKA0cdVBFQEEfSl5EEcXH8AOA+RWYtf88VmDnpOoO79I
+         BHFqIygWHRNBvipFkaTOe9wd/xxLjiq6jdpLm18zzPjV25VWa/LW6MzClcEwR1NNMtaY
+         dYogMh/4QIOABJW7LHeEFDZHHc1isdr5ZQixanHlVIro7GsNy5hFauMekhQYnTZA1a24
+         2PzOuIiFtLT2EaaTrpn19XLqGKvuybGX6ENUO4rHDlrguEXfXnTmxAn9GP+TFx6OzIz3
+         vVML2keZssOkXEkNCCUq3L7TV5J9/o+MwUv9C3jsN0adJHi1veIK2/I61L/l2aVtJbfM
+         QzIg==
+X-Gm-Message-State: AOAM531mq39Lg2uiOIRiQiy/GOmzekNyxu8wnmBzFJprcQg8IKJ0PI3T
+        +b2Ju5OR6O/Jn+g/Z28/oRM=
+X-Google-Smtp-Source: ABdhPJzKlDN42/enHfqoRythPwvPy3t4d9tW0TI2VEKciXivlkHqQmLUxBKJM0dT2fP8ZO9eepHOjQ==
+X-Received: by 2002:a05:6638:1346:b0:32b:71ec:3a74 with SMTP id u6-20020a056638134600b0032b71ec3a74mr6466213jad.270.1651705491546;
+        Wed, 04 May 2022 16:04:51 -0700 (PDT)
+Received: from ?IPV6:2600:1700:2442:6db0:5871:54:c73e:3c22? ([2600:1700:2442:6db0:5871:54:c73e:3c22])
+        by smtp.gmail.com with ESMTPSA id b35-20020a05663838a300b0032b3a781741sm73199jav.5.2022.05.04.16.04.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 04 May 2022 16:04:51 -0700 (PDT)
+Message-ID: <cca4e4ae-0a37-83ea-c740-1085b59a3e1c@gmail.com>
+Date:   Wed, 4 May 2022 18:04:49 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220504121243.63407-1-avromanov@sberdevices.ru>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2 0/2] begin KTAP spec v2 process
+Content-Language: en-US
+To:     David Gow <davidgow@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Kees Cook <keescook@chromium.org>, Tim.Bird@sony.com,
+        Brendan Higgins <brendanhiggins@google.com>
+Cc:     Jonathan Corbet <corbet@lwn.net>, rmr167@gmail.com,
+        guillaume.tucker@collabora.com, dlatypov@google.com,
+        kernelci@groups.io, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220504225152.1451440-1-frowand.list@gmail.com>
+From:   Frank Rowand <frowand.list@gmail.com>
+In-Reply-To: <20220504225152.1451440-1-frowand.list@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 04, 2022 at 03:12:43PM +0300, Alexey Romanov wrote:
-> The 2nd trial allocation under per-cpu presumption has been
-> used to prevent regression of allocation failure. However, it
-> makes trouble for maintenance without significant benefit.
-> The slowpath branch is executed extremely rarely: getting
-> there is problematic. Therefore, we delete this branch.
-
-Let's add about the stable_write, too in the description.
-
-
-"Since b09ab054b69b, zram has used QUEUE_FLAG_STABLE_WRITES to prevent
-buffer change between 1st and 2nd memory allocations. Since we remove
-second trial memory allocation logic, we could remove the STABLE_WRITES
-flag because there is no change buffer to be modified under us"
-
+On 5/4/22 17:51, frowand.list@gmail.com wrote:
+> From: Frank Rowand <frank.rowand@sony.com>
 > 
-> Signed-off-by: Alexey Romanov <avromanov@sberdevices.ru>
-> Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
+> The process to create version 2 of the KTAP Specification is documented
+> in email discussions.  I am attempting to capture this information at
+> 
+>    https://elinux.org/Test_Results_Format_Notes#KTAP_version_2
+> 
+> I am already not following the suggested process, which says:
+> "...please try to follow this principal of one major topic per email
+> thread."  I think that is ok in this case because the two patches
+> are related and (hopefully) not controversial.
+> 
+> Changes since patch version 1:
+>    - drop patch 1/2.  Jonathan Corbet has already applied this patch
+>      into version 1 of the Specification
+>    - rename patch 2/2 to patch 1/2, with updated patch comment
+>    - add new patch 2/2
+> 
+> Frank Rowand (2):
+>   ktap_v2: change version to 2-rc in KTAP specification
+>   ktap_v2: change "version 1" to "version 2" in examples
+> 
+>  Documentation/dev-tools/ktap.rst | 25 +++++++++++++------------
+>  1 file changed, 13 insertions(+), 12 deletions(-)
+> 
 
-Other than that, looks good to me.
-
-Acked-by: Minchan Kim <minchan@kernel.org>
-
-Please send the updated patch again with To: Andrew Morton <akpm@linux-foundation.org>
-with keeping Ccing.
+I should note that I will be maintaining a branch of the KTAP Specification version 2
+patches and that they will not be submitted to mainline until we agree on the final
+content of version 2.

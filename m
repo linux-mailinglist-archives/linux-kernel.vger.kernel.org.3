@@ -2,85 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F57051A3EC
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 17:22:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 818B251A3ED
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 17:23:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352337AbiEDP0P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 11:26:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50864 "EHLO
+        id S1351935AbiEDP1J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 11:27:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352277AbiEDPZ5 (ORCPT
+        with ESMTP id S229902AbiEDP1I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 11:25:57 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94FCA44A0A;
-        Wed,  4 May 2022 08:22:19 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id g20so2084189edw.6;
-        Wed, 04 May 2022 08:22:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=xTYBUgx4sIq3qSVsjgl0przbRExfOFSCf3/4HQ5y1Uc=;
-        b=Tg8Bx/C6xSkcoO2dnyBeqWLtw2X4t7JrowzuBljo19KkSRX3m38bUXkupa3z1LKIYj
-         lDc8dTcPIaGDiX8W5KxFNIyHS5gvtVITsZz5B0sxg6t6qFqj8XmvaUZKitBipDise3vG
-         zloRxSRT4SrmBSzVIvtpBZBpluOGNuOOCbkwR9MDxZxTkD56RomzQqgffTRXpUBZ8ege
-         EWkhyLiMvel0CWoo7osXQxbTKp1qYa/QYtC3hy4j59fctlVsilNKhTrkP7lM+JRKigJF
-         OGROArQqHuYpH/tamBr4G2HaA24v8QKypOjDCBqglcJNUxpg+C9EJEyksuZJ2hV58FKV
-         GXRA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=xTYBUgx4sIq3qSVsjgl0przbRExfOFSCf3/4HQ5y1Uc=;
-        b=QugPl+C3f4g+5G2jM56uheT6bO7KCnQQ3w7t18r9bE57umqx0TlWvBnwzKgVH+i8rW
-         KPTr/kh52aAFgzTq3bYVh9GiexH2cV0TdH9kRD8nZmhbeyxk4QzQDMkOIKaE5rYSjTrD
-         p/W4bg3IprGBCgLmWccyJ9J07EaH5fszUHiY2W0TR0HvBiKonAEfKCDOT4AcuBaU6jNS
-         kvD2iXkmQJ1N/QjSNvPMIgnfdFv1gZYr0RwVDbOlpSC/Bzzo61CzA7Iayd6GnE0nTzpE
-         hwpUEMGmsn1jQ4Gq99RKs7WuSzGZ2sfCrPutDpp4E9oErp00Sbkwhiv/C5CpsJ4gKLX5
-         6VAw==
-X-Gm-Message-State: AOAM533LN8jm7ASmmOGpgbMNcklzBGXHsVDjdKA7tUURkJdSUKV4Wvg0
-        wtMtJA8FTP+ohzRvOZs8MtY=
-X-Google-Smtp-Source: ABdhPJwQSHC3W2lpy/MOReI9kMJhEDuuR09hgP0Zb7GTtVs88FaRrxHsHhn/RqOQZsC5VpzSXtF99w==
-X-Received: by 2002:a05:6402:12cd:b0:426:16f:c135 with SMTP id k13-20020a05640212cd00b00426016fc135mr23796449edx.297.1651677738235;
-        Wed, 04 May 2022 08:22:18 -0700 (PDT)
-Received: from skbuf ([188.25.160.86])
-        by smtp.gmail.com with ESMTPSA id jx4-20020a170907760400b006f3ef214da3sm5739421ejc.9.2022.05.04.08.22.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 May 2022 08:22:17 -0700 (PDT)
-Date:   Wed, 4 May 2022 18:22:16 +0300
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Frank Wunderlich <linux@fw-web.de>
-Cc:     linux-mediatek@lists.infradead.org,
-        linux-rockchip@lists.infradead.org,
-        Frank Wunderlich <frank-w@public-files.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Peter Geis <pgwipeout@gmail.com>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [RFC v2 3/4] net: dsa: mt7530: get cpu-port via dp->cpu_dp
- instead of constant
-Message-ID: <20220504152216.747ckl3km7vbep4s@skbuf>
-References: <20220430130347.15190-1-linux@fw-web.de>
- <20220430130347.15190-4-linux@fw-web.de>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220430130347.15190-4-linux@fw-web.de>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        Wed, 4 May 2022 11:27:08 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FFB341318
+        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 08:23:32 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E904EB826BD
+        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 15:23:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A952C385A5;
+        Wed,  4 May 2022 15:23:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651677809;
+        bh=ktJHAAfxXY27F4Yp0pVOFZhlUjZRdnCIMDE+o9mcaSc=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Wf/i3XzvW7iUXulwTOOL76y5ntY2o/iZzlM7DltPzIOvHdDuYW8HHcuc2aVasFSrX
+         SkjKm6Wvv3MhL9TGp012sDM+fPVHy1+flzdjIVPFzBnVUsp+nDdzzxz/MLh0+cy/If
+         nWOhDXTQlG1MoQPNJ6jSQsdJGrJuGBo74GAUFkAXSgHzeouIe4SD9q1SZwlllvTYfR
+         whAlki5jIkAsUXS1pHxGR4PZTtksbMoDE9Sqqlmlghj3swVeelD8PmFbI3MxXq5l5m
+         Hoy75fcqSulg9leoTxV1K+5q6Ym3nBY9Vxrtuef0mJSCW+eXvL6js7GYW3AtrAqmwY
+         QFSYZzrqzjmsA==
+Date:   Thu, 5 May 2022 00:23:25 +0900
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     x86@kernel.org, jpoimboe@redhat.com, linux-kernel@vger.kernel.org,
+        Masami Hiramatsu <mhiramat@kernel.org>
+Subject: Re: [PATCH] objtool: Fix STACK_FRAME_NON_STANDARD reloc type
+Message-Id: <20220505002325.f29a5deaebb77549b80d59ce@kernel.org>
+In-Reply-To: <YmvTbN966XmLSZk+@hirez.programming.kicks-ass.net>
+References: <20220429092024.GT2731@worktop.programming.kicks-ass.net>
+        <YmvTbN966XmLSZk+@hirez.programming.kicks-ass.net>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-10.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,16 +56,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Apr 30, 2022 at 03:03:46PM +0200, Frank Wunderlich wrote:
-> From: Frank Wunderlich <frank-w@public-files.de>
-> 
-> Replace last occurences of hardcoded cpu-port by cpu_dp member of
-> dsa_port struct.
-> 
-> Now the constant can be dropped.
-> 
-> Suggested-by: Vladimir Oltean <olteanv@gmail.com>
-> Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
-> ---
+On Fri, 29 Apr 2022 14:00:44 +0200
+Peter Zijlstra <peterz@infradead.org> wrote:
 
-Reviewed-by: Vladimir Oltean <olteanv@gmail.com>
+> On Fri, Apr 29, 2022 at 11:20:24AM +0200, Peter Zijlstra wrote:
+> > 
+> > STACK_FRAME_NON_STANDARD results in inconsistent relocation types
+> > depending on .c or .S usage:
+> > 
+> >   Relocation section '.rela.discard.func_stack_frame_non_standard' at offset 0x3c01090 contains 5 entries:
+> >   Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
+> >   0000000000000000  00020c2200000002 R_X86_64_PC32          0000000000047b40 do_suspend_lowlevel + 0
+> >   0000000000000008  0002461e00000001 R_X86_64_64            00000000000480a0 machine_real_restart + 0
+> >   0000000000000010  0000001400000001 R_X86_64_64            0000000000000000 .rodata + b3d4
+> >   0000000000000018  0002444600000002 R_X86_64_PC32          00000000000678a0 __efi64_thunk + 0
+> >   0000000000000020  0002659d00000001 R_X86_64_64            0000000000113160 __crash_kexec + 0
+> 
+> So that weird .rodata entry is optprobe_template_func.
+> 
+> It being in .rodata also means it's not validated and there is no ORC
+> data generated, is that all intentional? The changelog for:
+> 
+>   877b145f0f47 ("x86/kprobes: Move trampoline code into RODATA")
+> 
+> doesn't really say anything useful about any of that :/
+
+This commit was introduced just for reducing attack surface (the
+trampoline code is NOT executed but just copied into trampoline
+buffers), but if the ORC unwinder doesn't work correctly, please
+revert it.
+I think there is no functional change.
+
+Thanks,
+
+-- 
+Masami Hiramatsu <mhiramat@kernel.org>

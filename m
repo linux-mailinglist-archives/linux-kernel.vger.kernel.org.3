@@ -2,90 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F734519946
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 10:08:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D673451994A
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 10:09:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346057AbiEDILw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 04:11:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41662 "EHLO
+        id S1346067AbiEDINZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 04:13:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346022AbiEDILr (ORCPT
+        with ESMTP id S1346022AbiEDINV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 04:11:47 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49B4822500;
-        Wed,  4 May 2022 01:08:11 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A5EFBB82299;
-        Wed,  4 May 2022 08:08:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE971C385A4;
-        Wed,  4 May 2022 08:08:07 +0000 (UTC)
-Date:   Wed, 4 May 2022 09:08:03 +0100
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Christoffer Dall <cdall@cs.columbia.edu>,
-        Will Deacon <will@kernel.org>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Oliver Upton <oupton@google.com>
-Subject: Re: linux-next: manual merge of the kvm-arm tree with the arm64 tree
-Message-ID: <YnI0Y/rF9gdVi5bV@arm.com>
-References: <20220504143529.4060ab27@canb.auug.org.au>
- <877d71ixpc.wl-maz@kernel.org>
+        Wed, 4 May 2022 04:13:21 -0400
+Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 679982250D;
+        Wed,  4 May 2022 01:09:46 -0700 (PDT)
+Received: by mail-io1-xd31.google.com with SMTP id h85so713628iof.12;
+        Wed, 04 May 2022 01:09:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Lu0+Qy04jOfWQIM0Gy8rraQtjHpXPEO19LjLG52mw9o=;
+        b=USH7ZZ1LQxTWexyjMl5Br1eNEI8WY2FaP7ZmbZvKUCSYIzweA/CqteP5DPe//EJjN5
+         5Dr+jMlNHozgcGkiYnujYJ4cwtaL0BYYBiAyWJjFHJqE+bk1esuyjR4IEbzz/rSmmPCj
+         OEbjnV18sHMNz4e8fYSmBedf1THpyFIRLbgKpY70Pkl1BzyH7yvYfbxMNep1XMEt1V1x
+         ahxI+FblPLUydAYyUVYDB6rGf3aYgAhQot0cJNDqNprViM+9uLdD1IJVAPa/1tFSyQwr
+         4ykPkTT+a9Wj8LLIOvviFYk+pCNn8fh2TYo2zduaLt5d8pjvIhYrXJ19PIeNGzpDkXZo
+         bbow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Lu0+Qy04jOfWQIM0Gy8rraQtjHpXPEO19LjLG52mw9o=;
+        b=Oz40c/M6+E4DUfBy0P9o5+eSp/TCVcJz538R8MBH296iPElrZY/SC9FO7vava6SLUR
+         FdqdafpWNupiJsBuIQ+d1oN7OFOatYsuFfQmOnOQ3mUXVPZlFPStI1uB4yKUB2rAIaoU
+         GBRvm+jSOAsA6RIMSOEVrqrDAROq2B3Kf9pVyx9VgOEKLUIcXrkFX0AV+BjU/uF9sCtp
+         KG4c/lZoI0cin2L+rkmY+GcdmuXiz5YUwJi78320x0AQpqhL/M1ryxTRXBBzTd8cXyjo
+         6H81yrfWzAiipEOBxxILWE0d+A8qeTueSO8YNuwClbl1QFnPYO2fWOpT0h4cv5mKhG1X
+         ZwmQ==
+X-Gm-Message-State: AOAM532BEmEz1wTwhL7kN7KTnlVx8/kVW+f3UoZc0osUjLvjDDrDym4e
+        SpVja5OT+SpQ6gQMukGtMDg209Xx0k21tXQC9CrFkHZ3T08=
+X-Google-Smtp-Source: ABdhPJzlbXuZcZ7lFZxvsNXNPvutssuzEIO//oGx7vMAwvE2mWagneIY//QqfdB3Ib+6SyZN37tutH53ntzIL2i6qDw=
+X-Received: by 2002:a02:c6af:0:b0:32a:f5f6:34bc with SMTP id
+ o15-20020a02c6af000000b0032af5f634bcmr8955794jan.186.1651651785880; Wed, 04
+ May 2022 01:09:45 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <877d71ixpc.wl-maz@kernel.org>
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220502093625.GA23225@kernel.org> <CAGS_qxoc=AnkzUtaFpJvF08Z_Z15h9sZxYNQT5-S9C7aM4poEg@mail.gmail.com>
+In-Reply-To: <CAGS_qxoc=AnkzUtaFpJvF08Z_Z15h9sZxYNQT5-S9C7aM4poEg@mail.gmail.com>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Wed, 4 May 2022 10:09:34 +0200
+Message-ID: <CANiq72m70q+zviHVNSV_AEwOByVBiMuSQL5vyo2UMMpD-vd+_Q@mail.gmail.com>
+Subject: Re: [PATCH] kunit: take `kunit_assert` as `const`
+To:     Daniel Latypov <dlatypov@google.com>
+Cc:     Miguel Ojeda <ojeda@kernel.org>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, kunit-dev@googlegroups.com,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 04, 2022 at 08:06:07AM +0100, Marc Zyngier wrote:
-> On Wed, 04 May 2022 05:35:29 +0100,
-> Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> > 
-> > [1  <text/plain; US-ASCII (quoted-printable)>]
-> > Hi all,
-> > 
-> > Today's linux-next merge of the kvm-arm tree got a conflict in:
-> > 
-> >   arch/arm64/kvm/sys_regs.c
-> > 
-> > between commit:
-> > 
-> >   0b12620fddb8 ("KVM: arm64: Treat ESR_EL2 as a 64-bit register")
-> > 
-> > from the arm64 tree and commits:
-> > 
-> >   e65197666773 ("KVM: arm64: Wire up CP15 feature registers to their AArch64 equivalents")
-> >   9369bc5c5e35 ("KVM: arm64: Plumb cp10 ID traps through the AArch64 sysreg handler")
-> > 
-> > from the kvm-arm tree.
-> > 
-> > I fixed it up (see below) and can carry the fix as necessary. This
-> > is now fixed as far as linux-next is concerned, but any non trivial
-> > conflicts should be mentioned to your upstream maintainer when your tree
-> > is submitted for merging.  You may also want to consider cooperating
-> > with the maintainer of the conflicting tree to minimise any particularly
-> > complex conflicts.
-> 
-> Thanks Stephen.
-> 
-> I've added a fix to address the 'u32 esr' instances that were
-> introduced by Oliver's series. Catalin, do you want me to merge the
-> ESR series in the kvm-arm tree in order to avoid the minor conflict?
+Hi Daniel,
 
-You could merge the arm64 for-next/esr-elx-64-bit branch, it already has
-a couple of KVM patches.
+On Mon, May 2, 2022 at 9:44 PM Daniel Latypov <dlatypov@google.com> wrote:
+>
+> Reviewed-by: Daniel Latypov <dlatypov@google.com>
+>
+> Thanks for this, the code definitely should have been this way from the start.
+>
+> I had wanted to make this change but mistakenly thought the format
+> func took it via non-const for some reason.
+> I must have misread it once and got it into my head that we were
+> leaving the door open for mutable child structs (which sounds like a
+> bad idea).
 
--- 
-Catalin
+Thanks for reviewing it so quickly! Yeah, I was unsure too if there
+was an external reason such as some future plan to use the mutability
+as you mention or maybe some out-of-tree user was relying on it
+already.
+
+But I thought it would be best to make it stricter until it is
+actually needed (if ever); or if there is an actual user for
+mutability, it should be documented/noted in-tree.
+
+It also simplifies a tiny bit a Rust-side call to
+`kunit_do_failed_assertion` that I am using within generated Rust
+documentation tests.
+
+Cheers,
+Miguel

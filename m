@@ -2,86 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE32B51B197
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 00:04:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9212851B199
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 00:06:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358593AbiEDWIT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 18:08:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59706 "EHLO
+        id S1356747AbiEDWJz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 18:09:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238158AbiEDWIP (ORCPT
+        with ESMTP id S1379048AbiEDWJi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 18:08:15 -0400
-Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 253D550E1A
-        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 15:04:38 -0700 (PDT)
-Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-2f863469afbso31085447b3.0
-        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 15:04:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=zqlpLuQfBXsLF0pGTV7F8Lqm0D+MDLdu0OmDcVtwIY4=;
-        b=uOk/SO4PYBMT+8q1dA1TD5ptS5xd/kbbzQLYE6iespzhwRZycMKu5S3Qhyiz6F+i+1
-         3cOJMgPCVoECy5RD3/Qtqqi0Dgd8cNVtxDpH7cyysA9bWJtaBzWNzqAT35Kh8PpgeUp0
-         LEwxjERbI/QnoiGBnKxyEE3BpPH5Cdrf+zKObdobq0SKBeWIaWkut6AZ2IU6fQ/sYQ6c
-         nTwHHjF0AO+2SNGg7wY3qPOsZREgDpQwjEuQq+eL8Uzo9fApS54erILmrbEOxlBVyUSs
-         NovjMz5MjUjUdq+1l8a+JM44tWm5RCCtn/vOHA36VSTza1cRyofX77vYLvS1C7rEPbK8
-         lHJQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=zqlpLuQfBXsLF0pGTV7F8Lqm0D+MDLdu0OmDcVtwIY4=;
-        b=JJ3O3GpZm8P2R2FeOOud/MGRkQDGi4fO4ckJprD+J9Ips01MzwL0VMwX9F88huVqmc
-         v1MUoImeOfj1py3ChN2UPJQ4Lh/4o3GNOwufQGqsoNZk01gB0JIbOA8fliub05+4MWVb
-         JkLu7b6yqVvwg+wmhjaxbIM9moxhbbveN9hrbD7ICEv3AmClJxR25UAHiu6eiTw74AKV
-         2kfwH5U8t648FUGCEyWop75pv/8NN1Qa5MJ0WVKg4v0wT4ZPHPcN1Iv1wLLzs+GGKp+m
-         zhLnjUUl9vwv3D3qewGxj3uY6HYzPdFL6CgjxGX/wlprzEaOTOXs94JC9rYjK3TP5qqv
-         OVfw==
-X-Gm-Message-State: AOAM530Dqltox/k6wmoWSWC7nATxtXuXZWsOVvhjkbBK4ZqAKDuNIi2f
-        +2XFS23hoZXiSVikyTvDcJ2Qv0SQeMIayrJ9eMsTSA==
-X-Google-Smtp-Source: ABdhPJwa3Zp+INs9eIYA3vmkO66opZgtx8fKINwCtGXZ3pcba1YTMqSjlpx5Z4gASQOH6KsNIBd0fjydcV+hsZ93qI4=
-X-Received: by 2002:a0d:ddc6:0:b0:2f8:a506:a5c0 with SMTP id
- g189-20020a0dddc6000000b002f8a506a5c0mr22606554ywe.140.1651701877405; Wed, 04
- May 2022 15:04:37 -0700 (PDT)
+        Wed, 4 May 2022 18:09:38 -0400
+Received: from mout02.posteo.de (mout02.posteo.de [185.67.36.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEB3011A30
+        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 15:05:59 -0700 (PDT)
+Received: from submission (posteo.de [185.67.36.169]) 
+        by mout02.posteo.de (Postfix) with ESMTPS id 6554D240107
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 00:05:57 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.de; s=2017;
+        t=1651701957; bh=ULZZ+k26KKjcsFqAjZrCBvWd2aE7gAOo79lBw+9K7RA=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Mj0ixB7Cx2Fo2Tjdg89gHmvZlpDrCkY1nH9NZpPSy5P1xzWWI0/fkQftmGPGtD9Sb
+         U6U10z5b+uCJl5uWlzQLUXZy/O5ksv9xIf8+xgmWyUqcS16aeSULtYCv3iVLga3KtE
+         S0GCawRfSrWEcnzduDG4dz1PqXNw1EqP8JHv6rAqHxFUFsHpR855fyBmqFoYtKw2bS
+         o9hZT9Xy88pDuCc8sAUFAq2eS5aO73hGW/xlzJJGqy1mx3+3olE+zTbni9yKQprUor
+         c10hoGCQh/UZJxHjoKFKpaGGUg8DChuG2VZ4lz30jC9zh7Im65ksazELNF5bb06AZ1
+         QHeP2Z3KS1NTw==
+Received: from customer (localhost [127.0.0.1])
+        by submission (posteo.de) with ESMTPSA id 4KtrW76HfFz6tmP;
+        Thu,  5 May 2022 00:05:55 +0200 (CEST)
+From:   Manuel Ullmann <labre@posteo.de>
+To:     Igor Russkikh <irusskikh@marvell.com>
+Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        regressions@lists.linux.dev, davem@davemloft.net,
+        ndanilov@marvell.com, kuba@kernel.org, pabeni@redhat.com,
+        Jordan Leppert <jordanleppert@protonmail.com>,
+        Holger =?utf-8?Q?Hoffst=C3=A4tte?= 
+        <holger@applied-asynchrony.com>, koo5 <kolman.jindrich@gmail.com>
+Subject: [PATCH] net: atlantic: always deep reset on pm op, fixing null
+ deref regression
+Date:   Wed, 04 May 2022 22:06:12 +0000
+Message-ID: <87czgt2bsb.fsf@posteo.de>
 MIME-Version: 1.0
-References: <20220502153114.283618-1-fabien.dessenne@foss.st.com>
-In-Reply-To: <20220502153114.283618-1-fabien.dessenne@foss.st.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Thu, 5 May 2022 00:04:26 +0200
-Message-ID: <CACRpkdZNS4N9q5whUT3fHh6M1xzuWYWGfr_EvRuDePpNP4QPzg@mail.gmail.com>
-Subject: Re: [PATCH] pinctrl: stm32: prevent the use of the secure protected pins
-To:     Fabien Dessenne <fabien.dessenne@foss.st.com>
-Cc:     Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        linux-gpio@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 2, 2022 at 5:31 PM Fabien Dessenne
-<fabien.dessenne@foss.st.com> wrote:
+From a3eccd32c618fe4b4f5c537cd83ba5611149623e Mon Sep 17 00:00:00 2001
+Date: Wed, 4 May 2022 21:30:44 +0200
 
-> The hardware denies any access from the Linux non-secure world to the
-> secure-protected pins. Hence, prevent any driver to request such a pin.
->
-> Mark the secure-protected GPIO lines as invalid (.init_valid_mask) and
-> prevent the pinmux request / pinconf setting operations.
-> Identify the secure pins with "NO ACCESS" in the pinconf sysfs.
->
-> Signed-off-by: Fabien Dessenne <fabien.dessenne@foss.st.com>
+The impact of this regression is the same for resume that I saw on
+thaw: the kernel hangs and nothing except SysRq rebooting can be done.
 
-Patch applied!
+The null deref occurs at the same position as on thaw.
+BUG: kernel NULL pointer dereference
+RIP: aq_ring_rx_fill+0xcf/0x210 [atlantic]
 
-Yours,
-Linus Walleij
+Fixes regression in cbe6c3a8f8f4 ("net: atlantic: invert deep par in
+pm functions, preventing null derefs"), where I disabled deep pm
+resets in suspend and resume, trying to make sense of the
+atl_resume_common deep parameter in the first place.
+
+It turns out, that atlantic always has to deep reset on pm operations
+and the parameter is useless. Even though I expected that and tested
+resume, I screwed up by kexec-rebooting into an unpatched kernel, thus
+missing the breakage.
+
+This fixup obsoletes the deep parameter of atl_resume_common, but I
+leave the cleanup for the maintainers to post to mainline.
+
+PS: I'm very sorry for this regression.
+
+Fixes: cbe6c3a8f8f4315b96e46e1a1c70393c06d95a4c
+Link: https://lore.kernel.org/regressions/9-Ehc_xXSwdXcvZqKD5aSqsqeNj5Izco4=
+MYEwnx5cySXVEc9-x_WC4C3kAoCqNTi-H38frroUK17iobNVnkLtW36V6VWGSQEOHXhmVMm5iQ=
+=3D@protonmail.com/
+Reported-by: Jordan Leppert <jordanleppert@protonmail.com>
+Reported-by: Holger Hoffst=C3=A4tte <holger@applied-asynchrony.com>
+CC: <stable@vger.kernel.org> # 5.17.5
+CC: <stable@vger.kernel.org> # 5.15.36
+CC: <stable@vger.kernel.org> # 5.10.113
+Signed-off-by: Manuel ULlmann <labre@posteo.de>
+---
+ drivers/net/ethernet/aquantia/atlantic/aq_pci_func.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/net/ethernet/aquantia/atlantic/aq_pci_func.c b/drivers=
+/net/ethernet/aquantia/atlantic/aq_pci_func.c
+index 3a529ee8c834..831833911a52 100644
+--- a/drivers/net/ethernet/aquantia/atlantic/aq_pci_func.c
++++ b/drivers/net/ethernet/aquantia/atlantic/aq_pci_func.c
+@@ -449,7 +449,7 @@ static int aq_pm_freeze(struct device *dev)
+=20
+ static int aq_pm_suspend_poweroff(struct device *dev)
+ {
+-	return aq_suspend_common(dev, false);
++	return aq_suspend_common(dev, true);
+ }
+=20
+ static int aq_pm_thaw(struct device *dev)
+@@ -459,7 +459,7 @@ static int aq_pm_thaw(struct device *dev)
+=20
+ static int aq_pm_resume_restore(struct device *dev)
+ {
+-	return atl_resume_common(dev, false);
++	return atl_resume_common(dev, true);
+ }
+=20
+ static const struct dev_pm_ops aq_pm_ops =3D {
+
+base-commit: 672c0c5173427e6b3e2a9bbb7be51ceeec78093a
+--=20
+2.35.1

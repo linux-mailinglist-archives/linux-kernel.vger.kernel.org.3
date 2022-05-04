@@ -2,47 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88CA151A5CE
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 18:44:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35DC151A7BA
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:04:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353596AbiEDQrc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 12:47:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47786 "EHLO
+        id S1355361AbiEDRER (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 13:04:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353588AbiEDQra (ORCPT
+        with ESMTP id S1354608AbiEDQ6y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 12:47:30 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C475546B14;
-        Wed,  4 May 2022 09:43:53 -0700 (PDT)
-Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1nmI6O-0001sG-7M; Wed, 04 May 2022 18:43:48 +0200
-Message-ID: <29f90334-53dc-4926-fc38-420b4d024f1b@leemhuis.info>
-Date:   Wed, 4 May 2022 18:43:47 +0200
+        Wed, 4 May 2022 12:58:54 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55D511FCC9;
+        Wed,  4 May 2022 09:50:47 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0AA20B82792;
+        Wed,  4 May 2022 16:50:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D118C385A5;
+        Wed,  4 May 2022 16:50:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1651683044;
+        bh=Q0Kg/EArx821a5Fy8d/3If2cJ8xy+zC5AZDlUXUfY4k=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=NMPAbiInIlGU2BJy4IOVg89jmWTenxY9sTdovHUCngY1P9H+Ud2dj4mVJG2UbnYJc
+         4uYcQLb/mP7WhyBHzKfDU/eEa6eB99gd0syYXrO2bPz1cj/wY46aMq6+C+eDTl9YDU
+         7Z4fsF5tNJOSkFAH47OEOlpj5uiNGFPgW889E5z8=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>,
+        Guo Ren <guoren@kernel.org>,
+        Palmer Dabbelt <palmer@rivosinc.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>
+Subject: [PATCH 5.10 035/129] riscv: patch_text: Fixup last cpu should be master
+Date:   Wed,  4 May 2022 18:43:47 +0200
+Message-Id: <20220504153024.031128517@linuxfoundation.org>
+X-Mailer: git-send-email 2.36.0
+In-Reply-To: <20220504153021.299025455@linuxfoundation.org>
+References: <20220504153021.299025455@linuxfoundation.org>
+User-Agent: quilt/0.66
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: Regression: CIFS umount fails since 14302ee33 with some servers
- (exit code 32)
-Content-Language: en-US
-To:     Paulo Alcantara <pc@cjr.nz>, Moritz Duge <duge@pre-sense.de>
-Cc:     "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
-        Aurelien Aptel <aaptel@suse.com>,
-        Ronnie Sahlberg <lsahlber@redhat.com>,
-        Steve French <stfrench@microsoft.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "linux-cifs@vger.kernel.org" <linux-cifs@vger.kernel.org>
-References: <715d745d-5a85-092a-68c2-b9b1dd8ad53e@leemhuis.info>
- <5fc82f02-be3a-6bb4-0800-aaf19a782655@leemhuis.info>
- <64a7de55-8f93-8e7a-4102-26f7d4dbe1dc@pre-sense.de> <87zgjx1d09.fsf@cjr.nz>
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
-In-Reply-To: <87zgjx1d09.fsf@cjr.nz>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1651682633;2b562ad7;
-X-HE-SMSGID: 1nmI6O-0001sG-7M
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -51,23 +56,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04.05.22 18:25, Paulo Alcantara wrote:
-> Moritz Duge <duge@pre-sense.de> writes:
-> 
->> I'm still waiting for a reply from Paul.
-> 
-> The bug is currently being handled at [1].  Enzo has also asked you to
-> send us network traces in [2] and you haven't sent any, yet.
+From: Guo Ren <guoren@linux.alibaba.com>
 
-Many thx for the update.
+commit 8ec1442953c66a1d8462cccd8c20b7ba561f5915 upstream.
 
-> I'm not "Paul", BTW.
+These patch_text implementations are using stop_machine_cpuslocked
+infrastructure with atomic cpu_count. The original idea: When the
+master CPU patch_text, the others should wait for it. But current
+implementation is using the first CPU as master, which couldn't
+guarantee the remaining CPUs are waiting. This patch changes the
+last CPU as the master to solve the potential risk.
 
-Paulo, please accept my apologies, that was my fault.
+Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+Signed-off-by: Guo Ren <guoren@kernel.org>
+Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
+Reviewed-by: Masami Hiramatsu <mhiramat@kernel.org>
+Fixes: 043cb41a85de ("riscv: introduce interfaces to patch kernel code")
+Cc: stable@vger.kernel.org
+Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ arch/riscv/kernel/patch.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> [1] https://bugzilla.opensuse.org/show_bug.cgi?id=1194945
-> [2] https://bugzilla.opensuse.org/show_bug.cgi?id=1194945#c13
+--- a/arch/riscv/kernel/patch.c
++++ b/arch/riscv/kernel/patch.c
+@@ -100,7 +100,7 @@ static int patch_text_cb(void *data)
+ 	struct patch_insn *patch = data;
+ 	int ret = 0;
+ 
+-	if (atomic_inc_return(&patch->cpu_count) == 1) {
++	if (atomic_inc_return(&patch->cpu_count) == num_online_cpus()) {
+ 		ret =
+ 		    patch_text_nosync(patch->addr, &patch->insn,
+ 					    GET_INSN_LENGTH(patch->insn));
 
-#regzbot link: https://bugzilla.opensuse.org/show_bug.cgi?id=1194945
 
-Ciao, Thorsten

@@ -2,144 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 318E851A2CD
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 16:57:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C387A51A2D9
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 17:00:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351599AbiEDPBM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 11:01:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49748 "EHLO
+        id S1351616AbiEDPDf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 11:03:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240868AbiEDPBK (ORCPT
+        with ESMTP id S240868AbiEDPD1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 11:01:10 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 585771A816;
-        Wed,  4 May 2022 07:57:34 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 13BC91F745;
-        Wed,  4 May 2022 14:57:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1651676253; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=qyasICj/5JSCOXA5cYimIBnYtjDZxXjrA99Ky5I1g2E=;
-        b=r4k5ERPAeu7SFF3HNQ31NTb2paZ2Ea6oMcWqgL/xYLEoeC+sEQ4K64/T2QaipXscit25Fc
-        XnTLKhq3umhrtDFP5ZOZp7VU7/hNtppJEbMvhtXNfeTdj0EijNEoHHIWN+ccIJ0KrTM638
-        biVIblYdc1vQeTBbSrkqQZj6s+yfiWg=
-Received: from suse.cz (pathway.suse.cz [10.100.12.24])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id E8CED2C141;
-        Wed,  4 May 2022 14:57:32 +0000 (UTC)
-Date:   Wed, 4 May 2022 16:57:32 +0200
-From:   Petr Mladek <pmladek@suse.com>
-To:     Seth Forshee <sforshee@digitalocean.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        Sean Christopherson <seanjc@google.com>,
-        linux-kernel@vger.kernel.org, live-patching@vger.kernel.org,
-        kvm@vger.kernel.org
-Subject: Re: [PATCH v2] entry/kvm: Make vCPU tasks exit to userspace when a
- livepatch is pending
-Message-ID: <20220504145732.GD8069@pathway.suse.cz>
-References: <20220503174934.2641605-1-sforshee@digitalocean.com>
- <20220504130753.GB8069@pathway.suse.cz>
- <YnKEnqfxSyVmSGYx@do-x1extreme>
- <20220504142809.GC8069@pathway.suse.cz>
- <YnKRN1zXKuh/gIMl@do-x1extreme>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YnKRN1zXKuh/gIMl@do-x1extreme>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Wed, 4 May 2022 11:03:27 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8CE81A816;
+        Wed,  4 May 2022 07:59:51 -0700 (PDT)
+Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 244EoVHF011423;
+        Wed, 4 May 2022 14:59:41 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=7GPkhD6ejF79+x0aVVJzyr7brhgG0+/pPCooXUjO+wM=;
+ b=H3nI89bJQpqDXuFYzAn5J+mFEC/ZDQjC5MfZ0zIkWGp8fmL09o9d3N36Js5yIcAcMxBM
+ 6trunGjhZ2aTUbJvbyjo0IvTOUJuUpVBJQe8wYAjRRvue2ZppCJ1rrJTubNc+pZOdYLo
+ VO4tE9VHFxGb/qBkszbCySNA6ZCT4AVndvn4sF7F629bJsamkowwgoWVRRWnWSSbg92h
+ PCRE/W45ObFh13YxdbYsrakR9Q15a0+kj8QKtKjV8TiEY4D6DKJp7ul9Viwfe+OHkFmw
+ yxq5xywmFgvyaSBUdR2nVm8pG6zXmnRz9h8KIFjJYc9EjPPxBJHkE966mhUKpwA89xH7 WA== 
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fuukv876f-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 04 May 2022 14:59:41 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 244EqWQc013865;
+        Wed, 4 May 2022 14:59:37 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma06ams.nl.ibm.com with ESMTP id 3frvcj5uat-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 04 May 2022 14:59:37 +0000
+Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 244ExZ7G44499236
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 4 May 2022 14:59:35 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E6ED142042;
+        Wed,  4 May 2022 14:59:34 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6AAB742041;
+        Wed,  4 May 2022 14:59:34 +0000 (GMT)
+Received: from sig-9-145-49-14.uk.ibm.com (unknown [9.145.49.14])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed,  4 May 2022 14:59:34 +0000 (GMT)
+Message-ID: <5707aafecdd95c1e3bb12980adb52c62827f9dfc.camel@linux.ibm.com>
+Subject: Re: [RFC v2 25/39] pcmcia: add HAS_IOPORT dependencies
+From:   Niklas Schnelle <schnelle@linux.ibm.com>
+To:     Arnd Bergmann <arnd@kernel.org>, Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        linux-pci <linux-pci@vger.kernel.org>,
+        Dominik Brodowski <linux@dominikbrodowski.net>
+Date:   Wed, 04 May 2022 16:59:34 +0200
+In-Reply-To: <CAK8P3a02vidd7u5Kp6UJj=9tj_hFGL24SmzuNpDGu1GOa1w9+w@mail.gmail.com>
+References: <20220429135108.2781579-44-schnelle@linux.ibm.com>
+         <20220503233802.GA420374@bhelgaas>
+         <CAK8P3a02vidd7u5Kp6UJj=9tj_hFGL24SmzuNpDGu1GOa1w9+w@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: hjSJhBQyQf8ZUYl7FJVX4SPjh9SLLxB5
+X-Proofpoint-ORIG-GUID: hjSJhBQyQf8ZUYl7FJVX4SPjh9SLLxB5
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-04_04,2022-05-04_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
+ lowpriorityscore=0 mlxlogscore=999 mlxscore=0 phishscore=0 adultscore=0
+ priorityscore=1501 clxscore=1011 suspectscore=0 impostorscore=0
+ bulkscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2205040092
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 2022-05-04 09:44:07, Seth Forshee wrote:
-> On Wed, May 04, 2022 at 04:28:09PM +0200, Petr Mladek wrote:
-> > On Wed 2022-05-04 08:50:22, Seth Forshee wrote:
-> > > On Wed, May 04, 2022 at 03:07:53PM +0200, Petr Mladek wrote:
-> > > > On Tue 2022-05-03 12:49:34, Seth Forshee wrote:
-> > > > > A task can be livepatched only when it is sleeping or it exits to
-> > > > > userspace. This may happen infrequently for a heavily loaded vCPU task,
-> > > > > leading to livepatch transition failures.
-> > > > 
-> > > > The problem was solved by sending a fake signal, see the commit
-> > > > 0b3d52790e1cfd6b80b826 ("livepatch: Remove signal sysfs attribute").
-> > > > It was achieved by calling signal_wake_up(). It set TIF_SIGPENDING
-> > > > and woke the task. It interrupted the syscall and the task was
-> > > > transitioned when leaving to the userspace.
-> > > > 
-> > > > signal_wake_up() was later replaced by set_notify_signal(),
-> > > > see the commit 8df1947c71ee53c7e21 ("livepatch: Replace
-> > > > the fake signal sending with TIF_NOTIFY_SIGNAL infrastructure").
-> > > > The difference is that set_notify_signal() uses TIF_NOTIFY_SIGNAL
-> > > > instead of TIF_SIGPENDING.
-> > > > 
-> > > > The effect is the same when running on a real hardware. The syscall
-> > > > gets interrupted and exit_to_user_mode_loop() is called where
-> > > > the livepatch state is updated (task migrated).
-> > > > 
-> > > > But it works a different way in kvm where the task works are
-> > > > called in the guest mode and the task does not return into
-> > > > the user space in the host mode.
+On Wed, 2022-05-04 at 12:33 +0200, Arnd Bergmann wrote:
+> On Wed, May 4, 2022 at 1:38 AM Bjorn Helgaas <helgaas@kernel.org> wrote:
+> > On Fri, Apr 29, 2022 at 03:50:41PM +0200, Niklas Schnelle wrote:
+> > > In a future patch HAS_IOPORT=n will result in inb()/outb() and friends
+> > > not being declared. PCMCIA devices are either LEGACY_PCI devices
+> > > which implies HAS_IOPORT or require HAS_IOPORT.
 > > > 
-> > > > > --- a/kernel/entry/kvm.c
-> > > > > +++ b/kernel/entry/kvm.c
-> > > > > @@ -14,7 +14,12 @@ static int xfer_to_guest_mode_work(struct kvm_vcpu *vcpu, unsigned long ti_work)
-> > > > >  				task_work_run();
-> > > > >  		}
-> > > > >  
-> > > > > -		if (ti_work & _TIF_SIGPENDING) {
-> > > > > +		/*
-> > > > > +		 * When a livepatch is pending, force an exit to userspace
-> > > > > +		 * as though a signal is pending to allow the task to be
-> > > > > +		 * patched.
-> > > > > +		 */
-> > > > > +		if (ti_work & (_TIF_SIGPENDING | _TIF_PATCH_PENDING)) {
-> > > > >  			kvm_handle_signal_exit(vcpu);
+> > > Acked-by: Dominik Brodowski <linux@dominikbrodowski.net>
+> > > Co-developed-by: Arnd Bergmann <arnd@kernel.org>
+> > > Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
+> > > ---
+> > >  drivers/pcmcia/Kconfig | 2 +-
+> > >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > > 
+> > > diff --git a/drivers/pcmcia/Kconfig b/drivers/pcmcia/Kconfig
+> > > index 2ce261cfff8e..32b5cd324c58 100644
+> > > --- a/drivers/pcmcia/Kconfig
+> > > +++ b/drivers/pcmcia/Kconfig
+> > > @@ -5,7 +5,7 @@
+> > > 
+> > >  menuconfig PCCARD
+> > >       tristate "PCCard (PCMCIA/CardBus) support"
+> > > -     depends on !UML
+> > > +     depends on HAS_IOPORT
 > > 
-> > Another problem. Is it safe to call kvm_handle_signal_exit(vcpu)
-> > for kthreads?
-> > 
-> > kthreads have _TIF_PATCH_PENDING when they need the livepatch transition.
-> > But kthreads never leave kernel so we do not send the fake signal
-> > signals to them.
+> > I don't know much about PC Card.  Is there a requirement that these
+> > devices must use I/O port space?  If so, can you include a spec
+> > reference in the commit log?
 > 
-> xfer_to_guest_mode_handle_work() should only be getting called on user
-> threads running ioctl(KVM_RUN).
-
-Great!
-
-> > In this case, we should revert the commit 8df1947c71ee53c7e21
-> > ("livepatch: Replace the fake signal sending with TIF_NOTIFY_SIGNAL
-> > infrastructure"). The flag TIF_NOTIFY_SIGNAL clearly does not guarantee
-> > restarting the syscall or exiting to the user space with -EINTR.
-> > 
-> > It should solve this problem. And it looks like a cleaner solution
-> > to me.
+> I think for PCMCIA devices, the dependency makes sense because
+> all device drivers for PCMCIA devices need I/O ports.
 > 
-> It looks like that should fix the issue. I'll test to confirm.
+> For cardbus, we can go either way, I don't see any reference to
+> I/O ports in yenta_socket.c or the pccard core, so it would build
+> fine with or without I/O ports.
+> 
+> > I do see the PC Card spec, r8.1, sec 5.5.4.2.2 says:
+> > 
+> >   All CardBus PC Card adapters must support either memory-mapped I/O
+> >   or both memory-mapped I/O and I/O space. The selection will depend
+> >   largely on the system architecture the adapter is intended to be
+> >   used in. The requirement to also support memory-mapped I/O, if I/O
+> >   space is supported, is driven by the potential emergence of
+> >   memory-mapped I/O only cards. Supporting both modes may also
+> >   position the adapter to be sold into multiple system architectures.
+> > 
+> > which sounds like I/O space is optional.
+> 
+> An earlier version of the patch series had a separate
+> CONFIG_LEGACY_PCI that required CONFIG_HAS_IOPORT
+> here, which I think made this clearer:
+> 
+> Almost all architectures that support CONFIG_PCI also provide
+> HAS_IOPORT today (at least at compile time, if not at runtime),
+> with s390 as a notable exception. Any machines that have legacy
+> PCI device support will also have I/O ports because a lot of
+> legacy PCI cards used it, and any machine with a pc-card slot
+> should also support legacy PCI devices.
+> 
+> If we get new architectures without I/O space in the future, they
+> would certainly not care about supporting old cardbus devices.
+> 
+>         Arnd
 
-Even better solution would be what Eric suggested, see
-https://lore.kernel.org/r/87r159fkmp.fsf@email.froward.int.ebiederm.org
+I tested removing the HAS_IOPORT dependency on PCCARD thus ungating
+PCMCIA and CARDBUS. This then requires about 30 additional HAS_IOPORT
+dependencies to build my s390 allyesconfig.
 
-But we need to make sure that the syscall really gets restarted
-when the livepatch state is updated.
+The only exceptions I found that depends on PCMCIA and isn't otherwise
+dependend on ISA or a specific platform are USB_SL811_CS and
+PCMCIA_RAYCS (Aviator/Raytheon 2.4GHz wireless).
 
-Best Regards,
-Petr
+As for CARDBUS the only "depends on CARDBUS" is in
+drivers/net/ethernet/dec/tulip/Kconfig. Now I tested with allyesconfig
+which also sets CONFIG_TULIP_MMIO and with that the drivers there did
+compile. I guess one should then have "select TULIP_MMIO if
+!HAS_IOPORT" in the config NET_TULIP.
+
+So not sure, it seems unlikely we're going to see any new
+PCMCIA/CardBus device drivers added and that's a lot of churn for
+compile testing so few drivers but in theory it looks like it is
+possible to have non-I/O port PCMCIA/CardBus.
+
+Thanks,
+Niklas
+

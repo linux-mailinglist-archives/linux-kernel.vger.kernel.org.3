@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6B2D51A842
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:07:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C50E751A9BA
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:18:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357250AbiEDRKD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 13:10:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38238 "EHLO
+        id S1356908AbiEDRTK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 13:19:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355605AbiEDRAR (ORCPT
+        with ESMTP id S1356333AbiEDRFJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 13:00:17 -0400
+        Wed, 4 May 2022 13:05:09 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2B8F4B438;
-        Wed,  4 May 2022 09:51:55 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DC2C50B32;
+        Wed,  4 May 2022 09:54:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id ABFCA617E7;
-        Wed,  4 May 2022 16:51:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1041C385A4;
-        Wed,  4 May 2022 16:51:42 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2EA9A61505;
+        Wed,  4 May 2022 16:54:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5AA22C385BA;
+        Wed,  4 May 2022 16:54:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651683103;
-        bh=nMML2so8EdmjRvi1bx9EPmflZxJh2Wa6JT2EQtbEGSM=;
+        s=korg; t=1651683241;
+        bh=+ajv8gDEINzpPt5k/lZ7YsXmqVeb/TEI1e3IDVzr2uw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UbPSuXLmJDgNKokLWmxznFZr4zbgadgp2EL9e67IgrlyFW5Lgm9ZF+GixH8cZZUPo
-         hZAAk7yjYrwDMCGHs6UtLWGiC1JpltmnzZCvjh+AoYXKXpOWXa4cyeRbXNR4j7ownf
-         WfUAgHlwDJuHWqHYk4KQtUdQr+VLRNxKteLIcodk=
+        b=dMgOkPMFKeLZAF7jGYZ8YjqmwtXq7rOPhct9SO77hvcnqoBC/DQaYwRrU4lDgn52n
+         aIN8lY1S06ECRWEw0CgsmjoQ/1fmmFsxwYdzIz68/75ZLkHjdoNj/oZa+4Iri/Yd21
+         bj8FPwIXafHPNv+InZgMrvntNwwXQX+XKvaFdIrk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Johannes Thumshirn <johannes.thumshirn@wdc.com>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        Hans Holmberg <hans.holmberg@wdc.com>
-Subject: [PATCH 5.10 107/129] zonefs: Clear inode information flags on inode creation
+        stable@vger.kernel.org, Jonathan Lemon <jonathan.lemon@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 106/177] net: bcmgenet: hide status block before TX timestamping
 Date:   Wed,  4 May 2022 18:44:59 +0200
-Message-Id: <20220504153029.503397862@linuxfoundation.org>
+Message-Id: <20220504153102.722994656@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220504153021.299025455@linuxfoundation.org>
-References: <20220504153021.299025455@linuxfoundation.org>
+In-Reply-To: <20220504153053.873100034@linuxfoundation.org>
+References: <20220504153053.873100034@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,34 +56,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+From: Jonathan Lemon <jonathan.lemon@gmail.com>
 
-commit 694852ead287a3433126e7ebda397b242dc99624 upstream.
+[ Upstream commit acac0541d1d65e81e599ec399d34d184d2424401 ]
 
-Ensure that the i_flags field of struct zonefs_inode_info is cleared to
-0 when initializing a zone file inode, avoiding seeing the flag
-ZONEFS_ZONE_OPEN being incorrectly set.
+The hardware checksum offloading requires use of a transmit
+status block inserted before the outgoing frame data, this was
+updated in '9a9ba2a4aaaa ("net: bcmgenet: always enable status blocks")'
 
-Fixes: b5c00e975779 ("zonefs: open/close zone on file open/close")
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Reviewed-by: Johannes Thumshirn <johannes.thumshirn@wdc.com>
-Reviewed-by: Chaitanya Kulkarni <kch@nvidia.com>
-Reviewed-by: Hans Holmberg <hans.holmberg@wdc.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+However, skb_tx_timestamp() assumes that it is passed a raw frame
+and PTP parsing chokes on this status block.
+
+Fix this by calling __skb_pull(), which hides the TSB before calling
+skb_tx_timestamp(), so an outgoing PTP packet is parsed correctly.
+
+As the data in the skb has already been set up for DMA, and the
+dma_unmap_* calls use a separately stored address, there is no
+no effective change in the data transmission.
+
+Signed-off-by: Jonathan Lemon <jonathan.lemon@gmail.com>
+Acked-by: Florian Fainelli <f.fainelli@gmail.com>
+Link: https://lore.kernel.org/r/20220424165307.591145-1-jonathan.lemon@gmail.com
+Fixes: d03825fba459 ("net: bcmgenet: add skb_tx_timestamp call")
+Signed-off-by: Paolo Abeni <pabeni@redhat.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/zonefs/super.c |    1 +
- 1 file changed, 1 insertion(+)
+ drivers/net/ethernet/broadcom/genet/bcmgenet.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
---- a/fs/zonefs/super.c
-+++ b/fs/zonefs/super.c
-@@ -1163,6 +1163,7 @@ static struct inode *zonefs_alloc_inode(
- 	mutex_init(&zi->i_truncate_mutex);
- 	init_rwsem(&zi->i_mmap_sem);
- 	zi->i_wr_refcnt = 0;
-+	zi->i_flags = 0;
- 
- 	return &zi->i_vnode;
+diff --git a/drivers/net/ethernet/broadcom/genet/bcmgenet.c b/drivers/net/ethernet/broadcom/genet/bcmgenet.c
+index b4f99dd284e5..8bcc39b1575c 100644
+--- a/drivers/net/ethernet/broadcom/genet/bcmgenet.c
++++ b/drivers/net/ethernet/broadcom/genet/bcmgenet.c
+@@ -1991,6 +1991,11 @@ static struct sk_buff *bcmgenet_add_tsb(struct net_device *dev,
+ 	return skb;
  }
+ 
++static void bcmgenet_hide_tsb(struct sk_buff *skb)
++{
++	__skb_pull(skb, sizeof(struct status_64));
++}
++
+ static netdev_tx_t bcmgenet_xmit(struct sk_buff *skb, struct net_device *dev)
+ {
+ 	struct bcmgenet_priv *priv = netdev_priv(dev);
+@@ -2097,6 +2102,8 @@ static netdev_tx_t bcmgenet_xmit(struct sk_buff *skb, struct net_device *dev)
+ 	}
+ 
+ 	GENET_CB(skb)->last_cb = tx_cb_ptr;
++
++	bcmgenet_hide_tsb(skb);
+ 	skb_tx_timestamp(skb);
+ 
+ 	/* Decrement total BD count and advance our write pointer */
+-- 
+2.35.1
+
 
 

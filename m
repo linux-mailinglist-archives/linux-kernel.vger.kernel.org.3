@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34BFD51A689
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 18:52:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B4FF51AA00
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:19:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352157AbiEDQ4P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 12:56:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50902 "EHLO
+        id S1344849AbiEDRUq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 13:20:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354191AbiEDQxz (ORCPT
+        with ESMTP id S1356406AbiEDRFL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 12:53:55 -0400
+        Wed, 4 May 2022 13:05:11 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D2D8483B1;
-        Wed,  4 May 2022 09:49:12 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBB8350E11;
+        Wed,  4 May 2022 09:54:06 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6337F61771;
-        Wed,  4 May 2022 16:49:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1B14C385A4;
-        Wed,  4 May 2022 16:49:11 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0BD4061896;
+        Wed,  4 May 2022 16:54:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A181C385AA;
+        Wed,  4 May 2022 16:54:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651682951;
-        bh=IwX2/NnejUzN7u8g7KsKfNNxuvUqvIN8hWL1MrCgCGU=;
+        s=korg; t=1651683245;
+        bh=25ux8NFNKLydnTHHEQeLqGsVmScposqAAuPdXMHZvJU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=itxNc3uTTXStJ4b5JIlC1tA0vv037DbE0zngd+S7cgM4Y198nVR5AJjQpO7+SG+Zg
-         He591syb8p9nHFmFc2LWL/sKuFgzhIxsWyL6qA2Us1DrP/jqDW8eaaKXQEwm0ZhFj5
-         Umedf7b98KLm6K/9s7LK+NTQUq3xm2qxB0qV1+gE=
+        b=LxioS/J+4QDjDI8uyqLst8p1jswCXJ62U00GeeTH9/DotPWqifHx0gVxC+Gtg4y/j
+         /tH4rATvDEK154MW+w9RoOtjwA8Gd8PGT2GJEfvZRfbDB4UbodZ4Rqtf2zzC1p3LJ0
+         vpl2NNeaNdx5r5qq4ZM9iTTeGfrEYBYRp6nCw4DY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Mikulas Patocka <mpatocka@redhat.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
+        stable@vger.kernel.org, Peilin Ye <peilin.ye@bytedance.com>,
+        William Tu <u9012063@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 70/84] x86: __memcpy_flushcache: fix wrong alignment if size > 2^32
+Subject: [PATCH 5.15 098/177] ip_gre: Make o_seqno start from 0 in native mode
 Date:   Wed,  4 May 2022 18:44:51 +0200
-Message-Id: <20220504152932.925204395@linuxfoundation.org>
+Message-Id: <20220504153101.902753048@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220504152927.744120418@linuxfoundation.org>
-References: <20220504152927.744120418@linuxfoundation.org>
+In-Reply-To: <20220504153053.873100034@linuxfoundation.org>
+References: <20220504153053.873100034@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,49 +56,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mikulas Patocka <mpatocka@redhat.com>
+From: Peilin Ye <peilin.ye@bytedance.com>
 
-[ Upstream commit a6823e4e360fe975bd3da4ab156df7c74c8b07f3 ]
+[ Upstream commit ff827beb706ed719c766acf36449801ded0c17fc ]
 
-The first "if" condition in __memcpy_flushcache is supposed to align the
-"dest" variable to 8 bytes and copy data up to this alignment.  However,
-this condition may misbehave if "size" is greater than 4GiB.
+For GRE and GRETAP devices, currently o_seqno starts from 1 in native
+mode.  According to RFC 2890 2.2., "The first datagram is sent with a
+sequence number of 0."  Fix it.
 
-The statement min_t(unsigned, size, ALIGN(dest, 8) - dest); casts both
-arguments to unsigned int and selects the smaller one.  However, the
-cast truncates high bits in "size" and it results in misbehavior.
+It is worth mentioning that o_seqno already starts from 0 in collect_md
+mode, see gre_fb_xmit(), where tunnel->o_seqno is passed to
+gre_build_header() before getting incremented.
 
-For example:
-
-	suppose that size == 0x100000001, dest == 0x200000002
-	min_t(unsigned, size, ALIGN(dest, 8) - dest) == min_t(0x1, 0xe) == 0x1;
-	...
-	dest += 0x1;
-
-so we copy just one byte "and" dest remains unaligned.
-
-This patch fixes the bug by replacing unsigned with size_t.
-
-Signed-off-by: Mikulas Patocka <mpatocka@redhat.com>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+Signed-off-by: Peilin Ye <peilin.ye@bytedance.com>
+Acked-by: William Tu <u9012063@gmail.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/x86/lib/usercopy_64.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ net/ipv4/ip_gre.c | 8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
 
-diff --git a/arch/x86/lib/usercopy_64.c b/arch/x86/lib/usercopy_64.c
-index 1847e993ac63..f3f7f4cb15a6 100644
---- a/arch/x86/lib/usercopy_64.c
-+++ b/arch/x86/lib/usercopy_64.c
-@@ -142,7 +142,7 @@ void __memcpy_flushcache(void *_dst, const void *_src, size_t size)
+diff --git a/net/ipv4/ip_gre.c b/net/ipv4/ip_gre.c
+index e7f3e37e4aa8..4b7d7ed4bab8 100644
+--- a/net/ipv4/ip_gre.c
++++ b/net/ipv4/ip_gre.c
+@@ -459,14 +459,12 @@ static void __gre_xmit(struct sk_buff *skb, struct net_device *dev,
+ 		       __be16 proto)
+ {
+ 	struct ip_tunnel *tunnel = netdev_priv(dev);
+-
+-	if (tunnel->parms.o_flags & TUNNEL_SEQ)
+-		tunnel->o_seqno++;
++	__be16 flags = tunnel->parms.o_flags;
  
- 	/* cache copy and flush to align dest */
- 	if (!IS_ALIGNED(dest, 8)) {
--		unsigned len = min_t(unsigned, size, ALIGN(dest, 8) - dest);
-+		size_t len = min_t(size_t, size, ALIGN(dest, 8) - dest);
+ 	/* Push GRE header. */
+ 	gre_build_header(skb, tunnel->tun_hlen,
+-			 tunnel->parms.o_flags, proto, tunnel->parms.o_key,
+-			 htonl(tunnel->o_seqno));
++			 flags, proto, tunnel->parms.o_key,
++			 (flags & TUNNEL_SEQ) ? htonl(tunnel->o_seqno++) : 0);
  
- 		memcpy((void *) dest, (void *) source, len);
- 		clean_cache_range((void *) dest, len);
+ 	ip_tunnel_xmit(skb, dev, tnl_params, tnl_params->protocol);
+ }
 -- 
 2.35.1
 

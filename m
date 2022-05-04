@@ -2,132 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0C7F51B401
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 02:08:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F138B51B3E4
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 02:08:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236509AbiEEAFe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 20:05:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46388 "EHLO
+        id S237509AbiEEAFI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 20:05:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383727AbiEDX7x (ORCPT
+        with ESMTP id S1383401AbiEEABS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 19:59:53 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BD8D522DA
-        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 16:56:15 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id c11so3977004wrn.8
-        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 16:56:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=bKdTjovqsCdX72d9roGYbZa4UTuliACzSNBJY8i+zFk=;
-        b=EA5zOF2CgBRM3KEnU1EvIVrVSK8lAaSe1mJheFenRg/fxUSAdgPxWJPZ260gEnWjKZ
-         ga9zu0kWaYJdhmnW5NcahZvlB3K9cUqIJBxrZUMnHORXjCFp4+DxOmpSBv8kw1tD+qFI
-         TsHcVzj6NygsHPQ70CeCqnZBqiDGgbyb+Q4Xw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=bKdTjovqsCdX72d9roGYbZa4UTuliACzSNBJY8i+zFk=;
-        b=kI6EsmyK4yRypVbGvpoYVIVPDdNONO3H8KfiJWxMQeAMT7069ojwwogIfKYvo9xN4D
-         IIBQ+h0y9gahfcuOI1FdkvrOOWODhq4vG47JeUlSmhzDKMKpBQ//HojRPFRHmi8FC/TN
-         OtCp1jB8dSwvFkNZ1SN8R9PoGGH5hldUem1+uT3ZPzTHjT14dy4AF9EbdTWm/CNNKdKh
-         g+ZoXOJp+Ne56eN1EIwGRDzfwX/O3czm7kTpbRQObnNNqjlU3yQp9M64hyCbsmGoOwKy
-         mY/ex8hQlqLIFsCZIyO5mJ60xpf65koDQdjyizYvFter1ULKT73LU721zBq4qDRNDhdf
-         blrA==
-X-Gm-Message-State: AOAM533SFiViSmSfrhvabUin5vUmXGytz3V1k06MJS76gzCAXKD/y/Nc
-        WbeSlmtHT5jUAg07/aQH64MYmZtLn+HOYnH3XG6+eetJYU1N/foG
-X-Google-Smtp-Source: ABdhPJyy6isOT7IY1zukIUAQclCqJeMt+peKPjxTLWrRh+Oi9q1PWYXtgZwYoMvGpfavLyv6J0lLTj/7IawTpAuezyQ=
-X-Received: by 2002:adf:fb03:0:b0:20a:e253:b8c7 with SMTP id
- c3-20020adffb03000000b0020ae253b8c7mr17853079wrr.119.1651708573697; Wed, 04
- May 2022 16:56:13 -0700 (PDT)
+        Wed, 4 May 2022 20:01:18 -0400
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2047.outbound.protection.outlook.com [40.107.236.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E156B98;
+        Wed,  4 May 2022 16:57:41 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Q8sSVvS24/76Q4Jh8NWT85pF3rMaDWUHMYtXkxX7kOszUbzaYsaWmYlBFimx538p2JlcmxJo3m8d5+5nvIy3nGW2P9v1VlKEcQJ+O9pgQXka2kBNnHIu3s7XVjX1r/QdRUUH0j+OJhEW0R/lHdb4fr62EMfI6dnt4Rp+A+cCp6hcztrFaOIbnydwJe7bCONcgv7rVOxUzit5zMIaN/gy9tZAwg+9WNk90+EMsffKD93qZWzq+DULFyKTHJYwJVruqV2elHfL+/UaOMFo5CWpEmZNP4Q+Tx9sF73rsa0jRgh/k7gvq1fIFlQ+hCtb89nnqza4QZDTlOYatkrDH3jdIA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=IhUL3zRn6YfbTb9ROEnuLEIlEEsTIrXOEWmJc83Lkig=;
+ b=hT4yK/N9Cr/Irl8JQKRcrJbQd+p9TDHx1M4tWM7Hq5R8T9L+pC7PXfuBowzBxHK1qQ+B7M3qLqYh5xlhO0wpXo+RAIDNb4E8U6ImcjGX/YANcGQZh5lNvoR1tUayElNjPeYrMc0QDPgm++f3YTUkUBBHW8CWqsKnWnggqRQY182xGSO/28lxxF+cWAaD2YtkXwmmTFmVyZXdugb+orOuozSWzzMrpNooPGm9Z1sQv9OpIO8BqyoKeKqBf9lqRuW2nllycA/PzPZLP1ZIUcJbTbjhg1Ti2pWrP956Sp+LatYzFZHc8g8sOkMPcuNi61L+lUyrg19Ek/b32omFARPlww==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=IhUL3zRn6YfbTb9ROEnuLEIlEEsTIrXOEWmJc83Lkig=;
+ b=Z7CE8+2rtuYKRFF2hA5a/JoHp75YyLs6vIlQZW/EOrVrK17CHoaL9850w1+uNSOBBBpp23HPicvuH2WtRgDwsTrNK+4VHYKxkfrXJ0s5UVUWz5SVxmBELnag2rntMafsQ0P4Zkapl3BZK8Xie8pILe7i2OLJG1VGqPuTRTq6XkVXP4p5Y/itsMkyOITR9/n09OIDt+Jc9mG6YuUV7E9hd+wgcXwPWi3kk7sHKmZRjcW8miGq6jEVDGuUk0WQslX08gWJBtJi35ZJqlE28sNHOusauhzkUQINtFaZH+BjYM5GBiMT6eaeOle9gV+ZeOoGWZOM/81IVx6Wqy6kytSW6Q==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from CH2PR12MB4181.namprd12.prod.outlook.com (2603:10b6:610:a8::16)
+ by CH2PR12MB4940.namprd12.prod.outlook.com (2603:10b6:610:65::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5206.24; Wed, 4 May
+ 2022 23:57:40 +0000
+Received: from CH2PR12MB4181.namprd12.prod.outlook.com
+ ([fe80::a090:8b53:715c:a961]) by CH2PR12MB4181.namprd12.prod.outlook.com
+ ([fe80::a090:8b53:715c:a961%5]) with mapi id 15.20.5206.026; Wed, 4 May 2022
+ 23:57:40 +0000
+Date:   Wed, 4 May 2022 20:57:38 -0300
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Guo Zhengkui <guozhengkui@vivo.com>
+Cc:     Wenpeng Liang <liangwenpeng@huawei.com>,
+        Weihang Li <liweihang@huawei.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        "open list:HISILICON ROCE DRIVER" <linux-rdma@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        zhengkui_guo@outlook.com
+Subject: Re: [PATCH linux-next] RDMA/hns: fix returnvar.cocci warning
+Message-ID: <20220504235738.GA197080@nvidia.com>
+References: <20220426070858.9098-1-guozhengkui@vivo.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220426070858.9098-1-guozhengkui@vivo.com>
+X-ClientProxiedBy: MN2PR15CA0064.namprd15.prod.outlook.com
+ (2603:10b6:208:237::33) To CH2PR12MB4181.namprd12.prod.outlook.com
+ (2603:10b6:610:a8::16)
 MIME-Version: 1.0
-References: <20220330090947.9100-1-chenxiangrui@huaqin.corp-partner.google.com>
- <a0eb6bf9-256a-29b1-2211-496df710f531@linaro.org> <CAD=FV=UjyLofXZqnj=bL89fza5JS6O5Np9W-A4V4WK+na0hdrw@mail.gmail.com>
- <b7ff08b8-60fb-7629-9399-3d5cca46ab9e@linaro.org> <CAD=FV=Vx5g_xTRZGc9wW=ZLnfsOcubTYFcnYQRC5jLm+n3en0w@mail.gmail.com>
- <606cc762-a0c2-49a4-3e5d-d2dbd4595bc7@linaro.org> <CAD=FV=W_SA-3PfDFi-Gkjk9pew5bchFNjQhXX8MkZyuy5UohEQ@mail.gmail.com>
- <CAJKOXPdt5WTg4VU-TEW3dmPHR76dKg63XVxRQfa7ZSKc_jz6Ag@mail.gmail.com>
- <CAD=FV=XQqQSQDNh-zXqEQkwsrax5Qb3OtfKZoQLkncJj_4mcQw@mail.gmail.com> <daf66d41-42ac-50dc-3f8d-c261da8e452d@linaro.org>
-In-Reply-To: <daf66d41-42ac-50dc-3f8d-c261da8e452d@linaro.org>
-From:   Julius Werner <jwerner@chromium.org>
-Date:   Wed, 4 May 2022 16:56:01 -0700
-Message-ID: <CAODwPW-0O16AkkYORovPHSESNfOe46639Wu2-QSsKxdx3fJs7A@mail.gmail.com>
-Subject: Re: [PATCH] CHROMIUM: arm64: dts: qcom: Add sc7180-gelarshie
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Doug Anderson <dianders@chromium.org>,
-        =?UTF-8?Q?Krzysztof_Koz=C5=82owski?= <k.kozlowski.k@gmail.com>,
-        Mars Chen <chenxiangrui@huaqin.corp-partner.google.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: ab8b71f7-4911-4e59-20ac-08da2e29df06
+X-MS-TrafficTypeDiagnostic: CH2PR12MB4940:EE_
+X-Microsoft-Antispam-PRVS: <CH2PR12MB49401CD4E0707F8A191AE983C2C39@CH2PR12MB4940.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: xLUmWa0NOfFqQ6BxLhU+bqyOTcvtbke2B3CXBhqa7juvzJ0nsm/l5TXf78ly0JhzCa0/KVqNNg+HwUMiV/IKVesmfvFPaw1c7QGvcIx6M9Hp2OfJlu22MMg47akrUo9CNbmSbjyqu8h0bYOu5WyMtYbmop+qnk2ZKvxa88HGy1L8YMTHFrChCUuo6aA9D5GwUGtavex/PJsMBfUjX+4BzYKPAiGjxlBfhj6p26W/Y2ORH4pz6TZaZWiiJucHFGGTPPzUMZmFQbs3i/6wV53Ont6bVh0IcYH6e14pXARklo4NYDxjcSrSRFzOmoDm83QPwI0Pkr+ebhZAK1d8hhy/MFJ/LIJ49vPF0EBgoQ5zhIXDLCfzET3m1GOgkxXqTZKqTHWk5XmckVjIHiVhICp+S/JdVNHFoaC4nph/6agXG3TQTTjLOxPZETQoNwLxGUjXPQJsIaMR+LqPATAnUgD9kn9QWskszYBjkXo9j2P33Asv9j5/Jpb+jSlKRalhyzAQLHIbSS+XyG0eQ5q6YA0eZbHqcOwAitbEbR4PyYxW5gNGcblMd48v/uGrjGAj1lwJIPWSlIC+/thXUpOK9aSIpM7f/E+qYYhSYbs7IZ+7UIV7PcSKYy8E8J3xJUWBA1A+8fZ/eVhRpDQw3tnlZzehaOUd++Dg+KxgecE53cyQSs9s0ycOeXgWnThZCnDLXq2q
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH2PR12MB4181.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(8936002)(2906002)(508600001)(83380400001)(6486002)(5660300002)(4744005)(86362001)(36756003)(26005)(33656002)(6512007)(186003)(1076003)(38100700002)(6916009)(316002)(2616005)(54906003)(66946007)(6506007)(66556008)(66476007)(4326008)(8676002)(27376004);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?8LsQC/hw+M8RJbtqacnNPKnWTAXftmqGhQZYXkrrh34u1IMrlrLsAo+qud2R?=
+ =?us-ascii?Q?2UF3kZ0u6DQ1RTslFnA19C/KzRppTjKo6365u02jAdgjH+FBtji7zMo0SMpe?=
+ =?us-ascii?Q?VxLw2hFI9oOav1Xzv/hOb0xbedp1W3mJpWx80fU5+f0hTSh7LIhuz9V9QuCa?=
+ =?us-ascii?Q?/GpfiiMjDR4Vyzs1sbxk/HeDGyMPlY3d7OpzVMjEq0Oi3XyPDFA8EoNc7Wns?=
+ =?us-ascii?Q?wbbioCnu7s5AfVZlyEubh/FmayVdDC5nLSvBoGleUS9vxp3q17nehVLjQSUf?=
+ =?us-ascii?Q?zIIdmBYWNnL3VyIU+W/eXVQks9LKJ3CaPDEl38FiVLWGFwh0JebKGu1RRGc/?=
+ =?us-ascii?Q?a5/1vabXwIQR5sWAiydHPJKVXUXvXyCVAM9S3epi1BGWNNNSgqhb+XlfsoWO?=
+ =?us-ascii?Q?kU2XDxceMgbrBoob5v6w62KE/JDVFP3x5r0RLHAufhyNEkH9Qd3GFXGM7FKM?=
+ =?us-ascii?Q?MKfh3YTmm6vqIyPetoLooyN4q3cmpucVD99LB8YtfjIt2/mOPhDiLXQA/K9x?=
+ =?us-ascii?Q?CXRTko0DyDMiA4Xf0R+NDctkNZs+2z/QJ4R7xRFzwobhemXG5UkK7tmjUz+y?=
+ =?us-ascii?Q?iQbHmHW6K2LMqNgq8UXqIG3bptPfBVh6gtHPFTEqmsa7aSC+AilTfwD3V6Zj?=
+ =?us-ascii?Q?EISOl8CH6pxDVstZn/G8fFmF2etQfldGRe6EJs3Z7V0CL5THla5Ge5h/joLy?=
+ =?us-ascii?Q?Od4TBkAOMOtcRR/upABB+G6v0Y78kS6ZGXZ6tyz21LXfaBLjtEc2Xuch9w0x?=
+ =?us-ascii?Q?GD20lXsCQxwOjWNszTdy9pst2oqTSjSbGRtg1ByIt1i2QltVmL8Mf9RXCe0s?=
+ =?us-ascii?Q?CZ3xv13RqVo3cRojV517USBW/YHpa47ljLuQHgjH3TPgGhxaNfuHnLQ9VmVk?=
+ =?us-ascii?Q?L7l7GoRTythcCiN8HsNLoCDnNWXOQwOspblrYW0JU/9MxVqV7XY5O78H1fIL?=
+ =?us-ascii?Q?NWWEn8CPK5Q9nQEApE39ojzy3aGhzmu8WpIN4XMA/OFwXRCCToTF30TALLeZ?=
+ =?us-ascii?Q?Eqz5SU8afmqa37HmKNpsKcl/zi6dZtKyYNjn8WmPuy/1h9dQKzojIQkNE0Oq?=
+ =?us-ascii?Q?tjXkBLNhhC8CIAMAYarvNzYtppoC6F5WDEJzp20KDCIgsUx087WN/U3qnPAr?=
+ =?us-ascii?Q?lRignXPEDsIDIVbMO1o6kVLHsidKH3fW/wLEVWTNVS5ogiwm9Hyn1kmfBa5j?=
+ =?us-ascii?Q?tXGQXiMviwhigiLqEnPkVOa6aYKg0hzhSa4vRUYL8PZO/WOHO5xDb7KvGN2W?=
+ =?us-ascii?Q?N1KJS1Svbe6EPHQTon+K4UQONX3ZTP+RXuE20fcq+IvEAKdJlk7SbCFka+AD?=
+ =?us-ascii?Q?idEVVX1R8ouDnUhkwixeiTKXRwFMwMRg+lloB6FL0Zl6NfgxnGyboiN1SbfQ?=
+ =?us-ascii?Q?7irPJKJZUpl5+rzgTkDADoYr5sRFNj9CXnMzhrlBydGKsIwJh9IJTRIG4A87?=
+ =?us-ascii?Q?N7rRRN7F78mCFeXIaIPOd0mYPAR/KynzILd4io53i++rXBcdVaVuRYVJml3T?=
+ =?us-ascii?Q?/yQBZM9GkviwLIhWxSe7pGxgjDgtA8GUqthEfuXL9i8sLiB7ucV3OaxIEEF1?=
+ =?us-ascii?Q?NOnJpNxSbSid8TNcss1B6iSE8FIR/fr/Jj1UTYpplDWvXEwB4twxyJc7jUea?=
+ =?us-ascii?Q?A25QGpqR8iF0bN6TtVVZmPVyGmXWOEGS64BIUm1tYemqMU1zWkfdurNHlO8v?=
+ =?us-ascii?Q?3FT6a2EYYz2q90nIBgiFap0meg8zHCbkJpaqi+G4Vo0IITZfpihoNCQbuyHf?=
+ =?us-ascii?Q?r9HkG13/Cg=3D=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ab8b71f7-4911-4e59-20ac-08da2e29df06
+X-MS-Exchange-CrossTenant-AuthSource: CH2PR12MB4181.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 May 2022 23:57:40.0665
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: xh7/jcG+NqLac/WX41YD5ql5xDv0Fy/uuZ1Vucyo4AcxsjjodsYQk+CDpYx7lJOt
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB4940
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Trying to chime in here from the firmware development side of this
-issue to help clarify what Doug is asking for. We have the fundamental
-problem that we have several different board revisions that we _think_
-should be 100% compatible for kernel and userspace, so for various
-practical reasons (easier to maintain in the source, limiting kernel
-image size by not having to bundle the same DTB multiple times under a
-different name), we want to use the same DTB for all of them. Just
-saying "well, you should treat each revision as incompatible to all
-the others from the start then" doesn't scale (we have a lot of
-revisions, and in the vast majority of cases they are just as
-compatible as we initially expect them to be).
+On Tue, Apr 26, 2022 at 03:08:58PM +0800, Guo Zhengkui wrote:
+> Fix the following coccicheck warning:
+> drivers/infiniband/hw/hns/hns_roce_mr.c:343:5-8: Unneeded variable: "ret".
+> Return "0" on line 351.
+> 
+> Signed-off-by: Guo Zhengkui <guozhengkui@vivo.com>
+> ---
+>  drivers/infiniband/hw/hns/hns_roce_mr.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
 
-However, we also can't just exhaustively enumerate all revision
-numbers that are compatible with this DTB, because we don't know in
-advance how many we'll build. For again various practical reasons
-(bundling, signing, testing), it would cost a lot of extra effort and
-friction to rebuild a new kernel image just to add a new compatible
-string to the list every time the factory updates the revision number.
-An earlier hacky solution we had for this is to just define a bunch of
-extra revision compatible strings in advance even though they don't
-exist yet (e.g. you can still see this in
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/arch/arm/boot/dts/tegra124-nyan-blaze.dts
--- I believe there were only actually ever 3 or 4 Blaze revisions, the
-other compatible strings defined there never existed as physical
-boards). This is cumbersome and hacky and also doesn't really scale
-(particularly when we need to add SKU as another dimension into the
-string), so we needed to come up with something more manageable.
+Applied to for-next, thanks
 
-Our solution is to use "google,lazor" as the stand-in compatible
-string for "all Lazor boards compatible with the latest revision".
-When a compatibility break happens at some point in the Lazor series
-(say between rev3 and rev4), we'll change the compatible string in the
-old rev3 DTB to no longer include "google,lazor" but to instead list
-all specific revision numbers ("google,lazor-rev0", ...,
-"google-lazor-rev3") exhaustively (at this point we can do it, because
-at this point we know we're not going to build any new boards
-compatible with that old layout in the future). The new rev4 DTB will
-then list "google,lazor" and again remain valid for all future
-revisions we build, until the next compatibility break.
-
-You are correct that this ends up changing the meaning of
-"google,lazor" at some point, but it's really the only good way I can
-see how to solve this within our practical constraints. I also don't
-really see a practical concern with that, since our firmware matching
-algorithm (and I believe this is the standard other bootloaders like
-U-Boot also follow) will look for the more specific string with the
-explicit revision number first, before falling back to the generic
-one. So whenever we decide to change the meaning of the latter in the
-kernel, we also make sure to provide matches for all the specific
-revisions that previously used the generic match, so that they will
-pick up those instead and there's no chance of them getting confused
-by the change in meaning. While it is perhaps a bit unorthodox, I
-think it is practical, safe, and I don't really see a practical
-alternative for our use case.
+Jason

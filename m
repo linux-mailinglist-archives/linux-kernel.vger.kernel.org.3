@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08EC851A637
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 18:51:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C96651AA48
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:19:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354384AbiEDQyU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 12:54:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52222 "EHLO
+        id S1356438AbiEDRWl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 13:22:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353828AbiEDQwb (ORCPT
+        with ESMTP id S1355809AbiEDREn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 12:52:31 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F76C47385;
-        Wed,  4 May 2022 09:48:42 -0700 (PDT)
+        Wed, 4 May 2022 13:04:43 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B71B49925;
+        Wed,  4 May 2022 09:53:25 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id ADACC6174B;
-        Wed,  4 May 2022 16:48:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0400FC385A5;
-        Wed,  4 May 2022 16:48:40 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D0D23B827AB;
+        Wed,  4 May 2022 16:53:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E068C385AF;
+        Wed,  4 May 2022 16:53:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651682921;
-        bh=H1GWMSx8QPe81iew5Blai1zIxy7NOOTXxmEgd/t/FOM=;
+        s=korg; t=1651683202;
+        bh=fiEjsMwi+sx83CopIVwfDXjNiCaih6WW+Reo85LpXa0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=oMIQTW+CASQE4IpdN0AaZNGk5GBIOCJJRNzOqZ3qYA0buPfbNshO3EJf740kewR4H
-         xJC/6TaO8+0hsX0UMcZd1iv2K3NIGLNVUA7z2vYkExa7rySELeT87UoxhthTmuxXcc
-         5RXinMOzQ0b94YCv3oPFV2rliJB9s4hj1sd4W6ek=
+        b=kO18R6A8uUU/ci6pJnyth9QU+F8C7QE1EiNul4e0ix2Tmat11iK6EzmmC8EIKvaat
+         LGSwTf2/95/bB/4xTj7op5Ng7iWQkE9UgaJqFj2dshlRf8OQzeV4iYF8JHNZsyeey7
+         dVQnI9RnNtDQEy5P/Cc+pE/FFSqbMym1f8mj7Ne4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Mark Brown <broonie@kernel.org>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 39/84] ARM: dts: at91: Map MCLK for wm8731 on at91sam9g20ek
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        Vinod Koul <vkoul@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 067/177] phy: mapphone-mdm6600: Fix PM error handling in phy_mdm6600_probe
 Date:   Wed,  4 May 2022 18:44:20 +0200
-Message-Id: <20220504152930.601883654@linuxfoundation.org>
+Message-Id: <20220504153059.048746597@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220504152927.744120418@linuxfoundation.org>
-References: <20220504152927.744120418@linuxfoundation.org>
+In-Reply-To: <20220504153053.873100034@linuxfoundation.org>
+References: <20220504153053.873100034@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,42 +54,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mark Brown <broonie@kernel.org>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-[ Upstream commit 0e486fe341fabd8e583f3d601a874cd394979c45 ]
+[ Upstream commit d644e0d79829b1b9a14beedbdb0dc1256fc3677d ]
 
-The MCLK of the WM8731 on the AT91SAM9G20-EK board is connected to the
-PCK0 output of the SoC and is expected to be set to 12MHz. Previously
-this was mapped using pre-common clock API calls in the audio machine
-driver but the conversion to the common clock framework broke that so
-describe things in the DT instead.
+The pm_runtime_enable will increase power disable depth.
+If the probe fails, we should use pm_runtime_disable() to balance
+pm_runtime_enable(). And use pm_runtime_dont_use_autosuspend() to
+undo pm_runtime_use_autosuspend()
+In the PM Runtime docs:
+    Drivers in ->remove() callback should undo the runtime PM changes done
+    in ->probe(). Usually this means calling pm_runtime_disable(),
+    pm_runtime_dont_use_autosuspend() etc.
 
-Fixes: ff78a189b0ae55f ("ARM: at91: remove old at91-specific clock driver")
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Reviewed-by: Claudiu Beznea <claudiu.beznea@microchip.com>
-Signed-off-by: Nicolas Ferre <nicolas.ferre@microchip.com>
-Link: https://lore.kernel.org/r/20220404102806.581374-2-broonie@kernel.org
+We should do this in error handling.
+
+Fixes: f7f50b2a7b05 ("phy: mapphone-mdm6600: Add runtime PM support for n_gsm on USB suspend")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Link: https://lore.kernel.org/r/20220301024615.31899-1-linmq006@gmail.com
+Signed-off-by: Vinod Koul <vkoul@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm/boot/dts/at91sam9g20ek_common.dtsi | 6 ++++++
- 1 file changed, 6 insertions(+)
+ drivers/phy/motorola/phy-mapphone-mdm6600.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/arch/arm/boot/dts/at91sam9g20ek_common.dtsi b/arch/arm/boot/dts/at91sam9g20ek_common.dtsi
-index bda22700110c..287566e09a67 100644
---- a/arch/arm/boot/dts/at91sam9g20ek_common.dtsi
-+++ b/arch/arm/boot/dts/at91sam9g20ek_common.dtsi
-@@ -217,6 +217,12 @@ i2c-gpio-0 {
- 		wm8731: wm8731@1b {
- 			compatible = "wm8731";
- 			reg = <0x1b>;
-+
-+			/* PCK0 at 12MHz */
-+			clocks = <&pmc PMC_TYPE_SYSTEM 8>;
-+			clock-names = "mclk";
-+			assigned-clocks = <&pmc PMC_TYPE_SYSTEM 8>;
-+			assigned-clock-rates = <12000000>;
- 		};
- 	};
+diff --git a/drivers/phy/motorola/phy-mapphone-mdm6600.c b/drivers/phy/motorola/phy-mapphone-mdm6600.c
+index 5172971f4c36..3cd4d51c247c 100644
+--- a/drivers/phy/motorola/phy-mapphone-mdm6600.c
++++ b/drivers/phy/motorola/phy-mapphone-mdm6600.c
+@@ -629,7 +629,8 @@ static int phy_mdm6600_probe(struct platform_device *pdev)
+ cleanup:
+ 	if (error < 0)
+ 		phy_mdm6600_device_power_off(ddata);
+-
++	pm_runtime_disable(ddata->dev);
++	pm_runtime_dont_use_autosuspend(ddata->dev);
+ 	return error;
+ }
  
 -- 
 2.35.1

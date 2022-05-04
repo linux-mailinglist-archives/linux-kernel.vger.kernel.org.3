@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C74B51AA58
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:27:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D5E751A83D
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:07:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356764AbiEDRXa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 13:23:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55356 "EHLO
+        id S1356713AbiEDRJj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 13:09:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356450AbiEDRFO (ORCPT
+        with ESMTP id S1355583AbiEDRAQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 13:05:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FF9550E31;
-        Wed,  4 May 2022 09:54:10 -0700 (PDT)
+        Wed, 4 May 2022 13:00:16 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 691264B868;
+        Wed,  4 May 2022 09:51:52 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id ECAE861794;
-        Wed,  4 May 2022 16:54:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45874C385AF;
-        Wed,  4 May 2022 16:54:07 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 749D9B82752;
+        Wed,  4 May 2022 16:51:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B511C385AA;
+        Wed,  4 May 2022 16:51:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651683247;
-        bh=JGN1aSur651jL6VwygsDUq9AQEFBdmvTSDtGQpbExFs=;
+        s=korg; t=1651683109;
+        bh=3U7sqrrWCLxxeCB6R9XUzsC/Y8YeVs1cxEa7tbzOWxU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=R9WgwEL2il2L3W4R7Ti7PiiXtlvVBgkF09goNDJqRNRf+DkTxXcjDsCWmyI+6L44L
-         e2xW3soFIp9JBZJVp75cDsI6cuglfOUUkflCrCFQ4a4vIBLqs1lpcOIbgjTX/szBrZ
-         hvnnhbSMoihes3JvXYIFAL0NK/doTaZ4RgoVZeYU=
+        b=m3kPcWrBePbICuoXUdbJgv6kzd5TylN4y329qMBZ1P0Gr37nB0M2eViMkmmwZB4a0
+         +6a54+o1aZKYgZY3ayLihM24EeWPd/0MLq63kHMpyTkql43NCQjhmxj8wtjxmAIxPo
+         hnxxQeJmd44+WXGdb/5QYMbs7WPJ9z5kjlQgpBA0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
-        Peilin Ye <peilin.ye@bytedance.com>,
-        William Tu <u9012063@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 100/177] ip_gre, ip6_gre: Fix race condition on o_seqno in collect_md mode
+        stable@vger.kernel.org, Ye Bin <yebin10@huawei.com>,
+        Jan Kara <jack@suse.cz>,
+        Ritesh Harjani <riteshh@linux.ibm.com>,
+        Theodore Tso <tytso@mit.edu>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 101/129] ext4: fix bug_on in start_this_handle during umount filesystem
 Date:   Wed,  4 May 2022 18:44:53 +0200
-Message-Id: <20220504153102.099314214@linuxfoundation.org>
+Message-Id: <20220504153028.958476561@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220504153053.873100034@linuxfoundation.org>
-References: <20220504153053.873100034@linuxfoundation.org>
+In-Reply-To: <20220504153021.299025455@linuxfoundation.org>
+References: <20220504153021.299025455@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,150 +56,112 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peilin Ye <peilin.ye@bytedance.com>
+From: Ye Bin <yebin10@huawei.com>
 
-[ Upstream commit 31c417c948d7f6909cb63f0ac3298f3c38f8ce20 ]
+[ Upstream commit b98535d091795a79336f520b0708457aacf55c67 ]
 
-As pointed out by Jakub Kicinski, currently using TUNNEL_SEQ in
-collect_md mode is racy for [IP6]GRE[TAP] devices.  Consider the
-following sequence of events:
+We got issue as follows:
+------------[ cut here ]------------
+kernel BUG at fs/jbd2/transaction.c:389!
+invalid opcode: 0000 [#1] PREEMPT SMP KASAN PTI
+CPU: 9 PID: 131 Comm: kworker/9:1 Not tainted 5.17.0-862.14.0.6.x86_64-00001-g23f87daf7d74-dirty #197
+Workqueue: events flush_stashed_error_work
+RIP: 0010:start_this_handle+0x41c/0x1160
+RSP: 0018:ffff888106b47c20 EFLAGS: 00010202
+RAX: ffffed10251b8400 RBX: ffff888128dc204c RCX: ffffffffb52972ac
+RDX: 0000000000000200 RSI: 0000000000000004 RDI: ffff888128dc2050
+RBP: 0000000000000039 R08: 0000000000000001 R09: ffffed10251b840a
+R10: ffff888128dc204f R11: ffffed10251b8409 R12: ffff888116d78000
+R13: 0000000000000000 R14: dffffc0000000000 R15: ffff888128dc2000
+FS:  0000000000000000(0000) GS:ffff88839d680000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000000001620068 CR3: 0000000376c0e000 CR4: 00000000000006e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ jbd2__journal_start+0x38a/0x790
+ jbd2_journal_start+0x19/0x20
+ flush_stashed_error_work+0x110/0x2b3
+ process_one_work+0x688/0x1080
+ worker_thread+0x8b/0xc50
+ kthread+0x26f/0x310
+ ret_from_fork+0x22/0x30
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
 
-1. An [IP6]GRE[TAP] device is created in collect_md mode using "ip link
-   add ... external".  "ip" ignores "[o]seq" if "external" is specified,
-   so TUNNEL_SEQ is off, and the device is marked as NETIF_F_LLTX (i.e.
-   it uses lockless TX);
-2. Someone sets TUNNEL_SEQ on outgoing skb's, using e.g.
-   bpf_skb_set_tunnel_key() in an eBPF program attached to this device;
-3. gre_fb_xmit() or __gre6_xmit() processes these skb's:
+Above issue may happen as follows:
+      umount            read procfs            error_work
+ext4_put_super
+  flush_work(&sbi->s_error_work);
 
-	gre_build_header(skb, tun_hlen,
-			 flags, protocol,
-			 tunnel_id_to_key32(tun_info->key.tun_id),
-			 (flags & TUNNEL_SEQ) ? htonl(tunnel->o_seqno++)
-					      : 0);   ^^^^^^^^^^^^^^^^^
+                      ext4_mb_seq_groups_show
+	                ext4_mb_load_buddy_gfp
+			  ext4_mb_init_group
+			    ext4_mb_init_cache
+	                      ext4_read_block_bitmap_nowait
+			        ext4_validate_block_bitmap
+				  ext4_error
+			            ext4_handle_error
+			              schedule_work(&EXT4_SB(sb)->s_error_work);
 
-Since we are not using the TX lock (&txq->_xmit_lock), multiple CPUs may
-try to do this tunnel->o_seqno++ in parallel, which is racy.  Fix it by
-making o_seqno atomic_t.
+  ext4_unregister_sysfs(sb);
+  jbd2_journal_destroy(sbi->s_journal);
+    journal_kill_thread
+      journal->j_flags |= JBD2_UNMOUNT;
 
-As mentioned by Eric Dumazet in commit b790e01aee74 ("ip_gre: lockless
-xmit"), making o_seqno atomic_t increases "chance for packets being out
-of order at receiver" when NETIF_F_LLTX is on.
+                                          flush_stashed_error_work
+				            jbd2_journal_start
+					      start_this_handle
+					        BUG_ON(journal->j_flags & JBD2_UNMOUNT);
 
-Maybe a better fix would be:
+To solve this issue, we call 'ext4_unregister_sysfs() before flushing
+s_error_work in ext4_put_super().
 
-1. Do not ignore "oseq" in external mode.  Users MUST specify "oseq" if
-   they want the kernel to allow sequencing of outgoing packets;
-2. Reject all outgoing TUNNEL_SEQ packets if the device was not created
-   with "oseq".
-
-Unfortunately, that would break userspace.
-
-We could now make [IP6]GRE[TAP] devices always NETIF_F_LLTX, but let us
-do it in separate patches to keep this fix minimal.
-
-Suggested-by: Jakub Kicinski <kuba@kernel.org>
-Fixes: 77a5196a804e ("gre: add sequence number for collect md mode.")
-Signed-off-by: Peilin Ye <peilin.ye@bytedance.com>
-Acked-by: William Tu <u9012063@gmail.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Ye Bin <yebin10@huawei.com>
+Reviewed-by: Jan Kara <jack@suse.cz>
+Reviewed-by: Ritesh Harjani <riteshh@linux.ibm.com>
+Link: https://lore.kernel.org/r/20220322012419.725457-1-yebin10@huawei.com
+Signed-off-by: Theodore Ts'o <tytso@mit.edu>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- include/net/ip6_tunnel.h | 2 +-
- include/net/ip_tunnels.h | 2 +-
- net/ipv4/ip_gre.c        | 6 +++---
- net/ipv6/ip6_gre.c       | 7 ++++---
- 4 files changed, 9 insertions(+), 8 deletions(-)
+ fs/ext4/super.c | 15 ++++++++++-----
+ 1 file changed, 10 insertions(+), 5 deletions(-)
 
-diff --git a/include/net/ip6_tunnel.h b/include/net/ip6_tunnel.h
-index 028eaea1c854..42d50856fcf2 100644
---- a/include/net/ip6_tunnel.h
-+++ b/include/net/ip6_tunnel.h
-@@ -57,7 +57,7 @@ struct ip6_tnl {
+diff --git a/fs/ext4/super.c b/fs/ext4/super.c
+index 5e6c03458317..3e26edeca8c7 100644
+--- a/fs/ext4/super.c
++++ b/fs/ext4/super.c
+@@ -1176,18 +1176,23 @@ static void ext4_put_super(struct super_block *sb)
+ 	int aborted = 0;
+ 	int i, err;
  
- 	/* These fields used only by GRE */
- 	__u32 i_seqno;	/* The last seen seqno	*/
--	__u32 o_seqno;	/* The last output seqno */
-+	atomic_t o_seqno;	/* The last output seqno */
- 	int hlen;       /* tun_hlen + encap_hlen */
- 	int tun_hlen;	/* Precalculated header length */
- 	int encap_hlen; /* Encap header length (FOU,GUE) */
-diff --git a/include/net/ip_tunnels.h b/include/net/ip_tunnels.h
-index bc3b13ec93c9..37d5d4968e20 100644
---- a/include/net/ip_tunnels.h
-+++ b/include/net/ip_tunnels.h
-@@ -113,7 +113,7 @@ struct ip_tunnel {
+-	ext4_unregister_li_request(sb);
+-	ext4_quota_off_umount(sb);
+-
+-	destroy_workqueue(sbi->rsv_conversion_wq);
+-
+ 	/*
+ 	 * Unregister sysfs before destroying jbd2 journal.
+ 	 * Since we could still access attr_journal_task attribute via sysfs
+ 	 * path which could have sbi->s_journal->j_task as NULL
++	 * Unregister sysfs before flush sbi->s_error_work.
++	 * Since user may read /proc/fs/ext4/xx/mb_groups during umount, If
++	 * read metadata verify failed then will queue error work.
++	 * flush_stashed_error_work will call start_this_handle may trigger
++	 * BUG_ON.
+ 	 */
+ 	ext4_unregister_sysfs(sb);
  
- 	/* These four fields used only by GRE */
- 	u32		i_seqno;	/* The last seen seqno	*/
--	u32		o_seqno;	/* The last output seqno */
-+	atomic_t	o_seqno;	/* The last output seqno */
- 	int		tun_hlen;	/* Precalculated header length */
- 
- 	/* These four fields used only by ERSPAN */
-diff --git a/net/ipv4/ip_gre.c b/net/ipv4/ip_gre.c
-index 4b7d7ed4bab8..276a3b7b0e9c 100644
---- a/net/ipv4/ip_gre.c
-+++ b/net/ipv4/ip_gre.c
-@@ -464,7 +464,7 @@ static void __gre_xmit(struct sk_buff *skb, struct net_device *dev,
- 	/* Push GRE header. */
- 	gre_build_header(skb, tunnel->tun_hlen,
- 			 flags, proto, tunnel->parms.o_key,
--			 (flags & TUNNEL_SEQ) ? htonl(tunnel->o_seqno++) : 0);
-+			 (flags & TUNNEL_SEQ) ? htonl(atomic_fetch_inc(&tunnel->o_seqno)) : 0);
- 
- 	ip_tunnel_xmit(skb, dev, tnl_params, tnl_params->protocol);
- }
-@@ -502,7 +502,7 @@ static void gre_fb_xmit(struct sk_buff *skb, struct net_device *dev,
- 		(TUNNEL_CSUM | TUNNEL_KEY | TUNNEL_SEQ);
- 	gre_build_header(skb, tunnel_hlen, flags, proto,
- 			 tunnel_id_to_key32(tun_info->key.tun_id),
--			 (flags & TUNNEL_SEQ) ? htonl(tunnel->o_seqno++) : 0);
-+			 (flags & TUNNEL_SEQ) ? htonl(atomic_fetch_inc(&tunnel->o_seqno)) : 0);
- 
- 	ip_md_tunnel_xmit(skb, dev, IPPROTO_GRE, tunnel_hlen);
- 
-@@ -579,7 +579,7 @@ static void erspan_fb_xmit(struct sk_buff *skb, struct net_device *dev)
- 	}
- 
- 	gre_build_header(skb, 8, TUNNEL_SEQ,
--			 proto, 0, htonl(tunnel->o_seqno++));
-+			 proto, 0, htonl(atomic_fetch_inc(&tunnel->o_seqno)));
- 
- 	ip_md_tunnel_xmit(skb, dev, IPPROTO_GRE, tunnel_hlen);
- 
-diff --git a/net/ipv6/ip6_gre.c b/net/ipv6/ip6_gre.c
-index 4ccbee5e7526..a817ac6d9759 100644
---- a/net/ipv6/ip6_gre.c
-+++ b/net/ipv6/ip6_gre.c
-@@ -766,7 +766,7 @@ static netdev_tx_t __gre6_xmit(struct sk_buff *skb,
- 		gre_build_header(skb, tun_hlen,
- 				 flags, protocol,
- 				 tunnel_id_to_key32(tun_info->key.tun_id),
--				 (flags & TUNNEL_SEQ) ? htonl(tunnel->o_seqno++)
-+				 (flags & TUNNEL_SEQ) ? htonl(atomic_fetch_inc(&tunnel->o_seqno))
- 						      : 0);
- 
- 	} else {
-@@ -777,7 +777,8 @@ static netdev_tx_t __gre6_xmit(struct sk_buff *skb,
- 
- 		gre_build_header(skb, tunnel->tun_hlen, flags,
- 				 protocol, tunnel->parms.o_key,
--				 (flags & TUNNEL_SEQ) ? htonl(tunnel->o_seqno++) : 0);
-+				 (flags & TUNNEL_SEQ) ? htonl(atomic_fetch_inc(&tunnel->o_seqno))
-+						      : 0);
- 	}
- 
- 	return ip6_tnl_xmit(skb, dev, dsfield, fl6, encap_limit, pmtu,
-@@ -1055,7 +1056,7 @@ static netdev_tx_t ip6erspan_tunnel_xmit(struct sk_buff *skb,
- 	/* Push GRE header. */
- 	proto = (t->parms.erspan_ver == 1) ? htons(ETH_P_ERSPAN)
- 					   : htons(ETH_P_ERSPAN2);
--	gre_build_header(skb, 8, TUNNEL_SEQ, proto, 0, htonl(t->o_seqno++));
-+	gre_build_header(skb, 8, TUNNEL_SEQ, proto, 0, htonl(atomic_fetch_inc(&t->o_seqno)));
- 
- 	/* TooBig packet may have updated dst->dev's mtu */
- 	if (!t->parms.collect_md && dst && dst_mtu(dst) > dst->dev->mtu)
++	ext4_unregister_li_request(sb);
++	ext4_quota_off_umount(sb);
++
++	destroy_workqueue(sbi->rsv_conversion_wq);
++
+ 	if (sbi->s_journal) {
+ 		aborted = is_journal_aborted(sbi->s_journal);
+ 		err = jbd2_journal_destroy(sbi->s_journal);
 -- 
 2.35.1
 

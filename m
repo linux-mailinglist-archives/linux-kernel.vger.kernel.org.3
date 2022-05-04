@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D5E751A83D
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:07:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA2CA51AAB2
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:29:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356713AbiEDRJj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 13:09:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37234 "EHLO
+        id S1357542AbiEDRbs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 13:31:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355583AbiEDRAQ (ORCPT
+        with ESMTP id S1356920AbiEDRJt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 13:00:16 -0400
+        Wed, 4 May 2022 13:09:49 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 691264B868;
-        Wed,  4 May 2022 09:51:52 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD99447386;
+        Wed,  4 May 2022 09:56:26 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 749D9B82752;
-        Wed,  4 May 2022 16:51:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B511C385AA;
-        Wed,  4 May 2022 16:51:49 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 84E25B8279C;
+        Wed,  4 May 2022 16:56:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1DDA3C385A5;
+        Wed,  4 May 2022 16:56:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651683109;
-        bh=3U7sqrrWCLxxeCB6R9XUzsC/Y8YeVs1cxEa7tbzOWxU=;
+        s=korg; t=1651683384;
+        bh=XXe5e6LTOiqCf7n9YpwIDSJ2KM10tPHdgipwNToxAwY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=m3kPcWrBePbICuoXUdbJgv6kzd5TylN4y329qMBZ1P0Gr37nB0M2eViMkmmwZB4a0
-         +6a54+o1aZKYgZY3ayLihM24EeWPd/0MLq63kHMpyTkql43NCQjhmxj8wtjxmAIxPo
-         hnxxQeJmd44+WXGdb/5QYMbs7WPJ9z5kjlQgpBA0=
+        b=Q8bHGCVCgfyagBkT+LYPwhk1CvuAmrGNRt4pq0657O5fur0MTjH2xybBZZNJJqy5X
+         qo6tcNquEm7DqKnmbCybOQgI1gDYpr5RiKpdRPBv4LNEtwnDI6MoFxKhxzusmHDNPs
+         US2MBINe6mgemGz15VB+97ElcTswFBoTidqQ8z7I=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ye Bin <yebin10@huawei.com>,
-        Jan Kara <jack@suse.cz>,
-        Ritesh Harjani <riteshh@linux.ibm.com>,
-        Theodore Tso <tytso@mit.edu>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 101/129] ext4: fix bug_on in start_this_handle during umount filesystem
-Date:   Wed,  4 May 2022 18:44:53 +0200
-Message-Id: <20220504153028.958476561@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 056/225] cpufreq: qcom-hw: fix the race between LMH worker and cpuhp
+Date:   Wed,  4 May 2022 18:44:54 +0200
+Message-Id: <20220504153115.159210170@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220504153021.299025455@linuxfoundation.org>
-References: <20220504153021.299025455@linuxfoundation.org>
+In-Reply-To: <20220504153110.096069935@linuxfoundation.org>
+References: <20220504153110.096069935@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,112 +57,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ye Bin <yebin10@huawei.com>
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-[ Upstream commit b98535d091795a79336f520b0708457aacf55c67 ]
+[ Upstream commit 5e4f009da6be563984ba4db4ef4f32529e9aeb90 ]
 
-We got issue as follows:
-------------[ cut here ]------------
-kernel BUG at fs/jbd2/transaction.c:389!
-invalid opcode: 0000 [#1] PREEMPT SMP KASAN PTI
-CPU: 9 PID: 131 Comm: kworker/9:1 Not tainted 5.17.0-862.14.0.6.x86_64-00001-g23f87daf7d74-dirty #197
-Workqueue: events flush_stashed_error_work
-RIP: 0010:start_this_handle+0x41c/0x1160
-RSP: 0018:ffff888106b47c20 EFLAGS: 00010202
-RAX: ffffed10251b8400 RBX: ffff888128dc204c RCX: ffffffffb52972ac
-RDX: 0000000000000200 RSI: 0000000000000004 RDI: ffff888128dc2050
-RBP: 0000000000000039 R08: 0000000000000001 R09: ffffed10251b840a
-R10: ffff888128dc204f R11: ffffed10251b8409 R12: ffff888116d78000
-R13: 0000000000000000 R14: dffffc0000000000 R15: ffff888128dc2000
-FS:  0000000000000000(0000) GS:ffff88839d680000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000000001620068 CR3: 0000000376c0e000 CR4: 00000000000006e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- jbd2__journal_start+0x38a/0x790
- jbd2_journal_start+0x19/0x20
- flush_stashed_error_work+0x110/0x2b3
- process_one_work+0x688/0x1080
- worker_thread+0x8b/0xc50
- kthread+0x26f/0x310
- ret_from_fork+0x22/0x30
- </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
+The driver would disable the worker when cpu is being put offline, but
+it happens closer to the end of cpufreq_offline(). The function
+qcom_lmh_dcvs_poll() can be running in parallel with this, when
+policy->cpus already has been updated. Read policy->related_cpus
+instead.
 
-Above issue may happen as follows:
-      umount            read procfs            error_work
-ext4_put_super
-  flush_work(&sbi->s_error_work);
+[   37.122433] ------------[ cut here ]------------
+[   37.127225] WARNING: CPU: 0 PID: 187 at drivers/base/arch_topology.c:180 topology_update_thermal_pressure+0xec/0x100
+[   37.138098] Modules linked in:
+[   37.141279] CPU: 0 PID: 187 Comm: kworker/0:3 Tainted: G S                5.17.0-rc6-00389-g37c83d0b8710-dirty #713
+[   37.158306] Workqueue: events qcom_lmh_dcvs_poll
+[   37.163095] pstate: 60400005 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+[   37.170278] pc : topology_update_thermal_pressure+0xec/0x100
+[   37.176131] lr : topology_update_thermal_pressure+0x20/0x100
+[   37.181977] sp : ffff800009b6bce0
+[   37.185402] x29: ffff800009b6bce0 x28: ffffd87abe92b000 x27: ffff04bd7292e205
+[   37.192792] x26: ffffd87abe930af8 x25: ffffd87abe94e4c8 x24: 0000000000000000
+[   37.200180] x23: ffff04bb01177018 x22: ffff04bb011770c0 x21: ffff04bb01177000
+[   37.207567] x20: ffff04bb0a419000 x19: 00000000000c4e00 x18: 0000000000000000
+[   37.214954] x17: 000000040044ffff x16: 004000b2b5503510 x15: 0000006aaa1326d2
+[   37.222333] x14: 0000000000000232 x13: 0000000000000001 x12: 0000000000000040
+[   37.229718] x11: ffff04bb00400000 x10: 968f57bd39f701c8 x9 : ffff04bb0acc8674
+[   37.237095] x8 : fefefefefefefeff x7 : 0000000000000018 x6 : ffffd87abd90092c
+[   37.244478] x5 : 0000000000000016 x4 : 0000000000000000 x3 : 0000000000000100
+[   37.251852] x2 : ffff04bb0a419020 x1 : 0000000000000100 x0 : 0000000000000100
+[   37.259235] Call trace:
+[   37.261771]  topology_update_thermal_pressure+0xec/0x100
+[   37.267266]  qcom_lmh_dcvs_poll+0xbc/0x154
+[   37.271505]  process_one_work+0x288/0x69c
+[   37.275654]  worker_thread+0x74/0x470
+[   37.279450]  kthread+0xfc/0x100
+[   37.282712]  ret_from_fork+0x10/0x20
+[   37.286417] irq event stamp: 74
+[   37.289664] hardirqs last  enabled at (73): [<ffffd87abdd78af4>] _raw_spin_unlock_irq+0x44/0x80
+[   37.298632] hardirqs last disabled at (74): [<ffffd87abdd71fc0>] __schedule+0x710/0xa10
+[   37.306885] softirqs last  enabled at (58): [<ffffd87abcc90410>] _stext+0x410/0x588
+[   37.314778] softirqs last disabled at (51): [<ffffd87abcd1bf68>] __irq_exit_rcu+0x158/0x174
+[   37.323386] ---[ end trace 0000000000000000 ]---
 
-                      ext4_mb_seq_groups_show
-	                ext4_mb_load_buddy_gfp
-			  ext4_mb_init_group
-			    ext4_mb_init_cache
-	                      ext4_read_block_bitmap_nowait
-			        ext4_validate_block_bitmap
-				  ext4_error
-			            ext4_handle_error
-			              schedule_work(&EXT4_SB(sb)->s_error_work);
-
-  ext4_unregister_sysfs(sb);
-  jbd2_journal_destroy(sbi->s_journal);
-    journal_kill_thread
-      journal->j_flags |= JBD2_UNMOUNT;
-
-                                          flush_stashed_error_work
-				            jbd2_journal_start
-					      start_this_handle
-					        BUG_ON(journal->j_flags & JBD2_UNMOUNT);
-
-To solve this issue, we call 'ext4_unregister_sysfs() before flushing
-s_error_work in ext4_put_super().
-
-Signed-off-by: Ye Bin <yebin10@huawei.com>
-Reviewed-by: Jan Kara <jack@suse.cz>
-Reviewed-by: Ritesh Harjani <riteshh@linux.ibm.com>
-Link: https://lore.kernel.org/r/20220322012419.725457-1-yebin10@huawei.com
-Signed-off-by: Theodore Ts'o <tytso@mit.edu>
+Fixes: 275157b367f4 ("cpufreq: qcom-cpufreq-hw: Add dcvs interrupt support")
+Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/ext4/super.c | 15 ++++++++++-----
- 1 file changed, 10 insertions(+), 5 deletions(-)
+ drivers/cpufreq/qcom-cpufreq-hw.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/fs/ext4/super.c b/fs/ext4/super.c
-index 5e6c03458317..3e26edeca8c7 100644
---- a/fs/ext4/super.c
-+++ b/fs/ext4/super.c
-@@ -1176,18 +1176,23 @@ static void ext4_put_super(struct super_block *sb)
- 	int aborted = 0;
- 	int i, err;
- 
--	ext4_unregister_li_request(sb);
--	ext4_quota_off_umount(sb);
--
--	destroy_workqueue(sbi->rsv_conversion_wq);
--
- 	/*
- 	 * Unregister sysfs before destroying jbd2 journal.
- 	 * Since we could still access attr_journal_task attribute via sysfs
- 	 * path which could have sbi->s_journal->j_task as NULL
-+	 * Unregister sysfs before flush sbi->s_error_work.
-+	 * Since user may read /proc/fs/ext4/xx/mb_groups during umount, If
-+	 * read metadata verify failed then will queue error work.
-+	 * flush_stashed_error_work will call start_this_handle may trigger
-+	 * BUG_ON.
- 	 */
- 	ext4_unregister_sysfs(sb);
- 
-+	ext4_unregister_li_request(sb);
-+	ext4_quota_off_umount(sb);
-+
-+	destroy_workqueue(sbi->rsv_conversion_wq);
-+
- 	if (sbi->s_journal) {
- 		aborted = is_journal_aborted(sbi->s_journal);
- 		err = jbd2_journal_destroy(sbi->s_journal);
+diff --git a/drivers/cpufreq/qcom-cpufreq-hw.c b/drivers/cpufreq/qcom-cpufreq-hw.c
+index 740518d8ae16..dc0d5f84d863 100644
+--- a/drivers/cpufreq/qcom-cpufreq-hw.c
++++ b/drivers/cpufreq/qcom-cpufreq-hw.c
+@@ -277,7 +277,7 @@ static unsigned int qcom_lmh_get_throttle_freq(struct qcom_cpufreq_data *data)
+ static void qcom_lmh_dcvs_notify(struct qcom_cpufreq_data *data)
+ {
+ 	struct cpufreq_policy *policy = data->policy;
+-	int cpu = cpumask_first(policy->cpus);
++	int cpu = cpumask_first(policy->related_cpus);
+ 	struct device *dev = get_cpu_device(cpu);
+ 	unsigned long freq_hz, throttled_freq;
+ 	struct dev_pm_opp *opp;
 -- 
 2.35.1
 

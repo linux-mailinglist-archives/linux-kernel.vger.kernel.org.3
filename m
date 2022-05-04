@@ -2,45 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E3BC51A88C
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:07:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D32E951AAAA
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:29:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355718AbiEDRL1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 13:11:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37174 "EHLO
+        id S1349455AbiEDRbf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 13:31:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355390AbiEDRAB (ORCPT
+        with ESMTP id S1356885AbiEDRJs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 13:00:01 -0400
+        Wed, 4 May 2022 13:09:48 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BBE64B1F8;
-        Wed,  4 May 2022 09:51:39 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AB2E4553B;
+        Wed,  4 May 2022 09:56:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9061DB827A1;
-        Wed,  4 May 2022 16:51:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38D8DC385A4;
-        Wed,  4 May 2022 16:51:27 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CBE74B82795;
+        Wed,  4 May 2022 16:56:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51567C385A5;
+        Wed,  4 May 2022 16:56:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651683087;
-        bh=RL5yGVkyeNKNqpXaH1HM7y2330PAjpWmWzwxkKb8fFU=;
+        s=korg; t=1651683375;
+        bh=K32jkouY8bCApJeS1xG/u8VhN90LNIqFe6Zp9teHNIg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vCmF3KN+Js0gbDcHnaLQtf6dwcOg+qh/ltOx497wSkaGuFgZrfgVO1AH85OKNlkvW
-         dSByEeCm82aD43daXMBlI2FPMFiEnNF4/KNNx7bCRO2LVp7bK7mI/4i2UzeocApiz8
-         JqJeCGnuqJLzy9H6o7kfkO4dD1q6EHt/e+KPRZ4A=
+        b=YDEYkk3ZUbqcsm8BIrCFqA/a0mbuAUdxV1M4T5JHh+q+vB7bmsSrs6m4RC0o7HxPu
+         d+zrr3vsPEEQsgQP/jjb4gv1fx6VU1sdM6NAGAQv6qm1HJSn0hwds2Lv8/wBq8nsgf
+         qyK3+XWs7ON2Y+yygu74cdUJ9GqwWt3miUn8gDxY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 091/129] drm/amd/display: Fix memory leak in dcn21_clock_source_create
-Date:   Wed,  4 May 2022 18:44:43 +0200
-Message-Id: <20220504153028.198953417@linuxfoundation.org>
+        stable@vger.kernel.org, Jaegeuk Kim <jaegeuk@kernel.org>
+Subject: [PATCH 5.17 046/225] f2fs: should not truncate blocks during roll-forward recovery
+Date:   Wed,  4 May 2022 18:44:44 +0200
+Message-Id: <20220504153114.207957787@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220504153021.299025455@linuxfoundation.org>
-References: <20220504153021.299025455@linuxfoundation.org>
+In-Reply-To: <20220504153110.096069935@linuxfoundation.org>
+References: <20220504153110.096069935@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,34 +53,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Jaegeuk Kim <jaegeuk@kernel.org>
 
-[ Upstream commit 65e54987508b6f0771f56bdfa3ee1926d52785ae ]
+commit 4d8ec91208196e0e19195f1e7d6be9de5873f242 upstream.
 
-When dcn20_clk_src_construct() fails, we need to release clk_src.
+If the file preallocated blocks and fsync'ed, we should not truncate them during
+roll-forward recovery which will recover i_size correctly back.
 
-Fixes: 6f4e6361c3ff ("drm/amd/display: Add Renoir resource (v2)")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: d4dd19ec1ea0 ("f2fs: do not expose unwritten blocks to user by DIO")
+Cc: <stable@vger.kernel.org> # 5.17+
+Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/amd/display/dc/dcn21/dcn21_resource.c | 1 +
- 1 file changed, 1 insertion(+)
+ fs/f2fs/inode.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/amd/display/dc/dcn21/dcn21_resource.c b/drivers/gpu/drm/amd/display/dc/dcn21/dcn21_resource.c
-index 7ed4d7c8734f..01c4e8753294 100644
---- a/drivers/gpu/drm/amd/display/dc/dcn21/dcn21_resource.c
-+++ b/drivers/gpu/drm/amd/display/dc/dcn21/dcn21_resource.c
-@@ -1267,6 +1267,7 @@ static struct clock_source *dcn21_clock_source_create(
- 		return &clk_src->base;
+diff --git a/fs/f2fs/inode.c b/fs/f2fs/inode.c
+index 71f232dcf3c2..83639238a1fe 100644
+--- a/fs/f2fs/inode.c
++++ b/fs/f2fs/inode.c
+@@ -550,7 +550,8 @@ struct inode *f2fs_iget(struct super_block *sb, unsigned long ino)
  	}
+ 	f2fs_set_inode_flags(inode);
  
-+	kfree(clk_src);
- 	BREAK_TO_DEBUGGER();
- 	return NULL;
- }
+-	if (file_should_truncate(inode)) {
++	if (file_should_truncate(inode) &&
++			!is_sbi_flag_set(sbi, SBI_POR_DOING)) {
+ 		ret = f2fs_truncate(inode);
+ 		if (ret)
+ 			goto bad_inode;
 -- 
-2.35.1
+2.36.0
 
 
 

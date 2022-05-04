@@ -2,38 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0291351AC43
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 20:06:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D63251AC41
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 20:06:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376530AbiEDSIl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 14:08:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47550 "EHLO
+        id S1376585AbiEDSIZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 14:08:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376494AbiEDSHu (ORCPT
+        with ESMTP id S1376328AbiEDSIM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 14:07:50 -0400
+        Wed, 4 May 2022 14:08:12 -0400
 Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 566BB6FA02;
-        Wed,  4 May 2022 10:23:10 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA70C7092E;
+        Wed,  4 May 2022 10:23:30 -0700 (PDT)
 Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id 99C7C1C0BAA; Wed,  4 May 2022 19:23:08 +0200 (CEST)
-Date:   Wed, 4 May 2022 19:23:07 +0200
+        id 65AF91C0BBB; Wed,  4 May 2022 19:23:29 +0200 (CEST)
+Date:   Wed, 4 May 2022 19:23:28 +0200
 From:   Pavel Machek <pavel@ucw.cz>
-To:     Michael Kelley <mikelley@microsoft.com>
-Cc:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
-        wei.liu@kernel.org, linux-kernel@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, vkuznets@redhat.com,
-        decui@microsoft.com, drawat.floss@gmail.com, airlied@linux.ie,
-        daniel@ffwll.ch, jejb@linux.ibm.com, martin.petersen@oracle.com,
-        deller@gmx.de, dri-devel@lists.freedesktop.org,
-        linux-scsi@vger.kernel.org, linux-fbdev@vger.kernel.org
-Subject: Re: [PATCH 0/4] Remove support for Hyper-V 2008 and 2008R2/Win7
-Message-ID: <20220504172307.GB1623@bug>
-References: <1651509391-2058-1-git-send-email-mikelley@microsoft.com>
+To:     Caleb Connolly <caleb.connolly@linaro.org>
+Cc:     Sebastian Reichel <sre@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        Amit Pundir <amit.pundir@linaro.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>
+Subject: Re: [PATCH 0/6] power: supply: introduce support for the Qualcomm
+ smb2 charger
+Message-ID: <20220504172328.GC1623@bug>
+References: <20220427184031.2569442-1-caleb.connolly@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1651509391-2058-1-git-send-email-mikelley@microsoft.com>
+In-Reply-To: <20220427184031.2569442-1-caleb.connolly@linaro.org>
 User-Agent: Mutt/1.5.23 (2014-03-12)
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
@@ -46,34 +49,21 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hi!
 
-> Linux code for running as a Hyper-V guest includes special cases for the
-> first released versions of Hyper-V: 2008 and 2008R2/Windows 7. These
-> versions were very thinly used for running Linux guests when first
-> released more than 12 years ago, and they are now out of support
-> (except for extended security updates). As initial versions, they
-> lack the performance features needed for effective production usage
-> of Linux guests. In total, there's no need to continue to support
-> the latest Linux kernels on these versions of Hyper-V.
+> Add a driver for the Qualcomm PMI8998/PM660 Switch-Mode Battery Charger.
+> This is the second generation SMB charger, and replaces the previous
+> SMBB hardware found in older PMICs.
 > 
-> Simplify the code for running on Hyper-V by removing the special
-> cases. This includes removing the negotiation of the VMbus protocol
-> versions for 2008 and 2008R2, and the special case code based on
-> those VMbus protocol versions. Changes are in the core VMbus code and
-> several drivers for synthetic VMbus devices.
+> This driver provides basic support for initialising the hardware,
+> configuring the USB input current limit and reporting information about
+> the state of the charger. Features like type-c dual role support and OTG
+> switching will be added in future patches.
+> 
+> This patch series depends on my previous series adding support for
+> the Round Robin ADC which is used for reading the USB voltage and
+> current, it can be found here:
+> https://lore.kernel.org/linux-arm-msm/20220323162820.110806-1-caleb@connolly.tech/
 
-> 2008 and 2008R2, so if the broader Linux kernel community surfaces
-> a reason why this clean-up should not be done now, we can wait.
-> But I think we want to eventually stop carrying around this extra
-> baggage, and based on discussions with the Hyper-V team within
-> Microsoft, we're already past the point that it has any value.
-
-Normal way to do such deprecations is to put printks in first, then hide it
-under config option noone sets, and wait for year or so if anyone complains.
-
-We can't really remove code that is in use.
+Please cc phone-devel mailing list with this and related stuff.
 
 Best regards,
 									Pavel
--- 
-(english) http://www.livejournal.com/~pavelmachek
-(cesky, pictures) http://atrey.karlin.mff.cuni.cz/~pavel/picture/horses/blog.html

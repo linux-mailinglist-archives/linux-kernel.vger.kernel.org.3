@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EAA951AF59
+	by mail.lfdr.de (Postfix) with ESMTP id C856F51AF5A
 	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 22:36:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344986AbiEDUje (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 16:39:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45040 "EHLO
+        id S1378226AbiEDUji (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 16:39:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238079AbiEDUi6 (ORCPT
+        with ESMTP id S1378118AbiEDUi7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 16:38:58 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53FB6109D
-        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 13:35:21 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id 1-20020a05600c248100b00393fbf11a05so3904445wms.3
-        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 13:35:21 -0700 (PDT)
+        Wed, 4 May 2022 16:38:59 -0400
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFEBE60F9
+        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 13:35:22 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id p7-20020a05600c358700b00393e80c59daso3145719wmq.0
+        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 13:35:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=conchuod.ie; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=/kez/qpsFQ+IZamV7zrV7LTtRW1TdlvsPTX0KFg6YaM=;
-        b=OzZyx1llwNQhvtNr3EhzufY2pfeGAnTQZ8980mXd99emptugndbzow05J7OXa8m8Xu
-         nqP+vnqzlOc8kFKMq/iHrWMedvjQ0wRUG+S6H4wF7jl0Za89CZBcRF4J5wksf86kGhMj
-         KrIvfuB1e62wN7PxM6tUfql2MvRjusCaH8FUy4WoNLxv1xPZsxlUOaOjz0eN4iMqdeeg
-         mkaG14zpKOLYsIheTbsOJqXU3Kj4mOfQNxRjiFvz9zmvBAKMTPGk8x/owLYrzK1Y9nts
-         1Ts50BdFx8cFdgu/qKUZoQVP75gO+N4ac/cN7jK+IUdqCbCasA2zIH60wWTZoHtf6qwh
-         2H6w==
+        bh=m85atXqhp4ztYTPocRCcI1bK28FLuljc1tOQ4ApvLt8=;
+        b=BoFO9RgijG3dtSC+Asm1aOZqkvwHfxz+CW4Wm64TPnFa7FGej6gX0ZOMUNTbQ4rrM7
+         4KYQ4Bjcvlc1vCOh4bp/BF1yNdOn6tRdeoOBlEjvCCY4j2HeQ/RM4E7egRLnZK2b+xwi
+         iSnNJh1hooZHs4gGM1ZdfQKb8gIF12WZ620/hfPU8rGSH0qI+GgLjDpYFglChHVp8NpR
+         K95vMSs3fmVUAcnP487exVHKXwKhqiUdaaYuirMivrr4jVN8EpQWRr/BBKM+80QnxVcO
+         jhnmE+9BSieIb71caKB+SjXaONf/L3QncYOvQqXgCSiPY5mB66hegKOvMeExGAyIg/qk
+         3rhg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=/kez/qpsFQ+IZamV7zrV7LTtRW1TdlvsPTX0KFg6YaM=;
-        b=5L7WOxHWadXzJJ3ogiIYfFO1HWB0oGF3ldAfHfup3M46rL6RANPBmi7HCnsCEPmG3B
-         EXa5LhaPdK8ZS4j+7vW9mf1MQBeRzBrDQu48gICpmpRYi6e+mEYx0T54as9wB4vkM84l
-         XRUK5M5TuHe/KlyY3sEJ19m9AEV2ESlWuySftBmysAOY5yY9cON6jBgM1S1YHYbouoV+
-         5dkbOGjoxpVRMEyHpd3zm+Ohu1MJEM0pzMaw5ChGk0R8nrkoSncm5m7lHbzQVBQizbHB
-         8JmMuQNE4BgrTRtU0ZloftnNdYcAv/9RmxQTZetmrRWZLFRr9Y7g/oB1wIR8cH0vhXFh
-         OMdg==
-X-Gm-Message-State: AOAM530zvgN4oJIVedlnhVUALqNAtfCnB1d2iA0a7VN2c8NJ68TAsPHv
-        5dmzLk2txYQvlwe9RZiCQ2MB2JnFRXKbHWFfucU=
-X-Google-Smtp-Source: ABdhPJwTP+LGkjMrAS/D90kMOMXTYP/hJZZwmXwXPYgDQ3kVDjSRRrJF5JOfWaxcbNwZKXmG/pVgEQ==
-X-Received: by 2002:a1c:5459:0:b0:394:1191:a1ff with SMTP id p25-20020a1c5459000000b003941191a1ffmr1086431wmi.96.1651696519959;
-        Wed, 04 May 2022 13:35:19 -0700 (PDT)
+        bh=m85atXqhp4ztYTPocRCcI1bK28FLuljc1tOQ4ApvLt8=;
+        b=UKwNQiJhfNhafs1WusDnIqU/GG9dDTGF5Wy0I4UdY2qVoImN7mZc1fRQh/lbAE8FGZ
+         A8uffMRO/DguW1DOQUR1w9ldNmU/V2vm7NylrLsk/kKaQyH14AMtjxmu4ROxlmjwDfuy
+         ju5fHcBu73pmmNMfoNvLS5i7vT8DNEHE4riXdyiJzS7sCHJuiTi+xWHi9GLzXKyZmSyB
+         v1rISfT7e2FtpZDsQWNTYTUgc1IwDeDdhrbIpXAwYBpiWHLqr8j3aRL4aIh/8hkmMDm+
+         DHjZ7Tdq6FCP9kdjISECtd9R871ypttjnTYnaNiaZkPVMxxAC+3dy3HxBbMwPlwGhKG9
+         9Qeg==
+X-Gm-Message-State: AOAM5329KMNFpNc6De8P18Aa40drHMoJiamW7LJeMu3Jj+4BgDYzy7gK
+        nIn4i1I/JX28tM9Nztk2V41XJA==
+X-Google-Smtp-Source: ABdhPJxS/9tz7EnYuOE7vwds4NgNRqe9y7xl30EkdPS6ldBVO4rTRSF4cGiHP9guGl9befwAPMej9A==
+X-Received: by 2002:a05:600c:35cd:b0:392:8e1a:18b7 with SMTP id r13-20020a05600c35cd00b003928e1a18b7mr1105496wmq.112.1651696521258;
+        Wed, 04 May 2022 13:35:21 -0700 (PDT)
 Received: from henark71.. ([109.77.36.132])
-        by smtp.gmail.com with ESMTPSA id l20-20020adfc794000000b0020c5253d8dfsm13330101wrg.43.2022.05.04.13.35.18
+        by smtp.gmail.com with ESMTPSA id l20-20020adfc794000000b0020c5253d8dfsm13330101wrg.43.2022.05.04.13.35.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 May 2022 13:35:19 -0700 (PDT)
+        Wed, 04 May 2022 13:35:20 -0700 (PDT)
 From:   Conor Dooley <mail@conchuod.ie>
 To:     krzk+dt@kernel.org, palmer@dabbelt.com, robh+dt@kernel.org
 Cc:     conor.dooley@microchip.com, Cyril.Jean@microchip.com,
@@ -56,9 +56,9 @@ Cc:     conor.dooley@microchip.com, Cyril.Jean@microchip.com,
         heiko@sntech.de, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
         Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v4 6/8] dt-bindings: vendor-prefixes: add Sundance DSP
-Date:   Wed,  4 May 2022 21:30:50 +0100
-Message-Id: <20220504203051.1210355-7-mail@conchuod.ie>
+Subject: [PATCH v4 7/8] dt-bindings: riscv: microchip: add polarberry compatible string
+Date:   Wed,  4 May 2022 21:30:51 +0100
+Message-Id: <20220504203051.1210355-8-mail@conchuod.ie>
 X-Mailer: git-send-email 2.36.0
 In-Reply-To: <20220504203051.1210355-1-mail@conchuod.ie>
 References: <20220504203051.1210355-1-mail@conchuod.ie>
@@ -76,28 +76,26 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Conor Dooley <conor.dooley@microchip.com>
 
-Sundance DSP Inc. (https://www.sundancedsp.com/) is a supplier of
-high-performance DSP and FPGA processor boards and I/O modules.
+Add a binding for the Sundance Polarberry board.
 
 Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
 ---
- Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
- 1 file changed, 2 insertions(+)
+ Documentation/devicetree/bindings/riscv/microchip.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-index 01430973ecec..1d47a38c2a2e 100644
---- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
-+++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-@@ -1197,6 +1197,8 @@ patternProperties:
-     description: Summit microelectronics
-   "^sunchip,.*":
-     description: Shenzhen Sunchip Technology Co., Ltd
-+  "^sundance,.*":
-+    description: Sundance DSP Inc.
-   "^sunplus,.*":
-     description: Sunplus Technology Co., Ltd.
-   "^SUNW,.*":
+diff --git a/Documentation/devicetree/bindings/riscv/microchip.yaml b/Documentation/devicetree/bindings/riscv/microchip.yaml
+index 822a711df9e9..1aa7336a9672 100644
+--- a/Documentation/devicetree/bindings/riscv/microchip.yaml
++++ b/Documentation/devicetree/bindings/riscv/microchip.yaml
+@@ -21,6 +21,7 @@ properties:
+       - enum:
+           - microchip,mpfs-icicle-kit
+           - microchip,mpfs-icicle-reference-rtlv2203
++          - sundance,polarberry
+       - const: microchip,mpfs
+ 
+ additionalProperties: true
 -- 
 2.36.0
 

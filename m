@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E584F51A60E
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 18:49:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6719051A7A6
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:04:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353876AbiEDQwl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 12:52:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51056 "EHLO
+        id S1355282AbiEDREP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 13:04:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353622AbiEDQwB (ORCPT
+        with ESMTP id S1354617AbiEDQ6y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 12:52:01 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 545774704B;
-        Wed,  4 May 2022 09:48:24 -0700 (PDT)
+        Wed, 4 May 2022 12:58:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0637C25588;
+        Wed,  4 May 2022 09:50:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C3FAF61786;
-        Wed,  4 May 2022 16:48:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1CFB3C385A5;
-        Wed,  4 May 2022 16:48:23 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6ED4F617C4;
+        Wed,  4 May 2022 16:50:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AFF8BC385AA;
+        Wed,  4 May 2022 16:50:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651682903;
-        bh=MgNU/KErX9XYknk3zj2PDYvQIh2K7GS2hYAzr7pzkmM=;
+        s=korg; t=1651683047;
+        bh=2AHMO1rt09lcgtSq7YM7IIDJOOXaAVwLycWd1FnTCxA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MOgtY2MWMmMgijbus5AUO9zU7QSMfcG7fcFG4iQ1/hGXcxcVatp1q8XmzRFrs/176
-         I3XTmAEkKAJVcBYbBCucl+5PJR42i+n3QNsY6rKi+OkMMIN4GauLjD8lPyf4V5RbVQ
-         GB5Nxk6hW2njWo8KsXWyvmQ6nj7ahUjP3apdsNfw=
+        b=wwNFe7JS0ZqlgVdQX/Pkm3AdHRVqTAnWngV6di0hbtBNTpdQQQEDM7hue5c+Fn1uV
+         eWkRYJDfFumSBRzvV3nSjBlfKX7zoyyatNkb3uBQ7O4MnvAoVktMmecfBz6FR87re2
+         ixY9rgwHK68qd7b9PaoAWdU1koNyCgyfXYvcWKy4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Bruno Thomsen <bruno.thomsen@gmail.com>,
-        Johan Hovold <johan@kernel.org>
-Subject: [PATCH 5.4 09/84] USB: serial: cp210x: add PIDs for Kamstrup USB Meter Reader
+        stable@vger.kernel.org, Pavel Skripkin <paskripkin@gmail.com>,
+        Helge Deller <deller@gmx.de>, Sasha Levin <sashal@kernel.org>,
+        syzbot+53ce4a4246d0fe0fee34@syzkaller.appspotmail.com
+Subject: [PATCH 5.10 038/129] video: fbdev: udlfb: properly check endpoint type
 Date:   Wed,  4 May 2022 18:43:50 +0200
-Message-Id: <20220504152928.395537118@linuxfoundation.org>
+Message-Id: <20220504153024.212430108@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220504152927.744120418@linuxfoundation.org>
-References: <20220504152927.744120418@linuxfoundation.org>
+In-Reply-To: <20220504153021.299025455@linuxfoundation.org>
+References: <20220504153021.299025455@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,38 +55,92 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Bruno Thomsen <bruno.thomsen@gmail.com>
+From: Pavel Skripkin <paskripkin@gmail.com>
 
-commit 35a923a0b329c343e9e81d79518e2937eba06fcd upstream.
+[ Upstream commit aaf7dbe07385e0b8deb7237eca2a79926bbc7091 ]
 
-Wireless reading of water and heat meters using 868 MHz wM-Bus mode C1.
+syzbot reported warning in usb_submit_urb, which is caused by wrong
+endpoint type.
 
-The two different product IDs allow detection of dongle antenna
-solution:
-- Internal antenna
-- External antenna using SMA connector
+This driver uses out bulk endpoint for communication, so
+let's check if this endpoint is present and bail out early if not.
 
-https://www.kamstrup.com/en-en/water-solutions/water-meter-reading/usb-meter-reader
+Fail log:
 
-Signed-off-by: Bruno Thomsen <bruno.thomsen@gmail.com>
-Link: https://lore.kernel.org/r/20220414081202.5591-1-bruno.thomsen@gmail.com
-Cc: stable@vger.kernel.org
-Signed-off-by: Johan Hovold <johan@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+usb 1-1: BOGUS urb xfer, pipe 3 != type 1
+WARNING: CPU: 0 PID: 4822 at drivers/usb/core/urb.c:493 usb_submit_urb+0xd27/0x1540 drivers/usb/core/urb.c:493
+Modules linked in:
+CPU: 0 PID: 4822 Comm: kworker/0:3 Tainted: G        W         5.13.0-syzkaller #0
+...
+Workqueue: usb_hub_wq hub_event
+RIP: 0010:usb_submit_urb+0xd27/0x1540 drivers/usb/core/urb.c:493
+...
+Call Trace:
+ dlfb_submit_urb+0x89/0x160 drivers/video/fbdev/udlfb.c:1969
+ dlfb_set_video_mode+0x21f0/0x2950 drivers/video/fbdev/udlfb.c:315
+ dlfb_ops_set_par+0x2a3/0x840 drivers/video/fbdev/udlfb.c:1110
+ dlfb_usb_probe.cold+0x113e/0x1f4a drivers/video/fbdev/udlfb.c:1732
+ usb_probe_interface+0x315/0x7f0 drivers/usb/core/driver.c:396
+
+Fixes: 88e58b1a42f8 ("Staging: add udlfb driver")
+Reported-and-tested-by: syzbot+53ce4a4246d0fe0fee34@syzkaller.appspotmail.com
+Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
+Signed-off-by: Helge Deller <deller@gmx.de>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/serial/cp210x.c |    2 ++
- 1 file changed, 2 insertions(+)
+ drivers/video/fbdev/udlfb.c | 14 ++++++++++++--
+ 1 file changed, 12 insertions(+), 2 deletions(-)
 
---- a/drivers/usb/serial/cp210x.c
-+++ b/drivers/usb/serial/cp210x.c
-@@ -195,6 +195,8 @@ static const struct usb_device_id id_tab
- 	{ USB_DEVICE(0x16DC, 0x0015) }, /* W-IE-NE-R Plein & Baus GmbH CML Control, Monitoring and Data Logger */
- 	{ USB_DEVICE(0x17A8, 0x0001) }, /* Kamstrup Optical Eye/3-wire */
- 	{ USB_DEVICE(0x17A8, 0x0005) }, /* Kamstrup M-Bus Master MultiPort 250D */
-+	{ USB_DEVICE(0x17A8, 0x0101) }, /* Kamstrup 868 MHz wM-Bus C-Mode Meter Reader (Int Ant) */
-+	{ USB_DEVICE(0x17A8, 0x0102) }, /* Kamstrup 868 MHz wM-Bus C-Mode Meter Reader (Ext Ant) */
- 	{ USB_DEVICE(0x17F4, 0xAAAA) }, /* Wavesense Jazz blood glucose meter */
- 	{ USB_DEVICE(0x1843, 0x0200) }, /* Vaisala USB Instrument Cable */
- 	{ USB_DEVICE(0x18EF, 0xE00F) }, /* ELV USB-I2C-Interface */
+diff --git a/drivers/video/fbdev/udlfb.c b/drivers/video/fbdev/udlfb.c
+index 90f48b71fd8f..d9eec1b60e66 100644
+--- a/drivers/video/fbdev/udlfb.c
++++ b/drivers/video/fbdev/udlfb.c
+@@ -1649,8 +1649,9 @@ static int dlfb_usb_probe(struct usb_interface *intf,
+ 	const struct device_attribute *attr;
+ 	struct dlfb_data *dlfb;
+ 	struct fb_info *info;
+-	int retval = -ENOMEM;
++	int retval;
+ 	struct usb_device *usbdev = interface_to_usbdev(intf);
++	struct usb_endpoint_descriptor *out;
+ 
+ 	/* usb initialization */
+ 	dlfb = kzalloc(sizeof(*dlfb), GFP_KERNEL);
+@@ -1664,6 +1665,12 @@ static int dlfb_usb_probe(struct usb_interface *intf,
+ 	dlfb->udev = usb_get_dev(usbdev);
+ 	usb_set_intfdata(intf, dlfb);
+ 
++	retval = usb_find_common_endpoints(intf->cur_altsetting, NULL, &out, NULL, NULL);
++	if (retval) {
++		dev_err(&intf->dev, "Device should have at lease 1 bulk endpoint!\n");
++		goto error;
++	}
++
+ 	dev_dbg(&intf->dev, "console enable=%d\n", console);
+ 	dev_dbg(&intf->dev, "fb_defio enable=%d\n", fb_defio);
+ 	dev_dbg(&intf->dev, "shadow enable=%d\n", shadow);
+@@ -1673,6 +1680,7 @@ static int dlfb_usb_probe(struct usb_interface *intf,
+ 	if (!dlfb_parse_vendor_descriptor(dlfb, intf)) {
+ 		dev_err(&intf->dev,
+ 			"firmware not recognized, incompatible device?\n");
++		retval = -ENODEV;
+ 		goto error;
+ 	}
+ 
+@@ -1686,8 +1694,10 @@ static int dlfb_usb_probe(struct usb_interface *intf,
+ 
+ 	/* allocates framebuffer driver structure, not framebuffer memory */
+ 	info = framebuffer_alloc(0, &dlfb->udev->dev);
+-	if (!info)
++	if (!info) {
++		retval = -ENOMEM;
+ 		goto error;
++	}
+ 
+ 	dlfb->info = info;
+ 	info->par = dlfb;
+-- 
+2.35.1
+
 
 

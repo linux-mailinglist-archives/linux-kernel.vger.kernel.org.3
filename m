@@ -2,61 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AE57519EE9
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 14:06:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F5AC519EF5
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 14:08:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349295AbiEDMKT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 08:10:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46988 "EHLO
+        id S1348845AbiEDMM1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 08:12:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234191AbiEDMKR (ORCPT
+        with ESMTP id S1349160AbiEDMMZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 08:10:17 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 580E11E3CD;
-        Wed,  4 May 2022 05:06:42 -0700 (PDT)
-X-UUID: 0945cdf5d10b472bbb0d06fd096e0f9d-20220504
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.4,REQID:4571927b-e1ff-4707-ad51-20fa77eb49f8,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:0
-X-CID-META: VersionHash:faefae9,CLOUDID:17842b16-2e53-443e-b81a-655c13977218,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,File:nil,QS:0,BEC:nil
-X-UUID: 0945cdf5d10b472bbb0d06fd096e0f9d-20220504
-Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
-        (envelope-from <rex-bc.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 393181000; Wed, 04 May 2022 20:06:39 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
- Wed, 4 May 2022 20:06:38 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n2.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
- Transport; Wed, 4 May 2022 20:06:38 +0800
-Message-ID: <af5d30f36092f387e4de7e4c09ca09f9de0478ba.camel@mediatek.com>
-Subject: Re: [PATCH] cpufreq: Avoid unnecessary frequency updates due to
- mismatch
-From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
-To:     Viresh Kumar <viresh.kumar@linaro.org>,
-        Rafael Wysocki <rjw@rjwysocki.net>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Matthias Brugger" <matthias.bgg@gmail.com>
-CC:     <linux-pm@vger.kernel.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>, <jia-wei.chang@mediatek.com>
-Date:   Wed, 4 May 2022 20:06:38 +0800
-In-Reply-To: <39e39a7d30c8ee6af81fb64670a330abeb87402e.1651652493.git.viresh.kumar@linaro.org>
-References: <39e39a7d30c8ee6af81fb64670a330abeb87402e.1651652493.git.viresh.kumar@linaro.org>
+        Wed, 4 May 2022 08:12:25 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9B8BD1DA62
+        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 05:08:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1651666128;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=5JmwH3ZBgKgTWBBO0FhYbpl+Uw/L1BpVs00veAWR2mo=;
+        b=V8eJOM6E+mxAUNRotyPQbEj38NW8QUljouww2/8pOOpU63eQjerR6Lvf6hXKcw2P5taRcC
+        hZ62g1BZRLKBBXuCE/Xbrlrd8TDrShEPHuPr1Z8boFEoiodRT3OWgr3LTuCN6uh0kYPu/Q
+        R8jBJA5WqJWt81bT4e/3VBUMjTtAuQE=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-546-BcUTJm7bM8W5xJWmZeLYrw-1; Wed, 04 May 2022 08:08:45 -0400
+X-MC-Unique: BcUTJm7bM8W5xJWmZeLYrw-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3AE403CF2AA0;
+        Wed,  4 May 2022 12:08:45 +0000 (UTC)
+Received: from starship (unknown [10.40.192.26])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id EC972C28101;
+        Wed,  4 May 2022 12:08:42 +0000 (UTC)
+Message-ID: <42e9431ec2c716f1066fc282ebd97a7a24cbac72.camel@redhat.com>
+Subject: Re: [PATCH] KVM: x86/mmu: Do not create SPTEs for GFNs that exceed
+ host.MAXPHYADDR
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Ben Gardon <bgardon@google.com>,
+        David Matlack <dmatlack@google.com>
+Date:   Wed, 04 May 2022 15:08:41 +0300
+In-Reply-To: <YnGQyE60lHD7wusA@google.com>
+References: <Ymv5TR76RNvFBQhz@google.com>
+         <e5864cb4-cce8-bd32-04b0-ecb60c058d0b@redhat.com>
+         <YmwL87h6klEC4UKV@google.com>
+         <ac2001e66957edc8a3af2413b78478c15898f86c.camel@redhat.com>
+         <f3ffad3aa8476156f369ff1d4c33f3e127b47d0c.camel@redhat.com>
+         <82d1a5364f1cc479da3762b046d22f136db167e3.camel@redhat.com>
+         <af15fd31f73e8a956da50db6104e690f9d308dad.camel@redhat.com>
+         <YnAMKtfAeoydHr3x@google.com>
+         <e11c21e99e7c4ac758b4417e0ae66d3a2f1fe663.camel@redhat.com>
+         <cbd4709bb499874c60986083489e17c93b48d003.camel@redhat.com>
+         <YnGQyE60lHD7wusA@google.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,33 +78,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-05-04 at 13:51 +0530, Viresh Kumar wrote:
-> For some platforms, the frequency returned by hardware may be
-> slightly
-> different from what is provided in the frequency table. For example,
-> hardware may return 499 MHz instead of 500 MHz. In such cases it is
-> better to avoid getting into unnecessary frequency updates, as we may
-> end up switching policy->cur between the two and sending unnecessary
-> pre/post update notifications, etc.
+On Tue, 2022-05-03 at 20:30 +0000, Sean Christopherson wrote:
+> On Tue, May 03, 2022, Maxim Levitsky wrote:
+> > On Tue, 2022-05-03 at 12:12 +0300, Maxim Levitsky wrote:
+> > > On Mon, 2022-05-02 at 16:51 +0000, Sean Christopherson wrote:
+> > > > On Mon, May 02, 2022, Maxim Levitsky wrote:
+> > > > > On Mon, 2022-05-02 at 10:59 +0300, Maxim Levitsky wrote:
+> > > > > > > > Also I can reproduce it all the way to 5.14 kernel (last kernel I have installed in this VM).
+> > > > > > > > 
+> > > > > > > > I tested kvm/queue as of today, sadly I still see the warning.
+> > > > > > > 
+> > > > > > > Due to a race, the above statements are out of order ;-)
+> > > > > > 
+> > > > > > So futher investigation shows that the trigger for this *is* cpu_pm=on :(
+> > > > > > 
+> > > > > > So this is enough to trigger the warning when run in the guest:
+> > > > > > 
+> > > > > > qemu-system-x86_64  -nodefaults  -vnc none -serial stdio -machine accel=kvm
+> > > > > > -kernel x86/dummy.flat -machine kernel-irqchip=on -smp 8 -m 1g -cpu host
+> > > > > > -overcommit cpu-pm=on
 > 
-> This patch has chosen allows the hardware frequency and table
-> frequency
-> to deviate by 1 MHz for now, we may want to increase it a bit later
-> on
-> if someone still complains.
+> ...
 > 
-> Reported-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
-> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
-> ---
+> > > > > All right, at least that was because I removed the '-device isa-debug-exit,iobase=0xf4,iosize=0x4',
+> > > > > which is apparently used by KVM unit tests to signal exit from the VM.
+> > > > 
+> > > > Can you provide your QEMU command line for running your L1 VM?  And your L0 and L1
+> > > > Kconfigs too?  I've tried both the dummy and ipi_stress tests on a variety of hardware,
+> > > > kernels, QEMUs, etc..., with no luck.
+> > > 
+> > > So now both L0 and L1 run almost pure kvm/queue)
+> > > (commit 2764011106d0436cb44702cfb0981339d68c3509)
+> > > 
+> > > I have some local patches but they are not relevant to KVM at all, more
+> > > like various tweaks to sensors, a sad hack for yet another regression
+> > > in AMDGPU, etc.
+> > > 
+> > > The config and qemu command line attached.
+> > > 
+> > > AVIC disabled in L0, L0 qemu is from master upstream.
+> > > Bug reproduces too well IMHO, almost always.
+> > > 
+> > > For reference the warning is printed in L1's dmesg.
+> > 
+> > Tested this without any preemption in L0 and L1 - bug still reproduces just fine.
+> > (kvm/queue)
+> 
+> Well, I officially give up, I'm out of ideas to try and repro this on my end.  To
+> try and narrow the search, maybe try processing "all" possible gfns and see if that
+> makes the leak go away?
+> 
+> diff --git a/arch/x86/kvm/mmu.h b/arch/x86/kvm/mmu.h
+> index 7e258cc94152..a354490939ec 100644
+> --- a/arch/x86/kvm/mmu.h
+> +++ b/arch/x86/kvm/mmu.h
+> @@ -84,9 +84,7 @@ static inline gfn_t kvm_mmu_max_gfn(void)
+>          * than hardware's real MAXPHYADDR.  Using the host MAXPHYADDR
+>          * disallows such SPTEs entirely and simplifies the TDP MMU.
+>          */
+> -       int max_gpa_bits = likely(tdp_enabled) ? shadow_phys_bits : 52;
+> -
+> -       return (1ULL << (max_gpa_bits - PAGE_SHIFT)) - 1;
+> +       return (1ULL << (52 - PAGE_SHIFT)) - 1;
+>  }
+> 
+>  static inline u8 kvm_get_shadow_phys_bits(void)
 > 
 
-Hello Viresh,
+Nope, still reproduces.
 
-Thanks for your help!
-Jia-wei verified this patch in his device, and I help him to add this.
+I'll think on how to trace this, maybe that will give me some ideas.
+Anything useful to dump from the mmu pages that are still not freed at that point?
 
-Tested-by: Jia-wei Chang <jia-wei.chang@mediatek.com>
+Also do you test on AMD? I test on my 3970X.
 
-BRs,
-Rex
+
+Best regards,
+	Maxim Levitsky
 

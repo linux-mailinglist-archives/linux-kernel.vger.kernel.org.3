@@ -2,49 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 963A051B3B0
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 01:47:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B268051B3C0
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 01:49:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382115AbiEDXr3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 19:47:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41700 "EHLO
+        id S1349865AbiEDXsE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 19:48:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359860AbiEDXZK (ORCPT
+        with ESMTP id S1379752AbiEDXZO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 19:25:10 -0400
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD6CA4DF56
-        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 16:21:32 -0700 (PDT)
-Received: by mail-pg1-x52b.google.com with SMTP id a191so2330186pge.2
-        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 16:21:32 -0700 (PDT)
+        Wed, 4 May 2022 19:25:14 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51CA94DF61
+        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 16:21:36 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id z5-20020a17090a468500b001d2bc2743c4so2589443pjf.0
+        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 16:21:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=Yhdb5Bb/HPOT7rt6ZFl1SIPi2sOZMgAuPW9HJM+UwR0=;
-        b=Lk4xT28VP//2/ipug2hDVNsFxT9ZIxqyDHb0zfUWgwzqxrDXikdUEYcZVll3q4j94i
-         ztdggJgt0+wJWipyAMzuue+sqAj5cr1iqrjXU6TY0KlGJi2k7/sLjz4SzJeD6C1FqUri
-         Vuh+XJBEfDQcKfui50SG/RlDJ8yjXNcYwrQew=
+        bh=oSCDp+BlWHOAe2tqoHinPSSzUxabaz3SWirbYWgZ7iE=;
+        b=AK96nFD2jq9As8QRqe4ZZgrKB3muSxd4UKPDu0PiPgxZCEkF09YM3a/lbxSE2Aolhc
+         8/11YUs8xGSuIa13K4FNjPmrXP32NRaFX2/fqhw5ycNjYisg1PBFJZiM4dKkwgF7l4SI
+         8V/qwibG9N2Kolpq0e2PDsUZD0WN7jb8AqoT4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=Yhdb5Bb/HPOT7rt6ZFl1SIPi2sOZMgAuPW9HJM+UwR0=;
-        b=huJNtmXetTBlqaZ+3095+NWZNAV0DG6BwQAUCMpTMteEm/3D3pFHybLgSbCSCxV4Xh
-         nU2Zp70Oin0DuqiDU2EsSr0mAtluQMsvQSn3nTYP2/2sbXZ6QajUYDV2D+NDiJak5ssv
-         1DGdSfVkmARYTdFQs8+8hsUZ5/q9QOl3VT4CRmiY3YuXq144fcOnfX4Y/s40X5VZaVpq
-         Yn6XNNwXjF244cziUfBAxS5oBqVkw/cwWVsK+4bbLYtRsPZjN472pA1lrPLy26N5EcKv
-         91CW768dKDNogrB6+m9dcHJOQ+2I3Nk8EwaS714fmaQQHLJLvOOE3WHerfNf8x/byssR
-         4xiQ==
-X-Gm-Message-State: AOAM532adHKqkl5zWmPpSesLVtdgsp+lQeAN4x8qrvoPC3jGSDAsSsnM
-        L9pYxUTKD3Ird19xCkRZSX4e1dra/oWoDPbu
-X-Google-Smtp-Source: ABdhPJw5P1NIDRBbT4jMlDGJLeiA/MnnIE6iVTPAa0LCmNhzVLp/2G2suU9nzhm2DtywpArEruqEYA==
-X-Received: by 2002:a62:ce82:0:b0:50d:512f:7b76 with SMTP id y124-20020a62ce82000000b0050d512f7b76mr23214566pfg.79.1651706491900;
-        Wed, 04 May 2022 16:21:31 -0700 (PDT)
+        bh=oSCDp+BlWHOAe2tqoHinPSSzUxabaz3SWirbYWgZ7iE=;
+        b=rMmY4HYmRpOAFdD5blgSZYu97KO2qsOT3f3nMSySOo2C5ZEeIGXtKPAE2hJo8JOoaZ
+         UL5dO2hUMT20CyWVcbbNs4UpsUfBqrQd+WCLW7/sLXg1MCDU2B1KPqrwq4Yv+cJntyPN
+         rhJKxB5c+cInYx2gLb+CQQEaru/ZUxDqPcn6uKrQNpvhcjTL3aAh7dlLjk47sICC6ALW
+         IjnVi6r4sGK95AIYE2g5/FW8flqnP44c8XQLMgW0QBuUQwhmtaq/h9g/Kt/sRW8wzp35
+         oV9TLrSiv7SxjFtfGbd6SUstbqDIpx4mVrDJkvnTJPaPeEA3SqIQ0sk91NY6neCRx87P
+         ndlg==
+X-Gm-Message-State: AOAM53217xxEgdojSEN7yk3TVwzBvZ4bRkUqMcvDf8awtaGQ0l2ms+zS
+        VrJruGXRRrMPst8Lz0suFxymNKnMKY4KPb8x
+X-Google-Smtp-Source: ABdhPJyWCNX/I16qyW4fvcathhxcuAgJ0GjSbW0c5vLuKr3I6Bnp2rIZfhNKLxSoEtDyFcQM2HOpmw==
+X-Received: by 2002:a17:902:7e01:b0:15e:caea:d6 with SMTP id b1-20020a1709027e0100b0015ecaea00d6mr4372912plm.33.1651706495884;
+        Wed, 04 May 2022 16:21:35 -0700 (PDT)
 Received: from evgreen-glaptop.lan ([98.47.98.87])
-        by smtp.gmail.com with ESMTPSA id q12-20020a170902f78c00b0015e8d4eb2d6sm1901pln.288.2022.05.04.16.21.30
+        by smtp.gmail.com with ESMTPSA id q12-20020a170902f78c00b0015e8d4eb2d6sm1901pln.288.2022.05.04.16.21.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 May 2022 16:21:31 -0700 (PDT)
+        Wed, 04 May 2022 16:21:35 -0700 (PDT)
 From:   Evan Green <evgreen@chromium.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Matthew Garrett <mgarrett@aurora.tech>, dlunev@google.com,
@@ -57,10 +57,10 @@ Cc:     Matthew Garrett <mgarrett@aurora.tech>, dlunev@google.com,
         David Howells <dhowells@redhat.com>,
         James Morris <jmorris@namei.org>,
         "Serge E. Hallyn" <serge@hallyn.com>, keyrings@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-Subject: [PATCH 03/10] security: keys: trusted: Parse out individual components of the key blob
-Date:   Wed,  4 May 2022 16:20:55 -0700
-Message-Id: <20220504161439.3.Id409e0cf397bd98b76df6eb60ff16454679dd23d@changeid>
+        linux-doc@vger.kernel.org, linux-security-module@vger.kernel.org
+Subject: [PATCH 04/10] security: keys: trusted: Allow storage of PCR values in creation data
+Date:   Wed,  4 May 2022 16:20:56 -0700
+Message-Id: <20220504161439.4.I32591db064b6cdc91850d777f363c9d05c985b39@changeid>
 X-Mailer: git-send-email 2.31.0
 In-Reply-To: <20220504232102.469959-1-evgreen@chromium.org>
 References: <20220504232102.469959-1-evgreen@chromium.org>
@@ -78,10 +78,13 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Matthew Garrett <matthewgarrett@google.com>
 
-Performing any sort of state validation of a sealed TPM blob requires
-being able to access the individual members in the response. Parse the
-blob sufficiently to be able to stash pointers to each member, along
-with the length.
+When TPMs generate keys, they can also generate some information
+describing the state of the PCRs at creation time. This data can then
+later be certified by the TPM, allowing verification of the PCR values.
+This allows us to determine the state of the system at the time a key
+was generated. Add an additional argument to the trusted key creation
+options, allowing the user to provide the set of PCRs that should have
+their values incorporated into the creation data.
 
 From: Matthew Garrett <mjg59@google.com>
 Signed-off-by: Matthew Garrett <mjg59@google.com>
@@ -89,147 +92,118 @@ Signed-off-by: Matthew Garrett <mjg59@google.com>
 Signed-off-by: Evan Green <evgreen@chromium.org>
 ---
 Matthew's original version of this patch is at:
-https://patchwork.kernel.org/patch/12096489/
+https://patchwork.kernel.org/patch/12096503/
 
- include/keys/trusted-type.h               |  8 +++
- security/keys/trusted-keys/trusted_tpm2.c | 67 ++++++++++++++++++++++-
- 2 files changed, 73 insertions(+), 2 deletions(-)
+ .../security/keys/trusted-encrypted.rst       |  4 +++
+ include/keys/trusted-type.h                   |  1 +
+ security/keys/trusted-keys/trusted_tpm1.c     |  9 +++++++
+ security/keys/trusted-keys/trusted_tpm2.c     | 25 +++++++++++++++++--
+ 4 files changed, 37 insertions(+), 2 deletions(-)
 
+diff --git a/Documentation/security/keys/trusted-encrypted.rst b/Documentation/security/keys/trusted-encrypted.rst
+index f614dad7de12f9..7215b067bf128f 100644
+--- a/Documentation/security/keys/trusted-encrypted.rst
++++ b/Documentation/security/keys/trusted-encrypted.rst
+@@ -170,6 +170,10 @@ Usage::
+        policyhandle= handle to an authorization policy session that defines the
+                      same policy and with the same hash algorithm as was used to
+                      seal the key.
++       creationpcrs= hex integer representing the set of PCR values to be
++                     included in the PCR creation data. The bit corresponding
++		     to each PCR should be 1 to be included, 0 to be ignored.
++		     TPM2 only.
+ 
+ "keyctl print" returns an ascii hex copy of the sealed key, which is in standard
+ TPM_STORED_DATA format.  The key length for new keys are always in bytes.
 diff --git a/include/keys/trusted-type.h b/include/keys/trusted-type.h
-index d89fa2579ac056..8a793ae1ad9f70 100644
+index 8a793ae1ad9f70..b3ac4afe8ba987 100644
 --- a/include/keys/trusted-type.h
 +++ b/include/keys/trusted-type.h
-@@ -22,15 +22,23 @@
- #define MAX_BLOB_SIZE			512
- #define MAX_PCRINFO_SIZE		64
- #define MAX_DIGEST_SIZE			64
-+#define MAX_CREATION_DATA		412
-+#define MAX_TK				76
- 
- struct trusted_key_payload {
- 	struct rcu_head rcu;
- 	unsigned int key_len;
- 	unsigned int blob_len;
-+	unsigned int creation_len;
-+	unsigned int creation_hash_len;
-+	unsigned int tk_len;
- 	unsigned char migratable;
- 	unsigned char old_format;
- 	unsigned char key[MAX_KEY_SIZE + 1];
- 	unsigned char blob[MAX_BLOB_SIZE];
-+	unsigned char *creation;
-+	unsigned char *creation_hash;
-+	unsigned char *tk;
+@@ -54,6 +54,7 @@ struct trusted_key_options {
+ 	uint32_t policydigest_len;
+ 	unsigned char policydigest[MAX_DIGEST_SIZE];
+ 	uint32_t policyhandle;
++	uint32_t creation_pcrs;
  };
  
- struct trusted_key_options {
+ struct trusted_key_ops {
+diff --git a/security/keys/trusted-keys/trusted_tpm1.c b/security/keys/trusted-keys/trusted_tpm1.c
+index aa108bea6739b3..2975827c01bec0 100644
+--- a/security/keys/trusted-keys/trusted_tpm1.c
++++ b/security/keys/trusted-keys/trusted_tpm1.c
+@@ -713,6 +713,7 @@ enum {
+ 	Opt_hash,
+ 	Opt_policydigest,
+ 	Opt_policyhandle,
++	Opt_creationpcrs,
+ };
+ 
+ static const match_table_t key_tokens = {
+@@ -725,6 +726,7 @@ static const match_table_t key_tokens = {
+ 	{Opt_hash, "hash=%s"},
+ 	{Opt_policydigest, "policydigest=%s"},
+ 	{Opt_policyhandle, "policyhandle=%s"},
++	{Opt_creationpcrs, "creationpcrs=%s"},
+ 	{Opt_err, NULL}
+ };
+ 
+@@ -858,6 +860,13 @@ static int getoptions(char *c, struct trusted_key_payload *pay,
+ 				return -EINVAL;
+ 			opt->policyhandle = handle;
+ 			break;
++		case Opt_creationpcrs:
++			if (!tpm2)
++				return -EINVAL;
++			res = kstrtoint(args[0].from, 16, &opt->creation_pcrs);
++			if (res < 0)
++				return -EINVAL;
++			break;
+ 		default:
+ 			return -EINVAL;
+ 		}
 diff --git a/security/keys/trusted-keys/trusted_tpm2.c b/security/keys/trusted-keys/trusted_tpm2.c
-index 0165da386289c3..296a00f872ba40 100644
+index 296a00f872ba40..b7ddb78e644d17 100644
 --- a/security/keys/trusted-keys/trusted_tpm2.c
 +++ b/security/keys/trusted-keys/trusted_tpm2.c
-@@ -215,6 +215,63 @@ static void tpm2_buf_append_auth(struct tpm_buf *buf, u32 session_handle,
- 		tpm_buf_append(buf, hmac, hmac_len);
- }
- 
-+static int tpm2_unpack_blob(struct trusted_key_payload *payload)
-+{
-+	int tmp, offset;
-+
-+	/* Find the length of the private data */
-+	tmp = be16_to_cpup((__be16 *) &payload->blob[0]);
-+	offset = tmp + 2;
-+	if (offset > payload->blob_len)
-+		return -EFAULT;
-+
-+	/* Find the length of the public data */
-+	tmp = be16_to_cpup((__be16 *) &payload->blob[offset]);
-+	offset += tmp + 2;
-+	if (offset > payload->blob_len)
-+		return -EFAULT;
-+
-+	/* Find the length of the creation data and store it */
-+	tmp = be16_to_cpup((__be16 *) &payload->blob[offset]);
-+	if (tmp > MAX_CREATION_DATA)
-+		return -E2BIG;
-+
-+	if ((offset + tmp + 2) > payload->blob_len)
-+		return -EFAULT;
-+
-+	payload->creation = &payload->blob[offset + 2];
-+	payload->creation_len = tmp;
-+	offset += tmp + 2;
-+
-+	/* Find the length of the creation hash and store it */
-+	tmp = be16_to_cpup((__be16 *) &payload->blob[offset]);
-+	if (tmp > MAX_DIGEST_SIZE)
-+		return -E2BIG;
-+
-+	if ((offset + tmp + 2) > payload->blob_len)
-+		return -EFAULT;
-+
-+	payload->creation_hash = &payload->blob[offset + 2];
-+	payload->creation_hash_len = tmp;
-+	offset += tmp + 2;
-+
-+	/*
-+	 * Store the creation ticket. TPMT_TK_CREATION is two bytes of tag,
-+	 * four bytes of handle, and then the digest length and digest data
-+	 */
-+	tmp = be16_to_cpup((__be16 *) &payload->blob[offset + 6]);
-+	if (tmp > MAX_TK)
-+		return -E2BIG;
-+
-+	if ((offset + tmp + 8) > payload->blob_len)
-+		return -EFAULT;
-+
-+	payload->tk = &payload->blob[offset];
-+	payload->tk_len = tmp + 8;
-+
-+	return 0;
-+}
-+
- /**
-  * tpm2_seal_trusted() - seal the payload of a trusted key
-  *
-@@ -229,6 +286,7 @@ int tpm2_seal_trusted(struct tpm_chip *chip,
- 		      struct trusted_key_options *options)
- {
- 	int blob_len = 0;
-+	unsigned int offset;
+@@ -290,7 +290,7 @@ int tpm2_seal_trusted(struct tpm_chip *chip,
  	struct tpm_buf buf;
  	u32 hash;
  	u32 flags;
-@@ -317,15 +375,17 @@ int tpm2_seal_trusted(struct tpm_chip *chip,
+-	int i;
++	int i, j;
+ 	int rc;
+ 
+ 	for (i = 0; i < ARRAY_SIZE(tpm2_hash_map); i++) {
+@@ -359,7 +359,28 @@ int tpm2_seal_trusted(struct tpm_chip *chip,
+ 	tpm_buf_append_u16(&buf, 0);
+ 
+ 	/* creation PCR */
+-	tpm_buf_append_u32(&buf, 0);
++	if (options->creation_pcrs) {
++		/* One bank */
++		tpm_buf_append_u32(&buf, 1);
++		/* Which bank to use */
++		tpm_buf_append_u16(&buf, hash);
++		/* Length of the PCR bitmask */
++		tpm_buf_append_u8(&buf, 3);
++		/* PCR bitmask */
++		for (i = 0; i < 3; i++) {
++			char tmp = 0;
++
++			for (j = 0; j < 8; j++) {
++				char bit = (i * 8) + j;
++
++				if (options->creation_pcrs & (1 << bit))
++					tmp |= (1 << j);
++			}
++			tpm_buf_append_u8(&buf, tmp);
++		}
++	} else {
++		tpm_buf_append_u32(&buf, 0);
++	}
+ 
+ 	if (buf.flags & TPM_BUF_OVERFLOW) {
  		rc = -E2BIG;
- 		goto out;
- 	}
--	if (tpm_buf_length(&buf) < TPM_HEADER_SIZE + 4 + blob_len) {
-+	offset = TPM_HEADER_SIZE + 4;
-+	if (tpm_buf_length(&buf) < offset + blob_len) {
- 		rc = -EFAULT;
- 		goto out;
- 	}
- 
- 	blob_len = tpm2_key_encode(payload, options,
--				   &buf.data[TPM_HEADER_SIZE + 4],
-+				   &buf.data[offset],
- 				   blob_len);
- 
-+	rc = tpm2_unpack_blob(payload);
- out:
- 	tpm_buf_destroy(&buf);
- 
-@@ -431,7 +491,10 @@ static int tpm2_load_cmd(struct tpm_chip *chip,
- 	if (!rc)
- 		*blob_handle = be32_to_cpup(
- 			(__be32 *) &buf.data[TPM_HEADER_SIZE]);
-+	else
-+		goto out;
- 
-+	rc = tpm2_unpack_blob(payload);
- out:
- 	if (blob != payload->blob)
- 		kfree(blob);
 -- 
 2.31.0
 

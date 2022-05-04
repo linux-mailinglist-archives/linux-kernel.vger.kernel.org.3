@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3324F51A91B
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:15:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FF7651A900
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:15:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356279AbiEDRL4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 13:11:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38270 "EHLO
+        id S1358793AbiEDRQO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 13:16:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355026AbiEDQ7h (ORCPT
+        with ESMTP id S1355782AbiEDREm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 12:59:37 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 681184924F;
-        Wed,  4 May 2022 09:51:13 -0700 (PDT)
+        Wed, 4 May 2022 13:04:42 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52EBC4990C;
+        Wed,  4 May 2022 09:53:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C2FF2B827A3;
-        Wed,  4 May 2022 16:51:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58678C385AA;
-        Wed,  4 May 2022 16:51:11 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CEACCB827AC;
+        Wed,  4 May 2022 16:53:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 766EFC385A5;
+        Wed,  4 May 2022 16:53:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651683071;
-        bh=OM7cXWUgQsh7S2dSER4HhmICHOFNPlw7hzYj/A2eg9M=;
+        s=korg; t=1651683201;
+        bh=kPLz94WvLTpi4nn5bI9RZUlYwgXMZk6o7VGKl86N18I=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tg/t1P2acfW2pV1SyOGKFv4JPAq85AbBJdP1yBCltK4N2lECxRI4hmPdioIawxpTH
-         bjQDYZBlhj+1d25V1d54MvWnn/mx4MpP7O3e+8McWRSCmBvdB8oUD7ow7q/OoZoV/j
-         rj7ibC+6JKfyWNgBBU1tgez+UuGvnu04nCJTnF28=
+        b=lE7Og0WfdLYCti3fBza8jqt5dmhRvPuG1sq8j0qKEQGFlCMj65UmGMJq8u6Lpsh2r
+         CH/mOmZ3FKz3PRCy2lGv0I2+1vWLHGOYBpix8rBpvlnnDvFNJ6kNvLr78SV9KkFeTj
+         B1X9Nvlu6uuUozSUnMSb2RbDcY7+wrC82oeqJTQc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Francesco Ruggeri <fruggeri@arista.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
+        stable@vger.kernel.org, Ajay Kathat <ajay.kathat@microchip.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 067/129] tcp: md5: incorrect tcp_header_len for incoming connections
+Subject: [PATCH 5.15 066/177] ARM: dts: at91: fix pinctrl phandles
 Date:   Wed,  4 May 2022 18:44:19 +0200
-Message-Id: <20220504153026.578788965@linuxfoundation.org>
+Message-Id: <20220504153058.970518474@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220504153021.299025455@linuxfoundation.org>
-References: <20220504153021.299025455@linuxfoundation.org>
+In-Reply-To: <20220504153053.873100034@linuxfoundation.org>
+References: <20220504153053.873100034@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,38 +56,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Francesco Ruggeri <fruggeri@arista.com>
+From: Claudiu Beznea <claudiu.beznea@microchip.com>
 
-[ Upstream commit 5b0b9e4c2c895227c8852488b3f09839233bba54 ]
+[ Upstream commit 0c640d9544d0109da3889d71ae77301e556db977 ]
 
-In tcp_create_openreq_child we adjust tcp_header_len for md5 using the
-remote address in newsk. But that address is still 0 in newsk at this
-point, and it is only set later by the callers (tcp_v[46]_syn_recv_sock).
-Use the address from the request socket instead.
+Commit bf781869e5cf ("ARM: dts: at91: add pinctrl-{names, 0} for all
+gpios") introduces pinctrl phandles for pins used by individual
+controllers to avoid failures due to commit 2ab73c6d8323 ("gpio:
+Support GPIO controllers without pin-ranges"). For SPI controllers
+available on SAMA5D4 and SAMA5D3 some of the pins are defined in
+SoC specific dtsi on behalf of pinctrl-0. Adding extra pinctrl phandles
+on board specific dts also on behalf of pinctrl-0 overwrite the pinctrl-0
+phandle specified in SoC specific dtsi. Thus add the board specific
+pinctrl to pinctrl-1.
 
-Fixes: cfb6eeb4c860 ("[TCP]: MD5 Signature Option (RFC2385) support.")
-Signed-off-by: Francesco Ruggeri <fruggeri@arista.com>
-Reviewed-by: Eric Dumazet <edumazet@google.com>
-Link: https://lore.kernel.org/r/20220421005026.686A45EC01F2@us226.sjc.aristanetworks.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Fixes: bf781869e5cf ("ARM: dts: at91: add pinctrl-{names, 0} for all gpios")
+Depends-on: 5c8b49852910 ("ARM: dts: at91: sama5d4_xplained: fix pinctrl phandle name")
+Reported-by: Ajay Kathat <ajay.kathat@microchip.com>
+Co-developed-by: Ajay Kathat <ajay.kathat@microchip.com>
+Signed-off-by: Ajay Kathat <ajay.kathat@microchip.com>
+Tested-by: Ajay Kathat <ajay.kathat@microchip.com>
+Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
+Signed-off-by: Nicolas Ferre <nicolas.ferre@microchip.com>
+Link: https://lore.kernel.org/r/20220331141323.194355-2-claudiu.beznea@microchip.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/ipv4/tcp_minisocks.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/arm/boot/dts/at91-sama5d3_xplained.dts | 8 ++++----
+ arch/arm/boot/dts/at91-sama5d4_xplained.dts | 4 ++--
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/net/ipv4/tcp_minisocks.c b/net/ipv4/tcp_minisocks.c
-index f0f67b25c97a..62f5ef9e6f93 100644
---- a/net/ipv4/tcp_minisocks.c
-+++ b/net/ipv4/tcp_minisocks.c
-@@ -538,7 +538,7 @@ struct sock *tcp_create_openreq_child(const struct sock *sk,
- 	newtp->tsoffset = treq->ts_off;
- #ifdef CONFIG_TCP_MD5SIG
- 	newtp->md5sig_info = NULL;	/*XXX*/
--	if (newtp->af_specific->md5_lookup(sk, newsk))
-+	if (treq->af_specific->req_md5_lookup(sk, req_to_sk(req)))
- 		newtp->tcp_header_len += TCPOLEN_MD5SIG_ALIGNED;
- #endif
- 	if (skb->len >= TCP_MSS_DEFAULT + newtp->tcp_header_len)
+diff --git a/arch/arm/boot/dts/at91-sama5d3_xplained.dts b/arch/arm/boot/dts/at91-sama5d3_xplained.dts
+index d72c042f2850..a49c2966b41e 100644
+--- a/arch/arm/boot/dts/at91-sama5d3_xplained.dts
++++ b/arch/arm/boot/dts/at91-sama5d3_xplained.dts
+@@ -57,8 +57,8 @@ slot@0 {
+ 			};
+ 
+ 			spi0: spi@f0004000 {
+-				pinctrl-names = "default";
+-				pinctrl-0 = <&pinctrl_spi0_cs>;
++				pinctrl-names = "default", "cs";
++				pinctrl-1 = <&pinctrl_spi0_cs>;
+ 				cs-gpios = <&pioD 13 0>, <0>, <0>, <&pioD 16 0>;
+ 				status = "okay";
+ 			};
+@@ -171,8 +171,8 @@ slot@0 {
+ 			};
+ 
+ 			spi1: spi@f8008000 {
+-				pinctrl-names = "default";
+-				pinctrl-0 = <&pinctrl_spi1_cs>;
++				pinctrl-names = "default", "cs";
++				pinctrl-1 = <&pinctrl_spi1_cs>;
+ 				cs-gpios = <&pioC 25 0>;
+ 				status = "okay";
+ 			};
+diff --git a/arch/arm/boot/dts/at91-sama5d4_xplained.dts b/arch/arm/boot/dts/at91-sama5d4_xplained.dts
+index accb92cfac44..e519d2747936 100644
+--- a/arch/arm/boot/dts/at91-sama5d4_xplained.dts
++++ b/arch/arm/boot/dts/at91-sama5d4_xplained.dts
+@@ -81,8 +81,8 @@ usart4: serial@fc010000 {
+ 			};
+ 
+ 			spi1: spi@fc018000 {
+-				pinctrl-names = "default";
+-				pinctrl-0 = <&pinctrl_spi1_cs>;
++				pinctrl-names = "default", "cs";
++				pinctrl-1 = <&pinctrl_spi1_cs>;
+ 				cs-gpios = <&pioB 21 0>;
+ 				status = "okay";
+ 			};
 -- 
 2.35.1
 

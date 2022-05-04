@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA68E51A83C
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:07:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0087951AB20
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:40:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356587AbiEDRJe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 13:09:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38298 "EHLO
+        id S1358173AbiEDRiO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 13:38:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355523AbiEDRAL (ORCPT
+        with ESMTP id S1356870AbiEDRJr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 13:00:11 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D78144B847;
-        Wed,  4 May 2022 09:51:48 -0700 (PDT)
+        Wed, 4 May 2022 13:09:47 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AA7843EC9;
+        Wed,  4 May 2022 09:56:11 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6DC02B82792;
-        Wed,  4 May 2022 16:51:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17CC8C385A5;
-        Wed,  4 May 2022 16:51:47 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B5D8DB8278E;
+        Wed,  4 May 2022 16:56:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58B37C385A4;
+        Wed,  4 May 2022 16:56:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651683107;
-        bh=9XMsbr7G05OYiESgCjRkznWz6gPpP4Kr/uPZBwsXf4c=;
+        s=korg; t=1651683368;
+        bh=UZl42qo5/Ar8qtWtm+NFa5TCzVY3jfja3ZRWVrYwy6k=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=P29NIpS82XtP9EtepqaODMO9AQlK3Eh8W+bw90Yfadchb//M9tq83OMf7pbDg2No7
-         yqlgoY+crT/2jqdnKxnMPpL863cmDc1FM9HRMXu4VrCb5cWBCyzzXbQKclFfNKB0IY
-         ogqjqkGpaDW4UpMF42cSL5GX3NSo8KI5QFKu33NQ=
+        b=zHUq/5Vb76IsZii9KsVuMsu71qvVZc7r/b0HCLBZPg5WA4hswZb7R9Ir5wwlzQMfT
+         C7rMZ0DIbCojpRu6P7yzwsw+w86/ZqEA78nQG8g5CbA1S5CYxXAxEQl1Lu0+AMTGv+
+         cYf2h9kgFXANEkAQo+3AriGZRmvwnqYkHl776mo4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Chao Song <chao.song@linux.intel.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 099/129] ASoC: Intel: soc-acpi: correct device endpoints for max98373
+        stable@vger.kernel.org, Tejun Heo <tj@kernel.org>,
+        Rik van Riel <riel@surriel.com>, Jens Axboe <axboe@kernel.dk>
+Subject: [PATCH 5.17 053/225] iocost: dont reset the inuse weight of under-weighted debtors
 Date:   Wed,  4 May 2022 18:44:51 +0200
-Message-Id: <20220504153028.791316478@linuxfoundation.org>
+Message-Id: <20220504153114.897394089@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220504153021.299025455@linuxfoundation.org>
-References: <20220504153021.299025455@linuxfoundation.org>
+In-Reply-To: <20220504153110.096069935@linuxfoundation.org>
+References: <20220504153110.096069935@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,46 +54,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chao Song <chao.song@linux.intel.com>
+From: Tejun Heo <tj@kernel.org>
 
-[ Upstream commit 97326be14df7bacc6ba5c62c0556298c27ea0432 ]
+commit 8c936f9ea11ec4e35e288810a7503b5c841a355f upstream.
 
-The left speaker of max98373 uses spk_r_endpoint, and right
-speaker uses spk_l_endpoint, this is obviously wrong.
+When an iocg is in debt, its inuse weight is owned by debt handling and
+should stay at 1. This invariant was broken when determining the amount of
+surpluses at the beginning of donation calculation - when an iocg's
+hierarchical weight is too low, the iocg is excluded from donation
+calculation and its inuse is reset to its active regardless of its
+indebtedness, triggering warnings like the following:
 
-This patch corrects the endpoints for max98373 codec.
+ WARNING: CPU: 5 PID: 0 at block/blk-iocost.c:1416 iocg_kick_waitq+0x392/0x3a0
+ ...
+ RIP: 0010:iocg_kick_waitq+0x392/0x3a0
+ Code: 00 00 be ff ff ff ff 48 89 4d a8 e8 98 b2 70 00 48 8b 4d a8 85 c0 0f 85 4a fe ff ff 0f 0b e9 43 fe ff ff 0f 0b e9 4d fe ff ff <0f> 0b e9 50 fe ff ff e8 a2 ae 70 00 66 90 0f 1f 44 00 00 55 48 89
+ RSP: 0018:ffffc90000200d08 EFLAGS: 00010016
+ ...
+  <IRQ>
+  ioc_timer_fn+0x2e0/0x1470
+  call_timer_fn+0xa1/0x2c0
+ ...
 
-Signed-off-by: Chao Song <chao.song@linux.intel.com>
-Signed-off-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-Link: https://lore.kernel.org/r/20220406192341.271465-1-pierre-louis.bossart@linux.intel.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+As this happens only when an iocg's hierarchical weight is negligible, its
+impact likely is limited to triggering the warnings. Fix it by skipping
+resetting inuse of under-weighted debtors.
+
+Signed-off-by: Tejun Heo <tj@kernel.org>
+Reported-by: Rik van Riel <riel@surriel.com>
+Fixes: c421a3eb2e27 ("blk-iocost: revamp debt handling")
+Cc: stable@vger.kernel.org # v5.10+
+Link: https://lore.kernel.org/r/YmjODd4aif9BzFuO@slm.duckdns.org
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/soc/intel/common/soc-acpi-intel-tgl-match.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ block/blk-iocost.c |   12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
 
-diff --git a/sound/soc/intel/common/soc-acpi-intel-tgl-match.c b/sound/soc/intel/common/soc-acpi-intel-tgl-match.c
-index 9f243e60b95c..15d862cdcd2f 100644
---- a/sound/soc/intel/common/soc-acpi-intel-tgl-match.c
-+++ b/sound/soc/intel/common/soc-acpi-intel-tgl-match.c
-@@ -126,13 +126,13 @@ static const struct snd_soc_acpi_adr_device mx8373_1_adr[] = {
- 	{
- 		.adr = 0x000123019F837300,
- 		.num_endpoints = 1,
--		.endpoints = &spk_l_endpoint,
-+		.endpoints = &spk_r_endpoint,
- 		.name_prefix = "Right"
- 	},
- 	{
- 		.adr = 0x000127019F837300,
- 		.num_endpoints = 1,
--		.endpoints = &spk_r_endpoint,
-+		.endpoints = &spk_l_endpoint,
- 		.name_prefix = "Left"
- 	}
- };
--- 
-2.35.1
-
+--- a/block/blk-iocost.c
++++ b/block/blk-iocost.c
+@@ -2322,7 +2322,17 @@ static void ioc_timer_fn(struct timer_li
+ 				iocg->hweight_donating = hwa;
+ 				iocg->hweight_after_donation = new_hwi;
+ 				list_add(&iocg->surplus_list, &surpluses);
+-			} else {
++			} else if (!iocg->abs_vdebt) {
++				/*
++				 * @iocg doesn't have enough to donate. Reset
++				 * its inuse to active.
++				 *
++				 * Don't reset debtors as their inuse's are
++				 * owned by debt handling. This shouldn't affect
++				 * donation calculuation in any meaningful way
++				 * as @iocg doesn't have a meaningful amount of
++				 * share anyway.
++				 */
+ 				TRACE_IOCG_PATH(inuse_shortage, iocg, &now,
+ 						iocg->inuse, iocg->active,
+ 						iocg->hweight_inuse, new_hwi);
 
 

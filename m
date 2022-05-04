@@ -2,43 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F76751A927
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:16:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EE0551AB53
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:42:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355447AbiEDRNB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 13:13:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37698 "EHLO
+        id S1376702AbiEDRpR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 13:45:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354328AbiEDRA3 (ORCPT
+        with ESMTP id S1355395AbiEDRHV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 13:00:29 -0400
+        Wed, 4 May 2022 13:07:21 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C96D04C795;
-        Wed,  4 May 2022 09:52:17 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B9F6517CB;
+        Wed,  4 May 2022 09:54:27 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 55B7B617A6;
-        Wed,  4 May 2022 16:52:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8FC66C385AA;
-        Wed,  4 May 2022 16:52:13 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5ADCD61852;
+        Wed,  4 May 2022 16:54:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9B65C385A5;
+        Wed,  4 May 2022 16:54:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651683133;
-        bh=7/Vx+R0dJUPhokOvKQ8yLZNNSGISyIWK0qTfgSU1yeU=;
+        s=korg; t=1651683266;
+        bh=FC9DjzQV9hBsv5/eiTjlSjGGc3F9HI+yaL5So1/yfBU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=S2lt7zMHR6ppWmaPVkeAWkL9b9n9UsgbUdmMHtpGsZficMs9ob5zsdYTXFJF31+Sf
-         17+qo2p3q2OJc4/SDmyfhIwpwUSN9ttqQ2oTdKn1MDuZgQqoKcp/fCXBzfv/jTrfyw
-         TXv7K1BgZjdy3BUY+1NP6OJt4rltpWD3g1p0NeDE=
+        b=Qh8gP7yT1wLMo5Mkw4tvb+VX8IU9FH3/esOhR/t77xPZUUWqUlAktwOoisoLJS3Y9
+         foOYlGTFDXaBQRwZPBRiYeQNSVWVzkDLXLFZaKu2rdi5owlpblC2n6K+JBs0DI2MKv
+         wYWmIGuPmQzSsAb2BL3mOQ3rpQ2ioOC7nYlkr1wU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Daniel Starke <daniel.starke@siemens.com>
-Subject: [PATCH 5.10 116/129] tty: n_gsm: fix decoupled mux resource
-Date:   Wed,  4 May 2022 18:45:08 +0200
-Message-Id: <20220504153030.561668678@linuxfoundation.org>
+        stable@vger.kernel.org, Maxim Mikityanskiy <maximmi@nvidia.com>,
+        Tariq Toukan <tariqt@nvidia.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 116/177] tls: Skip tls_append_frag on zero copy size
+Date:   Wed,  4 May 2022 18:45:09 +0200
+Message-Id: <20220504153103.578297666@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220504153021.299025455@linuxfoundation.org>
-References: <20220504153021.299025455@linuxfoundation.org>
+In-Reply-To: <20220504153053.873100034@linuxfoundation.org>
+References: <20220504153053.873100034@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,148 +56,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Daniel Starke <daniel.starke@siemens.com>
+From: Maxim Mikityanskiy <maximmi@nvidia.com>
 
-commit 1ec92e9742774bf42614fceea3bf6b50c9409225 upstream.
+[ Upstream commit a0df71948e9548de819a6f1da68f5f1742258a52 ]
 
-The active mux instances are managed in the gsm_mux array and via mux_get()
-and mux_put() functions separately. This gives a very loose coupling
-between the actual instance and the gsm_mux array which manages it. It also
-results in unnecessary lockings which makes it prone to failures. And it
-creates a race condition if more than the maximum number of mux instances
-are requested while the user changes the parameters of an active instance.
-The user may loose ownership of the current mux instance in this case.
-Fix this by moving the gsm_mux array handling to the mux allocation and
-deallocation functions.
+Calling tls_append_frag when max_open_record_len == record->len might
+add an empty fragment to the TLS record if the call happens to be on the
+page boundary. Normally tls_append_frag coalesces the zero-sized
+fragment to the previous one, but not if it's on page boundary.
 
-Fixes: e1eaea46bb40 ("tty: n_gsm line discipline")
-Cc: stable@vger.kernel.org
-Signed-off-by: Daniel Starke <daniel.starke@siemens.com>
-Link: https://lore.kernel.org/r/20220414094225.4527-3-daniel.starke@siemens.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+If a resync happens then, the mlx5 driver posts dump WQEs in
+tx_post_resync_dump, and the empty fragment may become a data segment
+with byte_count == 0, which will confuse the NIC and lead to a CQE
+error.
+
+This commit fixes the described issue by skipping tls_append_frag on
+zero size to avoid adding empty fragments. The fix is not in the driver,
+because an empty fragment is hardly the desired behavior.
+
+Fixes: e8f69799810c ("net/tls: Add generic NIC offload infrastructure")
+Signed-off-by: Maxim Mikityanskiy <maximmi@nvidia.com>
+Reviewed-by: Tariq Toukan <tariqt@nvidia.com>
+Link: https://lore.kernel.org/r/20220426154949.159055-1-maximmi@nvidia.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/tty/n_gsm.c |   63 +++++++++++++++++++++++++++++++---------------------
- 1 file changed, 38 insertions(+), 25 deletions(-)
+ net/tls/tls_device.c | 12 +++++++-----
+ 1 file changed, 7 insertions(+), 5 deletions(-)
 
---- a/drivers/tty/n_gsm.c
-+++ b/drivers/tty/n_gsm.c
-@@ -2070,18 +2070,6 @@ static void gsm_cleanup_mux(struct gsm_m
- 	/* Finish outstanding timers, making sure they are done */
- 	del_timer_sync(&gsm->t2_timer);
+diff --git a/net/tls/tls_device.c b/net/tls/tls_device.c
+index b932469ee69c..a40553e83f8b 100644
+--- a/net/tls/tls_device.c
++++ b/net/tls/tls_device.c
+@@ -483,11 +483,13 @@ static int tls_push_data(struct sock *sk,
+ 		copy = min_t(size_t, size, (pfrag->size - pfrag->offset));
+ 		copy = min_t(size_t, copy, (max_open_record_len - record->len));
  
--	spin_lock(&gsm_mux_lock);
--	for (i = 0; i < MAX_MUX; i++) {
--		if (gsm_mux[i] == gsm) {
--			gsm_mux[i] = NULL;
--			break;
--		}
--	}
--	spin_unlock(&gsm_mux_lock);
--	/* open failed before registering => nothing to do */
--	if (i == MAX_MUX)
--		return;
--
- 	/* Free up any link layer users */
- 	for (i = 0; i < NUM_DLCI; i++)
- 		if (gsm->dlci[i])
-@@ -2105,7 +2093,6 @@ static void gsm_cleanup_mux(struct gsm_m
- static int gsm_activate_mux(struct gsm_mux *gsm)
- {
- 	struct gsm_dlci *dlci;
--	int i = 0;
- 
- 	timer_setup(&gsm->t2_timer, gsm_control_retransmit, 0);
- 	init_waitqueue_head(&gsm->event);
-@@ -2117,18 +2104,6 @@ static int gsm_activate_mux(struct gsm_m
- 	else
- 		gsm->receive = gsm1_receive;
- 
--	spin_lock(&gsm_mux_lock);
--	for (i = 0; i < MAX_MUX; i++) {
--		if (gsm_mux[i] == NULL) {
--			gsm->num = i;
--			gsm_mux[i] = gsm;
--			break;
--		}
--	}
--	spin_unlock(&gsm_mux_lock);
--	if (i == MAX_MUX)
--		return -EBUSY;
--
- 	dlci = gsm_dlci_alloc(gsm, 0);
- 	if (dlci == NULL)
- 		return -ENOMEM;
-@@ -2144,6 +2119,15 @@ static int gsm_activate_mux(struct gsm_m
-  */
- static void gsm_free_mux(struct gsm_mux *gsm)
- {
-+	int i;
-+
-+	for (i = 0; i < MAX_MUX; i++) {
-+		if (gsm == gsm_mux[i]) {
-+			gsm_mux[i] = NULL;
-+			break;
+-		rc = tls_device_copy_data(page_address(pfrag->page) +
+-					  pfrag->offset, copy, msg_iter);
+-		if (rc)
+-			goto handle_error;
+-		tls_append_frag(record, pfrag, copy);
++		if (copy) {
++			rc = tls_device_copy_data(page_address(pfrag->page) +
++						  pfrag->offset, copy, msg_iter);
++			if (rc)
++				goto handle_error;
++			tls_append_frag(record, pfrag, copy);
 +		}
-+	}
-+	mutex_destroy(&gsm->mutex);
- 	kfree(gsm->txframe);
- 	kfree(gsm->buf);
- 	kfree(gsm);
-@@ -2163,12 +2147,20 @@ static void gsm_free_muxr(struct kref *r
  
- static inline void mux_get(struct gsm_mux *gsm)
- {
-+	unsigned long flags;
-+
-+	spin_lock_irqsave(&gsm_mux_lock, flags);
- 	kref_get(&gsm->ref);
-+	spin_unlock_irqrestore(&gsm_mux_lock, flags);
- }
- 
- static inline void mux_put(struct gsm_mux *gsm)
- {
-+	unsigned long flags;
-+
-+	spin_lock_irqsave(&gsm_mux_lock, flags);
- 	kref_put(&gsm->ref, gsm_free_muxr);
-+	spin_unlock_irqrestore(&gsm_mux_lock, flags);
- }
- 
- static inline unsigned int mux_num_to_base(struct gsm_mux *gsm)
-@@ -2189,6 +2181,7 @@ static inline unsigned int mux_line_to_n
- 
- static struct gsm_mux *gsm_alloc_mux(void)
- {
-+	int i;
- 	struct gsm_mux *gsm = kzalloc(sizeof(struct gsm_mux), GFP_KERNEL);
- 	if (gsm == NULL)
- 		return NULL;
-@@ -2218,6 +2211,26 @@ static struct gsm_mux *gsm_alloc_mux(voi
- 	gsm->mtu = 64;
- 	gsm->dead = true;	/* Avoid early tty opens */
- 
-+	/* Store the instance to the mux array or abort if no space is
-+	 * available.
-+	 */
-+	spin_lock(&gsm_mux_lock);
-+	for (i = 0; i < MAX_MUX; i++) {
-+		if (!gsm_mux[i]) {
-+			gsm_mux[i] = gsm;
-+			gsm->num = i;
-+			break;
-+		}
-+	}
-+	spin_unlock(&gsm_mux_lock);
-+	if (i == MAX_MUX) {
-+		mutex_destroy(&gsm->mutex);
-+		kfree(gsm->txframe);
-+		kfree(gsm->buf);
-+		kfree(gsm);
-+		return NULL;
-+	}
-+
- 	return gsm;
- }
- 
+ 		size -= copy;
+ 		if (!size) {
+-- 
+2.35.1
+
 
 

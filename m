@@ -2,84 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57A3251B021
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 23:09:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E98B851B029
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 23:11:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378501AbiEDVMs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 17:12:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56152 "EHLO
+        id S1378513AbiEDVOv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 17:14:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235258AbiEDVMq (ORCPT
+        with ESMTP id S1358477AbiEDVOt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 17:12:46 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87932517FC;
-        Wed,  4 May 2022 14:09:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651698549; x=1683234549;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=T0JUGY/mbcJez9N2jqbH9/PfYjcazcXJqwVpET3qd60=;
-  b=dTFC6+CS/Ra7RAG4Q6Nx/eigAUrIBrxrhs8+DtIwM5hyqHmVTLGAMWof
-   uuJ6M4fODqvoI57qEmIKPudTv4y4XhdDkWqtHFZ/8oJSupY1nCprPlgC0
-   6nU9ghgYmg+CcGkF7gs/Vj01HfudBbQ4yzpfnvIQmjprNhS9XiDCjPGJj
-   qlrNCtDOE0BkUYaQWdaYxIpFYEgxJtzt2W2yY+2pfPFDmHjtex62uR9Rq
-   GAw4bcg5dnEofa0xUJPksuH2oLR8b7OFvDimgsFiQUqPS+Ic/6pxIkupp
-   0D0FK/3Q4bhhf7ry+KhnS8v8AySR6uIyqCFuZXRgy2srLx4eNPLFP13+E
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10337"; a="247808559"
-X-IronPort-AV: E=Sophos;i="5.91,199,1647327600"; 
-   d="scan'208";a="247808559"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2022 14:09:09 -0700
-X-IronPort-AV: E=Sophos;i="5.91,199,1647327600"; 
-   d="scan'208";a="620985186"
-Received: from rhweight-wrk1.ra.intel.com ([137.102.106.43])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2022 14:09:09 -0700
-Date:   Wed, 4 May 2022 14:09:02 -0700 (PDT)
-From:   matthew.gerlach@linux.intel.com
-X-X-Sender: mgerlach@rhweight-WRK1
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-cc:     dinguyen@kernel.org, robh+dt@kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        krzysztof.kozlowski+dt@linaro.org
-Subject: Re: [PATCH v2 2/3] dt-bindings: intel: add binding for Intel n6000
-In-Reply-To: <45e55d3e-f29a-81ee-6673-a05da377e798@linaro.org>
-Message-ID: <alpine.DEB.2.22.394.2205041408230.2669897@rhweight-WRK1>
-References: <20220503194546.1287679-1-matthew.gerlach@linux.intel.com> <20220503194546.1287679-3-matthew.gerlach@linux.intel.com> <45e55d3e-f29a-81ee-6673-a05da377e798@linaro.org>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+        Wed, 4 May 2022 17:14:49 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81AED49FB4
+        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 14:11:12 -0700 (PDT)
+From:   John Ogness <john.ogness@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1651698671;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=CKPWYgbYXcfIsG95x1ua8STRPsIFuKN1LA1dfgcwhhA=;
+        b=1MWan81qhvKGVvbdBCrUwXV2WiAmiNVsoUUJGH95QqQOMCpw0T4wgYf4A+g2olyc52bhX5
+        iPkjnQLkzaMTi6VwTaowiIS8cbMF7deB2YVuXC6CUU1VPuQ0YyXE1YyRKgqSVh1BMx6NGY
+        PH7E3XlFBlJH0+YsLdSpZOxcxPkVBmlBZUuac+FRKCc1CbnblGRLezF+pnd2zkQkPYobde
+        NaJitdWbNoqLmjxim0r4NRHMYq9KhbymOq1JeraQhNiJCk1xWoFypAIhsCW0HAdWfFsUFL
+        3/ne/DduUXaQcaFFNpanLge4E7y8ZnNcJfzhpa8/MiaFMZpTtRXJftD4L7GM8w==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1651698671;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=CKPWYgbYXcfIsG95x1ua8STRPsIFuKN1LA1dfgcwhhA=;
+        b=odQlOZT03eWDUW4JUq55Nq9AyO8/0Gcb6em6qQlxjX+3nYEkdyYhLk80Lhp1/T42KeqlyS
+        GYGy6dmQmHzE4bBQ==
+To:     Marek Szyprowski <m.szyprowski@samsung.com>,
+        Petr Mladek <pmladek@suse.com>
+Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-amlogic@lists.infradead.org
+Subject: Re: [PATCH printk v5 1/1] printk: extend console_lock for
+ per-console locking
+In-Reply-To: <45849b63-d7a8-5cc3-26ad-256a28d09991@samsung.com>
+References: <Ymfgis0EAw0Oxoa5@alley> <Ymfwk+X0CHq6ex3s@alley>
+ <CGME20220427070833eucas1p27a32ce7c41c0da26f05bd52155f0031c@eucas1p2.samsung.com>
+ <2a82eae7-a256-f70c-fd82-4e510750906e@samsung.com>
+ <Ymjy3rHRenba7r7R@alley>
+ <b6c1a8ac-c691-a84d-d3a1-f99984d32f06@samsung.com>
+ <87fslyv6y3.fsf@jogness.linutronix.de>
+ <51dfc4a0-f6cf-092f-109f-a04eeb240655@samsung.com>
+ <87k0b6blz2.fsf@jogness.linutronix.de>
+ <32bba8f8-dec7-78aa-f2e5-f62928412eda@samsung.com>
+ <Ym/Z7PYPqvWPEjuL@alley>
+ <45849b63-d7a8-5cc3-26ad-256a28d09991@samsung.com>
+Date:   Wed, 04 May 2022 23:17:10 +0206
+Message-ID: <87pmktm2a9.fsf@jogness.linutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII; format=flowed
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INVALID_DATE_TZ_ABSURD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On Wed, 4 May 2022, Krzysztof Kozlowski wrote:
-
-> On 03/05/2022 21:45, matthew.gerlach@linux.intel.com wrote:
->> From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
->>
->> Add the binding string for the Agilex based Intel n6000 board.
->>
->> Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+On 2022-05-03, Marek Szyprowski <m.szyprowski@samsung.com> wrote:
+> QEMU virt/arm64:
 >
-> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> [=C2=A0 174.155760] task:pr/ttyAMA0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 state:S=
+ stack:=C2=A0=C2=A0=C2=A0 0 pid:=C2=A0=C2=A0 26=20
+> ppid:=C2=A0=C2=A0=C2=A0=C2=A0 2 flags:0x00000008
+> [=C2=A0 174.156305] Call trace:
+> [=C2=A0 174.156529]=C2=A0 __switch_to+0xe8/0x160
+> [=C2=A0 174.157131]=C2=A0 0xffff5ebbbfdd62d8
 
-Thank you for your time and the Acked-by. I will add it to my v3 patch 
-set.
+I can reproduce the apparent stack corruption with qemu:
 
-Matthew
->
->
-> Best regards,
-> Krzysztof
->
+[    5.545268] task:pr/ttyAMA0      state:S stack:    0 pid:   26 ppid:    =
+ 2 flags:0x00000008
+[    5.545520] Call trace:
+[    5.545620]  __switch_to+0x104/0x160
+[    5.545796]  __schedule+0x2f4/0x9f0
+[    5.546122]  schedule+0x54/0xd0
+[    5.546206]  0x0
+
+When it happens, the printk-kthread is the only one with the corrupted
+stack. It seems I am doing something wrong when creating the kthread? I
+will investigate this.
+
+Thanks Marek for helping us to narrow this down.
+
+John

@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FB0C51A7DD
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:04:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AE6951A8EA
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:15:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356024AbiEDREv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 13:04:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36314 "EHLO
+        id S1357500AbiEDRPE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 13:15:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354605AbiEDQ6y (ORCPT
+        with ESMTP id S1355257AbiEDREO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 12:58:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F2F32314C;
-        Wed,  4 May 2022 09:50:48 -0700 (PDT)
+        Wed, 4 May 2022 13:04:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C2414EA1A;
+        Wed,  4 May 2022 09:52:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6E02A617BD;
-        Wed,  4 May 2022 16:50:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6B74C385A4;
-        Wed,  4 May 2022 16:50:46 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 59396617C3;
+        Wed,  4 May 2022 16:52:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6DB3C385AA;
+        Wed,  4 May 2022 16:52:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651683046;
-        bh=humWjBXg5Qfpu/Xg7rjSgbiOYu3/AmTCV30mt2Nvlxk=;
+        s=korg; t=1651683172;
+        bh=ErSJhNxNhAjFQyo0IYu55uUHakx8l73TBNY52bN65po=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1NcIegnK9TrAg7GTU+RKDTQ5uk1aG4DzrHyAEJxQrcAfs5kjl9zUwej3cYwX6iDzX
-         JxFfYmmtfV7nfW/ZCLpW610x9J4BhYsYmxQoRoycav69haRtwIBnFnxyQkr5MiZqjo
-         dGxyOljmE8AzZj549JOEdjE5KfnHcwH+AnCS1I98=
+        b=cUuyE70H1KNkqRfNxtP7cIcdINKr0peVHWYmxYZHYwBkjG5T8Fi088NpnwFDZ3/6Q
+         ca3rVHyB4Fxd69u4ZyIzGJe9o7ltZEtNZQwjJ6QMkzrytnjBiKgcWYJftODDp+H+r4
+         cxM2hb2AFQE++tM784UPOOSwnQ93h875AzP92iYQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Tejun Heo <tj@kernel.org>,
-        Rik van Riel <riel@surriel.com>, Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH 5.10 037/129] iocost: dont reset the inuse weight of under-weighted debtors
-Date:   Wed,  4 May 2022 18:43:49 +0200
-Message-Id: <20220504153024.146447116@linuxfoundation.org>
+        stable@vger.kernel.org, Tim Harvey <tharvey@gateworks.com>,
+        Johan Hovold <johan@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>
+Subject: [PATCH 5.15 037/177] arm64: dts: imx8mm-venice: fix spi2 pin configuration
+Date:   Wed,  4 May 2022 18:43:50 +0200
+Message-Id: <20220504153056.262481379@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220504153021.299025455@linuxfoundation.org>
-References: <20220504153021.299025455@linuxfoundation.org>
+In-Reply-To: <20220504153053.873100034@linuxfoundation.org>
+References: <20220504153053.873100034@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,63 +55,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tejun Heo <tj@kernel.org>
+From: Johan Hovold <johan@kernel.org>
 
-commit 8c936f9ea11ec4e35e288810a7503b5c841a355f upstream.
+commit dc900431337f5f861e3cc47ec5be5a69db40ee34 upstream.
 
-When an iocg is in debt, its inuse weight is owned by debt handling and
-should stay at 1. This invariant was broken when determining the amount of
-surpluses at the beginning of donation calculation - when an iocg's
-hierarchical weight is too low, the iocg is excluded from donation
-calculation and its inuse is reset to its active regardless of its
-indebtedness, triggering warnings like the following:
+Due to what looks like a copy-paste error, the ECSPI2_MISO pad is not
+muxed for SPI mode and causes reads from a slave-device connected to the
+SPI header to always return zero.
 
- WARNING: CPU: 5 PID: 0 at block/blk-iocost.c:1416 iocg_kick_waitq+0x392/0x3a0
- ...
- RIP: 0010:iocg_kick_waitq+0x392/0x3a0
- Code: 00 00 be ff ff ff ff 48 89 4d a8 e8 98 b2 70 00 48 8b 4d a8 85 c0 0f 85 4a fe ff ff 0f 0b e9 43 fe ff ff 0f 0b e9 4d fe ff ff <0f> 0b e9 50 fe ff ff e8 a2 ae 70 00 66 90 0f 1f 44 00 00 55 48 89
- RSP: 0018:ffffc90000200d08 EFLAGS: 00010016
- ...
-  <IRQ>
-  ioc_timer_fn+0x2e0/0x1470
-  call_timer_fn+0xa1/0x2c0
- ...
+Configure the ECSPI2_MISO pad for SPI mode on the gw71xx, gw72xx and
+gw73xx families of boards that got this wrong.
 
-As this happens only when an iocg's hierarchical weight is negligible, its
-impact likely is limited to triggering the warnings. Fix it by skipping
-resetting inuse of under-weighted debtors.
-
-Signed-off-by: Tejun Heo <tj@kernel.org>
-Reported-by: Rik van Riel <riel@surriel.com>
-Fixes: c421a3eb2e27 ("blk-iocost: revamp debt handling")
-Cc: stable@vger.kernel.org # v5.10+
-Link: https://lore.kernel.org/r/YmjODd4aif9BzFuO@slm.duckdns.org
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
+Fixes: 6f30b27c5ef5 ("arm64: dts: imx8mm: Add Gateworks i.MX 8M Mini Development Kits")
+Cc: stable@vger.kernel.org      # 5.12
+Cc: Tim Harvey <tharvey@gateworks.com>
+Signed-off-by: Johan Hovold <johan@kernel.org>
+Acked-by: Tim Harvey <tharvey@gateworks.com>
+Signed-off-by: Shawn Guo <shawnguo@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- block/blk-iocost.c |   12 +++++++++++-
- 1 file changed, 11 insertions(+), 1 deletion(-)
+ arch/arm64/boot/dts/freescale/imx8mm-venice-gw71xx.dtsi |    2 +-
+ arch/arm64/boot/dts/freescale/imx8mm-venice-gw72xx.dtsi |    2 +-
+ arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx.dtsi |    2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
---- a/block/blk-iocost.c
-+++ b/block/blk-iocost.c
-@@ -2257,7 +2257,17 @@ static void ioc_timer_fn(struct timer_li
- 				iocg->hweight_donating = hwa;
- 				iocg->hweight_after_donation = new_hwi;
- 				list_add(&iocg->surplus_list, &surpluses);
--			} else {
-+			} else if (!iocg->abs_vdebt) {
-+				/*
-+				 * @iocg doesn't have enough to donate. Reset
-+				 * its inuse to active.
-+				 *
-+				 * Don't reset debtors as their inuse's are
-+				 * owned by debt handling. This shouldn't affect
-+				 * donation calculuation in any meaningful way
-+				 * as @iocg doesn't have a meaningful amount of
-+				 * share anyway.
-+				 */
- 				TRACE_IOCG_PATH(inuse_shortage, iocg, &now,
- 						iocg->inuse, iocg->active,
- 						iocg->hweight_inuse, new_hwi);
+--- a/arch/arm64/boot/dts/freescale/imx8mm-venice-gw71xx.dtsi
++++ b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw71xx.dtsi
+@@ -166,7 +166,7 @@
+ 		fsl,pins = <
+ 			MX8MM_IOMUXC_ECSPI2_SCLK_ECSPI2_SCLK	0xd6
+ 			MX8MM_IOMUXC_ECSPI2_MOSI_ECSPI2_MOSI	0xd6
+-			MX8MM_IOMUXC_ECSPI2_SCLK_ECSPI2_SCLK	0xd6
++			MX8MM_IOMUXC_ECSPI2_MISO_ECSPI2_MISO	0xd6
+ 			MX8MM_IOMUXC_ECSPI2_SS0_GPIO5_IO13	0xd6
+ 		>;
+ 	};
+--- a/arch/arm64/boot/dts/freescale/imx8mm-venice-gw72xx.dtsi
++++ b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw72xx.dtsi
+@@ -231,7 +231,7 @@
+ 		fsl,pins = <
+ 			MX8MM_IOMUXC_ECSPI2_SCLK_ECSPI2_SCLK	0xd6
+ 			MX8MM_IOMUXC_ECSPI2_MOSI_ECSPI2_MOSI	0xd6
+-			MX8MM_IOMUXC_ECSPI2_SCLK_ECSPI2_SCLK	0xd6
++			MX8MM_IOMUXC_ECSPI2_MISO_ECSPI2_MISO	0xd6
+ 			MX8MM_IOMUXC_ECSPI2_SS0_GPIO5_IO13	0xd6
+ 		>;
+ 	};
+--- a/arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx.dtsi
++++ b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx.dtsi
+@@ -280,7 +280,7 @@
+ 		fsl,pins = <
+ 			MX8MM_IOMUXC_ECSPI2_SCLK_ECSPI2_SCLK	0xd6
+ 			MX8MM_IOMUXC_ECSPI2_MOSI_ECSPI2_MOSI	0xd6
+-			MX8MM_IOMUXC_ECSPI2_SCLK_ECSPI2_SCLK	0xd6
++			MX8MM_IOMUXC_ECSPI2_MISO_ECSPI2_MISO	0xd6
+ 			MX8MM_IOMUXC_ECSPI2_SS0_GPIO5_IO13	0xd6
+ 		>;
+ 	};
 
 

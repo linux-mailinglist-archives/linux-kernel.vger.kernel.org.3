@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A298E51AA91
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:27:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47E5E51A78E
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:04:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358475AbiEDRa1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 13:30:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38862 "EHLO
+        id S1354587AbiEDRHT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 13:07:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356777AbiEDRJn (ORCPT
+        with ESMTP id S1355297AbiEDQ7w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 13:09:43 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49CA81B7A5;
-        Wed,  4 May 2022 09:55:33 -0700 (PDT)
+        Wed, 4 May 2022 12:59:52 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D5B2496AD;
+        Wed,  4 May 2022 09:51:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 838F4B82737;
-        Wed,  4 May 2022 16:55:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F8E1C385AA;
-        Wed,  4 May 2022 16:55:32 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EF957617E7;
+        Wed,  4 May 2022 16:51:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45BB8C385A5;
+        Wed,  4 May 2022 16:51:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651683332;
-        bh=HCoN8/Wq4Acpa5T6uG4M7Zn2PwaQBMq/3dfZoQIgsyM=;
+        s=korg; t=1651683085;
+        bh=1NXmhjDJG8sVMXeuR7P7595+33BQJhz9J+Aca7pXwWs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=l1TB1MjEf7UdT5grUfqfBJ+g+Gt5AdO3NFCqe6bg1pIuZX3SZVfAy9SAKAh04u8Vp
-         zabLlq6Q/DH4tPaE+sCQCcMs+xhX7dpmacCYiLHq1UpKZI0WysNPKV/iLOv+OGvCVW
-         T7Qc4XbueO6K3czAD3uno/xVT91AtHMEubvny60Q=
+        b=bqJG6Rl3LrJzhG/CRDPc4E2jhUKvt/FSyjSD/a6tDtA71mL697TsILmw7qKwZGi8C
+         lj/gK4wJz3smLx5ea9HEA10vBVjpiO1x43mK4xCM/rvUt2ZbO5u6bCT+dAW+m2jPLc
+         9q173br2Y5JEpm/oLlKdg7DmbRSY+fTnXmpslBwc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, stable <stable@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Tasos Sahanidis <tasos@tasossah.com>
-Subject: [PATCH 5.17 019/225] usb: core: Dont hold the device lock while sleeping in do_proc_control()
-Date:   Wed,  4 May 2022 18:44:17 +0200
-Message-Id: <20220504153112.012598935@linuxfoundation.org>
+        stable@vger.kernel.org, Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 066/129] pinctrl: rockchip: fix RK3308 pinmux bits
+Date:   Wed,  4 May 2022 18:44:18 +0200
+Message-Id: <20220504153026.508369870@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220504153110.096069935@linuxfoundation.org>
-References: <20220504153110.096069935@linuxfoundation.org>
+In-Reply-To: <20220504153021.299025455@linuxfoundation.org>
+References: <20220504153021.299025455@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,76 +56,162 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tasos Sahanidis <tasos@tasossah.com>
+From: Luca Ceresoli <luca.ceresoli@bootlin.com>
 
-commit 0543e4e8852ef5ff1809ae62f1ea963e2ab23b66 upstream.
+[ Upstream commit 1f3e25a068832f8892a5ff71467622d012f5bc9f ]
 
-Since commit ae8709b296d8 ("USB: core: Make do_proc_control() and
-do_proc_bulk() killable") if a device has the USB_QUIRK_DELAY_CTRL_MSG
-quirk set, it will temporarily block all other URBs (e.g. interrupts)
-while sleeping due to a control.
+Some of the pinmuxing bits described in rk3308_mux_recalced_data are wrong,
+pointing to non-existing registers.
 
-This results in noticeable delays when, for example, a userspace usbfs
-application is sending URB interrupts at a high rate to a keyboard and
-simultaneously updates the lock indicators using controls. Interrupts
-with direction set to IN are also affected by this, meaning that
-delivery of HID reports (containing scancodes) to the usbfs application
-is delayed as well.
+Fix the entire table.
 
-This patch fixes the regression by calling msleep() while the device
-mutex is unlocked, as was the case originally with usb_control_msg().
+Also add a comment in front of each entry with the same string that appears
+in the datasheet to make the table easier to compare with the docs.
 
-Fixes: ae8709b296d8 ("USB: core: Make do_proc_control() and do_proc_bulk() killable")
-Cc: stable <stable@kernel.org>
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
-Signed-off-by: Tasos Sahanidis <tasos@tasossah.com>
-Link: https://lore.kernel.org/r/3e299e2a-13b9-ddff-7fee-6845e868bc06@tasossah.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+This fix has been tested on real hardware for the gpio3b3_sel entry.
+
+Fixes: 7825aeb7b208 ("pinctrl: rockchip: add rk3308 SoC support")
+Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+Reviewed-by: Heiko Stuebner <heiko@sntech.de>
+Link: https://lore.kernel.org/r/20220420142432.248565-1-luca.ceresoli@bootlin.com
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/core/devio.c |   14 +++++++++-----
- 1 file changed, 9 insertions(+), 5 deletions(-)
+ drivers/pinctrl/pinctrl-rockchip.c | 45 ++++++++++++++++++++----------
+ 1 file changed, 30 insertions(+), 15 deletions(-)
 
---- a/drivers/usb/core/devio.c
-+++ b/drivers/usb/core/devio.c
-@@ -1197,12 +1197,16 @@ static int do_proc_control(struct usb_de
+diff --git a/drivers/pinctrl/pinctrl-rockchip.c b/drivers/pinctrl/pinctrl-rockchip.c
+index 9df48e0cf4cb..07b1204174bf 100644
+--- a/drivers/pinctrl/pinctrl-rockchip.c
++++ b/drivers/pinctrl/pinctrl-rockchip.c
+@@ -663,95 +663,110 @@ static  struct rockchip_mux_recalced_data rk3128_mux_recalced_data[] = {
  
- 		usb_unlock_device(dev);
- 		i = usbfs_start_wait_urb(urb, tmo, &actlen);
-+
-+		/* Linger a bit, prior to the next control message. */
-+		if (dev->quirks & USB_QUIRK_DELAY_CTRL_MSG)
-+			msleep(200);
- 		usb_lock_device(dev);
- 		snoop_urb(dev, NULL, pipe, actlen, i, COMPLETE, tbuf, actlen);
- 		if (!i && actlen) {
- 			if (copy_to_user(ctrl->data, tbuf, actlen)) {
- 				ret = -EFAULT;
--				goto recv_fault;
-+				goto done;
- 			}
- 		}
- 	} else {
-@@ -1219,6 +1223,10 @@ static int do_proc_control(struct usb_de
+ static struct rockchip_mux_recalced_data rk3308_mux_recalced_data[] = {
+ 	{
++		/* gpio1b6_sel */
+ 		.num = 1,
+ 		.pin = 14,
+ 		.reg = 0x28,
+ 		.bit = 12,
+ 		.mask = 0xf
+ 	}, {
++		/* gpio1b7_sel */
+ 		.num = 1,
+ 		.pin = 15,
+ 		.reg = 0x2c,
+ 		.bit = 0,
+ 		.mask = 0x3
+ 	}, {
++		/* gpio1c2_sel */
+ 		.num = 1,
+ 		.pin = 18,
+ 		.reg = 0x30,
+ 		.bit = 4,
+ 		.mask = 0xf
+ 	}, {
++		/* gpio1c3_sel */
+ 		.num = 1,
+ 		.pin = 19,
+ 		.reg = 0x30,
+ 		.bit = 8,
+ 		.mask = 0xf
+ 	}, {
++		/* gpio1c4_sel */
+ 		.num = 1,
+ 		.pin = 20,
+ 		.reg = 0x30,
+ 		.bit = 12,
+ 		.mask = 0xf
+ 	}, {
++		/* gpio1c5_sel */
+ 		.num = 1,
+ 		.pin = 21,
+ 		.reg = 0x34,
+ 		.bit = 0,
+ 		.mask = 0xf
+ 	}, {
++		/* gpio1c6_sel */
+ 		.num = 1,
+ 		.pin = 22,
+ 		.reg = 0x34,
+ 		.bit = 4,
+ 		.mask = 0xf
+ 	}, {
++		/* gpio1c7_sel */
+ 		.num = 1,
+ 		.pin = 23,
+ 		.reg = 0x34,
+ 		.bit = 8,
+ 		.mask = 0xf
+ 	}, {
++		/* gpio3b4_sel */
+ 		.num = 3,
+ 		.pin = 12,
+ 		.reg = 0x68,
+ 		.bit = 8,
+ 		.mask = 0xf
+ 	}, {
++		/* gpio3b5_sel */
+ 		.num = 3,
+ 		.pin = 13,
+ 		.reg = 0x68,
+ 		.bit = 12,
+ 		.mask = 0xf
+ 	}, {
++		/* gpio2a2_sel */
+ 		.num = 2,
+ 		.pin = 2,
+-		.reg = 0x608,
+-		.bit = 0,
+-		.mask = 0x7
++		.reg = 0x40,
++		.bit = 4,
++		.mask = 0x3
+ 	}, {
++		/* gpio2a3_sel */
+ 		.num = 2,
+ 		.pin = 3,
+-		.reg = 0x608,
+-		.bit = 4,
+-		.mask = 0x7
++		.reg = 0x40,
++		.bit = 6,
++		.mask = 0x3
+ 	}, {
++		/* gpio2c0_sel */
+ 		.num = 2,
+ 		.pin = 16,
+-		.reg = 0x610,
+-		.bit = 8,
+-		.mask = 0x7
++		.reg = 0x50,
++		.bit = 0,
++		.mask = 0x3
+ 	}, {
++		/* gpio3b2_sel */
+ 		.num = 3,
+ 		.pin = 10,
+-		.reg = 0x610,
+-		.bit = 0,
+-		.mask = 0x7
++		.reg = 0x68,
++		.bit = 4,
++		.mask = 0x3
+ 	}, {
++		/* gpio3b3_sel */
+ 		.num = 3,
+ 		.pin = 11,
+-		.reg = 0x610,
+-		.bit = 4,
+-		.mask = 0x7
++		.reg = 0x68,
++		.bit = 6,
++		.mask = 0x3
+ 	},
+ };
  
- 		usb_unlock_device(dev);
- 		i = usbfs_start_wait_urb(urb, tmo, &actlen);
-+
-+		/* Linger a bit, prior to the next control message. */
-+		if (dev->quirks & USB_QUIRK_DELAY_CTRL_MSG)
-+			msleep(200);
- 		usb_lock_device(dev);
- 		snoop_urb(dev, NULL, pipe, actlen, i, COMPLETE, NULL, 0);
- 	}
-@@ -1230,10 +1238,6 @@ static int do_proc_control(struct usb_de
- 	}
- 	ret = (i < 0 ? i : actlen);
- 
-- recv_fault:
--	/* Linger a bit, prior to the next control message. */
--	if (dev->quirks & USB_QUIRK_DELAY_CTRL_MSG)
--		msleep(200);
-  done:
- 	kfree(dr);
- 	usb_free_urb(urb);
+-- 
+2.35.1
+
 
 

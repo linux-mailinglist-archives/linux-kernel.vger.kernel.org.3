@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0646551A6BB
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 18:54:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D48851AAB9
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:29:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354514AbiEDQ60 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 12:58:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52434 "EHLO
+        id S1357678AbiEDRdE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 13:33:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354447AbiEDQyW (ORCPT
+        with ESMTP id S1356930AbiEDRJt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 12:54:22 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 469B54968B;
-        Wed,  4 May 2022 09:49:35 -0700 (PDT)
+        Wed, 4 May 2022 13:09:49 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0D294704A;
+        Wed,  4 May 2022 09:56:30 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1E96961701;
-        Wed,  4 May 2022 16:49:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D14EC385A5;
-        Wed,  4 May 2022 16:49:34 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7D468B8279A;
+        Wed,  4 May 2022 16:56:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30146C385A4;
+        Wed,  4 May 2022 16:56:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651682974;
-        bh=ri5FZx4k/xV0y56XosfN461TREudlontDU4CQIoNdhY=;
+        s=korg; t=1651683388;
+        bh=Za0VdiC3YL/IFH8GD9TAZhUplfNPPkWz+O8jG/yfWG4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GA3MboEVM8t3ogjgLkReGoWBWwDKeXqH9SGSfSjTfyAjD/s8w1/GhZer+DWARpCkT
-         +UQDmVqtMBdibfzT49RJ1bpmhXJAMMxc25Ed9mhQL7Feg0OOCbKdqGcqrPlsKi3hoU
-         aRt36VZ2LpyzG/CHsz9Xk8id1EtQspq9Fzh29pGE=
+        b=cAY/tld0AcVpVovLRtB8xCt5Wy3BRbJFuH8iWLa99CzM6/kaq6h/7jNZGq2ut5SNn
+         lXlQUIyrJyk2LX43OIJZ8It0OuY6DDCwOnMCV0RUHyOoIJGeoZ2TE0F7DQVLHyGNGl
+         JCmmAHIrm3wzVcsHDs26VO/3ic8zskBERpXN9GcM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Florian Westphal <fw@strlen.de>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        Topi Miettinen <toiwoton@gmail.com>
-Subject: [PATCH 5.4 77/84] netfilter: nft_socket: only do sk lookups when indev is available
+        stable@vger.kernel.org,
+        Christian Hewitt <christianshewitt@gmail.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 060/225] arm64: dts: meson: remove CPU opps below 1GHz for G12B boards
 Date:   Wed,  4 May 2022 18:44:58 +0200
-Message-Id: <20220504152933.610244490@linuxfoundation.org>
+Message-Id: <20220504153115.521635638@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220504152927.744120418@linuxfoundation.org>
-References: <20220504152927.744120418@linuxfoundation.org>
+In-Reply-To: <20220504153110.096069935@linuxfoundation.org>
+References: <20220504153110.096069935@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,110 +56,146 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Florian Westphal <fw@strlen.de>
+From: Christian Hewitt <christianshewitt@gmail.com>
 
-commit 743b83f15d4069ea57c3e40996bf4a1077e0cdc1 upstream.
+[ Upstream commit 6c4d636bc00dc17c63ffb2a73a0da850240e26e3 ]
 
-Check if the incoming interface is available and NFT_BREAK
-in case neither skb->sk nor input device are set.
+Amlogic G12B devices experience CPU stalls and random board wedges when
+the system idles and CPU cores clock down to lower opp points. Recent
+vendor kernels include a change to remove 100-250MHz and other distro
+sources also remove the 500/667MHz points. Unless all 100-667Mhz opps
+are removed or the CPU governor forced to performance stalls are still
+observed, so let's remove them to improve stability and uptime.
 
-Because nf_sk_lookup_slow*() assume packet headers are in the
-'in' direction, use in postrouting is not going to yield a meaningful
-result.  Same is true for the forward chain, so restrict the use
-to prerouting, input and output.
-
-Use in output work if a socket is already attached to the skb.
-
-Fixes: 554ced0a6e29 ("netfilter: nf_tables: add support for native socket matching")
-Reported-and-tested-by: Topi Miettinen <toiwoton@gmail.com>
-Signed-off-by: Florian Westphal <fw@strlen.de>
-Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: b96d4e92709b ("arm64: dts: meson-g12b: support a311d and s922x cpu operating points")
+Signed-off-by: Christian Hewitt <christianshewitt@gmail.com>
+Reviewed-by: Neil Armstrong <narmstrong@baylibre.com>
+Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
+Link: https://lore.kernel.org/r/20220210100638.19130-2-christianshewitt@gmail.com
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/netfilter/nft_socket.c |   52 ++++++++++++++++++++++++++++++++-------------
- 1 file changed, 38 insertions(+), 14 deletions(-)
+ .../boot/dts/amlogic/meson-g12b-a311d.dtsi    | 40 -------------------
+ .../boot/dts/amlogic/meson-g12b-s922x.dtsi    | 40 -------------------
+ 2 files changed, 80 deletions(-)
 
---- a/net/netfilter/nft_socket.c
-+++ b/net/netfilter/nft_socket.c
-@@ -14,6 +14,32 @@ struct nft_socket {
- 	};
- };
+diff --git a/arch/arm64/boot/dts/amlogic/meson-g12b-a311d.dtsi b/arch/arm64/boot/dts/amlogic/meson-g12b-a311d.dtsi
+index d61f43052a34..8e9ad1e51d66 100644
+--- a/arch/arm64/boot/dts/amlogic/meson-g12b-a311d.dtsi
++++ b/arch/arm64/boot/dts/amlogic/meson-g12b-a311d.dtsi
+@@ -11,26 +11,6 @@ cpu_opp_table_0: opp-table-0 {
+ 		compatible = "operating-points-v2";
+ 		opp-shared;
  
-+static struct sock *nft_socket_do_lookup(const struct nft_pktinfo *pkt)
-+{
-+	const struct net_device *indev = nft_in(pkt);
-+	const struct sk_buff *skb = pkt->skb;
-+	struct sock *sk = NULL;
-+
-+	if (!indev)
-+		return NULL;
-+
-+	switch (nft_pf(pkt)) {
-+	case NFPROTO_IPV4:
-+		sk = nf_sk_lookup_slow_v4(nft_net(pkt), skb, indev);
-+		break;
-+#if IS_ENABLED(CONFIG_NF_TABLES_IPV6)
-+	case NFPROTO_IPV6:
-+		sk = nf_sk_lookup_slow_v6(nft_net(pkt), skb, indev);
-+		break;
-+#endif
-+	default:
-+		WARN_ON_ONCE(1);
-+		break;
-+	}
-+
-+	return sk;
-+}
-+
- static void nft_socket_eval(const struct nft_expr *expr,
- 			    struct nft_regs *regs,
- 			    const struct nft_pktinfo *pkt)
-@@ -27,20 +53,7 @@ static void nft_socket_eval(const struct
- 		sk = NULL;
+-		opp-100000000 {
+-			opp-hz = /bits/ 64 <100000000>;
+-			opp-microvolt = <731000>;
+-		};
+-
+-		opp-250000000 {
+-			opp-hz = /bits/ 64 <250000000>;
+-			opp-microvolt = <731000>;
+-		};
+-
+-		opp-500000000 {
+-			opp-hz = /bits/ 64 <500000000>;
+-			opp-microvolt = <731000>;
+-		};
+-
+-		opp-667000000 {
+-			opp-hz = /bits/ 64 <667000000>;
+-			opp-microvolt = <731000>;
+-		};
+-
+ 		opp-1000000000 {
+ 			opp-hz = /bits/ 64 <1000000000>;
+ 			opp-microvolt = <761000>;
+@@ -71,26 +51,6 @@ cpub_opp_table_1: opp-table-1 {
+ 		compatible = "operating-points-v2";
+ 		opp-shared;
  
- 	if (!sk)
--		switch(nft_pf(pkt)) {
--		case NFPROTO_IPV4:
--			sk = nf_sk_lookup_slow_v4(nft_net(pkt), skb, nft_in(pkt));
--			break;
--#if IS_ENABLED(CONFIG_NF_TABLES_IPV6)
--		case NFPROTO_IPV6:
--			sk = nf_sk_lookup_slow_v6(nft_net(pkt), skb, nft_in(pkt));
--			break;
--#endif
--		default:
--			WARN_ON_ONCE(1);
--			regs->verdict.code = NFT_BREAK;
--			return;
--		}
-+		sk = nft_socket_do_lookup(pkt);
+-		opp-100000000 {
+-			opp-hz = /bits/ 64 <100000000>;
+-			opp-microvolt = <731000>;
+-		};
+-
+-		opp-250000000 {
+-			opp-hz = /bits/ 64 <250000000>;
+-			opp-microvolt = <731000>;
+-		};
+-
+-		opp-500000000 {
+-			opp-hz = /bits/ 64 <500000000>;
+-			opp-microvolt = <731000>;
+-		};
+-
+-		opp-667000000 {
+-			opp-hz = /bits/ 64 <667000000>;
+-			opp-microvolt = <731000>;
+-		};
+-
+ 		opp-1000000000 {
+ 			opp-hz = /bits/ 64 <1000000000>;
+ 			opp-microvolt = <731000>;
+diff --git a/arch/arm64/boot/dts/amlogic/meson-g12b-s922x.dtsi b/arch/arm64/boot/dts/amlogic/meson-g12b-s922x.dtsi
+index 1e5d0ee5d541..44c23c984034 100644
+--- a/arch/arm64/boot/dts/amlogic/meson-g12b-s922x.dtsi
++++ b/arch/arm64/boot/dts/amlogic/meson-g12b-s922x.dtsi
+@@ -11,26 +11,6 @@ cpu_opp_table_0: opp-table-0 {
+ 		compatible = "operating-points-v2";
+ 		opp-shared;
  
- 	if (!sk) {
- 		regs->verdict.code = NFT_BREAK;
-@@ -123,6 +136,16 @@ static int nft_socket_dump(struct sk_buf
- 	return 0;
- }
+-		opp-100000000 {
+-			opp-hz = /bits/ 64 <100000000>;
+-			opp-microvolt = <731000>;
+-		};
+-
+-		opp-250000000 {
+-			opp-hz = /bits/ 64 <250000000>;
+-			opp-microvolt = <731000>;
+-		};
+-
+-		opp-500000000 {
+-			opp-hz = /bits/ 64 <500000000>;
+-			opp-microvolt = <731000>;
+-		};
+-
+-		opp-667000000 {
+-			opp-hz = /bits/ 64 <667000000>;
+-			opp-microvolt = <731000>;
+-		};
+-
+ 		opp-1000000000 {
+ 			opp-hz = /bits/ 64 <1000000000>;
+ 			opp-microvolt = <731000>;
+@@ -76,26 +56,6 @@ cpub_opp_table_1: opp-table-1 {
+ 		compatible = "operating-points-v2";
+ 		opp-shared;
  
-+static int nft_socket_validate(const struct nft_ctx *ctx,
-+			       const struct nft_expr *expr,
-+			       const struct nft_data **data)
-+{
-+	return nft_chain_validate_hooks(ctx->chain,
-+					(1 << NF_INET_PRE_ROUTING) |
-+					(1 << NF_INET_LOCAL_IN) |
-+					(1 << NF_INET_LOCAL_OUT));
-+}
-+
- static struct nft_expr_type nft_socket_type;
- static const struct nft_expr_ops nft_socket_ops = {
- 	.type		= &nft_socket_type,
-@@ -130,6 +153,7 @@ static const struct nft_expr_ops nft_soc
- 	.eval		= nft_socket_eval,
- 	.init		= nft_socket_init,
- 	.dump		= nft_socket_dump,
-+	.validate	= nft_socket_validate,
- };
- 
- static struct nft_expr_type nft_socket_type __read_mostly = {
+-		opp-100000000 {
+-			opp-hz = /bits/ 64 <100000000>;
+-			opp-microvolt = <751000>;
+-		};
+-
+-		opp-250000000 {
+-			opp-hz = /bits/ 64 <250000000>;
+-			opp-microvolt = <751000>;
+-		};
+-
+-		opp-500000000 {
+-			opp-hz = /bits/ 64 <500000000>;
+-			opp-microvolt = <751000>;
+-		};
+-
+-		opp-667000000 {
+-			opp-hz = /bits/ 64 <667000000>;
+-			opp-microvolt = <751000>;
+-		};
+-
+ 		opp-1000000000 {
+ 			opp-hz = /bits/ 64 <1000000000>;
+ 			opp-microvolt = <771000>;
+-- 
+2.35.1
+
 
 

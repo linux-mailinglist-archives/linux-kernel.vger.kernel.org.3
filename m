@@ -2,47 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 637A251A80F
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:06:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9F2551AAEC
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:34:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355276AbiEDRHv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 13:07:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39248 "EHLO
+        id S235359AbiEDRhg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 13:37:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355569AbiEDRAQ (ORCPT
+        with ESMTP id S1356875AbiEDRJr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 13:00:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C1504B85E;
-        Wed,  4 May 2022 09:51:51 -0700 (PDT)
+        Wed, 4 May 2022 13:09:47 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECF37443C4;
+        Wed,  4 May 2022 09:56:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BB970617D4;
-        Wed,  4 May 2022 16:51:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 144D0C385A5;
-        Wed,  4 May 2022 16:51:36 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9EBEAB82795;
+        Wed,  4 May 2022 16:56:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46A49C385AA;
+        Wed,  4 May 2022 16:56:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651683096;
-        bh=AFIzawQbysXjYjCtcBjeB4t+pADeckbAOSyCAuGBxw4=;
+        s=korg; t=1651683371;
+        bh=64AJ4qdk/b55bLZ0FpkDpOa0tmr6z4FH7U3T6pElt1k=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uliJHoVw607CbJEvzL57rhqffRNF1wM6USb6BYKGymtJuqJWGT8xTTik6C/gWcRE/
-         SLMn6J6VWFKbrFuHA50ryIpjkBuFYYC0l/00YkYYXKoDtCqJsAplDQYsaG48PrbdIb
-         KEk3Z++vZcEtxUDeGkFhNkiSq9pscmkz7MSgfXS8=
+        b=ensa036+atoGZTJviQHo2iM1J12ZYwlz2Ng20RjMEC8li/gJHk8OtjDV6vCatxt+Y
+         FNyEnNoX5OEbniRLLLrjaJpTKAjjksXuuEnCFXLIoAh2PorKzfSeLiMlAOo9LHLY4G
+         PKfrGFsPYunNlrTGVDR8ydoLybOHJejFf6zSIXpg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Baruch Siach <baruch.siach@siklu.com>,
-        =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 088/129] net: phy: marvell10g: fix return value on error
+        stable@vger.kernel.org, Hemant Kumar <quic_hemantk@quicinc.com>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Subject: [PATCH 5.17 042/225] bus: mhi: host: pci_generic: Add missing poweroff() PM callback
 Date:   Wed,  4 May 2022 18:44:40 +0200
-Message-Id: <20220504153027.986477931@linuxfoundation.org>
+Message-Id: <20220504153113.904051485@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220504153021.299025455@linuxfoundation.org>
-References: <20220504153021.299025455@linuxfoundation.org>
+In-Reply-To: <20220504153110.096069935@linuxfoundation.org>
+References: <20220504153110.096069935@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,38 +54,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Baruch Siach <baruch.siach@siklu.com>
+From: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 
-[ Upstream commit 0ed9704b660b259b54743cad8a84a11148f60f0a ]
+commit e64d5fa5044f225ac87d96a7e4be11389999c4c6 upstream.
 
-Return back the error value that we get from phy_read_mmd().
+During hibernation process, once thaw() stage completes, the MHI endpoint
+devices will be in M0 state post recovery. After that, the devices will be
+powered down so that the system can enter the target sleep state. During
+this stage, the PCI core will put the devices in D3hot. But this transition
+is allowed by the MHI spec. The devices can only enter D3hot when it is in
+M3 state.
 
-Fixes: c84786fa8f91 ("net: phy: marvell10g: read copper results from CSSR1")
-Signed-off-by: Baruch Siach <baruch.siach@siklu.com>
-Reviewed-by: Marek Behún <kabel@kernel.org>
-Reviewed-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
-Link: https://lore.kernel.org/r/f47cb031aeae873bb008ba35001607304a171a20.1650868058.git.baruch@tkos.co.il
-Signed-off-by: Paolo Abeni <pabeni@redhat.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+So for fixing this issue, let's add the poweroff() callback that will get
+executed before putting the system in target sleep state during
+hibernation. This callback will power down the device properly so that it
+could be restored during restore() or thaw() stage.
+
+Cc: stable@vger.kernel.org
+Fixes: 5f0c2ee1fe8d ("bus: mhi: pci-generic: Fix hibernation")
+Reported-by: Hemant Kumar <quic_hemantk@quicinc.com>
+Suggested-by: Hemant Kumar <quic_hemantk@quicinc.com>
+Link: https://lore.kernel.org/r/20220405125907.5644-1-manivannan.sadhasivam@linaro.org
+Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/phy/marvell10g.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/bus/mhi/pci_generic.c |    1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/net/phy/marvell10g.c b/drivers/net/phy/marvell10g.c
-index b1bb9b8e1e4e..2b64318efdba 100644
---- a/drivers/net/phy/marvell10g.c
-+++ b/drivers/net/phy/marvell10g.c
-@@ -650,7 +650,7 @@ static int mv3310_read_status_copper(struct phy_device *phydev)
- 
- 	cssr1 = phy_read_mmd(phydev, MDIO_MMD_PCS, MV_PCS_CSSR1);
- 	if (cssr1 < 0)
--		return val;
-+		return cssr1;
- 
- 	/* If the link settings are not resolved, mark the link down */
- 	if (!(cssr1 & MV_PCS_CSSR1_RESOLVED)) {
--- 
-2.35.1
-
+--- a/drivers/bus/mhi/pci_generic.c
++++ b/drivers/bus/mhi/pci_generic.c
+@@ -1085,6 +1085,7 @@ static const struct dev_pm_ops mhi_pci_p
+ 	.resume = mhi_pci_resume,
+ 	.freeze = mhi_pci_freeze,
+ 	.thaw = mhi_pci_restore,
++	.poweroff = mhi_pci_freeze,
+ 	.restore = mhi_pci_restore,
+ #endif
+ };
 
 

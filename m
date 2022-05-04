@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0087951AB20
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:40:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34BFD51A689
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 18:52:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358173AbiEDRiO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 13:38:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40634 "EHLO
+        id S1352157AbiEDQ4P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 12:56:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356870AbiEDRJr (ORCPT
+        with ESMTP id S1354191AbiEDQxz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 13:09:47 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AA7843EC9;
-        Wed,  4 May 2022 09:56:11 -0700 (PDT)
+        Wed, 4 May 2022 12:53:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D2D8483B1;
+        Wed,  4 May 2022 09:49:12 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B5D8DB8278E;
-        Wed,  4 May 2022 16:56:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58B37C385A4;
-        Wed,  4 May 2022 16:56:08 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6337F61771;
+        Wed,  4 May 2022 16:49:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1B14C385A4;
+        Wed,  4 May 2022 16:49:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651683368;
-        bh=UZl42qo5/Ar8qtWtm+NFa5TCzVY3jfja3ZRWVrYwy6k=;
+        s=korg; t=1651682951;
+        bh=IwX2/NnejUzN7u8g7KsKfNNxuvUqvIN8hWL1MrCgCGU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=zHUq/5Vb76IsZii9KsVuMsu71qvVZc7r/b0HCLBZPg5WA4hswZb7R9Ir5wwlzQMfT
-         C7rMZ0DIbCojpRu6P7yzwsw+w86/ZqEA78nQG8g5CbA1S5CYxXAxEQl1Lu0+AMTGv+
-         cYf2h9kgFXANEkAQo+3AriGZRmvwnqYkHl776mo4=
+        b=itxNc3uTTXStJ4b5JIlC1tA0vv037DbE0zngd+S7cgM4Y198nVR5AJjQpO7+SG+Zg
+         He591syb8p9nHFmFc2LWL/sKuFgzhIxsWyL6qA2Us1DrP/jqDW8eaaKXQEwm0ZhFj5
+         Umedf7b98KLm6K/9s7LK+NTQUq3xm2qxB0qV1+gE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Tejun Heo <tj@kernel.org>,
-        Rik van Riel <riel@surriel.com>, Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH 5.17 053/225] iocost: dont reset the inuse weight of under-weighted debtors
+        stable@vger.kernel.org, Mikulas Patocka <mpatocka@redhat.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 70/84] x86: __memcpy_flushcache: fix wrong alignment if size > 2^32
 Date:   Wed,  4 May 2022 18:44:51 +0200
-Message-Id: <20220504153114.897394089@linuxfoundation.org>
+Message-Id: <20220504152932.925204395@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220504153110.096069935@linuxfoundation.org>
-References: <20220504153110.096069935@linuxfoundation.org>
+In-Reply-To: <20220504152927.744120418@linuxfoundation.org>
+References: <20220504152927.744120418@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,63 +55,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tejun Heo <tj@kernel.org>
+From: Mikulas Patocka <mpatocka@redhat.com>
 
-commit 8c936f9ea11ec4e35e288810a7503b5c841a355f upstream.
+[ Upstream commit a6823e4e360fe975bd3da4ab156df7c74c8b07f3 ]
 
-When an iocg is in debt, its inuse weight is owned by debt handling and
-should stay at 1. This invariant was broken when determining the amount of
-surpluses at the beginning of donation calculation - when an iocg's
-hierarchical weight is too low, the iocg is excluded from donation
-calculation and its inuse is reset to its active regardless of its
-indebtedness, triggering warnings like the following:
+The first "if" condition in __memcpy_flushcache is supposed to align the
+"dest" variable to 8 bytes and copy data up to this alignment.  However,
+this condition may misbehave if "size" is greater than 4GiB.
 
- WARNING: CPU: 5 PID: 0 at block/blk-iocost.c:1416 iocg_kick_waitq+0x392/0x3a0
- ...
- RIP: 0010:iocg_kick_waitq+0x392/0x3a0
- Code: 00 00 be ff ff ff ff 48 89 4d a8 e8 98 b2 70 00 48 8b 4d a8 85 c0 0f 85 4a fe ff ff 0f 0b e9 43 fe ff ff 0f 0b e9 4d fe ff ff <0f> 0b e9 50 fe ff ff e8 a2 ae 70 00 66 90 0f 1f 44 00 00 55 48 89
- RSP: 0018:ffffc90000200d08 EFLAGS: 00010016
- ...
-  <IRQ>
-  ioc_timer_fn+0x2e0/0x1470
-  call_timer_fn+0xa1/0x2c0
- ...
+The statement min_t(unsigned, size, ALIGN(dest, 8) - dest); casts both
+arguments to unsigned int and selects the smaller one.  However, the
+cast truncates high bits in "size" and it results in misbehavior.
 
-As this happens only when an iocg's hierarchical weight is negligible, its
-impact likely is limited to triggering the warnings. Fix it by skipping
-resetting inuse of under-weighted debtors.
+For example:
 
-Signed-off-by: Tejun Heo <tj@kernel.org>
-Reported-by: Rik van Riel <riel@surriel.com>
-Fixes: c421a3eb2e27 ("blk-iocost: revamp debt handling")
-Cc: stable@vger.kernel.org # v5.10+
-Link: https://lore.kernel.org/r/YmjODd4aif9BzFuO@slm.duckdns.org
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+	suppose that size == 0x100000001, dest == 0x200000002
+	min_t(unsigned, size, ALIGN(dest, 8) - dest) == min_t(0x1, 0xe) == 0x1;
+	...
+	dest += 0x1;
+
+so we copy just one byte "and" dest remains unaligned.
+
+This patch fixes the bug by replacing unsigned with size_t.
+
+Signed-off-by: Mikulas Patocka <mpatocka@redhat.com>
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- block/blk-iocost.c |   12 +++++++++++-
- 1 file changed, 11 insertions(+), 1 deletion(-)
+ arch/x86/lib/usercopy_64.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/block/blk-iocost.c
-+++ b/block/blk-iocost.c
-@@ -2322,7 +2322,17 @@ static void ioc_timer_fn(struct timer_li
- 				iocg->hweight_donating = hwa;
- 				iocg->hweight_after_donation = new_hwi;
- 				list_add(&iocg->surplus_list, &surpluses);
--			} else {
-+			} else if (!iocg->abs_vdebt) {
-+				/*
-+				 * @iocg doesn't have enough to donate. Reset
-+				 * its inuse to active.
-+				 *
-+				 * Don't reset debtors as their inuse's are
-+				 * owned by debt handling. This shouldn't affect
-+				 * donation calculuation in any meaningful way
-+				 * as @iocg doesn't have a meaningful amount of
-+				 * share anyway.
-+				 */
- 				TRACE_IOCG_PATH(inuse_shortage, iocg, &now,
- 						iocg->inuse, iocg->active,
- 						iocg->hweight_inuse, new_hwi);
+diff --git a/arch/x86/lib/usercopy_64.c b/arch/x86/lib/usercopy_64.c
+index 1847e993ac63..f3f7f4cb15a6 100644
+--- a/arch/x86/lib/usercopy_64.c
++++ b/arch/x86/lib/usercopy_64.c
+@@ -142,7 +142,7 @@ void __memcpy_flushcache(void *_dst, const void *_src, size_t size)
+ 
+ 	/* cache copy and flush to align dest */
+ 	if (!IS_ALIGNED(dest, 8)) {
+-		unsigned len = min_t(unsigned, size, ALIGN(dest, 8) - dest);
++		size_t len = min_t(size_t, size, ALIGN(dest, 8) - dest);
+ 
+ 		memcpy((void *) dest, (void *) source, len);
+ 		clean_cache_range((void *) dest, len);
+-- 
+2.35.1
+
 
 

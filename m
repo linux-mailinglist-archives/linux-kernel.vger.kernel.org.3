@@ -2,110 +2,368 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05F5D51B231
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 00:43:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 608ED51B258
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 00:51:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379234AbiEDWqw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 18:46:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60264 "EHLO
+        id S1379135AbiEDWxT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 18:53:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379088AbiEDWqn (ORCPT
+        with ESMTP id S1359382AbiEDWxK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 18:46:43 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4176A53726
-        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 15:42:32 -0700 (PDT)
-From:   John Ogness <john.ogness@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1651704149;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=bIg1HscWN1tvVWMSh8fcrYwHSnmqdBrRg0rNnb5YAr4=;
-        b=B6aIpuDJHUxIAuuxMW19vF2YskBMeJJY1RaYy1313Uyk1P/Z3GVoSvY0AbQFxrYcX1l0Az
-        2/+LxzzMrc1k1ZWkIqwQ8W3k4ne/1w5GJuxZvSBg2nx92EhrCkYuJ2wCRUN7EiSMXMzYDd
-        l1zVlr9+kWhZ1O7tHnfvpUy6/izefbTfP7q2LCkJgKbaY4KB4Mig6HzKfJE6CZIwC6h8bu
-        vBvgOPtqmZ+JYem07KSOyh4vmjnHfcNrTUIhwocHTXrKf9CbgBxcjyD2Ul+RpraPyBVlBj
-        55XhJKVhvDEXyxGfxU+jB6XLkv8B4/eKL61MRBrXnIptEUAYhLuU+qKkxUksGg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1651704149;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=bIg1HscWN1tvVWMSh8fcrYwHSnmqdBrRg0rNnb5YAr4=;
-        b=m98oYRuoP7rXD4qoKzjZfEYooVQPaQUBsEyWbXMrczs81p1HFw9GRfR/HRpjmTjK8iPQCm
-        sjWxzDfchSYoCEBQ==
-To:     Marek Szyprowski <m.szyprowski@samsung.com>,
-        Petr Mladek <pmladek@suse.com>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-amlogic@lists.infradead.org
-Subject: Re: [PATCH printk v5 1/1] printk: extend console_lock for
- per-console locking
-In-Reply-To: <87pmktm2a9.fsf@jogness.linutronix.de>
-References: <Ymfgis0EAw0Oxoa5@alley> <Ymfwk+X0CHq6ex3s@alley>
- <CGME20220427070833eucas1p27a32ce7c41c0da26f05bd52155f0031c@eucas1p2.samsung.com>
- <2a82eae7-a256-f70c-fd82-4e510750906e@samsung.com>
- <Ymjy3rHRenba7r7R@alley>
- <b6c1a8ac-c691-a84d-d3a1-f99984d32f06@samsung.com>
- <87fslyv6y3.fsf@jogness.linutronix.de>
- <51dfc4a0-f6cf-092f-109f-a04eeb240655@samsung.com>
- <87k0b6blz2.fsf@jogness.linutronix.de>
- <32bba8f8-dec7-78aa-f2e5-f62928412eda@samsung.com>
- <Ym/Z7PYPqvWPEjuL@alley>
- <45849b63-d7a8-5cc3-26ad-256a28d09991@samsung.com>
- <87pmktm2a9.fsf@jogness.linutronix.de>
-Date:   Thu, 05 May 2022 00:48:28 +0206
-Message-ID: <87a6bwapij.fsf@jogness.linutronix.de>
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INVALID_DATE_TZ_ABSURD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 4 May 2022 18:53:10 -0400
+Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC3DF53728
+        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 15:49:32 -0700 (PDT)
+Received: by mail-pg1-x54a.google.com with SMTP id 23-20020a630117000000b003c5ea4365a1so1343546pgb.6
+        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 15:49:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=reply-to:date:message-id:mime-version:subject:from:to:cc;
+        bh=j76ezE9GuMcgh+azSWqeqxg1EVetPVla9Ox2a6vhqUI=;
+        b=go6VGqLC1sTEwjzyH0S2QG3N2xUpKxNByiiICWd0zsYmHH2umI8zq/RwgxLmzGePIz
+         hOX+LMxBrNiOD8fVcR8/YtXQ+a38Ll3hiC0LzY5GT0IKVc0owHR++x67hdVNhxU3owGr
+         zBvTbKUgverQMXMNOI2p1MyL0tcQcko2ymSYZQe0ywXA8l6ixmr0vwY6k59deQ+I/CE6
+         Kdcqm9O6OvtCrxbovFMJI3p5XnVaS4GnKVhCwUPAO3YY2KFRRNvI7mKqrj2U+0uOT9Ff
+         RyATmGco9Vom2ji4z6OknaICTjOfOD9voDNPW+1ud/guY/PeMm4QpSKcmn1SgVI1pHVp
+         Mabg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:reply-to:date:message-id:mime-version:subject
+         :from:to:cc;
+        bh=j76ezE9GuMcgh+azSWqeqxg1EVetPVla9Ox2a6vhqUI=;
+        b=olenTYDhtB4h3S9uFsVAz6l+fK+S6Qr1898j35Xh2UsWitQDYU+85iwnlNTvxneNK/
+         oOXXAx8ipLTiMjaFKFEbXU8BoIb9FBo8sCUNGinPidcd/rhX6fSDBbPZuqOWTpQ1gBvx
+         +Jvsr3Ue9I/B59AjRIznS3VOURTSYom/0Lc/EvINbvVv1hW8Uf4MOUFeyz5Gj3CHzklt
+         j0I/sHlUwUFaFrSd1c0h1wPqY5oInG9q9cUCR6avzPmLGHqOUsVaLXTOrq3ObMhlgOf8
+         FPfN/4W6Vl1IttOHqVP3nXZOeRqddkOJxVKjuzPj+x45aWatwNiagD/NjszryJy5p9ko
+         TfCg==
+X-Gm-Message-State: AOAM533NtSYU9FWYVVPxpYRBIk09DVyJPW2P4x/KwXcM3mqX9X9h3Fq9
+        GBF2rSvaYTpP7DHxvrFA2HqZaX0HeGU=
+X-Google-Smtp-Source: ABdhPJzHFOm3Jj17tlJfs2w8wz8Q8OFUml5tzr1uaZ9XP1W2YSHNv/yOlcuE4ZF1FT3AnJ3jg29Ea1Oy8F4=
+X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
+ (user=seanjc job=sendgmr) by 2002:a17:90a:aa8a:b0:1c9:bfd8:9a90 with SMTP id
+ l10-20020a17090aaa8a00b001c9bfd89a90mr2253831pjq.118.1651704572147; Wed, 04
+ May 2022 15:49:32 -0700 (PDT)
+Reply-To: Sean Christopherson <seanjc@google.com>
+Date:   Wed,  4 May 2022 22:47:06 +0000
+Message-Id: <20220504224914.1654036-1-seanjc@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.36.0.464.gb9c8b46e94-goog
+Subject: [PATCH 000/128] KVM: selftests: Overhaul APIs, purge VCPU_ID
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Andrew Jones <drjones@redhat.com>,
+        David Matlack <dmatlack@google.com>,
+        Ben Gardon <bgardon@google.com>,
+        Oliver Upton <oupton@google.com>,
+        Sean Christopherson <seanjc@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-05-04, John Ogness <john.ogness@linutronix.de> wrote:
-> I can reproduce the apparent stack corruption with qemu:
->
-> [    5.545268] task:pr/ttyAMA0      state:S stack:    0 pid:   26 ppid:     2 flags:0x00000008
-> [    5.545520] Call trace:
-> [    5.545620]  __switch_to+0x104/0x160
-> [    5.545796]  __schedule+0x2f4/0x9f0
-> [    5.546122]  schedule+0x54/0xd0
-> [    5.546206]  0x0
+Overhaul KVM's selftest APIs to get selftests to a state where adding new
+features and writing tests is less painful/disgusting (I feel dirty every
+time I copy+paste VCPU_ID).
 
-I believe I am chasing a ghost. I can rather easily reproduce these
-strange call traces, but if another sysrq-t is sent afterwards, the call
-trace is OK. Also, I added trace_dump_stack() into the printk-kthread
-main loop to dump the stack on every iteration. There I never see any
-corruption, even though the timestamps are near the sysrq-t dump showing
-corruption. Moving trace_dump_stack() into
-amba-pl011:pl011_console_write() also showed no stack corruption at very
-near times when sysrq-t did.
+The primary theme is to stop treating tests like second class citizens.
+Stop hiding vcpu, kvm_vm, etc...  There's no sensitive data/constructs, and
+the encapsulation has led to really, really bad and difficult to maintain
+code.  E.g. having to pass around the VM just to call a vCPU ioctl(),
+arbitrary non-zero vCPU IDs, tests having to care about the vCPU ID in the
+first place, etc...
 
-And it should be noted that the console-hanging issues reported in this
-thread _cannot_ be reproduced with qemu.
+The other theme in the rework is to deduplicate code and try to set us
+up for success in the future.  E.g. provide macros/helpers instead of
+spamming CTRL-C => CTRL-V (see the -700 LoC), structure the VM creation
+APIs to build on one another, etc...
 
-So I will stop focussing on this "corrupt stack" thing and instead
-investigate what the meson driver is doing that causes it to get
-stuck. Since interrupts do not even fire, I'm guessing that the RX
-interrupts are not being re-enabled (AML_UART_RX_INT_EN) for some code
-path. This bit is only explicitly set once, in
-meson_uart_startup(). Whenever the bit is cleared, later the previous
-value is restored. This is assumed to mean the interrupt gets
-re-enabled. But if there is some code path where multiple CPUs can
-modify the register, then the interrupt could end up permanently
-disabled.
+The ridiculous patch count (as opposed to just laughable) is due to
+converting each test away from using hardcoded vCPU IDs in a separate patch.
+The vast majority of those patches probably aren't worth reviewing in depth,
+the changes are mostly mechanical in nature.
 
-I will go through and check if all access to AML_UART_CONTROL is
-protected by port->lock.
+However, _running_ non-x86 tests (or tests that have unique non-x86
+behavior) would be extremely valuable.  All patches have been compile tested
+on x86, arm, risc-v, and s390, but I've only run the tests on x86.  Based on
+my track record for the x86+common tests, I will be very, very surprised if
+I didn't break any of the non-x86 tests, e.g. pthread_create()'s 'void *'
+param tripped me up multiple times.
 
-John
+I believe the only x86 test I haven't run is amx_test, due to lack of
+hardware.
+
+Based on kvm/queue + kvm/master (wanted to avoid conflicts with fixes that
+are sitting in kvm/master):
+
+  2fd3ab9c169a Merge remote-tracking branch 'kvm/master' into x86/selftests_overhaul
+  2764011106d0 (kvm/queue) KVM: VMX: Include MKTME KeyID bits in shadow_zero_check
+
+Cc: kvm@vger.kernel.org
+Cc: Vitaly Kuznetsov <vkuznets@redhat.com>
+Cc: Andrew Jones <drjones@redhat.com>
+Cc: David Matlack <dmatlack@google.com>
+Cc: Ben Gardon <bgardon@google.com>
+Cc: Oliver Upton <oupton@google.com>
+
+Sean Christopherson (128):
+  KVM: selftests: Fix buggy-but-benign check in
+    test_v3_new_redist_regions()
+  KVM: selftests: Drop stale declarations from kvm_util_base.h
+  KVM: selftests: Unconditionally compile KVM selftests with -Werror
+  KVM: selftests: Always open VM file descriptors with O_RDWR
+  KVM: selftests: Add another underscore to inner ioctl() helpers
+  KVM: selftests: Make vcpu_ioctl() a wrapper to pretty print ioctl name
+  KVM: selftests: Drop @mode from common vm_create() helper
+  KVM: selftests: Split vcpu_set_nested_state() into two helpers
+  KVM: sefltests: Use vcpu_ioctl() and __vcpu_ioctl() helpers
+  KVM: selftests: Add __vcpu_run() helper
+  KVM: selftests: Use vcpu_access_device_attr() in arm64 code
+  KVM: selftests: Remove vcpu_get_fd()
+  KVM: selftests: Add vcpu_get() to retrieve and assert on vCPU
+    existence
+  KVM: selftests: Make vm_ioctl() a wrapper to pretty print ioctl name
+  KVM: sefltests: Use vm_ioctl() and __vm_ioctl() helpers
+  KVM: selftests: Make kvm_ioctl() a wrapper to pretty print ioctl name
+  KVM: selftests: Use kvm_ioctl() helpers
+  KVM: selftests: Use __KVM_SYSCALL_ERROR() to handle non-KVM syscall
+    errors
+  KVM: selftests: Make x86-64's register dump helpers static
+  KVM: selftests: Get rid of kvm_util_internal.h
+  KVM: selftests: Use KVM_IOCTL_ERROR() for one-off arm64 ioctls
+  KVM: selftests: Drop @test param from kvm_create_device()
+  KVM: selftests: Move KVM_CREATE_DEVICE_TEST code to separate helper
+  KVM: selftests: Multiplex return code and fd in __kvm_create_device()
+  KVM: selftests: Rename KVM_HAS_DEVICE_ATTR helpers for consistency
+  KVM: selftests: Drop 'int' return from asserting *_has_device_attr()
+  KVM: selftests: Split get/set device_attr helpers
+  KVM: selftests: Add a VM backpointer to 'struct vcpu'
+  KVM: selftests: Add vm_create_*() variants to expose/return 'struct
+    vcpu'
+  KVM: selftests: Push vm_adjust_num_guest_pages() into "w/o vCPUs"
+    helper
+  KVM: selftests: Use vm_create_without_vcpus() in set_boot_cpu_id
+  KVM: selftests: Use vm_create_without_vcpus() in dirty_log_test
+  KVM: selftests: Use vm_create_without_vcpus() in hardware_disable_test
+  KVM: selftests: Use vm_create_without_vcpus() in psci_cpu_on_test
+  KVM: selftests: Rename vm_create() => vm_create_barebones(), drop
+    param
+  KVM: selftests: Rename vm_create_without_vcpus() => vm_create()
+  KVM: selftests: Make vm_create() a wrapper that specifies
+    VM_MODE_DEFAULT
+  KVM: selftests: Rename xAPIC state test's vcpu struct
+  KVM: selftests: Rename vcpu.state => vcpu.run
+  KVM: selftests: Rename 'struct vcpu' to 'struct kvm_vcpu'
+  KVM: selftests: Return the created vCPU from vm_vcpu_add()
+  KVM: selftests: Convert memslot_perf_test away from VCPU_ID
+  KVM: selftests: Convert rseq_test away from VCPU_ID
+  KVM: selftests: Convert xss_msr_test away from VCPU_ID
+  KVM: selftests: Convert vmx_preemption_timer_test away from VCPU_ID
+  KVM: selftests: Convert vmx_pmu_msrs_test away from VCPU_ID
+  KVM: selftests: Convert vmx_set_nested_state_test away from VCPU_ID
+  KVM: selftests: Convert vmx_tsc_adjust_test away from VCPU_ID
+  KVM: selftests: Convert mmu_role_test away from VCPU_ID
+  KVM: selftests: Convert pmu_event_filter_test away from VCPU_ID
+  KVM: selftests: Convert smm_test away from VCPU_ID
+  KVM: selftests: Convert state_test away from VCPU_ID
+  KVM: selftests: Convert svm_int_ctl_test away from VCPU_ID
+  KVM: selftests: Convert svm_vmcall_test away from VCPU_ID
+  KVM: selftests: Convert sync_regs_test away from VCPU_ID
+  KVM: selftests: Convert hyperv_cpuid away from VCPU_ID
+  KVM: selftests: Convert kvm_pv_test away from VCPU_ID
+  KVM: selftests: Convert platform_info_test away from VCPU_ID
+  KVM: selftests: Convert vmx_nested_tsc_scaling_test away from VCPU_ID
+  KVM: selftests: Convert set_sregs_test away from VCPU_ID
+  KVM: selftests: Convert vmx_dirty_log_test away from VCPU_ID
+  KVM: selftests: Convert vmx_close_while_nested_test away from VCPU_ID
+  KVM: selftests: Convert vmx_apic_access_test away from VCPU_ID
+  KVM: selftests: Convert userspace_msr_exit_test away from VCPU_ID
+  KVM: selftests: Convert vmx_exception_with_invalid_guest_state away
+    from VCPU_ID
+  KVM: selftests: Convert tsc_msrs_test away from VCPU_ID
+  KVM: selftests: Convert kvm_clock_test away from VCPU_ID
+  KVM: selftests: Convert hyperv_svm_test away from VCPU_ID
+  KVM: selftests: Convert hyperv_features away from VCPU_ID
+  KVM: selftests: Convert hyperv_clock away from VCPU_ID
+  KVM: selftests: Convert evmcs_test away from VCPU_ID
+  KVM: selftests: Convert emulator_error_test away from VCPU_ID
+  KVM: selftests: Convert debug_regs away from VCPU_ID
+  KVM: selftests: Add proper helper for advancing RIP in debug_regs
+  KVM: selftests: Convert amx_test away from VCPU_ID
+  KVM: selftests: Convert cr4_cpuid_sync_test away from VCPU_ID
+  KVM: selftests: Convert cpuid_test away from VCPU_ID
+  KVM: selftests: Convert userspace_io_test away from VCPU_ID
+  KVM: selftests: Convert vmx_invalid_nested_guest_state away from
+    VCPU_ID
+  KVM: selftests: Convert xen_vmcall_test away from VCPU_ID
+  KVM: selftests: Convert xen_shinfo_test away from VCPU_ID
+  KVM: selftests: Convert dirty_log_test away from VCPU_ID
+  KVM: selftests: Convert set_memory_region_test away from VCPU_ID
+  KVM: selftests: Convert system_counter_offset_test away from VCPU_ID
+  KVM: selftests: Track kvm_vcpu object in tsc_scaling_sync
+  KVM: selftests: Convert xapic_state_test away from hardcoded vCPU ID
+  KVM: selftests: Convert debug-exceptions away from VCPU_ID
+  KVM: selftests: Convert fix_hypercall_test away from VCPU_ID
+  KVM: selftests: Convert vgic_irq away from VCPU_ID
+  KVM: selftests: Make arm64's guest_get_vcpuid() declaration arm64-only
+  KVM: selftests: Move vm_is_unrestricted_guest() to x86-64
+  KVM: selftests: Add "arch" to common utils that have arch
+    implementations
+  KVM: selftests: Return created vcpu from vm_vcpu_add_default()
+  KVM: selftests: Rename vm_vcpu_add* helpers to better show
+    relationships
+  KVM: selftests: Convert set_boot_cpu_id away from global VCPU_IDs
+  KVM: selftests: Convert psci_cpu_on_test away from VCPU_ID
+  KVM: selftests: Convert hardware_disable_test to pass around vCPU
+    objects
+  KVM: selftests: Add VM creation helper that "returns" vCPUs
+  KVM: selftests: Convert steal_time away from VCPU_ID
+  KVM: selftests: Convert arch_timer away from VCPU_ID
+  KVM: selftests: Fix typo in vgic_init test
+  KVM: selftests: Convert vgic_init away from
+    vm_create_default_with_vcpus()
+  KVM: selftests: Convert xapic_ipi_test away from *_VCPU_ID
+  KVM: selftests: Convert sync_regs_test away from VCPU_ID
+  KVM: selftests: Convert s390's "resets" test away from VCPU_ID
+  KVM: selftests: Convert memop away from VCPU_ID
+  KVM: selftests: Convert s390x/diag318_test_handler away from VCPU_ID
+  KVM: selftests: Convert tprot away from VCPU_ID
+  KVM: selftests: Use vm_create() in tsc_scaling_sync
+  KVM: selftests: Use vm_create_with_vcpus() in max_guest_memory_test
+  KVM: selftests: Drop vm_create_default* helpers
+  KVM: selftests: Drop @vcpuids param from VM creators
+  KVM: selftests: Convert kvm_page_table_test away from reliance on
+    vcpu_id
+  KVM: selftests: Convert kvm_binary_stats_test away from vCPU IDs
+  KVM: selftests: Convert get-reg-list away from its "VCPU_ID"
+  KVM: selftests: Stop hardcoding vCPU IDs in vcpu_width_config
+  KVM: selftests: Stop conflating vCPU index and ID in perf tests
+  KVM: selftests: Remove vcpu_get() usage from dirty_log_test
+  KVM: selftests: Require vCPU output array when creating VM with vCPUs
+  KVM: selftests: Purge vm+vcpu_id == vcpu silliness
+  KVM: selftests: Drop vcpu_get(), rename vcpu_find() => vcpu_exists()
+  KVM: selftests: Remove vcpu_state() helper
+  KVM: selftests: Open code and drop 'struct kvm_vm' accessors
+  KVM: selftests: Drop @slot0_mem_pages from __vm_create_with_vcpus()
+  KVM: selftests: Drop @num_percpu_pages from __vm_create_with_vcpus()
+  KVM: selftests: Move per-VM/per-vCPU nr pages calculation to
+    __vm_create()
+  KVM: selftests: Trust that MAXPHYADDR > memslot0 in
+    vmx_apic_access_test
+  KVM: selftests: Drop DEFAULT_GUEST_PHY_PAGES, open code the magic
+    number
+
+ tools/testing/selftests/kvm/Makefile          |    2 +-
+ .../selftests/kvm/aarch64/arch_timer.c        |   68 +-
+ .../selftests/kvm/aarch64/debug-exceptions.c  |   17 +-
+ .../selftests/kvm/aarch64/get-reg-list.c      |   19 +-
+ .../selftests/kvm/aarch64/psci_cpu_on_test.c  |   23 +-
+ .../selftests/kvm/aarch64/vcpu_width_config.c |   66 +-
+ .../testing/selftests/kvm/aarch64/vgic_init.c |  369 +++---
+ .../testing/selftests/kvm/aarch64/vgic_irq.c  |   35 +-
+ .../selftests/kvm/access_tracking_perf_test.c |   81 +-
+ .../selftests/kvm/demand_paging_test.c        |   49 +-
+ .../selftests/kvm/dirty_log_perf_test.c       |   42 +-
+ tools/testing/selftests/kvm/dirty_log_test.c  |   86 +-
+ .../selftests/kvm/hardware_disable_test.c     |   29 +-
+ .../selftests/kvm/include/aarch64/processor.h |   20 +-
+ .../selftests/kvm/include/aarch64/vgic.h      |    6 +-
+ .../selftests/kvm/include/kvm_util_base.h     |  690 ++++++++---
+ .../selftests/kvm/include/perf_test_util.h    |    5 +-
+ .../selftests/kvm/include/riscv/processor.h   |    8 +-
+ .../selftests/kvm/include/ucall_common.h      |    2 +-
+ .../selftests/kvm/include/x86_64/evmcs.h      |    2 +-
+ .../selftests/kvm/include/x86_64/processor.h  |   52 +-
+ .../selftests/kvm/kvm_binary_stats_test.c     |   26 +-
+ .../selftests/kvm/kvm_create_max_vcpus.c      |    4 +-
+ .../selftests/kvm/kvm_page_table_test.c       |   66 +-
+ .../selftests/kvm/lib/aarch64/processor.c     |   79 +-
+ .../testing/selftests/kvm/lib/aarch64/ucall.c |    9 +-
+ .../testing/selftests/kvm/lib/aarch64/vgic.c  |   54 +-
+ tools/testing/selftests/kvm/lib/elf.c         |    1 -
+ tools/testing/selftests/kvm/lib/guest_modes.c |    6 +-
+ tools/testing/selftests/kvm/lib/kvm_util.c    | 1076 +++--------------
+ .../selftests/kvm/lib/kvm_util_internal.h     |  128 --
+ .../selftests/kvm/lib/perf_test_util.c        |   84 +-
+ .../selftests/kvm/lib/riscv/processor.c       |  111 +-
+ tools/testing/selftests/kvm/lib/riscv/ucall.c |    9 +-
+ .../kvm/lib/s390x/diag318_test_handler.c      |    9 +-
+ .../selftests/kvm/lib/s390x/processor.c       |   44 +-
+ tools/testing/selftests/kvm/lib/s390x/ucall.c |    8 +-
+ .../selftests/kvm/lib/x86_64/processor.c      |  320 ++---
+ tools/testing/selftests/kvm/lib/x86_64/svm.c  |    1 -
+ .../testing/selftests/kvm/lib/x86_64/ucall.c  |   10 +-
+ tools/testing/selftests/kvm/lib/x86_64/vmx.c  |    5 +-
+ .../selftests/kvm/max_guest_memory_test.c     |   53 +-
+ .../kvm/memslot_modification_stress_test.c    |   13 +-
+ .../testing/selftests/kvm/memslot_perf_test.c |   28 +-
+ tools/testing/selftests/kvm/rseq_test.c       |    9 +-
+ tools/testing/selftests/kvm/s390x/memop.c     |   82 +-
+ tools/testing/selftests/kvm/s390x/resets.c    |  137 ++-
+ .../selftests/kvm/s390x/sync_regs_test.c      |   37 +-
+ tools/testing/selftests/kvm/s390x/tprot.c     |   25 +-
+ .../selftests/kvm/set_memory_region_test.c    |   43 +-
+ tools/testing/selftests/kvm/steal_time.c      |  123 +-
+ .../kvm/system_counter_offset_test.c          |   29 +-
+ tools/testing/selftests/kvm/x86_64/amx_test.c |   33 +-
+ .../testing/selftests/kvm/x86_64/cpuid_test.c |   29 +-
+ .../kvm/x86_64/cr4_cpuid_sync_test.c          |   17 +-
+ .../testing/selftests/kvm/x86_64/debug_regs.c |   72 +-
+ .../kvm/x86_64/emulator_error_test.c          |   65 +-
+ .../testing/selftests/kvm/x86_64/evmcs_test.c |   51 +-
+ .../selftests/kvm/x86_64/fix_hypercall_test.c |   34 +-
+ .../kvm/x86_64/get_msr_index_features.c       |   16 +-
+ .../selftests/kvm/x86_64/hyperv_clock.c       |   25 +-
+ .../selftests/kvm/x86_64/hyperv_cpuid.c       |   25 +-
+ .../selftests/kvm/x86_64/hyperv_features.c    |   51 +-
+ .../selftests/kvm/x86_64/hyperv_svm_test.c    |   14 +-
+ .../selftests/kvm/x86_64/kvm_clock_test.c     |   23 +-
+ .../selftests/kvm/x86_64/kvm_pv_test.c        |   25 +-
+ .../selftests/kvm/x86_64/mmio_warning_test.c  |    6 +-
+ .../selftests/kvm/x86_64/mmu_role_test.c      |   20 +-
+ .../selftests/kvm/x86_64/platform_info_test.c |   34 +-
+ .../kvm/x86_64/pmu_event_filter_test.c        |   71 +-
+ .../selftests/kvm/x86_64/set_boot_cpu_id.c    |   86 +-
+ .../selftests/kvm/x86_64/set_sregs_test.c     |   47 +-
+ .../selftests/kvm/x86_64/sev_migrate_tests.c  |   17 +-
+ tools/testing/selftests/kvm/x86_64/smm_test.c |   37 +-
+ .../testing/selftests/kvm/x86_64/state_test.c |   29 +-
+ .../selftests/kvm/x86_64/svm_int_ctl_test.c   |   21 +-
+ .../selftests/kvm/x86_64/svm_vmcall_test.c    |   16 +-
+ .../selftests/kvm/x86_64/sync_regs_test.c     |   52 +-
+ .../selftests/kvm/x86_64/tsc_msrs_test.c      |   35 +-
+ .../selftests/kvm/x86_64/tsc_scaling_sync.c   |   20 +-
+ .../selftests/kvm/x86_64/userspace_io_test.c  |   18 +-
+ .../kvm/x86_64/userspace_msr_exit_test.c      |  165 ++-
+ .../kvm/x86_64/vmx_apic_access_test.c         |   27 +-
+ .../kvm/x86_64/vmx_close_while_nested_test.c  |   17 +-
+ .../selftests/kvm/x86_64/vmx_dirty_log_test.c |   13 +-
+ .../vmx_exception_with_invalid_guest_state.c  |   62 +-
+ .../x86_64/vmx_invalid_nested_guest_state.c   |   18 +-
+ .../kvm/x86_64/vmx_nested_tsc_scaling_test.c  |   19 +-
+ .../selftests/kvm/x86_64/vmx_pmu_msrs_test.c  |   25 +-
+ .../kvm/x86_64/vmx_preemption_timer_test.c    |   30 +-
+ .../kvm/x86_64/vmx_set_nested_state_test.c    |   86 +-
+ .../kvm/x86_64/vmx_tsc_adjust_test.c          |   13 +-
+ .../selftests/kvm/x86_64/xapic_ipi_test.c     |   48 +-
+ .../selftests/kvm/x86_64/xapic_state_test.c   |   60 +-
+ .../selftests/kvm/x86_64/xen_shinfo_test.c    |   62 +-
+ .../selftests/kvm/x86_64/xen_vmcall_test.c    |   17 +-
+ .../selftests/kvm/x86_64/xss_msr_test.c       |   10 +-
+ 97 files changed, 2607 insertions(+), 3354 deletions(-)
+ delete mode 100644 tools/testing/selftests/kvm/lib/kvm_util_internal.h
+
+
+base-commit: 2fd3ab9c169a9ee91ca2a1e14cc454b03c86225e
+-- 
+2.36.0.464.gb9c8b46e94-goog
+

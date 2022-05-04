@@ -2,77 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7167451A130
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 15:43:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E272A51A131
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 15:43:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350759AbiEDNq7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 09:46:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35432 "EHLO
+        id S1350770AbiEDNrV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 09:47:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238169AbiEDNq4 (ORCPT
+        with ESMTP id S1350766AbiEDNrS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 09:46:56 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B23615700;
-        Wed,  4 May 2022 06:43:19 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id t11-20020a17090ad50b00b001d95bf21996so5231018pju.2;
-        Wed, 04 May 2022 06:43:19 -0700 (PDT)
+        Wed, 4 May 2022 09:47:18 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F14282FFEC
+        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 06:43:30 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id w4so2074781wrg.12
+        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 06:43:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:to:cc:references:subject
-         :content-language:from:in-reply-to:content-transfer-encoding;
-        bh=x9+OqVHzvgZAzmQ7FhCUwnOZ5RMklI3ZHl/WECgRlrA=;
-        b=h5GX2Ek2ssMRmIgfObUfXUBvms99jKkg2ji/NF1OP6hQtSdoRpqAKUrAqmOlgoOk1o
-         ef/TFOZXNPcm7g/tCjG9aSyV1a1PBTXnSwODFbuVHc5hPRdCF4OM9iQ2AW/GVGkae8F0
-         nkS80WsCTtNfsAh1qWSQkvPXYb6VcHR+9yiGrExNglUQdK5CiDVnQsfCQHTOZzBaIxto
-         75KQA6/VLNu3SESd3LCjiAzMMxWYRjZWjqE72zt4vP5Ze/HlHqzFUW59ROX4BhRyhns9
-         LWUXmT2ISG8LWT05rTHJ59jXMqVvxf9E2lP9QGnSG3KmulPoSqAd9owS2DWSMowZvZhg
-         s16Q==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=cBqq6UprR1Yrhinom9y32Umswbttty4rMVtulmJXvwU=;
+        b=RwgLbatbKNiJCxHnjM7Qtw2bcrhGQtkJ2mJ1LvQIS+CuVtI7Syx4no8gmzsYwZbKJD
+         a3aBjdlIhGaCLJoAdPLkhW4Ytsj4crbWLZd2Q948Ce0UPPT7r9/82kla7sNZGl3HrgKB
+         SIZA6dgC45cWOVNxsu1iODyE/b20eOYAjmmZvHjpGASSQ3oecwk5ZGMjoP88JoqQhCPi
+         wAkLJvhDQ+fZDX6NClXKv0wdEMBadBPoFhFHBd13DfYQoyk0PJq6ZcrKHIwrziRSjjI3
+         TBHupHd48/6OCjqE2godf9+MK83C1yK/r51WkrBbzNMOpWtHkD0o9F78PG2rciHgNKau
+         CeRQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:to:cc
-         :references:subject:content-language:from:in-reply-to
-         :content-transfer-encoding;
-        bh=x9+OqVHzvgZAzmQ7FhCUwnOZ5RMklI3ZHl/WECgRlrA=;
-        b=ePY6617dv/PPiZ87IK5v9K+GdOpGaNlLX+c0lmTVp3m+9Crl+cLRXZVRruLcpkAloD
-         XTj4o6DPtd49JOnJesNzi/f+tnff+awpOo4ubPUi4KPddqRREf9SZ7N5eavtiDGzRmhX
-         fU+ztjf6jfm67lm6Fput1cwNBdUWxPP+//JhRBiANuBQgjPpjmBbtC7oeS5Etny0k0lX
-         qVQUHAG89Xzmxou+rqSJAXFgM00pYXtSchOBsm17977KYwvwJEO1gsZOtJaYtkyquqbC
-         pI6g7vKmdweChdBa1zJ5JnGNMtpXettVoiO+acvcqBkVYfDAzmWPj/TDi/bSHz3WnLG/
-         YsPw==
-X-Gm-Message-State: AOAM531EAjbGmX8T5V3S1N7WHqyVHx/0/MidrOPuaCp002GrfKcuDDde
-        HOHSVJsfoVXkNNNPwtDtcTY=
-X-Google-Smtp-Source: ABdhPJxjFZqQSVkYuA4ff5UwMHa7xUqA2/GDpd9Wy9e+15M7E6oXY0uMd2Is9JGRFZMUQ6uNx7DyeA==
-X-Received: by 2002:a17:90a:c402:b0:1d9:a003:3f8a with SMTP id i2-20020a17090ac40200b001d9a0033f8amr10381617pjt.18.1651671799067;
-        Wed, 04 May 2022 06:43:19 -0700 (PDT)
-Received: from [192.168.11.5] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
-        by smtp.gmail.com with ESMTPSA id k129-20020a632487000000b003c14af5060dsm14679659pgk.37.2022.05.04.06.43.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 04 May 2022 06:43:18 -0700 (PDT)
-Message-ID: <c578c9e6-b2a5-3294-d291-2abfda7d1aed@gmail.com>
-Date:   Wed, 4 May 2022 22:43:12 +0900
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=cBqq6UprR1Yrhinom9y32Umswbttty4rMVtulmJXvwU=;
+        b=uRF6Xkmp+Er6v8FjJO8qzwNBwDL2qCJCSHqsOBdOVJ315jwMJX982aXS45JzJu//gn
+         Ykh62MvugQx4GQbhlEiJMLFxgCFKtaMQwnIUZfGUnaeiPF3oSz8EW417Vz5Z+IHaXEtl
+         NF2YXHKsIiUOFTSf+M6+YRATUsZX+BNThO5FqnAuYpOCu7jSboqpzhWr2XktTSTMRauO
+         E9MoI7A70vij/aFa9X4HL/UhAsri4PjtoGPeTzrNqr6zkbvAXoIkooiTeJEm5+WFWtag
+         BCuTFhgEu5oh25t3EUDY7dQ6w4GKb6KFgOo9cVvQ+GY7Jc7RMWABfE2y1r4IdqXXkNUl
+         pulQ==
+X-Gm-Message-State: AOAM530B0h09nRy50NTeJqarX+Ec29I1o/5tOg6cCw2l7YwsBpzdHWbC
+        YUJMoN30n/n4or9ventGgb3/Qc8C0RAM5AjpiThb3Q==
+X-Google-Smtp-Source: ABdhPJxIShXJi12iXrPikJsVYfHCvSYbYkVu2YYgyhehd6U2NWz6myNE5wIeepiDUEPHahK3gZbNP/cw4cb8jbikI0M=
+X-Received: by 2002:a5d:6b0e:0:b0:20a:dd17:e452 with SMTP id
+ v14-20020a5d6b0e000000b0020add17e452mr16461520wrw.501.1651671809318; Wed, 04
+ May 2022 06:43:29 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-To:     Bagas Sanjaya <bagasdotme@gmail.com>
-Cc:     Pavel Begunkov <asml.silence@gmail.com>,
-        Dave Jones <davej@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        Randy Dunlap <randy.dunlap@oracle.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-References: <9d8b436a-5d8d-2a53-a2a1-5fbab987e41b@gmail.com>
-Subject: Re: [PATCH net-next] net/core: Remove comment quote for
- __dev_queue_xmit()
-Content-Language: en-US
-From:   Akira Yokosawa <akiyks@gmail.com>
-In-Reply-To: <9d8b436a-5d8d-2a53-a2a1-5fbab987e41b@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20220504070941.2798233-1-elver@google.com>
+In-Reply-To: <20220504070941.2798233-1-elver@google.com>
+From:   David Gow <davidgow@google.com>
+Date:   Wed, 4 May 2022 21:43:18 +0800
+Message-ID: <CABVgOSnkROn18i62+M9ZfRVLO=E28Eiv7oF_RJV+14Ld73axLw@mail.gmail.com>
+Subject: Re: [PATCH -kselftest/kunit] kcsan: test: use new suite_{init,exit} support
+To:     Marco Elver <elver@google.com>
+Cc:     kasan-dev <kasan-dev@googlegroups.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Daniel Latypov <dlatypov@google.com>,
+        Brendan Higgins <brendanhiggins@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,27 +70,112 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Wed, May 4, 2022 at 3:09 PM Marco Elver <elver@google.com> wrote:
+>
+> Use the newly added suite_{init,exit} support for suite-wide init and
+> cleanup. This avoids the unsupported method by which the test used to do
+> suite-wide init and cleanup (avoiding issues such as missing TAP
+> headers, and possible future conflicts).
+>
+> Signed-off-by: Marco Elver <elver@google.com>
+> ---
+> This patch should go on the -kselftest/kunit branch, where this new
+> support currently lives, including a similar change to the KFENCE test.
+> ---
 
-On Wed, 4 May 2022 11:28:51 +0700,
-Bagas Sanjaya wrote:
-> On 5/4/22 08:03, Jakub Kicinski wrote:
-[...]
->> Why drop almost half of the comment if the problem is just the ----
->> banner?
-> 
-> I can't think of preserving delineation between actual documentation
-> and the quote without messing up kernel-doc.
-Actually, it is possible.
+Thanks! This is working for me. I ran it as a builtin using kunit_tool
+under (I had to add an x86_64-smp architecture), then use:
+./tools/testing/kunit/kunit.py run --arch=x86_64-smp
+--kconfig_add=CONFIG_KCSAN=y --kconfig_add=CONFIG_DEBUG_KERNEL=y
+--timeout 900 'kcsan'
 
-See "Block Quotes" in ReST documentation at:
-https://docutils.sourceforge.io/docs/ref/rst/restructuredtext.html#block-quotes
+To add the x86_64 smp architecture, I added a file
+./tools/testing/kunit/qemu_configs/x86_64-smp.py, which was a copy of
+x86_64.py but with 'CONFIG_SMP=y' added to XXXX and '-smp 16' added to
+YYYY.
+It took about 10 minutes on my system, so the default 5 minute timeout
+definitely wasn't enough.
 
-kernel-doc is basically ReST within comment blocks with several kernel-doc
-specific implicit/explicit markers.
+(It's maybe worth noting that kunit_tool's output is pretty ugly when
+this isn't running on an SMP system, as the skipped subtests -- plus
+the "no tests run" errors -- take up a lot of space on the screen.
+That's possibly something we should consider when we look further into
+how the kunit_tool NO_TEST result works. Not really related to this
+change (or even this test) though.)
 
-        Thanks, Akira
+No complaints about the patch: I'm just really glad to see things
+migrate off custom init/exit code!
 
-> 
-> Actually the "--BLG" signature is the culprit.
+Reviewed-by: David Gow <davidgow@google.com>
 
+-- David
+
+>  kernel/kcsan/kcsan_test.c | 31 +++++++++++++------------------
+>  1 file changed, 13 insertions(+), 18 deletions(-)
+>
+> diff --git a/kernel/kcsan/kcsan_test.c b/kernel/kcsan/kcsan_test.c
+> index a36fca063a73..59560b5e1d9c 100644
+> --- a/kernel/kcsan/kcsan_test.c
+> +++ b/kernel/kcsan/kcsan_test.c
+> @@ -1565,14 +1565,6 @@ static void test_exit(struct kunit *test)
+>         torture_cleanup_end();
+>  }
+>
+> -static struct kunit_suite kcsan_test_suite = {
+> -       .name = "kcsan",
+> -       .test_cases = kcsan_test_cases,
+> -       .init = test_init,
+> -       .exit = test_exit,
+> -};
+> -static struct kunit_suite *kcsan_test_suites[] = { &kcsan_test_suite, NULL };
+> -
+>  __no_kcsan
+>  static void register_tracepoints(struct tracepoint *tp, void *ignore)
+>  {
+> @@ -1588,11 +1580,7 @@ static void unregister_tracepoints(struct tracepoint *tp, void *ignore)
+>                 tracepoint_probe_unregister(tp, probe_console, NULL);
+>  }
+>
+> -/*
+> - * We only want to do tracepoints setup and teardown once, therefore we have to
+> - * customize the init and exit functions and cannot rely on kunit_test_suite().
+> - */
+> -static int __init kcsan_test_init(void)
+> +static int kcsan_suite_init(struct kunit_suite *suite)
+>  {
+>         /*
+>          * Because we want to be able to build the test as a module, we need to
+> @@ -1600,18 +1588,25 @@ static int __init kcsan_test_init(void)
+>          * won't work here.
+>          */
+>         for_each_kernel_tracepoint(register_tracepoints, NULL);
+> -       return __kunit_test_suites_init(kcsan_test_suites);
+> +       return 0;
+>  }
+>
+> -static void kcsan_test_exit(void)
+> +static void kcsan_suite_exit(struct kunit_suite *suite)
+>  {
+> -       __kunit_test_suites_exit(kcsan_test_suites);
+>         for_each_kernel_tracepoint(unregister_tracepoints, NULL);
+>         tracepoint_synchronize_unregister();
+>  }
+>
+> -late_initcall_sync(kcsan_test_init);
+> -module_exit(kcsan_test_exit);
+> +static struct kunit_suite kcsan_test_suite = {
+> +       .name = "kcsan",
+> +       .test_cases = kcsan_test_cases,
+> +       .init = test_init,
+> +       .exit = test_exit,
+> +       .suite_init = kcsan_suite_init,
+> +       .suite_exit = kcsan_suite_exit,
+> +};
+> +
+> +kunit_test_suites(&kcsan_test_suite);
+>
+>  MODULE_LICENSE("GPL v2");
+>  MODULE_AUTHOR("Marco Elver <elver@google.com>");
+> --
+> 2.36.0.464.gb9c8b46e94-goog
+>

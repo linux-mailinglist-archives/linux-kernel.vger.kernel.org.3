@@ -2,66 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1373519D6A
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 12:53:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8012E519D6E
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 12:54:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348310AbiEDK5P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 06:57:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32866 "EHLO
+        id S1348429AbiEDK5a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 06:57:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237688AbiEDK5B (ORCPT
+        with ESMTP id S1348313AbiEDK5E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 06:57:01 -0400
-Received: from EUR02-HE1-obe.outbound.protection.outlook.com (mail-eopbgr10080.outbound.protection.outlook.com [40.107.1.80])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F4EF245A8;
-        Wed,  4 May 2022 03:53:22 -0700 (PDT)
+        Wed, 4 May 2022 06:57:04 -0400
+Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2088.outbound.protection.outlook.com [40.107.21.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0550D2655B;
+        Wed,  4 May 2022 03:53:27 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=PokmQgPBmodHt3fH8XV2EgF029qEcIjuj9CQZ/zUC66N8KJQt5TDwIpex+baYLizm4eQNJmaeLBZfEggTzkoiKo6mf/XZt3Vr/aQg8B2x4mNxvxahh10svkwzOfeNPpfnmVay12K4U33+fZj1L29+p+IrcKTAZk1agiyG/pdaN01d7fOf9TFIiwNBVxP+DihpWO6Ma2AmlASLA7+81pKCMvKt4NH2wWaj0SPZmoHMuziNS/vBg559ATzoCsFqE7pRLsy9xqfH+ddnWi0mazoeosznKpKBFAlio0y/2KXiV7YXTV8mEgN/EotaKyTbHpkenC4vIb0u3GCIpmckPtaxA==
+ b=SNZE/CYqEkZFeuG5P4rVi3t+sdK4stYrnn5t5cu+9NPaVLgsGKUwCL6C9OMi0l2obGf6xB9RKmlcHi7SZITfO0W+55YsOtwnUOu39dR4ZDLpltklThtxzOl862sUoGys8zdkFDPGoyeLlJmjfXGZUmVo9StagDLMBRrDUx2gP95gwH4cp+NMYay/J9FR4u+3bXi9Z86HKlKFzWYZt64AWo7eV0HxJUzesT+XoE0zOoAIq+UHLwH2M5KbFe6ZBTgqdU/Pdr08WYtmohBLvr4UOj6QPQEg7vTfHLoSx2bbPuObVktjwB1Z43eGA/GkqnaRZIr2k1G/Cgf9g4L1Uxy3ZQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=iNw0yzPX9kSpZqOwMjkpxpxfYiO76PLLrYLhjDa3o1c=;
- b=hBax56DcSa4I483ZMQNkUKCQhz0XQJkWh6CGgNWcS/G6uOrEXhMNRd2+DFL5RzOJF5CmdE6ZyubUsk2oaC8XmPNBIqcR58qmflt1fUl5t8J4Iru/VwSBiyvQSoHWoFvNnU5WzpmYcR9SJm11t7gIJeu9svdHzjR9BpZdJut/y51xeTGOLs2USaoKsyxnN7e6hnTlB3I6ClBAcf16allztzQxHNCopfaVXWv2Jx4WC6lZCMnRqCzZBaDxGKnvk67Tt4P4xElE5UlpbLuzqwNBs2A0Pg1GzC3JXnAHkv1wPl5jvHMH/OuN7X4QvR/JxAr4ih1r7cmsFJBrsQHDg1iR3g==
+ bh=C5RZHOkRXBlYIxIn9v0R9x6IIQgHpI82NE1vHKj5aLk=;
+ b=gi6zUdvEGxQONKKDzmokfVfuxPpvrt+LJHYbVJ9BAa5jsBO1cG2ePNymL9q2ZL3PhWZTAZpHmx6fovLu819JFZLFqTBXBwhmZz8ym4swq5Azk/cdviUeV7fopQfeGiVFM9exvFk8jld8izm/+TN21MhRIlwQG1fNny24BzWMDgVjqzyqlYOoyEKxKTbwFMFomMXbED59HW7vkWztQ+O6NqV5Hp80KUMhc6T6WOYhirU2qpE8TTEEavQwo5cPu3XW3SP5Qc2kEjb+4krHJlCLT5eDK9l9qLl2NEeUGd+PST5H7PxZ1d3RppFYHdUj1XKmxmwBodO3/e8Jm280DQvpMA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 139.15.153.201) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=in.bosch.com;
+ 139.15.153.200) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=in.bosch.com;
  dmarc=pass (p=reject sp=none pct=100) action=none header.from=in.bosch.com;
  dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=in.bosch.com;
  s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=iNw0yzPX9kSpZqOwMjkpxpxfYiO76PLLrYLhjDa3o1c=;
- b=ZNBqjZnUrTj0yr9ew0u7vdPH6HL/9eJY+Sf5Dth9YDzMM2dlxzp5D0Rdlac7oYre4cDCi8MFNN6Za91r2go0JKocFXAZZ+rsUONI0CK/6rfIBj0zgMazEF8Yce+vCb8aSAhuXKpbK5QqD48nohtcr9rE6DFiio/xa++1bZdyT90=
-Received: from AM6P193CA0045.EURP193.PROD.OUTLOOK.COM (2603:10a6:209:8e::22)
- by DBAPR10MB4203.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:10:1c0::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5206.12; Wed, 4 May
- 2022 10:53:19 +0000
-Received: from VE1EUR03FT056.eop-EUR03.prod.protection.outlook.com
- (2603:10a6:209:8e:cafe::bd) by AM6P193CA0045.outlook.office365.com
- (2603:10a6:209:8e::22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5206.24 via Frontend
- Transport; Wed, 4 May 2022 10:53:19 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 139.15.153.201)
+ bh=C5RZHOkRXBlYIxIn9v0R9x6IIQgHpI82NE1vHKj5aLk=;
+ b=ln3Xy5pBvqOBvDcx5awIBgZQOixI96blHcCa/BX+EUxdACph2BOXk8AGlzxlctQIc0uHc0prpxXDOKkIYWfY0+bhTKEKHptLyYVO/1JXpaBDzspqYY0hpDgEE6ddoO1UDXbj3eFZgSxnXPOAgoF6VAhm/LCb9vnSHwujoB3RZjc=
+Received: from AM0PR01CA0113.eurprd01.prod.exchangelabs.com
+ (2603:10a6:208:168::18) by PAXPR10MB4875.EURPRD10.PROD.OUTLOOK.COM
+ (2603:10a6:102:202::11) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5206.24; Wed, 4 May
+ 2022 10:53:25 +0000
+Received: from VE1EUR03FT023.eop-EUR03.prod.protection.outlook.com
+ (2603:10a6:208:168:cafe::93) by AM0PR01CA0113.outlook.office365.com
+ (2603:10a6:208:168::18) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5206.14 via Frontend
+ Transport; Wed, 4 May 2022 10:53:25 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 139.15.153.200)
  smtp.mailfrom=in.bosch.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=in.bosch.com;
 Received-SPF: Pass (protection.outlook.com: domain of in.bosch.com designates
- 139.15.153.201 as permitted sender) receiver=protection.outlook.com;
- client-ip=139.15.153.201; helo=eop.bosch-org.com;
-Received: from eop.bosch-org.com (139.15.153.201) by
- VE1EUR03FT056.mail.protection.outlook.com (10.152.19.28) with Microsoft SMTP
+ 139.15.153.200 as permitted sender) receiver=protection.outlook.com;
+ client-ip=139.15.153.200; helo=eop.bosch-org.com;
+Received: from eop.bosch-org.com (139.15.153.200) by
+ VE1EUR03FT023.mail.protection.outlook.com (10.152.18.133) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5227.15 via Frontend Transport; Wed, 4 May 2022 10:53:19 +0000
+ 15.20.5227.15 via Frontend Transport; Wed, 4 May 2022 10:53:25 +0000
 Received: from FE-EXCAS2000.de.bosch.com (10.139.217.199) by eop.bosch-org.com
- (139.15.153.201) with Microsoft SMTP Server (version=TLS1_2,
+ (139.15.153.200) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2375.24; Wed, 4 May
- 2022 12:53:16 +0200
+ 2022 12:53:20 +0200
 Received: from SI-HUB2000.de.bosch.com (10.4.103.108) by
  FE-EXCAS2000.de.bosch.com (10.139.217.199) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.24; Wed, 4 May 2022 12:53:16 +0200
+ 15.1.2375.24; Wed, 4 May 2022 12:53:19 +0200
 Received: from localhost.localdomain (10.167.1.123) by SI-HUB2000.de.bosch.com
  (10.4.103.108) with Microsoft SMTP Server id 15.1.2375.24; Wed, 4 May 2022
- 12:53:12 +0200
+ 12:53:16 +0200
 From:   <Gireesh.Hiremath@in.bosch.com>
 To:     <linux-omap@vger.kernel.org>, <devicetree@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>, <linux-input@vger.kernel.org>,
@@ -75,38 +75,40 @@ To:     <linux-omap@vger.kernel.org>, <devicetree@vger.kernel.org>,
 CC:     <sjoerd.simons@collabora.co.uk>, <VinayKumar.Shettar@in.bosch.com>,
         <Govindaraji.Sivanantham@in.bosch.com>,
         <anaclaudia.dias@de.bosch.com>
-Subject: [PATCH 1/4] ARM: dts: am335x: Guardian: switch to AM33XX_PADCONF pinmux macro
-Date:   Wed, 4 May 2022 10:52:51 +0000
-Message-ID: <20220504105254.1576-1-Gireesh.Hiremath@in.bosch.com>
+Subject: [PATCH 2/4] Input: mt-matrix-keypad: Add Bosch mt matrix keypad driver
+Date:   Wed, 4 May 2022 10:52:52 +0000
+Message-ID: <20220504105254.1576-2-Gireesh.Hiremath@in.bosch.com>
 X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20220504105254.1576-1-Gireesh.Hiremath@in.bosch.com>
+References: <20220504105254.1576-1-Gireesh.Hiremath@in.bosch.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 X-Originating-IP: [10.167.1.123]
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 9211653f-b6f8-40a8-6803-08da2dbc4cf9
-X-MS-TrafficTypeDiagnostic: DBAPR10MB4203:EE_
-X-Microsoft-Antispam-PRVS: <DBAPR10MB4203E54AF34F54E00D744BA9A6C39@DBAPR10MB4203.EURPRD10.PROD.OUTLOOK.COM>
+X-MS-Office365-Filtering-Correlation-Id: 6ba412d6-5839-49ba-71be-08da2dbc5058
+X-MS-TrafficTypeDiagnostic: PAXPR10MB4875:EE_
+X-Microsoft-Antispam-PRVS: <PAXPR10MB4875296F7A7DDDB80AD39A34A6C39@PAXPR10MB4875.EURPRD10.PROD.OUTLOOK.COM>
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: VAYaKOxtyarICDv9npy1Zwgzv8sFomYp/H7e9adtmPOEqFWnhfIUu+KiGgNtqH34AOiWxwe57B93tpoZtfjW2pWzS+mNwJBIil4gju8tiGUX3OEBgbV8kOoY+cYJZ3fTKQaINzFaqt+Yi8XkOjjnA3EjYg8+3uC1uxpGnG2DHfflkVYhCxg612r6keCrzHDFvgyJWfzM3D3o8It9yDdtEAWrLhIebwYDLuu16ft9jMsAt7HHePJFOGbQTtbhx+Tz6XqPAZy20ThzEzUFjIipniUBVJNmPNBuz0D0JGSeqfGqUoBF+O5joSjR56l23KeZL8CRCuAcjG6XgfiYoTenseB+r6/lUeliV6mbhJSOIEY+eMFGc6sN8hTwX4OBE7wB4JFHUXywjEa497otIXnc6UpEZWvaLZl44z7+YMNQG9yo20McAV/YBc6rZGYET6AFG0v2eu+Z+y26sVb6ze3q12jUXmqkQep4vTSSdaxkRWYz/UZ4igo6MW99FLhIHexyrCkzEnQM7bU88t1tvJKF/DQd+ZXl5h+/skeoErbdh+YsZ/Ke3gVz9DtfLrg5Co6QQ/yPMlcGn4UnhNtEOZGL/k6tghl1V/EYwoiavz4x2xl64KeSmU5xJ9QWaliYRoFINyyF7Ve5WcAixPb1Ez8P0rTI5FV4CmH0AdeSSPYBklKpfDiykRWDjv4Imy77Iu9m6sJ6wLlP1yDqZM/PcJoigQdik5jLQ87EGrkMHM4UbMI=
-X-Forefront-Antispam-Report: CIP:139.15.153.201;CTRY:DE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:eop.bosch-org.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(40470700004)(46966006)(7416002)(508600001)(30864003)(2906002)(16526019)(4326008)(8676002)(186003)(2876002)(1076003)(2616005)(47076005)(336012)(107886003)(5660300002)(70206006)(8936002)(70586007)(6666004)(86362001)(83380400001)(40460700003)(26005)(82310400005)(82960400001)(110136005)(54906003)(316002)(81166007)(921005)(7049001)(356005)(36860700001)(36900700001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: fCWPiTPZpKkbaow/Po75BusbUUGqWVINhgVdpPMQNT8QTtbxUM8qbFtCYK5f+jA4vszH1M91zLNL5xlVjKMt8zdV4kL+Br5VM3EazECkrBfXIDn076UvkLDy3bEd/i3wUVLvIanlNacPEBhINUPB5npfDM+OyoCngIHYaA6ZQ4lAeMFGvxFcm05CbkikwZcDO9tNx6U+6uEP7exKYE3XThrcROkSrrqZ1l7G/iV9ESIu19gUDvQ56drXgot0EAcFtBDuDJVXeXF9T15gMZlYrYZuQxBi1NPS5Q2hCETNX8AhtInD09bJWnIK6LMqc2Q5XRe5xoMZy0TYGvM+GBt4g7nTULMmXCz7lnLjlikK+VD3IUkhf99KlByRl1OPcTeTJD9jHgvngM4ZmL2Qze8qcHnYl7w1XNOBSTqhAOm9AWcaQ+ugYAd93CpXRJQM2ni4EuT/ellq/xqycwmE5s2e4vB/P0NvtYKYJk7SdoGcdKIO81yGu4Rfi1ELT+Zxxwvsgj8F7yIqKUUeYgbsYALWwe5/nH8wtzrwcma0jmeylWnkCZkB0Kp7GNVgw8asrQ6CWkVztSr8lNUBnECdEFr+GsbPDoZY7XSlsolwcJxPYhClDpz2CXD2e/5lBpjtRdXoqIjHRt6varuWlSj7aey9iV3MQuBmTQbBR2/I2m+bwTpX0/1jlIh7p4fz6nkJb/rVj7ffSYS7lSoXlJ5cgA9V4KoV/12BvFQ0vSg8Tm0aiws=
+X-Forefront-Antispam-Report: CIP:139.15.153.200;CTRY:DE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:eop.bosch-org.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(46966006)(36840700001)(40470700004)(47076005)(8936002)(316002)(16526019)(5660300002)(336012)(36860700001)(2906002)(2876002)(186003)(26005)(30864003)(54906003)(6666004)(110136005)(86362001)(508600001)(7416002)(82960400001)(107886003)(83380400001)(7049001)(82310400005)(1076003)(2616005)(356005)(921005)(40460700003)(81166007)(4326008)(8676002)(70206006)(70586007)(36900700001);DIR:OUT;SFP:1101;
 X-OriginatorOrg: in.bosch.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 May 2022 10:53:19.3868
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 May 2022 10:53:25.0327
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9211653f-b6f8-40a8-6803-08da2dbc4cf9
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6ba412d6-5839-49ba-71be-08da2dbc5058
 X-MS-Exchange-CrossTenant-Id: 0ae51e19-07c8-4e4b-bb6d-648ee58410f4
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=0ae51e19-07c8-4e4b-bb6d-648ee58410f4;Ip=[139.15.153.201];Helo=[eop.bosch-org.com]
-X-MS-Exchange-CrossTenant-AuthSource: VE1EUR03FT056.eop-EUR03.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=0ae51e19-07c8-4e4b-bb6d-648ee58410f4;Ip=[139.15.153.200];Helo=[eop.bosch-org.com]
+X-MS-Exchange-CrossTenant-AuthSource: VE1EUR03FT023.eop-EUR03.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBAPR10MB4203
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR10MB4875
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,UPPERCASE_50_75
-        autolearn=no autolearn_force=no version=3.4.6
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -115,412 +117,869 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Gireesh Hiremath <Gireesh.Hiremath@in.bosch.com>
 
-switch the pin definitions from AM33XX_IOPAD to AM33XX_PADCONF macro
+add support for keypad driver running on Bosch Guardian
+Dtect board using TI-am335x cpu. Driver implementation
+is based on matrix_keypad.c
 
 Signed-off-by: Gireesh Hiremath <Gireesh.Hiremath@in.bosch.com>
 ---
- arch/arm/boot/dts/am335x-guardian.dts | 229 +++++++++++++++-----------
- 1 file changed, 132 insertions(+), 97 deletions(-)
+ drivers/input/keyboard/Kconfig            |  10 +
+ drivers/input/keyboard/Makefile           |   1 +
+ drivers/input/keyboard/mt_matrix_keypad.c | 741 ++++++++++++++++++++++
+ include/linux/input/mt_matrix_keypad.h    |  63 ++
+ 4 files changed, 815 insertions(+)
+ create mode 100644 drivers/input/keyboard/mt_matrix_keypad.c
+ create mode 100644 include/linux/input/mt_matrix_keypad.h
 
-diff --git a/arch/arm/boot/dts/am335x-guardian.dts b/arch/arm/boot/dts/am335x-guardian.dts
-index 1a7e187b1953..94d9e51cd0f9 100644
---- a/arch/arm/boot/dts/am335x-guardian.dts
-+++ b/arch/arm/boot/dts/am335x-guardian.dts
-@@ -485,7 +485,7 @@
- 	clkout2_pin: pinmux_clkout2_pin {
- 		pinctrl-single,pins = <
- 			/* xdma_event_intr1.clkout2 */
--			AM33XX_IOPAD(0x9b4, PIN_OUTPUT_PULLDOWN | MUX_MODE3)
-+			AM33XX_PADCONF(AM335X_PIN_XDMA_EVENT_INTR1, PIN_OUTPUT_PULLDOWN, MUX_MODE3)
- 		>;
- 	};
+diff --git a/drivers/input/keyboard/Kconfig b/drivers/input/keyboard/Kconfig
+index 4ea79db8f134..a55ee8656194 100644
+--- a/drivers/input/keyboard/Kconfig
++++ b/drivers/input/keyboard/Kconfig
+@@ -303,6 +303,16 @@ config KEYBOARD_MATRIX
+ 	  To compile this driver as a module, choose M here: the
+ 	  module will be called matrix_keypad.
  
-@@ -493,254 +493,289 @@
- 		pinctrl-single,pins = <
- 			/* ADC_BATSENSE_EN */
- 			/* (A14) MCASP0_AHCLKx.gpio3[21] */
--			AM33XX_IOPAD(0x9ac, PIN_OUTPUT_PULLDOWN | MUX_MODE7 )
-+			AM33XX_PADCONF(AM335X_PIN_MCASP0_AHCLKX, PIN_OUTPUT_PULLDOWN, MUX_MODE7)
- 			/* ADC_COINCELL_EN */
- 			/* (J16) MII1_TX_EN.gpio3[3] */
--			AM33XX_IOPAD(0x914, PIN_OUTPUT_PULLDOWN | MUX_MODE7 )
-+			AM33XX_PADCONF(AM335X_PIN_MII1_TX_EN, PIN_OUTPUT_PULLDOWN, MUX_MODE7)
- 			/* ASP_ENABLE */
- 			/* (A13) MCASP0_ACLKx.gpio3[14] */
--			AM33XX_IOPAD(0x990, PIN_OUTPUT_PULLUP | MUX_MODE7)
-+			AM33XX_PADCONF(AM335X_PIN_MCASP0_ACLKX, PIN_OUTPUT_PULLUP, MUX_MODE7)
- 			/* (D16) uart1_rxd.uart1_rxd */
--			AM33XX_IOPAD(0x980, PIN_INPUT | MUX_MODE7)
-+			AM33XX_PADCONF(AM335X_PIN_UART1_RXD, PIN_INPUT, MUX_MODE7)
- 			/* (D15) uart1_txd.uart1_txd */
--			AM33XX_IOPAD(0x984, PIN_INPUT | MUX_MODE7)
-+			AM33XX_PADCONF(AM335X_PIN_UART1_TXD, PIN_INPUT, MUX_MODE7)
- 			/*SWITCH-OFF_3V6*/
- 			/* (M18) gpio0[1] */
--			AM33XX_IOPAD(0x94c, PIN_OUTPUT_PULLUP | MUX_MODE7)
-+			AM33XX_PADCONF(AM335X_PIN_MDC, PIN_OUTPUT_PULLUP, MUX_MODE7)
- 			/* MIRACULIX */
- 			/* (H17) gmii1_crs.gpio3[1] */
--			AM33XX_IOPAD(0x90c, PIN_OUTPUT_PULLDOWN | MUX_MODE7 )
-+			AM33XX_PADCONF(AM335X_PIN_MII1_CRS, PIN_OUTPUT_PULLDOWN, MUX_MODE7 )
- 			/* (H18) rmii1_refclk.gpio0[29] */
--			AM33XX_IOPAD(0x944, PIN_OUTPUT_PULLDOWN | MUX_MODE7 )
-+			AM33XX_PADCONF(AM335X_PIN_RMII1_REF_CLK, PIN_OUTPUT_PULLDOWN, MUX_MODE7)
- 			/* (J18) gmii1_txd3.gpio0[16] */
--			AM33XX_IOPAD(0x91c, PIN_INPUT           | MUX_MODE7 )
-+			AM33XX_PADCONF(AM335X_PIN_MII1_TXD3, PIN_INPUT, MUX_MODE7)
- 			/* (J17) gmii1_rxdv.gpio3[4] */
--			AM33XX_IOPAD(0x918, PIN_OUTPUT_PULLDOWN | MUX_MODE7 )
-+			AM33XX_PADCONF(AM335X_PIN_MII1_RX_DV, PIN_OUTPUT_PULLDOWN, MUX_MODE7)
- 		>;
- 	};
- 
- 	guardian_beeper_pins: pinmux_dmtimer7_pins {
- 		pinctrl-single,pins = <
--			AM33XX_IOPAD(0x968, PIN_OUTPUT | MUX_MODE5) /* (E18) timer7 */
-+			/* (E18) timer7 */
-+			AM33XX_PADCONF(AM335X_PIN_UART0_CTSN, PIN_OUTPUT, MUX_MODE5)
- 		>;
- 	};
- 
- 	guardian_button_pins: pinmux_guardian_button_pins {
- 		pinctrl-single,pins = <
--			AM33XX_IOPAD(0x940, PIN_INPUT | MUX_MODE7) /* (M16) gmii1_rxd0.gpio2[21] */
--			AM33XX_IOPAD(0x884, PIN_INPUT | MUX_MODE7) /* (V9)  gpmc_csn2.gpio1[31] */
-+			/* (M16) gmii1_rxd0.gpio2[21] */
-+			AM33XX_PADCONF(AM335X_PIN_MII1_RXD0, PIN_INPUT, MUX_MODE7)
-+			/* (V9)  gpmc_csn2.gpio1[31] */
-+			AM33XX_PADCONF(AM335X_PIN_GPMC_CSN2, PIN_INPUT, MUX_MODE7)
- 		>;
- 	};
- 
- 
- 	i2c0_pins: pinmux_i2c0_pins {
- 		pinctrl-single,pins = <
--			AM33XX_IOPAD(0x988, PIN_INPUT_PULLUP | MUX_MODE0) /* i2c0_sda.i2c0_sda */
--			AM33XX_IOPAD(0x98c, PIN_INPUT_PULLUP | MUX_MODE0) /* i2c0_scl.i2c0_scl */
-+			/* i2c0_sda.i2c0_sda */
-+			AM33XX_PADCONF(AM335X_PIN_I2C0_SDA, PIN_INPUT_PULLUP, MUX_MODE0)
-+			/* i2c0_scl.i2c0_scl */
-+			AM33XX_PADCONF(AM335X_PIN_I2C0_SCL, PIN_INPUT_PULLUP, MUX_MODE0)
- 		>;
- 	};
- 
- 	led_bl_pins: gpio_led_bl_pins {
- 		pinctrl-single,pins = <
- 			/* P9_14, gpmc_a[2].GPIO1[18] (backlight control) */
--			AM33XX_IOPAD(0x848, PIN_OUTPUT | MUX_MODE7)
-+			AM33XX_PADCONF(AM335X_PIN_GPMC_A2, PIN_OUTPUT, MUX_MODE7)
- 		>;
- 	};
- 
- 	lcd_disen_pins: pinmux_lcd_disen_pins {
- 		pinctrl-single,pins = <
- 			/* P9_27, mcasp0_fsr.gpio3[19] (lcd_disen) */
--			AM33XX_IOPAD(0x9a4, PIN_OUTPUT_PULLUP | SLEWCTRL_SLOW | MUX_MODE7)
-+			AM33XX_PADCONF
-+			(AM335X_PIN_MCASP0_FSR, PIN_OUTPUT_PULLUP | SLEWCTRL_SLOW, MUX_MODE7)
- 		>;
- 	};
- 
- 	lcd_pins_default: pinmux_lcd_pins_default {
- 		pinctrl-single,pins = <
- 			/* (U10) gpmc_ad8.lcd_data23 */
--			AM33XX_IOPAD(0x820, PIN_OUTPUT | SLEWCTRL_SLOW | MUX_MODE1)
-+			AM33XX_PADCONF(AM335X_PIN_GPMC_AD8, PIN_OUTPUT | SLEWCTRL_SLOW, MUX_MODE1)
- 			/* (T10) gpmc_ad9.lcd_data22 */
--			AM33XX_IOPAD(0x824, PIN_OUTPUT | SLEWCTRL_SLOW | MUX_MODE1)
-+			AM33XX_PADCONF(AM335X_PIN_GPMC_AD9, PIN_OUTPUT | SLEWCTRL_SLOW, MUX_MODE1)
- 			/* (T11) gpmc_ad10.lcd_data21 */
--			AM33XX_IOPAD(0x828, PIN_OUTPUT | SLEWCTRL_SLOW | MUX_MODE1)
-+			AM33XX_PADCONF(AM335X_PIN_GPMC_AD10, PIN_OUTPUT | SLEWCTRL_SLOW, MUX_MODE1)
- 			/* (U12) gpmc_ad11.lcd_data20 */
--			AM33XX_IOPAD(0x82c, PIN_OUTPUT | SLEWCTRL_SLOW | MUX_MODE1)
-+			AM33XX_PADCONF(AM335X_PIN_GPMC_AD11, PIN_OUTPUT | SLEWCTRL_SLOW, MUX_MODE1)
- 			/* (T12) gpmc_ad12.lcd_data19 */
--			AM33XX_IOPAD(0x830, PIN_OUTPUT | SLEWCTRL_SLOW | MUX_MODE1)
-+			AM33XX_PADCONF(AM335X_PIN_GPMC_AD12, PIN_OUTPUT | SLEWCTRL_SLOW, MUX_MODE1)
- 			/* (R12) gpmc_ad13.lcd_data18 */
--			AM33XX_IOPAD(0x834, PIN_OUTPUT | SLEWCTRL_SLOW | MUX_MODE1)
-+			AM33XX_PADCONF(AM335X_PIN_GPMC_AD13, PIN_OUTPUT | SLEWCTRL_SLOW, MUX_MODE1)
- 			/* (V13) gpmc_ad14.lcd_data17 */
--			AM33XX_IOPAD(0x838, PIN_OUTPUT | SLEWCTRL_SLOW | MUX_MODE1)
-+			AM33XX_PADCONF(AM335X_PIN_GPMC_AD14, PIN_OUTPUT | SLEWCTRL_SLOW, MUX_MODE1)
- 			/* (U13) gpmc_ad15.lcd_data16 */
--			AM33XX_IOPAD(0x83c, PIN_OUTPUT | SLEWCTRL_SLOW | MUX_MODE1)
-+			AM33XX_PADCONF(AM335X_PIN_GPMC_AD15, PIN_OUTPUT | SLEWCTRL_SLOW, MUX_MODE1)
- 			/* lcd_data0.lcd_data0 */
--			AM33XX_IOPAD(0x8a0, PIN_OUTPUT | SLEWCTRL_SLOW | MUX_MODE0)
-+			AM33XX_PADCONF(AM335X_PIN_LCD_DATA0, PIN_OUTPUT | SLEWCTRL_SLOW, MUX_MODE0)
- 			/* lcd_data1.lcd_data1 */
--			AM33XX_IOPAD(0x8a4, PIN_OUTPUT | SLEWCTRL_SLOW | MUX_MODE0)
-+			AM33XX_PADCONF(AM335X_PIN_LCD_DATA1, PIN_OUTPUT | SLEWCTRL_SLOW, MUX_MODE0)
- 			/* lcd_data2.lcd_data2 */
--			AM33XX_IOPAD(0x8a8, PIN_OUTPUT | SLEWCTRL_SLOW | MUX_MODE0)
-+			AM33XX_PADCONF(AM335X_PIN_LCD_DATA2, PIN_OUTPUT | SLEWCTRL_SLOW, MUX_MODE0)
- 			/* lcd_data3.lcd_data3 */
--			AM33XX_IOPAD(0x8ac, PIN_OUTPUT | SLEWCTRL_SLOW | MUX_MODE0)
-+			AM33XX_PADCONF(AM335X_PIN_LCD_DATA3, PIN_OUTPUT | SLEWCTRL_SLOW, MUX_MODE0)
- 			/* lcd_data4.lcd_data4 */
--			AM33XX_IOPAD(0x8b0, PIN_OUTPUT | SLEWCTRL_SLOW | MUX_MODE0)
-+			AM33XX_PADCONF(AM335X_PIN_LCD_DATA4, PIN_OUTPUT | SLEWCTRL_SLOW, MUX_MODE0)
- 			/* lcd_data5.lcd_data5 */
--			AM33XX_IOPAD(0x8b4, PIN_OUTPUT | SLEWCTRL_SLOW | MUX_MODE0)
-+			AM33XX_PADCONF(AM335X_PIN_LCD_DATA5, PIN_OUTPUT | SLEWCTRL_SLOW, MUX_MODE0)
- 			/* lcd_data6.lcd_data6 */
--			AM33XX_IOPAD(0x8b8, PIN_OUTPUT | SLEWCTRL_SLOW | MUX_MODE0)
-+			AM33XX_PADCONF(AM335X_PIN_LCD_DATA6, PIN_OUTPUT | SLEWCTRL_SLOW, MUX_MODE0)
- 			/* lcd_data7.lcd_data7 */
--			AM33XX_IOPAD(0x8bc, PIN_OUTPUT | SLEWCTRL_SLOW | MUX_MODE0)
-+			AM33XX_PADCONF(AM335X_PIN_LCD_DATA7, PIN_OUTPUT | SLEWCTRL_SLOW, MUX_MODE0)
- 			/* lcd_data8.lcd_data8 */
--			AM33XX_IOPAD(0x8c0, PIN_OUTPUT | SLEWCTRL_SLOW | MUX_MODE0)
-+			AM33XX_PADCONF(AM335X_PIN_LCD_DATA8, PIN_OUTPUT | SLEWCTRL_SLOW, MUX_MODE0)
- 			/* lcd_data9.lcd_data9 */
--			AM33XX_IOPAD(0x8c4, PIN_OUTPUT | SLEWCTRL_SLOW | MUX_MODE0)
-+			AM33XX_PADCONF(AM335X_PIN_LCD_DATA9, PIN_OUTPUT | SLEWCTRL_SLOW, MUX_MODE0)
- 			/* lcd_data10.lcd_data10 */
--			AM33XX_IOPAD(0x8c8, PIN_OUTPUT | SLEWCTRL_SLOW | MUX_MODE0)
-+			AM33XX_PADCONF(AM335X_PIN_LCD_DATA10, PIN_OUTPUT | SLEWCTRL_SLOW, MUX_MODE0)
- 			/* lcd_data11.lcd_data11 */
--			AM33XX_IOPAD(0x8cc, PIN_OUTPUT | SLEWCTRL_SLOW | MUX_MODE0)
-+			AM33XX_PADCONF(AM335X_PIN_LCD_DATA11, PIN_OUTPUT | SLEWCTRL_SLOW, MUX_MODE0)
- 			/* lcd_data12.lcd_data12 */
--			AM33XX_IOPAD(0x8d0, PIN_OUTPUT | SLEWCTRL_SLOW | MUX_MODE0)
-+			AM33XX_PADCONF(AM335X_PIN_LCD_DATA12, PIN_OUTPUT | SLEWCTRL_SLOW, MUX_MODE0)
- 			/* lcd_data13.lcd_data13 */
--			AM33XX_IOPAD(0x8d4, PIN_OUTPUT | SLEWCTRL_SLOW | MUX_MODE0)
-+			AM33XX_PADCONF(AM335X_PIN_LCD_DATA13, PIN_OUTPUT | SLEWCTRL_SLOW, MUX_MODE0)
- 			/* lcd_data14.lcd_data14 */
--			AM33XX_IOPAD(0x8d8, PIN_OUTPUT | SLEWCTRL_SLOW | MUX_MODE0)
-+			AM33XX_PADCONF(AM335X_PIN_LCD_DATA14, PIN_OUTPUT | SLEWCTRL_SLOW, MUX_MODE0)
- 			/* lcd_data15.lcd_data15 */
--			AM33XX_IOPAD(0x8dc, PIN_OUTPUT | SLEWCTRL_SLOW | MUX_MODE0)
-+			AM33XX_PADCONF(AM335X_PIN_LCD_DATA15, PIN_OUTPUT | SLEWCTRL_SLOW, MUX_MODE0)
- 			/* lcd_vsync.lcd_vsync */
--			AM33XX_IOPAD(0x8e0, PIN_OUTPUT | SLEWCTRL_SLOW | MUX_MODE0)
-+			AM33XX_PADCONF(AM335X_PIN_LCD_VSYNC, PIN_OUTPUT | SLEWCTRL_SLOW, MUX_MODE0)
- 			/* lcd_hsync.lcd_hsync */
--			AM33XX_IOPAD(0x8e4, PIN_OUTPUT | SLEWCTRL_SLOW | MUX_MODE0)
-+			AM33XX_PADCONF(AM335X_PIN_LCD_HSYNC, PIN_OUTPUT | SLEWCTRL_SLOW, MUX_MODE0)
- 			/* lcd_pclk.lcd_pclk */
--			AM33XX_IOPAD(0x8e8, PIN_OUTPUT | SLEWCTRL_SLOW | MUX_MODE0)
-+			AM33XX_PADCONF(AM335X_PIN_LCD_PCLK, PIN_OUTPUT | SLEWCTRL_SLOW, MUX_MODE0)
- 			/* lcd_ac_bias_en.lcd_ac_bias_en */
--			AM33XX_IOPAD(0x8ec, PIN_OUTPUT | SLEWCTRL_SLOW | MUX_MODE0)
-+			AM33XX_PADCONF
-+			(AM335X_PIN_LCD_AC_BIAS_EN, PIN_OUTPUT | SLEWCTRL_SLOW, MUX_MODE0)
- 		>;
- 	};
- 
- 	lcd_pins_sleep: pinmux_lcd_pins_sleep {
- 		pinctrl-single,pins = <
- 			/* lcd_data0.lcd_data0 */
--			AM33XX_IOPAD(0x8a0, PULL_DISABLE | SLEWCTRL_SLOW | MUX_MODE7)
-+			AM33XX_PADCONF
-+			(AM335X_PIN_LCD_DATA0, PULL_DISABLE | SLEWCTRL_SLOW, MUX_MODE7)
- 			/* lcd_data1.lcd_data1 */
--			AM33XX_IOPAD(0x8a4, PULL_DISABLE | SLEWCTRL_SLOW | MUX_MODE7)
-+			AM33XX_PADCONF
-+			(AM335X_PIN_LCD_DATA1, PULL_DISABLE | SLEWCTRL_SLOW, MUX_MODE7)
- 			/* lcd_data2.lcd_data2 */
--			AM33XX_IOPAD(0x8a8, PULL_DISABLE | SLEWCTRL_SLOW | MUX_MODE7)
-+			AM33XX_PADCONF
-+			(AM335X_PIN_LCD_DATA2, PULL_DISABLE | SLEWCTRL_SLOW, MUX_MODE7)
- 			/* lcd_data3.lcd_data3 */
--			AM33XX_IOPAD(0x8ac, PULL_DISABLE | SLEWCTRL_SLOW | MUX_MODE7)
-+			AM33XX_PADCONF
-+			(AM335X_PIN_LCD_DATA3, PULL_DISABLE | SLEWCTRL_SLOW, MUX_MODE7)
- 			/* lcd_data4.lcd_data4 */
--			AM33XX_IOPAD(0x8b0, PULL_DISABLE | SLEWCTRL_SLOW | MUX_MODE7)
-+			AM33XX_PADCONF
-+			(AM335X_PIN_LCD_DATA4, PULL_DISABLE | SLEWCTRL_SLOW, MUX_MODE7)
- 			/* lcd_data5.lcd_data5 */
--			AM33XX_IOPAD(0x8b4, PULL_DISABLE | SLEWCTRL_SLOW | MUX_MODE7)
-+			AM33XX_PADCONF
-+			(AM335X_PIN_LCD_DATA5, PULL_DISABLE | SLEWCTRL_SLOW, MUX_MODE7)
- 			/* lcd_data6.lcd_data6 */
--			AM33XX_IOPAD(0x8b8, PULL_DISABLE | SLEWCTRL_SLOW | MUX_MODE7)
-+			AM33XX_PADCONF
-+			(AM335X_PIN_LCD_DATA6, PULL_DISABLE | SLEWCTRL_SLOW, MUX_MODE7)
- 			/* lcd_data7.lcd_data7 */
--			AM33XX_IOPAD(0x8bc, PULL_DISABLE | SLEWCTRL_SLOW | MUX_MODE7)
-+			AM33XX_PADCONF
-+			(AM335X_PIN_LCD_DATA7, PULL_DISABLE | SLEWCTRL_SLOW, MUX_MODE7)
- 			/* lcd_data8.lcd_data8 */
--			AM33XX_IOPAD(0x8c0, PULL_DISABLE | SLEWCTRL_SLOW | MUX_MODE7)
-+			AM33XX_PADCONF
-+			(AM335X_PIN_LCD_DATA8, PULL_DISABLE | SLEWCTRL_SLOW, MUX_MODE7)
- 			/* lcd_data9.lcd_data9 */
--			AM33XX_IOPAD(0x8c4, PULL_DISABLE | SLEWCTRL_SLOW | MUX_MODE7)
-+			AM33XX_PADCONF
-+			(AM335X_PIN_LCD_DATA9, PULL_DISABLE | SLEWCTRL_SLOW, MUX_MODE7)
- 			/* lcd_data10.lcd_data10 */
--			AM33XX_IOPAD(0x8c8, PULL_DISABLE | SLEWCTRL_SLOW | MUX_MODE7)
-+			AM33XX_PADCONF
-+			(AM335X_PIN_LCD_DATA10, PULL_DISABLE | SLEWCTRL_SLOW, MUX_MODE7)
- 			/* lcd_data11.lcd_data11 */
--			AM33XX_IOPAD(0x8cc, PULL_DISABLE | SLEWCTRL_SLOW | MUX_MODE7)
-+			AM33XX_PADCONF
-+			(AM335X_PIN_LCD_DATA11, PULL_DISABLE | SLEWCTRL_SLOW, MUX_MODE7)
- 			/* lcd_data12.lcd_data12 */
--			AM33XX_IOPAD(0x8d0, PULL_DISABLE | SLEWCTRL_SLOW | MUX_MODE7)
-+			AM33XX_PADCONF
-+			(AM335X_PIN_LCD_DATA12, PULL_DISABLE | SLEWCTRL_SLOW, MUX_MODE7)
- 			/* lcd_data13.lcd_data13 */
--			AM33XX_IOPAD(0x8d4, PULL_DISABLE | SLEWCTRL_SLOW | MUX_MODE7)
-+			AM33XX_PADCONF
-+			(AM335X_PIN_LCD_DATA13, PULL_DISABLE | SLEWCTRL_SLOW, MUX_MODE7)
- 			/* lcd_data14.lcd_data14 */
--			AM33XX_IOPAD(0x8d8, PULL_DISABLE | SLEWCTRL_SLOW | MUX_MODE7)
-+			AM33XX_PADCONF
-+			(AM335X_PIN_LCD_DATA14, PULL_DISABLE | SLEWCTRL_SLOW, MUX_MODE7)
- 			/* lcd_data15.lcd_data15 */
--			AM33XX_IOPAD(0x8dc, PULL_DISABLE | SLEWCTRL_SLOW | MUX_MODE7)
-+			AM33XX_PADCONF
-+			(AM335X_PIN_LCD_DATA15, PULL_DISABLE | SLEWCTRL_SLOW, MUX_MODE7)
- 			/* lcd_vsync.lcd_vsync */
--			AM33XX_IOPAD(0x8e0, PIN_INPUT_PULLDOWN | SLEWCTRL_SLOW | MUX_MODE7)
-+			AM33XX_PADCONF
-+			(AM335X_PIN_LCD_VSYNC, PIN_INPUT_PULLDOWN | SLEWCTRL_SLOW, MUX_MODE7)
- 			/* lcd_hsync.lcd_hsync */
--			AM33XX_IOPAD(0x8e4, PIN_INPUT_PULLDOWN | SLEWCTRL_SLOW | MUX_MODE7)
-+			AM33XX_PADCONF
-+			(AM335X_PIN_LCD_HSYNC, PIN_INPUT_PULLDOWN | SLEWCTRL_SLOW, MUX_MODE7)
- 			/* lcd_pclk.lcd_pclk */
--			AM33XX_IOPAD(0x8e8, PIN_INPUT_PULLDOWN | SLEWCTRL_SLOW | MUX_MODE7)
-+			AM33XX_PADCONF
-+			(AM335X_PIN_LCD_PCLK, PIN_INPUT_PULLDOWN | SLEWCTRL_SLOW, MUX_MODE7)
- 			/* lcd_ac_bias_en.lcd_ac_bias_en */
--			AM33XX_IOPAD(0x8ec, PIN_INPUT_PULLDOWN | SLEWCTRL_SLOW | MUX_MODE7)
-+			AM33XX_PADCONF
-+			(AM335X_PIN_LCD_AC_BIAS_EN, PIN_INPUT_PULLDOWN | SLEWCTRL_SLOW, MUX_MODE7)
- 		>;
- 	};
- 
- 	guardian_led_pins: pinmux_guardian_led_pins {
- 		pinctrl-single,pins = <
--			AM33XX_IOPAD(0x868, PIN_OUTPUT | MUX_MODE7) /* (T16) gpmc_a10.gpio1[26] */
-+			/* (T16) gpmc_a10.gpio1[26] */
-+			AM33XX_PADCONF(AM335X_PIN_GPMC_A10, PIN_OUTPUT, MUX_MODE7)
- 		>;
- 	};
- 
- 	mmc1_pins: pinmux_mmc1_pins {
- 		pinctrl-single,pins = <
--			AM33XX_IOPAD(0x8f0, PIN_INPUT_PULLUP | MUX_MODE0)  /* mmc0_dat3.mmc0_dat3 */
--			AM33XX_IOPAD(0x8f4, PIN_INPUT_PULLUP | MUX_MODE0)  /* mmc0_dat2.mmc0_dat2 */
--			AM33XX_IOPAD(0x8f8, PIN_INPUT_PULLUP | MUX_MODE0)  /* mmc0_dat1.mmc0_dat1 */
--			AM33XX_IOPAD(0x8fc, PIN_INPUT_PULLUP | MUX_MODE0)  /* mmc0_dat0.mmc0_dat0 */
--			AM33XX_IOPAD(0x900, PIN_INPUT_PULLUP | MUX_MODE0)  /* mmc0_clk.mmc0_clk */
--			AM33XX_IOPAD(0x904, PIN_INPUT_PULLUP | MUX_MODE0)  /* mmc0_cmd.mmc0_cmd */
--			AM33XX_IOPAD(0x960, PIN_INPUT | MUX_MODE7)         /* GPIO0_6 */
-+			/* mmc0_dat3.mmc0_dat3 */
-+			AM33XX_PADCONF(AM335X_PIN_MMC0_DAT3, PIN_INPUT_PULLUP, MUX_MODE0)
-+			/* mmc0_dat2.mmc0_dat2 */
-+			AM33XX_PADCONF(AM335X_PIN_MMC0_DAT2, PIN_INPUT_PULLUP, MUX_MODE0)
-+			/* mmc0_dat1.mmc0_dat1 */
-+			AM33XX_PADCONF(AM335X_PIN_MMC0_DAT1, PIN_INPUT_PULLUP, MUX_MODE0)
-+			/* mmc0_dat0.mmc0_dat0 */
-+			AM33XX_PADCONF(AM335X_PIN_MMC0_DAT0, PIN_INPUT_PULLUP, MUX_MODE0)
-+			/* mmc0_clk.mmc0_clk */
-+			AM33XX_PADCONF(AM335X_PIN_MMC0_CLK, PIN_INPUT_PULLUP, MUX_MODE0)
-+			/* mmc0_cmd.mmc0_cmd */
-+			AM33XX_PADCONF(AM335X_PIN_MMC0_CMD, PIN_INPUT_PULLUP, MUX_MODE0)
-+			/* GPIO0_6 */
-+			AM33XX_PADCONF(AM335X_PIN_SPI0_CS1, PIN_INPUT, MUX_MODE7)
- 		>;
- 	};
- 
- 	spi0_pins: pinmux_spi0_pins {
- 		pinctrl-single,pins = <
- 			/* SPI0_CLK  - spi0_clk.spi */
--			AM33XX_IOPAD(0x950, PIN_OUTPUT_PULLDOWN | MUX_MODE0)
-+			AM33XX_PADCONF(AM335X_PIN_SPI0_SCLK, PIN_OUTPUT_PULLDOWN, MUX_MODE0)
- 			/* SPI0_MOSI - spi0_d0.spi0 */
--			AM33XX_IOPAD(0x954, PIN_OUTPUT_PULLUP | MUX_MODE0)
-+			AM33XX_PADCONF(AM335X_PIN_SPI0_D0, PIN_OUTPUT_PULLUP, MUX_MODE0)
- 			/* SPI0_MISO - spi0_d1.spi0 */
--			AM33XX_IOPAD(0x958, PIN_INPUT_PULLUP | MUX_MODE0)
-+			AM33XX_PADCONF(AM335X_PIN_SPI0_D1, PIN_INPUT_PULLUP, MUX_MODE0)
- 			/* SPI0_CS0 - spi */
--			AM33XX_IOPAD(0x95c, PIN_OUTPUT_PULLUP | MUX_MODE0)
-+			AM33XX_PADCONF(AM335X_PIN_SPI0_CS0, PIN_OUTPUT_PULLUP, MUX_MODE0)
- 		>;
- 	};
- 
- 	uart0_pins: pinmux_uart0_pins {
- 		pinctrl-single,pins = <
- 			/* uart0_rxd.uart0_rxd */
--			AM33XX_IOPAD(0x970, PIN_INPUT_PULLUP | MUX_MODE0)
-+			AM33XX_PADCONF(AM335X_PIN_UART0_RXD, PIN_INPUT_PULLUP, MUX_MODE0)
- 			/* uart0_txd.uart0_txd */
--			AM33XX_IOPAD(0x974, PIN_OUTPUT_PULLDOWN | MUX_MODE0)
-+			AM33XX_PADCONF(AM335X_PIN_UART0_TXD, PIN_OUTPUT_PULLDOWN, MUX_MODE0)
- 		>;
- 	};
- 
- 	uart2_pins: pinmux_uart2_pins {
- 		pinctrl-single,pins = <
- 			/* K18 uart2_rxd.mirx_txd */
--			AM33XX_IOPAD(0x92c, PIN_INPUT_PULLUP | MUX_MODE1)
-+			AM33XX_PADCONF(AM335X_PIN_MII1_TX_CLK, PIN_INPUT_PULLUP, MUX_MODE1)
- 			/* L18 uart2_txd.mirx_rxd */
--			AM33XX_IOPAD(0x930, PIN_OUTPUT_PULLDOWN | MUX_MODE1)
-+			AM33XX_PADCONF(AM335X_PIN_MII1_RX_CLK, PIN_OUTPUT_PULLDOWN, MUX_MODE1)
- 		>;
- 	};
- 
- 	nandflash_pins: pinmux_nandflash_pins {
- 		pinctrl-single,pins = <
- 			/* (U7) gpmc_ad0.gpmc_ad0 */
--			AM33XX_IOPAD(0x800, PIN_INPUT | MUX_MODE0)
-+			AM33XX_PADCONF(AM335X_PIN_GPMC_AD0, PIN_INPUT, MUX_MODE0)
- 			/* (V7) gpmc_ad1.gpmc_ad1 */
--			AM33XX_IOPAD(0x804, PIN_INPUT | MUX_MODE0)
-+			AM33XX_PADCONF(AM335X_PIN_GPMC_AD1, PIN_INPUT, MUX_MODE0)
- 			/* (R8) gpmc_ad2.gpmc_ad2 */
--			AM33XX_IOPAD(0x808, PIN_INPUT | MUX_MODE0)
-+			AM33XX_PADCONF(AM335X_PIN_GPMC_AD2, PIN_INPUT, MUX_MODE0)
- 			/* (T8) gpmc_ad3.gpmc_ad3 */
--			AM33XX_IOPAD(0x80c, PIN_INPUT | MUX_MODE0)
-+			AM33XX_PADCONF(AM335X_PIN_GPMC_AD3, PIN_INPUT, MUX_MODE0)
- 			/* (U8) gpmc_ad4.gpmc_ad4 */
--			AM33XX_IOPAD(0x810, PIN_INPUT | MUX_MODE0)
-+			AM33XX_PADCONF(AM335X_PIN_GPMC_AD4, PIN_INPUT, MUX_MODE0)
- 			/* (V8) gpmc_ad5.gpmc_ad5 */
--			AM33XX_IOPAD(0x814, PIN_INPUT | MUX_MODE0)
-+			AM33XX_PADCONF(AM335X_PIN_GPMC_AD5, PIN_INPUT, MUX_MODE0)
- 			/* (R9) gpmc_ad6.gpmc_ad6 */
--			AM33XX_IOPAD(0x818, PIN_INPUT | MUX_MODE0)
-+			AM33XX_PADCONF(AM335X_PIN_GPMC_AD6, PIN_INPUT, MUX_MODE0)
- 			/* (T9) gpmc_ad7.gpmc_ad7 */
--			AM33XX_IOPAD(0x81c, PIN_INPUT | MUX_MODE0)
-+			AM33XX_PADCONF(AM335X_PIN_GPMC_AD7, PIN_INPUT, MUX_MODE0)
- 			/* (T17) gpmc_wait0.gpmc_wait0 */
--			AM33XX_IOPAD(0x870, PIN_INPUT | MUX_MODE0)
-+			AM33XX_PADCONF(AM335X_PIN_GPMC_WAIT0, PIN_INPUT, MUX_MODE0)
- 			/* (U17) gpmc_wpn.gpmc_wpn */
--			AM33XX_IOPAD(0x874, PIN_OUTPUT | MUX_MODE0)
-+			AM33XX_PADCONF(AM335X_PIN_GPMC_WPN, PIN_OUTPUT, MUX_MODE0)
- 			/* (V6) gpmc_csn0.gpmc_csn0 */
--			AM33XX_IOPAD(0x87c, PIN_OUTPUT | MUX_MODE0)
-+			AM33XX_PADCONF(AM335X_PIN_GPMC_CSN0, PIN_OUTPUT, MUX_MODE0)
- 			/* (R7) gpmc_advn_ale.gpmc_advn_ale */
--			AM33XX_IOPAD(0x890, PIN_OUTPUT | MUX_MODE0)
-+			AM33XX_PADCONF(AM335X_PIN_GPMC_ADVN_ALE, PIN_OUTPUT, MUX_MODE0)
- 			/* (T7) gpmc_oen_ren.gpmc_oen_ren */
--			AM33XX_IOPAD(0x894, PIN_OUTPUT | MUX_MODE0)
-+			AM33XX_PADCONF(AM335X_PIN_GPMC_OEN_REN, PIN_OUTPUT, MUX_MODE0)
- 			/* (U6) gpmc_wen.gpmc_wen */
--			AM33XX_IOPAD(0x898, PIN_OUTPUT | MUX_MODE0)
-+			AM33XX_PADCONF(AM335X_PIN_GPMC_WEN, PIN_OUTPUT, MUX_MODE0)
- 			/* (T6) gpmc_be0n_cle.gpmc_be0n_cle */
--			AM33XX_IOPAD(0x89c, PIN_OUTPUT | MUX_MODE0)
-+			AM33XX_PADCONF(AM335X_PIN_GPMC_BEN0_CLE, PIN_OUTPUT, MUX_MODE0)
- 		>;
- 	};
- };
++config KEYBOARD_MT_MATRIX
++        tristate "GPIO driven MT matrix keypad support"
++        depends on GPIOLIB || COMPILE_TEST
++        help
++	  This driver enable support for GPIO driven
++	  mt matrix keypad.
++
++          To compile this driver as a module, choose M here: the
++          module will be called mt_matrix_keypad.
++
+ config KEYBOARD_HIL_OLD
+ 	tristate "HP HIL keyboard support (simple driver)"
+ 	depends on GSC || HP300
+diff --git a/drivers/input/keyboard/Makefile b/drivers/input/keyboard/Makefile
+index 721936e90290..c7686d338b5d 100644
+--- a/drivers/input/keyboard/Makefile
++++ b/drivers/input/keyboard/Makefile
+@@ -41,6 +41,7 @@ obj-$(CONFIG_KEYBOARD_LOCOMO)		+= locomokbd.o
+ obj-$(CONFIG_KEYBOARD_LPC32XX)		+= lpc32xx-keys.o
+ obj-$(CONFIG_KEYBOARD_MAPLE)		+= maple_keyb.o
+ obj-$(CONFIG_KEYBOARD_MATRIX)		+= matrix_keypad.o
++obj-$(CONFIG_KEYBOARD_MT_MATRIX)	+= mt_matrix_keypad.o
+ obj-$(CONFIG_KEYBOARD_MAX7359)		+= max7359_keypad.o
+ obj-$(CONFIG_KEYBOARD_MCS)		+= mcs_touchkey.o
+ obj-$(CONFIG_KEYBOARD_MPR121)		+= mpr121_touchkey.o
+diff --git a/drivers/input/keyboard/mt_matrix_keypad.c b/drivers/input/keyboard/mt_matrix_keypad.c
+new file mode 100644
+index 000000000000..9310faf8b237
+--- /dev/null
++++ b/drivers/input/keyboard/mt_matrix_keypad.c
+@@ -0,0 +1,741 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ *  GPIO driven mt matrix keyboard driver
++ *
++ *  Copyright (c) 2008 Marek Vasut <marek.vasut@gmail.com>
++ *  Copyright (c) 2017 vinay <VinayKumar.Shettar@in.bosch.com>
++ *
++ *  Based on matrix_keypad.c
++ *
++ */
++
++#include <linux/stddef.h>
++#include <linux/types.h>
++#include <linux/delay.h>
++#include <linux/platform_device.h>
++#include <linux/input.h>
++#include <linux/irq.h>
++#include <linux/interrupt.h>
++#include <linux/jiffies.h>
++#include <linux/module.h>
++#include <linux/gpio.h>
++#include <linux/input/mt_matrix_keypad.h>
++#include <linux/slab.h>
++#include <linux/of.h>
++#include <linux/of_gpio.h>
++#include <linux/of_platform.h>
++#include <linux/pinctrl/consumer.h>
++
++#define MODULE_NAME "mt-matrix-keypad"
++
++struct mt_matrix_keypad {
++	struct mt_matrix_keypad_platform_data *pdata;
++	struct input_dev *input_dev;
++
++	DECLARE_BITMAP(disabled_gpios, MATRIX_MAX_ROWS);
++
++	struct delayed_work work;
++	spinlock_t lock;
++	bool scan_pending;
++	bool stopped;
++	bool gpio_all_disabled;
++};
++
++static bool
++get_gpio_line_value(const struct mt_matrix_keypad_platform_data *pdata,
++		    int row);
++static void
++activate_line_driving(const struct mt_matrix_keypad_platform_data *pdata,
++		      int line, bool on);
++
++void init_phase(struct mt_matrix_keypad_platform_data *pdata)
++{
++	pdata->phase_state.phase_prepare = -1;
++	pdata->phase_state.phase_start = 0;
++	pdata->phase_state.phase_update_button = pdata->num_line_gpios;
++}
++
++void button_init(struct button *btn, bool btn_hw_state, int key)
++{
++	btn->state.boPrevious = btn_hw_state;
++	btn->state.boCurrentStateOfHw = btn_hw_state;
++	btn->state.boCurrentStateOfSw = false;
++	btn->state.boCurrent = btn_hw_state;
++	btn->state.boEnabled = true;
++	btn->state.boStateAtInit = btn_hw_state;
++	btn->event.ui8Register = 0;
++	btn->key = key;
++}
++
++const struct button_states get_button_state(struct button *btn)
++{
++	return btn->state;
++}
++
++union typeEvent get_and_clear_events(struct button *btn)
++{
++	union typeEvent beTemp = btn->event;
++
++	btn->event.ui8Register = 0;
++
++	return beTemp;
++}
++
++uint8_t get_btn_index(struct mt_matrix_keypad_platform_data *pdata, int btn_key)
++{
++	uint8_t i;
++
++	for (i = 0; i < pdata->num_of_button; i++) {
++		if (pdata->button_array[i].key == btn_key)
++			break;
++	}
++	return i;
++}
++
++void set_btn_state_by_hw(struct button *btn, bool boButtonState)
++{
++	btn->state.boCurrentStateOfHw = boButtonState;
++}
++
++bool check_button_changes(struct button *btn)
++{
++	btn->state.boPrevious = btn->state.boCurrent;
++	btn->state.boCurrent =
++		btn->state.boCurrentStateOfHw || btn->state.boCurrentStateOfSw;
++
++	/* Check if Button is pressed */
++	if ((btn->state.boPrevious == false) &&
++	    (btn->state.boCurrent == true)) {
++		btn->event.status.boPressed = true;
++	}
++
++	/* Check if Button is released */
++	else if ((btn->state.boPrevious == true) &&
++		 (btn->state.boCurrent == false)) {
++		btn->event.status.boReleased = true;
++	}
++
++	if (btn->event.ui8Register != 0)
++		btn->event.status.boGlobalChanged = true;
++
++	return btn->event.status.boGlobalChanged;
++}
++
++const struct button_states
++get_btn_id_state(const struct mt_matrix_keypad_platform_data *pdata,
++		 int btn_index)
++{
++	if (btn_index < pdata->num_of_button)
++		return get_button_state(&pdata->button_array[btn_index]);
++	else
++		return get_button_state(&pdata->button_array[0]);
++}
++
++union typeEvent
++get_and_clear_btn_events(const struct mt_matrix_keypad_platform_data *pdata,
++			 int btn_index)
++{
++	if (btn_index < pdata->num_of_button)
++		return get_and_clear_events(&pdata->button_array[btn_index]);
++	else
++		return get_and_clear_events(&pdata->button_array[0]);
++}
++
++void button_hdl_init(struct mt_matrix_keypad_platform_data *pdata)
++{
++	int row, col, index;
++	int i;
++
++	pdata->scan_phase = pdata->phase_state.phase_prepare;
++	pdata->intialize_buttons = true;
++
++	/* Init Button Objects, will be reinited once states are captured */
++	i = 0;
++	for (row = 1; row < pdata->num_line_gpios; row++)
++		for (col = 0; col < row; col++) {
++			index = (row * pdata->num_line_gpios) + col;
++			if (pdata->button_matrix[index] !=
++			    pdata->button_matrix[0]) {
++				if (i < pdata->num_of_button) {
++					button_init(
++						&pdata->button_array[i], false,
++						pdata->button_matrix[index]);
++					i++;
++				}
++			}
++		}
++
++	pr_debug("[%s]: %s Done\n", MODULE_NAME, __func__);
++}
++
++bool on_button_event(const struct mt_matrix_keypad_platform_data *pdata,
++		     int btn_index, union typeEvent btn_event,
++		     struct input_dev *input_dev)
++{
++	bool any_btn_served = true;
++	unsigned int key_code = 0;
++	int key_value = 0;
++
++	key_code = pdata->button_array[btn_index].key;
++
++	if (btn_event.status.boPressed) {
++		key_value = 1;
++		pr_debug("[%s]:%d Pressed\n", MODULE_NAME, key_code);
++	}
++
++	if (btn_event.status.boReleased) {
++		key_value = 0;
++		pr_debug("[%s]:%d Released\n", MODULE_NAME, key_code);
++	}
++
++	input_report_key(input_dev, key_code, key_value);
++	input_sync(input_dev);
++	return any_btn_served;
++}
++
++void process_button_events(const struct mt_matrix_keypad_platform_data *pdata,
++			   struct input_dev *input_dev)
++{
++	int btn_index;
++	bool any_btn_served = false;
++
++	for (btn_index = 0; btn_index < pdata->num_of_button; btn_index++) {
++		const union typeEvent beEvent =
++			get_and_clear_btn_events(pdata, (int)btn_index);
++
++		if (beEvent.status.boGlobalChanged) {
++			const struct button_states bsState =
++				get_btn_id_state(pdata, (int)btn_index);
++
++			if (bsState.boEnabled) {
++				any_btn_served |=
++					on_button_event(pdata, (int)btn_index,
++							beEvent, input_dev);
++			}
++		}
++	}
++}
++
++void update_buttons(struct mt_matrix_keypad_platform_data *pdata,
++		    struct input_dev *input_dev)
++{
++	if (pdata->scan_phase == pdata->phase_state.phase_prepare) {
++		pdata->scan_phase = pdata->phase_state.phase_start;
++		activate_line_driving(pdata, (int)pdata->scan_phase, true);
++	} else if (pdata->scan_phase ==
++		   pdata->phase_state.phase_update_button) {
++		bool btn_changes_occured = false;
++		int btn_index;
++
++		if (pdata->intialize_buttons) {
++			int i;
++
++			pdata->intialize_buttons = false;
++
++			for (i = 0; i < pdata->num_of_button; i++) {
++				const bool btn_curr_hw_state =
++					get_button_state(
++						&pdata->button_array[i])
++						.boCurrentStateOfHw;
++				button_init(&pdata->button_array[i],
++					    btn_curr_hw_state,
++					    pdata->button_array[i].key);
++			}
++		}
++
++		for (btn_index = 0; btn_index < pdata->num_of_button;
++		     btn_index++) {
++			btn_changes_occured |= check_button_changes(
++				&pdata->button_array[btn_index]);
++		}
++
++		if (btn_changes_occured)
++			process_button_events(pdata, input_dev);
++
++		pdata->scan_phase = pdata->phase_state.phase_start;
++	} else {
++		uint8_t *btn_keylines;
++		uint8_t number_of_buttons_pressed = 0;
++		uint8_t btn_index;
++		uint8_t btn_key;
++		uint16_t index;
++		int i;
++
++		btn_keylines = kcalloc(pdata->num_line_gpios, sizeof(uint8_t),
++				       GFP_KERNEL);
++		for (i = 0; i < pdata->num_line_gpios; i++) {
++			index = (pdata->scan_phase * pdata->num_line_gpios) + i;
++			btn_key = pdata->button_matrix[index];
++			btn_keylines[i] = false;
++
++			if ((btn_key != pdata->button_matrix[0]) &&
++			    (get_gpio_line_value(pdata, (int)i) != false)) {
++				btn_keylines[i] = true;
++				number_of_buttons_pressed++;
++			}
++		}
++		if (number_of_buttons_pressed < 2) {
++			for (i = 0; i < pdata->num_line_gpios; i++) {
++				index = (pdata->scan_phase *
++					 pdata->num_line_gpios) +
++					i;
++				btn_key = pdata->button_matrix[index];
++				if (btn_key != pdata->button_matrix[0]) {
++					btn_index =
++						get_btn_index(pdata, btn_key);
++					set_btn_state_by_hw(
++						&pdata->button_array[btn_index],
++						btn_keylines[i]);
++				}
++			}
++		}
++
++		kfree(btn_keylines);
++		activate_line_driving(pdata, (int)pdata->scan_phase, false);
++		pdata->scan_phase++;
++		activate_line_driving(
++			pdata, (int)(pdata->scan_phase % pdata->num_line_gpios),
++			true);
++	}
++}
++
++/*
++ * NOTE: normally the GPIO has to be put into HiZ when de-activated to cause
++ * minmal side effect when scanning other columns, here it is configured to
++ * be input, and it should work on most platforms.
++ */
++static void
++__activate_line_driving(const struct mt_matrix_keypad_platform_data *pdata,
++			int line, bool on)
++{
++	bool level_on = pdata->active_low;
++
++	if (on)
++		gpio_direction_output(pdata->line_gpios[line], level_on);
++	else
++		gpio_direction_input(pdata->line_gpios[line]);
++}
++
++static void
++activate_line_driving(const struct mt_matrix_keypad_platform_data *pdata,
++		      int line, bool on)
++{
++	__activate_line_driving(pdata, line, on);
++
++	if (on && pdata->col_scan_delay_us)
++		udelay(pdata->col_scan_delay_us);
++}
++
++static bool
++get_gpio_line_value(const struct mt_matrix_keypad_platform_data *pdata, int row)
++{
++	return gpio_get_value(pdata->line_gpios[row]) ? pdata->active_low :
++							!pdata->active_low;
++}
++
++/*
++ * This gets the keys from keyboard and reports it to input subsystem
++ */
++static void mt_matrix_keypad_scan(struct work_struct *work)
++{
++	struct mt_matrix_keypad *keypad =
++		container_of(work, struct mt_matrix_keypad, work.work);
++	struct input_dev *input_dev = keypad->input_dev;
++	struct mt_matrix_keypad_platform_data *pdata = keypad->pdata;
++
++	if (keypad->stopped == false) {
++		update_buttons(pdata, input_dev);
++		schedule_delayed_work(
++			&keypad->work,
++			msecs_to_jiffies(keypad->pdata->debounce_ms));
++	}
++}
++
++static int mt_matrix_keypad_start(struct input_dev *dev)
++{
++	struct mt_matrix_keypad *keypad = input_get_drvdata(dev);
++
++	keypad->stopped = false;
++	/*
++	 * memory access initiated before the memory barrier
++	 * will be complete before passing the barrier
++	 */
++	mb();
++
++	/*
++	 * Schedule an immediate key scan to capture current key state;
++	 * columns will be activated and IRQs be enabled after the scan.
++	 */
++	schedule_delayed_work(&keypad->work, 0);
++
++	return 0;
++}
++
++static void mt_matrix_keypad_stop(struct input_dev *dev)
++{
++	struct mt_matrix_keypad *keypad = input_get_drvdata(dev);
++
++	keypad->stopped = true;
++	/*
++	 * memory access initiated before the memory barrier
++	 * will be complete before passing the barrier
++	 */
++	mb();
++	cancel_delayed_work_sync(&keypad->work);
++}
++
++#ifdef CONFIG_PM_SLEEP
++static void mt_matrix_keypad_enable_wakeup(struct mt_matrix_keypad *keypad)
++{
++	const struct mt_matrix_keypad_platform_data *pdata = keypad->pdata;
++	unsigned int gpio;
++	int i;
++
++	if (pdata->clustered_irq > 0) {
++		if (enable_irq_wake(pdata->clustered_irq) == 0)
++			keypad->gpio_all_disabled = true;
++	} else {
++		for (i = 0; i < pdata->num_line_gpios; i++) {
++			if (!test_bit(i, keypad->disabled_gpios)) {
++				gpio = pdata->line_gpios[i];
++
++				if (enable_irq_wake(gpio_to_irq(gpio)) == 0)
++					__set_bit(i, keypad->disabled_gpios);
++			}
++		}
++	}
++}
++
++static void mt_matrix_keypad_disable_wakeup(struct mt_matrix_keypad *keypad)
++{
++	const struct mt_matrix_keypad_platform_data *pdata = keypad->pdata;
++	unsigned int gpio;
++	int i;
++
++	if (pdata->clustered_irq > 0) {
++		if (keypad->gpio_all_disabled) {
++			disable_irq_wake(pdata->clustered_irq);
++			keypad->gpio_all_disabled = false;
++		}
++	} else {
++		for (i = 0; i < pdata->num_line_gpios; i++) {
++			if (test_and_clear_bit(i, keypad->disabled_gpios)) {
++				gpio = pdata->line_gpios[i];
++				disable_irq_wake(gpio_to_irq(gpio));
++			}
++		}
++	}
++}
++
++static int mt_matrix_keypad_suspend(struct device *dev)
++{
++	struct platform_device *pdev = to_platform_device(dev);
++	struct mt_matrix_keypad *keypad = platform_get_drvdata(pdev);
++
++	mt_matrix_keypad_stop(keypad->input_dev);
++
++	if (device_may_wakeup(&pdev->dev))
++		mt_matrix_keypad_enable_wakeup(keypad);
++
++	pinctrl_pm_select_sleep_state(dev);
++
++	return 0;
++}
++
++static int mt_matrix_keypad_resume(struct device *dev)
++{
++	struct platform_device *pdev = to_platform_device(dev);
++	struct mt_matrix_keypad *keypad = platform_get_drvdata(pdev);
++
++	if (device_may_wakeup(&pdev->dev))
++		mt_matrix_keypad_disable_wakeup(keypad);
++
++	pinctrl_pm_select_default_state(dev);
++
++	mt_matrix_keypad_start(keypad->input_dev);
++
++	return 0;
++}
++#endif
++
++static SIMPLE_DEV_PM_OPS(mt_matrix_keypad_pm_ops, mt_matrix_keypad_suspend,
++			 mt_matrix_keypad_resume);
++
++static int mt_matrix_keypad_init_gpio(struct platform_device *pdev,
++				      struct mt_matrix_keypad *keypad)
++{
++	const struct mt_matrix_keypad_platform_data *pdata = keypad->pdata;
++	int i, err;
++
++	for (i = 0; i < pdata->num_line_gpios; i++) {
++		err = gpio_request(pdata->line_gpios[i], "mt_kbd_row");
++		if (err) {
++			dev_err(&pdev->dev,
++				"failed to request GPIO%d for ROW%d\n",
++				pdata->line_gpios[i], i);
++			goto err_free_rows;
++		}
++
++		gpio_direction_input(pdata->line_gpios[i]);
++	}
++
++	return 0;
++
++err_free_rows:
++	while (--i >= 0)
++		gpio_free(pdata->line_gpios[i]);
++
++	i = pdata->num_line_gpios;
++	return err;
++}
++
++static void mt_matrix_keypad_free_gpio(struct mt_matrix_keypad *keypad)
++{
++	const struct mt_matrix_keypad_platform_data *pdata = keypad->pdata;
++	int i;
++
++	for (i = 0; i < pdata->num_line_gpios; i++)
++		gpio_free(pdata->line_gpios[i]);
++}
++
++#ifdef CONFIG_OF
++static struct mt_matrix_keypad_platform_data *
++mt_matrix_keypad_parse_dt(struct device *dev)
++{
++	struct mt_matrix_keypad_platform_data *pdata = NULL;
++	struct device_node *np = dev->of_node;
++	unsigned int *gpios;
++	struct button *button_array;
++	int8_t *button_matrix;
++	uint16_t keycode;
++	uint32_t *ptr;
++	int keymap;
++	int i;
++
++	if (!np) {
++		dev_err(dev, "device lacks DT data\n");
++		return ERR_PTR(-ENODEV);
++	}
++
++	pdata = devm_kzalloc(dev, sizeof(*pdata), GFP_KERNEL);
++	if (!pdata)
++		return ERR_PTR(-ENOMEM);
++
++	pdata->num_line_gpios = of_gpio_named_count(np, "line-gpios");
++	if (pdata->num_line_gpios <= 0) {
++		dev_err(dev, "number of gpio line not specified\n");
++		return ERR_PTR(-EINVAL);
++	}
++
++	if (of_get_property(np, "linux,no-autorepeat", NULL))
++		pdata->no_autorepeat = true;
++
++	pdata->wakeup = of_property_read_bool(np, "wakeup-source") ||
++			of_property_read_bool(np, "linux,wakeup"); /* legacy */
++
++	if (of_get_property(np, "gpio-activelow", NULL))
++		pdata->active_low = true;
++
++	of_property_read_u32(np, "debounce-delay-ms", &pdata->debounce_ms);
++	of_property_read_u32(np, "col-scan-delay-us",
++			     &pdata->col_scan_delay_us);
++	of_property_read_u32(np, "number-of-button", &pdata->num_of_button);
++	if (pdata->num_of_button <= 0) {
++		dev_err(dev, "number of button not specified\n");
++		return ERR_PTR(-EINVAL);
++	}
++
++	button_array =
++		devm_kzalloc(dev,
++			     sizeof(struct button) * (pdata->num_of_button),
++			     GFP_KERNEL);
++	if (!button_array) {
++		dev_err(dev, "could not allocate memory for button array\n");
++		return ERR_PTR(-ENOMEM);
++	}
++
++	pdata->button_array = button_array;
++
++	gpios = devm_kzalloc(dev,
++			     sizeof(unsigned int) * (pdata->num_line_gpios),
++			     GFP_KERNEL);
++	if (!gpios) {
++		dev_err(dev, "could not allocate memory for gpios\n");
++		return ERR_PTR(-ENOMEM);
++	}
++
++	for (i = 0; i < pdata->num_line_gpios; i++)
++		gpios[i] = of_get_named_gpio(np, "line-gpios", i);
++
++	pdata->line_gpios = gpios;
++
++	keymap = device_property_count_u32(dev, "linux,keymap");
++	if (keymap <= 0 ||
++	    keymap > (pdata->num_line_gpios * pdata->num_line_gpios)) {
++		dev_err(dev, "linux,keymap property count is more");
++		return ERR_PTR(-ENXIO);
++	}
++
++	ptr = kcalloc(keymap, sizeof(uint32_t), GFP_KERNEL);
++	if (!ptr)
++		return ERR_PTR(-ENOMEM);
++
++	if (device_property_read_u32_array(dev, "linux,keymap", ptr, keymap)) {
++		dev_err(dev, "problem parsing keymap property\n");
++		kfree(ptr);
++		return ERR_PTR(-EINVAL);
++	}
++
++	button_matrix =
++		devm_kzalloc(dev, (keymap * sizeof(int8_t)), GFP_KERNEL);
++	if (!button_matrix) {
++		dev_err(dev, "could not allocate memory for button matrix\n");
++		return ERR_PTR(-ENOMEM);
++	}
++
++	pdata->button_matrix = button_matrix;
++	for (i = 0; i < keymap; i++) {
++		keycode = KEYCODE(ptr[i]);
++		pdata->button_matrix[i] = keycode;
++	}
++	kfree(ptr);
++
++	return pdata;
++}
++
++#else
++static inline struct mt_matrix_keypad_platform_data *
++mt_matrix_keypad_parse_dt(struct device *dev)
++{
++	dev_err(dev, "no platform data defined\n");
++
++	return ERR_PTR(-EINVAL);
++}
++#endif
++
++static int mt_matrix_keypad_probe(struct platform_device *pdev)
++{
++	struct mt_matrix_keypad_platform_data *pdata;
++	struct mt_matrix_keypad *keypad;
++	struct input_dev *input_dev;
++	int err;
++	int row, col, index;
++
++	dev_info(&pdev->dev, "[%s]: Probe\n", MODULE_NAME);
++	pdata = dev_get_platdata(&pdev->dev);
++
++	if (!pdata) {
++		pdata = mt_matrix_keypad_parse_dt(&pdev->dev);
++		if (IS_ERR(pdata)) {
++			dev_err(&pdev->dev, "Mt platform data not defined\n");
++			return PTR_ERR(pdata);
++		}
++	}
++
++	err = pdata->line_gpios[0];
++	if (err < 0)
++		return dev_err_probe(
++			&pdev->dev, err,
++			"Could not register gpio chip for mt matrix keypad\n");
++
++	keypad = kzalloc(sizeof(struct mt_matrix_keypad), GFP_KERNEL);
++	input_dev = input_allocate_device();
++
++	if (!keypad || !input_dev) {
++		dev_err(&pdev->dev, "[%s]: Allocation Failed\n", MODULE_NAME);
++		err = -ENOMEM;
++		goto err_free_mem;
++	}
++
++	init_phase(pdata);
++	keypad->input_dev = input_dev;
++	keypad->pdata = pdata;
++	keypad->stopped = true;
++	INIT_DELAYED_WORK(&keypad->work, mt_matrix_keypad_scan);
++	spin_lock_init(&keypad->lock);
++
++	input_dev->name = pdev->name;
++	input_dev->id.bustype = BUS_HOST;
++	input_dev->dev.parent = &pdev->dev;
++	input_dev->open = mt_matrix_keypad_start;
++	input_dev->close = mt_matrix_keypad_stop;
++
++	if (!pdata->no_autorepeat)
++		__set_bit(EV_REP, input_dev->evbit);
++
++	input_set_capability(input_dev, EV_MSC, MSC_SCAN);
++
++	for (row = 1; row < pdata->num_line_gpios; row++) {
++		for (col = 0; col < row; col++) {
++			index = (row * pdata->num_line_gpios) + col;
++			if (pdata->button_matrix[index] !=
++			    pdata->button_matrix[0]) {
++				input_set_capability(
++					input_dev, EV_KEY,
++					pdata->button_matrix[index]);
++			}
++		}
++	}
++
++	input_set_drvdata(input_dev, keypad);
++	err = mt_matrix_keypad_init_gpio(pdev, keypad);
++
++	if (err)
++		goto err_free_mem;
++
++	button_hdl_init(pdata);
++
++	err = input_register_device(keypad->input_dev);
++
++	if (err)
++		goto err_free_gpio;
++
++	device_init_wakeup(&pdev->dev, pdata->wakeup);
++	platform_set_drvdata(pdev, keypad);
++
++	return 0;
++
++err_free_gpio:
++	mt_matrix_keypad_free_gpio(keypad);
++
++err_free_mem:
++	input_free_device(input_dev);
++	kfree(keypad);
++	return err;
++}
++
++static int mt_matrix_keypad_remove(struct platform_device *pdev)
++{
++	struct mt_matrix_keypad *keypad = platform_get_drvdata(pdev);
++
++	device_init_wakeup(&pdev->dev, 0);
++	input_unregister_device(keypad->input_dev);
++	mt_matrix_keypad_free_gpio(keypad);
++	kfree(keypad);
++
++	return 0;
++}
++
++#ifdef CONFIG_OF
++static const struct of_device_id mt_matrix_keypad_dt_match[] = {
++	{ .compatible = "gpio-mt-matrix-keypad" },
++	{}
++};
++MODULE_DEVICE_TABLE(of, mt_matrix_keypad_dt_match);
++#endif
++
++static struct platform_driver mt_matrix_keypad_driver = {
++	.probe		= mt_matrix_keypad_probe,
++	.remove		= mt_matrix_keypad_remove,
++	.driver		= {
++		.name	= "mt-matrix-keypad",
++		.pm	= &mt_matrix_keypad_pm_ops,
++		.of_match_table = of_match_ptr(mt_matrix_keypad_dt_match),
++	},
++};
++module_platform_driver(mt_matrix_keypad_driver);
++
++MODULE_AUTHOR("vinay");
++MODULE_DESCRIPTION("GPIO Driven Mt Matrix Keypad Driver");
++MODULE_LICENSE("GPL");
++MODULE_ALIAS("platform:mt-matrix-keypad");
+diff --git a/include/linux/input/mt_matrix_keypad.h b/include/linux/input/mt_matrix_keypad.h
+new file mode 100644
+index 000000000000..8c5fbf109dbc
+--- /dev/null
++++ b/include/linux/input/mt_matrix_keypad.h
+@@ -0,0 +1,63 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef _MT_MATRIX_KEYPAD_H
++#define _MT_MATRIX_KEYPAD_H
++
++#include <linux/types.h>
++#include <linux/input.h>
++#include <linux/of.h>
++
++#define MATRIX_MAX_ROWS 32
++#define KEYCODE(keymap) (keymap & 0xFFFF)
++
++struct button_states {
++	uint8_t boPrevious : 1;
++	uint8_t boCurrent : 1;
++	uint8_t boCurrentStateOfHw : 1;
++	uint8_t boCurrentStateOfSw : 1;
++	uint8_t boEnabled : 1;
++	uint8_t boStateAtInit : 1;
++};
++
++union typeEvent {
++	uint8_t ui8Register;
++	struct {
++		uint8_t boGlobalChanged : 1;
++		uint8_t boPressed : 1;
++		uint8_t boReleased : 1;
++	} status;
++};
++
++struct button {
++	uint8_t key;
++	union typeEvent event;
++	struct button_states state;
++};
++
++struct phase {
++	int phase_prepare;
++	int phase_start;
++	int phase_update_button;
++};
++
++struct mt_matrix_keypad_platform_data {
++	const struct mt_keymap_data *keymap_data;
++	const unsigned int *line_gpios;
++	unsigned int num_line_gpios;
++	unsigned int num_of_button;
++	unsigned int col_scan_delay_us;
++	unsigned int debounce_ms;
++	unsigned int clustered_irq;
++	unsigned int clustered_irq_flags;
++
++	bool active_low;
++	bool wakeup;
++	bool no_autorepeat;
++	bool intialize_buttons;
++
++	int8_t scan_phase;
++	int8_t *button_matrix;
++	struct button *button_array;
++	struct phase phase_state;
++};
++
++#endif /* _MT_MATRIX_KEYPAD_H */
 -- 
 2.20.1
 

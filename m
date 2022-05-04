@@ -2,112 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB53B51A429
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 17:37:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A68FC51A44A
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 17:40:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352565AbiEDPkp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 11:40:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35714 "EHLO
+        id S1352678AbiEDPns (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 11:43:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346350AbiEDPko (ORCPT
+        with ESMTP id S1352614AbiEDPmC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 11:40:44 -0400
-Received: from mail-ot1-f50.google.com (mail-ot1-f50.google.com [209.85.210.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 396561659C;
-        Wed,  4 May 2022 08:37:07 -0700 (PDT)
-Received: by mail-ot1-f50.google.com with SMTP id c5-20020a9d75c5000000b00605ff3b9997so1157959otl.0;
-        Wed, 04 May 2022 08:37:07 -0700 (PDT)
+        Wed, 4 May 2022 11:42:02 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BED7C165BB;
+        Wed,  4 May 2022 08:38:25 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id j15so2588220wrb.2;
+        Wed, 04 May 2022 08:38:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=OtzdCLQ1sMXip1wJYQTCTJSMcVxnPKUWI694G3NFHYs=;
+        b=QF6KL/3YVxfI4tf1KSfxllilhSSRMCc+0qW7eYARjEJ8W0X4GuaRhErkXsYRmMUIKD
+         QRAzVYg/mi1u530dbD1YaQdlXveHquKCJVq9ytiQQFyjK84Oo5rvziZg5pJLcib3CkEr
+         aEmfb7ZVvX3wtDemSXO88gPnCa9DYZS/OcCwH6rSBFx9iySklqAcpVRhHNF8cTec3uD/
+         8jYzQbcL0dN+9CQ5ZxzIwoCPf0XUqOLmLyQVmMh9iamAA8huL7/1+k1+YKXJpESk2tEi
+         gBkVLla254GDSd9Y3fzxFpEG/9mLY/ysH0QwRGhpq4MG8MbzKzcDcxlV0yx5DJrODt9d
+         27gw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=c+491uatbBNklSf07jZRBjGyT71SmXQky++32pxlRJE=;
-        b=VkHC6cbWYvI8BT0dTRdv5td4/bPuSH1yuEXRlNqufGbaTglRLua087tf/DW/mvT0rB
-         4uqCz4tUpLAovcOWSp/k5FY1jlxEMw+iBPo7ij+sz3cCVhPnb+H4g5svNRTT7ENHmWBf
-         6JTFFiYby9ceaoV8trQv8JLge1ULL19ncV6Q3RNlOur303nXvFaOhMbGZtDBJVzFuB1P
-         2chHastE1EN/LQ4C073vuP3+3PfKuRoiQ0oJB60O+IheZ+TIeGbqvOdP7hlUeXl8f0M1
-         Ms7v+IcHAionkbzOF0zJAJ9o2bhwlPPMuVqorKLk3Yf8x182xlCqxV1PaEp4Ygj+EqF8
-         Saqg==
-X-Gm-Message-State: AOAM531Geh1S1JW5+x/Flb13B86d3jJZqKuRLCrNi4XlxI+wAv/KY0QE
-        DBY9e615lZwoJP07vSrGeHqmL3M21g==
-X-Google-Smtp-Source: ABdhPJwOA2TQTPagMyY/d/b2379s4djD8KoNRcc2UmGBn4bQGTVBpdokxfhoi0xudJn30hCjsg4d8A==
-X-Received: by 2002:a05:6830:1e18:b0:605:f631:1bed with SMTP id s24-20020a0568301e1800b00605f6311bedmr7512441otr.137.1651678626482;
-        Wed, 04 May 2022 08:37:06 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id x108-20020a9d37f5000000b006060322123csm5109675otb.12.2022.05.04.08.37.05
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=OtzdCLQ1sMXip1wJYQTCTJSMcVxnPKUWI694G3NFHYs=;
+        b=gPpve8RFQHspW9AylbnUZRBFQVdd/1bpEJhcjykLcnK6eCYcxI5yGg6AacaBr+hi4g
+         sK4HjiEyx4vez1MK4w4wffJVK8RxEqDzC+BrFupTu8QYV0E5t7sexGvbIe4wCycrThE2
+         UVyFV6KCJwBMXP8roGl4cNu4kpARWpmVoJbzR9miYS+UMyAbLt+DKqiQ/gB60aoyWU+C
+         bK2MeO+6IwZNfMWHFUvzcYD4Q9GLz6m6sN5Hv7a5UUq0BwJDIbSdWcdv1I09z7eTSQCR
+         YVaezvgc6qW9Au+trlZe3PKm6FdbSy8/XDAnvZNOPC//s8Kg2Ivt/wndAFlfd6O5LB9y
+         8Mmg==
+X-Gm-Message-State: AOAM533OMUibvtzj5Bkr8oTgU6MPP4yXnfpLx0EII98PgVxaQChZEXcJ
+        xcV+NQjmeAOZCj4faEUC9B4=
+X-Google-Smtp-Source: ABdhPJwDfwdiXHKaFHVytyamWAxEwb4UMu8aQ+oSMVF4rtlgGbsxjnSp8fwnhw9uDDPtqSCnIaFitw==
+X-Received: by 2002:a5d:66c8:0:b0:20a:c807:6061 with SMTP id k8-20020a5d66c8000000b0020ac8076061mr16711076wrw.399.1651678704376;
+        Wed, 04 May 2022 08:38:24 -0700 (PDT)
+Received: from nergzd-desktop.localdomain ([194.39.226.133])
+        by smtp.gmail.com with ESMTPSA id e18-20020adf9bd2000000b0020c5253d8besm11792725wrc.10.2022.05.04.08.38.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 May 2022 08:37:06 -0700 (PDT)
-Received: (nullmailer pid 1755199 invoked by uid 1000);
-        Wed, 04 May 2022 15:37:02 -0000
-Date:   Wed, 4 May 2022 10:37:02 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
+        Wed, 04 May 2022 08:38:23 -0700 (PDT)
+From:   Markuss Broks <markuss.broks@gmail.com>
+To:     pavel@ucw.cz
+Cc:     Markuss Broks <markuss.broks@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-spi@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] spi: dt-bindings: qcom,spi-geni-qcom: allow three
- interconnects
-Message-ID: <YnKdnv69vueSURiU@robh.at.kernel.org>
-References: <20220504125119.190526-1-krzysztof.kozlowski@linaro.org>
+        Linus Walleij <linus.walleij@linaro.org>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH RESEND v6 (corrected v2) 0/2] Make AUX gpio pin optional for ktd2692
+Date:   Wed,  4 May 2022 18:38:09 +0300
+Message-Id: <20220504153814.11108-1-markuss.broks@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220504125119.190526-1-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 04, 2022 at 02:51:19PM +0200, Krzysztof Kozlowski wrote:
-> Recent Qualcomm Geni SPI nodes, e.g. on SM8450, come with three
-> interconnects.  This fixes dtbs_check warnings like:
-> 
->   sm8450-qrd.dtb: geniqup@8c0000: spi@880000:interconnect-names: ['qup-core', 'qup-config'] is too short
+Some appliances of ktd2692 don't have the AUX pin connected to
+a GPIO. Specifically, Samsung Galaxy J5 (2015), which uses ktd2692
+for driving the front flash LED, has the pin not connected anywhere on
+schematics. Make specifying the AUX pin optional, since it is additional
+functionality and only affects amount of current going through the LED.
 
-I'm confused. A length of 2 was already allowed before this change.
+Also convert the txt device-tree bindings to yaml and pick up maintenance
+over the yaml binding and the driver itself.
 
-> 
-> Fixes: 5bdcae1fe1c5 ("spi: dt-bindings: qcom,spi-geni-qcom: convert to dtschema")
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> 
-> ---
-> 
-> Fix for a commit in MSM/Bjorn's tree.
-> ---
->  .../devicetree/bindings/spi/qcom,spi-geni-qcom.yaml          | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/spi/qcom,spi-geni-qcom.yaml b/Documentation/devicetree/bindings/spi/qcom,spi-geni-qcom.yaml
-> index e2c7b934c50d..47e1b3ee8b1b 100644
-> --- a/Documentation/devicetree/bindings/spi/qcom,spi-geni-qcom.yaml
-> +++ b/Documentation/devicetree/bindings/spi/qcom,spi-geni-qcom.yaml
-> @@ -45,12 +45,15 @@ properties:
->        - const: rx
->  
->    interconnects:
-> -    maxItems: 2
-> +    minItems: 2
-> +    maxItems: 3
->  
->    interconnect-names:
-> +    minItems: 2
->      items:
->        - const: qup-core
->        - const: qup-config
-> +      - const: qup-memory
->  
->    interrupts:
->      maxItems: 1
-> -- 
-> 2.32.0
-> 
-> 
+v2:
+- fix the dt_binding_check
+v3:
+- set the aux_gpio to NULL to avoid passing ERR_PTR as a gpio
+v4:
+- maintainership -> maintenance (description)
+- remove the if (led->aux_gpio)
+- use devm_gpiod_get_optional for aux gpio
+v5:
+- use ret to pass a correct error return code (Christophe)
+v6:
+- use PTR_ERR properly (when IS_ERR is true) (Christophe)
+v6-a:
+- ended up being a mess, corrected-v2 should have proper tags now
+
+Markuss Broks (2):
+  dt-bindings: leds: convert ktd2692 bindings to yaml
+  leds: ktd2692: Make aux-gpios optional
+
+ .../bindings/leds/kinetic,ktd2692.yaml        | 87 +++++++++++++++++++
+ .../devicetree/bindings/leds/leds-ktd2692.txt | 50 -----------
+ MAINTAINERS                                   |  6 ++
+ drivers/leds/flash/leds-ktd2692.c             | 18 ++--
+ 4 files changed, 103 insertions(+), 58 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/leds/kinetic,ktd2692.yaml
+ delete mode 100644 Documentation/devicetree/bindings/leds/leds-ktd2692.txt
+
+-- 
+2.35.1
+

@@ -2,49 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BA3F519299
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 02:11:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0141951929B
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 02:12:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244497AbiEDAPS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 20:15:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51056 "EHLO
+        id S244516AbiEDAPc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 20:15:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242307AbiEDAPQ (ORCPT
+        with ESMTP id S244504AbiEDAPa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 20:15:16 -0400
+        Tue, 3 May 2022 20:15:30 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C800101D7;
-        Tue,  3 May 2022 17:11:43 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F04C14087;
+        Tue,  3 May 2022 17:11:57 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B4BDA6182F;
-        Wed,  4 May 2022 00:11:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4FA7C385A4;
-        Wed,  4 May 2022 00:11:41 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0AC3861839;
+        Wed,  4 May 2022 00:11:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A62B4C385A4;
+        Wed,  4 May 2022 00:11:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651623102;
-        bh=zXQJT9OcNxTWMgpJOONnP/VuTTgQG0f6H5ZJnf9VX3o=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=B29O+WfMIYjLgii+1tKPsUtOCZ0HHz+QMUJSoVrTrHMyyAKt3Ab/pK6zs7Vf6KMr1
-         jKqaaMfqSmNgbJlfz35YKR0e0ulHhXRQqV2Nh3+L/GK+gzi1DLwpNF7lEVdaWKkuqH
-         97kGdFbVavogJFQijC878+n1rxBkb2nj11/5+Ciatn1tdzAgmyQUs+tvDT1lkOeDCh
-         gX22ugDrgeYSW8Y9q31k5GukzyCWrHT/xKCAjxXzlCQZOePuIjLixyq2r0HRFU9pgG
-         OtEUjbZsCtZtkg927O2PFDMTYnoO/nCs6GInQzE1P+Koxw/U+QUIGo+qifB8xy3+hl
-         56/QYeCI/yGeA==
-Date:   Tue, 3 May 2022 17:11:40 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Min Li <min.li.xe@renesas.com>
-Cc:     richardcochran@gmail.com, lee.jones@linaro.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH net v3 1/2] ptp: ptp_clockmatrix: Add PTP_CLK_REQ_EXTTS
- support
-Message-ID: <20220503171140.27dbf8cf@kernel.org>
-In-Reply-To: <1651518530-25128-1-git-send-email-min.li.xe@renesas.com>
-References: <1651518530-25128-1-git-send-email-min.li.xe@renesas.com>
+        s=k20201202; t=1651623116;
+        bh=G+aZGUAr0FfQ9F3/qjycZ/CR4Cv6boS+C83q1nKXSqs=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=Y755J25ivPjrwAchjwtRXCl12Pb8K0fw3kyVxOnTlY6Hdxzz2F0OglpCYZixitNmV
+         guNWSmrZ2F5uNigbRYyIyN6oc76Ff3DD+O3b203M1sNgd3jSr8YnqNsqDt7Ay4KwA3
+         ycS3Bwk/Ip9sSVfM87PEpEzJULU+VC6CssAWgxBikYhSA9iHnjFdIQuP2LU5itqH2m
+         m5cxVR56lYwOlqtUlZplpI4fJd88Ue/Wvxt/Jt+dSQPWL4MAAcmjtVFaqN9K5jAs0s
+         2iBtC1+kqUZzwiseH+WqDSaZ3kZFNCqH9YkfeS/EDkABmqzAdJ2b1bJPPZyGggKhB5
+         Bgb8J9jiZy0dA==
+From:   SeongJae Park <sj@kernel.org>
+To:     Yuanchu Xie <yuanchu@google.com>
+Cc:     Shuah Khan <shuah@kernel.org>, Markus Boehme <markubo@amazon.de>,
+        SeongJae Park <sj@kernel.org>, rientjes@google.com,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] selftests/damon: suppress compiler warnings for huge_count_read_write
+Date:   Wed,  4 May 2022 00:11:53 +0000
+Message-Id: <20220504001153.119485-1-sj@kernel.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220504000358.1174849-1-yuanchu@google.com>
+References: 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -55,140 +56,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon,  2 May 2022 15:08:49 -0400 Min Li wrote:
-> Use TOD_READ_SECONDARY for extts to keep TOD_READ_PRIMARY
-> for gettime and settime exclusively
+Hi Yuanchu, thank you for this patch!
+
+On Wed, 4 May 2022 00:03:57 +0000 Yuanchu Xie <yuanchu@google.com> wrote:
+
+> The test case added in commit db7a347b26fe ("mm/damon/dbgfs:
+> use '__GFP_NOWARN' for user-specified size buffer allocation")
+> intentionally writes and reads with a large count to cause
+> allocation failure and check for kernel warnings. We suppress
+> the compiler warnings for these calls as they work as intended.
 > 
-> Signed-off-by: Min Li <min.li.xe@renesas.com>
-> Acked-by: Richard Cochran <richardcochran@gmail.com>
+> Signed-off-by: Yuanchu Xie <yuanchu@google.com>
 
-Since this is a new feature please tag the next version as 
-[PATCH net-next v4]. Bug fixes get tagged with [PATCH net]
-new features, refactoring etc with [PATCH net-next].
+Reviewed-by: SeongJae Park <sj@kernel.org>
 
-> +	err = idtcm_write(idtcm, channel->tod_read_secondary, tod_read_cmd,
-> +			  &val, sizeof(val));
-> +
-> +	if (err)
 
-Please remove the empty lines between calling a function and checking
-if it returned an error (only in the new code you're adding in this
-patch).
+Thanks,
+SJ
 
-> +		dev_err(idtcm->dev, "%s: err = %d", __func__, err);
+[...]
+> ---
+>  tools/testing/selftests/damon/Makefile | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/tools/testing/selftests/damon/Makefile b/tools/testing/selftests/damon/Makefile
+> index 0470c5f3e690..a300b4c5b373 100644
+> --- a/tools/testing/selftests/damon/Makefile
+> +++ b/tools/testing/selftests/damon/Makefile
+> @@ -1,6 +1,9 @@
+>  # SPDX-License-Identifier: GPL-2.0
+>  # Makefile for damon selftests
 >  
-> -	err = idtcm_write(idtcm, channel->tod_read_primary,
-> -			  tod_read_cmd, &val, sizeof(val));
->  	return err;
->  }
->  
-> -static int idtcm_enable_extts(struct idtcm_channel *channel, u8 todn, u8 ref,
-> -			      bool enable)
-> +static bool is_single_shot(u8 mask)
->  {
-> -	struct idtcm *idtcm = channel->idtcm;
-> -	u8 old_mask = idtcm->extts_mask;
-> -	u8 mask = 1 << todn;
-> +	/* Treat single bit ToD masks as continuous trigger */
-> +	if ((mask == 1) || (mask == 2) || (mask == 4) || (mask == 8))
-> +		return false;
-> +	else
-> +		return true;
-
-This function is better written as:
-
-	/* Treat single bit ToD masks as continuous trigger */
-	return mask <= 8 && is_power_of_2(mask);
-
-> +}
-
-> +static int _idtcm_gettime_triggered(struct idtcm_channel *channel,
-> +				    struct timespec64 *ts)
-> +{
-> +	struct idtcm *idtcm = channel->idtcm;
-> +	u16 tod_read_cmd = IDTCM_FW_REG(idtcm->fw_ver, V520, TOD_READ_SECONDARY_CMD);
-> +	u8 buf[TOD_BYTE_COUNT];
-> +	u8 trigger;
-> +	int err;
+> +CFLAGS += -Wno-stringop-overread
+> +CFLAGS += -Wno-stringop-overflow
 > +
-> +	err = idtcm_read(idtcm, channel->tod_read_secondary,
-> +			 tod_read_cmd, &trigger, sizeof(trigger));
-> +	if (err)
-> +		return err;
-> +
-> +	if (trigger & TOD_READ_TRIGGER_MASK)
-> +		return -EBUSY;
-> +
-> +	err = idtcm_read(idtcm, channel->tod_read_secondary,
-> +			 TOD_READ_SECONDARY_BASE, buf, sizeof(buf));
-> +
-> +	if (err)
-> +		return err;
-> +
-> +	err = char_array_to_timespec(buf, sizeof(buf), ts);
-> +
-> +	return err;
-
-Please return directly:
-
-	return char_array_...
-
-> +}
-
-
->  static int _idtcm_gettime_immediate(struct idtcm_channel *channel,
->  				    struct timespec64 *ts)
->  {
->  	struct idtcm *idtcm = channel->idtcm;
-> -	u8 extts_mask = 0;
-> +
-> +	u16 tod_read_cmd = IDTCM_FW_REG(idtcm->fw_ver, V520, TOD_READ_PRIMARY_CMD);
-> +	u8 val = (SCSR_TOD_READ_TRIG_SEL_IMMEDIATE << TOD_READ_TRIGGER_SHIFT);
->  	int err;
+>  TEST_GEN_FILES += huge_count_read_write
 >  
-> -	/* Disable extts */
-> -	if (idtcm->extts_mask) {
-> -		extts_mask = idtcm_enable_extts_mask(channel, idtcm->extts_mask,
-> -						     false);
-> -	}
-> +	err = idtcm_write(idtcm, channel->tod_read_primary,
-> +			  tod_read_cmd, &val, sizeof(val));
->  
-> -	err = _idtcm_set_scsr_read_trig(channel,
-> -					SCSR_TOD_READ_TRIG_SEL_IMMEDIATE, 0);
-> -	if (err == 0)
-> -		err = _idtcm_gettime(channel, ts, 10);
-> +	if (err)
-> +		return err;
->  
-> -	/* Re-enable extts */
-> -	if (extts_mask)
-> -		idtcm_enable_extts_mask(channel, extts_mask, true);
-> +	err = _idtcm_gettime(channel, ts, 10);
->  
->  	return err;
-
-Same here
-
-	return _idtcm_gettime(...
-
->  }
-
-> @@ -2420,10 +2502,11 @@ static int idtcm_remove(struct platform_device *pdev)
->  {
->  	struct idtcm *idtcm = platform_get_drvdata(pdev);
->  
-> -	ptp_clock_unregister_all(idtcm);
-> -
-> +	idtcm->extts_mask = 0;
->  	cancel_delayed_work_sync(&idtcm->extts_work);
->  
-> +	ptp_clock_unregister_all(idtcm);
-
-Why is the order of unregistering the clock and canceling the work
-changed? There is no locking around this function so seems like 
-the work can get scheduled right after the call to
-cancel_delayed_work_sync(), anyway.
-
->  	return 0;
->  }
+>  TEST_FILES = _chk_dependency.sh _debugfs_common.sh
+> -- 
+> 2.36.0.464.gb9c8b46e94-goog
+> 

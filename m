@@ -2,166 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 394E351B037
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 23:16:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FDE251B038
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 23:16:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378536AbiEDVT4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 17:19:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34600 "EHLO
+        id S1378539AbiEDVT6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 17:19:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244029AbiEDVTx (ORCPT
+        with ESMTP id S1357423AbiEDVTy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 17:19:53 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6B4821253
-        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 14:16:15 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id g20so3107148edw.6
+        Wed, 4 May 2022 17:19:54 -0400
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CD82220C4
+        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 14:16:16 -0700 (PDT)
+Received: by mail-lj1-x22f.google.com with SMTP id 4so3251912ljw.11
         for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 14:16:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=6MXhFAWbDglpoBwnCNgPXrGcxMNN6VO/SyKkfNQIIaY=;
-        b=od9l1MKX7VGnlty0UQGANhz5usp8Mso5lcbHl1nFickQHtjswW8vkxoYHz9GUsdtAU
-         f8AMtgLlad2SEhYwyYKIWXo3yBOyjtzO9GEDXVoigHp78Vy7LNTXXcMjmf5Uh+0y9m1K
-         cU09NofM9Tb/cXEvvtGa01f7Ej2pwrj93rcxtfNEn+TB0eBVG6N7nHffonOwEG2IBFR5
-         gxRbHIun3AuGBf38wjv/TAmzk+9U+1SlrJLS/pWnEiwf8vyjPM56HObsANDRQztEnBtN
-         p5tIFznUphSsy1ffWktrtVRSvUjRPWXTZrxiMqKQwDZwpWONN3F+s1PqA3ThuATdZT3q
-         pnrQ==
+        d=openvz-org.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=tdFt0uQlPJ4mzIwCT11tWacBOCFR/O+DCJD9m2elhvY=;
+        b=4BtgJE6tIVi5spqKRy2safmJJvFhDwqig/gu8SOgJVMNlQoN7e6oyggAGtbh0Ai3u+
+         mR+n9pawKCECW0w4KaZIWSRlsLDNrXNLicQze8WR7YOF14HoGfcdcRrLoH9tjDGrbzFy
+         WDWbyL2Nu4xZje0kDJ17xDqguvfoDCMUQSyM3hLgoAUlMcGEsTF7qPjnbhKhdYfxmucs
+         wHUTkWv/1+fU/qFlF5OKiFmii/NXaHWgs3XvRrl4Eifnz5ATici85iWc4YhEkszOJAxc
+         Bha+LOrKUOvCCgZ0Q3zYOFb0L/mULFRJtIuA6ZizjW+wmIlKvPAcW/NJrfdYapYD95QF
+         c2mg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=6MXhFAWbDglpoBwnCNgPXrGcxMNN6VO/SyKkfNQIIaY=;
-        b=M4GdeWsw/v9SWcHWNIG2YONaogDkaYEja3C6tXJurWDsI0QMHKZiXFMJo1P6tv3ffk
-         YD5PLFnTuzPOeT9uUNESg295uIOA9ffcWJrFdy3RMHOcpbHsrZJOZhRuXuhnNhJQ1G4u
-         +z1iq6Hzu9l8Fg/nrvnGGUd8qdZmf6hGoXnANd2Ppzn88IY13RjAJ4I7T9bLSFGkkj4b
-         jWe597wBcrYeCsduEwUDLETFEs18aLviU8UTHka8we8gD9qZPpIZBLMSEGShJ6vyDHLV
-         qR8DMqwqZDzteOd4bsyozBvoZGeBE0/A+M/zPz4Hjmn/yxABnY4axef2fpmnilv1f/iE
-         eFpw==
-X-Gm-Message-State: AOAM530+Rz3m7uFC0N1duicnJekmRSrQO0G3Q/+tzcCoImzCE4vw6UgN
-        z/Hw4Tq4ENhWfHxzwgGgNrt5SvWO8Jw13ugBaq3s1A==
-X-Google-Smtp-Source: ABdhPJwQ1M2NAmIFQZzAS9SZVXA1FRiwJe04VVWotoV0KyWmS6QO9tP0T66QfbBoTx2NAlraFyhy336blz2Fqf5csD4=
-X-Received: by 2002:a05:6402:2995:b0:425:d3a1:28aa with SMTP id
- eq21-20020a056402299500b00425d3a128aamr25411732edb.247.1651698974303; Wed, 04
- May 2022 14:16:14 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=tdFt0uQlPJ4mzIwCT11tWacBOCFR/O+DCJD9m2elhvY=;
+        b=4ocEM2cFmuZ+9ka1iXWyJQvvGERQshJYrpmm4tqNKHJkP+Iy1nkL2ihp71QZWN67CY
+         oAjRFkpedZCitZkAuiRFzc9bX1DDOgAvNmmqJ3jSQwaKPy4jQ3h52b0WG96VpU99SFsJ
+         BqECCyQg7GmRiEnDGI7GNKbKlI5Erc+02Aj8Bx2zMUrKNSKaz3x2mzllz3kVmWL3Rgq+
+         VdAUUJOLlkeOZ9KIJQPbU+5vhd9+PWaSFzVV3ZNfVwtrZ/QyX6t4gDpmFoSiq4wOeK2o
+         pz8u86h+SU39+oQ5LzrEr44BD+p79BMTBDYY64d4NO8ea0F+fvPavsGOBSP8Hef/UvKR
+         JFRA==
+X-Gm-Message-State: AOAM531N6dhlrUr946vE4vRKW5vunAI6SPBsviMKBY504ciEAho4kHhL
+        TnpDubSTljx1htcWaq3hELfq9g==
+X-Google-Smtp-Source: ABdhPJxgHSAUGLfgLZIb2+0g5ez7rOXgrwqXJD1qFd+PALJWQypuORHFvFz0pwvJnOif4DAYaP2oCw==
+X-Received: by 2002:a05:651c:10b4:b0:24f:88b:2dc3 with SMTP id k20-20020a05651c10b400b0024f088b2dc3mr13985315ljn.383.1651698974268;
+        Wed, 04 May 2022 14:16:14 -0700 (PDT)
+Received: from [192.168.1.65] ([46.188.121.177])
+        by smtp.gmail.com with ESMTPSA id j26-20020a19f51a000000b0047255d21115sm1302266lfb.68.2022.05.04.14.16.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 04 May 2022 14:16:13 -0700 (PDT)
+Message-ID: <65244222-02c5-6e8d-7f4b-83651f378ce2@openvz.org>
+Date:   Thu, 5 May 2022 00:16:12 +0300
 MIME-Version: 1.0
-References: <20220318021314.3225240-1-davidgow@google.com> <20220318021314.3225240-2-davidgow@google.com>
- <CAGS_qxqm1ys1qUz__4uXWOgs=34M5MB3QMnhg40FHtRhatF3+g@mail.gmail.com> <CAFd5g452ecbNbSyODT3Prraj5cOEugHm=asE_h+ik-yriUvf6w@mail.gmail.com>
-In-Reply-To: <CAFd5g452ecbNbSyODT3Prraj5cOEugHm=asE_h+ik-yriUvf6w@mail.gmail.com>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Wed, 4 May 2022 16:16:03 -0500
-Message-ID: <CAGS_qxrv_kSR0nnQNTDshUVSz=UT3djzLnHEpNLOV7fMO-fVCg@mail.gmail.com>
-Subject: Re: [RFC PATCH 1/2] kunit: Expose 'static stub' API to redirect functions
-To:     Brendan Higgins <brendanhiggins@google.com>
-Cc:     David Gow <davidgow@google.com>, Kees Cook <keescook@chromium.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: kernfs memcg accounting
+Content-Language: en-US
+To:     =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>
+Cc:     Roman Gushchin <roman.gushchin@linux.dev>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Shakeel Butt <shakeelb@google.com>, kernel@openvz.org,
+        Florian Westphal <fw@strlen.de>, linux-kernel@vger.kernel.org,
+        Michal Hocko <mhocko@suse.com>, cgroups@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Tejun Heo <tj@kernel.org>
+References: <7e867cb0-89d6-402c-33d2-9b9ba0ba1523@openvz.org>
+ <20220427140153.GC9823@blackbody.suse.cz>
+ <7509fa9f-9d15-2f29-cb2f-ac0e8d99a948@openvz.org>
+ <YnBLge4ZQNbbxufc@blackbook>
+ <52a9f35b-458b-44c4-7fc8-d05c8db0c73f@openvz.org>
+ <20220504141001.GA10890@blackbody.suse.cz>
+From:   Vasily Averin <vvs@openvz.org>
+In-Reply-To: <20220504141001.GA10890@blackbody.suse.cz>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 4, 2022 at 3:42 PM 'Brendan Higgins' via KUnit Development
-<kunit-dev@googlegroups.com> wrote:
->
-> On Wed, May 4, 2022 at 4:35 PM Daniel Latypov <dlatypov@google.com> wrote=
-:
-> >
-> > On Thu, Mar 17, 2022 at 9:13 PM David Gow <davidgow@google.com> wrote:
-> > > +#define kunit_activate_static_stub(test, real_fn_addr, replacement_a=
-ddr) do {  \
-> > > +       typecheck(typeof(real_fn_addr), replacement_addr);           =
-           \
-> >
-> > We can't call this macro in the same scope for functions w/ different
-> > signatures.
-> >
-> > E.g. if we add this func to the example test
-> >   static void other_func(void) {}
-> > then trying to call kunit_activate_static_stub() on it in the same
-> > test case, we get
-> >
-> > ./include/linux/typecheck.h:10:14: error: conflicting types for
-> > =E2=80=98__dummy=E2=80=99; have =E2=80=98void(void)=E2=80=99
-> >    10 | ({      type __dummy; \
-> >       |              ^~~~~~~
-> > ./include/kunit/static_stub.h:99:9: note: in expansion of macro =E2=80=
-=98typecheck=E2=80=99
-> >    99 |         typecheck(typeof(real_fn_addr), replacement_addr);
-> >                  \
-> >       |         ^~~~~~~~~
-> > lib/kunit/example-test.c:64:9: note: in expansion of macro
-> > =E2=80=98kunit_activate_static_stub=E2=80=99
-> >    64 |         kunit_activate_static_stub(test, other_func, other_func=
-);
-> >       |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
-> > ./include/linux/typecheck.h:10:14: note: previous declaration of
-> > =E2=80=98__dummy=E2=80=99 with type =E2=80=98int(int)=E2=80=99
-> >    10 | ({      type __dummy; \
-> >       |              ^~~~~~~
-> > ./include/kunit/static_stub.h:99:9: note: in expansion of macro =E2=80=
-=98typecheck=E2=80=99
-> >    99 |         typecheck(typeof(real_fn_addr), replacement_addr);
-> >                  \
-> >       |         ^~~~~~~~~
-> > lib/kunit/example-test.c:62:9: note: in expansion of macro
-> > =E2=80=98kunit_activate_static_stub=E2=80=99
-> >    62 |         kunit_activate_static_stub(test, add_one, subtract_one)=
-;
-> >       |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
-> >
-> > Afaict, the problem is that GCC thinks we're declaring a *function*
-> > called __dummy, not a variable.
-> > So it bleeds across the scope boundary of do-while unlike normal variab=
-les.
->
-> Yeah, I ran into that problem too. I posted a fix to gerrit. I have
-> been meaning to share it here.
+On 5/4/22 17:10, Michal Koutný wrote:
+> On Wed, May 04, 2022 at 12:00:18PM +0300, Vasily Averin <vvs@openvz.org> wrote:
+>> As far as I understand, Roman chose the parent memcg because it was a special
+>> case of creating a new memory group. He temporally changed active memcg
+>> in mem_cgroup_css_alloc() and properly accounted all required memcg-specific
+>> allocations.
+> 
+>> However, he ignored accounting for a rather large struct mem_cgroup
+>> therefore I think we can do not worry about 128 bytes of kernfs node.
+> 
+> Are you referring to the current code (>= v5.18-rc2)? All big structs
+> related to mem_cgroup should be accounted. What is ignored?
 
-For others, gerrit =3D=3D https://kunit-review.googlesource.com/c/linux/+/5=
-129
+mm/memcontrol.c:
+5079 static struct mem_cgroup *mem_cgroup_alloc(void)
+5080 {
+5081         struct mem_cgroup *memcg;
+...
+5086         memcg = kzalloc(struct_size(memcg, nodeinfo, nr_node_ids), GFP_KERNEL);
 
->
-> > There's the typecheck_fn macro, but it doesn't work either.
->
-> That's weird. It worked for me.
+I think it should allocate at least 2 pages.
 
-I'm running on top of 5.5.
-I tried reproducing w/ a stripped down version on 5.18 and saw the same iss=
-ues.
+>> Primary I mean here struct mem_cgroup allocation in mem_cgroup_alloc().
+> 
+> Just note that memory controller may not be always enabled so
+> cgroup_mkdir != mem_cgroup_alloc().
 
-Huh, I'm trying with
- #define kunit_activate_static_stub(test, real_fn_addr,
-replacement_addr) do {  \
--       typecheck(typeof(real_fn_addr), replacement_addr);
-         \
-+       typecheck_fn(typeof(real_fn_addr), replacement_addr); \
-        __kunit_activate_static_stub(test, real_fn_addr,
-replacement_addr);     \
+However if cgroup_mkdir() calls mem_cgroup_alloc() it correctly account huge percpu
+allocations but ignores neighbour multipage allocation.
 
-This gives me
-lib/kunit/example-test.c:62:9: error: function =E2=80=98__tmp=E2=80=99 is i=
-nitialized
-like a variable
-   62 |         kunit_activate_static_stub(test, add_one, subtract_one);
-      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
-lib/kunit/example-test.c:64:9: error: function =E2=80=98__tmp=E2=80=99 is i=
-nitialized
-like a variable
-   64 |         kunit_activate_static_stub(test, other_func, other_func);
-      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
+>> However, I think we need to take into account any other distributions called
+>> inside cgroup_mkdir: struct cgroup and kernefs node in common part and 
+>> any other cgroup-cpecific allocations in other .css_alloc functions.
+>> They all can be called from inside container, allocates non-accountable
+>> memory and by this way theoretically can be misused.
+> 
+> Also note that (if you're purely on unified hierachy) you can protect
+> against that with cgroup.max.descendants and cgroup.max.depth.
 
-Perhaps I'm missing something silly.
+In past OpenVz had a lot of limits for various resources (for example we had a limit 
+for iptable rules), but it was very hard to configure them properly.
+Finally we  decided to replace all such custom limits by common memory limit.
+It isn't important how many resources tries to use container as long as
+it doesn't exceed the memory limit.
+Such resource limits can be useful, especially to prevent possible misuses.
+However sooner or later there will be a legal user who will rest against them.
+All you can do in this situation is to recommend him just increase the limit,
+that makes the limit senseless.
+Memory limits looks much more reasonable and understandable.
 
-Can you post your fix and I can try it out?
+Thank you,
+	Vasily Averin

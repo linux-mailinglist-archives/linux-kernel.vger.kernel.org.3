@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0A3D51AAF5
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:34:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E3BC51A88C
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:07:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358392AbiEDRiC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 13:38:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40636 "EHLO
+        id S1355718AbiEDRL1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 13:11:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356882AbiEDRJr (ORCPT
+        with ESMTP id S1355390AbiEDRAB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 13:09:47 -0400
+        Wed, 4 May 2022 13:00:01 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13BD14474A;
-        Wed,  4 May 2022 09:56:16 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BBE64B1F8;
+        Wed,  4 May 2022 09:51:39 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B9F5FB827A3;
-        Wed,  4 May 2022 16:56:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F9CBC385A4;
-        Wed,  4 May 2022 16:56:14 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9061DB827A1;
+        Wed,  4 May 2022 16:51:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38D8DC385A4;
+        Wed,  4 May 2022 16:51:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651683374;
-        bh=blfb6PV7qdWdQWCJAaSTWeenwPcA67Q/sJFOLviYEZw=;
+        s=korg; t=1651683087;
+        bh=RL5yGVkyeNKNqpXaH1HM7y2330PAjpWmWzwxkKb8fFU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QNIMoowTI6nLJSoUm0q81wqo7Xsx3C5UGcZIJcjAedVf4ciKJjz2UXk47xQ6YK9Vx
-         iCKSmmNmmYwa68VUqi4rbZ2ye8x6hSRwT1AwGdAWRKfXxmDZJTvMbEHbymOOlc2UXc
-         gDYUM3lIxNyL1J7Bfa/yyf7aQrN1YecfuQHn7ylo=
+        b=vCmF3KN+Js0gbDcHnaLQtf6dwcOg+qh/ltOx497wSkaGuFgZrfgVO1AH85OKNlkvW
+         dSByEeCm82aD43daXMBlI2FPMFiEnNF4/KNNx7bCRO2LVp7bK7mI/4i2UzeocApiz8
+         JqJeCGnuqJLzy9H6o7kfkO4dD1q6EHt/e+KPRZ4A=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Necip Fazil Yildiran <fazilyildiran@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>
-Subject: [PATCH 5.17 045/225] pinctrl: samsung: fix missing GPIOLIB on ARM64 Exynos config
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 091/129] drm/amd/display: Fix memory leak in dcn21_clock_source_create
 Date:   Wed,  4 May 2022 18:44:43 +0200
-Message-Id: <20220504153114.131064327@linuxfoundation.org>
+Message-Id: <20220504153028.198953417@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220504153110.096069935@linuxfoundation.org>
-References: <20220504153110.096069935@linuxfoundation.org>
+In-Reply-To: <20220504153021.299025455@linuxfoundation.org>
+References: <20220504153021.299025455@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,79 +55,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-commit ac875df4d854ab13d9c4af682a1837a1214fecec upstream.
+[ Upstream commit 65e54987508b6f0771f56bdfa3ee1926d52785ae ]
 
-The Samsung pinctrl drivers depend on OF_GPIO, which is part of GPIOLIB.
-ARMv7 Exynos platform selects GPIOLIB and Samsung pinctrl drivers. ARMv8
-Exynos selects only the latter leading to possible wrong configuration
-on ARMv8 build:
+When dcn20_clk_src_construct() fails, we need to release clk_src.
 
-  WARNING: unmet direct dependencies detected for PINCTRL_EXYNOS
-    Depends on [n]: PINCTRL [=y] && OF_GPIO [=n] && (ARCH_EXYNOS [=y] || ARCH_S5PV210 || COMPILE_TEST [=y])
-    Selected by [y]:
-    - ARCH_EXYNOS [=y]
-
-Always select the GPIOLIB from the Samsung pinctrl drivers to fix the
-issue.  This requires removing of OF_GPIO dependency (to avoid recursive
-dependency), so add dependency on OF for COMPILE_TEST cases.
-
-Reported-by: Necip Fazil Yildiran <fazilyildiran@gmail.com>
-Fixes: eed6b3eb20b9 ("arm64: Split out platform options to separate Kconfig")
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Reviewed-by: Arnd Bergmann <arnd@arndb.de>
-Link: https://lore.kernel.org/r/20220420141407.470955-1-krzysztof.kozlowski@linaro.org
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 6f4e6361c3ff ("drm/amd/display: Add Renoir resource (v2)")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm/mach-exynos/Kconfig    |    1 -
- drivers/pinctrl/samsung/Kconfig |   11 ++++-------
- 2 files changed, 4 insertions(+), 8 deletions(-)
+ drivers/gpu/drm/amd/display/dc/dcn21/dcn21_resource.c | 1 +
+ 1 file changed, 1 insertion(+)
 
---- a/arch/arm/mach-exynos/Kconfig
-+++ b/arch/arm/mach-exynos/Kconfig
-@@ -17,7 +17,6 @@ menuconfig ARCH_EXYNOS
- 	select EXYNOS_PMU
- 	select EXYNOS_SROM
- 	select EXYNOS_PM_DOMAINS if PM_GENERIC_DOMAINS
--	select GPIOLIB
- 	select HAVE_ARM_ARCH_TIMER if ARCH_EXYNOS5
- 	select HAVE_ARM_SCU if SMP
- 	select PINCTRL
---- a/drivers/pinctrl/samsung/Kconfig
-+++ b/drivers/pinctrl/samsung/Kconfig
-@@ -4,14 +4,13 @@
- #
- config PINCTRL_SAMSUNG
- 	bool
--	depends on OF_GPIO
-+	select GPIOLIB
- 	select PINMUX
- 	select PINCONF
+diff --git a/drivers/gpu/drm/amd/display/dc/dcn21/dcn21_resource.c b/drivers/gpu/drm/amd/display/dc/dcn21/dcn21_resource.c
+index 7ed4d7c8734f..01c4e8753294 100644
+--- a/drivers/gpu/drm/amd/display/dc/dcn21/dcn21_resource.c
++++ b/drivers/gpu/drm/amd/display/dc/dcn21/dcn21_resource.c
+@@ -1267,6 +1267,7 @@ static struct clock_source *dcn21_clock_source_create(
+ 		return &clk_src->base;
+ 	}
  
- config PINCTRL_EXYNOS
- 	bool "Pinctrl common driver part for Samsung Exynos SoCs"
--	depends on OF_GPIO
--	depends on ARCH_EXYNOS || ARCH_S5PV210 || COMPILE_TEST
-+	depends on ARCH_EXYNOS || ARCH_S5PV210 || (COMPILE_TEST && OF)
- 	select PINCTRL_SAMSUNG
- 	select PINCTRL_EXYNOS_ARM if ARM && (ARCH_EXYNOS || ARCH_S5PV210)
- 	select PINCTRL_EXYNOS_ARM64 if ARM64 && ARCH_EXYNOS
-@@ -26,12 +25,10 @@ config PINCTRL_EXYNOS_ARM64
- 
- config PINCTRL_S3C24XX
- 	bool "Samsung S3C24XX SoC pinctrl driver"
--	depends on OF_GPIO
--	depends on ARCH_S3C24XX || COMPILE_TEST
-+	depends on ARCH_S3C24XX || (COMPILE_TEST && OF)
- 	select PINCTRL_SAMSUNG
- 
- config PINCTRL_S3C64XX
- 	bool "Samsung S3C64XX SoC pinctrl driver"
--	depends on OF_GPIO
--	depends on ARCH_S3C64XX || COMPILE_TEST
-+	depends on ARCH_S3C64XX || (COMPILE_TEST && OF)
- 	select PINCTRL_SAMSUNG
++	kfree(clk_src);
+ 	BREAK_TO_DEBUGGER();
+ 	return NULL;
+ }
+-- 
+2.35.1
+
 
 

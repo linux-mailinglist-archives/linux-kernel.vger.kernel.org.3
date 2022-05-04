@@ -2,117 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C901D51AE15
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 21:40:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EAF451AE19
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 21:41:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238011AbiEDToE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 15:44:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45282 "EHLO
+        id S1358467AbiEDTpA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 15:45:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377611AbiEDToA (ORCPT
+        with ESMTP id S1355901AbiEDTo6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 15:44:00 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B058760C6
-        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 12:40:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651693223; x=1683229223;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=YZhveE0tRxxXA0SEnZwijU5Fk8RXn+Oktsw2oc6zHVY=;
-  b=dS46Fb9r65Pd5f/K8oR9D8Wh9W+IGJMuv4Rw0FaDFnx35CELKKjYRT1r
-   insWw4oEuRDZAwozmJvpWrzBf1LCBP77wi0dMy5LUThhmgr0BfLlRGLo5
-   wT7J9sIYXnyW3BHgAErzq6SJkhzGUEfL0VUsU6i3ZRWCAa+gib8rcrn2I
-   wpJdGmmMgXztA0YdJLLfGU+k3Hel/9eklfN5R3HBxPl954ZjKci2uWag7
-   4RFM9vCDcKkM7hH/gLDZ64SJjqcB2tvdQSLJQt31tBoYbIXWKSUgIarwA
-   jX6Uf+F3TeUeqGVn2yYsU6n2DQQ12mpxSTksP2El9oFmPhK2/EH2J9nwE
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10337"; a="330865102"
-X-IronPort-AV: E=Sophos;i="5.91,199,1647327600"; 
-   d="scan'208";a="330865102"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2022 12:40:23 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,199,1647327600"; 
-   d="scan'208";a="536991905"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 04 May 2022 12:40:21 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nmKrF-000BjT-6H;
-        Wed, 04 May 2022 19:40:21 +0000
-Date:   Thu, 5 May 2022 03:39:38 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Jack Xiao <Jack.Xiao@amd.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Hawking Zhang <Hawking.Zhang@amd.com>
-Subject: [agd5f:drm-next 395/460]
- drivers/gpu/drm/amd/amdgpu/amdgpu_mes.c:864:13: warning: variable 'r' set
- but not used
-Message-ID: <202205050315.yMErlGvA-lkp@intel.com>
+        Wed, 4 May 2022 15:44:58 -0400
+Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7202C4D628
+        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 12:41:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=k1; bh=bfQjJp1hnaL5QWRQQRqZLDYnOo/e
+        vFULx7ZI4z+9tiY=; b=npvgPHtLbgcACCG85UpI4tywQ9Lt2qD2FYYC/kDuQO0Y
+        2qglEl/RYQ1JoVZLgpVtMiyptElvt2RDV59NRztjczsujju+dSk6aM8/1nOzg7Hm
+        JlgB1f8QNnLPPV8L07JLVUHSgTjcmEcQDRQJdUXCjokW3LKu9aXVhIYkHl1A7QM=
+Received: (qmail 1531107 invoked from network); 4 May 2022 21:41:19 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 4 May 2022 21:41:19 +0200
+X-UD-Smtp-Session: l3s3148p1@onAIzzTeGJwgAwDtxwyXAP9dq+3qRUcy
+Date:   Wed, 4 May 2022 21:41:16 +0200
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>
+Cc:     Magnus Damm <magnus.damm@gmail.com>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        linux-renesas-soc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] soc: renesas: R-Car V3U is R-Car Gen4
+Message-ID: <YnLW3FO+FOV/FXX9@kunai>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        linux-renesas-soc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <2bbecad7b6c24c0d5c1797b3f7f0733d5ba33842.1651497066.git.geert+renesas@glider.be>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="psvJW5ppJa1endeB"
 Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <2bbecad7b6c24c0d5c1797b3f7f0733d5ba33842.1651497066.git.geert+renesas@glider.be>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://gitlab.freedesktop.org/agd5f/linux.git drm-next
-head:   d6ffefccf7f04eefddc8e8aa35fb4afe05a42e0c
-commit: e3652b0976f383dea912607a404e974632b019b1 [395/460] drm/amdgpu/mes: add helper functions to alloc/free ctx metadata
-config: alpha-allyesconfig (https://download.01.org/0day-ci/archive/20220505/202205050315.yMErlGvA-lkp@intel.com/config)
-compiler: alpha-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        git remote add agd5f https://gitlab.freedesktop.org/agd5f/linux.git
-        git fetch --no-tags agd5f drm-next
-        git checkout e3652b0976f383dea912607a404e974632b019b1
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=alpha SHELL=/bin/bash drivers/gpu/drm/amd/amdgpu/
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+--psvJW5ppJa1endeB
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-All warnings (new ones prefixed by >>):
+On Mon, May 02, 2022 at 03:35:24PM +0200, Geert Uytterhoeven wrote:
+> Despite the name, R-Car V3U is the first member of the R-Car Gen4
+> family.  Hence reflect this in the SoC Family field.
+>=20
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-   drivers/gpu/drm/amd/amdgpu/amdgpu_mes.c: In function 'amdgpu_mes_ctx_alloc_meta_data':
->> drivers/gpu/drm/amd/amdgpu/amdgpu_mes.c:864:13: warning: variable 'r' set but not used [-Wunused-but-set-variable]
-     864 |         int r;
-         |             ^
+Reviewed-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
 
-vim +/r +864 drivers/gpu/drm/amd/amdgpu/amdgpu_mes.c
+--psvJW5ppJa1endeB
+Content-Type: application/pgp-signature; name="signature.asc"
 
-   860	
-   861	int amdgpu_mes_ctx_alloc_meta_data(struct amdgpu_device *adev,
-   862					   struct amdgpu_mes_ctx_data *ctx_data)
-   863	{
- > 864		int r;
-   865	
-   866		r = amdgpu_bo_create_kernel(adev,
-   867				    sizeof(struct amdgpu_mes_ctx_meta_data),
-   868				    PAGE_SIZE, AMDGPU_GEM_DOMAIN_GTT,
-   869				    &ctx_data->meta_data_obj, NULL,
-   870				    &ctx_data->meta_data_ptr);
-   871		if (!ctx_data->meta_data_obj)
-   872			return -ENOMEM;
-   873	
-   874		memset(ctx_data->meta_data_ptr, 0,
-   875		       sizeof(struct amdgpu_mes_ctx_meta_data));
-   876	
-   877		return 0;
-   878	}
-   879	
+-----BEGIN PGP SIGNATURE-----
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmJy1twACgkQFA3kzBSg
+KbbUsA//WO3/F3T39KYOV3qGgIKnIJEpobWTloFiYpsInxdW29Z7+rNxXNGsR9ez
+eJ2BzEnaQNQxqQ01VqaM7HFCBEDB84Ma91MklSThYW9LdHt0YM3UPHH1DmFERsG9
+v0BZ36D2Bva/kxraC8GDrDVhnowodT3dlVAPT75P/mXIV/c9WcB2SIp7qowmcPJp
+6KADQm4IdqA56tLvvsjRZoxqMFHJTRGb3vpcdgU/n2BHkcWxbElCVJrXfiE3bwdS
++Nb8fZNRebsoMUSdB/zM+8eOJHp1UF51FgPHtPGBROSk9A0s0oXoICkN0hJVSme3
+LNZ4k27hZvVFcB3QY3fCuEi1o+gMTUXFDB2iJMuNAeVpQtPi/nMUydQntvVkJjp9
+6gx5/rc0750LGX9Ztr3nExyg7rrplG3WkGlEz5ODzyR4+D5iKuZ2z9ewZnXg4l0t
+cC7X0kMcTNIrYEFWFsVychVL70nxmeO1rZTJ5f2kBB8iYPWvmzRAhofZKId01XBB
+3kRahltzWFmtlVO3amUui2dVkshT9YLY2nSqj99zvK56BjkIIQjL6KnB9H5ZKWZj
+mu5VU1Ihfoy7LjHFcee7Y0zf4lRzDcJxkRtujrCCsB3D8vIWHZjls4K3BlEH9GUF
+RPZFEY+9NzeMCclgrOrwkpzK6yIB0WoJEyUZ7E8bMMTT8u4kDBc=
+=Ekh4
+-----END PGP SIGNATURE-----
+
+--psvJW5ppJa1endeB--

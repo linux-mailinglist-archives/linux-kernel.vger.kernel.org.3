@@ -2,126 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12FE6519F07
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 14:11:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B08FB519F09
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 14:12:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349340AbiEDMPW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 08:15:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51844 "EHLO
+        id S1349346AbiEDMPx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 08:15:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343788AbiEDMPU (ORCPT
+        with ESMTP id S1343788AbiEDMPu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 08:15:20 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4903A18359
-        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 05:11:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651666305; x=1683202305;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=C+h/rftgRKdb1i6UwOq/0z1PcO5ClpbUoFCjucqM6iM=;
-  b=b9vyzU702BQBjYGPYhR78vS9scTbj85n06nPWMXMP8FNFDEE7WiedUcp
-   PCI6qDMezGOzvqoY4eg/LZMsDNJoHDDgHR229jyHL/lwqYGWZdl8QUSoa
-   /TV4pXcz0ruMS55TY7cOz6I7m8lxeVNDzQ6aH2mygEPH9FODHPBro8mxu
-   tXRYWuXhZiVL69m07ZeH3esJ3PVk0nyTIYj66cNZLGOBku9BC8cM6AmEF
-   q7i5cS2f3BklGYr0tZTDNLqLckoLOgrAVbvUxen3QUpo8EbId7Qmq2PXf
-   ZkrhIoDvUWk3lmdnzAB81pns6sc1vJtGoX17leX4DJuaHKBGgsGX/QRtW
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10336"; a="354184868"
-X-IronPort-AV: E=Sophos;i="5.91,198,1647327600"; 
-   d="scan'208";a="354184868"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2022 05:11:45 -0700
-X-IronPort-AV: E=Sophos;i="5.91,198,1647327600"; 
-   d="scan'208";a="664444001"
-Received: from gidaly-mobl1.ger.corp.intel.com (HELO [10.213.236.183]) ([10.213.236.183])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2022 05:11:43 -0700
-Message-ID: <ab578c17-faa6-222f-f37e-d5cd4f45dfd0@linux.intel.com>
-Date:   Wed, 4 May 2022 13:11:41 +0100
+        Wed, 4 May 2022 08:15:50 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 630DE18359
+        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 05:12:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1651666334;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=dCPW4qvwcpTydZ0St+Yp5/C2uYiVBC1zbL1N8xJvOoE=;
+        b=ZNMe05WuvsTtQuhUBkMaqsr4wnqvpDsh0LtxKi6ibPTfliHfa4WVzIb37FEx803tOdV0ZS
+        hkaIlCKKYzaX7qkS3Z/BL3DCJrZQ76oI40H57qoYN8v6gDhJU2aGiVqONMCNqqHAWUudrf
+        ZtkIptMOkd36452uJCuPZYQR25SC4UM=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-435-AtJSXlWaPcOqkMhwKzTjBA-1; Wed, 04 May 2022 08:12:09 -0400
+X-MC-Unique: AtJSXlWaPcOqkMhwKzTjBA-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 978AB3C01D8B;
+        Wed,  4 May 2022 12:12:08 +0000 (UTC)
+Received: from starship (unknown [10.40.192.26])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 1F8CE2024CBC;
+        Wed,  4 May 2022 12:12:03 +0000 (UTC)
+Message-ID: <a883ff438d6202f2dc0458dc4d7c1ab3688f5db8.camel@redhat.com>
+Subject: Re: [PATCH v3 03/14] KVM: SVM: Detect X2APIC virtualization
+ (x2AVIC) support
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Cc:     pbonzini@redhat.com, seanjc@google.com, joro@8bytes.org,
+        jon.grimm@amd.com, wei.huang2@amd.com, terry.bowman@amd.com
+Date:   Wed, 04 May 2022 15:12:02 +0300
+In-Reply-To: <20220504073128.12031-4-suravee.suthikulpanit@amd.com>
+References: <20220504073128.12031-1-suravee.suthikulpanit@amd.com>
+         <20220504073128.12031-4-suravee.suthikulpanit@amd.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH] drm/i915: use IOMEM_ERR_PTR() directly
-Content-Language: en-US
-To:     Jani Nikula <jani.nikula@linux.intel.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-References: <20220502034328.78486-1-wangkefeng.wang@huawei.com>
- <87h768s5f5.fsf@intel.com>
-From:   Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
-Organization: Intel Corporation UK Plc
-In-Reply-To: <87h768s5f5.fsf@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,
-        NICE_REPLY_A,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.4
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 02/05/2022 09:30, Jani Nikula wrote:
-> On Mon, 02 May 2022, Kefeng Wang <wangkefeng.wang@huawei.com> wrote:
->> Use IOMEM_ERR_PTR() instead of self defined IO_ERR_PTR().
->>
->> Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+On Wed, 2022-05-04 at 02:31 -0500, Suravee Suthikulpanit wrote:
+> Add CPUID check for the x2APIC virtualization (x2AVIC) feature.
+> If available, the SVM driver can support both AVIC and x2AVIC modes
+> when load the kvm_amd driver with avic=1. The operating mode will be
+> determined at runtime depending on the guest APIC mode.
 > 
-> Reviewed-by: Jani Nikula <jani.nikula@intel.com>
-
-Pushed to drm-intel-gt-next, thanks for the patch and review!
-
-Regards,
-
-Tvrtko
-
+> Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
+> Signed-off-by: Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
+> ---
+>  arch/x86/include/asm/svm.h |  3 +++
+>  arch/x86/kvm/svm/avic.c    | 40 ++++++++++++++++++++++++++++++++++++++
+>  arch/x86/kvm/svm/svm.c     | 15 ++------------
+>  arch/x86/kvm/svm/svm.h     |  1 +
+>  4 files changed, 46 insertions(+), 13 deletions(-)
 > 
->> ---
->>   drivers/gpu/drm/i915/i915_vma.c | 4 ++--
->>   drivers/gpu/drm/i915/i915_vma.h | 1 -
->>   2 files changed, 2 insertions(+), 3 deletions(-)
->>
->> diff --git a/drivers/gpu/drm/i915/i915_vma.c b/drivers/gpu/drm/i915/i915_vma.c
->> index 94fcdb7bd21d..639605c89b7b 100644
->> --- a/drivers/gpu/drm/i915/i915_vma.c
->> +++ b/drivers/gpu/drm/i915/i915_vma.c
->> @@ -541,7 +541,7 @@ void __iomem *i915_vma_pin_iomap(struct i915_vma *vma)
->>   	int err;
->>   
->>   	if (WARN_ON_ONCE(vma->obj->flags & I915_BO_ALLOC_GPU_ONLY))
->> -		return IO_ERR_PTR(-EINVAL);
->> +		return IOMEM_ERR_PTR(-EINVAL);
->>   
->>   	if (!i915_gem_object_is_lmem(vma->obj)) {
->>   		if (GEM_WARN_ON(!i915_vma_is_map_and_fenceable(vma))) {
->> @@ -594,7 +594,7 @@ void __iomem *i915_vma_pin_iomap(struct i915_vma *vma)
->>   err_unpin:
->>   	__i915_vma_unpin(vma);
->>   err:
->> -	return IO_ERR_PTR(err);
->> +	return IOMEM_ERR_PTR(err);
->>   }
->>   
->>   void i915_vma_flush_writes(struct i915_vma *vma)
->> diff --git a/drivers/gpu/drm/i915/i915_vma.h b/drivers/gpu/drm/i915/i915_vma.h
->> index 67ae7341c7e0..8e74972fdca3 100644
->> --- a/drivers/gpu/drm/i915/i915_vma.h
->> +++ b/drivers/gpu/drm/i915/i915_vma.h
->> @@ -331,7 +331,6 @@ static inline bool i915_node_color_differs(const struct drm_mm_node *node,
->>    * Returns a valid iomapped pointer or ERR_PTR.
->>    */
->>   void __iomem *i915_vma_pin_iomap(struct i915_vma *vma);
->> -#define IO_ERR_PTR(x) ((void __iomem *)ERR_PTR(x))
->>   
->>   /**
->>    * i915_vma_unpin_iomap - unpins the mapping returned from i915_vma_iomap
-> 
+> diff --git a/arch/x86/include/asm/svm.h b/arch/x86/include/asm/svm.h
+> index f70a5108d464..2c2a104b777e 100644
+> --- a/arch/x86/include/asm/svm.h
+> +++ b/arch/x86/include/asm/svm.h
+> @@ -195,6 +195,9 @@ struct __attribute__ ((__packed__)) vmcb_control_area {
+>  #define AVIC_ENABLE_SHIFT 31
+>  #define AVIC_ENABLE_MASK (1 << AVIC_ENABLE_SHIFT)
+>  
+> +#define X2APIC_MODE_SHIFT 30
+> +#define X2APIC_MODE_MASK (1 << X2APIC_MODE_SHIFT)
+> +
+>  #define LBR_CTL_ENABLE_MASK BIT_ULL(0)
+>  #define VIRTUAL_VMLOAD_VMSAVE_ENABLE_MASK BIT_ULL(1)
+>  
+> diff --git a/arch/x86/kvm/svm/avic.c b/arch/x86/kvm/svm/avic.c
+> index a8f514212b87..fc3ba6071482 100644
+> --- a/arch/x86/kvm/svm/avic.c
+> +++ b/arch/x86/kvm/svm/avic.c
+> @@ -40,6 +40,15 @@
+>  #define AVIC_GATAG_TO_VMID(x)		((x >> AVIC_VCPU_ID_BITS) & AVIC_VM_ID_MASK)
+>  #define AVIC_GATAG_TO_VCPUID(x)		(x & AVIC_VCPU_ID_MASK)
+>  
+> +enum avic_modes {
+> +	AVIC_MODE_NONE = 0,
+> +	AVIC_MODE_X1,
+> +	AVIC_MODE_X2,
+> +};
+> +
+> +static bool force_avic;
+> +module_param_unsafe(force_avic, bool, 0444);
+> +
+>  /* Note:
+>   * This hash table is used to map VM_ID to a struct kvm_svm,
+>   * when handling AMD IOMMU GALOG notification to schedule in
+> @@ -50,6 +59,7 @@ static DEFINE_HASHTABLE(svm_vm_data_hash, SVM_VM_DATA_HASH_BITS);
+>  static u32 next_vm_id = 0;
+>  static bool next_vm_id_wrapped = 0;
+>  static DEFINE_SPINLOCK(svm_vm_data_hash_lock);
+> +static enum avic_modes avic_mode;
+>  
+>  /*
+>   * This is a wrapper of struct amd_iommu_ir_data.
+> @@ -1077,3 +1087,33 @@ void avic_vcpu_unblocking(struct kvm_vcpu *vcpu)
+>  
+>  	avic_vcpu_load(vcpu);
+>  }
+> +
+> +/*
+> + * Note:
+> + * - The module param avic enable both xAPIC and x2APIC mode.
+> + * - Hypervisor can support both xAVIC and x2AVIC in the same guest.
+> + * - The mode can be switched at run-time.
+> + */
+> +bool avic_hardware_setup(struct kvm_x86_ops *x86_ops)
+> +{
+> +	if (!npt_enabled)
+> +		return false;
+> +
+> +	if (boot_cpu_has(X86_FEATURE_AVIC)) {
+> +		avic_mode = AVIC_MODE_X1;
+> +		pr_info("AVIC enabled\n");
+> +	} else if (force_avic) {
+> +		pr_warn("AVIC is not supported in CPUID but force enabled");
+> +		pr_warn("Your system might crash and burn");
+
+I think in this case avic_mode should also be set to AVIC_MODE_X1
+(Hopefully this won't be needed for systems that have x2avic enabled)
+
+Best regards,
+	Maxim Levitsky
+
+> +	}
+> +
+> +	if (boot_cpu_has(X86_FEATURE_X2AVIC)) {
+> +		avic_mode = AVIC_MODE_X2;
+> +		pr_info("x2AVIC enabled\n");
+> +	}
+> +
+> +	if (avic_mode != AVIC_MODE_NONE)
+> +		amd_iommu_register_ga_log_notifier(&avic_ga_log_notifier);
+> +
+> +	return !!avic_mode;
+> +}
+> diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
+> index 3b49337998ec..74e6f86f5dc3 100644
+> --- a/arch/x86/kvm/svm/svm.c
+> +++ b/arch/x86/kvm/svm/svm.c
+> @@ -188,9 +188,6 @@ module_param(tsc_scaling, int, 0444);
+>  static bool avic;
+>  module_param(avic, bool, 0444);
+>  
+> -static bool force_avic;
+> -module_param_unsafe(force_avic, bool, 0444);
+> -
+>  bool __read_mostly dump_invalid_vmcb;
+>  module_param(dump_invalid_vmcb, bool, 0644);
+>  
+> @@ -4913,17 +4910,9 @@ static __init int svm_hardware_setup(void)
+>  			nrips = false;
+>  	}
+>  
+> -	enable_apicv = avic = avic && npt_enabled && (boot_cpu_has(X86_FEATURE_AVIC) || force_avic);
+> +	enable_apicv = avic = avic && avic_hardware_setup(&svm_x86_ops);
+>  
+> -	if (enable_apicv) {
+> -		if (!boot_cpu_has(X86_FEATURE_AVIC)) {
+> -			pr_warn("AVIC is not supported in CPUID but force enabled");
+> -			pr_warn("Your system might crash and burn");
+> -		} else
+> -			pr_info("AVIC enabled\n");
+> -
+> -		amd_iommu_register_ga_log_notifier(&avic_ga_log_notifier);
+> -	} else {
+> +	if (!enable_apicv) {
+>  		svm_x86_ops.vcpu_blocking = NULL;
+>  		svm_x86_ops.vcpu_unblocking = NULL;
+>  		svm_x86_ops.vcpu_get_apicv_inhibit_reasons = NULL;
+> diff --git a/arch/x86/kvm/svm/svm.h b/arch/x86/kvm/svm/svm.h
+> index 32220a1b0ea2..678fc7757fe4 100644
+> --- a/arch/x86/kvm/svm/svm.h
+> +++ b/arch/x86/kvm/svm/svm.h
+> @@ -603,6 +603,7 @@ extern struct kvm_x86_nested_ops svm_nested_ops;
+>  
+>  /* avic.c */
+>  
+> +bool avic_hardware_setup(struct kvm_x86_ops *ops);
+>  int avic_ga_log_notifier(u32 ga_tag);
+>  void avic_vm_destroy(struct kvm *kvm);
+>  int avic_vm_init(struct kvm *kvm);
+
+

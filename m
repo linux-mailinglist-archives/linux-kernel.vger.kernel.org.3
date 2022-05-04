@@ -2,43 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F28051A6B7
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 18:54:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81D6C51AAA6
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:29:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354100AbiEDQ6Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 12:58:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51172 "EHLO
+        id S1357105AbiEDRcj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 13:32:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354460AbiEDQy3 (ORCPT
+        with ESMTP id S1356934AbiEDRJt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 12:54:29 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81C0149699;
-        Wed,  4 May 2022 09:49:38 -0700 (PDT)
+        Wed, 4 May 2022 13:09:49 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8522047394;
+        Wed,  4 May 2022 09:56:32 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1D6356179D;
-        Wed,  4 May 2022 16:49:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6EFB9C385AF;
-        Wed,  4 May 2022 16:49:37 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EEEB5617D5;
+        Wed,  4 May 2022 16:56:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F6BEC385AF;
+        Wed,  4 May 2022 16:56:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651682977;
-        bh=Dwb02Osau8GmUCvQ29Xhjm10+rv6DHuZBLwLwxyTep0=;
+        s=korg; t=1651683391;
+        bh=5kiyZl3wv3CTm+GFIfjJaXI1i53KPSbQgo/RAbnYu2g=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HOvJ+ibEuRCSVeMdfcHbwWhSFZert0WJWF40eC1z8otNmjkX5wVqUKE/SeFWEyR/5
-         r9/QFlWVmCcPRJeLNZ8Ns6+WYL0ZWmuqFz9I73Y4t3dtXrjT2dDv8TmGIIUXCdwk5D
-         Wv17kbkT0wHgPpL9pyTSaOYe4p3NlSxQYHTJNo7Y=
+        b=PddjGtZjvYH9uwo5QxX0CNCU5Psw1v2SnX/b0D8cMBnkrIPpiFuLak+Xe//4u4sNE
+         oDv8gk0uzCHuFaezwUK6eMkL09Vr71yYWGVDxNDtKNs6k1UtkrZSCmKDTghbnGef0T
+         Vbmjn8UM/7nzaeswhhslG2XJTkAX2db0HztE0aN4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Daniel Starke <daniel.starke@siemens.com>
-Subject: [PATCH 5.4 80/84] tty: n_gsm: fix wrong command retry handling
+        stable@vger.kernel.org,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Tong Zhang <ztong0001@gmail.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 063/225] iio:imu:bmi160: disable regulator in error path
 Date:   Wed,  4 May 2022 18:45:01 +0200
-Message-Id: <20220504152933.811807345@linuxfoundation.org>
+Message-Id: <20220504153115.803995263@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220504152927.744120418@linuxfoundation.org>
-References: <20220504152927.744120418@linuxfoundation.org>
+In-Reply-To: <20220504153110.096069935@linuxfoundation.org>
+References: <20220504153110.096069935@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,66 +57,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Daniel Starke <daniel.starke@siemens.com>
+From: Tong Zhang <ztong0001@gmail.com>
 
-commit d0bcdffcad5a22f202e3bf37190c0dd8c080ea92 upstream.
+[ Upstream commit d926054d5565d3cfa2c7c3f7a48e79bcc10453ed ]
 
-n_gsm is based on the 3GPP 07.010 and its newer version is the 3GPP 27.010.
-See https://portal.3gpp.org/desktopmodules/Specifications/SpecificationDetails.aspx?specificationId=1516
-The changes from 07.010 to 27.010 are non-functional. Therefore, I refer to
-the newer 27.010 here. Chapter 5.7.3 states that the valid range for the
-maximum number of retransmissions (N2) is from 0 to 255 (both including).
-gsm_config() fails to limit this range correctly. Furthermore,
-gsm_control_retransmit() handles this number incorrectly by performing
-N2 - 1 retransmission attempts. Setting N2 to zero results in more than 255
-retransmission attempts.
-Fix the range check in gsm_config() and the value handling in
-gsm_control_send() and gsm_control_retransmit() to comply with 3GPP 27.010.
+Regulator should be disabled in error path as mentioned in _regulator_put().
+Also disable accel if gyro cannot be enabled.
 
-Fixes: e1eaea46bb40 ("tty: n_gsm line discipline")
-Cc: stable@vger.kernel.org
-Signed-off-by: Daniel Starke <daniel.starke@siemens.com>
-Link: https://lore.kernel.org/r/20220414094225.4527-11-daniel.starke@siemens.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+[   16.233604] WARNING: CPU: 0 PID: 2177 at drivers/regulator/core.c:2257 _regulator_put
+[   16.240453] Call Trace:
+[   16.240572]  <TASK>
+[   16.240676]  regulator_put+0x26/0x40
+[   16.240853]  regulator_bulk_free+0x26/0x50
+[   16.241050]  release_nodes+0x3f/0x70
+[   16.241225]  devres_release_group+0x147/0x1c0
+[   16.241441]  ? bmi160_core_probe+0x175/0x3a0 [bmi160_core]
+
+Fixes: 5dea3fb066f0 ("iio: imu: bmi160: added regulator support")
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Signed-off-by: Tong Zhang <ztong0001@gmail.com>
+Link: https://lore.kernel.org/r/20220327154005.806049-1-ztong0001@gmail.com
+Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/tty/n_gsm.c |    6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/iio/imu/bmi160/bmi160_core.c | 20 ++++++++++++++------
+ 1 file changed, 14 insertions(+), 6 deletions(-)
 
---- a/drivers/tty/n_gsm.c
-+++ b/drivers/tty/n_gsm.c
-@@ -1329,7 +1329,6 @@ static void gsm_control_retransmit(struc
- 	spin_lock_irqsave(&gsm->control_lock, flags);
- 	ctrl = gsm->pending_cmd;
- 	if (ctrl) {
--		gsm->cretries--;
- 		if (gsm->cretries == 0) {
- 			gsm->pending_cmd = NULL;
- 			ctrl->error = -ETIMEDOUT;
-@@ -1338,6 +1337,7 @@ static void gsm_control_retransmit(struc
- 			wake_up(&gsm->event);
- 			return;
- 		}
-+		gsm->cretries--;
- 		gsm_control_transmit(gsm, ctrl);
- 		mod_timer(&gsm->t2_timer, jiffies + gsm->t2 * HZ / 100);
+diff --git a/drivers/iio/imu/bmi160/bmi160_core.c b/drivers/iio/imu/bmi160/bmi160_core.c
+index 824b5124a5f5..01336105792e 100644
+--- a/drivers/iio/imu/bmi160/bmi160_core.c
++++ b/drivers/iio/imu/bmi160/bmi160_core.c
+@@ -730,7 +730,7 @@ static int bmi160_chip_init(struct bmi160_data *data, bool use_spi)
+ 
+ 	ret = regmap_write(data->regmap, BMI160_REG_CMD, BMI160_CMD_SOFTRESET);
+ 	if (ret)
+-		return ret;
++		goto disable_regulator;
+ 
+ 	usleep_range(BMI160_SOFTRESET_USLEEP, BMI160_SOFTRESET_USLEEP + 1);
+ 
+@@ -741,29 +741,37 @@ static int bmi160_chip_init(struct bmi160_data *data, bool use_spi)
+ 	if (use_spi) {
+ 		ret = regmap_read(data->regmap, BMI160_REG_DUMMY, &val);
+ 		if (ret)
+-			return ret;
++			goto disable_regulator;
  	}
-@@ -1378,7 +1378,7 @@ retry:
  
- 	/* If DLCI0 is in ADM mode skip retries, it won't respond */
- 	if (gsm->dlci[0]->mode == DLCI_MODE_ADM)
--		gsm->cretries = 1;
-+		gsm->cretries = 0;
- 	else
- 		gsm->cretries = gsm->n2;
+ 	ret = regmap_read(data->regmap, BMI160_REG_CHIP_ID, &val);
+ 	if (ret) {
+ 		dev_err(dev, "Error reading chip id\n");
+-		return ret;
++		goto disable_regulator;
+ 	}
+ 	if (val != BMI160_CHIP_ID_VAL) {
+ 		dev_err(dev, "Wrong chip id, got %x expected %x\n",
+ 			val, BMI160_CHIP_ID_VAL);
+-		return -ENODEV;
++		ret = -ENODEV;
++		goto disable_regulator;
+ 	}
  
-@@ -2268,7 +2268,7 @@ static int gsm_config(struct gsm_mux *gs
- 	/* Check the MRU/MTU range looks sane */
- 	if (c->mru > MAX_MRU || c->mtu > MAX_MTU || c->mru < 8 || c->mtu < 8)
- 		return -EINVAL;
--	if (c->n2 < 3)
-+	if (c->n2 > 255)
- 		return -EINVAL;
- 	if (c->encapsulation > 1)	/* Basic, advanced, no I */
- 		return -EINVAL;
+ 	ret = bmi160_set_mode(data, BMI160_ACCEL, true);
+ 	if (ret)
+-		return ret;
++		goto disable_regulator;
+ 
+ 	ret = bmi160_set_mode(data, BMI160_GYRO, true);
+ 	if (ret)
+-		return ret;
++		goto disable_accel;
+ 
+ 	return 0;
++
++disable_accel:
++	bmi160_set_mode(data, BMI160_ACCEL, false);
++
++disable_regulator:
++	regulator_bulk_disable(ARRAY_SIZE(data->supplies), data->supplies);
++	return ret;
+ }
+ 
+ static int bmi160_data_rdy_trigger_set_state(struct iio_trigger *trig,
+-- 
+2.35.1
+
 
 

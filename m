@@ -2,46 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C50E751A9BA
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:18:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C0AF51A6B8
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 18:54:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356908AbiEDRTK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 13:19:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51434 "EHLO
+        id S1354497AbiEDQ6T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 12:58:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356333AbiEDRFJ (ORCPT
+        with ESMTP id S1354476AbiEDQy3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 13:05:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DC2C50B32;
-        Wed,  4 May 2022 09:54:03 -0700 (PDT)
+        Wed, 4 May 2022 12:54:29 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BF964969D;
+        Wed,  4 May 2022 09:49:39 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2EA9A61505;
-        Wed,  4 May 2022 16:54:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5AA22C385BA;
-        Wed,  4 May 2022 16:54:01 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B3540B8279F;
+        Wed,  4 May 2022 16:49:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6204EC385A4;
+        Wed,  4 May 2022 16:49:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651683241;
-        bh=+ajv8gDEINzpPt5k/lZ7YsXmqVeb/TEI1e3IDVzr2uw=;
+        s=korg; t=1651682976;
+        bh=JRE8OAckK6Z2/pZaQdU2BPmNB27yYOJnPnYlHynw71Q=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dMgOkPMFKeLZAF7jGYZ8YjqmwtXq7rOPhct9SO77hvcnqoBC/DQaYwRrU4lDgn52n
-         aIN8lY1S06ECRWEw0CgsmjoQ/1fmmFsxwYdzIz68/75ZLkHjdoNj/oZa+4Iri/Yd21
-         bj8FPwIXafHPNv+InZgMrvntNwwXQX+XKvaFdIrk=
+        b=LRkvf9/F2iISU9yWuPr5OAAi3oBmFaweWKZ/s/CpUjPW2/sGE9Hn0OCbAFuwJaRft
+         KyRdRFbkzuLxzfAFuAHdG273HyKrVzNXQk+DxGEx8qkgh4OE9+D1MUhRHhRARSFabO
+         MUXHCHnWcn+j2MFMegr9WpJ5G2XKVCR5rI/C47a8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jonathan Lemon <jonathan.lemon@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 106/177] net: bcmgenet: hide status block before TX timestamping
-Date:   Wed,  4 May 2022 18:44:59 +0200
-Message-Id: <20220504153102.722994656@linuxfoundation.org>
+        stable@vger.kernel.org, Daniel Starke <daniel.starke@siemens.com>
+Subject: [PATCH 5.4 79/84] tty: n_gsm: fix missing explicit ldisc flush
+Date:   Wed,  4 May 2022 18:45:00 +0200
+Message-Id: <20220504152933.753555817@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220504153053.873100034@linuxfoundation.org>
-References: <20220504153053.873100034@linuxfoundation.org>
+In-Reply-To: <20220504152927.744120418@linuxfoundation.org>
+References: <20220504152927.744120418@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,61 +53,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jonathan Lemon <jonathan.lemon@gmail.com>
+From: Daniel Starke <daniel.starke@siemens.com>
 
-[ Upstream commit acac0541d1d65e81e599ec399d34d184d2424401 ]
+commit 17eac652028501df7ea296b1d9b9c134db262b7d upstream.
 
-The hardware checksum offloading requires use of a transmit
-status block inserted before the outgoing frame data, this was
-updated in '9a9ba2a4aaaa ("net: bcmgenet: always enable status blocks")'
+In gsm_cleanup_mux() the muxer is closed down and all queues are removed.
+However, removing the queues is done without explicit control of the
+underlying buffers. Flush those before freeing up our queues to ensure
+that all outgoing queues are cleared consistently. Otherwise, a new mux
+connection establishment attempt may time out while the underlying tty is
+still busy sending out the remaining data from the previous connection.
 
-However, skb_tx_timestamp() assumes that it is passed a raw frame
-and PTP parsing chokes on this status block.
-
-Fix this by calling __skb_pull(), which hides the TSB before calling
-skb_tx_timestamp(), so an outgoing PTP packet is parsed correctly.
-
-As the data in the skb has already been set up for DMA, and the
-dma_unmap_* calls use a separately stored address, there is no
-no effective change in the data transmission.
-
-Signed-off-by: Jonathan Lemon <jonathan.lemon@gmail.com>
-Acked-by: Florian Fainelli <f.fainelli@gmail.com>
-Link: https://lore.kernel.org/r/20220424165307.591145-1-jonathan.lemon@gmail.com
-Fixes: d03825fba459 ("net: bcmgenet: add skb_tx_timestamp call")
-Signed-off-by: Paolo Abeni <pabeni@redhat.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: e1eaea46bb40 ("tty: n_gsm line discipline")
+Cc: stable@vger.kernel.org
+Signed-off-by: Daniel Starke <daniel.starke@siemens.com>
+Link: https://lore.kernel.org/r/20220414094225.4527-10-daniel.starke@siemens.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/broadcom/genet/bcmgenet.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+ drivers/tty/n_gsm.c |    1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/net/ethernet/broadcom/genet/bcmgenet.c b/drivers/net/ethernet/broadcom/genet/bcmgenet.c
-index b4f99dd284e5..8bcc39b1575c 100644
---- a/drivers/net/ethernet/broadcom/genet/bcmgenet.c
-+++ b/drivers/net/ethernet/broadcom/genet/bcmgenet.c
-@@ -1991,6 +1991,11 @@ static struct sk_buff *bcmgenet_add_tsb(struct net_device *dev,
- 	return skb;
- }
- 
-+static void bcmgenet_hide_tsb(struct sk_buff *skb)
-+{
-+	__skb_pull(skb, sizeof(struct status_64));
-+}
-+
- static netdev_tx_t bcmgenet_xmit(struct sk_buff *skb, struct net_device *dev)
- {
- 	struct bcmgenet_priv *priv = netdev_priv(dev);
-@@ -2097,6 +2102,8 @@ static netdev_tx_t bcmgenet_xmit(struct sk_buff *skb, struct net_device *dev)
- 	}
- 
- 	GENET_CB(skb)->last_cb = tx_cb_ptr;
-+
-+	bcmgenet_hide_tsb(skb);
- 	skb_tx_timestamp(skb);
- 
- 	/* Decrement total BD count and advance our write pointer */
--- 
-2.35.1
-
+--- a/drivers/tty/n_gsm.c
++++ b/drivers/tty/n_gsm.c
+@@ -2101,6 +2101,7 @@ static void gsm_cleanup_mux(struct gsm_m
+ 			gsm_dlci_release(gsm->dlci[i]);
+ 	mutex_unlock(&gsm->mutex);
+ 	/* Now wipe the queues */
++	tty_ldisc_flush(gsm->tty);
+ 	list_for_each_entry_safe(txq, ntxq, &gsm->tx_list, list)
+ 		kfree(txq);
+ 	INIT_LIST_HEAD(&gsm->tx_list);
 
 

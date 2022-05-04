@@ -2,172 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 439C951A2F9
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 17:03:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C56D51A2EC
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 17:02:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351734AbiEDPGF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 11:06:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54032 "EHLO
+        id S1351698AbiEDPFi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 11:05:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351738AbiEDPFy (ORCPT
+        with ESMTP id S1350502AbiEDPFg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 11:05:54 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C4391C125;
-        Wed,  4 May 2022 08:02:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651676533; x=1683212533;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=IvFXkRXbvHPObyixE1YmNeS0d+XfUnkt8S7gVuXki5k=;
-  b=AVpvhVXfARB44JLHtYUqyTI3Ba+GNbflUmhnQlTLb6Z5Vi/ehwZvmtEG
-   vYU7qgh7dZY1oA31XpUj/ZHeUiYrRyUm68Ng3CWXfFEniW83Jooyk8F0m
-   h+iaZFxTo7fOWwPrPjReAe269vESR67K2quQADox0hfW6E2ZfLXkp3d/E
-   G1StITImQ92ry0A5hpl8UO2+jllCIk4IiOxdUx5U2/6llIIe9rGIRWJSn
-   0JMJnDuKTOTcX5Qdq4daWCuCqX2WdZ2VXmMpV2b063YqPw92FsI4dt3GE
-   3DFIyU5n2UN6KdirK9HmqYRMWXdB/tfX7mN5dksF4dzyRDrLe/fIlZQ3V
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10337"; a="266633377"
-X-IronPort-AV: E=Sophos;i="5.91,198,1647327600"; 
-   d="scan'208";a="266633377"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2022 08:02:10 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,198,1647327600"; 
-   d="scan'208";a="568139943"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 04 May 2022 08:02:06 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nmGVx-000BSn-K8;
-        Wed, 04 May 2022 15:02:05 +0000
-Date:   Wed, 4 May 2022 23:01:19 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Seth Forshee <sforshee@digitalocean.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andy Lutomirski <luto@kernel.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Petr Mladek <pmladek@suse.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        linux-kernel@vger.kernel.org, live-patching@vger.kernel.org,
-        kvm@vger.kernel.org
-Subject: Re: [PATCH v2] entry/kvm: Make vCPU tasks exit to userspace when a
- livepatch is pending
-Message-ID: <202205042204.CiMJBtiY-lkp@intel.com>
-References: <20220503174934.2641605-1-sforshee@digitalocean.com>
+        Wed, 4 May 2022 11:05:36 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 687A21929B;
+        Wed,  4 May 2022 08:01:59 -0700 (PDT)
+Date:   Wed, 04 May 2022 15:01:55 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1651676517;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=E8Sl1BJzx5VZlK5935vDmJX+/Vd3hQyvhjrYXeHfdtc=;
+        b=XI5LfGtNHhobMsq08iRDRcopiZIq0bV5PO3S8CjsO6Xa1KS2iKoca0nIbvnjMGVZ8C1V9f
+        6R3N1vUeY+1Bsw5p2LdrLcQPmCo5l1TF3MA8cdHWIKP2NeQixry65VriVsPwlHD7Oa/AUa
+        uo0dYVffpOYMznFB32psdd8RGsprr+3zmD5KfvkQC3tANZCrXSAMKDrIeH3JvPLPxZEgtn
+        /8FeIKGVQrctp5aBFovUgZsbM8XYCvz3jZptCkuIBlLK79Uu4t0Jso38+IjCQU3LVmRiu9
+        cCxolY9hFyaqyndBd7jAgdeC0QOwZL1vDxMkZpG1DozPYWQjaVaRYXRn8+pHNw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1651676517;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=E8Sl1BJzx5VZlK5935vDmJX+/Vd3hQyvhjrYXeHfdtc=;
+        b=MS3Eq1DoyPJk9fTfQuH9TayUh7IM2+QztHjHOqksRKFhL4k93m9wFzh9vtDHjNO3H+T/e/
+        yXRs0hRtSNr/SBAg==
+From:   "tip-bot2 for Randy Dunlap" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/misc] x86: Fix return value of __setup handlers
+Cc:     Igor Zhbanov <i.zhbanov@omprussia.ru>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Borislav Petkov <bp@suse.de>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <64644a2f-4a20-bab3-1e15-3b2cdd0defe3@omprussia.ru>
+References: <64644a2f-4a20-bab3-1e15-3b2cdd0defe3@omprussia.ru>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220503174934.2641605-1-sforshee@digitalocean.com>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Message-ID: <165167651582.4207.15476698597517980214.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Seth,
+The following commit has been merged into the x86/misc branch of tip:
 
-Thank you for the patch! Yet something to improve:
+Commit-ID:     12441ccdf5e2f5a01a46e344976cbbd3d46845c9
+Gitweb:        https://git.kernel.org/tip/12441ccdf5e2f5a01a46e344976cbbd3d46845c9
+Author:        Randy Dunlap <rdunlap@infradead.org>
+AuthorDate:    Sun, 13 Mar 2022 18:27:25 -07:00
+Committer:     Borislav Petkov <bp@suse.de>
+CommitterDate: Wed, 04 May 2022 16:47:57 +02:00
 
-[auto build test ERROR on v5.18-rc5]
-[also build test ERROR on next-20220504]
-[cannot apply to tip/core/entry]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+x86: Fix return value of __setup handlers
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Seth-Forshee/entry-kvm-Make-vCPU-tasks-exit-to-userspace-when-a-livepatch-is-pending/20220504-015159
-base:    672c0c5173427e6b3e2a9bbb7be51ceeec78093a
-config: arm64-randconfig-r003-20220501 (https://download.01.org/0day-ci/archive/20220504/202205042204.CiMJBtiY-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 363b3a645a1e30011cc8da624f13dac5fd915628)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/1c97c02f02b9f8e6b8e1f11657f950510f9c828e
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Seth-Forshee/entry-kvm-Make-vCPU-tasks-exit-to-userspace-when-a-livepatch-is-pending/20220504-015159
-        git checkout 1c97c02f02b9f8e6b8e1f11657f950510f9c828e
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
+__setup() handlers should return 1 to obsolete_checksetup() in
+init/main.c to indicate that the boot option has been handled. A return
+of 0 causes the boot option/value to be listed as an Unknown kernel
+parameter and added to init's (limited) argument (no '=') or environment
+(with '=') strings. So return 1 from these x86 __setup handlers.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Examples:
 
-All errors (new ones prefixed by >>):
+  Unknown kernel command line parameters "apicpmtimer
+    BOOT_IMAGE=/boot/bzImage-517rc8 vdso=1 ring3mwait=disable", will be
+    passed to user space.
 
-   In file included from arch/arm64/kvm/arm.c:9:
->> include/linux/entry-kvm.h:80:22: error: use of undeclared identifier '_TIF_PATCH_PENDING'
-           return !!(ti_work & XFER_TO_GUEST_MODE_WORK);
-                               ^
-   include/linux/entry-kvm.h:20:41: note: expanded from macro 'XFER_TO_GUEST_MODE_WORK'
-           (_TIF_NEED_RESCHED | _TIF_SIGPENDING | _TIF_PATCH_PENDING |     \
-                                                  ^
-   In file included from arch/arm64/kvm/arm.c:17:
-   include/linux/mman.h:158:9: warning: division by zero is undefined [-Wdivision-by-zero]
-                  _calc_vm_trans(flags, MAP_SYNC,       VM_SYNC      ) |
-                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/mman.h:136:21: note: expanded from macro '_calc_vm_trans'
-      : ((x) & (bit1)) / ((bit1) / (bit2))))
-                       ^ ~~~~~~~~~~~~~~~~~
-   1 warning and 1 error generated.
---
-   In file included from kernel/entry/kvm.c:3:
->> include/linux/entry-kvm.h:80:22: error: use of undeclared identifier '_TIF_PATCH_PENDING'
-           return !!(ti_work & XFER_TO_GUEST_MODE_WORK);
-                               ^
-   include/linux/entry-kvm.h:20:41: note: expanded from macro 'XFER_TO_GUEST_MODE_WORK'
-           (_TIF_NEED_RESCHED | _TIF_SIGPENDING | _TIF_PATCH_PENDING |     \
-                                                  ^
->> kernel/entry/kvm.c:22:36: error: use of undeclared identifier '_TIF_PATCH_PENDING'
-                   if (ti_work & (_TIF_SIGPENDING | _TIF_PATCH_PENDING)) {
-                                                    ^
-   kernel/entry/kvm.c:38:21: error: use of undeclared identifier '_TIF_PATCH_PENDING'
-           } while (ti_work & XFER_TO_GUEST_MODE_WORK || need_resched());
-                              ^
-   include/linux/entry-kvm.h:20:41: note: expanded from macro 'XFER_TO_GUEST_MODE_WORK'
-           (_TIF_NEED_RESCHED | _TIF_SIGPENDING | _TIF_PATCH_PENDING |     \
-                                                  ^
-   kernel/entry/kvm.c:55:18: error: use of undeclared identifier '_TIF_PATCH_PENDING'
-           if (!(ti_work & XFER_TO_GUEST_MODE_WORK))
-                           ^
-   include/linux/entry-kvm.h:20:41: note: expanded from macro 'XFER_TO_GUEST_MODE_WORK'
-           (_TIF_NEED_RESCHED | _TIF_SIGPENDING | _TIF_PATCH_PENDING |     \
-                                                  ^
-   4 errors generated.
+  Run /sbin/init as init process
+   with arguments:
+     /sbin/init
+     apicpmtimer
+   with environment:
+     HOME=/
+     TERM=linux
+     BOOT_IMAGE=/boot/bzImage-517rc8
+     vdso=1
+     ring3mwait=disable
 
+Fixes: 2aae950b21e4 ("x86_64: Add vDSO for x86-64 with gettimeofday/clock_gettime/getcpu")
+Fixes: 77b52b4c5c66 ("x86: add "debugpat" boot option")
+Fixes: e16fd002afe2 ("x86/cpufeature: Enable RING3MWAIT for Knights Landing")
+Fixes: b8ce33590687 ("x86_64: convert to clock events")
+Reported-by: Igor Zhbanov <i.zhbanov@omprussia.ru>
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Link: https://lore.kernel.org/r/64644a2f-4a20-bab3-1e15-3b2cdd0defe3@omprussia.ru
+Link: https://lore.kernel.org/r/20220314012725.26661-1-rdunlap@infradead.org
+---
+ arch/x86/entry/vdso/vma.c   | 2 +-
+ arch/x86/kernel/apic/apic.c | 2 +-
+ arch/x86/kernel/cpu/intel.c | 2 +-
+ arch/x86/mm/pat/memtype.c   | 2 +-
+ 4 files changed, 4 insertions(+), 4 deletions(-)
 
-vim +/_TIF_PATCH_PENDING +80 include/linux/entry-kvm.h
-
-4ae7dc97f726ea Frederic Weisbecker 2021-02-01  67  
-935ace2fb5cc49 Thomas Gleixner     2020-07-22  68  /**
-935ace2fb5cc49 Thomas Gleixner     2020-07-22  69   * __xfer_to_guest_mode_work_pending - Check if work is pending
-935ace2fb5cc49 Thomas Gleixner     2020-07-22  70   *
-935ace2fb5cc49 Thomas Gleixner     2020-07-22  71   * Returns: True if work pending, False otherwise.
-935ace2fb5cc49 Thomas Gleixner     2020-07-22  72   *
-935ace2fb5cc49 Thomas Gleixner     2020-07-22  73   * Bare variant of xfer_to_guest_mode_work_pending(). Can be called from
-935ace2fb5cc49 Thomas Gleixner     2020-07-22  74   * interrupt enabled code for racy quick checks with care.
-935ace2fb5cc49 Thomas Gleixner     2020-07-22  75   */
-935ace2fb5cc49 Thomas Gleixner     2020-07-22  76  static inline bool __xfer_to_guest_mode_work_pending(void)
-935ace2fb5cc49 Thomas Gleixner     2020-07-22  77  {
-6ce895128b3bff Mark Rutland        2021-11-29  78  	unsigned long ti_work = read_thread_flags();
-935ace2fb5cc49 Thomas Gleixner     2020-07-22  79  
-935ace2fb5cc49 Thomas Gleixner     2020-07-22 @80  	return !!(ti_work & XFER_TO_GUEST_MODE_WORK);
-935ace2fb5cc49 Thomas Gleixner     2020-07-22  81  }
-935ace2fb5cc49 Thomas Gleixner     2020-07-22  82  
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+diff --git a/arch/x86/entry/vdso/vma.c b/arch/x86/entry/vdso/vma.c
+index 235a579..1000d45 100644
+--- a/arch/x86/entry/vdso/vma.c
++++ b/arch/x86/entry/vdso/vma.c
+@@ -438,7 +438,7 @@ bool arch_syscall_is_vdso_sigreturn(struct pt_regs *regs)
+ static __init int vdso_setup(char *s)
+ {
+ 	vdso64_enabled = simple_strtoul(s, NULL, 0);
+-	return 0;
++	return 1;
+ }
+ __setup("vdso=", vdso_setup);
+ 
+diff --git a/arch/x86/kernel/apic/apic.c b/arch/x86/kernel/apic/apic.c
+index b70344b..ed7d9cf 100644
+--- a/arch/x86/kernel/apic/apic.c
++++ b/arch/x86/kernel/apic/apic.c
+@@ -170,7 +170,7 @@ static __init int setup_apicpmtimer(char *s)
+ {
+ 	apic_calibrate_pmtmr = 1;
+ 	notsc_setup(NULL);
+-	return 0;
++	return 1;
+ }
+ __setup("apicpmtimer", setup_apicpmtimer);
+ #endif
+diff --git a/arch/x86/kernel/cpu/intel.c b/arch/x86/kernel/cpu/intel.c
+index 8321c43..350c247 100644
+--- a/arch/x86/kernel/cpu/intel.c
++++ b/arch/x86/kernel/cpu/intel.c
+@@ -91,7 +91,7 @@ static bool ring3mwait_disabled __read_mostly;
+ static int __init ring3mwait_disable(char *__unused)
+ {
+ 	ring3mwait_disabled = true;
+-	return 0;
++	return 1;
+ }
+ __setup("ring3mwait=disable", ring3mwait_disable);
+ 
+diff --git a/arch/x86/mm/pat/memtype.c b/arch/x86/mm/pat/memtype.c
+index 4ba2a3e..d5ef64d 100644
+--- a/arch/x86/mm/pat/memtype.c
++++ b/arch/x86/mm/pat/memtype.c
+@@ -101,7 +101,7 @@ int pat_debug_enable;
+ static int __init pat_debug_setup(char *str)
+ {
+ 	pat_debug_enable = 1;
+-	return 0;
++	return 1;
+ }
+ __setup("debugpat", pat_debug_setup);
+ 

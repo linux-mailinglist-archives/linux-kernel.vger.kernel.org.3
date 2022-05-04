@@ -2,149 +2,253 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B31A51AC94
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 20:18:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8603C51AC95
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 20:18:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354674AbiEDSVu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 14:21:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40872 "EHLO
+        id S242068AbiEDSWW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 14:22:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376968AbiEDSVc (ORCPT
+        with ESMTP id S1376787AbiEDSWM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 14:21:32 -0400
-Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4055A61294
-        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 10:43:57 -0700 (PDT)
-Received: by mail-yb1-xb2c.google.com with SMTP id w17so3623846ybh.9
-        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 10:43:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=K1n9fpldTiBt4+7bTClyqmjUIHytSrQ70M4AzMF65Pc=;
-        b=A/qVfvoBR7m65lufNi580qn7sweKa3qFysR8AOSrAEJ7mMjEh3aSQhMkP/nVDxJXr0
-         5gYeioggSEAMajiBMNyNUIMObE+Fg6rfKZKEWaGabAKTGY8o+8NhuiiMs2T8QLjAc2In
-         e/SVZSpDn9tBcic/nrjIhGmE17asrK1EKWDliqOPiWhTvV6EG6+WuNnKSPPnltbdXuDb
-         R9c2sZFImzk/P4ozL7d+2l/Jd/Gq9VZ9U49tf1RJbOaxItbB5sXdaolvuA/lS2F7Lwpi
-         zMSNJkt47gNFNvIA/N1p0FcOToKUisCexxbdduq8ngZxmKbSTYcv1VgxTZGdbvBVMdrf
-         jEkw==
+        Wed, 4 May 2022 14:22:12 -0400
+Received: from mail-lj1-f180.google.com (mail-lj1-f180.google.com [209.85.208.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEAD19419A;
+        Wed,  4 May 2022 10:44:55 -0700 (PDT)
+Received: by mail-lj1-f180.google.com with SMTP id 16so2566280lju.13;
+        Wed, 04 May 2022 10:44:55 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=K1n9fpldTiBt4+7bTClyqmjUIHytSrQ70M4AzMF65Pc=;
-        b=SZaiWJwhIRnjXCYVTEgVXhrMLGyve9P1Nqz1aM7BLT7eM6ViezxjCDtKe7q4hYsib5
-         w66sOCJaaKxYOe0x7xvMuFaDEvpYZ0hDKaKOhlIo16YWmx7F73HyKXpwHWNHq4egb5Lh
-         AAL7G7EZ9BWJvewfC0/XBpfjxsOwg/hCcC+9tAR9tAKLKCxn31lr2M8fi6cLGRnObt+6
-         Wd2rO36s9uOYRDSEbSUyNcIfJBI0OrBhZrtSABj+E75eAPhSZMO7xfmvisxNGnFiW7B9
-         rOj1EKujXmE5x+WKMMRTITuECvHl65KZLUWFI7wtFX2eFqHPl8sLAKuSRFxTT37L3Liv
-         EXBg==
-X-Gm-Message-State: AOAM533QWxhNV342t7n58+Fa0czB73VWxFONQzPWRrmmjCRwo9DLE3Wn
-        qQtQGggCja1sITbnQdZpAYMlvGDnBKal4sOGWOdIrlITJl3RpQ==
-X-Google-Smtp-Source: ABdhPJzLe2h1An4Fs9MeIuSmoDbxLHlp73p6tTRs2p/M7zbc6blBeZDp8hE9uOb5Up99bp6rqfPv7sjz7KWrQFaTYFk=
-X-Received: by 2002:a25:8045:0:b0:648:a9b3:96d0 with SMTP id
- a5-20020a258045000000b00648a9b396d0mr17625426ybn.88.1651686235567; Wed, 04
- May 2022 10:43:55 -0700 (PDT)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=+Q6SqrbYZWFx128//isZIV7PZCyMyA/oWJ4+i+1SqpQ=;
+        b=SJR3L8zR+8d5bvgbzKtIzYLsLn8vbBLACQi5XNP5Oe0LL5pb8Jj0iVXOS9WzKkLLo8
+         R7L46ho6bcD4h8A0eHDiReXAhwQl2V90VUA4hLlt50WpaPGXDZPcB+qt8aYRHhoD9N6Z
+         SB3AcjlfJVv9FZzLnfKsdN7ayNQAqNybVCMS/KoytSs9kFHomRhOFm14NSEuEhckHf2Y
+         84VYHeBADSymMa9q6bLzp7Dxs3QuAIO68LjuMNjtrStwpl/RfT4VFqTyK9eLmr8mwMnj
+         7qzDFp02DCO7Z2OpeZ8nZosRR51fVboyJq2Dbl8Igk91/P6l45f6BfBRrSVVjp28WMBN
+         fU4g==
+X-Gm-Message-State: AOAM530PR/s5mLu4x5BloR8zWeH/1la9AOAntgCwKKjdT32ezH+VKpoq
+        LBmlZVJHWNsPOz7GBNm3Cxnt4WvKNbywVeWX/gI=
+X-Google-Smtp-Source: ABdhPJw5AG2YrsW1npAHOjDJcRGDqpWprXLTivDEJBhDfskMirP6cXddjRw+ysx5IcErE5BpV0J65ztG3PNK5JqfwJs=
+X-Received: by 2002:a2e:7e05:0:b0:24f:12e3:6602 with SMTP id
+ z5-20020a2e7e05000000b0024f12e36602mr12689874ljc.202.1651686293418; Wed, 04
+ May 2022 10:44:53 -0700 (PDT)
 MIME-Version: 1.0
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Wed, 4 May 2022 23:13:43 +0530
-Message-ID: <CA+G9fYvLE9Rjw3h6styZj9un8hVd7rPS-H5EOVY6bi03PP0BJA@mail.gmail.com>
-Subject: [next] arm: include/linux/compiler_types.h:352:38: error: call to
- '__compiletime_assert_295' declared with attribute error: BUILD_BUG failed
-To:     open list <linux-kernel@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        lkft-triage@lists.linaro.org
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>, Arnd Bergmann <arnd@arndb.de>
+References: <20220503041757.2365696-1-irogers@google.com> <20220503041757.2365696-2-irogers@google.com>
+In-Reply-To: <20220503041757.2365696-2-irogers@google.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+Date:   Wed, 4 May 2022 10:44:42 -0700
+Message-ID: <CAM9d7cia6OT5Mk13R36CwZW8iwVWtsyQVBE7s1+NKhh+dT93Vg@mail.gmail.com>
+Subject: Re: [PATCH v5 1/6] perf cpumap: Switch to using perf_cpu_map API
+To:     Ian Rogers <irogers@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        John Garry <john.garry@huawei.com>,
+        Will Deacon <will@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        James Clark <james.clark@arm.com>,
+        German Gomez <german.gomez@arm.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Riccardo Mancini <rickyman7@gmail.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
+        Alexander Antonov <alexander.antonov@linux.intel.com>,
+        linux-perf-users <linux-perf-users@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Stephane Eranian <eranian@google.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Following build regressions noticed On Linux next-20220405.
+Hi Ian,
 
-Regressions found on arm:
+On Mon, May 2, 2022 at 9:18 PM Ian Rogers <irogers@google.com> wrote:
+>
+> Switch some raw accesses to the cpu map to using the library API. This
+> can help with reference count checking. Some BPF cases switch from index
+> to CPU for consistency, this shouldn't matter as the CPU map is full.
+>
+> Signed-off-by: Ian Rogers <irogers@google.com>
 
-   - gcc-10-lkftconfig-kselftest
-   - gcc-9-omap2plus_defconfig
-   - clang-11-omap2plus_defconfig
-   - gcc-10-lkftconfig-kasan
-   - clang-12-omap2plus_defconfig
-   - clang-nightly-omap2plus_defconfig
-   - gcc-10-omap2plus_defconfig
-   - clang-13-lkftconfig
-   - gcc-10-lkftconfig-kunit
-   - gcc-8-omap2plus_defconfig
-   - gcc-10-lkftconfig-libgpiod
-   - clang-13-omap2plus_defconfig
-   - clang-14-lkftconfig
-   - clang-14-omap2plus_defconfig
-   - gcc-10-lkftconfig
-   - gcc-11-omap2plus_defconfig
-   - clang-nightly-lkftconfig
-   - gcc-10-lkftconfig-debug-kmemleak
-   - clang-12-lkftconfig
-   - gcc-10-lkftconfig-perf
-   - gcc-10-lkftconfig-debug
-   - gcc-10-lkftconfig-rcutorture
+Acked-by: Namhyung Kim <namhyung@kernel.org>
+
+Thanks,
+Namhyung
 
 
-Build error:
-------------
-make --silent --keep-going --jobs=8
-O=/home/tuxbuild/.cache/tuxmake/builds/1/build ARCH=arm
-CROSS_COMPILE=arm-linux-gnueabihf- 'CC=sccache
-arm-linux-gnueabihf-gcc' 'HOSTCC=sccache gcc'
-In file included from <command-line>:
-mm/shmem.c: In function 'shmem_add_to_page_cache':
-include/linux/compiler_types.h:352:38: error: call to
-'__compiletime_assert_295' declared with attribute error: BUILD_BUG
-failed
-  352 |  _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-      |                                      ^
-include/linux/compiler_types.h:333:4: note: in definition of macro
-'__compiletime_assert'
-  333 |    prefix ## suffix();    \
-      |    ^~~~~~
-include/linux/compiler_types.h:352:2: note: in expansion of macro
-'_compiletime_assert'
-  352 |  _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-      |  ^~~~~~~~~~~~~~~~~~~
-include/linux/build_bug.h:39:37: note: in expansion of macro
-'compiletime_assert'
-   39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
-      |                                     ^~~~~~~~~~~~~~~~~~
-include/linux/build_bug.h:59:21: note: in expansion of macro 'BUILD_BUG_ON_MSG'
-   59 | #define BUILD_BUG() BUILD_BUG_ON_MSG(1, "BUILD_BUG failed")
-      |                     ^~~~~~~~~~~~~~~~
-include/linux/vm_event_item.h:148:30: note: in expansion of macro 'BUILD_BUG'
-  148 | #define THP_FILE_FALLBACK ({ BUILD_BUG(); 0; })
-      |                              ^~~~~~~~~
-mm/shmem.c:721:20: note: in expansion of macro 'THP_FILE_FALLBACK'
-  721 |     count_vm_event(THP_FILE_FALLBACK);
-      |                    ^~~~~~~~~~~~~~~~~
-make[2]: *** [scripts/Makefile.build:288: mm/shmem.o] Error 1
-make[2]: Target '__build' not remade because of errors.
-
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-
-Steps to reproduce:
----------------------
-# To install tuxmake on your system globally:
-# sudo pip3 install -U tuxmake
-
-tuxmake --runtime podman --target-arch arm --toolchain gcc-10
---kconfig https://builds.tuxbuild.com/28hlyiP2D23NEFj3GPtiLeUE2Qy/config
-
-Build link:
-https://builds.tuxbuild.com/28hlyiP2D23NEFj3GPtiLeUE2Qy/
-
---
-Linaro LKFT
-https://lkft.linaro.org
+> ---
+>  tools/perf/builtin-record.c          | 13 +++++----
+>  tools/perf/util/bpf_counter_cgroup.c | 42 +++++++++++++---------------
+>  2 files changed, 26 insertions(+), 29 deletions(-)
+>
+> diff --git a/tools/perf/builtin-record.c b/tools/perf/builtin-record.c
+> index 069825c48d40..a5cf6a99d67f 100644
+> --- a/tools/perf/builtin-record.c
+> +++ b/tools/perf/builtin-record.c
+> @@ -1011,7 +1011,7 @@ static int record__thread_data_init_maps(struct record_thread *thread_data, stru
+>
+>         for (m = 0, tm = 0; m < nr_mmaps && tm < thread_data->nr_mmaps; m++) {
+>                 if (cpu_map__is_dummy(cpus) ||
+> -                   test_bit(cpus->map[m].cpu, thread_data->mask->maps.bits)) {
+> +                   test_bit(perf_cpu_map__cpu(cpus, m).cpu, thread_data->mask->maps.bits)) {
+>                         if (thread_data->maps) {
+>                                 thread_data->maps[tm] = &mmap[m];
+>                                 pr_debug2("thread_data[%p]: cpu%d: maps[%d] -> mmap[%d]\n",
+> @@ -3331,13 +3331,14 @@ struct option *record_options = __record_options;
+>
+>  static void record__mmap_cpu_mask_init(struct mmap_cpu_mask *mask, struct perf_cpu_map *cpus)
+>  {
+> -       int c;
+> +       struct perf_cpu cpu;
+> +       int idx;
+>
+>         if (cpu_map__is_dummy(cpus))
+>                 return;
+>
+> -       for (c = 0; c < cpus->nr; c++)
+> -               set_bit(cpus->map[c].cpu, mask->bits);
+> +       perf_cpu_map__for_each_cpu(cpu, idx, cpus)
+> +               set_bit(cpu.cpu, mask->bits);
+>  }
+>
+>  static int record__mmap_cpu_mask_init_spec(struct mmap_cpu_mask *mask, const char *mask_spec)
+> @@ -3404,8 +3405,8 @@ static int record__init_thread_cpu_masks(struct record *rec, struct perf_cpu_map
+>         pr_debug("nr_threads: %d\n", rec->nr_threads);
+>
+>         for (t = 0; t < rec->nr_threads; t++) {
+> -               set_bit(cpus->map[t].cpu, rec->thread_masks[t].maps.bits);
+> -               set_bit(cpus->map[t].cpu, rec->thread_masks[t].affinity.bits);
+> +               set_bit(perf_cpu_map__cpu(cpus, t).cpu, rec->thread_masks[t].maps.bits);
+> +               set_bit(perf_cpu_map__cpu(cpus, t).cpu, rec->thread_masks[t].affinity.bits);
+>                 if (verbose) {
+>                         pr_debug("thread_masks[%d]: ", t);
+>                         mmap_cpu_mask__scnprintf(&rec->thread_masks[t].maps, "maps");
+> diff --git a/tools/perf/util/bpf_counter_cgroup.c b/tools/perf/util/bpf_counter_cgroup.c
+> index ac60c08e8e2a..63b9db657442 100644
+> --- a/tools/perf/util/bpf_counter_cgroup.c
+> +++ b/tools/perf/util/bpf_counter_cgroup.c
+> @@ -46,8 +46,8 @@ static int bperf_load_program(struct evlist *evlist)
+>         struct bpf_link *link;
+>         struct evsel *evsel;
+>         struct cgroup *cgrp, *leader_cgrp;
+> -       __u32 i, cpu;
+> -       __u32 nr_cpus = evlist->core.all_cpus->nr;
+> +       int i, j;
+> +       struct perf_cpu cpu;
+>         int total_cpus = cpu__max_cpu().cpu;
+>         int map_size, map_fd;
+>         int prog_fd, err;
+> @@ -93,9 +93,9 @@ static int bperf_load_program(struct evlist *evlist)
+>                 goto out;
+>         }
+>
+> -       for (i = 0; i < nr_cpus; i++) {
+> +       perf_cpu_map__for_each_cpu(cpu, i, evlist->core.all_cpus) {
+>                 link = bpf_program__attach_perf_event(skel->progs.on_cgrp_switch,
+> -                                                     FD(cgrp_switch, i));
+> +                                                     FD(cgrp_switch, cpu.cpu));
+>                 if (IS_ERR(link)) {
+>                         pr_err("Failed to attach cgroup program\n");
+>                         err = PTR_ERR(link);
+> @@ -122,10 +122,9 @@ static int bperf_load_program(struct evlist *evlist)
+>                         }
+>
+>                         map_fd = bpf_map__fd(skel->maps.events);
+> -                       for (cpu = 0; cpu < nr_cpus; cpu++) {
+> -                               int fd = FD(evsel, cpu);
+> -                               __u32 idx = evsel->core.idx * total_cpus +
+> -                                       evlist->core.all_cpus->map[cpu].cpu;
+> +                       perf_cpu_map__for_each_cpu(cpu, j, evlist->core.all_cpus) {
+> +                               int fd = FD(evsel, cpu.cpu);
+> +                               __u32 idx = evsel->core.idx * total_cpus + cpu.cpu;
+>
+>                                 err = bpf_map_update_elem(map_fd, &idx, &fd,
+>                                                           BPF_ANY);
+> @@ -207,14 +206,12 @@ static int bperf_cgrp__install_pe(struct evsel *evsel __maybe_unused,
+>   */
+>  static int bperf_cgrp__sync_counters(struct evlist *evlist)
+>  {
+> -       int i, cpu;
+> -       int nr_cpus = evlist->core.all_cpus->nr;
+> +       struct perf_cpu cpu;
+> +       int idx;
+>         int prog_fd = bpf_program__fd(skel->progs.trigger_read);
+>
+> -       for (i = 0; i < nr_cpus; i++) {
+> -               cpu = evlist->core.all_cpus->map[i].cpu;
+> -               bperf_trigger_reading(prog_fd, cpu);
+> -       }
+> +       perf_cpu_map__for_each_cpu(cpu, idx, evlist->core.all_cpus)
+> +               bperf_trigger_reading(prog_fd, cpu.cpu);
+>
+>         return 0;
+>  }
+> @@ -244,12 +241,10 @@ static int bperf_cgrp__disable(struct evsel *evsel)
+>  static int bperf_cgrp__read(struct evsel *evsel)
+>  {
+>         struct evlist *evlist = evsel->evlist;
+> -       int i, cpu, nr_cpus = evlist->core.all_cpus->nr;
+>         int total_cpus = cpu__max_cpu().cpu;
+>         struct perf_counts_values *counts;
+>         struct bpf_perf_event_value *values;
+>         int reading_map_fd, err = 0;
+> -       __u32 idx;
+>
+>         if (evsel->core.idx)
+>                 return 0;
+> @@ -263,7 +258,10 @@ static int bperf_cgrp__read(struct evsel *evsel)
+>         reading_map_fd = bpf_map__fd(skel->maps.cgrp_readings);
+>
+>         evlist__for_each_entry(evlist, evsel) {
+> -               idx = evsel->core.idx;
+> +               __u32 idx = evsel->core.idx;
+> +               int i;
+> +               struct perf_cpu cpu;
+> +
+>                 err = bpf_map_lookup_elem(reading_map_fd, &idx, values);
+>                 if (err) {
+>                         pr_err("bpf map lookup failed: idx=%u, event=%s, cgrp=%s\n",
+> @@ -271,13 +269,11 @@ static int bperf_cgrp__read(struct evsel *evsel)
+>                         goto out;
+>                 }
+>
+> -               for (i = 0; i < nr_cpus; i++) {
+> -                       cpu = evlist->core.all_cpus->map[i].cpu;
+> -
+> +               perf_cpu_map__for_each_cpu(cpu, i, evlist->core.all_cpus) {
+>                         counts = perf_counts(evsel->counts, i, 0);
+> -                       counts->val = values[cpu].counter;
+> -                       counts->ena = values[cpu].enabled;
+> -                       counts->run = values[cpu].running;
+> +                       counts->val = values[cpu.cpu].counter;
+> +                       counts->ena = values[cpu.cpu].enabled;
+> +                       counts->run = values[cpu.cpu].running;
+>                 }
+>         }
+>
+> --
+> 2.36.0.464.gb9c8b46e94-goog
+>

@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0124851A7BC
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:04:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9669651A9F0
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:19:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354703AbiEDRGy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 13:06:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37236 "EHLO
+        id S1358023AbiEDRUQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 13:20:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355244AbiEDQ7t (ORCPT
+        with ESMTP id S1356063AbiEDREv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 12:59:49 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 157E049686;
-        Wed,  4 May 2022 09:51:24 -0700 (PDT)
+        Wed, 4 May 2022 13:04:51 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4931850079;
+        Wed,  4 May 2022 09:53:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EC300617C2;
-        Wed,  4 May 2022 16:51:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 457B7C385AF;
-        Wed,  4 May 2022 16:51:23 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 002EAB82552;
+        Wed,  4 May 2022 16:53:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99215C385AF;
+        Wed,  4 May 2022 16:53:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651683083;
-        bh=JSCa2iDFyLjNaathPK9LBYB8qEdrw+UHxwx06chyEuA=;
+        s=korg; t=1651683221;
+        bh=ILpcJ1EnEQUwhSywYQ3IAqyxmDYiAyN1DkLdFFHSEvU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hp+4w2BnX4CDB9qWJH1EQr2oXNJXq7T9zSUa2OOnUYFMvLlKQN5+TAUBqXhMtbDvu
-         i/cUg/an+MABgzS1vJbdJTZpv9YmkaqmV04iCrXBwqp2IllCohGF3p6FHm8OtCn3cx
-         BC21GPiyo90R/GfcBrTbGBC4pBk8lIYzoR00pJLQ=
+        b=1wtiPB+4QpzVM2uxCuOLKfz+DuxqheGDgUXVli8gdQcXSFwexnpc99P7s8483lV8b
+         Uf9GufWYEHv4h6O6WiMw2lnA2t0k1ldlserpyuAqa9Loln5Pf62lDvQhEWRXi1SZFI
+         iZLifCeQvCj8tnZtpfxcqWrcmV3P189FmjB6vrLI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zeal Robot <zealci@zte.com.cn>,
-        Lv Ruyi <lv.ruyi@zte.com.cn>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 074/129] pinctrl: pistachio: fix use of irq_of_parse_and_map()
-Date:   Wed,  4 May 2022 18:44:26 +0200
-Message-Id: <20220504153027.095704950@linuxfoundation.org>
+        stable@vger.kernel.org, Heiner Kallweit <hkallweit1@gmail.com>,
+        Vinod Koul <vkoul@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 074/177] phy: amlogic: fix error path in phy_g12a_usb3_pcie_probe()
+Date:   Wed,  4 May 2022 18:44:27 +0200
+Message-Id: <20220504153059.695107723@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220504153021.299025455@linuxfoundation.org>
-References: <20220504153021.299025455@linuxfoundation.org>
+In-Reply-To: <20220504153053.873100034@linuxfoundation.org>
+References: <20220504153053.873100034@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,41 +54,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lv Ruyi <lv.ruyi@zte.com.cn>
+From: Heiner Kallweit <hkallweit1@gmail.com>
 
-[ Upstream commit 0c9843a74a85224a89daa81fa66891dae2f930e1 ]
+[ Upstream commit 2c8045d48dee703ad8eab2be7d6547765a89c069 ]
 
-The irq_of_parse_and_map() function returns 0 on failure, and does not
-return an negative value.
+If clk_prepare_enable() fails we call clk_disable_unprepare()
+in the error path what results in a warning that the clock
+is disabled and unprepared already.
+And if we fail later in phy_g12a_usb3_pcie_probe() then we
+bail out w/o calling clk_disable_unprepare().
+This patch fixes both errors.
 
-Fixes: cefc03e5995e ("pinctrl: Add Pistachio SoC pin control driver")
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Lv Ruyi <lv.ruyi@zte.com.cn>
-Link: https://lore.kernel.org/r/20220424031430.3170759-1-lv.ruyi@zte.com.cn
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+Fixes: 36077e16c050 ("phy: amlogic: Add Amlogic G12A USB3 + PCIE Combo PHY Driver")
+Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
+Link: https://lore.kernel.org/r/8e416f95-1084-ee28-860e-7884f7fa2e32@gmail.com
+Signed-off-by: Vinod Koul <vkoul@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/pinctrl/pinctrl-pistachio.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ .../phy/amlogic/phy-meson-g12a-usb3-pcie.c    | 20 +++++++++++--------
+ 1 file changed, 12 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/pinctrl/pinctrl-pistachio.c b/drivers/pinctrl/pinctrl-pistachio.c
-index ec761ba2a2da..989a37fb402d 100644
---- a/drivers/pinctrl/pinctrl-pistachio.c
-+++ b/drivers/pinctrl/pinctrl-pistachio.c
-@@ -1374,10 +1374,10 @@ static int pistachio_gpio_register(struct pistachio_pinctrl *pctl)
- 		}
+diff --git a/drivers/phy/amlogic/phy-meson-g12a-usb3-pcie.c b/drivers/phy/amlogic/phy-meson-g12a-usb3-pcie.c
+index 5b471ab80fe2..54d65a6f0fcc 100644
+--- a/drivers/phy/amlogic/phy-meson-g12a-usb3-pcie.c
++++ b/drivers/phy/amlogic/phy-meson-g12a-usb3-pcie.c
+@@ -414,19 +414,19 @@ static int phy_g12a_usb3_pcie_probe(struct platform_device *pdev)
  
- 		irq = irq_of_parse_and_map(child, 0);
--		if (irq < 0) {
--			dev_err(pctl->dev, "No IRQ for bank %u: %d\n", i, irq);
-+		if (!irq) {
-+			dev_err(pctl->dev, "No IRQ for bank %u\n", i);
- 			of_node_put(child);
--			ret = irq;
-+			ret = -EINVAL;
- 			goto err;
- 		}
+ 	ret = clk_prepare_enable(priv->clk_ref);
+ 	if (ret)
+-		goto err_disable_clk_ref;
++		return ret;
  
+ 	priv->reset = devm_reset_control_array_get_exclusive(dev);
+-	if (IS_ERR(priv->reset))
+-		return PTR_ERR(priv->reset);
++	if (IS_ERR(priv->reset)) {
++		ret = PTR_ERR(priv->reset);
++		goto err_disable_clk_ref;
++	}
+ 
+ 	priv->phy = devm_phy_create(dev, np, &phy_g12a_usb3_pcie_ops);
+ 	if (IS_ERR(priv->phy)) {
+ 		ret = PTR_ERR(priv->phy);
+-		if (ret != -EPROBE_DEFER)
+-			dev_err(dev, "failed to create PHY\n");
+-
+-		return ret;
++		dev_err_probe(dev, ret, "failed to create PHY\n");
++		goto err_disable_clk_ref;
+ 	}
+ 
+ 	phy_set_drvdata(priv->phy, priv);
+@@ -434,8 +434,12 @@ static int phy_g12a_usb3_pcie_probe(struct platform_device *pdev)
+ 
+ 	phy_provider = devm_of_phy_provider_register(dev,
+ 						     phy_g12a_usb3_pcie_xlate);
++	if (IS_ERR(phy_provider)) {
++		ret = PTR_ERR(phy_provider);
++		goto err_disable_clk_ref;
++	}
+ 
+-	return PTR_ERR_OR_ZERO(phy_provider);
++	return 0;
+ 
+ err_disable_clk_ref:
+ 	clk_disable_unprepare(priv->clk_ref);
 -- 
 2.35.1
 

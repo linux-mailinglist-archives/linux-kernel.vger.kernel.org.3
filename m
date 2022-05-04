@@ -2,76 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D237351974B
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 08:20:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7DAD51974E
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 08:23:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233453AbiEDGYU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 02:24:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49472 "EHLO
+        id S1344896AbiEDG0j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 02:26:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344875AbiEDGYS (ORCPT
+        with ESMTP id S1344875AbiEDG0g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 02:24:18 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AC2919289
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 23:20:43 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id i27so940391ejd.9
-        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 23:20:43 -0700 (PDT)
+        Wed, 4 May 2022 02:26:36 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EE281928D
+        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 23:23:01 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id g20so568867edw.6
+        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 23:23:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=S9kVssv7NOzawB6oy6PZFFqEWoy+1iZ0ddgQbndGXkY=;
-        b=eaPtpKhP1noRcNSLEl8k7DRsmp1+3MImkuiSu7hO9CNuSBf/5vIEAIH6OKgLl3Vgfs
-         DiuNCahXqDrm3TDxKTeBHztIQ2X4A4DvEcpu3jKQ6K0o0/1BYwYOcGfB5y6brD0c2zyH
-         QL6ONvMa6Dbimne4AH7LJkUgiduWjnNosD6HI1qAfmWhAvKsMXz8WR2bO0kLOFR/9pt0
-         f4qoxNXj/v29EwKAwkJa0ftgmaY0KnEDdVY3ov1TJg2vsxKrL4f5N5rlw28PVvwZXKl/
-         ASvjmeeeY8p0kcTWbGoCywM07jJ0+VdDy/jroI3pT9w9iEnC6viLgDEXrSNzA/TGuvbF
-         EH+w==
+        bh=/ICd+RLy/KAw7d3EVe6ay1LDqzY/81IaixYgq9AcSbY=;
+        b=rpwOrbkET0kIgwT7jgjkT9abeD7MXV7F16sWCFY0XYvqrnO9XNOO9/DhkjGKo5fEC8
+         LQVGsydxJeUsHsjGtYloSsO5mOjhiWjLOVsbTG1TaixjN+bAoacL2iw/GxBj0zkBodx4
+         vLA3Gp05nHYroPmKMrYUDf/Nh0BvwS9USecPBZLzVJNf+qSRjLPvxsitLcIao/AyGxT4
+         fXJ9HGJKtPlmfBh31lgK0Vrzphy55k/UPpusjkV28x0tlBwd+8/woFCDU6lsFOjHjx7D
+         rcX8BYTVfgpq1QmhxC401z58fYWnlv2HQ112BoTHSgFA6fNMgw+zWPgMxqcMKXF/EE+5
+         2bjQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=S9kVssv7NOzawB6oy6PZFFqEWoy+1iZ0ddgQbndGXkY=;
-        b=IEyaJymaxCbEkySAr4Vx62QhBMUCDEO7KsEW/wM+oCQg1WXoaEWC0GNBsXhoy6kUuy
-         sbbRplnt4gCQhyfHPqEZLSLmIh01uVwv/4fjHA882+L4KGeojmE/J4vMbL6CH9nr2Suz
-         vzHZayY/GOU2nTs4QnLG80mBBplRGLG0oRPA4DZK+TlsiEeauu3FoaEiyKjWbpa0seIn
-         8xOG7bq492uoth9f+ytvQWmUA+H0ZcebM3TuPEb0zZQQrQAjki6lLVCJhw6DP7+1l+dt
-         TYTNS/DU3ovWcjGV4C24VA84t8sDbiKmPqt8tG0jj9L5/BjfOhWb2PQEagrKepFIcTD7
-         yPOA==
-X-Gm-Message-State: AOAM531KmlaaZeXKygszzi84OkfzSD8xvRcMEa3Ljgx1FRZRoquAjgVN
-        8EeT7bAm1DEj5LjtYJFw1DjzkQ==
-X-Google-Smtp-Source: ABdhPJzK4afMKmzSks36dzSJk3t+IoiFVAyPRNs2XhoB+rYp60IdxaXm9RDJbKDGhEIcmVXDSM/ypQ==
-X-Received: by 2002:a17:907:2cc4:b0:6df:a036:a025 with SMTP id hg4-20020a1709072cc400b006dfa036a025mr19779920ejc.554.1651645241925;
-        Tue, 03 May 2022 23:20:41 -0700 (PDT)
+        bh=/ICd+RLy/KAw7d3EVe6ay1LDqzY/81IaixYgq9AcSbY=;
+        b=NTL2YQ71qTtEdanS//TTsKL+Z3udvqMWYKVc6tucA9NUj0v6viSfnJ3+915B4ew72c
+         SBWkvIJ4T7cG2GXo7hdSIoughq1iOpJd1KhpnZpbpKqUs2lrdXdESHFNyHnu1vu/PqFl
+         paJHJdoX5gPNAByskXBRM9aDpcH9wD1kDgN4tbp7tdn7CFnz1a/C15ADK0fYQRDdZPAK
+         RUGuAidebrTW8f5jX97xFXz+W5/jaUyaMc/XVc7VMwTqN4WSRtafSFEW6UdBD3klR0Mn
+         u67BaoyvBQ5MT6xWaMe6wNIzXfla34d7XyouKe//PpRGDLAsddPkA8VaxXsGfRB/UGjc
+         SmgA==
+X-Gm-Message-State: AOAM531x+eBRYv2qpK9jvz63Ay6Q8yLX9pkR2ZoXMoH+X0N0pJ7AT6H5
+        Q88ogffVQgDxDCIu5pWhorkKVA==
+X-Google-Smtp-Source: ABdhPJxFJJFSk1xLxRDDUo6zVnxtiMbpr2Qusve+SaBXHlAci0YLKutD2xiWzzJnWIPhl2fkSQ8riA==
+X-Received: by 2002:a05:6402:154:b0:423:dba8:c7fc with SMTP id s20-20020a056402015400b00423dba8c7fcmr21473341edu.346.1651645379646;
+        Tue, 03 May 2022 23:22:59 -0700 (PDT)
 Received: from [192.168.0.207] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id ig1-20020a1709072e0100b006f3ef214e7asm5365230ejc.224.2022.05.03.23.20.40
+        by smtp.gmail.com with ESMTPSA id gz25-20020a170907a05900b006f3ef214e63sm5351504ejc.201.2022.05.03.23.22.58
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 03 May 2022 23:20:41 -0700 (PDT)
-Message-ID: <faaa4ab4-8190-3cff-998e-3b6a6d3ce27c@linaro.org>
-Date:   Wed, 4 May 2022 08:20:40 +0200
+        Tue, 03 May 2022 23:22:59 -0700 (PDT)
+Message-ID: <a86ead7c-4bea-c4f3-b53f-38fa33e74942@linaro.org>
+Date:   Wed, 4 May 2022 08:22:58 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
-Subject: Re: [PATCH v2 1/2] dt-bindings: iio: sx9324: Add CS idle/sleep mode
+Subject: Re: [PATCH 1/2] dt-bindings: remoteproc: mediatek: Fix optional
+ reg-names for mtk,scp
 Content-Language: en-US
-To:     Stephen Boyd <swboyd@chromium.org>,
-        Jonathan Cameron <jic23@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
-        devicetree@vger.kernel.org, linux-iio@vger.kernel.org,
-        Gwendal Grignou <gwendal@chromium.org>,
+To:     =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
+        <nfraprado@collabora.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>, kernel@collabora.com,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
         Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>
-References: <20220503193937.3794477-1-swboyd@chromium.org>
- <20220503193937.3794477-2-swboyd@chromium.org>
+        Tinghan Shen <tinghan.shen@mediatek.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-remoteproc@vger.kernel.org
+References: <20220429211111.2214119-1-nfraprado@collabora.com>
+ <20220429211111.2214119-2-nfraprado@collabora.com>
+ <a95fc4a9-af6b-e2c2-ef41-df9742d393de@linaro.org>
+ <4bf2343b-3760-6ebf-7463-0b25fe9d942e@collabora.com>
+ <20220503204125.a4xwd7a5e3fxf7et@notapiano>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220503193937.3794477-2-swboyd@chromium.org>
+In-Reply-To: <20220503204125.a4xwd7a5e3fxf7et@notapiano>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,34 +89,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/05/2022 21:39, Stephen Boyd wrote:
-> We need to configure the sleep and idle mode of the CS pins for this
-> device. Add a DT property to do this so pins are in a proper state
-> during sleep (either hi-z, grounded, or pulled up to vdd).
+On 03/05/2022 22:41, Nícolas F. R. A. Prado wrote:
 > 
-> Reviewed-by: Gwendal Grignou <gwendal@chromium.org>
-> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
-> ---
->  .../bindings/iio/proximity/semtech,sx9324.yaml           | 9 +++++++++
->  1 file changed, 9 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/iio/proximity/semtech,sx9324.yaml b/Documentation/devicetree/bindings/iio/proximity/semtech,sx9324.yaml
-> index d265eb5258c8..b3aa2ebf9661 100644
-> --- a/Documentation/devicetree/bindings/iio/proximity/semtech,sx9324.yaml
-> +++ b/Documentation/devicetree/bindings/iio/proximity/semtech,sx9324.yaml
-> @@ -126,6 +126,14 @@ properties:
->        UINT_MAX (4294967295) represents infinite. Other values
->        represent 1-1/N.
->  
-> +  semtech,cs-idle-sleep:
-> +    description:
-> +      State of CS pins during sleep mode and idle time.
-> +    enum:
-> +      - hi-z
-> +      - gnd
-> +      - vdd
+> This was also supposed to fix the warning for mt8192, where the order is
+> different: "sram", "l1tcm", "cfg". But since Krzysztof said that we want a fixed
+> order, then the mt8192 DT will need to be updated.
 
-You need a ref to type (string).
+Yes, please update DTS.
+
 
 Best regards,
 Krzysztof

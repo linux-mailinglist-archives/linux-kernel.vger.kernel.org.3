@@ -2,130 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3B4F519D9C
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 13:06:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 419A4519DA4
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 13:08:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348549AbiEDLJc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 07:09:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45538 "EHLO
+        id S1348554AbiEDLL2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 07:11:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348515AbiEDLJb (ORCPT
+        with ESMTP id S1348558AbiEDLLX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 07:09:31 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DCB0240B8;
-        Wed,  4 May 2022 04:05:54 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id w5-20020a17090aaf8500b001d74c754128so4900243pjq.0;
-        Wed, 04 May 2022 04:05:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=FuHzk/nIGePrHZXHu5obeBKL4CwmtgVLQ7B81qaX0ec=;
-        b=QEPx7U9hNlI3vRDWKAbDtfXmpeSpovU9WosXOMWPby75hsXz8BF9NJPpYo3SPZmwHd
-         n/Gm3/On5FKA84ftZRrEaLUWoxrAPvc/+zBa2+gmMQfMDBntS3YRP0IlNfTaE+UX/o2F
-         3QZNPYoUEKMzUZzz+TBxu5FwphTwigrUEW3T4jZxk6uAq/TLtFplG+CR/kJ8zCzXFRXm
-         xhCvp73xVaUtWtQfb7uSmfudTePdsyBf9cAeTv/S5xSAmqKOP1PGExdXwVO7Ek8SbpRR
-         zgfNv30iDlnORAwDnTuf+PLC0Ek4bma6TSaPA4TrmX+YkG2vVPV07cFmwFyuhbnkkwfN
-         m0pw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=FuHzk/nIGePrHZXHu5obeBKL4CwmtgVLQ7B81qaX0ec=;
-        b=yWUv9F9O9xFaHPlr2DCC7dPEV1aOCzFracVLQj7RgOVSbqYeAoEsoHlSoCGbBElCtL
-         hZsew3t+MiQQaxbLIiaKZqvBzXL9Q/aKtHi6r6yqT5ITUY76CDJADHixNDIHh3oqyMqU
-         6jjMCdc9PzEvt1jPlalFbbhtMJjH5iYr+6v2tZEr0wgk+mp9M+jvNiKHRd58toDEtWAE
-         VAruiWXGw7zoUgNT8811c1YVxGOOa0JDNMnygPw7AxpK0gCeIaF4GhJtD4LG4q0hp6bZ
-         xKi+faxf2qp/ezsxgxKV+hLvU/wdFOTYAUFWrLO2QXiUFNF9Q/KEZezHwPGMoKEK+CpI
-         K+Og==
-X-Gm-Message-State: AOAM530vFZuEzn15bY0FzBdhgY3ZhlYSsoi5Bs6EBDL/j5dO/274cNLU
-        vWdIbnlzs/rr8a8S3PDXapU=
-X-Google-Smtp-Source: ABdhPJzxZ+xobWZQq60DnEg27iH6kRN+0zqq2JznY9vhTdiadAjubYEwreH4wT1gnCSEBBhDMd+WuA==
-X-Received: by 2002:a17:902:f690:b0:15e:9825:291 with SMTP id l16-20020a170902f69000b0015e98250291mr17327173plg.89.1651662353882;
-        Wed, 04 May 2022 04:05:53 -0700 (PDT)
-Received: from smtpclient.apple (164.174.128.101.dy.bbexcite.jp. [101.128.174.164])
-        by smtp.gmail.com with ESMTPSA id w24-20020a1709029a9800b0015ebbaccc46sm2555977plp.159.2022.05.04.04.05.51
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 04 May 2022 04:05:53 -0700 (PDT)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 14.0 \(3654.120.0.1.13\))
-Subject: Re: [PATCH 0/5] docs/ja_JP/SubmittingPatches: Trace changes in
- English docs, take 1
-From:   Kosuke Fujimoto <fujimotokosuke0@gmail.com>
-In-Reply-To: <20220503102429.48304-1-akiyks@gmail.com>
-Date:   Wed, 4 May 2022 20:05:49 +0900
-Cc:     Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Tsugikazu Shibata <shibata@linuxfoundation.org>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <2146482E-C509-421F-AF7B-C220F8E1614F@gmail.com>
-References: <20220503102429.48304-1-akiyks@gmail.com>
-To:     Akira Yokosawa <akiyks@gmail.com>
-X-Mailer: Apple Mail (2.3654.120.0.1.13)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 4 May 2022 07:11:23 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A4B928E20
+        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 04:07:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651662467; x=1683198467;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=uiLbHLxiGXNW6OESnecCcNJLWQSiF+MKfCJxeylLQB4=;
+  b=YHvNfTfM8yE8G7fWnDg91g1QWQJwKMsAhUDpcwOP9bRoTaZ6BchzL8xV
+   nYLF0MDz5FGTefT8BUg/pvxfYe3s+oLB6WbG0uVknJHRc4XtV+hmImPcL
+   BP/48gBu+O1LeVvdPMQC/4TRaDFlTfmPDQdFLadK0nEQyPXjGSXFv2AoJ
+   cpyktW49vv+6K8w9s/CO5G3+z2HbIZz5wVmdOwDJOkUi9MUVYELUrEMY8
+   bdjDjyqfK/+J5LmsuJNlXtR/AJ+eT9YWSpN/p9r7I0nVqRuKkAhi8o8xB
+   jnz3bGMKq78JWt9Wqr/meBdy3FrzOblXE4t3AuSAsv8PonKgMx+E6wdX+
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10336"; a="265321245"
+X-IronPort-AV: E=Sophos;i="5.91,197,1647327600"; 
+   d="scan'208";a="265321245"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2022 04:07:47 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,197,1647327600"; 
+   d="scan'208";a="548624233"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 04 May 2022 04:07:45 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nmCrA-000BKr-VX;
+        Wed, 04 May 2022 11:07:44 +0000
+Date:   Wed, 4 May 2022 19:06:44 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [andersson:wip/sc8180x-next-20220502 6/29]
+ drivers/gpu/drm/msm/dp/dp_hpd.c:63:53: warning: converting the enum constant
+ to a boolean
+Message-ID: <202205041920.TXQhAxL4-lkp@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+tree:   https://github.com/andersson/kernel wip/sc8180x-next-20220502
+head:   6199153320a3b7d1dce23ad1ea4d894a86793cb6
+commit: be6e31f126bed33f684250905b79d76f7664d985 [6/29] drm/msm/dp: Add typec_mux implementation
+config: hexagon-allyesconfig (https://download.01.org/0day-ci/archive/20220504/202205041920.TXQhAxL4-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 363b3a645a1e30011cc8da624f13dac5fd915628)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/andersson/kernel/commit/be6e31f126bed33f684250905b79d76f7664d985
+        git remote add andersson https://github.com/andersson/kernel
+        git fetch --no-tags andersson wip/sc8180x-next-20220502
+        git checkout be6e31f126bed33f684250905b79d76f7664d985
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/gpu/drm/msm/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/gpu/drm/msm/dp/dp_hpd.c:63:53: warning: converting the enum constant to a boolean [-Wint-in-bool-context]
+                   usbpd->multi_func = pin_assign == DP_PIN_ASSIGN_C || DP_PIN_ASSIGN_E;
+                                                                     ^
+   1 warning generated.
 
 
-> On May 3, 2022, at 19:24, Akira Yokosawa <akiyks@gmail.com> wrote:
->=20
-> Hi,
->=20
-> This is the first batch of updates attempting to modernize Japanese
-> SubmittingPatches.  Conversion to ReST will be done later when the
-> corresponding commit doing the conversion is reached.  Pending list
-> of commits is quite long (about 90) and this effort is expected to
-> produce dozens of series.
->=20
-> List of commits for English (then) SubmittingPatches:
->=20
-> - f5039935ac68 ("Documentation: update GregKH links")
-> - e52d2e1f25f0 ("Documentation/SubmittingPatches: suggested the use of =
-scripts/get_maintainer.pl")
-> - 755727b7fb1e ("Randy has moved")
-> - 8543ae1296f6 ("checkpatch: add Suggested-by as a standard =
-signature")
-> - 0af5270324cc ("Documentation/SubmittingPatches: Request summaries =
-for commit references")
->=20
-> Note: Commit db12fb833a88 ("Documentation: fix spelling error in
-> SubmittingPatches") does not affect Japanese translation.
->=20
->        Thanks, Akira
-> --
-> Akira Yokosawa (5):
->  docs/ja_JP/SubmittingPatches: Update GregKH links
->  docs/ja_JP/SubmittingPatches: Suggest the use of
->    scripts/get_maintainer.pl
->  docs/ja_JP/SubmittingPatches: Randy has moved
->  docs/ja_JP/SubmittingPatches: Add Suggested-by as a standard =
-signature
->  docs/ja_JP/SubmittingPatches: Request summaries for commit references
->=20
-> .../translations/ja_JP/SubmittingPatches      | 36 ++++++++++++++-----
-> 1 file changed, 27 insertions(+), 9 deletions(-)
->=20
->=20
-> base-commit: 81c653659d34ec253fba7f5d0f430813fe0f643d
-> --=20
-> 2.25.1
->=20
+vim +63 drivers/gpu/drm/msm/dp/dp_hpd.c
 
-Resending the response to this patch due to misconfiguration of my email =
-client.=20
+    52	
+    53	static int dp_hpd_mux_set(struct typec_mux_dev *mux, struct typec_mux_state *state)
+    54	{
+    55		struct dp_hpd_private *dp_hpd = typec_mux_get_drvdata(mux);
+    56		struct dp_usbpd *usbpd = &dp_hpd->dp_usbpd;
+    57		struct typec_displayport_data *dp_data = state->data;
+    58		int pin_assign = 0;
+    59	
+    60		if (dp_data) {
+    61			pin_assign = DP_CONF_GET_PIN_ASSIGN(dp_data->conf);
+    62			usbpd->hpd_irq = !!(dp_data->status & DP_STATUS_IRQ_HPD);
+  > 63			usbpd->multi_func = pin_assign == DP_PIN_ASSIGN_C || DP_PIN_ASSIGN_E;
+    64		}
+    65	
+    66		if (!pin_assign) {
+    67			if (dp_hpd->connected) {
+    68				dp_hpd->connected = false;
+    69				dp_hpd->dp_cb->disconnect(dp_hpd->dev);
+    70			}
+    71		} else if (!dp_hpd->connected) {
+    72			dp_hpd->connected = true;
+    73			dp_hpd->dp_cb->configure(dp_hpd->dev);
+    74		} else {
+    75			dp_hpd->dp_cb->attention(dp_hpd->dev);
+    76		}
+    77	
+    78		return 0;
+    79	}
+    80	
 
-For the series,
-
-Reviewed-by: Kosuke Fujimoto <fujimotokosuke0@gmail.com>
-
-Best regards,
-Kosuke=
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

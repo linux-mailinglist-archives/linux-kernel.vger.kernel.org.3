@@ -2,158 +2,353 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A207519BB0
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 11:29:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3D05519BB2
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 11:29:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347303AbiEDJcm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 05:32:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38958 "EHLO
+        id S1347317AbiEDJdB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 05:33:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344680AbiEDJci (ORCPT
+        with ESMTP id S1347309AbiEDJcz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 05:32:38 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B777A25EB4
-        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 02:29:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651656540;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=QiHfuXpjUO1Kx7oSpMgn+KkNUM21let3MfJCKQvBKl4=;
-        b=ShWIKnuJfMwR+qHBaPkRbzvqrku9xqFJsbrSP/yfadAZ9MASRFkukJZWo+vzk5EgNvRX5Y
-        X+VzoTleaU9rcXUuYoDT1HmmnAY1fAElhyCgze/dsSXIuzGZbQf3tL7L3F2XapT6FmSoqs
-        xs3E3/pHGXYNvVxRZ3blqBNRs9BW6nA=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-459-rsNqqJRNMAyf0BjdG38IcA-1; Wed, 04 May 2022 05:28:11 -0400
-X-MC-Unique: rsNqqJRNMAyf0BjdG38IcA-1
-Received: by mail-wr1-f69.google.com with SMTP id s8-20020adf9788000000b0020adb01dc25so185724wrb.20
-        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 02:28:10 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=QiHfuXpjUO1Kx7oSpMgn+KkNUM21let3MfJCKQvBKl4=;
-        b=Dr3gyDq8whJKSuqfxqXqaUrAl7rTxyTjj0VIB+glhZdjV3bSnrEwpvTquJwx03AiyX
-         iif9PDiK5yRH8e5UnUR/Jnhs9yyz27QvxZcld1ounSa+aYuYJEx7x7O1md7UBsVeX/Kg
-         nuM8pQUDg00oU6IWekdj8SnB8i1rqmgHa16WP2/+h8fXfVEfJ4So9XtTtSuXi3WEU14p
-         PgZdWVQGjrgU6sMi1LufXmN9CwpLWlBRGJD7eO07VBbTEtJ7kU6MpEmd19ixb/9G/dXS
-         bn7srW6HaUoB9EHsE1Jb/DVfvKr999RKpJp5Mq7MYoaieHIR30GTO/lTjm/GQSLAYfVw
-         UBNQ==
-X-Gm-Message-State: AOAM532wzMujHSuoLmLguoOSBRs0o5PAmSVMZ7NtDwsNTq9nix9b5hQL
-        m5Tnv1905SlPxCkIOsfLqioWZiW7Af/djHu7rkiTrmX/9FxJYh1yCy64IaaaXE7oQUKsifU5cJZ
-        MfXe/kmpBf0tae4DfgXzBJikcjKNvBjSKHZ/WA+M1jc+C8EkTtZrXOnndsD0ofUIrDd71gGB2z2
-        8=
-X-Received: by 2002:a05:600c:3b85:b0:393:edbb:ab9d with SMTP id n5-20020a05600c3b8500b00393edbbab9dmr6913228wms.126.1651656489583;
-        Wed, 04 May 2022 02:28:09 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwO3DLL2UeA2DZ+PW0v7ebQsybxG7YXPPfUWTKRUpRPBprerOB67LepYluV2171Xt8UBvnI7Q==
-X-Received: by 2002:a05:600c:3b85:b0:393:edbb:ab9d with SMTP id n5-20020a05600c3b8500b00393edbbab9dmr6913196wms.126.1651656489202;
-        Wed, 04 May 2022 02:28:09 -0700 (PDT)
-Received: from [192.168.1.129] (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id j30-20020adfb31e000000b0020c5253d8c2sm10915423wrd.14.2022.05.04.02.28.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 04 May 2022 02:28:08 -0700 (PDT)
-Message-ID: <038f8365-b23b-9d81-f7b2-8f8c6eb3a065@redhat.com>
-Date:   Wed, 4 May 2022 11:28:07 +0200
+        Wed, 4 May 2022 05:32:55 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8176E25EA2
+        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 02:29:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651656559; x=1683192559;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=HF6/toeKJzY3vv0eTRFPw9nkYRPugh+z7iO7/NTEyJc=;
+  b=exH2uyGY96mLwCGgjqF6GihiZe45TGaywyHUWtrdKNsoxYJxUplBkzQU
+   CTWh5VfI+iEPdwblbQS09p5jiedaynJUAauOZK4XnZW+a1ST9DeXjzI2M
+   cJOkgCuBsEdiUZsyUhrIOc5V5flcRQXIQClatBxtH/B/P2j7CR8H5S2vU
+   ujUAO1I68BiGPGcqM4Tj1HjQOLXkiwNHsD4Uy1ba65SNtfCcDuXZMdNHA
+   jMJxC0VmTM3gz+Jpb5b4L5q/h/WYIV56kPrX+Vjhhha1/MzlhDfmkZLmq
+   9lDkd7855pMnT3hUQuMEv9j1/cd8BSE/vzsWg61AW1o5fmIU7wcckaB0C
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10336"; a="267309602"
+X-IronPort-AV: E=Sophos;i="5.91,197,1647327600"; 
+   d="scan'208";a="267309602"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2022 02:29:19 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,197,1647327600"; 
+   d="scan'208";a="548531298"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga002.jf.intel.com with ESMTP; 04 May 2022 02:29:16 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 57F5D1A5; Wed,  4 May 2022 12:29:17 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Gaston Gonzalez <gascoar@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-staging@lists.linux.dev,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Broadcom Kernel Team <bcm-kernel-feedback-list@broadcom.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>
+Subject: [PATCH v2 1/1] staging: vc04_services: Re-use generic struct s32_fract
+Date:   Wed,  4 May 2022 12:29:15 +0300
+Message-Id: <20220504092915.72021-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v2] fbdev: Use helper to get fb_info in all file
- operations
-Content-Language: en-US
-To:     linux-kernel@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        Junxiao Chang <junxiao.chang@intel.com>,
-        dri-devel@lists.freedesktop.org, Maxime Ripard <maxime@cerno.tech>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Sam Ravnborg <sam@ravnborg.org>
-References: <20220503201934.681276-1-javierm@redhat.com>
- <YnJBGpvlViLV+0/a@phenom.ffwll.local>
-From:   Javier Martinez Canillas <javierm@redhat.com>
-In-Reply-To: <YnJBGpvlViLV+0/a@phenom.ffwll.local>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Daniel,
+Instead of custom data type re-use generic struct s32_fract.
+No changes intended.
 
-On 5/4/22 11:02, Daniel Vetter wrote:
-> On Tue, May 03, 2022 at 10:19:34PM +0200, Javier Martinez Canillas wrote:
->> A reference to the framebuffer device struct fb_info is stored in the file
->> private data, but this reference could no longer be valid and must not be
->> accessed directly. Instead, the file_fb_info() accessor function must be
->> used since it does sanity checking to make sure that the fb_info is valid.
->>
->> This can happen for example if the registered framebuffer device is for a
->> driver that just uses a framebuffer provided by the system firmware. In
->> that case, the fbdev core would unregister the framebuffer device when a
->> real video driver is probed and ask to remove conflicting framebuffers.
->>
->> Most fbdev file operations already use the helper to get the fb_info but
->> get_fb_unmapped_area() and fb_deferred_io_fsync() don't. Fix those two.
->>
->> Since fb_deferred_io_fsync() is not in fbmem.o, the helper has to be
->> exported. Rename it and add a fb_ prefix to denote that is public now.
->>
->> Reported-by: Junxiao Chang <junxiao.chang@intel.com>
->> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
-> 
-> Note that fb_file_info is hilariously racy since there's nothing
-> preventing a concurrenct framebuffer_unregister. Or at least I'm not
-> seeing anything. See cf4a3ae4ef33 ("fbdev: lock_fb_info cannot fail") for
-> context, maybe reference that commit here in your patch.
->
-> Either way this doesn't really make anything worse, so
-> Acked-by: Daniel Vetter <daniel.vetter@ffwll.ch>
->
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+v2: fixed typo (LKP)
+ .../bcm2835-camera/bcm2835-camera.c           | 24 +++++++-------
+ .../vc04_services/bcm2835-camera/controls.c   | 33 ++++++++++---------
+ .../vchiq-mmal/mmal-msg-common.h              |  7 ++--
+ .../vchiq-mmal/mmal-msg-format.h              |  6 ++--
+ .../vchiq-mmal/mmal-parameters.h              | 15 ++++-----
+ .../vc04_services/vchiq-mmal/mmal-vchiq.c     | 10 +++---
+ 6 files changed, 46 insertions(+), 49 deletions(-)
 
-Yes, I noticed is racy but at least checking this makes less likely to
-occur. And thanks, I'll reference that commit in the description of v3.
-
-BTW, I also noticed that the same race that happens with open(),read(),
-close(), etc happens with the VM operations:
-
-int fb_deferred_io_mmap(struct fb_info *info, struct vm_area_struct *vma)
-{
-...
-	vma->vm_private_data = info;
-...
-}
-
-static vm_fault_t fb_deferred_io_fault(struct vm_fault *vmf)
-{
-...
-	struct fb_info *info = vmf->vma->vm_private_data;
-...
-}
-
-static vm_fault_t fb_deferred_io_mkwrite(struct vm_fault *vmf)
-{
-...
-	struct fb_info *info = vmf->vma->vm_private_data;
-...
-}
-
-So something similar to fb_file_fb_info() is needed to check if
-the vm_private_data is still valid. I guess that could be done
-by using the vmf->vma->vm_file and attempting the same trick that
-fb_file_fb_info() does ?
-
+diff --git a/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c b/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c
+index 88b1878854e0..fd456d1f7061 100644
+--- a/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c
++++ b/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c
+@@ -1033,9 +1033,9 @@ static int mmal_setup_video_component(struct bcm2835_mmal_dev *dev,
+ 	preview_port->es.video.crop.y = 0;
+ 	preview_port->es.video.crop.width = f->fmt.pix.width;
+ 	preview_port->es.video.crop.height = f->fmt.pix.height;
+-	preview_port->es.video.frame_rate.num =
++	preview_port->es.video.frame_rate.numerator =
+ 				  dev->capture.timeperframe.denominator;
+-	preview_port->es.video.frame_rate.den =
++	preview_port->es.video.frame_rate.denominator =
+ 				  dev->capture.timeperframe.numerator;
+ 	ret = vchiq_mmal_port_set_format(dev->instance, preview_port);
+ 
+@@ -1084,9 +1084,9 @@ static int mmal_setup_encode_component(struct bcm2835_mmal_dev *dev,
+ 	port->es.video.crop.y = 0;
+ 	port->es.video.crop.width = f->fmt.pix.width;
+ 	port->es.video.crop.height = f->fmt.pix.height;
+-	port->es.video.frame_rate.num =
++	port->es.video.frame_rate.numerator =
+ 		  dev->capture.timeperframe.denominator;
+-	port->es.video.frame_rate.den =
++	port->es.video.frame_rate.denominator =
+ 		  dev->capture.timeperframe.numerator;
+ 
+ 	port->format.encoding = mfmt->mmal;
+@@ -1225,8 +1225,8 @@ static int mmal_setup_components(struct bcm2835_mmal_dev *dev,
+ 	camera_port->es.video.crop.y = 0;
+ 	camera_port->es.video.crop.width = f->fmt.pix.width;
+ 	camera_port->es.video.crop.height = f->fmt.pix.height;
+-	camera_port->es.video.frame_rate.num = 0;
+-	camera_port->es.video.frame_rate.den = 1;
++	camera_port->es.video.frame_rate.numerator = 0;
++	camera_port->es.video.frame_rate.denominator = 1;
+ 	camera_port->es.video.color_space = MMAL_COLOR_SPACE_JPEG_JFIF;
+ 
+ 	ret = vchiq_mmal_port_set_format(dev->instance, camera_port);
+@@ -1629,8 +1629,8 @@ static int mmal_init(struct bcm2835_mmal_dev *dev)
+ 	format->es->video.crop.y = 0;
+ 	format->es->video.crop.width = 1024;
+ 	format->es->video.crop.height = 768;
+-	format->es->video.frame_rate.num = 0; /* Rely on fps_range */
+-	format->es->video.frame_rate.den = 1;
++	format->es->video.frame_rate.numerator = 0; /* Rely on fps_range */
++	format->es->video.frame_rate.denominator = 1;
+ 
+ 	format = &camera->output[CAM_PORT_VIDEO].format;
+ 
+@@ -1643,8 +1643,8 @@ static int mmal_init(struct bcm2835_mmal_dev *dev)
+ 	format->es->video.crop.y = 0;
+ 	format->es->video.crop.width = 1024;
+ 	format->es->video.crop.height = 768;
+-	format->es->video.frame_rate.num = 0; /* Rely on fps_range */
+-	format->es->video.frame_rate.den = 1;
++	format->es->video.frame_rate.numerator = 0; /* Rely on fps_range */
++	format->es->video.frame_rate.denominator = 1;
+ 
+ 	format = &camera->output[CAM_PORT_CAPTURE].format;
+ 
+@@ -1656,8 +1656,8 @@ static int mmal_init(struct bcm2835_mmal_dev *dev)
+ 	format->es->video.crop.y = 0;
+ 	format->es->video.crop.width = 2592;
+ 	format->es->video.crop.height = 1944;
+-	format->es->video.frame_rate.num = 0; /* Rely on fps_range */
+-	format->es->video.frame_rate.den = 1;
++	format->es->video.frame_rate.numerator = 0; /* Rely on fps_range */
++	format->es->video.frame_rate.denominator = 1;
+ 
+ 	dev->capture.width = format->es->video.width;
+ 	dev->capture.height = format->es->video.height;
+diff --git a/drivers/staging/vc04_services/bcm2835-camera/controls.c b/drivers/staging/vc04_services/bcm2835-camera/controls.c
+index eb722f16fb91..5644d1d457b9 100644
+--- a/drivers/staging/vc04_services/bcm2835-camera/controls.c
++++ b/drivers/staging/vc04_services/bcm2835-camera/controls.c
+@@ -154,13 +154,13 @@ static int ctrl_set_rational(struct bcm2835_mmal_dev *dev,
+ 			     struct v4l2_ctrl *ctrl,
+ 			     const struct bcm2835_mmal_v4l2_ctrl *mmal_ctrl)
+ {
+-	struct mmal_parameter_rational rational_value;
++	struct s32_fract rational_value;
+ 	struct vchiq_mmal_port *control;
+ 
+ 	control = &dev->component[COMP_CAMERA]->control;
+ 
+-	rational_value.num = ctrl->val;
+-	rational_value.den = 100;
++	rational_value.numerator = ctrl->val;
++	rational_value.denominator = 100;
+ 
+ 	return vchiq_mmal_port_parameter_set(dev->instance, control,
+ 					     mmal_ctrl->mmal_id,
+@@ -489,9 +489,10 @@ static int ctrl_set_awb_gains(struct bcm2835_mmal_dev *dev,
+ 	else if (ctrl->id == V4L2_CID_BLUE_BALANCE)
+ 		dev->blue_gain = ctrl->val;
+ 
+-	gains.r_gain.num = dev->red_gain;
+-	gains.b_gain.num = dev->blue_gain;
+-	gains.r_gain.den = gains.b_gain.den = 1000;
++	gains.r_gain.numerator = dev->red_gain;
++	gains.r_gain.denominator = 1000;
++	gains.b_gain.numerator = dev->blue_gain;
++	gains.b_gain.denominator = 1000;
+ 
+ 	return vchiq_mmal_port_parameter_set(dev->instance, control,
+ 					     mmal_ctrl->mmal_id,
+@@ -1271,26 +1272,26 @@ int set_framerate_params(struct bcm2835_mmal_dev *dev)
+ 	struct mmal_parameter_fps_range fps_range;
+ 	int ret;
+ 
+-	fps_range.fps_high.num = dev->capture.timeperframe.denominator;
+-	fps_range.fps_high.den = dev->capture.timeperframe.numerator;
++	fps_range.fps_high.numerator = dev->capture.timeperframe.denominator;
++	fps_range.fps_high.denominator = dev->capture.timeperframe.numerator;
+ 
+ 	if ((dev->exposure_mode_active != MMAL_PARAM_EXPOSUREMODE_OFF) &&
+ 	    (dev->exp_auto_priority)) {
+ 		/* Variable FPS. Define min FPS as 1fps. */
+-		fps_range.fps_low.num = 1;
+-		fps_range.fps_low.den = 1;
++		fps_range.fps_low.numerator = 1;
++		fps_range.fps_low.denominator = 1;
+ 	} else {
+ 		/* Fixed FPS - set min and max to be the same */
+-		fps_range.fps_low.num = fps_range.fps_high.num;
+-		fps_range.fps_low.den = fps_range.fps_high.den;
++		fps_range.fps_low.numerator = fps_range.fps_high.numerator;
++		fps_range.fps_low.denominator = fps_range.fps_high.denominator;
+ 	}
+ 
+ 	v4l2_dbg(1, bcm2835_v4l2_debug, &dev->v4l2_dev,
+ 		 "Set fps range to %d/%d to %d/%d\n",
+-		 fps_range.fps_low.num,
+-		 fps_range.fps_low.den,
+-		 fps_range.fps_high.num,
+-		 fps_range.fps_high.den);
++		 fps_range.fps_low.numerator,
++		 fps_range.fps_low.denominator,
++		 fps_range.fps_high.numerator,
++		 fps_range.fps_high.denominator);
+ 
+ 	ret = vchiq_mmal_port_parameter_set(dev->instance,
+ 					    &dev->component[COMP_CAMERA]->output[CAM_PORT_PREVIEW],
+diff --git a/drivers/staging/vc04_services/vchiq-mmal/mmal-msg-common.h b/drivers/staging/vc04_services/vchiq-mmal/mmal-msg-common.h
+index d77e15f25dda..492d4c5dca08 100644
+--- a/drivers/staging/vc04_services/vchiq-mmal/mmal-msg-common.h
++++ b/drivers/staging/vc04_services/vchiq-mmal/mmal-msg-common.h
+@@ -14,6 +14,8 @@
+ #ifndef MMAL_MSG_COMMON_H
+ #define MMAL_MSG_COMMON_H
+ 
++#include <linux/types.h>
++
+ enum mmal_msg_status {
+ 	MMAL_MSG_STATUS_SUCCESS = 0, /**< Success */
+ 	MMAL_MSG_STATUS_ENOMEM,      /**< Out of memory */
+@@ -40,9 +42,4 @@ struct mmal_rect {
+ 	s32 height; /**< height */
+ };
+ 
+-struct mmal_rational {
+-	s32 num;    /**< Numerator */
+-	s32 den;    /**< Denominator */
+-};
+-
+ #endif /* MMAL_MSG_COMMON_H */
+diff --git a/drivers/staging/vc04_services/vchiq-mmal/mmal-msg-format.h b/drivers/staging/vc04_services/vchiq-mmal/mmal-msg-format.h
+index 1e996d8cd283..5569876d8c7d 100644
+--- a/drivers/staging/vc04_services/vchiq-mmal/mmal-msg-format.h
++++ b/drivers/staging/vc04_services/vchiq-mmal/mmal-msg-format.h
+@@ -14,6 +14,8 @@
+ #ifndef MMAL_MSG_FORMAT_H
+ #define MMAL_MSG_FORMAT_H
+ 
++#include <linux/math.h>
++
+ #include "mmal-msg-common.h"
+ 
+ /* MMAL_ES_FORMAT_T */
+@@ -30,8 +32,8 @@ struct mmal_video_format {
+ 	u32 width;		/* Width of frame in pixels */
+ 	u32 height;		/* Height of frame in rows of pixels */
+ 	struct mmal_rect crop;	/* Visible region of the frame */
+-	struct mmal_rational frame_rate;	/* Frame rate */
+-	struct mmal_rational par;		/* Pixel aspect ratio */
++	struct s32_fract frame_rate;	/* Frame rate */
++	struct s32_fract par;		/* Pixel aspect ratio */
+ 
+ 	/*
+ 	 * FourCC specifying the color space of the video stream. See the
+diff --git a/drivers/staging/vc04_services/vchiq-mmal/mmal-parameters.h b/drivers/staging/vc04_services/vchiq-mmal/mmal-parameters.h
+index 2277e05b1e31..a0cdd28101f2 100644
+--- a/drivers/staging/vc04_services/vchiq-mmal/mmal-parameters.h
++++ b/drivers/staging/vc04_services/vchiq-mmal/mmal-parameters.h
+@@ -22,6 +22,8 @@
+ #ifndef MMAL_PARAMETERS_H
+ #define MMAL_PARAMETERS_H
+ 
++#include <linux/math.h>
++
+ /** Common parameter ID group, used with many types of component. */
+ #define MMAL_PARAMETER_GROUP_COMMON		(0 << 16)
+ /** Camera-specific parameter ID group. */
+@@ -223,11 +225,6 @@ enum mmal_parameter_camera_type {
+ 	MMAL_PARAMETER_CUSTOM_AWB_GAINS,
+ };
+ 
+-struct mmal_parameter_rational {
+-	s32 num;    /**< Numerator */
+-	s32 den;    /**< Denominator */
+-};
+-
+ enum mmal_parameter_camera_config_timestamp_mode {
+ 	MMAL_PARAM_TIMESTAMP_MODE_ZERO = 0, /* Always timestamp frames as 0 */
+ 	MMAL_PARAM_TIMESTAMP_MODE_RAW_STC,  /* Use the raw STC value
+@@ -243,9 +240,9 @@ enum mmal_parameter_camera_config_timestamp_mode {
+ 
+ struct mmal_parameter_fps_range {
+ 	/**< Low end of the permitted framerate range */
+-	struct mmal_parameter_rational	fps_low;
++	struct s32_fract	fps_low;
+ 	/**< High end of the permitted framerate range */
+-	struct mmal_parameter_rational	fps_high;
++	struct s32_fract	fps_high;
+ };
+ 
+ /* camera configuration parameter */
+@@ -350,8 +347,8 @@ enum MMAL_PARAM_FLICKERAVOID {
+ };
+ 
+ struct mmal_parameter_awbgains {
+-	struct mmal_parameter_rational r_gain;	/**< Red gain */
+-	struct mmal_parameter_rational b_gain;	/**< Blue gain */
++	struct s32_fract r_gain;	/**< Red gain */
++	struct s32_fract b_gain;	/**< Blue gain */
+ };
+ 
+ /** Manner of video rate control */
+diff --git a/drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.c b/drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.c
+index 249dd3e30c2f..845b20e4d05a 100644
+--- a/drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.c
++++ b/drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.c
+@@ -744,9 +744,9 @@ static void dump_port_info(struct vchiq_mmal_port *port)
+ 			 port->es.video.crop.y,
+ 			 port->es.video.crop.width, port->es.video.crop.height);
+ 		pr_debug("		 : framerate %d/%d  aspect %d/%d\n",
+-			 port->es.video.frame_rate.num,
+-			 port->es.video.frame_rate.den,
+-			 port->es.video.par.num, port->es.video.par.den);
++			 port->es.video.frame_rate.numerator,
++			 port->es.video.frame_rate.denominator,
++			 port->es.video.par.numerator, port->es.video.par.denominator);
+ 	}
+ }
+ 
+@@ -1549,8 +1549,8 @@ int vchiq_mmal_port_connect_tunnel(struct vchiq_mmal_instance *instance,
+ 	dst->es.video.crop.y = src->es.video.crop.y;
+ 	dst->es.video.crop.width = src->es.video.crop.width;
+ 	dst->es.video.crop.height = src->es.video.crop.height;
+-	dst->es.video.frame_rate.num = src->es.video.frame_rate.num;
+-	dst->es.video.frame_rate.den = src->es.video.frame_rate.den;
++	dst->es.video.frame_rate.numerator = src->es.video.frame_rate.numerator;
++	dst->es.video.frame_rate.denominator = src->es.video.frame_rate.denominator;
+ 
+ 	/* set new format */
+ 	ret = port_info_set(instance, dst);
 -- 
-Best regards,
-
-Javier Martinez Canillas
-Linux Engineering
-Red Hat
+2.35.1
 

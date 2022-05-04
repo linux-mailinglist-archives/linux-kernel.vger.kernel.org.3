@@ -2,89 +2,221 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6382C519DF6
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 13:28:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8178B519DF8
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 13:29:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348748AbiEDLbl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 07:31:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41544 "EHLO
+        id S1348753AbiEDLcd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 07:32:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240345AbiEDLbk (ORCPT
+        with ESMTP id S232493AbiEDLcb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 07:31:40 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9096B1ADA8;
-        Wed,  4 May 2022 04:28:04 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 46F6F210E0;
-        Wed,  4 May 2022 11:28:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1651663683; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=L/cwtplOe2rgvl+3N8cSAUIrSPV4AbYQm0HK7GYEw/o=;
-        b=b/3AJN5rM/RWE3pUTW2qAKjzrKoqzbCyWmvFi0Rg3L+vFlZBs4SB15fcinTkpJxq51ABoL
-        T9gJXqsYz3iYWAwspcqrY8mtACL8gk8r/68VZWbNwdsSyp1MtWr8x3rPmrT9OlY5whJg+C
-        k6HnrcWYn88n7XSQX5Yy0jvoH+nzgss=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id EDE2E132C4;
-        Wed,  4 May 2022 11:28:02 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id qiUEOUJjcmKkPwAAMHmgww
-        (envelope-from <mkoutny@suse.com>); Wed, 04 May 2022 11:28:02 +0000
-Date:   Wed, 4 May 2022 13:28:01 +0200
-From:   Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
-To:     Waiman Long <longman@redhat.com>
-Cc:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Roman Gushchin <guro@fb.com>, Phil Auld <pauld@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Marcelo Tosatti <mtosatti@redhat.com>
-Subject: Re: [PATCH v10 0/8] cgroup/cpuset: Major cpu partition code
- restructuring
-Message-ID: <20220504112801.GB15266@blackbody.suse.cz>
-References: <20220503162149.1764245-1-longman@redhat.com>
+        Wed, 4 May 2022 07:32:31 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E221D1DA4C;
+        Wed,  4 May 2022 04:28:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1651663736; x=1683199736;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=2sSayxaSSWHVkrUa6lEsVNAyGS3h5gKzuXyt6bz0uQ8=;
+  b=X8Kq+YG5I+rayurvBUHbK/H7f7X5GLciFR448E7OPfWitj+kTWX9VyIh
+   tSe9UBmVt8Mmqcr/U9tHq7G/sfzSMTko04bSqQGUge5llOZSLC8AlKS/x
+   WDK2VXKbW88TqcaGYry4Ck1RN4sD2D9tH9Vwi6I9ZyfbON9mHyKnpbw5T
+   0=;
+Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
+  by alexa-out.qualcomm.com with ESMTP; 04 May 2022 04:28:55 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2022 04:28:55 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Wed, 4 May 2022 04:28:54 -0700
+Received: from blr-ubuntu-253.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Wed, 4 May 2022 04:28:50 -0700
+From:   Sai Prakash Ranjan <quic_saipraka@quicinc.com>
+To:     <arnd@arndb.de>, <catalin.marinas@arm.com>, <rostedt@goodmis.org>
+CC:     <gregkh@linuxfoundation.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <maz@kernel.org>, <quic_psodagud@quicinc.com>,
+        <quic_tsoni@quicinc.com>, <will@kernel.org>,
+        Sai Prakash Ranjan <quic_saipraka@quicinc.com>
+Subject: [PATCHv14 0/9] lib/rwmmio/arm64: Add support to trace register reads/writes
+Date:   Wed, 4 May 2022 16:58:19 +0530
+Message-ID: <cover.1651663123.git.quic_saipraka@quicinc.com>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220503162149.1764245-1-longman@redhat.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello.
+Generic MMIO read/write i.e., __raw_{read,write}{b,l,w,q} accessors
+are typically used to read/write from/to memory mapped registers
+and can cause hangs or some undefined behaviour in following cases,
 
-On Tue, May 03, 2022 at 12:21:41PM -0400, Waiman Long <longman@redhat.com> wrote:
-> v10:
->  - Relax constraints for changes made to "cpuset.cpus"
->    and "cpuset.cpus.partition" as suggested. Now almost all changes
->    are allowed.
+* If the access to the register space is unclocked, for example: if
+  there is an access to multimedia(MM) block registers without MM
+  clocks.
 
-I see there were also some other changes from v9 (like the first patches
-of series).
-Any chance you have a public git repo with both versions for a
-convenient range-diff?
+* If the register space is protected and not set to be accessible from
+  non-secure world, for example: only EL3 (EL: Exception level) access
+  is allowed and any EL2/EL1 access is forbidden.
 
-Thanks,
-Michal
+* If xPU(memory/register protection units) is controlling access to
+  certain memory/register space for specific clients.
+
+and more...
+
+Such cases usually results in instant reboot/SErrors/NOC or interconnect
+hangs and tracing these register accesses can be very helpful to debug
+such issues during initial development stages and also in later stages.
+
+So use ftrace trace events to log such MMIO register accesses which
+provides rich feature set such as early enablement of trace events,
+filtering capability, dumping ftrace logs on console and many more.
+
+Sample output:
+
+rwmmio_write: __qcom_geni_serial_console_write+0x160/0x1e0 width=32 val=0xa0d5d addr=0xfffffbfffdbff700
+rwmmio_post_write: __qcom_geni_serial_console_write+0x160/0x1e0 width=32 val=0xa0d5d addr=0xfffffbfffdbff700
+rwmmio_read: qcom_geni_serial_poll_bit+0x94/0x138 width=32 addr=0xfffffbfffdbff610
+rwmmio_post_read: qcom_geni_serial_poll_bit+0x94/0x138 width=32 val=0x0 addr=0xfffffbfffdbff610
+
+This series is a follow-up for the series [1] and a recent series [2] making use
+of both.
+
+[1] https://lore.kernel.org/lkml/cover.1536430404.git.saiprakash.ranjan@codeaurora.org/
+[2] https://lore.kernel.org/lkml/1604631386-178312-1-git-send-email-psodagud@codeaurora.org/
+
+Note in v4 version, Arnd suggested to benchmark and compare size with callback
+based implementation, please see [3] for more details on that with brief comparison below.
+
+
+**Inline version with CONFIG_FTRACE=y and CONFIG_TRACE_MMIO_ACCESS=y**
+$ size vmlinux
+   text           data             bss     dec             hex         filename
+ 23884219        14284468         532568 38701255        24e88c7        vmlinux
+
+**Callback version with CONFIG_FTRACE=y and CONFIG_TRACE_MMIO_ACCESS=y**
+$ size vmlinux
+    text          data             bss     dec             hex        filename
+ 24108179        14279596         532568 38920343        251e097       vmlinux
+
+$ ./scripts/bloat-o-meter inline-vmlinux callback-vmlinux
+add/remove: 8/3 grow/shrink: 4889/89 up/down: 242244/-11564 (230680)
+Total: Before=25812612, After=26043292, chg +0.89%
+
+[3] https://lore.kernel.org/lkml/466449a1-36da-aaa9-7e4f-477f36b52c9e@quicinc.com/
+
+Changes in v14:
+ * Add more description to disabling MMIO traces in geni serial drivers (Steve).
+
+Changes in v13:
+ * Remove the copyright update as one line change doesn't warrant it (Greg and Lawyers :))
+ * Update the comment about disabling MMIO traces in geni se and uart drivers.
+ * Add description for the build time flag to asm-generic/io.h.
+
+Changes in v12:
+ * Split the generic flag addition patch (Greg).
+ * Move the flag from makefile to driver .c file (Greg).
+
+Changes in v11:
+ * Use unsigned long for caller ip and current ip addr (Steven Rostedt).
+ * Include review tags from Arnd.
+
+Changes in v10:
+ * Use GENMASK(31, 0) for -Woverflow warning in irqchip tegra driver (Marc).
+ * Convert ETM4x ARM64 driver to use asm-generic IO memory barriers (Catalin).
+ * Collect ack from Catalin for arm64 change.
+
+Changes in v9:
+ * Use TRACE_EVENT_CLASS for rwmmio_write and post_write (Steven Rostedt).
+
+Changes in v8:
+ * Fix build error reported by kernel test robot.
+
+Changes in v7:
+ * Use lib/ instead of kernel/trace/ based on review comment by Steven Rostedt.
+
+Changes in v6:
+ * Implemented suggestions by Arnd Bergmann:
+   - Use arch independent IO barriers in arm64/asm
+   - Add ARCH_HAVE_TRACE_MMIO_ACCESS
+   - Add post read and post write logging support
+   - Remove tracepoint_active check
+ * Fix build error reported by kernel test robot.
+
+Changes in v5:
+ * Move arm64 to use asm-generic provided high level MMIO accessors (Arnd).
+ * Add inline logging for MMIO relaxed and non-relaxed accessors.
+ * Move nVHE KVM comment to makefile (Marc).
+ * Fix overflow warning due to switch to inline accessors instead of macro.
+ * Modify trace event field to include caller and parent details for more detailed logs.
+
+Changes in v4:
+ * Drop dynamic debug based filter support since that will be developed later with
+   the help from Steven (Ftrace maintainer).
+ * Drop value passed to writel as it is causing hangs when tracing is enabled.
+ * Code cleanup for trace event as suggested by Steven for earlier version.
+ * Fixed some build errors reported by 0-day bot.
+
+Changes in v3:
+ * Create a generic mmio header for instrumented version (Earlier suggested in [1]
+   by Will Deacon and recently [2] by Greg to have a generic version first).
+ * Add dynamic debug support to filter out traces which can be very useful for targeted
+   debugging specific to subsystems or drivers.
+ * Few modifications to the rwmmio trace event fields to include the mmio width and print
+   addresses in hex.
+ * Rewrote commit msg to explain some more about usecases.
+
+Prasad Sodagudi (1):
+  lib: Add register read/write tracing support
+
+Sai Prakash Ranjan (8):
+  arm64: io: Use asm-generic high level MMIO accessors
+  coresight: etm4x: Use asm-generic IO memory barriers
+  irqchip/tegra: Fix overflow implicit truncation warnings
+  drm/meson: Fix overflow implicit truncation warnings
+  KVM: arm64: Add a flag to disable MMIO trace for nVHE KVM
+  asm-generic/io: Add logging support for MMIO accessors
+  serial: qcom_geni_serial: Disable MMIO tracing for geni serial
+  soc: qcom: geni: Disable MMIO tracing for GENI SE
+
+ arch/Kconfig                                  |  3 +
+ arch/arm64/Kconfig                            |  1 +
+ arch/arm64/include/asm/io.h                   | 41 ++------
+ arch/arm64/kvm/hyp/nvhe/Makefile              |  7 +-
+ drivers/gpu/drm/meson/meson_viu.c             | 22 ++---
+ .../coresight/coresight-etm4x-core.c          |  8 +-
+ drivers/hwtracing/coresight/coresight-etm4x.h |  8 +-
+ drivers/irqchip/irq-tegra.c                   | 10 +-
+ drivers/soc/qcom/qcom-geni-se.c               |  3 +
+ drivers/tty/serial/qcom_geni_serial.c         |  3 +
+ include/asm-generic/io.h                      | 91 ++++++++++++++++-
+ include/trace/events/rwmmio.h                 | 97 +++++++++++++++++++
+ lib/Kconfig                                   |  7 ++
+ lib/Makefile                                  |  2 +
+ lib/trace_readwrite.c                         | 47 +++++++++
+ 15 files changed, 288 insertions(+), 62 deletions(-)
+ create mode 100644 include/trace/events/rwmmio.h
+ create mode 100644 lib/trace_readwrite.c
+
+-- 
+2.33.1
+

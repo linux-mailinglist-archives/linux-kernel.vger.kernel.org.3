@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9AB751A6A7
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 18:54:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA13351A89D
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:14:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354123AbiEDQ5S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 12:57:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51928 "EHLO
+        id S1356012AbiEDRMR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 13:12:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353894AbiEDQwp (ORCPT
+        with ESMTP id S1354791AbiEDQ7G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 12:52:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FC1447AC1;
-        Wed,  4 May 2022 09:48:49 -0700 (PDT)
+        Wed, 4 May 2022 12:59:06 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87C1748314;
+        Wed,  4 May 2022 09:51:01 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 776A061771;
-        Wed,  4 May 2022 16:48:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C41EFC385A4;
-        Wed,  4 May 2022 16:48:48 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2D847617BD;
+        Wed,  4 May 2022 16:51:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 770B4C385A4;
+        Wed,  4 May 2022 16:51:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651682928;
-        bh=vElSciYUSw5PYLIPgzAopPeCZT3L1Ns5W1UDzeUU2sY=;
+        s=korg; t=1651683060;
+        bh=Ml8Xr3vF/i5o3EcwcDdhV4lR+q7NSKCRiHjFcKZqJvk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ftPPULb2HKb1930r+yxyFhqa28LbKPU2rcMX5y89IILfepLCbCd+hcuF/OpsU3Sjc
-         iOMmw0GC6EM82XCrPumah1EHnaaM/n4biEEuz/TAGDGwfTGlmTi41cIrwb4K5nAdxZ
-         36Ydrr4Qq6zAHX/ASL/RXNXXnQ8LEoXP8PgqxH+g=
+        b=P6NUYIaIIjik+ymXkBx1YvEo/Qi0Ih7wDv8IzI/5yLX9kxmzEJQMPqzup5Cuz1nlw
+         FaOsRra5byE6hxDBEIk7E2ETRZRPMkfpwZ+rwaXDJhA7Cy6OdzMuwnBHlOnwmphhCT
+         /JCObQoXtcS5MbyuZdR43yrHyrhsoZSJn61x8O4c=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 35/84] phy: samsung: Fix missing of_node_put() in exynos_sata_phy_probe
+        stable@vger.kernel.org, Pablo Neira Ayuso <pablo@netfilter.org>,
+        Stefano Brivio <sbrivio@redhat.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 064/129] netfilter: nft_set_rbtree: overlap detection with element re-addition after deletion
 Date:   Wed,  4 May 2022 18:44:16 +0200
-Message-Id: <20220504152930.285423313@linuxfoundation.org>
+Message-Id: <20220504153026.338363624@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220504152927.744120418@linuxfoundation.org>
-References: <20220504152927.744120418@linuxfoundation.org>
+In-Reply-To: <20220504153021.299025455@linuxfoundation.org>
+References: <20220504153021.299025455@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,35 +55,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Pablo Neira Ayuso <pablo@netfilter.org>
 
-[ Upstream commit 388ec8f079f2f20d5cd183c3bc6f33cbc3ffd3ef ]
+[ Upstream commit babc3dc9524f0bcb5a0ec61f3c3639b11508fad6 ]
 
-The device_node pointer is returned by of_parse_phandle() with refcount
-incremented. We should use of_node_put() on it when done.
+This patch fixes spurious EEXIST errors.
 
-Fixes: bcff4cba41bc ("PHY: Exynos: Add Exynos5250 SATA PHY driver")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Link: https://lore.kernel.org/r/20220407091857.230386-1-krzysztof.kozlowski@linaro.org
-Signed-off-by: Vinod Koul <vkoul@kernel.org>
+Extend d2df92e98a34 ("netfilter: nft_set_rbtree: handle element
+re-addition after deletion") to deal with elements with same end flags
+in the same transation.
+
+Reset the overlap flag as described by 7c84d41416d8 ("netfilter:
+nft_set_rbtree: Detect partial overlaps on insertion").
+
+Fixes: 7c84d41416d8 ("netfilter: nft_set_rbtree: Detect partial overlaps on insertion")
+Fixes: d2df92e98a34 ("netfilter: nft_set_rbtree: handle element re-addition after deletion")
+Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
+Reviewed-by: Stefano Brivio <sbrivio@redhat.com>
+Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/phy/samsung/phy-exynos5250-sata.c | 1 +
- 1 file changed, 1 insertion(+)
+ net/netfilter/nft_set_rbtree.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/phy/samsung/phy-exynos5250-sata.c b/drivers/phy/samsung/phy-exynos5250-sata.c
-index 4dd7324d91b2..5077987570fd 100644
---- a/drivers/phy/samsung/phy-exynos5250-sata.c
-+++ b/drivers/phy/samsung/phy-exynos5250-sata.c
-@@ -190,6 +190,7 @@ static int exynos_sata_phy_probe(struct platform_device *pdev)
- 		return -EINVAL;
- 
- 	sata_phy->client = of_find_i2c_device_by_node(node);
-+	of_node_put(node);
- 	if (!sata_phy->client)
- 		return -EPROBE_DEFER;
+diff --git a/net/netfilter/nft_set_rbtree.c b/net/netfilter/nft_set_rbtree.c
+index 217ab3644c25..94a5446c5eae 100644
+--- a/net/netfilter/nft_set_rbtree.c
++++ b/net/netfilter/nft_set_rbtree.c
+@@ -348,7 +348,11 @@ static int __nft_rbtree_insert(const struct net *net, const struct nft_set *set,
+ 				*ext = &rbe->ext;
+ 				return -EEXIST;
+ 			} else {
+-				p = &parent->rb_left;
++				overlap = false;
++				if (nft_rbtree_interval_end(rbe))
++					p = &parent->rb_left;
++				else
++					p = &parent->rb_right;
+ 			}
+ 		}
  
 -- 
 2.35.1

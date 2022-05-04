@@ -2,67 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E24451A1CD
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 16:07:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78CDF51A1E2
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 16:09:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351039AbiEDOLK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 10:11:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56600 "EHLO
+        id S1351147AbiEDONY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 10:13:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344973AbiEDOLE (ORCPT
+        with ESMTP id S1351105AbiEDONN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 10:11:04 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDBB541338;
-        Wed,  4 May 2022 07:07:28 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6890461A35;
-        Wed,  4 May 2022 14:07:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D14A1C385A4;
-        Wed,  4 May 2022 14:07:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651673247;
-        bh=AOzP1mjGIKqKOsNlo9BHb/hKxiRMov98HMlUP91rW/0=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=QFkrSmgCkKXjqTPEq4kQlT0ktmBYcUZhWXaNTU/xLrJiMFoy3ekEvJ76ZybZitrbT
-         NgRYx3J2l+pWcvJHZN58Q3tlp7gXbafjbBeGHoY88sZ8VKL1H1qA4bVMMgdf+AtkAF
-         ZIGp2V58aIKQyKmpuIXfbUPMTDLkNzL+QfKxkr08XcEVMAT4VwdM73l8HAjN97MPcc
-         4oEzXkI7lCXLc4Vu4LNIBC9qQ+wxT7crzjS0TbrwArlun6Px6QbG0EoqNFoNWm59XO
-         mB+Q7vkxkSyDoRSX40CorQVysexK45CIzoRJNlKvH1zObWQr0j4dX9eSoaNZVlspNq
-         HOfc7g1HcUzyQ==
-Received: by mail-wr1-f43.google.com with SMTP id d5so2181986wrb.6;
-        Wed, 04 May 2022 07:07:27 -0700 (PDT)
-X-Gm-Message-State: AOAM533lI/2iybd3pb0fmsY0ib2ml2cLZqRCy1nFu8hoFrgtSI6ZSn1B
-        Vw63GiMgW8xJ4VOV7S5gz/mPbwsD88MKQGGI968=
-X-Google-Smtp-Source: ABdhPJyBvuzUVHauiOOhlgsX/356BcYJrvgYX24D9gTDq9FHSvu8LBFLLUOrs+/KZcEXVCs6uf2aemiYa3pCuILeHqY=
-X-Received: by 2002:a5d:49cb:0:b0:20a:cee3:54fc with SMTP id
- t11-20020a5d49cb000000b0020acee354fcmr16094949wrs.12.1651673246077; Wed, 04
- May 2022 07:07:26 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220429135108.2781579-44-schnelle@linux.ibm.com>
- <20220503233802.GA420374@bhelgaas> <CAK8P3a02vidd7u5Kp6UJj=9tj_hFGL24SmzuNpDGu1GOa1w9+w@mail.gmail.com>
- <alpine.DEB.2.21.2205041311280.9548@angie.orcam.me.uk>
-In-Reply-To: <alpine.DEB.2.21.2205041311280.9548@angie.orcam.me.uk>
-From:   Arnd Bergmann <arnd@kernel.org>
-Date:   Wed, 4 May 2022 16:07:09 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a2jwv00En13=5mHVA4OGRzDpAsPKy4nqM79L6xP5=aQFQ@mail.gmail.com>
-Message-ID: <CAK8P3a2jwv00En13=5mHVA4OGRzDpAsPKy4nqM79L6xP5=aQFQ@mail.gmail.com>
-Subject: Re: [RFC v2 25/39] pcmcia: add HAS_IOPORT dependencies
-To:     "Maciej W. Rozycki" <macro@orcam.me.uk>
-Cc:     Bjorn Helgaas <helgaas@kernel.org>,
-        Niklas Schnelle <schnelle@linux.ibm.com>,
-        Arnd Bergmann <arnd@arndb.de>,
+        Wed, 4 May 2022 10:13:13 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 204D241FA1
+        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 07:09:36 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1nmFgM-0000h2-LG; Wed, 04 May 2022 16:08:46 +0200
+Received: from pengutronix.de (unknown [IPv6:2a00:20:7019:a9b6:6aae:fc9e:d3ef:96db])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 347A975CE1;
+        Wed,  4 May 2022 14:08:34 +0000 (UTC)
+Date:   Wed, 4 May 2022 16:08:33 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Wolfram Sang <wsa@kernel.org>,
+        Chris Packham <chris.packham@alliedtelesis.co.nz>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        Dominik Brodowski <linux@dominikbrodowski.net>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Jiri Slaby <jirislaby@kernel.org>,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        linux-ide@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-serial@vger.kernel.org,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Anatolij Gustschin <agust@denx.de>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Pantelis Antoniou <pantelis.antoniou@gmail.com>,
+        Mark Brown <broonie@kernel.org>
+Subject: Re: [PATCH v1 2/4] powerpc/mpc5xxx: Switch
+ mpc5xxx_get_bus_frequency() to use fwnode
+Message-ID: <20220504140833.b2itvapuqlssm74k@pengutronix.de>
+References: <20220504134449.64473-1-andriy.shevchenko@linux.intel.com>
+ <20220504134449.64473-2-andriy.shevchenko@linux.intel.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="vz3cm7jicnfhqyjt"
+Content-Disposition: inline
+In-Reply-To: <20220504134449.64473-2-andriy.shevchenko@linux.intel.com>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,29 +74,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 4, 2022 at 2:38 PM Maciej W. Rozycki <macro@orcam.me.uk> wrote:
->
-> On Wed, 4 May 2022, Arnd Bergmann wrote:
->
-> > Almost all architectures that support CONFIG_PCI also provide
-> > HAS_IOPORT today (at least at compile time, if not at runtime),
-> > with s390 as a notable exception. Any machines that have legacy
-> > PCI device support will also have I/O ports because a lot of
-> > legacy PCI cards used it, and any machine with a pc-card slot
-> > should also support legacy PCI devices.
-> >
-> > If we get new architectures without I/O space in the future, they
-> > would certainly not care about supporting old cardbus devices.
->
->  POWER9 is another architecture with no port I/O space[1]:
 
-POWER9 is just an implementation of the power architecture
-that has a particular PCI host bridge. I would assume that
-arch/powerpc/ would continue to set HAS_IOPORT because
-it knows how to access I/O ports at compile-time.
+--vz3cm7jicnfhqyjt
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-If a particular host bridge does not declare an I/O port range
-in its DT, then of course it won't be accessible, but that is
-different from architectures that have no concept of I/O ports.
+On 04.05.2022 16:44:47, Andy Shevchenko wrote:
+> Switch mpc5xxx_get_bus_frequency() to use fwnode in order to help
+> cleaning up other parts of the kernel from OF specific code.
+>=20
+> No functional change intended.
+>=20
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+>  arch/powerpc/include/asm/mpc5xxx.h            |  9 +++-
+>  arch/powerpc/platforms/52xx/mpc52xx_gpt.c     |  2 +-
+>  arch/powerpc/sysdev/mpc5xxx_clocks.c          | 41 ++++++++++---------
+>  drivers/ata/pata_mpc52xx.c                    |  2 +-
+>  drivers/i2c/busses/i2c-mpc.c                  |  7 ++--
+>  drivers/net/can/mscan/mpc5xxx_can.c           |  2 +-
+>  drivers/net/ethernet/freescale/fec_mpc52xx.c  |  2 +-
+>  .../net/ethernet/freescale/fec_mpc52xx_phy.c  |  3 +-
+>  .../net/ethernet/freescale/fs_enet/mii-fec.c  |  4 +-
+>  drivers/spi/spi-mpc52xx.c                     |  2 +-
+>  drivers/tty/serial/mpc52xx_uart.c             |  4 +-
+>  11 files changed, 44 insertions(+), 34 deletions(-)
 
-         Arnd
+Acked-by: Marc Kleine-Budde <mkl@pengutronix.de> # for mscan/mpc5xxx_can
+
+regards,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--vz3cm7jicnfhqyjt
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmJyiN4ACgkQrX5LkNig
+010OIAf8CBk7q4SlnkqYRtXPIROz3oNFhMidCM6GZg2jjdclJJWBQBKZcqVIqVOE
+d8lOgUvYv1HV6YvQfoaTflFSAabkzzrzJHOzvrPjpQN8m/g/jQWrtgnLsnXR6DQ8
++IlS6l/ePviEK1b1wBflbpnXNDvqyuZ1JI6raS33OtF23UfR9i3okaA7vtWhBH2p
+w/pqkLeh9WHNBneeJaf9q5ag2Z99PothsCek8lEUrwJYaw9/bn0is0JWC8Zjze4C
+skOkxpOERxfSedvx4WSFuU7U+CNYXk4/BkWQa/1dcLbzFuW/WdgAJDKFOtWTOI9C
+od+uCAGiK4UNsWkGX3PG24Mrvry9iw==
+=o7Bz
+-----END PGP SIGNATURE-----
+
+--vz3cm7jicnfhqyjt--

@@ -2,79 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA6B751AC64
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 20:09:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFA8651AC6A
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 20:09:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376858AbiEDSMs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 14:12:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53186 "EHLO
+        id S1376604AbiEDSNa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 14:13:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376537AbiEDSMi (ORCPT
+        with ESMTP id S1376826AbiEDSNT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 14:12:38 -0400
+        Wed, 4 May 2022 14:13:19 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F06F47DA91
-        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 10:29:24 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 956BB7FF6B
+        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 10:31:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651685364;
+        s=mimecast20190719; t=1651685474;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=6DtzKR9aJWXKQXaXTDvVkj3EbrIwKfckZvxRRNgRE8g=;
-        b=EsumouLKgXhzZP4UqAAlXpSodnldS9NrV2a6Pf12GTJhSN+XOfAZzABYQ5Y6fgnlPA/bom
-        iZQqLOAaR5mtqXEjiCBBRNt9d8LViCXQq3prVn6F81W3fy+nliTV/IDXjKl+JU0dW1vtON
-        e8kmYFvdHWloW1wHVS9x2gJ3pPJ1Vf8=
-Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
- [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=joehKCGQgUtB5bm9SSiCyxnpdmxIgMPc6V/OebR+v8M=;
+        b=C5AJcstFFPYdyUe4tcA3IjnrYqT0Da2LH/jURefGvwUlSmJIa5FGlhs0tzRL9FuYff83pv
+        dLqHaund8jr5GXOD8Qv60Z6fjTpKINe72Qf3l6vTjUDdf9yk/q24po34dNjCm5hSlvOnFy
+        0ZDLKs0BkRonXrcBbe+Xb0C/+zf8XZc=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-3-QJhoN6n9Pf-445zSO_qaAQ-1; Wed, 04 May 2022 13:29:21 -0400
-X-MC-Unique: QJhoN6n9Pf-445zSO_qaAQ-1
-Received: by mail-qv1-f72.google.com with SMTP id bu6-20020ad455e6000000b004563a74e3f9so1368373qvb.9
-        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 10:29:20 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:organization:user-agent:mime-version
-         :content-transfer-encoding;
-        bh=6DtzKR9aJWXKQXaXTDvVkj3EbrIwKfckZvxRRNgRE8g=;
-        b=NYtYJLZwRHvI5OlxWjl7MLvlGAgLY/99o5NJ79X/1hbBI/1JprTk9yS8aXsSVQvMDl
-         oPe0eqfLIF4xo3wUksVmDW2jAdyLTHto+Gw4P94NmMb1t8lGFXZ0hSMjgNqw1kVI1kUl
-         6GdrkbH7hU5SonSkXHkL65oa35sZ1azFj/Y2SixNInaCxoJfjDp0Nktxs76oiQcu3pA5
-         wCvtnkWG9M4tFFsTtJFQp2IyqgF8PrBeK0lq2vYJB8tU5yYzzR78K/619PLe8DIiX14K
-         QKQwB1khHzd+sdegRPXpDr7FFcdRk5CN4ldBnCRS4Kgtcy7H0j9AJhPOATfszMDeVkcJ
-         ZoMg==
-X-Gm-Message-State: AOAM533lRyQq20oeDjZjWBMJcdngGSZnFOxadmSUeGxRRT9gxNFi4r0n
-        GLrMTMOAFLjSAovhD3AqOp/R7gsaAVpEp3oLxlWuA0e0b8O7UqclP2XIVYVZuTel29Gnc12AQo8
-        OblpWlIQ+x4FPmBniYiNPYbvG
-X-Received: by 2002:ac8:5e0c:0:b0:2f3:adfd:bd30 with SMTP id h12-20020ac85e0c000000b002f3adfdbd30mr8408569qtx.277.1651685360396;
-        Wed, 04 May 2022 10:29:20 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxjrX58n0IOhBj6Fr3PV/2lw6DGC036Yba/rU/r+Mamk+IeEqM5857Vdlz0oR2XeiB+lpTMJA==
-X-Received: by 2002:ac8:5e0c:0:b0:2f3:adfd:bd30 with SMTP id h12-20020ac85e0c000000b002f3adfdbd30mr8408554qtx.277.1651685360137;
-        Wed, 04 May 2022 10:29:20 -0700 (PDT)
-Received: from [192.168.8.138] (static-71-184-137-158.bstnma.ftas.verizon.net. [71.184.137.158])
-        by smtp.gmail.com with ESMTPSA id h23-20020ac85497000000b002f39b99f6b9sm7762181qtq.83.2022.05.04.10.29.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 May 2022 10:29:19 -0700 (PDT)
-Message-ID: <0ca5c54fab5dd7dd5988ae48af779570076800a6.camel@redhat.com>
-Subject: Re: [PATCH] drm/nouveau/devinit: fix returnvar.cocci warnings
-From:   Lyude Paul <lyude@redhat.com>
-To:     Guo Zhengkui <guozhengkui@vivo.com>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        Karol Herbst <kherbst@redhat.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Cc:     zhengkui_guo@outlook.com
-Date:   Wed, 04 May 2022 13:29:18 -0400
-In-Reply-To: <20220504161003.9245-1-guozhengkui@vivo.com>
-References: <20220504161003.9245-1-guozhengkui@vivo.com>
-Organization: Red Hat Inc.
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+ us-mta-393-rk43vzTnOBWIVmvA9gJnVw-1; Wed, 04 May 2022 13:31:11 -0400
+X-MC-Unique: rk43vzTnOBWIVmvA9gJnVw-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8CE0E380451D;
+        Wed,  4 May 2022 17:31:09 +0000 (UTC)
+Received: from horse.redhat.com (unknown [10.22.16.200])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 45A0A111DCF2;
+        Wed,  4 May 2022 17:31:09 +0000 (UTC)
+Received: by horse.redhat.com (Postfix, from userid 10451)
+        id 094EC220463; Wed,  4 May 2022 13:31:09 -0400 (EDT)
+Date:   Wed, 4 May 2022 13:31:08 -0400
+From:   Vivek Goyal <vgoyal@redhat.com>
+To:     Bernd Schubert <bschubert@ddn.com>
+Cc:     Dharmendra Hans <dharamhans87@gmail.com>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        linux-fsdevel@vger.kernel.org,
+        fuse-devel <fuse-devel@lists.sourceforge.net>,
+        linux-kernel@vger.kernel.org, Dharmendra Singh <dsingh@ddn.com>
+Subject: Re: [PATCH v4 1/3] FUSE: Implement atomic lookup + create
+Message-ID: <YnK4XIk0M3Dx5RP+@redhat.com>
+References: <20220502102521.22875-1-dharamhans87@gmail.com>
+ <20220502102521.22875-2-dharamhans87@gmail.com>
+ <YnGIUOP2BezDAb1k@redhat.com>
+ <CACUYsyGoX+o19u41cZyF92eDBO-9rFN_EEWBvWBGrEMuNn29Mw@mail.gmail.com>
+ <YnKR9CFYPXT1bM1F@redhat.com>
+ <8003098d-6b17-5cdf-866d-06fefdf1ca31@ddn.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8003098d-6b17-5cdf-866d-06fefdf1ca31@ddn.com>
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.3
 X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -85,96 +70,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Reviewed-by: Lyude Paul <lyude@redhat.com>
-
-Will push to the appropriate branch in a little bit
-
-On Thu, 2022-05-05 at 00:09 +0800, Guo Zhengkui wrote:
-> Fix the following coccicheck warnings:
+On Wed, May 04, 2022 at 05:46:27PM +0200, Bernd Schubert wrote:
 > 
-> drivers/gpu/drm/nouveau/nvkm/subdev/devinit/gf100.c:71:5-12:
-> Unneeded variable: "disable". Return "0ULL" on line 90.
-> drivers/gpu/drm/nouveau/nvkm/subdev/devinit/gm107.c:35:5-12:
-> Unneeded variable: "disable". Return "0ULL" on line 44.
-> drivers/gpu/drm/nouveau/nvkm/subdev/devinit/g98.c:35:5-12:
-> Unneeded variable: "disable". Return "0ULL" on line 50.
 > 
-> Signed-off-by: Guo Zhengkui <guozhengkui@vivo.com>
-> ---
->  drivers/gpu/drm/nouveau/nvkm/subdev/devinit/g98.c   | 3 +--
->  drivers/gpu/drm/nouveau/nvkm/subdev/devinit/gf100.c | 3 +--
->  drivers/gpu/drm/nouveau/nvkm/subdev/devinit/gm107.c | 3 +--
->  3 files changed, 3 insertions(+), 6 deletions(-)
+> On 5/4/22 16:47, Vivek Goyal wrote:
 > 
-> diff --git a/drivers/gpu/drm/nouveau/nvkm/subdev/devinit/g98.c
-> b/drivers/gpu/drm/nouveau/nvkm/subdev/devinit/g98.c
-> index 05729ca19e9a..8977483a9f42 100644
-> --- a/drivers/gpu/drm/nouveau/nvkm/subdev/devinit/g98.c
-> +++ b/drivers/gpu/drm/nouveau/nvkm/subdev/devinit/g98.c
-> @@ -32,7 +32,6 @@ g98_devinit_disable(struct nvkm_devinit *init)
->         struct nvkm_device *device = init->subdev.device;
->         u32 r001540 = nvkm_rd32(device, 0x001540);
->         u32 r00154c = nvkm_rd32(device, 0x00154c);
-> -       u64 disable = 0ULL;
->  
->         if (!(r001540 & 0x40000000)) {
->                 nvkm_subdev_disable(device, NVKM_ENGINE_MSPDEC, 0);
-> @@ -47,7 +46,7 @@ g98_devinit_disable(struct nvkm_devinit *init)
->         if (!(r00154c & 0x00000040))
->                 nvkm_subdev_disable(device, NVKM_ENGINE_SEC, 0);
->  
-> -       return disable;
-> +       return 0ULL;
->  }
->  
->  static const struct nvkm_devinit_func
-> diff --git a/drivers/gpu/drm/nouveau/nvkm/subdev/devinit/gf100.c
-> b/drivers/gpu/drm/nouveau/nvkm/subdev/devinit/gf100.c
-> index 051cfd6a5caf..5b7cb1fe7897 100644
-> --- a/drivers/gpu/drm/nouveau/nvkm/subdev/devinit/gf100.c
-> +++ b/drivers/gpu/drm/nouveau/nvkm/subdev/devinit/gf100.c
-> @@ -68,7 +68,6 @@ gf100_devinit_disable(struct nvkm_devinit *init)
->  {
->         struct nvkm_device *device = init->subdev.device;
->         u32 r022500 = nvkm_rd32(device, 0x022500);
-> -       u64 disable = 0ULL;
->  
->         if (r022500 & 0x00000001)
->                 nvkm_subdev_disable(device, NVKM_ENGINE_DISP, 0);
-> @@ -87,7 +86,7 @@ gf100_devinit_disable(struct nvkm_devinit *init)
->         if (r022500 & 0x00000200)
->                 nvkm_subdev_disable(device, NVKM_ENGINE_CE, 1);
->  
-> -       return disable;
-> +       return 0ULL;
->  }
->  
->  void
-> diff --git a/drivers/gpu/drm/nouveau/nvkm/subdev/devinit/gm107.c
-> b/drivers/gpu/drm/nouveau/nvkm/subdev/devinit/gm107.c
-> index 4323732a3cb2..8955af2704c7 100644
-> --- a/drivers/gpu/drm/nouveau/nvkm/subdev/devinit/gm107.c
-> +++ b/drivers/gpu/drm/nouveau/nvkm/subdev/devinit/gm107.c
-> @@ -32,7 +32,6 @@ gm107_devinit_disable(struct nvkm_devinit *init)
->         struct nvkm_device *device = init->subdev.device;
->         u32 r021c00 = nvkm_rd32(device, 0x021c00);
->         u32 r021c04 = nvkm_rd32(device, 0x021c04);
-> -       u64 disable = 0ULL;
->  
->         if (r021c00 & 0x00000001)
->                 nvkm_subdev_disable(device, NVKM_ENGINE_CE, 0);
-> @@ -41,7 +40,7 @@ gm107_devinit_disable(struct nvkm_devinit *init)
->         if (r021c04 & 0x00000001)
->                 nvkm_subdev_disable(device, NVKM_ENGINE_DISP, 0);
->  
-> -       return disable;
-> +       return 0ULL;
->  }
->  
->  static const struct nvkm_devinit_func
+> > Ok, naming is little confusing. I think we will have to put it in
+> > commit message and where you define FUSE_ATOMIC_CREATE that what's
+> > the difference between FUSE_CREATE and FUSE_ATOMIC_CREATE. This is
+> > ATOMIC w.r.t what?
+> > 
+> > May be atomic here means that "lookup + create + open" is a single operation.
+> > But then even FUSE_CREATE is atomic because "creat + open" is a single
+> > operation.
+> > 
+> > In fact FUSE_CREATE does lookup anyway and returns all the information
+> > in fuse_entry_out.
+> > 
+> > IIUC, only difference between FUSE_CREATE and FUSE_ATOMIC_CREATE is that
+> > later also carries information in reply whether file was actually created
+> > or not (FOPEN_FILE_CREATED). This will be set if file did not exist
+> > already and it was created indeed. Is that right?
+> > 
+> > I see FOPEN_FILE_CREATED is being used to avoid calling
+> > fuse_dir_changed(). That sounds like a separate optimization and probably
+> > should be in a separate patch.
+> > 
+> > IOW, I think this patch should be broken in to multiple pieces. First
+> > piece seems to be avoiding lookup() and given the way it is implemented,
+> > looks like we can avoid lookup() even by using existing FUSE_CREATE
+> > command. We don't necessarily need FUSE_ATOMIC_CREATE. Is that right?
+> 
+> The initial non-published patches had that, but I had actually asked not to
+> go that route, because I'm scared that some user space file system
+> implementations might get broken.
 
--- 
-Cheers,
- Lyude Paul (she/her)
- Software Engineer at Red Hat
+> Right now there is always a lookup before
+> fuse_create_open() and when the resulting dentry is positive
+> fuse_create_open/FUSE_CREATE is bypassed. I.e. user space implementations
+> didn't need to handle existing files.
+
+Hmm..., So if dentry is positive, we will call FUSE_OPEN instead in 
+current code.
+
+Now with this change, we will call FUSE_CREATE and file could still
+be present. If it is a shared filesystem, file could be created by
+another client anyway after lookup() completed and returned a non-existent
+file. So server can still get FUSE_CREATE and file could be there.
+
+But I understand that risk of regression is not zero. 
+
+Given we are going to implement FUSE_CREATE_EXT in the same patch
+series, I guess we could fix it easily by switching to FUSE_CREATE_EXT.
+
+So that's my take. I will be willing to take this chance. Until and
+unless ofcourse Miklos disagrees. :-)
+
+Thanks
+Vivek
+
+> Out of the sudden user space
+> implementations might need to handle it and some of them might get broken
+> with that kernel update. I guess even a single broken user space
+> implementation would count as regression.
+> So I had asked to change the patch to require a user space flag.
+> 
+> -- Bernd
+> 
 

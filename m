@@ -2,136 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FDE251B038
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 23:16:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B82C551B041
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 23:17:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378539AbiEDVT6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 17:19:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34612 "EHLO
+        id S1378549AbiEDVV3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 17:21:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357423AbiEDVTy (ORCPT
+        with ESMTP id S1357474AbiEDVV0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 17:19:54 -0400
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CD82220C4
-        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 14:16:16 -0700 (PDT)
-Received: by mail-lj1-x22f.google.com with SMTP id 4so3251912ljw.11
-        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 14:16:15 -0700 (PDT)
+        Wed, 4 May 2022 17:21:26 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 379DF4A900
+        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 14:17:49 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id j8-20020a17090a060800b001cd4fb60dccso2333170pjj.2
+        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 14:17:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=openvz-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=tdFt0uQlPJ4mzIwCT11tWacBOCFR/O+DCJD9m2elhvY=;
-        b=4BtgJE6tIVi5spqKRy2safmJJvFhDwqig/gu8SOgJVMNlQoN7e6oyggAGtbh0Ai3u+
-         mR+n9pawKCECW0w4KaZIWSRlsLDNrXNLicQze8WR7YOF14HoGfcdcRrLoH9tjDGrbzFy
-         WDWbyL2Nu4xZje0kDJ17xDqguvfoDCMUQSyM3hLgoAUlMcGEsTF7qPjnbhKhdYfxmucs
-         wHUTkWv/1+fU/qFlF5OKiFmii/NXaHWgs3XvRrl4Eifnz5ATici85iWc4YhEkszOJAxc
-         Bha+LOrKUOvCCgZ0Q3zYOFb0L/mULFRJtIuA6ZizjW+wmIlKvPAcW/NJrfdYapYD95QF
-         c2mg==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=8el4Rk0mk4LC6bzVxN9Wiyp6vHwSjolb835IADqSIQA=;
+        b=Y5V6GbrOtAzxivDyfLt5L5uZBXZlDDFBVcmRvZ3OOddanp56F72NsQK+Qec3PrNyH8
+         3SyQOe7yX5XMzvHZZbFpU3shQgwuqE6Ur9/o9SiEi5lTQpRUBzF2JCLai3oDiAyr1EOb
+         4usgamJAanu8dWMORqEYK6u7oaqD4PI1x3w/I=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=tdFt0uQlPJ4mzIwCT11tWacBOCFR/O+DCJD9m2elhvY=;
-        b=4ocEM2cFmuZ+9ka1iXWyJQvvGERQshJYrpmm4tqNKHJkP+Iy1nkL2ihp71QZWN67CY
-         oAjRFkpedZCitZkAuiRFzc9bX1DDOgAvNmmqJ3jSQwaKPy4jQ3h52b0WG96VpU99SFsJ
-         BqECCyQg7GmRiEnDGI7GNKbKlI5Erc+02Aj8Bx2zMUrKNSKaz3x2mzllz3kVmWL3Rgq+
-         VdAUUJOLlkeOZ9KIJQPbU+5vhd9+PWaSFzVV3ZNfVwtrZ/QyX6t4gDpmFoSiq4wOeK2o
-         pz8u86h+SU39+oQ5LzrEr44BD+p79BMTBDYY64d4NO8ea0F+fvPavsGOBSP8Hef/UvKR
-         JFRA==
-X-Gm-Message-State: AOAM531N6dhlrUr946vE4vRKW5vunAI6SPBsviMKBY504ciEAho4kHhL
-        TnpDubSTljx1htcWaq3hELfq9g==
-X-Google-Smtp-Source: ABdhPJxgHSAUGLfgLZIb2+0g5ez7rOXgrwqXJD1qFd+PALJWQypuORHFvFz0pwvJnOif4DAYaP2oCw==
-X-Received: by 2002:a05:651c:10b4:b0:24f:88b:2dc3 with SMTP id k20-20020a05651c10b400b0024f088b2dc3mr13985315ljn.383.1651698974268;
-        Wed, 04 May 2022 14:16:14 -0700 (PDT)
-Received: from [192.168.1.65] ([46.188.121.177])
-        by smtp.gmail.com with ESMTPSA id j26-20020a19f51a000000b0047255d21115sm1302266lfb.68.2022.05.04.14.16.13
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=8el4Rk0mk4LC6bzVxN9Wiyp6vHwSjolb835IADqSIQA=;
+        b=Lty3Jnl9BBnlJAFoHnMLrEhNF1oinrlECHIcDjTRl2K1PUbnarqMhSiokcQGszinNi
+         s22daYfg7FCfHoLnAND498bNaTyDeE7gvWhQIR51dJrEqq/AJ+VDgRvV21Npa+MN5iT8
+         74MYbU+xJtCzFqcoCjc5KiiyCBPe9KTtgo0Q36sunVZJw5aQYJIjWrf/DexcaqBkLjnc
+         nBiYKBnXdAj0MIFSEziw+lerqgHekqwBJT3tNeRjpoG1kOkeEf7MDXUdNJNLpds1yNyF
+         5TAfaD6BX01ocycG5KLek9x6K8B+wztcIfr8g+A6/DMNXJuWwtuLMLqWJ53M0K4LSNIj
+         OPzg==
+X-Gm-Message-State: AOAM531lcNkUQnDoa1HU3ZvNo4o9PlHJJMJhcT4uIqVaWvonDaBkraxM
+        qWX9Lf2+44P63AFmrhUld5ykPw==
+X-Google-Smtp-Source: ABdhPJwhlBxZacPgfc5H9mWbA5FH2eaEZzDvZ33SWLjd1tzJzoZhiR0LdHYinUeTZ9WuECufN0sw3A==
+X-Received: by 2002:a17:902:d4ce:b0:15e:90f7:5bf7 with SMTP id o14-20020a170902d4ce00b0015e90f75bf7mr21335093plg.98.1651699068765;
+        Wed, 04 May 2022 14:17:48 -0700 (PDT)
+Received: from localhost ([2620:15c:202:201:35b6:c77b:be04:3bd5])
+        by smtp.gmail.com with UTF8SMTPSA id o4-20020a17090ab88400b001dbf2aac185sm3739324pjr.1.2022.05.04.14.17.47
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 04 May 2022 14:16:13 -0700 (PDT)
-Message-ID: <65244222-02c5-6e8d-7f4b-83651f378ce2@openvz.org>
-Date:   Thu, 5 May 2022 00:16:12 +0300
+        Wed, 04 May 2022 14:17:48 -0700 (PDT)
+Date:   Wed, 4 May 2022 14:17:46 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+Cc:     agross@kernel.org, bjorn.andersson@linaro.org, robh+dt@kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, quic_rohkumar@quicinc.com,
+        srinivas.kandagatla@linaro.org, dianders@chromium.org,
+        swboyd@chromium.org, judyhsiao@chromium.org,
+        Venkata Prasad Potturu <quic_potturu@quicinc.com>
+Subject: Re: [PATCH v11 02/12] arm64: dts: qcom: sc7280: Enable digital
+ codecs and soundwire for CRD 1.0/2.0 and IDP boards
+Message-ID: <YnLteplwGCBheObA@google.com>
+References: <1651664649-25290-1-git-send-email-quic_srivasam@quicinc.com>
+ <1651664649-25290-3-git-send-email-quic_srivasam@quicinc.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: kernfs memcg accounting
-Content-Language: en-US
-To:     =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>
-Cc:     Roman Gushchin <roman.gushchin@linux.dev>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Shakeel Butt <shakeelb@google.com>, kernel@openvz.org,
-        Florian Westphal <fw@strlen.de>, linux-kernel@vger.kernel.org,
-        Michal Hocko <mhocko@suse.com>, cgroups@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Tejun Heo <tj@kernel.org>
-References: <7e867cb0-89d6-402c-33d2-9b9ba0ba1523@openvz.org>
- <20220427140153.GC9823@blackbody.suse.cz>
- <7509fa9f-9d15-2f29-cb2f-ac0e8d99a948@openvz.org>
- <YnBLge4ZQNbbxufc@blackbook>
- <52a9f35b-458b-44c4-7fc8-d05c8db0c73f@openvz.org>
- <20220504141001.GA10890@blackbody.suse.cz>
-From:   Vasily Averin <vvs@openvz.org>
-In-Reply-To: <20220504141001.GA10890@blackbody.suse.cz>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <1651664649-25290-3-git-send-email-quic_srivasam@quicinc.com>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/4/22 17:10, Michal Koutný wrote:
-> On Wed, May 04, 2022 at 12:00:18PM +0300, Vasily Averin <vvs@openvz.org> wrote:
->> As far as I understand, Roman chose the parent memcg because it was a special
->> case of creating a new memory group. He temporally changed active memcg
->> in mem_cgroup_css_alloc() and properly accounted all required memcg-specific
->> allocations.
+On Wed, May 04, 2022 at 05:13:59PM +0530, Srinivasa Rao Mandadapu wrote:
+> Enable rx, tx and va macro codecs and soundwire nodes on revision 3,
+> 4 (aka CRD 1.0 and 2.0) and IDP boards.
 > 
->> However, he ignored accounting for a rather large struct mem_cgroup
->> therefore I think we can do not worry about 128 bytes of kernfs node.
-> 
-> Are you referring to the current code (>= v5.18-rc2)? All big structs
-> related to mem_cgroup should be accounted. What is ignored?
+> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+> Co-developed-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
+> Signed-off-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
 
-mm/memcontrol.c:
-5079 static struct mem_cgroup *mem_cgroup_alloc(void)
-5080 {
-5081         struct mem_cgroup *memcg;
-...
-5086         memcg = kzalloc(struct_size(memcg, nodeinfo, nr_node_ids), GFP_KERNEL);
+Please make sure to collect tags, for v10 you already had:
 
-I think it should allocate at least 2 pages.
-
->> Primary I mean here struct mem_cgroup allocation in mem_cgroup_alloc().
-> 
-> Just note that memory controller may not be always enabled so
-> cgroup_mkdir != mem_cgroup_alloc().
-
-However if cgroup_mkdir() calls mem_cgroup_alloc() it correctly account huge percpu
-allocations but ignores neighbour multipage allocation.
-
->> However, I think we need to take into account any other distributions called
->> inside cgroup_mkdir: struct cgroup and kernefs node in common part and 
->> any other cgroup-cpecific allocations in other .css_alloc functions.
->> They all can be called from inside container, allocates non-accountable
->> memory and by this way theoretically can be misused.
-> 
-> Also note that (if you're purely on unified hierachy) you can protect
-> against that with cgroup.max.descendants and cgroup.max.depth.
-
-In past OpenVz had a lot of limits for various resources (for example we had a limit 
-for iptable rules), but it was very hard to configure them properly.
-Finally we  decided to replace all such custom limits by common memory limit.
-It isn't important how many resources tries to use container as long as
-it doesn't exceed the memory limit.
-Such resource limits can be useful, especially to prevent possible misuses.
-However sooner or later there will be a legal user who will rest against them.
-All you can do in this situation is to recommend him just increase the limit,
-that makes the limit senseless.
-Memory limits looks much more reasonable and understandable.
-
-Thank you,
-	Vasily Averin
+Reviewed-by: Matthias Kaehlcke <mka@chromium.org>

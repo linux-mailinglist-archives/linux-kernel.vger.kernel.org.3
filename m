@@ -2,43 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D32E951AAAA
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:29:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 503CF51A799
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:04:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349455AbiEDRbf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 13:31:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38746 "EHLO
+        id S1354833AbiEDRHM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 13:07:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356885AbiEDRJs (ORCPT
+        with ESMTP id S1355331AbiEDQ7y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 13:09:48 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AB2E4553B;
-        Wed,  4 May 2022 09:56:17 -0700 (PDT)
+        Wed, 4 May 2022 12:59:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C5584AE16;
+        Wed,  4 May 2022 09:51:32 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CBE74B82795;
-        Wed,  4 May 2022 16:56:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51567C385A5;
-        Wed,  4 May 2022 16:56:15 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DD518617C3;
+        Wed,  4 May 2022 16:51:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3209DC385A5;
+        Wed,  4 May 2022 16:51:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651683375;
-        bh=K32jkouY8bCApJeS1xG/u8VhN90LNIqFe6Zp9teHNIg=;
+        s=korg; t=1651683088;
+        bh=8/4Fbs9/GbSJ2Y8kjigEuSA44LNwUjllrxVYoEi/q6k=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YDEYkk3ZUbqcsm8BIrCFqA/a0mbuAUdxV1M4T5JHh+q+vB7bmsSrs6m4RC0o7HxPu
-         d+zrr3vsPEEQsgQP/jjb4gv1fx6VU1sdM6NAGAQv6qm1HJSn0hwds2Lv8/wBq8nsgf
-         qyK3+XWs7ON2Y+yygu74cdUJ9GqwWt3miUn8gDxY=
+        b=XVTAjgYIRjR7a9G9STfhXY2oVngKlwRjABkrybN6gRBsJWHeffmyAIQ4wQ08aD5C0
+         bhEGKRvzuBzmseRyx6vtY5cp8YdUjKxfDL0i2HAo8GpPcmqAx4PKsmJoZq8XRRq2yI
+         vpNTwOtlVTBGwvDrykdK92t+mINCDJffKoo59uzM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jaegeuk Kim <jaegeuk@kernel.org>
-Subject: [PATCH 5.17 046/225] f2fs: should not truncate blocks during roll-forward recovery
+        stable@vger.kernel.org, Maxim Mikityanskiy <maximmi@nvidia.com>,
+        Tariq Toukan <tariqt@nvidia.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 092/129] tls: Skip tls_append_frag on zero copy size
 Date:   Wed,  4 May 2022 18:44:44 +0200
-Message-Id: <20220504153114.207957787@linuxfoundation.org>
+Message-Id: <20220504153028.256636406@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220504153110.096069935@linuxfoundation.org>
-References: <20220504153110.096069935@linuxfoundation.org>
+In-Reply-To: <20220504153021.299025455@linuxfoundation.org>
+References: <20220504153021.299025455@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,37 +56,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jaegeuk Kim <jaegeuk@kernel.org>
+From: Maxim Mikityanskiy <maximmi@nvidia.com>
 
-commit 4d8ec91208196e0e19195f1e7d6be9de5873f242 upstream.
+[ Upstream commit a0df71948e9548de819a6f1da68f5f1742258a52 ]
 
-If the file preallocated blocks and fsync'ed, we should not truncate them during
-roll-forward recovery which will recover i_size correctly back.
+Calling tls_append_frag when max_open_record_len == record->len might
+add an empty fragment to the TLS record if the call happens to be on the
+page boundary. Normally tls_append_frag coalesces the zero-sized
+fragment to the previous one, but not if it's on page boundary.
 
-Fixes: d4dd19ec1ea0 ("f2fs: do not expose unwritten blocks to user by DIO")
-Cc: <stable@vger.kernel.org> # 5.17+
-Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+If a resync happens then, the mlx5 driver posts dump WQEs in
+tx_post_resync_dump, and the empty fragment may become a data segment
+with byte_count == 0, which will confuse the NIC and lead to a CQE
+error.
+
+This commit fixes the described issue by skipping tls_append_frag on
+zero size to avoid adding empty fragments. The fix is not in the driver,
+because an empty fragment is hardly the desired behavior.
+
+Fixes: e8f69799810c ("net/tls: Add generic NIC offload infrastructure")
+Signed-off-by: Maxim Mikityanskiy <maximmi@nvidia.com>
+Reviewed-by: Tariq Toukan <tariqt@nvidia.com>
+Link: https://lore.kernel.org/r/20220426154949.159055-1-maximmi@nvidia.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/f2fs/inode.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ net/tls/tls_device.c | 12 +++++++-----
+ 1 file changed, 7 insertions(+), 5 deletions(-)
 
-diff --git a/fs/f2fs/inode.c b/fs/f2fs/inode.c
-index 71f232dcf3c2..83639238a1fe 100644
---- a/fs/f2fs/inode.c
-+++ b/fs/f2fs/inode.c
-@@ -550,7 +550,8 @@ struct inode *f2fs_iget(struct super_block *sb, unsigned long ino)
- 	}
- 	f2fs_set_inode_flags(inode);
+diff --git a/net/tls/tls_device.c b/net/tls/tls_device.c
+index f718c7346088..1f56225a10e3 100644
+--- a/net/tls/tls_device.c
++++ b/net/tls/tls_device.c
+@@ -483,11 +483,13 @@ static int tls_push_data(struct sock *sk,
+ 		copy = min_t(size_t, size, (pfrag->size - pfrag->offset));
+ 		copy = min_t(size_t, copy, (max_open_record_len - record->len));
  
--	if (file_should_truncate(inode)) {
-+	if (file_should_truncate(inode) &&
-+			!is_sbi_flag_set(sbi, SBI_POR_DOING)) {
- 		ret = f2fs_truncate(inode);
- 		if (ret)
- 			goto bad_inode;
+-		rc = tls_device_copy_data(page_address(pfrag->page) +
+-					  pfrag->offset, copy, msg_iter);
+-		if (rc)
+-			goto handle_error;
+-		tls_append_frag(record, pfrag, copy);
++		if (copy) {
++			rc = tls_device_copy_data(page_address(pfrag->page) +
++						  pfrag->offset, copy, msg_iter);
++			if (rc)
++				goto handle_error;
++			tls_append_frag(record, pfrag, copy);
++		}
+ 
+ 		size -= copy;
+ 		if (!size) {
 -- 
-2.36.0
+2.35.1
 
 
 

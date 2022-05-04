@@ -2,53 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 818B251A3ED
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 17:23:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0122151A3FE
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 17:25:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351935AbiEDP1J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 11:27:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52612 "EHLO
+        id S1352344AbiEDP22 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 11:28:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229902AbiEDP1I (ORCPT
+        with ESMTP id S229902AbiEDP2W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 11:27:08 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FFB341318
-        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 08:23:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E904EB826BD
-        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 15:23:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A952C385A5;
-        Wed,  4 May 2022 15:23:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651677809;
-        bh=ktJHAAfxXY27F4Yp0pVOFZhlUjZRdnCIMDE+o9mcaSc=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Wf/i3XzvW7iUXulwTOOL76y5ntY2o/iZzlM7DltPzIOvHdDuYW8HHcuc2aVasFSrX
-         SkjKm6Wvv3MhL9TGp012sDM+fPVHy1+flzdjIVPFzBnVUsp+nDdzzxz/MLh0+cy/If
-         nWOhDXTQlG1MoQPNJ6jSQsdJGrJuGBo74GAUFkAXSgHzeouIe4SD9q1SZwlllvTYfR
-         whAlki5jIkAsUXS1pHxGR4PZTtksbMoDE9Sqqlmlghj3swVeelD8PmFbI3MxXq5l5m
-         Hoy75fcqSulg9leoTxV1K+5q6Ym3nBY9Vxrtuef0mJSCW+eXvL6js7GYW3AtrAqmwY
-         QFSYZzrqzjmsA==
-Date:   Thu, 5 May 2022 00:23:25 +0900
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     x86@kernel.org, jpoimboe@redhat.com, linux-kernel@vger.kernel.org,
-        Masami Hiramatsu <mhiramat@kernel.org>
-Subject: Re: [PATCH] objtool: Fix STACK_FRAME_NON_STANDARD reloc type
-Message-Id: <20220505002325.f29a5deaebb77549b80d59ce@kernel.org>
-In-Reply-To: <YmvTbN966XmLSZk+@hirez.programming.kicks-ass.net>
-References: <20220429092024.GT2731@worktop.programming.kicks-ass.net>
-        <YmvTbN966XmLSZk+@hirez.programming.kicks-ass.net>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-10.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        Wed, 4 May 2022 11:28:22 -0400
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8A9C4474B;
+        Wed,  4 May 2022 08:24:44 -0700 (PDT)
+Received: by mail-wm1-x32d.google.com with SMTP id c190-20020a1c35c7000000b0038e37907b5bso3452146wma.0;
+        Wed, 04 May 2022 08:24:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Z1nMz8AV1XcW5h20PdvGECZTKrNaeXZIC73UZ/jHwIc=;
+        b=U1q/DgV8WmHyHZrPnWTw4Mo6VNO40cDt5sFdZXGGwGSxj2C10Jt3V1kH94HvOhuBhe
+         Jl58Qqn39NgwpUAmANvXeQtsJy0Nax0dkVCNShi05Hy301IjRC2k1QU9QzOJ93J7EiZO
+         HsFSSKIKUdY+JpyEOEWWTH+IcEJQ/GXRQhijjqvrQIm6AMRuIBYVEPz6JUQ/lYoqNYk5
+         BQxzaBS+WRw0c+FGsnwAPoq0O8YrRs6DAN7DWLiZ9bP6dBetN5sSWVbKHnDuDUulaCb1
+         rlMbBYlmUfyechE2jVkwe7h2dXXzNoVzOk+37N2qKKwk8S0mTzz1qGS2GyV7m6khsm1d
+         W5GA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Z1nMz8AV1XcW5h20PdvGECZTKrNaeXZIC73UZ/jHwIc=;
+        b=tqPJWKQ8HuOpHQPSngtIkXGAmKUpgnI2uG1Jt08xOl4s2q2IMS6z1ACg78r8Wf1C90
+         qfF17GYufrGjroYaKarnQ4toO8TP4HnSWuVMdSQSv+vCxietz+BLnObDMKLpsEsy6gWd
+         cA66NJ6Q/Pq5QnoZnp4bK2aaI3IPE21GphrEFuWCzH3nccqzzAJJoHzzRWuIWEQh0BML
+         WLO1DFY3JLptmrqxU3fbZS/qNXptGqlXrmOQ7EGsHXSZ9h7FJIX+C3NVkY7lmuC/GFZT
+         eOZwXco6P1CpZKUNHVGo18OmbTYEPc1yUjfguVm2gdyZzvGGxO5UplkZWF7UKJgEh4Um
+         tEVA==
+X-Gm-Message-State: AOAM530+yj+1GGUC0ROX0MRzPJNmC/hDHYyB6wb4kXwpLUlwuUktzQ2K
+        W9DhP0iKFZM3RHSdhgwECbwe9FSdsi4=
+X-Google-Smtp-Source: ABdhPJy1kzYMGNLYhbuRv3y4d/PByfjuQojOI9mbcBzhZ5nvU8Rajr0jtKJHSHEkhIbjyJdnVi+45Q==
+X-Received: by 2002:a05:600c:12c9:b0:394:54ab:52c5 with SMTP id v9-20020a05600c12c900b0039454ab52c5mr5415489wmd.141.1651677883397;
+        Wed, 04 May 2022 08:24:43 -0700 (PDT)
+Received: from nergzd-desktop.localdomain ([194.39.226.133])
+        by smtp.gmail.com with ESMTPSA id s14-20020adfa28e000000b0020c5253d91csm11541041wra.104.2022.05.04.08.24.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 May 2022 08:24:43 -0700 (PDT)
+From:   Markuss Broks <markuss.broks@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
+        Markuss Broks <markuss.broks@gmail.com>,
+        Lin Meng-Bo <linmengbo0689@protonmail.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Henrik Rydberg <rydberg@bitmath.org>,
+        linux-input@vger.kernel.org, devicetree@vger.kernel.org
+Subject: [PATCH 0/3] Add support for Imagis IST3038B
+Date:   Wed,  4 May 2022 18:24:02 +0300
+Message-Id: <20220504152406.8730-1-markuss.broks@gmail.com>
+X-Mailer: git-send-email 2.35.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,38 +74,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 29 Apr 2022 14:00:44 +0200
-Peter Zijlstra <peterz@infradead.org> wrote:
+This series adds support for Imagis IST3038B IC support, which
+is a variant of Imagis IST3038 IC. It has a different register map
+(labeled protocol b), but otherwise it seems to be the same IC.
+It is also possible to support various other Imagis ICs using
+protocol b, such as (but not limited to) IST3044B, IST3026, IST3032,
+IST3026B, IST3032B. However, most of them (all except IST3044B)
+use a different coordinate format, so extra effort would be needed
+to support those.
 
-> On Fri, Apr 29, 2022 at 11:20:24AM +0200, Peter Zijlstra wrote:
-> > 
-> > STACK_FRAME_NON_STANDARD results in inconsistent relocation types
-> > depending on .c or .S usage:
-> > 
-> >   Relocation section '.rela.discard.func_stack_frame_non_standard' at offset 0x3c01090 contains 5 entries:
-> >   Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
-> >   0000000000000000  00020c2200000002 R_X86_64_PC32          0000000000047b40 do_suspend_lowlevel + 0
-> >   0000000000000008  0002461e00000001 R_X86_64_64            00000000000480a0 machine_real_restart + 0
-> >   0000000000000010  0000001400000001 R_X86_64_64            0000000000000000 .rodata + b3d4
-> >   0000000000000018  0002444600000002 R_X86_64_PC32          00000000000678a0 __efi64_thunk + 0
-> >   0000000000000020  0002659d00000001 R_X86_64_64            0000000000113160 __crash_kexec + 0
-> 
-> So that weird .rodata entry is optprobe_template_func.
-> 
-> It being in .rodata also means it's not validated and there is no ORC
-> data generated, is that all intentional? The changelog for:
-> 
->   877b145f0f47 ("x86/kprobes: Move trampoline code into RODATA")
-> 
-> doesn't really say anything useful about any of that :/
+Tested by Lin Meng-Bo on Samsung Galaxy Core Prime.
 
-This commit was introduced just for reducing attack surface (the
-trampoline code is NOT executed but just copied into trampoline
-buffers), but if the ORC unwinder doesn't work correctly, please
-revert it.
-I think there is no functional change.
+Cc: Lin Meng-Bo <linmengbo0689@protonmail.com>
 
-Thanks,
+Markuss Broks (3):
+  input/touchscreen: imagis: Correct the maximum touch area value
+  dt-bindings: input/touchscreen: Add compatible for IST3038B
+  input/touchscreen: imagis: Add support for Imagis IST3038B
+
+ .../input/touchscreen/imagis,ist3038c.yaml    |  1 +
+ drivers/input/touchscreen/imagis.c            | 60 +++++++++++++++----
+ 2 files changed, 49 insertions(+), 12 deletions(-)
 
 -- 
-Masami Hiramatsu <mhiramat@kernel.org>
+2.35.1
+

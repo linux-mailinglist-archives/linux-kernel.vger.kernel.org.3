@@ -2,66 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACE5A51B056
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 23:19:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C86E51B05D
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 23:21:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378582AbiEDVWz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 17:22:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36310 "EHLO
+        id S234259AbiEDVZD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 17:25:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231436AbiEDVWi (ORCPT
+        with ESMTP id S230292AbiEDVZB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 17:22:38 -0400
-Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EA0251E47
-        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 14:18:59 -0700 (PDT)
-Received: by mail-yb1-xb2f.google.com with SMTP id m128so4561110ybm.5
-        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 14:18:59 -0700 (PDT)
+        Wed, 4 May 2022 17:25:01 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A5A54BFDD
+        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 14:21:25 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id j8-20020a17090a060800b001cd4fb60dccso2340444pjj.2
+        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 14:21:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=6bErpLDN6CEEoWSzxhVYEvy5hGMXbYXtcuwfFFGVAPk=;
-        b=sWL0jayo/BfRe3n+jU/541fJTcBDKRz3K3MBqQOBfVFyUp3lXVtijyDPbGwHYO9VVN
-         Y7UVxdogikdk6NI+5DxCaqQLBng9/sh7yXAG6TTlEgHVftOtxRnqs5FKRin60E6MUXE1
-         0jBv8iPox4obg8v1FulX+HmQOlgvhMlC2KKM78UZLu0VIhybG3qNG6oDTXrIThDy7MHe
-         NQLjlQKUEY+lWo1sjIrZyvYvn/yO55hj1PmOUXZU9ffk2LCYOFJhb6TQ9W4X8P4594+9
-         //eI8vN7+IjAguBRByZZIdQQ6x+CVTCZkwDnQXPKEjeTn1C736aqZXckpAnFre9qwByV
-         XTQg==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=MWDrNP0KVVRYtQ+s/Maj2xGGZgUlqoPwnuuSKJXHvFI=;
+        b=KumagT+ulwEMT9XiJ9e4HVP6mkdQlDYEU2LKh4coIIMtKR4ch2Ifs2q/82h4nUlgBX
+         gJzDkoqhZjeQvidleU5qYCDk2J0YkQm1g7bXEGLsm2ejxbd7z3w30rzLKCSY3P9U/eMl
+         RVRTDSXasiIkEFcOyE84rBi+xLftsIVfa1v5w=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=6bErpLDN6CEEoWSzxhVYEvy5hGMXbYXtcuwfFFGVAPk=;
-        b=IV8p7spUgX6z3Bh307BAbIomlU8fx3yQWqpSoO+biKKR2NuRL0XTiQoov8muBUXIER
-         P0lirLXVHNlfi1p/uN+8pA/pp6bktBEu1rLWYd9hwAokujs69uC5uBA1f7oue5TYc1Nd
-         3jDykachKW/z52z75ypz63dEHvmFcpHslM+SWhNpWbk4SoALtf0qTL4nZAtM+I7n8LrA
-         zYia+j6AGCv97C5jbltgrD9xBHvHIY7uL4t4dseWnSqL+o+fD2mQEh91LCLG5PNMadkV
-         bAL97Tssn/eWteWTwR5ED/93JhCEqDo5nLcNNf/Ce5BGD69LSGwh9E6AR2w+yR8STqr+
-         46Fw==
-X-Gm-Message-State: AOAM533aYXRqDCx6ehCNHQ2Cp2lUiszWZ+MbkGbyAhdHhicdJU8iBJNK
-        UxLs2GAxvya+LDVPkGqxfiZLUhZJY+WuhkF0x0V0col6qQM=
-X-Google-Smtp-Source: ABdhPJzz+s6AELg+oOJUfJgzIhMlw+qtR1aNwDxIJCIHUMQYEN1ETifkaKkBhr0GUTxTIHvNmBQAt9dhJ2lpCPMTVc8=
-X-Received: by 2002:a25:bcc7:0:b0:648:d728:d39 with SMTP id
- l7-20020a25bcc7000000b00648d7280d39mr19531071ybm.514.1651699138505; Wed, 04
- May 2022 14:18:58 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=MWDrNP0KVVRYtQ+s/Maj2xGGZgUlqoPwnuuSKJXHvFI=;
+        b=uF/lZ4JfZU03zVSK8qDzZJ/K3R2f+7PDTqHdOMM4z53pANDh4Rin0Wf8meQ9WvLTV7
+         IIxUBZUjNqUyNlrMmrdxFQHzRSoEqtJYIQPdJg9jXtMIXFepLHobEKom1tHxapkEYDA4
+         sgYY6+kaNIIGgx3+iFipuRrL6Vl6IfsEJhGJ7m2uBD1lVCqIfUova76B17Bb3gW/Wy6l
+         iHDWBCA6yBXbtcYdUktc9c2q9Zk2S6bY5kZwDE9tR3ZMczIf36f4CneAQjyy64/9z1Fi
+         68M1hUWbT7iyoyKZGDWaVP3XL4JFiLT7aQ/rpQ+bFwTiDC068VfurdvhM0yjxPAg1pIY
+         crOQ==
+X-Gm-Message-State: AOAM532zjSJrHo8CrQDVpD//Nt1QodSA+N4rjZzOjBR7ocw1yTJ11Ybq
+        S9CUYcBZxVExsd9mfzZm2Sq5Mw==
+X-Google-Smtp-Source: ABdhPJzpy3iZLFBU9SDFj7wyNjGD0YtKH9znWsZw5WscqVIxRlIGYTkzrrQQ5Yrifudh350pFmVv3Q==
+X-Received: by 2002:a17:902:e851:b0:15e:93ac:41db with SMTP id t17-20020a170902e85100b0015e93ac41dbmr21339660plg.26.1651699284488;
+        Wed, 04 May 2022 14:21:24 -0700 (PDT)
+Received: from localhost ([2620:15c:202:201:35b6:c77b:be04:3bd5])
+        by smtp.gmail.com with UTF8SMTPSA id l17-20020a170902e2d100b0015e8d4eb2ebsm8579531plc.309.2022.05.04.14.21.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 04 May 2022 14:21:24 -0700 (PDT)
+Date:   Wed, 4 May 2022 14:21:22 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+Cc:     agross@kernel.org, bjorn.andersson@linaro.org, robh+dt@kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, quic_rohkumar@quicinc.com,
+        srinivas.kandagatla@linaro.org, dianders@chromium.org,
+        swboyd@chromium.org, judyhsiao@chromium.org,
+        Venkata Prasad Potturu <quic_potturu@quicinc.com>
+Subject: Re: [PATCH v11 03/12] arm64: dts: qcom: sc7280: Enable digital
+ codecs and soundwire for CRD 3.0/3.1
+Message-ID: <YnLuUrVj+VK1ay5r@google.com>
+References: <1651664649-25290-1-git-send-email-quic_srivasam@quicinc.com>
+ <1651664649-25290-4-git-send-email-quic_srivasam@quicinc.com>
 MIME-Version: 1.0
-References: <20220502164557.3cbb18ca@canb.auug.org.au> <CAHp75VddQMK7b-xbPy91rQ0QskXerhnY_sRiT0ZfGraRmKpL_Q@mail.gmail.com>
-In-Reply-To: <CAHp75VddQMK7b-xbPy91rQ0QskXerhnY_sRiT0ZfGraRmKpL_Q@mail.gmail.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Wed, 4 May 2022 23:18:47 +0200
-Message-ID: <CACRpkdZnCjvjUSP=0M9dOxV6d5PGAP+yqa2P7F2T-Ksgkbmp5A@mail.gmail.com>
-Subject: Re: linux-next: manual merge of the pinctrl tree with the gpio-intel tree
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Fabien Dessenne <fabien.dessenne@foss.st.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <1651664649-25290-4-git-send-email-quic_srivasam@quicinc.com>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,15 +73,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 2, 2022 at 5:43 PM Andy Shevchenko
-<andy.shevchenko@gmail.com> wrote:
+On Wed, May 04, 2022 at 05:14:00PM +0530, Srinivasa Rao Mandadapu wrote:
+> Enable rx, tx and va macro codecs and soundwire nodes for
+> CRD rev5+ (aka CRD 3.0/3.1) boards.
+> 
+> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+> Co-developed-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
+> Signed-off-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
 
-> Thanks for the fix. I think the best course of action is that Linus W.
-> can pull the same branch that GPIO tree has into the pin control tree
-> and resolve that, because the drivers touched are all pin control
-> drivers while the core part of GPIO subsystem was updated.
+Carrying over from v10:
 
-Yup did this!
-
-Yours,
-Linus Walleij
+Reviewed-by: Matthias Kaehlcke <mka@chromium.org>

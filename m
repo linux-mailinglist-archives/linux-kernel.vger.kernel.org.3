@@ -2,45 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05D6951A988
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:18:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 740D551A68C
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 18:53:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355364AbiEDRRo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 13:17:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54976 "EHLO
+        id S1353754AbiEDQ41 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 12:56:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356073AbiEDREw (ORCPT
+        with ESMTP id S1354094AbiEDQxu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 13:04:52 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B16DF50443;
-        Wed,  4 May 2022 09:53:45 -0700 (PDT)
+        Wed, 4 May 2022 12:53:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC14C48325;
+        Wed,  4 May 2022 09:49:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3D5A461505;
-        Wed,  4 May 2022 16:53:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 832F5C385AF;
-        Wed,  4 May 2022 16:53:44 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 472AF6174B;
+        Wed,  4 May 2022 16:49:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F13BC385A5;
+        Wed,  4 May 2022 16:49:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651683224;
-        bh=9aKAC8bS8AJ3whFajoPKnF48+NJXL61N8ubLWROvCB0=;
+        s=korg; t=1651682944;
+        bh=hyh0pvQzRcsuW6DBitFul1w7/YU1VHCjg27hnHWevco=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=AXQAiLyxgnnqP4hw+6yurCBMlIK5zCk50T86KI6xc7PLZ1ZiCFxg9i7rzy5jgy7QA
-         hMME7zrfAoyoODPsvGOho4bdcEEZUaeED+wHg+gJt9DH28I82XLHjqrPWkLSxcUQkp
-         nY77Zhq7hQfqxgaEqYFTjQonVd/YwJdNt24leEx8=
+        b=BOde6N9SrkHOCqs3mjrBaKsmQ3nX74RBd4ihfh3qDf5x5MuG/3o6vpxf0KMunUK0/
+         OiCSAFSMzLkwZ+squgPkMcebYZCzBr2YxocXJbz01XsJ3DsRPh8NtXK8xIJXLAODSa
+         J7UkhAH/JOYwtKowg/e+J7CL1ekraYYkjvxob46c=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Oleksandr Ocheretnyi <oocheret@cisco.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
+        stable@vger.kernel.org, Pengcheng Yang <yangpc@wangsu.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Neal Cardwell <ncardwell@google.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 077/177] mtd: fix part field data corruption in mtd_info
+Subject: [PATCH 5.4 49/84] tcp: ensure to use the most recently sent skb when filling the rate sample
 Date:   Wed,  4 May 2022 18:44:30 +0200
-Message-Id: <20220504153059.970955149@linuxfoundation.org>
+Message-Id: <20220504152931.247866789@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220504153053.873100034@linuxfoundation.org>
-References: <20220504153053.873100034@linuxfoundation.org>
+In-Reply-To: <20220504152927.744120418@linuxfoundation.org>
+References: <20220504152927.744120418@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,46 +58,99 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Oleksandr Ocheretnyi <oocheret@cisco.com>
+From: Pengcheng Yang <yangpc@wangsu.com>
 
-[ Upstream commit 37c5f9e80e015d0df17d0c377c18523002986851 ]
+[ Upstream commit b253a0680ceadc5d7b4acca7aa2d870326cad8ad ]
 
-Commit 46b5889cc2c5 ("mtd: implement proper partition handling")
-started using "mtd_get_master_ofs()" in mtd callbacks to determine
-memory offsets by means of 'part' field from mtd_info, what previously
-was smashed accessing 'master' field in the mtd_set_dev_defaults() method.
-That provides wrong offset what causes hardware access errors.
+If an ACK (s)acks multiple skbs, we favor the information
+from the most recently sent skb by choosing the skb with
+the highest prior_delivered count. But in the interval
+between receiving ACKs, we send multiple skbs with the same
+prior_delivered, because the tp->delivered only changes
+when we receive an ACK.
 
-Just make 'part', 'master' as separate fields, rather than using
-union type to avoid 'part' data corruption when mtd_set_dev_defaults()
-is called.
+We used RACK's solution, copying tcp_rack_sent_after() as
+tcp_skb_sent_after() helper to determine "which packet was
+sent last?". Later, we will use tcp_skb_sent_after() instead
+in RACK.
 
-Fixes: 46b5889cc2c5 ("mtd: implement proper partition handling")
-Signed-off-by: Oleksandr Ocheretnyi <oocheret@cisco.com>
-Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
-Link: https://lore.kernel.org/linux-mtd/20220417184649.449289-1-oocheret@cisco.com
+Fixes: b9f64820fb22 ("tcp: track data delivery rate for a TCP connection")
+Signed-off-by: Pengcheng Yang <yangpc@wangsu.com>
+Cc: Paolo Abeni <pabeni@redhat.com>
+Acked-by: Neal Cardwell <ncardwell@google.com>
+Tested-by: Neal Cardwell <ncardwell@google.com>
+Reviewed-by: Eric Dumazet <edumazet@google.com>
+Link: https://lore.kernel.org/r/1650422081-22153-1-git-send-email-yangpc@wangsu.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- include/linux/mtd/mtd.h | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ include/net/tcp.h   |  6 ++++++
+ net/ipv4/tcp_rate.c | 11 ++++++++---
+ 2 files changed, 14 insertions(+), 3 deletions(-)
 
-diff --git a/include/linux/mtd/mtd.h b/include/linux/mtd/mtd.h
-index 88227044fc86..8a2c60235ebb 100644
---- a/include/linux/mtd/mtd.h
-+++ b/include/linux/mtd/mtd.h
-@@ -394,10 +394,8 @@ struct mtd_info {
- 	/* List of partitions attached to this MTD device */
- 	struct list_head partitions;
+diff --git a/include/net/tcp.h b/include/net/tcp.h
+index b914959cd2c6..b686a21a8593 100644
+--- a/include/net/tcp.h
++++ b/include/net/tcp.h
+@@ -1030,6 +1030,7 @@ struct rate_sample {
+ 	int  losses;		/* number of packets marked lost upon ACK */
+ 	u32  acked_sacked;	/* number of packets newly (S)ACKed upon ACK */
+ 	u32  prior_in_flight;	/* in flight before this ACK */
++	u32  last_end_seq;	/* end_seq of most recently ACKed packet */
+ 	bool is_app_limited;	/* is sample from packet with bubble in pipe? */
+ 	bool is_retrans;	/* is sample from retransmission? */
+ 	bool is_ack_delayed;	/* is this (likely) a delayed ACK? */
+@@ -1139,6 +1140,11 @@ void tcp_rate_gen(struct sock *sk, u32 delivered, u32 lost,
+ 		  bool is_sack_reneg, struct rate_sample *rs);
+ void tcp_rate_check_app_limited(struct sock *sk);
  
--	union {
--		struct mtd_part part;
--		struct mtd_master master;
--	};
-+	struct mtd_part part;
-+	struct mtd_master master;
- };
++static inline bool tcp_skb_sent_after(u64 t1, u64 t2, u32 seq1, u32 seq2)
++{
++	return t1 > t2 || (t1 == t2 && after(seq1, seq2));
++}
++
+ /* These functions determine how the current flow behaves in respect of SACK
+  * handling. SACK is negotiated with the peer, and therefore it can vary
+  * between different flows.
+diff --git a/net/ipv4/tcp_rate.c b/net/ipv4/tcp_rate.c
+index 0de693565963..6ab197928abb 100644
+--- a/net/ipv4/tcp_rate.c
++++ b/net/ipv4/tcp_rate.c
+@@ -73,26 +73,31 @@ void tcp_rate_skb_sent(struct sock *sk, struct sk_buff *skb)
+  *
+  * If an ACK (s)acks multiple skbs (e.g., stretched-acks), this function is
+  * called multiple times. We favor the information from the most recently
+- * sent skb, i.e., the skb with the highest prior_delivered count.
++ * sent skb, i.e., the skb with the most recently sent time and the highest
++ * sequence.
+  */
+ void tcp_rate_skb_delivered(struct sock *sk, struct sk_buff *skb,
+ 			    struct rate_sample *rs)
+ {
+ 	struct tcp_sock *tp = tcp_sk(sk);
+ 	struct tcp_skb_cb *scb = TCP_SKB_CB(skb);
++	u64 tx_tstamp;
  
- static inline struct mtd_info *mtd_get_master(struct mtd_info *mtd)
+ 	if (!scb->tx.delivered_mstamp)
+ 		return;
+ 
++	tx_tstamp = tcp_skb_timestamp_us(skb);
+ 	if (!rs->prior_delivered ||
+-	    after(scb->tx.delivered, rs->prior_delivered)) {
++	    tcp_skb_sent_after(tx_tstamp, tp->first_tx_mstamp,
++			       scb->end_seq, rs->last_end_seq)) {
+ 		rs->prior_delivered  = scb->tx.delivered;
+ 		rs->prior_mstamp     = scb->tx.delivered_mstamp;
+ 		rs->is_app_limited   = scb->tx.is_app_limited;
+ 		rs->is_retrans	     = scb->sacked & TCPCB_RETRANS;
++		rs->last_end_seq     = scb->end_seq;
+ 
+ 		/* Record send time of most recently ACKed packet: */
+-		tp->first_tx_mstamp  = tcp_skb_timestamp_us(skb);
++		tp->first_tx_mstamp  = tx_tstamp;
+ 		/* Find the duration of the "send phase" of this window: */
+ 		rs->interval_us = tcp_stamp_us_delta(tp->first_tx_mstamp,
+ 						     scb->tx.first_tx_mstamp);
 -- 
 2.35.1
 

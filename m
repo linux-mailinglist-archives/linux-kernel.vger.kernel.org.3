@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 622A351A9F4
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:19:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4FEE51A6CD
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 18:57:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358108AbiEDRUa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 13:20:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55020 "EHLO
+        id S1354709AbiEDQ7A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 12:59:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355911AbiEDREr (ORCPT
+        with ESMTP id S1353891AbiEDQwp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 13:04:47 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CA6649C90;
-        Wed,  4 May 2022 09:53:32 -0700 (PDT)
+        Wed, 4 May 2022 12:52:45 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CF144757E;
+        Wed,  4 May 2022 09:48:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A0674B8279F;
-        Wed,  4 May 2022 16:53:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E2A9C385AA;
-        Wed,  4 May 2022 16:53:30 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3EA48B827A2;
+        Wed,  4 May 2022 16:48:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8809C385A5;
+        Wed,  4 May 2022 16:48:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651683210;
-        bh=sCjBYryfbrDNUGqpThNG1E4jFTg2IH/IIsr3Om6bE/U=;
+        s=korg; t=1651682927;
+        bh=i2poJufnaXAHK/IAzmKjpNzqw71tHmA+KEXNBZhEApY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rTPHvJRjO7SUs8vBOX7miqGV0qlkPwlvu4ToyIlu+vZmmqPxPKmaZtsGfF/ytLzhY
-         HfQ4y12GX1bCdoabTE5zfvFjygd1g5vlPIBEy7uEMZwTe7UN09qLWhYYWT48VLpwH3
-         NEpCTVKndA4YUtiX1kwd1dlRYlJOxZWD6Sb7Wz8k=
+        b=B2KLIGnH76KCbER+ex0XaNJJCGFcDflfC+ARYtSlM74Pjf3TFrZn1bWgmMZMB3jrU
+         +U2fbYIf3aTp1NVRp64lsm86RK9Rpye+BpVDD0BZqq8vIQc8cSM1lnLmz9vLXG+q8p
+         1Uf+FXeo8FBFJePdFcyZqVmz8tgw3QPceVWSEaTg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Benoit Parrot <bparrot@ti.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Tony Lindgren <tony@atomide.com>,
+        stable@vger.kernel.org, Fabio Estevam <festevam@gmail.com>,
+        Tim Harvey <tharvey@gateworks.com>,
+        Max Krummenacher <max.krummenacher@toradex.com>,
+        Shawn Guo <shawnguo@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 062/177] ARM: dts: dra7: Fix suspend warning for vpe powerdomain
+Subject: [PATCH 5.4 34/84] ARM: dts: imx6qdl-apalis: Fix sgtl5000 detection issue
 Date:   Wed,  4 May 2022 18:44:15 +0200
-Message-Id: <20220504153058.558589545@linuxfoundation.org>
+Message-Id: <20220504152930.194494352@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220504153053.873100034@linuxfoundation.org>
-References: <20220504153053.873100034@linuxfoundation.org>
+In-Reply-To: <20220504152927.744120418@linuxfoundation.org>
+References: <20220504152927.744120418@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,52 +57,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tony Lindgren <tony@atomide.com>
+From: Fabio Estevam <festevam@gmail.com>
 
-[ Upstream commit 8d2453d9a307c2eafd21242dd73f35f05fb7ce74 ]
+[ Upstream commit fa51e1dc4b91375bc18349663a52395ad585bd3c ]
 
-We currently are getting the following warning after a system suspend:
+On a custom carrier board with a i.MX6Q Apalis SoM, the sgtl5000 codec
+on the SoM is often not detected and the following error message is
+seen when the sgtl5000 driver tries to read the ID register:
 
-Powerdomain (vpe_pwrdm) didn't enter target state 0
+sgtl5000 1-000a: Error reading chip id -6
 
-Looks like this is because the STANDBYMODE bit for SMART_IDLE should
-not be used. The TRM "Table 12-348. VPE_SYSCONFIG" says that the value
-for SMART_IDLE is "0x2: Same behavior as bit-field value of 0x1". But
-if the SMART_IDLE value is used, PM_VPE_PWRSTST LASTPOWERSTATEENTERED
-bits always show value of 3.
+The reason for the error is that the MCLK clock is not provided
+early enough.
 
-Let's fix the issue by dropping SMART_IDLE for vpe. And let's also add
-the missing the powerdomain for vpe.
+Fix the problem by describing the MCLK pinctrl inside the codec
+node instead of placing it inside the audmux pinctrl group.
 
-Fixes: 1a2095160594 ("ARM: dts: dra7: Add ti-sysc node for VPE")
-Cc: Benoit Parrot <bparrot@ti.com>
-Reported-by: Kevin Hilman <khilman@baylibre.com>
-Reviewed-by: Kevin Hilman <khilman@baylibre.com>
-Tested-by: Kevin Hilman <khilman@baylibre.com>
-Signed-off-by: Tony Lindgren <tony@atomide.com>
+With this change applied the sgtl5000 is always detected on every boot.
+
+Fixes: 693e3ffaae5a ("ARM: dts: imx6: Add support for Toradex Apalis iMX6Q/D SoM")
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Reviewed-by: Tim Harvey <tharvey@gateworks.com>
+Acked-by: Max Krummenacher <max.krummenacher@toradex.com>
+Signed-off-by: Shawn Guo <shawnguo@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm/boot/dts/dra7-l4.dtsi | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ arch/arm/boot/dts/imx6qdl-apalis.dtsi | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
-diff --git a/arch/arm/boot/dts/dra7-l4.dtsi b/arch/arm/boot/dts/dra7-l4.dtsi
-index 0a11bacffc1f..5733e3a4ea8e 100644
---- a/arch/arm/boot/dts/dra7-l4.dtsi
-+++ b/arch/arm/boot/dts/dra7-l4.dtsi
-@@ -4188,11 +4188,11 @@ target-module@1d0010 {			/* 0x489d0000, ap 27 30.0 */
- 			reg = <0x1d0010 0x4>;
- 			reg-names = "sysc";
- 			ti,sysc-midle = <SYSC_IDLE_FORCE>,
--					<SYSC_IDLE_NO>,
--					<SYSC_IDLE_SMART>;
-+					<SYSC_IDLE_NO>;
- 			ti,sysc-sidle = <SYSC_IDLE_FORCE>,
- 					<SYSC_IDLE_NO>,
- 					<SYSC_IDLE_SMART>;
-+			power-domains = <&prm_vpe>;
- 			clocks = <&vpe_clkctrl DRA7_VPE_VPE_CLKCTRL 0>;
- 			clock-names = "fck";
- 			#address-cells = <1>;
+diff --git a/arch/arm/boot/dts/imx6qdl-apalis.dtsi b/arch/arm/boot/dts/imx6qdl-apalis.dtsi
+index 7c4ad541c3f5..b165bd6ea53b 100644
+--- a/arch/arm/boot/dts/imx6qdl-apalis.dtsi
++++ b/arch/arm/boot/dts/imx6qdl-apalis.dtsi
+@@ -314,6 +314,8 @@ vgen6_reg: vgen6 {
+ 	codec: sgtl5000@a {
+ 		compatible = "fsl,sgtl5000";
+ 		reg = <0x0a>;
++		pinctrl-names = "default";
++		pinctrl-0 = <&pinctrl_sgtl5000>;
+ 		clocks = <&clks IMX6QDL_CLK_CKO>;
+ 		VDDA-supply = <&reg_module_3v3_audio>;
+ 		VDDIO-supply = <&reg_module_3v3>;
+@@ -543,8 +545,6 @@ MX6QDL_PAD_DISP0_DAT20__AUD4_TXC	0x130b0
+ 			MX6QDL_PAD_DISP0_DAT21__AUD4_TXD	0x130b0
+ 			MX6QDL_PAD_DISP0_DAT22__AUD4_TXFS	0x130b0
+ 			MX6QDL_PAD_DISP0_DAT23__AUD4_RXD	0x130b0
+-			/* SGTL5000 sys_mclk */
+-			MX6QDL_PAD_GPIO_5__CCM_CLKO1		0x130b0
+ 		>;
+ 	};
+ 
+@@ -810,6 +810,12 @@ MX6QDL_PAD_NANDF_CS1__GPIO6_IO14 0x000b0
+ 		>;
+ 	};
+ 
++	pinctrl_sgtl5000: sgtl5000grp {
++		fsl,pins = <
++			MX6QDL_PAD_GPIO_5__CCM_CLKO1	0x130b0
++		>;
++	};
++
+ 	pinctrl_spdif: spdifgrp {
+ 		fsl,pins = <
+ 			MX6QDL_PAD_GPIO_16__SPDIF_IN  0x1b0b0
 -- 
 2.35.1
 

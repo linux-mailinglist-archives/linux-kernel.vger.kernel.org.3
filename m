@@ -2,95 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A549B51ACDA
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 20:30:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1473A51ACDB
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 20:31:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377061AbiEDSdf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 14:33:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56630 "EHLO
+        id S1351348AbiEDSel (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 14:34:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377094AbiEDSc7 (ORCPT
+        with ESMTP id S1377182AbiEDSdx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 14:32:59 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3A6A85159A
-        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 11:10:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651687812;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=t7hIAy3RxcqOtM7Yf90BC+sWNEC/sHJ+29FfPH3OpXA=;
-        b=fZG5DAMUID6LRMpg0c0ZD/Nl7SFvrdvdZ71osOgcse1V2nAsDr9CJyPE8v//6JB50WTSfT
-        Y3RunZLz9dNuIKqy+i7WUP7CdmPa9EoEi+q0y4G8h6sV3Uux/1f2R81E3CL6RegHUvWN/2
-        hHZDtjhpCOm7QxZWkD5jOnd/AYZdBrA=
-Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
- [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-649-suoIw_a1NzSUumGlIiuSvg-1; Wed, 04 May 2022 14:10:11 -0400
-X-MC-Unique: suoIw_a1NzSUumGlIiuSvg-1
-Received: by mail-qv1-f71.google.com with SMTP id g10-20020a0562141cca00b00456332167ffso1440351qvd.13
-        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 11:10:11 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:organization:user-agent:mime-version
-         :content-transfer-encoding;
-        bh=t7hIAy3RxcqOtM7Yf90BC+sWNEC/sHJ+29FfPH3OpXA=;
-        b=fokAwNxYnWYAqsmayFjgTvU/wnTkzpSQn16GMZW8ugMP18iFRBv2J+Q/TbdRikbISX
-         rm6MiwS1i5jXedv1m+I3veOG4vLNomz201BA2e+xn/0+FJsU9xvyNs414Wr7QfwO16m7
-         LKBBZWILLdxtFsTkm33m+ST7NzVVSjP1lRtOnmpWrONzSlRBALk5taKPc1eIxe/SYMmd
-         OaDVNCBc4hkeuPvLrlAXvsJsHrkVpk9Vzqum6ICEaI1YNh9Z9fvhTcV2VHEYF4kokoeh
-         TZyzk6txDLZh0PpM/Vbp8yOdvMruFsijGelApwWbVlgODwefXfaB3aT303WrqDlDfggH
-         q/lg==
-X-Gm-Message-State: AOAM532+FWMYXoO8fPBDMMesdecZSKVq9P7Hb8ffgn97vWxV3/+bn3sW
-        /0Df5TUmLLcr+taeGLFy96JNxOOUFfBsIRrSvZ5ILwMiE62vwf9/RiW9y9NL6LuXRTAiPlKU22V
-        wOpaWoXSSAWcgLwbGEqSKGOFQ
-X-Received: by 2002:a37:8641:0:b0:67e:85d1:f5e9 with SMTP id i62-20020a378641000000b0067e85d1f5e9mr17179562qkd.128.1651687810827;
-        Wed, 04 May 2022 11:10:10 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzO7GIjDZ3nMFv/5xr7vzUdIYwV4LLtoe8PJ1zll9EeaciJXDt+o14bNRkod44VnjaoVQRryQ==
-X-Received: by 2002:a37:8641:0:b0:67e:85d1:f5e9 with SMTP id i62-20020a378641000000b0067e85d1f5e9mr17179531qkd.128.1651687810478;
-        Wed, 04 May 2022 11:10:10 -0700 (PDT)
-Received: from [192.168.8.138] (static-71-184-137-158.bstnma.ftas.verizon.net. [71.184.137.158])
-        by smtp.gmail.com with ESMTPSA id m21-20020ac84455000000b002f39b99f674sm7757467qtn.14.2022.05.04.11.10.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 May 2022 11:10:09 -0700 (PDT)
-Message-ID: <1c6c9fde6e85f09cc89ea8dc6e8716fef58f3ee1.camel@redhat.com>
-Subject: Re: [PATCH] drm: Document that power requirements for DP AUX
- transfers
-From:   Lyude Paul <lyude@redhat.com>
-To:     Doug Anderson <dianders@chromium.org>,
-        Ville =?ISO-8859-1?Q?Syrj=E4l=E4?= 
-        <ville.syrjala@linux.intel.com>
-Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Maxime Ripard <maxime@cerno.tech>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        freedreno <freedreno@lists.freedesktop.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Robert Foss <robert.foss@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Imre Deak <imre.deak@intel.com>,
-        Jani Nikula <jani.nikula@intel.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        LKML <linux-kernel@vger.kernel.org>
-Date:   Wed, 04 May 2022 14:10:08 -0400
-In-Reply-To: <CAD=FV=WndmKuEB0=OVQP9YuJaSmD0uxkNs5LE0wWsFj7gBvhBA@mail.gmail.com>
-References: <20220503162033.1.Ia8651894026707e4fa61267da944ff739610d180@changeid>
-         <YnJv3B/85hTz54SC@intel.com>
-         <CAD=FV=WndmKuEB0=OVQP9YuJaSmD0uxkNs5LE0wWsFj7gBvhBA@mail.gmail.com>
-Organization: Red Hat Inc.
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
-MIME-Version: 1.0
+        Wed, 4 May 2022 14:33:53 -0400
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5120F5C368
+        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 11:11:56 -0700 (PDT)
+Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 244GuKlO024988;
+        Wed, 4 May 2022 18:11:14 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=corp-2021-07-09;
+ bh=qIwSnxhvRv8jNgDwHOAlQgyKyj5PFHdtRqcB3QFbYcA=;
+ b=M7Rpwjfn5IR6FMhAlznGkOBvuC4ObhfzV/6i6XzKz7TKq/XMEEOs5KPuVzRkSmx8xhLe
+ O6N7obqlGs28S+XAcmPnpvXLuMhjw59erRNoRSdnP2F/LBzB9fDl9vsN39G6izYSYB+x
+ 8dDkZblFBiD11XIL1n9HOzDhWn9KAPiDM1wU5WFxs7LTWKAgltN6sCbx+PIuylqqEi+0
+ iCrmjQq6+GDcNM3QE6x8sW1+/QCKeW0C/3nwQ52fWN1W32leaqBK/AdNAt6GB0nS8aQa
+ E0PLx7uIwxkSEJSB3itbRSibJhIdnBH06ayJr9WXb27eKFSzej8UHvAgRsmIF0rCDbuU xA== 
+Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3fruw2h92p-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 04 May 2022 18:11:14 +0000
+Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 244I1LN2017926;
+        Wed, 4 May 2022 18:11:13 GMT
+Received: from nam02-dm3-obe.outbound.protection.outlook.com (mail-dm3nam07lp2047.outbound.protection.outlook.com [104.47.56.47])
+        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com with ESMTP id 3fs1a5y4nq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 04 May 2022 18:11:13 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=RHsQ5RN6BOeBTDFj9x9X2JrYLiS+Rn2ixxD5TTJDOuThe/I8fbRnpBuMyTXNPSwWqBGJM7mLUqmOLvu9erg8AWa5SAB2/5MsVogfcaPPOUatt8/1Mv+seipgpz4hskXhyZCsznEOxHfj1K4ETtfvKe/vV/zsUxXd9j/MWvJRmjht6kCn+hjCL3wwi84aMLKBiD5W2161QASZWYxnJ6ucIGrpaAqrSr628CIhUpL6GmtSlkbgHNhNk7dWK9XWy1YIGncok9EfMpB00ZmL38QTyL1x78o50l4Uhy6PoCNpr2WkgTlXrrUFLLSyNHaa3cxY53lpNXFoxxGu5jAVP2dQ8Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=qIwSnxhvRv8jNgDwHOAlQgyKyj5PFHdtRqcB3QFbYcA=;
+ b=KS1mYBHSBjtYt8ImCNlzKC1ED2RveSX0V4HDDHa9fI019Fi+sSAb0t10d/IxX2OK4GnVyKX1niVHWSRPhbCZOJtqj/1sdmcHOyd2MBTROoMkXQexL70/Y2gyEdaLbjTYkPjY1Mwi66BIEXAr3/mAXlggqWUUGuyq1dDvr3DkWn6/t12m0rVuM/zup+hmMD2l0fAYKnkYZACu7RFcpUyU8/v7G+d8/DVD9ZLuggRoe5h9LVMC5Vdbe7ofWWDnVd3gPKYbnASOGZMIY8cKMJ6ZFWXRMCSbKyfXDMjyAMQMKTp2unF8MtoeYj0Edugk7BbnSulgEFDdPaAZ9lAiAt/Ipg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=qIwSnxhvRv8jNgDwHOAlQgyKyj5PFHdtRqcB3QFbYcA=;
+ b=vzwvspDT5kcqsFZg+5Fn3oDsfFSOmW5oHfJnScK3BoztGMlon9blRtUaj4nTVFhgb06xRHxP9f7UONRt2wcBFJQC/hL5TwnKqMc/UbXtakgmTLrJKoVz9bp8LCm9oTXwsM8PJr21z/s6dm0id+zV7So/obG3wSLv3v3tIrRhQOI=
+Received: from CO1PR10MB4531.namprd10.prod.outlook.com (2603:10b6:303:6c::22)
+ by BY5PR10MB3811.namprd10.prod.outlook.com (2603:10b6:a03:1fc::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5206.25; Wed, 4 May
+ 2022 18:11:11 +0000
+Received: from CO1PR10MB4531.namprd10.prod.outlook.com
+ ([fe80::bd49:f0ab:b476:860c]) by CO1PR10MB4531.namprd10.prod.outlook.com
+ ([fe80::bd49:f0ab:b476:860c%7]) with mapi id 15.20.5206.025; Wed, 4 May 2022
+ 18:11:11 +0000
+Message-ID: <6af5bf76-065c-9167-a73e-21908f4b5ef3@oracle.com>
+Date:   Wed, 4 May 2022 13:11:04 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.1
+Subject: Re: [PATCH v7 4/8] crash: add generic infrastructure for crash
+ hotplug support
+Content-Language: en-US
+To:     Sourabh Jain <sourabhjain@linux.ibm.com>,
+        Baoquan He <bhe@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        kexec@lists.infradead.org, ebiederm@xmission.com,
+        dyoung@redhat.com, vgoyal@redhat.com, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        hpa@zytor.com, nramas@linux.microsoft.com, thomas.lendacky@amd.com,
+        robh@kernel.org, efault@gmx.de, rppt@kernel.org, david@redhat.com,
+        konrad.wilk@oracle.com, boris.ostrovsky@oracle.com
+References: <20220413164237.20845-1-eric.devolder@oracle.com>
+ <20220413164237.20845-5-eric.devolder@oracle.com>
+ <YleK3J/4HNuFioIh@MiWiFi-R3L-srv>
+ <4eea2373-32f3-9960-cbec-21dc1a428807@oracle.com>
+ <6f3a6cbb-0ac4-f178-fc17-18f9594da319@linux.ibm.com>
+ <YmeBjrChOHsIYG3e@MiWiFi-R3L-srv>
+ <f2dbd4fe-6201-b5c4-2725-dec9c3dbf13e@linux.ibm.com>
+From:   Eric DeVolder <eric.devolder@oracle.com>
+In-Reply-To: <f2dbd4fe-6201-b5c4-2725-dec9c3dbf13e@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+X-ClientProxiedBy: SA9PR13CA0133.namprd13.prod.outlook.com
+ (2603:10b6:806:27::18) To CO1PR10MB4531.namprd10.prod.outlook.com
+ (2603:10b6:303:6c::22)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 3e4dd7dc-098b-4e94-1ed6-08da2df977d9
+X-MS-TrafficTypeDiagnostic: BY5PR10MB3811:EE_
+X-Microsoft-Antispam-PRVS: <BY5PR10MB3811D2216EEC577599C6824D97C39@BY5PR10MB3811.namprd10.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: kYuy5r9HtssAlGD5chJXqj+nzQpPQMsWE536j4AfGHJocvNu1ziWCep6vN1EWN4UUA+tXp3iIMH0shp89UMxYEkR9DuCmlwkayNpQYLYbkz5JFwtZC0Dja1nF3BxgCLj2TuQeYzAAAh9qagOMnovoaPcfO3SyE00HlgbLpwCHII5Puy7RYPohFsT5M3Sl8sZCzdKy+F5AK3L9R5keq/CUITuENs6H3SKe+MKOHNxO4atyI8TKqkBXITKsSgxfZNmSLyqD10ksx5JMpDtGA+vqPZmkbR2DuJsrvlwZV8VSWyjMFm4Gw/RH5RkAB9UCjhABVLL7mb5WoFvoTmaB0Z2nvHODmb4zeol/7gzc5LMgD3O6U4WK9URaXEvAJYjaWoTIieyf4bauxVD3OTrwIKorDchLJCjkJ0nt5T3O4xs7JSR/JheObpbV9NfJkhP0yakogoaBEaFJTPpjcLQe6XlGD6fes5lixA4WrK8O9U/k7EVMyS91RBzVKTOprrv3+EPGHWep3xHN+rw1fS22odw0nOO9VmwInyORzQHGXtHxXKe8/OD0wEmHv27Uq8e2ghVIV5MVb0Nh3mdUYZaG+LKjj7wDTVB3oVi4nJx3PDhzUgAnYRGIBCl4KnSdXuuXb074325eAWue+MhnDjWEGXDq3nzb4iiVoln3gs6k3uNLwv3HEUaU0nOb/cH3Lfwp+YdBVHL5SbuEoV/ADzm2jtKg9PPA3quW7SFaYYxOq5cMjR56/dJ6WmQn/8mh/4KAfUKsucnoYCm51cC2F+hz5PBcw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR10MB4531.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(6512007)(186003)(107886003)(6506007)(53546011)(6666004)(2616005)(31696002)(86362001)(38100700002)(83380400001)(110136005)(5660300002)(508600001)(7416002)(316002)(66556008)(4326008)(66946007)(8676002)(66476007)(8936002)(6486002)(31686004)(2906002)(36756003)(41533002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?eE5tN0k2VkltbGJkcVhoTDRUelZnY25ScEpDaWJGMGowQWlmSzVuTFhTeHc0?=
+ =?utf-8?B?cTFHWmtsZXRRRWt2RThBTUhpN0FOZzVrN2FCaFJLTHRIYi9NT1pQb2xKVDJB?=
+ =?utf-8?B?dUJBTWdpRllaNFNGbGZQSTY3ZU1tTElESEZCNnBrWVhRencxUlNJQzhmbDZ4?=
+ =?utf-8?B?Q0ZyZjJlOUhxYWJvT1JjVE14MHVFWnhpZjIrajA2UUFBYWdGd1EySU5GUmdy?=
+ =?utf-8?B?aUVCMWhITjNKVkE0RW8vSGRmUDZGakRLUTVKTVZCbFVreTFvYnUxL1ZNTUpw?=
+ =?utf-8?B?amN6S0dwenBwS1ZUR05SQUdBdTJqdFg4ZXZRVFAwODhpRUx5MVFnTmFFZ2sy?=
+ =?utf-8?B?c3ZEL3RQeGhsVkdETnU2RXRjOE1ienlsRkNIREo3UmFyNjBWOWtkN3Rwbi9X?=
+ =?utf-8?B?bU44b1BSYlJzMnRaVTEyMG9MZ2JnN0JyUmsycUlmbzM2OFFjd2NOdmlxakZI?=
+ =?utf-8?B?am1vaG94QjBkendMN2hPYWNzRWRXZlE4eHRKeEQzUUQ0bkhNOWw4eEhFU3d3?=
+ =?utf-8?B?cTdzazdlUDFqa1pxVC9vUkJFM003UXBOZGI2cWZPU1Z3dDVTZ0J6ejVsZXo4?=
+ =?utf-8?B?VkVyVkFhMlVGU3hoV2ViUy9kalg0MnhoWFo0QWRzSUU5NlZyQ0toMzNpdUM1?=
+ =?utf-8?B?bTgyOU5TcWU0YUgva1NDLzdncFM1clpOb0VhUmVnb3FnOVdpU3ZkTkpabjg5?=
+ =?utf-8?B?bXdKamFJdVg0YmQxSVRpUllNS1FoQjBzeEk3RkNHVDhpU0Q4a2lVN3R4U2Vz?=
+ =?utf-8?B?STFiSEZmdG00REl5T1FNdlgwUFZVK0FNWUpYaTRJQkdndmVOSWdaL1ZnZ21h?=
+ =?utf-8?B?R3hXSFAxSnY2WndJOVVPN0k5dWdLZ2E2V2hlUlIwaDR4TWhTTWJjeTJmbG5t?=
+ =?utf-8?B?SytuNjRoR3hPbHVMY0VpSVpmQXcxc2wrVXJoaHR6d2dlSHV1TW9SdGF2Ty9j?=
+ =?utf-8?B?dXA3eXVSQUxTSlEySzIycHBtTzRtYzlDeVdDMG0zeWpNTlRjamd5YjRkYjBH?=
+ =?utf-8?B?QTM1R3BBVnRxVTRWZW9CdEthNnBnV2hZZE5zVThmYUtLU3cxaHJmcVphMExs?=
+ =?utf-8?B?M2hPTFNkU21oaG1LenRwTHN0QTJBVmFNcCs2ZVR2QnRnVEJzWnRnc3Fsek9H?=
+ =?utf-8?B?YWNGMTd5NXRVQWg2ZGs5b0czMUJFamwyaDdURlFvUHBqWUpzdFlaVGd1MkJr?=
+ =?utf-8?B?Z3dqZkRIUGlxeDhtTVFIWDJUa20wdllDQlZWVEExV2ZBR2orLzUzaVc0Vmxj?=
+ =?utf-8?B?YmR3Q1VoU05zcVQvUlRuUi9vb3dCczB6ekdvbkd2cmdUNXh4UCs2VW55ZlRJ?=
+ =?utf-8?B?aXN2akRZWllkM3V1eVd3bGc1MEJFZENnVmxndDJzbExFK0VOUFFMd28wdTg3?=
+ =?utf-8?B?SjVsMVRtYzA4MHIwNFQ5WUhRL1NrRnJJUTFkSUN3ZGdtSHpXcndSTmlZZjVK?=
+ =?utf-8?B?QnRKQnlpbm1IMGFLUnd6TmFlQ1RvbzNOS1ZlaTRlemVRcXFSaWZHQXJJa3dr?=
+ =?utf-8?B?L3JlUmNmdmhaaUxNcitoSXhIak5yU0ttcnJsdFQ1d1BxUzJNb1dmUHFTa3Bk?=
+ =?utf-8?B?VTMrbWhkZ2oraS84UEx5TDRTOEtiaklLckxwYzlhQWhoRDBKMzdKcDZPZGRW?=
+ =?utf-8?B?N3Z0QStRdmUvU0w2cGpsczlPeno2S2x5M0EvRHRlaVc2ODZHSmRUN3dMclFr?=
+ =?utf-8?B?WjVMMm5hd0x5cFZKZmI5cGN2WXpFek9JVis1cVNkYm5aZitlbWFzTzF3Ykdm?=
+ =?utf-8?B?Y3MxbzBlc0RCYkdMV1d3N25aWU1VYTJ3MWtSSG9BNldoLzc2SmNXUzVscFpx?=
+ =?utf-8?B?cnNqNGg5ZUJaMEV2WG13Q25SUmhEL1d5dWQ2S2FvN2FNcWptNlhmUTNySExn?=
+ =?utf-8?B?Zy9QRUR3NUthNEppbjZTSUc2STlzU1BhakRYOFpHUXFHWEJQNG1LNjBQYVFF?=
+ =?utf-8?B?M1ZxTWc3c08rT2RQLzZJeEprclUzT25sRlVzYUdLNDN3YW9iOUQxS1VaeTFm?=
+ =?utf-8?B?d0dhOGJpY3BDRkthVTRLemR6UGpCci9SUmVJQUJ0bmc1ODJqUmQ5NVUyZkZ4?=
+ =?utf-8?B?SW5RclkvdmhmL0gyV1FRelh0clZsL2pVS1RuRkNlRDBLNktkaGUra1hqenVF?=
+ =?utf-8?B?ZncwN3BmVFVZcXMyNTFUTmxydmJiWlJpdVIxQ2JuZTdmaVh1d1FKRWZCdEpT?=
+ =?utf-8?B?V3M1bldsK0hPcFd1ZDFNeUtzaFBiT2VkcDRKQzVkZnl5OFpJZ015b3IrcUhv?=
+ =?utf-8?B?MEo2L1h4cXVQRVVZZUswZEZQMStVSDFsbW9QT2kyaFJWTm44QWVKRnRFakYw?=
+ =?utf-8?B?RXJRaFNCN2F0b01weCt1TXg0YVpYbUkzSzdsc2duQ014Qkx3OWhyenFSbS9a?=
+ =?utf-8?Q?6U/PgyGd6mMEf1WRmPf8G5Idu2rcqUxNNTfVy?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3e4dd7dc-098b-4e94-1ed6-08da2df977d9
+X-MS-Exchange-CrossTenant-AuthSource: CO1PR10MB4531.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 May 2022 18:11:11.0764
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: rdRIrXmutXGnOsQ8COkNm1UUuXX2gRkbGi4wJ4QCyGwEIVkx4WD/AJ22kvNFwo7WkJOiftkA70tUb0TYqiXnDrtgEe7UE0Q9lzutsIwwF20=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR10MB3811
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.486,18.0.858
+ definitions=2022-05-04_04:2022-05-04,2022-05-04 signatures=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 bulkscore=0 malwarescore=0
+ spamscore=0 mlxlogscore=999 mlxscore=0 suspectscore=0 phishscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
+ definitions=main-2205040108
+X-Proofpoint-GUID: Bl9zTsz75vQ8QVHi1thOfSTJcevxauaK
+X-Proofpoint-ORIG-GUID: Bl9zTsz75vQ8QVHi1thOfSTJcevxauaK
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -99,178 +172,191 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-05-04 at 09:04 -0700, Doug Anderson wrote:
-> Hi,
-> 
-> On Wed, May 4, 2022 at 5:21 AM Ville Syrjälä
-> <ville.syrjala@linux.intel.com> wrote:
-> > 
-> > On Tue, May 03, 2022 at 04:21:08PM -0700, Douglas Anderson wrote:
-> > > When doing DP AUX transfers there are two actors that need to be
-> > > powered in order for the DP AUX transfer to work: the DP source and
-> > > the DP sync. Commit bacbab58f09d ("drm: Mention the power state
-> > > requirement on side-channel operations") added some documentation
-> > > saying that the DP source is required to power itself up (if needed)
-> > > to do AUX transfers. However, that commit doesn't talk anything about
-> > > the DP sink.
-> > > 
-> > > For full fledged DP the sink isn't really a problem. It's expected
-> > > that if an external DP monitor isn't plugged in that attempting to do
-> > > AUX transfers won't work. It's also expected that if a DP monitor is
-> > > plugged in (and thus asserting HPD) that it AUX transfers will work.
-> > > 
-> > > When we're looking at eDP, however, things are less obvious. Let's add
-> > > some documentation about expectations. Here's what we'll say:
-> > > 
-> > > 1. We don't expect the DP AUX transfer function to power on an eDP
-> > > panel. If an eDP panel is physically connected but powered off then it
-> > > makes sense for the transfer to fail.
-> > 
-> > I don't agree with this. I think the panel should just get powred up
-> > for AUX transfers.
-> 
-> That's definitely a fair thing to think about and I have at times
-> thought about trying to make it work that way. It always ends up
-> hitting a roadblock.
-> 
-> The biggest roadblock that I recall is that to make this work then
-> you'd have to somehow ensure that the bridge chain's pre_enable() call
-> was made as part of the AUX transfer, right? Since the transfer
-> function can be called in any context at all, we have to coordinate
-> this with DRM. If, for instance, DRM is mid way through powering the
-> panel down then we need to wait for DRM to fully finish powering down,
-> then we need to power the panel back up. I don't believe that we can
-> just force the panel to stay on if DRM is turning it off because of
-> panel power sequencing requirements. At least I know it would have the
-> potential to break "samsung-atna33xc20.c" which absolutely needs to
-> see the panel power off after it's been disabled.
-> 
-> We also, I believe, need to handle the fact that the bridge chain may
-> not have even been created yet. We do AUX transfers to read the EDID
-> and also to setup the backlight in the probe function of panel-edp. At
-> that point the panel hasn't been linked into the chain. We had _long_
-> discussions [1] about moving these out of probe and decided that we
-> could move the EDID read to be later but that it was going to really
-> ugly to move the AUX backlight later. The backlight would end up
-> popping up at some point in time later (the first call to panel
-> prepare() or maybe get_modes()) and that seemed weird.
-> 
-> [1]
-> https://lore.kernel.org/lkml/CAD=FV=U5-sTDLYdkeJWLAOG-0wgxR49VxtwUyUO7z2PuibLGsg@mail.gmail.com/
-> 
-> 
-> > Otherwise you can't trust that eg. the /dev/aux
-> > stuff is actually usable.
-> 
-> Yeah, it's been on my mind to talk more about /dev/aux. I think
-> /dev/aux has some problems, at least with eDP. Specifically:
-> 
-> 1. Even if we somehow figure out how to power the panel on as part of
-> the aux transfer, we actually _still_ not guaranteed to be able to
-> talk to it as far as I understand. My colleague reported to me that on
-> a system he was working with that had PSR (panel self refresh) that
-> when the panel was powered on but in PSR mode that it wouldn't talk
-> over AUX. Assuming that this is correct then I guess we'd also have to
-> do even more coordination with DRM to exit PSR and block future
-> transitions of PSR. (NOTE: it's always possible that my colleague ran
-> into some other bug and that panels are _supposed_ to be able to talk
-> in PSR. If you think this is the case, I can always try to dig more).
 
-TBH - the coordination with drm I don't think would be the difficult part, as
-we'd just need to add some sort of property (ideally invisible to userspace)
-that can be used in an atomic commit to disable PSR - similar to how we enable
-CRC readback from sysfs in the majority of DRM drivers. That being said
-though, I think we can just leave the work of solving this problem up to
-whoever ends up needing this to work.
+
+On 4/28/22 00:18, Sourabh Jain wrote:
+> Hi Baoquan,
+> 
+> On 26/04/22 10:52, Baoquan He wrote:
+>> On 04/26/22 at 09:36am, Sourabh Jain wrote:
+>>> On 15/04/22 03:59, Eric DeVolder wrote:
+>>>> Hi Baoquan,
+>>>> Inline comments below.
+>>>> Thanks!
+>>>> eric
+>>>>
+>>>> On 4/13/22 21:45, Baoquan He wrote:
+>>>>> On 04/13/22 at 12:42pm, Eric DeVolder wrote:
+>>>>>> Upon CPU and memory changes, a generic crash_hotplug_handler()
+>>>>>> dispatches the hot plug/unplug event to the architecture specific
+>>>>>> arch_crash_hotplug_handler(). During the process, the kexec_mutex
+>>>>>> is held.
+>>>>>>
+>>>>>> To support cpu hotplug, a callback is registered to capture the
+>>>>>> CPUHP_AP_ONLINE_DYN online and ofline events via
+>>>>>> cpuhp_setup_state_nocalls().
+>>>>>>
+>>>>>> To support memory hotplug, a notifier is registered to capture the
+>>>>>> MEM_ONLINE and MEM_OFFLINE events via register_memory_notifier().
+>>>>>>
+>>>>>> The cpu callback and memory notifier then call crash_hotplug_handler()
+>>>>>> to handle the hot plug/unplug event.
+>>>>>>
+>>>>>> Signed-off-by: Eric DeVolder <eric.devolder@oracle.com>
+>>>>>> ---
+>>>>>>    include/linux/kexec.h |  16 +++++++
+>>>>>>    kernel/crash_core.c   | 101
+>>>>>> ++++++++++++++++++++++++++++++++++++++++++
+>>>>>>    2 files changed, 117 insertions(+)
+>>>>>>
+>>>>>> diff --git a/include/linux/kexec.h b/include/linux/kexec.h
+>>>>>> index f93f2591fc1e..02daff1f47dd 100644
+>>>>>> --- a/include/linux/kexec.h
+>>>>>> +++ b/include/linux/kexec.h
+>>>>>> @@ -306,6 +306,13 @@ struct kimage {
+>>>>>>          /* Information for loading purgatory */
+>>>>>>        struct purgatory_info purgatory_info;
+>>>>>> +
+>>>>>> +#ifdef CONFIG_CRASH_HOTPLUG
+>>>>>> +    bool hotplug_event;
+>>>>>> +    unsigned int offlinecpu;
+>>>>>> +    bool elfcorehdr_index_valid;
+>>>>>> +    int elfcorehdr_index;
+>>>>>> +#endif
+>>>>>>    #endif
+>>>>>>      #ifdef CONFIG_IMA_KEXEC
+>>>>>> @@ -322,6 +329,15 @@ struct kimage {
+>>>>>>        unsigned long elf_load_addr;
+>>>>>>    };
+>>>>>>    +#ifdef CONFIG_CRASH_HOTPLUG
+>>>>>> +void arch_crash_hotplug_handler(struct kimage *image,
+>>>>>> +    unsigned int hp_action, unsigned int cpu);
+>>>>>> +#define KEXEC_CRASH_HP_REMOVE_CPU   0
+>>>>>> +#define KEXEC_CRASH_HP_ADD_CPU      1
+>>>>>> +#define KEXEC_CRASH_HP_REMOVE_MEMORY 2
+>>>>>> +#define KEXEC_CRASH_HP_ADD_MEMORY   3
+>>>>>> +#endif /* CONFIG_CRASH_HOTPLUG */
+>>>>>> +
+>>>>>>    /* kexec interface functions */
+>>>>>>    extern void machine_kexec(struct kimage *image);
+>>>>>>    extern int machine_kexec_prepare(struct kimage *image);
+>>>>>> diff --git a/kernel/crash_core.c b/kernel/crash_core.c
+>>>>>> index 256cf6db573c..ecf746243ab2 100644
+>>>>>> --- a/kernel/crash_core.c
+>>>>>> +++ b/kernel/crash_core.c
+>>>>>> @@ -9,12 +9,17 @@
+>>>>>>    #include <linux/init.h>
+>>>>>>    #include <linux/utsname.h>
+>>>>>>    #include <linux/vmalloc.h>
+>>>>>> +#include <linux/highmem.h>
+>>>>>> +#include <linux/memory.h>
+>>>>>> +#include <linux/cpuhotplug.h>
+>>>>>>      #include <asm/page.h>
+>>>>>>    #include <asm/sections.h>
+>>>>>>      #include <crypto/sha1.h>
+>>>>>>    +#include "kexec_internal.h"
+>>>>>> +
+>>>>>>    /* vmcoreinfo stuff */
+>>>>>>    unsigned char *vmcoreinfo_data;
+>>>>>>    size_t vmcoreinfo_size;
+>>>>>> @@ -491,3 +496,99 @@ static int __init crash_save_vmcoreinfo_init(void)
+>>>>>>    }
+>>>>>>      subsys_initcall(crash_save_vmcoreinfo_init);
+>>>>>> +
+>>>>>> +#ifdef CONFIG_CRASH_HOTPLUG
+>>>>>> +void __weak arch_crash_hotplug_handler(struct kimage *image,
+>>>>>> +    unsigned int hp_action, unsigned int cpu)
+>>>>>> +{
+>>>>>> +    pr_warn("crash hp: %s not implemented", __func__);
+>>>>>> +}
+>>>>>> +
+>>>>>> +static void crash_hotplug_handler(unsigned int hp_action,
+>>>>>> +    unsigned int cpu)
+>>>>>> +{
+>>>>>> +    /* Obtain lock while changing crash information */
+>>>>>> +    if (!mutex_trylock(&kexec_mutex))
+>>>>>> +        return;
+>>>>>> +
+>>>>>> +    /* Check kdump is loaded */
+>>>>>> +    if (kexec_crash_image) {
+>>>>>> +        pr_debug("crash hp: hp_action %u, cpu %u", hp_action, cpu);
+>>>>>> +
+>>>>>> +        /* Needed in order for the segments to be updated */
+>>>>>> +        arch_kexec_unprotect_crashkres();
+>>>>>> +
+>>>>>> +        /* Flag to differentiate between normal load and hotplug */
+>>>>>> +        kexec_crash_image->hotplug_event = true;
+>>>>>> +
+>>>>>> +        /* Now invoke arch-specific update handler */
+>>>>>> +        arch_crash_hotplug_handler(kexec_crash_image, hp_action, cpu);
+>>>>>> +
+>>>>>> +        /* No longer handling a hotplug event */
+>>>>>> +        kexec_crash_image->hotplug_event = false;
+>>>>>> +
+>>>>>> +        /* Change back to read-only */
+>>>>>> +        arch_kexec_protect_crashkres();
+>>>>>> +    }
+>>>>>> +
+>>>>>> +    /* Release lock now that update complete */
+>>>>>> +    mutex_unlock(&kexec_mutex);
+>>>>>> +}
+>>>>>> +
+>>>>>> +#if defined(CONFIG_MEMORY_HOTPLUG)
+>>>>>> +static int crash_memhp_notifier(struct notifier_block *nb,
+>>>>>> +    unsigned long val, void *v)
+>>>>>> +{
+>>>>>> +    struct memory_notify *mhp = v;
+>>>>>> +
+>>>>>> +    switch (val) {
+>>>>>> +    case MEM_ONLINE:
+>>>>>> +        crash_hotplug_handler(KEXEC_CRASH_HP_ADD_MEMORY, -1U);
+>>>>> We don't differentiate the memory add/remove, cpu add, except of cpu
+>>>>> remove. Means the hp_action only differentiate cpu remove from the other
+>>>>> action. Maybe only making two types?
+>>>>>
+>>>>> #define KEXEC_CRASH_HP_REMOVE_CPU   0
+>>>>> #define KEXEC_CRASH_HP_UPDATE_OTHER      1
+>>>>>
+>>>> Sourabh Jain's work with PPC uses REMOVE_CPU, REMOVE_MEMORY, and
+>>>> ADD_MEMORY.
+>>>> Do you still want to consolidate these?
+>>> On PowerPC different actions are needed for CPU add and memory add/remove.
+>>> For CPU add case only FDT is updated whereas for the memory hotplug we will
+>>> be
+>>> updating FDT and elfcorehdr.
+>> I don't understand. For elfcorehdr updating, we only need regenerate it.
+>> Do you update them different for memory add/remove?
+> 
+> We have different actions for cpu remove, CPU add and memory add/remove case.
+> 
+> CPU remove: no action
+> CPU add: update flattened device tree (FDT)
+> memory add/remove: update FDT and regenerate/update elfcorehdr
+> 
+> Since memory add/remove action is same we can have common hp_action for them.
+> 
+>>
+>> What I saw is the added action for memory hotplug is only for message
+>> printing. Is this really needed? And memory hotplug is even not
+>> supported. Please correct me if I missed anything.
+> 
+> I agree that currently memory hp_action is only used for printing warning message but
+> eventually we will be handling memory hotplug case as well.
+
+Baoquan,
+It appears the straight forward thing to do here is just to keep the 4 cpu/mem add/remove 
+combinations. It appears there is value in keeping them as currently defined. However, please 
+indicate if you agree or not.
+Thanks!
+Eric
 
 > 
-> 2. I'm not totally convinced that it's a great idea, at least for eDP,
-> for userspace to be mucking with /dev/aux. For DP's case I guess
-> /dev/aux is essentially enabling userspace drivers to do things like
-> update firmware on DP monitors or play with the backlight. I guess we
-> decided that we didn't want to add drivers in the kernel to handle
-> this type of stuff so we left it for userspace? For eDP, though, there
-
-The main reason DP AUX got exposed to userspace in the first place was for
-usecases like fwupd, where some MST docks actually do their firmware updates
-over DPCD. I don't know of any equivalent usecase for eDP at the moment, but I
-can definitely try asking some of the OEM contacts I have whether this is/may
-eventually be a thing or not.
-
-> is a panel driver and we if we have an AUX backlight we create a real
-> backlight device. If we needed to do a firmware update of an eDP panel
-> it would make sense for the panel driver to present some interface for
-> the firmware update so that the panel driver could make sure that the
-> panel stayed powered for the duration of the firmware update, not just
-> for the duration of a single AUX transfer.
-
-Yeah, I tried adding this at one point actually but ran into some issues
-finding a nice solution. It wasn't the most important thing at the time, so I
-ended up shifting my attention to other things. Honestly the biggest
-complicating factor of this is the fact that we can't synchronously wake up a
-device from sysfs without introducing a deadlock due to lock order inversion
-between DRM and sysfs. If this could be solved nicely, I think a lot of this
-would become far easier.
-
+>> +       /* crash update on memory hotplug is not support yet */
+>> +       if (hp_action == KEXEC_CRASH_HP_REMOVE_MEMORY || hp_action == KEXEC_CRASH_HP_ADD_MEMORY) {
+>> +               pr_info_once("crash hp: crash update is not supported with memory hotplug\n");
+>> +               return;
+>> +       }
 > 
-> 3. In general it feels a little awkward for userspace to be directly
-> poking at the same set of registers that a kernel driver is also
-> poking at.
-
-We could always consider limiting the ranges that the DP AUX interface allows
-userspace to read from, although I haven't thought too hard about that since I
-don't know that would fix the issue entirely.
-
+> Thanks,
+> Sourabh Jain
 > 
-> To me it feels like /dev/aux is much like the /dev/i2c interface. Yes,
-> userspace can go talk to random i2c devices and can even talk to them
-> after a kernel driver has "claimed" an i2c device, but:
-> a) If an i2c device is powered off, then the i2c transfer won't work.
-> b) If you set a register of a device managed by a kernel driver behind
-> the back of the kernel driver, you're really asking for trouble.
-> 
-> 
-> So I guess my proposals would be to pick one of:
-> 
-> a) Leave things they way they are as I've documented. NOTE that my
-> documentation does document the way things are today. No aux transfer
-> function that I'm aware of powers up an eDP panel. In this case if
-> someone wants to use /dev/aux for an eDP panel it's really up to them
-> not to shoot themselves in the foot.
-
-To be honest, I do totally agree though that /dev/aux has very limited
-usecases for eDP. I do think it's definitely a useful debugging tool, and it's
-been a big help in figuring out how things like backlight interfaces work when
-I'm otherwise lacking in docs (and sometimes it's still useful, since you can
-test various subleties of panel controllers). So at a bare minimum, I'd very
-much like it if we can at least keep it around in some form (perhaps hidden
-behind a kernel config option). Although, that brings up the question of if
-that makes it harder for someone without kernel debugging experience to get me
-DPCD output from a panel outside of what got logged to the kernel…
-
-> 
-> b) Stop populating /dev/aux for eDP panels and only do it for DP and
-> then if/when someone yells we figure out how they were using /dev/aux
-> and why it was safe. This is definitely an ABI change but I have no
-> idea if it would really break anyone. I suppose we could take a first
-> step by spewing a WARN_ON if someone directly uses /dev/aux for eDP?
-> 
-> c) Somehow dynamically create / remove the /dev/aux device as the eDP
-> panel turns off and on again. If /dev/aux is there then we know that
-> the panel is on. NOTE: this ignores PSR. I don't think we'd want to
-> delete / create the /dev/aux node that often. So we'd either have to
-> still accept that the transfers will sometimes fail (c1) or make it a
-> requirement that we bring the panel out of PSR for an AUX transfer
-> (c2).
-> 
-> 
-> Technically we could list option (d) to power the panel up, but as per
-> above I think it's pretty awkward and doesn't feel like the right way
-> to go. Obviously happy to hear other opinions, though.
-> 
-
--- 
-Cheers,
- Lyude Paul (she/her)
- Software Engineer at Red Hat
-

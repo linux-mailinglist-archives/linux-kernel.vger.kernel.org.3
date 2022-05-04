@@ -2,142 +2,228 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B35AC51976C
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 08:34:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EF8C51977A
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 08:39:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344983AbiEDGiF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 02:38:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33070 "EHLO
+        id S1345009AbiEDGn1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 02:43:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344981AbiEDGiC (ORCPT
+        with ESMTP id S1345001AbiEDGnW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 02:38:02 -0400
+        Wed, 4 May 2022 02:43:22 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C814F101CB
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 23:34:27 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1nm8aO-0007Ou-Jp; Wed, 04 May 2022 08:34:08 +0200
-Received: from pengutronix.de (unknown [IPv6:2a00:20:7058:1382:cdf5:b54c:dde5:a5a5])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 9022575640;
-        Wed,  4 May 2022 06:34:03 +0000 (UTC)
-Date:   Wed, 4 May 2022 08:34:02 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Pavel Pisa <pisa@cmp.felk.cvut.cz>
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        linux-can@vger.kernel.org,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        David Miller <davem@davemloft.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Carsten Emde <c.emde@osadl.org>, armbru@redhat.com,
-        netdev <netdev@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Marin Jerabek <martin.jerabek01@gmail.com>,
-        Ondrej Ille <ondrej.ille@gmail.com>,
-        Jiri Novak <jnovak@fel.cvut.cz>,
-        Jaroslav Beran <jara.beran@gmail.com>,
-        Petr Porazil <porazil@pikron.com>, Pavel Machek <pavel@ucw.cz>,
-        Drew Fustini <pdp7pdp7@gmail.com>
-Subject: Re: [PATCH v8 5/7] can: ctucanfd: CTU CAN FD open-source IP core -
- platform/SoC support.
-Message-ID: <20220504063402.deowqy5lnmgg2mfy@pengutronix.de>
-References: <cover.1647904780.git.pisa@cmp.felk.cvut.cz>
- <4d5c53499bafe7717815f948801bd5aedaa05c12.1647904780.git.pisa@cmp.felk.cvut.cz>
- <CAMuHMdXY_sHw4W8_y+r1LMhGM+CF7RQtRFQzEC8wYKYSR98Daw@mail.gmail.com>
- <202205031707.21405.pisa@cmp.felk.cvut.cz>
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29B4513FBE
+        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 23:39:47 -0700 (PDT)
+Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[127.0.0.1])
+        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
+        (envelope-from <a.fatoum@pengutronix.de>)
+        id 1nm8fZ-0007wQ-Ke; Wed, 04 May 2022 08:39:29 +0200
+Message-ID: <ac014f19-0c08-c6cf-d639-f55268ba11c2@pengutronix.de>
+Date:   Wed, 4 May 2022 08:39:23 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="mnhfuo3af4c2bg3a"
-Content-Disposition: inline
-In-Reply-To: <202205031707.21405.pisa@cmp.felk.cvut.cz>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
+Subject: Re: [PATCH v8 3/6] crypto: caam - add in-kernel interface for blob
+ generator
+To:     Michael Walle <michael@walle.cc>
+Cc:     davem@davemloft.net, david@sigma-star.at, dhowells@redhat.com,
+        ebiggers@kernel.org, franck.lenormand@nxp.com,
+        herbert@gondor.apana.org.au, horia.geanta@nxp.com,
+        j.luebbe@pengutronix.de, jarkko@kernel.org, jejb@linux.ibm.com,
+        jmorris@namei.org, kernel@pengutronix.de, keyrings@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        matthias.schiffer@ew.tq-group.com, pankaj.gupta@nxp.com,
+        richard@nod.at, serge@hallyn.com, sumit.garg@linaro.org,
+        tharvey@gateworks.com, zohar@linux.ibm.com
+References: <20220428140145.870527-4-a.fatoum@pengutronix.de>
+ <20220503182454.2749454-1-michael@walle.cc>
+Content-Language: en-US
+In-Reply-To: <20220503182454.2749454-1-michael@walle.cc>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
+X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello Michael,
 
---mnhfuo3af4c2bg3a
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 03.05.22 20:24, Michael Walle wrote:
+>> Add functions to realize encrypting and decrypting into memory alongside
+>> the CAAM driver.
+>>
+>> They will be used in a later commit as a source for the trusted key
+>> seal/unseal mechanism.
+> 
+> Thanks for the work on this and I'm excited to try this. I'm currently
+> playing with this and one thing I've noticed is that an export restricted
+> CAAM isn't handled properly.
 
-On 03.05.2022 17:07:21, Pavel Pisa wrote:
-> Hello Geert,
->=20
-> On Tuesday 03 of May 2022 13:37:46 Geert Uytterhoeven wrote:
-> > Hi Pavel,
-> > > --- /dev/null
-> > > +++ b/drivers/net/can/ctucanfd/ctucanfd_platform.c
-> > >
-> > > +/* Match table for OF platform binding */
-> > > +static const struct of_device_id ctucan_of_match[] =3D {
-> > > +       { .compatible =3D "ctu,ctucanfd-2", },
-> >
-> > Do you need to match on the above compatible value?
-> > The driver seems to treat the hardware the same, and the DT
-> > bindings state the compatible value below should always be present.
->=20
-> I would keep it because there will be newer revisions and releases
-> of the core and I consider "ctu,ctucanfd" as the match to generic
-> one with maximal attempt to adjust to the version from provided
-> info registers but identification with the fixed version
-> "ctu,ctucanfd-2" ensures that some old hardware which is
-> in the wild is directly recognized even at /sys level
-> and if we need to do some workarounds for autodetection
-> etc. it can be recognized.
+I didn't know there are still crypto export restrictions in place ;o
 
-As Geert said:
-- There are 2 bindings in the driver which are (currently) treated the
-  same.
-- The binding documentation says devices must always have the
-  ctu,ctucanfd compatible.
+> That is, there are CAAM's which aren't fully featured. Normally, the
+> caam driver will take care of it. For example, see commit f20311cc9c58
+> ("crypto: caam - disable pkc for non-E SoCs"). For the trusted keys case,
+> it would be nice if the kernel will not even probe (or similar).
+>
+> Right now, everything seems to work fine, but once I try to add a new key,
+> I'll get the following errros:
+> 
+> # keyctl add trusted mykey "new 32" @u
+> add_key: Invalid argument
+> [   23.138714] caam_jr 8020000.jr: 20000b0f: CCB: desc idx 11: : Invalid CHA selected.
+> [   23.138740] trusted_key: key_seal failed (-22)
 
-This means (currently) the ctu,ctucanfd-2 is not needed in the driver.
-We can add it back once we need it.
+Trusted key core will attempt TPM and TEE if enabled before trying CAAM unless
+CAAM was explicitly requested. Silently failing in this case would not be
+helpful to users. I think an info message (not error, as it'd be annoying to
+see it every time booting a restricted SoC) is a good idea.
+Thanks for the feedback.
 
-Or are there devices that have a compatible of ctu,ctucanfd-2 without
-stating to be compatible with ctu,ctucanfd?
+> Again this is expected, because I run it on a non-E version. IMHO, it
+> should be that the trusted keys shouldn't be enabled at all. Like it is
+> for example if an unknown rng is given:
+> 
+>   trusted_key: Unsupported RNG. Supported: kernel, default
 
-regards,
-Marc
+Other backends return -ENODEV and Trusted key core will ignore and try next
+in list. Please give below patch a try. I tested it on normal unrestricted
+i.MX6. If that's what you had in mind, I can incorporate it into v9.
+If you have any Tested-by's or the like you want me to add, please tell. :)
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+Cheers,
+Ahmad
 
---mnhfuo3af4c2bg3a
-Content-Type: application/pgp-signature; name="signature.asc"
+------------------------------ 8< ------------------------------
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmJyHlcACgkQrX5LkNig
-0137/wf7Bt5X5J7njOAv8Nj3JgmHyfGQNLtw4QwMPQ8+F3y8I/rihTthe/4ua7sp
-pDDRiRFpzJQXgfKv6oE70VLug2RxISnRQ1jW9rNqX2yf0xGn82U2QFG9qjoJEkiG
-5lLNpaQG9E+xMO7OcN07MnB5UNnJ568AmhMtUf5JZInvpvzdr85/+1U6bP4Wo87m
-IZgjGn9sioBCOvl+13MUEW9YwWQRgS+7snjJ4c4Mnvc1T/no5DbK9nFViNs2Z78X
-qD6TwtJ2E/G0KGbtr8wR8+nY3vvlJLOLZHBhecyx1/996NxFe5OQsBDKmbDAG0d3
-6P9hP95RDc65hCOLyBX5N+q35qaVkg==
-=kcsI
------END PGP SIGNATURE-----
-
---mnhfuo3af4c2bg3a--
+diff --git a/drivers/crypto/caam/blob_gen.c b/drivers/crypto/caam/blob_gen.c
+index d0b1a0015308..1d07e056a5dd 100644
+--- a/drivers/crypto/caam/blob_gen.c
++++ b/drivers/crypto/caam/blob_gen.c
+@@ -4,6 +4,8 @@
+  * Copyright (C) 2021 Pengutronix, Ahmad Fatoum <kernel@pengutronix.de>
+  */
+ 
++#define pr_fmt(fmt) "caam blob_gen: " fmt
++
+ #include <linux/device.h>
+ #include <soc/fsl/caam-blob.h>
+ 
+@@ -147,11 +149,27 @@ EXPORT_SYMBOL(caam_process_blob);
+ 
+ struct caam_blob_priv *caam_blob_gen_init(void)
+ {
++	struct caam_drv_private *ctrlpriv;
+ 	struct device *jrdev;
+ 
++	/*
++	 * caam_blob_gen_init() may expectedly fail with -ENODEV, e.g. when
++	 * CAAM driver didn't probe or when SoC lacks BLOB support. An
++	 * error would be harsh in this case, so we stick to info level.
++	 */
++
+ 	jrdev = caam_jr_alloc();
+-	if (IS_ERR(jrdev))
+-		return ERR_CAST(jrdev);
++	if (IS_ERR(jrdev)) {
++		pr_info("no job ring available\n");
++		return ERR_PTR(-ENODEV);
++	}
++
++	ctrlpriv = dev_get_drvdata(jrdev->parent);
++	if (!ctrlpriv->blob_present) {
++		dev_info(jrdev, "no hardware blob generation support\n");
++		caam_jr_free(jrdev);
++		return ERR_PTR(-ENODEV);
++	}
+ 
+ 	return container_of(jrdev, struct caam_blob_priv, jrdev);
+ }
+diff --git a/drivers/crypto/caam/ctrl.c b/drivers/crypto/caam/ctrl.c
+index ca0361b2dbb0..a0a622ca5dd4 100644
+--- a/drivers/crypto/caam/ctrl.c
++++ b/drivers/crypto/caam/ctrl.c
+@@ -660,6 +660,10 @@ static int caam_probe(struct platform_device *pdev)
+ 
+ 	caam_little_end = !(bool)(rd_reg32(&ctrl->perfmon.status) &
+ 				  (CSTA_PLEND | CSTA_ALT_PLEND));
++
++	comp_params = rd_reg32(&ctrl->perfmon.comp_parms_ls);
++	ctrlpriv->blob_present = !!(comp_params & CTPR_LS_BLOB);
++
+ 	comp_params = rd_reg32(&ctrl->perfmon.comp_parms_ms);
+ 	if (comp_params & CTPR_MS_PS && rd_reg32(&ctrl->mcr) & MCFGR_LONG_PTR)
+ 		caam_ptr_sz = sizeof(u64);
+diff --git a/drivers/crypto/caam/intern.h b/drivers/crypto/caam/intern.h
+index 7d45b21bd55a..e92210e2ab76 100644
+--- a/drivers/crypto/caam/intern.h
++++ b/drivers/crypto/caam/intern.h
+@@ -92,6 +92,7 @@ struct caam_drv_private {
+ 	 */
+ 	u8 total_jobrs;		/* Total Job Rings in device */
+ 	u8 qi_present;		/* Nonzero if QI present in device */
++	u8 blob_present;	/* Nonzero if BLOB support present in device */
+ 	u8 mc_en;		/* Nonzero if MC f/w is active */
+ 	int secvio_irq;		/* Security violation interrupt number */
+ 	int virt_en;		/* Virtualization enabled in CAAM */
+diff --git a/drivers/crypto/caam/regs.h b/drivers/crypto/caam/regs.h
+index 3738625c0250..b829066f5063 100644
+--- a/drivers/crypto/caam/regs.h
++++ b/drivers/crypto/caam/regs.h
+@@ -414,6 +414,7 @@ struct caam_perfmon {
+ #define CTPR_MS_PG_SZ_MASK	0x10
+ #define CTPR_MS_PG_SZ_SHIFT	4
+ 	u32 comp_parms_ms;	/* CTPR - Compile Parameters Register	*/
++#define CTPR_LS_BLOB           BIT(1)
+ 	u32 comp_parms_ls;	/* CTPR - Compile Parameters Register	*/
+ 	u64 rsvd1[2];
+ 
+diff --git a/include/soc/fsl/caam-blob.h b/include/soc/fsl/caam-blob.h
+index ec57eec4f2d2..8e821bd56e54 100644
+--- a/include/soc/fsl/caam-blob.h
++++ b/include/soc/fsl/caam-blob.h
+@@ -38,8 +38,9 @@ struct caam_blob_info {
+ 
+ /**
+  * caam_blob_gen_init - initialize blob generation
+- * Return: pointer to new caam_blob_priv instance on success
+- * and error pointer otherwise
++ * Return: pointer to new &struct caam_blob_priv instance on success
++ * and ``ERR_PTR(-ENODEV)`` if CAAM has no hardware blobbing support
++ * or no job ring could be allocated.
+  */
+ struct caam_blob_priv *caam_blob_gen_init(void);
+ 
+diff --git a/security/keys/trusted-keys/trusted_caam.c b/security/keys/trusted-keys/trusted_caam.c
+index 46cb2484ec36..e3415c520c0a 100644
+--- a/security/keys/trusted-keys/trusted_caam.c
++++ b/security/keys/trusted-keys/trusted_caam.c
+@@ -55,10 +55,8 @@ static int trusted_caam_init(void)
+ 	int ret;
+ 
+ 	blobifier = caam_blob_gen_init();
+-	if (IS_ERR(blobifier)) {
+-		pr_err("Job Ring Device allocation for transform failed\n");
++	if (IS_ERR(blobifier))
+ 		return PTR_ERR(blobifier);
+-	}
+ 
+ 	ret = register_key_type(&key_type_trusted);
+ 	if (ret)
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |

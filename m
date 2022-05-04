@@ -2,141 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1745B51A2A6
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 16:53:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B831C51A2A9
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 16:54:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351527AbiEDO5U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 10:57:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44432 "EHLO
+        id S1351544AbiEDO52 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 10:57:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245006AbiEDO5R (ORCPT
+        with ESMTP id S1351533AbiEDO50 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 10:57:17 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA08919C35
-        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 07:53:37 -0700 (PDT)
-Received: from [192.168.1.107] ([37.4.249.94]) by mrelayeu.kundenserver.de
- (mreue108 [212.227.15.183]) with ESMTPSA (Nemesis) id
- 1N33AR-1nycCJ2lsj-013PzA; Wed, 04 May 2022 16:53:02 +0200
-Message-ID: <60a0ad1e-92d5-5032-7672-3da9ea606348@i2se.com>
-Date:   Wed, 4 May 2022 16:53:01 +0200
+        Wed, 4 May 2022 10:57:26 -0400
+X-Greylist: delayed 2195 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 04 May 2022 07:53:50 PDT
+Received: from out02.mta.xmission.com (out02.mta.xmission.com [166.70.13.232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0EE719C35;
+        Wed,  4 May 2022 07:53:50 -0700 (PDT)
+Received: from in02.mta.xmission.com ([166.70.13.52]:34250)
+        by out02.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1nmGNx-003gFY-Jr; Wed, 04 May 2022 08:53:49 -0600
+Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:36918 helo=email.froward.int.ebiederm.org.xmission.com)
+        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1nmGNw-00DdQV-Gz; Wed, 04 May 2022 08:53:49 -0600
+From:   "Eric W. Biederman" <ebiederm@xmission.com>
+To:     Petr Mladek <pmladek@suse.com>
+Cc:     Seth Forshee <sforshee@digitalocean.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Sean Christopherson <seanjc@google.com>,
+        linux-kernel@vger.kernel.org, live-patching@vger.kernel.org,
+        kvm@vger.kernel.org
+References: <20220503174934.2641605-1-sforshee@digitalocean.com>
+        <20220504130753.GB8069@pathway.suse.cz>
+        <YnKEnqfxSyVmSGYx@do-x1extreme>
+        <20220504142809.GC8069@pathway.suse.cz>
+Date:   Wed, 04 May 2022 09:53:40 -0500
+In-Reply-To: <20220504142809.GC8069@pathway.suse.cz> (Petr Mladek's message of
+        "Wed, 4 May 2022 16:28:09 +0200")
+Message-ID: <87ee19fix7.fsf@email.froward.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH 1/3] staging: vchiq_arm: add reference to vchiq device in
- vchiq_state
-Content-Language: en-US
-To:     Adrien Thierry <athierry@redhat.com>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        bcm-kernel-feedback-list@broadcom.com,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org
-References: <20220502183045.206519-1-athierry@redhat.com>
- <20220502183045.206519-2-athierry@redhat.com>
-From:   Stefan Wahren <stefan.wahren@i2se.com>
-In-Reply-To: <20220502183045.206519-2-athierry@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Provags-ID: V03:K1:4cx/fI0q0KQihxnCwEmGDzKTjM9ADUWFfTLZ70HcPtSmBPtzahB
- tzLsZgHMfnal8Gkulfc3wqdhrUtbyCt+x/LY2fmxFFGIJ5S/eJEKsXmkd32xqciBBYjxpgR
- 0S7xAdvzXOcpEU2me8qm9YZoAo7qFrB82C2kdLMlkSTReFEQRqiJwx/yv6M6GfZa4xwDdTq
- zM9dCAUSc/piWdx9EKCgg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:lOcrTv35cJQ=:RHlZO0yymYI3yjUoZtDKn+
- ofNSiUS/KnFs0t/BNFDxNipWThxlBnVdoi3XwxbQn0oupM6HCW519Ptma1i5Z0g04oyGpxLvT
- XregvIGc+RF6b/Cvg10bgHzuxf4pg+PzBBGQkWd+bNrbmlwtsSTkaJzFvvuYPkFI77/P5JFED
- zPOCgWVvv4EjcVSEQT9qYQi/41s1nFQB1vi6NWEL9EXdRZHD5ps0DzvExam+6uoLgLWBn0lO3
- R08+rxP67KfaR2oFL6ZHXvFuH1iOutci2fzQadt8FFoqd4TC23wEZJqGAC9hPIvCSROpAwcQT
- QGE8EQrf/KN7feUFSXmmqL1Fut/NSL/0H8kG7cUWlpYGwKS8O/e3n33UDwjq3Bns2QHcSqtrf
- xtcMlda88JzWNwXvs21KAcxgAXnD/Go96t8Bca9qGb9bgGgft8DMTWE93I+zTw/v43hhO6W+x
- QbFtsa/FxQEjILqH510c0GsQduSd95iit/sfP/S7amXClId3yX8SiRVPrm2fioiqxktRuErP8
- uQ8Vfjg7jvth3iI+2IWegWUw4VLOAwLt053ySVkR3TGkI6jslVtiGFol22u05K+Ye5Wb2fSew
- DkOfFFymcfQ7og18CRe+TetTy4K+zf6E9G5nUsDJ2rzW/egKgs78xOWwbUUSeT8mnOOgXfWju
- +2OSxrVIDnxKa2YyxhvRiuNLvfhWQjBv2LiLSUJ6cqB3gqsBmuCBSQ8BejWNh6V+dUdwyaBsC
- 31acJXmjlojhvzto
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-XM-SPF: eid=1nmGNw-00DdQV-Gz;;;mid=<87ee19fix7.fsf@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=softfail
+X-XM-AID: U2FsdGVkX1+Pmb3es8sVQGptMBHIKX3tnmcqpjmnk/g=
+X-SA-Exim-Connect-IP: 68.227.174.4
+X-SA-Exim-Mail-From: ebiederm@xmission.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-DCC: XMission; sa07 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: ***;Petr Mladek <pmladek@suse.com>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 412 ms - load_scoreonly_sql: 0.06 (0.0%),
+        signal_user_changed: 11 (2.8%), b_tie_ro: 10 (2.4%), parse: 0.99
+        (0.2%), extract_message_metadata: 12 (2.9%), get_uri_detail_list: 1.12
+        (0.3%), tests_pri_-1000: 14 (3.4%), tests_pri_-950: 1.31 (0.3%),
+        tests_pri_-900: 1.09 (0.3%), tests_pri_-90: 96 (23.3%), check_bayes:
+        90 (21.9%), b_tokenize: 7 (1.7%), b_tok_get_all: 7 (1.6%),
+        b_comp_prob: 2.1 (0.5%), b_tok_touch_all: 71 (17.3%), b_finish: 0.84
+        (0.2%), tests_pri_0: 264 (64.0%), check_dkim_signature: 0.58 (0.1%),
+        check_dkim_adsp: 3.2 (0.8%), poll_dns_idle: 1.29 (0.3%), tests_pri_10:
+        2.2 (0.5%), tests_pri_500: 7 (1.6%), rewrite_mail: 0.00 (0.0%)
+Subject: Re: [PATCH v2] entry/kvm: Make vCPU tasks exit to userspace when a
+ livepatch is pending
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Adrien,
+Petr Mladek <pmladek@suse.com> writes:
 
-Am 02.05.22 um 20:30 schrieb Adrien Thierry:
-> Add a reference to the vchiq device in the vchiq_state structure. This
-> allows the device structure to be passed around, which will be useful in
-> order to get rid of the global g_dev structure.
+> On Wed 2022-05-04 08:50:22, Seth Forshee wrote:
+>> On Wed, May 04, 2022 at 03:07:53PM +0200, Petr Mladek wrote:
 
-the patch looks good to me. It would be nice to mention that with adding 
-the device reference it would possible to introduce common kernel logging.
-
-Best regards
-
+>> > If "no" then I do not understand why TIF_NOTIFY_SIGNAL interrupts
+>> > the syscall on the real hardware and not in kvm.
+>> 
+>> It does interrupt, but xfer_to_guest_mode_handle_work() concludes it's
+>> not necessary to return to userspace and resumes guest execution.
 >
-> Signed-off-by: Adrien Thierry <athierry@redhat.com>
-> ---
->   drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c | 2 +-
->   .../staging/vc04_services/interface/vchiq_arm/vchiq_core.c    | 4 +++-
->   .../staging/vc04_services/interface/vchiq_arm/vchiq_core.h    | 3 ++-
->   3 files changed, 6 insertions(+), 3 deletions(-)
+> In this case, we should revert the commit 8df1947c71ee53c7e21
+> ("livepatch: Replace the fake signal sending with TIF_NOTIFY_SIGNAL
+> infrastructure"). The flag TIF_NOTIFY_SIGNAL clearly does not guarantee
+> restarting the syscall or exiting to the user space with -EINTR.
 >
-> diff --git a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c
-> index 0596ac61e286..e6e0737c85fc 100644
-> --- a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c
-> +++ b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c
-> @@ -519,7 +519,7 @@ int vchiq_platform_init(struct platform_device *pdev, struct vchiq_state *state)
->   	*(char **)&g_fragments_base[i * g_fragments_size] = NULL;
->   	sema_init(&g_free_fragments_sema, MAX_FRAGMENTS);
->   
-> -	err = vchiq_init_state(state, vchiq_slot_zero);
-> +	err = vchiq_init_state(state, vchiq_slot_zero, dev);
->   	if (err)
->   		return err;
->   
-> diff --git a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_core.c b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_core.c
-> index 8f99272dbd6f..0d5c39d7c6e2 100644
-> --- a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_core.c
-> +++ b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_core.c
-> @@ -2142,7 +2142,7 @@ vchiq_init_slots(void *mem_base, int mem_size)
->   }
->   
->   int
-> -vchiq_init_state(struct vchiq_state *state, struct vchiq_slot_zero *slot_zero)
-> +vchiq_init_state(struct vchiq_state *state, struct vchiq_slot_zero *slot_zero, struct device *dev)
->   {
->   	struct vchiq_shared_state *local;
->   	struct vchiq_shared_state *remote;
-> @@ -2169,6 +2169,8 @@ vchiq_init_state(struct vchiq_state *state, struct vchiq_slot_zero *slot_zero)
->   
->   	memset(state, 0, sizeof(struct vchiq_state));
->   
-> +	state->dev = dev;
-> +
->   	/*
->   	 * initialize shared state pointers
->   	 */
-> diff --git a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_core.h b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_core.h
-> index 82b7bd7b54b2..352017ff5309 100644
-> --- a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_core.h
-> +++ b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_core.h
-> @@ -315,6 +315,7 @@ struct vchiq_slot_zero {
->   };
->   
->   struct vchiq_state {
-> +	struct device *dev;
->   	int id;
->   	int initialised;
->   	enum vchiq_connstate conn_state;
-> @@ -458,7 +459,7 @@ extern struct vchiq_slot_zero *
->   vchiq_init_slots(void *mem_base, int mem_size);
->   
->   extern int
-> -vchiq_init_state(struct vchiq_state *state, struct vchiq_slot_zero *slot_zero);
-> +vchiq_init_state(struct vchiq_state *state, struct vchiq_slot_zero *slot_zero, struct device *dev);
->   
->   extern enum vchiq_status
->   vchiq_connect_internal(struct vchiq_state *state, struct vchiq_instance *instance);
+> It should solve this problem. And it looks like a cleaner solution
+> to me.
+
+Why not just?
+
+diff --git a/kernel/entry/kvm.c b/kernel/entry/kvm.c
+index 9d09f489b60e..cbb192aec13a 100644
+--- a/kernel/entry/kvm.c
++++ b/kernel/entry/kvm.c
+@@ -8,13 +8,7 @@ static int xfer_to_guest_mode_work(struct kvm_vcpu *vcpu, unsigned long ti_work)
+        do {
+                int ret;
+ 
+-               if (ti_work & (_TIF_SIGPENDING | _TIF_NOTIFY_SIGNAL)) {
+-                       clear_notify_signal();
+-                       if (task_work_pending(current))
+-                               task_work_run();
+-               }
+-
+-               if (ti_work & _TIF_SIGPENDING) {
++               if (ti_work & (_TIF_SIGPENDING | _TIF_NOTIFY_SIGNAL)) {
+                        kvm_handle_signal_exit(vcpu);
+                        return -EINTR;
+                }
+
+As far as I can tell the only reason _TIF_NOTIFY_SIGNAL was handled any
+differently than _TIF_SIGPENDING in xfer_to_guest_mode_work is because
+of historical confusion.
+
+Eric

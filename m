@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6BFB51AB4B
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:42:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CBAD51AAD3
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:34:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359693AbiEDRoa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 13:44:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39174 "EHLO
+        id S1358751AbiEDRfO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 13:35:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355897AbiEDRIz (ORCPT
+        with ESMTP id S1357088AbiEDRJ6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 13:08:55 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD26E51E65;
-        Wed,  4 May 2022 09:54:41 -0700 (PDT)
+        Wed, 4 May 2022 13:09:58 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3832B48E6F;
+        Wed,  4 May 2022 09:57:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 49C2E618B0;
-        Wed,  4 May 2022 16:54:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9660CC385B2;
-        Wed,  4 May 2022 16:54:40 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 696F0618EE;
+        Wed,  4 May 2022 16:57:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1288C385A4;
+        Wed,  4 May 2022 16:57:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651683280;
-        bh=J9fKvkWLHDd+6qz2ZBFVcWFT9ooivv7xE+aNdi+7aEU=;
+        s=korg; t=1651683423;
+        bh=QnEGDlMn9uLf+kFwnUU586VzqNWXp9vWlFw59N18DH0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NmwT8Lx7GbizdFnTwo5CXpFV/LQF98p4iPkgabP3LOkiR+ZUL79FOXXTHg9E3Ob+K
-         3TSnM/qRcCb88ZL8Moeeu9BESBDckGMi+nRzY9xRcUN2W2FddM5INYbTi987gX/G8l
-         twTmAGH/uiB2fIQpU9EZngz11MDpZ/Df8HprnLB8=
+        b=havZQ0PgtUMbDU5GGOp3P1lhXIRpIMXIeEYZ69N1Cq7CEeIsO0hrucTIUE/syRGDV
+         B+p3Mol7mR+k7Zm1SqDjMD2Fs9mJ+xaettK1nIjLRobKKWoPYpFINajpQaDzg4t7xS
+         VEqsgIrVd7zE+OgxXJyHfs7HiJh8Uk/CdbsKEhtQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, suresh kumar <suresh2514@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
+        stable@vger.kernel.org, "H. Nikolaus Schaller" <hns@goldelico.com>,
+        Tony Lindgren <tony@atomide.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 133/177] bonding: do not discard lowest hash bit for non layer3+4 hashing
-Date:   Wed,  4 May 2022 18:45:26 +0200
-Message-Id: <20220504153105.084842283@linuxfoundation.org>
+Subject: [PATCH 5.17 089/225] ARM: dts: Fix mmc order for omap3-gta04
+Date:   Wed,  4 May 2022 18:45:27 +0200
+Message-Id: <20220504153118.862004216@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220504153053.873100034@linuxfoundation.org>
-References: <20220504153053.873100034@linuxfoundation.org>
+In-Reply-To: <20220504153110.096069935@linuxfoundation.org>
+References: <20220504153110.096069935@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,97 +55,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: suresh kumar <suresh2514@gmail.com>
+From: H. Nikolaus Schaller <hns@goldelico.com>
 
-[ Upstream commit 49aefd131739df552f83c566d0665744c30b1d70 ]
+[ Upstream commit 09269dd050094593fc747f2a5853d189fefcb6b5 ]
 
-Commit b5f862180d70 was introduced to discard lowest hash bit for layer3+4 hashing
-but it also removes last bit from non layer3+4 hashing
+Commit a1ebdb374199 ("ARM: dts: Fix swapped mmc order for omap3")
+introduces general mmc aliases. Let's tailor them to the need
+of the GTA04 board which does not make use of mmc2 and mmc3 interfaces.
 
-Below script shows layer2+3 hashing will result in same slave to be used with above commit.
-$ cat hash.py
-#/usr/bin/python3.6
-
-h_dests=[0xa0, 0xa1]
-h_source=0xe3
-hproto=0x8
-saddr=0x1e7aa8c0
-daddr=0x17aa8c0
-
-for h_dest in h_dests:
-    hash = (h_dest ^ h_source ^ hproto ^ saddr ^ daddr)
-    hash ^= hash >> 16
-    hash ^= hash >> 8
-    print(hash)
-
-print("with last bit removed")
-for h_dest in h_dests:
-    hash = (h_dest ^ h_source ^ hproto ^ saddr ^ daddr)
-    hash ^= hash >> 16
-    hash ^= hash >> 8
-    hash = hash >> 1
-    print(hash)
-
-Output:
-$ python3.6 hash.py
-522133332
-522133333   <-------------- will result in both slaves being used
-
-with last bit removed
-261066666
-261066666   <-------------- only single slave used
-
-Signed-off-by: suresh kumar <suresh2514@gmail.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Fixes: a1ebdb374199 ("ARM: dts: Fix swapped mmc order for omap3")
+Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
+Message-Id: <dc9173ee3d391d9e92b7ab8ed4f84b29f0a21c83.1646744420.git.hns@goldelico.com>
+Signed-off-by: Tony Lindgren <tony@atomide.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/bonding/bond_main.c | 13 +++++++++----
- 1 file changed, 9 insertions(+), 4 deletions(-)
+ arch/arm/boot/dts/omap3-gta04.dtsi | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/net/bonding/bond_main.c b/drivers/net/bonding/bond_main.c
-index 46c3301a5e07..2e75b7e8f70b 100644
---- a/drivers/net/bonding/bond_main.c
-+++ b/drivers/net/bonding/bond_main.c
-@@ -3817,14 +3817,19 @@ static bool bond_flow_dissect(struct bonding *bond, struct sk_buff *skb, const v
- 	return true;
- }
+diff --git a/arch/arm/boot/dts/omap3-gta04.dtsi b/arch/arm/boot/dts/omap3-gta04.dtsi
+index 7e3d8147e2c1..0365f06165e9 100644
+--- a/arch/arm/boot/dts/omap3-gta04.dtsi
++++ b/arch/arm/boot/dts/omap3-gta04.dtsi
+@@ -31,6 +31,8 @@ chosen {
+ 	aliases {
+ 		display0 = &lcd;
+ 		display1 = &tv0;
++		/delete-property/ mmc2;
++		/delete-property/ mmc3;
+ 	};
  
--static u32 bond_ip_hash(u32 hash, struct flow_keys *flow)
-+static u32 bond_ip_hash(u32 hash, struct flow_keys *flow, int xmit_policy)
- {
- 	hash ^= (__force u32)flow_get_u32_dst(flow) ^
- 		(__force u32)flow_get_u32_src(flow);
- 	hash ^= (hash >> 16);
- 	hash ^= (hash >> 8);
-+
- 	/* discard lowest hash bit to deal with the common even ports pattern */
--	return hash >> 1;
-+	if (xmit_policy == BOND_XMIT_POLICY_LAYER34 ||
-+		xmit_policy == BOND_XMIT_POLICY_ENCAP34)
-+		return hash >> 1;
-+
-+	return hash;
- }
- 
- /* Generate hash based on xmit policy. If @skb is given it is used to linearize
-@@ -3854,7 +3859,7 @@ static u32 __bond_xmit_hash(struct bonding *bond, struct sk_buff *skb, const voi
- 			memcpy(&hash, &flow.ports.ports, sizeof(hash));
- 	}
- 
--	return bond_ip_hash(hash, &flow);
-+	return bond_ip_hash(hash, &flow, bond->params.xmit_policy);
- }
- 
- /**
-@@ -5012,7 +5017,7 @@ static u32 bond_sk_hash_l34(struct sock *sk)
- 	/* L4 */
- 	memcpy(&hash, &flow.ports.ports, sizeof(hash));
- 	/* L3 */
--	return bond_ip_hash(hash, &flow);
-+	return bond_ip_hash(hash, &flow, BOND_XMIT_POLICY_LAYER34);
- }
- 
- static struct net_device *__bond_sk_get_lower_dev(struct bonding *bond,
+ 	ldo_3v3: fixedregulator {
 -- 
 2.35.1
 

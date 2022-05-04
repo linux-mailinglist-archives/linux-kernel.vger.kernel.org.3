@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D6EB51AAE8
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:34:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C11D51AA73
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:27:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358688AbiEDRfE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 13:35:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35802 "EHLO
+        id S242000AbiEDR0S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 13:26:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356969AbiEDRJw (ORCPT
+        with ESMTP id S1354721AbiEDRFU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 13:09:52 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5EBE47558;
-        Wed,  4 May 2022 09:56:47 -0700 (PDT)
+        Wed, 4 May 2022 13:05:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3024847551;
+        Wed,  4 May 2022 09:54:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4149E617DE;
-        Wed,  4 May 2022 16:56:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83177C385A4;
-        Wed,  4 May 2022 16:56:46 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9B9E161899;
+        Wed,  4 May 2022 16:54:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E997DC385A5;
+        Wed,  4 May 2022 16:54:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651683406;
-        bh=3hVsmT5G8vgBYDvAK4nk4B5RhbZAjeVci/nVWw3xb8c=;
+        s=korg; t=1651683257;
+        bh=x+zWKCJC/67mFShgCqaDcE2fmsKse7a2+RmC1lsdbpY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IHO3kIX5sGhAxCv6APfkBytajmfEQOuJCoNeXRH8hpA6X94a3b0C0zCcDDAme1LLM
-         O2QgMgvE4jp+z7+RuhLB9/zL++FXsB3m+8cw08tun9wN/QRcQ/nB/Oq8o41L/h/Wmn
-         f9uJWMB0AtVfclL4oKlj1vdw6fhCJMamejLBzUQc=
+        b=RC047+qjJ+NHvBb4kmr+HG5ZKDL2ZpUnAXNVNsh+u1/naOKQ4NOtaelr3aPq1+LSo
+         T22SvISgtz49C5iCRFlLvGUZMAUTfcAVqufnqdnDk//KAIkZ98cpxy2SjpSpL9bxRD
+         +LnQS312C/MhMlghqoYZfmb4261KIwFmBUZCvHD0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Vinod Koul <vkoul@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 077/225] phy: samsung: exynos5250-sata: fix missing device put in probe error paths
+        stable@vger.kernel.org, Andreas Gruenbacher <agruenba@redhat.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 122/177] gfs2: No short reads or writes upon glock contention
 Date:   Wed,  4 May 2022 18:45:15 +0200
-Message-Id: <20220504153118.170914263@linuxfoundation.org>
+Message-Id: <20220504153104.053123041@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220504153110.096069935@linuxfoundation.org>
-References: <20220504153110.096069935@linuxfoundation.org>
+In-Reply-To: <20220504153053.873100034@linuxfoundation.org>
+References: <20220504153053.873100034@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,74 +54,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+From: Andreas Gruenbacher <agruenba@redhat.com>
 
-[ Upstream commit 5c8402c4db45dd55c2c93c8d730f5dfa7c78a702 ]
+[ Upstream commit 296abc0d91d8b65d42224dd33452ace14491ad08 ]
 
-The actions of of_find_i2c_device_by_node() in probe function should be
-reversed in error paths by putting the reference to obtained device.
+Commit 00bfe02f4796 ("gfs2: Fix mmap + page fault deadlocks for buffered
+I/O") changed gfs2_file_read_iter() and gfs2_file_buffered_write() to
+allow dropping the inode glock while faulting in user buffers.  When the
+lock was dropped, a short result was returned to indicate that the
+operation was interrupted.
 
-Fixes: bcff4cba41bc ("PHY: Exynos: Add Exynos5250 SATA PHY driver")
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Reviewed-by: Alim Akhtar <alim.akhtar@samsung.com>
-Link: https://lore.kernel.org/r/20220407091857.230386-2-krzysztof.kozlowski@linaro.org
-Signed-off-by: Vinod Koul <vkoul@kernel.org>
+As pointed out by Linus (see the link below), this behavior is broken
+and the operations should always re-acquire the inode glock and resume
+the operation instead.
+
+Link: https://lore.kernel.org/lkml/CAHk-=whaz-g_nOOoo8RRiWNjnv2R+h6_xk2F1J4TuSRxk1MtLw@mail.gmail.com/
+Fixes: 00bfe02f4796 ("gfs2: Fix mmap + page fault deadlocks for buffered I/O")
+Signed-off-by: Andreas Gruenbacher <agruenba@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/phy/samsung/phy-exynos5250-sata.c | 20 ++++++++++++++------
- 1 file changed, 14 insertions(+), 6 deletions(-)
+ fs/gfs2/file.c | 4 ----
+ 1 file changed, 4 deletions(-)
 
-diff --git a/drivers/phy/samsung/phy-exynos5250-sata.c b/drivers/phy/samsung/phy-exynos5250-sata.c
-index 6c305a3fe187..595adba5fb8f 100644
---- a/drivers/phy/samsung/phy-exynos5250-sata.c
-+++ b/drivers/phy/samsung/phy-exynos5250-sata.c
-@@ -196,20 +196,21 @@ static int exynos_sata_phy_probe(struct platform_device *pdev)
- 	sata_phy->phyclk = devm_clk_get(dev, "sata_phyctrl");
- 	if (IS_ERR(sata_phy->phyclk)) {
- 		dev_err(dev, "failed to get clk for PHY\n");
--		return PTR_ERR(sata_phy->phyclk);
-+		ret = PTR_ERR(sata_phy->phyclk);
-+		goto put_dev;
+diff --git a/fs/gfs2/file.c b/fs/gfs2/file.c
+index 42fa4b5b81a0..eb5ea0262f3c 100644
+--- a/fs/gfs2/file.c
++++ b/fs/gfs2/file.c
+@@ -998,8 +998,6 @@ static ssize_t gfs2_file_read_iter(struct kiocb *iocb, struct iov_iter *to)
+ 		if (leftover != window_size) {
+ 			if (gfs2_holder_queued(&gh))
+ 				goto retry_under_glock;
+-			if (written)
+-				goto out_uninit;
+ 			goto retry;
+ 		}
  	}
- 
- 	ret = clk_prepare_enable(sata_phy->phyclk);
- 	if (ret < 0) {
- 		dev_err(dev, "failed to enable source clk\n");
--		return ret;
-+		goto put_dev;
+@@ -1076,8 +1074,6 @@ static ssize_t gfs2_file_buffered_write(struct kiocb *iocb,
+ 			from->count = min(from->count, window_size - leftover);
+ 			if (gfs2_holder_queued(gh))
+ 				goto retry_under_glock;
+-			if (read && !(iocb->ki_flags & IOCB_DIRECT))
+-				goto out_uninit;
+ 			goto retry;
+ 		}
  	}
- 
- 	sata_phy->phy = devm_phy_create(dev, NULL, &exynos_sata_phy_ops);
- 	if (IS_ERR(sata_phy->phy)) {
--		clk_disable_unprepare(sata_phy->phyclk);
- 		dev_err(dev, "failed to create PHY\n");
--		return PTR_ERR(sata_phy->phy);
-+		ret = PTR_ERR(sata_phy->phy);
-+		goto clk_disable;
- 	}
- 
- 	phy_set_drvdata(sata_phy->phy, sata_phy);
-@@ -217,11 +218,18 @@ static int exynos_sata_phy_probe(struct platform_device *pdev)
- 	phy_provider = devm_of_phy_provider_register(dev,
- 					of_phy_simple_xlate);
- 	if (IS_ERR(phy_provider)) {
--		clk_disable_unprepare(sata_phy->phyclk);
--		return PTR_ERR(phy_provider);
-+		ret = PTR_ERR(phy_provider);
-+		goto clk_disable;
- 	}
- 
- 	return 0;
-+
-+clk_disable:
-+	clk_disable_unprepare(sata_phy->phyclk);
-+put_dev:
-+	put_device(&sata_phy->client->dev);
-+
-+	return ret;
- }
- 
- static const struct of_device_id exynos_sata_phy_of_match[] = {
 -- 
 2.35.1
 

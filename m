@@ -2,79 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78C1451A345
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 17:09:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15B9851A347
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 17:09:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351944AbiEDPM3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 11:12:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33960 "EHLO
+        id S1351948AbiEDPMd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 11:12:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351910AbiEDPM0 (ORCPT
+        with ESMTP id S1351966AbiEDPM2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 11:12:26 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D85640E60
-        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 08:08:41 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id n10so3472272ejk.5
-        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 08:08:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=OvVWFDJHVBQ2gAFb6YOBhaG9PIC2m/VMXu8QQADNdLc=;
-        b=ZsTJAqdm18tvarOdlZrUplyaMpMT48eO1YW7m3yfZgW/UzuBzQ/EYGlto1CYFX3vFy
-         t9amHZIt1/kbASG/QbevQmMPhD1h+kcKS1Wwlga9uXmY/FmReaG4/qDZemD2p2m9oS8O
-         moXPoMXcscuD5b/POKA/BkOKlc9GY2/c9MN4Q7ld2yRoqrGpK15M48iv2SPKGpzJQRZy
-         5FJpb+eDExfJRJbSCGZMAapmNhojdD+N5FIhzshM4OL7iu/IxlAO5B92tddt6g0ng0+G
-         Cjzcxhpx9iU/EvG7ChlbYQ+OQGQdiYdHilgo+cAL5QO88Y5DPOs/RByJdT/6zLteAvse
-         jL/Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=OvVWFDJHVBQ2gAFb6YOBhaG9PIC2m/VMXu8QQADNdLc=;
-        b=WPvT+Hcvv8AtADShHNIJCA64Z7l2T5UlbS7iH+HwlKXX39y+X/Z71fOFL79GDLJYTD
-         1GjJscuwy8sz2gzfF32mjwcxzXHqJK4XsZBnqtPboELGqO/GbCAmCMRi7U2AzLWA7nEo
-         B1FabbHsXrlPjU7fc1dKpfyHFCHBdiK5sgm/p14pZqLTxmur9oQyxM8PMuWNmvOLV7qT
-         aelGo6L7tz5N8e3oLNuSw61s8tbyToTk0xtYqoK9wb+aAxAKEebHz8T51cr4YLL5an+R
-         q0N2vuiQKeHFWFbunBpvyM/VkN26W4YbiKF8B9FUwFbBxezzNcyGWPnkHCZHRANKN1tK
-         vONg==
-X-Gm-Message-State: AOAM532ra93rhPunYy+VrRFYDvzsmsLbXlifO/bA9a+hHvFgjlkoftu3
-        SgZ9pJgZR/lOnkvOw2ZJXWoi4Q==
-X-Google-Smtp-Source: ABdhPJxmVQA4qV7ej58brqZ2gGQycy2rr2zls5Bx7lvSEtC5wJ7j+/HiJkxyVO+vbZE/6lEnkT3GVA==
-X-Received: by 2002:a17:906:c114:b0:6f3:ad4c:c886 with SMTP id do20-20020a170906c11400b006f3ad4cc886mr21460881ejc.124.1651676920086;
-        Wed, 04 May 2022 08:08:40 -0700 (PDT)
-Received: from [192.168.0.215] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id l21-20020a056402345500b0042617ba6393sm9202157edc.29.2022.05.04.08.08.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 04 May 2022 08:08:39 -0700 (PDT)
-Message-ID: <02b65b74-c37d-0bf6-5cfa-883b20c716ae@linaro.org>
-Date:   Wed, 4 May 2022 17:08:38 +0200
+        Wed, 4 May 2022 11:12:28 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22E9C220EF;
+        Wed,  4 May 2022 08:08:50 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CCE59B8263C;
+        Wed,  4 May 2022 15:08:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71A49C385A5;
+        Wed,  4 May 2022 15:08:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1651676927;
+        bh=+j0OUKTRMVyAKDfkZwYch4G0nCOnoDspSMbkklbc/N4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Fjcu0R6daCQsfHq6QS5Oe/XBjGKiWjVhAdWoUIGQQLELST7JLnrBCcfia7tkrc5m1
+         exBTkr8PXHxbX/kzdbGsgzW4gW2cE3T591JI9jc+zm95PkZLN6ykixc0A3DCPJ6mVo
+         AJ2+Lu5Ad/JUMkOWWmkqeZH+hAOqARMLBglNG/h8=
+Date:   Wed, 4 May 2022 17:08:46 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     "stable@vger.kernel.org" <stable@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Steve Capper <steve.capper@arm.com>,
+        Will Deacon <will.deacon@arm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: Re: [PATCH] [Rebased for 5.4] mm, hugetlb: allow for "high"
+ userspace addresses
+Message-ID: <YnKW/h6yElTSBKB1@kroah.com>
+References: <9367809ff3091ff451f9ab6fc029cef553c758fa.1651581958.git.christophe.leroy@csgroup.eu>
+ <YnEyiYh/NIFJG16V@kroah.com>
+ <9853ade6-3f32-7811-474e-2da2361af16c@csgroup.eu>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH 1/2] dt-bindings: arm-smmu: Add compatible for Qualcomm
- SC8280XP
-Content-Language: en-US
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        iommu@lists.linux-foundation.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220503163429.960998-1-bjorn.andersson@linaro.org>
- <20220503163429.960998-2-bjorn.andersson@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220503163429.960998-2-bjorn.andersson@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <9853ade6-3f32-7811-474e-2da2361af16c@csgroup.eu>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,14 +60,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/05/2022 18:34, Bjorn Andersson wrote:
-> Add compatible for the Qualcomm SC8280XP platform to the ARM SMMU
-> DeviceTree binding.
+On Wed, May 04, 2022 at 07:26:00AM +0000, Christophe Leroy wrote:
 > 
-> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> 
+> Le 03/05/2022 à 15:47, Greg KH a écrit :
+> > On Tue, May 03, 2022 at 02:47:11PM +0200, Christophe Leroy wrote:
+> >> This is backport for linux 5.4
+> >>
+> >> commit 5f24d5a579d1eace79d505b148808a850b417d4c upstream.
+> > 
+> > Now queued up, thanks.
+> > 
+> 
+> Looks like the robot has found a build failure, due to missing #include 
+> <linux/sched/mm.h>
+> 
+> However, looking into it in more details, I think  we should just apply 
+> the two following commits unmodified instead of modifying the original 
+> commit:
+> 
+> 885902531586 ("hugetlbfs: get unmapped area below TASK_UNMAPPED_BASE for 
+> hugetlbfs")
+> 5f24d5a579d1 ("mm, hugetlb: allow for "high" userspace addresses")
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Ok, thanks, I've done this now.
 
-
-Best regards,
-Krzysztof
+greg k-h

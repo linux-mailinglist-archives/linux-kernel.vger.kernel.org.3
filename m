@@ -2,109 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AA4B51AEF6
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 22:23:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6546451AEF8
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 22:23:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377967AbiEDU0u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 16:26:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58670 "EHLO
+        id S1377977AbiEDU1D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 16:27:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377969AbiEDU0s (ORCPT
+        with ESMTP id S1377994AbiEDU04 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 16:26:48 -0400
-Received: from mail-oi1-f169.google.com (mail-oi1-f169.google.com [209.85.167.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94B7E4F448;
-        Wed,  4 May 2022 13:23:11 -0700 (PDT)
-Received: by mail-oi1-f169.google.com with SMTP id n24so2324138oie.12;
-        Wed, 04 May 2022 13:23:11 -0700 (PDT)
+        Wed, 4 May 2022 16:26:56 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD9314F45D;
+        Wed,  4 May 2022 13:23:18 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id n10so5029073ejk.5;
+        Wed, 04 May 2022 13:23:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:to:references:from
+         :in-reply-to:content-transfer-encoding;
+        bh=9J1muNG7xxQsE+IQE8kK9Xe8x16+0OIP6QRk6sSLBHA=;
+        b=HEK2utQXKHjtqLbqX/vqazx+hdZwt+Mg2EADF9WqJbFE5pMaDWvvu2FF2xc+26Q687
+         ecMTl3kbnmdnSaNDtLpoo66vFp/eZlI2Z2WmQK30epJ8vLQGiexgkNtz7KKiG9Lz0PYx
+         KU0ZGHdSruT4oWtDPR8ByQeAhB8aKdEcAKCYTusdSGiZ0Y6gNEEe5ml+Jrn/66bLpr7h
+         TAs9lprs6QHYk1Sg32LzjBeUJ0mUPVWTTrJArdq5ynzMim4OcXiTMLXrRMvF60znfTqt
+         RZ9HNUibOoW453GAI24+8tVkt15XJQ6U89hfMLqj/Gy6DtyAIWNU8+EB/Gjh1b74RM4G
+         d8zg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ySBOubiPulo913haM4WoQ1mv/TU5CEHMQ1toV9XVhMc=;
-        b=FCXUdLEbcOxpcjp7ADFVzzL2Gzc4xU1gZLDS/KjuhAimejAP23RYfyfr0XrNcUaWen
-         bkoIy8uojZhLQKS5WmbTRQTW6a2qtL1e10vhkQwhLC4ADIvLYIae3lgGw45upQZXuyhP
-         6nqxhafn8/W7XBCo07/91jRd6P5B9FKVQRR+KT0WQWTVRHIQRIibvfRTg0Afc7JWISKZ
-         zYHncbxKha3ocQJRo6n3GuNwunjQHu3eDc0I60MZUa0wO/IDt55qYSyEVjS9zBomB8hM
-         7ClopJjeMCnkJ7HC5JLq2uaBfepzUv4B6KLtW6XVvySbkcBFzGzwoE4W6m5/iTFoFbQE
-         W8Aw==
-X-Gm-Message-State: AOAM530iV1vlhHpOjEtzE/2q188qJr21NsRXkp1i/keuFMzuYj3xK4Mj
-        3HWGC4nz2CVT4jedV8vD1Q==
-X-Google-Smtp-Source: ABdhPJzACW6AvH0oEJr8UNPH9HL8vuoKqEyRonyCY12D3tqsWHQUGMaQ5zgSLXG56C5vPug6oW5P/A==
-X-Received: by 2002:a05:6808:d48:b0:326:2d1f:1c0f with SMTP id w8-20020a0568080d4800b003262d1f1c0fmr637501oik.43.1651695790838;
-        Wed, 04 May 2022 13:23:10 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id o14-20020a0568080f8e00b00325cda1ff8bsm4649538oiw.10.2022.05.04.13.23.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 May 2022 13:23:10 -0700 (PDT)
-Received: (nullmailer pid 2163645 invoked by uid 1000);
-        Wed, 04 May 2022 20:23:09 -0000
-Date:   Wed, 4 May 2022 15:23:09 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
-Cc:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Ezequiel Garcia <ezequiel@collabora.com>,
-        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/3] dt-bindings: media: rockchip-vpu: Add RK3568 JPEG
- compatible
-Message-ID: <YnLgrVJcdkYgNvEO@robh.at.kernel.org>
-References: <20220427224438.335327-1-frattaroli.nicolas@gmail.com>
- <20220427224438.335327-2-frattaroli.nicolas@gmail.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :to:references:from:in-reply-to:content-transfer-encoding;
+        bh=9J1muNG7xxQsE+IQE8kK9Xe8x16+0OIP6QRk6sSLBHA=;
+        b=PEwzVtMRhWYUClmaUFYeZ3orwosbRWi4VV3fRB0kd0/nJgV3vXA0WWmtjGDunsdrXW
+         Fq8YjYD5hVWiSQ8bka360+QsAc9b4RgtrYB2xnn+DWHCEApHX43KVDV1+BF+ECt5k/Ze
+         TO/2RkEUv6eZUXn2BkdCXYEk0lvUAHX2prCW4i4B3+vECn+qOU12a9SZELu5pOB2sxQh
+         lLLqS6iLeGMFtqa38UT3dkHSnifIY2CrnTBJ+7tnNvs2r1EwFT+0DZYX0QevML9pfaBI
+         o+VXl14h/OgXDH9DUTaZ2ebS5bFfrazl5uFU4/1q09rCHQc3SgPOshbOGl7ziEBAOuL7
+         bY8g==
+X-Gm-Message-State: AOAM530KvAKypSe5z2O9vCu96JoraJS3p3o4r28ulOwL7dkNhFdXGLLF
+        ievlETXu4VRmXqOSCu9R9twMzPAzTpM=
+X-Google-Smtp-Source: ABdhPJwRIRMKn8SmQQLwOuNdIe7xBc/BywkOBRX4mCM0mgbE0qRs0UsZGf3yaw4d4xA3xKs282RfJg==
+X-Received: by 2002:a17:907:1c01:b0:6f4:2692:e23 with SMTP id nc1-20020a1709071c0100b006f426920e23mr19550187ejc.243.1651695797311;
+        Wed, 04 May 2022 13:23:17 -0700 (PDT)
+Received: from [192.168.26.149] (ip-194-187-74-233.konfederacka.maverick.com.pl. [194.187.74.233])
+        by smtp.googlemail.com with ESMTPSA id bo9-20020a0564020b2900b0042617ba63a5sm9559652edb.47.2022.05.04.13.23.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 04 May 2022 13:23:16 -0700 (PDT)
+Message-ID: <f511426e-47cd-7139-baab-ff31c9be2ba3@gmail.com>
+Date:   Wed, 4 May 2022 22:23:16 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220427224438.335327-2-frattaroli.nicolas@gmail.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:96.0) Gecko/20100101
+ Thunderbird/96.0
+Subject: Re: [RESEND PATCH v3 0/2] Add nvmem support for dynamic partitions
+To:     Ansuel Smith <ansuelsmth@gmail.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220429124825.21477-1-ansuelsmth@gmail.com>
+From:   =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>
+In-Reply-To: <20220429124825.21477-1-ansuelsmth@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 28, 2022 at 12:44:36AM +0200, Nicolas Frattaroli wrote:
-> The RK3568 and RK3566 have a VPU node solely dedicated to JPEG
-> encoding. This patch adds a compatible for it, and also allows
-> the bindings to only come with a vepu interrupt.
+On 29.04.2022 14:48, Ansuel Smith wrote:
+> This very small series comes to fix the very annyoing problem of
+> partitions declared by parser at runtime NOT supporting nvmem cells
+> definition.
+> 
+> The current implementation is very generic. The idea is to provide an of
+> node if defined for everyone and not strictly limit this to nvmem stuff.
+> But still the actual change is done only for nvmem-cells mtd. (just to
+> make sure) This can totally change by removing the compatible check.
+> 
+> The idea here is that a user can still use these dynamic parsers
+> instead of declaring a fixed-partition and also declare how nvmem-cells
+> are defined for the partition.
+> This live with the assumption that dynamic partition have always the
+> same name and they are known. (this is the case for smem-part partition
+> that would require a bootloader reflash to change and for parsers like
+> cmdlinepart where the name is always the same.)
+> With this assumption, it's easy to fix this problem. Just introduce a
+> new partition node that will declare just these special partition.
+> Mtdcore then will check if these special declaration are present and
+> connect the dynamic partition with the OF node present in the dts. Nvmem
+> will automagically fin the OF node and cells will be works based on the
+> data provided by the parser.
+> 
+> The initial idea was to create a special nvmem driver with a special
+> compatible where a user would declare the mtd partition name and this
+> driver would search it and register the nvmem cells but that became
+> difficult really fast, mtd notifier system is problematic for this kind
+> of stuff. So here is the better implementation. A variant of this is
+> already tested on openwrt where we have devices that use cmdlinepart.
+> (that current variant have defined in the dts the exact copy of
+> cmdlinepart in the fixed-partition scheme and we patched the cmdlinepart
+> parser to scan this fixed-partition node (that is ignored as cmdlinepart
+> have priority) and connect the dynamic partition with the dts node)
+> 
+> I provided an example of this in the documentation commit.
+> In short it's needed to add to the partitions where the compatible parser
+> is declared, a partition with just the label declared (instead of the reg).
+> Then declare some nvmem-cells and it will all work at runtime.
+> Mtdcore will check if a node with the same label is present and assign an
+> OF node to the MTD.
+> 
+> I currently tested this on my device that have smem-part and the
+> gmac driver use nvmem to get the mac-address. This works correctly and
+> the same address is provided.
 
-Sounds like this might be more than just JPEG, so I'm assuming this will 
-get sent again.
- 
-> Signed-off-by: Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
-> ---
->  Documentation/devicetree/bindings/media/rockchip-vpu.yaml | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/media/rockchip-vpu.yaml b/Documentation/devicetree/bindings/media/rockchip-vpu.yaml
-> index bacb60a34989..cd62b44c34c3 100644
-> --- a/Documentation/devicetree/bindings/media/rockchip-vpu.yaml
-> +++ b/Documentation/devicetree/bindings/media/rockchip-vpu.yaml
-> @@ -22,6 +22,7 @@ properties:
->            - rockchip,rk3288-vpu
->            - rockchip,rk3328-vpu
->            - rockchip,rk3399-vpu
-> +          - rockchip,rk3568-jpeg-vepu
->            - rockchip,px30-vpu
->        - items:
->            - const: rockchip,rk3188-vpu
-> @@ -40,6 +41,7 @@ properties:
->    interrupt-names:
->      oneOf:
->        - const: vdpu
-> +      - const: vepu
->        - items:
->            - const: vepu
->            - const: vdpu
-> -- 
-> 2.36.0
-> 
-> 
+Thanks a lot for working on this.
+
+Another case (that I need this work for) is cmdline parser. Some
+partitions passed by U-Boot may require extra handling and that needs to
+be described in DT.

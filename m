@@ -2,123 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A39655197BB
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 09:00:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25B855197C1
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 09:02:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345146AbiEDHDq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 03:03:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59180 "EHLO
+        id S1345171AbiEDHFl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 03:05:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238998AbiEDHDj (ORCPT
+        with ESMTP id S232560AbiEDHFi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 03:03:39 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62BD065E3;
-        Wed,  4 May 2022 00:00:03 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KtSPp3Dnlz4xTX;
-        Wed,  4 May 2022 16:59:58 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1651647598;
-        bh=90wlYgCpFivT1rC2wcKWEMcQDgDO6cL7YqVcGVtO2m8=;
-        h=Date:From:To:Cc:Subject:From;
-        b=aqyCxq+AwgXvwQ0UTcuBDMFsa60DDgyJhZlWvf05gi7G63GYCOX3iaQHtxOH/2Noh
-         0TT/UTS7aIv+4vBN0OoLvO9hqraJDz3FV/HaTT+wCDkDC0Qnyv6ajrLqJh8/h/KgnP
-         8y0DTvcTLkhr/qSjHNH/vAtBYlk7kR0BgwZE0i3SvsOBj7BpK8Zx9BEVSWdiidG2MP
-         /UZ2zDoH1+yWDAePs/VexAo4GDKGKtmrlXNgdB+d+PHmhp0v5jkux1IOT6MYVhaqGn
-         ZbmlH8eMTt1MVJh5WQyzdsKeW2ustY8VL7KwvJO3N9ZwHeuYwOd+46dZYjiS2TChdL
-         iQamaKHGtUgjA==
-Date:   Wed, 4 May 2022 16:59:56 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Thierry Reding <thierry.reding@gmail.com>,
-        Dipen Patel <dipenp@nvidia.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the hte tree
-Message-ID: <20220504165956.531c4b53@canb.auug.org.au>
+        Wed, 4 May 2022 03:05:38 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EDAA21260;
+        Wed,  4 May 2022 00:02:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651647722; x=1683183722;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=7ZCqlQA5sx7gnt6UXenHJLpYVoVKeBIUo5U3B8t8rmE=;
+  b=JgsQrAjNoJ2bKHpmeKPP0rymm4WqEYDo24MUUewYIoYW2YCZbO+tbXTg
+   W3A8ppj9USsIf09Ak+kXTlJKXTJri9oiCdi/rQvT44YlYz8v394LWa0dN
+   Kfn/VssNM90dJL2YaLpgQNwjDYoURjPIp++ntxf/J6NvMN+LJgNsMqMJu
+   ajep2Urat2qbuK0ZHEDlqugapvSSsztxSVYApTPV0FGhLCRu26/YL8xM1
+   3SlErWBs+K4t6mqQ8bra2384HEma3siIYo2NaHQyD4dm/Umz/52mULEaO
+   e2tCUZZw5/9M4opfpxyUgreVIiLXLgP0GQ/aI7N/r6fLRlB6NJb0nUDxn
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10336"; a="267279980"
+X-IronPort-AV: E=Sophos;i="5.91,197,1647327600"; 
+   d="scan'208";a="267279980"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2022 00:02:01 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,197,1647327600"; 
+   d="scan'208";a="653603446"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 04 May 2022 00:01:55 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nm91G-000B9r-MZ;
+        Wed, 04 May 2022 07:01:54 +0000
+Date:   Wed, 4 May 2022 15:01:44 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Guowei Du <duguoweisz@gmail.com>, jack@suse.cz
+Cc:     kbuild-all@lists.01.org, amir73il@gmail.com,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        viro@zeniv.linux.org.uk, jmorris@namei.org, serge@hallyn.com,
+        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org,
+        linux-security-module@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, paul@paul-moore.com,
+        stephen.smalley.work@gmail.com, eparis@parisplace.org,
+        keescook@chromium.org, anton@enomsg.org, ccross@android.com,
+        tony.luck@intel.com, selinux@vger.kernel.org, duguoweisz@gmail.com,
+        duguowei <duguowei@xiaomi.com>
+Subject: Re: [PATCH] fsnotify: add generic perm check for unlink/rmdir
+Message-ID: <202205041421.bHwZBEFK-lkp@intel.com>
+References: <20220503183750.1977-1-duguoweisz@gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/.Sxu7HfTmV2Dx4LHxmbfAJ8";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220503183750.1977-1-duguoweisz@gmail.com>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/.Sxu7HfTmV2Dx4LHxmbfAJ8
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hi Guowei,
 
-Hi all,
+Thank you for the patch! Perhaps something to improve:
 
-After merging the hte tree, today's linux-next build (arm
-multi_v7_defconfig) failed like this:
+[auto build test WARNING on pcmoore-selinux/next]
+[also build test WARNING on linus/master jmorris-security/next-testing v5.18-rc5]
+[cannot apply to jack-fs/fsnotify next-20220503]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-drivers/gpio/gpiolib-cdev.c:572:8: error: unknown type name 'hte_return_t'
-  572 | static hte_return_t process_hw_ts_thread(void *p)
-      |        ^~~~~~~~~~~~
-drivers/gpio/gpiolib-cdev.c:623:8: error: unknown type name 'hte_return_t'
-  623 | static hte_return_t process_hw_ts(struct hte_ts_data *ts, void *p)
-      |        ^~~~~~~~~~~~
-drivers/gpio/gpiolib-cdev.c: In function 'hte_edge_setup':
-drivers/gpio/gpiolib-cdev.c:851:41: error: passing argument 2 of 'hte_reque=
-st_ts_ns' from incompatible pointer type [-Werror=3Dincompatible-pointer-ty=
-pes]
-  851 |         return hte_request_ts_ns(hdesc, process_hw_ts,
-      |                                         ^~~~~~~~~~~~~
-      |                                         |
-      |                                         int (*)(struct hte_ts_data =
-*, void *)
-In file included from drivers/gpio/gpiolib-cdev.c:27:
-include/linux/hte.h:234:75: note: expected 'hte_ts_cb_t' {aka 'enum hte_ret=
-urn (*)(struct hte_ts_data *, void *)'} but argument is of type 'int (*)(st=
-ruct hte_ts_data *, void *)'
-  234 | static inline int hte_request_ts_ns(struct hte_ts_desc *desc, hte_t=
-s_cb_t cb,
-      |                                                               ~~~~~=
-~~~~~~~^~
-drivers/gpio/gpiolib-cdev.c:852:34: error: passing argument 3 of 'hte_reque=
-st_ts_ns' from incompatible pointer type [-Werror=3Dincompatible-pointer-ty=
-pes]
-  852 |                                  process_hw_ts_thread, line);
-      |                                  ^~~~~~~~~~~~~~~~~~~~
-      |                                  |
-      |                                  int (*)(void *)
-In file included from drivers/gpio/gpiolib-cdev.c:27:
-include/linux/hte.h:235:53: note: expected 'hte_ts_sec_cb_t' {aka 'enum hte=
-_return (*)(void *)'} but argument is of type 'int (*)(void *)'
-  235 |                                     hte_ts_sec_cb_t tcb, void *data)
-      |                                     ~~~~~~~~~~~~~~~~^~~
-cc1: some warnings being treated as errors
+url:    https://github.com/intel-lab-lkp/linux/commits/Guowei-Du/fsnotify-add-generic-perm-check-for-unlink-rmdir/20220504-024310
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/selinux.git next
+config: h8300-randconfig-s032-20220501 (https://download.01.org/0day-ci/archive/20220504/202205041421.bHwZBEFK-lkp@intel.com/config)
+compiler: h8300-linux-gcc (GCC) 11.3.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        # https://github.com/intel-lab-lkp/linux/commit/6f635019bbd2ab22a64e03164c8812a46531966e
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Guowei-Du/fsnotify-add-generic-perm-check-for-unlink-rmdir/20220504-024310
+        git checkout 6f635019bbd2ab22a64e03164c8812a46531966e
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=h8300 SHELL=/bin/bash
 
-Something has been missed in the contruction of the git tree :-(
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-I have dropped the hte tree for today.
 
---=20
-Cheers,
-Stephen Rothwell
+sparse warnings: (new ones prefixed by >>)
+   security/security.c:358:25: sparse: sparse: cast removes address space '__rcu' of expression
+>> security/security.c:1169:35: sparse: sparse: incorrect type in argument 1 (different modifiers) @@     expected struct path *path @@     got struct path const *dir @@
+   security/security.c:1169:35: sparse:     expected struct path *path
+   security/security.c:1169:35: sparse:     got struct path const *dir
+   security/security.c:1180:35: sparse: sparse: incorrect type in argument 1 (different modifiers) @@     expected struct path *path @@     got struct path const *dir @@
+   security/security.c:1180:35: sparse:     expected struct path *path
+   security/security.c:1180:35: sparse:     got struct path const *dir
 
---Sig_/.Sxu7HfTmV2Dx4LHxmbfAJ8
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+vim +1169 security/security.c
 
------BEGIN PGP SIGNATURE-----
+  1160	
+  1161	int security_path_rmdir(const struct path *dir, struct dentry *dentry)
+  1162	{
+  1163		int ret;
+  1164		if (unlikely(IS_PRIVATE(d_backing_inode(dir->dentry))))
+  1165			return 0;
+  1166		ret = call_int_hook(path_rmdir, 0, dir, dentry);
+  1167		if (ret)
+  1168			return ret;
+> 1169		return fsnotify_path_perm(dir, dentry, MAY_RMDIR);
+  1170	}
+  1171	
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJyJG0ACgkQAVBC80lX
-0Gwsgwf/U9QiLifUxSuF5snkAu+pe+s+awAPgzE4pqPpbfPhQb2VZiOkwuorZ10M
-VHdOr2QAw7RZ6nbRa/1CsXLOD9/LVuyyceL0Yck6HHjUD8Pbe/k01EoW8aI7zHl6
-mYcfSaQFB11OKT3Bl04J3/fURNWqJDN27wkklzyVhJJAjELLQzk4UcWE/LW2ofgI
-QegiOVVQPlWcKiMvh1Xb0ktH9/3yBAFhL+i1u1hbEAd4iRa7jb6yOUBt8dUUEaJ2
-ltU5TMUMkUWjTSgYsnbPhxgnWXMY8bB+GDkab0JxI6NBW2iYZ6zM/0xpU49jt8/G
-LJonNe5CDVvAkygAsko0EFs1fhay1A==
-=NM8K
------END PGP SIGNATURE-----
-
---Sig_/.Sxu7HfTmV2Dx4LHxmbfAJ8--
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

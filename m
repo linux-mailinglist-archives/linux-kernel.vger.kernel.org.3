@@ -2,64 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B1BB519F1A
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 14:18:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4889519F1F
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 14:19:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349365AbiEDMVu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 08:21:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57770 "EHLO
+        id S1349385AbiEDMXT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 08:23:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243515AbiEDMVs (ORCPT
+        with ESMTP id S1349382AbiEDMXQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 08:21:48 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FD712CC90;
-        Wed,  4 May 2022 05:18:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 4 May 2022 08:23:16 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0187C2F39E
+        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 05:19:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1651666780;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=uBV16vnuxP6wnKOyV7561KKUA2Dkfw/RJaBGuQ2QULQ=;
+        b=Vnrjiq7m1YTXCcKtek6hHvsGRccRj2phGNk4XdGXRz241WXCtjlYulTCqYs7xBJZDkfM8J
+        vnqezud7CtCCs+/tYApCEz6Xj6dLMlmbSE7tYWJDfKEW00NpOVxaCUgt6SVkQzlES8HsJe
+        ha/r7RrI1BzEGmPAQkshc/m+9BirdCI=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-636-GVT-Xq4iM0OAkxtHXuQB2A-1; Wed, 04 May 2022 08:19:34 -0400
+X-MC-Unique: GVT-Xq4iM0OAkxtHXuQB2A-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DAB26B8239E;
-        Wed,  4 May 2022 12:18:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7681BC385AF;
-        Wed,  4 May 2022 12:18:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651666689;
-        bh=6C67VGLCuUaGiRz3EE0II5UI9nzEfV+Tp+DmoxgCEGg=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=ACd0jXZ5o+Ptqt8JtK31bPHENHFd6SfUCS/sRLZ7z7knqdiObE2hhUEqsUXtWIbNv
-         QpJAjd9CQP84+itG/b9gNycw6K9Qr0Pd7TlB9TldaAl0zqjOyVXF0iJZZHUn6jRB21
-         Px2mPlvsMeI85f5zscA0KoCUICAqb2Unwz3tV+8Iem59HqIeEVPPS91HVylmb24d+e
-         vymCz2mBuTPKPS3ZbfUawFtBd9Q08wifc9ieYDtaFigixnn5uVyWI9ZBcmDRwtpDKC
-         83SR175Dlnem25Oo0FQeDLer9diUzOD+x2maEnGNC6x7DOZabxp0rFTnwUV8IkjAKo
-         Ep5xqNxdiZZYA==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
-        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <maz@kernel.org>)
-        id 1nmDxH-008taa-4Z; Wed, 04 May 2022 13:18:07 +0100
-Date:   Wed, 04 May 2022 13:18:07 +0100
-Message-ID: <875yml8pa8.wl-maz@kernel.org>
-From:   Marc Zyngier <maz@kernel.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Christoffer Dall <cdall@cs.columbia.edu>,
-        Raghavendra Rao Ananta <rananta@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warning after merge of the kvm-arm tree
-In-Reply-To: <20220504205627.18f46380@canb.auug.org.au>
-References: <20220504205627.18f46380@canb.auug.org.au>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
- (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: sfr@canb.auug.org.au, cdall@cs.columbia.edu, rananta@google.com, linux-kernel@vger.kernel.org, linux-next@vger.kernel.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id CF6D81014A63;
+        Wed,  4 May 2022 12:19:33 +0000 (UTC)
+Received: from starship (unknown [10.40.192.26])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 9B6EC2026614;
+        Wed,  4 May 2022 12:19:31 +0000 (UTC)
+Message-ID: <ff67344c0efe06d1422aa84e56738a0812c69bfc.camel@redhat.com>
+Subject: Re: [PATCH v3 08/14] KVM: SVM: Update AVIC settings when changing
+ APIC mode
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Cc:     pbonzini@redhat.com, seanjc@google.com, joro@8bytes.org,
+        jon.grimm@amd.com, wei.huang2@amd.com, terry.bowman@amd.com
+Date:   Wed, 04 May 2022 15:19:30 +0300
+In-Reply-To: <20220504073128.12031-9-suravee.suthikulpanit@amd.com>
+References: <20220504073128.12031-1-suravee.suthikulpanit@amd.com>
+         <20220504073128.12031-9-suravee.suthikulpanit@amd.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.4
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,25 +65,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 04 May 2022 11:56:27 +0100,
-Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+On Wed, 2022-05-04 at 02:31 -0500, Suravee Suthikulpanit wrote:
+> Update and refresh AVIC settings when guest APIC mode is updated
+> (e.g. changing between disabled, xAPIC, or x2APIC).
 > 
-> Hi all,
+> Signed-off-by: Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
+> ---
+>  arch/x86/kvm/svm/avic.c | 16 ++++++++++++++++
+>  arch/x86/kvm/svm/svm.c  |  1 +
+>  2 files changed, 17 insertions(+)
 > 
-> After merging the kvm-arm tree, today's linux-next build (htmldocs)
-> produced this warning:
-> 
-> Documentation/virt/kvm/arm/index.rst:7: WARNING: toctree contains reference to nonexisting document 'virt/kvm/arm/psci'
-> Documentation/virt/kvm/arm/hypercalls.rst: WARNING: document isn't included in any toctree
-> 
-> Introduced by commit
-> 
->   f1ced23a9be5 ("Docs: KVM: Rename psci.rst to hypercalls.rst")
-> 
+> diff --git a/arch/x86/kvm/svm/avic.c b/arch/x86/kvm/svm/avic.c
+> index 3ebeea19b487..d185dd8ddf17 100644
+> --- a/arch/x86/kvm/svm/avic.c
+> +++ b/arch/x86/kvm/svm/avic.c
+> @@ -691,6 +691,22 @@ void avic_apicv_post_state_restore(struct kvm_vcpu *vcpu)
+>  	avic_handle_ldr_update(vcpu);
+>  }
+>  
+> +void avic_set_virtual_apic_mode(struct kvm_vcpu *vcpu)
+> +{
+> +	struct vcpu_svm *svm = to_svm(vcpu);
+> +
+> +	if (!lapic_in_kernel(vcpu) || (avic_mode == AVIC_MODE_NONE))
+> +		return;
+> +
+> +	if (kvm_get_apic_mode(vcpu) == LAPIC_MODE_INVALID) {
+> +		WARN_ONCE(true, "Invalid local APIC state (vcpu_id=%d)", vcpu->vcpu_id);
+> +		return;
+> +	}
+> +
+> +	kvm_vcpu_update_apicv(&svm->vcpu);
 
-Thanks for the heads up, I have now pushed out a fix.
+Why to have this call? I think that all that is needed is only to call the
+avic_refresh_apicv_exec_ctrl.
 
-	M.
+Best regards,
+	Maxim Levitsky
 
--- 
-Without deviation from the norm, progress is not possible.
+
+> +	avic_refresh_apicv_exec_ctrl(&svm->vcpu);
+> +}
+> +
+>  static int avic_set_pi_irte_mode(struct kvm_vcpu *vcpu, bool activate)
+>  {
+>  	int ret = 0;
+> diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
+> index 314628b6bff4..9066568fd19d 100644
+> --- a/arch/x86/kvm/svm/svm.c
+> +++ b/arch/x86/kvm/svm/svm.c
+> @@ -4692,6 +4692,7 @@ static struct kvm_x86_ops svm_x86_ops __initdata = {
+>  	.enable_nmi_window = svm_enable_nmi_window,
+>  	.enable_irq_window = svm_enable_irq_window,
+>  	.update_cr8_intercept = svm_update_cr8_intercept,
+> +	.set_virtual_apic_mode = avic_set_virtual_apic_mode,
+>  	.refresh_apicv_exec_ctrl = avic_refresh_apicv_exec_ctrl,
+>  	.check_apicv_inhibit_reasons = avic_check_apicv_inhibit_reasons,
+>  	.apicv_post_state_restore = avic_apicv_post_state_restore,
+
+

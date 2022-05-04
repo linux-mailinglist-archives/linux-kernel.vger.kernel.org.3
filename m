@@ -2,46 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF05F51AA54
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:27:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2449C51AAC9
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:34:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357411AbiEDRYS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 13:24:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53588 "EHLO
+        id S1358615AbiEDRes (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 13:34:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355576AbiEDREa (ORCPT
+        with ESMTP id S1356724AbiEDRJj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 13:04:30 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54E134EF4D;
-        Wed,  4 May 2022 09:53:09 -0700 (PDT)
+        Wed, 4 May 2022 13:09:39 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8BA017061;
+        Wed,  4 May 2022 09:55:26 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 24983B827AF;
-        Wed,  4 May 2022 16:53:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE023C385B6;
-        Wed,  4 May 2022 16:53:04 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5FA19B82792;
+        Wed,  4 May 2022 16:55:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13695C385AF;
+        Wed,  4 May 2022 16:55:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651683184;
-        bh=bOEnfUtlCzKilcQVNdgNDkraRV1l4mxr/wnzQyI8f7Q=;
+        s=korg; t=1651683325;
+        bh=bU9zuv/XF1iwHuINloAyTAgfvnKnw2LCdg098a6ufOs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=q+4JdMqTA7356TvVOUfZ+hBanwLMXK595bt1liOebrmGn3qDsS+ZKl/6j+uYI7LSK
-         H6fSzDb4Dm+LIYV0kD7ZMF25ZK/nDeKjXwOKzGZPmOjcV/6cYFGaVtsOlh2D/jF3DO
-         cq5cQxjxE6KnMGzkWlmG0auR2JZTTzYQrb9j58G0=
+        b=EWCQu1cfcR8acu1kJQWy4eII+4WBYXGY+ivBF4Cgt60PCfPkTyN9Tw/19Y7CL+ZB/
+         2on0jCarHv8hnlgHqj2vQkJZlOCnuLJwXcor0+4qjMn17Ya/DB+RszziVVJkjig1BW
+         uBG9r4gsckjm+3A52i352GZ9Pyzs73QD31q9HHtc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Christian Hewitt <christianshewitt@gmail.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 049/177] arm64: dts: meson: remove CPU opps below 1GHz for SM1 boards
+        stable@vger.kernel.org, Oliver Neukum <oneukum@suse.com>
+Subject: [PATCH 5.17 004/225] USB: quirks: add STRING quirk for VCOM device
 Date:   Wed,  4 May 2022 18:44:02 +0200
-Message-Id: <20220504153057.375932150@linuxfoundation.org>
+Message-Id: <20220504153110.605085090@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220504153053.873100034@linuxfoundation.org>
-References: <20220504153053.873100034@linuxfoundation.org>
+In-Reply-To: <20220504153110.096069935@linuxfoundation.org>
+References: <20220504153110.096069935@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,60 +53,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christian Hewitt <christianshewitt@gmail.com>
+From: Oliver Neukum <oneukum@suse.com>
 
-[ Upstream commit fd86d85401c2049f652293877c0f7e6e5afc3bbc ]
+commit ec547af8a9ea6441864bad34172676b5652ceb96 upstream.
 
-Amlogic SM1 devices experience CPU stalls and random board wedges when
-the system idles and CPU cores clock down to lower opp points. Recent
-vendor kernels include a change to remove 100-250MHz and other distro
-sources also remove the 500/667MHz points. Unless all 100-667Mhz opps
-are removed or the CPU governor forced to performance stalls are still
-observed, so let's remove them to improve stability and uptime.
+This has been reported to stall if queried
 
-Fixes: 3d9e76483049 ("arm64: dts: meson-sm1-sei610: enable DVFS")
-Signed-off-by: Christian Hewitt <christianshewitt@gmail.com>
-Reviewed-by: Neil Armstrong <narmstrong@baylibre.com>
-Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
-Link: https://lore.kernel.org/r/20220210100638.19130-3-christianshewitt@gmail.com
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Cc: stable <stable@vger.kernel.org>
+Signed-off-by: Oliver Neukum <oneukum@suse.com>
+Link: https://lore.kernel.org/r/20220414123152.1700-1-oneukum@suse.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/arm64/boot/dts/amlogic/meson-sm1.dtsi | 20 --------------------
- 1 file changed, 20 deletions(-)
+ drivers/usb/core/quirks.c |    3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/amlogic/meson-sm1.dtsi b/arch/arm64/boot/dts/amlogic/meson-sm1.dtsi
-index 3d8b1f4f2001..78bdbd2ccc9d 100644
---- a/arch/arm64/boot/dts/amlogic/meson-sm1.dtsi
-+++ b/arch/arm64/boot/dts/amlogic/meson-sm1.dtsi
-@@ -95,26 +95,6 @@ cpu_opp_table: opp-table {
- 		compatible = "operating-points-v2";
- 		opp-shared;
+--- a/drivers/usb/core/quirks.c
++++ b/drivers/usb/core/quirks.c
+@@ -510,6 +510,9 @@ static const struct usb_device_id usb_qu
+ 	/* DJI CineSSD */
+ 	{ USB_DEVICE(0x2ca3, 0x0031), .driver_info = USB_QUIRK_NO_LPM },
  
--		opp-100000000 {
--			opp-hz = /bits/ 64 <100000000>;
--			opp-microvolt = <730000>;
--		};
--
--		opp-250000000 {
--			opp-hz = /bits/ 64 <250000000>;
--			opp-microvolt = <730000>;
--		};
--
--		opp-500000000 {
--			opp-hz = /bits/ 64 <500000000>;
--			opp-microvolt = <730000>;
--		};
--
--		opp-667000000 {
--			opp-hz = /bits/ 64 <666666666>;
--			opp-microvolt = <750000>;
--		};
--
- 		opp-1000000000 {
- 			opp-hz = /bits/ 64 <1000000000>;
- 			opp-microvolt = <770000>;
--- 
-2.35.1
-
++	/* VCOM device */
++	{ USB_DEVICE(0x4296, 0x7570), .driver_info = USB_QUIRK_CONFIG_INTF_STRINGS },
++
+ 	/* INTEL VALUE SSD */
+ 	{ USB_DEVICE(0x8086, 0xf1a5), .driver_info = USB_QUIRK_RESET_RESUME },
+ 
 
 

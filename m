@@ -2,75 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBEED51A4C1
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 17:57:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9991451A4C7
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 17:58:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353004AbiEDQBC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 12:01:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33378 "EHLO
+        id S1353001AbiEDQBa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 12:01:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352963AbiEDQAt (ORCPT
+        with ESMTP id S1345462AbiEDQB1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 12:00:49 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E41946174;
-        Wed,  4 May 2022 08:57:09 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 020191F74C;
-        Wed,  4 May 2022 15:57:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1651679828; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=0lMxpONprAdpQbV0uZskDbB1fEIP7YYHFmYdwzZhDVE=;
-        b=FZxi5C4az6xiRDRt5zrq3DDmodZF2oavjNsJxai9hYEooOypl2qGaNwDnpiy9Tx+vC7rtJ
-        6VsX/43rtog5GY2zI9yxWTXDz0XrgLb2dS1b5YOdmVOPtV5uJQwTW4VSx39BlUI2CPd3R6
-        9okDcBlH2MvPKcdeiIkPEin/HR4d5xc=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 632F013AFD;
-        Wed,  4 May 2022 15:57:07 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id WNXUFlOicmLWPAAAMHmgww
-        (envelope-from <jgross@suse.com>); Wed, 04 May 2022 15:57:07 +0000
-From:   Juergen Gross <jgross@suse.com>
-To:     xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, x86@kernel.org,
-        linux-s390@vger.kernel.org,
-        virtualization@lists.linux-foundation.org
-Cc:     Juergen Gross <jgross@suse.com>, Arnd Bergmann <arnd@arndb.de>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Oleksandr Tyshchenko <olekstysh@gmail.com>
-Subject: [PATCH v3 2/2] virtio: replace arch_has_restricted_virtio_memory_access()
-Date:   Wed,  4 May 2022 17:57:03 +0200
-Message-Id: <20220504155703.13336-3-jgross@suse.com>
-X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220504155703.13336-1-jgross@suse.com>
-References: <20220504155703.13336-1-jgross@suse.com>
+        Wed, 4 May 2022 12:01:27 -0400
+Received: from theia.8bytes.org (8bytes.org [81.169.241.247])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81DE746641
+        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 08:57:50 -0700 (PDT)
+Received: by theia.8bytes.org (Postfix, from userid 1000)
+        id A091F3FA; Wed,  4 May 2022 17:57:48 +0200 (CEST)
+Date:   Wed, 4 May 2022 17:57:47 +0200
+From:   Joerg Roedel <joro@8bytes.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
+        iommu@lists.linux-foundation.org
+Subject: [git pull] IOMMU Fixes for Linux v5.18-rc5
+Message-ID: <YnKie9R0RhJsGMz9@8bytes.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="dv9q/IqokSHqWzfx"
+Content-Disposition: inline
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -79,215 +37,105 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Instead of using arch_has_restricted_virtio_memory_access() together
-with CONFIG_ARCH_HAS_RESTRICTED_VIRTIO_MEMORY_ACCESS, replace those
-with platform_has() and a new platform feature
-PLATFORM_VIRTIO_RESTRICTED_MEM_ACCESS.
 
-Signed-off-by: Juergen Gross <jgross@suse.com>
----
-V2:
-- move setting of PLATFORM_VIRTIO_RESTRICTED_MEM_ACCESS in SEV case
-  to sev_setup_arch().
-V3:
-- remove Hyper-V chunk (Michael Kelley)
-- remove include virtio_config.h from mem_encrypt.c (Oleksandr Tyshchenko)
-- add comment for PLATFORM_VIRTIO_RESTRICTED_MEM_ACCESS (Oleksandr Tyshchenko)
----
- arch/s390/Kconfig                |  1 -
- arch/s390/mm/init.c              | 13 +++----------
- arch/x86/Kconfig                 |  1 -
- arch/x86/mm/mem_encrypt.c        |  7 -------
- arch/x86/mm/mem_encrypt_amd.c    |  4 ++++
- drivers/virtio/Kconfig           |  6 ------
- drivers/virtio/virtio.c          |  5 ++---
- include/linux/platform-feature.h |  6 +++++-
- include/linux/virtio_config.h    |  9 ---------
- 9 files changed, 14 insertions(+), 38 deletions(-)
+--dv9q/IqokSHqWzfx
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-diff --git a/arch/s390/Kconfig b/arch/s390/Kconfig
-index e084c72104f8..f97a22ae69a8 100644
---- a/arch/s390/Kconfig
-+++ b/arch/s390/Kconfig
-@@ -772,7 +772,6 @@ menu "Virtualization"
- config PROTECTED_VIRTUALIZATION_GUEST
- 	def_bool n
- 	prompt "Protected virtualization guest support"
--	select ARCH_HAS_RESTRICTED_VIRTIO_MEMORY_ACCESS
- 	help
- 	  Select this option, if you want to be able to run this
- 	  kernel as a protected virtualization KVM guest.
-diff --git a/arch/s390/mm/init.c b/arch/s390/mm/init.c
-index 86ffd0d51fd5..2c3b451813ed 100644
---- a/arch/s390/mm/init.c
-+++ b/arch/s390/mm/init.c
-@@ -31,6 +31,7 @@
- #include <linux/cma.h>
- #include <linux/gfp.h>
- #include <linux/dma-direct.h>
-+#include <linux/platform-feature.h>
- #include <asm/processor.h>
- #include <linux/uaccess.h>
- #include <asm/pgalloc.h>
-@@ -168,22 +169,14 @@ bool force_dma_unencrypted(struct device *dev)
- 	return is_prot_virt_guest();
- }
- 
--#ifdef CONFIG_ARCH_HAS_RESTRICTED_VIRTIO_MEMORY_ACCESS
--
--int arch_has_restricted_virtio_memory_access(void)
--{
--	return is_prot_virt_guest();
--}
--EXPORT_SYMBOL(arch_has_restricted_virtio_memory_access);
--
--#endif
--
- /* protected virtualization */
- static void pv_init(void)
- {
- 	if (!is_prot_virt_guest())
- 		return;
- 
-+	platform_set(PLATFORM_VIRTIO_RESTRICTED_MEM_ACCESS);
-+
- 	/* make sure bounce buffers are shared */
- 	swiotlb_force = SWIOTLB_FORCE;
- 	swiotlb_init(1);
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index 4bed3abf444d..eeb7c6c8eec5 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -1515,7 +1515,6 @@ config X86_CPA_STATISTICS
- config X86_MEM_ENCRYPT
- 	select ARCH_HAS_FORCE_DMA_UNENCRYPTED
- 	select DYNAMIC_PHYSICAL_MASK
--	select ARCH_HAS_RESTRICTED_VIRTIO_MEMORY_ACCESS
- 	def_bool n
- 
- config AMD_MEM_ENCRYPT
-diff --git a/arch/x86/mm/mem_encrypt.c b/arch/x86/mm/mem_encrypt.c
-index 50d209939c66..18a55a0f1ca2 100644
---- a/arch/x86/mm/mem_encrypt.c
-+++ b/arch/x86/mm/mem_encrypt.c
-@@ -12,7 +12,6 @@
- #include <linux/swiotlb.h>
- #include <linux/cc_platform.h>
- #include <linux/mem_encrypt.h>
--#include <linux/virtio_config.h>
- 
- /* Override for DMA direct allocation check - ARCH_HAS_FORCE_DMA_UNENCRYPTED */
- bool force_dma_unencrypted(struct device *dev)
-@@ -76,9 +75,3 @@ void __init mem_encrypt_init(void)
- 
- 	print_mem_encrypt_feature_info();
- }
--
--int arch_has_restricted_virtio_memory_access(void)
--{
--	return cc_platform_has(CC_ATTR_GUEST_MEM_ENCRYPT);
--}
--EXPORT_SYMBOL_GPL(arch_has_restricted_virtio_memory_access);
-diff --git a/arch/x86/mm/mem_encrypt_amd.c b/arch/x86/mm/mem_encrypt_amd.c
-index 6169053c2854..39b71084d36b 100644
---- a/arch/x86/mm/mem_encrypt_amd.c
-+++ b/arch/x86/mm/mem_encrypt_amd.c
-@@ -21,6 +21,7 @@
- #include <linux/dma-mapping.h>
- #include <linux/virtio_config.h>
- #include <linux/cc_platform.h>
-+#include <linux/platform-feature.h>
- 
- #include <asm/tlbflush.h>
- #include <asm/fixmap.h>
-@@ -206,6 +207,9 @@ void __init sev_setup_arch(void)
- 	size = total_mem * 6 / 100;
- 	size = clamp_val(size, IO_TLB_DEFAULT_SIZE, SZ_1G);
- 	swiotlb_adjust_size(size);
-+
-+	/* Set restricted memory access for virtio. */
-+	platform_set(PLATFORM_VIRTIO_RESTRICTED_MEM_ACCESS);
- }
- 
- static unsigned long pg_level_to_pfn(int level, pte_t *kpte, pgprot_t *ret_prot)
-diff --git a/drivers/virtio/Kconfig b/drivers/virtio/Kconfig
-index b5adf6abd241..a6dc8b5846fe 100644
---- a/drivers/virtio/Kconfig
-+++ b/drivers/virtio/Kconfig
-@@ -6,12 +6,6 @@ config VIRTIO
- 	  bus, such as CONFIG_VIRTIO_PCI, CONFIG_VIRTIO_MMIO, CONFIG_RPMSG
- 	  or CONFIG_S390_GUEST.
- 
--config ARCH_HAS_RESTRICTED_VIRTIO_MEMORY_ACCESS
--	bool
--	help
--	  This option is selected if the architecture may need to enforce
--	  VIRTIO_F_ACCESS_PLATFORM
--
- config VIRTIO_PCI_LIB
- 	tristate
- 	help
-diff --git a/drivers/virtio/virtio.c b/drivers/virtio/virtio.c
-index 22f15f444f75..371e16b18381 100644
---- a/drivers/virtio/virtio.c
-+++ b/drivers/virtio/virtio.c
-@@ -5,6 +5,7 @@
- #include <linux/module.h>
- #include <linux/idr.h>
- #include <linux/of.h>
-+#include <linux/platform-feature.h>
- #include <uapi/linux/virtio_ids.h>
- 
- /* Unique numbering for virtio devices. */
-@@ -170,12 +171,10 @@ EXPORT_SYMBOL_GPL(virtio_add_status);
- static int virtio_features_ok(struct virtio_device *dev)
- {
- 	unsigned status;
--	int ret;
- 
- 	might_sleep();
- 
--	ret = arch_has_restricted_virtio_memory_access();
--	if (ret) {
-+	if (platform_has(PLATFORM_VIRTIO_RESTRICTED_MEM_ACCESS)) {
- 		if (!virtio_has_feature(dev, VIRTIO_F_VERSION_1)) {
- 			dev_warn(&dev->dev,
- 				 "device must provide VIRTIO_F_VERSION_1\n");
-diff --git a/include/linux/platform-feature.h b/include/linux/platform-feature.h
-index 6ed859928b97..b2f48be999fa 100644
---- a/include/linux/platform-feature.h
-+++ b/include/linux/platform-feature.h
-@@ -6,7 +6,11 @@
- #include <asm/platform-feature.h>
- 
- /* The platform features are starting with the architecture specific ones. */
--#define PLATFORM_FEAT_N				(0 + PLATFORM_ARCH_FEAT_N)
-+
-+/* Used to enable platform specific DMA handling for virtio devices. */
-+#define PLATFORM_VIRTIO_RESTRICTED_MEM_ACCESS	(0 + PLATFORM_ARCH_FEAT_N)
-+
-+#define PLATFORM_FEAT_N				(1 + PLATFORM_ARCH_FEAT_N)
- 
- void platform_set(unsigned int feature);
- void platform_clear(unsigned int feature);
-diff --git a/include/linux/virtio_config.h b/include/linux/virtio_config.h
-index b341dd62aa4d..79498298519d 100644
---- a/include/linux/virtio_config.h
-+++ b/include/linux/virtio_config.h
-@@ -559,13 +559,4 @@ static inline void virtio_cwrite64(struct virtio_device *vdev,
- 		_r;							\
- 	})
- 
--#ifdef CONFIG_ARCH_HAS_RESTRICTED_VIRTIO_MEMORY_ACCESS
--int arch_has_restricted_virtio_memory_access(void);
--#else
--static inline int arch_has_restricted_virtio_memory_access(void)
--{
--	return 0;
--}
--#endif /* CONFIG_ARCH_HAS_RESTRICTED_VIRTIO_MEMORY_ACCESS */
--
- #endif /* _LINUX_VIRTIO_CONFIG_H */
--- 
-2.35.3
+Hi Linus,
 
+The following changes since commit af2d861d4cd2a4da5137f795ee3509e6f944a25b:
+
+  Linux 5.18-rc4 (2022-04-24 14:51:22 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/joro/iommu.git tags/iomm-fixes-v5.18-rc5
+
+for you to fetch changes up to 392bf51946c2463436a1ba237c1ec5865b234825:
+
+  iommu: Make sysfs robust for non-API groups (2022-05-04 15:13:39 +0200)
+
+----------------------------------------------------------------
+IOMMU Fixes for Linux v5.18-rc5
+
+Including:
+
+	- Fix for a regression in IOMMU core code which could cause NULL-ptr
+	  dereferences
+
+	- Arm SMMU fixes for 5.18
+	  - Fix off-by-one in SMMUv3 SVA TLB invalidation
+	  - Disable large mappings to workaround nvidia erratum
+
+	- Intel VT-d fixes
+	  - Handle PCI stop marker messages in IOMMU driver to meet the
+	    requirement of I/O page fault handling framework.
+	  - Calculate a feasible mask for non-aligned page-selective IOTLB
+	    invalidation.
+
+	- Two fixes for Apple DART IOMMU driver
+	  - Fix potential NULL-ptr dereference
+	  - Set module owner
+
+----------------------------------------------------------------
+Ashish Mhetre (1):
+      iommu: arm-smmu: disable large page mappings for Nvidia arm-smmu
+
+David Stevens (1):
+      iommu/vt-d: Calculate mask for non-aligned flushes
+
+Hector Martin (1):
+      iommu/dart: Add missing module owner to ops structure
+
+Joerg Roedel (1):
+      Merge tag 'arm-smmu-fixes' of git://git.kernel.org/pub/scm/linux/kernel/git/will/linux into iommu/fixes
+
+Lu Baolu (1):
+      iommu/vt-d: Drop stop marker messages
+
+Nicolin Chen (1):
+      iommu/arm-smmu-v3: Fix size calculation in arm_smmu_mm_invalidate_range()
+
+Robin Murphy (1):
+      iommu: Make sysfs robust for non-API groups
+
+Yang Yingliang (1):
+      iommu/dart: check return value after calling platform_get_resource()
+
+ drivers/iommu/apple-dart.c                      | 10 ++++-----
+ drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c |  9 +++++++-
+ drivers/iommu/arm/arm-smmu/arm-smmu-nvidia.c    | 30 +++++++++++++++++++++++++
+ drivers/iommu/intel/iommu.c                     | 27 +++++++++++++++++++---
+ drivers/iommu/intel/svm.c                       |  4 ++++
+ drivers/iommu/iommu.c                           |  9 +++++++-
+ 6 files changed, 79 insertions(+), 10 deletions(-)
+
+Please pull.
+
+Thanks,
+
+	Joerg
+
+--dv9q/IqokSHqWzfx
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: Digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEEr9jSbILcajRFYWYyK/BELZcBGuMFAmJyonsACgkQK/BELZcB
+GuN9mhAA3Ew/O0xkKnZ3nyHVoSXaTifytAc3kotV/KKKKjXrPUVoVQH2ggWZARvj
+o2ntI+C8Wf5KkTdVV9KLzWRcPa39ycvgK5Yi1emaFvQuYfxJNVV4nBR3D4bv55AM
+f3XdkpJgaRmbw0y/drxraLrennlGDd+aLtiAcJZeejfVkAW5CkOwJPVeOAI/5RqH
+wuNgrGtoItdIsbxgW4Vx5vNbXApRS2iKzDwQt7vBTnvnVbxzogjU3WM+1kPjUMSb
+ADM1/29Ujg4o2hX4CCeUdvyLhUX8NUXW3v9mhvVNNNf+XnW4rHwyTstMj/lC3DNy
+yunf5XMA+o8WlZDcYRh29da9tTH7YRJmOVqwn5V8bOKa2OJSCH38Dm1n5XnDWNLl
+yjlM6j2iPnz7fZf9lXzMxCAyxuoZ3YEmSQGILMZUYifvIpdumZ4ymcB5YtwJlYjn
+7hffrNz0Bt/VptE/w2pU5boDveEpwFL03t5y5LdDhOf6cIW68ZP8Ut8wBlkbu+0K
+YXxpdPn4FcieO2dW/IbXGr6IQ7cecMjAwJVOYX2Hmd1/725sSgCnFP2hwZPn21x6
+1EDDiL107HC3y2p+K9R/6vKQuog1mp+ABFs4hXjRkpCJ3mFQI5GsfPgPeEhoirSk
+638vDCX6tSvVxbi39DdfMtblbA/67y079JMJi5yH8FetsJ1vyng=
+=GbgG
+-----END PGP SIGNATURE-----
+
+--dv9q/IqokSHqWzfx--

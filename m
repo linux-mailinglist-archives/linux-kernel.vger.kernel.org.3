@@ -2,109 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4695051A551
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 18:20:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A11151A55B
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 18:23:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353323AbiEDQXf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 12:23:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56962 "EHLO
+        id S1353361AbiEDQ0r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 12:26:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353016AbiEDQXb (ORCPT
+        with ESMTP id S234286AbiEDQ0p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 12:23:31 -0400
-Received: from mail-oo1-xc2d.google.com (mail-oo1-xc2d.google.com [IPv6:2607:f8b0:4864:20::c2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66E3446648
-        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 09:19:55 -0700 (PDT)
-Received: by mail-oo1-xc2d.google.com with SMTP id q73-20020a4a334c000000b0035eb110dd0dso269791ooq.10
-        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 09:19:55 -0700 (PDT)
+        Wed, 4 May 2022 12:26:45 -0400
+Received: from smtp-fw-80007.amazon.com (smtp-fw-80007.amazon.com [99.78.197.218])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B31A39813;
+        Wed,  4 May 2022 09:23:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=dbVLoGLvvdOw9abtQc9gMQO+m9oCoAXtfZ2W1vRohYs=;
-        b=Xl0uRWlbqSeaYgNid5Xu5/x9v7F3s8ycxvRHbVXBkc4EaIyf8JUvW+LZrrYwSj84wg
-         Uq7G3EQ7sfke3vOYEhCzmHNBYlM17MnW/uzSzv8nP+Tgohzev8jDZ4W4W+ZpfkD5laux
-         TTWySJmTsuGHMjO6dYe3e5VgCshw5h1EZOVlcUeqYNJD3PLb9aNoiXxgfVGYXIq9x0Ke
-         9KbzEgVsafGZtNYX7X5WKx/E4i8ciZRLG3KL0RyAn8/Jojrnpcg3wnLSWw/fw9jjwlt9
-         22y/68iKAzVgHEYk66WuPBR+IfJBlguzT1rrJfY+btECbT13qFzxAIxq0ipFpCOz2iPI
-         tCRQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=dbVLoGLvvdOw9abtQc9gMQO+m9oCoAXtfZ2W1vRohYs=;
-        b=hMFq+jCMELd44oGW9G4ncXtLeRIuaa3SJJ6FItRqYY/UxLpt9qWfPd7Rl7eAlYfzYB
-         GkGcJ3URcbsYVqdx5NVovYoRjGEyCtZBZTyKmPJHQKEaNJUCQrUxVEMWbtZQ2p8aWATp
-         tqAyKZxHsImwpvpulJEWWzZP3U8emvLBG6Z4gjVNr8diNP5SCRUNqcpLkuANHl5Znmmx
-         SW7ZnUF+HfLqvmqongjcJ3WQrxHEv1oaiwEzcTIuPIsmcwkzaUlOWuZOiKKqN2D5bZpJ
-         UCh07lErFXigYZXkVVlkUEBQdhYb7pOjuJWzFqhDgyYZOE8GH8AaM40I+ruKI7mHaDzR
-         mE2A==
-X-Gm-Message-State: AOAM530Y9hkGrKz9IIFK7jtwC1fEWQ9pnejt5qziqH7Y81bShJrqnGr/
-        tXdLMunk4n+5Ic6PceEFhn8K5Q==
-X-Google-Smtp-Source: ABdhPJyyqUME15QFq+hLqomIxwFjEJTKjoS8Pdb8JTFULASh6I8vEFeva5aVv9Q+SPjB3A5zoW/eKg==
-X-Received: by 2002:a4a:3546:0:b0:35e:cecd:c81d with SMTP id w6-20020a4a3546000000b0035ececdc81dmr7461215oog.79.1651681194666;
-        Wed, 04 May 2022 09:19:54 -0700 (PDT)
-Received: from ripper (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id z4-20020a056870514400b000edae17a8cesm3104330oak.3.2022.05.04.09.19.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 May 2022 09:19:54 -0700 (PDT)
-Date:   Wed, 4 May 2022 09:21:39 -0700
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Pavel Machek <pavel@ucw.cz>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Uwe Kleine-K?nig <u.kleine-koenig@pengutronix.de>,
-        Lee Jones <lee.jones@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>, linux-leds@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-pwm@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, Stephen Boyd <swboyd@chromium.org>,
-        Rob Herring <robh@kernel.org>
-Subject: Re: [PATCH v14 1/2] dt-bindings: leds: Add Qualcomm Light Pulse
- Generator binding
-Message-ID: <YnKoEyEtFP3TBxkg@ripper>
-References: <20220303214300.59468-1-bjorn.andersson@linaro.org>
- <20220504072435.GB8204@duo.ucw.cz>
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1651681389; x=1683217389;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=2Q/yiQSP0UKyBh6YQJ5BaZo0I0IrAyfxQYHuply2jAk=;
+  b=hf2IYhbTP7/C5uI5Kqo6jNwp5esTQ5HkllgxU6KLMNpVxw0TrNzazoT3
+   DTejx9bgJW+tXUB1EtEzMMF9Hs89opPjCk7dQ0EZoVEb2hUX7pjY0edfr
+   W/ffJU0WtndriOjGqd5Mbw2F8tVxIdUMvfOEdFCJimA6ryHT07GqgpRoB
+   4=;
+X-IronPort-AV: E=Sophos;i="5.91,198,1647302400"; 
+   d="scan'208";a="85452775"
+Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO email-inbound-relay-iad-1d-1c3c2014.us-east-1.amazon.com) ([10.25.36.210])
+  by smtp-border-fw-80007.pdx80.corp.amazon.com with ESMTP; 04 May 2022 16:22:35 +0000
+Received: from EX13MTAUWC001.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan2.iad.amazon.com [10.40.163.34])
+        by email-inbound-relay-iad-1d-1c3c2014.us-east-1.amazon.com (Postfix) with ESMTPS id 60F5DE42C8;
+        Wed,  4 May 2022 16:22:30 +0000 (UTC)
+Received: from EX13D02UWC001.ant.amazon.com (10.43.162.243) by
+ EX13MTAUWC001.ant.amazon.com (10.43.162.135) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.32; Wed, 4 May 2022 16:22:23 +0000
+Received: from EX13MTAUEA001.ant.amazon.com (10.43.61.82) by
+ EX13D02UWC001.ant.amazon.com (10.43.162.243) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.32; Wed, 4 May 2022 16:22:23 +0000
+Received: from dev-dsk-alisaidi-1d-b9a0e636.us-east-1.amazon.com
+ (172.19.181.128) by mail-relay.amazon.com (10.43.61.243) with Microsoft SMTP
+ Server id 15.0.1497.32 via Frontend Transport; Wed, 4 May 2022 16:22:22 +0000
+Received: by dev-dsk-alisaidi-1d-b9a0e636.us-east-1.amazon.com (Postfix, from userid 5131138)
+        id B54541D1A; Wed,  4 May 2022 16:22:22 +0000 (UTC)
+From:   Ali Saidi <alisaidi@amazon.com>
+To:     <german.gomez@arm.com>
+CC:     <Nick.Forrington@arm.com>, <acme@kernel.org>,
+        <alexander.shishkin@linux.intel.com>, <alisaidi@amazon.com>,
+        <andrew.kilroy@arm.com>, <benh@kernel.crashing.org>,
+        <james.clark@arm.com>, <john.garry@huawei.com>, <jolsa@kernel.org>,
+        <kjain@linux.ibm.com>, <leo.yan@linaro.org>,
+        <lihuafei1@huawei.com>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-perf-users@vger.kernel.org>,
+        <mark.rutland@arm.com>, <mathieu.poirier@linaro.org>,
+        <mingo@redhat.com>, <namhyung@kernel.org>, <peterz@infradead.org>,
+        <will@kernel.org>
+Subject: Re: [PATCH v7 5/5] perf arm-spe: Use SPE data source for neoverse cores
+Date:   Wed, 4 May 2022 16:22:20 +0000
+Message-ID: <20220504162220.28528-1-alisaidi@amazon.com>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <458a2de1-dc93-7e2d-5dc5-fbcd670572b6@arm.com>
+References: <458a2de1-dc93-7e2d-5dc5-fbcd670572b6@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220504072435.GB8204@duo.ucw.cz>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-12.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 04 May 00:24 PDT 2022, Pavel Machek wrote:
+Hi German,
 
-> Hi!
-> 
-> > This adds the binding document describing the three hardware blocks
-> > related to the Light Pulse Generator found in a wide range of Qualcomm
-> > PMICs.
-> 
-> Sorry for the delays. I have collected tested/review tags and push the
-> result to:
-> 
-> To gitolite.kernel.org:pub/scm/linux/kernel/git/pavel/linux-leds.git
->    312310928417..24e2d05d1b68  for-next -> for-next
-> 
+Thanks for taking another look!
 
-Much appreciated, this will unblock a few different use cases for us -
-perhaps the most important one backlight control on devices such as the
-Lenovo Flex 5G :)
-
-> I'll need to check pattern usage in the driver, and there are some
-> small fixes needed as evidenced in the reviews.
+On Tue, 3 May 2022 09:58:15 +0000, German Gomez wrote:
+> Hi Ali, Leo
 > 
+> Some minor comments below.
+> 
+> On 26/04/2022 14:59, Ali Saidi wrote:
+> > When synthesizing data from SPE, augment the type with source information
+> > for Arm Neoverse cores. The field is IMPLDEF but the Neoverse cores all use
+> > the same encoding. I can't find encoding information for any other SPE
+> > implementations to unify their choices with Arm's thus that is left for
+> > future work.
+> >
+> > This change populates the mem_lvl_num for Neoverse cores as well as the
+> > deprecated mem_lvl namespace.
+> >
+> > Signed-off-by: Ali Saidi <alisaidi@amazon.com>
+> > ---
+> >  .../util/arm-spe-decoder/arm-spe-decoder.c    |   1 +
+> >  .../util/arm-spe-decoder/arm-spe-decoder.h    |  12 ++
+> >  tools/perf/util/arm-spe.c                     | 130 +++++++++++++++---
+> >  3 files changed, 127 insertions(+), 16 deletions(-)
+> >
+> [snip]
+> > +	/*
+> > +	 * We have no data on the hit level or data source for stores in the
+> > +	 * Neoverse SPE records.
+> > +	 */
+> > +	if (record->op & ARM_SPE_ST) {
+> > +		data_src->mem_lvl = PERF_MEM_LVL_NA;
+> > +		data_src->mem_lvl_num = PERF_MEM_LVLNUM_ANY_CACHE;
+> 
+> Is it correct to use ANY_CACHE as the NA value? The LVLNUM_* enum begins at 1, so it looks like this should be set to 0 instead (like in HOPS_*).
 
-I will go through the Marijn's feedback in detail and am looking forward
-to hear from you on the pattern front, and will look into preparing
-incremental patches for the changes needed.
+I think you're making a good point here. To be consistent we should set
+mem_lvl_num to PERF_MEM_LVLNUM_NA just like mem_lvl.
 
 Thanks,
-Bjorn
+Ali
+
+
+

@@ -2,44 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68AF251AB34
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:40:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31A1351A81F
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:07:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351816AbiEDRic (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 13:38:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38610 "EHLO
+        id S1354538AbiEDRIL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 13:08:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356854AbiEDRJq (ORCPT
+        with ESMTP id S1355513AbiEDRAH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 13:09:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F11832CE39;
-        Wed,  4 May 2022 09:56:00 -0700 (PDT)
+        Wed, 4 May 2022 13:00:07 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40AF84B842;
+        Wed,  4 May 2022 09:51:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D1987617DE;
-        Wed,  4 May 2022 16:56:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23220C385AA;
-        Wed,  4 May 2022 16:56:00 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CAB21617C4;
+        Wed,  4 May 2022 16:51:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26292C385AF;
+        Wed,  4 May 2022 16:51:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651683360;
-        bh=HYJR58QEHHoSYs3l8IRgOcIy5CFAG2cxLrnEXmuFJVU=;
+        s=korg; t=1651683093;
+        bh=QYfJ4jy1pgwenIxzQh04z03IUEVKov1C1SpEawfBfwY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=guqSvtVkuvafm6bYenYJG5oCKaFrGSBvLFgh5rpJjopTpkeR02NSESBv4ro9BiK6F
-         0nutNYsEcqT2nbH7z5tPXaGO741QUqwl/wUKPr/s2NezfeUCSlYyGvuMbJgG1L1kH8
-         E0TsebAAciUClyv3dD/6O0pRHFLFSCVkvKfmbneM=
+        b=P1PMh5cjx202KBHVzpbHXQIRJMgXpRIMKxPPuPKdMN5/DZJnRSBDyDeZSZGVfHtex
+         V3zXbyg0hu7AuSX8keGpUgiClJ14El19fKMgUyufy8lzdq7eRntpL0nZ7h/EC4iiHp
+         r45O1eu4o7xQESYuSwwkh7nAXpORdOxOzu53QsEs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Sudeep Holla <sudeep.holla@arm.com>,
-        Wang Qing <wangqing@vivo.com>
-Subject: [PATCH 5.17 039/225] arch_topology: Do not set llc_sibling if llc_id is invalid
+        stable@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Samuel Holland <samuel@sholland.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 085/129] bus: sunxi-rsb: Fix the return value of sunxi_rsb_device_create()
 Date:   Wed,  4 May 2022 18:44:37 +0200
-Message-Id: <20220504153113.670016499@linuxfoundation.org>
+Message-Id: <20220504153027.785752326@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220504153110.096069935@linuxfoundation.org>
-References: <20220504153110.096069935@linuxfoundation.org>
+In-Reply-To: <20220504153021.299025455@linuxfoundation.org>
+References: <20220504153021.299025455@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,35 +57,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Wang Qing <wangqing@vivo.com>
+From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 
-commit 1dc9f1a66e1718479e1c4f95514e1750602a3cb9 upstream.
+[ Upstream commit fff8c10368e64e7f8960f149375c12ca5f3b30af ]
 
-When ACPI is not enabled, cpuid_topo->llc_id = cpu_topo->llc_id = -1, which
-will set llc_sibling 0xff(...), this is misleading.
+This code is really spurious.
+It always returns an ERR_PTR, even when err is known to be 0 and calls
+put_device() after a successful device_register() call.
 
-Don't set llc_sibling(default 0) if we don't know the cache topology.
+It is likely that the return statement in the normal path is missing.
+Add 'return rdev;' to fix it.
 
-Reviewed-by: Sudeep Holla <sudeep.holla@arm.com>
-Signed-off-by: Wang Qing <wangqing@vivo.com>
-Fixes: 37c3ec2d810f ("arm64: topology: divorce MC scheduling domain from core_siblings")
-Cc: stable <stable@vger.kernel.org>
-Link: https://lore.kernel.org/r/1649644580-54626-1-git-send-email-wangqing@vivo.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: d787dcdb9c8f ("bus: sunxi-rsb: Add driver for Allwinner Reduced Serial Bus")
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Reviewed-by: Samuel Holland <samuel@sholland.org>
+Tested-by: Samuel Holland <samuel@sholland.org>
+Signed-off-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+Link: https://lore.kernel.org/r/ef2b9576350bba4c8e05e669e9535e9e2a415763.1650551719.git.christophe.jaillet@wanadoo.fr
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/base/arch_topology.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/bus/sunxi-rsb.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
---- a/drivers/base/arch_topology.c
-+++ b/drivers/base/arch_topology.c
-@@ -645,7 +645,7 @@ void update_siblings_masks(unsigned int
- 	for_each_online_cpu(cpu) {
- 		cpu_topo = &cpu_topology[cpu];
+diff --git a/drivers/bus/sunxi-rsb.c b/drivers/bus/sunxi-rsb.c
+index 1bb00a959c67..9b1a5e62417c 100644
+--- a/drivers/bus/sunxi-rsb.c
++++ b/drivers/bus/sunxi-rsb.c
+@@ -224,6 +224,8 @@ static struct sunxi_rsb_device *sunxi_rsb_device_create(struct sunxi_rsb *rsb,
  
--		if (cpuid_topo->llc_id == cpu_topo->llc_id) {
-+		if (cpu_topo->llc_id != -1 && cpuid_topo->llc_id == cpu_topo->llc_id) {
- 			cpumask_set_cpu(cpu, &cpuid_topo->llc_sibling);
- 			cpumask_set_cpu(cpuid, &cpu_topo->llc_sibling);
- 		}
+ 	dev_dbg(&rdev->dev, "device %s registered\n", dev_name(&rdev->dev));
+ 
++	return rdev;
++
+ err_device_add:
+ 	put_device(&rdev->dev);
+ 
+-- 
+2.35.1
+
 
 

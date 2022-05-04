@@ -2,82 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52A4B51AD52
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 20:50:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B65FC51AD55
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 20:52:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377408AbiEDSxk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 14:53:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52304 "EHLO
+        id S1355689AbiEDS4Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 14:56:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377389AbiEDSxf (ORCPT
+        with ESMTP id S230142AbiEDS4V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 14:53:35 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4922B1A073
-        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 11:49:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651690197;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=m4be0lUN3rLKvbTqi1ev9U0hEQDKuQCw8SDgLXDDtQ8=;
-        b=ADS5cvZHJn9im/SO2nU2KnTP0yb8KzkQGbPba1IAk3b8Lka5abygMqMPrG5zFmtHi+PSKc
-        +L8ba1HIk4h13dLNHJcGEXkBXxw2iS/GgEnHhQQIlcoewd0o0gWZ9X1OH4cqRgkqU5nmi4
-        Mg/FyJ+xB3qJT1j6dgz+mgtpcmZ2b3s=
-Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
- [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-660-1cp0Ja-CPaKX74Do2pRx2A-1; Wed, 04 May 2022 14:49:56 -0400
-X-MC-Unique: 1cp0Ja-CPaKX74Do2pRx2A-1
-Received: by mail-qt1-f197.google.com with SMTP id v7-20020a05622a188700b002f3a65c8ab9so1693798qtc.12
-        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 11:49:55 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:organization:user-agent:mime-version
-         :content-transfer-encoding;
-        bh=m4be0lUN3rLKvbTqi1ev9U0hEQDKuQCw8SDgLXDDtQ8=;
-        b=n4UeSnOwpgR46Cj2j8BiUY7qTL57TKVcnZJ19VbZlLEP+hdl73QAh5kV+THIhzFtSi
-         Xy7AXy70t5Gq0P66QU4bWBPja9GzhXYb7nNbBy7pPnaTqZvJUn2r1mJqIHTmLpCzjkXe
-         pK8jD9H3a3Rn4NiZMPxzwo6Wl1BKZoJDbRjWhacG+EndPzUD4BXvFUZCGcd3/POqaWBr
-         LEXQLnUFzhrEK+Ka0/uqO2PPj9zwehrb5DYnlWdAlXee6t7mUqg5iN57lESs0N7OsftC
-         52tm+y94ddD8TWKXKlEPVViMsdgASEIqUNlpupbZhpHP9cYkiuPPTjtybHPMg0iwtccA
-         usVw==
-X-Gm-Message-State: AOAM531KWistEUaaeIUsz+5QasTwyfz9gyft11ivA46dg8uiKy3Qm5SH
-        W0nbwXcUP9ZTxwm5OibpsShB9pnof2WwHt3rW7TR6lmK6mXHBqwOgkzH4EvFU5ssGQG5MxBRBMD
-        FLFvcuEH/oo0qRffyNNa5GsdA
-X-Received: by 2002:ac8:4e8f:0:b0:2f3:83ef:f06b with SMTP id 15-20020ac84e8f000000b002f383eff06bmr20138269qtp.344.1651690194833;
-        Wed, 04 May 2022 11:49:54 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxG+YEE9640XC9Q0TxKXIOu4OYQRb9HIa17dkwYt7i3SPR51ROIyeLOHCH0GKjio7e5whfd8A==
-X-Received: by 2002:ac8:4e8f:0:b0:2f3:83ef:f06b with SMTP id 15-20020ac84e8f000000b002f383eff06bmr20138250qtp.344.1651690194570;
-        Wed, 04 May 2022 11:49:54 -0700 (PDT)
-Received: from [192.168.8.138] (static-71-184-137-158.bstnma.ftas.verizon.net. [71.184.137.158])
-        by smtp.gmail.com with ESMTPSA id o26-20020ac872da000000b002f39b99f6afsm7565524qtp.73.2022.05.04.11.49.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 May 2022 11:49:53 -0700 (PDT)
-Message-ID: <8c3592767ac4c3d4c3bcb0294d97aff5a7375319.camel@redhat.com>
-Subject: Re: [PATCH] drm/nouveau/subdev/bus: Ratelimit logging for fault
- errors
-From:   Lyude Paul <lyude@redhat.com>
-To:     Karol Herbst <kherbst@redhat.com>
-Cc:     nouveau <nouveau@lists.freedesktop.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        open list <linux-kernel@vger.kernel.org>
-Date:   Wed, 04 May 2022 14:49:52 -0400
-In-Reply-To: <CACO55ttsBxe6V88CTtGZgUj8k+gT+ne+FD_9FD_OxowF1XG5Bg@mail.gmail.com>
-References: <20220429195350.85620-1-lyude@redhat.com>
-         <CACO55ttsBxe6V88CTtGZgUj8k+gT+ne+FD_9FD_OxowF1XG5Bg@mail.gmail.com>
-Organization: Red Hat Inc.
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+        Wed, 4 May 2022 14:56:21 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D32921FA7B;
+        Wed,  4 May 2022 11:52:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651690364; x=1683226364;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=g6cXVITLw5XGRVy0kM+kX0NCN2l4lKwducjAVxfFljo=;
+  b=Fx9jI+wWnrFMC2QGr7GC6i7PaeNe/rK7reJZfVbMWLfSKtG3i0HjGpRi
+   wZJ856pFaF5C7pEtUSbg4GuLX/aNWbj8L3qbUI/ceQe68GKNmDe9C5P7N
+   55A0c+XBbVZwhQjkzU3Y/kau3vnkiaMSv7J9ZOGCg8CDi6JZfVBPsSFzx
+   SAkhs1prU6gGf3nCXekpAIEwAPL0CTSj//QwXMdOmjTkfAuzx/aDmd1+R
+   ahh9TpPCHRjNSOk23jLYkiYz0m5NEZNa9WXhDocoJsoRkkVVUIcFZE7my
+   6nquNFGTXSYRB3q9eWg6+AQsdITFmBQiB1PVL79SjgpHUdtwD98pTVflO
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10337"; a="354303074"
+X-IronPort-AV: E=Sophos;i="5.91,198,1647327600"; 
+   d="scan'208";a="354303074"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2022 11:52:44 -0700
+X-IronPort-AV: E=Sophos;i="5.91,198,1647327600"; 
+   d="scan'208";a="599661690"
+Received: from agluck-desk3.sc.intel.com ([172.25.222.78])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2022 11:52:43 -0700
+Date:   Wed, 4 May 2022 11:52:42 -0700
+From:   "Luck, Tony" <tony.luck@intel.com>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     hdegoede@redhat.com, markgross@kernel.org, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, corbet@lwn.net, gregkh@linuxfoundation.org,
+        andriy.shevchenko@linux.intel.com, jithu.joseph@intel.com,
+        ashok.raj@intel.com, rostedt@goodmis.org, dan.j.williams@intel.com,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org, patches@lists.linux.dev,
+        ravi.v.shankar@intel.com
+Subject: Re: [PATCH v5 07/10] platform/x86/intel/ifs: Add scan test support
+Message-ID: <YnLLekoripdY2oQU@agluck-desk3.sc.intel.com>
+References: <20220422200219.2843823-1-tony.luck@intel.com>
+ <20220428153849.295779-1-tony.luck@intel.com>
+ <20220428153849.295779-8-tony.luck@intel.com>
+ <87r159jxaq.ffs@tglx>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87r159jxaq.ffs@tglx>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -86,137 +68,196 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-05-03 at 21:23 +0200, Karol Herbst wrote:
-> not able to hit any error on my machine, but regardless:
-> 
-> Reviewed-by: Karol Herbst <kherbst@redhat.com>
-> 
-> I suspect there are more places where we could put it, but we can add
-> those later.
-> 
-> Anyway, I think it's valuable to push it through fixes, not sure how
-> far back we want to CC stable though.
-
-JFYI - dim fixes can figure this out if you just give it the commit that
-introduced the issue.
-
-Anyway, will push this upstream in a moment
-
-> 
-> On Fri, Apr 29, 2022 at 9:54 PM Lyude Paul <lyude@redhat.com> wrote:
-> > 
-> > There's plenty of ways to fudge the GPU when developing on nouveau by
-> > mistake, some of which can result in nouveau seriously spamming dmesg with
-> > fault errors. This can be somewhat annoying, as it can quickly overrun the
-> > message buffer (or your terminal emulator's buffer) and get rid of
-> > actually
-> > useful feedback from the driver. While working on my new atomic only MST
-> > branch, I ran into this issue a couple of times.
-> > 
-> > So, let's fix this by adding nvkm_error_ratelimited(), and using it to
-> > ratelimit errors from faults. This should be fine for developers, since
-> > it's nearly always only the first few faults that we care about seeing.
-> > Plus, you can turn off rate limiting in the kernel if you really need to.
-> > 
-> > Signed-off-by: Lyude Paul <lyude@redhat.com>
-> > ---
-> >  drivers/gpu/drm/nouveau/include/nvkm/core/subdev.h |  2 ++
-> >  drivers/gpu/drm/nouveau/nvkm/subdev/bus/gf100.c    | 14 +++++++-------
-> >  drivers/gpu/drm/nouveau/nvkm/subdev/bus/nv31.c     |  6 +++---
-> >  drivers/gpu/drm/nouveau/nvkm/subdev/bus/nv50.c     |  6 +++---
-> >  4 files changed, 15 insertions(+), 13 deletions(-)
-> > 
-> > diff --git a/drivers/gpu/drm/nouveau/include/nvkm/core/subdev.h
-> > b/drivers/gpu/drm/nouveau/include/nvkm/core/subdev.h
-> > index 1665738948fb..96113c8bee8c 100644
-> > --- a/drivers/gpu/drm/nouveau/include/nvkm/core/subdev.h
-> > +++ b/drivers/gpu/drm/nouveau/include/nvkm/core/subdev.h
-> > @@ -62,4 +62,6 @@ void nvkm_subdev_intr(struct nvkm_subdev *);
-> >  #define nvkm_debug(s,f,a...) nvkm_printk((s), DEBUG,   info, f, ##a)
-> >  #define nvkm_trace(s,f,a...) nvkm_printk((s), TRACE,   info, f, ##a)
-> >  #define nvkm_spam(s,f,a...)  nvkm_printk((s),  SPAM,    dbg, f, ##a)
+On Wed, May 04, 2022 at 02:29:33PM +0200, Thomas Gleixner wrote:
+> On Thu, Apr 28 2022 at 08:38, Tony Luck wrote:
 > > +
-> > +#define nvkm_error_ratelimited(s,f,a...) nvkm_printk((s), ERROR,
-> > err_ratelimited, f, ##a)
-> >  #endif
-> > diff --git a/drivers/gpu/drm/nouveau/nvkm/subdev/bus/gf100.c
-> > b/drivers/gpu/drm/nouveau/nvkm/subdev/bus/gf100.c
-> > index 53a6651ac225..80b5aaceeaad 100644
-> > --- a/drivers/gpu/drm/nouveau/nvkm/subdev/bus/gf100.c
-> > +++ b/drivers/gpu/drm/nouveau/nvkm/subdev/bus/gf100.c
-> > @@ -35,13 +35,13 @@ gf100_bus_intr(struct nvkm_bus *bus)
-> >                 u32 addr = nvkm_rd32(device, 0x009084);
-> >                 u32 data = nvkm_rd32(device, 0x009088);
-> > 
-> > -               nvkm_error(subdev,
-> > -                          "MMIO %s of %08x FAULT at %06x [ %s%s%s]\n",
-> > -                          (addr & 0x00000002) ? "write" : "read", data,
-> > -                          (addr & 0x00fffffc),
-> > -                          (stat & 0x00000002) ? "!ENGINE " : "",
-> > -                          (stat & 0x00000004) ? "PRIVRING " : "",
-> > -                          (stat & 0x00000008) ? "TIMEOUT " : "");
-> > +               nvkm_error_ratelimited(subdev,
-> > +                                      "MMIO %s of %08x FAULT at %06x [
-> > %s%s%s]\n",
-> > +                                      (addr & 0x00000002) ? "write" :
-> > "read", data,
-> > +                                      (addr & 0x00fffffc),
-> > +                                      (stat & 0x00000002) ? "!ENGINE " :
-> > "",
-> > +                                      (stat & 0x00000004) ? "PRIVRING " :
-> > "",
-> > +                                      (stat & 0x00000008) ? "TIMEOUT " :
-> > "");
-> > 
-> >                 nvkm_wr32(device, 0x009084, 0x00000000);
-> >                 nvkm_wr32(device, 0x001100, (stat & 0x0000000e));
-> > diff --git a/drivers/gpu/drm/nouveau/nvkm/subdev/bus/nv31.c
-> > b/drivers/gpu/drm/nouveau/nvkm/subdev/bus/nv31.c
-> > index ad8da523bb22..c75e463f3501 100644
-> > --- a/drivers/gpu/drm/nouveau/nvkm/subdev/bus/nv31.c
-> > +++ b/drivers/gpu/drm/nouveau/nvkm/subdev/bus/nv31.c
-> > @@ -45,9 +45,9 @@ nv31_bus_intr(struct nvkm_bus *bus)
-> >                 u32 addr = nvkm_rd32(device, 0x009084);
-> >                 u32 data = nvkm_rd32(device, 0x009088);
-> > 
-> > -               nvkm_error(subdev, "MMIO %s of %08x FAULT at %06x\n",
-> > -                          (addr & 0x00000002) ? "write" : "read", data,
-> > -                          (addr & 0x00fffffc));
-> > +               nvkm_error_ratelimited(subdev, "MMIO %s of %08x FAULT at
-> > %06x\n",
-> > +                                      (addr & 0x00000002) ? "write" :
-> > "read", data,
-> > +                                      (addr & 0x00fffffc));
-> > 
-> >                 stat &= ~0x00000008;
-> >                 nvkm_wr32(device, 0x001100, 0x00000008);
-> > diff --git a/drivers/gpu/drm/nouveau/nvkm/subdev/bus/nv50.c
-> > b/drivers/gpu/drm/nouveau/nvkm/subdev/bus/nv50.c
-> > index 3a1e45adeedc..2055d0b100d3 100644
-> > --- a/drivers/gpu/drm/nouveau/nvkm/subdev/bus/nv50.c
-> > +++ b/drivers/gpu/drm/nouveau/nvkm/subdev/bus/nv50.c
-> > @@ -60,9 +60,9 @@ nv50_bus_intr(struct nvkm_bus *bus)
-> >                 u32 addr = nvkm_rd32(device, 0x009084);
-> >                 u32 data = nvkm_rd32(device, 0x009088);
-> > 
-> > -               nvkm_error(subdev, "MMIO %s of %08x FAULT at %06x\n",
-> > -                          (addr & 0x00000002) ? "write" : "read", data,
-> > -                          (addr & 0x00fffffc));
-> > +               nvkm_error_ratelimited(subdev, "MMIO %s of %08x FAULT at
-> > %06x\n",
-> > +                                      (addr & 0x00000002) ? "write" :
-> > "read", data,
-> > +                                      (addr & 0x00fffffc));
-> > 
-> >                 stat &= ~0x00000008;
-> >                 nvkm_wr32(device, 0x001100, 0x00000008);
-> > --
-> > 2.35.1
-> > 
+> > +	/* wait for the sibling threads to join */
+> > +	first = cpumask_first(topology_sibling_cpumask(cpu));
+> > +	if (!wait_for_siblings(dev, ifsd, &siblings_in, NSEC_PER_SEC)) {
 > 
+> Waiting for a second with preemption disabled? Seriously?
 
--- 
-Cheers,
- Lyude Paul (she/her)
- Software Engineer at Red Hat
+Probably won't ever wait for a second. Any suggestions for a reasonable
+timeout for how long it might take before both threads on a core begin
+executing the target code after a pair of:
 
+	queue_work_on(sibling, ifs_wq, &local_work[i].w);
+
+that the request to check this core fired off?
+
+Possibly this could be dropped, and just built into the allowable delay
+for the threads to execute the ACTIVATE_SCAN (31 bits of TSC cycles in
+the value written to the MSR). But a future scan feature doesn't include
+that user tuneable value.
+
+> 
+> > +		preempt_enable();
+> > +		dev_err(dev, "cpu %d sibling did not join rendezvous\n", cpu);
+> > +		goto out;
+> > +	}
+> > +
+> > +	activate.start = 0;
+> > +	activate.stop = ifsd->valid_chunks - 1;
+> > +	timeout = jiffies + HZ / 2;
+> 
+> Plus another half a second with preemption disabled. That's just insane.
+
+Another rounded up value. Experimentally we are seeing the core scan
+test take aroun 50ms. The spec (I know, we haven't published the spec)
+says "up to 200ms".
+
+> 
+> > +	retries = MAX_IFS_RETRIES;
+> > +
+> > +	while (activate.start <= activate.stop) {
+> > +		if (time_after(jiffies, timeout)) {
+> > +			status.error_code = IFS_SW_TIMEOUT;
+> > +			break;
+> > +		}
+> > +
+> > +		local_irq_disable();
+> > +		wrmsrl(MSR_ACTIVATE_SCAN, activate.data);
+> > +		local_irq_enable();
+> 
+> That local_irq_disable() solves what?
+
+An interrupt will stop the currently running "chunk" of the scan.
+It is a restartable case. But the concern is that with high rate of
+interrupts the scan may not complete (or even make any forward
+progress).
+
+> 
+> > +		/*
+> > +		 * All logical CPUs on this core are now running IFS test. When it completes
+> > +		 * execution or is interrupted, the following RDMSR gets the scan status.
+> > +		 */
+> > +
+> > +		rdmsrl(MSR_SCAN_STATUS, status.data);
+> 
+> Wait. Is that rdmsrl() blocking execution until the scan completes?
+
+The comment isn't quite accurate here (my fault). The WRMSR doesn't
+retire until the scan stops (either because it completed, or because
+some thing happend to stop before all chunks were processed).
+
+So the two HT threads will continue after the WRMSR pretty much in
+lockstep and do the RDMSR to get the status. Both will see the same
+status in most cases.
+
+> 
+> If so, what's the stall time here? If not, how is the logic below
+> supposed to work?
+
+Exact time will depend how many chunks of the scan were completed, and
+how long they took. I see 50 ms total on current test system.
+
+> 
+> > +		/* Some cases can be retried, give up for others */
+> > +		if (!can_restart(status))
+> > +			break;
+> > +
+> > +		if (status.chunk_num == activate.start) {
+> > +			/* Check for forward progress */
+> > +			if (retries-- == 0) {
+> > +				if (status.error_code == IFS_NO_ERROR)
+> > +					status.error_code = IFS_SW_PARTIAL_COMPLETION;
+> > +				break;
+> > +			}
+> > +		} else {
+> > +			retries = MAX_IFS_RETRIES;
+> > +			activate.start = status.chunk_num;
+> > +		}
+> > +	}
+> > +
+
+
+> > +int do_core_test(int cpu, struct device *dev)
+> > +{
+> > +	struct ifs_work *local_work;
+> > +	int sibling;
+> > +	int ret = 0;
+> > +	int i = 0;
+> > +
+> > +	if (!scan_enabled)
+> > +		return -ENXIO;
+> > +
+> > +	cpu_hotplug_disable();
+> 
+> Why cpu_hotplug_disable()? Why is cpus_read_lock() not sufficient here?
+
+May be left from earlier version. I'll check that cpus_read_lock() is
+enough.
+
+> 
+> > +	if (!cpu_online(cpu)) {
+> > +		dev_info(dev, "cannot test on the offline cpu %d\n", cpu);
+> > +		ret = -EINVAL;
+> > +		goto out;
+> > +	}
+> > +
+> > +	reinit_completion(&test_thread_done);
+> > +	atomic_set(&siblings_in, 0);
+> > +	atomic_set(&siblings_out, 0);
+> > +
+> > +	cpu_sibl_ct = cpumask_weight(topology_sibling_cpumask(cpu));
+> > +	local_work = kcalloc(cpu_sibl_ct, sizeof(*local_work), GFP_NOWAIT);
+> 
+> Why does this need GFP_NOWAIT?
+
+It doesn't. Will fix.
+
+> 
+> > +int ifs_setup_wq(void)
+> > +{
+> > +	/* Flags are to keep all the sibling cpu worker threads (of a core) in close sync */
+> 
+> I put that into the wishful thinking realm.
+
+Can change to "... to try to keep ..."
+> 
+> Is there anywhere a proper specification of this mechanism? The public
+> available MSR list in the SDM is uselss.
+> 
+> Without proper documentation it's pretty much impossible to review this
+> code and to think about the approach.
+
+Step 1 (at boot or driver load) is loading the scan tests into BIOS
+reserved memory. I will fix up the bits where you pointed out problems
+there.
+
+Step 2 is the run time test of each core. That requires the near
+simultaneous execution of:
+
+	wrmsrl(MSR_ACTIVATE_SCAN, activate.data);
+
+on all HT threads on the core. Trivial on parts that do not support
+HT, or where it is disabled in BIOS. The above code is trying to
+achieve this "parallel" execution.
+The follow-on :
+
+	rdmsrl(MSR_SCAN_STATUS, status.data);
+
+doesn't have to be synchronized ... but handy to do so for when not
+all chunks were processed and need to loop back to run another
+activate_scan to continue starting from the interrupted chunk. In
+the lab, this seems common ... when scanning all cores many of them
+complete all chunks in a single bite, but several take 2-3 times around
+the loop before completing.
+
+As noted above I'm seeing a core test take around 50ms (but spec says
+up to 200ms). In some environments that doesn't require any special
+application or system reconfiguration.  It's not much different from
+time-slicing when you are running more processes (or guests) than you
+have CPUs. So sysadmins in those environments can use this driver to
+cylce through cores testing each in turn without any extra steps.
+
+You've pointed out that the driver disables preemption for insanely
+long amounts of time ... to use this driver to test cores on a system
+running applications where that is an issue will require additonal steps
+to migrate latency critical applications to a different core while the
+test is in progess, also re-direct interrupts. That seems well beyond the
+scope of what is possible in a driver without all the information about
+what workloads are running to pick a new temporary home for processes
+and interrupts while the core is being tested.
+
+-Tony

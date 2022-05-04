@@ -2,47 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 814DE51A95E
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:17:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA52951AB25
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:40:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358411AbiEDRP5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 13:15:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55298 "EHLO
+        id S1359779AbiEDRk2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 13:40:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355636AbiEDREc (ORCPT
+        with ESMTP id S1356727AbiEDRJj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 13:04:32 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E1534EF56;
-        Wed,  4 May 2022 09:53:11 -0700 (PDT)
+        Wed, 4 May 2022 13:09:39 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D180717E35;
+        Wed,  4 May 2022 09:55:27 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id B2AADCE2625;
-        Wed,  4 May 2022 16:53:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0E34C385AA;
-        Wed,  4 May 2022 16:53:05 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B2BBC618BB;
+        Wed,  4 May 2022 16:55:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C9E3C385AF;
+        Wed,  4 May 2022 16:55:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651683185;
-        bh=5kiyZl3wv3CTm+GFIfjJaXI1i53KPSbQgo/RAbnYu2g=;
+        s=korg; t=1651683327;
+        bh=SDuyrBXIG1Ux4g+tRXchQPstQixndqbbbbN6bKOU6zI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=D52dfDCfgM3wYuA8iPCosUgc8zTF1W29/JlRiVyPt81MPNtxS4ObFNyQTZW8Uvue0
-         JbaX7w6tQhqo0XGSYZu2/8LHYDAYqpqaWoS/OLnP97LngLVdYq7YEdZQLyC5+iLC1e
-         0wypQ+YmLSLDvpWHPzOlwEObJuS+QfG9kIXKVr2E=
+        b=jZCJdtB6RGdEkMGdChAlLBnfG9lcMPV/cVtctplwFSE6EGJlDJAWlg+HM4RS2uTSv
+         PT+BQNpGz2oASK8WoZbJy9V/i7em7Ce0KYOXmVLI+zVXeEyu92QJevkt27g3RfCOVb
+         AgkxtT1EEWGCQ6mappomrZEIIcqDjFK0SQLt+hRk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Tong Zhang <ztong0001@gmail.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 050/177] iio:imu:bmi160: disable regulator in error path
-Date:   Wed,  4 May 2022 18:44:03 +0200
-Message-Id: <20220504153057.485932494@linuxfoundation.org>
+        stable@vger.kernel.org, Bruno Thomsen <bruno.thomsen@gmail.com>,
+        Johan Hovold <johan@kernel.org>
+Subject: [PATCH 5.17 006/225] USB: serial: cp210x: add PIDs for Kamstrup USB Meter Reader
+Date:   Wed,  4 May 2022 18:44:04 +0200
+Message-Id: <20220504153110.822126341@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220504153053.873100034@linuxfoundation.org>
-References: <20220504153053.873100034@linuxfoundation.org>
+In-Reply-To: <20220504153110.096069935@linuxfoundation.org>
+References: <20220504153110.096069935@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,90 +54,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tong Zhang <ztong0001@gmail.com>
+From: Bruno Thomsen <bruno.thomsen@gmail.com>
 
-[ Upstream commit d926054d5565d3cfa2c7c3f7a48e79bcc10453ed ]
+commit 35a923a0b329c343e9e81d79518e2937eba06fcd upstream.
 
-Regulator should be disabled in error path as mentioned in _regulator_put().
-Also disable accel if gyro cannot be enabled.
+Wireless reading of water and heat meters using 868 MHz wM-Bus mode C1.
 
-[   16.233604] WARNING: CPU: 0 PID: 2177 at drivers/regulator/core.c:2257 _regulator_put
-[   16.240453] Call Trace:
-[   16.240572]  <TASK>
-[   16.240676]  regulator_put+0x26/0x40
-[   16.240853]  regulator_bulk_free+0x26/0x50
-[   16.241050]  release_nodes+0x3f/0x70
-[   16.241225]  devres_release_group+0x147/0x1c0
-[   16.241441]  ? bmi160_core_probe+0x175/0x3a0 [bmi160_core]
+The two different product IDs allow detection of dongle antenna
+solution:
+- Internal antenna
+- External antenna using SMA connector
 
-Fixes: 5dea3fb066f0 ("iio: imu: bmi160: added regulator support")
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Signed-off-by: Tong Zhang <ztong0001@gmail.com>
-Link: https://lore.kernel.org/r/20220327154005.806049-1-ztong0001@gmail.com
-Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+https://www.kamstrup.com/en-en/water-solutions/water-meter-reading/usb-meter-reader
+
+Signed-off-by: Bruno Thomsen <bruno.thomsen@gmail.com>
+Link: https://lore.kernel.org/r/20220414081202.5591-1-bruno.thomsen@gmail.com
+Cc: stable@vger.kernel.org
+Signed-off-by: Johan Hovold <johan@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/iio/imu/bmi160/bmi160_core.c | 20 ++++++++++++++------
- 1 file changed, 14 insertions(+), 6 deletions(-)
+ drivers/usb/serial/cp210x.c |    2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/iio/imu/bmi160/bmi160_core.c b/drivers/iio/imu/bmi160/bmi160_core.c
-index 824b5124a5f5..01336105792e 100644
---- a/drivers/iio/imu/bmi160/bmi160_core.c
-+++ b/drivers/iio/imu/bmi160/bmi160_core.c
-@@ -730,7 +730,7 @@ static int bmi160_chip_init(struct bmi160_data *data, bool use_spi)
- 
- 	ret = regmap_write(data->regmap, BMI160_REG_CMD, BMI160_CMD_SOFTRESET);
- 	if (ret)
--		return ret;
-+		goto disable_regulator;
- 
- 	usleep_range(BMI160_SOFTRESET_USLEEP, BMI160_SOFTRESET_USLEEP + 1);
- 
-@@ -741,29 +741,37 @@ static int bmi160_chip_init(struct bmi160_data *data, bool use_spi)
- 	if (use_spi) {
- 		ret = regmap_read(data->regmap, BMI160_REG_DUMMY, &val);
- 		if (ret)
--			return ret;
-+			goto disable_regulator;
- 	}
- 
- 	ret = regmap_read(data->regmap, BMI160_REG_CHIP_ID, &val);
- 	if (ret) {
- 		dev_err(dev, "Error reading chip id\n");
--		return ret;
-+		goto disable_regulator;
- 	}
- 	if (val != BMI160_CHIP_ID_VAL) {
- 		dev_err(dev, "Wrong chip id, got %x expected %x\n",
- 			val, BMI160_CHIP_ID_VAL);
--		return -ENODEV;
-+		ret = -ENODEV;
-+		goto disable_regulator;
- 	}
- 
- 	ret = bmi160_set_mode(data, BMI160_ACCEL, true);
- 	if (ret)
--		return ret;
-+		goto disable_regulator;
- 
- 	ret = bmi160_set_mode(data, BMI160_GYRO, true);
- 	if (ret)
--		return ret;
-+		goto disable_accel;
- 
- 	return 0;
-+
-+disable_accel:
-+	bmi160_set_mode(data, BMI160_ACCEL, false);
-+
-+disable_regulator:
-+	regulator_bulk_disable(ARRAY_SIZE(data->supplies), data->supplies);
-+	return ret;
- }
- 
- static int bmi160_data_rdy_trigger_set_state(struct iio_trigger *trig,
--- 
-2.35.1
-
+--- a/drivers/usb/serial/cp210x.c
++++ b/drivers/usb/serial/cp210x.c
+@@ -194,6 +194,8 @@ static const struct usb_device_id id_tab
+ 	{ USB_DEVICE(0x16DC, 0x0015) }, /* W-IE-NE-R Plein & Baus GmbH CML Control, Monitoring and Data Logger */
+ 	{ USB_DEVICE(0x17A8, 0x0001) }, /* Kamstrup Optical Eye/3-wire */
+ 	{ USB_DEVICE(0x17A8, 0x0005) }, /* Kamstrup M-Bus Master MultiPort 250D */
++	{ USB_DEVICE(0x17A8, 0x0101) }, /* Kamstrup 868 MHz wM-Bus C-Mode Meter Reader (Int Ant) */
++	{ USB_DEVICE(0x17A8, 0x0102) }, /* Kamstrup 868 MHz wM-Bus C-Mode Meter Reader (Ext Ant) */
+ 	{ USB_DEVICE(0x17F4, 0xAAAA) }, /* Wavesense Jazz blood glucose meter */
+ 	{ USB_DEVICE(0x1843, 0x0200) }, /* Vaisala USB Instrument Cable */
+ 	{ USB_DEVICE(0x18EF, 0xE00F) }, /* ELV USB-I2C-Interface */
 
 

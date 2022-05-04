@@ -2,142 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56B4251A56C
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 18:24:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0521F51A55E
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 18:23:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353415AbiEDQ1u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 12:27:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60620 "EHLO
+        id S1353370AbiEDQ1H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 12:27:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353447AbiEDQ1s (ORCPT
+        with ESMTP id S234286AbiEDQ1F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 12:27:48 -0400
-Received: from mail-oa1-x2b.google.com (mail-oa1-x2b.google.com [IPv6:2001:4860:4864:20::2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A07D46B30
-        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 09:24:04 -0700 (PDT)
-Received: by mail-oa1-x2b.google.com with SMTP id 586e51a60fabf-e5e433d66dso1676245fac.5
-        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 09:24:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Zo3O6tVQd44QV+x14eWm1UztwGioRdt6e/ffaJNkFVk=;
-        b=liDHjBfLPT03qcEt5udttgxkBTlhkRj9QEnRjXqeDsGrQRYS1FSPoazeSWJPZLAMyU
-         a2MeQW559qQu9bBU+g4rBc/O0nKIqVUQN5/Ui9Hen7gD/IO8KpywTphZ5lsDcONdNwkI
-         zYhhfKc+0TUPOH7cURTrnodrtzKw/QPWLStxtEsHd7oXucjnz1GF+sbU5Hwl4q3kqLAf
-         xmtAu6IGgFQH2e+fVzpCcTSyT/ldQjVs2SQJ6CX0NhnyRoE46sKAw2GcQPPXz6AZl0mj
-         vQbi3DLL+yebcIQV/Offd+ZatlVFtrMtzhDuonkUXXfcprfyRjjGJnYyL0Yf1glmjGZK
-         NMBA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Zo3O6tVQd44QV+x14eWm1UztwGioRdt6e/ffaJNkFVk=;
-        b=dGu4AZy0ImFdyKVq1UUIxpz2YhhilTfDDeFQdDqq1o/ZtLzQBdgRmxrwlCMqfmMmtM
-         a/1096qB6S0qlxE8j22Zv7kYwHfe+zRGJMa5iy4W6yrvuABKhVYDpGRdkA6LkE+bV+id
-         /1mjsp8NTNeod1xoT0Er6q00IXzvlY1r+g3vR1zv6FBfs3XzA/KP52NExuN3AuC5hPDA
-         z6WXGF0JajuS+9npGbOpGMYKDPMWHOQBDV6QncM0HYWi32zjQts4HmLvd0O6u/C+0ocA
-         L97gjnVXzfL5oBtShJxo/Z1jjqR1bM8CYQZXotOEpGv4rq9qCmljLZl5EK+mKBMcFI5H
-         /quA==
-X-Gm-Message-State: AOAM5319n/Z/sCzI1rGMcgF+CTnPJTK+YDtV+l+cGPitzWlCXTZD3laz
-        UUHKNKOSujKBDSuNMaTz+YYYRQ==
-X-Google-Smtp-Source: ABdhPJxvTbJfQYVVkk06vmzUGhiMMpd6Af2yf8dg0IE6RS4vB2z6lPNUei0kcgWWXLi3e5slxqg8vg==
-X-Received: by 2002:a05:6870:5708:b0:db:2ef8:f220 with SMTP id k8-20020a056870570800b000db2ef8f220mr131572oap.198.1651681443863;
-        Wed, 04 May 2022 09:24:03 -0700 (PDT)
-Received: from localhost ([8.34.116.185])
-        by smtp.gmail.com with ESMTPSA id b21-20020a056870b25500b000eba4901e57sm5699113oam.17.2022.05.04.09.24.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 May 2022 09:24:03 -0700 (PDT)
-Date:   Wed, 4 May 2022 09:23:14 -0700
-From:   Johannes Weiner <hannes@cmpxchg.org>
-To:     Suren Baghdasaryan <surenb@google.com>
-Cc:     Matthew Wilcox <willy@infradead.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Michal Hocko <mhocko@suse.com>,
-        "Liam R. Howlett" <liam.howlett@oracle.com>,
-        Michel Lespinasse <walken.cr@gmail.com>,
-        linux-mm <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Davidlohr Bueso <dave@stgolabs.net>
-Subject: Re: Memory allocation on speculative fastpaths
-Message-ID: <YnKocgiWrupyFki3@cmpxchg.org>
-References: <20220503155913.GA1187610@paulmck-ThinkPad-P17-Gen-1>
- <YnFSfc8BR8CadOtw@dhcp22.suse.cz>
- <20220503163905.GM1790663@paulmck-ThinkPad-P17-Gen-1>
- <YnF0RyBaBSC1mdKo@casper.infradead.org>
- <CAJuCfpG8mBCV8O=FWwTJj8zfoh68fH9kBraMEjxKUvCyEw2MFw@mail.gmail.com>
+        Wed, 4 May 2022 12:27:05 -0400
+Received: from m-r2.th.seeweb.it (m-r2.th.seeweb.it [5.144.164.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C19E457A6
+        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 09:23:28 -0700 (PDT)
+Received: from [10.1.250.9] (riviera.nat.ds.pw.edu.pl [194.29.137.1])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 0EAC43F8C2;
+        Wed,  4 May 2022 18:23:27 +0200 (CEST)
+Message-ID: <600d13cc-962a-bb6c-6e43-c56fd63b9591@somainline.org>
+Date:   Wed, 4 May 2022 18:23:26 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJuCfpG8mBCV8O=FWwTJj8zfoh68fH9kBraMEjxKUvCyEw2MFw@mail.gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.8.1
+Subject: Re: [PATCH v3 4/6] clk: qcom: add support for SM8350 DISPCC
+To:     Robert Foss <robert.foss@linaro.org>, agross@kernel.org,
+        bjorn.andersson@linaro.org, mturquette@baylibre.com,
+        sboyd@kernel.org, robh+dt@kernel.org, krzk+dt@kernel.org,
+        jonathan@marek.ca, tdas@codeaurora.org,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+References: <20220504122725.179262-1-robert.foss@linaro.org>
+ <20220504122725.179262-5-robert.foss@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@somainline.org>
+In-Reply-To: <20220504122725.179262-5-robert.foss@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 03, 2022 at 04:15:46PM -0700, Suren Baghdasaryan wrote:
-> On Tue, May 3, 2022 at 11:28 AM Matthew Wilcox <willy@infradead.org> wrote:
-> >
-> > On Tue, May 03, 2022 at 09:39:05AM -0700, Paul E. McKenney wrote:
-> > > On Tue, May 03, 2022 at 06:04:13PM +0200, Michal Hocko wrote:
-> > > > On Tue 03-05-22 08:59:13, Paul E. McKenney wrote:
-> > > > > Hello!
-> > > > >
-> > > > > Just following up from off-list discussions yesterday.
-> > > > >
-> > > > > The requirements to allocate on an RCU-protected speculative fastpath
-> > > > > seem to be as follows:
-> > > > >
-> > > > > 1.        Never sleep.
-> > > > > 2.        Never reclaim.
-> > > > > 3.        Leave emergency pools alone.
-> > > > >
-> > > > > Any others?
-> > > > >
-> > > > > If those rules suffice, and if my understanding of the GFP flags is
-> > > > > correct (ha!!!), then the following GFP flags should cover this:
-> > > > >
-> > > > >   __GFP_NOMEMALLOC | __GFP_NOWARN
-> > > >
-> > > > GFP_NOWAIT | __GFP_NOMEMALLOC | __GFP_NOWARN
-> > >
-> > > Ah, good point on GFP_NOWAIT, thank you!
-> >
-> > Johannes (I think it was?) made the point to me that if we have another
-> > task very slowly freeing memory, a task in this path can take advantage
-> > of that other task's hard work and never go into reclaim.  So the
-> > approach we should take is:
 
-Right, GFP_NOWAIT can starve out other allocations. It can clear out
-the freelists without the burden of having to do reclaim like
-everybody else wanting memory during a shortage. Including GFP_KERNEL.
+On 04/05/2022 14:27, Robert Foss wrote:
+> From: Jonathan Marek <jonathan@marek.ca>
+>
+> Add support to the SM8350 display clock controller by extending the SM8250
+> display clock controller, which is almost identical but has some minor
+> differences.
+>
+> Signed-off-by: Jonathan Marek <jonathan@marek.ca>
+> Signed-off-by: Robert Foss <robert.foss@linaro.org>
+> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> ---
+>
+> Changes since v1
+>   - Remove comment - Dmitry
+>
+> Changes since v2
+>   - Add my SoB - Bjorn
+>   - Remove CLK_ASSUME_ENABLED_WHEN_UNUSED flag
+>
+>
+>   drivers/clk/qcom/Kconfig         |  4 +--
+>   drivers/clk/qcom/dispcc-sm8250.c | 60 +++++++++++++++++++++++++++++++-
+>   2 files changed, 61 insertions(+), 3 deletions(-)
+>
+> diff --git a/drivers/clk/qcom/Kconfig b/drivers/clk/qcom/Kconfig
+> index 9b1f54e634b9..1752ca0ee405 100644
+> --- a/drivers/clk/qcom/Kconfig
+> +++ b/drivers/clk/qcom/Kconfig
+> @@ -609,11 +609,11 @@ config SM_DISPCC_6125
+>   	  splash screen
+>   
+>   config SM_DISPCC_8250
+> -	tristate "SM8150 and SM8250 Display Clock Controller"
+> +	tristate "SM8150/SM8250/SM8350 Display Clock Controller"
+>   	depends on SM_GCC_8150 || SM_GCC_8250
 
-In smaller doses and/or for privileged purposes (e.g. single-argument
-kfree_rcu ;)), those allocations are fine. But because the context is
-page tables specifically, it would mean that userspace could trigger a
-large number of those and DOS other applications and the kernel.
+|| SM_GCC_8350?
 
-> > p4d_alloc(GFP_NOWAIT | __GFP_NOMEMALLOC | __GFP_NOWARN);
-> > pud_alloc(GFP_NOWAIT | __GFP_NOMEMALLOC | __GFP_NOWARN);
-> > pmd_alloc(GFP_NOWAIT | __GFP_NOMEMALLOC | __GFP_NOWARN);
-> >
-> > if (failure) {
-> >   rcu_read_unlock();
-> >   do_reclaim();
-> >   return FAULT_FLAG_RETRY;
-> > }
-> >
-> > ... but all this is now moot since the approach we agreed to yesterday
-> > is:
-> 
-> I think the discussion was about the above approach and Johannes
-> suggested to fallback to the normal pagefault handling with mmap_lock
-> locked if PMD does not exist. Please correct me if I misunderstood
-> here.
+sidenote: also || SC_GCC_8180X in a separate patch?
 
-Yeah. Either way works, as long as the task is held accountable.
+>   	help
+>   	  Support for the display clock controller on Qualcomm Technologies, Inc
+> -	  SM8150 and SM8250 devices.
+> +	  SM8150/SM8250/SM8350 devices.
+>   	  Say Y if you want to support display devices and functionality such as
+>   	  splash screen.
+>   
+> diff --git a/drivers/clk/qcom/dispcc-sm8250.c b/drivers/clk/qcom/dispcc-sm8250.c
+> index db9379634fb2..8e6cb990e387 100644
+> --- a/drivers/clk/qcom/dispcc-sm8250.c
+> +++ b/drivers/clk/qcom/dispcc-sm8250.c
+> @@ -43,6 +43,10 @@ static struct pll_vco vco_table[] = {
+>   	{ 249600000, 2000000000, 0 },
+>   };
+>   
+> +static struct pll_vco lucid_5lpe_vco[] = {
+> +	{ 249600000, 1750000000, 0 },
+> +};
+> +
+>   static struct alpha_pll_config disp_cc_pll0_config = {
+>   	.l = 0x47,
+>   	.alpha = 0xE000,
+> @@ -1228,6 +1232,7 @@ static const struct of_device_id disp_cc_sm8250_match_table[] = {
+>   	{ .compatible = "qcom,sc8180x-dispcc" },
+>   	{ .compatible = "qcom,sm8150-dispcc" },
+>   	{ .compatible = "qcom,sm8250-dispcc" },
+> +	{ .compatible = "qcom,sm8350-dispcc" },
+>   	{ }
+>   };
+>   MODULE_DEVICE_TABLE(of, disp_cc_sm8250_match_table);
+> @@ -1258,7 +1263,7 @@ static int disp_cc_sm8250_probe(struct platform_device *pdev)
+>   		return PTR_ERR(regmap);
+>   	}
+>   
+> -	/* note: trion == lucid, except for the prepare() op */
+> +	/* Apply differences for SM8150 and SM8350 */
+>   	BUILD_BUG_ON(CLK_ALPHA_PLL_TYPE_TRION != CLK_ALPHA_PLL_TYPE_LUCID);
+>   	if (of_device_is_compatible(pdev->dev.of_node, "qcom,sc8180x-dispcc") ||
+>   	    of_device_is_compatible(pdev->dev.of_node, "qcom,sm8150-dispcc")) {
+> @@ -1270,6 +1275,59 @@ static int disp_cc_sm8250_probe(struct platform_device *pdev)
+>   		disp_cc_pll1_config.config_ctl_hi1_val = 0x00000024;
+>   		disp_cc_pll1_config.user_ctl_hi1_val = 0x000000D0;
+>   		disp_cc_pll1_init.ops = &clk_alpha_pll_trion_ops;
+> +	} else if (of_device_is_compatible(pdev->dev.of_node, "qcom,sm8350-dispcc")) {
+> +		static struct clk_rcg2 * const rcgs[] = {
+> +			&disp_cc_mdss_byte0_clk_src,
+> +			&disp_cc_mdss_byte1_clk_src,
+> +			&disp_cc_mdss_dp_aux1_clk_src,
+> +			&disp_cc_mdss_dp_aux_clk_src,
+> +			&disp_cc_mdss_dp_link1_clk_src,
+> +			&disp_cc_mdss_dp_link_clk_src,
+> +			&disp_cc_mdss_dp_pixel1_clk_src,
+> +			&disp_cc_mdss_dp_pixel2_clk_src,
+> +			&disp_cc_mdss_dp_pixel_clk_src,
+> +			&disp_cc_mdss_esc0_clk_src,
+> +			&disp_cc_mdss_mdp_clk_src,
+> +			&disp_cc_mdss_pclk0_clk_src,
+> +			&disp_cc_mdss_pclk1_clk_src,
+> +			&disp_cc_mdss_rot_clk_src,
+> +			&disp_cc_mdss_vsync_clk_src,
+> +		};
+> +		static struct clk_regmap_div * const divs[] = {
+> +			&disp_cc_mdss_byte0_div_clk_src,
+> +			&disp_cc_mdss_byte1_div_clk_src,
+> +			&disp_cc_mdss_dp_link1_div_clk_src,
+> +			&disp_cc_mdss_dp_link_div_clk_src,
+> +		};
+> +		unsigned int i;
+> +		static bool offset_applied;
+> +
+> +		/* only apply the offsets once (in case of deferred probe) */
+> +		if (!offset_applied) {
+> +			for (i = 0; i < ARRAY_SIZE(rcgs); i++)
+> +				rcgs[i]->cmd_rcgr -= 4;
+> +
+> +			for (i = 0; i < ARRAY_SIZE(divs); i++) {
+> +				divs[i]->reg -= 4;
+> +				divs[i]->width = 4;
+> +			}
+> +
+> +			disp_cc_mdss_ahb_clk.halt_reg -= 4;
+> +			disp_cc_mdss_ahb_clk.clkr.enable_reg -= 4;
+> +
+> +			offset_applied = true;
+> +		}
+> +
+> +		disp_cc_mdss_ahb_clk_src.cmd_rcgr = 0x22a0;
+> +
+> +		disp_cc_pll0_config.config_ctl_hi1_val = 0x2A9A699C;
+
+Lowercase hex, also below.
+
+
+> +		disp_cc_pll0_config.test_ctl_hi1_val = 0x01800000;
+> +		disp_cc_pll0_init.ops = &clk_alpha_pll_lucid_5lpe_ops;
+> +		disp_cc_pll0.vco_table = lucid_5lpe_vco;
+> +		disp_cc_pll1_config.config_ctl_hi1_val = 0x2A9A699C;
+> +		disp_cc_pll1_config.test_ctl_hi1_val = 0x01800000;
+> +		disp_cc_pll1_init.ops = &clk_alpha_pll_lucid_5lpe_ops;
+> +		disp_cc_pll1.vco_table = lucid_5lpe_vco;
+>   	}
+>   
+>   	clk_lucid_pll_configure(&disp_cc_pll0, regmap, &disp_cc_pll0_config);
+Konrad
+>

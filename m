@@ -2,75 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB60A519E9A
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 13:54:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08E37519EA4
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 13:56:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348861AbiEDL55 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 07:57:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35904 "EHLO
+        id S1349184AbiEDL71 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 07:59:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346784AbiEDL54 (ORCPT
+        with ESMTP id S1349137AbiEDL6w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 07:57:56 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 72A5A21E37
-        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 04:54:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651665259;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=/49Ts2Y3PyK3UG8Ta4Osw4LZ0F6LxlnPsPESd+HWXHY=;
-        b=S8UwElLoXEo4fohtFXhGSRY0oeV9pAWChuS1rYHPEw9gFfYhmC6atVGzOvqAmQ4C6bVKD0
-        9GKGVYPKploYEbhBmwKvDNOJi1Ey9FHQyb20xGK2c1XGuxoNIEyw29obJmlZG3RlSR+d7/
-        6fIACVHTFYcnxDfYkl3I19mwEKptXUU=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-198-9Sh-mlorMq-AjzZQYiv4cg-1; Wed, 04 May 2022 07:54:15 -0400
-X-MC-Unique: 9Sh-mlorMq-AjzZQYiv4cg-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0A7A41C04B40;
-        Wed,  4 May 2022 11:54:15 +0000 (UTC)
-Received: from file01.intranet.prod.int.rdu2.redhat.com (file01.intranet.prod.int.rdu2.redhat.com [10.11.5.7])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id D57CB40CF8F8;
-        Wed,  4 May 2022 11:54:14 +0000 (UTC)
-Received: from file01.intranet.prod.int.rdu2.redhat.com (localhost [127.0.0.1])
-        by file01.intranet.prod.int.rdu2.redhat.com (8.14.4/8.14.4) with ESMTP id 244BsEPg020594;
-        Wed, 4 May 2022 07:54:14 -0400
-Received: from localhost (mpatocka@localhost)
-        by file01.intranet.prod.int.rdu2.redhat.com (8.14.4/8.14.4/Submit) with ESMTP id 244BsEjr020590;
-        Wed, 4 May 2022 07:54:14 -0400
-X-Authentication-Warning: file01.intranet.prod.int.rdu2.redhat.com: mpatocka owned process doing -bs
-Date:   Wed, 4 May 2022 07:54:14 -0400 (EDT)
-From:   Mikulas Patocka <mpatocka@redhat.com>
-X-X-Sender: mpatocka@file01.intranet.prod.int.rdu2.redhat.com
-To:     Andy Shevchenko <andriy.shevchenko@intel.com>
-cc:     Stafford Horne <shorne@gmail.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andy Shevchenko <andy@kernel.org>,
-        device-mapper development <dm-devel@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Mike Snitzer <msnitzer@redhat.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Milan Broz <gmazyland@gmail.com>, Jason@zx2c4.com
-Subject: Re: [PATCH v2] hex2bin: make the function hex_to_bin constant-time
-In-Reply-To: <YnJFViBFIgYOl7/2@smile.fi.intel.com>
-Message-ID: <alpine.LRH.2.02.2205040752210.20320@file01.intranet.prod.int.rdu2.redhat.com>
-References: <alpine.LRH.2.02.2204241648270.17244@file01.intranet.prod.int.rdu2.redhat.com> <CAHk-=wh+Z+OKH3jRttWGHbWSQq2wVMtdnA=ntDiadZu=VxAC7w@mail.gmail.com> <alpine.LRH.2.02.2204250723120.26714@file01.intranet.prod.int.rdu2.redhat.com> <YnI7hE4cIfjsdKSF@antec>
- <alpine.LRH.2.02.2205040453050.22937@file01.intranet.prod.int.rdu2.redhat.com> <YnJFViBFIgYOl7/2@smile.fi.intel.com>
-User-Agent: Alpine 2.02 (LRH 1266 2009-07-14)
+        Wed, 4 May 2022 07:58:52 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 808702CE35;
+        Wed,  4 May 2022 04:55:10 -0700 (PDT)
+X-UUID: 517ca73b13304fdd86de5c8fc96a84d0-20220504
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.4,REQID:3430fc7a-dc07-4ec4-afa8-7f6fdc023c76,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:-20,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,AC
+        TION:release,TS:-20
+X-CID-META: VersionHash:faefae9,CLOUDID:1fe38ab2-56b5-4c9e-8d83-0070b288eb6a,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,File:nil,QS:0,BEC:nil
+X-UUID: 517ca73b13304fdd86de5c8fc96a84d0-20220504
+Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw02.mediatek.com
+        (envelope-from <rex-bc.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1246745641; Wed, 04 May 2022 19:55:04 +0800
+Received: from mtkmbs07n1.mediatek.inc (172.21.101.16) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Wed, 4 May 2022 19:55:03 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Wed, 4 May 2022 19:55:03 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.792.3 via Frontend Transport; Wed, 4 May 2022 19:55:03 +0800
+From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
+To:     <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <matthias.bgg@gmail.com>
+CC:     <runyang.chen@mediatek.com>, <linux-mediatek@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        Rex-BC Chen <rex-bc.chen@mediatek.com>
+Subject: [PATCH v2 0/3] Support MediaTek devapc for MT8186
+Date:   Wed, 4 May 2022 19:54:58 +0800
+Message-ID: <20220504115501.3490-1-rex-bc.chen@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,42 +61,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This series is for supporting devapc implementation in MT8186.
 
+V2:
+- Add a patch to separate register offsets from mtk_devapc_data.
 
-On Wed, 4 May 2022, Andy Shevchenko wrote:
+V1:
+- Add dt-binding and add devapc data for MT8186.
 
-> On Wed, May 04, 2022 at 04:57:35AM -0400, Mikulas Patocka wrote:
-> > On Wed, 4 May 2022, Stafford Horne wrote:
-> > > On Mon, Apr 25, 2022 at 08:07:48AM -0400, Mikulas Patocka wrote:
-> 
-> ...
-> 
-> > > Just a heads up it seems this patch is causing some instability with crypto self
-> > > tests on OpenRISC when using a PREEMPT kernel (no SMP).
-> > > 
-> > > This was reported by Jason A. Donenfeld as it came up in wireguard testing.
-> > > 
-> > > I am trying to figure out if this is an OpenRISC PREEMPT issue or something
-> > > else.
-> 
-> > That patch is so simple that I can't imagine how could it break the 
-> > curve25519 test. Are you sure that you bisected it correctly?
-> 
-> Can you provide a test cases for hex_to_bin()?
+Rex-BC Chen (3):
+  dt-bindings: soc: mediatek: devapc: Add bindings for MT8186
+  soc: mediatek: devapc: Separate register offsets from mtk_devapc_data
+  soc: mediatek: devapc: Add support for MT8186
 
-I tested it with this:
+ .../bindings/soc/mediatek/devapc.yaml         |  1 +
+ drivers/soc/mediatek/mtk-devapc.c             | 45 ++++++++++++-------
+ 2 files changed, 31 insertions(+), 15 deletions(-)
 
-#include <stdio.h>
-
-int hex_to_bin(unsigned char c);
-
-int main(void)
-{
-        int i;
-        for (i = 0; i < 256; i++)
-                printf("%02x - %d\n", i, hex_to_bin(i));
-        return 0;
-}
-
-Mikulas
+-- 
+2.18.0
 

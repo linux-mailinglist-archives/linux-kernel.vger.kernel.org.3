@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A80C51AA90
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:27:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA8C551A97C
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:18:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357562AbiEDRYm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 13:24:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55298 "EHLO
+        id S1357597AbiEDRPI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 13:15:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355413AbiEDRET (ORCPT
+        with ESMTP id S1355334AbiEDRER (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 13:04:19 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA5E64EDC6;
-        Wed,  4 May 2022 09:53:02 -0700 (PDT)
+        Wed, 4 May 2022 13:04:17 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93293473AC;
+        Wed,  4 May 2022 09:52:58 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2381FB827AC;
-        Wed,  4 May 2022 16:52:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C773AC385B0;
-        Wed,  4 May 2022 16:52:55 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 374DAB827A1;
+        Wed,  4 May 2022 16:52:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2A06C385A4;
+        Wed,  4 May 2022 16:52:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651683175;
-        bh=GYqdHF/kWbxCt6a86UWjM3QOO2fhmQgGD64+8+8qvrI=;
+        s=korg; t=1651683176;
+        bh=d7FYk8CcoJFVfmacnUDKuqx+IN8JrgInU5TLM/A7XjQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=2LG3dKeR0HCc96BFRvMCCasWjm6W63ykKDPF8XThabZ+VlVn9Koj+Q7MLCzIESTIT
-         zZ+oHK3Q4SI/aqfkVbMQf5vNFovkAOyzJquRVzL8Rcv6Dz7/1rSEKefh5DjSWHO/EE
-         r2qKEhqN0WMMxsYLKktdOaiRb64HEdkNayutnqp8=
+        b=tWHKhc3IyIEP2FnmBCEfww4Xp4c6E2o3Vo7K0kdeuP0rwFPkwB3FfhpD+NvVD/OOT
+         U0vdm7SeWzMd/o97kFfpHJJjb+9rnYuFogWJ017Qwf8keb1kB6KVFsNMlky2fSSwa6
+         bcwwicg66jT3LVLG7FjSs6qoYNqqzrxmnfGX88Yc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Peter Chen <peter.chen@kernel.org>,
-        Pawel Laszczak <pawell@cadence.com>
-Subject: [PATCH 5.15 027/177] usb: cdns3: Fix issue for clear halt endpoint
-Date:   Wed,  4 May 2022 18:43:40 +0200
-Message-Id: <20220504153055.521161879@linuxfoundation.org>
+        stable@vger.kernel.org, stable <stable@kernel.org>,
+        Sean Anderson <sean.anderson@seco.com>
+Subject: [PATCH 5.15 028/177] usb: phy: generic: Get the vbus supply
+Date:   Wed,  4 May 2022 18:43:41 +0200
+Message-Id: <20220504153055.585463037@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
 In-Reply-To: <20220504153053.873100034@linuxfoundation.org>
 References: <20220504153053.873100034@linuxfoundation.org>
@@ -54,57 +54,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pawel Laszczak <pawell@cadence.com>
+From: Sean Anderson <sean.anderson@seco.com>
 
-commit b3fa25de31fb7e9afebe9599b8ff32eda13d7c94 upstream.
+commit 03e607cbb2931374db1825f371e9c7f28526d3f4 upstream.
 
-Path fixes bug which occurs during resetting endpoint in
-__cdns3_gadget_ep_clear_halt function. During resetting endpoint
-controller will change HW/DMA owned TRB. It set Abort flag in
-trb->control and will change trb->length field. If driver want
-to use the aborted trb it must update the changed field in
-TRB.
+While support for working with a vbus was added, the regulator was never
+actually gotten (despite what was documented). Fix this by actually
+getting the supply from the device tree.
 
-Fixes: 7733f6c32e36 ("usb: cdns3: Add Cadence USB3 DRD Driver")
-cc: <stable@vger.kernel.org>
-Acked-by: Peter Chen <peter.chen@kernel.org>
-Signed-off-by: Pawel Laszczak <pawell@cadence.com>
-Link: https://lore.kernel.org/r/20220329084605.4022-1-pawell@cadence.com
+Fixes: 7acc9973e3c4 ("usb: phy: generic: add vbus support")
+Cc: stable <stable@kernel.org>
+Signed-off-by: Sean Anderson <sean.anderson@seco.com>
+Link: https://lore.kernel.org/r/20220425171412.1188485-3-sean.anderson@seco.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/usb/cdns3/cdns3-gadget.c |    7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ drivers/usb/phy/phy-generic.c |    7 +++++++
+ 1 file changed, 7 insertions(+)
 
---- a/drivers/usb/cdns3/cdns3-gadget.c
-+++ b/drivers/usb/cdns3/cdns3-gadget.c
-@@ -2684,6 +2684,7 @@ int __cdns3_gadget_ep_clear_halt(struct
- 	struct usb_request *request;
- 	struct cdns3_request *priv_req;
- 	struct cdns3_trb *trb = NULL;
-+	struct cdns3_trb trb_tmp;
- 	int ret;
- 	int val;
- 
-@@ -2693,8 +2694,10 @@ int __cdns3_gadget_ep_clear_halt(struct
- 	if (request) {
- 		priv_req = to_cdns3_request(request);
- 		trb = priv_req->trb;
--		if (trb)
-+		if (trb) {
-+			trb_tmp = *trb;
- 			trb->control = trb->control ^ cpu_to_le32(TRB_CYCLE);
-+		}
+--- a/drivers/usb/phy/phy-generic.c
++++ b/drivers/usb/phy/phy-generic.c
+@@ -268,6 +268,13 @@ int usb_phy_gen_create_phy(struct device
+ 			return -EPROBE_DEFER;
  	}
  
- 	writel(EP_CMD_CSTALL | EP_CMD_EPRST, &priv_dev->regs->ep_cmd);
-@@ -2709,7 +2712,7 @@ int __cdns3_gadget_ep_clear_halt(struct
- 
- 	if (request) {
- 		if (trb)
--			trb->control = trb->control ^ cpu_to_le32(TRB_CYCLE);
-+			*trb = trb_tmp;
- 
- 		cdns3_rearm_transfer(priv_ep, 1);
- 	}
++	nop->vbus_draw = devm_regulator_get_exclusive(dev, "vbus");
++	if (PTR_ERR(nop->vbus_draw) == -ENODEV)
++		nop->vbus_draw = NULL;
++	if (IS_ERR(nop->vbus_draw))
++		return dev_err_probe(dev, PTR_ERR(nop->vbus_draw),
++				     "could not get vbus regulator\n");
++
+ 	nop->dev		= dev;
+ 	nop->phy.dev		= nop->dev;
+ 	nop->phy.label		= "nop-xceiv";
 
 

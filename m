@@ -2,128 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B831C51A2A9
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 16:54:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8A9751A2AE
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 16:54:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351544AbiEDO52 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 10:57:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44554 "EHLO
+        id S1351568AbiEDO5t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 10:57:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351533AbiEDO50 (ORCPT
+        with ESMTP id S1351559AbiEDO5o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 10:57:26 -0400
-X-Greylist: delayed 2195 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 04 May 2022 07:53:50 PDT
-Received: from out02.mta.xmission.com (out02.mta.xmission.com [166.70.13.232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0EE719C35;
-        Wed,  4 May 2022 07:53:50 -0700 (PDT)
-Received: from in02.mta.xmission.com ([166.70.13.52]:34250)
-        by out02.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1nmGNx-003gFY-Jr; Wed, 04 May 2022 08:53:49 -0600
-Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:36918 helo=email.froward.int.ebiederm.org.xmission.com)
-        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1nmGNw-00DdQV-Gz; Wed, 04 May 2022 08:53:49 -0600
-From:   "Eric W. Biederman" <ebiederm@xmission.com>
-To:     Petr Mladek <pmladek@suse.com>
-Cc:     Seth Forshee <sforshee@digitalocean.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        Sean Christopherson <seanjc@google.com>,
-        linux-kernel@vger.kernel.org, live-patching@vger.kernel.org,
-        kvm@vger.kernel.org
-References: <20220503174934.2641605-1-sforshee@digitalocean.com>
-        <20220504130753.GB8069@pathway.suse.cz>
-        <YnKEnqfxSyVmSGYx@do-x1extreme>
-        <20220504142809.GC8069@pathway.suse.cz>
-Date:   Wed, 04 May 2022 09:53:40 -0500
-In-Reply-To: <20220504142809.GC8069@pathway.suse.cz> (Petr Mladek's message of
-        "Wed, 4 May 2022 16:28:09 +0200")
-Message-ID: <87ee19fix7.fsf@email.froward.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Wed, 4 May 2022 10:57:44 -0400
+Received: from mail-ej1-x644.google.com (mail-ej1-x644.google.com [IPv6:2a00:1450:4864:20::644])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73A322250A
+        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 07:54:08 -0700 (PDT)
+Received: by mail-ej1-x644.google.com with SMTP id j6so3345932ejc.13
+        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 07:54:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=3CqMewY2qLhNoVYy8pnABiQEXDBLwdmzuZuCQ9llcqA=;
+        b=JIZF4JLztNOcNEo4SWDoc3uVBUY3XVnnSRMHtEmNqfbINrHZhs+RqZgaXWlLYQJKBz
+         45bRnisHROq/k5C6gSZLnuw+1KoJTn9/H2tf+974HGCcSzHB5rcmKSJEgIto4cJK9HKy
+         8MAoyaI0cOrY6W4KqDLMFN54Jrif7hydeiZrQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=3CqMewY2qLhNoVYy8pnABiQEXDBLwdmzuZuCQ9llcqA=;
+        b=cypvpUmbXIwri0Rr907KE+Gs0+XV0hmDQwTEFxcGRpT+IB25XKeTTmTTO4fGP7t1mj
+         ZJ3t9X3ndF7C94VlaD+TiamGnkFSXXXfu9YxenAupoIecB7PEr6dv6owNxp1WDPVSBKz
+         QjkO140Rvt5fnmkxA5fAqfdUjNLeurhXNtQg/ZcxGnUi5vS3PR6gxMEPfZYcbEgS0Skn
+         /byiIUYs6DXUHRMZxKK7mUonxL8ZmGyadIMfcTuc0ZViZPsp0WdeBNsq0lyfUfDbJgJ7
+         Q0PMyzxnpRZtThPois+evKNry1kXkqnyQz0xSKslX7bKVRPaX4WP+MNaNL58mEtViNSc
+         gE/A==
+X-Gm-Message-State: AOAM530gLdlrzhfkwOZonswuwoHIAq8M0Pg7JWbbFL6aUdQg3wMpJK9q
+        FGuNNNKDcGmuasaRCIat+r4Dr0rY+4/HfQCIZgE=
+X-Google-Smtp-Source: ABdhPJx9GEk3z3nW26GT/ex86vaMgAeHwUh3ICZ78ocxIT+DW2+8Wd7eZDQeAcXqk72fuQN+A5EnXA==
+X-Received: by 2002:a17:907:1b25:b0:6da:8206:fc56 with SMTP id mp37-20020a1709071b2500b006da8206fc56mr20289606ejc.81.1651676048035;
+        Wed, 04 May 2022 07:54:08 -0700 (PDT)
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com. [209.85.221.49])
+        by smtp.gmail.com with ESMTPSA id jl3-20020a17090775c300b006f3ef214e55sm5798507ejc.187.2022.05.04.07.54.06
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 04 May 2022 07:54:07 -0700 (PDT)
+Received: by mail-wr1-f49.google.com with SMTP id x18so2422796wrc.0
+        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 07:54:06 -0700 (PDT)
+X-Received: by 2002:a5d:6d09:0:b0:20c:53a9:cc30 with SMTP id
+ e9-20020a5d6d09000000b0020c53a9cc30mr15857966wrq.513.1651676045944; Wed, 04
+ May 2022 07:54:05 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1nmGNw-00DdQV-Gz;;;mid=<87ee19fix7.fsf@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=softfail
-X-XM-AID: U2FsdGVkX1+Pmb3es8sVQGptMBHIKX3tnmcqpjmnk/g=
-X-SA-Exim-Connect-IP: 68.227.174.4
-X-SA-Exim-Mail-From: ebiederm@xmission.com
+References: <20220503224029.3195306-1-dianders@chromium.org>
+ <20220503153850.v2.1.I4182ae27e00792842cb86f1433990a0ef9c0a073@changeid> <d4541684-337f-4c3f-fafa-a883be370c0e@linaro.org>
+In-Reply-To: <d4541684-337f-4c3f-fafa-a883be370c0e@linaro.org>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Wed, 4 May 2022 07:53:53 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=XMuUELUbLEuzG_r0J2+82gKxNLe5KTsvFBK2hNhKnLHQ@mail.gmail.com>
+Message-ID: <CAD=FV=XMuUELUbLEuzG_r0J2+82gKxNLe5KTsvFBK2hNhKnLHQ@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] drm/dp: Add callbacks to make using DP AUX bus
+ properly easier
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
+        Philip Chen <philipchen@chromium.org>,
+        Sankeerth Billakanti <quic_sbillaka@quicinc.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        freedreno <freedreno@lists.freedesktop.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>, Lyude Paul <lyude@redhat.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-DCC: XMission; sa07 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: ***;Petr Mladek <pmladek@suse.com>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 412 ms - load_scoreonly_sql: 0.06 (0.0%),
-        signal_user_changed: 11 (2.8%), b_tie_ro: 10 (2.4%), parse: 0.99
-        (0.2%), extract_message_metadata: 12 (2.9%), get_uri_detail_list: 1.12
-        (0.3%), tests_pri_-1000: 14 (3.4%), tests_pri_-950: 1.31 (0.3%),
-        tests_pri_-900: 1.09 (0.3%), tests_pri_-90: 96 (23.3%), check_bayes:
-        90 (21.9%), b_tokenize: 7 (1.7%), b_tok_get_all: 7 (1.6%),
-        b_comp_prob: 2.1 (0.5%), b_tok_touch_all: 71 (17.3%), b_finish: 0.84
-        (0.2%), tests_pri_0: 264 (64.0%), check_dkim_signature: 0.58 (0.1%),
-        check_dkim_adsp: 3.2 (0.8%), poll_dns_idle: 1.29 (0.3%), tests_pri_10:
-        2.2 (0.5%), tests_pri_500: 7 (1.6%), rewrite_mail: 0.00 (0.0%)
-Subject: Re: [PATCH v2] entry/kvm: Make vCPU tasks exit to userspace when a
- livepatch is pending
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Petr Mladek <pmladek@suse.com> writes:
+Hi,
 
-> On Wed 2022-05-04 08:50:22, Seth Forshee wrote:
->> On Wed, May 04, 2022 at 03:07:53PM +0200, Petr Mladek wrote:
-
->> > If "no" then I do not understand why TIF_NOTIFY_SIGNAL interrupts
->> > the syscall on the real hardware and not in kvm.
->> 
->> It does interrupt, but xfer_to_guest_mode_handle_work() concludes it's
->> not necessary to return to userspace and resumes guest execution.
+On Wed, May 4, 2022 at 3:41 AM Dmitry Baryshkov
+<dmitry.baryshkov@linaro.org> wrote:
 >
-> In this case, we should revert the commit 8df1947c71ee53c7e21
-> ("livepatch: Replace the fake signal sending with TIF_NOTIFY_SIGNAL
-> infrastructure"). The flag TIF_NOTIFY_SIGNAL clearly does not guarantee
-> restarting the syscall or exiting to the user space with -EINTR.
+> > - We had forgotten a EXPORT_SYMBOL_GPL on the non "devm" populate
+> >    function.
 >
-> It should solve this problem. And it looks like a cleaner solution
-> to me.
+> This can go to a separate patch, so that the fix can be backported to
+> earlier kernels. Please don't forget the Fixes: tag.
 
-Why not just?
+Sure. Will do for v3.
 
-diff --git a/kernel/entry/kvm.c b/kernel/entry/kvm.c
-index 9d09f489b60e..cbb192aec13a 100644
---- a/kernel/entry/kvm.c
-+++ b/kernel/entry/kvm.c
-@@ -8,13 +8,7 @@ static int xfer_to_guest_mode_work(struct kvm_vcpu *vcpu, unsigned long ti_work)
-        do {
-                int ret;
- 
--               if (ti_work & (_TIF_SIGPENDING | _TIF_NOTIFY_SIGNAL)) {
--                       clear_notify_signal();
--                       if (task_work_pending(current))
--                               task_work_run();
--               }
--
--               if (ti_work & _TIF_SIGPENDING) {
-+               if (ti_work & (_TIF_SIGPENDING | _TIF_NOTIFY_SIGNAL)) {
-                        kvm_handle_signal_exit(vcpu);
-                        return -EINTR;
-                }
 
-As far as I can tell the only reason _TIF_NOTIFY_SIGNAL was handled any
-differently than _TIF_SIGPENDING in xfer_to_guest_mode_work is because
-of historical confusion.
+> > -EXPORT_SYMBOL_GPL(of_dp_aux_depopulate_ep_devices);
+> > +EXPORT_SYMBOL_GPL(of_dp_aux_depopulate_ep_device);
+>
+> Small note about the name. What if we change that to something more
+> future-proof? Something like of_dp_aux_depopulate_bus() (and similarly
+> rename other calls)?
 
-Eric
+Will do for v3.
+
+> > +     /*
+> > +      * If no parent "of_node", no "aux-bus" child node, or no available
+> > +      * children then we're done. Call the callback (if needed) and return.
+> > +      *
+> > +      * NOTE: we intentionally pass the return code from done_probing
+> > +      * directly out here. eDP controller drivers may want to support
+> > +      * panels from old device trees where the panel was an independent
+> > +      * platform device. In that case it's expected that done_probing()
+> > +      * might need to return -EPROBE_DEFER to our caller.
+> > +      */
+> > +     if (!np) {
+> > +             if (done_probing)
+> > +                     return done_probing(aux);
+>
+> I see your point here (and that it makes code simpler). However I'm a
+> little bit uneasy here. What if code this more explicitly in the
+> drivers? Like the following:
+>
+> if (!dev_has_aux_bus()) {
+>         ret = panel_ready(....);
+> } else {
+>         ...
+>         ret = of_dp_aux_populate_ep_device(dp_aux, panel_ready);
+>         ....;
+> }
+
+Yeah, I had considered that and was about 50-50. You think I should
+change it? Is it really easier to understand if we break it up like
+this? I'll wait for a response from you, but if I don't hear anything
+then I'll change this as you suggest.
+
+
+> This way you won't have to worry about the EPROBE_DEFER. Or you'd rather
+> forbid it explicitly. Why? Consider the following scenario:
+>
+> dp_driver_probe()
+>    /* This creates new devices */
+>    done_probing returns -EPROBE_DEFER
+>    /* device registration is unwound */
+>    dp_driver_probe returns -EPROBE_DEFER
+>
+> However as the state of devices was chagned, the dp_driver_probe() can
+> be called again and again, ending up with the the same probe loop that
+> we are trying to solve.
+
+Actually, I'm not sure we'd necessarily end up the loop we're trying
+to solve. Let's see. If the panel probe itself doesn't create any
+sub-devices and neither does done_probing() then done_probing()
+returning -EPROBE_DEFER shouldn't cause any looping, right? It would
+look just as if the panel returned -EPROBE_DEFER.
+
+So I guess one could argue that _perhaps_ we don't need to forbid
+-EPROBE_DEFER from done_probing()? It'd probably work OK (we'd
+eventually retry probing the panel and call done_probing() once more
+devices were added), but it'd be ugly and the system would report
+(/sys/kernel/debug/devices_deferred) that it was the panel that
+deferred even though it was this extra callback.
+
+I'm going to go ahead and say this is too hacky, though. Also as long
+as Linux still has the probe loop when you create devices and return
+-EPROBE_DEFER we can get stuck because the panel _can_ create
+sub-devices. It can do this with DP AUX backlight.
+
+So I guess the summary is: yes, I'm confident that we should forbid
+-EPROBE_DEFER from being returned by done_probing() when called by
+dp_aux_ep_probe()
+
+-Doug

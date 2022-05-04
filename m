@@ -2,66 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40A5451956D
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 04:15:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D24C3519571
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 04:19:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344021AbiEDCTJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 22:19:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37366 "EHLO
+        id S243551AbiEDCW5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 22:22:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343964AbiEDCTF (ORCPT
+        with ESMTP id S229579AbiEDCWu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 22:19:05 -0400
-Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 994602BB14
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 19:15:31 -0700 (PDT)
-Received: by mail-yb1-xb2d.google.com with SMTP id h10so201560ybc.4
-        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 19:15:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=atishpatra.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=c5B5hkcsMKdDxIP0ityCzhRmvMG1VC+HFykgkdqu09U=;
-        b=SZfd803uo15kK66O/NlAk5XNFnbID7ZOAD3KZPSJujtLzKFGMVvU6o5VPAlUvxyn+3
-         NMFa1yCnfttudlWnJWcoXZABDL3Jeyan6z9d1fBaAr/qznMS/ktE4+xvkpw4I5OqKBWd
-         fBN1mc/S654rSyP51bV1T035KI5ONmgovVvrI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=c5B5hkcsMKdDxIP0ityCzhRmvMG1VC+HFykgkdqu09U=;
-        b=Yg5B9vq6qFPRCIh7qBpqmWkYmZX/mwE4XrFEzi2bs1QidROfUQP+KfM/InnRwQGIQx
-         rmYFCE3b9pjCeWvvm7DkRPjQot2naL472bC7asP1+h5c5jWlNwyNCj72gNoQBdbwkZuS
-         KTkpJJisPmkoVuLJbVMugS3+i7GT1SrtqMoOrVRjg3oKXvbaAMC20nA2E8lzvrdxRZIb
-         TCrAUghGfipiYQAAB/YA/414eirTeOAzA2U7JufeM7tGeW96S8r27uie81lju5c5GL36
-         dUGWGJrb1ev+UQpa4KPXFo5kRUbkkenqsDXq57MGuy24jKh+HhAqonpQpm9Tn6TKBwnI
-         UVvw==
-X-Gm-Message-State: AOAM533u9fYoQHYfXwEelLno5560i7aUSA3Tub7YwzFoB3/3ETPpLa7V
-        VQdlT7SxBPDMpMwY8CSRFDdKIhv/GIxxyZkRF1ta
-X-Google-Smtp-Source: ABdhPJzzW0cIF1J0ZWV6KCLxVfMG8MOvXPpwHtk2SUtqsQQxYUN8p+PNE8DoWlFM3bD79C4kiVsszGg1ntn5lWE6FaI=
-X-Received: by 2002:a25:32d3:0:b0:648:5929:845f with SMTP id
- y202-20020a2532d3000000b006485929845fmr15443858yby.53.1651630530878; Tue, 03
- May 2022 19:15:30 -0700 (PDT)
+        Tue, 3 May 2022 22:22:50 -0400
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::225])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDF8A2B27C;
+        Tue,  3 May 2022 19:19:15 -0700 (PDT)
+Received: (Authenticated sender: joao@overdrivepizza.com)
+        by mail.gandi.net (Postfix) with ESMTPA id 4842A1C0004;
+        Wed,  4 May 2022 02:19:11 +0000 (UTC)
 MIME-Version: 1.0
-References: <20220420112450.155624-1-apatel@ventanamicro.com> <20220420112450.155624-6-apatel@ventanamicro.com>
-In-Reply-To: <20220420112450.155624-6-apatel@ventanamicro.com>
-From:   Atish Patra <atishp@atishpatra.org>
-Date:   Tue, 3 May 2022 19:15:20 -0700
-Message-ID: <CAOnJCU+yd7hqauHRYwnPqNKEgfy5FK06ezR64aH0Hm2AcNNadw@mail.gmail.com>
-Subject: Re: [PATCH v2 5/7] RISC-V: KVM: Reduce KVM_MAX_VCPUS value
-To:     Anup Patel <apatel@ventanamicro.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Alistair Francis <Alistair.Francis@wdc.com>,
-        Anup Patel <anup@brainfault.org>,
-        KVM General <kvm@vger.kernel.org>,
-        kvm-riscv@lists.infradead.org,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Date:   Tue, 03 May 2022 19:19:11 -0700
+From:   Joao Moreira <joao@overdrivepizza.com>
+To:     Josh Poimboeuf <jpoimboe@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
+        peterz@infradead.org, andrew.cooper3@citrix.com,
+        keescook@chromium.org, samitolvanen@google.com,
+        mark.rutland@arm.com, hjl.tools@gmail.com,
+        alyssa.milburn@linux.intel.com, ndesaulniers@google.com,
+        gabriel.gomes@linux.intel.com, rick.p.edgecombe@intel.com
+Subject: Re: [RFC PATCH 01/11] x86: kernel FineIBT
+In-Reply-To: <20220503220244.vyz5flk3gg3y6rbw@treble>
+References: <20220420004241.2093-1-joao@overdrivepizza.com>
+ <20220420004241.2093-2-joao@overdrivepizza.com>
+ <20220429013704.4n4lmadpstdioe7a@treble>
+ <d82459b887bcaf9181ad836051e2d16b@overdrivepizza.com>
+ <20220503220244.vyz5flk3gg3y6rbw@treble>
+Message-ID: <068cafedb0699383b696ce15d5677979@overdrivepizza.com>
+X-Sender: joao@overdrivepizza.com
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -70,44 +49,110 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 20, 2022 at 4:25 AM Anup Patel <apatel@ventanamicro.com> wrote:
->
-> Currently, the KVM_MAX_VCPUS value is 16384 for RV64 and 128
-> for RV32.
->
-> The KVM_MAX_VCPUS value is too high for RV64 and too low for
-> RV32 compared to other architectures (e.g. x86 sets it to 1024
-> and ARM64 sets it to 512). The too high value of KVM_MAX_VCPUS
-> on RV64 also leads to VCPU mask on stack consuming 2KB.
->
-> We set KVM_MAX_VCPUS to 1024 for both RV64 and RV32 to be
-> aligned other architectures.
->
-> Signed-off-by: Anup Patel <apatel@ventanamicro.com>
-> ---
->  arch/riscv/include/asm/kvm_host.h | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
->
-> diff --git a/arch/riscv/include/asm/kvm_host.h b/arch/riscv/include/asm/kvm_host.h
-> index 806f74dc0bfc..61d8b40e3d82 100644
-> --- a/arch/riscv/include/asm/kvm_host.h
-> +++ b/arch/riscv/include/asm/kvm_host.h
-> @@ -16,8 +16,7 @@
->  #include <asm/kvm_vcpu_fp.h>
->  #include <asm/kvm_vcpu_timer.h>
->
-> -#define KVM_MAX_VCPUS                  \
-> -       ((HGATP_VMID_MASK >> HGATP_VMID_SHIFT) + 1)
-> +#define KVM_MAX_VCPUS                  1024
->
->  #define KVM_HALT_POLL_NS_DEFAULT       500000
->
-> --
-> 2.25.1
->
+> 
+> It should be possible to have a non-fatal #UD2 handler.
+> 
+> See for example how WARN() is implemented with __WARN_FLAGS in
+> arch/x86/include/asm/bug.h .
+> 
+> So hopefully we can just get rid of the need for the "call handler"
+> thing altogether.
+> 
+Nice, I'll look into it. Tks.
 
-Reviewed-by: Atish Patra <atishp@rivosinc.com>
+>> > Not sure what would happen for "ibt=off"?  Maybe apply_ibt_endbr() could
+>> > NOP out all the FineIBT stuff.
+>> 
+>> Either that, or...
+>> 
+>> I'm thinking about a way to have FineIBT interchangeable with KCFI.
+>> Currently KCFI adds a 4 byte hash + 2 byte nops before function entry, 
+>> to
+>> allow for proper prototype checking. After that, there should be an 
+>> ENDBR of
+>> 4 bytes. This gives us 10 bytes in total. Then, my yet to be properly
+>> thought idea would be patch these 10 bytes with:
+>> 
+>> endbr
+>> call fineibt_handler_<$HASH>
+>> nop
+>> 
+>> and then, on the caller side, patch the "cmp <$HASH>, -0x6(%r11); je; 
+>> ud2;
+>> call" sequence with a "sub 0x6, r11; mov $HASH, %r10; call %r11, add 
+>> 0x6
+>> %r11". This would then allow the kernel to verify if the CPU is IBT 
+>> capable
+>> on boot time and only then setting the proper scheme.
+>> 
+>> The downsides of having something like this would be that this sub 
+>> r11/add
+>> r11 sequence is kinda meh. We can avoid that by having two padding 
+>> nops
+>> after the original ENDBR, which will be skipped when the function is 
+>> reached
+>> directly by the linker optimization I'm working on, and that we can 
+>> convert
+>> into a JMP -offset that makes control flow reach the padding area 
+>> before the
+>> prologue and from where we can call the fineibt_handler function. The
+>> resulting instrumentation would be something like:
+>> 
+>> 1:
+>> call fineibt_handler_<$HASH>
+>> jmp 2f
+>> <foo>
+>> endbr
+>> jmp 1b
+>> 2:
+>> 
+>> Also, it would prevent a paranoid user to have both schemes 
+>> simultaneously
+>> (there are reasons why people could want that).
+>> 
+>> Any thoughts?
+> 
+> I'm not really qualified to comment on this too directly since I 
+> haven't
+> looked very much at the variations on FineIBT/CFI/KCFI, and what the
+> protections and drawbacks are for each approach, and when it might even
+> make sense to combine them for a "paranoid user".
+> 
+> Since we have multiple similar and possibly competing technologies 
+> being
+> discussed, one thing I do want to warn against is that we as kernel
+> developers tend to err on the side of giving people too many choices 
+> and
+> combinations which *never* get used.
+> 
+> All those unused options can confuse the user and significantly add to
+> complexity and maintenance overhead for us.  Especially for invasive
+> features like these.
+> 
+> (Just to be clear, I'm not saying that's happening here, but it's
+> something we need to be careful about.)
+> 
+> Here, documentation is going to be crucial, for both reviewers and
+> users.  Something that describes when/why I should use X or Y or X+Y.
+> 
+> If we truly want to add more options/combos for different use cases 
+> then
+> we'll also need clear and concise documentation about which
+> options/combos would be used under what circumstances.
 
--- 
-Regards,
-Atish
+Yeah, I totally understand/support this concern and I feel the same way. 
+While, in this case, I can't see super clear reasons for X+Y, there are 
+aspects why someone could prefer X or Y -- so I think that using 
+alternatives to flip the instrumentation is a valid consideration. In 
+time, taking the chance to be fair on the credits, using alternatives to 
+replace KCFI/FineIBT was also Peter's idea, not mine. It looked hard to 
+do at first sight because of the caller/callee-side checks differences, 
+but since Peter mentioned it, I started trying to solve the puzzle of 
+having the best suitable instrumentation that would be changeable. I 
+haven't discussed this with anyone yet, but at this point I think it 
+might be doable, although not in the most performant shape. Anyway, I'll 
+post something here once I have a more solid idea.
+
+And yes, I agree that documentation will be key and I totally see your 
+point/understand how confusing I was in my previous e-mail. I'll keep 
+that in mind for the next revision. Thanks for pointing it out :)

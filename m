@@ -2,59 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B15651AE1D
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 21:42:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AA1751ADD4
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 21:33:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377587AbiEDTps (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 15:45:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47476 "EHLO
+        id S1377518AbiEDThY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 15:37:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358531AbiEDTpp (ORCPT
+        with ESMTP id S1352087AbiEDThW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 15:45:45 -0400
-X-Greylist: delayed 527 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 04 May 2022 12:42:08 PDT
-Received: from mr85p00im-ztdg06011901.me.com (mr85p00im-ztdg06011901.me.com [17.58.23.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 418474D26E
-        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 12:42:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=icloud.com;
-        s=1a1hai; t=1651692800;
+        Wed, 4 May 2022 15:37:22 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED8724C42D;
+        Wed,  4 May 2022 12:33:45 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id z2so3227062ejj.3;
+        Wed, 04 May 2022 12:33:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:from:mime-version:subject:date:message-id
+         :cc:to;
         bh=4ht9G50SlYlr7BPTCuy+KjNotHQlLEXbSKghIYlF3TI=;
-        h=Content-Type:From:Mime-Version:Subject:Date:Message-Id:To;
-        b=mpWDTIXkVWICEbwP8lVucvUj2lXp7sgQANZDAy4SypLlwTlIvHxoCNneQvRa9H0IH
-         P7CY4MUJAtz/6KtrWpuwZU9f3KjM/u9IyxXM3f0nfSGim5MeZUAkNis7cMl8zFlhiB
-         7KSTjOif87OwMkrGMJrcDASZpBD4LuyGM3tESxFxmKlQLEWFu6bOEKNBqKrieYEGgV
-         U3hgPrhIwmv0bDeSoAhFSGLAPxm+5udruXrCFszANHgcQmeiKCB/MmpazN02tYXSEf
-         ylAuXE7qPZaViZ/n7p3FxWRwg+9vPSZxZNEWca9tsFjTf+xm+CF7YiNUgWrbfCX/1W
-         9Y4C1tekqmAiA==
-Received: from smtpclient.apple (mr38p00im-dlb-asmtp-mailmevip.me.com [17.57.152.18])
-        by mr85p00im-ztdg06011901.me.com (Postfix) with ESMTPSA id C2A01900AD7;
-        Wed,  4 May 2022 19:33:19 +0000 (UTC)
+        b=EfORBn1IU5YLU6vM2lbHgc9xrAtSW0JJzEpjkXnN3Y4B1jVYnMZsrilE74yba/6U5T
+         foNTCBSV4aOokszBa7PibzEXLnjScFYevmiylFPTcrK0G0mdFFO85zLbAPPZbWS/40s3
+         IKk9oVafeGEn49zoSyxzMp0T3pl5iHAURlv4N60bM+BqKwE0nli6Bku9TeYyXQZ60/ni
+         xtyCzYLlLnX9yfEsRrpEXxz6LCVjRkOJF2Gi5Oay+CcjWoqT0vPH8lGTpx1ILjKvE5Vm
+         LGv7vUhuVrzoZGeLKsDX5wHNDwhDw+JCPRklh6KfKRtvy5Ys1qDPMU8W09vFcls99SqW
+         b4pg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:content-transfer-encoding:from:mime-version
+         :subject:date:message-id:cc:to;
+        bh=4ht9G50SlYlr7BPTCuy+KjNotHQlLEXbSKghIYlF3TI=;
+        b=ninSZgDk91npk7m/gYmIPLCfzOhRhHYuNvIwATzf5Pb6NXspbxbAbU5MgBjdRBPcff
+         704/R6+AFqOTjts3mxHlmLY156DJOZpxI8MEnF2D+IBOi00rpQIuz/uqcGgg9s9gNR2f
+         NRbTI6+UriwyILYXeOzT1SZT6lwAnBUdPnk5V01RnkI5bKGfllsmfIYcuNdzePMWltM3
+         OT1dUakJGW37CjJgAsYRzFVWbKCqaE2k/afTQwJQWSlkOMyAOTyYytoZHfGciXT177yN
+         Ju2hdgg6P7qDryMiIBo1pBL3cRJWQFWPFzrWtnDc5fTUjvLEG64ZA3eENFdemeT9MZOu
+         j8Jg==
+X-Gm-Message-State: AOAM5331uCDW8ezvQSi8OEkL+uTvGqNW3yR95I4q84+Z270+f3e5TF80
+        ryLzTqXxtdTCaEf6hHuuDWKnjJbfwiqrunBJ
+X-Google-Smtp-Source: ABdhPJwHcrtSQDlr+mZ7DmEAqZ68d81+yOhTo8ytpNTbKbcNHduv7VeyTXo7SzIxQjlFKNlEhAXEAQ==
+X-Received: by 2002:a17:906:a05a:b0:6ef:a44d:2f46 with SMTP id bg26-20020a170906a05a00b006efa44d2f46mr21506417ejb.192.1651692824481;
+        Wed, 04 May 2022 12:33:44 -0700 (PDT)
+Received: from smtpclient.apple ([2a02:c7f:d28e:8500:75f8:3e84:fd90:ebc])
+        by smtp.gmail.com with ESMTPSA id jl6-20020a17090775c600b006f3ef214e64sm5962053ejc.202.2022.05.04.12.33.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 04 May 2022 12:33:43 -0700 (PDT)
 Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
-From:   Jamie Cuthbert <jamiecuthbert92@icloud.com>
+From:   Jamie Cuthbert <jamiecuthbert0@gmail.com>
 Mime-Version: 1.0 (1.0)
 Subject: Re: [PATCH v2] hwmon: (sun4i-lradc) Add driver for LRADC found on Allwinner A13/A20 SoC
-Date:   Wed, 4 May 2022 20:33:17 +0100
-Message-Id: <AC0C5D3A-9080-48D1-9478-340DB024F21A@icloud.com>
+Date:   Wed, 4 May 2022 20:33:43 +0100
+Message-Id: <FDBABC84-481C-4B0C-8475-131CA491DB4C@gmail.com>
 Cc:     jdelvare@suse.com, jernej.skrabec@gmail.com,
         linux-arm-kernel@lists.infradead.org, linux-hwmon@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-sunxi@lists.linux.dev,
         linux@roeck-us.net, samuel@sholland.org, wens@csie.org
 To:     rz@fabmicro.ru
 X-Mailer: iPhone Mail (19E258)
-X-Proofpoint-GUID: FQSkHrM5o5Ppy-zYGYBiJEvmRkzaD34A
-X-Proofpoint-ORIG-GUID: FQSkHrM5o5Ppy-zYGYBiJEvmRkzaD34A
-X-Proofpoint-Virus-Version: =?UTF-8?Q?vendor=3Dfsecure_engine=3D1.1.170-22c6f66c430a71ce266a39bfe25bc?=
- =?UTF-8?Q?2903e8d5c8f:6.0.138,18.0.572,17.11.62.513.0000000_definitions?=
- =?UTF-8?Q?=3D2020-02-14=5F11:2020-02-14=5F02,2020-02-14=5F11,2021-12-02?=
- =?UTF-8?Q?=5F01_signatures=3D0?=
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 mlxlogscore=382
- adultscore=0 spamscore=0 suspectscore=0 malwarescore=0 mlxscore=0
- phishscore=0 clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2205040114
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net

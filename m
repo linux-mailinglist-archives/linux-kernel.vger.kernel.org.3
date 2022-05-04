@@ -2,58 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC4DE51B033
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 23:14:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C85AF51B04D
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 23:19:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356777AbiEDVSA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 17:18:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60428 "EHLO
+        id S1378575AbiEDVWe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 17:22:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232427AbiEDVRw (ORCPT
+        with ESMTP id S229576AbiEDVWb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 17:17:52 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A37264D60D;
-        Wed,  4 May 2022 14:14:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651698855; x=1683234855;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=Cj2D+b59wkw3CToYcJa5g3cc4lPf7xHjm9JCn4zgTJs=;
-  b=nYad37At3y0c/94d/Vf9l9ky1fp6ql2aBTdOLpDzvj/GyZV/GvmcJHYM
-   3fBrtRwNeJGVDt9FoTLVT4u3tswqnyFQLFYXztBwRiUnioVPK2QhxIvvc
-   lQPvpGnhoqmNCYR/jZFg6kMUGweNlEvc53pAP+6KIBxzfAFxHoaEnObPY
-   Cya9L5cla5vyUrKMiWZkjcK4iQ+HHUiPKunVcFzGZLQNtYZ7tJba28qMP
-   Rmc+qLXziZVuAPpW3kPj+Q9O+/nypkq2xp3AeKp6A6AcnEIaDcWcGxO2c
-   RbyH2jf8scvr2RrUxJSs5g0f+3t8h3hJPGkCNAHi8KMsDSPVcQBoqlTxF
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10337"; a="354339092"
-X-IronPort-AV: E=Sophos;i="5.91,199,1647327600"; 
-   d="scan'208";a="354339092"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2022 14:14:15 -0700
-X-IronPort-AV: E=Sophos;i="5.91,199,1647327600"; 
-   d="scan'208";a="664653734"
-Received: from rhweight-wrk1.ra.intel.com ([137.102.106.43])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2022 14:14:15 -0700
-Date:   Wed, 4 May 2022 14:14:15 -0700 (PDT)
-From:   matthew.gerlach@linux.intel.com
-X-X-Sender: mgerlach@rhweight-WRK1
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-cc:     dinguyen@kernel.org, robh+dt@kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        krzysztof.kozlowski+dt@linaro.org
-Subject: Re: [PATCH v2 3/3] arm64: dts: intel: add device tree for n6000
-In-Reply-To: <d9608f47-e70b-43bd-14a1-d03b2ca3b1a9@linaro.org>
-Message-ID: <alpine.DEB.2.22.394.2205041413190.2669897@rhweight-WRK1>
-References: <20220503194546.1287679-1-matthew.gerlach@linux.intel.com> <20220503194546.1287679-4-matthew.gerlach@linux.intel.com> <d9608f47-e70b-43bd-14a1-d03b2ca3b1a9@linaro.org>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+        Wed, 4 May 2022 17:22:31 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 628E751580;
+        Wed,  4 May 2022 14:18:54 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id BABED210E5;
+        Wed,  4 May 2022 21:18:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1651699132;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=npPu7v4PVxjYw5k81v34byZcxUoLWsQ8uewcVPzgU3Y=;
+        b=tM1dspGpfMipCiAbW0HO2dZVPEAgyrff0KMavj6bZk8T37R9hRgCKrWvzwgeAGT0wBlOIm
+        ubeLZ7ieBvBdZyh1MDcuOhs1j09imPderIadxrCmq/Rsm19BAfVTGh1hT5vsADF9X2YLOS
+        su7DARpA5vqfoa0MkPB71ULlFqjV3/w=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1651699132;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=npPu7v4PVxjYw5k81v34byZcxUoLWsQ8uewcVPzgU3Y=;
+        b=vS6Y/NRPgUhS2xB+r59V5ZgrZyl8A56t3CcwGyemIqz6M8o7VVvzu6uPNAFvfQz1MtnccG
+        5x8uPy6F8/V4gpDg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B60DD131BD;
+        Wed,  4 May 2022 21:18:51 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id ptTKKrvtcmJMMQAAMHmgww
+        (envelope-from <dsterba@suse.cz>); Wed, 04 May 2022 21:18:51 +0000
+Date:   Wed, 4 May 2022 23:14:40 +0200
+From:   David Sterba <dsterba@suse.cz>
+To:     Pankaj Raghav <p.raghav@samsung.com>
+Cc:     Johannes Thumshirn <Johannes.Thumshirn@wdc.com>,
+        "jaegeuk@kernel.org" <jaegeuk@kernel.org>,
+        "axboe@kernel.dk" <axboe@kernel.dk>,
+        "snitzer@kernel.org" <snitzer@kernel.org>,
+        "hch@lst.de" <hch@lst.de>, "mcgrof@kernel.org" <mcgrof@kernel.org>,
+        Naohiro Aota <Naohiro.Aota@wdc.com>,
+        "sagi@grimberg.me" <sagi@grimberg.me>,
+        "damien.lemoal@opensource.wdc.com" <damien.lemoal@opensource.wdc.com>,
+        "dsterba@suse.com" <dsterba@suse.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-btrfs@vger.kernel.org" <linux-btrfs@vger.kernel.org>,
+        "clm@fb.com" <clm@fb.com>,
+        "gost.dev@samsung.com" <gost.dev@samsung.com>,
+        "chao@kernel.org" <chao@kernel.org>,
+        "linux-f2fs-devel@lists.sourceforge.net" 
+        <linux-f2fs-devel@lists.sourceforge.net>,
+        "josef@toxicpanda.com" <josef@toxicpanda.com>,
+        "jonathan.derrick@linux.dev" <jonathan.derrick@linux.dev>,
+        "agk@redhat.com" <agk@redhat.com>,
+        "kbusch@kernel.org" <kbusch@kernel.org>,
+        "kch@nvidia.com" <kch@nvidia.com>,
+        "linux-nvme@lists.infradead.org" <linux-nvme@lists.infradead.org>,
+        "dm-devel@redhat.com" <dm-devel@redhat.com>,
+        "bvanassche@acm.org" <bvanassche@acm.org>,
+        "jiangbo.365@bytedance.com" <jiangbo.365@bytedance.com>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        Matias =?iso-8859-1?Q?Bj=F8rling?= <Matias.Bjorling@wdc.com>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>
+Subject: Re: [PATCH 00/16] support non power of 2 zoned devices
+Message-ID: <20220504211440.GU18596@suse.cz>
+Reply-To: dsterba@suse.cz
+Mail-Followup-To: dsterba@suse.cz, Pankaj Raghav <p.raghav@samsung.com>,
+        Johannes Thumshirn <Johannes.Thumshirn@wdc.com>,
+        "jaegeuk@kernel.org" <jaegeuk@kernel.org>,
+        "axboe@kernel.dk" <axboe@kernel.dk>,
+        "snitzer@kernel.org" <snitzer@kernel.org>,
+        "hch@lst.de" <hch@lst.de>, "mcgrof@kernel.org" <mcgrof@kernel.org>,
+        Naohiro Aota <Naohiro.Aota@wdc.com>,
+        "sagi@grimberg.me" <sagi@grimberg.me>,
+        "damien.lemoal@opensource.wdc.com" <damien.lemoal@opensource.wdc.com>,
+        "dsterba@suse.com" <dsterba@suse.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-btrfs@vger.kernel.org" <linux-btrfs@vger.kernel.org>,
+        "clm@fb.com" <clm@fb.com>,
+        "gost.dev@samsung.com" <gost.dev@samsung.com>,
+        "chao@kernel.org" <chao@kernel.org>,
+        "linux-f2fs-devel@lists.sourceforge.net" <linux-f2fs-devel@lists.sourceforge.net>,
+        "josef@toxicpanda.com" <josef@toxicpanda.com>,
+        "jonathan.derrick@linux.dev" <jonathan.derrick@linux.dev>,
+        "agk@redhat.com" <agk@redhat.com>,
+        "kbusch@kernel.org" <kbusch@kernel.org>,
+        "kch@nvidia.com" <kch@nvidia.com>,
+        "linux-nvme@lists.infradead.org" <linux-nvme@lists.infradead.org>,
+        "dm-devel@redhat.com" <dm-devel@redhat.com>,
+        "bvanassche@acm.org" <bvanassche@acm.org>,
+        "jiangbo.365@bytedance.com" <jiangbo.365@bytedance.com>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        Matias =?iso-8859-1?Q?Bj=F8rling?= <Matias.Bjorling@wdc.com>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>
+References: <CGME20220427160256eucas1p2db2b58792ffc93026d870c260767da14@eucas1p2.samsung.com>
+ <20220427160255.300418-1-p.raghav@samsung.com>
+ <PH0PR04MB74167FC8BA634A3DA09586489BC19@PH0PR04MB7416.namprd04.prod.outlook.com>
+ <a702c7f7-9719-9f3e-63de-1e96f2912432@samsung.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII; format=flowed
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a702c7f7-9719-9f3e-63de-1e96f2912432@samsung.com>
+User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,39 +129,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, May 03, 2022 at 11:12:04AM +0200, Pankaj Raghav wrote:
+> Hi Johannes,
+> On 2022-05-03 00:07, Johannes Thumshirn wrote:
+> >> There was an effort previously [1] to add support to non po2 devices via
+> >> device level emulation but that was rejected with a final conclusion
+> >> to add support for non po2 zoned device in the complete stack[2].
+> > 
+> > Hey Pankaj,
+> > 
+> > One thing I'm concerned with this patches is, once we have npo2 zones (or to be precise 
+> > not fs_info->sectorsize aligned zones) we have to check on every allocation if we still 
+> > have at least have fs_info->sectorsize bytes left in a zone. If not we need to 
+> > explicitly finish the zone, otherwise we'll run out of max active zones. 
+> > 
+> This commit: `btrfs: zoned: relax the alignment constraint for zoned
+> devices` makes sure the zone size is BTRFS_STRIPE_LEN aligned (64K). So
+> even the npo2 zoned device should be aligned to `fs_info->sectorsize`,
+> which is typically 4k.
+> 
+> This was one of the comment that came from David Sterba:
+> https://lore.kernel.org/all/20220315142740.GU12643@twin.jikos.cz/
+> where he suggested to have some sane alignment for the zone sizes.
 
-
-On Wed, 4 May 2022, Krzysztof Kozlowski wrote:
-
-> On 03/05/2022 21:45, matthew.gerlach@linux.intel.com wrote:
->> From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
->>
->> Add a device tree for the n6000 instantiation of Agilex
->> Hard Processor System (HPS).
->>
->> Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
->> +
->> +&spi0 {
->> +	status = "okay";
->> +
->> +	spidev: spidev@0 {
->> +		status = "okay";
->> +		compatible = "linux,spidev";
->> +		spi-max-frequency = <25000000>;
->> +		reg = <0>;
->
-> You should see big fat warnings - from checkpatch and when you boot your
-> device. This compatible is not accepted.
-
-I must have missed the warning for the compatible string.  I see it now, 
-and I remove the node in the v3 patch set.
-
-Thanks for the feedback.
->
-> Please be sure you run checkpatch on your patches. Using reviewers time
-> instead of automated tool for the same job is discouraged...
->
->
-> Best regards,
-> Krzysztof
->
+My idea of 'sane' value would be 1M, that we have 4K for sectors is
+because of the 1:1 mapping to pages, but RAM sizes are on a different
+scale than storage devices. The 4K is absolute minimum but if the page
+size is taken as a basic constraint, ARM has 64K and there are some 256K
+arches.

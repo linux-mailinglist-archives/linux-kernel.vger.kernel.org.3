@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FDBA51AB01
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:39:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92AFC51A630
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 18:51:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359290AbiEDRjt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 13:39:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39258 "EHLO
+        id S1353951AbiEDQxc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 12:53:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356812AbiEDRJo (ORCPT
+        with ESMTP id S1353731AbiEDQwL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 13:09:44 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB425205F4;
-        Wed,  4 May 2022 09:55:45 -0700 (PDT)
+        Wed, 4 May 2022 12:52:11 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9D2647053;
+        Wed,  4 May 2022 09:48:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 977DDB8278E;
-        Wed,  4 May 2022 16:55:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43E55C385AF;
-        Wed,  4 May 2022 16:55:43 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8C3A1B8279F;
+        Wed,  4 May 2022 16:48:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20EB0C385BD;
+        Wed,  4 May 2022 16:48:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651683343;
-        bh=8lm3thwt99G1i9oKsvxb5K2n7Qp9sOJOBnjoL2NNz4E=;
+        s=korg; t=1651682908;
+        bh=yd24OcPBlVIUgxJ+YzdgSDislzfz6tX0jHWJ+szSPI8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=B3XLPkQyttT5oSOiFtjDXCVf4zMKNTi5SEY4bFJ8/+5J+99HKkMTSmqM6+vf/nH9Y
-         EiXy3Q1xgL1SU1fnsvJpuL34Hfju4UyJ68i8QEcTnFmThMXKqv6JvHKVr4BFw5qPb/
-         vL5PvXtxTFxgpOjh1XKBdgbz37cN/jgJSgmVJ/sI=
+        b=sXJt1j5kuQv5ALCD9/V8GFdWA17rWLN1zbH/0mlSMWwWSSmVSMz94YN3YFgIifquL
+         cl8kQvA+kJilK0ZUttR9660Crc3AP9sOJLxV696PTBlk2ir3ZdnMsTLLlUea0rzkz/
+         iHdlBnMmhYV3I01yiswY6z4J8OYPsfaHkosLxH8M=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Daniele Palmas <dnlplm@gmail.com>,
-        Johan Hovold <johan@kernel.org>
-Subject: [PATCH 5.17 008/225] USB: serial: option: add Telit 0x1057, 0x1058, 0x1075 compositions
-Date:   Wed,  4 May 2022 18:44:06 +0200
-Message-Id: <20220504153111.022630292@linuxfoundation.org>
+        stable@vger.kernel.org, Sudeep Holla <sudeep.holla@arm.com>,
+        Wang Qing <wangqing@vivo.com>
+Subject: [PATCH 5.4 26/84] arch_topology: Do not set llc_sibling if llc_id is invalid
+Date:   Wed,  4 May 2022 18:44:07 +0200
+Message-Id: <20220504152929.640436437@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220504153110.096069935@linuxfoundation.org>
-References: <20220504153110.096069935@linuxfoundation.org>
+In-Reply-To: <20220504152927.744120418@linuxfoundation.org>
+References: <20220504152927.744120418@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,46 +54,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Daniele Palmas <dnlplm@gmail.com>
+From: Wang Qing <wangqing@vivo.com>
 
-commit f32c5a0423400e01f4d7c607949fa3a1f006e8fa upstream.
+commit 1dc9f1a66e1718479e1c4f95514e1750602a3cb9 upstream.
 
-Add support for the following Telit FN980 and FN990 compositions:
+When ACPI is not enabled, cpuid_topo->llc_id = cpu_topo->llc_id = -1, which
+will set llc_sibling 0xff(...), this is misleading.
 
-0x1057: tty, adb, rmnet, tty, tty, tty, tty, tty
-0x1058: tty, adb, tty, tty, tty, tty, tty
-0x1075: adb, tty
+Don't set llc_sibling(default 0) if we don't know the cache topology.
 
-Signed-off-by: Daniele Palmas <dnlplm@gmail.com>
-Link: https://lore.kernel.org/r/20220406141408.580669-1-dnlplm@gmail.com
-Cc: stable@vger.kernel.org
-Signed-off-by: Johan Hovold <johan@kernel.org>
+Reviewed-by: Sudeep Holla <sudeep.holla@arm.com>
+Signed-off-by: Wang Qing <wangqing@vivo.com>
+Fixes: 37c3ec2d810f ("arm64: topology: divorce MC scheduling domain from core_siblings")
+Cc: stable <stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/1649644580-54626-1-git-send-email-wangqing@vivo.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/usb/serial/option.c |    6 ++++++
- 1 file changed, 6 insertions(+)
+ drivers/base/arch_topology.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/usb/serial/option.c
-+++ b/drivers/usb/serial/option.c
-@@ -1219,6 +1219,10 @@ static const struct usb_device_id option
- 	  .driver_info = NCTRL(0) | RSVD(1) },
- 	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x1056, 0xff),	/* Telit FD980 */
- 	  .driver_info = NCTRL(2) | RSVD(3) },
-+	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x1057, 0xff),	/* Telit FN980 */
-+	  .driver_info = NCTRL(0) | RSVD(1) | RSVD(2) },
-+	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x1058, 0xff),	/* Telit FN980 (PCIe) */
-+	  .driver_info = NCTRL(0) | RSVD(1) },
- 	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x1060, 0xff),	/* Telit LN920 (rmnet) */
- 	  .driver_info = NCTRL(0) | RSVD(1) | RSVD(2) },
- 	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x1061, 0xff),	/* Telit LN920 (MBIM) */
-@@ -1235,6 +1239,8 @@ static const struct usb_device_id option
- 	  .driver_info = NCTRL(2) | RSVD(3) },
- 	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x1073, 0xff),	/* Telit FN990 (ECM) */
- 	  .driver_info = NCTRL(0) | RSVD(1) },
-+	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x1075, 0xff),	/* Telit FN990 (PCIe) */
-+	  .driver_info = RSVD(0) },
- 	{ USB_DEVICE(TELIT_VENDOR_ID, TELIT_PRODUCT_ME910),
- 	  .driver_info = NCTRL(0) | RSVD(1) | RSVD(3) },
- 	{ USB_DEVICE(TELIT_VENDOR_ID, TELIT_PRODUCT_ME910_DUAL_MODEM),
+--- a/drivers/base/arch_topology.c
++++ b/drivers/base/arch_topology.c
+@@ -457,7 +457,7 @@ void update_siblings_masks(unsigned int
+ 	for_each_online_cpu(cpu) {
+ 		cpu_topo = &cpu_topology[cpu];
+ 
+-		if (cpuid_topo->llc_id == cpu_topo->llc_id) {
++		if (cpu_topo->llc_id != -1 && cpuid_topo->llc_id == cpu_topo->llc_id) {
+ 			cpumask_set_cpu(cpu, &cpuid_topo->llc_sibling);
+ 			cpumask_set_cpu(cpuid, &cpu_topo->llc_sibling);
+ 		}
 
 

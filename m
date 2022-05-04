@@ -2,160 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDF3251B35D
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 01:27:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E30451B240
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 00:49:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384146AbiEDXHp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 19:07:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45384 "EHLO
+        id S1358974AbiEDWwf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 18:52:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380250AbiEDW7w (ORCPT
+        with ESMTP id S1346758AbiEDWwe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 18:59:52 -0400
-Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86B2956F90
-        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 15:53:06 -0700 (PDT)
-Received: by mail-pg1-x549.google.com with SMTP id q143-20020a632a95000000b003c1c3490dfbso1331796pgq.20
-        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 15:53:06 -0700 (PDT)
+        Wed, 4 May 2022 18:52:34 -0400
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71A0453725
+        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 15:48:57 -0700 (PDT)
+Received: by mail-pg1-x531.google.com with SMTP id i62so2275612pgd.6
+        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 15:48:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=reply-to:date:in-reply-to:message-id:mime-version:references
-         :subject:from:to:cc;
-        bh=5DAJlGNKe8aX3EmZHon3SRjMD9ccYXNvX9H64hVT1+A=;
-        b=Hki4o5RLSB468iQLRnZhCPLw3xUA6dR+tqQVMGQ6ypwvf23CSxeip172ChxT/i/8Bq
-         TqJIOFJERX1LDyvx4aytdMe3PfI8OItrhsFwK7SSjoR4Nx8sTndPHqvvnUE3+n7kGJ8z
-         cZFFEgBH6HB5idGJT9aa28lcBArxAOnn2BzrFUP5QFbTe5MlVuLNOxqkSJwb2b23UUjr
-         +Z9sMbMboDUDZBptZf0LCIZPJC43jgzCI8l9jx4EwA+KAVjmUivvoDcKqThp+jDgY8yk
-         oivXUMvjFmUTKb5a1Uh4mzvdVXMTZ7d1nfkDHk3gO0N8YB/+ToA9H6R1KQ2+TuiHDIqK
-         9ZPA==
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=ZnQ5ikT44+7odGEG8SdbWqmU1OTX8BzekKD4PQr+Puk=;
+        b=YVQPAOzNbsOpq7m5CxZJNHAgUk61rTKfTMUGx6l6FXMk0lF0h5ZduEHqRDO+xSY0iO
+         hGqOARfpVOCexrIdOevgyb6k4Dw3TMKuqor5xvyUl9RzFuBknVAvewIi/eqelLh89cyn
+         pXKmfJSPQCqyoJFOoe1IEAjS2O7rVabVRSS3Ermw/8YD2u0ggcjbUiF20/XUcjuu80VN
+         xQwgVSc+cMCGAeZtCeybv3vnPpUaI9vZw6mkXQSJ9YJQLqpAVqTq+HXxIqYUYTkWVq/d
+         I0DNZ0IMA67pTuuoRiPdqAU3o9VsMxRF5tLozra/GKehy1rLGp2U1fw1wfy2Zr0dbwJF
+         Rqng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:reply-to:date:in-reply-to:message-id
-         :mime-version:references:subject:from:to:cc;
-        bh=5DAJlGNKe8aX3EmZHon3SRjMD9ccYXNvX9H64hVT1+A=;
-        b=ZzBxdpbYLZkJp1kY4k5fKvXoRern3PgIW+k5tg/6g+DSLyU3FlzOlT455xnn8UlxQm
-         DHX0AAUNOGa7+2DqYPvPH6qAgRJzQGu6v9QIYRetd1kzOCGHL7TakYP5fIzYARt9lb4S
-         atK4cNMYwNze35dA23ciFl9zG4/3dx2g7Nmrg/qAVRolgF6eQc6/p9NRV7T4Mwon1qH/
-         2+h1TxWyI10nR0xcVABaZYzgdTTxkNly+nVNuHVmn0UZTG40Ngp13LElpe3fANMhMDih
-         3RFA0l6LsQsygdHpvUOpmA4BwZQhaZpk/Xwin05fyMD4Jy6847YG+8YqVnOhE7KpUuou
-         F0HA==
-X-Gm-Message-State: AOAM532v/ViOPddI1nNfiF7kYreDCXnbTUWH8VsdH5E50MjDwjbOZ8MF
-        t1FjJdYX0V1HE1p+7S2idbTAG0B8CQA=
-X-Google-Smtp-Source: ABdhPJyzfctc2eyR5HnXUMoP63671DjI9Rgwc3rmUeZUs2u9V++XpkQ3kve8+q3f5fZc1hZakHSoPzkEnkU=
-X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
- (user=seanjc job=sendgmr) by 2002:a17:90b:3ecd:b0:1dc:945e:41b1 with SMTP id
- rm13-20020a17090b3ecd00b001dc945e41b1mr2212660pjb.208.1651704757437; Wed, 04
- May 2022 15:52:37 -0700 (PDT)
-Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Wed,  4 May 2022 22:48:54 +0000
-In-Reply-To: <20220504224914.1654036-1-seanjc@google.com>
-Message-Id: <20220504224914.1654036-109-seanjc@google.com>
-Mime-Version: 1.0
-References: <20220504224914.1654036-1-seanjc@google.com>
-X-Mailer: git-send-email 2.36.0.464.gb9c8b46e94-goog
-Subject: [PATCH 108/128] KVM: selftests: Convert tprot away from VCPU_ID
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Andrew Jones <drjones@redhat.com>,
-        David Matlack <dmatlack@google.com>,
-        Ben Gardon <bgardon@google.com>,
-        Oliver Upton <oupton@google.com>,
-        Sean Christopherson <seanjc@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=ZnQ5ikT44+7odGEG8SdbWqmU1OTX8BzekKD4PQr+Puk=;
+        b=yvFn4wS8PSQYY7ewBOAVTs92xVq1nN4XwQHeeW3Mg6OXCUj9aaVoSEgG41we2oNKF+
+         j02Bn0t5X7Oijn3bXpYIsM3R6exzbfDk/RnyMFrFWcLt+IkD/5neZuic5chJlxuGtq0f
+         kwo563sWKetTuvWMThHcoAqFHjQtiiO/w/PK3jMT0TLME+3bT02iiBT6eLU9cjSGqJPP
+         wIQfa+WeFNfDvZBV8UHP3ChQLpkBveEfcUq/vpikdyu/LVwtxh/0lWV9B7hDa7SNPgLp
+         N6/MBuZMRVdZcb6O8TWH8LtK1h7ZwQe374N2552FJWHrLGkmIQTwkgJbLJmG3VLrSPjJ
+         Q45Q==
+X-Gm-Message-State: AOAM530uiRGCR7GwZdoYqI3sYRaXeCUrf/aRs+NnYUlU+T2E6obdCx+K
+        dtoF6CCwqu5fwhHl1rGYRXo=
+X-Google-Smtp-Source: ABdhPJy6VLPLgrv4Si23S39l/X8cU/8ncNW25MkQg9xRHmAUA/DfYINs+YbdkPGp5EvqcRRpuBYsTA==
+X-Received: by 2002:a05:6a00:216c:b0:50d:f917:b502 with SMTP id r12-20020a056a00216c00b0050df917b502mr13966998pff.60.1651704536797;
+        Wed, 04 May 2022 15:48:56 -0700 (PDT)
+Received: from google.com ([2620:15c:211:201:8435:b3e7:62fc:4dfa])
+        by smtp.gmail.com with ESMTPSA id v12-20020a65568c000000b003c2f9540127sm2839509pgs.93.2022.05.04.15.48.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 May 2022 15:48:56 -0700 (PDT)
+Sender: Minchan Kim <minchan.kim@gmail.com>
+Date:   Wed, 4 May 2022 15:48:54 -0700
+From:   Minchan Kim <minchan@kernel.org>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        linux-mm <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        John Hubbard <jhubbard@nvidia.com>,
+        John Dias <joaodias@google.com>
+Subject: Re: [PATCH] mm: fix is_pinnable_page against on cma page
+Message-ID: <YnMC1jFoPvNLWqnG@google.com>
+References: <20220502173558.2510641-1-minchan@kernel.org>
+ <29d0c1c3-a44e-4573-7e7e-32be07544dbe@redhat.com>
+ <YnAhaRNjmIhtGUjk@google.com>
+ <08e9855c-395d-f40c-de3d-1ec8b644bfe8@redhat.com>
+ <YnFJss0doXGCmq3w@google.com>
+ <da07530d-92ad-7aef-2f2b-d115f878ef76@redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <da07530d-92ad-7aef-2f2b-d115f878ef76@redhat.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert tprot to use vm_create_with_vcpus() and pass around a
-'struct kvm_vcpu' object instead of passing around vCPU IDs.  Note, this is
-a "functional" change in the sense that the test now creates a vCPU with
-vcpu_id==0 instead of vcpu_id==1.  The non-zero VCPU_ID was 100% arbitrary
-and added little to no validation coverage.  If testing non-zero vCPU IDs
-is desirable for generic tests, that can be done in the future by tweaking
-the VM creation helpers.
+On Tue, May 03, 2022 at 06:02:33PM +0200, David Hildenbrand wrote:
+> On 03.05.22 17:26, Minchan Kim wrote:
+> > On Tue, May 03, 2022 at 03:15:24AM +0200, David Hildenbrand wrote:
+> >>
+> >>>>>> However, I assume we have the same issue right now already with
+> >>>> ZONE_MOVABLE and MIGRATE_CMA when trying to pin a page residing on these
+> >>>
+> >>> ZONE_MOVALBE is also changed dynamically?
+> >>>
+> >>
+> >> Sorry, with "same issue" I meant failing to pin if having to migrate and
+> >> the page is temporarily unmovable.
+> >>
+> >>>> there are temporarily unmovable and we fail to migrate. But it would now
+> >>>> apply even without ZONE_MOVABLE or MIGRATE_CMA. Hm...
+> >>>
+> >>> Didn't parse your last mention.
+> >>
+> >> On a system that neither uses ZONE_MOVABLE nor MIGRATE_CMA we might have
+> >> to migrate now when pinning.
+> > 
+> > I don't understand your point. My problem is pin_user_pages with
+> > FOLL_LONGTERM. It shouldn't pin a page from ZONE_MOVABLE and cma area
+> > without migrating page out of movable zone or CMA area.
+> > That's why try_grab_folio checks whether target page stays in those
+> > movable areas. However, to check CMA area, is_migrate_cma_page is
+> > racy so the FOLL_LONGTERM flag semantic is broken right now.
+> > 
+> > Do you see any problem of the fix?
+> 
+> My point is that you might decide to migrate a page because you stumble
+> over MIGRATE_ISOLATE, although there is no need to reject long-term
+> pinning and to trigger page migration.
+> 
+> Assume a system without ZONE_MOVABLE and without MIGRATE_CMA. Assume
+> someone reserves gigantic pages (alloc_contig_range()) and you have
+> concurrent long-term pinning on a page that is no MIGRATE_ISOLATE.
+> 
+> GUP would see MIGRATE_ISOLATE and would reject pinning. The page has to
+> be migrated, which can fail if the page is temporarily unmovable.
 
-Signed-off-by: Sean Christopherson <seanjc@google.com>
----
- tools/testing/selftests/kvm/s390x/tprot.c | 25 +++++++++++------------
- 1 file changed, 12 insertions(+), 13 deletions(-)
+A dump question since I'm not familiar with hugetlb.
 
-diff --git a/tools/testing/selftests/kvm/s390x/tprot.c b/tools/testing/selftests/kvm/s390x/tprot.c
-index c097b9db495e..4caa77388033 100644
---- a/tools/testing/selftests/kvm/s390x/tprot.c
-+++ b/tools/testing/selftests/kvm/s390x/tprot.c
-@@ -14,8 +14,6 @@
- #define CR0_FETCH_PROTECTION_OVERRIDE	(1UL << (63 - 38))
- #define CR0_STORAGE_PROTECTION_OVERRIDE	(1UL << (63 - 39))
- 
--#define VCPU_ID 1
--
- static __aligned(PAGE_SIZE) uint8_t pages[2][PAGE_SIZE];
- static uint8_t *const page_store_prot = pages[0];
- static uint8_t *const page_fetch_prot = pages[1];
-@@ -182,14 +180,14 @@ static void guest_code(void)
- 	GUEST_SYNC(perform_next_stage(&i, mapped_0));
- }
- 
--#define HOST_SYNC(vmp, stage)							\
-+#define HOST_SYNC(vcpup, stage)							\
- ({										\
--	struct kvm_vm *__vm = (vmp);						\
-+	struct kvm_vcpu *__vcpu = (vcpup);					\
- 	struct ucall uc;							\
- 	int __stage = (stage);							\
- 										\
--	vcpu_run(__vm, VCPU_ID);						\
--	get_ucall(__vm, VCPU_ID, &uc);						\
-+	vcpu_run(__vcpu->vm, __vcpu->id);					\
-+	get_ucall(__vcpu->vm, __vcpu->id, &uc);					\
- 	if (uc.cmd == UCALL_ABORT) {						\
- 		TEST_FAIL("line %lu: %s, hints: %lu, %lu", uc.args[1],		\
- 			  (const char *)uc.args[0], uc.args[2], uc.args[3]);	\
-@@ -200,28 +198,29 @@ static void guest_code(void)
- 
- int main(int argc, char *argv[])
- {
-+	struct kvm_vcpu *vcpu;
- 	struct kvm_vm *vm;
- 	struct kvm_run *run;
- 	vm_vaddr_t guest_0_page;
- 
--	vm = vm_create_default(VCPU_ID, 0, guest_code);
--	run = vcpu_state(vm, VCPU_ID);
-+	vm = vm_create_with_one_vcpu(&vcpu, guest_code);
-+	run = vcpu->run;
- 
--	HOST_SYNC(vm, STAGE_INIT_SIMPLE);
-+	HOST_SYNC(vcpu, STAGE_INIT_SIMPLE);
- 	mprotect(addr_gva2hva(vm, (vm_vaddr_t)pages), PAGE_SIZE * 2, PROT_READ);
--	HOST_SYNC(vm, TEST_SIMPLE);
-+	HOST_SYNC(vcpu, TEST_SIMPLE);
- 
- 	guest_0_page = vm_vaddr_alloc(vm, PAGE_SIZE, 0);
- 	if (guest_0_page != 0)
- 		print_skip("Did not allocate page at 0 for fetch protection override tests");
--	HOST_SYNC(vm, STAGE_INIT_FETCH_PROT_OVERRIDE);
-+	HOST_SYNC(vcpu, STAGE_INIT_FETCH_PROT_OVERRIDE);
- 	if (guest_0_page == 0)
- 		mprotect(addr_gva2hva(vm, (vm_vaddr_t)0), PAGE_SIZE, PROT_READ);
- 	run->s.regs.crs[0] |= CR0_FETCH_PROTECTION_OVERRIDE;
- 	run->kvm_dirty_regs = KVM_SYNC_CRS;
--	HOST_SYNC(vm, TEST_FETCH_PROT_OVERRIDE);
-+	HOST_SYNC(vcpu, TEST_FETCH_PROT_OVERRIDE);
- 
- 	run->s.regs.crs[0] |= CR0_STORAGE_PROTECTION_OVERRIDE;
- 	run->kvm_dirty_regs = KVM_SYNC_CRS;
--	HOST_SYNC(vm, TEST_STORAGE_PROT_OVERRIDE);
-+	HOST_SYNC(vcpu, TEST_STORAGE_PROT_OVERRIDE);
- }
--- 
-2.36.0.464.gb9c8b46e94-goog
+Is above reasonable scenario?
+
+The gigantic page is about to be created using alloc_contig_range so
+they has MIGRATE_ISOLATE as temporal state. It means no one uses the
+page yet so I guess the page is not mapped at userspace but other is
+trying to access the page using pin_user_pages?
+
+> 
+> See my point? We will try migrating in cases where we don't have to
+> migrate. I think what we would want to do is always reject pinning a CMA
+> page, independent of the isolation status. but we don't have that
+> information available.
+> 
+> I raised in the past that we should look into preserving the migration
+> type and turning MIGRATE_ISOLATE essentially into an additional flag.
+> 
+> 
+> So I guess this patch is the right thing to do for now, but I wanted to
+> spell out the implications.
+
 

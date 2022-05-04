@@ -2,157 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3432F519A66
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 10:49:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83F17519998
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 10:20:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346633AbiEDIxE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 04:53:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51740 "EHLO
+        id S240091AbiEDIW5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 04:22:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346620AbiEDIxA (ORCPT
+        with ESMTP id S1346330AbiEDIWp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 04:53:00 -0400
-X-Greylist: delayed 1801 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 04 May 2022 01:49:22 PDT
-Received: from lgeamrelo11.lge.com (lgeamrelo11.lge.com [156.147.23.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6A1E324BFF
-        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 01:49:21 -0700 (PDT)
-Received: from unknown (HELO lgeamrelo01.lge.com) (156.147.1.125)
-        by 156.147.23.51 with ESMTP; 4 May 2022 17:19:19 +0900
-X-Original-SENDERIP: 156.147.1.125
-X-Original-MAILFROM: byungchul.park@lge.com
-Received: from unknown (HELO localhost.localdomain) (10.177.244.38)
-        by 156.147.1.125 with ESMTP; 4 May 2022 17:19:19 +0900
-X-Original-SENDERIP: 10.177.244.38
-X-Original-MAILFROM: byungchul.park@lge.com
-From:   Byungchul Park <byungchul.park@lge.com>
-To:     torvalds@linux-foundation.org
-Cc:     damien.lemoal@opensource.wdc.com, linux-ide@vger.kernel.org,
-        adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
-        mingo@redhat.com, linux-kernel@vger.kernel.org,
-        peterz@infradead.org, will@kernel.org, tglx@linutronix.de,
-        rostedt@goodmis.org, joel@joelfernandes.org, sashal@kernel.org,
-        daniel.vetter@ffwll.ch, chris@chris-wilson.co.uk,
-        duyuyang@gmail.com, johannes.berg@intel.com, tj@kernel.org,
-        tytso@mit.edu, willy@infradead.org, david@fromorbit.com,
-        amir73il@gmail.com, bfields@fieldses.org,
-        gregkh@linuxfoundation.org, kernel-team@lge.com,
-        linux-mm@kvack.org, akpm@linux-foundation.org, mhocko@kernel.org,
-        minchan@kernel.org, hannes@cmpxchg.org, vdavydov.dev@gmail.com,
-        sj@kernel.org, jglisse@redhat.com, dennis@kernel.org, cl@linux.com,
-        penberg@kernel.org, rientjes@google.com, vbabka@suse.cz,
-        ngupta@vflare.org, linux-block@vger.kernel.org,
-        paolo.valente@linaro.org, josef@toxicpanda.com,
-        linux-fsdevel@vger.kernel.org, viro@zeniv.linux.org.uk,
-        jack@suse.cz, jack@suse.com, jlayton@kernel.org,
-        dan.j.williams@intel.com, hch@infradead.org, djwong@kernel.org,
-        dri-devel@lists.freedesktop.org, airlied@linux.ie,
-        rodrigosiqueiramelo@gmail.com, melissa.srw@gmail.com,
-        hamohammed.sa@gmail.com, 42.hyeyoo@gmail.com
-Subject: [PATCH RFC v6 04/21] dept: Apply Dept to mutex families
-Date:   Wed,  4 May 2022 17:17:32 +0900
-Message-Id: <1651652269-15342-5-git-send-email-byungchul.park@lge.com>
-X-Mailer: git-send-email 1.9.1
-In-Reply-To: <1651652269-15342-1-git-send-email-byungchul.park@lge.com>
-References: <1651652269-15342-1-git-send-email-byungchul.park@lge.com>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 4 May 2022 04:22:45 -0400
+X-Greylist: delayed 62 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 04 May 2022 01:19:08 PDT
+Received: from mta-64-227.siemens.flowmailer.net (mta-64-227.siemens.flowmailer.net [185.136.64.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A93322BEC
+        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 01:19:08 -0700 (PDT)
+Received: by mta-64-227.siemens.flowmailer.net with ESMTPSA id 202205040818047e1ff9d629ca237038
+        for <linux-kernel@vger.kernel.org>;
+        Wed, 04 May 2022 10:18:05 +0200
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; s=fm1;
+ d=siemens.com; i=daniel.starke@siemens.com;
+ h=Date:From:Subject:To:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding:Cc:References:In-Reply-To;
+ bh=pAhSICUghL2Tdq7gJgyrM0AnGc3NFl9PMHLsjpLV0lg=;
+ b=F3dffOSVez5dYK+lSZgubH5uaAJwwDy0kuPiCOJJ9/fzIxVXeR6pDvVYJdzwSYmVRRf4C/
+ 38bTz0xrAnfV80m6NBW22MfpjnOgdMoNq3+MD+e/Yet5byonFiKQBHDRGwm7V/mzPYldmOMR
+ ZjVBAiqkeyXt5K9nC2PfxCKIISC7w=;
+From:   "D. Starke" <daniel.starke@siemens.com>
+To:     linux-serial@vger.kernel.org, gregkh@linuxfoundation.org,
+        jirislaby@kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Daniel Starke <daniel.starke@siemens.com>
+Subject: [PATCH 3/3] tty: n_gsm: fix invalid gsmtty_write_room() result
+Date:   Wed,  4 May 2022 10:17:33 +0200
+Message-Id: <20220504081733.3494-3-daniel.starke@siemens.com>
+In-Reply-To: <20220504081733.3494-1-daniel.starke@siemens.com>
+References: <20220504081733.3494-1-daniel.starke@siemens.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Flowmailer-Platform: Siemens
+Feedback-ID: 519:519-314044:519-21489:flowmailer
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Makes Dept able to track dependencies by mutex families.
+From: Daniel Starke <daniel.starke@siemens.com>
 
-Signed-off-by: Byungchul Park <byungchul.park@lge.com>
+gsmtty_write() does not prevent the user to use the full fifo size of 4096
+bytes as allocated in gsm_dlci_alloc(). However, gsmtty_write_room() tries
+to limit the return value by 'TX_SIZE' and returns a negative value if the
+fifo has more than 'TX_SIZE' bytes stored. This is obviously wrong as
+'TX_SIZE' is defined as 512.
+Define 'TX_SIZE' to the fifo size and use it accordingly for allocation to
+keep the current behavior. Return the correct remaining size of the fifo in
+gsmtty_write_room() via kfifo_avail().
+
+Fixes: e1eaea46bb40 ("tty: n_gsm line discipline")
+Cc: stable@vger.kernel.org
+Signed-off-by: Daniel Starke <daniel.starke@siemens.com>
 ---
- include/linux/lockdep.h | 18 +++++++++++++++---
- include/linux/mutex.h   | 22 ++++++++++++++++++++++
- include/linux/rtmutex.h |  1 +
- 3 files changed, 38 insertions(+), 3 deletions(-)
+ drivers/tty/n_gsm.c | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/include/linux/lockdep.h b/include/linux/lockdep.h
-index 4fa91d5..99569acb 100644
---- a/include/linux/lockdep.h
-+++ b/include/linux/lockdep.h
-@@ -603,9 +603,21 @@ static inline void print_irqtrace_events(struct task_struct *curr)
- #define seqcount_acquire_read(l, s, t, i)	lock_acquire_shared_recursive(l, s, t, NULL, i)
- #define seqcount_release(l, i)			lock_release(l, i)
- 
--#define mutex_acquire(l, s, t, i)		lock_acquire_exclusive(l, s, t, NULL, i)
--#define mutex_acquire_nest(l, s, t, n, i)	lock_acquire_exclusive(l, s, t, n, i)
--#define mutex_release(l, i)			lock_release(l, i)
-+#define mutex_acquire(l, s, t, i)					\
-+do {									\
-+	lock_acquire_exclusive(l, s, t, NULL, i);			\
-+	dept_mutex_lock(&(l)->dmap, s, t, NULL, "mutex_unlock", i);	\
-+} while (0)
-+#define mutex_acquire_nest(l, s, t, n, i)				\
-+do {									\
-+	lock_acquire_exclusive(l, s, t, n, i);				\
-+	dept_mutex_lock(&(l)->dmap, s, t, (n) ? &(n)->dmap : NULL, "mutex_unlock", i);\
-+} while (0)
-+#define mutex_release(l, i)						\
-+do {									\
-+	lock_release(l, i);						\
-+	dept_mutex_unlock(&(l)->dmap, i);				\
-+} while (0)
- 
- #define rwsem_acquire(l, s, t, i)		lock_acquire_exclusive(l, s, t, NULL, i)
- #define rwsem_acquire_nest(l, s, t, n, i)	lock_acquire_exclusive(l, s, t, n, i)
-diff --git a/include/linux/mutex.h b/include/linux/mutex.h
-index 8f226d4..b699cf41 100644
---- a/include/linux/mutex.h
-+++ b/include/linux/mutex.h
-@@ -25,6 +25,7 @@
- 		, .dep_map = {					\
- 			.name = #lockname,			\
- 			.wait_type_inner = LD_WAIT_SLEEP,	\
-+			.dmap = DEPT_MAP_INITIALIZER(lockname)	\
- 		}
- #else
- # define __DEP_MAP_MUTEX_INITIALIZER(lockname)
-@@ -75,6 +76,27 @@ struct mutex {
- #endif
- };
- 
-+#ifdef CONFIG_DEPT
-+#define dept_mutex_lock(m, ne, t, n, e_fn, ip)				\
-+do {									\
-+	if (t) {							\
-+		dept_ecxt_enter(m, 1UL, ip, __func__, e_fn, ne);	\
-+	} else if (n) {							\
-+		dept_ecxt_enter_nokeep(m);				\
-+	} else {							\
-+		dept_wait(m, 1UL, ip, __func__, ne);			\
-+		dept_ecxt_enter(m, 1UL, ip, __func__, e_fn, ne);	\
-+	}								\
-+} while (0)
-+#define dept_mutex_unlock(m, ip)					\
-+do {									\
-+	dept_ecxt_exit(m, 1UL, ip);					\
-+} while (0)
-+#else
-+#define dept_mutex_lock(m, ne, t, n, e_fn, ip)	do { } while (0)
-+#define dept_mutex_unlock(m, ip)		do { } while (0)
-+#endif
-+
- #ifdef CONFIG_DEBUG_MUTEXES
- 
- #define __DEBUG_MUTEX_INITIALIZER(lockname)				\
-diff --git a/include/linux/rtmutex.h b/include/linux/rtmutex.h
-index 7d04988..416064d 100644
---- a/include/linux/rtmutex.h
-+++ b/include/linux/rtmutex.h
-@@ -81,6 +81,7 @@ static inline void rt_mutex_debug_task_free(struct task_struct *tsk) { }
- 	.dep_map = {					\
- 		.name = #mutexname,			\
- 		.wait_type_inner = LD_WAIT_SLEEP,	\
-+		.dmap = DEPT_MAP_INITIALIZER(mutexname)	\
+diff --git a/drivers/tty/n_gsm.c b/drivers/tty/n_gsm.c
+index bcb714031d69..fd8b86dde525 100644
+--- a/drivers/tty/n_gsm.c
++++ b/drivers/tty/n_gsm.c
+@@ -137,6 +137,7 @@ struct gsm_dlci {
+ 	int retries;
+ 	/* Uplink tty if active */
+ 	struct tty_port port;	/* The tty bound to this DLCI if there is one */
++#define TX_SIZE		4096    /* Must be power of 2. */
+ 	struct kfifo fifo;	/* Queue fifo for the DLCI */
+ 	int adaption;		/* Adaption layer in use */
+ 	int prev_adaption;
+@@ -1731,7 +1732,7 @@ static struct gsm_dlci *gsm_dlci_alloc(struct gsm_mux *gsm, int addr)
+ 		return NULL;
+ 	spin_lock_init(&dlci->lock);
+ 	mutex_init(&dlci->mutex);
+-	if (kfifo_alloc(&dlci->fifo, 4096, GFP_KERNEL) < 0) {
++	if (kfifo_alloc(&dlci->fifo, TX_SIZE, GFP_KERNEL) < 0) {
+ 		kfree(dlci);
+ 		return NULL;
  	}
- #else
- #define __DEP_MAP_RT_MUTEX_INITIALIZER(mutexname)
+@@ -2976,8 +2977,6 @@ static struct tty_ldisc_ops tty_ldisc_packet = {
+  *	Virtual tty side
+  */
+ 
+-#define TX_SIZE		512
+-
+ /**
+  *	gsm_modem_upd_via_data	-	send modem bits via convergence layer
+  *	@dlci: channel
+@@ -3217,7 +3216,7 @@ static unsigned int gsmtty_write_room(struct tty_struct *tty)
+ 	struct gsm_dlci *dlci = tty->driver_data;
+ 	if (dlci->state == DLCI_CLOSED)
+ 		return 0;
+-	return TX_SIZE - kfifo_len(&dlci->fifo);
++	return kfifo_avail(&dlci->fifo);
+ }
+ 
+ static unsigned int gsmtty_chars_in_buffer(struct tty_struct *tty)
 -- 
-1.9.1
+2.34.1
 

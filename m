@@ -2,81 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24447519E82
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 13:49:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28CA8519E85
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 13:49:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349084AbiEDLxJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 07:53:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59630 "EHLO
+        id S1349094AbiEDLx0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 07:53:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234461AbiEDLxF (ORCPT
+        with ESMTP id S234461AbiEDLxY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 07:53:05 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BC965F91;
-        Wed,  4 May 2022 04:49:28 -0700 (PDT)
-X-UUID: 03b2502f90ec4a62b4abbce6beff4ddd-20220504
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.4,REQID:7f5c9cfb-e572-4057-9e20-2dd2e1d5b1f6,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:0
-X-CID-META: VersionHash:faefae9,CLOUDID:fac48ab2-56b5-4c9e-8d83-0070b288eb6a,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,File:nil,QS:0,BEC:nil
-X-UUID: 03b2502f90ec4a62b4abbce6beff4ddd-20220504
-Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw01.mediatek.com
-        (envelope-from <rex-bc.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 325725063; Wed, 04 May 2022 19:49:22 +0800
-Received: from MTKMBS07N2.mediatek.inc (172.21.101.141) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Wed, 4 May 2022 19:49:21 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Wed, 4 May 2022 19:49:21 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 4 May 2022 19:49:21 +0800
-Message-ID: <7189b0c0c62fe8a8026d2e25e741a29b2f5b01a9.camel@mediatek.com>
-Subject: Re: [PATCH v14 1/3] dt-binding: mediatek: add bindings for MediaTek
- MDP3 components
-From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
-To:     Rob Herring <robh@kernel.org>, Moudy Ho <moudy.ho@mediatek.com>
-CC:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Rob Landley <rob@landley.net>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        Alexandre Courbot <acourbot@chromium.org>,
-        <tfiga@chromium.org>, <drinkcat@chromium.org>,
-        <pihsun@chromium.org>, <hsinyi@google.com>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        daoyuan huang <daoyuan.huang@mediatek.com>,
-        Ping-Hsun Wu <ping-hsun.wu@mediatek.com>,
-        <allen-kh.cheng@mediatek.com>, <xiandong.wang@mediatek.com>,
-        <randy.wu@mediatek.com>, <jason-jh.lin@mediatek.com>,
-        <roy-cw.yeh@mediatek.com>, <river.cheng@mediatek.com>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Wed, 4 May 2022 19:49:21 +0800
-In-Reply-To: <YnFqnEI16B+xrxdQ@robh.at.kernel.org>
-References: <20220427070514.10355-1-moudy.ho@mediatek.com>
-         <20220427070514.10355-2-moudy.ho@mediatek.com>
-         <YnFqnEI16B+xrxdQ@robh.at.kernel.org>
+        Wed, 4 May 2022 07:53:24 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5C85022532
+        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 04:49:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1651664988;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=lKJAHoOloyDONNdaSYjDVBT2BKN9t8wZnDduhidYecg=;
+        b=iiOdvzqEa6lYYDGVYfOHt/7hVBRkYftiDB2peLBeftoiKDFLz37ITCjFsBwq1QIqgILuza
+        2kuNSIOaBMFA4vU72Xn04YF/xIgGi4SVkHxLLw6ZIuxfuAXb3uoHTeXokYOia40sxJxlHm
+        phm4CW3/UP8fgHbwVhPe/FTFGeniBys=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-512-iBXNNrykP5as9MJnw2wrMA-1; Wed, 04 May 2022 07:49:45 -0400
+X-MC-Unique: iBXNNrykP5as9MJnw2wrMA-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BB7FB1C04B47;
+        Wed,  4 May 2022 11:49:44 +0000 (UTC)
+Received: from starship (unknown [10.40.192.26])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id A42EEC44AE2;
+        Wed,  4 May 2022 11:49:42 +0000 (UTC)
+Message-ID: <8be586dab3a80d96c88018a1919d01f2163b595d.camel@redhat.com>
+Subject: Re: [PATCH v2 08/12] KVM: SVM: Update AVIC settings when changing
+ APIC mode
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Cc:     pbonzini@redhat.com, seanjc@google.com, joro@8bytes.org,
+        jon.grimm@amd.com, wei.huang2@amd.com, terry.bowman@amd.com
+Date:   Wed, 04 May 2022 14:49:41 +0300
+In-Reply-To: <8a0b27436239a97cc486d8460662febb6b155069.camel@redhat.com>
+References: <20220412115822.14351-1-suravee.suthikulpanit@amd.com>
+         <20220412115822.14351-9-suravee.suthikulpanit@amd.com>
+         <abb93e2d73b7ada6cbabcd3ebbf7b38e4701ec57.camel@redhat.com>
+         <9307c734-3473-0bdc-57be-c39e96bca4d8@amd.com>
+         <24b74f5bd8810c7f79777ed6898baeaf47bfe3e3.camel@redhat.com>
+         <3196873f-0047-3411-d434-56d96ca31298@amd.com>
+         <8a0b27436239a97cc486d8460662febb6b155069.camel@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,109 +70,114 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-05-03 at 12:47 -0500, Rob Herring wrote:
-> On Wed, Apr 27, 2022 at 03:05:12PM +0800, Moudy Ho wrote:
-> > This patch adds DT binding documents for Media Data Path 3 (MDP3)
-> > a unit in multimedia system combined with several components and
-> > used for scaling and color format convert.
+On Wed, 2022-05-04 at 14:46 +0300, Maxim Levitsky wrote:
+> On Tue, 2022-05-03 at 20:04 +0700, Suravee Suthikulpanit wrote:
+> > Maxim,
 > > 
-> > Signed-off-by: Moudy Ho <moudy.ho@mediatek.com>
-> > ---
-> >  .../bindings/media/mediatek,mdp3-rdma.yaml    | 82
-> > +++++++++++++++++++
-> >  .../bindings/media/mediatek,mdp3-rsz.yaml     | 61 ++++++++++++++
-> >  .../bindings/media/mediatek,mdp3-wrot.yaml    | 66 +++++++++++++++
-> >  .../bindings/soc/mediatek/mediatek,ccorr.yaml | 54 ++++++++++++
-> >  .../bindings/soc/mediatek/mediatek,wdma.yaml  | 67 +++++++++++++++
-> >  5 files changed, 330 insertions(+)
-> >  create mode 100644
-> > Documentation/devicetree/bindings/media/mediatek,mdp3-rdma.yaml
-> >  create mode 100644
-> > Documentation/devicetree/bindings/media/mediatek,mdp3-rsz.yaml
-> >  create mode 100644
-> > Documentation/devicetree/bindings/media/mediatek,mdp3-wrot.yaml
-> >  create mode 100644
-> > Documentation/devicetree/bindings/soc/mediatek/mediatek,ccorr.yaml
-> >  create mode 100644
-> > Documentation/devicetree/bindings/soc/mediatek/mediatek,wdma.yaml
+> > On 5/3/22 12:13 AM, Maxim Levitsky wrote:
+> > > > In the kvm/queue branch, I found a regression on nested SVM guest, where L2 guest cannot
+> > > > launch. The bad commit is:
+> > > > 
+> > > > commit a4cfff3f0f8c07f1f7873a82bdeb3995807dac8c (bisect)
+> > > > Merge: 42dcbe7d8bac 8d5678a76689
+> > > > Author: Paolo Bonzini<pbonzini@redhat.com>
+> > > > Date:   Fri Apr 8 12:43:40 2022 -0400
+> > > > 
+> > > >       Merge branch 'kvm-older-features' into HEAD
+> > > > 
+> > > >       Merge branch for features that did not make it into 5.18:
+> > > > 
+> > > >       * New ioctls to get/set TSC frequency for a whole VM
+> > > > 
+> > > >       * Allow userspace to opt out of hypercall patching
+> > > > 
+> > > >       Nested virtualization improvements for AMD:
+> > > > 
+> > > >       * Support for "nested nested" optimizations (nested vVMLOAD/VMSAVE,
+> > > >         nested vGIF)
+> > > > 
+> > > >       * Allow AVIC to co-exist with a nested guest running
+> > > > 
+> > > >       * Fixes for LBR virtualizations when a nested guest is running,
+> > > >         and nested LBR virtualization support
+> > > > 
+> > > >       * PAUSE filtering for nested hypervisors
+> > > > 
+> > > >       Guest support:
+> > > > 
+> > > >       * Decoupling of vcpu_is_preempted from PV spinlocks
+> > > > 
+> > > >       Signed-off-by: Paolo Bonzini<pbonzini@redhat.com>
+> > > > 
+> > > > I am still working on the bisect into the merge commits.
+> > > > 
+> > > > Regards,
+> > > > Suravee
+> > > > 
+> > > What happens when the guest can't launch? It sure works for me for kvm/queue
+> > > from yesterday.
+> > > 
+> > > I'll test again tomorrow.
 > > 
-> > diff --git a/Documentation/devicetree/bindings/media/mediatek,mdp3-
-> > rdma.yaml b/Documentation/devicetree/bindings/media/mediatek,mdp3-
-> > rdma.yaml
-> > new file mode 100644
-> > index 000000000000..ce24eda14cb6
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/media/mediatek,mdp3-
-> > rdma.yaml
-> > @@ -0,0 +1,82 @@
-> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +$id: 
-> > https://urldefense.com/v3/__http://devicetree.org/schemas/media/mediatek,mdp3-rdma.yaml*__;Iw!!CTRNKA9wMg0ARbw!zzzJB6GFgAbOaMvOMeEANc2UnatoXvcdzZ3UGx6024oxx1okemuH9vCeCSpaGUuD8dSrlYueRf2HFVdfFu6CVB7LUQ$
-> >  
-> > +$schema: 
-> > https://urldefense.com/v3/__http://devicetree.org/meta-schemas/core.yaml*__;Iw!!CTRNKA9wMg0ARbw!zzzJB6GFgAbOaMvOMeEANc2UnatoXvcdzZ3UGx6024oxx1okemuH9vCeCSpaGUuD8dSrlYueRf2HFVdfFu5BwY-loQ$
-> >  
-> > +
-> > +title: Mediatek Read Direct Memory Access
-> > +
-> > +maintainers:
-> > +  - Matthias Brugger <matthias.bgg@gmail.com>
-> > +  - Ping-Hsun Wu <ping-hsun.wu@mediatek.com>
-> > +
-> > +description: |
-> > +  Mediatek Read Direct Memory Access(RDMA) component used to do
-> > read DMA.
-> > +  It contains one line buffer to store the sufficient pixel data,
-> > and
-> > +  must be siblings to the central MMSYS_CONFIG node.
-> > +  For a description of the MMSYS_CONFIG binding, see
-> > +  Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys.ya
-> > ml
-> > +  for details.
-> > +
-> > +properties:
-> > +  compatible:
-> > +    items:
-> > +      - const: mediatek,mt8183-mdp3-rdma
-> > +
-> > +  reg:
-> > +    maxItems: 1
-> > +
-> > +  mediatek,gce-client-reg:
-> > +    $ref: '/schemas/types.yaml#/definitions/phandle-array'
-> > +    maxItems: 1
+> > I have bisected it to this commit:
+> > 
+> > commit 74fd41ed16fd71725e69e2cb90b755505326c2e6
+> > Author: Maxim Levitsky <mlevitsk@redhat.com>
+> > Date:   Tue Mar 22 19:40:47 2022 +0200
+> > 
+> >      KVM: x86: nSVM: support PAUSE filtering when L0 doesn't intercept PAUSE
+> > 
+> >      Expose the pause filtering and threshold in the guest CPUID
+> >      and support PAUSE filtering when possible:
+> > 
+> >      - If the L0 doesn't intercept PAUSE (cpu_pm=on), then allow L1 to
+> >        have full control over PAUSE filtering.
+> > 
+> >      - if the L1 doesn't intercept PAUSE, use host values and update
+> >        the adaptive count/threshold even when running nested.
+> > 
+> >      - Otherwise always exit to L1; it is not really possible to merge
+> >        the fields correctly.  It is expected that in this case, userspace
+> >        will not enable this feature in the guest CPUID, to avoid having the
+> >        guest update both fields pointlessly.
+> > 
+> >      Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
+> >      Message-Id: <20220322174050.241850-4-mlevitsk@redhat.com>
+> >      Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+> > 
+> > I can revert this one or specify pause_filter_count=0 pause_filter_thresh=0,
+> > and then I can boot the L2 guest.
+> > 
+> > Regards,
+> > Suravee
+> > 
 > 
-> Like your other patches this needs 'items' describing each cell.
+> This is really wierd.
 > 
-> > +    description: |
-> > +      The register of client driver can be configured by gce with
-> > +      4 arguments defined in this property, such as phandle of
-> > gce, subsys id,
-> > +      register offset and size. Each GCE subsys id is mapping to a
-> > client
-> > +      defined in the header include/dt-bindings/gce/<chip>-gce.h.
+> Could you share the qemu command line for L1 and L2 guest, and as much as possible
+> info on what happens when you boot L2? I tested latest kvm/queue and I don't see
+> any issues with booting nested guest.
 > 
-> Other than other cases of this property, the rest looks fine.
+> Which hardware you test on? I test on Zen2 (3970X) mostly.
 > 
-> Rob
-
-Hello Rob,
-
-Thanks for your review and reminder.
-
-Moudy's mail is still not received by devicetree@vger.kernel.org.
-We are still under checking this issue.
-To prevent you do not receive his response, I help Moudy to mail you
-again.
-
-Moudy will sync the description from the patch listed below to this
-property and extend to other yaml files in this series.
+> How many vCPUs L2 has? Could you do a kvm trace of the L2, from L1,
+> to see what it does prior to hang?
 
 
-https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20220427064425.30383-5-moudy.ho@mediatek.com/
+Also assuming that you boot the L2 with -cpu host, could you not expose these two
+features to it?
 
-BRs,
-Rex
+-cpu host,pause-filter=off,pfthreshold=off
+
+Best regards,
+	Maxim Levitsky
+
+
+> 
+> 
+> Best regards,
+> 	Maxim Levitsky
+> 
+> 
+
 

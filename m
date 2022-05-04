@@ -2,153 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32C1351AEDC
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 22:15:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BEBBD51AEE0
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 22:18:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377931AbiEDUTM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 16:19:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51580 "EHLO
+        id S1377948AbiEDUVk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 16:21:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377953AbiEDUSz (ORCPT
+        with ESMTP id S1356979AbiEDUVj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 16:18:55 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81BB662FB;
-        Wed,  4 May 2022 13:15:17 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1651695314;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=2oJD7k+4DnOtUc+hYYmeV/3FEHnovMfe+24BdevlrYw=;
-        b=ESY3+67uixkgq/KnTmlbfh/J1esj5LQdSZff0zyIDPvxmM6KQcWk26aEmRWKHmLLWFurHQ
-        a5jUnBetFH+EW1367CNQoH+OSRAiVtzbTpfKIoKjBegg5eDD41Ytux9Ne2C4glXX1lWC6Q
-        JT6Ucq3++D0XX/AVNFoZA2NsjBq4Qs9+fk7EqgfgEC84QKUTjWV8/pzJEWjwA6vZAMMegI
-        6TO4CQZGYW1g07XBCFkEdX4YoAcdlMgxNgQH4qw5ZQOQZcVL7mwFmzYBslK12slf+cmmqH
-        mCaSyJttDTbQMmzawol2JsQDZnRzNWQZXTjxOLxtnUIhtJiKRtrXWRlOPnLAFA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1651695315;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=2oJD7k+4DnOtUc+hYYmeV/3FEHnovMfe+24BdevlrYw=;
-        b=z7V/iS1I/z0AcRhPiegimDhqSc9oxg7BG2knHRxNmH83LE8hyYBQpG6IbzvBjXno08JE75
-        xn7/LaaLV0qUHqBg==
-To:     Marcelo Tosatti <mtosatti@redhat.com>
-Cc:     Christoph Lameter <cl@gentwo.de>, linux-kernel@vger.kernel.org,
-        Nitesh Lal <nilal@redhat.com>,
-        Nicolas Saenz Julienne <nsaenzju@redhat.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Alex Belits <abelits@belits.com>, Peter Xu <peterx@redhat.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Oscar Shiang <oscar0225@livemail.tw>,
-        linux-rdma@vger.kernel.org
-Subject: Re: [patch v12 00/13] extensible prctl task isolation interface and
- vmstat sync
-In-Reply-To: <YnLMc5X8MZElk0NT@fuller.cnet>
-References: <20220315153132.717153751@fedora.localdomain>
- <alpine.DEB.2.22.394.2204271049050.159551@gentwo.de>
- <YnF7CjzYBhASi1Eo@fuller.cnet> <87h765juyk.ffs@tglx>
- <YnLMc5X8MZElk0NT@fuller.cnet>
-Date:   Wed, 04 May 2022 22:15:14 +0200
-Message-ID: <871qx9jbql.ffs@tglx>
+        Wed, 4 May 2022 16:21:39 -0400
+Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF96F45792
+        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 13:18:02 -0700 (PDT)
+Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-2f7c424c66cso28363377b3.1
+        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 13:18:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=OQdnNmzv4usFcCEslqJZULlg/FXfYALoeT9o7toWf+k=;
+        b=qxZZQ6AsGHlKFFmOKUtmMByudpi1JNcM2xDw70w505LXnF7lLC/fAGH//lR/VZSrlR
+         bzYODkJGL2C4z48gkOhr1/f+95RehMweBA2jJko7pnpROeEw4lFeekw/gjN1Sr37kxgi
+         VOMlKjWfiWZVgzx71URL6y09ubNYGY2jqAqF8+kHrivs8kT+ROvGvq/omyFx6GiYzqnh
+         2HFIhB+NVMjgQxOjfu7xbPQLIRCzspV8NJf8VjKSPTDxgkMvVCPk7/5bkBeytyd4UZ3g
+         nvxpwS5oICYNm4lV3uFPcMoYAXHHXPd6xQUHQRffNQmcC4ERg/4fgc/qsJtYGU/9DGZP
+         TTaw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=OQdnNmzv4usFcCEslqJZULlg/FXfYALoeT9o7toWf+k=;
+        b=T5zub0m8uJmAQAo+ssw7bK8lTOsaXHzSLRAFOIdNFXqyWJXd66amZe9DE8+oq5kIJ6
+         Ep12LV0sTA451cLVdNsi1BogPmy2zdlsHLAlvvkdK9Yjdb1wdcGkjox6FAGQgcPu6fIA
+         a3EDNzoBo5s0UP1wKx9+0c9BEv7cIYvPyF3Ekg/vtaM6DtvYTY9DqT9tDp78ZhEPD7VU
+         EExI3Fs1vK77Ru2/NaCEfZxw987SLwjzr/5lQsay5bnkV0VB8hbFl9fzBnChncGle2Kr
+         UboAKP8LE5ppKkAoaND/pt3fmMCQIpX4nte2NBD9wgNeKTaJE/PJxrTJzWbQXJQyFyAp
+         HLrQ==
+X-Gm-Message-State: AOAM530bAlNSi4RiaRA0l01OitEJrtKTnK65IbsERMKvV5rGWRh8IXTb
+        hSgvoLqjD+3cTLXr8mIOBLZxBxtDc4qJk29UvUZ4sQ==
+X-Google-Smtp-Source: ABdhPJyFwC10hGfB50VlWpxYYTkP/wq9NopFODyumnAGFAWmCLhvv/zUfhxhlo8Okdy8beVJXyf/MQoiY2U1PO5ibCw=
+X-Received: by 2002:a81:a93:0:b0:2f4:d65a:d44e with SMTP id
+ 141-20020a810a93000000b002f4d65ad44emr20076337ywk.243.1651695481261; Wed, 04
+ May 2022 13:18:01 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220429203644.2868448-1-samitolvanen@google.com>
+ <YnKnLyyXPJl5Llc0@FVFF77S0Q05N> <CABCJKudT9r=r0an4BwNp0-E1wC94wLWiHvUX4_vA8tDkQ=uHKQ@mail.gmail.com>
+In-Reply-To: <CABCJKudT9r=r0an4BwNp0-E1wC94wLWiHvUX4_vA8tDkQ=uHKQ@mail.gmail.com>
+From:   Sami Tolvanen <samitolvanen@google.com>
+Date:   Wed, 4 May 2022 13:17:25 -0700
+Message-ID: <CABCJKuc-6daZd8N6hQV6i_TtCtVpfzxJ2UW6xwxC2vxTmJ2deg@mail.gmail.com>
+Subject: Re: [RFC PATCH 00/21] KCFI support
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>, X86 ML <x86@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Joao Moreira <joao@overdrivepizza.com>,
+        Sedat Dilek <sedat.dilek@gmail.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        linux-hardening@vger.kernel.org,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 04 2022 at 15:56, Marcelo Tosatti wrote:
-> On Wed, May 04, 2022 at 03:20:03PM +0200, Thomas Gleixner wrote:
->> Can we please focus on the initial problem of
->> providing a sensible isolation mechanism with well defined semantics?
+On Wed, May 4, 2022 at 9:41 AM Sami Tolvanen <samitolvanen@google.com> wrote:
 >
-> Case 2, however, was implicitly suggested by you (or at least i
-> understood that):
+> Hi Mark,
 >
-> "Summary: The problem to be solved cannot be restricted to
+> On Wed, May 4, 2022 at 9:18 AM Mark Rutland <mark.rutland@arm.com> wrote:
+> > I wanted to give this a spin on arm64, but I'm seeing some very odd toolchain
+> > behaviour. I'm not sure if I've done something wrong, or if I'm just hitting an
+> > edge-case, but it looks like using -fsanitize=kcfi causes the toolchain to hit
+> > out-of-memory errors and other issues which look like they could be memory
+> > corruption.
 >
->     self_defined_important_task(OWN_WORLD);
->
-> Policy is not a binary on/off problem. It's manifold across all levels
-> of the stack and only a kernel problem when it comes down to the last
-> line of defence.
->
-> Up to the point where the kernel puts the line of last defence, policy
-> is defined by the user/admin via mechanims provided by the kernel.
->
-> Emphasis on "mechanims provided by the kernel", aka. user API.
->
-> Just in case, I hope that I don't have to explain what level of scrunity
-> and thought this requires."
+> Thanks for the detailed bug report! It definitely looks like something
+> is wrong with the recent switch from std::string to Twine in the Clang
+> code. I didn't see this issue when compiling the arm64 kernel, but
+> I'll take a closer look and see if I can reproduce it.
 
-Correct. This reasoning is still valid and I haven't changed my opinion
-on that since then.
+I was able to reproduce this by turning off assertions in Clang. It
+seems to work fine with -DLLVM_ENABLE_ASSERTIONS=ON. I'll go fix.
 
-My main objections against the proposed solution back then were the all
-or nothing approach and the implicit hard coded policies.
-
-> The idea, as i understood was that certain task isolation features (or
-> they parameters) might have to be changed at runtime (which depends on
-> the task isolation features themselves, and the plan is to create
-> an extensible interface).
-
-Again. I'm not against useful controls to select the isolation an
-application requires. I'm neither against extensible interfaces.
-
-But I'm against overengineered implementations which lack any form of
-sensible design and have ill defined semantics at the user ABI.
-
-Designing user space ABI is _hard_ and needs a lot of thoughts. It's not
-done with throwing something 'extensible' at the kernel and hope it
-sticks. As I showed you in the review, the ABI is inconsistent in
-itself, it has ill defined semantics and lacks any form of justification
-of the approach taken.
-
-Can we please take a step back and:
-
-  1) Define what is trying to be solved and what are the pieces known
-     today which need to be controlled in order to achieve the desired
-     isolation properties.
-
-  2) Describe the usage scenarios and the resulting constraints.
-
-  3) Describe the requirements for features on top, e.g. inheritance
-     or external control.
-
-Once we have that, we can have a discussion about the desired control
-granularity and how to support the extra features in a consistent and
-well defined way.
-
-A good and extensible UABI design comes with well defined functionality
-for the start and an obvious and maintainable extension path. The most
-important part is the well defined functionality.
-
-There have been enough examples in the past how well received approaches
-are, which lack the well defined part. Linus really loves to get a pull
-request for something which cannot be described what it does, but could
-be used for cool things in the future.
-
-> So for case 2, all you'd have to do is to modify the application only
-> once and allow the admin to configure the features.
-
-That's still an orthogonal problem, which can be solved once a sensible
-mechanism to control the isolation and handle it at the transition
-points is in place. You surely want to consider it when designing the
-UABI, but it's not required to create the real isolation mechanism in
-the first place.
-
-Problem decomposition is not an entirely new concept, really.
-
-Thanks,
-
-        tglx
+Sami

@@ -2,102 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40CC4519E88
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 13:51:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94896519E8B
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 13:51:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348979AbiEDLyb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 07:54:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34008 "EHLO
+        id S1348991AbiEDLys (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 07:54:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234461AbiEDLy3 (ORCPT
+        with ESMTP id S242743AbiEDLyp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 07:54:29 -0400
-Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4207F21E37
-        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 04:50:51 -0700 (PDT)
-Received: by mail-qk1-x72b.google.com with SMTP id a22so724985qkl.5
-        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 04:50:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:reply-to:mime-version
-         :content-disposition;
-        bh=N0qLrMUdkmKBPfEziSX/hNCjhprklRfQLQvu1qWvrOo=;
-        b=iUmsmI1WPaZ54LUDWEqIywg7fvqroLNmgjvybdiVRqPyfsMUOuBWQT0+S8RWPgcmBN
-         +sqcSzJZuWhbx/U6T+e96xXMGNTF7ubkK5xelVEe040su7wFbYo9NJMxtP6NYcPT/8Fz
-         oPd6XKBGMGkobGVScnwvq+g6OmxxrvfpkSDTCbZLRhLeEACHVfOQRvImSgfXhO8KyufY
-         ENMZvDvoeJXtisCOLFTxOMXSUmzbgS+aAwDr42H++7qEZrsQK7ZzFO2MI9WNUTa8S1sU
-         gVymct8fIfOIPncDv1Cbzl9tQJZVMiEU/xpRPmG5Y66m0w++ZcRXA7UecQELGsriVXU1
-         mb2w==
+        Wed, 4 May 2022 07:54:45 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C487B2CC91
+        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 04:51:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1651665067;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=tavZwp8BQxfV8UeYb9Xzxs1vfyyi2W9B0pF5sD/TmHM=;
+        b=WI5pX6tG4lNc7dxOy93ZoXp5L7SbxxBiHZTdWQ7MpkZ7AVZDNgiBAGXnOzNLJig3OzuJsv
+        vYreRLanyHBZijceZxPN3ixLSrVDkK2ZBqPvePrO+9xf/S1FrYaE9EAdPP7tnmPq9aLKjs
+        q7fXdz0qdMlw6d19gDNG1i61E+ET5j8=
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
+ [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-502-BxHj2Dx6M5On6y-X0LgeIw-1; Wed, 04 May 2022 07:51:06 -0400
+X-MC-Unique: BxHj2Dx6M5On6y-X0LgeIw-1
+Received: by mail-ej1-f71.google.com with SMTP id l20-20020a170906795400b006f3f30daf18so682221ejo.22
+        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 04:51:06 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :reply-to:mime-version:content-disposition;
-        bh=N0qLrMUdkmKBPfEziSX/hNCjhprklRfQLQvu1qWvrOo=;
-        b=zwlHDlH2C+eG2U0a5TAZ8m6bYiDRRpdJ3IhdyGummovO2I25gyM/st+lk0PBx77rrq
-         0cfOFqZWnZtSeVf5EV21Q7J6YTdFWU/RhEtYxtNpy/KS9LJrJoLwe3X/qfGcJ9MNcjGS
-         FrFCbiadX211/b2/iQQp6Jz1amP7wAwilvuFRedXVIBdV5dVMxQId0bLJYGPvT0qhzhu
-         U+2XrMYAtA7r0A+Qo1qGigHCBiCjmxAZ+eSOYeQ38O0eviB7AZd2Jrgclx669Nw2Bo/B
-         nH304Gz8HfaW3In3N+kMoNtJeDYvjiRhBl0p1sQkrtsNTk0tvR+nctebQu3pp09BnHf6
-         w1hA==
-X-Gm-Message-State: AOAM532y3/ylGX+IZiS7NXQKuFCJuvV4IGQ6vAppxNMsbUVEhJVb2GOU
-        A7tARybOH6gYD504rwqiEQ==
-X-Google-Smtp-Source: ABdhPJy1syGyi7DFFq9iQSqT+hdshiI7n/y8gA/XAUshBDHkdBYidKapwbKZ4B8B4Pt/jmtVjRILZQ==
-X-Received: by 2002:a05:620a:24c5:b0:69e:e777:4323 with SMTP id m5-20020a05620a24c500b0069ee7774323mr15575616qkn.465.1651665050240;
-        Wed, 04 May 2022 04:50:50 -0700 (PDT)
-Received: from serve.minyard.net ([47.184.144.75])
-        by smtp.gmail.com with ESMTPSA id t11-20020a05620a004b00b0069fc13ce231sm7206864qkt.98.2022.05.04.04.50.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 May 2022 04:50:49 -0700 (PDT)
-Sender: Corey Minyard <tcminyard@gmail.com>
-Received: from minyard.net (unknown [IPv6:2001:470:b8f6:1b:149c:2dc6:c0ab:4341])
-        by serve.minyard.net (Postfix) with ESMTPSA id 6F3511800BD;
-        Wed,  4 May 2022 11:50:48 +0000 (UTC)
-Date:   Wed, 4 May 2022 06:50:47 -0500
-From:   Corey Minyard <minyard@acm.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
-        openipmi-developer@lists.sourceforge.net
-Subject: [GIT PULL] IPMI bug fixes for 5.17 (second set)
-Message-ID: <20220504115047.GC3767252@minyard.net>
-Reply-To: minyard@acm.org
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:organization:mime-version:content-transfer-encoding;
+        bh=tavZwp8BQxfV8UeYb9Xzxs1vfyyi2W9B0pF5sD/TmHM=;
+        b=q4DCzi1yURlzJT5kxNdQ8aZVCb/ewTfdNVw0rYwYNsfN5ZQ+rFkLaVbaqWPrVH0qQN
+         qqEYxexv4hC64faKf+b88OrCX/ZvoQn4DcGYCwF9fU+WNMRVuw5pXQM5TbtkPEitlTBe
+         KhVRpwK2hbuSz1lwOXw4mAPZ0C7l2wVLCTgTsPRc9KoaZ6ChvrdxRnP2EebGWIfNQx00
+         9HHGCwQP3Is8F/klgUsbydhzM/I0VFgmLrHph8GY90dmrQkN1s5+DEjRvYovRhuehN0h
+         CdE3LZ5r/+ZqC5DN4zYFm7tDv05UiCOkRrUznUMBCxxCpm+xFNR5iLXmkctvtDWjBI5T
+         nvpg==
+X-Gm-Message-State: AOAM533I1MIZ5rXv3Vr1ZpXJvo4kIyHEv0cIBh3uqG580mXlnTJpGiDl
+        6wLZQtec6Wq1lJV8/p5ZQDO9IoZZ/neoqgZBAlgVn29eFNnXGR1UQaTeIG//OwGhnj4o0pnh76d
+        e360rVDGaojpPxo2aV1lctV2A
+X-Received: by 2002:a17:906:3fd1:b0:6ef:606f:e5c5 with SMTP id k17-20020a1709063fd100b006ef606fe5c5mr19216834ejj.441.1651665065700;
+        Wed, 04 May 2022 04:51:05 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyfylvO+VKVVbzY5ASXCx0ehCojnDyP/xtWqHiM66c5/brxEnt1fwNb2R3LeYpLzPIIxvzLhQ==
+X-Received: by 2002:a17:906:3fd1:b0:6ef:606f:e5c5 with SMTP id k17-20020a1709063fd100b006ef606fe5c5mr19216817ejj.441.1651665065489;
+        Wed, 04 May 2022 04:51:05 -0700 (PDT)
+Received: from maya.cloud.tilaa.com (maya.cloud.tilaa.com. [2a02:2770:5:0:21a:4aff:fe98:d313])
+        by smtp.gmail.com with ESMTPSA id el8-20020a170907284800b006f3ef214e12sm5674426ejc.120.2022.05.04.04.51.04
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 04 May 2022 04:51:04 -0700 (PDT)
+Date:   Wed, 4 May 2022 13:50:59 +0200
+From:   Stefano Brivio <sbrivio@redhat.com>
+To:     Dan Carpenter <dan.carpenter@oracle.com>
+Cc:     Jaehee <jhpark1013@gmail.com>, Kalle Valo <kvalo@kernel.org>,
+        =?UTF-8?B?SsOpcsO0bWU=?= Pouiller <jerome.pouiller@silabs.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
+        Outreachy Linux Kernel <outreachy@lists.linux.dev>
+Subject: Re: [PATCH] wfx: use container_of() to get vif
+Message-ID: <20220504135059.7132b2b6@elisabeth>
+In-Reply-To: <20220504093347.GB4009@kadam>
+References: <20220418035110.GA937332@jaehee-ThinkPad-X1-Extreme>
+        <87y200nf0a.fsf@kernel.org>
+        <CAA1TwFCOEEwnayexnJin8T=Fc2HEgHC9jyfj5HxfiWybjUi9GA@mail.gmail.com>
+        <20220504093347.GB4009@kadam>
+Organization: Red Hat
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit ae085d7f9365de7da27ab5c0d16b12d51ea7fca9:
+Hi Dan,
 
-  mm: kfence: fix missing objcg housekeeping for SLAB (2022-03-27 18:47:00 -0700)
+On Wed, 4 May 2022 12:33:48 +0300
+Dan Carpenter <dan.carpenter@oracle.com> wrote:
 
-are available in the Git repository at:
+> On Mon, May 02, 2022 at 02:10:07PM -0400, Jaehee wrote:
+> > On Wed, Apr 20, 2022 at 7:58 AM Kalle Valo <kvalo@kernel.org> wrote:  
+> > >
+> > > Jaehee Park <jhpark1013@gmail.com> writes:
+> > >  
+> > > > Currently, upon virtual interface creation, wfx_add_interface() stores
+> > > > a reference to the corresponding struct ieee80211_vif in private data,
+> > > > for later usage. This is not needed when using the container_of
+> > > > construct. This construct already has all the info it needs to retrieve
+> > > > the reference to the corresponding struct from the offset that is
+> > > > already available, inherent in container_of(), between its type and
+> > > > member inputs (struct ieee80211_vif and drv_priv, respectively).
+> > > > Remove vif (which was previously storing the reference to the struct
+> > > > ieee80211_vif) from the struct wfx_vif, define a function
+> > > > wvif_to_vif(wvif) for container_of(), and replace all wvif->vif with
+> > > > the newly defined container_of construct.
+> > > >
+> > > > Signed-off-by: Jaehee Park <jhpark1013@gmail.com>  
+> > >
+> > > [...]
+> > >  
+> > > > +static inline struct ieee80211_vif *wvif_to_vif(struct wfx_vif *wvif)
+> > > > +{
+> > > > +     return container_of((void *)wvif, struct ieee80211_vif, drv_priv);
+> > > > +}  
+> > >
+> > > Why the void pointer cast? Avoid casts as much possible.
+> > >  
+> > 
+> > Hi Kalle,
+> > 
+> > Sorry for the delay in getting back to you about why the void pointer
+> > cast was used.
+> > 
+> > In essence, I'm taking private data with a driver-specific pointer
+> > and that needs to be resolved back to a generic pointer.
+> > 
+> > The private data (drv_priv) is declared as a generic u8 array in struct
+> > ieee80211_vif, but wvif is a more specific type.
+> > 
+> > I wanted to also point to existing, reasonable examples such as:
+> > static void iwl_mvm_tcm_uapsd_nonagg_detected_wk(struct work_struct *wk)
+> > {
+> >         struct iwl_mvm *mvm;
+> >         struct iwl_mvm_vif *mvmvif;
+> >         struct ieee80211_vif *vif;
+> > 
+> >         mvmvif = container_of(wk, struct iwl_mvm_vif,
+> >                               uapsd_nonagg_detected_wk.work);
+> >         vif = container_of((void *)mvmvif, struct ieee80211_vif, drv_priv);
+> > 
+> > in drivers/net/wireless$ less intel/iwlwifi/mvm/utils.c, which does the
+> > same thing.
+> > 
+> > There are fifteen of them throughout:  
+> 
+> The cast is fine, but this email is frustrating.
+> 
+> It sounds like you are saying that you copied it from other code and
+> that's not a good answer...  :/  It's easiest if you just copy and paste
+> the build error and we can figure out why the cast is need for our
+> selves...
 
-  https://github.com/cminyard/linux-ipmi.git tags/for-linus-5.17-2
+...my bad, then.
 
-for you to fetch changes up to 9cc3aac42566a0021e0ab7c4e9b31667ad75b1e3:
+I suggested to Jaehee she would *also* point out that there are already
+a pile of usages (which I grepped for myself, by the way).
 
-  ipmi:ipmi_ipmb: Fix null-ptr-deref in ipmi_unregister_smi() (2022-04-29 10:06:52 -0500)
+And that it's *obvious* that container_of() would trigger warnings
+otherwise. Well, obvious just for me, it seems.
 
-----------------------------------------------------------------
-Fix some issues that were reported
+-- 
+Stefano
 
-This has been in for-next for a bit (longer than the times would
-indicate, I had to rebase to add some text to the headers) and these are
-fixes that need to go in.
-
-----------------------------------------------------------------
-Corey Minyard (2):
-      ipmi: When handling send message responses, don't process the message
-      ipmi:ipmi_ipmb: Fix null-ptr-deref in ipmi_unregister_smi()
-
- drivers/char/ipmi/ipmi_msghandler.c | 7 ++++++-
- drivers/char/ipmi/ipmi_si_intf.c    | 5 +----
- 2 files changed, 7 insertions(+), 5 deletions(-)

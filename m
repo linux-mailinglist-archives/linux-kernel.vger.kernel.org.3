@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64EEE51A693
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 18:53:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74CD951A9F7
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:19:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354204AbiEDQ4j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 12:56:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52416 "EHLO
+        id S1356729AbiEDRS4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 13:18:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354274AbiEDQx7 (ORCPT
+        with ESMTP id S1356167AbiEDRE4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 12:53:59 -0400
+        Wed, 4 May 2022 13:04:56 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28AE6488AD;
-        Wed,  4 May 2022 09:49:20 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6809506E7;
+        Wed,  4 May 2022 09:53:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5ACA061701;
-        Wed,  4 May 2022 16:49:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A97D6C385A5;
-        Wed,  4 May 2022 16:49:18 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1AB07617DE;
+        Wed,  4 May 2022 16:53:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64C55C385B2;
+        Wed,  4 May 2022 16:53:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651682958;
-        bh=vzEX6Tq9n68EdutGIw5T+UJNk47l/3TGbuch2cwKSbs=;
+        s=korg; t=1651683235;
+        bh=e+oxjEJlR1PMHd11JKjXVmZGlgC98O91GpA6vAZb0A4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gJxzKo1MWeeIn5Zz1VxQdkwGMf/5I4IiKelUWqrWT7OqTAXaAgxjgurckVU5ENzui
-         iRM4fY/mT6ODreu0GUXCwaXxCIHtsrd9zfu3J+IadEIBLXi/fSfHNI8w09z4c+3PJH
-         uGdgqB9XAyyV38/cc7CEvTz9Or/6CuioXR3U2JB8=
+        b=1HIluVmqrrgo6YlZfb9epWyIdSSbbDhAtyw0VK5scyhwp4OKRGs2boiPywkwzot79
+         MnXz3rfKAc9BivRqvJDEq9hQ8SRg9GufRJDWfXaVHHdZoFvXuPYtLr4eSkCpp9Isli
+         4CCdYrc1oM29JqEGlwZYklKjLh9stID4SAr4LT/M=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Yang Yingliang <yangyingliang@huawei.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        stable@vger.kernel.org, Ying Xu <yinxu@redhat.com>,
+        Xin Long <lucien.xin@gmail.com>,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 60/84] clk: sunxi: sun9i-mmc: check return value after calling platform_get_resource()
+Subject: [PATCH 5.15 088/177] sctp: check asoc strreset_chunk in sctp_generate_reconf_event
 Date:   Wed,  4 May 2022 18:44:41 +0200
-Message-Id: <20220504152932.010530078@linuxfoundation.org>
+Message-Id: <20220504153100.975775798@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220504152927.744120418@linuxfoundation.org>
-References: <20220504152927.744120418@linuxfoundation.org>
+In-Reply-To: <20220504153053.873100034@linuxfoundation.org>
+References: <20220504153053.873100034@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,36 +57,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yang Yingliang <yangyingliang@huawei.com>
+From: Xin Long <lucien.xin@gmail.com>
 
-[ Upstream commit f58ca215cda1975f77b2b762903684a3c101bec9 ]
+[ Upstream commit 165e3e17fe8fe6a8aab319bc6e631a2e23b9a857 ]
 
-It will cause null-ptr-deref if platform_get_resource() returns NULL,
-we need check the return value.
+A null pointer reference issue can be triggered when the response of a
+stream reconf request arrives after the timer is triggered, such as:
 
-Fixes: 7a6fca879f59 ("clk: sunxi: Add driver for A80 MMC config clocks/resets")
-Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
-Reviewed-by: Samuel Holland <samuel@sholland.org>
-Signed-off-by: Jernej Skrabec <jernej.skrabec@gmail.com>
-Link: https://lore.kernel.org/r/20220421134308.2885094-1-yangyingliang@huawei.com
+  send Incoming SSN Reset Request --->
+  CPU0:
+   reconf timer is triggered,
+   go to the handler code before hold sk lock
+                            <--- reply with Outgoing SSN Reset Request
+  CPU1:
+   process Outgoing SSN Reset Request,
+   and set asoc->strreset_chunk to NULL
+  CPU0:
+   continue the handler code, hold sk lock,
+   and try to hold asoc->strreset_chunk, crash!
+
+In Ying Xu's testing, the call trace is:
+
+  [ ] BUG: kernel NULL pointer dereference, address: 0000000000000010
+  [ ] RIP: 0010:sctp_chunk_hold+0xe/0x40 [sctp]
+  [ ] Call Trace:
+  [ ]  <IRQ>
+  [ ]  sctp_sf_send_reconf+0x2c/0x100 [sctp]
+  [ ]  sctp_do_sm+0xa4/0x220 [sctp]
+  [ ]  sctp_generate_reconf_event+0xbd/0xe0 [sctp]
+  [ ]  call_timer_fn+0x26/0x130
+
+This patch is to fix it by returning from the timer handler if asoc
+strreset_chunk is already set to NULL.
+
+Fixes: 7b9438de0cd4 ("sctp: add stream reconf timer")
+Reported-by: Ying Xu <yinxu@redhat.com>
+Signed-off-by: Xin Long <lucien.xin@gmail.com>
+Acked-by: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/clk/sunxi/clk-sun9i-mmc.c | 2 ++
- 1 file changed, 2 insertions(+)
+ net/sctp/sm_sideeffect.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/drivers/clk/sunxi/clk-sun9i-mmc.c b/drivers/clk/sunxi/clk-sun9i-mmc.c
-index 542b31d6e96d..636bcf2439ef 100644
---- a/drivers/clk/sunxi/clk-sun9i-mmc.c
-+++ b/drivers/clk/sunxi/clk-sun9i-mmc.c
-@@ -109,6 +109,8 @@ static int sun9i_a80_mmc_config_clk_probe(struct platform_device *pdev)
- 	spin_lock_init(&data->lock);
+diff --git a/net/sctp/sm_sideeffect.c b/net/sctp/sm_sideeffect.c
+index b3815b568e8e..463c4a58d2c3 100644
+--- a/net/sctp/sm_sideeffect.c
++++ b/net/sctp/sm_sideeffect.c
+@@ -458,6 +458,10 @@ void sctp_generate_reconf_event(struct timer_list *t)
+ 		goto out_unlock;
+ 	}
  
- 	r = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-+	if (!r)
-+		return -EINVAL;
- 	/* one clock/reset pair per word */
- 	count = DIV_ROUND_UP((resource_size(r)), SUN9I_MMC_WIDTH);
- 	data->membase = devm_ioremap_resource(&pdev->dev, r);
++	/* This happens when the response arrives after the timer is triggered. */
++	if (!asoc->strreset_chunk)
++		goto out_unlock;
++
+ 	error = sctp_do_sm(net, SCTP_EVENT_T_TIMEOUT,
+ 			   SCTP_ST_TIMEOUT(SCTP_EVENT_TIMEOUT_RECONF),
+ 			   asoc->state, asoc->ep, asoc,
 -- 
 2.35.1
 

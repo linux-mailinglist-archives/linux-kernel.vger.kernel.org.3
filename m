@@ -2,131 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56B96519E26
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 13:36:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCF57519E28
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 13:36:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234860AbiEDLjY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 07:39:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49336 "EHLO
+        id S1348911AbiEDLjm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 07:39:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349054AbiEDLjS (ORCPT
+        with ESMTP id S1348906AbiEDLjj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 07:39:18 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C5035222A6
-        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 04:35:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651664141;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=34VZxVT7BZbb571VsASnxn7VWsmyBHWuoREbYnuFRqA=;
-        b=bAF+GusD+zUbuKQHwGyPQ18r5QpYfiwMs9cjrazuUueGWamLU01FLpC6b5pI1YfPES1/Bc
-        m7F/V9uHp2I2AhykAqyH0EMisQQ++g21Qgeko0US7aBlbanHFOH9uRg00QaoxnO1fWpcS0
-        v89ed/lszdCuXXmN78mgpRTHYqUzdY8=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-673-HoCa62dZP3mkqIIPM04-zQ-1; Wed, 04 May 2022 07:35:40 -0400
-X-MC-Unique: HoCa62dZP3mkqIIPM04-zQ-1
-Received: by mail-wm1-f71.google.com with SMTP id m26-20020a7bcb9a000000b0039455e871b6so531286wmi.8
-        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 04:35:40 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=34VZxVT7BZbb571VsASnxn7VWsmyBHWuoREbYnuFRqA=;
-        b=zbrKWN2tHdbGP/3yjrXH2VUzNKBJK0eBlm4oTdpN1/TlTfoJFoAYS4gcl3lNDE0JTI
-         +jPd4Q072y8Ov55hgaZ7rJRtoE7C7osqKu95EAfwoMkvuWoQ9a1TLpPZLENL96ykzm57
-         2qOmIxrEFDBcJOIgB0bE+9B8z3NbWNUpkI7WVXU98RLkNCbHM5DK2INy/h6b5W5JLQ7w
-         OeOg1irhZbyBI2qcCY6OzpFDgT8aU0VyTcxzUaMDSYUu8FD9LeOr9mBFvQijQFrgArhz
-         /7EGGaQz3yvY8Jo+nBpo1cCVkBnGgU/vknGesnyUHJsUlAiuNUkOkyCQupXnE+bqYXyy
-         7iLw==
-X-Gm-Message-State: AOAM531rsRhF3mIYzvE41SWnA0Kz0DpHP1h4agnQYQieU3hkgyaIjC4q
-        FVmzAMuQtSPvpfbA14RQcfeGPOP0lo8JVLoV9BfXoiO/NCMkHjdWvOaSOsRCPmytykY8epitPT1
-        8Soh32qV11Yeejb88cZc4uLH1
-X-Received: by 2002:a7b:ce0a:0:b0:394:41e:2517 with SMTP id m10-20020a7bce0a000000b00394041e2517mr7303644wmc.135.1651664139535;
-        Wed, 04 May 2022 04:35:39 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwkqdX7HCGB2EekG/+HnmQTPbLcK1+rCPyta5s7F5sneyoQz8GhIv8xGVqmVaPz6xc7p4OmlA==
-X-Received: by 2002:a7b:ce0a:0:b0:394:41e:2517 with SMTP id m10-20020a7bce0a000000b00394041e2517mr7303627wmc.135.1651664139274;
-        Wed, 04 May 2022 04:35:39 -0700 (PDT)
-Received: from [192.168.1.129] (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id e11-20020a05600c4e4b00b003942a244f36sm3780628wmq.15.2022.05.04.04.35.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 04 May 2022 04:35:38 -0700 (PDT)
-Message-ID: <da8874d4-66f1-d14e-c0ef-c3557e189cf4@redhat.com>
-Date:   Wed, 4 May 2022 13:35:37 +0200
+        Wed, 4 May 2022 07:39:39 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EEBA2B25F;
+        Wed,  4 May 2022 04:36:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651664163; x=1683200163;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=7C3kW2JgC07k1KkETjGbC4cqsYvXG7ExF22Q6uzU8/8=;
+  b=hfcRgGaX7yB1tzrXLJUVtschoxAvk352KvkEMsZfudEJaReDjYveIYr+
+   MUllQps/aHsc/wH9yj7MQunXqm0VplTioOI3JaocK2Zl3rN7a1elF6Wx7
+   lSzl0PNY5jJdJbRuu5y+S03h94Oz5nZqOpobYjZ28CwavxpPsrjVuyE/H
+   ZkOvb1bdc+sNS1nlUYMNhEc/aAM62Uu9eJaIstdAOlllD14zMIzAg4sg0
+   zZrAsIJsvx/V5VFBfS7OKhSrWlSsReRHDQtWrts5rf7dHgL8jaB29sp5W
+   kKp6DBA1lQHOWiyg80KtOOybovjrRkDrZ5SMHFX2ORj+jQHmnuAqC/TB/
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10336"; a="267620629"
+X-IronPort-AV: E=Sophos;i="5.91,197,1647327600"; 
+   d="scan'208";a="267620629"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2022 04:36:03 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,197,1647327600"; 
+   d="scan'208";a="516988540"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga003.jf.intel.com with ESMTP; 04 May 2022 04:36:00 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id F132A2E4; Wed,  4 May 2022 14:36:01 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Andreas Klinger <ak@it-klinger.de>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 1/1] iio: proximity: srf04: Make use of device properties
+Date:   Wed,  4 May 2022 14:35:57 +0300
+Message-Id: <20220504113557.59048-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v2] fbdev: Use helper to get fb_info in all file
- operations
-Content-Language: en-US
-To:     Thomas Zimmermann <tzimmermann@suse.de>,
-        linux-kernel@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        Junxiao Chang <junxiao.chang@intel.com>,
-        dri-devel@lists.freedesktop.org, Maxime Ripard <maxime@cerno.tech>,
-        Sam Ravnborg <sam@ravnborg.org>
-References: <20220503201934.681276-1-javierm@redhat.com>
- <YnJBGpvlViLV+0/a@phenom.ffwll.local>
- <038f8365-b23b-9d81-f7b2-8f8c6eb3a065@redhat.com>
- <YnJbvb5TlHs4ckPM@phenom.ffwll.local>
- <d47a3cab-4f21-3b8b-2834-030663677070@suse.de>
-From:   Javier Martinez Canillas <javierm@redhat.com>
-In-Reply-To: <d47a3cab-4f21-3b8b-2834-030663677070@suse.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Thomas,
+Convert the module to be property provider agnostic and allow
+it to be used on non-OF platforms.
 
-On 5/4/22 13:08, Thomas Zimmermann wrote:
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/iio/proximity/srf04.c | 11 ++++-------
+ 1 file changed, 4 insertions(+), 7 deletions(-)
 
-[snip]
-
->>> So something similar to fb_file_fb_info() is needed to check if
->>> the vm_private_data is still valid. I guess that could be done
->>> by using the vmf->vma->vm_file and attempting the same trick that
->>> fb_file_fb_info() does ?
->>
->> Yeah should work, except if the ptes are set up already there's kinda not
->> much that this will prevent. We'd need to tear down mappings and SIGBUS or
->> alternatively have something else in place there so userspace doesn't blow
->> up in funny ways (which is what we're doing on the drm side, or at least
->> trying to).
->>
->> I'm also not sure how much we should care, since ideally for drm drivers
->> this is all taken care of by drm_dev_enter in the right places. It does
->> mean though that fbdev mmap either needs to have it's own memory or be
->> fully redirected to the drm gem mmap.
->>
->> And then we can afford to just not care to fix fbdev itself.
-> 
-> While the problem has been there ever since, the bug didn't happen until 
-> we fixed hot-unplugging for fbdev. Not doing anything is probably not 
-> the right thing.
->
-
-Actually, this issue shouldn't happen if the fbdev drivers are not buggy
-and do the proper cleanup at .fb_release() time rather than at .remove().
-
-I'll post patches for simplefb and efifb which are the drivers that we
-mostly care at this point. So we should be good and not need more fixes.
-
+diff --git a/drivers/iio/proximity/srf04.c b/drivers/iio/proximity/srf04.c
+index 4e6286765f01..05015351a34a 100644
+--- a/drivers/iio/proximity/srf04.c
++++ b/drivers/iio/proximity/srf04.c
+@@ -37,9 +37,8 @@
+ #include <linux/err.h>
+ #include <linux/gpio/consumer.h>
+ #include <linux/kernel.h>
++#include <linux/mod_devicetable.h>
+ #include <linux/module.h>
+-#include <linux/of.h>
+-#include <linux/of_device.h>
+ #include <linux/platform_device.h>
+ #include <linux/property.h>
+ #include <linux/sched.h>
+@@ -261,7 +260,7 @@ static int srf04_probe(struct platform_device *pdev)
+ 
+ 	data = iio_priv(indio_dev);
+ 	data->dev = dev;
+-	data->cfg = of_match_device(of_srf04_match, dev)->data;
++	data->cfg = device_get_match_data(dev);
+ 
+ 	mutex_init(&data->lock);
+ 	init_completion(&data->rising);
+@@ -289,10 +288,8 @@ static int srf04_probe(struct platform_device *pdev)
+ 		return PTR_ERR(data->gpiod_power);
+ 	}
+ 	if (data->gpiod_power) {
+-
+-		if (of_property_read_u32(dev->of_node, "startup-time-ms",
+-						&data->startup_time_ms))
+-			data->startup_time_ms = 100;
++		data->startup_time_ms = 100;
++		device_property_read_u32(dev, "startup-time-ms", &data->startup_time_ms);
+ 		dev_dbg(dev, "using power gpio: startup-time-ms=%d\n",
+ 							data->startup_time_ms);
+ 	}
 -- 
-Best regards,
-
-Javier Martinez Canillas
-Linux Engineering
-Red Hat
+2.35.1
 

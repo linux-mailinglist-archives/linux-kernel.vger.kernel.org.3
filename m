@@ -2,72 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B078751AC31
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 20:03:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBB9051AC34
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 20:03:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357427AbiEDSGf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 14:06:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47648 "EHLO
+        id S1359842AbiEDSG5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 14:06:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359561AbiEDSGL (ORCPT
+        with ESMTP id S1359599AbiEDSGL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 4 May 2022 14:06:11 -0400
-Received: from mail-oa1-x2c.google.com (mail-oa1-x2c.google.com [IPv6:2001:4860:4864:20::2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76EC76D3A3
-        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 10:21:28 -0700 (PDT)
-Received: by mail-oa1-x2c.google.com with SMTP id 586e51a60fabf-e9027efe6aso1831288fac.10
-        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 10:21:28 -0700 (PDT)
+Received: from mail-oa1-x32.google.com (mail-oa1-x32.google.com [IPv6:2001:4860:4864:20::32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3536D6D3A7
+        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 10:21:29 -0700 (PDT)
+Received: by mail-oa1-x32.google.com with SMTP id 586e51a60fabf-edf9ddb312so905399fac.8
+        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 10:21:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=DUWKIdH/fEUKAxxzAokiJ2q+i9WASUkxei6O8LHC1rU=;
-        b=a3TSfVCrQqto9wmhJlB9avSH7Rp2BPHfvLxJNNhi9ciOwVonT/3vyD9qvpnRG+ay/p
-         qodVdrmUN8IKY+xc/SwIaS/U9CllguT+CewL9xBoAIC9Y/aeFEng9u/xSDK6UhVeVt+O
-         sO+g09lD0i56YTXLqTzDrIsYeJGoIQ+q0uovZ0NRMQADtfZS08DC4ojVdOuGOjK2acsi
-         jVmiv3QUseFuu2IDWH00tkMrWer8HKAka2giqqNBfRrwkcAuIinbAEwEJ0Y5HyzQfaPh
-         4NF/gMn9Gy/IxS9yXzH99wjHS5ajbfASZKmDgOfbspi4lYoSdUSWNU4uqa0NFqpwu4fK
-         LOgw==
+        bh=vKpqt3Zv71OFS+RtPhQCpWEmVvpBGhpyU8YWWfhiy8Y=;
+        b=X3sXe04ZkZYP37hU1qpG6mMuBg9Z7LxX/EgWjSm7om6CYeHY5AX+WVfwlUtuR6s3DS
+         JQ2MOTy6wndnhdDNyARx/uI7yIWF3JnnEeFhoLU84NGkC7kVeQnfhEDswdgZ4jan6QYu
+         3hTtJim8bqdzAukunw3K/36WIdd2UoiOxiQrv3q+/ev+3xR0zYXB0I11VJOqLo5kKQnW
+         K8l43rAqc7C0qGOsLeYw4q/AJnZ9vbzRtD1wlNGiwI2fdtmhiSEbYdofofwBTXjQ69Az
+         Hybm0bC8HnDgoRCgNwt+lF5yHIvOhE7sQNuwi7gl5lUXcijwN+TQBY07gD+TPjFlCiva
+         fTPg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=DUWKIdH/fEUKAxxzAokiJ2q+i9WASUkxei6O8LHC1rU=;
-        b=13l1xLT4NfUihj74C+WFsLsPpTEMSUwNFCkMsPrrYxnrnB6eJkO9Gfehq/U1+dT6j5
-         DA6wbhgim3R562cEAzdf3c4iDyqou831y8MI0yBbOTc9aHQAOcXOTEPzAVi9C1Rfpgxd
-         CEHw+grxc2MMX1+Syubj7AJ5ly0ndoBeBbDyQ9XwhYSJ7+Sw+iraCZvYgdXV6VZkv5Zu
-         zlTVmb+oBQ2ii1z+Te3JJfcbLma8kPnbn7FLQkKzv7htMwjPlxRg+qlSCjjdAuDwfqeu
-         7o/8rgDjsmecsJHOcJHqQAVBb6N2aU8MEziB3FFLUmDfK9O6TRBwr5VR8pugJikUlC1D
-         kTuA==
-X-Gm-Message-State: AOAM531GKgnkkIiAHMPubvb6foDREvZ4ydNlyYgF6/J4BqKNhz39S70D
-        2X7M1mkCUF+BgGfCS9Y9wPKVNBbFNewWEkj9
-X-Google-Smtp-Source: ABdhPJy2UZOyD3CWXrA/eXvFp3d4iW9ppaYryHuEExwQ7s7wGina9JRPiQs5uxLBRUeni6GHxzzWGA==
-X-Received: by 2002:a05:6870:c186:b0:e9:5f39:85b1 with SMTP id h6-20020a056870c18600b000e95f3985b1mr277585oad.144.1651684887889;
-        Wed, 04 May 2022 10:21:27 -0700 (PDT)
+        bh=vKpqt3Zv71OFS+RtPhQCpWEmVvpBGhpyU8YWWfhiy8Y=;
+        b=b2KY6k5TxraY+mkLz4tVCj698Bhq+3OIfKDqu6aA2W3R63HDxkBkuw6qaYHXLiIknm
+         HqVJ0bUgj3m08omPc/EvSOiBJC1yWGGhbyno6l3KOqGo+NVX1ocD71IF3poUugOJfP37
+         osMGr4/D8ZyObGT9Z/K4Rs7YN4tA6sfstwsh57gg/pCQ62YFIlHjTEiBZnDPUSAJ9qDQ
+         FyIXrPQU1frs0S+tChLNoewkcksQOGw2Nn+hbOgSjVSoTSUru9ZNJQYKkcpSKsl7OziZ
+         mO1UXw/Ss6zbWWq7S1nCZ3CFmeucTdKP4+vz2emFj9ep+tbuqofkh7RULfaK/ywefFv0
+         96cA==
+X-Gm-Message-State: AOAM533VYoChFd4wJIwS0935owTDdu5N0lpKlhPL2tTUQt7fLEsNn9Ly
+        KY2FGhtOleAmDX/gU2K15JWnDA==
+X-Google-Smtp-Source: ABdhPJyU0Q/uoTIwMxovxMdIKX+ny8p88N5ogcC+0vganajhvhHMka5oEPfrKlUo8lGlzi/th+7yvw==
+X-Received: by 2002:a05:6870:6301:b0:e9:17b2:2e12 with SMTP id s1-20020a056870630100b000e917b22e12mr276826oao.96.1651684888962;
+        Wed, 04 May 2022 10:21:28 -0700 (PDT)
 Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id a7-20020a056870b14700b000ead8b89484sm5785452oal.5.2022.05.04.10.21.26
+        by smtp.gmail.com with ESMTPSA id a7-20020a056870b14700b000ead8b89484sm5785452oal.5.2022.05.04.10.21.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 May 2022 10:21:27 -0700 (PDT)
+        Wed, 04 May 2022 10:21:28 -0700 (PDT)
 From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Satya Priya <quic_c_skakit@quicinc.com>,
-        Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-leds@vger.kernel.org,
-        Doug Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        linux-kernel@vger.kernel.org, Stephen Boyd <swboyd@chromium.org>,
+To:     devicetree@vger.kernel.org,
+        Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>,
+        krzysztof.kozlowski+dt@linaro.org, linux-kernel@vger.kernel.org,
+        robh+dt@kernel.org, agross@kernel.org,
         linux-arm-msm@vger.kernel.org
-Subject: Re: (subset) [PATCH V4 0/4] Add PM8350C PMIC PWM support for backlight
-Date:   Wed,  4 May 2022 12:21:12 -0500
-Message-Id: <165168485227.3730817.2589652211436766434.b4-ty@linaro.org>
+Cc:     dianders@chromium.org, quic_msavaliy@quicinc.com
+Subject: Re: [V6 0/2] arm64: dts: qcom: Configure CTS pin to bias-bus-hold for bluetooth
+Date:   Wed,  4 May 2022 12:21:13 -0500
+Message-Id: <165168485227.3730817.12193941137410849095.b4-ty@linaro.org>
 X-Mailer: git-send-email 2.32.0
-In-Reply-To: <1645509309-16142-1-git-send-email-quic_c_skakit@quicinc.com>
-References: <1645509309-16142-1-git-send-email-quic_c_skakit@quicinc.com>
+In-Reply-To: <1650556567-4995-1-git-send-email-quic_vnivarth@quicinc.com>
+References: <1650556567-4995-1-git-send-email-quic_vnivarth@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,25 +74,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 22 Feb 2022 11:25:05 +0530, Satya Priya wrote:
-> This series depends on [1], which adds driver for Qualcomm LPG.
+On Thu, 21 Apr 2022 21:26:05 +0530, Vijaya Krishna Nivarthi wrote:
+> WLAN rail was leaking power during RBSC/sleep even after turning BT off.
+> Change pinctrl configuration to handle same.
 > 
-> [1] https://patchwork.kernel.org/project/linux-arm-msm/list/?series=615848
 > 
-> Satya Priya (4):
->   dt-bindings: leds: Add pm8350c pmic support
->   leds: Add pm8350c support to Qualcomm LPG driver
->   arm64: dts: qcom: pm8350c: Add pwm support
->   arm64: dts: qcom: Enable pm8350c pwm for sc7280-idp2
-> 
-> [...]
 
 Applied, thanks!
 
-[3/4] arm64: dts: qcom: pm8350c: Add pwm support
-      commit: 5be66d2dc8873edcf215804067b1c076b00c6887
-[4/4] arm64: dts: qcom: Enable pm8350c pwm for sc7280-idp2
-      commit: 82096cc644098ab610e6df5238341907ea662164
+[1/2] arm64: dts: qcom: sc7280-idp: Configure CTS pin to bias-bus-hold for bluetooth
+      commit: 497b272759986af1aa5a25b5e903d082c67bd8f6
+[2/2] arm64: dts: qcom: sc7280-qcard: Configure CTS pin to bias-bus-hold for bluetooth
+      commit: 3d0e375bae55c2dfa6dd0762f45ad71f0b192f71
 
 Best regards,
 -- 

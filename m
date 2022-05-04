@@ -2,108 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2D6C51970C
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 07:49:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76C41519712
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 07:56:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344746AbiEDFwi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 01:52:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57652 "EHLO
+        id S1344752AbiEDGAB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 02:00:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230474AbiEDFwg (ORCPT
+        with ESMTP id S230149AbiEDF75 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 01:52:36 -0400
-Received: from conssluserg-02.nifty.com (conssluserg-02.nifty.com [210.131.2.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B1AC2AC4A;
-        Tue,  3 May 2022 22:48:59 -0700 (PDT)
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171]) (authenticated)
-        by conssluserg-02.nifty.com with ESMTP id 2445mbVf030072;
-        Wed, 4 May 2022 14:48:37 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-02.nifty.com 2445mbVf030072
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1651643317;
-        bh=T8bp1SyzelhI1qnKYgaU33N5Pbu8tMye3y+kUusTrk8=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=aktyygebmjSrf1hvWY/HreiZuZSSqtZ2m/4fJdfi9L+cLb7J/5XJgODlErc1EKt7e
-         r2g2sStBxulTiIKBJ99pcnEtNwf0j2QMqhLavP7zIA1FFniSqpHcxdESIPw1zjSrF0
-         rWskx1ZB+8EchIawTIapLCtHpLXTGdX09yCUZSWNJizFNVhri2YYyHgVdLTECGh7v4
-         nfs6A44juOrR1Vbw+uL9NFyKeXnTrpf3i1dtGilSb5GOU1OVwK/kK3MhTCKalZDsWl
-         bDrOps9u+haZ2qTn2LVxEKcWZT6I7nXoBTnmzdXDMBBIBxTjoyA+MM/iKWuyjLh8YU
-         v11SIZ8S1r5ow==
-X-Nifty-SrcIP: [209.85.214.171]
-Received: by mail-pl1-f171.google.com with SMTP id i1so514521plg.7;
-        Tue, 03 May 2022 22:48:37 -0700 (PDT)
-X-Gm-Message-State: AOAM5312DjDbC46gOSDuRJHF1Ay7XCTmN8C9wXh3XrAATmqNIdUcnjIK
-        xi6E9hiVme3aCafk1Kn+pLFirR4LzsnIXCQZ52I=
-X-Google-Smtp-Source: ABdhPJwqUgU9Oyuqdeyikydu2vvX0zUjmYZyugpVPfGYT6J4leSXuYvASG/EtBt0FtsgpIe8ruEaTZENBgL23UDHI1A=
-X-Received: by 2002:a17:903:1205:b0:15e:8cbc:fd2b with SMTP id
- l5-20020a170903120500b0015e8cbcfd2bmr19953970plh.99.1651643316418; Tue, 03
- May 2022 22:48:36 -0700 (PDT)
+        Wed, 4 May 2022 01:59:57 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE733201BC
+        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 22:56:21 -0700 (PDT)
+From:   John Ogness <john.ogness@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1651643779;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=y4gZIDL4SXYoFWE4y++sOkoisUu5mBEu04VZLJ6Da3k=;
+        b=HDzJK9xF0QUViF6InNkFLn1aDJyGLxf1Liu4VNGxtUJ96Gg5nqPfXftf4oXoZoyfl2f+s3
+        dNTuEK3ALsewLQpLlDLkBXvCnQ7w25gWB8O3YKRNlv8FHEOO24AZp91Y9sj0RseCHQzKQc
+        kS5TX0fGxAaW8MDIdMB4gpSWfJ0fyiwRLd8TaLrsObIyb1UM5bZE4/t3BMWnkp17JoQML5
+        jzNwgKN5yb087IFldVhWBeevKWovU1xtMn8xi6zsmYuLaNOVTMz2dH4e32f5Ajdp79ZsV2
+        cau41KD3H/krQL0ptv7KsIL5ryHz71yZLf5hl3DG9YJSyY3KvqNHtAGAVXExCQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1651643779;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=y4gZIDL4SXYoFWE4y++sOkoisUu5mBEu04VZLJ6Da3k=;
+        b=f+DoFRCkfWwFo6/8okdZxAJ8tv80c/O3h9qzst54Ax3zeh1bD/qs3SswAVPuwCSAF01nzO
+        j2sEd1/ouC01vHBw==
+To:     Marek Szyprowski <m.szyprowski@samsung.com>,
+        Petr Mladek <pmladek@suse.com>
+Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-amlogic@lists.infradead.org
+Subject: Re: [PATCH printk v5 1/1] printk: extend console_lock for
+ per-console locking
+In-Reply-To: <601d6979-7462-6f20-0d60-2fcfcf1e405b@samsung.com>
+References: <20220421212250.565456-1-john.ogness@linutronix.de>
+ <20220421212250.565456-15-john.ogness@linutronix.de>
+ <878rrs6ft7.fsf@jogness.linutronix.de> <Ymfgis0EAw0Oxoa5@alley>
+ <Ymfwk+X0CHq6ex3s@alley>
+ <CGME20220427070833eucas1p27a32ce7c41c0da26f05bd52155f0031c@eucas1p2.samsung.com>
+ <2a82eae7-a256-f70c-fd82-4e510750906e@samsung.com>
+ <Ymjy3rHRenba7r7R@alley>
+ <b6c1a8ac-c691-a84d-d3a1-f99984d32f06@samsung.com>
+ <87fslyv6y3.fsf@jogness.linutronix.de>
+ <51dfc4a0-f6cf-092f-109f-a04eeb240655@samsung.com>
+ <87k0b6blz2.fsf@jogness.linutronix.de>
+ <32bba8f8-dec7-78aa-f2e5-f62928412eda@samsung.com>
+ <87y1zkkrjy.fsf@jogness.linutronix.de>
+ <601d6979-7462-6f20-0d60-2fcfcf1e405b@samsung.com>
+Date:   Wed, 04 May 2022 08:02:18 +0206
+Message-ID: <87pmkton7h.fsf@jogness.linutronix.de>
 MIME-Version: 1.0
-References: <20220501084032.1025918-1-masahiroy@kernel.org>
- <20220501084032.1025918-2-masahiroy@kernel.org> <CAKwvOdkuWSBShjA2uQEYj5Puyn0bJLdK1JE9Y-P+q9uxNk1A5w@mail.gmail.com>
-In-Reply-To: <CAKwvOdkuWSBShjA2uQEYj5Puyn0bJLdK1JE9Y-P+q9uxNk1A5w@mail.gmail.com>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Wed, 4 May 2022 14:47:59 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAS1ZoTufXU4xwHz5BNyAOX698opRnQvfNR8he7+b+j8vQ@mail.gmail.com>
-Message-ID: <CAK7LNAS1ZoTufXU4xwHz5BNyAOX698opRnQvfNR8he7+b+j8vQ@mail.gmail.com>
-Subject: Re: [PATCH v2 01/26] modpost: use bool type where appropriate
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INVALID_DATE_TZ_ABSURD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 4, 2022 at 6:43 AM Nick Desaulniers <ndesaulniers@google.com> wrote:
+On 2022-05-03, Marek Szyprowski <m.szyprowski@samsung.com> wrote:
+>> I suppose if you login via ssh and check /proc/interrupts, then type
+>> some things over serial, then check /proc/interrupts again, you will
+>> see there have been no interrupts for the uart. But interrupts for
+>> other devices are happening. Is this correct?
 >
-> On Sun, May 1, 2022 at 1:42 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
-> >
-> > diff --git a/scripts/mod/modpost.h b/scripts/mod/modpost.h
-> > index 96d6b3a16ca2..7ccfcc8899c1 100644
-> > --- a/scripts/mod/modpost.h
-> > +++ b/scripts/mod/modpost.h
-> > @@ -1,4 +1,5 @@
-> >  /* SPDX-License-Identifier: GPL-2.0 */
-> > +#include <stdbool.h>
-> >  #include <stdio.h>
-> >  #include <stdlib.h>
-> >  #include <stdarg.h>
-> > @@ -111,11 +112,10 @@ struct module {
-> >         struct module *next;
-> >         int gpl_compatible;
-> >         struct symbol *unres;
-> > -       int from_dump;  /* 1 if module was loaded from *.symvers */
-> > -       int is_vmlinux;
-> > -       int seen;
-> > -       int has_init;
-> > -       int has_cleanup;
-> > +       bool from_dump;         /* true if module was loaded from *.symvers */
-> > +       bool is_vmlinux;
-> > +       bool seen;
-> > +       bool has_init, has_cleanup;
->
-> Consider keeping these on separate lines. Either way:
+> Right. The counter for ttyAML0 is not increased when lockup happens
+> and I type something to the uart console.
 
-OK, I will keep them on separate lines.
+Hmmm. This would imply that the interrupts are disabled fo the UART.
 
+Just to be sure that we haven't corrupted something in the driver, if
+you make the following change, everything works, right?
 
+--------- BEGIN PATCH ------
+diff --git a/kernel/printk/printk.c b/kernel/printk/printk.c
+index c7973266b176..1eaa323e335c 100644
+--- a/kernel/printk/printk.c
++++ b/kernel/printk/printk.c
+@@ -3578,7 +3578,7 @@ static int __init printk_activate_kthreads(void)
+ 	struct console *con;
+ 
+ 	console_lock();
+-	printk_kthreads_available = true;
++	//printk_kthreads_available = true;
+ 	for_each_console(con)
+ 		printk_start_kthread(con);
+ 	console_unlock();
+--------- END PATCH ------
 
+The above change will cause the kthreads to not print and instead always
+fallback to the direct method.
 
-> Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
->
-> --
-> Thanks,
-> ~Nick Desaulniers
-
-
-
--- 
-Best Regards
-Masahiro Yamada
+John

@@ -2,117 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34C2951A134
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 15:44:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7167451A130
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 15:43:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350783AbiEDNsT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 09:48:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35968 "EHLO
+        id S1350759AbiEDNq7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 09:46:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350775AbiEDNsH (ORCPT
+        with ESMTP id S238169AbiEDNq4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 09:48:07 -0400
-X-Greylist: delayed 79480 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 04 May 2022 06:44:30 PDT
-Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 160BF27156;
-        Wed,  4 May 2022 06:44:29 -0700 (PDT)
-Received: (Authenticated sender: clement.leger@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 836C924000C;
-        Wed,  4 May 2022 13:44:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1651671868;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=rk72OOOdZSUj/t0ck9GUkQrJCm6OvviM5pEqmXGfJr4=;
-        b=GAjLy704dfosoxU9eAdGTyyj8HAuQP8NWeOEuRGQ8M0aC3aXtC4Z/+0wzc3MpPCNpazLqs
-        sqlSOuSZ6E7OfjEh41ItNsnvAA5BxHa65iDBnypdHxt0BXP1A3CRsej8eMwM2b4fFkFuYm
-        eqTfzkGfgZHCKC2EK18B8yQalmXLzMRS1WCKPc68XwGexWOYo+13s9ra5xfpAfeRdggkuW
-        Qub8s2GnqY2eWh1s/GD7d4ckd9MGOF29XRakpcsqC74GCJBSbd/9vNgAN1oXHmChv6Pbmc
-        g4QS/5UYg5Fm56SNbfpJkQ/Tv6k70XROwA7nHj0ThHUcgAPCMn6XmDh2rwu3gQ==
-Date:   Wed, 4 May 2022 15:43:03 +0200
-From:   =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Pantelis Antoniou <pantelis.antoniou@konsulko.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Allan Nielsen <allan.nielsen@microchip.com>,
-        Horatiu Vultur <horatiu.vultur@microchip.com>,
-        Steen Hegelund <steen.hegelund@microchip.com>,
-        Thomas Petazzoni <thomas.petazonni@bootlin.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Mark Brown <broonie@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Andrew Lunn <andrew@lunn.ch>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-        Rob Herring <robh@kernel.org>
-Subject: Re: [PATCH 2/3] PCI: of: create DT nodes for PCI devices if they do
- not exists
-Message-ID: <20220504154303.5cdf8cc2@fixe.home>
-In-Reply-To: <20220503225353.GA415393@bhelgaas>
-References: <20220427094502.456111-3-clement.leger@bootlin.com>
-        <20220503225353.GA415393@bhelgaas>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-pc-linux-gnu)
+        Wed, 4 May 2022 09:46:56 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B23615700;
+        Wed,  4 May 2022 06:43:19 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id t11-20020a17090ad50b00b001d95bf21996so5231018pju.2;
+        Wed, 04 May 2022 06:43:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:to:cc:references:subject
+         :content-language:from:in-reply-to:content-transfer-encoding;
+        bh=x9+OqVHzvgZAzmQ7FhCUwnOZ5RMklI3ZHl/WECgRlrA=;
+        b=h5GX2Ek2ssMRmIgfObUfXUBvms99jKkg2ji/NF1OP6hQtSdoRpqAKUrAqmOlgoOk1o
+         ef/TFOZXNPcm7g/tCjG9aSyV1a1PBTXnSwODFbuVHc5hPRdCF4OM9iQ2AW/GVGkae8F0
+         nkS80WsCTtNfsAh1qWSQkvPXYb6VcHR+9yiGrExNglUQdK5CiDVnQsfCQHTOZzBaIxto
+         75KQA6/VLNu3SESd3LCjiAzMMxWYRjZWjqE72zt4vP5Ze/HlHqzFUW59ROX4BhRyhns9
+         LWUXmT2ISG8LWT05rTHJ59jXMqVvxf9E2lP9QGnSG3KmulPoSqAd9owS2DWSMowZvZhg
+         s16Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:to:cc
+         :references:subject:content-language:from:in-reply-to
+         :content-transfer-encoding;
+        bh=x9+OqVHzvgZAzmQ7FhCUwnOZ5RMklI3ZHl/WECgRlrA=;
+        b=ePY6617dv/PPiZ87IK5v9K+GdOpGaNlLX+c0lmTVp3m+9Crl+cLRXZVRruLcpkAloD
+         XTj4o6DPtd49JOnJesNzi/f+tnff+awpOo4ubPUi4KPddqRREf9SZ7N5eavtiDGzRmhX
+         fU+ztjf6jfm67lm6Fput1cwNBdUWxPP+//JhRBiANuBQgjPpjmBbtC7oeS5Etny0k0lX
+         qVQUHAG89Xzmxou+rqSJAXFgM00pYXtSchOBsm17977KYwvwJEO1gsZOtJaYtkyquqbC
+         pI6g7vKmdweChdBa1zJ5JnGNMtpXettVoiO+acvcqBkVYfDAzmWPj/TDi/bSHz3WnLG/
+         YsPw==
+X-Gm-Message-State: AOAM531EAjbGmX8T5V3S1N7WHqyVHx/0/MidrOPuaCp002GrfKcuDDde
+        HOHSVJsfoVXkNNNPwtDtcTY=
+X-Google-Smtp-Source: ABdhPJxjFZqQSVkYuA4ff5UwMHa7xUqA2/GDpd9Wy9e+15M7E6oXY0uMd2Is9JGRFZMUQ6uNx7DyeA==
+X-Received: by 2002:a17:90a:c402:b0:1d9:a003:3f8a with SMTP id i2-20020a17090ac40200b001d9a0033f8amr10381617pjt.18.1651671799067;
+        Wed, 04 May 2022 06:43:19 -0700 (PDT)
+Received: from [192.168.11.5] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
+        by smtp.gmail.com with ESMTPSA id k129-20020a632487000000b003c14af5060dsm14679659pgk.37.2022.05.04.06.43.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 04 May 2022 06:43:18 -0700 (PDT)
+Message-ID: <c578c9e6-b2a5-3294-d291-2abfda7d1aed@gmail.com>
+Date:   Wed, 4 May 2022 22:43:12 +0900
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+To:     Bagas Sanjaya <bagasdotme@gmail.com>
+Cc:     Pavel Begunkov <asml.silence@gmail.com>,
+        Dave Jones <davej@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        Randy Dunlap <randy.dunlap@oracle.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+References: <9d8b436a-5d8d-2a53-a2a1-5fbab987e41b@gmail.com>
+Subject: Re: [PATCH net-next] net/core: Remove comment quote for
+ __dev_queue_xmit()
+Content-Language: en-US
+From:   Akira Yokosawa <akiyks@gmail.com>
+In-Reply-To: <9d8b436a-5d8d-2a53-a2a1-5fbab987e41b@gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le Tue, 3 May 2022 17:53:53 -0500,
-Bjorn Helgaas <helgaas@kernel.org> a =C3=A9crit :
+Hi,
 
-> In subject:
->=20
->   PCI: of: Create DT nodes ... if they do not exist
->=20
-> The subject could be read as saying that you're going to create DT
-> nodes before the PCI devices exist, but I think you mean that when we
-> enumerate a PCI devices, we're *always* going to create a DT node for
-> it, even if the DT didn't mention it.
+On Wed, 4 May 2022 11:28:51 +0700,
+Bagas Sanjaya wrote:
+> On 5/4/22 08:03, Jakub Kicinski wrote:
+[...]
+>> Why drop almost half of the comment if the problem is just the ----
+>> banner?
+> 
+> I can't think of preserving delineation between actual documentation
+> and the quote without messing up kernel-doc.
+Actually, it is possible.
 
-Hi Bjorn,
+See "Block Quotes" in ReST documentation at:
+https://docutils.sourceforge.io/docs/ref/rst/restructuredtext.html#block-quotes
 
-Indeed ! I'll modify that.
+kernel-doc is basically ReST within comment blocks with several kernel-doc
+specific implicit/explicit markers.
 
->=20
-> Maybe something like:
->=20
->   PCI: of: Create DT node for every PCI device
->=20
-> although I see Rob thinks this should be done on demand instead of
-> doing it for every device, which sounds sensible to me.
+        Thanks, Akira
 
-Agreed, I'll rework this series.
+> 
+> Actually the "--BLG" signature is the culprit.
 
-Thanks,
-
->=20
-> On Wed, Apr 27, 2022 at 11:45:01AM +0200, Cl=C3=A9ment L=C3=A9ger wrote:
-> > In order to apply overlays to PCI device nodes, the nodes must first
-> > exist. This commit add support to populate a skeleton tree for PCI bus
-> > and devices. These nodes can then be used by drivers to apply overlays.=
- =20
->=20
-> s/This commit add support/Add support/
->=20
-> Bjorn
-
-
-
---=20
-Cl=C3=A9ment L=C3=A9ger,
-Embedded Linux and Kernel engineer at Bootlin
-https://bootlin.com

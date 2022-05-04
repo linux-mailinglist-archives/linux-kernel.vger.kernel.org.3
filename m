@@ -2,131 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EEBF51AF73
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 22:39:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A87BE51AF77
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 22:39:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378209AbiEDUml (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 16:42:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53584 "EHLO
+        id S1378273AbiEDUm7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 16:42:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378158AbiEDUmi (ORCPT
+        with ESMTP id S1350809AbiEDUmy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 16:42:38 -0400
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 127E050049;
-        Wed,  4 May 2022 13:39:02 -0700 (PDT)
-Received: by mail-pf1-x42f.google.com with SMTP id x52so2017880pfu.11;
-        Wed, 04 May 2022 13:39:02 -0700 (PDT)
+        Wed, 4 May 2022 16:42:54 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AF8E5044E;
+        Wed,  4 May 2022 13:39:17 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id bv19so5092197ejb.6;
+        Wed, 04 May 2022 13:39:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=iPsQSqw38DosWcjT864uHfOF3XMxzmipGYiJZY97a+Y=;
-        b=HeKz8oHH+fsEnc9s5lWFq2PGnWyNSnGkB3GsCOSICh3Cp4xpuN0zvzcUvI23k1GPpH
-         nw3mWSQDbM8My5I3049IDKSslQGytio+8Mu1v/GyBvMuMQ4trIchlQB3blQaFDUoWw56
-         5MOYSYmdvCw3gVpi1BZNreXBJKLNjQ5H95BZjS/NaV1sI8mkk9qQFg/chvTR0o8j0X77
-         gWdUHFVhXgV47R3enUr/M301Ev/8EL3kPPiJ2WjX0OyLFy63ukkqt/cQgyXTSyjZ9Hsk
-         XvI0+0qvOAJO6jLRoAnXAXhUuommEQpTTf4YhnLO6lhcIcblnVFKApPdGCMZMpQFDR5B
-         3q+A==
+        h=message-id:date:mime-version:user-agent:subject:to:references:from
+         :in-reply-to:content-transfer-encoding;
+        bh=Z2dVs5miBxmXIySFSNiW8pDoiQoVKCwO3mjzMYv3Zec=;
+        b=Z3rTg8R+bJUJWRg/IqgFAIFPaCR7ziAiygfcpmxywJGxkFelZ6ryfoerwCQFWwBGuh
+         BuoMD1Ye30enuoDCP5jTZ8WN8YiA0Ycp8uR+6PTS9wmOfcw3aTg0BgHGe5qL+KKtwWeL
+         ONuIUbWjegJbQT2F1WLK8wmWWn2DG5HrkbArMLk8OE8AwVOV3tuRbATvzcfVfVO+dqt3
+         6yiXjYYMhew0GLY/3t9n62r8VbRlMZIEPROXPtkZqubcZ86T6ih6pnpdRwON2VwKDLw7
+         xobGgdk4Q7SjknBYnViPJ8XgdX+EJB+iagSiDtrtYl826TDbKWpC0od7jAOgfxE5ETcR
+         4LiA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=iPsQSqw38DosWcjT864uHfOF3XMxzmipGYiJZY97a+Y=;
-        b=FOw185EkRC2nmhe88VRknzEbWWmvWcRSUd6K55vzttqvEkr+zkgg0SyYFFFpmVq1w6
-         xkhqkX9qTFtdQiYCyqGUnVQGRq0BjxchbRQQK0p8QXGDGZEZjwHQ6qXkHQ3ogyqKFXQ1
-         jC7YcRA9ghaQIRis8Nn78zhHk5SVtinUxdO+1QIM1uzbNtC2x3eYJlCCP5u9+Sp97Lcb
-         Ry4rVLaJBW4vluD+oQAgXij4Da5xztYw3fUfqINwzP8dYES/PeD+XeGubIj/7hielvV3
-         1LEr3dwT1BGic1IuMGPJ3CxJiegOwx+3/1EEMPve+3wG/C93Cxk9GyV1i9Bn80nOvp/L
-         HchA==
-X-Gm-Message-State: AOAM531H+KaWyOdPhnpFf6MvHxGW8P2HRZnLj6SevF+f97buBMbnqMIt
-        CN6PkvUf0eZU97qJ4PNMH6fw2uW0YPTamA==
-X-Google-Smtp-Source: ABdhPJyT72f6GCu/Hi0foCbtIUf3rGveJmsZaXeGY5CnNpUoYWUQwAfMmEBdDiFZ9ilZNTjq67JcTg==
-X-Received: by 2002:a63:7c4e:0:b0:380:8ae9:c975 with SMTP id l14-20020a637c4e000000b003808ae9c975mr19713757pgn.25.1651696741592;
-        Wed, 04 May 2022 13:39:01 -0700 (PDT)
-Received: from localhost ([2409:10:24a0:4700:e8ad:216a:2a9d:6d0c])
-        by smtp.gmail.com with ESMTPSA id y11-20020a62b50b000000b0050e0a43712esm3644774pfe.63.2022.05.04.13.39.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 May 2022 13:39:00 -0700 (PDT)
-Date:   Thu, 5 May 2022 05:38:58 +0900
-From:   Stafford Horne <shorne@gmail.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Andy Shevchenko <andriy.shevchenko@intel.com>,
-        Mikulas Patocka <mpatocka@redhat.com>,
-        Andy Shevchenko <andy@kernel.org>,
-        device-mapper development <dm-devel@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Mike Snitzer <msnitzer@redhat.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Milan Broz <gmazyland@gmail.com>
-Subject: Re: [PATCH v2] hex2bin: make the function hex_to_bin constant-time
-Message-ID: <YnLkYjOF2vEOdjOo@antec>
-References: <alpine.LRH.2.02.2204250723120.26714@file01.intranet.prod.int.rdu2.redhat.com>
- <YnI7hE4cIfjsdKSF@antec>
- <YnJI4Ru0AlUgrr9C@zx2c4.com>
- <YnJOCbLtdATzC+jn@zx2c4.com>
- <YnJQXr3igEMTqY3+@smile.fi.intel.com>
- <YnJSQ3jJyvhmIstD@zx2c4.com>
- <CAHk-=wgb_eBdjM_mzEvXfRG2EhrSK5MHNGyAj7=4vxvN4U9Rug@mail.gmail.com>
- <CAHmME9q_-nfGxp8_VCqaritm4N8v8g67AzRjXs9du846JhhpoQ@mail.gmail.com>
- <CAAfxs77yaLvWx9KnkDZX7E1eDm9N-NVJn5n8=mCK9BU-cSob=A@mail.gmail.com>
- <CAHk-=wjLRo-6PbhbvMUDojbMo=L+2jc5VpCYTyF-LGxZPhUngA@mail.gmail.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :to:references:from:in-reply-to:content-transfer-encoding;
+        bh=Z2dVs5miBxmXIySFSNiW8pDoiQoVKCwO3mjzMYv3Zec=;
+        b=284Kce0OEEZELR1BksEPrUdkG/Zo/Z0tdOaNRwtLiChSwhgw8GZ7rHrHuxOeWGcNWj
+         piPKnIIwfEnxA8p+249ZSYTP+sJj2wgVq05yHjdu5EpKoky3UQkkqMefZVyOmFj4niUP
+         TWDqQ+fAZo4ta3jLc8EV8vTwu/tIrSfrnIo/pmxl+p1KN5TwmtcGW/SK5g2zIdL3e9WZ
+         NsfVeVIj+b2FHplgmJgMxov6fZcG9xNYxHHnejFcFebrhfSUhsHWLUfDzO1gXWMECQYw
+         JXsYPrfoWAu9cCXz1iREcfuFR6LmDNhoKzLNI7fqgrx7b1RgdseA1LVFtwCvKjePNhh0
+         zf2Q==
+X-Gm-Message-State: AOAM532/a/udTKrK3HocjAHZh1OTAbqebhqeZh34Zju85U4TA4lodWv2
+        XW/8pLjAEfO75GxDxgeinmY=
+X-Google-Smtp-Source: ABdhPJz/STYDRpY8rzebL057RwSwOIeG+CcAiMnBZMkP5z3+WXgOu4hNxD/b2WeJThieF8B9LgOK8A==
+X-Received: by 2002:a17:906:9c82:b0:6df:c5f0:d456 with SMTP id fj2-20020a1709069c8200b006dfc5f0d456mr22153238ejc.287.1651696755643;
+        Wed, 04 May 2022 13:39:15 -0700 (PDT)
+Received: from [192.168.26.149] (ip-194-187-74-233.konfederacka.maverick.com.pl. [194.187.74.233])
+        by smtp.googlemail.com with ESMTPSA id bf16-20020a0564021a5000b0042617ba63aesm9675481edb.56.2022.05.04.13.39.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 04 May 2022 13:39:15 -0700 (PDT)
+Message-ID: <b2d90156-f29d-88a0-58b8-7fb32c08c837@gmail.com>
+Date:   Wed, 4 May 2022 22:39:14 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wjLRo-6PbhbvMUDojbMo=L+2jc5VpCYTyF-LGxZPhUngA@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:96.0) Gecko/20100101
+ Thunderbird/96.0
+Subject: Re: [RESEND PATCH v3 1/2] dt-bindings: mtd: partitions: Document new
+ partition-dynamic nodes
+To:     Ansuel Smith <ansuelsmth@gmail.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220429124825.21477-1-ansuelsmth@gmail.com>
+ <20220429124825.21477-2-ansuelsmth@gmail.com>
+From:   =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>
+In-Reply-To: <20220429124825.21477-2-ansuelsmth@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 04, 2022 at 01:10:03PM -0700, Linus Torvalds wrote:
-> On Wed, May 4, 2022 at 12:58 PM Stafford Horne <shorne@gmail.com> wrote:
-> >
-> > I have uploaded a diff I created here:
-> >   https://gist.github.com/54334556f2907104cd12374872a0597c
-> >
-> > It shows the same output.
+On 29.04.2022 14:48, Ansuel Smith wrote:
+> Document new partition-dynamic nodes used to provide an OF node for
+> partition registred at runtime by parsers. This is required for nvmem
+> system to declare and detect nvmem-cells.
 > 
-> In hex_to_bin itself it seems to only be a difference due to some
-> register allocation (r19 and r3 switched around).
+> With these special partitions, the reg / offset is not required.
+> The node name must be in the form of "partition name"-dynamic.
+> If the partition can't be displayed using the node name, it's possible
+> to use the label binding that will be used instead of the node name.
+> The node name or the label binding is used to match the partition
+> allocated by the parser at runtime and the parser will provide reg
+> and offset of the mtd.
 > 
-> But then it gets inlined into hex2bin and there changes there seem to
-> be about instruction and basic block scheduling, so it's a lot harder
-> to see what's going on.
+> NVMEM will use the data from the parser and provide the NVMEM cells
+> declared in the DTS, "connecting" the dynamic partition with a
+> static declaration of cells in them.
 > 
-> And a lot of constant changes, which honestly look just like code code
-> moved around by 16 bytes and offsets changed due to that.
+> Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
+> ---
+>   .../mtd/partitions/partition-dynamic.yaml     | 56 +++++++++++++++++++
+>   .../mtd/partitions/qcom,smem-part.yaml        |  4 ++
+>   2 files changed, 60 insertions(+)
+>   create mode 100644 Documentation/devicetree/bindings/mtd/partitions/partition-dynamic.yaml
 > 
-> So I doubt it's hex_to_bin() that is causing problems, I think it's
-> purely code movement. Which explains why adding a nop or a fake printk
-> fixes things.
-> 
-> Some alignment assumption that got broken?
+> diff --git a/Documentation/devicetree/bindings/mtd/partitions/partition-dynamic.yaml b/Documentation/devicetree/bindings/mtd/partitions/partition-dynamic.yaml
+> new file mode 100644
+> index 000000000000..e0efa58e4fac
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/mtd/partitions/partition-dynamic.yaml
+> @@ -0,0 +1,56 @@
+> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/mtd/partitions/partition-dynamic.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Dynamic Partition
 
-This is what it looks like to me too.  I will have to do a deep dive on what is
-going on with this particular build combination as I can't figure out what it is
-off the top of my head.
+I'm not native but that "Dynamic Partition" sounds pretty natural and
+I'm wondering if you shouldn't make that binding dynamic-partition.yaml
 
-This test is using a gcc 11 compiler, I tried with my gcc 12 toolchain and the
-issue cannot be reproduced.
+Any natives to comment on this? :)
 
-  - musl gcc 11 - https://musl.cc/or1k-linux-musl-cross.tgz
-  - openrisc gcc 12 - https://github.com/openrisc/or1k-gcc/releases/tag/or1k-12.0.1-20220210-20220304
 
-But again the difference between the two compiler outputs is a lot of register
-allocation and offsets changes.  Its not easy to see anything that stands out.
-I checked the change log for the openrisc specific changes from gcc 11 to gcc
-12.  Nothing seems to stand out, mcount profiler fix for PIC, a new large binary
-link flag.
+> +description: |
+> +  This binding describes a single flash partition that is dynamically allocated
+> +  by a dedicated parser that is not a fixed-partition parser.
+> +
+> +  A dynamic partition require the node ending with the "-dynamic" tag and if the
+> +  dynamic partition name can't be displayed using the node name, the label
+> +  properties can be used. The node name or the label have to match the dynamic
+> +  partition allocated by the parser.
+> +
+> +  These special partition definition can be used to give a dynamic partition
+> +  an OF node to declare NVMEM cells. An example is declaring the partition
+> +  label and all the NVMEM cells in it. The parser will detect the correct reg
+> +  and offset and the NVMEM will register the cells in it based on the data
+> +  extracted by the parser.
+> +
+> +maintainers:
+> +  - Ansuel Smith <ansuelsmth@gmail.com>
+> +
+> +properties:
+> +  label:
+> +    description: The label / name for the partition assigned by the parser at
+> +      runtime. This is needed for sybsystem like NVMEM to define cells and
+> +      register with this OF node.
+> +
+> +additionalProperties: true
+> +
+> +examples:
+> +  - |
+> +    flash {
+> +      partitions {
+> +        compatible = "qcom,smem-part";
+> +
+> +        art-dynamic {
+> +          compatible = "nvmem-cells";
+> +          #address-cells = <1>;
+> +          #size-cells = <1>;
+> +          label = "0:art";
+> +
+> +          macaddr_art_0: macaddr@0 {
+> +            reg = <0x0 0x6>;
+> +          };
+> +
+> +          macaddr_art_6: macaddr@6 {
+> +            reg = <0x6 0x6>;
+> +          };
+> +        };
+> +      };
+> +    };
 
--Stafford
+I see that we need a property (like "label") for storing partition name
+as it may contain characters not allowed in $nodename.
+
+Is there a reason to play with all that foo-dynamic $nodename then? With
+fallback from "label" to extracting foo from *-dynamic pattern?
+
+Could we just be lazy, keep things simple and require "label" property?
+
+Then we could e.g. require $nodename to be pattern ^partition-[0-9a-f]+$
+It's what leds-gpio.yaml does for reference.
+
+Example:
+
+partitions {
+	compatible = "foo";
+
+	partition-1 {
+		label = "bootloader";
+	};
+
+	partition-2 {
+		label = "0:art";
+	};
+};

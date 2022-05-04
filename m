@@ -2,154 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6048B519953
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 10:10:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9346D519956
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 10:11:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346079AbiEDIOZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 04:14:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43950 "EHLO
+        id S231148AbiEDIOj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 04:14:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231220AbiEDION (ORCPT
+        with ESMTP id S1346083AbiEDIOf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 04:14:13 -0400
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15FB9BE;
-        Wed,  4 May 2022 01:10:35 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id 8999B5C0164;
-        Wed,  4 May 2022 04:10:33 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Wed, 04 May 2022 04:10:33 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1651651833; x=1651738233; bh=bPK/7BcS9Z
-        Vh3KOIsYKoLzx9Bn2Qwpk/lSWXMxu/LoI=; b=J6CLwRtA2ZYSjDHdqrBztHg381
-        uRuW2bQZmiovtEl/Fiou6WhY8pFI19nYVQEWmjTmNlglayEEL0WpQSwPxKuZNehi
-        n9BgkdA3xN0rkjol07ef/5ntqieRhE5UJETNX+hA1k7uLPsjALxNgRxDqiGtLZjK
-        aXoiA07u3mup+HWuMsdh8nY+KhYLZrxCu1yF/pehMbQLplI8GvzdJPzJATOcIAY2
-        wWPIaPFokJcoYGrOj0TRb6IkToybUsvYJhzJStDxisd6wReScwGAFwaGvnEEqRtw
-        C/n5PLgdfzEwx9TquMYwdAmju1IlvoqKhwtUP+qT82WBdCZX0dN2EeUowDSg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1651651833; x=
-        1651738233; bh=bPK/7BcS9ZVh3KOIsYKoLzx9Bn2Qwpk/lSWXMxu/LoI=; b=p
-        zdnNIlQRXM+yQCUeZydDtKOnJ9c7mJLM74euDTdz2mjgAmwI45IVBBnrhsAtArAo
-        V2sCFwDgjDWQBzvqLHG+ju1CDTSxKJ/oWQ1uzqStvurCKXArDcUMPUJiQLewJlje
-        tKTLFl7tM+3+38RXEDOfso4hQY0fVWGbBi0cdh3tGD5YNrl7ZV1gJ4FAsxkJGswn
-        cLoMGTLkkqaWyhe8ldYOyUosRbg0rgJi7Y1INTKXmq6PbDwBbr8RemgyMgrY3Iaw
-        A4L71u2vPOfNVMfoYXEsUm8SAUwu6L1qftbjVI3FfjcffjwACUbvxK2w3ZPC5uHO
-        FkQOlxn+15pbkLSYGKU/g==
-X-ME-Sender: <xms:-DRyYkWVXFjCngtoAOuWrGTjaBdZ8nl3lFMyXDATzuWImclZIed8ng>
-    <xme:-DRyYomoGYdKzjGFXq2nPvujQ9suChNwFlbtB7LU332-CN_6zk7DxjasS8RhbrMJq
-    e27PQyQxylg_22cOig>
-X-ME-Received: <xmr:-DRyYoYwBLfRq0WrfNXqSiOS2gcsw6oK0hpq0OVXf2qRMWWfCTVSt7wUlM9LnwV1XvR2eEtRxGJ7eAhOUfwa7KHna602xAb-gVfZQY8>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdelucetufdoteggodetrfdotffvucfrrh
-    hofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgenuceurghi
-    lhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurh
-    epfffhvfevuffkfhggtggujgesghdtreertddtvdenucfhrhhomhepofgrgihimhgvucft
-    ihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrghtthgvrh
-    hnpedtleekjeeiudefvdfhieffteelhfeivdeliefgieeugffhvdelieffjeeigeetjeen
-    ucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivgeptdenuc
-    frrghrrghmpehmrghilhhfrhhomhepmhgrgihimhgvsegtvghrnhhordhtvggthh
-X-ME-Proxy: <xmx:-DRyYjV5zOQ7DbD3VptxFu0qmPx95hgNLcYov6CKbtqRtBEn-cMbpQ>
-    <xmx:-DRyYun9FA8ENPT1MkSVdXMFqQpNH_jnSC4SBuHOafSV7P4TbePPPQ>
-    <xmx:-DRyYocOwuktBPfp9HSYQ6MuWcQmmep9CW3d6VkraxvJm68wkV97HQ>
-    <xmx:-TRyYgVnUjHduSX9wKGztbduXCOmL6nbZTouotelrq9R_DRqK3PBQw>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 4 May 2022 04:10:32 -0400 (EDT)
-Date:   Wed, 4 May 2022 10:10:30 +0200
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Javier Martinez Canillas <javierm@redhat.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        dri-devel@lists.freedesktop.org, linux-doc@vger.kernel.org
-Subject: Re: [PATCH] drm/todo: Add entry for using kunit in the subsystem
-Message-ID: <20220504081030.ky57nenipnif5r2e@houat>
-References: <20220504080212.713275-1-javierm@redhat.com>
+        Wed, 4 May 2022 04:14:35 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BCBD1DB;
+        Wed,  4 May 2022 01:11:00 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id F2F821F43F34
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1651651859;
+        bh=/jiZgVApvYyURKtaMltQCHC5vAnx+PmRgNJz/ENPruU=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=JcO/T9fmxesXuqmiI6lT/hvrrsBu0JKyDlpiOKBYugj0SO9wGtNrDasM/4dKi6Jk7
+         Gc+/pyCdaj3tY0M8kxGsLHWm5xR/bBhRtFZ/2rxsPohMQPSebWR+/8CnHrZC3YWi9x
+         jCTsltQcpeQEtvp3YpBTTX9DxQqEUbCToNIGPDHpjHpUteaaq3ogmjElAFiE3vLmHZ
+         DmHIwqDJAeRvnW7vAi6Beao400bkL/S9C/5UDqfWxI/2Af1tj0jeLGvnDKkki5+nf6
+         n/GVMOzOGQ+Dd6fVf0VuoQjOcpAzVTJAfr+lKoIvpBxSRj1K/yo7r0kNh00jFBi+3m
+         5Qyev2BJjEo6w==
+Message-ID: <8e0435e0-d871-c278-3362-d349cbd1f7c8@collabora.com>
+Date:   Wed, 4 May 2022 10:10:56 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="3nl2mgc5rvyywsjl"
-Content-Disposition: inline
-In-Reply-To: <20220504080212.713275-1-javierm@redhat.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH] arm64: dts: mt8192: Follow binding order for SCP
+ registers
+Content-Language: en-US
+To:     =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
+        <nfraprado@collabora.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     kernel@collabora.com,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org
+References: <20220503212531.2657870-1-nfraprado@collabora.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220503212531.2657870-1-nfraprado@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Il 03/05/22 23:25, Nícolas F. R. A. Prado ha scritto:
+> The dt-binding for SCP documents the reg-names order as sram, cfg,
+> l1tcm. Update the SCP node on the mt8192 devicetree to follow that
+> order, which gets rid of a dtbs_check warning. This doesn't change any
+> behavior since the SCP driver accesses the memory regions through the
+> names anyway.
+> 
+> Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
 
---3nl2mgc5rvyywsjl
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Nic, you need a Fixes: tag on this commit, please add it and send a v2!
 
-Hi,
+Cheers!
 
-On Wed, May 04, 2022 at 10:02:12AM +0200, Javier Martinez Canillas wrote:
-> The Kernel Unit Testing (KUnit) framework provides a common framework for
-> unit tests within the Linux kernel. Having a test suite would allow to
-> identify regressions earlier.
->=20
-> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
-> ---
->=20
->  Documentation/gpu/todo.rst | 14 ++++++++++++++
->  1 file changed, 14 insertions(+)
->=20
-> diff --git a/Documentation/gpu/todo.rst b/Documentation/gpu/todo.rst
-> index 127e76ee0b2d..10bfb50908d1 100644
-> --- a/Documentation/gpu/todo.rst
-> +++ b/Documentation/gpu/todo.rst
-> @@ -603,6 +603,20 @@ Level: Advanced
->  Better Testing
->  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> =20
-> +Add unit tests using the Kernel Unit Testing (KUnit) framework
-> +--------------------------------------------------------------
-> +
-> +The `KUnit <https://www.kernel.org/doc/html/latest/dev-tools/kunit/index=
-=2Ehtml>`_
-> +provides a common framework for unit tests within the Linux kernel. Havi=
-ng a
-> +test suite would allow to identify regressions earlier.
-> +
-> +A good candidate for the first unit tests are the format-conversion help=
-ers in
-> +``drm_format_helper.c``.
-> +
-> +Contact: Javier Martinez Canillas <javierm@redhat.com>
-> +
-> +Level: Intermediate
-
-Kunit is fairly easy to grasp if you have some knowledge of other unit
-testing frameworks already (pytest, cmocka, etc.)
-
-Another good candidate would be to convert (some ?) selftests to kunit.
-I'm not sure the others, but at least test-drm_cmdline_parser should be
-fairly easy to convert.
-
-Maxime
-
---3nl2mgc5rvyywsjl
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYnI09gAKCRDj7w1vZxhR
-xd5LAQCNNRyTW43GNxecA9dlkRXKzQrvQOpErHWYblVKbVbEPwD/YtdmQ1zS0OV+
-en3dU8LmtXErx0wwYkzOPG2RumzKugQ=
-=slP5
------END PGP SIGNATURE-----
-
---3nl2mgc5rvyywsjl--

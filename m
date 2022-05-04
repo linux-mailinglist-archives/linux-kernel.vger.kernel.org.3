@@ -2,173 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BA6951B3BA
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 01:47:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4982351B3CC
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 01:49:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232884AbiEDXr4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 19:47:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56368 "EHLO
+        id S1382640AbiEDXtI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 19:49:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377942AbiEDXnz (ORCPT
+        with ESMTP id S1351580AbiEDXpn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 19:43:55 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB43EDC7
-        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 16:40:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651707616; x=1683243616;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ErLPKcP/QuhD6dx8c87SJVGz6qV2J/pSXkY92k22r/g=;
-  b=JV0uaoUZEVTgf0KAfg9fNDoHUWIpNrqNQ4ZCraCTqF7CiDOVOXcwR6Kh
-   F4FOGG6xw5nJRl0YG3MOvzgLYG9AJ6X1OZE7ey7rcQiqb7GDiOD9uOPSY
-   F6CvjAhh7OeHcH0347aEsMrBUtp6jIWfviFAyyxRe7a2vNuAsXoYM/9ED
-   ZTSlollE/BmARTuY/s29DAu8pOLxADzSboatGv/9vdoG+NdYYU9GR/JuB
-   sj6MhkSF/W5lpMhTzVT/xgBygPQad2QPlW0lDFCQyNh2lkdDWxP6K+j+k
-   W3B10rg0MjrSVB8fVI5yq2ujg5kfazLoMecuxlt6PxR/csNfCRWcjisiV
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10337"; a="248467380"
-X-IronPort-AV: E=Sophos;i="5.91,199,1647327600"; 
-   d="scan'208";a="248467380"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2022 16:40:16 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,199,1647327600"; 
-   d="scan'208";a="621032139"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 04 May 2022 16:40:15 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nmObO-000Btz-Fe;
-        Wed, 04 May 2022 23:40:14 +0000
-Date:   Thu, 5 May 2022 07:39:54 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Leo Liu <leo.liu@amd.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Alex Deucher <alexander.deucher@amd.com>,
-        James Zhu <James.Zhu@amd.com>
-Subject: [agd5f:drm-next 451/460]
- drivers/gpu/drm/amd/amdgpu/vcn_v3_0.c:1731:6: warning: no previous prototype
- for 'vcn_v3_0_dec_sw_ring_emit_fence'
-Message-ID: <202205050701.Cg5K2NIK-lkp@intel.com>
+        Wed, 4 May 2022 19:45:43 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBB4A21E3B;
+        Wed,  4 May 2022 16:42:04 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 695201F745;
+        Wed,  4 May 2022 23:42:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1651707723; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=AfEAmNadKBsyJGPHhIrqELUvuuTnv3+PkANYskYe9Z0=;
+        b=HP9Mdd0yAlGwCYu5G+uJ3VejgPUOyGqL96rsTA3rLVta8BIpQlcOHOnWQqLYj/g+dJevsx
+        go/q/geAcVFpjCmAsZlJR5mjce9eJQ1f5MqbY6lz7JmDcbqzw+en7IlUUmewUnxqRPtsi6
+        oO4oYZUiReSD+rAaAsK723I3eNXWdgA=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1651707723;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=AfEAmNadKBsyJGPHhIrqELUvuuTnv3+PkANYskYe9Z0=;
+        b=baAopqfnk2KDxhB0joCqS5hQX4Zdx8yytBWV2UbF+3CqxSx6C28g7OxO8YVGZIVvKZNCEG
+        VvVPfKJmMxfQDYCw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9D8D4131BD;
+        Wed,  4 May 2022 23:42:00 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id a/7yFUgPc2JxXAAAMHmgww
+        (envelope-from <neilb@suse.de>); Wed, 04 May 2022 23:42:00 +0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+From:   "NeilBrown" <neilb@suse.de>
+To:     "Yang Shi" <shy828301@gmail.com>
+Cc:     "Huang Ying" <ying.huang@intel.com>,
+        "Andrew Morton" <akpm@linux-foundation.org>,
+        "Geert Uytterhoeven" <geert+renesas@glider.be>,
+        "Christoph Hellwig" <hch@lst.de>,
+        "Miaohe Lin" <linmiaohe@huawei.com>, linux-nfs@vger.kernel.org,
+        "Linux MM" <linux-mm@kvack.org>,
+        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 1/2] MM: handle THP in swap_*page_fs()
+In-reply-to: <CAHbLzkpF4zedBmipjX8Zy5F=Fffez+xgxTAvveaz1nRHb9Wg_Q@mail.gmail.com>
+References: <165119280115.15698.2629172320052218921.stgit@noble.brown>,
+ <165119301488.15698.9457662928942765453.stgit@noble.brown>,
+ <CAHbLzko+9nBem8GnxQJ8RQu7bizQMMmS1TNqbRXcgkjUs+JuMw@mail.gmail.com>,
+ <165146539609.24404.4051313590023463843@noble.neil.brown.name>,
+ <CAHbLzkpF4zedBmipjX8Zy5F=Fffez+xgxTAvveaz1nRHb9Wg_Q@mail.gmail.com>
+Date:   Thu, 05 May 2022 09:41:56 +1000
+Message-id: <165170771676.24672.16520001373464213119@noble.neil.brown.name>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://gitlab.freedesktop.org/agd5f/linux.git drm-next
-head:   d6ffefccf7f04eefddc8e8aa35fb4afe05a42e0c
-commit: 1218a2e39fded75543d1dea04b8ed50e59ac6cdd [451/460] drm/amdgpu: make software ring functions reuseable for newer VCN
-config: alpha-allyesconfig (https://download.01.org/0day-ci/archive/20220505/202205050701.Cg5K2NIK-lkp@intel.com/config)
-compiler: alpha-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        git remote add agd5f https://gitlab.freedesktop.org/agd5f/linux.git
-        git fetch --no-tags agd5f drm-next
-        git checkout 1218a2e39fded75543d1dea04b8ed50e59ac6cdd
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=alpha SHELL=/bin/bash drivers/gpu/drm/amd/amdgpu/
+On Tue, 03 May 2022, Yang Shi wrote:
+> On Sun, May 1, 2022 at 9:23 PM NeilBrown <neilb@suse.de> wrote:
+> >
+> > On Sat, 30 Apr 2022, Yang Shi wrote:
+> > > On Thu, Apr 28, 2022 at 5:44 PM NeilBrown <neilb@suse.de> wrote:
+> > > >
+> > > > Pages passed to swap_readpage()/swap_writepage() are not necessarily =
+all
+> > > > the same size - there may be transparent-huge-pages involves.
+> > > >
+> > > > The BIO paths of swap_*page() handle this correctly, but the SWP_FS_O=
+PS
+> > > > path does not.
+> > > >
+> > > > So we need to use thp_size() to find the size, not just assume
+> > > > PAGE_SIZE, and we need to track the total length of the request, not
+> > > > just assume it is "page * PAGE_SIZE".
+> > >
+> > > Swap-over-nfs doesn't support THP swap IIUC. So SWP_FS_OPS should not
+> > > see THP at all. But I agree to remove the assumption about page size
+> > > in this path.
+> >
+> > Can you help me understand this please.  How would the swap code know
+> > that swap-over-NFS doesn't support THP swap?  There is no reason that
+> > NFS wouldn't be able to handle 2MB writes.  Even 1GB should work though
+> > NFS would have to split into several smaller WRITE requests.
+>=20
+> AFAICT, THP swap is only supported on non-rotate block devices, for
+> example, SSD, PMEM, etc. IIRC, the swap device has to support the
+> cluster in order to swap THP. The cluster is only supported by
+> non-rotate block devices.
+>=20
+> Looped Ying in, who is the author of THP swap.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+I hunted around the code and found that THP swap only happens if a
+'cluster_info' is allocated, and that only happens if=20
+	if (p->bdev && bdev_nonrot(p->bdev)) {
+in the swapon syscall.
 
-All warnings (new ones prefixed by >>):
+I guess "nonrot" is being use as a synonym for "low latency"...
+So even if NFS was low-latency it couldn't benefit from THP swap.
 
->> drivers/gpu/drm/amd/amdgpu/vcn_v3_0.c:1731:6: warning: no previous prototype for 'vcn_v3_0_dec_sw_ring_emit_fence' [-Wmissing-prototypes]
-    1731 | void vcn_v3_0_dec_sw_ring_emit_fence(struct amdgpu_ring *ring, u64 addr,
-         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/gpu/drm/amd/amdgpu/vcn_v3_0.c:1743:6: warning: no previous prototype for 'vcn_v3_0_dec_sw_ring_insert_end' [-Wmissing-prototypes]
-    1743 | void vcn_v3_0_dec_sw_ring_insert_end(struct amdgpu_ring *ring)
-         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/gpu/drm/amd/amdgpu/vcn_v3_0.c:1748:6: warning: no previous prototype for 'vcn_v3_0_dec_sw_ring_emit_ib' [-Wmissing-prototypes]
-    1748 | void vcn_v3_0_dec_sw_ring_emit_ib(struct amdgpu_ring *ring, struct amdgpu_job *job,
-         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/gpu/drm/amd/amdgpu/vcn_v3_0.c:1760:6: warning: no previous prototype for 'vcn_v3_0_dec_sw_ring_emit_reg_wait' [-Wmissing-prototypes]
-    1760 | void vcn_v3_0_dec_sw_ring_emit_reg_wait(struct amdgpu_ring *ring, uint32_t reg,
-         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/gpu/drm/amd/amdgpu/vcn_v3_0.c:1769:6: warning: no previous prototype for 'vcn_v3_0_dec_sw_ring_emit_vm_flush' [-Wmissing-prototypes]
-    1769 | void vcn_v3_0_dec_sw_ring_emit_vm_flush(struct amdgpu_ring *ring,
-         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/gpu/drm/amd/amdgpu/vcn_v3_0.c:1784:6: warning: no previous prototype for 'vcn_v3_0_dec_sw_ring_emit_wreg' [-Wmissing-prototypes]
-    1784 | void vcn_v3_0_dec_sw_ring_emit_wreg(struct amdgpu_ring *ring, uint32_t reg,
-         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+So as you say it is not currently possible for THP pages to be send to
+NFS for swapout.  It makes sense to prepare for it though I think - if
+only so that the code is more consistent and less confusing.
 
-
-vim +/vcn_v3_0_dec_sw_ring_emit_fence +1731 drivers/gpu/drm/amd/amdgpu/vcn_v3_0.c
-
-  1730	
-> 1731	void vcn_v3_0_dec_sw_ring_emit_fence(struct amdgpu_ring *ring, u64 addr,
-  1732	      u64 seq, uint32_t flags)
-  1733	{
-  1734		WARN_ON(flags & AMDGPU_FENCE_FLAG_64BIT);
-  1735	
-  1736		amdgpu_ring_write(ring, VCN_DEC_SW_CMD_FENCE);
-  1737		amdgpu_ring_write(ring, addr);
-  1738		amdgpu_ring_write(ring, upper_32_bits(addr));
-  1739		amdgpu_ring_write(ring, seq);
-  1740		amdgpu_ring_write(ring, VCN_DEC_SW_CMD_TRAP);
-  1741	}
-  1742	
-> 1743	void vcn_v3_0_dec_sw_ring_insert_end(struct amdgpu_ring *ring)
-  1744	{
-  1745		amdgpu_ring_write(ring, VCN_DEC_SW_CMD_END);
-  1746	}
-  1747	
-> 1748	void vcn_v3_0_dec_sw_ring_emit_ib(struct amdgpu_ring *ring, struct amdgpu_job *job,
-  1749	        struct amdgpu_ib *ib, uint32_t flags)
-  1750	{
-  1751		uint32_t vmid = AMDGPU_JOB_GET_VMID(job);
-  1752	
-  1753		amdgpu_ring_write(ring, VCN_DEC_SW_CMD_IB);
-  1754		amdgpu_ring_write(ring, vmid);
-  1755		amdgpu_ring_write(ring, lower_32_bits(ib->gpu_addr));
-  1756		amdgpu_ring_write(ring, upper_32_bits(ib->gpu_addr));
-  1757		amdgpu_ring_write(ring, ib->length_dw);
-  1758	}
-  1759	
-> 1760	void vcn_v3_0_dec_sw_ring_emit_reg_wait(struct amdgpu_ring *ring, uint32_t reg,
-  1761	        uint32_t val, uint32_t mask)
-  1762	{
-  1763		amdgpu_ring_write(ring, VCN_DEC_SW_CMD_REG_WAIT);
-  1764		amdgpu_ring_write(ring, reg << 2);
-  1765		amdgpu_ring_write(ring, mask);
-  1766		amdgpu_ring_write(ring, val);
-  1767	}
-  1768	
-> 1769	void vcn_v3_0_dec_sw_ring_emit_vm_flush(struct amdgpu_ring *ring,
-  1770	        uint32_t vmid, uint64_t pd_addr)
-  1771	{
-  1772		struct amdgpu_vmhub *hub = &ring->adev->vmhub[ring->funcs->vmhub];
-  1773		uint32_t data0, data1, mask;
-  1774	
-  1775		pd_addr = amdgpu_gmc_emit_flush_gpu_tlb(ring, vmid, pd_addr);
-  1776	
-  1777		/* wait for register write */
-  1778		data0 = hub->ctx0_ptb_addr_lo32 + vmid * hub->ctx_addr_distance;
-  1779		data1 = lower_32_bits(pd_addr);
-  1780		mask = 0xffffffff;
-  1781		vcn_v3_0_dec_sw_ring_emit_reg_wait(ring, data0, data1, mask);
-  1782	}
-  1783	
-> 1784	void vcn_v3_0_dec_sw_ring_emit_wreg(struct amdgpu_ring *ring, uint32_t reg,
-  1785	      uint32_t val)
-  1786	{
-  1787		amdgpu_ring_write(ring, VCN_DEC_SW_CMD_REG_WRITE);
-  1788		amdgpu_ring_write(ring,	reg << 2);
-  1789		amdgpu_ring_write(ring, val);
-  1790	}
-  1791	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Thanks,
+NeilBrown

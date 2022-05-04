@@ -2,75 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67BE9519EFD
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 14:10:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EAA8519F00
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 14:11:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349314AbiEDMOO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 08:14:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50850 "EHLO
+        id S1349325AbiEDMOd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 08:14:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349196AbiEDMOM (ORCPT
+        with ESMTP id S1349236AbiEDMOb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 08:14:12 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CA571707B
-        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 05:10:37 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1nmDpx-0008Bl-5z; Wed, 04 May 2022 14:10:33 +0200
-Received: from mfe by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1nmDpt-000527-Jl; Wed, 04 May 2022 14:10:29 +0200
-Date:   Wed, 4 May 2022 14:10:29 +0200
-From:   Marco Felsch <m.felsch@pengutronix.de>
-To:     Gireesh.Hiremath@in.bosch.com
-Cc:     linux-omap@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
-        bcousson@baylibre.com, tony@atomide.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, dmitry.torokhov@gmail.com,
-        mkorpershoek@baylibre.com, davidgow@google.com,
-        swboyd@chromium.org, fengping.yu@mediatek.com,
-        y.oudjana@protonmail.com, rdunlap@infradead.org,
-        colin.king@intel.com, sjoerd.simons@collabora.co.uk,
-        VinayKumar.Shettar@in.bosch.com,
-        Govindaraji.Sivanantham@in.bosch.com, anaclaudia.dias@de.bosch.com
-Subject: Re: [PATCH 2/4] Input: mt-matrix-keypad: Add Bosch mt matrix keypad
- driver
-Message-ID: <20220504121029.h6z2vtbapllkfsad@pengutronix.de>
-References: <20220504105254.1576-1-Gireesh.Hiremath@in.bosch.com>
- <20220504105254.1576-2-Gireesh.Hiremath@in.bosch.com>
+        Wed, 4 May 2022 08:14:31 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D61D718359;
+        Wed,  4 May 2022 05:10:55 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 225CE1F745;
+        Wed,  4 May 2022 12:10:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1651666254; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=GbtrdowooXgC4Dq4I7PP0O0e6k1pK88440d13xBhK68=;
+        b=gvyorl1e9bnZvu9SbWDa+u1KYleZB6uYGpnI0dQX9V+DB6u4vxbQu5qltnYvmQiei1rLaI
+        TqiXg4X62CL/MZ4++gP+Oz/1JpJPP9PTjUOlGcSOfSxUrVHSQIqjBIGQ3yGsIhE2RWpvOv
+        bVYG1gSmsZ0Q0ATa/1Ic7LH6FnCUC5M=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A9C35131BD;
+        Wed,  4 May 2022 12:10:53 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id eFpTKE1tcmKnUwAAMHmgww
+        (envelope-from <mkoutny@suse.com>); Wed, 04 May 2022 12:10:53 +0000
+Date:   Wed, 4 May 2022 14:10:52 +0200
+From:   Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
+To:     "T.J. Mercier" <tjmercier@google.com>
+Cc:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>, daniel@ffwll.ch,
+        hridya@google.com, christian.koenig@amd.com, jstultz@google.com,
+        tkjos@android.com, cmllamas@google.com, surenb@google.com,
+        kaleshsingh@google.com, Kenny.Ho@amd.com,
+        skhan@linuxfoundation.org, kernel-team@android.com,
+        cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6 1/6] gpu: rfc: Proposal for a GPU cgroup controller
+Message-ID: <20220504121052.GA24172@blackbody.suse.cz>
+References: <20220502231944.3891435-1-tjmercier@google.com>
+ <20220502231944.3891435-2-tjmercier@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220504105254.1576-2-Gireesh.Hiremath@in.bosch.com>
-User-Agent: NeoMutt/20180716
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: mfe@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220502231944.3891435-2-tjmercier@google.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Gireesh,
+Hello.
 
-On 22-05-04, Gireesh.Hiremath@in.bosch.com wrote:
-> From: Gireesh Hiremath <Gireesh.Hiremath@in.bosch.com>
-> 
-> add support for keypad driver running on Bosch Guardian
-> Dtect board using TI-am335x cpu. Driver implementation
-> is based on matrix_keypad.c
+On Mon, May 02, 2022 at 11:19:35PM +0000, "T.J. Mercier" <tjmercier@google.com> wrote:
+> --- a/Documentation/admin-guide/cgroup-v2.rst
+> +++ b/Documentation/admin-guide/cgroup-v2.rst
+> [...]
+> +	The device name string is set by a device driver when it registers with the
+> +	GPU cgroup controller to participate in resource accounting. 
 
-pls can you tell me the main difference between the already existing
-matrix_keypad.c driver and your driver. If there are only minor
-differences I would rather add those to the existing driver.
+Are these names available anywhere else for the user? (I.e. would
+drivers add respective sysfs attributes or similar?)
 
-Regards,
-  Marco
+
+> +     Non-unique names will be rejected at the point of registration.
+
+This doesn't seem relevant to the cgroupfs user, does it?
+I think it should be mentioned at the respective API.
+
+HTH,
+Michal
+

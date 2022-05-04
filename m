@@ -2,134 +2,791 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83CE251AD40
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 20:47:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D02AF51AD46
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 20:48:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377300AbiEDSuz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 14:50:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49146 "EHLO
+        id S1377319AbiEDSwH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 14:52:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377285AbiEDSuv (ORCPT
+        with ESMTP id S1377315AbiEDSvs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 14:50:51 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BB6D165B1;
-        Wed,  4 May 2022 11:47:13 -0700 (PDT)
-Date:   Wed, 04 May 2022 18:47:10 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1651690031;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=zu5TSATSvCYYaY7Kn2lIzDaMbq7oFFxVQXH2iz93NOU=;
-        b=FT9XUPQSXNPAliWIwJWVv3GAtt+7uGyTD+RdDKElLRAS96W/MU3t3q/XtnJ1Rv1Y7OmGNb
-        IqZ0t3MxLwHFcLSTpM+JNNEVW1QIPj4HF7XQ+Zwfrl7UmAq/UqnVi6M3PK7Ol1wUvyzzkH
-        MqbUeBhA5V6xF2sVKfguup3Xkv8oFCWeGLhvkPOR7B4ozQ1Uy0//IQHkVDuyJnMvVpEgxi
-        7nhXTiSGPWqP6ehkHpwVShjO0Z8ibIKW+tYDamZE5OUAJsm0rSG3A6bb844H3cQPBH2I/q
-        6MB+FaDz+MORPCgVsQ2CkQylegh6DWWvwJXw9WorTmtyEEWOR3i3pO+RYY/ueA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1651690031;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=zu5TSATSvCYYaY7Kn2lIzDaMbq7oFFxVQXH2iz93NOU=;
-        b=L5OJ4IGTIFitrOyK09kyp0h2o+yt356Sl4YooRa8tmSRXqgNNxb9i5nLP7CslxZ1ThAUg4
-        ViZT4yarJJ9II4Bg==
-From:   "tip-bot2 for Josh Poimboeuf" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/urgent] MAINTAINERS: Update Josh Poimboeuf's email address
-Cc:     Josh Poimboeuf <jpoimboe@redhat.com>, Borislav Petkov <bp@suse.de>,
-        x86@kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <1abc3de4b00dc6f915ac975a2ec29ed545d96dc4.1651687652.git.jpoimboe@redhat.com>
-References: <1abc3de4b00dc6f915ac975a2ec29ed545d96dc4.1651687652.git.jpoimboe@redhat.com>
+        Wed, 4 May 2022 14:51:48 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E762A15FC8
+        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 11:48:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1651690090;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=IhgVURhgbuNXOQlJlrqsFaU1eyQ9iz5LQpBl+7wTZ04=;
+        b=Y5X6xlGFr3jIg+rCCiNj5dUIgPGUOEJON08cdpiylPsA2+9eLknwxn0QzSw+jfmblVlEiY
+        dxUqmqPDXf5yYqVgbIbD9hrqkBzQzYgTPnepNKaxlJ9MQZrqIdfNWoLEwTWR0YU4Sl/ZJ9
+        pEpGeQQ6yM6ytHi6mcCtQV94/viy6ZA=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-294-clMFzeFROLy4H3wqdXuBhA-1; Wed, 04 May 2022 14:48:02 -0400
+X-MC-Unique: clMFzeFROLy4H3wqdXuBhA-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 34FE0833966;
+        Wed,  4 May 2022 18:48:02 +0000 (UTC)
+Received: from jtoppins.rdu.csb (unknown [10.22.10.95])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 469B52166B1A;
+        Wed,  4 May 2022 18:48:01 +0000 (UTC)
+From:   Jonathan Toppins <jtoppins@redhat.com>
+To:     netdev@vger.kernel.org
+Cc:     Long Xin <lxin@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Jay Vosburgh <j.vosburgh@gmail.com>,
+        Veaceslav Falico <vfalico@gmail.com>,
+        Andy Gospodarek <andy@greyhouse.net>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH net-next v2] bond: add mac filter option for balance-xor
+Date:   Wed,  4 May 2022 14:47:50 -0400
+Message-Id: <6227427ef3b57d7de6d4d95e9dd7c9b222a37bf6.1651689665.git.jtoppins@redhat.com>
 MIME-Version: 1.0
-Message-ID: <165169003042.4207.8052984123869654429.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.6
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/urgent branch of tip:
+Implement a MAC filter that prevents duplicate frame delivery when
+handling BUM traffic. This attempts to partially replicate OvS SLB
+Bonding[1] like functionality without requiring significant change
+in the Linux bridging code.
 
-Commit-ID:     770fb0942c338545f93a584342b64848cff31efe
-Gitweb:        https://git.kernel.org/tip/770fb0942c338545f93a584342b64848cff31efe
-Author:        Josh Poimboeuf <jpoimboe@redhat.com>
-AuthorDate:    Wed, 04 May 2022 11:07:45 -07:00
-Committer:     Borislav Petkov <bp@suse.de>
-CommitterDate: Wed, 04 May 2022 20:43:08 +02:00
+A typical network setup for this feature would be:
 
-MAINTAINERS: Update Josh Poimboeuf's email address
+            .--------------------------------------------.
+            |         .--------------------.             |
+            |         |                    |             |
+       .-------------------.               |             |
+       |    | Bond 0  |    |               |             |
+       | .--'---. .---'--. |               |             |
+  .----|-| eth0 |-| eth1 |-|----.    .-----+----.   .----+------.
+  |    | '------' '------' |    |    | Switch 1 |   | Switch 2  |
+  |    '---,---------------'    |    |          +---+           |
+  |       /                     |    '----+-----'   '----+------'
+  |  .---'---.    .------.      |         |              |
+  |  |  br0  |----| VM 1 |      |      ~~~~~~~~~~~~~~~~~~~~~
+  |  '-------'    '------'      |     (                     )
+  |      |        .------.      |     ( Rest of Network     )
+  |      '--------| VM # |      |     (_____________________)
+  |               '------'      |
+  |  Host 1                     |
+  '-----------------------------'
 
-Change to my kernel.org email address.
+Where 'VM1' and 'VM#' are hosts connected to a Linux bridge, br0, with
+bond0 and its associated links, eth0 & eth1, provide ingress/egress. One
+can assume bond0, br1, and hosts VM1 to VM# are all contained in a
+single box, as depicted. Interfaces eth0 and eth1 provide redundant
+connections to the data center with the requirement to use all bandwidth
+when the system is functioning normally. Switch 1 and Switch 2 are
+physical switches that do not implement any advanced L2 management
+features such as MLAG, Cisco's VPC, or LACP.
 
-Signed-off-by: Josh Poimboeuf <jpoimboe@redhat.com>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Link: https://lore.kernel.org/r/1abc3de4b00dc6f915ac975a2ec29ed545d96dc4.1651687652.git.jpoimboe@redhat.com
+Combining this feature with vlan+srcmac hash policy allows a user to
+create an access network without the need to use expensive switches that
+support features like Cisco's VCP.
+
+[1] https://docs.openvswitch.org/en/latest/topics/bonding/#slb-bonding
+
+Co-developed-by: Long Xin <lxin@redhat.com>
+Signed-off-by: Long Xin <lxin@redhat.com>
+Signed-off-by: Jonathan Toppins <jtoppins@redhat.com>
 ---
- MAINTAINERS | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index edc96cd..1e1a226 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -7499,7 +7499,7 @@ F:	Documentation/hwmon/f71805f.rst
- F:	drivers/hwmon/f71805f.c
+Notes:
+    v2:
+     * dropped needless abstraction functions and put code in module init
+     * renamed variable "rc" to "ret" to stay consistent with most of the
+       code
+     * fixed parameter setting management, when arp-monitor is turned on
+       this feature will be turned off similar to how miimon and arp-monitor
+       interact
+     * renamed bond_xor_recv to bond_mac_filter_recv for a little more
+       clarity
+     * it appears the implied default return code for any bonding recv probe
+       must be `RX_HANDLER_ANOTHER`. Changed the default return code of
+       bond_mac_filter_recv to use this return value to not break skb
+       processing when the skb dev is switched to the bond dev:
+         `skb->dev = bond->dev`
+
+ Documentation/networking/bonding.rst  |  19 +++
+ drivers/net/bonding/Makefile          |   2 +-
+ drivers/net/bonding/bond_mac_filter.c | 201 ++++++++++++++++++++++++++
+ drivers/net/bonding/bond_mac_filter.h |  39 +++++
+ drivers/net/bonding/bond_main.c       |  27 ++++
+ drivers/net/bonding/bond_netlink.c    |  13 ++
+ drivers/net/bonding/bond_options.c    |  86 ++++++++++-
+ drivers/net/bonding/bonding_priv.h    |   1 +
+ include/net/bond_options.h            |   1 +
+ include/net/bonding.h                 |   3 +
+ include/uapi/linux/if_link.h          |   1 +
+ 11 files changed, 390 insertions(+), 3 deletions(-)
+ create mode 100644 drivers/net/bonding/bond_mac_filter.c
+ create mode 100644 drivers/net/bonding/bond_mac_filter.h
+
+diff --git a/Documentation/networking/bonding.rst b/Documentation/networking/bonding.rst
+index 43be3782e5df..8786ce7eaacb 100644
+--- a/Documentation/networking/bonding.rst
++++ b/Documentation/networking/bonding.rst
+@@ -550,6 +550,25 @@ lacp_rate
  
- FADDR2LINE
--M:	Josh Poimboeuf <jpoimboe@redhat.com>
-+M:	Josh Poimboeuf <jpoimboe@kernel.org>
- S:	Maintained
- F:	scripts/faddr2line
+ 	The default is slow.
  
-@@ -11348,7 +11348,7 @@ F:	drivers/mmc/host/litex_mmc.c
- N:	litex
++mac_filter
++
++	Tells the bonding device to drop frames received who's source MAC
++	address	matches entries in a filter table. The filter table is
++	populated when the bond transmits frames. This is similar in
++	concept to the MAC learning table implemented in the bridge code.
++
++	This filtering is only enabled for the balance-xor bonding mode.
++
++	off or 0
++		Turns the feature off
++
++	number
++		A number greater than zero turns the feature on and sets
++		the maximum number of MAC addresses to store in the hash
++		table.
++
++	The default is off.
++
+ max_bonds
  
- LIVE PATCHING
--M:	Josh Poimboeuf <jpoimboe@redhat.com>
-+M:	Josh Poimboeuf <jpoimboe@kernel.org>
- M:	Jiri Kosina <jikos@kernel.org>
- M:	Miroslav Benes <mbenes@suse.cz>
- M:	Petr Mladek <pmladek@suse.com>
-@@ -14224,7 +14224,7 @@ F:	lib/objagg.c
- F:	lib/test_objagg.c
+ 	Specifies the number of bonding devices to create for this
+diff --git a/drivers/net/bonding/Makefile b/drivers/net/bonding/Makefile
+index 30e8ae3da2da..5dbc360a8522 100644
+--- a/drivers/net/bonding/Makefile
++++ b/drivers/net/bonding/Makefile
+@@ -5,7 +5,7 @@
  
- OBJTOOL
--M:	Josh Poimboeuf <jpoimboe@redhat.com>
-+M:	Josh Poimboeuf <jpoimboe@kernel.org>
- M:	Peter Zijlstra <peterz@infradead.org>
- S:	Supported
- F:	tools/objtool/
-@@ -18792,7 +18792,7 @@ F:	include/dt-bindings/reset/starfive-jh7100.h
+ obj-$(CONFIG_BONDING) += bonding.o
  
- STATIC BRANCH/CALL
- M:	Peter Zijlstra <peterz@infradead.org>
--M:	Josh Poimboeuf <jpoimboe@redhat.com>
-+M:	Josh Poimboeuf <jpoimboe@kernel.org>
- M:	Jason Baron <jbaron@akamai.com>
- R:	Steven Rostedt <rostedt@goodmis.org>
- R:	Ard Biesheuvel <ardb@kernel.org>
-@@ -21444,7 +21444,7 @@ F:	arch/x86/kernel/apic/x2apic_uv_x.c
- F:	arch/x86/platform/uv/
+-bonding-objs := bond_main.o bond_3ad.o bond_alb.o bond_sysfs.o bond_sysfs_slave.o bond_debugfs.o bond_netlink.o bond_options.o
++bonding-objs := bond_main.o bond_3ad.o bond_alb.o bond_sysfs.o bond_sysfs_slave.o bond_debugfs.o bond_netlink.o bond_options.o bond_mac_filter.o
  
- X86 STACK UNWINDING
--M:	Josh Poimboeuf <jpoimboe@redhat.com>
-+M:	Josh Poimboeuf <jpoimboe@kernel.org>
- M:	Peter Zijlstra <peterz@infradead.org>
- S:	Supported
- F:	arch/x86/include/asm/unwind*.h
+ proc-$(CONFIG_PROC_FS) += bond_procfs.o
+ bonding-objs += $(proc-y)
+diff --git a/drivers/net/bonding/bond_mac_filter.c b/drivers/net/bonding/bond_mac_filter.c
+new file mode 100644
+index 000000000000..e86b2b475df3
+--- /dev/null
++++ b/drivers/net/bonding/bond_mac_filter.c
+@@ -0,0 +1,201 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * Filter received frames based on MAC addresses "behind" the bond.
++ */
++
++#include "bonding_priv.h"
++
++static const struct rhashtable_params bond_rht_params = {
++	.head_offset         = offsetof(struct bond_mac_cache_entry, rhnode),
++	.key_offset          = offsetof(struct bond_mac_cache_entry, key),
++	.key_len             = sizeof(struct mac_addr),
++	.automatic_shrinking = true,
++};
++
++static inline unsigned long hold_time(const struct bonding *bond)
++{
++	return msecs_to_jiffies(5000);
++}
++
++static bool has_expired(const struct bonding *bond,
++			struct bond_mac_cache_entry *mac)
++{
++	return time_before_eq(mac->used + hold_time(bond), jiffies);
++}
++
++static void mac_delete_rcu(struct callback_head *head)
++{
++	kmem_cache_free(bond_mac_cache,
++			container_of(head, struct bond_mac_cache_entry, rcu));
++}
++
++static int mac_delete(struct bonding *bond,
++		      struct bond_mac_cache_entry *entry)
++{
++	int ret;
++
++	ret = rhashtable_remove_fast(bond->mac_filter_tbl,
++				     &entry->rhnode,
++				     bond->mac_filter_tbl->p);
++	set_bit(BOND_MAC_DEAD, &entry->flags);
++	call_rcu(&entry->rcu, mac_delete_rcu);
++	return ret;
++}
++
++void bond_mac_hash_release_entries(struct work_struct *work)
++{
++	struct bonding *bond = container_of(work, struct bonding,
++				mac_work.work);
++	struct rhashtable_iter iter;
++	struct bond_mac_cache_entry *entry;
++	unsigned long flags;
++
++	rhashtable_walk_enter(bond->mac_filter_tbl, &iter);
++	rhashtable_walk_start(&iter);
++	while ((entry = rhashtable_walk_next(&iter)) != NULL) {
++		if (IS_ERR(entry))
++			continue;
++
++		spin_lock_irqsave(&entry->lock, flags);
++		if (has_expired(bond, entry))
++			mac_delete(bond, entry);
++		spin_unlock_irqrestore(&entry->lock, flags);
++	}
++	rhashtable_walk_stop(&iter);
++	rhashtable_walk_exit(&iter);
++	queue_delayed_work(bond->wq, &bond->mac_work,
++			   msecs_to_jiffies(5 * 60 * 1000));
++}
++
++int bond_mac_hash_init(struct bonding *bond)
++{
++	int ret;
++
++	netdev_dbg(bond->dev, "mac_filter: alloc memory for hash table\n");
++	bond->mac_filter_tbl = kzalloc(sizeof(*bond->mac_filter_tbl),
++				       GFP_KERNEL);
++	if (!bond->mac_filter_tbl)
++		return -ENOMEM;
++
++	ret = rhashtable_init(bond->mac_filter_tbl, &bond_rht_params);
++	if (ret)
++		kfree(bond->mac_filter_tbl);
++
++	return ret;
++}
++
++static void bond_mac_free_entry(void *entry, void *ctx)
++{
++	kmem_cache_free((struct kmem_cache *)ctx, entry);
++}
++
++void bond_mac_hash_destroy(struct bonding *bond)
++{
++	if (bond->mac_filter_tbl) {
++		rhashtable_free_and_destroy(bond->mac_filter_tbl,
++					    bond_mac_free_entry,
++					    bond_mac_cache);
++		kfree(bond->mac_filter_tbl);
++		bond->mac_filter_tbl = NULL;
++	}
++}
++
++static int mac_create(struct bonding *bond, const u8 *addr)
++{
++	struct bond_mac_cache_entry *entry;
++	int ret;
++
++	entry = kmem_cache_alloc(bond_mac_cache, GFP_ATOMIC);
++	if (!entry)
++		return -ENOMEM;
++	spin_lock_init(&entry->lock);
++	memcpy(&entry->key, addr, sizeof(entry->key));
++	entry->used = jiffies;
++	ret = rhashtable_lookup_insert_fast(bond->mac_filter_tbl,
++					    &entry->rhnode,
++					    bond->mac_filter_tbl->p);
++	if (ret) {
++		kmem_cache_free(bond_mac_cache, entry);
++		entry = NULL;
++		if (ret == -EEXIST)
++			return 0;
++		pr_err_once("Failed to insert mac entry %d\n", ret);
++	}
++	return ret;
++}
++
++static struct bond_mac_cache_entry *mac_find(struct bonding *bond,
++					     const u8 *addr)
++{
++	struct mac_addr key;
++
++	memcpy(&key, addr, sizeof(key));
++	return rhashtable_lookup(bond->mac_filter_tbl, &key,
++				 bond->mac_filter_tbl->p);
++}
++
++inline void mac_update(struct bond_mac_cache_entry *entry)
++{
++	entry->used = jiffies;
++}
++
++int bond_mac_insert(struct bonding *bond, const u8 *addr)
++{
++	struct bond_mac_cache_entry *entry;
++	int ret = 0;
++
++	if (!is_valid_ether_addr(addr))
++		return -EINVAL;
++
++	rcu_read_lock();
++	entry = mac_find(bond, addr);
++	if (entry) {
++		unsigned long flags;
++
++		spin_lock_irqsave(&entry->lock, flags);
++		if (!test_bit(BOND_MAC_DEAD, &entry->flags)) {
++			mac_update(entry);
++			spin_unlock_irqrestore(&entry->lock, flags);
++			goto out;
++		}
++		spin_unlock_irqrestore(&entry->lock, flags);
++	}
++
++	ret = mac_create(bond, addr);
++
++out:
++	rcu_read_unlock();
++	return ret;
++}
++
++int bond_mac_filter_recv(const struct sk_buff *skb, struct bonding *bond,
++			 struct slave *slave)
++{
++	const struct ethhdr *mac_hdr;
++	struct bond_mac_cache_entry *entry;
++	int ret = RX_HANDLER_ANOTHER;
++
++	mac_hdr = (struct ethhdr *)skb_mac_header(skb);
++	rcu_read_lock();
++	if (is_multicast_ether_addr(mac_hdr->h_dest) &&
++	    slave != rcu_dereference(bond->curr_active_slave)) {
++		ret = RX_HANDLER_CONSUMED;
++		goto out;
++	}
++
++	entry = mac_find(bond, mac_hdr->h_source);
++	if (entry) {
++		unsigned long flags;
++		bool expired;
++
++		spin_lock_irqsave(&entry->lock, flags);
++		expired = has_expired(bond, entry);
++		spin_unlock_irqrestore(&entry->lock, flags);
++		if (!expired)
++			ret = RX_HANDLER_CONSUMED;
++	}
++
++out:
++	rcu_read_unlock();
++	return ret;
++}
+diff --git a/drivers/net/bonding/bond_mac_filter.h b/drivers/net/bonding/bond_mac_filter.h
+new file mode 100644
+index 000000000000..7c968d41b456
+--- /dev/null
++++ b/drivers/net/bonding/bond_mac_filter.h
+@@ -0,0 +1,39 @@
++/* SPDX-License-Identifier: GPL-2.0-only
++ *
++ * Filter received frames based on MAC addresses "behind" the bond.
++ */
++
++#ifndef _BOND_MAC_FILTER_H
++#define _BOND_MAC_FILTER_H
++#include <net/bonding.h>
++#include <linux/spinlock.h>
++#include <linux/rhashtable.h>
++
++enum {
++	BOND_MAC_DEAD,
++	BOND_MAC_LOCKED,
++	BOND_MAC_STATIC,
++};
++
++struct bond_mac_cache_entry {
++	struct rhash_head	rhnode;
++	struct mac_addr		key;
++
++	spinlock_t		lock; /* protects used member */
++	unsigned long		flags;
++	unsigned long		used;
++	struct rcu_head		rcu;
++};
++
++extern struct kmem_cache *bond_mac_cache;
++
++void bond_mac_hash_release_entries(struct work_struct *work);
++int bond_mac_hash_init(struct bonding *bond);
++void bond_mac_hash_destroy(struct bonding *bond);
++
++int bond_mac_insert(struct bonding *bond, const u8 *addr);
++int bond_mac_filter_recv(const struct sk_buff *skb,
++			 struct bonding *bond,
++			 struct slave *slave);
++
++#endif
+diff --git a/drivers/net/bonding/bond_main.c b/drivers/net/bonding/bond_main.c
+index c9e75a9de282..0e3b4e271c58 100644
+--- a/drivers/net/bonding/bond_main.c
++++ b/drivers/net/bonding/bond_main.c
+@@ -207,6 +207,7 @@ MODULE_PARM_DESC(lp_interval, "The number of seconds between instances where "
+ atomic_t netpoll_block_tx = ATOMIC_INIT(0);
+ #endif
+ 
++struct kmem_cache *bond_mac_cache __read_mostly;
+ unsigned int bond_net_id __read_mostly;
+ 
+ static const struct flow_dissector_key flow_keys_bonding_keys[] = {
+@@ -4122,6 +4123,7 @@ void bond_work_init_all(struct bonding *bond)
+ 	INIT_DELAYED_WORK(&bond->arp_work, bond_arp_monitor);
+ 	INIT_DELAYED_WORK(&bond->ad_work, bond_3ad_state_machine_handler);
+ 	INIT_DELAYED_WORK(&bond->slave_arr_work, bond_slave_arr_handler);
++	INIT_DELAYED_WORK(&bond->mac_work, bond_mac_hash_release_entries);
+ }
+ 
+ static void bond_work_cancel_all(struct bonding *bond)
+@@ -4132,6 +4134,7 @@ static void bond_work_cancel_all(struct bonding *bond)
+ 	cancel_delayed_work_sync(&bond->ad_work);
+ 	cancel_delayed_work_sync(&bond->mcast_work);
+ 	cancel_delayed_work_sync(&bond->slave_arr_work);
++	cancel_delayed_work_sync(&bond->mac_work);
+ }
+ 
+ static int bond_open(struct net_device *bond_dev)
+@@ -4179,6 +4182,11 @@ static int bond_open(struct net_device *bond_dev)
+ 		bond_3ad_initiate_agg_selection(bond, 1);
+ 	}
+ 
++	if (BOND_MODE(bond) == BOND_MODE_XOR && bond->params.mac_filter) {
++		bond->recv_probe = bond_mac_filter_recv;
++		queue_delayed_work(bond->wq, &bond->mac_work, 0);
++	}
++
+ 	if (bond_mode_can_use_xmit_hash(bond))
+ 		bond_update_slave_arr(bond, NULL);
+ 
+@@ -5048,6 +5056,13 @@ static struct slave *bond_xmit_3ad_xor_slave_get(struct bonding *bond,
+ 	if (unlikely(!count))
+ 		return NULL;
+ 
++	if (BOND_MODE(bond) == BOND_MODE_XOR && bond->params.mac_filter) {
++		const struct ethhdr *mac_hdr;
++
++		mac_hdr = (struct ethhdr *)skb_mac_header(skb);
++		if (bond_mac_insert(bond, mac_hdr->h_source))
++			return NULL;
++	}
+ 	slave = slaves->arr[hash % count];
+ 	return slave;
+ }
+@@ -5665,6 +5680,8 @@ static void bond_destructor(struct net_device *bond_dev)
+ 
+ 	if (bond->rr_tx_counter)
+ 		free_percpu(bond->rr_tx_counter);
++
++	bond_mac_hash_destroy(bond);
+ }
+ 
+ void bond_setup(struct net_device *bond_dev)
+@@ -6120,6 +6137,7 @@ static int bond_check_params(struct bond_params *params)
+ 	params->downdelay = downdelay;
+ 	params->peer_notif_delay = 0;
+ 	params->use_carrier = use_carrier;
++	params->mac_filter = 0;
+ 	params->lacp_active = 1;
+ 	params->lacp_fast = lacp_fast;
+ 	params->primary[0] = 0;
+@@ -6322,6 +6340,14 @@ static int __init bonding_init(void)
+ 			goto err;
+ 	}
+ 
++	bond_mac_cache = kmem_cache_create("bond_mac_cache",
++					   sizeof(struct bond_mac_cache_entry),
++					   0, SLAB_HWCACHE_ALIGN, NULL);
++	if (!bond_mac_cache) {
++		res = -ENOMEM;
++		goto err;
++	}
++
+ 	skb_flow_dissector_init(&flow_keys_bonding,
+ 				flow_keys_bonding_keys,
+ 				ARRAY_SIZE(flow_keys_bonding_keys));
+@@ -6351,6 +6377,7 @@ static void __exit bonding_exit(void)
+ 	/* Make sure we don't have an imbalance on our netpoll blocking */
+ 	WARN_ON(atomic_read(&netpoll_block_tx));
+ #endif
++	kmem_cache_destroy(bond_mac_cache);
+ }
+ 
+ module_init(bonding_init);
+diff --git a/drivers/net/bonding/bond_netlink.c b/drivers/net/bonding/bond_netlink.c
+index f427fa1737c7..249d79b6e21a 100644
+--- a/drivers/net/bonding/bond_netlink.c
++++ b/drivers/net/bonding/bond_netlink.c
+@@ -113,6 +113,7 @@ static const struct nla_policy bond_policy[IFLA_BOND_MAX + 1] = {
+ 	[IFLA_BOND_PEER_NOTIF_DELAY]    = { .type = NLA_U32 },
+ 	[IFLA_BOND_MISSED_MAX]		= { .type = NLA_U8 },
+ 	[IFLA_BOND_NS_IP6_TARGET]	= { .type = NLA_NESTED },
++	[IFLA_BOND_MAC_FILTER]		= { .type = NLA_U8 },
+ };
+ 
+ static const struct nla_policy bond_slave_policy[IFLA_BOND_SLAVE_MAX + 1] = {
+@@ -498,6 +499,14 @@ static int bond_changelink(struct net_device *bond_dev, struct nlattr *tb[],
+ 		if (err)
+ 			return err;
+ 	}
++	if (data[IFLA_BOND_MAC_FILTER]) {
++		u8 mac_filter = nla_get_u8(data[IFLA_BOND_MAC_FILTER]);
++
++		bond_opt_initval(&newval, mac_filter);
++		err = __bond_opt_set(bond, BOND_OPT_MAC_FILTER, &newval);
++		if (err)
++			return err;
++	}
+ 
+ 	return 0;
+ }
+@@ -565,6 +574,7 @@ static size_t bond_get_size(const struct net_device *bond_dev)
+ 						/* IFLA_BOND_NS_IP6_TARGET */
+ 		nla_total_size(sizeof(struct nlattr)) +
+ 		nla_total_size(sizeof(struct in6_addr)) * BOND_MAX_NS_TARGETS +
++		nla_total_size(sizeof(u8)) +	/* IFLA_BOND_MAC_FILTER */
+ 		0;
+ }
+ 
+@@ -723,6 +733,9 @@ static int bond_fill_info(struct sk_buff *skb,
+ 	if (nla_put_u8(skb, IFLA_BOND_MISSED_MAX,
+ 		       bond->params.missed_max))
+ 		goto nla_put_failure;
++	if (nla_put_u8(skb, IFLA_BOND_MAC_FILTER,
++		       bond->params.mac_filter))
++		goto nla_put_failure;
+ 
+ 	if (BOND_MODE(bond) == BOND_MODE_8023AD) {
+ 		struct ad_info info;
+diff --git a/drivers/net/bonding/bond_options.c b/drivers/net/bonding/bond_options.c
+index 64f7db2627ce..d295903a525b 100644
+--- a/drivers/net/bonding/bond_options.c
++++ b/drivers/net/bonding/bond_options.c
+@@ -15,6 +15,7 @@
+ #include <linux/sched/signal.h>
+ 
+ #include <net/bonding.h>
++#include "bonding_priv.h"
+ 
+ static int bond_option_active_slave_set(struct bonding *bond,
+ 					const struct bond_opt_value *newval);
+@@ -84,7 +85,8 @@ static int bond_option_ad_user_port_key_set(struct bonding *bond,
+ 					    const struct bond_opt_value *newval);
+ static int bond_option_missed_max_set(struct bonding *bond,
+ 				      const struct bond_opt_value *newval);
+-
++static int bond_option_mac_filter_set(struct bonding *bond,
++				      const struct bond_opt_value *newval);
+ 
+ static const struct bond_opt_value bond_mode_tbl[] = {
+ 	{ "balance-rr",    BOND_MODE_ROUNDROBIN,   BOND_VALFLAG_DEFAULT},
+@@ -226,6 +228,14 @@ static const struct bond_opt_value bond_missed_max_tbl[] = {
+ 	{ NULL,		-1,	0},
+ };
+ 
++static const struct bond_opt_value bond_mac_filter_tbl[] = {
++	{ "off",	0,	BOND_VALFLAG_MIN | BOND_VALFLAG_DEFAULT},
++	{ "maxval",	18,	BOND_VALFLAG_MAX},
++	{ NULL,		-1,	0}
++};
++
++static const struct bond_opt_value *macfilteroff = &bond_mac_filter_tbl[0];
++
+ static const struct bond_option bond_opts[BOND_OPT_LAST] = {
+ 	[BOND_OPT_MODE] = {
+ 		.id = BOND_OPT_MODE,
+@@ -482,7 +492,16 @@ static const struct bond_option bond_opts[BOND_OPT_LAST] = {
+ 		.desc = "Delay between each peer notification on failover event, in milliseconds",
+ 		.values = bond_intmax_tbl,
+ 		.set = bond_option_peer_notif_delay_set
+-	}
++	},
++	[BOND_OPT_MAC_FILTER] = {
++		.id = BOND_OPT_MAC_FILTER,
++		.name = "mac_filter",
++		.unsuppmodes = BOND_MODE_ALL_EX(BIT(BOND_MODE_XOR)),
++		.desc = "filter received frames based on MAC addresses that have transmitted from the bond, number of MAC addresses to track",
++		.flags = BOND_OPTFLAG_NOSLAVES | BOND_OPTFLAG_IFDOWN,
++		.values = bond_mac_filter_tbl,
++		.set = bond_option_mac_filter_set
++	},
+ };
+ 
+ /* Searches for an option by name */
+@@ -832,6 +851,16 @@ static bool bond_set_tls_features(struct bonding *bond)
+ static int bond_option_mode_set(struct bonding *bond,
+ 				const struct bond_opt_value *newval)
+ {
++	int ret;
++
++	if (bond->params.mac_filter && newval->value != BOND_MODE_XOR) {
++		netdev_dbg(bond->dev, "%s mode is incompatiable with mac filtering, disabling\n",
++			   newval->string);
++		ret = bond_option_mac_filter_set(bond, macfilteroff);
++		if (ret)
++			return ret;
++	}
++
+ 	if (!bond_mode_uses_arp(newval->value)) {
+ 		if (bond->params.arp_interval) {
+ 			netdev_dbg(bond->dev, "%s mode is incompatible with arp monitoring, start mii monitoring\n",
+@@ -840,6 +869,17 @@ static int bond_option_mode_set(struct bonding *bond,
+ 			bond->params.arp_interval = 0;
+ 		}
+ 
++		if (!bond->params.miimon) {
++			/* set miimon to default value */
++			bond->params.miimon = BOND_DEFAULT_MIIMON;
++			netdev_dbg(bond->dev, "Setting MII monitoring interval to %d\n",
++				   bond->params.miimon);
++		}
++	} else if (bond->params.mac_filter && bond->params.arp_interval) {
++		netdev_dbg(bond->dev, "mac filtering is incompatible with arp monitoring, start mii monitoring\n");
++		/* disable arp monitoring */
++		bond->params.arp_interval = 0;
++
+ 		if (!bond->params.miimon) {
+ 			/* set miimon to default value */
+ 			bond->params.miimon = BOND_DEFAULT_MIIMON;
+@@ -1035,6 +1075,44 @@ static int bond_option_use_carrier_set(struct bonding *bond,
+ 	return 0;
+ }
+ 
++static int bond_option_mac_filter_set(struct bonding *bond,
++				      const struct bond_opt_value *newval)
++{
++	int rc = 0;
++	u8 prev = bond->params.mac_filter;
++
++	if (newval->value && bond->params.arp_interval) {
++		netdev_err(bond->dev, "ARP monitoring cannot be used with MAC Filtering.\n");
++		rc = -EPERM;
++		goto err;
++	}
++
++	netdev_dbg(bond->dev, "Setting mac_filter to %llu\n", newval->value);
++	bond->params.mac_filter = newval->value;
++
++	if (prev == 0 && bond->params.mac_filter > 0) {
++		rc = bond_mac_hash_init(bond);
++		if (rc)
++			goto err;
++	} else if (prev > 0 && bond->params.mac_filter == 0) {
++		bond_mac_hash_destroy(bond);
++	}
++
++	if (bond->mac_filter_tbl) {
++		bond->mac_filter_tbl->p.max_size =
++			1 << bond->params.mac_filter;
++		netdev_dbg(bond->dev, "mac_filter hash table size: %d\n",
++			   bond->mac_filter_tbl->p.max_size);
++	}
++
++out:
++	return rc;
++
++err:
++	bond->params.mac_filter = 0;
++	goto out;
++}
++
+ /* There are two tricky bits here.  First, if ARP monitoring is activated, then
+  * we must disable MII monitoring.  Second, if the ARP timer isn't running,
+  * we must start it.
+@@ -1050,6 +1128,10 @@ static int bond_option_arp_interval_set(struct bonding *bond,
+ 			netdev_dbg(bond->dev, "ARP monitoring cannot be used with MII monitoring. Disabling MII monitoring\n");
+ 			bond->params.miimon = 0;
+ 		}
++		if (bond->params.mac_filter) {
++			netdev_dbg(bond->dev, "mac filtering cannot be used with ARP monitoring. Disabling mac filtering\n");
++			bond_option_mac_filter_set(bond, macfilteroff);
++		}
+ 		if (!bond->params.arp_targets[0])
+ 			netdev_dbg(bond->dev, "ARP monitoring has been set up, but no ARP targets have been specified\n");
+ 	}
+diff --git a/drivers/net/bonding/bonding_priv.h b/drivers/net/bonding/bonding_priv.h
+index 48cdf3a49a7d..0299f8bcb5fd 100644
+--- a/drivers/net/bonding/bonding_priv.h
++++ b/drivers/net/bonding/bonding_priv.h
+@@ -15,6 +15,7 @@
+ #ifndef _BONDING_PRIV_H
+ #define _BONDING_PRIV_H
+ #include <generated/utsrelease.h>
++#include "bond_mac_filter.h"
+ 
+ #define DRV_NAME	"bonding"
+ #define DRV_DESCRIPTION	"Ethernet Channel Bonding Driver"
+diff --git a/include/net/bond_options.h b/include/net/bond_options.h
+index 61b49063791c..42e3e676b9c2 100644
+--- a/include/net/bond_options.h
++++ b/include/net/bond_options.h
+@@ -67,6 +67,7 @@ enum {
+ 	BOND_OPT_LACP_ACTIVE,
+ 	BOND_OPT_MISSED_MAX,
+ 	BOND_OPT_NS_TARGETS,
++	BOND_OPT_MAC_FILTER,
+ 	BOND_OPT_LAST
+ };
+ 
+diff --git a/include/net/bonding.h b/include/net/bonding.h
+index b14f4c0b4e9e..5bc3e7b5a2af 100644
+--- a/include/net/bonding.h
++++ b/include/net/bonding.h
+@@ -125,6 +125,7 @@ struct bond_params {
+ 	int miimon;
+ 	u8 num_peer_notif;
+ 	u8 missed_max;
++	u8 mac_filter;
+ 	int arp_interval;
+ 	int arp_validate;
+ 	int arp_all_targets;
+@@ -248,6 +249,7 @@ struct bonding {
+ 	struct   delayed_work alb_work;
+ 	struct   delayed_work ad_work;
+ 	struct   delayed_work mcast_work;
++	struct   delayed_work mac_work;
+ 	struct   delayed_work slave_arr_work;
+ #ifdef CONFIG_DEBUG_FS
+ 	/* debugging support via debugfs */
+@@ -260,6 +262,7 @@ struct bonding {
+ 	spinlock_t ipsec_lock;
+ #endif /* CONFIG_XFRM_OFFLOAD */
+ 	struct bpf_prog *xdp_prog;
++	struct rhashtable *mac_filter_tbl;
+ };
+ 
+ #define bond_slave_get_rcu(dev) \
+diff --git a/include/uapi/linux/if_link.h b/include/uapi/linux/if_link.h
+index d1e600816b82..55e54d54f358 100644
+--- a/include/uapi/linux/if_link.h
++++ b/include/uapi/linux/if_link.h
+@@ -934,6 +934,7 @@ enum {
+ 	IFLA_BOND_AD_LACP_ACTIVE,
+ 	IFLA_BOND_MISSED_MAX,
+ 	IFLA_BOND_NS_IP6_TARGET,
++	IFLA_BOND_MAC_FILTER,
+ 	__IFLA_BOND_MAX,
+ };
+ 
+-- 
+2.27.0
+

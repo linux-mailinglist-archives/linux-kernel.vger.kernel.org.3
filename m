@@ -2,191 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40DC551B214
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 00:42:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05F5D51B231
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 00:43:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379049AbiEDWpL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 18:45:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59406 "EHLO
+        id S1379234AbiEDWqw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 18:46:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376474AbiEDWo7 (ORCPT
+        with ESMTP id S1379088AbiEDWqn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 18:44:59 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD79548893;
-        Wed,  4 May 2022 15:41:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651704081; x=1683240081;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=vo98koW8xOZpXvkfJZ26bs6YvtqqcceUyFD7sOeeXGI=;
-  b=QARAiMKcBxMxlkyw4T73MEiVXW+ANS56eY0oZYG5t9YP1XT2TTUe6dpD
-   2XHKLbJsb8/bjbZhpw335BBAcRuArgCbzriJwBTrmj7fseynGcnhRZYVW
-   5s0J06AUDha6sKC2sY/6nxP+Xm5yM3v1g47NFDB3Tw+DozxXdJEyKPJGs
-   veh0F0MmYzYJODxOoUncxVx+G2fBkVykNqBtYu+JV7zGGAuYDWhB6m8R3
-   2i7mMujC/D8SnNNTOlNmTkYh1zRgl1wZdn1D+ejq/02I8KgCErrMQwLcZ
-   2+AyNQaiMTAZsuldSHLdPU7a8U/MdZ64tEs6Sz+x/23z2QKfkpVMYuHQJ
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10337"; a="267803170"
-X-IronPort-AV: E=Sophos;i="5.91,199,1647327600"; 
-   d="scan'208";a="267803170"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2022 15:41:20 -0700
-X-IronPort-AV: E=Sophos;i="5.91,199,1647327600"; 
-   d="scan'208";a="549071723"
-Received: from rhweight-wrk1.ra.intel.com ([137.102.106.43])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2022 15:41:20 -0700
-Date:   Wed, 4 May 2022 15:41:20 -0700 (PDT)
-From:   matthew.gerlach@linux.intel.com
-X-X-Sender: mgerlach@rhweight-WRK1
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-cc:     dinguyen@kernel.org, robh+dt@kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        krzysztof.kozlowski+dt@linaro.org
-Subject: Re: [PATCH v2 1/3] dt-bindings: misc: add bindings for Intel HPS
- Copy Engine
-In-Reply-To: <17407fe7-b11d-2ba8-acca-3e71cf1a3b2f@linaro.org>
-Message-ID: <alpine.DEB.2.22.394.2205041425230.2669897@rhweight-WRK1>
-References: <20220503194546.1287679-1-matthew.gerlach@linux.intel.com> <20220503194546.1287679-2-matthew.gerlach@linux.intel.com> <17407fe7-b11d-2ba8-acca-3e71cf1a3b2f@linaro.org>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+        Wed, 4 May 2022 18:46:43 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4176A53726
+        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 15:42:32 -0700 (PDT)
+From:   John Ogness <john.ogness@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1651704149;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=bIg1HscWN1tvVWMSh8fcrYwHSnmqdBrRg0rNnb5YAr4=;
+        b=B6aIpuDJHUxIAuuxMW19vF2YskBMeJJY1RaYy1313Uyk1P/Z3GVoSvY0AbQFxrYcX1l0Az
+        2/+LxzzMrc1k1ZWkIqwQ8W3k4ne/1w5GJuxZvSBg2nx92EhrCkYuJ2wCRUN7EiSMXMzYDd
+        l1zVlr9+kWhZ1O7tHnfvpUy6/izefbTfP7q2LCkJgKbaY4KB4Mig6HzKfJE6CZIwC6h8bu
+        vBvgOPtqmZ+JYem07KSOyh4vmjnHfcNrTUIhwocHTXrKf9CbgBxcjyD2Ul+RpraPyBVlBj
+        55XhJKVhvDEXyxGfxU+jB6XLkv8B4/eKL61MRBrXnIptEUAYhLuU+qKkxUksGg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1651704149;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=bIg1HscWN1tvVWMSh8fcrYwHSnmqdBrRg0rNnb5YAr4=;
+        b=m98oYRuoP7rXD4qoKzjZfEYooVQPaQUBsEyWbXMrczs81p1HFw9GRfR/HRpjmTjK8iPQCm
+        sjWxzDfchSYoCEBQ==
+To:     Marek Szyprowski <m.szyprowski@samsung.com>,
+        Petr Mladek <pmladek@suse.com>
+Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-amlogic@lists.infradead.org
+Subject: Re: [PATCH printk v5 1/1] printk: extend console_lock for
+ per-console locking
+In-Reply-To: <87pmktm2a9.fsf@jogness.linutronix.de>
+References: <Ymfgis0EAw0Oxoa5@alley> <Ymfwk+X0CHq6ex3s@alley>
+ <CGME20220427070833eucas1p27a32ce7c41c0da26f05bd52155f0031c@eucas1p2.samsung.com>
+ <2a82eae7-a256-f70c-fd82-4e510750906e@samsung.com>
+ <Ymjy3rHRenba7r7R@alley>
+ <b6c1a8ac-c691-a84d-d3a1-f99984d32f06@samsung.com>
+ <87fslyv6y3.fsf@jogness.linutronix.de>
+ <51dfc4a0-f6cf-092f-109f-a04eeb240655@samsung.com>
+ <87k0b6blz2.fsf@jogness.linutronix.de>
+ <32bba8f8-dec7-78aa-f2e5-f62928412eda@samsung.com>
+ <Ym/Z7PYPqvWPEjuL@alley>
+ <45849b63-d7a8-5cc3-26ad-256a28d09991@samsung.com>
+ <87pmktm2a9.fsf@jogness.linutronix.de>
+Date:   Thu, 05 May 2022 00:48:28 +0206
+Message-ID: <87a6bwapij.fsf@jogness.linutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII; format=flowed
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INVALID_DATE_TZ_ABSURD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On Wed, 4 May 2022, Krzysztof Kozlowski wrote:
-
-> On 03/05/2022 21:45, matthew.gerlach@linux.intel.com wrote:
->> From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
->>
->> Add device tree bindings documentation for the Intel Hard
->> Processor System (HPS) Copy Engine.
->>
->> Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
->> ---
->>  .../bindings/misc/intel,hps-copy-engine.yaml  | 48 +++++++++++++++++++
->>  1 file changed, 48 insertions(+)
->>  create mode 100644 Documentation/devicetree/bindings/misc/intel,hps-copy-engine.yaml
->>
->> diff --git a/Documentation/devicetree/bindings/misc/intel,hps-copy-engine.yaml b/Documentation/devicetree/bindings/misc/intel,hps-copy-engine.yaml
->> new file mode 100644
->> index 000000000000..74e7da9002f4
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/misc/intel,hps-copy-engine.yaml
+On 2022-05-04, John Ogness <john.ogness@linutronix.de> wrote:
+> I can reproduce the apparent stack corruption with qemu:
 >
-> Please find appropriate directory matching this hardware, not "misc". As
-> a fallback SoC related bindings end up in "soc".
+> [    5.545268] task:pr/ttyAMA0      state:S stack:    0 pid:   26 ppid:     2 flags:0x00000008
+> [    5.545520] Call trace:
+> [    5.545620]  __switch_to+0x104/0x160
+> [    5.545796]  __schedule+0x2f4/0x9f0
+> [    5.546122]  schedule+0x54/0xd0
+> [    5.546206]  0x0
 
-I thought misc seemed appropriate because it is a very specific IP block 
-in the FPGA connected to the HPS.  It does perform a simple DMA function; 
-so I considered putting it in the dma directory, but it also has some
-hand-shaking registers between the HPS and a host processor connected to the
-FPGA via PCIe; so I thought misc.  Since the HPS "soc" accesses the 
-component, I can put it in the "soc" directory, unless there is a better 
-suggestion.
+I believe I am chasing a ghost. I can rather easily reproduce these
+strange call traces, but if another sysrq-t is sent afterwards, the call
+trace is OK. Also, I added trace_dump_stack() into the printk-kthread
+main loop to dump the stack on every iteration. There I never see any
+corruption, even though the timestamps are near the sysrq-t dump showing
+corruption. Moving trace_dump_stack() into
+amba-pl011:pl011_console_write() also showed no stack corruption at very
+near times when sysrq-t did.
 
->
->> @@ -0,0 +1,48 @@
->> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
->> +# Copyright (C) 2022, Intel Corporation
->> +%YAML 1.2
->> +---
->> +$id: "http://devicetree.org/schemas/misc/intel,hps-copy-engine.yaml#"
->> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
->> +
->> +title: Intel HPS Copy Engine
->> +
->> +maintainers:
->> +  - Matthew Gerlach <matthew.gerlach@linux.intel.com>
->> +
->> +description: |
->> +  The Intel Hard Processor System (HPS) Copy Engine is an IP block used to copy
->> +  a bootable image from host memory to HPS DDR.  Additionally, there is a
->> +  register the HPS can use to indicate the state of booting the copied image as
->> +  well as a keep-a-live indication to the host.
->> +
->> +properties:
->> +  compatible:
->> +    items:
->
-> No "items", you have just one item.
+And it should be noted that the console-hanging issues reported in this
+thread _cannot_ be reproduced with qemu.
 
-Got it.  I will change it in v3.
->
->> +      - const: intel,hps-copy-engine
->> +
->> +  reg:
->> +    maxItems: 1
->> +
->> +required:
->> +  - compatible
->> +  - reg
->> +
->> +additionalProperties: false
->> +
->> +examples:
->> +  - |
->> +    agilex_hps_bridges: bus@80000000 {
->
-> Unused label...
+So I will stop focussing on this "corrupt stack" thing and instead
+investigate what the meson driver is doing that causes it to get
+stuck. Since interrupts do not even fire, I'm guessing that the RX
+interrupts are not being re-enabled (AML_UART_RX_INT_EN) for some code
+path. This bit is only explicitly set once, in
+meson_uart_startup(). Whenever the bit is cleared, later the previous
+value is restored. This is assumed to mean the interrupt gets
+re-enabled. But if there is some code path where multiple CPUs can
+modify the register, then the interrupt could end up permanently
+disabled.
 
-I will remove unused label in v3.
+I will go through and check if all access to AML_UART_CONTROL is
+protected by port->lock.
 
->
->> +        compatible = "simple-bus";
->> +        reg = <0x80000000 0x60000000>,
->> +              <0xf9000000 0x00100000>;
->> +        reg-names = "axi_h2f", "axi_h2f_lw";
->> +        #address-cells = <0x2>;
->
-> $ git grep address-cell
-> Do not use inconsistent coding. The same applies to your DTS.
-
-Is the inconsistency the use of '0x' in the values of #address-cells and 
-#size-cells, or is the consistency having different values for 
-#address-cells and #size-cells or both?
-
->
->> +        #size-cells = <0x1>;
->> +        ranges = <0x00000000 0x00000000 0xf9000000 0x00001000>;
->
-> Why do you even need the simple-bus above and cannot put the device
-> directly on the bus?
-
-On an Agilex chip, the HPS is connected to the FPGA via two bridges, 
-referred as the "HPS to FPGA bridge" and the "Lightweight HPS to FPGA 
-bridge".  An IP block in the FPGA could be connected to one or both of 
-these bridges.  I am anticipating device tree overlays being applied for 
-other IP blocks instantiated in the FPGA.
-
->
->> +
->> +        hps_cp_eng@0 {
->
-> No underscores in node names. Generic node name.
-
-I understand.  I am considering dma@0 for the generic node name.
-
->
->> +            compatible = "intel,hps-copy-engine";
->> +            reg = <0x00000000 0x00000000 0x00001000>;
->> +        };
->> +    };
->
->
-> Best regards,
-> Krzysztof
->
-
-Thank you for the review,
-Matthew
+John

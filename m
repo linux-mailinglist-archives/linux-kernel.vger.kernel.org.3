@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6754651AB07
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:40:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25AE351AB04
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:40:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358424AbiEDRmM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 13:42:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39262 "EHLO
+        id S1358964AbiEDRjO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 13:39:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356515AbiEDRJR (ORCPT
+        with ESMTP id S1357350AbiEDRKJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 13:09:17 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA0125372D;
-        Wed,  4 May 2022 09:55:12 -0700 (PDT)
+        Wed, 4 May 2022 13:10:09 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A23B94AE0C;
+        Wed,  4 May 2022 09:57:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6B679B8279A;
-        Wed,  4 May 2022 16:55:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D169C385A5;
-        Wed,  4 May 2022 16:55:10 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 666E7618E5;
+        Wed,  4 May 2022 16:57:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF895C385A5;
+        Wed,  4 May 2022 16:57:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651683310;
-        bh=QaZuhYaTIY1D8G4jnxZZ8Xzp6ltEEhBbagARWHW7sJc=;
+        s=korg; t=1651683437;
+        bh=QaSWXVTa1jFCnz66oF5QYBpqSJ/mOHkh5HeNfDbiWT4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=2OKv8vGGJFXwozHbU8jqqi5EmiMXWT9mDoxYWnp5Ek6Guy0Fb4JxNdTyJx3383m0n
-         Bo4jt9k3huTSAUbp8PNwsQrE3tWQvMpm7+aKPi2kNk4WjlWHGvkfiABTzbyy4I3ulN
-         AzyyicN3pWzQtYDrnUJEFNZAp9a/cLns7qJUvSV4=
+        b=GXFBAVhcuIxXdUwntsO8ACEFV65W4a9mHsIJsPjMcGI+qkIJrga/FCtOwAbRZZGjd
+         mbUyktb2YGN8D+3NmSqGBhwl37QvaQsbf5LiCkMb6xTf1NPDK4rWdhh6n2UFg5AOpq
+         MX2r+/VJX5Bhj9tY/prsxymgQCLpiU0PVYW1Grcs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Florian Westphal <fw@strlen.de>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        Topi Miettinen <toiwoton@gmail.com>
-Subject: [PATCH 5.15 162/177] netfilter: nft_socket: only do sk lookups when indev is available
+        stable@vger.kernel.org, Jian Shen <shenjian15@huawei.com>,
+        Guangbin Huang <huangguangbin2@huawei.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 117/225] net: hns3: add validity check for message data length
 Date:   Wed,  4 May 2022 18:45:55 +0200
-Message-Id: <20220504153107.993723163@linuxfoundation.org>
+Message-Id: <20220504153120.969847666@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220504153053.873100034@linuxfoundation.org>
-References: <20220504153053.873100034@linuxfoundation.org>
+In-Reply-To: <20220504153110.096069935@linuxfoundation.org>
+References: <20220504153110.096069935@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,110 +56,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Florian Westphal <fw@strlen.de>
+From: Jian Shen <shenjian15@huawei.com>
 
-commit 743b83f15d4069ea57c3e40996bf4a1077e0cdc1 upstream.
+[ Upstream commit 7d413735cb18ff73aaba3457b16b08332e8d3cc4 ]
 
-Check if the incoming interface is available and NFT_BREAK
-in case neither skb->sk nor input device are set.
+Add validity check for message data length in function
+hclge_send_mbx_msg(), avoid unexpected overflow.
 
-Because nf_sk_lookup_slow*() assume packet headers are in the
-'in' direction, use in postrouting is not going to yield a meaningful
-result.  Same is true for the forward chain, so restrict the use
-to prerouting, input and output.
-
-Use in output work if a socket is already attached to the skb.
-
-Fixes: 554ced0a6e29 ("netfilter: nf_tables: add support for native socket matching")
-Reported-and-tested-by: Topi Miettinen <toiwoton@gmail.com>
-Signed-off-by: Florian Westphal <fw@strlen.de>
-Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: dde1a86e93ca ("net: hns3: Add mailbox support to PF driver")
+Signed-off-by: Jian Shen <shenjian15@huawei.com>
+Signed-off-by: Guangbin Huang <huangguangbin2@huawei.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/netfilter/nft_socket.c |   52 ++++++++++++++++++++++++++++++++-------------
- 1 file changed, 38 insertions(+), 14 deletions(-)
+ drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_mbx.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
---- a/net/netfilter/nft_socket.c
-+++ b/net/netfilter/nft_socket.c
-@@ -53,6 +53,32 @@ nft_sock_get_eval_cgroupv2(u32 *dest, st
- }
- #endif
+diff --git a/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_mbx.c b/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_mbx.c
+index 36cbafc5f944..53f939923c28 100644
+--- a/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_mbx.c
++++ b/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_mbx.c
+@@ -94,6 +94,13 @@ static int hclge_send_mbx_msg(struct hclge_vport *vport, u8 *msg, u16 msg_len,
+ 	enum hclge_comm_cmd_status status;
+ 	struct hclge_desc desc;
  
-+static struct sock *nft_socket_do_lookup(const struct nft_pktinfo *pkt)
-+{
-+	const struct net_device *indev = nft_in(pkt);
-+	const struct sk_buff *skb = pkt->skb;
-+	struct sock *sk = NULL;
-+
-+	if (!indev)
-+		return NULL;
-+
-+	switch (nft_pf(pkt)) {
-+	case NFPROTO_IPV4:
-+		sk = nf_sk_lookup_slow_v4(nft_net(pkt), skb, indev);
-+		break;
-+#if IS_ENABLED(CONFIG_NF_TABLES_IPV6)
-+	case NFPROTO_IPV6:
-+		sk = nf_sk_lookup_slow_v6(nft_net(pkt), skb, indev);
-+		break;
-+#endif
-+	default:
-+		WARN_ON_ONCE(1);
-+		break;
++	if (msg_len > HCLGE_MBX_MAX_MSG_SIZE) {
++		dev_err(&hdev->pdev->dev,
++			"msg data length(=%u) exceeds maximum(=%u)\n",
++			msg_len, HCLGE_MBX_MAX_MSG_SIZE);
++		return -EMSGSIZE;
 +	}
 +
-+	return sk;
-+}
-+
- static void nft_socket_eval(const struct nft_expr *expr,
- 			    struct nft_regs *regs,
- 			    const struct nft_pktinfo *pkt)
-@@ -66,20 +92,7 @@ static void nft_socket_eval(const struct
- 		sk = NULL;
+ 	resp_pf_to_vf = (struct hclge_mbx_pf_to_vf_cmd *)desc.data;
  
- 	if (!sk)
--		switch(nft_pf(pkt)) {
--		case NFPROTO_IPV4:
--			sk = nf_sk_lookup_slow_v4(nft_net(pkt), skb, nft_in(pkt));
--			break;
--#if IS_ENABLED(CONFIG_NF_TABLES_IPV6)
--		case NFPROTO_IPV6:
--			sk = nf_sk_lookup_slow_v6(nft_net(pkt), skb, nft_in(pkt));
--			break;
--#endif
--		default:
--			WARN_ON_ONCE(1);
--			regs->verdict.code = NFT_BREAK;
--			return;
--		}
-+		sk = nft_socket_do_lookup(pkt);
- 
- 	if (!sk) {
- 		regs->verdict.code = NFT_BREAK;
-@@ -197,6 +210,16 @@ static int nft_socket_dump(struct sk_buf
- 	return 0;
- }
- 
-+static int nft_socket_validate(const struct nft_ctx *ctx,
-+			       const struct nft_expr *expr,
-+			       const struct nft_data **data)
-+{
-+	return nft_chain_validate_hooks(ctx->chain,
-+					(1 << NF_INET_PRE_ROUTING) |
-+					(1 << NF_INET_LOCAL_IN) |
-+					(1 << NF_INET_LOCAL_OUT));
-+}
-+
- static struct nft_expr_type nft_socket_type;
- static const struct nft_expr_ops nft_socket_ops = {
- 	.type		= &nft_socket_type,
-@@ -204,6 +227,7 @@ static const struct nft_expr_ops nft_soc
- 	.eval		= nft_socket_eval,
- 	.init		= nft_socket_init,
- 	.dump		= nft_socket_dump,
-+	.validate	= nft_socket_validate,
- };
- 
- static struct nft_expr_type nft_socket_type __read_mostly = {
+ 	hclge_cmd_setup_basic_desc(&desc, HCLGEVF_OPC_MBX_PF_TO_VF, false);
+-- 
+2.35.1
+
 
 

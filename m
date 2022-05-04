@@ -2,144 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E74DE51AC0B
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 20:02:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0281F51AC35
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 20:03:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376384AbiEDSFh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 14:05:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44862 "EHLO
+        id S1359484AbiEDSHO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 14:07:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376311AbiEDSFM (ORCPT
+        with ESMTP id S1357552AbiEDSGG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 14:05:12 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C7D96A01F
-        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 10:19:35 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id kq17so4181780ejb.4
-        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 10:19:34 -0700 (PDT)
+        Wed, 4 May 2022 14:06:06 -0400
+Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67FFA4FC77
+        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 10:21:20 -0700 (PDT)
+Received: by mail-ot1-x336.google.com with SMTP id s18-20020a056830149200b006063fef3e17so1306581otq.12
+        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 10:21:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=53tRH3Jax00x2MRGmAnmpVFoogtTBVaQBwRaJB/MSqI=;
-        b=ZpE/QIW7kna1o4IhzQQmp2637K1w9UcjrBWQkFmB3KeaXGJhRew5Qrrm4nVBxQuM5K
-         WxvhUYOlh8rWIuTX2aM0865lrsFa3LgNJmonYVw5QJ5TWtJ8GDZTmeKTt6ABumWC0QC1
-         ab5RGTAVBbqKEoK4b/TnHXAunRyIDb4UtS/WiYRpJvoKPoGFBe/xxsjE1LJ0+w1IU9lY
-         PawaTzdNF1YTKYIh5MvHjBCSHId3sE7LkENrHud89JTEUmJh7bVKtkqT2eRSPldXBLZc
-         Hy/1AeX5w6TUxiRTh+7aDA0ELWkG6xjnd2RXfENi04bsD7m5bd6YKUkx+vX1cIkHwdrw
-         TrCA==
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=WCQd0BEkr2350zVHaq5lFX9i48jak99a6vqhtPevMLA=;
+        b=fEKIAgKrPc3/Mqs8Fm9yoZwBQC9zu/F7t2r6+oEyIkgkGwg0jOe5SfeIj3DMsa1Up7
+         AoG/M4xa9coTvnuHJYFlvQ5IAK0RtIqEa23aODajOCTQpz33cjKnwL1n/xLPwXbfd2Tc
+         FH7r/sG/zdt1tSZz6uEZFGDQQnewvhfkeTNXe89i7/Sng2ym25yxlMiLVi7hgWB7g88i
+         6SrQZpvy8JBBd5a3hAVgTOSMmSY4EhPSXgLuXcBaNCFWHRe3qefcLhTCSwGFZxpBT3i6
+         M//ch3+ztRLkltCQQS6j2gkEWWRBj4UrdPi7nSEEmvSingrvRtl1GJ0cVF2XmljbkbTA
+         OGRw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=53tRH3Jax00x2MRGmAnmpVFoogtTBVaQBwRaJB/MSqI=;
-        b=NW5R7N+Jh2og3ERLOF7amqez/ybOWOlqZblUaVOYbIxRMo8TY6Nb1S3/a9mZ4v4/xU
-         dwJAxYbboKuow2XNze8lD2BeUoq62hM5bMw5lKzQmCmD1QsWF9IBqnU7a1wkKOtX90uh
-         l/RNF/3ruAnPLmUaNaKiYKq9lJYmbrwLVYTWR3dVBO0OYwlR1KDlLu9zOuXcFceh8tbh
-         ArMvE5PMZfBV1wbTrvuLjfLIuqen7SS8x4ZOyyHd3LKAJYYDLUaeuoFojrPQGCgBugMV
-         Db4VmCZuimXmk5EYcq7GTfb+WjDrQgCzkrb0rIU7loEEDcV6HltgPco97gAwrCQn+pU2
-         feBg==
-X-Gm-Message-State: AOAM531yaJG7CC7+qYeO5ZvcJMCsA87MuhnWb8WhWe8brqp6aRH6W2mE
-        QJ5lkOvQPy6Z1K69lacg8Chy3oeEdIwN88pg6Osqvg==
-X-Google-Smtp-Source: ABdhPJzYz0aK430SRVDxLl+B+OuSgn1cw903dQC7G1sXXHkRu7glc7gEEQOV/ft7a8r9UmYDzaVlBuVy0a6wROfL2lA=
-X-Received: by 2002:a17:907:971e:b0:6f3:ff27:ebf7 with SMTP id
- jg30-20020a170907971e00b006f3ff27ebf7mr21159148ejc.159.1651684771561; Wed, 04
- May 2022 10:19:31 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=WCQd0BEkr2350zVHaq5lFX9i48jak99a6vqhtPevMLA=;
+        b=63VKkmORIhc3HWrEQqnKwy6XNHvDBHZf9Pzuf7cu0rpZfdYHEk4Umq9PBAMJZhQPtr
+         2AqiOiQu+eZjEATKnbJrOpLtfBPqhK1yj5iErnaKNqPTe87Q92HL8YNhxF5pmmfoBjd6
+         vazVfdDFrck998AOoKVPhziKaryJ/Ez7qj2NouJsJIdxCjm5bwjeRYvs09kl0X2PzaBT
+         M7LF8KEWo0DtHgN8SH16q42OUrSLAkSVrblkhVS8fkBEBTH6yxuU5QGbgy8C73PsUnOM
+         nTyKXAdDrPZFe+TXtyJ3T3dNoGVuAYYUH346JFv9VUjh+6u+/cvadUxrrONHwxZLwa7c
+         3kTg==
+X-Gm-Message-State: AOAM530zubk6IPl2J3kry3hzhj1kz6coGpvpIVOQ2lLh2RUjnO9GCsKW
+        C6h8uxufADQlqisISYztlGLYgQ==
+X-Google-Smtp-Source: ABdhPJzYJ0FPCVUpXpj95XbIPDCcfuiWkIiq8GSf0HrRowwPJd5pm70bchb1f7meCo0CrJS5bAyQ0w==
+X-Received: by 2002:a9d:6956:0:b0:605:fcae:3240 with SMTP id p22-20020a9d6956000000b00605fcae3240mr7564614oto.280.1651684879703;
+        Wed, 04 May 2022 10:21:19 -0700 (PDT)
+Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id a7-20020a056870b14700b000ead8b89484sm5785452oal.5.2022.05.04.10.21.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 May 2022 10:21:19 -0700 (PDT)
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Adam Skladowski <a39.skl@gmail.com>, phone-devel@vger.kernel.org
+Cc:     Stephen Boyd <sboyd@kernel.org>, Andy Gross <agross@kernel.org>,
+        linux-clk@vger.kernel.org,
+        Michael Turquette <mturquette@baylibre.com>,
+        linux-kernel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        linux-arm-msm@vger.kernel.org
+Subject: Re: (subset) [PATCH] clk: qcom: smd: Update MSM8976 RPM clocks.
+Date:   Wed,  4 May 2022 12:21:05 -0500
+Message-Id: <165168485226.3730817.8622970582930057500.b4-ty@linaro.org>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20220426090226.27293-1-a39.skl@gmail.com>
+References: <20220426090226.27293-1-a39.skl@gmail.com>
 MIME-Version: 1.0
-References: <20220502231944.3891435-1-tjmercier@google.com>
- <20220502231944.3891435-3-tjmercier@google.com> <20220504122558.GB24172@blackbody.suse.cz>
-In-Reply-To: <20220504122558.GB24172@blackbody.suse.cz>
-From:   "T.J. Mercier" <tjmercier@google.com>
-Date:   Wed, 4 May 2022 10:19:20 -0700
-Message-ID: <CABdmKX2DJy0i3XAP7xTduZ8KFVKtgto24w714YJNUb_=pfYiKw@mail.gmail.com>
-Subject: Re: [PATCH v6 2/6] cgroup: gpu: Add a cgroup controller for allocator
- attribution of GPU memory
-To:     =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>
-Cc:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Hridya Valsaraju <hridya@google.com>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        John Stultz <jstultz@google.com>,
-        Todd Kjos <tkjos@android.com>,
-        Carlos Llamas <cmllamas@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Kalesh Singh <kaleshsingh@google.com>, Kenny.Ho@amd.com,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        kernel-team@android.com, linux-kernel@vger.kernel.org,
-        cgroups@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 4, 2022 at 5:26 AM Michal Koutn=C3=BD <mkoutny@suse.com> wrote:
->
-> Hello.
->
-> On Mon, May 02, 2022 at 11:19:36PM +0000, "T.J. Mercier" <tjmercier@googl=
-e.com> wrote:
-> > This patch adds APIs to:
-> > -allow a device to register for memory accounting using the GPU cgroup
-> > controller.
-> > -charge and uncharge allocated memory to a cgroup.
->
-> Is this API for separately built consumers?
-> The respective functions should be exported (EXPORT_SYMBOL_GPL) if I
-> haven't missed anything.
->
-As the only users are dmabuf heaps and dmabuf, and those cannot be
-built as modules I did not export the symbols here. However these
-definitely would need to be exported to support use by modules, and I
-have had to do that in one of my device test trees for this change.
-Should I export these now for this series?
+On Tue, 26 Apr 2022 11:02:17 +0200, Adam Skladowski wrote:
+> MSM8976 does not have rpm clock named mmssnoc,
+> instead it's called sysmmnoc, drop define and reuse.
+> While we are at it add XO clock to list.
+> 
+> 
 
-> > +#ifdef CONFIG_CGROUP_GPU
-> > + /* The GPU cgroup controller data structure */
-> > +struct gpucg {
-> > +     struct cgroup_subsys_state css;
-> > +
-> > +     /* list of all resource pools that belong to this cgroup */
-> > +     struct list_head rpools;
-> > +};
-> > +
-> > +/* A named entity representing bucket of tracked memory. */
-> > +struct gpucg_bucket {
-> > +     /* list of various resource pools in various cgroups that the buc=
-ket is part of */
-> > +     struct list_head rpools;
-> > +
-> > +     /* list of all buckets registered for GPU cgroup accounting */
-> > +     struct list_head bucket_node;
-> > +
-> > +     /* string to be used as identifier for accounting and limit setti=
-ng */
-> > +     const char *name;
-> > +};
->
-> Do these struct have to be defined "publicly"?
-> I.e. the driver code could just work with gpucg and gpucg_bucket
-> pointers.
->
-> > +int gpucg_register_bucket(struct gpucg_bucket *bucket, const char *nam=
-e)
->
-> ...and the registration function would return a pointer to newly
-> (internally) allocated gpucg_bucket.
->
-No, except maybe the gpucg_bucket name which I can add an accessor
-function for. Won't this mean depending on LTO for potential inlining
-of the functions currently implemented in the header? I'm happy to
-make this change, but I wonder why some parts of the kernel take this
-approach and others do not.
+Applied, thanks!
 
-> Regards,
-> Michal
+[1/1] clk: qcom: smd: Update MSM8976 RPM clocks.
+      commit: 665ca429bc4131f9165f119ad3ed81c786bf3262
+
+Best regards,
+-- 
+Bjorn Andersson <bjorn.andersson@linaro.org>

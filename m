@@ -2,112 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 633C251AE97
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 21:59:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E95C651AE9B
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 22:00:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377808AbiEDUCt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 16:02:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35976 "EHLO
+        id S1377877AbiEDUEG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 16:04:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344279AbiEDUCl (ORCPT
+        with ESMTP id S1377637AbiEDUEC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 16:02:41 -0400
-Received: from mail-il1-x12f.google.com (mail-il1-x12f.google.com [IPv6:2607:f8b0:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D486E4EDF9
-        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 12:58:47 -0700 (PDT)
-Received: by mail-il1-x12f.google.com with SMTP id s14so1549449ild.6
-        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 12:58:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=GsfXoNKONKDKWhJHjg7OT8XgANJP2e9G7Mc1nVY0AYE=;
-        b=Aq1U8sdb7NiZVJWC4vUlChWXOfRbCGaFNjbSpc0WleExMf0SKkQUNrsAlYXljTlC8V
-         kIwakMFlClmc4+G6Yl7CQ/45/9xgObIBveZ7BjUWWP3+FAaW4C1aJyJALPCVD9lXJc+x
-         YJ++0U3IX23F9PeoHw9+6HPC3HlHHljxhgJrbOn5aAgZau7Q6TShdWIkw27qEr4r1db0
-         ySclaROjZ8pxDb8YfChQRlCjxbFar+IhUVYKk3BD08+hVk5gdraFe163Ypca8nO0QyxZ
-         DsoFqtJh0sAijvTR6s7QSXKCKou0s4gdKPXNW/z/rGUII4CS32K7EojcLfa8YVJI1oAs
-         x6EQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=GsfXoNKONKDKWhJHjg7OT8XgANJP2e9G7Mc1nVY0AYE=;
-        b=ei288ihuNeuAzC40R+9WoJ+AheSl7/15sjglZ9VnFMIwJSISz0LcjzBfWoCZoaIYEV
-         bqtkvVJWQJF0V3Dm791e8CrY6CTRfW3W/dOHXcbW/kNB7hhnxfHKGfLhqYTLmAX8N2O7
-         S1lzHOD5J0ahDyM9wgAB99lDKHM8lZyiqZASgTTMhlGXtxuckZqNAo1zjDx8+Bw+0TM2
-         OICRgWictwA7reVZ+aaTDsDPOh7OkmPnmEuL4uKnxSL5zOcZRplN8lwzz7p4MqeaO8f1
-         HZtRQJ4hXzUs9Kok2VThZx0WG+J4pzjCZNvue6ZEq1w5YYZMh/OnRR+eF5wor3De2u7e
-         nqSQ==
-X-Gm-Message-State: AOAM530b4rkbnjXULL0oGxMDwNpARzACaVkGyf9qWi3SEdz4VlRp0ikc
-        2XabiYuKekjKvxF91Bh4lmGWpQ==
-X-Google-Smtp-Source: ABdhPJy5Bzj+uvdC2D+9IucvrmZ0XZi+3AvPJbXcQc72eVCSrPti9fdcCscTtD01OvFKOzl/PHzgiQ==
-X-Received: by 2002:a05:6e02:164f:b0:2cf:3244:665d with SMTP id v15-20020a056e02164f00b002cf3244665dmr4183126ilu.170.1651694326903;
-        Wed, 04 May 2022 12:58:46 -0700 (PDT)
-Received: from google.com (194.225.68.34.bc.googleusercontent.com. [34.68.225.194])
-        by smtp.gmail.com with ESMTPSA id t13-20020a02ccad000000b0032b3a7817afsm4928792jap.115.2022.05.04.12.58.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 May 2022 12:58:46 -0700 (PDT)
-Date:   Wed, 4 May 2022 19:58:42 +0000
-From:   Oliver Upton <oupton@google.com>
-To:     Raghavendra Rao Ananta <rananta@google.com>
-Cc:     Marc Zyngier <maz@kernel.org>, Andrew Jones <drjones@redhat.com>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Peter Shier <pshier@google.com>,
-        Ricardo Koller <ricarkol@google.com>,
-        Reiji Watanabe <reijiw@google.com>,
-        Jing Zhang <jingzhangos@google.com>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH] selftests: KVM: aarch64: Let hypercalls use UAPI
- *_BIT_COUNT
-Message-ID: <YnLa8uH55/epyjlS@google.com>
-References: <20220504184415.1905224-1-rananta@google.com>
+        Wed, 4 May 2022 16:04:02 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CB111CFFB;
+        Wed,  4 May 2022 13:00:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651694425; x=1683230425;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=jC2aMWUJhX29obrPq1HQfTtD2kGq5tdC3PTfWHFzxR8=;
+  b=mEavUaXik74IqPdaDCPLCpDJdGv/FsCn/MjV7kGvYRelL1ojtbMWA0f7
+   P4g0mx3u+AcfPGIo8nfSELNFBOwpHvrDAyySRK/+qTXnDOAhEN8W2zZBz
+   CFMlC/RCuHmHYHawK4eiPvR4RTwEDMBKKgCfFd9IAkV53LW0uU33wmIQb
+   RXkviN6N/ORJ01P1Vc0jqbLzYUfGyl5RAJeLpHpGXCTkVdA6CfjiA/PXX
+   dRw7BDaE8hotWriJSdKK6uHwNQLYlKiHAb8xArqCXCjvqByo3PV+EVYjE
+   V3yn2Qg2of35W75j/+NWAvVODUmdAmCGZiFemkOi+ksF6cJW9QyoyMNKd
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10337"; a="354320501"
+X-IronPort-AV: E=Sophos;i="5.91,199,1647327600"; 
+   d="scan'208";a="354320501"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2022 13:00:24 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,199,1647327600"; 
+   d="scan'208";a="599683635"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 04 May 2022 13:00:22 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nmLAb-000Bk9-W3;
+        Wed, 04 May 2022 20:00:21 +0000
+Date:   Thu, 5 May 2022 04:00:00 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Corentin Labbe <clabbe@baylibre.com>, jdelvare@suse.com,
+        linux@roeck-us.net
+Cc:     kbuild-all@lists.01.org, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Corentin Labbe <clabbe@baylibre.com>
+Subject: Re: [PATCH v2 2/2] hwmon: acpi_power_meter: convert to
+ hwmon_device_register_with_info
+Message-ID: <202205050310.mXK9zxb3-lkp@intel.com>
+References: <20220504103028.493155-3-clabbe@baylibre.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220504184415.1905224-1-rananta@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <20220504103028.493155-3-clabbe@baylibre.com>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Raghavendra,
+Hi Corentin,
 
-On Wed, May 04, 2022 at 06:44:15PM +0000, Raghavendra Rao Ananta wrote:
-> The hypercalls test currently defines its own *_BMAP_BIT_MAX macros to
-> define the last valid feature bit for each bitmap firmware register.
-> However, since these definitions are already present in the uapi header,
-> kvm.h, as *_BMAP_BIT_COUNT, and would help to keep the test updated as
-> features grow, use these instead.
+I love your patch! Yet something to improve:
 
-LOL, looks like I lost that one in the end! Still, the fact that you're
-patching the selftest highlights the fact that there is a nonzero chance
-of userspace using this value incorrectly expecting it to hold true
-across all kernels.
+[auto build test ERROR on groeck-staging/hwmon-next]
+[also build test ERROR on v5.18-rc5 next-20220504]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-Since this is the route going forward can we please consider documenting
-the fact that _BIT_COUNT *will* change and is not stable between kernel
-versions. Bad UAPI expectations could throw a wrench into this entire
-plan we've hatched for preserving hypercall ABI.
+url:    https://github.com/intel-lab-lkp/linux/commits/Corentin-Labbe/hwmon-acpi_power_meter-convert-to-new-hwmon-API/20220504-183225
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+config: i386-randconfig-a014 (https://download.01.org/0day-ci/archive/20220505/202205050310.mXK9zxb3-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.2.0-20) 11.2.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel-lab-lkp/linux/commit/0287ed3436a71556d5fb79429e9ca041a0c5fe5b
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Corentin-Labbe/hwmon-acpi_power_meter-convert-to-new-hwmon-API/20220504-183225
+        git checkout 0287ed3436a71556d5fb79429e9ca041a0c5fe5b
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
-Just a warning at the end of the register documentation would suffice.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-> No functional change intended.
-> 
-> Signed-off-by: Raghavendra Rao Ananta <rananta@google.com>
+All errors (new ones prefixed by >>):
 
-Besides considering the above hazard:
+   ld: drivers/hwmon/acpi_power_meter.o: in function `acpi_power_read':
+>> acpi_power_meter.c:(.text+0x83c): undefined reference to `__udivdi3'
 
-Reviewed-by: Oliver Upton <oupton@google.com>
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

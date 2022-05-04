@@ -2,101 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18F7E51A13D
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 15:46:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9467151A13B
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 15:45:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350826AbiEDNtg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 09:49:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37610 "EHLO
+        id S1350795AbiEDNtV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 09:49:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350805AbiEDNtH (ORCPT
+        with ESMTP id S1350791AbiEDNs6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 09:49:07 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB325167E9
-        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 06:45:29 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id kq17so2997898ejb.4
-        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 06:45:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Uv7Hp42LV/vTpm+weT4So5OI48akf0l91Vs3/APjQVg=;
-        b=nkKNa9OSox+I2AggVlih55mls2Es/JkmCEZAwb77r66baliDbgU8EDdLzRGFczo0yP
-         FSgfD+O+c4tXzxuOhPQHxvOUlJ9D5AQyRZZw0NkeftBD0NlLvEyt0MjIhMJ+lu1gyRhR
-         iFOd5IJGpYOdHePtcc3S7VnKeBkakc2CkiZbc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Uv7Hp42LV/vTpm+weT4So5OI48akf0l91Vs3/APjQVg=;
-        b=nYrv8a9UD4TV8P+MnAPxbU5gfDr67Z/lStI9Bt9qLlk3As1/MFwwOgRVsdqANrTYa3
-         dZhdm38+9RFqHaPhfk+sxLLaUFundmnaGqCMxdQNtTcCKTH7R7PCMNdoyRDQvGCqJ8TR
-         UchaJmV2oyojp4S3J+/CP2uWAfGjQtR+Yv4+Dd2XyDWUypmwojKVMJ21rJHvtD6pf40u
-         TJkysxKSXC6uKr29F/IhEjYH5YOx/JgEXRmKBOPRUNjVv1m07//zIV3YGO4En7z2bzKF
-         H88v7/MvTFjrHdDezr684oVYiP/SRVFfX6U9FAGerPzFsU5LcznKdc9jJ65DzCzRzyQt
-         kLrg==
-X-Gm-Message-State: AOAM530+6oXo4sknXcTPbPsLPJOZXtx6k61PI4xfWCoRdEycGba1APhW
-        WcRS2lHGY2iAIx3QqYJXLAW2mY9rA8uMQmhB81I=
-X-Google-Smtp-Source: ABdhPJwU/bBPQXlVlIcJgE/imAfaahKZUCNf8SDvrGQSlq/MWMI2bfj8dBersXMBvTg8uCSXZtn5sQ==
-X-Received: by 2002:a17:907:3c81:b0:6e6:cf3e:6e14 with SMTP id gl1-20020a1709073c8100b006e6cf3e6e14mr20598091ejc.181.1651671928168;
-        Wed, 04 May 2022 06:45:28 -0700 (PDT)
-Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com. [209.85.221.48])
-        by smtp.gmail.com with ESMTPSA id og34-20020a1709071de200b006f3ef214da7sm5765078ejc.13.2022.05.04.06.45.26
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 04 May 2022 06:45:26 -0700 (PDT)
-Received: by mail-wr1-f48.google.com with SMTP id b19so2082773wrh.11
-        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 06:45:26 -0700 (PDT)
-X-Received: by 2002:a05:6000:c7:b0:20a:d8c1:d044 with SMTP id
- q7-20020a05600000c700b0020ad8c1d044mr16774023wrx.422.1651671925564; Wed, 04
- May 2022 06:45:25 -0700 (PDT)
+        Wed, 4 May 2022 09:48:58 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C2756254
+        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 06:45:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651671919; x=1683207919;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=KZ4vphBXVfB/HfWb5Clb91wOAr0PLx69sTjqh3lXPSw=;
+  b=G/Z8EAzW/+vTzORVkEw10dP4dpdesc47Y/8Tv7n7ZHJwzK5Pg2/08yjX
+   5vNSXOsLCAwLmN3X+Ip5vlWBaEYnRAGU0/KknNnxyxdNGYGjlc/CY5UEm
+   04S6jlkrMi9SctZzLGXwN85jjJh/XeuZA+I0q2O3yutmkz5A5Ve9hAR3v
+   VGueUiaNgh0Q/XRuOknLYJUMhgD30G0AJI47s1p8jWF2cm5pPSpa2kGhG
+   JCVqn3H1qyyybXSxasx0vghJH61ELfix6rvTO4aSWZr/k4u34li3Gk8Ip
+   A5AkJvWOO6LuLA5Iq6FVWzZ/xViaaGjozFWVkZpLjU1zGVaajSKagq8Pa
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10337"; a="255235853"
+X-IronPort-AV: E=Sophos;i="5.91,198,1647327600"; 
+   d="scan'208";a="255235853"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2022 06:45:19 -0700
+X-IronPort-AV: E=Sophos;i="5.91,198,1647327600"; 
+   d="scan'208";a="734403682"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2022 06:45:16 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1nmFJZ-00Btne-Fp;
+        Wed, 04 May 2022 16:45:13 +0300
+Date:   Wed, 4 May 2022 16:45:13 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Michael Ellerman <mpe@ellerman.id.au>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        Scott Wood <oss@buserror.net>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>
+Subject: Re: [PATCH v1 1/1] powerpc/83xx/mpc8349emitx: Get rid of of_node
+ assignment
+Message-ID: <YnKDaTVDoqgFeQHz@smile.fi.intel.com>
+References: <20220323174342.56187-1-andriy.shevchenko@linux.intel.com>
+ <CACRpkdbUWE8knM=9uUVLTX792Y8_J1aPj4KtFh=yJxaKi+ZqRw@mail.gmail.com>
+ <Yk2PE7+oEEtGri95@smile.fi.intel.com>
+ <CACRpkdbqfNiWQG6ayqMXACby4xkW0pY6JhdYE-x+pWkSxJU5TQ@mail.gmail.com>
+ <87fsm7fkbt.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-References: <1645509309-16142-1-git-send-email-quic_c_skakit@quicinc.com>
-In-Reply-To: <1645509309-16142-1-git-send-email-quic_c_skakit@quicinc.com>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Wed, 4 May 2022 06:45:11 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=U9XfOancqNOGCWKEkP2jD4CHw6NHY8mdALG7D-7OLMTw@mail.gmail.com>
-Message-ID: <CAD=FV=U9XfOancqNOGCWKEkP2jD4CHw6NHY8mdALG7D-7OLMTw@mail.gmail.com>
-Subject: Re: [PATCH V4 0/4] Add PM8350C PMIC PWM support for backlight
-To:     Satya Priya <quic_c_skakit@quicinc.com>,
-        Pavel Machek <pavel@ucw.cz>
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        linux-leds@vger.kernel.org,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87fsm7fkbt.fsf@mpe.ellerman.id.au>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Pavel,
+On Thu, Apr 21, 2022 at 08:42:30AM +1000, Michael Ellerman wrote:
+> Linus Walleij <linus.walleij@linaro.org> writes:
+> > On Wed, Apr 6, 2022 at 3:02 PM Andy Shevchenko
+> > <andriy.shevchenko@linux.intel.com> wrote:
+> >> On Mon, Mar 28, 2022 at 03:16:08PM +0200, Linus Walleij wrote:
+> >> > On Wed, Mar 23, 2022 at 6:43 PM Andy Shevchenko
+> >> > <andriy.shevchenko@linux.intel.com> wrote:
+> >> >
+> >> > > Let GPIO library to assign of_node from the parent device.
+> >> > > This allows to move GPIO library and drivers to use fwnode
+> >> > > APIs instead of being stuck with OF-only interfaces.
+> >> > >
+> >> > > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> >> >
+> >> > That's a nice patch.
+> >> > Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+> >>
+> >> Thanks!
+> >>
+> >> Can we have this applied now?
+> >
+> > I think Michael Ellerman could help with this?
+> >
+> > Michael?
+> 
+> Yep, I'll pick it up when I start putting things into next.
+> 
+> That's usually the week after rc2, but I had a break for Easter.
 
-On Mon, Feb 21, 2022 at 9:55 PM Satya Priya <quic_c_skakit@quicinc.com> wrote:
->
-> This series depends on [1], which adds driver for Qualcomm LPG.
->
-> [1] https://patchwork.kernel.org/project/linux-arm-msm/list/?series=615848
->
-> Satya Priya (4):
->   dt-bindings: leds: Add pm8350c pmic support
->   leds: Add pm8350c support to Qualcomm LPG driver
->   arm64: dts: qcom: pm8350c: Add pwm support
->   arm64: dts: qcom: Enable pm8350c pwm for sc7280-idp2
+Any new on this? I haven't seen it yet in Linux Next.
 
-I see Bjorn's patch in your tree. Thanks!
+-- 
+With Best Regards,
+Andy Shevchenko
 
-...could you add patch #1 and #2 from this series too? They are both
-small and ready to go.
 
--Doug

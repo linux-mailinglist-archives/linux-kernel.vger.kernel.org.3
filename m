@@ -2,86 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 640A5519811
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 09:24:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D281519815
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 09:26:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345243AbiEDH2R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 03:28:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47964 "EHLO
+        id S1345317AbiEDH3g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 03:29:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230497AbiEDH2N (ORCPT
+        with ESMTP id S229628AbiEDH3a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 03:28:13 -0400
-Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 633F617045;
-        Wed,  4 May 2022 00:24:38 -0700 (PDT)
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id 901C91C0B82; Wed,  4 May 2022 09:24:36 +0200 (CEST)
-Date:   Wed, 4 May 2022 09:24:35 +0200
-From:   Pavel Machek <pavel@ucw.cz>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Lee Jones <lee.jones@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>, linux-leds@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-pwm@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, Stephen Boyd <swboyd@chromium.org>,
-        Rob Herring <robh@kernel.org>
-Subject: Re: [PATCH v14 1/2] dt-bindings: leds: Add Qualcomm Light Pulse
- Generator binding
-Message-ID: <20220504072435.GB8204@duo.ucw.cz>
-References: <20220303214300.59468-1-bjorn.andersson@linaro.org>
+        Wed, 4 May 2022 03:29:30 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C30701EEEC
+        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 00:25:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651649154; x=1683185154;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=zOXvk5xSpwk+RNWool8HSke68015qO3LDNaYLqS9tb4=;
+  b=URo7svdIy6ztjwm2O9FUKl4eKELVbWmDE2cFhR3jxwL+a6E2BAH1orug
+   bwIxWdhqAT/mTeNu8H19ljEc1t/Qenj7N4uFHypiCWVxdLVmaN+OwDbA/
+   ZEFZQPtYjr/jiilafa4E4vQ5bmn9f7N1EVd4688gaJZ4RI7Us4yn3rBbl
+   AMwx35p0q0+mFiyjQOOXVN3gx6dtY7EiGidnlv1LfFbqN0SIm7t1rjMnp
+   Wqc/FjAFAS/uxJfwIGH5cJx0yQNBEEdUbamHMPGDTmJjfExr6jqJug8hA
+   YYFtP6/O90fV7OzJAvUasCcYk42TVcxQAstYkRr8a4p6nEY8IBUV8Z8Mc
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10336"; a="354125995"
+X-IronPort-AV: E=Sophos;i="5.91,197,1647327600"; 
+   d="scan'208";a="354125995"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2022 00:25:54 -0700
+X-IronPort-AV: E=Sophos;i="5.91,197,1647327600"; 
+   d="scan'208";a="734278002"
+Received: from yanc1-mobl.ccr.corp.intel.com (HELO [10.255.30.223]) ([10.255.30.223])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2022 00:25:52 -0700
+Message-ID: <74172660-e9e9-6589-7755-50bcd8b0aca6@linux.intel.com>
+Date:   Wed, 4 May 2022 15:25:50 +0800
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="gatW/ieO32f1wygP"
-Content-Disposition: inline
-In-Reply-To: <20220303214300.59468-1-bjorn.andersson@linaro.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH 2/5] iommu/vt-d: Set SNP bit only in second-level page
+ table entries
+Content-Language: en-US
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     Joerg Roedel <joro@8bytes.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Jacob jun Pan <jacob.jun.pan@intel.com>,
+        Liu Yi L <yi.l.liu@intel.com>,
+        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org
+References: <20220501112434.874236-1-baolu.lu@linux.intel.com>
+ <20220501112434.874236-3-baolu.lu@linux.intel.com>
+ <20220502130546.GI8364@nvidia.com>
+From:   Baolu Lu <baolu.lu@linux.intel.com>
+In-Reply-To: <20220502130546.GI8364@nvidia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Jason,
 
---gatW/ieO32f1wygP
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 2022/5/2 21:05, Jason Gunthorpe wrote:
+> On Sun, May 01, 2022 at 07:24:31PM +0800, Lu Baolu wrote:
+>> The SNP bit is only valid for second-level PTEs. Setting this bit in the
+>> first-level PTEs has no functional impact because the Intel IOMMU always
+>> ignores the same bit in first-level PTEs. Anyway, let's check the page
+>> table type before setting SNP bit in PTEs to make the code more readable.
+> Shouldn't this be tested before setting force_snooping and not during
+> every map?
 
-Hi!
-
-> This adds the binding document describing the three hardware blocks
-> related to the Light Pulse Generator found in a wide range of Qualcomm
-> PMICs.
-
-Sorry for the delays. I have collected tested/review tags and push the
-result to:
-
-To gitolite.kernel.org:pub/scm/linux/kernel/git/pavel/linux-leds.git
-   312310928417..24e2d05d1b68  for-next -> for-next
-
-I'll need to check pattern usage in the driver, and there are some
-small fixes needed as evidenced in the reviews.
+The check is in the following patch. This just makes sure that SNP is
+only set in second-level page table entries.
 
 Best regards,
-								Pavel
---=20
-People of Russia, stop Putin before his war on Ukraine escalates.
+baolu
 
---gatW/ieO32f1wygP
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCYnIqMwAKCRAw5/Bqldv6
-8n7RAJ9oOCOR3ISZxwaIRR8H6om+IUUYdgCbB10QXZkS8Dp7LlyK3cTk9omfaOk=
-=o9iF
------END PGP SIGNATURE-----
-
---gatW/ieO32f1wygP--

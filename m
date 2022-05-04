@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B56B151A762
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:00:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7D2B51AA7F
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:27:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353649AbiEDRDV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 13:03:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38288 "EHLO
+        id S1358057AbiEDRZ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 13:25:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354577AbiEDQ6x (ORCPT
+        with ESMTP id S1354991AbiEDRDs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 12:58:53 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00D2C18B34;
-        Wed,  4 May 2022 09:50:33 -0700 (PDT)
+        Wed, 4 May 2022 13:03:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A7A04D273;
+        Wed,  4 May 2022 09:52:38 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AC34CB82752;
-        Wed,  4 May 2022 16:50:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 632FBC385A4;
-        Wed,  4 May 2022 16:50:31 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1B716617C3;
+        Wed,  4 May 2022 16:52:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F072C385A5;
+        Wed,  4 May 2022 16:52:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651683031;
-        bh=tYbbtFWE1gBnzqfxTsWUCnZsm02ZdWEOGyvLnKVQE5o=;
+        s=korg; t=1651683157;
+        bh=IzHnTEH3xlGhfuyQg4J8ArZeDQO0q0tTgX2u3BJ5BDk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=H54ctx2y5Uek03VWs27OuCHN+rjuQ+nb0F7kIllExRNJGUfyw0L9E7xpuIsw8sOnL
-         E06Gp7wzwjKPLAj9s0ZzXjFQwipmlCOswlxUwISuGFo63QsXWumNaJiLLcHIoxxUON
-         Lf41N10g9fIAq6mOaU0hDAPTQBW23rnPv2G0SUBo=
+        b=TizbRl46qVb/cv1lkbahlPUP3I2GatgVPN1EpkDi5sA8sUkchGkZJ7vdPLvr6/m9H
+         Otx9JdIyPEqmZpcOrJUhPQ41N9od6bgpkiciagbktkGm4cq+H6/T22OyVSQV8SgMou
+         coQA2/qlrhE9RbeaD9EdLBw2b9fOfqxdWTk/nr/c=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, stable <stable@kernel.org>,
         Sven Peter <sven@svenpeter.dev>
-Subject: [PATCH 5.10 022/129] usb: dwc3: Try usb-role-switch first in dwc3_drd_init
-Date:   Wed,  4 May 2022 18:43:34 +0200
-Message-Id: <20220504153023.018906145@linuxfoundation.org>
+Subject: [PATCH 5.15 022/177] usb: dwc3: Try usb-role-switch first in dwc3_drd_init
+Date:   Wed,  4 May 2022 18:43:35 +0200
+Message-Id: <20220504153055.222697534@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220504153021.299025455@linuxfoundation.org>
-References: <20220504153021.299025455@linuxfoundation.org>
+In-Reply-To: <20220504153053.873100034@linuxfoundation.org>
+References: <20220504153053.873100034@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -82,7 +82,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
 --- a/drivers/usb/dwc3/drd.c
 +++ b/drivers/usb/dwc3/drd.c
-@@ -568,16 +568,15 @@ int dwc3_drd_init(struct dwc3 *dwc)
+@@ -571,16 +571,15 @@ int dwc3_drd_init(struct dwc3 *dwc)
  {
  	int ret, irq;
  

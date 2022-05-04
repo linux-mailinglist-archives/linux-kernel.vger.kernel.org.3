@@ -2,133 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 708B351B11E
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 23:36:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 302C651B120
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 23:36:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347125AbiEDVjp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 17:39:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50064 "EHLO
+        id S1378816AbiEDVjk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 17:39:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379273AbiEDVjO (ORCPT
+        with ESMTP id S1379266AbiEDVjO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 4 May 2022 17:39:14 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E70E326CA
-        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 14:35:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651700103;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=3s3JJtjWkXdQIeMB4qwH1W143SmCevkLkyYdal6KkRA=;
-        b=fL0m2/wZPYvHvQ+x6xFfyPKxPIDpOC1haH/HdKelgxBevUzv1c/ee4IuO8fc1H+8zrUsuh
-        kmHC3j3qd52nLfagUkQaoxxEqUFuTMloHOUiXuToDpP0PeQ+0X0cIv7lZUHHAn2zhMGWYn
-        X550d7KZmhXEYCQrZ7Gj+9EcmxMigP4=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-605-UJvtXuB8OTG_3ShMvXL0sA-1; Wed, 04 May 2022 17:35:00 -0400
-X-MC-Unique: UJvtXuB8OTG_3ShMvXL0sA-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+Received: from thorn.bewilderbeest.net (thorn.bewilderbeest.net [IPv6:2605:2700:0:5::4713:9cab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07117532DE;
+        Wed,  4 May 2022 14:35:12 -0700 (PDT)
+Received: from hatter.bewilderbeest.net (174-21-163-222.tukw.qwest.net [174.21.163.222])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9DABD80418A;
-        Wed,  4 May 2022 21:34:59 +0000 (UTC)
-Received: from jsavitz-csb.redhat.com (unknown [10.22.8.120])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 3452F400F75F;
-        Wed,  4 May 2022 21:34:59 +0000 (UTC)
-From:   Joel Savitz <jsavitz@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Joel Savitz <jsavitz@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Sandipan Das <sandipan@linux.ibm.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Nico Pache <npache@redhat.com>, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org
-Subject: [PATCH] selftests: vm: Makefile: rename TARGETS to VMTARGETS
-Date:   Wed,  4 May 2022 17:34:54 -0400
-Message-Id: <20220504213454.1282532-1-jsavitz@redhat.com>
+        (Authenticated sender: zev)
+        by thorn.bewilderbeest.net (Postfix) with ESMTPSA id 2D00F368;
+        Wed,  4 May 2022 14:35:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bewilderbeest.net;
+        s=thorn; t=1651700112;
+        bh=TG2ba4y/RDwlDe7aExNpDRvQBRZU2FOjp8nvEg6cd1I=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=lugkWU3M8aQidzPUa+dHs6yMf6mvFols8gAAPjnxADbicqw7Vawf0nVlFXHAKBXIM
+         oej/qo8TkXReRDIV5f3qpZy/xJTgR1zzWwIArKgcTxibjps/HdiiWmdyDMmeHgXhOx
+         0Ap6n1nxdYp9bGIwkgIA2fQ2KqdNfVf/7Aa4Bgnw=
+Date:   Wed, 4 May 2022 14:35:08 -0700
+From:   Zev Weiss <zev@bewilderbeest.net>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Liam Girdwood <lgirdwood@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        openbmc@lists.ozlabs.org, MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>
+Subject: Re: [PATCH 2/6] dt-bindings: regulator: Add reg-external-output
+ binding
+Message-ID: <YnLxjJI8Vu3LqAnL@hatter.bewilderbeest.net>
+References: <20220504065252.6955-1-zev@bewilderbeest.net>
+ <20220504065252.6955-2-zev@bewilderbeest.net>
+ <YnJ32bG4IkSrRtHV@sirena.org.uk>
+ <YnLjNn9WVhvd4izZ@hatter.bewilderbeest.net>
+ <YnLmyHwMGnRL18LD@sirena.org.uk>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <YnLmyHwMGnRL18LD@sirena.org.uk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The tools/testing/selftests/vm/Makefile uses the variable TARGETS
-internally to generate a list of platform-specific binary build targets
-suffixed with _{32,64}. When building the selftests using its own
-Makefile directly, such as via the following command run in a kernel
-tree:
+[Adding extcon maintainers...]
 
-One receives an error such as the following:
+On Wed, May 04, 2022 at 01:49:12PM PDT, Mark Brown wrote:
+>On Wed, May 04, 2022 at 01:33:58PM -0700, Zev Weiss wrote:
+>> On Wed, May 04, 2022 at 05:55:53AM PDT, Mark Brown wrote:
+>
+>> > I think at a minimum anything like this would need some sort of
+>> > representation of how the output physically appears so that people can
+>> > work out how outputs are mapped to the hardware they see.
+>
+>> I don't quite understand what you're describing here -- could you elaborate
+>> on what you mean by "how the output physically appears", and what that might
+>> look like in a DT binding?
+>
+>For example if the output comes out on a socket then that socket should
+>be described.
+>
 
-make: Entering directory '/root/linux/tools/testing/selftests'
-make --no-builtin-rules ARCH=x86 -C ../../.. headers_install
-make[1]: Entering directory '/root/linux'
-  INSTALL ./usr/include
-make[1]: Leaving directory '/root/linux'
-make[1]: Entering directory '/root/linux/tools/testing/selftests/vm'
-make[1]: *** No rule to make target 'vm.c', needed by '/root/linux/tools/testing/selftests/vm/vm_64'.  Stop.
-make[1]: Leaving directory '/root/linux/tools/testing/selftests/vm'
-make: *** [Makefile:175: all] Error 2
-make: Leaving directory '/root/linux/tools/testing/selftests'
+Okay -- in the case of an Open19 power shelf like the ahe-50dc, there 
+are 50 instances of this, 48 of which are in four ganged connectors each 
+with 12 pairs of pins, but two of which have their own dedicated little 
+individual sockets.  The connectors are physically different, but 
+they're all identical as far as software is concerned, so I'm not clear 
+on why it would need to be expressed in any DT properties or the like.  
+Or did you just mean explanatory free-form text in the description 
+field?
 
-The TARGETS variable passed to tools/testing/selftests/Makefile collides
-with the TARGETS used in tools/testing/selftests/vm/Makefile, so rename
-the latter to VMTARGETS, eliminating the collision with no functional
-change.
+>> > However we
+>> > already have a subsystem for external connectors - extcon.  Perhaps this
+>> > should be a regulator client in the extcon API?  It's common for
+>> > connectors to include some sort of power provision so it seems like this
+>> > would fit right in.
+>
+>> Interesting -- I wasn't previously aware of the extcon subsystem, thanks for
+>> the pointer.  However, after looking at it a bit, I'm not sure I see how
+>> it'd be applicable here, since it looks like it's built to handle hardware
+>> that's at least sophisticated enough for software to tell whether or not
+>> something's plugged in, which isn't the case here.  The connector is just a
+>> ground pin and +12VDC pin, no presence-detection mechanism or anything else.
+>> Outside of the regulator itself there's really no "device" there for
+>> software to talk to or otherwise interact with at all.
+>
+>Sure, but there's no reason why it can't scale down to something
+>simpler.  It's easier to support something simpler than have to extend
+>to support something more complicated.
 
-Fixes: f21fda8f6453 ("selftests: vm: pkeys: fix multilib builds for
-x86")
+Alright, so would you suggest creating something like 
+drivers/extcon/extcon-regulator-output.c, and just having its extcon 
+functionality be something of a stub for now?
 
-Signed-off-by: Joel Savitz <jsavitz@redhat.com>
----
- tools/testing/selftests/vm/Makefile | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/tools/testing/selftests/vm/Makefile b/tools/testing/selftests/vm/Makefile
-index 04a49e876a46..5b1ecd00695b 100644
---- a/tools/testing/selftests/vm/Makefile
-+++ b/tools/testing/selftests/vm/Makefile
-@@ -57,9 +57,9 @@ CAN_BUILD_I386 := $(shell ./../x86/check_cc.sh "$(CC)" ../x86/trivial_32bit_prog
- CAN_BUILD_X86_64 := $(shell ./../x86/check_cc.sh "$(CC)" ../x86/trivial_64bit_program.c)
- CAN_BUILD_WITH_NOPIE := $(shell ./../x86/check_cc.sh "$(CC)" ../x86/trivial_program.c -no-pie)
- 
--TARGETS := protection_keys
--BINARIES_32 := $(TARGETS:%=%_32)
--BINARIES_64 := $(TARGETS:%=%_64)
-+VMTARGETS := protection_keys
-+BINARIES_32 := $(VMTARGETS:%=%_32)
-+BINARIES_64 := $(VMTARGETS:%=%_64)
- 
- ifeq ($(CAN_BUILD_WITH_NOPIE),1)
- CFLAGS += -no-pie
-@@ -112,7 +112,7 @@ $(BINARIES_32): CFLAGS += -m32 -mxsave
- $(BINARIES_32): LDLIBS += -lrt -ldl -lm
- $(BINARIES_32): $(OUTPUT)/%_32: %.c
- 	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) $(notdir $^) $(LDLIBS) -o $@
--$(foreach t,$(TARGETS),$(eval $(call gen-target-rule-32,$(t))))
-+$(foreach t,$(VMTARGETS),$(eval $(call gen-target-rule-32,$(t))))
- endif
- 
- ifeq ($(CAN_BUILD_X86_64),1)
-@@ -120,7 +120,7 @@ $(BINARIES_64): CFLAGS += -m64 -mxsave
- $(BINARIES_64): LDLIBS += -lrt -ldl
- $(BINARIES_64): $(OUTPUT)/%_64: %.c
- 	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) $(notdir $^) $(LDLIBS) -o $@
--$(foreach t,$(TARGETS),$(eval $(call gen-target-rule-64,$(t))))
-+$(foreach t,$(VMTARGETS),$(eval $(call gen-target-rule-64,$(t))))
- endif
- 
- # x86_64 users should be encouraged to install 32-bit libraries
--- 
-2.27.0
+Thanks,
+Zev
 

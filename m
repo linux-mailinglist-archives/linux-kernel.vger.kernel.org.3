@@ -2,162 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6F97519AB7
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 10:52:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76CF5519994
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 10:18:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347231AbiEDIyq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 04:54:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52536 "EHLO
+        id S1346221AbiEDIWM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 04:22:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346703AbiEDIxY (ORCPT
+        with ESMTP id S1346152AbiEDIVs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 04:53:24 -0400
-Received: from lgeamrelo11.lge.com (lgeamrelo11.lge.com [156.147.23.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5B70324BFB
-        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 01:49:25 -0700 (PDT)
-Received: from unknown (HELO lgeamrelo01.lge.com) (156.147.1.125)
-        by 156.147.23.51 with ESMTP; 4 May 2022 17:19:19 +0900
-X-Original-SENDERIP: 156.147.1.125
-X-Original-MAILFROM: byungchul.park@lge.com
-Received: from unknown (HELO localhost.localdomain) (10.177.244.38)
-        by 156.147.1.125 with ESMTP; 4 May 2022 17:19:19 +0900
-X-Original-SENDERIP: 10.177.244.38
-X-Original-MAILFROM: byungchul.park@lge.com
-From:   Byungchul Park <byungchul.park@lge.com>
-To:     torvalds@linux-foundation.org
-Cc:     damien.lemoal@opensource.wdc.com, linux-ide@vger.kernel.org,
-        adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
-        mingo@redhat.com, linux-kernel@vger.kernel.org,
-        peterz@infradead.org, will@kernel.org, tglx@linutronix.de,
-        rostedt@goodmis.org, joel@joelfernandes.org, sashal@kernel.org,
-        daniel.vetter@ffwll.ch, chris@chris-wilson.co.uk,
-        duyuyang@gmail.com, johannes.berg@intel.com, tj@kernel.org,
-        tytso@mit.edu, willy@infradead.org, david@fromorbit.com,
-        amir73il@gmail.com, bfields@fieldses.org,
-        gregkh@linuxfoundation.org, kernel-team@lge.com,
-        linux-mm@kvack.org, akpm@linux-foundation.org, mhocko@kernel.org,
-        minchan@kernel.org, hannes@cmpxchg.org, vdavydov.dev@gmail.com,
-        sj@kernel.org, jglisse@redhat.com, dennis@kernel.org, cl@linux.com,
-        penberg@kernel.org, rientjes@google.com, vbabka@suse.cz,
-        ngupta@vflare.org, linux-block@vger.kernel.org,
-        paolo.valente@linaro.org, josef@toxicpanda.com,
-        linux-fsdevel@vger.kernel.org, viro@zeniv.linux.org.uk,
-        jack@suse.cz, jack@suse.com, jlayton@kernel.org,
-        dan.j.williams@intel.com, hch@infradead.org, djwong@kernel.org,
-        dri-devel@lists.freedesktop.org, airlied@linux.ie,
-        rodrigosiqueiramelo@gmail.com, melissa.srw@gmail.com,
-        hamohammed.sa@gmail.com, 42.hyeyoo@gmail.com
-Subject: [PATCH RFC v6 03/21] dept: Apply Dept to spinlock
-Date:   Wed,  4 May 2022 17:17:31 +0900
-Message-Id: <1651652269-15342-4-git-send-email-byungchul.park@lge.com>
-X-Mailer: git-send-email 1.9.1
-In-Reply-To: <1651652269-15342-1-git-send-email-byungchul.park@lge.com>
-References: <1651652269-15342-1-git-send-email-byungchul.park@lge.com>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Wed, 4 May 2022 04:21:48 -0400
+Received: from mta-65-226.siemens.flowmailer.net (mta-65-226.siemens.flowmailer.net [185.136.65.226])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B37A62317F
+        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 01:18:06 -0700 (PDT)
+Received: by mta-65-226.siemens.flowmailer.net with ESMTPSA id 20220504081804bd89c3fceea64181bf
+        for <linux-kernel@vger.kernel.org>;
+        Wed, 04 May 2022 10:18:04 +0200
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; s=fm1;
+ d=siemens.com; i=daniel.starke@siemens.com;
+ h=Date:From:Subject:To:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding:Cc:References:In-Reply-To;
+ bh=givcKcPjIx5sD2l4pl+6VjcrPMHyRzWU5ISndNhsXmE=;
+ b=Uqv1JdNruTqnKaiNdczbMn3KY9J758mW2IfxbjXsfdMN/5m/YyE++8YhwrUKW9D2lATKea
+ cLlWRTCHypejgHj3MuZat3Dn8lvFwzVvn4Sy+vNSjV1Phq28DqVECqq5ZMBLu79OmHmFVQqK
+ grPpItO5O8IO5FpKlqwvqa9PUNA/o=;
+From:   "D. Starke" <daniel.starke@siemens.com>
+To:     linux-serial@vger.kernel.org, gregkh@linuxfoundation.org,
+        jirislaby@kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Daniel Starke <daniel.starke@siemens.com>
+Subject: [PATCH 2/3] tty: n_gsm: fix mux activation issues in gsm_config()
+Date:   Wed,  4 May 2022 10:17:32 +0200
+Message-Id: <20220504081733.3494-2-daniel.starke@siemens.com>
+In-Reply-To: <20220504081733.3494-1-daniel.starke@siemens.com>
+References: <20220504081733.3494-1-daniel.starke@siemens.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Flowmailer-Platform: Siemens
+Feedback-ID: 519:519-314044:519-21489:flowmailer
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Makes Dept able to track dependencies by spinlock.
+From: Daniel Starke <daniel.starke@siemens.com>
 
-Signed-off-by: Byungchul Park <byungchul.park@lge.com>
+The current implementation activates the mux if it was restarted and opens
+the control channel if the mux was previously closed and we are now acting
+as initiator instead of responder, which is the default setting.
+This has two issues.
+1) No mux is activated if we keep all default values and only switch to
+initiator. The control channel is not allocated but will be opened next
+which results in a NULL pointer dereference.
+2) Switching the configuration after it was once configured while keeping
+the initiator value the same will not reopen the control channel if it was
+closed due to parameter incompatibilities. The mux remains dead.
+
+Fix 1) by always activating the mux if it is dead after configuration.
+Fix 2) by always opening the control channel after mux activation.
+
+Fixes: e1eaea46bb40 ("tty: n_gsm line discipline")
+Cc: stable@vger.kernel.org
+Signed-off-by: Daniel Starke <daniel.starke@siemens.com>
 ---
- include/linux/lockdep.h            | 18 +++++++++++++++---
- include/linux/spinlock.h           | 21 +++++++++++++++++++++
- include/linux/spinlock_types_raw.h |  3 +++
- 3 files changed, 39 insertions(+), 3 deletions(-)
+ drivers/tty/n_gsm.c | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
 
-diff --git a/include/linux/lockdep.h b/include/linux/lockdep.h
-index aee4660..4fa91d5 100644
---- a/include/linux/lockdep.h
-+++ b/include/linux/lockdep.h
-@@ -572,9 +572,21 @@ static inline void print_irqtrace_events(struct task_struct *curr)
- #define lock_acquire_shared(l, s, t, n, i)		lock_acquire(l, s, t, 1, 1, n, i)
- #define lock_acquire_shared_recursive(l, s, t, n, i)	lock_acquire(l, s, t, 2, 1, n, i)
+diff --git a/drivers/tty/n_gsm.c b/drivers/tty/n_gsm.c
+index 9b0b435cf26e..bcb714031d69 100644
+--- a/drivers/tty/n_gsm.c
++++ b/drivers/tty/n_gsm.c
+@@ -2352,6 +2352,7 @@ static void gsm_copy_config_values(struct gsm_mux *gsm,
  
--#define spin_acquire(l, s, t, i)		lock_acquire_exclusive(l, s, t, NULL, i)
--#define spin_acquire_nest(l, s, t, n, i)	lock_acquire_exclusive(l, s, t, n, i)
--#define spin_release(l, i)			lock_release(l, i)
-+#define spin_acquire(l, s, t, i)					\
-+do {									\
-+	lock_acquire_exclusive(l, s, t, NULL, i);			\
-+	dept_spin_lock(&(l)->dmap, s, t, NULL, "spin_unlock", i);	\
-+} while (0)
-+#define spin_acquire_nest(l, s, t, n, i)				\
-+do {									\
-+	lock_acquire_exclusive(l, s, t, n, i);				\
-+	dept_spin_lock(&(l)->dmap, s, t, (n) ? &(n)->dmap : NULL, "spin_unlock", i); \
-+} while (0)
-+#define spin_release(l, i)						\
-+do {									\
-+	lock_release(l, i);						\
-+	dept_spin_unlock(&(l)->dmap, i);				\
-+} while (0)
+ static int gsm_config(struct gsm_mux *gsm, struct gsm_config *c)
+ {
++	int ret = 0;
+ 	int need_close = 0;
+ 	int need_restart = 0;
  
- #define rwlock_acquire(l, s, t, i)		lock_acquire_exclusive(l, s, t, NULL, i)
- #define rwlock_acquire_read(l, s, t, i)					\
-diff --git a/include/linux/spinlock.h b/include/linux/spinlock.h
-index 5c0c517..191fb99 100644
---- a/include/linux/spinlock.h
-+++ b/include/linux/spinlock.h
-@@ -95,6 +95,27 @@
- # include <linux/spinlock_up.h>
- #endif
+@@ -2419,10 +2420,13 @@ static int gsm_config(struct gsm_mux *gsm, struct gsm_config *c)
+ 	 * FIXME: We need to separate activation/deactivation from adding
+ 	 * and removing from the mux array
+ 	 */
+-	if (need_restart)
+-		gsm_activate_mux(gsm);
+-	if (gsm->initiator && need_close)
+-		gsm_dlci_begin_open(gsm->dlci[0]);
++	if (gsm->dead) {
++		ret = gsm_activate_mux(gsm);
++		if (ret)
++			return ret;
++		if (gsm->initiator)
++			gsm_dlci_begin_open(gsm->dlci[0]);
++	}
+ 	return 0;
+ }
  
-+#ifdef CONFIG_DEPT
-+#define dept_spin_lock(m, ne, t, n, e_fn, ip)				\
-+do {									\
-+	if (t) {							\
-+		dept_ecxt_enter(m, 1UL, ip, __func__, e_fn, ne);	\
-+	} else if (n) {							\
-+		dept_ecxt_enter_nokeep(m);				\
-+	} else {							\
-+		dept_wait(m, 1UL, ip, __func__, ne);			\
-+		dept_ecxt_enter(m, 1UL, ip, __func__, e_fn, ne);	\
-+	}								\
-+} while (0)
-+#define dept_spin_unlock(m, ip)						\
-+do {									\
-+	dept_ecxt_exit(m, 1UL, ip);					\
-+} while (0)
-+#else
-+#define dept_spin_lock(m, ne, t, n, e_fn, ip)	do { } while (0)
-+#define dept_spin_unlock(m, ip)			do { } while (0)
-+#endif
-+
- #ifdef CONFIG_DEBUG_SPINLOCK
-   extern void __raw_spin_lock_init(raw_spinlock_t *lock, const char *name,
- 				   struct lock_class_key *key, short inner);
-diff --git a/include/linux/spinlock_types_raw.h b/include/linux/spinlock_types_raw.h
-index 91cb36b..1a1da54 100644
---- a/include/linux/spinlock_types_raw.h
-+++ b/include/linux/spinlock_types_raw.h
-@@ -31,11 +31,13 @@
- 	.dep_map = {					\
- 		.name = #lockname,			\
- 		.wait_type_inner = LD_WAIT_SPIN,	\
-+		.dmap = DEPT_MAP_INITIALIZER(lockname)	\
- 	}
- # define SPIN_DEP_MAP_INIT(lockname)			\
- 	.dep_map = {					\
- 		.name = #lockname,			\
- 		.wait_type_inner = LD_WAIT_CONFIG,	\
-+		.dmap = DEPT_MAP_INITIALIZER(lockname)	\
- 	}
- 
- # define LOCAL_SPIN_DEP_MAP_INIT(lockname)		\
-@@ -43,6 +45,7 @@
- 		.name = #lockname,			\
- 		.wait_type_inner = LD_WAIT_CONFIG,	\
- 		.lock_type = LD_LOCK_PERCPU,		\
-+		.dmap = DEPT_MAP_INITIALIZER(lockname)	\
- 	}
- #else
- # define RAW_SPIN_DEP_MAP_INIT(lockname)
 -- 
-1.9.1
+2.34.1
 

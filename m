@@ -2,143 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8B3A51A1A8
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 15:59:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0781551A1A3
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 15:58:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351036AbiEDOCo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 10:02:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50316 "EHLO
+        id S1350857AbiEDOCT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 10:02:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350700AbiEDOCl (ORCPT
+        with ESMTP id S237763AbiEDOCQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 10:02:41 -0400
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0616427B08
-        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 06:59:05 -0700 (PDT)
-Received: by mail-yb1-xb2e.google.com with SMTP id h10so2506552ybc.4
-        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 06:59:04 -0700 (PDT)
+        Wed, 4 May 2022 10:02:16 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03890275F3
+        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 06:58:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=SPZZPIZ3tMBmU2J1+dZLu8mQ0Ktfd9UqnJWzWh7GFsY=;
-        b=LRu+SOgpWQ2b+0XE6XdI/GPR0EVOYpYkODREs06fm4JhpU/+whc8uYsRe84PoV/JSE
-         ZPYr0vcwK13wBePNL3HhRS1K5KCawgiM+8nA3JodO3TFcvqxV/SXUB6XsDpnbMmKrl/O
-         UwA2935dhr1JZ5IYE7VJe+x5YlZKUuTtthD6ZyullhDMhoGCelzR7b+dyGOKwbpY8+Tl
-         RweTMuhP01HvNGL4Iux7lkE+85f7iPo/miEVmHQz9pI4KJfovUn2gIuynUdyEaLBRKaA
-         ujGpZ1FPiKdjVCRW8uSeCvuoFeYdMaQr3Xp7ltKPvVz9kuiXOYxJwAk3C8iXVlnNOxgF
-         Hv+g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=SPZZPIZ3tMBmU2J1+dZLu8mQ0Ktfd9UqnJWzWh7GFsY=;
-        b=4Yo2jUVaPx6AhtT4qkQyuZFH0OTr2pv3zmKBdW4bSwaVq/q/tCn0xU5Y45sMO6iaET
-         aUymTydDIaV1gDNpKw/bhmHhWCLYUgdfTzta9kVJQlt6ip+hTzTXdRDwptBwna45lO1o
-         mEdJPMrbiMwRtwX/Xp9cELWJ5FXfgndXnxkpy6VreFhYMOtebLc/Odv/Fd2vFG7I8uzb
-         koQ9WJg3QGsNdwa1Jr1EXNH7Ud+iN0PhV/U30/jpij1u1qmIkvJw/42hfRsWZJ34yl1Z
-         UHjoKX5lw4iY7kN0lZWt6jrCYpqrzfB4gEzIS0kDm8T92ihT60uuAC1WNXcCo6fpcomf
-         wi9Q==
-X-Gm-Message-State: AOAM530FHOnElFJBNvzapF9iO87GaiKI3IOXYXH4fUugN/bRj3QjOPLB
-        VDv7lUmQXG58daza2biyvnDm/H3ThFN7iAmD5UkZ8aKhic8=
-X-Google-Smtp-Source: ABdhPJwFdnRNBegT96HZOCc6rf5V5GfnGTph+kAaVdv0O4+9BngcElxeohXGSrJ+jPxr8dcRqOpnRK6wxVA02Kq9C40=
-X-Received: by 2002:a25:c1c3:0:b0:648:e9af:111f with SMTP id
- r186-20020a25c1c3000000b00648e9af111fmr19203938ybf.168.1651672743992; Wed, 04
- May 2022 06:59:03 -0700 (PDT)
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1651672721; x=1683208721;
+  h=message-id:date:mime-version:subject:to:references:from:
+   in-reply-to:content-transfer-encoding;
+  bh=11770cKS+9CS+QLXwuNHlJ4PVZqEaAPkwZKE6duj5KU=;
+  b=kn60oK6Piy9cF8Npdqal5RMc40FvKwDyrhgHzFCeWS7Ka3csaJ2BoK3G
+   PZe5ci1ZX74lacVnRvvV1ncHxkr2mIVrm7MEZ+4EilItW3dZMoQMNS4Zx
+   qbOHW7hh1YdsdONbAj/orNZMM1tRswkFp2oxYdLiE2WBYS/tavjIP1GQu
+   8=;
+Received: from unknown (HELO ironmsg02-sd.qualcomm.com) ([10.53.140.142])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 04 May 2022 06:58:40 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg02-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2022 06:58:40 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Wed, 4 May 2022 06:58:40 -0700
+Received: from [10.226.59.182] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Wed, 4 May 2022
+ 06:58:39 -0700
+Message-ID: <6dde7bb4-8931-ccdb-2677-930a1c6d6dab@quicinc.com>
+Date:   Wed, 4 May 2022 07:58:38 -0600
 MIME-Version: 1.0
-References: <20220504070941.2798233-1-elver@google.com> <CABVgOSnkROn18i62+M9ZfRVLO=E28Eiv7oF_RJV+14Ld73axLw@mail.gmail.com>
- <CANpmjNPKyGUV4fXui5hEwc9+4y70kP_XgSnHbPObWBGyDeccYA@mail.gmail.com> <CABVgOSkLGryZeWVXdfBDkQKWvSkYTk2LWx+yC9J+4FYQpn2bpQ@mail.gmail.com>
-In-Reply-To: <CABVgOSkLGryZeWVXdfBDkQKWvSkYTk2LWx+yC9J+4FYQpn2bpQ@mail.gmail.com>
-From:   Marco Elver <elver@google.com>
-Date:   Wed, 4 May 2022 15:58:27 +0200
-Message-ID: <CANpmjNNHwpmVnrbRcibyu7F7r3cU9p_+ZHGTx=GGB7Y8LfVxGg@mail.gmail.com>
-Subject: Re: [PATCH -kselftest/kunit] kcsan: test: use new suite_{init,exit} support
-To:     David Gow <davidgow@google.com>
-Cc:     kasan-dev <kasan-dev@googlegroups.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Daniel Latypov <dlatypov@google.com>,
-        Brendan Higgins <brendanhiggins@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Subject: Re: [PATCH] drm: drm_gem.h: Add explicit includes for
+ DEFINE_DRM_GEM_FOPS
+Content-Language: en-US
+To:     Jani Nikula <jani.nikula@linux.intel.com>,
+        <maarten.lankhorst@linux.intel.com>, <mripard@kernel.org>,
+        <tzimmermann@suse.de>, <airlied@linux.ie>,
+        <linux-kernel@vger.kernel.org>, <dri-devel@lists.freedesktop.org>
+References: <1651262112-29664-1-git-send-email-quic_jhugo@quicinc.com>
+ <87y1zkq6vg.fsf@intel.com> <YnJJq6UdCVIWcH3G@phenom.ffwll.local>
+From:   Jeffrey Hugo <quic_jhugo@quicinc.com>
+In-Reply-To: <YnJJq6UdCVIWcH3G@phenom.ffwll.local>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 4 May 2022 at 15:54, David Gow <davidgow@google.com> wrote:
->
-> On Wed, May 4, 2022 at 9:48 PM Marco Elver <elver@google.com> wrote:
-> >
-> > On Wed, 4 May 2022 at 15:43, David Gow <davidgow@google.com> wrote:
-> > >
-> > > On Wed, May 4, 2022 at 3:09 PM Marco Elver <elver@google.com> wrote:
-> > > >
-> > > > Use the newly added suite_{init,exit} support for suite-wide init and
-> > > > cleanup. This avoids the unsupported method by which the test used to do
-> > > > suite-wide init and cleanup (avoiding issues such as missing TAP
-> > > > headers, and possible future conflicts).
-> > > >
-> > > > Signed-off-by: Marco Elver <elver@google.com>
-> > > > ---
-> > > > This patch should go on the -kselftest/kunit branch, where this new
-> > > > support currently lives, including a similar change to the KFENCE test.
-> > > > ---
-> > >
-> > > Thanks! This is working for me. I ran it as a builtin using kunit_tool
-> > > under (I had to add an x86_64-smp architecture), then use:
-> > > ./tools/testing/kunit/kunit.py run --arch=x86_64-smp
-> > > --kconfig_add=CONFIG_KCSAN=y --kconfig_add=CONFIG_DEBUG_KERNEL=y
-> > > --timeout 900 'kcsan'
-> > >
-> > > To add the x86_64 smp architecture, I added a file
-> > > ./tools/testing/kunit/qemu_configs/x86_64-smp.py, which was a copy of
-> > > x86_64.py but with 'CONFIG_SMP=y' added to XXXX and '-smp 16' added to
-> > > YYYY.
->
-> (Whoops, forgot to copy this in properly: XXXX was 'kconfig' and YYYY
-> was 'extra_qemu_params'.)
->
-> The x86_64-smp.py file ends up looking like this:
-> ---8<---
-> from ..qemu_config import QemuArchParams
->
-> QEMU_ARCH = QemuArchParams(linux_arch='x86_64',
->                           kconfig='''
-> CONFIG_SERIAL_8250=y
-> CONFIG_SERIAL_8250_CONSOLE=y
-> CONFIG_SMP=y
->                           ''',
->                           qemu_arch='x86_64',
->                           kernel_path='arch/x86/boot/bzImage',
->                           kernel_command_line='console=ttyS0',
->                           extra_qemu_params=['-smp 16'])
-> ---8<---
-> > > It took about 10 minutes on my system, so the default 5 minute timeout
-> > > definitely wasn't enough.
-> >
-> > The trick to reduce the KCSAN test time is to set
-> > CONFIG_KCSAN_REPORT_ONCE_IN_MS=100 or lower. So should you consider a
-> > special KUnit config, I'd add that.
-> >
->
-> Ah: it might be worth adding a dedicated kcsan .kunitconfig, in which
-> case this would be helpful. It'd also need the SMP qemu config above
-> before it's particularly useful, and 16 was a randomly-picked number
-> of CPUs -- not sure if there's a better default.
->
-> If you're likely to use it, though, we can definitely add it in. I'm
-> sure there'll eventually be other uses for an SMP config under
-> kunit_tool, too.
+On 5/4/2022 3:38 AM, Daniel Vetter wrote:
+> On Mon, May 02, 2022 at 06:41:39PM +0300, Jani Nikula wrote:
+>> On Fri, 29 Apr 2022, Jeffrey Hugo <quic_jhugo@quicinc.com> wrote:
+>>> DEFINE_DRM_GEM_FOPS() references drm functions from other headers.  For
+>>> example drm_open() is defined in drm_file.h and drm_ioctl() is defined
+>>> in drm_ioctl.h.  Since drm_gem.h doesn't include these headers, it
+>>> relies on an implicit include from the .c file to have included these
+>>> required headers before DEFINE_DRM_GEM_FOPS() gets used.  Relying on
+>>> these implicit includes can cause build failures for new code that
+>>> doesn't know about these requirements, and can lead to future problems
+>>> if the headers ever get restructured as there will be a need to update
+>>> every downstream file that includes drm_gem.h.
+>>>
+>>> Lets fix this explicitly including the required headers in drm_gem.h so
+>>> that code that includes drm_gem.h does not need to worry about these
+>>> implicit dependencies.
+>>
+>> In the general case, I tend to agree, but in this specific instance I
+>> think I'd err on the side of fewer includes. I think the more likely
+>> outcome here is accumulating implicit dependencies on symbols from
+>> drm_file.h and drm_ioctl.h by including drm_gem.h only!
+>>
+>> I do think headers need to be self-contained, and we actually enforce
+>> this in i915 (see HDRTEST in drivers/gpu/drm/i915/Makefile), but not to
+>> the point of macro expansions.
+> 
+> Yeah we abuse macros in a bunch of places to untangle header dependencies,
+> so then going back and pulling in all the headers back in feels a bit
+> silly and defeats the point.
 
-I currently have some other frankenscript to run it, but I wouldn't
-mind just using kunit_tool to do so. So having real SMP support there
-would be very useful.
+Fair enough.  I'll consider this NAK'd
 
-Thanks,
--- Marco
+I've been pondering alternate solutions, but haven't come up with any. 
+I guess, for now, the status quo will remain.
+
+> 
+> iow, I concur.
+> -Daniel
+> 
+>>
+>> BR,
+>> Jani.
+>>
+>>
+>>
+>>>
+>>> Signed-off-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
+>>> ---
+>>>   include/drm/drm_gem.h | 2 ++
+>>>   1 file changed, 2 insertions(+)
+>>>
+>>> diff --git a/include/drm/drm_gem.h b/include/drm/drm_gem.h
+>>> index 9d7c61a..1cbe3d8 100644
+>>> --- a/include/drm/drm_gem.h
+>>> +++ b/include/drm/drm_gem.h
+>>> @@ -37,6 +37,8 @@
+>>>   #include <linux/kref.h>
+>>>   #include <linux/dma-resv.h>
+>>>   
+>>> +#include <drm/drm_file.h>
+>>> +#include <drm/drm_ioctl.h>
+>>>   #include <drm/drm_vma_manager.h>
+>>>   
+>>>   struct iosys_map;
+>>
+>> -- 
+>> Jani Nikula, Intel Open Source Graphics Center
+> 
+

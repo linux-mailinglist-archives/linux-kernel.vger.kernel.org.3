@@ -2,62 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A34EB519DB2
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 13:13:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0AF3519DB7
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 13:14:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348599AbiEDLRB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 07:17:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51740 "EHLO
+        id S1348609AbiEDLRy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 07:17:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348593AbiEDLQx (ORCPT
+        with ESMTP id S1348017AbiEDLRw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 07:16:53 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B92522528E;
-        Wed,  4 May 2022 04:13:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2B9CAB821D5;
-        Wed,  4 May 2022 11:13:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A5EAC385AE;
-        Wed,  4 May 2022 11:13:14 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="dWXyH6SD"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1651662792;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=HXiaK4ictgTSjtvWOEUk+V6lbW8n+flqFYQG/qZp/tc=;
-        b=dWXyH6SDho1vsZk6jp325598IoQxyDX5RdlrojDYWX33rV3qpguAY0xp8e49erwjIbm//7
-        Noa6LXMvAeCBw28nTvaHBCczKc25blHIZKi/Grpmzf52tj13Z+Tfchj99QHzXPuHQOUbhJ
-        rQX0IwJd4uuNLiogVYtxli/EBNVsyO0=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 1638d895 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Wed, 4 May 2022 11:13:12 +0000 (UTC)
-Received: by mail-yb1-f181.google.com with SMTP id h10so1771010ybc.4;
-        Wed, 04 May 2022 04:13:12 -0700 (PDT)
-X-Gm-Message-State: AOAM531HNxE+twLkskJKdM/OH9H0kO5pQGxDJyB2paSJUqoLDBMco6Mm
-        N0S7qYaNTXDB+1Jzc/Lr7K+76cR242HrEuWmIA4=
-X-Google-Smtp-Source: ABdhPJwCBvpDxWGSWccxUCQ9Dcxzd+za7/HrhxllXzM3nsD8TEctq7GSKBM+TEdo8KJm1AuvrqSU4mLti6+HOafgrIk=
-X-Received: by 2002:a25:420b:0:b0:648:4baf:c639 with SMTP id
- p11-20020a25420b000000b006484bafc639mr17860583yba.373.1651662791725; Wed, 04
- May 2022 04:13:11 -0700 (PDT)
+        Wed, 4 May 2022 07:17:52 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E8CBA1570A
+        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 04:14:16 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A906C1042;
+        Wed,  4 May 2022 04:14:16 -0700 (PDT)
+Received: from [10.57.80.111] (unknown [10.57.80.111])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DAA1B3FA50;
+        Wed,  4 May 2022 04:14:12 -0700 (PDT)
+Message-ID: <8d6c30e0-dcf7-56f8-c44b-2d8bdb1dc04c@arm.com>
+Date:   Wed, 4 May 2022 12:14:07 +0100
 MIME-Version: 1.0
-References: <20220503195141.683217-1-Jason@zx2c4.com> <YnGI4lZVJ/FZEkcn@owl.dominikbrodowski.net>
- <CAHmME9o1zhtq=bMetwEx7YEzoW79z36BQ=vTWEv4M_ocChm5eA@mail.gmail.com> <YnIQ9RJpP/3j5aWF@owl.dominikbrodowski.net>
-In-Reply-To: <YnIQ9RJpP/3j5aWF@owl.dominikbrodowski.net>
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date:   Wed, 4 May 2022 13:13:01 +0200
-X-Gmail-Original-Message-ID: <CAHmME9pAHcXk+jyJDX27JfXbXRKtJmQuKH8aVbOo6d6N1RAakA@mail.gmail.com>
-Message-ID: <CAHmME9pAHcXk+jyJDX27JfXbXRKtJmQuKH8aVbOo6d6N1RAakA@mail.gmail.com>
-Subject: Re: [PATCH] random: mix hwgenerator randomness before sleeping
-To:     Dominik Brodowski <linux@dominikbrodowski.net>
-Cc:     Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [bug] NULL pointer deref after 3f6634d997db ("iommu: Use right
+ way to retrieve iommu_ops")
+Content-Language: en-GB
+To:     Jan Stancek <jstancek@redhat.com>,
+        Lu Baolu <baolu.lu@linux.intel.com>
+Cc:     Joerg Roedel <joro@8bytes.org>, Jason Gunthorpe <jgg@nvidia.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Ben Skeggs <bskeggs@redhat.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Eric Auger <eric.auger@redhat.com>,
+        Liu Yi L <yi.l.liu@intel.com>,
+        Jacob jun Pan <jacob.jun.pan@intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org,
+        Christoph Hellwig <hch@lst.de>, bgoncalv@redhat.com
+References: <20220216025249.3459465-1-baolu.lu@linux.intel.com>
+ <20220216025249.3459465-8-baolu.lu@linux.intel.com>
+ <20220504075356.GA2361844@janakin.usersys.redhat.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <20220504075356.GA2361844@janakin.usersys.redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -66,9 +62,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dominik,
+On 2022-05-04 08:53, Jan Stancek wrote:
+[...]
+> Hi,
+> 
+> I'm getting panics after hunk above was applied in this patch
+> on ppc64le KVM guest, dev->iommu is NULL.
 
-Alright I'll drop this patch for now, and we can revisit it if we ever
-get rid of the premature next stuff.
+Oof, this can probably be hit with vfio-noiommu too, and by the look of
+things, `echo auto > /sys/kernel/iommu_groups/0/type` would likely blow
+up as well. Does the patch below work for you?
 
-Jason
+Thanks,
+Robin.
+
+----->8-----
+ From abf0a38563bb2922a849e235d33d342170b5bc90 Mon Sep 17 00:00:00 2001
+Message-Id: <abf0a38563bb2922a849e235d33d342170b5bc90.1651662442.git.robin.murphy@arm.com>
+From: Robin Murphy <robin.murphy@arm.com>
+Date: Wed, 4 May 2022 11:53:20 +0100
+Subject: [PATCH] iommu: Make sysfs robust for non-API groups
+
+Groups created by VFIO backends outside the core IOMMU API should never
+be passed directly into the API itself, however they still expose their
+standard sysfs attributes, so we can still stumble across them that way.
+Take care to consider those cases before jumping into our normal
+assumptions of a fully-initialised core API group.
+
+Fixes: 3f6634d997db ("iommu: Use right way to retrieve iommu_ops")
+Reported-by: Jan Stancek <jstancek@redhat.com>
+Signed-off-by: Robin Murphy <robin.murphy@arm.com>
+---
+  drivers/iommu/iommu.c | 9 ++++++++-
+  1 file changed, 8 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
+index 29906bc16371..41ea2deaee03 100644
+--- a/drivers/iommu/iommu.c
++++ b/drivers/iommu/iommu.c
+@@ -510,6 +510,13 @@ int iommu_get_group_resv_regions(struct iommu_group *group,
+  	list_for_each_entry(device, &group->devices, list) {
+  		struct list_head dev_resv_regions;
+  
++		/*
++		 * Non-API groups still expose reserved_regions in sysfs,
++		 * so filter out calls that get here that way.
++		 */
++		if (!device->dev->iommu)
++			break;
++
+  		INIT_LIST_HEAD(&dev_resv_regions);
+  		iommu_get_resv_regions(device->dev, &dev_resv_regions);
+  		ret = iommu_insert_device_resv_regions(&dev_resv_regions, head);
+@@ -2977,7 +2984,7 @@ static ssize_t iommu_group_store_type(struct iommu_group *group,
+  	if (!capable(CAP_SYS_ADMIN) || !capable(CAP_SYS_RAWIO))
+  		return -EACCES;
+  
+-	if (WARN_ON(!group))
++	if (WARN_ON(!group) || !group->default_domain)
+  		return -EINVAL;
+  
+  	if (sysfs_streq(buf, "identity"))
+-- 
+2.35.3.dirty
+

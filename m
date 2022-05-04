@@ -2,42 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF89051A884
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:07:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FB6D51A833
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:07:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356162AbiEDRLU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 13:11:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35590 "EHLO
+        id S1355726AbiEDRIt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 13:08:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355404AbiEDRAC (ORCPT
+        with ESMTP id S1355684AbiEDRAU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 13:00:02 -0400
+        Wed, 4 May 2022 13:00:20 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 409684B402;
-        Wed,  4 May 2022 09:51:40 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B868B4BFC6;
+        Wed,  4 May 2022 09:52:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DAE9861811;
-        Wed,  4 May 2022 16:51:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38215C385A5;
-        Wed,  4 May 2022 16:51:30 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A551961851;
+        Wed,  4 May 2022 16:51:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF398C385AA;
+        Wed,  4 May 2022 16:51:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651683090;
-        bh=MAiGjYL2OG/xAAB6sKyAI75CanTT2wYUIKRLSJy6lhs=;
+        s=korg; t=1651683113;
+        bh=BKQz0nAn/eAiLvSRMPbGpJQjoQ6VusTJ+giCR77huYw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jj8xPB5ZrEkSVgZLnOg/6TEtLxVzb1Z78fLh8xJI0oH0NKbYsTYByeLruEOCOIfy6
-         oELZCLjaFoEf5/BCzn89lA9orjLlxJslkBtrQvEqHgwFBok1lrY94vSlgNfkF9OKMg
-         PwFKPpCeX1ad7qz0EXoCjjpaWIecGKPpaIco46hI=
+        b=K1wFDYoAT2mbT/hYtOi27GZyaOG8rLv8+wea7xST2++FdMnnSjIhPeWMxzOFMbQx8
+         G1t0RrV0YGFHMlYoiFFChCZzfbdZFEWQn0OJeJIYiRvho4D5FG5cjfKees5hNIvn9J
+         cyR1JNsvB1dXlV22mvioCc1DGUHy7h2QyT1Z+LZs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Yang Yingliang <yangyingliang@huawei.com>,
+        stable@vger.kernel.org, Raed Salem <raeds@nvidia.com>,
+        Leon Romanovsky <leonro@nvidia.com>,
+        Shannon Nelson <snelson@pensando.io>,
+        Konrad Jankowski <konrad0.jankowski@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
         Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 094/129] net: fec: add missing of_node_put() in fec_enet_init_stop_mode()
-Date:   Wed,  4 May 2022 18:44:46 +0200
-Message-Id: <20220504153028.392897634@linuxfoundation.org>
+Subject: [PATCH 5.10 095/129] ixgbe: ensure IPsec VF<->PF compatibility
+Date:   Wed,  4 May 2022 18:44:47 +0200
+Message-Id: <20220504153028.459291037@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
 In-Reply-To: <20220504153021.299025455@linuxfoundation.org>
 References: <20220504153021.299025455@linuxfoundation.org>
@@ -47,7 +51,7 @@ Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,34 +59,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yang Yingliang <yangyingliang@huawei.com>
+From: Leon Romanovsky <leonro@nvidia.com>
 
-[ Upstream commit d2b52ec056d5bddb055c8f21d7489a23548d0838 ]
+[ Upstream commit f049efc7f7cd2f3c419f55040928eaefb13b3636 ]
 
-Put device node in error path in fec_enet_init_stop_mode().
+The VF driver can forward any IPsec flags and such makes the function
+is not extendable and prone to backward/forward incompatibility.
 
-Fixes: 8a448bf832af ("net: ethernet: fec: move GPR register offset and bit into DT")
-Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
-Link: https://lore.kernel.org/r/20220426125231.375688-1-yangyingliang@huawei.com
+If new software runs on VF, it won't know that PF configured something
+completely different as it "knows" only XFRM_OFFLOAD_INBOUND flag.
+
+Fixes: eda0333ac293 ("ixgbe: add VF IPsec management")
+Reviewed-by: Raed Salem <raeds@nvidia.com>
+Signed-off-by: Leon Romanovsky <leonro@nvidia.com>
+Reviewed-by: Shannon Nelson <snelson@pensando.io>
+Tested-by: Konrad Jankowski <konrad0.jankowski@intel.com>
+Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
+Link: https://lore.kernel.org/r/20220427173152.443102-1-anthony.l.nguyen@intel.com
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/freescale/fec_main.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/net/ethernet/intel/ixgbe/ixgbe_ipsec.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/freescale/fec_main.c b/drivers/net/ethernet/freescale/fec_main.c
-index 166bc3f3b34c..d8bdaf2e5365 100644
---- a/drivers/net/ethernet/freescale/fec_main.c
-+++ b/drivers/net/ethernet/freescale/fec_main.c
-@@ -3529,7 +3529,7 @@ static int fec_enet_init_stop_mode(struct fec_enet_private *fep,
- 					 ARRAY_SIZE(out_val));
- 	if (ret) {
- 		dev_dbg(&fep->pdev->dev, "no stop mode property\n");
--		return ret;
-+		goto out;
+diff --git a/drivers/net/ethernet/intel/ixgbe/ixgbe_ipsec.c b/drivers/net/ethernet/intel/ixgbe/ixgbe_ipsec.c
+index 54d47265a7ac..319620856cba 100644
+--- a/drivers/net/ethernet/intel/ixgbe/ixgbe_ipsec.c
++++ b/drivers/net/ethernet/intel/ixgbe/ixgbe_ipsec.c
+@@ -903,7 +903,8 @@ int ixgbe_ipsec_vf_add_sa(struct ixgbe_adapter *adapter, u32 *msgbuf, u32 vf)
+ 	/* Tx IPsec offload doesn't seem to work on this
+ 	 * device, so block these requests for now.
+ 	 */
+-	if (!(sam->flags & XFRM_OFFLOAD_INBOUND)) {
++	sam->flags = sam->flags & ~XFRM_OFFLOAD_IPV6;
++	if (sam->flags != XFRM_OFFLOAD_INBOUND) {
+ 		err = -EOPNOTSUPP;
+ 		goto err_out;
  	}
- 
- 	fep->stop_gpr.gpr = syscon_node_to_regmap(gpr_np);
 -- 
 2.35.1
 

@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79DA351AB4A
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:42:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38F1F51AB5D
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:42:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359603AbiEDRo1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 13:44:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55550 "EHLO
+        id S1359428AbiEDRoU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 13:44:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355927AbiEDRI4 (ORCPT
+        with ESMTP id S1355953AbiEDRI5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 13:08:56 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70AE5522E8;
-        Wed,  4 May 2022 09:54:42 -0700 (PDT)
+        Wed, 4 May 2022 13:08:57 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5898E49F97;
+        Wed,  4 May 2022 09:54:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 466A761505;
+        by ams.source.kernel.org (Postfix) with ESMTPS id DD9BCB82792;
+        Wed,  4 May 2022 16:54:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9151DC385A5;
         Wed,  4 May 2022 16:54:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9143FC385A4;
-        Wed,  4 May 2022 16:54:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651683281;
-        bh=aEDMA/3oe/qWVXNiG9wL+UoIZG5uPLMm54IzJ4kwM5c=;
+        s=korg; t=1651683282;
+        bh=Gzzt0waAa8K+0dMB3qQiJ0MfV9GnsZLefeXzHn4bzdI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Q5A9/qREI3rr1L6UwIbajqV94SHLVNF7eXTP4tu9S+WMMgjgvZJuvJh/6jDYpj2op
-         dr0qg41VwhoPblEmEU+MEXutqTlZ7ff77fY+Q/hyKrWpd80TZnRkv1v2hZLk3QAaZF
-         gZ8JuEOhCeaCyi0TK2MOCAHhwZfpea6ahaJnyMyU=
+        b=TNVAOVbbIfHFdXpklG10n0aJObAaGZehHqDQP+3rTVeZBd1aebXhOFC1JtimsDitQ
+         kul06CfHTPoacbiDlQydvAxAzustIO17ItYnixtTnJX0UG+IWY+5Q7Mv3d0H8Ufwef
+         tZCL59mwNkiVZI7P3qiz7Hk3doZuF1w/om/B5T68=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Mikulas Patocka <mpatocka@redhat.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
+        stable@vger.kernel.org, Xiaoli Feng <xifeng@redhat.com>,
+        Ronnie Sahlberg <lsahlber@redhat.com>,
+        Steve French <stfrench@microsoft.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 134/177] x86: __memcpy_flushcache: fix wrong alignment if size > 2^32
-Date:   Wed,  4 May 2022 18:45:27 +0200
-Message-Id: <20220504153105.187160754@linuxfoundation.org>
+Subject: [PATCH 5.15 135/177] cifs: destage any unwritten data to the server before calling copychunk_write
+Date:   Wed,  4 May 2022 18:45:28 +0200
+Message-Id: <20220504153105.277538828@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
 In-Reply-To: <20220504153053.873100034@linuxfoundation.org>
 References: <20220504153053.873100034@linuxfoundation.org>
@@ -55,49 +56,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mikulas Patocka <mpatocka@redhat.com>
+From: Ronnie Sahlberg <lsahlber@redhat.com>
 
-[ Upstream commit a6823e4e360fe975bd3da4ab156df7c74c8b07f3 ]
+[ Upstream commit f5d0f921ea362636e4a2efb7c38d1ead373a8700 ]
 
-The first "if" condition in __memcpy_flushcache is supposed to align the
-"dest" variable to 8 bytes and copy data up to this alignment.  However,
-this condition may misbehave if "size" is greater than 4GiB.
+because the copychunk_write might cover a region of the file that has not yet
+been sent to the server and thus fail.
 
-The statement min_t(unsigned, size, ALIGN(dest, 8) - dest); casts both
-arguments to unsigned int and selects the smaller one.  However, the
-cast truncates high bits in "size" and it results in misbehavior.
+A simple way to reproduce this is:
+truncate -s 0 /mnt/testfile; strace -f -o x -ttT xfs_io -i -f -c 'pwrite 0k 128k' -c 'fcollapse 16k 24k' /mnt/testfile
 
-For example:
+the issue is that the 'pwrite 0k 128k' becomes rearranged on the wire with
+the 'fcollapse 16k 24k' due to write-back caching.
 
-	suppose that size == 0x100000001, dest == 0x200000002
-	min_t(unsigned, size, ALIGN(dest, 8) - dest) == min_t(0x1, 0xe) == 0x1;
-	...
-	dest += 0x1;
+fcollapse is implemented in cifs.ko as a SMB2 IOCTL(COPYCHUNK_WRITE) call
+and it will fail serverside since the file is still 0b in size serverside
+until the writes have been destaged.
+To avoid this we must ensure that we destage any unwritten data to the
+server before calling COPYCHUNK_WRITE.
 
-so we copy just one byte "and" dest remains unaligned.
-
-This patch fixes the bug by replacing unsigned with size_t.
-
-Signed-off-by: Mikulas Patocka <mpatocka@redhat.com>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+Bugzilla: https://bugzilla.redhat.com/show_bug.cgi?id=1997373
+Reported-by: Xiaoli Feng <xifeng@redhat.com>
+Signed-off-by: Ronnie Sahlberg <lsahlber@redhat.com>
+Signed-off-by: Steve French <stfrench@microsoft.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/x86/lib/usercopy_64.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ fs/cifs/smb2ops.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/arch/x86/lib/usercopy_64.c b/arch/x86/lib/usercopy_64.c
-index 508c81e97ab1..f1c0befb62df 100644
---- a/arch/x86/lib/usercopy_64.c
-+++ b/arch/x86/lib/usercopy_64.c
-@@ -121,7 +121,7 @@ void __memcpy_flushcache(void *_dst, const void *_src, size_t size)
+diff --git a/fs/cifs/smb2ops.c b/fs/cifs/smb2ops.c
+index db3ead52ec7c..0c1af2dd9069 100644
+--- a/fs/cifs/smb2ops.c
++++ b/fs/cifs/smb2ops.c
+@@ -1849,9 +1849,17 @@ smb2_copychunk_range(const unsigned int xid,
+ 	int chunks_copied = 0;
+ 	bool chunk_sizes_updated = false;
+ 	ssize_t bytes_written, total_bytes_written = 0;
++	struct inode *inode;
  
- 	/* cache copy and flush to align dest */
- 	if (!IS_ALIGNED(dest, 8)) {
--		unsigned len = min_t(unsigned, size, ALIGN(dest, 8) - dest);
-+		size_t len = min_t(size_t, size, ALIGN(dest, 8) - dest);
+ 	pcchunk = kmalloc(sizeof(struct copychunk_ioctl), GFP_KERNEL);
  
- 		memcpy((void *) dest, (void *) source, len);
- 		clean_cache_range((void *) dest, len);
++	/*
++	 * We need to flush all unwritten data before we can send the
++	 * copychunk ioctl to the server.
++	 */
++	inode = d_inode(trgtfile->dentry);
++	filemap_write_and_wait(inode->i_mapping);
++
+ 	if (pcchunk == NULL)
+ 		return -ENOMEM;
+ 
 -- 
 2.35.1
 

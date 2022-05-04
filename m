@@ -2,92 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A2CB51B1F0
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 00:31:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F52C51B1E6
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 00:31:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378973AbiEDWeR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 18:34:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50566 "EHLO
+        id S1379039AbiEDWeu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 18:34:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379000AbiEDWeF (ORCPT
+        with ESMTP id S1354265AbiEDWes (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 18:34:05 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD1CE25C44;
-        Wed,  4 May 2022 15:30:27 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id cq17-20020a17090af99100b001dc0386cd8fso2457794pjb.5;
-        Wed, 04 May 2022 15:30:27 -0700 (PDT)
+        Wed, 4 May 2022 18:34:48 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D43C2B24F
+        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 15:31:09 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id e24so2492534pjt.2
+        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 15:31:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=94a9pX/GV/eEl+QtDLHnwc8lloWm9uKODw2DiIxPFzg=;
-        b=GV0I9cg8N6KOAkYcoZKr2Gy5fEOZp2sOAgVEexp+9Jf715ipyYq30icc9NgQDWDrlG
-         meR7Y3IzOE2HxeiifnOKvm56q35EILWsUW4yNvt3hTg80m08NT4z3/nsEeVAtbTGGFuI
-         b1DJTRQht4wxbmiuZwTVI2cjqMn+0CUTXlF+jU8ikKKyoGtZOSGoNjCaKxNJC+Qyd9Yj
-         goesqFL/kjlLghbT676ldhQkddlo5btqmnDZIpqb0u3Yn8ycTZAI6kSstgQEVJXHG7Zs
-         epDj6PdIqhUFJ8kI+ERkGKvbg9cGLBzNkXaARnPh5CYbd86BpgkNROciT8wxFP6J6XJ1
-         xpKA==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=V4mcraihi9SrpCHC2jZoMr5aDTcAHssWAbY6f0fZueQ=;
+        b=RAWjYXrFLWLiT/sTepot+yp0Rawj48PXvecgBtpOgZCatOrIyduZDIHLEe30f5joku
+         aUOCgu9eKHYniNrqwX/TmFmc99JjM8WXdb5RX5pJ2X42hherVXdL5ME52oRBdTD01aPy
+         ZaEjDc+VZBH6DQLBqS95L4XLkQZ3e7rF1TI88=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=94a9pX/GV/eEl+QtDLHnwc8lloWm9uKODw2DiIxPFzg=;
-        b=nJOBmIQaWPkE3+/sfdKu43DESxyga95M+jhPH1vi2hR7I6lQzqXke2GACWebAYK4QK
-         HEjOCJXLa/RNr/BJLKhAeKuFpVa4ejKGoc5gl/Nj9N1w6+/TLcROM3vy7cqkdJeeXkmi
-         XuK9yda8zw9kVUgKFyTCEfdeb6NnOldBE9q72fQF7MyXPlK+BtGtHX4gO2VimoN9rJzc
-         IDDi39uFTzemekWnYHlkQGe+0Xmb5uCXWKB8sAoeUv0tL/aWEQz9W5ixoSJHkAC6xK3X
-         wPlQi+KmvWTtinIBzaolxUP41BoOog+V8Mz0cOWGuOoc7MaA2JdY8U5XOdqQ4EO7N6Kk
-         K/DQ==
-X-Gm-Message-State: AOAM531GKe5F6G6T91ftA1M4MupWR9bodrsB+YiZgUDvITVAHDBiPDJ2
-        FFJDJEHO9hGuH+3tSXIpaI8=
-X-Google-Smtp-Source: ABdhPJyAOefCc6L+2qUMnOCdFHcUwXWTa0u7mL4Sqe6/qy44e0e8MDs0PsXzTErnF79Kpa1zlv9PsQ==
-X-Received: by 2002:a17:90b:1d87:b0:1dc:a9c0:3d49 with SMTP id pf7-20020a17090b1d8700b001dca9c03d49mr2176020pjb.12.1651703427150;
-        Wed, 04 May 2022 15:30:27 -0700 (PDT)
-Received: from stbirv-lnx-2.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id p4-20020a1709028a8400b0015e8d4eb257sm8882284plo.161.2022.05.04.15.30.25
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 04 May 2022 15:30:26 -0700 (PDT)
-From:   Justin Chen <justinpopo6@gmail.com>
-To:     linus.walleij@linaro.org, brgl@bgdev.pl, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org
-Cc:     linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, f.fainelli@gmail.com,
-        justinpopo6@gmail.com
-Subject: [PATCH v2 2/2] dt-bindings: gpio: pca95xx: add entry for pca6408
-Date:   Wed,  4 May 2022 15:29:17 -0700
-Message-Id: <1651703357-25154-3-git-send-email-justinpopo6@gmail.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1651703357-25154-1-git-send-email-justinpopo6@gmail.com>
-References: <1651703357-25154-1-git-send-email-justinpopo6@gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=V4mcraihi9SrpCHC2jZoMr5aDTcAHssWAbY6f0fZueQ=;
+        b=XHS7CfZYFdoZJwlPCbyX7k6CrNcNn4m/IF+cKbZz9L4Zl87CTP/0VsBD1yc5r3k2SZ
+         2esZ0NIaeYQIs+V60SjfuRZpj1VPxVc979WpyQdBgiPgjuAsV0AerrrrHAoSAFhTYZTw
+         upU1KCCE+Zw/5koVy5C7Q6mZKurxXaSWm5K8y0OokP4d7axnWkbnG165Mz+NGeRNfNpz
+         p28tclt+r59vy6MW8WM8h87EBRVsK+qirPyyVvusyvSyMvIEvPRZxHQkEFxRNutvwh1b
+         umAm3w9997slteHLIEAF1JkbtgpvQVRgkGFNPv48aEfnbURe/TBUhLY0E6q0QTFl7S6z
+         2zow==
+X-Gm-Message-State: AOAM531Fc6fwsfL/H/ydKCjIq/+ZhrQuZgbcyehtlJxaqASyR537o9GF
+        G9R7KQj+gJx1izjup49aeeMQqQ==
+X-Google-Smtp-Source: ABdhPJyweJp6nGpMCJB6yHstmRUwk1LDnj+lQaH63hw1ifrVEHV1WkcGLOB3NcwSQd7lafQS0UOhvQ==
+X-Received: by 2002:a17:902:d510:b0:15e:afc4:85a0 with SMTP id b16-20020a170902d51000b0015eafc485a0mr13862867plg.64.1651703468915;
+        Wed, 04 May 2022 15:31:08 -0700 (PDT)
+Received: from localhost ([2620:15c:202:201:827b:7f14:bb7e:2898])
+        by smtp.gmail.com with UTF8SMTPSA id i9-20020aa79089000000b0050dc76281ffsm8617857pfa.217.2022.05.04.15.31.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 04 May 2022 15:31:08 -0700 (PDT)
+Date:   Wed, 4 May 2022 15:31:07 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+Cc:     agross@kernel.org, bjorn.andersson@linaro.org, robh+dt@kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, quic_rohkumar@quicinc.com,
+        srinivas.kandagatla@linaro.org, dianders@chromium.org,
+        swboyd@chromium.org, judyhsiao@chromium.org,
+        Venkata Prasad Potturu <quic_potturu@quicinc.com>
+Subject: Re: [PATCH v13 4/4] arm64: dts: qcom: sc7280-herobrine: Add lpi
+ pinmux properties for CRD 3.0/3.1
+Message-ID: <YnL+qwoSHt/95PcU@google.com>
+References: <1651662987-11704-1-git-send-email-quic_srivasam@quicinc.com>
+ <1651662987-11704-5-git-send-email-quic_srivasam@quicinc.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <1651662987-11704-5-git-send-email-quic_srivasam@quicinc.com>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The NXP PCA5608 is the 8-bit version of PCA5616.
+On Wed, May 04, 2022 at 04:46:27PM +0530, Srinivasa Rao Mandadapu wrote:
+> Add LPASS LPI pinctrl properties, which are required for Audio
+> functionality on herobrine based platforms of rev5+
+> (aka CRD 3.0/3.1) boards.
+> 
+> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+> Co-developed-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
+> Signed-off-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
+> ---
+>  arch/arm64/boot/dts/qcom/sc7280-herobrine-crd.dts | 63 +++++++++++++++++++++++
+>  1 file changed, 63 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine-crd.dts b/arch/arm64/boot/dts/qcom/sc7280-herobrine-crd.dts
+> index deaea3a..dc61bad 100644
+> --- a/arch/arm64/boot/dts/qcom/sc7280-herobrine-crd.dts
+> +++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine-crd.dts
+> @@ -110,6 +110,69 @@ ap_ts_pen_1v8: &i2c13 {
+>   * - If a pin is totally internal to Qcard then it gets Qcard name.
+>   * - If a pin is not hooked up on Qcard, it gets no name.
+>   */
+> +&lpass_dmic01_clk {
+> +	drive-strength = <8>;
+> +	bias-disable;
+> +};
+> +
+> +&lpass_dmic01_data {
+> +	bias-pull-down;
+> +};
+> +
+> +&lpass_dmic01_clk_sleep {
+> +	drive-strength = <2>;
+> +};
 
-Signed-off-by: Justin Chen <justinpopo6@gmail.com>
----
- Documentation/devicetree/bindings/gpio/gpio-pca95xx.yaml | 1 +
- 1 file changed, 1 insertion(+)
+should be after 'lpass_dmic01_clk'
 
-diff --git a/Documentation/devicetree/bindings/gpio/gpio-pca95xx.yaml b/Documentation/devicetree/bindings/gpio/gpio-pca95xx.yaml
-index dc0fc8f..977b14d 100644
---- a/Documentation/devicetree/bindings/gpio/gpio-pca95xx.yaml
-+++ b/Documentation/devicetree/bindings/gpio/gpio-pca95xx.yaml
-@@ -30,6 +30,7 @@ properties:
-       - maxim,max7325
-       - maxim,max7326
-       - maxim,max7327
-+      - nxp,pca6408
-       - nxp,pca6416
-       - nxp,pca9505
-       - nxp,pca9506
--- 
-2.7.4
+> +
+> +&lpass_dmic23_clk {
+> +	drive-strength = <8>;
+> +	bias-disable;
+> +};
+> +
+> +&lpass_dmic23_data {
+> +	bias-pull-down;
+> +};
+> +
+> +&lpass_dmic23_clk_sleep {
+> +	drive-strength = <2>;
+> +};
 
+see above
+
+> +
+> +&lpass_rx_swr_clk {
+> +	drive-strength = <2>;
+> +	slew-rate = <1>;
+> +	bias-disable;
+> +};
+> +
+> +&lpass_rx_swr_data {
+> +	drive-strength = <2>;
+> +	slew-rate = <1>;
+> +	bias-bus-hold;
+> +};
+> +
+> +&lpass_rx_swr_clk_sleep {
+> +	drive-strength = <2>;
+
+drive strengh is the same as for 'lpass_rx_swr_clk', can be omitted?
+
+> +	bias-pull-down;
+> +};
+
+see 'lpass_dmic23_clk_sleep'
+
+> +
+> +&lpass_rx_swr_data_sleep {
+> +	drive-strength = <2>;
+
+is drive strength really needed here?
+
+> +	bias-pull-down;
+> +};
+> +
+> +&lpass_tx_swr_clk {
+> +	drive-strength = <2>;
+> +	slew-rate = <1>;
+> +	bias-disable;
+> +};
+> +
+> +&lpass_tx_swr_data {
+> +	slew-rate = <1>;
+> +	bias-bus-hold;
+> +};
+> +
+> +&lpass_tx_swr_clk_sleep {
+> +	drive-strength = <2>;
+
+is drive strength really needed here?
+
+> +	bias-pull-down;
+> +};
+
+see 'lpass_dmic23_clk_sleep'
+
+>  
+>  &mi2s1_data0 {
+>  	drive-strength = <6>;
+> -- 
+> 2.7.4
+> 

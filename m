@@ -2,105 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A48251A53A
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 18:17:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CCDC51A53F
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 18:18:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353226AbiEDQVS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 12:21:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54938 "EHLO
+        id S1353304AbiEDQVc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 12:21:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353223AbiEDQVN (ORCPT
+        with ESMTP id S1353223AbiEDQVW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 12:21:13 -0400
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66CE0329A2;
-        Wed,  4 May 2022 09:17:37 -0700 (PDT)
-Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 244EYIqN015912;
-        Wed, 4 May 2022 18:17:26 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=selector1;
- bh=sBpm4BsKn7kHWShYVnazfKsSoeqIvIDBc5BHKKJkurM=;
- b=fDJXWKIVgQuAOM6DGjLpQja5wIndzgbp9ocAcJj/IFfRk88Az3FBa8V0Li/1QZlgDlIG
- pYgFhC7SX2rxvOd84hV6O2RTe9yLCiHTCy76GKhxxGTBRqKUvvGxPlYE2x5K0PsPaxKU
- 27JlBfTIkXBnDGmlR+U/PI40UnFr2B5rGW/GbKX/U86tiknr9mHA3wLd7oG/PBv7Evin
- Lt263lXOd20W7/pU2V4haeF0n767H/Vq0PFvFG02fGKYHtNWvMoVbTR0qjHrFQCENM30
- XoP3HIqablvDBXfppWNnw2gK8KWcFwQpx5RGiflkYzihwPsplZeXnqI9WBTdzn1tgNGv vQ== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3frvf0n78x-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 04 May 2022 18:17:26 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id C2B15100034;
-        Wed,  4 May 2022 18:17:25 +0200 (CEST)
-Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id BC49D22D18A;
-        Wed,  4 May 2022 18:17:25 +0200 (CEST)
-Received: from localhost (10.75.127.44) by SFHDAG2NODE2.st.com (10.75.127.5)
- with Microsoft SMTP Server (TLS) id 15.0.1497.26; Wed, 4 May 2022 18:17:24
- +0200
-From:   Amelie Delaunay <amelie.delaunay@foss.st.com>
-To:     Vinod Koul <vkoul@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>
-CC:     <dmaengine@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        Amelie Delaunay <amelie.delaunay@foss.st.com>
-Subject: [PATCH] dmaengine: stm32-dmamux: avoid reset of dmamux if used by coprocessor
-Date:   Wed, 4 May 2022 18:17:24 +0200
-Message-ID: <20220504161724.123180-1-amelie.delaunay@foss.st.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 4 May 2022 12:21:22 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8183227B33
+        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 09:17:46 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id e2so2710574wrh.7
+        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 09:17:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=conchuod.ie; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=q1QS1h63jdwlMuyWNP8xmEDpzxKjGMK4DEb1a7HY6v8=;
+        b=B5/wgTRM47Tl6PkYtUKKGOHAofL12q1D1XeQV2au8EsqDuKXxnhiEQ1NxmJNWAzdP2
+         3x4xdSeMWZUJQ+cV0ZMU+IeYQqTjTKcy168mCV6zySdGCVFpO5pgWlWaC5G3JLOGOmms
+         vBeH+yOKH0ArVlnht8uegF3WR1oh1AfRINI8z2Iy/QvIl4OMwngm41/ddl3h18Ga+Zm/
+         Pe5WXPQ25sM2RmJwQqg/8XprcUfWZtCcvwPuUVHQLVeCXkpEM6GNMbteVBkz0N1d6BY1
+         ec9Ls/wwmM1dRLKpVWHS1mVSPryPH9WniYE24/zlS9edV9v3RgFvDj/us7VuKziCRZgn
+         eC8g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=q1QS1h63jdwlMuyWNP8xmEDpzxKjGMK4DEb1a7HY6v8=;
+        b=aHLm3MPqny04Kjjvzmx3VPZy3LbzXJ+HUKNyFZjamxCoUvy7f9gXFo8OjAh8LQ1rme
+         42Hjuy9Xwm6tL5EXk6E2kw2fHVH2GqBYHe2MT3ubaiSbbS5ck2ZQY4h0kgXMhxx7cWil
+         LPaYGlfOSmK7ME4k5atUwC8Jy4S/dbIkCdu78AHFHW1en+hkWU1yWAi/wEbktUsiLhzu
+         j3Au20N9K+JJFxpqPpVNl47VOT1GQeiEEbMnaZhLGIrTKsit3v0ngF5tG/CP2FBtPLqI
+         8bmmXG86elsUxFMO/kT1JYQnhn/cdZDzyLDNLlpari4VzwU9n//XxHe26DVbBie2R1L2
+         zrYQ==
+X-Gm-Message-State: AOAM530KVK7AUP26tj0fxKnOz5bI7frlysZfXjLR9W4a+h0MINRWVI4U
+        PIRDSMXgaml/0rvq0k62DzgECg==
+X-Google-Smtp-Source: ABdhPJwuSiqhD1Cyjq81kfirw20i4hiDQULPYQWg/PuvNNeMNt1Vngp/iBTK7LXsBJS82EKqd4hhDg==
+X-Received: by 2002:a5d:474f:0:b0:20a:cb5c:bbd7 with SMTP id o15-20020a5d474f000000b0020acb5cbbd7mr16610323wrs.21.1651681065007;
+        Wed, 04 May 2022 09:17:45 -0700 (PDT)
+Received: from [192.168.2.222] ([109.77.36.132])
+        by smtp.gmail.com with ESMTPSA id p20-20020a7bcc94000000b003942a244f38sm4153161wma.17.2022.05.04.09.17.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 04 May 2022 09:17:44 -0700 (PDT)
+Message-ID: <1e6de466-eefc-c5f7-5db7-6a87ff1608ed@conchuod.ie>
+Date:   Wed, 4 May 2022 17:17:43 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.75.127.44]
-X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SFHDAG2NODE2.st.com
- (10.75.127.5)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-04_04,2022-05-04_02,2022-02-23_01
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v2] i2c: add support for microchip fpga i2c controllers
+Content-Language: en-US
+To:     Conor.Dooley@microchip.com, wsa@kernel.org,
+        linux-i2c@vger.kernel.org
+Cc:     ben.dooks@codethink.co.uk, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, Daire.McNamara@microchip.com,
+        geert@linux-m68k.org
+References: <20220321125855.3227057-1-conor.dooley@microchip.com>
+ <cad04bc5-ce7b-d7db-f967-8b2bb67897ae@microchip.com>
+From:   Conor Dooley <mail@conchuod.ie>
+In-Reply-To: <cad04bc5-ce7b-d7db-f967-8b2bb67897ae@microchip.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-One of the two DMA controllers managed by the DMAMUX can be used by the
-coprocessor. It is defined in the device tree with dma-masters.
-When the two DMA controllers are used by the main CPU,
-dma-masters = <&dma1, &dma2>; is specified in the device tree.
-When one of the controllers is used by coprocessor (so not managed by
-Linux), dma-masters = <&dma1>; is specified in the device tree.
-In this case, Linux driver must not reset the DMAMUX, because it could have
-been configured by the coprocessor to use the second DMA controller.
-count is the number of DMA controllers defined in dma-masters property.
-Reset only if resets property is found and valid in device tree, and if
-the two DMA controllers are under Linux control.
+On 04/05/2022 09:40, Conor.Dooley@microchip.com wrote:
+> On 21/03/2022 12:58, Conor Dooley wrote:
+>> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
+>>
+>> Add Microchip CoreI2C i2c controller support. This driver supports the
+>> "hard" i2c controller on the Microchip PolarFire SoC & the basic feature
+>> set for "soft" i2c controller implemtations in the FPGA fabric.
+>>
+>> Co-developed-by: Daire McNamara <daire.mcnamara@microchip.com>
+>> Signed-off-by: Daire McNamara <daire.mcnamara@microchip.com>
+>> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+>> ---
+>> Changes from v1:
+>> - Use byte write and read functions
+> 
+> So it turns out that how I made this change, which worked in my
+> test app, has issues.
+> I will rework and send a v3.
+> 
 
-Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
----
- drivers/dma/stm32-dmamux.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Welp, as it turns out we can chalk the issues up to user error,
+aka me entirely forgetting what the correct i2cdetect options
+were - d'oh.
 
-diff --git a/drivers/dma/stm32-dmamux.c b/drivers/dma/stm32-dmamux.c
-index d5d55732adba..eee0c5aa5fb5 100644
---- a/drivers/dma/stm32-dmamux.c
-+++ b/drivers/dma/stm32-dmamux.c
-@@ -267,7 +267,7 @@ static int stm32_dmamux_probe(struct platform_device *pdev)
- 		ret = PTR_ERR(rst);
- 		if (ret == -EPROBE_DEFER)
- 			goto err_clk;
--	} else {
-+	} else if (count > 1) { /* Don't reset if there is only one dma-master */
- 		reset_control_assert(rst);
- 		udelay(2);
- 		reset_control_deassert(rst);
--- 
-2.25.1
+Apologies for the noise & unless something else changes, don't
+expect a V3.
 
+Sorry,
+Conor.

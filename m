@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AF2751A63C
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 18:51:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D71851A8BE
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:14:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353963AbiEDQxg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 12:53:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51476 "EHLO
+        id S1358587AbiEDRQG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 13:16:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353746AbiEDQwN (ORCPT
+        with ESMTP id S1355701AbiEDREj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 12:52:13 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D37C247383;
-        Wed,  4 May 2022 09:48:34 -0700 (PDT)
+        Wed, 4 May 2022 13:04:39 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F18864F44B;
+        Wed,  4 May 2022 09:53:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 96246B82553;
-        Wed,  4 May 2022 16:48:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 309B4C385A4;
-        Wed,  4 May 2022 16:48:31 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5EFF4617BD;
+        Wed,  4 May 2022 16:53:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD0FCC385A5;
+        Wed,  4 May 2022 16:53:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651682912;
-        bh=XFgNyRslClTV0rrP3goGZV9aGZ2Y8CKS/AcF5V7U3OE=;
+        s=korg; t=1651683193;
+        bh=GZgX069Xig3QT1ywx3SlIJvq+f8nwWelsRS134k74wo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=p7VXIXkiWAkvNrtGQLxgQmAn4CR7uBdTKBsILVhu/0AoexAt/VbZYOxdZZ4ssvhA3
-         k70NSqwpEpScXp6LlM8D1FUORlWmK/FLvI3gm8P9PGyIK613tAAGz3XeugbBnRXHU/
-         RLBZtA/aFK4jxmMc0ibHexjStxpodh6i+rjMw6CU=
+        b=M0FgI3ZGbGGeMbkRleVSSq2JTEhUKJ5xLirHLK8rRpi4q1D+xE3zDae5ixXoBrGdX
+         NtQtdGEy4sf4RVTfAlVB1+VvbOJcIGDorSvuYMC4mGfb9KKecPwFP1IdzJu5vFci+h
+         rmmf/5+DZI3Jdq6wwGEAqvjlF11lreRPL8Cft66o=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Jia-Ju Bai <baijiaju1990@gmail.com>
-Subject: [PATCH 5.4 18/84] usb: typec: ucsi: Fix role swapping
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 046/177] cpufreq: qcom-cpufreq-hw: Fix throttle frequency value on EPSS platforms
 Date:   Wed,  4 May 2022 18:43:59 +0200
-Message-Id: <20220504152929.070520635@linuxfoundation.org>
+Message-Id: <20220504153057.045373689@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220504152927.744120418@linuxfoundation.org>
-References: <20220504152927.744120418@linuxfoundation.org>
+In-Reply-To: <20220504153053.873100034@linuxfoundation.org>
+References: <20220504153053.873100034@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,67 +57,85 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+From: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
 
-commit eb5d7ff3cf0d55093c619b5ad107cd5c05ce8134 upstream.
+[ Upstream commit f84ccad5f5660f86a642a3d7e2bfdc4e7a8a2d49 ]
 
-All attempts to swap the roles timed out because the
-completion was done without releasing the port lock. Fixing
-that by releasing the lock before starting to wait for the
-completion.
+On QCOM platforms with EPSS flavour of cpufreq IP a throttled frequency is
+obtained from another register REG_DOMAIN_STATE, thus the helper function
+qcom_lmh_get_throttle_freq() should be modified accordingly, as for now
+it returns gibberish since .reg_current_vote is unset for EPSS hardware.
 
-Link: https://lore.kernel.org/linux-usb/037de7ac-e210-bdf5-ec7a-8c0c88a0be20@gmail.com/
-Fixes: ad74b8649bea ("usb: typec: ucsi: Preliminary support for alternate modes")
-Cc: stable@vger.kernel.org
-Reported-and-tested-by: Jia-Ju Bai <baijiaju1990@gmail.com>
-Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Link: https://lore.kernel.org/r/20220405134824.68067-3-heikki.krogerus@linux.intel.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To exclude a hardcoded magic number 19200 it is replaced by "xo" clock rate
+in KHz.
+
+Fixes: 275157b367f4 ("cpufreq: qcom-cpufreq-hw: Add dcvs interrupt support")
+Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Signed-off-by: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
+Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/typec/ucsi/ucsi.c |   20 +++++++++++++-------
- 1 file changed, 13 insertions(+), 7 deletions(-)
+ drivers/cpufreq/qcom-cpufreq-hw.c | 17 +++++++++++------
+ 1 file changed, 11 insertions(+), 6 deletions(-)
 
---- a/drivers/usb/typec/ucsi/ucsi.c
-+++ b/drivers/usb/typec/ucsi/ucsi.c
-@@ -748,14 +748,18 @@ ucsi_dr_swap(const struct typec_capabili
- 	if (ret < 0)
- 		goto out_unlock;
+diff --git a/drivers/cpufreq/qcom-cpufreq-hw.c b/drivers/cpufreq/qcom-cpufreq-hw.c
+index dfe72d82858f..e73ecab23c85 100644
+--- a/drivers/cpufreq/qcom-cpufreq-hw.c
++++ b/drivers/cpufreq/qcom-cpufreq-hw.c
+@@ -28,6 +28,7 @@
  
-+	mutex_unlock(&con->lock);
-+
- 	if (!wait_for_completion_timeout(&con->complete,
--					msecs_to_jiffies(UCSI_SWAP_TIMEOUT_MS)))
--		ret = -ETIMEDOUT;
-+					 msecs_to_jiffies(UCSI_SWAP_TIMEOUT_MS)))
-+		return -ETIMEDOUT;
-+
-+	return 0;
- 
- out_unlock:
- 	mutex_unlock(&con->lock);
- 
--	return ret < 0 ? ret : 0;
-+	return ret;
+ struct qcom_cpufreq_soc_data {
+ 	u32 reg_enable;
++	u32 reg_domain_state;
+ 	u32 reg_freq_lut;
+ 	u32 reg_volt_lut;
+ 	u32 reg_current_vote;
+@@ -266,11 +267,16 @@ static void qcom_get_related_cpus(int index, struct cpumask *m)
+ 	}
  }
  
- static int
-@@ -780,11 +784,13 @@ ucsi_pr_swap(const struct typec_capabili
- 	if (ret < 0)
- 		goto out_unlock;
+-static unsigned int qcom_lmh_get_throttle_freq(struct qcom_cpufreq_data *data)
++static unsigned long qcom_lmh_get_throttle_freq(struct qcom_cpufreq_data *data)
+ {
+-	unsigned int val = readl_relaxed(data->base + data->soc_data->reg_current_vote);
++	unsigned int lval;
  
-+	mutex_unlock(&con->lock);
+-	return (val & 0x3FF) * 19200;
++	if (data->soc_data->reg_current_vote)
++		lval = readl_relaxed(data->base + data->soc_data->reg_current_vote) & 0x3ff;
++	else
++		lval = readl_relaxed(data->base + data->soc_data->reg_domain_state) & 0xff;
 +
- 	if (!wait_for_completion_timeout(&con->complete,
--				msecs_to_jiffies(UCSI_SWAP_TIMEOUT_MS))) {
--		ret = -ETIMEDOUT;
--		goto out_unlock;
--	}
-+					 msecs_to_jiffies(UCSI_SWAP_TIMEOUT_MS)))
-+		return -ETIMEDOUT;
-+
-+	mutex_lock(&con->lock);
++	return lval * xo_rate;
+ }
  
- 	/* Something has gone wrong while swapping the role */
- 	if (con->status.pwr_op_mode != UCSI_CONSTAT_PWR_OPMODE_PD) {
+ static void qcom_lmh_dcvs_notify(struct qcom_cpufreq_data *data)
+@@ -280,14 +286,12 @@ static void qcom_lmh_dcvs_notify(struct qcom_cpufreq_data *data)
+ 	int cpu = cpumask_first(policy->related_cpus);
+ 	struct device *dev = get_cpu_device(cpu);
+ 	struct dev_pm_opp *opp;
+-	unsigned int freq;
+ 
+ 	/*
+ 	 * Get the h/w throttled frequency, normalize it using the
+ 	 * registered opp table and use it to calculate thermal pressure.
+ 	 */
+-	freq = qcom_lmh_get_throttle_freq(data);
+-	freq_hz = freq * HZ_PER_KHZ;
++	freq_hz = qcom_lmh_get_throttle_freq(data);
+ 
+ 	opp = dev_pm_opp_find_freq_floor(dev, &freq_hz);
+ 	if (IS_ERR(opp) && PTR_ERR(opp) == -ERANGE)
+@@ -359,6 +363,7 @@ static const struct qcom_cpufreq_soc_data qcom_soc_data = {
+ 
+ static const struct qcom_cpufreq_soc_data epss_soc_data = {
+ 	.reg_enable = 0x0,
++	.reg_domain_state = 0x20,
+ 	.reg_freq_lut = 0x100,
+ 	.reg_volt_lut = 0x200,
+ 	.reg_perf_state = 0x320,
+-- 
+2.35.1
+
 
 

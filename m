@@ -2,70 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9673151A9DA
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:19:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C424C51AA85
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:27:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357688AbiEDRTu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 13:19:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50152 "EHLO
+        id S1353314AbiEDRZs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 13:25:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356235AbiEDRE7 (ORCPT
+        with ESMTP id S1354579AbiEDRFT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 13:04:59 -0400
-Received: from mail-oa1-x2d.google.com (mail-oa1-x2d.google.com [IPv6:2001:4860:4864:20::2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38A334FC6D
-        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 09:53:58 -0700 (PDT)
-Received: by mail-oa1-x2d.google.com with SMTP id 586e51a60fabf-ed8a3962f8so1765870fac.4
-        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 09:53:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=2klMetXGa1eUlKZSFzvlKnCFZIMh5g+h156STL277cU=;
-        b=xwSoPZhK4O9KfF0E9rB8njkdJRtTwkZ4NR9LCTG0wMvOKwKndxeRPvixpmBIcXqHdY
-         qnYVcoFOds+xnLyeSRi6JCoJvovK5Ont8ITuL89eG48BDLXzDfbI7+wpAhSS4VqLEciS
-         /ExulmzKoBHM1in91h9JtnFioxJJ+rQ4dOTGBUTyPiyzOCm25ErpRvSq4X/7e5xg6frM
-         hsHarDuHST1RgfinipAKy/JnsW5bKxiotUgLWcM9FS5fR3VZ2LAqpOXfbkI13sUKo+bm
-         O6AUeLw1hRpkjAOw9PYtndBN0mDjRpFPXAzA4IvNiK6aP9CHCbcgb7OCexn1diIWIYGI
-         x2OA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=2klMetXGa1eUlKZSFzvlKnCFZIMh5g+h156STL277cU=;
-        b=IvfzQ6zb2BambxzHwq4JB9ZT2v9Os3/93sPX+bYqOoGtDDmo12X/GMbPMX6eQU/E1a
-         f2MoR37oaW5qFce7thNcunbxoZY6SABzIXK9DK7B79fxRpLh/rCdAlIJMsuw6K8nxail
-         CGQJGD1Guqu6U8KlZ5SZqZ12IAr9Iavospfy8a2bt1rA3x1Fffg2YGr8gjU4vE5iSXIZ
-         KHxam5R4UdsN3/SyJMOy7qDo+S/VvT4txi4X/1eamvE8w3nWw96FsGeEUSevJydwGwLx
-         OSEh2MhgdU6bOg2mUD4ljtwVPgS3+VyCNIqXx7Bt4FM5StEvPGzg/+H++/R4J1328iTO
-         lWlQ==
-X-Gm-Message-State: AOAM53376bEd97q+8I4RcdTac5aB6ZraeGMp8LaVLCSXXkBEcl2tXaIi
-        lAjF00A0q6YLHuALTu2ggYoZnw==
-X-Google-Smtp-Source: ABdhPJyocyOzuasLctGeqNeBJMplgmBUpdNyW29oi9jqBr4TwlqaFgI/BnBfrAb7QdBgNToE3dbmIQ==
-X-Received: by 2002:a05:6870:b6aa:b0:ed:a7de:cc26 with SMTP id cy42-20020a056870b6aa00b000eda7decc26mr169045oab.259.1651683237792;
-        Wed, 04 May 2022 09:53:57 -0700 (PDT)
-Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id r42-20020a056808212a00b00325cda1ff85sm4484697oiw.4.2022.05.04.09.53.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 May 2022 09:53:57 -0700 (PDT)
-Date:   Wed, 4 May 2022 11:53:54 -0500
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Stephen Boyd <swboyd@chromium.org>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        patches@lists.linux.dev, Alex Elder <elder@linaro.org>,
-        Taniya Das <quic_tdas@quicinc.com>
-Subject: Re: [PATCH] clk: qcom: rpmh: Set wake/sleep state for BCM clks
-Message-ID: <YnKvoh+h07at8b65@builder.lan>
-References: <20220412194505.614002-1-swboyd@chromium.org>
+        Wed, 4 May 2022 13:05:19 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F0ED5132B;
+        Wed,  4 May 2022 09:54:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D5CD4B827AC;
+        Wed,  4 May 2022 16:54:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50683C385B1;
+        Wed,  4 May 2022 16:54:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651683251;
+        bh=c6+7Ne4K8yZ0+BKb8IfJNxGJ6ZxxOYXvDdFYiQ0PJqM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=uh7kUaXix6SXNpSHxcQafJqyVWArJKQx6BIJfPPwMl8cluoqPN3qGBf87C0JFYMh6
+         aUOJawCMaS6sZ7ndt9v8Sf0sPtPEJqffnJVQsm7THm2CtvsHU2AX9qaBlyBS7vDP9m
+         bBpyKzWp23iRlbBOwpNx9iabOCVxCVRLsMlixJ8MgdAvsYok1P1GsQzwz6toDlNjFg
+         KrvGLi8oVTmLGLVxGdCLImBEWD9YebI+IfxvCA9qRXcAtAjfXqKVEBuGQ4JmeWHHtg
+         LTOlrf0DOG1SdR1yVvMgg4/hfJrfgI4FtzUcCeKB1h1s2iF5k/INugSy7H0797WFSM
+         pkT9fnIfhu9NQ==
+Date:   Wed, 4 May 2022 11:54:09 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Anders Roxell <anders.roxell@linaro.org>
+Subject: Re: [PATCH v3 4/9] PCI/PM: Rework changing power states of PCI
+ devices
+Message-ID: <20220504165409.GA453565@bhelgaas>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220412194505.614002-1-swboyd@chromium.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+In-Reply-To: <YnFtjzGYwe28tVAA@dev-arch.thelio-3990X>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,80 +58,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue 12 Apr 14:45 CDT 2022, Stephen Boyd wrote:
+[+cc Anders]
 
-> Set the wake and sleep state for BCM clks here, not just the active
-> state, as the active only state is dropped when CPUs go to deep idle.
-> This ensures the clk is always on when the driver thinks it is on.
+On Tue, May 03, 2022 at 10:59:43AM -0700, Nathan Chancellor wrote:
+> On Thu, Apr 14, 2022 at 03:11:21PM +0200, Rafael J. Wysocki wrote:
+> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > 
+> > There are some issues related to changing power states of PCI
+> > devices, mostly related to carrying out unnecessary actions in some
+> > places, and the code is generally hard to follow.
+> > 
+> >  1. pci_power_up() has two callers, pci_set_power_state() and
+> >     pci_pm_default_resume_early().  The latter updates the current
+> >     power state of the device right after calling pci_power_up()
+> >     and it restores the entire config space of the device right
+> >     after that, so pci_power_up() itself need not read the
+> >     PCI_PM_CTRL register or restore the BARs after programming the
+> >     device into D0 in that case.
+> >  
+> >  2. It is generally hard to get a clear view of the pci_power_up()
+> >     code flow, especially in some corner cases, due to all of the
+> >     involved PCI_PM_CTRL register reads and writes occurring in
+> >     pci_platform_power_transition() and in pci_raw_set_power_state(),
+> >     some of which are redundant.
+> > 
+> >  3. The transitions from low-power states to D0 and the other way
+> >     around are unnecessarily tangled in pci_raw_set_power_state()
+> >     which causes it to use a redundant local variable and makes it
+> >     rather hard to follow.
+> > 
+> > To address the above shortcomings, make the following changes:
+> > 
+> >  a. Remove the code handling transitions into D0
+> >     from pci_raw_set_power_state() and rename it as
+> >     pci_set_low_power_state().
+> > 
+> >  b. Add the code handling transitions into D0 directly
+> >     to pci_power_up() and to a new wrapper function
+> >     pci_set_full_power_state() calling it internally that is
+> >     only used in pci_set_power_state().
+> > 
+> >  c. Make pci_power_up() avoid redundant PCI_PM_CTRL register reads
+> >     and make it work in the same way for transitions from any
+> >     low-power states (transitions from D1 and D2 are handled
+> >     slightly differently before the change).
+> > 
+> >  d. Put the restoration of the BARs and the PCI_PM_CTRL
+> >     register read confirming the power state change into
+> >     pci_set_full_power_state() to avoid doing that in
+> >     pci_pm_default_resume_early() unnecessarily.
+> > 
+> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
 > 
-> This was found by inspection, and could very well be incorrect if the
-> RPMh hardware copies over the active only state to the sleep and wake
-> states.
-> 
+> This change as commit 5bffe4c611f5 ("PCI/PM: Rework changing power
+> states of PCI devices") causes my AMD-based system to fail to fully
+> boot.
 
-Taking another look at this patch and now it makes perfect sense to me.
-Sorry for not grasping the problem earlier.
+I dropped 5bffe4c611f5 and subsequent pci/pm patches temporarily while
+this gets worked out.
 
-Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-
-
-Will you take this in fixes, or do you want me to pick it for 5.19?
-
-> Cc: Alex Elder <elder@linaro.org>
-> Cc: Taniya Das <quic_tdas@quicinc.com>
-> Fixes: 04053f4d23a4 ("clk: qcom: clk-rpmh: Add IPA clock support")
-> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
-> ---
->  drivers/clk/qcom/clk-rpmh.c | 19 ++++++++++++-------
->  1 file changed, 12 insertions(+), 7 deletions(-)
-> 
-> diff --git a/drivers/clk/qcom/clk-rpmh.c b/drivers/clk/qcom/clk-rpmh.c
-> index aed907982344..29da1ffd10cf 100644
-> --- a/drivers/clk/qcom/clk-rpmh.c
-> +++ b/drivers/clk/qcom/clk-rpmh.c
-> @@ -260,6 +260,7 @@ static int clk_rpmh_bcm_send_cmd(struct clk_rpmh *c, bool enable)
->  	struct tcs_cmd cmd = { 0 };
->  	u32 cmd_state;
->  	int ret = 0;
-> +	enum rpmh_state state;
->  
->  	mutex_lock(&rpmh_clk_lock);
->  	if (enable) {
-> @@ -274,15 +275,19 @@ static int clk_rpmh_bcm_send_cmd(struct clk_rpmh *c, bool enable)
->  		cmd.addr = c->res_addr;
->  		cmd.data = BCM_TCS_CMD(1, enable, 0, cmd_state);
->  
-> -		ret = clk_rpmh_send(c, RPMH_ACTIVE_ONLY_STATE, &cmd, enable);
-> -		if (ret) {
-> -			dev_err(c->dev, "set active state of %s failed: (%d)\n",
-> -				c->res_name, ret);
-> -		} else {
-> -			c->last_sent_aggr_state = cmd_state;
-> +		for (state = RPMH_SLEEP_STATE; state <= RPMH_ACTIVE_ONLY_STATE; state++) {
-> +			ret = clk_rpmh_send(c, state, &cmd, enable);
-
-Nit. We only need to pass the positive enable on the last iteration here...
-
-Regards,
 Bjorn
-
-> +			if (ret) {
-> +				dev_err(c->dev, "set %s state of %s failed: (%d)\n",
-> +					!state ? "sleep" :
-> +					state == RPMH_WAKE_ONLY_STATE	?
-> +					"wake" : "active", c->res_name, ret);
-> +				goto out;
-> +			}
->  		}
-> +		c->last_sent_aggr_state = cmd_state;
->  	}
-> -
-> +out:
->  	mutex_unlock(&rpmh_clk_lock);
->  
->  	return ret;
-> 
-> base-commit: 3123109284176b1532874591f7c81f3837bbdc17
-> -- 
-> https://chromeos.dev
-> 

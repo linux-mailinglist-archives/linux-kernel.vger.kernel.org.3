@@ -2,43 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F2B351AA80
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:27:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A15F551AB97
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:48:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358073AbiEDR3o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 13:29:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39338 "EHLO
+        id S1354393AbiEDRqy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 13:46:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356535AbiEDRJS (ORCPT
+        with ESMTP id S1356437AbiEDRNn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 13:09:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEAFB53730;
-        Wed,  4 May 2022 09:55:12 -0700 (PDT)
+        Wed, 4 May 2022 13:13:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B09F54B874;
+        Wed,  4 May 2022 09:57:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C8E9D61896;
-        Wed,  4 May 2022 16:55:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B631C385AA;
-        Wed,  4 May 2022 16:55:12 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 813C661808;
+        Wed,  4 May 2022 16:57:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9919C385AA;
+        Wed,  4 May 2022 16:57:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651683312;
-        bh=igiXcz1vZXUPdI8u28HDOq1udqXHD7uQHamkqSWaTm4=;
+        s=korg; t=1651683468;
+        bh=f1LFHvJ8uk8SHhwLGhNDYMjw5ZoMM0XJ+6vYeOX3FRo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mySHK6Wm41nDL/MvC1mXjBCyZFPESCddNq1UKyj86aEvqSJ+jAH6OXiWWVGcYmbrI
-         cizecan1Skd4Z+hYXOug2DLeX4iA9Y06h6AvB7EciWyF+ul4RRrHDWVbvKzg8Rvh4Y
-         si5STpeh/WbuUJ7PTMRsDfmdzoCO/DrreJtOoJlA=
+        b=ojVD+tbwY8MjARWZ4ZOmv8YGxqPIYAkFg4Z3n9L/SNNJzvsD2ILkUNO9AmC/WlslO
+         3iTpdmXsaJcKWtPf9KJ4HV2dvz5tQMDoSRirwpmEam7ghb8yRht2MFu7mbMuosX6Tl
+         mzFzY2LnxIp5LYfU9Z6B9dmZtawvG4SBSeWQqILI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Daniel Starke <daniel.starke@siemens.com>
-Subject: [PATCH 5.15 164/177] tty: n_gsm: fix wrong DLCI release order
-Date:   Wed,  4 May 2022 18:45:57 +0200
-Message-Id: <20220504153108.187535470@linuxfoundation.org>
+        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 120/225] net: lan966x: fix a couple off by one bugs
+Date:   Wed,  4 May 2022 18:45:58 +0200
+Message-Id: <20220504153121.194923229@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220504153053.873100034@linuxfoundation.org>
-References: <20220504153053.873100034@linuxfoundation.org>
+In-Reply-To: <20220504153110.096069935@linuxfoundation.org>
+References: <20220504153110.096069935@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,35 +55,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Daniel Starke <daniel.starke@siemens.com>
+From: Dan Carpenter <dan.carpenter@oracle.com>
 
-commit deefc58bafb4841df7f0a0d85d89a1c819db9743 upstream.
+[ Upstream commit 9810c58c7051ae83e7ac326fca3daa823da6b778 ]
 
-The current DLCI release order starts with the control channel followed by
-the user channels. Reverse this order to keep the control channel open
-until all user channels have been released.
+The lan966x->ports[] array has lan966x->num_phys_ports elements.  These
+are assigned in lan966x_probe().  That means the > comparison should be
+changed to >=.
 
-Fixes: e1eaea46bb40 ("tty: n_gsm line discipline")
-Cc: stable@vger.kernel.org
-Signed-off-by: Daniel Starke <daniel.starke@siemens.com>
-Link: https://lore.kernel.org/r/20220414094225.4527-9-daniel.starke@siemens.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+The first off by one check is harmless but the second one could lead to
+an out of bounds access and a crash.
+
+Fixes: 5ccd66e01cbe ("net: lan966x: add support for interrupts from analyzer")
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/tty/n_gsm.c |    4 ++--
+ drivers/net/ethernet/microchip/lan966x/lan966x_mac.c | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/drivers/tty/n_gsm.c
-+++ b/drivers/tty/n_gsm.c
-@@ -2081,8 +2081,8 @@ static void gsm_cleanup_mux(struct gsm_m
- 	/* Finish outstanding timers, making sure they are done */
- 	del_timer_sync(&gsm->t2_timer);
+diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_mac.c b/drivers/net/ethernet/microchip/lan966x/lan966x_mac.c
+index 2679111ef669..005e56ea5da1 100644
+--- a/drivers/net/ethernet/microchip/lan966x/lan966x_mac.c
++++ b/drivers/net/ethernet/microchip/lan966x/lan966x_mac.c
+@@ -346,7 +346,7 @@ static void lan966x_mac_irq_process(struct lan966x *lan966x, u32 row,
  
--	/* Free up any link layer users */
--	for (i = 0; i < NUM_DLCI; i++)
-+	/* Free up any link layer users and finally the control channel */
-+	for (i = NUM_DLCI - 1; i >= 0; i--)
- 		if (gsm->dlci[i])
- 			gsm_dlci_release(gsm->dlci[i]);
- 	mutex_unlock(&gsm->mutex);
+ 			lan966x_mac_process_raw_entry(&raw_entries[column],
+ 						      mac, &vid, &dest_idx);
+-			if (WARN_ON(dest_idx > lan966x->num_phys_ports))
++			if (WARN_ON(dest_idx >= lan966x->num_phys_ports))
+ 				continue;
+ 
+ 			/* If the entry in SW is found, then there is nothing
+@@ -393,7 +393,7 @@ static void lan966x_mac_irq_process(struct lan966x *lan966x, u32 row,
+ 
+ 		lan966x_mac_process_raw_entry(&raw_entries[column],
+ 					      mac, &vid, &dest_idx);
+-		if (WARN_ON(dest_idx > lan966x->num_phys_ports))
++		if (WARN_ON(dest_idx >= lan966x->num_phys_ports))
+ 			continue;
+ 
+ 		mac_entry = lan966x_mac_alloc_entry(mac, vid, dest_idx);
+-- 
+2.35.1
+
 
 

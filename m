@@ -2,111 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E47C51971A
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 07:59:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E317D51971C
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 07:59:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344773AbiEDGCy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 02:02:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34312 "EHLO
+        id S1344779AbiEDGDP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 02:03:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230149AbiEDGCt (ORCPT
+        with ESMTP id S1344788AbiEDGDM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 02:02:49 -0400
-Received: from zju.edu.cn (mail.zju.edu.cn [61.164.42.155])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 86C9527CDE;
-        Tue,  3 May 2022 22:59:12 -0700 (PDT)
-Received: from ubuntu.localdomain (unknown [10.15.192.164])
-        by mail-app4 (Coremail) with SMTP id cS_KCgB3ORAYFnJihcJQAg--.20435S2;
-        Wed, 04 May 2022 13:58:53 +0800 (CST)
-From:   Duoming Zhou <duoming@zju.edu.cn>
-To:     krzysztof.kozlowski@linaro.org, linux-kernel@vger.kernel.org
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, netdev@vger.kernel.org,
-        Duoming Zhou <duoming@zju.edu.cn>
-Subject: [PATCH net] NFC: netlink: fix sleep in atomic bug when firmware download timeout
-Date:   Wed,  4 May 2022 13:58:47 +0800
-Message-Id: <20220504055847.38026-1-duoming@zju.edu.cn>
-X-Mailer: git-send-email 2.17.1
-X-CM-TRANSID: cS_KCgB3ORAYFnJihcJQAg--.20435S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7ur48uF1rKF4fGw1DGFyxGrg_yoW8Cw47pF
-        WUG3WxAF4UJw1FvFyvyF4vkw4aka1kJrWDGF429rWruF98JF18AF45KFy8ZF4fCr4kXa1a
-        vF9Fvr4akF45Za7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUka1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
-        w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
-        IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2
-        z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcV
-        Aq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1Y
-        6r17McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64
-        vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v
-        1sIEY20_GFWkJr1UJwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r
-        18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vI
-        r41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr
-        1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvE
-        x4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUp6wZUUUUU=
-X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAggAAVZdtZgToAARsP
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Wed, 4 May 2022 02:03:12 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB5AF2AE12;
+        Tue,  3 May 2022 22:59:36 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KtR433QQ5z4xXS;
+        Wed,  4 May 2022 15:59:31 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1651643971;
+        bh=C8XFNo0MACWuzzd3GeNsre8CYszj5XfLhRDPTpa0WTs=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=odIvWeIo7sy+7E938rOqDN4nNheG/V9tcPuj5+9aZeDCrqs4lBdqW90f3DZ4ygj33
+         fpNG17LjwHCdAf5yhIgbY+W0xg1LyDy8uFe3x2H07adoJikyiKiCv+wP2cokE0mY3Z
+         byt94S3010u4Tb+68MPxaG44Rs5IrNHuR0x2U/Pj2r6ffil2jRl5zPOehqBe4xWigQ
+         H+GcrF8y1ffJQUj+FUGBoO4b3xxXqhS+8p/4Da5U5jXmbLjni7Dj4DjwkuCjBWg3Lk
+         cOPOa5PtbIQQNisaEDy93H1ABL8cGgtUtPJqakI6OJUl6z19edrlKIckmN+dE0yoRe
+         EOrYRG8c/Nz2w==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Laurent Dufour <ldufour@linux.ibm.com>
+Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        stable@vger.kernel.org, Nicholas Piggin <npiggin@gmail.com>
+Subject: Re: [PATCH v2] powerpc/rtas: Keep MSR[RI] set when calling RTAS
+In-Reply-To: <c33a2be3-d4b7-9b3b-c980-552f5de081be@linux.ibm.com>
+References: <20220401140634.65726-1-ldufour@linux.ibm.com>
+ <87r15aveny.fsf@mpe.ellerman.id.au>
+ <c33a2be3-d4b7-9b3b-c980-552f5de081be@linux.ibm.com>
+Date:   Wed, 04 May 2022 15:59:29 +1000
+Message-ID: <87ee19vnwe.fsf@mpe.ellerman.id.au>
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There are sleep in atomic bug that could cause kernel panic during
-firmware download process. The root cause is that nlmsg_new with
-GFP_KERNEL parameter is called in fw_dnld_timeout which is a timer
-handler. The call trace is shown below:
-
-BUG: sleeping function called from invalid context at include/linux/sched/mm.h:265
-Call Trace:
-kmem_cache_alloc_node
-__alloc_skb
-nfc_genl_fw_download_done
-call_timer_fn
-__run_timers.part.0
-run_timer_softirq
-__do_softirq
+Laurent Dufour <ldufour@linux.ibm.com> writes:
+> On 03/05/2022, 17:06:41, Michael Ellerman wrote:
+>> Laurent Dufour <ldufour@linux.ibm.com> writes:
 ...
+>>> diff --git a/arch/powerpc/kernel/rtas.c b/arch/powerpc/kernel/rtas.c
+>>> index 1f42aabbbab3..d7775b8c8853 100644
+>>> --- a/arch/powerpc/kernel/rtas.c
+>>> +++ b/arch/powerpc/kernel/rtas.c
+>>> @@ -49,6 +49,11 @@ void enter_rtas(unsigned long);
+>>>  
+>>>  static inline void do_enter_rtas(unsigned long args)
+>>>  {
+>>> +	unsigned long msr;
+>>> +
+>>> +	msr = mfmsr();
+>>> +	BUG_ON(!(msr & MSR_RI));
+>> 
+>> I'm not sure about this.
+>> 
+>> We call RTAS in some low-level places, so if we ever hit this BUG_ON
+>> then it might cause us to crash badly, or recursively BUG.
+>> 
+>> A WARN_ON_ONCE() might be safer?
+>
+> I'm afraid a BUG_ON is required here. Since MSR[RI] is set on RTAS exit so
+> if it was not set when calling RTAS, that's a real issue and should
+> generate unexpected behaviour.
+>
+> Do you have places in mind where RTAS could be called with !MSR[RI]?
 
-The nlmsg_new with GFP_KERNEL parameter may sleep during memory
-allocation process, and the timer handler is run as the result of
-a "software interrupt" that should not call any other function
-that could sleep.
+The main one I can think of is if someone is using
+CONFIG_UDBG_RTAS_CONSOLE, then udbg_rtascon_putc() is wired up as
+udbg_putc() and that might be called from anywhere, including xmon.
 
-This patch changes allocation mode of netlink message from GFP_KERNEL
-to GFP_ATOMIC in order to prevent sleep in atomic bug. The GFP_ATOMIC
-flag makes memory allocation operation could be used in atomic context.
+There's also RTAS calls in low-level xics interrupt code, that might get
+called during panic/crash.
 
-Fixes: 9674da8759df ("NFC: Add firmware upload netlink command")
-Fixes: 9ea7187c53f6 ("NFC: netlink: Rename CMD_FW_UPLOAD to CMD_FW_DOWNLOAD")
-Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
----
- net/nfc/netlink.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+I don't expect any of those places to be called with MSR[RI] unset, but
+I'm worried that if we're already crashing and for some reason MSR[RI]
+is unset, then that BUG_ON will just make things worse.
 
-diff --git a/net/nfc/netlink.c b/net/nfc/netlink.c
-index f184b0db79d..7c62417ccfd 100644
---- a/net/nfc/netlink.c
-+++ b/net/nfc/netlink.c
-@@ -1244,7 +1244,7 @@ int nfc_genl_fw_download_done(struct nfc_dev *dev, const char *firmware_name,
- 	struct sk_buff *msg;
- 	void *hdr;
- 
--	msg = nlmsg_new(NLMSG_DEFAULT_SIZE, GFP_KERNEL);
-+	msg = nlmsg_new(NLMSG_DEFAULT_SIZE, GFP_ATOMIC);
- 	if (!msg)
- 		return -ENOMEM;
- 
-@@ -1260,7 +1260,7 @@ int nfc_genl_fw_download_done(struct nfc_dev *dev, const char *firmware_name,
- 
- 	genlmsg_end(msg, hdr);
- 
--	genlmsg_multicast(&nfc_genl_family, msg, 0, 0, GFP_KERNEL);
-+	genlmsg_multicast(&nfc_genl_family, msg, 0, 0, GFP_ATOMIC);
- 
- 	return 0;
- 
--- 
-2.17.1
+eg. imagine taking a BUG_ON() for every character we try to print as
+part of an oops.
 
+Admittedly CONFIG_UDBG_RTAS_CONSOLE is old and probably not used much
+anymore, but I'm still a bit paranoid :)
+
+cheers

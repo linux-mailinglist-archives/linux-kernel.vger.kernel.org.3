@@ -2,122 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58DD551938C
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 03:40:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACA43519474
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 03:52:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245224AbiEDBoP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 21:44:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49190 "EHLO
+        id S1343566AbiEDBzu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 21:55:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235416AbiEDBoO (ORCPT
+        with ESMTP id S1343657AbiEDBw4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 21:44:14 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 325891A80F;
-        Tue,  3 May 2022 18:40:38 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Tue, 3 May 2022 21:52:56 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE29244A3A;
+        Tue,  3 May 2022 18:48:27 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KtKKF1wQhz4xTX;
-        Wed,  4 May 2022 11:40:32 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1651628434;
-        bh=QxQ5k3WeRy9fAPYUqZ8f27VNj5G0iGKr5OMkwJuFqZU=;
-        h=Date:From:To:Cc:Subject:From;
-        b=ZzrTCVnG49PdQY6hsudTqAGovpdIRJR5tPZ6yz2ifD5EL087CmVZFkve8QTptVqd0
-         zy3NIx4Ph2jgL2BADQXz5wbykwSuxUyZB1Li1jklyjXOfhAsB4hosWeQM+kuaAo7Z4
-         cZ/rJ8X1Ra3NsT9+EdoQfkzw01AI+7866YbklF1zWSDCq64Webx+YvEkRKrYqzGC+1
-         4zZlHZiVDmhrwZuCK8qHZhVi/x46O3saXsq6yjPMDgkElpe4MpL9Wy1L22zSkgkMUF
-         nelLrkGAC9wzTpDn30yrceS0iq7pkw23QrCl2iGCFb1cQEE4siqQtYnWG6r7qlMun6
-         sSOr5qcOlKVRQ==
-Date:   Wed, 4 May 2022 11:40:31 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the block tree
-Message-ID: <20220504114031.40747e03@canb.auug.org.au>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 96F9461987;
+        Wed,  4 May 2022 01:48:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 817C5C385A9;
+        Wed,  4 May 2022 01:48:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651628888;
+        bh=1sRYRjLbt8trZsAxQP405ve5/+hZRzhVT+rXdU002IU=;
+        h=From:To:Cc:Subject:Date:From;
+        b=ZIqODaO4EeJ3AGQlFrE98zItIkLii9TzICBsRd4HttDYp3pWa1CS91mDp0ZUG6rw7
+         0CfC61X+QTB8CfkhI0IfKJTrK1XkCVKDbALRtn1/jIDPB5DgnezjcBpdxiqCgiSSQq
+         RYy0Sr5k8tF72NreVxLBMxbHzhHejpdQD7l1ztACPs4V7bzwugXp19PXHC0yLQuLEw
+         Zqphrb0YORYhyJR/9DFSPDwVegg6iCuFN3kzs+NeOaUfToWmH4IvpL7jbcKERBjYhU
+         us+cOa1ec/2irqMEf8UQ3DkvRfQ/CKtyYEZQD26cQhblA2dk3l3Tz1Vrlsmix1UJY1
+         FKD8FhW6pSJqQ==
+From:   Chao Yu <chao@kernel.org>
+To:     jaegeuk@kernel.org
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, Chao Yu <chao@kernel.org>,
+        stable@vger.kernel.org, Ming Yan <yanming@tju.edu.cn>,
+        Chao Yu <chao.yu@oppo.com>
+Subject: [PATCH v2] f2fs: fix deadloop in foreground GC
+Date:   Wed,  4 May 2022 09:47:55 +0800
+Message-Id: <20220504014755.1727-1-chao@kernel.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/hX0vgwFIKurJsaX.xISZtGw";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/hX0vgwFIKurJsaX.xISZtGw
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+As Yanming reported in bugzilla:
 
-Hi all,
+https://bugzilla.kernel.org/show_bug.cgi?id=215914
 
-After merging the block tree, today's linux-next build (x86_64
-allmodconfig) failed like this:
+The root cause is: in a very small sized image, it's very easy to
+exceed threshold of foreground GC, if we calculate free space and
+dirty data based on section granularity, in corner case,
+has_not_enough_free_secs() will always return true, result in
+deadloop in f2fs_gc().
 
-drivers/block/xen-blkback/xenbus.c: In function 'xen_blkbk_discard':
-drivers/block/xen-blkback/xenbus.c:578:31: error: unused variable 'q' [-Wer=
-ror=3Dunused-variable]
-  578 |         struct request_queue *q =3D bdev_get_queue(bdev);
-      |                               ^
-cc1: all warnings being treated as errors
+So this patch refactors has_not_enough_free_secs() as below to fix
+this issue:
+1. calculate needed space based on block granularity, and separate
+all blocks to two parts, section part, and block part, comparing
+section part to free section, and comparing block part to free space
+in openned log.
+2. account F2FS_DIRTY_NODES, F2FS_DIRTY_IMETA and F2FS_DIRTY_DENTS
+as node block consumer;
+3. account F2FS_DIRTY_DENTS as data block consumer;
 
-Caused by commit
-
-  c899b2353386 ("xen-blkback: use bdev_discard_alignment")
-
-I have applied the following fix patch for today.
-
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Wed, 4 May 2022 11:26:59 +1000
-Subject: [PATCH] xen-blkback: remove unused variable
-
-Fixes: c899b2353386 ("xen-blkback: use bdev_discard_alignment")
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: stable@vger.kernel.org
+Reported-by: Ming Yan <yanming@tju.edu.cn>
+Signed-off-by: Chao Yu <chao.yu@oppo.com>
 ---
- drivers/block/xen-blkback/xenbus.c | 1 -
- 1 file changed, 1 deletion(-)
+v2:
+- fix performance regression
+ fs/f2fs/segment.h | 32 ++++++++++++++++++++------------
+ 1 file changed, 20 insertions(+), 12 deletions(-)
 
-diff --git a/drivers/block/xen-blkback/xenbus.c b/drivers/block/xen-blkback=
-/xenbus.c
-index 04c90cb8955f..97de13b14175 100644
---- a/drivers/block/xen-blkback/xenbus.c
-+++ b/drivers/block/xen-blkback/xenbus.c
-@@ -575,7 +575,6 @@ static void xen_blkbk_discard(struct xenbus_transaction=
- xbt, struct backend_info
- 	int err;
- 	int state =3D 0;
- 	struct block_device *bdev =3D be->blkif->vbd.bdev;
--	struct request_queue *q =3D bdev_get_queue(bdev);
-=20
- 	if (!xenbus_read_unsigned(dev->nodename, "discard-enable", 1))
- 		return;
---=20
-2.35.1
+diff --git a/fs/f2fs/segment.h b/fs/f2fs/segment.h
+index 8a591455d796..c38263dbc5ca 100644
+--- a/fs/f2fs/segment.h
++++ b/fs/f2fs/segment.h
+@@ -575,11 +575,10 @@ static inline int reserved_sections(struct f2fs_sb_info *sbi)
+ 	return GET_SEC_FROM_SEG(sbi, reserved_segments(sbi));
+ }
+ 
+-static inline bool has_curseg_enough_space(struct f2fs_sb_info *sbi)
++static inline bool has_curseg_enough_space(struct f2fs_sb_info *sbi,
++			unsigned int node_blocks, unsigned int dent_blocks)
+ {
+-	unsigned int node_blocks = get_pages(sbi, F2FS_DIRTY_NODES) +
+-					get_pages(sbi, F2FS_DIRTY_DENTS);
+-	unsigned int dent_blocks = get_pages(sbi, F2FS_DIRTY_DENTS);
++
+ 	unsigned int segno, left_blocks;
+ 	int i;
+ 
+@@ -605,19 +604,28 @@ static inline bool has_curseg_enough_space(struct f2fs_sb_info *sbi)
+ static inline bool has_not_enough_free_secs(struct f2fs_sb_info *sbi,
+ 					int freed, int needed)
+ {
+-	int node_secs = get_blocktype_secs(sbi, F2FS_DIRTY_NODES);
+-	int dent_secs = get_blocktype_secs(sbi, F2FS_DIRTY_DENTS);
+-	int imeta_secs = get_blocktype_secs(sbi, F2FS_DIRTY_IMETA);
++	unsigned int total_node_blocks = get_pages(sbi, F2FS_DIRTY_NODES) +
++					get_pages(sbi, F2FS_DIRTY_DENTS) +
++					get_pages(sbi, F2FS_DIRTY_IMETA);
++	unsigned int total_dent_blocks = get_pages(sbi, F2FS_DIRTY_DENTS);
++	unsigned int node_secs = total_node_blocks / BLKS_PER_SEC(sbi);
++	unsigned int dent_secs = total_dent_blocks / BLKS_PER_SEC(sbi);
++	unsigned int node_blocks = total_node_blocks % BLKS_PER_SEC(sbi);
++	unsigned int dent_blocks = total_dent_blocks % BLKS_PER_SEC(sbi);
++	unsigned int free, need_lower, need_upper;
+ 
+ 	if (unlikely(is_sbi_flag_set(sbi, SBI_POR_DOING)))
+ 		return false;
+ 
+-	if (free_sections(sbi) + freed == reserved_sections(sbi) + needed &&
+-			has_curseg_enough_space(sbi))
++	free = free_sections(sbi) + freed;
++	need_lower = node_secs + dent_secs + reserved_sections(sbi) + needed;
++	need_upper = need_lower + node_blocks ? 1 : 0 + dent_blocks ? 1 : 0;
++
++	if (free > need_upper)
+ 		return false;
+-	return (free_sections(sbi) + freed) <=
+-		(node_secs + 2 * dent_secs + imeta_secs +
+-		reserved_sections(sbi) + needed);
++	else if (free <= need_lower)
++		return true;
++	return !has_curseg_enough_space(sbi, node_blocks, dent_blocks);
+ }
+ 
+ static inline bool f2fs_is_checkpoint_ready(struct f2fs_sb_info *sbi)
+-- 
+2.32.0
 
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/hX0vgwFIKurJsaX.xISZtGw
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEyBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJx2Y8ACgkQAVBC80lX
-0GwNhQf47figcnswL2Xb/amERNfqXFce8a5yN7B8wxqYYEckDD27lB3L6irl7zrE
-V7HGi/B219Pw5Cml7SKBk/pldokFeDd7y1ERUFqeVySDqMSsKuZeAv4W2y6v26cR
-z5iFoZ/gfkE/sS38t0nhwCvRBwpaeoSfedLaMylmn9blS93JINvcSmSQK7gTjZ0S
-o2jgnkcntsf3ZeFlnaD61aWmeVY7Kkcnqb/qYLtmAh4Wikep6csJIusxZdJepymE
-0+V88MPV/uWg6ruBLXIrAHV8JlZQP9Opbu38QD0V5FLlHQYGHJfrrNBdkluCWYCe
-QlvuQowqct6uWLCLofON175y0XRd
-=YgK5
------END PGP SIGNATURE-----
-
---Sig_/hX0vgwFIKurJsaX.xISZtGw--

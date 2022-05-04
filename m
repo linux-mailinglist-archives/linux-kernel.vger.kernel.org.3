@@ -2,87 +2,217 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15B9851A347
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 17:09:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E45FB51A34E
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 17:09:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351948AbiEDPMd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 11:12:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34022 "EHLO
+        id S1351963AbiEDPMo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 11:12:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351966AbiEDPM2 (ORCPT
+        with ESMTP id S1351949AbiEDPMi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 11:12:28 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22E9C220EF;
-        Wed,  4 May 2022 08:08:50 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CCE59B8263C;
-        Wed,  4 May 2022 15:08:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71A49C385A5;
-        Wed,  4 May 2022 15:08:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651676927;
-        bh=+j0OUKTRMVyAKDfkZwYch4G0nCOnoDspSMbkklbc/N4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Fjcu0R6daCQsfHq6QS5Oe/XBjGKiWjVhAdWoUIGQQLELST7JLnrBCcfia7tkrc5m1
-         exBTkr8PXHxbX/kzdbGsgzW4gW2cE3T591JI9jc+zm95PkZLN6ykixc0A3DCPJ6mVo
-         AJ2+Lu5Ad/JUMkOWWmkqeZH+hAOqARMLBglNG/h8=
-Date:   Wed, 4 May 2022 17:08:46 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     "stable@vger.kernel.org" <stable@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Steve Capper <steve.capper@arm.com>,
-        Will Deacon <will.deacon@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: Re: [PATCH] [Rebased for 5.4] mm, hugetlb: allow for "high"
- userspace addresses
-Message-ID: <YnKW/h6yElTSBKB1@kroah.com>
-References: <9367809ff3091ff451f9ab6fc029cef553c758fa.1651581958.git.christophe.leroy@csgroup.eu>
- <YnEyiYh/NIFJG16V@kroah.com>
- <9853ade6-3f32-7811-474e-2da2361af16c@csgroup.eu>
+        Wed, 4 May 2022 11:12:38 -0400
+Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AB0231908
+        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 08:09:02 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.west.internal (Postfix) with ESMTP id 79A68320095B;
+        Wed,  4 May 2022 11:09:00 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute2.internal (MEProxy); Wed, 04 May 2022 11:09:01 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1651676939; x=1651763339; bh=UEdjlSWbPN
+        odoYMxMQh4+HmwveeXvhVk46I6Hzv0bH0=; b=SsZLYZ68asGqDK4yqfCQO//8Qq
+        99Hf8tuc1JAf07YZBpL/VAp/1Tew1HQnKZhA4+k0KbVqHyPbGHrrIql/NHkFLRo8
+        vGxOBmbdIMOgaDm7fOtye/dGuHtDosM4hzcagiUxIkAFT04j+md0j8mDuDdUpQl1
+        1GFrOOaZ5b72FC4h1BPwQTBkOtBNJ1krM1MDLX7o/91ah6MNjmUXdD7aQkr1pAcI
+        COUeNGGVAOf+AQsrNjaJiQhw28APXGXCvjenCMD3qK68a56v4TLtSjKfIYZPkEKr
+        xT++qXSMZi0yxQbPxySKS0fvUJ74TjtvxYXYB/s/qPnY+xRsOAlaMoUMLqpg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1651676939; x=
+        1651763339; bh=UEdjlSWbPNodoYMxMQh4+HmwveeXvhVk46I6Hzv0bH0=; b=i
+        QpXcN+gGu/9LPcZEFG7KhtY++OihFWOUiRLnb0FC04O3HjEIMQ9GJAsY0h1RUJ0Q
+        OoxCRyddG96WsIlDklKKMp76NBLK7ByqcFoDPQGjoRkYvO2NRyTQy4U6+iTvQSe7
+        sxPgedAVLwKt0lcuQiNuTzUhedHcyb56VKegaCc7avdZ0Ef5pnjhIdbb5kuNOt/i
+        pMtp7OxTropz7QSZNbxLcpG8ZzL4/Zi5N0oU+p1EdnE0XfrDDqOupDXBc3A6y4ob
+        Q4VhBRe8cJWokGkH8Q1kQCNGHhQcGzz4ISSINKPNkvH85izBbpcEZ2KmXUrDaic7
+        oR0vMDo+/V8bV0FcUHz6g==
+X-ME-Sender: <xms:CpdyYrvH0o6H-uuEIsslAHV5sYclYo8JqCTBocPrPDGwK8FHhXdLXQ>
+    <xme:CpdyYscoi8GEfV41OOmS-0rSl4vbhinI8ABpnqHtG9qCVQCXYXzGu86NREv-elnou
+    h1yvOlZm8ySNU3Ql8I>
+X-ME-Received: <xmr:CpdyYux-t4_qxLNLvWoWRXXHU0AhJfSFgoG60kVPqSKc5nM29nwzTdYih64h0-Nr1UAPCklntR1nSYuaYU4RwrcRsTMdBsvgyPGXl5k>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdelgdekhecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvvefukfhfgggtuggjsehgtderredttddvnecuhfhrohhmpeforgigihhm
+    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
+    htvghrnhepteefffefgfektdefgfeludfgtdejfeejvddttdekteeiffejvdfgheehfffh
+    vedunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepmh
+    grgihimhgvsegtvghrnhhordhtvggthh
+X-ME-Proxy: <xmx:CpdyYqN-nPsL6Wcxf5bSpocyOvyLQDGCKgce8jbI0CBZ9qUkK4L0kg>
+    <xmx:CpdyYr8h8A_UmccuwJAzOy1DJTFz_NUkoplDF1ESUR5ucpmpkcNQ9w>
+    <xmx:CpdyYqWUisZ93c6IRgjz_0-0z4-ZKqwzuSElzMTVKmYC6wgHOyNUYA>
+    <xmx:C5dyYhdAcacNObNVMScaSOsYDPcAkhUtuCU7VYBeGGvjERzwadK7uQ>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 4 May 2022 11:08:58 -0400 (EDT)
+Date:   Wed, 4 May 2022 17:08:57 +0200
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Jagan Teki <jagan@amarulasolutions.com>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Rob Clark <robdclark@gmail.com>, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Robert Foss <robert.foss@linaro.org>
+Subject: Re: [PATCH 2/2] Revert "drm: of: Lookup if child node has panel or
+ bridge"
+Message-ID: <20220504150857.7dhg3gtlgiwadhlm@houat>
+References: <CAMty3ZAw7DUSnBePC05qC8Gn6ESKiu+FHw4a-HPPc05VX1hqhg@mail.gmail.com>
+ <20220421082358.ivpmtak3ednvddrc@houat>
+ <YmEdAVwZuA7Wo1Ch@aptenodytes>
+ <YmelPCcWCCjALtRU@aptenodytes>
+ <CAMty3ZBwguzvC8A9xA5c0enfoFRGS=4wWCzpfakTUXrsRS9GyA@mail.gmail.com>
+ <20220427143410.bectqumq62qmlv5x@houat>
+ <CAMty3ZDk-M3hW97_GY4-z=f+cKs1Sg4Jbq5L7L4zHgXURhFuZA@mail.gmail.com>
+ <YmsSdmOEpSz4okt2@pendragon.ideasonboard.com>
+ <20220429154645.47tsii47vjxqklca@houat>
+ <YmwM5/oikfRt2ExQ@pendragon.ideasonboard.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="qfv6kjxcghrfgsyc"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <9853ade6-3f32-7811-474e-2da2361af16c@csgroup.eu>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <YmwM5/oikfRt2ExQ@pendragon.ideasonboard.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 04, 2022 at 07:26:00AM +0000, Christophe Leroy wrote:
-> 
-> 
-> Le 03/05/2022 à 15:47, Greg KH a écrit :
-> > On Tue, May 03, 2022 at 02:47:11PM +0200, Christophe Leroy wrote:
-> >> This is backport for linux 5.4
-> >>
-> >> commit 5f24d5a579d1eace79d505b148808a850b417d4c upstream.
-> > 
-> > Now queued up, thanks.
-> > 
-> 
-> Looks like the robot has found a build failure, due to missing #include 
-> <linux/sched/mm.h>
-> 
-> However, looking into it in more details, I think  we should just apply 
-> the two following commits unmodified instead of modifying the original 
-> commit:
-> 
-> 885902531586 ("hugetlbfs: get unmapped area below TASK_UNMAPPED_BASE for 
-> hugetlbfs")
-> 5f24d5a579d1 ("mm, hugetlb: allow for "high" userspace addresses")
 
-Ok, thanks, I've done this now.
+--qfv6kjxcghrfgsyc
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-greg k-h
+On Fri, Apr 29, 2022 at 07:05:59PM +0300, Laurent Pinchart wrote:
+> Hi Maxime,
+>=20
+> On Fri, Apr 29, 2022 at 05:46:45PM +0200, Maxime Ripard wrote:
+> > On Fri, Apr 29, 2022 at 01:17:26AM +0300, Laurent Pinchart wrote:
+> > > On Thu, Apr 28, 2022 at 02:09:42PM +0530, Jagan Teki wrote:
+> > > > On Wed, Apr 27, 2022 at 8:04 PM Maxime Ripard wrote:
+> > > > > On Tue, Apr 26, 2022 at 01:40:31PM +0530, Jagan Teki wrote:
+> > > > > > On Tue, Apr 26, 2022 at 1:24 PM Paul Kocialkowski wrote:
+> > > > > > > On Thu 21 Apr 22, 10:59, Paul Kocialkowski wrote:
+> > > > > > > > On Thu 21 Apr 22, 10:23, Maxime Ripard wrote:
+> > > > > > > > > On Thu, Apr 21, 2022 at 01:15:54PM +0530, Jagan Teki wrot=
+e:
+> > > > > > > > > > + Linus
+> > > > > > > > > > + Marek
+> > > > > > > > > > + Laurent
+> > > > > > > > > > + Robert
+> > > > > > > > > >
+> > > > > > > > > > On Thu, Apr 21, 2022 at 4:40 AM Bjorn Andersson wrote:
+> > > > > > > > > > >
+> > > > > > > > > > > Commit '80253168dbfd ("drm: of: Lookup if child node =
+has panel or
+> > > > > > > > > > > bridge")' attempted to simplify the case of expressin=
+g a simple panel
+> > > > > > > > > > > under a DSI controller, by assuming that the first no=
+n-graph child node
+> > > > > > > > > > > was a panel or bridge.
+> > > > > > > > > > >
+> > > > > > > > > > > Unfortunately for non-trivial cases the first child n=
+ode might not be a
+> > > > > > > > > > > panel or bridge.  Examples of this can be a aux-bus i=
+n the case of
+> > > > > > > > > > > DisplayPort, or an opp-table represented before the p=
+anel node.
+> > > > > > > > > > >
+> > > > > > > > > > > In these cases the reverted commit prevents the calle=
+r from ever finding
+> > > > > > > > > > > a reference to the panel.
+> > > > > > > > > > >
+> > > > > > > > > > > This reverts commit '80253168dbfd ("drm: of: Lookup i=
+f child node has
+> > > > > > > > > > > panel or bridge")', in favor of using an explicit gra=
+ph reference to the
+> > > > > > > > > > > panel in the trivial case as well.
+> > > > > > > > > >
+> > > > > > > > > > This eventually breaks many child-based devm_drm_of_get=
+_bridge
+> > > > > > > > > > switched drivers.  Do you have any suggestions on how t=
+o proceed to
+> > > > > > > > > > succeed in those use cases as well?
+> > > > > > > > >
+> > > > > > > > > I guess we could create a new helper for those, like
+> > > > > > > > > devm_drm_of_get_bridge_with_panel, or something.
+> > > > > > > >
+> > > > > > > > Oh wow I feel stupid for not thinking about that.
+> > > > > > > >
+> > > > > > > > Yeah I agree that it seems like the best option.
+> > > > > > >
+> > > > > > > Should I prepare a patch with such a new helper?
+> > > > > > >
+> > > > > > > The idea would be to keep drm_of_find_panel_or_bridge only fo=
+r the of graph
+> > > > > > > case and add one for the child node case, maybe:
+> > > > > > > drm_of_find_child_panel_or_bridge.
+> > > > > > >
+> > > > > > > I really don't have a clear idea of which driver would need t=
+o be switched
+> > > > > > > over though. Could someone (Jagan?) let me know where it woul=
+d be needed?
+> > > > > >
+> > > > > > sun6i_mipi_dsi
+> > > > >
+> > > > > It doesn't look like sun6i_mipi_dsi is using devm_drm_of_get_brid=
+ge at all?
+> > > >=20
+> > > > Correct, patch for this on the mailing list.
+> > >=20
+> > > I've lost track of how we're solving the fallout of this for v5.18. I
+> > > have received a report that the original commit (80253168dbfd) also
+> > > broke the rcar-du driver. Could you please provide a git branch (based
+> > > on drm-fixes or drm-misc-fixes) with any patch that you plan to get
+> > > merged in v5.18, to let me test them locally ?
+> >=20
+> > Was that report about 5.18 or drm-misc-next? It appears that all the
+> > drivers conversions are in drm-misc-next.
+>=20
+> v5.18-rc2. I've double-checked, and it has been bisected to commit
+> 67bae5f28c89, which is a fix of the commit this patch reverts
+> (80253168dbfd).
+
+We've reverted 67bae5f28c89 in -rc4, so it should work just fine now
+
+Maxime
+
+--qfv6kjxcghrfgsyc
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYnKXCAAKCRDj7w1vZxhR
+xdIjAQCFn3vpzZMcN+0pRgWibfT9JVeBJr8XuM6qdmRpPJ46SgEAsz+6o/m6DC24
+bTocO9sA/LABD7/OqSwSMVfnDNlieAw=
+=qF30
+-----END PGP SIGNATURE-----
+
+--qfv6kjxcghrfgsyc--

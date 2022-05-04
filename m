@@ -2,86 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94D2051B14A
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 23:42:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2067C51B150
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 23:44:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237347AbiEDVqZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 17:46:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36122 "EHLO
+        id S1378895AbiEDVsO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 17:48:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378849AbiEDVqX (ORCPT
+        with ESMTP id S1378877AbiEDVsH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 17:46:23 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1500552B3E
-        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 14:42:46 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id j14so2648086plx.3
-        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 14:42:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=wSvKAidaBTiVMQl2/M0XtOgAtcLOEobdYmpOs8Ro/hU=;
-        b=As4fKHXAkAyC2KpcVlbrKw1Sc/WEgiL1uGERHrhEwYkSVJNZjn+ob8d+TBjP7Ih/9U
-         2KqdU8NRzBhnowSBgng0oxxZfDXVmCw8uy72yZ5RbIuEWjN1RGHDFFjkkuAZXbw9AFww
-         AhsMfwgmQgZH/fAZEFzUURlJYC1eKx3m/uK0g=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=wSvKAidaBTiVMQl2/M0XtOgAtcLOEobdYmpOs8Ro/hU=;
-        b=Sog49BPzEgAu2JvBPaiuCDD3h5CVAECgCY6AphNf6q4BxNXJFosbxkudJ1znAtFqqO
-         WmGKgXmXZPaBc0uwLVGT5uoKpGNkO6lJhr8v3cl0XFWDX6AqYHvC8DheJuY+YCau17nl
-         ZyAbeaf4OYXlnngR4r4uHcQUueQlu4JMN2eg43p+bPxrzOm9z8j34PxDbxg/8mjO7rlN
-         67PsveiEnaazYdMFV7PWQvv4io6VYMIoy0vsmFRCofkvjNIBtfuPGBJcoqWnxHplGD4J
-         co6zcrcEmxAO+3Pp7wj1cFuvj9Rs79YnZG9dM3E3g+p76Bohg8EKvzzDujttSsnQXmgq
-         LDGQ==
-X-Gm-Message-State: AOAM530PIYOUENDiWigMnh0GtSinu6jyE3fI17tHj/IrMhT2ixrsAJ9G
-        1Vv67blSVkCmqxT3VEwLPeQuRQ==
-X-Google-Smtp-Source: ABdhPJzEhRhwVVnS7k0s5BIj2Fh5rsAK7m7Ufsi1Gefvu9ZCQ/STjdMQh9jZFnQE0j9QhLRfQ4te5Q==
-X-Received: by 2002:a17:90b:4c4d:b0:1dc:7c94:b821 with SMTP id np13-20020a17090b4c4d00b001dc7c94b821mr1888998pjb.84.1651700565698;
-        Wed, 04 May 2022 14:42:45 -0700 (PDT)
-Received: from localhost ([2620:15c:202:201:35b6:c77b:be04:3bd5])
-        by smtp.gmail.com with UTF8SMTPSA id c23-20020a62e817000000b0050dc76281fdsm8671120pfi.215.2022.05.04.14.42.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 04 May 2022 14:42:45 -0700 (PDT)
-Date:   Wed, 4 May 2022 14:42:44 -0700
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-Cc:     agross@kernel.org, bjorn.andersson@linaro.org, robh+dt@kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, quic_rohkumar@quicinc.com,
-        srinivas.kandagatla@linaro.org, dianders@chromium.org,
-        swboyd@chromium.org, judyhsiao@chromium.org,
-        Venkata Prasad Potturu <quic_potturu@quicinc.com>
-Subject: Re: [PATCH v11 12/12] arm64: dts: qcom: sc7280: Add sound node for
- CRD 3.0/3.1
-Message-ID: <YnLzVKj1Qx51wryn@google.com>
-References: <1651664649-25290-1-git-send-email-quic_srivasam@quicinc.com>
- <1651664649-25290-13-git-send-email-quic_srivasam@quicinc.com>
+        Wed, 4 May 2022 17:48:07 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9970532E7
+        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 14:44:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Type:MIME-Version:Message-ID:
+        Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+        Content-Description:In-Reply-To:References;
+        bh=nnLXKYzsn4Ff0H53e/iYWG4pt2fEuSs3Y0Owjo05quQ=; b=rAsWAKrg/BnsEj+sAFL9zDKNzj
+        hycwa5qwZygumLrMwKD/S+OiNu7+Yz+Dbt4bx4+NKHGc0rOdAq/RFrexskpjkW5T9/7nsTBCwZfEM
+        9EvPXDvEPG0s4fDupLglTDTRiqXhukfN7f/+gDEzMNuL+roIbSVkKAHBxTBXOYCqb8yQzKulD+fF8
+        EDWCM4CfZ5ykkEQJOwGRWQ7He2cAmCpJJK4gUFET9kjHEGoH8Gv+gIETUY51zeuDloTrVh4ADB4VU
+        16/8ig2MuowRWAingduT4D+ZrOsle3Aa9WwOKxjWn9BR01RCcv3lKSIAZymkP4MRSTZpH2WIUa2l6
+        Hs1Q7/Pg==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nmMn6-00GyNr-6H; Wed, 04 May 2022 21:44:12 +0000
+Date:   Wed, 4 May 2022 22:44:12 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>
+Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+        linux-kernel@vger.kernel.org
+Subject: Wait for mutex to become unlocked
+Message-ID: <YnLzrGlBNCmCPLmS@casper.infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1651664649-25290-13-git-send-email-quic_srivasam@quicinc.com>
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 04, 2022 at 05:14:09PM +0530, Srinivasa Rao Mandadapu wrote:
-> Add dt nodes for sound card support on rev5+ (aka CRD 3.0/3.1) boards,
-> which is using WCD9385 headset playback, capture, I2S speaker playback
-> and DMICs via VA macro.
-> 
-> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-> Co-developed-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
-> Signed-off-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
+Paul, Liam and I were talking about some code we intend to write soon
+and realised there's a missing function in the mutex & rwsem API.
+We're intending to use it for an rwsem, but I think it applies equally
+to mutexes.
 
-Carrying over from v10:
+The customer has a low priority task which wants to read /proc/pid/smaps
+of a higher priority task.  Today, everything is awful; smaps acquires
+mmap_sem read-only, is preempted, then the high-pri task calls mmap()
+and the down_write(mmap_sem) blocks on the low-pri task.  Then all the
+other threads in the high-pri task block on the mmap_sem as they take
+page faults because we don't want writers to starve.
 
-Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
+The approach we're looking at is to allow RCU lookup of VMAs, and then
+take a per-VMA rwsem for read.  Because we're under RCU protection,
+that looks a bit like this:
+
+	rcu_read_lock();
+	vma = vma_lookup();
+	if (down_read_trylock(&vma->sem)) {
+		rcu_read_unlock();
+	} else {
+		rcu_read_unlock();
+		down_read(&mm->mmap_sem);
+		vma = vma_lookup();
+		down_read(&vma->sem);
+		up_read(&mm->mmap_sem);
+	}
+
+(for clarity, I've skipped the !vma checks; don't take this too literally)
+
+So this is Good.  For the vast majority of cases, we avoid taking the
+mmap read lock and the problem will appear much less often.  But we can
+do Better with a new API.  You see, for this case, we don't actually
+want to acquire the mmap_sem; we're happy to spin a bit, but there's no
+point in spinning waiting for the writer to finish when we can sleep.
+I'd like to write this code:
+
+again:
+	rcu_read_lock();
+	vma = vma_lookup();
+	if (down_read_trylock(&vma->sem)) {
+		rcu_read_unlock();
+	} else {
+		rcu_read_unlock();
+		rwsem_wait_read(&mm->mmap_sem);
+		goto again;
+	}
+
+That is, rwsem_wait_read() puts the thread on the rwsem's wait queue,
+and wakes it up without giving it the lock.  Now this thread will never
+be able to block any thread that tries to acquire mmap_sem for write.
+
+Similarly, it may make sense to add rwsem_wait_write() and mutex_wait().
+Perhaps also mutex_wait_killable() and mutex_wait_interruptible()
+(the combinatoric explosion is a bit messy; I don't know that it makes
+sense to do the _nested, _io variants).
+
+Does any of this make sense?

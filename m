@@ -2,75 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDAE4519A51
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 10:47:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0778B519A53
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 10:48:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346582AbiEDIu4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 04:50:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50336 "EHLO
+        id S1346601AbiEDIve (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 04:51:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235435AbiEDIuw (ORCPT
+        with ESMTP id S243930AbiEDIv2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 04:50:52 -0400
+        Wed, 4 May 2022 04:51:28 -0400
 Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A022B24BE0
-        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 01:47:16 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id y3so1508781ejo.12
-        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 01:47:16 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDBDC24BE0
+        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 01:47:52 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id y3so1511451ejo.12
+        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 01:47:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :references:from:in-reply-to:content-transfer-encoding;
-        bh=QmtWwByo/ZIKuv6qy4yEByVOiPKOIaqS2BZn64y92Q4=;
-        b=AL3CjXJc7FL0+ahMAGnCQ7qmyxM+AoFMp+n++syujpzPeLdz3G9e8SumISuj6OAEA0
-         mN+gxfyTym9cCFHXVM2ma5gj6lTOqSS9+fFFVIN9K17+VhI/O5XELTfaBERRbjmSI/Nl
-         vvObVZ+lE/oHjIPDG5c3kZEYjJQEe1NvGt+HsrQ0Q+6yNj+8se8zRPFmuQGMPF5BpxNO
-         +M/mEz0tJP9w1V148yHSRWo5dQEAebdJpQrcp3fpkdmwYxogU+MGAbkl5NmYDLl3m4oe
-         Nv5JLzbG6l6Ef2KxCmwdwW2oy1uCKa2pWneGeT1ndmrmk+5OUccDsfooF869KS0AeRi0
-         oAQg==
+        bh=6f1dDCVmeyq91xhXZCZayQyn+IZwU2L4aZ+Foq78eA4=;
+        b=tmFZC8fD0Q56/y2iWBYOsKJY0o2MUehHpKVtve/rmhYh5x/7PbwoBdgaC8XLZgD+hE
+         fMIBNqBYry6FkCKA2vZ6qAWwRS+vbfplUyvchQSYAsde/5N11REnwbkj65150Xb0BXtv
+         TnGOSSDu23VUScaUMx1vIkmabyrZ2WkecZCbrnD/vZzxTGLZQsMvU9AvSMYl38kJGrah
+         1a/DEMKlgKYFNaj+cCJXxz5lQ6cBLS0KPH8HTbIWcgpUHm4VeHd2m5wbku6XTNtNL2II
+         myyFcR6JGjr14fVtveiWgC3sjCnDHRwtPI/Byf7m58lM8jJHJP70qrYXIo5gis2hWngm
+         w+Xw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=QmtWwByo/ZIKuv6qy4yEByVOiPKOIaqS2BZn64y92Q4=;
-        b=HYTYc1wqo7AoCApY4YAUt5SM20n01xtHHdg2kAdYgHRJPPlVUUMCfZbUVkf4+F5Yt7
-         ilgDFOXdJdCoJqxY62nybouFEsrp7Nr4JPGC9kYx78B5L6NGlujc9QGa74gT6BP4Xaor
-         UjTlDQHBEAFRlzmy82xsOmg99lyEF7OvdO9A9hvSgEykPhkiL8QaCKu2JeTGV3EKneEb
-         EnHi5HgbbIMYgvxsEoc0n/eRnQgdP4NZ4Mplaj0G/OqM8GMhG5Y+VOeIhw2rN5MjhWBK
-         h3MA8wkS13MSeSvKCl4qXe9JW/YM0It4fdoBowRnjKBAoTwTSSDFbNhheNc/wrhRBzpp
-         aTRg==
-X-Gm-Message-State: AOAM532MP68JdSKIUCZtwQlBmq5kmLkw4WbD4FQv82Xm5Vu1oS7yGBY8
-        PXduxs+fjK/KcVrquN9LgUppnw==
-X-Google-Smtp-Source: ABdhPJxKi7C4JKAEzHKaoMX1d2sBQ/HwAm7M6aW+7svbe2ak15MPFJVqHU4FxQsE+k7anyG0Uq+cjQ==
-X-Received: by 2002:a17:906:4fc6:b0:6f4:b5c0:aa3f with SMTP id i6-20020a1709064fc600b006f4b5c0aa3fmr2810602ejw.382.1651654035170;
-        Wed, 04 May 2022 01:47:15 -0700 (PDT)
+        bh=6f1dDCVmeyq91xhXZCZayQyn+IZwU2L4aZ+Foq78eA4=;
+        b=zej6jRUXCM78mMPWazon+eMr5HMOlxVW8bDp/2Yin+4Mty7VoNMTwq+z4zFtU5dQ+t
+         HHwp3IHZTJuAY9WC5huBytaiz9bbwbelvmjyzy73qpuSGIRnuQY2cMvBrNfa3MYOTJx/
+         KiPUNs4CxFVW6QGouT5q9U6CYhvnZBtk2vo7DiNGfAnkB0gnOTGtzWH5ZypCQOUgaUTx
+         zIfE6gPDUzEuEpA8BRfHCq8Uo3XLSXZ9Wxe3RFlSkt8UhoY5yfkwDg98fZ+QhuL/zF8r
+         hbtnRbqHns4c37dVpb+39T9y1fssv/2/CVufjh7q+09CFZE6ML7Dhg9eE2qyCz6Q8BYW
+         5tcQ==
+X-Gm-Message-State: AOAM533VpZfb4JGFN6Un2Yi6SFNuz1WgUDzAXIJEHphhBx/Nf9dM+Hzh
+        DrqvHc6I69Xc/RZQp5snz7SroyCcqkF8pw==
+X-Google-Smtp-Source: ABdhPJzTuUXZBXabjBTqCkCCerSU7CeFyLjRBzDtRGc7Ho1xl58OdSJcNj30Fj6JPJEt2c2wsY2Wvw==
+X-Received: by 2002:a17:906:c110:b0:6e0:dc2a:3393 with SMTP id do16-20020a170906c11000b006e0dc2a3393mr19274768ejc.512.1651654071403;
+        Wed, 04 May 2022 01:47:51 -0700 (PDT)
 Received: from [192.168.0.210] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id b6-20020aa7cd06000000b0042617ba63a9sm8799226edw.51.2022.05.04.01.47.13
+        by smtp.gmail.com with ESMTPSA id gv3-20020a1709072bc300b006f3ef214db7sm5542893ejc.29.2022.05.04.01.47.50
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 04 May 2022 01:47:14 -0700 (PDT)
-Message-ID: <38ddc169-7e8d-c8b5-62cb-7fd3de567e91@linaro.org>
-Date:   Wed, 4 May 2022 10:47:13 +0200
+        Wed, 04 May 2022 01:47:50 -0700 (PDT)
+Message-ID: <0793b555-b734-7a45-ba1e-c525c9a95d41@linaro.org>
+Date:   Wed, 4 May 2022 10:47:49 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
-Subject: Re: [PATCH 2/4] scsi: core: fix white-spaces
+Subject: Re: [PATCH] PM: Domains: Extend dev_pm_domain_detach() doc
 Content-Language: en-US
-To:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        Doug Gilbert <dgilbert@interlog.com>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220408103027.311624-1-krzysztof.kozlowski@linaro.org>
- <20220408103027.311624-2-krzysztof.kozlowski@linaro.org>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220401084950.118998-1-krzysztof.kozlowski@linaro.org>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220408103027.311624-2-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220401084950.118998-1-krzysztof.kozlowski@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,32 +75,13 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/04/2022 12:30, Krzysztof Kozlowski wrote:
-> Remove trailing white-spaces and correct mixed-up indentation.
+On 01/04/2022 10:49, Krzysztof Kozlowski wrote:
+> Mention all domain attach menthods which dev_pm_domain_detach()
+> reverses.
 > 
 > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->  drivers/scsi/scsi_debug.c         |  2 +-
->  drivers/scsi/scsi_priv.h          |  4 +--
->  drivers/scsi/scsi_proc.c          | 14 ++++-----
->  drivers/scsi/scsi_scan.c          | 10 +++----
->  drivers/scsi/scsi_sysfs.c         |  4 +--
->  drivers/scsi/scsi_transport_spi.c | 49 +++++++++++++++----------------
->  drivers/scsi/scsicam.c            |  6 ++--
->  include/scsi/scsi_cmnd.h          |  2 +-
->  include/scsi/scsi_device.h        | 10 +++----
->  include/scsi/scsi_host.h          | 13 ++++----
->  include/scsi/scsi_ioctl.h         |  2 +-
->  include/scsi/scsi_transport.h     |  2 +-
->  include/scsi/scsi_transport_spi.h |  2 +-
->  include/scsi/scsicam.h            |  2 +-
->  include/scsi/sg.h                 |  2 +-
->  15 files changed, 61 insertions(+), 63 deletions(-)
 
-Hi folks!
-
-I understand that patch #1 in the series is discussed/needs followup,
-but what about patches 2-4? Could you pick them up?
+Any comments on this patch?
 
 Best regards,
 Krzysztof

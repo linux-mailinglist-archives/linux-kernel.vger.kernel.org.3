@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52BC151AB03
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:39:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE8E451AB54
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:42:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358033AbiEDRlL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 13:41:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39202 "EHLO
+        id S1376765AbiEDRpU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 13:45:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356665AbiEDRJh (ORCPT
+        with ESMTP id S1356274AbiEDRL4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 13:09:37 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F32583B9;
-        Wed,  4 May 2022 09:55:19 -0700 (PDT)
+        Wed, 4 May 2022 13:11:56 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 601754B85D;
+        Wed,  4 May 2022 09:57:39 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B040761851;
-        Wed,  4 May 2022 16:55:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04470C385A4;
-        Wed,  4 May 2022 16:55:18 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EDBF6B827A4;
+        Wed,  4 May 2022 16:57:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99A8CC385A5;
+        Wed,  4 May 2022 16:57:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651683319;
-        bh=M0/axqTGok4fcs8rG0eauRfmKiO8nOsazqCkI5HiV/c=;
+        s=korg; t=1651683457;
+        bh=6Elx0oXf8pbyDQpAEzwHlIxpEwN9MDAQQX+4yMGajzg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mF4yGrzmeZ0g4gnSiKHdByCvwSpO1Tec8uV4LVfBNgNTpqAbjdrpascX5kyjJyjvi
-         0/moh8u+lCRx3OHcXhSflatH57Ld64sn/xj5w/iEMEm1e/c4cMBrd7z8EM8L0fKsAC
-         3RgNq1o0Bq9PuD22JLIYyM+EoMSdBepORukLaqdc=
+        b=eqUpLq8v88kBcvpOnmbmzWzKv601k56rkdbRMguzY1eyZkGItsh+yRDV1xihFZEnZ
+         FGikyi3fuwi7Zi2HusVlqOKXx8mqn2WcorjZhP74IDgR6UI9LUtQLozvIp2/1vt26k
+         +ZItnTfrl6AutsNHoaYYrWlfaEyzhli0HevmV82M=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>
-Subject: [PATCH 5.15 176/177] objtool: Fix type of reloc::addend
-Date:   Wed,  4 May 2022 18:46:09 +0200
-Message-Id: <20220504153109.467732856@linuxfoundation.org>
+        stable@vger.kernel.org, Nathan Rossi <nathan@nathanrossi.com>,
+        =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>,
+        Andrew Lunn <andrew@lunn.ch>, Paolo Abeni <pabeni@redhat.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 132/225] net: dsa: mv88e6xxx: Fix port_hidden_wait to account for port_base_addr
+Date:   Wed,  4 May 2022 18:46:10 +0200
+Message-Id: <20220504153122.110919171@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220504153053.873100034@linuxfoundation.org>
-References: <20220504153053.873100034@linuxfoundation.org>
+In-Reply-To: <20220504153110.096069935@linuxfoundation.org>
+References: <20220504153110.096069935@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,90 +56,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peter Zijlstra <peterz@infradead.org>
+From: Nathan Rossi <nathan@nathanrossi.com>
 
-commit c087c6e7b551b7f208c0b852304f044954cf2bb3 upstream.
+[ Upstream commit 24cbdb910bb62b5be3865275e5682be1a7708c0f ]
 
-Elf{32,64}_Rela::r_addend is of type: Elf{32,64}_Sword, that means
-that our reloc::addend needs to be long or face tuncation issues when
-we do elf_rebuild_reloc_section():
+The other port_hidden functions rely on the port_read/port_write
+functions to access the hidden control port. These functions apply the
+offset for port_base_addr where applicable. Update port_hidden_wait to
+use the port_wait_bit so that port_base_addr offsets are accounted for
+when waiting for the busy bit to change.
 
-  - 107:  48 b8 00 00 00 00 00 00 00 00   movabs $0x0,%rax        109: R_X86_64_64        level4_kernel_pgt+0x80000067
-  + 107:  48 b8 00 00 00 00 00 00 00 00   movabs $0x0,%rax        109: R_X86_64_64        level4_kernel_pgt-0x7fffff99
+Without the offset the port_hidden_wait function would timeout on
+devices that have a non-zero port_base_addr (e.g. MV88E6141), however
+devices that have a zero port_base_addr would operate correctly (e.g.
+MV88E6390).
 
-Fixes: 627fce14809b ("objtool: Add ORC unwind table generation")
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Acked-by: Josh Poimboeuf <jpoimboe@redhat.com>
-Link: https://lkml.kernel.org/r/20220419203807.596871927@infradead.org
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 609070133aff ("net: dsa: mv88e6xxx: update code operating on hidden registers")
+Signed-off-by: Nathan Rossi <nathan@nathanrossi.com>
+Reviewed-by: Marek Behún <kabel@kernel.org>
+Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+Link: https://lore.kernel.org/r/20220425070454.348584-1-nathan@nathanrossi.com
+Signed-off-by: Paolo Abeni <pabeni@redhat.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/objtool/check.c               |    8 ++++----
- tools/objtool/elf.c                 |    2 +-
- tools/objtool/include/objtool/elf.h |    4 ++--
- 3 files changed, 7 insertions(+), 7 deletions(-)
+ drivers/net/dsa/mv88e6xxx/port_hidden.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
---- a/tools/objtool/check.c
-+++ b/tools/objtool/check.c
-@@ -393,12 +393,12 @@ static int add_dead_ends(struct objtool_
- 		else if (reloc->addend == reloc->sym->sec->sh.sh_size) {
- 			insn = find_last_insn(file, reloc->sym->sec);
- 			if (!insn) {
--				WARN("can't find unreachable insn at %s+0x%x",
-+				WARN("can't find unreachable insn at %s+0x%lx",
- 				     reloc->sym->sec->name, reloc->addend);
- 				return -1;
- 			}
- 		} else {
--			WARN("can't find unreachable insn at %s+0x%x",
-+			WARN("can't find unreachable insn at %s+0x%lx",
- 			     reloc->sym->sec->name, reloc->addend);
- 			return -1;
- 		}
-@@ -428,12 +428,12 @@ reachable:
- 		else if (reloc->addend == reloc->sym->sec->sh.sh_size) {
- 			insn = find_last_insn(file, reloc->sym->sec);
- 			if (!insn) {
--				WARN("can't find reachable insn at %s+0x%x",
-+				WARN("can't find reachable insn at %s+0x%lx",
- 				     reloc->sym->sec->name, reloc->addend);
- 				return -1;
- 			}
- 		} else {
--			WARN("can't find reachable insn at %s+0x%x",
-+			WARN("can't find reachable insn at %s+0x%lx",
- 			     reloc->sym->sec->name, reloc->addend);
- 			return -1;
- 		}
---- a/tools/objtool/elf.c
-+++ b/tools/objtool/elf.c
-@@ -485,7 +485,7 @@ static struct section *elf_create_reloc_
- 						int reltype);
- 
- int elf_add_reloc(struct elf *elf, struct section *sec, unsigned long offset,
--		  unsigned int type, struct symbol *sym, int addend)
-+		  unsigned int type, struct symbol *sym, long addend)
+diff --git a/drivers/net/dsa/mv88e6xxx/port_hidden.c b/drivers/net/dsa/mv88e6xxx/port_hidden.c
+index b49d05f0e117..7a9f9ff6dedf 100644
+--- a/drivers/net/dsa/mv88e6xxx/port_hidden.c
++++ b/drivers/net/dsa/mv88e6xxx/port_hidden.c
+@@ -40,8 +40,9 @@ int mv88e6xxx_port_hidden_wait(struct mv88e6xxx_chip *chip)
  {
- 	struct reloc *reloc;
+ 	int bit = __bf_shf(MV88E6XXX_PORT_RESERVED_1A_BUSY);
  
---- a/tools/objtool/include/objtool/elf.h
-+++ b/tools/objtool/include/objtool/elf.h
-@@ -69,7 +69,7 @@ struct reloc {
- 	struct symbol *sym;
- 	unsigned long offset;
- 	unsigned int type;
--	int addend;
-+	long addend;
- 	int idx;
- 	bool jump_table_start;
- };
-@@ -131,7 +131,7 @@ struct elf *elf_open_read(const char *na
- struct section *elf_create_section(struct elf *elf, const char *name, unsigned int sh_flags, size_t entsize, int nr);
+-	return mv88e6xxx_wait_bit(chip, MV88E6XXX_PORT_RESERVED_1A_CTRL_PORT,
+-				  MV88E6XXX_PORT_RESERVED_1A, bit, 0);
++	return mv88e6xxx_port_wait_bit(chip,
++				       MV88E6XXX_PORT_RESERVED_1A_CTRL_PORT,
++				       MV88E6XXX_PORT_RESERVED_1A, bit, 0);
+ }
  
- int elf_add_reloc(struct elf *elf, struct section *sec, unsigned long offset,
--		  unsigned int type, struct symbol *sym, int addend);
-+		  unsigned int type, struct symbol *sym, long addend);
- int elf_add_reloc_to_insn(struct elf *elf, struct section *sec,
- 			  unsigned long offset, unsigned int type,
- 			  struct section *insn_sec, unsigned long insn_off);
+ int mv88e6xxx_port_hidden_read(struct mv88e6xxx_chip *chip, int block, int port,
+-- 
+2.35.1
+
 
 

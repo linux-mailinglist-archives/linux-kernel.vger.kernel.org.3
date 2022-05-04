@@ -2,212 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B08FB519F09
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 14:12:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CBD1519F0B
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 14:13:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349346AbiEDMPx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 08:15:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52216 "EHLO
+        id S1349355AbiEDMQj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 08:16:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343788AbiEDMPu (ORCPT
+        with ESMTP id S1343788AbiEDMQi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 08:15:50 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 630DE18359
-        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 05:12:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651666334;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=dCPW4qvwcpTydZ0St+Yp5/C2uYiVBC1zbL1N8xJvOoE=;
-        b=ZNMe05WuvsTtQuhUBkMaqsr4wnqvpDsh0LtxKi6ibPTfliHfa4WVzIb37FEx803tOdV0ZS
-        hkaIlCKKYzaX7qkS3Z/BL3DCJrZQ76oI40H57qoYN8v6gDhJU2aGiVqONMCNqqHAWUudrf
-        ZtkIptMOkd36452uJCuPZYQR25SC4UM=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-435-AtJSXlWaPcOqkMhwKzTjBA-1; Wed, 04 May 2022 08:12:09 -0400
-X-MC-Unique: AtJSXlWaPcOqkMhwKzTjBA-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 978AB3C01D8B;
-        Wed,  4 May 2022 12:12:08 +0000 (UTC)
-Received: from starship (unknown [10.40.192.26])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 1F8CE2024CBC;
-        Wed,  4 May 2022 12:12:03 +0000 (UTC)
-Message-ID: <a883ff438d6202f2dc0458dc4d7c1ab3688f5db8.camel@redhat.com>
-Subject: Re: [PATCH v3 03/14] KVM: SVM: Detect X2APIC virtualization
- (x2AVIC) support
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Cc:     pbonzini@redhat.com, seanjc@google.com, joro@8bytes.org,
-        jon.grimm@amd.com, wei.huang2@amd.com, terry.bowman@amd.com
-Date:   Wed, 04 May 2022 15:12:02 +0300
-In-Reply-To: <20220504073128.12031-4-suravee.suthikulpanit@amd.com>
-References: <20220504073128.12031-1-suravee.suthikulpanit@amd.com>
-         <20220504073128.12031-4-suravee.suthikulpanit@amd.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+        Wed, 4 May 2022 08:16:38 -0400
+Received: from mail.sberdevices.ru (mail.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0204F18359;
+        Wed,  4 May 2022 05:12:59 -0700 (PDT)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mail.sberdevices.ru (Postfix) with ESMTP id 23F475FD03;
+        Wed,  4 May 2022 15:12:57 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1651666377;
+        bh=09zpNo/QuzlUxL6xpefnWte+YVKHcE7RdGYglpUNogM=;
+        h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type;
+        b=Mk8axPLkhfGF0QoEUVTvMBvu+8rqsru3/+W9aacvguIr1RGt2Aogw2qNwGOiCfZNF
+         UJeEjqQKnOvpmSMqVli4AKK7n7uprGs28BlYMWDqNKg1WobcZY08CKybKwlvVKXjCE
+         ttNkBUxRd814aCCcQmGZnQW8zXe9uKaOPTuTMfHyzjwcMDgnCNeJ2xD0D2o64/NTy0
+         bJvHZSDH9GuUh+SdLGl5G9cP/V79MY9wJT5/h3zUyGwccy68sVa+D3P0x3y27pb5aM
+         oxj+JwoRzvrHMNv7mO20xSO+fbbFIizOoKsS39kWYFGF2ckifsN+Z4IcQhCgcq2D/X
+         lSlGJ2DulGjYg==
+Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
+        by mail.sberdevices.ru (Postfix) with ESMTP;
+        Wed,  4 May 2022 15:12:56 +0300 (MSK)
+From:   Alexey Romanov <avromanov@sberdevices.ru>
+To:     <minchan@kernel.org>, <ngupta@vflare.org>,
+        <senozhatsky@chromium.org>, <linux-block@vger.kernel.org>
+CC:     <axboe@chromium.org>, <kernel@sberdevices.ru>,
+        <linux-kernel@vger.kernel.org>, <mnitenko@gmail.com>,
+        Alexey Romanov <avromanov@sberdevices.ru>,
+        Dmitry Rokosov <ddrokosov@sberdevices.ru>
+Subject: [PATCH v4] zram: remove double compression logic
+Date:   Wed, 4 May 2022 15:12:43 +0300
+Message-ID: <20220504121243.63407-1-avromanov@sberdevices.ru>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.4
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [172.16.1.6]
+X-ClientProxiedBy: S-MS-EXCH01.sberdevices.ru (172.16.1.4) To
+ S-MS-EXCH01.sberdevices.ru (172.16.1.4)
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2022/05/04 08:31:00 #19348425
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-05-04 at 02:31 -0500, Suravee Suthikulpanit wrote:
-> Add CPUID check for the x2APIC virtualization (x2AVIC) feature.
-> If available, the SVM driver can support both AVIC and x2AVIC modes
-> when load the kvm_amd driver with avic=1. The operating mode will be
-> determined at runtime depending on the guest APIC mode.
-> 
-> Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
-> Signed-off-by: Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
-> ---
->  arch/x86/include/asm/svm.h |  3 +++
->  arch/x86/kvm/svm/avic.c    | 40 ++++++++++++++++++++++++++++++++++++++
->  arch/x86/kvm/svm/svm.c     | 15 ++------------
->  arch/x86/kvm/svm/svm.h     |  1 +
->  4 files changed, 46 insertions(+), 13 deletions(-)
-> 
-> diff --git a/arch/x86/include/asm/svm.h b/arch/x86/include/asm/svm.h
-> index f70a5108d464..2c2a104b777e 100644
-> --- a/arch/x86/include/asm/svm.h
-> +++ b/arch/x86/include/asm/svm.h
-> @@ -195,6 +195,9 @@ struct __attribute__ ((__packed__)) vmcb_control_area {
->  #define AVIC_ENABLE_SHIFT 31
->  #define AVIC_ENABLE_MASK (1 << AVIC_ENABLE_SHIFT)
->  
-> +#define X2APIC_MODE_SHIFT 30
-> +#define X2APIC_MODE_MASK (1 << X2APIC_MODE_SHIFT)
-> +
->  #define LBR_CTL_ENABLE_MASK BIT_ULL(0)
->  #define VIRTUAL_VMLOAD_VMSAVE_ENABLE_MASK BIT_ULL(1)
->  
-> diff --git a/arch/x86/kvm/svm/avic.c b/arch/x86/kvm/svm/avic.c
-> index a8f514212b87..fc3ba6071482 100644
-> --- a/arch/x86/kvm/svm/avic.c
-> +++ b/arch/x86/kvm/svm/avic.c
-> @@ -40,6 +40,15 @@
->  #define AVIC_GATAG_TO_VMID(x)		((x >> AVIC_VCPU_ID_BITS) & AVIC_VM_ID_MASK)
->  #define AVIC_GATAG_TO_VCPUID(x)		(x & AVIC_VCPU_ID_MASK)
->  
-> +enum avic_modes {
-> +	AVIC_MODE_NONE = 0,
-> +	AVIC_MODE_X1,
-> +	AVIC_MODE_X2,
-> +};
-> +
-> +static bool force_avic;
-> +module_param_unsafe(force_avic, bool, 0444);
-> +
->  /* Note:
->   * This hash table is used to map VM_ID to a struct kvm_svm,
->   * when handling AMD IOMMU GALOG notification to schedule in
-> @@ -50,6 +59,7 @@ static DEFINE_HASHTABLE(svm_vm_data_hash, SVM_VM_DATA_HASH_BITS);
->  static u32 next_vm_id = 0;
->  static bool next_vm_id_wrapped = 0;
->  static DEFINE_SPINLOCK(svm_vm_data_hash_lock);
-> +static enum avic_modes avic_mode;
->  
->  /*
->   * This is a wrapper of struct amd_iommu_ir_data.
-> @@ -1077,3 +1087,33 @@ void avic_vcpu_unblocking(struct kvm_vcpu *vcpu)
->  
->  	avic_vcpu_load(vcpu);
->  }
-> +
-> +/*
-> + * Note:
-> + * - The module param avic enable both xAPIC and x2APIC mode.
-> + * - Hypervisor can support both xAVIC and x2AVIC in the same guest.
-> + * - The mode can be switched at run-time.
-> + */
-> +bool avic_hardware_setup(struct kvm_x86_ops *x86_ops)
-> +{
-> +	if (!npt_enabled)
-> +		return false;
-> +
-> +	if (boot_cpu_has(X86_FEATURE_AVIC)) {
-> +		avic_mode = AVIC_MODE_X1;
-> +		pr_info("AVIC enabled\n");
-> +	} else if (force_avic) {
-> +		pr_warn("AVIC is not supported in CPUID but force enabled");
-> +		pr_warn("Your system might crash and burn");
+The 2nd trial allocation under per-cpu presumption has been
+used to prevent regression of allocation failure. However, it
+makes trouble for maintenance without significant benefit.
+The slowpath branch is executed extremely rarely: getting
+there is problematic. Therefore, we delete this branch.
 
-I think in this case avic_mode should also be set to AVIC_MODE_X1
-(Hopefully this won't be needed for systems that have x2avic enabled)
+Signed-off-by: Alexey Romanov <avromanov@sberdevices.ru>
+Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
+---
+ drivers/block/zram/zram_drv.c | 42 +++++++++--------------------------
+ drivers/block/zram/zram_drv.h |  1 -
+ 2 files changed, 10 insertions(+), 33 deletions(-)
 
-Best regards,
-	Maxim Levitsky
-
-> +	}
-> +
-> +	if (boot_cpu_has(X86_FEATURE_X2AVIC)) {
-> +		avic_mode = AVIC_MODE_X2;
-> +		pr_info("x2AVIC enabled\n");
-> +	}
-> +
-> +	if (avic_mode != AVIC_MODE_NONE)
-> +		amd_iommu_register_ga_log_notifier(&avic_ga_log_notifier);
-> +
-> +	return !!avic_mode;
-> +}
-> diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-> index 3b49337998ec..74e6f86f5dc3 100644
-> --- a/arch/x86/kvm/svm/svm.c
-> +++ b/arch/x86/kvm/svm/svm.c
-> @@ -188,9 +188,6 @@ module_param(tsc_scaling, int, 0444);
->  static bool avic;
->  module_param(avic, bool, 0444);
->  
-> -static bool force_avic;
-> -module_param_unsafe(force_avic, bool, 0444);
-> -
->  bool __read_mostly dump_invalid_vmcb;
->  module_param(dump_invalid_vmcb, bool, 0644);
->  
-> @@ -4913,17 +4910,9 @@ static __init int svm_hardware_setup(void)
->  			nrips = false;
->  	}
->  
-> -	enable_apicv = avic = avic && npt_enabled && (boot_cpu_has(X86_FEATURE_AVIC) || force_avic);
-> +	enable_apicv = avic = avic && avic_hardware_setup(&svm_x86_ops);
->  
-> -	if (enable_apicv) {
-> -		if (!boot_cpu_has(X86_FEATURE_AVIC)) {
-> -			pr_warn("AVIC is not supported in CPUID but force enabled");
-> -			pr_warn("Your system might crash and burn");
-> -		} else
-> -			pr_info("AVIC enabled\n");
-> -
-> -		amd_iommu_register_ga_log_notifier(&avic_ga_log_notifier);
-> -	} else {
-> +	if (!enable_apicv) {
->  		svm_x86_ops.vcpu_blocking = NULL;
->  		svm_x86_ops.vcpu_unblocking = NULL;
->  		svm_x86_ops.vcpu_get_apicv_inhibit_reasons = NULL;
-> diff --git a/arch/x86/kvm/svm/svm.h b/arch/x86/kvm/svm/svm.h
-> index 32220a1b0ea2..678fc7757fe4 100644
-> --- a/arch/x86/kvm/svm/svm.h
-> +++ b/arch/x86/kvm/svm/svm.h
-> @@ -603,6 +603,7 @@ extern struct kvm_x86_nested_ops svm_nested_ops;
->  
->  /* avic.c */
->  
-> +bool avic_hardware_setup(struct kvm_x86_ops *ops);
->  int avic_ga_log_notifier(u32 ga_tag);
->  void avic_vm_destroy(struct kvm *kvm);
->  int avic_vm_init(struct kvm *kvm);
-
+diff --git a/drivers/block/zram/zram_drv.c b/drivers/block/zram/zram_drv.c
+index cb253d80d72b..e10066a10dcf 100644
+--- a/drivers/block/zram/zram_drv.c
++++ b/drivers/block/zram/zram_drv.c
+@@ -1147,15 +1147,14 @@ static ssize_t bd_stat_show(struct device *dev,
+ static ssize_t debug_stat_show(struct device *dev,
+ 		struct device_attribute *attr, char *buf)
+ {
+-	int version = 1;
++	int version = 2;
+ 	struct zram *zram = dev_to_zram(dev);
+ 	ssize_t ret;
+ 
+ 	down_read(&zram->init_lock);
+ 	ret = scnprintf(buf, PAGE_SIZE,
+-			"version: %d\n%8llu %8llu\n",
++			"version: %d\n%8llu\n",
+ 			version,
+-			(u64)atomic64_read(&zram->stats.writestall),
+ 			(u64)atomic64_read(&zram->stats.miss_free));
+ 	up_read(&zram->init_lock);
+ 
+@@ -1373,7 +1372,6 @@ static int __zram_bvec_write(struct zram *zram, struct bio_vec *bvec,
+ 	}
+ 	kunmap_atomic(mem);
+ 
+-compress_again:
+ 	zstrm = zcomp_stream_get(zram->comp);
+ 	src = kmap_atomic(page);
+ 	ret = zcomp_compress(zstrm, src, &comp_len);
+@@ -1382,39 +1380,20 @@ static int __zram_bvec_write(struct zram *zram, struct bio_vec *bvec,
+ 	if (unlikely(ret)) {
+ 		zcomp_stream_put(zram->comp);
+ 		pr_err("Compression failed! err=%d\n", ret);
+-		zs_free(zram->mem_pool, handle);
+ 		return ret;
+ 	}
+ 
+ 	if (comp_len >= huge_class_size)
+ 		comp_len = PAGE_SIZE;
+-	/*
+-	 * handle allocation has 2 paths:
+-	 * a) fast path is executed with preemption disabled (for
+-	 *  per-cpu streams) and has __GFP_DIRECT_RECLAIM bit clear,
+-	 *  since we can't sleep;
+-	 * b) slow path enables preemption and attempts to allocate
+-	 *  the page with __GFP_DIRECT_RECLAIM bit set. we have to
+-	 *  put per-cpu compression stream and, thus, to re-do
+-	 *  the compression once handle is allocated.
+-	 *
+-	 * if we have a 'non-null' handle here then we are coming
+-	 * from the slow path and handle has already been allocated.
+-	 */
+-	if (!handle)
+-		handle = zs_malloc(zram->mem_pool, comp_len,
+-				__GFP_KSWAPD_RECLAIM |
+-				__GFP_NOWARN |
+-				__GFP_HIGHMEM |
+-				__GFP_MOVABLE);
+-	if (!handle) {
++
++	handle = zs_malloc(zram->mem_pool, comp_len,
++			__GFP_KSWAPD_RECLAIM |
++			__GFP_NOWARN |
++			__GFP_HIGHMEM |
++			__GFP_MOVABLE);
++
++	if (unlikely(!handle)) {
+ 		zcomp_stream_put(zram->comp);
+-		atomic64_inc(&zram->stats.writestall);
+-		handle = zs_malloc(zram->mem_pool, comp_len,
+-				GFP_NOIO | __GFP_HIGHMEM |
+-				__GFP_MOVABLE);
+-		if (handle)
+-			goto compress_again;
+ 		return -ENOMEM;
+ 	}
+ 
+@@ -1975,7 +1954,6 @@ static int zram_add(void)
+ 	if (ZRAM_LOGICAL_BLOCK_SIZE == PAGE_SIZE)
+ 		blk_queue_max_write_zeroes_sectors(zram->disk->queue, UINT_MAX);
+ 
+-	blk_queue_flag_set(QUEUE_FLAG_STABLE_WRITES, zram->disk->queue);
+ 	ret = device_add_disk(NULL, zram->disk, zram_disk_groups);
+ 	if (ret)
+ 		goto out_cleanup_disk;
+diff --git a/drivers/block/zram/zram_drv.h b/drivers/block/zram/zram_drv.h
+index 80c3b43b4828..158c91e54850 100644
+--- a/drivers/block/zram/zram_drv.h
++++ b/drivers/block/zram/zram_drv.h
+@@ -81,7 +81,6 @@ struct zram_stats {
+ 	atomic64_t huge_pages_since;	/* no. of huge pages since zram set up */
+ 	atomic64_t pages_stored;	/* no. of pages currently stored */
+ 	atomic_long_t max_used_pages;	/* no. of maximum pages stored */
+-	atomic64_t writestall;		/* no. of write slow paths */
+ 	atomic64_t miss_free;		/* no. of missed free */
+ #ifdef	CONFIG_ZRAM_WRITEBACK
+ 	atomic64_t bd_count;		/* no. of pages in backing device */
+-- 
+2.30.1
 

@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E985651AAF6
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:34:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5BC351A814
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:07:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352953AbiEDRiL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 13:38:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38804 "EHLO
+        id S1355547AbiEDRH5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 13:07:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356873AbiEDRJr (ORCPT
+        with ESMTP id S1355500AbiEDRAF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 13:09:47 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE772443C3;
-        Wed,  4 May 2022 09:56:12 -0700 (PDT)
+        Wed, 4 May 2022 13:00:05 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EEB54B841;
+        Wed,  4 May 2022 09:51:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A1261B82552;
-        Wed,  4 May 2022 16:56:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53BE9C385A4;
-        Wed,  4 May 2022 16:56:10 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C00DB617A6;
+        Wed,  4 May 2022 16:51:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11482C385B1;
+        Wed,  4 May 2022 16:51:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651683370;
-        bh=mByOyQJpflwm3yp0gkyUjgqQy6QgDdF3JuD8miju9pY=;
+        s=korg; t=1651683095;
+        bh=VCtRyXg3Pr3WcgZ2FulUzVHz7WGeADVI97kfVAKFyaE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HyYh0HjSv7N8IKB23eTSxZIPdNCM6JmD5w28QHG1TpCcC5ZzO1YIurnN5aL4ZpS54
-         4Z8TkuYKc9UgGK/OprBohpPEbKVHAmPySFQIA1/YPdMo4j97zchEepQ+D0yJXQaIfY
-         YPlaJA+jQfs90S0SC9OB8e846hSXKshCkoRr1cxk=
+        b=KCvZRBIYJjwA3meAkOH+szscu1TlwW2YOn5FSESa2SpeFJNj6Fycxv3tMOHw/1rVX
+         JJtEEFh/PzgR5PghQ1ld3RRAWOHqIIIAOrdUMoNek2GCGsqiadgDNw6uxAhbQ0dD3v
+         f5DZszMp7JIzGL0+ChZSuwznWwhdJ6iyeAMmpsIY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Xiubo Li <xiubli@redhat.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        Aaron Tomlin <atomlin@redhat.com>,
-        Ilya Dryomov <idryomov@gmail.com>
-Subject: [PATCH 5.17 041/225] ceph: fix possible NULL pointer dereference for req->r_session
+        stable@vger.kernel.org, Jonathan Lemon <jonathan.lemon@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 087/129] net: bcmgenet: hide status block before TX timestamping
 Date:   Wed,  4 May 2022 18:44:39 +0200
-Message-Id: <20220504153113.829524458@linuxfoundation.org>
+Message-Id: <20220504153027.919756294@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220504153110.096069935@linuxfoundation.org>
-References: <20220504153110.096069935@linuxfoundation.org>
+In-Reply-To: <20220504153021.299025455@linuxfoundation.org>
+References: <20220504153021.299025455@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,44 +56,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xiubo Li <xiubli@redhat.com>
+From: Jonathan Lemon <jonathan.lemon@gmail.com>
 
-commit 7acae6183cf37c48b8da48bbbdb78820fb3913f3 upstream.
+[ Upstream commit acac0541d1d65e81e599ec399d34d184d2424401 ]
 
-The request will be inserted into the ci->i_unsafe_dirops before
-assigning the req->r_session, so it's possible that we will hit
-NULL pointer dereference bug here.
+The hardware checksum offloading requires use of a transmit
+status block inserted before the outgoing frame data, this was
+updated in '9a9ba2a4aaaa ("net: bcmgenet: always enable status blocks")'
 
-Cc: stable@vger.kernel.org
-URL: https://tracker.ceph.com/issues/55327
-Signed-off-by: Xiubo Li <xiubli@redhat.com>
-Reviewed-by: Jeff Layton <jlayton@kernel.org>
-Tested-by: Aaron Tomlin <atomlin@redhat.com>
-Signed-off-by: Ilya Dryomov <idryomov@gmail.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+However, skb_tx_timestamp() assumes that it is passed a raw frame
+and PTP parsing chokes on this status block.
+
+Fix this by calling __skb_pull(), which hides the TSB before calling
+skb_tx_timestamp(), so an outgoing PTP packet is parsed correctly.
+
+As the data in the skb has already been set up for DMA, and the
+dma_unmap_* calls use a separately stored address, there is no
+no effective change in the data transmission.
+
+Signed-off-by: Jonathan Lemon <jonathan.lemon@gmail.com>
+Acked-by: Florian Fainelli <f.fainelli@gmail.com>
+Link: https://lore.kernel.org/r/20220424165307.591145-1-jonathan.lemon@gmail.com
+Fixes: d03825fba459 ("net: bcmgenet: add skb_tx_timestamp call")
+Signed-off-by: Paolo Abeni <pabeni@redhat.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/ceph/caps.c |    4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/net/ethernet/broadcom/genet/bcmgenet.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
---- a/fs/ceph/caps.c
-+++ b/fs/ceph/caps.c
-@@ -2267,6 +2267,8 @@ retry:
- 			list_for_each_entry(req, &ci->i_unsafe_dirops,
- 					    r_unsafe_dir_item) {
- 				s = req->r_session;
-+				if (!s)
-+					continue;
- 				if (unlikely(s->s_mds >= max_sessions)) {
- 					spin_unlock(&ci->i_unsafe_lock);
- 					for (i = 0; i < max_sessions; i++) {
-@@ -2287,6 +2289,8 @@ retry:
- 			list_for_each_entry(req, &ci->i_unsafe_iops,
- 					    r_unsafe_target_item) {
- 				s = req->r_session;
-+				if (!s)
-+					continue;
- 				if (unlikely(s->s_mds >= max_sessions)) {
- 					spin_unlock(&ci->i_unsafe_lock);
- 					for (i = 0; i < max_sessions; i++) {
+diff --git a/drivers/net/ethernet/broadcom/genet/bcmgenet.c b/drivers/net/ethernet/broadcom/genet/bcmgenet.c
+index a2062144d7ca..9ffdaa84ba12 100644
+--- a/drivers/net/ethernet/broadcom/genet/bcmgenet.c
++++ b/drivers/net/ethernet/broadcom/genet/bcmgenet.c
+@@ -1987,6 +1987,11 @@ static struct sk_buff *bcmgenet_add_tsb(struct net_device *dev,
+ 	return skb;
+ }
+ 
++static void bcmgenet_hide_tsb(struct sk_buff *skb)
++{
++	__skb_pull(skb, sizeof(struct status_64));
++}
++
+ static netdev_tx_t bcmgenet_xmit(struct sk_buff *skb, struct net_device *dev)
+ {
+ 	struct bcmgenet_priv *priv = netdev_priv(dev);
+@@ -2093,6 +2098,8 @@ static netdev_tx_t bcmgenet_xmit(struct sk_buff *skb, struct net_device *dev)
+ 	}
+ 
+ 	GENET_CB(skb)->last_cb = tx_cb_ptr;
++
++	bcmgenet_hide_tsb(skb);
+ 	skb_tx_timestamp(skb);
+ 
+ 	/* Decrement total BD count and advance our write pointer */
+-- 
+2.35.1
+
 
 

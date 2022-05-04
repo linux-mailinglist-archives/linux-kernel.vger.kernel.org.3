@@ -2,45 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3B2351AB46
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:42:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E727E51AB43
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:42:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359143AbiEDRnz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 13:43:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38804 "EHLO
+        id S1359050AbiEDRnm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 13:43:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356013AbiEDRI6 (ORCPT
+        with ESMTP id S1356121AbiEDRJD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 13:08:58 -0400
+        Wed, 4 May 2022 13:09:03 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65763527D9;
-        Wed,  4 May 2022 09:54:49 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D181522EE;
+        Wed,  4 May 2022 09:54:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E8CCBB82552;
-        Wed,  4 May 2022 16:54:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F2AAC385AA;
-        Wed,  4 May 2022 16:54:46 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B4F97B827A4;
+        Wed,  4 May 2022 16:54:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D362C385AA;
+        Wed,  4 May 2022 16:54:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651683286;
-        bh=V0v9LxIcrNzOs2RS2t7EIxt9/eWLs0W0ZPrTycKHqTI=;
+        s=korg; t=1651683291;
+        bh=u9mrsRgfGoMizZbDVPeNz/JA+WQ2trwoY2joYBPE0rY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=xdVzsm1MUtba1j3ItHE5+x5mEQv18E9JJToyDEDNA4XOFoAWEFvOWqC6KhbjZzSte
-         GBbpB/afXAfuKqVRGBUZV16CnHlFRBx4IYsEPeTz79+I3Grm6aFijxOgBaSqK1ibvl
-         YdNvuAPwesllMOwmeX+lfSbvS9aaEreonQOtcyY4=
+        b=P3qZt5CpQu1lXvCo9JTOrAyHgt2wdAo+4QbPdLOfnyDojLt1i88tdoRQ7IdRkiB8P
+         PDwRJgUS5PtK0mlLsa8YWlpmKQ3SSCSunp1BJFsv76GXaNLOG4A3yp+x0rYIh0+O0O
+         LkdGJ4+Buev0URPRjIABzqojkJtiqOh4zEa9ZZfw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Sricharan R <quic_srichara@quicinc.com>,
-        Md Sadre Alam <quic_mdalam@quicinc.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>
-Subject: [PATCH 5.15 144/177] mtd: rawnand: qcom: fix memory corruption that causes panic
-Date:   Wed,  4 May 2022 18:45:37 +0200
-Message-Id: <20220504153106.166117829@linuxfoundation.org>
+        stable@vger.kernel.org, Martin Willi <martin@strongswan.org>,
+        David Ahern <dsahern@kernel.org>,
+        Pablo Neira Ayuso <pablo@netfilter.org>
+Subject: [PATCH 5.15 145/177] netfilter: Update ip6_route_me_harder to consider L3 domain
+Date:   Wed,  4 May 2022 18:45:38 +0200
+Message-Id: <20220504153106.263366871@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
 In-Reply-To: <20220504153053.873100034@linuxfoundation.org>
 References: <20220504153053.873100034@linuxfoundation.org>
@@ -58,111 +55,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Md Sadre Alam <quic_mdalam@quicinc.com>
+From: Martin Willi <martin@strongswan.org>
 
-commit ba7542eb2dd5dfc75c457198b88986642e602065 upstream.
+commit 8ddffdb9442a9d60b4a6e679ac48d7d21403a674 upstream.
 
-This patch fixes a memory corruption that occurred in the
-nand_scan() path for Hynix nand device.
+The commit referenced below fixed packet re-routing if Netfilter mangles
+a routing key property of a packet and the packet is routed in a VRF L3
+domain. The fix, however, addressed IPv4 re-routing, only.
 
-On boot, for Hynix nand device will panic at a weird place:
-| Unable to handle kernel NULL pointer dereference at virtual
-  address 00000070
-| [00000070] *pgd=00000000
-| Internal error: Oops: 5 [#1] PREEMPT SMP ARM
-| Modules linked in:
-| CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.17.0-01473-g13ae1769cfb0
-  #38
-| Hardware name: Generic DT based system
-| PC is at nandc_set_reg+0x8/0x1c
-| LR is at qcom_nandc_command+0x20c/0x5d0
-| pc : [<c088b74c>]    lr : [<c088d9c8>]    psr: 00000113
-| sp : c14adc50  ip : c14ee208  fp : c0cc970c
-| r10: 000000a3  r9 : 00000000  r8 : 00000040
-| r7 : c16f6a00  r6 : 00000090  r5 : 00000004  r4 :c14ee040
-| r3 : 00000000  r2 : 0000000b  r1 : 00000000  r0 :c14ee040
-| Flags: nzcv  IRQs on  FIQs on  Mode SVC_32  ISA ARM Segment none
-| Control: 10c5387d  Table: 8020406a  DAC: 00000051
-| Register r0 information: slab kmalloc-2k start c14ee000 pointer offset
-  64 size 2048
-| Process swapper/0 (pid: 1, stack limit = 0x(ptrval))
-| nandc_set_reg from qcom_nandc_command+0x20c/0x5d0
-| qcom_nandc_command from nand_readid_op+0x198/0x1e8
-| nand_readid_op from hynix_nand_has_valid_jedecid+0x30/0x78
-| hynix_nand_has_valid_jedecid from hynix_nand_init+0xb8/0x454
-| hynix_nand_init from nand_scan_with_ids+0xa30/0x14a8
-| nand_scan_with_ids from qcom_nandc_probe+0x648/0x7b0
-| qcom_nandc_probe from platform_probe+0x58/0xac
+This commit applies the same behavior for IPv6. While at it, untangle
+the nested ternary operator to make the code more readable.
 
-The problem is that the nand_scan()'s qcom_nand_attach_chip callback
-is updating the nandc->max_cwperpage from 1 to 4 or 8 based on page size.
-This causes the sg_init_table of clear_bam_transaction() in the driver's
-qcom_nandc_command() to memset much more than what was initially
-allocated by alloc_bam_transaction().
-
-This patch will update nandc->max_cwperpage 1 to 4 or 8 based on page
-size in qcom_nand_attach_chip call back after freeing the previously
-allocated memory for bam txn as per nandc->max_cwperpage = 1 and then
-again allocating bam txn as per nandc->max_cwperpage = 4 or 8 based on
-page size in qcom_nand_attach_chip call back itself.
-
+Fixes: 6d8b49c3a3a3 ("netfilter: Update ip_route_me_harder to consider L3 domain")
 Cc: stable@vger.kernel.org
-Fixes: 6a3cec64f18c ("mtd: rawnand: qcom: convert driver to nand_scan()")
-Reported-by: Konrad Dybcio <konrad.dybcio@somainline.org>
-Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Co-developed-by: Sricharan R <quic_srichara@quicinc.com>
-Signed-off-by: Sricharan R <quic_srichara@quicinc.com>
-Signed-off-by: Md Sadre Alam <quic_mdalam@quicinc.com>
-Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
-Link: https://lore.kernel.org/linux-mtd/1650268107-5363-1-git-send-email-quic_mdalam@quicinc.com
+Signed-off-by: Martin Willi <martin@strongswan.org>
+Reviewed-by: David Ahern <dsahern@kernel.org>
+Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/mtd/nand/raw/qcom_nandc.c |   24 +++++++++++++-----------
- 1 file changed, 13 insertions(+), 11 deletions(-)
+ net/ipv6/netfilter.c |   10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
---- a/drivers/mtd/nand/raw/qcom_nandc.c
-+++ b/drivers/mtd/nand/raw/qcom_nandc.c
-@@ -2641,10 +2641,23 @@ static int qcom_nand_attach_chip(struct
- 	ecc->engine_type = NAND_ECC_ENGINE_TYPE_ON_HOST;
+--- a/net/ipv6/netfilter.c
++++ b/net/ipv6/netfilter.c
+@@ -24,14 +24,13 @@ int ip6_route_me_harder(struct net *net,
+ {
+ 	const struct ipv6hdr *iph = ipv6_hdr(skb);
+ 	struct sock *sk = sk_to_full_sk(sk_partial);
++	struct net_device *dev = skb_dst(skb)->dev;
+ 	struct flow_keys flkeys;
+ 	unsigned int hh_len;
+ 	struct dst_entry *dst;
+ 	int strict = (ipv6_addr_type(&iph->daddr) &
+ 		      (IPV6_ADDR_MULTICAST | IPV6_ADDR_LINKLOCAL));
+ 	struct flowi6 fl6 = {
+-		.flowi6_oif = sk && sk->sk_bound_dev_if ? sk->sk_bound_dev_if :
+-			strict ? skb_dst(skb)->dev->ifindex : 0,
+ 		.flowi6_mark = skb->mark,
+ 		.flowi6_uid = sock_net_uid(net, sk),
+ 		.daddr = iph->daddr,
+@@ -39,6 +38,13 @@ int ip6_route_me_harder(struct net *net,
+ 	};
+ 	int err;
  
- 	mtd_set_ooblayout(mtd, &qcom_nand_ooblayout_ops);
-+	/* Free the initially allocated BAM transaction for reading the ONFI params */
-+	if (nandc->props->is_bam)
-+		free_bam_transaction(nandc);
- 
- 	nandc->max_cwperpage = max_t(unsigned int, nandc->max_cwperpage,
- 				     cwperpage);
- 
-+	/* Now allocate the BAM transaction based on updated max_cwperpage */
-+	if (nandc->props->is_bam) {
-+		nandc->bam_txn = alloc_bam_transaction(nandc);
-+		if (!nandc->bam_txn) {
-+			dev_err(nandc->dev,
-+				"failed to allocate bam transaction\n");
-+			return -ENOMEM;
-+		}
-+	}
++	if (sk && sk->sk_bound_dev_if)
++		fl6.flowi6_oif = sk->sk_bound_dev_if;
++	else if (strict)
++		fl6.flowi6_oif = dev->ifindex;
++	else
++		fl6.flowi6_oif = l3mdev_master_ifindex(dev);
 +
- 	/*
- 	 * DATA_UD_BYTES varies based on whether the read/write command protects
- 	 * spare data with ECC too. We protect spare data by default, so we set
-@@ -2945,17 +2958,6 @@ static int qcom_nand_host_init_and_regis
- 	if (ret)
- 		return ret;
- 
--	if (nandc->props->is_bam) {
--		free_bam_transaction(nandc);
--		nandc->bam_txn = alloc_bam_transaction(nandc);
--		if (!nandc->bam_txn) {
--			dev_err(nandc->dev,
--				"failed to allocate bam transaction\n");
--			nand_cleanup(chip);
--			return -ENOMEM;
--		}
--	}
--
- 	ret = mtd_device_parse_register(mtd, probes, NULL, NULL, 0);
- 	if (ret)
- 		nand_cleanup(chip);
+ 	fib6_rules_early_flow_dissect(net, skb, &fl6, &flkeys);
+ 	dst = ip6_route_output(net, sk, &fl6);
+ 	err = dst->error;
 
 

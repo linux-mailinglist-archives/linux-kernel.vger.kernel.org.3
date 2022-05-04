@@ -2,53 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B80D5195D7
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 05:25:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 381AA5195EC
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 05:25:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344214AbiEDD2b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 23:28:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33064 "EHLO
+        id S1344249AbiEDD2i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 23:28:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235640AbiEDD23 (ORCPT
+        with ESMTP id S1344205AbiEDD2a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 23:28:29 -0400
-Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79ECA275CD
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 20:24:54 -0700 (PDT)
-Received: by mail-pf1-x44a.google.com with SMTP id p18-20020aa78612000000b0050d1c170018so17078pfn.15
-        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 20:24:54 -0700 (PDT)
+        Tue, 3 May 2022 23:28:30 -0400
+Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D197275CC
+        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 20:24:56 -0700 (PDT)
+Received: by mail-pj1-x1049.google.com with SMTP id m8-20020a17090aab0800b001cb1320ef6eso2272573pjq.3
+        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 20:24:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=KgPp4H0NuOXhN/wKLMYd5omlFxsjaCCDTXWIWXRSBbg=;
-        b=DmyQSOYJGcco5+Z4OTfOviHTkWkf+fn4I7+QmVo96W+55a7ZQD7pIzftEAC3pnN8ZA
-         l9JcBz03PNT7zTv1nUYlVUfKoC4VpY85yltqlsI6Xvd0Lmqep6+thdtV2s31+MT0FwpO
-         QGEQ4A0BkecMPTbEqMvp6Bg+K7qJLJjV/zOSNJf03h0nwFjjTIyWhhDSnW3slTH3bsJH
-         Y4c3nZYGMB+yKeWutRtXiYPLrYyUfec5ztQc2jKgLOypWbICymKSrVim4l4DL1zPUIiP
-         CHdmOTTLgA3y6KADxJGz9tVkJJ5ra4vTG89lT4lG9Vo9O6O5GYBs/0RUyCzDTxEKH6w1
-         PRtg==
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+         :cc;
+        bh=UE0HcXTxgX958/wjfkT/IQbNNoXqwMiaNuwDtFEI/7w=;
+        b=KIkwxXGDCX2GNwXt49UEWppqkI7IuskxNWAKGQOf+GUm67FzQ0X1o25H3Jno+gfiQ6
+         CX+0aLwHtRTaNLQs29WkmCJMoWyaOkjQqIWLpSwPP7wG0/CdKC1mqFIHVqsIJk4Y2Yfc
+         KnziFWF/93i9FsyNJbcWs8Pf8x+QTHGpT4DXq1tcxC4vMfc7g347aVmL63yjmqaZNb+h
+         lDhMlK7TwEMCTXURJiwbX2D8ZDAMyFwyWizp6BtKadlBYfWFMqjwV34OBer2HNf+ygVM
+         m9DJ4/oVnjPeZVtsTl6/6i7FQ5jr1pUrX9agQOX1Y0A/XyVBjSCVeyph5Hfw3piovqnt
+         LbnA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=KgPp4H0NuOXhN/wKLMYd5omlFxsjaCCDTXWIWXRSBbg=;
-        b=Fhlr14BxhFMxGsFDwI/+Y9RvtskzT5+ibx+H6Nm3s75byaa0XHsd3TyQ22bYME/yfO
-         fytRIPEgww2k1HgsPLDglwgGP1wxxHIHBRFwsps8ATeeR0QZ+lJJlCFcvDNlCNvZ5Pbe
-         1ziddAdSbFeTPBmiVo7Pym8O2jKkkcs1E2iCP1nEE6nsueEfuMLEEzJwZhRsnT2uMg5s
-         1EX/wg9DYemanoLw6RmeTblnexu0/c1i/S5ao0QamN4STOgNg9sulL5VA+qfPKEWNHuH
-         +Ed9dHQbCnodShYHiA+eW8D83d0q5UavunRnUnmKfjoUnen2W6CGCwjTg6mcgjLUv4q8
-         cxqQ==
-X-Gm-Message-State: AOAM533iHL8+MGSyAuzD8R9yKEA7fOMiKisYeuMhHUg7Z7+x0+jQfcnO
-        1w+cPa6oLKhmDwg7GYdeNva/ELgh6p4=
-X-Google-Smtp-Source: ABdhPJy0md364rnqqnpBagaJWaE/z1Wg/rNj8Qldyb9Z+17hxkDrPJCpHr8Z5hTe7QOHoLuWhwefh8NqYp8=
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=UE0HcXTxgX958/wjfkT/IQbNNoXqwMiaNuwDtFEI/7w=;
+        b=4uWM0X0M6rdGyZyCU79fkm0bllzYf5nTXjO2g1gcsFK0um7oZwnQJ2efFy4v2PqvwR
+         QWAEs6U0z7QQf7CbUjZazCbpxhQSPMViKgkOygpx+ZHn8847Jp3k1wbLzO0XqkuYXlZD
+         3YXBXRGPAR9QCIweWD9+aZ/cc5uRaLSmJw6e5cTNvmXdEcsUpbYOW+8jH0yH0s1JxBiA
+         kDmkIap6ZMZdaRcBdK3j02b25s6ANA37QbrEIKUk3P/EvNRVBBrKdzEknreIqrjOr1SB
+         vTKpjqKqrPNgC43ZRNzqnPtZCeRanZ+9DCbFJyWY007hdlIUl8yb47hEPlXykEys3E7r
+         wWlQ==
+X-Gm-Message-State: AOAM532G/B+i2qbWNrHc7TGE0Dyt7rDnxPpkG9ytxtGXi38C5BXUvDIa
+        tZ9oPqSwDhan/eyXFXbilSa30JyDwd0=
+X-Google-Smtp-Source: ABdhPJyd1Jxi1pP3kjM7I5iyXKCDdQGPA7cTg9gLCDVjhwSerOtbMrOWP35WmZ55PAcThzOFr0nC8wgJPwQ=
 X-Received: from oupton3.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:21eb])
- (user=oupton job=sendgmr) by 2002:a17:90a:c986:b0:1d9:56e7:4e83 with SMTP id
- w6-20020a17090ac98600b001d956e74e83mr221104pjt.1.1651634693511; Tue, 03 May
- 2022 20:24:53 -0700 (PDT)
-Date:   Wed,  4 May 2022 03:24:34 +0000
-Message-Id: <20220504032446.4133305-1-oupton@google.com>
+ (user=oupton job=sendgmr) by 2002:a17:902:db05:b0:15e:b542:3f23 with SMTP id
+ m5-20020a170902db0500b0015eb5423f23mr7097374plx.143.1651634695538; Tue, 03
+ May 2022 20:24:55 -0700 (PDT)
+Date:   Wed,  4 May 2022 03:24:35 +0000
+In-Reply-To: <20220504032446.4133305-1-oupton@google.com>
+Message-Id: <20220504032446.4133305-2-oupton@google.com>
 Mime-Version: 1.0
+References: <20220504032446.4133305-1-oupton@google.com>
 X-Mailer: git-send-email 2.36.0.464.gb9c8b46e94-goog
-Subject: [PATCH v6 00/12] KVM: arm64: PSCI SYSTEM_SUSPEND support
+Subject: [PATCH v6 01/12] KVM: arm64: Don't depend on fallthrough to hide SYSTEM_RESET2
 From:   Oliver Upton <oupton@google.com>
 To:     kvmarm@lists.cs.columbia.edu
 Cc:     kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
@@ -60,93 +64,78 @@ Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The PSCI v1.0 specification describes a call, SYSTEM_SUSPEND, which
-allows software to request that the system be placed into the lowest
-possible power state and await a wakeup event. This call is optional
-in v1.0 and v1.1. KVM does not currently support this optional call.
+Depending on a fallthrough to the default case for hiding SYSTEM_RESET2
+requires that any new case statements clean up the failure path for this
+PSCI call.
 
-This series adds support for the PSCI SYSTEM_SUSPEND call to KVM/arm64.
-For reasons best described in patch 8, it is infeasible to correctly
-implement PSCI SYSTEM_SUSPEND (or any system-wide event for that matter)
-in a split design between kernel/userspace. As such, this series cheaply
-exits to userspace so it can decide what to do with the call. This
-series also gives userspace some help to emulate suspension with a new
-MP state that awaits an unmasked pending interrupt.
+Unhitch SYSTEM_RESET2 from the default case by setting val to
+PSCI_RET_NOT_SUPPORTED outside of the switch statement. Apply the
+cleanup to both the PSCI_1_1_FN_SYSTEM_RESET2 and
+PSCI_1_0_FN_PSCI_FEATURES handlers.
 
-Patches 1-5 are small reworks to more easily shoehorn the new features
-into the kernel.
+No functional change intended.
 
-Patch 6 stands up the new suspend MP state, allowing userspace to
-emulate the PSCI call.
+Signed-off-by: Oliver Upton <oupton@google.com>
+Reviewed-by: Reiji Watanabe <reijiw@google.com>
+---
+ arch/arm64/kvm/psci.c | 13 +++++--------
+ 1 file changed, 5 insertions(+), 8 deletions(-)
 
-Patch 7 actually allows userspace to enable the PSCI call, which
-requires explicit opt-in for the new KVM_EXIT_SYSTEM_EVENT type.
-
-Patches 8-11 clean up the way PSCI is tested in selftests to more easily
-add new test cases.
-
-Finally, the last patch actually tests that PSCI SYSTEM_SUSPEND calls
-within the guest result in userspace exits.
-
-Applies cleanly to 5.18-rc5. I'm sure you're already aware of it Marc,
-but for the sake of everyone else there's some light conflict with
-Raghu's patches that you've got queued up [1].
-
-Tested with the included selftest and a hacked up kvmtool [2] with support
-for the new UAPI.
-
-[1]: https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms.git/log/?h=kvm-arm64/hcall-selection
-[2]: https://lore.kernel.org/all/20220311175717.616958-1-oupton@google.com/
-
-v5: http://lore.kernel.org/r/20220311174001.605719-1-oupton@google.com
-
-v5 -> v6:
-  - Rebase to 5.18-rc5
-  - Collect Reiji's R-b's
-  - Drop the system_event helper. Since we now have variadic data
-    returning to userspace it doesn't make much sense to roll it up into
-    a helper. Meh.
-  - Put back the pointless kvm_vcpu_request() in kvm_arm_vcpu_suspend().
-    We'll rip out the reliance on vCPU requests for power state later
-    on. It is entirely benign, even when a vCPU targets itself.
-
-Oliver Upton (12):
-  KVM: arm64: Don't depend on fallthrough to hide SYSTEM_RESET2
-  KVM: arm64: Dedupe vCPU power off helpers
-  KVM: arm64: Track vCPU power state using MP state values
-  KVM: arm64: Rename the KVM_REQ_SLEEP handler
-  KVM: arm64: Return a value from check_vcpu_requests()
-  KVM: arm64: Add support for userspace to suspend a vCPU
-  KVM: arm64: Implement PSCI SYSTEM_SUSPEND
-  selftests: KVM: Rename psci_cpu_on_test to psci_test
-  selftests: KVM: Create helper for making SMCCC calls
-  selftests: KVM: Use KVM_SET_MP_STATE to power off vCPU in psci_test
-  selftests: KVM: Refactor psci_test to make it amenable to new tests
-  selftests: KVM: Test SYSTEM_SUSPEND PSCI call
-
- Documentation/virt/kvm/api.rst                |  76 ++++++-
- arch/arm64/include/asm/kvm_host.h             |  10 +-
- arch/arm64/kvm/arm.c                          | 104 +++++++--
- arch/arm64/kvm/psci.c                         |  65 ++++--
- include/uapi/linux/kvm.h                      |   4 +
- tools/testing/selftests/kvm/.gitignore        |   2 +-
- tools/testing/selftests/kvm/Makefile          |   2 +-
- .../selftests/kvm/aarch64/psci_cpu_on_test.c  | 121 ----------
- .../testing/selftests/kvm/aarch64/psci_test.c | 213 ++++++++++++++++++
- .../selftests/kvm/include/aarch64/processor.h |  22 ++
- .../selftests/kvm/lib/aarch64/processor.c     |  25 ++
- tools/testing/selftests/kvm/steal_time.c      |  13 +-
- 12 files changed, 480 insertions(+), 177 deletions(-)
- delete mode 100644 tools/testing/selftests/kvm/aarch64/psci_cpu_on_test.c
- create mode 100644 tools/testing/selftests/kvm/aarch64/psci_test.c
-
+diff --git a/arch/arm64/kvm/psci.c b/arch/arm64/kvm/psci.c
+index 708d80e8e60d..67fbd6ef022c 100644
+--- a/arch/arm64/kvm/psci.c
++++ b/arch/arm64/kvm/psci.c
+@@ -305,9 +305,9 @@ static int kvm_psci_0_2_call(struct kvm_vcpu *vcpu)
+ 
+ static int kvm_psci_1_x_call(struct kvm_vcpu *vcpu, u32 minor)
+ {
++	unsigned long val = PSCI_RET_NOT_SUPPORTED;
+ 	u32 psci_fn = smccc_get_function(vcpu);
+ 	u32 arg;
+-	unsigned long val;
+ 	int ret = 1;
+ 
+ 	switch(psci_fn) {
+@@ -320,6 +320,8 @@ static int kvm_psci_1_x_call(struct kvm_vcpu *vcpu, u32 minor)
+ 		if (val)
+ 			break;
+ 
++		val = PSCI_RET_NOT_SUPPORTED;
++
+ 		switch(arg) {
+ 		case PSCI_0_2_FN_PSCI_VERSION:
+ 		case PSCI_0_2_FN_CPU_SUSPEND:
+@@ -338,13 +340,8 @@ static int kvm_psci_1_x_call(struct kvm_vcpu *vcpu, u32 minor)
+ 			break;
+ 		case PSCI_1_1_FN_SYSTEM_RESET2:
+ 		case PSCI_1_1_FN64_SYSTEM_RESET2:
+-			if (minor >= 1) {
++			if (minor >= 1)
+ 				val = 0;
+-				break;
+-			}
+-			fallthrough;
+-		default:
+-			val = PSCI_RET_NOT_SUPPORTED;
+ 			break;
+ 		}
+ 		break;
+@@ -365,7 +362,7 @@ static int kvm_psci_1_x_call(struct kvm_vcpu *vcpu, u32 minor)
+ 			val = PSCI_RET_INVALID_PARAMS;
+ 			break;
+ 		}
+-		fallthrough;
++		break;
+ 	default:
+ 		return kvm_psci_0_2_call(vcpu);
+ 	}
 -- 
 2.36.0.464.gb9c8b46e94-goog
 

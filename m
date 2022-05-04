@@ -2,94 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 361C4519B42
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 11:14:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01013519B44
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 11:14:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234279AbiEDJR7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 05:17:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54334 "EHLO
+        id S1347022AbiEDJSD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 05:18:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346990AbiEDJRt (ORCPT
+        with ESMTP id S1346992AbiEDJRu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 05:17:49 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 809011F632;
-        Wed,  4 May 2022 02:14:14 -0700 (PDT)
+        Wed, 4 May 2022 05:17:50 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBC9C1FA52
+        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 02:14:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651655654; x=1683191654;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=S3giD1hTFEiEIjC/qRjbZxRKhMfT4rpRxJepzxGqmEw=;
-  b=JP9R+Dw/qO5yHDEj7VH2WeZzc+ldh5A0FtG2ZNMvDviD8Qah0KkJ17tK
-   cjEaa9pXtM5mjRE0SqFF8MmYl+GZ8vAxCztoUC+rFQo2LXKrNihNl+wQD
-   sIiRX4YE3ITf7ZqbmODa2F7Tg2znU3+MgOCbmSyhJX6n9SJPRg3l5qNUQ
-   IUHsGbrjmhZ8grLTJGoeIYQ/dMIlvxFEMR6BVbb8JPKwV5ScgU5d4n9bZ
-   Hw5S22hj7q3X53vft+yhsyPYTGGm79FBV74j9jcYHh3p/Q08WPqkP2dx1
-   Xlyw/jTaqHCCT3bOcccaUpSv/hE3I9eEw7mawGrXoeqN+o5GdGpMA2tJB
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10336"; a="267864357"
+  t=1651655655; x=1683191655;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=VsPwoFBbW78xEeZLWVp/OKrWo88rORbPPuR9Qy9VbSQ=;
+  b=QkaA5VJYcNoIjCA1uySgeM2HpqH2YD+oKXcVoioZN03P/Km/kAUxRadt
+   RPhzsI6O3RsW50/ed5uNj7skwoVpfFAz77oNNsW1b19IQYAP6o/NZY1ZA
+   ukNh+ZuTcksiMEDk2kdzBv++qyVT7dRDr761qlLp2aY9n4u0Vph4G7z9w
+   PRHFdtAtyceNeLqs6fb4j9M95ZoX1dBMGkJ0/DGw6tHMhpvq1a7toBigo
+   pjRP/SdVdoAQ0TyJTv2fHpun772ElCOkJBPz3onG2mH1kOJO5aKdfPV34
+   tgH/IDgZ4Upoa49iKOBJWet+QRNGvM8BjvPmBATXVSLS7XEANepkCkvCR
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10336"; a="330696046"
 X-IronPort-AV: E=Sophos;i="5.91,197,1647327600"; 
-   d="scan'208";a="267864357"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2022 02:14:14 -0700
+   d="scan'208";a="330696046"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2022 02:14:15 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,197,1647327600"; 
-   d="scan'208";a="631878595"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga004.fm.intel.com with ESMTP; 04 May 2022 02:14:12 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 3D7F41A5; Wed,  4 May 2022 12:14:12 +0300 (EEST)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Allen Pais <apais@linux.microsoft.com>, netdev@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>,
-        Michael Chan <michael.chan@broadcom.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Christoph Hellwig <hch@lst.de>
-Subject: [PATCH v4 1/1] firmware: tee_bnxt: Use UUID API for exporting the UUID
-Date:   Wed,  4 May 2022 12:14:07 +0300
-Message-Id: <20220504091407.70661-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
+   d="scan'208";a="620726752"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 04 May 2022 02:14:14 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nmB5J-000BEk-Az;
+        Wed, 04 May 2022 09:14:13 +0000
+Date:   Wed, 4 May 2022 17:14:10 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Greg Ungerer <gerg@linux-m68k.org>
+Subject: time.c:undefined reference to `mach_get_rtc_pll'
+Message-ID: <202205041720.i8wJ8uXq-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is export_uuid() function which exports uuid_t to the u8 array.
-Use it instead of open coding variant.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   107c948d1d3e61d10aee9d0f7c3d81bbee9842af
+commit: 8b22820efb35f93d98638563b0a8f4094e8ee399 m68k: m68328: remove duplicate code
+date:   1 year, 5 months ago
+config: m68k-randconfig-r016-20220503 (https://download.01.org/0day-ci/archive/20220504/202205041720.i8wJ8uXq-lkp@intel.com/config)
+compiler: m68k-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=8b22820efb35f93d98638563b0a8f4094e8ee399
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 8b22820efb35f93d98638563b0a8f4094e8ee399
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash
 
-This allows to hide the uuid_t internals.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Reviewed-by: Christoph Hellwig <hch@lst.de>
----
-v4: added tag (Christoph), resent with 126858db81a5 (in next) in mind (Florian)
+All errors (new ones prefixed by >>):
 
- drivers/firmware/broadcom/tee_bnxt_fw.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+   m68k-linux-ld: arch/m68k/kernel/time.o: in function `rtc_ioctl':
+>> time.c:(.text+0x82): undefined reference to `mach_get_rtc_pll'
+   m68k-linux-ld: time.c:(.text+0xbc): undefined reference to `mach_set_rtc_pll'
+   m68k-linux-ld: time.c:(.text+0xf4): undefined reference to `mach_set_rtc_pll'
 
-diff --git a/drivers/firmware/broadcom/tee_bnxt_fw.c b/drivers/firmware/broadcom/tee_bnxt_fw.c
-index a5bf4c3f6dc7..40e3183a3d11 100644
---- a/drivers/firmware/broadcom/tee_bnxt_fw.c
-+++ b/drivers/firmware/broadcom/tee_bnxt_fw.c
-@@ -197,7 +197,7 @@ static int tee_bnxt_fw_probe(struct device *dev)
- 		return -ENODEV;
- 
- 	/* Open session with Bnxt load Trusted App */
--	memcpy(sess_arg.uuid, bnxt_device->id.uuid.b, TEE_IOCTL_UUID_LEN);
-+	export_uuid(sess_arg.uuid, &bnxt_device->id.uuid);
- 	sess_arg.clnt_login = TEE_IOCTL_LOGIN_PUBLIC;
- 	sess_arg.num_params = 0;
- 
 -- 
-2.35.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

@@ -2,106 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06B7A51AE9D
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 22:01:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA55951AEA0
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 22:01:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232408AbiEDUEg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 16:04:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39026 "EHLO
+        id S1377052AbiEDUFS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 16:05:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231649AbiEDUEe (ORCPT
+        with ESMTP id S230295AbiEDUFP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 16:04:34 -0400
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BF881CFFB
-        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 13:00:56 -0700 (PDT)
-Received: by mail-lj1-x22d.google.com with SMTP id c15so3036091ljr.9
-        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 13:00:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=LmVnCbPzQFTKVo2J8nBuP0OejuZI/MsiEmrhFI+epZk=;
-        b=IZC4w5jnu/QO9Q2oZdB9KCQz8nOkDzcwjag3H6CKaK97vN+BaEHZ+jhwzac65rOZ7+
-         48ojuixZFxaURG6EsMIJyxIqwbD+7Q9R5n52IgZ+3VJgF10qcua8LStnYEONl9dD3o0K
-         YZ0ThZakHUlxetViKTNCGE76sgsrMnNjFCjoY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=LmVnCbPzQFTKVo2J8nBuP0OejuZI/MsiEmrhFI+epZk=;
-        b=D2q7Lil2mjMe5gSieRiz+Ww742CAQXKlhvkZKb+qahVtOjxL764Z2bYN35IKSXwPjz
-         jWtSxQ6fQV2zRukKaDtFmEHRhByYCTNH4pVmc/O4Ll5WSTCX9HSb+t6K1nTbJ3Dmf13i
-         TL2Z8gvucGgdUizfF5IOruq6riFFuopUAD7T0y9u1CRgMCBVQmlP+dsy5bCPdxP8OzYK
-         C/8IzKEfIw7mJQ5LPzgT628qjuZYQlHvOCTzJ8uz/EH8Umw2N2R07JCqVGrNAdditOYd
-         78+dBQAOA/13u66xo2XUHhrQyervEic2QtpDfyr7Nf8UfYoxsR6au0SRsnr8yr51Sg/A
-         BhgA==
-X-Gm-Message-State: AOAM531z4jxIu7V7pJ1yk7MRyZ+Dpf2NyD244LGtJxGFTNpt2BoSGjNv
-        Ee13lqyoZyqVM2FnofFXq2RR7iaf5Vj2DZDyo1E=
-X-Google-Smtp-Source: ABdhPJzJYvO73sZkQCxPb6ZlhplNq4p9HFl+3nFNYRHj8T9/8YA+vokmOmPS44dY/nc7q20Tg5FS6w==
-X-Received: by 2002:a2e:a594:0:b0:24f:4ea7:50bd with SMTP id m20-20020a2ea594000000b0024f4ea750bdmr12026841ljp.78.1651694454790;
-        Wed, 04 May 2022 13:00:54 -0700 (PDT)
-Received: from mail-lj1-f174.google.com (mail-lj1-f174.google.com. [209.85.208.174])
-        by smtp.gmail.com with ESMTPSA id s9-20020a05651c200900b0024f3d1dae84sm1769068ljo.12.2022.05.04.13.00.52
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 04 May 2022 13:00:53 -0700 (PDT)
-Received: by mail-lj1-f174.google.com with SMTP id 17so3055095lji.1
-        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 13:00:52 -0700 (PDT)
-X-Received: by 2002:a2e:934b:0:b0:24f:cce:5501 with SMTP id
- m11-20020a2e934b000000b0024f0cce5501mr13625492ljh.443.1651694452466; Wed, 04
- May 2022 13:00:52 -0700 (PDT)
+        Wed, 4 May 2022 16:05:15 -0400
+Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14CFF1F612;
+        Wed,  4 May 2022 13:01:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:Subject:From:Cc:To:
+        MIME-Version:Date:Message-ID:Sender:Reply-To:Content-ID:Content-Description:
+        Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+        In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=aBNOEK5JmznFe788VWdmCxb/E0ad0SoBOicyxzidG4M=; b=hU6ZvLQLzt+mU2QbDsSwJAwG2K
+        30DuoWSMuIj8aO9pQO7xIlf0hPGS0L5OuRlGxcQJiRKoYSMAtroKV1MFv+B5r0Bpvx1Arl4UGvGgd
+        KROrXNajwRwCgHJ6jdWZXZhRjoqYLiDyfNJ9pzlkh+9MgrMg3FSXUHo8A1m88XchRWcj5eugxuNVc
+        +hZD4GEF0LfrUEaXFnM1KOSFiEZsuzMrcuhqMNV9yLhNNuljEXsV8sjTLMHgus+VC7fIB6uXkeBmx
+        yTxrb17XAdg8JXbasw9OhBvqp88JRzHZk65H39flrqd2hbf2yt4OPFFvDY8rjlPzERcK9AWXYOlQw
+        grP2V7AQ==;
+Received: from [179.113.53.197] (helo=[192.168.1.60])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1nmLBC-000BAC-K7; Wed, 04 May 2022 22:00:59 +0200
+Message-ID: <427a8277-49f0-4317-d6c3-4a15d7070e55@igalia.com>
+Date:   Wed, 4 May 2022 17:00:42 -0300
 MIME-Version: 1.0
-References: <alpine.LRH.2.02.2204241648270.17244@file01.intranet.prod.int.rdu2.redhat.com>
- <CAHk-=wh+Z+OKH3jRttWGHbWSQq2wVMtdnA=ntDiadZu=VxAC7w@mail.gmail.com>
- <alpine.LRH.2.02.2204250723120.26714@file01.intranet.prod.int.rdu2.redhat.com>
- <YnI7hE4cIfjsdKSF@antec> <YnJI4Ru0AlUgrr9C@zx2c4.com> <YnJOCbLtdATzC+jn@zx2c4.com>
- <YnJQXr3igEMTqY3+@smile.fi.intel.com> <YnJSQ3jJyvhmIstD@zx2c4.com>
- <CAHk-=wgb_eBdjM_mzEvXfRG2EhrSK5MHNGyAj7=4vxvN4U9Rug@mail.gmail.com>
- <CAHmME9q_-nfGxp8_VCqaritm4N8v8g67AzRjXs9du846JhhpoQ@mail.gmail.com> <CAHk-=wiaj8SMSQTWAx2cUFqzRWRqBspO5YV=qA8M+QOC2vDorw@mail.gmail.com>
-In-Reply-To: <CAHk-=wiaj8SMSQTWAx2cUFqzRWRqBspO5YV=qA8M+QOC2vDorw@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Wed, 4 May 2022 13:00:36 -0700
-X-Gmail-Original-Message-ID: <CAHk-=witNAEG7rRsbxD0-4mxhtijRT8fwSc3QCi5HN1sR=0YcA@mail.gmail.com>
-Message-ID: <CAHk-=witNAEG7rRsbxD0-4mxhtijRT8fwSc3QCi5HN1sR=0YcA@mail.gmail.com>
-Subject: Re: [PATCH v2] hex2bin: make the function hex_to_bin constant-time
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@intel.com>,
-        Stafford Horne <shorne@gmail.com>,
-        Mikulas Patocka <mpatocka@redhat.com>,
-        Andy Shevchenko <andy@kernel.org>,
-        device-mapper development <dm-devel@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Mike Snitzer <msnitzer@redhat.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Milan Broz <gmazyland@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Content-Language: en-US
+To:     Catalin Marinas <catalin.marinas@arm.com>,
+        will Deacon <will@kernel.org>,
+        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Marc Zyngier <maz@kernel.org>, mark.rutland@arm.com,
+        Russell King <linux@armlinux.org.uk>,
+        Ard Biesheuvel <ardb@kernel.org>, broonie@kernel.org
+Cc:     "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>
+From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+Subject: Should arm64 have a custom crash shutdown handler?
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 4, 2022 at 12:51 PM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> But I don't think that it's the browser, actually. Even 'nslookup'
-> refuses to touch it with
->
->    ** server can't find =D7=90.cc: SERVFAIL
->
-> and it seems it's literally the local dns caching (dnsmasq?)
+Hi folks, this email is to ask feedback / trigger a discussion about the
+concept of custom crash shutdown handler, that is "missing" in arm64
+while it's present in many architectures [mips, powerpc, x86, sh (!)].
 
-Looks like Fedora builds dnsmasq with 'no-i18n', although "dnsmasq -v"
-also shows "IDN2", so who knows.. Maybe it's some default config issue
-rather than the build configuration.
+Currently, when we kexec in arm64, the function machine_crash_shutdown()
+is called as a handler to disable CPUs and (potentially) do extra
+quiesce work. In the aforementioned architectures, there's a way to
+override this function, if for example an hypervisor wish to have its
+guests running their own custom shutdown machinery.
 
-                  Linus
+For powerpc/mips, the approach is a generic shutdown function that might
+call other handler-registered functions, whereas x86/sh relies in the
+"machine_ops" structure, having the crash shutdown as a callback in such
+struct.
+
+The usage for that is very broad, but heavy users are hypervisors like
+Hyper-V / KVM (CCed Michael and Vitaly here for this reason). The
+discussion about the need for that in arm64 is from another thread [0],
+so before start implementing/playing with that, I'd like to ask ARM64
+community if there is any feedback and in case it's positive, what is
+the best implementation strategy (struct callback vs. handler call), etc.
+
+I've CCed ARM64/ARM32 maintainers plus extra people I found as really
+involved with ARM architecture - sorry if I added people I shouldn't or
+if I forgot somebody (though the ARM mailing-list is CC).
+Cheers,
+
+
+Guilherme
+
+
+[0]
+https://lore.kernel.org/lkml/2787b476-6366-1c83-db80-0393da417497@igalia.com/
+See the proposed option (b)

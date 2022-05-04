@@ -2,76 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0DC451A29F
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 16:52:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F8E651A2A4
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 16:52:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351508AbiEDOzp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 10:55:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38506 "EHLO
+        id S1351522AbiEDO4a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 10:56:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351531AbiEDOxl (ORCPT
+        with ESMTP id S245006AbiEDO43 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 10:53:41 -0400
-Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com [IPv6:2001:4860:4864:20::34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B0D424F14
-        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 07:50:04 -0700 (PDT)
-Received: by mail-oa1-x34.google.com with SMTP id 586e51a60fabf-ed8a3962f8so1397465fac.4
-        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 07:50:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=QeFiQ9rABQ+jsnlWFATMHbzDLVEHfjrJ5lroY7LHjX4=;
-        b=H5IJ/aqZWpfdIMrj7CgLAqG/SdKN5STaYbw0mAiMe3knsYohgMViLX+4UVUoKCbjYy
-         KKl4gSQqN+y8a/5bgi2RL4jv+amby146NGM7XBx8dbVn4RsofMgka5QZYxjpufREvBgx
-         on8qRLmmmZDTNBS3mIpw49Zfq+rPlMGaYLZ12oBZLGWqrTnMda+uze00F4XB8lCnZ5nm
-         8Tl5G8rLBtDEYPTBoB6Iw3xTervmR0L8O+zASziNoND35e/wLu2xlyoXStOr8sXjon1D
-         bzVRi1ICf4OkXuJZNPr4iA9KfJYxKeZKraeRlic8bM30iN0elqk80fTjZY50t3Okqw6Y
-         ZeuQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=QeFiQ9rABQ+jsnlWFATMHbzDLVEHfjrJ5lroY7LHjX4=;
-        b=Io8+0QLe3kNlAFkJ67n672PRgCKwfZ09/xlmvnbD6SmrWMTfRsuNuZqhGjvtaKumty
-         qaGe689p1QbsWr7duksV/z1JH8oFIfRoQr56TF1hOXbwi/AX8eEMnTYs1STymf+R9Kh7
-         LotqUkOVraN3NSWa9D85OuMgpE2loIw0oNhBrSjQoj8h775DdNPLr2doo0CDUOVcv9bv
-         uOAj3aKvAMnzngeJobF+Q82ly2dk6k8Jil1Jyo9SbPh7qSwfoIKrofQIpYUD2N+b9nOo
-         RZzrUjf6cRrAcczWO5+dkQyAAit8e85FfAyY9bmbKLOlPHQ3nl7RxcfZAk3gApeU0qmR
-         Y17A==
-X-Gm-Message-State: AOAM530QB6duBiS4r39qVlY/qvHsT2ye3aKnf9uojAsb7UJqb/kEuLDc
-        Tnk1eVUib8DMj6w17dS130ZRow==
-X-Google-Smtp-Source: ABdhPJwNJvAJDal6JEEM3A076oA8yC/XXroNGViJX0ZDvZfYyeiTcwTHDhaQwkREcnPpG+p4quwFKw==
-X-Received: by 2002:a05:6870:d254:b0:e9:5d17:9e35 with SMTP id h20-20020a056870d25400b000e95d179e35mr3712035oac.154.1651675803423;
-        Wed, 04 May 2022 07:50:03 -0700 (PDT)
-Received: from ripper (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id v15-20020a05683018cf00b0060603221251sm5158169ote.33.2022.05.04.07.50.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 May 2022 07:50:02 -0700 (PDT)
-Date:   Wed, 4 May 2022 07:51:46 -0700
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Pavel Machek <pavel@ucw.cz>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Uwe Kleine-K?nig <u.kleine-koenig@pengutronix.de>,
-        Lee Jones <lee.jones@linaro.org>, Luca Weiss <luca@z3ntu.xyz>,
-        Doug Anderson <dianders@chromium.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>, linux-leds@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-pwm@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH v14 2/2] leds: Add driver for Qualcomm LPG
-Message-ID: <YnKTAvQc6eDxTl14@ripper>
-References: <20220303214300.59468-1-bjorn.andersson@linaro.org>
- <20220303214300.59468-2-bjorn.andersson@linaro.org>
- <20220504073009.GC8204@duo.ucw.cz>
+        Wed, 4 May 2022 10:56:29 -0400
+X-Greylist: delayed 25244 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 04 May 2022 07:52:51 PDT
+Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A521B120A9;
+        Wed,  4 May 2022 07:52:51 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: marcan@marcan.st)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id D5E7C419C2;
+        Wed,  4 May 2022 14:52:45 +0000 (UTC)
+Message-ID: <e0445aa6-0c96-b80d-154e-274be0c1a025@marcan.st>
+Date:   Wed, 4 May 2022 23:52:43 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220504073009.GC8204@duo.ucw.cz>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v2 1/4] MAINTAINERS: Add entries for Apple SoC cpufreq
+ driver
+Content-Language: es-ES
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Mark Kettenis <mark.kettenis@xs4all.nl>,
+        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220504075153.185208-1-marcan@marcan.st>
+ <20220504075153.185208-2-marcan@marcan.st>
+ <20220504101750.wmuicq3dytnxrw5o@vireshk-i7>
+From:   Hector Martin <marcan@marcan.st>
+In-Reply-To: <20220504101750.wmuicq3dytnxrw5o@vireshk-i7>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,66 +59,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 04 May 00:30 PDT 2022, Pavel Machek wrote:
-
-> Hi!
+On 04/05/2022 19.17, Viresh Kumar wrote:
+> On 04-05-22, 16:51, Hector Martin wrote:
+>> Splitting this commit, as usual, to facilitate merges via the SoC tree.
+>>
+>> Signed-off-by: Hector Martin <marcan@marcan.st>
+>> ---
+>>  MAINTAINERS | 2 ++
+>>  1 file changed, 2 insertions(+)
+>>
+>> diff --git a/MAINTAINERS b/MAINTAINERS
+>> index edc96cdb85e8..39bfa478fe55 100644
+>> --- a/MAINTAINERS
+>> +++ b/MAINTAINERS
+>> @@ -1835,6 +1835,7 @@ T:	git https://github.com/AsahiLinux/linux.git
+>>  F:	Documentation/devicetree/bindings/arm/apple.yaml
+>>  F:	Documentation/devicetree/bindings/arm/apple/*
+>>  F:	Documentation/devicetree/bindings/clock/apple,nco.yaml
+>> +F:	Documentation/devicetree/bindings/cpufreq/apple,soc-cpufreq.yaml
+>>  F:	Documentation/devicetree/bindings/i2c/apple,i2c.yaml
+>>  F:	Documentation/devicetree/bindings/interrupt-controller/apple,*
+>>  F:	Documentation/devicetree/bindings/mailbox/apple,mailbox.yaml
+>> @@ -1844,6 +1845,7 @@ F:	Documentation/devicetree/bindings/power/apple*
+>>  F:	Documentation/devicetree/bindings/watchdog/apple,wdt.yaml
+>>  F:	arch/arm64/boot/dts/apple/
+>>  F:	drivers/clk/clk-apple-nco.c
+>> +F:	drivers/cpufreq/apple-soc-cpufreq.c
+>>  F:	drivers/i2c/busses/i2c-pasemi-core.c
+>>  F:	drivers/i2c/busses/i2c-pasemi-platform.c
+>>  F:	drivers/irqchip/irq-apple-aic.c
 > 
-> > +/sys/class/leds/<led>/hw_pattern
-> > +--------------------------------
-> > +
-> > +Specify a hardware pattern for a Qualcomm LPG LED.
-> > +
-> > +The pattern is a series of brightness and hold-time pairs, with the hold-time
-> > +expressed in milliseconds. The hold time is a property of the pattern and must
-> > +therefor be identical for each element in the pattern (except for the pauses
-> > +described below).
-> 
-> therefore?
-> 
+> This should be the last patch instead, or should at least be added
+> after the files are merged first. If someone checks out at this
+> commit, the files won't be available but still linked here.
 
-Yes
+Isn't that backwards? If someone touches the files, we want them to be
+able to get_maintainer.pl, so the MAINTAINERS entries should come first.
+It doesn't really cause any issues if there are entries that point at
+files that don't exist yet, right?
 
-> > +Simple pattern::
-> > +
-> > +    "255 500 0 500"
-> > +
-> > +        ^
-> > +        |
-> > +    255 +----+    +----+
-> > +        |    |    |    |      ...
-> > +      0 |    +----+    +----
-> > +        +---------------------->
-> > +        0    5   10   15     time (100ms)
-> > +
-> > +The LPG supports specifying a longer hold-time for the first and last element
-> > +in the pattern, the so called "low pause" and "high pause".
-> 
-> Please see
-> Documentation/devicetree/bindings/leds/leds-trigger-pattern.txt . This
-> should really be compatible.
-> 
+Though this is mostly a moot point because the purpose of splitting this
+out is so we can merge this one patch through the SoC tree, at which
+point the ordering isn't guaranteed (unless the whole series goes
+through SoC). It's a minor issue though; we've done it like this for
+other series and it hasn't caused anyone trouble.
 
-Unfortunately the LPG hardware only supports fixed duration (except for
-the ability to hold/extend the first and last duration in the pattern)
-and it also does not support gradual transition between the brightness
-levels.
-
-As such the pattern sequence provided to hw_pattern looks to be the
-smae, but I don't see that it can be made compatible.
-
-> Can I get either patch to disable pattern infrastructure for now or to
-> get it compatible?
-> 
-
-I'd be happy to get this updated to your liking, but this was one of the
-drivers we discussed when we introduced the pattern trigger and led to
-the conclusion that we need the ability to do hw-specific patterns.
-
-As such this document provides the hardware specific documentation, as
-we describe under "hw_pattern" in
-Documentation/ABI/testing/sysfs-class-led-trigger-pattern.
-
-Please advice on what you would like me to do.
-
-Regards,
-Bjorn
+-- 
+Hector Martin (marcan@marcan.st)
+Public Key: https://mrcn.st/pub

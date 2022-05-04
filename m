@@ -2,67 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE8AA519D1D
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 12:38:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BB4A519D25
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 12:38:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348230AbiEDKlt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 06:41:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48562 "EHLO
+        id S1348294AbiEDKmK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 06:42:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346580AbiEDKlg (ORCPT
+        with ESMTP id S1348249AbiEDKlz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 06:41:36 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B70D42982F
-        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 03:38:00 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id y32so1590124lfa.6
-        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 03:38:00 -0700 (PDT)
+        Wed, 4 May 2022 06:41:55 -0400
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB23029CB6
+        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 03:38:14 -0700 (PDT)
+Received: by mail-lj1-x236.google.com with SMTP id 17so1132504lji.1
+        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 03:38:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=Hz2JT0Y66JwO+O7z/3riatkMgFmDBjhZZnw+6wr0nDU=;
-        b=B6BnBHWx7aPR8vkrGgx0QR9P+tAKxG1J+7DVaMCN5lDlbdTmjfEkp4yYbJAMaXF6ot
-         GoR6XyNw+iIfXQgXV/bTHeQK5KJm2oaGpMAm38+Dn+5uVeb2EN4mjsEu2s3b41WpJ6+w
-         /HR5DRX3jO5cAWDnEOF64aWCTdWZ2mgpq6XKxI7DWnW5u2ql4EVUIR7N7GxV2qTXyoPD
-         BLnL6wjNxiiRLu6C6PZNY0O06b5ypr2XaV9JQZUx+cb1rUnX/TJh8yWtHd99UXLQ42SI
-         JNS7subNRPWNu4W9cARVB9Z0ZYyaQN+HSL2DRcWgS9KTb1iLGoEWprOAPz3xqzVFOlDE
-         PitA==
+        bh=lD3vvXHAHJs3IRnQAHfphn1E2NtyGe633IfNU2pH9ck=;
+        b=QaNg+hrH0pWi1gegQLwIunoR96zQeWK405W/Y0DimAXEprgC6u6tNQyTc1XTqFVU4h
+         poyJ1hvGMfkGW4M4zzVcfyyiBE5x7enLur2bhx1BCk1vMfmmunpoJJvu62TgUJYs7EUN
+         rNETTUTSN7ekB6AXtT3O4rljzo4wb9v3QUMtEUUaODNLuI7ECb3F49YEvM+74VF7zM3W
+         m2cSjEjDZLt6B8o16XYHmC/R5xDBzmcf6Zi47MWoXmAq1hHZUYbz8bh+bRzkTgtz+jjX
+         CRGalEFuDBlXelp8sBL1sgXTzlbdfuBK0920R5Qh6l0w7CVfq4DSsVE7n1+PvvcN6ziO
+         PGQw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=Hz2JT0Y66JwO+O7z/3riatkMgFmDBjhZZnw+6wr0nDU=;
-        b=c187YicZ2HE3SJLTslLJUrykytHXJZiTKPx3T+pktNT4r/VGiofzD6ShDx0PI5Sgzu
-         VldBi4NJKPG5FJWH+PnSRn59g0yrmDyiG7WxEJctVA9sjh5F5KXFh4jY3IsHiBPT01m/
-         HA40zWJdkq2YW3oxOr5C7N6dI0d69KWQw1J2vLad15/I69s+40wh/XwjEG/jFNuxc9gK
-         zFPDBi9Zbb9PyH6PZlGv+C0X16oZxM2P5fSh9vDFTuct/DN8mVhs2rvMh4nq3HDgMoKZ
-         4MBbxUKE5lxpVqjqVweNUUIh7AmhP4UedPQkdpPkqD0E9bf1emk7NcY72iKwWF8o9e+O
-         04YQ==
-X-Gm-Message-State: AOAM5301F0cmP4pgsPtVLY1TJtfaEzoYSk/fcA4AGTX3bX4EyLoSdi4S
-        xt134gD4YRY/JnWKV+r+2w4jbOHEMOkpR41TxjA6GQ==
-X-Google-Smtp-Source: ABdhPJzffJi2WxI72pnoBTPmIBBRSL7VDCNLLj4ucIPRQm9TAVtT1e6kobqBKWRLvwh7qoaz/IMaD3uO9mTQuMjw6Z8=
-X-Received: by 2002:a05:6512:2627:b0:44a:f55c:ded9 with SMTP id
- bt39-20020a056512262700b0044af55cded9mr14018771lfb.373.1651660679081; Wed, 04
- May 2022 03:37:59 -0700 (PDT)
+        bh=lD3vvXHAHJs3IRnQAHfphn1E2NtyGe633IfNU2pH9ck=;
+        b=pwcK7wETKTfwHGa/IIMGzvMvr8+ANvqdQyLKJq1SlbWphLymDuQgA8w4m0eeo8Ys3s
+         dQa4xUXeQ8hKI5uEfE+X41Oxypa68A/R5TSA50sibBso6v1IXlmnWnP29Nl0KF5hnct1
+         pdiXSgHt9OrentdJblHjtJtq3/QHZEyLOcc3vSGffMtdkXHcrZTF5YCdhoQq0WtpkcXG
+         5rsgH68P7rBZWibmw3YFhKocm+Q0Iz6fDBSBKJCp2LUDAeLS1XSwZx/414qTC9hzfXid
+         nzlTk2v1iZ9/iuI3nmeTPAnnBHeDxQXiYfAz4/SYwOz6JaaHuyPJRr+jiRTsaIraOYK+
+         kWew==
+X-Gm-Message-State: AOAM530xdVYhcaR22YiDogEpCH+992Vddec766i9ms2NO1CBaiTtbJdq
+        40ihmSSmkQklNTcyhhWwFGJQAzd7jOe9qkYYSgYTlQ==
+X-Google-Smtp-Source: ABdhPJy+kS6AXMWUkmQ6E/kbOxo9lyfYr8OK70af4kdLrlbjvuToWT0sZZJrsSDzfyNmt7IFspcd+yMVuBQcDDWWKHI=
+X-Received: by 2002:a05:651c:483:b0:24f:2ae0:61f3 with SMTP id
+ s3-20020a05651c048300b0024f2ae061f3mr12397148ljc.229.1651660693223; Wed, 04
+ May 2022 03:38:13 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220427120310.838843-1-wanjiabing@vivo.com>
-In-Reply-To: <20220427120310.838843-1-wanjiabing@vivo.com>
+References: <20220428081817.35382-1-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220428081817.35382-1-krzysztof.kozlowski@linaro.org>
 From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Wed, 4 May 2022 12:37:22 +0200
-Message-ID: <CAPDyKFoCTX3E-D2OW_YMp0EJ2y872e+Nd-0XtinBD0vmwHjSZw@mail.gmail.com>
-Subject: Re: [PATCH] mmc: atmel-mci: Simplify if(chan) and if(!chan)
-To:     Wan Jiabing <wanjiabing@vivo.com>
-Cc:     Ludovic Desroches <ludovic.desroches@microchip.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        linux-mmc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+Date:   Wed, 4 May 2022 12:37:36 +0200
+Message-ID: <CAPDyKFrkkif0ABhe0_pZFBpWjMVoXETKZ7GpJUORR94LmbbaGg@mail.gmail.com>
+Subject: Re: [PATCH 1/2] dt-bindings: mmc: brcm,sdhci-brcmstb: correct number
+ of reg entries
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Broadcom Kernel Team <bcm-kernel-feedback-list@broadcom.com>,
+        Al Cooper <alcooperx@gmail.com>, linux-mmc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,12 +72,13 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 27 Apr 2022 at 14:03, Wan Jiabing <wanjiabing@vivo.com> wrote:
+On Thu, 28 Apr 2022 at 10:18, Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
 >
-> Use if(!host->dma.chan) instead of if(chan) and if(!chan) to make
-> code better.
+> The binding should not allow infinite number of 'reg' entries, so add
+> strict limit.
 >
-> Signed-off-by: Wan Jiabing <wanjiabing@vivo.com>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 Applied for next, thanks!
 
@@ -84,31 +87,22 @@ Uffe
 
 
 > ---
->  drivers/mmc/host/atmel-mci.c | 9 ++++-----
->  1 file changed, 4 insertions(+), 5 deletions(-)
+>  Documentation/devicetree/bindings/mmc/brcm,sdhci-brcmstb.yaml | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 >
-> diff --git a/drivers/mmc/host/atmel-mci.c b/drivers/mmc/host/atmel-mci.c
-> index 807177c953f3..91d52ba7a39f 100644
-> --- a/drivers/mmc/host/atmel-mci.c
-> +++ b/drivers/mmc/host/atmel-mci.c
-> @@ -1122,13 +1122,12 @@ atmci_prepare_data_dma(struct atmel_mci *host, struct mmc_data *data)
->         }
+> diff --git a/Documentation/devicetree/bindings/mmc/brcm,sdhci-brcmstb.yaml b/Documentation/devicetree/bindings/mmc/brcm,sdhci-brcmstb.yaml
+> index dccd5ad96981..54a0edab5f8c 100644
+> --- a/Documentation/devicetree/bindings/mmc/brcm,sdhci-brcmstb.yaml
+> +++ b/Documentation/devicetree/bindings/mmc/brcm,sdhci-brcmstb.yaml
+> @@ -31,7 +31,7 @@ properties:
+>            - const: brcm,sdhci-brcmstb
 >
->         /* If we don't have a channel, we can't do DMA */
-> -       chan = host->dma.chan;
-> -       if (chan)
-> -               host->data_chan = chan;
-> -
-> -       if (!chan)
-> +       if (!host->dma.chan)
->                 return -ENODEV;
+>    reg:
+> -    minItems: 2
+> +    maxItems: 2
 >
-> +       chan = host->dma.chan;
-> +       host->data_chan = chan;
-> +
->         if (data->flags & MMC_DATA_READ) {
->                 host->dma_conf.direction = slave_dirn = DMA_DEV_TO_MEM;
->                 maxburst = atmci_convert_chksize(host,
+>    reg-names:
+>      items:
 > --
-> 2.35.3
+> 2.32.0
 >

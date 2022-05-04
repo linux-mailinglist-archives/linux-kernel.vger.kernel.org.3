@@ -2,65 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF9B85192C8
+	by mail.lfdr.de (Postfix) with ESMTP id 628A25192C7
 	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 02:25:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244659AbiEDA26 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 20:28:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60386 "EHLO
+        id S244673AbiEDA2z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 20:28:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244676AbiEDA24 (ORCPT
+        with ESMTP id S244656AbiEDA2v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 20:28:56 -0400
-Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 573CB101D3
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 17:25:22 -0700 (PDT)
-Received: by mail-qt1-x833.google.com with SMTP id x22so9714803qto.2
-        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 17:25:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=l2Rvi2fYjCUZ2fnH709+1VRnkklGH3OfPRUgCz8KlGY=;
-        b=g51Ue/s5rS5LLtj4OEQPwT7d494kHpWcGbxGHxE981zyTogl4UOv74UfawU0k4oCqW
-         9HCYKSJi+8ywrRxtyJo1CGXrJhNCB8P+rFKRAWALSMOcO0B0fxKd4+8No0qRMXFd/6Zs
-         vQ7DomBoVP/+VmjvAMeGpOYeuEKcxvYv92dPSFm5FPLxwbScd8La5FO8UiVLhn0sjqyn
-         Lu51rk8SACDzvOxxHLHZ3d2QpUSSamZQPo8K0YLZR1hIE+RuTg6mcnfajAbCTVG5fX1S
-         KCF9UkahWu+IV3M0YKr3UmUGkW8aE1Mp956rRUkAG+uqWHxrRWMIcO3MQx/lKcw9hFm7
-         /fUg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=l2Rvi2fYjCUZ2fnH709+1VRnkklGH3OfPRUgCz8KlGY=;
-        b=BVpwFFj2NvjCKoClpVfMq9NsymYV6jARVFd6xGT1mCHA3vQ3SOInR2NZ6O8/nLkSrM
-         6hSZCtur503pOxQOINtBJXKeyWi4haktH+Lh2Vx3DYHZM3clfGuqEgHeF+Nd0E3CJu0x
-         0kIdV9Jz3SX5QW8B9AluafoW/W3VZLO2jQIfaeMi7tWem5QrqfZpweWSTNPS3aVAr2hk
-         YguNO2n/PlWTgzIYNVf0eOD7AnJU6zVwJNBIgwlkUzNXOfvALm+INZu15Y16ElCGo35O
-         FlF4xHOEa9p4RRxG6zN3n06mg31lbPIsntIj4zDc8gOFjvnAip6cWdX7RseoobaAn2+a
-         kCGA==
-X-Gm-Message-State: AOAM533SKSK57fLAkKOawJ81ss7Ll8YeojyRzUvhEpTg7ycUB4gZUYL2
-        +Q83iLp7HM/FgI4x62omOpCqwk3BUniAiQ==
-X-Google-Smtp-Source: ABdhPJyyjndUav0nHPLHbvWv9sEmjBBeh4RCNWvs91dbqR/94MA255Ej35UXNwSKxVOTtD0x4Y8l+g==
-X-Received: by 2002:ac8:5950:0:b0:2f3:9101:e0d4 with SMTP id 16-20020ac85950000000b002f39101e0d4mr17583041qtz.613.1651623921516;
-        Tue, 03 May 2022 17:25:21 -0700 (PDT)
-Received: from localhost.localdomain ([66.63.167.151])
-        by smtp.gmail.com with ESMTPSA id e188-20020a37b5c5000000b0069fc13ce225sm5966358qkf.86.2022.05.03.17.25.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 May 2022 17:25:16 -0700 (PDT)
-From:   Forest Crossman <cyrozap@gmail.com>
-To:     perex@perex.cz, tiwai@suse.com
-Cc:     Forest Crossman <cyrozap@gmail.com>, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] ALSA: usb-audio: Don't get sample rate for MCT Trigger 5 USB-to-HDMI
-Date:   Tue,  3 May 2022 19:24:44 -0500
-Message-Id: <20220504002444.114011-2-cyrozap@gmail.com>
-X-Mailer: git-send-email 2.36.0
+        Tue, 3 May 2022 20:28:51 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 609EC5F71;
+        Tue,  3 May 2022 17:25:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651623917; x=1683159917;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=ZCzg68E9e6BqBao4oWRrx0n2MdE1MfcFFpx+KA+MVak=;
+  b=n7yHHnSbciamEuX96JvhMtGmN3pbbfxFPoiyeXL4PSkndFhYIuq5F9ce
+   3bTxW050PVXT7w566JDjwzFcE5eVxh9onga4VVcUQRCaO13N4PHclw4lt
+   xUUBW5GHKggPuUf58+XvWg5zeiIlPaAuLcpce35FDiKJSb43yUh4WLAhB
+   GTpaNUUIDU+iNpq0OFD/+HRaf5XM74PftP36+7m7n3AxOIaF/9f+Ba4R2
+   UC8ImQSu0uVg5GXLJMFi2Uiq4PuhFmRXJ4EfOd+LO1ZX9C0t1uzNQX1oD
+   vnru3/NkjZmPaH7nrcQE83QXz7V5FzPItMwcBzwBytS9uvsDvFhdKg3FE
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10336"; a="328169916"
+X-IronPort-AV: E=Sophos;i="5.91,196,1647327600"; 
+   d="scan'208";a="328169916"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2022 17:25:16 -0700
+X-IronPort-AV: E=Sophos;i="5.91,196,1647327600"; 
+   d="scan'208";a="664215706"
+Received: from dbandax-mobl2.amr.corp.intel.com (HELO [10.209.188.251]) ([10.209.188.251])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2022 17:25:15 -0700
+Message-ID: <1b681365-ef98-ec78-96dc-04e28316cf0e@intel.com>
+Date:   Tue, 3 May 2022 17:25:35 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v3 00/21] TDX host kernel support
+Content-Language: en-US
+To:     Kai Huang <kai.huang@intel.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+Cc:     seanjc@google.com, pbonzini@redhat.com, len.brown@intel.com,
+        tony.luck@intel.com, rafael.j.wysocki@intel.com,
+        reinette.chatre@intel.com, dan.j.williams@intel.com,
+        peterz@infradead.org, ak@linux.intel.com,
+        kirill.shutemov@linux.intel.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com,
+        isaku.yamahata@intel.com
+References: <cover.1649219184.git.kai.huang@intel.com>
+ <522e37eb-68fc-35db-44d5-479d0088e43f@intel.com>
+ <ecf718abf864bbb2366209f00d4315ada090aedc.camel@intel.com>
+ <de24ac7e-349c-e49a-70bb-31b9bc867b10@intel.com>
+ <9b388f54f13b34fe684ef77603fc878952e48f87.camel@intel.com>
+ <d98ca73b-2d2d-757d-e937-acc83cfedfb0@intel.com>
+ <c90a10763969077826f42be6f492e3a3e062326b.camel@intel.com>
+ <fc1ca04d94ad45e79c0297719d5ef50a7c33c352.camel@intel.com>
+ <664f8adeb56ba61774f3c845041f016c54e0f96e.camel@intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <664f8adeb56ba61774f3c845041f016c54e0f96e.camel@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,27 +76,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This device doesn't support reading the sample rate, so we need to apply
-this quirk to avoid a 15-second delay waiting for three timeouts.
+On 5/3/22 16:59, Kai Huang wrote:
+> Should be:
+> 
+> 	// prevent racing with TDX module initialization */
+> 	tdx_init_disable();
+> 
+> 	if (tdx_module_initialized()) {
+> 		if (new_memory_resource in TDMRs)
+> 			// allow memory hot-add
+> 		else
+> 			// reject memory hot-add
+> 	} else if (new_memory_resource in CMR) {
+> 		// add new memory to TDX memory so it can be
+> 		// included into TDMRs
+> 
+> 		// allow memory hot-add
+> 	}
+> 	else
+> 		// reject memory hot-add
+> 	
+> 	tdx_module_enable();
+> 
+> And when platform doesn't TDX, always allow memory hot-add.
 
-Signed-off-by: Forest Crossman <cyrozap@gmail.com>
----
- sound/usb/quirks.c | 2 ++
- 1 file changed, 2 insertions(+)
+I don't think it even needs to be *that* complicated.
 
-diff --git a/sound/usb/quirks.c b/sound/usb/quirks.c
-index ab9f3da49941..fbbe59054c3f 100644
---- a/sound/usb/quirks.c
-+++ b/sound/usb/quirks.c
-@@ -1822,6 +1822,8 @@ static const struct usb_audio_quirk_flags_table quirk_flags_table[] = {
- 		   QUIRK_FLAG_IGNORE_CTL_ERROR),
- 	DEVICE_FLG(0x06f8, 0xd002, /* Hercules DJ Console (Macintosh Edition) */
- 		   QUIRK_FLAG_IGNORE_CTL_ERROR),
-+	DEVICE_FLG(0x0711, 0x5800, /* MCT Trigger 5 USB-to-HDMI */
-+		   QUIRK_FLAG_GET_SAMPLE_RATE),
- 	DEVICE_FLG(0x074d, 0x3553, /* Outlaw RR2150 (Micronas UAC3553B) */
- 		   QUIRK_FLAG_GET_SAMPLE_RATE),
- 	DEVICE_FLG(0x08bb, 0x2702, /* LineX FM Transmitter */
--- 
-2.36.0
+It could just be winner take all: if TDX is initialized first, don't
+allow memory hotplug.  If memory hotplug happens first, don't allow TDX
+to be initialized.
+
+That's fine at least for a minimal patch set.
+
+What you have up above is probably where you want to go eventually, but
+it means doing things like augmenting the e820 since it's the single
+source of truth for creating the TMDRs right now.
 

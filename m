@@ -2,199 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D88EE519D7E
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 12:59:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37037519D84
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 13:01:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348448AbiEDLCa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 07:02:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36930 "EHLO
+        id S1348459AbiEDLFL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 07:05:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234997AbiEDLC2 (ORCPT
+        with ESMTP id S234082AbiEDLFI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 07:02:28 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99EB41C13F
-        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 03:58:52 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id ba17so1262572edb.5
-        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 03:58:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=date:from:to:cc:subject:message-id:mail-followup-to:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=X5wC/y8l3phzvrxUj5g6Q/bU6cd0GrNgtke4GEPDYJA=;
-        b=j6UtRjbIBuPRag8NUVR1g+vsc1IRIjHiP/quPZKZ+CNUClMzeYRLSoTiU6sUL6tMbh
-         Ch+JDUZAINX+5lvGFdJ55Z14C3ED7UgQ9rYGgiqFnQiw7H7vVNCtaCbpOzcTjXnW5Qik
-         5H1x+DRmxmcvYtfkYGS1kgUy7v5guMdLC0S6Q=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id
-         :mail-followup-to:references:mime-version:content-disposition
-         :in-reply-to;
-        bh=X5wC/y8l3phzvrxUj5g6Q/bU6cd0GrNgtke4GEPDYJA=;
-        b=DZtD6ZH6m4Ju4FGteg3CssOlxRzhFkWeSPtQn1U3z8Osf96LUkMcnxTE3KZetGfuWv
-         GiWSZOv8QYZX2cNL6KfOLzob6KHoH26HzbfUWTPe/F9ifhi6J6KfNRDgKdqo/K3G8ZSD
-         KP2nnxl2H9DUuFvGw2wb6YhhU9M+Rffqy6jNmvOXYPC4xVSuaZg2OyVaHDZOAW4oW8rx
-         xbYdQ++PxtJ1HP+YbQgy9M4iAOQ6idIKYjDBP3twPWLGg2MqOMzT2dzGNgBrPh+MD8Wx
-         0La+ecTnODcxDZMyd3JycP5u+sGCjZTuQe1A4BBQ0YwK50pKh2DgzW82HiBoWhTzfwOX
-         OLWw==
-X-Gm-Message-State: AOAM530Fb+3HQ7uIo7wrm6bnhD2Srko+/mGXRpAqkRd4oK/z+e51Yjix
-        e3ZL/CrSX5PLb+2nyko5rPp4og==
-X-Google-Smtp-Source: ABdhPJwscxkAohHovF4FMJCxbrKKrlnGE8Vcg8WcnudkpdOe8bMqhcqJaZWO8XXMOpSukPeZNH4/6Q==
-X-Received: by 2002:a50:ee11:0:b0:425:b5b3:a48d with SMTP id g17-20020a50ee11000000b00425b5b3a48dmr22842334eds.246.1651661931124;
-        Wed, 04 May 2022 03:58:51 -0700 (PDT)
-Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
-        by smtp.gmail.com with ESMTPSA id dq9-20020a170907734900b006f3ef214de3sm5590177ejc.73.2022.05.04.03.58.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 May 2022 03:58:50 -0700 (PDT)
-Date:   Wed, 4 May 2022 12:58:49 +0200
-From:   Daniel Vetter <daniel@ffwll.ch>
-To:     Javier Martinez Canillas <javierm@redhat.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH v3 3/3] drm: Allow simpledrm to setup its emulated FB as
- firmware provided
-Message-ID: <YnJcaaDcIsJKhSwQ@phenom.ffwll.local>
-Mail-Followup-To: Javier Martinez Canillas <javierm@redhat.com>,
-        linux-kernel@vger.kernel.org,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        dri-devel@lists.freedesktop.org
-References: <20220503071540.471667-1-javierm@redhat.com>
- <20220503071540.471667-4-javierm@redhat.com>
+        Wed, 4 May 2022 07:05:08 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B993717E24;
+        Wed,  4 May 2022 04:01:31 -0700 (PDT)
+Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 244ASn2i032651;
+        Wed, 4 May 2022 11:01:24 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=1ag1YfXg3EBO7Or3ScbArxB8G7BzI6staQN620kU86g=;
+ b=ZZZruooGfLSzS36cVOPx8r/toTIR3mHbyJeLZjix3AZABSUW4/4KiTzm+lyapvGwpWI7
+ EH8PDiQLwxpT/0oZO60Zo2f/8YCfjpu3pwUDvcpSvIAN7HxW+BjUeAdlEuYBUnrs7vp6
+ wrd39OVNuNUL+Z3KnggzhqV+V0d77hETFjBFYQs6m67ieaYOXoaYhybC45bTCIJh4yF0
+ JatRpdBv2ZhXesaKjmoeuCBagt0cZptcULRKTCUQDx9bNhq2SMy0cL6Sb9mPCCU56xV3
+ IAyJPIYwtesMNipNnGD500godmgSN4/85TqpKXDaHAb6T51LcGIJVjfcqnuvF4CJBxyf mQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3fuqs0gkb5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 04 May 2022 11:01:23 +0000
+Received: from m0098414.ppops.net (m0098414.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 244AV6x7007803;
+        Wed, 4 May 2022 11:01:23 GMT
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3fuqs0gkad-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 04 May 2022 11:01:23 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 244AwlOl001521;
+        Wed, 4 May 2022 11:01:21 GMT
+Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
+        by ppma04ams.nl.ibm.com with ESMTP id 3frvr8wgtd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 04 May 2022 11:01:21 +0000
+Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 244AlxZI50594048
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 4 May 2022 10:47:59 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2E00742049;
+        Wed,  4 May 2022 11:01:19 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id EA8F842042;
+        Wed,  4 May 2022 11:01:18 +0000 (GMT)
+Received: from [9.145.14.176] (unknown [9.145.14.176])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed,  4 May 2022 11:01:18 +0000 (GMT)
+Message-ID: <f498f098-8b87-26bd-9967-2315bbc231f3@linux.ibm.com>
+Date:   Wed, 4 May 2022 13:01:18 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220503071540.471667-4-javierm@redhat.com>
-X-Operating-System: Linux phenom 5.10.0-8-amd64 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.8.1
+Subject: Re: [PATCH v2] powerpc/rtas: Keep MSR[RI] set when calling RTAS
+Content-Language: en-US
+To:     Michael Ellerman <mpe@ellerman.id.au>
+Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        stable@vger.kernel.org, Nicholas Piggin <npiggin@gmail.com>
+References: <20220401140634.65726-1-ldufour@linux.ibm.com>
+ <87r15aveny.fsf@mpe.ellerman.id.au>
+ <c33a2be3-d4b7-9b3b-c980-552f5de081be@linux.ibm.com>
+ <87ee19vnwe.fsf@mpe.ellerman.id.au>
+From:   Laurent Dufour <ldufour@linux.ibm.com>
+In-Reply-To: <87ee19vnwe.fsf@mpe.ellerman.id.au>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: 9miYMbhLlVrMRbdzZN77mC4eIDD1F5m-
+X-Proofpoint-GUID: rhI7oEMXt52f1caDX5UlztzBXFTj78Qx
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-04_03,2022-05-04_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 mlxlogscore=958
+ lowpriorityscore=0 suspectscore=0 impostorscore=0 malwarescore=0
+ spamscore=0 phishscore=0 bulkscore=0 priorityscore=1501 mlxscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2205040070
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 03, 2022 at 09:15:40AM +0200, Javier Martinez Canillas wrote:
-> Indicate to fbdev subsystem that the registered framebuffer is provided by
-> the system firmware, so that it can handle accordingly. For example, would
-> unregister the FB devices if asked to remove the conflicting framebuffers.
+On 04/05/2022, 07:59:29, Michael Ellerman wrote:
+> Laurent Dufour <ldufour@linux.ibm.com> writes:
+>> On 03/05/2022, 17:06:41, Michael Ellerman wrote:
+>>> Laurent Dufour <ldufour@linux.ibm.com> writes:
+> ...
+>>>> diff --git a/arch/powerpc/kernel/rtas.c b/arch/powerpc/kernel/rtas.c
+>>>> index 1f42aabbbab3..d7775b8c8853 100644
+>>>> --- a/arch/powerpc/kernel/rtas.c
+>>>> +++ b/arch/powerpc/kernel/rtas.c
+>>>> @@ -49,6 +49,11 @@ void enter_rtas(unsigned long);
+>>>>  
+>>>>  static inline void do_enter_rtas(unsigned long args)
+>>>>  {
+>>>> +	unsigned long msr;
+>>>> +
+>>>> +	msr = mfmsr();
+>>>> +	BUG_ON(!(msr & MSR_RI));
+>>>
+>>> I'm not sure about this.
+>>>
+>>> We call RTAS in some low-level places, so if we ever hit this BUG_ON
+>>> then it might cause us to crash badly, or recursively BUG.
+>>>
+>>> A WARN_ON_ONCE() might be safer?
+>>
+>> I'm afraid a BUG_ON is required here. Since MSR[RI] is set on RTAS exit so
+>> if it was not set when calling RTAS, that's a real issue and should
+>> generate unexpected behaviour.
+>>
+>> Do you have places in mind where RTAS could be called with !MSR[RI]?
 > 
-> Add a new DRM_FB_FW field to drm_fbdev_generic_setup() options parameter.
-> Drivers can use this to indicate the FB helper initialization that the FB
-> registered is provided by the firmware, so it can be configured as such.
+> The main one I can think of is if someone is using
+> CONFIG_UDBG_RTAS_CONSOLE, then udbg_rtascon_putc() is wired up as
+> udbg_putc() and that might be called from anywhere, including xmon.
 > 
-> Suggested-by: Thomas Zimmermann <tzimmermann@suse.de>
-> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
-> Reviewed-by: Thomas Zimmermann <tzimmermann@suse.de>
-> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> ---
+> There's also RTAS calls in low-level xics interrupt code, that might get
+> called during panic/crash.
 > 
-> Changes in v3:
-> - Drop the firmware local variable (Laurent Pinchart).
-> - Use DRM_FB_OPTION() since DRM_FB_SET_OPTION() got renamed (kernel test robot).
+> I don't expect any of those places to be called with MSR[RI] unset, but
+> I'm worried that if we're already crashing and for some reason MSR[RI]
+> is unset, then that BUG_ON will just make things worse.
+> 
+> eg. imagine taking a BUG_ON() for every character we try to print as
+> part of an oops.
+> 
+> Admittedly CONFIG_UDBG_RTAS_CONSOLE is old and probably not used much
+> anymore, but I'm still a bit paranoid :)
 
-Just for the record what I brought up on irc already:
+I think you're right to be paranoid :)
 
-FBINFO_MISC_FIRMWARE is purely an internal flag with no uapi impact, and
-it's only to control whether we nuke this from
-remove_conflicting_framebuffer or not. Since simpledrm only ever binds
-against sysfb I think it'd be cleaner to only rely on that, and relegate
-that entire FBINFO_MISC_FIRMWARE misc hack to the fbdev dungeons and let
-it quietly wither away there.
+This part of code can be really sensitive.
+I boot a kernel built with CONFIG_UDBG_RTAS_CONSOLE, xmon is working fine,
+but I cannot pretend this is covering all the RTAS call cases.
 
-Also I'm not a huge fan of these midlayer flags in general :-)
--Daniel
-
-> 
->  drivers/gpu/drm/drm_fb_helper.c  |  8 ++++++++
->  drivers/gpu/drm/tiny/simpledrm.c |  2 +-
->  include/drm/drm_fb_helper.h      | 10 ++++++++++
->  3 files changed, 19 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/gpu/drm/drm_fb_helper.c b/drivers/gpu/drm/drm_fb_helper.c
-> index 52042ba1e4cf..28b21858b726 100644
-> --- a/drivers/gpu/drm/drm_fb_helper.c
-> +++ b/drivers/gpu/drm/drm_fb_helper.c
-> @@ -1891,6 +1891,10 @@ __drm_fb_helper_initial_config_and_unlock(struct drm_fb_helper *fb_helper,
->  		/* don't leak any physical addresses to userspace */
->  		info->flags |= FBINFO_HIDE_SMEM_START;
->  
-> +	/* Indicate that the framebuffer is provided by the firmware */
-> +	if (fb_helper->firmware)
-> +		info->flags |= FBINFO_MISC_FIRMWARE;
-> +
->  	/* Need to drop locks to avoid recursive deadlock in
->  	 * register_framebuffer. This is ok because the only thing left to do is
->  	 * register the fbdev emulation instance in kernel_fb_helper_list. */
-> @@ -2512,6 +2516,8 @@ static const struct drm_client_funcs drm_fbdev_client_funcs = {
->   *
->   * * DRM_FB_BPP: bits per pixel for the device. If the field is not set,
->   *   @dev->mode_config.preferred_depth is used instead.
-> + * * DRM_FB_FW: if the framebuffer for the device is provided by the
-> + *   system firmware.
->   *
->   * This function sets up generic fbdev emulation for drivers that supports
->   * dumb buffers with a virtual address and that can be mmap'ed.
-> @@ -2569,6 +2575,8 @@ void drm_fbdev_generic_setup(struct drm_device *dev, const unsigned int options)
->  	if (!fb_helper->preferred_bpp)
->  		fb_helper->preferred_bpp = 32;
->  
-> +	fb_helper->firmware = DRM_FB_GET_OPTION(DRM_FB_FW, options);
-> +
->  	ret = drm_fbdev_client_hotplug(&fb_helper->client);
->  	if (ret)
->  		drm_dbg_kms(dev, "client hotplug ret=%d\n", ret);
-> diff --git a/drivers/gpu/drm/tiny/simpledrm.c b/drivers/gpu/drm/tiny/simpledrm.c
-> index f5b8e864a5cd..f6f1c5e108b2 100644
-> --- a/drivers/gpu/drm/tiny/simpledrm.c
-> +++ b/drivers/gpu/drm/tiny/simpledrm.c
-> @@ -901,7 +901,7 @@ static int simpledrm_probe(struct platform_device *pdev)
->  	if (ret)
->  		return ret;
->  
-> -	drm_fbdev_generic_setup(dev, 0);
-> +	drm_fbdev_generic_setup(dev, DRM_FB_OPTION(DRM_FB_FW, 1));
->  
->  	return 0;
->  }
-> diff --git a/include/drm/drm_fb_helper.h b/include/drm/drm_fb_helper.h
-> index 5fc41cf0c987..5a17af423944 100644
-> --- a/include/drm/drm_fb_helper.h
-> +++ b/include/drm/drm_fb_helper.h
-> @@ -44,6 +44,7 @@ enum mode_set_atomic {
->  };
->  
->  #define DRM_FB_BPP_MASK GENMASK(7, 0)
-> +#define DRM_FB_FW_MASK GENMASK(8, 8)
->  
->  /* Using the GNU statement expression extension */
->  #define DRM_FB_OPTION(option, value)				\
-> @@ -197,6 +198,15 @@ struct drm_fb_helper {
->  	 * See also: @deferred_setup
->  	 */
->  	int preferred_bpp;
-> +
-> +	/**
-> +	 * @firmware:
-> +	 *
-> +	 * Set if the driver indicates to the FB helper initialization that the
-> +	 * framebuffer for the device being registered is provided by firmware,
-> +	 * so that it can pass this on when registering the framebuffer device.
-> +	 */
-> +	bool firmware;
->  };
->  
->  static inline struct drm_fb_helper *
-> -- 
-> 2.35.1
-> 
-
--- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+My hope with BUG_ON() is to raise the issue, as soon as possible, so it can
+be addressed during the test phase.

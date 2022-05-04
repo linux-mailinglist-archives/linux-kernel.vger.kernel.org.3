@@ -2,46 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35DC151A7BA
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:04:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD0BB51A617
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 18:49:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355361AbiEDRER (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 13:04:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38688 "EHLO
+        id S1353724AbiEDQwr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 12:52:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354608AbiEDQ6y (ORCPT
+        with ESMTP id S1353675AbiEDQwB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 12:58:54 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55D511FCC9;
-        Wed,  4 May 2022 09:50:47 -0700 (PDT)
+        Wed, 4 May 2022 12:52:01 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 959EA47043;
+        Wed,  4 May 2022 09:48:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0AA20B82792;
-        Wed,  4 May 2022 16:50:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D118C385A5;
-        Wed,  4 May 2022 16:50:44 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 39A35B82553;
+        Wed,  4 May 2022 16:48:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3584C385B2;
+        Wed,  4 May 2022 16:48:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651683044;
-        bh=Q0Kg/EArx821a5Fy8d/3If2cJ8xy+zC5AZDlUXUfY4k=;
+        s=korg; t=1651682901;
+        bh=iw5r7VXYhZZ7jk1+tRISB95kKILUAHqZqpWpvMsK8Bo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NMPAbiInIlGU2BJy4IOVg89jmWTenxY9sTdovHUCngY1P9H+Ud2dj4mVJG2UbnYJc
-         4uYcQLb/mP7WhyBHzKfDU/eEa6eB99gd0syYXrO2bPz1cj/wY46aMq6+C+eDTl9YDU
-         7Z4fsF5tNJOSkFAH47OEOlpj5uiNGFPgW889E5z8=
+        b=YTSVEOT65ILm2D6S/rZSfCWHPVElofiQ5N6J0fatR60A+fN+c4Kbo8aE4nlnnwBgg
+         00WQyUvImpEUs3uW5VshpGRkAwJeG+++XxMAHJiDU04+exi5oL9ezZnYe51Al0WX26
+         BHQi4JCZLpAIx+HxPAZmjQtz1qL2FD/L6VFPDWKw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>,
-        Guo Ren <guoren@kernel.org>,
-        Palmer Dabbelt <palmer@rivosinc.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>
-Subject: [PATCH 5.10 035/129] riscv: patch_text: Fixup last cpu should be master
-Date:   Wed,  4 May 2022 18:43:47 +0200
-Message-Id: <20220504153024.031128517@linuxfoundation.org>
+        stable@vger.kernel.org, Oliver Neukum <oneukum@suse.com>
+Subject: [PATCH 5.4 07/84] USB: quirks: add STRING quirk for VCOM device
+Date:   Wed,  4 May 2022 18:43:48 +0200
+Message-Id: <20220504152928.241906856@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220504153021.299025455@linuxfoundation.org>
-References: <20220504153021.299025455@linuxfoundation.org>
+In-Reply-To: <20220504152927.744120418@linuxfoundation.org>
+References: <20220504152927.744120418@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,39 +53,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Guo Ren <guoren@linux.alibaba.com>
+From: Oliver Neukum <oneukum@suse.com>
 
-commit 8ec1442953c66a1d8462cccd8c20b7ba561f5915 upstream.
+commit ec547af8a9ea6441864bad34172676b5652ceb96 upstream.
 
-These patch_text implementations are using stop_machine_cpuslocked
-infrastructure with atomic cpu_count. The original idea: When the
-master CPU patch_text, the others should wait for it. But current
-implementation is using the first CPU as master, which couldn't
-guarantee the remaining CPUs are waiting. This patch changes the
-last CPU as the master to solve the potential risk.
+This has been reported to stall if queried
 
-Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-Signed-off-by: Guo Ren <guoren@kernel.org>
-Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
-Reviewed-by: Masami Hiramatsu <mhiramat@kernel.org>
-Fixes: 043cb41a85de ("riscv: introduce interfaces to patch kernel code")
-Cc: stable@vger.kernel.org
-Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
+Cc: stable <stable@vger.kernel.org>
+Signed-off-by: Oliver Neukum <oneukum@suse.com>
+Link: https://lore.kernel.org/r/20220414123152.1700-1-oneukum@suse.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/riscv/kernel/patch.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/usb/core/quirks.c |    3 +++
+ 1 file changed, 3 insertions(+)
 
---- a/arch/riscv/kernel/patch.c
-+++ b/arch/riscv/kernel/patch.c
-@@ -100,7 +100,7 @@ static int patch_text_cb(void *data)
- 	struct patch_insn *patch = data;
- 	int ret = 0;
+--- a/drivers/usb/core/quirks.c
++++ b/drivers/usb/core/quirks.c
+@@ -511,6 +511,9 @@ static const struct usb_device_id usb_qu
+ 	/* DJI CineSSD */
+ 	{ USB_DEVICE(0x2ca3, 0x0031), .driver_info = USB_QUIRK_NO_LPM },
  
--	if (atomic_inc_return(&patch->cpu_count) == 1) {
-+	if (atomic_inc_return(&patch->cpu_count) == num_online_cpus()) {
- 		ret =
- 		    patch_text_nosync(patch->addr, &patch->insn,
- 					    GET_INSN_LENGTH(patch->insn));
++	/* VCOM device */
++	{ USB_DEVICE(0x4296, 0x7570), .driver_info = USB_QUIRK_CONFIG_INTF_STRINGS },
++
+ 	/* INTEL VALUE SSD */
+ 	{ USB_DEVICE(0x8086, 0xf1a5), .driver_info = USB_QUIRK_RESET_RESUME },
+ 
 
 

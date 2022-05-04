@@ -2,75 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F5AC519EF5
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 14:08:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2081519EF7
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 14:09:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348845AbiEDMM1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 08:12:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47996 "EHLO
+        id S1349310AbiEDMMn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 08:12:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349160AbiEDMMZ (ORCPT
+        with ESMTP id S1349160AbiEDMMl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 08:12:25 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9B8BD1DA62
-        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 05:08:49 -0700 (PDT)
+        Wed, 4 May 2022 08:12:41 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D6E5C1EAF8
+        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 05:09:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651666128;
+        s=mimecast20190719; t=1651666145;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=5JmwH3ZBgKgTWBBO0FhYbpl+Uw/L1BpVs00veAWR2mo=;
-        b=V8eJOM6E+mxAUNRotyPQbEj38NW8QUljouww2/8pOOpU63eQjerR6Lvf6hXKcw2P5taRcC
-        hZ62g1BZRLKBBXuCE/Xbrlrd8TDrShEPHuPr1Z8boFEoiodRT3OWgr3LTuCN6uh0kYPu/Q
-        R8jBJA5WqJWt81bT4e/3VBUMjTtAuQE=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=PaKDp0AYChF2TvU0gnmgAfapbqSSfeuarNmx4DaDCMY=;
+        b=Fin0CAAMThFakBO72tNJNbMtKS435o4Sjk11NGi++eouVMTL2A8LKdpkM+BjxyXc9IGD/0
+        DXFgTryD7HK4slJ1J2wExiSAKlP046yeua26M+Jq0gdgepB13cAmLEw5bHmuAzfviV4yVT
+        ckMJChAGnwi0uCZISkOOIR87Uj5Wz+w=
+Received: from mail-lf1-f69.google.com (mail-lf1-f69.google.com
+ [209.85.167.69]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-546-BcUTJm7bM8W5xJWmZeLYrw-1; Wed, 04 May 2022 08:08:45 -0400
-X-MC-Unique: BcUTJm7bM8W5xJWmZeLYrw-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3AE403CF2AA0;
-        Wed,  4 May 2022 12:08:45 +0000 (UTC)
-Received: from starship (unknown [10.40.192.26])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id EC972C28101;
-        Wed,  4 May 2022 12:08:42 +0000 (UTC)
-Message-ID: <42e9431ec2c716f1066fc282ebd97a7a24cbac72.camel@redhat.com>
-Subject: Re: [PATCH] KVM: x86/mmu: Do not create SPTEs for GFNs that exceed
- host.MAXPHYADDR
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Ben Gardon <bgardon@google.com>,
-        David Matlack <dmatlack@google.com>
-Date:   Wed, 04 May 2022 15:08:41 +0300
-In-Reply-To: <YnGQyE60lHD7wusA@google.com>
-References: <Ymv5TR76RNvFBQhz@google.com>
-         <e5864cb4-cce8-bd32-04b0-ecb60c058d0b@redhat.com>
-         <YmwL87h6klEC4UKV@google.com>
-         <ac2001e66957edc8a3af2413b78478c15898f86c.camel@redhat.com>
-         <f3ffad3aa8476156f369ff1d4c33f3e127b47d0c.camel@redhat.com>
-         <82d1a5364f1cc479da3762b046d22f136db167e3.camel@redhat.com>
-         <af15fd31f73e8a956da50db6104e690f9d308dad.camel@redhat.com>
-         <YnAMKtfAeoydHr3x@google.com>
-         <e11c21e99e7c4ac758b4417e0ae66d3a2f1fe663.camel@redhat.com>
-         <cbd4709bb499874c60986083489e17c93b48d003.camel@redhat.com>
-         <YnGQyE60lHD7wusA@google.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+ us-mta-611-JWPdbUmDMxWs0ShBRo0ZOg-1; Wed, 04 May 2022 08:09:01 -0400
+X-MC-Unique: JWPdbUmDMxWs0ShBRo0ZOg-1
+Received: by mail-lf1-f69.google.com with SMTP id bp17-20020a056512159100b00472631eb445so532085lfb.13
+        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 05:09:01 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=PaKDp0AYChF2TvU0gnmgAfapbqSSfeuarNmx4DaDCMY=;
+        b=BPjqzXr/kGHj3sxO9N/jl9eFDzjggw9iCVs/sOyCq9p9+htTp2TnWQG9aqtCy8S9+4
+         FlB9vxB53ttq8Eu37fdgN+iExUdrG9aQ2dpNA0PyLcbI1FFRWCJJ4OeDUe+5EfnJ/L9H
+         PQ2ptLnYeD1TfwaFIOBmlapVP7U3g2AfHKsMVwvhgfkOeCVzzYd72TJvm4uhI8EnQDc9
+         c5ishCoYveWG/cmBth3sKXMeaOp+ZISoH5iHdtryfPul6IbP480bAaLTXeHMoYZwCWeI
+         5me6TSyGj0F7EjzlhPIrpVG2HrVUL7GV/+PwVxPBytmWh4eOvEk4fgS1WVFq0WtPvK1P
+         t2Tg==
+X-Gm-Message-State: AOAM530+1u2aXmt1Wam25RofMOQqc0XvOCLUzTkMIJy7xxBDuj89DiuV
+        O6Ado+xzbR1JTZqWOhwJpze6cyVyrJdCiegAOWG1/EkkftQrt2RiwnyR+tfaNhZAr2Jdfdie3EK
+        XwCFjghvuh4j4eI7xKOh4Ejdzq7aMdbDF71YcvfBy
+X-Received: by 2002:a19:640d:0:b0:472:75e:7373 with SMTP id y13-20020a19640d000000b00472075e7373mr13561741lfb.46.1651666139920;
+        Wed, 04 May 2022 05:08:59 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwP4/TVUhuStPAtOdkhRDyMe0PvYAgIbFywWQjkb0/8vXRf7mlfrFI8l+7CxK/ewd/JXpCbla/6BaNya6gu4bQ=
+X-Received: by 2002:a19:640d:0:b0:472:75e:7373 with SMTP id
+ y13-20020a19640d000000b00472075e7373mr13561730lfb.46.1651666139723; Wed, 04
+ May 2022 05:08:59 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
+References: <20220216025249.3459465-1-baolu.lu@linux.intel.com>
+ <20220216025249.3459465-8-baolu.lu@linux.intel.com> <20220504075356.GA2361844@janakin.usersys.redhat.com>
+ <8d6c30e0-dcf7-56f8-c44b-2d8bdb1dc04c@arm.com>
+In-Reply-To: <8d6c30e0-dcf7-56f8-c44b-2d8bdb1dc04c@arm.com>
+From:   Jan Stancek <jstancek@redhat.com>
+Date:   Wed, 4 May 2022 14:08:43 +0200
+Message-ID: <CAASaF6zc=6Mxo6uq1m7OMkXGPHmqeb=92uE8uERo9ze-GLndfg@mail.gmail.com>
+Subject: Re: [bug] NULL pointer deref after 3f6634d997db ("iommu: Use right
+ way to retrieve iommu_ops")
+To:     Robin Murphy <robin.murphy@arm.com>
+Cc:     Lu Baolu <baolu.lu@linux.intel.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Ben Skeggs <bskeggs@redhat.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Eric Auger <eric.auger@redhat.com>,
+        Liu Yi L <yi.l.liu@intel.com>,
+        Jacob jun Pan <jacob.jun.pan@intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        iommu@lists.linux-foundation.org,
+        lkml <linux-kernel@vger.kernel.org>,
+        Christoph Hellwig <hch@lst.de>,
+        Bruno Goncalves <bgoncalv@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,81 +92,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-05-03 at 20:30 +0000, Sean Christopherson wrote:
-> On Tue, May 03, 2022, Maxim Levitsky wrote:
-> > On Tue, 2022-05-03 at 12:12 +0300, Maxim Levitsky wrote:
-> > > On Mon, 2022-05-02 at 16:51 +0000, Sean Christopherson wrote:
-> > > > On Mon, May 02, 2022, Maxim Levitsky wrote:
-> > > > > On Mon, 2022-05-02 at 10:59 +0300, Maxim Levitsky wrote:
-> > > > > > > > Also I can reproduce it all the way to 5.14 kernel (last kernel I have installed in this VM).
-> > > > > > > > 
-> > > > > > > > I tested kvm/queue as of today, sadly I still see the warning.
-> > > > > > > 
-> > > > > > > Due to a race, the above statements are out of order ;-)
-> > > > > > 
-> > > > > > So futher investigation shows that the trigger for this *is* cpu_pm=on :(
-> > > > > > 
-> > > > > > So this is enough to trigger the warning when run in the guest:
-> > > > > > 
-> > > > > > qemu-system-x86_64  -nodefaults  -vnc none -serial stdio -machine accel=kvm
-> > > > > > -kernel x86/dummy.flat -machine kernel-irqchip=on -smp 8 -m 1g -cpu host
-> > > > > > -overcommit cpu-pm=on
-> 
-> ...
-> 
-> > > > > All right, at least that was because I removed the '-device isa-debug-exit,iobase=0xf4,iosize=0x4',
-> > > > > which is apparently used by KVM unit tests to signal exit from the VM.
-> > > > 
-> > > > Can you provide your QEMU command line for running your L1 VM?  And your L0 and L1
-> > > > Kconfigs too?  I've tried both the dummy and ipi_stress tests on a variety of hardware,
-> > > > kernels, QEMUs, etc..., with no luck.
-> > > 
-> > > So now both L0 and L1 run almost pure kvm/queue)
-> > > (commit 2764011106d0436cb44702cfb0981339d68c3509)
-> > > 
-> > > I have some local patches but they are not relevant to KVM at all, more
-> > > like various tweaks to sensors, a sad hack for yet another regression
-> > > in AMDGPU, etc.
-> > > 
-> > > The config and qemu command line attached.
-> > > 
-> > > AVIC disabled in L0, L0 qemu is from master upstream.
-> > > Bug reproduces too well IMHO, almost always.
-> > > 
-> > > For reference the warning is printed in L1's dmesg.
-> > 
-> > Tested this without any preemption in L0 and L1 - bug still reproduces just fine.
-> > (kvm/queue)
-> 
-> Well, I officially give up, I'm out of ideas to try and repro this on my end.  To
-> try and narrow the search, maybe try processing "all" possible gfns and see if that
-> makes the leak go away?
-> 
-> diff --git a/arch/x86/kvm/mmu.h b/arch/x86/kvm/mmu.h
-> index 7e258cc94152..a354490939ec 100644
-> --- a/arch/x86/kvm/mmu.h
-> +++ b/arch/x86/kvm/mmu.h
-> @@ -84,9 +84,7 @@ static inline gfn_t kvm_mmu_max_gfn(void)
->          * than hardware's real MAXPHYADDR.  Using the host MAXPHYADDR
->          * disallows such SPTEs entirely and simplifies the TDP MMU.
->          */
-> -       int max_gpa_bits = likely(tdp_enabled) ? shadow_phys_bits : 52;
-> -
-> -       return (1ULL << (max_gpa_bits - PAGE_SHIFT)) - 1;
-> +       return (1ULL << (52 - PAGE_SHIFT)) - 1;
->  }
-> 
->  static inline u8 kvm_get_shadow_phys_bits(void)
-> 
+On Wed, May 4, 2022 at 1:14 PM Robin Murphy <robin.murphy@arm.com> wrote:
+>
+> On 2022-05-04 08:53, Jan Stancek wrote:
+> [...]
+> > Hi,
+> >
+> > I'm getting panics after hunk above was applied in this patch
+> > on ppc64le KVM guest, dev->iommu is NULL.
+>
+> Oof, this can probably be hit with vfio-noiommu too, and by the look of
+> things, `echo auto > /sys/kernel/iommu_groups/0/type` would likely blow
+> up as well. Does the patch below work for you?
 
-Nope, still reproduces.
+Thanks for quick reply. Yes, it does.
 
-I'll think on how to trace this, maybe that will give me some ideas.
-Anything useful to dump from the mmu pages that are still not freed at that point?
+# cat /sys/kernel/iommu_groups/0/reserved_regions
+# echo auto > /sys/kernel/iommu_groups/0/type
+-bash: echo: write error: Invalid argument
 
-Also do you test on AMD? I test on my 3970X.
+Tested-by: Jan Stancek <jstancek@redhat.com>
 
-
-Best regards,
-	Maxim Levitsky
+>
+> Thanks,
+> Robin.
+>
+> ----->8-----
+>  From abf0a38563bb2922a849e235d33d342170b5bc90 Mon Sep 17 00:00:00 2001
+> Message-Id: <abf0a38563bb2922a849e235d33d342170b5bc90.1651662442.git.robin.murphy@arm.com>
+> From: Robin Murphy <robin.murphy@arm.com>
+> Date: Wed, 4 May 2022 11:53:20 +0100
+> Subject: [PATCH] iommu: Make sysfs robust for non-API groups
+>
+> Groups created by VFIO backends outside the core IOMMU API should never
+> be passed directly into the API itself, however they still expose their
+> standard sysfs attributes, so we can still stumble across them that way.
+> Take care to consider those cases before jumping into our normal
+> assumptions of a fully-initialised core API group.
+>
+> Fixes: 3f6634d997db ("iommu: Use right way to retrieve iommu_ops")
+> Reported-by: Jan Stancek <jstancek@redhat.com>
+> Signed-off-by: Robin Murphy <robin.murphy@arm.com>
+> ---
+>   drivers/iommu/iommu.c | 9 ++++++++-
+>   1 file changed, 8 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
+> index 29906bc16371..41ea2deaee03 100644
+> --- a/drivers/iommu/iommu.c
+> +++ b/drivers/iommu/iommu.c
+> @@ -510,6 +510,13 @@ int iommu_get_group_resv_regions(struct iommu_group *group,
+>         list_for_each_entry(device, &group->devices, list) {
+>                 struct list_head dev_resv_regions;
+>
+> +               /*
+> +                * Non-API groups still expose reserved_regions in sysfs,
+> +                * so filter out calls that get here that way.
+> +                */
+> +               if (!device->dev->iommu)
+> +                       break;
+> +
+>                 INIT_LIST_HEAD(&dev_resv_regions);
+>                 iommu_get_resv_regions(device->dev, &dev_resv_regions);
+>                 ret = iommu_insert_device_resv_regions(&dev_resv_regions, head);
+> @@ -2977,7 +2984,7 @@ static ssize_t iommu_group_store_type(struct iommu_group *group,
+>         if (!capable(CAP_SYS_ADMIN) || !capable(CAP_SYS_RAWIO))
+>                 return -EACCES;
+>
+> -       if (WARN_ON(!group))
+> +       if (WARN_ON(!group) || !group->default_domain)
+>                 return -EINVAL;
+>
+>         if (sysfs_streq(buf, "identity"))
+> --
+> 2.35.3.dirty
+>
 

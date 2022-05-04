@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5182351AAD0
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:34:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C543751AAB8
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:29:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357965AbiEDRhL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 13:37:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40892 "EHLO
+        id S1357642AbiEDRdA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 13:33:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356906AbiEDRJs (ORCPT
+        with ESMTP id S1356918AbiEDRJt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 13:09:48 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C75F47066;
-        Wed,  4 May 2022 09:56:22 -0700 (PDT)
+        Wed, 4 May 2022 13:09:49 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C376547381;
+        Wed,  4 May 2022 09:56:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 95C6AB827A3;
-        Wed,  4 May 2022 16:56:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2FC29C385AA;
-        Wed,  4 May 2022 16:56:21 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7118BB82795;
+        Wed,  4 May 2022 16:56:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25D12C385A5;
+        Wed,  4 May 2022 16:56:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651683381;
-        bh=3hl5Abyr5dqFZ/zVqmKDc6D8kC4kQ2wP/P9hBWlUJCc=;
+        s=korg; t=1651683382;
+        bh=ubcQyke9vPFH9s6nU+Un2l/Q2Wf/PRFTnF/wUNLwwzo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pscxf8jWR3/Ue76JBwcnW3uYbBYOz9YnxBLMkJyrx/xUJnOfCZYPQDODQDsfBT0Dp
-         IdHFMkLIu6bmuDQ36JPItmcuaPysTcO6dyh/2snI5WoKJa7A8/Vr+YbcpmdACIY/L8
-         DE3Sf7L/nRr53eoCEvX3ZRAoJBlu91fVOCy5qKcM=
+        b=Kl0snVSGz7jgGwKPfld7VSbDkcyyet/R3OIaORyILvA9AqOYo1Fq+V+9yhphWnsKE
+         CQ7ErSGW5D8K9MSCq7qbJaSXEW++PuiMcNqNJDhNpSFwMlwYC3700SWV50YmAiZQw0
+         J2t1fwn7mIyEXRam5+90h64ggtgk7fV0Me5bHfkU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dongliang Mu <mudongliangabcd@gmail.com>,
-        Jens Wiklander <jens.wiklander@linaro.org>,
+        stable@vger.kernel.org,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 066/225] tee: optee: add missing mutext_destroy in optee_ffa_probe
-Date:   Wed,  4 May 2022 18:45:04 +0200
-Message-Id: <20220504153116.059763982@linuxfoundation.org>
+Subject: [PATCH 5.17 067/225] xsk: Fix l2fwd for copy mode + busy poll combo
+Date:   Wed,  4 May 2022 18:45:05 +0200
+Message-Id: <20220504153117.092670935@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
 In-Reply-To: <20220504153110.096069935@linuxfoundation.org>
 References: <20220504153110.096069935@linuxfoundation.org>
@@ -55,35 +56,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dongliang Mu <mudongliangabcd@gmail.com>
+From: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 
-[ Upstream commit b5e22886839ae466fcf03295150094516c0fd8eb ]
+[ Upstream commit 8de8b71b787f38983d414d2dba169a3bfefa668a ]
 
-The error handling code of optee_ffa_probe misses the mutex_destroy of
-ffa.mutex when mutext_init succeeds.
+While checking AF_XDP copy mode combined with busy poll, strange
+results were observed. rxdrop and txonly scenarios worked fine, but
+l2fwd broke immediately.
 
-Fix this by adding mutex_destory of ffa.mutex at the error handling part
+After a deeper look, it turned out that for l2fwd, Tx side was exiting
+early due to xsk_no_wakeup() returning true and in the end
+xsk_generic_xmit() was never called. Note that AF_XDP Tx in copy mode
+is syscall steered, so the current behavior is broken.
 
-Fixes: aceeafefff73 ("optee: use driver internal tee_context for some rpc")
-Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
-Signed-off-by: Jens Wiklander <jens.wiklander@linaro.org>
+Txonly scenario only worked due to the fact that
+sk_mark_napi_id_once_xdp() was never called - since Rx side is not in
+the picture for this case and mentioned function is called in
+xsk_rcv_check(), sk::sk_napi_id was never set, which in turn meant that
+xsk_no_wakeup() was returning false (see the sk->sk_napi_id >=
+MIN_NAPI_ID check in there).
+
+To fix this, prefer busy poll in xsk_sendmsg() only when zero copy is
+enabled on a given AF_XDP socket. By doing so, busy poll in copy mode
+would not exit early on Tx side and eventually xsk_generic_xmit() will
+be called.
+
+Fixes: a0731952d9cd ("xsk: Add busy-poll support for {recv,send}msg()")
+Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Link: https://lore.kernel.org/bpf/20220406155804.434493-1-maciej.fijalkowski@intel.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/tee/optee/ffa_abi.c | 1 +
- 1 file changed, 1 insertion(+)
+ net/xdp/xsk.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/tee/optee/ffa_abi.c b/drivers/tee/optee/ffa_abi.c
-index f744ab15bf2c..30a6119a2b16 100644
---- a/drivers/tee/optee/ffa_abi.c
-+++ b/drivers/tee/optee/ffa_abi.c
-@@ -894,6 +894,7 @@ static int optee_ffa_probe(struct ffa_device *ffa_dev)
- 	rhashtable_free_and_destroy(&optee->ffa.global_ids, rh_free_fn, NULL);
- 	optee_supp_uninit(&optee->supp);
- 	mutex_destroy(&optee->call_queue.mutex);
-+	mutex_destroy(&optee->ffa.mutex);
- err_unreg_supp_teedev:
- 	tee_device_unregister(optee->supp_teedev);
- err_unreg_teedev:
+diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
+index ac343cd8ff3f..39a82bfb5caa 100644
+--- a/net/xdp/xsk.c
++++ b/net/xdp/xsk.c
+@@ -640,7 +640,7 @@ static int __xsk_sendmsg(struct socket *sock, struct msghdr *m, size_t total_len
+ 	if (sk_can_busy_loop(sk))
+ 		sk_busy_loop(sk, 1); /* only support non-blocking sockets */
+ 
+-	if (xsk_no_wakeup(sk))
++	if (xs->zc && xsk_no_wakeup(sk))
+ 		return 0;
+ 
+ 	pool = xs->pool;
 -- 
 2.35.1
 

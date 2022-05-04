@@ -2,144 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C94C519C0C
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 11:39:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83492519C16
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 11:42:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347656AbiEDJmc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 05:42:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51030 "EHLO
+        id S1347663AbiEDJqI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 05:46:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238227AbiEDJma (ORCPT
+        with ESMTP id S238227AbiEDJp7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 05:42:30 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2125E275C0
-        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 02:38:55 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id b24so1035624edu.10
-        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 02:38:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=date:from:to:cc:subject:message-id:mail-followup-to:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=v445vAlme2zlrPL6XrM4JniIviakM8QqlAR33SjZ/5E=;
-        b=hM2bbzfYB9M+Ca6zJVRzpxwIn7EMB8SBN8mUvDSIzsa+xWIcfUGlTfwqzMYyRTSfXm
-         sisamAPFM5rcXf413mOFntR5wifzmK2GIzilqLQcVqKa74yGBGZzrTgfmApi2V4lxIkn
-         D00G1ZxDPYQLCbCzPIezeBFYNL+fl0wRhgsPw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id
-         :mail-followup-to:references:mime-version:content-disposition
-         :in-reply-to;
-        bh=v445vAlme2zlrPL6XrM4JniIviakM8QqlAR33SjZ/5E=;
-        b=z9yuB+hbIQ4SuLF8mlqMc0wH1cYZNIVpa4rA0squIMRkB6Tj2/378jt3N5KzHZXk/5
-         8AebK0uC0wtdwv/1/yU4Cmg2M8AtskfYel167Tgx1hpEA3f3LQiCVc4kx4CxnUHbGeF/
-         8yhu/VMq2tL+A+A4J96cTBsKE+DROA1ho6LbLm+mt/9XWz0jwS4Rb6SG8kWP0Qdo+qhv
-         SzkBVyHRyzmPglbTkkWHhNhGdv6Z2yNp26DT/9W0fNqjTsI0fbacvRTyv873+czWMtTZ
-         QC8fXKG2KzUDqM8A5HSc1oV5/M5X2xTAM99gocgONaX4eoZSBMWZxkoANFShGuI3RJkK
-         yzaA==
-X-Gm-Message-State: AOAM531/dha1nqLcgrhhO68icprPQFjGT1qHonqPyAIwCdCdgSZu3lmJ
-        r9kToIvEOyJu6x3exNBv0xkLeQ==
-X-Google-Smtp-Source: ABdhPJyvZnRAfF291GMqjz7DLqK6y4u0GKdaL17PBCM4iimO9RBWYJ1fAx8Vy9Brbgoj0DSchPP6sA==
-X-Received: by 2002:a05:6402:42c4:b0:426:a7a8:348f with SMTP id i4-20020a05640242c400b00426a7a8348fmr22175278edc.341.1651657133662;
-        Wed, 04 May 2022 02:38:53 -0700 (PDT)
-Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
-        by smtp.gmail.com with ESMTPSA id gv8-20020a1709072bc800b006f3ef214e5csm5520368ejc.194.2022.05.04.02.38.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 May 2022 02:38:53 -0700 (PDT)
-Date:   Wed, 4 May 2022 11:38:51 +0200
-From:   Daniel Vetter <daniel@ffwll.ch>
-To:     Jani Nikula <jani.nikula@linux.intel.com>
-Cc:     Jeffrey Hugo <quic_jhugo@quicinc.com>,
-        maarten.lankhorst@linux.intel.com, mripard@kernel.org,
-        tzimmermann@suse.de, airlied@linux.ie, daniel@ffwll.ch,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH] drm: drm_gem.h: Add explicit includes for
- DEFINE_DRM_GEM_FOPS
-Message-ID: <YnJJq6UdCVIWcH3G@phenom.ffwll.local>
-Mail-Followup-To: Jani Nikula <jani.nikula@linux.intel.com>,
-        Jeffrey Hugo <quic_jhugo@quicinc.com>,
-        maarten.lankhorst@linux.intel.com, mripard@kernel.org,
-        tzimmermann@suse.de, airlied@linux.ie, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-References: <1651262112-29664-1-git-send-email-quic_jhugo@quicinc.com>
- <87y1zkq6vg.fsf@intel.com>
+        Wed, 4 May 2022 05:45:59 -0400
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40CAE26AC8;
+        Wed,  4 May 2022 02:42:22 -0700 (PDT)
+Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2446C7E6018201;
+        Wed, 4 May 2022 11:42:00 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=selector1;
+ bh=RSjmW4IjUGZ/bQ/two1rZ1aHlJIVLGx+97yQ1s1zd4A=;
+ b=JkwE7esC89R64iqYz9q+1Wyv3tHA6csHuhH/W/gaRAX4Y4FkcHsPpLsJVGsDP/PlPKM/
+ x9vw1JMYyrXVDV9S09ff5LYhUicrDOW6+K3cQBxgnbSDZpclUUCtS6E95K2nqCMsB8kd
+ oNhtKpfAN/o5Pz+bvMomqiEq914ff0Xua2ygEjgPbfRo+1CyZG3pZ4at1lwo4bkwQriP
+ BuDMchsW0nD6qgsqFBdJtBTjBQJ+Lv1NohNy40Mqirl3ETJko6qrt3ga/eYgSSQO3OaU
+ GdZVkGDZQSk+PB7VCzWl7HFBGv759H0xXjPQF+KSRf3wmloGoyd1RP0xLJXbXUy5q15a rg== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3frthjubws-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 04 May 2022 11:42:00 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 28C9610002A;
+        Wed,  4 May 2022 11:41:58 +0200 (CEST)
+Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 114BE216EE0;
+        Wed,  4 May 2022 11:41:58 +0200 (CEST)
+Received: from localhost (10.75.127.45) by SFHDAG2NODE2.st.com (10.75.127.5)
+ with Microsoft SMTP Server (TLS) id 15.0.1497.26; Wed, 4 May 2022 11:41:57
+ +0200
+From:   Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>
+CC:     <devicetree@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+Subject: [PATCH] dt-bindings: remoteproc: Fix phandle-array parameters description
+Date:   Wed, 4 May 2022 11:41:43 +0200
+Message-ID: <20220504094143.1272200-1-arnaud.pouliquen@foss.st.com>
+X-Mailer: git-send-email 2.24.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87y1zkq6vg.fsf@intel.com>
-X-Operating-System: Linux phenom 5.10.0-8-amd64 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.75.127.45]
+X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SFHDAG2NODE2.st.com
+ (10.75.127.5)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-04_03,2022-05-02_03,2022-02-23_01
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 02, 2022 at 06:41:39PM +0300, Jani Nikula wrote:
-> On Fri, 29 Apr 2022, Jeffrey Hugo <quic_jhugo@quicinc.com> wrote:
-> > DEFINE_DRM_GEM_FOPS() references drm functions from other headers.  For
-> > example drm_open() is defined in drm_file.h and drm_ioctl() is defined
-> > in drm_ioctl.h.  Since drm_gem.h doesn't include these headers, it
-> > relies on an implicit include from the .c file to have included these
-> > required headers before DEFINE_DRM_GEM_FOPS() gets used.  Relying on
-> > these implicit includes can cause build failures for new code that
-> > doesn't know about these requirements, and can lead to future problems
-> > if the headers ever get restructured as there will be a need to update
-> > every downstream file that includes drm_gem.h.
-> >
-> > Lets fix this explicitly including the required headers in drm_gem.h so
-> > that code that includes drm_gem.h does not need to worry about these
-> > implicit dependencies.
-> 
-> In the general case, I tend to agree, but in this specific instance I
-> think I'd err on the side of fewer includes. I think the more likely
-> outcome here is accumulating implicit dependencies on symbols from
-> drm_file.h and drm_ioctl.h by including drm_gem.h only!
-> 
-> I do think headers need to be self-contained, and we actually enforce
-> this in i915 (see HDRTEST in drivers/gpu/drm/i915/Makefile), but not to
-> the point of macro expansions.
+Replace the FIXME by appropriate description.
 
-Yeah we abuse macros in a bunch of places to untangle header dependencies,
-so then going back and pulling in all the headers back in feels a bit
-silly and defeats the point.
+Fixes: 39bd2b6a3783 ("dt-bindings: Improve phandle-array schemas")
+Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+---
+ .../bindings/remoteproc/st,stm32-rproc.yaml      | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
 
-iow, I concur.
--Daniel
-
-> 
-> BR,
-> Jani.
-> 
-> 
-> 
-> >
-> > Signed-off-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
-> > ---
-> >  include/drm/drm_gem.h | 2 ++
-> >  1 file changed, 2 insertions(+)
-> >
-> > diff --git a/include/drm/drm_gem.h b/include/drm/drm_gem.h
-> > index 9d7c61a..1cbe3d8 100644
-> > --- a/include/drm/drm_gem.h
-> > +++ b/include/drm/drm_gem.h
-> > @@ -37,6 +37,8 @@
-> >  #include <linux/kref.h>
-> >  #include <linux/dma-resv.h>
-> >  
-> > +#include <drm/drm_file.h>
-> > +#include <drm/drm_ioctl.h>
-> >  #include <drm/drm_vma_manager.h>
-> >  
-> >  struct iosys_map;
-> 
-> -- 
-> Jani Nikula, Intel Open Source Graphics Center
-
+diff --git a/Documentation/devicetree/bindings/remoteproc/st,stm32-rproc.yaml b/Documentation/devicetree/bindings/remoteproc/st,stm32-rproc.yaml
+index be3d9b0e876b..da50f0e99fe2 100644
+--- a/Documentation/devicetree/bindings/remoteproc/st,stm32-rproc.yaml
++++ b/Documentation/devicetree/bindings/remoteproc/st,stm32-rproc.yaml
+@@ -43,8 +43,8 @@ properties:
+     items:
+       - items:
+           - description: Phandle of syscon block
+-          - description: FIXME
+-          - description: FIXME
++          - description: The offset of the trust zone setting register
++          - description: The field mask of the trust zone state
+ 
+   interrupts:
+     description: Should contain the WWDG1 watchdog reset interrupt
+@@ -101,8 +101,8 @@ properties:
+     items:
+       - items:
+           - description: Phandle of syscon block
+-          - description: FIXME
+-          - description: FIXME
++          - description: The offset of the power setting register
++          - description: The field mask of the PDDS selection
+ 
+   st,syscfg-m4-state:
+     $ref: "/schemas/types.yaml#/definitions/phandle-array"
+@@ -111,8 +111,8 @@ properties:
+     items:
+       - items:
+           - description: Phandle of syscon block with the tamp register
+-          - description: FIXME
+-          - description: FIXME
++          - description: The offset of the tamp register
++          - description: The field mask of the Cortex-M4 state
+ 
+   st,syscfg-rsc-tbl:
+     $ref: "/schemas/types.yaml#/definitions/phandle-array"
+@@ -122,8 +122,8 @@ properties:
+     items:
+       - items:
+           - description: Phandle of syscon block with the tamp register
+-          - description: FIXME
+-          - description: FIXME
++          - description: The offset of the tamp register
++          - description: The field mask of the Cortex-M4 resource table address
+ 
+   st,auto-boot:
+     $ref: /schemas/types.yaml#/definitions/flag
 -- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+2.24.3
+

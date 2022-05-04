@@ -2,43 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4361851A633
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 18:51:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D208E51A8FA
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:15:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353999AbiEDQxp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 12:53:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51380 "EHLO
+        id S1356067AbiEDRMD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 13:12:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353757AbiEDQwS (ORCPT
+        with ESMTP id S1354908AbiEDQ7d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 12:52:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CF0847395;
-        Wed,  4 May 2022 09:48:36 -0700 (PDT)
+        Wed, 4 May 2022 12:59:33 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A48A488B5;
+        Wed,  4 May 2022 09:51:06 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BEC6E61775;
-        Wed,  4 May 2022 16:48:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14491C385A4;
-        Wed,  4 May 2022 16:48:35 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 13CBA617BD;
+        Wed,  4 May 2022 16:51:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5DF75C385A4;
+        Wed,  4 May 2022 16:51:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651682915;
-        bh=EgOJk3ui2P1WPj5Kx+Q0XiNrigZfZXXW2qHJ3g9In/A=;
+        s=korg; t=1651683065;
+        bh=c9tifztPdtIZMnIZoFYTn8EbVTxFGghKHU5Yrzs7rmg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=0yP8xhp7+WZhHeM+y4fDjQ0NdXNlCf2Wvb1Us0dymoTa3gq8H4co+4BeNcQND1x8n
-         Rh0iEijdzy0ICF/gYA4AxfLhmhjyNccYfoLzZJmpqv+ewHKjO5MQlu4r2bQvBCtcCK
-         9AHeXAMPFVy9EHtMhPUCX2jtW8WgwNeoH/2bQ82w=
+        b=S6NHRzL56JMaPy5TfeYyG052QmOGmTLdmnHjLVoQ43idl4QTUtNPxDe+7cgWYcMcJ
+         lublwXIyfKjqQnKhnsxcDLsUt7C20B+ruPz55yLj5Xj0l8UiFH5226uo6/3au1fwf0
+         FKxaLWJzew+zG+Jw9G4jvZo7MJYgsehzm0XKbexs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Subject: [PATCH 5.4 21/84] usb: dwc3: core: Fix tx/rx threshold settings
+        stable@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 050/129] ARM: dts: at91: Map MCLK for wm8731 on at91sam9g20ek
 Date:   Wed,  4 May 2022 18:44:02 +0200
-Message-Id: <20220504152929.257435650@linuxfoundation.org>
+Message-Id: <20220504153025.043787892@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220504152927.744120418@linuxfoundation.org>
-References: <20220504152927.744120418@linuxfoundation.org>
+In-Reply-To: <20220504153021.299025455@linuxfoundation.org>
+References: <20220504153021.299025455@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,40 +56,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+From: Mark Brown <broonie@kernel.org>
 
-commit f28ad9069363dec7deb88032b70612755eed9ee6 upstream.
+[ Upstream commit 0e486fe341fabd8e583f3d601a874cd394979c45 ]
 
-The current driver logic checks against 0 to determine whether the
-periodic tx/rx threshold settings are set, but we may get bogus values
-from uninitialized variables if no device property is set. Properly
-default these variables to 0.
+The MCLK of the WM8731 on the AT91SAM9G20-EK board is connected to the
+PCK0 output of the SoC and is expected to be set to 12MHz. Previously
+this was mapped using pre-common clock API calls in the audio machine
+driver but the conversion to the common clock framework broke that so
+describe things in the DT instead.
 
-Fixes: 938a5ad1d305 ("usb: dwc3: Check for ESS TX/RX threshold config")
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Link: https://lore.kernel.org/r/cccfce990b11b730b0dae42f9d217dc6fb988c90.1649727139.git.Thinh.Nguyen@synopsys.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: ff78a189b0ae55f ("ARM: at91: remove old at91-specific clock driver")
+Signed-off-by: Mark Brown <broonie@kernel.org>
+Reviewed-by: Claudiu Beznea <claudiu.beznea@microchip.com>
+Signed-off-by: Nicolas Ferre <nicolas.ferre@microchip.com>
+Link: https://lore.kernel.org/r/20220404102806.581374-2-broonie@kernel.org
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/dwc3/core.c |    8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ arch/arm/boot/dts/at91sam9g20ek_common.dtsi | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
---- a/drivers/usb/dwc3/core.c
-+++ b/drivers/usb/dwc3/core.c
-@@ -1229,10 +1229,10 @@ static void dwc3_get_properties(struct d
- 	u8			lpm_nyet_threshold;
- 	u8			tx_de_emphasis;
- 	u8			hird_threshold;
--	u8			rx_thr_num_pkt_prd;
--	u8			rx_max_burst_prd;
--	u8			tx_thr_num_pkt_prd;
--	u8			tx_max_burst_prd;
-+	u8			rx_thr_num_pkt_prd = 0;
-+	u8			rx_max_burst_prd = 0;
-+	u8			tx_thr_num_pkt_prd = 0;
-+	u8			tx_max_burst_prd = 0;
+diff --git a/arch/arm/boot/dts/at91sam9g20ek_common.dtsi b/arch/arm/boot/dts/at91sam9g20ek_common.dtsi
+index 87bb39060e8b..ca03685f0f08 100644
+--- a/arch/arm/boot/dts/at91sam9g20ek_common.dtsi
++++ b/arch/arm/boot/dts/at91sam9g20ek_common.dtsi
+@@ -219,6 +219,12 @@ i2c-gpio-0 {
+ 		wm8731: wm8731@1b {
+ 			compatible = "wm8731";
+ 			reg = <0x1b>;
++
++			/* PCK0 at 12MHz */
++			clocks = <&pmc PMC_TYPE_SYSTEM 8>;
++			clock-names = "mclk";
++			assigned-clocks = <&pmc PMC_TYPE_SYSTEM 8>;
++			assigned-clock-rates = <12000000>;
+ 		};
+ 	};
  
- 	/* default to highest possible threshold */
- 	lpm_nyet_threshold = 0xf;
+-- 
+2.35.1
+
 
 

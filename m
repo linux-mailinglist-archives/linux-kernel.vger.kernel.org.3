@@ -2,106 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72228519BA0
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 11:25:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 783A1519BA5
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 11:26:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347199AbiEDJ25 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 05:28:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36324 "EHLO
+        id S1347137AbiEDJ3K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 05:29:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347191AbiEDJ2z (ORCPT
+        with ESMTP id S1343608AbiEDJ3I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 05:28:55 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 615541FCD0
-        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 02:25:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651656320; x=1683192320;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=RS4O6T59/rL0NmtNBaTkGbjHAgtDtRZzqREcH6ArbLw=;
-  b=XlOZKCpj0SP2ZfwnI8bDz7IlYva+iNEO1UAr0+zFHVjFtZ1ELH3wEJ3y
-   EAbMdBy8dEu6FazwDLQR8mV9BRgzjy8k54Q7TRFjFKSuIJMwTctiED1uM
-   wd8RUuo0p4Baq5k3WzIs69Hrwip4YXrAF25bF7RYzYstQOZ0tqoAbSovT
-   aRQDIufFHQO1kB9CSZcxJCPW+KR/v3iQpmHEn0CAjlc+i5EvWObE66Ubk
-   oXiT1NQMCfgyJzyn+ax2CfopcMRodteAMsiwLLnRKno4blGsNuzk8HQEC
-   ZFw+UuHVeCpOhx2YdOc3T1gX6MfsimjFhQPxvUygvoMCWJk6SF4IyqxSK
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10336"; a="292902698"
-X-IronPort-AV: E=Sophos;i="5.91,197,1647327600"; 
-   d="scan'208";a="292902698"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2022 02:25:20 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,197,1647327600"; 
-   d="scan'208";a="734316108"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 04 May 2022 02:25:16 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nmBFz-000BG1-RP;
-        Wed, 04 May 2022 09:25:15 +0000
-Date:   Wed, 4 May 2022 17:24:28 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Wesley Cheng <wcheng@codeaurora.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Subject: [andersson:wip/sc8180x-next-20220502 7/29] phy-qcom-qmp.c:undefined
- reference to `typec_switch_get_drvdata'
-Message-ID: <202205041734.dMEFSXWf-lkp@intel.com>
+        Wed, 4 May 2022 05:29:08 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D9B425C49
+        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 02:25:31 -0700 (PDT)
+Received: from mail-wr1-f42.google.com ([209.85.221.42]) by
+ mrelayeu.kundenserver.de (mreue109 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1MRmsG-1nNP9M0zta-00TGVH for <linux-kernel@vger.kernel.org>; Wed, 04 May
+ 2022 11:25:30 +0200
+Received: by mail-wr1-f42.google.com with SMTP id j15so1172425wrb.2
+        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 02:25:30 -0700 (PDT)
+X-Gm-Message-State: AOAM532mOYBwm2FY+eiS9Vf4I68HIxgsD5nwjT1wxa2fMbbjJoZF7MRM
+        Gfi+L52xM/KuWp7JN5E3qd2kWLOz4QluayaboX0=
+X-Google-Smtp-Source: ABdhPJxUrYvF7ZwgY8qESD9R2klluG7ro6Hn3afJZBZ1V9fyHe6ne3atELuxzGyH27D5YamYlyvt8DckXsyol8Y0Ock=
+X-Received: by 2002:a5d:6da4:0:b0:20c:6d76:cc54 with SMTP id
+ u4-20020a5d6da4000000b0020c6d76cc54mr7615575wrs.317.1651656329805; Wed, 04
+ May 2022 02:25:29 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <202205041720.i8wJ8uXq-lkp@intel.com>
+In-Reply-To: <202205041720.i8wJ8uXq-lkp@intel.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Wed, 4 May 2022 11:25:13 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a3F3Z1NyhVcK6wN+b6Es3gqiYGee8a+pAPsaer4hhHDbQ@mail.gmail.com>
+Message-ID: <CAK8P3a3F3Z1NyhVcK6wN+b6Es3gqiYGee8a+pAPsaer4hhHDbQ@mail.gmail.com>
+Subject: Re: time.c:undefined reference to `mach_get_rtc_pll'
+To:     kernel test robot <lkp@intel.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, kbuild-all@lists.01.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Greg Ungerer <gerg@linux-m68k.org>,
+        Daniel Palmer <daniel@0x0f.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:+6hTjSXhpGfXeveAzSpA8NdW02PQ7vI+5v41YGSKLyVaqMWQKi9
+ r1u8EdOzmVfhTWMG9Owj2NME13lVcSJHBuzFinB7PCAkxpm0cNnh8fpWBN/IU3al7vjPQcO
+ WeVocrZvxSsyHzhnVZVC6e63wiMRamY93Li8hFVW0++wsIlowFY4E7ZNowjB8HwTj+JdITP
+ iVBLNqqFcYb7adMdBp57w==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:MjJICdzK1MI=:N+TM9EWQdUj/h2GQzBXZB5
+ hG1xrFR8ibfh1eAEtBE0dbGUxzJAxjv5NWyhC5e0MsAQ06075t9ZVKh8teA3h/SYIxPE0zDx2
+ N+5DJ3/hp3q3uyEXZJUhMfWoV5uEny7v13r2/hpE4tBgIzVeFsb5g5nvSBTeYS4KqoVLD4VnD
+ nt71KvYP2zegq+WczBgNBdjfReHu3VnDCqpFgwxV0b26ceZab4UEm/E2sfMOTd9pE1a9zPwyC
+ hvBnte71fYiz3/gjTt6eKpi+jUS/b+N+3Nl31sgwF1oIqPGNLGOk5CAI5Q6BwPSeb8PpnVmLb
+ DC3afDym1pSeZHeUyge2yYi5l2rlVTWuE3rcEwAFAxbeTaggHcYyg0Pt9Qvr2vPxKAFABGdUe
+ V51nLR8koPhuNwINbjiK5m4Fui3GPI/EzsvoIgG8NfFkhxfjQjizgqew3Vzcff5H2jIZgZMUW
+ ioVpKz3B2SQ4Lzpqr1+sVepsFYHhy/botD7KehXSDZK0boU6+q6nyKR/rTA9kbHRAF4Ql3EUB
+ De+AOnK2Mmss46UhCz/hBSx9HByaZ4s12P2G4SUB9mErcitFYkz/Is8HmHWCoQ4q25iwPAGGX
+ Qzxv1FLFfOyk2vYqaeVwrL9/rYv+T3KYqxmFrEcGVLzOX1DJ9m5220NH4TMg4vkQysOV/1EyI
+ NrNFSbsySEWM0Zfy3s+bDWuYAJqupq9OlIvxkDXhIWnZSCy8+X6/0P2iWQrIg8Lv0B0UrXif2
+ uEXP/ALm4qZS5CKF7ALK8+ASMut6yUPYC4VBf1o7264Avv4W7xlnpCVxELNf9D0Jq3FPGApCs
+ i/1Ple4+7Xm06MYea07RiiU5XT3Q3lYVmAZfhD23w2IOgChhx4=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/andersson/kernel wip/sc8180x-next-20220502
-head:   6199153320a3b7d1dce23ad1ea4d894a86793cb6
-commit: 5cc3b17921dda08e833aa7933dc2da40d7e47b43 [7/29] phy: qcom-qmp: Register as a typec switch for orientation detection
-config: openrisc-randconfig-r024-20220501 (https://download.01.org/0day-ci/archive/20220504/202205041734.dMEFSXWf-lkp@intel.com/config)
-compiler: or1k-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/andersson/kernel/commit/5cc3b17921dda08e833aa7933dc2da40d7e47b43
-        git remote add andersson https://github.com/andersson/kernel
-        git fetch --no-tags andersson wip/sc8180x-next-20220502
-        git checkout 5cc3b17921dda08e833aa7933dc2da40d7e47b43
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=openrisc SHELL=/bin/bash
+On Wed, May 4, 2022 at 11:14 AM kernel test robot <lkp@intel.com> wrote:
+>
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+> head:   107c948d1d3e61d10aee9d0f7c3d81bbee9842af
+> commit: 8b22820efb35f93d98638563b0a8f4094e8ee399 m68k: m68328: remove duplicate code
+>
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
+>
+> All errors (new ones prefixed by >>):
+>
+>    m68k-linux-ld: arch/m68k/kernel/time.o: in function `rtc_ioctl':
+> >> time.c:(.text+0x82): undefined reference to `mach_get_rtc_pll'
+>    m68k-linux-ld: time.c:(.text+0xbc): undefined reference to `mach_set_rtc_pll'
+>    m68k-linux-ld: time.c:(.text+0xf4): undefined reference to `mach_set_rtc_pll'
+>
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+I think this is just another build failure that was hidden before my patch,
+not caused by my patch.
 
-All errors (new ones prefixed by >>):
-
-   or1k-linux-ld: drivers/phy/qualcomm/phy-qcom-qmp.o: in function `qcom_qmp_phy_typec_switch_set':
->> phy-qcom-qmp.c:(.text+0x470): undefined reference to `typec_switch_get_drvdata'
-   phy-qcom-qmp.c:(.text+0x470): relocation truncated to fit: R_OR1K_INSN_REL_26 against undefined symbol `typec_switch_get_drvdata'
-   or1k-linux-ld: drivers/phy/qualcomm/phy-qcom-qmp.o: in function `qcom_qmp_phy_probe':
->> phy-qcom-qmp.c:(.text+0x119c): undefined reference to `typec_switch_register'
-   phy-qcom-qmp.c:(.text+0x119c): relocation truncated to fit: R_OR1K_INSN_REL_26 against undefined symbol `typec_switch_register'
-   or1k-linux-ld: drivers/gpu/drm/msm/dp/dp_hpd.o: in function `dp_hpd_unregister_typec_mux':
-   dp_hpd.c:(.text+0xc): undefined reference to `typec_mux_unregister'
-   dp_hpd.c:(.text+0xc): relocation truncated to fit: R_OR1K_INSN_REL_26 against undefined symbol `typec_mux_unregister'
-   or1k-linux-ld: drivers/gpu/drm/msm/dp/dp_hpd.o: in function `dp_hpd_mux_set':
-   dp_hpd.c:(.text+0x38): undefined reference to `typec_mux_get_drvdata'
-   dp_hpd.c:(.text+0x38): relocation truncated to fit: R_OR1K_INSN_REL_26 against undefined symbol `typec_mux_get_drvdata'
-   or1k-linux-ld: drivers/gpu/drm/msm/dp/dp_hpd.o: in function `dp_hpd_get':
-   dp_hpd.c:(.text+0x268): undefined reference to `typec_mux_register'
-   dp_hpd.c:(.text+0x268): relocation truncated to fit: R_OR1K_INSN_REL_26 against undefined symbol `typec_mux_register'
-   or1k-linux-ld: dp_hpd.c:(.text+0x2c8): undefined reference to `typec_mux_unregister'
-   dp_hpd.c:(.text+0x2c8): relocation truncated to fit: R_OR1K_INSN_REL_26 against undefined symbol `typec_mux_unregister'
-   `.exit.text' referenced in section `.data' of sound/soc/codecs/tlv320adc3xxx.o: defined in discarded section `.exit.text' of sound/soc/codecs/tlv320adc3xxx.o
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+      Arnd

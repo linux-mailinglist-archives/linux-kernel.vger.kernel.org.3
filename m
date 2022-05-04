@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8E5951AA77
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:27:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB09F51AAD2
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:34:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235658AbiEDR0P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 13:26:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50158 "EHLO
+        id S1359268AbiEDRfz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 13:35:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354717AbiEDRFU (ORCPT
+        with ESMTP id S1356972AbiEDRJw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 13:05:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EF665133C;
-        Wed,  4 May 2022 09:54:16 -0700 (PDT)
+        Wed, 4 May 2022 13:09:52 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 599CC47552;
+        Wed,  4 May 2022 09:56:47 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F202B618BB;
-        Wed,  4 May 2022 16:54:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C564C385AA;
-        Wed,  4 May 2022 16:54:15 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 114F5B82737;
+        Wed,  4 May 2022 16:56:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8CAFCC385A4;
+        Wed,  4 May 2022 16:56:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651683255;
-        bh=AzxGN6B+6s9ilIUtcllUE9KE0UO6vCvY2wsQE9iImXE=;
+        s=korg; t=1651683404;
+        bh=vZgK6Y9PLhjhFdFkYNeKjuquI8/FQ9aIPBNEBrVREaw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mmOZEhiuWleRN4IsXoOY46U9mBCyFDvZk7E0+NwJMhimnxq8xNl/0qmSTU4t79RMb
-         1sl1LA24FX9VHpUtrGIv1B145dz9wUNFrzNPV7HTPxFBkSiGNTyBVNeM6pvDINcSz0
-         arVhVWWiIdN94hBM2T2o8YfgIz3iy9jXaqhwvEN0=
+        b=FJHOABncIv1ezM4Et75KGOMDb1IRIEmbxWt+g1IPx5VP8SvtWVGhC28pch9mPV8UH
+         iK17QHvhaim6gqVbqxYWe1h8IrPOjPBf7b0D8xzgPBRCpX9s8I+MocyuAc9tpST8tb
+         KxksHYmOB54yAYKOPXUcffWJ507n8GcMUaL+6BYw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Andreas Gruenbacher <agruenba@redhat.com>,
+        stable@vger.kernel.org, Guillaume Giraudon <ggiraudon@prism19.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 120/177] gfs2: Minor retry logic cleanup
+Subject: [PATCH 5.17 075/225] arm64: dts: meson-sm1-bananapi-m5: fix wrong GPIO pin labeling for CON1
 Date:   Wed,  4 May 2022 18:45:13 +0200
-Message-Id: <20220504153103.895550456@linuxfoundation.org>
+Message-Id: <20220504153118.060255320@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220504153053.873100034@linuxfoundation.org>
-References: <20220504153053.873100034@linuxfoundation.org>
+In-Reply-To: <20220504153110.096069935@linuxfoundation.org>
+References: <20220504153110.096069935@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,84 +55,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andreas Gruenbacher <agruenba@redhat.com>
+From: Guillaume Giraudon <ggiraudon@prism19.com>
 
-[ Upstream commit 124c458a401a2497f796e4f2d6cafac6edbea8e9 ]
+[ Upstream commit 962dd65e575dde950ef0844568edc37cfb39f302 ]
 
-Clean up the retry logic in the read and write functions somewhat.
+The labels for lines 61 through 84 on the periphs-banks were offset by 2.
+2 lines are missing in the BOOT GPIO lines (contains 14, should be 16)
+Added 2 empty entries in BOOT to realigned the rest of GPIO labels
+to match the Banana Pi M5 schematics.
 
-Signed-off-by: Andreas Gruenbacher <agruenba@redhat.com>
+(Thanks to Neil Armstrong for the heads up on the position of the missing pins)
+
+Fixes: 976e920183e4 ("arm64: dts: meson-sm1: add Banana PI BPI-M5 board dts")
+Signed-off-by: Guillaume Giraudon <ggiraudon@prism19.com>
+Reviewed-by: Neil Armstrong <narmstrong@baylibre.com>
+Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
+Link: https://lore.kernel.org/r/20220411144427.874-1-ggiraudon@prism19.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/gfs2/file.c | 34 ++++++++++++++++------------------
- 1 file changed, 16 insertions(+), 18 deletions(-)
+ arch/arm64/boot/dts/amlogic/meson-sm1-bananapi-m5.dts | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/fs/gfs2/file.c b/fs/gfs2/file.c
-index 97e2793e22d7..964c19e27ce2 100644
---- a/fs/gfs2/file.c
-+++ b/fs/gfs2/file.c
-@@ -858,9 +858,9 @@ static ssize_t gfs2_file_direct_read(struct kiocb *iocb, struct iov_iter *to,
- 		leftover = fault_in_iov_iter_writeable(to, window_size);
- 		gfs2_holder_disallow_demote(gh);
- 		if (leftover != window_size) {
--			if (!gfs2_holder_queued(gh))
--				goto retry;
--			goto retry_under_glock;
-+			if (gfs2_holder_queued(gh))
-+				goto retry_under_glock;
-+			goto retry;
- 		}
- 	}
- 	if (gfs2_holder_queued(gh))
-@@ -927,9 +927,9 @@ static ssize_t gfs2_file_direct_write(struct kiocb *iocb, struct iov_iter *from,
- 		leftover = fault_in_iov_iter_readable(from, window_size);
- 		gfs2_holder_disallow_demote(gh);
- 		if (leftover != window_size) {
--			if (!gfs2_holder_queued(gh))
--				goto retry;
--			goto retry_under_glock;
-+			if (gfs2_holder_queued(gh))
-+				goto retry_under_glock;
-+			goto retry;
- 		}
- 	}
- out:
-@@ -996,12 +996,11 @@ static ssize_t gfs2_file_read_iter(struct kiocb *iocb, struct iov_iter *to)
- 		leftover = fault_in_iov_iter_writeable(to, window_size);
- 		gfs2_holder_disallow_demote(&gh);
- 		if (leftover != window_size) {
--			if (!gfs2_holder_queued(&gh)) {
--				if (written)
--					goto out_uninit;
--				goto retry;
--			}
--			goto retry_under_glock;
-+			if (gfs2_holder_queued(&gh))
-+				goto retry_under_glock;
-+			if (written)
-+				goto out_uninit;
-+			goto retry;
- 		}
- 	}
- 	if (gfs2_holder_queued(&gh))
-@@ -1075,12 +1074,11 @@ static ssize_t gfs2_file_buffered_write(struct kiocb *iocb,
- 		gfs2_holder_disallow_demote(gh);
- 		if (leftover != window_size) {
- 			from->count = min(from->count, window_size - leftover);
--			if (!gfs2_holder_queued(gh)) {
--				if (read)
--					goto out_uninit;
--				goto retry;
--			}
--			goto retry_under_glock;
-+			if (gfs2_holder_queued(gh))
-+				goto retry_under_glock;
-+			if (read)
-+				goto out_uninit;
-+			goto retry;
- 		}
- 	}
- out_unlock:
+diff --git a/arch/arm64/boot/dts/amlogic/meson-sm1-bananapi-m5.dts b/arch/arm64/boot/dts/amlogic/meson-sm1-bananapi-m5.dts
+index 5751c48620ed..cadba194b149 100644
+--- a/arch/arm64/boot/dts/amlogic/meson-sm1-bananapi-m5.dts
++++ b/arch/arm64/boot/dts/amlogic/meson-sm1-bananapi-m5.dts
+@@ -437,6 +437,7 @@ &gpio {
+ 		"",
+ 		"eMMC_RST#", /* BOOT_12 */
+ 		"eMMC_DS", /* BOOT_13 */
++		"", "",
+ 		/* GPIOC */
+ 		"SD_D0_B", /* GPIOC_0 */
+ 		"SD_D1_B", /* GPIOC_1 */
 -- 
 2.35.1
 

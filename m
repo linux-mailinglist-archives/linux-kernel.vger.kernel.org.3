@@ -2,78 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FF6751AF3E
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 22:33:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E50551AF1A
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 22:30:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378081AbiEDUgh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 16:36:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42272 "EHLO
+        id S1378025AbiEDUeT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 16:34:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237273AbiEDUgb (ORCPT
+        with ESMTP id S1378062AbiEDUeB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 16:36:31 -0400
-Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3729E4FC79;
-        Wed,  4 May 2022 13:32:53 -0700 (PDT)
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1nmLg4-0003MI-00; Wed, 04 May 2022 22:32:52 +0200
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 37D00C01D0; Wed,  4 May 2022 22:28:42 +0200 (CEST)
-Date:   Wed, 4 May 2022 22:28:42 +0200
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Julia Lawall <Julia.Lawall@inria.fr>
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org
-Subject: Re: [PATCH] MIPS: fix typos in comments
-Message-ID: <20220504202842.GC23391@alpha.franken.de>
-References: <20220430190310.7566-1-Julia.Lawall@inria.fr>
+        Wed, 4 May 2022 16:34:01 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25EB7E2B;
+        Wed,  4 May 2022 13:30:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=meJPT/FhJ0t/HxCnUl9CRH+QfNVPReDG9ZhriBQxFCY=; b=pLYhjoEj6qFf8XaRBebMuhPHUH
+        suyXEPq2mEYfo56Vk96bJ/+ovqCcO21nwCbGFaSzYhaFiJtoPHRD3mQZK3YgS8YlPAo3bhORPthpB
+        FvRjH6bshBTryeJk8eooSm/zrjhE+0pf5ZF95NHeIrkwN5dTnnBEY/pUXgDbXzcQyYbbRT9JyDj86
+        4uTLavN0VRsiT0XyxYtWOH9f9k+9n+5JC0bZ3ot1twjcM8FWsVKwdaeePEkFtWUnOX62mK+W1VkM1
+        MWEFn6KtA1UkQFUuPVgGreAu+DZzj8+Z02af/ycm0Q/OKc7JeX1GJdEUdQHFSTigVUHpnKrLhRL8E
+        kbkth4lg==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nmLdY-00CZDY-Vg; Wed, 04 May 2022 20:30:17 +0000
+Date:   Wed, 4 May 2022 13:30:16 -0700
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Alexey Dobriyan <adobriyan@gmail.com>
+Cc:     akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
+        linux-modules@vger.kernel.org,
+        Frank van der Linden <fllinden@amazon.com>
+Subject: Re: [PATCH v2] module: fix [e_shstrndx].sh_size=0 OOB access
+Message-ID: <YnLiWHx24nTmhIM5@bombadil.infradead.org>
+References: <YnFC93NVRqOterbV@localhost.localdomain>
+ <YnGNSNcUbkwLNWNd@bombadil.infradead.org>
+ <YnJNTIJeB2NHK9Jh@localhost.localdomain>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220430190310.7566-1-Julia.Lawall@inria.fr>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <YnJNTIJeB2NHK9Jh@localhost.localdomain>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Apr 30, 2022 at 09:03:10PM +0200, Julia Lawall wrote:
-> Various spelling mistakes in comments.
-> Detected with the help of Coccinelle.
+On Wed, May 04, 2022 at 12:54:20PM +0300, Alexey Dobriyan wrote:
+> It is trivial to craft a module to trigger OOB access in this line:
 > 
-> Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
+> 	if (info->secstrings[strhdr->sh_size - 1] != '\0') {
 > 
-> ---
->  arch/mips/alchemy/common/dbdma.c                 |    2 +-
->  arch/mips/cavium-octeon/executive/cvmx-bootmem.c |    2 +-
->  arch/mips/cavium-octeon/executive/cvmx-pko.c     |    2 +-
->  arch/mips/cavium-octeon/octeon-irq.c             |    2 +-
->  arch/mips/cavium-octeon/octeon-usb.c             |    2 +-
->  arch/mips/dec/ioasic-irq.c                       |    4 ++--
->  arch/mips/dec/setup.c                            |    2 +-
->  arch/mips/fw/arc/memory.c                        |    2 +-
->  arch/mips/jazz/irq.c                             |    2 +-
->  arch/mips/kernel/cmpxchg.c                       |    2 +-
->  arch/mips/kernel/cpu-probe.c                     |    2 +-
->  arch/mips/kernel/idle.c                          |    2 +-
->  arch/mips/kernel/perf_event_mipsxx.c             |    2 +-
->  arch/mips/kvm/tlb.c                              |    2 +-
->  arch/mips/net/bpf_jit_comp32.c                   |    2 +-
->  arch/mips/pci/pcie-octeon.c                      |    2 +-
->  arch/mips/pic32/pic32mzda/config.c               |    2 +-
->  arch/mips/tools/loongson3-llsc-check.c           |    2 +-
->  arch/mips/txx9/generic/pci.c                     |    2 +-
->  19 files changed, 20 insertions(+), 20 deletions(-)
+> BUG: unable to handle page fault for address: ffffc90000aa0fff
+> #PF: supervisor read access in kernel mode
+> #PF: error_code(0x0000) - not-present page
+> PGD 100000067 P4D 100000067 PUD 100066067 PMD 10436f067 PTE 0
+> Oops: 0000 [#1] PREEMPT SMP PTI
+> CPU: 7 PID: 1215 Comm: insmod Not tainted 5.18.0-rc5-00007-g9bf578647087-dirty #10
+> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.14.0-4.fc34 04/01/2014
+> RIP: 0010:load_module+0x19b/0x2391
+> 
+> Fixes: ec2a29593c83 ("module: harden ELF info handling")
+> Signed-off-by: Alexey Dobriyan <adobriyan@gmail.com>
 
-applied to mips-next.
+Thanks! I rebased your patch onto modules-next [0] and applied onto
+modules-testing and pushed out there. If that doesn't break I'll then
+push to modules-next as well.
 
-Thomas.
-
--- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+  Luis

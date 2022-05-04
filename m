@@ -2,131 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8FA351A211
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 16:20:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0606051A213
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 16:21:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351248AbiEDOY2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 10:24:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39756 "EHLO
+        id S1351269AbiEDOYr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 10:24:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345701AbiEDOYZ (ORCPT
+        with ESMTP id S1345701AbiEDOYn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 10:24:25 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D07D11C928;
-        Wed,  4 May 2022 07:20:49 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id k27so1880070edk.4;
-        Wed, 04 May 2022 07:20:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=PDUpqEwsU0g54F2duDLV9Pqr2Yjkf7JgCmsGkPEOp0w=;
-        b=LsrQObZXf1A/KJ3l8fAg9QNyokldjCq9cX5C7y+XIxBlonabohntkTLKb0rJ3mO6ES
-         DlWroY41MZMuGn0G6eM/TINrCGpIqU0VYsy/5y8QrNBn/E0vvJSiXGIOOonTe7PX7wwJ
-         Kr/dUZlao0crAh6cyzm7vJ9wvZQXkXUGl5gJnY6WKF6pf6dww8E3AHlESi0P/yHZ2q5F
-         Bki4i/mXRFF/XI2J7ovTbRnLw4ZJqtR4NOewVfd6Y94CzqGiP1rULXKWxYnGan3Qclxs
-         uPDx/gryb9V0LY+irlYkN/WoifbWSwOPw8d2bWmzgbROezZ2j1qhBrfFqwvyezQ0hqZd
-         Ztww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=PDUpqEwsU0g54F2duDLV9Pqr2Yjkf7JgCmsGkPEOp0w=;
-        b=yCA0xbQpp3xj6eKFuxId0IaP1z61UvE6HS2vfoiq4uKLPZBeY7E1iZDDvyVdQ3Xzof
-         ISPhrC40ToQZ6GPYH1IU6Qi+o1Ql0O2Uqlm2Ua6wmedDrO4WFRFwLeYUzBZVpq/TWWwT
-         ateNDi9VVbi4FokhjI3HwQ3+6FXBHUkYWiyc0XUSMeNLJ06v576Tjeg1ZRu/c1ihqqPf
-         d28LthPl4+yCacBlYKREyZnH64idZ0CDlQ3xPJYLNskJjs0t0jMrem8POuR635pBowPJ
-         NjhSOoKpCP6dROBtTMDTCBJNbVJA3KdkrzbuvICyFX7bm+SsTMFyBYrbdw2MqKaH96tt
-         vA2g==
-X-Gm-Message-State: AOAM530E+5iBuB4DCWaSoXjF9xGWLAL2wPVJWpPg5Kq/g220uKz0by6b
-        mTCYATCRMp5Mm8ciLiXJUpJRaPxr4IU/e/11ydQ=
-X-Google-Smtp-Source: ABdhPJxtzj9zFuQw6N6sVztraiGsQxy5kNW6AXTNcgQlk00LHVmbnO+1P+bByTm7T3zXzTkNai4eTBVZFHT+TvmdkoU=
-X-Received: by 2002:a05:6402:d51:b0:425:d5e1:e9f0 with SMTP id
- ec17-20020a0564020d5100b00425d5e1e9f0mr23287754edb.125.1651674048120; Wed, 04
- May 2022 07:20:48 -0700 (PDT)
+        Wed, 4 May 2022 10:24:43 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 123941C928
+        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 07:21:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651674067; x=1683210067;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=HK/bGwrK7gNN26AiISjyYadi0tg1LKA4bEkzY6KdU80=;
+  b=TU8B0RGkbm0WEEOLmw4YLxtH6QgUTJG2TH8X4dl4Xxi+9Tv77d6pYXHX
+   5yIHbLXA1VTmJUAMOZGY6CVElpHSvVK31gz+n3m0CvBxF7tv+xJ7VRmky
+   n7kkH/hqyRvMsi7dHt46bxIfE/yzoL4QO/GLnOyST/rErX7xBBaB0s4WB
+   TqIXGVayyuiKNi9dtOM1dCftpUwVSgkaajTfifojVMRpxjHNiqd72GpCF
+   JdTh1qLke4C0vjwOPxgqpryVuPHZxSWotW3pdVvgEvMEftwWVLllQ2gWf
+   /D+MTZMNwgNitqWL/anHMZufKLdAPE8o6m2ref3JEgPFq+31buVymECLO
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10337"; a="266621736"
+X-IronPort-AV: E=Sophos;i="5.91,198,1647327600"; 
+   d="scan'208";a="266621736"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2022 07:21:06 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,198,1647327600"; 
+   d="scan'208";a="517047072"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 04 May 2022 07:21:05 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nmFsG-000BRP-Fp;
+        Wed, 04 May 2022 14:21:04 +0000
+Date:   Wed, 4 May 2022 22:20:14 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [andersson:wip/sc8180x-next-20220502 6/29] mips64el-linux-ld:
+ dp_hpd.c:undefined reference to `typec_mux_unregister'
+Message-ID: <202205042205.Iqy6XSFU-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220504133612.604304-1-Qing-wu.Li@leica-geosystems.com.cn> <20220504133612.604304-4-Qing-wu.Li@leica-geosystems.com.cn>
-In-Reply-To: <20220504133612.604304-4-Qing-wu.Li@leica-geosystems.com.cn>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Wed, 4 May 2022 16:20:11 +0200
-Message-ID: <CAHp75VeseZ2ChtbafmbgVavS4KvCvrQ4+XSRkeiJSyqr8__dSw@mail.gmail.com>
-Subject: Re: [PATCH V3 3/5] iio: accel: sca3300: modified to support multi chips
-To:     LI Qingwu <Qing-wu.Li@leica-geosystems.com.cn>
-Cc:     Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Tomas Melin <tomas.melin@vaisala.com>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        Rob Herring <robh@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 4, 2022 at 3:36 PM LI Qingwu
-<Qing-wu.Li@leica-geosystems.com.cn> wrote:
->
-> The drive support sca3300 only.
+tree:   https://github.com/andersson/kernel wip/sc8180x-next-20220502
+head:   6199153320a3b7d1dce23ad1ea4d894a86793cb6
+commit: be6e31f126bed33f684250905b79d76f7664d985 [6/29] drm/msm/dp: Add typec_mux implementation
+config: mips-randconfig-r005-20220501 (https://download.01.org/0day-ci/archive/20220504/202205042205.Iqy6XSFU-lkp@intel.com/config)
+compiler: mips64el-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/andersson/kernel/commit/be6e31f126bed33f684250905b79d76f7664d985
+        git remote add andersson https://github.com/andersson/kernel
+        git fetch --no-tags andersson wip/sc8180x-next-20220502
+        git checkout be6e31f126bed33f684250905b79d76f7664d985
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
 
-driver supports
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-> There are some other similar chips, for instance, SCL3300.
-> Prepare the way for multiple chips and additional channels.
-> Modify the driver to read the device id.
-> Add the tables for the corresponding id to support multiple chips.
-> Add prepares for the addition of extra channels.
-> Add prepares for handling the operation modes for multiple chips.
+All errors (new ones prefixed by >>):
 
-It seems you need to work more on the commit messages in all patches.
-
-...
-
-> +struct sca3300_chip_info {
-> +       const struct iio_chan_spec *channels;
-> +       const int (*accel_scale_table)[2];
-> +       const int *accel_scale_modes_map;
-> +       const unsigned long *scan_masks;
-> +       const int *avail_modes_table;
-> +       const int *freq_modes_map;
-> +       const int *freq_table;
-> +       const u8 num_accel_scales;
-> +       const u8 num_avail_modes;
-> +       const u8 num_channels;
-> +       const u8 num_freqs;
-> +       const u8 chip_id;
-
-Why do you have const qualifier on all members?  The last one is
-understandable, but the rest, esp. pointers should be justified.
-
-> +       const char *name;
-> +};
-
-...
-
-> +static int sca3300_set_op_mode(struct sca3300_data *sca_data, int index)
-> +{
-> +       int mode;
-> +
-> +       if ((index < 0) || (index >= sca_data->chip->num_avail_modes))
-
-Too many parentheses.
-
-> +               return -EINVAL;
-> +
-> +       mode = sca_data->chip->avail_modes_table[index];
-> +
-> +       return sca3300_write_reg(sca_data, SCA3300_REG_MODE, mode);
-> +}
+   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `drivers/nvmem/layerscape-sfp.o' being placed in section `.ctors.65436'
+   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `drivers/fpga/fpga-mgr.o' being placed in section `.ctors.65436'
+   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `drivers/fpga/altera-cvp.o' being placed in section `.ctors.65436'
+   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `drivers/fpga/socfpga.o' being placed in section `.ctors.65436'
+   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `drivers/fpga/socfpga-a10.o' being placed in section `.ctors.65436'
+   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `drivers/fpga/zynq-fpga.o' being placed in section `.ctors.65436'
+   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `drivers/fpga/zynqmp-fpga.o' being placed in section `.ctors.65436'
+   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `drivers/fpga/versal-fpga.o' being placed in section `.ctors.65436'
+   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `drivers/fpga/altera-pr-ip-core.o' being placed in section `.ctors.65436'
+   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `drivers/fpga/altera-pr-ip-core-plat.o' being placed in section `.ctors.65436'
+   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `drivers/fsi/fsi-core.o' being placed in section `.ctors.65436'
+   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `drivers/fsi/fsi-master-hub.o' being placed in section `.ctors.65436'
+   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `drivers/fsi/fsi-master-aspeed.o' being placed in section `.ctors.65436'
+   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `drivers/fsi/fsi-master-gpio.o' being placed in section `.ctors.65436'
+   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `drivers/fsi/fsi-sbefifo.o' being placed in section `.ctors.65436'
+   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `drivers/fsi/fsi-occ.o' being placed in section `.ctors.65436'
+   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `drivers/tee/tee_core.o' being placed in section `.ctors.65436'
+   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `drivers/tee/tee_shm.o' being placed in section `.ctors.65436'
+   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `drivers/tee/tee_shm_pool.o' being placed in section `.ctors.65436'
+   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `drivers/mux/core.o' being placed in section `.ctors.65436'
+   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `drivers/mux/mmio.o' being placed in section `.ctors.65436'
+   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `drivers/siox/siox-core.o' being placed in section `.ctors.65436'
+   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `drivers/gnss/core.o' being placed in section `.ctors.65436'
+   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `drivers/interconnect/core.o' being placed in section `.ctors.65436'
+   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `drivers/interconnect/bulk.o' being placed in section `.ctors.65436'
+   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `drivers/interconnect/imx/imx.o' being placed in section `.ctors.65436'
+   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `drivers/interconnect/imx/imx8mn.o' being placed in section `.ctors.65436'
+   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `drivers/counter/counter-core.o' being placed in section `.ctors.65436'
+   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `drivers/counter/counter-sysfs.o' being placed in section `.ctors.65436'
+   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `drivers/counter/counter-chrdev.o' being placed in section `.ctors.65436'
+   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `drivers/counter/104-quad-8.o' being placed in section `.ctors.65436'
+   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `drivers/counter/interrupt-cnt.o' being placed in section `.ctors.65436'
+   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `drivers/counter/stm32-timer-cnt.o' being placed in section `.ctors.65436'
+   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `drivers/counter/stm32-lptimer-cnt.o' being placed in section `.ctors.65436'
+   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `drivers/counter/ftm-quaddec.o' being placed in section `.ctors.65436'
+   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `drivers/counter/microchip-tcb-capture.o' being placed in section `.ctors.65436'
+   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `drivers/counter/intel-qep.o' being placed in section `.ctors.65436'
+   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `drivers/most/core.o' being placed in section `.ctors.65436'
+   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `drivers/most/configfs.o' being placed in section `.ctors.65436'
+   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `drivers/peci/core.o' being placed in section `.ctors.65436'
+   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `drivers/peci/request.o' being placed in section `.ctors.65436'
+   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `drivers/peci/device.o' being placed in section `.ctors.65436'
+   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `drivers/peci/sysfs.o' being placed in section `.ctors.65436'
+   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `drivers/peci/cpu.o' being placed in section `.ctors.65436'
+   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `drivers/peci/controller/peci-aspeed.o' being placed in section `.ctors.65436'
+   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `virt/lib/irqbypass.o' being placed in section `.ctors.65436'
+   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `arch/mips/pci/pci.o' being placed in section `.ctors.65436'
+   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `arch/mips/pci/pci-generic.o' being placed in section `.ctors.65436'
+   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `lib/argv_split.o' being placed in section `.ctors.65436'
+   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `lib/bootconfig.o' being placed in section `.ctors.65436'
+   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `lib/buildid.o' being placed in section `.ctors.65436'
+   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `lib/cmdline.o' being placed in section `.ctors.65436'
+   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `lib/cpumask.o' being placed in section `.ctors.65436'
+   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `lib/ctype.o' being placed in section `.ctors.65436'
+   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `lib/dec_and_lock.o' being placed in section `.ctors.65436'
+   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `lib/decompress.o' being placed in section `.ctors.65436'
+   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `lib/decompress_unlzo.o' being placed in section `.ctors.65436'
+   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `lib/decompress_unxz.o' being placed in section `.ctors.65436'
+   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `lib/extable.o' being placed in section `.ctors.65436'
+   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `lib/fdt.o' being placed in section `.ctors.65436'
+   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `lib/fdt_ro.o' being placed in section `.ctors.65436'
+   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `lib/fdt_rw.o' being placed in section `.ctors.65436'
+   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `lib/fdt_wip.o' being placed in section `.ctors.65436'
+   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `lib/flex_proportions.o' being placed in section `.ctors.65436'
+   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `lib/idr.o' being placed in section `.ctors.65436'
+   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `lib/is_single_threaded.o' being placed in section `.ctors.65436'
+   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `lib/klist.o' being placed in section `.ctors.65436'
+   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `lib/kobject.o' being placed in section `.ctors.65436'
+   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `lib/kobject_uevent.o' being placed in section `.ctors.65436'
+   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `lib/logic_pio.o' being placed in section `.ctors.65436'
+   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `lib/memcat_p.o' being placed in section `.ctors.65436'
+   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `lib/nmi_backtrace.o' being placed in section `.ctors.65436'
+   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `lib/nodemask.o' being placed in section `.ctors.65436'
+   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `lib/plist.o' being placed in section `.ctors.65436'
+   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `lib/radix-tree.o' being placed in section `.ctors.65436'
+   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `lib/ratelimit.o' being placed in section `.ctors.65436'
+   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `lib/rbtree.o' being placed in section `.ctors.65436'
+   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `lib/seq_buf.o' being placed in section `.ctors.65436'
+   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `lib/sha1.o' being placed in section `.ctors.65436'
+   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `lib/show_mem.o' being placed in section `.ctors.65436'
+   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `lib/siphash.o' being placed in section `.ctors.65436'
+   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `lib/string.o' being placed in section `.ctors.65436'
+   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `lib/timerqueue.o' being placed in section `.ctors.65436'
+   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `lib/vsprintf.o' being placed in section `.ctors.65436'
+   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `lib/xarray.o' being placed in section `.ctors.65436'
+   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `arch/mips/fw/lib/cmdline.o' being placed in section `.ctors.65436'
+   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `arch/mips/lib/delay.o' being placed in section `.ctors.65436'
+   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `arch/mips/lib/mips-atomic.o' being placed in section `.ctors.65436'
+   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `arch/mips/math-emu/dp_flong.o' being placed in section `.ctors.65436'
+   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `arch/mips/math-emu/dp_sqrt.o' being placed in section `.ctors.65436'
+   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `arch/mips/math-emu/dp_tlong.o' being placed in section `.ctors.65436'
+   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `arch/mips/math-emu/sp_flong.o' being placed in section `.ctors.65436'
+   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `arch/mips/math-emu/sp_sqrt.o' being placed in section `.ctors.65436'
+   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `arch/mips/math-emu/sp_tlong.o' being placed in section `.ctors.65436'
+   mips64el-linux-ld: drivers/gpu/drm/msm/dp/dp_hpd.o: in function `dp_hpd_unregister_typec_mux':
+   dp_hpd.c:(.text+0xc0): undefined reference to `typec_mux_unregister'
+   mips64el-linux-ld: drivers/gpu/drm/msm/dp/dp_hpd.o: in function `dp_hpd_mux_set':
+   dp_hpd.c:(.text+0xf8): undefined reference to `typec_mux_get_drvdata'
+   mips64el-linux-ld: drivers/gpu/drm/msm/dp/dp_hpd.o: in function `dp_hpd_get':
+   dp_hpd.c:(.text+0x30c): undefined reference to `typec_mux_register'
+>> mips64el-linux-ld: dp_hpd.c:(.text+0x34c): undefined reference to `typec_mux_unregister'
 
 -- 
-With Best Regards,
-Andy Shevchenko
+0-DAY CI Kernel Test Service
+https://01.org/lkp

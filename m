@@ -2,66 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BA095196F6
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 07:40:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92D44519705
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 07:43:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344679AbiEDFoV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 01:44:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53352 "EHLO
+        id S1344719AbiEDFrZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 01:47:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230474AbiEDFoT (ORCPT
+        with ESMTP id S230474AbiEDFrX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 01:44:19 -0400
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD3D126104;
-        Tue,  3 May 2022 22:40:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1651642844; x=1683178844;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=nD9Yd2tjQcZusGHucY1wp7TRcdWxNvW77SUlhTgYrfc=;
-  b=etKBGjJxcyZz117O7v0Rlibd0aqPAd7ytUnwlKuHN06gCSjlZhAf3q4g
-   0yRy5xiFGZP8JcNxlDcQLJ7k7KokQAk4YofrX2zz7L93hZyIGGuoJwpBa
-   AsdV9U7O3Nym07tBqMj0IX6RytatI2ylPeE0kNbWqx76NOYBnN0RS0kOV
-   Y=;
-Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 03 May 2022 22:40:44 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2022 22:40:44 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Tue, 3 May 2022 22:40:43 -0700
-Received: from [10.216.1.126] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Tue, 3 May 2022
- 22:40:40 -0700
-Message-ID: <fe2721e7-d987-5cef-cc7b-3e138cf3fa1d@quicinc.com>
-Date:   Wed, 4 May 2022 11:10:37 +0530
+        Wed, 4 May 2022 01:47:23 -0400
+Received: from hr2.samba.org (hr2.samba.org [IPv6:2a01:4f8:192:486::2:0])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38F7726112;
+        Tue,  3 May 2022 22:43:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=samba.org;
+        s=42; h=From:Cc:To:Date:Message-ID;
+        bh=TatprxO4xZzU4ESyGnkidUF+o4GoftI+QmBq5qqUcsk=; b=XFBowGi34o1WrJgRi8WIGJb6Xf
+        z4i5namwqTAY6ynnqw6+qyOLfpof0m1jFPULcaHDe2qwps9gntBlaaWi/DPMTlOj/b+9CaPYJh0LE
+        NImUPO3O9FJ3oDvG/RP3aFIYmJoC3GrhkPjyuj+Bcl4q01L8Eaewif7dX5tVUCX+C6bo5PX+xqsqE
+        Ngy/fm+pegLfkDLIENYThIw0b2zlnFgjGFex033aJACY0tnNDl9DdURaRnm78To35TK4M+vsqd4Rn
+        QwvkZFC9PGg2uK0F9qAjOlaEGXHhhY48OSbZUb0QeR1nEly/jMalCfMyFEkhDpspOamNiTX0k1ZuX
+        8Wxuuxe/LaX2lS7wAgdo8JEJ3Ush3rel8qwz/COwRogyTHtCSdPwbUyhThktUFsRCckss7KDowuNa
+        PY1WHXF2r0BA9A50ZKwL513eqEiQuU2zcH4McVbI3pSAcJtmVHg7o097JfwFoe8GRaCBBBJVei1OE
+        +INE1IHAFkOGhRJ3zINWpB61;
+Received: from [127.0.0.2] (localhost [127.0.0.1])
+        by hr2.samba.org with esmtpsa (TLS1.3:ECDHE_SECP256R1__ECDSA_SECP256R1_SHA256__CHACHA20_POLY1305:256)
+        (Exim)
+        id 1nm7nd-0041Oj-8c; Wed, 04 May 2022 05:43:45 +0000
+Message-ID: <7dc6c729-73cd-74be-eec7-ac4a0013f60f@samba.org>
+Date:   Wed, 4 May 2022 00:43:42 -0500
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [PATCH v4] arm64: dts: qcom: sc7280: Add lpasscore & lpassaudio
- clock controllers
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: CIFS regression mounting vers=1.0 NTLMSSP when hostname is too
+ long
 Content-Language: en-US
-To:     Matthias Kaehlcke <mka@chromium.org>
-CC:     Rob Herring <robh+dt@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        <devicetree@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20220503113246.13857-1-quic_tdas@quicinc.com>
- <YnF7b7n4Yn+NcP/b@google.com>
-From:   Taniya Das <quic_tdas@quicinc.com>
-In-Reply-To: <YnF7b7n4Yn+NcP/b@google.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+To:     Paulo Alcantara <pc@cjr.nz>, Byron Stanoszek <gandalf@winds.org>
+Cc:     linux-cifs@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <e6837098-15d9-acb6-7e34-1923cf8c6fe1@winds.org>
+ <878rri2i6o.fsf@cjr.nz>
+From:   Steven French <sfrench@samba.org>
+In-Reply-To: <878rri2i6o.fsf@cjr.nz>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
 X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -72,98 +55,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Matthias,
+makes sense - do you see anything related in the NTLMSSP doc?
 
-On 5/4/2022 12:28 AM, Matthias Kaehlcke wrote:
-> On Tue, May 03, 2022 at 05:02:46PM +0530, Taniya Das wrote:
->> Add the low pass audio clock controller device nodes. Keep the lpasscc
->> clock node disabled and enabled for lpass pil based devices.
+Want to spin up a patch for SMB1 for this?
+
+On 5/3/22 20:35, Paulo Alcantara wrote:
+> Byron Stanoszek <gandalf@winds.org> writes:
+>
+>> I would like to report a regression in the CIFS fs. Sometime between Linux 4.14
+>> and 5.16, mounting CIFS with option vers=1.0 (and
+>> CONFIG_CIFS_ALLOW_INSECURE_LEGACY=y set appropriately) with security type
+>> NTLMSSP stopped working for me. The server side is a Windows 2003 Server.
 >>
->> Signed-off-by: Taniya Das <quic_tdas@quicinc.com>
+>> I found that this behavior depends on the length of the Linux client's
+>> host+domain name (e.g. utsname()->nodename), where the mount works as long as
+>> the name is 16 characters or less. Anything 17 or above returns -EIO, per the
+>> following example:
+> Looks like your server is expecting the WorkstationName field in
+> AUTHENTICATE_MESSAGE payload to be 16 bytes long.  That is, NetBIOS name
+> length as per rfc1001.
+>
+>> I implemented a workaround using the following patch:
+>>
+>> Signed-off-by: Byron Stanoszek <gandalf@winds.org>
 >> ---
->> [v4]
->>   * Mark lpasscc[lpasscc@3000000] device node as "disabled".
+>> --- a/fs/cifs/cifsglob.h
+>> +++ b/fs/cifs/cifsglob.h
+>> @@ -101,7 +101,7 @@
+>>    #define XATTR_DOS_ATTRIB "user.DOSATTRIB"
+>>    #endif
 >>
->> [v3]
->>   * Fix unwanted extra spaces in reg property.
->>   * Fix lpass_aon node clock phandle <&lpasscc> to <&lpasscore>
+>> -#define CIFS_MAX_WORKSTATION_LEN  (__NEW_UTS_LEN + 1)  /* reasonable max for client */
+>> +#define CIFS_MAX_WORKSTATION_LEN 16
 >>
->>   arch/arm64/boot/dts/qcom/sc7280.dtsi | 44 ++++++++++++++++++++++++++++
->>   1 file changed, 44 insertions(+)
+>>    /*
+>>     * CIFS vfs client Status information (based on what we know.)
 >>
->> diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
->> index f0b64be63c21..477a754741a1 100644
->> --- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
->> +++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
->> @@ -8,6 +8,8 @@
->>   #include <dt-bindings/clock/qcom,dispcc-sc7280.h>
->>   #include <dt-bindings/clock/qcom,gcc-sc7280.h>
->>   #include <dt-bindings/clock/qcom,gpucc-sc7280.h>
->> +#include <dt-bindings/clock/qcom,lpassaudiocc-sc7280.h>
->> +#include <dt-bindings/clock/qcom,lpasscorecc-sc7280.h>
->>   #include <dt-bindings/clock/qcom,rpmh.h>
->>   #include <dt-bindings/clock/qcom,videocc-sc7280.h>
->>   #include <dt-bindings/gpio/gpio.h>
->> @@ -1978,6 +1980,48 @@
->>   			clocks = <&gcc GCC_CFG_NOC_LPASS_CLK>;
->>   			clock-names = "iface";
->>   			#clock-cells = <1>;
->> +			status = "disabled";
->> +		};
->> +
->> +		lpass_audiocc: clock-controller@3300000 {
->> +			compatible = "qcom,sc7280-lpassaudiocc";
->> +			reg = <0 0x03300000 0 0x30000>;
->> +			clocks = <&rpmhcc RPMH_CXO_CLK>,
->> +			       <&lpass_aon LPASS_AON_CC_MAIN_RCG_CLK_SRC>;
->> +			clock-names = "bi_tcxo", "lpass_aon_cc_main_rcg_clk_src";
->> +			power-domains = <&lpass_aon LPASS_AON_CC_LPASS_AUDIO_HM_GDSC>;
->> +			#clock-cells = <1>;
->> +			#power-domain-cells = <1>;
->> +		};
->> +
->> +		lpass_aon: clock-controller@3380000 {
->> +			compatible = "qcom,sc7280-lpassaoncc";
->> +			reg = <0 0x03380000 0 0x30000>;
->> +			clocks = <&rpmhcc RPMH_CXO_CLK>,
->> +			       <&rpmhcc RPMH_CXO_CLK_A>,
->> +			       <&lpasscore LPASS_CORE_CC_CORE_CLK>;
->> +			clock-names = "bi_tcxo", "bi_tcxo_ao", "iface";
->> +			#clock-cells = <1>;
->> +			#power-domain-cells = <1>;
->> +		};
->> +
->> +		lpasscore: clock-controller@3900000 {
-> 
-> nit: lpass_core?
-> 
-> The other labels have an underscore, it wouldn't hurt to be consistent.
-
-Sure, will take care in the next patch.
-
-> 
->> +			compatible = "qcom,sc7280-lpasscorecc";
->> +			reg = <0 0x03900000 0 0x50000>;
->> +			clocks =  <&rpmhcc RPMH_CXO_CLK>;
->> +			clock-names = "bi_tcxo";
->> +			power-domains = <&lpass_hm LPASS_CORE_CC_LPASS_CORE_HM_GDSC>;
->> +			#clock-cells = <1>;
->> +			#power-domain-cells = <1>;
->> +		};
->> +
->> +		lpass_hm: clock-controller@3c00000 {
->> +			compatible = "qcom,sc7280-lpasshm";
->> +			reg = <0 0x3c00000 0 0x28>;
->> +			clocks = <&rpmhcc RPMH_CXO_CLK>;
->> +			clock-names = "bi_tcxo";
->> +			#clock-cells = <1>;
->> +			#power-domain-cells = <1>;
->>   		};
->>
->>   		lpass_ag_noc: interconnect@3c40000 {
->> --
-
-
--- 
-Thanks & Regards,
-Taniya Das.
+>> I don't know if this patch is correct or will have any real effect outside of
+>> the NTLMSSP session connect sequence, but it worked in my case.
+> Perhaps we should be use TCP_Server_Info::workstation_RFC1001_name in
+> fs/cifs/sess.c:build_ntlmssp_auth_blob() instead only when connecting to
+> old servers by using insecure dialects -- like SMB1, in your case.

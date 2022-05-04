@@ -2,89 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D71C051A6F1
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 18:58:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3C3A51A5CC
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 18:43:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351286AbiEDRAl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 13:00:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52440 "EHLO
+        id S1353575AbiEDQrG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 12:47:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353948AbiEDQyk (ORCPT
+        with ESMTP id S1345266AbiEDQrD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 12:54:40 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6FD349904;
-        Wed,  4 May 2022 09:49:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 34748617A5;
-        Wed,  4 May 2022 16:49:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81362C385A5;
-        Wed,  4 May 2022 16:49:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651682983;
-        bh=k1rHxpQm2S8mpKlnDFvQd5CLu7baZrkGv8q8lii6SQc=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=0m1vj5hbi5ViNYOBR4qnc8uX8AykAsu2mn7g8kU1OrlteXFObaEcoWrO2cWoykF7e
-         cpvIE5LBRRFhXaumOedZ3mLefNq08nWSJDL3ByKss2PP/df8Ieas5vW8HbQP8uK2KB
-         7rX84UWg4kZke2tZRQ3B24Z5ZyadrFsmofFG8t4w=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: [PATCH 5.10 012/129] xhci: increase usb U3 -> U0 link resume timeout from 100ms to 500ms
-Date:   Wed,  4 May 2022 18:43:24 +0200
-Message-Id: <20220504153022.295406273@linuxfoundation.org>
-X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220504153021.299025455@linuxfoundation.org>
-References: <20220504153021.299025455@linuxfoundation.org>
-User-Agent: quilt/0.66
+        Wed, 4 May 2022 12:47:03 -0400
+Received: from na01-obe.outbound.protection.outlook.com (mail-cusazon11020026.outbound.protection.outlook.com [52.101.61.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88E72443D5;
+        Wed,  4 May 2022 09:43:27 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=W3kVbMCjckZb/GO2rKXkekMKykljcOw/vH/lSakEmrP3K0S59WoXmF63rCaiFQI+FQq0/Mzp3Odq7kaLunh6EkRyYujiqfyYhhkPTWDAyggBUPuY+BpGFMiOW0gulu11eoIAJmeN2M23oFbRaR3QSX263Em+pEFFZbN7SOKqxT0uwhKQMSdbaYacgAoJu6pdGNXaUQEfMjqtg5bgan0rIuYOtMr1UMyKE+W19CH1fqAFgbV0sT7b2uhGL+8vtse9Q/RZsn3czmVz0zIECO5XaqfpIpccajCKR8cpE9HUJ7iLFIz8EaVqwmfACg3Ykw2xExbKYcDzuKfHPNl1OtAFNQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=EbadKU2ja4QhdqHNENqqNrvpNboQ2IhA9jknKuNRtV0=;
+ b=lbvhihjSuTRs3HLNK6qc/nXPvxbsZ4Axw9hzOTse6BGD+PPCu0+1IpYEAkmqYK2nst3L/WSq+rYDxtDr2rJ6zXOd+VpX9QeXXuNpGuZkSd6TeIsX6cjGY/uMeH1P7YHvJfDHeC59GjscOmu8odkrIjO6VZVhB1Z52w4EhMBAK8Ouug4hovduc2ASWjsn+ImNTklkARfFcpjo0RC2tj8My/vBNcx4ItEEbO8nqsTGl62PoyFsQCc/DT/F3K3slj/IlSiLkSN5nHrlEo3BMfw1GfiR8ryEv4bYQBY1BjJ3+Nvbfv9swWYlLl75iZjKkHZRuZH5FgoCMG4s2b9YwGLC2Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microsoft.com; dmarc=pass action=none
+ header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=EbadKU2ja4QhdqHNENqqNrvpNboQ2IhA9jknKuNRtV0=;
+ b=hWeWbXdZ66uXc97hTzN85obTxMi3vWQ9UygktMOe9CfBdpKy8Vm1lZYEaiCREGb96mt58B1geSQzdaedxWOMN1X0TXa4qx7mIMu5Ro2d6x4OmleJtQiBngVN+jXgyXBuySOt88W2mRtgKB/V6/+aBD28Gahljz+k0rtmRVTiES4=
+Received: from DM5PR21MB1749.namprd21.prod.outlook.com (2603:10b6:4:9f::21) by
+ BY5PR21MB1457.namprd21.prod.outlook.com (2603:10b6:a03:21f::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5250.7; Wed, 4 May
+ 2022 16:43:24 +0000
+Received: from DM5PR21MB1749.namprd21.prod.outlook.com
+ ([fe80::6d4a:ca20:4584:49f]) by DM5PR21MB1749.namprd21.prod.outlook.com
+ ([fe80::6d4a:ca20:4584:49f%5]) with mapi id 15.20.5250.006; Wed, 4 May 2022
+ 16:43:24 +0000
+From:   Haiyang Zhang <haiyangz@microsoft.com>
+To:     Wei Liu <wei.liu@kernel.org>,
+        Saurabh Sengar <ssengar@linux.microsoft.com>,
+        Dexuan Cui <decui@microsoft.com>,
+        "Michael Kelley (LINUX)" <mikelley@microsoft.com>
+CC:     Saurabh Singh Sengar <ssengar@microsoft.com>,
+        KY Srinivasan <kys@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        "deller@gmx.de" <deller@gmx.de>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "linux-fbdev@vger.kernel.org" <linux-fbdev@vger.kernel.org>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH] video: hyperv_fb: Allow resolutions with size > 64 MB for
+ Gen1
+Thread-Topic: [PATCH] video: hyperv_fb: Allow resolutions with size > 64 MB
+ for Gen1
+Thread-Index: AQHYWj1qgbQXzG7yeUuG8g2gPWY4Wa0FZpIAgAmPjZA=
+Date:   Wed, 4 May 2022 16:43:24 +0000
+Message-ID: <DM5PR21MB1749EE7458996FF22AAA9AF8CAC39@DM5PR21MB1749.namprd21.prod.outlook.com>
+References: <1651067273-6635-1-git-send-email-ssengar@linux.microsoft.com>
+ <20220428143746.sya775ro5zi3kgm3@liuwe-devbox-debian-v2>
+In-Reply-To: <20220428143746.sya775ro5zi3kgm3@liuwe-devbox-debian-v2>
+Accept-Language: en-US
+Content-Language: en-US
+X-Mentions: decui@microsoft.com,mikelley@microsoft.com
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=ea6efad5-303e-4efd-b054-9cb15ed3afe4;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2022-05-04T16:37:53Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microsoft.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 2d7664d1-3fe8-4291-4841-08da2ded351c
+x-ms-traffictypediagnostic: BY5PR21MB1457:EE_
+x-microsoft-antispam-prvs: <BY5PR21MB1457BA31FA97B22C7DC19AF4CAC39@BY5PR21MB1457.namprd21.prod.outlook.com>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: nOVi5VlB+KwXGtbfh9dBdFGNrjD24UGAmqRdbCCxDat4erlPD/qWxxQ9BhF0fLtLWXEfxI+YsYmT+9OZtBilNcQKqp25fP9Yd0c8yrZA7ft94TAcrIngiHnLc7f4+sOr6RWkNiLT7w1hFUamBt7OD2chrbh6lB9pqzTF6U2rHBhY+ret7yaggGfEjENzjwOD9XtLL69qyDJSEr2Rj2AQGQudT7mEodTFRVpLj94OqRHo7PNNSBO1HRIqOBADrfQJYKDwsnIIGRHecovywY47HPCMwc5wyuGa/TPEDObW3P8HhYqefSuRRJe+rd+oZBmBmXhymWZNVGhthfzTLXsVxHexG2E1liyb+beBPpNwl2J5A8cd8dYbz74ZMNh5f+n2cVnr4CDo3hMJIF44HC29zL5O2ZYBDfeWRGRMFd+ut6XnkFArT15ghF27GcSPrH6yKpPsggVz1XzCJD2cevYsu79U20MZ83oTWXY2ibZ6NaBatjHytOELAylF/KUbFt8tspqnlC7xrDwg4AJqjDeP2av/D6TSXQkr0D/b3tGgGan3U31pLA9A4Et6krtAE+s6PcjQpB5FZll4jDt3spwuttXXVspKQi+kKu3LNDldQ9C1TcjpACbf4CnIiMx8uZhJ0oDWSZ+ulsFY6aXeVyqhcFw+ZD1BwIMDdDbyk98coom0m3gYPru/u/2LSeXKvnsqiis3ldXZYf+eVnOIxE3VfDFXfX1JU8J6eDy6rwExcKfCil7v8MsgG2tRrK7ZUnhU
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR21MB1749.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(451199009)(71200400001)(86362001)(52536014)(8990500004)(33656002)(38100700002)(8936002)(83380400001)(4326008)(8676002)(5660300002)(64756008)(66446008)(66476007)(66556008)(66946007)(76116006)(2906002)(38070700005)(110136005)(122000001)(6506007)(10290500003)(9686003)(55016003)(7696005)(508600001)(26005)(82950400001)(53546011)(54906003)(82960400001)(6636002)(316002)(186003);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?pDDtLISk+QTUEkLC1Lya5i1HDARXCIgcu30Q2k2kegQJHOAWOyUVYOswBP0h?=
+ =?us-ascii?Q?h9CcpsG9VIGWQ7zPdUFFbLi9mOlMpZ1LJJ/557Undg+PVR3C7vu/4hH2ygbV?=
+ =?us-ascii?Q?hU7l/NRWO0Li8GFPN8f1J0lDJXJ+iHUeVG1odfUWmwnaFk3jak3qoT1ZZ/kb?=
+ =?us-ascii?Q?92moFyAiH+HKiZ5KOrIOZ53F3WaBy5YrD8p83VdsWIVZLYKR+ZEH0XMZi+hJ?=
+ =?us-ascii?Q?eqdk5ypg3wZMslcyLEOdoZOnoWgrxyV0r7NMS+LGdr9evVsLk5jXys/DcAMZ?=
+ =?us-ascii?Q?xEcImdOiA8ohh8AX8Pt7LGEmUluX+vzRjW1xM06Ir0jZl76ult6AGTXClmc0?=
+ =?us-ascii?Q?cnTL/jaJ6r24Mz6bItvyZGKs25g+iAy8gj/kDLp1wKbuQ+T1iY+gE7J4QSjq?=
+ =?us-ascii?Q?1FeYrRAAhOR4XWzIEzVMLmDXXYA6yGxYizzYXBiUYlbWfken86WosdpAmgBb?=
+ =?us-ascii?Q?sfIH6pE7UuU37gHSp511Wm2UtPjY3tN3+i8qfhIzNS3NuU+Zm+C9IYD+7RBp?=
+ =?us-ascii?Q?zuL5T+ABY01uP9wJjdh2q0VpMH7ZCN+eBEbI4e3D3SC+OXaVD70Qu/4LpLmE?=
+ =?us-ascii?Q?bXPWF8liuV7eM3YXhsZw7HHetJhNmvePYYxUIeG78UQFtlUtkYgEfpX10+ig?=
+ =?us-ascii?Q?3gSVcyElT7GWQuAUnWMTW6hQ6d5ZSKE3h6KKm3ODVGHej/ai0HW1z8OKCdzA?=
+ =?us-ascii?Q?mJSmZzVGE+QMHjYbB39L2zQO9R8VXlwegYL0gk1Y207t8ov+9E68+d6W52LV?=
+ =?us-ascii?Q?bdlu0C7i+6UYZ8i+AqpByUs+gazXV8B1JJEDyvmDb6MkXhMQUmQE4LcSCYto?=
+ =?us-ascii?Q?fcwm8STDfBlaW29WLKf8EA4x9zttjyaLC7J4egd+w4Fw82JiZGb0eZn8pfim?=
+ =?us-ascii?Q?qNmlmXJTt16rn3OAzwzSMlRuKiArsiTLLXO4jVrlU+E1mDxvsfcarvyXJfA+?=
+ =?us-ascii?Q?SIyoN/+FhGYqe43nfL8J/THoHYuIv4sAfj5LQ64gu6re1rHxgIqQcnEGUn62?=
+ =?us-ascii?Q?XVqT++Whw4PKj5zGI1XPn8T3aF/PUrP5LYX3kMsdtFiqZsIlmc01UuqDmLAc?=
+ =?us-ascii?Q?8FFNhiRlMy5TsFaMJYyEtBHON6tOp2V/M7EU2s3qwyIv/hFdm+bqbkzNOxBP?=
+ =?us-ascii?Q?YZIkUCBDW8aNO7kH9M65vdOwTYlYif0Qu0gE901zly0uBMuRjNIh856PthjR?=
+ =?us-ascii?Q?oD1YGzZMMxUINzucul5IDD+vHvpc7wzzcN5Cp3qzgqNAQfFBfzcnnTcqPllg?=
+ =?us-ascii?Q?Yhmd1FMT7QX8CVquUmEsnzC9TeHQJ6k09acYoBBpCYNO52NIHKeSy6AClWVA?=
+ =?us-ascii?Q?Yqjw+DfN7K42NZF4VsLds+f0+uPMmNVnFJenhRl6lJYMu8XhgkaJcvgdYRa2?=
+ =?us-ascii?Q?ABGbOdoXNrpqIyp34clMYAKdXF2kryasJEVKOs7b2XXsLKJDd340XwZqekLb?=
+ =?us-ascii?Q?XSigSwbjH+JPiyi24x/wqjqrLGm90HcKNKKmR+Kn/y/J3ZpUnZqKxWifJ4w+?=
+ =?us-ascii?Q?9EEh/R1E8a6VJetsl/evoljrHJGrnZWObrGt1kIlDPUCLEA1dxb92b9Hfh0Z?=
+ =?us-ascii?Q?yBrQkl9pWagpAlSmfP+yTjndU0wcEa39Z9D3EE9zd5dkYNQIDSpBc8e2Y/8o?=
+ =?us-ascii?Q?lXPZ3XT1uRNpEQukMr5xySHdQDt2MTOa8Pr3IouqpMbQeGt6gYjVNmRABC3k?=
+ =?us-ascii?Q?JN0tgkBCpJosWlRulbW4IgvEHo8TueLzip9VrkJnHcTuFG8/1lmthxn8b3QP?=
+ =?us-ascii?Q?jIV0hCS88Q=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-OriginatorOrg: microsoft.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM5PR21MB1749.namprd21.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2d7664d1-3fe8-4291-4841-08da2ded351c
+X-MS-Exchange-CrossTenant-originalarrivaltime: 04 May 2022 16:43:24.7641
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: tWc2Lzx23dOu+zxLkuYNXfpdWhfjBZ9eb/zkiChTurSVpqqlFelu+jcG+ZHo948H/rnvp1Q948c1zYa0JlySDw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR21MB1457
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
 
-commit 33597f0c48be0836854d43c577e35c8f8a765a7d upstream.
 
-The first U3 wake signal by the host may be lost if the USB 3 connection is
-tunneled over USB4, with a runtime suspended USB4 host, and firmware
-implemented connection manager.
+> -----Original Message-----
+> From: Wei Liu <wei.liu@kernel.org>
+> Sent: Thursday, April 28, 2022 10:38 AM
+> To: Saurabh Sengar <ssengar@linux.microsoft.com>
+> Cc: Saurabh Singh Sengar <ssengar@microsoft.com>; KY Srinivasan
+> <kys@microsoft.com>; Haiyang Zhang <haiyangz@microsoft.com>; Stephen
+> Hemminger <sthemmin@microsoft.com>; wei.liu@kernel.org; Dexuan Cui
+> <decui@microsoft.com>; deller@gmx.de; linux-hyperv@vger.kernel.org; linux=
+-
+> fbdev@vger.kernel.org; dri-devel@lists.freedesktop.org; linux-
+> kernel@vger.kernel.org
+> Subject: Re: [PATCH] video: hyperv_fb: Allow resolutions with size > 64 M=
+B for
+> Gen1
+>=20
+> On Wed, Apr 27, 2022 at 06:47:53AM -0700, Saurabh Sengar wrote:
+> > This patch fixes a bug where GEN1 VMs doesn't allow resolutions greater
+> > than 64 MB size (eg 7680x4320). Unnecessary PCI check limits Gen1 VRAM
+> > to legacy PCI BAR size only (ie 64MB). Thus any, resolution requesting
+> > greater then 64MB (eg 7680x4320) would fail. MMIO region assigning this
+> > memory shouldn't be limited by PCI bar size.
+> >
+> > Signed-off-by: Saurabh Sengar <ssengar@linux.microsoft.com>
+> > ---
+> >  drivers/video/fbdev/hyperv_fb.c | 19 +------------------
+> >  1 file changed, 1 insertion(+), 18 deletions(-)
+> >
+> > diff --git a/drivers/video/fbdev/hyperv_fb.c
+> b/drivers/video/fbdev/hyperv_fb.c
+> > index c8e0ea2..58c304a 100644
+> > --- a/drivers/video/fbdev/hyperv_fb.c
+> > +++ b/drivers/video/fbdev/hyperv_fb.c
+> > @@ -1009,7 +1009,6 @@ static int hvfb_getmem(struct hv_device *hdev,
+> struct fb_info *info)
+> >  	struct pci_dev *pdev  =3D NULL;
+> >  	void __iomem *fb_virt;
+> >  	int gen2vm =3D efi_enabled(EFI_BOOT);
+> > -	resource_size_t pot_start, pot_end;
+> >  	phys_addr_t paddr;
+> >  	int ret;
+> >
+> > @@ -1060,23 +1059,7 @@ static int hvfb_getmem(struct hv_device *hdev,
+> struct fb_info *info)
+> >  	dio_fb_size =3D
+> >  		screen_width * screen_height * screen_depth / 8;
+> >
+> > -	if (gen2vm) {
+> > -		pot_start =3D 0;
+> > -		pot_end =3D -1;
+> > -	} else {
+> > -		if (!(pci_resource_flags(pdev, 0) & IORESOURCE_MEM) ||
+> > -		    pci_resource_len(pdev, 0) < screen_fb_size) {
+> > -			pr_err("Resource not available or (0x%lx < 0x%lx)\n",
+> > -			       (unsigned long) pci_resource_len(pdev, 0),
+> > -			       (unsigned long) screen_fb_size);
+> > -			goto err1;
+>=20
+> This restriction has been in place since day 1. Haiyang, you wrote this
+> driver. Can you comment on whether this change here is sensible?
 
-Specs state the host must wait 100ms (tU3WakeupRetryDelay) before
-resending a U3 wake signal if device doesn't respond, leading to U3 -> U0
-link transition times around 270ms in the tunneled case.
+When I initially implemented this driver 10 years ago, I believe there=20
+was smaller limit for the fb... But I think this patch is good for the=20
+newer MMIO alloc scheme. I hope to see reviews also from
+ @Dexuan Cui @Michael Kelley (LINUX) who are more familiar with=20
+the PCI/BAR/MMIO area.
 
-Fixes: 0200b9f790b0 ("xhci: Wait until link state trainsits to U0 after setting USB_SS_PORT_LS_U0")
-Cc: stable@vger.kernel.org
-Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
-Link: https://lore.kernel.org/r/20220408134823.2527272-4-mathias.nyman@linux.intel.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- drivers/usb/host/xhci-hub.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
---- a/drivers/usb/host/xhci-hub.c
-+++ b/drivers/usb/host/xhci-hub.c
-@@ -1348,7 +1348,7 @@ int xhci_hub_control(struct usb_hcd *hcd
- 				}
- 				spin_unlock_irqrestore(&xhci->lock, flags);
- 				if (!wait_for_completion_timeout(&bus_state->u3exit_done[wIndex],
--								 msecs_to_jiffies(100)))
-+								 msecs_to_jiffies(500)))
- 					xhci_dbg(xhci, "missing U0 port change event for port %d-%d\n",
- 						 hcd->self.busnum, wIndex + 1);
- 				spin_lock_irqsave(&xhci->lock, flags);
-
+Thanks,
+- Haiyang
 

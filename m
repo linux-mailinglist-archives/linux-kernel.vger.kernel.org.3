@@ -2,157 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D24C3519571
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 04:19:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92908519572
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 04:21:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243551AbiEDCW5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 22:22:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38760 "EHLO
+        id S1343806AbiEDCZW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 22:25:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229579AbiEDCWu (ORCPT
+        with ESMTP id S229579AbiEDCZS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 22:22:50 -0400
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::225])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDF8A2B27C;
-        Tue,  3 May 2022 19:19:15 -0700 (PDT)
-Received: (Authenticated sender: joao@overdrivepizza.com)
-        by mail.gandi.net (Postfix) with ESMTPA id 4842A1C0004;
-        Wed,  4 May 2022 02:19:11 +0000 (UTC)
-MIME-Version: 1.0
-Date:   Tue, 03 May 2022 19:19:11 -0700
-From:   Joao Moreira <joao@overdrivepizza.com>
-To:     Josh Poimboeuf <jpoimboe@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
-        peterz@infradead.org, andrew.cooper3@citrix.com,
-        keescook@chromium.org, samitolvanen@google.com,
-        mark.rutland@arm.com, hjl.tools@gmail.com,
-        alyssa.milburn@linux.intel.com, ndesaulniers@google.com,
-        gabriel.gomes@linux.intel.com, rick.p.edgecombe@intel.com
-Subject: Re: [RFC PATCH 01/11] x86: kernel FineIBT
-In-Reply-To: <20220503220244.vyz5flk3gg3y6rbw@treble>
-References: <20220420004241.2093-1-joao@overdrivepizza.com>
- <20220420004241.2093-2-joao@overdrivepizza.com>
- <20220429013704.4n4lmadpstdioe7a@treble>
- <d82459b887bcaf9181ad836051e2d16b@overdrivepizza.com>
- <20220503220244.vyz5flk3gg3y6rbw@treble>
-Message-ID: <068cafedb0699383b696ce15d5677979@overdrivepizza.com>
-X-Sender: joao@overdrivepizza.com
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 3 May 2022 22:25:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2B3122BDD
+        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 19:21:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 34333619DD
+        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 02:21:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D56B7C385A4;
+        Wed,  4 May 2022 02:21:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651630903;
+        bh=fcTqXzojK4WmUgceBGkv/oGAZ7gI7I5rRw7o4nQVbGU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=ojzA6aF0kfY1cUuum9CUbSCbM9+l4RhJ8rV5UXJnu7Mr2OEVH7qbx6sX5ml6CTL9a
+         AoaQVg4nFBa4gCSepjH8uClbLuHAdgykwVF54AY/hL3TASIvtecRA+7EaX/kTM/hHv
+         5qt7BXRZFSLaute/jXivH+Gno1McJ05QZnTgCdzfCuLooRHW0f1oSgYxaMzsb2a6gv
+         gdf0mwycPUxH6ZIpHuPEG65PrJxk5Y4The64wvEcYRV9TutNwwvW0/1SftGf/0jVN5
+         Yro7K5EUUwtl6Kl6Qb/dKFZJBI6eY9BlV4Sc5FN0wo/2m/zrilgV7nlVMse8yWG/MX
+         thvcHtXZV1TSQ==
+Date:   Wed, 4 May 2022 11:21:39 +0900
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     Max Filippov <jcmvbkbc@gmail.com>
+Cc:     linux-kernel@vger.kernel.org,
+        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
+        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>
+Subject: Re: [PATCH] kprobes: fix build with CONFIG_KRETPROBES=n
+Message-Id: <20220504112139.a4b9e0bbeb697fb0980864c6@kernel.org>
+In-Reply-To: <20220502184050.1792743-1-jcmvbkbc@gmail.com>
+References: <20220502184050.1792743-1-jcmvbkbc@gmail.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-10.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> 
-> It should be possible to have a non-fatal #UD2 handler.
-> 
-> See for example how WARN() is implemented with __WARN_FLAGS in
-> arch/x86/include/asm/bug.h .
-> 
-> So hopefully we can just get rid of the need for the "call handler"
-> thing altogether.
-> 
-Nice, I'll look into it. Tks.
+Hello Max,
 
->> > Not sure what would happen for "ibt=off"?  Maybe apply_ibt_endbr() could
->> > NOP out all the FineIBT stuff.
->> 
->> Either that, or...
->> 
->> I'm thinking about a way to have FineIBT interchangeable with KCFI.
->> Currently KCFI adds a 4 byte hash + 2 byte nops before function entry, 
->> to
->> allow for proper prototype checking. After that, there should be an 
->> ENDBR of
->> 4 bytes. This gives us 10 bytes in total. Then, my yet to be properly
->> thought idea would be patch these 10 bytes with:
->> 
->> endbr
->> call fineibt_handler_<$HASH>
->> nop
->> 
->> and then, on the caller side, patch the "cmp <$HASH>, -0x6(%r11); je; 
->> ud2;
->> call" sequence with a "sub 0x6, r11; mov $HASH, %r10; call %r11, add 
->> 0x6
->> %r11". This would then allow the kernel to verify if the CPU is IBT 
->> capable
->> on boot time and only then setting the proper scheme.
->> 
->> The downsides of having something like this would be that this sub 
->> r11/add
->> r11 sequence is kinda meh. We can avoid that by having two padding 
->> nops
->> after the original ENDBR, which will be skipped when the function is 
->> reached
->> directly by the linker optimization I'm working on, and that we can 
->> convert
->> into a JMP -offset that makes control flow reach the padding area 
->> before the
->> prologue and from where we can call the fineibt_handler function. The
->> resulting instrumentation would be something like:
->> 
->> 1:
->> call fineibt_handler_<$HASH>
->> jmp 2f
->> <foo>
->> endbr
->> jmp 1b
->> 2:
->> 
->> Also, it would prevent a paranoid user to have both schemes 
->> simultaneously
->> (there are reasons why people could want that).
->> 
->> Any thoughts?
-> 
-> I'm not really qualified to comment on this too directly since I 
-> haven't
-> looked very much at the variations on FineIBT/CFI/KCFI, and what the
-> protections and drawbacks are for each approach, and when it might even
-> make sense to combine them for a "paranoid user".
-> 
-> Since we have multiple similar and possibly competing technologies 
-> being
-> discussed, one thing I do want to warn against is that we as kernel
-> developers tend to err on the side of giving people too many choices 
-> and
-> combinations which *never* get used.
-> 
-> All those unused options can confuse the user and significantly add to
-> complexity and maintenance overhead for us.  Especially for invasive
-> features like these.
-> 
-> (Just to be clear, I'm not saying that's happening here, but it's
-> something we need to be careful about.)
-> 
-> Here, documentation is going to be crucial, for both reviewers and
-> users.  Something that describes when/why I should use X or Y or X+Y.
-> 
-> If we truly want to add more options/combos for different use cases 
-> then
-> we'll also need clear and concise documentation about which
-> options/combos would be used under what circumstances.
+Thank you for reporting this issue and making a patch.
+However, it looks those functions (free_rp_inst_rcu(), recycle_rp_inst(), 
+kprobe_flush_task() and free_rp_inst()) should be moved into the
+CONFIG_KRETPROBES=y area simply because all of those are needed for
+kretprobes.
+Let me fix that.
 
-Yeah, I totally understand/support this concern and I feel the same way. 
-While, in this case, I can't see super clear reasons for X+Y, there are 
-aspects why someone could prefer X or Y -- so I think that using 
-alternatives to flip the instrumentation is a valid consideration. In 
-time, taking the chance to be fair on the credits, using alternatives to 
-replace KCFI/FineIBT was also Peter's idea, not mine. It looked hard to 
-do at first sight because of the caller/callee-side checks differences, 
-but since Peter mentioned it, I started trying to solve the puzzle of 
-having the best suitable instrumentation that would be changeable. I 
-haven't discussed this with anyone yet, but at this point I think it 
-might be doable, although not in the most performant shape. Anyway, I'll 
-post something here once I have a more solid idea.
+Thank you,
 
-And yes, I agree that documentation will be key and I totally see your 
-point/understand how confusing I was in my previous e-mail. I'll keep 
-that in mind for the next revision. Thanks for pointing it out :)
+On Mon,  2 May 2022 11:40:50 -0700
+Max Filippov <jcmvbkbc@gmail.com> wrote:
+
+> When building kernel with CONFIG_KRETPROBES=n kernel/kprobes.c
+> compilation fails with the following messages:
+> 
+>   kernel/kprobes.c: In function ‘recycle_rp_inst’:
+>   kernel/kprobes.c:1273:32: error: implicit declaration of function
+>                                    ‘get_kretprobe’
+> 
+>   kernel/kprobes.c: In function ‘kprobe_flush_task’:
+>   kernel/kprobes.c:1299:35: error: ‘struct task_struct’ has no member
+>                                    named ‘kretprobe_instances’
+> 
+> Make references to kretprobe-specific structures and functions
+> conditional.
+> 
+> Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+> ---
+>  kernel/kprobes.c | 32 +++++++++++++++++++++-----------
+>  1 file changed, 21 insertions(+), 11 deletions(-)
+> 
+> diff --git a/kernel/kprobes.c b/kernel/kprobes.c
+> index dd58c0be9ce2..95ce4d16e63e 100644
+> --- a/kernel/kprobes.c
+> +++ b/kernel/kprobes.c
+> @@ -1258,6 +1258,7 @@ void kprobe_busy_end(void)
+>  }
+>  
+>  #if !defined(CONFIG_KRETPROBE_ON_RETHOOK)
+> +#ifdef CONFIG_KRETPROBES
+>  static void free_rp_inst_rcu(struct rcu_head *head)
+>  {
+>  	struct kretprobe_instance *ri = container_of(head, struct kretprobe_instance, rcu);
+> @@ -1279,21 +1280,11 @@ static void recycle_rp_inst(struct kretprobe_instance *ri)
+>  }
+>  NOKPROBE_SYMBOL(recycle_rp_inst);
+>  
+> -/*
+> - * This function is called from delayed_put_task_struct() when a task is
+> - * dead and cleaned up to recycle any kretprobe instances associated with
+> - * this task. These left over instances represent probed functions that
+> - * have been called but will never return.
+> - */
+> -void kprobe_flush_task(struct task_struct *tk)
+> +static void kretprobe_flush_task(struct task_struct *tk)
+>  {
+>  	struct kretprobe_instance *ri;
+>  	struct llist_node *node;
+>  
+> -	/* Early boot, not yet initialized. */
+> -	if (unlikely(!kprobes_initialized))
+> -		return;
+> -
+>  	kprobe_busy_begin();
+>  
+>  	node = __llist_del_all(&tk->kretprobe_instances);
+> @@ -1306,6 +1297,25 @@ void kprobe_flush_task(struct task_struct *tk)
+>  
+>  	kprobe_busy_end();
+>  }
+> +NOKPROBE_SYMBOL(kretprobe_flush_task);
+> +#endif
+> +
+> +/*
+> + * This function is called from delayed_put_task_struct() when a task is
+> + * dead and cleaned up to recycle any kretprobe instances associated with
+> + * this task. These left over instances represent probed functions that
+> + * have been called but will never return.
+> + */
+> +void kprobe_flush_task(struct task_struct *tk)
+> +{
+> +	/* Early boot, not yet initialized. */
+> +	if (unlikely(!kprobes_initialized))
+> +		return;
+> +
+> +#ifdef CONFIG_KRETPROBES
+> +	kretprobe_flush_task(tk);
+> +#endif
+> +}
+>  NOKPROBE_SYMBOL(kprobe_flush_task);
+>  
+>  static inline void free_rp_inst(struct kretprobe *rp)
+> -- 
+> 2.30.2
+> 
+
+
+-- 
+Masami Hiramatsu <mhiramat@kernel.org>

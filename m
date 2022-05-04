@@ -2,225 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A26051A11F
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 15:40:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DC9651A126
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 15:41:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350664AbiEDNns (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 09:43:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58644 "EHLO
+        id S1350720AbiEDNoh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 09:44:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235194AbiEDNnr (ORCPT
+        with ESMTP id S235194AbiEDNog (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 09:43:47 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71F4222B28;
-        Wed,  4 May 2022 06:40:11 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 28B57210DB;
-        Wed,  4 May 2022 13:40:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1651671610; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=P3L8WfScLSRH1WI2OZY7AnhEganXihLXSAJyDojrSeM=;
-        b=Fk5VhujveqOe+22CV+xy4pe1FB8tjhA8zmVtCswChKBR1lE48OBFdSCQro6wZwNieh3MIU
-        VX/25koisNCEm21sYdalDZeVWVlqxG1DYFs503aAAf7BQfJZMnNNtnalXJXTZClu9tW+Ck
-        NNY5GIhJSsWqL/xmDDSFPXxyMDm+MCA=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id C10AD132C4;
-        Wed,  4 May 2022 13:40:09 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id gtoeLTmCcmIffwAAMHmgww
-        (envelope-from <jgross@suse.com>); Wed, 04 May 2022 13:40:09 +0000
-Message-ID: <7fa956e0-98dd-4bce-033b-8566f1b7cfc6@suse.com>
-Date:   Wed, 4 May 2022 15:40:09 +0200
+        Wed, 4 May 2022 09:44:36 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2FA124BCD;
+        Wed,  4 May 2022 06:40:58 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id g20so1739128edw.6;
+        Wed, 04 May 2022 06:40:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:to:cc:references
+         :from:in-reply-to:content-transfer-encoding;
+        bh=suVw3tSzbwyZSam3QbzRJHAkBAls+2hu9csRGskWjWw=;
+        b=bk9kOJqOLJTxShNzNja788BQ2B6hxHftCjyH0aVxO0vJypv6yv1bMzkGh7Qu8+7ccE
+         Y2XQdNv3VZEdvDWkWuimAcjeExlT3lFCmgTValt3KEPauGhwXBQkHqC2zZanUpv7heF7
+         kb8xaW5XRYSzxtRbRl3jtjMBTHZj4JB+o0azkG6bN1VZbmUVp05G2SFu8BdSc4Ayu/3+
+         cwV20fCW68AQh17TdOtQWun/2JxzAyXY00ENFuUquQYIcc0eLoQXSaTduF3/FHmJiNK9
+         +hJK3W5lulfnGCf9T1CuZQcWCIWcroGoMGeAnqKk5DJzeABcTvx1JM/69AmyBog9jtlR
+         1Y8w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :to:cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=suVw3tSzbwyZSam3QbzRJHAkBAls+2hu9csRGskWjWw=;
+        b=Lllvft10z/2m/fEsNx4eQcEBHIYSUYlt1SiL3f9KSRzrHQvrjQ+cCmvMx1ths0mKps
+         rLbp/oTtRO8QDEiDKr9C9v7GGRqFc85fJuc4m5GkkeXdBPRXuZRgeG4b5VVhUG9EyUJE
+         zbWVR02XRDYirmWzsCfyhMlmXZYcws5iF1uqfqrruaDKR5Pmb4cwmKD0sUudyoBGsu9q
+         3ymw4SGiDy26CabBUfmKjvkikmll90LhNPam08OVRBCmIWG3t79eq8YLgAxx8DreAbTh
+         uQPJVbkoRDoVlnc4zSrE88/sy0DLxyUn35GNCcWIncxeJwgYv2oTgUerkoePrVEEkKEz
+         hRMw==
+X-Gm-Message-State: AOAM531Jr+UvLKLWvNi1d4khcINUTVh4F1pDvegxVN66f4X6mw4x+EzO
+        rl8gXgbKXTxLDsZH33qe2e/p23Vx8ig=
+X-Google-Smtp-Source: ABdhPJwV+5IUc2JZSq1pNUPzHy8aTwwTASBzecl/CgmJrjO0BveOXuEoDT+ZmXE7LkjGMGFzYy/nkA==
+X-Received: by 2002:a05:6402:5108:b0:427:e323:4c67 with SMTP id m8-20020a056402510800b00427e3234c67mr8686804edd.326.1651671657228;
+        Wed, 04 May 2022 06:40:57 -0700 (PDT)
+Received: from [192.168.26.149] (ip-194-187-74-233.konfederacka.maverick.com.pl. [194.187.74.233])
+        by smtp.googlemail.com with ESMTPSA id t26-20020a05640203da00b0042617ba6383sm9088126edw.13.2022.05.04.06.40.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 04 May 2022 06:40:56 -0700 (PDT)
+Message-ID: <63cb6fe1-5abe-ebfe-7d94-34dff86f1a81@gmail.com>
+Date:   Wed, 4 May 2022 15:40:55 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v2] arm64: paravirt: Use RCU read locks to guard
- stolen_time
-Content-Language: en-US
-To:     Elliot Berman <quic_eberman@quicinc.com>,
-        "Srivatsa S. Bhat (VMware)" <srivatsa@csail.mit.edu>,
-        Alexey Makhalov <amakhalov@vmware.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>
-Cc:     Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>,
-        virtualization@lists.linux-foundation.org, x86@kernel.org,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:96.0) Gecko/20100101
+ Thunderbird/96.0
+Subject: Re: Regression? [PATCH 1/2] mtd: call of_platform_populate() for MTD
+ partitions
+To:     Daniel Golle <daniel@makrotopia.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>
+Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Tom Rini <trini@konsulko.com>, linux-mtd@lists.infradead.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Murali Nalajala <quic_mnalajal@quicinc.com>,
-        stable@vger.kernel.org
-References: <20220428183536.2866667-1-quic_eberman@quicinc.com>
-From:   Juergen Gross <jgross@suse.com>
-In-Reply-To: <20220428183536.2866667-1-quic_eberman@quicinc.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------xuyclinqwvjtwpIMj7eZwjJz"
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        u-boot@lists.denx.de, devicetree@vger.kernel.org,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
+References: <20220406143225.28107-1-zajec5@gmail.com>
+ <20220411090032.10999-1-miquel.raynal@bootlin.com>
+ <YmX3Yn9cS1YjWOjs@makrotopia.org>
+From:   =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>
+In-Reply-To: <YmX3Yn9cS1YjWOjs@makrotopia.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------xuyclinqwvjtwpIMj7eZwjJz
-Content-Type: multipart/mixed; boundary="------------dRLRymBekbLvthqZxssmtJ0j";
- protected-headers="v1"
-From: Juergen Gross <jgross@suse.com>
-To: Elliot Berman <quic_eberman@quicinc.com>,
- "Srivatsa S. Bhat (VMware)" <srivatsa@csail.mit.edu>,
- Alexey Makhalov <amakhalov@vmware.com>,
- Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>
-Cc: Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>,
- virtualization@lists.linux-foundation.org, x86@kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
- Murali Nalajala <quic_mnalajal@quicinc.com>, stable@vger.kernel.org
-Message-ID: <7fa956e0-98dd-4bce-033b-8566f1b7cfc6@suse.com>
-Subject: Re: [PATCH v2] arm64: paravirt: Use RCU read locks to guard
- stolen_time
-References: <20220428183536.2866667-1-quic_eberman@quicinc.com>
-In-Reply-To: <20220428183536.2866667-1-quic_eberman@quicinc.com>
+On 25.04.2022 03:20, Daniel Golle wrote:
+> On Mon, Apr 11, 2022 at 11:00:32AM +0200, Miquel Raynal wrote:
+>> On Wed, 2022-04-06 at 14:32:24 UTC, =?utf-8?b?UmFmYcWCIE1pxYJlY2tp?= wrote:
+>>> From: Rafał Miłecki <rafal@milecki.pl>
+>>>
+>>> Until this change MTD subsystem supported handling partitions only with
+>>> MTD partitions parsers. That's a specific / limited API designed around
+>>> partitions.
+>>>
+>>> Some MTD partitions may however require different handling. They may
+>>> contain specific data that needs to be parsed and somehow extracted. For
+>>> that purpose MTD subsystem should allow binding of standard platform
+>>> drivers.
+>>>
+>>> An example can be U-Boot (sub)partition with environment variables.
+>>> There exist a "u-boot,env" DT binding for MTD (sub)partition that
+>>> requires an NVMEM driver.
+>>>
+>>> Ref: 5db1c2dbc04c ("dt-bindings: nvmem: add U-Boot environment variables binding")
+>>> Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
+>>
+>> Applied to https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git mtd/next, thanks.
+> 
+> I'm trying to use next-20220422 and noticed a few new oops'es.
+> Turns out it could be a problem with this commit according to
+> 
+> [daniel@box linux.git]$ git bisect good
+> 68471517e883902cdff6ea399d043b17f803b1a8 is the first bad commit
+> commit 68471517e883902cdff6ea399d043b17f803b1a8
+> Author: Rafał Miłecki <rafal@milecki.pl>
+> Date:   Wed Apr 6 16:32:24 2022 +0200
+> 
+>      mtd: call of_platform_populate() for MTD partitions
+> [...]
+> ---
+> 
+> So when ever there is at least one 'compatible' node for any of the
+> mtd partitions I get the oops messages below. It doesn't really matter
+> what the compatible string is, "nvmem-cells" as well as "denx,fit"
+> (used for OpenWrt mtdsplit not even present in linux-next, so just a
+> dead hint in DTS) make the kernel to oops.
+> 
+> Despite the messages being shown, both accessing MTD partitions and
+> also eth0 MAC address populated via NVMEM seem to work without
+> problems (at least looks like it on first sight).
+> 
+> Find the full device tree here:
+> 
+> https://git.openwrt.org/?p=openwrt/openwrt.git;a=blob;f=target/linux/mediatek/dts/mt7622-ubnt-unifi-6-lr-ubootmod.dts
 
---------------dRLRymBekbLvthqZxssmtJ0j
-Content-Type: multipart/mixed; boundary="------------Lqc0Jx82gB2MJ5eOgbe3v0Ti"
+I found it! It used to happen (before dropping patch) with:
+# CONFIG_MTD_PARTITIONED_MASTER is not set
 
---------------Lqc0Jx82gB2MJ5eOgbe3v0Ti
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
-
-T24gMjguMDQuMjIgMjA6MzUsIEVsbGlvdCBCZXJtYW4gd3JvdGU6DQo+IEZyb206IFByYWty
-dXRoaSBEZWVwYWsgSGVyYWd1IDxxdWljX3BoZXJhZ3VAcXVpY2luYy5jb20+DQo+IA0KPiBE
-dXJpbmcgaG90cGx1ZywgdGhlIHN0b2xlbiB0aW1lIGRhdGEgc3RydWN0dXJlIGlzIHVubWFw
-cGVkIGFuZCBtZW1zZXQuDQo+IFRoZXJlIGlzIGEgcG9zc2liaWxpdHkgb2YgdGhlIHRpbWVy
-IElSUSBiZWluZyB0cmlnZ2VyZWQgYmVmb3JlIG1lbXNldA0KPiBhbmQgc3RvbGVuIHRpbWUg
-aXMgZ2V0dGluZyB1cGRhdGVkIGFzIHBhcnQgb2YgdGhpcyB0aW1lciBJUlEgaGFuZGxlci4g
-VGhpcw0KPiBjYXVzZXMgdGhlIGJlbG93IGNyYXNoIGluIHRpbWVyIGhhbmRsZXIgLQ0KPiAN
-Cj4gICAgWyAzNDU3LjQ3MzEzOV1bICAgIEM1XSBVbmFibGUgdG8gaGFuZGxlIGtlcm5lbCBw
-YWdpbmcgcmVxdWVzdCBhdCB2aXJ0dWFsIGFkZHJlc3MgZmZmZmZmYzAzZGYwNTE0OA0KPiAg
-ICAuLi4NCj4gICAgWyAzNDU4LjE1NDM5OF1bICAgIEM1XSBDYWxsIHRyYWNlOg0KPiAgICBb
-IDM0NTguMTU3NjQ4XVsgICAgQzVdICBwYXJhX3N0ZWFsX2Nsb2NrKzB4MzAvMHg1MA0KPiAg
-ICBbIDM0NTguMTYyMzE5XVsgICAgQzVdICBpcnF0aW1lX2FjY291bnRfcHJvY2Vzc190aWNr
-KzB4MzAvMHgxOTQNCj4gICAgWyAzNDU4LjE2ODE0OF1bICAgIEM1XSAgYWNjb3VudF9wcm9j
-ZXNzX3RpY2srMHgzYy8weDI4MA0KPiAgICBbIDM0NTguMTczMjc0XVsgICAgQzVdICB1cGRh
-dGVfcHJvY2Vzc190aW1lcysweDVjLzB4ZjQNCj4gICAgWyAzNDU4LjE3ODMxMV1bICAgIEM1
-XSAgdGlja19zY2hlZF90aW1lcisweDE4MC8weDM4NA0KPiAgICBbIDM0NTguMTgzMTY0XVsg
-ICAgQzVdICBfX3J1bl9ocnRpbWVyKzB4MTYwLzB4NTdjDQo+ICAgIFsgMzQ1OC4xODc3NDRd
-WyAgICBDNV0gIGhydGltZXJfaW50ZXJydXB0KzB4MjU4LzB4Njg0DQo+ICAgIFsgMzQ1OC4x
-OTI2OThdWyAgICBDNV0gIGFyY2hfdGltZXJfaGFuZGxlcl92aXJ0KzB4NWMvMHhhMA0KPiAg
-ICBbIDM0NTguMTk4MDAyXVsgICAgQzVdICBoYW5kbGVfcGVyY3B1X2RldmlkX2lycSsweGRj
-LzB4NDE0DQo+ICAgIFsgMzQ1OC4yMDMzODVdWyAgICBDNV0gIGhhbmRsZV9kb21haW5faXJx
-KzB4YTgvMHgxNjgNCj4gICAgWyAzNDU4LjIwODI0MV1bICAgIEM1XSAgZ2ljX2hhbmRsZV9p
-cnEuMzQ0OTMrMHg1NC8weDI0NA0KPiAgICBbIDM0NTguMjEzMzU5XVsgICAgQzVdICBjYWxs
-X29uX2lycV9zdGFjaysweDQwLzB4NzANCj4gICAgWyAzNDU4LjIxODEyNV1bICAgIEM1XSAg
-ZG9faW50ZXJydXB0X2hhbmRsZXIrMHg2MC8weDljDQo+ICAgIFsgMzQ1OC4yMjMxNTZdWyAg
-ICBDNV0gIGVsMV9pbnRlcnJ1cHQrMHgzNC8weDY0DQo+ICAgIFsgMzQ1OC4yMjc1NjBdWyAg
-ICBDNV0gIGVsMWhfNjRfaXJxX2hhbmRsZXIrMHgxYy8weDJjDQo+ICAgIFsgMzQ1OC4yMzI1
-MDNdWyAgICBDNV0gIGVsMWhfNjRfaXJxKzB4N2MvMHg4MA0KPiAgICBbIDM0NTguMjM2NzM2
-XVsgICAgQzVdICBmcmVlX3ZtYXBfYXJlYV9ub2ZsdXNoKzB4MTA4LzB4MzljDQo+ICAgIFsg
-MzQ1OC4yNDIxMjZdWyAgICBDNV0gIHJlbW92ZV92bV9hcmVhKzB4YmMvMHgxMTgNCj4gICAg
-WyAzNDU4LjI0NjcxNF1bICAgIEM1XSAgdm1fcmVtb3ZlX21hcHBpbmdzKzB4NDgvMHgyYTQN
-Cj4gICAgWyAzNDU4LjI1MTY1Nl1bICAgIEM1XSAgX192dW5tYXArMHgxNTQvMHgyNzgNCj4g
-ICAgWyAzNDU4LjI1NTc5Nl1bICAgIEM1XSAgc3RvbGVuX3RpbWVfY3B1X2Rvd25fcHJlcGFy
-ZSsweGMwLzB4ZDgNCj4gICAgWyAzNDU4LjI2MTU0Ml1bICAgIEM1XSAgY3B1aHBfaW52b2tl
-X2NhbGxiYWNrKzB4MjQ4LzB4YzM0DQo+ICAgIFsgMzQ1OC4yNjY4NDJdWyAgICBDNV0gIGNw
-dWhwX3RocmVhZF9mdW4rMHgxYzQvMHgyNDgNCj4gICAgWyAzNDU4LjI3MTY5Nl1bICAgIEM1
-XSAgc21wYm9vdF90aHJlYWRfZm4rMHgxYjAvMHg0MDANCj4gICAgWyAzNDU4LjI3NjYzOF1b
-ICAgIEM1XSAga3RocmVhZCsweDE3Yy8weDFlMA0KPiAgICBbIDM0NTguMjgwNjkxXVsgICAg
-QzVdICByZXRfZnJvbV9mb3JrKzB4MTAvMHgyMA0KPiANCj4gQXMgYSBmaXgsIGludHJvZHVj
-ZSByY3UgbG9jayB0byB1cGRhdGUgc3RvbGVuIHRpbWUgc3RydWN0dXJlLg0KPiANCj4gRml4
-ZXM6IDc1ZGY1MjliZWM5MSAoImFybTY0OiBwYXJhdmlydDogSW5pdGlhbGl6ZSBzdGVhbCB0
-aW1lIHdoZW4gY3B1IGlzIG9ubGluZSIpDQo+IENjOiBzdGFibGVAdmdlci5rZXJuZWwub3Jn
-DQo+IFNpZ25lZC1vZmYtYnk6IFByYWtydXRoaSBEZWVwYWsgSGVyYWd1IDxxdWljX3BoZXJh
-Z3VAcXVpY2luYy5jb20+DQo+IFNpZ25lZC1vZmYtYnk6IEVsbGlvdCBCZXJtYW4gPHF1aWNf
-ZWJlcm1hbkBxdWljaW5jLmNvbT4NCg0KUmV2aWV3ZWQtYnk6IEp1ZXJnZW4gR3Jvc3MgPGpn
-cm9zc0BzdXNlLmNvbT4NCg0KDQpKdWVyZ2VuDQo=
---------------Lqc0Jx82gB2MJ5eOgbe3v0Ti
-Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Description: OpenPGP public key
-Content-Transfer-Encoding: quoted-printable
-
------BEGIN PGP PUBLIC KEY BLOCK-----
-
-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
-jR/i1DG86lem3iBDXzXsZDn8R38=3D
-=3D2wuH
------END PGP PUBLIC KEY BLOCK-----
-
---------------Lqc0Jx82gB2MJ5eOgbe3v0Ti--
-
---------------dRLRymBekbLvthqZxssmtJ0j--
-
---------------xuyclinqwvjtwpIMj7eZwjJz
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmJygjkFAwAAAAAACgkQsN6d1ii/Ey8m
-qQf+L/un+sZhNjTuRokZrpKwchtUInkitMKwf0t1vKDAvd597+9+gz2kmqPYmEKUr+iZrrPeoVyz
-mc9gupMZ/AZhJeRhzMR+VySSUZBse4sUCrwSBb/6Q7wc/rWe+grJ8cnu1dEWeLPrK/Z6LAj1BJiA
-y3T737cjFEXzC1s/TX/6ikD2X/gEXBPXPD7IzxnPNPS6RaSqg0lA1Ykl953HEdLDxRkBuFpUmf2b
-F/ilAjhor6mpy36H5j3PXjPMfzYWWt4nY/ZsZyER8f/0WapOVLmcaPuPkbhLZWO5L9wRf7T/AXD/
-58ZyUhzLLh/A7q19zrfRymmBOedGKEVeIHL/ShTDNw==
-=DLvL
------END PGP SIGNATURE-----
-
---------------xuyclinqwvjtwpIMj7eZwjJz--
+I'll work on V2 which doesn't require
+CONFIG_MTD_PARTITIONED_MASTER=y

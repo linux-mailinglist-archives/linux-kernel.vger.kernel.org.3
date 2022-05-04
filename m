@@ -2,93 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3FA351B186
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 23:59:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30C6E51B18B
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 00:01:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358370AbiEDWDZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 18:03:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55704 "EHLO
+        id S233476AbiEDWEo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 18:04:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357853AbiEDWDV (ORCPT
+        with ESMTP id S236501AbiEDWEk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 18:03:21 -0400
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F77950B05
-        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 14:59:43 -0700 (PDT)
-Received: by mail-yb1-xb36.google.com with SMTP id e12so4682638ybc.11
-        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 14:59:43 -0700 (PDT)
+        Wed, 4 May 2022 18:04:40 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 796264DF53
+        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 15:01:02 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id fv2so2425430pjb.4
+        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 15:01:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=rmJxiEP7m5MkHAr9riUqfx3uT8FiWx1lLvenswbOwJo=;
-        b=QoiC7QZe2hJyujp1ZRg0nlXjXopykN2j/DeYH65TBWATXUktJf0x/kyffuuacsI/Xo
-         3U/WGyV+fixlajIQ09GKt1DZZYpxMas0dWaDYCL8jonCJtMRr4CSZtyBZVh8caz3Zhfm
-         KLVYZqsNmH6MjXnLA95998XCfsQEg4LoRnNmHuqp/sQ2AApgVFWMqqZBdroSiC1gbSmN
-         F4COMU/J9YGu52LHRSSP9wDA3f+g3bnizNxpCHxuTE9h/gJ7KhKhsdH72IujMMikVg4I
-         fP3vyeXEvVrVnkAX/oRVPo4TmV6M5W4ptTtqSYXWLDxsKe5hoIl7+BOBmDpgqE7s/ubD
-         8xlA==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=YThuPh+s7LnjrsrALpq1ogvBWPUTyDqXXpti2DDQyjE=;
+        b=RnPiNAC7Rac9eeabHXFewXF3MhRT3bCih53TqO05gK3/vmIlxQEqUYiczH7NEQPccd
+         OWjpndrXBe+9SljNrlTXfpjigbk4lbNyYNTb/VWbv5jI4snPgYH7nIBjPMkvwRdNxPPE
+         VsHaCAgKRotqYogG6N1PsuZCXh34xHZjPpGDQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=rmJxiEP7m5MkHAr9riUqfx3uT8FiWx1lLvenswbOwJo=;
-        b=6aVJErBzrd0LFagv5QOiJO1EkaCZ+68mNkz/RNTw25HgYyfV8XvoMvT8ejIR3ZThHA
-         KHAQdR/zvaThqmeKSzd3rXjS1oFVCk3QjowAltaZcf5KrNQVitYbstwTQCQSbf3FFq6+
-         wX1ELo3VzD0X0/paBuuRoJVtIgtrPRpBT5wRYEaJuRnf6TxYYyvFVY3Gv0J+9YXSqPw6
-         GWXIT2nlgzivbijFBKc33VU8/GgvJo7bbbW/6Cdjfpq3iuI8xpg+q4DM1Lw33BTWahqI
-         v3FNHBc6iOg77T4HZrtUHIVs9UY9vWz7fkytZagrH0lk4XmMZRwNBl2cPK1quG8Fw48E
-         bz3Q==
-X-Gm-Message-State: AOAM532joBarBgJ4Vnonu3bFhKDt8lpZ+DF37+5cV7ePdHdcsk8xpOyn
-        coBBsNG7uujtZhfep4VZv/HxITVgkZExpzy7BNuXmQ==
-X-Google-Smtp-Source: ABdhPJws0kFu4uk8m+EBRW3/56Ag/4uZ6hdskWay/lA/R4RBYkLUb5oUPb5cyXOdcEWwAD5EvFRWUXI3Mh6lxHFGeY0=
-X-Received: by 2002:a25:bcc7:0:b0:648:d728:d39 with SMTP id
- l7-20020a25bcc7000000b00648d7280d39mr19634791ybm.514.1651701582183; Wed, 04
- May 2022 14:59:42 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=YThuPh+s7LnjrsrALpq1ogvBWPUTyDqXXpti2DDQyjE=;
+        b=zGfVJEtclq+OpsRUOCYDpTxdtAZHkedTmnI6TtKVrN98A1K3OLiX0+MlyTqJ3o6wrX
+         O9C2CuFhUi3NHm9j+rh79DkD+7zEtXt1oFo9L59mFnfIm40p1kaf9i8U5PgoBNUWCT6n
+         Z6CBSHaKlCX3923bwFVqbGF580zNJvMLXecu46MuMuknZSAfLm01PqsONFFHYQeX9mZT
+         rsFK1v50ti1URddurllsfff3BtkgC8JKz4x2UKpBCRuFxVAQloDIdRIMkr+K81f4ILqK
+         /4XbeTl2zvMM7lhMQEve8cDxCeNZOOXhD7LCiNyuKj3OJSsrHr2ZfxKD8vmnLLGP3v5d
+         NLbg==
+X-Gm-Message-State: AOAM530gdjkFDAhz1drBp1wqKauORz75D4k7Z8XWjVlE5urvpB0Ekcy0
+        DfSTpXUxDXkstf6hu5j6oQa+AQ==
+X-Google-Smtp-Source: ABdhPJxPrp7cUIoDh/7wvot9FXUqLhcvPJR27R6LXJvZCb6WINmMKHG5Hsy8L85/Fu+5zdtgNwFXXQ==
+X-Received: by 2002:a17:902:d48d:b0:15e:a480:78b2 with SMTP id c13-20020a170902d48d00b0015ea48078b2mr17021893plg.19.1651701661583;
+        Wed, 04 May 2022 15:01:01 -0700 (PDT)
+Received: from localhost ([2620:15c:202:201:35b6:c77b:be04:3bd5])
+        by smtp.gmail.com with UTF8SMTPSA id a7-20020aa780c7000000b0050dc76281b6sm8966059pfn.144.2022.05.04.15.01.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 04 May 2022 15:01:01 -0700 (PDT)
+Date:   Wed, 4 May 2022 15:00:59 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+Cc:     agross@kernel.org, bjorn.andersson@linaro.org, robh+dt@kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, quic_rohkumar@quicinc.com,
+        srinivas.kandagatla@linaro.org, dianders@chromium.org,
+        swboyd@chromium.org, judyhsiao@chromium.org,
+        Venkata Prasad Potturu <quic_potturu@quicinc.com>
+Subject: Re: [PATCH v13 3/4] arm64: dts: qcom: sc7280: add lpass lpi pin
+ controller node
+Message-ID: <YnL3m1gzggaSZ+c5@google.com>
+References: <1651662987-11704-1-git-send-email-quic_srivasam@quicinc.com>
+ <1651662987-11704-4-git-send-email-quic_srivasam@quicinc.com>
 MIME-Version: 1.0
-References: <20220419163810.2118169-1-arnd@kernel.org> <20220419163810.2118169-19-arnd@kernel.org>
- <CACRpkdac8dGKSEmc-HpgooJefrDtiKK+_A1Mv7AJM8yQV9UY-w@mail.gmail.com> <CAK8P3a0w3gFzZoBzyRsi1Ta4prESf8Fp0=quAPSKMnaXvbXNTQ@mail.gmail.com>
-In-Reply-To: <CAK8P3a0w3gFzZoBzyRsi1Ta4prESf8Fp0=quAPSKMnaXvbXNTQ@mail.gmail.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Wed, 4 May 2022 23:59:30 +0200
-Message-ID: <CACRpkdZNryYkidvdKuT57RM3fz6_X+3oOzF5xaOZd+TyScfUsw@mail.gmail.com>
-Subject: Re: [PATCH 18/48] ARM: pxa: hx4700: use gpio descriptors for audio
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Robert Jarzmik <robert.jarzmik@free.fr>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>, Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Marek Vasut <marek.vasut@gmail.com>,
-        Philipp Zabel <philipp.zabel@gmail.com>,
-        Lubomir Rintel <lkundrak@v3.sk>,
-        Paul Parsons <lost.distance@yahoo.com>,
-        Tomas Cech <sleep_walker@suse.com>,
-        Sergey Lapin <slapin@ossfans.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Helge Deller <deller@gmx.de>, Mark Brown <broonie@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        IDE-ML <linux-ide@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        patches@opensource.cirrus.com, linux-leds@vger.kernel.org,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        linux-mtd <linux-mtd@lists.infradead.org>,
-        linux-rtc@vger.kernel.org, USB list <linux-usb@vger.kernel.org>,
-        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        ALSA Development Mailing List <alsa-devel@alsa-project.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <1651662987-11704-4-git-send-email-quic_srivasam@quicinc.com>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -97,58 +73,236 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 2, 2022 at 9:08 AM Arnd Bergmann <arnd@kernel.org> wrote:
-> On Sun, May 1, 2022 at 11:41 PM Linus Walleij <linus.walleij@linaro.org> wrote:
-> >
-> > (...)
-> > > +static struct gpiod_lookup_table hx4700_audio_gpio_table = {
-> > > +       .dev_id = "hx4700-audio",
-> > > +       .table = {
-> > > +               GPIO_LOOKUP("gpio-pxa", GPIO75_HX4700_EARPHONE_nDET,
-> > > +                           "earphone-ndet", GPIO_ACTIVE_HIGH),
-> >
-> > This looks wrong. The n in nDET in the end of the name of the GPIO line
-> > means active low does it not?
-> >
-> > What I usually do when I see this is to properly set it to
-> > GPIO_ACTIVE_LOW in the descriptor table, then invert the logic
-> > where it's getting used.
-> >
-> > Also rename to earphone-det instead of -ndet
->
-> Thanks for taking a look! I changed it now, but I don't know if
-> I got the correct number of inversions in the end. How does this look?
+On Wed, May 04, 2022 at 04:46:26PM +0530, Srinivasa Rao Mandadapu wrote:
+> Add LPASS LPI pinctrl node required for Audio functionality on sc7280
+> based platforms.
+> 
+> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+> Co-developed-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
+> Signed-off-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
+> Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+> Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
 
-Looks wrong, you can just invert the argument to any statement of set_value()
-after tagging respective line as active low. Then gpilob will do a second
-inversion.
+Please remove my tag for now, the patch changed quite a bit since the
+last version.
 
-> +               GPIO_LOOKUP("gpio-pxa", GPIO75_HX4700_EARPHONE_nDET,
-> +                           "earphone-det", GPIO_ACTIVE_LOW),
-> +               GPIO_LOOKUP("gpio-pxa", GPIO107_HX4700_SPK_nSD,
-> +                           "spk-sd", GPIO_ACTIVE_LOW),
+> ---
+>  arch/arm64/boot/dts/qcom/sc7280-idp.dtsi | 64 ++++++++++++++++++++++
+>  arch/arm64/boot/dts/qcom/sc7280.dtsi     | 91 ++++++++++++++++++++++++++++++++
+>  2 files changed, 155 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
+> index 754da58..fb0e313 100644
+> --- a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
+> @@ -367,6 +367,70 @@
+>  	bias-disable;
+>  };
+>  
+> +&lpass_dmic01_clk {
+> +	drive-strength = <8>;
+> +	bias-disable;
+> +};
+> +
+> +&lpass_dmic01_data {
+> +	bias-pull-down;
+> +};
+> +
+> +&lpass_dmic01_clk_sleep {
+> +	drive-strength = <2>;
+> +};
 
-So those two have switched polarity.
+Should be after 'lpass_dmic01_clk', not only because of alphanumerical sorting
+order, but also because the two belong together.
 
-> @@ -81,14 +79,14 @@ static const struct snd_soc_ops hx4700_ops = {
->  static int hx4700_spk_power(struct snd_soc_dapm_widget *w,
->                             struct snd_kcontrol *k, int event)
->  {
-> -       gpio_set_value(GPIO107_HX4700_SPK_nSD, !!SND_SOC_DAPM_EVENT_ON(event));
-> +       gpiod_set_value(gpiod_spk_sd, !!SND_SOC_DAPM_EVENT_ON(event));
+> +
+> +&lpass_dmic23_clk {
+> +	drive-strength = <8>;
+> +	bias-disable;
+> +};
+> +
+> +&lpass_dmic23_data {
+> +	bias-pull-down;
+> +};
+> +
+> +&lpass_dmic23_clk_sleep {
+> +	drive-strength = <2>;
+> +};
 
-Thus drop one ! in front of the expression, just !SND_SOC_DAPM_EVENT_ON(event)
+ditto
 
-> -       gpio_set_value(GPIO92_HX4700_HP_DRIVER, !!SND_SOC_DAPM_EVENT_ON(event));
-> +       gpiod_set_value(gpiod_hp_driver, !!SND_SOC_DAPM_EVENT_ON(event));
+> +
+> +&lpass_rx_swr_clk {
+> +	drive-strength = <2>;
+> +	slew-rate = <1>;
+> +	bias-disable;
+> +};
+> +
+> +&lpass_rx_swr_data {
+> +	drive-strength = <2>;
+> +	slew-rate = <1>;
+> +	bias-bus-hold;
+> +};
+> +
+> +&lpass_rx_swr_clk_sleep {
+> +	drive-strength = <2>;
 
-But not this.
+The drive strength is the same as for 'lpass_rx_swr_clk', so I think you
+could omit it?
 
-> +       gpiod_spk_sd = devm_gpiod_get(&pdev->dev, "spk-sd", GPIOD_OUT_LOW);
+> +	bias-pull-down;
+> +};
 
-These initial values don't seem to be set in the old code you could
-just use GPIOD_ASIS as flag to make sure the new code behaves
-the same.
+fix sorting order
 
-Yours,
-Linus Walleij
+> +
+> +&lpass_rx_swr_data_sleep {
+> +	drive-strength = <2>;
+
+drive strength not needed?
+
+> +	bias-pull-down;
+> +};
+> +
+> +&lpass_tx_swr_clk {
+> +	drive-strength = <2>;
+> +	slew-rate = <1>;
+> +	bias-disable;
+> +};
+> +
+> +&lpass_tx_swr_data {
+> +	slew-rate = <1>;
+> +	bias-bus-hold;
+> +};
+> +
+> +&lpass_tx_swr_clk_sleep {
+> +	drive-strength = <2>;
+
+drive strength not needed?
+
+> +	bias-pull-down;
+> +};
+
+fix sorting order
+
+> +
+>  &mi2s1_data0 {
+>  	drive-strength = <6>;
+>  	bias-disable;
+> diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+> index c5b6b46..c961ca1 100644
+> --- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+> @@ -2224,6 +2224,97 @@
+>  			qcom,bcm-voters = <&apps_bcm_voter>;
+>  		};
+>  
+> +		lpass_tlmm: pinctrl@33c0000 {
+> +			compatible = "qcom,sc7280-lpass-lpi-pinctrl";
+> +			reg = <0 0x033c0000 0x0 0x20000>,
+> +				<0 0x03550000 0x0 0x10000>;
+> +			gpio-controller;
+> +			#gpio-cells = <2>;
+> +			gpio-ranges = <&lpass_tlmm 0 0 15>;
+> +
+> +			#clock-cells = <1>;
+> +
+> +			lpass_dmic01_clk: dmic01-clk {
+> +				pins = "gpio6";
+> +				function = "dmic1_clk";
+> +			};
+> +
+> +			lpass_dmic01_data: dmic01-data {
+> +				pins = "gpio7";
+> +				function = "dmic1_data";
+> +			};
+> +
+> +			lpass_dmic01_clk_sleep: dmic01-clk-sleep {
+> +				pins = "gpio6";
+> +				function = "dmic1_clk";
+> +			};
+
+fix sorting order
+
+> +
+> +			lpass_dmic01_data_sleep: dmic01-data-sleep {
+> +				pins = "gpio7";
+> +				function = "dmic1_data";
+> +			};
+> +
+> +			lpass_dmic23_clk: dmic23-clk {
+> +				pins = "gpio8";
+> +				function = "dmic2_clk";
+> +			};
+> +
+> +			lpass_dmic23_data: dmic23-data {
+> +				pins = "gpio9";
+> +				function = "dmic2_data";
+> +			};
+> +
+> +			lpass_dmic23_clk_sleep: dmic23-clk-sleep {
+> +				pins = "gpio8";
+> +				function = "dmic2_clk";
+> +			};
+
+fix sorting order
+
+> +
+> +			lpass_dmic23_data_sleep: dmic23-data-sleep {
+> +				pins = "gpio9";
+> +				function = "dmic2_data";
+> +			};
+> +
+> +			lpass_rx_swr_clk: rx-swr-clk {
+> +				pins = "gpio3";
+> +				function = "swr_rx_clk";
+> +			};
+> +
+> +			lpass_rx_swr_data: rx-swr-data {
+> +				pins = "gpio4", "gpio5";
+> +				function = "swr_rx_data";
+> +			};
+> +
+> +			lpass_rx_swr_clk_sleep: rx-swr-clk-sleep {
+> +				pins = "gpio3";
+> +				function = "swr_rx_clk";
+> +			};
+
+fix sorting order
+
+> +
+> +			lpass_rx_swr_data_sleep: rx-swr-data-sleep {
+> +				pins = "gpio4", "gpio5";
+> +				function = "swr_rx_data";
+> +			};
+> +
+> +			lpass_tx_swr_clk: tx-swr-clk {
+> +				pins = "gpio0";
+> +				function = "swr_tx_clk";
+> +			};
+> +
+> +			lpass_tx_swr_data: tx-swr-data {
+> +				pins = "gpio1", "gpio2", "gpio14";
+> +				function = "swr_tx_data";
+> +			};
+> +
+> +			lpass_tx_swr_clk_sleep: tx-swr-clk-sleep {
+> +				pins = "gpio0";
+> +				function = "swr_tx_clk";
+> +			};
+
+fix sorting order
+
+> +
+> +			lpass_tx_swr_data_sleep: tx-swr-data-sleep {
+> +				pins = "gpio1", "gpio2", "gpio14";
+> +				function = "swr_tx_data";
+> +			};
+> +		};
+> +
+>  		gpu: gpu@3d00000 {
+>  			compatible = "qcom,adreno-635.0", "qcom,adreno";
+>  			reg = <0 0x03d00000 0 0x40000>,
+> -- 
+> 2.7.4
+> 

@@ -2,53 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBC9151A758
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:00:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED00951AA19
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:19:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354811AbiEDRCw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 13:02:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51026 "EHLO
+        id S1348997AbiEDRV3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 13:21:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354391AbiEDQ5B (ORCPT
+        with ESMTP id S1355111AbiEDREI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 12:57:01 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30BF74754E;
-        Wed,  4 May 2022 09:49:58 -0700 (PDT)
+        Wed, 4 May 2022 13:04:08 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 458664E382;
+        Wed,  4 May 2022 09:52:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8789FB827A3;
-        Wed,  4 May 2022 16:49:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E10EC385A4;
-        Wed,  4 May 2022 16:49:55 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 27F0C617DE;
+        Wed,  4 May 2022 16:52:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 772A2C385A5;
+        Wed,  4 May 2022 16:52:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651682995;
-        bh=T3taqKNS4GW6ujjq9vOvlKK0jXWPRH8z2xtSBaw/epo=;
+        s=korg; t=1651683164;
+        bh=9E39mHLbOPtkiWOEOKFy56IbZL3g5wvMyD0A5kF6R7k=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=T3qUaOewnwgk4c/ZthYi08rw0OsJsKOgOhU5kCxe++s/Y5Y1GvSz7HzkBKCOOl+tq
-         KO0EkqTokLwpg/c3MtwIgaovvAWY+VtlMxMcLfe88AiMHD30P0oZPq3V3NIKaxEank
-         Ydpi5t6RfsQJjyc8346cfCFMrbE+0iGLVa7aVCiw=
+        b=Q7plFIHgIAGNeYsW4s2Ipi65QK9KsX3Cd7RDY30gljkdyzvhHXRxX7OynSdR2N6ZB
+         NBKmWJVylA6c7ykJJc7ChBt6R14vWV4OMd1eD+lFHtvMXICB6iuZALYUC2ZS3+ixgj
+         UEpP7R+sObMzx2YHgrdGnB9w6TyJN+h88MIG568Y=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Fawzi Khaber <fawzi.khaber@tdk.com>,
-        Jean-Baptiste Maneyrol <jean-baptiste.maneyrol@tdk.com>,
-        Stable@vger.kernel.org,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: [PATCH 5.10 016/129] iio: imu: inv_icm42600: Fix I2C init possible nack
-Date:   Wed,  4 May 2022 18:43:28 +0200
-Message-Id: <20220504153022.588593716@linuxfoundation.org>
+        stable@vger.kernel.org, stable <stable@kernel.org>,
+        Dongliang Mu <mudongliangabcd@gmail.com>,
+        Hangyu Hua <hbh25y@gmail.com>
+Subject: [PATCH 5.15 016/177] usb: misc: fix improper handling of refcount in uss720_probe()
+Date:   Wed,  4 May 2022 18:43:29 +0200
+Message-Id: <20220504153054.873494597@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220504153021.299025455@linuxfoundation.org>
-References: <20220504153021.299025455@linuxfoundation.org>
+In-Reply-To: <20220504153053.873100034@linuxfoundation.org>
+References: <20220504153053.873100034@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,48 +55,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Fawzi Khaber <fawzi.khaber@tdk.com>
+From: Hangyu Hua <hbh25y@gmail.com>
 
-commit b5d6ba09b10d2ccb865ed9bc45941db0a41c6756 upstream.
+commit 0a96fa640dc928da9eaa46a22c46521b037b78ad upstream.
 
-This register write to REG_INTF_CONFIG6 enables a spike filter that
-is impacting the line and can prevent the I2C ACK to be seen by the
-controller. So we don't test the return value.
+usb_put_dev shouldn't be called when uss720_probe succeeds because of
+priv->usbdev. At the same time, priv->usbdev shouldn't be set to NULL
+before destroy_priv in uss720_disconnect because usb_put_dev is in
+destroy_priv.
 
-Fixes: 7297ef1e261672b8 ("iio: imu: inv_icm42600: add I2C driver")
-Signed-off-by: Fawzi Khaber <fawzi.khaber@tdk.com>
-Signed-off-by: Jean-Baptiste Maneyrol <jean-baptiste.maneyrol@tdk.com>
-Link: https://lore.kernel.org/r/20220411111533.5826-1-jmaneyrol@invensense.com
-Cc: <Stable@vger.kernel.org>
-Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Fix this by moving priv->usbdev = NULL after usb_put_dev.
+
+Fixes: dcb4b8ad6a44 ("misc/uss720: fix memory leak in uss720_probe")
+Cc: stable <stable@kernel.org>
+Reviewed-by: Dongliang Mu <mudongliangabcd@gmail.com>
+Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
+Link: https://lore.kernel.org/r/20220407024001.11761-1-hbh25y@gmail.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/iio/imu/inv_icm42600/inv_icm42600_i2c.c |   15 +++++++++------
- 1 file changed, 9 insertions(+), 6 deletions(-)
+ drivers/usb/misc/uss720.c |    3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
---- a/drivers/iio/imu/inv_icm42600/inv_icm42600_i2c.c
-+++ b/drivers/iio/imu/inv_icm42600/inv_icm42600_i2c.c
-@@ -18,12 +18,15 @@ static int inv_icm42600_i2c_bus_setup(st
- 	unsigned int mask, val;
- 	int ret;
+--- a/drivers/usb/misc/uss720.c
++++ b/drivers/usb/misc/uss720.c
+@@ -71,6 +71,7 @@ static void destroy_priv(struct kref *kr
  
--	/* setup interface registers */
--	ret = regmap_update_bits(st->map, INV_ICM42600_REG_INTF_CONFIG6,
--				 INV_ICM42600_INTF_CONFIG6_MASK,
--				 INV_ICM42600_INTF_CONFIG6_I3C_EN);
--	if (ret)
--		return ret;
-+	/*
-+	 * setup interface registers
-+	 * This register write to REG_INTF_CONFIG6 enables a spike filter that
-+	 * is impacting the line and can prevent the I2C ACK to be seen by the
-+	 * controller. So we don't test the return value.
-+	 */
-+	regmap_update_bits(st->map, INV_ICM42600_REG_INTF_CONFIG6,
-+			   INV_ICM42600_INTF_CONFIG6_MASK,
-+			   INV_ICM42600_INTF_CONFIG6_I3C_EN);
+ 	dev_dbg(&priv->usbdev->dev, "destroying priv datastructure\n");
+ 	usb_put_dev(priv->usbdev);
++	priv->usbdev = NULL;
+ 	kfree(priv);
+ }
  
- 	ret = regmap_update_bits(st->map, INV_ICM42600_REG_INTF_CONFIG4,
- 				 INV_ICM42600_INTF_CONFIG4_I3C_BUS_ONLY, 0);
+@@ -736,7 +737,6 @@ static int uss720_probe(struct usb_inter
+ 	parport_announce_port(pp);
+ 
+ 	usb_set_intfdata(intf, pp);
+-	usb_put_dev(usbdev);
+ 	return 0;
+ 
+ probe_abort:
+@@ -754,7 +754,6 @@ static void uss720_disconnect(struct usb
+ 	usb_set_intfdata(intf, NULL);
+ 	if (pp) {
+ 		priv = pp->private_data;
+-		priv->usbdev = NULL;
+ 		priv->pp = NULL;
+ 		dev_dbg(&intf->dev, "parport_remove_port\n");
+ 		parport_remove_port(pp);
 
 

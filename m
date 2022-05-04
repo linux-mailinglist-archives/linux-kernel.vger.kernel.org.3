@@ -2,70 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F52C51B1E6
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 00:31:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10DAC51B1FC
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 00:33:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379039AbiEDWeu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 18:34:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51432 "EHLO
+        id S1356186AbiEDWfc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 18:35:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354265AbiEDWes (ORCPT
+        with ESMTP id S233487AbiEDWf2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 18:34:48 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D43C2B24F
-        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 15:31:09 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id e24so2492534pjt.2
-        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 15:31:09 -0700 (PDT)
+        Wed, 4 May 2022 18:35:28 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F50E2B1A9
+        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 15:31:50 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id r9so2478879pjo.5
+        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 15:31:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=V4mcraihi9SrpCHC2jZoMr5aDTcAHssWAbY6f0fZueQ=;
-        b=RAWjYXrFLWLiT/sTepot+yp0Rawj48PXvecgBtpOgZCatOrIyduZDIHLEe30f5joku
-         aUOCgu9eKHYniNrqwX/TmFmc99JjM8WXdb5RX5pJ2X42hherVXdL5ME52oRBdTD01aPy
-         ZaEjDc+VZBH6DQLBqS95L4XLkQZ3e7rF1TI88=
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Ym7pQ9PZG06J3qUsaBV/BTn83s/gyQ6wOepfY5bJx4I=;
+        b=K7Wi0bnRVZZG7Pk+DpEAKVfKWMruzNrAKFojyu/NTd/EAasFTz+Nc5rLyaefVBSnAk
+         yL81ghqlIEHAXwSwYEn9G+LYHDCjfQnNueIb55SLHwdvdyRGvlS0vp0de8dtMqoSS7kV
+         5TPN3YkPubWDOI3SOK+dFL+sc6p3jWtI6aDoM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=V4mcraihi9SrpCHC2jZoMr5aDTcAHssWAbY6f0fZueQ=;
-        b=XHS7CfZYFdoZJwlPCbyX7k6CrNcNn4m/IF+cKbZz9L4Zl87CTP/0VsBD1yc5r3k2SZ
-         2esZ0NIaeYQIs+V60SjfuRZpj1VPxVc979WpyQdBgiPgjuAsV0AerrrrHAoSAFhTYZTw
-         upU1KCCE+Zw/5koVy5C7Q6mZKurxXaSWm5K8y0OokP4d7axnWkbnG165Mz+NGeRNfNpz
-         p28tclt+r59vy6MW8WM8h87EBRVsK+qirPyyVvusyvSyMvIEvPRZxHQkEFxRNutvwh1b
-         umAm3w9997slteHLIEAF1JkbtgpvQVRgkGFNPv48aEfnbURe/TBUhLY0E6q0QTFl7S6z
-         2zow==
-X-Gm-Message-State: AOAM531Fc6fwsfL/H/ydKCjIq/+ZhrQuZgbcyehtlJxaqASyR537o9GF
-        G9R7KQj+gJx1izjup49aeeMQqQ==
-X-Google-Smtp-Source: ABdhPJyweJp6nGpMCJB6yHstmRUwk1LDnj+lQaH63hw1ifrVEHV1WkcGLOB3NcwSQd7lafQS0UOhvQ==
-X-Received: by 2002:a17:902:d510:b0:15e:afc4:85a0 with SMTP id b16-20020a170902d51000b0015eafc485a0mr13862867plg.64.1651703468915;
-        Wed, 04 May 2022 15:31:08 -0700 (PDT)
-Received: from localhost ([2620:15c:202:201:827b:7f14:bb7e:2898])
-        by smtp.gmail.com with UTF8SMTPSA id i9-20020aa79089000000b0050dc76281ffsm8617857pfa.217.2022.05.04.15.31.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 04 May 2022 15:31:08 -0700 (PDT)
-Date:   Wed, 4 May 2022 15:31:07 -0700
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-Cc:     agross@kernel.org, bjorn.andersson@linaro.org, robh+dt@kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, quic_rohkumar@quicinc.com,
-        srinivas.kandagatla@linaro.org, dianders@chromium.org,
-        swboyd@chromium.org, judyhsiao@chromium.org,
-        Venkata Prasad Potturu <quic_potturu@quicinc.com>
-Subject: Re: [PATCH v13 4/4] arm64: dts: qcom: sc7280-herobrine: Add lpi
- pinmux properties for CRD 3.0/3.1
-Message-ID: <YnL+qwoSHt/95PcU@google.com>
-References: <1651662987-11704-1-git-send-email-quic_srivasam@quicinc.com>
- <1651662987-11704-5-git-send-email-quic_srivasam@quicinc.com>
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Ym7pQ9PZG06J3qUsaBV/BTn83s/gyQ6wOepfY5bJx4I=;
+        b=oQqgjiv9Ub+yu+HuAZEIC1kOw8KE8U9LgzQ9YBhHxOliAqKLaDvnPhw++iZMz+WIk+
+         FUGRQFasPodtmw8K4a2WFkQwoorE9LMbP1VQ007jj5OfNT/PL307k5xn6nuhV62JGeJh
+         NOGzbvYMP3FE2uHQ+yuSntMkSoJq3tVqflSKBnMvVlM4LZPeESi8Zo2kmv5CVWgP//z3
+         klZ8jEJ44kpNYUDlU/8nwqiMLkkvtHPTgGl3o2S5l/ZEmZyPvjeO4utWsvKgxhPLrT+m
+         bLd/tjQid5H/qvs+W1faAQjwdMrQCrw4LsBDOgSGccEV4X79jWdCmE93IEHgMJOA0DeN
+         6GAQ==
+X-Gm-Message-State: AOAM530yqady7HCkarKUfPBt13l6M25iEqSIy/YqKVKhY3hyL6CcnNyJ
+        mNtFdUUcVxftO/AWsgjg8Ol+kg==
+X-Google-Smtp-Source: ABdhPJxL3oGX9IusDtlyD6KSqAAElSfPht86DVn85gFyo1oMW4VvNzPns8mPrm3XWZr4yJbyMOuT5g==
+X-Received: by 2002:a17:90a:8418:b0:1d2:7c69:e3bf with SMTP id j24-20020a17090a841800b001d27c69e3bfmr2171270pjn.44.1651703509905;
+        Wed, 04 May 2022 15:31:49 -0700 (PDT)
+Received: from smtp.gmail.com ([2620:15c:202:201:597f:a6c6:7682:e714])
+        by smtp.gmail.com with ESMTPSA id q21-20020a62ae15000000b0050dc76281e2sm8690810pff.188.2022.05.04.15.31.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 May 2022 15:31:49 -0700 (PDT)
+From:   Stephen Boyd <swboyd@chromium.org>
+To:     John Stultz <john.stultz@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
+        Tejun Heo <tj@kernel.org>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Guenter Roeck <groeck@chromium.org>
+Subject: [PATCH] timers: Provide a better debugobjects hint for delayed works
+Date:   Wed,  4 May 2022 15:31:48 -0700
+Message-Id: <20220504223148.644228-1-swboyd@chromium.org>
+X-Mailer: git-send-email 2.36.0.464.gb9c8b46e94-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <1651662987-11704-5-git-send-email-quic_srivasam@quicinc.com>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,113 +68,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 04, 2022 at 04:46:27PM +0530, Srinivasa Rao Mandadapu wrote:
-> Add LPASS LPI pinctrl properties, which are required for Audio
-> functionality on herobrine based platforms of rev5+
-> (aka CRD 3.0/3.1) boards.
-> 
-> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-> Co-developed-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
-> Signed-off-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
-> ---
->  arch/arm64/boot/dts/qcom/sc7280-herobrine-crd.dts | 63 +++++++++++++++++++++++
->  1 file changed, 63 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine-crd.dts b/arch/arm64/boot/dts/qcom/sc7280-herobrine-crd.dts
-> index deaea3a..dc61bad 100644
-> --- a/arch/arm64/boot/dts/qcom/sc7280-herobrine-crd.dts
-> +++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine-crd.dts
-> @@ -110,6 +110,69 @@ ap_ts_pen_1v8: &i2c13 {
->   * - If a pin is totally internal to Qcard then it gets Qcard name.
->   * - If a pin is not hooked up on Qcard, it gets no name.
->   */
-> +&lpass_dmic01_clk {
-> +	drive-strength = <8>;
-> +	bias-disable;
-> +};
-> +
-> +&lpass_dmic01_data {
-> +	bias-pull-down;
-> +};
-> +
-> +&lpass_dmic01_clk_sleep {
-> +	drive-strength = <2>;
-> +};
+With debugobjects enabled the timer hint for freeing of active timers
+embedded inside delayed works is always the same, i.e. the hint is
+delayed_work_timer_fn(), even though the function the delayed work is
+going to run can be wildly different depending on what work was
+scheduled. Enabling workqueue debugobjects doesn't help either because
+the delayed work isn't considered active until it is actually queued to
+run on a workqueue. That's because if the work is freed while the timer
+is pending the work isn't considered active to debugobjects so we don't
+get any information about freeing an active work.
 
-should be after 'lpass_dmic01_clk'
+Provide better information here by special casing delayed works in the
+timer debugobjects hint logic so that the work function is returned
+instead of the timer function delayed_work_timer_fn(). This will help us
+understand what delayed work was pending that got freed, leading to
+faster bug resolutions.
 
-> +
-> +&lpass_dmic23_clk {
-> +	drive-strength = <8>;
-> +	bias-disable;
-> +};
-> +
-> +&lpass_dmic23_data {
-> +	bias-pull-down;
-> +};
-> +
-> +&lpass_dmic23_clk_sleep {
-> +	drive-strength = <2>;
-> +};
+Cc: Tejun Heo <tj@kernel.org>
+Cc: Lai Jiangshan <jiangshanlai@gmail.com>
+Cc: Guenter Roeck <groeck@chromium.org>
+Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+---
 
-see above
+I have an alternative approach which is to treat delayed works with a
+different debug_obj_descr structure but it basically boils down to
+another version of timer debugobjects in the workqueue code. The idea is
+to make the delayed work active once the timer is queued and then
+convert it over from a delayed work descriptor to a work descriptor once
+the timer runs delayed_work_timer_fn() or when we pull it off to flush
+out.
 
-> +
-> +&lpass_rx_swr_clk {
-> +	drive-strength = <2>;
-> +	slew-rate = <1>;
-> +	bias-disable;
-> +};
-> +
-> +&lpass_rx_swr_data {
-> +	drive-strength = <2>;
-> +	slew-rate = <1>;
-> +	bias-bus-hold;
-> +};
-> +
-> +&lpass_rx_swr_clk_sleep {
-> +	drive-strength = <2>;
+ kernel/time/timer.c | 13 ++++++++++++-
+ 1 file changed, 12 insertions(+), 1 deletion(-)
 
-drive strengh is the same as for 'lpass_rx_swr_clk', can be omitted?
+diff --git a/kernel/time/timer.c b/kernel/time/timer.c
+index 9dd2a39cb3b0..7b3c1019835c 100644
+--- a/kernel/time/timer.c
++++ b/kernel/time/timer.c
+@@ -44,6 +44,7 @@
+ #include <linux/slab.h>
+ #include <linux/compat.h>
+ #include <linux/random.h>
++#include <linux/workqueue.h>
+ 
+ #include <linux/uaccess.h>
+ #include <asm/unistd.h>
+@@ -617,7 +618,17 @@ static const struct debug_obj_descr timer_debug_descr;
+ 
+ static void *timer_debug_hint(void *addr)
+ {
+-	return ((struct timer_list *) addr)->function;
++	struct timer_list *timer = addr;
++
++	if (timer->function == delayed_work_timer_fn) {
++		struct delayed_work *dwork;
++
++		dwork = container_of(timer, struct delayed_work, timer);
++
++		return dwork->work.func;
++	}
++
++	return timer->function;
+ }
+ 
+ static bool timer_is_static_object(void *addr)
 
-> +	bias-pull-down;
-> +};
+base-commit: 672c0c5173427e6b3e2a9bbb7be51ceeec78093a
+-- 
+https://chromeos.dev
 
-see 'lpass_dmic23_clk_sleep'
-
-> +
-> +&lpass_rx_swr_data_sleep {
-> +	drive-strength = <2>;
-
-is drive strength really needed here?
-
-> +	bias-pull-down;
-> +};
-> +
-> +&lpass_tx_swr_clk {
-> +	drive-strength = <2>;
-> +	slew-rate = <1>;
-> +	bias-disable;
-> +};
-> +
-> +&lpass_tx_swr_data {
-> +	slew-rate = <1>;
-> +	bias-bus-hold;
-> +};
-> +
-> +&lpass_tx_swr_clk_sleep {
-> +	drive-strength = <2>;
-
-is drive strength really needed here?
-
-> +	bias-pull-down;
-> +};
-
-see 'lpass_dmic23_clk_sleep'
-
->  
->  &mi2s1_data0 {
->  	drive-strength = <6>;
-> -- 
-> 2.7.4
-> 

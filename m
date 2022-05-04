@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17E0651AB23
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:40:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C92F751AB05
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:40:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358796AbiEDRnQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 13:43:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39172 "EHLO
+        id S1358834AbiEDRn2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 13:43:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356230AbiEDRL3 (ORCPT
+        with ESMTP id S1354937AbiEDRLe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 13:11:29 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62CBD4B431;
-        Wed,  4 May 2022 09:57:33 -0700 (PDT)
+        Wed, 4 May 2022 13:11:34 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69E874B842;
+        Wed,  4 May 2022 09:57:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5BD62618AC;
+        by ams.source.kernel.org (Postfix) with ESMTPS id E0A24B82737;
+        Wed,  4 May 2022 16:57:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93389C385AA;
         Wed,  4 May 2022 16:57:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0D67C385A4;
-        Wed,  4 May 2022 16:57:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651683450;
-        bh=IiuLVqn+41hK/TvtV51P7ny7tLaJWsoNCR7nCU1SY98=;
+        s=korg; t=1651683451;
+        bh=d8aBkKFvDCEcM+/vDNEOn7RvlX+nP+BcdMllvbGZQzc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rJG7haIl1c1cit9JvOezP85IoWJ/JlnrR7VwymNVZGr+wl4abq4gsq8veHig68K2V
-         2yPGGtp39tkrAZAuzzSQ+bvdOKryvbpbQi+M0QzL9czgAS+6Z/6ZfpiVN8H35vV+Cw
-         q4VEKp/Y96ACP9QUSCMwJhlnzG3tc8n+s7gAFkQ4=
+        b=ItclEZ3G2akTNEeql2+/J1yyrwjasR+5GSNMUI73zQFFWF+x4SVkUaFHArMIP4uLf
+         p64AsMBul0pgnDheHAw2bCNnmSwCbRx3QpdHoDrkUNeWUOz21Vb8bMHs4sQ5xjwAPX
+         Gbppdh8SApwHwHqFg3xNZE2+U/K+yepsQWC4EorE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Xiaobing Luo <luoxiaobing0926@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
+        stable@vger.kernel.org, Jian Shen <shenjian15@huawei.com>,
+        Guangbin Huang <huangguangbin2@huawei.com>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 113/225] cpufreq: fix memory leak in sun50i_cpufreq_nvmem_probe
-Date:   Wed,  4 May 2022 18:45:51 +0200
-Message-Id: <20220504153120.671649468@linuxfoundation.org>
+Subject: [PATCH 5.17 114/225] net: hns3: clear inited state and stop client after failed to register netdev
+Date:   Wed,  4 May 2022 18:45:52 +0200
+Message-Id: <20220504153120.744668252@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
 In-Reply-To: <20220504153110.096069935@linuxfoundation.org>
 References: <20220504153110.096069935@linuxfoundation.org>
@@ -56,62 +56,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xiaobing Luo <luoxiaobing0926@gmail.com>
+From: Jian Shen <shenjian15@huawei.com>
 
-[ Upstream commit 1aa24a8f3b5133dae4bc1e57427e345445f3e902 ]
+[ Upstream commit e98365afc1e94ea1609268866a44112b3572c58b ]
 
---------------------------------------------
-unreferenced object 0xffff000010742a00 (size 128):
-  comm "swapper/0", pid 1, jiffies 4294902015 (age 1187.652s)
-  hex dump (first 32 bytes):
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<00000000b4dfebaa>] __kmalloc+0x338/0x474
-    [<00000000d6e716db>] sun50i_cpufreq_nvmem_probe+0xc4/0x36c
-    [<000000007d6082a0>] platform_probe+0x98/0x11c
-    [<00000000c990f549>] really_probe+0x234/0x5a0
-    [<000000002d9fecc6>] __driver_probe_device+0x194/0x224
-    [<00000000cf0b94fa>] driver_probe_device+0x64/0x13c
-    [<00000000f238e4cf>] __device_attach_driver+0xf8/0x180
-    [<000000006720e418>] bus_for_each_drv+0xf8/0x160
-    [<00000000df4f14f6>] __device_attach+0x174/0x29c
-    [<00000000782002fb>] device_initial_probe+0x20/0x30
-    [<00000000c2681b06>] bus_probe_device+0xfc/0x110
-    [<00000000964cf3bd>] device_add+0x5f0/0xcd0
-    [<000000004b9264e3>] platform_device_add+0x198/0x390
-    [<00000000fa82a9d0>] platform_device_register_full+0x178/0x210
-    [<000000009a5daf13>] sun50i_cpufreq_init+0xf8/0x168
-    [<000000000377cc7c>] do_one_initcall+0xe4/0x570
---------------------------------------------
+If failed to register netdev, it needs to clear INITED state and stop
+client in case of cause problem when concurrency with uninitialized
+process of driver.
 
-if sun50i_cpufreq_get_efuse failed, then opp_tables leak.
-
-Fixes: f328584f7bff ("cpufreq: Add sun50i nvmem based CPU scaling driver")
-Signed-off-by: Xiaobing Luo <luoxiaobing0926@gmail.com>
-Reviewed-by: Samuel Holland <samuel@sholland.org>
-Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+Fixes: a289a7e5c1d4 ("net: hns3: put off calling register_netdev() until client initialize complete")
+Signed-off-by: Jian Shen <shenjian15@huawei.com>
+Signed-off-by: Guangbin Huang <huangguangbin2@huawei.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/cpufreq/sun50i-cpufreq-nvmem.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/net/ethernet/hisilicon/hns3/hns3_enet.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff --git a/drivers/cpufreq/sun50i-cpufreq-nvmem.c b/drivers/cpufreq/sun50i-cpufreq-nvmem.c
-index 2deed8d8773f..75e1bf3a08f7 100644
---- a/drivers/cpufreq/sun50i-cpufreq-nvmem.c
-+++ b/drivers/cpufreq/sun50i-cpufreq-nvmem.c
-@@ -98,8 +98,10 @@ static int sun50i_cpufreq_nvmem_probe(struct platform_device *pdev)
- 		return -ENOMEM;
+diff --git a/drivers/net/ethernet/hisilicon/hns3/hns3_enet.c b/drivers/net/ethernet/hisilicon/hns3/hns3_enet.c
+index f6082be7481c..f33b4c351a70 100644
+--- a/drivers/net/ethernet/hisilicon/hns3/hns3_enet.c
++++ b/drivers/net/ethernet/hisilicon/hns3/hns3_enet.c
+@@ -5132,6 +5132,13 @@ static void hns3_state_init(struct hnae3_handle *handle)
+ 		set_bit(HNS3_NIC_STATE_RXD_ADV_LAYOUT_ENABLE, &priv->state);
+ }
  
- 	ret = sun50i_cpufreq_get_efuse(&speed);
--	if (ret)
-+	if (ret) {
-+		kfree(opp_tables);
- 		return ret;
-+	}
++static void hns3_state_uninit(struct hnae3_handle *handle)
++{
++	struct hns3_nic_priv *priv  = handle->priv;
++
++	clear_bit(HNS3_NIC_STATE_INITED, &priv->state);
++}
++
+ static int hns3_client_init(struct hnae3_handle *handle)
+ {
+ 	struct pci_dev *pdev = handle->pdev;
+@@ -5249,7 +5256,9 @@ static int hns3_client_init(struct hnae3_handle *handle)
+ 	return ret;
  
- 	snprintf(name, MAX_NAME_LEN, "speed%d", speed);
- 
+ out_reg_netdev_fail:
++	hns3_state_uninit(handle);
+ 	hns3_dbg_uninit(handle);
++	hns3_client_stop(handle);
+ out_client_start:
+ 	hns3_free_rx_cpu_rmap(netdev);
+ 	hns3_nic_uninit_irq(priv);
 -- 
 2.35.1
 

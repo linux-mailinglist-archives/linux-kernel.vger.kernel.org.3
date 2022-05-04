@@ -2,45 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A5F851AAA1
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:27:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19A1F51A9F3
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:19:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357220AbiEDRbK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 13:31:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38974 "EHLO
+        id S1358075AbiEDRUY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 13:20:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356813AbiEDRJo (ORCPT
+        with ESMTP id S1355938AbiEDREr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 13:09:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76B5E21806;
-        Wed,  4 May 2022 09:55:46 -0700 (PDT)
+        Wed, 4 May 2022 13:04:47 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 280014FC50;
+        Wed,  4 May 2022 09:53:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F2431616B8;
-        Wed,  4 May 2022 16:55:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4CD14C385A5;
-        Wed,  4 May 2022 16:55:45 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AE932B827AC;
+        Wed,  4 May 2022 16:53:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E6A4C385A5;
+        Wed,  4 May 2022 16:53:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651683345;
-        bh=xh0CIvo5OSsNTrwskNOMVvGcZpqhPK91MF32l7lHP9c=;
+        s=korg; t=1651683213;
+        bh=mmNb0QQ6+Ixfyf+1ANzPjL3xuEFqItZxzDmgCCM79dA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Bh7xyKWd/U3EpowSL3G69W9YRgcz7vMc2uwuDrLhNeTyCcSNaSDyMIkkp3b730aSs
-         9Grs0aNPVUNyVNIo5DYqEoT0IvCavv3cF9B7YZFNa04U8mM8rEZ+32I1PeBAgm3cIJ
-         JKNTQyee01NtcINznbyN94xson2pYgCjgT8+reEM=
+        b=UMhjjl8EtzJYpjAMp5uDeIrLdDs6E6p6ME1zkfpRN1ZkteKtZWINlvk7ruF/jBfD4
+         XM/p/M05sODC/jaLkEikWtPwRhoKK6uGVQII2TnU4WrGV+RcYMeb7Pc7f4Ydf9Ah/1
+         Ela3WeBlnG3PX6adVy/8smuWxxHZMEDMprce0SJ8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
+To:     linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Todd Kjos <tkjos@google.com>,
-        stable <stable@kernel.org>,
-        Alessandro Astone <ales.astone@gmail.com>
-Subject: [PATCH 5.17 032/225] binder: Gracefully handle BINDER_TYPE_FDA objects with num_fds=0
-Date:   Wed,  4 May 2022 18:44:30 +0200
-Message-Id: <20220504153113.119453489@linuxfoundation.org>
+        stable@vger.kernel.org, Marek Vasut <marex@denx.de>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Fabien Dessenne <fabien.dessenne@foss.st.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Marc Zyngier <maz@kernel.org>,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 078/177] pinctrl: stm32: Do not call stm32_gpio_get() for edge triggered IRQs in EOI
+Date:   Wed,  4 May 2022 18:44:31 +0200
+Message-Id: <20220504153100.054423299@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220504153110.096069935@linuxfoundation.org>
-References: <20220504153110.096069935@linuxfoundation.org>
+In-Reply-To: <20220504153053.873100034@linuxfoundation.org>
+References: <20220504153053.873100034@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,48 +60,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alessandro Astone <ales.astone@gmail.com>
+From: Marek Vasut <marex@denx.de>
 
-commit ef38de9217a04c9077629a24652689d8fdb4c6c6 upstream.
+[ Upstream commit e74200ebf7c4f6a7a7d1be9f63833ddba251effa ]
 
-Some android userspace is sending BINDER_TYPE_FDA objects with
-num_fds=0. Like the previous patch, this is reproducible when
-playing a video.
+The stm32_gpio_get() should only be called for LEVEL triggered interrupts,
+skip calling it for EDGE triggered interrupts altogether to avoid wasting
+CPU cycles in EOI handler. On this platform, EDGE triggered interrupts are
+the majority and LEVEL triggered interrupts are the exception no less, and
+the CPU cycles are not abundant.
 
-Before commit 09184ae9b575 BINDER_TYPE_FDA objects with num_fds=0
-were 'correctly handled', as in no fixup was performed.
-
-After commit 09184ae9b575 we aggregate fixup and skip regions in
-binder_ptr_fixup structs and distinguish between the two by using
-the skip_size field: if it's 0, then it's a fixup, otherwise skip.
-When processing BINDER_TYPE_FDA objects with num_fds=0 we add a
-skip region of skip_size=0, and this causes issues because now
-binder_do_deferred_txn_copies will think this was a fixup region.
-
-To address that, return early from binder_translate_fd_array to
-avoid adding an empty skip region.
-
-Fixes: 09184ae9b575 ("binder: defer copies of pre-patched txn data")
-Acked-by: Todd Kjos <tkjos@google.com>
-Cc: stable <stable@kernel.org>
-Signed-off-by: Alessandro Astone <ales.astone@gmail.com>
-Link: https://lore.kernel.org/r/20220415120015.52684-1-ales.astone@gmail.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 47beed513a85b ("pinctrl: stm32: Add level interrupt support to gpio irq chip")
+Signed-off-by: Marek Vasut <marex@denx.de>
+Cc: Alexandre Torgue <alexandre.torgue@foss.st.com>
+Cc: Fabien Dessenne <fabien.dessenne@foss.st.com>
+Cc: Linus Walleij <linus.walleij@linaro.org>
+Cc: Marc Zyngier <maz@kernel.org>
+Cc: linux-stm32@st-md-mailman.stormreply.com
+Cc: linux-arm-kernel@lists.infradead.org
+To: linux-gpio@vger.kernel.org
+Link: https://lore.kernel.org/r/20220415215410.498349-1-marex@denx.de
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/android/binder.c |    3 +++
- 1 file changed, 3 insertions(+)
+ drivers/pinctrl/stm32/pinctrl-stm32.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
---- a/drivers/android/binder.c
-+++ b/drivers/android/binder.c
-@@ -2486,6 +2486,9 @@ static int binder_translate_fd_array(str
- 	struct binder_proc *proc = thread->proc;
- 	int ret;
+diff --git a/drivers/pinctrl/stm32/pinctrl-stm32.c b/drivers/pinctrl/stm32/pinctrl-stm32.c
+index 8934b4878fa8..2c78af0aac57 100644
+--- a/drivers/pinctrl/stm32/pinctrl-stm32.c
++++ b/drivers/pinctrl/stm32/pinctrl-stm32.c
+@@ -311,6 +311,10 @@ static void stm32_gpio_irq_trigger(struct irq_data *d)
+ 	struct stm32_gpio_bank *bank = d->domain->host_data;
+ 	int level;
  
-+	if (fda->num_fds == 0)
-+		return 0;
++	/* Do not access the GPIO if this is not LEVEL triggered IRQ. */
++	if (!(bank->irq_type[d->hwirq] & IRQ_TYPE_LEVEL_MASK))
++		return;
 +
- 	fd_buf_size = sizeof(u32) * fda->num_fds;
- 	if (fda->num_fds >= SIZE_MAX / sizeof(u32)) {
- 		binder_user_error("%d:%d got transaction with invalid number of fds (%lld)\n",
+ 	/* If level interrupt type then retrig */
+ 	level = stm32_gpio_get(&bank->gpio_chip, d->hwirq);
+ 	if ((level == 0 && bank->irq_type[d->hwirq] == IRQ_TYPE_LEVEL_LOW) ||
+-- 
+2.35.1
+
 
 

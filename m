@@ -2,82 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A9AC519743
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 08:13:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D237351974B
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 08:20:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344838AbiEDGQb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 02:16:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44570 "EHLO
+        id S233453AbiEDGYU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 02:24:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233453AbiEDGQ3 (ORCPT
+        with ESMTP id S1344875AbiEDGYS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 02:16:29 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1FDF17051
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 23:12:54 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id j4so614840lfh.8
-        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 23:12:54 -0700 (PDT)
+        Wed, 4 May 2022 02:24:18 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AC2919289
+        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 23:20:43 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id i27so940391ejd.9
+        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 23:20:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=2tuqEYU8OdIQxZ+rdModr4KYTKneYsLdEMUMbVDbBTk=;
-        b=BWUeIlVpukCSflMHB1tgYceEosqVc9oe/jVXzIYsrusbl87pNjhYnDjv9qEL0oLhwn
-         aa5UjM1m72/z0Hga1RJHxiWZAKJqXW7wF3rMzST8CqwYHbsHDVJmbnoWbRlJOuZlx6tU
-         ySVvgdDG7ZICzvh3u7mvZrki7RSf7Jlvyp9n+9KOD688mckez/KQg0eVURkS5L/boK+e
-         IbT0Ut7YD4VLvL2Hh6VnoxQu4td6H/Fr3wJXIwAUC0p64RQorCh9AzQc5A4aFkxjWj4X
-         zV3ANrN2TxFoRJ8c3bWK+NaiHY6YqPwSlTVWKpnmiPXr/oEYIm7X6CGb+/md6PS/104Z
-         VzNg==
+        bh=S9kVssv7NOzawB6oy6PZFFqEWoy+1iZ0ddgQbndGXkY=;
+        b=eaPtpKhP1noRcNSLEl8k7DRsmp1+3MImkuiSu7hO9CNuSBf/5vIEAIH6OKgLl3Vgfs
+         DiuNCahXqDrm3TDxKTeBHztIQ2X4A4DvEcpu3jKQ6K0o0/1BYwYOcGfB5y6brD0c2zyH
+         QL6ONvMa6Dbimne4AH7LJkUgiduWjnNosD6HI1qAfmWhAvKsMXz8WR2bO0kLOFR/9pt0
+         f4qoxNXj/v29EwKAwkJa0ftgmaY0KnEDdVY3ov1TJg2vsxKrL4f5N5rlw28PVvwZXKl/
+         ASvjmeeeY8p0kcTWbGoCywM07jJ0+VdDy/jroI3pT9w9iEnC6viLgDEXrSNzA/TGuvbF
+         EH+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=2tuqEYU8OdIQxZ+rdModr4KYTKneYsLdEMUMbVDbBTk=;
-        b=hec23Veh5TMteIfzo8ujr22kPo4KB6zdAFBayb0rc9cDjy/FreGv/WMH9ahxLa8liM
-         NN3Dv6VPYhlqF7divpwAZIF2LBLcc5iRmBoLC08136MwEBKZOtaLNYqfaqVhhNDzR1Qe
-         LFxf58EIM8yDOumGXsUTNvpo4lmaPgCTHN7gdzU+aYOS8hsCg89WCfeaZufl4+2QyhYY
-         Zqq3v3fGoW1F73zLQntdusRyJ4/hIhCbNy3OCQ1Oah73Zn3oq0TiIfBX6nVGrbD+pjjS
-         3iMQuFnxvQqAbGkh0biJu7ZiJNtOpn9djvgTbqyV4c2l4nApJl0uc+PBWiKPabaMf1d2
-         sDkg==
-X-Gm-Message-State: AOAM532ZOxxiIXOoXZmJuT0zHXXBcNk329Q5lPnHOr2Q/UBkWxmtgq1j
-        SQ50P0+GBm2D1TXuyi+QbRIn5g==
-X-Google-Smtp-Source: ABdhPJwS/7njQpo3DbfyMqUKtFd3wGDymfnni39lsDf6ApW3pU5xpDjIEk2egMPRoKYUqDcviFdi4w==
-X-Received: by 2002:a05:6512:118b:b0:46b:a9ae:3a3b with SMTP id g11-20020a056512118b00b0046ba9ae3a3bmr13477930lfr.188.1651644772957;
-        Tue, 03 May 2022 23:12:52 -0700 (PDT)
-Received: from [192.168.1.211] ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id c3-20020ac25303000000b0047255d210f9sm1119231lfh.40.2022.05.03.23.12.52
+        bh=S9kVssv7NOzawB6oy6PZFFqEWoy+1iZ0ddgQbndGXkY=;
+        b=IEyaJymaxCbEkySAr4Vx62QhBMUCDEO7KsEW/wM+oCQg1WXoaEWC0GNBsXhoy6kUuy
+         sbbRplnt4gCQhyfHPqEZLSLmIh01uVwv/4fjHA882+L4KGeojmE/J4vMbL6CH9nr2Suz
+         vzHZayY/GOU2nTs4QnLG80mBBplRGLG0oRPA4DZK+TlsiEeauu3FoaEiyKjWbpa0seIn
+         8xOG7bq492uoth9f+ytvQWmUA+H0ZcebM3TuPEb0zZQQrQAjki6lLVCJhw6DP7+1l+dt
+         TYTNS/DU3ovWcjGV4C24VA84t8sDbiKmPqt8tG0jj9L5/BjfOhWb2PQEagrKepFIcTD7
+         yPOA==
+X-Gm-Message-State: AOAM531KmlaaZeXKygszzi84OkfzSD8xvRcMEa3Ljgx1FRZRoquAjgVN
+        8EeT7bAm1DEj5LjtYJFw1DjzkQ==
+X-Google-Smtp-Source: ABdhPJzK4afMKmzSks36dzSJk3t+IoiFVAyPRNs2XhoB+rYp60IdxaXm9RDJbKDGhEIcmVXDSM/ypQ==
+X-Received: by 2002:a17:907:2cc4:b0:6df:a036:a025 with SMTP id hg4-20020a1709072cc400b006dfa036a025mr19779920ejc.554.1651645241925;
+        Tue, 03 May 2022 23:20:41 -0700 (PDT)
+Received: from [192.168.0.207] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id ig1-20020a1709072e0100b006f3ef214e7asm5365230ejc.224.2022.05.03.23.20.40
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 03 May 2022 23:12:52 -0700 (PDT)
-Message-ID: <031fccd7-0082-8284-967d-285525a64394@linaro.org>
-Date:   Wed, 4 May 2022 09:12:51 +0300
+        Tue, 03 May 2022 23:20:41 -0700 (PDT)
+Message-ID: <faaa4ab4-8190-3cff-998e-3b6a6d3ce27c@linaro.org>
+Date:   Wed, 4 May 2022 08:20:40 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH] drm: Document that power requirements for DP AUX
- transfers
-Content-Language: en-GB
-To:     Douglas Anderson <dianders@chromium.org>,
-        dri-devel@lists.freedesktop.org
-Cc:     Lyude Paul <lyude@redhat.com>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Maxime Ripard <maxime@cerno.tech>,
-        linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
-        Stephen Boyd <swboyd@chromium.org>,
-        Robert Foss <robert.foss@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Imre Deak <imre.deak@intel.com>,
-        Jani Nikula <jani.nikula@intel.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        =?UTF-8?B?VmlsbGUgU3lyasOkbMOk?= <ville.syrjala@linux.intel.com>,
-        linux-kernel@vger.kernel.org
-References: <20220503162033.1.Ia8651894026707e4fa61267da944ff739610d180@changeid>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20220503162033.1.Ia8651894026707e4fa61267da944ff739610d180@changeid>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v2 1/2] dt-bindings: iio: sx9324: Add CS idle/sleep mode
+Content-Language: en-US
+To:     Stephen Boyd <swboyd@chromium.org>,
+        Jonathan Cameron <jic23@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
+        devicetree@vger.kernel.org, linux-iio@vger.kernel.org,
+        Gwendal Grignou <gwendal@chromium.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>
+References: <20220503193937.3794477-1-swboyd@chromium.org>
+ <20220503193937.3794477-2-swboyd@chromium.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220503193937.3794477-2-swboyd@chromium.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
@@ -89,85 +79,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/05/2022 02:21, Douglas Anderson wrote:
-> When doing DP AUX transfers there are two actors that need to be
-> powered in order for the DP AUX transfer to work: the DP source and
-> the DP sync.
-
-Nit: sink
-
-> Commit bacbab58f09d ("drm: Mention the power state
-> requirement on side-channel operations") added some documentation
-> saying that the DP source is required to power itself up (if needed)
-> to do AUX transfers. However, that commit doesn't talk anything about
-> the DP sink.
+On 03/05/2022 21:39, Stephen Boyd wrote:
+> We need to configure the sleep and idle mode of the CS pins for this
+> device. Add a DT property to do this so pins are in a proper state
+> during sleep (either hi-z, grounded, or pulled up to vdd).
 > 
-> For full fledged DP the sink isn't really a problem. It's expected
-> that if an external DP monitor isn't plugged in that attempting to do
-> AUX transfers won't work. It's also expected that if a DP monitor is
-> plugged in (and thus asserting HPD) that it AUX transfers will work.
-
-then
-
-> 
-> When we're looking at eDP, however, things are less obvious. Let's add
-> some documentation about expectations. Here's what we'll say:
-> 
-> 1. We don't expect the DP AUX transfer function to power on an eDP
-> panel. If an eDP panel is physically connected but powered off then it
-> makes sense for the transfer to fail.
-> 
-> 2. We'll document that the official way to power on a panel is via the
-> bridge chain, specifically by making sure that the panel's prepare
-> function has been called (which is called by
-> panel_bridge_pre_enable()). It's already specified in the kernel doc
-> of drm_panel_prepare() that this is the way to power the panel on and
-> also that after this call "it is possible to communicate with any
-> integrated circuitry via a command bus."
-> 
-> 3. We'll also document that for code running in the panel driver
-> itself that it is legal for the panel driver to power itself up
-> however it wants (it doesn't need to officially call
-> drm_panel_pre_enable()) and then it can do AUX bus transfers. This is
-> currently the way that edp-panel works when it's running atop the DP
-> AUX bus.
-> 
-> Signed-off-by: Douglas Anderson <dianders@chromium.org>
-
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-
+> Reviewed-by: Gwendal Grignou <gwendal@chromium.org>
+> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
 > ---
+>  .../bindings/iio/proximity/semtech,sx9324.yaml           | 9 +++++++++
+>  1 file changed, 9 insertions(+)
 > 
->   include/drm/display/drm_dp_helper.h | 14 +++++++++++---
->   1 file changed, 11 insertions(+), 3 deletions(-)
-> 
-> diff --git a/include/drm/display/drm_dp_helper.h b/include/drm/display/drm_dp_helper.h
-> index dca40a045dd6..e5165b708a40 100644
-> --- a/include/drm/display/drm_dp_helper.h
-> +++ b/include/drm/display/drm_dp_helper.h
-> @@ -370,9 +370,17 @@ struct drm_dp_aux {
->   	 * helpers assume this is the case.
->   	 *
->   	 * Also note that this callback can be called no matter the
-> -	 * state @dev is in. Drivers that need that device to be powered
-> -	 * to perform this operation will first need to make sure it's
-> -	 * been properly enabled.
-> +	 * state @dev is in and also no matter what state the panel is
-> +	 * in. It's expected:
-> +	 * - If the @dev providing the AUX bus is currently unpowered then
-> +	 *   it will power itself up for the transfer.
-> +	 * - If we're on eDP and the panel is not in a state where it can
-> +	 *   respond (it's not powered or it's in a low power state) then this
-> +	 *   function will return an error (but not crash). Note that if a
-> +	 *   panel driver is initiating a DP AUX transfer it may power itself
-> +	 *   up however it wants. All other code should ensure that the
-> +	 *   pre_enable() bridge chain (which eventually calls the panel
-> +	 *   prepare function) has powered the panel.
->   	 */
->   	ssize_t (*transfer)(struct drm_dp_aux *aux,
->   			    struct drm_dp_aux_msg *msg);
+> diff --git a/Documentation/devicetree/bindings/iio/proximity/semtech,sx9324.yaml b/Documentation/devicetree/bindings/iio/proximity/semtech,sx9324.yaml
+> index d265eb5258c8..b3aa2ebf9661 100644
+> --- a/Documentation/devicetree/bindings/iio/proximity/semtech,sx9324.yaml
+> +++ b/Documentation/devicetree/bindings/iio/proximity/semtech,sx9324.yaml
+> @@ -126,6 +126,14 @@ properties:
+>        UINT_MAX (4294967295) represents infinite. Other values
+>        represent 1-1/N.
+>  
+> +  semtech,cs-idle-sleep:
+> +    description:
+> +      State of CS pins during sleep mode and idle time.
+> +    enum:
+> +      - hi-z
+> +      - gnd
+> +      - vdd
 
+You need a ref to type (string).
 
--- 
-With best wishes
-Dmitry
+Best regards,
+Krzysztof

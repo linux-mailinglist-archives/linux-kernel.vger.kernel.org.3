@@ -2,104 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2B09519C6C
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 11:55:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7ADA0519C71
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 11:56:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347911AbiEDJ7K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 05:59:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38002 "EHLO
+        id S1347810AbiEDKAP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 06:00:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347841AbiEDJ7A (ORCPT
+        with ESMTP id S232653AbiEDKAN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 05:59:00 -0400
+        Wed, 4 May 2022 06:00:13 -0400
 Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD64D1B7B1
-        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 02:55:22 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB83926AFB
+        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 02:56:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651658122; x=1683194122;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=TQAj5zU5YBDIpsvllkIWVZmIaEkdqHUjk7C411iG0ro=;
-  b=EO15RvGKWaJtoET+wJ8FTc3kOPjgRUiEtVkXA3qOjABUZMMBQxOFIuq1
-   ey5/VAJP6SoTcinJeilkBHysZCE+xAxGWqlDdNLbsZnBBd6rEe+Z5duEM
-   ZhkGMQaOZzSybOseAIVazFhoqtpJHKitboK1ootjatkHLV7WDhtS8P/P2
-   ou8daeknctcrkD2uXTtauNj06/LWQqJhtfaswZgrXZ/OIN6UeLbRDHxue
-   RTLLNx1/KeM0eC8S9W/pTrzD42ax8FJwTmnHmm7YFP/gnx/t3GflyyXAq
-   pxdNtuCtuvU5BbCbrlu0sHCFWbWb8bNyffYn+DMcg2SP2nJZh9lANO45X
+  t=1651658198; x=1683194198;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=HVgWLd9KHhixvotLGTOAB/90RvXHZYwfdJRQ9AXq3Mo=;
+  b=RmXE1bGRqfVVsT3zb5az7XopxZ1kZ/mFvG4ymRP+2sOCkpdUJ4Ykak0w
+   N//PG4J1QozKJGBlCqVB6F+ipScGLzkpqmn0/kfPJI5eZbXS69mggzlTQ
+   unMuVAW68Z+k7JhzaxtFY7KLjEXKxBUwmz3pxUW+yZme1+B774zXw1m+F
+   6rt/LKFofZKRMbZJPzcrbc/J3xhRmDsNBc9gMXR7uArfXOkG7L00nj2Dj
+   dC40WGQf7XcmghooBpRBY/BgcLYTBnano0Z0yPkQRhkJnfWtrsS9uHYnc
+   LSpzR3e2CjQ2aqquFhlPgl+DNJOotpz11usvpsBaiQt9FMfA2Q8+/j1Y4
    Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10336"; a="330704702"
+X-IronPort-AV: E=McAfee;i="6400,9594,10336"; a="330704993"
 X-IronPort-AV: E=Sophos;i="5.91,197,1647327600"; 
-   d="scan'208";a="330704702"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2022 02:55:22 -0700
-X-ExtLoop1: 1
+   d="scan'208";a="330704993"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2022 02:56:38 -0700
 X-IronPort-AV: E=Sophos;i="5.91,197,1647327600"; 
-   d="scan'208";a="693685435"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 04 May 2022 02:55:19 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nmBj4-000BI3-Qu;
-        Wed, 04 May 2022 09:55:18 +0000
-Date:   Wed, 4 May 2022 17:55:00 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [andersson:wip/sc8180x-next-20220502 2/29]
- drivers/usb/typec/ucsi/ucsi_glink.c:622:34: warning: unused variable
- 'ucsi_glink_of_match'
-Message-ID: <202205041711.8Ka8RUyq-lkp@intel.com>
+   d="scan'208";a="584655996"
+Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.32.90])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2022 02:56:36 -0700
+Message-ID: <c6bf8be1-1416-499b-7695-6b46e41b788c@intel.com>
+Date:   Wed, 4 May 2022 12:56:31 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.8.1
+Subject: Re: [PATCH RFC 18/21] libperf evlist: Allow mixing per-thread and
+ per-cpu mmaps
+Content-Language: en-US
+To:     Namhyung Kim <namhyung@kernel.org>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@redhat.com>, Ian Rogers <irogers@google.com>,
+        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+References: <20220422162402.147958-1-adrian.hunter@intel.com>
+ <20220422162402.147958-19-adrian.hunter@intel.com>
+ <CAM9d7chPX314n6c_V+3c0HF1OKNSL3zS-s3L78oH39Ds7cSpEg@mail.gmail.com>
+From:   Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <CAM9d7chPX314n6c_V+3c0HF1OKNSL3zS-s3L78oH39Ds7cSpEg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/andersson/kernel wip/sc8180x-next-20220502
-head:   6199153320a3b7d1dce23ad1ea4d894a86793cb6
-commit: be6dcf10ab84d8bb9ec872791f28b2724996fc32 [2/29] pmic_glink: Add UCSI/PAN prototype
-config: hexagon-allyesconfig (https://download.01.org/0day-ci/archive/20220504/202205041711.8Ka8RUyq-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 363b3a645a1e30011cc8da624f13dac5fd915628)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/andersson/kernel/commit/be6dcf10ab84d8bb9ec872791f28b2724996fc32
-        git remote add andersson https://github.com/andersson/kernel
-        git fetch --no-tags andersson wip/sc8180x-next-20220502
-        git checkout be6dcf10ab84d8bb9ec872791f28b2724996fc32
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/gpu/drm/msm/ drivers/usb/typec/ucsi/
+On 3/05/22 23:29, Namhyung Kim wrote:
+> On Fri, Apr 22, 2022 at 9:25 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
+>>
+>> mmap_per_evsel() will skip events that do not match the CPU, so all CPUs
+>> can be iterated in any case.
+>>
+>> Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
+>> ---
+> [...]
+>> @@ -561,9 +538,12 @@ static int perf_evlist__nr_mmaps(struct perf_evlist *evlist)
+>>  {
+>>         int nr_mmaps;
+>>
+>> +       /* One for each CPU */
+>>         nr_mmaps = perf_cpu_map__nr(evlist->all_cpus);
+>> -       if (perf_cpu_map__empty(evlist->all_cpus))
+>> -               nr_mmaps = perf_thread_map__nr(evlist->threads);
+>> +       /* One for each thread */
+>> +       nr_mmaps += perf_thread_map__nr(evlist->threads);
+>> +       /* Minus the dummy CPU or dummy thread */
+>> +       nr_mmaps -= 1;
+> 
+> I'm not sure it'd work for per-task events with default-per-cpu mode.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Thanks for noticing that. It ends up being too high which doesn't fail
+immediately.  I need to add a check that nr_mmaps matches the number
+of mmaps actually made.
 
-All warnings (new ones prefixed by >>):
+> 
+> Thanks,
+> Namhyung
+> 
+>>
+>>         return nr_mmaps;
+>>  }
 
->> drivers/usb/typec/ucsi/ucsi_glink.c:622:34: warning: unused variable 'ucsi_glink_of_match' [-Wunused-const-variable]
-   static const struct of_device_id ucsi_glink_of_match[] = {
-                                    ^
-   1 warning generated.
-
-
-vim +/ucsi_glink_of_match +622 drivers/usb/typec/ucsi/ucsi_glink.c
-
-   621	
- > 622	static const struct of_device_id ucsi_glink_of_match[] = {
-   623		{ .compatible = "qcom,glink-ucsi", },
-   624		{}
-   625	};
-   626	//MODULE_DEVICE_TABLE(of, ucsi_glink_of_match);
-   627	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp

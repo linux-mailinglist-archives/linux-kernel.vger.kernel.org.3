@@ -2,46 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA79151AB3D
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:40:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F9CF51AA97
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:27:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358921AbiEDRna (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 13:43:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39256 "EHLO
+        id S1357326AbiEDR3E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 13:29:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355038AbiEDRLf (ORCPT
+        with ESMTP id S1356307AbiEDRJL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 13:11:35 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A13E4B845;
-        Wed,  4 May 2022 09:57:36 -0700 (PDT)
+        Wed, 4 May 2022 13:09:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08EBB532DB;
+        Wed,  4 May 2022 09:55:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D2655B827A3;
-        Wed,  4 May 2022 16:57:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8CCCDC385A4;
-        Wed,  4 May 2022 16:57:34 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C2E4261899;
+        Wed,  4 May 2022 16:55:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17D0FC385AA;
+        Wed,  4 May 2022 16:55:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651683454;
-        bh=uNDN8A8qsXZol7TTIOtlrkvOZ9SMvxddG+IitYyh9TY=;
+        s=korg; t=1651683302;
+        bh=7pBfGO7jJD7TSXKhPud04PKEnIWy2lecZmL2TL3JfC8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hHD4GxcyXiTgSz/4w15AFC6QR5mSyYgFDLrHZegkvw72N6ZWMqGNGlVSDqFWkYoav
-         +Wz4WPwdqlobyDBUbCda7SjxbAO2yUwP7PGirlhuMOcHzVP1cTIsmvgJlERNDDEIS6
-         mCw/2e/Ny/kBzHhkvQDn5ls05tDc6bYUAGAWoo6w=
+        b=D/gJkHr7qUwFSaEjq1VWmAcj+p1V8cRnuzPJiEs1HVoMTciy05vj2vA7njOH5kp76
+         mYm/WC8edXaHP3OintIEjGzfWeBdD/ISO1d/y3RwWLCS3sNmosADyiWXBYB0Tx5qWi
+         fYFrgYz2fGGOsOyVFxnEazNRd5rZYRes1b5UUcDU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Peilin Ye <peilin.ye@bytedance.com>,
-        William Tu <u9012063@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 121/225] ip_gre: Make o_seqno start from 0 in native mode
-Date:   Wed,  4 May 2022 18:45:59 +0200
-Message-Id: <20220504153121.269949239@linuxfoundation.org>
+        stable@vger.kernel.org, Daniel Starke <daniel.starke@siemens.com>
+Subject: [PATCH 5.15 167/177] tty: n_gsm: fix wrong command frame length field encoding
+Date:   Wed,  4 May 2022 18:46:00 +0200
+Message-Id: <20220504153108.497103113@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220504153110.096069935@linuxfoundation.org>
-References: <20220504153110.096069935@linuxfoundation.org>
+In-Reply-To: <20220504153053.873100034@linuxfoundation.org>
+References: <20220504153053.873100034@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,51 +53,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peilin Ye <peilin.ye@bytedance.com>
+From: Daniel Starke <daniel.starke@siemens.com>
 
-[ Upstream commit ff827beb706ed719c766acf36449801ded0c17fc ]
+commit 398867f59f956985f4c324f173eff7b946e14bd8 upstream.
 
-For GRE and GRETAP devices, currently o_seqno starts from 1 in native
-mode.  According to RFC 2890 2.2., "The first datagram is sent with a
-sequence number of 0."  Fix it.
+n_gsm is based on the 3GPP 07.010 and its newer version is the 3GPP 27.010.
+See https://portal.3gpp.org/desktopmodules/Specifications/SpecificationDetails.aspx?specificationId=1516
+The changes from 07.010 to 27.010 are non-functional. Therefore, I refer to
+the newer 27.010 here. Chapter 5.4.6.1 states that each command frame shall
+be made up from type, length and value. Looking for example in chapter
+5.4.6.3.5 at the description for the encoding of a flow control on command
+it becomes obvious, that the type and length field is always present
+whereas the value may be zero bytes long. The current implementation omits
+the length field if the value is not present. This is wrong.
+Correct this by always sending the length in gsm_control_transmit().
+So far only the modem status command (MSC) has included a value and encoded
+its length directly. Therefore, also change gsmtty_modem_update().
 
-It is worth mentioning that o_seqno already starts from 0 in collect_md
-mode, see gre_fb_xmit(), where tunnel->o_seqno is passed to
-gre_build_header() before getting incremented.
-
-Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-Signed-off-by: Peilin Ye <peilin.ye@bytedance.com>
-Acked-by: William Tu <u9012063@gmail.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: e1eaea46bb40 ("tty: n_gsm line discipline")
+Cc: stable@vger.kernel.org
+Signed-off-by: Daniel Starke <daniel.starke@siemens.com>
+Link: https://lore.kernel.org/r/20220414094225.4527-12-daniel.starke@siemens.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/ipv4/ip_gre.c | 8 +++-----
- 1 file changed, 3 insertions(+), 5 deletions(-)
+ drivers/tty/n_gsm.c |   23 +++++++++++------------
+ 1 file changed, 11 insertions(+), 12 deletions(-)
 
-diff --git a/net/ipv4/ip_gre.c b/net/ipv4/ip_gre.c
-index 99db2e41ed10..ca70b92e80d9 100644
---- a/net/ipv4/ip_gre.c
-+++ b/net/ipv4/ip_gre.c
-@@ -459,14 +459,12 @@ static void __gre_xmit(struct sk_buff *skb, struct net_device *dev,
- 		       __be16 proto)
+--- a/drivers/tty/n_gsm.c
++++ b/drivers/tty/n_gsm.c
+@@ -1302,11 +1302,12 @@ static void gsm_control_response(struct
+ 
+ static void gsm_control_transmit(struct gsm_mux *gsm, struct gsm_control *ctrl)
  {
- 	struct ip_tunnel *tunnel = netdev_priv(dev);
--
--	if (tunnel->parms.o_flags & TUNNEL_SEQ)
--		tunnel->o_seqno++;
-+	__be16 flags = tunnel->parms.o_flags;
- 
- 	/* Push GRE header. */
- 	gre_build_header(skb, tunnel->tun_hlen,
--			 tunnel->parms.o_flags, proto, tunnel->parms.o_key,
--			 htonl(tunnel->o_seqno));
-+			 flags, proto, tunnel->parms.o_key,
-+			 (flags & TUNNEL_SEQ) ? htonl(tunnel->o_seqno++) : 0);
- 
- 	ip_tunnel_xmit(skb, dev, tnl_params, tnl_params->protocol);
+-	struct gsm_msg *msg = gsm_data_alloc(gsm, 0, ctrl->len + 1, gsm->ftype);
++	struct gsm_msg *msg = gsm_data_alloc(gsm, 0, ctrl->len + 2, gsm->ftype);
+ 	if (msg == NULL)
+ 		return;
+-	msg->data[0] = (ctrl->cmd << 1) | 2 | EA;	/* command */
+-	memcpy(msg->data + 1, ctrl->data, ctrl->len);
++	msg->data[0] = (ctrl->cmd << 1) | CR | EA;	/* command */
++	msg->data[1] = (ctrl->len << 1) | EA;
++	memcpy(msg->data + 2, ctrl->data, ctrl->len);
+ 	gsm_data_queue(gsm->dlci[0], msg);
  }
--- 
-2.35.1
-
+ 
+@@ -2889,19 +2890,17 @@ static struct tty_ldisc_ops tty_ldisc_pa
+ 
+ static int gsmtty_modem_update(struct gsm_dlci *dlci, u8 brk)
+ {
+-	u8 modembits[5];
++	u8 modembits[3];
+ 	struct gsm_control *ctrl;
+ 	int len = 2;
+ 
+-	if (brk)
++	modembits[0] = (dlci->addr << 2) | 2 | EA;  /* DLCI, Valid, EA */
++	modembits[1] = (gsm_encode_modem(dlci) << 1) | EA;
++	if (brk) {
++		modembits[2] = (brk << 4) | 2 | EA; /* Length, Break, EA */
+ 		len++;
+-
+-	modembits[0] = len << 1 | EA;		/* Data bytes */
+-	modembits[1] = dlci->addr << 2 | 3;	/* DLCI, EA, 1 */
+-	modembits[2] = gsm_encode_modem(dlci) << 1 | EA;
+-	if (brk)
+-		modembits[3] = brk << 4 | 2 | EA;	/* Valid, EA */
+-	ctrl = gsm_control_send(dlci->gsm, CMD_MSC, modembits, len + 1);
++	}
++	ctrl = gsm_control_send(dlci->gsm, CMD_MSC, modembits, len);
+ 	if (ctrl == NULL)
+ 		return -ENOMEM;
+ 	return gsm_control_wait(dlci->gsm, ctrl);
 
 

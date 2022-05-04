@@ -2,92 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01013519B44
+	by mail.lfdr.de (Postfix) with ESMTP id 49B1C519B45
 	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 11:14:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347022AbiEDJSD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 05:18:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54350 "EHLO
+        id S1347036AbiEDJSM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 05:18:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346992AbiEDJRu (ORCPT
+        with ESMTP id S1347029AbiEDJSI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 05:17:50 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBC9C1FA52
-        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 02:14:15 -0700 (PDT)
+        Wed, 4 May 2022 05:18:08 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FD52252A4;
+        Wed,  4 May 2022 02:14:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651655655; x=1683191655;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=VsPwoFBbW78xEeZLWVp/OKrWo88rORbPPuR9Qy9VbSQ=;
-  b=QkaA5VJYcNoIjCA1uySgeM2HpqH2YD+oKXcVoioZN03P/Km/kAUxRadt
-   RPhzsI6O3RsW50/ed5uNj7skwoVpfFAz77oNNsW1b19IQYAP6o/NZY1ZA
-   ukNh+ZuTcksiMEDk2kdzBv++qyVT7dRDr761qlLp2aY9n4u0Vph4G7z9w
-   PRHFdtAtyceNeLqs6fb4j9M95ZoX1dBMGkJ0/DGw6tHMhpvq1a7toBigo
-   pjRP/SdVdoAQ0TyJTv2fHpun772ElCOkJBPz3onG2mH1kOJO5aKdfPV34
-   tgH/IDgZ4Upoa49iKOBJWet+QRNGvM8BjvPmBATXVSLS7XEANepkCkvCR
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10336"; a="330696046"
+  t=1651655671; x=1683191671;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=eKFjZ/eVF8ElceRlB71qNooFaIa0RunpC73Yf+SQ4NI=;
+  b=jD4DoSSdwyGD9EqxBsOA/2ZK8iLqHPTna0GxuG8gWpsA7YCu7MYVh+je
+   Xe/jwZGT36s1VO+xAbkGXj3FdBcKAusu6w1J2hfx/Lt3zlNgSVKJaW06S
+   T7SK5d9x/9j/3+JEq3gHLmo/kYJVtEIUpDlHEt7omcYzPAaY3cPknVF3O
+   5NAvtHhjHwA7HoLr34cwe4UMNbue94/vfpLKwKceEydCIWqA0/TfxJM+N
+   2JfqIGZ2QfpK0FFh7j5N/Qk8rYFDu0zTJuejqPC4G4E5syPkyhdPdD4Me
+   ZVIf8Ke1bgo+jT5pvRgSDP0lVl0pJhc85EkIJ83ZtLfUvzyOF4clCL+VE
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10336"; a="265297879"
 X-IronPort-AV: E=Sophos;i="5.91,197,1647327600"; 
-   d="scan'208";a="330696046"
+   d="scan'208";a="265297879"
 Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2022 02:14:15 -0700
-X-ExtLoop1: 1
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2022 02:14:31 -0700
 X-IronPort-AV: E=Sophos;i="5.91,197,1647327600"; 
-   d="scan'208";a="620726752"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 04 May 2022 02:14:14 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nmB5J-000BEk-Az;
-        Wed, 04 May 2022 09:14:13 +0000
-Date:   Wed, 4 May 2022 17:14:10 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Greg Ungerer <gerg@linux-m68k.org>
-Subject: time.c:undefined reference to `mach_get_rtc_pll'
-Message-ID: <202205041720.i8wJ8uXq-lkp@intel.com>
+   d="scan'208";a="620726815"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2022 02:14:29 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1nmB5W-00Bp5R-99;
+        Wed, 04 May 2022 12:14:26 +0300
+Date:   Wed, 4 May 2022 12:14:26 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     Allen Pais <apais@linux.microsoft.com>, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: [PATCH v3 1/1] firmware: tee_bnxt: Use UUID API for exporting
+ the UUID
+Message-ID: <YnJD8pYFcBBD2g5T@smile.fi.intel.com>
+References: <20220412113250.57997-1-andriy.shevchenko@linux.intel.com>
+ <e9c81a3d-d03a-5b13-ee14-9ba6103093f7@gmail.com>
+ <YnEBtk4ltlsep5/m@smile.fi.intel.com>
+ <092fbb39-9a62-80ce-b3bc-62a597d8a718@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <092fbb39-9a62-80ce-b3bc-62a597d8a718@gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   107c948d1d3e61d10aee9d0f7c3d81bbee9842af
-commit: 8b22820efb35f93d98638563b0a8f4094e8ee399 m68k: m68328: remove duplicate code
-date:   1 year, 5 months ago
-config: m68k-randconfig-r016-20220503 (https://download.01.org/0day-ci/archive/20220504/202205041720.i8wJ8uXq-lkp@intel.com/config)
-compiler: m68k-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=8b22820efb35f93d98638563b0a8f4094e8ee399
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 8b22820efb35f93d98638563b0a8f4094e8ee399
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash
+On Tue, May 03, 2022 at 12:28:18PM -0700, Florian Fainelli wrote:
+> On 5/3/22 03:19, Andy Shevchenko wrote:
+> > On Wed, Apr 13, 2022 at 08:38:41AM -0700, Florian Fainelli wrote:
+> > > On 4/12/2022 4:32 AM, Andy Shevchenko wrote:
+> > > > There is export_uuid() function which exports uuid_t to the u8 array.
+> > > > Use it instead of open coding variant.
+> > > > 
+> > > > This allows to hide the uuid_t internals.
+> > > > 
+> > > > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> > > > ---
+> > > > v3: rebased on the latest vanilla, added Andrew since it has no move for 1y+
+> > > 
+> > > I don't think this is going to be picked up unless we designate a entry in
+> > > the MAINTAINERS file, I don't mind taking this via the Broadcom ARM SoCs
+> > > pull request if this does not move.
+> > 
+> > I saw your patch has been picked up to up-to-date MAINTAINERS record.
+> > Can this one now be picked up too?
+> 
+> Please resubmit targeting David Miller's net-next tree since this is how
+> patches would be merged moving forward. Thanks!
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   m68k-linux-ld: arch/m68k/kernel/time.o: in function `rtc_ioctl':
->> time.c:(.text+0x82): undefined reference to `mach_get_rtc_pll'
-   m68k-linux-ld: time.c:(.text+0xbc): undefined reference to `mach_set_rtc_pll'
-   m68k-linux-ld: time.c:(.text+0xf4): undefined reference to `mach_set_rtc_pll'
+Done, thanks!
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+With Best Regards,
+Andy Shevchenko
+
+

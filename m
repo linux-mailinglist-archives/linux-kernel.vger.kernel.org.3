@@ -2,46 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0DF651A7AC
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:04:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A71C651AA6B
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:27:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356229AbiEDRE7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 13:04:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38300 "EHLO
+        id S1357315AbiEDRX6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 13:23:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354586AbiEDQ6x (ORCPT
+        with ESMTP id S1355637AbiEDREc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 12:58:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5B351AF2D;
-        Wed,  4 May 2022 09:50:40 -0700 (PDT)
+        Wed, 4 May 2022 13:04:32 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7252B4EF5F;
+        Wed,  4 May 2022 09:53:11 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 41AAC617C3;
-        Wed,  4 May 2022 16:50:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 891C0C385AA;
-        Wed,  4 May 2022 16:50:39 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 176E0B82792;
+        Wed,  4 May 2022 16:53:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA5FAC385A5;
+        Wed,  4 May 2022 16:53:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651683039;
-        bh=QBqLKXwnKZhXrAhur7NkZenhyZHNLuYq2DrCA0YMzMI=;
+        s=korg; t=1651683189;
+        bh=WebTtxslwKDAsVRcLEZUGWc3FTCSF1suL5dLjrOM8mA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=B1du+or5OOAy8n1hkLRzu/+prY7KPxp7gnIyVemAkWrJ0oCUwaoWYVAOEfByyqCkb
-         sLTyPWUe7sg8yJZOMmbN9lJS2qDr+u1yHrqkfJ2Cmfz8K4956fE46kx6avUpl09taC
-         q3gbk10SIho5hxhT//3cJhx5Kpy4ODA++QnOJ7Rw=
+        b=03KP018MOWB1i/vW2RKW7Zb5hlEmCpOJAv9Uyi5P5BmeF5mGTynnfWjvjsUnrquvT
+         Pk6Z7+P+zzaNbRYvqQnVKBtK1LLEf7l2EzKwRay/uK3dGFVrFdh4xqyLCnIx8vV7QY
+         n89jstqooo/75CmZQ0AOrZ4lnoQ7x76rQ2JmyjZU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Peter Chen <peter.chen@kernel.org>,
-        Weitao Wang <WeitaoWang-oc@zhaoxin.com>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 043/129] USB: Fix xhci event ring dequeue pointer ERDP update issue
+        stable@vger.kernel.org,
+        Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>,
+        Dusty Mabe <dustymabe@redhat.com>,
+        Salvatore Bonaccorso <carnil@debian.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Noah Meyerhans <noahm@debian.org>
+Subject: [PATCH 5.15 042/177] x86/pci/xen: Disable PCI/MSI[-X] masking for XEN_HVM guests
 Date:   Wed,  4 May 2022 18:43:55 +0200
-Message-Id: <20220504153024.570893878@linuxfoundation.org>
+Message-Id: <20220504153056.686401990@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220504153021.299025455@linuxfoundation.org>
-References: <20220504153021.299025455@linuxfoundation.org>
+In-Reply-To: <20220504153053.873100034@linuxfoundation.org>
+References: <20220504153053.873100034@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,65 +58,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Weitao Wang <WeitaoWang-oc@zhaoxin.com>
+From: Thomas Gleixner <tglx@linutronix.de>
 
-[ Upstream commit e91ac20889d1a26d077cc511365cd7ff4346a6f3 ]
+commit 7e0815b3e09986d2fe651199363e135b9358132a upstream.
 
-In some situations software handles TRB events slower than adding TRBs.
-If the number of TRB events to be processed in a given interrupt is exactly
-the same as the event ring size 256, then the local variable
-"event_ring_deq" that holds the initial dequeue position is equal to
-software_dequeue after handling all 256 interrupts.
+When a XEN_HVM guest uses the XEN PIRQ/Eventchannel mechanism, then
+PCI/MSI[-X] masking is solely controlled by the hypervisor, but contrary to
+XEN_PV guests this does not disable PCI/MSI[-X] masking in the PCI/MSI
+layer.
 
-It will cause driver to not update ERDP to hardware,
+This can lead to a situation where the PCI/MSI layer masks an MSI[-X]
+interrupt and the hypervisor grants the write despite the fact that it
+already requested the interrupt. As a consequence interrupt delivery on the
+affected device is not happening ever.
 
-Software dequeue pointer is out of sync with ERDP on interrupt exit.
-On the next interrupt, the event ring may full but driver will not
-update ERDP as software_dequeue is equal to ERDP.
+Set pci_msi_ignore_mask to prevent that like it's done for XEN_PV guests
+already.
 
-[  536.377115] xhci_hcd 0000:00:12.0: ERROR unknown event type 37
-[  566.933173] sd 8:0:0:0: [sdb] tag#27 uas_eh_abort_handler 0 uas-tag 7 inflight: CMD OUT
-[  566.933181] sd 8:0:0:0: [sdb] tag#27 CDB: Write(10) 2a 00 17 71 e6 78 00 00 08 00
-[  572.041186] xhci_hcd On some situataions,the0000:00:12.0: xHCI host not responding to stop endpoint command.
-[  572.057193] xhci_hcd 0000:00:12.0: Host halt failed, -110
-[  572.057196] xhci_hcd 0000:00:12.0: xHCI host controller not responding, assume dead
-[  572.057236] sd 8:0:0:0: [sdb] tag#26 uas_eh_abort_handler 0 uas-tag 6 inflight: CMD
-[  572.057240] sd 8:0:0:0: [sdb] tag#26 CDB: Write(10) 2a 00 38 eb cc d8 00 00 08 00
-[  572.057244] sd 8:0:0:0: [sdb] tag#25 uas_eh_abort_handler 0 uas-tag 5 inflight: CMD
-
-Hardware ERDP is updated mid event handling if there are more than 128
-events in an interrupt (half of ring size).
-Fix this by updating the software local variable at the same time as
-hardware ERDP.
-
-[commit message rewording -Mathias]
-
-Fixes: dc0ffbea5729 ("usb: host: xhci: update event ring dequeue pointer on purpose")
-Reviewed-by: Peter Chen <peter.chen@kernel.org>
-Signed-off-by: Weitao Wang <WeitaoWang-oc@zhaoxin.com>
-Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
-Link: https://lore.kernel.org/r/20220408134823.2527272-2-mathias.nyman@linux.intel.com
+Fixes: 809f9267bbab ("xen: map MSIs into pirqs")
+Reported-by: Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>
+Reported-by: Dusty Mabe <dustymabe@redhat.com>
+Reported-by: Salvatore Bonaccorso <carnil@debian.org>
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Tested-by: Noah Meyerhans <noahm@debian.org>
+Cc: stable@vger.kernel.org
+Link: https://lore.kernel.org/r/87tuaduxj5.ffs@tglx
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/host/xhci-ring.c | 2 ++
- 1 file changed, 2 insertions(+)
+ arch/x86/pci/xen.c |    6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-index 76389c0dda8b..fa3a7ac15f82 100644
---- a/drivers/usb/host/xhci-ring.c
-+++ b/drivers/usb/host/xhci-ring.c
-@@ -2969,6 +2969,8 @@ irqreturn_t xhci_irq(struct usb_hcd *hcd)
- 		if (event_loop++ < TRBS_PER_SEGMENT / 2)
- 			continue;
- 		xhci_update_erst_dequeue(xhci, event_ring_deq);
-+		event_ring_deq = xhci->event_ring->dequeue;
-+
- 		event_loop = 0;
- 	}
+--- a/arch/x86/pci/xen.c
++++ b/arch/x86/pci/xen.c
+@@ -472,7 +472,6 @@ static __init void xen_setup_pci_msi(voi
+ 			xen_msi_ops.setup_msi_irqs = xen_setup_msi_irqs;
+ 		}
+ 		xen_msi_ops.teardown_msi_irqs = xen_pv_teardown_msi_irqs;
+-		pci_msi_ignore_mask = 1;
+ 	} else if (xen_hvm_domain()) {
+ 		xen_msi_ops.setup_msi_irqs = xen_hvm_setup_msi_irqs;
+ 		xen_msi_ops.teardown_msi_irqs = xen_teardown_msi_irqs;
+@@ -486,6 +485,11 @@ static __init void xen_setup_pci_msi(voi
+ 	 * in allocating the native domain and never use it.
+ 	 */
+ 	x86_init.irqs.create_pci_msi_domain = xen_create_pci_msi_domain;
++	/*
++	 * With XEN PIRQ/Eventchannels in use PCI/MSI[-X] masking is solely
++	 * controlled by the hypervisor.
++	 */
++	pci_msi_ignore_mask = 1;
+ }
  
--- 
-2.35.1
-
+ #else /* CONFIG_PCI_MSI */
 
 

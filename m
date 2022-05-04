@@ -2,42 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A9CB51AB17
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:40:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E25851AB06
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:40:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359170AbiEDRji (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 13:39:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40222 "EHLO
+        id S1358586AbiEDRir (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 13:38:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356811AbiEDRJo (ORCPT
+        with ESMTP id S1356834AbiEDRJp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 13:09:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 629321FA77;
-        Wed,  4 May 2022 09:55:45 -0700 (PDT)
+        Wed, 4 May 2022 13:09:45 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7FA02E9E3;
+        Wed,  4 May 2022 09:55:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F2C19616F8;
-        Wed,  4 May 2022 16:55:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47000C385A4;
-        Wed,  4 May 2022 16:55:44 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8AE98B82795;
+        Wed,  4 May 2022 16:55:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41CA1C385AA;
+        Wed,  4 May 2022 16:55:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651683344;
-        bh=kscUROeCRE3O/E7CUAcG4kFKztYxg8m/TICMXx6czhg=;
+        s=korg; t=1651683351;
+        bh=IzHnTEH3xlGhfuyQg4J8ArZeDQO0q0tTgX2u3BJ5BDk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KMsZp166GDNAaI0wnp17FyGk7rfmp5hRDArluXGvNGoIs547RvxJDNfO5f4ab5buJ
-         6KCsRg4VZrpVMTYZIinkXN8PYE1tqLbBFoTj6Dur2wgFw2N0SNlW/4KAPWZeyGwqKg
-         Kj70U34uZMx9JDNmd/54JSy/KGxsNsrufvkLGsHU=
+        b=GpRKz31fOgTmqBE1PL/iJdbzcgPcwKHQ7OzsoZAE/UWu5z7zuLH8aBq1z5p8ePphk
+         J2MAyQrkuWD6fgROMvVPnvWAiZhPxS2lkvBozDe6LHZMKElWz9Shbw237U7WNWLT5y
+         xtv+1F3gLJOByASU715BEl6lXK3THUQXM2nfoqL4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Vijayavardhan Vennapusa <vvreddy@codeaurora.org>,
-        Dan Vacura <w36195@motorola.com>, stable <stable@kernel.org>
-Subject: [PATCH 5.17 023/225] usb: gadget: configfs: clear deactivation flag in configfs_composite_unbind()
-Date:   Wed,  4 May 2022 18:44:21 +0200
-Message-Id: <20220504153112.388885928@linuxfoundation.org>
+        stable@vger.kernel.org, stable <stable@kernel.org>,
+        Sven Peter <sven@svenpeter.dev>
+Subject: [PATCH 5.17 024/225] usb: dwc3: Try usb-role-switch first in dwc3_drd_init
+Date:   Wed,  4 May 2022 18:44:22 +0200
+Message-Id: <20220504153112.490831148@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
 In-Reply-To: <20220504153110.096069935@linuxfoundation.org>
 References: <20220504153110.096069935@linuxfoundation.org>
@@ -55,37 +54,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Vijayavardhan Vennapusa <vvreddy@codeaurora.org>
+From: Sven Peter <sven@svenpeter.dev>
 
-commit bf95c4d4630c7a2c16e7b424fdea5177d9ce0864 upstream.
+commit ab7aa2866d295438dc60522f85c5421c6b4f1507 upstream.
 
-If any function like UVC is deactivating gadget as part of composition
-switch which results in not calling pullup enablement, it is not getting
-enabled after switch to new composition due to this deactivation flag
-not cleared. This results in USB enumeration not happening after switch
-to new USB composition. Hence clear deactivation flag inside gadget
-structure in configfs_composite_unbind() before switch to new USB
-composition.
+If the PHY controller node has a "port" dwc3 tries to find an
+extcon device even when "usb-role-switch" is present. This happens
+because dwc3_get_extcon() sees that "port" node and then calls
+extcon_find_edev_by_node() which will always return EPROBE_DEFER
+in that case.
 
-Signed-off-by: Vijayavardhan Vennapusa <vvreddy@codeaurora.org>
-Signed-off-by: Dan Vacura <w36195@motorola.com>
+On the other hand, even if an extcon was present and dwc3_get_extcon()
+was successful it would still be ignored in favor of "usb-role-switch".
+
+Let's just first check if "usb-role-switch" is configured in the device
+tree and directly use it instead and only try to look for an extcon
+device otherwise.
+
+Fixes: 8a0a13799744 ("usb: dwc3: Registering a role switch in the DRD code.")
 Cc: stable <stable@kernel.org>
-Link: https://lore.kernel.org/r/20220413211038.72797-1-w36195@motorola.com
+Signed-off-by: Sven Peter <sven@svenpeter.dev>
+Link: https://lore.kernel.org/r/20220411155300.9766-1-sven@svenpeter.dev
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/usb/gadget/configfs.c |    2 ++
- 1 file changed, 2 insertions(+)
+ drivers/usb/dwc3/drd.c |   11 +++++------
+ 1 file changed, 5 insertions(+), 6 deletions(-)
 
---- a/drivers/usb/gadget/configfs.c
-+++ b/drivers/usb/gadget/configfs.c
-@@ -1434,6 +1434,8 @@ static void configfs_composite_unbind(st
- 	usb_ep_autoconfig_reset(cdev->gadget);
- 	spin_lock_irqsave(&gi->spinlock, flags);
- 	cdev->gadget = NULL;
-+	cdev->deactivations = 0;
-+	gadget->deactivated = false;
- 	set_gadget_data(gadget, NULL);
- 	spin_unlock_irqrestore(&gi->spinlock, flags);
- }
+--- a/drivers/usb/dwc3/drd.c
++++ b/drivers/usb/dwc3/drd.c
+@@ -571,16 +571,15 @@ int dwc3_drd_init(struct dwc3 *dwc)
+ {
+ 	int ret, irq;
+ 
++	if (ROLE_SWITCH &&
++	    device_property_read_bool(dwc->dev, "usb-role-switch"))
++		return dwc3_setup_role_switch(dwc);
++
+ 	dwc->edev = dwc3_get_extcon(dwc);
+ 	if (IS_ERR(dwc->edev))
+ 		return PTR_ERR(dwc->edev);
+ 
+-	if (ROLE_SWITCH &&
+-	    device_property_read_bool(dwc->dev, "usb-role-switch")) {
+-		ret = dwc3_setup_role_switch(dwc);
+-		if (ret < 0)
+-			return ret;
+-	} else if (dwc->edev) {
++	if (dwc->edev) {
+ 		dwc->edev_nb.notifier_call = dwc3_drd_notifier;
+ 		ret = extcon_register_notifier(dwc->edev, EXTCON_USB_HOST,
+ 					       &dwc->edev_nb);
 
 

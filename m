@@ -2,44 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DBC851A788
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:04:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4E7D51A779
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:04:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356183AbiEDRE4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 13:04:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38290 "EHLO
+        id S1356289AbiEDRFH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 13:05:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354585AbiEDQ6x (ORCPT
+        with ESMTP id S1354588AbiEDQ6x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 4 May 2022 12:58:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3BA3193EC;
-        Wed,  4 May 2022 09:50:38 -0700 (PDT)
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2669D1B7B5;
+        Wed,  4 May 2022 09:50:41 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 433EE6179D;
+        by ams.source.kernel.org (Postfix) with ESMTPS id D6FE9B82554;
+        Wed,  4 May 2022 16:50:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8AFBBC385A5;
         Wed,  4 May 2022 16:50:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8CE7DC385A5;
-        Wed,  4 May 2022 16:50:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651683037;
-        bh=3tCD9UPGGLCqsAMO+Vo9sno0Rmur0LR0rPnUEVYNJ6A=;
+        s=korg; t=1651683038;
+        bh=SKiGiE4LnzJUkdBzGlcrfDHQo6PAlOWLE1jcxhmrgjQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=S42KLcMML8dvqJhjAgM+/S/BVbESIhElHwD0aoY9E4zDFf42ubf3hoaSdaI0e+fZW
-         9uS0yRuUtsZeZQuhEyNyN9BN0wIVtd58++L5rQ8360uVd56ISNhv/g9Ej019GcQmtc
-         oVorHjzTxFNyX4SUIOvEGJTnc83lIalMKu2lrWLU=
+        b=Eb0CG26bF+lTDy5mfkFD7rJLhSy++Y4S4oETW3XiBCY3z0H13Z4wJ3GjtIMlHK72W
+         3vJ2fODlh4lVEUJ0jXsUX4QSFIIvKWoJlbetIFWGQdN/sIlgrJlVXAnXgxFSCuSK63
+         J9kZ3JkXpuR7kAX2+rfQa6Wt15R5R+EyxKkMcvAU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Tong Zhang <ztong0001@gmail.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        stable@vger.kernel.org, Chuanhong Guo <gch981213@gmail.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 041/129] iio:imu:bmi160: disable regulator in error path
-Date:   Wed,  4 May 2022 18:43:53 +0200
-Message-Id: <20220504153024.435636515@linuxfoundation.org>
+Subject: [PATCH 5.10 042/129] mtd: rawnand: fix ecc parameters for mt7622
+Date:   Wed,  4 May 2022 18:43:54 +0200
+Message-Id: <20220504153024.502476406@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
 In-Reply-To: <20220504153021.299025455@linuxfoundation.org>
 References: <20220504153021.299025455@linuxfoundation.org>
@@ -57,88 +55,97 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tong Zhang <ztong0001@gmail.com>
+From: Chuanhong Guo <gch981213@gmail.com>
 
-[ Upstream commit d926054d5565d3cfa2c7c3f7a48e79bcc10453ed ]
+[ Upstream commit 9fe4e0d3cbfe90152137963cc024ecb63db6e8e6 ]
 
-Regulator should be disabled in error path as mentioned in _regulator_put().
-Also disable accel if gyro cannot be enabled.
+According to the datasheet, mt7622 only has 5 ECC capabilities instead
+of 7, and the decoding error register is arranged  as follows:
++------+---------+---------+---------+---------+
+| Bits |  19:15  |  14:10  |   9:5   |   4:0   |
++------+---------+---------+---------+---------+
+| Name | ERRNUM3 | ERRNUM2 | ERRNUM1 | ERRNUM0 |
++------+---------+---------+---------+---------+
+This means err_mask should be 0x1f instead of 0x3f and the number of
+bits shifted in mtk_ecc_get_stats should be 5 instead of 8.
 
-[   16.233604] WARNING: CPU: 0 PID: 2177 at drivers/regulator/core.c:2257 _regulator_put
-[   16.240453] Call Trace:
-[   16.240572]  <TASK>
-[   16.240676]  regulator_put+0x26/0x40
-[   16.240853]  regulator_bulk_free+0x26/0x50
-[   16.241050]  release_nodes+0x3f/0x70
-[   16.241225]  devres_release_group+0x147/0x1c0
-[   16.241441]  ? bmi160_core_probe+0x175/0x3a0 [bmi160_core]
+This commit introduces err_shift for the difference in this register
+and fix other existing parameters.
 
-Fixes: 5dea3fb066f0 ("iio: imu: bmi160: added regulator support")
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Signed-off-by: Tong Zhang <ztong0001@gmail.com>
-Link: https://lore.kernel.org/r/20220327154005.806049-1-ztong0001@gmail.com
-Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Public MT7622 reference manual can be found on [0] and the info this
+commit is based on is from page 656 and page 660.
+
+[0]: https://wiki.banana-pi.org/Banana_Pi_BPI-R64#Documents
+
+Fixes: 98dea8d71931 ("mtd: nand: mtk: Support MT7622 NAND flash controller.")
+Signed-off-by: Chuanhong Guo <gch981213@gmail.com>
+Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
+Link: https://lore.kernel.org/linux-mtd/20220402160315.919094-1-gch981213@gmail.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/iio/imu/bmi160/bmi160_core.c | 20 ++++++++++++++------
- 1 file changed, 14 insertions(+), 6 deletions(-)
+ drivers/mtd/nand/raw/mtk_ecc.c | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/iio/imu/bmi160/bmi160_core.c b/drivers/iio/imu/bmi160/bmi160_core.c
-index 82f03a4dc47a..5fd61889f593 100644
---- a/drivers/iio/imu/bmi160/bmi160_core.c
-+++ b/drivers/iio/imu/bmi160/bmi160_core.c
-@@ -731,7 +731,7 @@ static int bmi160_chip_init(struct bmi160_data *data, bool use_spi)
+diff --git a/drivers/mtd/nand/raw/mtk_ecc.c b/drivers/mtd/nand/raw/mtk_ecc.c
+index 75f1fa3d4d35..c115e03ede88 100644
+--- a/drivers/mtd/nand/raw/mtk_ecc.c
++++ b/drivers/mtd/nand/raw/mtk_ecc.c
+@@ -43,6 +43,7 @@
  
- 	ret = regmap_write(data->regmap, BMI160_REG_CMD, BMI160_CMD_SOFTRESET);
- 	if (ret)
--		return ret;
-+		goto disable_regulator;
+ struct mtk_ecc_caps {
+ 	u32 err_mask;
++	u32 err_shift;
+ 	const u8 *ecc_strength;
+ 	const u32 *ecc_regs;
+ 	u8 num_ecc_strength;
+@@ -76,7 +77,7 @@ static const u8 ecc_strength_mt2712[] = {
+ };
  
- 	usleep_range(BMI160_SOFTRESET_USLEEP, BMI160_SOFTRESET_USLEEP + 1);
+ static const u8 ecc_strength_mt7622[] = {
+-	4, 6, 8, 10, 12, 14, 16
++	4, 6, 8, 10, 12
+ };
  
-@@ -742,29 +742,37 @@ static int bmi160_chip_init(struct bmi160_data *data, bool use_spi)
- 	if (use_spi) {
- 		ret = regmap_read(data->regmap, BMI160_REG_DUMMY, &val);
- 		if (ret)
--			return ret;
-+			goto disable_regulator;
- 	}
+ enum mtk_ecc_regs {
+@@ -221,7 +222,7 @@ void mtk_ecc_get_stats(struct mtk_ecc *ecc, struct mtk_ecc_stats *stats,
+ 	for (i = 0; i < sectors; i++) {
+ 		offset = (i >> 2) << 2;
+ 		err = readl(ecc->regs + ECC_DECENUM0 + offset);
+-		err = err >> ((i % 4) * 8);
++		err = err >> ((i % 4) * ecc->caps->err_shift);
+ 		err &= ecc->caps->err_mask;
+ 		if (err == ecc->caps->err_mask) {
+ 			/* uncorrectable errors */
+@@ -449,6 +450,7 @@ EXPORT_SYMBOL(mtk_ecc_get_parity_bits);
  
- 	ret = regmap_read(data->regmap, BMI160_REG_CHIP_ID, &val);
- 	if (ret) {
- 		dev_err(dev, "Error reading chip id\n");
--		return ret;
-+		goto disable_regulator;
- 	}
- 	if (val != BMI160_CHIP_ID_VAL) {
- 		dev_err(dev, "Wrong chip id, got %x expected %x\n",
- 			val, BMI160_CHIP_ID_VAL);
--		return -ENODEV;
-+		ret = -ENODEV;
-+		goto disable_regulator;
- 	}
+ static const struct mtk_ecc_caps mtk_ecc_caps_mt2701 = {
+ 	.err_mask = 0x3f,
++	.err_shift = 8,
+ 	.ecc_strength = ecc_strength_mt2701,
+ 	.ecc_regs = mt2701_ecc_regs,
+ 	.num_ecc_strength = 20,
+@@ -459,6 +461,7 @@ static const struct mtk_ecc_caps mtk_ecc_caps_mt2701 = {
  
- 	ret = bmi160_set_mode(data, BMI160_ACCEL, true);
- 	if (ret)
--		return ret;
-+		goto disable_regulator;
+ static const struct mtk_ecc_caps mtk_ecc_caps_mt2712 = {
+ 	.err_mask = 0x7f,
++	.err_shift = 8,
+ 	.ecc_strength = ecc_strength_mt2712,
+ 	.ecc_regs = mt2712_ecc_regs,
+ 	.num_ecc_strength = 23,
+@@ -468,10 +471,11 @@ static const struct mtk_ecc_caps mtk_ecc_caps_mt2712 = {
+ };
  
- 	ret = bmi160_set_mode(data, BMI160_GYRO, true);
- 	if (ret)
--		return ret;
-+		goto disable_accel;
- 
- 	return 0;
-+
-+disable_accel:
-+	bmi160_set_mode(data, BMI160_ACCEL, false);
-+
-+disable_regulator:
-+	regulator_bulk_disable(ARRAY_SIZE(data->supplies), data->supplies);
-+	return ret;
- }
- 
- static int bmi160_data_rdy_trigger_set_state(struct iio_trigger *trig,
+ static const struct mtk_ecc_caps mtk_ecc_caps_mt7622 = {
+-	.err_mask = 0x3f,
++	.err_mask = 0x1f,
++	.err_shift = 5,
+ 	.ecc_strength = ecc_strength_mt7622,
+ 	.ecc_regs = mt7622_ecc_regs,
+-	.num_ecc_strength = 7,
++	.num_ecc_strength = 5,
+ 	.ecc_mode_shift = 4,
+ 	.parity_bits = 13,
+ 	.pg_irq_sel = 0,
 -- 
 2.35.1
 

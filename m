@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E45D051AAE0
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:34:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85E5251AB4D
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:42:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359152AbiEDRfu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 13:35:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40998 "EHLO
+        id S1359853AbiEDRol (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 13:44:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356983AbiEDRJw (ORCPT
+        with ESMTP id S1355850AbiEDRIx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 13:09:52 -0400
+        Wed, 4 May 2022 13:08:53 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BA114830B;
-        Wed,  4 May 2022 09:56:53 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99F10522D1;
+        Wed,  4 May 2022 09:54:38 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F22C5B827A3;
-        Wed,  4 May 2022 16:56:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A15DBC385A5;
-        Wed,  4 May 2022 16:56:50 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F03FAB827A1;
+        Wed,  4 May 2022 16:54:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B826C385AF;
+        Wed,  4 May 2022 16:54:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651683410;
-        bh=ILpcJ1EnEQUwhSywYQ3IAqyxmDYiAyN1DkLdFFHSEvU=;
+        s=korg; t=1651683275;
+        bh=/1yeXMa6uf99VEUn8qt+TxYPCMGa6OAgd4dvwWp1OYA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=F5CoNnl27rR9eOUEV65JcK9fdfJ8/iWGdgtpeg/Z/XYie8jcDiimz5sjBp7FHQt3d
-         ZIXpB4XyDOlwg9ohzGlIYFZg4ZZzv7Cz1sB9+VEc3+6D7G35pVCoIR3V3Ch17m/kMt
-         ktgNWpGyIkXvR7Ye/bXTDda3ch197ixCR58zCagQ=
+        b=j/0ozO4Mj8a4KYGTvmKoanUzCgMJiaaw617Y3/DAYx8es3SkldOlvwxF02gt1J71w
+         RlgnQHsR2jSRpvIAiTC0jLYdYIxPQuek0b8L2BUVeQJ4iao9IUD0TENCkMpbcRh2yP
+         4RFmm7FOUyR6Qq4QRRZ2w3nTas67ss+39JzCKk84=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Heiner Kallweit <hkallweit1@gmail.com>,
-        Vinod Koul <vkoul@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 095/225] phy: amlogic: fix error path in phy_g12a_usb3_pcie_probe()
-Date:   Wed,  4 May 2022 18:45:33 +0200
-Message-Id: <20220504153119.292839850@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Johannes Thumshirn <johannes.thumshirn@wdc.com>,
+        Hans Holmberg <hans.holmberg@wdc.com>
+Subject: [PATCH 5.15 141/177] zonefs: Fix management of open zones
+Date:   Wed,  4 May 2022 18:45:34 +0200
+Message-Id: <20220504153105.876861977@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220504153110.096069935@linuxfoundation.org>
-References: <20220504153110.096069935@linuxfoundation.org>
+In-Reply-To: <20220504153053.873100034@linuxfoundation.org>
+References: <20220504153053.873100034@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,73 +56,126 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Heiner Kallweit <hkallweit1@gmail.com>
+From: Damien Le Moal <damien.lemoal@opensource.wdc.com>
 
-[ Upstream commit 2c8045d48dee703ad8eab2be7d6547765a89c069 ]
+commit 1da18a296f5ba4f99429e62a7cf4fdbefa598902 upstream.
 
-If clk_prepare_enable() fails we call clk_disable_unprepare()
-in the error path what results in a warning that the clock
-is disabled and unprepared already.
-And if we fail later in phy_g12a_usb3_pcie_probe() then we
-bail out w/o calling clk_disable_unprepare().
-This patch fixes both errors.
+The mount option "explicit_open" manages the device open zone
+resources to ensure that if an application opens a sequential file for
+writing, the file zone can always be written by explicitly opening
+the zone and accounting for that state with the s_open_zones counter.
 
-Fixes: 36077e16c050 ("phy: amlogic: Add Amlogic G12A USB3 + PCIE Combo PHY Driver")
-Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
-Link: https://lore.kernel.org/r/8e416f95-1084-ee28-860e-7884f7fa2e32@gmail.com
-Signed-off-by: Vinod Koul <vkoul@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+However, if some zones are already open when mounting, the device open
+zone resource usage status will be larger than the initial s_open_zones
+value of 0. Ensure that this inconsistency does not happen by closing
+any sequential zone that is open when mounting.
+
+Furthermore, with ZNS drives, closing an explicitly open zone that has
+not been written will change the zone state to "closed", that is, the
+zone will remain in an active state. Since this can then cause failures
+of explicit open operations on other zones if the drive active zone
+resources are exceeded, we need to make sure that the zone is not
+active anymore by resetting it instead of closing it. To address this,
+zonefs_zone_mgmt() is modified to change a REQ_OP_ZONE_CLOSE request
+into a REQ_OP_ZONE_RESET for sequential zones that have not been
+written.
+
+Fixes: b5c00e975779 ("zonefs: open/close zone on file open/close")
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Reviewed-by: Johannes Thumshirn <johannes.thumshirn@wdc.com>
+Reviewed-by: Hans Holmberg <hans.holmberg@wdc.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- .../phy/amlogic/phy-meson-g12a-usb3-pcie.c    | 20 +++++++++++--------
- 1 file changed, 12 insertions(+), 8 deletions(-)
+ fs/zonefs/super.c |   45 ++++++++++++++++++++++++++++++++++++++++-----
+ 1 file changed, 40 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/phy/amlogic/phy-meson-g12a-usb3-pcie.c b/drivers/phy/amlogic/phy-meson-g12a-usb3-pcie.c
-index 5b471ab80fe2..54d65a6f0fcc 100644
---- a/drivers/phy/amlogic/phy-meson-g12a-usb3-pcie.c
-+++ b/drivers/phy/amlogic/phy-meson-g12a-usb3-pcie.c
-@@ -414,19 +414,19 @@ static int phy_g12a_usb3_pcie_probe(struct platform_device *pdev)
+--- a/fs/zonefs/super.c
++++ b/fs/zonefs/super.c
+@@ -35,6 +35,17 @@ static inline int zonefs_zone_mgmt(struc
  
- 	ret = clk_prepare_enable(priv->clk_ref);
- 	if (ret)
--		goto err_disable_clk_ref;
-+		return ret;
+ 	lockdep_assert_held(&zi->i_truncate_mutex);
  
- 	priv->reset = devm_reset_control_array_get_exclusive(dev);
--	if (IS_ERR(priv->reset))
--		return PTR_ERR(priv->reset);
-+	if (IS_ERR(priv->reset)) {
-+		ret = PTR_ERR(priv->reset);
-+		goto err_disable_clk_ref;
++	/*
++	 * With ZNS drives, closing an explicitly open zone that has not been
++	 * written will change the zone state to "closed", that is, the zone
++	 * will remain active. Since this can then cause failure of explicit
++	 * open operation on other zones if the drive active zone resources
++	 * are exceeded, make sure that the zone does not remain active by
++	 * resetting it.
++	 */
++	if (op == REQ_OP_ZONE_CLOSE && !zi->i_wpoffset)
++		op = REQ_OP_ZONE_RESET;
++
+ 	trace_zonefs_zone_mgmt(inode, op);
+ 	ret = blkdev_zone_mgmt(inode->i_sb->s_bdev, op, zi->i_zsector,
+ 			       zi->i_zone_size >> SECTOR_SHIFT, GFP_NOFS);
+@@ -1295,12 +1306,13 @@ static void zonefs_init_dir_inode(struct
+ 	inc_nlink(parent);
+ }
+ 
+-static void zonefs_init_file_inode(struct inode *inode, struct blk_zone *zone,
+-				   enum zonefs_ztype type)
++static int zonefs_init_file_inode(struct inode *inode, struct blk_zone *zone,
++				  enum zonefs_ztype type)
+ {
+ 	struct super_block *sb = inode->i_sb;
+ 	struct zonefs_sb_info *sbi = ZONEFS_SB(sb);
+ 	struct zonefs_inode_info *zi = ZONEFS_I(inode);
++	int ret = 0;
+ 
+ 	inode->i_ino = zone->start >> sbi->s_zone_sectors_shift;
+ 	inode->i_mode = S_IFREG | sbi->s_perm;
+@@ -1325,6 +1337,22 @@ static void zonefs_init_file_inode(struc
+ 	sb->s_maxbytes = max(zi->i_max_size, sb->s_maxbytes);
+ 	sbi->s_blocks += zi->i_max_size >> sb->s_blocksize_bits;
+ 	sbi->s_used_blocks += zi->i_wpoffset >> sb->s_blocksize_bits;
++
++	/*
++	 * For sequential zones, make sure that any open zone is closed first
++	 * to ensure that the initial number of open zones is 0, in sync with
++	 * the open zone accounting done when the mount option
++	 * ZONEFS_MNTOPT_EXPLICIT_OPEN is used.
++	 */
++	if (type == ZONEFS_ZTYPE_SEQ &&
++	    (zone->cond == BLK_ZONE_COND_IMP_OPEN ||
++	     zone->cond == BLK_ZONE_COND_EXP_OPEN)) {
++		mutex_lock(&zi->i_truncate_mutex);
++		ret = zonefs_zone_mgmt(inode, REQ_OP_ZONE_CLOSE);
++		mutex_unlock(&zi->i_truncate_mutex);
 +	}
++
++	return ret;
+ }
  
- 	priv->phy = devm_phy_create(dev, np, &phy_g12a_usb3_pcie_ops);
- 	if (IS_ERR(priv->phy)) {
- 		ret = PTR_ERR(priv->phy);
--		if (ret != -EPROBE_DEFER)
--			dev_err(dev, "failed to create PHY\n");
--
--		return ret;
-+		dev_err_probe(dev, ret, "failed to create PHY\n");
-+		goto err_disable_clk_ref;
- 	}
+ static struct dentry *zonefs_create_inode(struct dentry *parent,
+@@ -1334,6 +1362,7 @@ static struct dentry *zonefs_create_inod
+ 	struct inode *dir = d_inode(parent);
+ 	struct dentry *dentry;
+ 	struct inode *inode;
++	int ret;
  
- 	phy_set_drvdata(priv->phy, priv);
-@@ -434,8 +434,12 @@ static int phy_g12a_usb3_pcie_probe(struct platform_device *pdev)
+ 	dentry = d_alloc_name(parent, name);
+ 	if (!dentry)
+@@ -1344,10 +1373,16 @@ static struct dentry *zonefs_create_inod
+ 		goto dput;
  
- 	phy_provider = devm_of_phy_provider_register(dev,
- 						     phy_g12a_usb3_pcie_xlate);
-+	if (IS_ERR(phy_provider)) {
-+		ret = PTR_ERR(phy_provider);
-+		goto err_disable_clk_ref;
+ 	inode->i_ctime = inode->i_mtime = inode->i_atime = dir->i_ctime;
+-	if (zone)
+-		zonefs_init_file_inode(inode, zone, type);
+-	else
++	if (zone) {
++		ret = zonefs_init_file_inode(inode, zone, type);
++		if (ret) {
++			iput(inode);
++			goto dput;
++		}
++	} else {
+ 		zonefs_init_dir_inode(dir, inode, type);
 +	}
++
+ 	d_add(dentry, inode);
+ 	dir->i_size++;
  
--	return PTR_ERR_OR_ZERO(phy_provider);
-+	return 0;
- 
- err_disable_clk_ref:
- 	clk_disable_unprepare(priv->clk_ref);
--- 
-2.35.1
-
 
 

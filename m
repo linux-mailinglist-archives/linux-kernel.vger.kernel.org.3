@@ -2,174 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64B9A5195FA
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 05:26:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 356405195FC
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 05:28:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344369AbiEDD3k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 23:29:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33582 "EHLO
+        id S1344371AbiEDDcB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 23:32:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243955AbiEDD3H (ORCPT
+        with ESMTP id S1343502AbiEDDbv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 23:29:07 -0400
-Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E14CE65D2
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 20:25:21 -0700 (PDT)
-Received: by mail-pj1-x1049.google.com with SMTP id v10-20020a17090a0c8a00b001c7a548e4f7so2274888pja.2
-        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 20:25:21 -0700 (PDT)
+        Tue, 3 May 2022 23:31:51 -0400
+Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91E1613A
+        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 20:28:16 -0700 (PDT)
+Received: by mail-yb1-xb2c.google.com with SMTP id r11so365626ybg.6
+        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 20:28:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=O6gsi1VosCJ9Q+QJJSE7NIUXWalRHVe1tFy/2jVg0nU=;
-        b=J2nRE+pM0k4FjNp2cMlnN8/gWRkViT6d6HglwgNSrVeXwgSSlC2eD0N42z2TxFenrK
-         1++90Z1DhXB+oCBWCaQUko3MtAX2Vwd7k7Tg1W8U1wFg4ebNTsyShXIVfZkQlXp61hpV
-         P8TkYscwX69KGqwKqPYsXZHORIsX6xH+TgDrD+LwGi6A533g0QAbvuLY4DBvjChRlkuh
-         uAKUg7eTOY8BCZ0zNkVkrc+zK8FyrgaDWWHxRBy50l5jAmd2A4PbUM4xe1EOHPswFwyu
-         luobZxTR3exLfL81rO4/ZURyhjwdWEhoN7RcpAgHC25Ze+urfrMTfV3ojBPHk7Pyw04k
-         jjPQ==
+        bh=R9FJwQCrIwdOgk5TBiW4fZIwz7YdVA9O8EgN31+EQpM=;
+        b=A/kA4+FBweAr9lVyBTELBbGu9MrjxfHDgMNZieroE6twWBKa0ozA98z4GsZqBTYDW3
+         S+tkUjiaivxuGA18dVlvBzfgH+HV7zi/eOwfotkb4xUzCI4jLNDndRmkC6uX5AoFPpPD
+         oqpkzdvGprG1P/w7A4UNVO05F4hH/9zHUb1ZXsIDaXWQ0WWHvAuZuK0KyjDHRTbEUIGk
+         ZLhqJxvvriMH1Eggz9hshHRAMZPLyHPkyEJdF1YFpMvVGNgp8/A8Cb3bkKiMj5ayRHCd
+         xiWy0YffXzZk/qMbQfHVulsO2vqDggBXWwv3hg5pXTtM5GVcPV+U1G51GTFqnMyXsauT
+         i4lA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=O6gsi1VosCJ9Q+QJJSE7NIUXWalRHVe1tFy/2jVg0nU=;
-        b=H6Aw75cGfm9h5DnPG7cse9p2bujiUud6JYUWoHfy0wc18c30P5WfWruGZK1JDhNQfd
-         QGdw9RzMO52556ONpCPu0fT+6zgP2Yb8UR53dzlk5WG4ZB/HhtZa7EnVuVgRipCvz5+J
-         Ce8HpCRPjgTbaQB8TzNeDH7SpX3e/M9VVd2vZot0bF1dTZ0M/SQl+bs4w0VhvwpOAlfy
-         ilvVp9X7jpYVg0yIuyS1f9BPV5IrBpu+r4PypAxWZJruNWaqy6q7vLLzZwDfSbM14dHV
-         WI4MmKI6q/XsDxc58nOdMSAr0/nkg95mHFA2EsZYxhyeOnPku0PbCcF9A8QLvq8kPswQ
-         8XYQ==
-X-Gm-Message-State: AOAM530eV1tcNKPQGsGiB+0/dHpTuSAmXO6cXDqPmHX9WzUB8quo4U6V
-        gojiutK53px0+8YY/GIwl5l+G9LG1X4=
-X-Google-Smtp-Source: ABdhPJzFv7NkWcBU+6vplhxBAUpwjxPW1/ACANI7rwBZF4ra9bVHx4OSHqKJtvMgIzFZVeY3+CTj/EOn3DA=
-X-Received: from oupton3.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:21eb])
- (user=oupton job=sendgmr) by 2002:a17:902:9309:b0:156:983d:2193 with SMTP id
- bc9-20020a170902930900b00156983d2193mr19155791plb.158.1651634713185; Tue, 03
- May 2022 20:25:13 -0700 (PDT)
-Date:   Wed,  4 May 2022 03:24:46 +0000
-In-Reply-To: <20220504032446.4133305-1-oupton@google.com>
-Message-Id: <20220504032446.4133305-13-oupton@google.com>
-Mime-Version: 1.0
-References: <20220504032446.4133305-1-oupton@google.com>
-X-Mailer: git-send-email 2.36.0.464.gb9c8b46e94-goog
-Subject: [PATCH v6 12/12] selftests: KVM: Test SYSTEM_SUSPEND PSCI call
-From:   Oliver Upton <oupton@google.com>
-To:     kvmarm@lists.cs.columbia.edu
-Cc:     kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, maz@kernel.org, james.morse@arm.com,
-        alexandru.elisei@arm.com, suzuki.poulose@arm.com,
-        reijiw@google.com, ricarkol@google.com,
-        Oliver Upton <oupton@google.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=R9FJwQCrIwdOgk5TBiW4fZIwz7YdVA9O8EgN31+EQpM=;
+        b=kSKoeS0txatfBEOpqZ5zI/NrCgoKNhoWw+QrmOg5FWrwBBqtjCCjIBUM6B0D0aj9Ve
+         J+eoLjpmUB59DMBqac2DPV0M1VqyW5tTm0DcmlcYo9sY02T3nQkdggE12AT8mLBd1iGo
+         +8p/m2eFa+dGXi2MurAisYFe7Fks7YoL2oDTK/ElDTRn7+6ZYSuVr/8mhctAMRZMoxwO
+         8H/BEvP8Bx07+m9lxZ7AXQChb1ogldr6JlLO+rBCgXhXUHObzDke1nWcqBbYylwpN3MW
+         /iPpYMpn9n56uem7g7HtolIcl/+JliZ0CIFU05sB+yG2vmzugKbzKON8APWs9VivHDnQ
+         3Qtw==
+X-Gm-Message-State: AOAM531khc+sQwx2kOk73oMnmHVYMeN0u5I8M6u9YxsM8q7qg496AQMV
+        qha1URDK26na42XP5zGIS1JRSM+pYbfk4cQFrm25L7K/jvs=
+X-Google-Smtp-Source: ABdhPJxg5zoFR8qLr9OHBxcx2aPHWBf18tbQHiTK5nxyByE5sZWTpONjJFbTOZEPKdz4f+cpktC++OySLL9aSPyzZzs=
+X-Received: by 2002:a25:d1d6:0:b0:649:73e3:e49e with SMTP id
+ i205-20020a25d1d6000000b0064973e3e49emr9738209ybg.315.1651634895588; Tue, 03
+ May 2022 20:28:15 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220502045102.40005-1-ppbuk5246@gmail.com> <20220504120903.057867b1b2e2fb2b2a542470@kernel.org>
+In-Reply-To: <20220504120903.057867b1b2e2fb2b2a542470@kernel.org>
+From:   Yun Levi <ppbuk5246@gmail.com>
+Date:   Wed, 4 May 2022 12:28:01 +0900
+Message-ID: <CAM7-yPT5DDUvQiyVmExa4=6hdK0mSW7eWxmXYSZN=ErAUM9suA@mail.gmail.com>
+Subject: Re: [PATCH] kprobe: sync issue's on ftraced-kprobe.
+To:     Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>, mingo@redhat.com,
+        bp@alien8.de, hpa@zytor.com, naveen.n.rao@linux.ibm.com,
+        "David S. Miller" <davem@davemloft.net>, rostedt@goodmis.org,
+        yun.wang@linux.alibaba.com, x86@kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Assert that the vCPU exits to userspace with KVM_SYSTEM_EVENT_SUSPEND if
-the guest calls PSCI SYSTEM_SUSPEND. Additionally, guarantee that the
-SMC32 and SMC64 flavors of this call are discoverable with the
-PSCI_FEATURES call.
+> NAK this, because get_kprobes() doesn't require the kprobe_mutex in
+> the preempt-disabled context. Please read the comment of get_kprobe().
+>
+> /*
+>  * This routine is called either:
+>  *      - under the 'kprobe_mutex' - during kprobe_[un]register().
+>  *                              OR
+>  *      - with preemption disabled - from architecture specific code.
+>  */
+> struct kprobe *get_kprobe(void *addr)
 
-Signed-off-by: Oliver Upton <oupton@google.com>
----
- .../testing/selftests/kvm/aarch64/psci_test.c | 69 +++++++++++++++++++
- 1 file changed, 69 insertions(+)
+> Moreover, we can not use mutex inside kprobe handler because it runs
+> in the interrupt context.
 
-diff --git a/tools/testing/selftests/kvm/aarch64/psci_test.c b/tools/testing/selftests/kvm/aarch64/psci_test.c
-index 535130d5e97f..88541de21c41 100644
---- a/tools/testing/selftests/kvm/aarch64/psci_test.c
-+++ b/tools/testing/selftests/kvm/aarch64/psci_test.c
-@@ -45,6 +45,25 @@ static uint64_t psci_affinity_info(uint64_t target_affinity,
- 	return res.a0;
- }
- 
-+static uint64_t psci_system_suspend(uint64_t entry_addr, uint64_t context_id)
-+{
-+	struct arm_smccc_res res;
-+
-+	smccc_hvc(PSCI_1_0_FN64_SYSTEM_SUSPEND, entry_addr, context_id,
-+		  0, 0, 0, 0, 0, &res);
-+
-+	return res.a0;
-+}
-+
-+static uint64_t psci_features(uint32_t func_id)
-+{
-+	struct arm_smccc_res res;
-+
-+	smccc_hvc(PSCI_1_0_FN_PSCI_FEATURES, func_id, 0, 0, 0, 0, 0, 0, &res);
-+
-+	return res.a0;
-+}
-+
- static void vcpu_power_off(struct kvm_vm *vm, uint32_t vcpuid)
- {
- 	struct kvm_mp_state mp_state = {
-@@ -137,8 +156,58 @@ static void host_test_cpu_on(void)
- 	kvm_vm_free(vm);
- }
- 
-+static void enable_system_suspend(struct kvm_vm *vm)
-+{
-+	struct kvm_enable_cap cap = {
-+		.cap = KVM_CAP_ARM_SYSTEM_SUSPEND,
-+	};
-+
-+	vm_enable_cap(vm, &cap);
-+}
-+
-+static void guest_test_system_suspend(void)
-+{
-+	uint64_t ret;
-+
-+	/* assert that SYSTEM_SUSPEND is discoverable */
-+	GUEST_ASSERT(!psci_features(PSCI_1_0_FN_SYSTEM_SUSPEND));
-+	GUEST_ASSERT(!psci_features(PSCI_1_0_FN64_SYSTEM_SUSPEND));
-+
-+	ret = psci_system_suspend(CPU_ON_ENTRY_ADDR, CPU_ON_CONTEXT_ID);
-+	GUEST_SYNC(ret);
-+}
-+
-+static void host_test_system_suspend(void)
-+{
-+	struct kvm_run *run;
-+	struct kvm_vm *vm;
-+
-+	vm = setup_vm(guest_test_system_suspend);
-+	enable_system_suspend(vm);
-+
-+	vcpu_power_off(vm, VCPU_ID_TARGET);
-+	run = vcpu_state(vm, VCPU_ID_SOURCE);
-+
-+	enter_guest(vm, VCPU_ID_SOURCE);
-+
-+	TEST_ASSERT(run->exit_reason == KVM_EXIT_SYSTEM_EVENT,
-+		    "Unhandled exit reason: %u (%s)",
-+		    run->exit_reason, exit_reason_str(run->exit_reason));
-+	TEST_ASSERT(run->system_event.type == KVM_SYSTEM_EVENT_SUSPEND,
-+		    "Unhandled system event: %u (expected: %u)",
-+		    run->system_event.type, KVM_SYSTEM_EVENT_SUSPEND);
-+
-+	kvm_vm_free(vm);
-+}
-+
- int main(void)
- {
-+	if (!kvm_check_cap(KVM_CAP_ARM_SYSTEM_SUSPEND)) {
-+		print_skip("KVM_CAP_ARM_SYSTEM_SUSPEND not supported");
-+		exit(KSFT_SKIP);
-+	}
-+
- 	host_test_cpu_on();
-+	host_test_system_suspend();
- 	return 0;
- }
--- 
-2.36.0.464.gb9c8b46e94-goog
+Actually, I think it's in the preemption disabled in situation.
+What I mentioned is actually it seems inside the kprobe handler which
+installed via ftrace isn't interrupt context.
 
+#ifdef CONFIG_KPROBES_ON_FTRACE
+static struct ftrace_ops kprobe_ftrace_ops __read_mostly = {
+ >---.func = kprobe_ftrace_handler,
+ >---.flags = FTRACE_OPS_FL_SAVE_REGS,
+ };
+
+In case of optimized kprobe it disables preemption when it enter
+"optimized callback"
+And the trampoline isn't the interrupted context.
+It's also the same to install kprobe via ftraced .
+When I see the ftraced patched code, I couldn't find any interrupt and
+preemption disable code.
+But it seems to allow preemption in ftarce handler.
+(In the ftrace_reg_caller, ftace_reg_end, and other ftrace trampoline code also)
+
+What I understand is break point based kprobe is only interrupted
+disabled status
+But optimized kprobe and ftarced kprobe isn't interrupted disabled status.
+For this, optimized kprobe disable disable preemption in "optimized_callback"
+
+But ftrace kprobe isn't preemption disabled nor interrupt-disabled context.
+
+That's why I sent patches and I experienced the problem above.
+
+Am I missing something?
+
+Thx.

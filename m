@@ -2,45 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD51051A606
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 18:48:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 692A451A8B3
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:14:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353712AbiEDQwJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 12:52:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50752 "EHLO
+        id S1357831AbiEDRPW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 13:15:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353631AbiEDQvx (ORCPT
+        with ESMTP id S1355368AbiEDRES (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 12:51:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B86592F3B4;
-        Wed,  4 May 2022 09:48:16 -0700 (PDT)
+        Wed, 4 May 2022 13:04:18 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D792F4ECDC;
+        Wed,  4 May 2022 09:52:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 529F36174C;
-        Wed,  4 May 2022 16:48:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F2C3C385A4;
-        Wed,  4 May 2022 16:48:15 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5A8FFB827AE;
+        Wed,  4 May 2022 16:52:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E69EBC385AF;
+        Wed,  4 May 2022 16:52:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651682895;
-        bh=EHjp78b+jP6LO64HOUaw59Cd7UestUx/qGjCreGcY4I=;
+        s=korg; t=1651683179;
+        bh=4DNcNCHM3If/Pd7pLcI1oBJQ3+DYgaREuJpCgjY887A=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bKsBAZnlaLVFmfJPUhFGRYNNiksRz8Rgknn2bau6BFN/AlNMFcdjrXrnkRsGLphlf
-         /eSMcZdTK5FYJTaHm34v84gsihkYebTtJ6zlTvxjqPPoqHPrLoTooBoFLrjT0kh5Gl
-         lHWaVBg6Pxbg0rhh3Bjz0YtCnwgf55OfMTP0m9vA=
+        b=vIGcZ236lvWgI66ABPXOa+VYY1SZOmM5tncc4rmnwEZ5Z6MuaEZ1IPednrj1NCTBT
+         QKpsgrR24By4rrMZhlTYiJt2khXRr/wlV2Vkx5LpwfxKX8Se9IN0mT22j4fS80cQq4
+         g4plIEh+OylMosKgg5sbRUbIjAaWBt1RG43t1JWY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Lin Ma <linma@zju.edu.cn>,
-        "David S. Miller" <davem@davemloft.net>,
-        Ovidiu Panait <ovidiu.panait@windriver.com>
-Subject: [PATCH 5.4 02/84] hamradio: defer 6pack kfree after unregister_netdev
+        stable@vger.kernel.org, Lino Sanfilippo <LinoSanfilippo@gmx.de>
+Subject: [PATCH 5.15 030/177] serial: amba-pl011: do not time out prematurely when draining tx fifo
 Date:   Wed,  4 May 2022 18:43:43 +0200
-Message-Id: <20220504152927.930466007@linuxfoundation.org>
+Message-Id: <20220504153055.716476987@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220504152927.744120418@linuxfoundation.org>
-References: <20220504152927.744120418@linuxfoundation.org>
+In-Reply-To: <20220504153053.873100034@linuxfoundation.org>
+References: <20220504153053.873100034@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,51 +53,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lin Ma <linma@zju.edu.cn>
+From: Lino Sanfilippo <LinoSanfilippo@gmx.de>
 
-commit 0b9111922b1f399aba6ed1e1b8f2079c3da1aed8 upstream.
+commit 0e4deb56b0c625efdb70c94f150429e2f2a16fa1 upstream.
 
-There is a possible race condition (use-after-free) like below
+The current timeout for draining the tx fifo in RS485 mode is calculated by
+multiplying the time it takes to transmit one character (with the given
+baud rate) with the maximal number of characters in the tx queue.
 
- (USE)                       |  (FREE)
-  dev_queue_xmit             |
-   __dev_queue_xmit          |
-    __dev_xmit_skb           |
-     sch_direct_xmit         | ...
-      xmit_one               |
-       netdev_start_xmit     | tty_ldisc_kill
-        __netdev_start_xmit  |  6pack_close
-         sp_xmit             |   kfree
-          sp_encaps          |
-                             |
+This timeout is too short for two reasons:
+First when calculating the time to transmit one character integer division
+is used which may round down the result in case of a remainder of the
+division.
 
-According to the patch "defer ax25 kfree after unregister_netdev", this
-patch reorder the kfree after the unregister_netdev to avoid the possible
-UAF as the unregister_netdev() is well synchronized and won't return if
-there is a running routine.
+Fix this by rounding up the division result.
 
-Signed-off-by: Lin Ma <linma@zju.edu.cn>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Ovidiu Panait <ovidiu.panait@windriver.com>
+Second the hardware may need additional time (e.g for first putting the
+characters from the fifo into the shift register) before the characters are
+actually put onto the wire.
+
+To be on the safe side double the current maximum number of iterations
+that are used to wait for the queue draining.
+
+Fixes: 8d479237727c ("serial: amba-pl011: add RS485 support")
+Cc: stable@vger.kernel.org
+Signed-off-by: Lino Sanfilippo <LinoSanfilippo@gmx.de>
+Link: https://lore.kernel.org/r/20220408233503.7251-1-LinoSanfilippo@gmx.de
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/hamradio/6pack.c |    4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/tty/serial/amba-pl011.c |    9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
---- a/drivers/net/hamradio/6pack.c
-+++ b/drivers/net/hamradio/6pack.c
-@@ -679,9 +679,11 @@ static void sixpack_close(struct tty_str
- 	del_timer_sync(&sp->tx_t);
- 	del_timer_sync(&sp->resync_t);
+--- a/drivers/tty/serial/amba-pl011.c
++++ b/drivers/tty/serial/amba-pl011.c
+@@ -1288,13 +1288,18 @@ static inline bool pl011_dma_rx_running(
  
--	/* Free all 6pack frame buffers. */
-+	/* Free all 6pack frame buffers after unreg. */
- 	kfree(sp->rbuff);
- 	kfree(sp->xbuff);
-+
-+	free_netdev(sp->dev);
- }
+ static void pl011_rs485_tx_stop(struct uart_amba_port *uap)
+ {
++	/*
++	 * To be on the safe side only time out after twice as many iterations
++	 * as fifo size.
++	 */
++	const int MAX_TX_DRAIN_ITERS = uap->port.fifosize * 2;
+ 	struct uart_port *port = &uap->port;
+ 	int i = 0;
+ 	u32 cr;
  
- /* Perform I/O control on an active 6pack channel. */
+ 	/* Wait until hardware tx queue is empty */
+ 	while (!pl011_tx_empty(port)) {
+-		if (i == port->fifosize) {
++		if (i > MAX_TX_DRAIN_ITERS) {
+ 			dev_warn(port->dev,
+ 				 "timeout while draining hardware tx queue\n");
+ 			break;
+@@ -2099,7 +2104,7 @@ pl011_set_termios(struct uart_port *port
+ 	 * with the given baud rate. We use this as the poll interval when we
+ 	 * wait for the tx queue to empty.
+ 	 */
+-	uap->rs485_tx_drain_interval = (bits * 1000 * 1000) / baud;
++	uap->rs485_tx_drain_interval = DIV_ROUND_UP(bits * 1000 * 1000, baud);
+ 
+ 	pl011_setup_status_masks(port, termios);
+ 
 
 

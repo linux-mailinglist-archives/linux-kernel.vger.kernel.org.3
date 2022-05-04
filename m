@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2449C51AAC9
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:34:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4361851A633
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 18:51:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358615AbiEDRes (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 13:34:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38690 "EHLO
+        id S1353999AbiEDQxp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 12:53:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356724AbiEDRJj (ORCPT
+        with ESMTP id S1353757AbiEDQwS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 13:09:39 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8BA017061;
-        Wed,  4 May 2022 09:55:26 -0700 (PDT)
+        Wed, 4 May 2022 12:52:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CF0847395;
+        Wed,  4 May 2022 09:48:36 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5FA19B82792;
-        Wed,  4 May 2022 16:55:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13695C385AF;
-        Wed,  4 May 2022 16:55:25 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BEC6E61775;
+        Wed,  4 May 2022 16:48:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14491C385A4;
+        Wed,  4 May 2022 16:48:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651683325;
-        bh=bU9zuv/XF1iwHuINloAyTAgfvnKnw2LCdg098a6ufOs=;
+        s=korg; t=1651682915;
+        bh=EgOJk3ui2P1WPj5Kx+Q0XiNrigZfZXXW2qHJ3g9In/A=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=EWCQu1cfcR8acu1kJQWy4eII+4WBYXGY+ivBF4Cgt60PCfPkTyN9Tw/19Y7CL+ZB/
-         2on0jCarHv8hnlgHqj2vQkJZlOCnuLJwXcor0+4qjMn17Ya/DB+RszziVVJkjig1BW
-         uBG9r4gsckjm+3A52i352GZ9Pyzs73QD31q9HHtc=
+        b=0yP8xhp7+WZhHeM+y4fDjQ0NdXNlCf2Wvb1Us0dymoTa3gq8H4co+4BeNcQND1x8n
+         Rh0iEijdzy0ICF/gYA4AxfLhmhjyNccYfoLzZJmpqv+ewHKjO5MQlu4r2bQvBCtcCK
+         9AHeXAMPFVy9EHtMhPUCX2jtW8WgwNeoH/2bQ82w=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Oliver Neukum <oneukum@suse.com>
-Subject: [PATCH 5.17 004/225] USB: quirks: add STRING quirk for VCOM device
+        stable@vger.kernel.org, Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Subject: [PATCH 5.4 21/84] usb: dwc3: core: Fix tx/rx threshold settings
 Date:   Wed,  4 May 2022 18:44:02 +0200
-Message-Id: <20220504153110.605085090@linuxfoundation.org>
+Message-Id: <20220504152929.257435650@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220504153110.096069935@linuxfoundation.org>
-References: <20220504153110.096069935@linuxfoundation.org>
+In-Reply-To: <20220504152927.744120418@linuxfoundation.org>
+References: <20220504152927.744120418@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,31 +53,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Oliver Neukum <oneukum@suse.com>
+From: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
 
-commit ec547af8a9ea6441864bad34172676b5652ceb96 upstream.
+commit f28ad9069363dec7deb88032b70612755eed9ee6 upstream.
 
-This has been reported to stall if queried
+The current driver logic checks against 0 to determine whether the
+periodic tx/rx threshold settings are set, but we may get bogus values
+from uninitialized variables if no device property is set. Properly
+default these variables to 0.
 
-Cc: stable <stable@vger.kernel.org>
-Signed-off-by: Oliver Neukum <oneukum@suse.com>
-Link: https://lore.kernel.org/r/20220414123152.1700-1-oneukum@suse.com
+Fixes: 938a5ad1d305 ("usb: dwc3: Check for ESS TX/RX threshold config")
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Link: https://lore.kernel.org/r/cccfce990b11b730b0dae42f9d217dc6fb988c90.1649727139.git.Thinh.Nguyen@synopsys.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/usb/core/quirks.c |    3 +++
- 1 file changed, 3 insertions(+)
+ drivers/usb/dwc3/core.c |    8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
---- a/drivers/usb/core/quirks.c
-+++ b/drivers/usb/core/quirks.c
-@@ -510,6 +510,9 @@ static const struct usb_device_id usb_qu
- 	/* DJI CineSSD */
- 	{ USB_DEVICE(0x2ca3, 0x0031), .driver_info = USB_QUIRK_NO_LPM },
+--- a/drivers/usb/dwc3/core.c
++++ b/drivers/usb/dwc3/core.c
+@@ -1229,10 +1229,10 @@ static void dwc3_get_properties(struct d
+ 	u8			lpm_nyet_threshold;
+ 	u8			tx_de_emphasis;
+ 	u8			hird_threshold;
+-	u8			rx_thr_num_pkt_prd;
+-	u8			rx_max_burst_prd;
+-	u8			tx_thr_num_pkt_prd;
+-	u8			tx_max_burst_prd;
++	u8			rx_thr_num_pkt_prd = 0;
++	u8			rx_max_burst_prd = 0;
++	u8			tx_thr_num_pkt_prd = 0;
++	u8			tx_max_burst_prd = 0;
  
-+	/* VCOM device */
-+	{ USB_DEVICE(0x4296, 0x7570), .driver_info = USB_QUIRK_CONFIG_INTF_STRINGS },
-+
- 	/* INTEL VALUE SSD */
- 	{ USB_DEVICE(0x8086, 0xf1a5), .driver_info = USB_QUIRK_RESET_RESUME },
- 
+ 	/* default to highest possible threshold */
+ 	lpm_nyet_threshold = 0xf;
 
 

@@ -2,154 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3513519DAE
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 13:12:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A34EB519DB2
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 13:13:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348577AbiEDLPr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 07:15:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50920 "EHLO
+        id S1348599AbiEDLRB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 07:17:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234023AbiEDLPo (ORCPT
+        with ESMTP id S1348593AbiEDLQx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 07:15:44 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8173A140CE;
-        Wed,  4 May 2022 04:12:09 -0700 (PDT)
-Received: from zn.tnic (p5de8eeb4.dip0.t-ipconnect.de [93.232.238.180])
+        Wed, 4 May 2022 07:16:53 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B92522528E;
+        Wed,  4 May 2022 04:13:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id EBAD81EC03AD;
-        Wed,  4 May 2022 13:12:03 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1651662724;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2B9CAB821D5;
+        Wed,  4 May 2022 11:13:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A5EAC385AE;
+        Wed,  4 May 2022 11:13:14 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="dWXyH6SD"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1651662792;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=kUk21YBmxyczXtFGcC5AK2mHVk/xapqtm88uS9NvDyY=;
-        b=p2B1tkQWwDlCdHp7NKG1T7/gTleL6yeWMd01DSIhaI10qDOd6aaT1LwQDM63Rjx0kSnRQ0
-        a5faOD4YbYR6hkbqoDdUzlx9bPjZzpYjqLUECnyB7huVXTuRW2EgvXRJ0U/M+zjSHWgyNY
-        9s8Fy4ymLhX99fwnLdC/F7cY2Y9CtMU=
-Date:   Wed, 4 May 2022 13:12:06 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Cc:     Andy Lutomirski <luto@kernel.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Joerg Roedel <jroedel@suse.de>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Varad Gautam <varad.gautam@suse.com>,
-        Dario Faggioli <dfaggioli@suse.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        David Hildenbrand <david@redhat.com>, x86@kernel.org,
-        linux-mm@kvack.org, linux-coco@lists.linux.dev,
-        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCHv5 08/12] x86/mm: Provide helpers for unaccepted memory
-Message-ID: <YnJfhiiHn+48H2vb@zn.tnic>
-References: <20220425033934.68551-1-kirill.shutemov@linux.intel.com>
- <20220425033934.68551-9-kirill.shutemov@linux.intel.com>
+         in-reply-to:in-reply-to:references:references;
+        bh=HXiaK4ictgTSjtvWOEUk+V6lbW8n+flqFYQG/qZp/tc=;
+        b=dWXyH6SDho1vsZk6jp325598IoQxyDX5RdlrojDYWX33rV3qpguAY0xp8e49erwjIbm//7
+        Noa6LXMvAeCBw28nTvaHBCczKc25blHIZKi/Grpmzf52tj13Z+Tfchj99QHzXPuHQOUbhJ
+        rQX0IwJd4uuNLiogVYtxli/EBNVsyO0=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 1638d895 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Wed, 4 May 2022 11:13:12 +0000 (UTC)
+Received: by mail-yb1-f181.google.com with SMTP id h10so1771010ybc.4;
+        Wed, 04 May 2022 04:13:12 -0700 (PDT)
+X-Gm-Message-State: AOAM531HNxE+twLkskJKdM/OH9H0kO5pQGxDJyB2paSJUqoLDBMco6Mm
+        N0S7qYaNTXDB+1Jzc/Lr7K+76cR242HrEuWmIA4=
+X-Google-Smtp-Source: ABdhPJwCBvpDxWGSWccxUCQ9Dcxzd+za7/HrhxllXzM3nsD8TEctq7GSKBM+TEdo8KJm1AuvrqSU4mLti6+HOafgrIk=
+X-Received: by 2002:a25:420b:0:b0:648:4baf:c639 with SMTP id
+ p11-20020a25420b000000b006484bafc639mr17860583yba.373.1651662791725; Wed, 04
+ May 2022 04:13:11 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220425033934.68551-9-kirill.shutemov@linux.intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220503195141.683217-1-Jason@zx2c4.com> <YnGI4lZVJ/FZEkcn@owl.dominikbrodowski.net>
+ <CAHmME9o1zhtq=bMetwEx7YEzoW79z36BQ=vTWEv4M_ocChm5eA@mail.gmail.com> <YnIQ9RJpP/3j5aWF@owl.dominikbrodowski.net>
+In-Reply-To: <YnIQ9RJpP/3j5aWF@owl.dominikbrodowski.net>
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date:   Wed, 4 May 2022 13:13:01 +0200
+X-Gmail-Original-Message-ID: <CAHmME9pAHcXk+jyJDX27JfXbXRKtJmQuKH8aVbOo6d6N1RAakA@mail.gmail.com>
+Message-ID: <CAHmME9pAHcXk+jyJDX27JfXbXRKtJmQuKH8aVbOo6d6N1RAakA@mail.gmail.com>
+Subject: Re: [PATCH] random: mix hwgenerator randomness before sleeping
+To:     Dominik Brodowski <linux@dominikbrodowski.net>
+Cc:     Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 25, 2022 at 06:39:30AM +0300, Kirill A. Shutemov wrote:
-> +/* Protects unaccepted memory bitmap */
-> +static DEFINE_SPINLOCK(unaccepted_memory_lock);
-> +
-> +void accept_memory(phys_addr_t start, phys_addr_t end)
-> +{
-> +	unsigned long *unaccepted_memory;
+Hi Dominik,
 
-shorten that name.
+Alright I'll drop this patch for now, and we can revisit it if we ever
+get rid of the premature next stuff.
 
-> +	unsigned long flags;
-> +	unsigned long range_start, range_end;
-
-The tip-tree preferred ordering of variable declarations at the
-beginning of a function is reverse fir tree order::
-
-	struct long_struct_name *descriptive_name;
-	unsigned long foo, bar;
-	unsigned int tmp;
-	int ret;
-
-The above is faster to parse than the reverse ordering::
-
-	int ret;
-	unsigned int tmp;
-	unsigned long foo, bar;
-	struct long_struct_name *descriptive_name;
-
-And even more so than random ordering::
-
-	unsigned long foo, bar;
-	int ret;
-	struct long_struct_name *descriptive_name;
-	unsigned int tmp;
-
-> +
-> +	if (!boot_params.unaccepted_memory)
-> +		return;
-> +
-> +	unaccepted_memory = __va(boot_params.unaccepted_memory);
-> +	range_start = start / PMD_SIZE;
-> +
-> +	spin_lock_irqsave(&unaccepted_memory_lock, flags);
-> +	for_each_set_bitrange_from(range_start, range_end, unaccepted_memory,
-> +				   DIV_ROUND_UP(end, PMD_SIZE)) {
-> +		unsigned long len = range_end - range_start;
-> +
-> +		/* Platform-specific memory-acceptance call goes here */
-> +		panic("Cannot accept memory");
-
-Yeah, no, WARN_ON_ONCE() pls.
-
-> +		bitmap_clear(unaccepted_memory, range_start, len);
-> +	}
-> +	spin_unlock_irqrestore(&unaccepted_memory_lock, flags);
-> +}
-> +
-> +bool memory_is_unaccepted(phys_addr_t start, phys_addr_t end)
-> +{
-> +	unsigned long *unaccepted_memory = __va(boot_params.unaccepted_memory);
-
-As above, shorten that one.
-
-> +	unsigned long flags;
-> +	bool ret = false;
-> +
-> +	spin_lock_irqsave(&unaccepted_memory_lock, flags);
-> +	while (start < end) {
-> +		if (test_bit(start / PMD_SIZE, unaccepted_memory)) {
-> +			ret = true;
-
-Wait, what?
-
-That thing is lying: it'll return true for *some* PMD which is accepted
-but not the whole range of [start, end].
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Jason

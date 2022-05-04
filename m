@@ -2,53 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6364851A6A8
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 18:54:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79CE151A87C
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:07:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345514AbiEDQ5M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 12:57:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52242 "EHLO
+        id S1356129AbiEDRLR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 13:11:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354421AbiEDQyW (ORCPT
+        with ESMTP id S1355693AbiEDRAU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 12:54:22 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98B9F48E57;
-        Wed,  4 May 2022 09:49:30 -0700 (PDT)
+        Wed, 4 May 2022 13:00:20 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 005B94BFC7;
+        Wed,  4 May 2022 09:52:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 30F0D617A5;
-        Wed,  4 May 2022 16:49:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70341C385A4;
-        Wed,  4 May 2022 16:49:29 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7B5E9B82552;
+        Wed,  4 May 2022 16:52:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC355C385AA;
+        Wed,  4 May 2022 16:52:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651682969;
-        bh=DKYLV+LZxiUOMb7u0bnXMz4p/6ql4ov5ZJDiPdMji7E=;
+        s=korg; t=1651683121;
+        bh=PxgXNPHV5TbBv+6Dd5h+DGw6KamCPCTS6psgqEWotqY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=o4u4leVXQXS1chPChhgAZmGOVDqRekV8unfxn9NkAFxr6dwHZsvTL5pzOa3c5lZ+G
-         jFITvSYcSi+f0mTjGT+xz30Qsmau5e/w2BxgEQwISzX98PESh+Z1x/ZojSVVspjnYr
-         Rp3UF/ime+eVsLLzUdWUjqPoAqe3drkmbo/ffACk=
+        b=X+l9W6JEtih6gsIjyViEf+yc0SM0KxHiT+vOrNTzWKFQaq6j4f+hZt29h0Ah52KHD
+         C/+wStZlaVXBcvG+r6+hFPxnAj6IFiafRxYweNu9Z1kf2dqGmd3actj2l+giZjHeQr
+         YcKM8TtBKyQUTzDbRxGmXQf4Hiq1aFIGk6K8KV4A=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, kbuild test robot <lkp@intel.com>,
-        Shijie Hu <hushijie3@huawei.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Will Deacon <will@kernel.org>,
-        Xiaoming Ni <nixiaoming@huawei.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        yangerkun <yangerkun@huawei.com>, ChenGang <cg.chen@huawei.com>,
-        Chen Jie <chenjie6@huawei.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>
-Subject: [PATCH 5.4 83/84] hugetlbfs: get unmapped area below TASK_UNMAPPED_BASE for hugetlbfs
+        stable@vger.kernel.org, "Kyle D. Pelton" <kyle.d.pelton@intel.com>,
+        Borislav Petkov <bp@suse.de>,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+Subject: [PATCH 5.10 112/129] x86/cpu: Load microcode during restore_processor_state()
 Date:   Wed,  4 May 2022 18:45:04 +0200
-Message-Id: <20220504152934.001472741@linuxfoundation.org>
+Message-Id: <20220504153030.176843372@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220504152927.744120418@linuxfoundation.org>
-References: <20220504152927.744120418@linuxfoundation.org>
+In-Reply-To: <20220504153021.299025455@linuxfoundation.org>
+References: <20220504153021.299025455@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -63,151 +55,125 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Shijie Hu <hushijie3@huawei.com>
+From: Borislav Petkov <bp@suse.de>
 
-commit 885902531586d5a20a74099c1357bfdc982befe3 upstream.
+commit f9e14dbbd454581061c736bf70bf5cbb15ac927c upstream.
 
-In a 32-bit program, running on arm64 architecture.  When the address
-space below mmap base is completely exhausted, shmat() for huge pages will
-return ENOMEM, but shmat() for normal pages can still success on no-legacy
-mode.  This seems not fair.
+When resuming from system sleep state, restore_processor_state()
+restores the boot CPU MSRs. These MSRs could be emulated by microcode.
+If microcode is not loaded yet, writing to emulated MSRs leads to
+unchecked MSR access error:
 
-For normal pages, the calling trace of get_unmapped_area() is:
+  ...
+  PM: Calling lapic_suspend+0x0/0x210
+  unchecked MSR access error: WRMSR to 0x10f (tried to write 0x0...0) at rIP: ... (native_write_msr)
+  Call Trace:
+    <TASK>
+    ? restore_processor_state
+    x86_acpi_suspend_lowlevel
+    acpi_suspend_enter
+    suspend_devices_and_enter
+    pm_suspend.cold
+    state_store
+    kobj_attr_store
+    sysfs_kf_write
+    kernfs_fop_write_iter
+    new_sync_write
+    vfs_write
+    ksys_write
+    __x64_sys_write
+    do_syscall_64
+    entry_SYSCALL_64_after_hwframe
+   RIP: 0033:0x7fda13c260a7
 
-	=> mm->get_unmapped_area()
-	if on legacy mode,
-		=> arch_get_unmapped_area()
-			=> vm_unmapped_area()
-	if on no-legacy mode,
-		=> arch_get_unmapped_area_topdown()
-			=> vm_unmapped_area()
+To ensure microcode emulated MSRs are available for restoration, load
+the microcode on the boot CPU before restoring these MSRs.
 
-For huge pages, the calling trace of get_unmapped_area() is:
+  [ Pawan: write commit message and productize it. ]
 
-	=> file->f_op->get_unmapped_area()
-		=> hugetlb_get_unmapped_area()
-			=> vm_unmapped_area()
-
-To solve this issue, we only need to make hugetlb_get_unmapped_area() take
-the same way as mm->get_unmapped_area().  Add *bottomup() and *topdown()
-for hugetlbfs, and check current mm->get_unmapped_area() to decide which
-one to use.  If mm->get_unmapped_area is equal to
-arch_get_unmapped_area_topdown(), hugetlb_get_unmapped_area() calls
-topdown routine, otherwise calls bottomup routine.
-
-Reported-by: kbuild test robot <lkp@intel.com>
-Signed-off-by: Shijie Hu <hushijie3@huawei.com>
-Signed-off-by: Mike Kravetz <mike.kravetz@oracle.com>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-Cc: Will Deacon <will@kernel.org>
-Cc: Xiaoming Ni <nixiaoming@huawei.com>
-Cc: Kefeng Wang <wangkefeng.wang@huawei.com>
-Cc: yangerkun <yangerkun@huawei.com>
-Cc: ChenGang <cg.chen@huawei.com>
-Cc: Chen Jie <chenjie6@huawei.com>
-Link: http://lkml.kernel.org/r/20200518065338.113664-1-hushijie3@huawei.com
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Christophe Leroy <christophe.leroy@csgroup.eu>
+Fixes: e2a1256b17b1 ("x86/speculation: Restore speculation related MSRs during S3 resume")
+Reported-by: Kyle D. Pelton <kyle.d.pelton@intel.com>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Signed-off-by: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+Tested-by: Kyle D. Pelton <kyle.d.pelton@intel.com>
+Cc: stable@vger.kernel.org
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=215841
+Link: https://lore.kernel.org/r/4350dfbf785cd482d3fafa72b2b49c83102df3ce.1650386317.git.pawan.kumar.gupta@linux.intel.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/hugetlbfs/inode.c |   67 ++++++++++++++++++++++++++++++++++++++++++++-------
- 1 file changed, 59 insertions(+), 8 deletions(-)
+ arch/x86/include/asm/microcode.h     |    2 ++
+ arch/x86/kernel/cpu/microcode/core.c |    6 +++---
+ arch/x86/power/cpu.c                 |   10 +++++++++-
+ 3 files changed, 14 insertions(+), 4 deletions(-)
 
---- a/fs/hugetlbfs/inode.c
-+++ b/fs/hugetlbfs/inode.c
-@@ -38,6 +38,7 @@
- #include <linux/uio.h>
- 
- #include <linux/uaccess.h>
-+#include <linux/sched/mm.h>
- 
- static const struct super_operations hugetlbfs_ops;
- static const struct address_space_operations hugetlbfs_aops;
-@@ -201,13 +202,60 @@ out:
- 
- #ifndef HAVE_ARCH_HUGETLB_UNMAPPED_AREA
- static unsigned long
-+hugetlb_get_unmapped_area_bottomup(struct file *file, unsigned long addr,
-+		unsigned long len, unsigned long pgoff, unsigned long flags)
-+{
-+	struct hstate *h = hstate_file(file);
-+	struct vm_unmapped_area_info info;
-+
-+	info.flags = 0;
-+	info.length = len;
-+	info.low_limit = current->mm->mmap_base;
-+	info.high_limit = TASK_SIZE;
-+	info.align_mask = PAGE_MASK & ~huge_page_mask(h);
-+	info.align_offset = 0;
-+	return vm_unmapped_area(&info);
-+}
-+
-+static unsigned long
-+hugetlb_get_unmapped_area_topdown(struct file *file, unsigned long addr,
-+		unsigned long len, unsigned long pgoff, unsigned long flags)
-+{
-+	struct hstate *h = hstate_file(file);
-+	struct vm_unmapped_area_info info;
-+
-+	info.flags = VM_UNMAPPED_AREA_TOPDOWN;
-+	info.length = len;
-+	info.low_limit = max(PAGE_SIZE, mmap_min_addr);
-+	info.high_limit = current->mm->mmap_base;
-+	info.align_mask = PAGE_MASK & ~huge_page_mask(h);
-+	info.align_offset = 0;
-+	addr = vm_unmapped_area(&info);
-+
-+	/*
-+	 * A failed mmap() very likely causes application failure,
-+	 * so fall back to the bottom-up function here. This scenario
-+	 * can happen with large stack limits and large mmap()
-+	 * allocations.
-+	 */
-+	if (unlikely(offset_in_page(addr))) {
-+		VM_BUG_ON(addr != -ENOMEM);
-+		info.flags = 0;
-+		info.low_limit = current->mm->mmap_base;
-+		info.high_limit = TASK_SIZE;
-+		addr = vm_unmapped_area(&info);
-+	}
-+
-+	return addr;
-+}
-+
-+static unsigned long
- hugetlb_get_unmapped_area(struct file *file, unsigned long addr,
- 		unsigned long len, unsigned long pgoff, unsigned long flags)
- {
- 	struct mm_struct *mm = current->mm;
- 	struct vm_area_struct *vma;
- 	struct hstate *h = hstate_file(file);
--	struct vm_unmapped_area_info info;
- 
- 	if (len & ~huge_page_mask(h))
- 		return -EINVAL;
-@@ -228,13 +276,16 @@ hugetlb_get_unmapped_area(struct file *f
- 			return addr;
- 	}
- 
--	info.flags = 0;
--	info.length = len;
--	info.low_limit = TASK_UNMAPPED_BASE;
--	info.high_limit = TASK_SIZE;
--	info.align_mask = PAGE_MASK & ~huge_page_mask(h);
--	info.align_offset = 0;
--	return vm_unmapped_area(&info);
-+	/*
-+	 * Use mm->get_unmapped_area value as a hint to use topdown routine.
-+	 * If architectures have special needs, they should define their own
-+	 * version of hugetlb_get_unmapped_area.
-+	 */
-+	if (mm->get_unmapped_area == arch_get_unmapped_area_topdown)
-+		return hugetlb_get_unmapped_area_topdown(file, addr, len,
-+				pgoff, flags);
-+	return hugetlb_get_unmapped_area_bottomup(file, addr, len,
-+			pgoff, flags);
- }
+--- a/arch/x86/include/asm/microcode.h
++++ b/arch/x86/include/asm/microcode.h
+@@ -133,11 +133,13 @@ extern void load_ucode_ap(void);
+ void reload_early_microcode(void);
+ extern bool get_builtin_firmware(struct cpio_data *cd, const char *name);
+ extern bool initrd_gone;
++void microcode_bsp_resume(void);
+ #else
+ static inline int __init microcode_init(void)			{ return 0; };
+ static inline void __init load_ucode_bsp(void)			{ }
+ static inline void load_ucode_ap(void)				{ }
+ static inline void reload_early_microcode(void)			{ }
++static inline void microcode_bsp_resume(void)			{ }
+ static inline bool
+ get_builtin_firmware(struct cpio_data *cd, const char *name)	{ return false; }
  #endif
+--- a/arch/x86/kernel/cpu/microcode/core.c
++++ b/arch/x86/kernel/cpu/microcode/core.c
+@@ -775,9 +775,9 @@ static struct subsys_interface mc_cpu_in
+ };
  
+ /**
+- * mc_bp_resume - Update boot CPU microcode during resume.
++ * microcode_bsp_resume - Update boot CPU microcode during resume.
+  */
+-static void mc_bp_resume(void)
++void microcode_bsp_resume(void)
+ {
+ 	int cpu = smp_processor_id();
+ 	struct ucode_cpu_info *uci = ucode_cpu_info + cpu;
+@@ -789,7 +789,7 @@ static void mc_bp_resume(void)
+ }
+ 
+ static struct syscore_ops mc_syscore_ops = {
+-	.resume			= mc_bp_resume,
++	.resume			= microcode_bsp_resume,
+ };
+ 
+ static int mc_cpu_starting(unsigned int cpu)
+--- a/arch/x86/power/cpu.c
++++ b/arch/x86/power/cpu.c
+@@ -25,6 +25,7 @@
+ #include <asm/cpu.h>
+ #include <asm/mmu_context.h>
+ #include <asm/cpu_device_id.h>
++#include <asm/microcode.h>
+ 
+ #ifdef CONFIG_X86_32
+ __visible unsigned long saved_context_ebx;
+@@ -265,11 +266,18 @@ static void notrace __restore_processor_
+ 	x86_platform.restore_sched_clock_state();
+ 	mtrr_bp_restore();
+ 	perf_restore_debug_store();
+-	msr_restore_context(ctxt);
+ 
+ 	c = &cpu_data(smp_processor_id());
+ 	if (cpu_has(c, X86_FEATURE_MSR_IA32_FEAT_CTL))
+ 		init_ia32_feat_ctl(c);
++
++	microcode_bsp_resume();
++
++	/*
++	 * This needs to happen after the microcode has been updated upon resume
++	 * because some of the MSRs are "emulated" in microcode.
++	 */
++	msr_restore_context(ctxt);
+ }
+ 
+ /* Needed by apm.c */
 
 

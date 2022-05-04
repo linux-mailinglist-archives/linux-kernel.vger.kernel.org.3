@@ -2,123 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E15A051B091
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 23:28:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0321351B096
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 23:28:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378590AbiEDVbc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 17:31:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43674 "EHLO
+        id S1378594AbiEDVc2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 17:32:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347126AbiEDVba (ORCPT
+        with ESMTP id S1347126AbiEDVc1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 17:31:30 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06AD75131E;
-        Wed,  4 May 2022 14:27:52 -0700 (PDT)
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 244JMSOl005392;
-        Wed, 4 May 2022 21:27:42 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding; s=pp1;
- bh=uG2cuZvxA/+CYu9Mwm0/55GfutEUGI00AFnLdQHDLcc=;
- b=Za+bFClkcZI6+yLno4HDgZMEnNPExsuK2xIkJVJMWr6BZ3UN/P/9rU3dmqOWGiayfx+P
- maTx9BVPz6n7K31lUE8vU9bZ6xXRHIPdDkx6f4NNcoz8vP5QAJhXd/tbvJVR06pDDTj8
- /k8ARufXGbYpaYDsuKtJDDG/rl3R1+2iijiXuHMpSzMNePc/rd/5bb+UwohhwqXtLqCk
- rsljVm7B3o9l/4tkHLUAVinnzwohulQmzO1+saYrJp3YdUKxQaECcWKfdZ7ghWd8Tvvd
- XxDvL4cqfASxfmAKHsr67LMvMsuQlWcRHU/Qs4iAe+YyhfrlB2kmdou6w/b1q//7Q9y2 ig== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fuyka24td-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 04 May 2022 21:27:42 +0000
-Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 244L6JOi009223;
-        Wed, 4 May 2022 21:27:41 GMT
-Received: from ppma05wdc.us.ibm.com (1b.90.2fa9.ip4.static.sl-reverse.com [169.47.144.27])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fuyka24t7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 04 May 2022 21:27:41 +0000
-Received: from pps.filterd (ppma05wdc.us.ibm.com [127.0.0.1])
-        by ppma05wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 244KqPXe023256;
-        Wed, 4 May 2022 21:27:41 GMT
-Received: from b03cxnp08027.gho.boulder.ibm.com (b03cxnp08027.gho.boulder.ibm.com [9.17.130.19])
-        by ppma05wdc.us.ibm.com with ESMTP id 3frvra5bep-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 04 May 2022 21:27:41 +0000
-Received: from b03ledav005.gho.boulder.ibm.com (b03ledav005.gho.boulder.ibm.com [9.17.130.236])
-        by b03cxnp08027.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 244LReit15663456
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 4 May 2022 21:27:40 GMT
-Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 55C90BE053;
-        Wed,  4 May 2022 21:27:40 +0000 (GMT)
-Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 35851BE054;
-        Wed,  4 May 2022 21:27:39 +0000 (GMT)
-Received: from arbab-laptop.localdomain (unknown [9.160.71.212])
-        by b03ledav005.gho.boulder.ibm.com (Postfix) with SMTP;
-        Wed,  4 May 2022 21:27:38 +0000 (GMT)
-Received: by arbab-laptop.localdomain (Postfix, from userid 152845)
-        id B858A1DF790; Wed,  4 May 2022 16:27:36 -0500 (CDT)
-From:   Reza Arbab <arbab@linux.ibm.com>
-To:     Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-kbuild@vger.kernel.org
-Cc:     "J . Bruce Fields" <bfields@fieldses.org>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] scripts/prune-kernel: Use kernel-install if available
-Date:   Wed,  4 May 2022 16:27:14 -0500
-Message-Id: <20220504212714.152837-1-arbab@linux.ibm.com>
-X-Mailer: git-send-email 2.27.0
+        Wed, 4 May 2022 17:32:27 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F27750E0B;
+        Wed,  4 May 2022 14:28:50 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3BCD561967;
+        Wed,  4 May 2022 21:28:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A0B2C385A4;
+        Wed,  4 May 2022 21:28:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651699729;
+        bh=k/SHTcjQ/PrI0QjQFYZgO+ymU5S0yqAqGxV95jD8MsQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=AdVKX9QSdZLa7TIJ3yvhHLml7315UPHCfxhawSuffcCTBVJotbhWHUzsROHlu2O5e
+         jPAZTuP4dm5QjDRzuEWnuSnugpo1wvvQtnrPNzLgJIyuOX+vtX94qcN0DwtZf8U4/m
+         ZBaXw3Hihi4m/X8rhkruZupoD+MYwjUK2HyN9s/HTQizW9b+zi6E3xpx6utfeTDtK/
+         Y66zF313//wPDhubvYbZGAlRpalOIzlLj2APkEM2lAU3mSTGcbcJD9XZbqCXuRxn6x
+         aXN4sHCVprdCf8uqq5ZDKQVixCM/+1Sh+YwzhAlpEPuNESC2X6aSnBfPlnoWXUWdzj
+         0FnwTqPfzpeyA==
+Date:   Wed, 4 May 2022 14:28:47 -0700
+From:   Jaegeuk Kim <jaegeuk@kernel.org>
+To:     Chao Yu <chao@kernel.org>
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Ming Yan <yanming@tju.edu.cn>, Chao Yu <chao.yu@oppo.com>
+Subject: Re: [PATCH] f2fs: fix to do sanity check for inline inode
+Message-ID: <YnLwDx1smguDQ6qC@google.com>
+References: <20220428024940.12102-1-chao@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: UVRWZzirs79AQa0aZQdoRcca5gsIKBU4
-X-Proofpoint-ORIG-GUID: TbXZe023WkTytbhFasi6BMGrRz4UO_-9
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-04_05,2022-05-04_02,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- malwarescore=0 suspectscore=0 clxscore=1011 impostorscore=0 spamscore=0
- mlxscore=0 phishscore=0 bulkscore=0 mlxlogscore=844 adultscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2205040122
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220428024940.12102-1-chao@kernel.org>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If the new-kernel-pkg utility isn't present, try using kernel-install.
-This is what the %preun scriptlet in scripts/package/mkspec does too.
+On 04/28, Chao Yu wrote:
+> As Yanming reported in bugzilla:
+> 
+> https://bugzilla.kernel.org/show_bug.cgi?id=215895
+> 
+> I have encountered a bug in F2FS file system in kernel v5.17.
+> 
+> The kernel message is shown below:
+> 
+> kernel BUG at fs/inode.c:611!
+> Call Trace:
+>  evict+0x282/0x4e0
+>  __dentry_kill+0x2b2/0x4d0
+>  dput+0x2dd/0x720
+>  do_renameat2+0x596/0x970
+>  __x64_sys_rename+0x78/0x90
+>  do_syscall_64+0x3b/0x90
+> 
+> The root cause is: fuzzed inode has both inline_data flag and encrypted
+> flag, so after it was deleted by rename(), during f2fs_evict_inode(),
+> it will cause inline data conversion due to flags confilction, then
+> page cache will be polluted and trigger panic in clear_inode().
+> 
+> This patch tries to fix the issue by do more sanity checks for inline
+> data inode in sanity_check_inode().
+> 
+> Cc: stable@vger.kernel.org
+> Reported-by: Ming Yan <yanming@tju.edu.cn>
+> Signed-off-by: Chao Yu <chao.yu@oppo.com>
+> ---
+>  fs/f2fs/f2fs.h  | 7 +++++++
+>  fs/f2fs/inode.c | 3 +--
+>  2 files changed, 8 insertions(+), 2 deletions(-)
+> 
+> diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
+> index 27aa93caec06..64c511b498cc 100644
+> --- a/fs/f2fs/f2fs.h
+> +++ b/fs/f2fs/f2fs.h
+> @@ -4173,6 +4173,13 @@ static inline void f2fs_set_encrypted_inode(struct inode *inode)
+>   */
+>  static inline bool f2fs_post_read_required(struct inode *inode)
+>  {
+> +	/*
+> +	 * used by sanity_check_inode(), when disk layout fields has not
+> +	 * been synchronized to inmem fields.
+> +	 */
+> +	if (file_is_encrypt(inode) || file_is_verity(inode) ||
+> +			F2FS_I(inode)->i_flags & F2FS_COMPR_FL)
+> +		return true;
+>  	return f2fs_encrypted_file(inode) || fsverity_active(inode) ||
+>  		f2fs_compressed_file(inode);
+>  }
+> diff --git a/fs/f2fs/inode.c b/fs/f2fs/inode.c
+> index 83639238a1fe..234b8ed02644 100644
+> --- a/fs/f2fs/inode.c
+> +++ b/fs/f2fs/inode.c
+> @@ -276,8 +276,7 @@ static bool sanity_check_inode(struct inode *inode, struct page *node_page)
+>  		}
+>  	}
+>  
+> -	if (f2fs_has_inline_data(inode) &&
+> -			(!S_ISREG(inode->i_mode) && !S_ISLNK(inode->i_mode))) {
+> +	if (f2fs_has_inline_data(inode) && !f2fs_may_inline_data(inode)) {
 
-Signed-off-by: Reza Arbab <arbab@linux.ibm.com>
----
-Hope I've sent this to the right people. get_maintainer.pl came up
-blank, but kbuild seems like the nearest match in MAINTAINERS.
+It seems f2fs_may_inline_data() is breaking the atomic write case. Please fix.
 
- scripts/prune-kernel | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
-
-diff --git a/scripts/prune-kernel b/scripts/prune-kernel
-index e8aa940bc0a9..dadfd0e47f89 100755
---- a/scripts/prune-kernel
-+++ b/scripts/prune-kernel
-@@ -16,6 +16,10 @@ do
-                 rm -f "/boot/initramfs-$f.img" "/boot/System.map-$f"
-                 rm -f "/boot/vmlinuz-$f"   "/boot/config-$f"
-                 rm -rf "/lib/modules/$f"
--                new-kernel-pkg --remove $f
-+                if [ -x "$(command -v new-kernel-pkg)" ]; then
-+                        new-kernel-pkg --remove $f
-+                elif [ -x "$(command -v kernel-install)" ]; then
-+                        kernel-install remove $f
-+                fi
-         fi
- done
---=20
-2.27.0
-
+>  		set_sbi_flag(sbi, SBI_NEED_FSCK);
+>  		f2fs_warn(sbi, "%s: inode (ino=%lx, mode=%u) should not have inline_data, run fsck to fix",
+>  			  __func__, inode->i_ino, inode->i_mode);
+> -- 
+> 2.25.1

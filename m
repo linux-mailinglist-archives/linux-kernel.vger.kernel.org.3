@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FACD519E1B
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 13:34:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54922519E25
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 13:35:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348895AbiEDLhu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 07:37:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47572 "EHLO
+        id S1348956AbiEDLjU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 07:39:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348871AbiEDLhr (ORCPT
+        with ESMTP id S1349053AbiEDLjN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 07:37:47 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 821552B1A7;
-        Wed,  4 May 2022 04:34:11 -0700 (PDT)
+        Wed, 4 May 2022 07:39:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80D8C222A6;
+        Wed,  4 May 2022 04:35:38 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D3FC960A3D;
-        Wed,  4 May 2022 11:34:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C3D7C385A5;
-        Wed,  4 May 2022 11:34:10 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1F48260F3A;
+        Wed,  4 May 2022 11:35:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81CB5C385A5;
+        Wed,  4 May 2022 11:35:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651664050;
-        bh=B2BOkmQWAewYICCAZqhm4S7YchQqMKeCiQ7EuGLUGeE=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=X/fplh0RgU2RQqvSj00dZlcKsfPuFjC8mU9wT/apulBFOYH+I9nHmY2ihFrEcuET0
-         gcixXjgWz48w4d6+qM+P5qBKZnerjpIipEoBxNI7EBs8PVleFMrqWoNUrRCkD6awQ9
-         2uBYiucUMx8r7oMq+Cw0UKCher8oxJeqMU6VKzzLkuOhiUCxXw/cSJxqXhT27bl4KZ
-         sq+sWs8HsfC36DhwPIC/2TpcL8gFxIeBQInWKTdXFtd1DJhD2tSloobTTBaBi6TTsL
-         OZjp8dmox3bbYtCGLkPXjx1dM33oO7msqdhsksW5c3b4fGm+c+V8919ck9avGaVOka
-         cEPlesZqPZYxA==
-Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id 8C45E3464C7; Wed,  4 May 2022 13:34:07 +0200 (CEST)
-From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@kernel.org>
-To:     Alexander Lobakin <alobakin@pm.me>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Alexander Lobakin <alobakin@pm.me>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Song Liu <songliubraving@fb.com>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        bpf <bpf@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 bpf 00/11] bpf: random unpopular userspace fixes (32
- bit et al)
-In-Reply-To: <20220503211001.160060-1-alobakin@pm.me>
-References: <20220421003152.339542-1-alobakin@pm.me>
- <CAADnVQJJiBO5T3dvYaifhu3crmce7CH9b5ioc1u4=Y25SUxVRA@mail.gmail.com>
- <20220503211001.160060-1-alobakin@pm.me>
-X-Clacks-Overhead: GNU Terry Pratchett
-Date:   Wed, 04 May 2022 13:34:07 +0200
-Message-ID: <8735hpwmz4.fsf@toke.dk>
-MIME-Version: 1.0
-Content-Type: text/plain
+        s=k20201202; t=1651664137;
+        bh=PNar57YQTdXYctK0mUGX69cvLoEWngboH5a6JZfKJJ4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=ZUY4ELDpxMlUefSXe2ZWF/ksNzztdd1YP8zKO2WPLQgybsuR4oCA0T/MKXHb1rqOs
+         MzIZoSHarevXW1OzkCOFF/vahbGqmEzEcsObA1Xw94XGCAq/DD5howrBcCvLbyMUXs
+         rskpPoMLr2qlHpLoBl3bwHo2H9XQqNVabl6YcXbyDXYn1nYO0j9uS7JVGJcLjnsY1K
+         PMdyHB7dtfUZn7U9OAqCOglX3WTIVuIug00isGlHBt61B8kPQV45Y1IaEM5EdzXvTO
+         fGmDSvIQ6CcT+98AbNNvJRldk2M0s8MrfCeqQh8p07wg/y0uEALwBajv8S3ZwWzI39
+         kuX/Cj0S4dcrw==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nmDI6-008t0G-T4; Wed, 04 May 2022 12:35:35 +0100
+Date:   Wed, 04 May 2022 12:35:34 +0100
+Message-ID: <877d718r95.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Jon Hunter <jonathanh@nvidia.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        <linux-gpio@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-tegra@vger.kernel.org>
+Subject: Re: [PATCH] gpio: max77620: Make the irqchip immutable
+In-Reply-To: <20220504111936.8412-1-jonathanh@nvidia.com>
+References: <20220504111936.8412-1-jonathanh@nvidia.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: jonathanh@nvidia.com, linus.walleij@linaro.org, brgl@bgdev.pl, linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -67,57 +67,101 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Alexander Lobakin <alobakin@pm.me> writes:
+Hi Jon,
 
-> From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-> Date: Wed, 20 Apr 2022 17:40:34 -0700
->
->> On Wed, Apr 20, 2022 at 5:38 PM Alexander Lobakin <alobakin@pm.me> wrote:
->>
->> Again?
->>
->> -----BEGIN PGP MESSAGE-----
->> Version: ProtonMail
->>
->> wcFMA165ASBBe6s8AQ/8C9y4TqXgASA5xBT7UIf2GyTQRjKWcy/6kT1dkjkF
->> FldAOhehhgLYjLJzNAIkecOQfz/XNapW3GdrQDq11pq9Bzs1SJJekGXlHVIW
->
-> ProtonMail support:
->
-> "
-> The reason that some of the recipients are receiving PGP-encrypted
-> emails is that kernel.org is providing public keys for those
-> recipients (ast@kernel.org and toke@kernel.org specifically) via WKD
-> (Web Key Directory), and our API automatically encrypts messages
-> when a key is served over WKD.
->
-> Unfortunately, there is currently no way to disable encryption for
-> recipients that server keys over WKD but the recipients should be
-> able to decrypt the messages using the secret keys that correspond
-> to their public keys provided by kernel.org.
-> This is applicable both to messages sent via the ProtonMail web app,
-> and messages sent via Bridge app.
->
-> We have forwarded your feedback to the appropriate teams, and we
-> will see if we can implement a disable encryption option for these
-> cases. Unfortunately, we cannot speculate when we might implement
-> such an option.
-> "
->
-> Weeeeeird, it wasn't like that a year ago.
+On Wed, 04 May 2022 12:19:36 +0100,
+Jon Hunter <jonathanh@nvidia.com> wrote:
+> 
+> Commit 6c846d026d49 ("gpio: Don't fiddle with irqchips marked as
+> immutable") added a warning to indicate if the gpiolib is altering the
+> internals of irqchips. Following this change the following warning is
+> now observed for the max77620 gpio driver ...
+> 
+>  WARNING KERN gpio gpiochip0: (max77620-gpio): not an immutable chip,
+>  	please consider fixing it!
+> 
+> Fix the above warning by making the max77620 gpio driver immutable.
 
-Well, they're also doing something non-standard with their WKD
-retrieval, so maybe that changed? GPG itself will refuse to retrieve a
-key that doesn't have the email address specified in the key itself:
+Thanks for looking into this. Comments below.
 
-$ gpg --locate-keys toke@kernel.org
-gpg: key 4A55C497F744F705: no valid user IDs
-gpg: Total number processed: 1
-gpg:           w/o user IDs: 1
-gpg: error retrieving 'toke@kernel.org' via WKD: No fingerprint
+> 
+> Signed-off-by: Jon Hunter <jonathanh@nvidia.com>
+> ---
+> This warning is observed with v5.18-rc5 and so it would be great if
+> we can fix for v5.18. This is triggering a kernel warning test failure
+> on one of our platforms.
 
-Given that they do it this way, I suppose this will affect every
-@kernel.org address that has a PGP key attached (of which there are
-currently 519, according to pgpkeys.git)...
+I'm surprised. This is definitely *not* 5.18 material, and I can't see
+the patches in Linus' tree. Are you sure you're not running -next
+instead?
 
--Toke
+> 
+>  drivers/gpio/gpio-max77620.c | 15 ++++++++++++---
+>  1 file changed, 12 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/gpio/gpio-max77620.c b/drivers/gpio/gpio-max77620.c
+> index ebf9dea6546b..aa92658780d6 100644
+> --- a/drivers/gpio/gpio-max77620.c
+> +++ b/drivers/gpio/gpio-max77620.c
+> @@ -119,14 +119,23 @@ static void max77620_gpio_bus_sync_unlock(struct irq_data *data)
+>  	mutex_unlock(&gpio->buslock);
+>  }
+>  
+> -static struct irq_chip max77620_gpio_irqchip = {
+> +static void max77620_gpio_irq_print_chip(struct irq_data *data, struct seq_file *p)
+> +{
+> +	struct gpio_chip *gc = irq_data_get_irq_chip_data(data);
+> +
+> +	seq_printf(p, dev_name(gc->parent));
+> +}
+> +
+
+I'd rather you don't do this. This was added as a band-aid for drivers
+that display a device-specific string in /proc/interrupts, and that we
+cannot fix because the string is in effect an ABI.
+
+Here, you're going in the opposite direction (making the name
+device-specific while it was constant so far). This has the same
+ABI-breaking effect, and we shouldn't do that. It is also rather
+pointless, as we already have all the required debugging information
+in debugfs (and I assume that this is the reason this is added).
+
+> +static const struct irq_chip max77620_gpio_irqchip = {
+>  	.name		= "max77620-gpio",
+>  	.irq_mask	= max77620_gpio_irq_mask,
+>  	.irq_unmask	= max77620_gpio_irq_unmask,
+
+You seem to be missing the updates for these two functions. Please see
+the updated documentation in commit 5644b66a9c63 ("Documentation:
+Update the recommended pattern for GPIO irqchips").
+
+>  	.irq_set_type	= max77620_gpio_set_irq_type,
+>  	.irq_bus_lock	= max77620_gpio_bus_lock,
+>  	.irq_bus_sync_unlock = max77620_gpio_bus_sync_unlock,
+> -	.flags		= IRQCHIP_MASK_ON_SUSPEND,
+> +	.irq_print_chip	= max77620_gpio_irq_print_chip,
+> +	.flags		= IRQCHIP_IMMUTABLE | IRQCHIP_MASK_ON_SUSPEND,
+> +	GPIOCHIP_IRQ_RESOURCE_HELPERS,
+>  };
+>  
+>  static int max77620_gpio_dir_input(struct gpio_chip *gc, unsigned int offset)
+> @@ -318,7 +327,7 @@ static int max77620_gpio_probe(struct platform_device *pdev)
+>  	mgpio->gpio_chip.base = -1;
+>  
+>  	girq = &mgpio->gpio_chip.irq;
+> -	girq->chip = &max77620_gpio_irqchip;
+> +	gpio_irq_chip_set_chip(girq, &max77620_gpio_irqchip);
+>  	/* This will let us handle the parent IRQ in the driver */
+>  	girq->parent_handler = NULL;
+>  	girq->num_parents = 0;
+> -- 
+> 2.25.1
+> 
+> 
+
+Thanks,
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.

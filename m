@@ -2,207 +2,279 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4641B51AD60
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 20:56:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1075F51AD63
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 20:57:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356537AbiEDS7q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 14:59:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57850 "EHLO
+        id S1377432AbiEDTBV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 15:01:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377496AbiEDS71 (ORCPT
+        with ESMTP id S1354684AbiEDTBP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 14:59:27 -0400
-Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAD9F205C5
-        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 11:55:50 -0700 (PDT)
-Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
-        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20220504185548euoutp02803129409bd7312afd58a09ef14bfea7~r_81_Pgl-0224602246euoutp02f
-        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 18:55:48 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20220504185548euoutp02803129409bd7312afd58a09ef14bfea7~r_81_Pgl-0224602246euoutp02f
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1651690548;
-        bh=pV5YDy3++3X3MIupEP5BQJa/D3ldEEIqyW1PGs7g3LA=;
-        h=Date:Subject:To:CC:From:In-Reply-To:References:From;
-        b=C3mf37JL/98r6HpZXFXFDzi6CbVZsUgFhhKhfG+aC3QAHzRFeg7jzb3DJrWoEP//i
-         0eJ6BRa+4cHGNBRT7v+V7WSmxqcMjq0Ma5UdpOar7E+7fY+D+lg7qEtEn2FgbIhjfe
-         5Ru6i3ozTKmV1tf/FR9AfRbN2m6x08gINc2ePWe4=
-Received: from eusmges3new.samsung.com (unknown [203.254.199.245]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20220504185547eucas1p240580c93fa3c9f495030f24c99f7b036~r_81jWyOU1535315353eucas1p2J;
-        Wed,  4 May 2022 18:55:47 +0000 (GMT)
-Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
-        eusmges3new.samsung.com (EUCPMTA) with SMTP id 0C.F6.10260.33CC2726; Wed,  4
-        May 2022 19:55:47 +0100 (BST)
-Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
-        20220504185546eucas1p12c80ccf80fe52669eb1885bb3623e43c~r_80e8r-31641116411eucas1p1_;
-        Wed,  4 May 2022 18:55:46 +0000 (GMT)
-Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
-        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20220504185546eusmtrp1cdb0bb539189f8416727ea413859b749~r_80dRlTq0429604296eusmtrp1L;
-        Wed,  4 May 2022 18:55:46 +0000 (GMT)
-X-AuditID: cbfec7f5-bf3ff70000002814-54-6272cc339050
-Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
-        eusmgms2.samsung.com (EUCPMTA) with SMTP id A5.5A.09404.23CC2726; Wed,  4
-        May 2022 19:55:46 +0100 (BST)
-Received: from CAMSVWEXC01.scsc.local (unknown [106.1.227.71]) by
-        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20220504185546eusmtip2dbec558b1150776064b3f6539435b137~r_80SYl9S2194821948eusmtip2d;
-        Wed,  4 May 2022 18:55:46 +0000 (GMT)
-Received: from [192.168.8.130] (106.210.248.170) by CAMSVWEXC01.scsc.local
-        (2002:6a01:e347::6a01:e347) with Microsoft SMTP Server (TLS) id 15.0.1497.2;
-        Wed, 4 May 2022 19:55:43 +0100
-Message-ID: <3f4717f9-ab7f-0caa-3809-0ab14629e5c8@samsung.com>
-Date:   Wed, 4 May 2022 20:55:43 +0200
+        Wed, 4 May 2022 15:01:15 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4D28E222BC
+        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 11:57:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1651690657;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=uAicELaPXE9dwMxkjrZ0sq+/Xws0OTtxlGLWhiCN/ho=;
+        b=aX5yaoL/QPH1HsH++ja7EVGm6j8CwRnHmNHlXRH927TDGBafpq1i/tGC0c0yS1wHwMAubJ
+        D+Wo69GvPb1iwvc6gouMJuN5Q7xk0pKwjfezEiViPGVb9/6TEvRqRql2hM80XwkkYfWFDH
+        nJCIKi2S5vRs1kdsiiBIctAsMo4jp0I=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-18-xVv9cXqFP6OQBnN1v2isgg-1; Wed, 04 May 2022 14:57:34 -0400
+X-MC-Unique: xVv9cXqFP6OQBnN1v2isgg-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BA6BB3C138A0;
+        Wed,  4 May 2022 18:57:33 +0000 (UTC)
+Received: from fuller.cnet (ovpn-112-3.gru2.redhat.com [10.97.112.3])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id E417B2D441;
+        Wed,  4 May 2022 18:57:12 +0000 (UTC)
+Received: by fuller.cnet (Postfix, from userid 1000)
+        id 1D5EA4936633; Wed,  4 May 2022 15:56:51 -0300 (-03)
+Date:   Wed, 4 May 2022 15:56:51 -0300
+From:   Marcelo Tosatti <mtosatti@redhat.com>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     Christoph Lameter <cl@gentwo.de>, linux-kernel@vger.kernel.org,
+        Nitesh Lal <nilal@redhat.com>,
+        Nicolas Saenz Julienne <nsaenzju@redhat.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Alex Belits <abelits@belits.com>, Peter Xu <peterx@redhat.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Oscar Shiang <oscar0225@livemail.tw>,
+        linux-rdma@vger.kernel.org
+Subject: Re: [patch v12 00/13] extensible prctl task isolation interface and
+ vmstat sync
+Message-ID: <YnLMc5X8MZElk0NT@fuller.cnet>
+References: <20220315153132.717153751@fedora.localdomain>
+ <alpine.DEB.2.22.394.2204271049050.159551@gentwo.de>
+ <YnF7CjzYBhASi1Eo@fuller.cnet>
+ <87h765juyk.ffs@tglx>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
-        Thunderbird/91.8.1
-Subject: Re: [PATCH 05/16] nvme: zns: Allow ZNS drives that have
- non-power_of_2 zone size
-Content-Language: en-US
-To:     Hannes Reinecke <hare@suse.de>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        <jaegeuk@kernel.org>, <axboe@kernel.dk>, <snitzer@kernel.org>,
-        <hch@lst.de>, <mcgrof@kernel.org>, <naohiro.aota@wdc.com>,
-        <sagi@grimberg.me>, <dsterba@suse.com>,
-        <johannes.thumshirn@wdc.com>
-CC:     <linux-kernel@vger.kernel.org>, <clm@fb.com>,
-        <gost.dev@samsung.com>, <chao@kernel.org>, <josef@toxicpanda.com>,
-        <jonathan.derrick@linux.dev>, <agk@redhat.com>,
-        <kbusch@kernel.org>, <kch@nvidia.com>,
-        <linux-nvme@lists.infradead.org>, <bvanassche@acm.org>,
-        <jiangbo.365@bytedance.com>, <matias.bjorling@wdc.com>,
-        <linux-block@vger.kernel.org>
-From:   Pankaj Raghav <p.raghav@samsung.com>
-In-Reply-To: <6a1c06e8-bedd-47b0-2a3f-9c51468fc029@suse.de>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [106.210.248.170]
-X-ClientProxiedBy: CAMSVWEXC01.scsc.local (2002:6a01:e347::6a01:e347) To
-        CAMSVWEXC01.scsc.local (2002:6a01:e347::6a01:e347)
-X-Brightmail-Tracker: H4sIAAAAAAAAA01SbUxTZxjNe+/t7aWz7FLZeEUDs7AfuAgy5nz3EcacP+4yNIsyZSNOS7kD
-        RimspeI0ZmWIEeL4KJFpOwJ0Ih+iWGAIpTBSQgFbVqR0Q5w4hLrJN0O3GTpcy50J/845zzlP
-        nvPmpXBRNRlIpcqzWIVcIhOTAqLV8sS+PcqmSNzxcDASNd604OjK3SISlS0+wZH1/CCGNEUX
-        +Ghl0I6joX9yMGTSazBUd6UXQ1ONWhyd614k0L8F4x7t9ASO3BORSGP+GSCXU4uhzrFXkMP4
-        HYkqLrv4qPjMYxyNFrsAKulr5qFrMwsE6h/bHAMZx8gHzGp/A8mU5M7zGfu4gWAcgyqmqT6f
-        ZKrU53Gm+dJXTMdtNcl8kztPMu1593jMQpeTZBpbnATTbD3JFDcbeMxyU9CHfp8I3k5iZanH
-        WEVE9FFByv2ZOZDZBY/3Wc4QamD0LwA+FKRfg6af7HgBEFAiuhbAihvtPI48AtC5VM/zukT0
-        MoC3f419lvit3I1xeg2ArsldXMDj6dFXYhwxAjhtncW9LiEdDXvGl9YSBB0K7yzl8zjdDw5c
-        nCK8+AU6HpZpbaQXb6QToHFsYE3H6QA4NlWxttSfLsdg/kUn30twehKD7p5OD6Eokt4Gc/L5
-        3oAP/RZcvTOPc+EwmHdjhc/hYJj7gw7nKoTA0tERjMOn4FWLbW0npHsFsCT37P+DPXD4YTXg
-        8EY43dfC5/AWaC09R3D4JHSNruBc+DSARe2NpPcg6Lmi0CbjPO/C3vI5gpN94eicH3ePL9S0
-        fosXg5e1695Cu66zdl0F7boKlYCoBwGsSpmezCqj5Gx2uFKSrlTJk8OlGelNwPOTrat9j9tA
-        7fRSuBlgFDADSOFif+F71ZmJImGS5MsTrCLjiEIlY5VmsJkixAFCaep1iYhOlmSxaSybySqe
-        TTHKJ1CNfboqnRyqK3seD2+7HitSd29tzco7tKAL0++emx1tkB6IvlCX0HL4VlRImio+rC1U
-        kh2iY2YUoeYjB4Mqnzp8/rq2e7+jISXwLHFiZb/po51V99UFBUE1h56LyXh9j76wOKfk/ZtV
-        X+fEfxZsP2iJ7P1xl0m/T9W9PJj41NQfF7Hh496mBanu+N593bPyTt6bxt9LH6Qd3jAsH6jY
-        MR6hfLCTXd2bkx1za8RiMJjiYhMeYTVb7+qb1Prlso57yS0TiSG/DP2Rl/9O6NX2jmOFfwaT
-        /C1dp46m1L5xQPxF0ou+Quurs1FViUUBle44SqcxfP5919/2kU3bZYvuIJtZM7XpJcOwmFCm
-        SCK34Qql5D/LGIyuOAQAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrDKsWRmVeSWpSXmKPExsVy+t/xe7pGZ4qSDD4u1bBYf+oYs8Xqu/1s
-        FtM+/GS2OD31LJPFpP4Z7Ba/z55ntrjwo5HJYs+iSUwWK1cfZbJ4sn4Ws0XPgQ8sFn+77gHF
-        Wh4yW/x5aGgx6dA1RounV2cxWey9pW1xedccNov5y56yW0xo+8pscWPCU0aLicc3s1qse/2e
-        xeLELWkHCY/LV7w9/p1Yw+Yxsfkdu8f5extZPC6fLfXYtKqTzWNhw1Rmj81L6j1232xg8+ht
-        fsfmsbP1PqvH+31X2TzWb7nK4rH5dLXHhM0bWT0+b5ILEIzSsynKLy1JVcjILy6xVYo2tDDS
-        M7S00DMysdQzNDaPtTIyVdK3s0lJzcksSy3St0vQy3j0+i1jwT6JiuPH2lgaGHeJdDFyckgI
-        mEg8mPuHqYuRi0NIYCmjxNeDy9kgEjISn658ZIewhSX+XOtigyj6yCixf3UjM4Szi1HiVMsn
-        sA5eATuJw/c+MoHYLAIqErc/drJCxAUlTs58wgJiiwpESDzYfRYsLiwQLbHr1kmwOLOAuMSt
-        J/PBzhARmMsk0TnzKjvEhg+MEjs2d4I5zAKPmST+HN4L5HBwsAloSTR2gt3HKWAt8e/2O2aI
-        SZoSrdt/s0PY8hLNW2czQ/ygLDH5xhUmCLtW4tX93YwTGEVnITlwFpJDZiEZNQvJqAWMLKsY
-        RVJLi3PTc4uN9IoTc4tL89L1kvNzNzECk9m2Yz+37GBc+eqj3iFGJg7GQ4wSHMxKIrzOSwuS
-        hHhTEiurUovy44tKc1KLDzGaAkNpIrOUaHI+MJ3mlcQbmhmYGpqYWRqYWpoZK4nzehZ0JAoJ
-        pCeWpGanphakFsH0MXFwSjUwtdvGnbuffm+OVkZfxS31+m0fP2eHnVXZqXfKvD1+m3mGu3Kh
-        bcFbBsNW8U/86hp9F/rSi20Pm/nuPf68Ztvm5wZbDZb8UbBPZ5Xi2lASbVB9MEshxe2bBl+3
-        0uNq10gdg8nsZ+Y56R2zyfI78j/k0JL7G2cqPt3wo/jucQ1dxwTDDf32VXtW3eqP/nFq/YPl
-        It1s7zeIVUbs+T5v2Zscozm7PfTqy4smvtR0cessNyys99/FJpkSGaX+eyd7eNrsX5smW+Rs
-        W/3A0kmyMXKrzrLOhQkrbYX4jt0RFq2YzWmi1jtni2WDts6uL7JK/gcmTTh4SK7Z6X73BFvG
-        gnOZWgkx7muczX9wzzt05poSS3FGoqEWc1FxIgA0vWi47wMAAA==
-X-CMS-MailID: 20220504185546eucas1p12c80ccf80fe52669eb1885bb3623e43c
-X-Msg-Generator: CA
-X-RootMTR: 20220427160301eucas1p147d0dced70946e20dd2dd046b94b8224
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20220427160301eucas1p147d0dced70946e20dd2dd046b94b8224
-References: <20220427160255.300418-1-p.raghav@samsung.com>
-        <CGME20220427160301eucas1p147d0dced70946e20dd2dd046b94b8224@eucas1p1.samsung.com>
-        <20220427160255.300418-6-p.raghav@samsung.com>
-        <6a1c06e8-bedd-47b0-2a3f-9c51468fc029@suse.de>
-X-Spam-Status: No, score=-10.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87h765juyk.ffs@tglx>
+X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-05-04 19:03, Hannes Reinecke wrote:
-> On 4/27/22 09:02, Pankaj Raghav wrote:
->> Remove the condition which disallows non-power_of_2 zone size ZNS drive
->> to be updated and use generic method to calculate number of zones
->> instead of relying on log and shift based calculation on zone size.
->>
->> The power_of_2 calculation has been replaced directly with generic
->> calculation without special handling. Both modified functions are not
->> used in hot paths, they are only used during initialization &
->> revalidation of the ZNS device.
->>
->> Reviewed-by: Luis Chamberlain <mcgrof@kernel.org>
->> Signed-off-by: Pankaj Raghav <p.raghav@samsung.com>
->> ---
-     }
->>         ns->zsze = nvme_lba_to_sect(ns,
->> le64_to_cpu(id->lbafe[lbaf].zsze));
->> -    if (!is_power_of_2(ns->zsze)) {
->> -        dev_warn(ns->ctrl->device,
->> -            "invalid zone size:%llu for namespace:%u\n",
->> -            ns->zsze, ns->head->ns_id);
->> -        status = -ENODEV;
->> -        goto free_data;
->> -    }
->>         blk_queue_set_zoned(ns->disk, BLK_ZONED_HM);
->>       blk_queue_flag_set(QUEUE_FLAG_ZONE_RESETALL, q);
->> @@ -129,7 +122,7 @@ static void *nvme_zns_alloc_report_buffer(struct
->> nvme_ns *ns,
->>                      sizeof(struct nvme_zone_descriptor);
->>         nr_zones = min_t(unsigned int, nr_zones,
->> -             get_capacity(ns->disk) >> ilog2(ns->zsze));
->> +             div64_u64(get_capacity(ns->disk), ns->zsze));
->>   
-> Same here; please add a helper calculating the number of zones for a
-> given disk.
+On Wed, May 04, 2022 at 03:20:03PM +0200, Thomas Gleixner wrote:
+> On Tue, May 03 2022 at 15:57, Marcelo Tosatti wrote:
+> > On Wed, Apr 27, 2022 at 11:19:02AM +0200, Christoph Lameter wrote:
+> >> I could modify busyloop() in ib2roce.c to use the oneshot mode via prctl
+> >> provided by this patch instead of the NOHZ_FULL.
+> >> 
+> >> What kind of metric could I be using to show the difference in idleness of
+> >> the quality of the cpu isolation?
+> >
+> > Interruption length and frequencies:
+> >
+> > -------|xxxxx|---------------|xxx|---------
+> > 	 5us 		      3us
+> >
+> > which is what should be reported by oslat ?
 > 
-I am already  using the div64_u64 helper and this is not done again
-anywhere in the nvme zns driver. I am not sure if having a separate
-helper for this will add value. And this is not in the hot path, so no
-need for special handling.
->>       bufsize = sizeof(struct nvme_zone_report) +
->>           nr_zones * sizeof(struct nvme_zone_descriptor);
->> @@ -197,7 +190,7 @@ int nvme_ns_report_zones(struct nvme_ns *ns,
->> sector_t sector,
->>       c.zmr.zrasf = NVME_ZRASF_ZONE_REPORT_ALL;
->>       c.zmr.pr = NVME_REPORT_ZONE_PARTIAL;
->>   -    sector &= ~(ns->zsze - 1);
->> +    sector = rounddown(sector, ns->zsze);
->>       while (zone_idx < nr_zones && sector < get_capacity(ns->disk)) {
->>           memset(report, 0, buflen);
->>   
-> Please be a bit more consistent. In the previous patches you always had
-> a condition to check if it's a power_of_2 zone size, but here you are
-> using the same calculation for each disk.
-> So please use the check in all locations, or add a comment why the
-> generic calculation is okay to use here.
-> 
-That is a good point. I have mentioned that in my commit log that I am
-not having any special handling because these calculations are not in
-the hot path.
+> How is oslat helpful there? That's running artifical workload benchmarks
+> which are not necessarily representing the actual
+> idle->interrupt->idle... timing sequence of the real world usecase.
 
-Maybe adding comments is better for clarity. I will also do it for your
-previous comment.
+Ok, so what is happening today on production on some telco installations 
+(considering virtualized RAN usecase) is this:
 
-I will queue this up for my next revision. Thanks.
-> Cheers,
+1) Basic testing: Verify the hardware, software and its configuration
+(cpu isolation parameters etc) are able to achieve the desired maximum
+interruption length/frequencies through a synthetic benchmark like 
+cyclictest and oslat, for a duration that is considered sufficient.
+
+One might also use the actual application in a synthetic configuration
+(for example FlexRAN with synthetic data).
+
+2) From the above, assume real world usecase is able to achieve the
+desired maximum interruption length/frequency.
+
+Of course, that is sub-optimal. The rt-trace-bcc.py scripts instruments
+certain functions in the kernel (say smp_call_function family), 
+allowing one to check if certain interruptions have happened
+on production. Example:
+
+$ sudo ./rt-trace-bcc.py -c 36-39
+[There can be some warnings dumped; we can ignore them]
+Enabled hook point: process_one_work
+Enabled hook point: __queue_work
+Enabled hook point: __queue_delayed_work
+Enabled hook point: generic_exec_single
+Enabled hook point: smp_call_function_many_cond
+Enabled hook point: irq_work_queue
+Enabled hook point: irq_work_queue_on
+TIME(s)            COMM                 CPU  PID      MSG
+0.009599293        rcuc/8               8    75       irq_work_queue_on (target=36, func=nohz_full_kick_func)
+0.009603039        rcuc/8               8    75       irq_work_queue_on (target=37, func=nohz_full_kick_func)
+0.009604047        rcuc/8               8    75       irq_work_queue_on (target=38, func=nohz_full_kick_func)
+0.009604848        rcuc/8               8    75       irq_work_queue_on (target=39, func=nohz_full_kick_func)
+0.103600589        rcuc/8               8    75       irq_work_queue_on (target=36, func=nohz_full_kick_func)
+...
+
+Currently it does not record the length of each interruption, but it
+could (or you can do that from its output).
+
+Note however that the sum of the interruptions is not the entire
+overhead caused by the interruptions: there might also cachelines thrown 
+away which are only going to be "counted" when the latency sensitive
+app executes.
+
+But you could say the overhead is _at least_ the sum of interruptions +
+cache effects unaccounted for.
+
+Also note that for idle->interrupt->idle type scenarios (the vRAN
+usecase above currently does not idle at all, but there is interest
+from the field for that to happen for power saving reasons), you'd
+also sum return from idle.
+
+> > Inheritance is an attempt to support unmodified binaries like so:
+> >
+> > 1) configure task isolation parameters (eg sync per-CPU vmstat to global
+> > stats on system call returns).
+> > 2) enable inheritance (so that task isolation configuration and
+> > activation states are copied across to child processes).
+> > 3) enable task isolation.
+> > 4) execv(binary, params)
 > 
-> Hannes
+> What for? If an application has isolation requirements, then the
+> specific requirements are part of the application design and not of some
+> arbitrary wrapper. 
+
+To be able to configure and active task isolation for an unmodified
+binary, which seems a useful feature. However, have no problem of not 
+supporting unmodified binaries (would have then to change the
+applications).
+
+There are 3 types of application arrangements:
+
+==================
+Userspace support
+==================
+
+Task isolation is divided in two main steps: configuration and activation.
+
+Each step can be performed by an external tool or the latency sensitive
+application itself. util-linux contains the "chisol" tool for this
+purpose.
+
+This results in three combinations:
+
+1. Both configuration and activation performed by the
+latency sensitive application.
+Allows fine grained control of what task isolation
+features are enabled and when (see samples section below).
+
+2. Only activation can be performed by the latency sensitive app
+(and configuration performed by chisol).
+This allows the admin/user to control task isolation parameters,
+and applications have to be modified only once.
+
+3. Configuration and activation performed by an external tool.
+This allows unmodified applications to take advantage of
+task isolation. Activation is performed by the "-a" option
+of chisol.
+
+---
+
+Some features might not be supportable (or have awkward behavior) on a
+given combination. For example, if a feature such as "warn if
+sched_out/sched_in is ever performed if task isolation is
+configured/activated", then you'll get those warnings 
+for combination 3 (which is the case of unmodified binaries above).
+
+> Inheritance is an orthogonal problem and there is no reason to have this
+> initially.
+
+No problem, will drop it.
+
+> Can we please focus on the initial problem of
+> providing a sensible isolation mechanism with well defined semantics?
+
+Case 2, however, was implicitly suggested by you (or at least i
+understood that):
+
+"Summary: The problem to be solved cannot be restricted to
+
+    self_defined_important_task(OWN_WORLD);
+
+Policy is not a binary on/off problem. It's manifold across all levels
+of the stack and only a kernel problem when it comes down to the last
+line of defence.
+
+Up to the point where the kernel puts the line of last defence, policy
+is defined by the user/admin via mechanims provided by the kernel.
+
+Emphasis on "mechanims provided by the kernel", aka. user API.
+
+Just in case, I hope that I don't have to explain what level of scrunity
+and thought this requires." 
+
+The idea, as i understood was that certain task isolation features (or
+they parameters) might have to be changed at runtime (which depends on
+the task isolation features themselves, and the plan is to create
+an extensible interface). So for case 2, all you'd have to do is to 
+modify the application only once and allow the admin to configure 
+the features. From the documentation:
+
+This is a snippet of code to activate task isolation if
+it has been previously configured (by chisol for example)::
+
+        #include <sys/prctl.h>
+        #include <linux/types.h>
+
+        #ifdef PR_ISOL_CFG_GET
+        unsigned long long fmask;
+
+        ret = prctl(PR_ISOL_CFG_GET, I_CFG_FEAT, 0, &fmask, 0);
+        if (ret != -1 && fmask != 0) {
+                ret = prctl(PR_ISOL_ACTIVATE_SET, &fmask, 0, 0, 0);
+                if (ret == -1) {
+                        perror("prctl PR_ISOL_ACTIVATE_SET");
+                        return ret;
+                }
+        }
+        #endif
+
+This seemed pretty useful to me (which is possible if the features 
+being discussed do not require further modifications on the part of the
+application). For example, a new task isolation feature can be enabled 
+without having to modify the application.
+
+Again, maybe that was misunderstood (and i'm OK with dropping this 
+and forcing both configuration and activation to be performed
+inside the app), no problem.
+
+> >> Special handling when the scheduler
+> >> switches a task? If tasks are being switched that requires them to be low
+> >> latency and undisturbed then something went very very wrong with the
+> >> system configuration and the only thing I would suggest is to issue some
+> >> kernel warning that this is not the way one should configure the system.
+> >
+> > Trying to provide mechanisms, not policy? 
+> 
+> This preemption notifier is not a mechanism, it's simply mindless
+> hackery as I told you already.
+
+Sure, if there is another way of checking "if per-CPU vmstats require
+syncing" that is cheap (which seems you suggested on the other email),
+can drop preempt notifiers.
+

@@ -2,48 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E681D51AAAD
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:29:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5431451A840
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:07:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350999AbiEDRcb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 13:32:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40668 "EHLO
+        id S1356951AbiEDRJv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 13:09:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356915AbiEDRJt (ORCPT
+        with ESMTP id S1355579AbiEDRAQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 13:09:49 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C444F47383;
-        Wed,  4 May 2022 09:56:26 -0700 (PDT)
+        Wed, 4 May 2022 13:00:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 693994B869;
+        Wed,  4 May 2022 09:51:52 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 69922B82795;
-        Wed,  4 May 2022 16:56:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1BAE6C385AA;
-        Wed,  4 May 2022 16:56:25 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B52DE617C2;
+        Wed,  4 May 2022 16:51:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E602C385A5;
+        Wed,  4 May 2022 16:51:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651683385;
-        bh=DZc9vvguRZ/lyKSb/utrxbO+TjjSi011tbvZ3KPPSg0=;
+        s=korg; t=1651683111;
+        bh=Fibnfz6UKMUBj//0u9tJTPvRAWqgcl6ZhEU2wPNikR0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=AF25SrJjeLn9fHZK/fbslQNYKCAFtqX7pl+3JSAexjTb1HUmxl9w+9bvq3BF92/3g
-         ITyOswuEdGnH1aw0YpbwX6LFSxX0Q5lfW5rHM0RUfIyoflTZczxuRSr5J9v6O1LHsq
-         HJlzS/GqWSC9ruuN1VFfd74zwLIxs4hBlsSuE7z8=
+        b=uU6RIg1vbcC5VqVVgvlxX8+7uyiXV80bq0xyxhBlXcjgBCfqsrVBw5yTDQO4medRb
+         XfMz8INGhGpqLUQUL2+woImTCJmaZZwBJMVcyrPpwUBqDaNk5sLeG3YTRp7sa9oShJ
+         +trmrIQPP8D2sYlkdB33YFQW1SB5MhJ6TVYAU2yI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
-        Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
+        stable@vger.kernel.org, Xiaoli Feng <xifeng@redhat.com>,
+        Ronnie Sahlberg <lsahlber@redhat.com>,
+        Steve French <stfrench@microsoft.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 057/225] cpufreq: qcom-hw: fix the opp entries refcounting
+Subject: [PATCH 5.10 103/129] cifs: destage any unwritten data to the server before calling copychunk_write
 Date:   Wed,  4 May 2022 18:44:55 +0200
-Message-Id: <20220504153115.251833804@linuxfoundation.org>
+Message-Id: <20220504153029.123978567@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220504153110.096069935@linuxfoundation.org>
-References: <20220504153110.096069935@linuxfoundation.org>
+In-Reply-To: <20220504153021.299025455@linuxfoundation.org>
+References: <20220504153021.299025455@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,91 +56,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+From: Ronnie Sahlberg <lsahlber@redhat.com>
 
-[ Upstream commit 6240aaad75e1a623872a830d13393d7aabf1052c ]
+[ Upstream commit f5d0f921ea362636e4a2efb7c38d1ead373a8700 ]
 
-The qcom_lmh_dcvs_notify() will get the dev_pm_opp instance for
-throttling, but will not put it, ending up with leaking a reference
-count and the following backtrace when putting the CPU offline.
+because the copychunk_write might cover a region of the file that has not yet
+been sent to the server and thus fail.
 
-Correctly put the reference count of the returned opp instance.
+A simple way to reproduce this is:
+truncate -s 0 /mnt/testfile; strace -f -o x -ttT xfs_io -i -f -c 'pwrite 0k 128k' -c 'fcollapse 16k 24k' /mnt/testfile
 
-[   84.418025] ------------[ cut here ]------------
-[   84.422770] WARNING: CPU: 7 PID: 43 at drivers/opp/core.c:1396 _opp_table_kref_release+0x188/0x190
-[   84.431966] Modules linked in:
-[   84.435106] CPU: 7 PID: 43 Comm: cpuhp/7 Tainted: G S                5.17.0-rc6-00388-g7cf3c0d89c44-dirty #721
-[   84.451631] pstate: 82400005 (Nzcv daif +PAN -UAO +TCO -DIT -SSBS BTYPE=--)
-[   84.458781] pc : _opp_table_kref_release+0x188/0x190
-[   84.463878] lr : _opp_table_kref_release+0x78/0x190
-[   84.468885] sp : ffff80000841bc70
-[   84.472294] x29: ffff80000841bc70 x28: ffff6664afe3d000 x27: ffff1db6729e5908
-[   84.479621] x26: 0000000000000000 x25: 0000000000000000 x24: ffff1db6729e58e0
-[   84.486946] x23: ffff8000080a5000 x22: ffff1db40aad80e0 x21: ffff1db4002fec80
-[   84.494277] x20: ffff1db40aad8000 x19: ffffb751c3186300 x18: ffffffffffffffff
-[   84.501603] x17: 5300326563697665 x16: 645f676e696c6f6f x15: 00001186c1df5448
-[   84.508928] x14: 00000000000002e9 x13: 0000000000000000 x12: 0000000000000000
-[   84.516256] x11: ffffb751c3186368 x10: ffffb751c39a2a70 x9 : 0000000000000000
-[   84.523585] x8 : ffff1db4008edf00 x7 : ffffb751c328c000 x6 : 0000000000000001
-[   84.530916] x5 : 0000000000040000 x4 : 0000000000000001 x3 : ffff1db4008edf00
-[   84.538247] x2 : 0000000000000000 x1 : ffff1db400aa6100 x0 : ffff1db40aad80d0
-[   84.545579] Call trace:
-[   84.548101]  _opp_table_kref_release+0x188/0x190
-[   84.552842]  dev_pm_opp_remove_all_dynamic+0x8c/0xc0
-[   84.557949]  qcom_cpufreq_hw_cpu_exit+0x30/0xdc
-[   84.562608]  cpufreq_offline.isra.0+0x1b4/0x1d8
-[   84.567270]  cpuhp_cpufreq_offline+0x10/0x6c
-[   84.571663]  cpuhp_invoke_callback+0x16c/0x2b0
-[   84.576231]  cpuhp_thread_fun+0x190/0x250
-[   84.580353]  smpboot_thread_fn+0x12c/0x230
-[   84.584568]  kthread+0xfc/0x100
-[   84.587810]  ret_from_fork+0x10/0x20
-[   84.591490] irq event stamp: 3482
-[   84.594901] hardirqs last  enabled at (3481): [<ffffb751c13c3db0>] call_rcu+0x39c/0x50c
-[   84.603119] hardirqs last disabled at (3482): [<ffffb751c236b518>] el1_dbg+0x24/0x8c
-[   84.611074] softirqs last  enabled at (310): [<ffffb751c1290410>] _stext+0x410/0x588
-[   84.619028] softirqs last disabled at (305): [<ffffb751c131bf68>] __irq_exit_rcu+0x158/0x174
-[   84.627691] ---[ end trace 0000000000000000 ]---
+the issue is that the 'pwrite 0k 128k' becomes rearranged on the wire with
+the 'fcollapse 16k 24k' due to write-back caching.
 
-Fixes: 275157b367f4 ("cpufreq: qcom-cpufreq-hw: Add dcvs interrupt support")
-Reported-by: kernel test robot <lkp@intel.com>
-Tested-by: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
-Reviewed-by: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
-Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+fcollapse is implemented in cifs.ko as a SMB2 IOCTL(COPYCHUNK_WRITE) call
+and it will fail serverside since the file is still 0b in size serverside
+until the writes have been destaged.
+To avoid this we must ensure that we destage any unwritten data to the
+server before calling COPYCHUNK_WRITE.
+
+Bugzilla: https://bugzilla.redhat.com/show_bug.cgi?id=1997373
+Reported-by: Xiaoli Feng <xifeng@redhat.com>
+Signed-off-by: Ronnie Sahlberg <lsahlber@redhat.com>
+Signed-off-by: Steve French <stfrench@microsoft.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/cpufreq/qcom-cpufreq-hw.c | 14 ++++++++++----
- 1 file changed, 10 insertions(+), 4 deletions(-)
+ fs/cifs/smb2ops.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/drivers/cpufreq/qcom-cpufreq-hw.c b/drivers/cpufreq/qcom-cpufreq-hw.c
-index dc0d5f84d863..60d38f62308a 100644
---- a/drivers/cpufreq/qcom-cpufreq-hw.c
-+++ b/drivers/cpufreq/qcom-cpufreq-hw.c
-@@ -292,12 +292,18 @@ static void qcom_lmh_dcvs_notify(struct qcom_cpufreq_data *data)
+diff --git a/fs/cifs/smb2ops.c b/fs/cifs/smb2ops.c
+index 0e8f484031da..c758ff41b638 100644
+--- a/fs/cifs/smb2ops.c
++++ b/fs/cifs/smb2ops.c
+@@ -1744,9 +1744,17 @@ smb2_copychunk_range(const unsigned int xid,
+ 	int chunks_copied = 0;
+ 	bool chunk_sizes_updated = false;
+ 	ssize_t bytes_written, total_bytes_written = 0;
++	struct inode *inode;
  
- 	opp = dev_pm_opp_find_freq_floor(dev, &freq_hz);
- 	if (IS_ERR(opp) && PTR_ERR(opp) == -ERANGE)
--		dev_pm_opp_find_freq_ceil(dev, &freq_hz);
-+		opp = dev_pm_opp_find_freq_ceil(dev, &freq_hz);
+ 	pcchunk = kmalloc(sizeof(struct copychunk_ioctl), GFP_KERNEL);
  
--	throttled_freq = freq_hz / HZ_PER_KHZ;
-+	if (IS_ERR(opp)) {
-+		dev_warn(dev, "Can't find the OPP for throttling: %pe!\n", opp);
-+	} else {
-+		throttled_freq = freq_hz / HZ_PER_KHZ;
++	/*
++	 * We need to flush all unwritten data before we can send the
++	 * copychunk ioctl to the server.
++	 */
++	inode = d_inode(trgtfile->dentry);
++	filemap_write_and_wait(inode->i_mapping);
 +
-+		/* Update thermal pressure (the boost frequencies are accepted) */
-+		arch_update_thermal_pressure(policy->related_cpus, throttled_freq);
+ 	if (pcchunk == NULL)
+ 		return -ENOMEM;
  
--	/* Update thermal pressure (the boost frequencies are accepted) */
--	arch_update_thermal_pressure(policy->related_cpus, throttled_freq);
-+		dev_pm_opp_put(opp);
-+	}
- 
- 	/*
- 	 * In the unlikely case policy is unregistered do not enable
 -- 
 2.35.1
 

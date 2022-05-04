@@ -2,42 +2,35 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B18251A054
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 15:06:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F78751A05B
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 15:06:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350235AbiEDNKJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 09:10:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52048 "EHLO
+        id S234316AbiEDNKP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 09:10:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344202AbiEDNJn (ORCPT
+        with ESMTP id S1350200AbiEDNJb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 09:09:43 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A23831CB3F;
-        Wed,  4 May 2022 06:05:51 -0700 (PDT)
-X-UUID: c23191fcedaa4ddfb7a52f89b07961d1-20220504
+        Wed, 4 May 2022 09:09:31 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2B392DA9B;
+        Wed,  4 May 2022 06:05:52 -0700 (PDT)
+X-UUID: ad26d81e1d15409196e62563f77b68fc-20220504
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.4,REQID:b75a05ea-8af4-4f4b-ba0d-e318cb4ce5ff,OB:20,L
-        OB:30,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,RULE:Release_Ham,A
-        CTION:release,TS:95
-X-CID-INFO: VERSION:1.1.4,REQID:b75a05ea-8af4-4f4b-ba0d-e318cb4ce5ff,OB:20,LOB
-        :30,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,RULE:Spam_GS981B3D,A
-        CTION:quarantine,TS:95
-X-CID-META: VersionHash:faefae9,CLOUDID:17b32c16-2e53-443e-b81a-655c13977218,C
-        OID:a8c8ccef9126,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,File:nil
-        ,QS:0,BEC:nil
-X-UUID: c23191fcedaa4ddfb7a52f89b07961d1-20220504
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
+X-CID-O-INFO: VERSION:1.1.4,REQID:576b7779-7dd4-404c-8ebe-10aa4da612b5,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:-20,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,AC
+        TION:release,TS:-20
+X-CID-META: VersionHash:faefae9,CLOUDID:385e8cb2-56b5-4c9e-8d83-0070b288eb6a,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,File:nil,QS:0,BEC:nil
+X-UUID: ad26d81e1d15409196e62563f77b68fc-20220504
+Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw02.mediatek.com
         (envelope-from <rex-bc.chen@mediatek.com>)
         (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 915530431; Wed, 04 May 2022 21:05:42 +0800
-Received: from MTKMBS07N2.mediatek.inc (172.21.101.141) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Wed, 4 May 2022 21:05:41 +0800
+        with ESMTP id 571115399; Wed, 04 May 2022 21:05:43 +0800
 Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Wed, 4 May 2022 21:05:41 +0800
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Wed, 4 May 2022 21:05:41 +0800
 Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
  mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
  15.2.792.3 via Frontend Transport; Wed, 4 May 2022 21:05:41 +0800
@@ -54,276 +47,208 @@ CC:     <jia-wei.chang@mediatek.com>, <roger.lu@mediatek.com>,
         <linux-mediatek@lists.infradead.org>,
         <Project_Global_Chrome_Upstream_Group@mediatek.com>,
         Rex-BC Chen <rex-bc.chen@mediatek.com>
-Subject: [PATCH v5 4/9] cpufreq: mediatek: Refine mtk_cpufreq_voltage_tracking()
-Date:   Wed, 4 May 2022 21:05:35 +0800
-Message-ID: <20220504130540.5902-5-rex-bc.chen@mediatek.com>
+Subject: [PATCH v5 5/9] cpufreq: mediatek: Link CCI device to CPU
+Date:   Wed, 4 May 2022 21:05:36 +0800
+Message-ID: <20220504130540.5902-6-rex-bc.chen@mediatek.com>
 X-Mailer: git-send-email 2.18.0
 In-Reply-To: <20220504130540.5902-1-rex-bc.chen@mediatek.com>
 References: <20220504130540.5902-1-rex-bc.chen@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-MTK:  N
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
-        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jia-Wei Chang <jia-wei.chang@mediatek.com>
+In some MediaTek SoCs, like MT8183, CPU and CCI share the same power
+supplies. Cpufreq needs to check if CCI devfreq exists and wait until
+CCI devfreq ready before scaling frequency.
 
-Because the difference of sram and proc should in a range of min_volt_shift
-and max_volt_shift. We need to adjust the sram and proc step by step.
+Before CCI devfreq is ready, we record the voltage when booting to
+kernel and use the max(cpu target voltage, booting voltage) to
+prevent cpufreq adjust to the lower voltage which will cause the CCI
+crash because of high frequency and low voltage.
 
-We replace VOLT_TOL (voltage tolerance) with the platform data and update the
-logic to determine the voltage boundary and invoking regulator_set_voltage.
-
-- Use 'sram_min_volt' and 'sram_max_volt' to determine the voltage boundary
-  of sram regulator.
-- Use (sram_min_volt - min_volt_shift) and 'proc_max_volt' to determine the
-  voltage boundary of vproc regulator.
-
-Moreover, to prevent infinite loop when tracking voltage, we calculate the
-maximum value for each platform data.
-We assume min voltage is 0 and tracking target voltage using
-min_volt_shift for each iteration.
-The retry_max is 3 times of expeted iteration count.
+- Add is_ccifreq_ready() to link CCI device to CPI, and CPU will start
+  DVFS when CCI is ready.
+- Add platform data for MT8183.
 
 Signed-off-by: Jia-Wei Chang <jia-wei.chang@mediatek.com>
 Signed-off-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
 Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Reviewed-by: Kevin Hilman <khilman@baylibre.com>
 ---
- drivers/cpufreq/mediatek-cpufreq.c | 147 ++++++++++-------------------
- 1 file changed, 51 insertions(+), 96 deletions(-)
+ drivers/cpufreq/mediatek-cpufreq.c | 82 +++++++++++++++++++++++++++++-
+ 1 file changed, 81 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/cpufreq/mediatek-cpufreq.c b/drivers/cpufreq/mediatek-cpufreq.c
-index 80a3d4cd49ed..c9f09ddd4428 100644
+index c9f09ddd4428..1a4c95e06b0e 100644
 --- a/drivers/cpufreq/mediatek-cpufreq.c
 +++ b/drivers/cpufreq/mediatek-cpufreq.c
-@@ -8,6 +8,7 @@
- #include <linux/cpu.h>
- #include <linux/cpufreq.h>
- #include <linux/cpumask.h>
-+#include <linux/minmax.h>
- #include <linux/module.h>
- #include <linux/of.h>
- #include <linux/of_platform.h>
-@@ -15,8 +16,6 @@
- #include <linux/pm_opp.h>
- #include <linux/regulator/consumer.h>
+@@ -22,6 +22,7 @@ struct mtk_cpufreq_platform_data {
+ 	int proc_max_volt;
+ 	int sram_min_volt;
+ 	int sram_max_volt;
++	bool ccifreq_supported;
+ };
  
--#define VOLT_TOL		(10000)
--
- struct mtk_cpufreq_platform_data {
- 	int min_volt_shift;
- 	int max_volt_shift;
-@@ -53,6 +52,7 @@ struct mtk_cpu_dvfs_info {
- 	unsigned int opp_cpu;
+ /*
+@@ -38,6 +39,7 @@ struct mtk_cpufreq_platform_data {
+ struct mtk_cpu_dvfs_info {
+ 	struct cpumask cpus;
+ 	struct device *cpu_dev;
++	struct device *cci_dev;
+ 	struct regulator *proc_reg;
+ 	struct regulator *sram_reg;
+ 	struct clk *cpu_clk;
+@@ -45,6 +47,7 @@ struct mtk_cpu_dvfs_info {
+ 	struct list_head list_head;
+ 	int intermediate_voltage;
+ 	bool need_voltage_tracking;
++	int vproc_on_boot;
+ 	int pre_vproc;
+ 	/* Avoid race condition for regulators between notify and policy */
+ 	struct mutex reg_lock;
+@@ -53,6 +56,7 @@ struct mtk_cpu_dvfs_info {
  	unsigned long opp_freq;
  	const struct mtk_cpufreq_platform_data *soc_data;
-+	int vtrack_max;
+ 	int vtrack_max;
++	bool ccifreq_bound;
  };
  
  static struct platform_device *cpufreq_pdev;
-@@ -78,6 +78,7 @@ static int mtk_cpufreq_voltage_tracking(struct mtk_cpu_dvfs_info *info,
- 	struct regulator *proc_reg = info->proc_reg;
- 	struct regulator *sram_reg = info->sram_reg;
- 	int pre_vproc, pre_vsram, new_vsram, vsram, vproc, ret;
-+	int retry = info->vtrack_max;
- 
- 	pre_vproc = regulator_get_voltage(proc_reg);
- 	if (pre_vproc < 0) {
-@@ -85,91 +86,44 @@ static int mtk_cpufreq_voltage_tracking(struct mtk_cpu_dvfs_info *info,
- 			"invalid Vproc value: %d\n", pre_vproc);
- 		return pre_vproc;
- 	}
--	/* Vsram should not exceed the maximum allowed voltage of SoC. */
--	new_vsram = min(new_vproc + soc_data->min_volt_shift,
--			soc_data->sram_max_volt);
--
--	if (pre_vproc < new_vproc) {
--		/*
--		 * When scaling up voltages, Vsram and Vproc scale up step
--		 * by step. At each step, set Vsram to (Vproc + 200mV) first,
--		 * then set Vproc to (Vsram - 100mV).
--		 * Keep doing it until Vsram and Vproc hit target voltages.
--		 */
--		do {
--			pre_vsram = regulator_get_voltage(sram_reg);
--			if (pre_vsram < 0) {
--				dev_err(info->cpu_dev,
--					"invalid Vsram value: %d\n", pre_vsram);
--				return pre_vsram;
--			}
--			pre_vproc = regulator_get_voltage(proc_reg);
--			if (pre_vproc < 0) {
--				dev_err(info->cpu_dev,
--					"invalid Vproc value: %d\n", pre_vproc);
--				return pre_vproc;
--			}
--
--			vsram = min(new_vsram,
--				    pre_vproc + soc_data->min_volt_shift);
- 
--			if (vsram + VOLT_TOL >= soc_data->sram_max_volt) {
--				vsram = soc_data->sram_max_volt;
-+	pre_vsram = regulator_get_voltage(sram_reg);
-+	if (pre_vsram < 0) {
-+		dev_err(info->cpu_dev, "invalid Vsram value: %d\n", pre_vsram);
-+		return pre_vsram;
-+	}
- 
--				/*
--				 * If the target Vsram hits the maximum voltage,
--				 * try to set the exact voltage value first.
--				 */
--				ret = regulator_set_voltage(sram_reg, vsram,
--							    vsram);
--				if (ret)
--					ret = regulator_set_voltage(sram_reg,
--							vsram - VOLT_TOL,
--							vsram);
-+	new_vsram = clamp(new_vproc + soc_data->min_volt_shift,
-+			  soc_data->sram_min_volt, soc_data->sram_max_volt);
- 
--				vproc = new_vproc;
--			} else {
--				ret = regulator_set_voltage(sram_reg, vsram,
--							    vsram + VOLT_TOL);
-+	do {
-+		if (pre_vproc <= new_vproc) {
-+			vsram = clamp(pre_vproc + soc_data->max_volt_shift,
-+				      soc_data->sram_min_volt, new_vsram);
-+			ret = regulator_set_voltage(sram_reg, vsram,
-+						    soc_data->sram_max_volt);
- 
--				vproc = vsram - soc_data->min_volt_shift;
--			}
- 			if (ret)
- 				return ret;
- 
-+			if (vsram == soc_data->sram_max_volt ||
-+			    new_vsram == soc_data->sram_min_volt)
-+				vproc = new_vproc;
-+			else
-+				vproc = vsram - soc_data->min_volt_shift;
-+
- 			ret = regulator_set_voltage(proc_reg, vproc,
--						    vproc + VOLT_TOL);
-+						    soc_data->proc_max_volt);
- 			if (ret) {
- 				regulator_set_voltage(sram_reg, pre_vsram,
--						      pre_vsram);
-+						      soc_data->sram_max_volt);
- 				return ret;
- 			}
--		} while (vproc < new_vproc || vsram < new_vsram);
--	} else if (pre_vproc > new_vproc) {
--		/*
--		 * When scaling down voltages, Vsram and Vproc scale down step
--		 * by step. At each step, set Vproc to (Vsram - 200mV) first,
--		 * then set Vproc to (Vproc + 100mV).
--		 * Keep doing it until Vsram and Vproc hit target voltages.
--		 */
--		do {
--			pre_vproc = regulator_get_voltage(proc_reg);
--			if (pre_vproc < 0) {
--				dev_err(info->cpu_dev,
--					"invalid Vproc value: %d\n", pre_vproc);
--				return pre_vproc;
--			}
--			pre_vsram = regulator_get_voltage(sram_reg);
--			if (pre_vsram < 0) {
--				dev_err(info->cpu_dev,
--					"invalid Vsram value: %d\n", pre_vsram);
--				return pre_vsram;
--			}
--
-+		} else if (pre_vproc > new_vproc) {
- 			vproc = max(new_vproc,
- 				    pre_vsram - soc_data->max_volt_shift);
- 			ret = regulator_set_voltage(proc_reg, vproc,
--						    vproc + VOLT_TOL);
-+						    soc_data->proc_max_volt);
- 			if (ret)
- 				return ret;
- 
-@@ -179,32 +133,24 @@ static int mtk_cpufreq_voltage_tracking(struct mtk_cpu_dvfs_info *info,
- 				vsram = max(new_vsram,
- 					    vproc + soc_data->min_volt_shift);
- 
--			if (vsram + VOLT_TOL >= soc_data->sram_max_volt) {
--				vsram = soc_data->sram_max_volt;
--
--				/*
--				 * If the target Vsram hits the maximum voltage,
--				 * try to set the exact voltage value first.
--				 */
--				ret = regulator_set_voltage(sram_reg, vsram,
--							    vsram);
--				if (ret)
--					ret = regulator_set_voltage(sram_reg,
--							vsram - VOLT_TOL,
--							vsram);
--			} else {
--				ret = regulator_set_voltage(sram_reg, vsram,
--							    vsram + VOLT_TOL);
--			}
--
-+			ret = regulator_set_voltage(sram_reg, vsram,
-+						    soc_data->sram_max_volt);
- 			if (ret) {
- 				regulator_set_voltage(proc_reg, pre_vproc,
--						      pre_vproc);
-+						      soc_data->proc_max_volt);
- 				return ret;
- 			}
--		} while (vproc > new_vproc + VOLT_TOL ||
--			 vsram > new_vsram + VOLT_TOL);
--	}
-+		}
-+
-+		pre_vproc = vproc;
-+		pre_vsram = vsram;
-+
-+		if (--retry < 0) {
-+			dev_err(info->cpu_dev,
-+				"over loop count, failed to set voltage\n");
-+			return -EINVAL;
-+		}
-+	} while (vproc != new_vproc || vsram != new_vsram);
- 
- 	return 0;
+@@ -171,6 +175,28 @@ static int mtk_cpufreq_set_voltage(struct mtk_cpu_dvfs_info *info, int vproc)
+ 	return ret;
  }
-@@ -268,8 +214,8 @@ static int mtk_cpufreq_set_target(struct cpufreq_policy *policy,
- 	 * If the new voltage or the intermediate voltage is higher than the
- 	 * current voltage, scale up voltage first.
- 	 */
--	target_vproc = (inter_vproc > vproc) ? inter_vproc : vproc;
--	if (pre_vproc < target_vproc) {
-+	target_vproc = max(inter_vproc, vproc);
-+	if (pre_vproc <= target_vproc) {
- 		ret = mtk_cpufreq_set_voltage(info, target_vproc);
- 		if (ret) {
- 			dev_err(cpu_dev,
-@@ -490,6 +436,15 @@ static int mtk_cpu_dvfs_info_init(struct mtk_cpu_dvfs_info *info, int cpu)
- 	 */
- 	info->need_voltage_tracking = (info->sram_reg != NULL);
+ 
++static bool is_ccifreq_ready(struct mtk_cpu_dvfs_info *info)
++{
++	struct device_link *sup_link;
++
++	if (info->ccifreq_bound)
++		return true;
++
++	sup_link = device_link_add(info->cpu_dev, info->cci_dev,
++				   DL_FLAG_AUTOREMOVE_CONSUMER);
++	if (!sup_link) {
++		dev_err(info->cpu_dev, "cpu%d: sup_link is NULL\n", info->opp_cpu);
++		return false;
++	}
++
++	if (sup_link->supplier->links.status != DL_DEV_DRIVER_BOUND)
++		return false;
++
++	info->ccifreq_bound = true;
++
++	return true;
++}
++
+ static int mtk_cpufreq_set_target(struct cpufreq_policy *policy,
+ 				  unsigned int index)
+ {
+@@ -210,6 +236,14 @@ static int mtk_cpufreq_set_target(struct cpufreq_policy *policy,
+ 	vproc = dev_pm_opp_get_voltage(opp);
+ 	dev_pm_opp_put(opp);
  
 +	/*
-+	 * We assume min voltage is 0 and tracking target voltage using
-+	 * min_volt_shift for each iteration.
-+	 * The vtrack_max is 3 times of expeted iteration count.
++	 * If MediaTek cci is supported but is not ready, we will use the value
++	 * of max(target cpu voltage, booting voltage) to prevent high freqeuncy
++	 * low voltage crash.
 +	 */
-+	info->vtrack_max = 3 * DIV_ROUND_UP(max(info->soc_data->sram_max_volt,
-+						info->soc_data->proc_max_volt),
-+					    info->soc_data->min_volt_shift);
++	if (info->soc_data->ccifreq_supported && !is_ccifreq_ready(info))
++		vproc = max(vproc, info->vproc_on_boot);
 +
- 	return 0;
+ 	/*
+ 	 * If the new voltage or the intermediate voltage is higher than the
+ 	 * current voltage, scale up voltage first.
+@@ -331,6 +365,23 @@ static int mtk_cpufreq_opp_notifier(struct notifier_block *nb,
+ 	return notifier_from_errno(ret);
+ }
  
- out_disable_inter_clock:
++static struct device *of_get_cci(struct device *cpu_dev)
++{
++	struct device_node *np;
++	struct platform_device *pdev;
++
++	np = of_parse_phandle(cpu_dev->of_node, "mediatek,cci", 0);
++	if (IS_ERR_OR_NULL(np))
++		return NULL;
++
++	pdev = of_find_device_by_node(np);
++	of_node_put(np);
++	if (IS_ERR_OR_NULL(pdev))
++		return NULL;
++
++	return &pdev->dev;
++}
++
+ static int mtk_cpu_dvfs_info_init(struct mtk_cpu_dvfs_info *info, int cpu)
+ {
+ 	struct device *cpu_dev;
+@@ -345,6 +396,16 @@ static int mtk_cpu_dvfs_info_init(struct mtk_cpu_dvfs_info *info, int cpu)
+ 	}
+ 	info->cpu_dev = cpu_dev;
+ 
++	info->ccifreq_bound = false;
++	if (info->soc_data->ccifreq_supported) {
++		info->cci_dev = of_get_cci(info->cpu_dev);
++		if (IS_ERR_OR_NULL(info->cci_dev)) {
++			ret = PTR_ERR(info->cci_dev);
++			dev_err(cpu_dev, "cpu%d: failed to get cci device\n", cpu);
++			return -ENODEV;
++		}
++	}
++
+ 	info->cpu_clk = clk_get(cpu_dev, "cpu");
+ 	if (IS_ERR(info->cpu_clk)) {
+ 		ret = PTR_ERR(info->cpu_clk);
+@@ -408,6 +469,15 @@ static int mtk_cpu_dvfs_info_init(struct mtk_cpu_dvfs_info *info, int cpu)
+ 	if (ret)
+ 		goto out_disable_mux_clock;
+ 
++	if (info->soc_data->ccifreq_supported) {
++		info->vproc_on_boot = regulator_get_voltage(info->proc_reg);
++		if (info->vproc_on_boot < 0) {
++			dev_err(info->cpu_dev,
++				"invalid Vproc value: %d\n", info->vproc_on_boot);
++			goto out_disable_inter_clock;
++		}
++	}
++
+ 	/* Search a safe voltage for intermediate frequency. */
+ 	rate = clk_get_rate(info->inter_clk);
+ 	opp = dev_pm_opp_find_freq_ceil(cpu_dev, &rate);
+@@ -617,6 +687,16 @@ static const struct mtk_cpufreq_platform_data mt2701_platform_data = {
+ 	.proc_max_volt = 1150000,
+ 	.sram_min_volt = 0,
+ 	.sram_max_volt = 1150000,
++	.ccifreq_supported = false,
++};
++
++static const struct mtk_cpufreq_platform_data mt8183_platform_data = {
++	.min_volt_shift = 100000,
++	.max_volt_shift = 200000,
++	.proc_max_volt = 1150000,
++	.sram_min_volt = 0,
++	.sram_max_volt = 1150000,
++	.ccifreq_supported = true,
+ };
+ 
+ /* List of machines supported by this driver */
+@@ -629,7 +709,7 @@ static const struct of_device_id mtk_cpufreq_machines[] __initconst = {
+ 	{ .compatible = "mediatek,mt817x", .data = &mt2701_platform_data },
+ 	{ .compatible = "mediatek,mt8173", .data = &mt2701_platform_data },
+ 	{ .compatible = "mediatek,mt8176", .data = &mt2701_platform_data },
+-	{ .compatible = "mediatek,mt8183", .data = &mt2701_platform_data },
++	{ .compatible = "mediatek,mt8183", .data = &mt8183_platform_data },
+ 	{ .compatible = "mediatek,mt8365", .data = &mt2701_platform_data },
+ 	{ .compatible = "mediatek,mt8516", .data = &mt2701_platform_data },
+ 	{ }
 -- 
 2.18.0
 

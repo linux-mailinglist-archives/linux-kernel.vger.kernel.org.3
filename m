@@ -2,113 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB4025196E6
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 07:23:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E0715196F0
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 07:35:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237985AbiEDF0l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 01:26:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35676 "EHLO
+        id S1343937AbiEDFjQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 01:39:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235416AbiEDF0j (ORCPT
+        with ESMTP id S238209AbiEDFjO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 01:26:39 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97CCA1A3BC
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 22:23:01 -0700 (PDT)
-Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2444olut031528;
-        Wed, 4 May 2022 05:23:00 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : references : date : in-reply-to : message-id : mime-version :
- content-type; s=pp1; bh=24RB/HLOYtZvIrRuVGwSYwsoXcOHWsgOEhJJ2V5mDm8=;
- b=AQ9q00LTEL/ZNyqO8pjh4Y5PTfB2QFwHfsc8DXRd9VXQ9c2Oqo3r30WRkX8OovocQtOD
- GGk9bxKSEFHFb1bc8LgNMaE5IjIIULkaG7+LsUlZo/tX3ey95zp6wvt2ppndG9KpdW5Y
- iYkeBYUooh9tDdBvpz2t7nZSsFAJoAwjfT8XcWrp4ZwKFRk0jAKGCgqlrWIcJM6oOlGL
- tE8Qd0OM/WsBWoAizdHwN1L+PRyGIm67nMPiUcUVdQnF4eOBZM7/bYeAG/y8yCfZREZS
- pRrsyBnmNrclOztm/XcQ/s5tCIz5IlXW/+8D4rqf/bjUnYmvR5Fpzo8qBYfUsz9NkOrD 5w== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fujtqrej1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 04 May 2022 05:22:59 +0000
-Received: from m0098396.ppops.net (m0098396.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2445JRsu011121;
-        Wed, 4 May 2022 05:22:59 GMT
-Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fujtqrehh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 04 May 2022 05:22:59 +0000
-Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
-        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2445I2b3003780;
-        Wed, 4 May 2022 05:22:57 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma06fra.de.ibm.com with ESMTP id 3fttcj1b33-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 04 May 2022 05:22:56 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2445MsBc7209338
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 4 May 2022 05:22:54 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id BC027AE045;
-        Wed,  4 May 2022 05:22:54 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8CF35AE051;
-        Wed,  4 May 2022 05:22:54 +0000 (GMT)
-Received: from tuxmaker.linux.ibm.com (unknown [9.152.85.9])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Wed,  4 May 2022 05:22:54 +0000 (GMT)
-From:   Sven Schnelle <svens@linux.ibm.com>
-To:     Paul Moore <paul@paul-moore.com>
-Cc:     Eric Paris <eparis@redhat.com>, linux-audit@redhat.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] audit: add filterkey to special audit messages
-References: <20220503090212.1322050-1-svens@linux.ibm.com>
-        <20220503090212.1322050-2-svens@linux.ibm.com>
-        <CAHC9VhQ44G1oXLHTf7FmqwzYBRNW=5EPHod1uMTLhaY3sK_Qeg@mail.gmail.com>
-Date:   Wed, 04 May 2022 07:22:54 +0200
-In-Reply-To: <CAHC9VhQ44G1oXLHTf7FmqwzYBRNW=5EPHod1uMTLhaY3sK_Qeg@mail.gmail.com>
-        (Paul Moore's message of "Tue, 3 May 2022 12:57:21 -0400")
-Message-ID: <yt9dbkwddg7l.fsf@linux.ibm.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.0.50 (gnu/linux)
+        Wed, 4 May 2022 01:39:14 -0400
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8191B23BFE;
+        Tue,  3 May 2022 22:35:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1651642539; x=1683178539;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=HERzZ8fE5BhLt+64mZr7M8chYHgaQz+gAR/fUV9fewc=;
+  b=vpHSV8q43KJwTTOkDbtakd9QELbYSEhtPtfP76JYxz6i7NQfD+3SaJHd
+   Mxw5LgDnoO8JrH679TIKp+6N8Bk5ouvppECCPxQ54wPw2AEYnCZyVGTb6
+   1SatCxtMAovMNJdxcV3K1W9zTHrbgtJV0n8hE+Mc31WARwGAQWA5qLE3M
+   8=;
+Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 03 May 2022 22:35:38 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2022 22:35:38 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Tue, 3 May 2022 22:35:38 -0700
+Received: from [10.216.1.126] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Tue, 3 May 2022
+ 22:35:35 -0700
+Message-ID: <e74aacdf-3ff7-261d-997f-5b6566b66207@quicinc.com>
+Date:   Wed, 4 May 2022 11:05:29 +0530
 MIME-Version: 1.0
-Content-Type: text/plain
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: wCKP6VK8w9RMpIrahzofXVjWTNsQjINg
-X-Proofpoint-GUID: 33MC8WjOjA4nFURHawwlqYaTy2EuVfH3
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-04_01,2022-05-02_03,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- suspectscore=0 clxscore=1015 spamscore=0 phishscore=0 mlxscore=0
- mlxlogscore=999 malwarescore=0 priorityscore=1501 adultscore=0 bulkscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2205040032
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [PATCH v4] arm64: dts: qcom: sc7280: Add lpasscore & lpassaudio
+ clock controllers
+Content-Language: en-US
+To:     Stephen Boyd <swboyd@chromium.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>
+CC:     Douglas Anderson <dianders@chromium.org>,
+        <devicetree@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20220503113246.13857-1-quic_tdas@quicinc.com>
+ <CAE-0n53QZn8VYB-dxzwccYDURU-0qW3ZwsuOEECwrKGAhYzwgw@mail.gmail.com>
+From:   Taniya Das <quic_tdas@quicinc.com>
+In-Reply-To: <CAE-0n53QZn8VYB-dxzwccYDURU-0qW3ZwsuOEECwrKGAhYzwgw@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Paul Moore <paul@paul-moore.com> writes:
+Hello Stephen,
 
-> On Tue, May 3, 2022 at 5:02 AM Sven Schnelle <svens@linux.ibm.com> wrote:
+On 5/4/2022 12:40 AM, Stephen Boyd wrote:
+> Quoting Taniya Das (2022-05-03 04:32:46)
+>> Add the low pass audio clock controller device nodes. Keep the lpasscc
+>> clock node disabled and enabled for lpass pil based devices.
+> 
+> Does it mean that we're going to have overlapping reg ranges between
+> nodes in DT for clk controllers? That is not proper DT style, indicating
+> that we should combine the overlapping nodes and then have some
+> compatible or DT property telling us how to treat the clks in the audio
+> subsystem.
+> 
+
+In the case where PIL based LPASS node would be used, we would disable 
+the other lpass clock controller nodes. Does that seem fine or I would 
+need to map the complete range in the current PIL driver if that works.
+
 >>
->> For automated filtering/testing it is useful to have the
->> filter key logged in the message.
->>
->> Signed-off-by: Sven Schnelle <svens@linux.ibm.com>
+>> Signed-off-by: Taniya Das <quic_tdas@quicinc.com>
 >> ---
->>  kernel/auditsc.c | 1 +
->>  1 file changed, 1 insertion(+)
->
-> The SOCKETCALL record, along with all of the others generated inside
-> show_special(), are associated with a SYSCALL record which carries the
-> "key=" field.  As a general rule we try very hard not to duplicate
-> fields across records in a single audit event.
+>> [v4]
+>>   * Mark lpasscc[lpasscc@3000000] device node as "disabled".
 
-Ok, thanks. Guess you can ignore both patches than.
-
-Thanks!
+-- 
+Thanks & Regards,
+Taniya Das.

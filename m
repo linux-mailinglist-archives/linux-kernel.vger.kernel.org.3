@@ -2,50 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C581351AA2E
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:19:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4185A51AAF3
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:34:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355865AbiEDRWL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 13:22:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51402 "EHLO
+        id S1357830AbiEDRht (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 13:37:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356151AbiEDREz (ORCPT
+        with ESMTP id S1356869AbiEDRJr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 13:04:55 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 560BE506C6;
-        Wed,  4 May 2022 09:53:54 -0700 (PDT)
+        Wed, 4 May 2022 13:09:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D12743AF0;
+        Wed,  4 May 2022 09:56:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DC4FCB827A9;
-        Wed,  4 May 2022 16:53:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 622A7C385A4;
-        Wed,  4 May 2022 16:53:52 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0AFE2617DE;
+        Wed,  4 May 2022 16:56:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B7FEC385B0;
+        Wed,  4 May 2022 16:56:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651683232;
-        bh=BhD/YoPhqnDf8jMNqwbknukIxwRJA39mAq7J59EoT1k=;
+        s=korg; t=1651683369;
+        bh=6KisIebj9lDcZTp40DXBowgWsCa5Vj0P7bVBz0IGuAw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TVyHqy94RW4wPQiK9AAy7NK8RTu68bajbvxH3njprw1B/oWtHUAYZBDztbQ9lK8qG
-         ycGONdpsMbyf5Vz1vK9ia0xs88IlZKbPlS8Csra4AYPNBZLyi0atWKnOfxokTVbih8
-         9UO27JCgMYSkMN8f3pYOUOga+nMeXKR1yYl0Np5I=
+        b=elDDmn+sQLcqtvqofd8iMPnjDvp6qB9EkHxkaR0/9xyQMExayXcQ3iEP+PbmL7OFA
+         VEuAjwvXGCoSoGNOb6tMAkv+y7PJTohNVWqN0KZPxl53zFd4mOr4RDpL6XzU74ZnpS
+         lg/8CrGXAh4w/4lGn+HVEqBuOuHusqRatP9wOkLQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org
+To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Marek Vasut <marex@denx.de>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Fabien Dessenne <fabien.dessenne@foss.st.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Marc Zyngier <maz@kernel.org>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 085/177] pinctrl: stm32: Keep pinctrl block clock enabled when LEVEL IRQ requested
+        stable@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        "D. Scott Phillips" <scott@os.amperecomputing.com>,
+        Ilkka Koskinen <ilkka@os.amperecomputing.com>,
+        Barry Song <song.bao.hua@hisilicon.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Darren Hart <darren@os.amperecomputing.com>
+Subject: [PATCH 5.17 040/225] topology: make core_mask include at least cluster_siblings
 Date:   Wed,  4 May 2022 18:44:38 +0200
-Message-Id: <20220504153100.717869692@linuxfoundation.org>
+Message-Id: <20220504153113.747830165@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220504153053.873100034@linuxfoundation.org>
-References: <20220504153053.873100034@linuxfoundation.org>
+In-Reply-To: <20220504153110.096069935@linuxfoundation.org>
+References: <20220504153110.096069935@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -60,139 +63,92 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Marek Vasut <marex@denx.de>
+From: Darren Hart <darren@os.amperecomputing.com>
 
-[ Upstream commit 05d8af449d93e04547b4c6b328e39c890bc803f4 ]
+commit db1e59483dfd8d4e956575302520bb8f7e20c79b upstream.
 
-The current EOI handler for LEVEL triggered interrupts calls clk_enable(),
-register IO, clk_disable(). The clock manipulation requires locking which
-happens with IRQs disabled in clk_enable_lock(). Instead of turning the
-clock on and off all the time, enable the clock in case LEVEL interrupt is
-requested and keep the clock enabled until all LEVEL interrupts are freed.
-The LEVEL interrupts are an exception on this platform and seldom used, so
-this does not affect the common case.
+Ampere Altra defines CPU clusters in the ACPI PPTT. They share a Snoop
+Control Unit, but have no shared CPU-side last level cache.
 
-This simplifies the LEVEL interrupt handling considerably and also fixes
-the following splat found when using preempt-rt:
- ------------[ cut here ]------------
- WARNING: CPU: 0 PID: 0 at kernel/locking/rtmutex.c:2040 __rt_mutex_trylock+0x37/0x62
- Modules linked in:
- CPU: 0 PID: 0 Comm: swapper/0 Not tainted 5.10.109-rt65-stable-standard-00068-g6a5afc4b1217 #85
- Hardware name: STM32 (Device Tree Support)
- [<c010a45d>] (unwind_backtrace) from [<c010766f>] (show_stack+0xb/0xc)
- [<c010766f>] (show_stack) from [<c06353ab>] (dump_stack+0x6f/0x84)
- [<c06353ab>] (dump_stack) from [<c01145e3>] (__warn+0x7f/0xa4)
- [<c01145e3>] (__warn) from [<c063386f>] (warn_slowpath_fmt+0x3b/0x74)
- [<c063386f>] (warn_slowpath_fmt) from [<c063b43d>] (__rt_mutex_trylock+0x37/0x62)
- [<c063b43d>] (__rt_mutex_trylock) from [<c063c053>] (rt_spin_trylock+0x7/0x16)
- [<c063c053>] (rt_spin_trylock) from [<c036a2f3>] (clk_enable_lock+0xb/0x80)
- [<c036a2f3>] (clk_enable_lock) from [<c036ba69>] (clk_core_enable_lock+0x9/0x18)
- [<c036ba69>] (clk_core_enable_lock) from [<c034e9f3>] (stm32_gpio_get+0x11/0x24)
- [<c034e9f3>] (stm32_gpio_get) from [<c034ef43>] (stm32_gpio_irq_trigger+0x1f/0x48)
- [<c034ef43>] (stm32_gpio_irq_trigger) from [<c014aa53>] (handle_fasteoi_irq+0x71/0xa8)
- [<c014aa53>] (handle_fasteoi_irq) from [<c0147111>] (generic_handle_irq+0x19/0x22)
- [<c0147111>] (generic_handle_irq) from [<c014752d>] (__handle_domain_irq+0x55/0x64)
- [<c014752d>] (__handle_domain_irq) from [<c0346f13>] (gic_handle_irq+0x53/0x64)
- [<c0346f13>] (gic_handle_irq) from [<c0100ba5>] (__irq_svc+0x65/0xc0)
- Exception stack(0xc0e01f18 to 0xc0e01f60)
- 1f00:                                                       0000300c 00000000
- 1f20: 0000300c c010ff01 00000000 00000000 c0e00000 c0e07714 00000001 c0e01f78
- 1f40: c0e07758 00000000 ef7cd0ff c0e01f68 c010554b c0105542 40000033 ffffffff
- [<c0100ba5>] (__irq_svc) from [<c0105542>] (arch_cpu_idle+0xc/0x1e)
- [<c0105542>] (arch_cpu_idle) from [<c063be95>] (default_idle_call+0x21/0x3c)
- [<c063be95>] (default_idle_call) from [<c01324f7>] (do_idle+0xe3/0x1e4)
- [<c01324f7>] (do_idle) from [<c01327b3>] (cpu_startup_entry+0x13/0x14)
- [<c01327b3>] (cpu_startup_entry) from [<c0a00c13>] (start_kernel+0x397/0x3d4)
- [<c0a00c13>] (start_kernel) from [<00000000>] (0x0)
- ---[ end trace 0000000000000002 ]---
+cpu_coregroup_mask() will return a cpumask with weight 1, while
+cpu_clustergroup_mask() will return a cpumask with weight 2.
 
-Power consumption measured on STM32MP157C DHCOM SoM is not increased or
-is below noise threshold.
+As a result, build_sched_domain() will BUG() once per CPU with:
 
-Fixes: 47beed513a85b ("pinctrl: stm32: Add level interrupt support to gpio irq chip")
-Signed-off-by: Marek Vasut <marex@denx.de>
-Cc: Alexandre Torgue <alexandre.torgue@foss.st.com>
-Cc: Fabien Dessenne <fabien.dessenne@foss.st.com>
-Cc: Linus Walleij <linus.walleij@linaro.org>
-Cc: Marc Zyngier <maz@kernel.org>
-Cc: linux-stm32@st-md-mailman.stormreply.com
-Cc: linux-arm-kernel@lists.infradead.org
-To: linux-gpio@vger.kernel.org
-Reviewed-by: Fabien Dessenne <fabien.dessenne@foss.st.com>
-Link: https://lore.kernel.org/r/20220421140827.214088-1-marex@denx.de
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+BUG: arch topology borken
+the CLS domain not a subset of the MC domain
+
+The MC level cpumask is then extended to that of the CLS child, and is
+later removed entirely as redundant. This sched domain topology is an
+improvement over previous topologies, or those built without
+SCHED_CLUSTER, particularly for certain latency sensitive workloads.
+With the current scheduler model and heuristics, this is a desirable
+default topology for Ampere Altra and Altra Max system.
+
+Rather than create a custom sched domains topology structure and
+introduce new logic in arch/arm64 to detect these systems, update the
+core_mask so coregroup is never a subset of clustergroup, extending it
+to cluster_siblings if necessary. Only do this if CONFIG_SCHED_CLUSTER
+is enabled to avoid also changing the topology (MC) when
+CONFIG_SCHED_CLUSTER is disabled.
+
+This has the added benefit over a custom topology of working for both
+symmetric and asymmetric topologies. It does not address systems where
+the CLUSTER topology is above a populated MC topology, but these are not
+considered today and can be addressed separately if and when they
+appear.
+
+The final sched domain topology for a 2 socket Ampere Altra system is
+unchanged with or without CONFIG_SCHED_CLUSTER, and the BUG is avoided:
+
+For CPU0:
+
+CONFIG_SCHED_CLUSTER=y
+CLS  [0-1]
+DIE  [0-79]
+NUMA [0-159]
+
+CONFIG_SCHED_CLUSTER is not set
+DIE  [0-79]
+NUMA [0-159]
+
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Will Deacon <will@kernel.org>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Vincent Guittot <vincent.guittot@linaro.org>
+Cc: D. Scott Phillips <scott@os.amperecomputing.com>
+Cc: Ilkka Koskinen <ilkka@os.amperecomputing.com>
+Cc: <stable@vger.kernel.org> # 5.16.x
+Suggested-by: Barry Song <song.bao.hua@hisilicon.com>
+Reviewed-by: Barry Song <song.bao.hua@hisilicon.com>
+Reviewed-by: Dietmar Eggemann <dietmar.eggemann@arm.com>
+Acked-by: Sudeep Holla <sudeep.holla@arm.com>
+Signed-off-by: Darren Hart <darren@os.amperecomputing.com>
+Link: https://lore.kernel.org/r/c8fe9fce7c86ed56b4c455b8c902982dc2303868.1649696956.git.darren@os.amperecomputing.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/pinctrl/stm32/pinctrl-stm32.c | 19 +++++++++++++++++--
- 1 file changed, 17 insertions(+), 2 deletions(-)
+ drivers/base/arch_topology.c |    9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff --git a/drivers/pinctrl/stm32/pinctrl-stm32.c b/drivers/pinctrl/stm32/pinctrl-stm32.c
-index 2c78af0aac57..97a4fb5a9328 100644
---- a/drivers/pinctrl/stm32/pinctrl-stm32.c
-+++ b/drivers/pinctrl/stm32/pinctrl-stm32.c
-@@ -225,6 +225,13 @@ static void stm32_gpio_free(struct gpio_chip *chip, unsigned offset)
- 	pinctrl_gpio_free(chip->base + offset);
- }
- 
-+static int stm32_gpio_get_noclk(struct gpio_chip *chip, unsigned int offset)
-+{
-+	struct stm32_gpio_bank *bank = gpiochip_get_data(chip);
-+
-+	return !!(readl_relaxed(bank->base + STM32_GPIO_IDR) & BIT(offset));
-+}
-+
- static int stm32_gpio_get(struct gpio_chip *chip, unsigned offset)
- {
- 	struct stm32_gpio_bank *bank = gpiochip_get_data(chip);
-@@ -232,7 +239,7 @@ static int stm32_gpio_get(struct gpio_chip *chip, unsigned offset)
- 
- 	clk_enable(bank->clk);
- 
--	ret = !!(readl_relaxed(bank->base + STM32_GPIO_IDR) & BIT(offset));
-+	ret = stm32_gpio_get_noclk(chip, offset);
- 
- 	clk_disable(bank->clk);
- 
-@@ -316,7 +323,7 @@ static void stm32_gpio_irq_trigger(struct irq_data *d)
- 		return;
- 
- 	/* If level interrupt type then retrig */
--	level = stm32_gpio_get(&bank->gpio_chip, d->hwirq);
-+	level = stm32_gpio_get_noclk(&bank->gpio_chip, d->hwirq);
- 	if ((level == 0 && bank->irq_type[d->hwirq] == IRQ_TYPE_LEVEL_LOW) ||
- 	    (level == 1 && bank->irq_type[d->hwirq] == IRQ_TYPE_LEVEL_HIGH))
- 		irq_chip_retrigger_hierarchy(d);
-@@ -358,6 +365,7 @@ static int stm32_gpio_irq_request_resources(struct irq_data *irq_data)
- {
- 	struct stm32_gpio_bank *bank = irq_data->domain->host_data;
- 	struct stm32_pinctrl *pctl = dev_get_drvdata(bank->gpio_chip.parent);
-+	unsigned long flags;
- 	int ret;
- 
- 	ret = stm32_gpio_direction_input(&bank->gpio_chip, irq_data->hwirq);
-@@ -371,6 +379,10 @@ static int stm32_gpio_irq_request_resources(struct irq_data *irq_data)
- 		return ret;
+--- a/drivers/base/arch_topology.c
++++ b/drivers/base/arch_topology.c
+@@ -628,6 +628,15 @@ const struct cpumask *cpu_coregroup_mask
+ 			core_mask = &cpu_topology[cpu].llc_sibling;
  	}
  
-+	flags = irqd_get_trigger_type(irq_data);
-+	if (flags & IRQ_TYPE_LEVEL_MASK)
-+		clk_enable(bank->clk);
++	/*
++	 * For systems with no shared cpu-side LLC but with clusters defined,
++	 * extend core_mask to cluster_siblings. The sched domain builder will
++	 * then remove MC as redundant with CLS if SCHED_CLUSTER is enabled.
++	 */
++	if (IS_ENABLED(CONFIG_SCHED_CLUSTER) &&
++	    cpumask_subset(core_mask, &cpu_topology[cpu].cluster_sibling))
++		core_mask = &cpu_topology[cpu].cluster_sibling;
 +
- 	return 0;
+ 	return core_mask;
  }
  
-@@ -378,6 +390,9 @@ static void stm32_gpio_irq_release_resources(struct irq_data *irq_data)
- {
- 	struct stm32_gpio_bank *bank = irq_data->domain->host_data;
- 
-+	if (bank->irq_type[irq_data->hwirq] & IRQ_TYPE_LEVEL_MASK)
-+		clk_disable(bank->clk);
-+
- 	gpiochip_unlock_as_irq(&bank->gpio_chip, irq_data->hwirq);
- }
- 
--- 
-2.35.1
-
 
 

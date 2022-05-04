@@ -2,53 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 156E7519D9E
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 13:07:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B96CC519DA7
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 13:08:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348535AbiEDLKs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 07:10:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46316 "EHLO
+        id S1348566AbiEDLMX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 07:12:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239197AbiEDLKp (ORCPT
+        with ESMTP id S233441AbiEDLMV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 07:10:45 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8784F24098
-        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 04:07:07 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1nmCqQ-0006y8-HV; Wed, 04 May 2022 13:06:58 +0200
-Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ore@pengutronix.de>)
-        id 1nmCqQ-000IRW-Np; Wed, 04 May 2022 13:06:57 +0200
-Received: from ore by dude04.red.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ore@pengutronix.de>)
-        id 1nmCqO-006AjO-Oa; Wed, 04 May 2022 13:06:56 +0200
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     Oleksij Rempel <o.rempel@pengutronix.de>, kernel@pengutronix.de,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Subject: [PATCH net-next v2 2/2] net: phy: dp83td510: Add support for the DP83TD510 Ethernet PHY
-Date:   Wed,  4 May 2022 13:06:55 +0200
-Message-Id: <20220504110655.1470008-3-o.rempel@pengutronix.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220504110655.1470008-1-o.rempel@pengutronix.de>
-References: <20220504110655.1470008-1-o.rempel@pengutronix.de>
+        Wed, 4 May 2022 07:12:21 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9C46240BA;
+        Wed,  4 May 2022 04:08:45 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 71DCB210EB;
+        Wed,  4 May 2022 11:08:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1651662524; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=yGux/NDVJ5qImFxzSCAdzpn2rPw4/jEzHA5wE0M6XQ8=;
+        b=gXfhhXWXLutgJ+SPFRn80E1EsAKGZE70AMNZAterEg4/ANuZvPHLkohkPl/8vwZo7iR8Nu
+        /8++1CInI0DhQelcmilS4iRor773tKGYfC5tWspW7/XsXskzYBuOqqq5B9kEUNXeyRMDCn
+        8hZDagJEuTiEYJAiNH7x47Wf75D5uII=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1651662524;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=yGux/NDVJ5qImFxzSCAdzpn2rPw4/jEzHA5wE0M6XQ8=;
+        b=PK/I9Y8HxmQfVnYUScgH+oE7Ak/A6cBnzp2wItDHWLsgwraP4Ipg+oXjB6Ej/vufbZJvdQ
+        +Kqph0KvWq/rPlAg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 4AA0E132C4;
+        Wed,  4 May 2022 11:08:44 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id hgBrEbxecmIFNwAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Wed, 04 May 2022 11:08:44 +0000
+Message-ID: <d47a3cab-4f21-3b8b-2834-030663677070@suse.de>
+Date:   Wed, 4 May 2022 13:08:43 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v2] fbdev: Use helper to get fb_info in all file
+ operations
+Content-Language: en-US
+To:     Javier Martinez Canillas <javierm@redhat.com>,
+        linux-kernel@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        Junxiao Chang <junxiao.chang@intel.com>,
+        dri-devel@lists.freedesktop.org, Maxime Ripard <maxime@cerno.tech>,
+        Sam Ravnborg <sam@ravnborg.org>
+References: <20220503201934.681276-1-javierm@redhat.com>
+ <YnJBGpvlViLV+0/a@phenom.ffwll.local>
+ <038f8365-b23b-9d81-f7b2-8f8c6eb3a065@redhat.com>
+ <YnJbvb5TlHs4ckPM@phenom.ffwll.local>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <YnJbvb5TlHs4ckPM@phenom.ffwll.local>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------SemERBSZaWaNoPn20igjAYtJ"
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -57,327 +79,121 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The DP83TD510E is an ultra-low power Ethernet physical layer transceiver
-that supports 10M single pair cable.
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------SemERBSZaWaNoPn20igjAYtJ
+Content-Type: multipart/mixed; boundary="------------XyJXHb9zTGLtwU7EOaFzfZXZ";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Javier Martinez Canillas <javierm@redhat.com>,
+ linux-kernel@vger.kernel.org, linux-fbdev@vger.kernel.org,
+ Junxiao Chang <junxiao.chang@intel.com>, dri-devel@lists.freedesktop.org,
+ Maxime Ripard <maxime@cerno.tech>, Sam Ravnborg <sam@ravnborg.org>
+Message-ID: <d47a3cab-4f21-3b8b-2834-030663677070@suse.de>
+Subject: Re: [PATCH v2] fbdev: Use helper to get fb_info in all file
+ operations
+References: <20220503201934.681276-1-javierm@redhat.com>
+ <YnJBGpvlViLV+0/a@phenom.ffwll.local>
+ <038f8365-b23b-9d81-f7b2-8f8c6eb3a065@redhat.com>
+ <YnJbvb5TlHs4ckPM@phenom.ffwll.local>
+In-Reply-To: <YnJbvb5TlHs4ckPM@phenom.ffwll.local>
 
-This driver was tested with NXP SJA1105, STMMAC and ASIX AX88772B USB Ethernet
-controller.
+--------------XyJXHb9zTGLtwU7EOaFzfZXZ
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
----
- drivers/net/phy/Kconfig     |   6 +
- drivers/net/phy/Makefile    |   1 +
- drivers/net/phy/dp83td510.c | 272 ++++++++++++++++++++++++++++++++++++
- 3 files changed, 279 insertions(+)
- create mode 100644 drivers/net/phy/dp83td510.c
+SGkNCg0KQW0gMDQuMDUuMjIgdW0gMTI6NTUgc2NocmllYiBEYW5pZWwgVmV0dGVyOg0KPiBP
+biBXZWQsIE1heSAwNCwgMjAyMiBhdCAxMToyODowN0FNICswMjAwLCBKYXZpZXIgTWFydGlu
+ZXogQ2FuaWxsYXMgd3JvdGU6DQo+PiBIZWxsbyBEYW5pZWwsDQo+Pg0KPj4gT24gNS80LzIy
+IDExOjAyLCBEYW5pZWwgVmV0dGVyIHdyb3RlOg0KPj4+IE9uIFR1ZSwgTWF5IDAzLCAyMDIy
+IGF0IDEwOjE5OjM0UE0gKzAyMDAsIEphdmllciBNYXJ0aW5leiBDYW5pbGxhcyB3cm90ZToN
+Cj4+Pj4gQSByZWZlcmVuY2UgdG8gdGhlIGZyYW1lYnVmZmVyIGRldmljZSBzdHJ1Y3QgZmJf
+aW5mbyBpcyBzdG9yZWQgaW4gdGhlIGZpbGUNCj4+Pj4gcHJpdmF0ZSBkYXRhLCBidXQgdGhp
+cyByZWZlcmVuY2UgY291bGQgbm8gbG9uZ2VyIGJlIHZhbGlkIGFuZCBtdXN0IG5vdCBiZQ0K
+Pj4+PiBhY2Nlc3NlZCBkaXJlY3RseS4gSW5zdGVhZCwgdGhlIGZpbGVfZmJfaW5mbygpIGFj
+Y2Vzc29yIGZ1bmN0aW9uIG11c3QgYmUNCj4+Pj4gdXNlZCBzaW5jZSBpdCBkb2VzIHNhbml0
+eSBjaGVja2luZyB0byBtYWtlIHN1cmUgdGhhdCB0aGUgZmJfaW5mbyBpcyB2YWxpZC4NCj4+
+Pj4NCj4+Pj4gVGhpcyBjYW4gaGFwcGVuIGZvciBleGFtcGxlIGlmIHRoZSByZWdpc3RlcmVk
+IGZyYW1lYnVmZmVyIGRldmljZSBpcyBmb3IgYQ0KPj4+PiBkcml2ZXIgdGhhdCBqdXN0IHVz
+ZXMgYSBmcmFtZWJ1ZmZlciBwcm92aWRlZCBieSB0aGUgc3lzdGVtIGZpcm13YXJlLiBJbg0K
+Pj4+PiB0aGF0IGNhc2UsIHRoZSBmYmRldiBjb3JlIHdvdWxkIHVucmVnaXN0ZXIgdGhlIGZy
+YW1lYnVmZmVyIGRldmljZSB3aGVuIGENCj4+Pj4gcmVhbCB2aWRlbyBkcml2ZXIgaXMgcHJv
+YmVkIGFuZCBhc2sgdG8gcmVtb3ZlIGNvbmZsaWN0aW5nIGZyYW1lYnVmZmVycy4NCj4+Pj4N
+Cj4+Pj4gTW9zdCBmYmRldiBmaWxlIG9wZXJhdGlvbnMgYWxyZWFkeSB1c2UgdGhlIGhlbHBl
+ciB0byBnZXQgdGhlIGZiX2luZm8gYnV0DQo+Pj4+IGdldF9mYl91bm1hcHBlZF9hcmVhKCkg
+YW5kIGZiX2RlZmVycmVkX2lvX2ZzeW5jKCkgZG9uJ3QuIEZpeCB0aG9zZSB0d28uDQo+Pj4+
+DQo+Pj4+IFNpbmNlIGZiX2RlZmVycmVkX2lvX2ZzeW5jKCkgaXMgbm90IGluIGZibWVtLm8s
+IHRoZSBoZWxwZXIgaGFzIHRvIGJlDQo+Pj4+IGV4cG9ydGVkLiBSZW5hbWUgaXQgYW5kIGFk
+ZCBhIGZiXyBwcmVmaXggdG8gZGVub3RlIHRoYXQgaXMgcHVibGljIG5vdy4NCj4+Pj4NCj4+
+Pj4gUmVwb3J0ZWQtYnk6IEp1bnhpYW8gQ2hhbmcgPGp1bnhpYW8uY2hhbmdAaW50ZWwuY29t
+Pg0KPj4+PiBTaWduZWQtb2ZmLWJ5OiBKYXZpZXIgTWFydGluZXogQ2FuaWxsYXMgPGphdmll
+cm1AcmVkaGF0LmNvbT4NCj4+Pg0KPj4+IE5vdGUgdGhhdCBmYl9maWxlX2luZm8gaXMgaGls
+YXJpb3VzbHkgcmFjeSBzaW5jZSB0aGVyZSdzIG5vdGhpbmcNCj4+PiBwcmV2ZW50aW5nIGEg
+Y29uY3VycmVuY3QgZnJhbWVidWZmZXJfdW5yZWdpc3Rlci4gT3IgYXQgbGVhc3QgSSdtIG5v
+dA0KPj4+IHNlZWluZyBhbnl0aGluZy4gU2VlIGNmNGEzYWU0ZWYzMyAoImZiZGV2OiBsb2Nr
+X2ZiX2luZm8gY2Fubm90IGZhaWwiKSBmb3INCj4+PiBjb250ZXh0LCBtYXliZSByZWZlcmVu
+Y2UgdGhhdCBjb21taXQgaGVyZSBpbiB5b3VyIHBhdGNoLg0KPj4+DQo+Pj4gRWl0aGVyIHdh
+eSB0aGlzIGRvZXNuJ3QgcmVhbGx5IG1ha2UgYW55dGhpbmcgd29yc2UsIHNvDQo+Pj4gQWNr
+ZWQtYnk6IERhbmllbCBWZXR0ZXIgPGRhbmllbC52ZXR0ZXJAZmZ3bGwuY2g+DQo+Pj4NCj4+
+DQo+PiBZZXMsIEkgbm90aWNlZCBpcyByYWN5IGJ1dCBhdCBsZWFzdCBjaGVja2luZyB0aGlz
+IG1ha2VzIGxlc3MgbGlrZWx5IHRvDQo+PiBvY2N1ci4gQW5kIHRoYW5rcywgSSdsbCByZWZl
+cmVuY2UgdGhhdCBjb21taXQgaW4gdGhlIGRlc2NyaXB0aW9uIG9mIHYzLg0KPj4NCj4+IEJU
+VywgSSBhbHNvIG5vdGljZWQgdGhhdCB0aGUgc2FtZSByYWNlIHRoYXQgaGFwcGVucyB3aXRo
+IG9wZW4oKSxyZWFkKCksDQo+PiBjbG9zZSgpLCBldGMgaGFwcGVucyB3aXRoIHRoZSBWTSBv
+cGVyYXRpb25zOg0KPj4NCj4+IGludCBmYl9kZWZlcnJlZF9pb19tbWFwKHN0cnVjdCBmYl9p
+bmZvICppbmZvLCBzdHJ1Y3Qgdm1fYXJlYV9zdHJ1Y3QgKnZtYSkNCj4+IHsNCj4+IC4uLg0K
+Pj4gCXZtYS0+dm1fcHJpdmF0ZV9kYXRhID0gaW5mbzsNCj4+IC4uLg0KPj4gfQ0KPj4NCj4+
+IHN0YXRpYyB2bV9mYXVsdF90IGZiX2RlZmVycmVkX2lvX2ZhdWx0KHN0cnVjdCB2bV9mYXVs
+dCAqdm1mKQ0KPj4gew0KPj4gLi4uDQo+PiAJc3RydWN0IGZiX2luZm8gKmluZm8gPSB2bWYt
+PnZtYS0+dm1fcHJpdmF0ZV9kYXRhOw0KPj4gLi4uDQo+PiB9DQo+Pg0KPj4gc3RhdGljIHZt
+X2ZhdWx0X3QgZmJfZGVmZXJyZWRfaW9fbWt3cml0ZShzdHJ1Y3Qgdm1fZmF1bHQgKnZtZikN
+Cj4+IHsNCj4+IC4uLg0KPj4gCXN0cnVjdCBmYl9pbmZvICppbmZvID0gdm1mLT52bWEtPnZt
+X3ByaXZhdGVfZGF0YTsNCj4+IC4uLg0KPj4gfQ0KPj4NCj4+IFNvIHNvbWV0aGluZyBzaW1p
+bGFyIHRvIGZiX2ZpbGVfZmJfaW5mbygpIGlzIG5lZWRlZCB0byBjaGVjayBpZg0KPj4gdGhl
+IHZtX3ByaXZhdGVfZGF0YSBpcyBzdGlsbCB2YWxpZC4gSSBndWVzcyB0aGF0IGNvdWxkIGJl
+IGRvbmUNCj4+IGJ5IHVzaW5nIHRoZSB2bWYtPnZtYS0+dm1fZmlsZSBhbmQgYXR0ZW1wdGlu
+ZyB0aGUgc2FtZSB0cmljayB0aGF0DQo+PiBmYl9maWxlX2ZiX2luZm8oKSBkb2VzID8NCj4g
+DQo+IFllYWggc2hvdWxkIHdvcmssIGV4Y2VwdCBpZiB0aGUgcHRlcyBhcmUgc2V0IHVwIGFs
+cmVhZHkgdGhlcmUncyBraW5kYSBub3QNCj4gbXVjaCB0aGF0IHRoaXMgd2lsbCBwcmV2ZW50
+LiBXZSdkIG5lZWQgdG8gdGVhciBkb3duIG1hcHBpbmdzIGFuZCBTSUdCVVMgb3INCj4gYWx0
+ZXJuYXRpdmVseSBoYXZlIHNvbWV0aGluZyBlbHNlIGluIHBsYWNlIHRoZXJlIHNvIHVzZXJz
+cGFjZSBkb2Vzbid0IGJsb3cNCj4gdXAgaW4gZnVubnkgd2F5cyAod2hpY2ggaXMgd2hhdCB3
+ZSdyZSBkb2luZyBvbiB0aGUgZHJtIHNpZGUsIG9yIGF0IGxlYXN0DQo+IHRyeWluZyB0byku
+DQo+IA0KPiBJJ20gYWxzbyBub3Qgc3VyZSBob3cgbXVjaCB3ZSBzaG91bGQgY2FyZSwgc2lu
+Y2UgaWRlYWxseSBmb3IgZHJtIGRyaXZlcnMNCj4gdGhpcyBpcyBhbGwgdGFrZW4gY2FyZSBv
+ZiBieSBkcm1fZGV2X2VudGVyIGluIHRoZSByaWdodCBwbGFjZXMuIEl0IGRvZXMNCj4gbWVh
+biB0aG91Z2ggdGhhdCBmYmRldiBtbWFwIGVpdGhlciBuZWVkcyB0byBoYXZlIGl0J3Mgb3du
+IG1lbW9yeSBvciBiZQ0KPiBmdWxseSByZWRpcmVjdGVkIHRvIHRoZSBkcm0gZ2VtIG1tYXAu
+DQo+IA0KPiBBbmQgdGhlbiB3ZSBjYW4gYWZmb3JkIHRvIGp1c3Qgbm90IGNhcmUgdG8gZml4
+IGZiZGV2IGl0c2VsZi4NCg0KV2hpbGUgdGhlIHByb2JsZW0gaGFzIGJlZW4gdGhlcmUgZXZl
+ciBzaW5jZSwgdGhlIGJ1ZyBkaWRuJ3QgaGFwcGVuIHVudGlsIA0Kd2UgZml4ZWQgaG90LXVu
+cGx1Z2dpbmcgZm9yIGZiZGV2LiBOb3QgZG9pbmcgYW55dGhpbmcgaXMgcHJvYmFibHkgbm90
+IA0KdGhlIHJpZ2h0IHRoaW5nLg0KDQpCZXN0IHJlZ2FyZHMNClRob21hcw0KDQo+IC1EYW5p
+ZWwNCg0KLS0gDQpUaG9tYXMgWmltbWVybWFubg0KR3JhcGhpY3MgRHJpdmVyIERldmVsb3Bl
+cg0KU1VTRSBTb2Z0d2FyZSBTb2x1dGlvbnMgR2VybWFueSBHbWJIDQpNYXhmZWxkc3RyLiA1
+LCA5MDQwOSBOw7xybmJlcmcsIEdlcm1hbnkNCihIUkIgMzY4MDksIEFHIE7DvHJuYmVyZykN
+Ckdlc2Now6RmdHNmw7xocmVyOiBJdm8gVG90ZXYNCg==
 
-diff --git a/drivers/net/phy/Kconfig b/drivers/net/phy/Kconfig
-index bbbf6c07ea53..9fee639ee5c8 100644
---- a/drivers/net/phy/Kconfig
-+++ b/drivers/net/phy/Kconfig
-@@ -342,6 +342,12 @@ config DP83869_PHY
- 	  Currently supports the DP83869 PHY.  This PHY supports copper and
- 	  fiber connections.
- 
-+config DP83TD510_PHY
-+	tristate "Texas Instruments DP83TD510 Ethernet 10Base-T1L PHY"
-+	help
-+	  Support for the DP83TD510 Ethernet 10Base-T1L PHY. This PHY supports
-+	  a 10M single pair Ethernet connection for up to 1000 meter cable.
-+
- config VITESSE_PHY
- 	tristate "Vitesse PHYs"
- 	help
-diff --git a/drivers/net/phy/Makefile b/drivers/net/phy/Makefile
-index b82651b57043..b12b1d86fc99 100644
---- a/drivers/net/phy/Makefile
-+++ b/drivers/net/phy/Makefile
-@@ -57,6 +57,7 @@ obj-$(CONFIG_DP83848_PHY)	+= dp83848.o
- obj-$(CONFIG_DP83867_PHY)	+= dp83867.o
- obj-$(CONFIG_DP83869_PHY)	+= dp83869.o
- obj-$(CONFIG_DP83TC811_PHY)	+= dp83tc811.o
-+obj-$(CONFIG_DP83TD510_PHY)	+= dp83td510.o
- obj-$(CONFIG_FIXED_PHY)		+= fixed_phy.o
- obj-$(CONFIG_ICPLUS_PHY)	+= icplus.o
- obj-$(CONFIG_INTEL_XWAY_PHY)	+= intel-xway.o
-diff --git a/drivers/net/phy/dp83td510.c b/drivers/net/phy/dp83td510.c
-new file mode 100644
-index 000000000000..8f6b0cbed599
---- /dev/null
-+++ b/drivers/net/phy/dp83td510.c
-@@ -0,0 +1,272 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Driver for the Texas Instruments DP83TD510 PHY
-+ * Copyright (c) 2022 Pengutronix, Oleksij Rempel <kernel@pengutronix.de>
-+ */
-+
-+#include <linux/bitfield.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/phy.h>
-+
-+#define DP83TD510E_PHY_ID			0x20000181
-+
-+/* MDIO_MMD_VEND2 registers */
-+#define DP83TD510E_PHY_STS			0x10
-+#define DP83TD510E_STS_MII_INT			BIT(7)
-+#define DP83TD510E_LINK_STATUS			BIT(0)
-+
-+#define DP83TD510E_GEN_CFG			0x11
-+#define DP83TD510E_GENCFG_INT_POLARITY		BIT(3)
-+#define DP83TD510E_GENCFG_INT_EN		BIT(1)
-+#define DP83TD510E_GENCFG_INT_OE		BIT(0)
-+
-+#define DP83TD510E_INTERRUPT_REG_1		0x12
-+#define DP83TD510E_INT1_LINK			BIT(13)
-+#define DP83TD510E_INT1_LINK_EN			BIT(5)
-+
-+#define DP83TD510E_AN_STAT_1			0x60c
-+#define DP83TD510E_MASTER_SLAVE_RESOL_FAIL	BIT(15)
-+
-+static int dp83td510_config_intr(struct phy_device *phydev)
-+{
-+	int ret;
-+
-+	if (phydev->interrupts == PHY_INTERRUPT_ENABLED) {
-+		/* Clear any pending interrupts */
-+		ret = phy_write_mmd(phydev, MDIO_MMD_VEND2, DP83TD510E_PHY_STS,
-+				    0x0);
-+		if (ret)
-+			return ret;
-+
-+		ret = phy_write_mmd(phydev, MDIO_MMD_VEND2,
-+				    DP83TD510E_INTERRUPT_REG_1,
-+				    DP83TD510E_INT1_LINK_EN);
-+		if (ret)
-+			return ret;
-+
-+		ret = phy_set_bits_mmd(phydev, MDIO_MMD_VEND2,
-+				       DP83TD510E_GEN_CFG,
-+				       DP83TD510E_GENCFG_INT_POLARITY |
-+				       DP83TD510E_GENCFG_INT_EN |
-+				       DP83TD510E_GENCFG_INT_OE);
-+	} else {
-+		ret = phy_write_mmd(phydev, MDIO_MMD_VEND2,
-+				    DP83TD510E_INTERRUPT_REG_1, 0x0);
-+		if (ret)
-+			return ret;
-+
-+		ret = phy_clear_bits_mmd(phydev, MDIO_MMD_VEND2,
-+					 DP83TD510E_GEN_CFG,
-+					 DP83TD510E_GENCFG_INT_EN);
-+		if (ret)
-+			return ret;
-+
-+		/* Clear any pending interrupts */
-+		ret = phy_write_mmd(phydev, MDIO_MMD_VEND2, DP83TD510E_PHY_STS,
-+				    0x0);
-+	}
-+
-+	return ret;
-+}
-+
-+static irqreturn_t dp83td510_handle_interrupt(struct phy_device *phydev)
-+{
-+	int  ret;
-+
-+	ret = phy_read_mmd(phydev, MDIO_MMD_VEND2, DP83TD510E_PHY_STS);
-+	if (ret < 0) {
-+		phy_error(phydev);
-+		return IRQ_NONE;
-+	} else if (!(ret & DP83TD510E_STS_MII_INT)) {
-+		return IRQ_NONE;
-+	}
-+
-+	/* Read the current enabled interrupts */
-+	ret = phy_read_mmd(phydev, MDIO_MMD_VEND2, DP83TD510E_INTERRUPT_REG_1);
-+	if (ret < 0) {
-+		phy_error(phydev);
-+		return IRQ_NONE;
-+	} else if (!(ret & DP83TD510E_INT1_LINK_EN) ||
-+		   !(ret & DP83TD510E_INT1_LINK)) {
-+		return IRQ_NONE;
-+	}
-+
-+	phy_trigger_machine(phydev);
-+
-+	return IRQ_HANDLED;
-+}
-+
-+static int dp83td510_read_status(struct phy_device *phydev)
-+{
-+	u16 phy_sts;
-+	int ret, cfg;
-+
-+	phydev->speed = SPEED_UNKNOWN;
-+	phydev->duplex = DUPLEX_UNKNOWN;
-+	phydev->pause = 0;
-+	phydev->asym_pause = 0;
-+	phydev->master_slave_get = MASTER_SLAVE_CFG_UNKNOWN;
-+	phydev->master_slave_state = MASTER_SLAVE_STATE_UNKNOWN;
-+	linkmode_zero(phydev->lp_advertising);
-+
-+	phy_sts = phy_read(phydev, DP83TD510E_PHY_STS);
-+
-+	phydev->link = !!(phy_sts & DP83TD510E_LINK_STATUS);
-+	if (phydev->link) {
-+		/* This PHY supports only one link mode: 10BaseT1L_Full */
-+		phydev->duplex = DUPLEX_FULL;
-+		phydev->speed = SPEED_10;
-+
-+		if (phydev->autoneg == AUTONEG_ENABLE) {
-+			ret = genphy_c45_read_lpa(phydev);
-+			if (ret)
-+				return ret;
-+
-+			phy_resolve_aneg_linkmode(phydev);
-+		}
-+	}
-+
-+	if (phydev->autoneg == AUTONEG_DISABLE) {
-+		ret = phy_read_mmd(phydev, MDIO_MMD_PMAPMD,
-+				   MDIO_PMA_PMD_BT1_CTRL);
-+		if (ret < 0)
-+			return ret;
-+
-+		if (ret & MDIO_PMA_PMD_BT1_CTRL_CFG_MST) {
-+			phydev->master_slave_get =
-+				MASTER_SLAVE_CFG_MASTER_FORCE;
-+			if (phydev->link)
-+				phydev->master_slave_state =
-+					MASTER_SLAVE_STATE_MASTER;
-+		} else {
-+			phydev->master_slave_get = MASTER_SLAVE_CFG_SLAVE_FORCE;
-+			if (phydev->link)
-+				phydev->master_slave_state =
-+					MASTER_SLAVE_STATE_SLAVE;
-+		}
-+	} else {
-+		ret = phy_read_mmd(phydev, MDIO_MMD_AN, MDIO_AN_T1_ADV_L);
-+		if (ret < 0)
-+			return ret;
-+
-+		cfg = phy_read_mmd(phydev, MDIO_MMD_AN, MDIO_AN_T1_ADV_M);
-+		if (cfg < 0)
-+			return cfg;
-+
-+		if (ret & MDIO_AN_T1_ADV_L_FORCE_MS) {
-+			if (cfg & MDIO_AN_T1_ADV_M_MST)
-+				phydev->master_slave_get =
-+					MASTER_SLAVE_CFG_MASTER_FORCE;
-+			else
-+				phydev->master_slave_get =
-+					MASTER_SLAVE_CFG_SLAVE_FORCE;
-+		} else {
-+			if (cfg & MDIO_AN_T1_ADV_M_MST)
-+				phydev->master_slave_get =
-+					MASTER_SLAVE_CFG_MASTER_PREFERRED;
-+			else
-+				phydev->master_slave_get =
-+					MASTER_SLAVE_CFG_SLAVE_PREFERRED;
-+		}
-+
-+		ret = phy_read_mmd(phydev, MDIO_MMD_VEND2,
-+				   DP83TD510E_AN_STAT_1);
-+		if (ret < 0)
-+			return ret;
-+
-+		if (ret & DP83TD510E_MASTER_SLAVE_RESOL_FAIL)
-+			phydev->master_slave_state = MASTER_SLAVE_STATE_ERR;
-+	}
-+
-+	return 0;
-+}
-+
-+static int dp83td510_config_master_slave(struct phy_device *phydev)
-+{
-+	int ctl = 0;
-+
-+	switch (phydev->master_slave_set) {
-+	case MASTER_SLAVE_CFG_MASTER_PREFERRED:
-+	case MASTER_SLAVE_CFG_MASTER_FORCE:
-+		ctl = MDIO_PMA_PMD_BT1_CTRL_CFG_MST;
-+		break;
-+	case MASTER_SLAVE_CFG_SLAVE_FORCE:
-+	case MASTER_SLAVE_CFG_SLAVE_PREFERRED:
-+		break;
-+	case MASTER_SLAVE_CFG_UNKNOWN:
-+	case MASTER_SLAVE_CFG_UNSUPPORTED:
-+		return 0;
-+	default:
-+		phydev_warn(phydev, "Unsupported Master/Slave mode\n");
-+		return -EOPNOTSUPP;
-+	}
-+
-+	return phy_modify_mmd(phydev, MDIO_MMD_PMAPMD, MDIO_PMA_PMD_BT1_CTRL,
-+			     MDIO_PMA_PMD_BT1_CTRL_CFG_MST, ctl);
-+}
-+
-+static int dp83td510_config_aneg(struct phy_device *phydev)
-+{
-+	bool changed = false;
-+	int ctl = 0;
-+	int ret;
-+
-+	ret = dp83td510_config_master_slave(phydev);
-+	if (ret < 0)
-+		return ret;
-+
-+	if (phydev->autoneg == AUTONEG_DISABLE)
-+		return genphy_c45_an_disable_aneg(phydev);
-+
-+	ret = genphy_c45_an_config_aneg(phydev);
-+	if (ret < 0)
-+		return ret;
-+	if (ret > 0)
-+		changed = true;
-+
-+	return genphy_c45_check_and_restart_aneg(phydev, changed);
-+}
-+
-+static int dp83td510_get_features(struct phy_device *phydev)
-+{
-+	/* This PHY can't respond on MDIO bus if no RMII clock is enabled.
-+	 * In case RMII mode is used (most meaningful mode for this PHY) and
-+	 * the PHY do not have own XTAL, and CLK providing MAC is not probed,
-+	 * we won't be able to read all needed ability registers.
-+	 * So provide it manually.
-+	 */
-+
-+	linkmode_set_bit(ETHTOOL_LINK_MODE_Autoneg_BIT, phydev->supported);
-+	linkmode_set_bit(ETHTOOL_LINK_MODE_Asym_Pause_BIT, phydev->supported);
-+	linkmode_set_bit(ETHTOOL_LINK_MODE_Pause_BIT, phydev->supported);
-+	linkmode_set_bit(ETHTOOL_LINK_MODE_10baseT1L_Full_BIT,
-+			 phydev->supported);
-+
-+	return 0;
-+}
-+
-+static struct phy_driver dp83td510_driver[] = {
-+{
-+	PHY_ID_MATCH_MODEL(DP83TD510E_PHY_ID),
-+	.name		= "TI DP83TD510E",
-+
-+	.config_aneg	= dp83td510_config_aneg,
-+	.read_status	= dp83td510_read_status,
-+	.get_features	= dp83td510_get_features,
-+	.config_intr	= dp83td510_config_intr,
-+	.handle_interrupt = dp83td510_handle_interrupt,
-+
-+	.suspend	= genphy_suspend,
-+	.resume		= genphy_resume,
-+} };
-+module_phy_driver(dp83td510_driver);
-+
-+static struct mdio_device_id __maybe_unused dp83td510_tbl[] = {
-+	{ PHY_ID_MATCH_MODEL(DP83TD510E_PHY_ID) },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(mdio, dp83td510_tbl);
-+
-+MODULE_DESCRIPTION("Texas Instruments DP83TD510E PHY driver");
-+MODULE_AUTHOR("Oleksij Rempel <kernel@pengutronix.de>");
-+MODULE_LICENSE("GPL v2");
--- 
-2.30.2
+--------------XyJXHb9zTGLtwU7EOaFzfZXZ--
 
+--------------SemERBSZaWaNoPn20igjAYtJ
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
+
+-----BEGIN PGP SIGNATURE-----
+
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmJyXrsFAwAAAAAACgkQlh/E3EQov+CE
+gA/+KaO0/CRHklPoLCTpG7I/88o5n2jJ0/VWCBPo/76v7jn8U9bqGYU1hO50wp8P2WRRD08A62qv
+jIBqk42zFZnm/k7CzBZA0w1BYxQBpwvQ4CgLTJvNARvZrF1lAJ3FbsXTzst53fK3SFVD4rBkvTUE
+B+UpMlVqsFF7bpneRYJT0CBVe73ZopAcWZho/9hezWP2R3EEVGC3wqOqBZ54z0A46vbNFy2hT84c
+gXFUboorptBfA/b88fkQywxYx1+DOuC/iURklxmyO50MU9fnIZVE7K8munYjPIPXZ/300JD/xSNV
+f05S/HWMewoyy5ama8Pn8woZEEseUXl38d4S19QWmJI4HK/68c5iDAjO5ffg1dPbLXAOqQBVOpMy
+tryDdYu9entOpbD3IR/tIR3+1L7kCyDST94hOLveErnmj0TNV5CQ26JEjZq1e1UCiNiLj25pLD+c
+eKjCSAPFKhueg/jKHvLveE+PKvPh4fqgmXM6LM4KeA9ci1/fbjNTa9VudM3EdPIJE5owbOMUyU4Y
+mjBKbUEFtD5JTQPHEhsPCpVKpO7x7UJ52oThTOfrgsylDpR3XXc6OMtGARiiHUk+5wWTtW2qCskd
+hmXoXCsrP+xKh3N7gG7G4C7pQXTuasZfy0NqwsL3M1RrVWbbn1Pp+Mi6VPyWgvxAjI4x/NPGF2eH
++DU=
+=11L/
+-----END PGP SIGNATURE-----
+
+--------------SemERBSZaWaNoPn20igjAYtJ--

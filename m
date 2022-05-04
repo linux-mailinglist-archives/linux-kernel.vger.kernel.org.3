@@ -2,76 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C267F51ACF1
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 20:34:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FC6251ACF3
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 20:34:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377167AbiEDSiE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 14:38:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34358 "EHLO
+        id S1377210AbiEDSiH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 14:38:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377094AbiEDShz (ORCPT
+        with ESMTP id S1377034AbiEDSh7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 14:37:55 -0400
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4D9854BD5
-        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 11:26:12 -0700 (PDT)
-Received: by mail-lj1-x22d.google.com with SMTP id 16so2706286lju.13
-        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 11:26:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=WcSGq79606QCKFHIe92xawG76AnBIpchBNyPREMJFh8=;
-        b=RURKbGYakxzaIrEtJ9aTpazHbip4v8DlxNuQ+4p5UAkCAZudwRQdESInGeQcaXhynz
-         Q4Ianc7rdPV2mUeJh79YDyBjSBEKFqcEb9jNAEtGgjXUGf3/nWvXMp+nHZuSN7bNfCvu
-         47ARcI+vA7xBND6soQPd2CBVJ/Fb9t0LXnybCZROluJ1Fo6Td4CxbfDOXfWm1edMC5rL
-         VNXVWV0V9zoxFLjELeOSXBoEMraplR1T6iTn4//lfso6Fhn0GyPqCu7cywE5zMAKxu1V
-         uK2HPN00tSbLNjVB7vjM8fRFuhTfTAJYP+n1K3agSTtwam1d0xMlGz4TLq1upH27KoP4
-         fe1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=WcSGq79606QCKFHIe92xawG76AnBIpchBNyPREMJFh8=;
-        b=nq55IqLSLWsGT0XnUD0Rv9KuWqhh6t0dbR8NelPAsny5BhyvSJmYlJfEztgJPGJRe1
-         jx5vXSIeJdeINMyg+mJSvEu8WrkmmKX2olNqVhpPVd2PErP0wDiGLnQu4xJL7JCDRAm9
-         pEP6hEiH4DM7mRga5/29iqqJXw7wbwmUqJDced5DPUF3E1lAzH8VzoWTHE/NFcoX6p5E
-         Ah9C671e0/7t9OXNF5Nh/of72TIM7Akw7o/VXqO0fSq1ktM3SZA34R1nxZdOCsMC/7S3
-         d71U5HmmQIUaJXQ4B1a/G3V5ywYwctpSgN2wN/SCecPluhxbyYZHAOpX/dLU2Z8goKaf
-         pEQQ==
-X-Gm-Message-State: AOAM533iKBJuoo2zW5Zw5Fk6+O4p61QRzECGpX225vGCF9tEkePuRBz3
-        E91zeVYVqaTSMxBRV+s+/6/ABw==
-X-Google-Smtp-Source: ABdhPJxws7eoaBBc/d8tLooGSLDO9wYMzHRjrretVeiVwsWonORpkVOxpE/ICf2zdQsZwe3x4LLDjA==
-X-Received: by 2002:a05:651c:3c2:b0:24f:b91:fcba with SMTP id f2-20020a05651c03c200b0024f0b91fcbamr12865430ljp.154.1651688770938;
-        Wed, 04 May 2022 11:26:10 -0700 (PDT)
-Received: from [192.168.1.211] ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id f24-20020a2eb5b8000000b0024f3df9f298sm1746762ljn.46.2022.05.04.11.26.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 04 May 2022 11:26:10 -0700 (PDT)
-Message-ID: <febc6b74-eb33-8c72-0b60-a2253d8d6dde@linaro.org>
-Date:   Wed, 4 May 2022 21:26:09 +0300
+        Wed, 4 May 2022 14:37:59 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F017825D;
+        Wed,  4 May 2022 11:26:41 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 794BE1042;
+        Wed,  4 May 2022 11:26:41 -0700 (PDT)
+Received: from bogus (unknown [10.57.1.45])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 22B433FA35;
+        Wed,  4 May 2022 11:26:38 -0700 (PDT)
+Date:   Wed, 4 May 2022 19:26:33 +0100
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Besar Wicaksono <bwicaksono@nvidia.com>, rafael@kernel.org
+Cc:     lenb@kernel.org, robert.moore@intel.com, catalin.marinas@arm.com,
+        will@kernel.org, lorenzo.pieralisi@arm.com, guohanjun@huawei.com,
+        linux-tegra@vger.kernel.org, treding@nvidia.com,
+        jonathanh@nvidia.com, linux-acpi@vger.kernel.org, devel@acpica.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH 2/2] ACPI: ARM Performance Monitoring Unit Table (APMT)
+ initial support
+Message-ID: <20220504182633.a3mwuiohfqtjvpep@bogus>
+References: <20220419205432.46021-1-bwicaksono@nvidia.com>
+ <20220419205432.46021-3-bwicaksono@nvidia.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH v3] drm/msm/dp: fix event thread stuck in wait_event after
- kthread_stop()
-Content-Language: en-GB
-To:     Kuogee Hsieh <quic_khsieh@quicinc.com>, robdclark@gmail.com,
-        sean@poorly.run, swboyd@chromium.org, dianders@chromium.org,
-        vkoul@kernel.org, daniel@ffwll.ch, airlied@linux.ie,
-        agross@kernel.org, bjorn.andersson@linaro.org
-Cc:     quic_abhinavk@quicinc.com, quic_aravindh@quicinc.com,
-        quic_sbillaka@quicinc.com, freedreno@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <1651595136-24312-1-git-send-email-quic_khsieh@quicinc.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <1651595136-24312-1-git-send-email-quic_khsieh@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220419205432.46021-3-bwicaksono@nvidia.com>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -80,62 +47,103 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/05/2022 19:25, Kuogee Hsieh wrote:
-> Event thread supposed to exit from its while loop after kthread_stop().
-> However there may has possibility that event thread is pending in the
-> middle of wait_event due to condition checking never become true.
-> To make sure event thread exit its loop after kthread_stop(), this
-> patch OR kthread_should_stop() into wait_event's condition checking
-> so that event thread will exit its loop after kernal_stop().
-> 
-> Changes in v2:
-> --  correct spelling error at commit title
-> 
-> Changes in v3:
-> -- remove unnecessary parenthesis
-> -- while(1) to replace while (!kthread_should_stop())
-> 
-> Reported-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> Fixes: 570d3e5d28db ("drm/msm/dp: stop event kernel thread when DP unbind")
-> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+Hi Besar, Rafael,
 
-Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Sorry for the delayed response.
 
+On Tue, Apr 19, 2022 at 03:54:32PM -0500, Besar Wicaksono wrote:
+> ARM Performance Monitoring Unit Table describes the properties of PMU
+> support in ARM-based system. The APMT table contains a list of nodes,
+> each represents a PMU in the system that conforms to ARM CoreSight PMU
+> architecture. The properties of each node include information required
+> to access the PMU (e.g. MMIO base address, interrupt number) and also
+> identification. For more detailed information, please refer to the
+> specification below:
+>  * APMT: https://developer.arm.com/documentation/den0117/latest
+>  * ARM Coresight PMU:
+>         https://developer.arm.com/documentation/ihi0091/latest
+> 
+> The initial support adds the detection of APMT table and generic
+> infrastructure to create platform devices for ARM CoreSight PMUs.
+> Similar to IORT the root pointer of APMT is preserved during runtime
+> and each PMU platform device is given a pointer to the corresponding
+> APMT node.
+>
+
+Hi Besar,
+
+This patch on its own looks fine and happy to ack. However I would like
+to know general process on such changes that add platform or any bus
+device but the driver itself is not upstream.
+
+Any particular reason why you would like to rush and push this without
+the actual driver to probe the device being added here ?
+
+> Signed-off-by: Besar Wicaksono <bwicaksono@nvidia.com>
 > ---
->   drivers/gpu/drm/msm/dp/dp_display.c | 13 +++++++++----
->   1 file changed, 9 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
-> index c388323..da5c03a 100644
-> --- a/drivers/gpu/drm/msm/dp/dp_display.c
-> +++ b/drivers/gpu/drm/msm/dp/dp_display.c
-> @@ -1103,15 +1103,20 @@ static int hpd_event_thread(void *data)
->   
->   	dp_priv = (struct dp_display_private *)data;
->   
-> -	while (!kthread_should_stop()) {
-> +	while (1) {
->   		if (timeout_mode) {
->   			wait_event_timeout(dp_priv->event_q,
-> -				(dp_priv->event_pndx == dp_priv->event_gndx),
-> -						EVENT_TIMEOUT);
-> +				(dp_priv->event_pndx == dp_priv->event_gndx) ||
-> +					kthread_should_stop(), EVENT_TIMEOUT);
->   		} else {
->   			wait_event_interruptible(dp_priv->event_q,
-> -				(dp_priv->event_pndx != dp_priv->event_gndx));
-> +				(dp_priv->event_pndx != dp_priv->event_gndx) ||
-> +					kthread_should_stop());
->   		}
-> +
-> +		if (kthread_should_stop())
-> +			break;
-> +
->   		spin_lock_irqsave(&dp_priv->event_lock, flag);
->   		todo = &dp_priv->event_list[dp_priv->event_gndx];
->   		if (todo->delay) {
+>  arch/arm64/Kconfig          |   1 +
+>  drivers/acpi/arm64/Kconfig  |   3 +
+>  drivers/acpi/arm64/Makefile |   1 +
+>  drivers/acpi/arm64/apmt.c   | 176 ++++++++++++++++++++++++++++++++++++
+>  drivers/acpi/bus.c          |   2 +
+>  include/linux/acpi_apmt.h   |  19 ++++
+>  6 files changed, 202 insertions(+)
+>  create mode 100644 drivers/acpi/arm64/apmt.c
+>  create mode 100644 include/linux/acpi_apmt.h
+>
 
+[...]
+
+> diff --git a/drivers/acpi/arm64/apmt.c b/drivers/acpi/arm64/apmt.c
+> new file mode 100644
+> index 000000000000..8b8b9f480548
+> --- /dev/null
+> +++ b/drivers/acpi/arm64/apmt.c
+> @@ -0,0 +1,176 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * ARM APMT table support.
+> + * Design document number: ARM DEN0117.
+> + *
+> + * Copyright (c) 2022, NVIDIA CORPORATION & AFFILIATES.
+> + *
+> + */
+> +
+> +#define pr_fmt(fmt)	"ACPI: APMT: " fmt
+> +
+> +#include <linux/acpi.h>
+> +#include <linux/init.h>
+> +#include <linux/kernel.h>
+> +#include <linux/platform_device.h>
+> +
+> +#define DEV_NAME "arm-csite-pmu"
+> +
+
+I really don't prefer this name:
+1. arm-coresight-pmu is much better than "csite". I see the short form
+   used elsewhere in the kernel is just "cs" as in cs_etm,...etc
+2. Since APMT is more generic than just coresight(I understand coresight
+   was the initial motivation for the generic specification) and also
+   the type list seem to cover memory controller, SMMU,..etc, does
+   it make sense to call it "arm-generic-pmu" or something similar.
+
+Anyways, it can be part of the driver discussion as people might have
+opinion based on what and how the driver covers the variety of PMU
+types possible as described in APMT.
+
+Not sure if the same device name will be re-used or PMUs can be registered
+with different name under perf subsystem, but the name matters for the user
+space tools and decoders. They may use the name or type information to analyse
+the data samples.
+
+So it is better to wait for all those discussion as part of the driver
+upstreaming before you use this device name unless we are absolutely sure
+the PMUs can be registered with different names in the driver(which could
+be possible, I just don't know)
+
+Apart from this name, I am OK with the changes here and happy to ack if it
+is OK to merge this without any driver to probe this device yet.
 
 -- 
-With best wishes
-Dmitry
+Regards,
+Sudeep

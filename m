@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1129251A91C
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:15:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3196351AB16
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:40:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356107AbiEDRQd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 13:16:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55360 "EHLO
+        id S1358720AbiEDRjC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 13:39:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355963AbiEDREs (ORCPT
+        with ESMTP id S1356829AbiEDRJp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 13:04:48 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DD8D4F9FC;
-        Wed,  4 May 2022 09:53:37 -0700 (PDT)
+        Wed, 4 May 2022 13:09:45 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E58812CCBD;
+        Wed,  4 May 2022 09:55:52 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D700D61505;
-        Wed,  4 May 2022 16:53:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28C23C385AA;
-        Wed,  4 May 2022 16:53:36 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 96BE0B8278E;
+        Wed,  4 May 2022 16:55:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39706C385A4;
+        Wed,  4 May 2022 16:55:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651683216;
-        bh=eidVBpEHpfCZhtqWZN0t3L727DuGTceR+6ii9207lXE=;
+        s=korg; t=1651683350;
+        bh=Lu2E1I2yiHFlJN+E/H9ofPZXowvZgsabxZMdN2uM2cI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dzXANxX2pAT6TwfowZT6cSxMMbjhSSKEe4/aPLlo0mAVovp9XMSj2TOotpfoMm8c2
-         8D1+qQuX4bqssfI9I4dIEYMDhxT7aD28Ra7RSvRiGIto81bOo4/7Xv49KQCrOP0z2j
-         xxR5J7goZ4vqXK+4yO7SGg4RXDfQAd9mpnVs4eFA=
+        b=Z+Hk8NDOSpqEpCYOqI/TSDsg2c0L5tQgGBENlbjvURRjj1nrEEqR/9ojPHekju0iK
+         tSiNRVQmZs5Da1Uh05NGNg9giHIRreZ1gLwtlhHhzOx61C/MHQpSfPiJeOF2ElbVM8
+         WSpjCoH1mb7zRjZ9GYNZtFajskFP0Lp7zVnnnuu0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Pablo Neira Ayuso <pablo@netfilter.org>,
-        Stefano Brivio <sbrivio@redhat.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 081/177] netfilter: nft_set_rbtree: overlap detection with element re-addition after deletion
-Date:   Wed,  4 May 2022 18:44:34 +0200
-Message-Id: <20220504153100.311608257@linuxfoundation.org>
+        stable@vger.kernel.org, "Maciej W. Rozycki" <macro@orcam.me.uk>,
+        stable <stable@kernel.org>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>
+Subject: [PATCH 5.17 037/225] serial: 8250: Correct the clock for EndRun PTP/1588 PCIe device
+Date:   Wed,  4 May 2022 18:44:35 +0200
+Message-Id: <20220504153113.515763636@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220504153053.873100034@linuxfoundation.org>
-References: <20220504153053.873100034@linuxfoundation.org>
+In-Reply-To: <20220504153110.096069935@linuxfoundation.org>
+References: <20220504153110.096069935@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,48 +55,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pablo Neira Ayuso <pablo@netfilter.org>
+From: Maciej W. Rozycki <macro@orcam.me.uk>
 
-[ Upstream commit babc3dc9524f0bcb5a0ec61f3c3639b11508fad6 ]
+commit 637674fa40059cddcc3ad2212728965072f62ea3 upstream.
 
-This patch fixes spurious EEXIST errors.
+The EndRun PTP/1588 dual serial port device is based on the Oxford
+Semiconductor OXPCIe952 UART device with the PCI vendor:device ID set
+for EndRun Technologies and is therefore driven by a fixed 62.5MHz clock
+input derived from the 100MHz PCI Express clock.  The clock rate is
+divided by the oversampling rate of 16 as it is supplied to the baud
+rate generator, yielding the baud base of 3906250.
 
-Extend d2df92e98a34 ("netfilter: nft_set_rbtree: handle element
-re-addition after deletion") to deal with elements with same end flags
-in the same transation.
+Replace the incorrect baud base of 4000000 with the right value of
+3906250 then, complementing commit 6cbe45d8ac93 ("serial: 8250: Correct
+the clock for OxSemi PCIe devices").
 
-Reset the overlap flag as described by 7c84d41416d8 ("netfilter:
-nft_set_rbtree: Detect partial overlaps on insertion").
-
-Fixes: 7c84d41416d8 ("netfilter: nft_set_rbtree: Detect partial overlaps on insertion")
-Fixes: d2df92e98a34 ("netfilter: nft_set_rbtree: handle element re-addition after deletion")
-Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
-Reviewed-by: Stefano Brivio <sbrivio@redhat.com>
-Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Maciej W. Rozycki <macro@orcam.me.uk>
+Cc: stable <stable@kernel.org>
+Fixes: 1bc8cde46a159 ("8250_pci: Added driver for Endrun Technologies PTP PCIe card.")
+Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+Link: https://lore.kernel.org/r/alpine.DEB.2.21.2204181515270.9383@angie.orcam.me.uk
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/netfilter/nft_set_rbtree.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ drivers/tty/serial/8250/8250_pci.c |    8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/net/netfilter/nft_set_rbtree.c b/net/netfilter/nft_set_rbtree.c
-index d600a566da32..7325bee7d144 100644
---- a/net/netfilter/nft_set_rbtree.c
-+++ b/net/netfilter/nft_set_rbtree.c
-@@ -349,7 +349,11 @@ static int __nft_rbtree_insert(const struct net *net, const struct nft_set *set,
- 				*ext = &rbe->ext;
- 				return -EEXIST;
- 			} else {
--				p = &parent->rb_left;
-+				overlap = false;
-+				if (nft_rbtree_interval_end(rbe))
-+					p = &parent->rb_left;
-+				else
-+					p = &parent->rb_right;
- 			}
- 		}
- 
--- 
-2.35.1
-
+--- a/drivers/tty/serial/8250/8250_pci.c
++++ b/drivers/tty/serial/8250/8250_pci.c
+@@ -2667,7 +2667,7 @@ enum pci_board_num_t {
+ 	pbn_panacom2,
+ 	pbn_panacom4,
+ 	pbn_plx_romulus,
+-	pbn_endrun_2_4000000,
++	pbn_endrun_2_3906250,
+ 	pbn_oxsemi,
+ 	pbn_oxsemi_1_3906250,
+ 	pbn_oxsemi_2_3906250,
+@@ -3195,10 +3195,10 @@ static struct pciserial_board pci_boards
+ 	* signal now many ports are available
+ 	* 2 port 952 Uart support
+ 	*/
+-	[pbn_endrun_2_4000000] = {
++	[pbn_endrun_2_3906250] = {
+ 		.flags		= FL_BASE0,
+ 		.num_ports	= 2,
+-		.base_baud	= 4000000,
++		.base_baud	= 3906250,
+ 		.uart_offset	= 0x200,
+ 		.first_offset	= 0x1000,
+ 	},
+@@ -4115,7 +4115,7 @@ static const struct pci_device_id serial
+ 	*/
+ 	{	PCI_VENDOR_ID_ENDRUN, PCI_DEVICE_ID_ENDRUN_1588,
+ 		PCI_ANY_ID, PCI_ANY_ID, 0, 0,
+-		pbn_endrun_2_4000000 },
++		pbn_endrun_2_3906250 },
+ 	/*
+ 	 * Quatech cards. These actually have configurable clocks but for
+ 	 * now we just use the default.
 
 

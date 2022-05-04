@@ -2,20 +2,20 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5600C519B8B
+	by mail.lfdr.de (Postfix) with ESMTP id E83AA519B8D
 	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 11:23:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347177AbiEDJ1P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 05:27:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33392 "EHLO
+        id S1347224AbiEDJ10 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 05:27:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347134AbiEDJ1A (ORCPT
+        with ESMTP id S1347125AbiEDJ1A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 4 May 2022 05:27:00 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6061C255B8;
-        Wed,  4 May 2022 02:23:23 -0700 (PDT)
-Date:   Wed, 04 May 2022 09:23:20 -0000
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 420EF255BF;
+        Wed,  4 May 2022 02:23:24 -0700 (PDT)
+Date:   Wed, 04 May 2022 09:23:21 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020; t=1651656202;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
@@ -23,12 +23,12 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=QGl5F7/1qdWmXllHVt4ghtyzdt80DT7R0uoNuv0KmoY=;
-        b=MRx79LDzoJhC3b6V83Og4r+7mOpPgkKkBsQmP8Vk62tOWl8QkXbKM6GPHRxMNkHiaCi7ZZ
-        ET6oy+fb3TUWHZh1iyWE7uL14qSO1lGaJzUhugbk6ggE/fes/341JxwJSO9bQcErU75FTx
-        yaV4Z5yM1aw4bC2Y/skIbCowmomrlQGYaSXiVHgNg8+/v/Owp2Ppwgj5kwZgr4cnV/qyoz
-        tdoweOdQ6aeB0T2CcGThYClAhutbgOMU8BNguBlElPo3swfvpaSXLwcngyMM9osdqdzw/u
-        aOTa/cjqhaPOxVCNZ4XurYvdg1z1QAr6ur6C0cjFBVAD2l6zkoCjTN/3f8+g0w==
+        bh=kz1QPqzXOM0cYVAx3B79d5D4n7/yR1WkuK5Z44yYHtQ=;
+        b=rlw9ZmjaqRK1LDlRhMkhxZs9FzgtTk+7n7pZTTX2EJLJXGfYmg6LtwBqAMPTRfHiI5sVGX
+        wydAOXsQOW1n2AtUwCJRmQrf75a7lc9zFWOdhRk1e4yJ8UNpfI4bO3cnCOkJNt9Ha1bmkC
+        LfyOs+aujLwjLIyAYxP4pYRq+DVs2emr1wA4IUk+VEXs9mWRutzkbye+ZRpm9EI9NPp0/u
+        1a7WNm7EB9J7u8Hon0too9+x0AzoMXpG60lbSwBLKBwHm25VZITNiTHtO4ILiXlZENYCql
+        sQwplQaqCr8U4iRaJYWKfMpAPdfxFu+ZkDnfmrhS7CV4mTVqyC1xyNhIx3+uJQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020e; t=1651656202;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
@@ -36,23 +36,23 @@ DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=QGl5F7/1qdWmXllHVt4ghtyzdt80DT7R0uoNuv0KmoY=;
-        b=mZI3g+rxF/wfYFEzKJX26UfxozP4K4Ipb1y3RhCniPk7WEIkRjQaVe04lJ3Puve+doeHpk
-        3vO12Wi/VOHnqgCw==
+        bh=kz1QPqzXOM0cYVAx3B79d5D4n7/yR1WkuK5Z44yYHtQ=;
+        b=yBtuNdIJQLjNYKtErpUZvNt9SvduhoVif4aHLl6xMK0RLX/pj/DwmAW6ZbSAGSI7jM0kHL
+        pYrwFvnhd2oo8XBA==
 From:   "tip-bot2 for Sandipan Das" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: perf/core] perf/x86/amd/core: Add PerfMonV2 overflow handling
+Subject: [tip: perf/core] perf/x86/amd/core: Add PerfMonV2 counter control
 Cc:     Sandipan Das <sandipan.das@amd.com>,
         "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: =?utf-8?q?=3Cf20b7e4da0b0a83bdbe05857f354146623bc63ab=2E16505?=
+In-Reply-To: =?utf-8?q?=3Cdfe8e934074aaabc6ba748dfaccd0a77c974bb82=2E16505?=
  =?utf-8?q?15382=2Egit=2Esandipan=2Edas=40amd=2Ecom=3E?=
-References: =?utf-8?q?=3Cf20b7e4da0b0a83bdbe05857f354146623bc63ab=2E165051?=
+References: =?utf-8?q?=3Cdfe8e934074aaabc6ba748dfaccd0a77c974bb82=2E165051?=
  =?utf-8?q?5382=2Egit=2Esandipan=2Edas=40amd=2Ecom=3E?=
 MIME-Version: 1.0
-Message-ID: <165165620089.4207.7064790458623594612.tip-bot2@tip-bot2>
+Message-ID: <165165620180.4207.1345040590129398389.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -69,247 +69,139 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the perf/core branch of tip:
 
-Commit-ID:     7685665c390dc68c2d9a74e8445f41494cc8f6cf
-Gitweb:        https://git.kernel.org/tip/7685665c390dc68c2d9a74e8445f41494cc8f6cf
+Commit-ID:     9622e67e3980c01872490de0925e5c6c23247c94
+Gitweb:        https://git.kernel.org/tip/9622e67e3980c01872490de0925e5c6c23247c94
 Author:        Sandipan Das <sandipan.das@amd.com>
-AuthorDate:    Thu, 21 Apr 2022 11:16:58 +05:30
+AuthorDate:    Thu, 21 Apr 2022 11:16:57 +05:30
 Committer:     Peter Zijlstra <peterz@infradead.org>
 CommitterDate: Wed, 04 May 2022 11:18:27 +02:00
 
-perf/x86/amd/core: Add PerfMonV2 overflow handling
+perf/x86/amd/core: Add PerfMonV2 counter control
 
 If AMD Performance Monitoring Version 2 (PerfMonV2) is
-supported, use a new scheme to process Core PMC overflows
-in the NMI handler using the new global control and status
-registers. This will be bypassed on unsupported hardware
-(x86_pmu.version < 2).
+supported, use a new scheme to manage the Core PMCs using
+the new global control and status registers. This will be
+bypassed on unsupported hardware (x86_pmu.version < 2).
 
-In x86_pmu_handle_irq(), overflows are detected by testing
-the contents of the PERF_CTR register for each active PMC in
-a loop. The new scheme instead inspects the overflow bits of
-the global status register.
+Currently, all PMCs have dedicated control (PERF_CTL) and
+counter (PERF_CTR) registers. For a given PMC, the enable
+(En) bit of its PERF_CTL register is used to start or stop
+counting.
 
-The Performance Counter Global Status (PerfCntrGlobalStatus)
-register has overflow (PerfCntrOvfl) bits for each PMC. This
-is, however, a read-only MSR. To acknowledge that overflows
-have been processed, the NMI handler must clear the bits by
-writing to the PerfCntrGlobalStatusClr register.
+The Performance Counter Global Control (PerfCntrGlobalCtl)
+register has enable (PerfCntrEn) bits for each PMC. For a
+PMC to start counting, both PERF_CTL and PerfCntrGlobalCtl
+enable bits must be set. If either of those are cleared,
+the PMC stops counting.
 
-In x86_pmu_handle_irq(), PMCs counting the same event that
-are started and stopped at the same time record slightly
-different counts due to delays in between reads from the
-PERF_CTR registers. This is fixed by stopping and starting
-the PMCs at the same before and with a single write to the
-Performance Counter Global Control (PerfCntrGlobalCtl) upon
-entering and before exiting the NMI handler.
+In x86_pmu_{en,dis}able_all(), the PERF_CTL registers of
+all active PMCs are written to in a loop. Ideally, PMCs
+counting the same event that were started and stopped at
+the same time should record the same counts. Due to delays
+in between writes to the PERF_CTL registers across loop
+iterations, the PMCs cannot be enabled or disabled at the
+same instant and hence, record slightly different counts.
+This is fixed by enabling or disabling all active PMCs at
+the same time with a single write to the PerfCntrGlobalCtl
+register.
 
 Signed-off-by: Sandipan Das <sandipan.das@amd.com>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lkml.kernel.org/r/f20b7e4da0b0a83bdbe05857f354146623bc63ab.1650515382.git.sandipan.das@amd.com
+Link: https://lkml.kernel.org/r/dfe8e934074aaabc6ba748dfaccd0a77c974bb82.1650515382.git.sandipan.das@amd.com
 ---
- arch/x86/events/amd/core.c | 144 +++++++++++++++++++++++++++++++++---
- 1 file changed, 133 insertions(+), 11 deletions(-)
+ arch/x86/events/amd/core.c | 50 +++++++++++++++++++++++++++++++++----
+ 1 file changed, 45 insertions(+), 5 deletions(-)
 
 diff --git a/arch/x86/events/amd/core.c b/arch/x86/events/amd/core.c
-index a339c3e..262e39a 100644
+index 52fd794..a339c3e 100644
 --- a/arch/x86/events/amd/core.c
 +++ b/arch/x86/events/amd/core.c
-@@ -8,6 +8,7 @@
- #include <linux/delay.h>
- #include <linux/jiffies.h>
- #include <asm/apicdef.h>
-+#include <asm/apic.h>
- #include <asm/nmi.h>
- 
- #include "../perf_event.h"
-@@ -669,6 +670,45 @@ static inline void amd_pmu_set_global_ctl(u64 ctl)
- 	wrmsrl(MSR_AMD64_PERF_CNTR_GLOBAL_CTL, ctl);
+@@ -664,6 +664,11 @@ static void amd_pmu_cpu_dead(int cpu)
+ 	amd_pmu_cpu_reset(cpu);
  }
  
-+static inline u64 amd_pmu_get_global_status(void)
++static inline void amd_pmu_set_global_ctl(u64 ctl)
 +{
-+	u64 status;
-+
-+	/* PerfCntrGlobalStatus is read-only */
-+	rdmsrl(MSR_AMD64_PERF_CNTR_GLOBAL_STATUS, status);
-+
-+	return status & amd_pmu_global_cntr_mask;
++	wrmsrl(MSR_AMD64_PERF_CNTR_GLOBAL_CTL, ctl);
 +}
-+
-+static inline void amd_pmu_ack_global_status(u64 status)
-+{
-+	/*
-+	 * PerfCntrGlobalStatus is read-only but an overflow acknowledgment
-+	 * mechanism exists; writing 1 to a bit in PerfCntrGlobalStatusClr
-+	 * clears the same bit in PerfCntrGlobalStatus
-+	 */
-+
-+	/* Only allow modifications to PerfCntrGlobalStatus.PerfCntrOvfl */
-+	status &= amd_pmu_global_cntr_mask;
-+	wrmsrl(MSR_AMD64_PERF_CNTR_GLOBAL_STATUS_CLR, status);
-+}
-+
-+static bool amd_pmu_test_overflow_topbit(int idx)
-+{
-+	u64 counter;
-+
-+	rdmsrl(x86_pmu_event_addr(idx), counter);
-+
-+	return !(counter & BIT_ULL(x86_pmu.cntval_bits - 1));
-+}
-+
-+static bool amd_pmu_test_overflow_status(int idx)
-+{
-+	return amd_pmu_get_global_status() & BIT_ULL(idx);
-+}
-+
-+DEFINE_STATIC_CALL(amd_pmu_test_overflow, amd_pmu_test_overflow_topbit);
 +
  /*
   * When a PMC counter overflows, an NMI is used to process the event and
   * reset the counter. NMI latency can result in the counter being updated
-@@ -681,7 +721,6 @@ static inline void amd_pmu_set_global_ctl(u64 ctl)
- static void amd_pmu_wait_on_overflow(int idx)
- {
- 	unsigned int i;
--	u64 counter;
- 
- 	/*
- 	 * Wait for the counter to be reset if it has overflowed. This loop
-@@ -689,8 +728,7 @@ static void amd_pmu_wait_on_overflow(int idx)
- 	 * forever...
- 	 */
- 	for (i = 0; i < OVERFLOW_WAIT_COUNT; i++) {
--		rdmsrl(x86_pmu_event_addr(idx), counter);
--		if (counter & (1ULL << (x86_pmu.cntval_bits - 1)))
-+		if (!static_call(amd_pmu_test_overflow)(idx))
- 			break;
- 
- 		/* Might be in IRQ context, so can't sleep */
-@@ -830,6 +868,24 @@ static void amd_pmu_del_event(struct perf_event *event)
-  * handled a counter. When an un-handled NMI is received, it will be claimed
-  * only if arriving within that window.
-  */
-+static inline int amd_pmu_adjust_nmi_window(int handled)
-+{
-+	/*
-+	 * If a counter was handled, record a timestamp such that un-handled
-+	 * NMIs will be claimed if arriving within that window.
-+	 */
-+	if (handled) {
-+		this_cpu_write(perf_nmi_tstamp, jiffies + perf_nmi_window);
-+
-+		return handled;
-+	}
-+
-+	if (time_after(jiffies, this_cpu_read(perf_nmi_tstamp)))
-+		return NMI_DONE;
-+
-+	return NMI_HANDLED;
-+}
-+
- static int amd_pmu_handle_irq(struct pt_regs *regs)
- {
- 	struct cpu_hw_events *cpuc = this_cpu_ptr(&cpu_hw_events);
-@@ -857,20 +913,84 @@ static int amd_pmu_handle_irq(struct pt_regs *regs)
- 	if (pmu_enabled)
- 		amd_pmu_enable_all(0);
- 
-+	return amd_pmu_adjust_nmi_window(handled);
-+}
-+
-+static int amd_pmu_v2_handle_irq(struct pt_regs *regs)
-+{
-+	struct cpu_hw_events *cpuc = this_cpu_ptr(&cpu_hw_events);
-+	struct perf_sample_data data;
-+	struct hw_perf_event *hwc;
-+	struct perf_event *event;
-+	int handled = 0, idx;
-+	u64 status, mask;
-+	bool pmu_enabled;
-+
- 	/*
--	 * If a counter was handled, record a timestamp such that un-handled
--	 * NMIs will be claimed if arriving within that window.
-+	 * Save the PMU state as it needs to be restored when leaving the
-+	 * handler
- 	 */
--	if (handled) {
--		this_cpu_write(perf_nmi_tstamp, jiffies + perf_nmi_window);
-+	pmu_enabled = cpuc->enabled;
-+	cpuc->enabled = 0;
- 
--		return handled;
-+	/* Stop counting */
-+	amd_pmu_v2_disable_all();
-+
-+	status = amd_pmu_get_global_status();
-+
-+	/* Check if any overflows are pending */
-+	if (!status)
-+		goto done;
-+
-+	for (idx = 0; idx < x86_pmu.num_counters; idx++) {
-+		if (!test_bit(idx, cpuc->active_mask))
-+			continue;
-+
-+		event = cpuc->events[idx];
-+		hwc = &event->hw;
-+		x86_perf_event_update(event);
-+		mask = BIT_ULL(idx);
-+
-+		if (!(status & mask))
-+			continue;
-+
-+		/* Event overflow */
-+		handled++;
-+		perf_sample_data_init(&data, 0, hwc->last_period);
-+
-+		if (!x86_perf_event_set_period(event))
-+			continue;
-+
-+		if (perf_event_overflow(event, &data, regs))
-+			x86_pmu_stop(event, 0);
-+
-+		status &= ~mask;
+@@ -693,15 +698,11 @@ static void amd_pmu_wait_on_overflow(int idx)
  	}
- 
--	if (time_after(jiffies, this_cpu_read(perf_nmi_tstamp)))
--		return NMI_DONE;
-+	/*
-+	 * It should never be the case that some overflows are not handled as
-+	 * the corresponding PMCs are expected to be inactive according to the
-+	 * active_mask
-+	 */
-+	WARN_ON(status > 0);
- 
--	return NMI_HANDLED;
-+	/* Clear overflow bits */
-+	amd_pmu_ack_global_status(~status);
-+
-+	/*
-+	 * Unmasking the LVTPC is not required as the Mask (M) bit of the LVT
-+	 * PMI entry is not set by the local APIC when a PMC overflow occurs
-+	 */
-+	inc_irq_stat(apic_perf_irqs);
-+
-+done:
-+	cpuc->enabled = pmu_enabled;
-+
-+	/* Resume counting only if PMU is active */
-+	if (pmu_enabled)
-+		amd_pmu_v2_enable_all(0);
-+
-+	return amd_pmu_adjust_nmi_window(handled);
  }
  
- static struct event_constraint *
-@@ -1256,6 +1376,8 @@ static int __init amd_core_pmu_init(void)
- 		x86_pmu.enable_all = amd_pmu_v2_enable_all;
- 		x86_pmu.disable_all = amd_pmu_v2_disable_all;
- 		x86_pmu.enable = amd_pmu_v2_enable_event;
-+		x86_pmu.handle_irq = amd_pmu_v2_handle_irq;
-+		static_call_update(amd_pmu_test_overflow, amd_pmu_test_overflow_status);
+-static void amd_pmu_disable_all(void)
++static void amd_pmu_check_overflow(void)
+ {
+ 	struct cpu_hw_events *cpuc = this_cpu_ptr(&cpu_hw_events);
+ 	int idx;
+ 
+-	amd_brs_disable_all();
+-
+-	x86_pmu_disable_all();
+-
+ 	/*
+ 	 * This shouldn't be called from NMI context, but add a safeguard here
+ 	 * to return, since if we're in NMI context we can't wait for an NMI
+@@ -748,6 +749,26 @@ static void amd_pmu_enable_all(int added)
+ 	}
+ }
+ 
++static void amd_pmu_v2_enable_event(struct perf_event *event)
++{
++	struct hw_perf_event *hwc = &event->hw;
++
++	/*
++	 * Testing cpu_hw_events.enabled should be skipped in this case unlike
++	 * in x86_pmu_enable_event().
++	 *
++	 * Since cpu_hw_events.enabled is set only after returning from
++	 * x86_pmu_start(), the PMCs must be programmed and kept ready.
++	 * Counting starts only after x86_pmu_enable_all() is called.
++	 */
++	__x86_pmu_enable_event(hwc, ARCH_PERFMON_EVENTSEL_ENABLE);
++}
++
++static void amd_pmu_v2_enable_all(int added)
++{
++	amd_pmu_set_global_ctl(amd_pmu_global_cntr_mask);
++}
++
+ static void amd_pmu_disable_event(struct perf_event *event)
+ {
+ 	x86_pmu_disable_event(event);
+@@ -765,6 +786,20 @@ static void amd_pmu_disable_event(struct perf_event *event)
+ 	amd_pmu_wait_on_overflow(event->hw.idx);
+ }
+ 
++static void amd_pmu_disable_all(void)
++{
++	amd_brs_disable_all();
++	x86_pmu_disable_all();
++	amd_pmu_check_overflow();
++}
++
++static void amd_pmu_v2_disable_all(void)
++{
++	/* Disable all PMCs */
++	amd_pmu_set_global_ctl(0);
++	amd_pmu_check_overflow();
++}
++
+ static void amd_pmu_add_event(struct perf_event *event)
+ {
+ 	if (needs_branch_stack(event))
+@@ -1216,6 +1251,11 @@ static int __init amd_core_pmu_init(void)
+ 		x86_pmu.num_counters = ebx.split.num_core_pmc;
+ 
+ 		amd_pmu_global_cntr_mask = (1ULL << x86_pmu.num_counters) - 1;
++
++		/* Update PMC handling functions */
++		x86_pmu.enable_all = amd_pmu_v2_enable_all;
++		x86_pmu.disable_all = amd_pmu_v2_disable_all;
++		x86_pmu.enable = amd_pmu_v2_enable_event;
  	}
  
  	/*

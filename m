@@ -2,78 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D8AB519C87
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 12:06:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0675F519CC4
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 12:17:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347735AbiEDKJt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 06:09:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49892 "EHLO
+        id S1347998AbiEDKUu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 06:20:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235489AbiEDKJo (ORCPT
+        with ESMTP id S229778AbiEDKUr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 06:09:44 -0400
-Received: from nbd.name (nbd.name [IPv6:2a01:4f8:221:3d45::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A75981B7A8;
-        Wed,  4 May 2022 03:06:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=nbd.name;
-         s=20160729; h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject
-        :Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:
-        Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-        In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=QFtJkn5BuBJmX8Cb0xWWHrPPY+oTpRZoTPus45vNpxs=; b=IQnS1Iat5s9IUVBlsUtsC6SNEQ
-        FrgVXD48EVV8xxC+s9Ngx87L8drjwRWZfnU1Rb5cgnFR/bFhyxH1xVrqJMdyNuc3StlDcjyzC6OYA
-        +qmz/CzzxXw4dbxtfZhyRRWicgYeiQsgDDkSxXSKyDejMDL95WkkiARbnQWigsRbaKJU=;
-Received: from p200300daa70ef200891a2ae4514fd280.dip0.t-ipconnect.de ([2003:da:a70e:f200:891a:2ae4:514f:d280] helo=Maecks.lan)
-        by ds12 with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.89)
-        (envelope-from <nbd@nbd.name>)
-        id 1nmBtO-00029r-EQ; Wed, 04 May 2022 12:05:58 +0200
-From:   Felix Fietkau <nbd@nbd.name>
-To:     Ryder Lee <ryder.lee@mediatek.com>,
-        Jianjun Wang <jianjun.wang@mediatek.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     linux-pci@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: [PATCH] PCI: mediatek-gen3: change driver name to mtk-pcie-gen3
-Date:   Wed,  4 May 2022 12:05:55 +0200
-Message-Id: <20220504100555.96007-1-nbd@nbd.name>
-X-Mailer: git-send-email 2.35.1
+        Wed, 4 May 2022 06:20:47 -0400
+X-Greylist: delayed 657 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 04 May 2022 03:17:09 PDT
+Received: from mail.aperture-lab.de (mail.aperture-lab.de [IPv6:2a01:4f8:c2c:665b::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC0CA1EACB;
+        Wed,  4 May 2022 03:17:09 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id E10F54116B;
+        Wed,  4 May 2022 12:06:02 +0200 (CEST)
+Date:   Wed, 4 May 2022 12:06:00 +0200
+From:   Linus =?utf-8?Q?L=C3=BCssing?= <linus.luessing@c0d3.blue>
+To:     Kevin Mitchell <kevmitch@arista.com>
+Cc:     Matthias Schiffer <mschiffer@universe-factory.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        netdev@vger.kernel.org, gal@nvidia.com,
+        bridge@lists.linux-foundation.org, Florian Westphal <fw@strlen.de>,
+        linux-kernel@vger.kernel.org,
+        Jozsef Kadlecsik <kadlec@netfilter.org>,
+        coreteam@netfilter.org, netfilter-devel@vger.kernel.org,
+        Nikolay Aleksandrov <nikolay@nvidia.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
+        "David S. Miller" <davem@davemloft.net>,
+        Pablo Neira Ayuso <pablo@netfilter.org>
+Subject: Re: [Bridge] [PATCH v2 0/1] UDP traceroute packets with no checksum
+Message-ID: <YnJQCIKgriI3kjFc@sellars>
+References: <20220405235117.269511-1-kevmitch@arista.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220405235117.269511-1-kevmitch@arista.com>
+X-Last-TLS-Session-Version: TLSv1.3
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This allows it to coexist with the other mtk pcie driver in the same kernel
+On Tue, Apr 05, 2022 at 04:51:15PM -0700, Kevin Mitchell via Bridge wrote:
+> This is v2 of https://lkml.org/lkml/2022/1/14/1060
+> 
+> That patch was discovered to cause problems with UDP tunnels as
+> described here:
+> 
+> https://lore.kernel.org/netdev/7eed8111-42d7-63e1-d289-346a596fc933@nvidia.com/
+> 
+> This version addresses the issue by instead explicitly handling zero UDP
+> checksum in the nf_reject_verify_csum() helper function.
+> 
+> Unlike the previous patch, this one only allows zero UDP checksum in
+> IPv4. I discovered that the non-netfilter IPv6 path would indeed drop
+> zero UDP checksum packets, so it's probably best to remain consistent.
 
-Signed-off-by: Felix Fietkau <nbd@nbd.name>
----
- drivers/pci/controller/pcie-mediatek-gen3.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Are you sure that a UDP zero checksum is not working for IPv6
+packets? We are using it here without any issues with VXLAN
+tunnels.
 
-diff --git a/drivers/pci/controller/pcie-mediatek-gen3.c b/drivers/pci/controller/pcie-mediatek-gen3.c
-index 3e8d70bfabc6..2e665cd7e735 100644
---- a/drivers/pci/controller/pcie-mediatek-gen3.c
-+++ b/drivers/pci/controller/pcie-mediatek-gen3.c
-@@ -1021,7 +1021,7 @@ static struct platform_driver mtk_pcie_driver = {
- 	.probe = mtk_pcie_probe,
- 	.remove = mtk_pcie_remove,
- 	.driver = {
--		.name = "mtk-pcie",
-+		.name = "mtk-pcie-gen3",
- 		.of_match_table = mtk_pcie_of_match,
- 		.pm = &mtk_pcie_pm_ops,
- 	},
--- 
-2.35.1
+Yes, the original RFC did not allow UDP zero checksums in IPv6
+packets, but I believe this has changed:
 
+https://www.rfc-editor.org/rfc/rfc6936
+(https://www.ietf.org/archive/id/draft-ietf-6man-udpzero-01.html)
+
+Regards, Linus

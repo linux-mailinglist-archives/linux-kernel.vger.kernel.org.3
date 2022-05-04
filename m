@@ -2,67 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D286D519CF0
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 12:31:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93793519CF6
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 12:33:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348148AbiEDKe0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 06:34:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43504 "EHLO
+        id S1348115AbiEDKgs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 06:36:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348111AbiEDKeS (ORCPT
+        with ESMTP id S239023AbiEDKgp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 06:34:18 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51CBCE0C2
-        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 03:30:42 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id v12so1377031wrv.10
-        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 03:30:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=QRwF0dGsfdTHRlN/d1PJ9h1Zv3dHY26YISg3X11/2Y4=;
-        b=3pFNEsQYO7nwxiiZ5Mb0jj/wh11cUGNC8gBKQOvPlpd8O88BCKvUK47+J1isla5ODQ
-         xRySKPBmY2bRziXe6UB9zOMIhCf299RuMwgEU1zvUfa6DtgdZylgypqwSxbjfoqgeOfi
-         F2ux7j53w/aNVcGzUjuHypDR6oKJAmECeMJpznqrO5iyrlM3ZkHk8Hr4fVODTg7MOyC9
-         ugg3xM62oIk5Md6bsIQwcCdtjT1CAZe+MBnfbblwm2UXrRFaJU12alPG1BBblWOHqnVr
-         Tho1Xy7lTHFl7SKwEOGRtuxEAOWbfD53FzNYzmq/EZ7iOtWnHool2nLREkV9fiqSSDRB
-         vKgQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=QRwF0dGsfdTHRlN/d1PJ9h1Zv3dHY26YISg3X11/2Y4=;
-        b=iENn+m5QqbO+tf8wvyX1ieexw76/W1zPdTeSPLyc2aH5mwLbE5BPDJra09YXxzr1qk
-         9QErYQ71huenyLYLauWHbpwV4QDvCN99zc7dHikser91VSU9dkq7DJm5YiybUUZZQQ7G
-         aD5jjHDXZDgyVZaUHvbN2fSN5TlSa1l+cWDcscRC+Z+X+52+FUZenhA/ccyMFcUOA6D5
-         sDU41kwHE27rSZ3ViQ5+Kwys1kjPOo2DmND4JSrg3cLtVJcUXj7q+6OwiuO62pkP3EUJ
-         7sP4BH+G5Lrz4wyGZWSOsU1kPCdKhEIr/UvrJ+TULRJF0E1Z3Xqs/Ie9lkagJM5NzbTS
-         kjeQ==
-X-Gm-Message-State: AOAM532tzBo2RdG2+V6p29c6yYTYYVrZbPdUS0wpNb49DmkUww4Ikyny
-        6EpL8aARKb3rmYeCpgyYjZYMig==
-X-Google-Smtp-Source: ABdhPJxviVh0ZaERJTsydWaKnV4yo/EAWUS7IF9jWniuSgINgUFoJ7tfwAPb2wg+IlAT3wClYJwB4A==
-X-Received: by 2002:a05:6000:1acd:b0:20c:7201:9267 with SMTP id i13-20020a0560001acd00b0020c72019267mr6593519wry.41.1651660240359;
-        Wed, 04 May 2022 03:30:40 -0700 (PDT)
-Received: from localhost.localdomain (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.googlemail.com with ESMTPSA id k6-20020a05600c1c8600b0039429bfebebsm7521395wms.3.2022.05.04.03.30.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 May 2022 03:30:39 -0700 (PDT)
-From:   Corentin Labbe <clabbe@baylibre.com>
-To:     jdelvare@suse.com, linux@roeck-us.net
-Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Corentin Labbe <clabbe@baylibre.com>
-Subject: [PATCH v2 2/2] hwmon: acpi_power_meter: convert to hwmon_device_register_with_info
-Date:   Wed,  4 May 2022 10:30:28 +0000
-Message-Id: <20220504103028.493155-3-clabbe@baylibre.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220504103028.493155-1-clabbe@baylibre.com>
-References: <20220504103028.493155-1-clabbe@baylibre.com>
+        Wed, 4 May 2022 06:36:45 -0400
+Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam07on2047.outbound.protection.outlook.com [40.107.212.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C43C192B3;
+        Wed,  4 May 2022 03:33:09 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=WzoogM3zsbCGYqRGCZI0RAo4Qbdyt0dnMoTGDatjUqFVPJa+GtelNaWuIyzQqOMQrBO93R59owfmwiuvYzDCUx22Z3RO72jRIaSxamSGgP0H874zjvfJ5nCBl4nClKLKgUrhuSZCNzzzqN8v+u9/QmHFII9UgRd//0Aj9g4ZA/PAh9BPv8vNH81pFBLp8nYZ1vNnRvZHIRaX29kHSGmukES8NYoktMySIZN/54bvn94yJxw5CCugjyEjNc1GzVyWcVcsrpOyC8OkxBw2svxFXjcN4w87M+OXN6W7dE8ji+VpHQ1Y49JU+Yx8odRNOn5L7vOM3glBAmNDxadrP8aBew==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=47RnqaiyuWIWjyyZOX9nl75nOIKlQZuBq7JiiTSBgpg=;
+ b=A+H8mW5FZTleufnaZ4PU1vni1SE2ZaWDwGzrb21bVagvuuvpY0Tl33A0I9j8POQhStXF8YJ+iJU3nm+uRdK8mfM3hHmydbRc8crXqXohOV0aytHyGRARs36Pm7FAEXtXN2RDkJUUXBro6/HyipbSDVcIYf5R3p/44rJvVx8b/JmEBeq5sHTMc4WqlMTvtNMsqPvUlBzUcYjQAonfkeF3N26yCMwhkPZSVrNs1EzYF6Eojgmi7OQ7dySRqoAZLW5pbGZ8/Dnqhiguz1CygZOQZL9znCuo3ieTdA8I7OkiGkMzY2x9LZqwZPQriF5x9X7FkqCsGH9IjO26X2sUnIOfEA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=47RnqaiyuWIWjyyZOX9nl75nOIKlQZuBq7JiiTSBgpg=;
+ b=OUTwngqbXdMxOVLvjFs+CVaNKn9VEGCgL9GwukK3nn6m08fDnUp6fBX1GP0QydcWGEAGqB9axZohEj23vIZNDZKcGxAxw5kEM8RIfP74IiLrtaxv8CvWKdlUT8rzZpyLBhpBpKHnu263rEuF3rEIEJzqt7hVjxiwBG1bYWODWTtZSbPiyIF0+83YhV2dsUY5rNZtbVmy6tU8r2yveXqY9cyv8jm/NPIdF/pRqXhRW6qXdzS8/JAmVGq6Z4KMBDcMR1qcEO7LD6PKoN898dUoWkKFdjTIQdKfyq16DORs5AariTeAQS9JyjvNCwOuLbbHd1SFpQ7Y1vGIB7s3qHTxSA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from BL1PR12MB5304.namprd12.prod.outlook.com (2603:10b6:208:314::13)
+ by DM6PR12MB2714.namprd12.prod.outlook.com (2603:10b6:5:42::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5206.13; Wed, 4 May
+ 2022 10:33:07 +0000
+Received: from BL1PR12MB5304.namprd12.prod.outlook.com
+ ([fe80::a9fa:62ae:bbc8:9d7d]) by BL1PR12MB5304.namprd12.prod.outlook.com
+ ([fe80::a9fa:62ae:bbc8:9d7d%6]) with mapi id 15.20.5206.025; Wed, 4 May 2022
+ 10:33:07 +0000
+Message-ID: <f8f9ea38-0716-7f41-0879-2c71dd243369@nvidia.com>
+Date:   Wed, 4 May 2022 16:02:54 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v3 4/8] vfio/pci: Add support for setting driver data
+ inside core layer
+Content-Language: en-US
+To:     Jason Gunthorpe <jgg@nvidia.com>,
+        Alex Williamson <alex.williamson@redhat.com>
+Cc:     Cornelia Huck <cohuck@redhat.com>,
+        Yishai Hadas <yishaih@nvidia.com>,
+        Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Max Gurtovoy <mgurtovoy@nvidia.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-pci@vger.kernel.org
+References: <20220425092615.10133-1-abhsahu@nvidia.com>
+ <20220425092615.10133-5-abhsahu@nvidia.com>
+ <20220503111124.38b07a9e.alex.williamson@redhat.com>
+ <20220504002056.GW8364@nvidia.com>
+X-Nvconfidentiality: public
+From:   Abhishek Sahu <abhsahu@nvidia.com>
+In-Reply-To: <20220504002056.GW8364@nvidia.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: MA0PR01CA0013.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:a01:80::13) To BL1PR12MB5304.namprd12.prod.outlook.com
+ (2603:10b6:208:314::13)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 5b02be29-30ae-455c-3db6-08da2db97a24
+X-MS-TrafficTypeDiagnostic: DM6PR12MB2714:EE_
+X-Microsoft-Antispam-PRVS: <DM6PR12MB27145A483ADC9206D78ACE3ACCC39@DM6PR12MB2714.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ZoNX92OxUFLaATKqNikPvDdpkfLk3nLJkWxdOjIDHfuQ6NLlZCD1P9XqPf2h/Alv8GpPhNj0zSQ3Y6s+dnk5JO+ZjR2Rn/NCE3BWuSY5gFo37NY4yGG1q/pTJawN1LjhdveQnCWAzzucsQbTJncRMICOBbfFYRJ5Aj2fovQQ37B1yBTc2oYYGLIuZnQep2yxVW7wgQppN5bjekQPqphUAwOHCQCDlcLm+yqPLbwR+vKqYZ1RtsMTTVZgtOvaBXcBSM48UPz8BdttHlKsTBw5DkUCVBUqtSdq6aHNH66mSVsOzcPPccEaJzfsmE5kN7kSQYV6ivC9a6BgOhThjO2azl+1Xrvvsq6Noz9kzMOHiYirtnYyJngK/um0HY8OvV0tlRQS8hFhKgsX848Oj9mhT7Re8ZyeLNVR4SlpvEJABGo2fUOOjWpwKzflbvLvr9VEUzNr8ZyT8DgNy/+eDbfiCJ2AhrDeNzJ8f0vH+ciN33P4IPClZsaibH/nBFtidepxU73USzeBoFbK/79flcXB5lgJegtf6SmlBgfyvJLTfOyCNA08LT5pieNgMw46xDo5hJUX3UU7FTfldw3bmP5D4qclf0h3jTiVViLzH/TeI2g31jYd6Evo4EcDTOYVZV3aCr73rBhnR6nrEMHacFm3RjZD4oiC4v//OwLohvAgDNGuSlArhxlAeG3SIo+kF+EmAPkK8DpBNrIOgFrsrSyS6erB9fSnOKfdL9IJcQVyeoOPGlCTUXliE16TNqy5Glr2VfKVHspmHJEgUTK8g11h5M/9aXfDOFPHKCmc5si+6zHkKkqWpxsTl03d74p3luBg
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR12MB5304.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(86362001)(966005)(6486002)(508600001)(31696002)(26005)(53546011)(55236004)(6506007)(6512007)(38100700002)(6666004)(7416002)(66556008)(186003)(66476007)(316002)(2906002)(66946007)(36756003)(5660300002)(8936002)(54906003)(31686004)(110136005)(83380400001)(4326008)(8676002)(2616005)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?R0h5UFB1YklNMWRLMUswcm1xTDM3R0pQaW14Umk2Ulg4ZDVVcE1VMmppNWZa?=
+ =?utf-8?B?K0F6Q3ZPNWlQTVU4YW41SWMvcnBtLzc4MkR2MEpieXI4b1hmOVlwbFAxRWp4?=
+ =?utf-8?B?Q2hWakZpa2dWK1BUMFZ3ZHdlODBFS2ZTRU1LZHRrcVQvR0pTaGhlWWwrUExZ?=
+ =?utf-8?B?YnQ2S2lyZ1p2d2diTjFZamFrNkNua3VrWUVwemVvemMzcmk3amZjNlpabUli?=
+ =?utf-8?B?QlpYQXdJU3dWWW8rQlQ2NTd3TjhrNGgzdWVaaHd3QVc2L2ZsUmZPajF6ZFdY?=
+ =?utf-8?B?d0Q3bjZQR1VTSzhibnVadFk2bXNMNjl4ZDVjWlpOcDhtYk90SlhLNDU4ZVlF?=
+ =?utf-8?B?SjFPL2JPQjZ6OWpDM1Y0RlNXOFd0NmNWclQ5Q1R2YXBsMmZFYTV0c1B1K21t?=
+ =?utf-8?B?OGVKb0R3a1hOYzltdEVXZ2hJVlBxVHJCQ3VFUTkzREpIVmtvQzRIZGlaRHdo?=
+ =?utf-8?B?am1tQlR5Nm9Yc3V0WGpORnNIVk94V1ZIYzFUZ0FvM1B0d014SFpuMGszek9p?=
+ =?utf-8?B?MHdxYnFCYVUxMDFLZ0Y2bGRzcVVobnRXZDF1Si9HdWtxNHFXNmZiM29VT0dT?=
+ =?utf-8?B?MzkzK2xtVFRUZ0l3NnF1c3dsYXBYZHU2TEE5eDZYeW9pWm1KY08yU1g1Sy95?=
+ =?utf-8?B?bHA1YzZGRU9jU09qQm1ZaWQxeThYTEFvUGhvUFB1TjNZWEhFMDdmYktaRVEv?=
+ =?utf-8?B?dEltV09mQzQxZDZzSFlVZEhkdGY3RDYwbG9tdDg5VFdTWTUveEdUZDlVM21q?=
+ =?utf-8?B?Z1htd0U4MzRPNmdsaSthalIxU04zaE5yZndINGZqL0xQalVoUEp2RXBKYVRm?=
+ =?utf-8?B?TFlVNHhoMkhDUFdreEh3cTNtTW03NU5MRnVkWjJ3OTdOREsyb0ZLTmVUN21o?=
+ =?utf-8?B?V3BnT3A3NWpDRU5XTnBhVnNqNFNzOXdqQ0tYSDlJYzIvZ1VpQ1MrNkk5ZXhQ?=
+ =?utf-8?B?M3g0UWdWTmZjNDR0Q3dreWkyYXdJamtrOGVaSjM5akcrd0xlVUQyUE5NWnVp?=
+ =?utf-8?B?M2hVdEVtN2JBbXBGOGRHTnJjTEhsSEprdHVuUVZCNXdJUE5UV2xkdDNDWFRq?=
+ =?utf-8?B?THBvSThsY1NvZjRROWdtczdLRi9vM1Q2RmxUck1yYktadUtnSXJ0TzRQUC9L?=
+ =?utf-8?B?cGpYZnZSUTZZeHhXdGVVSUY3Y3JDMnFjTHlRM3BBbjdWaVlvWGVHaG5UQU95?=
+ =?utf-8?B?QSs5M0luL2dzellvU25sMzlzZ2FTNk1RaFdrbmpieU1ZaHA2ZjltODdHbnha?=
+ =?utf-8?B?bGNyQksxUEdnYXVBaGNjTHlZeXVVS2VsQWtYenkzVjVQWGFZMXZxdTI1L2RI?=
+ =?utf-8?B?dlRsSis0cXdpOWVZZmUvM2VPLzFqR3RmWHBpMy9kOFpFMXBrYWJWRms0U2Nw?=
+ =?utf-8?B?dEJyYW44VDJMaHVmYTNtWkhXeElqUmcraWhkWWtUSTB6QjRFK0FFdUk5L0N3?=
+ =?utf-8?B?aFhTaGJOWStkRHIwZ09DMlZ5U1M0c3dHYjgwMVhkVDFBaXF3R0JqcHZqNEVZ?=
+ =?utf-8?B?T25IMjhNblFaaDVkOXNNV09MSkp0TGVIZCtqQk03NEZzbS9FLzFlVzV3WGVR?=
+ =?utf-8?B?S0pDRnZwSWNaU28xaW91aGEwekE2aFQwTGZtNlF1OWlMcmRkUE5yR2lkTE10?=
+ =?utf-8?B?ZEE2QTdGQnJmbk1Mbm5RU3Q2Z1ZDcE9xOGJrNVZ5RDV2N0ZpOU9mY3ZzbEM1?=
+ =?utf-8?B?aHlmTFFKQU11OUhmeHMrOUNGYmpISjVrU3UyeVhsR3E2djFDVkt0NzJhOENm?=
+ =?utf-8?B?MDYrbzZVTm9oNHlDY2tyNGxQUlhQYk1UTjBiUFhETXdyNCtGekl1OGt0TTBG?=
+ =?utf-8?B?Z2Y4b0tDT2RHSWk1bG1RZjVpbndXRm13RzdobCsxL1lCYUNoL0JmWXUyQVpP?=
+ =?utf-8?B?S2ZFRC9lTzZ6My92Y1F6ZC9pZ0ZFNk45UFVxeUg1YTBhb3d5RTZMQW1yYmYz?=
+ =?utf-8?B?Z2tPSkcxZ0Vad1Z0UlhCeDlMaW04ZWloRlYvbE11YWFBT2JmbXVHRldZTlZm?=
+ =?utf-8?B?M0F6U2pkZmo3MEJzcnNTMy9QL3dSdVMvMktTSTJ6SDdwcjNpMmRWSit0OEFW?=
+ =?utf-8?B?dXhUcVhMbWsvRjRDbUhWNTVlUlByU0tUb2hIZVBXNWJiMzRmRytSdnJ6QWli?=
+ =?utf-8?B?V2t4UmxlMmZRNEUwVXg2Ty95ZStMSXF6eGtXT3JqaEN5Ym16OFZ3T0g0SllM?=
+ =?utf-8?B?YndCV2RQOVNvbGIrR2FVOE1abXhWQ1hHak53WkRrS09nWVdnTTJiQUtYZEJJ?=
+ =?utf-8?B?MUlGYUFUc1c3WEhzVDFWeXdGTkNUV01kQnU1RU4wanBoZnB3S0NHYVdkbkNZ?=
+ =?utf-8?B?bnlmd1pJRm03VUltZ3paVHZTYUpzSjZyMDFHZldtRHhIUWlaVlhqUT09?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5b02be29-30ae-455c-3db6-08da2db97a24
+X-MS-Exchange-CrossTenant-AuthSource: BL1PR12MB5304.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 May 2022 10:33:07.1021
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: zd2AGBg/EDl9YgDRssY5FWTaiBw/rvSP4ef3ZQQcHHVPDWUlmv/ZFMzy68JX70oEeT5JxnRlRyMEajexEcFo7w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB2714
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,769 +143,189 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Booting lead to a hwmon_device_register() is deprecated. Please convert the driver to use hwmon_device_register_with_info().
-So let's convert the driver to use hwmon_device_register_with_info().
+On 5/4/2022 5:50 AM, Jason Gunthorpe wrote:
+> On Tue, May 03, 2022 at 11:11:24AM -0600, Alex Williamson wrote:
+>>> @@ -1843,6 +1845,17 @@ int vfio_pci_core_register_device(struct vfio_pci_core_device *vdev)
+>>>  		return -EBUSY;
+>>>  	}
+>>>  
+>>> +	/*
+>>> +	 * The 'struct vfio_pci_core_device' should be the first member of the
+>>> +	 * of the structure referenced by 'driver_data' so that it can be
+>>> +	 * retrieved with dev_get_drvdata() inside vfio-pci core layer.
+>>> +	 */
+>>> +	if ((struct vfio_pci_core_device *)driver_data != vdev) {
+>>> +		pci_warn(pdev, "Invalid driver data\n");
+>>> +		return -EINVAL;
+>>> +	}
+>>
+>> It seems a bit odd to me to add a driver_data arg to the function,
+>> which is actually required to point to the same thing as the existing
+>> function arg.  Is this just to codify the requirement?  Maybe others
+>> can suggest alternatives.
 
-Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
----
- drivers/hwmon/acpi_power_meter.c | 509 +++++++++++++------------------
- 1 file changed, 219 insertions(+), 290 deletions(-)
+ Yes. It was mainly for enforcing this requirement, otherwise in future
+ if someone tries to add new driver (or done changes in the existing
+ structure) and does not follow this convention then the pointer will
+ be wrong.
 
-diff --git a/drivers/hwmon/acpi_power_meter.c b/drivers/hwmon/acpi_power_meter.c
-index d2545a1be9fc..fa3417786356 100644
---- a/drivers/hwmon/acpi_power_meter.c
-+++ b/drivers/hwmon/acpi_power_meter.c
-@@ -23,7 +23,8 @@
- #define ACPI_POWER_METER_DEVICE_NAME	"Power Meter"
- #define ACPI_POWER_METER_CLASS		"pwr_meter_resource"
+>>
+>> We also need to collaborate with Jason's patch:
+>>
+>> https://lore.kernel.org/all/0-v2-0f36bcf6ec1e+64d-vfio_get_from_dev_jgg@nvidia.com/
+>>
+>> (and maybe others)
+>>
+>> If we implement a change like proposed here that vfio-pci-core sets
+>> drvdata then we don't need for each variant driver to implement their
+>> own wrapper around err_handler or err_detected as Jason proposes in the
+>> linked patch.  Thanks,
+> 
+> Oh, I forgot about this series completely.
+> 
+> Yes, we need to pick a method, either drvdata always points at the
+> core struct, or we wrapper the core functions.
+> 
+> I have an independent version of the above patch that uses the
+> drvdata, but I chucked it because it was unnecessary for just a couple
+> of AER functions. 
+> 
+> We should probably go back to it though if we are adding more
+> functions, as the wrapping is a bit repetitive. I'll go and respin
+> that series then. Abhishek can base on top of it.
+> 
+
+ Sure. I will rebase on top of Jason patch series.
+
+> My approach was more type-sane though:
+> 
+ This is also fine.
+
+ Initially I wanted to do the same but it requires to have a new
+ wrapper function for each driver so I implemented in the core layer.
  
--#define NUM_SENSORS			17
-+#define TRIP_MIN 0
-+#define TRIP_MAX 1
- 
- #define POWER_METER_CAN_MEASURE	(1 << 0)
- #define POWER_METER_CAN_TRIP	(1 << 1)
-@@ -38,11 +39,6 @@
- #define METER_NOTIFY_CAPPING	0x83
- #define METER_NOTIFY_INTERVAL	0x84
- 
--#define POWER_AVERAGE_NAME	"power1_average"
--#define POWER_CAP_NAME		"power1_cap"
--#define POWER_AVG_INTERVAL_NAME	"power1_average_interval"
--#define POWER_ALARM_NAME	"power1_alarm"
--
- static int cap_in_hardware;
- static bool force_cap_on;
- 
-@@ -85,8 +81,6 @@ struct acpi_power_meter_resource {
- 	u64		avg_interval;
- 	int			sensors_valid;
- 	unsigned long		sensors_last_updated;
--	struct sensor_device_attribute	sensors[NUM_SENSORS];
--	int			num_sensors;
- 	s64			trip[2];
- 	int			num_domain_devices;
- 	struct acpi_device	**domain_devices;
-@@ -122,47 +116,32 @@ static int update_avg_interval(struct acpi_power_meter_resource *resource)
- 	return 0;
- }
- 
--static ssize_t show_avg_interval(struct device *dev,
--				 struct device_attribute *devattr,
--				 char *buf)
-+static int acpi_power_average_interval_read(struct acpi_power_meter_resource *resource)
- {
--	struct acpi_device *acpi_dev = to_acpi_device(dev);
--	struct acpi_power_meter_resource *resource = acpi_dev->driver_data;
--
- 	mutex_lock(&resource->lock);
- 	update_avg_interval(resource);
- 	mutex_unlock(&resource->lock);
- 
--	return sprintf(buf, "%llu\n", resource->avg_interval);
-+	return resource->avg_interval;
- }
- 
--static ssize_t set_avg_interval(struct device *dev,
--				struct device_attribute *devattr,
--				const char *buf, size_t count)
-+static int set_average_interval(struct acpi_power_meter_resource *resource, long val)
- {
--	struct acpi_device *acpi_dev = to_acpi_device(dev);
--	struct acpi_power_meter_resource *resource = acpi_dev->driver_data;
- 	union acpi_object arg0 = { ACPI_TYPE_INTEGER };
- 	struct acpi_object_list args = { 1, &arg0 };
--	int res;
--	unsigned long temp;
- 	unsigned long long data;
- 	acpi_status status;
- 
--	res = kstrtoul(buf, 10, &temp);
--	if (res)
--		return res;
--
--	if (temp > resource->caps.max_avg_interval ||
--	    temp < resource->caps.min_avg_interval)
-+	if (val > resource->caps.max_avg_interval ||
-+	    val < resource->caps.min_avg_interval)
- 		return -EINVAL;
--	arg0.integer.value = temp;
-+	arg0.integer.value = val;
- 
- 	mutex_lock(&resource->lock);
- 	status = acpi_evaluate_integer(resource->acpi_dev->handle, "_PAI",
- 				       &args, &data);
- 	if (ACPI_SUCCESS(status))
--		resource->avg_interval = temp;
-+		resource->avg_interval = val;
- 	mutex_unlock(&resource->lock);
- 
- 	if (ACPI_FAILURE(status)) {
-@@ -175,7 +154,7 @@ static ssize_t set_avg_interval(struct device *dev,
- 	if (data)
- 		return -EINVAL;
- 
--	return count;
-+	return 0;
- }
- 
- /* Cap functions */
-@@ -196,46 +175,33 @@ static int update_cap(struct acpi_power_meter_resource *resource)
- 	return 0;
- }
- 
--static ssize_t show_cap(struct device *dev,
--			struct device_attribute *devattr,
--			char *buf)
-+static int acpi_power_cap_read(struct acpi_power_meter_resource *resource,
-+			       long *val)
- {
--	struct acpi_device *acpi_dev = to_acpi_device(dev);
--	struct acpi_power_meter_resource *resource = acpi_dev->driver_data;
--
- 	mutex_lock(&resource->lock);
- 	update_cap(resource);
- 	mutex_unlock(&resource->lock);
- 
--	return sprintf(buf, "%llu\n", resource->cap * 1000);
-+	return resource->cap * 1000;
- }
- 
--static ssize_t set_cap(struct device *dev, struct device_attribute *devattr,
--		       const char *buf, size_t count)
-+static int set_cap(struct acpi_power_meter_resource *resource, long val)
- {
--	struct acpi_device *acpi_dev = to_acpi_device(dev);
--	struct acpi_power_meter_resource *resource = acpi_dev->driver_data;
- 	union acpi_object arg0 = { ACPI_TYPE_INTEGER };
- 	struct acpi_object_list args = { 1, &arg0 };
--	int res;
--	unsigned long temp;
- 	unsigned long long data;
- 	acpi_status status;
- 
--	res = kstrtoul(buf, 10, &temp);
--	if (res)
--		return res;
--
--	temp = DIV_ROUND_CLOSEST(temp, 1000);
--	if (temp > resource->caps.max_cap || temp < resource->caps.min_cap)
-+	val = DIV_ROUND_CLOSEST(val, 1000);
-+	if (val > resource->caps.max_cap || val < resource->caps.min_cap)
- 		return -EINVAL;
--	arg0.integer.value = temp;
-+	arg0.integer.value = val;
- 
- 	mutex_lock(&resource->lock);
- 	status = acpi_evaluate_integer(resource->acpi_dev->handle, "_SHL",
- 				       &args, &data);
- 	if (ACPI_SUCCESS(status))
--		resource->cap = temp;
-+		resource->cap = val;
- 	mutex_unlock(&resource->lock);
- 
- 	if (ACPI_FAILURE(status)) {
-@@ -248,7 +214,7 @@ static ssize_t set_cap(struct device *dev, struct device_attribute *devattr,
- 	if (data)
- 		return -EINVAL;
- 
--	return count;
-+	return 0;
- }
- 
- /* Power meter trip points */
-@@ -263,12 +229,12 @@ static int set_acpi_trip(struct acpi_power_meter_resource *resource)
- 	acpi_status status;
- 
- 	/* Both trip levels must be set */
--	if (resource->trip[0] < 0 || resource->trip[1] < 0)
-+	if (resource->trip[TRIP_MIN] < 0 || resource->trip[TRIP_MAX] < 0)
- 		return 0;
- 
- 	/* This driver stores min, max; ACPI wants max, min. */
--	arg_objs[0].integer.value = resource->trip[1];
--	arg_objs[1].integer.value = resource->trip[0];
-+	arg_objs[0].integer.value = resource->trip[TRIP_MAX];
-+	arg_objs[1].integer.value = resource->trip[TRIP_MIN];
- 
- 	status = acpi_evaluate_integer(resource->acpi_dev->handle, "_PTP",
- 				       &args, &data);
-@@ -285,30 +251,18 @@ static int set_acpi_trip(struct acpi_power_meter_resource *resource)
- 	return 0;
- }
- 
--static ssize_t set_trip(struct device *dev, struct device_attribute *devattr,
--			const char *buf, size_t count)
-+static int set_trip(struct acpi_power_meter_resource *resource, long val, int triptype)
- {
--	struct sensor_device_attribute *attr = to_sensor_dev_attr(devattr);
--	struct acpi_device *acpi_dev = to_acpi_device(dev);
--	struct acpi_power_meter_resource *resource = acpi_dev->driver_data;
- 	int res;
--	unsigned long temp;
- 
--	res = kstrtoul(buf, 10, &temp);
--	if (res)
--		return res;
--
--	temp = DIV_ROUND_CLOSEST(temp, 1000);
-+	val = DIV_ROUND_CLOSEST(val, 1000);
- 
- 	mutex_lock(&resource->lock);
--	resource->trip[attr->index - 7] = temp;
-+	resource->trip[triptype] = val;
- 	res = set_acpi_trip(resource);
- 	mutex_unlock(&resource->lock);
- 
--	if (res)
--		return res;
--
--	return count;
-+	return res;
- }
- 
- /* Power meter */
-@@ -337,33 +291,26 @@ static int update_meter(struct acpi_power_meter_resource *resource)
- 	return 0;
- }
- 
--static ssize_t show_power(struct device *dev,
--			  struct device_attribute *devattr,
--			  char *buf)
-+static int acpi_power_power_read(struct acpi_power_meter_resource *resource,
-+				 long *val)
- {
--	struct acpi_device *acpi_dev = to_acpi_device(dev);
--	struct acpi_power_meter_resource *resource = acpi_dev->driver_data;
--
- 	mutex_lock(&resource->lock);
- 	update_meter(resource);
- 	mutex_unlock(&resource->lock);
- 
--	return sprintf(buf, "%llu\n", resource->power * 1000);
-+	*val = resource->power * 1000;
-+	return 0;
- }
- 
- /* Miscellaneous */
--static ssize_t show_str(struct device *dev,
--			struct device_attribute *devattr,
--			char *buf)
-+static ssize_t show_str(struct device *dev, int index, char *buf)
- {
--	struct sensor_device_attribute *attr = to_sensor_dev_attr(devattr);
--	struct acpi_device *acpi_dev = to_acpi_device(dev);
--	struct acpi_power_meter_resource *resource = acpi_dev->driver_data;
-+	struct acpi_power_meter_resource *resource = dev_get_drvdata(dev);
- 	acpi_string val;
- 	int ret;
- 
- 	mutex_lock(&resource->lock);
--	switch (attr->index) {
-+	switch (index) {
- 	case 0:
- 		val = resource->model_number;
- 		break;
-@@ -375,7 +322,7 @@ static ssize_t show_str(struct device *dev,
- 		break;
- 	default:
- 		WARN(1, "Implementation error: unexpected attribute index %d\n",
--		     attr->index);
-+		     index);
- 		val = "";
- 		break;
- 	}
-@@ -384,141 +331,138 @@ static ssize_t show_str(struct device *dev,
- 	return ret;
- }
- 
--static ssize_t show_val(struct device *dev,
--			struct device_attribute *devattr,
--			char *buf)
-+static ssize_t power1_is_battery_show(struct device *dev,
-+				      struct device_attribute *attr,
-+				      char *buf)
- {
--	struct sensor_device_attribute *attr = to_sensor_dev_attr(devattr);
- 	struct acpi_device *acpi_dev = to_acpi_device(dev);
- 	struct acpi_power_meter_resource *resource = acpi_dev->driver_data;
--	u64 val = 0;
-+	int val;
- 
--	switch (attr->index) {
--	case 0:
--		val = resource->caps.min_avg_interval;
-+	if (resource->caps.flags & POWER_METER_IS_BATTERY)
-+		val = 1;
-+	else
-+		val = 0;
-+	return sprintf(buf, "%d\n", val);
-+}
-+
-+static ssize_t power1_model_number_show(struct device *dev,
-+					struct device_attribute *attr,
-+					char *buf)
-+{
-+	return show_str(dev, 0, buf);
-+}
-+
-+static ssize_t power1_serial_number_show(struct device *dev,
-+					 struct device_attribute *attr,
-+					 char *buf)
-+{
-+	return show_str(dev, 1, buf);
-+}
-+
-+static ssize_t power1_oem_info_show(struct device *dev,
-+				    struct device_attribute *attr,
-+				    char *buf)
-+{
-+	return show_str(dev, 2, buf);
-+}
-+
-+static int acpi_power_read(struct device *dev, enum hwmon_sensor_types type,
-+			   u32 attr, int channel, long *val)
-+{
-+	struct acpi_power_meter_resource *resource = dev_get_drvdata(dev);
-+
-+	switch (attr) {
-+	case hwmon_power_average:
-+		return acpi_power_power_read(resource, val);
-+	case hwmon_power_average_interval_min:
-+		*val = resource->caps.min_avg_interval;
- 		break;
--	case 1:
--		val = resource->caps.max_avg_interval;
-+	case hwmon_power_average_interval_max:
-+		*val = resource->caps.max_avg_interval;
- 		break;
--	case 2:
--		val = resource->caps.min_cap * 1000;
-+	case hwmon_power_cap_min:
-+		*val = resource->caps.min_cap * 1000;
- 		break;
--	case 3:
--		val = resource->caps.max_cap * 1000;
-+	case hwmon_power_cap_max:
-+		*val = resource->caps.max_cap * 1000;
- 		break;
--	case 4:
-+	case hwmon_power_cap:
-+		*val = acpi_power_cap_read(resource, val);
-+		break;
-+	case hwmon_power_cap_hyst:
- 		if (resource->caps.hysteresis == UNKNOWN_HYSTERESIS)
--			return sprintf(buf, "unknown\n");
-+			return -EINVAL;
- 
--		val = resource->caps.hysteresis * 1000;
-+		*val = resource->caps.hysteresis * 1000;
- 		break;
--	case 5:
--		if (resource->caps.flags & POWER_METER_IS_BATTERY)
--			val = 1;
--		else
--			val = 0;
--		break;
--	case 6:
-+	case hwmon_power_alarm:
- 		if (resource->power > resource->cap)
--			val = 1;
-+			*val = 1;
- 		else
--			val = 0;
-+			*val = 0;
- 		break;
--	case 7:
--	case 8:
--		if (resource->trip[attr->index - 7] < 0)
--			return sprintf(buf, "unknown\n");
--
--		val = resource->trip[attr->index - 7] * 1000;
-+	case hwmon_power_average_min:
-+		if (resource->trip[TRIP_MIN] < 0)
-+			return -EINVAL;
-+		*val = resource->trip[TRIP_MIN] * 1000;
-+		break;
-+	case hwmon_power_average_max:
-+		if (resource->trip[TRIP_MAX] < 0)
-+			return -EINVAL;
-+		*val = resource->trip[TRIP_MAX] * 1000;
-+		break;
-+	case hwmon_power_average_interval:
-+		*val = acpi_power_average_interval_read(resource);
-+		break;
-+	case hwmon_power_accuracy:
-+		*val = resource->caps.accuracy / 1000;
- 		break;
- 	default:
- 		WARN(1, "Implementation error: unexpected attribute index %d\n",
--		     attr->index);
--		break;
-+		     attr);
-+		return -EOPNOTSUPP;
- 	}
- 
--	return sprintf(buf, "%llu\n", val);
--}
--
--static ssize_t show_accuracy(struct device *dev,
--			     struct device_attribute *devattr,
--			     char *buf)
--{
--	struct acpi_device *acpi_dev = to_acpi_device(dev);
--	struct acpi_power_meter_resource *resource = acpi_dev->driver_data;
--	unsigned int acc = resource->caps.accuracy;
--
--	return sprintf(buf, "%u.%u%%\n", acc / 1000, acc % 1000);
-+	return 0;
- }
- 
--static ssize_t show_name(struct device *dev,
--			 struct device_attribute *devattr,
--			 char *buf)
-+static int acpi_power_write(struct device *dev, enum hwmon_sensor_types type,
-+			    u32 attr, int channel, long val)
- {
--	return sprintf(buf, "%s\n", ACPI_POWER_METER_NAME);
--}
--
--#define RO_SENSOR_TEMPLATE(_label, _show, _index)	\
--	{						\
--		.label = _label,			\
--		.show  = _show,				\
--		.index = _index,			\
--	}
--
--#define RW_SENSOR_TEMPLATE(_label, _show, _set, _index)	\
--	{						\
--		.label = _label,			\
--		.show  = _show,				\
--		.set   = _set,				\
--		.index = _index,			\
-+	struct acpi_power_meter_resource *resource = dev_get_drvdata(dev);
-+
-+	switch (attr) {
-+	case hwmon_power_average_min:
-+		return set_trip(resource, TRIP_MIN, val);
-+	case hwmon_power_average_max:
-+		return set_trip(resource, TRIP_MAX, val);
-+	case hwmon_power_cap:
-+		if (resource->caps.configurable_cap)
-+			return set_cap(resource, val);
-+		else
-+			return -EINVAL;
-+	case hwmon_power_average_interval:
-+		return set_average_interval(resource, val);
-+	default:
-+		return -EOPNOTSUPP;
- 	}
-+}
- 
--/* Sensor descriptions.  If you add a sensor, update NUM_SENSORS above! */
--static struct sensor_template meter_attrs[] = {
--	RO_SENSOR_TEMPLATE(POWER_AVERAGE_NAME, show_power, 0),
--	RO_SENSOR_TEMPLATE("power1_accuracy", show_accuracy, 0),
--	RO_SENSOR_TEMPLATE("power1_average_interval_min", show_val, 0),
--	RO_SENSOR_TEMPLATE("power1_average_interval_max", show_val, 1),
--	RO_SENSOR_TEMPLATE("power1_is_battery", show_val, 5),
--	RW_SENSOR_TEMPLATE(POWER_AVG_INTERVAL_NAME, show_avg_interval,
--			   set_avg_interval, 0),
--	{},
--};
--
--static struct sensor_template misc_cap_attrs[] = {
--	RO_SENSOR_TEMPLATE("power1_cap_min", show_val, 2),
--	RO_SENSOR_TEMPLATE("power1_cap_max", show_val, 3),
--	RO_SENSOR_TEMPLATE("power1_cap_hyst", show_val, 4),
--	RO_SENSOR_TEMPLATE(POWER_ALARM_NAME, show_val, 6),
--	{},
--};
--
--static struct sensor_template ro_cap_attrs[] = {
--	RO_SENSOR_TEMPLATE(POWER_CAP_NAME, show_cap, 0),
--	{},
--};
--
--static struct sensor_template rw_cap_attrs[] = {
--	RW_SENSOR_TEMPLATE(POWER_CAP_NAME, show_cap, set_cap, 0),
--	{},
--};
--
--static struct sensor_template trip_attrs[] = {
--	RW_SENSOR_TEMPLATE("power1_average_min", show_val, set_trip, 7),
--	RW_SENSOR_TEMPLATE("power1_average_max", show_val, set_trip, 8),
--	{},
--};
--
--static struct sensor_template misc_attrs[] = {
--	RO_SENSOR_TEMPLATE("name", show_name, 0),
--	RO_SENSOR_TEMPLATE("power1_model_number", show_str, 0),
--	RO_SENSOR_TEMPLATE("power1_oem_info", show_str, 2),
--	RO_SENSOR_TEMPLATE("power1_serial_number", show_str, 1),
--	{},
-+static DEVICE_ATTR_RO(power1_is_battery);
-+static DEVICE_ATTR_RO(power1_model_number);
-+static DEVICE_ATTR_RO(power1_oem_info);
-+static DEVICE_ATTR_RO(power1_serial_number);
-+
-+static struct attribute *acpi_power_attrs[] = {
-+	&dev_attr_power1_is_battery.attr,
-+	&dev_attr_power1_model_number.attr,
-+	&dev_attr_power1_oem_info.attr,
-+	&dev_attr_power1_serial_number.attr,
-+	NULL
- };
- 
--#undef RO_SENSOR_TEMPLATE
--#undef RW_SENSOR_TEMPLATE
-+ATTRIBUTE_GROUPS(acpi_power);
- 
- /* Read power domain data */
- static void remove_domain_devices(struct acpi_power_meter_resource *resource)
-@@ -621,55 +565,52 @@ static int read_domain_devices(struct acpi_power_meter_resource *resource)
- 	return res;
- }
- 
--/* Registration and deregistration */
--static int register_attrs(struct acpi_power_meter_resource *resource,
--			  struct sensor_template *attrs)
--{
--	struct device *dev = &resource->acpi_dev->dev;
--	struct sensor_device_attribute *sensors =
--		&resource->sensors[resource->num_sensors];
--	int res = 0;
--
--	while (attrs->label) {
--		sensors->dev_attr.attr.name = attrs->label;
--		sensors->dev_attr.attr.mode = 0444;
--		sensors->dev_attr.show = attrs->show;
--		sensors->index = attrs->index;
--
--		if (attrs->set) {
--			sensors->dev_attr.attr.mode |= 0200;
--			sensors->dev_attr.store = attrs->set;
--		}
--
--		sysfs_attr_init(&sensors->dev_attr.attr);
--		res = device_create_file(dev, &sensors->dev_attr);
--		if (res) {
--			sensors->dev_attr.attr.name = NULL;
--			goto error;
--		}
--		sensors++;
--		resource->num_sensors++;
--		attrs++;
--	}
--
--error:
--	return res;
--}
--
--static void remove_attrs(struct acpi_power_meter_resource *resource)
-+static umode_t acpi_power_is_visible(const void *data,
-+				     enum hwmon_sensor_types type,
-+				     u32 attr, int channel)
- {
--	int i;
-+	const struct acpi_power_meter_resource *resource = data;
- 
--	for (i = 0; i < resource->num_sensors; i++) {
--		if (!resource->sensors[i].dev_attr.attr.name)
--			continue;
--		device_remove_file(&resource->acpi_dev->dev,
--				   &resource->sensors[i].dev_attr);
-+	switch (attr) {
-+	case hwmon_power_average_min:
-+	case hwmon_power_average_max:
-+		if (resource->caps.flags & POWER_METER_CAN_TRIP)
-+			return 0644;
-+		break;
-+	case hwmon_power_average:
-+	case hwmon_power_accuracy:
-+	case hwmon_power_average_interval_min:
-+	case hwmon_power_average_interval_max:
-+		if (resource->caps.flags & POWER_METER_CAN_MEASURE)
-+			return 0444;
-+		break;
-+	case hwmon_power_average_interval:
-+		if (resource->caps.flags & POWER_METER_CAN_MEASURE)
-+			return 0644;
-+		break;
-+	case hwmon_power_cap:
-+		if (!can_cap_in_hardware())
-+			return 0;
-+		if (!(resource->caps.flags & POWER_METER_CAN_CAP))
-+			return 0;
-+		if (resource->caps.configurable_cap)
-+			return 0644;
-+		return 0444;
-+		break;
-+	case hwmon_power_cap_min:
-+	case hwmon_power_cap_max:
-+	case hwmon_power_cap_hyst:
-+	case hwmon_power_cap_alarm:
-+		if (!can_cap_in_hardware())
-+			return 0;
-+		if (resource->caps.flags & POWER_METER_CAN_CAP)
-+			return 0444;
-+		break;
-+	default:
-+		break;
- 	}
- 
--	remove_domain_devices(resource);
--
--	resource->num_sensors = 0;
-+	return 0;
- }
- 
- static int setup_attrs(struct acpi_power_meter_resource *resource)
-@@ -680,47 +621,11 @@ static int setup_attrs(struct acpi_power_meter_resource *resource)
- 	if (res)
- 		return res;
- 
--	if (resource->caps.flags & POWER_METER_CAN_MEASURE) {
--		res = register_attrs(resource, meter_attrs);
--		if (res)
--			goto error;
-+	if (resource->caps.flags & POWER_METER_CAN_CAP && !can_cap_in_hardware()) {
-+		dev_warn(&resource->acpi_dev->dev,
-+			 "Ignoring unsafe software power cap!\n");
- 	}
--
--	if (resource->caps.flags & POWER_METER_CAN_CAP) {
--		if (!can_cap_in_hardware()) {
--			dev_warn(&resource->acpi_dev->dev,
--				 "Ignoring unsafe software power cap!\n");
--			goto skip_unsafe_cap;
--		}
--
--		if (resource->caps.configurable_cap)
--			res = register_attrs(resource, rw_cap_attrs);
--		else
--			res = register_attrs(resource, ro_cap_attrs);
--
--		if (res)
--			goto error;
--
--		res = register_attrs(resource, misc_cap_attrs);
--		if (res)
--			goto error;
--	}
--
--skip_unsafe_cap:
--	if (resource->caps.flags & POWER_METER_CAN_TRIP) {
--		res = register_attrs(resource, trip_attrs);
--		if (res)
--			goto error;
--	}
--
--	res = register_attrs(resource, misc_attrs);
--	if (res)
--		goto error;
--
--	return res;
--error:
--	remove_attrs(resource);
--	return res;
-+	return 0;
- }
- 
- static void free_capabilities(struct acpi_power_meter_resource *resource)
-@@ -795,7 +700,6 @@ static int read_capabilities(struct acpi_power_meter_resource *resource)
- 			res = -EINVAL;
- 			goto error;
- 		}
--
- 		*str = kcalloc(element->string.length + 1, sizeof(u8),
- 			       GFP_KERNEL);
- 		if (!*str) {
-@@ -836,20 +740,20 @@ static void acpi_power_meter_notify(struct acpi_device *device, u32 event)
- 		if (res)
- 			break;
- 
--		remove_attrs(resource);
-+		remove_domain_devices(resource);
- 		setup_attrs(resource);
- 		break;
- 	case METER_NOTIFY_TRIP:
--		sysfs_notify(&device->dev.kobj, NULL, POWER_AVERAGE_NAME);
-+		hwmon_notify_event(&device->dev, hwmon_power, hwmon_power_average, 0);
- 		break;
- 	case METER_NOTIFY_CAP:
--		sysfs_notify(&device->dev.kobj, NULL, POWER_CAP_NAME);
-+		hwmon_notify_event(&device->dev, hwmon_power, hwmon_power_cap, 0);
- 		break;
- 	case METER_NOTIFY_INTERVAL:
--		sysfs_notify(&device->dev.kobj, NULL, POWER_AVG_INTERVAL_NAME);
-+		hwmon_notify_event(&device->dev, hwmon_power, hwmon_power_average_interval, 0);
- 		break;
- 	case METER_NOTIFY_CAPPING:
--		sysfs_notify(&device->dev.kobj, NULL, POWER_ALARM_NAME);
-+		hwmon_notify_event(&device->dev, hwmon_power, hwmon_power_alarm, 0);
- 		dev_info(&device->dev, "Capping in progress.\n");
- 		break;
- 	default:
-@@ -861,6 +765,28 @@ static void acpi_power_meter_notify(struct acpi_device *device, u32 event)
- 					dev_name(&device->dev), event, 0);
- }
- 
-+static const struct hwmon_channel_info *acpi_power_info[] = {
-+	HWMON_CHANNEL_INFO(power,
-+			   HWMON_P_AVERAGE | HWMON_P_AVERAGE_INTERVAL |
-+			   HWMON_P_AVERAGE_MIN | HWMON_P_AVERAGE_MAX |
-+			   HWMON_P_CAP | HWMON_P_CAP_HYST |
-+			   HWMON_P_CAP_MIN | HWMON_P_CAP_MAX |
-+			   HWMON_P_ACCURACY
-+			   ),
-+	NULL,
-+};
-+
-+static const struct hwmon_ops acpi_power_hwmon_ops = {
-+	.is_visible = acpi_power_is_visible,
-+	.read = acpi_power_read,
-+	.write = acpi_power_write,
-+};
-+
-+static const struct hwmon_chip_info acpi_power_chip_info = {
-+	.ops = &acpi_power_hwmon_ops,
-+	.info = acpi_power_info,
-+};
-+
- static int acpi_power_meter_add(struct acpi_device *device)
- {
- 	int res;
-@@ -891,7 +817,10 @@ static int acpi_power_meter_add(struct acpi_device *device)
- 	if (res)
- 		goto exit_free_capability;
- 
--	resource->hwmon_dev = hwmon_device_register(&device->dev);
-+	resource->hwmon_dev = hwmon_device_register_with_info(&device->dev,
-+							      ACPI_POWER_METER_NAME,
-+							      resource, &acpi_power_chip_info,
-+							      acpi_power_groups);
- 	if (IS_ERR(resource->hwmon_dev)) {
- 		res = PTR_ERR(resource->hwmon_dev);
- 		goto exit_remove;
-@@ -901,7 +830,7 @@ static int acpi_power_meter_add(struct acpi_device *device)
- 	goto exit;
- 
- exit_remove:
--	remove_attrs(resource);
-+	remove_domain_devices(resource);
- exit_free_capability:
- 	free_capabilities(resource);
- exit_free:
-@@ -920,7 +849,7 @@ static int acpi_power_meter_remove(struct acpi_device *device)
- 	resource = acpi_driver_data(device);
- 	hwmon_device_unregister(resource->hwmon_dev);
- 
--	remove_attrs(resource);
-+	remove_domain_devices(resource);
- 	free_capabilities(resource);
- 
- 	kfree(resource);
--- 
-2.35.1
+ Thanks,
+ Abhishek
+
+> commit 12ba94a72d7aa134af8752d6ff78193acdac93ae
+> Author: Jason Gunthorpe <jgg@ziepe.ca>
+> Date:   Tue Mar 29 16:32:32 2022 -0300
+> 
+>     vfio/pci: Have all VFIO PCI drivers store the vfio_pci_core_device in drvdata
+>     
+>     Having a consistent pointer in the drvdata will allow the next patch to
+>     make use of the drvdata from some of the core code helpers.
+>     
+>     Use a WARN_ON inside vfio_pci_core_unregister_device() to detect drivers
+>     that miss this.
+>     
+>     Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
+> 
+> diff --git a/drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.c b/drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.c
+> index 767b5d47631a49..665691967a030c 100644
+> --- a/drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.c
+> +++ b/drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.c
+> @@ -337,6 +337,14 @@ static int vf_qm_cache_wb(struct hisi_qm *qm)
+>  	return 0;
+>  }
+>  
+> +static struct hisi_acc_vf_core_device *hssi_acc_drvdata(struct pci_dev *pdev)
+> +{
+> +	struct vfio_pci_core_device *core_device = dev_get_drvdata(&pdev->dev);
+> +
+> +	return container_of(core_device, struct hisi_acc_vf_core_device,
+> +			    core_device);
+> +}
+> +
+>  static void vf_qm_fun_reset(struct hisi_acc_vf_core_device *hisi_acc_vdev,
+>  			    struct hisi_qm *qm)
+>  {
+> @@ -962,7 +970,7 @@ hisi_acc_vfio_pci_get_device_state(struct vfio_device *vdev,
+>  
+>  static void hisi_acc_vf_pci_aer_reset_done(struct pci_dev *pdev)
+>  {
+> -	struct hisi_acc_vf_core_device *hisi_acc_vdev = dev_get_drvdata(&pdev->dev);
+> +	struct hisi_acc_vf_core_device *hisi_acc_vdev = hssi_acc_drvdata(pdev);
+>  
+>  	if (hisi_acc_vdev->core_device.vdev.migration_flags !=
+>  				VFIO_MIGRATION_STOP_COPY)
+> @@ -1278,7 +1286,7 @@ static int hisi_acc_vfio_pci_probe(struct pci_dev *pdev, const struct pci_device
+>  	if (ret)
+>  		goto out_free;
+>  
+> -	dev_set_drvdata(&pdev->dev, hisi_acc_vdev);
+> +	dev_set_drvdata(&pdev->dev, &hisi_acc_vdev->core_device);
+>  	return 0;
+>  
+>  out_free:
+> @@ -1289,7 +1297,7 @@ static int hisi_acc_vfio_pci_probe(struct pci_dev *pdev, const struct pci_device
+>  
+>  static void hisi_acc_vfio_pci_remove(struct pci_dev *pdev)
+>  {
+> -	struct hisi_acc_vf_core_device *hisi_acc_vdev = dev_get_drvdata(&pdev->dev);
+> +	struct hisi_acc_vf_core_device *hisi_acc_vdev = hssi_acc_drvdata(pdev);
+>  
+>  	vfio_pci_core_unregister_device(&hisi_acc_vdev->core_device);
+>  	vfio_pci_core_uninit_device(&hisi_acc_vdev->core_device);
+> diff --git a/drivers/vfio/pci/mlx5/main.c b/drivers/vfio/pci/mlx5/main.c
+> index bbec5d288fee97..3391f965abd9f0 100644
+> --- a/drivers/vfio/pci/mlx5/main.c
+> +++ b/drivers/vfio/pci/mlx5/main.c
+> @@ -39,6 +39,14 @@ struct mlx5vf_pci_core_device {
+>  	struct mlx5_vf_migration_file *saving_migf;
+>  };
+>  
+> +static struct mlx5vf_pci_core_device *mlx5vf_drvdata(struct pci_dev *pdev)
+> +{
+> +	struct vfio_pci_core_device *core_device = dev_get_drvdata(&pdev->dev);
+> +
+> +	return container_of(core_device, struct mlx5vf_pci_core_device,
+> +			    core_device);
+> +}
+> +
+>  static struct page *
+>  mlx5vf_get_migration_page(struct mlx5_vf_migration_file *migf,
+>  			  unsigned long offset)
+> @@ -505,7 +513,7 @@ static int mlx5vf_pci_get_device_state(struct vfio_device *vdev,
+>  
+>  static void mlx5vf_pci_aer_reset_done(struct pci_dev *pdev)
+>  {
+> -	struct mlx5vf_pci_core_device *mvdev = dev_get_drvdata(&pdev->dev);
+> +	struct mlx5vf_pci_core_device *mvdev = mlx5vf_drvdata(pdev);
+>  
+>  	if (!mvdev->migrate_cap)
+>  		return;
+> @@ -618,7 +626,7 @@ static int mlx5vf_pci_probe(struct pci_dev *pdev,
+>  	if (ret)
+>  		goto out_free;
+>  
+> -	dev_set_drvdata(&pdev->dev, mvdev);
+> +	dev_set_drvdata(&pdev->dev, &mvdev->core_device);
+>  	return 0;
+>  
+>  out_free:
+> @@ -629,7 +637,7 @@ static int mlx5vf_pci_probe(struct pci_dev *pdev,
+>  
+>  static void mlx5vf_pci_remove(struct pci_dev *pdev)
+>  {
+> -	struct mlx5vf_pci_core_device *mvdev = dev_get_drvdata(&pdev->dev);
+> +	struct mlx5vf_pci_core_device *mvdev = mlx5vf_drvdata(pdev);
+>  
+>  	vfio_pci_core_unregister_device(&mvdev->core_device);
+>  	vfio_pci_core_uninit_device(&mvdev->core_device);
+> diff --git a/drivers/vfio/pci/vfio_pci_core.c b/drivers/vfio/pci/vfio_pci_core.c
+> index 06b6f3594a1316..53ad39d617653d 100644
+> --- a/drivers/vfio/pci/vfio_pci_core.c
+> +++ b/drivers/vfio/pci/vfio_pci_core.c
+> @@ -262,6 +262,10 @@ int vfio_pci_core_enable(struct vfio_pci_core_device *vdev)
+>  	u16 cmd;
+>  	u8 msix_pos;
+>  
+> +	/* Drivers must set the vfio_pci_core_device to their drvdata */
+> +	if (WARN_ON(vdev != dev_get_drvdata(&vdev->pdev->dev)))
+> +		return -EINVAL;
+> +
+>  	vfio_pci_set_power_state(vdev, PCI_D0);
+>  
+>  	/* Don't allow our initial saved state to include busmaster */
 

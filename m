@@ -2,65 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DF00519BF9
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 11:36:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D18D2519BFD
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 11:36:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347296AbiEDJjc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 05:39:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47412 "EHLO
+        id S1347391AbiEDJkV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 05:40:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347712AbiEDJjW (ORCPT
+        with ESMTP id S233315AbiEDJkS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 05:39:22 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6696226117
-        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 02:35:46 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id x33so1369323lfu.1
-        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 02:35:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=9/WJ0tqMozkcFwQbk0zwDH9itMdQXF9SUhVNLVNoj+0=;
-        b=boEv99Alzg6cPbETkNH72ehzATXFLMi5L3muYvYsEn/vKqkvsCs1VdacBOyJpuE0N9
-         /RiBOILz34hEQ06GMFwyq7fIDpy8/fsTesXOsvHRgDwhs6aAYEAJOE3siuM5BFHieTVc
-         1QBC2R6vyZUP8e3ACeDowMLf3pXC8YeRdpx6O6fF0tf87oJHYuLu/93+ZGIww1e/YC8A
-         RxOHBwucOrOR6Opexh2tUF2w5dDuZXmJ1+dXRv2YKsgjflGj1dd3ObIOq5xQD+oQ3Fyz
-         OsuFogZisOa/u4a0Km3JfSnfWScn0V00W2g9UA+R126iqo7tmLlI7sUhj3RDLDQyDaSQ
-         Scqg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=9/WJ0tqMozkcFwQbk0zwDH9itMdQXF9SUhVNLVNoj+0=;
-        b=QLC4dNjiWOovmq1CAZveiA1zgS707iytj5YP6ToiwF/LcMtap4FGNi6jGS/6uHDTLW
-         ehZtGY38Rl1iZ15Z3YBW127gQ3lu01ah6QGuX9b1G/JcTsFgK+8/Mdkibp64D3yRL8/Z
-         cZzaYOJXkjVlNKUCqdFIT+ViQkXoh4B/I9bQ6Usv5iKe9k5SYyY0fsJGL5KhlgcGqf7f
-         11LBZ2eFI+fahoIpxJDJYlUwtnUYDJBWighmsiBkli8T3NmBKJz/ONzbieeXSN6wVLLH
-         PgEP84Wk748v5LFwCHpU7EwmUNipMOBmpaonFrxiRg3qfSZFpxSWTcc0ylU98vDLrVBw
-         dCDg==
-X-Gm-Message-State: AOAM531GFhzXYlwCS3e6NIuJIXvuWUZENmK/Q+QM7WxJTvP1Hyp1ztJ2
-        SkmnsulsPzHymUONbqxk3enfDh8/UognOl3GP0aI2w==
-X-Google-Smtp-Source: ABdhPJxdJ7AeCc3WGwsxm2aWitYelOiSZyUAsthyGttVRji7k1IxzTQn213OcxxbKtIt5MCydz7+Y7/NhLVt1QyP9b0=
-X-Received: by 2002:a19:e007:0:b0:44a:a22d:2d49 with SMTP id
- x7-20020a19e007000000b0044aa22d2d49mr13432121lfg.254.1651656944773; Wed, 04
- May 2022 02:35:44 -0700 (PDT)
+        Wed, 4 May 2022 05:40:18 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6C00C1ADBD
+        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 02:36:40 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7C4BFED1;
+        Wed,  4 May 2022 02:36:40 -0700 (PDT)
+Received: from e120937-lin.home (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DF68A3FA50;
+        Wed,  4 May 2022 02:36:38 -0700 (PDT)
+From:   Cristian Marussi <cristian.marussi@arm.com>
+To:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Cc:     sudeep.holla@arm.com, james.quinlan@broadcom.com,
+        Jonathan.Cameron@Huawei.com, f.fainelli@gmail.com,
+        vincent.guittot@linaro.org, daniel.lezcano@linaro.org,
+        tarek.el-sherbiny@arm.com, adrian.slatineanu@arm.com,
+        souvik.chakravarty@arm.com,
+        Cristian Marussi <cristian.marussi@arm.com>
+Subject: [PATCH 0/7] SCMIv3.1 Powercap protocol and driver
+Date:   Wed,  4 May 2022 10:36:02 +0100
+Message-Id: <20220504093609.3077646-1-cristian.marussi@arm.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-References: <20220426141507.89868-1-ulf.hansson@linaro.org>
-In-Reply-To: <20220426141507.89868-1-ulf.hansson@linaro.org>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Wed, 4 May 2022 11:35:08 +0200
-Message-ID: <CAPDyKFrxr_t5iCa4E5Obvzk25wQbLCoY2Co=8iG==WfbBhpRVQ@mail.gmail.com>
-Subject: Re: [PATCH 0/3] PM: domains: Some minor improvements for genpd_power_off()
-To:     "Rafael J . Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org
-Cc:     Kevin Hilman <khilman@kernel.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -69,24 +44,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 26 Apr 2022 at 16:15, Ulf Hansson <ulf.hansson@linaro.org> wrote:
->
-> This small series intends to improve some of the execution paths when powering
-> off a genpd. More information is available in the commit messages.
->
-> Ulf Hansson (3):
->   PM: domains: Add GENPD_FLAG_RPM_ALWAYS_ON for the always-on governor
->   PM: domains: Drop redundant code for genpd always-on governor
->   PM: domain: Don't check PM_QOS_FLAG_NO_POWER_OFF in genpd
->
->  drivers/base/power/domain.c          | 10 ++++------
->  drivers/base/power/domain_governor.c |  6 ------
->  2 files changed, 4 insertions(+), 12 deletions(-)
->
+Hi all,
 
-Rafael, I have another slew of patches for genpd that I am getting
-prepared to submit. However, it would be nice to get @subject series
-queued first. Is it ready to go, you think?
+this short series introduces the last missing bit of SCMIv3.1, Powercap
+protocol. Along the series, there is a small refactoring around the SCMI
+FastChannels handling routines so as to reuse as much as possible the
+pre-existent (and tested) FastChannel code from the Perf protocol.
 
-Kind regards
-Uffe
+As a last step in the series an ARM SCMI based powercap driver is added,
+which takes care to expose via the Powercap framework all the SCMI Powercap
+zones that have been discovered asking the SCMI platform firmware.
+
+Basic testing has been performed against an emulated SCMI platform
+supporting SCMIv3.1 Powercap protocol, with the exclusion of the FCs
+bits whose generalization has been only tested for regression on a
+JUNO platform sporting a regular SCP/SCMI v2.10 fw.
+
+The series is based on sudeep/for-next/scmi [1] on top of:
+
+commit c7f8852d4216 ("firmware: arm_scmi: Fix late checks on pointer dereference")
+
+Thanks,
+Cristian
+
+[1]: https://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux.git/log/?h=for-next/scmi
+----
+
+
+Cristian Marussi (7):
+  dt-bindings: firmware: arm,scmi: Add powercap protocol
+  firmware: arm_scmi: Add SCMIv3.1 Powercap protocol basic support
+  firmware: arm_scmi: Generalize FastChannel support
+  firmware: arm_scmi: Add SCMIv3.1 Powercap FastChannels support
+  firmware: arm_scmi: Make use of FastChannels configurable
+  firmware: arm_scmi: Add scmi_driver optional setup/teardown callbacks
+  powercap: arm_scmi: Add SCMI Powercap based driver
+
+ .../bindings/firmware/arm,scmi.yaml           |  10 +
+ drivers/firmware/arm_scmi/Kconfig             |  13 +
+ drivers/firmware/arm_scmi/Makefile            |   2 +-
+ drivers/firmware/arm_scmi/bus.c               |  15 +-
+ drivers/firmware/arm_scmi/driver.c            | 167 ++++
+ drivers/firmware/arm_scmi/perf.c              | 218 +----
+ drivers/firmware/arm_scmi/powercap.c          | 809 ++++++++++++++++++
+ drivers/firmware/arm_scmi/protocols.h         |  23 +
+ drivers/powercap/Kconfig                      |  13 +
+ drivers/powercap/Makefile                     |   1 +
+ drivers/powercap/arm_scmi_powercap.c          | 537 ++++++++++++
+ include/linux/scmi_protocol.h                 | 124 +++
+ 12 files changed, 1757 insertions(+), 175 deletions(-)
+ create mode 100644 drivers/firmware/arm_scmi/powercap.c
+ create mode 100644 drivers/powercap/arm_scmi_powercap.c
+
+-- 
+2.32.0
+

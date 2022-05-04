@@ -2,122 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9212851B199
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 00:06:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BBB351B1A0
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 00:08:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356747AbiEDWJz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 18:09:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33394 "EHLO
+        id S1359040AbiEDWMV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 18:12:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379048AbiEDWJi (ORCPT
+        with ESMTP id S1358529AbiEDWMS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 18:09:38 -0400
-Received: from mout02.posteo.de (mout02.posteo.de [185.67.36.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEB3011A30
-        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 15:05:59 -0700 (PDT)
-Received: from submission (posteo.de [185.67.36.169]) 
-        by mout02.posteo.de (Postfix) with ESMTPS id 6554D240107
-        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 00:05:57 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.de; s=2017;
-        t=1651701957; bh=ULZZ+k26KKjcsFqAjZrCBvWd2aE7gAOo79lBw+9K7RA=;
-        h=From:To:Cc:Subject:Date:From;
-        b=Mj0ixB7Cx2Fo2Tjdg89gHmvZlpDrCkY1nH9NZpPSy5P1xzWWI0/fkQftmGPGtD9Sb
-         U6U10z5b+uCJl5uWlzQLUXZy/O5ksv9xIf8+xgmWyUqcS16aeSULtYCv3iVLga3KtE
-         S0GCawRfSrWEcnzduDG4dz1PqXNw1EqP8JHv6rAqHxFUFsHpR855fyBmqFoYtKw2bS
-         o9hZT9Xy88pDuCc8sAUFAq2eS5aO73hGW/xlzJJGqy1mx3+3olE+zTbni9yKQprUor
-         c10hoGCQh/UZJxHjoKFKpaGGUg8DChuG2VZ4lz30jC9zh7Im65ksazELNF5bb06AZ1
-         QHeP2Z3KS1NTw==
-Received: from customer (localhost [127.0.0.1])
-        by submission (posteo.de) with ESMTPSA id 4KtrW76HfFz6tmP;
-        Thu,  5 May 2022 00:05:55 +0200 (CEST)
-From:   Manuel Ullmann <labre@posteo.de>
-To:     Igor Russkikh <irusskikh@marvell.com>
-Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        regressions@lists.linux.dev, davem@davemloft.net,
-        ndanilov@marvell.com, kuba@kernel.org, pabeni@redhat.com,
-        Jordan Leppert <jordanleppert@protonmail.com>,
-        Holger =?utf-8?Q?Hoffst=C3=A4tte?= 
-        <holger@applied-asynchrony.com>, koo5 <kolman.jindrich@gmail.com>
-Subject: [PATCH] net: atlantic: always deep reset on pm op, fixing null
- deref regression
-Date:   Wed, 04 May 2022 22:06:12 +0000
-Message-ID: <87czgt2bsb.fsf@posteo.de>
+        Wed, 4 May 2022 18:12:18 -0400
+Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB9731A05D
+        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 15:08:40 -0700 (PDT)
+Received: by mail-yb1-xb35.google.com with SMTP id m128so4734403ybm.5
+        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 15:08:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=KR2DheuJjcUkIOIUvQUUeNZAD0Do/Uz4XuptHOySxt8=;
+        b=EEdHY2WYXdlpU2yBjkiemZxWwkp3ZpOMz4fiag41piTszem+RnzSdsfhLwno+JWoOo
+         ec8LLnd6k1z9Dhx+Kk/rSvF2DS8wRH0xt/IZed8l/fVIfrEEM8RCTt+HuCambNCMkHsj
+         Pi58haaM6QMnPRETblZo1RBEu2eSbG/sHcAWwzNETIO15yOOFrJTE+J4FzEeyq6a+e+/
+         exwk5FTzyZJ1EqcnOm+M2MXvVTYiDP/nqUyhz8bCklhjmlL277XoYVFHqD/rAmEmCOiQ
+         oqfxkT1QXj8q5NSXzbiiejSjtBMnIOQ6s4C29Tu+y9Ky+PLFJH3AvcNCTYf0ev15JvjS
+         G6Yg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=KR2DheuJjcUkIOIUvQUUeNZAD0Do/Uz4XuptHOySxt8=;
+        b=wbaPjtJLKFup8cFmiPmW6tPT0KZ02LnNeFUIA7VoKMAZ726ssseYK6CcArSQKgmIUz
+         l/8jzC2DU+/T03px6QkgnhhXRSMzgcOGUxDL3vpOw1yy+vdVb8NZ02mBhFZBDczFmquq
+         WZyK/VY8nFHkilpNFZsv7SUJ/PYFfcJF1LpGBcgPtgn1tyMUzOqCBMHtXMfdSRyUjYu4
+         iW46hDtFJqu0R/2dkb8g2YeHkigPYQExYeU9sVSGr3pNlkivBLbqdxnuBIS8w6y9uZrB
+         HnZvoWexaMgRjEmptz3cNPSXsad8TXreckebbt/nb+GA3OhTcEfr3Yqc9ayNGZLPmWhP
+         quDw==
+X-Gm-Message-State: AOAM532mexag3Ic8p+yQ2hna/HcA87ChAvCCB/20B2A/JUtRgx5RDbFN
+        m4TBTY7d9sJFLrbk0XhrotwJPs9rm5E0YExr34ZOZQ==
+X-Google-Smtp-Source: ABdhPJyTdhH2kmQaQQumXDHs0GjRnjkcH7xMYZb2ZH+uxT3QLuUwFLJJJF0FYLyU4UL2YqI+Ks3c8frqNy2YXLv4iJM=
+X-Received: by 2002:a25:aa92:0:b0:649:6b56:5597 with SMTP id
+ t18-20020a25aa92000000b006496b565597mr14236454ybi.295.1651702119896; Wed, 04
+ May 2022 15:08:39 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220503151310.58762-1-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20220503151310.58762-1-andriy.shevchenko@linux.intel.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Thu, 5 May 2022 00:08:28 +0200
+Message-ID: <CACRpkdZLTys2PjLHZZ+Jy-L+8=Td5MWRbX+KB2_ePM5k0_FYGQ@mail.gmail.com>
+Subject: Re: [PATCH v1 1/1] pinctrl: nomadik: Setup parent device and get rid
+ of unnecessary of_node assignment
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From a3eccd32c618fe4b4f5c537cd83ba5611149623e Mon Sep 17 00:00:00 2001
-Date: Wed, 4 May 2022 21:30:44 +0200
+On Tue, May 3, 2022 at 5:13 PM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
 
-The impact of this regression is the same for resume that I saw on
-thaw: the kernel hangs and nothing except SysRq rebooting can be done.
+> Some of the drivers do not set parent device. This may lead to obstacles
+> during debugging or understanding the device relations from the Linux
+> point of view. Assign parent device for GPIO chips created by these
+> drivers.
+>
+> While at it, let GPIO library to assign of_node from the parent device.
+>
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-The null deref occurs at the same position as on thaw.
-BUG: kernel NULL pointer dereference
-RIP: aq_ring_rx_fill+0xcf/0x210 [atlantic]
+Patch applied!
 
-Fixes regression in cbe6c3a8f8f4 ("net: atlantic: invert deep par in
-pm functions, preventing null derefs"), where I disabled deep pm
-resets in suspend and resume, trying to make sense of the
-atl_resume_common deep parameter in the first place.
-
-It turns out, that atlantic always has to deep reset on pm operations
-and the parameter is useless. Even though I expected that and tested
-resume, I screwed up by kexec-rebooting into an unpatched kernel, thus
-missing the breakage.
-
-This fixup obsoletes the deep parameter of atl_resume_common, but I
-leave the cleanup for the maintainers to post to mainline.
-
-PS: I'm very sorry for this regression.
-
-Fixes: cbe6c3a8f8f4315b96e46e1a1c70393c06d95a4c
-Link: https://lore.kernel.org/regressions/9-Ehc_xXSwdXcvZqKD5aSqsqeNj5Izco4=
-MYEwnx5cySXVEc9-x_WC4C3kAoCqNTi-H38frroUK17iobNVnkLtW36V6VWGSQEOHXhmVMm5iQ=
-=3D@protonmail.com/
-Reported-by: Jordan Leppert <jordanleppert@protonmail.com>
-Reported-by: Holger Hoffst=C3=A4tte <holger@applied-asynchrony.com>
-CC: <stable@vger.kernel.org> # 5.17.5
-CC: <stable@vger.kernel.org> # 5.15.36
-CC: <stable@vger.kernel.org> # 5.10.113
-Signed-off-by: Manuel ULlmann <labre@posteo.de>
----
- drivers/net/ethernet/aquantia/atlantic/aq_pci_func.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/net/ethernet/aquantia/atlantic/aq_pci_func.c b/drivers=
-/net/ethernet/aquantia/atlantic/aq_pci_func.c
-index 3a529ee8c834..831833911a52 100644
---- a/drivers/net/ethernet/aquantia/atlantic/aq_pci_func.c
-+++ b/drivers/net/ethernet/aquantia/atlantic/aq_pci_func.c
-@@ -449,7 +449,7 @@ static int aq_pm_freeze(struct device *dev)
-=20
- static int aq_pm_suspend_poweroff(struct device *dev)
- {
--	return aq_suspend_common(dev, false);
-+	return aq_suspend_common(dev, true);
- }
-=20
- static int aq_pm_thaw(struct device *dev)
-@@ -459,7 +459,7 @@ static int aq_pm_thaw(struct device *dev)
-=20
- static int aq_pm_resume_restore(struct device *dev)
- {
--	return atl_resume_common(dev, false);
-+	return atl_resume_common(dev, true);
- }
-=20
- static const struct dev_pm_ops aq_pm_ops =3D {
-
-base-commit: 672c0c5173427e6b3e2a9bbb7be51ceeec78093a
---=20
-2.35.1
+Yours,
+Linus Walleij

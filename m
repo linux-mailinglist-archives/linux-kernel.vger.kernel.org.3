@@ -2,94 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4284651AE63
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 21:54:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BECEF51AE6E
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 21:54:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355589AbiEDT56 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 15:57:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58366 "EHLO
+        id S1377742AbiEDT6K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 15:58:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233969AbiEDT5z (ORCPT
+        with ESMTP id S1377633AbiEDT6C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 15:57:55 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D82D14DF78
-        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 12:54:18 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id p18so2901803edr.7
-        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 12:54:18 -0700 (PDT)
+        Wed, 4 May 2022 15:58:02 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A63144E3BD
+        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 12:54:24 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id a11so1961097pff.1
+        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 12:54:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=JzBKrifr7mkPiYJG21R0/9X6KZhWc9gfTpNCQaGfxR8=;
-        b=PuHMG+DO/TH1jPO9lTz0dH3ySyZK5V/CIBQq40IyvujtcseG/7DfxU0O1ZTDwNiFx7
-         2pItBt7+u2ZGOauSTGoSQhBtVYJU/oSTrw7my3vrpuRc7XaT2YY5u50RnkhEA/ZbFzHd
-         mHyspYVQJGFdhiGe694yZVOqVMbEmj+pI8BZZ2wCjQNmku10olU4vUHLsQ1vyvDSbJDR
-         e1P/pBOtWZD87T8IV8aXvWZGerQDOQ8rLiVvHRSHLjQ8Mbc9cUh//qN28Ue7sfqeShPL
-         kmy0TKX9w0JdyF7drD5sUtAVpbmeV1kKE7KSBicggpTzG7513xQ2rnJtASC4jYrWbX1j
-         1hHQ==
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=h3ETif9Foq2WWYlVvzrpzb/TRJhspVBRsqqlMfFf5RE=;
+        b=bFEhgow2kthggDsRYWLjsBQ4oqoD9Yx8p7YoLuIFcg6vkGF5NKTVgGyZpwGKN6j9jQ
+         +eCtLxowhfkljQHHR59zJXDVT8hHq4w54MuvBi6DL2GEsR19pG11rDyZ80nLiS9a3Gy2
+         tAO+XKAFFwijLwnlZFmqAIx6vIYSugE1RfQrM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=JzBKrifr7mkPiYJG21R0/9X6KZhWc9gfTpNCQaGfxR8=;
-        b=VCBAZlzH0oTMVsF1NrUcGXzrF4joyqEF2NHwNx07j1y6qEZHFLwaie5eZ4kIGfAv+1
-         i84UMAqDMzb4tN3row0TjeCk3Ua/hKI/XfJsEW9y/Qlfz2QTtuucDPLCcDXvdEohQJEQ
-         t0drwbV7UgiZIUzvqmoDD5n2y08Q548p61TYQB12cOke6Kl9rGH4wgsmr+NqqLRzRft5
-         vQrfYgmIuV2LDmawq/ceIlaK3KEfQgjGeb7386ClOo0pPnbGzLcdoR0qNs0iDeu7UAvo
-         Z2e1KeC7BtdbwjlgHa7du2EH7W34odUNHuAGhajE72vM5x31AmUPZGf6X0Rtj5UNnriM
-         zTiw==
-X-Gm-Message-State: AOAM531mCihowJPe5ncMNQRnqS3oOC9uJY5qxLhGvIOnhL59p6BULbFd
-        KRilyxFyk4W25NFydY6WvJOHXr8YW5my3gRHrYo=
-X-Google-Smtp-Source: ABdhPJz9RDsDEQW1vZTDpmWQt9JtrfFaGK06BHhHkG/8Y+pfrinEx1EcQ9NvCauraCZy5Eamm4kKS3YwbmaPzR11kjo=
-X-Received: by 2002:a05:6402:54:b0:419:9b58:e305 with SMTP id
- f20-20020a056402005400b004199b58e305mr24782167edu.158.1651694057438; Wed, 04
- May 2022 12:54:17 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=h3ETif9Foq2WWYlVvzrpzb/TRJhspVBRsqqlMfFf5RE=;
+        b=RtZVwV8v6uok5END0ZEc5Fn/IyirJbJaNoM9ht86rdjUZbFOQRg1gXam1F4Lb+iZmE
+         HGrklEQfx1vKRr+gQb2qBgQrSOh8g6gS06qGdYyxtrbr7DQTC86pTg9TDBDDWCpoKZgl
+         9AZO/rmfeHek9fdv6OR7sPxql7y1eCdQxXhQryAcwv1upbwEP/5uYArjmnNrzS8s7rIN
+         wF4Ib5rQCknRCcLLN6Xuph2B/AgvVkKJvqlRe0PG7EHKOXYXdEfmaFNBdja4y53oJJd2
+         1hGbjfCJs2Nccs/BxegE4bOOY/ehWwoAiym+z4dJYM2g4m+4v9LuEaIWlaPaFtGJGnVR
+         KsKQ==
+X-Gm-Message-State: AOAM532dh+jc3MX5mCas12pVSg6uCwwLmtFKK2mhVqlOSdJfDc6Oc1mD
+        nsf6+NBGebcEgPFdYftoUHjWbQ==
+X-Google-Smtp-Source: ABdhPJw3OEAXuCRHeeH+ekWBhlrlqMKIX2kvZ+3Yz7JTRDJfzJoF2x0zxnO0Fgykowymq6svm7lI3g==
+X-Received: by 2002:a65:6051:0:b0:39d:1b00:e473 with SMTP id a17-20020a656051000000b0039d1b00e473mr18737927pgp.578.1651694063968;
+        Wed, 04 May 2022 12:54:23 -0700 (PDT)
+Received: from localhost ([2620:15c:202:201:35b6:c77b:be04:3bd5])
+        by smtp.gmail.com with UTF8SMTPSA id v13-20020aa7808d000000b0050dc762819esm8622355pff.120.2022.05.04.12.54.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 04 May 2022 12:54:23 -0700 (PDT)
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Alasdair Kergon <agk@redhat.com>,
+        Mike Snitzer <snitzer@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        James Morris <jmorris@namei.org>,
+        "Serge E . Hallyn" <serge@hallyn.com>
+Cc:     dm-devel@redhat.com, linux-kernel@vger.kernel.org,
+        linux-raid@vger.kernel.org, Song Liu <song@kernel.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        linux-security-module@vger.kernel.org,
+        Matthias Kaehlcke <mka@chromium.org>
+Subject: [PATCH v3 0/3] LoadPin: Enable loading from trusted dm-verity devices
+Date:   Wed,  4 May 2022 12:54:16 -0700
+Message-Id: <20220504195419.1143099-1-mka@chromium.org>
+X-Mailer: git-send-email 2.36.0.464.gb9c8b46e94-goog
 MIME-Version: 1.0
-References: <202205042019.gOXJsH4f-lkp@intel.com>
-In-Reply-To: <202205042019.gOXJsH4f-lkp@intel.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Wed, 4 May 2022 21:53:41 +0200
-Message-ID: <CAHp75Vf9wUOKpxa5q8=tJNju_3uzTMbEGcQxAr_f14c_wp-jAQ@mail.gmail.com>
-Subject: Re: [chanwoo:devfreq-testing 5/5] include/linux/list.h:638:9:
- warning: this 'for' clause does not guard...
-To:     kernel test robot <lkp@intel.com>
-Cc:     Chanwoo Choi <cw00.choi@samsung.com>, kbuild-all@lists.01.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 4, 2022 at 7:02 PM kernel test robot <lkp@intel.com> wrote:
->
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/linux.git devfreq-testing
-> head:   40eaf97ddb3a7e661942296ccf192af0edd3d77d
-> commit: 40eaf97ddb3a7e661942296ccf192af0edd3d77d [5/5] PM / devfreq: Use cpufreq_policy instead of NR_CPU
-> config: mips-allyesconfig (https://download.01.org/0day-ci/archive/20220504/202205042019.gOXJsH4f-lkp@intel.com/config)
-> compiler: mips-linux-gcc (GCC) 11.3.0
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/linux.git/commit/?id=40eaf97ddb3a7e661942296ccf192af0edd3d77d
->         git remote add chanwoo https://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/linux.git
->         git fetch --no-tags chanwoo devfreq-testing
->         git checkout 40eaf97ddb3a7e661942296ccf192af0edd3d77d
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/
->
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
+As of now LoadPin restricts loading of kernel files to a single pinned
+filesystem, typically the rootfs. This works for many systems, however it
+can result in a bloated rootfs (and OTA updates) on platforms where
+multiple boards with different hardware configurations use the same rootfs
+image. Especially when 'optional' files are large it may be preferable to
+download/install them only when they are actually needed by a given board.
+Chrome OS uses Downloadable Content (DLC) [1] to deploy certain 'packages'
+at runtime. As an example a DLC package could contain firmware for a
+peripheral that is not present on all boards. DLCs use dm-verity [2] to
+verify the integrity of the DLC content.
 
-Seems like LIST_HEAD_INIT() calls in the above mentioned patch miss the &.
+This series extends LoadPin to allow loading of kernel files from trusted
+dm-verity devices. LoadPin maintains a list of root digests of verity
+devices it considers trusted. Userspace can populate this list through an
+ioctl on the new LoadPin securityfs entry 'dm-verity'. The ioctl receives
+a file descriptor of a file with verity digests as parameter. Verity reads
+the digests from this file after confirming that the file is located on the
+pinned root. The list of trusted digests can only be set up once, which is
+typically done at boot time.
+
+When a kernel file is read LoadPin first checks (as usual) whether the file
+is located on the pinned root, if so the file can be loaded. Otherwise, if
+the verity extension is enabled, LoadPin determines whether the file is
+located on a verity backed device and whether the root digest of that
+device is in the list of trusted digests. The file can be loaded if the
+verity device has a trusted root digest.
+
+[1] https://chromium.googlesource.com/chromiumos/platform2/+/HEAD/dlcservice/docs/developer.md
+[2] https://www.kernel.org/doc/html/latest/admin-guide/device-mapper/verity.html
+
+Changes in v3:
+- added securityfs for LoadPin (currently only populated when
+  CONFIG_SECURITY_LOADPIN_VERITY=y)
+- added uapi include for LoadPin
+- changed the interface for setting up the list of trusted
+  digests from sysctl to ioctl on securityfs entry
+- added stub for loadpin_is_fs_trusted() to be used
+  CONFIG_SECURITY_LOADPIN_VERITY is not select
+- depend on CONFIG_SECURITYFS instead of CONFIG_SYSTCL
+- updated Kconfig help
+- minor changes in read_trusted_verity_root_digests()
+- updated commit message
+
+Changes in v2:
+- userspace now passes the path of the file with the verity digests
+  via systcl, instead of the digests themselves
+- renamed sysctl file to 'trusted_verity_root_digests_path'
+- have CONFIG_SECURITY_LOADPIN_VERITY depend on CONFIG_SYSCTL
+- updated Kconfig doc
+- updated commit message
+
+Matthias Kaehlcke (3):
+  dm: Add verity helpers for LoadPin
+  LoadPin: Enable loading from trusted dm-verity devices
+  dm: verity-loadpin: Use CONFIG_SECURITY_LOADPIN_VERITY for conditional
+    compilation
+
+ drivers/md/Makefile               |   1 +
+ drivers/md/dm-verity-loadpin.c    |  80 +++++++++++++
+ drivers/md/dm-verity-target.c     |  33 ++++++
+ drivers/md/dm-verity.h            |   4 +
+ include/linux/dm-verity-loadpin.h |  27 +++++
+ include/uapi/linux/loadpin.h      |  19 +++
+ security/loadpin/Kconfig          |  16 +++
+ security/loadpin/loadpin.c        | 184 +++++++++++++++++++++++++++++-
+ 8 files changed, 363 insertions(+), 1 deletion(-)
+ create mode 100644 drivers/md/dm-verity-loadpin.c
+ create mode 100644 include/linux/dm-verity-loadpin.h
+ create mode 100644 include/uapi/linux/loadpin.h
 
 -- 
-With Best Regards,
-Andy Shevchenko
+2.36.0.464.gb9c8b46e94-goog
+

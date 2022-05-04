@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BB7951AB2E
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 19:40:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 515F551A65D
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 18:51:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357007AbiEDRi1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 13:38:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39860 "EHLO
+        id S1354200AbiEDQzL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 12:55:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356839AbiEDRJp (ORCPT
+        with ESMTP id S1354068AbiEDQxt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 13:09:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 685ED4093D;
-        Wed,  4 May 2022 09:55:56 -0700 (PDT)
+        Wed, 4 May 2022 12:53:49 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FB7346B3D;
+        Wed,  4 May 2022 09:49:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D920A616B8;
-        Wed,  4 May 2022 16:55:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35F5CC385A5;
-        Wed,  4 May 2022 16:55:55 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0B211B827A0;
+        Wed,  4 May 2022 16:49:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A76DFC385AA;
+        Wed,  4 May 2022 16:49:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651683355;
-        bh=d9FRUiv783dU/wMy58x9p6NFoSQWCkLOfWCusjCDE3g=;
+        s=korg; t=1651682940;
+        bh=NhFhnzI0gdPcL+Y4/SDdfwLcqHDIn6Qbw2CnLVHsIJw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BwYEDfMAnpmRSMr9WUnlvAt0qtEfzua/ETnUm2h9URgMXplw6CP7gV53VYVl0rxtF
-         7TTpIf/fJmMFcF/nUbOhzfx4AhIyIAgz0JoIoWr72gW+7ZYjDb64IOIiLBERQoVb2p
-         vYtTpk3KOD6v8hmzficbepvVMyeh4UmPTYb93E30=
+        b=sa0j9RD3jWfq775bDv9iFKm3y+ZzJje9UvFquC9/txsCJ+1x8RtBfQTzdozPDc1eQ
+         dQwQW/cNma46sW2P56JmDQbPe54jrxD1Z0dr0SAsn5ykdFKE6faCNxOB/EUfghYz1s
+         qwcmDCx5rh2bSlCv3qaRFKlPdbZNFes7fmf5xOe4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        stable <stable@kernel.org>
-Subject: [PATCH 5.17 028/225] usb: dwc3: pci: add support for the Intel Meteor Lake-P
+        stable@vger.kernel.org, Pengcheng Yang <yangpc@wangsu.com>,
+        Julian Anastasov <ja@ssi.bg>,
+        Simon Horman <horms@verge.net.au>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 45/84] ipvs: correctly print the memory size of ip_vs_conn_tab
 Date:   Wed,  4 May 2022 18:44:26 +0200
-Message-Id: <20220504153112.808856424@linuxfoundation.org>
+Message-Id: <20220504152931.009523556@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220504153110.096069935@linuxfoundation.org>
-References: <20220504153110.096069935@linuxfoundation.org>
+In-Reply-To: <20220504152927.744120418@linuxfoundation.org>
+References: <20220504152927.744120418@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,44 +57,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+From: Pengcheng Yang <yangpc@wangsu.com>
 
-commit 973e0f7a847ef13ade840d4c30729ce329a66895 upstream.
+[ Upstream commit eba1a872cb73314280d5448d934935b23e30b7ca ]
 
-This patch adds the necessary PCI IDs for Intel Meteor Lake-P
-devices.
+The memory size of ip_vs_conn_tab changed after we use hlist
+instead of list.
 
-Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc: stable <stable@kernel.org>
-Link: https://lore.kernel.org/r/20220425103518.44028-1-heikki.krogerus@linux.intel.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 731109e78415 ("ipvs: use hlist instead of list")
+Signed-off-by: Pengcheng Yang <yangpc@wangsu.com>
+Acked-by: Julian Anastasov <ja@ssi.bg>
+Acked-by: Simon Horman <horms@verge.net.au>
+Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/dwc3/dwc3-pci.c |    8 ++++++++
- 1 file changed, 8 insertions(+)
+ net/netfilter/ipvs/ip_vs_conn.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/usb/dwc3/dwc3-pci.c
-+++ b/drivers/usb/dwc3/dwc3-pci.c
-@@ -44,6 +44,8 @@
- #define PCI_DEVICE_ID_INTEL_ADLM		0x54ee
- #define PCI_DEVICE_ID_INTEL_ADLS		0x7ae1
- #define PCI_DEVICE_ID_INTEL_RPLS		0x7a61
-+#define PCI_DEVICE_ID_INTEL_MTLP		0x7ec1
-+#define PCI_DEVICE_ID_INTEL_MTL			0x7e7e
- #define PCI_DEVICE_ID_INTEL_TGL			0x9a15
- #define PCI_DEVICE_ID_AMD_MR			0x163a
+diff --git a/net/netfilter/ipvs/ip_vs_conn.c b/net/netfilter/ipvs/ip_vs_conn.c
+index d1524ca4b90e..a189079a6ea5 100644
+--- a/net/netfilter/ipvs/ip_vs_conn.c
++++ b/net/netfilter/ipvs/ip_vs_conn.c
+@@ -1421,7 +1421,7 @@ int __init ip_vs_conn_init(void)
+ 	pr_info("Connection hash table configured "
+ 		"(size=%d, memory=%ldKbytes)\n",
+ 		ip_vs_conn_tab_size,
+-		(long)(ip_vs_conn_tab_size*sizeof(struct list_head))/1024);
++		(long)(ip_vs_conn_tab_size*sizeof(*ip_vs_conn_tab))/1024);
+ 	IP_VS_DBG(0, "Each connection entry needs %zd bytes at least\n",
+ 		  sizeof(struct ip_vs_conn));
  
-@@ -421,6 +423,12 @@ static const struct pci_device_id dwc3_p
- 	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_RPLS),
- 	  (kernel_ulong_t) &dwc3_pci_intel_swnode, },
- 
-+	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_MTLP),
-+	  (kernel_ulong_t) &dwc3_pci_intel_swnode, },
-+
-+	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_MTL),
-+	  (kernel_ulong_t) &dwc3_pci_intel_swnode, },
-+
- 	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_TGL),
- 	  (kernel_ulong_t) &dwc3_pci_intel_swnode, },
- 
+-- 
+2.35.1
+
 
 

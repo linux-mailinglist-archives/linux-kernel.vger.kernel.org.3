@@ -2,72 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0778B519A53
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 10:48:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45086519A58
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 10:48:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346601AbiEDIve (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 04:51:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50706 "EHLO
+        id S229835AbiEDIvj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 04:51:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243930AbiEDIv2 (ORCPT
+        with ESMTP id S1346594AbiEDIve (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 04:51:28 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDBDC24BE0
-        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 01:47:52 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id y3so1511451ejo.12
-        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 01:47:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:from:in-reply-to:content-transfer-encoding;
-        bh=6f1dDCVmeyq91xhXZCZayQyn+IZwU2L4aZ+Foq78eA4=;
-        b=tmFZC8fD0Q56/y2iWBYOsKJY0o2MUehHpKVtve/rmhYh5x/7PbwoBdgaC8XLZgD+hE
-         fMIBNqBYry6FkCKA2vZ6qAWwRS+vbfplUyvchQSYAsde/5N11REnwbkj65150Xb0BXtv
-         TnGOSSDu23VUScaUMx1vIkmabyrZ2WkecZCbrnD/vZzxTGLZQsMvU9AvSMYl38kJGrah
-         1a/DEMKlgKYFNaj+cCJXxz5lQ6cBLS0KPH8HTbIWcgpUHm4VeHd2m5wbku6XTNtNL2II
-         myyFcR6JGjr14fVtveiWgC3sjCnDHRwtPI/Byf7m58lM8jJHJP70qrYXIo5gis2hWngm
-         w+Xw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=6f1dDCVmeyq91xhXZCZayQyn+IZwU2L4aZ+Foq78eA4=;
-        b=zej6jRUXCM78mMPWazon+eMr5HMOlxVW8bDp/2Yin+4Mty7VoNMTwq+z4zFtU5dQ+t
-         HHwp3IHZTJuAY9WC5huBytaiz9bbwbelvmjyzy73qpuSGIRnuQY2cMvBrNfa3MYOTJx/
-         KiPUNs4CxFVW6QGouT5q9U6CYhvnZBtk2vo7DiNGfAnkB0gnOTGtzWH5ZypCQOUgaUTx
-         zIfE6gPDUzEuEpA8BRfHCq8Uo3XLSXZ9Wxe3RFlSkt8UhoY5yfkwDg98fZ+QhuL/zF8r
-         hbtnRbqHns4c37dVpb+39T9y1fssv/2/CVufjh7q+09CFZE6ML7Dhg9eE2qyCz6Q8BYW
-         5tcQ==
-X-Gm-Message-State: AOAM533VpZfb4JGFN6Un2Yi6SFNuz1WgUDzAXIJEHphhBx/Nf9dM+Hzh
-        DrqvHc6I69Xc/RZQp5snz7SroyCcqkF8pw==
-X-Google-Smtp-Source: ABdhPJzTuUXZBXabjBTqCkCCerSU7CeFyLjRBzDtRGc7Ho1xl58OdSJcNj30Fj6JPJEt2c2wsY2Wvw==
-X-Received: by 2002:a17:906:c110:b0:6e0:dc2a:3393 with SMTP id do16-20020a170906c11000b006e0dc2a3393mr19274768ejc.512.1651654071403;
-        Wed, 04 May 2022 01:47:51 -0700 (PDT)
-Received: from [192.168.0.210] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id gv3-20020a1709072bc300b006f3ef214db7sm5542893ejc.29.2022.05.04.01.47.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 04 May 2022 01:47:50 -0700 (PDT)
-Message-ID: <0793b555-b734-7a45-ba1e-c525c9a95d41@linaro.org>
-Date:   Wed, 4 May 2022 10:47:49 +0200
+        Wed, 4 May 2022 04:51:34 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D80024BE0
+        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 01:47:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651654079; x=1683190079;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=kRAxXFRDE1RfRdjz1uNhLBx4H2p9vLqfF7AlX0j83pA=;
+  b=DrSMerryL8rWbY641mejVxI7h+4eyvGVPkdqNYIPoYdpBvZJtMqoe0pg
+   I5y+jiHMIUOH3h8GkIf+E6gZw3HNaouCQbhAT8gh3q/CAfroL1gwffvqd
+   1fPF8shO6Rt6qf0rNxIp9kQBaPi3KvpoyAHN5R1Aa8atPJ1y6xakXMnI4
+   UdIlCOh/iO8JOjAUVIVKXUxZAnVIwpXJeddqYU+oCI10rGyrvCcFIPprY
+   0QP78pTxB22c6hr/z10OHXOaTdrqA20AahSWmKUBxfnICjCNgh20dNC8c
+   pGxUsUzaLssVPYnhjtXSNsOC/wOD6zuMWcz3PqudW5IUKVoHarMFuYlVI
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10336"; a="354141673"
+X-IronPort-AV: E=Sophos;i="5.91,197,1647327600"; 
+   d="scan'208";a="354141673"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2022 01:47:59 -0700
+X-IronPort-AV: E=Sophos;i="5.91,197,1647327600"; 
+   d="scan'208";a="734304227"
+Received: from yanc1-mobl.ccr.corp.intel.com (HELO [10.255.30.223]) ([10.255.30.223])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2022 01:47:56 -0700
+Message-ID: <d42cba21-049d-0f0a-f030-60e1609fc4c3@linux.intel.com>
+Date:   Wed, 4 May 2022 16:47:54 +0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] PM: Domains: Extend dev_pm_domain_detach() doc
+ Thunderbird/91.8.1
+Subject: Re: [PATCH 4/5] iommu/vt-d: Remove domain_update_iommu_snooping()
 Content-Language: en-US
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220401084950.118998-1-krzysztof.kozlowski@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220401084950.118998-1-krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset=UTF-8
+To:     Jacob Pan <jacob.jun.pan@intel.com>
+Cc:     Joerg Roedel <joro@8bytes.org>, Jason Gunthorpe <jgg@nvidia.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Liu Yi L <yi.l.liu@intel.com>,
+        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org
+References: <20220501112434.874236-1-baolu.lu@linux.intel.com>
+ <20220501112434.874236-5-baolu.lu@linux.intel.com>
+ <20220502143603.4143dd66@jacob-builder>
+From:   Baolu Lu <baolu.lu@linux.intel.com>
+In-Reply-To: <20220502143603.4143dd66@jacob-builder>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,13 +67,93 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/04/2022 10:49, Krzysztof Kozlowski wrote:
-> Mention all domain attach menthods which dev_pm_domain_detach()
-> reverses.
+On 2022/5/3 05:36, Jacob Pan wrote:
+> Hi BaoLu,
 > 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> On Sun, 1 May 2022 19:24:33 +0800, Lu Baolu <baolu.lu@linux.intel.com>
+> wrote:
+> 
+>> The IOMMU force snooping capability is not required to be consistent
+>> among all the IOMMUs anymore. Remove force snooping capability check
+>> in the IOMMU hot-add path and domain_update_iommu_snooping() becomes
+>> a dead code now.
+>>
+>> Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
+>> ---
+>>   drivers/iommu/intel/iommu.c | 34 +---------------------------------
+>>   1 file changed, 1 insertion(+), 33 deletions(-)
+>>
+>> diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
+>> index 3c1c228f9031..d5808495eb64 100644
+>> --- a/drivers/iommu/intel/iommu.c
+>> +++ b/drivers/iommu/intel/iommu.c
+>> @@ -533,33 +533,6 @@ static void domain_update_iommu_coherency(struct
+>> dmar_domain *domain) rcu_read_unlock();
+>>   }
+>>   
+>> -static bool domain_update_iommu_snooping(struct intel_iommu *skip)
+>> -{
+>> -	struct dmar_drhd_unit *drhd;
+>> -	struct intel_iommu *iommu;
+>> -	bool ret = true;
+>> -
+>> -	rcu_read_lock();
+>> -	for_each_active_iommu(iommu, drhd) {
+>> -		if (iommu != skip) {
+>> -			/*
+>> -			 * If the hardware is operating in the scalable
+>> mode,
+>> -			 * the snooping control is always supported
+>> since we
+>> -			 * always set PASID-table-entry.PGSNP bit if the
+>> domain
+>> -			 * is managed outside (UNMANAGED).
+>> -			 */
+>> -			if (!sm_supported(iommu) &&
+>> -			    !ecap_sc_support(iommu->ecap)) {
+>> -				ret = false;
+>> -				break;
+>> -			}
+>> -		}
+>> -	}
+>> -	rcu_read_unlock();
+>> -
+>> -	return ret;
+>> -}
+>> -
+>>   static int domain_update_iommu_superpage(struct dmar_domain *domain,
+>>   					 struct intel_iommu *skip)
+>>   {
+>> @@ -3593,12 +3566,7 @@ static int intel_iommu_add(struct dmar_drhd_unit
+>> *dmaru) iommu->name);
+>>   		return -ENXIO;
+>>   	}
+>> -	if (!ecap_sc_support(iommu->ecap) &&
+>> -	    domain_update_iommu_snooping(iommu)) {
+>> -		pr_warn("%s: Doesn't support snooping.\n",
+>> -			iommu->name);
+>> -		return -ENXIO;
+>> -	}
+>> +
+> Maybe I missed earlier patches, so this bit can also be deleted?
+> 
+> struct dmar_domain {
+> 	u8 iommu_snooping: 1;		/* indicate snooping control
+> feature */
 
-Any comments on this patch?
+It has been cleaned up by below commit:
+
+71cfafda9c9b vfio: Move the Intel no-snoop control off of IOMMU_CACHE
+
+> 
+>>   	sp = domain_update_iommu_superpage(NULL, iommu) - 1;
+>>   	if (sp >= 0 && !(cap_super_page_val(iommu->cap) & (1 << sp))) {
+>>   		pr_warn("%s: Doesn't support large page.\n",
+> 
+> 
+> Thanks,
+> 
+> Jacob
 
 Best regards,
-Krzysztof
+baolu

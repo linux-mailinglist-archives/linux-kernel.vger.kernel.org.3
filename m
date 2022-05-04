@@ -2,67 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1104551A1E7
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 16:10:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 467F951A1EC
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 16:12:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351105AbiEDOOF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 10:14:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57900 "EHLO
+        id S1351129AbiEDOPw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 10:15:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351207AbiEDONn (ORCPT
+        with ESMTP id S239972AbiEDOPu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 10:13:43 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CABE43AD4;
-        Wed,  4 May 2022 07:10:04 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id BA529210DB;
-        Wed,  4 May 2022 14:10:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1651673402; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=X8N/2j1iMVEWPhLHwXlf1lbWHCy97qgMOd6RtCKAAHI=;
-        b=YUvahhi8lIQnKT+/35TWCpA0GcF25PHrlG0nI6I37i/XqOeTn+w+dV7CC77XJJbhzSF9d6
-        hg6QJYGL24C0qMCZELbiXO5XFTcgbVtkpXWBBhhbCSTgPBQPb3AtS78QY6poz0CYHIWK+m
-        IWbijGNan7qNqCzpWSk4Oe9ejmyXlUI=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 70740131BD;
-        Wed,  4 May 2022 14:10:02 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id hitmGjqJcmLpDQAAMHmgww
-        (envelope-from <mkoutny@suse.com>); Wed, 04 May 2022 14:10:02 +0000
-Date:   Wed, 4 May 2022 16:10:01 +0200
-From:   Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
-To:     Vasily Averin <vvs@openvz.org>
-Cc:     Roman Gushchin <roman.gushchin@linux.dev>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Shakeel Butt <shakeelb@google.com>, kernel@openvz.org,
-        Florian Westphal <fw@strlen.de>, linux-kernel@vger.kernel.org,
-        Michal Hocko <mhocko@suse.com>, cgroups@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Tejun Heo <tj@kernel.org>
-Subject: Re: kernfs memcg accounting
-Message-ID: <20220504141001.GA10890@blackbody.suse.cz>
-References: <7e867cb0-89d6-402c-33d2-9b9ba0ba1523@openvz.org>
- <20220427140153.GC9823@blackbody.suse.cz>
- <7509fa9f-9d15-2f29-cb2f-ac0e8d99a948@openvz.org>
- <YnBLge4ZQNbbxufc@blackbook>
- <52a9f35b-458b-44c4-7fc8-d05c8db0c73f@openvz.org>
+        Wed, 4 May 2022 10:15:50 -0400
+Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 142F5419AE;
+        Wed,  4 May 2022 07:12:13 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.west.internal (Postfix) with ESMTP id 75386320027A;
+        Wed,  4 May 2022 10:12:10 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute5.internal (MEProxy); Wed, 04 May 2022 10:12:11 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1651673529; x=1651759929; bh=xUUhuAdWl5
+        ztZDGXsYgh3f41yA2CkH+/W2wG9PAr7kU=; b=wiHx1q5liF64+jC1h+QiniPKBL
+        t2dX9X2+maVEUh+r7S37r7+EpzQ3ujUGzSre70LRHxqZ3Aw2KbBV7D0wB5qe3zmR
+        UOf3/8GRHvCjpvP1LpjtfAOnmqGSkPqTCBIdbkPQCRZ5paJ3EVwhV7zFfnFhdJ4Z
+        XG1hdve7+c+YHoB1IqJsSeOL59ce4fYQzIsYQurD9eXiGFTp7hgYT76QjZmVGNtJ
+        Jpermg9Be8ZZC1ZzCkCSC6PdPIs0JIaBHgdQi2hUrlhavkLb2UuRyM+JStqAy090
+        SSs1K8l576D+f7UxxX8Kj8XRLc9JMRS58RZgb+JwgjA7H/v84slLSAG+hSHA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1651673529; x=
+        1651759929; bh=xUUhuAdWl5ztZDGXsYgh3f41yA2CkH+/W2wG9PAr7kU=; b=b
+        4CD9mu/DX2GZhwPHXlDAlHSWDPiq6U3YCdxPREQzj+Ixonm9DnW2V0ACn9aRsX/X
+        XWtX2hxcwjKlbxlhpTduqH5ZXlUfC+MYdJUYkqXVg2XRPn6q+iGR7HqXb17lFH70
+        QyVdoAqIpD26RtMbGuRMehgjazoBPqNGwY05JcNikkfPbm5Y87JvnQdnJyPIfqRu
+        MgiD3TnWJm80yUopP1UNgiXiuneP7tvaGevSLreozrOz6HMZtPk9pLLYcz3peBqX
+        H8UM1Wc+NozWSh1tqbRwLkGjU5LqQFdiUDpkf1J4FtMnXwlSiJnQWXHhITNTei0a
+        whWCUxlxd/aAhRmfsfA2g==
+X-ME-Sender: <xms:uIlyYunEAHSjVfHJkOdq7LSA4pIQ7k0Sjjd95wq69EgYOK4wErA9ew>
+    <xme:uIlyYl1J__EqRGeJ7VddqJaBim9zcXGqszhSXOt2yYO-8Ci2pONhpfGX5ny8utHgJ
+    _4g89uHyoc48I2eiLM>
+X-ME-Received: <xmr:uIlyYsoiuKTxN47W4nAhz4bqlSG4hKBtEvV9vWrJEHQ3o8CihAtLjszjUjvpzgWIdXf2zwTiGigs8uuVyWmDT1Ex-DAN80XPHzDqHLw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdelgdejvdcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvvefukfhfgggtuggjsehgtderredttddvnecuhfhrohhmpeforgigihhm
+    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
+    htvghrnhepffekleevgeejieeigeeftddtgfejheekvedvudetgfduudfffeffueekfeeh
+    ueegnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghdplhhinhhugihfohhunhgurdhorh
+    hgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepmhgr
+    gihimhgvsegtvghrnhhordhtvggthh
+X-ME-Proxy: <xmx:uIlyYim4wxT3MBp7xYXWU7dJt_ELeHilF_g8l1e7VpJPOyrc7D8P2A>
+    <xmx:uIlyYs0D2j4msU21Z9dqwLT8lyMLQjmHEAn1w4IPQoQSTDnrdXszIw>
+    <xmx:uIlyYptoIGoGVEAFQSMaUwVx-P7DaA8koWYxwBZsoGxdBRrRnX9UvQ>
+    <xmx:uYlyYiw1y7yGZeoAFBKDd1COur6orF-Ov15gxE9xDrcW4GqRgPWfNQ>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 4 May 2022 10:12:07 -0400 (EDT)
+Date:   Wed, 4 May 2022 16:12:04 +0200
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Ruslan Zalata <rz@fabmicro.ru>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Icenowy Zheng <icenowy@aosc.io>,
+        Jean Delvare <jdelvare@suse.com>, Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
+Subject: Re: [PATCH v2] hwmon: (sun4i-lradc) Add driver for LRADC found on
+ Allwinner A13/A20 SoC
+Message-ID: <20220504141204.iqjwa62ije2pedal@houat>
+References: <20220428210906.29527-1-rz@fabmicro.ru>
+ <20220502110010.q7vvdkdpaiz5acjl@houat>
+ <7433B295-D896-4BF8-87DF-87EB89D7A550@aosc.io>
+ <20220502112112.3ne7zy4b6gggxzoo@houat>
+ <4aabfd63-18e2-65c5-d1c2-d7600afc1c40@roeck-us.net>
+ <97e3af18e947492b1ac968c058ba509f@fabmicro.ru>
+ <20220503161446.tl3qoqqnkzq2f3hn@houat>
+ <18ded45dcd670edcc9eb9811e7c7c034@fabmicro.ru>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="66mbevpbgads7k7l"
 Content-Disposition: inline
-In-Reply-To: <52a9f35b-458b-44c4-7fc8-d05c8db0c73f@openvz.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+In-Reply-To: <18ded45dcd670edcc9eb9811e7c7c034@fabmicro.ru>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -71,44 +97,110 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 04, 2022 at 12:00:18PM +0300, Vasily Averin <vvs@openvz.org> wrote:
-> My patches protect the host mostly from misuse, when someone creates
-> a huge number of nedevices inside a container.
 
-Understood.
+--66mbevpbgads7k7l
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> Frankly speaking I do not see a big difference between memcg of current process,
-> memcg of newly created child and memcg of its parent.
+On Wed, May 04, 2022 at 02:37:32AM +0500, Ruslan Zalata wrote:
+> Hi Maxime,
+>=20
+> > At the hardware level, I'd assume you would either use the LRADC as an
+> > actual ADC, or use it to drive buttons, right?
+>=20
+> Yes, exactly.
+>=20
+> > So I don't think a new device tree binding is such a deal breaker since
+> > you have to describe it differently anyway.
+>=20
+> ...
+>=20
+> > Since that would be a completely different use-case, the IIO driver
+> > doesn't have to support input right away, it can be done later if
+> > needed.
+> >=20
+> > And you could have the two drivers compiled at the same time.
+>=20
+> As I got you right, you propose do add new bindings, say
+> "allwinner,sun4i-a10-lradc-hwmon" and "allwinner,sun8i-a83t-lradc-hwmon" =
+for
+> new driver, which will allow two drivers (hwmon and keyboard) be compiled
+> and loaded at same time, only that one listed in DT will be instantiated.
 
-I agree that's not substantial difference. It's relevant for outer
-entities "injecting" something into a subtree.
-As I wrote previously, charging to the creator in the generic case is
-sensible.
+Compatibles are meant to describe the hardware and remain OS-agnostic,
+while hwmon is linux-specific so we should probably drop the hwmon from
+the compatible. But otherwise, yes.
 
-> As far as I understand, Roman chose the parent memcg because it was a special
-> case of creating a new memory group. He temporally changed active memcg
-> in mem_cgroup_css_alloc() and properly accounted all required memcg-specific
-> allocations.
+> If two are listed at same time, one of the calls to devm_request_irq()
+> will return with an error preventing second driver to be probed (some
+> error message would be necessary to let user know what's going on). If
+> this is ok, I will implement it.
+>=20
+> I think moving this driver to IIO framework is overkill. We use LRADC to
+> monitor battery temp and state (voltage) and that's what HWMON was made f=
+or.
+> It's simple, easy and elegant.
 
-> However, he ignored accounting for a rather large struct mem_cgroup
-> therefore I think we can do not worry about 128 bytes of kernfs node.
+Yeah, that's that *you* use it for. If someone wants to use it for some
+other use, what's going to happen? Will we create a third driver for the
+exact same controller? That's not reasonable.
 
-Are you referring to the current code (>= v5.18-rc2)? All big structs
-related to mem_cgroup should be accounted. What is ignored?
+> IIO, on the other hand, is for data acquisition and is much more
+> complex beast. Can we stay with HWMON, please ? :)
 
-> Primary I mean here struct mem_cgroup allocation in mem_cgroup_alloc().
+But it's generic, and you can plug hwmon on top of it. So you don't lose
+any feature, but it also doesn't prevent any one else to use it for some
+slightly different usecase either.
 
-Just note that memory controller may not be always enabled so
-cgroup_mkdir != mem_cgroup_alloc().
+> I looked through the code for a number of iio/adc drivers and I could see
+> that all of them initiate ADC conversion inside read(), then wait for
+> completion and return single sample. For me this very flawed approach
+> because a) much more overhead/load on the system,
 
-> However, I think we need to take into account any other distributions called
-> inside cgroup_mkdir: struct cgroup and kernefs node in common part and 
-> any other cgroup-cpecific allocations in other .css_alloc functions.
-> They all can be called from inside container, allocates non-accountable
-> memory and by this way theoretically can be misused.
+To monitor a battery? What kind of polling interval do you expect on this?
 
-Also note that (if you're purely on unified hierachy) you can protect
-against that with cgroup.max.descendants and cgroup.max.depth.
+> b) initiating conversion may (and will) take more time than a single
+> consequent conversion,
 
-Thanks,
-Michal
+Ditto, I'd expect to have a request in the order of seconds for a
+battery, so the setup time will be negligible.
+
+> c) samples will be read in irregular periods of time, hence acquired
+> data will not be consistent for any further processing (like FFT). So,
+> this whole IIO framework is no way better than HWMON, yet more
+> complex. At least for ADCs. :-)
+>
+> A better approach for an IIO/ADC driver would be to implement some
+> serialization mechanism to let reads go in sync with updates (IRQs), with
+> buffering, guaranteeing no same sample is read twice and no sample is los=
+t.
+> The read() would return next available sample from buffer with nearly zero
+> overhead or sleep till data is available.
+
+Like this:
+https://www.kernel.org/doc/html/latest/driver-api/iio/buffers.html ?
+
+> And the best way is to extend IIO framework to support ring buffers
+> mechanism like the one proposed by Analog Devices, but that's a way
+> different story. Link: https://events.static.linuxfound.org/sites/events/=
+files/slides/iio_high_speed.pdf
+
+Those suggestions were to handle more than a ~100 kilosamples per
+seconds order of magnitude. How many samples per seconds do you expect
+to get out from this ADC?
+
+Maxime
+
+--66mbevpbgads7k7l
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYnKJtAAKCRDj7w1vZxhR
+xdtKAQD8ETOpp5uHBoLQ0BmZsA0blycwGb6XqOpbIuD8ExWyPgD/cak7iCKVEfxm
+6SJtMB+QLLQYe4LICLR1en4ssJd5nQQ=
+=RTTX
+-----END PGP SIGNATURE-----
+
+--66mbevpbgads7k7l--

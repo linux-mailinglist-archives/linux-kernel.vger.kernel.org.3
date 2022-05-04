@@ -2,128 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C2BC51A32B
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 17:07:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55BAD51A320
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 17:06:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351889AbiEDPKg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 11:10:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60138 "EHLO
+        id S1351851AbiEDPIj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 11:08:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351865AbiEDPKd (ORCPT
+        with ESMTP id S1351727AbiEDPIc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 11:10:33 -0400
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3F8121822;
-        Wed,  4 May 2022 08:06:56 -0700 (PDT)
-Received: by mail-wm1-x330.google.com with SMTP id 1-20020a05600c248100b00393fbf11a05so3391039wms.3;
-        Wed, 04 May 2022 08:06:56 -0700 (PDT)
+        Wed, 4 May 2022 11:08:32 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7404E41325
+        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 08:04:55 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id dk23so3441096ejb.8
+        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 08:04:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=Yb/evyWqaNixsLW2kxwJWCdv52JEaXEGCeVAcoqx36g=;
-        b=UoJRUOku+Y5L4dmp7tDz9wPK5709yjvuajXhr+DZmwvqcJieFzkkO1qUpNnwlAJN8W
-         CXVuT1gyUNPyGr1foBcskQwExbC3ZhWTSMRZkL2nzQRKdtKDoscDeofCxtnz3ZiSYzaV
-         T31f6NnQ7iBiaUcZg6+St17jbrSuxrkjdQ/EPdI8ejQQF2gaPExkw1FwGuoMdY2CEHuq
-         HkVtcdc3RbnQQZDz1GZMvwrAqSzm1KZ1KWlRk8nox1MgsePF0e2Tp034hdMGu+mMXgcL
-         ift+Jaokypbs9waLHaYQDKOEDmV3J/Fhwm1yldyuA80+l3ripsWJbqQ/Ae24aKTGHTpW
-         j53A==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to:content-transfer-encoding;
+        bh=x5Zoz/iyWDxLTQhXQBTElr/xGz3ziSFD9Wy1VQnSTXI=;
+        b=hW6OlYQ9E4L5RU2mGkTdC1n2bf+wBHAt3hCerdvKM4BRmSIV1vRGVE6fKTSrqm7qT5
+         ZN9S4rVAHb2tIgglQWUaO6LB3KlUlXAktMvMV6CqwC2Ih56jmxcwDgbYN2l928z15ySq
+         qEsAfqqY/vUBImzo3VKRNO2IpEwx+5c6wfq+ENr3a71QWhwnETr4EdwQIcfMwLGHBUve
+         tw66Rpm9IzhxDdislc2yTm1Q1WOhDDKbe16rz1RJR8MAEE2mHB8Fb/CubNbRBPDn3goL
+         otmALhVVcItojb0jzE5GmyKWrG/mSKx6isqXcafGTKD6ERRJkEge1wses/Z/sDwAgWwa
+         YFsg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=Yb/evyWqaNixsLW2kxwJWCdv52JEaXEGCeVAcoqx36g=;
-        b=wQ1Xl/QvApMijcK1xb3gm+2Xh+hmSV7Y4sPmJnS9IcO8NdKY9RkBeUPBqxI5plqfEx
-         W5boXDuipy9X8w1QCn51z25wosHR9eZ4jIsABOGUzmfQqsMvkkWZN4vKF+4le+YTuzaj
-         bJXf/ILL/eWLGC7hlGa461PP9BG0/xkzElSEMQ/azuG2ajHwtbGzK7vF9zp3ohHTfpD5
-         BAMYciuu9h9uNqmz+HMS6SHnb+GY/1b1g6EPmo2+Jsuy+zUSY2XEVpXFXJAdn1AbWsA2
-         TmPsVWm0puxxHUP77HBzz/tJLtf6kx59AtcbFivOo3vOQx50DRxmeRWNgx+ngNNLuQ3T
-         30OQ==
-X-Gm-Message-State: AOAM532Z41NrvmlYILK3t+9RRbBC9GnXK2pQ66yzx/0CHid1WgH9LIb4
-        8QMgm7A9trE9fnWUmWLRZIc=
-X-Google-Smtp-Source: ABdhPJyXHyoVksCuq8+mhIBxrsoR9GlQ7k+6D18WjCHanh4pORoyL0mATlWtjWk6Q5v30M+bi4swAA==
-X-Received: by 2002:a1c:2c6:0:b0:38f:f280:caa2 with SMTP id 189-20020a1c02c6000000b0038ff280caa2mr8031383wmc.87.1651676815484;
-        Wed, 04 May 2022 08:06:55 -0700 (PDT)
-Received: from nergzd-desktop.localdomain ([194.39.226.133])
-        by smtp.gmail.com with ESMTPSA id q14-20020adfaa4e000000b0020c5253d91fsm12143596wrd.107.2022.05.04.08.06.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 May 2022 08:06:55 -0700 (PDT)
-From:   Markuss Broks <markuss.broks@gmail.com>
-To:     pavel@ucw.cz
-Cc:     Markuss Broks <markuss.broks@gmail.com>,
-        Rob Herring <robh@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH RESEND v6 2/2] leds: ktd2692: Make aux-gpios optional
-Date:   Wed,  4 May 2022 18:04:11 +0300
-Message-Id: <20220504150457.5626-3-markuss.broks@gmail.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220504150457.5626-1-markuss.broks@gmail.com>
-References: <20220504150457.5626-1-markuss.broks@gmail.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=x5Zoz/iyWDxLTQhXQBTElr/xGz3ziSFD9Wy1VQnSTXI=;
+        b=47pKuU0Q6aeL2aiktQ+UzJpWo+9+iICyWoN7+SxI8+71ysgjirWntqcd3KrAOMhHIu
+         Q8qLEkAKvrEUSkZ9qyVD7r0dtoWgn+l5y9AEXEqbRSJbIjj4hxBkFxVt1PLpoxGXNtmx
+         vcD/BlQWWVlNCVVUs3ieFNZnicvcpI03R+bhmZDNlThrDxIxmhfcfCAEHHVEZX3AhPrb
+         qNv+apes9GgrnVT9V8ug+4CeVkk5OVfyGCraaJl1FbVo1Fjwcmtz79OqgBPFIkDihCKl
+         q6RH+EI7SSe9V+05uyMO7Ft0f0MEcOsGN0D0uakC2DtOrAgPh+ksv14Sx34Qjuqenau4
+         XeSw==
+X-Gm-Message-State: AOAM530oPBq4/3tMYNie5KG9ouMHUYQaJ+mNDNRXDeYpRY42ZZfoN2K8
+        DV4TK0S8O2cmJwzTvRABowefpA==
+X-Google-Smtp-Source: ABdhPJwIOV/eE5zBY57dkzYmTDhfsV2xNZbGb5Dm4XBxb47mkKoNVLltzkrubopudGNlgWmKnSyZpQ==
+X-Received: by 2002:a17:907:7fac:b0:6f4:6b70:33d9 with SMTP id qk44-20020a1709077fac00b006f46b7033d9mr10666095ejc.380.1651676693967;
+        Wed, 04 May 2022 08:04:53 -0700 (PDT)
+Received: from [192.168.0.215] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id eb8-20020a170907280800b006f3ef214decsm5711399ejc.82.2022.05.04.08.04.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 04 May 2022 08:04:53 -0700 (PDT)
+Message-ID: <17407fe7-b11d-2ba8-acca-3e71cf1a3b2f@linaro.org>
+Date:   Wed, 4 May 2022 17:04:52 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v2 1/3] dt-bindings: misc: add bindings for Intel HPS Copy
+ Engine
+Content-Language: en-US
+To:     matthew.gerlach@linux.intel.com, dinguyen@kernel.org,
+        robh+dt@kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org
+References: <20220503194546.1287679-1-matthew.gerlach@linux.intel.com>
+ <20220503194546.1287679-2-matthew.gerlach@linux.intel.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220503194546.1287679-2-matthew.gerlach@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Make the AUX pin optional, since it isn't a core part of functionality,
-and the device is designed to be operational with only one CTRL pin.
+On 03/05/2022 21:45, matthew.gerlach@linux.intel.com wrote:
+> From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+> 
+> Add device tree bindings documentation for the Intel Hard
+> Processor System (HPS) Copy Engine.
+> 
+> Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+> ---
+>  .../bindings/misc/intel,hps-copy-engine.yaml  | 48 +++++++++++++++++++
+>  1 file changed, 48 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/misc/intel,hps-copy-engine.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/misc/intel,hps-copy-engine.yaml b/Documentation/devicetree/bindings/misc/intel,hps-copy-engine.yaml
+> new file mode 100644
+> index 000000000000..74e7da9002f4
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/misc/intel,hps-copy-engine.yaml
 
-Also pick up maintenance for the LED driver and the yaml bindings.
+Please find appropriate directory matching this hardware, not "misc". As
+a fallback SoC related bindings end up in "soc".
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+> @@ -0,0 +1,48 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +# Copyright (C) 2022, Intel Corporation
+> +%YAML 1.2
+> +---
+> +$id: "http://devicetree.org/schemas/misc/intel,hps-copy-engine.yaml#"
+> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
+> +
+> +title: Intel HPS Copy Engine
+> +
+> +maintainers:
+> +  - Matthew Gerlach <matthew.gerlach@linux.intel.com>
+> +
+> +description: |
+> +  The Intel Hard Processor System (HPS) Copy Engine is an IP block used to copy
+> +  a bootable image from host memory to HPS DDR.  Additionally, there is a
+> +  register the HPS can use to indicate the state of booting the copied image as
+> +  well as a keep-a-live indication to the host.
+> +
+> +properties:
+> +  compatible:
+> +    items:
 
-Signed-off-by: Markuss Broks <markuss.broks@gmail.com>
----
- MAINTAINERS                       | 6 ++++++
- drivers/leds/flash/leds-ktd2692.c | 6 +++---
- 2 files changed, 9 insertions(+), 3 deletions(-)
+No "items", you have just one item.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 2db49ea7ae55..8ef5667a1d98 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -10479,6 +10479,12 @@ S:	Maintained
- F:	Documentation/devicetree/bindings/leds/backlight/kinetic,ktd253.yaml
- F:	drivers/video/backlight/ktd253-backlight.c
- 
-+KTD2692 FLASH LED DRIVER
-+M:	Markuss Broks <markuss.broks@gmail.com>
-+S:	Maintained
-+F:	Documentation/devicetree/bindings/leds/backlight/kinetic,ktd2692.yaml
-+F:	drivers/leds/flash/leds-ktd2692.yaml
-+
- KTEST
- M:	Steven Rostedt <rostedt@goodmis.org>
- M:	John Hawley <warthog9@eaglescrag.net>
-diff --git a/drivers/leds/flash/leds-ktd2692.c b/drivers/leds/flash/leds-ktd2692.c
-index f341da1503a4..01ceea83af67 100644
---- a/drivers/leds/flash/leds-ktd2692.c
-+++ b/drivers/leds/flash/leds-ktd2692.c
-@@ -284,9 +284,9 @@ static int ktd2692_parse_dt(struct ktd2692_context *led, struct device *dev,
- 		return ret;
- 	}
- 
--	led->aux_gpio = devm_gpiod_get(dev, "aux", GPIOD_ASIS);
--	ret = PTR_ERR_OR_ZERO(led->aux_gpio);
--	if (ret) {
-+	led->aux_gpio = devm_gpiod_get_optional(dev, "aux", GPIOD_ASIS);
-+	if (IS_ERR(led->aux_gpio)) {
-+		ret = PTR_ERR(led->aux_gpio);
- 		dev_err(dev, "cannot get aux-gpios %d\n", ret);
- 		return ret;
- 	}
--- 
-2.35.1
+> +      - const: intel,hps-copy-engine
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    agilex_hps_bridges: bus@80000000 {
 
+Unused label...
+
+> +        compatible = "simple-bus";
+> +        reg = <0x80000000 0x60000000>,
+> +              <0xf9000000 0x00100000>;
+> +        reg-names = "axi_h2f", "axi_h2f_lw";
+> +        #address-cells = <0x2>;
+
+$ git grep address-cell
+Do not use inconsistent coding. The same applies to your DTS.
+
+> +        #size-cells = <0x1>;
+> +        ranges = <0x00000000 0x00000000 0xf9000000 0x00001000>;
+
+Why do you even need the simple-bus above and cannot put the device
+directly on the bus?
+
+> +
+> +        hps_cp_eng@0 {
+
+No underscores in node names. Generic node name.
+
+> +            compatible = "intel,hps-copy-engine";
+> +            reg = <0x00000000 0x00000000 0x00001000>;
+> +        };
+> +    };
+
+
+Best regards,
+Krzysztof

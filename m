@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC47751B5C1
+	by mail.lfdr.de (Postfix) with ESMTP id 82F2751B5C0
 	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 04:20:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238178AbiEECXF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 22:23:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55146 "EHLO
+        id S238222AbiEECXj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 22:23:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234203AbiEECXE (ORCPT
+        with ESMTP id S234203AbiEECXg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 22:23:04 -0400
+        Wed, 4 May 2022 22:23:36 -0400
 Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4E13483BF;
-        Wed,  4 May 2022 19:19:26 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id i24so2538062pfa.7;
-        Wed, 04 May 2022 19:19:26 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 991D94889F
+        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 19:19:58 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id h1so2531324pfv.12
+        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 19:19:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=IGv/QuhBfQMEN1mITB6WR1nioX3n8yw8Uyn/MllDKZo=;
-        b=O1bvPD2pfqGO5YcVlBia0bgyU6sSXfeggPG92iUilwzKRv2JssKoDRVEd1eyW9BIJn
-         fzcfzo52m4fIjgLfrRfZeXW0ZWT4yiCruYJnEqNcqfkE3X8YNUdd4nojV291GiaToISk
-         uoF7M1gzS2//K24N/EscNY61kYERovP5NCEM1TtJYAo4jjwPNRFqSue1HP4jrjE1BMZN
-         +/0YSATZMyiZjXsGj+VEhrB6PJgprB8ul3XfX7JhDHQJ7fRijZ8P7tLF3MDBxplj0b2p
-         e/uAs3Y0pWSD/KjIdOrSDzsH9U53zhOY3hvg8BmdSX9Y7niXr1pIJYNPKKCoP0w2+D6l
-         ka7w==
+        bh=Moay9sBk8rVdbaL64S3jDlKhD4QT9fJRTKr12K5jA4Q=;
+        b=m2o/3KXUn3ZQ20LMuY5L26YynIH0bHNe0Fuf3ch/mnqdG+uF0EhIGNRoA94CF7hkkU
+         DICEutWk4PRZI4AgQ8JvG5IkzCYvyR4tmrErX7caGBsnZUMCBejo6+xhAxENgPsaMHhK
+         ueKhrdkcSY04Yv5M7PPd3D42BeiiPApWaVfUxe9vSaHQ3Dlg7JWpS2NEtItND9bzw1dP
+         YGGxf0Y0M5Jnt/pw4tYfLUN47x1o/BiRsOEFtnthcKW/oQQvaxmZFnWlTr6XuhLZJFdZ
+         1vufCkBVn6X7bcLuzA9meKQLomIuFG+ictp7pKua3eHxp+fyx3yYdGwkTfrlAX9SmSWO
+         TW7w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=IGv/QuhBfQMEN1mITB6WR1nioX3n8yw8Uyn/MllDKZo=;
-        b=xBlXMaQ/mttUpoBGtSaLN3ot+T5+R3G4dzT5y8gom9pKNwPdYzZQdSZSVBQO0OjBO/
-         aDelh4Oi3gO24YvsocCUZJijDwcKDFRZ37KPWM15pvfkf5fNn+66wZ4rWwJqv3uhKvIE
-         vouLFO+36LQ59O4IH6wQ2IpwRGmKa86zzxX82KFx8y+nxr4E3VItUH+yuinmbqtJEA9v
-         E9gMYCOeJtUDEHqiqQUlCzjUAbZxaVTN+FInldvEJTqFFl5JmI/K+UI0GieWW0EpQYSi
-         qQEE7N+X14hxIqt1CdUTTk9ZeZrI9kcG7xcw5eboIDNbwVes4KMzJCvFSBQ2KL7bW/hI
-         s7Wg==
-X-Gm-Message-State: AOAM531baf7gsUIJl+gPHfufCVU+27GdBeRtpwO0qdnyzK3dsXR8d/lc
-        PSX0RYt6acGg7WfPkG8opkg=
-X-Google-Smtp-Source: ABdhPJyrL+ek4+CgF2rPUMkUnMVKUAUJnXy5lHQGfZ8YPp657PFqSjEntMedpfFCKQKyjqjbKzWHQw==
-X-Received: by 2002:a05:6a00:4385:b0:510:4422:aa3a with SMTP id bt5-20020a056a00438500b005104422aa3amr5084784pfb.16.1651717166440;
-        Wed, 04 May 2022 19:19:26 -0700 (PDT)
+        bh=Moay9sBk8rVdbaL64S3jDlKhD4QT9fJRTKr12K5jA4Q=;
+        b=tq1vT3i4LXFv0svFWQMIl4O+Co14tAbOCIA+jdvMv65ys5fbvZRq2MgdHayNaJnLw8
+         kPXp6RXaHoMGoup/X8XpTYL+9+4fZ0sgtk+Y1+r6wNxf9q+T0bHhbO5OhoTnvwfQO8e8
+         JvxqRJJqJnDS4QZEBbQvRAjt920yFEldMNcG7yHj5qKplHavlhWYOzMLIr2V/CYf1O/j
+         +ULAebfkg+jOdcPCF6ddbOge/iec3TODTu5gYiXjbbWQosS17MbquuRvy8zo9X8C7ZKF
+         pFgmf0DHX8Cgb8dPBjuOiIrvhxixgwuCV77l77LSFASg++W9LGIW1qAvG7jNQEf3dkwg
+         zqAQ==
+X-Gm-Message-State: AOAM533BZrDXnzTMX3eJhHURZbl8XWC7cS5g4VzWwQm1CHAYA7x5e/Ir
+        QFM9iRGo3q5EBl1MbjVmkJvTmFuameY=
+X-Google-Smtp-Source: ABdhPJze9fMC3XNJanQ45X3LhX0fh8loKWHwpc0KslufZ+Vjs8bB8YGm37Bc3hMJTtbcubwSHdG/sQ==
+X-Received: by 2002:a05:6a00:1353:b0:50e:982:6a4f with SMTP id k19-20020a056a00135300b0050e09826a4fmr11808215pfu.50.1651717198174;
+        Wed, 04 May 2022 19:19:58 -0700 (PDT)
 Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id b28-20020aa78edc000000b0050dc7628138sm105962pfr.18.2022.05.04.19.19.23
+        by smtp.gmail.com with ESMTPSA id e185-20020a621ec2000000b0050dc76281bdsm76984pfe.151.2022.05.04.19.19.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 May 2022 19:19:26 -0700 (PDT)
+        Wed, 04 May 2022 19:19:57 -0700 (PDT)
 From:   cgel.zte@gmail.com
 X-Google-Original-From: chi.minghao@zte.com.cn
-To:     hdegoede@redhat.com
-Cc:     markgross@kernel.org, platform-driver-x86@vger.kernel.org,
+To:     alexandre.belloni@bootlin.com
+Cc:     npitre@baylibre.com, linux-i3c@lists.infradead.org,
         linux-kernel@vger.kernel.org, Minghao Chi <chi.minghao@zte.com.cn>,
         Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH] platform/x86: hp-wmi: simplify the return expression of platform_profile_omen_set()
-Date:   Thu,  5 May 2022 02:19:19 +0000
-Message-Id: <20220505021919.54462-1-chi.minghao@zte.com.cn>
+Subject: [PATCH] i3c/master: simplify the return expression of i3c_hci_remove()
+Date:   Thu,  5 May 2022 02:19:54 +0000
+Message-Id: <20220505021954.54524-1-chi.minghao@zte.com.cn>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -77,35 +77,28 @@ Simplify the return expression.
 Reported-by: Zeal Robot <zealci@zte.com.cn>
 Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
 ---
- drivers/platform/x86/hp-wmi.c | 8 ++------
- 1 file changed, 2 insertions(+), 6 deletions(-)
+ drivers/i3c/master/mipi-i3c-hci/core.c | 7 +------
+ 1 file changed, 1 insertion(+), 6 deletions(-)
 
-diff --git a/drivers/platform/x86/hp-wmi.c b/drivers/platform/x86/hp-wmi.c
-index 667f94bba905..9edb1f877189 100644
---- a/drivers/platform/x86/hp-wmi.c
-+++ b/drivers/platform/x86/hp-wmi.c
-@@ -1119,7 +1119,7 @@ static int platform_profile_omen_get(struct platform_profile_handler *pprof,
- static int platform_profile_omen_set(struct platform_profile_handler *pprof,
- 				     enum platform_profile_option profile)
+diff --git a/drivers/i3c/master/mipi-i3c-hci/core.c b/drivers/i3c/master/mipi-i3c-hci/core.c
+index 8c01123dc4ed..6aef5ce43cc1 100644
+--- a/drivers/i3c/master/mipi-i3c-hci/core.c
++++ b/drivers/i3c/master/mipi-i3c-hci/core.c
+@@ -768,13 +768,8 @@ static int i3c_hci_probe(struct platform_device *pdev)
+ static int i3c_hci_remove(struct platform_device *pdev)
  {
--	int err, tp, tp_version;
-+	int tp, tp_version;
+ 	struct i3c_hci *hci = platform_get_drvdata(pdev);
+-	int ret;
  
- 	tp_version = omen_get_thermal_policy_version();
- 
-@@ -1149,11 +1149,7 @@ static int platform_profile_omen_set(struct platform_profile_handler *pprof,
- 		return -EOPNOTSUPP;
- 	}
- 
--	err = omen_thermal_profile_set(tp);
--	if (err < 0)
--		return err;
+-	ret = i3c_master_unregister(&hci->master);
+-	if (ret)
+-		return ret;
 -
 -	return 0;
-+	return omen_thermal_profile_set(tp);
++	return i3c_master_unregister(&hci->master);
  }
  
- static int thermal_profile_get(void)
+ static const __maybe_unused struct of_device_id i3c_hci_of_match[] = {
 -- 
 2.25.1
 

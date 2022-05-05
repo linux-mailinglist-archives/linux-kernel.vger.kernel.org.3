@@ -2,278 +2,400 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F106851BCE6
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 12:12:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AAC3651BCEB
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 12:14:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355001AbiEEKQQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 06:16:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53278 "EHLO
+        id S1355090AbiEEKQq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 06:16:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355113AbiEEKQB (ORCPT
+        with ESMTP id S1355046AbiEEKQl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 06:16:01 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C05B51E46;
-        Thu,  5 May 2022 03:12:21 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id e24so5427361wrc.9;
-        Thu, 05 May 2022 03:12:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=eb2ZcFrJLchDQJ3uoZwQrPbJ1hCXeW171xzslTdT/U4=;
-        b=G89l6j5DRWAvV3zCYyVoZKkWWBGnZmD3gVlBJDJs1rBbWZGMduvsJXgjawnSyEvdry
-         wK8X2CVN4x+NPbTCSj/Hhf99L/9GOZ1OJbxwihCOn/RX0Kl5nqvbEsQh3FNzrbb1gixQ
-         UCiBZhzKSWWfPKfAk9noqtj32u52IDzcaLqLzCgHlvFdrC+eqqa6vTfXWDUFbgRqFBqB
-         6sLFoZLkvMkYbyxOtL/JwMxWfZNOPan9v832XXd/QrVzjHj+WBf2G+buT/KWnTlMphbF
-         UxWVKrDxlAdR/Thq9GPIpuJJU5fg+AoBHmdU1+Fi9uoVPjtOmPBSchUkefm3TRpzF2/C
-         pz6Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=eb2ZcFrJLchDQJ3uoZwQrPbJ1hCXeW171xzslTdT/U4=;
-        b=nQjeR7qQRGbhEfOfENsRle0WrwiGYUyn54kt5Tm3P+68SG5bwUyaoPTGBCGJQZtKui
-         +s1chc/gHbOX8VlDwPvgv3/9LUVlnk9DQCypVPfDWOwIodk7OnLYrw0FU12hFn8rRmH+
-         AL8s/kPmQXLscMT8xz1Jh5LEAxcWL/xYbsYXVjrzA6gUgFCGYTSaS5+DipszSu71gUtD
-         tRYskPIYupQopDmvitwQXZ7klKAeY/A24RRYKyl7JWvr0TVsyHDbiUHWOnf9YfygDiEc
-         mwTj/WN8A4ESiPeSsfkGjTD+7S6J/HOhdFLCfkcThTAWRV6bz3jL8cfgXVGL+N4u1if6
-         XchQ==
-X-Gm-Message-State: AOAM531EhkN2WSrQWFHwfbNNHfVyeoaCpiZXCrikE5gGHkK6aIanKhw7
-        GDwCaIOVZMIZKsLi86e42zE=
-X-Google-Smtp-Source: ABdhPJw7Wbi8fb/wzTczoS25ioRejgwcD7Tq0/bwbcNAYzBrRJZFfWNBH1Dc95FX1erDQ/IFeDBlUg==
-X-Received: by 2002:a05:6000:144d:b0:20c:7829:2a44 with SMTP id v13-20020a056000144d00b0020c78292a44mr8970101wrx.663.1651745539758;
-        Thu, 05 May 2022 03:12:19 -0700 (PDT)
-Received: from [192.168.1.7] ([212.22.223.21])
-        by smtp.gmail.com with ESMTPSA id bj20-20020a0560001e1400b0020c5253d8edsm908950wrb.57.2022.05.05.03.12.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 05 May 2022 03:12:18 -0700 (PDT)
-Subject: Re: [PATCH V1 4/6] dt-bindings: Add xen,dev-domid property
- description for xen-grant DMA ops
-To:     Rob Herring <robh@kernel.org>
-Cc:     xen-devel@lists.xenproject.org,
-        virtualization@lists.linux-foundation.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Julien Grall <julien@xen.org>, Juergen Gross <jgross@suse.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Christoph Hellwig <hch@infradead.org>
-References: <1650646263-22047-1-git-send-email-olekstysh@gmail.com>
- <1650646263-22047-5-git-send-email-olekstysh@gmail.com>
- <YnBUUclJqkvKsV2o@robh.at.kernel.org>
- <accbc6be-82c1-dfd2-586f-816141415d7c@gmail.com>
- <YnHCgBsQ90cJ58+0@robh.at.kernel.org>
-From:   Oleksandr <olekstysh@gmail.com>
-Message-ID: <87009e86-8999-eac9-a5c9-feef196f69fc@gmail.com>
-Date:   Thu, 5 May 2022 13:12:17 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Thu, 5 May 2022 06:16:41 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D95451309;
+        Thu,  5 May 2022 03:13:00 -0700 (PDT)
+Received: from zn.tnic (p5de8eeb4.dip0.t-ipconnect.de [93.232.238.180])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id A58891EC018C;
+        Thu,  5 May 2022 12:12:54 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1651745574;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=t9JyiCDJFfz7s1eUG7EqK8oLbEfhC5TaTEFbaVQRdLA=;
+        b=fTsaA2RJ6GuhINTvwK23oAjSi06r+vO8t+3JpFx6smcORH5fPHNIlfcx987GneGwMkn+Ka
+        940q5I/BnlYFEJJhivn24WzihmMj7scaiRRVtde/ini7RvSoZDP/LfLXn63+zs8pQVaUZN
+        zpq6hJvp0KrrtRiTN3xjBvoQDIfzbUw=
+Date:   Thu, 5 May 2022 12:12:52 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Cc:     Andy Lutomirski <luto@kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Joerg Roedel <jroedel@suse.de>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Varad Gautam <varad.gautam@suse.com>,
+        Dario Faggioli <dfaggioli@suse.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        David Hildenbrand <david@redhat.com>, x86@kernel.org,
+        linux-mm@kvack.org, linux-coco@lists.linux.dev,
+        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCHv5 10/12] x86/tdx: Unaccepted memory support
+Message-ID: <YnOjJB8h3ZUR9sLX@zn.tnic>
+References: <20220425033934.68551-1-kirill.shutemov@linux.intel.com>
+ <20220425033934.68551-11-kirill.shutemov@linux.intel.com>
 MIME-Version: 1.0
-In-Reply-To: <YnHCgBsQ90cJ58+0@robh.at.kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220425033934.68551-11-kirill.shutemov@linux.intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Apr 25, 2022 at 06:39:32AM +0300, Kirill A. Shutemov wrote:
+> Subject: [PATCHv5 10/12] x86/tdx: Unaccepted memory support
 
-On 04.05.22 03:02, Rob Herring wrote:
+Patch subject needs a verb:
 
-Hello Rob
+"Add ... "
 
-> On Tue, May 03, 2022 at 08:09:32PM +0300, Oleksandr wrote:
->> On 03.05.22 00:59, Rob Herring wrote:
->>
->> Hello Rob
->>
->>
->>> On Fri, Apr 22, 2022 at 07:51:01PM +0300, Oleksandr Tyshchenko wrote:
->>>> From: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
->>>>
->>>> Introduce Xen specific binding for the virtualized device (e.g. virtio)
->>>> to be used by Xen grant DMA-mapping layer in the subsequent commit.
->>>>
->>>> This binding indicates that Xen grant mappings scheme needs to be
->>>> enabled for the device which DT node contains that property and specifies
->>>> the ID of Xen domain where the corresponding backend resides. The ID
->>>> (domid) is used as an argument to the grant mapping APIs.
->>>>
->>>> This is needed for the option to restrict memory access using Xen grant
->>>> mappings to work which primary goal is to enable using virtio devices
->>>> in Xen guests.
->>>>
->>>> Signed-off-by: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
->>>> ---
->>>> Changes RFC -> V1:
->>>>      - update commit subject/description and text in description
->>>>      - move to devicetree/bindings/arm/
->>>> ---
->>>>    .../devicetree/bindings/arm/xen,dev-domid.yaml     | 37 ++++++++++++++++++++++
->>>>    1 file changed, 37 insertions(+)
->>>>    create mode 100644 Documentation/devicetree/bindings/arm/xen,dev-domid.yaml
->>>>
->>>> diff --git a/Documentation/devicetree/bindings/arm/xen,dev-domid.yaml b/Documentation/devicetree/bindings/arm/xen,dev-domid.yaml
->>>> new file mode 100644
->>>> index 00000000..ef0f747
->>>> --- /dev/null
->>>> +++ b/Documentation/devicetree/bindings/arm/xen,dev-domid.yaml
->>>> @@ -0,0 +1,37 @@
->>>> +# SPDX-License-Identifier: (GPL-2.0-only or BSD-2-Clause)
->>>> +%YAML 1.2
->>>> +---
->>>> +$id: http://devicetree.org/schemas/arm/xen,dev-domid.yaml#
->>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->>>> +
->>>> +title: Xen specific binding for the virtualized device (e.g. virtio)
->>>> +
->>>> +maintainers:
->>>> +  - Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
->>>> +
->>>> +select: true
->>> Do we really need to support this property everywhere?
->>  From my understanding - yes.
->>
->> As, I think, any device node describing virtulized device in the guest
->> device tree can have this property.  Initially (in the RFC series) the
->> "solution to restrict memory access using Xen grant mappings" was
->> virtio-specific.
->>
->> Although the support of virtio is a primary target of this series, we
->> decided to generalize this work and expand it to any device [1]. So the Xen
->> grant mappings scheme (this property to be used for) can be theoretically
->> used for any device emulated by the Xen backend.
->>
->>
->>>> +
->>>> +description:
->>>> +  This binding indicates that Xen grant mappings scheme needs to be enabled
->>>> +  for that device and specifies the ID of Xen domain where the corresponding
->>>> +  device (backend) resides. This is needed for the option to restrict memory
->>>> +  access using Xen grant mappings to work.
->>>> +
->>>> +properties:
->>>> +  xen,dev-domid:
->>>> +    $ref: /schemas/types.yaml#/definitions/uint32
->>>> +    description:
->>>> +      The domid (domain ID) of the domain where the device (backend) is running.
->>>> +
->>>> +additionalProperties: true
->>>> +
->>>> +examples:
->>>> +  - |
->>>> +    virtio_block@3000 {
->>> virtio@3000
->> ok, will change
->>
->>
->>>> +            compatible = "virtio,mmio";
->>>> +            reg = <0x3000 0x100>;
->>>> +            interrupts = <41>;
->>>> +
->>>> +            /* The device is located in Xen domain with ID 1 */
->>>> +            xen,dev-domid = <1>;
->>> This fails validation:
->>>
->>> Documentation/devicetree/bindings/arm/xen,dev-domid.example.dtb: virtio_block@3000: xen,dev-domid: [[1]] is not of type 'object'
->>>           From schema: /home/rob/proj/git/linux-dt/Documentation/devicetree/bindings/virtio/mmio.yaml
->> Thank you for pointing this out, my fault, I haven't "properly" checked this
->> before. I think, we need to remove "compatible = "virtio,mmio"; here
-> Uhh, no. That just means the example is incomplete. You need to add this
-> property or reference this schema from virtio/mmio.yaml.
+> All preparations are complete.
 
-ok, I got it
+Drop this sentence.
+
+> Hookup TDX-specific code to accept memory.
+> 
+> Accepting the memory is the same process as converting memory from
+> shared to private: kernel notifies VMM with MAP_GPA hypercall and then
+> accept pages with ACCEPT_PAGE module call.
+> 
+> The implementation in core kernel uses tdx_enc_status_changed(). It
+> already used for converting memory to shared and back for I/O
+> transactions.
+> 
+> Boot stub provides own implementation of tdx_accept_memory(). It is
+> similar in structure to tdx_enc_status_changed(), but only cares about
+> converting memory to private.
+> 
+> Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+> ---
+>  arch/x86/Kconfig                  |  1 +
+>  arch/x86/boot/compressed/mem.c    | 24 ++++++++-
+>  arch/x86/boot/compressed/tdx.c    | 85 +++++++++++++++++++++++++++++++
+>  arch/x86/coco/tdx/tdx.c           | 31 +++++++----
+>  arch/x86/include/asm/shared/tdx.h |  2 +
+>  arch/x86/mm/unaccepted_memory.c   |  9 +++-
+>  6 files changed, 141 insertions(+), 11 deletions(-)
+> 
+> diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+> index 7021ec725dd3..e4c31dbea6d7 100644
+> --- a/arch/x86/Kconfig
+> +++ b/arch/x86/Kconfig
+> @@ -885,6 +885,7 @@ config INTEL_TDX_GUEST
+>  	select ARCH_HAS_CC_PLATFORM
+>  	select X86_MEM_ENCRYPT
+>  	select X86_MCE
+> +	select UNACCEPTED_MEMORY
+
+WARNING: unmet direct dependencies detected for UNACCEPTED_MEMORY
+  Depends on [n]: EFI [=y] && EFI_STUB [=y] && !KEXEC_CORE [=y]
+  Selected by [y]:
+  - INTEL_TDX_GUEST [=y] && HYPERVISOR_GUEST [=y] && X86_64 [=y] && CPU_SUP_INTEL [=y] && X86_X2APIC [=y]
+
+WARNING: unmet direct dependencies detected for UNACCEPTED_MEMORY
+  Depends on [n]: EFI [=y] && EFI_STUB [=y] && !KEXEC_CORE [=y]
+  Selected by [y]:
+  - INTEL_TDX_GUEST [=y] && HYPERVISOR_GUEST [=y] && X86_64 [=y] && CPU_SUP_INTEL [=y] && X86_X2APIC [=y]
 
 
->
->
->> diff --git a/Documentation/devicetree/bindings/arm/xen,dev-domid.yaml
->> b/Documentation/devicetree/bindings/arm/xen,dev-domid.yaml
->> index 2daa8aa..d2f2140 100644
->> --- a/Documentation/devicetree/bindings/arm/xen,dev-domid.yaml
->> +++ b/Documentation/devicetree/bindings/arm/xen,dev-domid.yaml
->> @@ -28,7 +28,7 @@ additionalProperties: true
->>   examples:
->>     - |
->>       virtio_block@3000 {
->> -            compatible = "virtio,mmio";
->> +            /* ... */
->>               reg = <0x3000 0x100>;
->>               interrupts = <41>;
->>
->>
->>
->>> The property has to be added to the virtio/mmio.yaml schema. If it is
->>> not needed elsewhere, then *just* add the property there.
->> As I described above, the property is not virtio specific and can be used
->> for any virtualized device for which Xen grant mappings scheme needs to be
->> enabled (xen-grant DMA-mapping layer).
-> But that's a finite list of devices, right?
+> diff --git a/arch/x86/boot/compressed/mem.c b/arch/x86/boot/compressed/mem.c
+> index b5058c975d26..539fff27de49 100644
+> --- a/arch/x86/boot/compressed/mem.c
+> +++ b/arch/x86/boot/compressed/mem.c
+> @@ -5,6 +5,8 @@
+>  #include "error.h"
+>  #include "find.h"
+>  #include "math.h"
+> +#include "tdx.h"
+> +#include <asm/shared/tdx.h>
+>  
+>  #define PMD_SHIFT	21
+>  #define PMD_SIZE	(_AC(1, UL) << PMD_SHIFT)
+> @@ -12,10 +14,30 @@
+>  
+>  extern struct boot_params *boot_params;
+>  
+> +static bool is_tdx_guest(void)
 
-Right
+There is arch/x86/boot/compressed/tdx.c which already looks at that leaf
+and detects crap. Why is that hastily slapped here too?
 
+> +{
+> +	static bool once;
+> +	static bool is_tdx;
+> +
+> +	if (!once) {
+> +		u32 eax, sig[3];
+> +
+> +		cpuid_count(TDX_CPUID_LEAF_ID, 0, &eax,
+> +			    &sig[0], &sig[2],  &sig[1]);
+> +		is_tdx = !memcmp(TDX_IDENT, sig, sizeof(sig));
+> +		once = true;
+> +	}
+> +
+> +	return is_tdx;
+> +}
+> +
+>  static inline void __accept_memory(phys_addr_t start, phys_addr_t end)
+>  {
+>  	/* Platform-specific memory-acceptance call goes here */
+> -	error("Cannot accept memory");
+> +	if (is_tdx_guest())
+> +		tdx_accept_memory(start, end);
+> +	else
+> +		error("Cannot accept memory");
 
-> In any case, you have to
-> list the property anywhere it can be used.
+What is that supposed to catch?
 
-Agree
+> diff --git a/arch/x86/boot/compressed/tdx.c b/arch/x86/boot/compressed/tdx.c
+> index 918a7606f53c..57fd2bf28484 100644
+> --- a/arch/x86/boot/compressed/tdx.c
+> +++ b/arch/x86/boot/compressed/tdx.c
+> @@ -3,12 +3,14 @@
+>  #include "../cpuflags.h"
+>  #include "../string.h"
+>  #include "../io.h"
+> +#include "align.h"
+>  #include "error.h"
+>  
+>  #include <vdso/limits.h>
+>  #include <uapi/asm/vmx.h>
+>  
+>  #include <asm/shared/tdx.h>
+> +#include <asm/page_types.h>
+>  
+>  /* Called from __tdx_hypercall() for unrecoverable failure */
+>  void __tdx_hypercall_failed(void)
+> @@ -75,3 +77,86 @@ void early_tdx_detect(void)
+>  	pio_ops.f_outb = tdx_outb;
+>  	pio_ops.f_outw = tdx_outw;
+>  }
+> +
+> +enum pg_level {
+> +	PG_LEVEL_4K,
+> +	PG_LEVEL_2M,
+> +	PG_LEVEL_1G,
+> +};
+> +
+> +#define PTE_SHIFT 9
 
+At least stick those in a header.
 
-If I got it right, we need to add to virtio/mmio.yaml something like:
+> +static bool try_accept_one(phys_addr_t *start, unsigned long len,
+> +			  enum pg_level pg_level)
 
+No need to break that line.
 
-diff --git a/Documentation/devicetree/bindings/virtio/mmio.yaml 
-b/Documentation/devicetree/bindings/virtio/mmio.yaml
-index 10c22b5..29a0932 100644
---- a/Documentation/devicetree/bindings/virtio/mmio.yaml
-+++ b/Documentation/devicetree/bindings/virtio/mmio.yaml
-@@ -13,6 +13,9 @@ description:
-    See 
-https://www.oasis-open.org/committees/tc_home.php?wg_abbrev=virtio for
-    more details.
+Also, it doesn't need to be bool - you can simply return accept_size on
+success and 0 on error so that you don't have an I/O argument.
 
-+allOf:
-+  - $ref: /schemas/arm/xen,dev-domid.yaml#
-+
-  properties:
-    compatible:
-      const: virtio,mmio
-@@ -33,6 +36,10 @@ properties:
-      description: Required for devices making accesses thru an IOMMU.
-      maxItems: 1
+Ditto for the copy in coco/tdx/tdx.c
 
-+  xen,dev-domid:
-+    description: Required when Xen grant mappings need to be enabled 
-for device.
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+
-  required:
-    - compatible
-    - reg
+> +{
+> +	unsigned long accept_size = PAGE_SIZE << (pg_level * PTE_SHIFT);
+> +	u64 tdcall_rcx;
+> +	u8 page_size;
+> +
+> +	if (!IS_ALIGNED(*start, accept_size))
+> +		return false;
+> +
+> +	if (len < accept_size)
+> +		return false;
+> +
+> +	/*
+> +	 * Pass the page physical address to the TDX module to accept the
+> +	 * pending, private page.
+> +	 *
+> +	 * Bits 2:0 of RCX encode page size: 0 - 4K, 1 - 2M, 2 - 1G.
+> +	 */
+> +	switch (pg_level) {
+> +	case PG_LEVEL_4K:
+> +		page_size = 0;
+> +		break;
+> +	case PG_LEVEL_2M:
+> +		page_size = 1;
+> +		break;
+> +	case PG_LEVEL_1G:
+> +		page_size = 2;
+> +		break;
+> +	default:
+> +		return false;
+> +	}
+> +
+> +	tdcall_rcx = *start | page_size;
+> +	if (__tdx_module_call(TDX_ACCEPT_PAGE, tdcall_rcx, 0, 0, 0, NULL))
+> +		return false;
+> +
+> +	*start += accept_size;
+> +	return true;
+> +}
+> +
+> +void tdx_accept_memory(phys_addr_t start, phys_addr_t end)
+> +{
+> +	/*
+> +	 * Notify the VMM about page mapping conversion. More info about ABI
+> +	 * can be found in TDX Guest-Host-Communication Interface (GHCI),
+> +	 * section "TDG.VP.VMCALL<MapGPA>"
+> +	 */
+> +	if (_tdx_hypercall(TDVMCALL_MAP_GPA, start, end - start, 0, 0))
+> +		error("Accepting memory failed\n");
+> +	/*
+> +	 * For shared->private conversion, accept the page using
+> +	 * TDX_ACCEPT_PAGE TDX module call.
+> +	 */
+> +	while (start < end) {
+> +		unsigned long len = end - start;
+> +
+> +		/*
+> +		 * Try larger accepts first. It gives chance to VMM to keep
+> +		 * 1G/2M SEPT entries where possible and speeds up process by
 
+"SEPT"?
 
-This passed validation.
+> +		 * cutting number of hypercalls (if successful).
+> +		 */
+> +
+> +		if (try_accept_one(&start, len, PG_LEVEL_1G))
+> +			continue;
+> +
+> +		if (try_accept_one(&start, len, PG_LEVEL_2M))
+> +			continue;
+> +
+> +		if (!try_accept_one(&start, len, PG_LEVEL_4K))
+> +			error("Accepting memory failed\n");
+> +	}
+> +}
+> diff --git a/arch/x86/coco/tdx/tdx.c b/arch/x86/coco/tdx/tdx.c
+> index ddb60a87b426..ab4deb897942 100644
+> --- a/arch/x86/coco/tdx/tdx.c
+> +++ b/arch/x86/coco/tdx/tdx.c
+> @@ -580,16 +580,9 @@ static bool try_accept_one(phys_addr_t *start, unsigned long len,
+>  	return true;
+>  }
+>  
+> -/*
+> - * Inform the VMM of the guest's intent for this physical page: shared with
+> - * the VMM or private to the guest.  The VMM is expected to change its mapping
+> - * of the page in response.
+> - */
+> -static bool tdx_enc_status_changed(unsigned long vaddr, int numpages, bool enc)
+> +static bool tdx_enc_status_changed_phys(phys_addr_t start, phys_addr_t end,
 
+Why? is tdx_enc_status_changed_virt() coming too?
 
-Could you please clarify, is my understanding correct?
+> +					bool enc)
+>  {
+> -	phys_addr_t start = __pa(vaddr);
+> -	phys_addr_t end   = __pa(vaddr + numpages * PAGE_SIZE);
+> -
+>  	if (!enc) {
+>  		/* Set the shared (decrypted) bits: */
+>  		start |= cc_mkdec(0);
+> @@ -634,6 +627,25 @@ static bool tdx_enc_status_changed(unsigned long vaddr, int numpages, bool enc)
+>  	return true;
+>  }
+>  
+> +void tdx_accept_memory(phys_addr_t start, phys_addr_t end)
+> +{
+> +	if (!tdx_enc_status_changed_phys(start, end, true))
+> +		panic("Accepting memory failed\n");
+> +}
+> +
+> +/*
+> + * Inform the VMM of the guest's intent for this physical page: shared with
+> + * the VMM or private to the guest.  The VMM is expected to change its mapping
+> + * of the page in response.
+> + */
+> +static bool tdx_enc_status_changed(unsigned long vaddr, int numpages, bool enc)
+> +{
+> +	phys_addr_t start = __pa(vaddr);
+> +	phys_addr_t end = __pa(vaddr + numpages * PAGE_SIZE);
+> +
+> +	return tdx_enc_status_changed_phys(start, end, enc);
+> +}
+> +
+>  void __init tdx_early_init(void)
+>  {
+>  	u64 cc_mask;
+> @@ -645,6 +657,7 @@ void __init tdx_early_init(void)
+>  		return;
+>  
+>  	setup_force_cpu_cap(X86_FEATURE_TDX_GUEST);
+> +	setup_clear_cpu_cap(X86_FEATURE_MCE);
 
+What, no comment? Why does TDX need to disable MCE?
 
->
-> Rob
+>  	cc_set_vendor(CC_VENDOR_INTEL);
+>  	cc_mask = get_cc_mask();
+> diff --git a/arch/x86/include/asm/shared/tdx.h b/arch/x86/include/asm/shared/tdx.h
+> index 956ced04c3be..97534c334473 100644
+> --- a/arch/x86/include/asm/shared/tdx.h
+> +++ b/arch/x86/include/asm/shared/tdx.h
+> @@ -81,5 +81,7 @@ struct tdx_module_output {
+>  u64 __tdx_module_call(u64 fn, u64 rcx, u64 rdx, u64 r8, u64 r9,
+>  		      struct tdx_module_output *out);
+>  
+> +void tdx_accept_memory(phys_addr_t start, phys_addr_t end);
+> +
+>  #endif /* !__ASSEMBLY__ */
+>  #endif /* _ASM_X86_SHARED_TDX_H */
+> diff --git a/arch/x86/mm/unaccepted_memory.c b/arch/x86/mm/unaccepted_memory.c
+> index 1327f64d5205..de0790af1824 100644
+> --- a/arch/x86/mm/unaccepted_memory.c
+> +++ b/arch/x86/mm/unaccepted_memory.c
+> @@ -6,6 +6,7 @@
+>  
+>  #include <asm/io.h>
+>  #include <asm/setup.h>
+> +#include <asm/shared/tdx.h>
+>  #include <asm/unaccepted_memory.h>
+>  
+>  /* Protects unaccepted memory bitmap */
+> @@ -29,7 +30,13 @@ void accept_memory(phys_addr_t start, phys_addr_t end)
+>  		unsigned long len = range_end - range_start;
+>  
+>  		/* Platform-specific memory-acceptance call goes here */
+> -		panic("Cannot accept memory");
+> +		if (cpu_feature_enabled(X86_FEATURE_TDX_GUEST)) {
+> +			tdx_accept_memory(range_start * PMD_SIZE,
+> +					  range_end * PMD_SIZE);
+> +		} else {
+> +			panic("Cannot accept memory");
+
+Why panic here? A WARN_ONCE() should suffice, methinks.
 
 -- 
-Regards,
+Regards/Gruss,
+    Boris.
 
-Oleksandr Tyshchenko
-
+https://people.kernel.org/tglx/notes-about-netiquette

@@ -2,67 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC60651C4CE
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 18:11:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E326651C4CB
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 18:11:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381781AbiEEQOx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 12:14:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37560 "EHLO
+        id S1381701AbiEEQOe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 12:14:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381875AbiEEQOu (ORCPT
+        with ESMTP id S1382328AbiEEQOU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 12:14:50 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 599701D30B;
-        Thu,  5 May 2022 09:11:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651767060; x=1683303060;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=1eGeIh+xMiBRTxqWkXlfYujous1v8oMKzohvreSWsN8=;
-  b=FNMAdsi+bg+d8+nosUfVJUoMrzCP+ZwWMIIQ38Sis9BZBryE1ITu1E24
-   /F8BHqZsOr/ZDTPD3/safwHP+4+KVD6dds7ponxMCg40eon1sCWXVL/25
-   MgLPGzhmn4F/GvSULHgWYJsczT5Tn68ITVnCmq9TG4Os63l3rJxWGULVq
-   TqWTOrlj2Pa0QGs7LQUDgdYRrl0hzbogNCb1PQhwlzeDoN5ItvVN+6t4/
-   Ql8gC/WlZLP03T/ZV2OodXeDhsnXV6P3g0XvSGZUMRTFlXriAQQH6p7tK
-   ObfP/5DoCeyQ3wW46OXSGOvS7iwwOSAM3ZuwhUkRueHfCEKQJJY8iOCeX
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10338"; a="331155509"
-X-IronPort-AV: E=Sophos;i="5.91,201,1647327600"; 
-   d="scan'208";a="331155509"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2022 09:10:45 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,201,1647327600"; 
-   d="scan'208";a="665035013"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 05 May 2022 09:10:40 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nme3s-000CXj-Ac;
-        Thu, 05 May 2022 16:10:40 +0000
-Date:   Fri, 6 May 2022 00:09:59 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     cgel.zte@gmail.com, akpm@linux-foundation.org, hannes@cmpxchg.org,
-        willy@infradead.org, shy828301@gmail.com
-Cc:     kbuild-all@lists.01.org, mhocko@kernel.org,
-        roman.gushchin@linux.dev, shakeelb@google.com,
-        linmiaohe@huawei.com, william.kucharski@oracle.com,
-        peterx@redhat.com, hughd@google.com, vbabka@suse.cz,
-        songmuchun@bytedance.com, surenb@google.com,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        cgroups@vger.kernel.org, Yang Yang <yang.yang29@zte.com.cn>
-Subject: Re: [PATCH] mm/memcg: support control THP behaviour in cgroup
-Message-ID: <202205052327.RldmheYL-lkp@intel.com>
-References: <20220505033814.103256-1-xu.xin16@zte.com.cn>
+        Thu, 5 May 2022 12:14:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFF701D0FC;
+        Thu,  5 May 2022 09:10:32 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8B22161E38;
+        Thu,  5 May 2022 16:10:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3FE18C385A8;
+        Thu,  5 May 2022 16:10:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651767031;
+        bh=y1bm/ePw6qN7M+uAMLXPbjzr3hDC7iN+2T5U5hZp75c=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=V+TiGeXpnpx8QAPISZ/tFZ1vgqt07jnZ/e8UGsZFjYbSOIbxjOaFyb/UjHBhqn5hx
+         Z64n0P5wnIuaGgxiRpF7HUD9ziSD/Vy04koyZ+3OiNayjnxjzS0fZIDvEf4IlnjJDh
+         ZFqZNchd+Rmh0D+frE/gcDMj07LtCQDi4bliOoYzYtwBViRsBNVzjXBMPmC2/Yp3+O
+         avJDoEKTBRLhRLGuv5dd4ZPPntedsmPSHGr9oDetkDU8rgxRb4BichpG/ijCid5diK
+         e/q4W6AYEDDk6fNQ6Z+JXpgOmkNdUU12Kp4sKoGZvuLv591DrEpNAjn9EHl9SCvfts
+         lHbL5gffrnaQA==
+Date:   Thu, 5 May 2022 11:10:28 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Niklas Schnelle <schnelle@linux.ibm.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        linux-pci <linux-pci@vger.kernel.org>,
+        Richard Henderson <rth@twiddle.net>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Michal Simek <monstr@monstr.eu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        "open list:ALPHA PORT" <linux-alpha@vger.kernel.org>,
+        "moderated list:ARM PORT" <linux-arm-kernel@lists.infradead.org>,
+        "open list:IA64 (Itanium) PLATFORM" <linux-ia64@vger.kernel.org>,
+        "open list:M68K ARCHITECTURE" <linux-m68k@lists.linux-m68k.org>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        "open list:PARISC ARCHITECTURE" <linux-parisc@vger.kernel.org>,
+        "open list:LINUX FOR POWERPC (32-BIT AND 64-BIT)" 
+        <linuxppc-dev@lists.ozlabs.org>,
+        "open list:RISC-V ARCHITECTURE" <linux-riscv@lists.infradead.org>,
+        "open list:SUPERH" <linux-sh@vger.kernel.org>,
+        "open list:SPARC + UltraSPARC (sparc/sparc64)" 
+        <sparclinux@vger.kernel.org>
+Subject: Re: [RFC v2 01/39] Kconfig: introduce HAS_IOPORT option and select
+ it as necessary
+Message-ID: <20220505161028.GA492600@bhelgaas>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220505033814.103256-1-xu.xin16@zte.com.cn>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <CAK8P3a0sJgMSpZB_Butx2gO0hapYZy-Dm_QH-hG5rOaq_ZgsXg@mail.gmail.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,75 +92,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Wed, May 04, 2022 at 11:31:28PM +0200, Arnd Bergmann wrote:
+> On Wed, May 4, 2022 at 11:08 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
+> > On Fri, Apr 29, 2022 at 03:49:59PM +0200, Niklas Schnelle wrote:
+> > > We introduce a new HAS_IOPORT Kconfig option to indicate support for
+> > > I/O Port access. In a future patch HAS_IOPORT=n will disable compilation
+> > > of the I/O accessor functions inb()/outb() and friends on architectures
+> > > which can not meaningfully support legacy I/O spaces such as s390 or
+> > > where such support is optional.
+> >
+> > So you plan to drop inb()/outb() on architectures where I/O port space
+> > is optional?  So even platforms that have I/O port space may not be
+> > able to use it?
+> >
+> > This feels like a lot of work where the main benefit is to keep
+> > Kconfig from offering drivers that aren't of interest on s390.
+> >
+> > Granted, there may be issues where inb()/outb() does the wrong thing
+> > such as dereferencing null pointers when I/O port space isn't
+> > implemented.  I think that's a defect in inb()/outb() and could be
+> > fixed there.
+> 
+> The current implementation in asm-generic/io.h implements inb()/outb()
+> using readb()/writeb() with a fixed architecture specific offset.
+> 
+> There are three possible things that can happen here:
+> 
+> a) there is a host bridge driver that maps its I/O ports to this window,
+>     and everything works
+> b) the address range is reserved and accessible but no host bridge
+>    driver has mapped its registers there, so an access causes a
+>    page fault
+> c) the architecture does not define an offset, and accessing low I/O
+>     ports ends up as a NULL pointer dereference
+> 
+> The main goal is to avoid c), which is what happens on s390, but
+> can also happen elsewhere. Catching b) would be nice as well,
+> but is much harder to do from generic code as you'd need an
+> architecture specific inline asm statement to insert a ex_table
+> fixup, or a runtime conditional on each access.
 
-Thank you for the patch! Perhaps something to improve:
+Or s390 could implement its own inb().
 
-[auto build test WARNING on linux/master]
-[also build test WARNING on linus/master v5.18-rc5]
-[cannot apply to hnaz-mm/master]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+I'm hearing that generic powerpc kernels have to run both on machines
+that have I/O port space and those that don't.  That makes me think
+s390 could do something similar.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/cgel-zte-gmail-com/mm-memcg-support-control-THP-behaviour-in-cgroup/20220505-114028
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 107c948d1d3e61d10aee9d0f7c3d81bbee9842af
-config: i386-randconfig-s001 (https://download.01.org/0day-ci/archive/20220505/202205052327.RldmheYL-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.2.0-20) 11.2.0
-reproduce:
-        # apt-get install sparse
-        # sparse version: v0.6.4-dirty
-        # https://github.com/intel-lab-lkp/linux/commit/f08a35b9798572693a91c6a3d823ed9ae54ef688
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review cgel-zte-gmail-com/mm-memcg-support-control-THP-behaviour-in-cgroup/20220505-114028
-        git checkout f08a35b9798572693a91c6a3d823ed9ae54ef688
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=i386 SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-
-sparse warnings: (new ones prefixed by >>)
-   mm/huge_memory.c: note: in included file (through include/linux/mm.h):
->> include/linux/huge_mm.h:272:43: sparse: sparse: marked inline, but without a definition
-   mm/huge_memory.c: note: in included file:
->> include/linux/khugepaged.h:30:36: sparse: sparse: marked inline, but without a definition
-   include/linux/khugepaged.h:31:38: sparse: sparse: marked inline, but without a definition
---
-   mm/memory.c:1024:17: sparse: sparse: context imbalance in 'copy_pte_range' - different lock contexts for basic block
-   mm/memory.c:1752:16: sparse: sparse: context imbalance in '__get_locked_pte' - different lock contexts for basic block
-   mm/memory.c:1800:9: sparse: sparse: context imbalance in 'insert_page' - different lock contexts for basic block
-   mm/memory.c:2302:17: sparse: sparse: context imbalance in 'remap_pte_range' - different lock contexts for basic block
-   mm/memory.c:2558:17: sparse: sparse: context imbalance in 'apply_to_pte_range' - unexpected unlock
-   mm/memory.c:2847:9: sparse: sparse: context imbalance in 'wp_page_copy' - different lock contexts for basic block
-   mm/memory.c:3185:17: sparse: sparse: context imbalance in 'wp_pfn_shared' - unexpected unlock
-   mm/memory.c:3248:19: sparse: sparse: context imbalance in 'do_wp_page' - different lock contexts for basic block
-   mm/memory.c: note: in included file (through include/linux/mm.h):
->> include/linux/huge_mm.h:272:43: sparse: sparse: marked inline, but without a definition
->> include/linux/huge_mm.h:272:43: sparse: sparse: marked inline, but without a definition
---
-   mm/shmem.c: note: in included file:
->> include/linux/khugepaged.h:30:36: sparse: sparse: marked inline, but without a definition
-   include/linux/khugepaged.h:31:38: sparse: sparse: marked inline, but without a definition
->> include/linux/khugepaged.h:30:36: sparse: sparse: marked inline, but without a definition
-   include/linux/khugepaged.h:31:38: sparse: sparse: marked inline, but without a definition
-
-vim +272 include/linux/huge_mm.h
-
-   263	
-   264	static inline struct list_head *page_deferred_list(struct page *page)
-   265	{
-   266		/*
-   267		 * Global or memcg deferred list in the second tail pages is
-   268		 * occupied by compound_head.
-   269		 */
-   270		return &page[2].deferred_list;
-   271	}
- > 272	inline bool __transparent_hugepage_enabled(struct vm_area_struct *vma);
-   273	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Bjorn

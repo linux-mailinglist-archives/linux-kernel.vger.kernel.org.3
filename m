@@ -2,299 +2,394 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E38951C816
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 20:37:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 614CA51C828
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 20:42:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384586AbiEESjC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 14:39:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38166 "EHLO
+        id S1384691AbiEESmq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 14:42:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384398AbiEEShG (ORCPT
+        with ESMTP id S1384398AbiEESmd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 14:37:06 -0400
-Received: from out02.mta.xmission.com (out02.mta.xmission.com [166.70.13.232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15EE35EBF9;
-        Thu,  5 May 2022 11:27:51 -0700 (PDT)
-Received: from in01.mta.xmission.com ([166.70.13.51]:53836)
-        by out02.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1nmgCc-007C2r-RS; Thu, 05 May 2022 12:27:50 -0600
-Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:37118 helo=localhost.localdomain)
-        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1nmgCb-002BtP-DG; Thu, 05 May 2022 12:27:50 -0600
-From:   "Eric W. Biederman" <ebiederm@xmission.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     rjw@rjwysocki.net, Oleg Nesterov <oleg@redhat.com>,
-        mingo@kernel.org, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, mgorman@suse.de,
-        bigeasy@linutronix.de, Will Deacon <will@kernel.org>,
-        tj@kernel.org, linux-pm@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        linux-um@lists.infradead.org, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        linux-xtensa@linux-xtensa.org, Kees Cook <keescook@chromium.org>,
-        Jann Horn <jannh@google.com>, linux-ia64@vger.kernel.org,
-        "Eric W . Biederman" <ebiederm@xmission.com>
-Date:   Thu,  5 May 2022 13:26:45 -0500
-Message-Id: <20220505182645.497868-12-ebiederm@xmission.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <87a6bv6dl6.fsf_-_@email.froward.int.ebiederm.org>
-References: <87a6bv6dl6.fsf_-_@email.froward.int.ebiederm.org>
+        Thu, 5 May 2022 14:42:33 -0400
+Received: from mail-vs1-xe2c.google.com (mail-vs1-xe2c.google.com [IPv6:2607:f8b0:4864:20::e2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AB6D66AC9
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 11:31:34 -0700 (PDT)
+Received: by mail-vs1-xe2c.google.com with SMTP id t85so5010619vst.4
+        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 11:31:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=I+s6eSEgX7VT4YaUGMk4yfqAJuzTQqz0OALDSN2MMSU=;
+        b=CsbJ2EBkJc0pw1NmzWz9EkEATe4y7DS/nOd5MSXdyvNixrpj9+6/TMyeXyc6fzMhpQ
+         5MFt38cLvLoeRLy7qQzgdrRMukjYBI2d/VVrrp9119qUPe+TlmUa6YMGL8xb45xIA+db
+         YJw3j9btT4wJ5TIBVxV8OP18kXRdIO0o/dNTIeoqNKFa8j7twcj1haiXKxK2iIFCmco5
+         9YLuVhqPj3iMzbEWvHWVKvGC3Dm/mepbbtABgw+jNJ5plEgv8Uds3oxSsakwV7iP5usy
+         u8yUnCvREBiad30MTfMk2WVUNDf6XzRYdIU67gdxWMVZVsfKaIkwDz+PRTWqmcjECf6Z
+         Ns9A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=I+s6eSEgX7VT4YaUGMk4yfqAJuzTQqz0OALDSN2MMSU=;
+        b=nxHbzZgX672PX/CbopEq7/JpO9zXJmkpDOA7aobybl26csJKBwtU0rxPTvW7a32jmk
+         /shY+vQmnS7Grh80phZBSMqMy+7dUTc/ZACD09S3GeTyY0SeZAxCqFPJIO2SQQGWJ4bL
+         P+WU8fT6r6ySbPH79PtSKnk3dWAJJedT97gE0SnWXSDGOfHvggDFluLlTYQ6Lir/IEHe
+         ybKo5c2BxyhulOqUCh33PUAN87+g67BDU3eyk6pyw7HtqKfOsj8Srou6wT3Xh0rNJPDw
+         eO5+dkD9siFk2GwboelV0xP5VvvjIyvlYLpshwfP93KIC5od37tWAYnoyGB6HaqE41Kz
+         aRKA==
+X-Gm-Message-State: AOAM533xdsvzIZhvGe//zsooq2Db4dwNaFd38JSFjYPE8QMz3uUbeIGO
+        0FwrQ2hZoSVfDC8c5gtab/t2mT8dyb4Py2pIpW8XTg==
+X-Google-Smtp-Source: ABdhPJy7isFowmjW0tmGC1Z/BsOtM9+GJM4XoeRS0JMAbE1UYpCjcHWh3h9fECkO5Agey+Ti4Z8GVLzn19g6zESncvo=
+X-Received: by 2002:a05:6102:2929:b0:32d:6662:72e2 with SMTP id
+ cz41-20020a056102292900b0032d666272e2mr3983463vsb.56.1651775493500; Thu, 05
+ May 2022 11:31:33 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-XM-SPF: eid=1nmgCb-002BtP-DG;;;mid=<20220505182645.497868-12-ebiederm@xmission.com>;;;hst=in01.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=softfail
-X-XM-AID: U2FsdGVkX19yXDGzbN+79Chr1ZRx7vBHfiqPGCKeUto=
-X-SA-Exim-Connect-IP: 68.227.174.4
-X-SA-Exim-Mail-From: ebiederm@xmission.com
+References: <20220505043846.3165303-1-irogers@google.com> <87b89e2c-da5c-52c3-40dc-448e874cb5d8@linux.intel.com>
+ <CAP-5=fVHhWu1uJHnTfFYWvM02_F-bFBZaaOYo8zPRiA=ODRxGQ@mail.gmail.com> <12c03e85-cb48-d264-5f04-e9bf9faaf739@linux.intel.com>
+In-Reply-To: <12c03e85-cb48-d264-5f04-e9bf9faaf739@linux.intel.com>
+From:   Ian Rogers <irogers@google.com>
+Date:   Thu, 5 May 2022 11:31:20 -0700
+Message-ID: <CAP-5=fW9Cp3ShO=tTQddDWXz+nrSip99HrNW7Wv5_Qsy1UT7bw@mail.gmail.com>
+Subject: Re: [PATCH 1/2] perf evlist: Keep topdown counters in weak group
+To:     "Liang, Kan" <kan.liang@linux.intel.com>
+Cc:     Caleb Biggers <caleb.biggers@intel.com>,
+        Perry Taylor <perry.taylor@intel.com>,
+        Kshipra Bopardikar <kshipra.bopardikar@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ravi Bangoria <ravi.bangoria@amd.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Haowen Bai <baihaowen@meizu.com>,
+        Riccardo Mancini <rickyman7@gmail.com>,
+        Kim Phillips <kim.phillips@amd.com>,
+        Madhavan Srinivasan <maddy@linux.ibm.com>,
+        Shunsuke Nakamura <nakamura.shun@fujitsu.com>,
+        Florian Fischer <florian.fischer@muhq.space>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        Stephane Eranian <eranian@google.com>,
+        Zhengjun Xing <zhengjun.xing@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Virus: No
-X-Spam-DCC: XMission; sa01 1397; Body=1 Fuz1=1 Fuz2=40 
-X-Spam-Combo: ****;linux-kernel@vger.kernel.org
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 663 ms - load_scoreonly_sql: 0.04 (0.0%),
-        signal_user_changed: 4.7 (0.7%), b_tie_ro: 3.2 (0.5%), parse: 1.55
-        (0.2%), extract_message_metadata: 16 (2.4%), get_uri_detail_list: 4.4
-        (0.7%), tests_pri_-1000: 19 (2.8%), tests_pri_-950: 1.01 (0.2%),
-        tests_pri_-900: 0.86 (0.1%), tests_pri_-90: 80 (12.1%), check_bayes:
-        79 (11.9%), b_tokenize: 13 (1.9%), b_tok_get_all: 12 (1.9%),
-        b_comp_prob: 3.4 (0.5%), b_tok_touch_all: 47 (7.1%), b_finish: 0.70
-        (0.1%), tests_pri_0: 526 (79.4%), check_dkim_signature: 0.51 (0.1%),
-        check_dkim_adsp: 2.9 (0.4%), poll_dns_idle: 0.25 (0.0%), tests_pri_10:
-        2.4 (0.4%), tests_pri_500: 8 (1.2%), rewrite_mail: 0.00 (0.0%)
-Subject: [PATCH v4 12/12] sched,signal,ptrace: Rework TASK_TRACED, TASK_STOPPED state
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peter Zijlstra <peterz@infradead.org>
+On Thu, May 5, 2022 at 11:15 AM Liang, Kan <kan.liang@linux.intel.com> wrot=
+e:
+>
+> On 5/5/2022 11:18 AM, Ian Rogers wrote:
+> > On Thu, May 5, 2022 at 4:56 AM Liang, Kan <kan.liang@linux.intel.com> w=
+rote:
+> >>
+> >> Hi Ian,
+> >>
+> >> Thanks for the patches.
+> >>
+> >> On 5/5/2022 12:38 AM, Ian Rogers wrote:
+> >>> On Intel Icelake, topdown events must always be grouped with a slots
+> >>> event as leader. When a metric is parsed a weak group is formed and
+> >>> retried if perf_event_open fails. The retried events aren't grouped
+> >>> breaking the slots leader requirement. This change modifies the weak
+> >>> group "reset" behavior so that topdown events aren't broken from the
+> >>> group for the retry.
+> >>>
+> >>> $ perf stat -e '{slots,topdown-bad-spec,topdown-be-bound,topdown-fe-b=
+ound,topdown-retiring,branch-instructions,branch-misses,bus-cycles,cache-mi=
+sses,cache-references,cpu-cycles,instructions,mem-loads,mem-stores,ref-cycl=
+es,baclears.any,ARITH.DIVIDER_ACTIVE}:W' -a sleep 1
+> >>>
+> >>>    Performance counter stats for 'system wide':
+> >>>
+> >>>       47,867,188,483      slots                                      =
+                   (92.27%)
+> >>>      <not supported>      topdown-bad-spec
+> >>>      <not supported>      topdown-be-bound
+> >>>      <not supported>      topdown-fe-bound
+> >>>      <not supported>      topdown-retiring
+> >>>        2,173,346,937      branch-instructions                        =
+                   (92.27%)
+> >>>           10,540,253      branch-misses             #    0.48% of all=
+ branches          (92.29%)
+> >>>           96,291,140      bus-cycles                                 =
+                   (92.29%)
+> >>>            6,214,202      cache-misses              #   20.120 % of a=
+ll cache refs      (92.29%)
+> >>>           30,886,082      cache-references                           =
+                   (76.91%)
+> >>>       11,773,726,641      cpu-cycles                                 =
+                   (84.62%)
+> >>>       11,807,585,307      instructions              #    1.00  insn p=
+er cycle           (92.31%)
+> >>>                    0      mem-loads                                  =
+                   (92.32%)
+> >>>        2,212,928,573      mem-stores                                 =
+                   (84.69%)
+> >>>       10,024,403,118      ref-cycles                                 =
+                   (92.35%)
+> >>>           16,232,978      baclears.any                               =
+                   (92.35%)
+> >>>           23,832,633      ARITH.DIVIDER_ACTIVE                       =
+                   (84.59%)
+> >>>
+> >>>          0.981070734 seconds time elapsed
+> >>>
+> >>> After:
+> >>>
+> >>> $ perf stat -e '{slots,topdown-bad-spec,topdown-be-bound,topdown-fe-b=
+ound,topdown-retiring,branch-instructions,branch-misses,bus-cycles,cache-mi=
+sses,cache-references,cpu-cycles,instructions,mem-loads,mem-stores,ref-cycl=
+es,baclears.any,ARITH.DIVIDER_ACTIVE}:W' -a sleep 1
+> >>>
+> >>>    Performance counter stats for 'system wide':
+> >>>
+> >>>          31040189283      slots                                      =
+                   (92.27%)
+> >>>           8997514811      topdown-bad-spec          #     28.2% bad s=
+peculation         (92.27%)
+> >>>          10997536028      topdown-be-bound          #     34.5% backe=
+nd bound           (92.27%)
+> >>>           4778060526      topdown-fe-bound          #     15.0% front=
+end bound          (92.27%)
+> >>>           7086628768      topdown-retiring          #     22.2% retir=
+ing                (92.27%)
+> >>>           1417611942      branch-instructions                        =
+                   (92.26%)
+> >>>              5285529      branch-misses             #    0.37% of all=
+ branches          (92.28%)
+> >>>             62922469      bus-cycles                                 =
+                   (92.29%)
+> >>>              1440708      cache-misses              #    8.292 % of a=
+ll cache refs      (92.30%)
+> >>>             17374098      cache-references                           =
+                   (76.94%)
+> >>>           8040889520      cpu-cycles                                 =
+                   (84.63%)
+> >>>           7709992319      instructions              #    0.96  insn p=
+er cycle           (92.32%)
+> >>>                    0      mem-loads                                  =
+                   (92.32%)
+> >>>           1515669558      mem-stores                                 =
+                   (84.68%)
+> >>>           6542411177      ref-cycles                                 =
+                   (92.35%)
+> >>>              4154149      baclears.any                               =
+                   (92.35%)
+> >>>             20556152      ARITH.DIVIDER_ACTIVE                       =
+                   (84.59%)
+> >>>
+> >>>          1.010799593 seconds time elapsed
+> >>>
+> >>> Signed-off-by: Ian Rogers <irogers@google.com>
+> >>> ---
+> >>>    tools/perf/arch/x86/util/evsel.c | 12 ++++++++++++
+> >>>    tools/perf/util/evlist.c         | 16 ++++++++++++++--
+> >>>    tools/perf/util/evsel.c          | 10 ++++++++++
+> >>>    tools/perf/util/evsel.h          |  3 +++
+> >>>    4 files changed, 39 insertions(+), 2 deletions(-)
+> >>>
+> >>> diff --git a/tools/perf/arch/x86/util/evsel.c b/tools/perf/arch/x86/u=
+til/evsel.c
+> >>> index ac2899a25b7a..40b171de2086 100644
+> >>> --- a/tools/perf/arch/x86/util/evsel.c
+> >>> +++ b/tools/perf/arch/x86/util/evsel.c
+> >>> @@ -3,6 +3,7 @@
+> >>>    #include <stdlib.h>
+> >>>    #include "util/evsel.h"
+> >>>    #include "util/env.h"
+> >>> +#include "util/pmu.h"
+> >>>    #include "linux/string.h"
+> >>>
+> >>>    void arch_evsel__set_sample_weight(struct evsel *evsel)
+> >>> @@ -29,3 +30,14 @@ void arch_evsel__fixup_new_cycles(struct perf_even=
+t_attr *attr)
+> >>>
+> >>>        free(env.cpuid);
+> >>>    }
+> >>> +
+> >>> +bool arch_evsel__must_be_in_group(const struct evsel *evsel)
+> >>> +{
+> >>> +     if ((evsel->pmu_name && strcmp(evsel->pmu_name, "cpu")) ||
+> >>> +         !pmu_have_event("cpu", "slots"))
+> >>> +             return false;
+> >>> +
+> >>
+> >> The big core of ADL also supports Perf_metrics. At least, we should
+> >> check both "cpu" and "cpu_core" here.
+> >>
+> >> Thanks,
+> >> Kan
+> >
+> > Thanks Kan, we have the same problem for
+> > arch_evlist__add_default_attrs and arch_evlist__leader:
+> > https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/tree/too=
+ls/perf/arch/x86/util/evlist.c?h=3Dperf/core
+>
+> These are known issues. Zhengjun already have some patches to fix them,
+> but hasn't posted yet.
+>
+> The arch_evlist__add_default_attrs impacts the perf stat default. On the
+> ADL, perf stat default doesn't display the topdown events.
+>
+> The arch_evlist__leader impacts the sampling read of the topdown events.
+> Sampling read the topdown events should always fail with the current
+> perf tool on ADL.
+>
+> We already have many backlogs on ADL. I think it's better not to
+> introduce more issues.
+>
+> > So I think fixing all of these should be a follow up. I am working to
+> > get access to an Alderlake system, could we land this first?
+> >
+>
+> I think we can use pmu_name to replace the "cpu" to fix the issue for
+> the hybrid platform. For a hybrid platform, the pmu_name is either
+> cpu_atom or cpu_core.
+>
+> Besides, the topdown events may have a PMU prefix, e.g.,
+> cpu_core/topdown-be-bound/. The strcasecmp may not work well for this cas=
+e.
+>
+> How about the below patch?
+> If it's OK for you, could you please merge it into your V2 patch set?
+> I can do the test on a ADL system.
+>
+> diff --git a/tools/perf/arch/x86/util/evsel.c
+> b/tools/perf/arch/x86/util/evsel.c
+> index 40b171de2086..551ae2bab70e 100644
+> --- a/tools/perf/arch/x86/util/evsel.c
+> +++ b/tools/perf/arch/x86/util/evsel.c
+> @@ -33,11 +33,12 @@ void arch_evsel__fixup_new_cycles(struct
+> perf_event_attr *attr)
+>
+>   bool arch_evsel__must_be_in_group(const struct evsel *evsel)
+>   {
+> -       if ((evsel->pmu_name && strcmp(evsel->pmu_name, "cpu")) ||
+> -           !pmu_have_event("cpu", "slots"))
+> +       const char *pmu_name =3D evsel->pmu_name ? evsel->pmu_name : "cpu=
+";
+> +
+> +       if (!pmu_have_event(pmu_name, "slots"))
+>                 return false;
 
-Currently ptrace_stop() / do_signal_stop() rely on the special states
-TASK_TRACED and TASK_STOPPED resp. to keep unique state. That is, this
-state exists only in task->__state and nowhere else.
+Hmm. The idea with this test is to see if the architecture supports
+topdown events before going further. There's a similar test in all the
+arch_evlist functions. I think with cpu_core this needs to become:
 
-There's two spots of bother with this:
+if (!pmu_have_event("cpu", "slots") && !pmu_have_event("cpu_core", "slots")=
+ )
 
- - PREEMPT_RT has task->saved_state which complicates matters,
-   meaning task_is_{traced,stopped}() needs to check an additional
-   variable.
+But we should add a helper function for this. It is odd to have this
+change supporting Alderlake but the existing evlist work not. Perhaps
+we should just wait until Zhengjun's patches land.
 
- - An alternative freezer implementation that itself relies on a
-   special TASK state would loose TASK_TRACED/TASK_STOPPED and will
-   result in misbehaviour.
+Thanks,
+Ian
 
-As such, add additional state to task->jobctl to track this state
-outside of task->__state.
-
-NOTE: this doesn't actually fix anything yet, just adds extra state.
-
---EWB
-  * didn't add a unnecessary newline in signal.h
-  * Update t->jobctl in signal_wake_up and ptrace_signal_wake_up
-    instead of in signal_wake_up_state.  This prevents the clearing
-    of TASK_STOPPED and TASK_TRACED from getting lost.
-  * Added warnings if JOBCTL_STOPPED or JOBCTL_TRACED are not cleared
-
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lkml.kernel.org/r/20220421150654.757693825@infradead.org
-Signed-off-by: Eric W. Biederman <ebiederm@xmission.com>
----
- include/linux/sched.h        |  8 +++-----
- include/linux/sched/jobctl.h |  6 ++++++
- include/linux/sched/signal.h | 19 +++++++++++++++----
- kernel/ptrace.c              | 16 +++++++++++++---
- kernel/signal.c              | 10 ++++++++--
- 5 files changed, 45 insertions(+), 14 deletions(-)
-
-diff --git a/include/linux/sched.h b/include/linux/sched.h
-index 610f2fdb1e2c..cbe5c899599c 100644
---- a/include/linux/sched.h
-+++ b/include/linux/sched.h
-@@ -118,11 +118,9 @@ struct task_group;
- 
- #define task_is_running(task)		(READ_ONCE((task)->__state) == TASK_RUNNING)
- 
--#define task_is_traced(task)		((READ_ONCE(task->__state) & __TASK_TRACED) != 0)
--
--#define task_is_stopped(task)		((READ_ONCE(task->__state) & __TASK_STOPPED) != 0)
--
--#define task_is_stopped_or_traced(task)	((READ_ONCE(task->__state) & (__TASK_STOPPED | __TASK_TRACED)) != 0)
-+#define task_is_traced(task)		((READ_ONCE(task->jobctl) & JOBCTL_TRACED) != 0)
-+#define task_is_stopped(task)		((READ_ONCE(task->jobctl) & JOBCTL_STOPPED) != 0)
-+#define task_is_stopped_or_traced(task)	((READ_ONCE(task->jobctl) & (JOBCTL_STOPPED | JOBCTL_TRACED)) != 0)
- 
- /*
-  * Special states are those that do not use the normal wait-loop pattern. See
-diff --git a/include/linux/sched/jobctl.h b/include/linux/sched/jobctl.h
-index d556c3425963..68876d0a7ef9 100644
---- a/include/linux/sched/jobctl.h
-+++ b/include/linux/sched/jobctl.h
-@@ -21,6 +21,9 @@ struct task_struct;
- #define JOBCTL_TRAP_FREEZE_BIT	23	/* trap for cgroup freezer */
- #define JOBCTL_PTRACE_FROZEN_BIT	24	/* frozen for ptrace */
- 
-+#define JOBCTL_STOPPED_BIT	26	/* do_signal_stop() */
-+#define JOBCTL_TRACED_BIT	27	/* ptrace_stop() */
-+
- #define JOBCTL_STOP_DEQUEUED	(1UL << JOBCTL_STOP_DEQUEUED_BIT)
- #define JOBCTL_STOP_PENDING	(1UL << JOBCTL_STOP_PENDING_BIT)
- #define JOBCTL_STOP_CONSUME	(1UL << JOBCTL_STOP_CONSUME_BIT)
-@@ -31,6 +34,9 @@ struct task_struct;
- #define JOBCTL_TRAP_FREEZE	(1UL << JOBCTL_TRAP_FREEZE_BIT)
- #define JOBCTL_PTRACE_FROZEN	(1UL << JOBCTL_PTRACE_FROZEN_BIT)
- 
-+#define JOBCTL_STOPPED		(1UL << JOBCTL_STOPPED_BIT)
-+#define JOBCTL_TRACED		(1UL << JOBCTL_TRACED_BIT)
-+
- #define JOBCTL_TRAP_MASK	(JOBCTL_TRAP_STOP | JOBCTL_TRAP_NOTIFY)
- #define JOBCTL_PENDING_MASK	(JOBCTL_STOP_PENDING | JOBCTL_TRAP_MASK)
- 
-diff --git a/include/linux/sched/signal.h b/include/linux/sched/signal.h
-index e66948abbee4..07ba3404fcde 100644
---- a/include/linux/sched/signal.h
-+++ b/include/linux/sched/signal.h
-@@ -294,8 +294,10 @@ static inline int kernel_dequeue_signal(void)
- static inline void kernel_signal_stop(void)
- {
- 	spin_lock_irq(&current->sighand->siglock);
--	if (current->jobctl & JOBCTL_STOP_DEQUEUED)
-+	if (current->jobctl & JOBCTL_STOP_DEQUEUED) {
-+		current->jobctl |= JOBCTL_STOPPED;
- 		set_special_state(TASK_STOPPED);
-+	}
- 	spin_unlock_irq(&current->sighand->siglock);
- 
- 	schedule();
-@@ -437,12 +439,21 @@ extern void signal_wake_up_state(struct task_struct *t, unsigned int state);
- 
- static inline void signal_wake_up(struct task_struct *t, bool fatal)
- {
--	fatal = fatal && !(t->jobctl & JOBCTL_PTRACE_FROZEN);
--	signal_wake_up_state(t, fatal ? TASK_WAKEKILL | __TASK_TRACED : 0);
-+	unsigned int state = 0;
-+	if (fatal && !(t->jobctl & JOBCTL_PTRACE_FROZEN)) {
-+		t->jobctl &= ~(JOBCTL_STOPPED | JOBCTL_TRACED);
-+		state = TASK_WAKEKILL | __TASK_TRACED;
-+	}
-+	signal_wake_up_state(t, state);
- }
- static inline void ptrace_signal_wake_up(struct task_struct *t, bool resume)
- {
--	signal_wake_up_state(t, resume ? __TASK_TRACED : 0);
-+	unsigned int state = 0;
-+	if (resume) {
-+		t->jobctl &= ~JOBCTL_TRACED;
-+		state = __TASK_TRACED;
-+	}
-+	signal_wake_up_state(t, state);
- }
- 
- void task_join_group_stop(struct task_struct *task);
-diff --git a/kernel/ptrace.c b/kernel/ptrace.c
-index 36a5b7a00d2f..328a34a99124 100644
---- a/kernel/ptrace.c
-+++ b/kernel/ptrace.c
-@@ -185,7 +185,12 @@ static bool looks_like_a_spurious_pid(struct task_struct *task)
- 	return true;
- }
- 
--/* Ensure that nothing can wake it up, even SIGKILL */
-+/*
-+ * Ensure that nothing can wake it up, even SIGKILL
-+ *
-+ * A task is switched to this state while a ptrace operation is in progress;
-+ * such that the ptrace operation is uninterruptible.
-+ */
- static bool ptrace_freeze_traced(struct task_struct *task)
- {
- 	bool ret = false;
-@@ -216,8 +221,10 @@ static void ptrace_unfreeze_traced(struct task_struct *task)
- 	 */
- 	if (lock_task_sighand(task, &flags)) {
- 		task->jobctl &= ~JOBCTL_PTRACE_FROZEN;
--		if (__fatal_signal_pending(task))
-+		if (__fatal_signal_pending(task)) {
-+			task->jobctl &= ~TASK_TRACED;
- 			wake_up_state(task, __TASK_TRACED);
-+		}
- 		unlock_task_sighand(task, &flags);
- 	}
- }
-@@ -462,8 +469,10 @@ static int ptrace_attach(struct task_struct *task, long request,
- 	 * in and out of STOPPED are protected by siglock.
- 	 */
- 	if (task_is_stopped(task) &&
--	    task_set_jobctl_pending(task, JOBCTL_TRAP_STOP | JOBCTL_TRAPPING))
-+	    task_set_jobctl_pending(task, JOBCTL_TRAP_STOP | JOBCTL_TRAPPING)) {
-+		task->jobctl &= ~JOBCTL_STOPPED;
- 		signal_wake_up_state(task, __TASK_STOPPED);
-+	}
- 
- 	spin_unlock(&task->sighand->siglock);
- 
-@@ -875,6 +884,7 @@ static int ptrace_resume(struct task_struct *child, long request,
- 	 */
- 	spin_lock_irq(&child->sighand->siglock);
- 	child->exit_code = data;
-+	child->jobctl &= ~JOBCTL_TRACED;
- 	wake_up_state(child, __TASK_TRACED);
- 	spin_unlock_irq(&child->sighand->siglock);
- 
-diff --git a/kernel/signal.c b/kernel/signal.c
-index a58b68a2d3c6..e782c2611b64 100644
---- a/kernel/signal.c
-+++ b/kernel/signal.c
-@@ -762,7 +762,10 @@ static int dequeue_synchronous_signal(kernel_siginfo_t *info)
-  */
- void signal_wake_up_state(struct task_struct *t, unsigned int state)
- {
-+	lockdep_assert_held(&t->sighand->siglock);
-+
- 	set_tsk_thread_flag(t, TIF_SIGPENDING);
-+
- 	/*
- 	 * TASK_WAKEKILL also means wake it up in the stopped/traced/killable
- 	 * case. We don't check t->state here because there is a race with it
-@@ -930,9 +933,10 @@ static bool prepare_signal(int sig, struct task_struct *p, bool force)
- 		for_each_thread(p, t) {
- 			flush_sigqueue_mask(&flush, &t->pending);
- 			task_clear_jobctl_pending(t, JOBCTL_STOP_PENDING);
--			if (likely(!(t->ptrace & PT_SEIZED)))
-+			if (likely(!(t->ptrace & PT_SEIZED))) {
-+				t->jobctl &= ~JOBCTL_STOPPED;
- 				wake_up_state(t, __TASK_STOPPED);
--			else
-+			} else
- 				ptrace_trap_notify(t);
- 		}
- 
-@@ -2218,6 +2222,7 @@ static int ptrace_stop(int exit_code, int why, unsigned long message,
- 		return exit_code;
- 
- 	set_special_state(TASK_TRACED);
-+	current->jobctl |= JOBCTL_TRACED;
- 
- 	/*
- 	 * We're committing to trapping.  TRACED should be visible before
-@@ -2436,6 +2441,7 @@ static bool do_signal_stop(int signr)
- 		if (task_participate_group_stop(current))
- 			notify = CLD_STOPPED;
- 
-+		current->jobctl |= JOBCTL_STOPPED;
- 		set_special_state(TASK_STOPPED);
- 		spin_unlock_irq(&current->sighand->siglock);
- 
--- 
-2.35.3
-
+>         return evsel->name &&
+> -               (!strcasecmp(evsel->name, "slots") ||
+> -                !strncasecmp(evsel->name, "topdown", 7));
+> +               (strcasestr(evsel->name, "slots") ||
+> +                strcasestr(evsel->name, "topdown"));
+>   }
+>
+>
+>
+> Thanks,
+> Kan
+>
+> > Thanks,
+> > Ian
+> >
+> >>> +     return evsel->name &&
+> >>> +             (!strcasecmp(evsel->name, "slots") ||
+> >>> +              !strncasecmp(evsel->name, "topdown", 7));
+> >>> +}
+> >>> diff --git a/tools/perf/util/evlist.c b/tools/perf/util/evlist.c
+> >>> index 52ea004ba01e..dfa65a383502 100644
+> >>> --- a/tools/perf/util/evlist.c
+> >>> +++ b/tools/perf/util/evlist.c
+> >>> @@ -1790,8 +1790,17 @@ struct evsel *evlist__reset_weak_group(struct =
+evlist *evsel_list, struct evsel *
+> >>>                if (evsel__has_leader(c2, leader)) {
+> >>>                        if (is_open && close)
+> >>>                                perf_evsel__close(&c2->core);
+> >>> -                     evsel__set_leader(c2, c2);
+> >>> -                     c2->core.nr_members =3D 0;
+> >>> +                     /*
+> >>> +                      * We want to close all members of the group an=
+d reopen
+> >>> +                      * them. Some events, like Intel topdown, requi=
+re being
+> >>> +                      * in a group and so keep these in the group.
+> >>> +                      */
+> >>> +                     if (!evsel__must_be_in_group(c2) && c2 !=3D lea=
+der) {
+> >>> +                             evsel__set_leader(c2, c2);
+> >>> +                             c2->core.nr_members =3D 0;
+> >>> +                             leader->core.nr_members--;
+> >>> +                     }
+> >>> +
+> >>>                        /*
+> >>>                         * Set this for all former members of the grou=
+p
+> >>>                         * to indicate they get reopened.
+> >>> @@ -1799,6 +1808,9 @@ struct evsel *evlist__reset_weak_group(struct e=
+vlist *evsel_list, struct evsel *
+> >>>                        c2->reset_group =3D true;
+> >>>                }
+> >>>        }
+> >>> +     /* Reset the leader count if all entries were removed. */
+> >>> +     if (leader->core.nr_members)
+> >>> +             leader->core.nr_members =3D 0;
+> >>>        return leader;
+> >>>    }
+> >>>
+> >>> diff --git a/tools/perf/util/evsel.c b/tools/perf/util/evsel.c
+> >>> index d38722560e80..b7c0c9775673 100644
+> >>> --- a/tools/perf/util/evsel.c
+> >>> +++ b/tools/perf/util/evsel.c
+> >>> @@ -3082,3 +3082,13 @@ int evsel__source_count(const struct evsel *ev=
+sel)
+> >>>        }
+> >>>        return count;
+> >>>    }
+> >>> +
+> >>> +bool __weak arch_evsel__must_be_in_group(const struct evsel *evsel _=
+_maybe_unused)
+> >>> +{
+> >>> +     return false;
+> >>> +}
+> >>> +
+> >>> +bool evsel__must_be_in_group(const struct evsel *evsel)
+> >>> +{
+> >>> +     return arch_evsel__must_be_in_group(evsel);
+> >>> +}
+> >>> diff --git a/tools/perf/util/evsel.h b/tools/perf/util/evsel.h
+> >>> index 45d674812239..0ed2850b7ebb 100644
+> >>> --- a/tools/perf/util/evsel.h
+> >>> +++ b/tools/perf/util/evsel.h
+> >>> @@ -488,6 +488,9 @@ bool evsel__has_leader(struct evsel *evsel, struc=
+t evsel *leader);
+> >>>    bool evsel__is_leader(struct evsel *evsel);
+> >>>    void evsel__set_leader(struct evsel *evsel, struct evsel *leader);
+> >>>    int evsel__source_count(const struct evsel *evsel);
+> >>> +bool evsel__must_be_in_group(const struct evsel *evsel);
+> >>> +
+> >>> +bool arch_evsel__must_be_in_group(const struct evsel *evsel);
+> >>>
+> >>>    /*
+> >>>     * Macro to swap the bit-field postition and size.

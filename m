@@ -2,55 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C009351B61F
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 04:51:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94F9851B625
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 04:51:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240024AbiEECx5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 22:53:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57424 "EHLO
+        id S240094AbiEECyt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 22:54:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239963AbiEECxx (ORCPT
+        with ESMTP id S237139AbiEECyp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 22:53:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89169E46;
-        Wed,  4 May 2022 19:50:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1EB2A6135D;
-        Thu,  5 May 2022 02:50:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 7414DC385AA;
-        Thu,  5 May 2022 02:50:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651719014;
-        bh=W7kgWBekRhjvUK4oGmuZBqzE/MvWvPC3uCOtjm5r1pw=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=g/b7CGMVsABkoz6tv5a8MDK5tt75YLuXhcguYpLt59MWqMBlxNHw7z06tOBv3D0IH
-         ul7Epuk3cFXCaDRiLWNzictigyyemE93A1ERJq1f1jIP1EEgmXJbhhiVHcQySWzZsC
-         KSSi7SqbSskXdAJI6czeyNZUZohlI4hmADbEyaWXHaZGHySKWytHnAS7jpB8kcsST3
-         ij9fAjmvjebC8FTE8g8qYnEKcGR5Pdr14M+9kSD+KF6PeTx9pcn3cs1oyRtyE0RZnS
-         1WK8c5S6gwfFyrcQxM6/WeyIPDXK6ybc5LkuylSH+s9r4cxcdV90+qkq5JOjDLZWre
-         YxWwHzJlF1fWg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 5593CF03876;
-        Thu,  5 May 2022 02:50:14 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Wed, 4 May 2022 22:54:45 -0400
+Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC0EE4D61E
+        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 19:51:07 -0700 (PDT)
+Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-2f863469afbso35498767b3.0
+        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 19:51:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=hQ87eN9SQZi8NIJ0dQLJS+dLce/vvTzOM8adEXAvNpY=;
+        b=Le7GeHdTtmB5SEv2vlD7zJRJo2n5QshLycQemr00mvMeqoY81qcNLBHXHiJhUZzKbi
+         G42atpj+pi97+SAOT5ltJpCB55xi3goWnfEZsyMZeKKjGx72SadV4XMeYTOOB/j/Ch5I
+         cKg/UJvPDk/A5xrlnxZSMCG5I1DtTp79k9R18=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=hQ87eN9SQZi8NIJ0dQLJS+dLce/vvTzOM8adEXAvNpY=;
+        b=zgaJP9t3xWGgIVbeYx8gQr3xTglEwM/gGQQXHf2PqpyBKWVhWlMkiCGyRi/UPabINF
+         fR6zUXuFL3xCHbny3v5mimQYKFyRLGE/D6YVnyl2bUmoja8ypP2zDRqBM0998+51ojf8
+         r8o9uh3R5SHB565Rfbj6jMugoy4wNOD13bRX1i1F89NGX4O8zJ8Bpb5Xwb2ZYUd8Qq3+
+         6M8ijdfMWOS0Phap8qnkeJZ3FE70x67vxrN2liOgFb27XmkaEyKmiapVXphzev+Qeatg
+         KWf1p2HY6v0Rj5JX+GTQbIJlZnsliUCueL5eLdwQa+9WL6ZzN7mOt5U7D/+pvxZZdDzr
+         8E3A==
+X-Gm-Message-State: AOAM531iWdILl1iinWiv0+DAZi5rPK4pBMRWrmXQ6d4FV6gtLfbDujyh
+        Vdh+35XRKqaYJN4fMn1u95r8Q+hupHlfxAQoM/xEWyalnCQ=
+X-Google-Smtp-Source: ABdhPJyAKMpcVpgskbnOy66gjUlw5KH/+b9uJG5rcYjxVXxuwcOYSmCeTcLTWA1Tu+QO4F7WHXLWo3pCF2QtRAd5yPc=
+X-Received: by 2002:a81:be05:0:b0:2e5:6c26:59fb with SMTP id
+ i5-20020a81be05000000b002e56c2659fbmr22963642ywn.94.1651719067116; Wed, 04
+ May 2022 19:51:07 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v3 net 0/7] insufficient TCP source port randomness
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <165171901434.9346.11862672519464851497.git-patchwork-notify@kernel.org>
-Date:   Thu, 05 May 2022 02:50:14 +0000
-References: <20220502084614.24123-1-w@1wt.eu>
-In-Reply-To: <20220502084614.24123-1-w@1wt.eu>
-To:     Willy Tarreau <w@1wt.eu>
-Cc:     netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
-        edumazet@google.com, moshe.kol@mail.huji.ac.il,
-        yossi.gilad@mail.huji.ac.il, aksecurity@gmail.com, Jason@zx2c4.com,
-        linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+References: <20220504214516.2957504-1-nfraprado@collabora.com>
+In-Reply-To: <20220504214516.2957504-1-nfraprado@collabora.com>
+From:   Chen-Yu Tsai <wenst@chromium.org>
+Date:   Thu, 5 May 2022 10:50:55 +0800
+Message-ID: <CAGXv+5EOactKnHkqq4E8Azkn4MGG8VHju4F8ZWWcaYeyy2wUww@mail.gmail.com>
+Subject: Re: [PATCH v2] arm64: dts: mt8192: Follow binding order for SCP registers
+To:     =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
+        <nfraprado@collabora.com>
+Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, kernel@collabora.com,
+        Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -59,42 +71,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+On Thu, May 5, 2022 at 5:50 AM N=C3=ADcolas F. R. A. Prado
+<nfraprado@collabora.com> wrote:
+>
+> The dt-binding for SCP documents the reg-names order as sram, cfg,
+> l1tcm. Update the SCP node on the mt8192 devicetree to follow that
+> order, which gets rid of a dtbs_check warning. This doesn't change any
+> behavior since the SCP driver accesses the memory regions through the
+> names anyway.
+>
+> Fixes: c63556ec6bfe ("arm64: dts: mt8192: Add SCP node")
+> Signed-off-by: N=C3=ADcolas F. R. A. Prado <nfraprado@collabora.com>
 
-This series was applied to netdev/net.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
-
-On Mon,  2 May 2022 10:46:07 +0200 you wrote:
-> Hi,
-> 
-> In a not-yet published paper, Moshe Kol, Amit Klein, and Yossi Gilad
-> report being able to accurately identify a client by forcing it to emit
-> only 40 times more connections than the number of entries in the
-> table_perturb[] table, which is indexed by hashing the connection tuple.
-> The current 2^8 setting allows them to perform that attack with only 10k
-> connections, which is not hard to achieve in a few seconds.
-> 
-> [...]
-
-Here is the summary with links:
-  - [v3,net,1/7] secure_seq: use the 64 bits of the siphash for port offset calculation
-    https://git.kernel.org/netdev/net/c/b2d057560b81
-  - [v3,net,2/7] tcp: use different parts of the port_offset for index and offset
-    https://git.kernel.org/netdev/net/c/9e9b70ae923b
-  - [v3,net,3/7] tcp: resalt the secret every 10 seconds
-    https://git.kernel.org/netdev/net/c/4dfa9b438ee3
-  - [v3,net,4/7] tcp: add small random increments to the source port
-    https://git.kernel.org/netdev/net/c/ca7af0402550
-  - [v3,net,5/7] tcp: dynamically allocate the perturb table used by source ports
-    https://git.kernel.org/netdev/net/c/e9261476184b
-  - [v3,net,6/7] tcp: increase source port perturb table to 2^16
-    https://git.kernel.org/netdev/net/c/4c2c8f03a5ab
-  - [v3,net,7/7] tcp: drop the hash_32() part from the index calculation
-    https://git.kernel.org/netdev/net/c/e8161345ddbb
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>

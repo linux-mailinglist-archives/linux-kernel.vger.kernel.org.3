@@ -2,134 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EAC151BB68
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 11:07:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12A1151BB6E
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 11:07:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345893AbiEEJKg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 05:10:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49308 "EHLO
+        id S1351552AbiEEJLK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 05:11:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234566AbiEEJKd (ORCPT
+        with ESMTP id S1351367AbiEEJLD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 05:10:33 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 607584B41B;
-        Thu,  5 May 2022 02:06:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1651741573;
-        bh=PE49ljxOaJbEZXi8zE0UMbSilxTIkum0Hyl9KtNCWhk=;
-        h=X-UI-Sender-Class:Date:In-Reply-To:References:Subject:Reply-to:To:
-         CC:From;
-        b=VUzb45/7jJ0QvY1LxJ8fGd5PIAHk5tdZv7WCsWGN7HfaLTECfsZkWen2XvyKS2Gcj
-         8kH0TsJ3fjICqkzk+WMAkUiLt9Bn1doMlT+h/XRlLyxtX+9DYHnXTl42I6LxeNibw+
-         Z5m/D4xAVI5EUTEwdTqGLboOd5OI7EtfGKKkEX84=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from frank-s9 ([217.61.145.208]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MO9z7-1nSWYG34kz-00OWh0; Thu, 05
- May 2022 11:06:13 +0200
-Date:   Thu, 05 May 2022 11:06:05 +0200
-User-Agent: K-9 Mail for Android
-In-Reply-To: <313a5b2e-c571-a13f-3447-b1cd7200f4c9@linaro.org>
-References: <20220430130347.15190-1-linux@fw-web.de> <20220430130347.15190-5-linux@fw-web.de> <20220504152450.cs2afa4hwkqp5b5m@skbuf> <trinity-9f557027-8e00-4a4a-bc19-bc576e163f7b-1651678399970@3c-app-gmx-bs42> <20220504154720.62cwrz7frjkjbb7u@skbuf> <313a5b2e-c571-a13f-3447-b1cd7200f4c9@linaro.org>
+        Thu, 5 May 2022 05:11:03 -0400
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89ADA4B871;
+        Thu,  5 May 2022 02:07:24 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 24597E0L091469;
+        Thu, 5 May 2022 04:07:14 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1651741634;
+        bh=cuNlpAakS45rBc8XBXO2gkkoHDbvVLiW7EmY+HgwLOY=;
+        h=From:To:CC:Subject:Date;
+        b=xh02vZf69oWa0NLyqR+e9Iql2/Q40Mw1IGBgP9txfkKSLjEwwe9wHdpWgfuQAK+c6
+         L2aKuseb3/4V7EZd8p5nnH+TVw2X4EdoG+v03s6Edmp2nPjjevReJBLOEuSkFuF4e7
+         FOqYi4Lm5JUWs4B/Kdhu1fsyJpEmcV1LZfuuP0rw=
+Received: from DLEE103.ent.ti.com (dlee103.ent.ti.com [157.170.170.33])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 24597DXQ043661
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 5 May 2022 04:07:13 -0500
+Received: from DLEE114.ent.ti.com (157.170.170.25) by DLEE103.ent.ti.com
+ (157.170.170.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Thu, 5
+ May 2022 04:07:13 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE114.ent.ti.com
+ (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Thu, 5 May 2022 04:07:13 -0500
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 24597B9d089648;
+        Thu, 5 May 2022 04:07:12 -0500
+From:   Rahul T R <r-ravikumar@ti.com>
+To:     <nm@ti.com>
+CC:     <vigneshr@ti.com>, <kristo@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <tomi.valkeinen@ideasonboard.com>,
+        <laurent.pinchart@ideasonboard.com>, <kishon@ti.com>,
+        <a-bhatia1@ti.com>, <r-ravikumar@ti.com>
+Subject: [PATCH v2 0/2] Add support for DP and HDMI on j721e-sk
+Date:   Thu, 5 May 2022 14:37:07 +0530
+Message-ID: <20220505090709.9252-1-r-ravikumar@ti.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [RFC v2 4/4] arm64: dts: rockchip: Add mt7531 dsa node to BPI-R2-Pro board
-Reply-to: frank-w@public-files.de
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Vladimir Oltean <olteanv@gmail.com>
-CC:     Frank Wunderlich <linux@fw-web.de>,
-        linux-mediatek@lists.infradead.org,
-        linux-rockchip@lists.infradead.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Peter Geis <pgwipeout@gmail.com>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-From:   Frank Wunderlich <frank-w@public-files.de>
-Message-ID: <D201CE50-280C-4089-BB9F-053FEA28FE9A@public-files.de>
-X-Provags-ID: V03:K1:fswHZVyF/lRZd8JVwCdyHBJTeHXeAmwGzgMDMSGIdz0hDXO4adf
- 6DNQ7Hdu1vjFnafdsMjLokD96/xSHtW4P+JlwGF2ydVvccgeJQBGyVtf7/ZDzMAqCho34s6
- sqGM3PaZ3PFndCo6VMXLcocAJLEHxA55eeaTeLXVgZvDzQ8Eq5RrHCw/S+odtiUpd+qjGwv
- hU0vAPDjw5yIm6bXegJYA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:j9Ro5GzlgnE=:y3PubMXQ+/zpI4KYSQDupN
- oJQ4JRWONcKWVYZCKX5H33jQSFgLL0YuSvZjmf5jpfD9ZjxI1yRt3sXo5C6rRn34aoaYXcKP5
- /4H0dcXerNyfkv11BLsVwX2VgZQOxaQjNLpXLl3aGa3zNBYwqcSzz/EdExVhA9cuEf8sEgCfn
- 0wnFgq+SwuViwDNEq/HpuRQQaFDuxy1QDlx+o2nvYr3Hz788H0tqJwVfEMaWelJU+mtfwaBe6
- NzkUsrZ2U2B9dvCi+VSuW/GkhIMUw1KQlWZ4UKCNFtJAZmcwrMSIxIFOvJPEwDUaXgtE10z50
- 7Fiv/v8B6y2qiSGvW/ReSyVbVgmgZhe1YtU8E2XzI5TXrt7rFOQw87hJkp/crzLFShocXerQ7
- zm4WJks0YVv+1oltOdPUFIspJjubkzbv6XYiF6BdA+1CMEaKHrstBYrKXswB30nDsqcWhzjrw
- /kfzpB34G2xm9xqFsI5fuR9s77kfUsVeA4d6UFGAhBhHRaclbOsFaHtbFhSIhSHIwg9bwKVIh
- 92vmwoTI+2PqW/yiSDF3TKfSwd/vsdlZzF0+C3hwSi8Ko6/PFLXSWUVCWgA6nexfzcs1aVEqx
- 0I4/Z32mTAh00UsfdTLvjzeqkIgzoNRB74Sjxg+mFyaD/zrL38u74bF3LB109QcvBTTxYlG9y
- NKZZ0Zue4kRVXXJ6jMvnCicYjwWrdHSKgW4nTT6d0Q9LhQb0mHnA0HN/m+BJRQLa7q2oQQHKz
- 0lwS8B3plWBqraGPjKNqjhvTh/56cN9zvWWnXKNGA62Iayo5NAHKrVcuLPVUF1JFtbX4RVL3+
- rYbffYZn8AWErO/QSmfeoOWLPRiCSw5iQs214Qy7h2QgFe2mQb+BXSiZxLW1fQag1q+c3QUwT
- JRy7cyct7nh15eyCpady/PJZVyrV2v1SdKAZz2u5iF4aPZfy1qvV5C/lyUwqqEz/Q3Uael2IP
- M5nkUJKzCP6lIJUeLYU0LtyfFwZAAF/cyKyNAcZ3UvmQ8Rh1OFJadwYuyxLyRXiP3Wi6XDTAT
- gia7QCQap4UUaPAopLvQFtwWb0Gm66A9uYYycp2oQfnUWkuMSVGRNbufUVlKGNuB9pIvr8uQE
- 88aNqbN5kytPzg=
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 5=2E Mai 2022 10:46:55 MESZ schrieb Krzysztof Kozlowski <krzysztof=2Ekoz=
-lowski@linaro=2Eorg>:
->On 04/05/2022 17:47, Vladimir Oltean wrote:
->>>
->>> current device-tree nodes using "switch" and "ports"
->>>
->>> see discussioon here about make it fixed to "ports" property instead
->of PatternProperties including optional "ethernet-"
->>>
->>>
->https://patchwork=2Ekernel=2Eorg/project/linux-mediatek/patch/20220502153=
-238=2E85090-1-linux@fw-web=2Ede/#24843155
->>=20
->> Hmm, I don't get why Krzysztof said to just keep what is used in
->> existing device trees=2E The schema validator should describe what is
->> valid,=20
->
->These were talks about bindings which describe hardware=2E The node name,
->except Devicetree spec asking for generic names, does not matter here
->actually=2E
->
->> and since the mt7530 driver does not care one way or another
->> (some drivers do explicitly parse the "ports"/"ethernet-ports" node),
->> then whatever is valid for the DSA core is also valid for the mt7530
->> bindings=2E And "ethernet-ports" is valid too, so I think it should be
->> accepted by mediatek=2Eyaml=2E=2E=2E
->
->You can make it "(ethernet-)?ports" as well=2E My comment was purely to
->make it simpler, for bindings (goes into properties, not
->patternProperties) and for us=2E If you prefer to keep it like DSA core,
->also fine=2E
+The following series of patches enables DisplayPort and
+HDMI on j721e-sk
 
-Ok, i'm also thinking, the dsa-definition will be the right way (pattern-p=
-roperties with optional "ethernet-") in binding=2E
+v2:
+   - Fix name for dpi1 dss endpoint
 
-Should i use "ethernet-ports" instead of "ports" here? Current dts with mt=
-7530/mt7531 switches using "ports" so i would use it here too=2E If dsa pre=
-fer ethernet-ports now it should be changed in other files too=2E
+This series depends on
+https://lore.kernel.org/all/20220429112639.13004-1-r-ravikumar@ti.com/
+which adds required nodes in the SoC dtsi file
 
->Best regards,
->Krzysztof
+boot logs:
+   https://gist.githubusercontent.com/ravi-rahul/d2e139d8ff9446ede003291a6a3e8be5/raw/ed51498efe7f7bc4848dffb27e2b37e0beb7a94d/j7_sk_DP_HDMI_boot.log
 
-Hi,
-regards Frank
+kernel patch verify report:
+   https://gist.githubusercontent.com/ravi-rahul/1e2350b53ac7d6ba7694373c0b3bbb44/raw/f09f75821610b42ad1f8b4bf3e5ef7843de0c76e/report-kernel-patch-verify-sk-dp-hdmi.txt
+
+Rahul T R (2):
+  arm64: dts: ti: k3-j721e-sk: Enable DisplayPort
+  arm64: dts: ti: k3-j721e-sk: Enable HDMI
+
+ arch/arm64/boot/dts/ti/k3-j721e-sk.dts | 123 ++++++++++++++++++++++++-
+ 1 file changed, 119 insertions(+), 4 deletions(-)
+
+-- 
+2.17.1
+

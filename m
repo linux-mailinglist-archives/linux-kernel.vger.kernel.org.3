@@ -2,161 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDF9151BDAE
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 13:04:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 730A351BDB0
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 13:05:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356441AbiEELHy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 07:07:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41944 "EHLO
+        id S1356507AbiEELIg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 07:08:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351727AbiEELHv (ORCPT
+        with ESMTP id S1347727AbiEELId (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 07:07:51 -0400
-Received: from us-smtp-delivery-74.mimecast.com (us-smtp-delivery-74.mimecast.com [170.10.133.74])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BC79147AE1
-        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 04:04:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651748651;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=YpvAlgsdsw/KIuMgHDypmHZwrrA1JG576kOGWL22Vos=;
-        b=SZzt9euLIwDfQFiO//1Cx7liuu+a42MFfOwqdfYFTOvHlBwoNsPuXXIL25CC1+Mpbbuxwf
-        2gm8F29EWlUNCsJ3rGLy60hXMnzxX8SjZnYEJX/mFaux6K4NyX4PIZhHt1fIG/ENPu6Vae
-        /LSps2qrj6hPgRCiKFUnLDzZnelbFrw=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-294-8PF5AEt5PACm8IdP7C8MQQ-1; Thu, 05 May 2022 07:04:08 -0400
-X-MC-Unique: 8PF5AEt5PACm8IdP7C8MQQ-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id CEED7185A794;
-        Thu,  5 May 2022 11:04:07 +0000 (UTC)
-Received: from localhost (ovpn-12-197.pek2.redhat.com [10.72.12.197])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 2F026403156;
-        Thu,  5 May 2022 11:04:06 +0000 (UTC)
-Date:   Thu, 5 May 2022 19:04:02 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Sourabh Jain <sourabhjain@linux.ibm.com>,
-        Eric DeVolder <eric.devolder@oracle.com>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        kexec@lists.infradead.org, ebiederm@xmission.com,
-        dyoung@redhat.com, vgoyal@redhat.com, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        hpa@zytor.com, nramas@linux.microsoft.com, thomas.lendacky@amd.com,
-        robh@kernel.org, efault@gmx.de, rppt@kernel.org, david@redhat.com,
-        konrad.wilk@oracle.com, boris.ostrovsky@oracle.com
-Subject: Re: [PATCH v7 4/8] crash: add generic infrastructure for crash
- hotplug support
-Message-ID: <YnOvIuSRZX1cct4Y@MiWiFi-R3L-srv>
-References: <20220413164237.20845-1-eric.devolder@oracle.com>
- <20220413164237.20845-5-eric.devolder@oracle.com>
- <YleK3J/4HNuFioIh@MiWiFi-R3L-srv>
- <4eea2373-32f3-9960-cbec-21dc1a428807@oracle.com>
- <6f3a6cbb-0ac4-f178-fc17-18f9594da319@linux.ibm.com>
- <YmeBjrChOHsIYG3e@MiWiFi-R3L-srv>
- <f2dbd4fe-6201-b5c4-2725-dec9c3dbf13e@linux.ibm.com>
- <YnNkgfnHlUTky0lt@MiWiFi-R3L-srv>
- <e677f11b-32f9-0c89-9592-b987b00c4353@linux.ibm.com>
+        Thu, 5 May 2022 07:08:33 -0400
+Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam08on2084.outbound.protection.outlook.com [40.107.102.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0447747AE1
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 04:04:54 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=lyBHKxViXD25ZDjmQTsUZBZF/Lr5vcEz7jA9evNlZeUOaqI0UnXcNo+bIMiKebUDAqO+YaPyffxY3FscxelhmDZQ+i4gKqa4kW3RJ7KZIUPgVFQd+mxLCdJRzKBZdHwEmgYGYxIJ6+5lmq2rtKI4DfKzKqoyBhYHiFVLXcKF/ykdggxpuf4NSw6yWW68LnpOZSKi6y9CuBM+qDJMpxr+Azmln2PhN5P18Ilx2st3fNavMSv3xSb4FCycCy52HPQ9RiLujKWCrrfsY5ma88eng5vOac5sbjibuzb9S3DTMimvS6I0pj+MA1r0q+05uWBCwKIQVpNvJ1gNK2NA6nP5jg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=CQZYKsXhr5TqkILzTN8gwNMamwyaDpKv5mixrF6mKRQ=;
+ b=euD3+BdwBRQ6WR6i7br+IUuHEFvz2hQfwGQnty/xj0zjuFb0Pn6EowqFL8zWZx/nS4wO4kYFjmf1kGP6YCJK0i7ZlBXsHvY9N4DlIMxeB154nTn+CSlsLKfHSxk7vvsP4TAoLrwoIwMbGHOnY+YeylsrwGvUP2NL2XCow9+aMPVux2T4BlaCKqulZ2SC9rm2Kc+R3IkZ1Qxe2HAu0PcCPuUG1fqlPf+mPbN5WBuxJHwnwM9GqOvDQdAc1Bh44R32DwL1HDkR/Kh/v0BdOFjXT73deNDM1NnpbnocB4MFAg0BAtWnYzsR0tJ9ZDhMOl2r5TBoFLLfWBgCNHRsJkSf8w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=CQZYKsXhr5TqkILzTN8gwNMamwyaDpKv5mixrF6mKRQ=;
+ b=ehB1UDwM9mZD24y/h4UxAqVR2a/QFaHm4Y4ZEODaZhm5bm4CN5A616B3kd8SQg0F+dbA5L2CeHMnQ6RTrGxh5WsGEDpY8vN+k0hryqWBAOvpbuHX1WrP4+v6ie8k/zS+AJipkMvA0r8wF9PwYJLs7G9koMU1aFypLXavCaMSyaQ=
+Received: from DS7PR05CA0048.namprd05.prod.outlook.com (2603:10b6:8:2f::19) by
+ MN0PR12MB6271.namprd12.prod.outlook.com (2603:10b6:208:3c1::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5206.24; Thu, 5 May
+ 2022 11:04:50 +0000
+Received: from DM6NAM11FT027.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:8:2f:cafe::3) by DS7PR05CA0048.outlook.office365.com
+ (2603:10b6:8:2f::19) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5227.7 via Frontend
+ Transport; Thu, 5 May 2022 11:04:50 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ DM6NAM11FT027.mail.protection.outlook.com (10.13.172.205) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5227.15 via Frontend Transport; Thu, 5 May 2022 11:04:49 +0000
+Received: from beas.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Thu, 5 May
+ 2022 06:04:42 -0500
+From:   Wyes Karny <wyes.karny@amd.com>
+To:     <linux-kernel@vger.kernel.org>
+CC:     <Lewis.Carroll@amd.com>, <Mario.Limonciello@amd.com>,
+        <gautham.shenoy@amd.com>, <Ananth.Narayan@amd.com>,
+        <bharata@amd.com>, <len.brown@intel.com>, <x86@kernel.org>,
+        <tglx@linutronix.de>, <mingo@redhat.com>, <bp@alien8.de>,
+        <dave.hansen@linux.intel.com>, <hpa@zytor.com>,
+        <peterz@infradead.org>, <chang.seok.bae@intel.com>,
+        <keescook@chromium.org>, <metze@samba.org>,
+        <zhengqi.arch@bytedance.com>, <mark.rutland@arm.com>,
+        <puwen@hygon.cn>, <rafael.j.wysocki@intel.com>,
+        <andrew.cooper3@citrix.com>, <jing2.liu@intel.com>,
+        <jmattson@google.com>, <pawan.kumar.gupta@linux.intel.com>
+Subject: [PATCH v2 3/3] x86: Fix comment for X86_FEATURE_ZEN
+Date:   Thu, 5 May 2022 16:34:29 +0530
+Message-ID: <20220505110429.453279-1-wyes.karny@amd.com>
+X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20220505104856.452311-1-wyes.karny@amd.com>
+References: <20220505104856.452311-1-wyes.karny@amd.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <e677f11b-32f9-0c89-9592-b987b00c4353@linux.ibm.com>
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 02649c6e-c331-403c-537c-08da2e8712fa
+X-MS-TrafficTypeDiagnostic: MN0PR12MB6271:EE_
+X-Microsoft-Antispam-PRVS: <MN0PR12MB6271F9D46EEAB26C44F3AEF884C29@MN0PR12MB6271.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 1dquG9FH+1+Dr+ChxW3MRbcOFTKRrRpf3tONaXPycJMyn9Z5k5UEVIRf6Z35+UnVSqvo9LV4IBzPCgMdmSVmJE6QC9fd0/KEDodsnAaeqA9l8qH8QrizbdzglPr/bGJoJbTpvxD8vUAWIOrbjyVOYuXTLbekIt2mh/nz9tAiqWssWzQWiuVfSnx8hEs3Fg7sTSueAskcEZDfuVxYFVRx9wXc0TtRMC02cZUV6nrUoWu1RVS4UPd9aiG+YYt5Uy2Qf0xhm/9dtKq1IJfErWN8HDObMO0Xp6WBqv2rkPRkuy/uenPsJ4vka2yYcI4lfc2AmAkTV1Bnvf7APzWdT6v42wtKoIK+T7e961/2NrDDrJLKjDIEm5IDtYvBHsGKLcGZIlEziyEKi9XQf+kSFdc7hWa5xYhEEM0H+ISBN+ol0QNAob4jD42aY+UtawuPuuXSSSUjtyDAP/IdjB0JxlAM4XcfqSsOLwxcHPI1ZhARVMssIyYqEDd1zWXmOJe+LoUkiptZaPI9spXfLfL591a7kZB+DKVQluMcm/5bQpkalCSMxTgoaTBozmavfmpqEPmDIh4KOrgQq7vELACYYoKGgDv7zU86SUFeyylTpq4/4IF/rU9X5XDid0OVsKodu2sdgsp9rRYPJ1YJgcLwhAy33wN9OM3LM+NcUiV7+Zn+znwe5EvRw3STD1SvLX2HCdOrxVzuaTZYYYF5IOz/klYSiA==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(40470700004)(46966006)(70586007)(86362001)(40460700003)(82310400005)(26005)(316002)(70206006)(81166007)(508600001)(356005)(8676002)(4326008)(6666004)(54906003)(336012)(47076005)(7416002)(426003)(7696005)(186003)(83380400001)(5660300002)(2906002)(6916009)(16526019)(36860700001)(1076003)(2616005)(8936002)(44832011)(36756003)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 May 2022 11:04:49.9423
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 02649c6e-c331-403c-537c-08da2e8712fa
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT027.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR12MB6271
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/05/22 at 03:29pm, Sourabh Jain wrote:
-> 
-> On 05/05/22 11:15, Baoquan He wrote:
-> > On 04/28/22 at 10:48am, Sourabh Jain wrote:
-> > > Hi Baoquan,
-> > > 
-> > > On 26/04/22 10:52, Baoquan He wrote:
-> > > > On 04/26/22 at 09:36am, Sourabh Jain wrote:
-> > > > > On 15/04/22 03:59, Eric DeVolder wrote:
-> > ......
-> > 
-> > > > > > > > +#if defined(CONFIG_MEMORY_HOTPLUG)
-> > > > > > > > +static int crash_memhp_notifier(struct notifier_block *nb,
-> > > > > > > > +    unsigned long val, void *v)
-> > > > > > > > +{
-> > > > > > > > +    struct memory_notify *mhp = v;
-> > > > > > > > +
-> > > > > > > > +    switch (val) {
-> > > > > > > > +    case MEM_ONLINE:
-> > > > > > > > +        crash_hotplug_handler(KEXEC_CRASH_HP_ADD_MEMORY, -1U);
-> > > > > > > We don't differentiate the memory add/remove, cpu add, except of cpu
-> > > > > > > remove. Means the hp_action only differentiate cpu remove from the other
-> > > > > > > action. Maybe only making two types?
-> > > > > > > 
-> > > > > > > #define KEXEC_CRASH_HP_REMOVE_CPU   0
-> > > > > > > #define KEXEC_CRASH_HP_UPDATE_OTHER      1
-> > > > > > > 
-> > > > > > Sourabh Jain's work with PPC uses REMOVE_CPU, REMOVE_MEMORY, and
-> > > > > > ADD_MEMORY.
-> > > > > > Do you still want to consolidate these?
-> > > > > On PowerPC different actions are needed for CPU add and memory add/remove.
-> > > > > For CPU add case only FDT is updated whereas for the memory hotplug we will
-> > > > > be
-> > > > > updating FDT and elfcorehdr.
-> > > > I don't understand. For elfcorehdr updating, we only need regenerate it.
-> > > > Do you update them different for memory add/remove?
-> > > We have different actions for cpu remove, CPU add and memory add/remove
-> > > case.
-> > > 
-> > > CPU remove: no action
-> > > CPU add: update flattened device tree (FDT)
-> > > memory add/remove: update FDT and regenerate/update elfcorehdr
-> > > 
-> > > Since memory add/remove action is same we can have common hp_action for
-> > > them.
-> > For memory hot add/remove, we need rengereate elfcorehdr, and add the
-> > new elfcorehdr into fdt. Except of this, FDT need to know the hp_action
-> > and the hot added/removed memory region, namely the start and end, e.g
-> > [start, end]?
-> > 
-> > I checked arm64 kexec code, seems we only need to know if mem hotplug
-> > event happened, then regenerate elfcorehdr and embed the new elfcorehdr
-> > into fdt. Then we don't know pass the [start, end] info into the
-> > handler. Please tell if ppc is different or I missed anything.
-> 
-> Yes we don't need start and end info as such but we expect arch
-> handler to have info about which hotplug action is performed.
-> It is just that I don't see an significant advantage of consolidation of
-> CPU ADD, memory ADD and Memory REMOVE in one hp_action as
-> KEXEC_CRASH_HP_UPDATE_OTHER.
+The feature X86_FEATURE_ZEN implies that the CPU supports Zen
+microarchitecture. Call this out explicitly in the comment.
 
-I see. I don't oppose all those passed info, just worried the
-unnecessary info passed down to the handler.
+Signed-off-by: Wyes Karny <wyes.karny@amd.com>
+---
+ arch/x86/include/asm/cpufeatures.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> 
-> > If I am right, I would like the handler interface as Boris has made
-> > in his draft patch.
-> > 
-> > void __weak arch_crash_handle_hotplug_event(struct kimage *image, unsigned int hp_action,
-> >                                             unsigned int cpu)
-> > 
-> > static void handle_hotplug_event(unsigned int hp_action, unsigned int cpu)
-> The above template works fine for PowerPC as long we have four different
-> hp_action
-> to indicate CPU add/remove and memory add/remove.
-
-Cool. Then all things are clear. We can pass the needed hp_action and
-cpu number only.
-
-Hi Eric,
-
-The consensus is reached, please proceed when it's convenient.
+diff --git a/arch/x86/include/asm/cpufeatures.h b/arch/x86/include/asm/cpufeatures.h
+index 73e643ae94b6..c851ab4e45b9 100644
+--- a/arch/x86/include/asm/cpufeatures.h
++++ b/arch/x86/include/asm/cpufeatures.h
+@@ -219,7 +219,7 @@
+ #define X86_FEATURE_IBRS		( 7*32+25) /* Indirect Branch Restricted Speculation */
+ #define X86_FEATURE_IBPB		( 7*32+26) /* Indirect Branch Prediction Barrier */
+ #define X86_FEATURE_STIBP		( 7*32+27) /* Single Thread Indirect Branch Predictors */
+-#define X86_FEATURE_ZEN			( 7*32+28) /* "" CPU is AMD family 0x17 or above (Zen) */
++#define X86_FEATURE_ZEN			(7*32+28) /* "" CPU supports Zen microarchitecture */
+ #define X86_FEATURE_L1TF_PTEINV		( 7*32+29) /* "" L1TF workaround PTE inversion */
+ #define X86_FEATURE_IBRS_ENHANCED	( 7*32+30) /* Enhanced IBRS */
+ #define X86_FEATURE_MSR_IA32_FEAT_CTL	( 7*32+31) /* "" MSR IA32_FEAT_CTL configured */
+-- 
+2.27.0
 

@@ -2,130 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B77D51B6DD
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 05:57:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16E0A51B6DF
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 05:59:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239286AbiEEEB1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 00:01:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57438 "EHLO
+        id S242011AbiEEEDY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 00:03:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229761AbiEEEBZ (ORCPT
+        with ESMTP id S231154AbiEEEDV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 00:01:25 -0400
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2081.outbound.protection.outlook.com [40.107.223.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 760EF25585;
-        Wed,  4 May 2022 20:57:47 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=AzfOrMOXlcH2GZ9K9+paPJvAvRgxGxFxY2EsiqP8BxphT0NFwNh5oIFf9tUZTla+1leZrxYBRc3BEz19IFiJZgPhnXh3F8yGPNOswj6OydNZ1nS3OCmfcFsAfQYp/rIcNiwFXLmYEOxlduKFZlI/iKgLx1Edcb5nnxWmtX12XrPhm5o06TBg3jDDfQeCpFNLmGInHxbIe+v2wRqYrUdyHEo5lyxsOfo+qByvRwmHSpVW/NvExozKB818SUCdJt+NID9nFM2++7HkpxmNikvDv2ipHsO5JGfb3KCSAs0R2avcK7ddjID1gk0OqXexly/R1zLQBCeIPDZlWmwpMIdCbw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=4yYB2Ia7dPQQfndMkJYgBI2n0WrVAVCUXmG+edTMNyw=;
- b=eSzII7A1HzeJkLZTGQCwnv4hALiBq+Toom71uiN8arwYMkccTDaFyv4rqEGJNmlt1LZCd4wguunJqkn8AVf24vJQgT2T/24RjvJtt67grQOzzedCrWsQw/rc3gMz5KmiyTZ61fCB6J0OJVql9UE17O3iJZH7xrQcCRFB9uu9lZZPlVxTXv0X1ZRS623q9fEbKB57nEcKnXXqtj/iqKOVAU3NM9/r/K5hCGGs9Xyvz54ogZXO1L8Qrr69Fw1pn7Ky6kAyFfYaWIk6aB5sf46wZkDVuqWarnSTOgVZ3xOyQcl45AUBsceRU5G/Wyaa/fAheNbftQcckB8r03dfvZHT9g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=4yYB2Ia7dPQQfndMkJYgBI2n0WrVAVCUXmG+edTMNyw=;
- b=fKPLkk0dTPzaCEFTtRFZWdVYsTLvVTMwpZ6B+tXQxwYYvQFasfnmUmLeJ7m+Tbz4s+IBDTFfBxEu0TnqSM99QY0fg7NwCV+Lx08HISxDxv2RluSLfXdK5YycZoU80zvQZDWh2ToHcCtqkFoMN+Tj3EKfI+c89NsDkQ2JwPsQW/k=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM8PR12MB5445.namprd12.prod.outlook.com (2603:10b6:8:24::7) by
- BYAPR12MB4630.namprd12.prod.outlook.com (2603:10b6:a03:107::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5206.24; Thu, 5 May
- 2022 03:57:45 +0000
-Received: from DM8PR12MB5445.namprd12.prod.outlook.com
- ([fe80::9894:c8:c612:ba6b]) by DM8PR12MB5445.namprd12.prod.outlook.com
- ([fe80::9894:c8:c612:ba6b%4]) with mapi id 15.20.5206.024; Thu, 5 May 2022
- 03:57:45 +0000
-Message-ID: <a5f0b098-234b-7044-c6d5-ec50cff74676@amd.com>
-Date:   Thu, 5 May 2022 10:57:36 +0700
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.8.1
-Subject: Re: [PATCH v3 11/14] KVM: SVM: Introduce hybrid-AVIC mode
-Content-Language: en-US
-To:     Maxim Levitsky <mlevitsk@redhat.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org
-Cc:     pbonzini@redhat.com, seanjc@google.com, joro@8bytes.org,
-        jon.grimm@amd.com, wei.huang2@amd.com, terry.bowman@amd.com
-References: <20220504073128.12031-1-suravee.suthikulpanit@amd.com>
- <20220504073128.12031-12-suravee.suthikulpanit@amd.com>
- <fe7cd5012445a941cf55ea82871ea51157490aaa.camel@redhat.com>
-From:   Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
-In-Reply-To: <fe7cd5012445a941cf55ea82871ea51157490aaa.camel@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: HK2PR02CA0146.apcprd02.prod.outlook.com
- (2603:1096:202:16::30) To DM8PR12MB5445.namprd12.prod.outlook.com
- (2603:10b6:8:24::7)
+        Thu, 5 May 2022 00:03:21 -0400
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3431325585
+        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 20:59:43 -0700 (PDT)
+Received: from mail-pj1-f70.google.com (mail-pj1-f70.google.com [209.85.216.70])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id F0CCC3F201
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 03:59:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1651723181;
+        bh=tHBXCEpcvE3FUcO2qJsnS05zkLtGUpvJDlRzIJIAxmo=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=rRG9l53tpL1Mz9eap6y4ARHJnZwhcM3SEGuXz/5et+LPuRBc2CPF2b6P06JwDINAs
+         TzzF31GZlTE/73jmPG/v9yiFXY9iNmvdb6IwMK2xvcMxgPsoD70yPe26Q/IM7mjykj
+         ej62lBkE+27hi2Xm6F0WoByQWiAZ0UnbMpIfh0PO5zxCf3SbWMxhIXY4wDhHwIydam
+         EeiT2Wms0GjOfeFGwao/HkVGTgi3JuhyWIfBTrfewu/h8WPu1Z7ftyN8jTKxinU6+y
+         XjEsQW+QjntL4fUkGE7SwYhzyMduQG7BOyzhw8WQSXRA9apB4XsPMLtwsVnuafqm54
+         pesAlUJNL677g==
+Received: by mail-pj1-f70.google.com with SMTP id fy8-20020a17090b020800b001d8de2118ccso1637302pjb.8
+        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 20:59:40 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=tHBXCEpcvE3FUcO2qJsnS05zkLtGUpvJDlRzIJIAxmo=;
+        b=kbCPXBkoyOwODqzKXcK+ehToPdPWbeAaVwoqZ0UU0jcS8ePx73a6CWHCb3pfwT53ws
+         SxkEWG77IIekCKbs6oiOpHCiA2xogtqfvGm3W3TMui8WTPUYWnJ3e1Zs6b3L/Uxtf1Xn
+         sd+6/PE+a3wva+XmTQge9UcxteXmWjFjfumDot+Par2LSplF6AKo9mSotIY+04i9OWXZ
+         J+EEEYvl6Va+vfAd9HcdXJvSPMtTG5WEzkG1uRDeADPMZWxh6yt53AwILo7CeIuGZTa2
+         pyZW+pyLECMufuPAn0dgkpBSefsy61pFcyp6vRt+bhY4SoKu6761TR/4cgp1ZbWTdYEP
+         GXPQ==
+X-Gm-Message-State: AOAM530au7akaAzKJDtKT4JlVzAvpMfd5Z/56bPhNSbw8VJEYptH740t
+        bJJHUVJaCJyxdZ416GS0kMYE3UXEVgQGdOgcagznc+akTdufLdaPzhGmL1FVbD8UtCk6qOz65h8
+        WGJnZ5v3BleUxNby9ia7tMiArP6r3Rr5ZGlqk+giGtQ==
+X-Received: by 2002:a17:902:cf0f:b0:15a:24e0:d9b0 with SMTP id i15-20020a170902cf0f00b0015a24e0d9b0mr25320115plg.42.1651723178382;
+        Wed, 04 May 2022 20:59:38 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJw82gsr0PpaFQdwd8j/stSV+YDDfhbUCXqlhmGf94ePNM8YZXcOkPEx+bfep4SF537NhgOtsQ==
+X-Received: by 2002:a17:902:cf0f:b0:15a:24e0:d9b0 with SMTP id i15-20020a170902cf0f00b0015a24e0d9b0mr25320082plg.42.1651723177947;
+        Wed, 04 May 2022 20:59:37 -0700 (PDT)
+Received: from [10.102.97.125] (118-163-61-247.hinet-ip.hinet.net. [118.163.61.247])
+        by smtp.gmail.com with ESMTPSA id s6-20020a170902ea0600b0015e8d4eb2d5sm277509plg.287.2022.05.04.20.59.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 04 May 2022 20:59:37 -0700 (PDT)
+Message-ID: <bb0801fa-3007-b837-17f4-f729c6473253@canonical.com>
+Date:   Thu, 5 May 2022 11:59:34 +0800
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 4e90ccb9-3a9b-479b-e520-08da2e4b6932
-X-MS-TrafficTypeDiagnostic: BYAPR12MB4630:EE_
-X-Microsoft-Antispam-PRVS: <BYAPR12MB4630E1319AEA67AF63D6B810F3C29@BYAPR12MB4630.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Ry9ytJVAKrjI1GCEaFQxwCmChe5CRg8f2Gd6YX5c5tmf7HFXvGiIF1RWdRF1e8fjrydD2i7R0q/lZSRdsZ+/+3a22xfBozwLTENcl44eQrFBIwFrRh+yxOOgSkyqFRdXtYNs65LIfMGnA5lXiIT/CDLW28dsa8HFwFx9Lv4a0bB9qdZsN9h/8i8OFT9dHyYuX48HyjX7h/F3GbzQ19uoUGyeBNYXfhs5lCfMWbVCXYaL/aVgSN01hcxetC1CD1QD4D5Tz3/uAN8GbziAtvTfw7dRISA6B5vJzVkH8yvRDUXyOmNNjyhOwlqrK0oER5Lc9aK+60cv4FPmPBaMoKcil8iFZLeESY7ZU71xQOQ1fE4S/eKOqI40pV5PDBHV12xUz5NbC0HfIqXgzdi6EbDZV9Sgg3dcQLGuEn1d8/4m9l0oDZT7UcajfYbzUjlM6rln/2Bkp1GXtKHT4Q2H9setHDEexHcoW++Rzn3flMtcaozc+TwHLzn3m0R3oY61jy1y5Gr1nayf8vaxMCE6dlGliN3hGazAeP4VIffN5UYTUHtZFPqhs4X3n4wEUMDPbXAQjTL28DVnFZfcy1qsUcrAmVs4NkhsDZRSTgbgASqfgBSGOewBazMCdGcTgzp0zdH22Ldzf4xexIm0GKdz0lFJfitM7w5NZHflKKUeunLeRhQI1JrmG8awWKV9orRpoeaCWKMUON5og5Ixo4bN/Cg2/NZoqiLHbvcipN/E5FIxC2PP0fQRmIzqAgMTRV/x7ppd
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM8PR12MB5445.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(36756003)(508600001)(83380400001)(6486002)(6666004)(31686004)(2906002)(53546011)(6506007)(186003)(2616005)(6512007)(8676002)(4326008)(44832011)(66946007)(66556008)(4744005)(66476007)(316002)(5660300002)(31696002)(38100700002)(86362001)(8936002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 2
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?SVJTeUczeFM0Z0d4MmRVd1BRT3o3ZDdaNldiTGYvQWdkS1gxclpSUldiSDE1?=
- =?utf-8?B?dGpuVElmZEtqMmcrSjcxVk1tMU9ZSzYwMW8rUzEyZFB6RDdoditpdDJ6RFpO?=
- =?utf-8?B?UlBRa1VWajZIYmhjTjl5TjR1cDhSZWJWaDYzc2wwNExtOEpaT3pRek85RmVU?=
- =?utf-8?B?QmUvNHh6QTVBOS9ZMThhVC9jYTJpaFdXREFNKzNYLzQwQ21kREJlUWtNeWcr?=
- =?utf-8?B?c0pUYTVkRUxQb2M0bUh6cERZam5RZFdrRUJuRG54Mzd1UlpSdmgvUG4zaTk1?=
- =?utf-8?B?OFMwcW1KV1VGTjFIT1FYSXpxc1g2empzMDljZFFzSExSbHkrSHpmYWgzNUk3?=
- =?utf-8?B?eFI0SkhWQkFLWWxjMXpZcDlrQlk1aTBHdjlEK051WFJRamZkYk1XQ01JMGJT?=
- =?utf-8?B?Z3pXZHNCREs4SmlNOVEwR3BvdTc2dkR1enhCS0NwbWNJVFkwZzFFSmlkT3Bw?=
- =?utf-8?B?bUtNcmJYb2xoYlVucXJUOUtDakEvY2pFRnlIbDdqODlyS1o4NE9ocGZMUnpa?=
- =?utf-8?B?WFdLTVdLYWRNai9nU09Td0VyaXFHd1ZxRkluSHZpaWhzSFhhQkJCUDFoMVJB?=
- =?utf-8?B?OStCZUhwZnRUK1B2RlhoRGI4UFYxSW1JV3FoOERFR1lLa3Z5T1YwQ3pwcXJQ?=
- =?utf-8?B?RFh4TFVPNFFXTDNYMG1rajdKenBOUGcwblRsT3BrZ1hjSVdObEUyMjFlTkdh?=
- =?utf-8?B?ZVhTTHpJME9EUXIxK3BmWGh5MUI4TExaQVJnS2hoVzJkbE4rSkJpUUxpYWxY?=
- =?utf-8?B?amxwYnRXVGt1a21kRnAzMDJEbnRhU29QLzVDaDcwWEpVY1Q4dFMrTGgzRlQ1?=
- =?utf-8?B?VGpoOUVZNHZnbktiR3ZDcmRrdmRUZzM0Rm1Qb2NiVnE3dFo3REwxdWc2OHBp?=
- =?utf-8?B?djRzTGZJbkE0Z20zZDdxbUc3ZmFRZFhYSyttRlB5R3FTZW41bXMySnFwZytT?=
- =?utf-8?B?dzE1S3R0eVFDL3BMQWovSXo5c1JXQUFJQWh3RktDdlBON0dlajdrMDRRU1ZJ?=
- =?utf-8?B?ZUNNbEZKeC92U1ZPOUtuZURCYWQzRHFDT25UVlo1aHFPQzBXUFZBWnlWR1BF?=
- =?utf-8?B?alF6cFF3bkZWQlBOSzNzUlRlQUM3Zk85ZVFvbzlvc2srcUs5cVNmdUNJcHZK?=
- =?utf-8?B?Q3JnLzVkZ2JubkE3WjVUN2ZyQlZlVlI4SDZUZFU5NjVRWTZjeFI2NjNJSWdB?=
- =?utf-8?B?V2VPOExMYmdUNkVFdk0vcHlHT2tFR1pzZHFRQTNUR3NLQVBCZjlqWUxhcjJQ?=
- =?utf-8?B?bGZGT3lzZVNYMGVTVXg3NmkzeGlFekpsRk5sZHZ3R1BtNCs4ZDJObnZiOVFv?=
- =?utf-8?B?QzlqR0phaklTUFQxMHQzNzNNUGd3akozNCs1cEpvdEtNRjBQNFBKalBiYWY3?=
- =?utf-8?B?NUFGeEJRamFpOGtjbktkQzFxTWg2b1doeUlzMDl4MEVUZGoxRXd1YVFKRlJP?=
- =?utf-8?B?QXV4eStvUGlwWjc3Z0pFNzUrYjZDMEhEdFJzVmJYaUNQUWlDU3hHZGZucWMy?=
- =?utf-8?B?Ty9neXV2UHhNRXdQbW4rVFlGbjhvT2lyR2prZlpFOFc4SWp0NnprUjNNWUQ2?=
- =?utf-8?B?eVpBV0Q1aURYbEw3c3hyaVI4d0pJUHlxYWxDQU1XbnVKclFvLzJkWnIzTEpI?=
- =?utf-8?B?MTJ2dHE3WTVJRURiSnFBOWJpQk9SNDdtWEwrRWIyODdRYXJTY3NldjlDNmRB?=
- =?utf-8?B?cXFrSE5kOVlkNTFkL0dWbFM0aVI5ajZUSG5IYzVZV0QrcUNwckMxaEhRVnRZ?=
- =?utf-8?B?YjdvYzlUYnlkelBlbDZHV0JEQnZnUVVYUlp5R0Q3UCtEOEVZOGVQMEdBZVM0?=
- =?utf-8?B?QmE1bHdiV0JRQUI3ZG1XM1Y1VTZaSDBDYWJJNkxaaVltNXRYb3VOcGlUTTBO?=
- =?utf-8?B?bzhzUm0wbjZ1b0pKOXgrekFUTTJsWmNVS1ZlY0ZETWx6cmw2ZjhFZWt2QVRT?=
- =?utf-8?B?czFkai93N28vYXg5M2VrbzNXaVl1TmdEeFZSQjNUZG9tSHZEZ3RHSTJZeWw1?=
- =?utf-8?B?TE8vdDN5cyt6WW4xZ3BRMGdMbDVLZ0Z0Q3FCSHExMzFJRXF4WEdRbjNDQ1Fl?=
- =?utf-8?B?OUsxd2tkNHpQTnhVK21QQkE4ZzlZeFJJTjVCWjhhRTRMRm5YMWFZSTB1VDdo?=
- =?utf-8?B?ZmRUQ2hQcUw3dnJMdlg3U05GRjQ4MXkvUGh1Q2o3WWo5L0ZScDZIWi90VHRt?=
- =?utf-8?B?UXFPL3ErdlpZOTB6Uy9Od0oxSFVlZFlQd2ZUMkRMNEhzWXVCVW9NbUJBUXB5?=
- =?utf-8?B?TGV4WkwxK3U3NDhaWTd6VmpSSkV1VjZRaDZVN3o2aGlqTCsxL2JHMjNnNHZQ?=
- =?utf-8?B?bFQ1VXMzdW1OczBFdkdVOGV6UUoyNHZnbWh1d3FueTBiSHpHUUpaZFNxVUgy?=
- =?utf-8?Q?C9P+G+Kag+hPnQK8JtLaW+C5Y+NrPdJjpcwcI2CdOnJS6?=
-X-MS-Exchange-AntiSpam-MessageData-1: vv8F7zxPrUEXRw==
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4e90ccb9-3a9b-479b-e520-08da2e4b6932
-X-MS-Exchange-CrossTenant-AuthSource: DM8PR12MB5445.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 May 2022 03:57:45.3088
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: A73C8usXs7jRGI5g4kr58k0ZCv1/n+TTiTxMnfpEDQkLhUS7EBrldn4yyr6C1T2WfcUoIooo0OxnY9ytBx6UkQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR12MB4630
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v1 3/3] ALSA: hda/cs8409: Support manual mode detection
+ for CS42L42
+Content-Language: en-US
+To:     Stefan Binding <sbinding@opensource.cirrus.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
+Cc:     patches@opensource.cirrus.com, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org
+References: <20220504161236.2490532-1-sbinding@opensource.cirrus.com>
+ <20220504161236.2490532-4-sbinding@opensource.cirrus.com>
+From:   Chris Chiu <chris.chiu@canonical.com>
+In-Reply-To: <20220504161236.2490532-4-sbinding@opensource.cirrus.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -133,25 +87,271 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Maxim
 
-On 5/4/22 7:32 PM, Maxim Levitsky wrote:
-> Well strictly speaking, another thing that has to be done, other that removing the inhibit,
-> is to 'hide' the AVIC's private memslot if one of vCPUs is in x2apic mode,
-> although not doing this doesn't cause any harm as the guest is not supposed to poke at xAPIC
-> mmio even when uses x2apic, and if it does it will get the normal AVIC acceleration,
-> so probably it is better to not add any more complexity and leave it like that.
+On 2022/5/5 00:12, Stefan Binding wrote:
+> For Jack detection on CS42L42, detection is normally done using
+> "auto" mode, which automatically detects what type of jack is
+> connected to the device. However, some headsets are not
+> automatically detected, and as such and alternative detection
+> method "manual mode" can be used to detect these headsets.
+>
+> Signed-off-by: Stefan Binding <sbinding@opensource.cirrus.com>
+> ---
 
-Agree, I'll note this detail in the comment above.
+Tested-by: Chris Chiu <chris.chiu@canonical.com>
 
-> ... 
-> BTW, hardware wise, does 'X2APIC_MODE' keeps the emulation of the AVIC mmio, or
-> not?
 
-According to the AVIC documentation, when the AVIC is configured to use x2 APIC mode
-the MMIO access method will be disabled. This is consistent with the Intel x2APIC specification,
-where it states "accessing the MMIO interface when in x2APIC mode, the behavior is identical
-to xAPIC in globally disabled state".
-
-Regards,
-Suravee
+>   sound/pci/hda/patch_cs8409-tables.c |   3 -
+>   sound/pci/hda/patch_cs8409.c        | 159 +++++++++++++++++++++++-----
+>   sound/pci/hda/patch_cs8409.h        |   1 -
+>   3 files changed, 132 insertions(+), 31 deletions(-)
+>
+> diff --git a/sound/pci/hda/patch_cs8409-tables.c b/sound/pci/hda/patch_cs8409-tables.c
+> index a7ee489e6aec..0d11b24a1317 100644
+> --- a/sound/pci/hda/patch_cs8409-tables.c
+> +++ b/sound/pci/hda/patch_cs8409-tables.c
+> @@ -252,7 +252,6 @@ struct sub_codec cs8409_cs42l42_codec = {
+>   	.init_seq_num = ARRAY_SIZE(cs42l42_init_reg_seq),
+>   	.hp_jack_in = 0,
+>   	.mic_jack_in = 0,
+> -	.force_status_change = 1,
+>   	.paged = 1,
+>   	.suspended = 1,
+>   	.no_type_dect = 0,
+> @@ -444,7 +443,6 @@ struct sub_codec dolphin_cs42l42_0 = {
+>   	.init_seq_num = ARRAY_SIZE(dolphin_c0_init_reg_seq),
+>   	.hp_jack_in = 0,
+>   	.mic_jack_in = 0,
+> -	.force_status_change = 1,
+>   	.paged = 1,
+>   	.suspended = 1,
+>   	.no_type_dect = 0,
+> @@ -458,7 +456,6 @@ struct sub_codec dolphin_cs42l42_1 = {
+>   	.init_seq_num = ARRAY_SIZE(dolphin_c1_init_reg_seq),
+>   	.hp_jack_in = 0,
+>   	.mic_jack_in = 0,
+> -	.force_status_change = 1,
+>   	.paged = 1,
+>   	.suspended = 1,
+>   	.no_type_dect = 1,
+> diff --git a/sound/pci/hda/patch_cs8409.c b/sound/pci/hda/patch_cs8409.c
+> index d35d124bf3dc..c3a8b04c71d8 100644
+> --- a/sound/pci/hda/patch_cs8409.c
+> +++ b/sound/pci/hda/patch_cs8409.c
+> @@ -634,38 +634,128 @@ static void cs42l42_run_jack_detect(struct sub_codec *cs42l42)
+>   	cs8409_i2c_write(cs42l42, CS42L42_HSDET_CTL2, 0xc0);
+>   }
+>   
+> -static int cs42l42_handle_tip_sense(struct sub_codec *cs42l42, unsigned int reg_ts_status)
+> +static int cs42l42_manual_hs_det(struct sub_codec *cs42l42)
+>   {
+> -	int status_changed = cs42l42->force_status_change;
+> +	unsigned int hs_det_status;
+> +	unsigned int hs_det_comp1;
+> +	unsigned int hs_det_comp2;
+> +	unsigned int hs_det_sw;
+> +	unsigned int hs_type;
+> +
+> +	/* Set hs detect to manual, active mode */
+> +	cs8409_i2c_write(cs42l42, CS42L42_HSDET_CTL2,
+> +			 (1 << CS42L42_HSDET_CTRL_SHIFT) |
+> +			 (0 << CS42L42_HSDET_SET_SHIFT) |
+> +			 (0 << CS42L42_HSBIAS_REF_SHIFT) |
+> +			 (0 << CS42L42_HSDET_AUTO_TIME_SHIFT));
+> +
+> +	/* Configure HS DET comparator reference levels. */
+> +	cs8409_i2c_write(cs42l42, CS42L42_HSDET_CTL1,
+> +			 (CS42L42_HSDET_COMP1_LVL_VAL << CS42L42_HSDET_COMP1_LVL_SHIFT) |
+> +			 (CS42L42_HSDET_COMP2_LVL_VAL << CS42L42_HSDET_COMP2_LVL_SHIFT));
+> +
+> +	/* Open the SW_HSB_HS3 switch and close SW_HSB_HS4 for a Type 1 headset. */
+> +	cs8409_i2c_write(cs42l42, CS42L42_HS_SWITCH_CTL, CS42L42_HSDET_SW_COMP1);
+> +
+> +	msleep(100);
+> +
+> +	hs_det_status = cs8409_i2c_read(cs42l42, CS42L42_HS_DET_STATUS);
+> +
+> +	hs_det_comp1 = (hs_det_status & CS42L42_HSDET_COMP1_OUT_MASK) >>
+> +			CS42L42_HSDET_COMP1_OUT_SHIFT;
+> +	hs_det_comp2 = (hs_det_status & CS42L42_HSDET_COMP2_OUT_MASK) >>
+> +			CS42L42_HSDET_COMP2_OUT_SHIFT;
+> +
+> +	/* Close the SW_HSB_HS3 switch for a Type 2 headset. */
+> +	cs8409_i2c_write(cs42l42, CS42L42_HS_SWITCH_CTL, CS42L42_HSDET_SW_COMP2);
+>   
+> -	cs42l42->force_status_change = 0;
+> +	msleep(100);
+> +
+> +	hs_det_status = cs8409_i2c_read(cs42l42, CS42L42_HS_DET_STATUS);
+> +
+> +	hs_det_comp1 |= ((hs_det_status & CS42L42_HSDET_COMP1_OUT_MASK) >>
+> +			CS42L42_HSDET_COMP1_OUT_SHIFT) << 1;
+> +	hs_det_comp2 |= ((hs_det_status & CS42L42_HSDET_COMP2_OUT_MASK) >>
+> +			CS42L42_HSDET_COMP2_OUT_SHIFT) << 1;
+> +
+> +	/* Use Comparator 1 with 1.25V Threshold. */
+> +	switch (hs_det_comp1) {
+> +	case CS42L42_HSDET_COMP_TYPE1:
+> +		hs_type = CS42L42_PLUG_CTIA;
+> +		hs_det_sw = CS42L42_HSDET_SW_TYPE1;
+> +		break;
+> +	case CS42L42_HSDET_COMP_TYPE2:
+> +		hs_type = CS42L42_PLUG_OMTP;
+> +		hs_det_sw = CS42L42_HSDET_SW_TYPE2;
+> +		break;
+> +	default:
+> +		/* Fallback to Comparator 2 with 1.75V Threshold. */
+> +		switch (hs_det_comp2) {
+> +		case CS42L42_HSDET_COMP_TYPE1:
+> +			hs_type = CS42L42_PLUG_CTIA;
+> +			hs_det_sw = CS42L42_HSDET_SW_TYPE1;
+> +			break;
+> +		case CS42L42_HSDET_COMP_TYPE2:
+> +			hs_type = CS42L42_PLUG_OMTP;
+> +			hs_det_sw = CS42L42_HSDET_SW_TYPE2;
+> +			break;
+> +		case CS42L42_HSDET_COMP_TYPE3:
+> +			hs_type = CS42L42_PLUG_HEADPHONE;
+> +			hs_det_sw = CS42L42_HSDET_SW_TYPE3;
+> +			break;
+> +		default:
+> +			hs_type = CS42L42_PLUG_INVALID;
+> +			hs_det_sw = CS42L42_HSDET_SW_TYPE4;
+> +			break;
+> +		}
+> +	}
+> +
+> +	/* Set Switches */
+> +	cs8409_i2c_write(cs42l42, CS42L42_HS_SWITCH_CTL, hs_det_sw);
+> +
+> +	/* Set HSDET mode to Manual—Disabled */
+> +	cs8409_i2c_write(cs42l42, CS42L42_HSDET_CTL2,
+> +			 (0 << CS42L42_HSDET_CTRL_SHIFT) |
+> +			 (0 << CS42L42_HSDET_SET_SHIFT) |
+> +			 (0 << CS42L42_HSBIAS_REF_SHIFT) |
+> +			 (0 << CS42L42_HSDET_AUTO_TIME_SHIFT));
+> +
+> +	/* Configure HS DET comparator reference levels. */
+> +	cs8409_i2c_write(cs42l42, CS42L42_HSDET_CTL1,
+> +			 (CS42L42_HSDET_COMP1_LVL_DEFAULT << CS42L42_HSDET_COMP1_LVL_SHIFT) |
+> +			 (CS42L42_HSDET_COMP2_LVL_DEFAULT << CS42L42_HSDET_COMP2_LVL_SHIFT));
+> +
+> +	return hs_type;
+> +}
+> +
+> +static int cs42l42_handle_tip_sense(struct sub_codec *cs42l42, unsigned int reg_ts_status)
+> +{
+> +	int status_changed = 0;
+>   
+>   	/* TIP_SENSE INSERT/REMOVE */
+>   	switch (reg_ts_status) {
+>   	case CS42L42_TS_PLUG:
+> -		if (!cs42l42->hp_jack_in) {
+> -			if (cs42l42->no_type_dect) {
+> -				status_changed = 1;
+> -				cs42l42->hp_jack_in = 1;
+> -				cs42l42->mic_jack_in = 0;
+> -			} else {
+> -				cs42l42_run_jack_detect(cs42l42);
+> -			}
+> +		if (cs42l42->no_type_dect) {
+> +			status_changed = 1;
+> +			cs42l42->hp_jack_in = 1;
+> +			cs42l42->mic_jack_in = 0;
+> +		} else {
+> +			cs42l42_run_jack_detect(cs42l42);
+>   		}
+>   		break;
+>   
+>   	case CS42L42_TS_UNPLUG:
+> -		if (cs42l42->hp_jack_in || cs42l42->mic_jack_in) {
+> -			status_changed = 1;
+> -			cs42l42->hp_jack_in = 0;
+> -			cs42l42->mic_jack_in = 0;
+> -		}
+> +		status_changed = 1;
+> +		cs42l42->hp_jack_in = 0;
+> +		cs42l42->mic_jack_in = 0;
+>   		break;
+>   	default:
+>   		/* jack in transition */
+>   		break;
+>   	}
+>   
+> +	codec_dbg(cs42l42->codec, "Tip Sense Detection: (%d)\n", reg_ts_status);
+> +
+>   	return status_changed;
+>   }
+>   
+> @@ -698,24 +788,40 @@ static int cs42l42_jack_unsol_event(struct sub_codec *cs42l42)
+>   
+>   		type = (reg_hs_status & CS42L42_HSDET_TYPE_MASK) >> CS42L42_HSDET_TYPE_SHIFT;
+>   
+> +		/* Configure the HSDET mode. */
+> +		cs8409_i2c_write(cs42l42, CS42L42_HSDET_CTL2, 0x80);
+> +
+>   		if (cs42l42->no_type_dect) {
+>   			status_changed = cs42l42_handle_tip_sense(cs42l42, current_plug_status);
+> -		} else if (type == CS42L42_PLUG_INVALID) {
+> -			/* Type CS42L42_PLUG_INVALID not supported	*/
+> -			status_changed = cs42l42_handle_tip_sense(cs42l42, CS42L42_TS_UNPLUG);
+>   		} else {
+> -			if (!cs42l42->hp_jack_in) {
+> -				status_changed = 1;
+> -				cs42l42->hp_jack_in = 1;
+> +			if (type == CS42L42_PLUG_INVALID || type == CS42L42_PLUG_HEADPHONE) {
+> +				codec_dbg(cs42l42->codec,
+> +					  "Auto detect value not valid (%d), running manual det\n",
+> +					  type);
+> +				type = cs42l42_manual_hs_det(cs42l42);
+>   			}
+> -			/* type = CS42L42_PLUG_HEADPHONE has no mic */
+> -			if ((!cs42l42->mic_jack_in) && (type != CS42L42_PLUG_HEADPHONE)) {
+> +
+> +			switch (type) {
+> +			case CS42L42_PLUG_CTIA:
+> +			case CS42L42_PLUG_OMTP:
+>   				status_changed = 1;
+> +				cs42l42->hp_jack_in = 1;
+>   				cs42l42->mic_jack_in = 1;
+> +				break;
+> +			case CS42L42_PLUG_HEADPHONE:
+> +				status_changed = 1;
+> +				cs42l42->hp_jack_in = 1;
+> +				cs42l42->mic_jack_in = 0;
+> +				break;
+> +			default:
+> +				status_changed = 1;
+> +				cs42l42->hp_jack_in = 0;
+> +				cs42l42->mic_jack_in = 0;
+> +				break;
+>   			}
+> +			codec_dbg(cs42l42->codec, "Detection done (%d)\n", type);
+>   		}
+> -		/* Configure the HSDET mode. */
+> -		cs8409_i2c_write(cs42l42, CS42L42_HSDET_CTL2, 0x80);
+> +
+>   		/* Enable the HPOUT ground clamp and configure the HP pull-down */
+>   		cs8409_i2c_write(cs42l42, CS42L42_DAC_CTL2, 0x02);
+>   		/* Re-Enable Tip Sense Interrupt */
+> @@ -803,7 +909,6 @@ static void cs42l42_suspend(struct sub_codec *cs42l42)
+>   	cs42l42->last_page = 0;
+>   	cs42l42->hp_jack_in = 0;
+>   	cs42l42->mic_jack_in = 0;
+> -	cs42l42->force_status_change = 1;
+>   
+>   	/* Put CS42L42 into Reset */
+>   	gpio_data = snd_hda_codec_read(codec, CS8409_PIN_AFG, 0, AC_VERB_GET_GPIO_DATA, 0);
+> diff --git a/sound/pci/hda/patch_cs8409.h b/sound/pci/hda/patch_cs8409.h
+> index 988259f8a940..ebf473a3f109 100644
+> --- a/sound/pci/hda/patch_cs8409.h
+> +++ b/sound/pci/hda/patch_cs8409.h
+> @@ -304,7 +304,6 @@ struct sub_codec {
+>   
+>   	unsigned int hp_jack_in:1;
+>   	unsigned int mic_jack_in:1;
+> -	unsigned int force_status_change:1;
+>   	unsigned int suspended:1;
+>   	unsigned int paged:1;
+>   	unsigned int last_page;
+>

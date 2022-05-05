@@ -2,68 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D59A151B9A2
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 10:07:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83D7851B9A8
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 10:08:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346472AbiEEIKr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 04:10:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43434 "EHLO
+        id S1346486AbiEEIMG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 04:12:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346444AbiEEIKo (ORCPT
+        with ESMTP id S236869AbiEEIME (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 04:10:44 -0400
-Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66E2337012
-        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 01:07:05 -0700 (PDT)
-Received: by mail-yb1-xb2f.google.com with SMTP id s30so6328190ybi.8
-        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 01:07:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=/lcDjUXmqCC8++TChfQPb2y1ThOaTsMZ60wPCLJmwfA=;
-        b=PfkiLCiCuWYhfERRM7OhNV/KVoCSisP9NR0V9RCRfCMS0JYexbisjTUOLMO/xzc/Up
-         JN/dm0Q628PUIMyjze7Sbgf0Sn/keQULXJuLVA/0IbO8EIw7pmbAD+p2PS7Mjz32TQmA
-         IP6sOxIhRdgFhfGWxuZEjuASayWOlwztM2Eh290YZXnhXVbtDTLE8UCaDGsyMw9B7irZ
-         AzCgZTm/kzKsXvp/OPvSMg0Mmu60mtKJdNTq5B3fSrVOSNV3aa12XYW+9eHOb0HBSBmS
-         rWlnIBPHDv/ArvC/F+AeO4JEDnaKHow7rdfxYnQ+WIxlYUhSgNfHScUlaqktszkcpgub
-         b9qQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=/lcDjUXmqCC8++TChfQPb2y1ThOaTsMZ60wPCLJmwfA=;
-        b=TW8qgTbJde4pxsTy5wNfdfDCq2n61HTaPlFzSvIVgL+z+2NGzpKoohYimXXWdQGjwh
-         F6CrGr9c+t/6JO7VXGBIdbIdvpeBo4jR0UQ74ORT6EoRrlgio99WeS2f8M96fFgsPpn/
-         a+mSj57jE3vdvv8jdVsYZqEkrAJxTiKdlPBVJdEC9T+6LoyZq7C78zB3eIaEq8QpUzY6
-         yQrMKthv3o/5gMTVfjyMbTOgp9hIfSPE5SMmH3jzdyIh0t/0KRSVtikcVkH/8VBbRBwj
-         KNUj1un/nBtZxe32kiyrdEsTDD++1T5wU2oxtaoFyuJmNJNjIKHjx1p8jo5Y7DSU5ISJ
-         aquw==
-X-Gm-Message-State: AOAM532vZzUy5kdcnrSNaIL8tAY8hDSUIkD9cP97yxQF23rRtlllXEWg
-        pQHMQA4Hvqbs1To/VUHlUeAwwM5+p7B6UUnYWUJjTw==
-X-Google-Smtp-Source: ABdhPJynvain3ZWlz4aA94WoEPTunkw2wiG3XQs99AhMQwYBKyshzz8EzX7dNVM3DYp4uTxzYm9Kdya3nbQHc43rVrs=
-X-Received: by 2002:a25:c64b:0:b0:649:11d:9db1 with SMTP id
- k72-20020a25c64b000000b00649011d9db1mr20279333ybf.128.1651738024465; Thu, 05
- May 2022 01:07:04 -0700 (PDT)
+        Thu, 5 May 2022 04:12:04 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F3273337C;
+        Thu,  5 May 2022 01:08:25 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id E73021F44D6A
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1651738103;
+        bh=Sx0JTutas4/a5URHaHdUEVftBTpjpG3kAugSQyvFlOk=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=LQP40dxFDRXce8lfztccxf30KUdLwEI7Biw7WJFTVQgsdDbNckjKld2YhLoBNGUFK
+         6oiSh0nR9Xfnfbzk/jr6ze4TO3H0+DqXEUSKRQPakdjJeaG4ckhTKy9NBwbOVYL7Rz
+         75B5Sarx4ocMBfhtUMYwULroMzHxA1GU5xiW71rPLvmdS8+Nb3IVHiMdvyuR1N54lA
+         8CKd8fB/xfvNwcgZqG6z1VjuSIdQFmHsVfj3TRNZlUY4/F4ra07cYNlwfAXCukg8J5
+         X4Obi7f66sRUcI/xgAb4Y3SaJM2Yu8CnQ9wkG3c5C6d0oOM60j5N3/znbWeNql2KFQ
+         K5ftZZVV6WFrw==
+Message-ID: <4826c824-40ce-5726-ed95-5be069233ca7@collabora.com>
+Date:   Thu, 5 May 2022 10:08:20 +0200
 MIME-Version: 1.0
-References: <20220504153053.873100034@linuxfoundation.org>
-In-Reply-To: <20220504153053.873100034@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Thu, 5 May 2022 13:36:51 +0530
-Message-ID: <CA+G9fYsKrM1EJULYU=te5k7i11yijpF29PWPgB6qNaxssF09cA@mail.gmail.com>
-Subject: Re: [PATCH 5.15 000/177] 5.15.38-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 1/3] ASoC: dt-bindings: mediatek: mt8192: Add i2s-share
+ properties
+Content-Language: en-US
+To:     =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
+        <nfraprado@collabora.com>, Mark Brown <broonie@kernel.org>
+Cc:     kernel@collabora.com, Jiaxin Yu <jiaxin.yu@mediatek.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Shane Chien <shane.chien@mediatek.com>,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org
+References: <20220429203039.2207848-1-nfraprado@collabora.com>
+ <20220429203039.2207848-2-nfraprado@collabora.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220429203039.2207848-2-nfraprado@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,176 +64,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 4 May 2022 at 22:22, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 5.15.38 release.
-> There are 177 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Fri, 06 May 2022 15:25:19 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
-5.15.38-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-5.15.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+Il 29/04/22 22:30, Nícolas F. R. A. Prado ha scritto:
+> The Mediatek AFE PCM controller for MT8192 allows sharing of an I2S bus
+> between two busses. Add a pattern for these properties in the
+> dt-binding.
+> 
+> Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+> ---
+> 
+>   Documentation/devicetree/bindings/sound/mt8192-afe-pcm.yaml | 5 +++++
+>   1 file changed, 5 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/sound/mt8192-afe-pcm.yaml b/Documentation/devicetree/bindings/sound/mt8192-afe-pcm.yaml
+> index 7a25bc9b8060..5b03c8dbf318 100644
+> --- a/Documentation/devicetree/bindings/sound/mt8192-afe-pcm.yaml
+> +++ b/Documentation/devicetree/bindings/sound/mt8192-afe-pcm.yaml
+> @@ -54,6 +54,11 @@ properties:
+>         - const: aud_infra_clk
+>         - const: aud_infra_26m_clk
+>   
+> +patternProperties:
+> +  "^i2s[0-35-9]-share$":
+> +    description: Name of the I2S bus that is shared with this bus
+> +    pattern: "^I2S[0-35-9]$"
+> +
+>   required:
+>     - compatible
+>     - interrupts
+> 
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
+The only other way of doing this would be to complicate this in the driver
+so that we can do something like
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+"i2s-share = <0 2>";  instead of  i2s0-share = "I2S2";
 
-## Build
-* kernel: 5.15.38-rc1
-* git: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-=
-rc.git
-* git branch: linux-5.15.y
-* git commit: c8851235b4b74c00f49cc1cf05ab6f4a483e978e
-* git describe: v5.15.37-178-gc8851235b4b7
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.15.y/build/v5.15=
-.37-178-gc8851235b4b7
+...and I don't think that this would be any more straightforward than the
+provided way.
 
-## Test Regressions (compared to v5.15.37)
-No test regressions found.
+There's an improvement that we can do to that pattern description though,
+which would be explaining that declaring 'i2s0-share = "I2S2"' means that
+I2S2's data pin will be used as DATA-OUT, while i2s0 is DATA-IN.
 
-## Metric Regressions (compared to v5.15.37)
-No metric regressions found.
+Another thing that comes to mind here is that this is a MediaTek specific
+property and *not* a generic one, which means that both the driver and
+this binding should be fixed to get a "mediatek," prefix, so, this property
+should - in reality - be "mediatek,i2s[0-35-9]-share" instead.
 
-## Test Fixes (compared to v5.15.37)
-No test fixes found.
+I think that everyone agrees about that, but let's see what the others say.
 
-## Metric Fixes (compared to v5.15.37)
-No metric fixes found.
-
-## Test result summary
-total: 106754, pass: 90235, fail: 665, skip: 14702, xfail: 1152
-
-## Build Summary
-* arc: 10 total, 10 passed, 0 failed
-* arm: 291 total, 291 passed, 0 failed
-* arm64: 41 total, 41 passed, 0 failed
-* i386: 39 total, 39 passed, 0 failed
-* juno-r2: 1 total, 1 passed, 0 failed
-* mips: 37 total, 37 passed, 0 failed
-* parisc: 12 total, 12 passed, 0 failed
-* powerpc: 60 total, 54 passed, 6 failed
-* riscv: 27 total, 22 passed, 5 failed
-* s390: 21 total, 21 passed, 0 failed
-* sh: 24 total, 24 passed, 0 failed
-* sparc: 12 total, 12 passed, 0 failed
-* x86_64: 41 total, 41 passed, 0 failed
-
-## Test suites summary
-* fwts
-* igt-gpu-tools
-* kselftest-android
-* kselftest-arm64
-* kselftest-bpf
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-net
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* kunit
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* linux-log-parser
-* ltp-cap_bounds-tests
-* ltp-commands-tests
-* ltp-containers-tests
-* ltp-controllers-tests
-* ltp-cpuhotplug-tests
-* ltp-crypto-tests
-* ltp-cve-tests
-* ltp-dio-tests
-* ltp-fcntl-locktests-tests
-* ltp-filecaps-tests
-* ltp-fs-tests
-* ltp-fs_bind-tests
-* ltp-fs_perms_simple-tests
-* ltp-fsx-tests
-* ltp-hugetlb-tests
-* ltp-io-tests
-* ltp-ipc-tests
-* ltp-math-tests
-* ltp-mm-tests
-* ltp-nptl-tests
-* ltp-open-posix-tests
-* ltp-pty-tests
-* ltp-sched-tests
-* ltp-securebits-tests
-* ltp-syscalls-tests
-* ltp-tracing-tests
-* network-basic-tests
-* packetdrill
-* perf
-* perf/Zstd-perf.data-compression
-* rcutorture
-* ssuite
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org
+Cheers,
+Angelo

@@ -2,155 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D6CA51B91F
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 09:32:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D50251B925
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 09:32:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345011AbiEEHfE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 03:35:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43910 "EHLO
+        id S1345148AbiEEHf4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 03:35:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345015AbiEEHe7 (ORCPT
+        with ESMTP id S242062AbiEEHft (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 03:34:59 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2FD04838F;
-        Thu,  5 May 2022 00:31:20 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 794951F45B;
-        Thu,  5 May 2022 07:31:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1651735879; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=6jJUVSWEcAHn4h4WxX/y0FXvOs9oH3c8L78FJ4AX5R4=;
-        b=bMmhkndPmLBEUBU4jphvxPj/mOfHan/b5hO33KVT3FGnjYLncebvuefOrXBf7ysiIi5uPj
-        uYh9GgwcBYnThaZp4ykkkhMNcnF2Lzd3ViAQ6tyDEf836uNez/BLexDc5eLt0W0xDa/rXr
-        FZ+FzCQHBMlBp1zibKBFtrMp7BHdsWA=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1651735879;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=6jJUVSWEcAHn4h4WxX/y0FXvOs9oH3c8L78FJ4AX5R4=;
-        b=sNUwtEI3InnUZhY5U0O3A8GylV4lth/8A24k1HEbKYTo4NwyPo+3NQBhEcjFsHQNgHCPoj
-        dz4YbxfXZIkJi9Ag==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5048B13A65;
-        Thu,  5 May 2022 07:31:19 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id TjTFEkd9c2LdcQAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Thu, 05 May 2022 07:31:19 +0000
-Message-ID: <39017ccf-969b-d010-5e62-de74605eac84@suse.de>
-Date:   Thu, 5 May 2022 09:31:18 +0200
+        Thu, 5 May 2022 03:35:49 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1B7225CF;
+        Thu,  5 May 2022 00:32:10 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id j4so6055715lfh.8;
+        Thu, 05 May 2022 00:32:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=oB2KwW+fZDHqViOCO0SeVykq03oI7SrGtrTSNV/zeXw=;
+        b=BFRMgPCyAxXKzFPzrX83J2MXIK6omEstm896Lx2iPA/ubW3FXufIIDGSpcw8nP7CfZ
+         KT6VvMMcQWBRuio908uzwWeaZoaZF37iiYvkO9cu99FRdbR0RkWnJ/AsH6Bz3ptOkNC5
+         9kq+ZBstRLXItzwWciuW4x1sGY9BNgrvGL5YDH8eCFf9VF9MJ+7AMoz5Ti3TPSpcKo7J
+         SCqjV2razKzhfdKn1jwNKTN3W8e+110uqKe+UDoqurE1o07K8UnTvFMmgRQbpF/hqtl4
+         hXWiO544ygw/QY3BDhL4KzQP6+9CyF4G5ox7dFLLFzCaucoNe4kPJOOBSk1Srlly+IfH
+         6nRw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=oB2KwW+fZDHqViOCO0SeVykq03oI7SrGtrTSNV/zeXw=;
+        b=XTudahIcyIG14kXQ4rB9VynUcyDQmY4jtSmdSWirpO9Y3Jm/kl3ahXnV62TImTUsAq
+         frHHf47brvKcBzPlh41uDisJY/UZK3xw/UdnyeMD7HfvE7FErcAS2D+eDELy/GBf7YPm
+         wzfs2wAHilJVLnLdT59qRxm+p/7KS+q2BYpNLXzS5klt7cdbuam0Co4PqAexxvW6VR6s
+         hDfmZCh53FsLT/jP0FLEYQ1snSusDjxFaGFgRRANDmil3klHtUbjGUPbNsoT4PltqBX/
+         HQzZ58D0/fk/LJs9OglCZaackVK0hjXF/u+adDACalP0xCjXSAgF5YfFfBQovASLyaDU
+         rXlw==
+X-Gm-Message-State: AOAM533CCdtsfxvOyQi+jNwvQK0HJXY1NJuPFnuSsrO9NeA61JO8hPPJ
+        j3SLZ3qEup9tPfQMyaITrSUQ42ll97JrzRygGQE=
+X-Google-Smtp-Source: ABdhPJxdjK58CQrmJIEecoD5ChKmpWmyR/5zI/i8u9leJjHYWUtdHJ1LEMyH3OIqMm8fbt5BxCCWR/FljHxYpu4pjwA=
+X-Received: by 2002:a05:6512:c03:b0:447:7912:7e6b with SMTP id
+ z3-20020a0565120c0300b0044779127e6bmr17108146lfu.508.1651735928726; Thu, 05
+ May 2022 00:32:08 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH 1/3] fbdev: Prevent possible use-after-free in
- fb_release()
-Content-Language: en-US
-To:     Javier Martinez Canillas <javierm@redhat.com>,
-        linux-kernel@vger.kernel.org
-Cc:     linux-fbdev@vger.kernel.org,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Helge Deller <deller@gmx.de>, dri-devel@lists.freedesktop.org,
-        Daniel Vetter <daniel.vetter@intel.com>
-References: <20220504215151.55082-1-javierm@redhat.com>
- <20220504215631.56756-1-javierm@redhat.com>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <20220504215631.56756-1-javierm@redhat.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------m9jlwfCNRnsWJzgSPUoc0Gro"
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220503094728.926-1-ctcchien@nuvoton.com> <20220503094728.926-2-ctcchien@nuvoton.com>
+ <YnEAtQQ6Wnacfrub@zn.tnic>
+In-Reply-To: <YnEAtQQ6Wnacfrub@zn.tnic>
+From:   Medad Young <medadyoung@gmail.com>
+Date:   Thu, 5 May 2022 15:31:57 +0800
+Message-ID: <CAHpyw9dz-P76ioNoZJPty0A_iHcw6Yx_z1S01E9+xWou28BeUg@mail.gmail.com>
+Subject: Re: [PATCH v8 1/3] ARM: dts: nuvoton: Add memory controller node
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     rric@kernel.org, James Morse <james.morse@arm.com>,
+        tony.luck@intel.com, Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Patrick Venture <venture@google.com>, KWLIU@nuvoton.com,
+        YSCHU@nuvoton.com, JJLIU0@nuvoton.com, KFTING <KFTING@nuvoton.com>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>, ctcchien@nuvoton.com,
+        linux-edac <linux-edac@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        OpenBMC Maillist <openbmc@lists.ozlabs.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------m9jlwfCNRnsWJzgSPUoc0Gro
-Content-Type: multipart/mixed; boundary="------------dYCAb0oVJCI8hmk1sjhXkz28";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Javier Martinez Canillas <javierm@redhat.com>,
- linux-kernel@vger.kernel.org
-Cc: linux-fbdev@vger.kernel.org, Daniel Vetter <daniel.vetter@ffwll.ch>,
- Helge Deller <deller@gmx.de>, dri-devel@lists.freedesktop.org,
- Daniel Vetter <daniel.vetter@intel.com>
-Message-ID: <39017ccf-969b-d010-5e62-de74605eac84@suse.de>
-Subject: Re: [PATCH 1/3] fbdev: Prevent possible use-after-free in
- fb_release()
-References: <20220504215151.55082-1-javierm@redhat.com>
- <20220504215631.56756-1-javierm@redhat.com>
-In-Reply-To: <20220504215631.56756-1-javierm@redhat.com>
+Dear Borislav,
 
---------------dYCAb0oVJCI8hmk1sjhXkz28
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+Borislav Petkov <bp@alien8.de> =E6=96=BC 2022=E5=B9=B45=E6=9C=883=E6=97=A5 =
+=E9=80=B1=E4=BA=8C =E4=B8=8B=E5=8D=886:15=E5=AF=AB=E9=81=93=EF=BC=9A
+>
+> On Tue, May 03, 2022 at 05:47:26PM +0800, Medad CChien wrote:
+> > ECC must be configured in the BootBlock header.
+> > Then, you can read error counts via
+> > the EDAC kernel framework.
+> >
+> > Signed-off-by: Medad CChien <ctcchien@nuvoton.com>
+> > Reviewed-by: Borislav Petkov <bp@alien8.de>
+> > Reviewed-by: Paul Menzel <pmenzel@molgen.mpg.de>
+>
+> I don't think you understand the concept of Reviewed-by: tags. You
+> may add them to a patch of yours when the reviewer gives them to you
+> explicitly - not because she/he has given comments to a patch of yours.
+>
+> Please go over
+>
+> Documentation/process/
+>
+> and Documentation/process/submitting-patches.rst especially and then
+> send patches.
+>
+> Thx.
+>
 
-DQoNCkFtIDA0LjA1LjIyIHVtIDIzOjU2IHNjaHJpZWIgSmF2aWVyIE1hcnRpbmV6IENhbmls
-bGFzOg0KPiBGcm9tOiBEYW5pZWwgVmV0dGVyIDxkYW5pZWwudmV0dGVyQGZmd2xsLmNoPg0K
-PiANCj4gTW9zdCBmYmRldiBkcml2ZXJzIGhhdmUgaXNzdWVzIHdpdGggdGhlIGZiX2luZm8g
-bGlmZXRpbWUsIGJlY2F1c2UgY2FsbCB0bw0KPiBmcmFtZWJ1ZmZlcl9yZWxlYXNlKCkgZnJv
-bSB0aGVpciBkcml2ZXIncyAucmVtb3ZlIGNhbGxiYWNrLCByYXRoZXIgdGhhbg0KPiBkb2lu
-ZyBmcm9tIGZib3BzLmZiX2Rlc3Ryb3kgY2FsbGJhY2suDQo+IA0KPiBEb2luZyB0aGF0IHdp
-bGwgZGVzdHJveSB0aGUgZmJfaW5mbyB0b28gZWFybHksIHdoaWxlIHJlZmVyZW5jZXMgdG8g
-aXQgbWF5DQo+IHN0aWxsIGV4aXN0LCBsZWFkaW5nIHRvIGEgdXNlLWFmdGVyLWZyZWUgZXJy
-b3IuDQo+IA0KPiBUbyBwcmV2ZW50IHRoaXMsIGNoZWNrIHRoZSBmYl9pbmZvIHJlZmVyZW5j
-ZSBjb3VudGVyIHdoZW4gYXR0ZW1wdGluZyB0bw0KPiBrZnJlZSB0aGUgZGF0YSBzdHJ1Y3R1
-cmUgaW4gZnJhbWVidWZmZXJfcmVsZWFzZSgpLiBUaGF0IHdpbGwgbGVhayBpdCBidXQNCj4g
-YXQgbGVhc3Qgd2lsbCBwcmV2ZW50IHRoZSBtZW50aW9uZWQgZXJyb3IuDQo+IA0KPiBTaWdu
-ZWQtb2ZmLWJ5OiBEYW5pZWwgVmV0dGVyIDxkYW5pZWwudmV0dGVyQGludGVsLmNvbT4NCj4g
-U2lnbmVkLW9mZi1ieTogSmF2aWVyIE1hcnRpbmV6IENhbmlsbGFzIDxqYXZpZXJtQHJlZGhh
-dC5jb20+DQoNClJldmlld2VkLWJ5OiBUaG9tYXMgWmltbWVybWFubiA8dHppbW1lcm1hbm5A
-c3VzZS5kZT4NCg0KPiAtLS0NCj4gDQo+ICAgZHJpdmVycy92aWRlby9mYmRldi9jb3JlL2Zi
-c3lzZnMuYyB8IDQgKysrKw0KPiAgIDEgZmlsZSBjaGFuZ2VkLCA0IGluc2VydGlvbnMoKykN
-Cj4gDQo+IGRpZmYgLS1naXQgYS9kcml2ZXJzL3ZpZGVvL2ZiZGV2L2NvcmUvZmJzeXNmcy5j
-IGIvZHJpdmVycy92aWRlby9mYmRldi9jb3JlL2Zic3lzZnMuYw0KPiBpbmRleCAyNjg5Mjk0
-MGMyMTMuLjgyZTMxYTJkODQ1ZSAxMDA2NDQNCj4gLS0tIGEvZHJpdmVycy92aWRlby9mYmRl
-di9jb3JlL2Zic3lzZnMuYw0KPiArKysgYi9kcml2ZXJzL3ZpZGVvL2ZiZGV2L2NvcmUvZmJz
-eXNmcy5jDQo+IEBAIC04MCw2ICs4MCwxMCBAQCB2b2lkIGZyYW1lYnVmZmVyX3JlbGVhc2Uo
-c3RydWN0IGZiX2luZm8gKmluZm8pDQo+ICAgew0KPiAgIAlpZiAoIWluZm8pDQo+ICAgCQly
-ZXR1cm47DQo+ICsNCj4gKwlpZiAoV0FSTl9PTihyZWZjb3VudF9yZWFkKCZpbmZvLT5jb3Vu
-dCkpKQ0KPiArCQlyZXR1cm47DQo+ICsNCj4gICAJa2ZyZWUoaW5mby0+YXBlcnR1cmVzKTsN
-Cj4gICAJa2ZyZWUoaW5mbyk7DQo+ICAgfQ0KDQotLSANClRob21hcyBaaW1tZXJtYW5uDQpH
-cmFwaGljcyBEcml2ZXIgRGV2ZWxvcGVyDQpTVVNFIFNvZnR3YXJlIFNvbHV0aW9ucyBHZXJt
-YW55IEdtYkgNCk1heGZlbGRzdHIuIDUsIDkwNDA5IE7DvHJuYmVyZywgR2VybWFueQ0KKEhS
-QiAzNjgwOSwgQUcgTsO8cm5iZXJnKQ0KR2VzY2jDpGZ0c2bDvGhyZXI6IEl2byBUb3Rldg0K
+Sorry, I did misunderstand  the concept of Reviewed-by: tags.
+I will revise
+thanks
 
+> --
+> Regards/Gruss,
+>     Boris.
+>
+> https://people.kernel.org/tglx/notes-about-netiquette
 
---------------dYCAb0oVJCI8hmk1sjhXkz28--
-
---------------m9jlwfCNRnsWJzgSPUoc0Gro
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmJzfUYFAwAAAAAACgkQlh/E3EQov+C0
-jg/+OlTXlT+22OhaSOXgOLVxtLHi4Dbu2x2++k9NcgW+avrdhtiJij7Ii6EtW3xIKRRiq4i9//GR
-dDovZxNIlHV/bSNODx6/UD/jiN4uUnpQm+OXTDbkpwn5HFPqUw6HdA3vyNeMcBDsKEBWBM/NBtqA
-U9wUomva6oEp2sTz7fAP++8UySCmmplQzNDj4QnFZzbpcRdIYO5yljqmkuyFnr4mr0rRbgoTs/yr
-dpLf/10/GRH0hAc/SIiJ5TGGkKvIspQDUI+ipMX2iTkua625oReR4jPK5swnowihqTINNrlvM0za
-W/bbc2GfC0AnWbvRa4xigfzFLrvveNTgNegJfoL5jQHJfQap4bC/n+R6c4PxVZwqYAaiE80xCSQV
-9jiWCjcsX5vmrsbJAJPyLXSJV1w6IuBFAG1Lt0gVWmyqD8Tch0Xv6RZRwtbBFFKLiKRLe9/iDWX5
-+j9m/yZseCpBA10hSAqA1FaadxgQ5o/WDpN79qJ2thDlzuL6gGM0qVOGWL9b9bODcutl0quJWX8R
-vjK7cmoXk/6ItlmYw9dXu06Mv+T58IOoutM2SzjZBVp9DYoE1sbTTGV0hY0szYElkAFwosfzqKBo
-Yd9dOCAXxL+XnG3IqkNAMi67VmOQSa19ygpee+I33YBMYXmGOPoyIlZLJGvp12wGMofRKXXjvXod
-N1c=
-=32l8
------END PGP SIGNATURE-----
-
---------------m9jlwfCNRnsWJzgSPUoc0Gro--
+B.R.
+Medad

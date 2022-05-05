@@ -2,154 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A16B551C1A8
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 15:57:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EB4151C119
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 15:44:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380331AbiEEN7s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 09:59:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48990 "EHLO
+        id S1379849AbiEENqw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 09:46:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380276AbiEEN7R (ORCPT
+        with ESMTP id S239808AbiEENqu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 09:59:17 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8F071EEDE;
-        Thu,  5 May 2022 06:55:37 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id g23so5294141edy.13;
-        Thu, 05 May 2022 06:55:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=W4OY/JvmasUugHSn3rUmXaSkS514QXA0AsYyOrhfQQg=;
-        b=H8Ao8D+HKPoqzvyk98XDDUx5ZI7tA1FociIFIuzl17MmQWY+/ne9onYEyJ0AYfrm6M
-         WBl8sG1lg7rLJT+ffPgm8+ERj97fPvTeSbCsqbV/h6YlsCvpNUU/SH7E4nWQHwQU8Y0H
-         fQhXJQemxVsnGX6dt0rvSKqm47LDBgg9ByAAs+3RMv0Ot3YFjq3hLRfsG2DPniS3t4tp
-         WhEqGTIecb+TAtoJ4goXvh/SbiMP9gwzm/uIIgPQNy116BtfzSDWWjEaRdRfeoc2C1Te
-         o5Mry/99pzA8YkYpAYviJKCNP97gqiItOI+NtsW6Ppnw9ndyiGrdPcpP2ZSxG1ufiQh+
-         +Aig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=W4OY/JvmasUugHSn3rUmXaSkS514QXA0AsYyOrhfQQg=;
-        b=tDfJn+YuPVgaAmVyWZe9n82wFVcEnDpCX+it73cjRR17en3oTWOZxUDwkMsuX0NESr
-         vBqTx11eaPig5HP1RTIk5G4L2yquAqR9eUhhFzcARqAHYv9yd2FGxQNcglOMId3ZLW0Q
-         +XeYpk8Tc36nE0pzDebJPbYbT0FV+1ixP8zoph7p119lUu1ALbMS3l8vNjAO8k8UCnij
-         qcbS4KWDQNs07qsomy26s2SeupEUEotGIc0Wl58LuvLm8fzV5PViPbqYcxUuZTy1Ez6j
-         6LZIK2o+vtkLWIx2Ki55TKerJXMss/7GuvByNtl2TOh1I8NGK7vBWhBibEJ1xIR3ZP9o
-         SzvQ==
-X-Gm-Message-State: AOAM530JLQeWaONohBV7JkkCV9V9eMw0VEgNIJxxMIhcmfhLaP9woxPb
-        vgTkNMxActh+OshNjWGWXKQ=
-X-Google-Smtp-Source: ABdhPJxZtO2nEF1yJ6MjoitOsoR6NiKa4vbJTd4fTbtfyjCPOSo9zQI9bOEoP434SL7qulITdqNiPQ==
-X-Received: by 2002:a05:6402:2741:b0:41f:69dc:9bcd with SMTP id z1-20020a056402274100b0041f69dc9bcdmr30258922edd.239.1651758936244;
-        Thu, 05 May 2022 06:55:36 -0700 (PDT)
-Received: from localhost.lan (ip-194-187-74-233.konfederacka.maverick.com.pl. [194.187.74.233])
-        by smtp.gmail.com with ESMTPSA id e15-20020a50e44f000000b0042617ba63c7sm877949edm.81.2022.05.05.06.55.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 May 2022 06:55:35 -0700 (PDT)
-From:   =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Pavel Machek <pavel@ucw.cz>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
-        devicetree@vger.kernel.org, netdev@vger.kernel.org,
-        linux-leds@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        bcm-kernel-feedback-list@broadcom.com, ansuelsmth@gmail.com,
-        andrew@lunn.ch, vivien.didelot@gmail.com,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        John Crispin <john@phrozen.org>, linux-doc@vger.kernel.org,
-        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>
-Subject: [PATCH RESEND PoC] leds: trigger: netdev: support DT "trigger-sources" property
-Date:   Thu,  5 May 2022 15:55:12 +0200
-Message-Id: <20220505135512.3486-6-zajec5@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220505135512.3486-1-zajec5@gmail.com>
-References: <20220505135512.3486-1-zajec5@gmail.com>
+        Thu, 5 May 2022 09:46:50 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5875357158;
+        Thu,  5 May 2022 06:43:10 -0700 (PDT)
+Received: from canpemm500010.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KvFHx3QByzhYqf;
+        Thu,  5 May 2022 21:42:37 +0800 (CST)
+Received: from huawei.com (10.175.127.227) by canpemm500010.china.huawei.com
+ (7.192.105.118) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Thu, 5 May
+ 2022 21:43:07 +0800
+From:   Ye Bin <yebin10@huawei.com>
+To:     <tytso@mit.edu>, <adilger.kernel@dilger.ca>,
+        <linux-ext4@vger.kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <jack@suse.cz>,
+        <lczerner@redhat.com>, Ye Bin <yebin10@huawei.com>
+Subject: [PATCH -next] ext4: fix bug_on in ext4_writepages
+Date:   Thu, 5 May 2022 21:57:08 +0800
+Message-ID: <20220505135708.2629657-1-yebin10@huawei.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.127.227]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ canpemm500010.china.huawei.com (7.192.105.118)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rafał Miłecki <rafal@milecki.pl>
+we got issue as follows:
+EXT4-fs error (device loop0): ext4_mb_generate_buddy:1141: group 0, block bitmap and bg descriptor inconsistent: 25 vs 31513 free cls
+------------[ cut here ]------------
+kernel BUG at fs/ext4/inode.c:2708!
+invalid opcode: 0000 [#1] PREEMPT SMP KASAN PTI
+CPU: 2 PID: 2147 Comm: rep Not tainted 5.18.0-rc2-next-20220413+ #155
+RIP: 0010:ext4_writepages+0x1977/0x1c10
+RSP: 0018:ffff88811d3e7880 EFLAGS: 00010246
+RAX: 0000000000000000 RBX: 0000000000000001 RCX: ffff88811c098000
+RDX: 0000000000000000 RSI: ffff88811c098000 RDI: 0000000000000002
+RBP: ffff888128140f50 R08: ffffffffb1ff6387 R09: 0000000000000000
+R10: 0000000000000007 R11: ffffed10250281ea R12: 0000000000000001
+R13: 00000000000000a4 R14: ffff88811d3e7bb8 R15: ffff888128141028
+FS:  00007f443aed9740(0000) GS:ffff8883aef00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000000020007200 CR3: 000000011c2a4000 CR4: 00000000000006e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ do_writepages+0x130/0x3a0
+ filemap_fdatawrite_wbc+0x83/0xa0
+ filemap_flush+0xab/0xe0
+ ext4_alloc_da_blocks+0x51/0x120
+ __ext4_ioctl+0x1534/0x3210
+ __x64_sys_ioctl+0x12c/0x170
+ do_syscall_64+0x3b/0x90
 
-Parse "trigger-sources", find referenced netdev & use it as default
-trigger source.
+It may happen as follows:
+1. write inline_data inode
+vfs_write
+  new_sync_write
+    ext4_file_write_iter
+      ext4_buffered_write_iter
+        generic_perform_write
+	  ext4_da_write_begin
+	    ext4_da_write_inline_data_begin -> If inline data size too
+	    small will allocate block to write, then mapping will has
+	    dirty page
+	    	ext4_da_convert_inline_data_to_extent ->clear EXT4_STATE_MAY_INLINE_DATA
+2. fallocate
+do_vfs_ioctl
+  ioctl_preallocate
+    vfs_fallocate
+      ext4_fallocate
+        ext4_convert_inline_data
+	  ext4_convert_inline_data_nolock
+	    ext4_map_blocks -> fail will goto restore data
+	    ext4_restore_inline_data
+	      ext4_create_inline_data
+	      ext4_write_inline_data
+	      ext4_set_inode_state -> set inode EXT4_STATE_MAY_INLINE_DATA
+3. writepages
+__ext4_ioctl
+  ext4_alloc_da_blocks
+    filemap_flush
+      filemap_fdatawrite_wbc
+        do_writepages
+	  ext4_writepages
+	    if (ext4_has_inline_data(inode))
+	      BUG_ON(ext4_test_inode_state(inode, EXT4_STATE_MAY_INLINE_DATA))
 
-Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
+To solved this issue, record origin 'EXT4_STATE_MAY_INLINE_DATA' flag, then pass
+value to 'ext4_restore_inline_data', 'ext4_restore_inline_data' will
+decide to if recovery 'EXT4_STATE_MAY_INLINE_DATA' flag according to parameter.
+
+Signed-off-by: Ye Bin <yebin10@huawei.com>
 ---
-This is a proof on concept, please don't apply this patch. I'll rework
-this on top of Ansuel's netdev trigger refactoring once it gets accepted
-----
- drivers/leds/trigger/ledtrig-netdev.c | 26 ++++++++++++++++++++++++++
- 1 file changed, 26 insertions(+)
+ fs/ext4/inline.c | 13 +++++++++----
+ 1 file changed, 9 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/leds/trigger/ledtrig-netdev.c b/drivers/leds/trigger/ledtrig-netdev.c
-index d5e774d83021..c036a3671773 100644
---- a/drivers/leds/trigger/ledtrig-netdev.c
-+++ b/drivers/leds/trigger/ledtrig-netdev.c
-@@ -20,6 +20,8 @@
- #include <linux/list.h>
- #include <linux/module.h>
- #include <linux/netdevice.h>
-+#include <linux/of.h>
-+#include <linux/of_net.h>
- #include <linux/spinlock.h>
- #include <linux/timer.h>
- #include "../leds.h"
-@@ -389,6 +391,28 @@ static void netdev_trig_work(struct work_struct *work)
- 			(atomic_read(&trigger_data->interval)*2));
+diff --git a/fs/ext4/inline.c b/fs/ext4/inline.c
+index 9c076262770d..407061c79adc 100644
+--- a/fs/ext4/inline.c
++++ b/fs/ext4/inline.c
+@@ -1125,8 +1125,8 @@ static int ext4_update_inline_dir(handle_t *handle, struct inode *dir,
  }
  
-+static void netdev_trig_of_init(struct led_classdev *led_cdev)
-+{
-+	struct device *dev = led_cdev->dev;
-+	struct device_node *np = dev->of_node;
-+	struct of_phandle_args args;
-+	struct net_device *netdev;
-+	int err;
-+
-+	err = of_parse_phandle_with_args(np, "trigger-sources", "#trigger-source-cells", 0, &args);
-+	if (err || WARN_ON(!args.np)) {
-+		dev_err(dev, "Failed to get trigger source phandle: %d\n", err);
-+		return;
-+	}
-+
-+	netdev = of_find_net_device_by_node(args.np);
-+	if (netdev) {
-+		device_name_store(dev, NULL, netdev->name, strlen(netdev->name) + 1);
-+	}
-+
-+	of_node_put(args.np);
-+}
-+
- static int netdev_trig_activate(struct led_classdev *led_cdev)
+ static void ext4_restore_inline_data(handle_t *handle, struct inode *inode,
+-				     struct ext4_iloc *iloc,
+-				     void *buf, int inline_size)
++				     struct ext4_iloc *iloc, void *buf,
++				     int inline_size, bool has_data)
  {
- 	struct led_netdev_data *trigger_data;
-@@ -415,6 +439,8 @@ static int netdev_trig_activate(struct led_classdev *led_cdev)
+ 	int ret;
  
- 	led_set_trigger_data(led_cdev, trigger_data);
+@@ -1138,7 +1138,8 @@ static void ext4_restore_inline_data(handle_t *handle, struct inode *inode,
+ 		return;
+ 	}
+ 	ext4_write_inline_data(inode, iloc, buf, 0, inline_size);
+-	ext4_set_inode_state(inode, EXT4_STATE_MAY_INLINE_DATA);
++	if (has_data)
++		ext4_set_inode_state(inode, EXT4_STATE_MAY_INLINE_DATA);
+ }
  
-+	netdev_trig_of_init(led_cdev);
+ static int ext4_finish_convert_inline_dir(handle_t *handle,
+@@ -1194,6 +1195,7 @@ static int ext4_convert_inline_data_nolock(handle_t *handle,
+ 	struct buffer_head *data_bh = NULL;
+ 	struct ext4_map_blocks map;
+ 	int inline_size;
++	bool has_data;
+ 
+ 	inline_size = ext4_get_inline_size(inode);
+ 	buf = kmalloc(inline_size, GFP_NOFS);
+@@ -1222,6 +1224,8 @@ static int ext4_convert_inline_data_nolock(handle_t *handle,
+ 	if (error)
+ 		goto out;
+ 
++	has_data = !!ext4_test_inode_state(inode, EXT4_STATE_MAY_INLINE_DATA);
 +
- 	rc = register_netdevice_notifier(&trigger_data->notifier);
- 	if (rc)
- 		kfree(trigger_data);
+ 	map.m_lblk = 0;
+ 	map.m_len = 1;
+ 	map.m_flags = 0;
+@@ -1262,7 +1266,8 @@ static int ext4_convert_inline_data_nolock(handle_t *handle,
+ 	unlock_buffer(data_bh);
+ out_restore:
+ 	if (error)
+-		ext4_restore_inline_data(handle, inode, iloc, buf, inline_size);
++		ext4_restore_inline_data(handle, inode, iloc, buf,
++					 inline_size, has_data);
+ 
+ out:
+ 	brelse(data_bh);
 -- 
-2.34.1
+2.31.1
 

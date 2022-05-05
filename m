@@ -2,154 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82EEA51B49B
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 02:20:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04B3A51B49D
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 02:22:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230407AbiEEAXp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 20:23:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42296 "EHLO
+        id S231195AbiEEA0O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 20:26:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230027AbiEEAXn (ORCPT
+        with ESMTP id S229999AbiEEA0L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 20:23:43 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 673B618E06;
-        Wed,  4 May 2022 17:20:05 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 274F2B82A3E;
-        Thu,  5 May 2022 00:20:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E527C385A5;
-        Thu,  5 May 2022 00:20:01 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="LjvDclPy"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1651710000;
+        Wed, 4 May 2022 20:26:11 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A83755418F
+        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 17:22:33 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1651710151;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=/x+q8szNDEuBdV29gbI+Fv1fEqHBjjq0rW124DO+QnY=;
-        b=LjvDclPydox5jokMv+8kIIOdf4dsQqmeFatfQLF8P6adL/mNAFRwI33SovkQQmb73Ke43z
-        9ScUiXpoGrx9UAKUTWtg8LG2viDnxaOgzCTdseNNRKR7t/U8GZbkUuvJAxzlkR7EiEN9bY
-        jC1QlNYKz9ghPUUsSEG6g5Y8SWwM+DA=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 152a7184 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Thu, 5 May 2022 00:19:59 +0000 (UTC)
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org
-Cc:     nathan@kernel.org, "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Arnd Bergmann <arnd@arndb.de>, Theodore Ts'o <tytso@mit.edu>
-Subject: [PATCH v7] timekeeping: Add raw clock fallback for random_get_entropy()
-Date:   Thu,  5 May 2022 02:19:24 +0200
-Message-Id: <20220505001924.176087-1-Jason@zx2c4.com>
-In-Reply-To: <87y1zkmg0l.ffs@tglx>
-References: <87y1zkmg0l.ffs@tglx>
+        bh=AQX/yGqOrNtAiv8c6VVWkhD3MpwFQE6ubjan3C8pBjA=;
+        b=qE9sI66f07H+FJHWJUq89EnPFvjktmbfFHlqnDmfKoQYlyY6Xru63QyKRQj/zDGCNQ2Cja
+        wHNhAxFZwkk7fVS1KPnEmAS/gGzYLpXs3tjLVt9TEjNtC25gDNVd0KN0o0rL65PFpFYVu/
+        NdN0HFjSW3lNhCXSXS38Rubp00QvR7LW0AVC8SnoTNIC3NdpGw33E3RK3XNKgGZ+bu4Z6T
+        PaQCFyYaykuDAI6X3/S1/ecL2Vviey08T4vayDmm47Tse6ZoD1Rs4OF6RdkIbIRkhBQtBc
+        zphAFEhc5XhsC8LkZ5wO70amLoEpy3Hf5fyS6BX7UA33BfluY+gPX6R1XsP9aw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1651710151;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=AQX/yGqOrNtAiv8c6VVWkhD3MpwFQE6ubjan3C8pBjA=;
+        b=HdqMIHAFqpNh4x48lnYKsQm758zUPyXBLExVqtHifcxGWhWSK5i/JW/8r1BkVjhiVwPvTp
+        9q29YAeybp7qnHDw==
+To:     Matthew Wilcox <willy@infradead.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>
+Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
+        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: Wait for mutex to become unlocked
+In-Reply-To: <YnLzrGlBNCmCPLmS@casper.infradead.org>
+References: <YnLzrGlBNCmCPLmS@casper.infradead.org>
+Date:   Thu, 05 May 2022 02:22:30 +0200
+Message-ID: <87pmksj0ah.ffs@tglx>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The addition of random_get_entropy_fallback() provides access to
-whichever time source has the highest frequency, which is useful for
-gathering entropy on platforms without available cycle counters. It's
-not necessarily as good as being able to quickly access a cycle counter
-that the CPU has, but it's still something, even when it falls back to
-being jiffies-based.
+On Wed, May 04 2022 at 22:44, Matthew Wilcox wrote:
+> The customer has a low priority task which wants to read /proc/pid/smaps
+> of a higher priority task.  Today, everything is awful; smaps acquires
+> mmap_sem read-only, is preempted, then the high-pri task calls mmap()
+> and the down_write(mmap_sem) blocks on the low-pri task.  Then all the
+> other threads in the high-pri task block on the mmap_sem as they take
+> page faults because we don't want writers to starve.
 
-In the event that a given arch does not define get_cycles(), falling
-back to the get_cycles() default implementation that returns 0 is really
-not the best we can do. Instead, at least calling
-random_get_entropy_fallback() would be preferable, because that always
-needs to return _something_, even falling back to jiffies eventually.
-It's not as though random_get_entropy_fallback() is super high precision
-or guaranteed to be entropic, but basically anything that's not zero all
-the time is better than returning zero all the time.
+Welcome to the wonderful world of priority inversion.
 
-Finally, since random_get_entropy_fallback() is used during extremely
-early boot when randomizing freelists in mm_init(), it can be called
-before timekeeping has been initialized. In that case there really is
-nothing we can do; jiffies hasn't even started ticking yet. So just give
-up and return 0.
+> So this is Good.  For the vast majority of cases, we avoid taking the
+> mmap read lock and the problem will appear much less often.  But we can
+> do Better with a new API.  You see, for this case, we don't actually
+> want to acquire the mmap_sem; we're happy to spin a bit, but there's no
+> point in spinning waiting for the writer to finish when we can sleep.
+> I'd like to write this code:
+>
+> again:
+> 	rcu_read_lock();
+> 	vma = vma_lookup();
+> 	if (down_read_trylock(&vma->sem)) {
+> 		rcu_read_unlock();
+> 	} else {
+> 		rcu_read_unlock();
+> 		rwsem_wait_read(&mm->mmap_sem);
+> 		goto again;
+> 	}
+>
+> That is, rwsem_wait_read() puts the thread on the rwsem's wait queue,
+> and wakes it up without giving it the lock.  Now this thread will never
+> be able to block any thread that tries to acquire mmap_sem for write.
 
-Suggested-by: Thomas Gleixner <tglx@linutronix.de>
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
-Reviewed-by: Thomas Gleixner <tglx@linutronix.de>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Theodore Ts'o <tytso@mit.edu>
----
-Changes v6->v7:
-- Return 0 if we're called before timekeeping has been initialized,
-  reported by Nathan.
+Never?
 
- include/linux/timex.h     |  8 ++++++++
- kernel/time/timekeeping.c | 10 ++++++++++
- 2 files changed, 18 insertions(+)
+ 	if (down_read_trylock(&vma->sem)) {
 
-diff --git a/include/linux/timex.h b/include/linux/timex.h
-index 5745c90c8800..3871b06bd302 100644
---- a/include/linux/timex.h
-+++ b/include/linux/timex.h
-@@ -62,6 +62,8 @@
- #include <linux/types.h>
- #include <linux/param.h>
- 
-+unsigned long random_get_entropy_fallback(void);
-+
- #include <asm/timex.h>
- 
- #ifndef random_get_entropy
-@@ -74,8 +76,14 @@
-  *
-  * By default we use get_cycles() for this purpose, but individual
-  * architectures may override this in their asm/timex.h header file.
-+ * If a given arch does not have get_cycles(), then we fallback to
-+ * using random_get_entropy_fallback().
-  */
-+#ifdef get_cycles
- #define random_get_entropy()	((unsigned long)get_cycles())
-+#else
-+#define random_get_entropy()	random_get_entropy_fallback()
-+#endif
- #endif
- 
- /*
-diff --git a/kernel/time/timekeeping.c b/kernel/time/timekeeping.c
-index dcdcb85121e4..7cd2ec239cae 100644
---- a/kernel/time/timekeeping.c
-+++ b/kernel/time/timekeeping.c
-@@ -17,6 +17,7 @@
- #include <linux/clocksource.h>
- #include <linux/jiffies.h>
- #include <linux/time.h>
-+#include <linux/timex.h>
- #include <linux/tick.h>
- #include <linux/stop_machine.h>
- #include <linux/pvclock_gtod.h>
-@@ -2380,6 +2381,15 @@ static int timekeeping_validate_timex(const struct __kernel_timex *txc)
- 	return 0;
- }
- 
-+/**
-+ * random_get_entropy_fallback - Returns the raw clock source value,
-+ * used by random.c for platforms with no valid random_get_entropy().
-+ */
-+unsigned long random_get_entropy_fallback(void)
-+{
-+	return tk_clock_read(&tk_core.timekeeper.tkr_mono);
-+}
-+EXPORT_SYMBOL_GPL(random_get_entropy_fallback);
- 
- /**
-  * do_adjtimex() - Accessor function to NTP __do_adjtimex function
--- 
-2.35.1
+---> preemption by writer
 
+The writer will still block and depending on the rest of the runnable
+threads it can take quite a while until the low prio reader comes back
+on a CPU.
+
+I grant you that the propability will decrease, but 'never' is just
+wishful thinking.
+
+> Similarly, it may make sense to add rwsem_wait_write() and mutex_wait().
+> Perhaps also mutex_wait_killable() and mutex_wait_interruptible()
+> (the combinatoric explosion is a bit messy; I don't know that it makes
+> sense to do the _nested, _io variants).
+>
+> Does any of this make sense?
+
+TBH, no.
+
+If we start opening this can of worms, then we'll see tons of "customer
+want's a pony" problems being solved by half baken "solutions" which
+will exactly cause the combinatoric explosion you are worried about.
+
+If there is a legitimate requirement to retrieve such information, then
+we are better off thinking about a general approach of introspection,
+which makes such information available as unreliable snapshots
+retrievable with RCU protection.
+
+The information gathered from /proc/pid/smaps is unreliable at the point
+where the lock is dropped already today. So it does not make a
+difference whether the VMAs have a 'read me if you really think it's
+useful' sideband information which gets updated when the VMA changes and
+allows to do:
+
+ 	rcu_read_lock();
+ 	vma = vma_lookup();
+        if (vma)
+                dump(vma->info);
+        rcu_read_unlock();
+
+You still need to decide, whether you want to provide that information
+or not for a particular interface, but that's way more sane than the
+'make locking more complex for questionable value' approach.
+
+But looking at the stuff which gets recomputed and reevaluated in that
+proc/smaps code this makes a lot of sense, because most if not all of
+this information is already known at the point where the VMA is modified
+while holding mmap_sem for useful reasons, no?
+
+So no, we don't want to add more magic locking functions which pretend
+to solve unsolvable problems. We rather go and make use of information
+which is already available by providing a less archaic access mechanism.
+
+What you are trying to do here is just adding to technical debt IMNSHO.
+
+Thanks,
+
+        tglx

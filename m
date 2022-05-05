@@ -2,58 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7D8B51CCBF
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 01:29:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E7E951CCC1
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 01:31:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386790AbiEEXdS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 19:33:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40500 "EHLO
+        id S1386795AbiEEXfJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 19:35:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241255AbiEEXdP (ORCPT
+        with ESMTP id S239216AbiEEXfG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 19:33:15 -0400
-Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F46960A99
-        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 16:29:34 -0700 (PDT)
-Received: from fsav115.sakura.ne.jp (fsav115.sakura.ne.jp [27.133.134.242])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 245NTAcP068515;
-        Fri, 6 May 2022 08:29:10 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav115.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav115.sakura.ne.jp);
- Fri, 06 May 2022 08:29:09 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav115.sakura.ne.jp)
-Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-        (authenticated bits=0)
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 245NT9sU068510
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
-        Fri, 6 May 2022 08:29:09 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Message-ID: <a0d6b5e4-b9c8-1a43-570f-4c73b0f6fc0c@I-love.SAKURA.ne.jp>
-Date:   Fri, 6 May 2022 08:29:07 +0900
+        Thu, 5 May 2022 19:35:06 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F1185E77F
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 16:31:25 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id x18so5799710plg.6
+        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 16:31:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Dk85sWuvWwyFVSp6EaPRyXx5QUr9wUHTKQTFrQ86w9c=;
+        b=VGyCsfpxonBGljswD8tfluQxqkgxzE2Jm6aBEYg3Bs4U7qL3AcjZk5MOOqkHF2LBKr
+         ZBI52zr6myjmu+7/Y6K09j7Z6myWTyNRotQffYjE7Av+XSkaMgw4luRMY+l7mCss/lLS
+         k4bqNNQUiHasVoLGJExVtJJTkbnhQvTO1B59g=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Dk85sWuvWwyFVSp6EaPRyXx5QUr9wUHTKQTFrQ86w9c=;
+        b=NjD/ROZXY4PRH49KXBHU0UItD5jyFj5umQW3n8da/+hdQDFz0ahNnkWV4NfYn9qXdb
+         PfLY3j23O4CSGRqfubbQSR1vcNbyPHSTKQtx/1wZx4/ncHTIpa0bQuVRrvElpMZr36LM
+         kNWe+wSKj62jMMxkfIJ3Osaapu7THdvM7attpv4zLSY4r5nJtJwXfyuckpDBONdBjqy0
+         Hx8fTogu/rOQxCI8SyFZEActnSDLcpcgI8pcpDU78mS0rIcmf8V0Rl3/a2vConkczyT8
+         DuWaDJYfM9uEwPfJgYLia5uT2NRlElhW+tL5gjNJ4y8n8IBk+GeXeIKfOFDVNN+u+yll
+         JT6g==
+X-Gm-Message-State: AOAM53212xBdSv5FEw15FdTb4bXIIdI37VzZ9dk8xINy3vjPNSwkB1CJ
+        KIcR2tj3wBWjdTjkFiUx8XQxPg==
+X-Google-Smtp-Source: ABdhPJxH+ypbt+mk2nYkMlhFdncL+IzYFTyUt8newyL0X7o+W+8oDNFZLei2V9TQRXdacwcM952gAQ==
+X-Received: by 2002:a17:90a:730c:b0:1da:4630:518e with SMTP id m12-20020a17090a730c00b001da4630518emr785478pjk.239.1651793484604;
+        Thu, 05 May 2022 16:31:24 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id h2-20020a170902f70200b0015e8d4eb2cbsm153810plo.277.2022.05.05.16.31.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 May 2022 16:31:23 -0700 (PDT)
+From:   Kees Cook <keescook@chromium.org>
+To:     Raju Rangoju <rajur@chelsio.com>
+Cc:     Kees Cook <keescook@chromium.org>,
+        kernel test robot <lkp@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        stable@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2] net: chelsio: cxgb4: Avoid potential negative array offset
+Date:   Thu,  5 May 2022 16:31:01 -0700
+Message-Id: <20220505233101.1224230-1-keescook@chromium.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH] checkpatch: warn about flushing system-wide workqueues
-Content-Language: en-US
-To:     Tejun Heo <tj@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Joe Perches <joe@perches.com>,
-        Andy Whitcroft <apw@canonical.com>,
-        Dwaipayan Ray <dwaipayanray1@gmail.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-References: <d34dac10-c12f-8bda-35c4-9cb158781db2@I-love.SAKURA.ne.jp>
- <a6288570ed3534b0316723061f5604e3871accef.camel@perches.com>
- <6e4ed62e-888b-6e7a-c13d-67656f39ca94@I-love.SAKURA.ne.jp>
- <738afe71-2983-05d5-f0fc-d94efbdf7634@I-love.SAKURA.ne.jp>
- <YnQKNea6KWFaWNis@slm.duckdns.org>
-From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-In-Reply-To: <YnQKNea6KWFaWNis@slm.duckdns.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4559; h=from:subject; bh=UPw9JrMNx/oB5GYowYRkwaqWmTgDk6MsLr0FPBcBgQY=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBidF40hYaMLJgXj8olYq6kdxmrN4lNiUzmUn5c3l0W HGi5yAWJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYnReNAAKCRCJcvTf3G3AJjdjEA Cj2tF/TXIA6laBYY6MPfrUeB8XyihZQY1nrEREAXcISDaQveOLuaKbIP77YdV4UJG2qM6kK6caNs7Q +j6i8TCsoY8yz5RcJxwXXYL50OJdhoSQfc8Wf2/TfdOdAF9UDhwpHAuHo0AhV1dHYMcTTh16SOMrX4 eHQj/YjGSSHFJzPhUdI6LM2csVkNoNUBRzMThDXhtJ+3PV8PQr3DZfSwIr5Ogqw3CE+kUaFRFuJj+O 0IZfKjg0MBB5svqQuRaRTiIXhDsUL5zS6+Jusjli5T5IvnxRTRDfZMqWvcsxCME1agJhIz9z99K4nc bAnZL0asN9ZV9BTUY0tTxLYnEG7j/cgMJvB9jS1cBWigpfYRfkIP2vbKTclwrUbD+yGCyhBkQWZvLS HJFzAhExnwQxYITTwyaLbTO8W0YDOYOJ9EYmmkNcSJYCb4bEb6o8LCuj3guOdvKfZ8KxzFA0Ixr4LG f0rEiHV7EtFhJsme28QscbCGbjqp3OTEUyZu+17GSsvNWbxnvXh9AHKboF5Wmf0yDWzYpCMBeYqHqV GGp5MGxWweHDDPI4G28rKp9YJppivmfbUCxw/D2KJmoWgAqxI4hwWA1bmOF5dRgTrbx9vcCDYCHOeh x5w3iXmMxXesKSSI2PwPSLVjBVW4xreOK0J4uTqHbHeXbMG5ydCVF5+TjMrA==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,33 +74,94 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/05/06 2:32, Tejun Heo wrote:
-> Given that we'll need runtime check anyway, why not resurrect the original
-> runtime warning but exempt flush_schedule_work() if that's the only thing
-> remaining right now (using a special flag or whatever)?
+Using min_t(int, ...) as a potential array index implies to the compiler
+that negative offsets should be allowed. This is not the case, though.
+Replace "int" with "unsigned int". Fixes the following warning exposed
+under future CONFIG_FORTIFY_SOURCE improvements:
 
-Yes, we will also need runtime check for robustness, for we can't catch usage
-like
+In file included from include/linux/string.h:253,
+                 from include/linux/bitmap.h:11,
+                 from include/linux/cpumask.h:12,
+                 from include/linux/smp.h:13,
+                 from include/linux/lockdep.h:14,
+                 from include/linux/rcupdate.h:29,
+                 from include/linux/rculist.h:11,
+                 from include/linux/pid.h:5,
+                 from include/linux/sched.h:14,
+                 from include/linux/delay.h:23,
+                 from drivers/net/ethernet/chelsio/cxgb4/t4_hw.c:35:
+drivers/net/ethernet/chelsio/cxgb4/t4_hw.c: In function 't4_get_raw_vpd_params':
+include/linux/fortify-string.h:46:33: warning: '__builtin_memcpy' pointer overflow between offset 29 and size [2147483648, 4294967295] [-Warray-bounds]
+   46 | #define __underlying_memcpy     __builtin_memcpy
+      |                                 ^
+include/linux/fortify-string.h:388:9: note: in expansion of macro '__underlying_memcpy'
+  388 |         __underlying_##op(p, q, __fortify_size);                        \
+      |         ^~~~~~~~~~~~~
+include/linux/fortify-string.h:433:26: note: in expansion of macro '__fortify_memcpy_chk'
+  433 | #define memcpy(p, q, s)  __fortify_memcpy_chk(p, q, s,                  \
+      |                          ^~~~~~~~~~~~~~~~~~~~
+drivers/net/ethernet/chelsio/cxgb4/t4_hw.c:2796:9: note: in expansion of macro 'memcpy'
+ 2796 |         memcpy(p->id, vpd + id, min_t(int, id_len, ID_LEN));
+      |         ^~~~~~
+include/linux/fortify-string.h:46:33: warning: '__builtin_memcpy' pointer overflow between offset 0 and size [2147483648, 4294967295] [-Warray-bounds]
+   46 | #define __underlying_memcpy     __builtin_memcpy
+      |                                 ^
+include/linux/fortify-string.h:388:9: note: in expansion of macro '__underlying_memcpy'
+  388 |         __underlying_##op(p, q, __fortify_size);                        \
+      |         ^~~~~~~~~~~~~
+include/linux/fortify-string.h:433:26: note: in expansion of macro '__fortify_memcpy_chk'
+  433 | #define memcpy(p, q, s)  __fortify_memcpy_chk(p, q, s,                  \
+      |                          ^~~~~~~~~~~~~~~~~~~~
+drivers/net/ethernet/chelsio/cxgb4/t4_hw.c:2798:9: note: in expansion of macro 'memcpy'
+ 2798 |         memcpy(p->sn, vpd + sn, min_t(int, sn_len, SERNUM_LEN));
+      |         ^~~~~~
 
-	struct workqueue_struct *my_wq = alloc_workqueue();
-	if (!my_wq)
-		my_wq = system_long_wq;
-	flush_workqueue(my_wq);
+Additionally remove needless cast from u8[] to char * in last strim()
+call.
 
-using compile time checks.
+Reported-by: kernel test robot <lkp@intel.com>
+Link: https://lore.kernel.org/lkml/202205031926.FVP7epJM-lkp@intel.com
+Fixes: fc9279298e3a ("cxgb4: Search VPD with pci_vpd_find_ro_info_keyword()")
+Fixes: 24c521f81c30 ("cxgb4: Use pci_vpd_find_id_string() to find VPD ID string")
+Cc: Raju Rangoju <rajur@chelsio.com>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Eric Dumazet <edumazet@google.com>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: Paolo Abeni <pabeni@redhat.com>
+Cc: netdev@vger.kernel.org
+Cc: stable@vger.kernel.org
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+v1: https://lore.kernel.org/lkml/20220503144425.2858110-1-keescook@chromium.org/
+v2: use min_t again.
+---
+ drivers/net/ethernet/chelsio/cxgb4/t4_hw.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-I found that it is not easy to trigger flush_workqueue() paths. For example,
-several modules are using flush_workqueue() only upon module unloading.
-Therefore, I'm trying to catch obvious flush_workqueue() paths at compile
-time when possible.
-
->                                                         If we're sure that
-> we aren't triggering it spuriously, we can ask Andrew to take the warning
-> patch into -mm so that it floats on top of everything else and gets pulled
-> into the trunk during the coming merge window.
-
-OK, the coming merge window means 5.19.
-
-The original runtime checking will be used anyway. Is "workqueue: Wrap
-flush_workqueue() using a macro" OK for you as a compile time check?
+diff --git a/drivers/net/ethernet/chelsio/cxgb4/t4_hw.c b/drivers/net/ethernet/chelsio/cxgb4/t4_hw.c
+index e7b4e3ed056c..8d719f82854a 100644
+--- a/drivers/net/ethernet/chelsio/cxgb4/t4_hw.c
++++ b/drivers/net/ethernet/chelsio/cxgb4/t4_hw.c
+@@ -2793,14 +2793,14 @@ int t4_get_raw_vpd_params(struct adapter *adapter, struct vpd_params *p)
+ 		goto out;
+ 	na = ret;
+ 
+-	memcpy(p->id, vpd + id, min_t(int, id_len, ID_LEN));
++	memcpy(p->id, vpd + id, min_t(unsigned int, id_len, ID_LEN));
+ 	strim(p->id);
+-	memcpy(p->sn, vpd + sn, min_t(int, sn_len, SERNUM_LEN));
++	memcpy(p->sn, vpd + sn, min_t(unsigned int, sn_len, SERNUM_LEN));
+ 	strim(p->sn);
+-	memcpy(p->pn, vpd + pn, min_t(int, pn_len, PN_LEN));
++	memcpy(p->pn, vpd + pn, min_t(unsigned int, pn_len, PN_LEN));
+ 	strim(p->pn);
+-	memcpy(p->na, vpd + na, min_t(int, na_len, MACADDR_LEN));
+-	strim((char *)p->na);
++	memcpy(p->na, vpd + na, min_t(unsigned int, na_len, MACADDR_LEN));
++	strim(p->na);
+ 
+ out:
+ 	vfree(vpd);
+-- 
+2.32.0
 

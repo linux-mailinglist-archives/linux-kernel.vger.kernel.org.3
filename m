@@ -2,98 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E99A51B942
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 09:36:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0434251B947
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 09:38:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345355AbiEEHk1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 03:40:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47896 "EHLO
+        id S1345403AbiEEHmI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 03:42:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345357AbiEEHkY (ORCPT
+        with ESMTP id S235142AbiEEHmF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 03:40:24 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACF0248E59;
-        Thu,  5 May 2022 00:36:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=wcYnBFlZFnuL55r/7R4vP4SWucs4Cfa2ZGuWm0/JeN4=; b=Mef7Zg8e6eUtD1INYhQtlDQDK2
-        TnLMqT87vd+VUwl51mcl7AmONX5pV/tgJ0uw7oTAwA7caDwbAukT4DnHzM8KLsHAsS9h9m+DgpXuG
-        +vZiTI4lrPOlk+6McJj9+HclMTCtZGIETMOAMT5HqfbSX5vWN6kdGECWPnC2bc6QU14ROKZ/njaTk
-        P/frbgH2tbsIm+YynyjOXa/y3RbefwHuSkpyLgOuwHCTiJpEqGhu595W7vOTiU7+3kkTAFKsBRGbx
-        2HEU+isTfSeF35GTlMtDZkhil0YktLztT2YFIxRy6Xht0XtGFMZdpMqVPuxA3tnx+vbxF/Ljm5v+Z
-        GEa2qq6g==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nmW2D-00HN1E-Dk; Thu, 05 May 2022 07:36:25 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id EBDE8980DFE; Thu,  5 May 2022 09:36:22 +0200 (CEST)
-Date:   Thu, 5 May 2022 09:36:22 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Sami Tolvanen <samitolvanen@google.com>
-Cc:     Peter Collingbourne <pcc@google.com>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Joao Moreira <joao@overdrivepizza.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-hardening@vger.kernel.org, andrew.cooper3@citrix.com,
-        Kees Cook <keescook@chromium.org>,
-        Mark Rutland <mark.rutland@arm.com>, hjl.tools@gmail.com,
-        alyssa.milburn@linux.intel.com,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        gabriel.gomes@linux.intel.com, rick.p.edgecombe@intel.com
-Subject: Re: [RFC PATCH 01/11] x86: kernel FineIBT
-Message-ID: <20220505073622.GC2501@worktop.programming.kicks-ass.net>
-References: <20220420004241.2093-1-joao@overdrivepizza.com>
- <20220420004241.2093-2-joao@overdrivepizza.com>
- <20220429013704.4n4lmadpstdioe7a@treble>
- <d82459b887bcaf9181ad836051e2d16b@overdrivepizza.com>
- <20220503220244.vyz5flk3gg3y6rbw@treble>
- <YnJTYzralOhGGmED@hirez.programming.kicks-ass.net>
- <YnKx5a9WvJ1UhWPm@google.com>
- <YnLDGcJGKfqi5+8w@hirez.programming.kicks-ass.net>
- <CABCJKueqqq-keiyE8tYJQtfitxQt08vQwEfG41C8t3aJC8AwKQ@mail.gmail.com>
+        Thu, 5 May 2022 03:42:05 -0400
+X-Greylist: delayed 194 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 05 May 2022 00:38:26 PDT
+Received: from us-smtp-delivery-74.mimecast.com (us-smtp-delivery-74.mimecast.com [170.10.129.74])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 595DB488AC
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 00:38:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1651736305;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=b9rpry9zAS0NImcSGkX84W35fGXZlxRLYAukKDROuGs=;
+        b=hcnos0Zfz4dtsnjmOwXDcj4tT9XdCnguKVeIE6jymBjahHNoMqojaR+cOTYquet7kuhvhj
+        b6lNYjWEVWjTbCG7LkkN7zR9pZu/Vyr5ih6qy8+QcRVQYovX5YzxzbMxkIzkklPhR/sZmD
+        x4Kt6WjF6WrdWyZM0KLkCt/+A1MD49A=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-141-ZPodbWEcM76ip_3clU7xFQ-1; Thu, 05 May 2022 03:38:20 -0400
+X-MC-Unique: ZPodbWEcM76ip_3clU7xFQ-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 5B0A3185A79C;
+        Thu,  5 May 2022 07:38:20 +0000 (UTC)
+Received: from starship (unknown [10.40.192.26])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 39E1540CF8FE;
+        Thu,  5 May 2022 07:38:18 +0000 (UTC)
+Message-ID: <a323749a15c76c32bb7e94a7f65b25de122c4065.camel@redhat.com>
+Subject: Re: [PATCH v3 03/14] KVM: SVM: Detect X2APIC virtualization
+ (x2AVIC) support
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Cc:     pbonzini@redhat.com, seanjc@google.com, joro@8bytes.org,
+        jon.grimm@amd.com, wei.huang2@amd.com, terry.bowman@amd.com
+Date:   Thu, 05 May 2022 10:38:17 +0300
+In-Reply-To: <3af75c05-40e9-2371-b5a9-c702853a974e@amd.com>
+References: <20220504073128.12031-1-suravee.suthikulpanit@amd.com>
+         <20220504073128.12031-4-suravee.suthikulpanit@amd.com>
+         <a883ff438d6202f2dc0458dc4d7c1ab3688f5db8.camel@redhat.com>
+         <3af75c05-40e9-2371-b5a9-c702853a974e@amd.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CABCJKueqqq-keiyE8tYJQtfitxQt08vQwEfG41C8t3aJC8AwKQ@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 04, 2022 at 05:28:57PM -0700, Sami Tolvanen wrote:
-> On Wed, May 4, 2022 at 11:17 AM Peter Zijlstra <peterz@infradead.org> wrote:
-> > __cfi_\sym:                                     __cfi_\sym:
-> >                                                         int3; int3                              # 2
-> >         endbr                   # 4                     mov     \hash, %eax                     # 5
-> >         call    __fineibt_\hash # 5                     int3; int3                              # 2
-> > \sym:                                           \sym:
+On Thu, 2022-05-05 at 11:07 +0700, Suravee Suthikulpanit wrote:
+> Maxim,
 > 
-> OK, that looks reasonable to me.
+> On 5/4/22 7:12 PM, Maxim Levitsky wrote:
+> > > diff --git a/arch/x86/kvm/svm/avic.c b/arch/x86/kvm/svm/avic.c
+> > > index a8f514212b87..fc3ba6071482 100644
+> > > --- a/arch/x86/kvm/svm/avic.c
+> > > +++ b/arch/x86/kvm/svm/avic.c
+> > > @@ -40,6 +40,15 @@
+> > >   #define AVIC_GATAG_TO_VMID(x)		((x >> AVIC_VCPU_ID_BITS) & AVIC_VM_ID_MASK)
+> > >   #define AVIC_GATAG_TO_VCPUID(x)		(x & AVIC_VCPU_ID_MASK)
+> > >   
+> > > +enum avic_modes {
+> > > +	AVIC_MODE_NONE = 0,
+> > > +	AVIC_MODE_X1,
+> > > +	AVIC_MODE_X2,
+> > > +};
+> > > +
+> > > +static bool force_avic;
+> > > +module_param_unsafe(force_avic, bool, 0444);
+> > > +
+> > >   /* Note:
+> > >    * This hash table is used to map VM_ID to a struct kvm_svm,
+> > >    * when handling AMD IOMMU GALOG notification to schedule in
+> > > @@ -50,6 +59,7 @@ static DEFINE_HASHTABLE(svm_vm_data_hash, SVM_VM_DATA_HASH_BITS);
+> > >   static u32 next_vm_id = 0;
+> > >   static bool next_vm_id_wrapped = 0;
+> > >   static DEFINE_SPINLOCK(svm_vm_data_hash_lock);
+> > > +static enum avic_modes avic_mode;
+> > >   
+> > >   /*
+> > >    * This is a wrapper of struct amd_iommu_ir_data.
+> > > @@ -1077,3 +1087,33 @@ void avic_vcpu_unblocking(struct kvm_vcpu *vcpu)
+> > >   
+> > >   	avic_vcpu_load(vcpu);
+> > >   }
+> > > +
+> > > +/*
+> > > + * Note:
+> > > + * - The module param avic enable both xAPIC and x2APIC mode.
+> > > + * - Hypervisor can support both xAVIC and x2AVIC in the same guest.
+> > > + * - The mode can be switched at run-time.
+> > > + */
+> > > +bool avic_hardware_setup(struct kvm_x86_ops *x86_ops)
+> > > +{
+> > > +	if (!npt_enabled)
+> > > +		return false;
+> > > +
+> > > +	if (boot_cpu_has(X86_FEATURE_AVIC)) {
+> > > +		avic_mode = AVIC_MODE_X1;
+> > > +		pr_info("AVIC enabled\n");
+> > > +	} else if (force_avic) {
+> > > +		pr_warn("AVIC is not supported in CPUID but force enabled");
+> > > +		pr_warn("Your system might crash and burn");
+> > I think in this case avic_mode should also be set to AVIC_MODE_X1
+> > (Hopefully this won't be needed for systems that have x2avic enabled)
 > 
-> > It seems to preserve the properties of the last one in that direct calls
-> > will already be correct and we don't need linker fixups, and objtool can
-> > simply parse the preamble as regular instructions without needing
-> > further help.
+> You are right. My appology :(
 > 
-> Wouldn't objtool still print out unreachable instruction warnings here?
+> Actually, x2AVIC depends on both CPUID bits (i.e. X86_FEATURE_AVIC and X86_FEATURE_X2AVIC).
+> If the force_avic option is only applicable to only the X86_FEATURE_AVIC bit, we would
+> need to check for the following condition before enabling x2AVIC support in the driver:
+> 
+>    if ((X86_FEATURE_AVIC | avic_force) & X86_FEATURE_X2AVIC)
+> 	avic_mode = AVIC_MODE_X2
 
-Depends a bit on what kind of symbol they end up being, if they're
-STT_FUNC we'll probably get the complaint that it falls through into the
-next symbol, while if they're STT_NOTYPE then yes, we'll get the
-unreachable thing.
+Let it be just for AVIC_MODE_X1, that is
 
-So either way we need to special case the __cfi_\sym things anyway.
+else if (force_avic) {
+	pr_warn("AVIC is not supported in CPUID but force enabled");
+	pr_warn("Your system might crash and burn");
+	avic_mode = AVIC_MODE_X1;
 
-But that should be relatively straight forward. I think I would lean
-towards making then STT_FUNC (they really are for FineIBT anyway) and
-then supressing the fallthrough warning for all functions that start
-with "__cfi_". This way we get an ORC entry for them and the unwinder
-will be happy.
+Best regards,
+	Maxim Levitsky
+
+> 
+> Regards,
+> Suravee
+> 
+> 
+
+

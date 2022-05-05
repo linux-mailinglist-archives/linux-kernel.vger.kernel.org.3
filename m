@@ -2,156 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DC3551CBF2
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 00:13:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BBDB51CBF3
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 00:13:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386225AbiEEWRD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 18:17:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35232 "EHLO
+        id S1386233AbiEEWRJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 18:17:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386177AbiEEWQ7 (ORCPT
+        with ESMTP id S1386227AbiEEWRG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 18:16:59 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF8A85EBCF
-        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 15:13:18 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id x18so7799479wrc.0
-        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 15:13:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=pqUrx2G73vCZU3RKcd1QDtqQBikNfcSkQr6QFJTd/RI=;
-        b=S959801w4vdtlsza92BrRIUGnFjCeKV2Y+izFx2I3sC62pe/+7Q80xrV7Xagcv54Fn
-         /FjZsa8tjCnmwsnodGMvUZusxWjxV3N3JFU2H8caiVJtWfQLs41NJFrjt6gxbMKZFJtH
-         b8wIglZAzlG1/a3ILKWXxNnGeYFi99ORwFCt+NWdVZwFAFupXavZDZeH+5yDjoD4kbuv
-         pReCVEmFPYqNo3tqT++zHhzQlHfpGzodgaVdYmj9059hU6/Q/KzJEign6GoP+M/plv+J
-         DOwjlRDO8ni8Rw27n+4NNTkVOfnSPsdwimwRjMI7PhJgBPQcRaov/g0L9CMqtlIJk7A5
-         dgNQ==
+        Thu, 5 May 2022 18:17:06 -0400
+Received: from mail-oo1-f49.google.com (mail-oo1-f49.google.com [209.85.161.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F359D5EBDB;
+        Thu,  5 May 2022 15:13:25 -0700 (PDT)
+Received: by mail-oo1-f49.google.com with SMTP id c22-20020a4ad216000000b0035f13ae7646so950522oos.9;
+        Thu, 05 May 2022 15:13:25 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=pqUrx2G73vCZU3RKcd1QDtqQBikNfcSkQr6QFJTd/RI=;
-        b=1FBE0KCvLnFAZCRWeGajs6d624HYVhfQQrPcIneEKa5kfSUFmfe0q6qJUAdfVMo4AD
-         X8rF88WtNgR40Unal8HeOkYfl7t3CaY5rCTgCIzje5kwUU/rNnYmh17AfKqED01BLb5U
-         JUfStmWyQgwxMvbaP+9hHccMefgvpiKC8LuiYRbf/xOPIPW/mwAaGPvsE07c2//C0NjB
-         AgL0A9nwNvnJPZytj7Oe11gq/hD7Y0r0KxkE20vM5ksu/0MO1BSylk0NoZg1QTHMp8dz
-         Z9cTur+KMDQyMmdr0Dj84Tlj4Sp3r2ZLXF/ZqwC9KrnOifbnWp4V4eBwTHAy5anmxdqN
-         na5A==
-X-Gm-Message-State: AOAM531iEolA7eOQr6nLd5lx4Du8tayETsfj/fgyUTr6CwyZrGtICXxA
-        HVtDlXzCl+VdkGmuCoO62BSmXiXhMY6dkEjBw+PuqytB31CEig==
-X-Google-Smtp-Source: ABdhPJyckM9L+k3pCxnqo7frUskiB7nV7HLmfhb3ujWuEI0FVvqnQKyEN431BiXvhMZ5xz7NjvJp5N84EUSm69biBaI=
-X-Received: by 2002:adf:d1e9:0:b0:20c:6c76:14d5 with SMTP id
- g9-20020adfd1e9000000b0020c6c7614d5mr171232wrd.375.1651788797279; Thu, 05 May
- 2022 15:13:17 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Dw6mDqUtW1IcBDmIT9Uj1tyD3+Ete1lc8k+iE+64oyU=;
+        b=si/qP2bNxsW7CuFIICiTijnPBFHgruCvS9ac30PKsEiU03n4+2T9B6lJq0+gEDD8PP
+         i3tloOq3zpD7WW5/H70KrtIl+eEwDB7VrbAadWdCCAiOnQHf1eCGPZtx+Vhr+3hkOeht
+         warniryIRRQlEtZPBJxTsQnMNyjVbYv+V1BwVP1+rDc9Q4/aDt0SlKsFMk3EZUeg9LHm
+         h247QrC5/bj82ZHUtYi7rgbRLtpWqz+yYzZa2Jl3yx3f9c+RRr56xpu2Vc572uB+GbTg
+         NTLsy/hsXPGMKiJ1ICZszOW2++1TjMMwVHT4uLZe5nZA1TQN7FyrZdfbzFTRpZ2VBRA/
+         oZLQ==
+X-Gm-Message-State: AOAM532jvTQtma3sse+YpKKOPLf/nU/ux64i0LbVLvoddP/2ODY1GUK+
+        Evcu7/FbjDAxWXM+xIQCPU5WYPpN0A==
+X-Google-Smtp-Source: ABdhPJxOc5FVD8sT0nwIy21thI5XYRxSYUZPQaP+QealOffMPjtb78oG9toMKYoC2Im9NqI1BQy6Bw==
+X-Received: by 2002:a4a:621e:0:b0:35e:950e:6be8 with SMTP id x30-20020a4a621e000000b0035e950e6be8mr101204ooc.41.1651788805243;
+        Thu, 05 May 2022 15:13:25 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id fp13-20020a056870658d00b000edf5a12baasm927193oab.46.2022.05.05.15.13.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 May 2022 15:13:24 -0700 (PDT)
+Received: (nullmailer pid 288773 invoked by uid 1000);
+        Thu, 05 May 2022 22:13:24 -0000
+Date:   Thu, 5 May 2022 17:13:24 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Stanislav Jakubek <stano.jakubek@gmail.com>
+Cc:     Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-kernel@vger.kernel.org,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        linux-unisoc@lists.infradead.org,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: [PATCH RESEND,v2] dt-bindings: timer: Convert rda,8810pl-timer
+ to YAML
+Message-ID: <YnRMBKKn02Ut+Z/G@robh.at.kernel.org>
+References: <20220504175502.GA2573@standask-GA-A55M-S2HP>
 MIME-Version: 1.0
-References: <20220505165639.361733-1-adrian.hunter@intel.com> <20220505165639.361733-12-adrian.hunter@intel.com>
-In-Reply-To: <20220505165639.361733-12-adrian.hunter@intel.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Thu, 5 May 2022 15:13:03 -0700
-Message-ID: <CAP-5=fVHsH5Q=nQpNdhPZGuYMDDB6HPYqPG5x24u7pjGLxsEcA@mail.gmail.com>
-Subject: Re: [PATCH V1 11/23] perf auxtrace: Remove auxtrace_mmap_params__set_idx()
- per_cpu parameter
-To:     Adrian Hunter <adrian.hunter@intel.com>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Leo Yan <leo.yan@linaro.org>, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220504175502.GA2573@standask-GA-A55M-S2HP>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 5, 2022 at 9:57 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
->
-> Remove auxtrace_mmap_params__set_idx() per_cpu parameter because it isn't
-> needed.
->
-> Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
+On Wed, 04 May 2022 19:55:02 +0200, Stanislav Jakubek wrote:
+> Convert RDA Micro Timer bindings to DT schema format.
+> 
+> Signed-off-by: Stanislav Jakubek <stano.jakubek@gmail.com>
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 > ---
->  tools/perf/util/auxtrace.c | 5 +++--
->  tools/perf/util/auxtrace.h | 3 +--
->  tools/perf/util/evlist.c   | 3 +--
->  tools/perf/util/mmap.c     | 3 +--
->  4 files changed, 6 insertions(+), 8 deletions(-)
->
-> diff --git a/tools/perf/util/auxtrace.c b/tools/perf/util/auxtrace.c
-> index b446cfa66469..ac4e4660932d 100644
-> --- a/tools/perf/util/auxtrace.c
-> +++ b/tools/perf/util/auxtrace.c
-> @@ -169,9 +169,10 @@ void auxtrace_mmap_params__init(struct auxtrace_mmap_params *mp,
->
->  void auxtrace_mmap_params__set_idx(struct auxtrace_mmap_params *mp,
->                                    struct evlist *evlist,
-> -                                  struct evsel *evsel, int idx,
-> -                                  bool per_cpu)
-> +                                  struct evsel *evsel, int idx)
->  {
-> +       bool per_cpu = !perf_cpu_map__empty(evlist->core.user_requested_cpus);
-> +
->         mp->mmap_needed = evsel->needs_auxtrace_mmap;
->
->         if (!mp->mmap_needed)
-> diff --git a/tools/perf/util/auxtrace.h b/tools/perf/util/auxtrace.h
-> index 4e715e2d9291..7931c34f749a 100644
-> --- a/tools/perf/util/auxtrace.h
-> +++ b/tools/perf/util/auxtrace.h
-> @@ -492,8 +492,7 @@ void auxtrace_mmap_params__init(struct auxtrace_mmap_params *mp,
->                                 bool auxtrace_overwrite);
->  void auxtrace_mmap_params__set_idx(struct auxtrace_mmap_params *mp,
->                                    struct evlist *evlist,
-> -                                  struct evsel *evsel, int idx,
-> -                                  bool per_cpu);
-> +                                  struct evsel *evsel, int idx);
+> Changes in v2:
+>   - Collect Krzysztof's and Manivannan's R-b's
+> 
+> It's been a month since the original v2, 2 months since v1,
+> so I figured it's about time for a resend.
+> 
+>  .../bindings/timer/rda,8810pl-timer.txt       | 20 --------
+>  .../bindings/timer/rda,8810pl-timer.yaml      | 47 +++++++++++++++++++
+>  MAINTAINERS                                   |  2 +-
+>  3 files changed, 48 insertions(+), 21 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/timer/rda,8810pl-timer.txt
+>  create mode 100644 Documentation/devicetree/bindings/timer/rda,8810pl-timer.yaml
+> 
 
-A similar change is needed on line 868 for when HAVE_AUXTRACE_SUPPORT
-isn't defined.
-
-Thanks,
-Ian
-
->
->  typedef int (*process_auxtrace_t)(struct perf_tool *tool,
->                                   struct mmap *map,
-> diff --git a/tools/perf/util/evlist.c b/tools/perf/util/evlist.c
-> index 996bdc203616..25eae096bdac 100644
-> --- a/tools/perf/util/evlist.c
-> +++ b/tools/perf/util/evlist.c
-> @@ -753,10 +753,9 @@ perf_evlist__mmap_cb_idx(struct perf_evlist *_evlist,
->  {
->         struct evlist *evlist = container_of(_evlist, struct evlist, core);
->         struct mmap_params *mp = container_of(_mp, struct mmap_params, core);
-> -       bool per_cpu = !perf_cpu_map__empty(_evlist->user_requested_cpus);
->         struct evsel *evsel = container_of(_evsel, struct evsel, core);
->
-> -       auxtrace_mmap_params__set_idx(&mp->auxtrace_mp, evlist, evsel, idx, per_cpu);
-> +       auxtrace_mmap_params__set_idx(&mp->auxtrace_mp, evlist, evsel, idx);
->  }
->
->  static struct perf_mmap*
-> diff --git a/tools/perf/util/mmap.c b/tools/perf/util/mmap.c
-> index de59c4da852b..a4dff881be39 100644
-> --- a/tools/perf/util/mmap.c
-> +++ b/tools/perf/util/mmap.c
-> @@ -63,8 +63,7 @@ void __weak auxtrace_mmap_params__init(struct auxtrace_mmap_params *mp __maybe_u
->  void __weak auxtrace_mmap_params__set_idx(struct auxtrace_mmap_params *mp __maybe_unused,
->                                           struct evlist *evlist __maybe_unused,
->                                           struct evsel *evsel __maybe_unused,
-> -                                         int idx __maybe_unused,
-> -                                         bool per_cpu __maybe_unused)
-> +                                         int idx __maybe_unused)
->  {
->  }
->
-> --
-> 2.25.1
->
+Applied, thanks!

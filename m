@@ -2,448 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6C6E51B9B0
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 10:10:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3372F51B9C4
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 10:13:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346729AbiEEIOO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 04:14:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46584 "EHLO
+        id S1346825AbiEEIQk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 04:16:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346670AbiEEIOL (ORCPT
+        with ESMTP id S1346700AbiEEIQe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 04:14:11 -0400
-Received: from us-smtp-delivery-74.mimecast.com (us-smtp-delivery-74.mimecast.com [170.10.129.74])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CBFF921E01
-        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 01:10:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651738229;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=W38gAA92CbwpAJsovXhkL/wbuo3RfiQzorzsE5/cLJM=;
-        b=Lt5I0Q0nLdeIEtqAM0XFhLpboHHGBjVGY1VtpGYD6NI/C2MtpCkG162Gna+74maS6xVfqB
-        F4nt5bHqoIEWVB3G3+CnUqgy7b6rTZyNxDOOxE8vmfNzQefwd5mR8q8yISZXUgWkwCLC3V
-        JRzgCwgl28I64TnxOqpDmcLAuHWhzT4=
-Received: from mail-pl1-f200.google.com (mail-pl1-f200.google.com
- [209.85.214.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-633-Sn4XYjm-P0iKkXChyHlnlw-1; Thu, 05 May 2022 04:10:28 -0400
-X-MC-Unique: Sn4XYjm-P0iKkXChyHlnlw-1
-Received: by mail-pl1-f200.google.com with SMTP id m11-20020a170902f64b00b0015820f8038fso1929424plg.23
-        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 01:10:28 -0700 (PDT)
+        Thu, 5 May 2022 04:16:34 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6C1D47AD2
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 01:12:54 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id m20so7212913ejj.10
+        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 01:12:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ffwll.ch; s=google;
+        h=date:from:to:cc:subject:message-id:mail-followup-to:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=HGg12g7rqV6st3fX8w/ctnDqBvDsC80/xO++kQycD7o=;
+        b=W6QD2uraJIvioMM9fyC+0Oiy7cWSHGHMC5pGskeQFPUekBSjtiKm3A70QIEWNq7Sh5
+         VHhAw8hpfYagzTcrcMnO/hTb04SOcTe5+Mfj4gD6ifM0bAYMuh0fCSo7taWQKTU+4m31
+         dnKZxrmpJh8nR6mgozp6BQibK09vKIbIrpwKg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=W38gAA92CbwpAJsovXhkL/wbuo3RfiQzorzsE5/cLJM=;
-        b=7Xn1xJsgqzwZKv+eMnKi03bv8gGelUtJLfdVu/5susf31wyT5+XU6m0pn/SFFjTVMf
-         ifFSvwlrFuIr0n+heCqCII8ClukKViYBLCs97rOFYMFJRzcEPQdOU83yi3M2SPo8vixe
-         7iY8RnP750UxGTCD2TWoWLhQjRcbBCvP7m3A9sAEocAGK7mUsmQm1wGMyb7AXa6sy6cd
-         QKkWUD+QyzrXw/7iTSHCTZfrA4ErTttvsaeXHxrPyrzqYHmocDh2nZ1LRVVykWvWFWvw
-         +u+6nFQpSYmBD1B4Uz8iGKB1uRay5s65Ev2LPwHY2WA8RiwZp9bm0ZrJknHaVv9EjtLb
-         2VAA==
-X-Gm-Message-State: AOAM533tCyQc56iuYA7FDk+/zfweR6s9qV+b6K9G0e9e78z2ISm1m0Vd
-        hB57FzZTiRgSFhgo0fI0pMV/oLIw+dFtPgA+ntQO5On2IraYX0nfIlK2ydTsrw0yhKQakJCbJNP
-        F731QCqA3QzF8VntHMa/z6ADN
-X-Received: by 2002:a17:90b:4b01:b0:1dc:7405:dd62 with SMTP id lx1-20020a17090b4b0100b001dc7405dd62mr4671456pjb.160.1651738227264;
-        Thu, 05 May 2022 01:10:27 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzJNmzcOYcJPY6GOPWW5DcJvaF45auJSncbZBBzW/G+F4/k471Veg764kO7NTNAVVQ8RLluPA==
-X-Received: by 2002:a17:90b:4b01:b0:1dc:7405:dd62 with SMTP id lx1-20020a17090b4b0100b001dc7405dd62mr4671434pjb.160.1651738226985;
-        Thu, 05 May 2022 01:10:26 -0700 (PDT)
-Received: from [10.72.13.116] ([209.132.188.80])
-        by smtp.gmail.com with ESMTPSA id pf5-20020a17090b1d8500b001cd4989ff64sm874792pjb.43.2022.05.05.01.10.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 05 May 2022 01:10:26 -0700 (PDT)
-Message-ID: <813999b5-8e7e-b9c1-c63a-ca5a80d520b6@redhat.com>
-Date:   Thu, 5 May 2022 16:10:19 +0800
+        h=x-gm-message-state:date:from:to:cc:subject:message-id
+         :mail-followup-to:references:mime-version:content-disposition
+         :content-transfer-encoding:in-reply-to;
+        bh=HGg12g7rqV6st3fX8w/ctnDqBvDsC80/xO++kQycD7o=;
+        b=zCgseNqgaxyfpm4/2Q+IuLJC7fyqSuauhqjwALnsscZDFLdz6TSPSW+IUBqfog1GW+
+         rRYUdf6U0RMAgOtrHUxLuGOQVHdDYGuCMfhJguS2fHLPaRGujDWd8aQtcXxA8fIGBNi/
+         WpUs08cYcG8O7gusUIJHZXJ2bYmkTsnGQDfT4Wg8DoFuTdhtOA9oPb5LY2v0Rpe9qGiI
+         XfbODvAcyF3fEKzrsrzEntWHDR1D3PrSaTKJsBMCD0zpYsLS/TOZFbUxakEbfTb0KXOw
+         yZTeWZh5QDmQBCWluyzCPkXB13l9F/Dm+47kSYMoEcdv+ZUsc4Lg3TqubZN4UDKUiK82
+         Zjbw==
+X-Gm-Message-State: AOAM5322o03lxz/zt2j8tOprBPgn9bbTGXqjh8Kl+kZS13HtA/q28Brj
+        redAZSVH3HmCrFAEEPpZoYsvGQ==
+X-Google-Smtp-Source: ABdhPJy/OlYDHV4abt2gnWtLXTtgDhEwCbc9MHayNWwoiurjDqvY2ogAsYMRzgyNYsm6uejfvxCNrQ==
+X-Received: by 2002:a17:907:2cc6:b0:6f0:2de3:9446 with SMTP id hg6-20020a1709072cc600b006f02de39446mr24511672ejc.690.1651738373298;
+        Thu, 05 May 2022 01:12:53 -0700 (PDT)
+Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
+        by smtp.gmail.com with ESMTPSA id gz14-20020a170907a04e00b006f3ef214e62sm447457ejc.200.2022.05.05.01.12.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 May 2022 01:12:52 -0700 (PDT)
+Date:   Thu, 5 May 2022 10:12:50 +0200
+From:   Daniel Vetter <daniel@ffwll.ch>
+To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>
+Cc:     Daniel Stone <daniel@fooishbar.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Gurchetan Singh <gurchetansingh@chromium.org>,
+        Chia-I Wu <olvaffe@gmail.com>,
+        Daniel Almeida <daniel.almeida@collabora.com>,
+        Gert Wollny <gert.wollny@collabora.com>,
+        Gustavo Padovan <gustavo.padovan@collabora.com>,
+        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
+        Rob Clark <robdclark@gmail.com>,
+        Emil Velikov <emil.l.velikov@gmail.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        virtualization@lists.linux-foundation.org
+Subject: Re: [PATCH v4 10/15] drm/shmem-helper: Take reservation lock instead
+ of drm_gem_shmem locks
+Message-ID: <YnOHAh9I1ds4+1J+@phenom.ffwll.local>
+Mail-Followup-To: Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        Daniel Stone <daniel@fooishbar.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>, Gerd Hoffmann <kraxel@redhat.com>,
+        Gurchetan Singh <gurchetansingh@chromium.org>,
+        Chia-I Wu <olvaffe@gmail.com>,
+        Daniel Almeida <daniel.almeida@collabora.com>,
+        Gert Wollny <gert.wollny@collabora.com>,
+        Gustavo Padovan <gustavo.padovan@collabora.com>,
+        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>, Rob Herring <robh@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
+        Rob Clark <robdclark@gmail.com>,
+        Emil Velikov <emil.l.velikov@gmail.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Dmitry Osipenko <digetx@gmail.com>, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        virtualization@lists.linux-foundation.org
+References: <20220417223707.157113-1-dmitry.osipenko@collabora.com>
+ <20220417223707.157113-11-dmitry.osipenko@collabora.com>
+ <248083d2-b8f2-a4d7-099d-70a7e7859c11@suse.de>
+ <d9e7bec1-fffb-e0c4-8659-ef3ce2c31280@collabora.com>
+ <YmlYHNlcmNMfOeyy@phenom.ffwll.local>
+ <8f932ab0-bb72-8fea-4078-dc59e9164bd4@collabora.com>
+ <YnI3lE0TxLfZaQjE@phenom.ffwll.local>
+ <01506516-ab2f-cb6e-7507-f2a3295efb59@collabora.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.8.1
-Subject: Re: [PATCH v3 1/2] vdpa: Add support for querying vendor statistics
-Content-Language: en-US
-To:     Eli Cohen <elic@nvidia.com>, Si-Wei Liu <si-wei.liu@oracle.com>,
-        "mst@redhat.com" <mst@redhat.com>
-Cc:     "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20220502102201.190357-1-elic@nvidia.com>
- <20220502102201.190357-2-elic@nvidia.com>
- <f279bbbb-6af2-95f4-08c3-97ba72deb6cb@oracle.com>
- <DM8PR12MB5400350099D5A2C932C32B07ABC09@DM8PR12MB5400.namprd12.prod.outlook.com>
- <f54e1450-bdd0-860c-5962-90f312234134@oracle.com>
- <DM8PR12MB5400F57667C36D579F2EF95CABC39@DM8PR12MB5400.namprd12.prod.outlook.com>
-From:   Jason Wang <jasowang@redhat.com>
-In-Reply-To: <DM8PR12MB5400F57667C36D579F2EF95CABC39@DM8PR12MB5400.namprd12.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <01506516-ab2f-cb6e-7507-f2a3295efb59@collabora.com>
+X-Operating-System: Linux phenom 5.10.0-8-amd64 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, May 04, 2022 at 06:56:09PM +0300, Dmitry Osipenko wrote:
+> On 5/4/22 11:21, Daniel Vetter wrote:
+> ...
+> >>> - Maybe also do what you suggest and keep a separate lock for this, but
+> >>>   the fundamental issue is that this doesn't really work - if you share
+> >>>   buffers both ways with two drivers using shmem helpers, then the
+> >>>   ordering of this vmap_count_mutex vs dma_resv_lock is inconsistent and
+> >>>   you can get some nice deadlocks. So not a great approach (and also the
+> >>>   reason why we really need to get everyone to move towards dma_resv_lock
+> >>>   as _the_ buffer object lock, since otherwise we'll never get a
+> >>>   consistent lock nesting hierarchy).
+> >>
+> >> The separate locks should work okay because it will be always the
+> >> exporter that takes the dma_resv_lock. But I agree that it's less ideal
+> >> than defining the new rules for dma-bufs since sometime you will take
+> >> the resv lock and sometime not, potentially hiding bugs related to lockings.
+> > 
+> > That's the issue, some importers need to take the dma_resv_lock for
+> > dma_buf_vmap too (e.g. to first nail the buffer in place when it's a
+> > dynamic memory manager). In practice it'll work as well as what we have
+> > currently, which is similarly inconsistent, except with per-driver locks
+> > instead of shared locks from shmem helpers or dma-buf, so less obvious
+> > that things are inconsistent.
+> > 
+> > So yeah if it's too messy maybe the approach is to have a separate lock
+> > for vmap for now, land things, and then fix up dma_buf_vmap in a follow up
+> > series.
+> 
+> The amdgpu driver was the fist who introduced the concept of movable
+> memory for dma-bufs. Now we want to support it for DRM SHMEM too. For
+> both amdgpu ttm and shmem drivers we will want to hold the reservation
+> lock when we're touching moveable buffers. The current way of denoting
+> that dma-buf is movable is to implement the pin/unpin callbacks of the
+> dma-buf ops, should be doable for shmem.
 
-在 2022/5/4 13:44, Eli Cohen 写道:
->
->> -----Original Message-----
->> From: Si-Wei Liu <si-wei.liu@oracle.com>
->> Sent: Wednesday, May 4, 2022 7:44 AM
->> To: Eli Cohen <elic@nvidia.com>; mst@redhat.com; jasowang@redhat.com
->> Cc: virtualization@lists.linux-foundation.org; linux-kernel@vger.kernel.org
->> Subject: Re: [PATCH v3 1/2] vdpa: Add support for querying vendor statistics
->>
->>
->>
->> On 5/2/2022 10:13 PM, Eli Cohen wrote:
->>>> -----Original Message-----
->>>> From: Si-Wei Liu <si-wei.liu@oracle.com>
->>>> Sent: Tuesday, May 3, 2022 2:48 AM
->>>> To: Eli Cohen <elic@nvidia.com>; mst@redhat.com; jasowang@redhat.com
->>>> Cc: virtualization@lists.linux-foundation.org; linux-kernel@vger.kernel.org
->>>> Subject: Re: [PATCH v3 1/2] vdpa: Add support for querying vendor statistics
->>>>
->>>>
->>>>
->>>> On 5/2/2022 3:22 AM, Eli Cohen wrote:
->>>>> Allows to read vendor statistics of a vdpa device. The specific
->>>>> statistics data are received from the upstream driver in the form of an
->>>>> (attribute name, attribute value) pairs.
->>>>>
->>>>> An example of statistics for mlx5_vdpa device are:
->>>>>
->>>>> received_desc - number of descriptors received by the virtqueue
->>>>> completed_desc - number of descriptors completed by the virtqueue
->>>>>
->>>>> A descriptor using indirect buffers is still counted as 1. In addition,
->>>>> N chained descriptors are counted correctly N times as one would expect.
->>>>>
->>>>> A new callback was added to vdpa_config_ops which provides the means for
->>>>> the vdpa driver to return statistics results.
->>>>>
->>>>> The interface allows for reading all the supported virtqueues, including
->>>>> the control virtqueue if it exists.
->>>>>
->>>>> Below are some examples taken from mlx5_vdpa which are introduced in the
->>>>> following patch:
->>>>>
->>>>> 1. Read statistics for the virtqueue at index 1
->>>>>
->>>>> $ vdpa dev vstats show vdpa-a qidx 1
->>>>> vdpa-a:
->>>>> queue_type tx queue_index 1 received_desc 3844836 completed_desc 3844836
->>>>>
->>>>> 2. Read statistics for the virtqueue at index 32
->>>>> $ vdpa dev vstats show vdpa-a qidx 32
->>>>> vdpa-a:
->>>>> queue_type control_vq queue_index 32 received_desc 62 completed_desc 62
->>>>>
->>>>> 3. Read statisitics for the virtqueue at index 0 with json output
->>>>> $ vdpa -j dev vstats show vdpa-a qidx 0
->>>>> {"vstats":{"vdpa-a":{
->>>>> "queue_type":"rx","queue_index":0,"name":"received_desc","value":417776,\
->>>>>     "name":"completed_desc","value":417548}}}
->>>>>
->>>>> 4. Read statistics for the virtqueue at index 0 with preety json output
->>>>> $ vdpa -jp dev vstats show vdpa-a qidx 0
->>>>> {
->>>>>        "vstats": {
->>>>>            "vdpa-a": {
->>>>>
->>>>>                "queue_type": "rx",
->>>>>                "queue_index": 0,
->>>>>                "name": "received_desc",
->>>>>                "value": 417776,
->>>>>                "name": "completed_desc",
->>>>>                "value": 417548
->>>>>            }
->>>>>        }
->>>>> }
->>>>>
->>>>> Signed-off-by: Eli Cohen <elic@nvidia.com>
->>>>> ---
->>>>>     drivers/vdpa/vdpa.c       | 129 ++++++++++++++++++++++++++++++++++++++
->>>>>     include/linux/vdpa.h      |   5 ++
->>>>>     include/uapi/linux/vdpa.h |   6 ++
->>>>>     3 files changed, 140 insertions(+)
->>>>>
->>>>> diff --git a/drivers/vdpa/vdpa.c b/drivers/vdpa/vdpa.c
->>>>> index 2b75c00b1005..933466f61ca8 100644
->>>>> --- a/drivers/vdpa/vdpa.c
->>>>> +++ b/drivers/vdpa/vdpa.c
->>>>> @@ -909,6 +909,74 @@ vdpa_dev_config_fill(struct vdpa_device *vdev, struct sk_buff *msg, u32 portid,
->>>>>     	return err;
->>>>>     }
->>>>>
->>>>> +static int vdpa_fill_stats_rec(struct vdpa_device *vdev, struct sk_buff *msg,
->>>>> +			       struct genl_info *info, u32 index)
->>>>> +{
->>>>> +	int err;
->>>>> +
->>>>> +	err = vdev->config->get_vendor_vq_stats(vdev, index, msg, info->extack);
->>>>> +	if (err)
->>>>> +		return err;
->>>>> +
->>>>> +	if (nla_put_u32(msg, VDPA_ATTR_DEV_QUEUE_INDEX, index))
->>>>> +		return -EMSGSIZE;
->>>>> +
->>>>> +	return 0;
->>>>> +}
->>>>> +
->>>>> +static int vendor_stats_fill(struct vdpa_device *vdev, struct sk_buff *msg,
->>>>> +			     struct genl_info *info, u32 index)
->>>>> +{
->>>>> +	int err;
->>>>> +
->>>>> +	if (!vdev->config->get_vendor_vq_stats)
->>>>> +		return -EOPNOTSUPP;
->>>>> +
->>>>> +	err = vdpa_fill_stats_rec(vdev, msg, info, index);
->>>>> +	if (err)
->>>>> +		return err;
->>>>> +
->>>>> +	return 0;
->>>>> +}
->>>>> +
->>>>> +static int vdpa_dev_vendor_stats_fill(struct vdpa_device *vdev,
->>>>> +				      struct sk_buff *msg,
->>>>> +				      struct genl_info *info, u32 index)
->>>>> +{
->>>>> +	u32 device_id;
->>>>> +	void *hdr;
->>>>> +	int err;
->>>>> +	u32 portid = info->snd_portid;
->>>>> +	u32 seq = info->snd_seq;
->>>>> +	u32 flags = 0;
->>>>> +
->>>>> +	hdr = genlmsg_put(msg, portid, seq, &vdpa_nl_family, flags,
->>>>> +			  VDPA_CMD_DEV_VSTATS_GET);
->>>>> +	if (!hdr)
->>>>> +		return -EMSGSIZE;
->>>>> +
->>>>> +	if (nla_put_string(msg, VDPA_ATTR_DEV_NAME, dev_name(&vdev->dev))) {
->>>>> +		err = -EMSGSIZE;
->>>>> +		goto undo_msg;
->>>>> +	}
->>>>> +
->>>>> +	device_id = vdev->config->get_device_id(vdev);
->>>>> +	if (nla_put_u32(msg, VDPA_ATTR_DEV_ID, device_id)) {
->>>>> +		err = -EMSGSIZE;
->>>>> +		goto undo_msg;
->>>>> +	}
->>>>> +
->>>> You seem to miss VDPA_ATTR_DEV_NEGOTIATED_FEATURES from this function,
->>>> otherwise I can't image how you can ensure the atomicity to infer
->>>> queue_type for control vq.
->>>> And should we make sure VIRTIO_CONFIG_S_FEATURES_OK is set before call
->>>> into vendor_stats_fill()?
->>> It is done in the hardware driver. In this case, in mlx5_vdpa.
->> OK... So you think this is not vdpa common code but rather individual
->> vendor driver should deal with? Seems fine at the first glance, but with
->> some thoughts this would complicate userspace code quite a lot to tell
->> apart different cases - say if the VDPA_ATTR_DEV_NEGOTIATED_FEATURES
->> attr is missing it would not be possible to display the queue type. On
->> the other hand, the queue type itself shouldn't be vendor specific thing
->> - only the vendor stats are, right?
->>
-> Right, although this feature is really about displaying statistics and queue type
-> is just supplemental information.
->
->> Furthermore, without FEATURES_OK the stats returned for a specific queue
->> might not be stable/reliable/reasonable at all, not sure how the tool
->> can infer such complex state (e.g. negotiation is in progress) if
->> somehow the vendor driver doesn't provide the corresponding attribute?
->> Should vendor driver expect to fail with explicit message to indicate
->> the reason, or it'd be fine to just display zero stats there? Looking at
->> mlx5_vdpa implementation it seems to be the former case, but in case of
->> device being negotiating, depending on which queue, the vstat query
->> might end up with a confusing message of, either
->>
->> "virtqueue index is not valid"
->>
->> or,
->>
->> "failed to query hardware"
->>
->> but none is helpful for user to indicate what's going on... I wonder if
->> mandating presence of FEATURES_OK would simplify userspace tool's
->> implementation in this case?
-> When you say "mandating", do you refer to kernel? The userspace tool
-> can do that since it will have the negotiated features.
+Hm that sounds like a bridge too far? I don't think we want to start
+adding moveable dma-bufs for shmem, thus far at least no one asked for
+that. Goal here is just to streamline the locking a bit and align across
+all the different ways of doing buffers in drm.
 
+Or do you mean something else and I'm just completely lost?
 
-I think it might be helpful if the userspace code could be posted as well.
+> A day ago I found that mapping of imported dma-bufs is broken at least
+> for the Tegra DRM driver (and likely for others too) because driver
+> doesn't assume that anyone will try to mmap imported buffer and just
+> doesn't handle this case at all, so we're getting a hard lockup on
+> touching mapped memory because we're mapping something else than the
+> dma-buf.
 
-Thanks
+Huh that sounds bad, how does this happen? Pretty much all pieces of
+dma-buf (cpu vmap, userspace mmap, heck even dma_buf_attach) are optional
+or at least can fail for various reasons. So exporters not providing mmap
+support is fine, but importers then dying is not.
 
+> My plan is to move the dma-buf management code to the level of DRM core
+> and make it aware of the reservation locks for the dynamic dma-bufs.
+> This way we will get the proper locking for dma-bufs and fix mapping of
+> imported dma-bufs for Tegra and other drivers.
 
->
-> I am reluctant to splitting attributes insertion between hardware driver
-> and generic vdpa code. If this is vendor specific feature I think all attributes
-> should come from the vendor driver. But, I don't insist and can move to vdpa
-> generic code.
->
->>
->> Thanks,
->> -Siwei
->>
->>>>> +	err = vendor_stats_fill(vdev, msg, info, index);
->>>>> +
->>>>> +	genlmsg_end(msg, hdr);
->>>>> +
->>>>> +	return err;
->>>>> +
->>>>> +undo_msg:
->>>>> +	genlmsg_cancel(msg, hdr);
->>>>> +	return err;
->>>>> +}
->>>>> +
->>>>>     static int vdpa_nl_cmd_dev_config_get_doit(struct sk_buff *skb, struct genl_info *info)
->>>>>     {
->>>>>     	struct vdpa_device *vdev;
->>>>> @@ -990,6 +1058,60 @@ vdpa_nl_cmd_dev_config_get_dumpit(struct sk_buff *msg, struct netlink_callback *
->>>>>     	return msg->len;
->>>>>     }
->>>>>
->>>>> +static int vdpa_nl_cmd_dev_stats_get_doit(struct sk_buff *skb,
->>>>> +					  struct genl_info *info)
->>>>> +{
->>>>> +	struct vdpa_device *vdev;
->>>>> +	struct sk_buff *msg;
->>>>> +	const char *devname;
->>>>> +	struct device *dev;
->>>>> +	u32 index;
->>>>> +	int err;
->>>>> +
->>>>> +	if (!info->attrs[VDPA_ATTR_DEV_NAME])
->>>>> +		return -EINVAL;
->>>>> +
->>>>> +	if (!info->attrs[VDPA_ATTR_DEV_QUEUE_INDEX])
->>>>> +		return -EINVAL;
->>>>> +
->>>>> +	devname = nla_data(info->attrs[VDPA_ATTR_DEV_NAME]);
->>>>> +	msg = nlmsg_new(NLMSG_DEFAULT_SIZE, GFP_KERNEL);
->>>>> +	if (!msg)
->>>>> +		return -ENOMEM;
->>>>> +
->>>>> +	index = nla_get_u32(info->attrs[VDPA_ATTR_DEV_QUEUE_INDEX]);
->>>>> +	mutex_lock(&vdpa_dev_mutex);
->>>> Given that stats_get() is a read-only operation that might happen quite
->>>> often from time to time, I wonder if it is now a good timing to convert
->>>> vdpa_dev_mutex to a semaphore?
->>>>
->>>>> +	dev = bus_find_device(&vdpa_bus, NULL, devname, vdpa_name_match);
->>>>> +	if (!dev) {
->>>>> +		NL_SET_ERR_MSG_MOD(info->extack, "device not found");
->>>>> +		err = -ENODEV;
->>>>> +		goto dev_err;
->>>> Missing nlmsg_free().
->>>>> +	}
->>>>> +	vdev = container_of(dev, struct vdpa_device, dev);
->>>>> +	if (!vdev->mdev) {
->>>>> +		NL_SET_ERR_MSG_MOD(info->extack, "unmanaged vdpa device");
->>>>> +		err = -EINVAL;
->>>>> +		goto mdev_err;
->>>> Missing nlmsg_free().
->>>>
->>>> Otherwise looks fine.
->>>>
->>>> Acked-by: Si-Wei Liu <si-wei.liu@oracle.com>
->>>>
->>>>
->>>> -Siwei
->>>>> +	}
->>>>> +	err = vdpa_dev_vendor_stats_fill(vdev, msg, info, index);
->>>>> +	if (!err)
->>>>> +		err = genlmsg_reply(msg, info);
->>>>> +
->>>>> +	put_device(dev);
->>>>> +	mutex_unlock(&vdpa_dev_mutex);
->>>>> +
->>>>> +	if (err)
->>>>> +		nlmsg_free(msg);
->>>>> +
->>>>> +	return err;
->>>>> +
->>>>> +mdev_err:
->>>>> +	put_device(dev);
->>>>> +dev_err:
->>>>> +	mutex_unlock(&vdpa_dev_mutex);
->>>>> +	return err;
->>>>> +}
->>>>> +
->>>>>     static const struct nla_policy vdpa_nl_policy[VDPA_ATTR_MAX + 1] = {
->>>>>     	[VDPA_ATTR_MGMTDEV_BUS_NAME] = { .type = NLA_NUL_STRING },
->>>>>     	[VDPA_ATTR_MGMTDEV_DEV_NAME] = { .type = NLA_STRING },
->>>>> @@ -997,6 +1119,7 @@ static const struct nla_policy vdpa_nl_policy[VDPA_ATTR_MAX + 1] = {
->>>>>     	[VDPA_ATTR_DEV_NET_CFG_MACADDR] = NLA_POLICY_ETH_ADDR,
->>>>>     	/* virtio spec 1.1 section 5.1.4.1 for valid MTU range */
->>>>>     	[VDPA_ATTR_DEV_NET_CFG_MTU] = NLA_POLICY_MIN(NLA_U16, 68),
->>>>> +	[VDPA_ATTR_DEV_QUEUE_INDEX] = NLA_POLICY_RANGE(NLA_U32, 0, 65535),
->>>>>     };
->>>>>
->>>>>     static const struct genl_ops vdpa_nl_ops[] = {
->>>>> @@ -1030,6 +1153,12 @@ static const struct genl_ops vdpa_nl_ops[] = {
->>>>>     		.doit = vdpa_nl_cmd_dev_config_get_doit,
->>>>>     		.dumpit = vdpa_nl_cmd_dev_config_get_dumpit,
->>>>>     	},
->>>>> +	{
->>>>> +		.cmd = VDPA_CMD_DEV_VSTATS_GET,
->>>>> +		.validate = GENL_DONT_VALIDATE_STRICT | GENL_DONT_VALIDATE_DUMP,
->>>>> +		.doit = vdpa_nl_cmd_dev_stats_get_doit,
->>>>> +		.flags = GENL_ADMIN_PERM,
->>>>> +	},
->>>>>     };
->>>>>
->>>>>     static struct genl_family vdpa_nl_family __ro_after_init = {
->>>>> diff --git a/include/linux/vdpa.h b/include/linux/vdpa.h
->>>>> index 8943a209202e..48ed1fc00830 100644
->>>>> --- a/include/linux/vdpa.h
->>>>> +++ b/include/linux/vdpa.h
->>>>> @@ -276,6 +276,9 @@ struct vdpa_config_ops {
->>>>>     			    const struct vdpa_vq_state *state);
->>>>>     	int (*get_vq_state)(struct vdpa_device *vdev, u16 idx,
->>>>>     			    struct vdpa_vq_state *state);
->>>>> +	int (*get_vendor_vq_stats)(struct vdpa_device *vdev, u16 idx,
->>>>> +				   struct sk_buff *msg,
->>>>> +				   struct netlink_ext_ack *extack);
->>>>>     	struct vdpa_notification_area
->>>>>     	(*get_vq_notification)(struct vdpa_device *vdev, u16 idx);
->>>>>     	/* vq irq is not expected to be changed once DRIVER_OK is set */
->>>>> @@ -473,4 +476,6 @@ struct vdpa_mgmt_dev {
->>>>>     int vdpa_mgmtdev_register(struct vdpa_mgmt_dev *mdev);
->>>>>     void vdpa_mgmtdev_unregister(struct vdpa_mgmt_dev *mdev);
->>>>>
->>>>> +#define VDPA_INVAL_QUEUE_INDEX 0xffff
->>>>> +
->>>>>     #endif /* _LINUX_VDPA_H */
->>>>> diff --git a/include/uapi/linux/vdpa.h b/include/uapi/linux/vdpa.h
->>>>> index 1061d8d2d09d..25c55cab3d7c 100644
->>>>> --- a/include/uapi/linux/vdpa.h
->>>>> +++ b/include/uapi/linux/vdpa.h
->>>>> @@ -18,6 +18,7 @@ enum vdpa_command {
->>>>>     	VDPA_CMD_DEV_DEL,
->>>>>     	VDPA_CMD_DEV_GET,		/* can dump */
->>>>>     	VDPA_CMD_DEV_CONFIG_GET,	/* can dump */
->>>>> +	VDPA_CMD_DEV_VSTATS_GET,
->>>>>     };
->>>>>
->>>>>     enum vdpa_attr {
->>>>> @@ -46,6 +47,11 @@ enum vdpa_attr {
->>>>>     	VDPA_ATTR_DEV_NEGOTIATED_FEATURES,	/* u64 */
->>>>>     	VDPA_ATTR_DEV_MGMTDEV_MAX_VQS,		/* u32 */
->>>>>     	VDPA_ATTR_DEV_SUPPORTED_FEATURES,	/* u64 */
->>>>> +
->>>>> +	VDPA_ATTR_DEV_QUEUE_INDEX,              /* u32 */
->>>>> +	VDPA_ATTR_DEV_VENDOR_ATTR_NAME,		/* string */
->>>>> +	VDPA_ATTR_DEV_VENDOR_ATTR_VALUE,        /* u64 */
->>>>> +
->>>>>     	/* new attributes must be added above here */
->>>>>     	VDPA_ATTR_MAX,
->>>>>     };
+So maybe we're completely talking past each another, or coffee is not
+working here on my end, but I've no idea what you mean.
 
+We do have some helpers for taking care of the dma_resv_lock dance, and
+Christian K�nig has an rfc patch set to maybe unify this further. But that
+should be fairly orthogonal to reworking shmem (it might help a bit with
+reworking shmem though).
+-Daniel
+-- 
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch

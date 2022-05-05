@@ -2,60 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FFD751CCCB
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 01:35:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 711E251CCD1
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 01:38:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229837AbiEEXjF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 19:39:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46668 "EHLO
+        id S235035AbiEEXm1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 19:42:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233701AbiEEXjC (ORCPT
+        with ESMTP id S233701AbiEEXmW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 19:39:02 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8CF262CC;
-        Thu,  5 May 2022 16:35:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651793720; x=1683329720;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=QdHqNWyGLHU7CNlXQvsoiMH9bQPQvhJL4LtZP/GKoVg=;
-  b=TMY0b7uQhqKJtyWZKPVGmvDLlcrbwdgsCc7Fh1p9STEiougAk6bTGyBS
-   GeOsbwhYfLzF/+H212EBAt4UU3lMfQb/Qyt/34sCrZ91M1SuvFqJGGdcc
-   6RqczqmAqiE2608t7oz3vMQ+fRjdGyGFjqb3lHBG5ZgCG0/wo4u6bAB0I
-   ems86GFt/TD7hrgt4UI6L/G0T0zCAFXtrSMc6JSGbkZXVhpD/iIjC09nH
-   mgFXP0n/wnTVYRSxV/nnWY9voxwKD/Ka98zB1Y+1KZqX/YneROTOlgvrO
-   hu2xz/uY2wx04grbADaSJpYDqR1y4cO7esiDg8HxQY4NhqWGHZc0abVoo
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10338"; a="328831078"
-X-IronPort-AV: E=Sophos;i="5.91,203,1647327600"; 
-   d="scan'208";a="328831078"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2022 16:35:20 -0700
-X-IronPort-AV: E=Sophos;i="5.91,203,1647327600"; 
-   d="scan'208";a="665203550"
-Received: from jesicili-mobl1.amr.corp.intel.com (HELO [10.213.189.201]) ([10.213.189.201])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2022 16:35:19 -0700
-Message-ID: <32803e0b-8ff6-ae8d-f9cb-ce2d3fd37229@intel.com>
-Date:   Thu, 5 May 2022 16:35:39 -0700
+        Thu, 5 May 2022 19:42:22 -0400
+Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 522DD2559B;
+        Thu,  5 May 2022 16:38:41 -0700 (PDT)
+Received: from penguin.thunk.org (corpnat-104-133-9-85.corp.google.com [104.133.9.85] (may be forged))
+        (authenticated bits=0)
+        (User authenticated as tytso@ATHENA.MIT.EDU)
+        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 245NcDT2021685
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 5 May 2022 19:38:14 -0400
+Received: by penguin.thunk.org (Postfix, from userid 1000)
+        id 4B9634B485; Thu,  5 May 2022 16:38:12 -0700 (PDT)
+Date:   Thu, 5 May 2022 16:38:12 -0700
+From:   tytso <tytso@mit.edu>
+To:     Miklos Szeredi <miklos@szeredi.hu>
+Cc:     linux-fsdevel@vger.kernel.org, Dave Chinner <david@fromorbit.com>,
+        Karel Zak <kzak@redhat.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Christian Brauner <brauner@kernel.org>,
+        linux-kernel@vger.kernel.org,
+        Linux API <linux-api@vger.kernel.org>,
+        linux-man <linux-man@vger.kernel.org>,
+        LSM <linux-security-module@vger.kernel.org>,
+        Ian Kent <raven@themaw.net>,
+        David Howells <dhowells@redhat.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <christian@brauner.io>,
+        Amir Goldstein <amir73il@gmail.com>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>
+Subject: Re: [RFC PATCH] getting misc stats/attributes via xattr API
+Message-ID: <YnRf5CNN2yNKVu0B@mit.edu>
+References: <YnEeuw6fd1A8usjj@miu.piliscsaba.redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: Issue With real-time patches on 5.15.y
-Content-Language: en-US
-To:     Joseph Salisbury <joseph.salisbury@canonical.com>,
-        tglx@linutronix.de
-Cc:     linux-kernel@vger.kernel.org, dave.hansen@linux.intel.com,
-        linux-rt-users@vger.kernel.org
-References: <bdb23fe5-51ae-8873-a3d7-85f377877c79@canonical.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <bdb23fe5-51ae-8873-a3d7-85f377877c79@canonical.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YnEeuw6fd1A8usjj@miu.piliscsaba.redhat.com>
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,23 +57,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/5/22 16:18, Joseph Salisbury wrote:
-> The real-time kernel build failure can be resolved by reverting commit
-> b50854eca0e0.  The failure seems to be due to the removal of an include
-> of xstate.h from pkru.h and caused spinlock_t to not be defined.  The
-> commit would only be reverted for the real-time kernel and not any other
-> kernels.  I wanted to see if reverting the commit is the proper
-> approach, or if cherry-picking additional commits might be a better
-> solution in preparation for additional changes that might be coming in
-> the future?
+On Tue, May 03, 2022 at 02:23:23PM +0200, Miklos Szeredi wrote:
 > 
-> Any suggestions would be greatly appreciated.
+> : - root
+> bar - an attribute
+> foo: - a folder (can contain attributes and/or folders)
+> 
+> The contents of a folder is represented by a null separated list of names.
+> 
+> Examples:
+> 
+> $ getfattr -etext -n ":" .
+> # file: .
+> :="mnt:\000mntns:"
 
-I thought you distro folks were the franenkernel experts. :)
+In your example, does it matter what "." is?  It looks like in some
+cases, it makes no difference at all, and in other cases, like this,
+'.' *does* matter:
 
-But, seriously...  This isn't rocket science.  Just look at the pkru.h
-in your tree and figure out what includes it needs.  If it needs FPU
-gunk, include the FPU header.  If you get a compile error for spinlock_t
-...  well ...  find the code using spinlock_t and make sure it includes
-spinlock.h.
+> $ getfattr -etext -n ":mnt:info" .
+> # file: .
+> :mnt:info="21 1 254:0 / / rw,relatime - ext4 /dev/root rw\012"
 
+Is that right?
+
+> $ getfattr -etext -n ":mntns:" .
+> # file: .
+> :mntns:="21:\00022:\00024:\00025:\00023:\00026:\00027:\00028:\00029:\00030:\00031:"
+
+What is this returning?  All possible mount name spaces?  Or all of
+the mount spaces where '.' happens to exist?
+
+Also, using the null character means that we can't really use shell
+scripts calling getfattr.  I understand that the problem is that in
+some cases, you might want to return a pathname, and NULL is the only
+character which is guaranteed not to show up in a pathname.  However,
+it makes parsing the returned value in a shell script exciting.
+
+   	 	     	      	       	 - Ted

@@ -2,72 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC71A51C98D
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 21:49:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE72351C993
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 21:49:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385403AbiEETvk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 15:51:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35332 "EHLO
+        id S1348414AbiEETvr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 15:51:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385483AbiEETvT (ORCPT
+        with ESMTP id S1385569AbiEETvV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 15:51:19 -0400
-Received: from mx0b-002e3701.pphosted.com (mx0b-002e3701.pphosted.com [148.163.143.35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FFEB5EBE3
-        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 12:47:31 -0700 (PDT)
-Received: from pps.filterd (m0148664.ppops.net [127.0.0.1])
-        by mx0b-002e3701.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 245FhOpo003652;
-        Thu, 5 May 2022 19:47:01 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding; s=pps0720;
- bh=C3QEOZbwGY5sXGcx1EpjDtWP0ojZE1TLeKrfEOzEke0=;
- b=VF2gFtW6wqp/nmndXtcLTS/8b435NXPUh13SQhzacfCr3W3akrSKQapAdF64ArztphY4
- zbAWp8V6BzBtWiyqY17nbTIF1VFIq6KejA37pnMzhRafKZ99klqNW8HZ0T0cF0Vl/gpW
- jBw8pSyWNysnS6998PFZRzsnR15rNSGOAT0eMu4cWrs7OMHo5JqJEZ8voBiBkBoBbl0z
- ljEIRCzGNL88Pu/wv52ZwS5gfX+7BYHXArJbj4s4WYF5+7+6GchByksxNx73GYU18PCq
- ojIz7rCNYn4dYjaPBSDI8LIvD/oa0o41nf93PwMhP7JnuRmROKt2w5oHLO0h7GQ24FgS ZA== 
-Received: from g4t3427.houston.hpe.com (g4t3427.houston.hpe.com [15.241.140.73])
-        by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 3fvhfd2336-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 05 May 2022 19:47:00 +0000
-Received: from g9t2301.houston.hpecorp.net (g9t2301.houston.hpecorp.net [16.220.97.129])
-        by g4t3427.houston.hpe.com (Postfix) with ESMTP id 346D25E;
-        Thu,  5 May 2022 19:46:59 +0000 (UTC)
-Received: from dog.eag.rdlabs.hpecorp.net (dog.eag.rdlabs.hpecorp.net [128.162.243.181])
-        by g9t2301.houston.hpecorp.net (Postfix) with ESMTP id 7FB9E4D;
-        Thu,  5 May 2022 19:46:58 +0000 (UTC)
-Received: by dog.eag.rdlabs.hpecorp.net (Postfix, from userid 200934)
-        id 275CF30193E67; Thu,  5 May 2022 14:46:58 -0500 (CDT)
-From:   Steve Wahl <steve.wahl@hpe.com>
-To:     Joerg Roedel <jroedel@suse.de>,
-        Kyung Min Park <kyung.min.park@intel.com>,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Will Deacon <will@kernel.org>, iommu@lists.linux-foundation.org
-Cc:     Mike Travis <mike.travis@hpe.com>,
-        Dimitri Sivanich <sivanich@hpe.com>,
-        Steve Wahl <steve.wahl@hpe.com>,
-        Russ Anderson <russ.anderson@hpe.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] iommu/vt-d: Increase DMAR_UNITS_SUPPORTED
-Date:   Thu,  5 May 2022 14:46:58 -0500
-Message-Id: <20220505194658.246121-1-steve.wahl@hpe.com>
-X-Mailer: git-send-email 2.26.2
+        Thu, 5 May 2022 15:51:21 -0400
+Received: from us-smtp-delivery-74.mimecast.com (us-smtp-delivery-74.mimecast.com [170.10.133.74])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8D6915E768
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 12:47:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1651780052;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=DnqJVZbPVeI46s0enhoaS6Hy7uEfMjKkZf47zK1+eGQ=;
+        b=HON4Zz4NID7pOuNDt73JuYQv9qGcpxIQUmp3lQP0CWCyLO/jJEozjbWSj3E1D4NbQmP7te
+        PqB4GGovgxhiOTb5MyOCzcTd5w5FSRXpKhbmhXx54x4QuTrSQ0GHI4ZSS0SMCo+wBijdmv
+        XtYmMNHnYKPP5t6hnf9gMFxcMSumtFs=
+Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
+ [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-600-oJT75RQ6NSinGFWKEaMI7Q-1; Thu, 05 May 2022 15:47:31 -0400
+X-MC-Unique: oJT75RQ6NSinGFWKEaMI7Q-1
+Received: by mail-qv1-f72.google.com with SMTP id cy9-20020a05621418c900b004562be4402eso4034296qvb.6
+        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 12:47:31 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:organization:user-agent:mime-version
+         :content-transfer-encoding;
+        bh=DnqJVZbPVeI46s0enhoaS6Hy7uEfMjKkZf47zK1+eGQ=;
+        b=ocTpXCsTSf+hEEID+kvPcOt+oNf8UEgT5TIqfWTMap5/T3ktvXKQaojd2kWE1BzkSC
+         T933Oo+N8+oOOIV+qZdBwAStSjscasBtvQ23nDfbcj6yfJ3ik1rSsbdN/QUcAMBB19Ax
+         WhCSZXa7oEmehDXc4eLplMCnZW8RaGwA6eWMnQv1Hcea6FR7cWwj7oSGrmUpu3Sth2Ja
+         MGkfr50tAd4JbhQwM0Fu1gp6qSWagIZ+CPrj7DvjrjN3TSKmfCq4bgTqZY8DHGrpkIw4
+         ND1mcp5bPM+u3Xzeq2SnD+8jxJkMv3anvBgjDeDtB1KjSEvn+GSmJn6HadpVmMjNBIMp
+         I/1Q==
+X-Gm-Message-State: AOAM531KTWWtR2Ep/tjEVgXgA8fqOUmokLi6IgwUelYfMSsHUtU9lDAj
+        b9BgbwZhP1ZdNN/fAbcUkaDcd2KCF6m/zkfNTBhKVzZqwT5gdxkABpA+3Widr3cTLV36Lz2hoJr
+        WTF6fW2AdlmSJDuL5RzE490oh
+X-Received: by 2002:a05:622a:1899:b0:2f3:b09e:dbe9 with SMTP id v25-20020a05622a189900b002f3b09edbe9mr12328365qtc.199.1651780050723;
+        Thu, 05 May 2022 12:47:30 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxw9VxJIDFIIwB9AlGQDX3a0wArIewXNGv5CEduHIStpRGXI2+xlxlAMXfahblbt2mKcwJawQ==
+X-Received: by 2002:a05:622a:1899:b0:2f3:b09e:dbe9 with SMTP id v25-20020a05622a189900b002f3b09edbe9mr12328357qtc.199.1651780050495;
+        Thu, 05 May 2022 12:47:30 -0700 (PDT)
+Received: from [192.168.8.138] (static-71-184-137-158.bstnma.ftas.verizon.net. [71.184.137.158])
+        by smtp.gmail.com with ESMTPSA id m21-20020aed27d5000000b002f39b99f686sm1290873qtg.32.2022.05.05.12.47.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 May 2022 12:47:29 -0700 (PDT)
+Message-ID: <b1a7310afc2b09dd0575826d0df973df839ef5ac.camel@redhat.com>
+Subject: Re: [PATCH] drm: Document that power requirements for DP AUX
+ transfers
+From:   Lyude Paul <lyude@redhat.com>
+To:     Douglas Anderson <dianders@chromium.org>,
+        dri-devel@lists.freedesktop.org
+Cc:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Maxime Ripard <maxime@cerno.tech>,
+        linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
+        Stephen Boyd <swboyd@chromium.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Imre Deak <imre.deak@intel.com>,
+        Jani Nikula <jani.nikula@intel.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Ville =?ISO-8859-1?Q?Syrj=E4l=E4?= 
+        <ville.syrjala@linux.intel.com>, linux-kernel@vger.kernel.org
+Date:   Thu, 05 May 2022 15:47:28 -0400
+In-Reply-To: <20220503162033.1.Ia8651894026707e4fa61267da944ff739610d180@changeid>
+References: <20220503162033.1.Ia8651894026707e4fa61267da944ff739610d180@changeid>
+Organization: Red Hat Inc.
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-ORIG-GUID: ZiQt0AfFhekgODgw_TIdFOWhuDP_me1a
-X-Proofpoint-GUID: ZiQt0AfFhekgODgw_TIdFOWhuDP_me1a
-X-HPE-SCL: -1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-05_08,2022-05-05_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- bulkscore=0 adultscore=0 priorityscore=1501 suspectscore=0 mlxlogscore=999
- mlxscore=0 spamscore=0 malwarescore=0 impostorscore=0 phishscore=0
- clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2205050131
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -76,41 +95,92 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Increase DMAR_UNITS_SUPPORTED to support 64 sockets with 10 DMAR units
-each, for a total of 640.
+So I think if Ville is OK with it (an ack at least) I'm fine with this
+documentation change. I think it's worth me noting for other reviewers I made
+this decision based on the fact that the documentation is for the transfer()
+function - which I agree shouldn't need to be responsible for powering the
+panel on.
 
-If the available hardware exceeds DMAR_UNITS_SUPPORTED (previously set
-to MAX_IO_APICS, or 128), it causes these messages: "DMAR: Failed to
-allocate seq_id", "DMAR: Parse DMAR table failure.", and "x2apic: IRQ
-remapping doesn't support X2APIC mode x2apic disabled"; and the system
-fails to boot.
+Since that doesn't actually specify what we expect the behavior for userspace
+accesses to be (since we could in theory add more behavior in those codepaths
+around the transfer() calls that don't exist for the driver's own AUX usages)
+I think this is totally fine
 
-Signed-off-by: Steve Wahl <steve.wahl@hpe.com>
-Reviewed-by: Mike Travis <mike.travis@hpe.com>
----
+Reviewed-by: Lyude Paul <lyude@redhat.com>
 
-Note that we could not find a reason for connecting
-DMAR_UNITS_SUPPORTED to MAX_IO_APICS as was done previously.  Perhaps
-it seemed like the two would continue to match on earlier processors.
-There doesn't appear to be kernel code that assumes that the value of
-one is related to the other.
+On Tue, 2022-05-03 at 16:21 -0700, Douglas Anderson wrote:
+> When doing DP AUX transfers there are two actors that need to be
+> powered in order for the DP AUX transfer to work: the DP source and
+> the DP sync. Commit bacbab58f09d ("drm: Mention the power state
+> requirement on side-channel operations") added some documentation
+> saying that the DP source is required to power itself up (if needed)
+> to do AUX transfers. However, that commit doesn't talk anything about
+> the DP sink.
+> 
+> For full fledged DP the sink isn't really a problem. It's expected
+> that if an external DP monitor isn't plugged in that attempting to do
+> AUX transfers won't work. It's also expected that if a DP monitor is
+> plugged in (and thus asserting HPD) that it AUX transfers will work.
+> 
+> When we're looking at eDP, however, things are less obvious. Let's add
+> some documentation about expectations. Here's what we'll say:
+> 
+> 1. We don't expect the DP AUX transfer function to power on an eDP
+> panel. If an eDP panel is physically connected but powered off then it
+> makes sense for the transfer to fail.
+> 
+> 2. We'll document that the official way to power on a panel is via the
+> bridge chain, specifically by making sure that the panel's prepare
+> function has been called (which is called by
+> panel_bridge_pre_enable()). It's already specified in the kernel doc
+> of drm_panel_prepare() that this is the way to power the panel on and
+> also that after this call "it is possible to communicate with any
+> integrated circuitry via a command bus."
+> 
+> 3. We'll also document that for code running in the panel driver
+> itself that it is legal for the panel driver to power itself up
+> however it wants (it doesn't need to officially call
+> drm_panel_pre_enable()) and then it can do AUX bus transfers. This is
+> currently the way that edp-panel works when it's running atop the DP
+> AUX bus.
+> 
+> Signed-off-by: Douglas Anderson <dianders@chromium.org>
+> ---
+> 
+>  include/drm/display/drm_dp_helper.h | 14 +++++++++++---
+>  1 file changed, 11 insertions(+), 3 deletions(-)
+> 
+> diff --git a/include/drm/display/drm_dp_helper.h
+> b/include/drm/display/drm_dp_helper.h
+> index dca40a045dd6..e5165b708a40 100644
+> --- a/include/drm/display/drm_dp_helper.h
+> +++ b/include/drm/display/drm_dp_helper.h
+> @@ -370,9 +370,17 @@ struct drm_dp_aux {
+>          * helpers assume this is the case.
+>          *
+>          * Also note that this callback can be called no matter the
+> -        * state @dev is in. Drivers that need that device to be powered
+> -        * to perform this operation will first need to make sure it's
+> -        * been properly enabled.
+> +        * state @dev is in and also no matter what state the panel is
+> +        * in. It's expected:
+> +        * - If the @dev providing the AUX bus is currently unpowered then
+> +        *   it will power itself up for the transfer.
+> +        * - If we're on eDP and the panel is not in a state where it can
+> +        *   respond (it's not powered or it's in a low power state) then
+> this
+> +        *   function will return an error (but not crash). Note that if a
+> +        *   panel driver is initiating a DP AUX transfer it may power
+> itself
+> +        *   up however it wants. All other code should ensure that the
+> +        *   pre_enable() bridge chain (which eventually calls the panel
+> +        *   prepare function) has powered the panel.
+>          */
+>         ssize_t (*transfer)(struct drm_dp_aux *aux,
+>                             struct drm_dp_aux_msg *msg);
 
- include/linux/dmar.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/include/linux/dmar.h b/include/linux/dmar.h
-index 45e903d84733..9d4867b8f42e 100644
---- a/include/linux/dmar.h
-+++ b/include/linux/dmar.h
-@@ -19,7 +19,7 @@
- struct acpi_dmar_header;
- 
- #ifdef	CONFIG_X86
--# define	DMAR_UNITS_SUPPORTED	MAX_IO_APICS
-+# define	DMAR_UNITS_SUPPORTED	640
- #else
- # define	DMAR_UNITS_SUPPORTED	64
- #endif
 -- 
-2.26.2
+Cheers,
+ Lyude Paul (she/her)
+ Software Engineer at Red Hat
 

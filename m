@@ -2,81 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 987B251BFDB
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 14:51:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 990EC51BF9B
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 14:39:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378156AbiEEMyp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 08:54:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60716 "EHLO
+        id S1377332AbiEEMmp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 08:42:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377827AbiEEMyO (ORCPT
+        with ESMTP id S1376382AbiEEMmk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 08:54:14 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 220FC527CF;
-        Thu,  5 May 2022 05:50:34 -0700 (PDT)
-Date:   Thu, 5 May 2022 14:50:31 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1651755032;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=FLqE2JkFG6wskvkAF74RyMbEOiLynryLGT+inUSn7EA=;
-        b=3xp7O05OJNSxkbSR+9rQkTEF7CPouvJjOfPZM54VIo2k364AuWFNmO8OKNfPNKeIovxt6G
-        E67NYpC7+c+e88q7DAlFINhhg+TWgproY/2VKvIWJ/rQj6lYKkKXGIkRiUEIUh9rcg0L93
-        S38ZDBoGoqx7lzEhN/e3upw3cokfeN2+NWZLjndXSFXsBcmHfENnhwlqGLij/H2tqnirbz
-        +M+RZ0qtyPDwqhzCaIcIl0h0BQsTEbwdOwJY+3pVzBWQIpxPgww8MhNtSaTUqIYVGPj187
-        tcWFT7vizHDSNmjGcHgvQZuPg1y6WcNyIdgAjFLM0tgME7/kMaeez/a/GD/9JA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1651755032;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=FLqE2JkFG6wskvkAF74RyMbEOiLynryLGT+inUSn7EA=;
-        b=TPhpV6m2xTtkLaiPVVKbbScuDeSevE2Fbi+jxi7o95ROlDs4TtcmSSI3o+GZ87UnDDPR3T
-        j1P/gCiVWNqV+fAQ==
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     linux-kernel@vger.kernel.org, rjw@rjwysocki.net,
-        Oleg Nesterov <oleg@redhat.com>, mingo@kernel.org,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, mgorman@suse.de,
-        Will Deacon <will@kernel.org>, tj@kernel.org,
-        linux-pm@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        linux-um@lists.infradead.org, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        linux-xtensa@linux-xtensa.org, Kees Cook <keescook@chromium.org>,
-        Jann Horn <jannh@google.com>, linux-ia64@vger.kernel.org
-Subject: Re: [PATCH v3 09/11] ptrace: Don't change __state
-Message-ID: <YnPIF9DvM9L0k+0U@linutronix.de>
-References: <87k0b0apne.fsf_-_@email.froward.int.ebiederm.org>
- <20220504224058.476193-9-ebiederm@xmission.com>
+        Thu, 5 May 2022 08:42:40 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC363554AC;
+        Thu,  5 May 2022 05:39:00 -0700 (PDT)
+Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KvCqM4BhTzGpTN;
+        Thu,  5 May 2022 20:36:15 +0800 (CST)
+Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
+ dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 5 May 2022 20:38:59 +0800
+Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
+ (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Thu, 5 May
+ 2022 20:38:58 +0800
+From:   Yang Yingliang <yangyingliang@huawei.com>
+To:     <linux-kernel@vger.kernel.org>, <linux-rtc@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>
+CC:     <eddie.huang@mediatek.com>, <sean.wang@mediatek.com>,
+        <a.zummo@towertech.it>, <alexandre.belloni@bootlin.com>,
+        <lee.jones@linaro.org>
+Subject: [PATCH] rtc: mt6397: check return value after calling platform_get_resource()
+Date:   Thu, 5 May 2022 20:50:43 +0800
+Message-ID: <20220505125043.1594771-1-yangyingliang@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220504224058.476193-9-ebiederm@xmission.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.103.91]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpemm500007.china.huawei.com (7.185.36.183)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-05-04 17:40:56 [-0500], Eric W. Biederman wrote:
-> Stop playing with tsk->__state to remove TASK_WAKEKILL while a ptrace
-> command is executing.
-> 
-> Instead remove TASK_WAKEKILL from the definition of TASK_TRACED, and
-> implemention a new jobctl flag TASK_PTRACE_FROZEN.  This new flag is
-implement ?
+It will cause null-ptr-deref if platform_get_resource() returns NULL,
+we need check the return value.
 
-> set in jobctl_freeze_task and cleared when ptrace_stop is awoken or in
-> jobctl_unfreeze_task (when ptrace_stop remains asleep).
+Fixes: fc2979118f3f ("rtc: mediatek: Add MT6397 RTC driver")
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+---
+ drivers/rtc/rtc-mt6397.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Sebastian
+diff --git a/drivers/rtc/rtc-mt6397.c b/drivers/rtc/rtc-mt6397.c
+index 80dc479a6ff0..1d297af80f87 100644
+--- a/drivers/rtc/rtc-mt6397.c
++++ b/drivers/rtc/rtc-mt6397.c
+@@ -269,6 +269,8 @@ static int mtk_rtc_probe(struct platform_device *pdev)
+ 		return -ENOMEM;
+ 
+ 	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
++	if (!res)
++		return -EINVAL;
+ 	rtc->addr_base = res->start;
+ 
+ 	rtc->data = of_device_get_match_data(&pdev->dev);
+-- 
+2.25.1
+

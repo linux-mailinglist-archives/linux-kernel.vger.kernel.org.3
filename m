@@ -2,81 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D64E651C0CF
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 15:31:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DA6B51C0DB
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 15:34:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379694AbiEENeu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 09:34:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45680 "EHLO
+        id S1379916AbiEENf3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 09:35:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379529AbiEENeS (ORCPT
+        with ESMTP id S1379794AbiEENex (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 09:34:18 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57F59B7D9;
-        Thu,  5 May 2022 06:30:38 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id a21so5234038edb.1;
-        Thu, 05 May 2022 06:30:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:from:to:cc:subject:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=LEyhSb4KLLHDvo9x+lHGafva3P7wuUyOsl0RpBl3TYY=;
-        b=erloLqL3L1Z5rKgWGi4x265WiJi7qZEJLqO8bCzSE2d4j++qzExi65405a1CWA8eOF
-         /tuO4stZhJCz4LgMWaweViYv4mbdAhIA9TVAfY9EvDuTb+QABNmIP9dS2da456z1ikc/
-         vI/QBWiPprwIxazaUWrFJLU8MpQ4vTlDlJK2bsf2jjZ4B7DSFFjagZ56gTH7g06akm07
-         Yo8ZPTDQ3ZSw856iCNFu9yd3y9sIDJY3DtGvj5TmOKIxtGTdl23i9LIGGzlG7TroyxLJ
-         eoR+jrykBs7MqoK6pTyjsmHb1VRdDJrFWCuOj7nov6KTYsXw7PAk+darzy5Lz3OPe5wi
-         hWqA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:from:to:cc:subject:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=LEyhSb4KLLHDvo9x+lHGafva3P7wuUyOsl0RpBl3TYY=;
-        b=EvPJj2H8KxmPHIbZM3R6K3X1tPcUwqLz0vHaQJQyoin3bYQSH0EmxIx/zCocnCWbDZ
-         ahB/WmAjQ+huOxH3eUyxVPp/r0umnAtFWU8DsDPF2I0/1Pk/ln4Chd7+QDY1NV0PLqee
-         9oDEKUpzp+1z9FzHa/v8Tgdiz8c6zPTeAuiB9vKemQnEUnQ6YUYQbgc9/IiHzgEYEg9q
-         0U2vOwUdAgnsSUahERpSP1IdsIynrVT53PyAGwP2ilV9HhwjFBtWcaxTtV4iJXR2PF+0
-         vW0M4oPuEyBvufFFveuWqIWePocaiqrLqkVlleOPq3jitIzlb74hkmMTnzraKadP87A0
-         BUmQ==
-X-Gm-Message-State: AOAM531zONSQDU/ELrU1/DvaEL+RanGifX49TDOY2mZq5oBzTCVNzewP
-        TDi6a/Kz/iyth/dumvTgWGI=
-X-Google-Smtp-Source: ABdhPJzLBZeGQSoC4QxkDn6W8OqQ2KRQfFIE+hPKggNvQz9ecywyyuj4wg8kdTVlJk79vAMxJ2B0QA==
-X-Received: by 2002:a50:ce14:0:b0:425:cb75:5322 with SMTP id y20-20020a50ce14000000b00425cb755322mr30882298edi.386.1651757433754;
-        Thu, 05 May 2022 06:30:33 -0700 (PDT)
-Received: from Ansuel-xps. (93-42-70-190.ip85.fastwebnet.it. [93.42.70.190])
-        by smtp.gmail.com with ESMTPSA id qz24-20020a170907681800b006f4cb79d9a8sm766846ejc.75.2022.05.05.06.30.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 May 2022 06:30:33 -0700 (PDT)
-Message-ID: <6273d179.1c69fb81.7c36a.435b@mx.google.com>
-X-Google-Original-Message-ID: <YnPRd5865LV21/Bw@Ansuel-xps.>
-Date:   Thu, 5 May 2022 15:30:31 +0200
-From:   Ansuel Smith <ansuelsmth@gmail.com>
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>, Pavel Machek <pavel@ucw.cz>,
-        John Crispin <john@phrozen.org>, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-leds@vger.kernel.org
-Subject: Re: [RFC PATCH v6 09/11] leds: trigger: netdev: add additional
- hardware only triggers
-References: <20220503151633.18760-1-ansuelsmth@gmail.com>
- <20220503151633.18760-10-ansuelsmth@gmail.com>
- <YnModmKCG3BD5nvd@lunn.ch>
+        Thu, 5 May 2022 09:34:53 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5F4857161;
+        Thu,  5 May 2022 06:30:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1651757457; x=1683293457;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=bBeL7VG4B1BfSIJpQYXGtLTM84mhXf094fNxVcH+l0c=;
+  b=sB3JoVSNsKLBwGzkNmncp0yVZ6RUx+QjsyNRNRdKFhRu3c9KWRBo41t7
+   xI3gZ+ezFtNp9fiwdZa9/AgfFE7s4V6VTwwKGNcsRbTkGk0T8DB0wXh8W
+   ok36/fEsCo5oNPWjKacDt2EqmzA3GV+mHOZN9bEvbq7Z1dGMsHQf21Shq
+   3/wA6BJb0sK6U0RvRln9rRfDu5ULLaW8ClnlUYUGHObl2QCCay+nLQpYi
+   sp1rQpSEFcTOowfMoOYqsd61GUwmCDIuVjluRIBlKhDLsTxtzwHNG6mC6
+   aF8Kw1habsKUqVJGBB9V86jTNAfDCu6I40c3/N0Gjuasrmzy5FBe9jx40
+   A==;
+X-IronPort-AV: E=Sophos;i="5.91,201,1647327600"; 
+   d="scan'208";a="154927945"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 05 May 2022 06:30:56 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Thu, 5 May 2022 06:30:54 -0700
+Received: from [10.159.245.112] (10.10.115.15) by chn-vm-ex03.mchp-main.com
+ (10.10.85.151) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
+ Transport; Thu, 5 May 2022 06:30:52 -0700
+Message-ID: <71390da3-1130-3595-b7f2-8c0ac2d4cd9d@microchip.com>
+Date:   Thu, 5 May 2022 15:30:46 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YnModmKCG3BD5nvd@lunn.ch>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v10 4/5] ARM: configs: at91: sama7: add xisc and csi2dc
+Content-Language: en-US
+To:     Eugen Hristev <eugen.hristev@microchip.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-media@vger.kernel.org>, <hverkuil@xs4all.nl>
+CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <claudiu.beznea@microchip.com>, <jacopo@jmondi.org>
+References: <20220503095127.48710-1-eugen.hristev@microchip.com>
+ <20220503095127.48710-5-eugen.hristev@microchip.com>
+From:   Nicolas Ferre <nicolas.ferre@microchip.com>
+Organization: microchip
+In-Reply-To: <20220503095127.48710-5-eugen.hristev@microchip.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,33 +68,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 05, 2022 at 03:29:26AM +0200, Andrew Lunn wrote:
-> On Tue, May 03, 2022 at 05:16:31PM +0200, Ansuel Smith wrote:
-> > Add additional hardware only triggers commonly supported by switch LEDs.
-> > 
-> > Additional modes:
-> > link_10: LED on with link up AND speed 10mbps
-> > link_100: LED on with link up AND speed 100mbps
-> > link_1000: LED on with link up AND speed 1000mbps
-> > half_duplex: LED on with link up AND half_duplex mode
-> > full_duplex: LED on with link up AND full duplex mode
-> > 
-> > Additional blink interval modes:
-> > blink_2hz: LED blink on any even at 2Hz (250ms)
-> > blink_4hz: LED blink on any even at 4Hz (125ms)
-> > blink_8hz: LED blink on any even at 8Hz (62ms)
+On 03/05/2022 at 11:51, Eugen Hristev wrote:
+> Enable XISC and CSI2DC drivers.
 > 
-> I would suggest separating blink intervals into a patch of their own,
-> because they are orthogonal to the other modes. Most PHYs are not
-> going to support them, or they have to be the same across all LEDs, or
-> don't for example make sense with duplex etc. We need to first
-> concentrate on the basics, get that correct. Then we can add nice to
-> have features like this.
-> 
->      Andrew
+> Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
 
-Okok will just drop this. I agree that adds additional complexity to the
-code and would make this even harder to merge.
+Acked-by: Nicolas Ferre <nicolas.ferre@microchip.com>
+and queued in at91-defconfig branch for 5.19, as the drivers and 
+defconfig options are already there in 5.18-rc1.
+
+Thanks, best regards,
+   Nicolas
+
+> ---
+>   arch/arm/configs/sama7_defconfig | 2 ++
+>   1 file changed, 2 insertions(+)
+> 
+> diff --git a/arch/arm/configs/sama7_defconfig b/arch/arm/configs/sama7_defconfig
+> index 07b0494ef743..b375bf5f924c 100644
+> --- a/arch/arm/configs/sama7_defconfig
+> +++ b/arch/arm/configs/sama7_defconfig
+> @@ -138,6 +138,8 @@ CONFIG_MEDIA_SUPPORT_FILTER=y
+>   CONFIG_MEDIA_CAMERA_SUPPORT=y
+>   CONFIG_MEDIA_PLATFORM_SUPPORT=y
+>   CONFIG_V4L_PLATFORM_DRIVERS=y
+> +CONFIG_VIDEO_ATMEL_XISC=y
+> +CONFIG_VIDEO_MICROCHIP_CSI2DC=y
+>   CONFIG_VIDEO_IMX219=m
+>   CONFIG_VIDEO_IMX274=m
+>   CONFIG_VIDEO_OV5647=m
+
 
 -- 
-	Ansuel
+Nicolas Ferre

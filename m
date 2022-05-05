@@ -2,179 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A90551C003
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 14:58:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C32B51BFFF
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 14:58:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377565AbiEENBF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 09:01:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41996 "EHLO
+        id S1378331AbiEENB0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 09:01:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233634AbiEENBB (ORCPT
+        with ESMTP id S1378295AbiEENBY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 09:01:01 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C90184AE08
-        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 05:57:21 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id i19so8541252eja.11
-        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 05:57:21 -0700 (PDT)
+        Thu, 5 May 2022 09:01:24 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA0E553E3B
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 05:57:43 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id g6so8579799ejw.1
+        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 05:57:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=date:from:to:cc:subject:message-id:mail-followup-to:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=FM/Z6quK2HFXaGlKN2qHDcgt6AtRbU+Icwi43NmIU6g=;
-        b=e7ujymya9ex2b8NDhVyC0LmZepjwDZX1dOJK1JDnnmGuRG6AyTOFnHJ4J2V7rtz1p/
-         FBP0QGnQxWCfs+GWzsqJKxqz66EmleSHDZtXvbKHaBCbdrS6bFMgGWAdoBaq5hRTvKk1
-         IAbU4QUVUeqgtXnBEA9JGXIncA6nXjki8yuyg=
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=RybWbrXcj8zBS10i0C/9NHfeL8tGwcNcqo6inv4EpAI=;
+        b=d7ws1vmB8TNasv2lYZpKICd2vTQXUueLbTwFXYGVqHpQ8H7SyvH2fl6/g62DCgDWaA
+         fRW66tJ5nWbqkYv2F+uwnoUBQ0VhC7V40TrefZW2K7wY5hhgHFI0bMpqYtJsxDlk/IP8
+         AQFbrHBEVLvgQHq3gyz3ga5LiF8TDzDBKFzBq/3CLCP+nEXz1UNTy7EM8Pj2M6D7/bXx
+         rVmyxES41BJeedBgaQs82ycRHSuZpGNQHb+HIHtYs19eNWBu0xI6aA5uVIsoFPKxMdhv
+         jcdEBeWv/1d59lQKC+eLFIb73JCKOYx1yiBelaxx/HkTPjtP+53zYjRczjThZJQLBaYP
+         beUQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id
-         :mail-followup-to:references:mime-version:content-disposition
-         :content-transfer-encoding:in-reply-to;
-        bh=FM/Z6quK2HFXaGlKN2qHDcgt6AtRbU+Icwi43NmIU6g=;
-        b=sOyYf/HHARlxxiJG+eA9fAwacOMvW95YYojFAx0VdCJeTFCpHZxJmdNSYLGnTovc5g
-         tlATu8XW0x9y3xeqKQu23vwISyIIRid+ao8QYfu2l3lD3bbt+6BiXHu+ELxEB/1Mt1WJ
-         qJFSzPQFmPfk0MDZMRZjoHHVQB07eOmzRJrm9M52Asscm+AJeabYUZQ/LWppEJsrN9LW
-         77QphSUihRpaMBaaDyzBTBx4jKFAs26btD55qJO/YEnmZtAqsHMMKAeYGAZ1wRc3rZRf
-         3umYstJ8jhdkLII3yQqhpVD0ZBjGJfZCMtC7jZMoT+GrZhFJILukhxah7Li/qMvgJuXu
-         Afog==
-X-Gm-Message-State: AOAM533r/MDjEyTW7zpB/thRc3R2AV68ACGF913JtVVI73dMHJfTGDV/
-        nm5qxATjRV13fe5/T6YOOPZvTg==
-X-Google-Smtp-Source: ABdhPJydB+X7T3Uinb/cc9VMJSsCVdAEUcKhuzhNyoyqd8YRzscpNiO1NJQT0fjm1pOxqN4/qUBFXA==
-X-Received: by 2002:a17:906:58ca:b0:6f4:444f:31ef with SMTP id e10-20020a17090658ca00b006f4444f31efmr19843303ejs.135.1651755440390;
-        Thu, 05 May 2022 05:57:20 -0700 (PDT)
-Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
-        by smtp.gmail.com with ESMTPSA id n15-20020a05640206cf00b0042617ba6386sm823998edy.16.2022.05.05.05.57.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 May 2022 05:57:19 -0700 (PDT)
-Date:   Thu, 5 May 2022 14:57:18 +0200
-From:   Daniel Vetter <daniel@ffwll.ch>
-To:     Thomas Zimmermann <tzimmermann@suse.de>
-Cc:     Javier Martinez Canillas <javierm@redhat.com>,
-        linux-kernel@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Helge Deller <deller@gmx.de>, dri-devel@lists.freedesktop.org,
-        Hans de Goede <hdegoede@redhat.com>
-Subject: Re: [PATCH 2/3] fbdev/simplefb: Cleanup fb_info in .fb_destroy
- rather than .remove
-Message-ID: <YnPJroqQ+oxqJqIx@phenom.ffwll.local>
-Mail-Followup-To: Thomas Zimmermann <tzimmermann@suse.de>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        linux-kernel@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        Helge Deller <deller@gmx.de>, dri-devel@lists.freedesktop.org,
-        Hans de Goede <hdegoede@redhat.com>
-References: <20220504215151.55082-1-javierm@redhat.com>
- <20220504215722.56970-1-javierm@redhat.com>
- <974f4d00-89bc-a2da-6d65-ca4207300794@suse.de>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=RybWbrXcj8zBS10i0C/9NHfeL8tGwcNcqo6inv4EpAI=;
+        b=XthUJFEnFO/CQsHXh4zkIQR/wTNskcqwO57sXhkKUu8/o/oaCRoYhgSVENm4mHtQ07
+         H5Xihoxb1HqRco6kEFPfNsdL9jqNdN9sn4aTS1f98jaARf4LGz3uMyIuCxXZv+h/gCjh
+         5LykqNTG4bcYBE0f0fduBquAoJSwacobRCR0Z8opJvg+pwjUPYpbFgc4p1HGi3metQOW
+         pHOBIS9DXja8slE6uSV38luWB9fxcCreJ5ff2gPVaEzrakCbMqU8kizZyomMk5KhSJeu
+         AoQLGDUV0Gv5uroL6bzHaQsUV4VcmPRgYjdsl9xW9QZotaFLl1XQblWgfTKaaepvPo3t
+         c7fw==
+X-Gm-Message-State: AOAM530MuzP+E8SgkaaCRHX12CLZ3Vcl0AnYnZjlPuhCud0vOPeUF8F0
+        CZojwdhWYnCPuJdD5lo77vsVzbPTsfO+juwCOOOZPQ==
+X-Google-Smtp-Source: ABdhPJzm7DvuddhoB6IlDfOb7PG3Zm7dp7T7j+cXQJ/VMgHGfFkalZ86UDm1bktcuRSPyzrSERhqQrQnGfs2PDceCNc=
+X-Received: by 2002:a17:907:3e28:b0:6f4:3900:78f8 with SMTP id
+ hp40-20020a1709073e2800b006f4390078f8mr21669903ejc.736.1651755462487; Thu, 05
+ May 2022 05:57:42 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <974f4d00-89bc-a2da-6d65-ca4207300794@suse.de>
-X-Operating-System: Linux phenom 5.10.0-8-amd64 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220504144406.36744-1-jonathanh@nvidia.com> <CAMRc=MeXUN6P8kWxB75GsXdKD7Owz9mX5HpgfQoMGeJh-z3=Rw@mail.gmail.com>
+ <6629e06d06f647923c04502ce3133f76@kernel.org>
+In-Reply-To: <6629e06d06f647923c04502ce3133f76@kernel.org>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Thu, 5 May 2022 14:57:31 +0200
+Message-ID: <CAMRc=Me=10YmTMQVWtBe6gUQxUSAL9fe_X7qq_F-mFGbWvrGtw@mail.gmail.com>
+Subject: Re: [PATCH V2] gpio: max77620: Make the irqchip immutable
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     Jon Hunter <jonathanh@nvidia.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-tegra@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 05, 2022 at 09:29:40AM +0200, Thomas Zimmermann wrote:
-> Hi
-> 
-> Am 04.05.22 um 23:57 schrieb Javier Martinez Canillas:
-> > The driver is calling framebuffer_release() in its .remove callback, but
-> > this will cause the struct fb_info to be freed too early. Since it could
-> > be that a reference is still hold to it if user-space opened the fbdev.
-> > 
-> > This would lead to a use-after-free error if the framebuffer device was
-> > unregistered but later a user-space process tries to close the fbdev fd.
-> > 
-> > The correct thing to do is to only unregister the framebuffer in the
-> > driver's .remove callback, but do any cleanup in the fb_ops.fb_destroy.
-> > 
-> > Suggested-by: Daniel Vetter <daniel.vetter@ffwll.ch>
-> > Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
-> 
-> Reviewed-by: Thomas Zimmermann <tzimmermann@suse.de>
-> 
-> Please see my question below.
-> 
-> > ---
-> > 
-> >   drivers/video/fbdev/simplefb.c | 8 +++++++-
-> >   1 file changed, 7 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/video/fbdev/simplefb.c b/drivers/video/fbdev/simplefb.c
-> > index 94fc9c6d0411..2c198561c338 100644
-> > --- a/drivers/video/fbdev/simplefb.c
-> > +++ b/drivers/video/fbdev/simplefb.c
-> > @@ -84,6 +84,10 @@ struct simplefb_par {
-> >   static void simplefb_clocks_destroy(struct simplefb_par *par);
-> >   static void simplefb_regulators_destroy(struct simplefb_par *par);
-> > +/*
-> > + * fb_ops.fb_destroy is called by the last put_fb_info() call at the end
-> > + * of unregister_framebuffer() or fb_release(). Do any cleanup here.
-> > + */
-> >   static void simplefb_destroy(struct fb_info *info)
-> >   {
-> >   	struct simplefb_par *par = info->par;
-> > @@ -94,6 +98,8 @@ static void simplefb_destroy(struct fb_info *info)
-> >   	if (info->screen_base)
-> >   		iounmap(info->screen_base);
-> > +	framebuffer_release(info);
-> > +
-> >   	if (mem)
-> >   		release_mem_region(mem->start, resource_size(mem));
-> 
-> The original problem with fbdev hot-unplug was that vmwgfx needed the
-> framebuffer region to be released. If we release it only after userspace
-> closed it's final file descriptor, vmwgfx could have already failed.
-> 
-> I still don't fully get why this code apparently works or at least doesn't
-> blow up occasionally. Any ideas?
+On Thu, May 5, 2022 at 2:54 PM Marc Zyngier <maz@kernel.org> wrote:
+>
+> On 2022-05-05 13:42, Bartosz Golaszewski wrote:
+> > On Wed, May 4, 2022 at 4:44 PM Jon Hunter <jonathanh@nvidia.com> wrote:
+> >>
+> >> Commit 6c846d026d49 ("gpio: Don't fiddle with irqchips marked as
+> >> immutable") added a warning to indicate if the gpiolib is altering the
+> >> internals of irqchips. Following this change the following warning is
+> >> now observed for the max77620 gpio driver ...
+> >>
+> >>  WARNING KERN gpio gpiochip0: (max77620-gpio): not an immutable chip,
+> >>         please consider fixing it!
+> >>
+> >> Fix the above warning by making the max77620 gpio driver immutable.
+> >>
+> >> Signed-off-by: Jon Hunter <jonathanh@nvidia.com>
+> >> ---
+> >
+> > Queued for fixes, thanks!
+>
+> You mean fixes for *5.19*, right?
+>
 
-See my other reply, releasing hw stuff should be done from ->remove, not
-->fb_destroy.
+Of course I did. 100%. And I'll stick to this version. :)
 
-Also note that none of the patches discussed moved around anything here,
-we simply leaked things a bit when only unregistering the fb and not going
-through the device->remove callback. I guess in practice it works because
-unregistering the device sends out a uevent, and userspace then closes all
-it's device fd as a reaction to that, and usually that's fast enough to
-not upset anyone?
+(Thanks for the heads-up!)
 
-No idea tbh.
--Daniel
-
-> Best regards
-> Thomas
-> 
-> >   }
-> > @@ -545,8 +551,8 @@ static int simplefb_remove(struct platform_device *pdev)
-> >   {
-> >   	struct fb_info *info = platform_get_drvdata(pdev);
-> > +	/* simplefb_destroy takes care of info cleanup */
-> >   	unregister_framebuffer(info);
-> > -	framebuffer_release(info);
-> >   	return 0;
-> >   }
-> 
-> -- 
-> Thomas Zimmermann
-> Graphics Driver Developer
-> SUSE Software Solutions Germany GmbH
-> Maxfeldstr. 5, 90409 Nürnberg, Germany
-> (HRB 36809, AG Nürnberg)
-> Geschäftsführer: Ivo Totev
-
-
-
-
--- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+Bart

@@ -2,98 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFBA351C06F
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 15:19:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8FE351C083
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 15:20:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379119AbiEENWG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 09:22:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34072 "EHLO
+        id S1379219AbiEENXl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 09:23:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379004AbiEENV6 (ORCPT
+        with ESMTP id S1379120AbiEENXf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 09:21:58 -0400
-Received: from us-smtp-delivery-74.mimecast.com (us-smtp-delivery-74.mimecast.com [170.10.133.74])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DF11A36E28
-        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 06:18:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651756698;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=dZYBN09igH8LtCAZWzaFJ4ayRRE7BNTVPZW2OM3YADI=;
-        b=hCfPgJthobgLCk7MVI5YbbDazH/msf9MQISysUUXVDrZAPhKJ0lUNXZAaUI3tITEOPKIsj
-        18NWWPPm6ze/g9Ml5qT/7hj70gdxtprBOQ3/LzTXJplsUWf+aTTmzZMQLq4n65yHpSqVY0
-        qOU3Mtn45nVnTDeDAU3Ra7DhwiuR0XY=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-668-Vc_JEwU5P8Oa5jz7d530gA-1; Thu, 05 May 2022 09:18:15 -0400
-X-MC-Unique: Vc_JEwU5P8Oa5jz7d530gA-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 5355C185A79C;
-        Thu,  5 May 2022 13:18:14 +0000 (UTC)
-Received: from shodan.usersys.redhat.com (unknown [10.43.17.22])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 159057AE3;
-        Thu,  5 May 2022 13:18:14 +0000 (UTC)
-Received: by shodan.usersys.redhat.com (Postfix, from userid 1000)
-        id 105471C0242; Thu,  5 May 2022 15:18:13 +0200 (CEST)
-From:   Artem Savkov <asavkov@redhat.com>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Josh Poimboeuf <jpoimboe@redhat.com>
-Cc:     Anna-Maria Behnsen <anna-maria@linutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Artem Savkov <asavkov@redhat.com>
-Subject: [PATCH v5 2/2] net: make tcp keepalive timer upper bound
-Date:   Thu,  5 May 2022 15:18:11 +0200
-Message-Id: <20220505131811.3744503-3-asavkov@redhat.com>
-In-Reply-To: <20220505131811.3744503-1-asavkov@redhat.com>
-References: <87zgkwjtq2.ffs@tglx>
- <20220505131811.3744503-1-asavkov@redhat.com>
+        Thu, 5 May 2022 09:23:35 -0400
+Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ADD656F94;
+        Thu,  5 May 2022 06:19:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=1DNfkVatFPseIRLRTaf5GG9N3vrErBYge1wmaOwIZns=; b=LZPrJ/vjUPasOI43ov6ddZJwu/
+        p0j9nUctyDj+SFAaWk7zI/PPi78KLqVLLq7RTp94cYeImH/Oz48mhUea8dNQwA1mwowWHdOQsW6Eg
+        J9jMvU+x/33EcKgIVyWm0n8bR0BGRO5lxV56aAC+ZiKkzr7QN6HHEuJe/z6LDqeVex0+JBQrvmL32
+        aVZeBYzmKvwP1cTw04LEGcx5Ku3dP26Y06ygZFvgIBF4N9l3WAyf1CRHjPuNa99Apa0axXvsaCvB2
+        XF+dUTRht+ESY831J5TV75e00FEes8HLRzqS9eAvvPd25eOysvNknOidWwX4l6Ek+jpeGolt7tcpV
+        USHVIKPg==;
+Received: from [179.113.53.197] (helo=[192.168.1.60])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1nmbOP-0001q2-IE; Thu, 05 May 2022 15:19:41 +0200
+Message-ID: <3a52c5ac-e8c3-64dc-d94f-e210ccb19a70@igalia.com>
+Date:   Thu, 5 May 2022 10:19:27 -0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: Should arm64 have a custom crash shutdown handler?
+Content-Language: en-US
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        will Deacon <will@kernel.org>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Ard Biesheuvel <ardb@kernel.org>, broonie@kernel.org,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>
+References: <427a8277-49f0-4317-d6c3-4a15d7070e55@igalia.com>
+ <874k24igjf.wl-maz@kernel.org>
+ <92645c41-96fd-2755-552f-133675721a24@igalia.com>
+ <YnPIwjLMDXgII1vf@FVFF77S0Q05N.cambridge.arm.com>
+ <3bee47db-f771-b502-82a3-d6fac388aa89@igalia.com>
+ <YnPN33qN7oVQa4fA@FVFF77S0Q05N.cambridge.arm.com>
+From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+In-Reply-To: <YnPN33qN7oVQa4fA@FVFF77S0Q05N.cambridge.arm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Make sure TCP keepalive timer does not expire late. Switching to upper
-bound timers means it can fire off early but in case of keepalive
-tcp_keepalive_timer() handler checks elapsed time and resets the timer
-if it was triggered early. This results in timer "cascading" to a
-higher precision and being just a couple of milliseconds off it's
-original mark.
-This adds minimal overhead as keepalive timers are never re-armed and
-are usually quite long.
+On 05/05/2022 10:15, Mark Rutland wrote:
+> [...]
+> Without a strong justification, we wouldn't add such hooks to arm64.
+> 
+> Could you start by trying to use the notifiers, and if you encounter a problem,
+> *then* we consider an alternative? That should mean we have a concrete reason.
+> 
+> Thanks,
+> Mark.
 
-Signed-off-by: Artem Savkov <asavkov@redhat.com>
----
- net/ipv4/inet_connection_sock.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+That's a good idea Mark. I'm not expert in Hyper-V - I could try that
+for a fact, but let's see if Michael has a strong reason on why this
+need to be done in arch code and panic notifiers aren't enough.
 
-diff --git a/net/ipv4/inet_connection_sock.c b/net/ipv4/inet_connection_sock.c
-index 1e5b53c2bb26..bb2dbfb6f5b5 100644
---- a/net/ipv4/inet_connection_sock.c
-+++ b/net/ipv4/inet_connection_sock.c
-@@ -589,7 +589,7 @@ EXPORT_SYMBOL(inet_csk_delete_keepalive_timer);
- 
- void inet_csk_reset_keepalive_timer(struct sock *sk, unsigned long len)
- {
--	sk_reset_timer(sk, &sk->sk_timer, jiffies + len);
-+	sk_reset_timer(sk, &sk->sk_timer, jiffies + upper_bound_timeout(len));
- }
- EXPORT_SYMBOL(inet_csk_reset_keepalive_timer);
- 
--- 
-2.34.1
+Thanks,
 
+
+Guilherme

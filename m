@@ -2,157 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68C4E51B794
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 07:45:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5898951B796
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 07:46:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243711AbiEEFt3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 01:49:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43116 "EHLO
+        id S243820AbiEEFuS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 01:50:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243731AbiEEFt1 (ORCPT
+        with ESMTP id S243729AbiEEFuQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 01:49:27 -0400
-Received: from us-smtp-delivery-74.mimecast.com (us-smtp-delivery-74.mimecast.com [170.10.133.74])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6AE76377D7
-        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 22:45:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651729548;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=5OB2SJWAbhkv+kJ54v7gaAtBueD1ceTwg1RbEyJ/vO0=;
-        b=Nz7y+McGhxPhJLW91mNW8TlE+oSTbqpJjVfrBGLjXjouG/s0EZPpAYDgD3F4PfoWCI4Yce
-        CvU7Uw/85mD72eidLC+7tI3YFeB/X7DCX0xwHcJT4YEkxnX0Ybjru3w9tR5r6e3s+GK+F6
-        Xph8fya7AtQhVD/P1jCUkpMuxK5lf08=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-302-397aCiWfNlG4en0fd6A3IQ-1; Thu, 05 May 2022 01:45:43 -0400
-X-MC-Unique: 397aCiWfNlG4en0fd6A3IQ-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 52FC629ABA2F;
-        Thu,  5 May 2022 05:45:42 +0000 (UTC)
-Received: from localhost (ovpn-12-197.pek2.redhat.com [10.72.12.197])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 1A35CC15E71;
-        Thu,  5 May 2022 05:45:41 +0000 (UTC)
-Date:   Thu, 5 May 2022 13:45:37 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Sourabh Jain <sourabhjain@linux.ibm.com>
-Cc:     Eric DeVolder <eric.devolder@oracle.com>,
-        linux-kernel@vger.kernel.org, x86@kernel.org,
-        kexec@lists.infradead.org, ebiederm@xmission.com,
-        dyoung@redhat.com, vgoyal@redhat.com, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        hpa@zytor.com, nramas@linux.microsoft.com, thomas.lendacky@amd.com,
-        robh@kernel.org, efault@gmx.de, rppt@kernel.org, david@redhat.com,
-        konrad.wilk@oracle.com, boris.ostrovsky@oracle.com
-Subject: Re: [PATCH v7 4/8] crash: add generic infrastructure for crash
- hotplug support
-Message-ID: <YnNkgfnHlUTky0lt@MiWiFi-R3L-srv>
-References: <20220413164237.20845-1-eric.devolder@oracle.com>
- <20220413164237.20845-5-eric.devolder@oracle.com>
- <YleK3J/4HNuFioIh@MiWiFi-R3L-srv>
- <4eea2373-32f3-9960-cbec-21dc1a428807@oracle.com>
- <6f3a6cbb-0ac4-f178-fc17-18f9594da319@linux.ibm.com>
- <YmeBjrChOHsIYG3e@MiWiFi-R3L-srv>
- <f2dbd4fe-6201-b5c4-2725-dec9c3dbf13e@linux.ibm.com>
+        Thu, 5 May 2022 01:50:16 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 803F7344CC;
+        Wed,  4 May 2022 22:46:37 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id gh6so6721410ejb.0;
+        Wed, 04 May 2022 22:46:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:to:cc:references
+         :from:in-reply-to:content-transfer-encoding;
+        bh=AAqxEn14F2urq7gRW6XIInZJqYKSj6uaZRKkj7ztyxc=;
+        b=iVInBQQc78CUYacNlpsH9Ud7kB6dqn23jW7w+jMJscvFFkOHvZBF54dzHIWhvU3llN
+         qW0uY0HHzTq1H9e10V+kPJH7f9nsk5NsPgVxzBhUXMTmiHdbSLSfbQiD6VysHFoae+Dh
+         JFilEyLYF9y7tE5HunM7u10h/4uBoOSZYLbV5OsBHJWx8zA7ewQVvD7mRBRKh0EeAf5s
+         fDfVGfhSWyajKH0AaR0S1TvwlCtCCjXTck9Cumtnlv7g4rsUW/ExegF650iQ+7M8EkaJ
+         W9OofsnjDhmPo7P59xG8naTefJsMm8WeFaoU4y0mIE28JQ+Zg9heoq3GCh7vep4TvCgU
+         IIWg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :to:cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=AAqxEn14F2urq7gRW6XIInZJqYKSj6uaZRKkj7ztyxc=;
+        b=P6q1lg5UcmotkFwFo1YaVUTMo8yYw+I+Uo26sIUcR7iLWwSXK6sIt9k3C6VKuwvvYk
+         8FEJ7PQTZeYVNwtxjsuSC2Gc//yLVxAUCEsarrJOM8KqKHd25/FyQwQ9WNblqmVlzGaZ
+         1HHTBYbELsdEbopev1LMiOrq+eJ1QtfaovqHwejjcXrcnI7+3jeDPgpQMtAFD7pRd3TF
+         g8gFc8kC+EH1ulSDsoNI1cvpeCP7rkAZAD0npb1s1yMeWL0nGqEFi/KX/4VpJwWLXF1O
+         JxD90tYcAwEw8/TJ1owv+XlKnQ8VD9dnCIM/zefoZ5AzpXwpuF537GdfkVx89Egh1I2x
+         WdLA==
+X-Gm-Message-State: AOAM530GyxpK4FIH2jv2hA3+4MHY+kMfwA6D1pLVzrEeYPcOpbp63CJ+
+        lv2pLJkSEQSgdKGlnQeShjE=
+X-Google-Smtp-Source: ABdhPJxmEoOm7L1U4kbR4F1xUSjzh+Guzq53ory3XJUYqqgkU5cBr7/B9HTGtNiGANSfQ2qgdwaB1Q==
+X-Received: by 2002:a17:907:7f09:b0:6f4:9f76:d10a with SMTP id qf9-20020a1709077f0900b006f49f76d10amr9971400ejc.248.1651729595926;
+        Wed, 04 May 2022 22:46:35 -0700 (PDT)
+Received: from [192.168.26.149] (ip-194-187-74-233.konfederacka.maverick.com.pl. [194.187.74.233])
+        by smtp.googlemail.com with ESMTPSA id eb7-20020a170907280700b006f3ef214e4esm326062ejc.180.2022.05.04.22.46.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 04 May 2022 22:46:35 -0700 (PDT)
+Message-ID: <318c0814-7f0b-9798-6998-5039094b010d@gmail.com>
+Date:   Thu, 5 May 2022 07:46:34 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:96.0) Gecko/20100101
+ Thunderbird/96.0
+Subject: Re: [PATCH V2] nvmem: add driver handling U-Boot environment
+ variables
+To:     Ahmad Fatoum <a.fatoum@pengutronix.de>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>
+Cc:     Tom Rini <trini@konsulko.com>, linux-mtd@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        u-boot@lists.denx.de, devicetree@vger.kernel.org,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>
+References: <20220503165658.13932-1-zajec5@gmail.com>
+ <79c7891a-9a68-a111-094d-be9804071a9e@pengutronix.de>
+From:   =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>
+In-Reply-To: <79c7891a-9a68-a111-094d-be9804071a9e@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <f2dbd4fe-6201-b5c4-2725-dec9c3dbf13e@linux.ibm.com>
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/28/22 at 10:48am, Sourabh Jain wrote:
-> Hi Baoquan,
+On 4.05.2022 11:23, Ahmad Fatoum wrote:
+> Hello Rafa≈Ç,
 > 
-> On 26/04/22 10:52, Baoquan He wrote:
-> > On 04/26/22 at 09:36am, Sourabh Jain wrote:
-> > > On 15/04/22 03:59, Eric DeVolder wrote:
-......
+> On 03.05.22 18:56, Rafa≈Ç Mi≈Çecki wrote:
+>> From: Rafa≈Ç Mi≈Çecki <rafal@milecki.pl>
+>>
+>> U-Boot stores its setup as environment variables. It's a list of
+>> key-value pairs stored on flash device with a custom header.
+>>
+>> This commit adds an NVMEM driver that:
+>> 1. Provides NVMEM access to environment vars binary data
+>> 2. Extracts variables as NVMEM cells
+>>
+>> It can be used for:
+>> 1. Accessing env variables from user-space
+> 
+> Is this already possible? The only interface I know of is the /nvmem
+> file in sysfs, but that one is not per cell, but per device.
 
-> > > > > > +#if defined(CONFIG_MEMORY_HOTPLUG)
-> > > > > > +static int crash_memhp_notifier(struct notifier_block *nb,
-> > > > > > +††† unsigned long val, void *v)
-> > > > > > +{
-> > > > > > +††† struct memory_notify *mhp = v;
-> > > > > > +
-> > > > > > +††† switch (val) {
-> > > > > > +††† case MEM_ONLINE:
-> > > > > > +††††††† crash_hotplug_handler(KEXEC_CRASH_HP_ADD_MEMORY, -1U);
-> > > > > We don't differentiate the memory add/remove, cpu add, except of cpu
-> > > > > remove. Means the hp_action only differentiate cpu remove from the other
-> > > > > action. Maybe only making two types?
-> > > > > 
-> > > > > #define KEXEC_CRASH_HP_REMOVE_CPU†† 0
-> > > > > #define KEXEC_CRASH_HP_UPDATE_OTHER††††† 1
-> > > > > 
-> > > > Sourabh Jain's work with PPC uses REMOVE_CPU, REMOVE_MEMORY, and
-> > > > ADD_MEMORY.
-> > > > Do you still want to consolidate these?
-> > > On PowerPC different actions are needed for CPU add and memory add/remove.
-> > > For CPU add case only FDT is updated whereas for the memory hotplug we will
-> > > be
-> > > updating FDT and elfcorehdr.
-> > I don't understand. For elfcorehdr updating, we only need regenerate it.
-> > Do you update them different for memory add/remove?
-> 
-> We have different actions for cpu remove, CPU add and memory add/remove
-> case.
-> 
-> CPU remove: no action
-> CPU add: update flattened device tree (FDT)
-> memory add/remove: update FDT and regenerate/update elfcorehdr
-> 
-> Since memory add/remove action is same we can have common hp_action for
-> them.
+Maybe that wasn't precise enough, I should probably write:
+1. Parsing binary data from user-space
 
-For memory hot add/remove, we need rengereate elfcorehdr, and add the
-new elfcorehdr into fdt. Except of this, FDT need to know the hp_action
-and the hot added/removed memory region, namely the start and end, e.g
-[start, end]? 
+In future I'd like to extend U-Boot's "printenv" tool to support reading
+env variables blob using Linux's sysfs as documented in the
+Documentation/ABI/stable/sysfs-bus-nvmem
 
-I checked arm64 kexec code, seems we only need to know if mem hotplug
-event happened, then regenerate elfcorehdr and embed the new elfcorehdr
-into fdt. Then we don't know pass the [start, end] info into the
-handler. Please tell if ppc is different or I missed anything.
 
-If I am right, I would like the handler interface as Boris has made
-in his draft patch.
+>> +	label = of_get_property(np->parent, "label", NULL);
+>> +	if (!label)
+>> +		label = np->parent->name;
+>> +
+>> +	priv->mtd = get_mtd_device_nm(label);
+>> +	if (IS_ERR(priv->mtd)) {
+>> +		dev_err(dev, "Failed to find \"%s\" MTD device: %ld\n", label, PTR_ERR(priv->mtd));
+>> +		return PTR_ERR(priv->mtd);
+>> +	}
+> 
+> I am trying to make sense of this using the binding, but I can't.
+> Do you have an example device tree fragment?
 
-void __weak arch_crash_handle_hotplug_event(struct kimage *image, unsigned int hp_action,
-                                           unsigned int cpu)
+This comes from unreleased yet board I'm working on.
 
-static void handle_hotplug_event(unsigned int hp_action, unsigned int cpu)
-> 
-> > 
-> > What I saw is the added action for memory hotplug is only for message
-> > printing. Is this really needed? And memory hotplug is even not
-> > supported. Please correct me if I missed anything.
-> 
-> I agree that currently memory hp_action is only used for printing warning
-> message but
-> eventually we will be handling memory hotplug case as well.
-> 
-> > +       /* crash update on memory hotplug is not support yet */
-> > +       if (hp_action == KEXEC_CRASH_HP_REMOVE_MEMORY || hp_action == KEXEC_CRASH_HP_ADD_MEMORY) {
-> > +               pr_info_once("crash hp: crash update is not supported with memory hotplug\n");
-> > +               return;
-> > +       }
-> 
-> Thanks,
-> Sourabh Jain
-> 
+It stores U-Boot env variables in the middle of U-Boot binary.
 
+partitions {
+	compatible = "fixed-partitions";
+	#address-cells = <1>;
+	#size-cells = <1>;
+
+	partition@0 {
+		label = "loader";
+		reg = <0x0 0x100000>;
+
+		partition@40000 {
+			compatible = "u-boot,env";
+			label = "u-boot-env";
+			reg = <0x40000 0x4000>;
+		};
+	};
+
+	partition@100000 {
+		label = "image";
+		reg = <0x100000 0x1fe00000>;
+	};
+};

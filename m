@@ -2,40 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05B7851CD37
+	by mail.lfdr.de (Postfix) with ESMTP id 7632E51CD38
 	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 02:00:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233742AbiEFAC6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 20:02:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35548 "EHLO
+        id S1357309AbiEFADV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 20:03:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1387122AbiEFABs (ORCPT
+        with ESMTP id S1387128AbiEFABs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 5 May 2022 20:01:48 -0400
 Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81B48612AC
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1A8B60DAE
         for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 16:57:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1651795074; x=1683331074;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references;
-  bh=eMvcJDLLgv1piJPvn9rpsQ5W0zxPoYZ7HqfVKzdrDNs=;
-  b=g/tj6SB7eJFUNZLsZ3LhFWCGdd10Xz9MKBaIfRpP9IW2YfmJefGgwa2+
-   4ddlXKmn3mQPSUYG1JmM0O4sfDR5UdFrtfxQtyDR+QxfgJXzaCMTVf8zC
-   SpKKIMXEoOW7H/UlEcXdgk5Owqm5V/ik/wdjM+A2xGfCse3hEzbEFI9XK
-   4PQ835JONUcHQE3zV3SzfFTJHm9JvQjbHTGlq3rC4Yu/Ug2P6k1dqDnI/
-   Pki4RLkjLElxqU+YzXQX0jfU3DZjZcYyaiMj5AqZ/rvNeTCT5wyBhC/fm
-   +43fkWETQwU/mBPAiyFbYUjWVvvWbPSW/ZsPJNtKp4v3AgxeYKaqnxzv9
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10338"; a="250283643"
+  bh=t1y1ryZh2p05ZGgOOcX19YcqK36Xcxw5j/JRqkc11No=;
+  b=H14gOds5Pn6jcoTi5IAwEoiWHMhOMcjOzXjS3Wkw93u5Yrlhazx5bUSX
+   c/Zr3HcGO8G8aFtznMWPA6GqGNCF7+OoeTVbbkspF4Yh80zz0uu0eC+Nr
+   hU6eT6zcVLY46UqcRZBwfniqBiyQ629G3uHNd3Pa7mIgjw3iau6Mn1JPG
+   axPwiBnZ/7yA14LIjBnP/D0Dh22N0uYRehyOmmnBHDYpK0agZ/Fgk8t70
+   g6vWQmUB9j+3uG67+RWsgo0z/AWD5UTE2y6gbnW3wuQqmHN+5CRqkcL4L
+   3hG51FjBCyzfXUlZ0d0YaelKH3absuVcZIblxuT4q06tmlWf0o7/l7PIz
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10338"; a="250283645"
 X-IronPort-AV: E=Sophos;i="5.91,203,1647327600"; 
-   d="scan'208";a="250283643"
+   d="scan'208";a="250283645"
 Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2022 16:57:51 -0700
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2022 16:57:52 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,203,1647327600"; 
-   d="scan'208";a="694914386"
+   d="scan'208";a="694914391"
 Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
   by orsmga004.jf.intel.com with ESMTP; 05 May 2022 16:57:51 -0700
 From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
@@ -53,9 +53,9 @@ Cc:     Tony Luck <tony.luck@intel.com>, Andi Kleen <ak@linux.intel.com>,
         iommu@lists.linux-foundation.org, linuxppc-dev@lists.ozlabs.org,
         linux-kernel@vger.kernel.org,
         Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-Subject: [PATCH v6 17/29] x86/hpet: Reserve an HPET channel for the hardlockup detector
-Date:   Thu,  5 May 2022 16:59:56 -0700
-Message-Id: <20220506000008.30892-18-ricardo.neri-calderon@linux.intel.com>
+Subject: [PATCH v6 18/29] watchdog/hardlockup: Define a generic function to detect hardlockups
+Date:   Thu,  5 May 2022 16:59:57 -0700
+Message-Id: <20220506000008.30892-19-ricardo.neri-calderon@linux.intel.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220506000008.30892-1-ricardo.neri-calderon@linux.intel.com>
 References: <20220506000008.30892-1-ricardo.neri-calderon@linux.intel.com>
@@ -68,32 +68,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The HPET hardlockup detector needs a dedicated HPET channel. Hence, create
-a new HPET_MODE_NMI_WATCHDOG mode category to indicate that it cannot be
-used for other purposes. Using MSI interrupts greatly simplifies the
-implementation of the detector. Specifically, it helps to avoid the
-complexities of routing the interrupt via the IO-APIC (e.g., potential
-race conditions that arise from re-programming the IO-APIC while also
-servicing an NMI). Therefore, only reserve the timer if it supports Front
-Side Bus interrupt delivery.
+The procedure to detect hardlockups is independent of the underlying
+mechanism that generates the non-maskable interrupt used to drive the
+detector. Thus, it can be put in a separate, generic function. In this
+manner, it can be invoked by various implementations of the NMI watchdog.
 
-HPET channels are reserved at various stages. First, from
-x86_late_time_init(), hpet_time_init() checks if the HPET timer supports
-Legacy Replacement Routing. If this is the case, channels 0 and 1 are
-reserved as HPET_MODE_LEGACY.
-
-At a later stage, from lockup_detector_init(), reserve the HPET channel
-for the hardlockup detector. Then, the HPET clocksource reserves the
-channels it needs and then the remaining channels are given to the HPET
-char driver via hpet_alloc().
-
-Hence, the channel assigned to the HPET hardlockup detector depends on
-whether the first two channels are reserved for legacy mode.
-
-Lastly, only reserve the channel for the hardlockup detector if enabled
-in the kernel command line.
+For this purpose, move the bulk of watchdog_overflow_callback() to the
+new function inspect_for_hardlockups(). This function can then be called
+from the applicable NMI handlers. No functional changes.
 
 Cc: Andi Kleen <ak@linux.intel.com>
+Cc: Nicholas Piggin <npiggin@gmail.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>
 Cc: Stephane Eranian <eranian@google.com>
 Cc: "Ravi V. Shankar" <ravi.v.shankar@intel.com>
 Cc: iommu@lists.linux-foundation.org
@@ -103,25 +89,10 @@ Reviewed-by: Tony Luck <tony.luck@intel.com>
 Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
 ---
 Changes since v5:
- * Added a check for the allowed maximum frequency of the HPET.
- * Added hpet_hld_free_timer() to properly free the reserved HPET channel
-   if the initialization is not completed.
- * Call hpet_assign_irq() with as_nmi = true.
- * Relocated declarations of functions and data structures of the detector
-   to not depend on CONFIG_HPET_TIMER.
+ * None
 
 Changes since v4:
- * Reworked timer reservation to use Thomas' rework on HPET channel
-   management.
- * Removed hard-coded channel number for the hardlockup detector.
- * Provided more details on the sequence of HPET channel reservations.
-   (Thomas Gleixner)
- * Only reserve a channel for the hardlockup detector if enabled via
-   kernel command line. The function reserving the channel is called from
-   hardlockup detector. (Thomas Gleixner)
- * Shorten the name of hpet_hardlockup_detector_get_timer() to
-   hpet_hld_get_timer(). (Andi)
- * Simplify error handling when a channel is not found. (Tony)
+ * None
 
 Changes since v3:
  * None
@@ -132,168 +103,59 @@ Changes since v2:
 Changes since v1:
  * None
 ---
- arch/x86/include/asm/hpet.h |  22 ++++++++
- arch/x86/kernel/hpet.c      | 105 ++++++++++++++++++++++++++++++++++++
- 2 files changed, 127 insertions(+)
+ include/linux/nmi.h   |  1 +
+ kernel/watchdog_hld.c | 18 +++++++++++-------
+ 2 files changed, 12 insertions(+), 7 deletions(-)
 
-diff --git a/arch/x86/include/asm/hpet.h b/arch/x86/include/asm/hpet.h
-index 486e001413c7..5762bd0169a1 100644
---- a/arch/x86/include/asm/hpet.h
-+++ b/arch/x86/include/asm/hpet.h
-@@ -103,4 +103,26 @@ static inline int is_hpet_enabled(void) { return 0; }
- #define default_setup_hpet_msi	NULL
+diff --git a/include/linux/nmi.h b/include/linux/nmi.h
+index 750c7f395ca9..1b68f48ad440 100644
+--- a/include/linux/nmi.h
++++ b/include/linux/nmi.h
+@@ -207,6 +207,7 @@ int proc_nmi_watchdog(struct ctl_table *, int , void *, size_t *, loff_t *);
+ int proc_soft_watchdog(struct ctl_table *, int , void *, size_t *, loff_t *);
+ int proc_watchdog_thresh(struct ctl_table *, int , void *, size_t *, loff_t *);
+ int proc_watchdog_cpumask(struct ctl_table *, int, void *, size_t *, loff_t *);
++void inspect_for_hardlockups(struct pt_regs *regs);
  
- #endif
-+
-+#ifdef CONFIG_X86_HARDLOCKUP_DETECTOR_HPET
-+/**
-+ * struct hpet_hld_data - Data needed to operate the detector
-+ * @has_periodic:		The HPET channel supports periodic mode
-+ * @channel:			HPET channel assigned to the detector
-+ * @channe_priv:		Private data of the assigned channel
-+ * @ticks_per_second:		Frequency of the HPET timer
-+ * @irq:			IRQ number assigned to the HPET channel
-+ */
-+struct hpet_hld_data {
-+	bool			has_periodic;
-+	u32			channel;
-+	struct hpet_channel	*channel_priv;
-+	u64			ticks_per_second;
-+	int			irq;
-+};
-+
-+extern struct hpet_hld_data *hpet_hld_get_timer(void);
-+extern void hpet_hld_free_timer(struct hpet_hld_data *hdata);
-+#endif /* CONFIG_X86_HARDLOCKUP_DETECTOR_HPET */
-+
- #endif /* _ASM_X86_HPET_H */
-diff --git a/arch/x86/kernel/hpet.c b/arch/x86/kernel/hpet.c
-index 02d25e00e93f..ee9275c013f5 100644
---- a/arch/x86/kernel/hpet.c
-+++ b/arch/x86/kernel/hpet.c
-@@ -20,6 +20,7 @@ enum hpet_mode {
- 	HPET_MODE_LEGACY,
- 	HPET_MODE_CLOCKEVT,
- 	HPET_MODE_DEVICE,
-+	HPET_MODE_NMI_WATCHDOG,
+ #ifdef CONFIG_HAVE_ACPI_APEI_NMI
+ #include <asm/nmi.h>
+diff --git a/kernel/watchdog_hld.c b/kernel/watchdog_hld.c
+index 247bf0b1582c..b352e507b17f 100644
+--- a/kernel/watchdog_hld.c
++++ b/kernel/watchdog_hld.c
+@@ -106,14 +106,8 @@ static struct perf_event_attr wd_hw_attr = {
+ 	.disabled	= 1,
  };
  
- struct hpet_channel {
-@@ -216,6 +217,7 @@ static void __init hpet_reserve_platform_timers(void)
- 			break;
- 		case HPET_MODE_CLOCKEVT:
- 		case HPET_MODE_LEGACY:
-+		case HPET_MODE_NMI_WATCHDOG:
- 			hpet_reserve_timer(&hd, hc->num);
- 			break;
- 		}
-@@ -1496,3 +1498,106 @@ irqreturn_t hpet_rtc_interrupt(int irq, void *dev_id)
+-/* Callback function for perf event subsystem */
+-static void watchdog_overflow_callback(struct perf_event *event,
+-				       struct perf_sample_data *data,
+-				       struct pt_regs *regs)
++void inspect_for_hardlockups(struct pt_regs *regs)
+ {
+-	/* Ensure the watchdog never gets throttled */
+-	event->hw.interrupts = 0;
+-
+ 	if (__this_cpu_read(watchdog_nmi_touch) == true) {
+ 		__this_cpu_write(watchdog_nmi_touch, false);
+ 		return;
+@@ -163,6 +157,16 @@ static void watchdog_overflow_callback(struct perf_event *event,
+ 	return;
  }
- EXPORT_SYMBOL_GPL(hpet_rtc_interrupt);
- #endif
-+
-+#ifdef CONFIG_X86_HARDLOCKUP_DETECTOR_HPET
-+
-+/*
-+ * We program the timer in 32-bit mode to reduce the number of register
-+ * accesses. The maximum value of watch_thresh is 60 seconds. The HPET counter
-+ * should not wrap around more frequently than that. Thus, the frequency of the
-+ * HPET timer must be less than 71.582788 MHz. For safety, limit the frequency
-+ * to 85% the maximum frequency.
-+ *
-+ * The frequency of the HPET on systems in the field is usually less than 24MHz.
-+ */
-+#define HPET_HLD_MAX_FREQ 60845000ULL
-+
-+static struct hpet_hld_data *hld_data;
-+
-+/**
-+ * hpet_hld_free_timer - Free the reserved timer for the hardlockup detector
-+ *
-+ * Free the resources held by the HPET channel reserved for the hard lockup
-+ * detector and make it available for other uses.
-+ *
-+ * Returns: none
-+ */
-+void hpet_hld_free_timer(struct hpet_hld_data *hdata)
+ 
++/* Callback function for perf event subsystem */
++static void watchdog_overflow_callback(struct perf_event *event,
++				       struct perf_sample_data *data,
++				       struct pt_regs *regs)
 +{
-+	hdata->channel_priv->mode = HPET_MODE_UNUSED;
-+	hdata->channel_priv->in_use = 0;
-+	kfree(hld_data);
++	/* Ensure the watchdog never gets throttled */
++	event->hw.interrupts = 0;
++	inspect_for_hardlockups(regs);
 +}
 +
-+/**
-+ * hpet_hld_get_timer - Get an HPET channel for the hardlockup detector
-+ *
-+ * Reseve an HPET channel and return the timer information to caller only if a
-+ * channel is available and supports FSB mode. This function is called by the
-+ * hardlockup detector only if enabled in the kernel command line.
-+ *
-+ * Returns: a pointer with the properties of the reserved HPET channel.
-+ */
-+struct hpet_hld_data *hpet_hld_get_timer(void)
-+{
-+	struct hpet_channel *hc = hpet_base.channels;
-+	int i, irq;
-+
-+	if (hpet_freq > HPET_HLD_MAX_FREQ)
-+		return NULL;
-+
-+	for (i = 0; i < hpet_base.nr_channels; i++) {
-+		hc = hpet_base.channels + i;
-+
-+		/*
-+		 * Associate the first unused channel to the hardlockup
-+		 * detector. Bailout if we cannot find one. This may happen if
-+		 * the HPET clocksource has taken all the timers. The HPET driver
-+		 * (/dev/hpet) should not take timers at this point as channels
-+		 * for such driver can only be reserved from user space.
-+		 */
-+		if (hc->mode == HPET_MODE_UNUSED)
-+			break;
-+	}
-+
-+	if (i == hpet_base.nr_channels)
-+		return NULL;
-+
-+	if (!(hc->boot_cfg & HPET_TN_FSB_CAP))
-+		return NULL;
-+
-+	hld_data = kzalloc(sizeof(*hld_data), GFP_KERNEL);
-+	if (!hld_data)
-+		return NULL;
-+
-+	hc->mode = HPET_MODE_NMI_WATCHDOG;
-+	hc->in_use = 1;
-+	hld_data->channel_priv = hc;
-+
-+	if (hc->boot_cfg & HPET_TN_PERIODIC_CAP)
-+		hld_data->has_periodic = true;
-+
-+	if (!hpet_domain)
-+		hpet_domain = hpet_create_irq_domain(hpet_blockid);
-+
-+	if (!hpet_domain)
-+		goto err;
-+
-+	/* Assign an IRQ with NMI delivery mode. */
-+	irq = hpet_assign_irq(hpet_domain, hc, hc->num, true);
-+	if (irq <= 0)
-+		goto err;
-+
-+	hc->irq = irq;
-+	hld_data->irq = irq;
-+	hld_data->channel = i;
-+	hld_data->ticks_per_second = hpet_freq;
-+
-+	return hld_data;
-+
-+err:
-+	hpet_hld_free_timer(hld_data);
-+	hld_data = NULL;
-+	return NULL;
-+}
-+#endif /* CONFIG_X86_HARDLOCKUP_DETECTOR_HPET */
+ static int hardlockup_detector_event_create(void)
+ {
+ 	unsigned int cpu = smp_processor_id();
 -- 
 2.17.1
 

@@ -2,126 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE14A51C522
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 18:29:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A281651C523
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 18:30:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381983AbiEEQdX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 12:33:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55044 "EHLO
+        id S1381990AbiEEQeB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 12:34:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381039AbiEEQdU (ORCPT
+        with ESMTP id S1381473AbiEEQdx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 12:33:20 -0400
-Received: from sonic309-27.consmr.mail.ne1.yahoo.com (sonic309-27.consmr.mail.ne1.yahoo.com [66.163.184.153])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AE2A26579
-        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 09:29:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1651768180; bh=BBoA8CuRgkbA7cmy3x62CIFOIJuQmkI5nM2k21Q2MQY=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=ihQBmtSn1+pdUrTUfmnYARsRzjV0rUvXD0EZsMkevLZ3gEW2Jgo3bOEZd/y9sYAZDg+vmESB0306l8qb8NRtWyZfK7fSl2HmoGCNmT2sUrTYlPdAwTGZ42UKfX7yzffTk/BKL3ipILCCotqvcpYwk7uKYjikebSnDR+H3Na+0ByXYN44GJDTiIYIp28wrZTLyF2n6fFa/ZvCPN4XmS6V0Abw63qn/VnKuf0icRYzxQ1js7uI7NBU5ZbXqlgPohRyjAZGwIZgMj/ryFqvH2ej3qZHnPKW3A1F37sZ+RxOH1gXslJZ8uvnRpQKEAfTVbILvvUNLp2z1DGY0qTDmLb//w==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1651768180; bh=XYk6WA+A2wypDxVG9uSPSh0LN+IeUqUwAyUGgpOqZZp=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=sjxwt7vCpDl64g3JGMGRGCLxdemZ8vGptaT+tB7osT+gkNm4roeys86KKBs9fcIC57Owh9EUystpoCGhrSlKnIkW0Fc3DU+JqQS8Pf79BFZLsMT1eUOAdw7oxSE0ezGQRDVEUkkFYRLocjqXYWoXSaE6h4AGkRAAwtfGZyrpMPBS7VTwYA6xG76jxlwKZI5B9NOTBbJHiBJDaE0hLNDJNNojxBovHrbwhNRONBa80Nfcp224lIBQow0voxF5/A7+SWo93w5343bWjEJOUGRUwBsATsF1qRsuLcXTP8kDFN6oVk1PDkD6sXxnAbkYy4woxPZhQRv00RCdAXoxsxumSw==
-X-YMail-OSG: pJt4TT8VM1nGmnl9kZnN1WCGvMTcLo0RjHLt2muSJ11KFhlldg4TIbu9dAl43b9
- rDjeAqil6mAQpXiq8b.0kWbiLBhxu471LUsdDD63XZa9ADnJQN089vUZFaSc6Vh3iejysuiaW7FU
- 7uhHN1yULCxfJsZH9U2AkSprCAMXgJ65nFuoRuAVex7GpNevd1AyP2NOM.ihhrkl3AsgdCyadbt0
- W02nXqztvEvrMjsrFwibJQBrAJ4nGWr5h0akSmX34dDOlxEkyPc1mcWNHrJE.0s9h9n1sRu9hmTL
- VRBiWprF0PzsIK8Mmo.08NSg_Et4OCk52kidbZia3GJcznVz0VjerLAI0RkmqOFo2WRk.xIdzAoi
- efdX2n3zRSJyiJTQ48oJixUrj7FxoS9wplaR7t4ctnXdr5vNjHPZeSLqgZzDmOLX4trTEwWOFE1Q
- thZ.x61Ivivmeo9Sik0hqY.VsCHHmrhMm_PMGG1VwTPwWhn59Tl6fO_j_zEhymHPtMSXZLJDc0Ph
- jUsoDayuFJYddGOelUFGSMPbrYT9P_T9MRf8Iyqbx7oN4n0DC8GWDMAfb6gcFlBd_sCvf3IzTvRt
- 2BVRoPBq7I1zggrgNjxuW_y2F5HouUPV69dEOF061YUoaW0fmGnu2iEcrpNIe7.Cl473JJcPIvVL
- TOCngx4SsgUGL8qYQHKhSJNw0j5BAlIDp5d.uVmteeFnHmYdPHov9x2b0HZCtrq9p2UwaHbVaSrU
- FsRL0RQluHxp0f2UhXYjqrUJV7Fkk3gAtaV0RjVRr_9BeR0l1LyV.Fp4VKCgj_rTSCa3enkJrRja
- Cf0WFKanBTdnC7xUmdElyKT2JT2ksYL3pg3thBGCDEfnrFK.VWn7ZVLWzIyKALg2fhKREnLYywIa
- yqt9SmirZfZQHuh9XkW.7sTuVR4lea8IKPuQGk7DTsCCYsPMhJbTNd4II8Mlxvd1Xrltq0D3l_G0
- Lwd7gr5vywClwAIUUJEY7mbxmi_PHQTdnJfpSlhE8i_4FYnkDgt5YOK0GmI8ki7uYyvEXXNez.Vw
- ktVwYc.qW9F6MiU8DbYxQkcHEtusrjEwxLlzHdvGamphIyT7jzJgej42M9m9IfK9a5FrjCeRNE2t
- m8_ODJgfyxMJqm4cbLHx7Zbd.wU1oBS9ZF7zT7QhWlAhcY7S5o1QkwOhDn3U0zt0d3Y.s.ilePul
- r1ZfjD70oJpjKBDTAmIBrl7XquFT5PpPWHSrI6DU_tWrbfRtQWLbGq9zKkMp26QOYOuJVS5QjVV5
- .Kz8mJAlw_4gvgmbPF2k16UdGUJmD0XtD1pyE8vNyXt4sLF3h3UxrNeN0BV7CdsWe3gbQ8HVJKKr
- kJW2r5DaT36p4n0ON5i.KEO1LHLmUuoB3RzkqvFMb0.Bb4i8m6.93.TmUfd_Im7wVwuZ8_uGJaLf
- _r3Q.wcanNgli35LRmg2S8wMpR1plfoqo6Q6_AfYV2pyxXH6mPaS1aYcKS5P.ZLE844gBuDflbCr
- ZGAj4h2ekwwTRDBJweLcZ8In4VOMH6GZz6n3_pLwipQTp5e3dSKPts53DZYMw1XcTHP9NaIotwU_
- f_xKwzHrSa3qCnVNUKgCuTiu6oFAEwepXgivRG80xuQz_HyjvEA5XkffnaRzj0Cvq1yrQIuKMMib
- HSIo1wL1anQNanUi8vImo0oanIM1iEXSXtrPy6V8a5CWYLLC4dqlkHxi71kpuxs9rKtvsqKW7qhD
- Wxy1UrcuKgFWgA3B8TLtUJKQuszSu8kI.qjQ0La7msYnHfHLFFofnsxoAnRuUUICzSMZT_v1vrVk
- 4rb2joAcOGhUL0acXXAt2S6hg0khHcYk8IbyUQcQNnU.cuSHBvHNCSSnGOU3tBi7XFVCfzw2NGKS
- NecHIcgH17QABwSyyS53VJjzhHsRuDxaR4MGuOV8ovyAhEJ1vnCkT0fi9qIU_XQwuOjBhcp.pzBh
- kr5Xkjqr6CZbQJvhxTS8r3IQNqLLd9uc_Q3aynbYr5eHXiutnX7CIPd89o4olNZVkitlrE6RUGtB
- I7z659rXcNAGUPnNVGqe.c02IeI3MzzfIGzViNlCcx1euff1ki7qjCCvBjtKM.ql4_Q3WJU.52bk
- 5D8F4y0okxgqgvNg6j3zhz6KkHyBchtOAxYd6fLgCbScXT4eig.zasRdC0lql.BeKO435hNYq0kd
- LjRyeVEW3fp6_O9nQVNqVh6DS6WOA68xrva6_Y11_X.J8.99_iwynRPnkaFL3siQVRwcRUv_7l6z
- ISA831TM_R0p6mWudN4NJn6xS5EMwMzTHSoWCm5I-
-X-Sonic-MF: <casey@schaufler-ca.com>
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic309.consmr.mail.ne1.yahoo.com with HTTP; Thu, 5 May 2022 16:29:39 +0000
-Received: by hermes--canary-production-gq1-647b99747d-ndj76 (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 89f08076760c31b5e11091f02eb35912;
-          Thu, 05 May 2022 16:29:36 +0000 (UTC)
-Message-ID: <84b848b6-770a-7d2a-4978-5e758383f994@schaufler-ca.com>
-Date:   Thu, 5 May 2022 09:29:34 -0700
+        Thu, 5 May 2022 12:33:53 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BA2895C65A;
+        Thu,  5 May 2022 09:30:12 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 85844106F;
+        Thu,  5 May 2022 09:30:12 -0700 (PDT)
+Received: from FVFF77S0Q05N.cambridge.arm.com (FVFF77S0Q05N.cambridge.arm.com [10.1.38.147])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6D2573FA31;
+        Thu,  5 May 2022 09:30:10 -0700 (PDT)
+Date:   Thu, 5 May 2022 17:30:07 +0100
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Sami Tolvanen <samitolvanen@google.com>
+Cc:     linux-kernel@vger.kernel.org, Kees Cook <keescook@chromium.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Joao Moreira <joao@overdrivepizza.com>,
+        Sedat Dilek <sedat.dilek@gmail.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        linux-hardening@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev
+Subject: Re: [RFC PATCH 10/21] treewide: Drop function_nocfi
+Message-ID: <YnP7j+miotxYM6fu@FVFF77S0Q05N.cambridge.arm.com>
+References: <20220429203644.2868448-1-samitolvanen@google.com>
+ <20220429203644.2868448-11-samitolvanen@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH 1/3] securityfs: Append line feed to
- /sys/kernel/security/lsm
-Content-Language: en-US
-To:     Wang Weiyang <wangweiyang2@huawei.com>, zohar@linux.ibm.com,
-        dmitry.kasatkin@gmail.com, jmorris@namei.org, serge@hallyn.com
-Cc:     linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
-        Casey Schaufler <casey@schaufler-ca.com>
-References: <20220505132301.124832-1-wangweiyang2@huawei.com>
- <20220505132301.124832-2-wangweiyang2@huawei.com>
-From:   Casey Schaufler <casey@schaufler-ca.com>
-In-Reply-To: <20220505132301.124832-2-wangweiyang2@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Mailer: WebService/1.1.20118 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220429203644.2868448-11-samitolvanen@google.com>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/5/2022 6:22 AM, Wang Weiyang wrote:
-> There is no LF in /sys/kerne/security/lsm output. It is a little weird,
-> so append LF to it.
-
-NAK: The existing behavior is consistent with long standing LSM convention.
-
->
-> Example:
->
-> / # cat /sys/kernel/security/lsm
-> capability,selinux/ #
->
-> Signed-off-by: Wang Weiyang <wangweiyang2@huawei.com>
+On Fri, Apr 29, 2022 at 01:36:33PM -0700, Sami Tolvanen wrote:
+> With -fsanitize=kcfi, we no longer need function_nocfi() as
+> the compiler won't change function references to point to a
+> jump table. Remove all implementations and uses of the macro.
+> 
+> Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
 > ---
->   security/inode.c | 16 ++++++++++++++--
->   1 file changed, 14 insertions(+), 2 deletions(-)
->
-> diff --git a/security/inode.c b/security/inode.c
-> index 6c326939750d..bfd5550fa129 100644
-> --- a/security/inode.c
-> +++ b/security/inode.c
-> @@ -318,8 +318,20 @@ static struct dentry *lsm_dentry;
->   static ssize_t lsm_read(struct file *filp, char __user *buf, size_t count,
->   			loff_t *ppos)
->   {
-> -	return simple_read_from_buffer(buf, count, ppos, lsm_names,
-> -		strlen(lsm_names));
-> +	char *tmp;
-> +	ssize_t len = strlen(lsm_names);
-> +	ssize_t rc;
-> +
-> +	tmp = kmalloc(len + 2, GFP_KERNEL);
-> +	if (!tmp)
-> +		return -ENOMEM;
-> +
-> +	scnprintf(tmp, len + 2, "%s\n", lsm_names);
-> +	rc = simple_read_from_buffer(buf, count, ppos, tmp, strlen(tmp));
-> +
-> +	kfree(tmp);
-> +
-> +	return rc;
->   }
->   
->   static const struct file_operations lsm_ops = {
+>  arch/arm64/include/asm/compiler.h         | 16 ----------------
+>  arch/arm64/include/asm/ftrace.h           |  2 +-
+>  arch/arm64/include/asm/mmu_context.h      |  2 +-
+>  arch/arm64/kernel/acpi_parking_protocol.c |  2 +-
+>  arch/arm64/kernel/cpufeature.c            |  2 +-
+>  arch/arm64/kernel/ftrace.c                |  2 +-
+>  arch/arm64/kernel/machine_kexec.c         |  2 +-
+>  arch/arm64/kernel/psci.c                  |  2 +-
+>  arch/arm64/kernel/smp_spin_table.c        |  2 +-
+>  drivers/firmware/psci/psci.c              |  4 ++--
+>  drivers/misc/lkdtm/usercopy.c             |  2 +-
+>  include/linux/compiler.h                  | 10 ----------
+>  12 files changed, 11 insertions(+), 37 deletions(-)
+
+Nice!
+
+I also believe that in most cases we can drop the __nocfi annotation on callers
+now that we can mark the called assembly function with SYM_TYPED_FUNC_START().
+
+In most cases we needed the __nocfi annotation on a caller because it was
+invoking an assembly function at an unusual virtual address (which differed
+from the link address), and the existing CFI scheme couldn't handle that. The
+kCFI scheme should handle that fine so long as the type ID before the function
+is accessible.
+
+The other odd case was where we had the non-cfi address of a target function
+(e.g. for callback structures populated in assembly), and that doesn't matter
+with kCFI.
+
+In looking at the below I spotted some latent issues. I'll prepare some patches
+for those.
+
+> diff --git a/arch/arm64/include/asm/compiler.h b/arch/arm64/include/asm/compiler.h
+> index dc3ea4080e2e..6fb2e6bcc392 100644
+> --- a/arch/arm64/include/asm/compiler.h
+> +++ b/arch/arm64/include/asm/compiler.h
+> @@ -23,20 +23,4 @@
+>  #define __builtin_return_address(val)					\
+>  	(void *)(ptrauth_clear_pac((unsigned long)__builtin_return_address(val)))
+>  
+> -#ifdef CONFIG_CFI_CLANG
+> -/*
+> - * With CONFIG_CFI_CLANG, the compiler replaces function address
+> - * references with the address of the function's CFI jump table
+> - * entry. The function_nocfi macro always returns the address of the
+> - * actual function instead.
+> - */
+> -#define function_nocfi(x) ({						\
+> -	void *addr;							\
+> -	asm("adrp %0, " __stringify(x) "\n\t"				\
+> -	    "add  %0, %0, :lo12:" __stringify(x)			\
+> -	    : "=r" (addr));						\
+> -	addr;								\
+> -})
+> -#endif
+> -
+>  #endif /* __ASM_COMPILER_H */
+> diff --git a/arch/arm64/include/asm/ftrace.h b/arch/arm64/include/asm/ftrace.h
+> index 1494cfa8639b..c96d47cb8f46 100644
+> --- a/arch/arm64/include/asm/ftrace.h
+> +++ b/arch/arm64/include/asm/ftrace.h
+> @@ -26,7 +26,7 @@
+>  #ifdef CONFIG_DYNAMIC_FTRACE_WITH_REGS
+>  #define ARCH_SUPPORTS_FTRACE_OPS 1
+>  #else
+> -#define MCOUNT_ADDR		((unsigned long)function_nocfi(_mcount))
+> +#define MCOUNT_ADDR		((unsigned long)_mcount)
+>  #endif
+>  
+>  /* The BL at the callsite's adjusted rec->ip */
+> diff --git a/arch/arm64/include/asm/mmu_context.h b/arch/arm64/include/asm/mmu_context.h
+> index 6770667b34a3..c9df5ab2c448 100644
+> --- a/arch/arm64/include/asm/mmu_context.h
+> +++ b/arch/arm64/include/asm/mmu_context.h
+> @@ -164,7 +164,7 @@ static inline void __nocfi cpu_replace_ttbr1(pgd_t *pgdp)
+>  		ttbr1 |= TTBR_CNP_BIT;
+>  	}
+>  
+> -	replace_phys = (void *)__pa_symbol(function_nocfi(idmap_cpu_replace_ttbr1));
+> +	replace_phys = (void *)__pa_symbol(idmap_cpu_replace_ttbr1);
+>  
+>  	cpu_install_idmap();
+>  	replace_phys(ttbr1);
+
+
+As long as we create `idmap_cpu_replace_ttbr1` with SYM_TYPED_FUNC_START(), we
+can drop `__nocfi` from `cpu_replace_ttbr1`
+
+[...]
+
+> diff --git a/arch/arm64/kernel/cpufeature.c b/arch/arm64/kernel/cpufeature.c
+> index d72c4b4d389c..dae07d99508b 100644
+> --- a/arch/arm64/kernel/cpufeature.c
+> +++ b/arch/arm64/kernel/cpufeature.c
+> @@ -1619,7 +1619,7 @@ kpti_install_ng_mappings(const struct arm64_cpu_capabilities *__unused)
+>  	if (arm64_use_ng_mappings)
+>  		return;
+>  
+> -	remap_fn = (void *)__pa_symbol(function_nocfi(idmap_kpti_install_ng_mappings));
+> +	remap_fn = (void *)__pa_symbol(idmap_kpti_install_ng_mappings);
+>  
+>  	cpu_install_idmap();
+>  	remap_fn(cpu, num_online_cpus(), __pa_symbol(swapper_pg_dir));
+
+There' a latent bug here with the existing CFI scheme, since
+`kpti_install_ng_mappings` isn't marked with __nocfi, and should explode when
+calling `idmap_kpti_install_ng_mappings` via the idmap.
+
+With the kCFI scheme we instead need to mark `idmap_kpti_install_ng_mappings`
+with SYM_TYPED_FUNC_START().
+
+[...]
+
+> diff --git a/arch/arm64/kernel/machine_kexec.c b/arch/arm64/kernel/machine_kexec.c
+> index e16b248699d5..4eb5388aa5a6 100644
+> --- a/arch/arm64/kernel/machine_kexec.c
+> +++ b/arch/arm64/kernel/machine_kexec.c
+> @@ -204,7 +204,7 @@ void machine_kexec(struct kimage *kimage)
+>  		typeof(cpu_soft_restart) *restart;
+>  
+>  		cpu_install_idmap();
+> -		restart = (void *)__pa_symbol(function_nocfi(cpu_soft_restart));
+> +		restart = (void *)__pa_symbol(cpu_soft_restart);
+>  		restart(is_hyp_nvhe(), kimage->start, kimage->arch.dtb_mem,
+>  			0, 0);
+>  	} else {
+
+There' a latent bug here with the existing CFI scheme, since
+`machine_kexec` isn't marked with __nocfi, and should explode when calling
+`cpu_soft_restart` via the idmap.
+
+With the kCFI scheme we instead need to mark `cpu_soft_restart` with
+SYM_TYPED_FUNC_START(). It's currently marked as SYM_CODE() because it doesn't
+follow the usual function call conventions, but that also means it's broken for
+BTI, and for now (without something like objtool caring about function calling
+conventions) SYM_FUNC_START() is fine.
+
+Thanks,
+Mark.

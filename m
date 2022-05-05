@@ -2,133 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AB4B51C419
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 17:41:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41F6551C42A
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 17:45:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381389AbiEEPoQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 11:44:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36198 "EHLO
+        id S1381390AbiEEPsf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 11:48:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344423AbiEEPoG (ORCPT
+        with ESMTP id S1380861AbiEEPsd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 11:44:06 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36B7B532C0;
-        Thu,  5 May 2022 08:40:26 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id E8937219A6;
-        Thu,  5 May 2022 15:40:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1651765224; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=KpNChwSjUc7RiYYcpVZmbJ+8eaBDtjhqDZRBxEQzGqw=;
-        b=VGRIP6k3SOBgUQUF5sUlZXUK09JlAriC3EaR6iT2ovje3lx45O55tdS64bKReMAAoocKmZ
-        SLdk9B+uNUEfGXyteQaUPDYeTxySiJa4oM1VNit/XoZ1fcblaE6bnzZODw8t4i2JhXLWtd
-        xsznA5Ph7ZC2ZVhxBBPVnLqDtRAtbWk=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1651765224;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=KpNChwSjUc7RiYYcpVZmbJ+8eaBDtjhqDZRBxEQzGqw=;
-        b=I8b3F5BuEeCjbDPbDnUc0SYVNp6vb4Uk4GGAJMzwSIrVAUYDyIxRZlgAbdXYGZbDMQ0kpc
-        9/uOUGllUbzFpgDw==
-Received: from quack3.suse.cz (unknown [10.100.224.230])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id AF8AB2C145;
-        Thu,  5 May 2022 15:40:24 +0000 (UTC)
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 63322A0627; Thu,  5 May 2022 17:40:24 +0200 (CEST)
-Date:   Thu, 5 May 2022 17:40:24 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     Jing Xia <jing.xia@unisoc.com>
-Cc:     viro@zeniv.linux.org.uk, jack@suse.cz, jing.xia.mail@gmail.com,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] writeback: Avoid skipping inode writeback
-Message-ID: <20220505154024.onreajr4xmtsswes@quack3.lan>
-References: <20220505134731.5295-1-jing.xia@unisoc.com>
+        Thu, 5 May 2022 11:48:33 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BBA5532E2
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 08:44:53 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id g6so9527203ejw.1
+        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 08:44:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=quJEpHcp/xQptAms2+pqVJe+BALCjwpz/XJpAyA2rOQ=;
+        b=LtUWKtWwjEvzaJgwc+Y/Pc6ZtJYCCkbtEkwMj1kQLWR6QFKfyiqJlhG7vN+64C/904
+         xP1Ersi2F/t8PVceS5QerFuVP5j/3gPomyLsiSTKmZBksKXz8GSeR+BShI51vCfXE6u3
+         smVhw88erVhJUBtIhFgT/WIVkntmQ4UTU7dtA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=quJEpHcp/xQptAms2+pqVJe+BALCjwpz/XJpAyA2rOQ=;
+        b=dLqTY8GMcuTp7/KGDhNP/ubR0DCt6QWrbw5c5NNWY6XC/F614G+3uRw07vX0RhT/UA
+         9jPHJ13SsR2ExDIIR8//PNFkfYTKurzsX7EKomsVrKwUW8EGN7cpwgAILLvNaJNvXHmG
+         kSd3ZxU2J05wJKu2xzUa3kHPTfRnKc1O++H6gzJNnwVKjp+XsHH/mg+GOfYLqBqLnTxr
+         16EPTAht28LphyBT2gLf+AbO3yy7mrfL/rm+SAspOkp+YqFlE9DfJux6RrdqceiBJ2bU
+         vCYQem+H75bcav4o9s8mW5RrI2TTRILU5XbphtKMYRrOiEBhre/26h3l/cqJXSvAvlT9
+         5HOg==
+X-Gm-Message-State: AOAM533KeOZnB0WzyjRbgnjo2nfchrjly9G1LFOw478gV9fF4FYKYenu
+        e9lJRetJ4qLeUOuPXiNzUn//pp5ySByhsh7yQLo=
+X-Google-Smtp-Source: ABdhPJxKXwl6ZJFnDaL2Q0PL46c2dGGZjXij8xAuSPN99bI1wm03YECZOl1wU6zDc1NZvEQSR2K43A==
+X-Received: by 2002:a17:907:1b28:b0:6f0:836:89b0 with SMTP id mp40-20020a1709071b2800b006f0083689b0mr25815297ejc.379.1651765491567;
+        Thu, 05 May 2022 08:44:51 -0700 (PDT)
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com. [209.85.128.50])
+        by smtp.gmail.com with ESMTPSA id ek25-20020a056402371900b0042617ba637asm955430edb.4.2022.05.05.08.44.49
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 05 May 2022 08:44:50 -0700 (PDT)
+Received: by mail-wm1-f50.google.com with SMTP id 129so2905645wmz.0
+        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 08:44:49 -0700 (PDT)
+X-Received: by 2002:a05:600c:4f08:b0:391:fe3c:40e6 with SMTP id
+ l8-20020a05600c4f0800b00391fe3c40e6mr5718669wmq.34.1651765489131; Thu, 05 May
+ 2022 08:44:49 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220505134731.5295-1-jing.xia@unisoc.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220426114627.1.I2dd93486c6952bd52f2020904de0133970d11b29@changeid>
+ <20220426114627.2.I4ac7f55aa446699f8c200a23c10463256f6f439f@changeid>
+In-Reply-To: <20220426114627.2.I4ac7f55aa446699f8c200a23c10463256f6f439f@changeid>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Thu, 5 May 2022 08:44:36 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=XzGOGc8pMics4=idQeCuLYWxj=bHcic4NZa9+3qbqpbg@mail.gmail.com>
+Message-ID: <CAD=FV=XzGOGc8pMics4=idQeCuLYWxj=bHcic4NZa9+3qbqpbg@mail.gmail.com>
+Subject: Re: [PATCH 2/2] drm/probe-helper: For DP, add 640x480 if all other
+ modes are bad
+To:     dri-devel <dri-devel@lists.freedesktop.org>,
+        =?UTF-8?B?VmlsbGUgU3lyasOkbMOk?= <ville.syrjala@linux.intel.com>,
+        "Abhinav Kumar (QUIC)" <quic_abhinavk@quicinc.com>
+Cc:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        "Aravind Venkateswaran (QUIC)" <quic_aravindh@quicinc.com>,
+        Rob Clark <robdclark@gmail.com>,
+        "Kuogee Hsieh (QUIC)" <quic_khsieh@quicinc.com>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Sankeerth Billakanti <quic_sbillaka@quicinc.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 05-05-22 21:47:31, Jing Xia wrote:
-> We have run into an issue that a task gets stuck in
-> balance_dirty_pages_ratelimited() when perform I/O stress testing.
-> The reason we observed is that an I_DIRTY_PAGES inode with lots
-> of dirty pages is in b_dirty_time list and standard background
-> writeback cannot writeback the inode.
-> After studing the relevant code, the following scenario may lead
-> to the issue:
-> 
-> task1                                   task2
-> -----                                   -----
-> fuse_flush
->  write_inode_now //in b_dirty_time
->   writeback_single_inode
->    __writeback_single_inode
->                                  fuse_write_end
->                                   filemap_dirty_folio
->                                    __xa_set_mark:PAGECACHE_TAG_DIRTY
->     lock inode->i_lock
->     if mapping tagged PAGECACHE_TAG_DIRTY
->     inode->i_state |= I_DIRTY_PAGES
->     unlock inode->i_lock
->                                    __mark_inode_dirty:I_DIRTY_PAGES
->                                       lock inode->i_lock
->                                       -was dirty,inode stays in
->                                       -b_dirty_time
->                                       unlock inode->i_lock
-> 
->    if(!(inode->i_state & I_DIRTY_All))
->       -not true,so nothing done
-> 
-> This patch moves the dirty inode to b_dirty list when the inode
-> currently is not queued in b_io or b_more_io list at the end of
-> writeback_single_inode.
-> 
-> Signed-off-by: Jing Xia <jing.xia@unisoc.com>
+Ville,
 
-Thanks for report and the fix! The patch looks good so feel free to add:
+On Tue, Apr 26, 2022 at 11:47 AM Douglas Anderson <dianders@chromium.org> wrote:
+>
+> As per Displayport spec section 5.2.1.2 ("Video Timing Format") says
+> that all detachable sinks shall support 640x480 @60Hz as a fail safe
+> mode.
+>
+> A DP compliance test expected us to utilize the above fact when all
+> modes it presented to the DP source were not achievable. It presented
+> only modes that would be achievable with more lanes and/or higher
+> speeds than we had available and expected that when we couldn't do
+> that then we'd fall back to 640x480 even though it didn't advertise
+> this size.
+>
+> In order to pass the compliance test (and also support any users who
+> might fall into a similar situation with their display), we need to
+> add 640x480 into the list of modes. However, we don't want to add
+> 640x480 all the time. Despite the fact that the DP spec says all sinks
+> _shall support_ 640x480, they're not guaranteed to support it
+> _well_. Continuing to read the spec you can see that the display is
+> not required to really treat 640x480 equal to all the other modes. It
+> doesn't need to scale or anything--just display the pixels somehow for
+> failsafe purposes. It should also be noted that it's not hard to find
+> a display hooked up via DisplayPort that _doesn't_ support 640x480 at
+> all. The HP ZR30w screen I'm sitting in front of has a native DP port
+> and doesn't work at 640x480. I also plugged in a tiny 800x480 HDMI
+> display via a DP to HDMI adapter and that screen definitely doesn't
+> support 640x480.
+>
+> As a compromise solution, let's only add the 640x480 mode if:
+> * We're on DP.
+> * All other modes have been pruned.
+>
+> This acknowledges that 640x480 might not be the best mode to use but,
+> since sinks are _supposed_ to support it, we will at least fall back
+> to it if there's nothing else.
+>
+> Note that we _don't_ add higher resolution modes like 1024x768 in this
+> case. We only add those modes for a failed EDID read where we have no
+> idea what's going on. In the case where we've pruned all modes then
+> instead we only want 640x480 which is the only defined "Fail Safe"
+> resolution.
+>
+> This patch originated in response to Kuogee Hsieh's patch [1].
+>
+> [1] https://lore.kernel.org/r/1650671124-14030-1-git-send-email-quic_khsieh@quicinc.com
+>
+> Signed-off-by: Douglas Anderson <dianders@chromium.org>
+> ---
+>
+>  drivers/gpu/drm/drm_probe_helper.c | 26 +++++++++++++++++++++-----
+>  1 file changed, 21 insertions(+), 5 deletions(-)
 
-Reviewed-by: Jan Kara <jack@suse.cz>
+I think this patch is fairly safe / non-controversial, but someone
+suggested you might have an opinion on it and another patch I posted
+recently [1] so I wanted to double-check. Just to be clear: I'm hoping
+to land _both_ this patch and [1]. If you don't have an opinion,
+that's OK too.
 
-Also please add tags:
+Abhinav: I think maybe you're happy with this now? Would you be
+willing to give a Reviewed-by?
 
-CC: stable@vger.kernel.org
-Fixes: 0ae45f63d4ef ("vfs: add support for a lazytime mount option")
+[1] https://lore.kernel.org/r/20220426132121.RFC.1.I31ec454f8d4ffce51a7708a8092f8a6f9c929092@changeid
 
-Thanks.
-								Honza
-
-> diff --git a/fs/fs-writeback.c b/fs/fs-writeback.c
-> index 591fe9cf1659..d7763feaf14a 100644
-> --- a/fs/fs-writeback.c
-> +++ b/fs/fs-writeback.c
-> @@ -1712,6 +1712,9 @@ static int writeback_single_inode(struct inode *inode,
->  	 */
->  	if (!(inode->i_state & I_DIRTY_ALL))
->  		inode_cgwb_move_to_attached(inode, wb);
-> +	else if (!(inode->i_state & I_SYNC_QUEUED) && (inode->i_state & I_DIRTY))
-> +		redirty_tail_locked(inode, wb);
-> +
->  	spin_unlock(&wb->list_lock);
->  	inode_sync_complete(inode);
->  out:
-> -- 
-> 2.17.1
-> 
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+-Doug

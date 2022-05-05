@@ -2,61 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DB4351B5C9
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 04:22:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D989051B5D6
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 04:24:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238346AbiEECZU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 22:25:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58734 "EHLO
+        id S238388AbiEECZ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 22:25:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238235AbiEECZP (ORCPT
+        with ESMTP id S232529AbiEECZy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 22:25:15 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 126CC4B1EF;
-        Wed,  4 May 2022 19:21:38 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id n18so3125729plg.5;
-        Wed, 04 May 2022 19:21:38 -0700 (PDT)
+        Wed, 4 May 2022 22:25:54 -0400
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4796549F08
+        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 19:22:17 -0700 (PDT)
+Received: by mail-pg1-x530.google.com with SMTP id a191so2592150pge.2
+        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 19:22:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=m8tYXGu935tCO4A1yLQDnVEfASFN2GrANQDA+wv6yeI=;
-        b=hs0QdSt9aR5HZJsrBx0cyFQacevUUGNfXXJmjnhK+snDefAYRtPfS/OJseaupvONmy
-         qzF/ATnv02xNB9rPB/FN0JVdDBvbxbuqWxuD4DochLemJ/K/Qw+CGpQi+ZIhwt462/NC
-         6grsP2lT0BklqXBS18MMCba8HF+/tdpx0xWEFlqRuicK1ftj2iZgwFEI0jox5VV1ujse
-         Zv7185NHU7njna7csplr/VBQ3vN1pLp6ciYpCF4hvBs2zg7Q+OpRSQGYe5QFJ9BeTB09
-         5rzpbXdaP1CUx2Xj9xrqu2nQ0CNDYou7JpYLB8VLQRihQOTGOGgrP5mg206nexOcMQBW
-         4Rog==
+        bh=ef+sybKBAkUjKLs8tlJYfzgpqHk/AEhKYaj2VVeifvg=;
+        b=OG/lleGzbi4WRp3eEVn2Ky39PrCMOzoBfa81MHSat9WWdT6+lVMGwstvSB7TyQrK0O
+         ekPuX5JS4wq+jTGfYLENqJFAo8PYJ0lOsTN+qpSxH0S50gN1dgHXfv5wKC7rXy9o+CHx
+         o76liOhu+Mj7Pejjz3EZ6g0SV75SJazPqoOzQG5qTHicMLiqT8td7jtc+6D0Sv9GMq7L
+         BvNSCf/V9NPNxftEg3HDXhsHd9MsG9sXVL1ckLWa/boFegB5JA0RjPq7bxzR2O2I+wiz
+         xTel8KCWKQ8Wrz86uuQ/hrVRBvEzo21tlHd3jds4Hq7TejkqH2sb7A5t7AFv3bNIMnt3
+         +GWQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=m8tYXGu935tCO4A1yLQDnVEfASFN2GrANQDA+wv6yeI=;
-        b=iyYOA1Mdn88HKLa3Xzzqym2ZeHOU7HBQGkAUMzoEbCS1b+Dxdwswot0577Uj9KGOQQ
-         X2fEKLT09r3nd5kZfNo55GzXNynoiqtzoQq9VbbSwmbFi0J86RwJm0uMPaW6AvAcfjo4
-         DFzTZZIkR4Z+DkO8gxSGZUmbHaDF7GofqteNkBdEk7RdfBK1j/wICy062CHWSUxnZald
-         R2MTwOHoPUDGjYJRQQ+Mhv8ScCe8aNeIj2g9XXIqk35kL5KL12R/x69vj1lXiVMWhZ87
-         6bryILh+ehqwA4HtneisJxpyjolO4BZY1cvG8STEDyufmE466u16qEI4z6OHPL1Bdhtl
-         jx8Q==
-X-Gm-Message-State: AOAM530JPA3FlKIicYtKVxll8kgBR1TQpIAGe+IHd2Pk5YAnRVqxMzRD
-        6/Z+JjSmEBBpoO/Oatxm36bLGmNTT3k=
-X-Google-Smtp-Source: ABdhPJw1JgQ70uS+Tb2Lt26hrrMVuOCjMo2+j9p7TVrg90ySnEN8YqRvbL5Zwhdu3VIXO+AjpdVvjA==
-X-Received: by 2002:a17:902:b48f:b0:15e:da68:8f12 with SMTP id y15-20020a170902b48f00b0015eda688f12mr271928plr.27.1651717297536;
-        Wed, 04 May 2022 19:21:37 -0700 (PDT)
+        bh=ef+sybKBAkUjKLs8tlJYfzgpqHk/AEhKYaj2VVeifvg=;
+        b=QoqRW2Xr6ABXelNgGWBcBfoKikwR8fe1UXAul4P6alrN9iO/vjogwg2jVWa54l9DWn
+         u5YSUMeTzk+SUIPNiq/sM7fxJsouVEoLjzgC80rsDwUGF3OQO/2BsvCUFmKtMsfunXTn
+         CAOKCfEOWB2k8GIkunhfaIQvxMtgTBHKjMwvoUd0MMosWrj8ofIgeNeAcvoocmlcPE/k
+         oE25bCMI6ICSJ9PMxMq7iY3sD9lyY2jRc7SIRIZD0R1pOYf5tKUSBz0GdFozFTSW3i2L
+         DtTSfonS39NfP7Bo/OQz+J0B90uIrU4yZp5NMNkziPDvFoLhI9lrWM6yR2s9E5Nl77v4
+         x6jQ==
+X-Gm-Message-State: AOAM531doxTzGm0ui4wlqOLx/vXfwjDGnlDj8paNplQjj9lzy/4+C+Hz
+        4koCzcr50EUWj0OMtWFm0m0=
+X-Google-Smtp-Source: ABdhPJxwgs2AzWqDhC4ZlkGGOfEWL9n90q8upIDnCzYEAp4SHXBb9BBiuNWmzfxRnFREFEVH6h+mqA==
+X-Received: by 2002:a05:6a00:c83:b0:50e:eea:1b9 with SMTP id a3-20020a056a000c8300b0050e0eea01b9mr10598547pfv.47.1651717336875;
+        Wed, 04 May 2022 19:22:16 -0700 (PDT)
 Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id cq17-20020a17090af99100b001cd4989fec9sm4017898pjb.21.2022.05.04.19.21.35
+        by smtp.gmail.com with ESMTPSA id v29-20020aa799dd000000b0050dc7628152sm99911pfi.44.2022.05.04.19.22.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 May 2022 19:21:36 -0700 (PDT)
+        Wed, 04 May 2022 19:22:16 -0700 (PDT)
 From:   cgel.zte@gmail.com
 X-Google-Original-From: chi.minghao@zte.com.cn
-To:     damien.lemoal@opensource.wdc.com
-Cc:     linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org,
+To:     airlied@redhat.com
+Cc:     tzimmermann@suse.de, airlied@linux.ie,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
         Minghao Chi <chi.minghao@zte.com.cn>,
         Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH] ata: simplify the return expression of brcm_ahci_remove
-Date:   Thu,  5 May 2022 02:21:33 +0000
-Message-Id: <20220505022133.55852-1-chi.minghao@zte.com.cn>
+Subject: [PATCH] drm: simplify the return expression of ast_drm_resume()
+Date:   Thu,  5 May 2022 02:22:08 +0000
+Message-Id: <20220505022208.57157-1-chi.minghao@zte.com.cn>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -77,30 +78,30 @@ Simplify the return expression.
 Reported-by: Zeal Robot <zealci@zte.com.cn>
 Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
 ---
- drivers/ata/ahci_brcm.c | 7 +------
+ drivers/gpu/drm/ast/ast_drv.c | 7 +------
  1 file changed, 1 insertion(+), 6 deletions(-)
 
-diff --git a/drivers/ata/ahci_brcm.c b/drivers/ata/ahci_brcm.c
-index ab8552b1ff2a..f61795c546cf 100644
---- a/drivers/ata/ahci_brcm.c
-+++ b/drivers/ata/ahci_brcm.c
-@@ -549,15 +549,10 @@ static int brcm_ahci_remove(struct platform_device *pdev)
- 	struct ata_host *host = dev_get_drvdata(&pdev->dev);
- 	struct ahci_host_priv *hpriv = host->private_data;
- 	struct brcm_ahci_priv *priv = hpriv->plat_data;
+diff --git a/drivers/gpu/drm/ast/ast_drv.c b/drivers/gpu/drm/ast/ast_drv.c
+index 7465c4f0156a..760b27971557 100644
+--- a/drivers/gpu/drm/ast/ast_drv.c
++++ b/drivers/gpu/drm/ast/ast_drv.c
+@@ -159,15 +159,10 @@ static int ast_drm_thaw(struct drm_device *dev)
+ 
+ static int ast_drm_resume(struct drm_device *dev)
+ {
 -	int ret;
+-
+ 	if (pci_enable_device(to_pci_dev(dev->dev)))
+ 		return -EIO;
  
- 	brcm_sata_phys_disable(priv);
- 
--	ret = ata_platform_remove_one(pdev);
+-	ret = ast_drm_thaw(dev);
 -	if (ret)
 -		return ret;
--
 -	return 0;
-+	return ata_platform_remove_one(pdev);
++	return ast_drm_thaw(dev);
  }
  
- static void brcm_ahci_shutdown(struct platform_device *pdev)
+ static int ast_pm_suspend(struct device *dev)
 -- 
 2.25.1
 

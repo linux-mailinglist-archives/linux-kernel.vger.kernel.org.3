@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F01AB51C38D
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 17:12:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2ACFA51C394
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 17:13:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381148AbiEEPQC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 11:16:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38074 "EHLO
+        id S1348072AbiEEPQM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 11:16:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381127AbiEEPPz (ORCPT
+        with ESMTP id S1381139AbiEEPQH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 11:15:55 -0400
+        Thu, 5 May 2022 11:16:07 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07A3A19296
-        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 08:12:16 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ACEE47AD8
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 08:12:27 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B606EB82DB0
-        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 15:12:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D23BC385AF;
-        Thu,  5 May 2022 15:12:11 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 091CEB82DBF
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 15:12:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CAC02C385A8;
+        Thu,  5 May 2022 15:12:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651763533;
-        bh=0D7MU0dHkdxGOE7RXexlR/iR0tAYQw8+ivhRWjMp3FA=;
+        s=k20201202; t=1651763544;
+        bh=xcOlH7B1feD79PhMdI0xbnMNwi95h9VhpC9qXOyXA1Q=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=agnsg3TYnwpX6aPG9clT2R2gXSbQqDEzIxmBhg26tkwdUNDbOZNE36zATNUWDZQ2o
-         7vRcwxtXNheKa7AfP1EH7J3TNuHB6FbnbZ3BqIsKWlStqbmviwNnJ6mgvItQvdVE5Z
-         VHTEitiQq2SGquRDA3E7RYjzqFP5VmKmZbItMRVpp/rh8/wDjRJ0GP3fdSFsQBAvNX
-         DGrUtguzIspgflva/h4TvNF2u/Mzfgm1g+qOXVduyW5gQmENDXnPeegYIzmlWNLoai
-         iaxAyDL8/+lN9+1gLHmAjE4M3ODJDfe8Pr0HE5NhTaBI3WIChrDAs1nPTTrj4RbtUi
-         /esxfEI2tDc9g==
+        b=R5R5W7Rm5eajaJmr0IF5IgjrJj+FC3BcGVMjrq4E6XAoXxoijtZVtlWcc8KAkACtY
+         4ccvciw59yrH0sjok1VImkgIdqFJL0vJSx/RwzqObaI8cE7C5s4a/gG/w+n6zYRgyL
+         rhSuUKTI9pQuIAPTbQLl4yJjrx8S6huEHxX2uZW/LeLyTcbNJB3uNLWoOYbAOzdbYp
+         xUkBiUOu6URs1F50Qnmvc/BSIhjrxjb24RMJR2KYym6b1pu3eeJpc9qZq4tWUZ9Ud7
+         epsE30TpGGtS4Qc7vIIU4YH8rZ4Xai1G9bi3KE9GnJHBxjxHcJfw4ZZtk0jjv5KDxG
+         /gvxwLbQSmKlA==
 From:   Mark Brown <broonie@kernel.org>
-To:     j-luthra@ti.com, peter.ujfalusi@gmail.com
-Cc:     lgirdwood@gmail.com, tiwai@suse.com, j-choudhary@ti.com,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-        perex@perex.cz
-In-Reply-To: <20220505111226.29217-1-j-luthra@ti.com>
-References: <20220505111226.29217-1-j-luthra@ti.com>
-Subject: Re: [PATCH v2 RESEND] ASoC: ti: davinci-mcasp: Add dma-type for bcdma
-Message-Id: <165176353126.543130.13376348569850557799.b4-ty@kernel.org>
-Date:   Thu, 05 May 2022 16:12:11 +0100
+To:     zev@bewilderbeest.net, lgirdwood@gmail.com
+Cc:     linux-kernel@vger.kernel.org, dianders@chromium.org
+In-Reply-To: <20220505043152.12933-1-zev@bewilderbeest.net>
+References: <20220505043152.12933-1-zev@bewilderbeest.net>
+Subject: Re: [PATCH] regulator: core: Fix enable_count imbalance with EXCLUSIVE_GET
+Message-Id: <165176354355.543296.3728962840338389293.b4-ty@kernel.org>
+Date:   Thu, 05 May 2022 16:12:23 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -55,21 +53,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 5 May 2022 16:42:26 +0530, Jai Luthra wrote:
-> From: Jayesh Choudhary <j-choudhary@ti.com>
+On Wed, 4 May 2022 21:31:52 -0700, Zev Weiss wrote:
+> Since the introduction of regulator->enable_count, a driver that did
+> an exclusive get on an already-enabled regulator would end up with
+> enable_count initialized to 0 but rdev->use_count initialized to 1.
+> With that starting point the regulator is effectively stuck enabled,
+> because if the driver attempted to disable it it would fail the
+> enable_count underflow check in _regulator_handle_consumer_disable().
 > 
-> Set DMA type for ti-bcdma controller for AM62-SK.
-> 
-> 
+> [...]
 
 Applied to
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git for-next
 
 Thanks!
 
-[1/1] ASoC: ti: davinci-mcasp: Add dma-type for bcdma
-      commit: ea706e5604e6d68ec7ec7243f0af0b569045e925
+[1/1] regulator: core: Fix enable_count imbalance with EXCLUSIVE_GET
+      commit: c3e3ca05dae37f8f74bb80358efd540911cbc2c8
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during

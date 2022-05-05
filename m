@@ -2,193 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46AE351C5A5
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 19:02:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BBD651C5A7
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 19:02:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356896AbiEERFm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 13:05:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50510 "EHLO
+        id S1382350AbiEERFw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 13:05:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382496AbiEERFb (ORCPT
+        with ESMTP id S1344870AbiEERFd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 13:05:31 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B4E05C840;
-        Thu,  5 May 2022 10:01:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 98ED961E8A;
-        Thu,  5 May 2022 17:01:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8A37C385A4;
-        Thu,  5 May 2022 17:01:26 +0000 (UTC)
-Date:   Thu, 5 May 2022 18:01:23 +0100
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Zhen Lei <thunder.leizhen@huawei.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        linux-kernel@vger.kernel.org, Dave Young <dyoung@redhat.com>,
-        Baoquan He <bhe@redhat.com>, Vivek Goyal <vgoyal@redhat.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        kexec@lists.infradead.org, Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        devicetree@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        linux-doc@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
-        Feng Zhou <zhoufeng.zf@bytedance.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Chen Zhou <dingguo.cz@antgroup.com>,
-        John Donnelly <John.p.donnelly@oracle.com>,
-        Dave Kleikamp <dave.kleikamp@oracle.com>
-Subject: Re: [PATCH v23 3/6] arm64: kdump: Reimplement crashkernel=X
-Message-ID: <YnQC44KVKirH0vyB@arm.com>
-References: <20220505091845.167-1-thunder.leizhen@huawei.com>
- <20220505091845.167-4-thunder.leizhen@huawei.com>
+        Thu, 5 May 2022 13:05:33 -0400
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63BD35B3DC;
+        Thu,  5 May 2022 10:01:52 -0700 (PDT)
+Received: by mail-wm1-x32b.google.com with SMTP id k126-20020a1ca184000000b003943fd07180so3006973wme.3;
+        Thu, 05 May 2022 10:01:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:subject:from:to:date:content-transfer-encoding
+         :user-agent:mime-version;
+        bh=WdAvXMilkjeXGxCjt4xSahrQ1dbVlNr+hNx2Eah+WlM=;
+        b=hTNmdPYIZqmJ813s+jCFPFG2FxNmfsZ1OymxifcGYmreRrJs6FAySX+Z8IlZ5qxpcX
+         V3QWT2s8/IsLlbXcnNM8SL9NsLo1XKhBgS9UZuyXYk7cPVrwMWQyJJB/L+yfRepwM8e9
+         KHl4uL7I/3cyXenNxV6FWEryxat4r1bg6E46kkj0vtEvDBBJm4E/B6ux8ak9MlOq9biI
+         4mYzdf1WfB4+iVRc8jVtaNyY68o/m8gfFsZ87CW3q+Q1Z2MI+6Ms2bXDjLu8Po24hPc8
+         aXKIpYyxq+kQuDokdWomLpkAl6/bU+GLb2ZExxsHJQTg6TDWcjKpmpCVpf3QVE3SGOgO
+         sZ8w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:subject:from:to:date
+         :content-transfer-encoding:user-agent:mime-version;
+        bh=WdAvXMilkjeXGxCjt4xSahrQ1dbVlNr+hNx2Eah+WlM=;
+        b=AqO330shtCkFNr4P/yXzQxQekrB8dFO679MPsfvD7ToVbbVC8GMA5UzQB1U9mspBhW
+         DU5+EgqSmDXqcKIa7FCEXMTX1pUx/Gdm1P8N/RkX2j8Q9gqhP0rwp3BxHyxQKUgHo1Zw
+         SMEbjMb1fsyR1quU/3j5E2/qOc0y/g4LDJOJaWvT6q5ylwgwxwVCJyAoPpS7KVueeCMe
+         knREJ5HGT66iDAlH520QyINk+3UE5VZPpsRpZcZehhwF3y8C2+GSDOrI04hSfTGaOouz
+         QMbQq3NGO+k4cDRL++2m3Kcm45MKY+AG15N+uLL7U6zGmIsUvyPm7dAGZYRtm4RVJ3L/
+         JZsw==
+X-Gm-Message-State: AOAM532RDh3pf/iHvMsbQp8w/TdguWw+ZOBG1u9gQXPlnUF2gHXy4OMg
+        RogiUJcFPrEzJB8jRydZHIuJjphISeU=
+X-Google-Smtp-Source: ABdhPJwGhkNOC7bMhu95RxFbVVMEfYOF2frj3xLBCZmE2FFo4w9Rz+9PZHPCh0N0pN22TBVrX7RUyw==
+X-Received: by 2002:a05:600c:4fc6:b0:393:fb29:1f3f with SMTP id o6-20020a05600c4fc600b00393fb291f3fmr5964866wmq.60.1651770110800;
+        Thu, 05 May 2022 10:01:50 -0700 (PDT)
+Received: from [192.168.11.155] (94-21-221-167.pool.digikabel.hu. [94.21.221.167])
+        by smtp.gmail.com with ESMTPSA id g6-20020a056000118600b0020c5253d8d6sm1644791wrx.34.2022.05.05.10.01.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 May 2022 10:01:50 -0700 (PDT)
+Message-ID: <052a814001aaa46eab844f1d9693ddd9d731c164.camel@gmail.com>
+Subject: 9 bit serial / non-blocking TCSADRAIN
+From:   =?ISO-8859-1?Q?Baltaz=E1r?= Radics <baltazar.radics@gmail.com>
+To:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Thu, 05 May 2022 19:01:48 +0200
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220505091845.167-4-thunder.leizhen@huawei.com>
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 05, 2022 at 05:18:42PM +0800, Zhen Lei wrote:
-> From: Chen Zhou <chenzhou10@huawei.com>
-> 
-> There are following issues in arm64 kdump:
-> 1. We use crashkernel=X to reserve crashkernel in DMA zone, which
-> will fail when there is not enough low memory.
-> 2. If reserving crashkernel above DMA zone, in this case, crash dump
-> kernel will fail to boot because there is no low memory available
-> for allocation.
-> 
-> To solve these issues, introduce crashkernel=X,[high,low].
-> The "crashkernel=X,high" is used to select a region above DMA zone, and
-> the "crashkernel=Y,low" is used to allocate specified size low memory.
+Hello!
 
-Thanks for posting the simplified version, though the discussion with
-Baoquan is still ongoing. AFAICT there is no fallback if crashkernel=
-fails. The advantage with this series is cleaner code, we set the limits
-during parsing and don't have to adjust them if some of the first
-allocation failed.
+I want to use a raspberry pi's serial to communicate over a protocol
+that uses 9-bit characters, so currently I'm using the stick parity
+mode (CMSPAR) and toggling between odd and even parity, then using
+tcsetattr with TCSADRAIN as the second argument, which blocks until all
+bytes are transmitted. Is there a non-blocking api to do the same
+thing, so I can use it from poll / select? (If there's a better way to
+do 9 bit character size, that'd be even better. For my protocol, the
+9th bit is only used to tell address bytes from data bytes, so I don't
+have to change it often, so I guess my current method isn't too
+horrible.)
 
-> diff --git a/arch/arm64/mm/init.c b/arch/arm64/mm/init.c
-> index 51863f1448c6989..11406f3e1443168 100644
-> --- a/arch/arm64/mm/init.c
-> +++ b/arch/arm64/mm/init.c
-> @@ -90,6 +90,32 @@ phys_addr_t __ro_after_init arm64_dma_phys_limit;
->  phys_addr_t __ro_after_init arm64_dma_phys_limit = PHYS_MASK + 1;
->  #endif
->  
-> +/* Current arm64 boot protocol requires 2MB alignment */
-> +#define CRASH_ALIGN			SZ_2M
-> +
-> +#define CRASH_ADDR_LOW_MAX		arm64_dma_phys_limit
-> +#define CRASH_ADDR_HIGH_MAX		memblock.current_limit
-
-Better use memblock_get_current_limit() if you need to or just
-MEMBLOCK_ALLOC_ANYWHERE, memblock.current_limit is just a memblock
-internal. But I think we can go for (PHYS_MASK + 1) if you need
-something other than MEMBLOCK_ALLOC_ANYWHERE, memblock knows what to
-allocate anyway.
-
-> +static int __init reserve_crashkernel_low(unsigned long long low_size)
-> +{
-> +	unsigned long long low_base;
-> +
-> +	low_base = memblock_phys_alloc_range(low_size, CRASH_ALIGN, 0, CRASH_ADDR_LOW_MAX);
-> +	if (!low_base) {
-> +		pr_err("cannot allocate crashkernel low memory (size:0x%llx).\n", low_size);
-> +		return -ENOMEM;
-> +	}
-> +
-> +	pr_info("crashkernel low memory reserved: 0x%08llx - 0x%08llx (%lld MB)\n",
-> +		low_base, low_base + low_size, low_size >> 20);
-> +
-> +	crashk_low_res.start = low_base;
-> +	crashk_low_res.end   = low_base + low_size - 1;
-> +	insert_resource(&iomem_resource, &crashk_low_res);
-> +
-> +	return 0;
-> +}
-> +
->  /*
->   * reserve_crashkernel() - reserves memory for crash kernel
->   *
-> @@ -100,17 +126,32 @@ phys_addr_t __ro_after_init arm64_dma_phys_limit = PHYS_MASK + 1;
->  static void __init reserve_crashkernel(void)
->  {
->  	unsigned long long crash_base, crash_size;
-> -	unsigned long long crash_max = arm64_dma_phys_limit;
-> +	unsigned long long crash_low_size = 0;
-> +	unsigned long long crash_max = CRASH_ADDR_LOW_MAX;
-> +	char *cmdline = boot_command_line;
->  	int ret;
->  
->  	if (!IS_ENABLED(CONFIG_KEXEC_CORE))
->  		return;
->  
-> -	ret = parse_crashkernel(boot_command_line, memblock_phys_mem_size(),
-> +	/* crashkernel=X[@offset] */
-> +	ret = parse_crashkernel(cmdline, memblock_phys_mem_size(),
->  				&crash_size, &crash_base);
-> -	/* no crashkernel= or invalid value specified */
-> -	if (ret || !crash_size)
-> -		return;
-> +	if (ret || !crash_size) {
-
-I think we should check for ret == -ENOENT only. If the crashkernel=
-exists but is malformed or the size is 0, we shouldn't bother with
-high/low at all.
-
-> +		ret = parse_crashkernel_high(cmdline, 0, &crash_size, &crash_base);
-> +		if (ret || !crash_size)
-> +			return;
-> +
-> +		/*
-> +		 * crashkernel=Y,low can be specified or not, but invalid value
-> +		 * is not allowed.
-> +		 */
-> +		ret = parse_crashkernel_low(cmdline, 0, &crash_low_size, &crash_base);
-> +		if (ret && (ret != -ENOENT))
-> +			return;
-> +
-> +		crash_max = CRASH_ADDR_HIGH_MAX;
-> +	}
->  
->  	crash_size = PAGE_ALIGN(crash_size);
->  
-> @@ -118,8 +159,7 @@ static void __init reserve_crashkernel(void)
->  	if (crash_base)
->  		crash_max = crash_base + crash_size;
->  
-> -	/* Current arm64 boot protocol requires 2MB alignment */
-> -	crash_base = memblock_phys_alloc_range(crash_size, SZ_2M,
-> +	crash_base = memblock_phys_alloc_range(crash_size, CRASH_ALIGN,
->  					       crash_base, crash_max);
->  	if (!crash_base) {
->  		pr_warn("cannot allocate crashkernel (size:0x%llx)\n",
-
-I personally like this but let's see how the other thread goes. I guess
-if we want a fallback, it would come just before the check the above:
-
-	if (!crash_base && crash_max != CRASH_ADDR_HIGH_MAX) {
-		/* attempt high allocation with default low */
-		if (!crash_low_size)
-			crash_low_size = some default;
-		crash_max = CRASH_ADDR_LOW_MAX;
-		crash_base = memblock_phys_alloc_range();
-	}
-
-Well, I guess we end up with your earlier proposal but I think I
-understand it better now ;).
-
--- 
-Catalin
+Thanks!

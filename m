@@ -2,95 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A02851CB90
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 23:43:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49AE451CB94
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 23:44:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386076AbiEEVrY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 17:47:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42266 "EHLO
+        id S1386095AbiEEVry (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 17:47:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229905AbiEEVrU (ORCPT
+        with ESMTP id S1386089AbiEEVrs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 17:47:20 -0400
-Received: from mail-oa1-x2f.google.com (mail-oa1-x2f.google.com [IPv6:2001:4860:4864:20::2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D11352E77;
-        Thu,  5 May 2022 14:43:38 -0700 (PDT)
-Received: by mail-oa1-x2f.google.com with SMTP id 586e51a60fabf-e5e433d66dso5526208fac.5;
-        Thu, 05 May 2022 14:43:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=HwVwUxk5H0GtYIO92JdyFcoBHKe3VuV2ZMa5DcmeEHI=;
-        b=kGTK3m6KN9Js2LjNbj+P7ZjUmo9wgkKemNu3EKGtiVjTpyzNzvoRZivBzthfxvxm23
-         F5Y5+RDOMSMDwC2gWpw7FyCLYxj9at8fVxhsIXx0LEe1Xnc8QknHQgWhgkkOu0HOWsyL
-         wA/R8C9RKtig+xMv9UY7KzopFlspn35mc8ZjEGet6Fye2pSTun0Y8dA7GA5tXlEVM+RM
-         ZWAKrsIERhYn/zTYaeObou2fXyLQWSpdOdkULf+Ju1hOdJfN8N6Lqt2BruRQLBX7HWrX
-         q7HjQK/T0/S2F/n7dCgpv0PtujT86kTA/S/k91VJZLLhYZ36SBdWGsfo3y+tJwjmE2Q+
-         ZOZQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=HwVwUxk5H0GtYIO92JdyFcoBHKe3VuV2ZMa5DcmeEHI=;
-        b=iE0V84216SIIx5HvaipNpIETaS6Tu4cKWvw5gWFbA271EMM7oQoIOmaHO0s2zv6Nfb
-         mdGK+22EFtlPa9zH1ETnUXoIezTsI0loKY8nl6C+GMBxv6HyarS+KV8OpSMpY1jlzKdg
-         uBd5hHhDmibs/lMgwTlM5Y45R8qbYUFbp/UhAr4Vgkv6O8lawSka83SOK9tm3Ev3gKgj
-         /y5zsOln2M9oJPFStnaiYuByNJY4ngu35DMokxYRJeVPQSQuQ9yL6AkeFfVgJG7mRgjB
-         oww49o5nf2HrykY+YqJjzK7QSiZtKFnb0tDh3D6JON9FfqAF/9fgmqSZK0d0UTRMNyiq
-         8CJg==
-X-Gm-Message-State: AOAM5331M8CZTIUeZ5VogUEHvfLOeZ1ik5pue9CcIYwizTwl/eLib5C5
-        zd2RHnB3xbuvX+0UEv4vzXc=
-X-Google-Smtp-Source: ABdhPJwzoiGQJXFexMygYYgnrH+9SnCHxAzU3LeHp/H3m9EXYk8zhQv75IjaQj2C/Jqh5L6rXPQlTA==
-X-Received: by 2002:a05:6870:891f:b0:e1:ec98:3c59 with SMTP id i31-20020a056870891f00b000e1ec983c59mr111734oao.295.1651787017929;
-        Thu, 05 May 2022 14:43:37 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id a32-20020a9d2623000000b006060322123csm1012879otb.12.2022.05.05.14.43.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 May 2022 14:43:37 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Thu, 5 May 2022 14:43:36 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Subject: Re: [PATCH 5.17 000/225] 5.17.6-rc1 review
-Message-ID: <20220505214336.GD1988936@roeck-us.net>
-References: <20220504153110.096069935@linuxfoundation.org>
+        Thu, 5 May 2022 17:47:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A6A05EDC2;
+        Thu,  5 May 2022 14:44:07 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7CB2C61F0F;
+        Thu,  5 May 2022 21:44:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 358E1C385A8;
+        Thu,  5 May 2022 21:44:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651787046;
+        bh=epemp84j4xj21AKIY1Y6/uEGtGWjrK9bsJzhHmU8nk4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=YdViTLUMWWNFhptNqUPe/CDvcg3vJPSAhcTKuwkx6pGLKcQFoYIUujs5zIPtxeVPz
+         fiMoQgcUqHqa6NogLYfdihJti1NmWbx9CEk6LAr34SJ3Skkqz1Qa8iXagSjg3XGTTJ
+         ZdsVnmc9OMjPsNnmf3+SS/AV8vhLxS0+MTqjAcuxBALQx2F4eXkCARE6L/A7ASQeWo
+         cADc0aj0Tc/0rwOklZ4R/XpNmNIvyUwQlKC5QmQgimQEYjMvdiDh+zY/kh4rdSiwjR
+         09OW5+b+NGJC9Ucj2KuLNRSx/jKdpAOgoiIxG2H5yhXSQ5nCcv/ARPEzKT5oksMTrF
+         NCpl59yv+xf2A==
+Date:   Thu, 5 May 2022 16:44:03 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Niklas Schnelle <schnelle@linux.ibm.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>
+Subject: Re: [PATCH 33/37] PCI: make quirk using inw() depend on HAS_IOPORT
+Message-ID: <20220505214403.GA517655@bhelgaas>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220504153110.096069935@linuxfoundation.org>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20220429135108.2781579-60-schnelle@linux.ibm.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 04, 2022 at 06:43:58PM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.17.6 release.
-> There are 225 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On Fri, Apr 29, 2022 at 03:50:57PM +0200, Niklas Schnelle wrote:
+> In the future inw() and friends will not be compiled on architectures
+> without I/O port support.
 > 
-> Responses should be made by Fri, 06 May 2022 15:25:19 +0000.
-> Anything received after that time might be too late.
+> Co-developed-by: Arnd Bergmann <arnd@kernel.org>
+> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
+
+After capitalizing "Make" in the subject,
+
+Acked-by: Bjorn Helgaas <bhelgaas@google.com>
+
+> ---
+>  drivers/pci/quirks.c | 2 ++
+>  1 file changed, 2 insertions(+)
 > 
-
-Build results:
-	total: 155 pass: 155 fail: 0
-Qemu test results:
-	total: 489 pass: 489 fail: 0
-
-Tested-by: Guenter Roeck <linux@roeck-us.net>
-
-Guenter
+> diff --git a/drivers/pci/quirks.c b/drivers/pci/quirks.c
+> index da829274fc66..27db2810f034 100644
+> --- a/drivers/pci/quirks.c
+> +++ b/drivers/pci/quirks.c
+> @@ -265,6 +265,7 @@ DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_NEC,	PCI_DEVICE_ID_NEC_CBUS_1,	quirk_isa_d
+>  DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_NEC,	PCI_DEVICE_ID_NEC_CBUS_2,	quirk_isa_dma_hangs);
+>  DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_NEC,	PCI_DEVICE_ID_NEC_CBUS_3,	quirk_isa_dma_hangs);
+>  
+> +#ifdef CONFIG_HAS_IOPORT
+>  /*
+>   * Intel NM10 "TigerPoint" LPC PM1a_STS.BM_STS must be clear
+>   * for some HT machines to use C4 w/o hanging.
+> @@ -284,6 +285,7 @@ static void quirk_tigerpoint_bm_sts(struct pci_dev *dev)
+>  	}
+>  }
+>  DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_TGP_LPC, quirk_tigerpoint_bm_sts);
+> +#endif
+>  
+>  /* Chipsets where PCI->PCI transfers vanish or hang */
+>  static void quirk_nopcipci(struct pci_dev *dev)
+> -- 
+> 2.32.0
+> 

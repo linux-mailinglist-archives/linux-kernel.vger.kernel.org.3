@@ -2,40 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1391151C02B
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 15:04:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB67351C061
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 15:17:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378713AbiEENHq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 09:07:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50728 "EHLO
+        id S1378995AbiEENUo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 09:20:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346531AbiEENHo (ORCPT
+        with ESMTP id S1354075AbiEENUl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 09:07:44 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BBAB25641A
-        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 06:04:04 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 91CCD106F;
-        Thu,  5 May 2022 06:04:04 -0700 (PDT)
-Received: from FVFF77S0Q05N.cambridge.arm.com (FVFF77S0Q05N.cambridge.arm.com [10.1.29.132])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9F2213F885;
-        Thu,  5 May 2022 06:04:03 -0700 (PDT)
-Date:   Thu, 5 May 2022 14:04:00 +0100
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Zhen Lei <thunder.leizhen@huawei.com>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] arm64: add the printing of tpidr_elx in __show_regs()
-Message-ID: <YnPLQJhu5B1Cxvoh@FVFF77S0Q05N.cambridge.arm.com>
-References: <20220505095640.312-1-thunder.leizhen@huawei.com>
+        Thu, 5 May 2022 09:20:41 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28E4B18E18;
+        Thu,  5 May 2022 06:17:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651756622; x=1683292622;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=+6MCbEQSUwrgaPZw/EyhSqJQGKL9MpyVEdD0/n5EPeI=;
+  b=NidSsoJSQWI7Xil2Da5FncYmC4RR9xPSXdoS0FD3sT+aCpqFaMydh0jR
+   zTZYYVArzsQ22RV7a2W8ipjYbtZJxEEEgTmJHHbmjR5mx9PqHVidT6mz7
+   CbwMiqbM7zp8ZJx1xJzfYTbSmtwT6tv/+pJQjgxRWaWRXCkYzQao5cbdY
+   CUMFjfjAPphXSC22xGGUKV1jtcWZ+LckTt+h9Zhc6ZXYVuo7FpF9eASsY
+   LP5uAPQvvxNJyDRV18g8K7q95evwEIK9nYhYwsORjzNjVMV95YwKVEEZr
+   PG4QZN2+LAKlCsHZE+5JrJ/bAN9gTRPyN3/BBoD4ztn59bY2EdyEDiL5z
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10338"; a="331090656"
+X-IronPort-AV: E=Sophos;i="5.91,201,1647327600"; 
+   d="scan'208";a="331090656"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2022 06:17:01 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,201,1647327600"; 
+   d="scan'208";a="563235590"
+Received: from irvmail001.ir.intel.com ([10.43.11.63])
+  by orsmga007.jf.intel.com with ESMTP; 05 May 2022 06:16:58 -0700
+Received: from lincoln.igk.intel.com (lincoln.igk.intel.com [10.102.21.235])
+        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 245DGuYS009371;
+        Thu, 5 May 2022 14:16:56 +0100
+From:   Larysa Zaremba <larysa.zaremba@intel.com>
+To:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>
+Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Quentin Monnet <quentin@isovalent.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Larysa Zaremba <larysa.zaremba@intel.com>,
+        Alexander Lobakin <alexandr.lobakin@intel.com>
+Subject: [PATCH bpf-next v2] bpftool: Use sysfs vmlinux when dumping BTF by ID
+Date:   Thu,  5 May 2022 15:05:08 +0200
+Message-Id: <20220505130507.130670-1-larysa.zaremba@intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220505095640.312-1-thunder.leizhen@huawei.com>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -43,66 +70,116 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 05, 2022 at 05:56:40PM +0800, Zhen Lei wrote:
-> Commit 7158627686f0 ("arm64: percpu: implement optimised pcpu access
-> using tpidr_el1") and commit 6d99b68933fb ("arm64: alternatives: use
-> tpidr_el2 on VHE hosts") use tpidr_elx to cache my_cpu_offset to optimize
-> pcpu access. However, when performing reverse execution based on the
-> registers and the memory contents in kdump, this information is sometimes
-> required if there is a pcpu access.
-> 
-> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
-> ---
->  arch/arm64/kernel/process.c | 5 +++++
->  1 file changed, 5 insertions(+)
-> 
-> v2 --> v3:
-> 1) Relace "switch (read_sysreg(CurrentEL))" statement with
->    "if (is_kernel_in_hyp_mode())" statement.
-> 2) Change the register name to lowercase.
-> 
-> v1 --> v2:
-> Directly print the tpidr_elx register of the current exception level.
-> Avoid coupling with the implementation of 'my_cpu_offset'.
-> 
-> diff --git a/arch/arm64/kernel/process.c b/arch/arm64/kernel/process.c
-> index 7fa97df55e3ad3f..7b6bccce9721c36 100644
-> --- a/arch/arm64/kernel/process.c
-> +++ b/arch/arm64/kernel/process.c
-> @@ -216,6 +216,11 @@ void __show_regs(struct pt_regs *regs)
->  	show_regs_print_info(KERN_DEFAULT);
->  	print_pstate(regs);
->  
-> +	if (is_kernel_in_hyp_mode())
-> +		printk("tpidr_el2 : %016llx\n", read_sysreg(tpidr_el2));
-> +	else
-> +		printk("tpidr_el1 : %016llx\n", read_sysreg(tpidr_el1));
+Currently, dumping almost all BTFs specified by id requires
+using the -B option to pass the base BTF. For kernel module
+BTFs the vmlinux BTF sysfs path should work.
 
-If we care about the offset specifically, this would be simpler as:
+This patch simplifies dumping by ID usage by attempting to
+use vmlinux BTF from sysfs, if the first try of loading BTF by ID
+fails with certain conditions and the ID corresponds to a kernel
+module BTF.
 
-	printk("cpu offset : 0x%016lx\n", __my_cpu_offset());
+Signed-off-by: Larysa Zaremba <larysa.zaremba@intel.com>
+Reviewed-by: Alexander Lobakin <alexandr.lobakin@intel.com>
+---
+ tools/bpf/bpftool/btf.c | 67 +++++++++++++++++++++++++++++++++++------
+ 1 file changed, 58 insertions(+), 9 deletions(-)
 
-... which should do the right thing even if we repurpose the TPIDRs and move the offset elsewhere.
+diff --git a/tools/bpf/bpftool/btf.c b/tools/bpf/bpftool/btf.c
+index a2c665beda87..070e0c1595d7 100644
+--- a/tools/bpf/bpftool/btf.c
++++ b/tools/bpf/bpftool/btf.c
+@@ -459,6 +459,56 @@ static int dump_btf_c(const struct btf *btf,
+ 	return err;
+ }
+ 
++static const char sysfs_vmlinux[] = "/sys/kernel/btf/vmlinux";
++
++static struct btf *get_vmlinux_btf_from_sysfs(void)
++{
++	struct btf *base;
++
++	base = btf__parse(sysfs_vmlinux, NULL);
++	if (libbpf_get_error(base)) {
++		p_err("failed to parse vmlinux BTF at '%s': %ld\n",
++		      sysfs_vmlinux, libbpf_get_error(base));
++		base = NULL;
++	}
++
++	return base;
++}
++
++static struct btf *btf_try_load_with_vmlinux(__u32 btf_id, struct btf **base)
++{
++	struct bpf_btf_info btf_info = {};
++	unsigned int len;
++	int btf_fd;
++	int err;
++
++	btf_fd = bpf_btf_get_fd_by_id(btf_id);
++	if (btf_fd < 0) {
++		p_err("can't get BTF object by id (%u): %s",
++		      btf_id, strerror(errno));
++		return ERR_PTR(btf_fd);
++	}
++
++	len = sizeof(btf_info);
++	err = bpf_obj_get_info_by_fd(btf_fd, &btf_info, &len);
++	close(btf_fd);
++
++	if (err) {
++		p_err("can't get BTF (ID %u) object info: %s",
++		      btf_id, strerror(errno));
++		return ERR_PTR(err);
++	}
++
++	if (!btf_info.kernel_btf) {
++		p_err("BTF with ID %u is not a kernel module BTF, cannot use vmlinux as base",
++		      btf_id);
++		return ERR_PTR(-EINVAL);
++	}
++
++	*base = get_vmlinux_btf_from_sysfs();
++	return btf__load_from_kernel_by_id_split(btf_id, *base);
++}
++
+ static int do_dump(int argc, char **argv)
+ {
+ 	struct btf *btf = NULL, *base = NULL;
+@@ -536,18 +586,11 @@ static int do_dump(int argc, char **argv)
+ 		NEXT_ARG();
+ 	} else if (is_prefix(src, "file")) {
+ 		const char sysfs_prefix[] = "/sys/kernel/btf/";
+-		const char sysfs_vmlinux[] = "/sys/kernel/btf/vmlinux";
+ 
+ 		if (!base_btf &&
+ 		    strncmp(*argv, sysfs_prefix, sizeof(sysfs_prefix) - 1) == 0 &&
+-		    strcmp(*argv, sysfs_vmlinux) != 0) {
+-			base = btf__parse(sysfs_vmlinux, NULL);
+-			if (libbpf_get_error(base)) {
+-				p_err("failed to parse vmlinux BTF at '%s': %ld\n",
+-				      sysfs_vmlinux, libbpf_get_error(base));
+-				base = NULL;
+-			}
+-		}
++		    strcmp(*argv, sysfs_vmlinux))
++			base = get_vmlinux_btf_from_sysfs();
+ 
+ 		btf = btf__parse_split(*argv, base ?: base_btf);
+ 		err = libbpf_get_error(btf);
+@@ -593,6 +636,12 @@ static int do_dump(int argc, char **argv)
+ 	if (!btf) {
+ 		btf = btf__load_from_kernel_by_id_split(btf_id, base_btf);
+ 		err = libbpf_get_error(btf);
++		if (err == -EINVAL && !base_btf) {
++			p_info("Warning: valid base BTF was not specified with -B option, falling back on standard base BTF (sysfs vmlinux)");
++			btf = btf_try_load_with_vmlinux(btf_id, &base);
++			err = libbpf_get_error(btf);
++		}
++
+ 		if (err) {
+ 			p_err("get btf by id (%u): %s", btf_id, strerror(err));
+ 			goto done;
+-- 
+2.35.1
 
-As Will says, we should only log this for !user_mode(regs), so it could
-be placed in the block below, immediately before we print the kernel PC, i.e.
-
-	if (!user_mode_regs) {
-		printk("cpu offset : %016lx\n", __my_cpu_offset());
-		printk("pc : %pS\n", (void *)regs->pc);
-		printk("lr : %pS\n", (void *)ptrauth_strip_insn_pac(lr));
-		...
-	}
-
-... or in a separate block which checks the same condition.
-
-Thanks,
-Mark.
-
-> +
->  	if (!user_mode(regs)) {
->  		printk("pc : %pS\n", (void *)regs->pc);
->  		printk("lr : %pS\n", (void *)ptrauth_strip_insn_pac(lr));
-> -- 
-> 2.25.1
-> 

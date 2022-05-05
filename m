@@ -2,194 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52FAC51C01F
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 15:01:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 419C451C023
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 15:03:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347049AbiEENF1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 09:05:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48604 "EHLO
+        id S1378487AbiEENGH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 09:06:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378881AbiEENFR (ORCPT
+        with ESMTP id S229539AbiEENGF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 09:05:17 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48A4D5677D;
-        Thu,  5 May 2022 06:01:23 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id n10so8587273ejk.5;
-        Thu, 05 May 2022 06:01:23 -0700 (PDT)
+        Thu, 5 May 2022 09:06:05 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE23B52B2B
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 06:02:25 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id g6so8608432ejw.1
+        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 06:02:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:from:to:cc:subject:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=+8Bn3kW6e0wg38EIvqrVCzIx965fXouRqL0MFSFcWLA=;
-        b=J4uXpxzAF4fntLkmDVkXZMfd8yirdLuHYgKoHT0AaACWwDZrZ2htX8OXoxuig9GktV
-         o8mW+TShx4kz2GkxSxexXi/KoWIPXCcUfC6KliLUj+n7x0QN5ZGexFxdaPnZ3w+Fb21l
-         OO/u/VgF7caDVsdwDFMtao+6FA/f1jAr2asgHOVav2XDkroTYoRH+KQw1FuPect69Dui
-         Was1/ggd389uk9xyaecMRk+z01QglbTngQ60pHuBXldwlWidSf+OFVsXdrmOq22dNfNG
-         a+bUCfhFdyDO3Qh8n2waf4Rb4soLDhmFKSA6N4D7b/9MnpIFiddnmZkvR/fqSvsmO1Sm
-         5o9Q==
+        d=ffwll.ch; s=google;
+        h=date:from:to:cc:subject:message-id:mail-followup-to:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=BOm9C+H5cCzRKeEZrFMRYiRqzZ6UOwUcjZY2tv0sRpc=;
+        b=Kxw8nwKJ8DvGjh9azZysybfe83qaqPbJNMBImiHRRShDE9cAQIVUPwpNRzMYyqJDWn
+         dsRQVs0f6iLibcVuVSZkqpqhNIFiDlD3wJgApXaHgV2OLHQUNm6UMFbpquj9a984Ath2
+         YYzt5AvkVS0kW+QS7oh5lGjcn6amGHjvw2cFc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:from:to:cc:subject:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=+8Bn3kW6e0wg38EIvqrVCzIx965fXouRqL0MFSFcWLA=;
-        b=5bhoOcsoTg/5cGXxGfr1eHPlYS/7sIOv+AET3mSW7I5fsimP9T1lVAA1nwe/aPgbe3
-         dYug+n2BaMLk5D6gFqU8UnEGwHCftf4EdufY4f+ldkDBpNUVb6yPuWiMAVE0p6ozMEHj
-         qN7irjUOiYJ73dfhz2/sQXIk+XgyUUiJox6YVDEYte8TyT0MnsTgObN96PEvUhgITDlt
-         p7GWGMn7B1rkPmkQXo/LnzieS1VTT2l80gEAz1cBo5HK2a9cuBQCjjmhAbcaXB2VGyZz
-         PY7lunl/kxapGdr82GRx3C2CT0UVTcoZxk2jclMmt1dwxntMnj3tEF4Q3TQc3vlhUx9h
-         EPdA==
-X-Gm-Message-State: AOAM533seXohz7Iz+tSffdiaeFdCC5vbIphUIEISSTwNEWOfgaJJdoya
-        g0lvqqAcuw1nOP6ukwyuJ6Q=
-X-Google-Smtp-Source: ABdhPJxF2OAZFYPrnxQxOo+ZEdFEnihNvhGqXp1BtBiI6HAAqPIH3LA2mibKtUkDnyPhffVR3ZOaNQ==
-X-Received: by 2002:a17:907:97ce:b0:6f3:91d6:a8a1 with SMTP id js14-20020a17090797ce00b006f391d6a8a1mr7774669ejc.393.1651755681319;
-        Thu, 05 May 2022 06:01:21 -0700 (PDT)
-Received: from Ansuel-xps. (93-42-70-190.ip85.fastwebnet.it. [93.42.70.190])
-        by smtp.gmail.com with ESMTPSA id qp24-20020a170907a21800b006f3ef214e4bsm713586ejc.177.2022.05.05.06.01.20
+        h=x-gm-message-state:date:from:to:cc:subject:message-id
+         :mail-followup-to:references:mime-version:content-disposition
+         :in-reply-to;
+        bh=BOm9C+H5cCzRKeEZrFMRYiRqzZ6UOwUcjZY2tv0sRpc=;
+        b=kIFegg/YMr+sU5LYyiLX5oHG4cxGEapRD9sPR0MJZUpPaGdtRtnIeX+p9CGGwTwwp5
+         KY1D79hXzeh2PgpQ/3381/TtrzTvr6oe1QfOE7T+R1iH0G278menuEVtuh1IeFp6oy0z
+         aJLA/lEwgUzl3AkXatIsKWNNkM8/43buQEttpytunLYvFS1eIm7JZ7rrbRqlyTI8aNh8
+         RCgooWQdVpRi4Zz8pjMq0Mqsf9Yz0X7WK1Ns1cOtdh5680CG+3efxlcMBx5W8+KqmSPR
+         NggXlDi5KPhEx4leLy/ccQsOLaHmJOM0ybAXXdJs+IPFDVA5zNGaY9XYVWkUNI6p7qNP
+         ujGg==
+X-Gm-Message-State: AOAM532TNM+vDmQLqejkCHEyWsDk+BZlbLqubzt85nctcgqsqO6nKqvf
+        jVoBkatv3QhRnBjKvmb0EKikmg==
+X-Google-Smtp-Source: ABdhPJztrJUrelAEmEd/ZSyj3JbJlOid+Hsdae80sL28sjz9o0jSUsQ4xsro3xCtUCPLNWG8pnxaUA==
+X-Received: by 2002:a17:907:3f86:b0:6db:b745:f761 with SMTP id hr6-20020a1709073f8600b006dbb745f761mr25395823ejc.610.1651755744294;
+        Thu, 05 May 2022 06:02:24 -0700 (PDT)
+Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
+        by smtp.gmail.com with ESMTPSA id d3-20020a170907272300b006f3ef214da4sm767144ejl.10.2022.05.05.06.02.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 May 2022 06:01:20 -0700 (PDT)
-Message-ID: <6273caa0.1c69fb81.b164f.3f11@mx.google.com>
-X-Google-Original-Message-ID: <YnPKnpiyj5Wcj5i9@Ansuel-xps.>
-Date:   Thu, 5 May 2022 15:01:18 +0200
-From:   Ansuel Smith <ansuelsmth@gmail.com>
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>, Pavel Machek <pavel@ucw.cz>,
-        John Crispin <john@phrozen.org>, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-leds@vger.kernel.org,
-        Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>
-Subject: Re: [RFC PATCH v6 01/11] leds: add support for hardware driven LEDs
-References: <20220503151633.18760-1-ansuelsmth@gmail.com>
- <20220503151633.18760-2-ansuelsmth@gmail.com>
- <YnL73yOfh+wHQObm@lunn.ch>
+        Thu, 05 May 2022 06:02:23 -0700 (PDT)
+Date:   Thu, 5 May 2022 15:02:21 +0200
+From:   Daniel Vetter <daniel@ffwll.ch>
+To:     Javier Martinez Canillas <javierm@redhat.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Helge Deller <deller@gmx.de>, dri-devel@lists.freedesktop.org,
+        linux-fbdev@vger.kernel.org
+Subject: Re: [PATCH v2 4/4] fbdev: vesafb: Cleanup fb_info in .fb_destroy
+ rather than .remove
+Message-ID: <YnPK3RLPdtvFze+8@phenom.ffwll.local>
+Mail-Followup-To: Javier Martinez Canillas <javierm@redhat.com>,
+        linux-kernel@vger.kernel.org, Helge Deller <deller@gmx.de>,
+        dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org
+References: <20220505113128.264963-1-javierm@redhat.com>
+ <20220505113128.264963-5-javierm@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YnL73yOfh+wHQObm@lunn.ch>
+In-Reply-To: <20220505113128.264963-5-javierm@redhat.com>
+X-Operating-System: Linux phenom 5.10.0-8-amd64 
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 05, 2022 at 12:19:11AM +0200, Andrew Lunn wrote:
-> > diff --git a/drivers/leds/led-class.c b/drivers/leds/led-class.c
-> > index 6a8ea94834fa..3516ae3c4c3c 100644
-> > --- a/drivers/leds/led-class.c
-> > +++ b/drivers/leds/led-class.c
-> > @@ -164,6 +164,27 @@ static void led_remove_brightness_hw_changed(struct led_classdev *led_cdev)
-> >  }
-> >  #endif
-> >  
-> > +#ifdef CONFIG_LEDS_HARDWARE_CONTROL
-> > +static int led_classdev_check_blink_mode_functions(struct led_classdev *led_cdev)
-> > +{
-> > +	int mode = led_cdev->blink_mode;
-> > +
+On Thu, May 05, 2022 at 01:31:27PM +0200, Javier Martinez Canillas wrote:
+> The driver is calling framebuffer_release() in its .remove callback, but
+> this will cause the struct fb_info to be freed too early. Since it could
+> be that a reference is still hold to it if user-space opened the fbdev.
 > 
-> We try to avoid #ifdef in code. I suggest you use
+> This would lead to a use-after-free error if the framebuffer device was
+> unregistered but later a user-space process tries to close the fbdev fd.
 > 
->    if (IS_ENABLED(CONFIG_LEDS_HARDWARE_CONTROL)) {
->    }
+> The correct thing to do is to only unregister the framebuffer in the
+> driver's .remove callback, but do any cleanup in the fb_ops.fb_destroy.
 > 
-> You then get compiler coverage independent of if the option is on or
-> off.
+> Suggested-by: Daniel Vetter <daniel.vetter@ffwll.ch>
+> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
+> ---
 > 
-> > +	if (mode == SOFTWARE_HARDWARE_CONTROLLED &&
-> > +	    (!led_cdev->hw_control_status ||
-> > +	    !led_cdev->hw_control_start ||
-> > +	    !led_cdev->hw_control_stop))
-> > +		return -EINVAL;
-> > +
-> > +	if (mode == SOFTWARE_CONTROLLED &&
-> > +	    (led_cdev->hw_control_status ||
-> > +	    led_cdev->hw_control_start ||
-> > +	    led_cdev->hw_control_stop))
-> > +		return -EINVAL;
-> > +
-> > +	return 0;
-> > +}
-> > +#endif
-> > +
-> >  /**
-> >   * led_classdev_suspend - suspend an led_classdev.
-> >   * @led_cdev: the led_classdev to suspend.
-> > @@ -367,6 +388,12 @@ int led_classdev_register_ext(struct device *parent,
-> >  	if (ret < 0)
-> >  		return ret;
-> >  
-> > +#ifdef CONFIG_LEDS_HARDWARE_CONTROL
-> > +	ret = led_classdev_check_blink_mode_functions(led_cdev);
-> > +	if (ret < 0)
-> > +		return ret;
-> > +#endif
+> Changes in v2:
+> - Also do the change for vesafb (Thomas Zimmermann).
 > 
-> You can then drop this #ifdef, since it will return 0 by default when
-> disabled, and the compiler should optimize it all out.
+>  drivers/video/fbdev/vesafb.c | 14 +++++++++++---
+>  1 file changed, 11 insertions(+), 3 deletions(-)
 > 
-> > @@ -154,6 +160,32 @@ struct led_classdev {
-> >  
-> >  	/* LEDs that have private triggers have this set */
-> >  	struct led_hw_trigger_type	*trigger_type;
-> > +
-> > +	/* This report the supported blink_mode. The driver should report the
-> > +	 * correct LED capabilities.
-> > +	 * With this set to HARDWARE_CONTROLLED, LED is always in offload mode
-> > +	 * and triggers can't be simulated by software.
-> > +	 * If the led is HARDWARE_CONTROLLED, status/start/stop function
-> > +	 * are optional.
-> > +	 * By default SOFTWARE_CONTROLLED is set as blink_mode.
-> > +	 */
-> > +	enum led_blink_modes	blink_mode;
-> > +#ifdef CONFIG_LEDS_HARDWARE_CONTROL
-> > +	/* Ask the LED driver if hardware mode is enabled or not.
-> > +	 * If the option is not declared by the LED driver, SOFTWARE_CONTROLLED
-> > +	 * is assumed.
-> > +	 * Triggers will check if the hardware mode is supported and will be
-> > +	 * activated accordingly. If the trigger can't run in hardware mode,
-> > +	 * return -EOPNOTSUPP as the blinking can't be simulated by software.
-> > +	 */
-> > +	bool			(*hw_control_status)(struct led_classdev *led_cdev);
-> > +	/* Set LED in hardware mode */
-> > +	int			(*hw_control_start)(struct led_classdev *led_cdev);
-> > +	/* Disable hardware mode for LED. It's advised to the LED driver to put it to
-> > +	 * the old status but that is not mandatory and also putting it off is accepted.
-> > +	 */
-> > +	int			(*hw_control_stop)(struct led_classdev *led_cdev);
-> > +#endif
-> 
-> I'm surprised this builds. It looked like you accessed these two
-> members even when the option was disabled. I would keep them even when
-> the option is disabled. Two pointers don't add much overhead, and it
-> makes the drivers simpler.
-> 
+> diff --git a/drivers/video/fbdev/vesafb.c b/drivers/video/fbdev/vesafb.c
+> index df6de5a9dd4c..1f03a449e505 100644
+> --- a/drivers/video/fbdev/vesafb.c
+> +++ b/drivers/video/fbdev/vesafb.c
+> @@ -179,6 +179,10 @@ static int vesafb_setcolreg(unsigned regno, unsigned red, unsigned green,
+>  	return err;
+>  }
+>  
+> +/*
+> + * fb_ops.fb_destroy is called by the last put_fb_info() call at the end
+> + * of unregister_framebuffer() or fb_release(). Do any cleanup here.
+> + */
+>  static void vesafb_destroy(struct fb_info *info)
+>  {
+>  	struct vesafb_par *par = info->par;
+> @@ -187,7 +191,13 @@ static void vesafb_destroy(struct fb_info *info)
+>  	arch_phys_wc_del(par->wc_cookie);
+>  	if (info->screen_base)
+>  		iounmap(info->screen_base);
+> +
+> +	if (((struct vesafb_par *)(info->par))->region)
+> +		release_region(0x3c0, 32);
 
-Yhea sorry about this... I proposed this as an RFC as it was old code
-that I just refreshed and I'm really checking the implementation...
-Will do the ifdef changes in the next version.
+This move seems rather iffy, so maybe justify it with "makes the code
+exactly as busted before 27599aacbaef ("fbdev: Hot-unplug firmware fb
+devices on forced removal")"
 
-> >  #ifdef CONFIG_LEDS_BRIGHTNESS_HW_CHANGED
-> > @@ -215,7 +247,6 @@ extern struct led_classdev *of_led_get(struct device_node *np, int index);
-> >  extern void led_put(struct led_classdev *led_cdev);
-> >  struct led_classdev *__must_check devm_of_led_get(struct device *dev,
-> >  						  int index);
-> > -
+Also same comments as on v1 about adding more details about what/how this
+fixes, with that: Reviewed-by: Daniel Vetter <daniel.vetter@ffwll.ch>
+
+> +
+>  	release_mem_region(info->apertures->ranges[0].base, info->apertures->ranges[0].size);
+> +
+> +	framebuffer_release(info);
+>  }
+>  
+>  static struct fb_ops vesafb_ops = {
+> @@ -484,10 +494,8 @@ static int vesafb_remove(struct platform_device *pdev)
+>  {
+>  	struct fb_info *info = platform_get_drvdata(pdev);
+>  
+> +	/* vesafb_destroy takes care of info cleanup */
+>  	unregister_framebuffer(info);
+> -	if (((struct vesafb_par *)(info->par))->region)
+> -		release_region(0x3c0, 32);
+> -	framebuffer_release(info);
+>  
+>  	return 0;
+>  }
+> -- 
+> 2.35.1
 > 
-> Unrelated white space change.
-> 
-> 	  Andrew
 
 -- 
-	Ansuel
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch

@@ -2,106 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DADB151BF20
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 14:19:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9370B51BF25
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 14:19:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376495AbiEEMWm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 08:22:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56112 "EHLO
+        id S1376539AbiEEMWz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 08:22:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241946AbiEEMWk (ORCPT
+        with ESMTP id S1376520AbiEEMWy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 08:22:40 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DF4F53B48
-        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 05:19:01 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id b24so4967987edu.10
-        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 05:19:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=rDk3qs/Q4Xe8wlL/UcZMtYsp2NSwhtSMKNXSB48HRlA=;
-        b=7y/YvlHScipYanP00lb1LV7E2AOk6re7HN1ndCWAVJSLqR28Xi83kG+pQu7/UEtsUh
-         FvBJfCJiffmk85MzcLJeWGYfHc4Bcz0J1BFhnHP4lz38NglS75/OC0sCksV9s4USD2US
-         YvhkMS8UmpeanIAMp2MlaxJsbi7a+//HVBT+BHe+CyPfejaJu200/vxanoZERxjaLxjo
-         JRclq1WSTmnRJTYj4VgDERRQQp92MYm1Kerpf4hV0AiZ2clDZqIMfTHwDTFirgNZr43x
-         cXEVmhexEKEBA6kMCMv2xoaQHnvXdhieEDZJmVka9cQ2IPHU4EzTmRCs4opTzj9qeNYn
-         jHLQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=rDk3qs/Q4Xe8wlL/UcZMtYsp2NSwhtSMKNXSB48HRlA=;
-        b=JNXl18BXTaGubbPekKLfvGyACV+yelQbphQWg+9vEOsOjf3KLzBDMd1HgM9h14hFq/
-         uPXOzRwbEWxZUXLYDLSiFZq+FAxILLkfZWF0Hbv/Qaz45LLh/iK3GvUAnDQ3phUW2Tk2
-         ms4417aWn3JyMQtKuwkEFJY1HvqEE07P8+Xn+mInLdhPf9sTQRsaeIAnuRGYoj2gRTbN
-         5ApVsLkXeOqbfq/BOdmlr49J/OK5br2B2m3jv86vXQJiO+G8IzZXY9JylEj0mHybCSPe
-         SZkAZ3Lv6Qu0tNjg5yAKc/Znt77FBolRCYlz9x8BHQaZhcjWLHxuT3NPi0zeLjREEAia
-         t/kg==
-X-Gm-Message-State: AOAM5318ZYvn3FP8+Fs+c+avcFlT21JeMSsxyfKvqLHa1gFpEisu0YIv
-        ydsW75GrWE4ujsVd3auxCPlfO7XUh3MVZx0X6snrzg==
-X-Google-Smtp-Source: ABdhPJzNj4hoyQIi5bToIm8IJx9uJV1XrbVuw7EmRPlboKIHjiKMwU+E7zq+NuwRHGZGpR3PQrqlT8CW8qRS1Bqrhfw=
-X-Received: by 2002:a05:6402:d4c:b0:410:a415:fd95 with SMTP id
- ec12-20020a0564020d4c00b00410a415fd95mr29189322edb.288.1651753139972; Thu, 05
- May 2022 05:18:59 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220505115011.3435-1-hanyihao@vivo.com>
-In-Reply-To: <20220505115011.3435-1-hanyihao@vivo.com>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Thu, 5 May 2022 14:18:48 +0200
-Message-ID: <CAMRc=MdkbZVW_vFxyJbKh9oDo3mdud2omfS=cW5=Gn=nMrM37A@mail.gmail.com>
-Subject: Re: [PATCH] gpiolib: cdev: fix stream_open.cocci warnings
-To:     Kent Gibson <warthog618@gmail.com>, Yihao Han <hanyihao@vivo.com>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        kernel@vivo.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 5 May 2022 08:22:54 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 406DF54FA2;
+        Thu,  5 May 2022 05:19:14 -0700 (PDT)
+Received: from linux.localdomain (unknown [113.200.148.30])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9BxYNq9wHNiWN0KAA--.42405S2;
+        Thu, 05 May 2022 20:19:09 +0800 (CST)
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     Xuefeng Li <lixuefeng@loongson.cn>, linux-mips@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 0/2] Modify some code about kprobe
+Date:   Thu,  5 May 2022 20:19:06 +0800
+Message-Id: <1651753148-1464-1-git-send-email-yangtiezhu@loongson.cn>
+X-Mailer: git-send-email 2.1.0
+X-CM-TRANSID: AQAAf9BxYNq9wHNiWN0KAA--.42405S2
+X-Coremail-Antispam: 1UD129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
+        VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUYe7AC8VAFwI0_Gr0_Xr1l1xkIjI8I6I8E
+        6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28Cjx
+        kF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8I
+        cVCY1x0267AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aV
+        CY1x0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAq
+        x4xG6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6x
+        CaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY
+        02Avz4vE14v_Xr1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxV
+        Aqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q
+        6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6x
+        kF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE
+        14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa
+        7VUj_Ma5UUUUU==
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 5, 2022 at 1:50 PM Yihao Han <hanyihao@vivo.com> wrote:
->
-> ./drivers/gpio/gpiolib-cdev.c:2498:7-23: WARNING:
-> gpio_fileops: .read() has stream semantic;
-> safe to change nonseekable_open -> stream_open.
->
-> Generated by: scripts/coccinelle/api/stream_open.cocci
->
-> Signed-off-by: Yihao Han <hanyihao@vivo.com>
-> ---
->  drivers/gpio/gpiolib-cdev.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/gpio/gpiolib-cdev.c b/drivers/gpio/gpiolib-cdev.c
-> index f5aa5f93342a..d03c8e012c8c 100644
-> --- a/drivers/gpio/gpiolib-cdev.c
-> +++ b/drivers/gpio/gpiolib-cdev.c
-> @@ -2495,7 +2495,7 @@ static int gpio_chrdev_open(struct inode *inode, struct file *file)
->         get_device(&gdev->dev);
->         file->private_data = cdev;
->
-> -       ret = nonseekable_open(inode, file);
-> +       ret = stream_open(inode, file);
->         if (ret)
->                 goto out_unregister_notifier;
->
-> --
-> 2.17.1
->
+This patch series is preparation to fix the problems when execute
+the multiple_kprobes.tc selftest on mips, some more work needs to
+be done.
 
-Cc'ing Kent.
+Tiezhu Yang (2):
+  selftests/ftrace: Save kprobe_events to test log
+  MIPS: Use NOKPROBE_SYMBOL() instead of __kprobes annotation
 
-This patch doesn't seem to target current master or rc1.
+ arch/mips/kernel/kprobes.c                         | 45 +++++++++++++++-------
+ arch/mips/mm/fault.c                               |  6 ++-
+ .../ftrace/test.d/kprobe/multiple_kprobes.tc       |  2 +
+ 3 files changed, 38 insertions(+), 15 deletions(-)
 
-It also can't be right - we specifically mark all filesystem objects
-exposed by the GPIO character device as non-seekable.
+-- 
+2.1.0
 
-Bart

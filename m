@@ -2,91 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E4A551BFEB
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 14:54:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A769751BFF7
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 14:55:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378232AbiEEM5V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 08:57:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36582 "EHLO
+        id S245541AbiEEM5u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 08:57:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234636AbiEEM5U (ORCPT
+        with ESMTP id S1378259AbiEEM5p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 08:57:20 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7981D562D2
-        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 05:53:40 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id dk23so8538162ejb.8
-        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 05:53:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ZDiHbRXep/6+iyVjBExAePFQNEIwfM2Y++lVywpRZIA=;
-        b=JmUml4YWHv61GXiXI2JyoF4jHOy53241/JumCqgKvphO8ePrl++Lt2BRghiHYcCvxK
-         qD4nUjeFfiL8KGlWm4q1J0JF91/JuU4xySs6PCN3+zNheujLLq0P30PogHwssz1VUEwm
-         boBP+lF91KbEZ7nfoF+nUYr93RRXTlpBma/zcWHS4bqco/+Wmh+I5W2Oqzq9MgKac+yW
-         MkEietDQx61ArfpOTeE7ubKojSmqv9mqZO/4tOuXYnrVFMKsP+w45aVkQE4t964ZVyE7
-         2+ZcpXs1Vsnz3DfmFoGCzTGw9xqhNjzGjLxxWrJyrKtomt6DdTDVOURCeHHFNax8h/Yz
-         KQmA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ZDiHbRXep/6+iyVjBExAePFQNEIwfM2Y++lVywpRZIA=;
-        b=JDG6/6ZqzrbO1tuEdoaFN0WPW8FVK+6KhBR3NmmE9L8PwMAzRnPZ7FCbkRlvl8OWm1
-         5E3ikvsUjmLs2IqQS8UKYWtjOJBXeNxg1HFOGRXH3kOyFCZyjwYNGab5jZeR2mCzw1Zs
-         bbzo929uTON63mQbZwdC+WNZml0ShO9UcvTHTXio7g1ivnFXWF6Gbf74TrwgeBYI+xWv
-         Iorpnl615lS843ciLBD1Kf60IpvRrOuAvgDM1I5OJzbjN95OZIDQrFhxFp7QcPqVVBYa
-         jY10M4QAvmCSy3Qu3pUjzM4I5mMECq9sP3inL6cf+FBWM5xrx49B4JePmSe8s4Ifw6SA
-         iwgw==
-X-Gm-Message-State: AOAM532kbxTqLzgZfNSuJt7yzXLgTUturCwxc6d+p+isR+GGsQ9AJj6I
-        3U2ZCPzvgVPgr/oVply4fF6eFiJHnimtBjMZ8GuiCA==
-X-Google-Smtp-Source: ABdhPJx63A3bP0rjtjyKAom95/TvqkcnzhynHc/l8+zWlqYCcu2m88EFVmKf3AOCUbb+ftsGWYZgQtWf0j+Sf/0+vIc=
-X-Received: by 2002:a17:907:7e92:b0:6f4:c553:c734 with SMTP id
- qb18-20020a1709077e9200b006f4c553c734mr8125613ejc.286.1651755219026; Thu, 05
- May 2022 05:53:39 -0700 (PDT)
+        Thu, 5 May 2022 08:57:45 -0400
+Received: from us-smtp-delivery-74.mimecast.com (us-smtp-delivery-74.mimecast.com [170.10.129.74])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2B35A562E7
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 05:54:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1651755245;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=7ALHOS/AhHZTnqkgAgjy6knXJ+TYy7w9Te//L0PuVbc=;
+        b=FjvTu8RglBpB0JjQOKrF5b4ur6XMXUmhS91xiNOwWIa5whubccGZKrdurSv61K7rxP0zCg
+        8fd8OhEU4QwUBhSdHtnJSrAECQZ0fBrRUIpNSJs5oAm9GIVa4mu1CaQfVMV7g1qhION7rF
+        3x3Oo0iSmduqJwfSFeJgUsxOL03oyqI=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-467-9INGEXHyM9CVrc7QbKjBww-1; Thu, 05 May 2022 08:54:02 -0400
+X-MC-Unique: 9INGEXHyM9CVrc7QbKjBww-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 99F913C02B7C;
+        Thu,  5 May 2022 12:54:01 +0000 (UTC)
+Received: from horse.redhat.com (unknown [10.22.32.26])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 8A5F6552AB1;
+        Thu,  5 May 2022 12:54:01 +0000 (UTC)
+Received: by horse.redhat.com (Postfix, from userid 10451)
+        id 4D000220463; Thu,  5 May 2022 08:54:01 -0400 (EDT)
+Date:   Thu, 5 May 2022 08:54:01 -0400
+From:   Vivek Goyal <vgoyal@redhat.com>
+To:     Dharmendra Hans <dharamhans87@gmail.com>
+Cc:     Miklos Szeredi <miklos@szeredi.hu>, linux-fsdevel@vger.kernel.org,
+        fuse-devel <fuse-devel@lists.sourceforge.net>,
+        linux-kernel@vger.kernel.org, Bernd Schubert <bschubert@ddn.com>
+Subject: Re: [PATCH v4 0/3] FUSE: Implement atomic lookup + open/create
+Message-ID: <YnPI6f2fRZUXbCFP@redhat.com>
+References: <20220502102521.22875-1-dharamhans87@gmail.com>
+ <YnLRnR3Xqu0cYPdb@redhat.com>
+ <CACUYsyEsRph+iFC_fj3F6Ceqhq7NCTuFPH3up8R6C+_bGHktZg@mail.gmail.com>
 MIME-Version: 1.0
-References: <1651703357-25154-1-git-send-email-justinpopo6@gmail.com>
-In-Reply-To: <1651703357-25154-1-git-send-email-justinpopo6@gmail.com>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Thu, 5 May 2022 14:53:28 +0200
-Message-ID: <CAMRc=Md811qriKCKR9wO0kq6FBW_Pq6WJ3vLnQ1EFno46gzYUQ@mail.gmail.com>
-Subject: Re: [PATCH v2 0/2] Add support for NXP PCA6408
-To:     Justin Chen <justinpopo6@gmail.com>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CACUYsyEsRph+iFC_fj3F6Ceqhq7NCTuFPH3up8R6C+_bGHktZg@mail.gmail.com>
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 5, 2022 at 12:30 AM Justin Chen <justinpopo6@gmail.com> wrote:
->
-> The NXP PCA6408 is the 8 bit/8 GPIO version of the NXP PCA6416.
->
-> Justin Chen (2):
->   gpio: pca953xx: Add support for pca6408
->   dt-bindings: gpio: pca95xx: add entry for pca6408
->
->  Documentation/devicetree/bindings/gpio/gpio-pca95xx.yaml | 1 +
->  drivers/gpio/gpio-pca953x.c                              | 2 ++
->  2 files changed, 3 insertions(+)
->
-> --
-> 2.7.4
->
+On Thu, May 05, 2022 at 11:42:51AM +0530, Dharmendra Hans wrote:
+> On Thu, May 5, 2022 at 12:48 AM Vivek Goyal <vgoyal@redhat.com> wrote:
+> >
+> > On Mon, May 02, 2022 at 03:55:18PM +0530, Dharmendra Singh wrote:
+> > > In FUSE, as of now, uncached lookups are expensive over the wire.
+> > > E.g additional latencies and stressing (meta data) servers from
+> > > thousands of clients. These lookup calls possibly can be avoided
+> > > in some cases. Incoming three patches address this issue.
+> >
+> > BTW, these patches are designed to improve performance by cutting down
+> > on number of fuse commands sent. Are there any performance numbers
+> > which demonstrate what kind of improvement you are seeing.
+> >
+> > Say, If I do kernel build, is the performance improvement observable?
+> 
+> Here are the numbers I took last time. These were taken on tmpfs to
+> actually see the effect of reduced calls. On local file systems it
+> might not be that much visible. But we have observed that on systems
+> where we have thousands of clients hammering the metadata servers, it
+> helps a lot (We did not take numbers yet as  we are required to change
+> a lot of our client code but would be doing it later on).
+> 
+> Note that for a change in performance number due to the new version of
+> these patches, we have just refactored the code and functionality has
+> remained the same since then.
+> 
+> here is the link to the performance numbers
+> https://lore.kernel.org/linux-fsdevel/20220322121212.5087-1-dharamhans87@gmail.com/
 
-Both applied, thanks!
+There is a lot going in that table. Trying to understand it. 
 
-Bart
+- Why care about No-Flush. I mean that's independent of these changes,
+  right?  I am assuming this means that upon file close do not send
+  a flush to fuse server. Not sure how bringing No-Flush into the
+  mix is helpful here.
+
+- What is "Patched Libfuse"? I am assuming that these are changes
+  needed in libfuse to support atomic create + atomic open. Similarly
+  assuming "Patched FuseK" means patched kernel with your changes.
+
+  If this is correct, I would probably only be interested in 
+  looking at "Patched Libfuse + Patched FuseK" numbers to figure out
+  what's the effect of your changes w.r.t vanilla kernel + libfuse.
+  Am I understanding it right?
+
+- I am wondering why do we measure "Sequential" and "Random" patterns. 
+  These optimizations are primarily for file creation + file opening
+  and I/O pattern should not matter. 
+
+- Also wondering why performance of Read/s improves. Assuming once
+  file has been opened, I think your optimizations get out of the
+  way (no create, no open) and we are just going through data path of
+  reading file data and no lookups happening. If that's the case, why
+  do Read/s numbers show an improvement.
+
+- Why do we measure "Patched Libfuse". It shows performance regression
+  of 4-5% in table 0B, Sequential workoad. That sounds bad. So without
+  any optimization kicking in, it has a performance cost.
+
+Thanks
+Vivek
+

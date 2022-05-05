@@ -2,225 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 745AC51C13A
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 15:49:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A03951C17F
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 15:53:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243790AbiEENvS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 09:51:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35160 "EHLO
+        id S1380150AbiEENzL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 09:55:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379994AbiEENvC (ORCPT
+        with ESMTP id S1380173AbiEENyt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 09:51:02 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A548757149;
-        Thu,  5 May 2022 06:47:22 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id l18so8835925ejc.7;
-        Thu, 05 May 2022 06:47:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=82ySVt2ChtjKl3QU+pguknZpdr/d2PyQOBQbWfayXGY=;
-        b=SfVmRiTTUxzjc+1QZoWxa1YWNdnZkZqKrIovzyZA7N4h5pTax32kYUqqkv5Qb9uxti
-         NlnIh7OU9kLgoTkHkU50NOjFPjJAjQXvG3nTSZ0J7Z9y7ugJsoXWR79WwG4/xVqwe2BB
-         ZjpR+y3MEZpzxT9uLMhs6x+wT/EUCMMmckm2a53HDHPP33m7MV0FNJ54ZDOczpu3yf3G
-         3OmN16ISbQmPrznnKOSILKAJtPup0JkgLrkBRO0RNTs97yB/6/h06mS8PQJ/y4zi9n8m
-         Hg6m9IKFVpXVqUz4qYfCsf3hw/Z6bNu/sIBtRy7WxkLkVgCyACPoYAUdZhk+XXlZSnuF
-         yMqQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=82ySVt2ChtjKl3QU+pguknZpdr/d2PyQOBQbWfayXGY=;
-        b=kuQWSk0XWVMaivVOEChs2B6NvRv1Lqq62X2lni06AvovikXoAHvWVZ3EPEKDG6wj3O
-         VTVe6kC7+D7pUTrbLaPjmUXD0NtDlD2vUc3dbzX9NiflV7hSw4OhPHZn+YYy2DWbnIDm
-         EBdc/I8fUInRARDgRn5+7Am2l7SYLJru7eDV+ipXvnx7UsWe2ezPgWieGnKTxze2F7ds
-         2CfWbJaYq4T7n3H4q8uSUx+Chw3M0mc7jm3LLjpN21r1kkMI9/rXec1+G79gTNV6BLDP
-         IluMGL4eFbOfOFCYyxNEAWhijs7wjhswk/kFkB+vI9+BqlzilHTPq3fvGAA6sLYjbHPU
-         ptMQ==
-X-Gm-Message-State: AOAM5330U+Gg2RKx3ScUSNviK+NQGSlerO46oxNJtMZVeZwXW69xqO36
-        5jYofeAjZkSjEPAN9SswcqI=
-X-Google-Smtp-Source: ABdhPJzIa3KAznxko5Ij9lTbofJCQziDWDQ/3MLAvLhDVUrzkmZMLbi/elDSrXqlTjrflBFhVYKmHw==
-X-Received: by 2002:a17:907:2d11:b0:6f4:7cf0:2275 with SMTP id gs17-20020a1709072d1100b006f47cf02275mr14868896ejc.72.1651758441223;
-        Thu, 05 May 2022 06:47:21 -0700 (PDT)
-Received: from linux.. (p5dd1ed70.dip0.t-ipconnect.de. [93.209.237.112])
-        by smtp.gmail.com with ESMTPSA id 26-20020a170906301a00b006f3ef214e69sm728324ejz.207.2022.05.05.06.47.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 May 2022 06:47:20 -0700 (PDT)
-From:   Bean Huo <huobean@gmail.com>
-To:     alim.akhtar@samsung.com, avri.altman@wdc.com,
-        asutoshd@codeaurora.org, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, stanley.chu@mediatek.com,
-        beanhuo@micron.com, bvanassche@acm.org, tomas.winkler@intel.com,
-        cang@codeaurora.org, daejun7.park@samsung.com,
-        peter.wang@mediatek.com, powen.kao@mediatek.com,
-        keosung.park@samsung.com
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v4 4/6] scsi: ufshpb: Change sysfs node hpb_stats/rb_* prefix to start with rcmd_*
-Date:   Thu,  5 May 2022 15:47:05 +0200
-Message-Id: <20220505134707.35929-5-huobean@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220505134707.35929-1-huobean@gmail.com>
-References: <20220505134707.35929-1-huobean@gmail.com>
+        Thu, 5 May 2022 09:54:49 -0400
+Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91B3C2FE52
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 06:51:09 -0700 (PDT)
+Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
+        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20220505135108euoutp02f8b1ff93e4204d394c823bf1102ca305~sOcHhMqaw3242332423euoutp02i
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 13:51:08 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20220505135108euoutp02f8b1ff93e4204d394c823bf1102ca305~sOcHhMqaw3242332423euoutp02i
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1651758668;
+        bh=LMzILViEYGl7DXa37dpeTA+tqVrqwK5EcVpc6Ix2yY8=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=CPGQ9j92/rr1enTM8W51HIe+iuZEr6A+pmjVyB7wTM9oQYKbiJDfLBmKJxgvr+u5d
+         npf6DVf6mvZCT4debamywIdobwudx1L2C+Xeuk3k+NeDyd9YRWyd/NB7gcT9i76zY2
+         PfUIAswbVhwRgza41F2Utlnk2O9/yPWlY5G3pKFM=
+Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
+        20220505135105eucas1p1875318bd43e3622035711a71d689236f~sOcFcxcL70606606066eucas1p1W;
+        Thu,  5 May 2022 13:51:05 +0000 (GMT)
+Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
+        eusmges2new.samsung.com (EUCPMTA) with SMTP id 60.BC.09887.946D3726; Thu,  5
+        May 2022 14:51:05 +0100 (BST)
+Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
+        20220505135105eucas1p1428258bde56a77a96d98509a2c0d5fe9~sOcFECa1e1070010700eucas1p1C;
+        Thu,  5 May 2022 13:51:05 +0000 (GMT)
+Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
+        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20220505135105eusmtrp19dbb21ab3bd151eb0520eaf17fcf130f~sOcFDNRxd1365913659eusmtrp1B;
+        Thu,  5 May 2022 13:51:05 +0000 (GMT)
+X-AuditID: cbfec7f4-45bff7000000269f-f7-6273d649daa6
+Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
+        eusmgms2.samsung.com (EUCPMTA) with SMTP id A6.6A.09404.946D3726; Thu,  5
+        May 2022 14:51:05 +0100 (BST)
+Received: from localhost (unknown [106.210.248.170]) by eusmtip1.samsung.com
+        (KnoxPortal) with ESMTPA id
+        20220505135105eusmtip1f64a5a3601c119d85d57b328e28ec824~sOcEvSwAx2664626646eusmtip1f;
+        Thu,  5 May 2022 13:51:05 +0000 (GMT)
+From:   Pankaj Raghav <p.raghav@samsung.com>
+To:     axboe@kernel.dk, hch@lst.de, damien.lemoal@opensource.wdc.com,
+        dsterba@suse.com, jaegeuk@kernel.org, bvanassche@acm.org,
+        hare@suse.de
+Cc:     jonathan.derrick@linux.dev, jiangbo.365@bytedance.com,
+        matias.bjorling@wdc.com, gost.dev@samsung.com, pankydev8@gmail.com,
+        Pankaj Raghav <p.raghav@samsung.com>,
+        Luis Chamberlain <mcgrof@kernel.org>, Chris Mason <clm@fb.com>,
+        Josef Bacik <josef@toxicpanda.com>,
+        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 06/11] btrfs: zoned: Make sb_zone_number function non
+ power of 2 compatible
+Date:   Thu,  5 May 2022 15:47:06 +0200
+Message-Id: <20220505134710.132630-7-p.raghav@samsung.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220505134710.132630-1-p.raghav@samsung.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrCKsWRmVeSWpSXmKPExsWy7djP87qe14qTDJ4fM7dYfbefzWLah5/M
+        FpP6Z7Bb/D57ntniwo9GJoubB3YyWexZNInJYuXqo0wWT9bPYrboOfCBxWJly0Nmiz8PDS0u
+        PV7BbnF51xw2iwltX5ktbkx4ymjxeWkLu8Wam09ZHIQ8Ll/x9vh3Yg2bx8Tmd+weO2fdZfe4
+        fLbUY9OqTjaPhQ1TmT1232xg89jZep/Vo2/LKkaP9VuusnhsPl3tMWHzRlaPz5vkPNoPdDMF
+        8Edx2aSk5mSWpRbp2yVwZbz7vZWx4JBkxda7NxkbGD+JdDFyckgImEj83tfI0sXIxSEksIJR
+        YvqRqWwQzhdGiQn3GpggnM+MEh+edDHBtDy9dgSqajmjxNOpB6D6XzJKrJ42C8jh4GAT0JJo
+        7GQHiYsIdDNKnG1+A1bELHCKSaLx6m8mkCJhgQSJaauFQKayCKhKXPn5ghEkzCtgJXH4UDzE
+        MnmJmZe+s4PYnALWEnM6H7KC2LwCghInZz5hAbGZgWqat85mBhkvIXCNU+Ldw43sEM0uEpOX
+        PoSyhSVeHd8CZctInJ7cwwJhV0s8vfEbqrmFUaJ/53o2kCMkgLb1nckBMZkFNCXW79KHKHeU
+        WPW7nRWigk/ixltBiBP4JCZtm84MEeaV6GgTgqhWktj58wnUUgmJy01zWCBKPCSe/ZebwKg4
+        C8kvs5D8Mgth7QJG5lWM4qmlxbnpqcVGeanlesWJucWleel6yfm5mxiBCfP0v+NfdjAuf/VR
+        7xAjEwfjIUYJDmYlEV7npQVJQrwpiZVVqUX58UWlOanFhxilOViUxHmTMzckCgmkJ5akZqem
+        FqQWwWSZODilGpiS3r2UEZMXXphx7sB5tlsNtYumxq/R271kJaNBXH5rarqLxByhquUros2C
+        n78UnysSZPlJ61SyufQOwS+Xi+VvM5r13v5aYuu59MPabRm/J5zV6Wbtvi063XzRmQs8f2L8
+        HniE+59YKexp/1bZtl6l6ds9M0bt03dkd35R8XLd9fBf5tKZjC+1pz3v2DijYEYw70e2573O
+        i5couPNOSbRke7jRytOZ6Wto/+8Zhp7vG+ov3voRuzhceM69iOTvh95efDwlaOnz0tQX742X
+        8IcG2M9ue3O/s29XAWvVwVZPSebXywLeHmxhOzP/5lXN/YoBaien+Fwo/Gf8Is/u2Kdiy6l2
+        z2/NZjhr8un+bWUpJZbijERDLeai4kQARM0GwgcEAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrKIsWRmVeSWpSXmKPExsVy+t/xu7qe14qTDE6vl7ZYfbefzWLah5/M
+        FpP6Z7Bb/D57ntniwo9GJoubB3YyWexZNInJYuXqo0wWT9bPYrboOfCBxWJly0Nmiz8PDS0u
+        PV7BbnF51xw2iwltX5ktbkx4ymjxeWkLu8Wam09ZHIQ8Ll/x9vh3Yg2bx8Tmd+weO2fdZfe4
+        fLbUY9OqTjaPhQ1TmT1232xg89jZep/Vo2/LKkaP9VuusnhsPl3tMWHzRlaPz5vkPNoPdDMF
+        8Efp2RTll5akKmTkF5fYKkUbWhjpGVpa6BmZWOoZGpvHWhmZKunb2aSk5mSWpRbp2yXoZbz7
+        vZWx4JBkxda7NxkbGD+JdDFyckgImEg8vXaErYuRi0NIYCmjxO8FO5khEhIStxc2MULYwhJ/
+        rnVBFT1nlNj17w9rFyMHB5uAlkRjJztIXERgKqPEhe0XWEAcZoFrTBIND3exgXQLC8RJNNzc
+        BjaJRUBV4srPF4wgzbwCVhKHD8VDLJCXmHnpOzuIzSlgLTGn8yEriC0EVDLx4TuwMbwCghIn
+        Zz5hAbGZgeqbt85mnsAoMAtJahaS1AJGplWMIqmlxbnpucVGesWJucWleel6yfm5mxiB8b3t
+        2M8tOxhXvvqod4iRiYPxEKMEB7OSCK/z0oIkId6UxMqq1KL8+KLSnNTiQ4ymQGdPZJYSTc4H
+        Jpi8knhDMwNTQxMzSwNTSzNjJXFez4KORCGB9MSS1OzU1ILUIpg+Jg5OqQYmtTSvPQapMTFZ
+        a80L1q2q63sTy3/SKfwQz5kn218+eL/j6X6ur7vurVx5SHnxfWsu8ykuJy9v2cp05+GUwu2c
+        AS8+rU58sOBBivjKTK6e7zkW3ws+thX3KrCHBd9Pn+HGP+lwaYjex9zwKa9uuk4tXZBWdGBv
+        764k1fncNwRfs11RnL+bX3LN1/OlqpVL+AKfr+ry6ChJ7WxpKhFesnTHs+lxyzL9wloETGK9
+        Rc+bmj05v7omvWdL2WzfU9OXJSyZqKe4S1Pxc4XaJJbw46/XbQycxPmU+XjZz2USrJEs/80+
+        MtRYSaY4+58QVjT2Wq3RKR5/x7nxi6fcqUjnzQl+Xh4rn+SriIUZHciILyhUYinOSDTUYi4q
+        TgQAF6KNiXgDAAA=
+X-CMS-MailID: 20220505135105eucas1p1428258bde56a77a96d98509a2c0d5fe9
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20220505135105eucas1p1428258bde56a77a96d98509a2c0d5fe9
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20220505135105eucas1p1428258bde56a77a96d98509a2c0d5fe9
+References: <20220505134710.132630-1-p.raghav@samsung.com>
+        <CGME20220505135105eucas1p1428258bde56a77a96d98509a2c0d5fe9@eucas1p1.samsung.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Bean Huo <beanhuo@micron.com>
+Make the calculation in sb_zone_number function to be generic and work
+for both power-of-2 and non power-of-2 zone sizes.
 
-According to the documentation of the sysfs nodes rb_noti_cnt, rb_active_cnt
-and rb_inactive_cnt, they are all related to HPB recommendation in UPIU response
-packet. 'rcmd' (recommendation) should be the correct abbreviation.
+The function signature has been modified to take block device and mirror
+as input as this function is only invoked from callers that have access
+to the block device. This enables to use the generic bdev_zone_no
+function provided by the block layer to calculate the zone number.
 
-Change the sysfs documentation about these sysfs nodes to highlight what they mean
-under different HPB control modes.
+Even though division is used to calculate the zone index for non
+power-of-2 zone sizes, this function will not be used in the fast path as
+the sb_zone_location cache is used for the superblock zone location.
 
-Reviewed-by: Keoseong Park <keosung.park@samsung.com>
-Signed-off-by: Bean Huo <beanhuo@micron.com>
+Reviewed-by: Luis Chamberlain <mcgrof@kernel.org>
+Signed-off-by: Pankaj Raghav <p.raghav@samsung.com>
 ---
- Documentation/ABI/testing/sysfs-driver-ufs | 18 +++++++++-------
- drivers/scsi/ufs/ufshpb.c                  | 24 +++++++++++-----------
- drivers/scsi/ufs/ufshpb.h                  |  6 +++---
- 3 files changed, 26 insertions(+), 22 deletions(-)
+ fs/btrfs/zoned.c | 25 +++++++++++++++----------
+ 1 file changed, 15 insertions(+), 10 deletions(-)
 
-diff --git a/Documentation/ABI/testing/sysfs-driver-ufs b/Documentation/ABI/testing/sysfs-driver-ufs
-index a44ef8bfbadf..6b248abb1bd7 100644
---- a/Documentation/ABI/testing/sysfs-driver-ufs
-+++ b/Documentation/ABI/testing/sysfs-driver-ufs
-@@ -1518,7 +1518,7 @@ Description:	This entry shows the number of reads that cannot be changed to
+diff --git a/fs/btrfs/zoned.c b/fs/btrfs/zoned.c
+index e8c7cebb2..5be2ef7bb 100644
+--- a/fs/btrfs/zoned.c
++++ b/fs/btrfs/zoned.c
+@@ -34,9 +34,6 @@
+ #define BTRFS_SB_LOG_FIRST_OFFSET	(512ULL * SZ_1G)
+ #define BTRFS_SB_LOG_SECOND_OFFSET	(4096ULL * SZ_1G)
  
- 		The file is read only.
+-#define BTRFS_SB_LOG_FIRST_SHIFT	const_ilog2(BTRFS_SB_LOG_FIRST_OFFSET)
+-#define BTRFS_SB_LOG_SECOND_SHIFT	const_ilog2(BTRFS_SB_LOG_SECOND_OFFSET)
+-
+ /* Number of superblock log zones */
+ #define BTRFS_NR_SB_LOG_ZONES 2
  
--What:		/sys/class/scsi_device/*/device/hpb_stats/rb_noti_cnt
-+What:		/sys/class/scsi_device/*/device/hpb_stats/rcmd_noti_cnt
- Date:		June 2021
- Contact:	Daejun Park <daejun7.park@samsung.com>
- Description:	This entry shows the number of response UPIUs that has
-@@ -1526,19 +1526,23 @@ Description:	This entry shows the number of response UPIUs that has
- 
- 		The file is read only.
- 
--What:		/sys/class/scsi_device/*/device/hpb_stats/rb_active_cnt
-+What:		/sys/class/scsi_device/*/device/hpb_stats/rcmd_active_cnt
- Date:		June 2021
- Contact:	Daejun Park <daejun7.park@samsung.com>
--Description:	This entry shows the number of active sub-regions recommended by
--		response UPIUs.
-+Description:	For the HPB device control mode, this entry shows the number of
-+        active sub-regions recommended by response UPIUs. For the HPB host control
-+        mode, this entry shows the number of active sub-regions recommended by the
-+        HPB host control mode heuristic algorithm.
- 
- 		The file is read only.
- 
--What:		/sys/class/scsi_device/*/device/hpb_stats/rb_inactive_cnt
-+What:		/sys/class/scsi_device/*/device/hpb_stats/rcmd_inactive_cnt
- Date:		June 2021
- Contact:	Daejun Park <daejun7.park@samsung.com>
--Description:	This entry shows the number of inactive regions recommended by
--		response UPIUs.
-+Description:	For the HPB device control mode, this entry shows the number of
-+        inactive regions recommended by response UPIUs. For the HPB host control
-+        mode, this entry shows the number of inactive regions recommended by the
-+        HPB host control mode heuristic algorithm.
- 
- 		The file is read only.
- 
-diff --git a/drivers/scsi/ufs/ufshpb.c b/drivers/scsi/ufs/ufshpb.c
-index 901e0a3d4836..4833f20cc7d0 100644
---- a/drivers/scsi/ufs/ufshpb.c
-+++ b/drivers/scsi/ufs/ufshpb.c
-@@ -563,7 +563,7 @@ static void ufshpb_update_active_info(struct ufshpb_lu *hpb, int rgn_idx,
- 	if (list_empty(&srgn->list_act_srgn))
- 		list_add_tail(&srgn->list_act_srgn, &hpb->lh_act_srgn);
- 
--	hpb->stats.rb_active_cnt++;
-+	hpb->stats.rcmd_active_cnt++;
- }
- 
- static void ufshpb_update_inactive_info(struct ufshpb_lu *hpb, int rgn_idx)
-@@ -580,7 +580,7 @@ static void ufshpb_update_inactive_info(struct ufshpb_lu *hpb, int rgn_idx)
- 	if (list_empty(&rgn->list_inact_rgn))
- 		list_add_tail(&rgn->list_inact_rgn, &hpb->lh_inact_rgn);
- 
--	hpb->stats.rb_inactive_cnt++;
-+	hpb->stats.rcmd_inactive_cnt++;
- }
- 
- static void ufshpb_activate_subregion(struct ufshpb_lu *hpb,
-@@ -1321,7 +1321,7 @@ void ufshpb_rsp_upiu(struct ufs_hba *hba, struct ufshcd_lrb *lrbp)
- 	if (!ufshpb_is_hpb_rsp_valid(hba, lrbp, rsp_field))
- 		return;
- 
--	hpb->stats.rb_noti_cnt++;
-+	hpb->stats.rcmd_noti_cnt++;
- 
- 	switch (rsp_field->hpb_op) {
- 	case HPB_RSP_REQ_REGION_UPDATE:
-@@ -1724,18 +1724,18 @@ static DEVICE_ATTR_RO(__name)
- 
- ufshpb_sysfs_attr_show_func(hit_cnt);
- ufshpb_sysfs_attr_show_func(miss_cnt);
--ufshpb_sysfs_attr_show_func(rb_noti_cnt);
--ufshpb_sysfs_attr_show_func(rb_active_cnt);
--ufshpb_sysfs_attr_show_func(rb_inactive_cnt);
-+ufshpb_sysfs_attr_show_func(rcmd_noti_cnt);
-+ufshpb_sysfs_attr_show_func(rcmd_active_cnt);
-+ufshpb_sysfs_attr_show_func(rcmd_inactive_cnt);
- ufshpb_sysfs_attr_show_func(map_req_cnt);
- ufshpb_sysfs_attr_show_func(umap_req_cnt);
- 
- static struct attribute *hpb_dev_stat_attrs[] = {
- 	&dev_attr_hit_cnt.attr,
- 	&dev_attr_miss_cnt.attr,
--	&dev_attr_rb_noti_cnt.attr,
--	&dev_attr_rb_active_cnt.attr,
--	&dev_attr_rb_inactive_cnt.attr,
-+	&dev_attr_rcmd_noti_cnt.attr,
-+	&dev_attr_rcmd_active_cnt.attr,
-+	&dev_attr_rcmd_inactive_cnt.attr,
- 	&dev_attr_map_req_cnt.attr,
- 	&dev_attr_umap_req_cnt.attr,
- 	NULL,
-@@ -2098,9 +2098,9 @@ static void ufshpb_stat_init(struct ufshpb_lu *hpb)
+@@ -153,15 +150,23 @@ static int sb_write_pointer(struct block_device *bdev, struct blk_zone *zones,
+ /*
+  * Get the first zone number of the superblock mirror
+  */
+-static inline u32 sb_zone_number(int shift, int mirror)
++static inline u32 sb_zone_number(struct block_device *bdev, int mirror)
  {
- 	hpb->stats.hit_cnt = 0;
- 	hpb->stats.miss_cnt = 0;
--	hpb->stats.rb_noti_cnt = 0;
--	hpb->stats.rb_active_cnt = 0;
--	hpb->stats.rb_inactive_cnt = 0;
-+	hpb->stats.rcmd_noti_cnt = 0;
-+	hpb->stats.rcmd_active_cnt = 0;
-+	hpb->stats.rcmd_inactive_cnt = 0;
- 	hpb->stats.map_req_cnt = 0;
- 	hpb->stats.umap_req_cnt = 0;
- }
-diff --git a/drivers/scsi/ufs/ufshpb.h b/drivers/scsi/ufs/ufshpb.h
-index b83b9ec9044a..0d6e6004d783 100644
---- a/drivers/scsi/ufs/ufshpb.h
-+++ b/drivers/scsi/ufs/ufshpb.h
-@@ -211,9 +211,9 @@ struct ufshpb_params {
- struct ufshpb_stats {
- 	u64 hit_cnt;
- 	u64 miss_cnt;
--	u64 rb_noti_cnt;
--	u64 rb_active_cnt;
--	u64 rb_inactive_cnt;
-+	u64 rcmd_noti_cnt;
-+	u64 rcmd_active_cnt;
-+	u64 rcmd_inactive_cnt;
- 	u64 map_req_cnt;
- 	u64 pre_req_cnt;
- 	u64 umap_req_cnt;
+ 	u64 zone;
+ 
+ 	ASSERT(mirror < BTRFS_SUPER_MIRROR_MAX);
+ 	switch (mirror) {
+-	case 0: zone = 0; break;
+-	case 1: zone = 1ULL << (BTRFS_SB_LOG_FIRST_SHIFT - shift); break;
+-	case 2: zone = 1ULL << (BTRFS_SB_LOG_SECOND_SHIFT - shift); break;
++	case 0:
++		zone = 0;
++		break;
++	case 1:
++		zone = bdev_zone_no(bdev,
++				    BTRFS_SB_LOG_FIRST_OFFSET >> SECTOR_SHIFT);
++		break;
++	case 2:
++		zone = bdev_zone_no(bdev,
++				    BTRFS_SB_LOG_SECOND_OFFSET >> SECTOR_SHIFT);
++		break;
+ 	}
+ 
+ 	ASSERT(zone <= U32_MAX);
+@@ -514,7 +519,7 @@ int btrfs_get_dev_zone_info(struct btrfs_device *device, bool populate_cache)
+ 	/* Cache the sb zone number */
+ 	for (i = 0; i < BTRFS_SUPER_MIRROR_MAX; ++i) {
+ 		zone_info->sb_zone_location[i] =
+-			sb_zone_number(zone_info->zone_size_shift, i);
++			sb_zone_number(bdev, i);
+ 	}
+ 	/* Validate superblock log */
+ 	nr_zones = BTRFS_NR_SB_LOG_ZONES;
+@@ -839,7 +844,7 @@ int btrfs_sb_log_location_bdev(struct block_device *bdev, int mirror, int rw,
+ 	nr_sectors = bdev_nr_sectors(bdev);
+ 	nr_zones = nr_sectors >> zone_sectors_shift;
+ 
+-	sb_zone = sb_zone_number(zone_sectors_shift + SECTOR_SHIFT, mirror);
++	sb_zone = sb_zone_number(bdev, mirror);
+ 	if (sb_zone + 1 >= nr_zones)
+ 		return -ENOENT;
+ 
+@@ -963,7 +968,7 @@ int btrfs_reset_sb_log_zones(struct block_device *bdev, int mirror)
+ 	nr_sectors = bdev_nr_sectors(bdev);
+ 	nr_zones = nr_sectors >> zone_sectors_shift;
+ 
+-	sb_zone = sb_zone_number(zone_sectors_shift + SECTOR_SHIFT, mirror);
++	sb_zone = sb_zone_number(bdev, mirror);
+ 	if (sb_zone + 1 >= nr_zones)
+ 		return -ENOENT;
+ 
 -- 
-2.34.1
+2.25.1
 

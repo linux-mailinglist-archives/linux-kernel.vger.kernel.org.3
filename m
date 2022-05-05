@@ -2,215 +2,259 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00CFF51C2D1
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 16:45:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C377D51C2D5
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 16:45:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380743AbiEEOsn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 10:48:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39496 "EHLO
+        id S1380757AbiEEOtS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 10:49:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237470AbiEEOsk (ORCPT
+        with ESMTP id S231311AbiEEOtN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 10:48:40 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3C475A2D3;
-        Thu,  5 May 2022 07:44:59 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 271261F8D2;
-        Thu,  5 May 2022 14:44:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1651761898; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
+        Thu, 5 May 2022 10:49:13 -0400
+Received: from us-smtp-delivery-74.mimecast.com (us-smtp-delivery-74.mimecast.com [170.10.133.74])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1482B15A09
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 07:45:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1651761929;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=CSu7w+nmnR68Ha0NqVpNUTtYFKouPF6ihnFnZEJDGyU=;
-        b=K5fed7g1aYIgkbSwGkw0QyJUSxdLWt2sLIovnqYJzsX3YfyZ8hTY2/9BIaEiPGXWWhjzsT
-        sy49TbSZ2BmYLPQ+1V/PcAo7iZhU4L2+AHDZUrO4G2LCdJ+iB5nnxPSHSIxscLohCoaXxk
-        A2eCSzr+0ke9pS7sQEoum9QnewhaT90=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1651761898;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=CSu7w+nmnR68Ha0NqVpNUTtYFKouPF6ihnFnZEJDGyU=;
-        b=3EoBBOdToRb0kvKHft86VQqshn2r2xcKxXPRldkGmgvw0hmagrg+rxPgj7ayhOJ82LlXJV
-        KoOx4EEJMT4v1IDQ==
-Received: from quack3.suse.cz (unknown [10.100.224.230])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id B4A922C142;
-        Thu,  5 May 2022 14:44:57 +0000 (UTC)
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 6835CA0627; Thu,  5 May 2022 16:44:56 +0200 (CEST)
-Date:   Thu, 5 May 2022 16:44:56 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     Richard Guy Briggs <rgb@redhat.com>
-Cc:     Paul Moore <paul@paul-moore.com>,
-        Linux-Audit Mailing List <linux-audit@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org, Eric Paris <eparis@parisplace.org>,
-        Steve Grubb <sgrubb@redhat.com>, Jan Kara <jack@suse.cz>,
-        Amir Goldstein <amir73il@gmail.com>
-Subject: Re: [PATCH v2 2/3] fanotify: define struct members to hold response
- decision context
-Message-ID: <20220505144456.nw6slyqw4pjizl5p@quack3.lan>
-References: <cover.1651174324.git.rgb@redhat.com>
- <17660b3f2817e5c0a19d1e9e5d40b53ff4561845.1651174324.git.rgb@redhat.com>
- <CAHC9VhQ3Qtpwhj6TeMR7rmdbUe_6VRHU9OymmDoDdsazeGuNKA@mail.gmail.com>
- <YnHX74E+COTp7AgY@madcap2.tricolour.ca>
+        bh=jyfGq7dMfrbIZ4AP54s9Y4BCxr+1pD8LVHEm2Fcyagk=;
+        b=CkVbdKQR8F8E1frVSxe9qgc9iBVz4cmT+aGJijL/8kwNZ999D8G9YUp8oJU5TkDgEdX7iV
+        ZAaJy6A8GfWn32/TlxRZ6r7O+TjtDPM4kXIYk8/DkFXvL1s2taFcug45DQl0S9p6ZbAIDC
+        y4EfdFIe6mdEKQWyRpgttnxbBHM3/mY=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-526-GtORjxlAO0WgK_p9jhgL8A-1; Thu, 05 May 2022 10:45:20 -0400
+X-MC-Unique: GtORjxlAO0WgK_p9jhgL8A-1
+Received: by mail-wr1-f72.google.com with SMTP id k29-20020adfb35d000000b0020adc94662dso1544084wrd.12
+        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 07:45:20 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent
+         :content-language:to:cc:references:from:subject:in-reply-to
+         :content-transfer-encoding;
+        bh=jyfGq7dMfrbIZ4AP54s9Y4BCxr+1pD8LVHEm2Fcyagk=;
+        b=I2fAy62ab7+SZlNy0DaTn0jMRmeXmsZSXDnI1Nvf7y36uIcX0wlahy2GO//jDuFOkH
+         b7FFMJnoHEVhze7vvC1C/a6oWqQCy0zBVXgsodYirNsCCz/txrRyQ55HtKIRU//nOEFO
+         wfGPoezHuvqvLkL9hqfS+iqleeu27y4VE4K20nofntBWVMN8RDclHhF5yYwEiIfyvWqb
+         ADlG2p5mFOXZ3AQi9MB1ejOw5Jv5Ix0OhGifDp6wIqSP9zyfjZktCOfAjs8RDoi9OuBf
+         vPy02JGiYdOxyFD1XEuA4gtuOtPjVjF2VxuV+lVH6fnHf+FH3xiS7qYYdpdK3VCwbTBW
+         FfNA==
+X-Gm-Message-State: AOAM530mqu1NTypbbKP6otRuuu0pnBXvN8R09QZ72h+3Zkh7vP5Y1lJS
+        PneDkQwWvHvYENUjbEonm6Q+8ih191Lx8OPawsvuB82BevTb2MzRunmvLWsVehB7cqDPKaYCmMZ
+        CCm18UPj763wWTomgtRR53KHG
+X-Received: by 2002:adf:fe84:0:b0:20a:dc0b:4f2d with SMTP id l4-20020adffe84000000b0020adc0b4f2dmr21500155wrr.229.1651761919144;
+        Thu, 05 May 2022 07:45:19 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzZQq4VH2YS9CYoJkurgdMeySXi6KiIogT8HsYcwxJv74M68UxhhdX5HsfgALsw7hRyBw/cSA==
+X-Received: by 2002:adf:fe84:0:b0:20a:dc0b:4f2d with SMTP id l4-20020adffe84000000b0020adc0b4f2dmr21500139wrr.229.1651761918878;
+        Thu, 05 May 2022 07:45:18 -0700 (PDT)
+Received: from [192.168.8.104] (tmo-082-126.customers.d1-online.com. [80.187.82.126])
+        by smtp.gmail.com with ESMTPSA id l41-20020a05600c1d2900b0039456c00ba7sm6101976wms.1.2022.05.05.07.45.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 05 May 2022 07:45:18 -0700 (PDT)
+Message-ID: <08f78cc7-b34e-cdca-72b8-a0f9163f3ca7@redhat.com>
+Date:   Thu, 5 May 2022 16:45:13 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YnHX74E+COTp7AgY@madcap2.tricolour.ca>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Content-Language: en-US
+To:     Claudio Imbrenda <imbrenda@linux.ibm.com>, kvm@vger.kernel.org
+Cc:     borntraeger@de.ibm.com, frankja@linux.ibm.com, pasic@linux.ibm.com,
+        david@redhat.com, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org, scgl@linux.ibm.com,
+        mimu@linux.ibm.com, nrb@linux.ibm.com
+References: <20220414080311.1084834-1-imbrenda@linux.ibm.com>
+ <20220414080311.1084834-2-imbrenda@linux.ibm.com>
+From:   Thomas Huth <thuth@redhat.com>
+Subject: Re: [PATCH v10 01/19] KVM: s390: pv: leak the topmost page table when
+ destroy fails
+In-Reply-To: <20220414080311.1084834-2-imbrenda@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue 03-05-22 21:33:35, Richard Guy Briggs wrote:
-> On 2022-05-02 20:16, Paul Moore wrote:
-> > On Thu, Apr 28, 2022 at 8:45 PM Richard Guy Briggs <rgb@redhat.com> wrote:
-> > > This patch adds 2 structure members to the response returned from user
-> > > space on a permission event. The first field is 16 bits for the context
-> > > type.  The context type will describe what the meaning is of the second
-> > > field. The default is none. The patch defines one additional context
-> > > type which means that the second field is a 32-bit rule number. This
-> > > will allow for the creation of other context types in the future if
-> > > other users of the API identify different needs.  The second field size
-> > > is defined by the context type and can be used to pass along the data
-> > > described by the context.
-> > >
-> > > To support this, there is a macro for user space to check that the data
-> > > being sent is valid. Of course, without this check, anything that
-> > > overflows the bit field will trigger an EINVAL based on the use of
-> > > FAN_INVALID_RESPONSE_MASK in process_access_response().
-> > >
-
-...
-
-> > >  static ssize_t fanotify_write(struct file *file, const char __user *buf, size_t count, loff_t *pos)
-> > >  {
-> > > -       struct fanotify_response response = { .fd = -1, .response = -1 };
-> > > +       struct fanotify_response response;
-> > >         struct fsnotify_group *group;
-> > >         int ret;
-> > > +       size_t size = min(count, sizeof(struct fanotify_response));
-> > >
-> > >         if (!IS_ENABLED(CONFIG_FANOTIFY_ACCESS_PERMISSIONS))
-> > >                 return -EINVAL;
-> > >
-> > >         group = file->private_data;
-> > >
-> > > -       if (count < sizeof(response))
-> > > +       if (count < offsetof(struct fanotify_response, extra_info_buf))
-> > >                 return -EINVAL;
-> > 
-> > Is this why you decided to shrink the fanotify_response:response field
-> > from 32-bits to 16-bits?  I hope not.  I would suggest both keeping
-> > the existing response field as 32-bits and explicitly checking for
-> > writes that are either the existing/compat length as well as the
-> > newer, longer length.
+On 14/04/2022 10.02, Claudio Imbrenda wrote:
+> Each secure guest must have a unique ASCE (address space control
+> element); we must avoid that new guests use the same page for their
+> ASCE, to avoid errors.
 > 
-> No.  I shrank it at Jan's suggestion.  I think I agree with you that
-> the response field should be kept at u32 as it is defined in userspace
-> and purge the doubt about what would happen with a new userspace with
-> an old kernel.
-
-Hum, for the life of me I cannot find my response you mention here. Can you
-send a link so that I can refresh my memory? It has been a long time...
-
-> > > +
-> > > +#define FANOTIFY_RESPONSE_EXTRA_LEN_MAX        \
-> > > +       (sizeof(union { \
-> > > +               struct fanotify_response_audit_rule r; \
-> > > +               /* add other extra info structures here */ \
-> > > +       }))
-> > > +
-> > >  struct fanotify_response {
-> > >         __s32 fd;
-> > > -       __u32 response;
-> > > +       __u16 response;
-> > > +       __u16 extra_info_type;
-> > > +       char extra_info_buf[FANOTIFY_RESPONSE_EXTRA_LEN_MAX];
-> > >  };
-> > 
-> > Since both the kernel and userspace are going to need to agree on the
-> > content and formatting of the fanotify_response:extra_info_buf field,
-> > why is it hidden behind a char array?  You might as well get rid of
-> > that abstraction and put the union directly in the fanotify_response
-> > struct.  It is possible you could also get rid of the
-> > fanotify_response_audit_rule struct this way too and just access the
-> > rule scalar directly.
+> Since the ASCE mostly consists of the address of the topmost page table
+> (plus some flags), we must not return that memory to the pool unless
+> the ASCE is no longer in use.
 > 
-> This does make sense and my only concern would be a variable-length
-> type.  There isn't any reason to hide it.  If userspace chooses to use
-> the old interface and omit the type field then it defaults to NONE.
+> Only a successful Destroy Secure Configuration UVC will make the ASCE
+> reusable again.
 > 
-> If future types with variable data are defined, the first field could be
-> a u32 that unions with the rule number that won't change the struct
-> size.
+> If the Destroy Configuration UVC fails, the ASCE cannot be reused for a
+> secure guest (either for the ASCE or for other memory areas). To avoid
+> a collision, it must not be used again. This is a permanent error and
+> the page becomes in practice unusable, so we set it aside and leak it.
+> On failure we already leak other memory that belongs to the ultravisor
+> (i.e. the variable and base storage for a guest) and not leaking the
+> topmost page table was an oversight.
+> 
+> This error (and thus the leakage) should not happen unless the hardware
+> is broken or KVM has some unknown serious bug.
+> 
+> Signed-off-by: Claudio Imbrenda <imbrenda@linux.ibm.com>
+> Fixes: 29b40f105ec8d55 ("KVM: s390: protvirt: Add initial vm and cpu lifecycle handling")
+> ---
+>   arch/s390/include/asm/gmap.h |  2 +
+>   arch/s390/kvm/pv.c           |  9 ++--
+>   arch/s390/mm/gmap.c          | 80 ++++++++++++++++++++++++++++++++++++
+>   3 files changed, 88 insertions(+), 3 deletions(-)
+> 
+> diff --git a/arch/s390/include/asm/gmap.h b/arch/s390/include/asm/gmap.h
+> index 40264f60b0da..746e18bf8984 100644
+> --- a/arch/s390/include/asm/gmap.h
+> +++ b/arch/s390/include/asm/gmap.h
+> @@ -148,4 +148,6 @@ void gmap_sync_dirty_log_pmd(struct gmap *gmap, unsigned long dirty_bitmap[4],
+>   			     unsigned long gaddr, unsigned long vmaddr);
+>   int gmap_mark_unmergeable(void);
+>   void s390_reset_acc(struct mm_struct *mm);
+> +void s390_remove_old_asce(struct gmap *gmap);
+> +int s390_replace_asce(struct gmap *gmap);
+>   #endif /* _ASM_S390_GMAP_H */
+> diff --git a/arch/s390/kvm/pv.c b/arch/s390/kvm/pv.c
+> index 7f7c0d6af2ce..3c59ef763dde 100644
+> --- a/arch/s390/kvm/pv.c
+> +++ b/arch/s390/kvm/pv.c
+> @@ -166,10 +166,13 @@ int kvm_s390_pv_deinit_vm(struct kvm *kvm, u16 *rc, u16 *rrc)
+>   	atomic_set(&kvm->mm->context.is_protected, 0);
+>   	KVM_UV_EVENT(kvm, 3, "PROTVIRT DESTROY VM: rc %x rrc %x", *rc, *rrc);
+>   	WARN_ONCE(cc, "protvirt destroy vm failed rc %x rrc %x", *rc, *rrc);
+> -	/* Inteded memory leak on "impossible" error */
+> -	if (!cc)
+> +	/* Intended memory leak on "impossible" error */
+> +	if (!cc) {
+>   		kvm_s390_pv_dealloc_vm(kvm);
+> -	return cc ? -EIO : 0;
+> +		return 0;
+> +	}
+> +	s390_replace_asce(kvm->arch.gmap);
+> +	return -EIO;
+>   }
+>   
+>   int kvm_s390_pv_init_vm(struct kvm *kvm, u16 *rc, u16 *rrc)
+> diff --git a/arch/s390/mm/gmap.c b/arch/s390/mm/gmap.c
+> index af03cacf34ec..e8904cb9dc38 100644
+> --- a/arch/s390/mm/gmap.c
+> +++ b/arch/s390/mm/gmap.c
+> @@ -2714,3 +2714,83 @@ void s390_reset_acc(struct mm_struct *mm)
+>   	mmput(mm);
+>   }
+>   EXPORT_SYMBOL_GPL(s390_reset_acc);
+> +
+> +/**
+> + * s390_remove_old_asce - Remove the topmost level of page tables from the
+> + * list of page tables of the gmap.
+> + * @gmap the gmap whose table is to be removed
+> + *
+> + * This means that it will not be freed when the VM is torn down, and needs
+> + * to be handled separately by the caller, unless an intentional leak is
+> + * intended. Notice that this function will only remove the page from the
 
-Struct fanotify_response size must not change, it is part of the kernel
-ABI. In particular your above change would break userspace code that is
-currently working just fine (e.g. allocating 8 bytes and expecting struct
-fanotify_response fits there, or just writing sizeof(struct
-fanotify_response) as a response while initializing only first 8 bytes).
-How I'd suggest doing it now (and I'd like to refresh my memory from my
-past emails you mention because in the past I might have thought something
-else ;)) is that you add another flag to 'response' field similar to
-FAN_AUDIT - like FAN_EXTRA_INFO. If that is present, it means extra info is
-to be expected after struct fanotify_response. The extra info would always
-start with a header like:
+"intentional leak is intended" ... sounds redundant. Scratch the first 
+"intentional" ?
 
-struct fanotify_response_info_header {
-        __u8 info_type;
-        __u8 pad;
-        __u16 len;		/* This is including the header itself */
-}
+> + * list, the page will still be used as a top level page table (and ASCE).
+> + */
+> +void s390_remove_old_asce(struct gmap *gmap)
+> +{
+> +	struct page *old;
+> +
+> +	old = virt_to_page(gmap->table);
+> +	spin_lock(&gmap->guest_table_lock);
+> +	list_del(&old->lru);
+> +	/*
+> +	 * In case the ASCE needs to be "removed" multiple times, for example
+> +	 * if the VM is rebooted into secure mode several times
+> +	 * concurrently, or if s390_replace_asce fails after calling
+> +	 * s390_remove_old_asce and is attempted again later. In that case
 
-And after such header there would be the 'blob' of data 'len - header size'
-long.  We use this same scheme when passing fanotify events to userspace
-and it has proven to be lightweight and extensible. It covers the situation
-when in the future audit would decide it wants other data (just change data
-type), it would also cover the situation when some other subsystem wants
-its information passed as well - there can be more structures like this
-attached at the end, we can process the response up to the length of the
-write.
+"In case the ASCE ... . In that case" - this should be either one big 
+sentence, or better, scratch the first "In case" and use "Sometimes" or 
+something similar to start the first sentence.
 
-Now these are just possible future extensions making sure we can extend the
-ABI without too much pain. In the current implementation I'd just return
-EINVAL whenever more than FANOTIFY_RESPONSE_MAX_LEN (16 bytes) is written 
-and do very strict checks on what gets passed in. It is also trivially
-backwards compatible (old userspace on new kernel works just fine).
+> +	 * the old asce has been removed from the list, and therefore it
+> +	 * will not be freed when the VM terminates, but the ASCE is still
+> +	 * in use and still pointed to.
+> +	 * A subsequent call to replace_asce will follow the pointer and try
+> +	 * to remove the same page from the list again.
+> +	 * Therefore it's necessary that the page of the ASCE has valid
+> +	 * pointers, so list_del can work (and do nothing) without
+> +	 * dereferencing stale or invalid pointers.
+> +	 */
+> +	INIT_LIST_HEAD(&old->lru);
+> +	spin_unlock(&gmap->guest_table_lock);
+> +}
+> +EXPORT_SYMBOL_GPL(s390_remove_old_asce);
+> +
+> +/**
+> + * s390_replace_asce - Try to replace the current ASCE of a gmap with
+> + * another equivalent one.
+> + * @gmap the gmap
 
-If you want to achieve compatibility of running new userspace on old kernel
-(I guess that's desirable), we have group flags for that - like we
-introduced FAN_ENABLE_AUDIT to allow for FAN_AUDIT flag in response we now
-need to add a flag like FAN_EXTENDED_PERMISSION_INFO telling the kernel it
-should expect an allow more info returning for permission events. At the
-same time this is the way for userspace to be able to tell whether the
-kernel supports this. I know this sounds tedious but that's the cost of
-extending the ABI in the compatible way. We've made various API mistakes in
-the past having to add weird workarounds to fanotify and we don't want to
-repeat those mistakes :).
+"the gmap" is not a very helpful description for a parmeter that is already 
+called gmap. Write at least "the guest map that should be replaced" ?
 
-One open question I have is what should the kernel do with 'info_type' in
-response it does not understand (in the future when there are possibly more
-different info types). It could just skip it because this should be just
-additional info for introspection (the only mandatory part is in
-fanotify_response, however it could surprise userspace that passed info is
-just getting ignored. To solve this we would have to somewhere report
-supported info types (maybe in fanotify fdinfo in proc). I guess we'll
-cross that bridge when we get to it.
+> + *
+> + * If the allocation of the new top level page table fails, the ASCE is not
+> + * replaced.
+> + * In any case, the old ASCE is always removed from the list. Therefore the
+> + * caller has to make sure to save a pointer to it beforehands, unless an
 
-Amir, what do you think?
+s/beforehands/beforehand/
 
-								Honza
+> + * intentional leak is intended.
 
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+scratch "intentional".
+
+> + */
+> +int s390_replace_asce(struct gmap *gmap)
+> +{
+> +	unsigned long asce;
+> +	struct page *page;
+> +	void *table;
+> +
+> +	s390_remove_old_asce(gmap);
+> +
+> +	page = alloc_pages(GFP_KERNEL_ACCOUNT, CRST_ALLOC_ORDER);
+> +	if (!page)
+> +		return -ENOMEM;
+> +	table = page_to_virt(page);
+> +	memcpy(table, gmap->table, 1UL << (CRST_ALLOC_ORDER + PAGE_SHIFT));
+> +
+> +	/*
+> +	 * The caller has to deal with the old ASCE, but here we make sure
+> +	 * the new one is properly added to the list of page tables, so that
+> +	 * it will be freed when the VM is torn down.
+> +	 */
+> +	spin_lock(&gmap->guest_table_lock);
+> +	list_add(&page->lru, &gmap->crst_list);
+> +	spin_unlock(&gmap->guest_table_lock);
+> +
+> +	/* Set new table origin while preserving existing ASCE control bits */
+> +	asce = (gmap->asce & ~_ASCE_ORIGIN) | __pa(table);
+> +	WRITE_ONCE(gmap->asce, asce);
+> +	WRITE_ONCE(gmap->mm->context.gmap_asce, asce);
+> +	WRITE_ONCE(gmap->table, table);
+> +
+> +	return 0;
+> +}
+> +EXPORT_SYMBOL_GPL(s390_replace_asce);
+
+  Thomas
+

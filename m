@@ -2,211 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E745751C383
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 17:10:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E105551C389
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 17:11:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381179AbiEEPOS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 11:14:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35226 "EHLO
+        id S1381094AbiEEPPQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 11:15:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381102AbiEEPNy (ORCPT
+        with ESMTP id S231680AbiEEPPO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 11:13:54 -0400
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A53D9A;
-        Thu,  5 May 2022 08:10:13 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id e24so6513590wrc.9;
-        Thu, 05 May 2022 08:10:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=m2VDhVRQPjsV1IPycPT/Y4TlTx8jaZtNzcIfdQQLUOE=;
-        b=FFAziO4TJTHw3bMRuvzzhIrejv1YFi9kr+TvLjW7GH03D/Ms9GHVRb1qHk7xSkSRbh
-         GvMrgZMhsdYjPOhZYy4728AKW1+YecbVpH26/5sPMvodoh8znUPVwIaI2wutBIoVS3id
-         V3Q41qlgLA7wJ/1dKXp2jStShtULGJGPdIsH9P84DHXPzRSdX5kmeTdmbO9WPqM1ffop
-         IyAnwBJwiXbCsYAGoORTH9/WeQHWkQqXtUWP0kWHWP9csb2E1yLcNsTDW2jlYDYEpICg
-         qOYRXPsYrWAAkXYhyDF85cizqBuwsLLGTf+I/NervEbk5N0KYG0lmK2Ud1qeJE8t81t6
-         5HxA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=m2VDhVRQPjsV1IPycPT/Y4TlTx8jaZtNzcIfdQQLUOE=;
-        b=GijDkvHEr5CvbdwV50PwTMjf28rLEyJQYqPn4INIokPqcOXo1TidZBYN7IboAasRL8
-         pgAFAPNOuS0IxPuNw1z0wNVvuoWaK/z5JGBwLLKAd7nsHgKSkZ/SJRUTdzB2sblb1SnS
-         h7ZlRba93xjWth4a2mXIKm20H8Yc55pyJ9IjFcvvo+lRzqxwS+ybmbCNjnJqyw07LFGB
-         tpB/pR2JnVuOqhmh/AK4UrOY+3wEX5letC3NNLKRRpVCyylYad9a2YB+9Qq3Ltu9egOh
-         q9Agyu3EvmBnHnHyS/wiiqfK7W8UC2XXlIelECZ4DeC3X18NwQj0Nqb5iVHECvTEbU+s
-         Ps3A==
-X-Gm-Message-State: AOAM531b9KPJPYVwABcHPmy7+oTAIDmWDdjYt+6Dga7l1sllVt+SP+Pk
-        xZLzFGPSXJo0GJgV8lHbjfE=
-X-Google-Smtp-Source: ABdhPJwqfM73K8adtgjCuTsQ1ipScmTZxb+Itq8+sQiiM3H9l56+FpM2fMwHfTDdKGvr4/YnWoJOlA==
-X-Received: by 2002:a5d:5547:0:b0:20c:7a44:d8e7 with SMTP id g7-20020a5d5547000000b0020c7a44d8e7mr9963872wrw.349.1651763411909;
-        Thu, 05 May 2022 08:10:11 -0700 (PDT)
-Received: from alaa-emad ([197.57.200.226])
-        by smtp.gmail.com with ESMTPSA id m65-20020a1c2644000000b003942a244ecesm1624120wmm.19.2022.05.05.08.10.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 May 2022 08:10:11 -0700 (PDT)
-From:   Alaa Mohamed <eng.alaamohamedsoliman.am@gmail.com>
-To:     netdev@vger.kernel.org
-Cc:     outreachy@lists.linux.dev, roopa@nvidia.com, jdenham@redhat.com,
-        sbrivio@redhat.com, jesse.brandeburg@intel.com,
-        anthony.l.nguyen@intel.com, davem@davemloft.net, kuba@kernel.org,
-        pabeni@redhat.com, vladimir.oltean@nxp.com, claudiu.manoil@nxp.com,
-        alexandre.belloni@bootlin.com, shshaikh@marvell.com,
-        manishc@marvell.com, razor@blackwall.org,
-        intel-wired-lan@lists.osuosl.org, linux-kernel@vger.kernel.org,
-        UNGLinuxDriver@microchip.com, GR-Linux-NIC-Dev@marvell.com,
-        bridge@lists.linux-foundation.org,
-        eng.alaamohamedsoliman.am@gmail.com
-Subject: [PATCH net-next v6 2/2] net: vxlan: Add extack support to vxlan_fdb_delete
-Date:   Thu,  5 May 2022 17:09:58 +0200
-Message-Id: <ac4b6c650b6519cc56baa32ef20415460a5aa8ee.1651762830.git.eng.alaamohamedsoliman.am@gmail.com>
-X-Mailer: git-send-email 2.36.0
-In-Reply-To: <cover.1651762829.git.eng.alaamohamedsoliman.am@gmail.com>
-References: <cover.1651762829.git.eng.alaamohamedsoliman.am@gmail.com>
+        Thu, 5 May 2022 11:15:14 -0400
+Received: from ssl.serverraum.org (ssl.serverraum.org [176.9.125.105])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3172BC0F;
+        Thu,  5 May 2022 08:11:33 -0700 (PDT)
+Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id 1A2F422205;
+        Thu,  5 May 2022 17:11:31 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1651763491;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=X4UP6069upSAVdzEbZTvI/GU1SyPtbLZbn/Xr0OjFbY=;
+        b=BeZQlslXr2cadlkcDPbqpc6/U+6AVHRWEs/66Sc2QarlHx6v24hKjpcbOKRtHoFY1C+L7z
+        rn3PVUDns8G0M8nCA6J7+EIoshXhE2vskY8iNUI0wPFsz4ORWSRU++1XituRXaZK3SaUeW
+        5ubR0UeMuiZqw18zEnmvGT5RDe/w0Zs=
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Thu, 05 May 2022 17:11:30 +0200
+From:   Michael Walle <michael@walle.cc>
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     Codrin Ciubotariu <codrin.ciubotariu@microchip.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        Wolfram Sang <wsa@kernel.org>
+Subject: Re: [PATCH v2] i2c: at91: use dma safe buffers
+In-Reply-To: <YnPkfrI4Udl9lMR8@dev-arch.thelio-3990X>
+References: <20220407150828.202513-1-michael@walle.cc>
+ <YnPkfrI4Udl9lMR8@dev-arch.thelio-3990X>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <54f02090e6621460b66dc9d233d53283@walle.cc>
+X-Sender: michael@walle.cc
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch adds extack msg support to vxlan_fdb_delete and vxlan_fdb_parse.
-extack is used to propagate meaningful error msgs to the user of vxlan
-fdb netlink api
+[+ Wolfram]
 
-Signed-off-by: Alaa Mohamed <eng.alaamohamedsoliman.am@gmail.com>
----
-changes in V2:
-        - fix spelling vxlan_fdb_delete
-        - add missing braces
-        - edit error message
----
-changes in V3:
-        fix errors reported by checkpatch.pl
----
-changes in V4:
-        - fix errors reported by checkpatch.pl
-        - edit commit message.
----
-changes in V5:
-	- edit commit message
----
- drivers/net/vxlan/vxlan_core.c | 38 ++++++++++++++++++++++++----------
- 1 file changed, 27 insertions(+), 11 deletions(-)
+Am 2022-05-05 16:51, schrieb Nathan Chancellor:
+> On Thu, Apr 07, 2022 at 05:08:28PM +0200, Michael Walle wrote:
+>> The supplied buffer might be on the stack and we get the following 
+>> error
+>> message:
+>> [    3.312058] at91_i2c e0070600.i2c: rejecting DMA map of vmalloc 
+>> memory
+>> 
+>> Use i2c_{get,put}_dma_safe_msg_buf() to get a DMA-able memory region 
+>> if
+>> necessary.
+>> 
+>> Fixes: 60937b2cdbf9 ("i2c: at91: add dma support")
+>> Signed-off-by: Michael Walle <michael@walle.cc>
+>> Reviewed-by: Codrin Ciubotariu <codrin.ciubotariu@microchip.com>
+>> ---
+>> changes since v1:
+>>  - remove extra empty line
+>>  - add fixes tag as suggested by Codrin
+>> 
+>>  drivers/i2c/busses/i2c-at91-master.c | 11 +++++++++++
+>>  1 file changed, 11 insertions(+)
+>> 
+>> diff --git a/drivers/i2c/busses/i2c-at91-master.c 
+>> b/drivers/i2c/busses/i2c-at91-master.c
+>> index b0eae94909f4..5eca3b3bb609 100644
+>> --- a/drivers/i2c/busses/i2c-at91-master.c
+>> +++ b/drivers/i2c/busses/i2c-at91-master.c
+>> @@ -656,6 +656,7 @@ static int at91_twi_xfer(struct i2c_adapter *adap, 
+>> struct i2c_msg *msg, int num)
+>>  	unsigned int_addr_flag = 0;
+>>  	struct i2c_msg *m_start = msg;
+>>  	bool is_read;
+>> +	u8 *dma_buf;
+>> 
+>>  	dev_dbg(&adap->dev, "at91_xfer: processing %d messages:\n", num);
+>> 
+>> @@ -703,7 +704,17 @@ static int at91_twi_xfer(struct i2c_adapter 
+>> *adap, struct i2c_msg *msg, int num)
+>>  	dev->msg = m_start;
+>>  	dev->recv_len_abort = false;
+>> 
+>> +	if (dev->use_dma) {
+>> +		dma_buf = i2c_get_dma_safe_msg_buf(m_start, 1);
+>> +		if (!dma_buf) {
+>> +			ret = -ENOMEM;
+>> +			goto out;
+>> +		}
+>> +		dev->buf = dma_buf;
+>> +	}
+>> +
+>>  	ret = at91_do_twi_transfer(dev);
+>> +	i2c_put_dma_safe_msg_buf(dma_buf, m_start, !ret);
+>> 
+>>  	ret = (ret < 0) ? ret : num;
+>>  out:
+>> --
+>> 2.30.2
+>> 
+>> 
+> 
+> This change as commit 03fbb903c8bf ("i2c: at91: use dma safe buffers")
+> causes the following clang warning:
 
-diff --git a/drivers/net/vxlan/vxlan_core.c b/drivers/net/vxlan/vxlan_core.c
-index ad0f2150cfdb..429ce2168971 100644
---- a/drivers/net/vxlan/vxlan_core.c
-+++ b/drivers/net/vxlan/vxlan_core.c
-@@ -1129,19 +1129,25 @@ static void vxlan_fdb_dst_destroy(struct vxlan_dev *vxlan, struct vxlan_fdb *f,
+Ugh..
 
- static int vxlan_fdb_parse(struct nlattr *tb[], struct vxlan_dev *vxlan,
- 			   union vxlan_addr *ip, __be16 *port, __be32 *src_vni,
--			   __be32 *vni, u32 *ifindex, u32 *nhid)
-+			   __be32 *vni, u32 *ifindex, u32 *nhid,
-+			   struct netlink_ext_ack *extack)
- {
- 	struct net *net = dev_net(vxlan->dev);
- 	int err;
+> drivers/i2c/busses/i2c-at91-master.c:707:6: error: variable 'dma_buf'
+> is used uninitialized whenever 'if' condition is false
+> [-Werror,-Wsometimes-uninitialized]
+>         if (dev->use_dma) {
+>             ^~~~~~~~~~~~
+> drivers/i2c/busses/i2c-at91-master.c:717:27: note: uninitialized use 
+> occurs here
+>         i2c_put_dma_safe_msg_buf(dma_buf, m_start, !ret);
+>                                  ^~~~~~~
+> drivers/i2c/busses/i2c-at91-master.c:707:2: note: remove the 'if' if
+> its condition is always true
+>         if (dev->use_dma) {
+>         ^~~~~~~~~~~~~~~~~~
+> drivers/i2c/busses/i2c-at91-master.c:659:13: note: initialize the
+> variable 'dma_buf' to silence this warning
+>         u8 *dma_buf;
+>                    ^
+>                     = NULL
+> 1 error generated.
+> 
+> Should this variable be initialized or should the call to
+> i2c_put_dma_safe_msg_buf() be moved into the if statement?
 
- 	if (tb[NDA_NH_ID] && (tb[NDA_DST] || tb[NDA_VNI] || tb[NDA_IFINDEX] ||
--	    tb[NDA_PORT]))
--		return -EINVAL;
-+	    tb[NDA_PORT])) {
-+			NL_SET_ERR_MSG(extack,
-+						  "DST, VNI, ifindex and port are mutually exclusive with NH_ID");
-+			return -EINVAL;
-+		}
+Initializing dma_buf with NULL should to the trick because
+i2c_put_dma_safe_msg_buf() is handling NULL gracefully. No
+need for an extra "if (dma_buf)".
 
- 	if (tb[NDA_DST]) {
- 		err = vxlan_nla_get_addr(ip, tb[NDA_DST]);
--		if (err)
-+		if (err) {
-+			NL_SET_ERR_MSG(extack, "Unsupported address family");
- 			return err;
-+		}
- 	} else {
- 		union vxlan_addr *remote = &vxlan->default_dst.remote_ip;
+Will you take care or should I send a patch?
 
-@@ -1157,24 +1163,30 @@ static int vxlan_fdb_parse(struct nlattr *tb[], struct vxlan_dev *vxlan,
- 	}
-
- 	if (tb[NDA_PORT]) {
--		if (nla_len(tb[NDA_PORT]) != sizeof(__be16))
-+		if (nla_len(tb[NDA_PORT]) != sizeof(__be16)) {
-+			NL_SET_ERR_MSG(extack, "Invalid vxlan port");
- 			return -EINVAL;
-+		}
- 		*port = nla_get_be16(tb[NDA_PORT]);
- 	} else {
- 		*port = vxlan->cfg.dst_port;
- 	}
-
- 	if (tb[NDA_VNI]) {
--		if (nla_len(tb[NDA_VNI]) != sizeof(u32))
-+		if (nla_len(tb[NDA_VNI]) != sizeof(u32)) {
-+			NL_SET_ERR_MSG(extack, "Invalid vni");
- 			return -EINVAL;
-+		}
- 		*vni = cpu_to_be32(nla_get_u32(tb[NDA_VNI]));
- 	} else {
- 		*vni = vxlan->default_dst.remote_vni;
- 	}
-
- 	if (tb[NDA_SRC_VNI]) {
--		if (nla_len(tb[NDA_SRC_VNI]) != sizeof(u32))
-+		if (nla_len(tb[NDA_SRC_VNI]) != sizeof(u32)) {
-+			NL_SET_ERR_MSG(extack, "Invalid src vni");
- 			return -EINVAL;
-+		}
- 		*src_vni = cpu_to_be32(nla_get_u32(tb[NDA_SRC_VNI]));
- 	} else {
- 		*src_vni = vxlan->default_dst.remote_vni;
-@@ -1183,12 +1195,16 @@ static int vxlan_fdb_parse(struct nlattr *tb[], struct vxlan_dev *vxlan,
- 	if (tb[NDA_IFINDEX]) {
- 		struct net_device *tdev;
-
--		if (nla_len(tb[NDA_IFINDEX]) != sizeof(u32))
-+		if (nla_len(tb[NDA_IFINDEX]) != sizeof(u32)) {
-+			NL_SET_ERR_MSG(extack, "Invalid ifindex");
- 			return -EINVAL;
-+		}
- 		*ifindex = nla_get_u32(tb[NDA_IFINDEX]);
- 		tdev = __dev_get_by_index(net, *ifindex);
--		if (!tdev)
-+		if (!tdev) {
-+			NL_SET_ERR_MSG(extack, "Device not found");
- 			return -EADDRNOTAVAIL;
-+		}
- 	} else {
- 		*ifindex = 0;
- 	}
-@@ -1226,7 +1242,7 @@ static int vxlan_fdb_add(struct ndmsg *ndm, struct nlattr *tb[],
- 		return -EINVAL;
-
- 	err = vxlan_fdb_parse(tb, vxlan, &ip, &port, &src_vni, &vni, &ifindex,
--			      &nhid);
-+			      &nhid, extack);
- 	if (err)
- 		return err;
-
-@@ -1292,7 +1308,7 @@ static int vxlan_fdb_delete(struct ndmsg *ndm, struct nlattr *tb[],
- 	int err;
-
- 	err = vxlan_fdb_parse(tb, vxlan, &ip, &port, &src_vni, &vni, &ifindex,
--			      &nhid);
-+			      &nhid, extack);
- 	if (err)
- 		return err;
-
---
-2.36.0
-
+-michael

@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E040D51BCF6
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 12:15:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D07A951BCF5
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 12:15:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355178AbiEEKSf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 06:18:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55150 "EHLO
+        id S1355250AbiEEKSh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 06:18:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355141AbiEEKS2 (ORCPT
+        with ESMTP id S1355152AbiEEKSb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 06:18:28 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E12F517F7;
-        Thu,  5 May 2022 03:14:49 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id n8so3972415plh.1;
-        Thu, 05 May 2022 03:14:49 -0700 (PDT)
+        Thu, 5 May 2022 06:18:31 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB8A2517F7;
+        Thu,  5 May 2022 03:14:52 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id d17so3985699plg.0;
+        Thu, 05 May 2022 03:14:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=j0lpWHtkZPnUSw3Pz3NPm999/qD6Tlj3Gh1CrgJTGZU=;
-        b=VxyYBP2h13BJiv24GVFMhKdV0vR5LsXwX8f9cu2NG1UV99aQ3OEDkeUfqQNbj5IR3f
-         H1orNojlI/EHg+K0auKwroHtUV09/VTkjS2iO9ENlTlr6kfCp+goflCuErdW7bqSeU/k
-         fUmzOT9+P8A95eshGKn0xoQfXUmfgsrqGMProoXBI5J2kn1BxISbf7Ot84Y0uKMXb5/u
-         zS10KuYCJOk6Z8p5i+Y/wF5LQqSr3d206wITmjLlMyit/p+l9AD6H0Hc28SNwanCzb2N
-         M3jNbYaF8nokfX4P4PRBvA682Avyh2KelfoHEQ5A07Y836Ighf7yEQoVUY4enz2N9KAs
-         lEfg==
+        bh=a5n2rQav5Pw8Em71zzLULSb7yyvZg/ST3BqtiUX72ak=;
+        b=XJAT33VmgQlgzLEQ+S4zoq8s2zjs7g5bL5Se32zHSNIiO/ToUNzCGqhXNpXy1YUaFh
+         go6t/knJ/DjtP23H/ysX+YX7puvpbBHnxA9k3JAtvlT6OETmcFuhzkOBMUNYy+mY3+Mw
+         9ogzx1EaMeftMPgWGagJgengD8Kfp0YHESA4SNM54/zC3ihqSTvhs7dd4NHoOKAqYwIU
+         4cLMsWwM7M/+k11+/ZHX75xAUY4T//VEh/sI2Cj8nDkBrTM4MVJeBOYZfczFNZGkdxJ+
+         P1o7kbHTPV20qU7QM21LorSyaDsDnDRlPR/uXhvZw+EGMPMsvPqKjEL1wS2wGgO6ImP0
+         HAWg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=j0lpWHtkZPnUSw3Pz3NPm999/qD6Tlj3Gh1CrgJTGZU=;
-        b=ixpqhIRUnkHu3ENfa2G8o4vUodLwNBg2OZnczTYRjds6slIod4vh8bdCoXnef6NRyj
-         or2LFgFMwWQcT50/eKTqYWKfi2J7iX8YwdYUid3hHYOYYCSpTwIkBOBP333PnSSU65yp
-         2vsB96bJYHPUb0IHJ6yh/hogAzLmDDSPIwI+3HB5knh3MUUkLTYImFb+aFCrd+F1Q076
-         ZxoeLULrR9ZOQsCHHTWAldjd1qC35LWUuveXeDBEf13A8LiNd55JfXItsDUMJHq5UaaI
-         JuvSHIObtg5EFouvKooYQRnUGNGLvF5NCvPfSjGN01eaSrHdCRMQmFZZAPgkwDOnSIAi
-         LjSQ==
-X-Gm-Message-State: AOAM530GR7IkDsQDzsFy8Q5WRNUZ27PQy/HU44dV/x+BDlM7Gxuxucth
-        Fsm5WTTwx+9Sr7KmUIUEYdpKObxlvGg=
-X-Google-Smtp-Source: ABdhPJzOspbHXb6jok9CYiaBBBHTWSh4+uYGnQCPjbjDlG3nhGX2jUv354wHsDBbWCZLiTGKaZzoig==
-X-Received: by 2002:a17:902:8f94:b0:151:64c5:7759 with SMTP id z20-20020a1709028f9400b0015164c57759mr26785799plo.4.1651745688654;
-        Thu, 05 May 2022 03:14:48 -0700 (PDT)
+        bh=a5n2rQav5Pw8Em71zzLULSb7yyvZg/ST3BqtiUX72ak=;
+        b=zUJvAUBduOqeXVt80nyQvWG7rkbpoPKq9dEv0GFwzjMzDJ1VIVt3clYCEKpkCVyA0D
+         Id/kDhqHsFsuv/MeEXT4wKanXLWl05eXQy8gW6y1rtKJaGOrBQnOg/k5ugJUkt9ToVHq
+         0SA4hWaDmTV8K4nGLzv5SWEilbGGFdeSOPi0RGaAvohB0eZfYM9MVGPdMvnqj2C0wp4C
+         nFwuhmNj2p+VJfHEqeXd6+R5Mek8z1iO+TUe+xSO2bPiTeMxaaT0y6e6oQQwibspfDT2
+         Dgw1X98wh5DXC8MzJIFUmzGwnBsQBWgRoaT35PrN+ZKFKiwlMwCOY2BS4roIyaq2bKvN
+         qPiQ==
+X-Gm-Message-State: AOAM532+E4rsH09wfK66Ow1l+oNfi506p4requ9ysf3jSKw6jWhAdMHS
+        3uymvN8bf0RaHgNd4+b16anNDZDwoz4=
+X-Google-Smtp-Source: ABdhPJyjd+LpZrQpSpEoByGpWahDQelTNqowRxC5l0fXbEGpOAUVfYfA6i3CbN7VyS6CN+Wy8Zn8Tw==
+X-Received: by 2002:a17:903:2344:b0:15e:d382:2e3b with SMTP id c4-20020a170903234400b0015ed3822e3bmr4923641plh.37.1651745692085;
+        Thu, 05 May 2022 03:14:52 -0700 (PDT)
 Received: from tj10039pcu.spreadtrum.com ([117.18.48.102])
-        by smtp.gmail.com with ESMTPSA id y10-20020a1709027c8a00b0015e8d4eb2d2sm1099717pll.284.2022.05.05.03.14.45
+        by smtp.gmail.com with ESMTPSA id y10-20020a1709027c8a00b0015e8d4eb2d2sm1099717pll.284.2022.05.05.03.14.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 May 2022 03:14:48 -0700 (PDT)
+        Thu, 05 May 2022 03:14:51 -0700 (PDT)
 From:   Cixi Geng <gengcixi@gmail.com>
 To:     mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
         krzysztof.kozlowski+dt@linaro.org, orsonzhai@gmail.com,
         baolin.wang7@gmail.com, zhang.lyra@gmail.com, lee.jones@linaro.org
 Cc:     linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v5 1/4] dt-bindings: clk: sprd: Add bindings for ums512 clock controller
-Date:   Thu,  5 May 2022 18:14:30 +0800
-Message-Id: <20220505101433.1575096-2-gengcixi@gmail.com>
+Subject: [PATCH v5 2/4] dt-bindings: mfd: sprd: Add bindings for ums512 global registers
+Date:   Thu,  5 May 2022 18:14:31 +0800
+Message-Id: <20220505101433.1575096-3-gengcixi@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220505101433.1575096-1-gengcixi@gmail.com>
 References: <20220505101433.1575096-1-gengcixi@gmail.com>
@@ -72,95 +72,93 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Cixi Geng <cixi.geng1@unisoc.com>
+From: Chunyan Zhang <chunyan.zhang@unisoc.com>
 
-Add a new bindings to describe ums512 clock compatible string.
+Add bindings for Unisoc system global register which provide register map
+for clocks.
 
 Signed-off-by: Chunyan Zhang <chunyan.zhang@unisoc.com>
 Signed-off-by: Cixi Geng <cixi.geng1@unisoc.com>
 Reviewed-by: Rob Herring <robh@kernel.org>
 ---
- .../bindings/clock/sprd,ums512-clk.yaml       | 71 +++++++++++++++++++
- 1 file changed, 71 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/clock/sprd,ums512-clk.yaml
+ .../bindings/mfd/sprd,ums512-glbreg.yaml      | 68 +++++++++++++++++++
+ 1 file changed, 68 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/mfd/sprd,ums512-glbreg.yaml
 
-diff --git a/Documentation/devicetree/bindings/clock/sprd,ums512-clk.yaml b/Documentation/devicetree/bindings/clock/sprd,ums512-clk.yaml
+diff --git a/Documentation/devicetree/bindings/mfd/sprd,ums512-glbreg.yaml b/Documentation/devicetree/bindings/mfd/sprd,ums512-glbreg.yaml
 new file mode 100644
-index 000000000000..5f747b0471cf
+index 000000000000..416f94a09c27
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/clock/sprd,ums512-clk.yaml
-@@ -0,0 +1,71 @@
++++ b/Documentation/devicetree/bindings/mfd/sprd,ums512-glbreg.yaml
+@@ -0,0 +1,68 @@
 +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
 +# Copyright 2022 Unisoc Inc.
 +%YAML 1.2
 +---
-+$id: "http://devicetree.org/schemas/clock/sprd,ums512-clk.yaml#"
-+$schema: "http://devicetree.org/meta-schemas/core.yaml#"
++$id: http://devicetree.org/schemas/mfd/sprd,ums512-glbreg.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+title: UMS512 Soc clock controller
++title: Unisoc System Global Register
 +
 +maintainers:
 +  - Orson Zhai <orsonzhai@gmail.com>
 +  - Baolin Wang <baolin.wang7@gmail.com>
 +  - Chunyan Zhang <zhang.lyra@gmail.com>
 +
++description:
++  Unisoc system global registers provide register map
++  for clocks and some multimedia modules of the SoC.
++
 +properties:
 +  compatible:
-+    enum:
-+      - sprd,ums512-apahb-gate
-+      - sprd,ums512-ap-clk
-+      - sprd,ums512-aonapb-clk
-+      - sprd,ums512-pmu-gate
-+      - sprd,ums512-g0-pll
-+      - sprd,ums512-g2-pll
-+      - sprd,ums512-g3-pll
-+      - sprd,ums512-gc-pll
-+      - sprd,ums512-aon-gate
-+      - sprd,ums512-audcpapb-gate
-+      - sprd,ums512-audcpahb-gate
-+      - sprd,ums512-gpu-clk
-+      - sprd,ums512-mm-clk
-+      - sprd,ums512-mm-gate-clk
-+      - sprd,ums512-apapb-gate
-+
-+  "#clock-cells":
-+    const: 1
-+
-+  clocks:
-+    minItems: 1
-+    maxItems: 4
-+    description: |
-+      The input parent clock(s) phandle for the clock, only list
-+      fixed clocks which are declared in devicetree.
-+
-+  clock-names:
-+    minItems: 1
 +    items:
-+      - const: ext-26m
-+      - const: ext-32k
-+      - const: ext-4m
-+      - const: rco-100m
++      - const: sprd,ums512-glbregs
++      - const: syscon
++      - const: simple-mfd
++
++  "#address-cells": true
++  "#size-cells": true
++
++  ranges:
++    maxItems: 1
 +
 +  reg:
 +    maxItems: 1
 +
++patternProperties:
++  "^clock-controller@[0-9a-f]+$":
++    type: object
++    $ref: "../clock/sprd,ums512-clk.yaml"
++    description:
++      Clock controller for the SoC clocks.
++
 +required:
 +  - compatible
-+  - '#clock-cells'
 +  - reg
 +
 +additionalProperties: false
 +
 +examples:
 +  - |
-+    ap_clk: clock-controller@20200000 {
-+      compatible = "sprd,ums512-ap-clk";
-+      reg = <0x20200000 0x1000>;
-+      clocks = <&ext_26m>;
-+      clock-names = "ext-26m";
-+      #clock-cells = <1>;
++    ap_apb_regs: syscon@71000000 {
++      compatible = "sprd,ums512-glbregs", "syscon", "simple-mfd";
++      reg = <0x71000000 0x3000>;
++      #address-cells = <1>;
++      #size-cells = <1>;
++      ranges = <0 0x71000000 0x3000>;
++
++      clock-controller@0 {
++        compatible = "sprd,ums512-apahb-gate";
++        reg = <0x0 0x2000>;
++        #clock-cells = <1>;
++      };
 +    };
-+...
++
++  - |
++    ap_intc5_regs: syscon@32360000 {
++      compatible = "sprd,ums512-glbregs", "syscon", "simple-mfd";
++      reg = <0x32360000 0x1000>;
++    };
 -- 
 2.25.1
 

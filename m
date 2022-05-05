@@ -2,78 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B55A451C8A3
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 21:04:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01B4A51C8AE
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 21:06:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384815AbiEETHl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 15:07:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53198 "EHLO
+        id S244263AbiEETJ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 15:09:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384416AbiEETHa (ORCPT
+        with ESMTP id S244319AbiEETJx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 15:07:30 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 601A84B1D4
-        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 12:03:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651777430; x=1683313430;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=4tROlkNo1kbPCFN62W49cfr118LlJIiTBohgCgaZqMg=;
-  b=jko0gGkwQSye1xN0AXP/yV9MS93gXUwQGWGiBBoqBa7kt7u2H55z5G6h
-   A1dwJHO+AYqWbculX1w+SRdtqTyJgmZSPeT/+WO8JFBJEUQ28wt/5K8Pk
-   se/OZUMHxcOIwytot1MSumeUvRIBpN43L9/yIvvlhrCRmShlJK/qzkChD
-   6SuvZomh034QXnR/qh/yDLzCaCZxuDk+Z22I52qhErp2BuurT3Ki6QbO2
-   xPnGz1lXMpuZV47kj2GiiXohvrQv5Mx3KpnnS1zxbxg+YfGFZJ/oTzyEG
-   lBnF1OVT+9Kv+vqU0cU9lxxJ0Q3xxFty40puyBgGrUscoTiB9r7L0+isC
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10338"; a="248757016"
-X-IronPort-AV: E=Sophos;i="5.91,203,1647327600"; 
-   d="scan'208";a="248757016"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2022 12:03:49 -0700
-X-IronPort-AV: E=Sophos;i="5.91,203,1647327600"; 
-   d="scan'208";a="585505604"
-Received: from jdrobitc-mobl1.amr.corp.intel.com (HELO [10.209.123.186]) ([10.209.123.186])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2022 12:03:46 -0700
-Message-ID: <5d34ac93-09dc-ea93-bffe-f3995647cd5b@linux.intel.com>
-Date:   Thu, 5 May 2022 12:03:45 -0700
+        Thu, 5 May 2022 15:09:53 -0400
+Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BFF54A918
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 12:06:12 -0700 (PDT)
+Received: by mail-oi1-x229.google.com with SMTP id l203so5330770oif.0
+        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 12:06:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to:cc;
+        bh=D0hIIaQCI/Dh7yD1DKDpvDpYdxU4Kww1YfWBC7PJ66o=;
+        b=Y5TZ8gwH28OUdcotbTOTVpcbR4pDhTI/YaqLz24TF+cgaEBsGrcHfKJ6FBpz5fI8YD
+         0ZQoF6vw49X7WRHB1KNIwNnaHPbGRAeoDQ27rWR0fcMzDbA4qQ8IRsYiuu1tu/cgCh6i
+         7ztBLJfvDKa2BhXMW2eS+XrHhX8up86RwTwaI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to:cc;
+        bh=D0hIIaQCI/Dh7yD1DKDpvDpYdxU4Kww1YfWBC7PJ66o=;
+        b=BN+3xGYR5/mtWZsbhUjknpWu11eGBGZCV7x+5VZCZA8aVj6fqdGnCOuBu7lgGVp0j6
+         Kua6BBbthpRxaw9IIFxvm3o//HlCnLNlbPVA999rDIugenrjTn8HYdJ5+Jza30tzGSB2
+         6x53ajq6M7i7pNu3/cFB0KopG04eTGM+7skS5oqn/P7Ha/kUtY7LNeuuuBuPflrWK9gE
+         XBbQAmpPHGjhhyujiQWHTNL6WMc4K7tRPBwpjbMlAVduNLv0qwV0yRrDacFyYpFk6uFY
+         WnF5qYpOWmBQJxBVHXO2wWC7Qy8d0tSgr9Xqj+EdxdMaCznyT5xvaaY/JNH56HprVA+N
+         7G9Q==
+X-Gm-Message-State: AOAM533EOAOUsI1JCaWIU7YnGtM6iJo1IUT6F4/xPP2d7TRdJmmDka4q
+        7Hi2BRv1YP4dGjQno9uZOpk17UmFd5OzVVCYie7WFA==
+X-Google-Smtp-Source: ABdhPJynlWjxd2luIxa71ND0gePgQJv4YZ4ySZIIn/1gXDonkO41PQ/jE3q3+0goFTuJnjQr8o6y5FLtPhweRHmec9s=
+X-Received: by 2002:aca:bd41:0:b0:2ec:ff42:814f with SMTP id
+ n62-20020acabd41000000b002ecff42814fmr3286599oif.63.1651777571605; Thu, 05
+ May 2022 12:06:11 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Thu, 5 May 2022 15:06:10 -0400
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.7.0
-Subject: Re: [PATCH v5 3/3] x86/tdx: Add Quote generation support
-Content-Language: en-US
-To:     Kai Huang <kai.huang@intel.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Wander Lairson Costa <wander@redhat.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
-        linux-kernel@vger.kernel.org
-References: <20220501183500.2242828-1-sathyanarayanan.kuppuswamy@linux.intel.com>
- <20220501183500.2242828-4-sathyanarayanan.kuppuswamy@linux.intel.com>
- <243e918c523320ba3d216cbe22d24fe5ce33f370.camel@intel.com>
- <20220503012721.ok7fbvxmnvsr6qny@box.shutemov.name>
- <58d07b2d-cef5-17ed-9c57-e12fe5665e04@intel.com>
- <40ccd0f0-35a1-5aa7-9e51-25ab196d79e5@linux.intel.com>
- <1534b975275b78d61d851eb86faa226fd9be5c7a.camel@intel.com>
-From:   Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-In-Reply-To: <1534b975275b78d61d851eb86faa226fd9be5c7a.camel@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <MW4PR02MB71867A18732B266DE8FA2040E1C29@MW4PR02MB7186.namprd02.prod.outlook.com>
+References: <20220425210643.2420919-1-dianders@chromium.org>
+ <20220425140619.1.Ibfde5a26a7182c4b478d570c23d2649823ac2cce@changeid>
+ <CAE-0n51eZpAKprRQ0HqjLciF_BVQHBDN8SMFNVmmOd=B9UBEzg@mail.gmail.com>
+ <CAD=FV=WmVK3wTQf_EAxSi0WPXedSFGCsKdyqRnHsskmMYTHDQA@mail.gmail.com>
+ <MW4PR02MB718610FAA14F966ADE1B1585E1C29@MW4PR02MB7186.namprd02.prod.outlook.com>
+ <CAE-0n51Q=cGwrMec3JEQENqWHV3pAUjLPT6RwZLA5xV080sgxQ@mail.gmail.com> <MW4PR02MB71867A18732B266DE8FA2040E1C29@MW4PR02MB7186.namprd02.prod.outlook.com>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Thu, 5 May 2022 15:06:10 -0400
+Message-ID: <CAE-0n53MEBYhyRtGWOCmjj923UQU_iVE_SEBQw6_FUci8NLz3w@mail.gmail.com>
+Subject: RE: [PATCH 1/2] dt-bindings: msm/dp: List supplies in the bindings
+To:     Doug Anderson <dianders@chromium.org>,
+        Sankeerth Billakanti <quic_sbillaka@quicinc.com>
+Cc:     "bjorn.andersson@linaro.org" <bjorn.andersson@linaro.org>,
+        "dmitry.baryshkov@linaro.org" <dmitry.baryshkov@linaro.org>,
+        Rob Clark <robdclark@chromium.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        freedreno <freedreno@lists.freedesktop.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Kalyan Thota <quic_kalyant@quicinc.com>,
+        Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,105 +89,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Kai,
+Quoting Sankeerth Billakanti (QUIC) (2022-05-05 11:47:20)
+> >Quoting Sankeerth Billakanti (2022-05-05 11:02:36)
+> >>
+> >> Our internal power grid documents list the regulators as VDD_A_*_1P2
+> >> and VDD_A_*_0P9 for all the platforms.
+> >
+> >Do your internal power grid documents indicate what these supplies are
+> >powering? The question is if these supplies power any of the logic inside the
+> >eDP controller or if they only supply power to the analog circuits in the eDP
+> >phy. If it's the eDP phy only then the regulator usage in the eDP driver should
+> >be removed. I would suspect this is the case because the controller is
+> >probably all digital logic and runs at the typical 1.8V that the rest of the SoC
+> >uses. Similarly, these are voltage references which sound like a PLL reference
+> >voltage.
+> >
+> >Please clarify this further.
+> >
+>
+> For the DP driver using the usb-dp combo phy, there were cases where the usb driver
+> was turning off the phy and pll regulators whenever usb-dp concurrent mode need not be supported.
+> This caused phy and pll to be powered down causing aux transaction failures and display blankouts.
+> From then on, it became a practice for the controller driver to vote for the phy and pll regulators also.
+>
 
-On 5/5/22 3:50 AM, Kai Huang wrote:
-> 
->> +       /* Submit GetQuote Request */
->> +       ret = tdx_get_quote_hypercall(buf);
->> +       if (ret) {
->> +               pr_err("GetQuote hypercall failed, status:%lx\n", ret);
->> +               ret = -EIO;
->> +               goto free_entry;
->> +       }
->> +
->> +       /* Add current quote entry to quote_list */
->> +       add_quote_entry(entry);
->> +
->> +       /* Wait for attestation completion */
->> +       ret = wait_for_completion_interruptible(&entry->compl);
->> +       if (ret < 0) {
->> +               ret = -EIO;
->> +               goto del_entry;
->> +       }
-> 
-> This is misuse of wait_for_completion_interruptible().
-> 
-> xxx_interruptible() essentially means this operation can be interrupted by
-> signal.  Using xxx_interruptible() in driver IOCTL essentially means when it
-> returns due to signal, the IOCTL should return -EINTR to let userspace know that
-> your application received some signal needs handling, and this IOCTL isn't
-> finished and you should retry.  So here we should return -EINTR (and cleanup all
-> staff has been done) when wait_for_completion_interruptible() returns -
-> ERESTARTSYS (in fact, it returns only -ERESTARTSYS or 0).
-
-
-But in this case, I was expecting the user agent to check the Quote
-buffer status code to understand the IN_FLIGHT, SUCCESS or FAILURE
-status and handle it appropriately. So IMO, it should not matter what
-we return for the failure case. For the IN_FLIGHT case, they can retry
-if they want after checking the status code.
-
-But I agree that EINTR is the appropriate return value for an
-interrupted case. So, I will change it.
-
-> 
-> Since normally userspace application just ignore signals, and in this particular
-> case, asking userspace to retry just makes things more complicated to handle, I
-
-I am not sure how the user agent is going to be implemented. So I don't
-want to make any assumptions. In this case, we are not asking user space
-to implement the retry support using signals. But we are just giving 
-them option to do it. It is up to them if they want to use it.
-
-> think you can just use wait_for_completion_killable(), which only returns when
-> the application receives signal that it is going to be killed.
-
-If you agree with the above point, we can leave just it as 
-*_interruptible(). But if you still see other issues, please let me
-know.
-
-> 
->> +
->> +       /* Copy output data back to user buffer */
->> +       if (copy_to_user((void __user *)quote_req.buf, buf->vmaddr,
->> quote_req.len))
->> +               ret = -EFAULT;
->> +
->> +del_entry:
->> +       del_quote_entry(entry);
->> +free_entry:
->> +       free_quote_entry(entry);
-> 
-> As I (and Isaku) mentioned before, when wait_for_completion_killable() returns
-> with error, you cannot just convert the buffer to private and free it.  The VMM
-> is still owning it (IN_FLIGHT).
-
-Do you know what happens when VMM writes to a page which already marked
-private? Will MapGPA fail during shared-private conversion?
-
-> 
-> One way to handle is you can put those buffers that are still owned by VMM to a
-> new list, and have some kernel thread to periodically check buffer's status and
-> free those are already released by VMM.  I haven't thought thoroughly, so maybe
-> there's better way to handle, though.
-
-Instead of adding new thread to just handle the cleanup, maybe I
-can move the entire callback interrupt logic (contents of
-attestation_callback_handler()) to a work queue and wake up this
-work queue whenever we get the callback interrupt.
-
-We can let the same work queue handle the cleanup for interrupted
-requests. As for as how to identify the interrupted request, we
-can add a bit in queue_entry for it and set it when we exit
-wait_for_completion*() due to signals.
-
-I will do a sample logic and get back to you.
-
-
-
-> 
-
--- 
-Sathyanarayanan Kuppuswamy
-Linux Kernel Developer
+That sounds like USB-DP combo phy driver had improper regulator power
+management where aux transactions from DP didn't keep the power on to
+the phy. Where does the power physically go? If the power isn't
+physically going to the DP controller it shouldn't be controlled from
+the DP controller driver. If the aux bus needs the DP phy enabled, the
+DP controller driver should enable the phy power (via phy_power_on()?).

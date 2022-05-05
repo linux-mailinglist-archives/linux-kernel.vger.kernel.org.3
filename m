@@ -2,67 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F76151BEF4
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 14:13:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A422351BF07
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 14:14:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376300AbiEEMQN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 08:16:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50564 "EHLO
+        id S1347820AbiEEMQk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 08:16:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359849AbiEEMQJ (ORCPT
+        with ESMTP id S1376424AbiEEMQg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 08:16:09 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1789864C1
-        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 05:12:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651752750; x=1683288750;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=2DhPSKq1r7S3sDZ7dC36QkPcIiYnpBlQkC9n0su6nWA=;
-  b=AsvY5a+si04NRTl0EiIu4c3xx4/xbf5aACiBkXrmzE3zAMvwTVgcmST5
-   PIwW74aB0YaaLk8k1arjd/pnCZaQDTXLYV0SGiin1bwjcd/HFO5tSB6CR
-   ackoBDM54XkxwBMsho4mUVIIHy8QTBYmT6Ti1PTM7Gx5wtEoTsQm7COeO
-   0yWV6QW7A9mHjIvCiZUbvXCM0/nEioE4YYXkw31/9W5TP6farap/Ay8M2
-   IJ9KzU6qeKM/rxsDtXdCiAW2VIoJKkyJi9J+MW14sbXJZM5qIUbu4eQ3y
-   KKApGvQqIhSRrzfJ5hXeIZmOIfZkwQgZF11djHSt2MZiTZ2b9Y6JSdNhy
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10337"; a="268240484"
-X-IronPort-AV: E=Sophos;i="5.91,201,1647327600"; 
-   d="scan'208";a="268240484"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2022 05:12:29 -0700
-X-IronPort-AV: E=Sophos;i="5.91,201,1647327600"; 
-   d="scan'208";a="563215563"
-Received: from minhaowa-mobl.ccr.corp.intel.com (HELO [10.255.30.75]) ([10.255.30.75])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2022 05:12:26 -0700
-Message-ID: <22359719-15c8-5215-fdf3-7eec60f2c106@linux.intel.com>
-Date:   Thu, 5 May 2022 20:12:24 +0800
+        Thu, 5 May 2022 08:16:36 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67D5D13D5C
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 05:12:50 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1nmaLa-0002HT-15; Thu, 05 May 2022 14:12:42 +0200
+Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1nmaLZ-0002cd-4m; Thu, 05 May 2022 14:12:41 +0200
+Date:   Thu, 5 May 2022 14:12:41 +0200
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, kernel@pengutronix.de,
+        netdev@vger.kernel.org
+Subject: Re: [PATCH net-next v3 7/7] net: phy: dp83td510: Add support for the
+ DP83TD510 Ethernet PHY
+Message-ID: <20220505121241.GA19896@pengutronix.de>
+References: <20220505063318.296280-1-o.rempel@pengutronix.de>
+ <20220505063318.296280-8-o.rempel@pengutronix.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH v2 2/4] iommu/vt-d: Check domain force_snooping against
- attached devices
-Content-Language: en-US
-To:     "Tian, Kevin" <kevin.tian@intel.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Alex Williamson <alex.williamson@redhat.com>
-Cc:     "Pan, Jacob jun" <jacob.jun.pan@intel.com>,
-        "Liu, Yi L" <yi.l.liu@intel.com>,
-        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20220505010710.1477739-1-baolu.lu@linux.intel.com>
- <20220505010710.1477739-3-baolu.lu@linux.intel.com>
- <BN9PR11MB5276F768185B4CB64C2D027E8CC29@BN9PR11MB5276.namprd11.prod.outlook.com>
-From:   Baolu Lu <baolu.lu@linux.intel.com>
-In-Reply-To: <BN9PR11MB5276F768185B4CB64C2D027E8CC29@BN9PR11MB5276.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-10.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220505063318.296280-8-o.rempel@pengutronix.de>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-IRC:  #ptxdist @freenode
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-Uptime: 14:11:52 up 36 days, 41 min, 82 users,  load average: 0.25, 0.18,
+ 0.15
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,55 +63,165 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/5/5 16:43, Tian, Kevin wrote:
->> From: Lu Baolu <baolu.lu@linux.intel.com>
->> Sent: Thursday, May 5, 2022 9:07 AM
->>
->> As domain->force_snooping only impacts the devices attached with the
->> domain, there's no need to check against all IOMMU units. At the same
->> time, for a brand new domain (hasn't been attached to any device), the
->> force_snooping field could be set, but the attach_dev callback will
->> return failure if it wants to attach to a device which IOMMU has no
->> snoop control capability.
+On Thu, May 05, 2022 at 08:33:18AM +0200, Oleksij Rempel wrote:
+> The DP83TD510E is an ultra-low power Ethernet physical layer transceiver
+> that supports 10M single pair cable.
 > 
-> The description about brand new domain is not very clear. I think the
-> point here is that force_snooping could be set on a domain no matter
-> whether it has been attached or not and once set it is an immutable
-> flag. If no device attached the operation always succeeds then this
-> empty domain can be only attached to a device of which the IOMMU
-> supports snoop control.
-
-Exactly. Will update this description.
-
+> This driver was tested with NXP SJA1105, STMMAC and ASIX AX88772B USB Ethernet
+> controller.
 > 
->>   static bool intel_iommu_enforce_cache_coherency(struct iommu_domain
->> *domain)
->>   {
->>   	struct dmar_domain *dmar_domain = to_dmar_domain(domain);
->>
->> -	if (!domain_update_iommu_snooping(NULL))
->> +	if (dmar_domain->force_snooping)
->> +		return true;
->> +
->> +	if (!domain_support_force_snooping(dmar_domain))
->>   		return false;
->> +
+> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+> ---
+>  drivers/net/phy/Kconfig     |   6 ++
+>  drivers/net/phy/Makefile    |   1 +
+>  drivers/net/phy/dp83td510.c | 210 ++++++++++++++++++++++++++++++++++++
+>  3 files changed, 217 insertions(+)
+>  create mode 100644 drivers/net/phy/dp83td510.c
 > 
-> Who guarantees that domain->devices won't change between
-> above condition check and following set operation?
+> diff --git a/drivers/net/phy/Kconfig b/drivers/net/phy/Kconfig
+> index bbbf6c07ea53..9fee639ee5c8 100644
+> --- a/drivers/net/phy/Kconfig
+> +++ b/drivers/net/phy/Kconfig
+> @@ -342,6 +342,12 @@ config DP83869_PHY
+>  	  Currently supports the DP83869 PHY.  This PHY supports copper and
+>  	  fiber connections.
+>  
+> +config DP83TD510_PHY
+> +	tristate "Texas Instruments DP83TD510 Ethernet 10Base-T1L PHY"
+> +	help
+> +	  Support for the DP83TD510 Ethernet 10Base-T1L PHY. This PHY supports
+> +	  a 10M single pair Ethernet connection for up to 1000 meter cable.
+> +
+>  config VITESSE_PHY
+>  	tristate "Vitesse PHYs"
+>  	help
+> diff --git a/drivers/net/phy/Makefile b/drivers/net/phy/Makefile
+> index b82651b57043..b12b1d86fc99 100644
+> --- a/drivers/net/phy/Makefile
+> +++ b/drivers/net/phy/Makefile
+> @@ -57,6 +57,7 @@ obj-$(CONFIG_DP83848_PHY)	+= dp83848.o
+>  obj-$(CONFIG_DP83867_PHY)	+= dp83867.o
+>  obj-$(CONFIG_DP83869_PHY)	+= dp83869.o
+>  obj-$(CONFIG_DP83TC811_PHY)	+= dp83tc811.o
+> +obj-$(CONFIG_DP83TD510_PHY)	+= dp83td510.o
+>  obj-$(CONFIG_FIXED_PHY)		+= fixed_phy.o
+>  obj-$(CONFIG_ICPLUS_PHY)	+= icplus.o
+>  obj-$(CONFIG_INTEL_XWAY_PHY)	+= intel-xway.o
+> diff --git a/drivers/net/phy/dp83td510.c b/drivers/net/phy/dp83td510.c
+> new file mode 100644
+> index 000000000000..5c3251602e4a
+> --- /dev/null
+> +++ b/drivers/net/phy/dp83td510.c
+> @@ -0,0 +1,210 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/* Driver for the Texas Instruments DP83TD510 PHY
+> + * Copyright (c) 2022 Pengutronix, Oleksij Rempel <kernel@pengutronix.de>
+> + */
+> +
+> +#include <linux/bitfield.h>
+> +#include <linux/kernel.h>
+> +#include <linux/module.h>
+> +#include <linux/phy.h>
+> +
+> +#define DP83TD510E_PHY_ID			0x20000181
+> +
+> +/* MDIO_MMD_VEND2 registers */
+> +#define DP83TD510E_PHY_STS			0x10
+> +#define DP83TD510E_STS_MII_INT			BIT(7)
+> +#define DP83TD510E_LINK_STATUS			BIT(0)
+> +
+> +#define DP83TD510E_GEN_CFG			0x11
+> +#define DP83TD510E_GENCFG_INT_POLARITY		BIT(3)
+> +#define DP83TD510E_GENCFG_INT_EN		BIT(1)
+> +#define DP83TD510E_GENCFG_INT_OE		BIT(0)
+> +
+> +#define DP83TD510E_INTERRUPT_REG_1		0x12
+> +#define DP83TD510E_INT1_LINK			BIT(13)
+> +#define DP83TD510E_INT1_LINK_EN			BIT(5)
+> +
+> +#define DP83TD510E_AN_STAT_1			0x60c
+> +#define DP83TD510E_MASTER_SLAVE_RESOL_FAIL	BIT(15)
+> +
+> +static int dp83td510_config_intr(struct phy_device *phydev)
+> +{
+> +	int ret;
+> +
+> +	if (phydev->interrupts == PHY_INTERRUPT_ENABLED) {
+> +		/* Clear any pending interrupts */
+> +		ret = phy_write_mmd(phydev, MDIO_MMD_VEND2, DP83TD510E_PHY_STS,
+> +				    0x0);
+> +		if (ret)
+> +			return ret;
+> +
+> +		ret = phy_write_mmd(phydev, MDIO_MMD_VEND2,
+> +				    DP83TD510E_INTERRUPT_REG_1,
+> +				    DP83TD510E_INT1_LINK_EN);
+> +		if (ret)
+> +			return ret;
+> +
+> +		ret = phy_set_bits_mmd(phydev, MDIO_MMD_VEND2,
+> +				       DP83TD510E_GEN_CFG,
+> +				       DP83TD510E_GENCFG_INT_POLARITY |
+> +				       DP83TD510E_GENCFG_INT_EN |
+> +				       DP83TD510E_GENCFG_INT_OE);
+> +	} else {
+> +		ret = phy_write_mmd(phydev, MDIO_MMD_VEND2,
+> +				    DP83TD510E_INTERRUPT_REG_1, 0x0);
+> +		if (ret)
+> +			return ret;
+> +
+> +		ret = phy_clear_bits_mmd(phydev, MDIO_MMD_VEND2,
+> +					 DP83TD510E_GEN_CFG,
+> +					 DP83TD510E_GENCFG_INT_EN);
+> +		if (ret)
+> +			return ret;
+> +
+> +		/* Clear any pending interrupts */
+> +		ret = phy_write_mmd(phydev, MDIO_MMD_VEND2, DP83TD510E_PHY_STS,
+> +				    0x0);
+> +	}
+> +
+> +	return ret;
+> +}
+> +
+> +static irqreturn_t dp83td510_handle_interrupt(struct phy_device *phydev)
+> +{
+> +	int  ret;
+> +
+> +	ret = phy_read_mmd(phydev, MDIO_MMD_VEND2, DP83TD510E_PHY_STS);
+> +	if (ret < 0) {
+> +		phy_error(phydev);
+> +		return IRQ_NONE;
+> +	} else if (!(ret & DP83TD510E_STS_MII_INT)) {
+> +		return IRQ_NONE;
+> +	}
+> +
+> +	/* Read the current enabled interrupts */
+> +	ret = phy_read_mmd(phydev, MDIO_MMD_VEND2, DP83TD510E_INTERRUPT_REG_1);
+> +	if (ret < 0) {
+> +		phy_error(phydev);
+> +		return IRQ_NONE;
+> +	} else if (!(ret & DP83TD510E_INT1_LINK_EN) ||
+> +		   !(ret & DP83TD510E_INT1_LINK)) {
+> +		return IRQ_NONE;
+> +	}
+> +
+> +	phy_trigger_machine(phydev);
+> +
+> +	return IRQ_HANDLED;
+> +}
+> +
+> +static int dp83td510_read_status(struct phy_device *phydev)
+> +{
+> +	u16 phy_sts;
+> +	int ret, cfg;
 
-Good catch. Should lift the lock up here.
+Heh, here is unused variable. Need to fix it.
 
-> 
->> +	domain_set_force_snooping(dmar_domain);
->>   	dmar_domain->force_snooping = true;
->> +
->>   	return true;
->>   }
->>
-> 
-> Thanks
-> Kevin
-
-Best regards,
-baolu
+Regards,
+Oleksij
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |

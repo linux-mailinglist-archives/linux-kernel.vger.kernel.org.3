@@ -2,67 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEBBF51B863
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 09:03:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16BF451B868
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 09:05:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245485AbiEEHHA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 03:07:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44110 "EHLO
+        id S245464AbiEEHJW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 03:09:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232300AbiEEHGw (ORCPT
+        with ESMTP id S234477AbiEEHJM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 03:06:52 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC430424B8
-        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 00:03:13 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id v12so4770476wrv.10
-        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 00:03:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=CfZ3ZePVs1zizifKFOCKdtP4owCke/xt9ZozThlShL8=;
-        b=sUKmqDeLUlbnwYWcHGCCTwFM6OxAYGp/M3asB/xn+YqzZAmsxT2CbvEKXN73+VZ4N2
-         k3SGgx+QUrO8bAmOmuFUKOfUpPYwtoEzn1nhTjYcIB2Hko6zoe++oggqb33ooONyDMhQ
-         ad3UWqaSNYZ0ztIfeODcJQVubb6aGjEXHPmK3w4VHmg+UsdID2jnczga6mhfF3evBgBb
-         Os9PX/fOySWg3W9CP8BQJG98QHzL4geytfoSyqfpVDF4sPcyE84lWcZK6KCMxPhN5eGL
-         d4ORixgjl4umEjmaMOg5ftvZQ3mjDa57jKaMI5dNaClDcJdGADDX2jW8ZErxZqrNB31d
-         1fPg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=CfZ3ZePVs1zizifKFOCKdtP4owCke/xt9ZozThlShL8=;
-        b=7t2svzKzoEcgvvtQpSJeIHEAWCh8iycNimQ9w0RiJ+/xyfDifoGJN1vXvL5vJl0uyV
-         bMx85xeh6dlT6wR/sLHj6Nv+W+86zVCFCg4gZSrxCSx78Vk9Gzc6yyYVHdkBPqNU6036
-         /WC2ue+GYFNwbCyfElLYhYTJhh2BqHlVa9ub/KU1JXn3vKMwEb85226s5xyoF7usINjh
-         Wq2ZNHGFgQdJ3X0JSjHXsNFCMi/FPm/AchEB8MJ0OUbUNnOJoDg4znqEAs2KxIN3UpI7
-         aFv+uQlHS50qp0di+DDdq/U8lY+zRxMjc9NhIhT0ZGD8UhPLuxEkFQrYnP+2oMZIdpeC
-         r6nQ==
-X-Gm-Message-State: AOAM530wYZNQ/i8lU79+UCKXOcdN85GiQlJ2xZFZ/QVlMwp3HcrlEoAT
-        GzBtcOTkUdxcKbd8zD6YGFETWA==
-X-Google-Smtp-Source: ABdhPJzxqJxw5vDooWxiWTjg+cFR1uj+e7cZJwS/W4TlRcrQrIVljaF/20ohFz5pVK5+RhVQ55tcxA==
-X-Received: by 2002:adf:f504:0:b0:20c:734f:d39d with SMTP id q4-20020adff504000000b0020c734fd39dmr9547097wro.717.1651734192506;
-        Thu, 05 May 2022 00:03:12 -0700 (PDT)
-Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id n21-20020a7bc5d5000000b003942a244f47sm6233739wmk.32.2022.05.05.00.03.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 May 2022 00:03:12 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Sylwester Nawrocki <s.nawrocki@samsung.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>
-Subject: [GIT PULL] clk: dt-bindings: samsung: exynosautov9 for v5.19
-Date:   Thu,  5 May 2022 09:03:08 +0200
-Message-Id: <20220505070308.29863-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.32.0
+        Thu, 5 May 2022 03:09:12 -0400
+Received: from mx0b-0016f401.pphosted.com (mx0a-0016f401.pphosted.com [67.231.148.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5904018E29;
+        Thu,  5 May 2022 00:05:32 -0700 (PDT)
+Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
+        by mx0a-0016f401.pphosted.com (8.17.1.5/8.16.1.2) with ESMTP id 244LDqHD012012;
+        Thu, 5 May 2022 00:04:59 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pfpt0220;
+ bh=IvZ59VBMCUfOAZJJ9yKKHCWaGLF30TtIMEy60rvzfbI=;
+ b=d5w/6d6SoSWEzHF9Zkducbv0Skm8HvcJyegOfP4gEb8TmVInqqGxWifbSKLAqVbRDxqA
+ 2N5UaJUa3afg2nwbEMy5vHSpfLXKxHTyzDAvuSUl/iwoaWScMcZr4+pM8kRtc5eiD6t/
+ BiZVAN/bJnPBB0L5iCyBZ2feVitPwFTrMNnPoYZmS42sCW+ueUYPK7B0PYtqgSaq8Syn
+ pEzn+P3oS5z1vVSo6sbqCng55PZcjY0lZ3J4vRloUH85spp3jw6cCFZbnrA3v1aPTwCp
+ lc+NhSJtOwF5i5R1socZx/MEcG+x5+61eJPW6D0s7boLzvrcdBYEBm9b3/g6D793A0Ge ug== 
+Received: from dc5-exch01.marvell.com ([199.233.59.181])
+        by mx0a-0016f401.pphosted.com (PPS) with ESMTPS id 3fuscx3sad-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
+        Thu, 05 May 2022 00:04:58 -0700
+Received: from DC5-EXCH01.marvell.com (10.69.176.38) by DC5-EXCH01.marvell.com
+ (10.69.176.38) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Thu, 5 May
+ 2022 00:04:57 -0700
+Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH01.marvell.com
+ (10.69.176.38) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 5 May 2022 00:04:57 -0700
+Received: from [10.9.118.10] (EL-LT0043.marvell.com [10.9.118.10])
+        by maili.marvell.com (Postfix) with ESMTP id 4A67D3F70A1;
+        Thu,  5 May 2022 00:04:50 -0700 (PDT)
+Message-ID: <1f4b595a-1553-f015-c7a0-6d3075bdbcda@marvell.com>
+Date:   Thu, 5 May 2022 09:04:48 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:100.0) Gecko/20100101
+ Thunderbird/100.0
+Subject: Re: [EXT] [PATCH] net: atlantic: always deep reset on pm op, fixing
+ null deref regression
+Content-Language: en-US
+To:     Manuel Ullmann <labre@posteo.de>
+CC:     <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <regressions@lists.linux.dev>, <davem@davemloft.net>,
+        <kuba@kernel.org>, <pabeni@redhat.com>,
+        Jordan Leppert <jordanleppert@protonmail.com>,
+        =?UTF-8?Q?Holger_Hoffst=c3=a4tte?= <holger@applied-asynchrony.com>,
+        koo5 <kolman.jindrich@gmail.com>,
+        Dmitry Bezrukov <dbezrukov@marvell.com>
+References: <87czgt2bsb.fsf@posteo.de>
+From:   Igor Russkikh <irusskikh@marvell.com>
+In-Reply-To: <87czgt2bsb.fsf@posteo.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-GUID: _7rCjKR59eG9a8k1-WxBl1-Uiu8haI-J
+X-Proofpoint-ORIG-GUID: _7rCjKR59eG9a8k1-WxBl1-Uiu8haI-J
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-05_02,2022-05-04_02,2022-02-23_01
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -71,37 +76,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sylwester,
 
-Clock bindings for v5.19.
+> The impact of this regression is the same for resume that I saw on
+> thaw: the kernel hangs and nothing except SysRq rebooting can be done.
+> 
+> The null deref occurs at the same position as on thaw.
+> BUG: kernel NULL pointer dereference
+> RIP: aq_ring_rx_fill+0xcf/0x210 [atlantic]
+> 
+> Fixes regression in cbe6c3a8f8f4 ("net: atlantic: invert deep par in
+> pm functions, preventing null derefs"), where I disabled deep pm
+> resets in suspend and resume, trying to make sense of the
+> atl_resume_common deep parameter in the first place.
+> 
+> It turns out, that atlantic always has to deep reset on pm operations
+> and the parameter is useless. Even though I expected that and tested
+> resume, I screwed up by kexec-rebooting into an unpatched kernel, thus
+> missing the breakage.
+> 
+> This fixup obsoletes the deep parameter of atl_resume_common, but I
+> leave the cleanup for the maintainers to post to mainline.
+> 
+> PS: I'm very sorry for this regression.
 
-Best regards,
-Krzysztof
+Hi Manuel,
 
-The following changes since commit 3123109284176b1532874591f7c81f3837bbdc17:
+Unfortunately I've missed to review and comment on previous patch - it was too quickly accepted.
 
-  Linux 5.18-rc1 (2022-04-03 14:08:21 -0700)
+I'm still in doubt on your fixes, even after rereading the original problem.
+Is it possible for you to test this with all the possible combinations?
+suspend/resume with device up/down,
+hibernate/restore with device up/down?
 
-are available in the Git repository at:
+I'll try to do the same on our side, but we don't have much resources for that now unfortunately..
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git tags/samsung-dt-bindings-clk-exynosautov9-5.19
 
-for you to fetch changes up to e61492e47838f4d99a3ffcc591ba57d1d5d0896f:
+> Fixes: cbe6c3a8f8f4315b96e46e1a1c70393c06d95a4c
 
-  dt-bindings: clock: add Exynos Auto v9 SoC CMU bindings (2022-05-05 08:58:38 +0200)
+That tag format is incorrect I think..
 
-----------------------------------------------------------------
-dt-bindings for Samsung ExynosAutov9 clock controllers for v5.19
-
-The Devicetree bindings for Samsung ExynosAutov9 clock controllers.
-
-----------------------------------------------------------------
-Chanho Park (2):
-      dt-bindings: clock: add clock binding definitions for Exynos Auto v9
-      dt-bindings: clock: add Exynos Auto v9 SoC CMU bindings
-
- .../bindings/clock/samsung,exynosautov9-clock.yaml | 219 +++++++++++++++
- include/dt-bindings/clock/samsung,exynosautov9.h   | 299 +++++++++++++++++++++
- 2 files changed, 518 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/clock/samsung,exynosautov9-clock.yaml
- create mode 100644 include/dt-bindings/clock/samsung,exynosautov9.h
+Igor

@@ -2,89 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F328F51C40F
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 17:38:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5255951C410
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 17:38:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380744AbiEEPmA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 11:42:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34052 "EHLO
+        id S1381364AbiEEPmM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 11:42:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238590AbiEEPl4 (ORCPT
+        with ESMTP id S1380759AbiEEPmK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 11:41:56 -0400
-Received: from ssl.serverraum.org (ssl.serverraum.org [176.9.125.105])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA5802182B;
-        Thu,  5 May 2022 08:38:16 -0700 (PDT)
-Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
+        Thu, 5 May 2022 11:42:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0377957B15;
+        Thu,  5 May 2022 08:38:30 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id D71A022205;
-        Thu,  5 May 2022 17:38:14 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1651765095;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=pXolXFD/8YvBpURyLprQMd66AYD3SbrwCVNfcxqyXZk=;
-        b=WTVjWTjBe9fipZn5j8DnckvD149tei47OB9AfFABgbqxXilmu+1KhmVirxdz20oZJhFufL
-        LHrTCTnGrpgZSV0wgPW6MOgicicmQeEwwwFwA0MS4ZY5wSQNHYmxnsWeU5d6Oev5/RXsJi
-        GGDHzyei9ewg+WTy85lGYpT+9ZdgNvA=
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Thu, 05 May 2022 17:38:14 +0200
-From:   Michael Walle <michael@walle.cc>
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     Codrin Ciubotariu <codrin.ciubotariu@microchip.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Wolfram Sang <wsa@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, linux-i2c@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-Subject: Re: [PATCH] i2c: at91: Initialize dma_buf in at91_twi_xfer()
-In-Reply-To: <20220505152738.1440249-1-nathan@kernel.org>
-References: <20220505152738.1440249-1-nathan@kernel.org>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <9ffec526be965d37579b573f1a0debb6@walle.cc>
-X-Sender: michael@walle.cc
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1FAD861D1B;
+        Thu,  5 May 2022 15:38:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7350AC385A8;
+        Thu,  5 May 2022 15:38:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651765109;
+        bh=Np8qjfuZd4T5JqzN9vyOqdbCko5iAGfOJsY1a9k7kjs=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=B8KjwH+SmG/PA/TUMcocOHV9fNtRi0ICkxpNV46AhiQydGNzI1H5qFWbJigWgWU7s
+         eu4icqtQoKuz+mrholtDw/AyUJQA9SY6LS+5IXo6rwX/dlnbPjBin4VRiWQozICOjg
+         F38lHR2u/ipv5Onk4CB4BDZEyZAN7T4B7lgLdk//pjVVtrxzk+hInbVPXrhsTuFIWz
+         kK19N6UX1SNckP2hhsP/Pe8iyYrcHTMUb7ppKJXM+gzO96XJyKny9/6wEGPCDQNGOm
+         QkTuf5+d6Lj2HZ1bm+j3LpLHO658M27z9i+njUMTKHzInNTLEDLWPDe/sqkHrPRFNV
+         I45j/PzN5Ny5g==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nmdYg-009FLc-QL; Thu, 05 May 2022 16:38:26 +0100
+Date:   Thu, 05 May 2022 16:38:26 +0100
+Message-ID: <87wnf06lcd.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Hector Martin <marcan@marcan.st>
+Cc:     Rob Herring <robh@kernel.org>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Krzysztof =?UTF-8?B?V2lsY3p5xYRza2k=?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Sven Peter <sven@svenpeter.dev>,
+        PCI <linux-pci@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 3/3] PCI: apple: Add support for optional PWREN GPIO
+In-Reply-To: <57e47786-0b99-646e-9e73-694e47d14cf5@marcan.st>
+References: <20220502093832.32778-1-marcan@marcan.st>
+        <20220502093832.32778-4-marcan@marcan.st>
+        <CAL_Jsq+_cWZUXtJVXC_cwhmADj0NQc95v1sqgFioMsfEX6OqGg@mail.gmail.com>
+        <0ccc44cd-21aa-3670-24b3-4ee051dd3c12@marcan.st>
+        <2615501d-7569-41cb-7039-46e690689f1f@marcan.st>
+        <YnHJ2ZKd2CqhNWrX@robh.at.kernel.org>
+        <57e47786-0b99-646e-9e73-694e47d14cf5@marcan.st>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: marcan@marcan.st, robh@kernel.org, lorenzo.pieralisi@arm.com, kw@linux.com, bhelgaas@google.com, alyssa@rosenzweig.io, sven@svenpeter.dev, linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 2022-05-05 17:27, schrieb Nathan Chancellor:
-> Clang warns:
-> 
->   drivers/i2c/busses/i2c-at91-master.c:707:6: warning: variable
-> 'dma_buf' is used uninitialized whenever 'if' condition is false
-> [-Wsometimes-uninitialized]
->           if (dev->use_dma) {
->               ^~~~~~~~~~~~
->   drivers/i2c/busses/i2c-at91-master.c:717:27: note: uninitialized use
-> occurs here
->           i2c_put_dma_safe_msg_buf(dma_buf, m_start, !ret);
->                                    ^~~~~~~
-> 
-> Initialize dma_buf to NULL, as i2c_put_dma_safe_msg_buf() is a no-op
-> when the first argument is NULL, which will work for the !dev->use_dma
-> case.
-> 
-> Fixes: 03fbb903c8bf ("i2c: at91: use dma safe buffers")
-> Link: https://github.com/ClangBuiltLinux/linux/issues/1629
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+On Wed, 04 May 2022 04:36:02 +0100,
+Hector Martin <marcan@marcan.st> wrote:
 
-Thanks for fixing.
+[...]
 
-Reviewed-by: Michael Walle <michael@walle.cc>
+> 
+> So it'd go something like this:
+> 
+> - apcie driver, on slot activation, sees a pwren gpio/reg and powers it
+> on prior to bringing up the link (and marks that port as d3cold supported)
+> - sdhci-pci driver, on probe, sees an external card detect GPIO declared
+> and considers that license to call pci_d3cold_enable and enable
+> runtime-pm (since it won't need the internal card detect IRQ/GPIO)
+> - No SD card is inserted, so SD driver goes into runtime suspend and
+> saves whatever controller state it needs
+> - PCI core saves whatever config space stuff it needs to save, SD
+> controller is powered down via GPIO
 
--michael
+I haven't quite found yet how this goes, but I can't say I tried in
+anger. I guess that the root port device has to provide some standard
+PM callbacks that would further tickle the regulator?
+
+> - SD card is inserted, SMC GPIO IRQ notifies SD driver
+> - SD driver goes out of runtime suspend
+> - PCI core powers on controller, re-establishes link, restores config space
+> - SD driver restores host controller registers and discovers the new card
+> 
+> No new APIs, this is all existing kernel stuff. PCI manages slot power
+> same as it does on ACPI systems (that support it), driver interacts with
+> it via runtime-pm and the d3cold control stuff.
+> 
+> I'm tempted to prototype this today and see how it goes...
+
+Well, let us know how that goes.
+
+Thanks,
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.

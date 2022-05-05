@@ -2,83 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F4E051BBA6
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 11:13:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82BB251BBAC
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 11:14:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352064AbiEEJRG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 05:17:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55464 "EHLO
+        id S1352114AbiEEJSW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 05:18:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245698AbiEEJRD (ORCPT
+        with ESMTP id S1346307AbiEEJSN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 05:17:03 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 172244C402
-        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 02:13:24 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id g20so4450118edw.6
-        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 02:13:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=C13CFKJEOWyH4FQIHZ/zbMnXVynUc/Y9MwQkzIzQHbE=;
-        b=F6SFjkjjWudZLAozoSYNPJQraIiViaBJ2Unq9ZF3WmHPCPxSPqMYXfwo0cWrp7R3Zs
-         3zplapT1nChS1cRnMbQFli1zcNAGqFo1MPfGZark0mRVOumKUdefulsAmgfA0QxoP2Qr
-         uWM+ij6HoeUN1G4VKS/bR4UCiXvXLxsG0vvS2pTdph1ldSuw2KoWBGgBPnbkUJW0Co+R
-         +bktWgbr5PDS4JNOEuhDuBaeqHNJeBkJscx7s0uAFHq+Ke3XEfA0jFFwiXXr1Qh91JJv
-         tlEtjRTPjzzm3ZNSM60oHrmgcE38hIDGHZwFnLnvLXi87ZRuHOEu8MZNadxmbkazggCL
-         XuFA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=C13CFKJEOWyH4FQIHZ/zbMnXVynUc/Y9MwQkzIzQHbE=;
-        b=gXAForpJvKjRNGeOV6evAaopS1Dw1GgX7o6GG4MoiQavay5zjCCwWv0goJoeaTW/k8
-         mbZmUjD9s5AGkB/eVpSexafRUtmeyeQC0FA229p6Jr7tb4ve07ioSIHWC6LslLKxqGVt
-         wR96Dw1MVJLSt2k9SodeASSOOBP1VqCAXKHQfeiyb8f8QliONnGoTkf6IqHFPZurVqDY
-         kTZMNXJhODNwddU8fa0F8yEzRSir5UnU/RM9baRei1xniLKIELIo8/vRp7e4q4jSENUY
-         E5l03GQMOBg5iy2wXRGOR0CDTwUKNLC+RqRQxlHrwyezh/ImHb2Tf7w+4LFtfKaBQ6DT
-         ocvg==
-X-Gm-Message-State: AOAM531iTljipcHtnPyiRP7kgcnsFo/4DUo5ZMiND9zyhXutelfy6O2i
-        UlQ3FXxrrL9cctjYjoTQVVUvTw==
-X-Google-Smtp-Source: ABdhPJyauXqqC7x8uraKE/6KGzasb6Rf6omeH6bh0NkPyDvQ1ATzyeeI5h3E8OUKjmWmg42poxBUVQ==
-X-Received: by 2002:a05:6402:849:b0:427:edfe:1b7e with SMTP id b9-20020a056402084900b00427edfe1b7emr12779009edz.355.1651742002696;
-        Thu, 05 May 2022 02:13:22 -0700 (PDT)
-Received: from [192.168.0.217] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id my50-20020a1709065a7200b006f3ef214e79sm502596ejc.223.2022.05.05.02.13.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 05 May 2022 02:13:22 -0700 (PDT)
-Message-ID: <c790db17-79b9-a73f-ed0f-728a8a075ba1@linaro.org>
-Date:   Thu, 5 May 2022 11:13:21 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH v3 1/2] dt-bindings: remoteproc: mediatek: Make l1tcm reg
- optional for mtk,scp
-Content-Language: en-US
-To:     =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
-        <nfraprado@collabora.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>, kernel@collabora.com,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
+        Thu, 5 May 2022 05:18:13 -0400
+X-Greylist: delayed 44191 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 05 May 2022 02:14:33 PDT
+Received: from relay08.th.seeweb.it (relay08.th.seeweb.it [IPv6:2001:4b7a:2000:18::169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C2804D247;
+        Thu,  5 May 2022 02:14:32 -0700 (PDT)
+Received: from SoMainline.org (94-209-165-62.cable.dynamic.v4.ziggo.nl [94.209.165.62])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 6D2493F613;
+        Thu,  5 May 2022 11:14:28 +0200 (CEST)
+Date:   Thu, 5 May 2022 11:14:26 +0200
+From:   Marijn Suijten <marijn.suijten@somainline.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     phone-devel@vger.kernel.org, Pavel Machek <pavel@ucw.cz>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        linux-arm-msm@vger.kernel.org, linux-leds@vger.kernel.org,
         Rob Herring <robh+dt@kernel.org>,
-        Tinghan Shen <tinghan.shen@mediatek.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-remoteproc@vger.kernel.org
-References: <20220503211114.2656099-1-nfraprado@collabora.com>
- <20220503211114.2656099-2-nfraprado@collabora.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220503211114.2656099-2-nfraprado@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/4] dt-bindings: leds: qcom-lpg: Add compatible for
+ PM660L LPG block
+Message-ID: <20220505091426.ycjejqtkf3hvy4u7@SoMainline.org>
+Mail-Followup-To: Marijn Suijten <marijn.suijten@somainline.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        phone-devel@vger.kernel.org, Pavel Machek <pavel@ucw.cz>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        linux-arm-msm@vger.kernel.org, linux-leds@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220504205704.699500-1-marijn.suijten@somainline.org>
+ <ec1afdc4-54be-71cd-1873-6959e132a45d@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ec1afdc4-54be-71cd-1873-6959e132a45d@linaro.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,14 +66,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/05/2022 23:11, Nícolas F. R. A. Prado wrote:
-> The SCP has three memory regions: sram, cfg and l1tcm. While the first
-> two are required, l1tcm is optional. Fix the dt-binding so that it can
-> be omitted and update the description. This gets rid of dtbs_check
-> warnings for devicetrees where the l1tcm reg is missing like mt8183.
+On 2022-05-05 10:35:20, Krzysztof Kozlowski wrote:
+> On 04/05/2022 22:57, Marijn Suijten wrote:
+> > Document the availability of an LPG configuration for the PM660L PMIC in
+> > the Qualcomm Light Pulse Generator driver.
+> > 
+> > Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
+> > ---
+> >  Documentation/devicetree/bindings/leds/leds-qcom-lpg.yaml | 1 +
+> 
+> Hmm, there is no such file in next-20220503...
 
-Please add "if:then:" for this case (need to put all ifs in allOf). I
-understand that l1tcm is optional *only* on mt8183.
+Bjorn's patches got pulled into Pavel's linux-leds tree just yesterday:
 
-Best regards,
-Krzysztof
+    https://git.kernel.org/pub/scm/linux/kernel/git/pavel/linux-leds.git/log/?h=for-next
+
+Specifically, this file got added in:
+
+    https://git.kernel.org/pub/scm/linux/kernel/git/pavel/linux-leds.git/commit/?h=for-next&id=a8e53db46f19f67be6a26488aafb7d10c78e33bd
+
+They don't seem to be in next-20220504 yet either, but should probably
+show up in next-20220505.  This shouldn't prevent the patch from being
+picked up for linux-leds though, now that everone is scrambling to send
+additional LPG configs in hopes of landing for 5.19 all at once.
+
+- Marijn

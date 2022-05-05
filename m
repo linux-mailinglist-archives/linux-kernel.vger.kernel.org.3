@@ -2,142 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A05FD51B7C8
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 08:11:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08C8951B7CB
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 08:13:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235255AbiEEGOs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 02:14:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35122 "EHLO
+        id S244188AbiEEGQq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 02:16:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230304AbiEEGOq (ORCPT
+        with ESMTP id S230304AbiEEGQm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 02:14:46 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 702C146654
-        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 23:11:07 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id k1so3488747pll.4
-        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 23:11:07 -0700 (PDT)
+        Thu, 5 May 2022 02:16:42 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DC1C46650;
+        Wed,  4 May 2022 23:13:04 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id i17so3474603pla.10;
+        Wed, 04 May 2022 23:13:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=IBbOZnTSEqAFzOW1mFDCOLOCAD06OzggQKmfl/tqan0=;
-        b=ZWAdYohJZEYZJYDIP8h0O3j0RbhgrCZO8fu8ng+dhXIT8lmC5eNuOXl6Vakk6G1jz3
-         tPXkormoNX3cF02GUARXqFJT9Bdkq7qHKnNFskzhDel4Dn7zntpVuVEzMUSIlhgLBsTs
-         G9yLeMdvdHl/R0V0e4q0PdrvAcB7BZ4QMYBgtPE4XZQjs4KEK4ZA/HQ54Ru99PXnI9Ru
-         6fxDrrKntknLkcf17zd4O2/QFys9y66xJVP2TYZ/IRz+QDtungHVesTYCDOJIfOM2ala
-         ibIHKCBNnKmXb8RxjieM3BXPaxlmkJspdNN/tk/YlVX+6/tlsRsvuLekuy5bwKZ+vey4
-         3x/g==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=hPCChwN70fxKmAN8N/8qwui+OHfL43odd3gHeAPd0q8=;
+        b=Y8DQ/E81oo8oXjq/OXlH0hSHb5JxT7Z7U2aSMklNhxdxESdRqmT07BwEoI9nufkmSh
+         XXNl58Jrnf0WfDKwmfcyzU6qrJuB/N4yf5Q5FSw+8QVHrX31IZ49B6u20eNLP+/11PHr
+         E/A9YuuogwWOfTmToJ3Xf/fHevzCaOWbARPWcZUxUZXuOBDyU5BrVxQ+3el74hhAxKod
+         maGAQs7hN+/Qt8wb6KGsZh3V8/YbMqEQolsyvHmJPj9nJEDhl6udCy4T+Gc4kH8RDUqX
+         YWYolo8NoN3kO0YoP17f/Jn8aU+SwlpB95YAjoeTA8xOaiZoydeb2yLqH+cu57aKv29g
+         MRGQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=IBbOZnTSEqAFzOW1mFDCOLOCAD06OzggQKmfl/tqan0=;
-        b=LbRGxUsABynkVCIirqwLkH5Np0fsjzsAAlkVqsO9SQpOoy41qyMTEjG41/YwLaR0tH
-         Nv1GywxP0ySbZHUsn0cYunqOT3EBs08iQkRUsP9rZsGJ/iCjU2xIIpJMcypczavQRGNb
-         DGTl9srOZ0gY0tGv3luk6Gaml9EWe+Q7dx04LFdHYzjYyR8JWeqKdvRzR1bDDX0LP+XR
-         EULixK7CP+ZfSwy+a66uQoHLabW1/khso9fFKdknhyoBwQccE17+g4OSbgWL69dGYSFC
-         4GZeZ998S00Nm7daFFsK0JUbH7jpDa/4MpT0/LZwoodJ3p+QKD60eYjz16Ptq3UAC/Z3
-         /cwA==
-X-Gm-Message-State: AOAM530HSilMJvl2NrXsXIcpP1m/zApNk8dc0uixVBTpSy/zkRFMXhNA
-        KrLuq7Xk0MvIybsK3LrOoLU=
-X-Google-Smtp-Source: ABdhPJyxPgNQtsnhXBAjSa/+0PBF5EszwI+PJ7RFR2HsWS4kXzHZrKX+q6rWHO4BgIUPF6PsAdvPtw==
-X-Received: by 2002:a17:90b:3ecd:b0:1dc:94f2:1bc0 with SMTP id rm13-20020a17090b3ecd00b001dc94f21bc0mr4232087pjb.32.1651731066924;
-        Wed, 04 May 2022 23:11:06 -0700 (PDT)
-Received: from google.com ([2620:15c:211:201:8435:b3e7:62fc:4dfa])
-        by smtp.gmail.com with ESMTPSA id bb6-20020a170902bc8600b0015e8d4eb2besm546170plb.264.2022.05.04.23.11.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 May 2022 23:11:06 -0700 (PDT)
-Sender: Minchan Kim <minchan.kim@gmail.com>
-Date:   Wed, 4 May 2022 23:11:04 -0700
-From:   Minchan Kim <minchan@kernel.org>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-mm <linux-mm@kvack.org>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Michal Hocko <mhocko@suse.com>,
-        John Dias <joaodias@google.com>,
-        Tim Murray <timmurray@google.com>,
-        Vladimir Davydov <vdavydov.dev@gmail.com>
-Subject: Re: [PATCH] mm: don't be stuck to rmap lock on reclaim path
-Message-ID: <YnNqeB5tUf6LZ57b@google.com>
-References: <20220503170341.1413961-1-minchan@kernel.org>
- <YnHzvV2Uz2ynENnG@casper.infradead.org>
- <YnIBbjRYACzvuZpp@google.com>
- <YnIYofrw/GGEvc0U@casper.infradead.org>
- <YnKhLX+jzJc+2KwB@google.com>
- <YnKwBeRAWwIlEVqy@casper.infradead.org>
- <YnMQp/zJVHu9Qq/S@google.com>
- <YnMdaW67GEDF0Ynr@casper.infradead.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=hPCChwN70fxKmAN8N/8qwui+OHfL43odd3gHeAPd0q8=;
+        b=eIQt/VGRuIDsEFgUQkkWmL15W1nxPXVNjXMCM3mRPEW3enzBApJPHQb7rf5TS6IwZh
+         QHWpdtfiFACJZqH5Ok8+tP57QUDiixyrDJH0J/7E1zZRMmg6/BuUhfQ4cz7GbbRKqyda
+         04S3gBXydy0urqvUA2tS4pEvIQjLHJf2A39PXWgibEPLTm/2toJxQuMJKKc0xk5/F1Zp
+         4cFkQ8SXkNPc16s3IYVlBaJ5VPw9jgMMzyBPNKOLry1DxKJ0X9Ke2vw5NN8W7fzWd50F
+         23MkluFiQ6q/e5Ii/EH44k5ZkaJkwt645n5UYh/1K2N8j3Y+qETGd8BO+wZLv+gEB1jo
+         ZYLQ==
+X-Gm-Message-State: AOAM532hHaLVtmHuW5KEsHezU4paIBryzmGel4yh2HdMsiiCISdORXRV
+        3GkO18t0PvdBWA0bIpuiodWAMoEE8bo7KX6K4UM=
+X-Google-Smtp-Source: ABdhPJw6V7kYDj37Er8DF4ILO71pnBsQK8iCKJPJ9N4PizW0GXzcRhWAjr724/Exlo83fzJAffo4NfY5obanYQrRWa4=
+X-Received: by 2002:a17:902:d2d1:b0:15e:9b06:28b3 with SMTP id
+ n17-20020a170902d2d100b0015e9b0628b3mr21557574plc.148.1651731184006; Wed, 04
+ May 2022 23:13:04 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YnMdaW67GEDF0Ynr@casper.infradead.org>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+References: <20220502102521.22875-1-dharamhans87@gmail.com> <YnLRnR3Xqu0cYPdb@redhat.com>
+In-Reply-To: <YnLRnR3Xqu0cYPdb@redhat.com>
+From:   Dharmendra Hans <dharamhans87@gmail.com>
+Date:   Thu, 5 May 2022 11:42:51 +0530
+Message-ID: <CACUYsyEsRph+iFC_fj3F6Ceqhq7NCTuFPH3up8R6C+_bGHktZg@mail.gmail.com>
+Subject: Re: [PATCH v4 0/3] FUSE: Implement atomic lookup + open/create
+To:     Vivek Goyal <vgoyal@redhat.com>
+Cc:     Miklos Szeredi <miklos@szeredi.hu>, linux-fsdevel@vger.kernel.org,
+        fuse-devel <fuse-devel@lists.sourceforge.net>,
+        linux-kernel@vger.kernel.org, Bernd Schubert <bschubert@ddn.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 05, 2022 at 01:42:17AM +0100, Matthew Wilcox wrote:
-> On Wed, May 04, 2022 at 04:47:51PM -0700, Minchan Kim wrote:
-> > Since this patch introduces a new "contended" field as out param
-> > in rmap_walk_control, it's not immutable any longer so remove
-> > const keywords on rmap related functions. Since rmap walking
-> > is already expensive operation, I doubt the const would help sizable
-> > benefit(And we didn't have it until 5.17).
-> 
-> Um?  If it's now mutable, it surely can't be static as that means it
-> would be shared by all callers, and you might write to the new fields
-> in one caller and have them interpreted by the other caller!
-> 
-> Or if it is safe, then the comment needs to not be deleted, but modified
-> to explain why it's safe to do so in this instance, and that other
-> instances should not copy the approach unless they are similarly safe.
+On Thu, May 5, 2022 at 12:48 AM Vivek Goyal <vgoyal@redhat.com> wrote:
+>
+> On Mon, May 02, 2022 at 03:55:18PM +0530, Dharmendra Singh wrote:
+> > In FUSE, as of now, uncached lookups are expensive over the wire.
+> > E.g additional latencies and stressing (meta data) servers from
+> > thousands of clients. These lookup calls possibly can be avoided
+> > in some cases. Incoming three patches address this issue.
+>
+> BTW, these patches are designed to improve performance by cutting down
+> on number of fuse commands sent. Are there any performance numbers
+> which demonstrate what kind of improvement you are seeing.
+>
+> Say, If I do kernel build, is the performance improvement observable?
 
-It's safe since rwc.contended is used only when rwc.try_lock is true.
+Here are the numbers I took last time. These were taken on tmpfs to
+actually see the effect of reduced calls. On local file systems it
+might not be that much visible. But we have observed that on systems
+where we have thousands of clients hammering the metadata servers, it
+helps a lot (We did not take numbers yet as  we are required to change
+a lot of our client code but would be doing it later on).
 
-> 
-> > diff --git a/mm/page_idle.c b/mm/page_idle.c
-> > index fc0435abf909..fdff8c6dcd2d 100644
-> > --- a/mm/page_idle.c
-> > +++ b/mm/page_idle.c
-> > @@ -86,11 +86,8 @@ static bool page_idle_clear_pte_refs_one(struct folio *folio,
-> >  static void page_idle_clear_pte_refs(struct page *page)
-> >  {
-> >  	struct folio *folio = page_folio(page);
-> > -	/*
-> > -	 * Since rwc.arg is unused, rwc is effectively immutable, so we
-> > -	 * can make it static const to save some cycles and stack.
-> > -	 */
-> > -	static const struct rmap_walk_control rwc = {
-> > +
-> > +	static struct rmap_walk_control rwc = {
-> >  		.rmap_one = page_idle_clear_pte_refs_one,
-> >  		.anon_lock = folio_lock_anon_vma_read,
-> >  	};
+Note that for a change in performance number due to the new version of
+these patches, we have just refactored the code and functionality has
+remained the same since then.
 
-So, delta is
-
-diff --git a/mm/page_idle.c b/mm/page_idle.c
-index fdff8c6dcd2d..bc08332a609c 100644
---- a/mm/page_idle.c
-+++ b/mm/page_idle.c
-@@ -87,6 +87,10 @@ static void page_idle_clear_pte_refs(struct page *page)
- {
-        struct folio *folio = page_folio(page);
-
-+       /*
-+        * Since rwc.try_lock is unused, rwc is effectively immutable, so we
-+        * can make it static to save some cycles and stack.
-+        */
-        static struct rmap_walk_control rwc = {
-                .rmap_one = page_idle_clear_pte_refs_one,
-                .anon_lock = folio_lock_anon_vma_read,
-
+here is the link to the performance numbers
+https://lore.kernel.org/linux-fsdevel/20220322121212.5087-1-dharamhans87@gmail.com/

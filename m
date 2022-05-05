@@ -2,90 +2,247 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DD3251C79F
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 20:36:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3D2351C6B4
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 20:05:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381682AbiEESff (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 14:35:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56374 "EHLO
+        id S1382977AbiEESJJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 14:09:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385340AbiEESaW (ORCPT
+        with ESMTP id S1382978AbiEESJC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 14:30:22 -0400
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C77C5D644;
-        Thu,  5 May 2022 11:21:01 -0700 (PDT)
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.0.0)
- id 27807f26a92f6163; Thu, 5 May 2022 20:19:40 +0200
-Received: from kreacher.localnet (unknown [213.134.161.219])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id D246266C2F5;
-        Thu,  5 May 2022 20:19:39 +0200 (CEST)
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Linux PCI <linux-pci@vger.kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Anders Roxell <anders.roxell@linaro.org>
-Subject: [PATCH v1 03/11] PCI/PM: Set current_state to D3cold if the device is not accessible
-Date:   Thu, 05 May 2022 20:04:07 +0200
-Message-ID: <10104376.nUPlyArG6x@kreacher>
-In-Reply-To: <4738492.GXAFRqVoOG@kreacher>
-References: <4738492.GXAFRqVoOG@kreacher>
+        Thu, 5 May 2022 14:09:02 -0400
+Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 195A326E1
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 11:05:22 -0700 (PDT)
+Received: by mail-yb1-xb35.google.com with SMTP id s30so8975869ybi.8
+        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 11:05:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=lfs9ILt8sxsLN7d0CVj7IGkIjZk0ddULlJ98hbLjdl0=;
+        b=Ndgpe6IFiFofWceJK8I/DTEcQWT+/sHZsEWM1fYblnv9x81eSyj1R7FuXA8ILnq7mL
+         MirG8+CssXftrYGqNJ4vf1ERQtOm6a4Nq9IPOlrkw8GYT4MTbR51+m8zuOlLdoGmwuqT
+         LCH7motTy7WzByAkTNq0edQigKWkmNqayX293USnIaJr7BJOSxH8GmifZMRZNAE+kkk2
+         zWArlAg0ixMHNJJTifGAlU5k07E2zrU6JttPU9X300dt1NgXtfBycBtCfouCZIPcZCWE
+         LiBSab1rlgeKcaxikFZxkwfIaXNH19dfTS2sMDmjcRpqtla1OP0W8r34tKP8eXHD/c2L
+         VqsA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=lfs9ILt8sxsLN7d0CVj7IGkIjZk0ddULlJ98hbLjdl0=;
+        b=hv/pfQzi/uc06m6BBwfRCeBe+95kiboHGv1dybE5vTeP0tdCkqiC5HpePZWHpeBoz9
+         sCGuBhyn3KKqRAKOQPEwXxU0RtF/+o74jdQZy6iqIYdh90Q7UxZSJYXTgbbdao+11RrI
+         YUqDlRYDXz/54BS2K/mjxmY87SZc8yFLGIgIEoMQBCV7Bdnisgn7E/2JMiITzeKk+QFW
+         7XmL8ScHlQrU5S4ZDka9GOP3Q2mqx5cyeQP0Yi26SsTNKwYTGV/VelPvy93OJibhK/TO
+         zMQz2ej4w33Jo7uwWHBd1QgoeDZAZxpUBHtpXIbAcx1nfaGTaOhwhIY721IJMe/rHUuA
+         OhIw==
+X-Gm-Message-State: AOAM530NUS4Epa0puwyI0jHj/X6YpXYrGW4yB3E21FKTDIjqQXwIlzWd
+        YKpRw8DuG94rAGxy2bAJi0qBFaPq94QlRtIZIgeg/A==
+X-Google-Smtp-Source: ABdhPJxOGddy4d0Gcmj8AKq4eH0h4RCWeNm0um7E0xiCZcOB55dahtuyVvi1XSbZU3Ov8nWjJGuOmIU9Rx3UziGE6Uk=
+X-Received: by 2002:a25:aa62:0:b0:648:590f:5a53 with SMTP id
+ s89-20020a25aa62000000b00648590f5a53mr23847856ybi.5.1651773921071; Thu, 05
+ May 2022 11:05:21 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
+References: <20220426164315.625149-1-glider@google.com> <20220426164315.625149-29-glider@google.com>
+ <87a6c6y7mg.ffs@tglx> <CAG_fn=U7PPBmmkgxFcWFQUCqZitzMizr1e69D9f26sGGzeitLQ@mail.gmail.com>
+ <87y1zjlhmj.ffs@tglx>
+In-Reply-To: <87y1zjlhmj.ffs@tglx>
+From:   Alexander Potapenko <glider@google.com>
+Date:   Thu, 5 May 2022 20:04:44 +0200
+Message-ID: <CAG_fn=XxAhBEBP2KJvahinbaxLAd1xvqTfRJdAu1Tk5r8=01jw@mail.gmail.com>
+Subject: Re: [PATCH v3 28/46] kmsan: entry: handle register passing from
+ uninstrumented code
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Christoph Hellwig <hch@lst.de>,
+        Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Kees Cook <keescook@chromium.org>,
+        Marco Elver <elver@google.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Vegard Nossum <vegard.nossum@oracle.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 213.134.161.219
-X-CLIENT-HOSTNAME: 213.134.161.219
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedrfedugdduvdduucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgjfhgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepvdffueeitdfgvddtudegueejtdffteetgeefkeffvdeftddttdeuhfegfedvjefhnecukfhppedvudefrddufeegrdduiedurddvudelnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvddufedrudefgedrudeiuddrvdduledphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedpnhgspghrtghpthhtohepjedprhgtphhtthhopehlihhnuhigqdhptghisehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepmhhikhgrrdifvghsthgvrhgsvghrgheslhhinhhugidrihhnthgv
- lhdrtghomhdprhgtphhtthhopehhvghlghgrrghssehkvghrnhgvlhdrohhrghdprhgtphhtthhopehnrghthhgrnheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprghnuggvrhhsrdhrohigvghllheslhhinhgrrhhordhorhhg
-X-DCC--Metrics: v370.home.net.pl 1024; Body=7 Fuz1=7 Fuz2=7
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On Tue, May 3, 2022 at 12:00 AM Thomas Gleixner <tglx@linutronix.de> wrote:
+>
+> Alexander,
 
-Make pci_power_up() and pci_set_low_power_state() change current_state
-to PCI_D3cold when the device is not accessible along the lines of
-pci_update_current_state().
+First of all, thanks a lot for the comments, those are greatly appreciated!
+I tried to revert this patch and the previous one ("kmsan:
+instrumentation.h: add instrumentation_begin_with_regs()") and
+reimplement unpoisoning pt_regs without breaking into
+instrumentation_begin(), see below.
 
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- drivers/pci/pci.c |    2 ++
- 1 file changed, 2 insertions(+)
+> >
+> > Regarding the regs, you are right. It should be enough to unpoison the
+> > regs at idtentry prologue instead.
+> > I tried that initially, but IIRC it required patching each of the
+> > DEFINE_IDTENTRY_XXX macros, which already use instrumentation_begin().
+>
+> Exactly 4 instances :)
+>
 
-Index: linux-pm/drivers/pci/pci.c
-===================================================================
---- linux-pm.orig/drivers/pci/pci.c
-+++ linux-pm/drivers/pci/pci.c
-@@ -1207,6 +1207,7 @@ int pci_power_up(struct pci_dev *dev)
- 	if (PCI_POSSIBLE_ERROR(pmcsr)) {
- 		pci_err(dev, "Unable to change power state from %s to D0, device inaccessible\n",
- 			pci_power_name(dev->current_state));
-+		dev->current_state = PCI_D3cold;
- 		return -EIO;
- 	}
- 
-@@ -1335,6 +1336,7 @@ static int pci_set_low_power_state(struc
- 		pci_err(dev, "Unable to change power state from %s to %s, device inaccessible\n",
- 			pci_power_name(dev->current_state),
- 			pci_power_name(state));
-+		dev->current_state = PCI_D3cold;
- 		return -EIO;
- 	}
- 
+Not really, I had to add a call to `kmsan_unpoison_memory(regs,
+sizeof(*regs));` to the following places in
+arch/x86/include/asm/idtentry.h:
+- DEFINE_IDTENTRY()
+- DEFINE_IDTENTRY_ERRORCODE()
+- DEFINE_IDTENTRY_RAW()
+- DEFINE_IDTENTRY_RAW_ERRORCODE()
+- DEFINE_IDTENTRY_IRQ()
+- DEFINE_IDTENTRY_SYSVEC()
+- DEFINE_IDTENTRY_SYSVEC_SIMPLE()
+- DEFINE_IDTENTRY_DF()
+
+, but even that wasn't enough. For some reason I also had to unpoison
+pt_regs directly in
+DEFINE_IDTENTRY_SYSVEC(sysvec_apic_timer_interrupt) and
+DEFINE_IDTENTRY_IRQ(common_interrupt).
+In the latter case, this could have been caused by
+asm_common_interrupt being entered from irq_entries_start(), but I am
+not sure what is so special about sysvec_apic_timer_interrupt().
+
+Ideally, it would be great to find that single point where pt_regs are
+set up before being passed to all IDT entries.
+I used to do that by inserting calls to kmsan_unpoison_memory right
+into arch/x86/entry/entry_64.S
+(https://github.com/google/kmsan/commit/3b0583f45f74f3a09f4c7e0e0588169cef9=
+18026),
+but that required storing/restoring all GP registers. Maybe there's a
+better way?
+
+
+>
+> then
+>
+>      instrumentation_begin();
+>      foo(fargs...);
+>      bar(bargs...);
+>      instrumentation_end();
+>
+> is a source of potential false positives because the state is not
+> guaranteed to be correct, neither for foo() nor for bar(), even if you
+> wipe the state in instrumentation_begin(), right?
+
+Yes, this is right.
+
+> This approximation approach smells fishy and it's inevitably going to be
+> a constant source of 'add yet another kmsan annotation/fixup' patches,
+> which I'm not interested in at all.
+>
+> As this needs compiler support anyway, then why not doing the obvious:
+>
+> #define noinstr                                 \
+>         .... __kmsan_conditional
+>
+> #define instrumentation_begin()                 \
+>         ..... __kmsan_cond_begin
+>
+> #define instrumentation_end()                   \
+>         __kmsan_cond_end .......
+>
+> and let the compiler stick whatever is required into that code section
+> between instrumentation_begin() and instrumentation_end()?
+
+We define noinstr as
+__attribute__((disable_sanitizer_instrumentation))
+(https://llvm.org/docs/LangRef.html#:~:text=3Ddisable_sanitizer_instrumenta=
+tion),
+which means no instrumentation will be applied to the annotated
+function.
+Changing that behavior by adding subregions that can be instrumented
+sounds questionable.
+C also doesn't have good syntactic means to define these subregions -
+perhaps some __xxx_begin()/__xxx_end() intrinsics would work, but they
+would require both compile-time and run-time validation.
+
+Fortunately, I don't think we need to insert extra instrumentation
+into instrumentation_begin()/instrumentation_end() regions.
+
+What I have in mind is adding a bool flag to kmsan_context_state, that
+the instrumentation sets to true before the function call.
+When entering an instrumented function, KMSAN would check that flag
+and set it to false, so that the context state can be only used once.
+If a function is called from another instrumented function, the
+context state is properly set up, and there is nothing to worry about.
+If it is called from non-instrumented code (either noinstr or the
+skipped files that have KMSAN_SANITIZE:=3Dn), KMSAN would detect that
+and wipe the context state before use.
+
+By the way, I've noticed that at least for now (with pt_regs
+unpoisoning performed in IDT entries) the problem with false positives
+in noinstr code is entirely gone, so maybe we don't even have to
+bother.
+
+> Yes, it's more work on the tooling side, but the tooling side is mostly
+> a one time effort while chasing the false positives is a long term
+> nightmare.
+
+Well said.
+
+> Thanks,
+>
+>         tglx
 
 
 
+--=20
+Alexander Potapenko
+Software Engineer
+
+Google Germany GmbH
+Erika-Mann-Stra=C3=9Fe, 33
+80636 M=C3=BCnchen
+
+Gesch=C3=A4ftsf=C3=BChrer: Paul Manicle, Liana Sebastian
+Registergericht und -nummer: Hamburg, HRB 86891
+Sitz der Gesellschaft: Hamburg
+
+Diese E-Mail ist vertraulich. Falls Sie diese f=C3=A4lschlicherweise
+erhalten haben sollten, leiten Sie diese bitte nicht an jemand anderes
+weiter, l=C3=B6schen Sie alle Kopien und Anh=C3=A4nge davon und lassen Sie =
+mich
+bitte wissen, dass die E-Mail an die falsche Person gesendet wurde.
+
+
+This e-mail is confidential. If you received this communication by
+mistake, please don't forward it to anyone else, please erase all
+copies and attachments, and please let me know that it has gone to the
+wrong person.

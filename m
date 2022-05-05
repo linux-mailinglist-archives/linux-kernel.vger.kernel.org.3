@@ -2,192 +2,228 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D57351B993
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 10:04:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78A2051B98F
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 10:03:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346214AbiEEIGS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 04:06:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38264 "EHLO
+        id S239337AbiEEIHA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 04:07:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346238AbiEEIGP (ORCPT
+        with ESMTP id S239748AbiEEIG5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 04:06:15 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3977D33E24
-        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 01:02:36 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id s14so3687571plk.8
-        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 01:02:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=PShkJzVucYzHmTWOWA19iZ2R7/CUl/du8x+v8/m6eak=;
-        b=rXiO+G2RVXc79XKg+DxGCyvWynPSvXSf5jHVcLN6vb8WTIXeDgIGVT9fXj2f7csWGP
-         hgBzSRld+vHsk8GHK0BCXG0OTatp1gKjEN/+drDy44zoWmUKOJbZtYd3W32uXzIebLrJ
-         LZLVxRpSkwc7TfRK/qKQLZos1PlfwEQv7hC14IxjPLY00C0+JbHSwcR6BettVHJLH8jJ
-         0mHVxHwTyPXk8yqvjcCLskCITBkRQo2vU1Yqpo+pSNugqCxyjcfn2cG1cFaVw4k5Or4v
-         YKTDltG7pWJ99XQ9JeSowH8FY4RaAoyI2zSRNCxXgchnAnAp4beFlmJROU1f//FlC1bN
-         3tAw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=PShkJzVucYzHmTWOWA19iZ2R7/CUl/du8x+v8/m6eak=;
-        b=TYHr0oR80C2xOhKh+yvRrQ4OEBZWGqx4wFK6b8L5rofPyR8F3Hkp/vP8Q50vXgeCz3
-         yw8v61dIyHlV5rXChrEqSQ9Zat35X7KgvFuY8dJRD5cPwtVG1ZdE3wH/1L4aW47oE4EL
-         u1oKADACDNeBBsINAZKJQWPQq3Gzb+mvMPjPCrAFvyHJMLapZ5RFE4bl0KVNsIAiDgQM
-         62ZS3Nv00cw8TygcZnx/jkzkGgdVI2hdRi/hcSwoEUvyp9kcqm31IuEebK8cSBnPedcB
-         veyDE6VmxkjS1xTY62UpPYvx3kEXBPDZJ5256eiLjDn5EdIASSRwqiRW8rZNmm9SSgzq
-         RSow==
-X-Gm-Message-State: AOAM531u4hkZqyq2Ko+2K1yDspiDYRPZwQE6bOCWlKH3pIlDfLxIZqT5
-        tYFqPFRTfbMDHfjpecezg4/8UA==
-X-Google-Smtp-Source: ABdhPJzcmP/gFjk5XJNOBaDdYfBOx/5hGLiE7KzRJVfV8g6ITCklmhjuG/AU1KnZXR3qk8hUmvtw3g==
-X-Received: by 2002:a17:902:e494:b0:15a:4b81:1c16 with SMTP id i20-20020a170902e49400b0015a4b811c16mr26803407ple.10.1651737755636;
-        Thu, 05 May 2022 01:02:35 -0700 (PDT)
-Received: from localhost ([139.177.225.234])
-        by smtp.gmail.com with ESMTPSA id p9-20020a170902a40900b0015e8d4eb2acsm793721plq.246.2022.05.05.01.02.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 May 2022 01:02:35 -0700 (PDT)
-Date:   Thu, 5 May 2022 16:02:31 +0800
-From:   Muchun Song <songmuchun@bytedance.com>
-To:     Mike Kravetz <mike.kravetz@oracle.com>
-Cc:     corbet@lwn.net, akpm@linux-foundation.org, mcgrof@kernel.org,
-        keescook@chromium.org, yzaikin@google.com, osalvador@suse.de,
-        david@redhat.com, masahiroy@kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        duanxiongchun@bytedance.com, smuchun@gmail.com
-Subject: Re: [PATCH v9 4/4] mm: hugetlb_vmemmap: add hugetlb_optimize_vmemmap
- sysctl
-Message-ID: <YnOEl6Qwp5jp7RHp@FVFYT0MHHV2J>
-References: <20220429121816.37541-1-songmuchun@bytedance.com>
- <20220429121816.37541-5-songmuchun@bytedance.com>
- <eadec7de-2e1a-2fb3-3317-c7b492a84e2b@oracle.com>
- <YnM4DRFhdD6iZIs1@FVFYT0MHHV2J.googleapis.com>
- <f77412f1-ffe5-659d-8a7d-578e0e8c5e2c@oracle.com>
+        Thu, 5 May 2022 04:06:57 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1F3DC31365
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 01:03:18 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9E50E1042;
+        Thu,  5 May 2022 01:03:17 -0700 (PDT)
+Received: from e120937-lin (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 294DF3FA27;
+        Thu,  5 May 2022 01:03:16 -0700 (PDT)
+Date:   Thu, 5 May 2022 09:03:14 +0100
+From:   Cristian Marussi <cristian.marussi@arm.com>
+To:     Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
+Cc:     Sudeep Holla <sudeep.holla@arm.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org,
+        Heiko Stuebner <heiko@sntech.de>,
+        Liang Chen <cl@rock-chips.com>, linux-kernel@vger.kernel.org,
+        Kever Yang <kever.yang@rock-chips.com>,
+        Jeffy Chen <jeffy.chen@rock-chips.com>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Etienne Carriere <etienne.carriere@linaro.org>
+Subject: Re: [BUG] New arm scmi check in linux-next causing rk3568 not to
+ boot due to firmware bug
+Message-ID: <YnOEwuuyO2/h7c1G@e120937-lin>
+References: <1698297.NAKyZzlH2u@archbook>
+ <20220504132130.wmmmge6qjc675jw6@bogus>
+ <3764923.NsmnsBrXv5@archbook>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <f77412f1-ffe5-659d-8a7d-578e0e8c5e2c@oracle.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <3764923.NsmnsBrXv5@archbook>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 04, 2022 at 08:36:00PM -0700, Mike Kravetz wrote:
-> On 5/4/22 19:35, Muchun Song wrote:
-> > On Wed, May 04, 2022 at 03:12:39PM -0700, Mike Kravetz wrote:
-> >> On 4/29/22 05:18, Muchun Song wrote:
-> >>> +static void vmemmap_optimize_mode_switch(enum vmemmap_optimize_mode to)
-> >>> +{
-> >>> +	if (vmemmap_optimize_mode == to)
-> >>> +		return;
-> >>> +
-> >>> +	if (to == VMEMMAP_OPTIMIZE_OFF)
-> >>> +		static_branch_dec(&hugetlb_optimize_vmemmap_key);
-> >>> +	else
-> >>> +		static_branch_inc(&hugetlb_optimize_vmemmap_key);
-> >>> +	vmemmap_optimize_mode = to;
-> >>> +}
-> >>> +
-> >>>  static int __init hugetlb_vmemmap_early_param(char *buf)
-> >>>  {
-> >>>  	bool enable;
-> >>> +	enum vmemmap_optimize_mode mode;
-> >>>  
-> >>>  	if (kstrtobool(buf, &enable))
-> >>>  		return -EINVAL;
-> >>>  
-> >>> -	if (enable)
-> >>> -		static_branch_enable(&hugetlb_optimize_vmemmap_key);
-> >>> -	else
-> >>> -		static_branch_disable(&hugetlb_optimize_vmemmap_key);
-> >>> +	mode = enable ? VMEMMAP_OPTIMIZE_ON : VMEMMAP_OPTIMIZE_OFF;
-> >>> +	vmemmap_optimize_mode_switch(mode);
-> >>>  
-> >>>  	return 0;
-> >>>  }
-> >>> @@ -60,6 +80,8 @@ int hugetlb_vmemmap_alloc(struct hstate *h, struct page *head)
-> >>>  	vmemmap_end	= vmemmap_addr + (vmemmap_pages << PAGE_SHIFT);
-> >>>  	vmemmap_reuse	= vmemmap_addr - PAGE_SIZE;
-> >>>  
-> >>> +	VM_BUG_ON_PAGE(!vmemmap_pages, head);
-> >>> +
-> >>>  	/*
-> >>>  	 * The pages which the vmemmap virtual address range [@vmemmap_addr,
-> >>>  	 * @vmemmap_end) are mapped to are freed to the buddy allocator, and
-> >>> @@ -69,8 +91,10 @@ int hugetlb_vmemmap_alloc(struct hstate *h, struct page *head)
-> >>>  	 */
-> >>>  	ret = vmemmap_remap_alloc(vmemmap_addr, vmemmap_end, vmemmap_reuse,
-> >>>  				  GFP_KERNEL | __GFP_NORETRY | __GFP_THISNODE);
-> >>> -	if (!ret)
-> >>> +	if (!ret) {
-> >>>  		ClearHPageVmemmapOptimized(head);
-> >>> +		static_branch_dec(&hugetlb_optimize_vmemmap_key);
-> >>> +	}
-> >>>  
-> >>>  	return ret;
-> >>>  }
-> >>> @@ -84,6 +108,8 @@ void hugetlb_vmemmap_free(struct hstate *h, struct page *head)
-> >>>  	if (!vmemmap_pages)
-> >>>  		return;
-> >>>  
-> >>> +	static_branch_inc(&hugetlb_optimize_vmemmap_key);
-> >>
-> >> Can you explain the reasoning behind doing the static_branch_inc here in free,
-> >> and static_branch_dec in alloc?
-> >> IIUC, they may not be absolutely necessary but you could use the count to
-> >> know how many optimized pages are in use?  Or, I may just be missing
-> >> something.
-> >>
+On Wed, May 04, 2022 at 07:51:45PM +0200, Nicolas Frattaroli wrote:
+> On Mittwoch, 4. Mai 2022 15:21:30 CEST Sudeep Holla wrote:
+> > + Cristian
+
++Etieenne
+
+Hi Nicolas,
+
 > > 
-> > Partly right. One 'count' is not enough. I have implemented this with similar
-> > approach in v6 [1]. Except the 'count', we also need a lock to do synchronization.
-> > However, both count and synchronization are included in static_key_inc/dec
-> > infrastructure. It is simpler to use static_key_inc/dec directly, right? 
+> > Hi Nicolas,
 > > 
-> > [1] https://lore.kernel.org/all/20220330153745.20465-5-songmuchun@bytedance.com/
+> > Thanks for the formal report.
 > > 
+> > On Wed, May 04, 2022 at 02:49:07PM +0200, Nicolas Frattaroli wrote:
+> > > Good day,
+> > > 
+> > > a user on the #linux-rockchip channel on the Libera.chat IRC network
+> > > reported that their RK3568 was no longer getting a CPU and GPU clock
+> > > from scmi and consequently not booting when using linux-next. This
+> > > was bisected down to the following commit:
+> > > 
+> > > https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/drivers/firmware/arm_scmi/base.c?h=next-20220503&id=3b0041f6e10e5bdbb646d98172be43e88734ed62
+> > > 
+> > > The error message in the log is as follows:
+> > > 
+> > > arm-scmi firmware:scmi: Malformed reply - real_sz:8  calc_sz:4, t->rx.len is 12, sizeof(u32) is 4, loop_num_ret is 3
+> > > 
+> > > The rockchip firmware (bl31) being used was v1.32, from here:
+> > > 
+> > > https://github.com/JeffyCN/rockchip_mirrors/blob/rkbin/bin/rk35/rk3568_bl31_v1.32.elf
+> > >
+> > 
+> > So this platform is not supported in upstream TF-A like its predecessors ?
 > 
-> Sorry, but I am a little confused.
+> Hello,
 > 
-> vmemmap_optimize_mode_switch will static_key_inc to enable and static_key_dec
-> to disable.  In addition each time we optimize (allocate) a hugetlb page after
-> enabling we will static_key_inc.
+> it is not yet supported by upstream. Rockchip plans to release the sources
+> for it at some point if I recall correctly, but I believe their software
+> team has been very busy due to new hardware releases, so it hasn't happened
+> yet. I hope we'll see an open source release of the TF-A sources eventually,
+> so that for bugs like this we can always fix them without the vendor needing
+> to do it for us.
 > 
-> Suppose we have 1 hugetlb page optimized.  So static count == 2 IIUC.
-> The someone turns off optimization via sysctl.  static count == 1 ???
+> > 
+> > > This seems like a non-fatal firmware bug, for which a kernel workaround is
+> > > certainly possible, but it would be good if rockchip could fix this in their
+> > > firmware.
+> > >
+> > 
+> > Indeed, we added this check finding issue in one of our tests. Luckily
+> > it helped to unearth the same issue on this platform, but due to the
+> > nature of its f/w release, it is bit unfortunate that it can't be fixed
+> > easily and quickly. But I really wish this gets fixed in the firmware.
+> > Are there any other f/w bugs reported so far ? If so how are they fixed
+> > as I don't expect all such bugs can be worked around in the kernel though
+> > this might be. I would like to hear details there if possible.
+> 
+> I'm not aware of how the rockchip bug report workflow works. They seemingly
+> did update the firmware multiple times, last in October of 2021.
+> 
+> The official rockchip repository at [1] hasn't been kept as up to date as
+> the mirror by a rockchip employee at [2], so most people seem to have been
+> using the latter. Speaking of which, I'll add the owner of that repo to 
+> the CC of this thread to make sure this doesn't get lost.
+> 
+> Rockchip lists an e-mail at [3] for reporting issues at, but this seems to
+> relate to their open-source documentation. The official github repository
+> of "rkbin" on the "rockchip-linux" organisation does not have issues
+> enabled, so submitting a bug report through that is unfortunately not
+> possible.
 
-Definitely right.
+Having a quick look at TF-A SCMI code in charge of this message (at least in
+the upstream):
 
-> If we then add another hugetlb page via nr_hugepages it seems that it
-> would be optimized as static count == 1.  Is that correct?  Do we need
+https://git.trustedfirmware.org/TF-A/trusted-firmware-a.git/tree/drivers/scmi-msg/base.c#n136
 
-I'm wrong.
+it seems to me that the bug lies in the fact that the BASE_DISCOVER_PROTOCOLS
+response message built by the function above is not properly sized: the trailing
+message payload carrying the list of protocols (after returned_protos field) returns
+always a fixed arbitrarily sized payload, possibly zeroed if fewer protocols are
+carried.
 
-> to free all hugetlb pages with optimization before we can add new pages
-> without optimization?
->
+IOW, even though the answer in this case carries 3 items/protocols, the payload
+is anyway 8 bytes (with the last 5 bytes zeroed), while by the spec it should have
+been just 4 bytes.
 
-My bad. I think the following code would fix this.
+(in fact testing the kernel fix on a JUNO with last SCP fw release did NOT expose
+any issue...)
 
-Thanks for your review carefully.
+I think a fix FW side could be something along these lines (UNTESTED NOR
+BUILT ! ... I Cc'ed Etienne that seems the author of this bit)
 
-diff --git a/mm/hugetlb_vmemmap.c b/mm/hugetlb_vmemmap.c
-index 5820a681a724..997e192aeed7 100644
---- a/mm/hugetlb_vmemmap.c
-+++ b/mm/hugetlb_vmemmap.c
-@@ -105,7 +105,7 @@ void hugetlb_vmemmap_free(struct hstate *h, struct page *head)
-        unsigned long vmemmap_end, vmemmap_reuse, vmemmap_pages;
+This basically mirrors the same checks introduced in kernel...if someone
+is fancy/able to test it....
 
-        vmemmap_pages = hugetlb_optimize_vmemmap_pages(h);
--       if (!vmemmap_pages)
-+       if (!vmemmap_pages || READ_ONCE(vmemmap_optimize_mode) == VMEMMAP_OPTIMIZE_OFF)
-                return;
+---
 
-        static_branch_inc(&hugetlb_optimize_vmemmap_key);
+diff --git a/drivers/scmi-msg/base.c b/drivers/scmi-msg/base.c
+index 2d7203451..35c99e308 100644
+--- a/drivers/scmi-msg/base.c
++++ b/drivers/scmi-msg/base.c
+@@ -142,6 +142,7 @@ static void discover_list_protocols(struct scmi_msg *msg)
+        uint8_t outargs[sizeof(p2a) + MAX_PROTOCOL_IN_LIST] = { 0U };
+        const uint8_t *list = NULL;
+        unsigned int count = 0U;
++       size_t list_sz = 0U;
  
+        if (msg->in_size != sizeof(*a2p)) {
+                scmi_status_response(msg, SCMI_PROTOCOL_ERROR);
+@@ -163,9 +164,12 @@ static void discover_list_protocols(struct scmi_msg *msg)
+        p2a.num_protocols = count;
+ 
+        memcpy(outargs, &p2a, sizeof(p2a));
+-       memcpy(outargs + sizeof(p2a), list + a2p->skip, count);
+-
+-       scmi_write_response(msg, outargs, sizeof(outargs));
++       if (count) {
++               memcpy(outargs + sizeof(p2a), list + a2p->skip, count);
++               list_sz = (1 + (count - 1) / sizeof(uint32_t)) *
++                          sizeof(uint32_t);
++       }
++       scmi_write_response(msg, outargs, sizeof(p2a) + list_sz);
+ }
+
+
+> 
+> > 
+> > > The user going by "amazingfate" reported that commenting out the
+> > >   ret = -EPROTO; break;
+> > > fixes the issue for them.
+> > >
+> > 
+> > Sure, or we could relax the check as calc_sz <= real_sz or something so
+> > that the reverse is still caught and handled as OS might read junk data in
+> > the later case.
+> 
+> This seems like a good solution, that way we're unlikely to ever run into a
+> situation where the kernel does the wrong thing here even if we're less
+> strict about the check. In either case, it should print a dev_err though,
+> it's still an error even if we can tolerate it in some cases.
+> 
+> > 
+
+Beside fixing the FW, adding a workaround like the one Sudeep mentioned to
+avoid killing old fw plaform seems reasonable: we can just _err() as long as
+Kernel is not put into peril (i.e. calc_sz <= real_sz ) without
+necessarily bail out if an out of spec, but harmless, message is
+spotted.
+
+> > > I'm writing here to get the discussion started on how we can resolve this
+> > > before the Linux 5.19 release.
+> > >
+> > 
+> > Agreed, I just sent by pull request for this literally few hours ago.
+> > 
+> > > Sudeep Holla has already told me they'll gladly add a workaround before
+> > > the 5.19 release, but would rather see this fixed in the vendor firmware
+> > > first. Would rockchip be able and willing to fix it and publish a new
+> > > bl31 for rk3568?
+> > >
+> > 
+> > Indeed and as mentioned above details on how other such f/w bugs are dealt
+> > in general esp that the firmware is blob release and one can't fix it easily.
+> > Do we have a bugzilla kind of setup to report and get the bugs fixed ?
+> 
+> It's worth mentioning that I think even if we get Rockchip to fix the bug in
+> the firmware, I believe Linux should still add a workaround, as otherwise
+> people running older firmware who are upgrading their kernels could suddenly
+> have unbootable systems and don't know why that happened.
+> 
+
+Agree.
+
+Thanks,
+Cristian

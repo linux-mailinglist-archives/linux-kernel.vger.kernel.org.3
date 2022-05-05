@@ -2,61 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFDF451B84B
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 08:57:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40CC951B848
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 08:56:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240917AbiEEHAj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 03:00:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39438 "EHLO
+        id S231454AbiEEG7t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 02:59:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236957AbiEEHAe (ORCPT
+        with ESMTP id S238079AbiEEG7p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 03:00:34 -0400
-Received: from conssluserg-02.nifty.com (conssluserg-02.nifty.com [210.131.2.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 198F7377EF;
-        Wed,  4 May 2022 23:56:54 -0700 (PDT)
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173]) (authenticated)
-        by conssluserg-02.nifty.com with ESMTP id 2456uUBv002675;
-        Thu, 5 May 2022 15:56:31 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-02.nifty.com 2456uUBv002675
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1651733791;
-        bh=i8UVQkDD1UoDas2ND/0n+dx2bVcfUGCIy5PTWE5iI2U=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=NtasHN6CYnJgzyHeGmjakUgOvG3aQKwjwNspzBvJfa1nSTNKB4VJeRjgFr0h5iWGJ
-         Ed2Et83jp97YZI9+ZUWaVzBXPPX1vZ//SjsMzPahP6YGDI5Rd6UKLEL/MHair6kyzE
-         HPhD5JAqaR9pf4QesMJeU20UDYZQYyN+9Eq9t/5sTApSPPHiolvlKR3iSxpM9YwyXe
-         2SUg+dGMYYWojipEOySJ7oKWhzNz6zcZYI7ZbcxDIqt71lS+B1o/lBT2V8FMZjjC44
-         pAno5SkQ/NzVS7IwoMVpMOfRvBVdrIQlZgTvw4h4vP7BDlaSmNWsGYuPIPixYu9ei/
-         PJTBm3RAS79dg==
-X-Nifty-SrcIP: [209.85.214.173]
-Received: by mail-pl1-f173.google.com with SMTP id c9so2868684plh.2;
-        Wed, 04 May 2022 23:56:31 -0700 (PDT)
-X-Gm-Message-State: AOAM5311GHW8mMR+MGIR17B/xRk2rCgDmGgXiEvAmLV8Y+9CX++l37uF
-        WTAUnh9wisV+08zzPQpBX0G5goKwElr2M4sYZeo=
-X-Google-Smtp-Source: ABdhPJxsF51fbTyL6C4bazzUfCl2jPYlFrYotwR5hNcMGm8bZWKjxRNEqo5gx4CM+pyfrjnfAbsIB5F+gLE6/gs6RWU=
-X-Received: by 2002:a17:902:9887:b0:151:6e1c:7082 with SMTP id
- s7-20020a170902988700b001516e1c7082mr25314570plp.162.1651733790231; Wed, 04
- May 2022 23:56:30 -0700 (PDT)
+        Thu, 5 May 2022 02:59:45 -0400
+Received: from mail-qv1-f47.google.com (mail-qv1-f47.google.com [209.85.219.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2825377EF;
+        Wed,  4 May 2022 23:56:06 -0700 (PDT)
+Received: by mail-qv1-f47.google.com with SMTP id kd11so2426566qvb.2;
+        Wed, 04 May 2022 23:56:06 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=H63lRZ0aFf3Uo76l2TVh/QJRDaMCJkmpdWde3tg+LhI=;
+        b=cPwm6ZXgyQ2cTIJMEtRRARC53JUjs1pmcu4OQyZmKC14uK3I3TtMS3XmgZQ1NeQwIG
+         pnQT5gbnwFJ5BoL+DRu9crcxsbh6lV17HFODuZEUVwW89faDbUQeILJYgd8aQJGfy0YT
+         AGk/qi7epfw7Q7QaTnWfS0weLdCIE426hroSacPM0nLy0gAEofrW4VYfcUOioJzXIM7A
+         Vn6cypN7m7yGl0pgD9nTd2uGHX+erc6B33oWi60OEZ7dvREJ/wpil89J/QCLEPNtABCK
+         OSWRXwjn81oELKmTkcDJBkRJBLF3JoIZqO4mIuEiLeu5Lpnaz597JBMp4h54ArKcobUK
+         +8Wg==
+X-Gm-Message-State: AOAM53121veNiKmaW9JqgyyvHOwM3eDUMOzM27vPdgUAzI0HGOntX0Uo
+        7ove0PJssLHpWWppXgHRwiQqC9+lV2xv2w==
+X-Google-Smtp-Source: ABdhPJz1y9lRi4pNrieAI7o05QV3pJBfPjr3R/eTdXcGA44dXsGlJJQsq5OS/haoiOH+f/0ZDNxwbg==
+X-Received: by 2002:a0c:e409:0:b0:45a:8a6e:c771 with SMTP id o9-20020a0ce409000000b0045a8a6ec771mr15624117qvl.123.1651733765729;
+        Wed, 04 May 2022 23:56:05 -0700 (PDT)
+Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com. [209.85.128.176])
+        by smtp.gmail.com with ESMTPSA id l14-20020ac84a8e000000b002f39b99f68dsm417304qtq.39.2022.05.04.23.56.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 04 May 2022 23:56:05 -0700 (PDT)
+Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-2ef5380669cso38504037b3.9;
+        Wed, 04 May 2022 23:56:05 -0700 (PDT)
+X-Received: by 2002:a81:913:0:b0:2f7:c833:f304 with SMTP id
+ 19-20020a810913000000b002f7c833f304mr23117982ywj.283.1651733765108; Wed, 04
+ May 2022 23:56:05 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220501084032.1025918-1-masahiroy@kernel.org>
-In-Reply-To: <20220501084032.1025918-1-masahiroy@kernel.org>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Thu, 5 May 2022 15:55:23 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAQ3JmpfJRU4xJisuZCzpN7OkK078MP5okBT-PD=N1R9jg@mail.gmail.com>
-Message-ID: <CAK7LNAQ3JmpfJRU4xJisuZCzpN7OkK078MP5okBT-PD=N1R9jg@mail.gmail.com>
-Subject: Re: [PATCH v2 00/26] kbuild: yet another series of cleanups (modpost
- and LTO)
-To:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        clang-built-linux <llvm@lists.linux.dev>
+References: <20220504142333.8844-1-guozhengkui@vivo.com>
+In-Reply-To: <20220504142333.8844-1-guozhengkui@vivo.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 5 May 2022 08:55:53 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdW=V=92VnD2sPpuXwJ1CAj-swC10vcSssLArbrPULs4-A@mail.gmail.com>
+Message-ID: <CAMuHMdW=V=92VnD2sPpuXwJ1CAj-swC10vcSssLArbrPULs4-A@mail.gmail.com>
+Subject: Re: [PATCH] clk: renesas: rzg2l: remove repeated data
+To:     Guo Zhengkui <guozhengkui@vivo.com>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        zhengkui_guo@outlook.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,80 +68,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 1, 2022 at 5:42 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
->
->
-> This is the third batch of cleanups in this development cycle.
->
-> Major changes in v2:
->
->  - V1 did not work with CONFIG_MODULE_REL_CRCS.
->    I fixed this for v2.
->
->  - Reflect some review comments in v1
->
->  - Refactor the code more
->
->  - Avoid too long argument error
->
->
->
-> Masahiro Yamada (26):
->   modpost: use bool type where appropriate
->   modpost: change mod->gpl_compatible to bool type
->   modpost: import include/linux/list.h
->   modpost: traverse modules in order
->   modpost: add sym_add_unresolved() helper
->   modpost: traverse unresolved symbols in order
->   modpost: use doubly linked list for dump_lists
->   modpost: traverse the namespace_list in order
->   modpost: dump Module.symvers in the same order of modules.order
->   modpost: move static EXPORT_SYMBOL check to check_exports()
->   modpost: make multiple export error
->   modpost: make sym_add_exported() always allocate a new symbol
->   modpost: split new_symbol() to symbol allocation and hash table
->     addition
->   modpost: mitigate false-negatives for static EXPORT_SYMBOL checks
->   kbuild: record symbol versions in *.cmd files
->   kbuild: generate a list of objects in vmlinux
->   modpost: extract symbol versions from *.cmd files
->   modpost: generate linker script to collect symbol versions
->   kbuild: embed symbol versions at final link of vmlinux or modules
->   kbuild: stop merging *.symversions
->   genksyms: adjust the output format for .cmd files
->   kbuild: do not create *.prelink.o for Clang LTO or IBT
->   kbuild: make built-in.a rule robust against too long argument error
->   kbuild: make *.mod rule robust against too long argument error
->   modpost: simplify the ->is_static initialization
->   modpost: use hlist for hash table implementation
+Hi Guo,
 
-Applied 01-13 to linux-kbuild
-with Nick's reviewed-by.
-
-I will send v3 for the rest.
-
->  .gitignore                  |   1 +
->  Makefile                    |   1 +
->  scripts/Kbuild.include      |   4 +
->  scripts/Makefile.build      | 118 +++------
->  scripts/Makefile.lib        |   7 -
->  scripts/Makefile.modfinal   |   6 +-
->  scripts/Makefile.modpost    |  10 +-
->  scripts/genksyms/genksyms.c |  17 +-
->  scripts/link-vmlinux.sh     |  34 +--
->  scripts/mod/file2alias.c    |   2 -
->  scripts/mod/list.h          | 265 +++++++++++++++++++
->  scripts/mod/modpost.c       | 501 ++++++++++++++++++++++--------------
->  scripts/mod/modpost.h       |  24 +-
->  scripts/mod/sumversion.c    |   8 +-
->  14 files changed, 650 insertions(+), 348 deletions(-)
->  create mode 100644 scripts/mod/list.h
+On Wed, May 4, 2022 at 4:24 PM Guo Zhengkui <guozhengkui@vivo.com> wrote:
+> Remove a repeated CPG_SIPLL5_CLK1_REFDIV_WEN.
 >
-> --
-> 2.32.0
+> Signed-off-by: Guo Zhengkui <guozhengkui@vivo.com>
+
+Thanks for your patch!
+
+> --- a/drivers/clk/renesas/rzg2l-cpg.c
+> +++ b/drivers/clk/renesas/rzg2l-cpg.c
+> @@ -601,9 +601,8 @@ static int rzg2l_cpg_sipll5_set_rate(struct clk_hw *hw,
 >
+>         /* Output clock setting 1 */
+>         writel(CPG_SIPLL5_CLK1_POSTDIV1_WEN | CPG_SIPLL5_CLK1_REFDIV_WEN |
+> -              CPG_SIPLL5_CLK1_REFDIV_WEN  | (params.pl5_postdiv1 << 0) |
+
+This is not correct: one of the CPG_SIPLL5_CLK1_REFDIV_WENs
+should have been CPG_SIPLL5_CLK1_POSTDIV2_WEN.
+
+> -              (params.pl5_postdiv2 << 4) | (params.pl5_refdiv << 8),
+> -              priv->base + CPG_SIPLL5_CLK1);
+> +              (params.pl5_postdiv1 << 0) | (params.pl5_postdiv2 << 4) |
+> +              (params.pl5_refdiv << 8), priv->base + CPG_SIPLL5_CLK1);
+>
+>         /* Output clock setting, SSCG modulation value setting 3 */
+>         writel((params.pl5_fracin << 8), priv->base + CPG_SIPLL5_CLK3);
 
 
--- 
-Best Regards
-Masahiro Yamada
+So I'm going for Wan's fix instead
+https://lore.kernel.org/r/20220504142058.18704-1-wanjiabing@vivo.com/
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

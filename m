@@ -2,115 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6530D51BFA1
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 14:40:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C768651BF9F
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 14:40:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377405AbiEEMnW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 08:43:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47830 "EHLO
+        id S1377514AbiEEMnb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 08:43:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346505AbiEEMnT (ORCPT
+        with ESMTP id S1377465AbiEEMn2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 08:43:19 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10AED554AD;
-        Thu,  5 May 2022 05:39:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=MR1Suk6Z26VQH6EVEjcO9jgsClsEMNnUR8xQJnq/MaA=; b=l0RlIqaVNL6SklggkXb7Ebiv5v
-        fMacZdF2nfntj7gRwgmz7Cz2sDP6p/qAa698ar2YKEkURpxh8AVSYsOOlPWLFXHIGBkz8RdLmlxpl
-        eWlB26GsRtVM6jAbefI+uvyZFFSnyaGrlf9v3maBuPCA1uWcwI+bTDXeOctA8SUKP3omiW/YJv2ht
-        jkPVJwr11StUKPCfA0lLjpgJz5NH4RPCb1Rjs4p8L7KyOH5kjB+JBGGxvUFRJLD8VouJ4TdfZcqUn
-        6h+wGf5sHxy7GFnuza78MBvD+IxAtUs8+fOk3oaZCoRGC047syaUSwiH+UBUPj8FQQ6IntmQIsgdE
-        AaYVknLg==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nmalb-00FqUS-L5; Thu, 05 May 2022 12:39:35 +0000
-Date:   Thu, 5 May 2022 05:39:35 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Russ Weight <russell.h.weight@intel.com>,
-        Tianfei zhang <tianfei.zhang@intel.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Shawn Guo <shawn.guo@linaro.org>, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH] test_firmware: fix end of loop test in upload_read_show()
-Message-ID: <YnPFh6ULhhPloue2@bombadil.infradead.org>
-References: <YnOm+9tEN+xerpov@kili>
+        Thu, 5 May 2022 08:43:28 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68C63562C6
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 05:39:49 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id ks9so2055190ejb.2
+        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 05:39:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=1Qy0A2dD0pG2b3g7kJt9R3XBemYnWmUi1/lei/Mn3Kg=;
+        b=apV+M2lCzmxrkXkl/YOZ2ZchS7VFuh+64GUdQbxrZP73O2Y2WyK8BzlBD5e63KnJ5r
+         QcS33LlKGXmmYxXADaN60mwwM8sthQ6o8m8Bf+ejN0zL+T7ux2MKNpH6kZAUsc5OYrFU
+         qFI+3m1/ZZaLULHXb5cC+xZMIeFLGDxZaCx0rmWkQRq9lMta1pp2kLMHGe3oofQ9OmkK
+         YOiO8/x1dkVFJIxnP3Zjy7FLSKJYnQgSl9RuAm2HCfPF5qLhVacv2JTn33SSON5p9f08
+         dSapFGUIGAVO5ZEXgHc10PvxkCdEShTHoOEqxWeJSZDJi6vrVSh4Txm2+T7WHn1mw5or
+         Ru8g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=1Qy0A2dD0pG2b3g7kJt9R3XBemYnWmUi1/lei/Mn3Kg=;
+        b=sYdwJCxymxzRmW4nTpOSO8mv8BUwO9gSHYFJq8v2VjlgFfPqm1wFgD6PNKhDl7psfP
+         xNqlTukDi92BfHG2lZ68tioiqKsKmWiwD2L/kQjDijsDvuvcimHpS6F61mBTGGhhARhM
+         iAl0rdIye867ljIEBUiUoar6xsXu3G6KkJpUQa+Oelt465cg+8xh/UshJ7xHRHTxd5eU
+         YS+4+mMvf3Vgk+zqX1Alesmi0vmyE5Fpg9CFQM2+7bjbaTT5h5IhJEJLBJEWjjSojR63
+         Jd2UhknU3AH2GCsHdA2GQIB3kHYcKcKo+rwA4+mymhDUKZtH7oQJLTUCXUfAMAnX3ar3
+         9emQ==
+X-Gm-Message-State: AOAM532XJFNeMgFrynSV5AzclBFoUtIB+MI0SD+b4QMyt4ZS/eV+it8f
+        4G2s37Zg9KEUEQOV0k34hSMUUAnmfMXNvHrodXNCLA==
+X-Google-Smtp-Source: ABdhPJwHL+dhjrBiYFtuN1w9kygL7hnns5su7zZoA5+fLD0Z8x9CsUv9BkSkolH441plWrj4N1/QpXmRAuyVO9r7gwA=
+X-Received: by 2002:a17:907:c2a:b0:6f4:4b49:9cfb with SMTP id
+ ga42-20020a1709070c2a00b006f44b499cfbmr18829308ejc.697.1651754387944; Thu, 05
+ May 2022 05:39:47 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YnOm+9tEN+xerpov@kili>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220421094228.2141569-1-nobuhiro1.iwamatsu@toshiba.co.jp>
+In-Reply-To: <20220421094228.2141569-1-nobuhiro1.iwamatsu@toshiba.co.jp>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Thu, 5 May 2022 14:39:37 +0200
+Message-ID: <CAMRc=Mf+Oz0W458GkWXTj060=QVmL78=cyDDebKWP+9NmjfdsQ@mail.gmail.com>
+Subject: Re: [PATCH v2] gpio: visconti: Fix fwnode of GPIO IRQ
+To:     Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,SUSPICIOUS_RECIPS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 05, 2022 at 01:29:15PM +0300, Dan Carpenter wrote:
-> If we iterate through a loop using list_for_each_entry() without
-> hitting a break, then the iterator points to bogus memory.  The
-> if (tst->name != test_fw_config->upload_name) { will likely still work
-> but technically it's an out of bounds read.
-> 
-> Fixes: a31ad463b72d ("test_firmware: Add test support for firmware upload")
-> Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+On Thu, Apr 21, 2022 at 11:42 AM Nobuhiro Iwamatsu
+<nobuhiro1.iwamatsu@toshiba.co.jp> wrote:
+>
+> The fwnode of GPIO IRQ must be set to its own fwnode, not the fwnode of the
+> parent IRQ. Therefore, this sets own fwnode instead of the parent IRQ fwnode to
+> GPIO IRQ's.
+>
+> Fixes: 2ad74f40dacc ("gpio: visconti: Add Toshiba Visconti GPIO support")
+> Signed-off-by: Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
 > ---
->  lib/test_firmware.c | 11 +++++++----
->  1 file changed, 7 insertions(+), 4 deletions(-)
-> 
-> diff --git a/lib/test_firmware.c b/lib/test_firmware.c
-> index 76115c1a2629..c82b65947ce6 100644
-> --- a/lib/test_firmware.c
-> +++ b/lib/test_firmware.c
-> @@ -1392,7 +1392,8 @@ static ssize_t upload_read_show(struct device *dev,
->  				struct device_attribute *attr,
->  				char *buf)
->  {
-> -	struct test_firmware_upload *tst;
-> +	struct test_firmware_upload *tst = NULL;
-> +	struct test_firmware_upload *tst_iter;
->  	int ret = -EINVAL;
->  
->  	if (!test_fw_config->upload_name) {
-> @@ -1401,11 +1402,13 @@ static ssize_t upload_read_show(struct device *dev,
->  	}
->  
->  	mutex_lock(&test_fw_mutex);
+>
+>  v2: Add Fixes tag.
+>
+>  drivers/gpio/gpio-visconti.c | 7 ++-----
+>  1 file changed, 2 insertions(+), 5 deletions(-)
+>
+> diff --git a/drivers/gpio/gpio-visconti.c b/drivers/gpio/gpio-visconti.c
+> index 47455810bdb9..e6534ea1eaa7 100644
+> --- a/drivers/gpio/gpio-visconti.c
+> +++ b/drivers/gpio/gpio-visconti.c
+> @@ -130,7 +130,6 @@ static int visconti_gpio_probe(struct platform_device *pdev)
+>         struct gpio_irq_chip *girq;
+>         struct irq_domain *parent;
+>         struct device_node *irq_parent;
+> -       struct fwnode_handle *fwnode;
+>         int ret;
+>
+>         priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
+> @@ -150,14 +149,12 @@ static int visconti_gpio_probe(struct platform_device *pdev)
+>         }
+>
+>         parent = irq_find_host(irq_parent);
+> +       of_node_put(irq_parent);
+>         if (!parent) {
+>                 dev_err(dev, "No IRQ parent domain\n");
+>                 return -ENODEV;
+>         }
+>
+> -       fwnode = of_node_to_fwnode(irq_parent);
+> -       of_node_put(irq_parent);
+> -
+>         ret = bgpio_init(&priv->gpio_chip, dev, 4,
+>                          priv->base + GPIO_IDATA,
+>                          priv->base + GPIO_OSET,
+> @@ -180,7 +177,7 @@ static int visconti_gpio_probe(struct platform_device *pdev)
+>
+>         girq = &priv->gpio_chip.irq;
+>         girq->chip = irq_chip;
+> -       girq->fwnode = fwnode;
+> +       girq->fwnode = of_node_to_fwnode(dev->of_node);
+>         girq->parent_domain = parent;
+>         girq->child_to_parent_hwirq = visconti_gpio_child_to_parent_hwirq;
+>         girq->populate_parent_alloc_arg = visconti_gpio_populate_parent_fwspec;
+> --
+> 2.34.1
+>
+>
 
-Note the mutex lock.
+Queued for fixes, thanks!
 
-> -	list_for_each_entry(tst, &test_upload_list, node)
-> -		if (tst->name == test_fw_config->upload_name)
-> +	list_for_each_entry(tst_iter, &test_upload_list, node)
-
-If a lock is held I can't see how the premise of this patch is
-correct and we ensure we don't remove entries while holdingg
-the lock.
-
-Generalizing this problem seems like a bigger issue, no?
-
-Additionally this patch doesn't apply at all on linux-next.
-
-  Luis
-
-> +		if (tst_iter->name == test_fw_config->upload_name) {
-> +			tst = tst_iter;
->  			break;
-> +		}
->  
-> -	if (tst->name != test_fw_config->upload_name) {
-> +	if (!tst) {
->  		pr_err("Firmware name not found: %s\n",
->  		       test_fw_config->upload_name);
->  		goto out;
-> -- 
-> 2.35.1
-> 
+Bart

@@ -2,60 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25A3951C31D
+	by mail.lfdr.de (Postfix) with ESMTP id 6D9CF51C31E
 	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 16:59:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380880AbiEEPBC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 11:01:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50392 "EHLO
+        id S1380889AbiEEPBR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 11:01:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236360AbiEEPBA (ORCPT
+        with ESMTP id S236360AbiEEPBP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 11:01:00 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47E87B2A
-        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 07:57:21 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id 5F7D01F4589E
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1651762640;
-        bh=852xH/KcBe3CUteZgRNyrG66GO4E9q7U2O3+DhPjsUM=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=YWDw1Y2G4i8MWiG6/sJvV4mWgfsBcV7yg6XtgOeF95Bx6aCIwxDNJvqrRuIOoC1qt
-         58q5In4zFxu4BDJWGH6/v8asx74ifrFLhfhQUBIUNXaec25iuW6Xzb3e8s1EE3eBVA
-         GyddmwMKa0DTzCgWBGAXNK03eA2ORbVbKr3gKq36g0yZ8hAcCJu1+joONFTHWKt48n
-         pxLDyUGTZDeezP/3QA1nZ9nBbwhhXpbb0vWmF6PFXTevYGBAF50J3poKbXvnqHAS9X
-         TnkUn6m9u/UeYgHMaefak1qkV+6/0D8CK3yR2zIpqBChIFeCx6N+2X1S+VEhfww07W
-         IdwJAegQHk9Dg==
-Message-ID: <e10d2b34-adbe-4ec5-04f3-55b52fa2f006@collabora.com>
-Date:   Thu, 5 May 2022 16:57:17 +0200
+        Thu, 5 May 2022 11:01:15 -0400
+Received: from us-smtp-delivery-74.mimecast.com (us-smtp-delivery-74.mimecast.com [170.10.129.74])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 089951C13C
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 07:57:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1651762655;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=edMoOIi5W5h5BTuQ+OG7p8B5wBOMsVB1tjxMAlGSHpw=;
+        b=g6G+akOnEwA2jwWAcYXHRjiVxCnWpkRt3KkYmWJqHI/bmhA4Vz5p/PT0YHTGvtEhaKGN/2
+        ms8I6l7rmPYJCOcv4yB0O9l14G6AiwEc5IdqE2RVvnZKlNGbyj3IidSPPBbhC78V1QOC4u
+        H4V+xQo0UyJoClfz8tCgnVH7cNnwprM=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-187-7XIzuTHxPNix0eEXnTrTjw-1; Thu, 05 May 2022 10:57:31 -0400
+X-MC-Unique: 7XIzuTHxPNix0eEXnTrTjw-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A339C1E7DCD6;
+        Thu,  5 May 2022 14:57:30 +0000 (UTC)
+Received: from dhcp-27-174.brq.redhat.com (unknown [10.40.192.3])
+        by smtp.corp.redhat.com (Postfix) with SMTP id E03E840CF8F5;
+        Thu,  5 May 2022 14:57:24 +0000 (UTC)
+Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
+        oleg@redhat.com; Thu,  5 May 2022 16:57:28 +0200 (CEST)
+Date:   Thu, 5 May 2022 16:57:22 +0200
+From:   Oleg Nesterov <oleg@redhat.com>
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     linux-kernel@vger.kernel.org, rjw@rjwysocki.net, mingo@kernel.org,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, mgorman@suse.de, bigeasy@linutronix.de,
+        Will Deacon <will@kernel.org>, tj@kernel.org,
+        linux-pm@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        linux-um@lists.infradead.org, Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        linux-xtensa@linux-xtensa.org, Kees Cook <keescook@chromium.org>,
+        Jann Horn <jannh@google.com>, linux-ia64@vger.kernel.org
+Subject: Re: [PATCH v3 08/11] ptrace: Admit ptrace_stop can generate spuriuos
+ SIGTRAPs
+Message-ID: <20220505145721.GA13929@redhat.com>
+References: <87k0b0apne.fsf_-_@email.froward.int.ebiederm.org>
+ <20220504224058.476193-8-ebiederm@xmission.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v3] iommu/mediatek: Fix NULL pointer dereference when
- printing dev_name
-Content-Language: en-US
-To:     Miles Chen <miles.chen@mediatek.com>,
-        Yong Wu <yong.wu@mediatek.com>, Joerg Roedel <joro@8bytes.org>,
-        Will Deacon <will@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Cc:     Robin Murphy <robin.murphy@arm.com>,
-        Joerg Roedel <jroedel@suse.de>,
-        iommu@lists.linux-foundation.org,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20220505132731.21628-1-miles.chen@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220505132731.21628-1-miles.chen@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220504224058.476193-8-ebiederm@xmission.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,64 +75,103 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 05/05/22 15:27, Miles Chen ha scritto:
-> When larbdev is NULL (in the case I hit, the node is incorrectly set
-> iommus = <&iommu NUM>), it will cause device_link_add() fail and
-> kernel crashes when we try to print dev_name(larbdev).
-> 
-> Let's fail the probe if a larbdev is NULL to avoid invalid inputs from
-> dts.
-> 
-> It should work for normal correct setting and avoid the crash caused
-> by my incorrect setting.
-> 
-> Error log:
-> [   18.189042][  T301] Unable to handle kernel NULL pointer dereference at virtual address 0000000000000050
-> ...
-> [   18.344519][  T301] pstate: a0400005 (NzCv daif +PAN -UAO)
-> [   18.345213][  T301] pc : mtk_iommu_probe_device+0xf8/0x118 [mtk_iommu]
-> [   18.346050][  T301] lr : mtk_iommu_probe_device+0xd0/0x118 [mtk_iommu]
-> [   18.346884][  T301] sp : ffffffc00a5635e0
-> [   18.347392][  T301] x29: ffffffc00a5635e0 x28: ffffffd44a46c1d8
-> [   18.348156][  T301] x27: ffffff80c39a8000 x26: ffffffd44a80cc38
-> [   18.348917][  T301] x25: 0000000000000000 x24: ffffffd44a80cc38
-> [   18.349677][  T301] x23: ffffffd44e4da4c6 x22: ffffffd44a80cc38
-> [   18.350438][  T301] x21: ffffff80cecd1880 x20: 0000000000000000
-> [   18.351198][  T301] x19: ffffff80c439f010 x18: ffffffc00a50d0c0
-> [   18.351959][  T301] x17: ffffffffffffffff x16: 0000000000000004
-> [   18.352719][  T301] x15: 0000000000000004 x14: ffffffd44eb5d420
-> [   18.353480][  T301] x13: 0000000000000ad2 x12: 0000000000000003
-> [   18.354241][  T301] x11: 00000000fffffad2 x10: c0000000fffffad2
-> [   18.355003][  T301] x9 : a0d288d8d7142d00 x8 : a0d288d8d7142d00
-> [   18.355763][  T301] x7 : ffffffd44c2bc640 x6 : 0000000000000000
-> [   18.356524][  T301] x5 : 0000000000000080 x4 : 0000000000000001
-> [   18.357284][  T301] x3 : 0000000000000000 x2 : 0000000000000005
-> [   18.358045][  T301] x1 : 0000000000000000 x0 : 0000000000000000
-> [   18.360208][  T301] Hardware name: MT6873 (DT)
-> [   18.360771][  T301] Call trace:
-> [   18.361168][  T301]  dump_backtrace+0xf8/0x1f0
-> [   18.361737][  T301]  dump_stack_lvl+0xa8/0x11c
-> [   18.362305][  T301]  dump_stack+0x1c/0x2c
-> [   18.362816][  T301]  mrdump_common_die+0x184/0x40c [mrdump]
-> [   18.363575][  T301]  ipanic_die+0x24/0x38 [mrdump]
-> [   18.364230][  T301]  atomic_notifier_call_chain+0x128/0x2b8
-> [   18.364937][  T301]  die+0x16c/0x568
-> [   18.365394][  T301]  __do_kernel_fault+0x1e8/0x214
-> [   18.365402][  T301]  do_page_fault+0xb8/0x678
-> [   18.366934][  T301]  do_translation_fault+0x48/0x64
-> [   18.368645][  T301]  do_mem_abort+0x68/0x148
-> [   18.368652][  T301]  el1_abort+0x40/0x64
-> [   18.368660][  T301]  el1h_64_sync_handler+0x54/0x88
-> [   18.368668][  T301]  el1h_64_sync+0x68/0x6c
-> [   18.368673][  T301]  mtk_iommu_probe_device+0xf8/0x118 [mtk_iommu]
-> ...
-> 
-> Cc: Robin Murphy <robin.murphy@arm.com>
-> Cc: Yong Wu <yong.wu@mediatek.com>
-> Reported-by: kernel test robot <lkp@intel.com>
-> Fixes: 635319a4a744 ("media: iommu/mediatek: Add device_link between the consumer and the larb devices")
-> Signed-off-by: Miles Chen <miles.chen@mediatek.com>
+On 05/04, Eric W. Biederman wrote:
+>
+> -static int ptrace_stop(int exit_code, int why, int clear_code,
+> -			unsigned long message, kernel_siginfo_t *info)
+> +static int ptrace_stop(int exit_code, int why, unsigned long message,
+> +		       kernel_siginfo_t *info)
+>  	__releases(&current->sighand->siglock)
+>  	__acquires(&current->sighand->siglock)
+>  {
+> @@ -2259,54 +2259,33 @@ static int ptrace_stop(int exit_code, int why, int clear_code,
+>  
+>  	spin_unlock_irq(&current->sighand->siglock);
+>  	read_lock(&tasklist_lock);
+> -	if (likely(current->ptrace)) {
+> -		/*
+> -		 * Notify parents of the stop.
+> -		 *
+> -		 * While ptraced, there are two parents - the ptracer and
+> -		 * the real_parent of the group_leader.  The ptracer should
+> -		 * know about every stop while the real parent is only
+> -		 * interested in the completion of group stop.  The states
+> -		 * for the two don't interact with each other.  Notify
+> -		 * separately unless they're gonna be duplicates.
+> -		 */
+> +	/*
+> +	 * Notify parents of the stop.
+> +	 *
+> +	 * While ptraced, there are two parents - the ptracer and
+> +	 * the real_parent of the group_leader.  The ptracer should
+> +	 * know about every stop while the real parent is only
+> +	 * interested in the completion of group stop.  The states
+> +	 * for the two don't interact with each other.  Notify
+> +	 * separately unless they're gonna be duplicates.
+> +	 */
+> +	if (current->ptrace)
+>  		do_notify_parent_cldstop(current, true, why);
+> -		if (gstop_done && ptrace_reparented(current))
+> -			do_notify_parent_cldstop(current, false, why);
+> +	if (gstop_done && (!current->ptrace || ptrace_reparented(current)))
+> +		do_notify_parent_cldstop(current, false, why);
+>  
+> -		/*
+> -		 * Don't want to allow preemption here, because
+> -		 * sys_ptrace() needs this task to be inactive.
+> -		 *
+> -		 * XXX: implement read_unlock_no_resched().
+> -		 */
+> -		preempt_disable();
+> -		read_unlock(&tasklist_lock);
+> -		cgroup_enter_frozen();
+> -		preempt_enable_no_resched();
+> -		freezable_schedule();
+> -		cgroup_leave_frozen(true);
+> -	} else {
+> -		/*
+> -		 * By the time we got the lock, our tracer went away.
+> -		 * Don't drop the lock yet, another tracer may come.
+> -		 *
+> -		 * If @gstop_done, the ptracer went away between group stop
+> -		 * completion and here.  During detach, it would have set
+> -		 * JOBCTL_STOP_PENDING on us and we'll re-enter
+> -		 * TASK_STOPPED in do_signal_stop() on return, so notifying
+> -		 * the real parent of the group stop completion is enough.
+> -		 */
+> -		if (gstop_done)
+> -			do_notify_parent_cldstop(current, false, why);
+> -
+> -		/* tasklist protects us from ptrace_freeze_traced() */
+> -		__set_current_state(TASK_RUNNING);
+> -		read_code = false;
+> -		if (clear_code)
+> -			exit_code = 0;
+> -		read_unlock(&tasklist_lock);
+> -	}
+> +	/*
+> +	 * Don't want to allow preemption here, because
+> +	 * sys_ptrace() needs this task to be inactive.
+> +	 *
+> +	 * XXX: implement read_unlock_no_resched().
+> +	 */
+> +	preempt_disable();
+> +	read_unlock(&tasklist_lock);
+> +	cgroup_enter_frozen();
+> +	preempt_enable_no_resched();
+> +	freezable_schedule();
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+I must have missed something.
 
+So the tracee calls ptrace_notify() but debugger goes away before the
+ptrace_notify() takes siglock. After that the no longer traced task
+will sleep in TASK_TRACED ?
+
+Looks like ptrace_stop() needs to check current->ptrace before it does
+set_special_state(TASK_TRACED) with siglock held? Then we can rely on
+ptrace_unlink() which will wake the tracee up even if debugger exits.
+
+No?
+
+Oleg.
 

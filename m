@@ -2,70 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B44E51C826
+	by mail.lfdr.de (Postfix) with ESMTP id AC26351C827
 	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 20:42:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345854AbiEESm4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 14:42:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49738 "EHLO
+        id S234148AbiEESqD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 14:46:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383127AbiEESmo (ORCPT
+        with ESMTP id S1386036AbiEESpb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 14:42:44 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68FE766FAE;
-        Thu,  5 May 2022 11:32:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651775526; x=1683311526;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=qIOFndILJT/RTQCAijUPdDLm6tWk5rI8wqnqOSA8lFw=;
-  b=SsHNPhOK4Q6OjfRtOJQRD5vplIv4ZjZEDSdlPiH8NBi5My9/z5WLISWo
-   2VcSqEwqM+AT4soZAlXbK8XnoUOaG1ddRX+sRlRJduRnCv2tt7Ql+7p9y
-   VL1jHqvG0Nqe1aq7ThZkUrImG8p0QK8hQ76Ay25HqhhOf98JmUm/ImoBL
-   tX7s+/BoHYeDrmQ6+fpjK8cbxY1vCg1/BuBs2EpCDQZzcyewm9xmf2Rg7
-   qUm+TD02FXCk6HKsGHtuC3pAHLCJEIXPmleLiZhVozSmBlEb3DXaRMUYX
-   OeCyD854RHRQFzVQM7XV9T68ucXqR0fcTCbuzL604dyt9MDJGxO48Pzlc
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10338"; a="265807023"
-X-IronPort-AV: E=Sophos;i="5.91,203,1647327600"; 
-   d="scan'208";a="265807023"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2022 11:32:06 -0700
-X-IronPort-AV: E=Sophos;i="5.91,203,1647327600"; 
-   d="scan'208";a="621427891"
-Received: from agluck-desk3.sc.intel.com ([172.25.222.78])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2022 11:32:05 -0700
-Date:   Thu, 5 May 2022 11:32:04 -0700
-From:   "Luck, Tony" <tony.luck@intel.com>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     Peter Zijlstra <peterz@infradead.org>, hdegoede@redhat.com,
-        markgross@kernel.org, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        corbet@lwn.net, gregkh@linuxfoundation.org,
-        andriy.shevchenko@linux.intel.com, jithu.joseph@intel.com,
-        ashok.raj@intel.com, rostedt@goodmis.org, dan.j.williams@intel.com,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org, patches@lists.linux.dev,
-        ravi.v.shankar@intel.com
-Subject: Re: [PATCH v5 07/10] platform/x86/intel/ifs: Add scan test support
-Message-ID: <YnQYJIVC0scuL7D7@agluck-desk3.sc.intel.com>
-References: <20220422200219.2843823-1-tony.luck@intel.com>
- <20220428153849.295779-1-tony.luck@intel.com>
- <20220428153849.295779-8-tony.luck@intel.com>
- <87r159jxaq.ffs@tglx>
- <YnLLekoripdY2oQU@agluck-desk3.sc.intel.com>
- <87tua4j3es.ffs@tglx>
- <20220505082824.GD2501@worktop.programming.kicks-ass.net>
- <87bkwcic9k.ffs@tglx>
+        Thu, 5 May 2022 14:45:31 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 453966D976;
+        Thu,  5 May 2022 11:34:30 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 7B5A51F8D0;
+        Thu,  5 May 2022 18:34:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1651775669; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=a/FDtzVo54pXU0gESSj26SSwrG94fNo021bRyTX+A3k=;
+        b=1F9xmGU8mi38n2qsqmP+U2Li8n9MNNkqef32m4DudMVBYZuU2owl3cwzuBkgOw1GYY0V3y
+        4Sah2K+jlLy1bpZHfPP8LA05KNksOebkeS/MqbpE484Tdo8K6fBCujjffhHIVNe8TI2h57
+        cUHNXH6hprmnpMFgHgNFN+UIUhynE3M=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1651775669;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=a/FDtzVo54pXU0gESSj26SSwrG94fNo021bRyTX+A3k=;
+        b=HIznE7wdpzarMMCgElyhzSrNA5djBc96qRHonsFvHT4EYq0BxwbX3JAW8WJ6L3szGiyy4I
+        b+HrFhfQGh2IJhCA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 3B43F13A65;
+        Thu,  5 May 2022 18:34:29 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id po4BDbUYdGLtFAAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Thu, 05 May 2022 18:34:29 +0000
+Message-ID: <a0342c52-6d39-cf16-632a-f45ff051210c@suse.de>
+Date:   Thu, 5 May 2022 20:34:28 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87bkwcic9k.ffs@tglx>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH 1/2] drm/probe-helper: Add helper for
+ drm_helper_probe_single_connector_modes()
+Content-Language: en-US
+To:     Douglas Anderson <dianders@chromium.org>,
+        dri-devel@lists.freedesktop.org
+Cc:     quic_sbillaka@quicinc.com, David Airlie <airlied@linux.ie>,
+        linux-arm-msm@vger.kernel.org, quic_abhinavk@quicinc.com,
+        quic_khsieh@quicinc.com, dmitry.baryshkov@linaro.org,
+        quic_aravindh@quicinc.com, swboyd@chromium.org,
+        linux-kernel@vger.kernel.org
+References: <20220426114627.1.I2dd93486c6952bd52f2020904de0133970d11b29@changeid>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <20220426114627.1.I2dd93486c6952bd52f2020904de0133970d11b29@changeid>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------uvArjD8BBk0l8XSeSfNnFgOh"
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,126 +78,148 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 05, 2022 at 11:01:27AM +0200, Thomas Gleixner wrote:
-> On Thu, May 05 2022 at 10:28, Peter Zijlstra wrote:
-> > On Thu, May 05, 2022 at 01:15:07AM +0200, Thomas Gleixner wrote:
-> >> We don't have stomp_cpumask() today, but that's trivial enough to
-> >> implement.
-> >
-> > I don't think we want to gift people a random cpumask stop_machine(),
-> 
-> Fair enough.
-> 
-> > but here's one that stops a core. It runs the @fn on every cpu since I
-> > thought to have understood that was the requirement for this muck.
-> 
-> Yes.
-> 
-> > *completely* untestededed.
-> 
-> Looks about right neverthelessesseess.
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------uvArjD8BBk0l8XSeSfNnFgOh
+Content-Type: multipart/mixed; boundary="------------z9oIwSGpdljbtuDoAMPor8oJ";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Douglas Anderson <dianders@chromium.org>, dri-devel@lists.freedesktop.org
+Cc: quic_sbillaka@quicinc.com, David Airlie <airlied@linux.ie>,
+ linux-arm-msm@vger.kernel.org, quic_abhinavk@quicinc.com,
+ quic_khsieh@quicinc.com, dmitry.baryshkov@linaro.org,
+ quic_aravindh@quicinc.com, swboyd@chromium.org, linux-kernel@vger.kernel.org
+Message-ID: <a0342c52-6d39-cf16-632a-f45ff051210c@suse.de>
+Subject: Re: [PATCH 1/2] drm/probe-helper: Add helper for
+ drm_helper_probe_single_connector_modes()
+References: <20220426114627.1.I2dd93486c6952bd52f2020904de0133970d11b29@changeid>
+In-Reply-To: <20220426114627.1.I2dd93486c6952bd52f2020904de0133970d11b29@changeid>
 
-Close enough. I made these changes:
+--------------z9oIwSGpdljbtuDoAMPor8oJ
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-1) Added EXPORT_SYMBOL_GPL()
-2) Added protoype in <linux/stop_machine.h>
-3) Moved the kerneldoc comment to the header (for some reason
-   the other stop* functions document there).
-4) Edited that kerneldoc a bit <<<< NEEDS REVIEW  >>>
-5) Changed a ';' to a ',' to make it compile.
+SGkNCg0KQW0gMjYuMDQuMjIgdW0gMjA6NDYgc2NocmllYiBEb3VnbGFzIEFuZGVyc29uOg0K
+PiBUaGUgZHJtX2hlbHBlcl9wcm9iZV9zaW5nbGVfY29ubmVjdG9yX21vZGVzKCkgaXMgYSBi
+aXQgbG9uZy4gTGV0J3MNCj4gYnJlYWsgYSBjaHVuayBvZmYgdG8gdXBkYXRlIGFuZCB2YWxp
+ZGF0ZSBtb2Rlcy4gVGhpcyBoZWxwcyBhdm9pZCBvbmUNCj4gZ290byBhbmQgYWxzbyB3aWxs
+IGFsbG93IHVzIHRvIG1vcmUgZWFzaWx5IGNhbGwgdGhlIGhlbHBlciBhIHNlY29uZA0KPiB0
+aW1lIGluIGEgZnV0dXJlIHBhdGNoIHdpdGhvdXQgYWRkaW5nIGxvb3Bpbmcgb3IgYW5vdGhl
+ciBnb3RvLg0KPiANCj4gVGhpcyBjaGFuZ2UgaXMgaW50ZW5kZWQgdG8gYmUgYSBuby1vcCBj
+aGFuZ2UtLWp1c3QgY29kZSBtb3ZlbWVudC4NCj4gDQo+IFNpZ25lZC1vZmYtYnk6IERvdWds
+YXMgQW5kZXJzb24gPGRpYW5kZXJzQGNocm9taXVtLm9yZz4NCg0KDQo+IC0tLQ0KPiANCj4g
+ICBkcml2ZXJzL2dwdS9kcm0vZHJtX3Byb2JlX2hlbHBlci5jIHwgMTA1ICsrKysrKysrKysr
+KysrKystLS0tLS0tLS0tLS0tDQo+ICAgMSBmaWxlIGNoYW5nZWQsIDU5IGluc2VydGlvbnMo
+KyksIDQ2IGRlbGV0aW9ucygtKQ0KPiANCj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvZ3B1L2Ry
+bS9kcm1fcHJvYmVfaGVscGVyLmMgYi9kcml2ZXJzL2dwdS9kcm0vZHJtX3Byb2JlX2hlbHBl
+ci5jDQo+IGluZGV4IDY4MjM1OTUxMjk5Ni4uODE5MjI1NjI5MDEwIDEwMDY0NA0KPiAtLS0g
+YS9kcml2ZXJzL2dwdS9kcm0vZHJtX3Byb2JlX2hlbHBlci5jDQo+ICsrKyBiL2RyaXZlcnMv
+Z3B1L2RybS9kcm1fcHJvYmVfaGVscGVyLmMNCj4gQEAgLTM1NCw2ICszNTQsNjEgQEAgZHJt
+X2hlbHBlcl9wcm9iZV9kZXRlY3Qoc3RydWN0IGRybV9jb25uZWN0b3IgKmNvbm5lY3RvciwN
+Cj4gICB9DQo+ICAgRVhQT1JUX1NZTUJPTChkcm1faGVscGVyX3Byb2JlX2RldGVjdCk7DQo+
+ICAgDQo+ICtzdGF0aWMgYm9vbCBfZHJtX2hlbHBlcl91cGRhdGVfYW5kX3ZhbGlkYXRlKHN0
+cnVjdCBkcm1fY29ubmVjdG9yICpjb25uZWN0b3IsDQoNCkFGQUlLIGNvbnZlbnRpb24gaXMg
+dG8gdXNlIHR3byB1bmRlcnNjb3JlcyBmb3IgaW50ZXJuYWwgbmFtZXMuDQoNCj4gKwkJCQkJ
+ICAgIHVpbnQzMl90IG1heFgsIHVpbnQzMl90IG1heFksDQo+ICsJCQkJCSAgICBzdHJ1Y3Qg
+ZHJtX21vZGVzZXRfYWNxdWlyZV9jdHggKmN0eCkNCj4gK3sNCj4gKwlzdHJ1Y3QgZHJtX2Rl
+dmljZSAqZGV2ID0gY29ubmVjdG9yLT5kZXY7DQo+ICsJc3RydWN0IGRybV9kaXNwbGF5X21v
+ZGUgKm1vZGU7DQo+ICsJaW50IG1vZGVfZmxhZ3MgPSAwOw0KPiArCWludCByZXQ7DQo+ICsN
+Cj4gKwlkcm1fY29ubmVjdG9yX2xpc3RfdXBkYXRlKGNvbm5lY3Rvcik7DQo+ICsNCj4gKwlp
+ZiAoY29ubmVjdG9yLT5pbnRlcmxhY2VfYWxsb3dlZCkNCj4gKwkJbW9kZV9mbGFncyB8PSBE
+Uk1fTU9ERV9GTEFHX0lOVEVSTEFDRTsNCj4gKwlpZiAoY29ubmVjdG9yLT5kb3VibGVzY2Fu
+X2FsbG93ZWQpDQo+ICsJCW1vZGVfZmxhZ3MgfD0gRFJNX01PREVfRkxBR19EQkxTQ0FOOw0K
+PiArCWlmIChjb25uZWN0b3ItPnN0ZXJlb19hbGxvd2VkKQ0KPiArCQltb2RlX2ZsYWdzIHw9
+IERSTV9NT0RFX0ZMQUdfM0RfTUFTSzsNCj4gKw0KPiArCWxpc3RfZm9yX2VhY2hfZW50cnko
+bW9kZSwgJmNvbm5lY3Rvci0+bW9kZXMsIGhlYWQpIHsNCj4gKwkJaWYgKG1vZGUtPnN0YXR1
+cyAhPSBNT0RFX09LKQ0KPiArCQkJY29udGludWU7DQo+ICsNCj4gKwkJbW9kZS0+c3RhdHVz
+ID0gZHJtX21vZGVfdmFsaWRhdGVfZHJpdmVyKGRldiwgbW9kZSk7DQo+ICsJCWlmIChtb2Rl
+LT5zdGF0dXMgIT0gTU9ERV9PSykNCj4gKwkJCWNvbnRpbnVlOw0KPiArDQo+ICsJCW1vZGUt
+PnN0YXR1cyA9IGRybV9tb2RlX3ZhbGlkYXRlX3NpemUobW9kZSwgbWF4WCwgbWF4WSk7DQo+
+ICsJCWlmIChtb2RlLT5zdGF0dXMgIT0gTU9ERV9PSykNCj4gKwkJCWNvbnRpbnVlOw0KPiAr
+DQo+ICsJCW1vZGUtPnN0YXR1cyA9IGRybV9tb2RlX3ZhbGlkYXRlX2ZsYWcobW9kZSwgbW9k
+ZV9mbGFncyk7DQo+ICsJCWlmIChtb2RlLT5zdGF0dXMgIT0gTU9ERV9PSykNCj4gKwkJCWNv
+bnRpbnVlOw0KPiArDQo+ICsJCXJldCA9IGRybV9tb2RlX3ZhbGlkYXRlX3BpcGVsaW5lKG1v
+ZGUsIGNvbm5lY3RvciwgY3R4LA0KPiArCQkJCQkJICZtb2RlLT5zdGF0dXMpOw0KPiArCQlp
+ZiAocmV0KSB7DQo+ICsJCQlkcm1fZGJnX2ttcyhkZXYsDQo+ICsJCQkJICAgICJkcm1fbW9k
+ZV92YWxpZGF0ZV9waXBlbGluZSBmYWlsZWQ6ICVkXG4iLA0KPiArCQkJCSAgICByZXQpOw0K
+PiArDQo+ICsJCQlpZiAoZHJtX1dBUk5fT05fT05DRShkZXYsIHJldCAhPSAtRURFQURMSykp
+DQo+ICsJCQkJbW9kZS0+c3RhdHVzID0gTU9ERV9FUlJPUjsNCj4gKwkJCWVsc2UNCj4gKwkJ
+CQlyZXR1cm4gdHJ1ZTsNCg0KUmV0dXJuaW5nIHRydWUgaXMgbm9uLWludHVpdGl2ZS4gSXQg
+bG9va3MgYXMgaWYgd2UgcmVwb3J0IHN1Y2Nlc3Mgd2hlbiANCml0IGFjdHVhbGx5IHNpZ25h
+bHMgYSByZXRyeS4NCg0KSSBzdWdnZXN0IHRvIHJldHVybiAncmV0JyBoZXJlIGFuZCBsZXQg
+dGhlIGNhbGxlciBkZWNpZGUuIE9uIHN1Y2Nlc3MgYXQgDQp0aGUgZW5kIG9mIHRoZSBmdW5j
+dGlvbiwgaXQgd291bGQgcmV0dXJuIDAgYXMgdXN1YWwuDQoNCkJlc3QgcmVnYXJkcw0KVGhv
+bWFzDQoNCj4gKwkJfQ0KPiArDQo+ICsJCWlmIChtb2RlLT5zdGF0dXMgIT0gTU9ERV9PSykN
+Cj4gKwkJCWNvbnRpbnVlOw0KPiArCQltb2RlLT5zdGF0dXMgPSBkcm1fbW9kZV92YWxpZGF0
+ZV95Y2JjcjQyMChtb2RlLCBjb25uZWN0b3IpOw0KPiArCX0NCj4gKw0KPiArCXJldHVybiBm
+YWxzZTsNCj4gK30NCj4gKw0KPiAgIC8qKg0KPiAgICAqIGRybV9oZWxwZXJfcHJvYmVfc2lu
+Z2xlX2Nvbm5lY3Rvcl9tb2RlcyAtIGdldCBjb21wbGV0ZSBzZXQgb2YgZGlzcGxheSBtb2Rl
+cw0KPiAgICAqIEBjb25uZWN0b3I6IGNvbm5lY3RvciB0byBwcm9iZQ0KPiBAQCAtNDIxLDcg
+KzQ3Niw2IEBAIGludCBkcm1faGVscGVyX3Byb2JlX3NpbmdsZV9jb25uZWN0b3JfbW9kZXMo
+c3RydWN0IGRybV9jb25uZWN0b3IgKmNvbm5lY3RvciwNCj4gICAJY29uc3Qgc3RydWN0IGRy
+bV9jb25uZWN0b3JfaGVscGVyX2Z1bmNzICpjb25uZWN0b3JfZnVuY3MgPQ0KPiAgIAkJY29u
+bmVjdG9yLT5oZWxwZXJfcHJpdmF0ZTsNCj4gICAJaW50IGNvdW50ID0gMCwgcmV0Ow0KPiAt
+CWludCBtb2RlX2ZsYWdzID0gMDsNCj4gICAJYm9vbCB2ZXJib3NlX3BydW5lID0gdHJ1ZTsN
+Cj4gICAJZW51bSBkcm1fY29ubmVjdG9yX3N0YXR1cyBvbGRfc3RhdHVzOw0KPiAgIAlzdHJ1
+Y3QgZHJtX21vZGVzZXRfYWNxdWlyZV9jdHggY3R4Ow0KPiBAQCAtNTE5LDUyICs1NzMsMTEg
+QEAgaW50IGRybV9oZWxwZXJfcHJvYmVfc2luZ2xlX2Nvbm5lY3Rvcl9tb2RlcyhzdHJ1Y3Qg
+ZHJtX2Nvbm5lY3RvciAqY29ubmVjdG9yLA0KPiAgIAkJCSAgIGNvbm5lY3Rvci0+c3RhdHVz
+ID09IGNvbm5lY3Rvcl9zdGF0dXNfdW5rbm93bikpDQo+ICAgCQljb3VudCA9IGRybV9hZGRf
+bW9kZXNfbm9lZGlkKGNvbm5lY3RvciwgMTAyNCwgNzY4KTsNCj4gICAJY291bnQgKz0gZHJt
+X2hlbHBlcl9wcm9iZV9hZGRfY21kbGluZV9tb2RlKGNvbm5lY3Rvcik7DQo+IC0JaWYgKGNv
+dW50ID09IDApDQo+IC0JCWdvdG8gcHJ1bmU7DQo+IC0NCj4gLQlkcm1fY29ubmVjdG9yX2xp
+c3RfdXBkYXRlKGNvbm5lY3Rvcik7DQo+IC0NCj4gLQlpZiAoY29ubmVjdG9yLT5pbnRlcmxh
+Y2VfYWxsb3dlZCkNCj4gLQkJbW9kZV9mbGFncyB8PSBEUk1fTU9ERV9GTEFHX0lOVEVSTEFD
+RTsNCj4gLQlpZiAoY29ubmVjdG9yLT5kb3VibGVzY2FuX2FsbG93ZWQpDQo+IC0JCW1vZGVf
+ZmxhZ3MgfD0gRFJNX01PREVfRkxBR19EQkxTQ0FOOw0KPiAtCWlmIChjb25uZWN0b3ItPnN0
+ZXJlb19hbGxvd2VkKQ0KPiAtCQltb2RlX2ZsYWdzIHw9IERSTV9NT0RFX0ZMQUdfM0RfTUFT
+SzsNCj4gLQ0KPiAtCWxpc3RfZm9yX2VhY2hfZW50cnkobW9kZSwgJmNvbm5lY3Rvci0+bW9k
+ZXMsIGhlYWQpIHsNCj4gLQkJaWYgKG1vZGUtPnN0YXR1cyAhPSBNT0RFX09LKQ0KPiAtCQkJ
+Y29udGludWU7DQo+IC0NCj4gLQkJbW9kZS0+c3RhdHVzID0gZHJtX21vZGVfdmFsaWRhdGVf
+ZHJpdmVyKGRldiwgbW9kZSk7DQo+IC0JCWlmIChtb2RlLT5zdGF0dXMgIT0gTU9ERV9PSykN
+Cj4gLQkJCWNvbnRpbnVlOw0KPiAtDQo+IC0JCW1vZGUtPnN0YXR1cyA9IGRybV9tb2RlX3Zh
+bGlkYXRlX3NpemUobW9kZSwgbWF4WCwgbWF4WSk7DQo+IC0JCWlmIChtb2RlLT5zdGF0dXMg
+IT0gTU9ERV9PSykNCj4gLQkJCWNvbnRpbnVlOw0KPiAtDQo+IC0JCW1vZGUtPnN0YXR1cyA9
+IGRybV9tb2RlX3ZhbGlkYXRlX2ZsYWcobW9kZSwgbW9kZV9mbGFncyk7DQo+IC0JCWlmICht
+b2RlLT5zdGF0dXMgIT0gTU9ERV9PSykNCj4gLQkJCWNvbnRpbnVlOw0KPiAtDQo+IC0JCXJl
+dCA9IGRybV9tb2RlX3ZhbGlkYXRlX3BpcGVsaW5lKG1vZGUsIGNvbm5lY3RvciwgJmN0eCwN
+Cj4gLQkJCQkJCSAmbW9kZS0+c3RhdHVzKTsNCj4gLQkJaWYgKHJldCkgew0KPiAtCQkJZHJt
+X2RiZ19rbXMoZGV2LA0KPiAtCQkJCSAgICAiZHJtX21vZGVfdmFsaWRhdGVfcGlwZWxpbmUg
+ZmFpbGVkOiAlZFxuIiwNCj4gLQkJCQkgICAgcmV0KTsNCj4gLQ0KPiAtCQkJaWYgKGRybV9X
+QVJOX09OX09OQ0UoZGV2LCByZXQgIT0gLUVERUFETEspKSB7DQo+IC0JCQkJbW9kZS0+c3Rh
+dHVzID0gTU9ERV9FUlJPUjsNCj4gLQkJCX0gZWxzZSB7DQo+IC0JCQkJZHJtX21vZGVzZXRf
+YmFja29mZigmY3R4KTsNCj4gLQkJCQlnb3RvIHJldHJ5Ow0KPiAtCQkJfQ0KPiArCWlmIChj
+b3VudCAhPSAwKSB7DQo+ICsJCWlmIChfZHJtX2hlbHBlcl91cGRhdGVfYW5kX3ZhbGlkYXRl
+KGNvbm5lY3RvciwgbWF4WCwgbWF4WSwgJmN0eCkpIHsNCj4gKwkJCWRybV9tb2Rlc2V0X2Jh
+Y2tvZmYoJmN0eCk7DQo+ICsJCQlnb3RvIHJldHJ5Ow0KPiAgIAkJfQ0KPiAtDQo+IC0JCWlm
+IChtb2RlLT5zdGF0dXMgIT0gTU9ERV9PSykNCj4gLQkJCWNvbnRpbnVlOw0KPiAtCQltb2Rl
+LT5zdGF0dXMgPSBkcm1fbW9kZV92YWxpZGF0ZV95Y2JjcjQyMChtb2RlLCBjb25uZWN0b3Ip
+Ow0KPiAgIAl9DQo+ICAgDQo+ICAgcHJ1bmU6DQoNCi0tIA0KVGhvbWFzIFppbW1lcm1hbm4N
+CkdyYXBoaWNzIERyaXZlciBEZXZlbG9wZXINClNVU0UgU29mdHdhcmUgU29sdXRpb25zIEdl
+cm1hbnkgR21iSA0KTWF4ZmVsZHN0ci4gNSwgOTA0MDkgTsO8cm5iZXJnLCBHZXJtYW55DQoo
+SFJCIDM2ODA5LCBBRyBOw7xybmJlcmcpDQpHZXNjaMOkZnRzZsO8aHJlcjogSXZvIFRvdGV2
+DQo=
 
-With that it works, and will do exactly what I need (with less code
-in the IFS driver by the look of things).
+--------------z9oIwSGpdljbtuDoAMPor8oJ--
 
-A couple of thousand tests shows it works. The two threads
-arrive within 20 TSC cycles of each other 60% of the time,
-but I have some outliers up to 654 cycles ... which is plenty
-close enough.
+--------------uvArjD8BBk0l8XSeSfNnFgOh
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
-Patch now looks like this. Author credit to Peter ... are you willing
-to add a Signed-off-by to stop checkpatch from whining at me?
+-----BEGIN PGP SIGNATURE-----
 
-There isn't a "Something-similar-suggested-by:" tag to credit Thomas
-with this.  Perhaps "Inspired-by:"?
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmJ0GLQFAwAAAAAACgkQlh/E3EQov+Dm
+Xw//ekn/CghDX1nF3tDJlSHHynP85U/OAl8Cd8yTePQ+JhcG6WKo44OFkcFTZxX1E/QolpVxrKGJ
+2SQ1H0mTWoJIN5lPiCvXzWOJmzRF12EFdJ+WDszSw7NC7j7FeiQZJfWKyUSRWZ+ccjG3rlWv5FMx
+BwBOBcVysIO9mqKrqEYf2pFRIuYJ3/hDgVNF/g7MWNFIbRdp+RKZe4hM3YeviP724GvZaOQRBpNe
+9/sZGs5yL4MQJ9lNb+oUfZKgeLjRdGXStHdrucgUhBWrBBVahVQfkG/NyEPMfekv5SRSL2Rf0F5Z
+ROfS6cStzTIVXS+hNt/7n7Eg3rgiUtvRWrB9+W1z1YbqPonZFd42zbNBiSO0vNAzkiqLjPv8jCTk
+4X+fOg/pbrqc2v2aJYUia2CGw7AvuLGyTZeTe8KCwA4ZB83B8nx1VmWfHIiu8XqPfPHS1Rqty8/r
+syP+n9wqrTm9HlcHoPm8R55SXsLJ0kO03DPXl+qqV76mC+2XC7N2oVEn8eGROEKY7oyf7AxDXX8Y
+uRKEUzqsYxTdI58Ng1Nhe2+77SEvcncegaoNvqDx5+Hfc746e1wjdEmY0VQLvTcWVQNgY9JTyOG1
+xiblvPlJ0llOhviy04n7oYPYIZZE8hKjBF8EwB59ArQNgx+RJU5xJTN43mVy9YBlBMPijEiqfwRG
+bDo=
+=h727
+-----END PGP SIGNATURE-----
 
--Tony
-
-
-From df5ca8024997d3d782978d154cfbff5147f451ad Mon Sep 17 00:00:00 2001
-From: Peter Zijlstra <peterz@infradead.org>
-Date: Thu, 5 May 2022 08:55:09 -0700
-Subject: [PATCH] stop_machine: Add stop_core_cpuslocked() for per-core
- operations
-
-Hardware core level testing features require near simultaneous execution
-of WRMSR instructions on all threads of a core to initiate a test.
-
-Provide a customized cut down version of stop_machine_cpuslocked() that
-just operates on the threads of a single core.
-
-Signed-off-by: Tony Luck <tony.luck@intel.com>
----
- include/linux/stop_machine.h | 16 ++++++++++++++++
- kernel/stop_machine.c        | 19 +++++++++++++++++++
- 2 files changed, 35 insertions(+)
-
-diff --git a/include/linux/stop_machine.h b/include/linux/stop_machine.h
-index 46fb3ebdd16e..ea7a74ea7389 100644
---- a/include/linux/stop_machine.h
-+++ b/include/linux/stop_machine.h
-@@ -124,6 +124,22 @@ int stop_machine(cpu_stop_fn_t fn, void *data, const struct cpumask *cpus);
-  */
- int stop_machine_cpuslocked(cpu_stop_fn_t fn, void *data, const struct cpumask *cpus);
- 
-+/**
-+ * stop_core_cpuslocked: - stop all threads on just one core
-+ * @cpu: any cpu in the targeted core
-+ * @fn: the function to run
-+ * @data: the data ptr for @fn()
-+ *
-+ * Same as above, but instead of every CPU, only the logical CPUs of a
-+ * single core are affected.
-+ *
-+ * Context: Must be called from within a cpus_read_lock() protected region.
-+ *
-+ * Return: 0 if all executions of @fn returned 0, any non zero return
-+ * value if any returned non zero.
-+ */
-+int stop_core_cpuslocked(unsigned int cpu, cpu_stop_fn_t fn, void *data);
-+
- int stop_machine_from_inactive_cpu(cpu_stop_fn_t fn, void *data,
- 				   const struct cpumask *cpus);
- #else	/* CONFIG_SMP || CONFIG_HOTPLUG_CPU */
-diff --git a/kernel/stop_machine.c b/kernel/stop_machine.c
-index cbc30271ea4d..579761729836 100644
---- a/kernel/stop_machine.c
-+++ b/kernel/stop_machine.c
-@@ -633,6 +633,25 @@ int stop_machine(cpu_stop_fn_t fn, void *data, const struct cpumask *cpus)
- }
- EXPORT_SYMBOL_GPL(stop_machine);
- 
-+int stop_core_cpuslocked(unsigned int cpu, cpu_stop_fn_t fn, void *data)
-+{
-+	const struct cpumask *smt_mask = cpu_smt_mask(cpu);
-+
-+	struct multi_stop_data msdata = {
-+		.fn = fn,
-+		.data = data,
-+		.num_threads = cpumask_weight(smt_mask),
-+		.active_cpus = smt_mask,
-+	};
-+
-+	lockdep_assert_cpus_held();
-+
-+	/* Set the initial state and stop all online cpus. */
-+	set_state(&msdata, MULTI_STOP_PREPARE);
-+	return stop_cpus(smt_mask, multi_cpu_stop, &msdata);
-+}
-+EXPORT_SYMBOL_GPL(stop_core_cpuslocked);
-+
- /**
-  * stop_machine_from_inactive_cpu - stop_machine() from inactive CPU
-  * @fn: the function to run
--- 
-2.35.1
-
+--------------uvArjD8BBk0l8XSeSfNnFgOh--

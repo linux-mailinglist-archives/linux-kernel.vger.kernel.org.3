@@ -2,132 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 430CF51CAC6
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 22:42:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 927EF51CAD6
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 22:56:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385242AbiEEUqN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 16:46:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56404 "EHLO
+        id S1385283AbiEEU5k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 16:57:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236566AbiEEUqK (ORCPT
+        with ESMTP id S237124AbiEEU5g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 16:46:10 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B5CBB841;
-        Thu,  5 May 2022 13:42:28 -0700 (PDT)
+        Thu, 5 May 2022 16:57:36 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC597B841
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 13:53:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651783348; x=1683319348;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ymzjNgr6wXbJBAQoerxRdvjeszrBU3nmqB3iQd5YQy8=;
-  b=koU7yL70toCAj8vk6QNxmLD8q+JlK308b5F0uyF+DNA4GtRn36X3PI5p
-   lKqQCe5TzmN5r2KaoAGNt/kpBQSL5DLMlu8HgQaL3nCZ5MUz+YQHzdOf4
-   vk3AQlugiTsIZ5G/cuenv0qVdWlpFK8VY8cX4NQ+bz3o0v9ZzxiF3ZmiG
-   Gobr7M4xo9OENVZupWgqT4WQtZmIgVan+CsZHFI38A3md1L1dcJySG4D8
-   8x5anvhQm514lj7iGSlfyDwUbLqSED5BMCill1JunMDKP4WZuNaRSsGup
-   N7AeRatnzYEwY698C8xVwHs+zpIsjqwjkjNIH83vyTxlZgVAeDugfyeaX
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10338"; a="250235012"
+  t=1651784034; x=1683320034;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=kwt3NLcQ7vZUMpzwSJrxDzlxXEiLhkkY2MWkEy+kI+8=;
+  b=lVF9VIafqxDTxYNPgTiqEiY7QZ5m6RM5pKMhm7IDtdzxoqTxqMhbUA3i
+   rruZ2GpcltUiv/4Ewo7P1uYcSiEUid0xu9SQy6St/+Krr5Q40M7t8pEKz
+   QngLfSJ++nfdnkGZM6FpfOhZqmL4lDhN3oYVYj02pP9vdGzwnx3cOrpUW
+   EjZO5/FtYNt07qpV5zd+a7RWugKukNRPXdcHHIY4wAkSXE5zUHEYZBaCY
+   nuj5axMBfhyN7/OMX5Ky587YP3AyoMjV2CyU2axmmPiCWzdWaLZ01sOsH
+   xgieNwq5gtfH85pblbcRg04tLbAntBNqx3adGTrBBGAjY2Im2pJDdyaMQ
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10338"; a="265841291"
 X-IronPort-AV: E=Sophos;i="5.91,203,1647327600"; 
-   d="scan'208";a="250235012"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2022 13:42:28 -0700
-X-ExtLoop1: 1
+   d="scan'208";a="265841291"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2022 13:53:54 -0700
 X-IronPort-AV: E=Sophos;i="5.91,203,1647327600"; 
-   d="scan'208";a="811896847"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 05 May 2022 13:42:25 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nmiIq-000Ck0-Gs;
-        Thu, 05 May 2022 20:42:24 +0000
-Date:   Fri, 6 May 2022 04:42:10 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Oleksij Rempel <o.rempel@pengutronix.de>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     kbuild-all@lists.01.org, netdev@vger.kernel.org,
-        Oleksij Rempel <o.rempel@pengutronix.de>,
-        kernel@pengutronix.de, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next v3 4/7] net: phy: introduce
- genphy_c45_pma_baset1_read_master_slave()
-Message-ID: <202205060406.gHnrGdXy-lkp@intel.com>
-References: <20220505063318.296280-5-o.rempel@pengutronix.de>
+   d="scan'208";a="585562101"
+Received: from jdrobitc-mobl1.amr.corp.intel.com (HELO [10.209.123.186]) ([10.209.123.186])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2022 13:53:52 -0700
+Message-ID: <ab17102c-0cb7-87d3-3494-969866d64573@linux.intel.com>
+Date:   Thu, 5 May 2022 13:53:52 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220505063318.296280-5-o.rempel@pengutronix.de>
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.7.0
+Subject: Re: [PATCH v5 3/3] x86/tdx: Add Quote generation support
+Content-Language: en-US
+To:     Kai Huang <kai.huang@intel.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Wander Lairson Costa <wander@redhat.com>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>,
+        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
+        khalid.elmously@canonical.com, philip.cox@canonical.com,
+        linux-kernel@vger.kernel.org
+References: <20220501183500.2242828-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <20220501183500.2242828-4-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <243e918c523320ba3d216cbe22d24fe5ce33f370.camel@intel.com>
+ <20220503012721.ok7fbvxmnvsr6qny@box.shutemov.name>
+ <58d07b2d-cef5-17ed-9c57-e12fe5665e04@intel.com>
+ <40ccd0f0-35a1-5aa7-9e51-25ab196d79e5@linux.intel.com>
+ <2ed5c9cc316950a5a47ee714715b7980f358a140.camel@intel.com>
+From:   Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+In-Reply-To: <2ed5c9cc316950a5a47ee714715b7980f358a140.camel@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-10.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Oleksij,
+Hi Kai,
 
-I love your patch! Perhaps something to improve:
+On 5/4/22 4:28 PM, Kai Huang wrote:
+> On Wed, 2022-05-04 at 15:49 -0700, Sathyanarayanan Kuppuswamy wrote:
+>> --- a/arch/x86/coco/tdx/tdx.c
+>> +++ b/arch/x86/coco/tdx/tdx.c
+>> @@ -15,6 +15,7 @@
+>>    #include <asm/idtentry.h>
+>>    #include <asm/irq_regs.h>
+>>    #include <asm/desc.h>
+>> +#include <asm/io.h>
+>>
+>>    /* TDX module Call Leaf IDs */
+>>    #define TDX_GET_INFO                   1
+>> @@ -680,8 +681,15 @@ static bool try_accept_one(phys_addr_t *start,
+>> unsigned long len,
+>>     */
+>>    static bool tdx_enc_status_changed(unsigned long vaddr, int numpages,
+>> bool enc)
+>>    {
+>> -       phys_addr_t start = __pa(vaddr);
+>> -       phys_addr_t end   = __pa(vaddr + numpages * PAGE_SIZE);
+>> +       phys_addr_t start;
+>> +       phys_addr_t end;
+>> +
+>> +       if (is_vmalloc_addr((void *)vaddr))
+>> +               start =  page_to_phys(vmalloc_to_page((void*)vaddr));
+>> +       else
+>> +               start = __pa(vaddr);
+>> +
+>> +       end = start + numpages * PAGE_SIZE;
+>>
+>>           if (!enc) {
+>>                   /* Set the shared (decrypted) bits: */
+> 
+> Looks set_memory_decrypted() only works for direct-mapping, so you should not
+> use this.  Instead, you can pass shared bit in 'prot' argument (using
+> pgprot_decrypted()) when you call vmap(), and explicitly call MapGPA().
 
-[auto build test WARNING on net-next/master]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Oleksij-Rempel/add-ti-dp83td510-support/20220505-143922
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git 4950b6990e3b1efae64a5f6fc5738d25e3b816b3
-config: mips-allyesconfig (https://download.01.org/0day-ci/archive/20220506/202205060406.gHnrGdXy-lkp@intel.com/config)
-compiler: mips-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/80dad43edb356876484acb116b8a906dd4bef941
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Oleksij-Rempel/add-ti-dp83td510-support/20220505-143922
-        git checkout 80dad43edb356876484acb116b8a906dd4bef941
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/net/phy/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> drivers/net/phy/phy-c45.c:558: warning: expecting prototype for genphy_c45_baset1_read_master_slave(). Prototype was for genphy_c45_pma_baset1_read_master_slave() instead
+Is it because of the above change, or you see other direct-mapping 
+dependencies in set_memory_*() functions?
 
 
-vim +558 drivers/net/phy/phy-c45.c
-
-   552	
-   553	/**
-   554	 * genphy_c45_baset1_read_master_slave - read forced master/slave configuration
-   555	 * @phydev: target phy_device struct
-   556	 */
-   557	int genphy_c45_pma_baset1_read_master_slave(struct phy_device *phydev)
- > 558	{
-   559		int val;
-   560	
-   561		phydev->master_slave_state = MASTER_SLAVE_STATE_UNKNOWN;
-   562	
-   563		val = phy_read_mmd(phydev, MDIO_MMD_PMAPMD, MDIO_PMA_PMD_BT1_CTRL);
-   564		if (val < 0)
-   565			return val;
-   566	
-   567		if (val & MDIO_PMA_PMD_BT1_CTRL_CFG_MST)
-   568			phydev->master_slave_state = MASTER_SLAVE_STATE_MASTER;
-   569		else
-   570			phydev->master_slave_state = MASTER_SLAVE_STATE_SLAVE;
-   571	
-   572		return 0;
-   573	}
-   574	EXPORT_SYMBOL_GPL(genphy_c45_pma_baset1_read_master_slave);
-   575	
+> 
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Sathyanarayanan Kuppuswamy
+Linux Kernel Developer

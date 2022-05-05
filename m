@@ -2,133 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFA0351C450
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 17:54:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC98151C45E
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 17:57:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381468AbiEEP6P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 11:58:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45750 "EHLO
+        id S1381496AbiEEQA0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 12:00:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381457AbiEEP6K (ORCPT
+        with ESMTP id S1381467AbiEEQAW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 11:58:10 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C38305C34A;
-        Thu,  5 May 2022 08:54:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1651766058;
-        bh=OZPw31eDi3knqjv/5JX7svy8ZOi10sgL+1UBIT7O9hA=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=VPgKzqK3v9rsJuPUzzZdLF9vobW+4Iy8lwwwRG1x9FSOCDHVfDpJdpgVY63PaqBPW
-         87JjH+ITRev8lg/rN9JC1mElcqL8Is/xB/8EDxSMGOHjs6hynLO4fA7OR6jG0ChGmX
-         LFTPqlP+N5h835ymU3ZM1nPPlvxZ03BdA8lqGY/4=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [217.61.145.208] ([217.61.145.208]) by web-mail.gmx.net
- (3c-app-gmx-bs47.server.lan [172.19.170.99]) (via HTTP); Thu, 5 May 2022
- 17:54:18 +0200
+        Thu, 5 May 2022 12:00:22 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C38981AF27
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 08:56:41 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id ks9so3160102ejb.2
+        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 08:56:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=amarulasolutions.com; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=fjBt4PhnxyvpQZHwHALGbz1X5a0xwh6G7fjizoTyXiA=;
+        b=ZTU0SNmZWifpArOZCxILL1SHYnm+fwkV4zfQa0dehmOC6D+EdD2T94tUhkGrq5RDwu
+         VIty5jNMoq6e/2XPmutsofxDGkSMxM62aTiasN4leHOn3IBGOjHDd6iFA1z7l/LAwRQy
+         SaqCUOCtU7A1IOCnxJr63fR+eNnmf0X55eYxo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=fjBt4PhnxyvpQZHwHALGbz1X5a0xwh6G7fjizoTyXiA=;
+        b=AsM+JjXlDFNj1nxtmwMf8fY9wKBdLJo9OV9Iz8bVdjGK0R+u3/YfJ50P0rGp9rItrw
+         NzigRBApvNJCWInhOgvCD02XeYrNMr5aWYMHYEYMQ7gdmN9ULMWUbka9gA9udxQEAxEm
+         ixNLq1KlgD/dye/mx/G4xdAby2qPD+P8k1L4iIwLNf4FTjuOoo8QnkiiW/ufpaElcniL
+         oW1XRglMMk/qEe9DSKbSHDr0rhzTsxMqWvbpTh7+KpFuul10L2xzz5vZY7o9FuixWNVi
+         bLS7P2sPo5lSNlfSHvBF4K8YQdLkcxUGLgbcZJO14HGvk/9m+qMDATwjA6RRndK+KYT0
+         e9+A==
+X-Gm-Message-State: AOAM5317vKzn4L2NAPKT0zmqP92ztqqHr+EPL35ZuQ2TpCMDxHC3RKhE
+        QHesF+NiJHeQBM/DcQyTX3qr4WctInVdNQ==
+X-Google-Smtp-Source: ABdhPJwB/ZFjB6/h1JrEs8E12lO3+RH5QW17ibva6faESPfAZjkoAf0YstZGBgfG8dNGDjhQzNuQLA==
+X-Received: by 2002:a17:907:72cc:b0:6f4:cc8a:2bcd with SMTP id du12-20020a17090772cc00b006f4cc8a2bcdmr8661986ejc.532.1651766199997;
+        Thu, 05 May 2022 08:56:39 -0700 (PDT)
+Received: from dario-ThinkPad-T14s-Gen-2i.pdxnet.pdxeng.ch (host-87-0-15-73.retail.telecomitalia.it. [87.0.15.73])
+        by smtp.gmail.com with ESMTPSA id a4-20020aa7d904000000b0042617ba6385sm1009328edr.15.2022.05.05.08.56.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 May 2022 08:56:39 -0700 (PDT)
+From:   Dario Binacchi <dario.binacchi@amarulasolutions.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Marco Felsch <m.felsch@pengutronix.de>,
+        Michael Trimarchi <michael@amarulasolutions.com>,
+        Oliver Graute <oliver.graute@kococonnector.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        devicetree@vger.kernel.org, linux-input@vger.kernel.org
+Subject: [RESEND PATCH v4 0/6] Input: edt-ft5x06 - Improve configuration
+Date:   Thu,  5 May 2022 17:56:29 +0200
+Message-Id: <20220505155635.419653-1-dario.binacchi@amarulasolutions.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Message-ID: <trinity-6a6249b9-69eb-459c-96f1-dbf8f031a86f-1651766058085@3c-app-gmx-bs47>
-From:   Frank Wunderlich <frank-w@public-files.de>
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Frank Wunderlich <linux@fw-web.de>, linux-pm@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-kernel@vger.kernel.org
-Subject: Aw: Re: [RFC v1] opp: add config option for debug
-Content-Type: text/plain; charset=UTF-8
-Date:   Thu, 5 May 2022 17:54:18 +0200
-Importance: normal
-Sensitivity: Normal
-In-Reply-To: <20220505055857.bqjm72qkzwcbuvuh@vireshk-i7>
-References: <20220504174823.156709-1-linux@fw-web.de>
- <20220505055857.bqjm72qkzwcbuvuh@vireshk-i7>
-X-UI-Message-Type: mail
-X-Priority: 3
-X-Provags-ID: V03:K1:JjduCuy3fMLSoCYKA+wbDZgJVEMTvSr/Ee7dpRQd+Ou029TLzUuMdZTMe9kWdAGoO0JwZ
- uCD3Pmr5HT0ZLOald0gZZq0R2vpMR+JbiXX1PifMhhh6FinR7iJbagfUyhn92lo8nQLLgIK9YZez
- Qp5oOG/lJ/9V+s4Z0rAoN/Jzx1zZq6wcAPlLN77z6i7lX5r3Gxx6kwUQ8KiMzcFRsABdSoTeZUto
- +zCJ22IjDwbY3Rg+jTEkV0WYsjQr9rMicnJUigY2AOALJPyR4l0c8gPdi+F7eCoA7lnfVFWmaRXc
- lA=
-X-UI-Out-Filterresults: notjunk:1;V03:K0:KnF/vpqsQGY=:3vPuSDaC4JWuuJfCu9W3gn
- ax+NYjBqoTnGxJEsKRyIQaKfY05OLni/CAWgwlw1EsR6fKcTDZRo4kl+wXzg+Er4hEcqXNonu
- rYHg2aLh3enVIZfXz1cIQeQ5nAZyw/TIM41ScmFWQ9835RUG2WyepXJYxipVRtUXzkaFHFjcC
- 6WQGuvosI5VZyaPZ1ONCw/zJgSy4TN5VEnVCLnPLzrql0s1wAXYsE/TQNrn0FqCeDauI9CtCk
- C0zHKm0FV3pj05TYT9C5CM2CqtI1eioq0v3vgmUgS4DFDLIbUapw5LmJ/czkC9WnmmiIseodL
- 6h+Gixl+aSpxAgFgPO/2VuScSCPCBlB5+t2LN71kjPWriSD+ShLRuPegqbqNQPpy261kjUoVx
- 48OUkmFcfAQidKVzGm5B3RQFwKbM3oF1xvgIiuip7qVCvyRrP5FRuLxaIKrNxhKaYxwuJF1fR
- 4y9aj8BEaw1oAbFysJEIIbIDWjQDNWxlldt6enMqGpl2wk32GEhpIoGM1Lcgnc78sLTF3vNQS
- DneJmuOfT8UuqxHX8zBtv17GRVBPMfHSW/83gs+ihWtUJLPIKBo67uqpSAsgNlfpdp3upDMR8
- mZJwCa29Pm6SCFcpp5jDbacoDTq4qxGMxQE7oJi7OZyuJh7+r2VW6YA+pIkZlmA5MyzlMV3HR
- cPQ8aS2+qjadiXFomckMhH3lPBWKnIycECbNpjqtfI0l//0vkwrMvq+u2LcZTcU7xualjm+Hp
- y3lSzVJgjftIAwKUFEP6XUuWwYAIu/4w5oWw2yc0xJQXJdj8a5uoqwlcEHvoK3/vAcPdds5QF
- q2z2mZT
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+The series was born from the analysis and mitigation of a crc problem
+raised by an M06 type device. The added sysfs attributes were helpful
+in debugging the problem. Patches that change the report rate on driver
+probing, mitigated crc errors on kernel bootup. The patch to get/set
+report rate by sysfs for an M12 device, has been tested.
 
-> Gesendet: Donnerstag, 05. Mai 2022 um 07:58 Uhr
-> Von: "Viresh Kumar" <viresh.kumar@linaro.org>
-> An: "Frank Wunderlich" <linux@fw-web.de>
-> Cc: linux-pm@vger.kernel.org, "Frank Wunderlich" <frank-w@public-files.d=
-e>, "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>, "Rafael J. Wysocki"=
- <rafael@kernel.org>, "Viresh Kumar" <vireshk@kernel.org>, "Nishanth Menon=
-" <nm@ti.com>, "Stephen Boyd" <sboyd@kernel.org>, linux-kernel@vger.kernel=
-.org
-> Betreff: Re: [RFC v1] opp: add config option for debug
->
-> On 04-05-22, 19:48, Frank Wunderlich wrote:
-> > From: Frank Wunderlich <frank-w@public-files.de>
-> >
-> > Currently OPP debug is enabled by DEBUG_DRIVER option. This is generic
-> > driver debug and opp floods serial console. This is annoying if opp is
-> > not needed so give it an additional config-key.
-> >
-> > Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
-> > ---
-> >  drivers/base/Kconfig | 1 +
-> >  drivers/opp/Kconfig  | 7 +++++++
-> >  drivers/opp/Makefile | 2 +-
-> >  3 files changed, 9 insertions(+), 1 deletion(-)
->
-> Isn't something like Dynamic Debug helpful here ?
+Changes in v4:
+- Add Rob Herring 'Acked-by' tag.
 
-you mean something like this:
+Changes in v3:
+- Add hz unit suffix.
+- Add '|' to description.
+- Check the lower and upper limits of the report-rate-hz value
+- Convert the M06 report-rate-hz value
 
-https://www.kernel.org/doc/html/v5.17/admin-guide/dynamic-debug-howto.html=
-#debug-messages-during-boot-process
+Changes in v2:
+- Add Oliver Graute's 'Acked-by' tag to:
+  * Input: edt-ft5x06 - show model name by sysfs
+  * Input: edt-ft5x06 - show firmware version by sysfs
+- Fix yaml file. Tested with `make DT_CHECKER_FLAGS=-m dt_binding_check'.
 
-so enabling debug only with cmdline-param...
+Dario Binacchi (6):
+  dt-bindings: input: touchscreen: edt-ft5x06: add report-rate-hz
+  Input: edt-ft5x06 - get/set M12 report rate by sysfs
+  Input: edt-ft5x06 - set report rate by dts property
+  Input: edt-ft5x06 - show model name by sysfs
+  Input: edt-ft5x06 - show firmware version by sysfs
+  Input: edt-ft5x06 - show crc and header errors by sysfs
 
-have you a simple example how to implement it? have not done anything with=
- dynamic-debug yet...seems mighty but not trivial to implement.
+ .../input/touchscreen/edt-ft5x06.yaml         |   8 ++
+ drivers/input/touchscreen/edt-ft5x06.c        | 103 ++++++++++++++++--
+ 2 files changed, 103 insertions(+), 8 deletions(-)
 
-currently dev_dbg() is used for the messages that i try to disable...but s=
-how others from driver_debug at debug level.
+-- 
+2.32.0
 
-What needs to be changed to filter it via DYNAMIC_DEBUG?
-
-found this, but i'm not sure if i interpret it the right way...
-
-https://elixir.bootlin.com/linux/v5.18-rc5/source/drivers/acpi/utils.c#L49=
-5
-defines __acpi_handle_debug
-called via acpi_handle_debug macro
-https://elixir.bootlin.com/linux/v5.18-rc5/source/include/linux/acpi.h#L11=
-36
-
-so basicly convert dev_dbg to __dynamic_pr_debug
-
-at least much more changed code because all dev_*/pr_* needs to be changed=
- to own handler which does the switch based on CONFIG_DYNAMIC_DEBUG set or=
- not.
-
-regards Frank

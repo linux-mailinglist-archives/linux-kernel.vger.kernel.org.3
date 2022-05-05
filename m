@@ -2,69 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84E3D51CC31
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 00:36:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1A5851CC3B
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 00:36:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381706AbiEEWjW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 18:39:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54724 "EHLO
+        id S1386437AbiEEWjs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 18:39:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386405AbiEEWin (ORCPT
+        with ESMTP id S1386491AbiEEWio (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 18:38:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 134B0606C7
-        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 15:34:46 -0700 (PDT)
+        Thu, 5 May 2022 18:38:44 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C65D606D6
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 15:34:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9633D61F3C
-        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 22:34:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DAA22C385A8;
-        Thu,  5 May 2022 22:34:44 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 71A0EB8306F
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 22:34:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06947C385A8;
+        Thu,  5 May 2022 22:34:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651790085;
-        bh=FGb5UR006KfZMpikx+bLVdLJYMjB2a8HujAnk3x3PNM=;
+        s=korg; t=1651790086;
+        bh=WI8QLFqK75r2HXo5FfrBnTLOY0nctWS77VW+kxLMDnU=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=zPhbqAzN+cP39KbbUbk1rg1C5Bp0o3WxqSHIDNm36wQHJWrMicsuJo73I9FU2FKs8
-         uWIEbySkyFZLwESHkaH9n6tG7gQVSCYMLHzfZbf2eZOYl5uEJsnoWlK00AnXtOGiFc
-         17B45hda7Yr5Uc/LFYfapEEWuaiwne5vxdEZCPI0=
-Date:   Thu, 5 May 2022 23:11:35 +0200
+        b=tl/wYOGsIhkZwOn4lj4ydl9gkmOXb87kvwJhPZ9VU3wgCKZcZjh0zEwjLKRd6RpRP
+         ZOsS2j7ItAW0I87QNLAGl5I5QuKpeEBCxn2OY0tJ2A+IoJBfMUMFAO3l3Fc8iGhmFm
+         FAfEoeaOzhiPyARTeQQry3VnMBIclBAcNZZi1BFA=
+Date:   Thu, 5 May 2022 23:16:15 +0200
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Tinghan Shen <tinghan.shen@mediatek.com>
-Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Borislav Petkov <bp@suse.de>,
-        Michal Suchanek <msuchanek@suse.de>,
-        Cristian Marussi <cristian.marussi@arm.com>,
-        Etienne Carriere <etienne.carriere@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Simon Trimmer <simont@opensource.cirrus.com>,
-        John Stultz <john.stultz@linaro.org>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
-        YC Hung <yc.hung@mediatek.com>,
-        Tzung-Bi Shih <tzungbi@google.com>,
-        Curtis Malainey <cujomalainey@chromium.org>,
-        Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, alsa-devel@alsa-project.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-Subject: Re: [RESEND PATCH v7 1/1] firmware: mediatek: add adsp ipc protocol
- interface
-Message-ID: <YnQ9h6k0yFN8f+Ui@kroah.com>
-References: <20220505053048.13804-1-tinghan.shen@mediatek.com>
- <20220505053048.13804-2-tinghan.shen@mediatek.com>
+To:     Artur Bujdoso <artur.bujdoso@gmail.com>
+Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] staging: octeon-usb: remove unnecessary parentheses
+Message-ID: <YnQ+n2+nYVLns2r+@kroah.com>
+References: <Yk/knRtaujd/PzK7@crux>
+ <Yk/uxoi4VUaR9OpO@kroah.com>
+ <YmqFGS2e45SEUbe/@crux>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220505053048.13804-2-tinghan.shen@mediatek.com>
+In-Reply-To: <YmqFGS2e45SEUbe/@crux>
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -75,143 +52,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 05, 2022 at 01:30:48PM +0800, Tinghan Shen wrote:
-> From: TingHan Shen <tinghan.shen@mediatek.com>
+On Thu, Apr 28, 2022 at 02:14:17PM +0200, Artur Bujdoso wrote:
+> On Fri, Apr 08, 2022 at 10:13:58AM +0200, Greg Kroah-Hartman wrote:
+> > On Fri, Apr 08, 2022 at 09:30:37AM +0200, Artur Bujdoso wrote:
+> > > Adhere to Linux kernel coding style.
+> > > 
+> > > Reported by checkpatch:
+> > > 
+> > > CHECK:UNNECESSARY_PARENTHESES: Unnecessary parentheses
+> > > 
+> > > Signed-off-by: Artur Bujdoso <artur.bujdoso@gmail.com>
+> > > ---
+> > >  drivers/staging/octeon-usb/octeon-hcd.c | 62 ++++++++++++-------------
+> > >  1 file changed, 31 insertions(+), 31 deletions(-)
+> > > 
+> > > diff --git a/drivers/staging/octeon-usb/octeon-hcd.c b/drivers/staging/octeon-usb/octeon-hcd.c
+> > > index a1cd81d4a114..32bcd6c582f5 100644
+> > > --- a/drivers/staging/octeon-usb/octeon-hcd.c
+> > > +++ b/drivers/staging/octeon-usb/octeon-hcd.c
+> > > @@ -1101,9 +1101,9 @@ static struct cvmx_usb_pipe *cvmx_usb_open_pipe(struct octeon_hcd *usb,
+> > >  	pipe = kzalloc(sizeof(*pipe), GFP_ATOMIC);
+> > >  	if (!pipe)
+> > >  		return NULL;
+> > > -	if ((device_speed == CVMX_USB_SPEED_HIGH) &&
+> > > -	    (transfer_dir == CVMX_USB_DIRECTION_OUT) &&
+> > > -	    (transfer_type == CVMX_USB_TRANSFER_BULK))
+> > > +	if (device_speed == CVMX_USB_SPEED_HIGH &&
+> > > +	    transfer_dir == CVMX_USB_DIRECTION_OUT &&
+> > > +	    transfer_type == CVMX_USB_TRANSFER_BULK)
+> > >  		pipe->flags |= CVMX_USB_PIPE_FLAGS_NEED_PING;
+> > 
+> > Nah, the original is fine, no need to change this.
+> > 
+> > Unless, do you have this hardware?  If so, getting this out of staging
+> > would be nice to have happen one day.
+> > 
+> > thanks,
+> > 
+> > greg k-h
 > 
-> Some of mediatek processors contain
-> the Tensilica HiFix DSP for audio processing.
+> Hi,
 > 
-> The communication between Host CPU and DSP firmware is
-> taking place using a shared memory area for message passing.
+> So I do have the hardware, an Ubiquiti Edgerouter POE. This has a Cavium Octeon+ SoC and a single USB port.
+> This is used for booting and for rootfs (in a form of a squasfs image) and configuration.
 > 
-> ADSP IPC protocol offers (send/recv) interfaces using
-> mediatek-mailbox APIs.
+> I cross-compiled an unmodified kernel with a sufficient configuration - with the octeon-usb driver added - to get to user space.
+> I am not sure how should I present it - sorry in advance if it's not the right way - so here is the boot log as it happened. 
 > 
-> We use two mbox channels to implement a request-reply protocol.
+> I should note that I tried to plug in other devices such as usb pendrives, wifi dongles, a hub and even an Elgato card, all showed up.
+> Partitions were also detected on all usb drives, all of them had some sort of FAT partitions with MBR.
 > 
-> Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
-> Signed-off-by: TingHan Shen <tinghan.shen@mediatek.com>
-> Reviewed-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-> Reviewed-by: Curtis Malainey <cujomalainey@chromium.org>
-> Reviewed-by: Tzung-Bi Shih <tzungbi@google.com>
-> Reviewed-by: YC Hung <yc.hung@mediatek.com>
-> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> ---
->  drivers/firmware/Kconfig                      |   1 +
->  drivers/firmware/Makefile                     |   1 +
->  drivers/firmware/mediatek/Kconfig             |   9 +
->  drivers/firmware/mediatek/Makefile            |   2 +
->  drivers/firmware/mediatek/mtk-adsp-ipc.c      | 161 ++++++++++++++++++
->  .../linux/firmware/mediatek/mtk-adsp-ipc.h    |  65 +++++++
->  6 files changed, 239 insertions(+)
->  create mode 100644 drivers/firmware/mediatek/Kconfig
->  create mode 100644 drivers/firmware/mediatek/Makefile
->  create mode 100644 drivers/firmware/mediatek/mtk-adsp-ipc.c
->  create mode 100644 include/linux/firmware/mediatek/mtk-adsp-ipc.h
-> 
-> diff --git a/drivers/firmware/Kconfig b/drivers/firmware/Kconfig
-> index d65964996e8d..c4d149b28944 100644
-> --- a/drivers/firmware/Kconfig
-> +++ b/drivers/firmware/Kconfig
-> @@ -300,6 +300,7 @@ source "drivers/firmware/cirrus/Kconfig"
->  source "drivers/firmware/google/Kconfig"
->  source "drivers/firmware/efi/Kconfig"
->  source "drivers/firmware/imx/Kconfig"
-> +source "drivers/firmware/mediatek/Kconfig"
->  source "drivers/firmware/meson/Kconfig"
->  source "drivers/firmware/psci/Kconfig"
->  source "drivers/firmware/smccc/Kconfig"
-> diff --git a/drivers/firmware/Makefile b/drivers/firmware/Makefile
-> index 4e58cb474a68..88fbdc110100 100644
-> --- a/drivers/firmware/Makefile
-> +++ b/drivers/firmware/Makefile
-> @@ -34,6 +34,7 @@ obj-$(CONFIG_GOOGLE_FIRMWARE)	+= google/
->  obj-$(CONFIG_EFI)		+= efi/
->  obj-$(CONFIG_UEFI_CPER)		+= efi/
->  obj-y				+= imx/
-> +obj-y				+= mediatek/
->  obj-y				+= psci/
->  obj-y				+= smccc/
->  obj-y				+= tegra/
-> diff --git a/drivers/firmware/mediatek/Kconfig b/drivers/firmware/mediatek/Kconfig
-> new file mode 100644
-> index 000000000000..6d1e580b967b
-> --- /dev/null
-> +++ b/drivers/firmware/mediatek/Kconfig
-> @@ -0,0 +1,9 @@
-> +# SPDX-License-Identifier: GPL-2.0-only
-> +config MTK_ADSP_IPC
-> +	tristate "MTK ADSP IPC Protocol driver"
-> +	depends on MTK_ADSP_MBOX
-> +	help
-> +	  Say yes here to add support for the MediaTek ADSP IPC
-> +	  between host AP (Linux) and the firmware running on ADSP.
-> +	  ADSP exists on some mtk processors.
-> +	  Client might use shared memory to exchange information with ADSP side.
-> diff --git a/drivers/firmware/mediatek/Makefile b/drivers/firmware/mediatek/Makefile
-> new file mode 100644
-> index 000000000000..4e840b65650d
-> --- /dev/null
-> +++ b/drivers/firmware/mediatek/Makefile
-> @@ -0,0 +1,2 @@
-> +# SPDX-License-Identifier: GPL-2.0
-> +obj-$(CONFIG_MTK_ADSP_IPC)		+= mtk-adsp-ipc.o
-> diff --git a/drivers/firmware/mediatek/mtk-adsp-ipc.c b/drivers/firmware/mediatek/mtk-adsp-ipc.c
-> new file mode 100644
-> index 000000000000..87cee61dbf32
-> --- /dev/null
-> +++ b/drivers/firmware/mediatek/mtk-adsp-ipc.c
-> @@ -0,0 +1,161 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright (c) 2022 MediaTek Corporation. All rights reserved.
-> + * Author: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
-> + */
-> +
-> +#include <linux/firmware/mediatek/mtk-adsp-ipc.h>
-> +#include <linux/kernel.h>
-> +#include <linux/mailbox_client.h>
-> +#include <linux/module.h>
-> +#include <linux/of_platform.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/slab.h>
-> +
-> +/*
-> + * mtk_adsp_ipc_send - send ipc cmd to MTK ADSP
-> + *
-> + * @ipc: ADSP IPC handle
-> + * @idx: index of the mailbox channel
-> + * @msg: IPC cmd (reply or request)
-> + *
-> + * Returns zero for success from mbox_send_message
-> + * negative value for error
-> + */
-> +int mtk_adsp_ipc_send(struct mtk_adsp_ipc *ipc, unsigned int idx, uint32_t msg)
-> +{
-> +	struct mtk_adsp_chan *adsp_chan;
-> +	int ret;
-> +
-> +	if (idx >= MTK_ADSP_MBOX_NUM)
-> +		return -EINVAL;
-> +
-> +	adsp_chan = &ipc->chans[idx];
-> +	ret = mbox_send_message(adsp_chan->ch, &msg);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	/*
-> +	 * mbox_send_message returns non-negative value on success,
-> +	 * return zero for success
-> +	 */
-> +	return 0;
+> What else can I help with to get this driver out of staging?
 
-You already said this up in the function comments, no need to duplicate
-it again.
-
-> +}
-> +EXPORT_SYMBOL(mtk_adsp_ipc_send);
-
-EXPORT_SYMBOL_GPL()?  I have to ask, sorry.
+Is it checkpatch and sparse clean?  If so, then propose a patch that
+adds it to the proper place in the kernel tree and we can go from there.
 
 thanks,
 

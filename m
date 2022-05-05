@@ -2,30 +2,30 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3277151BBDA
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 11:21:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2B4B51BBE1
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 11:21:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352528AbiEEJYd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 05:24:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34284 "EHLO
+        id S1353288AbiEEJZR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 05:25:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352828AbiEEJX5 (ORCPT
+        with ESMTP id S1352846AbiEEJX6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 05:23:57 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 198E9317;
-        Thu,  5 May 2022 02:20:15 -0700 (PDT)
-Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.55])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4Kv7Rx0sYbz1JBJq;
+        Thu, 5 May 2022 05:23:58 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F053ADB0;
+        Thu,  5 May 2022 02:20:16 -0700 (PDT)
+Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Kv7Rx6MB9zfbMF;
         Thu,  5 May 2022 17:19:09 +0800 (CST)
 Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
+ dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 5 May 2022 17:20:13 +0800
+ 15.1.2375.24; Thu, 5 May 2022 17:20:14 +0800
 Received: from thunder-town.china.huawei.com (10.174.178.55) by
  dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 5 May 2022 17:20:12 +0800
+ 15.1.2375.24; Thu, 5 May 2022 17:20:13 +0800
 From:   Zhen Lei <thunder.leizhen@huawei.com>
 To:     Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
@@ -48,9 +48,9 @@ CC:     Zhen Lei <thunder.leizhen@huawei.com>,
         Chen Zhou <dingguo.cz@antgroup.com>,
         "John Donnelly" <John.p.donnelly@oracle.com>,
         Dave Kleikamp <dave.kleikamp@oracle.com>
-Subject: [PATCH v23 5/6] of: Support more than one crash kernel regions for kexec -s
-Date:   Thu, 5 May 2022 17:18:44 +0800
-Message-ID: <20220505091845.167-6-thunder.leizhen@huawei.com>
+Subject: [PATCH v23 6/6] docs: kdump: Update the crashkernel description for arm64
+Date:   Thu, 5 May 2022 17:18:45 +0800
+Message-ID: <20220505091845.167-7-thunder.leizhen@huawei.com>
 X-Mailer: git-send-email 2.26.0.windows.1
 In-Reply-To: <20220505091845.167-1-thunder.leizhen@huawei.com>
 References: <20220505091845.167-1-thunder.leizhen@huawei.com>
@@ -70,39 +70,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When "crashkernel=X,high" is used, there may be two crash regions:
-high=crashk_res and low=crashk_low_res. But now the syscall
-kexec_file_load() only add crashk_res into "linux,usable-memory-range",
-this may cause the second kernel to have no available dma memory.
-
-Fix it like kexec tool do for option -c, add both 'high' and 'low' regions
-into the dtb.
+Now arm64 has added support for "crashkernel=X,high" and
+"crashkernel=Y,low". Unlike x86, crash low memory is not allocated if
+"crashkernel=Y,low" is not specified.
 
 Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
 ---
- drivers/of/kexec.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ Documentation/admin-guide/kernel-parameters.txt | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/of/kexec.c b/drivers/of/kexec.c
-index b9bd1cff179388c..8d374cc552be5f2 100644
---- a/drivers/of/kexec.c
-+++ b/drivers/of/kexec.c
-@@ -386,6 +386,15 @@ void *of_kexec_alloc_and_setup_fdt(const struct kimage *image,
- 				crashk_res.end - crashk_res.start + 1);
- 		if (ret)
- 			goto out;
-+
-+		if (crashk_low_res.end) {
-+			ret = fdt_appendprop_addrrange(fdt, 0, chosen_node,
-+					"linux,usable-memory-range",
-+					crashk_low_res.start,
-+					crashk_low_res.end - crashk_low_res.start + 1);
-+			if (ret)
-+				goto out;
-+		}
- 	}
+diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+index 3f1cc5e317ed4a5..aa44c61114aa4b8 100644
+--- a/Documentation/admin-guide/kernel-parameters.txt
++++ b/Documentation/admin-guide/kernel-parameters.txt
+@@ -808,7 +808,7 @@
+ 			Documentation/admin-guide/kdump/kdump.rst for an example.
  
- 	/* add bootargs */
+ 	crashkernel=size[KMG],high
+-			[KNL, X86-64] range could be above 4G. Allow kernel
++			[KNL, X86-64, ARM64] range could be above 4G. Allow kernel
+ 			to allocate physical memory region from top, so could
+ 			be above 4G if system have more than 4G ram installed.
+ 			Otherwise memory region will be allocated below 4G, if
+@@ -821,7 +821,7 @@
+ 			that require some amount of low memory, e.g. swiotlb
+ 			requires at least 64M+32K low memory, also enough extra
+ 			low memory is needed to make sure DMA buffers for 32-bit
+-			devices won't run out. Kernel would try to allocate at
++			devices won't run out. Kernel would try to allocate
+ 			at least 256M below 4G automatically.
+ 			This one let user to specify own low range under 4G
+ 			for second kernel instead.
+@@ -829,6 +829,11 @@
+ 			It will be ignored when crashkernel=X,high is not used
+ 			or memory reserved is below 4G.
+ 
++			[KNL, ARM64] range in low memory.
++			This one let user to specify a low range in DMA zone for
++			crash dump kernel.
++			It will be ignored when crashkernel=X,high is not used.
++
+ 	cryptomgr.notests
+ 			[KNL] Disable crypto self-tests
+ 
 -- 
 2.25.1
 

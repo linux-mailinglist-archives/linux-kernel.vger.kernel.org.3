@@ -2,70 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B6DC51C321
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 16:59:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5821751C399
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 17:13:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380923AbiEEPCN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 11:02:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51170 "EHLO
+        id S1381192AbiEEPRN convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 5 May 2022 11:17:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236360AbiEEPCK (ORCPT
+        with ESMTP id S1381199AbiEEPRJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 11:02:10 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB2122F384;
-        Thu,  5 May 2022 07:58:30 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 93DDEB82D7B;
-        Thu,  5 May 2022 14:58:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86188C385A8;
-        Thu,  5 May 2022 14:58:27 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="O34exH6/"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1651762706;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=KpInDdEYbSbY47RBsSFy57ts9NQcl1oXkKpbt5QwMwo=;
-        b=O34exH6/JYvayiHMbbkp9j06B54KTUgRhn4BkyxmGuq6kASQ+pTAsEYwruvN8hg/FCmrqY
-        SH7IPkWNsEJ8o0fxsA+26OBcg4WX5UCA6u5/nORvcQYJBwbKFbJGPY6BGVy2VhYbLYIh0+
-        qiDSWoKpSa2Co7zl/iUD5bJuw2P55J0=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 88f7219e (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Thu, 5 May 2022 14:58:25 +0000 (UTC)
-Date:   Thu, 5 May 2022 16:58:22 +0200
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     linux-acpi@vger.kernel.org, stable@vger.kernel.org,
-        rafael@kernel.org, gregkh@linuxfoundation.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: cache_from_obj: Wrong slab cache. Acpi-Namespace but object is
- from kmalloc-64
-Message-ID: <YnPmDlf3KD9ckpM1@zx2c4.com>
-References: <YnPkFkZ/S87cHUnP@zx2c4.com>
+        Thu, 5 May 2022 11:17:09 -0400
+X-Greylist: delayed 902 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 05 May 2022 08:13:28 PDT
+Received: from mail.actia.se (212-181-117-226.customer.telia.com [212.181.117.226])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E90A5C35C;
+        Thu,  5 May 2022 08:13:27 -0700 (PDT)
+Received: from S036ANL.actianordic.se (10.12.31.117) by S035ANL.actianordic.se
+ (10.12.31.116) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Thu, 5 May
+ 2022 16:58:24 +0200
+Received: from S036ANL.actianordic.se ([fe80::e13e:1feb:4ea6:ec69]) by
+ S036ANL.actianordic.se ([fe80::e13e:1feb:4ea6:ec69%10]) with mapi id
+ 15.01.2375.024; Thu, 5 May 2022 16:58:24 +0200
+From:   John Ernberg <john.ernberg@actia.se>
+To:     "a.fatoum@pengutronix.de" <a.fatoum@pengutronix.de>
+CC:     "andreas@rammhold.de" <andreas@rammhold.de>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "david@sigma-star.at" <david@sigma-star.at>,
+        "dhowells@redhat.com" <dhowells@redhat.com>,
+        "ebiggers@kernel.org" <ebiggers@kernel.org>,
+        "franck.lenormand@nxp.com" <franck.lenormand@nxp.com>,
+        "herbert@gondor.apana.org.au" <herbert@gondor.apana.org.au>,
+        "horia.geanta@nxp.com" <horia.geanta@nxp.com>,
+        "j.luebbe@pengutronix.de" <j.luebbe@pengutronix.de>,
+        "jarkko@kernel.org" <jarkko@kernel.org>,
+        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
+        "jmorris@namei.org" <jmorris@namei.org>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>,
+        "matthias.schiffer@ew.tq-group.com" 
+        <matthias.schiffer@ew.tq-group.com>,
+        "pankaj.gupta@nxp.com" <pankaj.gupta@nxp.com>,
+        "richard@nod.at" <richard@nod.at>,
+        "s.trumtrar@pengutronix.de" <s.trumtrar@pengutronix.de>,
+        "serge@hallyn.com" <serge@hallyn.com>,
+        "sumit.garg@linaro.org" <sumit.garg@linaro.org>,
+        "tharvey@gateworks.com" <tharvey@gateworks.com>,
+        "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
+        John Ernberg <john.ernberg@actia.se>
+Subject: Re: [PATCH v8 0/6] KEYS: trusted: Introduce support for NXP
+ CAAM-based trusted keys
+Thread-Topic: [PATCH v8 0/6] KEYS: trusted: Introduce support for NXP
+ CAAM-based trusted keys
+Thread-Index: AQHYYJCRaP1BJI53pkGuwIjy0ObIWw==
+Date:   Thu, 5 May 2022 14:58:23 +0000
+Message-ID: <20220505145756.2492566-1-john.ernberg@actia.se>
+References: <20220428140145.870527-1-a.fatoum@pengutronix.de>
+In-Reply-To: <20220428140145.870527-1-a.fatoum@pengutronix.de>
+Accept-Language: en-US, sv-SE
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-mailer: git-send-email 2.35.1
+x-originating-ip: [10.12.12.58]
+x-esetresult: clean, is OK
+x-esetid: 37303A293105C852667D6B
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <YnPkFkZ/S87cHUnP@zx2c4.com>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,RDNS_DYNAMIC,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hey again,
+Gave this a go on iMX8QXP with Linux 5.17.5 and I can't quite get it working.
 
-On Thu, May 05, 2022 at 04:50:16PM +0200, Jason A. Donenfeld wrote:
-> Hi Rafael,
-> 
-> I'm seeing the following boot time splat on 5.4.191:
+I get -ENODEV from add_key() via keyctl. When I traced it in dmesg I couldn't
+get an as clear picture as I would like but CAAM (and thus possibly JRs?)
+initialzing after trusted_key.
 
-Figured it out. 25928deeb1e4 ("ACPICA: Always create namespace nodes
-using acpi_ns_create_node()") needs to be backported to stable.
+dmesg snips:
+[    1.296772] trusted_key: Job Ring Device allocation for transform failed
+...
+[    1.799768] caam 31400000.crypto: device ID = 0x0a16040000000100 (Era 9)
+[    1.807142] caam 31400000.crypto: job rings = 2, qi = 0
+[    1.822667] caam algorithms registered in /proc/crypto
+[    1.830541] caam 31400000.crypto: caam pkc algorithms registered in /proc/crypto
+[    1.841807] caam 31400000.crypto: registering rng-caam
 
-Jason
+I didn't quite have the time to get a better trace than that.
+
+Best regards // John Ernberg

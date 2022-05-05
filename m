@@ -2,190 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9BDA51CC55
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 00:49:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED1AA51CC5E
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 00:58:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386508AbiEEWxC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 18:53:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35712 "EHLO
+        id S1358131AbiEEXB7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 19:01:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386487AbiEEWw6 (ORCPT
+        with ESMTP id S234134AbiEEXB4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 18:52:58 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F72E5DD1C
-        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 15:49:17 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: dmitry.osipenko)
-        with ESMTPSA id CC3041F40774
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1651790956;
-        bh=ISp00WA5pK91zAAU1GJQYbnnxVyu4GtysQuECSVD5SU=;
-        h=Date:Subject:To:References:From:In-Reply-To:From;
-        b=bwatyiwZ4kDcFa6lvUhE4lcQTXXu+ZquCX1nIIoLtbo5lgvoss7jP7T3TU/NfmpcS
-         aLmFmGDnWo80BlCfgC3u0ysYro21h5XqsTfr4FNS4Uf4VxerGtu1BgAbzZtIyIq57W
-         p70AeBWglC7f/q/P+989NEwASAy8ue+u3H2HD9T7NMcVdAjrGsWzN4qs9eqUVOFHKn
-         WvvI/igjZd7CH1Nv54Od6RkijyI3yyBKVpktUHR/uGhSWZbzR2s39tddrOQyKfPo6T
-         t6cKOSJ1G6C7M7u5mEC7Zac4bAXXIjEialQTPiy1vKnhfPyjv9K2tHjGKB9IYDTyhM
-         vRkW0/7WThHjw==
-Message-ID: <83e68918-68de-c0c6-6f9b-e94d34b19383@collabora.com>
-Date:   Fri, 6 May 2022 01:49:12 +0300
+        Thu, 5 May 2022 19:01:56 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C9DB5EBE4
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 15:58:15 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id i20-20020a05600c355400b0039456976dcaso3139588wmq.1
+        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 15:58:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=tg9pGfi5Km3VoMJM0LTkjUuUhJHBdyw13Xhhfgqt+cw=;
+        b=B4r6h2CwaztRmtxDSYqK7gCNt4eCtjWLDBROB0hbM67sifEx8uZuPGYnY9wTHUl72K
+         L2cZC6eatXO14Y927WRfuxsCuWJl4eZ9GGi6mh0RPDXdPLx/w4lhijwe18Pf5VY45R1A
+         sxOIma3kdENj1zkG0QiWn6LwlFFYF7F0nkDWrrLyWXZgJgQYXrC1Cz+mrimqVK8mlhXn
+         nQ5qk59G4ikDj68CWoFWFu38W30UmRepnUy65KeKbOcNugI9BoG7prPMBTC2xgXF6hz8
+         H3dbwaesgJfnMg86T9uJsXw38bq8EO6+XkWIKZU/ASlww6ZcKD/4+tHolP9Pz7mLf1lb
+         RlFA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=tg9pGfi5Km3VoMJM0LTkjUuUhJHBdyw13Xhhfgqt+cw=;
+        b=C0AgpR7k13o/walj5RQWrDnuRIeLPu9zRwepiGybo7NCqwh8O0jYsDhIewZQBsS3gk
+         tBODfL9ScGJEr74coSHsuUrXEIcjZXgTiWwmZmbl7ge0sz12AaIAqoJnZhu/FSLXbc+b
+         McjICvgnjwNq31st/HnpFTYNP69z3fs4s/pFy8Y69nG1+Mja+bfXadcVWTEzz76XoRcf
+         8sanoCUpGnt4lSIOCkuL9RFiiAEss5HYBZUcFlBXO2/VbI2s2YdewEYR3KljpPbkZwlC
+         IjrGH3AV8GhBELknnywXpMC1SLUe1ZW6annj8WBT2OWyJ25F+2KeCwTNKIHZHf7gMWWm
+         jldg==
+X-Gm-Message-State: AOAM530ccfJdQDNdM7ZJGANYrfwEwqYYKY8UzPvO/jGMBKtQZnYfQrul
+        r02IMiS+P9UE9i4WIixGGMdyYPg2J8JLwgVGcJ6cLA==
+X-Google-Smtp-Source: ABdhPJw3JAX5vU8+JI2cLa5sd1dMq1PwZvG30mWPzocPpq/XzPCbyJhb48dtPKX0ZVoZU0oQU10Yj7G7X0r0T1MDOCc=
+X-Received: by 2002:a05:600c:2315:b0:394:1f6:f663 with SMTP id
+ 21-20020a05600c231500b0039401f6f663mr6934294wmo.115.1651791493710; Thu, 05
+ May 2022 15:58:13 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v4 10/15] drm/shmem-helper: Take reservation lock instead
- of drm_gem_shmem locks
-Content-Language: en-US
-To:     Daniel Stone <daniel@fooishbar.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Gurchetan Singh <gurchetansingh@chromium.org>,
-        Chia-I Wu <olvaffe@gmail.com>,
-        Daniel Almeida <daniel.almeida@collabora.com>,
-        Gert Wollny <gert.wollny@collabora.com>,
-        Gustavo Padovan <gustavo.padovan@collabora.com>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
-        Rob Clark <robdclark@gmail.com>,
-        Emil Velikov <emil.l.velikov@gmail.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        virtualization@lists.linux-foundation.org
-References: <20220417223707.157113-1-dmitry.osipenko@collabora.com>
- <20220417223707.157113-11-dmitry.osipenko@collabora.com>
- <248083d2-b8f2-a4d7-099d-70a7e7859c11@suse.de>
- <d9e7bec1-fffb-e0c4-8659-ef3ce2c31280@collabora.com>
- <YmlYHNlcmNMfOeyy@phenom.ffwll.local>
- <8f932ab0-bb72-8fea-4078-dc59e9164bd4@collabora.com>
- <YnI3lE0TxLfZaQjE@phenom.ffwll.local>
- <01506516-ab2f-cb6e-7507-f2a3295efb59@collabora.com>
- <YnOHAh9I1ds4+1J+@phenom.ffwll.local>
-From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
-In-Reply-To: <YnOHAh9I1ds4+1J+@phenom.ffwll.local>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220505165639.361733-1-adrian.hunter@intel.com> <20220505165639.361733-4-adrian.hunter@intel.com>
+In-Reply-To: <20220505165639.361733-4-adrian.hunter@intel.com>
+From:   Ian Rogers <irogers@google.com>
+Date:   Thu, 5 May 2022 15:58:00 -0700
+Message-ID: <CAP-5=fXZ92XJbHviDe229=pvAKRevaOLjD549vpTqPpO=64H3g@mail.gmail.com>
+Subject: Re: [PATCH V1 03/23] perf evlist: Use libperf functions in evlist__enable_event_idx()
+To:     Adrian Hunter <adrian.hunter@intel.com>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Leo Yan <leo.yan@linaro.org>, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/5/22 11:12, Daniel Vetter wrote:
-> On Wed, May 04, 2022 at 06:56:09PM +0300, Dmitry Osipenko wrote:
->> On 5/4/22 11:21, Daniel Vetter wrote:
->> ...
->>>>> - Maybe also do what you suggest and keep a separate lock for this, but
->>>>>   the fundamental issue is that this doesn't really work - if you share
->>>>>   buffers both ways with two drivers using shmem helpers, then the
->>>>>   ordering of this vmap_count_mutex vs dma_resv_lock is inconsistent and
->>>>>   you can get some nice deadlocks. So not a great approach (and also the
->>>>>   reason why we really need to get everyone to move towards dma_resv_lock
->>>>>   as _the_ buffer object lock, since otherwise we'll never get a
->>>>>   consistent lock nesting hierarchy).
->>>>
->>>> The separate locks should work okay because it will be always the
->>>> exporter that takes the dma_resv_lock. But I agree that it's less ideal
->>>> than defining the new rules for dma-bufs since sometime you will take
->>>> the resv lock and sometime not, potentially hiding bugs related to lockings.
->>>
->>> That's the issue, some importers need to take the dma_resv_lock for
->>> dma_buf_vmap too (e.g. to first nail the buffer in place when it's a
->>> dynamic memory manager). In practice it'll work as well as what we have
->>> currently, which is similarly inconsistent, except with per-driver locks
->>> instead of shared locks from shmem helpers or dma-buf, so less obvious
->>> that things are inconsistent.
->>>
->>> So yeah if it's too messy maybe the approach is to have a separate lock
->>> for vmap for now, land things, and then fix up dma_buf_vmap in a follow up
->>> series.
->>
->> The amdgpu driver was the fist who introduced the concept of movable
->> memory for dma-bufs. Now we want to support it for DRM SHMEM too. For
->> both amdgpu ttm and shmem drivers we will want to hold the reservation
->> lock when we're touching moveable buffers. The current way of denoting
->> that dma-buf is movable is to implement the pin/unpin callbacks of the
->> dma-buf ops, should be doable for shmem.
-> 
-> Hm that sounds like a bridge too far? I don't think we want to start
-> adding moveable dma-bufs for shmem, thus far at least no one asked for
-> that. Goal here is just to streamline the locking a bit and align across
-> all the different ways of doing buffers in drm.
-> 
-> Or do you mean something else and I'm just completely lost?
+On Thu, May 5, 2022 at 9:56 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
+>
+> evlist__enable_event_idx() is used only for auxtrace events which are never
+> system_wide. Simplify by using libperf enable event functions.
+>
+> Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
 
-I'm talking about aligning DRM locks with the dma-buf locks. The problem
-is that the convention of dma-bufs isn't specified yet. In particular
-there is no convention for the mapping operations.
+Acked-by: Ian Rogers <irogers@google.com>
 
-If we want to switch vmapping of shmem to use reservation lock, then
-somebody will have to hold this lock for dma_buf_vmap() and the locking
-convention needs to be specified firmly.
+Thanks,
+Ian
 
-In case of dynamic buffers, we will also need to specify whether
-dma_buf_vmap() should imply the implicit pinning by exporter or the
-buffer must be pinned explicitly by importer before dma_buf_vmap() is
-invoked.
-
-Perhaps I indeed shouldn't care about this for this patchset. The
-complete locking model of dma-bufs must be specified first.
-
->> A day ago I found that mapping of imported dma-bufs is broken at least
->> for the Tegra DRM driver (and likely for others too) because driver
->> doesn't assume that anyone will try to mmap imported buffer and just
->> doesn't handle this case at all, so we're getting a hard lockup on
->> touching mapped memory because we're mapping something else than the
->> dma-buf.
-> 
-> Huh that sounds bad, how does this happen? Pretty much all pieces of
-> dma-buf (cpu vmap, userspace mmap, heck even dma_buf_attach) are optional
-> or at least can fail for various reasons. So exporters not providing mmap
-> support is fine, but importers then dying is not.
-
-Those drivers that die don't have userspace that uses dma-bufs
-extensively. I noticed it only because was looking at this code too much
-for the last days.
-
-Drivers that don't die either map imported BOs properly or don't allow
-mapping at all.
-
->> My plan is to move the dma-buf management code to the level of DRM core
->> and make it aware of the reservation locks for the dynamic dma-bufs.
->> This way we will get the proper locking for dma-bufs and fix mapping of
->> imported dma-bufs for Tegra and other drivers.
-> 
-> So maybe we're completely talking past each another, or coffee is not
-> working here on my end, but I've no idea what you mean.
-> 
-> We do have some helpers for taking care of the dma_resv_lock dance, and
-> Christian König has an rfc patch set to maybe unify this further. But that
-> should be fairly orthogonal to reworking shmem (it might help a bit with
-> reworking shmem though).
-
-The reservation lock itself doesn't help much shmem, IMO. It should help
-only in the context of dynamic dma-bufs and today we don't have a need
-in the dynamic shmem dma-bufs.
-
-You were talking about making DRM locks consistent with dma-buf locks,
-so I thought that yours main point of making use of reservation locks
-for shmem is to prepare to the new locking scheme.
-
-I wanted to try to specify the dma-buf locking convention for mapping
-operations because it's missing right now and it should affect how DRM
-should take the reservation locks, but this is not easy to do as I see now.
-
-Could you please point at the Christian's RFC patch? He posted too many
-patches, can't find it :) I'm curious to take a look.
-
--- 
-Best regards,
-Dmitry
+> ---
+>  tools/perf/util/evlist.c | 44 ++--------------------------------------
+>  1 file changed, 2 insertions(+), 42 deletions(-)
+>
+> diff --git a/tools/perf/util/evlist.c b/tools/perf/util/evlist.c
+> index 52ea004ba01e..9fcecf7daa62 100644
+> --- a/tools/perf/util/evlist.c
+> +++ b/tools/perf/util/evlist.c
+> @@ -334,14 +334,6 @@ int evlist__add_newtp(struct evlist *evlist, const char *sys, const char *name,
+>         return 0;
+>  }
+>
+> -static int evlist__nr_threads(struct evlist *evlist, struct evsel *evsel)
+> -{
+> -       if (evsel->core.system_wide)
+> -               return 1;
+> -       else
+> -               return perf_thread_map__nr(evlist->core.threads);
+> -}
+> -
+>  struct evlist_cpu_iterator evlist__cpu_begin(struct evlist *evlist, struct affinity *affinity)
+>  {
+>         struct evlist_cpu_iterator itr = {
+> @@ -546,46 +538,14 @@ void evlist__toggle_enable(struct evlist *evlist)
+>         (evlist->enabled ? evlist__disable : evlist__enable)(evlist);
+>  }
+>
+> -static int evlist__enable_event_cpu(struct evlist *evlist, struct evsel *evsel, int cpu)
+> -{
+> -       int thread;
+> -       int nr_threads = evlist__nr_threads(evlist, evsel);
+> -
+> -       if (!evsel->core.fd)
+> -               return -EINVAL;
+> -
+> -       for (thread = 0; thread < nr_threads; thread++) {
+> -               int err = ioctl(FD(evsel, cpu, thread), PERF_EVENT_IOC_ENABLE, 0);
+> -               if (err)
+> -                       return err;
+> -       }
+> -       return 0;
+> -}
+> -
+> -static int evlist__enable_event_thread(struct evlist *evlist, struct evsel *evsel, int thread)
+> -{
+> -       int cpu;
+> -       int nr_cpus = perf_cpu_map__nr(evlist->core.user_requested_cpus);
+> -
+> -       if (!evsel->core.fd)
+> -               return -EINVAL;
+> -
+> -       for (cpu = 0; cpu < nr_cpus; cpu++) {
+> -               int err = ioctl(FD(evsel, cpu, thread), PERF_EVENT_IOC_ENABLE, 0);
+> -               if (err)
+> -                       return err;
+> -       }
+> -       return 0;
+> -}
+> -
+>  int evlist__enable_event_idx(struct evlist *evlist, struct evsel *evsel, int idx)
+>  {
+>         bool per_cpu_mmaps = !perf_cpu_map__empty(evlist->core.user_requested_cpus);
+>
+>         if (per_cpu_mmaps)
+> -               return evlist__enable_event_cpu(evlist, evsel, idx);
+> +               return perf_evsel__enable_cpu(&evsel->core, idx);
+>
+> -       return evlist__enable_event_thread(evlist, evsel, idx);
+> +       return perf_evsel__enable_thread(&evsel->core, idx);
+>  }
+>
+>  int evlist__add_pollfd(struct evlist *evlist, int fd)
+> --
+> 2.25.1
+>

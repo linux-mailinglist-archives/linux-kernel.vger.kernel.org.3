@@ -2,59 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 559AC51C8B1
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 21:09:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B935051C8B3
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 21:09:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233366AbiEETNG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 15:13:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57802 "EHLO
+        id S1384862AbiEETN1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 15:13:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236899AbiEETND (ORCPT
+        with ESMTP id S1359647AbiEETNZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 15:13:03 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AF2E4A3CC;
-        Thu,  5 May 2022 12:09:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B831361DA5;
-        Thu,  5 May 2022 19:09:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02E04C385A4;
-        Thu,  5 May 2022 19:09:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651777762;
-        bh=Uk2itM+41NwsyGYkqfOsrHQ+MB+xj36KVOfK4Ms5dT8=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=nXdjxiKaiafN/TyUnZz8u3dV9XIk5tohTB/l4VZoAY95taxze15KtFhJGG8JjDVmf
-         oi3NP+9l5Yb/HrKgCGX6jMTXIsg/H5qrvvytdIMSAyXwz5GQ+9gj7O/bWfinpZMLXQ
-         Hctviq2fFMHIhqbf4MdOjQ2MTKvhYac2FFsPkT/TTn4sIMMFxUbAid4bR9AzKMY9r1
-         p8jwxjm1+8JgC3xqBBXg2oc20TXsA9WQAwG3CEgwljjG1A+s2wpQNWVykroOWxrON+
-         xIMWlMOSIYQ0bcyy1Oi4FTIk3krpKYQWw8YLxHC675hAIjYSLFWgCJ8c3dI7LNbiYf
-         g/okAPjVmAuaA==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 55AC05C2CB7; Thu,  5 May 2022 12:09:15 -0700 (PDT)
-Date:   Thu, 5 May 2022 12:09:15 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     "Uladzislau Rezki (Sony)" <urezki@gmail.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>, RCU <rcu@vger.kernel.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Neeraj Upadhyay <neeraj.iitr10@gmail.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>,
-        bigeasy@linutronix.de
-Subject: Re: [PATCH] rcu/nocb: Add an option to ON/OFF an offloading from RT
- context
-Message-ID: <20220505190915.GW1790663@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20220505101641.28472-1-urezki@gmail.com>
+        Thu, 5 May 2022 15:13:25 -0400
+Received: from us-smtp-delivery-74.mimecast.com (us-smtp-delivery-74.mimecast.com [170.10.129.74])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AF00A4A3CC
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 12:09:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1651777784;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ZxnXTkpEEA0ypiQkB3eztb9h9bG9xl88+4zCoT7tsso=;
+        b=BJ9yoi+nRcg14IJxTPZvVIfvVPvpW92mMqUNFWpOdzt06t6D+MSGlyJhYl/ALEbQC/npc9
+        sVIVfSXp6t3Xe+lqQ/YFeZspphR6AWgKQJ9sovw9Ur4d247f2maqKTmyN+vZvcgcq37kUG
+        3mY6cNIK/0P8/IVxC3ozT1BWjnQHMlU=
+Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
+ [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-333-Cuo0fmAbPsObRm3hWpERqw-1; Thu, 05 May 2022 15:09:43 -0400
+X-MC-Unique: Cuo0fmAbPsObRm3hWpERqw-1
+Received: by mail-qt1-f200.google.com with SMTP id d15-20020ac85d8f000000b002f3b3b7e0adso4055762qtx.20
+        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 12:09:43 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:organization:user-agent:mime-version
+         :content-transfer-encoding;
+        bh=ZxnXTkpEEA0ypiQkB3eztb9h9bG9xl88+4zCoT7tsso=;
+        b=AEsjNhFSlg/wiEtIhPMhXM0mdJO+MFMW0x5aSrFZhPnQbIzcbUG4kMyTSkV4GjuIp+
+         ogAlenFaXaKFRIXBRFLajbvZdOEqsNgIV3gN+mkKneo3yBJPTEIx0As/L42HAif3Zef+
+         wW+yOxS8rxh/3dBfo7j8COD1bRwPkinuz0yu15elCsVRuED93xOIhQZ/c38BOud8xTj9
+         V09ypoIz8LzqBvimlO1GffFMg5s41g7hEuD8myAwHvJcdhQYm/U0tDg/j9+lHW8Zln00
+         7HPj7ZvVq5zIfeHM+FSFg9apmaWkGJTxKzvIw620GsQDJinVnCp+wr6XA9ILoQDnHPKc
+         rgtw==
+X-Gm-Message-State: AOAM533J/AQA5nCQ1M1kSEQV/m04hihb8SvuE1UvbbOO2jidouRm6dT2
+        46LxqRyQVAJz0jecTSsTEJ9NmenXaKzeHvueB0m+t+RvR8XpfyCcqr4EZ7Poq+Lwd39xkR12jAQ
+        Fgogslry1mBLXItN/AXP2Yf2n
+X-Received: by 2002:ac8:5cc6:0:b0:2f1:ffa3:ef2b with SMTP id s6-20020ac85cc6000000b002f1ffa3ef2bmr25381841qta.518.1651777782900;
+        Thu, 05 May 2022 12:09:42 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyb4sWIQkHXnwic3TWdV/eR5dZuyWfn9dc3NOluXljfI9qtqzg5cTFanA9fkQON5k6aPQx0Hg==
+X-Received: by 2002:ac8:5cc6:0:b0:2f1:ffa3:ef2b with SMTP id s6-20020ac85cc6000000b002f1ffa3ef2bmr25381817qta.518.1651777782697;
+        Thu, 05 May 2022 12:09:42 -0700 (PDT)
+Received: from [192.168.8.138] (static-71-184-137-158.bstnma.ftas.verizon.net. [71.184.137.158])
+        by smtp.gmail.com with ESMTPSA id u12-20020ac8750c000000b002f39b99f69csm1243350qtq.54.2022.05.05.12.09.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 May 2022 12:09:42 -0700 (PDT)
+Message-ID: <2b71f1e318af9819707de1aa61727f02a7e0a79f.camel@redhat.com>
+Subject: Re: [PATCH] drm/nouveau/gr/gf100-: Clean up some inconsistent
+ indenting
+From:   Lyude Paul <lyude@redhat.com>
+To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>, bskeggs@redhat.com
+Cc:     kherbst@redhat.com, airlied@linux.ie, daniel@ffwll.ch,
+        dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, Abaci Robot <abaci@linux.alibaba.com>
+Date:   Thu, 05 May 2022 15:09:40 -0400
+In-Reply-To: <20220505081345.89762-1-jiapeng.chong@linux.alibaba.com>
+References: <20220505081345.89762-1-jiapeng.chong@linux.alibaba.com>
+Organization: Red Hat Inc.
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220505101641.28472-1-urezki@gmail.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,124 +82,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 05, 2022 at 12:16:41PM +0200, Uladzislau Rezki (Sony) wrote:
-> Introduce a RCU_NOCB_CPU_CB_BOOST kernel option. So a user can
-> decide if an offloading has to be done in a high-prio context or
-> not. Please note an option depends on RCU_NOCB_CPU and RCU_BOOST
-> parameters and by default it is off.
-> 
-> This patch splits the boosting preempted RCU readers and those
-> kthreads which directly responsible for driving expedited grace
-> periods forward with enabling/disabling the offloading from/to
-> SCHED_FIFO/SCHED_OTHER contexts.
-> 
-> The main reason of such split is, for example on Android there
-> are some workloads which require fast expedited grace period to
-> be done whereas offloading in RT context can lead to starvation
-> and hogging a CPU for a long time what is not acceptable for
-> latency sensitive environment. For instance:
-> 
-> <snip>
-> <...>-60 [006] d..1 2979.028717: rcu_batch_start: rcu_preempt CBs=34619 bl=270
-> <snip>
-> 
-> invoking 34 619 callbacks will take time thus making other CFS
-> tasks waiting in run-queue to be starved due to such behaviour.
-> 
-> Signed-off-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
+Thanks!
 
-All good points!
+Reviewed-by: Lyude Paul <lyude@redhat.com>
 
-Some questions and comments below.
+Will push upstream in a moment
 
-Adding Sebastian on CC for his perspective.
-
-						Thanx, Paul
-
+On Thu, 2022-05-05 at 16:13 +0800, Jiapeng Chong wrote:
+> Eliminate the follow smatch warning:
+> 
+> drivers/gpu/drm/nouveau/nvkm/engine/gr/gf100.c:1925
+> gf100_gr_oneinit_tiles() warn: inconsistent indenting.
+> 
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
 > ---
->  kernel/rcu/Kconfig     | 14 ++++++++++++++
->  kernel/rcu/tree.c      |  5 ++++-
->  kernel/rcu/tree_nocb.h |  3 ++-
->  3 files changed, 20 insertions(+), 2 deletions(-)
+>  drivers/gpu/drm/nouveau/nvkm/engine/gr/gf100.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/kernel/rcu/Kconfig b/kernel/rcu/Kconfig
-> index 27aab870ae4c..074630b94902 100644
-> --- a/kernel/rcu/Kconfig
-> +++ b/kernel/rcu/Kconfig
-> @@ -275,6 +275,20 @@ config RCU_NOCB_CPU_DEFAULT_ALL
->  	  Say Y here if you want offload all CPUs by default on boot.
->  	  Say N here if you are unsure.
->  
-> +config RCU_NOCB_CPU_CB_BOOST
-> +	bool "Perform offloading from real-time kthread"
-> +	depends on RCU_NOCB_CPU && RCU_BOOST
-> +	default n
+> diff --git a/drivers/gpu/drm/nouveau/nvkm/engine/gr/gf100.c
+> b/drivers/gpu/drm/nouveau/nvkm/engine/gr/gf100.c
+> index 397ff4fe9df8..f16eabf4f642 100644
+> --- a/drivers/gpu/drm/nouveau/nvkm/engine/gr/gf100.c
+> +++ b/drivers/gpu/drm/nouveau/nvkm/engine/gr/gf100.c
+> @@ -1922,8 +1922,8 @@ gf100_gr_oneinit_tiles(struct gf100_gr *gr)
+>  
+>         for (i = 0; i < gr->gpc_nr; i++) {
+>                 init_frac[i] = gr->tpc_nr[gpc_map[i]] * gr->gpc_nr *
+> mul_factor;
+> -                init_err[i] = i * gr->tpc_max * mul_factor - comm_denom/2;
+> -                 run_err[i] = init_frac[i] + init_err[i];
+> +               init_err[i] = i * gr->tpc_max * mul_factor - comm_denom/2;
+> +               run_err[i] = init_frac[i] + init_err[i];
+>         }
+>  
+>         for (i = 0; i < gr->tpc_total;) {
 
-I understand that you need this to default to "n" on your systems.
-However, other groups already using callback offloading should not see
-a sudden change.  I don't see an Android-specific defconfig file, but
-perhaps something in drivers/android/Kconfig?
+-- 
+Cheers,
+ Lyude Paul (she/her)
+ Software Engineer at Red Hat
 
-One easy way to make this work would be to invert the sense of this
-Kconfig option ("RCU_NOCB_CB_NO_BOOST"?), continue having it default to
-"n", but then select it somewhere in drivers/android/Kconfig.  But I
-would not be surprised if there is a better way.
-
-> +	help
-> +	  Use this option to offload callbacks from the SCHED_FIFO context
-> +	  to make the process faster. As a side effect of this approach is
-> +	  a latency especially for the SCHED_OTHER tasks which will not be
-> +	  able to preempt an offloading kthread. That latency depends on a
-> +	  number of callbacks to be invoked.
-> +
-> +	  Say Y here if you want to set RT priority for offloading kthreads.
-> +	  Say N here if you are unsure.
-> +
->  config TASKS_TRACE_RCU_READ_MB
->  	bool "Tasks Trace RCU readers use memory barriers in user and idle"
->  	depends on RCU_EXPERT && TASKS_TRACE_RCU
-> diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
-> index 9dc4c4e82db6..d769a15bc0e3 100644
-> --- a/kernel/rcu/tree.c
-> +++ b/kernel/rcu/tree.c
-> @@ -154,7 +154,10 @@ static void sync_sched_exp_online_cleanup(int cpu);
->  static void check_cb_ovld_locked(struct rcu_data *rdp, struct rcu_node *rnp);
->  static bool rcu_rdp_is_offloaded(struct rcu_data *rdp);
->  
-> -/* rcuc/rcub/rcuop kthread realtime priority */
-> +/*
-> + * rcuc/rcub/rcuop kthread realtime priority. The former
-> + * depends on if CONFIG_RCU_NOCB_CPU_CB_BOOST is set.
-
-Aren't the rcuo[ps] kthreads controlled by the RCU_NOCB_CPU_CB_BOOST
-Kconfig option?  (As opposed to the "former", which is "rcuc".)
-
-> + */
->  static int kthread_prio = IS_ENABLED(CONFIG_RCU_BOOST) ? 1 : 0;
->  module_param(kthread_prio, int, 0444);
->  
-> diff --git a/kernel/rcu/tree_nocb.h b/kernel/rcu/tree_nocb.h
-> index 60cc92cc6655..a2823be9b1d0 100644
-> --- a/kernel/rcu/tree_nocb.h
-> +++ b/kernel/rcu/tree_nocb.h
-> @@ -1315,8 +1315,9 @@ static void rcu_spawn_cpu_nocb_kthread(int cpu)
->  	if (WARN_ONCE(IS_ERR(t), "%s: Could not start rcuo CB kthread, OOM is now expected behavior\n", __func__))
->  		goto end;
->  
-> -	if (kthread_prio)
-> +	if (IS_ENABLED(CONFIG_RCU_NOCB_CPU_CB_BOOST))
-
-Don't we need both non-zero kthread_prio and the proper setting of the
-new Kconfig option before we run it at SCHED_FIFO?
-
-Yes, we could rely on sched_setscheduler_nocheck() erroring out in
-that case, but that sounds like an accident waiting to happen.
-
->  		sched_setscheduler_nocheck(t, SCHED_FIFO, &sp);
-> +
->  	WRITE_ONCE(rdp->nocb_cb_kthread, t);
->  	WRITE_ONCE(rdp->nocb_gp_kthread, rdp_gp->nocb_gp_kthread);
->  	return;
-> -- 
-> 2.30.2
-> 

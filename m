@@ -2,62 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A769751BFF7
+	by mail.lfdr.de (Postfix) with ESMTP id EF58951BFF8
 	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 14:55:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245541AbiEEM5u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 08:57:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37024 "EHLO
+        id S1378291AbiEEM6K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 08:58:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378259AbiEEM5p (ORCPT
+        with ESMTP id S1378418AbiEEM6E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 08:57:45 -0400
-Received: from us-smtp-delivery-74.mimecast.com (us-smtp-delivery-74.mimecast.com [170.10.129.74])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2B35A562E7
-        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 05:54:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651755245;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=7ALHOS/AhHZTnqkgAgjy6knXJ+TYy7w9Te//L0PuVbc=;
-        b=FjvTu8RglBpB0JjQOKrF5b4ur6XMXUmhS91xiNOwWIa5whubccGZKrdurSv61K7rxP0zCg
-        8fd8OhEU4QwUBhSdHtnJSrAECQZ0fBrRUIpNSJs5oAm9GIVa4mu1CaQfVMV7g1qhION7rF
-        3x3Oo0iSmduqJwfSFeJgUsxOL03oyqI=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-467-9INGEXHyM9CVrc7QbKjBww-1; Thu, 05 May 2022 08:54:02 -0400
-X-MC-Unique: 9INGEXHyM9CVrc7QbKjBww-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Thu, 5 May 2022 08:58:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56F775674C;
+        Thu,  5 May 2022 05:54:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 99F913C02B7C;
-        Thu,  5 May 2022 12:54:01 +0000 (UTC)
-Received: from horse.redhat.com (unknown [10.22.32.26])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 8A5F6552AB1;
-        Thu,  5 May 2022 12:54:01 +0000 (UTC)
-Received: by horse.redhat.com (Postfix, from userid 10451)
-        id 4D000220463; Thu,  5 May 2022 08:54:01 -0400 (EDT)
-Date:   Thu, 5 May 2022 08:54:01 -0400
-From:   Vivek Goyal <vgoyal@redhat.com>
-To:     Dharmendra Hans <dharamhans87@gmail.com>
-Cc:     Miklos Szeredi <miklos@szeredi.hu>, linux-fsdevel@vger.kernel.org,
-        fuse-devel <fuse-devel@lists.sourceforge.net>,
-        linux-kernel@vger.kernel.org, Bernd Schubert <bschubert@ddn.com>
-Subject: Re: [PATCH v4 0/3] FUSE: Implement atomic lookup + open/create
-Message-ID: <YnPI6f2fRZUXbCFP@redhat.com>
-References: <20220502102521.22875-1-dharamhans87@gmail.com>
- <YnLRnR3Xqu0cYPdb@redhat.com>
- <CACUYsyEsRph+iFC_fj3F6Ceqhq7NCTuFPH3up8R6C+_bGHktZg@mail.gmail.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D2DC261E0C;
+        Thu,  5 May 2022 12:54:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3489BC385A8;
+        Thu,  5 May 2022 12:54:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651755259;
+        bh=6lsmH0CxgqYKBOcML9+EDkwriT9FTWy1+KKvkIcEEc0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=c8RxOr9faMCBiRtMQ5zYMH4HMGNtFnSpywnsWHCaLmRJ32wDcwkkYuSbGcQeFmthK
+         /fe3QHQCQaDHRJKWSuA4EMgP5Sz/aSteyeVk7veahmLe4ulzVRxmNbBux6tCivlfTz
+         oOiYMUEpf+Vr7hGbc7tm8SHP3ogwJ84S7gQvzVKjdX/WvpSmBtav/LSI+xBiyMV5iX
+         95nd+Ai6d5wAwH5HdcJZYOsjhmn8s+/w145K3ESSk91/ysHnAMLft+KY/8u1KJwwAm
+         tS28s56PJRveoEubU+hTlrlEuyXuCsnkWi0TOpU0G9JluMovwtjhjnV2mZBYcg4gd0
+         dGczW2ilWeqbA==
+Received: from disco-boy.misterjones.org ([51.254.78.96] helo=www.loen.fr)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nmazo-009Cyd-PY; Thu, 05 May 2022 13:54:16 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CACUYsyEsRph+iFC_fj3F6Ceqhq7NCTuFPH3up8R6C+_bGHktZg@mail.gmail.com>
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Date:   Thu, 05 May 2022 13:54:16 +0100
+From:   Marc Zyngier <maz@kernel.org>
+To:     Bartosz Golaszewski <brgl@bgdev.pl>
+Cc:     Jon Hunter <jonathanh@nvidia.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-tegra@vger.kernel.org
+Subject: Re: [PATCH V2] gpio: max77620: Make the irqchip immutable
+In-Reply-To: <CAMRc=MeXUN6P8kWxB75GsXdKD7Owz9mX5HpgfQoMGeJh-z3=Rw@mail.gmail.com>
+References: <20220504144406.36744-1-jonathanh@nvidia.com>
+ <CAMRc=MeXUN6P8kWxB75GsXdKD7Owz9mX5HpgfQoMGeJh-z3=Rw@mail.gmail.com>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <6629e06d06f647923c04502ce3133f76@kernel.org>
+X-Sender: maz@kernel.org
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 51.254.78.96
+X-SA-Exim-Rcpt-To: brgl@bgdev.pl, jonathanh@nvidia.com, linus.walleij@linaro.org, linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,65 +70,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 05, 2022 at 11:42:51AM +0530, Dharmendra Hans wrote:
-> On Thu, May 5, 2022 at 12:48 AM Vivek Goyal <vgoyal@redhat.com> wrote:
-> >
-> > On Mon, May 02, 2022 at 03:55:18PM +0530, Dharmendra Singh wrote:
-> > > In FUSE, as of now, uncached lookups are expensive over the wire.
-> > > E.g additional latencies and stressing (meta data) servers from
-> > > thousands of clients. These lookup calls possibly can be avoided
-> > > in some cases. Incoming three patches address this issue.
-> >
-> > BTW, these patches are designed to improve performance by cutting down
-> > on number of fuse commands sent. Are there any performance numbers
-> > which demonstrate what kind of improvement you are seeing.
-> >
-> > Say, If I do kernel build, is the performance improvement observable?
+On 2022-05-05 13:42, Bartosz Golaszewski wrote:
+> On Wed, May 4, 2022 at 4:44 PM Jon Hunter <jonathanh@nvidia.com> wrote:
+>> 
+>> Commit 6c846d026d49 ("gpio: Don't fiddle with irqchips marked as
+>> immutable") added a warning to indicate if the gpiolib is altering the
+>> internals of irqchips. Following this change the following warning is
+>> now observed for the max77620 gpio driver ...
+>> 
+>>  WARNING KERN gpio gpiochip0: (max77620-gpio): not an immutable chip,
+>>         please consider fixing it!
+>> 
+>> Fix the above warning by making the max77620 gpio driver immutable.
+>> 
+>> Signed-off-by: Jon Hunter <jonathanh@nvidia.com>
+>> ---
 > 
-> Here are the numbers I took last time. These were taken on tmpfs to
-> actually see the effect of reduced calls. On local file systems it
-> might not be that much visible. But we have observed that on systems
-> where we have thousands of clients hammering the metadata servers, it
-> helps a lot (We did not take numbers yet as  we are required to change
-> a lot of our client code but would be doing it later on).
-> 
-> Note that for a change in performance number due to the new version of
-> these patches, we have just refactored the code and functionality has
-> remained the same since then.
-> 
-> here is the link to the performance numbers
-> https://lore.kernel.org/linux-fsdevel/20220322121212.5087-1-dharamhans87@gmail.com/
+> Queued for fixes, thanks!
 
-There is a lot going in that table. Trying to understand it. 
+You mean fixes for *5.19*, right?
 
-- Why care about No-Flush. I mean that's independent of these changes,
-  right?  I am assuming this means that upon file close do not send
-  a flush to fuse server. Not sure how bringing No-Flush into the
-  mix is helpful here.
+Thanks,
 
-- What is "Patched Libfuse"? I am assuming that these are changes
-  needed in libfuse to support atomic create + atomic open. Similarly
-  assuming "Patched FuseK" means patched kernel with your changes.
-
-  If this is correct, I would probably only be interested in 
-  looking at "Patched Libfuse + Patched FuseK" numbers to figure out
-  what's the effect of your changes w.r.t vanilla kernel + libfuse.
-  Am I understanding it right?
-
-- I am wondering why do we measure "Sequential" and "Random" patterns. 
-  These optimizations are primarily for file creation + file opening
-  and I/O pattern should not matter. 
-
-- Also wondering why performance of Read/s improves. Assuming once
-  file has been opened, I think your optimizations get out of the
-  way (no create, no open) and we are just going through data path of
-  reading file data and no lookups happening. If that's the case, why
-  do Read/s numbers show an improvement.
-
-- Why do we measure "Patched Libfuse". It shows performance regression
-  of 4-5% in table 0B, Sequential workoad. That sounds bad. So without
-  any optimization kicking in, it has a performance cost.
-
-Thanks
-Vivek
-
+         M.
+-- 
+Jazz is not dead. It just smells funny...

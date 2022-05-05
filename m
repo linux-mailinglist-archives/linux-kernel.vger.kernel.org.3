@@ -2,128 +2,222 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E61FB51BC40
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 11:33:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EEB951BC34
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 11:32:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353837AbiEEJhA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 05:37:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52238 "EHLO
+        id S1349950AbiEEJgD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 05:36:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344308AbiEEJg4 (ORCPT
+        with ESMTP id S1353896AbiEEJfy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 05:36:56 -0400
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D5B711160
-        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 02:33:17 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id i24so3206017pfa.7
-        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 02:33:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=LAABk+Hqn/ed3olCk7cLLnxGOLs8GPCl8qPvqmsVMMM=;
-        b=ErbXNtFsbGBEns+3J2+rqVHArDPQgCAH5aInArNTr5Ytkh/2HnvkfZXsi+I8K9/fKL
-         FOod075XSxK4u/V8rbUwYiTnw6NXlPrvknjrKk02/PKJgkljGMJxHnB+e1xcGiYhZC4J
-         CVcjLuK/RXUvnMfbnldwLtRd3sIqwBcG5uKkEbX8yd+vyFbQZRSah9nEtuLOhACyZ3ya
-         XaDrcJdsyj6SllWgRfR3/AOf2W1IRrw9wkJdWRgoV9vASSILU2/qzvlVf0Zxqb1gMZYI
-         oIKjAQgqB18wWrdMBJP2VgJ1s0eE++rcSs3OtLqAt5iMcVjZMs3QZ4wqnKyLSuxZIqFR
-         WDmw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=LAABk+Hqn/ed3olCk7cLLnxGOLs8GPCl8qPvqmsVMMM=;
-        b=tkS5nbd1br1tQiCN7se3B1FcRfVZITX1YtqciDT0qhPTAZOXsggiVtysZvN4QXY7Nz
-         UX7JNMOMtdCPZ/RutSe/7HIyFx+sRrubHxfVEe9Wj/XIWTJDa0PgeprSvKDNxxQUoPtB
-         RdMVhk0r/E49EwKqrUt0s6XuuL6ahQQxre4NrP15Vr9iC8h4QCWLga310ZBF5KpdMv/j
-         2J3FCtA1F6U1NE4887pMh11+YbVAytr5auLETHYy7YdaoeJhmWiAr2ri6II+PBT8q20q
-         JMTA464TX9dxn4NyAoVb4OxINxKNGLdW63B1UPiq0Xjx30T8CUi6KOWF8wMjen5VpddU
-         Cjzw==
-X-Gm-Message-State: AOAM532L0uGCUYK+uUPdNWywD8tOMo2v/ZFbAW0q6LHVqZKK4qou/3Vc
-        rouYQjiJuMb3luL+mlCS2oLSQA==
-X-Google-Smtp-Source: ABdhPJwaIsuvBtKuAQv+SmYbKWs22EAjLiyHSuubS0HBGDuWiWajxYniwE9CGElZZX7/xwqc39QOow==
-X-Received: by 2002:a65:5b81:0:b0:3aa:1671:c6a7 with SMTP id i1-20020a655b81000000b003aa1671c6a7mr21224552pgr.169.1651743197230;
-        Thu, 05 May 2022 02:33:17 -0700 (PDT)
-Received: from [10.255.89.252] ([139.177.225.255])
-        by smtp.gmail.com with ESMTPSA id mu6-20020a17090b388600b001d960eaed66sm1054035pjb.42.2022.05.05.02.33.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 05 May 2022 02:33:16 -0700 (PDT)
-Message-ID: <ea42cb6e-cd1d-e0be-ab9f-382b75c070e8@bytedance.com>
-Date:   Thu, 5 May 2022 17:29:23 +0800
+        Thu, 5 May 2022 05:35:54 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D5CE515AD
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 02:31:38 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 363AFB82BF9
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 09:31:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E17FC385A4;
+        Thu,  5 May 2022 09:31:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651743096;
+        bh=WoQt/A1ObBnkpFpX/yJarqtaw5Tp5MG2q+woPOfv7SQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=irPQ2KEcY28F1YUCQ7OhemVLWF599gxgP6esTQN994tBHBCOJGEmpAtqxkfROD8Rn
+         zgVEQ1V3pw2TvmIo7anTU3Ayr9KUZHmNFHR0FYPfkWiRGu7Ox+0mHqABXF0D29sF/S
+         2JjkwaGUKB5sjQWwEzxgex4Mr7GODrk71BG7rXFjXEkDP1OfB45EZEUmRZAPL0ObAG
+         c8xMjH6TT5WhL0XbXyalnYD3U/SYi7UTpZLeZNj201yYX7ETST82jlEng9XHD+guiD
+         gOzGRXPmhtFUkqE9Y3eHgTPpdi0iGg3RmtvaC6gjz99NGMQkGuPa3qmDncbE8jqXpm
+         7xFVHBfbGit4g==
+Received: by pali.im (Postfix)
+        id A15CE7A6; Thu,  5 May 2022 11:31:32 +0200 (CEST)
+Date:   Thu, 5 May 2022 11:31:32 +0200
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] powerpc/pci: Add config option for using OF 'reg' for
+ PCI domain
+Message-ID: <20220505093132.45ehu6pdfzmvt2xw@pali>
+References: <20220504175718.29011-1-pali@kernel.org>
+ <8ffa0287-de5e-4308-07d8-204ac2e7f63a@csgroup.eu>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: Re: PING: [PATCH v4 0/5] virtio-crypto: Improve performance
-Content-Language: en-US
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     "jasowang@redhat.com" <jasowang@redhat.com>,
-        "herbert@gondor.apana.org.au" <herbert@gondor.apana.org.au>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Gonglei (Arei)" <arei.gonglei@huawei.com>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "helei.sig11@bytedance.com" <helei.sig11@bytedance.com>,
-        "davem@davemloft.net" <davem@davemloft.net>
-References: <20220424104140.44841-1-pizhenwei@bytedance.com>
- <cc9eb4aa-2e40-490f-f5a0-beee3a57313b@bytedance.com>
- <7f7ab8ae46174ed6b0888b5fbeb5849b@huawei.com>
- <20220505005607-mutt-send-email-mst@kernel.org>
-From:   zhenwei pi <pizhenwei@bytedance.com>
-In-Reply-To: <20220505005607-mutt-send-email-mst@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <8ffa0287-de5e-4308-07d8-204ac2e7f63a@csgroup.eu>
+User-Agent: NeoMutt/20180716
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello!
 
-On 5/5/22 12:57, Michael S. Tsirkin wrote:
-> On Thu, May 05, 2022 at 03:14:40AM +0000, Gonglei (Arei) wrote:
->>
->>
->>> -----Original Message-----
->>> From: zhenwei pi [mailto:pizhenwei@bytedance.com]
->>> Sent: Thursday, May 5, 2022 10:35 AM
->>> To: Gonglei (Arei) <arei.gonglei@huawei.com>; mst@redhat.com;
->>> jasowang@redhat.com
->>> Cc: herbert@gondor.apana.org.au; linux-kernel@vger.kernel.org;
->>> virtualization@lists.linux-foundation.org; linux-crypto@vger.kernel.org;
->>> helei.sig11@bytedance.com; davem@davemloft.net
->>> Subject: PING: [PATCH v4 0/5] virtio-crypto: Improve performance
->>>
->>> Hi, Lei
->>>
->>> Jason replied in another patch:
->>> Still hundreds of lines of changes, I'd leave this change to other maintainers to
->>> decide.
->>>
->>> Quite frankly, the virtio crypto driver changed only a few in the past, and the
->>> performance of control queue is not good enough. I am in doubt about that this
->>> driver is not used widely. So I'd like to rework a lot, it would be best to complete
->>> this work in 5.18 window.
->>>
->>> This gets different point with Jason. I would appreciate it if you could give me
->>> any hint.
->>>
->>
->> This is already in my todo list.
->>
->> Regards,
->> -Gonglei
+On Thursday 05 May 2022 07:16:40 Christophe Leroy wrote:
+> Le 04/05/2022 à 19:57, Pali Rohár a écrit :
+> > Since commit 63a72284b159 ("powerpc/pci: Assign fixed PHB number based on
+> > device-tree properties"), powerpc kernel always fallback to PCI domain
+> > assignment from OF / Device Tree 'reg' property of the PCI controller.
+> > 
+> > PCI code for other Linux architectures use increasing assignment of the PCI
+> > domain for individual controllers (assign the first free number), like it
+> > was also for powerpc prior mentioned commit.
+> > 
+> > Upgrading powerpc kernels from LTS 4.4 version (which does not contain
+> > mentioned commit) to new LTS versions brings a regression in domain
+> > assignment.
 > 
-> It's been out a month though, not really acceptable latency for review.
-> So I would apply this for next,  but you need to address Dan Captenter's
-> comment, and look for simular patterns elesewhere in your patch.
+> Can you elaborate why it is a regression ?
 > 
+> That commit says 'no functionnal changes', I'm having hard time 
+> understanding how a nochange can be a regression.
 
-I fixed this in the v5 series. Thanks!
+It is not 'no functional change'. That commit completely changed PCI
+domain assignment in a way that is incompatible with other architectures
+and also incompatible with the way how it was done prior that commit.
 
--- 
-zhenwei pi
+For example, prior that commit on P2020 RDB board were PCI domains 0, 1 and 2.
+
+$ lspci
+0000:00:00.0 PCI bridge: Freescale Semiconductor Inc P2020E (rev 21)
+0000:01:00.0 USB controller: Texas Instruments TUSB73x0 SuperSpeed USB 3.0 xHCI Host Controller (rev 02)
+0001:02:00.0 PCI bridge: Freescale Semiconductor Inc P2020E (rev 21)
+0001:03:00.0 Network controller: Qualcomm Atheros AR93xx Wireless Network Adapter (rev 01)
+0002:04:00.0 PCI bridge: Freescale Semiconductor Inc P2020E (rev 21)
+0002:05:00.0 Network controller: Qualcomm Atheros QCA986x/988x 802.11ac Wireless Network Adapter
+
+After that commit on P2020 RDB board are PCI domains 0x8000, 0x9000 and 0xa000.
+
+$ lspci
+8000:00:00.0 PCI bridge: Freescale Semiconductor Inc P2020E (rev 21)
+8000:01:00.0 USB controller: Texas Instruments TUSB73x0 SuperSpeed USB 3.0 xHCI Host Controller (rev 02)
+9000:02:00.0 PCI bridge: Freescale Semiconductor Inc P2020E (rev 21)
+9000:03:00.0 Network controller: Qualcomm Atheros AR93xx Wireless Network Adapter (rev 01)
+a000:04:00.0 PCI bridge: Freescale Semiconductor Inc P2020E (rev 21)
+a000:05:00.0 Network controller: Qualcomm Atheros QCA986x/988x 802.11ac Wireless Network Adapter
+
+It is somehow strange that PCI domains are not indexed one by one and
+also that there is no domain 0.
+
+With my patch when CONFIG_PPC_PCI_DOMAIN_FROM_OF_REG is not set, then
+previous behavior used and PCI domains are again 0, 1 and 2.
+
+> Usually we don't commit regressions to mainline ...
+> 
+> 
+> > 
+> > Fix this issue by introducing a new option CONFIG_PPC_PCI_DOMAIN_FROM_OF_REG
+> > When this options is disabled then powerpc kernel would assign PCI domains
+> > in the similar way like it is doing kernel for other architectures and also
+> > how it was done prior that commit.
+> 
+> You don't define CONFIG_PPC_PCI_DOMAIN_FROM_OF_REG on by default, it 
+> means this commit will change the behaviour. Is that expected ?
+> 
+> Is that really worth a user selectable option ? Is the user able to 
+> decide what he needs ?
+
+Well, I hope that maintainers of that code answer to these questions.
+
+In any case, I think that it could be a user selectable option as in
+that commit is explained that in some situation is makes sense to do
+PCI domain numbering based on DT reg.
+
+But as I pointed above, upgrading from 4.4 TLS kernel to some new TLS
+kernel brings above regression, so I think that there should be a way to
+disable this behavior.
+
+In my opinion, for people who are upgrading from 4.4 TLS kernel, this
+option should be turned off by default (= do not change behavior). For
+people who want same behaviour on powerpc as on other platforms, also it
+should be turned off by default.
+
+> > 
+> > Fixes: 63a72284b159 ("powerpc/pci: Assign fixed PHB number based on device-tree properties")
+> 
+> Is that really a fix ? What is the problem really ?
+
+Problem is that PCI domains were changed in a way that is not compatible
+neither with version prior that commit and neither with how other linux
+platforms assign PCI domains for controllers.
+
+> > Signed-off-by: Pali Rohár <pali@kernel.org>
+> > ---
+> >   arch/powerpc/Kconfig             | 10 ++++++++++
+> >   arch/powerpc/kernel/pci-common.c |  4 ++--
+> >   2 files changed, 12 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
+> > index 174edabb74fa..4dd3e3acddda 100644
+> > --- a/arch/powerpc/Kconfig
+> > +++ b/arch/powerpc/Kconfig
+> > @@ -375,6 +375,16 @@ config PPC_OF_PLATFORM_PCI
+> >   	depends on PCI
+> >   	depends on PPC64 # not supported on 32 bits yet
+> >   
+> > +config PPC_PCI_DOMAIN_FROM_OF_REG
+> > +	bool "Use OF reg property for PCI domain"
+> > +	depends on PCI
+> 
+> Should it depend on PPC_OF_PLATFORM_PCI instead ?
+
+No, PPC_OF_PLATFORM_PCI has line "depends on PPC64 # not supported on 32
+bits yet". But it is already used also for e.g. P2020 which is 32-bit
+platform.
+
+> > +	help
+> > +	  By default PCI domain for host bridge during its registration is
+> > +	  chosen as the lowest unused PCI domain number.
+> > +
+> > +	  When this option is enabled then PCI domain is determined from
+> > +	  the OF / Device Tree 'reg' property.
+> > +
+> >   config ARCH_SUPPORTS_UPROBES
+> >   	def_bool y
+> >   
+> > diff --git a/arch/powerpc/kernel/pci-common.c b/arch/powerpc/kernel/pci-common.c
+> > index 8bc9cf62cd93..8cb6fc5302ae 100644
+> > --- a/arch/powerpc/kernel/pci-common.c
+> > +++ b/arch/powerpc/kernel/pci-common.c
+> > @@ -74,7 +74,6 @@ void __init set_pci_dma_ops(const struct dma_map_ops *dma_ops)
+> >   static int get_phb_number(struct device_node *dn)
+> >   {
+> >   	int ret, phb_id = -1;
+> > -	u32 prop_32;
+> >   	u64 prop;
+> >   
+> >   	/*
+> > @@ -83,7 +82,8 @@ static int get_phb_number(struct device_node *dn)
+> >   	 * reading "ibm,opal-phbid", only present in OPAL environment.
+> >   	 */
+> >   	ret = of_property_read_u64(dn, "ibm,opal-phbid", &prop);
+> 
+> This looks like very specific, it is not reflected in the commit log.
+
+I have not changed nor touched this "ibm,opal-phbid" setting. And it was
+not also touched in that mentioned patch. I see that no DTS file in
+kernel use this option (so probably only DTS files supplied by
+bootloader use it). So I thought that there is not reason to mention in
+commit message.
+
+But if you think so, I can add some info to commit message about it.
+
+> > -	if (ret) {
+> > +	if (ret && IS_ENABLED(CONFIG_PPC_PCI_DOMAIN_FROM_OF_REG)) {
+> > +		u32 prop_32;
+> >   		ret = of_property_read_u32_index(dn, "reg", 1, &prop_32);
+> >   		prop = prop_32;
+> >   	}

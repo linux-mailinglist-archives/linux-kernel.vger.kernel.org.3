@@ -2,172 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE4D151BE6E
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 13:51:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C270951BE8F
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 13:55:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358316AbiEELzZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 07:55:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59742 "EHLO
+        id S1358840AbiEEL4w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 07:56:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231308AbiEELzX (ORCPT
+        with ESMTP id S1358642AbiEEL43 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 07:55:23 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ED9F532F9;
-        Thu,  5 May 2022 04:51:43 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 846C31F8D4;
-        Thu,  5 May 2022 11:51:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1651751502; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=mVkZP16seFI7V6Y2j5g4tx9yd6zUju4tMIUwikRtuZM=;
-        b=n529iRyin8u2q3PFxoHpdH81Ajn0A11USwjflG9sxDot4D5AyXnjJ0cwcFAdPS0rE/jryu
-        Za1i9xB96fbi28GNovCBvvb/1TFa4BGnC8/dYCrUUi2DJabyle1EoMkBP58Tn/6oUYpBoM
-        A9IHVRGssfxSjwdLJJnYpgiOFRMkaxc=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1651751502;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=mVkZP16seFI7V6Y2j5g4tx9yd6zUju4tMIUwikRtuZM=;
-        b=yvw98h3Q7Emlhc2YpJFEzS3823zRCZwrweAPGR28eCy+o5S0wtN3FrE1XuQgFET6Jkia63
-        9yxmFPn8xbcUsTBQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5FE8613A65;
-        Thu,  5 May 2022 11:51:42 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id D+71FU66c2KcbwAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Thu, 05 May 2022 11:51:42 +0000
-Message-ID: <d5348b86-f455-b28e-14ef-972dfdb75585@suse.de>
-Date:   Thu, 5 May 2022 13:51:41 +0200
+        Thu, 5 May 2022 07:56:29 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C75A6546A5;
+        Thu,  5 May 2022 04:52:48 -0700 (PDT)
+X-UUID: 8b5692ab6061431987afe33afce68adf-20220505
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.4,REQID:4d41151f-4347-4aed-920d-db156ef68961,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:0
+X-CID-META: VersionHash:faefae9,CLOUDID:e293b1b2-56b5-4c9e-8d83-0070b288eb6a,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,File:nil,QS:0,BEC:nil
+X-UUID: 8b5692ab6061431987afe33afce68adf-20220505
+Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw02.mediatek.com
+        (envelope-from <rex-bc.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 179822082; Thu, 05 May 2022 19:52:32 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Thu, 5 May 2022 19:52:28 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 5 May 2022 19:52:27 +0800
+From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
+To:     <rafael@kernel.org>, <viresh.kumar@linaro.org>,
+        <robh+dt@kernel.org>, <krzk+dt@kernel.org>,
+        <matthias.bgg@gmail.com>
+CC:     <jia-wei.chang@mediatek.com>, <roger.lu@mediatek.com>,
+        <hsinyi@google.com>, <khilman@baylibre.com>,
+        <angelogioacchino.delregno@collabora.com>,
+        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        Rex-BC Chen <rex-bc.chen@mediatek.com>
+Subject: [PATCH v6 00/10] cpufreq: mediatek: Cleanup and support MT8183 and MT8186
+Date:   Thu, 5 May 2022 19:52:16 +0800
+Message-ID: <20220505115226.20130-1-rex-bc.chen@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH v2 4/4] fbdev: vesafb: Cleanup fb_info in .fb_destroy
- rather than .remove
-Content-Language: en-US
-To:     Javier Martinez Canillas <javierm@redhat.com>,
-        linux-kernel@vger.kernel.org
-Cc:     Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Helge Deller <deller@gmx.de>, dri-devel@lists.freedesktop.org,
-        linux-fbdev@vger.kernel.org
-References: <20220505113128.264963-1-javierm@redhat.com>
- <20220505113128.264963-5-javierm@redhat.com>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <20220505113128.264963-5-javierm@redhat.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------3qb0jJDsfMwthAxMyida0Ig6"
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------3qb0jJDsfMwthAxMyida0Ig6
-Content-Type: multipart/mixed; boundary="------------qjaYkn7iDSY9Mbq55tpCXTw7";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Javier Martinez Canillas <javierm@redhat.com>,
- linux-kernel@vger.kernel.org
-Cc: Daniel Vetter <daniel.vetter@ffwll.ch>, Helge Deller <deller@gmx.de>,
- dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org
-Message-ID: <d5348b86-f455-b28e-14ef-972dfdb75585@suse.de>
-Subject: Re: [PATCH v2 4/4] fbdev: vesafb: Cleanup fb_info in .fb_destroy
- rather than .remove
-References: <20220505113128.264963-1-javierm@redhat.com>
- <20220505113128.264963-5-javierm@redhat.com>
-In-Reply-To: <20220505113128.264963-5-javierm@redhat.com>
+Cpufreq is a DVFS driver used for power saving to scale the clock frequency
+and supply the voltage for CPUs. This series do some cleanup for MediaTek
+cpufreq drivers and add support for MediaTek SVS[2] and MediaTek CCI
+devfreq[3] which are supported in MT8183 and MT8186.
 
---------------qjaYkn7iDSY9Mbq55tpCXTw7
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+Changes for v6:
+1. Reorder patches in this series.
+2. Add a new patch to do unregister platform device.
+3. Modify drivers from maintainer's advice.
 
-DQoNCkFtIDA1LjA1LjIyIHVtIDEzOjMxIHNjaHJpZWIgSmF2aWVyIE1hcnRpbmV6IENhbmls
-bGFzOg0KPiBUaGUgZHJpdmVyIGlzIGNhbGxpbmcgZnJhbWVidWZmZXJfcmVsZWFzZSgpIGlu
-IGl0cyAucmVtb3ZlIGNhbGxiYWNrLCBidXQNCj4gdGhpcyB3aWxsIGNhdXNlIHRoZSBzdHJ1
-Y3QgZmJfaW5mbyB0byBiZSBmcmVlZCB0b28gZWFybHkuIFNpbmNlIGl0IGNvdWxkDQo+IGJl
-IHRoYXQgYSByZWZlcmVuY2UgaXMgc3RpbGwgaG9sZCB0byBpdCBpZiB1c2VyLXNwYWNlIG9w
-ZW5lZCB0aGUgZmJkZXYuDQo+IA0KPiBUaGlzIHdvdWxkIGxlYWQgdG8gYSB1c2UtYWZ0ZXIt
-ZnJlZSBlcnJvciBpZiB0aGUgZnJhbWVidWZmZXIgZGV2aWNlIHdhcw0KPiB1bnJlZ2lzdGVy
-ZWQgYnV0IGxhdGVyIGEgdXNlci1zcGFjZSBwcm9jZXNzIHRyaWVzIHRvIGNsb3NlIHRoZSBm
-YmRldiBmZC4NCj4gDQo+IFRoZSBjb3JyZWN0IHRoaW5nIHRvIGRvIGlzIHRvIG9ubHkgdW5y
-ZWdpc3RlciB0aGUgZnJhbWVidWZmZXIgaW4gdGhlDQo+IGRyaXZlcidzIC5yZW1vdmUgY2Fs
-bGJhY2ssIGJ1dCBkbyBhbnkgY2xlYW51cCBpbiB0aGUgZmJfb3BzLmZiX2Rlc3Ryb3kuDQo+
-IA0KPiBTdWdnZXN0ZWQtYnk6IERhbmllbCBWZXR0ZXIgPGRhbmllbC52ZXR0ZXJAZmZ3bGwu
-Y2g+DQo+IFNpZ25lZC1vZmYtYnk6IEphdmllciBNYXJ0aW5leiBDYW5pbGxhcyA8amF2aWVy
-bUByZWRoYXQuY29tPg0KDQpSZXZpZXdlZC1ieTogVGhvbWFzIFppbW1lcm1hbm4gPHR6aW1t
-ZXJtYW5uQHN1c2UuZGU+DQoNCj4gLS0tDQo+IA0KPiBDaGFuZ2VzIGluIHYyOg0KPiAtIEFs
-c28gZG8gdGhlIGNoYW5nZSBmb3IgdmVzYWZiIChUaG9tYXMgWmltbWVybWFubikuDQo+IA0K
-PiAgIGRyaXZlcnMvdmlkZW8vZmJkZXYvdmVzYWZiLmMgfCAxNCArKysrKysrKysrKy0tLQ0K
-PiAgIDEgZmlsZSBjaGFuZ2VkLCAxMSBpbnNlcnRpb25zKCspLCAzIGRlbGV0aW9ucygtKQ0K
-PiANCj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvdmlkZW8vZmJkZXYvdmVzYWZiLmMgYi9kcml2
-ZXJzL3ZpZGVvL2ZiZGV2L3Zlc2FmYi5jDQo+IGluZGV4IGRmNmRlNWE5ZGQ0Yy4uMWYwM2E0
-NDllNTA1IDEwMDY0NA0KPiAtLS0gYS9kcml2ZXJzL3ZpZGVvL2ZiZGV2L3Zlc2FmYi5jDQo+
-ICsrKyBiL2RyaXZlcnMvdmlkZW8vZmJkZXYvdmVzYWZiLmMNCj4gQEAgLTE3OSw2ICsxNzks
-MTAgQEAgc3RhdGljIGludCB2ZXNhZmJfc2V0Y29scmVnKHVuc2lnbmVkIHJlZ25vLCB1bnNp
-Z25lZCByZWQsIHVuc2lnbmVkIGdyZWVuLA0KPiAgIAlyZXR1cm4gZXJyOw0KPiAgIH0NCj4g
-ICANCj4gKy8qDQo+ICsgKiBmYl9vcHMuZmJfZGVzdHJveSBpcyBjYWxsZWQgYnkgdGhlIGxh
-c3QgcHV0X2ZiX2luZm8oKSBjYWxsIGF0IHRoZSBlbmQNCj4gKyAqIG9mIHVucmVnaXN0ZXJf
-ZnJhbWVidWZmZXIoKSBvciBmYl9yZWxlYXNlKCkuIERvIGFueSBjbGVhbnVwIGhlcmUuDQo+
-ICsgKi8NCj4gICBzdGF0aWMgdm9pZCB2ZXNhZmJfZGVzdHJveShzdHJ1Y3QgZmJfaW5mbyAq
-aW5mbykNCj4gICB7DQo+ICAgCXN0cnVjdCB2ZXNhZmJfcGFyICpwYXIgPSBpbmZvLT5wYXI7
-DQo+IEBAIC0xODcsNyArMTkxLDEzIEBAIHN0YXRpYyB2b2lkIHZlc2FmYl9kZXN0cm95KHN0
-cnVjdCBmYl9pbmZvICppbmZvKQ0KPiAgIAlhcmNoX3BoeXNfd2NfZGVsKHBhci0+d2NfY29v
-a2llKTsNCj4gICAJaWYgKGluZm8tPnNjcmVlbl9iYXNlKQ0KPiAgIAkJaW91bm1hcChpbmZv
-LT5zY3JlZW5fYmFzZSk7DQo+ICsNCj4gKwlpZiAoKChzdHJ1Y3QgdmVzYWZiX3BhciAqKShp
-bmZvLT5wYXIpKS0+cmVnaW9uKQ0KPiArCQlyZWxlYXNlX3JlZ2lvbigweDNjMCwgMzIpOw0K
-PiArDQo+ICAgCXJlbGVhc2VfbWVtX3JlZ2lvbihpbmZvLT5hcGVydHVyZXMtPnJhbmdlc1sw
-XS5iYXNlLCBpbmZvLT5hcGVydHVyZXMtPnJhbmdlc1swXS5zaXplKTsNCj4gKw0KPiArCWZy
-YW1lYnVmZmVyX3JlbGVhc2UoaW5mbyk7DQo+ICAgfQ0KPiAgIA0KPiAgIHN0YXRpYyBzdHJ1
-Y3QgZmJfb3BzIHZlc2FmYl9vcHMgPSB7DQo+IEBAIC00ODQsMTAgKzQ5NCw4IEBAIHN0YXRp
-YyBpbnQgdmVzYWZiX3JlbW92ZShzdHJ1Y3QgcGxhdGZvcm1fZGV2aWNlICpwZGV2KQ0KPiAg
-IHsNCj4gICAJc3RydWN0IGZiX2luZm8gKmluZm8gPSBwbGF0Zm9ybV9nZXRfZHJ2ZGF0YShw
-ZGV2KTsNCj4gICANCj4gKwkvKiB2ZXNhZmJfZGVzdHJveSB0YWtlcyBjYXJlIG9mIGluZm8g
-Y2xlYW51cCAqLw0KPiAgIAl1bnJlZ2lzdGVyX2ZyYW1lYnVmZmVyKGluZm8pOw0KPiAtCWlm
-ICgoKHN0cnVjdCB2ZXNhZmJfcGFyICopKGluZm8tPnBhcikpLT5yZWdpb24pDQo+IC0JCXJl
-bGVhc2VfcmVnaW9uKDB4M2MwLCAzMik7DQo+IC0JZnJhbWVidWZmZXJfcmVsZWFzZShpbmZv
-KTsNCj4gICANCj4gICAJcmV0dXJuIDA7DQo+ICAgfQ0KDQotLSANClRob21hcyBaaW1tZXJt
-YW5uDQpHcmFwaGljcyBEcml2ZXIgRGV2ZWxvcGVyDQpTVVNFIFNvZnR3YXJlIFNvbHV0aW9u
-cyBHZXJtYW55IEdtYkgNCk1heGZlbGRzdHIuIDUsIDkwNDA5IE7DvHJuYmVyZywgR2VybWFu
-eQ0KKEhSQiAzNjgwOSwgQUcgTsO8cm5iZXJnKQ0KR2VzY2jDpGZ0c2bDvGhyZXI6IEl2byBU
-b3Rldg0K
+Changes for v5:
+1. Modify the description for the reason we need to use mediatek,cci.
+2. Drop [07/14] cpufreq: mediatek: Add .get function.
 
---------------qjaYkn7iDSY9Mbq55tpCXTw7--
+Changes for V4:
+1. Revise drivers from reviewers' suggestion.
+2. Fix name of opp table issue.
 
---------------3qb0jJDsfMwthAxMyida0Ig6
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
+Changes for V3:
+1. Rebased to linux-next-20220414.
+2. Drop accepted patches.
+3. Drop "cpufreq: mediatek: Use maximum voltage in init stage" because we
+   make sure the voltage we set is safe for both mediatek cci and cpufreq.
+4. Rename cci property to mediatek,cci.
+5. Adjust order of cleanup patches.
+6. Add new patches for cleanup, handle infinite loop and MT8183 dts.
+7. Revise drivers from reviewers' suggestion.
+8. Revise commit message of some patches to avoid confusion and misunderstand.
+9. Revise "cpufreq: mediatek: Link CCI device to CPU".
+   We do not return successful to pretend we set the target frequency done
+   when cci is not ready. Instead, we find and set a safe voltage so that we
+   can set the target cpufrequency.
 
------BEGIN PGP SIGNATURE-----
+Changes for V2:
+1. Drop the modification of transforming cpufreq-mediatek into yaml and
+   only add the MediaTek CCI property for MediaTek cpufreq.
+2. Split the original patches into several patches.
 
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmJzuk0FAwAAAAAACgkQlh/E3EQov+C9
-CBAAkIiJUw3OnjFE97PswhZpdccKT8EMFa/zzkjh+SS+nCzOHUimt0Nf7kvtOYUB5EVmYS6DV+n6
-Kz395oq40et5kks17UL/yTqxryNr4BlIrkgqQwy0f35clZw8iM5QOolgnlXE10gP5oYGrd9W7Tpi
-U+ynq3kYOT2AO+J2GvNxMTEK3pq9pcUiha7HIEG1N52VGrDPDlPaV7Qamx95C5oXvRhkg8yDaW0i
-x1tLe7dY3n7mrPDuG6LqqS6efPUARDcquRvCKr6m7AZpN1amT7ceyW3K93HpBRqDZM25Tq/Vv6Nx
-IH2h3b/J4Oz09a6Z8jjJk/WPdh2IPTr63o2miJx7mWe9OPeepT53WZJRO0R3zDNWOieXNObFXhbY
-I7b0CsBRGU0jdzQCesDf2jlhFQBahxUZxgJvlB35N292k2PMFRgDBxeLkoun5VKVr2kb+iuD6y+D
-iZKrbKWC33D7wOeJeVgEx7CLkmzyxQX5jwytFSZKnU3bZWWjLBVVMjJ5Uwgo0W9PgNi4HRlaQ0Ft
-As9uD7HCg3IWkKjuP51Prw4cuyR2e6XMPhvQa2yeJp2AMXiIVvnUMGvqtb/cg41K7QVD+/7DlBUy
-vdcVGIO0TMbPnGjQmvwm+sCJG2lni9Y9aGrFm2AZXpCX/KVHDGws+mo6hhTxI0CuzyiUv2PVQCs2
-IQs=
-=M+WV
------END PGP SIGNATURE-----
+Reference series:
+[1]: V1 of this series is present by Jia-Wei Chang.
+     https://lore.kernel.org/all/20220307122151.11666-1-jia-wei.chang@mediatek.com/
 
---------------3qb0jJDsfMwthAxMyida0Ig6--
+[2]: The MediaTek CCI devfreq driver is introduced in another series.
+     https://lore.kernel.org/all/20220425125546.4129-1-johnson.wang@mediatek.com/
+
+[3]: The MediaTek SVS driver is introduced in another series.
+     https://lore.kernel.org/all/20220420102044.10832-1-roger.lu@mediatek.com/
+
+Jia-Wei Chang (2):
+  cpufreq: mediatek: Refine mtk_cpufreq_voltage_tracking()
+  cpufreq: mediatek: Add support for MT8186
+
+Rex-BC Chen (8):
+  dt-bindings: cpufreq: mediatek: Add MediaTek CCI property
+  cpufreq: mediatek: Add platform_device_unregister when driver exit
+  cpufreq: mediatek: Move voltage limits to platform data
+  cpufreq: mediatek: Add opp notification support
+  cpufreq: mediatek: Link CCI device to CPU
+  arm64: dts: mediatek: Add opp table and clock property for MT8183
+    cpufreq
+  arm64: dts: mediatek: Add MediaTek CCI node for MT8183
+  arm64: dts: mediatek: Add mediatek,cci property for MT8183 cpufreq
+
+ .../bindings/cpufreq/cpufreq-mediatek.txt     |   7 +
+ arch/arm64/boot/dts/mediatek/mt8183-evb.dts   |  36 ++
+ .../arm64/boot/dts/mediatek/mt8183-kukui.dtsi |   4 +
+ arch/arm64/boot/dts/mediatek/mt8183.dtsi      | 285 +++++++++++++
+ drivers/cpufreq/mediatek-cpufreq.c            | 400 ++++++++++++------
+ 5 files changed, 609 insertions(+), 123 deletions(-)
+
+-- 
+2.18.0
+

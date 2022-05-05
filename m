@@ -2,59 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB8D651C34B
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 17:04:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA96451C35E
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 17:06:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380994AbiEEPH7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 11:07:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56852 "EHLO
+        id S1381128AbiEEPJv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 11:09:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243206AbiEEPH5 (ORCPT
+        with ESMTP id S1381152AbiEEPJU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 11:07:57 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A300B56430;
-        Thu,  5 May 2022 08:04:18 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id 754D41F45912
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1651763057;
-        bh=CvWL0d92LTexS+0TabDQSn5dqaw57JFYhNx34gLvT+4=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=FymySwbCbDQl4GF3l/lIkKKEPFBziW0d1hu4fmNOOGncPJRlggPbECJOkic3hNT4K
-         cl9A3RkP/QPmQDeirnZHyngRLX4MiVEMNuB47cfXJDaf9/N04OxMj6DVK9KqCli+eY
-         HBxIeetLXKDJqR+9jTcyxpK6KqMhCt8/Rge//og6LNx/ealuvT/J03zU0NUjfGmG+q
-         S7N3hSGeKfBF8wmWRrHdtQq+dGZ9cH6VPj6PjhHU6wm9ToIptVUtdhRqPbjq4PvcSi
-         k0fH6vBYIICtwFYmnIrAXhTSSAICy1h1N7HiosBncuBXhwud9Ul1ibgP5YYY7BzoAz
-         z/rTsZqbcatTA==
-Message-ID: <af9724fe-181d-3ba4-79b9-bf3fab1ca80d@collabora.com>
-Date:   Thu, 5 May 2022 17:04:14 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v6 02/10] cpufreq: mediatek: Add
- platform_device_unregister when driver exit
-Content-Language: en-US
-To:     Rex-BC Chen <rex-bc.chen@mediatek.com>, rafael@kernel.org,
-        viresh.kumar@linaro.org, robh+dt@kernel.org, krzk+dt@kernel.org,
-        matthias.bgg@gmail.com
-Cc:     jia-wei.chang@mediatek.com, roger.lu@mediatek.com,
-        hsinyi@google.com, khilman@baylibre.com, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <20220505115226.20130-1-rex-bc.chen@mediatek.com>
- <20220505115226.20130-3-rex-bc.chen@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220505115226.20130-3-rex-bc.chen@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        Thu, 5 May 2022 11:09:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0AF01CB22;
+        Thu,  5 May 2022 08:05:39 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5DA7B61BB6;
+        Thu,  5 May 2022 15:05:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2778C385A8;
+        Thu,  5 May 2022 15:05:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651763138;
+        bh=AV7Ctm48EGltuTuBFDYE7IrEPNSYirdqxElT2gUK6aA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Cuvz24GWC9Qj3KZZ53ITYSvcMm/bfiFx/kZzyWAwYEtWo11Jj37pz4GQQQD22LV77
+         +7Ae6IIZbVryRwEOD1Bxjuurptoy5/xtLQ9MW7c5hdQ45SC4M0eRKB4uses+Z1ak2P
+         b+S+q/8Oa5uGFV1kQKrh6NJPJanNyWuY6Kaf8NddYfZdPTD7Psmy++ZAEEJFcObXmz
+         uSle+r3FeYBqKXxLIP6sK8GofGsuglJUajLGFnXgzLhPKsTtzqDpFNOiOZydwn9ZcM
+         Y58KyBWpG8QlBykTURyXxB+uvR5coBptIV02sndeiljhmMqDZLjP9XKZbAoqvoWRue
+         nCRP4vtwqiK+w==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nmd2u-009EuL-7S; Thu, 05 May 2022 16:05:36 +0100
+Date:   Thu, 05 May 2022 16:05:36 +0100
+Message-ID: <87y1zg6mv3.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Michael Walle <michael@walle.cc>,
+        Lars Povlsen <lars.povlsen@microchip.com>,
+        Steen Hegelund <Steen.Hegelund@microchip.com>,
+        UNGLinuxDriver@microchip.com, linux-arm-kernel@lists.infradead.org,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] pinctrl: microchip-sgpio: make irq_chip immutable
+In-Reply-To: <CACRpkdZjsdkq2KP-k0pwB5KZo25AeTgW_-iAZ4K84A=s1_+gnQ@mail.gmail.com>
+References: <20220428111622.1395831-1-michael@walle.cc>
+        <CACRpkdZjsdkq2KP-k0pwB5KZo25AeTgW_-iAZ4K84A=s1_+gnQ@mail.gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: linus.walleij@linaro.org, michael@walle.cc, lars.povlsen@microchip.com, Steen.Hegelund@microchip.com, UNGLinuxDriver@microchip.com, linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,19 +69,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 05/05/22 13:52, Rex-BC Chen ha scritto:
-> We register the platform device when driver inits. However, we do not
-> unregister it when driver exits.
-> To resolve this, we declare the platform data to be a global static
-> variable and rename it to be "cpufreq_pdev".
-> With this global variable, we can do platform_device_unregister() when
-> driver exits.
+On Thu, 05 May 2022 15:55:01 +0100,
+Linus Walleij <linus.walleij@linaro.org> wrote:
 > 
-> Signed-off-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
+> On Thu, Apr 28, 2022 at 1:16 PM Michael Walle <michael@walle.cc> wrote:
+> 
+> > Since recently, the kernel is nagging about mutable irq_chips:
+> >
+> > [    4.967050] gpio gpiochip1: (e2004190.gpio-input): not an immutable chip, please consider fixing it!
+> >
+> > Drop the unneeded copy, flag it as IRQCHIP_IMMUTABLE, add the new
+> > helper functions and call the appropriate gpiolib functions.
+> >
+> > Signed-off-by: Michael Walle <michael@walle.cc>
+> 
+> Patch applied after pulling in Marc's immutable branch.
+> 
+> (Hm a bit confusing since it is a immutable branch with code
+> for immutable GPIO chips ... I assume it is both.)
 
-Hello Rex,
-this commit needs a Fixes: tag.
+Both indeed. Immutable^2, or something like that.
 
-Cheers,
-Angelo
+	M.
 
+-- 
+Without deviation from the norm, progress is not possible.

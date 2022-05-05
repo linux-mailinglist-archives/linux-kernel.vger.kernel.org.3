@@ -2,124 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FC3D51B827
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 08:43:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E68A51B82C
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 08:44:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244918AbiEEGqb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 02:46:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55930 "EHLO
+        id S245072AbiEEGsQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 02:48:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245072AbiEEGqY (ORCPT
+        with ESMTP id S233151AbiEEGsN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 02:46:24 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C686847385
-        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 23:42:45 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id i27so6833298ejd.9
-        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 23:42:45 -0700 (PDT)
+        Thu, 5 May 2022 02:48:13 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6079747396
+        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 23:44:34 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id iq10so3356743pjb.0
+        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 23:44:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=Ed/YN7SZpW0AehsQ0TRZSSDMrgfoZJTJw/aMQm/z/ps=;
-        b=uaV9QfHAzNNMFn3vMSpf6pJlvN+ezYaq1CbLnhaMhssIxvyFGrDZms9qA5P94LsTvv
-         Mlxsfyt7/C6/TPDKR1Q7Y2/rVe2wFI5leI2m8PRZ2Vonm4IqpV3U0CTThQGC6qXV/TAl
-         o3L1IwMWbz5E6MWYIEPAzgkhaWq0Bwlu3Y/y6LvYH8zne8nC1OB+Mk6yiZ1vklYKICY3
-         IRt8hympRJgEvd0jHrsHBBCv9fdM5KrlXQDa+9cE1hnmC/hufiDhVRMfvVu0BmLFHk6i
-         X1Z4mRTSXYlf71hu93YoaKpFk8JdjtiWvxN6bybD9IgoJZrKq2WDVAONxJNiBUdBybLR
-         kVFw==
+        d=gmail.com; s=20210112;
+        h=sender:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=SpMxQmnSg4UVgtzsaV27Dc50ZPZ1XGAaiwMaGVOZnx4=;
+        b=O6MdnO7Q8MeRyVhpyem9ME5F879UZYGZOWB5QcbzS5777SzYENXA4ikFQyNn26Ikc2
+         ALtRObfn4Uodb1hdfgtuXQLbcgIYIpKeEJ6tJe2ZGTCCiDebqQiK4eLwwRrzo6beKrMA
+         wOoUESAL5em0iE8TcrVj4v9RNuQrVAaMtrP2lJSxyF30L0tCmfBidrW2+MW+H+hDZt1B
+         sRYTffnr+xQ5aLVm4LYR/hqz2y7QfyvHQyKccXdYO9FZ/moRquUsHvasUW29L7NTmeyV
+         xkf0YZddfuBXVh4RNedItJHXVWCwdOzEJph4raS9N/u3/EtLyWM2iKFE/YLKaDx36Hk+
+         bxUQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Ed/YN7SZpW0AehsQ0TRZSSDMrgfoZJTJw/aMQm/z/ps=;
-        b=rc2pz3RJw6xIdaAj10BsKOVSp0I89I58AaYCSmMrIokxd9ZbGnJ8ibdb7HBaT/vnMT
-         v9ZaU0OGkJfQA22zpjEJtBKy6vpLaQHsHaC23z16GoOsyeS9V1w2naFlqP/nJ3Gscu0w
-         BrSdtNDT3tc0HldARypYFdpLtyhMYwBh0t1hBHLDl8e/O/aT2nwfwyw1N/ijeBWE2INk
-         mVm4smZjJC3uKnRThdYBXiGW8Rb8u0lUD/CmmLiHpayD2PtvzuycrPdVmKF3QzMJKWTl
-         3aC7IonJiFi+FRYE3jPwZsFBWa0iJnFDOg8P77Ft3xeu+A4fIHoVF7D4+lvXDkjGMMTi
-         5PKA==
-X-Gm-Message-State: AOAM533ZHMildYDolxnq54ttTdI+/jUrzFOC5irNxjmEWXo2yLIIBOhx
-        /hmAbzPekYf9vKnDdGit58P9cpBHPaKoQk2n
-X-Google-Smtp-Source: ABdhPJxghAWrXoUYvA0tjlL9B695cnzP6RNTnJxRd7vwhBy4hj6J/Q85mfkw3/oVdqm+4soehUIYQA==
-X-Received: by 2002:a17:907:2da2:b0:6f4:7395:568b with SMTP id gt34-20020a1709072da200b006f47395568bmr13898404ejc.766.1651732964418;
-        Wed, 04 May 2022 23:42:44 -0700 (PDT)
-Received: from [192.168.0.215] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id ec40-20020a0564020d6800b0042617ba63c2sm367706edb.76.2022.05.04.23.42.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 04 May 2022 23:42:44 -0700 (PDT)
-Message-ID: <316d2e11-a12a-3a73-0d07-a606005df159@linaro.org>
-Date:   Thu, 5 May 2022 08:42:42 +0200
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
+         :mime-version:content-transfer-encoding;
+        bh=SpMxQmnSg4UVgtzsaV27Dc50ZPZ1XGAaiwMaGVOZnx4=;
+        b=Ef+iVzLR9JUal11drQ/oWACLgkNXNpKs1ronS9U8cc5VlyMVndudvVf2Gdr9V7TEf8
+         LUysSHvVZf59sWKTH8ffQpqlqR29oq2bzw//YinbUIpLIWEHFQDFq6Uj7AUYwvuA5Lln
+         /X4qNOEHlnnzK8R8GBJtwmEWdG6DPR+Zhlnl26SdtYFwnigtq9FvcW9j3pFDoA+GnzIi
+         QRg36ThGr6MKDkszOQCntCV0s0Bs686NKwnyxbcPK97xr6FVj6j0n6acOfHcPo7oAkFw
+         3QjEki0CdIgQV1qCNZgRLXxxxW7BGLKQlq7kgTUjdmJFMpZ+GAeq+6asxGXzJLxorSq8
+         vRpg==
+X-Gm-Message-State: AOAM530sVTlkA98i086DqQivTm0Y/NnTRIYGqmSkZxpaTk5/UCWMst8t
+        CGEHbh+vW0buoGP0ZOFQwo0=
+X-Google-Smtp-Source: ABdhPJwmm2POHenL0J+W/qewrTiJqVSaZq1CpWud0SYupgHxX6RZuaTLuRUFBUYDYgXmxJKbcSgpHQ==
+X-Received: by 2002:a17:90b:4c0a:b0:1d5:2e1d:ec6 with SMTP id na10-20020a17090b4c0a00b001d52e1d0ec6mr4394269pjb.64.1651733073867;
+        Wed, 04 May 2022 23:44:33 -0700 (PDT)
+Received: from bbox-1.mtv.corp.google.com ([2620:15c:211:201:8435:b3e7:62fc:4dfa])
+        by smtp.gmail.com with ESMTPSA id s19-20020a056a00195300b0050dc762812esm566289pfk.8.2022.05.04.23.44.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 May 2022 23:44:32 -0700 (PDT)
+Sender: Minchan Kim <minchan.kim@gmail.com>
+From:   Minchan Kim <minchan@kernel.org>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-mm <linux-mm@kvack.org>, LKML <linux-kernel@vger.kernel.org>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        John Hubbard <jhubbard@nvidia.com>,
+        John Dias <joaodias@google.com>,
+        Minchan Kim <minchan@kernel.org>,
+        David Hildenbrand <david@redhat.com>
+Subject: [PATCH v2] mm: fix is_pinnable_page against on cma page
+Date:   Wed,  4 May 2022 23:44:29 -0700
+Message-Id: <20220505064429.2818496-1-minchan@kernel.org>
+X-Mailer: git-send-email 2.36.0.512.ge40c2bad7a-goog
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH v2 3/3] arm64: dts: intel: add device tree for n6000
-Content-Language: en-US
-To:     matthew.gerlach@linux.intel.com
-Cc:     dinguyen@kernel.org, robh+dt@kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        krzysztof.kozlowski+dt@linaro.org
-References: <20220503194546.1287679-1-matthew.gerlach@linux.intel.com>
- <20220503194546.1287679-4-matthew.gerlach@linux.intel.com>
- <608ba746-9116-3f36-d640-07eb8b5d793e@linaro.org>
- <alpine.DEB.2.22.394.2205041415420.2669897@rhweight-WRK1>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <alpine.DEB.2.22.394.2205041415420.2669897@rhweight-WRK1>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/05/2022 23:22, matthew.gerlach@linux.intel.com wrote:
-> 
-> 
-> On Wed, 4 May 2022, Krzysztof Kozlowski wrote:
-> 
->> On 03/05/2022 21:45, matthew.gerlach@linux.intel.com wrote:
->>> From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
->>>
->>> Add a device tree for the n6000 instantiation of Agilex
->>> Hard Processor System (HPS).
->>>
->>> Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
->>
->>> +
->>> +	soc {
->>> +		agilex_hps_bridges: bus@80000000 {
->>> +			compatible = "simple-bus";
->>> +			reg = <0x80000000 0x60000000>,
->>> +				<0xf9000000 0x00100000>;
->>> +			reg-names = "axi_h2f", "axi_h2f_lw";
->>> +			#address-cells = <0x2>;
->>> +			#size-cells = <0x1>;
->>> +			ranges = <0x00000000 0x00000000 0xf9000000 0x00001000>;
->>> +
->>> +			hps_cp_eng@0 {
->>
->> No underscores in node names.  dtc W=1 should complain about it.
-> 
-> I will remove the underscores in the name.  I didn't see a complaint when 
-> I compiled it with "make W=1" in the kernel tree.
-> 
->> The node name should be generic, matching class of a device. What is
->> this exactly?
-> 
-> The component is a specialized IP block instantiated in the FPGA directly 
-> connected to the HPS.  In one sense the IP block is a simple DMA 
-> controller, but it also has some registers for hand shaking between the 
-> HPS and a host processor connected to the FPGA via PCIe.  Should I call 
-> the node, dma@0?
+Pages on CMA area could have MIGRATE_ISOLATE as well as MIGRATE_CMA
+so current is_pinnable_page could miss CMA pages which has MIGRATE_
+ISOLATE. It ends up putting CMA pages longterm pinning possible on
+pin_user_pages APIs so CMA allocation fails.
 
-Then maybe the closest is dma-controller.
+The CMA allocation path protects the migration type change race
+using zone->lock but what GUP path need to know is just whether the
+page is on CMA area or not rather than exact type. Thus, we don't
+need zone->lock but just checks the migratype in either of
+(MIGRATE_ISOLATE and MIGRATE_CMA).
 
+Adding the MIGRATE_ISOLATE check in is_pinnable_page could cause
+rejecting of pinning the page on MIGRATE_ISOLATE pageblock even
+thouth it's neither CMA nor movable zone if the page is temporarily
+unmovable. However, the migration failure is general issue, not
+only come from MIGRATE_ISOLATE and the MIGRATE_ISOLATE is also
+transient state like other temporal refcount holding of pages.
 
-Best regards,
-Krzysztof
+Cc: David Hildenbrand <david@redhat.com>
+Signed-off-by: Minchan Kim <minchan@kernel.org>
+---
+* from v1 - https://lore.kernel.org/all/20220502173558.2510641-1-minchan@kernel.org/
+  * fix build warning - lkp
+  * fix refetching issue of migration type
+  * add side effect on !ZONE_MOVABLE and !MIGRATE_CMA in description - david
+
+ include/linux/mm.h | 14 ++++++++++++--
+ 1 file changed, 12 insertions(+), 2 deletions(-)
+
+diff --git a/include/linux/mm.h b/include/linux/mm.h
+index 6acca5cecbc5..e77758e2035e 100644
+--- a/include/linux/mm.h
++++ b/include/linux/mm.h
+@@ -1625,8 +1625,18 @@ static inline bool page_needs_cow_for_dma(struct vm_area_struct *vma,
+ #ifdef CONFIG_MIGRATION
+ static inline bool is_pinnable_page(struct page *page)
+ {
+-	return !(is_zone_movable_page(page) || is_migrate_cma_page(page)) ||
+-		is_zero_pfn(page_to_pfn(page));
++#ifdef CONFIG_CMA
++	/*
++	 * use volatile to use local variable mt instead of
++	 * refetching mt value.
++	 */
++	volatile int mt = get_pageblock_migratetype(page);
++
++	if (mt == MIGRATE_CMA || mt == MIGRATE_ISOLATE)
++		return false;
++#endif
++
++	return !(is_zone_movable_page(page) || is_zero_pfn(page_to_pfn(page)));
+ }
+ #else
+ static inline bool is_pinnable_page(struct page *page)
+-- 
+2.36.0.512.ge40c2bad7a-goog
+

@@ -2,47 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E326251C8D0
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 21:18:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 601FB51C8D3
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 21:18:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384936AbiEETVo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 15:21:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37136 "EHLO
+        id S1344734AbiEETV5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 15:21:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384925AbiEETVl (ORCPT
+        with ESMTP id S1343951AbiEETVy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 15:21:41 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8533F4B848;
-        Thu,  5 May 2022 12:18:01 -0700 (PDT)
+        Thu, 5 May 2022 15:21:54 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0676E50449;
+        Thu,  5 May 2022 12:18:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 46001B82F20;
-        Thu,  5 May 2022 19:18:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F115C385A8;
-        Thu,  5 May 2022 19:17:57 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 89D16B82F20;
+        Thu,  5 May 2022 19:18:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 369B4C385B9;
+        Thu,  5 May 2022 19:18:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651778279;
-        bh=m3BSN+54NVRaC/iJQn28GUNDH+kVUNyA61dRWvK4XN8=;
+        s=k20201202; t=1651778291;
+        bh=XLwv05HK4cqKvTg/DHDbRijSSxci4Q5RSO07SJNVPxY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mSTw/aIfNEqccH08hbSo/aXsI2VL0YAw4Ieu2Jzd0J2IjVPyWwbQY4di6KlSItYRo
-         3uP2EpdkeJ5+Ay0N818sifX2HJaxG22Y+ooDdybEMJLMV96SkOryXMShF+UxMxG56q
-         dz8tMy85+vA8fAaEVapMSEDefhhZdCBtWA9Qioy0ACYzRBoIbd5C+LoJKU1mMQUJxh
-         wCUhnPdWECkz85e2qX9L/qwcW8oNyLQ0EZaFSwK9yPg9RmQbW09KwT/TdsyPTyRQv9
-         bcMXEcL4q0vRL9A+JsROrs//3ijUaacn2qSWZ8TFnvqe+chGqjHBupb8LuYRfYqY0S
-         1SPjirRnGY5DQ==
+        b=phYQZs1SssV/Z9+rPpcDM6mV2VGi0lgzVa17AlbhV/uhf5N6ioV9N0RmwflxhPAM1
+         ZUI0G8mEKuANJb09zMh030bcJJ4Ns2ARneVFptBKBX58hOdNLnhWBurFCPD/ZBKtOZ
+         PcXAhQBN8bzGTVpWZCPNPvo04+XNWk8f1hdCReWPqv3mSbwLbQfnct0Toj1QK5Mec7
+         2v5SazcHgjChdPRFYpsWFMkY0fqs3w81PqNBpXSD0w8JhVguxQHL4UMZGceyCzQ5L3
+         RwPWESFyL5EkD8vPnp7helkNvkfLvmKH1Qasto4IFZsfMix0drJ/nhNl80lpjgFXgN
+         bqcx0f1AZyjkQ==
 From:   Miguel Ojeda <ojeda@kernel.org>
-To:     Masahiro Yamada <masahiroy@kernel.org>,
-        Changbin Du <changbin.du@intel.com>,
+To:     Randy Dunlap <rdunlap@infradead.org>, Song Liu <song@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Bixuan Cui <cuibixuan@huawei.com>,
+        Alexei Starovoitov <ast@kernel.org>,
         Nick Desaulniers <ndesaulniers@google.com>,
+        David Vernet <void@manifault.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Changbin Du <changbin.du@intel.com>,
         Nathan Chancellor <nathan@kernel.org>,
         linux-kernel@vger.kernel.org
 Cc:     rust-for-linux@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>
-Subject: [PATCH v1 1/3] kallsyms: avoid hardcoding the buffer size
-Date:   Thu,  5 May 2022 21:16:43 +0200
-Message-Id: <20220505191704.22812-2-ojeda@kernel.org>
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@google.com>,
+        Gary Guo <gary@garyguo.net>, Boqun Feng <boqun.feng@gmail.com>,
+        Matthew Wilcox <willy@infradead.org>
+Subject: [PATCH v1 2/3] kallsyms: support "big" kernel symbols
+Date:   Thu,  5 May 2022 21:16:44 +0200
+Message-Id: <20220505191704.22812-3-ojeda@kernel.org>
 In-Reply-To: <20220505191704.22812-1-ojeda@kernel.org>
 References: <20220505191704.22812-1-ojeda@kernel.org>
 MIME-Version: 1.0
@@ -57,63 +67,131 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Boqun Feng <boqun.feng@gmail.com>
+Rust symbols can become quite long due to namespacing introduced
+by modules, types, traits, generics, etc.
 
-This makes it easier to update the size later on.
+Increasing to 255 is not enough in some cases, and therefore
+we need to introduce longer lengths to the symbol table.
 
-Furthermore, a static assert is added to ensure both are updated
-when that happens. The relationship used is one that keeps the new
-size (512+1) close to the original buffer size (500).
+In order to avoid increasing all lengths to 2 bytes (since most
+of them are small, including many Rust ones), we use ULEB128 to
+keep smaller symbols in 1 byte, with the rest in 2 bytes.
 
+Co-developed-by: Alex Gaynor <alex.gaynor@gmail.com>
+Signed-off-by: Alex Gaynor <alex.gaynor@gmail.com>
+Co-developed-by: Wedson Almeida Filho <wedsonaf@google.com>
+Signed-off-by: Wedson Almeida Filho <wedsonaf@google.com>
+Co-developed-by: Gary Guo <gary@garyguo.net>
+Signed-off-by: Gary Guo <gary@garyguo.net>
+Co-developed-by: Boqun Feng <boqun.feng@gmail.com>
 Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
-Co-developed-by: Miguel Ojeda <ojeda@kernel.org>
+Co-developed-by: Matthew Wilcox <willy@infradead.org>
+Signed-off-by: Matthew Wilcox <willy@infradead.org>
 Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
 ---
- scripts/kallsyms.c | 16 +++++++++++++---
- 1 file changed, 13 insertions(+), 3 deletions(-)
+ kernel/kallsyms.c  | 26 ++++++++++++++++++++++----
+ scripts/kallsyms.c | 29 ++++++++++++++++++++++++++---
+ 2 files changed, 48 insertions(+), 7 deletions(-)
 
+diff --git a/kernel/kallsyms.c b/kernel/kallsyms.c
+index 79f2eb617a62..e8d2262ef2d2 100644
+--- a/kernel/kallsyms.c
++++ b/kernel/kallsyms.c
+@@ -69,12 +69,20 @@ static unsigned int kallsyms_expand_symbol(unsigned int off,
+ 	data = &kallsyms_names[off];
+ 	len = *data;
+ 	data++;
++	off++;
++
++	/* If MSB is 1, it is a "big" symbol, so needs an additional byte. */
++	if ((len & 0x80) != 0) {
++		len = (len & 0x7F) | (*data << 7);
++		data++;
++		off++;
++	}
+ 
+ 	/*
+ 	 * Update the offset to return the offset for the next symbol on
+ 	 * the compressed stream.
+ 	 */
+-	off += len + 1;
++	off += len;
+ 
+ 	/*
+ 	 * For every byte on the compressed symbol data, copy the table
+@@ -127,7 +135,7 @@ static char kallsyms_get_symbol_type(unsigned int off)
+ static unsigned int get_symbol_offset(unsigned long pos)
+ {
+ 	const u8 *name;
+-	int i;
++	int i, len;
+ 
+ 	/*
+ 	 * Use the closest marker we have. We have markers every 256 positions,
+@@ -141,8 +149,18 @@ static unsigned int get_symbol_offset(unsigned long pos)
+ 	 * so we just need to add the len to the current pointer for every
+ 	 * symbol we wish to skip.
+ 	 */
+-	for (i = 0; i < (pos & 0xFF); i++)
+-		name = name + (*name) + 1;
++	for (i = 0; i < (pos & 0xFF); i++) {
++		len = *name;
++
++		/*
++		 * If MSB is 1, it is a "big" symbol, so we need to look into
++		 * the next byte (and skip it, too).
++		 */
++		if ((len & 0x80) != 0)
++			len = ((len & 0x7F) | (name[1] << 7)) + 1;
++
++		name = name + len + 1;
++	}
+ 
+ 	return name - kallsyms_names;
+ }
 diff --git a/scripts/kallsyms.c b/scripts/kallsyms.c
-index 8caabddf817c..880c4404731b 100644
+index 880c4404731b..c4e85eec2b4b 100644
 --- a/scripts/kallsyms.c
 +++ b/scripts/kallsyms.c
-@@ -27,8 +27,18 @@
+@@ -480,12 +480,35 @@ static void write_src(void)
+ 		if ((i & 0xFF) == 0)
+ 			markers[i >> 8] = off;
  
- #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof(arr[0]))
- 
-+#define _stringify_1(x)	#x
-+#define _stringify(x)	_stringify_1(x)
+-		printf("\t.byte 0x%02x", table[i]->len);
++		/* There cannot be any symbol of length zero. */
++		if (table[i]->len == 0) {
++			fprintf(stderr, "kallsyms failure: "
++				"unexpected zero symbol length\n");
++			exit(EXIT_FAILURE);
++		}
 +
- #define KSYM_NAME_LEN		128
- 
-+/* A substantially bigger size than the current maximum. */
-+#define KSYM_NAME_LEN_BUFFER	512
-+_Static_assert(
-+	KSYM_NAME_LEN_BUFFER == KSYM_NAME_LEN * 4,
-+	"Please keep KSYM_NAME_LEN_BUFFER in sync with KSYM_NAME_LEN"
-+);
++		/* Only lengths that fit in up-to-two-byte ULEB128 are supported. */
++		if (table[i]->len > 0x3FFF) {
++			fprintf(stderr, "kallsyms failure: "
++				"unexpected huge symbol length\n");
++			exit(EXIT_FAILURE);
++		}
 +
- struct sym_entry {
- 	unsigned long long addr;
- 	unsigned int len;
-@@ -197,15 +207,15 @@ static void check_symbol_range(const char *sym, unsigned long long addr,
- 
- static struct sym_entry *read_symbol(FILE *in)
- {
--	char name[500], type;
-+	char name[KSYM_NAME_LEN_BUFFER+1], type;
- 	unsigned long long addr;
- 	unsigned int len;
- 	struct sym_entry *sym;
- 	int rc;
- 
--	rc = fscanf(in, "%llx %c %499s\n", &addr, &type, name);
-+	rc = fscanf(in, "%llx %c %" _stringify(KSYM_NAME_LEN_BUFFER) "s\n", &addr, &type, name);
- 	if (rc != 3) {
--		if (rc != EOF && fgets(name, 500, in) == NULL)
-+		if (rc != EOF && fgets(name, KSYM_NAME_LEN_BUFFER + 1, in) == NULL)
- 			fprintf(stderr, "Read error or end of file.\n");
- 		return NULL;
++		/* Encode length with ULEB128. */
++		if (table[i]->len <= 0x7F) {
++			/* Most symbols use a single byte for the length. */
++			printf("\t.byte 0x%02x", table[i]->len);
++			off += table[i]->len + 1;
++		} else {
++			/* "Big" symbols use two bytes. */
++			printf("\t.byte 0x%02x, 0x%02x",
++				(table[i]->len & 0x7F) | 0x80,
++				(table[i]->len >> 7) & 0x7F);
++			off += table[i]->len + 2;
++		}
+ 		for (k = 0; k < table[i]->len; k++)
+ 			printf(", 0x%02x", table[i]->sym[k]);
+ 		printf("\n");
+-
+-		off += table[i]->len + 1;
  	}
+ 	printf("\n");
+ 
 -- 
 2.35.3
 

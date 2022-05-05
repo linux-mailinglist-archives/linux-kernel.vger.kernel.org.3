@@ -2,32 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29E6051C973
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 21:46:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BCF151C97D
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 21:46:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385320AbiEETuN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 15:50:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34846 "EHLO
+        id S1385341AbiEETuR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 15:50:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385211AbiEETuJ (ORCPT
+        with ESMTP id S1385303AbiEETuL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 15:50:09 -0400
+        Thu, 5 May 2022 15:50:11 -0400
 Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D6175DA7B;
-        Thu,  5 May 2022 12:46:28 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A46B85D651;
+        Thu,  5 May 2022 12:46:31 -0700 (PDT)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: nfraprado)
-        with ESMTPSA id E74AB1F45CC9
+        with ESMTPSA id 8D1111F45CCB
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1651779979;
-        bh=XzEaiEHNWOYXuBWQGKEaKopiSHkFX8Xw6nY868u+Ces=;
+        s=mail; t=1651779990;
+        bh=I6V1qhlJl3e4i+gbr+q91PTZx0jogs0Jp+BzGxZx2KE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=U2rc+UO+OXSwdT+oR1eWJK4kT4Bc6IoHf8rWTxs4788dFRNZhJb9WKoKYG+xJu5if
-         2wYeQewZ9+k9NipMekRbxrVHCIiOYyu+b5vlmSPHFptmohRO3HPHCpbl7fswzixn6W
-         DeYH86oCoryzksUAlzjbGnV1rvuF+C7mnKNx0iAbvtuY9m5tWc0Ni6dotvG0UAUB0r
-         1m5ak/CX+USpqHr+uR2jGOKmfFDn4A6EvFJlRQq1iEpWosMm3UsW+8wm4P2VjqUsLE
-         vNIZzlEZoOFG9m3UeuDWMTzndhGPVqi6oL2AoNmFedsBQW8c57GBNAipiebTwLGLQ5
-         wSnUBZjND6gvw==
+        b=TW06FaAmI0ySY7OshRtxKpiWkT8By/BDpG0/bMqo7BdF1ZvxjVqFAOC5wrNrVHtUR
+         WJAkewcDestegsNrKlFxerdHr6Pl2+/5VHqy/oK0yu/aay2lc5zmHI6LalzT/spr1y
+         89GihkT0L92RSIxX18NuevodbMabh6sZ+pbUyng3PIT16k8j5oioirdNbux/OmAghp
+         iAVFdGyCWfy6tEkOxcIjwNrATs32aPF5eABgkKJJIo32jsiogZnwqCJ3lxMnAdemvb
+         RqJDse0mK7FFnDO5WUTxS90w1F86oD1pFuM0EkMZMX9W6G6mP8rznAMg5ckXCycYYT
+         /r4izLAdEGq+w==
 From:   =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
         <nfraprado@collabora.com>
 To:     Matthias Brugger <matthias.bgg@gmail.com>
@@ -40,9 +40,9 @@ Cc:     AngeloGioacchino Del Regno
         Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-mediatek@lists.infradead.org
-Subject: [PATCH v2 05/16] arm64: dts: mediatek: asurada: Add system-wide power supplies
-Date:   Thu,  5 May 2022 15:45:39 -0400
-Message-Id: <20220505194550.3094656-6-nfraprado@collabora.com>
+Subject: [PATCH v2 06/16] arm64: dts: mediatek: asurada: Enable and configure I2C and SPI busses
+Date:   Thu,  5 May 2022 15:45:40 -0400
+Message-Id: <20220505194550.3094656-7-nfraprado@collabora.com>
 X-Mailer: git-send-email 2.36.0
 In-Reply-To: <20220505194550.3094656-1-nfraprado@collabora.com>
 References: <20220505194550.3094656-1-nfraprado@collabora.com>
@@ -59,8 +59,9 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add system-wide power supplies present on all of the boards in the
-Asurada family.
+The Asurada platform has five I2C controllers and two SPI controllers
+that are used. In preparation for enabling the devices connected to
+these controllers, enable and configure their busses.
 
 Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
 Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
@@ -68,84 +69,157 @@ Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com
 
 (no changes since v1)
 
- .../boot/dts/mediatek/mt8192-asurada.dtsi     | 64 +++++++++++++++++++
- 1 file changed, 64 insertions(+)
+ .../boot/dts/mediatek/mt8192-asurada.dtsi     | 130 ++++++++++++++++++
+ 1 file changed, 130 insertions(+)
 
 diff --git a/arch/arm64/boot/dts/mediatek/mt8192-asurada.dtsi b/arch/arm64/boot/dts/mediatek/mt8192-asurada.dtsi
-index e10636298639..5cb7580a13cf 100644
+index 5cb7580a13cf..3c5b1e475cf6 100644
 --- a/arch/arm64/boot/dts/mediatek/mt8192-asurada.dtsi
 +++ b/arch/arm64/boot/dts/mediatek/mt8192-asurada.dtsi
-@@ -19,6 +19,70 @@ memory@40000000 {
- 		device_type = "memory";
- 		reg = <0 0x40000000 0 0x80000000>;
+@@ -85,6 +85,47 @@ ppvar_sys: ppvar-sys {
  	};
-+
-+	/* system wide LDO 1.8V power rail */
-+	pp1800_ldo_g: pp1800-ldo-g {
-+		compatible = "regulator-fixed";
-+		regulator-name = "pp1800_ldo_g";
-+		regulator-always-on;
-+		regulator-boot-on;
-+		regulator-min-microvolt = <1800000>;
-+		regulator-max-microvolt = <1800000>;
-+		vin-supply = <&pp3300_g>;
-+	};
-+
-+	/* system wide switching 3.3V power rail */
-+	pp3300_g: pp3300-g {
-+		compatible = "regulator-fixed";
-+		regulator-name = "pp3300_g";
-+		regulator-always-on;
-+		regulator-boot-on;
-+		regulator-min-microvolt = <3300000>;
-+		regulator-max-microvolt = <3300000>;
-+		vin-supply = <&ppvar_sys>;
-+	};
-+
-+	/* system wide LDO 3.3V power rail */
-+	pp3300_ldo_z: pp3300-ldo-z {
-+		compatible = "regulator-fixed";
-+		regulator-name = "pp3300_ldo_z";
-+		regulator-always-on;
-+		regulator-boot-on;
-+		regulator-min-microvolt = <3300000>;
-+		regulator-max-microvolt = <3300000>;
-+		vin-supply = <&ppvar_sys>;
-+	};
-+
-+	/* separately switched 3.3V power rail */
-+	pp3300_u: pp3300-u {
-+		compatible = "regulator-fixed";
-+		regulator-name = "pp3300_u";
-+		regulator-always-on;
-+		regulator-boot-on;
-+		regulator-min-microvolt = <3300000>;
-+		regulator-max-microvolt = <3300000>;
-+		/* enable pin wired to GPIO controlled by EC */
-+		vin-supply = <&pp3300_g>;
-+	};
-+
-+	/* system wide switching 5.0V power rail */
-+	pp5000_a: pp5000-a {
-+		compatible = "regulator-fixed";
-+		regulator-name = "pp5000_a";
-+		regulator-always-on;
-+		regulator-boot-on;
-+		regulator-min-microvolt = <5000000>;
-+		regulator-max-microvolt = <5000000>;
-+		vin-supply = <&ppvar_sys>;
-+	};
-+
-+	/* system wide semi-regulated power rail from battery or USB */
-+	ppvar_sys: ppvar-sys {
-+		compatible = "regulator-fixed";
-+		regulator-name = "ppvar_sys";
-+		regulator-always-on;
-+		regulator-boot-on;
-+	};
  };
  
++&i2c0 {
++	status = "okay";
++
++	clock-frequency = <400000>;
++	pinctrl-names = "default";
++	pinctrl-0 = <&i2c0_pins>;
++};
++
++&i2c1 {
++	status = "okay";
++
++	clock-frequency = <400000>;
++	pinctrl-names = "default";
++	pinctrl-0 = <&i2c1_pins>;
++};
++
++&i2c2 {
++	status = "okay";
++
++	clock-frequency = <400000>;
++	clock-stretch-ns = <12600>;
++	pinctrl-names = "default";
++	pinctrl-0 = <&i2c2_pins>;
++};
++
++&i2c3 {
++	status = "okay";
++
++	clock-frequency = <400000>;
++	pinctrl-names = "default";
++	pinctrl-0 = <&i2c3_pins>;
++};
++
++&i2c7 {
++	status = "okay";
++
++	clock-frequency = <400000>;
++	pinctrl-names = "default";
++	pinctrl-0 = <&i2c7_pins>;
++};
++
  &pio {
+ 	/* 220 lines */
+ 	gpio-line-names = "I2S_DP_LRCK",
+@@ -311,6 +352,95 @@ &pio {
+ 			  "AUD_DAT_MOSI1",
+ 			  "AUD_DAT_MISO0",
+ 			  "AUD_DAT_MISO1";
++
++	i2c0_pins: i2c0-default-pins {
++		pins-bus {
++			pinmux = <PINMUX_GPIO204__FUNC_SCL0>,
++				 <PINMUX_GPIO205__FUNC_SDA0>;
++			bias-pull-up;
++			mediatek,pull-up-adv = <3>;
++			mediatek,drive-strength-adv = <7>;
++		};
++	};
++
++	i2c1_pins: i2c1-default-pins {
++		pins-bus {
++			pinmux = <PINMUX_GPIO118__FUNC_SCL1>,
++				 <PINMUX_GPIO119__FUNC_SDA1>;
++			bias-pull-up;
++			mediatek,pull-up-adv = <3>;
++			mediatek,drive-strength-adv = <7>;
++		};
++	};
++
++	i2c2_pins: i2c2-default-pins {
++		pins-bus {
++			pinmux = <PINMUX_GPIO141__FUNC_SCL2>,
++				 <PINMUX_GPIO142__FUNC_SDA2>;
++			bias-pull-up;
++			mediatek,pull-up-adv = <3>;
++			mediatek,drive-strength-adv = <0>;
++		};
++	};
++
++	i2c3_pins: i2c3-default-pins {
++		pins-bus {
++			pinmux = <PINMUX_GPIO160__FUNC_SCL3>,
++				 <PINMUX_GPIO161__FUNC_SDA3>;
++			bias-disable;
++			mediatek,drive-strength-adv = <7>;
++		};
++	};
++
++	i2c7_pins: i2c7-default-pins {
++		pins-bus {
++			pinmux = <PINMUX_GPIO124__FUNC_SCL7>,
++				 <PINMUX_GPIO125__FUNC_SDA7>;
++			bias-disable;
++			mediatek,drive-strength-adv = <7>;
++		};
++	};
++
++	spi1_pins: spi1-default-pins {
++		pins-cs-mosi-clk {
++			pinmux = <PINMUX_GPIO157__FUNC_SPI1_A_CSB>,
++				 <PINMUX_GPIO159__FUNC_SPI1_A_MO>,
++				 <PINMUX_GPIO156__FUNC_SPI1_A_CLK>;
++			bias-disable;
++		};
++
++		pins-miso {
++			pinmux = <PINMUX_GPIO158__FUNC_SPI1_A_MI>;
++			bias-pull-down;
++		};
++	};
++
++	spi5_pins: spi5-default-pins {
++		pins-bus {
++			pinmux = <PINMUX_GPIO38__FUNC_SPI5_A_MI>,
++				 <PINMUX_GPIO37__FUNC_GPIO37>,
++				 <PINMUX_GPIO39__FUNC_SPI5_A_MO>,
++				 <PINMUX_GPIO36__FUNC_SPI5_A_CLK>;
++			bias-disable;
++		};
++	};
++};
++
++&spi1 {
++	status = "okay";
++
++	mediatek,pad-select = <0>;
++	pinctrl-names = "default";
++	pinctrl-0 = <&spi1_pins>;
++};
++
++&spi5 {
++	status = "okay";
++
++	cs-gpios = <&pio 37 GPIO_ACTIVE_LOW>;
++	mediatek,pad-select = <0>;
++	pinctrl-names = "default";
++	pinctrl-0 = <&spi5_pins>;
+ };
+ 
+ &uart0 {
 -- 
 2.36.0
 

@@ -2,64 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7670F51BF1A
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 14:17:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DADB151BF20
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 14:19:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376369AbiEEMVY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 08:21:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55308 "EHLO
+        id S1376495AbiEEMWm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 08:22:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355567AbiEEMVW (ORCPT
+        with ESMTP id S241946AbiEEMWk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 08:21:22 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DD1E54FB5;
-        Thu,  5 May 2022 05:17:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Transfer-Encoding:Content-Disposition:
-        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:From:
-        Sender:Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Content-Disposition:
-        In-Reply-To:References; bh=aZq5jO8c2cQjpNu/6cSRu86328iJHgS0Kgbi++2VnQk=; b=t9
-        rEggc8JstJI8HquYLGPX7K2BbrWG3xtlnbc5OBWAZzd6tAddeHR6S3uzlGNzNnpsgY73ujkYD4fd/
-        uo1KRNTnmkYJPUMERaGHOKvsAIS299g2tf1xHtD5/TV7sqtYzry9CVbxv8trMehsTnNzawMVoo4je
-        TzI5G6zMq8PYzt4=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1nmaPw-001LnC-7I; Thu, 05 May 2022 14:17:12 +0200
-Date:   Thu, 5 May 2022 14:17:12 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Pavel Machek <pavel@ucw.cz>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
-        devicetree@vger.kernel.org, netdev@vger.kernel.org,
-        linux-leds@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        bcm-kernel-feedback-list@broadcom.com,
-        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        John Crispin <john@phrozen.org>, linux-doc@vger.kernel.org
-Subject: Re: [PATCH 1/4] dt-bindings: net: add bitfield defines for Ethernet
- speeds
-Message-ID: <YnPASLy4oWJ6BJDq@lunn.ch>
-References: <20220503153613.15320-1-zajec5@gmail.com>
- <235aa025-7c12-f7e1-d788-9a2ef97f664f@gmail.com>
+        Thu, 5 May 2022 08:22:40 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DF4F53B48
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 05:19:01 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id b24so4967987edu.10
+        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 05:19:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=rDk3qs/Q4Xe8wlL/UcZMtYsp2NSwhtSMKNXSB48HRlA=;
+        b=7y/YvlHScipYanP00lb1LV7E2AOk6re7HN1ndCWAVJSLqR28Xi83kG+pQu7/UEtsUh
+         FvBJfCJiffmk85MzcLJeWGYfHc4Bcz0J1BFhnHP4lz38NglS75/OC0sCksV9s4USD2US
+         YvhkMS8UmpeanIAMp2MlaxJsbi7a+//HVBT+BHe+CyPfejaJu200/vxanoZERxjaLxjo
+         JRclq1WSTmnRJTYj4VgDERRQQp92MYm1Kerpf4hV0AiZ2clDZqIMfTHwDTFirgNZr43x
+         cXEVmhexEKEBA6kMCMv2xoaQHnvXdhieEDZJmVka9cQ2IPHU4EzTmRCs4opTzj9qeNYn
+         jHLQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=rDk3qs/Q4Xe8wlL/UcZMtYsp2NSwhtSMKNXSB48HRlA=;
+        b=JNXl18BXTaGubbPekKLfvGyACV+yelQbphQWg+9vEOsOjf3KLzBDMd1HgM9h14hFq/
+         uPXOzRwbEWxZUXLYDLSiFZq+FAxILLkfZWF0Hbv/Qaz45LLh/iK3GvUAnDQ3phUW2Tk2
+         ms4417aWn3JyMQtKuwkEFJY1HvqEE07P8+Xn+mInLdhPf9sTQRsaeIAnuRGYoj2gRTbN
+         5ApVsLkXeOqbfq/BOdmlr49J/OK5br2B2m3jv86vXQJiO+G8IzZXY9JylEj0mHybCSPe
+         SZkAZ3Lv6Qu0tNjg5yAKc/Znt77FBolRCYlz9x8BHQaZhcjWLHxuT3NPi0zeLjREEAia
+         t/kg==
+X-Gm-Message-State: AOAM5318ZYvn3FP8+Fs+c+avcFlT21JeMSsxyfKvqLHa1gFpEisu0YIv
+        ydsW75GrWE4ujsVd3auxCPlfO7XUh3MVZx0X6snrzg==
+X-Google-Smtp-Source: ABdhPJzNj4hoyQIi5bToIm8IJx9uJV1XrbVuw7EmRPlboKIHjiKMwU+E7zq+NuwRHGZGpR3PQrqlT8CW8qRS1Bqrhfw=
+X-Received: by 2002:a05:6402:d4c:b0:410:a415:fd95 with SMTP id
+ ec12-20020a0564020d4c00b00410a415fd95mr29189322edb.288.1651753139972; Thu, 05
+ May 2022 05:18:59 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <235aa025-7c12-f7e1-d788-9a2ef97f664f@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+References: <20220505115011.3435-1-hanyihao@vivo.com>
+In-Reply-To: <20220505115011.3435-1-hanyihao@vivo.com>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Thu, 5 May 2022 14:18:48 +0200
+Message-ID: <CAMRc=MdkbZVW_vFxyJbKh9oDo3mdud2omfS=cW5=Gn=nMrM37A@mail.gmail.com>
+Subject: Re: [PATCH] gpiolib: cdev: fix stream_open.cocci warnings
+To:     Kent Gibson <warthog618@gmail.com>, Yihao Han <hanyihao@vivo.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        kernel@vivo.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,26 +67,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 05, 2022 at 07:19:41AM +0200, Rafał Miłecki wrote:
-> On 3.05.2022 17:36, Rafał Miłecki wrote:
-> > From: Rafał Miłecki <rafal@milecki.pl>
-> > 
-> > This allows specifying multiple Ethernet speeds in a single DT uint32
-> > value.
-> > 
-> > Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
-> 
-> Ansuel please check if my patchset conflicts in any way with your work.
-> 
-> Andrew suggested to combine both but right now I don't see it as
-> necessary.
-> 
-> I'd still appreciate your review of my work. Such binding may be
-> required for some hardware controlled LEDs setup too I guess.
+On Thu, May 5, 2022 at 1:50 PM Yihao Han <hanyihao@vivo.com> wrote:
+>
+> ./drivers/gpio/gpiolib-cdev.c:2498:7-23: WARNING:
+> gpio_fileops: .read() has stream semantic;
+> safe to change nonseekable_open -> stream_open.
+>
+> Generated by: scripts/coccinelle/api/stream_open.cocci
+>
+> Signed-off-by: Yihao Han <hanyihao@vivo.com>
+> ---
+>  drivers/gpio/gpiolib-cdev.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/gpio/gpiolib-cdev.c b/drivers/gpio/gpiolib-cdev.c
+> index f5aa5f93342a..d03c8e012c8c 100644
+> --- a/drivers/gpio/gpiolib-cdev.c
+> +++ b/drivers/gpio/gpiolib-cdev.c
+> @@ -2495,7 +2495,7 @@ static int gpio_chrdev_open(struct inode *inode, struct file *file)
+>         get_device(&gdev->dev);
+>         file->private_data = cdev;
+>
+> -       ret = nonseekable_open(inode, file);
+> +       ret = stream_open(inode, file);
+>         if (ret)
+>                 goto out_unregister_notifier;
+>
+> --
+> 2.17.1
+>
 
-Please look at the LED binding. It is an LED you are trying to
-control, so that is the binding you should be using.  How do you
-describe this functionality using that binding. Ansuel code will give
-you the framework to actually do the implementation within.
+Cc'ing Kent.
 
-    Andrew
+This patch doesn't seem to target current master or rc1.
+
+It also can't be right - we specifically mark all filesystem objects
+exposed by the GPIO character device as non-seekable.
+
+Bart

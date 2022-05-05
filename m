@@ -2,66 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70B4351B639
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 04:58:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E3E751B5A2
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 04:10:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240290AbiEEDAL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 23:00:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34742 "EHLO
+        id S237341AbiEECNe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 22:13:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240161AbiEEDAI (ORCPT
+        with ESMTP id S230027AbiEECNc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 23:00:08 -0400
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5493313DC8;
-        Wed,  4 May 2022 19:56:30 -0700 (PDT)
-Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 242Nnl5h025194;
-        Tue, 3 May 2022 00:51:50 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type : content-transfer-encoding; s=corp-2021-07-09;
- bh=DZRyLUARGbpvjj9KLE8couN5sqcicCf2H9NcWm/lQeo=;
- b=tZUt5C97u62nlPQz4nVrqHZ99oviz+0sWlquG9KEV6KSJmIUy7eSIdQ/28AriRhAzaN+
- gw8yF2P3QrRDDyKv4DbXCzeGh8NjzWjAlxZn61P5AA/0qj+LvSzbUFUw4FJvzcIHw1ym
- dRJnANaLmjX9gZUAP6SDTnFDHGA2AwKJTwd+qnnNBRpLi7LQI7SxVadtIVNjVwSAOUDa
- CVgd8/v544Tf34CEQcRppFk5Jj6jSoxgyhjjqi3cWC9mal5SNH0LbI6WKh0yOh4zDOGP
- M+5c9kvpAA5/avqRKNKFVJzS4QjOhBrLm2Paw8ZFG+pYjWE2h08auytyp9jscz0cbXSr yg== 
-Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3fruw2cnx5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 03 May 2022 00:51:50 +0000
-Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 2430oo10008891;
-        Tue, 3 May 2022 00:51:49 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3fruj83x5k-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 03 May 2022 00:51:49 +0000
-Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 2430plj4010389;
-        Tue, 3 May 2022 00:51:49 GMT
-Received: from ca-mkp.mkp.ca.oracle.com (ca-mkp.ca.oracle.com [10.156.108.201])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3fruj83x4g-4;
-        Tue, 03 May 2022 00:51:49 +0000
-From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-To:     Haowen Bai <baihaowen@meizu.com>, jejb@linux.ibm.com
-Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org
-Subject: Re: [PATCH] scsi: fnic: remove redundant NULL check
-Date:   Mon,  2 May 2022 20:51:14 -0400
-Message-Id: <165153836360.24053.10929907009827872411.b4-ty@oracle.com>
-X-Mailer: git-send-email 2.35.2
-In-Reply-To: <1647309219-12772-1-git-send-email-baihaowen@meizu.com>
-References: <1647309219-12772-1-git-send-email-baihaowen@meizu.com>
+        Wed, 4 May 2022 22:13:32 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94C7821E13
+        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 19:09:53 -0700 (PDT)
+Received: from dggpeml500021.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KtxsS2DwRzGpY0;
+        Thu,  5 May 2022 10:07:08 +0800 (CST)
+Received: from localhost.localdomain (10.157.217.52) by
+ dggpeml500021.china.huawei.com (7.185.36.21) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 5 May 2022 10:09:51 +0800
+From:   taolan <taolan@huawei.com>
+To:     <pmladek@suse.com>, <senozhatsky@chromium.org>,
+        <rostedt@goodmis.org>, <john.ogness@linutronix.de>
+CC:     <linux-kernel@vger.kernel.org>
+Subject: [PATCH] =?UTF-8?q?printk:=20fix=20kernel=20msg=20leakage=20in=20s?= =?UTF-8?q?yslog=5Fprint=5Fall=20function=EF=BC=9B?=
+Date:   Thu, 5 May 2022 02:05:41 +0000
+Message-ID: <20220505020541.1133-1-taolan@huawei.com>
+X-Mailer: git-send-email 2.18.0.huawei.25
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-GUID: dTvflSWKDBRWbpLhG3m55XEtZwl1Pw43
-X-Proofpoint-ORIG-GUID: dTvflSWKDBRWbpLhG3m55XEtZwl1Pw43
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Originating-IP: [10.157.217.52]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpeml500021.china.huawei.com (7.185.36.21)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,17 +46,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 15 Mar 2022 09:53:39 +0800, Haowen Bai wrote:
+From: t00264981 <taolan@huawei.com>
 
-> Fix below warnings reported by coccicheck:
-> drivers/scsi/fnic/fnic_debugfs.c:90:2-7: WARNING: NULL check before some freeing functions is not needed.
-> 
-> 
+This function applies for memory but does not initialize the memory,and
+then invokes copy_to_user to copy the memory to the user space, which
+causes kernel information leaks.
 
-Applied to 5.19/scsi-queue, thanks!
+[ 148.439660] kernel memory leak value 0xffffff80aed972bc at
+0xffffffd37f00a000 to 0x704b883e74
 
-[1/1] scsi: fnic: remove redundant NULL check
-      https://git.kernel.org/mkp/scsi/c/1dcd96c4d0b7
+Signed-off-by: t00264981 <taolan@huawei.com>
+---
+ kernel/printk/printk.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/kernel/printk/printk.c b/kernel/printk/printk.c
+index da03c15ecc89..22d7d821909d 100644
+--- a/kernel/printk/printk.c
++++ b/kernel/printk/printk.c
+@@ -1591,7 +1591,7 @@ static int syslog_print_all(char __user *buf, int size, bool clear)
+ 	u64 seq;
+ 	bool time;
+ 
+-	text = kmalloc(CONSOLE_LOG_MAX, GFP_KERNEL);
++	text = kzalloc(CONSOLE_LOG_MAX, GFP_KERNEL);
+ 	if (!text)
+ 		return -ENOMEM;
+ 
 -- 
-Martin K. Petersen	Oracle Linux Engineering
+2.18.0.huawei.25
+

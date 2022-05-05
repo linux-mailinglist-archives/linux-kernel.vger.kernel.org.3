@@ -2,157 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4759351C8C3
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 21:14:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02F4D51C8C9
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 21:18:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384919AbiEETSh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 15:18:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34408 "EHLO
+        id S1383816AbiEETVc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 15:21:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231905AbiEETSc (ORCPT
+        with ESMTP id S231905AbiEETVa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 15:18:32 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FE511FA79
-        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 12:14:52 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id g8so4392208pfh.5
-        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 12:14:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=e+FJ46/7Sy9VfribnYX6kNq/CwfrxVb5YsTgHdbMzYw=;
-        b=RPTG4z8cakasD5OVp+30Q1BSbjyv4oUbHU8Fojvj4vDLWZeCEb/iPIxaF9Uoz9Aeqi
-         1q4khR1N5XYVxxmYJiEZYDsu1AGelLC+IK2jurgtuq5vP9WTUPkWm95m9EdYHoxtuQkj
-         W3s5xidBprXymtQ6qhaqNCi67LSvL18u+mJOXRYHO+E2Z2fYaqB3387lwOq65MHkD0DN
-         ot/vs+zI1Od/WovlLOGqGioGy1OSVGdeVrmlXoOlCJARfIrpKixRRtaJCJf/Sn+M3i+m
-         8rIHUKd+hiYwzkCHovLRDunzuoFFSvcQl3sp5Mt7crE5V57Dkb6LSdEVXvC1AAwGJeSu
-         l60A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=e+FJ46/7Sy9VfribnYX6kNq/CwfrxVb5YsTgHdbMzYw=;
-        b=C8p/DcfBTxzFlLUVJhvVKdZ/UtGt35bOjUazsYaZTj7Uhq/RWoqTst0VBHUSAysAaJ
-         Ze4LmyY+a5mtzy/UQ5ypwfLMSi0W2udUJVapUbXim49mcK1udwCCA36kijC1ts3TTIY/
-         nn94pk8ge603m3LXis2RaMjs12nuGZJC1BPhSfzR+Kr2Ub/wssN5Z2lnXKJJCNwRj3m0
-         NJraSXOoInAkGDt0qd7X8VzW2SZkF4qRYWqNQ1HzNahAOEHUP8M8c3iReImAJL0n/avH
-         4aDd+8869zsRpi5AbfM2XxSw5vOWMOLL/1zjAjgINjcyyxA+JwZ7jcExg59fq6RBnQlx
-         JSjg==
-X-Gm-Message-State: AOAM532av9HggQKqPcPrC6D+oip9UTBKICxwph+8M7TG4rCmAdz+qvPa
-        XQL5ta8ffnp+f0At0O33EVeo3g==
-X-Google-Smtp-Source: ABdhPJyT95WwbRXkrGVd4EpOotmnRFvktUdqrHky1EemmQS9SfP8FFAH2kPzRIBGRF3tuP4H20T2pQ==
-X-Received: by 2002:a63:5756:0:b0:36c:67bc:7f3f with SMTP id h22-20020a635756000000b0036c67bc7f3fmr23587816pgm.389.1651778091865;
-        Thu, 05 May 2022 12:14:51 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id x5-20020a170902b40500b0015e8d4eb29bsm1885958plr.229.2022.05.05.12.14.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 May 2022 12:14:51 -0700 (PDT)
-Date:   Thu, 5 May 2022 19:14:48 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Ben Gardon <bgardon@google.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Peter Xu <peterx@redhat.com>,
-        David Matlack <dmatlack@google.com>,
-        Jim Mattson <jmattson@google.com>,
-        David Dunn <daviddunn@google.com>,
-        Jing Zhang <jingzhangos@google.com>,
-        Junaid Shahid <junaids@google.com>
-Subject: Re: [PATCH v7 10/11] KVM: selftests: Test disabling NX hugepages on
- a VM
-Message-ID: <YnQiKJcufscYYq/j@google.com>
-References: <20220503183045.978509-1-bgardon@google.com>
- <20220503183045.978509-11-bgardon@google.com>
+        Thu, 5 May 2022 15:21:30 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98BE83585B;
+        Thu,  5 May 2022 12:17:50 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4F95AB82E60;
+        Thu,  5 May 2022 19:17:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58367C385A8;
+        Thu,  5 May 2022 19:17:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651778268;
+        bh=S2VlxsKlNheP/UaljF4jK7i69JWNXtFiU1ZWtep/VvM=;
+        h=From:To:Cc:Subject:Date:From;
+        b=nl8guXmqkeqn8U0uP7nQcR6bT/b9QTUvlNCqHwCwe5Xh6gRXOCpq8g81dvZSYTfmL
+         tFQfiK7MKkf0nC38lNniKXVg7vMuDxmAzR4zNiaA10VUWd7t0+tMz4sCcN0xDV6enG
+         ZhD0D50LhOG9uAIuQ8VIBRlM5XYSgZlxMJPWQw8Qb3hm1F0Uay8X9gCsUBmyn2u5zh
+         Dp44orNE87kfByd8GqNu3fHsco9lG+hbLb+GrI8sHn1sYuYFEz97mGIy6Y5KlyHr+d
+         6FphjRfllmG7jCgrQ/XKdVRIVg319jWQW88Z3YDRzS2kSc2cLxBRo4CgLo1BMVVkaj
+         beVeazmC3ARRA==
+From:   Miguel Ojeda <ojeda@kernel.org>
+To:     Adrian Hunter <adrian.hunter@intel.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Changbin Du <changbin.du@intel.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        David Vernet <void@manifault.com>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>, Jiri Kosina <jikos@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Kees Cook <keescook@chromium.org>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        live-patching@vger.kernel.org,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Stephen Boyd <swboyd@chromium.org>
+Cc:     rust-for-linux@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>
+Subject: [PATCH v1 0/3] kallsyms: Rust requirements
+Date:   Thu,  5 May 2022 21:16:42 +0200
+Message-Id: <20220505191704.22812-1-ojeda@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220503183045.978509-11-bgardon@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 03, 2022, Ben Gardon wrote:
-> +	if (disable_nx_huge_pages) {
-> +		/*
-> +		 * Cannot run the test without NX huge pages if the kernel
-> +		 * does not support it.
-> +		 */
-> +		if (!kvm_check_cap(KVM_CAP_VM_DISABLE_NX_HUGE_PAGES))
-> +			return;
-> +
-> +		r = __vm_disable_nx_huge_pages(vm);
-> +		if (reboot_permissions) {
-> +			TEST_ASSERT(!r, "Disabling NX huge pages should succeed if process has reboot permissions");
-> +		} else {
-> +			TEST_ASSERT(r == -EPERM, "This process should not have permission to disable NX huge pages");
+These are the kallsyms patches we carry on the Rust patch series as
+prerequisites. We were requested to submit them independently, so
+here they are!
 
-This is wrong, the return value on ioctl() failure is -1, the error code is
-in errno and it's a positive value.
+  - The first one is an improvement that may be applied even without
+    the big symbol support.
 
-LOL, but it passes because EPERM == 1, hilarious.  To avoid confusion:
+  - The second adds support for "big" symbols without actually
+    increasing the limit.
 
-			TEST_ASSERT(r == -1 && errno == EPERM,
-				    "This process should not have permission to disable NX huge pages");
+  - The third performs the actual increase.
 
-> diff --git a/tools/testing/selftests/kvm/x86_64/nx_huge_pages_test.sh b/tools/testing/selftests/kvm/x86_64/nx_huge_pages_test.sh
-> index 60bfed8181b9..c21c1f639141 100755
-> --- a/tools/testing/selftests/kvm/x86_64/nx_huge_pages_test.sh
-> +++ b/tools/testing/selftests/kvm/x86_64/nx_huge_pages_test.sh
-> @@ -16,6 +16,8 @@ HUGE_PAGES=$(sudo cat /sys/kernel/mm/hugepages/hugepages-2048kB/nr_hugepages)
->  
->  set +e
->  
-> +NXECUTABLE="$(dirname $0)/nx_huge_pages_test"
-> +
->  (
->  	set -e
->  
-> @@ -24,7 +26,15 @@ set +e
->  	sudo echo 100 > /sys/module/kvm/parameters/nx_huge_pages_recovery_period_ms
->  	sudo echo 3 > /sys/kernel/mm/hugepages/hugepages-2048kB/nr_hugepages
->  
-> -	"$(dirname $0)"/nx_huge_pages_test 887563923
-> +	# Test with reboot permissions
-> +	sudo setcap cap_sys_boot+ep $NXECUTABLE
+Thanks!
 
-This leaves cap_sys_boot set on the executable if the script is run as root.
+Boqun Feng (1):
+  kallsyms: avoid hardcoding the buffer size
 
-Probably this?  It's moderately user friendly without going too crazy on error
-handling.
+Miguel Ojeda (2):
+  kallsyms: support "big" kernel symbols
+  kallsyms: increase maximum kernel symbol length to 512
 
-	# Test with reboot permissions
-	if [ $(whoami) != "root" ] ; then
-		sudo setcap cap_sys_boot+ep $NXECUTABLE
-	fi
-	$NXECUTABLE 887563923 1
+ include/linux/kallsyms.h            |  2 +-
+ kernel/kallsyms.c                   | 26 +++++++++++++---
+ kernel/livepatch/core.c             |  4 +--
+ scripts/kallsyms.c                  | 47 ++++++++++++++++++++++++-----
+ tools/include/linux/kallsyms.h      |  2 +-
+ tools/lib/perf/include/perf/event.h |  2 +-
+ tools/lib/symbol/kallsyms.h         |  2 +-
+ 7 files changed, 68 insertions(+), 17 deletions(-)
 
-	# Test without reboot permissions
-	if [ $(whoami) != "root" ] ; then
-		sudo setcap cap_sys_boot-ep $NXECUTABLE
-		$NXECUTABLE 887563923 0
-	fi
 
-> +	$NXECUTABLE 887563923 1
-> +
-> +	# Test without reboot permissions
-> +	if [ $(whoami) != "root" ] ; then
-> +		sudo setcap cap_sys_boot-ep $NXECUTABLE
-> +		$NXECUTABLE 887563923 0
+base-commit: 672c0c5173427e6b3e2a9bbb7be51ceeec78093a
+-- 
+2.35.3
 
-I would much prefer a proper flag, not a magic 0 vs. 1.  
-
-> +	fi
->  )
->  RET=$?
->  
-> -- 
-> 2.36.0.464.gb9c8b46e94-goog
-> 

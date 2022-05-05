@@ -2,175 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6818D51B8FF
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 09:29:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBB5151B8FD
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 09:29:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344463AbiEEHch (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 03:32:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37338 "EHLO
+        id S1344427AbiEEHdB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 03:33:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344233AbiEEHcb (ORCPT
+        with ESMTP id S1344667AbiEEHcy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 03:32:31 -0400
-Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9D1729801
-        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 00:28:51 -0700 (PDT)
-Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
-        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20220505072849euoutp0253a72b122b7be16f944c9de3d4f50357~sJOTw34ny0111701117euoutp02H
-        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 07:28:48 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20220505072849euoutp0253a72b122b7be16f944c9de3d4f50357~sJOTw34ny0111701117euoutp02H
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1651735729;
-        bh=j19LG41QlgQqZ+lZFqrhtRma1C1jIg9OOFvDpBlTex4=;
-        h=Date:Subject:To:CC:From:In-Reply-To:References:From;
-        b=qSK450mxwZZbcleGzZAl+PCJRc4osU6wshdEJje4Fgn9KOe9lVv4T6FR/JKhixwvP
-         qKNh0rcCqoXrfZmcJVv2aZQ+mnheRHSPM/uVx2YzEJ1YQal8PeNEd5Pf01PDAaE7JJ
-         KA9nLDxF4tAnrPXEbFnp5IxetDXPhhCXa7q3Ov+M=
-Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20220505072848eucas1p1d66f136b7b1226351171cd4dd1152d26~sJOTKK_DF2541325413eucas1p1z;
-        Thu,  5 May 2022 07:28:48 +0000 (GMT)
-Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
-        eusmges2new.samsung.com (EUCPMTA) with SMTP id B4.15.09887.0BC73726; Thu,  5
-        May 2022 08:28:48 +0100 (BST)
-Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
-        20220505072847eucas1p27c50364580d96918bc2a59b6877671ba~sJOSvbf6V0726607266eucas1p2b;
-        Thu,  5 May 2022 07:28:47 +0000 (GMT)
-Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
-        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20220505072847eusmtrp2acdb61270717097424f910760caaa9a7~sJOStu9m32757327573eusmtrp2B;
-        Thu,  5 May 2022 07:28:47 +0000 (GMT)
-X-AuditID: cbfec7f4-471ff7000000269f-26-62737cb08449
-Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
-        eusmgms2.samsung.com (EUCPMTA) with SMTP id 73.0D.09404.FAC73726; Thu,  5
-        May 2022 08:28:47 +0100 (BST)
-Received: from CAMSVWEXC01.scsc.local (unknown [106.1.227.71]) by
-        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20220505072847eusmtip133d8624e020309d5e17197a6d3fce6cd~sJOSiJ1WZ1867518675eusmtip1m;
-        Thu,  5 May 2022 07:28:47 +0000 (GMT)
-Received: from [192.168.8.130] (106.210.248.170) by CAMSVWEXC01.scsc.local
-        (2002:6a01:e347::6a01:e347) with Microsoft SMTP Server (TLS) id 15.0.1497.2;
-        Thu, 5 May 2022 08:28:44 +0100
-Message-ID: <fe8746d5-f7c4-efd6-b4a6-e198f6d95813@samsung.com>
-Date:   Thu, 5 May 2022 09:28:43 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
-        Thunderbird/91.8.1
-Subject: Re: [PATCH 00/16] support non power of 2 zoned devices
-Content-Language: en-US
-To:     David Sterba <dsterba@suse.cz>
-CC:     Johannes Thumshirn <Johannes.Thumshirn@wdc.com>,
-        "jaegeuk@kernel.org" <jaegeuk@kernel.org>,
-        "axboe@kernel.dk" <axboe@kernel.dk>,
-        "snitzer@kernel.org" <snitzer@kernel.org>,
-        "hch@lst.de" <hch@lst.de>, "mcgrof@kernel.org" <mcgrof@kernel.org>,
-        Naohiro Aota <Naohiro.Aota@wdc.com>,
-        "sagi@grimberg.me" <sagi@grimberg.me>,
-        "damien.lemoal@opensource.wdc.com" <damien.lemoal@opensource.wdc.com>,
-        "dsterba@suse.com" <dsterba@suse.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-btrfs@vger.kernel.org" <linux-btrfs@vger.kernel.org>,
-        "clm@fb.com" <clm@fb.com>,
-        "gost.dev@samsung.com" <gost.dev@samsung.com>,
-        "chao@kernel.org" <chao@kernel.org>,
-        "linux-f2fs-devel@lists.sourceforge.net" 
-        <linux-f2fs-devel@lists.sourceforge.net>,
-        "josef@toxicpanda.com" <josef@toxicpanda.com>,
-        "jonathan.derrick@linux.dev" <jonathan.derrick@linux.dev>,
-        "agk@redhat.com" <agk@redhat.com>,
-        "kbusch@kernel.org" <kbusch@kernel.org>,
-        "kch@nvidia.com" <kch@nvidia.com>,
-        "linux-nvme@lists.infradead.org" <linux-nvme@lists.infradead.org>,
-        "dm-devel@redhat.com" <dm-devel@redhat.com>,
-        "bvanassche@acm.org" <bvanassche@acm.org>,
-        "jiangbo.365@bytedance.com" <jiangbo.365@bytedance.com>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        =?UTF-8?Q?Matias_Bj=c3=b8rling?= <Matias.Bjorling@wdc.com>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>
-From:   Pankaj Raghav <p.raghav@samsung.com>
-In-Reply-To: <20220504211440.GU18596@suse.cz>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [106.210.248.170]
-X-ClientProxiedBy: CAMSVWEXC01.scsc.local (2002:6a01:e347::6a01:e347) To
-        CAMSVWEXC01.scsc.local (2002:6a01:e347::6a01:e347)
-X-Brightmail-Tracker: H4sIAAAAAAAAA01Sa0xTZxjed87pOaedkGOB8K2wbMOxcZk4yJJ9G5sDN+dJRtQfbGMmRiuc
-        AI5yaenmmKZ0KFEY4+IFd0Rg3rCIFoEUqVwEpAgWXYA6JFrmKAkWqd1AkRRxtIct/Hve55L3
-        fb58NC41kjI6NT2bU6bL04JICWEwzd9aW79Xtevd0iop0vebcHThfjGJjjnncXTz6ACGyoqP
-        U8g1cBtHbY4TIvT7My2GTrvmCKS70IMhm57H0c/XnAR6XmDFkG7/AxwtPIhEZV13AJqw8Bhq
-        Gw1Hg+PnKTR4ahNqbesj0JCxgkRV5yYoVJL/BEcjJRMAlfY2itClqccEujEaEBPIDg1/wS7e
-        qCPZ0jwHxd62XibYoQE121B7iGR/yz2Ks41nNOzV6hmMvXo3l2SL8hwk23JgTMQ+breQrL7J
-        QrDm6usUW9J4WbRVuk3yURKXlvodp1y3fqckZfKci8rsp/YYzA0gFxSRBUBMQ+Y9eG2hYQlL
-        aClzHsCJwfuEMMwCaC3rWR5mAGxfyPs/8nSmiRKEGgCnrAaRW/C4bK0bBcEIoHM435PwYtbD
-        uzWdhBsTzJuwcGx+mV8N+361eXg/JgEe480e3of5BF40zmJujDP+cNRW5cG+TBCsNFkw9wKc
-        cUmgo7VyaTNNk0wY1B6i3B4xsxYeqejHhWwoPNDsogT8GmyersCFBmvg4ZFhTMD74EWT2dMG
-        MpMS+MeJ08umz2DBi/Jlkw+09zZRAg6EL1qqlvkf4cSICxfC+wEsbtGT7oMgEw1/MacJnlj4
-        Z5FNJNDecGR6tXCPNywzlOMlIJhf8RT8isr8igr8igrVgKgF/pxapUjmVFHp3PcRKrlCpU5P
-        jkjMUDSApe99c7F39gqosf8d0QUwGnQBSONBvl6fns3cJfVKkv+QwykzdijVaZyqCwTQRJC/
-        V2JqvVzKJMuzuW85LpNT/qditFiWi9VHWTd3NNfVGQoSAyLj7PH6O1mZEnF3yOB2/i8yUTG3
-        o+M6r9k+3rNzxhA78E9e2qq5KeZhsdT+isw3sCZasTfE76zlJ8OXhYrBRwlbgrOfD8s0b4un
-        D6ptYdMv51AObfSa/vKOW88SNogiOsMveXUfH+OzNmzN73WqU/OzdLEZB2UaLVF4ZHHVWzJr
-        /MhL2Y/inPu2iaiN9R+caQgNd9KvmqIaO0VGy0Of8Th7RHDV6+HajP43Pv7Q4H3PmFPGvXMl
-        ZtzvpObrb3ZbYp4CmqytXPc+3x5rD6xVn+oOTfqqNUVXVPx54ea6Jw6nbjIxku4R7/YOc9wb
-        Cqm37tnUF58SRKhS5JFhuFIl/xeMBbOtTQQAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrPKsWRmVeSWpSXmKPExsVy+t/xu7rra4qTDDa0GVusP3WM2WL13X42
-        i2kffjJbnJ56lsliUv8MdovfZ88zW+x9N5vV4sKPRiaLxb+/s1isXH2UyeLJ+lnMFj0HPrBY
-        /O26x2SxsuUhs8Wfh4YWkw5dY7R4enUWk8XeW9oWlx6vYLe4tMjdYs/ekywWl3fNYbOYv+wp
-        u8WEtq/MFjcmPGW0mHh8M6vFutfvWSxO3JJ2kPG4fMXb49+JNWweE5vfsXucv7eRxePy2VKP
-        Tas62TwWNkxl9ti8pN5j94LPTB67bzawefQ2v2Pz2Nl6n9Xj/b6rbB7rt1xl8Tiz4Ai7x4TN
-        G1kDhKL0bIryS0tSFTLyi0tslaINLYz0DC0t9IxMLPUMjc1jrYxMlfTtbFJSczLLUov07RL0
-        Ml4s+81ecIq9YtuZTYwNjL1sXYycHBICJhLfPm9h72Lk4hASWMoocXXLJqiEjMSnKx/ZIWxh
-        iT/Xutggij4ySsz61cIM4exilPj05DdYFa+AncTN5QdZQGwWARWJ7vs/2SDighInZz4Bi4sK
-        REg82H2WFcQWFrCXWLvrCxOIzSwgLnHryXwwW0RASWLesatgtpDATiaJR99iQJYxC/zkkpj5
-        uRFoMwcHm4CWRGMn2F5OAV2JKXNOMUPM0ZRo3Q5xD7OAvMT2t3OYIT5Qlph84woThF0r8er+
-        bsYJjKKzkJw3C8kZs5CMmoVk1AJGllWMIqmlxbnpucVGesWJucWleel6yfm5mxiBKW/bsZ9b
-        djCufPVR7xAjEwfjIUYJDmYlEV7npQVJQrwpiZVVqUX58UWlOanFhxhNgWE0kVlKNDkfmHTz
-        SuINzQxMDU3MLA1MLc2MlcR5PQs6EoUE0hNLUrNTUwtSi2D6mDg4pRqYPJye+xrfntSvZ258
-        sj6QJ9fgXaL0leeRGjbXc2Z27Emf8VX0/e7QfR3TnWf9nXBUmW1d3O05uo/j9ub9Xv+do/+c
-        6k+Xz5Ncz6auZj7aEKfMKPCOLZH/r4iFUtiBjKMlDRwBTp+tOK/Eq/yU/GDnG3Juaej7f7c9
-        32dmfnFOOtLQFn3ZwdynzppHc+uk5ZVL7ktFvw/KOpx5UzHl3601M7+fPD7P8ac8e2Kl6nvL
-        qZ5LLqyY9XS+sreS5fy62uavc7R6Y8t6O8xzT3hWGIR517PbPPu33uTrLOvmbsGnEdf39hW2
-        Hr8b+t6/Yu9yK/NfD2vdi45rWb9xTXYKSbueFt7nJ526oeeI8lJrUSclluKMREMt5qLiRABk
-        5eXBAgQAAA==
-X-CMS-MailID: 20220505072847eucas1p27c50364580d96918bc2a59b6877671ba
-X-Msg-Generator: CA
-X-RootMTR: 20220427160256eucas1p2db2b58792ffc93026d870c260767da14
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20220427160256eucas1p2db2b58792ffc93026d870c260767da14
-References: <CGME20220427160256eucas1p2db2b58792ffc93026d870c260767da14@eucas1p2.samsung.com>
-        <20220427160255.300418-1-p.raghav@samsung.com>
-        <PH0PR04MB74167FC8BA634A3DA09586489BC19@PH0PR04MB7416.namprd04.prod.outlook.com>
-        <a702c7f7-9719-9f3e-63de-1e96f2912432@samsung.com>
-        <20220504211440.GU18596@suse.cz>
-X-Spam-Status: No, score=-10.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Thu, 5 May 2022 03:32:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F231047AEF;
+        Thu,  5 May 2022 00:29:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8C38261CE9;
+        Thu,  5 May 2022 07:29:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4F1EC385A4;
+        Thu,  5 May 2022 07:29:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651735752;
+        bh=3F5JYiDZI5MLnm7uZGVodg2E+7gWDAjHwFt/B9Hgii0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=tkI5pCVlh0Q8k9Skj3PToWNe7TkQE6dczw9b1XbChJwGiUw8vQJIdEGYExtDgtyDu
+         dSPED1QOWv1YGUx33erJp1vMVEaoG2aWiqTSAdej1AZYVgU5tay7HBCMffxP7LRfMh
+         0XTDAavxcgYvw77LF0soHRnjU2l0Mn4e9BwnRjPL7wmSPMx3RsDKVey54JDBCzgbWs
+         vQv05u8V9dBp+fbXvOP7Ade3J737bGTbhpu7a0doZ+NsbYxqfhvgTuKShgqpvww5em
+         XlYCnoLsBSUI8iPdRaDE/9N+YqriDKTARvowEqk2tSriSZyT0idrAk0tJgmO4CMPLg
+         MmSlAVGQpqyEA==
+Received: from 82-132-244-133.dab.02.net ([82.132.244.133] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nmVvB-0098Td-CF; Thu, 05 May 2022 08:29:09 +0100
+Date:   Thu, 05 May 2022 08:29:08 +0100
+Message-ID: <874k24igjf.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        will Deacon <will@kernel.org>,
+        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>, mark.rutland@arm.com,
+        Russell King <linux@armlinux.org.uk>,
+        Ard Biesheuvel <ardb@kernel.org>, broonie@kernel.org,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>
+Subject: Re: Should arm64 have a custom crash shutdown handler?
+In-Reply-To: <427a8277-49f0-4317-d6c3-4a15d7070e55@igalia.com>
+References: <427a8277-49f0-4317-d6c3-4a15d7070e55@igalia.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 82.132.244.133
+X-SA-Exim-Rcpt-To: gpiccoli@igalia.com, catalin.marinas@arm.com, will@kernel.org, mikelley@microsoft.com, vkuznets@redhat.com, mark.rutland@arm.com, linux@armlinux.org.uk, ardb@kernel.org, broonie@kernel.org, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, linux-hyperv@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-05-04 23:14, David Sterba wrote:
->> This commit: `btrfs: zoned: relax the alignment constraint for zoned
->> devices` makes sure the zone size is BTRFS_STRIPE_LEN aligned (64K). So
->> even the npo2 zoned device should be aligned to `fs_info->sectorsize`,
->> which is typically 4k.
->>
->> This was one of the comment that came from David Sterba:
->> https://lore.kernel.org/all/20220315142740.GU12643@twin.jikos.cz/
->> where he suggested to have some sane alignment for the zone sizes.
+On Wed, 04 May 2022 21:00:42 +0100,
+"Guilherme G. Piccoli" <gpiccoli@igalia.com> wrote:
 > 
-> My idea of 'sane' value would be 1M, that we have 4K for sectors is
-> because of the 1:1 mapping to pages, but RAM sizes are on a different
-> scale than storage devices. The 4K is absolute minimum but if the page
-> size is taken as a basic constraint, ARM has 64K and there are some 256K
-> arches.
+> Hi folks, this email is to ask feedback / trigger a discussion about the
+> concept of custom crash shutdown handler, that is "missing" in arm64
+> while it's present in many architectures [mips, powerpc, x86, sh (!)].
+> 
+> Currently, when we kexec in arm64, the function machine_crash_shutdown()
+> is called as a handler to disable CPUs and (potentially) do extra
+> quiesce work. In the aforementioned architectures, there's a way to
+> override this function, if for example an hypervisor wish to have its
+> guests running their own custom shutdown machinery.
+>
+> For powerpc/mips, the approach is a generic shutdown function that might
+> call other handler-registered functions, whereas x86/sh relies in the
+> "machine_ops" structure, having the crash shutdown as a callback in such
+> struct.
+> 
+> The usage for that is very broad, but heavy users are hypervisors like
+> Hyper-V / KVM (CCed Michael and Vitaly here for this reason). The
+> discussion about the need for that in arm64 is from another thread [0],
+> so before start implementing/playing with that, I'd like to ask ARM64
+> community if there is any feedback and in case it's positive, what is
+> the best implementation strategy (struct callback vs. handler call), etc.
+> 
+> I've CCed ARM64/ARM32 maintainers plus extra people I found as really
+> involved with ARM architecture - sorry if I added people I shouldn't or
+> if I forgot somebody (though the ARM mailing-list is CC).
 
-That is a good point. I think it is safe to have 1MB as the minimum
-alignment so that it covers all architecture's page sizes. Thanks. I
-will queue this up.
+I have the feeling that you are conflating two different things here:
+
+(1) general shutdown/reboot, whether this because of a crash or not
+
+(2) kexec, for which the whole point is that it is possible to handle
+*everything* from within the kernel
+
+On arm64:
+
+(1) is already abstracted via PSCI. The hypervisor can do whatever it
+wants there (KVM, not needing anything, just forwards this to
+userspace for fun and profit -- if something has to be done, the VMM
+is the right spot). I expect other hypervisors to do the same thing
+(and that's what the architecture expects anyway).
+
+(2) must, by definition, fit into the architectural envelope. If you
+need help from another entity in the system to be able to kexec,
+something is broken, because the hypervisor doesn't implement the
+architecture correctly (and frankly, we really don't need much to be
+able to kexec).
+
+Not having any 'machine_ops' indirection was a conscious decision on
+arm64, if only to avoid the nightmare that 32bit was at a time with
+every single platform doing their own stuff. Introducing them would
+not be an improvement, but simply the admission that hypervisors are
+simply too broken for words. And I don't buy the "but x86 has it!"
+argument. x86 is a nightmare of PV mess that we can happily ignore,
+because we don't do PV for core operations at all.
+
+If something has to be done to quiesce the system, it probably is
+related to the system topology, and must be linked to it. We already
+have these requirements in order to correctly stop ongoing DMA, shut
+down IOMMUs, and other similar stuff. What other requirements does
+your favourite hypervisor have?
+
+Thanks,
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.

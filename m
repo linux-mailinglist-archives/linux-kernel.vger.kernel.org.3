@@ -2,176 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24AF151B903
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 09:30:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCB5A51B910
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 09:30:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344695AbiEEHdX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 03:33:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40926 "EHLO
+        id S1344716AbiEEHdt convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 5 May 2022 03:33:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344519AbiEEHdU (ORCPT
+        with ESMTP id S1344950AbiEEHdl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 03:33:20 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 396BB47AE1;
-        Thu,  5 May 2022 00:29:42 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id E82741F891;
-        Thu,  5 May 2022 07:29:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1651735780; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=7oszj393KfchLXHg916YqCIeRK1AJbaDk3ClmN+/Bh4=;
-        b=KdLoTN4Z75Y80d7DYk9en/+bOUYMRXtWatVyv7dJiVIBls8UFNV99CZuO6NwRWNGnUmIWE
-        2MEbQJ8AHYjtzQMWGXF8ZMd6P65JGgaWUbbhs108yX/XngaaR9htNy0OpeFFZ+qoOJu0aO
-        ikHel9TmvzGJxuYVkAjIL4zVhuQNXTA=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1651735780;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=7oszj393KfchLXHg916YqCIeRK1AJbaDk3ClmN+/Bh4=;
-        b=xXwR5T8/3cxrsCpiuRH/xS7eWWLDuAie/ZvWTTQ/JmGVcpQmWw0OeaCDHWQpy3r8ojlK6o
-        aSv4lpGtJnZYsbDg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B5FAF13A65;
-        Thu,  5 May 2022 07:29:40 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id ahhCK+R8c2LwcAAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Thu, 05 May 2022 07:29:40 +0000
-Message-ID: <974f4d00-89bc-a2da-6d65-ca4207300794@suse.de>
-Date:   Thu, 5 May 2022 09:29:40 +0200
+        Thu, 5 May 2022 03:33:41 -0400
+Received: from mail-qv1-f41.google.com (mail-qv1-f41.google.com [209.85.219.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 834A1488B6;
+        Thu,  5 May 2022 00:29:57 -0700 (PDT)
+Received: by mail-qv1-f41.google.com with SMTP id l1so66440qvh.1;
+        Thu, 05 May 2022 00:29:57 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=KzAVmzBQmEO2JBPDtZGXfDmIQ4cQijhB1DuSyb01WrU=;
+        b=5N1IWr6m0gkJR6vW9nBddzzvBXN+oEycvKSnnLRyVOzjlyQPbi2YCFVm/czc6ACrL2
+         UGmXp/XMODp/Bcx1hviy0ymkXrfWDQ7W3od7TZmaJDRyolpAEGYs9aRvcXdjBFU8mIMN
+         3T8973Jz/f+BbCy9mSU7Ju+ol0szF9n0BqW0iSTi8ApHnErTAIFgMzTnwdLjAI8r/q7Q
+         HMBAgNmxTsLszBr32TxYY2bdl/39thCIvx8uVGyXTGc+Dyu1xT/w+41W4jJckuZWsLvS
+         /8YISqIKmqBd4DMxCLOx29ML/EeoUvbVlZ7REiK1dgvv9w7quxrbbBX8Uf705J+SnYx2
+         L3mQ==
+X-Gm-Message-State: AOAM532h3xpTaI++bz2r6ojWutXyDXJ8uXZd1yGyH8smpopYsx81Cjc9
+        0vGCzRntqwdvNNM5CCOnp9yfv8njaPO/yw==
+X-Google-Smtp-Source: ABdhPJwckh3gPol9EtZ060BLIaj2kVITp/R4+Z33r1y8JyoJObQRTAhGAD9QZtHxqiK0A5Sy5emKqw==
+X-Received: by 2002:a05:6214:2a82:b0:443:a395:cc23 with SMTP id jr2-20020a0562142a8200b00443a395cc23mr20705112qvb.67.1651735795912;
+        Thu, 05 May 2022 00:29:55 -0700 (PDT)
+Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com. [209.85.128.176])
+        by smtp.gmail.com with ESMTPSA id j186-20020a3755c3000000b0069fc13ce20asm424674qkb.59.2022.05.05.00.29.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 05 May 2022 00:29:55 -0700 (PDT)
+Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-2ef5380669cso39197047b3.9;
+        Thu, 05 May 2022 00:29:55 -0700 (PDT)
+X-Received: by 2002:a81:234b:0:b0:2f8:4082:bbd3 with SMTP id
+ j72-20020a81234b000000b002f84082bbd3mr22448044ywj.47.1651735794998; Thu, 05
+ May 2022 00:29:54 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH 2/3] fbdev/simplefb: Cleanup fb_info in .fb_destroy rather
- than .remove
-Content-Language: en-US
-To:     Javier Martinez Canillas <javierm@redhat.com>,
-        linux-kernel@vger.kernel.org
-Cc:     linux-fbdev@vger.kernel.org,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Helge Deller <deller@gmx.de>, dri-devel@lists.freedesktop.org,
-        Hans de Goede <hdegoede@redhat.com>
-References: <20220504215151.55082-1-javierm@redhat.com>
- <20220504215722.56970-1-javierm@redhat.com>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <20220504215722.56970-1-javierm@redhat.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------M6QrRRNoD3q2fMmWOKHoyYDu"
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220504093000.132579-1-clement.leger@bootlin.com>
+In-Reply-To: <20220504093000.132579-1-clement.leger@bootlin.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 5 May 2022 09:29:43 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdXdGCebeGiDj-4hYH24tBVRVqGsHbPfEqfUGT88GZKZrw@mail.gmail.com>
+Message-ID: <CAMuHMdXdGCebeGiDj-4hYH24tBVRVqGsHbPfEqfUGT88GZKZrw@mail.gmail.com>
+Subject: Re: [PATCH net-next v3 00/12] add support for Renesas RZ/N1 ethernet
+ subsystem devices
+To:     =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Herve Codina <herve.codina@bootlin.com>,
+        =?UTF-8?Q?Miqu=C3=A8l_Raynal?= <miquel.raynal@bootlin.com>,
+        Milan Stevanovic <milan.stevanovic@se.com>,
+        Jimmy Lalande <jimmy.lalande@se.com>,
+        Pascal Eberhard <pascal.eberhard@se.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------M6QrRRNoD3q2fMmWOKHoyYDu
-Content-Type: multipart/mixed; boundary="------------UIiPyxvlLyMVaz0POf4AxHbW";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Javier Martinez Canillas <javierm@redhat.com>,
- linux-kernel@vger.kernel.org
-Cc: linux-fbdev@vger.kernel.org, Daniel Vetter <daniel.vetter@ffwll.ch>,
- Helge Deller <deller@gmx.de>, dri-devel@lists.freedesktop.org,
- Hans de Goede <hdegoede@redhat.com>
-Message-ID: <974f4d00-89bc-a2da-6d65-ca4207300794@suse.de>
-Subject: Re: [PATCH 2/3] fbdev/simplefb: Cleanup fb_info in .fb_destroy rather
- than .remove
-References: <20220504215151.55082-1-javierm@redhat.com>
- <20220504215722.56970-1-javierm@redhat.com>
-In-Reply-To: <20220504215722.56970-1-javierm@redhat.com>
+Hi Clément,
 
---------------UIiPyxvlLyMVaz0POf4AxHbW
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+On Wed, May 4, 2022 at 11:31 AM Clément Léger <clement.leger@bootlin.com> wrote:
+> This series needs commits bcfb459b25b8 and 542d5835e4f6 which are on
+> the renesas-devel tree in order to enable generic power domain on
+> RZ/N1.
 
-SGkNCg0KQW0gMDQuMDUuMjIgdW0gMjM6NTcgc2NocmllYiBKYXZpZXIgTWFydGluZXogQ2Fu
-aWxsYXM6DQo+IFRoZSBkcml2ZXIgaXMgY2FsbGluZyBmcmFtZWJ1ZmZlcl9yZWxlYXNlKCkg
-aW4gaXRzIC5yZW1vdmUgY2FsbGJhY2ssIGJ1dA0KPiB0aGlzIHdpbGwgY2F1c2UgdGhlIHN0
-cnVjdCBmYl9pbmZvIHRvIGJlIGZyZWVkIHRvbyBlYXJseS4gU2luY2UgaXQgY291bGQNCj4g
-YmUgdGhhdCBhIHJlZmVyZW5jZSBpcyBzdGlsbCBob2xkIHRvIGl0IGlmIHVzZXItc3BhY2Ug
-b3BlbmVkIHRoZSBmYmRldi4NCj4gDQo+IFRoaXMgd291bGQgbGVhZCB0byBhIHVzZS1hZnRl
-ci1mcmVlIGVycm9yIGlmIHRoZSBmcmFtZWJ1ZmZlciBkZXZpY2Ugd2FzDQo+IHVucmVnaXN0
-ZXJlZCBidXQgbGF0ZXIgYSB1c2VyLXNwYWNlIHByb2Nlc3MgdHJpZXMgdG8gY2xvc2UgdGhl
-IGZiZGV2IGZkLg0KPiANCj4gVGhlIGNvcnJlY3QgdGhpbmcgdG8gZG8gaXMgdG8gb25seSB1
-bnJlZ2lzdGVyIHRoZSBmcmFtZWJ1ZmZlciBpbiB0aGUNCj4gZHJpdmVyJ3MgLnJlbW92ZSBj
-YWxsYmFjaywgYnV0IGRvIGFueSBjbGVhbnVwIGluIHRoZSBmYl9vcHMuZmJfZGVzdHJveS4N
-Cj4gDQo+IFN1Z2dlc3RlZC1ieTogRGFuaWVsIFZldHRlciA8ZGFuaWVsLnZldHRlckBmZnds
-bC5jaD4NCj4gU2lnbmVkLW9mZi1ieTogSmF2aWVyIE1hcnRpbmV6IENhbmlsbGFzIDxqYXZp
-ZXJtQHJlZGhhdC5jb20+DQoNClJldmlld2VkLWJ5OiBUaG9tYXMgWmltbWVybWFubiA8dHpp
-bW1lcm1hbm5Ac3VzZS5kZT4NCg0KUGxlYXNlIHNlZSBteSBxdWVzdGlvbiBiZWxvdy4NCg0K
-PiAtLS0NCj4gDQo+ICAgZHJpdmVycy92aWRlby9mYmRldi9zaW1wbGVmYi5jIHwgOCArKysr
-KysrLQ0KPiAgIDEgZmlsZSBjaGFuZ2VkLCA3IGluc2VydGlvbnMoKyksIDEgZGVsZXRpb24o
-LSkNCj4gDQo+IGRpZmYgLS1naXQgYS9kcml2ZXJzL3ZpZGVvL2ZiZGV2L3NpbXBsZWZiLmMg
-Yi9kcml2ZXJzL3ZpZGVvL2ZiZGV2L3NpbXBsZWZiLmMNCj4gaW5kZXggOTRmYzljNmQwNDEx
-Li4yYzE5ODU2MWMzMzggMTAwNjQ0DQo+IC0tLSBhL2RyaXZlcnMvdmlkZW8vZmJkZXYvc2lt
-cGxlZmIuYw0KPiArKysgYi9kcml2ZXJzL3ZpZGVvL2ZiZGV2L3NpbXBsZWZiLmMNCj4gQEAg
-LTg0LDYgKzg0LDEwIEBAIHN0cnVjdCBzaW1wbGVmYl9wYXIgew0KPiAgIHN0YXRpYyB2b2lk
-IHNpbXBsZWZiX2Nsb2Nrc19kZXN0cm95KHN0cnVjdCBzaW1wbGVmYl9wYXIgKnBhcik7DQo+
-ICAgc3RhdGljIHZvaWQgc2ltcGxlZmJfcmVndWxhdG9yc19kZXN0cm95KHN0cnVjdCBzaW1w
-bGVmYl9wYXIgKnBhcik7DQo+ICAgDQo+ICsvKg0KPiArICogZmJfb3BzLmZiX2Rlc3Ryb3kg
-aXMgY2FsbGVkIGJ5IHRoZSBsYXN0IHB1dF9mYl9pbmZvKCkgY2FsbCBhdCB0aGUgZW5kDQo+
-ICsgKiBvZiB1bnJlZ2lzdGVyX2ZyYW1lYnVmZmVyKCkgb3IgZmJfcmVsZWFzZSgpLiBEbyBh
-bnkgY2xlYW51cCBoZXJlLg0KPiArICovDQo+ICAgc3RhdGljIHZvaWQgc2ltcGxlZmJfZGVz
-dHJveShzdHJ1Y3QgZmJfaW5mbyAqaW5mbykNCj4gICB7DQo+ICAgCXN0cnVjdCBzaW1wbGVm
-Yl9wYXIgKnBhciA9IGluZm8tPnBhcjsNCj4gQEAgLTk0LDYgKzk4LDggQEAgc3RhdGljIHZv
-aWQgc2ltcGxlZmJfZGVzdHJveShzdHJ1Y3QgZmJfaW5mbyAqaW5mbykNCj4gICAJaWYgKGlu
-Zm8tPnNjcmVlbl9iYXNlKQ0KPiAgIAkJaW91bm1hcChpbmZvLT5zY3JlZW5fYmFzZSk7DQo+
-ICAgDQo+ICsJZnJhbWVidWZmZXJfcmVsZWFzZShpbmZvKTsNCj4gKw0KPiAgIAlpZiAobWVt
-KQ0KPiAgIAkJcmVsZWFzZV9tZW1fcmVnaW9uKG1lbS0+c3RhcnQsIHJlc291cmNlX3NpemUo
-bWVtKSk7DQoNClRoZSBvcmlnaW5hbCBwcm9ibGVtIHdpdGggZmJkZXYgaG90LXVucGx1ZyB3
-YXMgdGhhdCB2bXdnZnggbmVlZGVkIHRoZSANCmZyYW1lYnVmZmVyIHJlZ2lvbiB0byBiZSBy
-ZWxlYXNlZC4gSWYgd2UgcmVsZWFzZSBpdCBvbmx5IGFmdGVyIHVzZXJzcGFjZSANCmNsb3Nl
-ZCBpdCdzIGZpbmFsIGZpbGUgZGVzY3JpcHRvciwgdm13Z2Z4IGNvdWxkIGhhdmUgYWxyZWFk
-eSBmYWlsZWQuDQoNCkkgc3RpbGwgZG9uJ3QgZnVsbHkgZ2V0IHdoeSB0aGlzIGNvZGUgYXBw
-YXJlbnRseSB3b3JrcyBvciBhdCBsZWFzdCANCmRvZXNuJ3QgYmxvdyB1cCBvY2Nhc2lvbmFs
-bHkuIEFueSBpZGVhcz8NCg0KQmVzdCByZWdhcmRzDQpUaG9tYXMNCg0KPiAgIH0NCj4gQEAg
-LTU0NSw4ICs1NTEsOCBAQCBzdGF0aWMgaW50IHNpbXBsZWZiX3JlbW92ZShzdHJ1Y3QgcGxh
-dGZvcm1fZGV2aWNlICpwZGV2KQ0KPiAgIHsNCj4gICAJc3RydWN0IGZiX2luZm8gKmluZm8g
-PSBwbGF0Zm9ybV9nZXRfZHJ2ZGF0YShwZGV2KTsNCj4gICANCj4gKwkvKiBzaW1wbGVmYl9k
-ZXN0cm95IHRha2VzIGNhcmUgb2YgaW5mbyBjbGVhbnVwICovDQo+ICAgCXVucmVnaXN0ZXJf
-ZnJhbWVidWZmZXIoaW5mbyk7DQo+IC0JZnJhbWVidWZmZXJfcmVsZWFzZShpbmZvKTsNCj4g
-ICANCj4gICAJcmV0dXJuIDA7DQo+ICAgfQ0KDQotLSANClRob21hcyBaaW1tZXJtYW5uDQpH
-cmFwaGljcyBEcml2ZXIgRGV2ZWxvcGVyDQpTVVNFIFNvZnR3YXJlIFNvbHV0aW9ucyBHZXJt
-YW55IEdtYkgNCk1heGZlbGRzdHIuIDUsIDkwNDA5IE7DvHJuYmVyZywgR2VybWFueQ0KKEhS
-QiAzNjgwOSwgQUcgTsO8cm5iZXJnKQ0KR2VzY2jDpGZ0c2bDvGhyZXI6IEl2byBUb3Rldg0K
+-ENOENT
 
+I assume you mean:
+14f11da778ff6421 ("soc: renesas: rzn1: Select PM and
+PM_GENERIC_DOMAINS configs")
+ed66b37f916ee23b ("ARM: dts: r9a06g032: Add missing '#power-domain-cells'")
 
---------------UIiPyxvlLyMVaz0POf4AxHbW--
+Gr{oetje,eeting}s,
 
---------------M6QrRRNoD3q2fMmWOKHoyYDu
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
+                        Geert
 
------BEGIN PGP SIGNATURE-----
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmJzfOQFAwAAAAAACgkQlh/E3EQov+D3
-Xg/9HjoP34X+CZ1CZUlKTe8unr/01RG2xvoO67jA9JafUhE5+LdK6wDeDOL4KMsxtg8cIh7qWNBX
-pN4vxSieVJB96bfisMmFNc+1H4XK0AqxG0d9UscOCvl2H3R/gvDMm0NUmLPVPe9ZXB4P3/zFQzTs
-oSjhCjUwMP/3HwJofYMImSreDOHOCgHEYS33MR8aAEi5gy6e/yZfQrt57SZyEXlmW0lyC8FXmcFz
-J+1zEvQ9OijFvguegpyUD8p8htJisk7hbm4VdodnDPUCAvz0XqqpjdNdgkybZf5NO22cGP/kF8DG
-M5hmxD5uOIkjXML/1lIa327Hbfi6lWSJ1Dhdjlj7GNdqUJ3N4LrMhh2V/L5zrBQu6Z5VYGNmIgkB
-5Kw1rpAobocgO5VQNvWtxGMgKLGndl4u78Ue91YoWmcpC3KwHyPub6HncH6fnVXo0sdjqXeTJX2c
-JYucSPQmF0aaDRdbStokM1PgVOtsWDX8OlRBOZSUjhZoyau5TqA87MwpgnkIhsk2yRjzr9s417Rd
-KflWlcUkrpTCQx751Npvt7tOQQ8CV7fH1JnpWKnLD7z4nYr0FlskUvo1MqE1LXi7gMoVSJNi64jR
-Zp6iHP8KbItbaia1/glFvbs9aK+Wl+FIkKvEhoTLDHybeHa43i8H4DaLod16NuPFBaXJPd5RlFv1
-aa0=
-=adqs
------END PGP SIGNATURE-----
-
---------------M6QrRRNoD3q2fMmWOKHoyYDu--
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

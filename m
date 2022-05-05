@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A785751B5BD
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 04:19:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4A4B51B5BA
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 04:19:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237910AbiEECUu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 22:20:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53566 "EHLO
+        id S237947AbiEECVT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 22:21:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230027AbiEECUs (ORCPT
+        with ESMTP id S237927AbiEECVP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 22:20:48 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 924BD48391;
-        Wed,  4 May 2022 19:17:08 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id c11so3096895plg.13;
-        Wed, 04 May 2022 19:17:08 -0700 (PDT)
+        Wed, 4 May 2022 22:21:15 -0400
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5324A483B3
+        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 19:17:38 -0700 (PDT)
+Received: by mail-pl1-x631.google.com with SMTP id n18so3119115plg.5
+        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 19:17:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=nvK1oEM6KjezJqxZAQccrrlAj7Q7lGbQGzhJauB66Kc=;
-        b=JaNNX8vQNXTxTRidslur+hjuVCZByyJo1AaJtI7UHjfkYpYrQeSMb1YOZ/cM0eC9zM
-         eAWExvxlhUl/+7HwJd5GcK4fpxlz0Bg6Cn3kEg3S7mGu5HoO73mQcF02Og36F4J6A56K
-         ur/MT5b6O7CYzDFmMbrQY2rK/kGLuSozZWyCyGuH01Zb78rUdQySI5ewSED4oB/gZEO1
-         qF7sVyNX2TqPYXnDmd4L+7sghmf/JM7BT3W3zblxVq+18UaujlO/jTipx8p1K4mWK8Q+
-         puSLJOjl6z9FIrxAkEpSqXZC2i/msGLTdrwzRsPbfV2igGn66CzCY2AWmPuk2KiEv8et
-         xANA==
+        bh=F2nk/ssfCB0vTWyS6vaFNqXTpQUVylAvicTxU2kBcY8=;
+        b=GC3/Rj8Izk85qe05Uvsum7tPpxVZtjLFcopo+A3fa8s/5loDut8y7iWCNEvjQme2WX
+         EnmOc60vVyj8KiLzODlQ6vIc4N7UR5ztYnrnKC9I8VbRAiJLxxdpXtLE606l781T9l20
+         5ecROuPBCMlPt4JR4HtdNs0QLHYVKSVgVoXNGT04VLTisI7byfTH4z95mpUs4rapUc9Q
+         7aVMqa30ajkIpZ0g8BWQ7GjsJw8TipMOzn8T31rxkIqUD9anJ4X5bjAEbEiwRXyCq0Na
+         azH+2woprSkwLESH9c3T2/k+xULIgJgKTh82lSDmEPV4jrXQzQ/iYZ6OFAaITkSOCqnk
+         O+6g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=nvK1oEM6KjezJqxZAQccrrlAj7Q7lGbQGzhJauB66Kc=;
-        b=aymiRaVDeL8P/+Zu/K2S9Grh5jdFAfVjKQPaW9PmgaTWqydgoKHnGGfNu9jCjEdCOF
-         GeX4DkxQblCpfftQ9Nft1dQZwIx84QkRMdeZb0qZu6stT/KOZeYq0Re7/vpCDzg/ai5L
-         eBxZ8mkUQgPEhG1JWOpkFSzCt/tkaom5NuPWkVcmwWOKxPTvR9FdJDGpdHhFyVirwxuR
-         K+k7HzFEA+w7EP5X5ijgAF0GPDFX2azYPP/a/SxycUC1OBzgqgs6mV0JfujhZNPYeaio
-         4ZVzSvV5p4WoTT9qOvTmcTaSuquhpcbAZQj8UVsf1C/gnAqEwH0NVyJLYQs6U61fqPSs
-         ndrQ==
-X-Gm-Message-State: AOAM5313J+MaM6nzomhCdEfv2eRqiqqph6y8/RcAoXQp/8Ky5mfqBypl
-        C8D1tifc2APeoideY9PrGK62ApfxdCM=
-X-Google-Smtp-Source: ABdhPJyUNdfLMyfx0nTA4vph3BqzY4vAyUclmLRXLSoXTqOuwTZy8UavVq8pUwOqSidvb1dyBX3/Ag==
-X-Received: by 2002:a17:90b:1808:b0:1dc:8904:76a1 with SMTP id lw8-20020a17090b180800b001dc890476a1mr3221470pjb.202.1651717027932;
-        Wed, 04 May 2022 19:17:07 -0700 (PDT)
+        bh=F2nk/ssfCB0vTWyS6vaFNqXTpQUVylAvicTxU2kBcY8=;
+        b=mI/D581KYhQO9YvKXDMV493nKbwved8/xLA3YeNyiuFySRnFGgKvksRQa1M4g7MUFw
+         vbgyOtuxdNowttffvz7Wy29jL4/bdcbuCqFcXQz6CbfwSO2d75yZZGamSC7mvy62bCbo
+         9VdMopVzqUE1tEfvzJ7dvgAvUOItMkNBJJg3yWZQ6Fxl+ixKnXquEauSHmXZGfQoxh39
+         u8I1iur833asme+7wfwldqwFV1VWuBbQEmL5fq1ihtvGuroiVJNHEMggK3YRd1TNQ5Ql
+         auozLFF47m1fzET3usIi1YuQhKYN6N8F9mY5Si3A3vYNIcg8LJ8e3iELwOGHBqEqWM8j
+         CsxQ==
+X-Gm-Message-State: AOAM533GWH/Ekv6LeYNr0ajLkGGV2Cir7ztXe5FSHLJY7XRxuxCp29VP
+        zyU62eTu0cqgV3+uGiMcFN4=
+X-Google-Smtp-Source: ABdhPJxIK9x8R05f9RBILPM4SBRiuoNiqtGSovQy5pR4hh+ZgLz2hy5Ac/8ilHaiMumxaeKAEigllw==
+X-Received: by 2002:a17:902:bf45:b0:15c:df47:3d6 with SMTP id u5-20020a170902bf4500b0015cdf4703d6mr24385071pls.58.1651717057904;
+        Wed, 04 May 2022 19:17:37 -0700 (PDT)
 Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id 30-20020a17090a19de00b001dc8eca6536sm234219pjj.4.2022.05.04.19.17.06
+        by smtp.gmail.com with ESMTPSA id f19-20020a63dc53000000b003c14af50631sm60468pgj.73.2022.05.04.19.17.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 May 2022 19:17:07 -0700 (PDT)
+        Wed, 04 May 2022 19:17:37 -0700 (PDT)
 From:   cgel.zte@gmail.com
 X-Google-Original-From: chi.minghao@zte.com.cn
-To:     jarkko@kernel.org
-Cc:     dave.hansen@linux.intel.com, tglx@linutronix.de,
-        linux-sgx@vger.kernel.org, linux-kernel@vger.kernel.org,
+To:     lgirdwood@gmail.com
+Cc:     broonie@kernel.org, alsa-devel@alsa-project.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         Minghao Chi <chi.minghao@zte.com.cn>,
         Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH] x86/sgx: simplify the return expression of sgx_drv_init()
-Date:   Thu,  5 May 2022 02:16:59 +0000
-Message-Id: <20220505021659.54210-1-chi.minghao@zte.com.cn>
+Subject: [PATCH] ASoC: uniphier: simplify the return expression of uniphier_aio_compr_set_params()
+Date:   Thu,  5 May 2022 02:17:33 +0000
+Message-Id: <20220505021733.54275-1-chi.minghao@zte.com.cn>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -78,32 +78,34 @@ Simplify the return expression.
 Reported-by: Zeal Robot <zealci@zte.com.cn>
 Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
 ---
- arch/x86/kernel/cpu/sgx/driver.c | 7 +------
+ sound/soc/uniphier/aio-compress.c | 7 +------
  1 file changed, 1 insertion(+), 6 deletions(-)
 
-diff --git a/arch/x86/kernel/cpu/sgx/driver.c b/arch/x86/kernel/cpu/sgx/driver.c
-index aa9b8b868867..dffb271f4edb 100644
---- a/arch/x86/kernel/cpu/sgx/driver.c
-+++ b/arch/x86/kernel/cpu/sgx/driver.c
-@@ -148,7 +148,6 @@ int __init sgx_drv_init(void)
- 	unsigned int eax, ebx, ecx, edx;
- 	u64 attr_mask;
- 	u64 xfrm_mask;
+diff --git a/sound/soc/uniphier/aio-compress.c b/sound/soc/uniphier/aio-compress.c
+index 0f76bc601ca9..7d1492c15b57 100644
+--- a/sound/soc/uniphier/aio-compress.c
++++ b/sound/soc/uniphier/aio-compress.c
+@@ -139,7 +139,6 @@ static int uniphier_aio_compr_set_params(struct snd_soc_component *component,
+ 	struct uniphier_aio *aio = uniphier_priv(asoc_rtd_to_cpu(rtd, 0));
+ 	struct uniphier_aio_sub *sub = &aio->sub[cstream->direction];
+ 	struct device *dev = &aio->chip->pdev->dev;
 -	int ret;
  
- 	if (!cpu_feature_enabled(X86_FEATURE_SGX_LC))
- 		return -ENODEV;
-@@ -172,9 +171,5 @@ int __init sgx_drv_init(void)
- 		sgx_xfrm_reserved_mask = ~xfrm_mask;
- 	}
+ 	if (params->codec.id != SND_AUDIOCODEC_IEC61937) {
+ 		dev_err(dev, "Codec ID is not supported(%d)\n",
+@@ -161,11 +160,7 @@ static int uniphier_aio_compr_set_params(struct snd_soc_component *component,
+ 	aio_port_reset(sub);
+ 	aio_src_reset(sub);
  
--	ret = misc_register(&sgx_dev_enclave);
+-	ret = uniphier_aio_compr_prepare(component, cstream);
 -	if (ret)
 -		return ret;
 -
 -	return 0;
-+	return misc_register(&sgx_dev_enclave);
++	return uniphier_aio_compr_prepare(component, cstream);
  }
+ 
+ static int uniphier_aio_compr_hw_free(struct snd_soc_component *component,
 -- 
 2.25.1
 

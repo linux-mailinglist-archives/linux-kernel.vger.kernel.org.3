@@ -2,202 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC14651C7A6
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 20:36:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9895451C7F6
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 20:37:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385322AbiEESaV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 14:30:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37416 "EHLO
+        id S1383194AbiEEShT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 14:37:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383407AbiEESVE (ORCPT
+        with ESMTP id S1381112AbiEESff (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 14:21:04 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF4815DBC7;
-        Thu,  5 May 2022 11:16:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651774588; x=1683310588;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=IbG+j+ZdWAUtQg/ZqHolbv+gUeqsU/yo5UGAxS0cGAs=;
-  b=HcgT1r+JzW4jH5e/nLM3+h+MqDiXjMkDJgh+eh+KavEO10xy0whbgYxV
-   e8DN4OcyzV2YI9Xp37nf+3oaT0d9KqDfCAgsh8abjpCFcl7oOMzD87XvP
-   0R/SQ7PEH2dC0Fc0B6IDoJ6sP9U6pYuoS6FX2Emg2YHKAxHS7jS493B+f
-   kTr/DsYsSjQshs/NlYiuieLnlSOjc1WKOEMIDHtAmuwJjTuB4czYchFxB
-   N9Kz5VkGoMtfEIEgLemrPOFbGoLbXcf+NjuLH9P/fSf2AkJXnGdvjUwQc
-   Vw4T5D9fREm+rXtkgxOdflC3h/tjulH6AU9zQI/jxHxBQkO9TlWSkA/f1
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10338"; a="268354897"
-X-IronPort-AV: E=Sophos;i="5.91,202,1647327600"; 
-   d="scan'208";a="268354897"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2022 11:15:56 -0700
-X-IronPort-AV: E=Sophos;i="5.91,202,1647327600"; 
-   d="scan'208";a="665083503"
-Received: from ls.sc.intel.com (HELO localhost) ([143.183.96.54])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2022 11:15:55 -0700
-From:   isaku.yamahata@intel.com
-To:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     isaku.yamahata@intel.com, isaku.yamahata@gmail.com,
-        Paolo Bonzini <pbonzini@redhat.com>, erdemaktas@google.com,
-        Sean Christopherson <seanjc@google.com>,
-        Sagi Shahar <sagis@google.com>
-Subject: [RFC PATCH v6 100/104] KVM: TDX: Silently ignore INIT/SIPI
-Date:   Thu,  5 May 2022 11:15:34 -0700
-Message-Id: <e83b335c8a0b02a9c30bea63291790223461ca70.1651774251.git.isaku.yamahata@intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1651774250.git.isaku.yamahata@intel.com>
-References: <cover.1651774250.git.isaku.yamahata@intel.com>
+        Thu, 5 May 2022 14:35:35 -0400
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D242D14087;
+        Thu,  5 May 2022 11:26:38 -0700 (PDT)
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.0.0)
+ id e30f9251d57c40cd; Thu, 5 May 2022 20:19:30 +0200
+Received: from kreacher.localnet (unknown [213.134.161.219])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by v370.home.net.pl (Postfix) with ESMTPSA id 0EFE266C2F2;
+        Thu,  5 May 2022 20:19:30 +0200 (CEST)
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Linux PCI <linux-pci@vger.kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Anders Roxell <anders.roxell@linaro.org>
+Subject: [PATCH v1 09/11] PCI/PM: Clean up pci_set_low_power_state()
+Date:   Thu, 05 May 2022 20:15:34 +0200
+Message-ID: <2539071.Lt9SDvczpP@kreacher>
+In-Reply-To: <4738492.GXAFRqVoOG@kreacher>
+References: <4738492.GXAFRqVoOG@kreacher>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 213.134.161.219
+X-CLIENT-HOSTNAME: 213.134.161.219
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedrfedugdduvdduucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgjfhgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepvdffueeitdfgvddtudegueejtdffteetgeefkeffvdeftddttdeuhfegfedvjefhnecukfhppedvudefrddufeegrdduiedurddvudelnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvddufedrudefgedrudeiuddrvdduledphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedpnhgspghrtghpthhtohepjedprhgtphhtthhopehlihhnuhigqdhptghisehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepmhhikhgrrdifvghsthgvrhgsvghrgheslhhinhhugidrihhnthgv
+ lhdrtghomhdprhgtphhtthhopehhvghlghgrrghssehkvghrnhgvlhdrohhrghdprhgtphhtthhopehnrghthhgrnheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprghnuggvrhhsrdhrohigvghllheslhhinhgrrhhordhorhhg
+X-DCC--Metrics: v370.home.net.pl 1024; Body=7 Fuz1=7 Fuz2=7
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Isaku Yamahata <isaku.yamahata@intel.com>
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-The TDX module API doesn't provide API for VMM to inject INIT IPI and SIPI.
-Instead it defines the different protocols to boot application processors.
-Ignore INIT and SIPI events for the TDX guest.
+Make the following assorted non-essential changes in
+pci_set_low_power_state():
 
-There are two options. 1) (silently) ignore INIT/SIPI request or 2) return
-error to guest TDs somehow.  Given that TDX guest is paravirtualized to
-boot AP, the option 1 is chosen for simplicity.
+ 1. Drop two redundant checks from it (the caller takes care of these
+    conditions).
 
-Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
+ 2. Change the log level of a messages printed by it to "debug",
+    because it only indicates a programming mistake.
+
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
 ---
- arch/x86/include/asm/kvm-x86-ops.h |  1 +
- arch/x86/include/asm/kvm_host.h    |  2 ++
- arch/x86/kvm/lapic.c               | 16 +++++++++++-----
- arch/x86/kvm/svm/svm.c             |  1 +
- arch/x86/kvm/vmx/main.c            | 22 +++++++++++++++++++++-
- 5 files changed, 36 insertions(+), 6 deletions(-)
+ drivers/pci/pci.c |    9 +--------
+ 1 file changed, 1 insertion(+), 8 deletions(-)
 
-diff --git a/arch/x86/include/asm/kvm-x86-ops.h b/arch/x86/include/asm/kvm-x86-ops.h
-index ec98b3f734a2..ff658969cfff 100644
---- a/arch/x86/include/asm/kvm-x86-ops.h
-+++ b/arch/x86/include/asm/kvm-x86-ops.h
-@@ -136,6 +136,7 @@ KVM_X86_OP_OPTIONAL(migrate_timers)
- KVM_X86_OP(msr_filter_changed)
- KVM_X86_OP(complete_emulated_msr)
- KVM_X86_OP(vcpu_deliver_sipi_vector)
-+KVM_X86_OP(vcpu_deliver_init)
- KVM_X86_OP_OPTIONAL_RET0(vcpu_get_apicv_inhibit_reasons);
- KVM_X86_OP(check_processor_compatibility)
+Index: linux-pm/drivers/pci/pci.c
+===================================================================
+--- linux-pm.orig/drivers/pci/pci.c
++++ linux-pm/drivers/pci/pci.c
+@@ -1341,16 +1341,9 @@ static int pci_set_low_power_state(struc
+ {
+ 	u16 pmcsr;
  
-diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-index f67fe33e6661..94736f107628 100644
---- a/arch/x86/include/asm/kvm_host.h
-+++ b/arch/x86/include/asm/kvm_host.h
-@@ -1553,6 +1553,7 @@ struct kvm_x86_ops {
- 	int (*complete_emulated_msr)(struct kvm_vcpu *vcpu, int err);
+-	/* Check if we're already there */
+-	if (dev->current_state == state)
+-		return 0;
+-
+ 	if (!dev->pm_cap)
+ 		return -EIO;
  
- 	void (*vcpu_deliver_sipi_vector)(struct kvm_vcpu *vcpu, u8 vector);
-+	void (*vcpu_deliver_init)(struct kvm_vcpu *vcpu);
- 
+-	if (state < PCI_D1 || state > PCI_D3hot)
+-		return -EINVAL;
+-
  	/*
- 	 * Returns vCPU specific APICv inhibit reasons
-@@ -1777,6 +1778,7 @@ int kvm_emulate_wbinvd(struct kvm_vcpu *vcpu);
- void kvm_get_segment(struct kvm_vcpu *vcpu, struct kvm_segment *var, int seg);
- int kvm_load_segment_descriptor(struct kvm_vcpu *vcpu, u16 selector, int seg);
- void kvm_vcpu_deliver_sipi_vector(struct kvm_vcpu *vcpu, u8 vector);
-+void kvm_vcpu_deliver_init(struct kvm_vcpu *vcpu);
- 
- int kvm_task_switch(struct kvm_vcpu *vcpu, u16 tss_selector, int idt_index,
- 		    int reason, bool has_error_code, u32 error_code);
-diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
-index bc329c4488a9..db5ff56538f7 100644
---- a/arch/x86/kvm/lapic.c
-+++ b/arch/x86/kvm/lapic.c
-@@ -2976,6 +2976,16 @@ int kvm_lapic_set_pv_eoi(struct kvm_vcpu *vcpu, u64 data, unsigned long len)
- 	return 0;
- }
- 
-+void kvm_vcpu_deliver_init(struct kvm_vcpu *vcpu)
-+{
-+	kvm_vcpu_reset(vcpu, true);
-+	if (kvm_vcpu_is_bsp(vcpu))
-+		vcpu->arch.mp_state = KVM_MP_STATE_RUNNABLE;
-+	else
-+		vcpu->arch.mp_state = KVM_MP_STATE_INIT_RECEIVED;
-+}
-+EXPORT_SYMBOL_GPL(kvm_vcpu_deliver_init);
-+
- int kvm_apic_accept_events(struct kvm_vcpu *vcpu)
- {
- 	struct kvm_lapic *apic = vcpu->arch.apic;
-@@ -3023,11 +3033,7 @@ int kvm_apic_accept_events(struct kvm_vcpu *vcpu)
- 
- 	if (test_bit(KVM_APIC_INIT, &pe)) {
- 		clear_bit(KVM_APIC_INIT, &apic->pending_events);
--		kvm_vcpu_reset(vcpu, true);
--		if (kvm_vcpu_is_bsp(apic->vcpu))
--			vcpu->arch.mp_state = KVM_MP_STATE_RUNNABLE;
--		else
--			vcpu->arch.mp_state = KVM_MP_STATE_INIT_RECEIVED;
-+		static_call(kvm_x86_vcpu_deliver_init)(vcpu);
- 	}
- 	if (test_bit(KVM_APIC_SIPI, &pe)) {
- 		clear_bit(KVM_APIC_SIPI, &apic->pending_events);
-diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-index ca2700020322..ee11a4537ddd 100644
---- a/arch/x86/kvm/svm/svm.c
-+++ b/arch/x86/kvm/svm/svm.c
-@@ -4729,6 +4729,7 @@ static struct kvm_x86_ops svm_x86_ops __initdata = {
- 	.complete_emulated_msr = svm_complete_emulated_msr,
- 
- 	.vcpu_deliver_sipi_vector = svm_vcpu_deliver_sipi_vector,
-+	.vcpu_deliver_init = kvm_vcpu_deliver_init,
- 	.vcpu_get_apicv_inhibit_reasons = avic_vcpu_get_apicv_inhibit_reasons,
- };
- 
-diff --git a/arch/x86/kvm/vmx/main.c b/arch/x86/kvm/vmx/main.c
-index b8d0b875d8d9..d7cc85f81713 100644
---- a/arch/x86/kvm/vmx/main.c
-+++ b/arch/x86/kvm/vmx/main.c
-@@ -295,6 +295,25 @@ static void vt_deliver_interrupt(struct kvm_lapic *apic, int delivery_mode,
- 	vmx_deliver_interrupt(apic, delivery_mode, trig_mode, vector);
- }
- 
-+static void vt_vcpu_deliver_sipi_vector(struct kvm_vcpu *vcpu, u8 vector)
-+{
-+	if (is_td_vcpu(vcpu))
-+		return;
-+
-+	kvm_vcpu_deliver_sipi_vector(vcpu, vector);
-+}
-+
-+static void vt_vcpu_deliver_init(struct kvm_vcpu *vcpu)
-+{
-+	if (is_td_vcpu(vcpu)) {
-+		/* TDX doesn't support INIT.  Ignore INIT event */
-+		vcpu->arch.mp_state = KVM_MP_STATE_RUNNABLE;
-+		return;
-+	}
-+
-+	kvm_vcpu_deliver_init(vcpu);
-+}
-+
- static void vt_flush_tlb_all(struct kvm_vcpu *vcpu)
- {
- 	if (is_td_vcpu(vcpu))
-@@ -618,7 +637,8 @@ struct kvm_x86_ops vt_x86_ops __initdata = {
- 	.msr_filter_changed = vmx_msr_filter_changed,
- 	.complete_emulated_msr = kvm_complete_insn_gp,
- 
--	.vcpu_deliver_sipi_vector = kvm_vcpu_deliver_sipi_vector,
-+	.vcpu_deliver_sipi_vector = vt_vcpu_deliver_sipi_vector,
-+	.vcpu_deliver_init = vt_vcpu_deliver_init,
- 
- 	.dev_mem_enc_ioctl = tdx_dev_ioctl,
- 	.mem_enc_ioctl = vt_mem_enc_ioctl,
--- 
-2.25.1
+ 	 * Validate transition: We can enter D0 from any state, but if
+ 	 * we're already in a low-power state, we can only go deeper.  E.g.,
+@@ -1358,7 +1351,7 @@ static int pci_set_low_power_state(struc
+ 	 * we'd have to go from D3 to D0, then to D1.
+ 	 */
+ 	if (dev->current_state <= PCI_D3cold && dev->current_state > state) {
+-		pci_err(dev, "invalid power transition (from %s to %s)\n",
++		pci_dbg(dev, "Invalid power transition (from %s to %s)\n",
+ 			pci_power_name(dev->current_state),
+ 			pci_power_name(state));
+ 		return -EINVAL;
+
+
 

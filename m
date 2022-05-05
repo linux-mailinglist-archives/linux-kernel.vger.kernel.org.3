@@ -2,88 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25D9851B4D5
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 02:50:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 347A851B4D7
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 02:53:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233059AbiEEAxy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 20:53:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39850 "EHLO
+        id S233131AbiEEA5N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 20:57:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232535AbiEEAxv (ORCPT
+        with ESMTP id S232535AbiEEA5K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 20:53:51 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E2B51FA7B;
-        Wed,  4 May 2022 17:50:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C4012B82A5C;
-        Thu,  5 May 2022 00:50:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28C2AC385A4;
-        Thu,  5 May 2022 00:50:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651711810;
-        bh=/xejNG+Nw+IZM6OJpM1IMjqf9IciuPJZVfl3gWmM700=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=beJyvgIH4+8xH0MbllmJI0cLfNVdFhR1gg6Ktq1LuYgXNwbn2WRqCzbVxffpO747R
-         FFFHbOAAd6iM7ChNoe+SeaLgE+KJ/HmiKKeUYxQvtpaeVOPvqLj8NNVRs1/cj1s29K
-         X3IA7DOJNHbJEsZtE0YrVj5LrXA76WarJLUGHIFe4Kjo3PHEQgh5EuYR9ARTOx970i
-         IAC4+ev1BzCb0WoT3TJ8bEGyNQtZYYjx+P/N3kXNUGtnCMnpvQQt4TAGS4RxHdE9gw
-         0+3h1odDMsY1eQvYejWU/6O3TnOGOpbfe7ysGaFumno4rSHWb4dkqpZZHsA9Uj4dnV
-         UFNoiJEKURReg==
-Date:   Thu, 5 May 2022 08:50:03 +0800
-From:   Shawn Guo <shawnguo@kernel.org>
-To:     Leo Li <leoyang.li@nxp.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 1/6] ARM: dts: ls1021a: remove "simple-bus" compatible
- from ifc node
-Message-ID: <20220505005003.GC14615@dragon>
-References: <20220322022818.9860-1-leoyang.li@nxp.com>
- <20220410072745.GN129381@dragon>
- <AS8PR04MB8946C4F390D57C34816DBFB28FFA9@AS8PR04MB8946.eurprd04.prod.outlook.com>
+        Wed, 4 May 2022 20:57:10 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7886E20F5C;
+        Wed,  4 May 2022 17:53:32 -0700 (PDT)
+Received: from kwepemi100026.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KtwD447vpzhYsL;
+        Thu,  5 May 2022 08:53:08 +0800 (CST)
+Received: from kwepemm600013.china.huawei.com (7.193.23.68) by
+ kwepemi100026.china.huawei.com (7.221.188.60) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 5 May 2022 08:53:30 +0800
+Received: from [10.174.178.208] (10.174.178.208) by
+ kwepemm600013.china.huawei.com (7.193.23.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 5 May 2022 08:53:28 +0800
+Subject: Re: [PATCH 5.4 00/84] 5.4.192-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <stable@vger.kernel.org>, <torvalds@linux-foundation.org>,
+        <akpm@linux-foundation.org>, <linux@roeck-us.net>,
+        <shuah@kernel.org>, <patches@kernelci.org>,
+        <lkft-triage@lists.linaro.org>, <pavel@denx.de>,
+        <jonathanh@nvidia.com>, <f.fainelli@gmail.com>,
+        <sudipm.mukherjee@gmail.com>, <slade@sladewatkins.com>
+References: <20220504152927.744120418@linuxfoundation.org>
+From:   Samuel Zou <zou_wei@huawei.com>
+Message-ID: <6ac82e31-1434-f7dc-85cb-ac45482070a0@huawei.com>
+Date:   Thu, 5 May 2022 08:53:27 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <AS8PR04MB8946C4F390D57C34816DBFB28FFA9@AS8PR04MB8946.eurprd04.prod.outlook.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220504152927.744120418@linuxfoundation.org>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.208]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ kwepemm600013.china.huawei.com (7.193.23.68)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 27, 2022 at 09:26:22PM +0000, Leo Li wrote:
+
+
+On 2022/5/5 0:43, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.4.192 release.
+> There are 84 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
+> Responses should be made by Fri, 06 May 2022 15:25:19 +0000.
+> Anything received after that time might be too late.
 > 
-> > -----Original Message-----
-> > From: Shawn Guo <shawnguo@kernel.org>
-> > Sent: Sunday, April 10, 2022 2:28 AM
-> > To: Leo Li <leoyang.li@nxp.com>
-> > Cc: Rob Herring <robh+dt@kernel.org>; linux-arm-kernel@lists.infradead.org;
-> > devicetree@vger.kernel.org; linux-kernel@vger.kernel.org
-> > Subject: Re: [PATCH 1/6] ARM: dts: ls1021a: remove "simple-bus" compatible
-> > from ifc node
-> > 
-> > On Mon, Mar 21, 2022 at 09:28:13PM -0500, Li Yang wrote:
-> > > The binding of ifc device has been updated.  Update dts to match
-> > > accordingly.
-> > >
-> > > Signed-off-by: Li Yang <leoyang.li@nxp.com>
-> > 
-> > I only received patches #1, #2, #4 and #5, while it claims there are 6 patches
-> > in the series.
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.4.192-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.4.y
+> and the diffstat can be found below.
 > 
-> I used the get_maintainers.pl script to generate the recipients.  The patch #3 and #6 are for powerpc, that's probably why it missed you.  Please help to review the current patches.  If they need a rebase to the latest baseline I will resend the whole series and include you for all the patches.
+> thanks,
+> 
+> greg k-h
 > 
 
-Applied all 4 patches you sent me, thanks!
+Tested on arm64 and x86 for 5.4.192-rc1,
 
-Shawn
+Kernel repo:
+https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+Branch: linux-5.4.y
+Version: 5.4.192-rc1
+Commit: bea55d0a1d975bbc086c3c870de090b9c29b60c5
+Compiler: gcc version 7.3.0 (GCC)
+
+arm64:
+--------------------------------------------------------------------
+Testcase Result Summary:
+total: 9030
+passed: 9030
+failed: 0
+timeout: 0
+--------------------------------------------------------------------
+
+x86:
+--------------------------------------------------------------------
+Testcase Result Summary:
+total: 9030
+passed: 9030
+failed: 0
+timeout: 0
+--------------------------------------------------------------------
+
+Tested-by: Hulk Robot <hulkrobot@huawei.com>

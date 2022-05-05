@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B57051CD45
+	by mail.lfdr.de (Postfix) with ESMTP id EB52751CD48
 	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 02:00:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387250AbiEFACj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 20:02:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35558 "EHLO
+        id S1387126AbiEFAC3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 20:02:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1387108AbiEFABm (ORCPT
+        with ESMTP id S1387107AbiEFABm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 5 May 2022 20:01:42 -0400
 Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFD0D61295
-        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 16:57:51 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78FA7612A1
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 16:57:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651795071; x=1683331071;
+  t=1651795073; x=1683331073;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references;
-  bh=60YeowQrYtVQTC/Y9/6aG1nPAySkU1vh5niJqWVSb28=;
-  b=WYRBDqbmyC1mf2GOXxhmq7iTYY4kZm8YZd6zHR5HrpZdJG0d5mn5A3Uh
-   mWuTcc9mFgLkgsFDQQMPs1B3YHjFmH+I5yjpBiOSPLKK8lY2n+uAsxXfi
-   HZ4OxCQBdvlJGevFPGWn6QBJwNrpFzrBFj44UVKT/5KrOJ6uyOSLsgMuW
-   oJ1T+0uPxI1hKNLiwPxcBpBGSO0ep8OlzZOrlxNtJLgMGWBxfF4ZjPZIt
-   iwA1Ff1o/UnehMLB/Ojzpc1faC3A03+kgaPK4aiHwv815hdA9I+cYLqAU
-   wW19A6XL5bYAeScnXC35V3y4mxWspD3M8nZb92Ad6nWOFHQtUhGv8PrxY
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10338"; a="250283636"
+  bh=xjphrR/fdJYxZybC1OeOpVaKdDVRMW9p0gc6LYNcZJo=;
+  b=URLFvnE4ct6dF+OEekMBR4GhFlwSu2/Hxk9ClCVf2+A3qv+DEQguIvDe
+   J5598G22iJk9/WHZKyl9NjXOkB0ua4Szci85NHZbFVPwy1yDuke6ZgsGH
+   B3mA3aeGm/w6QdlreD5CLycPFS+9aoHczb5Cbc3l1CRflqolmpmHS6pju
+   w4bVaJrP7jgncroa6doHL4ideimHNPu3zg45HdFoZR0JBbs73lf0qa4GB
+   FPV2r20Elqx+xrxGVvVIoJdGp6TmZBI9TZprQOAfHCAJ5zQckHnjSkz1m
+   Ya5TH0g+bR7E4dTHh4gnX8y6c1OC0zCgHZly3HMYy27oJjS5mrGDqicE4
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10338"; a="250283638"
 X-IronPort-AV: E=Sophos;i="5.91,203,1647327600"; 
-   d="scan'208";a="250283636"
+   d="scan'208";a="250283638"
 Received: from orsmga004.jf.intel.com ([10.7.209.38])
   by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2022 16:57:50 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,203,1647327600"; 
-   d="scan'208";a="694914372"
+   d="scan'208";a="694914376"
 Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
-  by orsmga004.jf.intel.com with ESMTP; 05 May 2022 16:57:49 -0700
+  by orsmga004.jf.intel.com with ESMTP; 05 May 2022 16:57:50 -0700
 From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
 To:     Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org
 Cc:     Tony Luck <tony.luck@intel.com>, Andi Kleen <ak@linux.intel.com>,
@@ -52,11 +52,10 @@ Cc:     Tony Luck <tony.luck@intel.com>, Andi Kleen <ak@linux.intel.com>,
         Ricardo Neri <ricardo.neri@intel.com>,
         iommu@lists.linux-foundation.org, linuxppc-dev@lists.ozlabs.org,
         linux-kernel@vger.kernel.org,
-        Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
-        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
-Subject: [PATCH v6 13/29] iommu/amd: Compose MSI messages for NMI irqs in non-IR format
-Date:   Thu,  5 May 2022 16:59:52 -0700
-Message-Id: <20220506000008.30892-14-ricardo.neri-calderon@linux.intel.com>
+        Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+Subject: [PATCH v6 14/29] x86/hpet: Expose hpet_writel() in header
+Date:   Thu,  5 May 2022 16:59:53 -0700
+Message-Id: <20220506000008.30892-15-ricardo.neri-calderon@linux.intel.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220506000008.30892-1-ricardo.neri-calderon@linux.intel.com>
 References: <20220506000008.30892-1-ricardo.neri-calderon@linux.intel.com>
@@ -69,83 +68,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If NMIPass is enabled in a device's DTE, the IOMMU lets NMI interrupt
-messages pass through unmapped. Therefore, the contents of the MSI
-message, not an IRTE, determine how and where the NMI is delivered.
-
-Since the IOMMU driver owns the MSI message of the NMI irq, compose
-it using the non-interrupt-remapping format. Also, let descendant
-irqchips write the MSI as appropriate for the device.
+In order to allow hpet_writel() to be used by other components (e.g.,
+the HPET-based hardlockup detector), expose it in the HPET header file.
 
 Cc: Andi Kleen <ak@linux.intel.com>
-Cc: "Ravi V. Shankar" <ravi.v.shankar@intel.com>
-Cc: Joerg Roedel <joro@8bytes.org>
-Cc: Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
 Cc: Stephane Eranian <eranian@google.com>
+Cc: "Ravi V. Shankar" <ravi.v.shankar@intel.com>
 Cc: iommu@lists.linux-foundation.org
 Cc: linuxppc-dev@lists.ozlabs.org
 Cc: x86@kernel.org
+Reviewed-by: Tony Luck <tony.luck@intel.com>
 Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
 ---
 Changes since v5:
- * Introduced this patch
+ * None
 
 Changes since v4:
- * N/A
+ * Dropped exposing hpet_readq() as it is not needed.
 
 Changes since v3:
- * N/A
+ * None
 
 Changes since v2:
- * N/A
+ * None
 
 Changes since v1:
- * N/A
+ * None
 ---
- drivers/iommu/amd/iommu.c | 23 ++++++++++++++++++++++-
- 1 file changed, 22 insertions(+), 1 deletion(-)
+ arch/x86/include/asm/hpet.h | 1 +
+ arch/x86/kernel/hpet.c      | 2 +-
+ 2 files changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/iommu/amd/iommu.c b/drivers/iommu/amd/iommu.c
-index 4d7421b6858d..6e07949b3e2a 100644
---- a/drivers/iommu/amd/iommu.c
-+++ b/drivers/iommu/amd/iommu.c
-@@ -3111,7 +3111,16 @@ static void irq_remapping_prepare_irte(struct amd_ir_data *data,
- 	case X86_IRQ_ALLOC_TYPE_HPET:
- 	case X86_IRQ_ALLOC_TYPE_PCI_MSI:
- 	case X86_IRQ_ALLOC_TYPE_PCI_MSIX:
--		fill_msi_msg(&data->msi_entry, irte_info->index);
-+		if (irq_cfg->delivery_mode == APIC_DELIVERY_MODE_NMI)
-+			/*
-+			 * The IOMMU lets NMIs pass through unmapped. Thus, the
-+			 * MSI message, not the IRTE, determines the irq
-+			 * configuration. Since we own the MSI message,
-+			 * compose it. Descendant irqchips will write it.
-+			 */
-+			__irq_msi_compose_msg(irq_cfg, &data->msi_entry, true);
-+		else
-+			fill_msi_msg(&data->msi_entry, irte_info->index);
- 		break;
+diff --git a/arch/x86/include/asm/hpet.h b/arch/x86/include/asm/hpet.h
+index ab9f3dd87c80..be9848f0883f 100644
+--- a/arch/x86/include/asm/hpet.h
++++ b/arch/x86/include/asm/hpet.h
+@@ -72,6 +72,7 @@ extern int is_hpet_enabled(void);
+ extern int hpet_enable(void);
+ extern void hpet_disable(void);
+ extern unsigned int hpet_readl(unsigned int a);
++extern void hpet_writel(unsigned int d, unsigned int a);
+ extern void force_hpet_resume(void);
  
- 	default:
-@@ -3509,6 +3518,18 @@ static int amd_ir_set_affinity(struct irq_data *data,
- 	 */
- 	send_cleanup_vector(cfg);
- 
-+	/*
-+	 * When the delivery mode of an irq is NMI, the IOMMU lets the NMI
-+	 * interrupt messages pass through unmapped. Hence, changes in the
-+	 * destination are to be reflected in the NMI message itself, not the
-+	 * IRTE. Thus, descendant irqchips must set the affinity and compose
-+	 * write the MSI message.
-+	 *
-+	 * Also, NMIs do not have an associated vector. No need for cleanup.
-+	 */
-+	if (cfg->delivery_mode == APIC_DELIVERY_MODE_NMI)
-+		return IRQ_SET_MASK_OK;
-+
- 	return IRQ_SET_MASK_OK_DONE;
+ #ifdef CONFIG_HPET_EMULATE_RTC
+diff --git a/arch/x86/kernel/hpet.c b/arch/x86/kernel/hpet.c
+index 71f336425e58..47678e7927ff 100644
+--- a/arch/x86/kernel/hpet.c
++++ b/arch/x86/kernel/hpet.c
+@@ -79,7 +79,7 @@ inline unsigned int hpet_readl(unsigned int a)
+ 	return readl(hpet_virt_address + a);
  }
  
+-static inline void hpet_writel(unsigned int d, unsigned int a)
++inline void hpet_writel(unsigned int d, unsigned int a)
+ {
+ 	writel(d, hpet_virt_address + a);
+ }
 -- 
 2.17.1
 

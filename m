@@ -2,97 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F1C851BDCC
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 13:13:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02E1C51BDDA
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 13:16:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356723AbiEELRS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 07:17:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49520 "EHLO
+        id S1349682AbiEELSe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 07:18:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232536AbiEELRN (ORCPT
+        with ESMTP id S232327AbiEELS0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 07:17:13 -0400
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29B2B4CD41
-        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 04:13:30 -0700 (PDT)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 245BCacL128891;
-        Thu, 5 May 2022 06:12:36 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1651749156;
-        bh=PAwxuIdAzrk8KzNqgB6A6joePytPbjjtzpjZ8xBDjJ8=;
-        h=From:To:CC:Subject:Date;
-        b=iBTWotTZZ/QO+EGl1eA8JghbY4gZSsGdazFKAyvjiEMlcjq6EEhS+ivpNQiaE5Xmt
-         FaIHJzWY6PJcsnjf8PSR9Fd2JN2UrWkpFC2lXu4ynxLuqnE7ski7QLPvLgKkPGibAH
-         TpeiOGWR9Bbg+HmKEXJlwayPnH9XMY6HXEzU2EQg=
-Received: from DFLE104.ent.ti.com (dfle104.ent.ti.com [10.64.6.25])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 245BCa8Q100090
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 5 May 2022 06:12:36 -0500
-Received: from DFLE115.ent.ti.com (10.64.6.36) by DFLE104.ent.ti.com
- (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Thu, 5
- May 2022 06:12:35 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE115.ent.ti.com
- (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Thu, 5 May 2022 06:12:35 -0500
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 245BCYKY045210;
-        Thu, 5 May 2022 06:12:35 -0500
-From:   Jai Luthra <j-luthra@ti.com>
-To:     Peter Ujfalusi <peter.ujfalusi@gmail.com>,
-        Mark Brown <broonie@kernel.org>
-CC:     <alsa-devel@alsa-project.org>, <linux-kernel@vger.kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Jayesh Choudhary <j-choudhary@ti.com>,
-        Jai Luthra <j-luthra@ti.com>
-Subject: [PATCH v2 RESEND] ASoC: ti: davinci-mcasp: Add dma-type for bcdma
-Date:   Thu, 5 May 2022 16:42:26 +0530
-Message-ID: <20220505111226.29217-1-j-luthra@ti.com>
-X-Mailer: git-send-email 2.17.1
+        Thu, 5 May 2022 07:18:26 -0400
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 737614D62B;
+        Thu,  5 May 2022 04:14:47 -0700 (PDT)
+Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2458PiUc018222;
+        Thu, 5 May 2022 13:14:37 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=selector1;
+ bh=U6Bf9hl5wzM7Kpw0BRIGT7+zxjqmU+6MCbiv78o43HQ=;
+ b=dOf1A+WtxrzUgzdLRybaAOOrqFpo4fxfsBqMi3/7hNj/4wVYl1bcUwwn4C/1YRprRbbO
+ O0Lfr9S8FEWHAfGHJhAeEaDnNpiqriPbkldrvkRKJFU+Xo09tEAw/5K/fzVf9DcmvU4z
+ re2OKzk3sfM8RoBa9Rw9MjMrCbJsvkUoTzBhgLtqFkF+vasjzwbqWC+Cgpk6oXXb8l7y
+ BA9yhiHWY0RyyVbl483578VqvXitvsi31T/OFuHuxZq3leLT19kmVgCC3gOrKuayik9a
+ lcBNVhMuMXU2+K438XUxyDw9r8UXVsAbDVeyKZU9OV5ha2t+wvMBcLVBI0wctG4BMiJd +g== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3frthk2143-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 05 May 2022 13:14:37 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id A67D8100034;
+        Thu,  5 May 2022 13:14:36 +0200 (CEST)
+Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id A076C21A200;
+        Thu,  5 May 2022 13:14:36 +0200 (CEST)
+Received: from localhost (10.75.127.49) by SFHDAG2NODE2.st.com (10.75.127.5)
+ with Microsoft SMTP Server (TLS) id 15.0.1497.26; Thu, 5 May 2022 13:14:36
+ +0200
+From:   Amelie Delaunay <amelie.delaunay@foss.st.com>
+To:     Vinod Koul <vkoul@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>
+CC:     <dmaengine@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        Amelie Delaunay <amelie.delaunay@foss.st.com>
+Subject: [PATCH 0/4] STM32 DMA pause/resume support
+Date:   Thu, 5 May 2022 13:14:30 +0200
+Message-ID: <20220505111434.37274-1-amelie.delaunay@foss.st.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Originating-IP: [10.75.127.49]
+X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SFHDAG2NODE2.st.com
+ (10.75.127.5)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-05_04,2022-05-05_01,2022-02-23_01
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jayesh Choudhary <j-choudhary@ti.com>
+This patchset introduces pause/resume support in stm32-dma driver.
+[1/4], [2/4] and [3/4] ease the introduction of device_pause/device_resume
+ops management in [4/4].
 
-Set DMA type for ti-bcdma controller for AM62-SK.
+Amelie Delaunay (4):
+  dmaengine: stm32-dma: introduce stm32_dma_sg_inc to manage
+    chan->next_sg
+  dmaengine: stm32-dma: pass DMA_SxSCR value to
+    stm32_dma_handle_chan_done()
+  dmaengine: stm32-dma: rename pm ops before dma pause/resume
+    introduction
+  dmaengine: stm32-dma: add device_pause/device_resume support
 
-Acked-by: Peter Ujfalusi <peter.ujfalusi@gmail.com>
-Signed-off-by: Jayesh Choudhary <j-choudhary@ti.com>
-Signed-off-by: Jai Luthra <j-luthra@ti.com>
----
+ drivers/dma/stm32-dma.c | 311 ++++++++++++++++++++++++++++++++++------
+ 1 file changed, 268 insertions(+), 43 deletions(-)
 
-Resending the ack-ed patch, as I missed cc'ing all maintainers.
-
- sound/soc/ti/davinci-mcasp.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/sound/soc/ti/davinci-mcasp.c b/sound/soc/ti/davinci-mcasp.c
-index 2c146b91fca3..377be2e2b6ee 100644
---- a/sound/soc/ti/davinci-mcasp.c
-+++ b/sound/soc/ti/davinci-mcasp.c
-@@ -2047,6 +2047,8 @@ static int davinci_mcasp_get_dma_type(struct davinci_mcasp *mcasp)
- 		return PCM_SDMA;
- 	else if (strstr(tmp, "udmap"))
- 		return PCM_UDMA;
-+	else if (strstr(tmp, "bcdma"))
-+		return PCM_UDMA;
- 
- 	return PCM_EDMA;
- }
 -- 
-2.17.1
+2.25.1
 

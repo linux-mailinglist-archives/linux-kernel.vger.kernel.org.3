@@ -2,81 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A60CA51B6EC
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 06:13:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A1B451B72D
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 06:31:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242622AbiEEEQs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 00:16:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38506 "EHLO
+        id S242730AbiEEEet (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 00:34:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230030AbiEEEQp (ORCPT
+        with ESMTP id S242747AbiEEEei (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 00:16:45 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91A7A1C93C
-        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 21:13:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=kPqUPzB7ZQQlCv5tpljxbIPbLYmA0so+DR2l5Jk0zMg=; b=fVfdadQ5Pr5sgP2TEYrIde1mLD
-        G6BG/RwDPOqG/wYBd0imGWBVIUtRwNbe5ecX30qffFSkiFMkt3iQxbpF89w5f/jbfDS6jgW67b2Im
-        u0Qtnu+aTCO7NJfi8XxBxI9dr7+tZc6T58HIg+LsTweEFdRiIe8kYGkQsWG9q5W7Goj+D6riJhURa
-        PmtCey6AvB8S7CMaZ8bHjU1+M9qFsUG3ScJo+4qWrDEBLRyYvhZfMJSHj6X2BybPfL52iCLs9BC3F
-        5eqGF4GaOyDI2nYMp5I7TWVGjJUIVAenWRpYO3S3dIB4QiRH635YmScSKo62jDyTgrR+D6mM8xES8
-        zhKGZiAg==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nmSr4-00HFa4-KT; Thu, 05 May 2022 04:12:42 +0000
-Date:   Thu, 5 May 2022 05:12:42 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Hillf Danton <hdanton@sina.com>
-Cc:     Waiman Long <longman@redhat.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: Wait for mutex to become unlocked
-Message-ID: <YnNOupZ0o8z0BJEP@casper.infradead.org>
-References: <YnLzrGlBNCmCPLmS@casper.infradead.org>
- <20220505015223.5132-1-hdanton@sina.com>
+        Thu, 5 May 2022 00:34:38 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82ED647395
+        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 21:30:58 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id t5so3829294edw.11
+        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 21:30:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=colorfullife-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=J4r++s4XK6X2VmgmsR/kDK3UrTmMmAhqRv3mwjxwC5U=;
+        b=SgyzOj2WTFPsCeEIFqhDTkCjohkRSa5X4hxwMON4/02awTx6lvP6JfbUS8kjOh0lVI
+         l5nl5RosgwmyaBXBAx5V+4x2My85F6zCFOcjVtYOqPnlyL9P95zCeitVVBVN0O5ivE9f
+         6aJSLFQVMDj50ARacPwqI/GvGHtEIyZZMkknwKiQOyj4D5xqOkA/FV8KAvKsMRyHM3cW
+         ersdwzh5mSS6VljkqHkQYFmgaGYn0dg3f081U5qiPYYDT8mviCyQWTKKT1PKeQNtWZtM
+         x05AG73kslyI3WsStlgX4Gg+jS0DrQkOsFOpuJl90k78JDX3fK3LDIGxHBZzLWLcXSmN
+         XP0g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=J4r++s4XK6X2VmgmsR/kDK3UrTmMmAhqRv3mwjxwC5U=;
+        b=5OMvOpzOO+2zMSjHuSa3Mdj4ZaMgwx3BmGKrtcQOz5TQWZaQzZ1QYvS+wuybq8Kkp7
+         wjxdp7HcWFVxjzONfefo/dcdUNMIOnYhVQXkXHRvD3X6SrpUGgcO81CnL8noGD/goYHr
+         7Ov0XB+vsI5AcVdFQ0uvIanP3Wx7IqMA47xxNoPX6PF60MdB6NLYBWGfAJn5pHd4QWRA
+         e24jtWfEOB0lcfYNYgG+GkeiATnihtEHrzgV54eoXqMoD8d58JHIGAuw91Ha+5zaLGsB
+         EzuE+bWIBDCbwbaDZTxCiZMAkiCTZSU9qGteZ1DGLDcvNIXdJMeVB2Ev5jLE/HU/FVQF
+         VJGw==
+X-Gm-Message-State: AOAM532xlTaxO9c2KNRHYgG+cxgX8D7xNw5qQ+Oh1HBBzNLlbHalN7pt
+        fvrkLZz67EOFKFfrK+ihMbVITA==
+X-Google-Smtp-Source: ABdhPJwO2J1aYMyFqWXwg4ZNOb9kPrVha9YCg2Qv7n7mprAl0RbPYoc9maLsgGz60S/qQ1TV3jO9Yg==
+X-Received: by 2002:a05:6402:2692:b0:427:ddba:d811 with SMTP id w18-20020a056402269200b00427ddbad811mr14423701edd.343.1651725057018;
+        Wed, 04 May 2022 21:30:57 -0700 (PDT)
+Received: from ?IPV6:2003:d9:9709:6f00:a185:5aff:42c6:1e24? (p200300d997096f00a1855aff42c61e24.dip0.t-ipconnect.de. [2003:d9:9709:6f00:a185:5aff:42c6:1e24])
+        by smtp.googlemail.com with ESMTPSA id e6-20020a170906374600b006f3ef214dfesm285074ejc.100.2022.05.04.21.30.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 04 May 2022 21:30:55 -0700 (PDT)
+Message-ID: <5b422b20-c168-9d25-b79b-cf0c0c00e646@colorfullife.com>
+Date:   Thu, 5 May 2022 06:30:54 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220505015223.5132-1-hdanton@sina.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v4] ipc: Update semtimedop() to use hrtimer
+Content-Language: en-US
+To:     Prakash Sangappa <prakash.sangappa@oracle.com>,
+        linux-kernel@vger.kernel.org
+Cc:     tglx@linutronix.de, akpm@linux-foundation.org,
+        peterz@infradead.org, dave@stgolabs.net
+References: <1651187881-2858-1-git-send-email-prakash.sangappa@oracle.com>
+From:   Manfred Spraul <manfred@colorfullife.com>
+In-Reply-To: <1651187881-2858-1-git-send-email-prakash.sangappa@oracle.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 05, 2022 at 09:52:23AM +0800, Hillf Danton wrote:
-> +++ x/kernel/locking/rwsem.c
-> @@ -1464,6 +1464,35 @@ void __sched down_read(struct rw_semapho
->  }
->  EXPORT_SYMBOL(down_read);
->  
-> +static void __rwsem_wait(struct rw_semaphore *sem, int read, int state)
-> +{
-> +	DEFINE_WAIT(wait);
-> +	int locked;
-> +
-> +	prepare_to_wait(&sem->willy_wq, &wait, state);
-> +	if (read)
-> +		locked = down_read_trylock(sem);
+On 4/29/22 01:18, Prakash Sangappa wrote:
+> semtimedop() should be converted to use hrtimer like it has been done
+> for most of the system calls with timeouts. This system call already
+> takes a struct timespec as an argument and can therefore provide finer
+> granularity timed wait.
+>
+> Signed-off-by: Prakash Sangappa <prakash.sangappa@oracle.com>
+> Reviewed-by: Thomas Gleixner <tglx@linutronix.de>
+> Reviewed-by: Davidlohr Bueso <dave@stgolabs.net>
+> ---
+> v1->v2:
+>    - Use timespec64_valid() to validate timeout
+>       and other changes as suggested by Thomas Gleixner
+> v2->v3: Added Reviewed by tag (Thomas)
+> v3->v4: Added Reviewed by (Davidlohr)
+>
+>   ipc/sem.c | 23 +++++++++++------------
+>   1 file changed, 11 insertions(+), 12 deletions(-)
+Reviewed-by: Manfred Spraul <manfred@colorfullife.com>
+> diff --git a/ipc/sem.c b/ipc/sem.c
+> index 0dbdb98..44b65b6 100644
+> --- a/ipc/sem.c
+> +++ b/ipc/sem.c
+> @@ -1995,7 +1995,9 @@ long __do_semtimedop(int semid, struct sembuf *sops,
+>   	int max, locknum;
+>   	bool undos = false, alter = false, dupsop = false;
+>   	struct sem_queue queue;
+> -	unsigned long dup = 0, jiffies_left = 0;
+> +	unsigned long dup = 0;
+> +	ktime_t expires, *exp = NULL;
+> +	bool timed_out = false;
+>   
+>   	if (nsops < 1 || semid < 0)
+>   		return -EINVAL;
+> @@ -2003,12 +2005,11 @@ long __do_semtimedop(int semid, struct sembuf *sops,
+>   		return -E2BIG;
+>   
+>   	if (timeout) {
+> -		if (timeout->tv_sec < 0 || timeout->tv_nsec < 0 ||
+> -			timeout->tv_nsec >= 1000000000L) {
+> -			error = -EINVAL;
+> -			goto out;
+> -		}
+> -		jiffies_left = timespec64_to_jiffies(timeout);
+> +		if (!timespec64_valid(timeout))
+> +			return -EINVAL;
+> +		expires = ktime_add_safe(ktime_get(),
+> +				timespec64_to_ktime(*timeout));
+> +		exp = &expires;
+>   	}
+>   
+>   
+> @@ -2166,10 +2167,8 @@ long __do_semtimedop(int semid, struct sembuf *sops,
+>   		sem_unlock(sma, locknum);
+>   		rcu_read_unlock();
+>   
+> -		if (timeout)
+> -			jiffies_left = schedule_timeout(jiffies_left);
+> -		else
+> -			schedule();
+> +		timed_out = !schedule_hrtimeout_range(exp,
+> +				current->timer_slack_ns, HRTIMER_MODE_ABS);
+>   
+>   		/*
+>   		 * fastpath: the semop has completed, either successfully or
+> @@ -2210,7 +2209,7 @@ long __do_semtimedop(int semid, struct sembuf *sops,
+>   		/*
+>   		 * If an interrupt occurred we have to clean up the queue.
+>   		 */
+> -		if (timeout && jiffies_left == 0)
+> +		if (timed_out)
+>   			error = -EAGAIN;
+>   	} while (error == -EINTR && !signal_pending(current)); /* spurious */
+>   
 
-... but then we just acquired the lock.  And the point was to never
-acquire the lock.
-
-Also, what's the 'willy_wq' thing?  Do you mean wait_list?
-Oh, no, I see, you're pretending that we should add an extra waitq
-to the rwsem.  That's very silly.
-
-The point was not to ask "how can we do this", the question was "should we
-do this?"  And Thomas, at least for now, is saying "No".
-
-If you want to figure out how to do it properly, see rwsem_add_waiter()
-and how it's used.
 

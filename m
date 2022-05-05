@@ -2,121 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D50251B925
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 09:32:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1FD051B928
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 09:33:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345148AbiEEHf4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 03:35:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44426 "EHLO
+        id S1345133AbiEEHgT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 03:36:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242062AbiEEHft (ORCPT
+        with ESMTP id S232037AbiEEHgP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 03:35:49 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1B7225CF;
-        Thu,  5 May 2022 00:32:10 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id j4so6055715lfh.8;
-        Thu, 05 May 2022 00:32:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=oB2KwW+fZDHqViOCO0SeVykq03oI7SrGtrTSNV/zeXw=;
-        b=BFRMgPCyAxXKzFPzrX83J2MXIK6omEstm896Lx2iPA/ubW3FXufIIDGSpcw8nP7CfZ
-         KT6VvMMcQWBRuio908uzwWeaZoaZF37iiYvkO9cu99FRdbR0RkWnJ/AsH6Bz3ptOkNC5
-         9kq+ZBstRLXItzwWciuW4x1sGY9BNgrvGL5YDH8eCFf9VF9MJ+7AMoz5Ti3TPSpcKo7J
-         SCqjV2razKzhfdKn1jwNKTN3W8e+110uqKe+UDoqurE1o07K8UnTvFMmgRQbpF/hqtl4
-         hXWiO544ygw/QY3BDhL4KzQP6+9CyF4G5ox7dFLLFzCaucoNe4kPJOOBSk1Srlly+IfH
-         6nRw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=oB2KwW+fZDHqViOCO0SeVykq03oI7SrGtrTSNV/zeXw=;
-        b=XTudahIcyIG14kXQ4rB9VynUcyDQmY4jtSmdSWirpO9Y3Jm/kl3ahXnV62TImTUsAq
-         frHHf47brvKcBzPlh41uDisJY/UZK3xw/UdnyeMD7HfvE7FErcAS2D+eDELy/GBf7YPm
-         wzfs2wAHilJVLnLdT59qRxm+p/7KS+q2BYpNLXzS5klt7cdbuam0Co4PqAexxvW6VR6s
-         hDfmZCh53FsLT/jP0FLEYQ1snSusDjxFaGFgRRANDmil3klHtUbjGUPbNsoT4PltqBX/
-         HQzZ58D0/fk/LJs9OglCZaackVK0hjXF/u+adDACalP0xCjXSAgF5YfFfBQovASLyaDU
-         rXlw==
-X-Gm-Message-State: AOAM533CCdtsfxvOyQi+jNwvQK0HJXY1NJuPFnuSsrO9NeA61JO8hPPJ
-        j3SLZ3qEup9tPfQMyaITrSUQ42ll97JrzRygGQE=
-X-Google-Smtp-Source: ABdhPJxdjK58CQrmJIEecoD5ChKmpWmyR/5zI/i8u9leJjHYWUtdHJ1LEMyH3OIqMm8fbt5BxCCWR/FljHxYpu4pjwA=
-X-Received: by 2002:a05:6512:c03:b0:447:7912:7e6b with SMTP id
- z3-20020a0565120c0300b0044779127e6bmr17108146lfu.508.1651735928726; Thu, 05
- May 2022 00:32:08 -0700 (PDT)
+        Thu, 5 May 2022 03:36:15 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 478DD4838F
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 00:32:37 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 0802D1F37F;
+        Thu,  5 May 2022 07:32:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1651735956; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=HXstb6qIrKmVpMJGfGqh1asVn65N4FtaTqGBmpBFdTg=;
+        b=FaYTKslVJR6IAWMRbeaZV7z6jvZN8xFr4rrMBUnqQ4WtfUN+sTrDnqjuo8b5sCNZPBfRJk
+        9vFC0eug3w/WBuV1lZ6eI9ga7UN6gt2tulEdIkNdipTrd4ad1+SiHsMjUSBd05L7GsSceS
+        CX07Sqe+1n7TVeJR0mt4dng8f4z1o44=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1651735956;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=HXstb6qIrKmVpMJGfGqh1asVn65N4FtaTqGBmpBFdTg=;
+        b=hmMyJaBa9eEWbNIyvRnlWX8qDIgc3dYsl98gLL2ta7s7MhCH6aBUSejNv76DsnM+MQ0xLt
+        /CDtHdlYri4sK8BQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id D4CE613A65;
+        Thu,  5 May 2022 07:32:35 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id A/n1MpN9c2JRcgAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Thu, 05 May 2022 07:32:35 +0000
+Message-ID: <f0f408f5-f6e9-79d4-809d-6fa197afd110@suse.de>
+Date:   Thu, 5 May 2022 09:32:35 +0200
 MIME-Version: 1.0
-References: <20220503094728.926-1-ctcchien@nuvoton.com> <20220503094728.926-2-ctcchien@nuvoton.com>
- <YnEAtQQ6Wnacfrub@zn.tnic>
-In-Reply-To: <YnEAtQQ6Wnacfrub@zn.tnic>
-From:   Medad Young <medadyoung@gmail.com>
-Date:   Thu, 5 May 2022 15:31:57 +0800
-Message-ID: <CAHpyw9dz-P76ioNoZJPty0A_iHcw6Yx_z1S01E9+xWou28BeUg@mail.gmail.com>
-Subject: Re: [PATCH v8 1/3] ARM: dts: nuvoton: Add memory controller node
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     rric@kernel.org, James Morse <james.morse@arm.com>,
-        tony.luck@intel.com, Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Benjamin Fair <benjaminfair@google.com>,
-        Nancy Yuen <yuenn@google.com>,
-        Patrick Venture <venture@google.com>, KWLIU@nuvoton.com,
-        YSCHU@nuvoton.com, JJLIU0@nuvoton.com, KFTING <KFTING@nuvoton.com>,
-        Avi Fishman <avifishman70@gmail.com>,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        Tali Perry <tali.perry1@gmail.com>, ctcchien@nuvoton.com,
-        linux-edac <linux-edac@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        OpenBMC Maillist <openbmc@lists.ozlabs.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH] drm: simplify the return expression of ast_drm_resume()
+Content-Language: en-US
+To:     cgel.zte@gmail.com, airlied@redhat.com
+Cc:     airlied@linux.ie, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, Minghao Chi <chi.minghao@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+References: <20220505022208.57157-1-chi.minghao@zte.com.cn>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <20220505022208.57157-1-chi.minghao@zte.com.cn>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------XBHppxJhtYzlIVTtnikAC9w6"
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Borislav,
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------XBHppxJhtYzlIVTtnikAC9w6
+Content-Type: multipart/mixed; boundary="------------hIdRGWqeECLwcxDrefsYqbec";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: cgel.zte@gmail.com, airlied@redhat.com
+Cc: airlied@linux.ie, dri-devel@lists.freedesktop.org,
+ linux-kernel@vger.kernel.org, Minghao Chi <chi.minghao@zte.com.cn>,
+ Zeal Robot <zealci@zte.com.cn>
+Message-ID: <f0f408f5-f6e9-79d4-809d-6fa197afd110@suse.de>
+Subject: Re: [PATCH] drm: simplify the return expression of ast_drm_resume()
+References: <20220505022208.57157-1-chi.minghao@zte.com.cn>
+In-Reply-To: <20220505022208.57157-1-chi.minghao@zte.com.cn>
 
-Borislav Petkov <bp@alien8.de> =E6=96=BC 2022=E5=B9=B45=E6=9C=883=E6=97=A5 =
-=E9=80=B1=E4=BA=8C =E4=B8=8B=E5=8D=886:15=E5=AF=AB=E9=81=93=EF=BC=9A
->
-> On Tue, May 03, 2022 at 05:47:26PM +0800, Medad CChien wrote:
-> > ECC must be configured in the BootBlock header.
-> > Then, you can read error counts via
-> > the EDAC kernel framework.
-> >
-> > Signed-off-by: Medad CChien <ctcchien@nuvoton.com>
-> > Reviewed-by: Borislav Petkov <bp@alien8.de>
-> > Reviewed-by: Paul Menzel <pmenzel@molgen.mpg.de>
->
-> I don't think you understand the concept of Reviewed-by: tags. You
-> may add them to a patch of yours when the reviewer gives them to you
-> explicitly - not because she/he has given comments to a patch of yours.
->
-> Please go over
->
-> Documentation/process/
->
-> and Documentation/process/submitting-patches.rst especially and then
-> send patches.
->
-> Thx.
->
+--------------hIdRGWqeECLwcxDrefsYqbec
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-Sorry, I did misunderstand  the concept of Reviewed-by: tags.
-I will revise
-thanks
+SGkNCg0KQW0gMDUuMDUuMjIgdW0gMDQ6MjIgc2NocmllYiBjZ2VsLnp0ZUBnbWFpbC5jb206
+DQo+IEZyb206IE1pbmdoYW8gQ2hpIDxjaGkubWluZ2hhb0B6dGUuY29tLmNuPg0KPiANCj4g
+U2ltcGxpZnkgdGhlIHJldHVybiBleHByZXNzaW9uLg0KPiANCj4gUmVwb3J0ZWQtYnk6IFpl
+YWwgUm9ib3QgPHplYWxjaUB6dGUuY29tLmNuPg0KPiBTaWduZWQtb2ZmLWJ5OiBNaW5naGFv
+IENoaSA8Y2hpLm1pbmdoYW9AenRlLmNvbS5jbj4NCg0KVGhhbmtzIGEgbG90LiBJIGFkZGVk
+IHlvdXIgcGF0Y2ggdG8gZHJtLW1pc2MtbmV4dC4NCg0KQmVzdCByZWdhcmRzDQpUaG9tYXMN
+Cg0KPiAtLS0NCj4gICBkcml2ZXJzL2dwdS9kcm0vYXN0L2FzdF9kcnYuYyB8IDcgKy0tLS0t
+LQ0KPiAgIDEgZmlsZSBjaGFuZ2VkLCAxIGluc2VydGlvbigrKSwgNiBkZWxldGlvbnMoLSkN
+Cj4gDQo+IGRpZmYgLS1naXQgYS9kcml2ZXJzL2dwdS9kcm0vYXN0L2FzdF9kcnYuYyBiL2Ry
+aXZlcnMvZ3B1L2RybS9hc3QvYXN0X2Rydi5jDQo+IGluZGV4IDc0NjVjNGYwMTU2YS4uNzYw
+YjI3OTcxNTU3IDEwMDY0NA0KPiAtLS0gYS9kcml2ZXJzL2dwdS9kcm0vYXN0L2FzdF9kcnYu
+Yw0KPiArKysgYi9kcml2ZXJzL2dwdS9kcm0vYXN0L2FzdF9kcnYuYw0KPiBAQCAtMTU5LDE1
+ICsxNTksMTAgQEAgc3RhdGljIGludCBhc3RfZHJtX3RoYXcoc3RydWN0IGRybV9kZXZpY2Ug
+KmRldikNCj4gICANCj4gICBzdGF0aWMgaW50IGFzdF9kcm1fcmVzdW1lKHN0cnVjdCBkcm1f
+ZGV2aWNlICpkZXYpDQo+ICAgew0KPiAtCWludCByZXQ7DQo+IC0NCj4gICAJaWYgKHBjaV9l
+bmFibGVfZGV2aWNlKHRvX3BjaV9kZXYoZGV2LT5kZXYpKSkNCj4gICAJCXJldHVybiAtRUlP
+Ow0KPiAgIA0KPiAtCXJldCA9IGFzdF9kcm1fdGhhdyhkZXYpOw0KPiAtCWlmIChyZXQpDQo+
+IC0JCXJldHVybiByZXQ7DQo+IC0JcmV0dXJuIDA7DQo+ICsJcmV0dXJuIGFzdF9kcm1fdGhh
+dyhkZXYpOw0KPiAgIH0NCj4gICANCj4gICBzdGF0aWMgaW50IGFzdF9wbV9zdXNwZW5kKHN0
+cnVjdCBkZXZpY2UgKmRldikNCg0KLS0gDQpUaG9tYXMgWmltbWVybWFubg0KR3JhcGhpY3Mg
+RHJpdmVyIERldmVsb3Blcg0KU1VTRSBTb2Z0d2FyZSBTb2x1dGlvbnMgR2VybWFueSBHbWJI
+DQpNYXhmZWxkc3RyLiA1LCA5MDQwOSBOw7xybmJlcmcsIEdlcm1hbnkNCihIUkIgMzY4MDks
+IEFHIE7DvHJuYmVyZykNCkdlc2Now6RmdHNmw7xocmVyOiBJdm8gVG90ZXYNCg==
 
-> --
-> Regards/Gruss,
->     Boris.
->
-> https://people.kernel.org/tglx/notes-about-netiquette
+--------------hIdRGWqeECLwcxDrefsYqbec--
 
-B.R.
-Medad
+--------------XBHppxJhtYzlIVTtnikAC9w6
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
+
+-----BEGIN PGP SIGNATURE-----
+
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmJzfZMFAwAAAAAACgkQlh/E3EQov+Ap
+mBAAjJrVm7nKu11xecXvBNDzIxiMSFxXqDDffYT3K5Wso1Ht5T3L6grX3bq+HpCTle6e8Jf4nAXm
+zskg7puoC27rt2EmA4809jnRU7hsfc06GijopIH4qwZVlV4tLBXsS3pA2PMnwjFfJxbO2XUrOCU7
+Xa/9+uEbu4wNQQRO6qbimDHE5BZLExBy9KeGXrKZvKEoYGQ0uXN5xxcU3uCxmlSlvwMjf8gj7UPG
+MiWEGGkKo5f5cYpAFp9doagh5TNKmYpD/62BDH7lEbvzZVu0Bs0w9ldMkb0WaSJrABT7Hcgtq/pM
+LO4iLxaXllFH7Gp9xwZmUvud2GDcxPj7antjB8eQTDn3Rhl7YF+DhusZczPbkOkNyBNOq+bZww4R
+akNxvwMH75JVZD/bem04cx14xgHLn7qAXUfkjVoWiRfVPcsWQ5ggAJ3/Y63lmDAWpANigZOcBE88
+Icj2p2g4IR+bRx7al1a/3Dx34udWGW1yRArODfEQZNkxFK6nKcoWSzT11kzYXnVnaKN97p+YhzB8
+lGzvSXxuByJjZozOkNJmSbRi7Xtu2J4rtMdYPzIrmU7JiIXbJtO5WJV3n3G+wUw/WxYmIM3NbCZb
+pGNzQc1rzbgnaWcVidAT041Htk1hr/bnnt8GL4RDn852Sd99FTIZf2+27G2LdR3KF07fHKel792p
+suU=
+=uKFD
+-----END PGP SIGNATURE-----
+
+--------------XBHppxJhtYzlIVTtnikAC9w6--

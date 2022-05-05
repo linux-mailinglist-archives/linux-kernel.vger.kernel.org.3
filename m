@@ -2,155 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2DC351CBE2
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 00:06:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB01D51CBE7
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 00:08:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386183AbiEEWKU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 18:10:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58794 "EHLO
+        id S1386175AbiEEWM0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 18:12:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386177AbiEEWKS (ORCPT
+        with ESMTP id S231304AbiEEWMY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 18:10:18 -0400
-Received: from us-smtp-delivery-74.mimecast.com (us-smtp-delivery-74.mimecast.com [170.10.129.74])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 25E855EDDA
-        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 15:06:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651788396;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=2QUs/dFpZjXD63m2oUdzjI7+Wpnx04uqjBRSmxR+fJo=;
-        b=NoeVH+LQnxYMLYYVXHGRCy7OFetIWVi5u+7Pk5FBOHyKKEMSgREgymlEgh3EV5WBMV/IZK
-        14DKGnoqDCy80qvLrNJyR6w6p05KtLDMZMfmi8Kp7WCNuTRyjXogw+BhgFQKGeqYGr9/FG
-        XegBqSEp0bm6RVZ4+Vinv6Aoi4AgJrc=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-639-IOYryVw9Nh6yPaHpBI4weg-1; Thu, 05 May 2022 18:06:35 -0400
-X-MC-Unique: IOYryVw9Nh6yPaHpBI4weg-1
-Received: by mail-wr1-f72.google.com with SMTP id s14-20020adfa28e000000b0020ac7532f08so1874160wra.15
-        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 15:06:34 -0700 (PDT)
+        Thu, 5 May 2022 18:12:24 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42F4B5DE4A;
+        Thu,  5 May 2022 15:08:44 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id x18so5651987plg.6;
+        Thu, 05 May 2022 15:08:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=ZctFPbIkyyBRN7A+G750EEkN6msxHuL8eqp5mqoQ1Rw=;
+        b=fVW8tJJiyLpUsuCsQDLJeKt9GdBmL7vu8PiqCKg5vNilsGOJzXi/lYlE2Y3j7naxrX
+         9kBOKY7ceQIs+w89ou3N3riXEgTmfY6njVsuKmkNXOA4YjqvxyeYJI1B4/7d44EJyVZQ
+         hgiU8yHwDxG5pQsFZJMa6i4Yn1TpRY9Fnz9OpfCd3jhJqKMMrnpzRtaMQDXNpLMfbciR
+         XbFpjgur9tuDQTuxQ3VNgl/+opK4kJNEehrRRWz4+w4eTbqV0+HyAo8oTtL4uejcx83g
+         /bx1eppx2lOdo0lgOQppr/6QAA131P2XbyLQwaEuxkw6AAURnlQQvvYxwyA3sf1znOzJ
+         I8Yw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=2QUs/dFpZjXD63m2oUdzjI7+Wpnx04uqjBRSmxR+fJo=;
-        b=29P5oF84PWp0Z/EOyqbffA7rHLgnPZzNqyas9FjoSyi57U478h/BFTrwuAqGAh3eq/
-         T/futsReB6d6EBYrnD4CiH9dYc2hO6qBtq5EsqxDWXBmz2Ox9JZjm7Btb31DbvY3IcBI
-         PFG8K3PmglOiWd/IHY6OKQU2eppea0SWar1F9TV4HjwYzcdohO1+59Xix5VK/VJ5buX/
-         L5y9Y1hOawZ3edDIy20ylnDDvvjMnFanHvqeuLlPsQ+ac3TPCAehJ3pf0eG0/uuFmmBV
-         PttT9MrX9aEpe0PEl6aKCawY0GCgrJjWBYYALiTUHmWowDicPFYweejbNLaOjU2UGddl
-         wv0w==
-X-Gm-Message-State: AOAM531kM0GFGkZFrlPkkAGPRMxrNoCjHSj15mrsPZSoeeFbQ7gYS7Cd
-        MgoN22IasmrHaO4eiQursNYRi6p9cBwxO+11odaTQpZsQtGWcKPzPMy795ZAVz/Fw8RZm4aK0h8
-        CX14GgpMOjkhnCXaj1/BpiydWwf80647HU66YQsQvYAOTBgZSqd4g7w0ppSIJrFcSI2h2VnU9Mc
-        4=
-X-Received: by 2002:a5d:6dd1:0:b0:207:92c4:eaef with SMTP id d17-20020a5d6dd1000000b0020792c4eaefmr165085wrz.498.1651788393706;
-        Thu, 05 May 2022 15:06:33 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwJuZtwlqObinYznGZMuIaaeVki7i2UMoMVMO9mJCvQ2FsqRQYwPdVCdFx20Il32JBmnuIcGA==
-X-Received: by 2002:a5d:6dd1:0:b0:207:92c4:eaef with SMTP id d17-20020a5d6dd1000000b0020792c4eaefmr165062wrz.498.1651788393466;
-        Thu, 05 May 2022 15:06:33 -0700 (PDT)
-Received: from minerva.home (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id n11-20020a056000170b00b0020c5253d8c7sm2040236wrc.19.2022.05.05.15.06.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 May 2022 15:06:33 -0700 (PDT)
-From:   Javier Martinez Canillas <javierm@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Helge Deller <deller@gmx.de>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>
-Subject: [PATCH v3 4/4] fbdev: vesafb: Cleanup fb_info in .fb_destroy rather than .remove
-Date:   Fri,  6 May 2022 00:06:31 +0200
-Message-Id: <20220505220631.366371-1-javierm@redhat.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220505215947.364694-1-javierm@redhat.com>
-References: <20220505215947.364694-1-javierm@redhat.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=ZctFPbIkyyBRN7A+G750EEkN6msxHuL8eqp5mqoQ1Rw=;
+        b=Mlh4w+em7sMZ3U5m15oLLzA1v0Q/adrQRUIjq/4l11YjGKV+md9b2vQGrmRQll6wCm
+         4hEhveneB1VZp7KGSuquhQop1rsioKWwtHCEcy6VYepuaK4JTqdmllBfrq+o4GUJFWUY
+         FU3jUp5fOdT69oyGvRSMt1yf15UjBHxMsN+iz0z2kMo1TSA2gHX2c7lbVOCeP5phQwvX
+         PK4Yy7qCPvrPcNNfPphACeKpsyKF8a0E4ZYD7p3ljLi7h9wevNLPRIu9B9e2QqJcrvbw
+         3otqlv1eHi0thoqlzTde5q11Db9rjUWvJ+N+pKS+9LvKbMwsCOPKfcVg5Ud3N9jwRCyV
+         ty2Q==
+X-Gm-Message-State: AOAM532ggdtJuNEeK2oNNoZV6xWbCwyuRDfc14Y84iacmDC2UlapAzWi
+        QYcVq1qvWI9WWmtXMsd9xqs=
+X-Google-Smtp-Source: ABdhPJxrJQ1znobxJsDaMY2MuAzsVvl21cvzxtdYXjDgEHVzA7T3IH6ne1HEtLcuy0U/LwHvpLvvNQ==
+X-Received: by 2002:a17:90b:3889:b0:1dc:cac6:f03e with SMTP id mu9-20020a17090b388900b001dccac6f03emr463795pjb.23.1651788523662;
+        Thu, 05 May 2022 15:08:43 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id y9-20020a17090a134900b001da3780bfd3sm303383pjf.0.2022.05.05.15.08.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 05 May 2022 15:08:42 -0700 (PDT)
+Message-ID: <f71c8b62-d875-5f84-e6fa-5548eaf442fa@gmail.com>
+Date:   Thu, 5 May 2022 15:08:22 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH 5.15 000/177] 5.15.38-rc1 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+References: <20220504153053.873100034@linuxfoundation.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20220504153053.873100034@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The driver is calling framebuffer_release() in its .remove callback, but
-this will cause the struct fb_info to be freed too early. Since it could
-be that a reference is still hold to it if user-space opened the fbdev.
+On 5/4/22 09:43, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.38 release.
+> There are 177 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Fri, 06 May 2022 15:25:19 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.38-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
-This would lead to a use-after-free error if the framebuffer device was
-unregistered but later a user-space process tries to close the fbdev fd.
+On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels:
 
-To prevent this, move the framebuffer_release() call to fb_ops.fb_destroy
-instead of doing it in the driver's .remove callback.
-
-Strictly speaking, the code flow in the driver is still wrong because all
-the hardware cleanupd (i.e: iounmap) should be done in .remove while the
-software cleanup (i.e: releasing the framebuffer) should be done in the
-.fb_destroy handler. But this at least makes to match the behavior before
-commit 27599aacbaef ("fbdev: Hot-unplug firmware fb devices on forced removal").
-
-Fixes: 27599aacbaef ("fbdev: Hot-unplug firmware fb devices on forced removal")
-Suggested-by: Daniel Vetter <daniel.vetter@ffwll.ch>
-Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
-Reviewed-by: Thomas Zimmermann <tzimmermann@suse.de>
-Reviewed-by: Daniel Vetter <daniel.vetter@ffwll.ch>
----
-
-Changes in v3:
-- Only move framebuffer_release() and don't do any other change
-  (Daniel Vetter).
-
-Changes in v2:
-- Also do the change for vesafb (Thomas Zimmermann).
-
- drivers/video/fbdev/vesafb.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/video/fbdev/vesafb.c b/drivers/video/fbdev/vesafb.c
-index df6de5a9dd4c..e25e8de5ff67 100644
---- a/drivers/video/fbdev/vesafb.c
-+++ b/drivers/video/fbdev/vesafb.c
-@@ -179,6 +179,10 @@ static int vesafb_setcolreg(unsigned regno, unsigned red, unsigned green,
- 	return err;
- }
- 
-+/*
-+ * fb_ops.fb_destroy is called by the last put_fb_info() call at the end
-+ * of unregister_framebuffer() or fb_release(). Do any cleanup here.
-+ */
- static void vesafb_destroy(struct fb_info *info)
- {
- 	struct vesafb_par *par = info->par;
-@@ -188,6 +192,8 @@ static void vesafb_destroy(struct fb_info *info)
- 	if (info->screen_base)
- 		iounmap(info->screen_base);
- 	release_mem_region(info->apertures->ranges[0].base, info->apertures->ranges[0].size);
-+
-+	framebuffer_release(info);
- }
- 
- static struct fb_ops vesafb_ops = {
-@@ -484,10 +490,10 @@ static int vesafb_remove(struct platform_device *pdev)
- {
- 	struct fb_info *info = platform_get_drvdata(pdev);
- 
-+	/* vesafb_destroy takes care of info cleanup */
- 	unregister_framebuffer(info);
- 	if (((struct vesafb_par *)(info->par))->region)
- 		release_region(0x3c0, 32);
--	framebuffer_release(info);
- 
- 	return 0;
- }
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
 -- 
-2.35.1
-
+Florian

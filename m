@@ -2,61 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83D7851B9A8
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 10:08:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A93D251B9AD
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 10:09:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346486AbiEEIMG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 04:12:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44304 "EHLO
+        id S1346500AbiEEINS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 04:13:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236869AbiEEIME (ORCPT
+        with ESMTP id S235053AbiEEINO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 04:12:04 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F3273337C;
-        Thu,  5 May 2022 01:08:25 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id E73021F44D6A
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1651738103;
-        bh=Sx0JTutas4/a5URHaHdUEVftBTpjpG3kAugSQyvFlOk=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=LQP40dxFDRXce8lfztccxf30KUdLwEI7Biw7WJFTVQgsdDbNckjKld2YhLoBNGUFK
-         6oiSh0nR9Xfnfbzk/jr6ze4TO3H0+DqXEUSKRQPakdjJeaG4ckhTKy9NBwbOVYL7Rz
-         75B5Sarx4ocMBfhtUMYwULroMzHxA1GU5xiW71rPLvmdS8+Nb3IVHiMdvyuR1N54lA
-         8CKd8fB/xfvNwcgZqG6z1VjuSIdQFmHsVfj3TRNZlUY4/F4ra07cYNlwfAXCukg8J5
-         X4Obi7f66sRUcI/xgAb4Y3SaJM2Yu8CnQ9wkG3c5C6d0oOM60j5N3/znbWeNql2KFQ
-         K5ftZZVV6WFrw==
-Message-ID: <4826c824-40ce-5726-ed95-5be069233ca7@collabora.com>
-Date:   Thu, 5 May 2022 10:08:20 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 1/3] ASoC: dt-bindings: mediatek: mt8192: Add i2s-share
- properties
-Content-Language: en-US
-To:     =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
-        <nfraprado@collabora.com>, Mark Brown <broonie@kernel.org>
-Cc:     kernel@collabora.com, Jiaxin Yu <jiaxin.yu@mediatek.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Shane Chien <shane.chien@mediatek.com>,
-        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org
-References: <20220429203039.2207848-1-nfraprado@collabora.com>
- <20220429203039.2207848-2-nfraprado@collabora.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220429203039.2207848-2-nfraprado@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        Thu, 5 May 2022 04:13:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F4A83A19C;
+        Thu,  5 May 2022 01:09:36 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0F5A561D4D;
+        Thu,  5 May 2022 08:09:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D57BC385A8;
+        Thu,  5 May 2022 08:09:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651738175;
+        bh=AxkyhWsY0UHLjBXjb82tMurMjw8wJrl0qgnK1/vTnuc=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=dcsZoR/C2yudiaDq/2t8TpOhuKv/LqvbG6v9dDjDvenLYUQCJuKp99ebMfwb504nU
+         QN1pKCkszu1h342LDPq6+R3zbKw+jj4CuDstMZdFLOgLmRbLcV9QO+A7pnFzL8yLtr
+         TlybH2TGe/OBc1vSiy1B1SGnDSyQRxijfFqgrqpKAjIVT2avyyHbh9/XlB0nNQPylg
+         WCtcjIoPzrYg4/PLGZytfFJwRXX8jNb14QnMB/AHvgkEv5GsDkXdhMx2z5R6/YsCXr
+         MnbA1C6CuPb+PRRAC8WZ8oxGacS7GRlVZg7CCM66CH7IwO7gpR3aWP3XFSAcJG89sv
+         ag6TmTrCaHk1g==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nmWYG-0098wB-OL; Thu, 05 May 2022 09:09:32 +0100
+Date:   Thu, 05 May 2022 09:09:32 +0100
+Message-ID: <8735ho8koz.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Bartosz Golaszewski <brgl@bgdev.pl>, linux-kernel@vger.kernel.org,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Joey Gouly <joey.gouly@arm.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Hector Martin <marcan@marcan.st>,
+        Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Jeffrey Hugo <jeffrey.l.hugo@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Basavaraj Natikar <Basavaraj.Natikar@amd.com>,
+        Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        linux-gpio@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, kernel-team@android.com
+Subject: Re: [PATCH v3 00/10] gpiolib: Handle immutable irq_chip structures
+In-Reply-To: <CACRpkdb32NuJ8jdsk6ox7ViVjK=9WWWavS=aYcoWTCbaO3WkTg@mail.gmail.com>
+References: <20220419141846.598305-1-maz@kernel.org>
+        <CACRpkda3L_itpqcnPq6xDoJtNHt8NuvE1MZk1bCNR+u2KKUpBA@mail.gmail.com>
+        <874k2kccse.wl-maz@kernel.org>
+        <CACRpkdb32NuJ8jdsk6ox7ViVjK=9WWWavS=aYcoWTCbaO3WkTg@mail.gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: linus.walleij@linaro.org, brgl@bgdev.pl, linux-kernel@vger.kernel.org, thierry.reding@gmail.com, joey.gouly@arm.com, jonathanh@nvidia.com, marcan@marcan.st, sven@svenpeter.dev, alyssa@rosenzweig.io, bjorn.andersson@linaro.org, agross@kernel.org, jeffrey.l.hugo@gmail.com, tglx@linutronix.de, Basavaraj.Natikar@amd.com, Shyam-sundar.S-k@amd.com, andy.shevchenko@gmail.com, linux-gpio@vger.kernel.org, linux-tegra@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org, kernel-team@android.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,53 +83,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 29/04/22 22:30, Nícolas F. R. A. Prado ha scritto:
-> The Mediatek AFE PCM controller for MT8192 allows sharing of an I2S bus
-> between two busses. Add a pattern for these properties in the
-> dt-binding.
+On Wed, 04 May 2022 22:21:51 +0100,
+Linus Walleij <linus.walleij@linaro.org> wrote:
 > 
-> Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
-> ---
+> On Sat, Apr 23, 2022 at 12:30 PM Marc Zyngier <maz@kernel.org> wrote:
 > 
->   Documentation/devicetree/bindings/sound/mt8192-afe-pcm.yaml | 5 +++++
->   1 file changed, 5 insertions(+)
+> > > Bartosz: if you're happy with this can you apply it to an immutable branch
+> > > from v5.18-rc1 and merge that into the GPIO for-next and then I can also
+> > > pull that into pinctrl?
+> >
+> > For what it is worth, I've pushed this branch into irqchip-next.
+> >
+> > You can pick it up from:
+> >
+> > https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms.git/log/?h=irq/gpio-immutable
 > 
-> diff --git a/Documentation/devicetree/bindings/sound/mt8192-afe-pcm.yaml b/Documentation/devicetree/bindings/sound/mt8192-afe-pcm.yaml
-> index 7a25bc9b8060..5b03c8dbf318 100644
-> --- a/Documentation/devicetree/bindings/sound/mt8192-afe-pcm.yaml
-> +++ b/Documentation/devicetree/bindings/sound/mt8192-afe-pcm.yaml
-> @@ -54,6 +54,11 @@ properties:
->         - const: aud_infra_clk
->         - const: aud_infra_26m_clk
->   
-> +patternProperties:
-> +  "^i2s[0-35-9]-share$":
-> +    description: Name of the I2S bus that is shared with this bus
-> +    pattern: "^I2S[0-35-9]$"
-> +
->   required:
->     - compatible
->     - interrupts
-> 
+> Bartosz are you pulling this? Most of the changes are in GPIO.
+> Patches have started to arrive that go on top of these changes
+> so would be nice to have it in both GPIO and pin control as a
+> baseline.
 
-The only other way of doing this would be to complicate this in the driver
-so that we can do something like
+I'm happy to queue things on top of my series if that helps.
 
-"i2s-share = <0 2>";  instead of  i2s0-share = "I2S2";
+	M.
 
-...and I don't think that this would be any more straightforward than the
-provided way.
-
-There's an improvement that we can do to that pattern description though,
-which would be explaining that declaring 'i2s0-share = "I2S2"' means that
-I2S2's data pin will be used as DATA-OUT, while i2s0 is DATA-IN.
-
-Another thing that comes to mind here is that this is a MediaTek specific
-property and *not* a generic one, which means that both the driver and
-this binding should be fixed to get a "mediatek," prefix, so, this property
-should - in reality - be "mediatek,i2s[0-35-9]-share" instead.
-
-I think that everyone agrees about that, but let's see what the others say.
-
-Cheers,
-Angelo
+-- 
+Without deviation from the norm, progress is not possible.

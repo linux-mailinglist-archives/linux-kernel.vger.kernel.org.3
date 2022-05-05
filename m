@@ -2,129 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D847351B558
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 03:43:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FD9851B55B
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 03:45:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236019AbiEEBqy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 21:46:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56856 "EHLO
+        id S236103AbiEEBr2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 21:47:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235887AbiEEBqx (ORCPT
+        with ESMTP id S235887AbiEEBrZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 21:46:53 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04CCF4C41E;
-        Wed,  4 May 2022 18:43:15 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KtxKr1qPSz4xXS;
-        Thu,  5 May 2022 11:43:12 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1651714993;
-        bh=TtMfVqytzBjCR0qUWr+CTwB6YM9CYPM1mDOpJiblGJc=;
-        h=Date:From:To:Cc:Subject:From;
-        b=QVpJlN7F1fjtI06Pzr5J23Bta3i1MLD/IVdXxywARhGWkNDvvqnThpIG+2ptNIbOS
-         Rsv4iTmDHTZ773tlen8bvJu0rT+TZ36LG6Uo3kY6Ky6D7vfzIK0BffcPtabeF94db3
-         1lCHBTjACCaE4whuBaP3ayLccOWLlohTTI/Rk3BWhLPYau87WcAcfIt6WNci1oxWqN
-         UnVnyo/AcyZMpLL8xdHABA/7Qe81hklzeBU5hTadZ/DqXKnnxXQHgIrZ+z6jKuTaUl
-         eP10cH5iaz4iItf8sNCB2SDYYkE270RWnbCck+gqCFDxG3FvxWYX3ffljoVun3YOtD
-         HhQ4r0Fz49OFw==
-Date:   Thu, 5 May 2022 11:43:11 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Rob Clark <robdclark@gmail.com>, Sean Paul <seanpaul@chromium.org>,
-        Dave Airlie <airlied@linux.ie>
-Cc:     Thomas Zimmermann <tzimmermann@suse.de>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sankeerth Billakanti <quic_sbillaka@quicinc.com>,
-        DRI <dri-devel@lists.freedesktop.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the drm-msm tree
-Message-ID: <20220505114311.18e7786f@canb.auug.org.au>
+        Wed, 4 May 2022 21:47:25 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 018584C41E
+        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 18:43:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651715028; x=1683251028;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Zwza5U7NsfaBQi0ChOCEggAFl0x8H9t6iT813UM9/Ck=;
+  b=NEmLBxMQgqAzPJ8ev5N2e5a96vbmJKWPaoFDzr6BsRKSmhJeIFBI/j5l
+   yNC53T8bDpVwA956oi1+mvaMMQTIZDW+pUtd5z0SbfFD3SDaxWCUcqkyq
+   qOhMwTO0HuAVXf+Xf0ce4Uips2ZbcqrUtDQtr07KNFbrRdxxjplxx0gIu
+   LuZTkcSBbVaP77Asnv8Iw5vUf4Eo4vcjr8MlsV/dx+fMYi3ON5zAkknNR
+   MytabuJsxQFlFxTmWCBopXXhK4pyDQs21uDwjIrSfEWjwLTBZzRdxD9Bh
+   Sqv5la97KM9QDXZaOKy9z3+/P88wU0cRsFR0gNd+9sLaflMO3azDiisa9
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10337"; a="265548883"
+X-IronPort-AV: E=Sophos;i="5.91,199,1647327600"; 
+   d="scan'208";a="265548883"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2022 18:43:47 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,199,1647327600"; 
+   d="scan'208";a="621071506"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 04 May 2022 18:43:46 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nmQWv-000ByF-HV;
+        Thu, 05 May 2022 01:43:45 +0000
+Date:   Thu, 5 May 2022 09:43:36 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org, Kees Cook <keescook@chromium.org>
+Subject: [kees:for-next/kspp 21/25] drivers/misc/lkdtm/stackleak.c:17:39:
+ error: call to undeclared function 'stackleak_task_low_bound'; ISO C99 and
+ later do not support implicit function declarations
+Message-ID: <202205050943.HDgeO9iV-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/teBL01mlIaMgI0/1eR149Pp";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/teBL01mlIaMgI0/1eR149Pp
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git for-next/kspp
+head:   d46ac904fd35edfccc5080818e950d4d3b4697c4
+commit: f4cfacd92972cc440d534b5156df23d0a2136bab [21/25] lkdtm/stackleak: rework boundary management
+config: s390-randconfig-r044-20220502 (https://download.01.org/0day-ci/archive/20220505/202205050943.HDgeO9iV-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 363b3a645a1e30011cc8da624f13dac5fd915628)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install s390 cross compiling tool for clang build
+        # apt-get install binutils-s390x-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git/commit/?id=f4cfacd92972cc440d534b5156df23d0a2136bab
+        git remote add kees https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git
+        git fetch --no-tags kees for-next/kspp
+        git checkout f4cfacd92972cc440d534b5156df23d0a2136bab
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash
 
-Hi all,
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-After merging the drm-msm tree, today's linux-next build (arm
-multi_v7_defconfig) failed like this:
+All errors (new ones prefixed by >>):
 
-drivers/gpu/drm/msm/dp/dp_display.c:13:10: fatal error: drm/dp/drm_dp_aux_b=
-us.h: No such file or directory
-   13 | #include <drm/dp/drm_dp_aux_bus.h>
-      |          ^~~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/misc/lkdtm/stackleak.c:17:39: error: call to undeclared function 'stackleak_task_low_bound'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           const unsigned long task_stack_low = stackleak_task_low_bound(current);
+                                                ^
+>> drivers/misc/lkdtm/stackleak.c:18:40: error: call to undeclared function 'stackleak_task_high_bound'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           const unsigned long task_stack_high = stackleak_task_high_bound(current);
+                                                 ^
+   drivers/misc/lkdtm/stackleak.c:19:22: warning: incompatible pointer to integer conversion initializing 'const unsigned long' with an expression of type 'unsigned long (void)' [-Wint-conversion]
+           const unsigned long current_sp = current_stack_pointer;
+                               ^            ~~~~~~~~~~~~~~~~~~~~~
+   drivers/misc/lkdtm/stackleak.c:20:43: error: no member named 'lowest_stack' in 'struct task_struct'; did you mean 'ret_stack'?
+           const unsigned long lowest_sp = current->lowest_stack;
+                                                    ^~~~~~~~~~~~
+                                                    ret_stack
+   include/linux/sched.h:1365:28: note: 'ret_stack' declared here
+           struct ftrace_ret_stack         *ret_stack;
+                                            ^
+   drivers/misc/lkdtm/stackleak.c:20:22: warning: incompatible pointer to integer conversion initializing 'const unsigned long' with an expression of type 'struct ftrace_ret_stack *' [-Wint-conversion]
+           const unsigned long lowest_sp = current->lowest_stack;
+                               ^           ~~~~~~~~~~~~~~~~~~~~~
+   drivers/misc/lkdtm/stackleak.c:42:16: error: call to undeclared function 'stackleak_find_top_of_poison'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           poison_high = stackleak_find_top_of_poison(task_stack_low, untracked_high);
+                         ^
+   2 warnings and 4 errors generated.
 
-Caused by commit
 
-  c3bf8e21b38a ("drm/msm/dp: Add eDP support via aux_bus")
+vim +/stackleak_task_low_bound +17 drivers/misc/lkdtm/stackleak.c
 
-interacting with commit
+    13	
+    14	void lkdtm_STACKLEAK_ERASING(void)
+    15	{
+    16		const unsigned long task_stack_base = (unsigned long)task_stack_page(current);
+  > 17		const unsigned long task_stack_low = stackleak_task_low_bound(current);
+  > 18		const unsigned long task_stack_high = stackleak_task_high_bound(current);
 
-  da68386d9edb ("drm: Rename dp/ to display/")
-
-from the drm tree.
-
-I have applied the following merge fix patch for today.
-
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Thu, 5 May 2022 11:41:09 +1000
-Subject: [PATCH] fix up for "drm: Rename dp/ to display/"
-
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- drivers/gpu/drm/msm/dp/dp_display.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/d=
-p_display.c
-index ed4e26ed20e4..c68d6007c2c6 100644
---- a/drivers/gpu/drm/msm/dp/dp_display.c
-+++ b/drivers/gpu/drm/msm/dp/dp_display.c
-@@ -10,7 +10,7 @@
- #include <linux/component.h>
- #include <linux/of_irq.h>
- #include <linux/delay.h>
--#include <drm/dp/drm_dp_aux_bus.h>
-+#include <drm/display/drm_dp_aux_bus.h>
-=20
- #include "msm_drv.h"
- #include "msm_kms.h"
---=20
-2.35.1
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/teBL01mlIaMgI0/1eR149Pp
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJzK68ACgkQAVBC80lX
-0GxfmAf/bh2STLE2WuZawybH3tOZoRkCOAI1s9AYEDPZqTTDgVJwzhcaaTdoYVwX
-r/hRBDe+UtOzg0oDcRpM4lwQl0GJaeW28XbZDqYomNvfpANMRqSlWievOEOEOm3h
-Ct/m5UyyL1vWyAEOkq+xu/Syw2wIu5QP/PKwC0XomdROQ+gt5/s7LipVab5z7tKb
-8FuMGJVj0pxZsLDHQM87sXsbmo67eovH+hKzqTO9qQQwPXPBfRyfbjPbbY/05KbY
-RacuxoZgWZcv6bQsvSskLP6dS0u+fFjNCmbaHq+3VDEXGIE23ZGem9x8/5tOHGqo
-AF3rckl2InIENa0CQPpfTVSjTISfDQ==
-=zrUm
------END PGP SIGNATURE-----
-
---Sig_/teBL01mlIaMgI0/1eR149Pp--
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

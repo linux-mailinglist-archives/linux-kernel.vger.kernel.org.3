@@ -2,119 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0867D51B524
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 03:15:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9011251B534
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 03:21:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235005AbiEEBSe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 21:18:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33500 "EHLO
+        id S235267AbiEEBYz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 21:24:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230176AbiEEBSc (ORCPT
+        with ESMTP id S230176AbiEEBYw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 21:18:32 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11E67515AD
-        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 18:14:55 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1651713293;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=n17gGihYsOZ1CbJmH63jbnw4kqj3EjuV+qmxB3T5Ge8=;
-        b=TlsZwi0uyF1NKkZHplRBpBaz//Z6mpYb/w41WUZ7NR5PBbb2kD6MbtA8H8J3hBd6ihWmYJ
-        kVWzLZRrMilIWKwUE/N7L2dRFP1lsyZbMAYUN7VZC/PmgBKyD4WIKLsBJkqSJJl7eJMl5g
-        Rby+GikSXrxli4EImKAm10RGKPsqz+8o+4iA3xvWmOA+H1tJ7T8Es32WQ6xnS956ilmrhJ
-        c/i049M0vBbzgVoHIOwPu5O+tZRDhHWm7oZaygcEI28IXDQoFkCR0ts9hz6QSI3QLcBKol
-        T/8mhplso+jUD4APEA/ROK/FuIFf4JzJh/GlBgkzry5eSeKGpDDCQ1glMH/pGA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1651713293;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=n17gGihYsOZ1CbJmH63jbnw4kqj3EjuV+qmxB3T5Ge8=;
-        b=47Xv4gfd6yiM8vnmcngpfAz5X6za6e5419uh7iVLImO157Whj5mLkYSC6aLePokOZcqbEm
-        HFLN8pxeB6MjnODQ==
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: Wait for mutex to become unlocked
-In-Reply-To: <YnMcdmx9ZwHcxTYe@casper.infradead.org>
-References: <YnLzrGlBNCmCPLmS@casper.infradead.org> <87pmksj0ah.ffs@tglx>
- <YnMcdmx9ZwHcxTYe@casper.infradead.org>
-Date:   Thu, 05 May 2022 03:14:53 +0200
-Message-ID: <87k0b0ixv6.ffs@tglx>
+        Wed, 4 May 2022 21:24:52 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 653C1506DB
+        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 18:21:14 -0700 (PDT)
+Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KtwnK3MHbzGpTN;
+        Thu,  5 May 2022 09:18:29 +0800 (CST)
+Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
+ dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 5 May 2022 09:21:12 +0800
+Received: from [10.174.177.243] (10.174.177.243) by
+ dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 5 May 2022 09:21:11 +0800
+Message-ID: <83e5bbe7-0880-3534-897a-156a4d2b4451@huawei.com>
+Date:   Thu, 5 May 2022 09:21:11 +0800
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH -next v4 1/7] x86, powerpc: fix function define in
+ copy_mc_to_user
+Content-Language: en-US
+To:     Tong Tiangen <tongtiangen@huawei.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Mark Rutland <mark.rutland@arm.com>,
+        "James Morse" <james.morse@arm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Robin Murphy <robin.murphy@arm.com>,
+        "Dave Hansen" <dave.hansen@linux.intel.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        "Benjamin Herrenschmidt" <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "H . Peter Anvin" <hpa@zytor.com>
+CC:     Xie XiuQi <xiexiuqi@huawei.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        Guohanjun <guohanjun@huawei.com>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>
+References: <20220420030418.3189040-1-tongtiangen@huawei.com>
+ <20220420030418.3189040-2-tongtiangen@huawei.com>
+ <91011a66-b125-b445-1486-bada8e06b994@csgroup.eu>
+ <48f2779d-bc62-c7f5-c40e-7238a16b90fb@huawei.com>
+From:   Kefeng Wang <wangkefeng.wang@huawei.com>
+In-Reply-To: <48f2779d-bc62-c7f5-c40e-7238a16b90fb@huawei.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.177.243]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggpemm500001.china.huawei.com (7.185.36.107)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 05 2022 at 01:38, Matthew Wilcox wrote:
-> On Thu, May 05, 2022 at 02:22:30AM +0200, Thomas Gleixner wrote:
->> > That is, rwsem_wait_read() puts the thread on the rwsem's wait queue,
->> > and wakes it up without giving it the lock.  Now this thread will never
->> > be able to block any thread that tries to acquire mmap_sem for write.
->> 
->> Never?
->> 
->>  	if (down_read_trylock(&vma->sem)) {
->> 
->> ---> preemption by writer
+
+On 2022/5/3 9:06, Tong Tiangen wrote:
 >
-> Ah!  This is a different semaphore.  Yes, it can be preempted while
-> holding the VMA rwsem and block a thread which is trying to modify the
-> VMA which will then block all threads from faulting _on that VMA_,
-> but it won't affect page faults on any other VMA.
-
-Ooops. Missed that detail. Too many semaphores here.
-
-> It's only Better, not Best (the Best approach was proposed on Monday
-> afternoon, and the other MM developers asked us to only go as far as
-> Better and see if that was good enough).
-
-:)
-
->> The information gathered from /proc/pid/smaps is unreliable at the point
->> where the lock is dropped already today. So it does not make a
->> difference whether the VMAs have a 'read me if you really think it's
->> useful' sideband information which gets updated when the VMA changes and
->> allows to do:
 >
-> Mmm.  I'm not sure that we want to maintain the smaps information on
-> the off chance that somebody wants to query it.
-
-Fair enough, but then the question is whether it's more reasonable to
-document that if you want to read that nonsense, then you have to live
-with the consequences. The problem with many of those interfaces is that
-they have been added for whatever reasons, became ABI and people are
-suddenly making performance claims which might not be justified at all.
-
-We really have to make our mind up and make decisions whether we want to
-solve every "I want a pony" complaint just because.
-
->> But looking at the stuff which gets recomputed and reevaluated in that
->> proc/smaps code this makes a lot of sense, because most if not all of
->> this information is already known at the point where the VMA is modified
->> while holding mmap_sem for useful reasons, no?
+> 在 2022/5/2 22:24, Christophe Leroy 写道:
+>>
+>>
+>> Le 20/04/2022 à 05:04, Tong Tiangen a écrit :
+>>> x86/powerpc has it's implementation of copy_mc_to_user but not use 
+>>> #define
+>>> to declare.
+>>>
+>>> This may cause problems, for example, if other architectures open
+>>> CONFIG_ARCH_HAS_COPY_MC, but want to use copy_mc_to_user() outside the
+>>> architecture, the code add to include/linux/uaddess.h is as follows:
+>>>
+>>>       #ifndef copy_mc_to_user
+>>>       static inline unsigned long __must_check
+>>>       copy_mc_to_user(void *dst, const void *src, size_t cnt)
+>>>       {
+>>>         ...
+>>>       }
+>>>       #endif
+>>>
+>>> Then this definition will conflict with the implementation of 
+>>> x86/powerpc
+>>> and cause compilation errors as follow:
+>>>
+>>> Fixes: ec6347bb4339 ("x86, powerpc: Rename memcpy_mcsafe() to 
+>>> copy_mc_to_{user, kernel}()")
+>>
+>> I don't understand, what does it fix really ? What was the
+>> (existing/real) bug introduced by that patch and that your are fixing ?
+>>
+>> If those defined had been expected and missing, we would have had a
+>> build failure. If you have one, can you describe it ?
 >
-> I suspect the only way to know is to try to implement it, and then
-> benchmark it.
+It could prevent future problems when patch3 is introduced， and yes，for 
+now，
 
-Sure. There are other ways than having a RCU protected info, e.g. a
-sequence count which ensures that the to be read information is
-consistent.
+this patch won't fix any issue，we could drop the fix tag, and update the 
+changelog.
 
-Thanks,
 
-        tglx
+> There will be build failure after patch 3 is added, there is a little
+> confusing for a reader of this commit in isolation.
+> In the next version, I will put this patch after patch 3.
+This is an alternative.
+>
+> Thanks,
+> Tong.
+> .

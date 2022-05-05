@@ -2,69 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7F5551BB4A
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 10:58:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A67D51BB51
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 11:00:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345239AbiEEJBx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 05:01:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42808 "EHLO
+        id S1351424AbiEEJEQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 05:04:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351298AbiEEJBo (ORCPT
+        with ESMTP id S1351313AbiEEJEJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 05:01:44 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 058BB4BB83
-        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 01:58:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651741079; x=1683277079;
-  h=message-id:subject:from:to:date:in-reply-to:references:
-   mime-version:content-transfer-encoding;
-  bh=OwaADqInLFvML8Pzn4Xj8vEJaMmYcXVodZ6+QSyN9F0=;
-  b=O4zw4w0n5hdX8uMVJnkzi3HMQtbV5nd+5NOmlvnifnLnBbpVwbLHpW1k
-   Yd2O+miTCFCQk6qQvtP8IeXCPbupST71dAblDr3fO8Hsul5ORbkBhnQvf
-   9YPmgRaAxKWxIx097mfF5MwCLsz5VZ3m/iuR/McUxHerWUZta4wQnqS4S
-   d6ONjoB4OTw/Kch88lqFc1IwhuFqjcaC1OiZP8uN9JRjzJDLsTWe+qbV6
-   HfBngH7WbpxLy+CeHJ+O90CTMHpL3G7n3rbZhjfbcpy7110DxQhdjFDj8
-   W6CfLZb0c50YCk9Dq9/OCfFLz1jtnvlZ623xq4J8y11F2GpWF74z2hnvp
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10337"; a="268196432"
-X-IronPort-AV: E=Sophos;i="5.91,200,1647327600"; 
-   d="scan'208";a="268196432"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2022 01:57:59 -0700
-X-IronPort-AV: E=Sophos;i="5.91,200,1647327600"; 
-   d="scan'208";a="537244278"
-Received: from jchen40-mobl2.ccr.corp.intel.com ([10.254.213.126])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2022 01:57:55 -0700
-Message-ID: <867bc216386eb6cbf54648f23e5825830f5b922e.camel@intel.com>
-Subject: Re: RFC: Memory Tiering Kernel Interfaces
-From:   "ying.huang@intel.com" <ying.huang@intel.com>
-To:     Wei Xu <weixugc@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Yang Shi <shy828301@gmail.com>, Linux MM <linux-mm@kvack.org>,
-        Greg Thelen <gthelen@google.com>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Jagdish Gediya <jvgediya@linux.ibm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Alistair Popple <apopple@nvidia.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Michal Hocko <mhocko@kernel.org>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Brice Goglin <brice.goglin@gmail.com>,
-        Feng Tang <feng.tang@intel.com>, Jonathan.Cameron@huawei.com
-Date:   Thu, 05 May 2022 16:57:53 +0800
-In-Reply-To: <CAAPL-u9sVx94ACSuCVN8V0tKp+AMxiY89cro0japtyB=xNfNBw@mail.gmail.com>
-References: <CAAPL-u9sVx94ACSuCVN8V0tKp+AMxiY89cro0japtyB=xNfNBw@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.38.3-1 
+        Thu, 5 May 2022 05:04:09 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 973E41FCF8
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 02:00:29 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id bv19so7450483ejb.6
+        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 02:00:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=9AhHvge8RPPYxMTc08AdPjB0Im0yrHzhMR6FLazEcKY=;
+        b=qCcqE7MjKRccPt6aVTkfa2QCmPSM6UECqx8iMHUMeYy7r7GtvA4hPANJ6oS5frF3Oy
+         K7t+2k/Qj+7oxoz/8PppTw7UDI0HuNnIIxhhV9kJ0R11ryMFNziwtFc6LFyvAQSI226p
+         jdggYUSFS/V8rKTveXc/9EH+uqfreR1WV8PB83QVHzofB0RuTuyNS0L6HJljo57wxO0b
+         foLI8v6fh/oXQNRQoiOmtZRzDvkb2alBnjzS1u9J355JmXvsuKy8FtPqx43Fipa2u3K/
+         SOeOJpvLDnmZwZuSDORaItASRxuR2eUTNcDkA9iVkiat4JaUVWWRcmdGDwJofVu5u9JO
+         K61w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=9AhHvge8RPPYxMTc08AdPjB0Im0yrHzhMR6FLazEcKY=;
+        b=ZlCAFMWErqId77wBXSOYfYX7vDbMNsvw140pJ007bHye3bn4XPXJeR2R7vJGOGWzYa
+         87rfEnXcy5Fk4lR9X+tV45LarypaWFQwj1/a1DGDFKNL8HIEujhoAxcoQsBc39pWDxbj
+         HueSf6NICccrxmzn9iaUTIt75ZlsPjEeCDTgTjT+nsMFro+iAYIEVyM4rYQBpwCratnX
+         jiFhKhBcuxkQmnIhsV6mIoTtW7c0TWoXJN8antLT96clV3oRkjR2wJK5f3R+nf3mnnnU
+         kv0Hhi4ycGMm3PcIw8Li5gnr7upOokOWjuVcTkhI8hqO6v0D9oKeIEdarynjDkC4ouPj
+         oUxg==
+X-Gm-Message-State: AOAM5313fNsW/GkKJtVGpUNjHzyQl//jrGfMRsW9yHmH8o0tvpnrfYtc
+        1lVmaGEURYK8VkhFgce9gq3NNA==
+X-Google-Smtp-Source: ABdhPJyVYeKkXidgPkQrPg7qjd5RnUZ/ol5zwHrgIrLMcOzGQ7cFpuk9ivJ15p5PLg/Zb/0gPvZatg==
+X-Received: by 2002:a17:906:300d:b0:6ec:c1b:9780 with SMTP id 13-20020a170906300d00b006ec0c1b9780mr24836204ejz.415.1651741228199;
+        Thu, 05 May 2022 02:00:28 -0700 (PDT)
+Received: from [192.168.0.217] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id z18-20020a05640240d200b0042617ba63a0sm537952edb.42.2022.05.05.02.00.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 05 May 2022 02:00:27 -0700 (PDT)
+Message-ID: <a099eb33-91a0-0262-f6c0-a77dc7aec146@linaro.org>
+Date:   Thu, 5 May 2022 11:00:26 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH] spi: dt-bindings: qcom,spi-geni-qcom: allow three
+ interconnects
+Content-Language: en-US
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-spi@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220504125119.190526-1-krzysztof.kozlowski@linaro.org>
+ <YnKVLxmz0hhQGNzI@sirena.org.uk>
+ <cfba178d-ff36-910b-3067-ce32b701b643@linaro.org>
+ <YnKZyCogvngR7zfc@sirena.org.uk>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <YnKZyCogvngR7zfc@sirena.org.uk>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,296 +82,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-04-29 at 19:10 -0700, Wei Xu wrote:
-> The current kernel has the basic memory tiering support: Inactive
-> pages on a higher tier NUMA node can be migrated (demoted) to a lower
-> tier NUMA node to make room for new allocations on the higher tier
-> NUMA node.  Frequently accessed pages on a lower tier NUMA node can be
-> migrated (promoted) to a higher tier NUMA node to improve the
-> performance.
-> 
-> A tiering relationship between NUMA nodes in the form of demotion path
-> is created during the kernel initialization and updated when a NUMA
-> node is hot-added or hot-removed.  The current implementation puts all
-> nodes with CPU into the top tier, and then builds the tiering hierarchy
-> tier-by-tier by establishing the per-node demotion targets based on
-> the distances between nodes.
-> 
-> The current memory tiering interface needs to be improved to address
-> several important use cases:
-> 
-> * The current tiering initialization code always initializes
->   each memory-only NUMA node into a lower tier.  But a memory-only
->   NUMA node may have a high performance memory device (e.g. a DRAM
->   device attached via CXL.mem or a DRAM-backed memory-only node on
->   a virtual machine) and should be put into the top tier.
-> 
-> * The current tiering hierarchy always puts CPU nodes into the top
->   tier. But on a system with HBM (e.g. GPU memory) devices, these
->   memory-only HBM NUMA nodes should be in the top tier, and DRAM nodes
->   with CPUs are better to be placed into the next lower tier.
-> 
-> * Also because the current tiering hierarchy always puts CPU nodes
->   into the top tier, when a CPU is hot-added (or hot-removed) and
->   triggers a memory node from CPU-less into a CPU node (or vice
->   versa), the memory tiering hierarchy gets changed, even though no
->   memory node is added or removed.  This can make the tiering
->   hierarchy much less stable.
-> 
-> * A higher tier node can only be demoted to selected nodes on the
->   next lower tier, not any other node from the next lower tier.  This
->   strict, hard-coded demotion order does not work in all use cases
->   (e.g. some use cases may want to allow cross-socket demotion to
->   another node in the same demotion tier as a fallback when the
->   preferred demotion node is out of space), and has resulted in the
->   feature request for an interface to override the system-wide,
->   per-node demotion order from the userspace.
-> 
-> * There are no interfaces for the userspace to learn about the memory
->   tiering hierarchy in order to optimize its memory allocations.
-> 
-> I'd like to propose revised memory tiering kernel interfaces based on
-> the discussions in the threads:
-> 
-> - https://lore.kernel.org/lkml/20220425201728.5kzm4seu7rep7ndr@offworld/T/
-> - https://lore.kernel.org/linux-mm/20220426114300.00003ad8@Huawei.com/t/
-> 
-> 
-> Sysfs Interfaces
-> ================
-> 
-> * /sys/devices/system/node/memory_tiers
-> 
->   Format: node list (one tier per line, in the tier order)
-> 
->   When read, list memory nodes by tiers.
-> 
->   When written (one tier per line), take the user-provided node-tier
->   assignment as the new tiering hierarchy and rebuild the per-node
->   demotion order.  It is allowed to only override the top tiers, in
->   which cases, the kernel will establish the lower tiers automatically.
-> 
-> 
-> Kernel Representation
-> =====================
-> 
-> * nodemask_t node_states[N_TOPTIER_MEMORY]
-> 
->   Store all top-tier memory nodes.
-> 
-> * nodemask_t memory_tiers[MAX_TIERS]
-> 
->   Store memory nodes by tiers.
-> 
-> * struct demotion_nodes node_demotion[]
-> 
->   where: struct demotion_nodes { nodemask_t preferred; nodemask_t allowed; }
-> 
->   For a node N:
-> 
->   node_demotion[N].preferred lists all preferred demotion targets;
-> 
->   node_demotion[N].allowed lists all allowed demotion targets
->   (initialized to be all the nodes in the same demotion tier).
-> 
-> 
-> Tiering Hierarchy Initialization
-> ================================
-> 
-> By default, all memory nodes are in the top tier (N_TOPTIER_MEMORY).
-> 
-> A device driver can remove its memory nodes from the top tier, e.g.
-> a dax driver can remove PMEM nodes from the top tier.
-> 
-> The kernel builds the memory tiering hierarchy and per-node demotion
-> order tier-by-tier starting from N_TOPTIER_MEMORY.  For a node N, the
-> best distance nodes in the next lower tier are assigned to
-> node_demotion[N].preferred and all the nodes in the next lower tier
-> are assigned to node_demotion[N].allowed.
-> 
-> node_demotion[N].preferred can be empty if no preferred demotion node
-> is available for node N.
-> 
-> If the userspace overrides the tiers via the memory_tiers sysfs
-> interface, the kernel then only rebuilds the per-node demotion order
-> accordingly.
-> 
-> Memory tiering hierarchy is rebuilt upon hot-add or hot-remove of a
-> memory node, but is NOT rebuilt upon hot-add or hot-remove of a CPU
-> node.
-> 
-> 
-> Memory Allocation for Demotion
-> ==============================
-> 
-> When allocating a new demotion target page, both a preferred node
-> and the allowed nodemask are provided to the allocation function.
-> The default kernel allocation fallback order is used to allocate the
-> page from the specified node and nodemask.
-> 
-> The memopolicy of cpuset, vma and owner task of the source page can
-> be set to refine the demotion nodemask, e.g. to prevent demotion or
-> select a particular allowed node as the demotion target.
-> 
-> 
-> Examples
-> ========
-> 
-> * Example 1:
->   Node 0 & 1 are DRAM nodes, node 2 & 3 are PMEM nodes.
-> 
->   Node 0 has node 2 as the preferred demotion target and can also
->   fallback demotion to node 3.
-> 
->   Node 1 has node 3 as the preferred demotion target and can also
->   fallback demotion to node 2.
-> 
->   Set mempolicy to prevent cross-socket demotion and memory access,
->   e.g. cpuset.mems=0,2
-> 
-> node distances:
-> node   0    1    2    3
->    0  10   20   30   40
->    1  20   10   40   30
->    2  30   40   10   40
->    3  40   30   40   10
-> 
-> /sys/devices/system/node/memory_tiers
-> 0-1
-> 2-3
-> 
-> N_TOPTIER_MEMORY: 0-1
-> 
-> node_demotion[]:
->   0: [2], [2-3]
->   1: [3], [2-3]
->   2: [],  []
->   3: [],  []
-> 
-> * Example 2:
->   Node 0 & 1 are DRAM nodes.
->   Node 2 is a PMEM node and closer to node 0.
-> 
->   Node 0 has node 2 as the preferred and only demotion target.
-> 
->   Node 1 has no preferred demotion target, but can still demote
->   to node 2.
-> 
->   Set mempolicy to prevent cross-socket demotion and memory access,
->   e.g. cpuset.mems=0,2
-> 
-> node distances:
-> node   0    1    2
->    0  10   20   30
->    1  20   10   40
->    2  30   40   10
-> 
-> /sys/devices/system/node/memory_tiers
-> 0-1
-> 2
-> 
-> N_TOPTIER_MEMORY: 0-1
-> 
-> node_demotion[]:
->   0: [2], [2]
->   1: [],  [2]
->   2: [],  []
-> 
-> 
-> * Example 3:
->   Node 0 & 1 are DRAM nodes.
->   Node 2 is a PMEM node and has the same distance to node 0 & 1.
-> 
->   Node 0 has node 2 as the preferred and only demotion target.
-> 
->   Node 1 has node 2 as the preferred and only demotion target.
-> 
-> node distances:
-> node   0    1    2
->    0  10   20   30
->    1  20   10   30
->    2  30   30   10
-> 
-> /sys/devices/system/node/memory_tiers
-> 0-1
-> 2
-> 
-> N_TOPTIER_MEMORY: 0-1
-> 
-> node_demotion[]:
->   0: [2], [2]
->   1: [2], [2]
->   2: [],  []
-> 
-> 
-> * Example 4:
->   Node 0 & 1 are DRAM nodes, Node 2 is a memory-only DRAM node.
-> 
->   All nodes are top-tier.
-> 
-> node distances:
-> node   0    1    2
->    0  10   20   30
->    1  20   10   30
->    2  30   30   10
-> 
-> /sys/devices/system/node/memory_tiers
-> 0-2
-> 
-> N_TOPTIER_MEMORY: 0-2
-> 
-> node_demotion[]:
->   0: [],  []
->   1: [],  []
->   2: [],  []
-> 
-> 
-> * Example 5:
->   Node 0 is a DRAM node with CPU.
->   Node 1 is a HBM node.
->   Node 2 is a PMEM node.
-> 
->   With userspace override, node 1 is the top tier and has node 0 as
->   the preferred and only demotion target.
-> 
->   Node 0 is in the second tier, tier 1, and has node 2 as the
->   preferred and only demotion target.
-> 
->   Node 2 is in the lowest tier, tier 2, and has no demotion targets.
-> 
-> node distances:
-> node   0    1    2
->    0  10   21   30
->    1  21   10   40
->    2  30   40   10
-> 
-> /sys/devices/system/node/memory_tiers (userspace override)
-> 1
-> 0
-> 2
-> 
-> N_TOPTIER_MEMORY: 1
-> 
-> node_demotion[]:
->   0: [2], [2]
->   1: [0], [0]
->   2: [],  []
+On 04/05/2022 17:20, Mark Brown wrote:
+>> Thanks Mark, but as explained in commit below "---" - this is a fix for
+>> commit in Qualcomm/Bjorn tree. Could you ack it instead?
+> 
+> I was expecting this to be a fix for some change in the DTs in the
+> Qualcomm tree.  Why is there a change to the SPI bindings in there?  I
+> don't seem to have reviewed it...
 
-Sorry for late reply.
+I don't know, Mark. The confusion was not intended. The second patch in
+the set depended on SPI patch, so probably after three weeks Bjorn just
+took entire set.
 
-I think the proposed interfaces above and more "tiered" organization is
-a good idea in general.  As in your later email, we should use one file
-for each tier as suggested by Dave Hansen.  And we can start with 2
-tiers for now.  That is, all nodes start with tier0, and the nodes
-onlined via kmem dax driver are in tierN (N >= 1) as suggested by Aneesh
-Kumar and Jagdish Gediya.  When we have more information and clearer
-requirement in the future, we can improve our implementation and extend
-our user space interface.
+https://lore.kernel.org/all/20220404064017.68634-1-krzysztof.kozlowski@linaro.org/
 
-We can even start with just one file: "tier0", because all nodes except
-that in tier0 will be in tier1.
-
-Best Regards,
-Huang, Ying
-
-
+Best regards,
+Krzysztof

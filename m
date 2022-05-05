@@ -2,99 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B54C451C105
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 15:41:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB96751C109
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 15:42:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380019AbiEENoT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 09:44:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55464 "EHLO
+        id S1379839AbiEENqF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 09:46:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379925AbiEENoB (ORCPT
+        with ESMTP id S1379771AbiEENqB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 09:44:01 -0400
-Received: from us-smtp-delivery-74.mimecast.com (us-smtp-delivery-74.mimecast.com [170.10.129.74])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 76435DF75
-        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 06:40:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651758019;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=cqdrYW62uTnZvKa7HUn2Nv6tPwsemJAGd//mOeVF61A=;
-        b=ZPcLsevF29doU2+AxGy2OXrDZtUQ2A5YITJPwvYEqIPS79RK4kSozPiHZm3UnXo1ZMICBQ
-        Koe7ypr+zF4Fhj+qkP5mtY3ZjF7aZrKpIAKttuuwTnG66fhkpo0CojACWU/AUQEIPRKrQP
-        A1PhnX3nieaHf+DGa0LtaveC/BZzhy4=
-Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
- [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-63-9oBbxT6vPfmdsgpZkJfF7A-1; Thu, 05 May 2022 09:40:18 -0400
-X-MC-Unique: 9oBbxT6vPfmdsgpZkJfF7A-1
-Received: by mail-ej1-f71.google.com with SMTP id nd34-20020a17090762a200b006e0ef16745cso2629436ejc.20
-        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 06:40:18 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=cqdrYW62uTnZvKa7HUn2Nv6tPwsemJAGd//mOeVF61A=;
-        b=2OPTAfDmG1fbnpKFVb7zgCfCPKFK6ilHly8ExnCC9SOJacwz2Ya5y0Jp47Yn/fTAJ0
-         LimRdtTmvsa2O3i4jFCMi0xIWw/k3rA2U/lBocL1hxYEM/vn2PKVZL3hukbT40A7pB36
-         GuDULlfS+E4rKUIWZAthiGFM0wOA9PHCRq0higwaQIIxGLT+quvmVOONU79F3SLv21+z
-         o7E7hvQxLDXXojqaRovlc2L3PMB9HNNEU6TiFAJY+G8C8sqLRNqYhWI3jhyqO3KHxqyH
-         tAeztQZ9aIR3aWBEBAIFF8PApB+NC/YHs/JNFxI+IzThSzfCsP0Iayi4fkapYzkE4sug
-         rPyA==
-X-Gm-Message-State: AOAM5308fDWf2L9kTM5BjPZ0bkCKDgTtAWubYslp/Ze70So6GNkRJa53
-        5hYyoAAUuhZ/+mEvDmdsC99ObRmWfgPPLB4f+2zTPFgxMaUJOnoP2Cp7IudTm0HL8OPQFXzZ9us
-        DjyOkNWTTBvd/lr7akoPJRlHv
-X-Received: by 2002:a05:6402:1399:b0:410:9fa2:60d6 with SMTP id b25-20020a056402139900b004109fa260d6mr7209286edv.35.1651758017318;
-        Thu, 05 May 2022 06:40:17 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxPe6WJb7OIa3ESzr+aNmV7030frJYOWHSOZsepP3IUesecusunQPL4mGY5h9sKeBQVJyQf3Q==
-X-Received: by 2002:a05:6402:1399:b0:410:9fa2:60d6 with SMTP id b25-20020a056402139900b004109fa260d6mr7209258edv.35.1651758017072;
-        Thu, 05 May 2022 06:40:17 -0700 (PDT)
-Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
-        by smtp.googlemail.com with ESMTPSA id c24-20020aa7c758000000b0042617ba63b4sm824307eds.62.2022.05.05.06.40.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 05 May 2022 06:40:16 -0700 (PDT)
-Message-ID: <84920fc8-a966-25d2-9b3b-c7918c0b9cd4@redhat.com>
-Date:   Thu, 5 May 2022 15:40:15 +0200
+        Thu, 5 May 2022 09:46:01 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7227757158;
+        Thu,  5 May 2022 06:42:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651758141; x=1683294141;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Klh2w7LNZv2eWeVfq9/1/u2/n898gwlGd/zAyuhv2Ck=;
+  b=D6HB/XyINBWflW+0U3NVPO4hEX9hL9QEQG8adrCWWHPxjLTmIF2D492L
+   qvl/wOvGQu9oG7zuBvTJlrZj2GUNlgDEaHXYYCoukhe1aoxrDacdiD0Qc
+   7Ge4f7xN5X0hba/bW3FEFXW0S/4NCo0NlQmq7n55uLLFzGPAByWQ0fwgQ
+   01lCNzdeKdCwLVzuVEceVOz9vwHl+Dp1zJC8yNjg6sVNTs/ewbw+sV4sJ
+   osGr5tCByFjkamInAS24ZbGfjLycVafM9d1noZ5Gw0cxIwXfPZZw7dJVK
+   kCCX5NvDNHiRmIS9SRqdxQLjCpUTuEjBKzCPxnwPWUzIRjqQTZGIaozLT
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10338"; a="248019615"
+X-IronPort-AV: E=Sophos;i="5.91,201,1647327600"; 
+   d="scan'208";a="248019615"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2022 06:42:21 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,201,1647327600"; 
+   d="scan'208";a="708942820"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 05 May 2022 06:42:18 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nmbkH-000CR9-R7;
+        Thu, 05 May 2022 13:42:17 +0000
+Date:   Thu, 5 May 2022 21:41:47 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Oleksij Rempel <o.rempel@pengutronix.de>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        netdev@vger.kernel.org, Oleksij Rempel <o.rempel@pengutronix.de>,
+        kernel@pengutronix.de, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next v3 4/7] net: phy: introduce
+ genphy_c45_pma_baset1_read_master_slave()
+Message-ID: <202205052146.y8znPT8Q-lkp@intel.com>
+References: <20220505063318.296280-5-o.rempel@pengutronix.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH] x86: Function missing integer return value
-Content-Language: en-US
-To:     "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>,
-        Juergen Gross <jgross@suse.com>, Li kunyu <kunyu@nfschina.com>
-Cc:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com,
-        joro@8bytes.org, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
-        seanjc@google.com
-References: <20220505113218.93520-1-kunyu@nfschina.com>
- <ba469ccc-f5c4-248a-4c26-1cbf487fd62e@suse.com>
- <fdd2d7e2-cf7c-4bfd-39d2-af5a3cf60b26@maciej.szmigiero.name>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <fdd2d7e2-cf7c-4bfd-39d2-af5a3cf60b26@maciej.szmigiero.name>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220505063318.296280-5-o.rempel@pengutronix.de>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/5/22 15:37, Maciej S. Szmigiero wrote:
->> This statement is not reachable, so the patch is adding unneeded dead
->> code only.
-> 
-> Maybe some static checker isn't smart enough to figure this out.
+Hi Oleksij,
 
-The static checker really should be improved.  This is a while(true), 
-not the halting problem. :)
+I love your patch! Perhaps something to improve:
 
-Paolo
+[auto build test WARNING on net-next/master]
 
+url:    https://github.com/intel-lab-lkp/linux/commits/Oleksij-Rempel/add-ti-dp83td510-support/20220505-143922
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git 4950b6990e3b1efae64a5f6fc5738d25e3b816b3
+config: x86_64-randconfig-a016 (https://download.01.org/0day-ci/archive/20220505/202205052146.y8znPT8Q-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 5e004fb787698440a387750db7f8028e7cb14cfc)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/80dad43edb356876484acb116b8a906dd4bef941
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Oleksij-Rempel/add-ti-dp83td510-support/20220505-143922
+        git checkout 80dad43edb356876484acb116b8a906dd4bef941
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/net/phy/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/net/phy/phy-c45.c:558: warning: expecting prototype for genphy_c45_baset1_read_master_slave(). Prototype was for genphy_c45_pma_baset1_read_master_slave() instead
+
+
+vim +558 drivers/net/phy/phy-c45.c
+
+   552	
+   553	/**
+   554	 * genphy_c45_baset1_read_master_slave - read forced master/slave configuration
+   555	 * @phydev: target phy_device struct
+   556	 */
+   557	int genphy_c45_pma_baset1_read_master_slave(struct phy_device *phydev)
+ > 558	{
+   559		int val;
+   560	
+   561		phydev->master_slave_state = MASTER_SLAVE_STATE_UNKNOWN;
+   562	
+   563		val = phy_read_mmd(phydev, MDIO_MMD_PMAPMD, MDIO_PMA_PMD_BT1_CTRL);
+   564		if (val < 0)
+   565			return val;
+   566	
+   567		if (val & MDIO_PMA_PMD_BT1_CTRL_CFG_MST)
+   568			phydev->master_slave_state = MASTER_SLAVE_STATE_MASTER;
+   569		else
+   570			phydev->master_slave_state = MASTER_SLAVE_STATE_SLAVE;
+   571	
+   572		return 0;
+   573	}
+   574	EXPORT_SYMBOL_GPL(genphy_c45_pma_baset1_read_master_slave);
+   575	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

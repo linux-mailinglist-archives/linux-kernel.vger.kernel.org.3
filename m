@@ -2,68 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A85F51C47C
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 18:03:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4ECE651C48C
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 18:04:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356920AbiEEQGu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 12:06:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54944 "EHLO
+        id S1381629AbiEEQIT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 12:08:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231164AbiEEQGs (ORCPT
+        with ESMTP id S233041AbiEEQIQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 12:06:48 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B7F32DE5;
-        Thu,  5 May 2022 09:03:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651766588; x=1683302588;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=zlTpNAuOWVsLMZxKenOm6Jo9aWTy0OBhL/05VXpK+aU=;
-  b=EVhNcVEZkmrXQTUB+q24buU9l4oPOunAfEopPJU33di8leg7EaWXRuOX
-   uhvDB8JUsGXOCE+pck8Rv8TVqMkso22X0z3ziZ3Fojr5iHngHqIp9O2yi
-   ZbdCdFaPZLhGFIXhB8T+BEDLrurIDEfOFjGF0Et71d53tvMmGyMI+z1hV
-   OoFijJ2gT5yiZ5ZkVFeZ7qAk3+kEKDqXxO/7puxZfdfQhXX/JN8I6wbnR
-   K/IJrUR64RC36f8n6Ji0phpwnAeophrdttAbXTqSjER1MiqubHSOIKtPi
-   hg0ERLErcma8SiFT/1wXgjkTBDeG6HPVzEhdzpK5AD8B7zx5cL8vd3KPk
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10338"; a="354594634"
-X-IronPort-AV: E=Sophos;i="5.91,201,1647327600"; 
-   d="scan'208";a="354594634"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2022 08:54:44 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,201,1647327600"; 
-   d="scan'208";a="891389408"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 05 May 2022 08:54:40 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nmdoO-000CWs-2M;
-        Thu, 05 May 2022 15:54:40 +0000
-Date:   Thu, 5 May 2022 23:54:11 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Satya Priya <quic_c_skakit@quicinc.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     kbuild-all@lists.01.org, Lee Jones <lee.jones@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        swboyd@chromium.org, quic_collinsd@quicinc.com,
-        quic_subbaram@quicinc.com, quic_jprakash@quicinc.com,
-        Satya Priya <quic_c_skakit@quicinc.com>
-Subject: Re: [PATCH V11 6/9] mfd: pm8008: Use i2c_new_dummy_device() API
-Message-ID: <202205052333.90qqQnWQ-lkp@intel.com>
-References: <1651742739-12338-7-git-send-email-quic_c_skakit@quicinc.com>
+        Thu, 5 May 2022 12:08:16 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14EED515A3;
+        Thu,  5 May 2022 09:04:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BB227B82DBE;
+        Thu,  5 May 2022 16:04:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19C73C385A4;
+        Thu,  5 May 2022 16:04:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651766674;
+        bh=HAVCUwKRzzzGViCcf2QhsPvIC0F6WRsXgFuVQn2MY9w=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=nuuatEu5lMst9s45JGhFoVMYbDXrcZTeHgSmbpsW8EzqskUyskFg9sJAhdxfPeFlP
+         HaKSPGtZNW4mWv5oIsypnLqzTgeKX6/wwnfO8dpeSeH5xKJfiDI7C9dnCHFv/5attR
+         gKTETkGyfeMJr+Z8qzwWqhbCg65soALoeeo4m4/nq2f+eGtJ2bpMT5dGwBnnjJ4jWq
+         M2KOVV4o2MdHoJTyJwbm49vJbP44M8Hl3YuCh0ZWPX4CGl7LGqPWPm2J65VusdKCyE
+         TjojtlmOUlL3rTOMqrR66ox7su6Jgd+FFWYyYJsdOD6oF7Vf0Nvs9pwkD5T8zRCqG7
+         HrsB88hBaCfJg==
+Date:   Thu, 5 May 2022 09:04:32 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Carlos Fernandez <carlos.fernandez@technica-engineering.de>
+Cc:     Paolo Abeni <pabeni@redhat.com>,
+        Carlos Fernansez <carlos.escuin@gmail.com>,
+        "carlos.fernandez@technica-enineering.de" 
+        <carlos.fernandez@technica-enineering.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] net/macsec copy salt to MACSec ctx for XPN
+Message-ID: <20220505090432.544ce339@kernel.org>
+In-Reply-To: <AM9PR08MB6788E94C6961047699B20871DBC29@AM9PR08MB6788.eurprd08.prod.outlook.com>
+References: <XPN copy to MACSec context>
+        <20220502121837.22794-1-carlos.escuin@gmail.com>
+        <f277699b10b28b0553c8bbfc296e14096b9f402a.camel@redhat.com>
+        <AM9PR08MB6788E94C6961047699B20871DBC29@AM9PR08MB6788.eurprd08.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1651742739-12338-7-git-send-email-quic_c_skakit@quicinc.com>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,50 +63,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Satya,
-
-Thank you for the patch! Perhaps something to improve:
-
-[auto build test WARNING on lee-mfd/for-mfd-next]
-[also build test WARNING on robh/for-next broonie-regulator/for-next v5.18-rc5 next-20220505]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Satya-Priya/Add-Qualcomm-Technologies-Inc-PM8008-regulator-driver/20220505-173045
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git for-mfd-next
-config: m68k-allyesconfig (https://download.01.org/0day-ci/archive/20220505/202205052333.90qqQnWQ-lkp@intel.com/config)
-compiler: m68k-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/28e91eacf6442c72c4f1ca25e5ad90fedc73ab73
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Satya-Priya/Add-Qualcomm-Technologies-Inc-PM8008-regulator-driver/20220505-173045
-        git checkout 28e91eacf6442c72c4f1ca25e5ad90fedc73ab73
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash drivers/mfd/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> drivers/mfd/qcom-pm8008.c:154:16: warning: no previous prototype for 'pm8008_get_regmap' [-Wmissing-prototypes]
-     154 | struct regmap *pm8008_get_regmap(struct pm8008_data *chip)
-         |                ^~~~~~~~~~~~~~~~~
+On Thu, 5 May 2022 12:32:33 +0000 Carlos Fernandez wrote:
+> When macsec offloading is used with XPN, before mdo_add_rxsa
+> and mdo_add_txsa functions are called, the key salt is not
+> copied to the macsec context struct.
 
 
-vim +/pm8008_get_regmap +154 drivers/mfd/qcom-pm8008.c
+So that it can be read out later by user space, but kernel 
+doesn't need it. Is that correct?
 
-   153	
- > 154	struct regmap *pm8008_get_regmap(struct pm8008_data *chip)
-   155	{
-   156		return chip->regulators_regmap;
-   157	}
-   158	
+Please also see below.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> Fix by copying salt to context struct before calling the
+> offloading functions.
+> 
+> Fixes: 48ef50fa866a ("macsec: Netlink support of XPN cipher suites")
+> Signed-off-by: Carlos Fernandez <carlos.fernandez@technica-engineering.de>
+> ---
+>  drivers/net/macsec.c | 30 ++++++++++++++++--------------
+>  1 file changed, 16 insertions(+), 14 deletions(-)
+
+[snip]
+
+>         rtnl_unlock();
+> --
+> 2.25.1
+> 
+> ________________________________________
+> From: Paolo Abeni <pabeni@redhat.com>
+> Sent: Tuesday, May 3, 2022 1:42 PM
+> To: Carlos Fernansez
+> Cc: carlos.fernandez@technica-enineering.de; Carlos Fernandez; David S. Miller; Eric Dumazet; Jakub Kicinski; netdev@vger.kernel.org; linux-kernel@vger.kernel.org
+> Subject: Re: [PATCH] net/macsec copy salt to MACSec ctx for XPN
+> 
+> CAUTION: This email originated from outside of the organization. Do not click links or open attachments unless you recognize the sender and know the content is safe.
+
+You'll need to make a fresh posting without this quote and the legal
+footer. Posting as a new thread is encouraged, you don't need to try
+to make it a reply to the previous posting.
+
+> Hello,
+> 
+> On Mon, 2022-05-02 at 14:18 +0200, Carlos Fernansez wrote:
+> > From: Carlos Fernandez <carlos.fernandez@technica-engineering.de>
+> >
+> > Salt and KeyId copied to offloading context.
+> >
+> > If not, offloaded phys cannot work with XPN
+> >
+> > Signed-off-by: Carlos Fernandez <carlos.fernandez@technica-engineering.de>  
+> 
+> This looks like a bugfix, could you please provide a relevant 'Fixes'
+> tag? (in a v2).
+

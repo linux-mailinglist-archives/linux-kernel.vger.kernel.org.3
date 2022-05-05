@@ -2,147 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5898951B796
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 07:46:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CFD151B7A0
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 07:55:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243820AbiEEFuS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 01:50:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43820 "EHLO
+        id S243839AbiEEF7R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 01:59:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243729AbiEEFuQ (ORCPT
+        with ESMTP id S231531AbiEEF7O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 01:50:16 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 803F7344CC;
-        Wed,  4 May 2022 22:46:37 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id gh6so6721410ejb.0;
-        Wed, 04 May 2022 22:46:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:to:cc:references
-         :from:in-reply-to:content-transfer-encoding;
-        bh=AAqxEn14F2urq7gRW6XIInZJqYKSj6uaZRKkj7ztyxc=;
-        b=iVInBQQc78CUYacNlpsH9Ud7kB6dqn23jW7w+jMJscvFFkOHvZBF54dzHIWhvU3llN
-         qW0uY0HHzTq1H9e10V+kPJH7f9nsk5NsPgVxzBhUXMTmiHdbSLSfbQiD6VysHFoae+Dh
-         JFilEyLYF9y7tE5HunM7u10h/4uBoOSZYLbV5OsBHJWx8zA7ewQVvD7mRBRKh0EeAf5s
-         fDfVGfhSWyajKH0AaR0S1TvwlCtCCjXTck9Cumtnlv7g4rsUW/ExegF650iQ+7M8EkaJ
-         W9OofsnjDhmPo7P59xG8naTefJsMm8WeFaoU4y0mIE28JQ+Zg9heoq3GCh7vep4TvCgU
-         IIWg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :to:cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=AAqxEn14F2urq7gRW6XIInZJqYKSj6uaZRKkj7ztyxc=;
-        b=P6q1lg5UcmotkFwFo1YaVUTMo8yYw+I+Uo26sIUcR7iLWwSXK6sIt9k3C6VKuwvvYk
-         8FEJ7PQTZeYVNwtxjsuSC2Gc//yLVxAUCEsarrJOM8KqKHd25/FyQwQ9WNblqmVlzGaZ
-         1HHTBYbELsdEbopev1LMiOrq+eJ1QtfaovqHwejjcXrcnI7+3jeDPgpQMtAFD7pRd3TF
-         g8gFc8kC+EH1ulSDsoNI1cvpeCP7rkAZAD0npb1s1yMeWL0nGqEFi/KX/4VpJwWLXF1O
-         JxD90tYcAwEw8/TJ1owv+XlKnQ8VD9dnCIM/zefoZ5AzpXwpuF537GdfkVx89Egh1I2x
-         WdLA==
-X-Gm-Message-State: AOAM530GyxpK4FIH2jv2hA3+4MHY+kMfwA6D1pLVzrEeYPcOpbp63CJ+
-        lv2pLJkSEQSgdKGlnQeShjE=
-X-Google-Smtp-Source: ABdhPJxmEoOm7L1U4kbR4F1xUSjzh+Guzq53ory3XJUYqqgkU5cBr7/B9HTGtNiGANSfQ2qgdwaB1Q==
-X-Received: by 2002:a17:907:7f09:b0:6f4:9f76:d10a with SMTP id qf9-20020a1709077f0900b006f49f76d10amr9971400ejc.248.1651729595926;
-        Wed, 04 May 2022 22:46:35 -0700 (PDT)
-Received: from [192.168.26.149] (ip-194-187-74-233.konfederacka.maverick.com.pl. [194.187.74.233])
-        by smtp.googlemail.com with ESMTPSA id eb7-20020a170907280700b006f3ef214e4esm326062ejc.180.2022.05.04.22.46.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 04 May 2022 22:46:35 -0700 (PDT)
-Message-ID: <318c0814-7f0b-9798-6998-5039094b010d@gmail.com>
-Date:   Thu, 5 May 2022 07:46:34 +0200
+        Thu, 5 May 2022 01:59:14 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A748B1AD8E;
+        Wed,  4 May 2022 22:55:34 -0700 (PDT)
+X-UUID: b391feff2acf4deea7391f61bc0538e2-20220505
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.4,REQID:3946083e-4c33-41de-bcf0-50e7fa125dcf,OB:0,LO
+        B:0,IP:0,URL:8,TC:0,Content:0,EDM:0,RT:0,SF:100,FILE:0,RULE:Release_Ham,AC
+        TION:release,TS:108
+X-CID-INFO: VERSION:1.1.4,REQID:3946083e-4c33-41de-bcf0-50e7fa125dcf,OB:0,LOB:
+        0,IP:0,URL:8,TC:0,Content:0,EDM:0,RT:0,SF:100,FILE:0,RULE:Spam_GS981B3D,AC
+        TION:quarantine,TS:108
+X-CID-META: VersionHash:faefae9,CLOUDID:b2474316-2e53-443e-b81a-655c13977218,C
+        OID:6060dbeaf70c,Recheck:0,SF:28|16|19|48,TC:nil,Content:0,EDM:-3,File:nil
+        ,QS:0,BEC:nil
+X-UUID: b391feff2acf4deea7391f61bc0538e2-20220505
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
+        (envelope-from <lina.wang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1907580698; Thu, 05 May 2022 13:55:30 +0800
+Received: from mtkmbs07n1.mediatek.inc (172.21.101.16) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Thu, 5 May 2022 13:55:29 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Thu, 5 May 2022 13:55:29 +0800
+Received: from mbjsdccf07.mediatek.inc (10.15.20.246) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 5 May 2022 13:55:28 +0800
+From:   Lina Wang <lina.wang@mediatek.com>
+To:     "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+CC:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        "Jesper Dangaard Brouer" <hawk@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        "Nick Desaulniers" <ndesaulniers@google.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Willem de Bruijn <willemb@google.com>,
+        Maciej enczykowski <maze@google.com>,
+        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>, <bpf@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>, <llvm@lists.linux.dev>,
+        Lina Wang <lina.wang@mediatek.com>
+Subject: [PATCH v6 1/2] net: fix wrong network header length
+Date:   Thu, 5 May 2022 13:48:49 +0800
+Message-ID: <20220505054850.4878-1-lina.wang@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:96.0) Gecko/20100101
- Thunderbird/96.0
-Subject: Re: [PATCH V2] nvmem: add driver handling U-Boot environment
- variables
-To:     Ahmad Fatoum <a.fatoum@pengutronix.de>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>
-Cc:     Tom Rini <trini@konsulko.com>, linux-mtd@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        u-boot@lists.denx.de, devicetree@vger.kernel.org,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>
-References: <20220503165658.13932-1-zajec5@gmail.com>
- <79c7891a-9a68-a111-094d-be9804071a9e@pengutronix.de>
-From:   =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>
-In-Reply-To: <79c7891a-9a68-a111-094d-be9804071a9e@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4.05.2022 11:23, Ahmad Fatoum wrote:
-> Hello Rafał,
-> 
-> On 03.05.22 18:56, Rafał Miłecki wrote:
->> From: Rafał Miłecki <rafal@milecki.pl>
->>
->> U-Boot stores its setup as environment variables. It's a list of
->> key-value pairs stored on flash device with a custom header.
->>
->> This commit adds an NVMEM driver that:
->> 1. Provides NVMEM access to environment vars binary data
->> 2. Extracts variables as NVMEM cells
->>
->> It can be used for:
->> 1. Accessing env variables from user-space
-> 
-> Is this already possible? The only interface I know of is the /nvmem
-> file in sysfs, but that one is not per cell, but per device.
+When clatd starts with ebpf offloaing, and NETIF_F_GRO_FRAGLIST is enable,
+several skbs are gathered in skb_shinfo(skb)->frag_list. The first skb's
+ipv6 header will be changed to ipv4 after bpf_skb_proto_6_to_4,
+network_header\transport_header\mac_header have been updated as ipv4 acts,
+but other skbs in frag_list didnot update anything, just ipv6 packets.
 
-Maybe that wasn't precise enough, I should probably write:
-1. Parsing binary data from user-space
+udp_queue_rcv_skb will call skb_segment_list to traverse other skbs in
+frag_list and make sure right udp payload is delivered to user space.
+Unfortunately, other skbs in frag_list who are still ipv6 packets are
+updated like the first skb and will have wrong transport header length.
 
-In future I'd like to extend U-Boot's "printenv" tool to support reading
-env variables blob using Linux's sysfs as documented in the
-Documentation/ABI/stable/sysfs-bus-nvmem
+e.g.before bpf_skb_proto_6_to_4,the first skb and other skbs in frag_list
+has the same network_header(24)& transport_header(64), after
+bpf_skb_proto_6_to_4, ipv6 protocol has been changed to ipv4, the first
+skb's network_header is 44,transport_header is 64, other skbs in frag_list
+didnot change.After skb_segment_list, the other skbs in frag_list has
+different network_header(24) and transport_header(44), so there will be 20
+bytes different from original,that is difference between ipv6 header and
+ipv4 header. Just change transport_header to be the same with original.
 
+Actually, there are two solutions to fix it, one is traversing all skbs
+and changing every skb header in bpf_skb_proto_6_to_4, the other is
+modifying frag_list skb's header in skb_segment_list. Considering
+efficiency, adopt the second one--- when the first skb and other skbs in
+frag_list has different network_header length, restore them to make sure
+right udp payload is delivered to user space.
 
->> +	label = of_get_property(np->parent, "label", NULL);
->> +	if (!label)
->> +		label = np->parent->name;
->> +
->> +	priv->mtd = get_mtd_device_nm(label);
->> +	if (IS_ERR(priv->mtd)) {
->> +		dev_err(dev, "Failed to find \"%s\" MTD device: %ld\n", label, PTR_ERR(priv->mtd));
->> +		return PTR_ERR(priv->mtd);
->> +	}
-> 
-> I am trying to make sense of this using the binding, but I can't.
-> Do you have an example device tree fragment?
+Signed-off-by: Lina Wang <lina.wang@mediatek.com>
+---
+ net/core/skbuff.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-This comes from unreleased yet board I'm working on.
+diff --git a/net/core/skbuff.c b/net/core/skbuff.c
+index 10bde7c6db44..e8006e0a1b25 100644
+--- a/net/core/skbuff.c
++++ b/net/core/skbuff.c
+@@ -3897,7 +3897,7 @@ struct sk_buff *skb_segment_list(struct sk_buff *skb,
+ 	unsigned int delta_len = 0;
+ 	struct sk_buff *tail = NULL;
+ 	struct sk_buff *nskb, *tmp;
+-	int err;
++	int len_diff, err;
+ 
+ 	skb_push(skb, -skb_network_offset(skb) + offset);
+ 
+@@ -3937,9 +3937,11 @@ struct sk_buff *skb_segment_list(struct sk_buff *skb,
+ 		skb_push(nskb, -skb_network_offset(nskb) + offset);
+ 
+ 		skb_release_head_state(nskb);
++		len_diff = skb_network_header_len(nskb) - skb_network_header_len(skb);
+ 		__copy_skb_header(nskb, skb);
+ 
+ 		skb_headers_offset_update(nskb, skb_headroom(nskb) - skb_headroom(skb));
++		nskb->transport_header += len_diff;
+ 		skb_copy_from_linear_data_offset(skb, -tnl_hlen,
+ 						 nskb->data - tnl_hlen,
+ 						 offset + tnl_hlen);
+-- 
+2.18.0
 
-It stores U-Boot env variables in the middle of U-Boot binary.
-
-partitions {
-	compatible = "fixed-partitions";
-	#address-cells = <1>;
-	#size-cells = <1>;
-
-	partition@0 {
-		label = "loader";
-		reg = <0x0 0x100000>;
-
-		partition@40000 {
-			compatible = "u-boot,env";
-			label = "u-boot-env";
-			reg = <0x40000 0x4000>;
-		};
-	};
-
-	partition@100000 {
-		label = "image";
-		reg = <0x100000 0x1fe00000>;
-	};
-};

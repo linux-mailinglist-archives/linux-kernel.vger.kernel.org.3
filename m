@@ -2,132 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A879051C176
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 15:53:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC30051C16D
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 15:53:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380175AbiEEN4N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 09:56:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41952 "EHLO
+        id S1380208AbiEEN4U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 09:56:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380343AbiEENze (ORCPT
+        with ESMTP id S1380328AbiEENze (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 5 May 2022 09:55:34 -0400
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E7E459325
-        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 06:51:31 -0700 (PDT)
-Received: by mail-pf1-x42d.google.com with SMTP id j6so3676430pfe.13
-        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 06:51:31 -0700 (PDT)
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CF6D57980;
+        Thu,  5 May 2022 06:51:29 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id i27so8851864ejd.9;
+        Thu, 05 May 2022 06:51:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=intel-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=oIH9/l+jKgs9B5DRYw7FbS58vVe4zVtylGwe2TjrN9M=;
-        b=iWb/KiI5Nh4F/zht1nOaD5nXxGZBVUw70MvhbB/MJ6c+5LPqpREBzsf6zsAQsrRDm8
-         rx/RYqOl+t8yV2aaX7MVFWaZvRX9f5nKsomJH2A+eg3KYprH4WqxwzJSyMckr3iJaKXk
-         JiCQBoCdirntvgQwkNUj81coh+byvO158gtCySbTKTu7QRCz3MZhlApdPH//ifXBchv0
-         UvitkHWl28bD8tdx70HEP8vaf9H3st3Uu54CmlDnMyBi7D2FUbHJQVrUAG71YMXAoyw8
-         GcDd05HWhgN9qLBr6esb2aJMpkMvKgXc/DFPVtmeJ6Fnr1DS5S6T0cBS3lXFfjEVmAnn
-         Zh/g==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=03jEfwhlWo+0F3QSErStBbhWJEDMANJVy/9rSPAUx1Y=;
+        b=gDuWgen8Trv88IGdxznU7oSgtaGFD9MISOr5rrDibBMmmE7rdJ9qzu55Y8IjlM48TA
+         Pj1rTM8nEBAfhGlUpxlZz+uzebwMmf42g21Mp/bNWSMUURl4OJqCXAnmVYIugg/zJqXT
+         ggmCRFZethoWCe6B3tJRbgQBma3Yls8XMzFVPNfH0WvxIp9HrKG4u/eguY6/k8fugqHE
+         bJjxcHaonBy5O2ss12U6jckTDgwk/iCRdtWve1Up6aZUc4pNKSBgsqkFdNhZzY3cKDhh
+         KFbS/810r+VUh/Y9fB0WrcwyPhOsGgfsSz5wOM6HxTiz1Az1/oEyM5fW7fxc85E/BhNK
+         H2nw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=oIH9/l+jKgs9B5DRYw7FbS58vVe4zVtylGwe2TjrN9M=;
-        b=BvQgHn7lAvFLTk5e9yMwoBydHCXwKIwpzZz30u63GGLTpvKAhai2U8C5NevFsyqwaI
-         +9tEV+BvOU6p59ZXpgJ0Fpq07T7zQRk6ggqTxWkXr5EXumuBMgyMXyI9ga1LXWoeghbe
-         uXKRVdaEV9YgOhaNB6G01eQJ+rEqqr4BO0prfxHuxPwWWajls6r/jYQvRBmTFcaxqrQ9
-         UVdhu37/R0U7AZcnk5LgX/MsC4T1O9jb3QGCwnrko4y08fNd5JiLEWGNfVkw5kAt6goo
-         /sHik6vBmJbLhDRXgta+YRSj1pyPFTJ+0L1lOPC3L+oGg+KavcSp7KCDvxj3xEIhATIA
-         H0yA==
-X-Gm-Message-State: AOAM531qNMnHKUvSwZof9gTXQDDMOt19B//1ADaLXszHUuViLboimDNp
-        WDDYgTdVa4t0Vjzoc4Cw+0B8cSaZ/ePJwRCaWYiV9g==
-X-Google-Smtp-Source: ABdhPJxpS0BcW8ju409ItQiIAiHo+aqD0i1wKv4dQJui6EWLaCpdb50z1BFUKtJYPkQggkeD3Blgh/QiSI1KJedl4Ug=
-X-Received: by 2002:a05:6a02:283:b0:342:703e:1434 with SMTP id
- bk3-20020a056a02028300b00342703e1434mr21850337pgb.74.1651758691003; Thu, 05
- May 2022 06:51:31 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=03jEfwhlWo+0F3QSErStBbhWJEDMANJVy/9rSPAUx1Y=;
+        b=JX7HkjnWrsBxF70znaiSanXFeElxOHdjmdLO09SG/x7/R8JkgcDO2Ex7Z+3ZWvSNl2
+         NAURg2yEjLglOsTqr5v5Ey+fQqWQTUQ66i5qVS6R1yTKC2wbUZIaQ0KWjNjXOm43Ur1r
+         K4ACQGlhO6kWipUAfo4rmSubKWvqSvDWXr4c2sgeFp7yLId4eEBnSB7gs6pjbYO9yJs7
+         ZR6dvpT3BI/Gg1dpOdTfAktGqo6cg9GCmJphSjf8PZLxHt+LLeediJ/6PbH26/q7fLAr
+         Dag5RSKQE+5P1K228pe6iu24gxRkLBWlFpysgwH8jtB5FAQMf+nO1P63x1mQjtPnCPGC
+         X0sQ==
+X-Gm-Message-State: AOAM531YYXor7wJCh9SZaPihYK8w71m5rcgtA9Aq9uoxzrGcBURzKDYo
+        JPBshY5y8ZhTUvgl0VLHhek=
+X-Google-Smtp-Source: ABdhPJxv3vaDNdwJi00++TLK8Ghuv5Ib+qTCOCEdX5gN/oc0y8OEOLbbC12VtWJ8ETtvXVM4x8Wt6w==
+X-Received: by 2002:a17:907:6e8b:b0:6f4:7147:a6ac with SMTP id sh11-20020a1709076e8b00b006f47147a6acmr16897480ejc.187.1651758687576;
+        Thu, 05 May 2022 06:51:27 -0700 (PDT)
+Received: from archbook.localnet (84-72-105-84.dclient.hispeed.ch. [84.72.105.84])
+        by smtp.gmail.com with ESMTPSA id g3-20020a056402424300b0042617ba6387sm895632edb.17.2022.05.05.06.51.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 May 2022 06:51:27 -0700 (PDT)
+From:   Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
+To:     Heiko Stuebner <heiko@sntech.de>,
+        linux-rockchip@lists.infradead.org
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel@lists.collabora.co.uk,
+        Jianqun Xu <jay.xu@rock-chips.com>, kernel@collabora.com,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>
+Subject: Re: [PATCHv2 13/21] pinctrl/rockchip: add rk3588 support
+Date:   Thu, 05 May 2022 15:51:25 +0200
+Message-ID: <1792093.MYTQk1Oth5@archbook>
+In-Reply-To: <20220504213251.264819-14-sebastian.reichel@collabora.com>
+References: <20220504213251.264819-1-sebastian.reichel@collabora.com> <20220504213251.264819-14-sebastian.reichel@collabora.com>
 MIME-Version: 1.0
-References: <cover.1649219184.git.kai.huang@intel.com> <522e37eb-68fc-35db-44d5-479d0088e43f@intel.com>
- <ecf718abf864bbb2366209f00d4315ada090aedc.camel@intel.com>
- <de24ac7e-349c-e49a-70bb-31b9bc867b10@intel.com> <9b388f54f13b34fe684ef77603fc878952e48f87.camel@intel.com>
- <d98ca73b-2d2d-757d-e937-acc83cfedfb0@intel.com> <c90a10763969077826f42be6f492e3a3e062326b.camel@intel.com>
- <fc1ca04d94ad45e79c0297719d5ef50a7c33c352.camel@intel.com>
- <664f8adeb56ba61774f3c845041f016c54e0f96e.camel@intel.com>
- <1b681365-ef98-ec78-96dc-04e28316cf0e@intel.com> <8bf596b45f68363134f431bcc550e16a9a231b80.camel@intel.com>
- <6bb89ca6e7346f4334f06ea293f29fd12df70fe4.camel@intel.com>
-In-Reply-To: <6bb89ca6e7346f4334f06ea293f29fd12df70fe4.camel@intel.com>
-From:   Dan Williams <dan.j.williams@intel.com>
-Date:   Thu, 5 May 2022 06:51:20 -0700
-Message-ID: <CAPcyv4iP3hcNNDxNdPT+iB0E4aUazfqFWwaa_dtHpVf+qKPNcQ@mail.gmail.com>
-Subject: Re: [PATCH v3 00/21] TDX host kernel support
-To:     Kai Huang <kai.huang@intel.com>
-Cc:     Dave Hansen <dave.hansen@intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        KVM list <kvm@vger.kernel.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        "Brown, Len" <len.brown@intel.com>,
-        "Luck, Tony" <tony.luck@intel.com>,
-        Rafael J Wysocki <rafael.j.wysocki@intel.com>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Isaku Yamahata <isaku.yamahata@intel.com>,
-        Mike Rapoport <rppt@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[ add Mike ]
+On Mittwoch, 4. Mai 2022 23:32:43 CEST Sebastian Reichel wrote:
+> From: Jianqun Xu <jay.xu@rock-chips.com>
+> 
+> Add pinctrl support for RK3588.
+> 
+> Signed-off-by: Jianqun Xu <jay.xu@rock-chips.com>
+> [merged in downstream fixes, simplified register lookup logic for better
+> maintanence at the cost of a bit more static const memory and fixed some
+> incorrect registers]
+> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+
+Hi,
+
+a heads up to the maintainer: this was already merged. The cover letter
+states
+
+>  * Dropped pinctrl and mmc binding patch (applied)
+
+so I think this was included by accident.
+
+Regards,
+Nicolas Frattaroli
 
 
-On Thu, May 5, 2022 at 2:54 AM Kai Huang <kai.huang@intel.com> wrote:
-[..]
->
-> Hi Dave,
->
-> Sorry to ping (trying to close this).
->
-> Given we don't need to consider kmem-hot-add legacy PMEM after TDX module
-> initialization, I think for now it's totally fine to exclude legacy PMEMs from
-> TDMRs.  The worst case is when someone tries to use them as TD guest backend
-> directly, the TD will fail to create.  IMO it's acceptable, as it is supposedly
-> that no one should just use some random backend to run TD.
-
-The platform will already do this, right? I don't understand why this
-is trying to take proactive action versus documenting the error
-conditions and steps someone needs to take to avoid unconvertible
-memory. There is already the CONFIG_HMEM_REPORTING that describes
-relative performance properties between initiators and targets, it
-seems fitting to also add security properties between initiators and
-targets so someone can enumerate the numa-mempolicy that avoids
-unconvertible memory.
-
-No, special casing in hotplug code paths needed.
-
->
-> I think w/o needing to include legacy PMEM, it's better to get all TDX memory
-> blocks based on memblock, but not e820.  The pages managed by page allocator are
-> from memblock anyway (w/o those from memory hotplug).
->
-> And I also think it makes more sense to introduce 'tdx_memblock' and
-> 'tdx_memory' data structures to gather all TDX memory blocks during boot when
-> memblock is still alive.  When TDX module is initialized during runtime, TDMRs
-> can be created based on the 'struct tdx_memory' which contains all TDX memory
-> blocks we gathered based on memblock during boot.  This is also more flexible to
-> support other TDX memory from other sources such as CLX memory in the future.
->
-> Please let me know if you have any objection?  Thanks!
-
-It's already the case that x86 maintains sideband structures to
-preserve memory after exiting the early memblock code. Mike, correct
-me if I am wrong, but adding more is less desirable than just keeping
-the memblock around?

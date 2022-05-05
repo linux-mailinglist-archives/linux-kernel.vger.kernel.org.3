@@ -2,137 +2,231 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F9DB51C9D3
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 22:00:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC49351C9CD
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 21:59:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385551AbiEEUEF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 16:04:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50840 "EHLO
+        id S1385525AbiEEUC6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 16:02:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385539AbiEEUEE (ORCPT
+        with ESMTP id S1383706AbiEEUCw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 16:04:04 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ECD6E0A;
-        Thu,  5 May 2022 13:00:15 -0700 (PDT)
-Received: from leknes.fjasle.eu ([46.142.98.182]) by mrelayeu.kundenserver.de
- (mreue109 [212.227.15.183]) with ESMTPSA (Nemesis) id
- 1N3Kc8-1nwE5E2FiE-010Ok2; Thu, 05 May 2022 21:58:54 +0200
-Received: by leknes.fjasle.eu (Postfix, from userid 1000)
-        id D902E3C088; Thu,  5 May 2022 21:58:52 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=fjasle.eu; s=mail;
-        t=1651780732; bh=vYIqL3eaKPYTYqh4k5jXwkhNTTztM7wW6tSG2tFIoVU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=H4igcJXNQ6jjMIy7+cvVTEgWda4gX4BGzFgc7p/3G/PPrXH5KnPaO9BbsMe0pF8/U
-         rHYW+CseTNlFByUDSrQsRm0SzcsCVT+gdo9n/LMYX1w7wqci7S3Dg5ro7RlvAgeR65
-         G4lesugCBZB2rNVh7mesgZQWRu4Ba9MtFG7WTFzc=
-Date:   Thu, 5 May 2022 21:58:52 +0200
-From:   Nicolas Schier <nicolas@fjasle.eu>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     linux-kbuild@vger.kernel.org, clang-built-linux@googlegroups.com,
-        linux-kernel@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        linuxppc-dev@lists.ozlabs.org, linux-um@lists.infradead.org,
-        linux-s390@vger.kernel.org,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Kees Cook <keescook@chromium.org>
-Subject: Re: [PATCH v3 03/15] modpost: merge
- add_{intree_flag,retpoline,staging_flag} to add_header
-Message-ID: <YnQsfA8kHDDpnBcU@fjasle.eu>
-References: <20220505072244.1155033-1-masahiroy@kernel.org>
- <20220505072244.1155033-4-masahiroy@kernel.org>
+        Thu, 5 May 2022 16:02:52 -0400
+Received: from us-smtp-delivery-74.mimecast.com (us-smtp-delivery-74.mimecast.com [170.10.133.74])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2B5AE5F253
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 12:59:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1651780751;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=qBYz8oIHOIDYp4BEZnUrEb3KsOkemOKPjddPARtaHag=;
+        b=M8mRL19OlAFR+3O6CoJz+Zx9UNcryoxShkiMwy7DcPcd98W7HSoXdXOnDOs/Jc4/8mVuqp
+        heKepdCBO4S4JIJdKtDKGGgCGFYu53wa0UA4Na+/UVQGL4Ybe2EKw0NS9xYbvkAY2XDoG5
+        Xn7zWVn74BpNR+//RBLcZCqS+MOlN+o=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-112-04jmGuanPTOPvZVvO1TW4g-1; Thu, 05 May 2022 15:59:08 -0400
+X-MC-Unique: 04jmGuanPTOPvZVvO1TW4g-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7C54A299E76A;
+        Thu,  5 May 2022 19:59:07 +0000 (UTC)
+Received: from horse.redhat.com (unknown [10.22.32.26])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 650B241616B;
+        Thu,  5 May 2022 19:59:07 +0000 (UTC)
+Received: by horse.redhat.com (Postfix, from userid 10451)
+        id 1FAFB220463; Thu,  5 May 2022 15:59:07 -0400 (EDT)
+Date:   Thu, 5 May 2022 15:59:07 -0400
+From:   Vivek Goyal <vgoyal@redhat.com>
+To:     Bernd Schubert <bschubert@ddn.com>
+Cc:     Dharmendra Hans <dharamhans87@gmail.com>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        linux-fsdevel@vger.kernel.org,
+        fuse-devel <fuse-devel@lists.sourceforge.net>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 0/3] FUSE: Implement atomic lookup + open/create
+Message-ID: <YnQsizX5Q1sMnlI2@redhat.com>
+References: <20220502102521.22875-1-dharamhans87@gmail.com>
+ <YnLRnR3Xqu0cYPdb@redhat.com>
+ <CACUYsyEsRph+iFC_fj3F6Ceqhq7NCTuFPH3up8R6C+_bGHktZg@mail.gmail.com>
+ <YnPI6f2fRZUXbCFP@redhat.com>
+ <882fbf7f-a56b-1e82-a158-9e2186ec7c4c@ddn.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220505072244.1155033-4-masahiroy@kernel.org>
-X-Provags-ID: V03:K1:9IUa2J8sJMvk7749DgPeiJiaBu6FL73EwQpRS6B0dgVLx4t442T
- osDTAH9JsajKHG1lcsCY/9daT/X0HMjejOOquvET7hizcj77zh+VoRDgizFgA6ppO3DNYhC
- ZFQG9l9TC1kFRKPb2hox/iIdOgwzdJ8ls3hX24wQeR4DTg1vK/y+O+Ik6M0XZfmHcX9omoG
- nqm6EIfPIJk6jK9uV1jbg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:lbwNODae88U=:tAHOR6f0wimj/5peX0H7sJ
- qOXoXweEAyAP3gkzUjCzGoXNLVAif4i5vu22l0XQ4vlCrU99K1sleCBKtx+KfX4bR/9KPzp3h
- wabj/Rt1H64uxoelOJfoHkUEOH2DarMgVRYSv2I/uCbE277VYeXbayYjeOA+YWQ2V7WFkp0be
- fjAtMDa+OWWLkFVc6ObvTIsbeCxCnzaBrpAgIKisgHvnkui2BxKXUSU/2+g8bbX/FUwZBYKIa
- e/s9cgQ6Qdi6i0lpSBUgCBeEGObMuTaoodpnfhBDHMBR2vuqopL+Cul/MCehEy8w3X2llmwcA
- b5zKFLYOrKFlVTZ9yDpYdgbLSNo0ppMB+mHS6Ibx5XJUpo0fA/RU7Jp3OWXNvW//lDanmXHBZ
- SDZ5FjebLti6UbTjb7RKLPdY3om845p009yO0DElLqxY1dq9Shp4oZlVLTCwnqIt6d1p+FNso
- OE2qPMJYSjP6rQr1mS36P+G4xFYdV98rMVzUh0PBNRQlbuqRcATTW3MOBM7HWfiQCBNGyCxpN
- x5oElC04i/ztleBl7z5zL7lzA3kJ5GlPNg3v2nAhTJKcw+90CNxzJYb1TCnHDUPf6bXxNv+jB
- rjKr64REmHqXVO0Fy1gurXWgrHNONJMtFpF1/a29zOprou70jcQEzp8Xy7rF1U1D8not7PUx3
- yRmAEErm1dQbZkB1yBg4kDVsHIFCkJ9W+IQ4GkKsx6PCHfFX96kTuzBXWxEXp05qkHIY=
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <882fbf7f-a56b-1e82-a158-9e2186ec7c4c@ddn.com>
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 05, 2022 at 04:22:32PM +0900 Masahiro Yamada wrote:
-> add_intree_flag(), add_retpoline(), and add_staging_flag() are small
-> enough to be merged into add_header().
+On Thu, May 05, 2022 at 05:13:00PM +0200, Bernd Schubert wrote:
 > 
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> ---
 > 
-> Changes in v3:
->   - New patch
+> On 5/5/22 14:54, Vivek Goyal wrote:
+> > On Thu, May 05, 2022 at 11:42:51AM +0530, Dharmendra Hans wrote:
+> > > Here are the numbers I took last time. These were taken on tmpfs to
+> > > actually see the effect of reduced calls. On local file systems it
+> > > might not be that much visible. But we have observed that on systems
+> > > where we have thousands of clients hammering the metadata servers, it
+> > > helps a lot (We did not take numbers yet as  we are required to change
+> > > a lot of our client code but would be doing it later on).
+> > > 
+> > > Note that for a change in performance number due to the new version of
+> > > these patches, we have just refactored the code and functionality has
+> > > remained the same since then.
+> > > 
+> > > here is the link to the performance numbers
+> > > https://lore.kernel.org/linux-fsdevel/20220322121212.5087-1-dharamhans87@gmail.com/
+> > 
+> > There is a lot going in that table. Trying to understand it.
+> > 
+> > - Why care about No-Flush. I mean that's independent of these changes,
+> >    right?  I am assuming this means that upon file close do not send
+> >    a flush to fuse server. Not sure how bringing No-Flush into the
+> >    mix is helpful here.
 > 
->  scripts/mod/modpost.c | 25 +++++++------------------
->  1 file changed, 7 insertions(+), 18 deletions(-)
 > 
-> diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
-> index ebd80c77fa03..ae8e4a4dcfd2 100644
-> --- a/scripts/mod/modpost.c
-> +++ b/scripts/mod/modpost.c
-> @@ -2200,25 +2200,17 @@ static void add_header(struct buffer *b, struct module *mod)
->  			      "#endif\n");
->  	buf_printf(b, "\t.arch = MODULE_ARCH_INIT,\n");
->  	buf_printf(b, "};\n");
-> -}
->  
-> -static void add_intree_flag(struct buffer *b, int is_intree)
-> -{
-> -	if (is_intree)
-> +	if (!external_module)
->  		buf_printf(b, "\nMODULE_INFO(intree, \"Y\");\n");
-> -}
->  
-> -/* Cannot check for assembler */
-> -static void add_retpoline(struct buffer *b)
-> -{
-> -	buf_printf(b, "\n#ifdef CONFIG_RETPOLINE\n");
-> -	buf_printf(b, "MODULE_INFO(retpoline, \"Y\");\n");
-> -	buf_printf(b, "#endif\n");
-> -}
-> +	buf_printf(b,
-> +		   "\n"
-> +		   "#ifdef CONFIG_RETPOLINE\n"
-> +		   "MODULE_INFO(retpoline, \"Y\");\n"
-> +		   "#endif\n");
->  
-> -static void add_staging_flag(struct buffer *b, const char *name)
-> -{
-> -	if (strstarts(name, "drivers/staging"))
-> +	if (strstarts(mod->name, "drivers/staging"))
->  		buf_printf(b, "\nMODULE_INFO(staging, \"Y\");\n");
->  }
->  
-> @@ -2544,9 +2536,6 @@ int main(int argc, char **argv)
->  		check_exports(mod);
->  
->  		add_header(&buf, mod);
-> -		add_intree_flag(&buf, !external_module);
-> -		add_retpoline(&buf);
-> -		add_staging_flag(&buf, mod->name);
->  		add_versions(&buf, mod);
->  		add_depends(&buf, mod);
->  		add_moddevtable(&buf, mod);
-> -- 
-> 2.32.0
+> It is a basically removing another call from kernel to user space. The calls
+> there are, the lower is the resulting percentage for atomic-open.
 
-Reviewed-by: Nicolas Schier <nicolas@fjasle.eu>
+Ok. You want to get rid of FUSE_FLUSH call so that % of FUSE_LOOKUP calls
+go up and that will effectively show higher % of improvement due to
+this. 
+
+> 
+> 
+> > 
+> > - What is "Patched Libfuse"? I am assuming that these are changes
+> >    needed in libfuse to support atomic create + atomic open. Similarly
+> >    assuming "Patched FuseK" means patched kernel with your changes.
+> 
+> Yes, I did that to ensure there is no regression with the patches, when the
+> other side is not patched.
+> 
+> > 
+> >    If this is correct, I would probably only be interested in
+> >    looking at "Patched Libfuse + Patched FuseK" numbers to figure out
+> >    what's the effect of your changes w.r.t vanilla kernel + libfuse.
+> >    Am I understanding it right?
+> 
+> Yes.
+> 
+> > 
+> > - I am wondering why do we measure "Sequential" and "Random" patterns.
+> >    These optimizations are primarily for file creation + file opening
+> >    and I/O pattern should not matter.
+> 
+> bonnie++ does this automatically and it just convenient to take the bonnie++
+> csv value and to paste them into a table.
+> 
+> In our HPC world mdtest is more common, but it has MPI as requirement - make
+> it harder to run. Reproducing the values with bonnie++ should be rather easy
+> for you.
+> 
+> Only issue with bonnie++ is that bonnie++ by default does not run
+> multi-threaded and the old 3rd party perl scripts I had to let it run with
+> multiple processes and to sum up the values don't work anymore with recent
+> perl versions. I need to find some time to fix that.
+> 
+> 
+> > 
+> > - Also wondering why performance of Read/s improves. Assuming once
+> >    file has been opened, I think your optimizations get out of the
+> >    way (no create, no open) and we are just going through data path of
+> >    reading file data and no lookups happening. If that's the case, why
+> >    do Read/s numbers show an improvement.
+> 
+> That is now bonnie++ works. It creates the files, closes them (which causes
+> the flush) and then re-opens for stat and read - atomic open comes into the
+> picture here. Also read() is totally skipped when the files are empty -
+> which is why one should use something like 1B files.
+> 
+> If you have another metadata benchmark - please let us know.
+
+Once I was pointed at smallfile.
+
+https://github.com/distributed-system-analysis/smallfile
+
+I ran this when I was posting the patches for virtiofs.
+
+https://patchwork.kernel.org/project/linux-fsdevel/cover/20181210171318.16998-1-vgoyal@redhat.com/
+
+See if this is something interesting to you.
+
+
+> 
+> > 
+> > - Why do we measure "Patched Libfuse". It shows performance regression
+> >    of 4-5% in table 0B, Sequential workoad. That sounds bad. So without
+> >    any optimization kicking in, it has a performance cost.
+> 
+> Yes, I'm not sure yet. There is not so much code that has changed on the
+> libfuse side.
+> However the table needs to be redone with fixed libfuse - limiting the
+> number of threads caused a permanent libfuse thread creation and destruction
+> 
+> https://github.com/libfuse/libfuse/pull/652
+> 
+> The numbers in table are also with paththrough_ll, which has its own issue
+> due to linear inode search. paththrough_hp uses a C++ map and avoids that. I
+> noticed too late when I started to investigate why there are regressions....
+> 
+> Also the table made me to investigate/profile all the fuse operations, which
+> resulted in my waitq question. Please see that thread for more details https://lore.kernel.org/lkml/9326bb76-680f-05f6-6f78-df6170afaa2c@fastmail.fm/T/
+> 
+> Regarding atomic-open/create with avoiding lookup/revalidate, our primary
+> goal is to reduce network calls. A file system that handles it locally only
+> reduces the number of fuse kernel/user space crossing. A network file system
+> that fully supports it needs to do the atomic open (or in old terms
+> lookup-intent-open) on the server side of the network and needs to transfer
+> attributes together with the open result.
+
+Oh, I have no issues with the intent. I will like to see cut in network
+traffic too (if we can do this without introducing problems). My primary
+interest is that this kind of change should benefit virtiofs as well.
+
+I am just trying to understand how much performance improvement is
+actually there. And also trying to improve the quality of implementation.
+Frankly speaking, it all seems very twisted and hard to read (and
+hence maintain) code at this point fo time.
+
+That's why I am going into the details to understand and suggest some
+improvements.
+
+Thanks
+Vivek
+
+> 
+> Lustre does this, although I cannot easily point you to the right code. It
+> all started almost two decades ago:
+> https://groups.google.com/g/lucky.linux.fsdevel/c/iYNFIIrkJ1s
+> 
+> 
+> BeeGFS does this as well
+> https://git.beegfs.io/pub/v7/-/blob/master/client_module/source/filesystem/FhgfsOpsInode.c
+> See for examaple FhgfsOps_atomicOpen() and FhgfsOps_createIntent()
+> 
+> (FhGFS is the old name when I was still involved in the project.)
+> 
+> From my head I'm not sure if NFS does it over the wire, maybe v4.
+> 
+> 
+> Thanks,
+> Bernd
+> 
+> 
+> 
+> 
+> 
+> 
+

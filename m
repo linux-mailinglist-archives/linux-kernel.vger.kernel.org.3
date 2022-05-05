@@ -2,67 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65A5851BD3F
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 12:31:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FC1051BD44
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 12:32:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355769AbiEEKd4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 06:33:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40648 "EHLO
+        id S1355733AbiEEKfK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 06:35:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243887AbiEEKdr (ORCPT
+        with ESMTP id S238250AbiEEKfH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 06:33:47 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7645522D9;
-        Thu,  5 May 2022 03:30:06 -0700 (PDT)
-X-UUID: a76e1fba8217433bb4de5e53a881fbc2-20220505
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.4,REQID:c1a19077-6a5a-4cbf-ac97-f1a93f270dcf,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:0
-X-CID-META: VersionHash:faefae9,CLOUDID:692a5016-2e53-443e-b81a-655c13977218,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,File:nil,QS:0,BEC:nil
-X-UUID: a76e1fba8217433bb4de5e53a881fbc2-20220505
-Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
-        (envelope-from <rex-bc.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1428609696; Thu, 05 May 2022 18:30:01 +0800
-Received: from mtkmbs07n1.mediatek.inc (172.21.101.16) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Thu, 5 May 2022 18:30:00 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Thu, 5 May 2022 18:30:00 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n2.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
- Transport; Thu, 5 May 2022 18:30:00 +0800
-Message-ID: <696e3b1659d60e128b006cc0b41bbb21528a3949.camel@mediatek.com>
-Subject: Re: [PATCH v5 3/9] cpufreq: mediatek: Move voltage limits to
- platform data
-From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-CC:     <rafael@kernel.org>, <robh+dt@kernel.org>, <krzk+dt@kernel.org>,
-        <matthias.bgg@gmail.com>, <jia-wei.chang@mediatek.com>,
-        <roger.lu@mediatek.com>, <hsinyi@google.com>,
-        <khilman@baylibre.com>, <angelogioacchino.delregno@collabora.com>,
-        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Thu, 5 May 2022 18:29:59 +0800
-In-Reply-To: <20220505085200.rzwzblirsprkvcz7@vireshk-i7>
-References: <20220504130540.5902-1-rex-bc.chen@mediatek.com>
-         <20220504130540.5902-4-rex-bc.chen@mediatek.com>
-         <20220505085200.rzwzblirsprkvcz7@vireshk-i7>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Thu, 5 May 2022 06:35:07 -0400
+Received: from us-smtp-delivery-74.mimecast.com (us-smtp-delivery-74.mimecast.com [170.10.133.74])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DBECE1CB1C
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 03:31:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1651746686;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=Y2f31+KLvcVlSUSW7RUeEuI1kWt5V/CnuS4tzxxow8s=;
+        b=GBh2FLzyzFq76k79lKYAeKCS9G0VpDrypxcdpOE90Tbp8lt5Ivj33w4KmjE2g37KX3qHyz
+        OQdsRS6iBT8KVaTNw66FO/47P0C2WQmJS463Xv2iRnVK1zwztVhGrA8f/URb9wItu+Lcck
+        Deuw62vSaS8CAVGS70AtD7dToWVlL5U=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-670-OgeasoXBPPudDTU8CYBkMQ-1; Thu, 05 May 2022 06:31:25 -0400
+X-MC-Unique: OgeasoXBPPudDTU8CYBkMQ-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 22135803D4E;
+        Thu,  5 May 2022 10:31:25 +0000 (UTC)
+Received: from gerbillo.redhat.com (unknown [10.39.194.241])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id DABA3111DCF2;
+        Thu,  5 May 2022 10:31:23 +0000 (UTC)
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     torvalds@linux-foundation.org
+Cc:     kuba@kernel.org, davem@davemloft.net, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [GIT PULL] Networking for 5.18-rc6
+Date:   Thu,  5 May 2022 12:31:11 +0200
+Message-Id: <20220505103111.20628-1-pabeni@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.3
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,318 +58,278 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-05-05 at 14:22 +0530, Viresh Kumar wrote:
-> On 04-05-22, 21:05, Rex-BC Chen wrote:
-> > From: Jia-Wei Chang <jia-wei.chang@mediatek.com>
-> > 
-> > Voltages and shifts are defined as macros originally.
-> > There are different requirements of these values for each MediaTek
-> > SoCs.
-> > Therefore, we add the platform data and move these values into it.
-> > 
-> > Signed-off-by: Jia-Wei Chang <jia-wei.chang@mediatek.com>
-> > Signed-off-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
-> > Reviewed-by: AngeloGioacchino Del Regno <
-> > angelogioacchino.delregno@collabora.com>
-> > ---
-> >  drivers/cpufreq/mediatek-cpufreq.c | 90 ++++++++++++++++++++----
-> > ------
-> >  1 file changed, 61 insertions(+), 29 deletions(-)
-> > 
-> > diff --git a/drivers/cpufreq/mediatek-cpufreq.c
-> > b/drivers/cpufreq/mediatek-cpufreq.c
-> > index 363ebecb2c80..80a3d4cd49ed 100644
-> > --- a/drivers/cpufreq/mediatek-cpufreq.c
-> > +++ b/drivers/cpufreq/mediatek-cpufreq.c
-> > @@ -10,15 +10,21 @@
-> >  #include <linux/cpumask.h>
-> >  #include <linux/module.h>
-> >  #include <linux/of.h>
-> > +#include <linux/of_platform.h>
-> >  #include <linux/platform_device.h>
-> >  #include <linux/pm_opp.h>
-> >  #include <linux/regulator/consumer.h>
-> >  
-> > -#define MIN_VOLT_SHIFT		(100000)
-> > -#define MAX_VOLT_SHIFT		(200000)
-> > -#define MAX_VOLT_LIMIT		(1150000)
-> >  #define VOLT_TOL		(10000)
-> >  
-> > +struct mtk_cpufreq_platform_data {
-> > +	int min_volt_shift;
-> > +	int max_volt_shift;
-> > +	int proc_max_volt;
-> > +	int sram_min_volt;
-> > +	int sram_max_volt;
-> > +};
-> > +
-> >  /*
-> >   * The struct mtk_cpu_dvfs_info holds necessary information for
-> > doing CPU DVFS
-> >   * on each CPU power/clock domain of Mediatek SoCs. Each CPU
-> > cluster in
-> > @@ -46,8 +52,11 @@ struct mtk_cpu_dvfs_info {
-> >  	struct notifier_block opp_nb;
-> >  	unsigned int opp_cpu;
-> >  	unsigned long opp_freq;
-> > +	const struct mtk_cpufreq_platform_data *soc_data;
-> >  };
-> >  
-> > +static struct platform_device *cpufreq_pdev;
-> > +
-> >  static LIST_HEAD(dvfs_info_list);
-> >  
-> >  static struct mtk_cpu_dvfs_info *mtk_cpu_dvfs_info_lookup(int cpu)
-> > @@ -65,6 +74,7 @@ static struct mtk_cpu_dvfs_info
-> > *mtk_cpu_dvfs_info_lookup(int cpu)
-> >  static int mtk_cpufreq_voltage_tracking(struct mtk_cpu_dvfs_info
-> > *info,
-> >  					int new_vproc)
-> >  {
-> > +	const struct mtk_cpufreq_platform_data *soc_data = info-
-> > >soc_data;
-> >  	struct regulator *proc_reg = info->proc_reg;
-> >  	struct regulator *sram_reg = info->sram_reg;
-> >  	int pre_vproc, pre_vsram, new_vsram, vsram, vproc, ret;
-> > @@ -76,7 +86,8 @@ static int mtk_cpufreq_voltage_tracking(struct
-> > mtk_cpu_dvfs_info *info,
-> >  		return pre_vproc;
-> >  	}
-> >  	/* Vsram should not exceed the maximum allowed voltage of SoC.
-> > */
-> > -	new_vsram = min(new_vproc + MIN_VOLT_SHIFT, MAX_VOLT_LIMIT);
-> > +	new_vsram = min(new_vproc + soc_data->min_volt_shift,
-> > +			soc_data->sram_max_volt);
-> >  
-> >  	if (pre_vproc < new_vproc) {
-> >  		/*
-> > @@ -99,10 +110,11 @@ static int mtk_cpufreq_voltage_tracking(struct
-> > mtk_cpu_dvfs_info *info,
-> >  				return pre_vproc;
-> >  			}
-> >  
-> > -			vsram = min(new_vsram, pre_vproc +
-> > MAX_VOLT_SHIFT);
-> > +			vsram = min(new_vsram,
-> > +				    pre_vproc + soc_data-
-> > >min_volt_shift);
-> >  
-> > -			if (vsram + VOLT_TOL >= MAX_VOLT_LIMIT) {
-> > -				vsram = MAX_VOLT_LIMIT;
-> > +			if (vsram + VOLT_TOL >= soc_data-
-> > >sram_max_volt) {
-> > +				vsram = soc_data->sram_max_volt;
-> >  
-> >  				/*
-> >  				 * If the target Vsram hits the maximum
-> > voltage,
-> > @@ -120,7 +132,7 @@ static int mtk_cpufreq_voltage_tracking(struct
-> > mtk_cpu_dvfs_info *info,
-> >  				ret = regulator_set_voltage(sram_reg,
-> > vsram,
-> >  							    vsram +
-> > VOLT_TOL);
-> >  
-> > -				vproc = vsram - MIN_VOLT_SHIFT;
-> > +				vproc = vsram - soc_data-
-> > >min_volt_shift;
-> >  			}
-> >  			if (ret)
-> >  				return ret;
-> > @@ -154,7 +166,8 @@ static int mtk_cpufreq_voltage_tracking(struct
-> > mtk_cpu_dvfs_info *info,
-> >  				return pre_vsram;
-> >  			}
-> >  
-> > -			vproc = max(new_vproc, pre_vsram -
-> > MAX_VOLT_SHIFT);
-> > +			vproc = max(new_vproc,
-> > +				    pre_vsram - soc_data-
-> > >max_volt_shift);
-> >  			ret = regulator_set_voltage(proc_reg, vproc,
-> >  						    vproc + VOLT_TOL);
-> >  			if (ret)
-> > @@ -163,10 +176,11 @@ static int
-> > mtk_cpufreq_voltage_tracking(struct mtk_cpu_dvfs_info *info,
-> >  			if (vproc == new_vproc)
-> >  				vsram = new_vsram;
-> >  			else
-> > -				vsram = max(new_vsram, vproc +
-> > MIN_VOLT_SHIFT);
-> > +				vsram = max(new_vsram,
-> > +					    vproc + soc_data-
-> > >min_volt_shift);
-> >  
-> > -			if (vsram + VOLT_TOL >= MAX_VOLT_LIMIT) {
-> > -				vsram = MAX_VOLT_LIMIT;
-> > +			if (vsram + VOLT_TOL >= soc_data-
-> > >sram_max_volt) {
-> > +				vsram = soc_data->sram_max_volt;
-> >  
-> >  				/*
-> >  				 * If the target Vsram hits the maximum
-> > voltage,
-> > @@ -197,13 +211,14 @@ static int
-> > mtk_cpufreq_voltage_tracking(struct mtk_cpu_dvfs_info *info,
-> >  
-> >  static int mtk_cpufreq_set_voltage(struct mtk_cpu_dvfs_info *info,
-> > int vproc)
-> >  {
-> > +	const struct mtk_cpufreq_platform_data *soc_data = info-
-> > >soc_data;
-> >  	int ret;
-> >  
-> >  	if (info->need_voltage_tracking)
-> >  		ret = mtk_cpufreq_voltage_tracking(info, vproc);
-> >  	else
-> >  		ret = regulator_set_voltage(info->proc_reg, vproc,
-> > -					    MAX_VOLT_LIMIT);
-> > +					    soc_data->proc_max_volt);
-> >  	if (!ret)
-> >  		info->pre_vproc = vproc;
-> >  
-> > @@ -583,9 +598,17 @@ static struct cpufreq_driver
-> > mtk_cpufreq_driver = {
-> >  
-> >  static int mtk_cpufreq_probe(struct platform_device *pdev)
-> >  {
-> > +	const struct of_device_id *match;
-> >  	struct mtk_cpu_dvfs_info *info, *tmp;
-> >  	int cpu, ret;
-> >  
-> > +	match = dev_get_platdata(&pdev->dev);
-> > +	if (!match || !match->data) {
-> > +		dev_err(&pdev->dev,
-> > +			"failed to get mtk cpufreq platform data\n");
-> > +		return -ENODEV;
-> > +	}
-> > +
-> >  	for_each_possible_cpu(cpu) {
-> >  		info = mtk_cpu_dvfs_info_lookup(cpu);
-> >  		if (info)
-> > @@ -597,6 +620,7 @@ static int mtk_cpufreq_probe(struct
-> > platform_device *pdev)
-> >  			goto release_dvfs_info_list;
-> >  		}
-> >  
-> > +		info->soc_data = match->data;
-> >  		ret = mtk_cpu_dvfs_info_init(info, cpu);
-> >  		if (ret) {
-> >  			dev_err(&pdev->dev,
-> > @@ -632,20 +656,27 @@ static struct platform_driver
-> > mtk_cpufreq_platdrv = {
-> >  	.probe		= mtk_cpufreq_probe,
-> >  };
-> >  
-> > +static const struct mtk_cpufreq_platform_data mt2701_platform_data
-> > = {
-> > +	.min_volt_shift = 100000,
-> > +	.max_volt_shift = 200000,
-> > +	.proc_max_volt = 1150000,
-> > +	.sram_min_volt = 0,
-> > +	.sram_max_volt = 1150000,
-> > +};
-> > +
-> >  /* List of machines supported by this driver */
-> >  static const struct of_device_id mtk_cpufreq_machines[]
-> > __initconst = {
-> > -	{ .compatible = "mediatek,mt2701", },
-> > -	{ .compatible = "mediatek,mt2712", },
-> > -	{ .compatible = "mediatek,mt7622", },
-> > -	{ .compatible = "mediatek,mt7623", },
-> > -	{ .compatible = "mediatek,mt8167", },
-> > -	{ .compatible = "mediatek,mt817x", },
-> > -	{ .compatible = "mediatek,mt8173", },
-> > -	{ .compatible = "mediatek,mt8176", },
-> > -	{ .compatible = "mediatek,mt8183", },
-> > -	{ .compatible = "mediatek,mt8365", },
-> > -	{ .compatible = "mediatek,mt8516", },
-> > -
-> > +	{ .compatible = "mediatek,mt2701", .data =
-> > &mt2701_platform_data },
-> > +	{ .compatible = "mediatek,mt2712", .data =
-> > &mt2701_platform_data },
-> > +	{ .compatible = "mediatek,mt7622", .data =
-> > &mt2701_platform_data },
-> > +	{ .compatible = "mediatek,mt7623", .data =
-> > &mt2701_platform_data },
-> > +	{ .compatible = "mediatek,mt8167", .data =
-> > &mt2701_platform_data },
-> > +	{ .compatible = "mediatek,mt817x", .data =
-> > &mt2701_platform_data },
-> > +	{ .compatible = "mediatek,mt8173", .data =
-> > &mt2701_platform_data },
-> > +	{ .compatible = "mediatek,mt8176", .data =
-> > &mt2701_platform_data },
-> > +	{ .compatible = "mediatek,mt8183", .data =
-> > &mt2701_platform_data },
-> > +	{ .compatible = "mediatek,mt8365", .data =
-> > &mt2701_platform_data },
-> > +	{ .compatible = "mediatek,mt8516", .data =
-> > &mt2701_platform_data },
-> >  	{ }
-> >  };
-> >  MODULE_DEVICE_TABLE(of, mtk_cpufreq_machines);
-> > @@ -654,7 +685,6 @@ static int __init mtk_cpufreq_driver_init(void)
-> >  {
-> >  	struct device_node *np;
-> >  	const struct of_device_id *match;
-> > -	struct platform_device *pdev;
-> >  	int err;
-> >  
-> >  	np = of_find_node_by_path("/");
-> > @@ -678,11 +708,12 @@ static int __init
-> > mtk_cpufreq_driver_init(void)
-> >  	 * and the device registration codes are put here to handle
-> > defer
-> >  	 * probing.
-> >  	 */
-> > -	pdev = platform_device_register_simple("mtk-cpufreq", -1, NULL,
-> > 0);
-> > -	if (IS_ERR(pdev)) {
-> > +	cpufreq_pdev = platform_device_register_data(NULL, "mtk-
-> > cpufreq", -1,
-> > +						     match,
-> > sizeof(*match));
-> 
-> Why pass match here instead of just the data ?
-> 
+Hi Linus!
 
-Hello Viresh,
+The following changes since commit 249aca0d3d631660aa3583c6a3559b75b6e971b4:
 
-Thanks for your review.
-I will pass data directly in next version.
+  Merge tag 'net-5.18-rc5' of git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net (2022-04-28 12:34:50 -0700)
 
-> > +	if (IS_ERR(cpufreq_pdev)) {
-> >  		pr_err("failed to register mtk-cpufreq platform
-> > device\n");
-> >  		platform_driver_unregister(&mtk_cpufreq_platdrv);
-> > -		return PTR_ERR(pdev);
-> > +		return PTR_ERR(cpufreq_pdev);
-> >  	}
-> >  
-> >  	return 0;
-> > @@ -691,6 +722,7 @@ module_init(mtk_cpufreq_driver_init)
-> >  
-> >  static void __exit mtk_cpufreq_driver_exit(void)
-> >  {
-> > +	platform_device_unregister(cpufreq_pdev);
-> 
-> You fixed a bug silently :)
-> 
-> That's not right.
-> 
+are available in the Git repository at:
 
-I will move this modification to another patch.
+  git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git tags/net-5.18-rc6
 
-BRs,
-Rex
+for you to fetch changes up to 4071bf121d59944d5cd2238de0642f3d7995a997:
 
-> >  	platform_driver_unregister(&mtk_cpufreq_platdrv);
-> >  }
-> >  module_exit(mtk_cpufreq_driver_exit)
-> > -- 
-> > 2.18.0
-> 
-> 
+  NFC: netlink: fix sleep in atomic bug when firmware download timeout (2022-05-05 10:18:15 +0200)
+
+----------------------------------------------------------------
+Networking fixes for 5.18-rc6, including fixes from can, rxrpc and
+wireguard
+
+Previous releases - regressions:
+  - igmp: respect RCU rules in ip_mc_source() and ip_mc_msfilter()
+
+  - mld: respect RCU rules in ip6_mc_source() and ip6_mc_msfilter()
+
+  - rds: acquire netns refcount on TCP sockets
+
+  - rxrpc: enable IPv6 checksums on transport socket
+
+  - nic: hinic: fix bug of wq out of bound access
+
+  - nic: thunder: don't use pci_irq_vector() in atomic context
+
+  - nic: bnxt_en: fix possible bnxt_open() failure caused by wrong RFS flag
+
+  - nic: mlx5e:
+    - lag, fix use-after-free in fib event handler
+    - fix deadlock in sync reset flow
+
+Previous releases - always broken:
+  - tcp: fix insufficient TCP source port randomness
+
+  - can: grcan: grcan_close(): fix deadlock
+
+  - nfc: reorder destructive operations in to avoid bugs
+
+Misc:
+  - wireguard: improve selftests reliability
+
+Signed-off-by: Paolo Abeni <pabeni@redhat.com>
+
+----------------------------------------------------------------
+Andreas Larsson (2):
+      can: grcan: grcan_probe(): fix broken system id check for errata workaround needs
+      can: grcan: only use the NAPI poll budget for RX
+
+Ariel Levkovich (4):
+      net/mlx5e: Fix wrong source vport matching on tunnel rule
+      net/mlx5e: TC, Fix ct_clear overwriting ct action metadata
+      net/mlx5e: TC, fix decap fallback to uplink when int port not supported
+      net/mlx5e: Avoid checking offload capability in post_parse action
+
+Arun Ramadoss (1):
+      net: dsa: ksz9477: port mirror sniffing limited to one port
+
+Aya Levin (1):
+      net/mlx5: Fix slab-out-of-bounds while reading resource dump menu
+
+Daniel Hellstrom (1):
+      can: grcan: use ofdev->dev when allocating DMA memory
+
+David Howells (1):
+      rxrpc: Enable IPv6 checksums on transport socket
+
+David S. Miller (2):
+      Merge branch 'nfc-fixes'
+      Merge tag 'mlx5-fixes-2022-05-03' of git://git.kernel.org/pub/scm/linux/kernel/g it/saeed/linux
+
+Duoming Zhou (4):
+      can: grcan: grcan_close(): fix deadlock
+      nfc: replace improper check device_is_registered() in netlink related functions
+      nfc: nfcmrvl: main: reorder destructive operations in nfcmrvl_nci_unregister_dev to avoid bugs
+      NFC: netlink: fix sleep in atomic bug when firmware download timeout
+
+Eric Dumazet (3):
+      net: igmp: respect RCU rules in ip_mc_source() and ip_mc_msfilter()
+      mld: respect RCU rules in ip6_mc_source() and ip6_mc_msfilter()
+      tcp: resalt the secret every 10 seconds
+
+Hangbin Liu (2):
+      selftests/net: add missing tests to Makefile
+      selftests/net/forwarding: add missing tests to Makefile
+
+Ido Schimmel (1):
+      selftests: mirror_gre_bridge_1q: Avoid changing PVID while interface is operational
+
+Jakub Kicinski (5):
+      Merge tag 'linux-can-fixes-for-5.18-20220429' of git://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can
+      Merge branch 'selftests-net-add-missing-tests-to-makefile'
+      Merge branch 'bnxt_en-bug-fixes'
+      Merge branch 'wireguard-patches-for-5-18-rc6'
+      Merge branch 'insufficient-tcp-source-port-randomness'
+
+Jason A. Donenfeld (6):
+      wireguard: selftests: make routing loop test non-fatal
+      wireguard: selftests: limit parallelism to $(nproc) tests at once
+      wireguard: selftests: use newer toolchains to fill out architectures
+      wireguard: selftests: restore support for ccache
+      wireguard: selftests: bump package deps
+      wireguard: selftests: set panic_on_warn=1 from cmdline
+
+Marc Kleine-Budde (2):
+      selftests/net: so_txtime: fix parsing of start time stamp on 32 bit systems
+      selftests/net: so_txtime: usage(): fix documentation of default clock
+
+Mark Bloch (1):
+      net/mlx5: Fix matching on inner TTC
+
+Mark Zhang (1):
+      net/mlx5e: Fix the calling of update_buffer_lossy() API
+
+Matthew Hagan (1):
+      net: sfp: Add tx-fault workaround for Huawei MA5671A SFP ONT
+
+Michael Chan (2):
+      bnxt_en: Initiallize bp->ptp_lock first before using it
+      bnxt_en: Fix unnecessary dropping of RX packets
+
+Moshe Shemesh (2):
+      net/mlx5: Fix deadlock in sync reset flow
+      net/mlx5: Avoid double clear or set of sync reset requested
+
+Moshe Tal (1):
+      net/mlx5e: Fix trust state reset in reload
+
+Niels Dossche (1):
+      net: mdio: Fix ENOMEM return value in BCM6368 mux bus controller
+
+Oliver Hartkopp (1):
+      can: isotp: remove re-binding of bound socket
+
+Paolo Abeni (1):
+      Merge branch 'emaclite-improve-error-handling-and-minor-cleanup'
+
+Paul Blakey (1):
+      net/mlx5e: CT: Fix queued up restore put() executing after relevant ft release
+
+Qiao Ma (1):
+      hinic: fix bug of wq out of bound access
+
+Russell King (Oracle) (1):
+      net: dsa: b53: convert to phylink_pcs
+
+Sergey Shtylyov (1):
+      smsc911x: allow using IRQ0
+
+Shravya Kumbham (2):
+      net: emaclite: Don't advertise 1000BASE-T and do auto negotiation
+      net: emaclite: Add error handling for of_address_to_resource()
+
+Somnath Kotur (1):
+      bnxt_en: Fix possible bnxt_open() failure caused by wrong RFS flag
+
+Tan Tee Min (1):
+      net: stmmac: disable Split Header (SPH) for Intel platforms
+
+Tetsuo Handa (1):
+      net: rds: acquire refcount on TCP sockets
+
+Thomas Gleixner (1):
+      pci_irq_vector() can't be used in atomic context any longer. This conflicts with the usage of this function in nic_mbx_intr_handler().
+
+Vlad Buslov (4):
+      net/mlx5e: Don't match double-vlan packets if cvlan is not set
+      net/mlx5e: Lag, Fix use-after-free in fib event handler
+      net/mlx5e: Lag, Fix fib_info pointer assignment
+      net/mlx5e: Lag, Don't skip fib events on current dst
+
+Vladimir Oltean (1):
+      selftests: ocelot: tc_flower_chains: specify conform-exceed action for policer
+
+Willy Tarreau (6):
+      secure_seq: use the 64 bits of the siphash for port offset calculation
+      tcp: use different parts of the port_offset for index and offset
+      tcp: add small random increments to the source port
+      tcp: dynamically allocate the perturb table used by source ports
+      tcp: increase source port perturb table to 2^16
+      tcp: drop the hash_32() part from the index calculation
+
+Yang Yingliang (4):
+      net: ethernet: mediatek: add missing of_node_put() in mtk_sgmii_init()
+      net: dsa: mt7530: add missing of_node_put() in mt7530_setup()
+      net: stmmac: dwmac-sun8i: add missing of_node_put() in sun8i_dwmac_register_mdio_mux()
+      net: cpsw: add missing of_node_put() in cpsw_probe_dt()
+
+ drivers/net/can/grcan.c                            |  46 ++---
+ drivers/net/dsa/b53/b53_common.c                   |  36 +---
+ drivers/net/dsa/b53/b53_priv.h                     |  24 +--
+ drivers/net/dsa/b53/b53_serdes.c                   |  74 +++++---
+ drivers/net/dsa/b53/b53_serdes.h                   |   9 +-
+ drivers/net/dsa/b53/b53_srab.c                     |   4 +-
+ drivers/net/dsa/microchip/ksz9477.c                |  38 +++-
+ drivers/net/dsa/mt7530.c                           |   1 +
+ drivers/net/ethernet/broadcom/bnxt/bnxt.c          |  13 +-
+ drivers/net/ethernet/broadcom/bnxt/bnxt_ptp.c      |  15 +-
+ drivers/net/ethernet/cavium/thunder/nic_main.c     |  16 +-
+ drivers/net/ethernet/huawei/hinic/hinic_hw_wq.c    |   7 +-
+ drivers/net/ethernet/mediatek/mtk_sgmii.c          |   1 +
+ .../ethernet/mellanox/mlx5/core/diag/rsc_dump.c    |  31 +++-
+ .../ethernet/mellanox/mlx5/core/en/port_buffer.c   |   4 +-
+ .../ethernet/mellanox/mlx5/core/en/tc/act/act.c    |   3 +-
+ .../net/ethernet/mellanox/mlx5/core/en/tc/act/ct.c |  34 +++-
+ drivers/net/ethernet/mellanox/mlx5/core/en/tc_ct.c |  24 +--
+ drivers/net/ethernet/mellanox/mlx5/core/en/tc_ct.h |  11 ++
+ .../net/ethernet/mellanox/mlx5/core/en/tc_tun.c    |   3 +-
+ drivers/net/ethernet/mellanox/mlx5/core/en_dcbnl.c |  10 +
+ drivers/net/ethernet/mellanox/mlx5/core/en_tc.c    |  11 ++
+ .../ethernet/mellanox/mlx5/core/eswitch_offloads.c |   2 +-
+ drivers/net/ethernet/mellanox/mlx5/core/fw_reset.c |  60 +++---
+ drivers/net/ethernet/mellanox/mlx5/core/lag/mp.c   |  38 ++--
+ drivers/net/ethernet/mellanox/mlx5/core/lag/mp.h   |   7 +-
+ .../net/ethernet/mellanox/mlx5/core/lag/port_sel.c |   2 +-
+ .../net/ethernet/mellanox/mlx5/core/lib/fs_ttc.c   |   2 +
+ drivers/net/ethernet/smsc/smsc911x.c               |   2 +-
+ drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c  |   1 +
+ drivers/net/ethernet/stmicro/stmmac/dwmac-sun8i.c  |   1 +
+ drivers/net/ethernet/stmicro/stmmac/stmmac_main.c  |   2 +-
+ drivers/net/ethernet/ti/cpsw_new.c                 |   5 +-
+ drivers/net/ethernet/xilinx/xilinx_emaclite.c      |  30 ++-
+ drivers/net/mdio/mdio-mux-bcm6368.c                |   2 +-
+ drivers/net/phy/sfp.c                              |  12 +-
+ drivers/nfc/nfcmrvl/main.c                         |   2 +-
+ include/linux/stmmac.h                             |   1 +
+ include/net/inet_hashtables.h                      |   2 +-
+ include/net/secure_seq.h                           |   4 +-
+ net/can/isotp.c                                    |  25 +--
+ net/core/secure_seq.c                              |  16 +-
+ net/ipv4/igmp.c                                    |   9 +-
+ net/ipv4/inet_hashtables.c                         |  42 +++--
+ net/ipv6/inet6_hashtables.c                        |   4 +-
+ net/ipv6/mcast.c                                   |   8 +-
+ net/nfc/core.c                                     |  29 ++-
+ net/nfc/netlink.c                                  |   4 +-
+ net/rds/tcp.c                                      |   8 +
+ net/rxrpc/local_object.c                           |   3 +
+ .../drivers/net/ocelot/tc_flower_chains.sh         |   2 +-
+ tools/testing/selftests/net/Makefile               |   3 +-
+ tools/testing/selftests/net/forwarding/Makefile    |  33 ++++
+ .../net/forwarding/mirror_gre_bridge_1q.sh         |   3 +
+ tools/testing/selftests/net/so_txtime.c            |   4 +-
+ tools/testing/selftests/wireguard/netns.sh         |  34 ++--
+ tools/testing/selftests/wireguard/qemu/.gitignore  |   1 +
+ tools/testing/selftests/wireguard/qemu/Makefile    | 205 ++++++++++++++-------
+ .../selftests/wireguard/qemu/arch/aarch64.config   |   5 +-
+ .../wireguard/qemu/arch/aarch64_be.config          |   5 +-
+ .../selftests/wireguard/qemu/arch/arm.config       |   5 +-
+ .../selftests/wireguard/qemu/arch/armeb.config     |   5 +-
+ .../selftests/wireguard/qemu/arch/i686.config      |   2 +-
+ .../selftests/wireguard/qemu/arch/m68k.config      |   2 +-
+ .../selftests/wireguard/qemu/arch/mips.config      |   2 +-
+ .../selftests/wireguard/qemu/arch/mips64.config    |   2 +-
+ .../selftests/wireguard/qemu/arch/mips64el.config  |   2 +-
+ .../selftests/wireguard/qemu/arch/mipsel.config    |   2 +-
+ .../selftests/wireguard/qemu/arch/powerpc.config   |   2 +-
+ .../selftests/wireguard/qemu/arch/powerpc64.config |  13 ++
+ .../wireguard/qemu/arch/powerpc64le.config         |   2 +-
+ .../selftests/wireguard/qemu/arch/riscv32.config   |  12 ++
+ .../selftests/wireguard/qemu/arch/riscv64.config   |  12 ++
+ .../selftests/wireguard/qemu/arch/s390x.config     |   6 +
+ .../selftests/wireguard/qemu/arch/x86_64.config    |   2 +-
+ tools/testing/selftests/wireguard/qemu/init.c      |   6 -
+ 76 files changed, 724 insertions(+), 386 deletions(-)
+ create mode 100644 tools/testing/selftests/wireguard/qemu/arch/powerpc64.config
+ create mode 100644 tools/testing/selftests/wireguard/qemu/arch/riscv32.config
+ create mode 100644 tools/testing/selftests/wireguard/qemu/arch/riscv64.config
+ create mode 100644 tools/testing/selftests/wireguard/qemu/arch/s390x.config
 

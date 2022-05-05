@@ -2,143 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C11151B529
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 03:18:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0867D51B524
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 03:15:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235112AbiEEBVr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 21:21:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38422 "EHLO
+        id S235005AbiEEBSe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 21:18:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230176AbiEEBVq (ORCPT
+        with ESMTP id S230176AbiEEBSc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 21:21:46 -0400
-X-Greylist: delayed 306 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 04 May 2022 18:18:08 PDT
-Received: from us-smtp-delivery-74.mimecast.com (us-smtp-delivery-74.mimecast.com [170.10.133.74])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3ABD254F8C
-        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 18:18:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651713483;
+        Wed, 4 May 2022 21:18:32 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11E67515AD
+        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 18:14:55 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1651713293;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=hjXZjoXRwWi27O+yncPytNpTaOYs3QPDkObrlrwm7sg=;
-        b=afyM6DfHula07uikirOgZfUYYWoovBX3OZ3TV7UqgMZr1KjIMrYYkZVQLTLRedQKqv9apT
-        FVL9ZFkVSEAzQtQxGkkRVk1NdZycEStHP0YzvqSetuS4RBTj2hfHw2c8hnyoByzB0BGoDA
-        UTjitouSiriuiDJrsfx0muIfUSCahOo=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-79-u3D2452pOgiHzviR_wT0RQ-1; Wed, 04 May 2022 21:11:50 -0400
-X-MC-Unique: u3D2452pOgiHzviR_wT0RQ-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 14EF485A5BC;
-        Thu,  5 May 2022 01:11:50 +0000 (UTC)
-Received: from [10.22.16.87] (unknown [10.22.16.87])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id B7D5743E779;
-        Thu,  5 May 2022 01:11:49 +0000 (UTC)
-Message-ID: <cc3a8d8b-50fa-1058-554e-113eb96fba70@redhat.com>
-Date:   Wed, 4 May 2022 21:11:49 -0400
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: Wait for mutex to become unlocked
-Content-Language: en-US
-To:     Matthew Wilcox <willy@infradead.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>
-Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
+        bh=n17gGihYsOZ1CbJmH63jbnw4kqj3EjuV+qmxB3T5Ge8=;
+        b=TlsZwi0uyF1NKkZHplRBpBaz//Z6mpYb/w41WUZ7NR5PBbb2kD6MbtA8H8J3hBd6ihWmYJ
+        kVWzLZRrMilIWKwUE/N7L2dRFP1lsyZbMAYUN7VZC/PmgBKyD4WIKLsBJkqSJJl7eJMl5g
+        Rby+GikSXrxli4EImKAm10RGKPsqz+8o+4iA3xvWmOA+H1tJ7T8Es32WQ6xnS956ilmrhJ
+        c/i049M0vBbzgVoHIOwPu5O+tZRDhHWm7oZaygcEI28IXDQoFkCR0ts9hz6QSI3QLcBKol
+        T/8mhplso+jUD4APEA/ROK/FuIFf4JzJh/GlBgkzry5eSeKGpDDCQ1glMH/pGA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1651713293;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=n17gGihYsOZ1CbJmH63jbnw4kqj3EjuV+qmxB3T5Ge8=;
+        b=47Xv4gfd6yiM8vnmcngpfAz5X6za6e5419uh7iVLImO157Whj5mLkYSC6aLePokOZcqbEm
+        HFLN8pxeB6MjnODQ==
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
         "Liam R. Howlett" <Liam.Howlett@oracle.com>,
         linux-kernel@vger.kernel.org
-References: <YnLzrGlBNCmCPLmS@casper.infradead.org>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <YnLzrGlBNCmCPLmS@casper.infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: Wait for mutex to become unlocked
+In-Reply-To: <YnMcdmx9ZwHcxTYe@casper.infradead.org>
+References: <YnLzrGlBNCmCPLmS@casper.infradead.org> <87pmksj0ah.ffs@tglx>
+ <YnMcdmx9ZwHcxTYe@casper.infradead.org>
+Date:   Thu, 05 May 2022 03:14:53 +0200
+Message-ID: <87k0b0ixv6.ffs@tglx>
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/4/22 17:44, Matthew Wilcox wrote:
-> Paul, Liam and I were talking about some code we intend to write soon
-> and realised there's a missing function in the mutex & rwsem API.
-> We're intending to use it for an rwsem, but I think it applies equally
-> to mutexes.
+On Thu, May 05 2022 at 01:38, Matthew Wilcox wrote:
+> On Thu, May 05, 2022 at 02:22:30AM +0200, Thomas Gleixner wrote:
+>> > That is, rwsem_wait_read() puts the thread on the rwsem's wait queue,
+>> > and wakes it up without giving it the lock.  Now this thread will never
+>> > be able to block any thread that tries to acquire mmap_sem for write.
+>> 
+>> Never?
+>> 
+>>  	if (down_read_trylock(&vma->sem)) {
+>> 
+>> ---> preemption by writer
 >
-> The customer has a low priority task which wants to read /proc/pid/smaps
-> of a higher priority task.  Today, everything is awful; smaps acquires
-> mmap_sem read-only, is preempted, then the high-pri task calls mmap()
-> and the down_write(mmap_sem) blocks on the low-pri task.  Then all the
-> other threads in the high-pri task block on the mmap_sem as they take
-> page faults because we don't want writers to starve.
->
-> The approach we're looking at is to allow RCU lookup of VMAs, and then
-> take a per-VMA rwsem for read.  Because we're under RCU protection,
-> that looks a bit like this:
->
-> 	rcu_read_lock();
-> 	vma = vma_lookup();
-> 	if (down_read_trylock(&vma->sem)) {
-> 		rcu_read_unlock();
-> 	} else {
-> 		rcu_read_unlock();
-> 		down_read(&mm->mmap_sem);
-> 		vma = vma_lookup();
-> 		down_read(&vma->sem);
-> 		up_read(&mm->mmap_sem);
-> 	}
->
-> (for clarity, I've skipped the !vma checks; don't take this too literally)
->
-> So this is Good.  For the vast majority of cases, we avoid taking the
-> mmap read lock and the problem will appear much less often.  But we can
-> do Better with a new API.  You see, for this case, we don't actually
-> want to acquire the mmap_sem; we're happy to spin a bit, but there's no
-> point in spinning waiting for the writer to finish when we can sleep.
-> I'd like to write this code:
->
-> again:
-> 	rcu_read_lock();
-> 	vma = vma_lookup();
-> 	if (down_read_trylock(&vma->sem)) {
-> 		rcu_read_unlock();
-> 	} else {
-> 		rcu_read_unlock();
-> 		rwsem_wait_read(&mm->mmap_sem);
-> 		goto again;
-> 	}
->
-> That is, rwsem_wait_read() puts the thread on the rwsem's wait queue,
-> and wakes it up without giving it the lock.  Now this thread will never
-> be able to block any thread that tries to acquire mmap_sem for write.
+> Ah!  This is a different semaphore.  Yes, it can be preempted while
+> holding the VMA rwsem and block a thread which is trying to modify the
+> VMA which will then block all threads from faulting _on that VMA_,
+> but it won't affect page faults on any other VMA.
 
-I suppose that a writer that needs to take a write lock on vma->sem will 
-have to take a write lock on mmap_sem first, then it makes sense to me 
-that you want to wait for all the vma->sem writers to finish by waiting 
-on the wait queue of mmap_sem. By the time the waiting task is being 
-woken up, there is no active write lock on the vma->sem and hopefully by 
-the time the waiting process wakes up and do a down_read_trylock(), it 
-will succeed. However, the time gap in the wakeup process may have 
-another writer coming in taking the vma->sem write lock. It improves the 
-chance of a successful trylock but it is not guaranteed. So you will 
-need a retry count and revert back to a direct down_read() when there 
-are too many retries.
+Ooops. Missed that detail. Too many semaphores here.
 
-Since the waiting process isn't taking any lock, the name 
-rwsem_wait_read() may be somewhat misleading. I think a better name may 
-be rwsem_flush_waiters(). So do you want to flush the waiters at the 
-point this API is called or you want to wait until the wait queue is empty?
+> It's only Better, not Best (the Best approach was proposed on Monday
+> afternoon, and the other MM developers asked us to only go as far as
+> Better and see if that was good enough).
 
-Cheers,
-Longman
+:)
 
+>> The information gathered from /proc/pid/smaps is unreliable at the point
+>> where the lock is dropped already today. So it does not make a
+>> difference whether the VMAs have a 'read me if you really think it's
+>> useful' sideband information which gets updated when the VMA changes and
+>> allows to do:
+>
+> Mmm.  I'm not sure that we want to maintain the smaps information on
+> the off chance that somebody wants to query it.
+
+Fair enough, but then the question is whether it's more reasonable to
+document that if you want to read that nonsense, then you have to live
+with the consequences. The problem with many of those interfaces is that
+they have been added for whatever reasons, became ABI and people are
+suddenly making performance claims which might not be justified at all.
+
+We really have to make our mind up and make decisions whether we want to
+solve every "I want a pony" complaint just because.
+
+>> But looking at the stuff which gets recomputed and reevaluated in that
+>> proc/smaps code this makes a lot of sense, because most if not all of
+>> this information is already known at the point where the VMA is modified
+>> while holding mmap_sem for useful reasons, no?
+>
+> I suspect the only way to know is to try to implement it, and then
+> benchmark it.
+
+Sure. There are other ways than having a RCU protected info, e.g. a
+sequence count which ensures that the to be read information is
+consistent.
+
+Thanks,
+
+        tglx

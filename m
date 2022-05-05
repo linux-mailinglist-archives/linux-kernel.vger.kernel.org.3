@@ -2,65 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2782C51BEC5
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 14:03:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E19051BECA
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 14:04:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359437AbiEEMHF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 08:07:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43476 "EHLO
+        id S1359477AbiEEMHz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 08:07:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244273AbiEEMHA (ORCPT
+        with ESMTP id S244273AbiEEMHx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 08:07:00 -0400
-Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F063D2AC7F;
-        Thu,  5 May 2022 05:03:20 -0700 (PDT)
-Received: by angie.orcam.me.uk (Postfix, from userid 500)
-        id 8C73B92009C; Thu,  5 May 2022 14:03:19 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by angie.orcam.me.uk (Postfix) with ESMTP id 8024592009B;
-        Thu,  5 May 2022 13:03:19 +0100 (BST)
-Date:   Thu, 5 May 2022 13:03:19 +0100 (BST)
-From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
-To:     David Laight <David.Laight@ACULAB.COM>
-cc:     'Arnd Bergmann' <arnd@kernel.org>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Niklas Schnelle <schnelle@linux.ibm.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        Dominik Brodowski <linux@dominikbrodowski.net>
-Subject: RE: [RFC v2 25/39] pcmcia: add HAS_IOPORT dependencies
-In-Reply-To: <145b4021c7b14ada95ba0acf6f294b96@AcuMS.aculab.com>
-Message-ID: <alpine.DEB.2.21.2205051254010.52331@angie.orcam.me.uk>
-References: <20220429135108.2781579-44-schnelle@linux.ibm.com> <20220503233802.GA420374@bhelgaas> <CAK8P3a02vidd7u5Kp6UJj=9tj_hFGL24SmzuNpDGu1GOa1w9+w@mail.gmail.com> <145b4021c7b14ada95ba0acf6f294b96@AcuMS.aculab.com>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
-MIME-Version: 1.0
+        Thu, 5 May 2022 08:07:53 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDAC545527;
+        Thu,  5 May 2022 05:04:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AE3B6B82C2B;
+        Thu,  5 May 2022 12:04:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4EC45C385A4;
+        Thu,  5 May 2022 12:04:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651752250;
+        bh=bkJvphN7syBYWRsUJY+LC4KlT+zXODM0ziWUwHCjA/0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=td/Txg+E2NK7U7QAjor3Z4L0qanKjWzlFWAGi8ipOLZ3Z10aa883FcQJL0K8w5RtT
+         j90NRbECApWwgMI097QJ5gDdRY5C2N6nOFLOPxbUPd3LXquIa0qM2dLXFkNOo0crAr
+         l08byEWOYbQamUUdh3FBGhHiyO9dNYPlyHlBy2UFhqkYdgVpMkMOoq/rG+fMccrIIa
+         WqM8yxtwsi8y6LfyPsseXcSlHCpHvxhYeIdqFCzXOE1cP2KPXAhbPRVVd7KqSxCjYa
+         J4Xm3pRGWPwW6p9PVmJbmOnqY8Nse8pls6fs0mNCwKhLTWMJF52M8/emhjuiPvN37B
+         z2ATW/zVAf+iw==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nmaDH-009CAb-M4; Thu, 05 May 2022 13:04:07 +0100
+Date:   Thu, 05 May 2022 13:04:07 +0100
+Message-ID: <87zgjw6v9k.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Oliver Upton <oupton@google.com>
+Cc:     Raghavendra Rao Ananta <rananta@google.com>,
+        Andrew Jones <drjones@redhat.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Peter Shier <pshier@google.com>,
+        Ricardo Koller <ricarkol@google.com>,
+        Reiji Watanabe <reijiw@google.com>,
+        Jing Zhang <jingzhangos@google.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH] selftests: KVM: aarch64: Let hypercalls use UAPI *_BIT_COUNT
+In-Reply-To: <YnLa8uH55/epyjlS@google.com>
+References: <20220504184415.1905224-1-rananta@google.com>
+        <YnLa8uH55/epyjlS@google.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
 Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: oupton@google.com, rananta@google.com, drjones@redhat.com, james.morse@arm.com, alexandru.elisei@arm.com, suzuki.poulose@arm.com, pbonzini@redhat.com, catalin.marinas@arm.com, will@kernel.org, pshier@google.com, ricarkol@google.com, reijiw@google.com, jingzhangos@google.com, linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu, linux-kernel@vger.kernel.org, kvm@vger.kernel.org, linux-kselftest@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 4 May 2022, David Laight wrote:
+On Wed, 04 May 2022 20:58:42 +0100,
+Oliver Upton <oupton@google.com> wrote:
+> 
+> Hi Raghavendra,
+> 
+> On Wed, May 04, 2022 at 06:44:15PM +0000, Raghavendra Rao Ananta wrote:
+> > The hypercalls test currently defines its own *_BMAP_BIT_MAX macros to
+> > define the last valid feature bit for each bitmap firmware register.
+> > However, since these definitions are already present in the uapi header,
+> > kvm.h, as *_BMAP_BIT_COUNT, and would help to keep the test updated as
+> > features grow, use these instead.
+> 
+> LOL, looks like I lost that one in the end! Still, the fact that you're
+> patching the selftest highlights the fact that there is a nonzero chance
+> of userspace using this value incorrectly expecting it to hold true
+> across all kernels.
+> 
+> Since this is the route going forward can we please consider documenting
+> the fact that _BIT_COUNT *will* change and is not stable between kernel
+> versions. Bad UAPI expectations could throw a wrench into this entire
+> plan we've hatched for preserving hypercall ABI.
+> 
+> Just a warning at the end of the register documentation would suffice.
 
-> I think you can find cardbus cards that have a pci bridge and a cable
-> link to an expansion chassis into which you can insert standard PCI cards.
-> If you are really lucky the initial enumeration allocates the
-> 'high field' bus numbers, io addresses and plenty of memory
-> space to the bridge - otherwise you lose.
+Maybe something in the kvm.h file as well, as the includes are often
+distributed without the kernel documentation. Something like:
 
- No need to rely on luck as (given that no single size fits all) we have 
-the `hpbussize', `hpiosize', `hpmemsize', `hpmmioprefsize', `hpmmiosize', 
-options to the `pci=...' kernel parameter for people to tune the settings 
-according to their needs.  I don't have such a CardBus option, but I do 
-have a couple of such ExpressCard devices, and mixed PCIe/PCI expansion 
-backplanes for them.
+diff --git a/arch/arm64/include/uapi/asm/kvm.h b/arch/arm64/include/uapi/asm/kvm.h
+index e523bb6eac67..3cde9f958eee 100644
+--- a/arch/arm64/include/uapi/asm/kvm.h
++++ b/arch/arm64/include/uapi/asm/kvm.h
+@@ -342,6 +342,10 @@ struct kvm_arm_copy_mte_tags {
+ 
+ enum {
+ 	KVM_REG_ARM_STD_BIT_TRNG_V1_0	= 0,
++	/*
++	 * KVM_REG_ARM_STD_BMAP_BIT_COUNT will vary as new services
++	 * are added, and is explicitely not part of the ABI.
++	 */
+ 	KVM_REG_ARM_STD_BMAP_BIT_COUNT,
+ };
+ 
+@@ -349,6 +353,10 @@ enum {
+ 
+ enum {
+ 	KVM_REG_ARM_STD_HYP_BIT_PV_TIME	= 0,
++	/*
++	 * KVM_REG_ARM_STD_HYP_BMAP_BIT_COUNT will vary as new
++	 * services are added, and is explicitely not part of the ABI.
++	 */
+ 	KVM_REG_ARM_STD_HYP_BMAP_BIT_COUNT,
+ };
+ 
+@@ -357,6 +365,10 @@ enum {
+ enum {
+ 	KVM_REG_ARM_VENDOR_HYP_BIT_FUNC_FEAT	= 0,
+ 	KVM_REG_ARM_VENDOR_HYP_BIT_PTP		= 1,
++	/*
++	 * KVM_REG_ARM_VENDOR_HYP_BMAP_BIT_COUNT will vary as new
++	 * services are added, and is explicitely not part of the ABI.
++	 */
+ 	KVM_REG_ARM_VENDOR_HYP_BMAP_BIT_COUNT,
+ };
 
-  Maciej
+Thanks,
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.

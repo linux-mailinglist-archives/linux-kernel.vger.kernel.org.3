@@ -2,132 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9011251B534
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 03:21:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54C1951B537
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 03:21:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235267AbiEEBYz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 21:24:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42916 "EHLO
+        id S235323AbiEEBZY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 21:25:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230176AbiEEBYw (ORCPT
+        with ESMTP id S230176AbiEEBZX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 21:24:52 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 653C1506DB
-        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 18:21:14 -0700 (PDT)
-Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KtwnK3MHbzGpTN;
-        Thu,  5 May 2022 09:18:29 +0800 (CST)
-Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
- dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 5 May 2022 09:21:12 +0800
-Received: from [10.174.177.243] (10.174.177.243) by
- dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 5 May 2022 09:21:11 +0800
-Message-ID: <83e5bbe7-0880-3534-897a-156a4d2b4451@huawei.com>
-Date:   Thu, 5 May 2022 09:21:11 +0800
+        Wed, 4 May 2022 21:25:23 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B60EF506FD;
+        Wed,  4 May 2022 18:21:45 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1651713704;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=kKuGwdSJtS+WiXghVoIOPpH32AVOKBI/15oCiMuq+jQ=;
+        b=mlX+me3NOGEr2QS8iofK25Nzt/JMyKvAWUFvlEBfi3vgWJWAbGFlCJZZBCi9XfpgkVGdTp
+        ezzlLg4sna1GNariY6xv6alMom9mPBIouX8Dz2xknquqKah6lac/eiY40VaI1BdYxv6+kz
+        Rsi9x2ic0FV2GhKQ2a5iLUEkxa80w9VhYdzzIOiChlSow5SrbTchqbqhobT4Kcta8tBYu9
+        u/rOBZfDm6UYayws4BisIIPNBInm0iKwNm+3i3iBGIan9fTxv1DLqdlwe8dxtP5qhYd0Xa
+        BkJMpAmi9qf0duNXFF/25xIvCndY8vKkScVwYD/cAMHO+ZlKsLlokQ0ReZ/Xpw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1651713704;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=kKuGwdSJtS+WiXghVoIOPpH32AVOKBI/15oCiMuq+jQ=;
+        b=ah23Qu7hQPYvzXRQTkxFXgnobMZPJBL9gXOSfAFn0Ru7tgFXZpLOI06TDd8B5iP1IE87o4
+        Uv3voCCxRFzNvIAg==
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Borislav Petkov <bp@alien8.de>,
+        LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
+        Filipe Manana <fdmanana@suse.com>, linux-crypto@vger.kernel.org
+Subject: Re: [patch 3/3] x86/fpu: Make FPU protection more robust
+In-Reply-To: <YnMkRLcxczMxdE5z@zx2c4.com>
+References: <Ym/sHqKqmLOJubgE@zn.tnic> <87k0b4lydr.ffs@tglx>
+ <YnDwjjdiSQ5Yml6E@hirez.programming.kicks-ass.net> <87fslpjomx.ffs@tglx>
+ <YnKh96isoB7jiFrv@zx2c4.com> <87czgtjlfq.ffs@tglx>
+ <YnLOXZp6WgH7ULVU@zx2c4.com> <87wnf1huwj.ffs@tglx>
+ <YnMRwPFfvB0RlBow@zx2c4.com> <87mtfwiyqp.ffs@tglx>
+ <YnMkRLcxczMxdE5z@zx2c4.com>
+Date:   Thu, 05 May 2022 03:21:43 +0200
+Message-ID: <87h764ixjs.ffs@tglx>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH -next v4 1/7] x86, powerpc: fix function define in
- copy_mc_to_user
-Content-Language: en-US
-To:     Tong Tiangen <tongtiangen@huawei.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Mark Rutland <mark.rutland@arm.com>,
-        "James Morse" <james.morse@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Robin Murphy <robin.murphy@arm.com>,
-        "Dave Hansen" <dave.hansen@linux.intel.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        "Benjamin Herrenschmidt" <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "H . Peter Anvin" <hpa@zytor.com>
-CC:     Xie XiuQi <xiexiuqi@huawei.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        Guohanjun <guohanjun@huawei.com>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-References: <20220420030418.3189040-1-tongtiangen@huawei.com>
- <20220420030418.3189040-2-tongtiangen@huawei.com>
- <91011a66-b125-b445-1486-bada8e06b994@csgroup.eu>
- <48f2779d-bc62-c7f5-c40e-7238a16b90fb@huawei.com>
-From:   Kefeng Wang <wangkefeng.wang@huawei.com>
-In-Reply-To: <48f2779d-bc62-c7f5-c40e-7238a16b90fb@huawei.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.177.243]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpemm500001.china.huawei.com (7.185.36.107)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Jason,
 
-On 2022/5/3 9:06, Tong Tiangen wrote:
+On Thu, May 05 2022 at 03:11, Jason A. Donenfeld wrote:
+> On Thu, May 05, 2022 at 02:55:58AM +0200, Thomas Gleixner wrote:
+>> > So if truly the only user of this is random.c as of 5.18 (is it? I'm
+>> > assuming from a not very thorough survey...), and if the performance
+>> > boost doesn't even exist, then yeah, I think it'd make sense to just get
+>> > rid of it, and have kernel_fpu_usable() return false in those cases.
+>> >
+>> > I'll run some benchmarks on a little bit more hardware in representative
+>> > cases and see.
+>> 
+>> Find below a combo patch which makes use of strict softirq serialization
+>> for the price of not supporting the hardirq FPU usage. 
 >
+> Thanks, I'll give it a shot in the morning (3am) when trying to do a
+> more realistic benchmark. But just as a synthetic thing, I ran the
+> numbers in kBench900 and am getting:
 >
-> 在 2022/5/2 22:24, Christophe Leroy 写道:
->>
->>
->> Le 20/04/2022 à 05:04, Tong Tiangen a écrit :
->>> x86/powerpc has it's implementation of copy_mc_to_user but not use 
->>> #define
->>> to declare.
->>>
->>> This may cause problems, for example, if other architectures open
->>> CONFIG_ARCH_HAS_COPY_MC, but want to use copy_mc_to_user() outside the
->>> architecture, the code add to include/linux/uaddess.h is as follows:
->>>
->>>       #ifndef copy_mc_to_user
->>>       static inline unsigned long __must_check
->>>       copy_mc_to_user(void *dst, const void *src, size_t cnt)
->>>       {
->>>         ...
->>>       }
->>>       #endif
->>>
->>> Then this definition will conflict with the implementation of 
->>> x86/powerpc
->>> and cause compilation errors as follow:
->>>
->>> Fixes: ec6347bb4339 ("x86, powerpc: Rename memcpy_mcsafe() to 
->>> copy_mc_to_{user, kernel}()")
->>
->> I don't understand, what does it fix really ? What was the
->> (existing/real) bug introduced by that patch and that your are fixing ?
->>
->> If those defined had been expected and missing, we would have had a
->> build failure. If you have one, can you describe it ?
+>      generic:    430 cycles per call
+>        ssse3:    315 cycles per call
+>       avx512:    277 cycles per call
 >
-It could prevent future problems when patch3 is introduced， and yes，for 
-now，
+> for a single call to the compression function, which is the most any of
+> those mix_pool_bytes() calls do from add_{input,disk}_randomness(), on
+> Tiger Lake, using RDPMC from kernel space.
 
-this patch won't fix any issue，we could drop the fix tag, and update the 
-changelog.
+I'm well aware of the difference between synthetic benchmarks and real
+world scenarios and with the more in depth instrumentation of these
+things I'm even more concerned that the difference is underestimated.
 
+> This _doesn't_ take into account the price of calling kernel_fpu_begin().
+> That's a little hard to bench synthetically by running it in a loop and
+> taking medians because of the lazy restoration. But that's an indication
+> anyway that I should be looking at the cost of the actual function as
+> its running in random.c, rather than the synthetic test. Will keep this
+> thread updated.
 
-> There will be build failure after patch 3 is added, there is a little
-> confusing for a reader of this commit in isolation.
-> In the next version, I will put this patch after patch 3.
-This is an alternative.
->
-> Thanks,
-> Tong.
-> .
+Appreciated.
+
+Thanks,
+
+        tglx

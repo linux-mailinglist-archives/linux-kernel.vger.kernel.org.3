@@ -2,68 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EE8051BAEF
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 10:48:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E04A51BAF5
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 10:49:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350439AbiEEIw3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 04:52:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33998 "EHLO
+        id S1350483AbiEEIxT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 04:53:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350432AbiEEIwY (ORCPT
+        with ESMTP id S232713AbiEEIxR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 04:52:24 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53F754AE2D;
-        Thu,  5 May 2022 01:48:40 -0700 (PDT)
-X-UUID: b6a27cbdd49b4151970748d245fa15a2-20220505
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.4,REQID:b0e02674-ab0d-40a7-ad44-6868b5f9cd64,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:0
-X-CID-META: VersionHash:faefae9,CLOUDID:6a14acb2-56b5-4c9e-8d83-0070b288eb6a,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,File:nil,QS:0,BEC:nil
-X-UUID: b6a27cbdd49b4151970748d245fa15a2-20220505
-Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
-        (envelope-from <jiaxin.yu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1325095859; Thu, 05 May 2022 16:48:33 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Thu, 5 May 2022 16:48:32 +0800
-Received: from mhfsdcap04 (10.17.3.154) by mtkmbs11n2.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
- Transport; Thu, 5 May 2022 16:48:31 +0800
-Message-ID: <cbf2fcbae25408b95875278eb37e829bf4671430.camel@mediatek.com>
-Subject: Re: [PATCH 1/3] ASoC: dt-bindings: mediatek: mt8192: Add i2s-share
- properties
-From:   Jiaxin Yu <jiaxin.yu@mediatek.com>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        "=?ISO-8859-1?Q?N=EDcolas?= F. R. A. Prado" <nfraprado@collabora.com>,
-        "Mark Brown" <broonie@kernel.org>
-CC:     <kernel@collabora.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Shane Chien <shane.chien@mediatek.com>,
-        <alsa-devel@alsa-project.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>
-Date:   Thu, 5 May 2022 16:48:31 +0800
-In-Reply-To: <4826c824-40ce-5726-ed95-5be069233ca7@collabora.com>
-References: <20220429203039.2207848-1-nfraprado@collabora.com>
-         <20220429203039.2207848-2-nfraprado@collabora.com>
-         <4826c824-40ce-5726-ed95-5be069233ca7@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Thu, 5 May 2022 04:53:17 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0782B4AE0F;
+        Thu,  5 May 2022 01:49:39 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id B9E39218ED;
+        Thu,  5 May 2022 08:49:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1651740577; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=G98mln19ZgjcWOJ1EpprkkSYVYDttaLj17m3CPfaya0=;
+        b=fP+Z5rt/gxgHBIrKtnF8r6iXxmrS8OqhX5a0Jd2K/jAFSnh/hnzl6Y23ku2iKW7Ak3Wgjg
+        CP3DhBzzJdO+V4n/WY0mmOUNdrPcxAqbnRRr0STjn+uqGG7cUEr8zh2/MzNC2A1ONdESvN
+        6n0luq29P6mtKdlN0jkz8emg+8ozKdU=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1651740577;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=G98mln19ZgjcWOJ1EpprkkSYVYDttaLj17m3CPfaya0=;
+        b=f38ImMI5VE2CUGPJDEK5AU0qXgyiUT6TFQUq4oabCBu3l+IwipxnyrFPd6Vtr3017BXXde
+        04t5xS23Keci0uCQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 8C7B713B11;
+        Thu,  5 May 2022 08:49:37 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id gXkCIaGPc2LoGAAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Thu, 05 May 2022 08:49:37 +0000
+Message-ID: <e1797321-d901-45dc-713f-7f706147c341@suse.de>
+Date:   Thu, 5 May 2022 10:49:36 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH 2/3] fbdev/simplefb: Cleanup fb_info in .fb_destroy rather
+ than .remove
+Content-Language: en-US
+To:     Javier Martinez Canillas <javierm@redhat.com>,
+        linux-kernel@vger.kernel.org
+Cc:     Daniel Vetter <daniel.vetter@ffwll.ch>,
+        linux-fbdev@vger.kernel.org, Helge Deller <deller@gmx.de>,
+        dri-devel@lists.freedesktop.org,
+        Hans de Goede <hdegoede@redhat.com>
+References: <20220504215151.55082-1-javierm@redhat.com>
+ <20220504215722.56970-1-javierm@redhat.com>
+ <974f4d00-89bc-a2da-6d65-ca4207300794@suse.de>
+ <d9a5cb30-2d9b-50b5-d287-0ead0fe252f3@redhat.com>
+ <78167587-fd2e-354c-485b-db4ee9251178@suse.de>
+ <237c7fa0-744d-97c2-2bba-3f714d6c2e9d@redhat.com>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <237c7fa0-744d-97c2-2bba-3f714d6c2e9d@redhat.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------bfNxQvqkcvpizuhcxOBwiAnc"
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,81 +82,97 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-05-05 at 10:08 +0200, AngeloGioacchino Del Regno wrote:
-> Il 29/04/22 22:30, Nícolas F. R. A. Prado ha scritto:
-> > The Mediatek AFE PCM controller for MT8192 allows sharing of an I2S
-> > bus
-> > between two busses. Add a pattern for these properties in the
-> > dt-binding.
-> > 
-> > Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
-> > ---
-> > 
-> >   Documentation/devicetree/bindings/sound/mt8192-afe-pcm.yaml | 5
-> > +++++
-> >   1 file changed, 5 insertions(+)
-> > 
-> > diff --git a/Documentation/devicetree/bindings/sound/mt8192-afe-
-> > pcm.yaml b/Documentation/devicetree/bindings/sound/mt8192-afe-
-> > pcm.yaml
-> > index 7a25bc9b8060..5b03c8dbf318 100644
-> > --- a/Documentation/devicetree/bindings/sound/mt8192-afe-pcm.yaml
-> > +++ b/Documentation/devicetree/bindings/sound/mt8192-afe-pcm.yaml
-> > @@ -54,6 +54,11 @@ properties:
-> >         - const: aud_infra_clk
-> >         - const: aud_infra_26m_clk
-> >   
-> > +patternProperties:
-> > +  "^i2s[0-35-9]-share$":
-> > +    description: Name of the I2S bus that is shared with this bus
-> > +    pattern: "^I2S[0-35-9]$"
-> > +
-> >   required:
-> >     - compatible
-> >     - interrupts
-> > 
-> 
-> The only other way of doing this would be to complicate this in the
-> driver
-> so that we can do something like
-> 
-> "i2s-share = <0 2>";  instead of  i2s0-share = "I2S2";
-> 
-> ...and I don't think that this would be any more straightforward than
-> the
-> provided way.
-> 
-> There's an improvement that we can do to that pattern description
-> though,
-> which would be explaining that declaring 'i2s0-share = "I2S2"' means
-> that
-> I2S2's data pin will be used as DATA-OUT, while i2s0 is DATA-IN.
-> 
-> Another thing that comes to mind here is that this is a MediaTek
-> specific
-> property and *not* a generic one, which means that both the driver
-> and
-> this binding should be fixed to get a "mediatek," prefix, so, this
-> property
-> should - in reality - be "mediatek,i2s[0-35-9]-share" instead.
-> 
-> I think that everyone agrees about that, but let's see what the
-> others say.
-> 
-> Cheers,
-> Angelo
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------bfNxQvqkcvpizuhcxOBwiAnc
+Content-Type: multipart/mixed; boundary="------------MF9XvBTem0bHn0z8Qv0sXD0P";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Javier Martinez Canillas <javierm@redhat.com>,
+ linux-kernel@vger.kernel.org
+Cc: Daniel Vetter <daniel.vetter@ffwll.ch>, linux-fbdev@vger.kernel.org,
+ Helge Deller <deller@gmx.de>, dri-devel@lists.freedesktop.org,
+ Hans de Goede <hdegoede@redhat.com>
+Message-ID: <e1797321-d901-45dc-713f-7f706147c341@suse.de>
+Subject: Re: [PATCH 2/3] fbdev/simplefb: Cleanup fb_info in .fb_destroy rather
+ than .remove
+References: <20220504215151.55082-1-javierm@redhat.com>
+ <20220504215722.56970-1-javierm@redhat.com>
+ <974f4d00-89bc-a2da-6d65-ca4207300794@suse.de>
+ <d9a5cb30-2d9b-50b5-d287-0ead0fe252f3@redhat.com>
+ <78167587-fd2e-354c-485b-db4ee9251178@suse.de>
+ <237c7fa0-744d-97c2-2bba-3f714d6c2e9d@redhat.com>
+In-Reply-To: <237c7fa0-744d-97c2-2bba-3f714d6c2e9d@redhat.com>
 
-Hi Angelo,
+--------------MF9XvBTem0bHn0z8Qv0sXD0P
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-'i2s0-share = "I2S2"' means that if we want use I2S0, there need open
-I2S2 to provide clock. Conversely, if we want to use I2S2, we don't
-need to open I2S0. However, MediaTek I2S0 and I2S2 hardware are
-generally designed as input. So usually we use 'i2s0-share = "I2S1"'.
-Even numbers represent input, odd numbers represent output.
+SGkNCg0KQW0gMDUuMDUuMjIgdW0gMTA6Mjggc2NocmllYiBKYXZpZXIgTWFydGluZXogQ2Fu
+aWxsYXM6DQo+IEhlbGxvIFRob21hcywNCj4gDQo+IE9uIDUvNS8yMiAxMDowNSwgVGhvbWFz
+IFppbW1lcm1hbm4gd3JvdGU6DQo+IA0KPiBbc25pcF0NCj4gDQo+Pj4NCj4+PiBJbiBvdGhl
+ciB3b3JkcywgaW4gbW9zdCBjYXNlcyAoaS5lOiBvbmx5IGZiY29uIGJvdW5kIHRvIHRoZSBm
+YmRldikNCj4+PiB0aGUgZHJpdmVyJ3MgcmVtb3ZhbC8gZGV2aWNlIHVuYmluZCBhbmQgdGhl
+IG1lbW9yeSByZWxlYXNlIHdpbGwgYmUNCj4+PiBhdCB0aGUgc2FtZSB0aW1lLg0KPj4+DQo+
+Pg0KPj4gV2UncmUgb25lIHRoZSBzYW1lIHBhZ2UgaGVyZSwgYnV0IGl0J3Mgc3RpbGwgc29y
+dCBvZiBhIG15c3RlcnkgdG8gbWUgd2h5DQo+PiB0aGlzIHdvcmtzIGluIHByYWN0aWNlLg0K
+Pj4NCj4+IEknbSBzcGVjaWZpY2FsbHkgdGFsa2luZyBhYm91dCBwY2lfcmVxdWVzdF9yZWdp
+b25zKCkgaW4gdm13Z2Z4IFsxXS4gSUlSQw0KPj4gdGhpcyB3b3VsZCBmYWlsIGlmIHNpbXBs
+ZWZiIHN0aWxsIG93bnMgdGhlIGZyYW1lYnVmZmVyIHJlZ2lvbi4gTG90cyBvZg0KPj4gc3lz
+dGVtcyBydW4gUGx5bW91dGggZHVyaW5nIGJvb3QgYW5kIHRoaXMgc2hvdWxkIHJlc3VsdCBp
+biBmYWlsdXJlcw0KPj4gb2NjYXNpb25hbGx5LiBTdGlsbCwgd2UgbmV2ZXIgaGVhcmQgYWJv
+dXQgYW55dGhpbmcuDQo+Pg0KPiANCj4gWWVzLCBJIHRoaW5rIGlzIGJlY2F1c2UgUGx5bW91
+dGggSUlVQyB3YWl0cyBmb3IgYSAvZGV2L2RyaS9jYXJkPyB0byBiZQ0KPiBwcmVzZW50IGFu
+ZCBvbmx5IHVzZXMgYSAvZGV2L2ZiPyBhcyBhIGZhbGxiYWNrIGlmIGEgdGltZW91dCBleHBp
+cmVzLg0KDQpPaCwgcmlnaHQhIFRoZSBpbmZhbW91cyBwbHltb3V0aCB0aW1lb3V0LiAnc2xl
+ZXAoMzApJyBpcyB0aGUgc3dpc3MtYXJteSANCmtuaWZlIG9mIGNvbmN1cnJlbnQgcHJvZ3Jh
+bW1pbmcuIDspDQoNCkJ1dCBJJ20gbm90IGJsYW1pbmcgYW55b25lLiBUaGVyZSBhcmUgc2l0
+dWF0aW9ucyB3aGVyZSBub3RoaW5nIGVsc2UgDQpoZWxwcy4gUGx5bW91dGggcmVhbGx5IGNh
+bid0IGRvIGFueXRoaW5nIGVsc2UgaGVyZS4gV2UndmUgcmVjZWl2ZWQgDQpyZXBvcnRzIGZv
+ciBnZngtaGFuZG92ZXIgYnVncyB3aGVuIHRoZSB0aW1lb3V0IGV4cGlyZWQgYW5kIHBseW1v
+dXRoIHVzZXMgDQp0aGUgZmJkZXYuIFRoZSBzeXN0ZW0gZ290IHN0dWNrIHRoZW4gYmVjYXVz
+ZSBvZiBmYmRldiBJSVJDLg0KDQpCZXN0IHJlZ2FyZHMNClRob21hcw0KDQo+IA0KPiBBdCBs
+ZWFzdCBpbiBGZWRvcmEgKGV2ZW4gYmVmb3JlIHRoZSBlZmlmYiAtPiBzaW1wbGVkcm0gY2hh
+bmdlKSBpdCB3aWxsDQo+IHVzZSBLTVMvRFJNIHNpbmNlIHRoZSBEUk0ga2VybmVsIG1vZHVs
+ZSBmb3IgdGhlIGdyYXBoaWNzIGRldmljZSBpbiB0aGUNCj4gbWFjaGluZSB3b3VsZCBiZSBp
+biB0aGUgaW50aXJkLg0KPiANCj4gU28gZWZpZmIgd2FzIG9ubHkgdXNlZCBmb3IgZmJjb24g
+YW5kIHBseW1vdXRoIHdvdWxkIG9ubHkgdXNlIERSTS9LTVMNCj4gYW5kIG5vdCBpdHMgZmJk
+ZXYgYmFja2VuZC4NCj4gDQo+IFRoaXMgc2VlbXMgdG8gYmUgc29ydCBvZiBhIGNvcm5lciBj
+YXNlIHdoZW4geW91IGhhdmUge2VmaSxzaW1wbGV9ZmINCj4gaW4gdGhlIGVhcmx5IGJvb3Qg
+YnV0IHRoZSByZWFsIERSTSBtb2R1bGUgb25seSBpbiB0aGUgcm9vdGZzIGFmdGVyIHRoZQ0K
+PiBpbml0cmQgaGFzIGRvbmUgYSBwaXZvdF9yb290KDIpLg0KPiAgIA0KPj4gT2YgY291cnNl
+LCBpdCdzIGFsd2F5cyBiZWVuIGJyb2tlbiAoZXZlbiBsb25nIGJlZm9yZSByZWFsIGZiZGV2
+DQo+PiBob3R1bnBsdWdnaW5nKS4gU3dpdGNoaW5nIHRvIHNpbXBsZWRybSByZXNvbHZlcyB0
+aGUgcHJvYmxlbS4NCj4+DQo+IA0KPiBJbmRlZWQuIE15IG9waW5pb24gYWZ0ZXIgZGVhbGlu
+ZyB3aXRoIHRoZXNlIGZiZGV2IHByb2JsZW1zIGlzIHRoYXQgd2UNCj4gc2hvdWxkbid0IHRy
+eSB0byBmaXggYWxsIHBvc3NpYmxlIGNvcm5lciBjYXNlcyBhbmQganVzdCB0cnkgdG8gZ2V0
+IHJpZA0KPiBvZiBmYmRldiBhcyBzb29uIGFzIHBvc3NpYmxlLg0KPiAgIC0tDQo+IEJlc3Qg
+cmVnYXJkcywNCj4gDQo+IEphdmllciBNYXJ0aW5leiBDYW5pbGxhcw0KPiBMaW51eCBFbmdp
+bmVlcmluZw0KPiBSZWQgSGF0DQo+IA0KDQotLSANClRob21hcyBaaW1tZXJtYW5uDQpHcmFw
+aGljcyBEcml2ZXIgRGV2ZWxvcGVyDQpTVVNFIFNvZnR3YXJlIFNvbHV0aW9ucyBHZXJtYW55
+IEdtYkgNCk1heGZlbGRzdHIuIDUsIDkwNDA5IE7DvHJuYmVyZywgR2VybWFueQ0KKEhSQiAz
+NjgwOSwgQUcgTsO8cm5iZXJnKQ0KR2VzY2jDpGZ0c2bDvGhyZXI6IEl2byBUb3Rldg0K
 
-Yes, I think adding the "mediatek," prefix is the right way to define a
-non-generic property.
+--------------MF9XvBTem0bHn0z8Qv0sXD0P--
 
-Best Regards,
-Jiaxin Yu
+--------------bfNxQvqkcvpizuhcxOBwiAnc
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
+-----BEGIN PGP SIGNATURE-----
+
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmJzj6AFAwAAAAAACgkQlh/E3EQov+AS
+bRAA0XI+TZwItuDpnm0hiVI3S04EtviZIWLBCjC9Z3Sv2jm60QyRUUv+S8+Up5EHoBCMGhy2kD40
+EGtnMIHqnCB9pahLx/yvy//bQ1lD6kIfRHQgqD0REZPxjf+WD7vVZ3jLdO3YqSOvxc7pamS3jcWr
+yd6lyjEpuYfwa8GA+n2stNk9w97SaRC8xRzrKw2SYY3dEgW+RJL6NwCD1DOMvnvrFj2+hN6LuWck
+lxw5JqT+i7zHRVeCGCMXBy9VL66+ZCnyYhwpAlrOjpTnV+YYT32Mk5y53kh+SYOmT3U3PJmtYdtN
+HwT4poXg2pQSs5WBbqW8qUUZJzj9nv/3Wo3j0G4GjjPECn49d6KMSHt2lqDVJbJoVaMNdmvbZ/5l
+1HTLiJblC7oszL+fqHbBArdQRCjwAFmiWXyfz4lBHhOT6VlEOGljEHVo2bVZ9u2DHu1EAeZVGUU2
+N8zw88QxwLV4dMUcTkEJ+mwGTw7Ois5KGqxLAeDxDHUqgIc+5GgPE5j6puj+rI/27GmB7xvhEVRv
+okR5eJLymIY2hHvIdF+1bDJmR2CmBbrRYzGrOqR/jQ4YCdfG2uYyG0AA5QX4Fsi/kbZ08HYk4H/l
+U/NmGFOmF1aygCAFSdzTlnav4eEgMpVdNWKBQmjuYohPr4MP+hbROebysqHbJo295u6UwUh8TSTZ
+t7I=
+=b7m2
+-----END PGP SIGNATURE-----
+
+--------------bfNxQvqkcvpizuhcxOBwiAnc--

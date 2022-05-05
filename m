@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A9B751BE44
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 13:39:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EDA351BE34
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 13:39:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358469AbiEELmW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 07:42:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44646 "EHLO
+        id S1358226AbiEELmK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 07:42:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358327AbiEELmA (ORCPT
+        with ESMTP id S1358337AbiEELmA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 5 May 2022 07:42:00 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06FE55418C
-        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 04:38:16 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id bv19so8173323ejb.6
-        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 04:38:15 -0700 (PDT)
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0438B53B7A
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 04:38:17 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id i27so8145734ejd.9
+        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 04:38:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=+WqpoGIdyJSyDNz1/n0SzZvxTxflnlsJs1yAYSXzCKI=;
-        b=CcZviteHoGf4SavUw+2Kf8Kl3r6Gkj+vE61AgfDlE8ltjTT0+hq7383KQ0wgazC+5P
-         fgC+CKPLKQW5zj4lB/0CWTsNISZDhE2M3dB02xlTKsdQL6Tg0XTid8GRTX13n04Owhlc
-         P5fPgfxf4BajSZE6DGWMCuoGmhNkiTfW+NjU3Bv5UCYK2eT6eTnuA5XKfu6YqP11bEe3
-         AloazsbQ7beAFq9noP5KpbNOFFe5ub20LtjIkJ31ogzniUeP1/eqkeI6tBbfTRzG3rXX
-         PMKFzdj4Pri6NFMMjyEAVyrB2ftBkfVQWHR4hW2gcjS3uKXTpfOSsAea5dL86avqyKkn
-         LNwg==
+        bh=eLgQPwziK+ko4kQyG3I37Mp7K7CNGQrMU0x5X86Viy4=;
+        b=hHO6dNn457mwN8ZY11w+Ya9foj5hhTMPgJvqcokiXZmXsKrOgOfZy01GeiOTTGHYlC
+         nIJL2+pu+smRvh8aT+so+QIIMTOYU6H2spQh7fW0nVbrPhzNOhJ/x8ESXZtWfrVnYPmj
+         UDs1MWCcftcp3a6X1fUm31l8Bb23z/boJHsKoUvUj40B+sMPI/nxzNQB+OpcK2eX0r4U
+         KEYzoVHeskta63tNXL67NKXh6vXJnrCcJba1jmD82sbrtwEKOcohKaGgibns/U922LxO
+         jRJvwTD+XtnBxNYQoz1KWBe2Rsj3mtz5b/F5/Mv2fUasPz3OFXipG5405qodDVHrj0pf
+         vAAQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=+WqpoGIdyJSyDNz1/n0SzZvxTxflnlsJs1yAYSXzCKI=;
-        b=ig2cC0xD1k78TrvQMhKvPsGlFMj+tGh2N0p0QOSoBEKKxdQsbeVXTZkqnqLCKP0bXq
-         p7jltL3TtHhXNxHEI4IFWfmq1uL06mSeTMbGe0r8k90q/wyl8ps3GLMosB2bZ44xC8bE
-         kaU/RxvcApfGDJpR9MILrn8uhb89cmAIt/z9Yr3Wp8YKkXqBmQlvL8PyGWo7kd8jVshq
-         +/qPbEIiJh8iaByE+6gzzuxycGHFk27fUa1YeK+LxeMZ7YzrkdswNvtqnCoMuhF//oQH
-         pPAFQjwV7Le0NbQBAH85x33mNA1m7nppJlDJySlb2U7H0qaEIs7IYX7RAJPt22NR5cuy
-         IGxQ==
-X-Gm-Message-State: AOAM532mHcj8fsK9dqsj9OgACTYWFAp3fv4jJVAn3S8VvojYRkhWT5Vc
-        /vUYWlUhU86a1Myi554MEd81jw==
-X-Google-Smtp-Source: ABdhPJwBtr2Kpwz2XJmTimebmxreUwlReI5+UblLmCc+D7UtsZUoQroXYJ8kFuYvwHG8hvBSNIliFw==
-X-Received: by 2002:a17:906:5811:b0:6e8:47dd:c55d with SMTP id m17-20020a170906581100b006e847ddc55dmr25829706ejq.191.1651750694608;
-        Thu, 05 May 2022 04:38:14 -0700 (PDT)
+        bh=eLgQPwziK+ko4kQyG3I37Mp7K7CNGQrMU0x5X86Viy4=;
+        b=3snvY78xHJm1RIWWYL7lcMsQIjylqFWWjTxVZGAdwnMjmO0UWdpaWHnqqVMs1r7qB1
+         4EQd71YTbJiHvfGa8dMjxfUZU/A4R8y3jjSkzSBq3jm0XX2TiXK61N/V++nR/qI2qY4C
+         wAGR952tgBZzVdzW8Wymdk56BirVm87iPY0/+urnafwmEyIvJhkcT2Xc1yG+Y7Wxeom/
+         YZsyescgIhBNMPOKAC3MlPWDXhaAXg7SBHRWv9XpmLe2Fvrwtwx2NJwsXoWWoEBVh8in
+         WODl70PRjC1RxNw9oQcGOXTBMmsac0mYNL+XsU/xzzOKGnPTk9DCyUaiWlHzVWKYYJjU
+         h3Ow==
+X-Gm-Message-State: AOAM5338UQdMDpT/dpPMxS0ULhLEWXcGdvPBYp5QtV2qv3icBCdQ5zON
+        Z0DD3Gq+JAwNThMpY8YbwHweYw==
+X-Google-Smtp-Source: ABdhPJz56RQddCKde8syNeZ99IESBlDy9ESB9ITrwMeCYoMWTZUXN/j4oCItchLbl2oXlmaZPfTRcw==
+X-Received: by 2002:a17:907:8a0c:b0:6f4:7fc2:b0b0 with SMTP id sc12-20020a1709078a0c00b006f47fc2b0b0mr13945675ejc.251.1651750695502;
+        Thu, 05 May 2022 04:38:15 -0700 (PDT)
 Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id g9-20020a1709063b0900b006f3ef214db6sm661006ejf.28.2022.05.05.04.38.13
+        by smtp.gmail.com with ESMTPSA id g9-20020a1709063b0900b006f3ef214db6sm661006ejf.28.2022.05.05.04.38.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 May 2022 04:38:14 -0700 (PDT)
+        Thu, 05 May 2022 04:38:15 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
@@ -57,9 +57,9 @@ To:     Andy Gross <agross@kernel.org>,
         linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 5/6] arm64: dts: qcom: use dedicated QFPROM compatibles
-Date:   Thu,  5 May 2022 13:38:01 +0200
-Message-Id: <20220505113802.243301-5-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 6/6] arm64: dts: qcom: sdm630: correct QFPROM byte offsets
+Date:   Thu,  5 May 2022 13:38:02 +0200
+Message-Id: <20220505113802.243301-6-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220505113802.243301-1-krzysztof.kozlowski@linaro.org>
 References: <20220505113802.243301-1-krzysztof.kozlowski@linaro.org>
@@ -75,85 +75,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use dedicated compatibles for QFPROM on MSM8916, MSM8996, MSM8998,
-QCS404 and SDM630 which is expected by the bindings:
+The NVMEM bindings expect that 'bits' property holds offset and size of
+region within a byte, so it applies a constraint of <0, 7> for the
+offset.  Using 25 as HSTX trim offset is within 4-byte QFPROM word, but
+outside of the byte:
 
-  msm8996-mtp.dtb: qfprom@74000: compatible:0: 'qcom,qfprom' is not one of ['qcom,apq8064-qfprom', ...
+  sdm630-sony-xperia-nile-discovery.dtb: qfprom@780000: hstx-trim@240:bits:0:0: 25 is greater than the maximum of 7
+  sdm630-sony-xperia-nile-discovery.dtb: qfprom@780000: gpu-speed-bin@41a0:bits:0:0: 21 is greater than the maximum of 7
+
+Align the offsets to match the bindings.
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- arch/arm64/boot/dts/qcom/msm8916.dtsi | 2 +-
- arch/arm64/boot/dts/qcom/msm8996.dtsi | 2 +-
- arch/arm64/boot/dts/qcom/msm8998.dtsi | 2 +-
- arch/arm64/boot/dts/qcom/qcs404.dtsi  | 2 +-
- arch/arm64/boot/dts/qcom/sdm630.dtsi  | 2 +-
- 5 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/qcom/msm8916.dtsi b/arch/arm64/boot/dts/qcom/msm8916.dtsi
-index 05472510e29d..d2468081c4d2 100644
---- a/arch/arm64/boot/dts/qcom/msm8916.dtsi
-+++ b/arch/arm64/boot/dts/qcom/msm8916.dtsi
-@@ -436,7 +436,7 @@ restart@4ab000 {
- 		};
- 
- 		qfprom: qfprom@5c000 {
--			compatible = "qcom,qfprom";
-+			compatible = "qcom,msm8916-qfprom", "qcom,qfprom";
- 			reg = <0x0005c000 0x1000>;
- 			#address-cells = <1>;
- 			#size-cells = <1>;
-diff --git a/arch/arm64/boot/dts/qcom/msm8996.dtsi b/arch/arm64/boot/dts/qcom/msm8996.dtsi
-index 9932186f7ceb..ab95ec4a7491 100644
---- a/arch/arm64/boot/dts/qcom/msm8996.dtsi
-+++ b/arch/arm64/boot/dts/qcom/msm8996.dtsi
-@@ -650,7 +650,7 @@ rpm_msg_ram: sram@68000 {
- 		};
- 
- 		qfprom@74000 {
--			compatible = "qcom,qfprom";
-+			compatible = "qcom,msm8996-qfprom", "qcom,qfprom";
- 			reg = <0x00074000 0x8ff>;
- 			#address-cells = <1>;
- 			#size-cells = <1>;
-diff --git a/arch/arm64/boot/dts/qcom/msm8998.dtsi b/arch/arm64/boot/dts/qcom/msm8998.dtsi
-index 758c45bbbe78..9b8e5767fdb6 100644
---- a/arch/arm64/boot/dts/qcom/msm8998.dtsi
-+++ b/arch/arm64/boot/dts/qcom/msm8998.dtsi
-@@ -838,7 +838,7 @@ rpm_msg_ram: sram@778000 {
- 		};
- 
- 		qfprom: qfprom@784000 {
--			compatible = "qcom,qfprom";
-+			compatible = "qcom,msm8998-qfprom", "qcom,qfprom";
- 			reg = <0x00784000 0x621c>;
- 			#address-cells = <1>;
- 			#size-cells = <1>;
-diff --git a/arch/arm64/boot/dts/qcom/qcs404.dtsi b/arch/arm64/boot/dts/qcom/qcs404.dtsi
-index d912166b7552..1cdbe6645f2a 100644
---- a/arch/arm64/boot/dts/qcom/qcs404.dtsi
-+++ b/arch/arm64/boot/dts/qcom/qcs404.dtsi
-@@ -366,7 +366,7 @@ usb2_phy_sec: phy@7c000 {
- 		};
- 
- 		qfprom: qfprom@a4000 {
--			compatible = "qcom,qfprom";
-+			compatible = "qcom,qcs404-qfprom", "qcom,qfprom";
- 			reg = <0x000a4000 0x1000>;
- 			#address-cells = <1>;
- 			#size-cells = <1>;
+---
+
+Not tested on SDM630 hardware, but similar behavior on SDM845 works
+fine (although causes a read of 4 bytes instead of 1).
+---
+ arch/arm64/boot/dts/qcom/sdm630.dtsi | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
 diff --git a/arch/arm64/boot/dts/qcom/sdm630.dtsi b/arch/arm64/boot/dts/qcom/sdm630.dtsi
-index b72e8e6c52f3..505e10674cb6 100644
+index 505e10674cb6..c713aa6e7044 100644
 --- a/arch/arm64/boot/dts/qcom/sdm630.dtsi
 +++ b/arch/arm64/boot/dts/qcom/sdm630.dtsi
-@@ -552,7 +552,7 @@ rpm_msg_ram: sram@778000 {
+@@ -558,13 +558,13 @@ qfprom: qfprom@780000 {
+ 			#size-cells = <1>;
+ 
+ 			qusb2_hstx_trim: hstx-trim@240 {
+-				reg = <0x240 0x1>;
+-				bits = <25 3>;
++				reg = <0x243 0x1>;
++				bits = <1 3>;
+ 			};
+ 
+ 			gpu_speed_bin: gpu-speed-bin@41a0 {
+-				reg = <0x41a0 0x1>;
+-				bits = <21 7>;
++				reg = <0x41a2 0x1>;
++				bits = <5 7>;
+ 			};
  		};
  
- 		qfprom: qfprom@780000 {
--			compatible = "qcom,qfprom";
-+			compatible = "qcom,sdm630-qfprom", "qcom,qfprom";
- 			reg = <0x00780000 0x621c>;
- 			#address-cells = <1>;
- 			#size-cells = <1>;
 -- 
 2.32.0
 

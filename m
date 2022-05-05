@@ -2,72 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D5F351C2D4
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 16:45:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B728551C2D9
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 16:46:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380748AbiEEOtC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 10:49:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40126 "EHLO
+        id S1380758AbiEEOuJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 10:50:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237470AbiEEOs7 (ORCPT
+        with ESMTP id S1345436AbiEEOuG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 10:48:59 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63C0F6545
-        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 07:45:19 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id g23so5468362edy.13
-        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 07:45:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=NRsKFGIDkGHr/C8V+t8DnhNZU5FADxmt1ukPKfs0+qI=;
-        b=c5ikg0iw+xkhPe37FFEtC4U5qxSuDAe010fSVIvZHP2qT3yAjfouMmAQcaxBVsMJfz
-         e5tvSP60GpMwmnDf+0nbIH5nPVjrfyDoxyVc/Qd7kkRElsAMlHKGSs1pBqw3dxRe3yjb
-         eK1fLlHDMm/0JmhTd6vSfdr8bvaOwYYx3nKMHimIrNXKlluid+VMlPDsu8CiCv9LEw1q
-         xjWxDNezow5qnf3Nuu+3ln0TnK4cGO9afLc/ObNO+QfGRDhSrRU38Y0cKwB74VILuTdv
-         v/AjZpR4me2JP8kFISQlxJ2hFJNPmHB95I4oga3utOtX1GQFui0cKqalXpX4AOTvnPqx
-         LJ0w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=NRsKFGIDkGHr/C8V+t8DnhNZU5FADxmt1ukPKfs0+qI=;
-        b=XLZFBICNIxFsHEow5vNVa7dSqHAVjiYBZKmENIb3Dq+ZzSqBJ3irl33k7fHX8+knm2
-         gYbBb8dp8RN51dhCi3gCZBufwnAEFL2A3rGtQf7psPxnPbWwt76vYd0uTIClu97T3zfr
-         z4WaVFhC++R9Fq15I9qEEvZ+p7Ule9yVgI1ThoXRhdOC7y5zQcxWAkQs5otNKFk7gqve
-         cXHvWRKQhFB5/qBJGxLof9mSGE5rPt9ICud2nuXuvpk7h9CVu/yA01rlK7AU23JDiPpJ
-         tnV0EnHPEkLiP0CUKfLEAxoE6VMn2yspsyAW91knVMqnHba27cpm7sMf2t7BZP9LsCul
-         j29w==
-X-Gm-Message-State: AOAM5333B6WPJX6JQ6Rk0vBcDCq82BaWDqMfWiwv4YixWgjregvikzF6
-        h9sFE0t7vw85ZB6rfQ/gtIY0LJ0HFB0SlY26Jpc=
-X-Google-Smtp-Source: ABdhPJxJW3mnnsG7aF7ISQP0hagAkmwFrWkCOhylR6YCeCbILtvUtuX3jKIPj0rAeiXauHgC+XUDFgTrFZWoYrnz4o8=
-X-Received: by 2002:a05:6402:35cd:b0:428:3831:1ba7 with SMTP id
- z13-20020a05640235cd00b0042838311ba7mr4091593edc.311.1651761917975; Thu, 05
- May 2022 07:45:17 -0700 (PDT)
+        Thu, 5 May 2022 10:50:06 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82FBD56FA9;
+        Thu,  5 May 2022 07:46:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651761986; x=1683297986;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=4+kd0vjMMPtv/zM2IFvgaogRom6Tf4HdZlD6H0t9CP0=;
+  b=Ng+++amhxRW65S0WX6OwPnkGPAAStAPxP9QzbcUWX3nVZ9Ah7nh/YHgg
+   LriHlkvBX59+vsKlpkxtwwktXhcDj0c8bS9KY7DhVwJVHWtv1gjKTZSPW
+   1nXTyT2rRCe1gzRla6Y1u/Pz1Gd3xDddos05u4IH33dHvdBKrZ4Wtqz7z
+   exTwS8Zlvediw4HLL04KJ4B+R8wTd107+K1V+fP58gQTkS+wsblSoUkOS
+   RjfSo7a4xmLx/dpkVaQxTnPtClbFkGA4C+7mbFuoJsr8fWLW+cpYvdi3e
+   4/SKAECS3pIfFNjhFCab4JzQLkI/r9qi/Byyn9RQpbnjPZi+k5AkBcoWD
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10338"; a="267727466"
+X-IronPort-AV: E=Sophos;i="5.91,201,1647327600"; 
+   d="scan'208";a="267727466"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2022 07:46:26 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,201,1647327600"; 
+   d="scan'208";a="568618280"
+Received: from stinkpipe.fi.intel.com (HELO stinkbox) ([10.237.72.51])
+  by fmsmga007.fm.intel.com with SMTP; 05 May 2022 07:46:20 -0700
+Received: by stinkbox (sSMTP sendmail emulation); Thu, 05 May 2022 17:46:19 +0300
+Date:   Thu, 5 May 2022 17:46:19 +0300
+From:   Ville =?iso-8859-1?Q?Syrj=E4l=E4?= <ville.syrjala@linux.intel.com>
+To:     Lyude Paul <lyude@redhat.com>
+Cc:     Doug Anderson <dianders@chromium.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Maxime Ripard <maxime@cerno.tech>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        freedreno <freedreno@lists.freedesktop.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Imre Deak <imre.deak@intel.com>,
+        Jani Nikula <jani.nikula@intel.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] drm: Document that power requirements for DP AUX
+ transfers
+Message-ID: <YnPjO4kbjezQl5Da@intel.com>
+References: <20220503162033.1.Ia8651894026707e4fa61267da944ff739610d180@changeid>
+ <YnJv3B/85hTz54SC@intel.com>
+ <CAD=FV=WndmKuEB0=OVQP9YuJaSmD0uxkNs5LE0wWsFj7gBvhBA@mail.gmail.com>
+ <1c6c9fde6e85f09cc89ea8dc6e8716fef58f3ee1.camel@redhat.com>
 MIME-Version: 1.0
-Received: by 2002:a50:ee96:0:b0:425:f70b:1e42 with HTTP; Thu, 5 May 2022
- 07:45:17 -0700 (PDT)
-Reply-To: sgtkaylam28@gmail.com
-From:   sgt kayla manthey <mamancherif2018@gmail.com>
-Date:   Thu, 5 May 2022 08:45:17 -0600
-Message-ID: <CAHTj9E5Sy1B3n43iYwh-jApsa-kQamLNu52pBMvNb0N-mNxe7g@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=4.8 required=5.0 tests=BAYES_20,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1c6c9fde6e85f09cc89ea8dc6e8716fef58f3ee1.camel@redhat.com>
+X-Patchwork-Hint: comment
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---=20
-=C3=9Cdv=C3=B6zlettel,
-K=C3=A9rem, megkapta az el=C5=91z=C5=91 =C3=BCzenetem? =C3=8Drj vissza
+On Wed, May 04, 2022 at 02:10:08PM -0400, Lyude Paul wrote:
+> On Wed, 2022-05-04 at 09:04 -0700, Doug Anderson wrote:
+> > Hi,
+> > 
+> > On Wed, May 4, 2022 at 5:21 AM Ville Syrjälä
+> > <ville.syrjala@linux.intel.com> wrote:
+> > > 
+> > > On Tue, May 03, 2022 at 04:21:08PM -0700, Douglas Anderson wrote:
+> > > > When doing DP AUX transfers there are two actors that need to be
+> > > > powered in order for the DP AUX transfer to work: the DP source and
+> > > > the DP sync. Commit bacbab58f09d ("drm: Mention the power state
+> > > > requirement on side-channel operations") added some documentation
+> > > > saying that the DP source is required to power itself up (if needed)
+> > > > to do AUX transfers. However, that commit doesn't talk anything about
+> > > > the DP sink.
+> > > > 
+> > > > For full fledged DP the sink isn't really a problem. It's expected
+> > > > that if an external DP monitor isn't plugged in that attempting to do
+> > > > AUX transfers won't work. It's also expected that if a DP monitor is
+> > > > plugged in (and thus asserting HPD) that it AUX transfers will work.
+> > > > 
+> > > > When we're looking at eDP, however, things are less obvious. Let's add
+> > > > some documentation about expectations. Here's what we'll say:
+> > > > 
+> > > > 1. We don't expect the DP AUX transfer function to power on an eDP
+> > > > panel. If an eDP panel is physically connected but powered off then it
+> > > > makes sense for the transfer to fail.
+> > > 
+> > > I don't agree with this. I think the panel should just get powred up
+> > > for AUX transfers.
+> > 
+> > That's definitely a fair thing to think about and I have at times
+> > thought about trying to make it work that way. It always ends up
+> > hitting a roadblock.
+
+How do you even probe the panel initially if you can't power it on
+without doing some kind of full modeset/etc.?
+
+> > 
+> > The biggest roadblock that I recall is that to make this work then
+> > you'd have to somehow ensure that the bridge chain's pre_enable() call
+> > was made as part of the AUX transfer, right? Since the transfer
+> > function can be called in any context at all, we have to coordinate
+> > this with DRM. If, for instance, DRM is mid way through powering the
+> > panel down then we need to wait for DRM to fully finish powering down,
+> > then we need to power the panel back up. I don't believe that we can
+> > just force the panel to stay on if DRM is turning it off because of
+> > panel power sequencing requirements. At least I know it would have the
+> > potential to break "samsung-atna33xc20.c" which absolutely needs to
+> > see the panel power off after it's been disabled.
+> > 
+> > We also, I believe, need to handle the fact that the bridge chain may
+> > not have even been created yet. We do AUX transfers to read the EDID
+> > and also to setup the backlight in the probe function of panel-edp. At
+> > that point the panel hasn't been linked into the chain. We had _long_
+> > discussions [1] about moving these out of probe and decided that we
+> > could move the EDID read to be later but that it was going to really
+> > ugly to move the AUX backlight later. The backlight would end up
+> > popping up at some point in time later (the first call to panel
+> > prepare() or maybe get_modes()) and that seemed weird.
+> > 
+> > [1]
+> > https://lore.kernel.org/lkml/CAD=FV=U5-sTDLYdkeJWLAOG-0wgxR49VxtwUyUO7z2PuibLGsg@mail.gmail.com/
+> > 
+> > 
+> > > Otherwise you can't trust that eg. the /dev/aux
+> > > stuff is actually usable.
+> > 
+> > Yeah, it's been on my mind to talk more about /dev/aux. I think
+> > /dev/aux has some problems, at least with eDP. Specifically:
+> > 
+> > 1. Even if we somehow figure out how to power the panel on as part of
+> > the aux transfer, we actually _still_ not guaranteed to be able to
+> > talk to it as far as I understand. My colleague reported to me that on
+> > a system he was working with that had PSR (panel self refresh) that
+> > when the panel was powered on but in PSR mode that it wouldn't talk
+> > over AUX. Assuming that this is correct then I guess we'd also have to
+> > do even more coordination with DRM to exit PSR and block future
+> > transitions of PSR. (NOTE: it's always possible that my colleague ran
+> > into some other bug and that panels are _supposed_ to be able to talk
+> > in PSR. If you think this is the case, I can always try to dig more).
+> 
+> TBH - the coordination with drm I don't think would be the difficult part, as
+> we'd just need to add some sort of property (ideally invisible to userspace)
+> that can be used in an atomic commit to disable PSR - similar to how we enable
+> CRC readback from sysfs in the majority of DRM drivers. That being said
+> though, I think we can just leave the work of solving this problem up to
+> whoever ends up needing this to work.
+
+The driver should just disable/prevent PSR when doing AUX if the hardware
+can't guarantee the PSR and AUX won't interfere with each other.
+
+For i915 we have no problems with powering the panel on for AUX, but
+there is still a race with PSR vs. AUX because both use the same hardware
+internally. I've been nagging at people to fix this for i915 but I don't 
+think it still got done :( Originally we were supposed to get a hardware
+mutex for this but that plan got scrapped for some reason.
+
+> 
+> > 
+> > 2. I'm not totally convinced that it's a great idea, at least for eDP,
+> > for userspace to be mucking with /dev/aux. For DP's case I guess
+> > /dev/aux is essentially enabling userspace drivers to do things like
+> > update firmware on DP monitors or play with the backlight. I guess we
+> > decided that we didn't want to add drivers in the kernel to handle
+> > this type of stuff so we left it for userspace? For eDP, though, there
+> 
+> The main reason DP AUX got exposed to userspace in the first place was for
+> usecases like fwupd,
+
+My memory says the original reason was debugging. Or at least I had
+no idea fwupd had started to use this until I saw some weird looking
+DPCD addresses in some debug log.
+
+But I suppose it's possible there were already plans for firmware
+updates and whatnot and it just wasn't being discussed when this was
+being developed.
+
+-- 
+Ville Syrjälä
+Intel

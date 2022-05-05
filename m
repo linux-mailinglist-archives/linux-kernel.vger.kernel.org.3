@@ -2,72 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 641EC51C654
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 19:40:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A85F51C47C
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 18:03:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382789AbiEERnr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 13:43:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34198 "EHLO
+        id S1356920AbiEEQGu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 12:06:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382768AbiEERnl (ORCPT
+        with ESMTP id S231164AbiEEQGs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 13:43:41 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 701765BE46
-        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 10:40:01 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id CCAFCCE2ED7
-        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 17:39:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0861C385A8;
-        Thu,  5 May 2022 17:39:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651772398;
-        bh=Fea/rsoxEnUkTCcBFJAwvQ9RkVxQQI5m8J3zJBHz8TE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=MJacyXw5JQdV1zxZ6e/r0qhwiQ+k9EW9VNgnv6ulXAQEKa+weAJyctY+gywsr4JPE
-         9N0/t+LD3x8bdacDkRd6+rFAYvjPnHJX4mwFjH2oujFKe34RRPzFp1eDpk5f7UseK3
-         qEPJngQfmEl1LHxs7NInu4wJGfSJLUD4z6ajdnl0=
-Date:   Thu, 5 May 2022 14:23:12 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     "zhangjianhua (E)" <chris.zjh@huawei.com>
-Cc:     jirislaby@kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH -next] vt: defkeymap.c_shipped remove unused variables
-Message-ID: <YnPBsEiaUfbEI+Ef@kroah.com>
-References: <20220429014814.988829-1-chris.zjh@huawei.com>
- <YmuIEoOnJqYLy3CE@kroah.com>
- <53e36000-ad70-9de7-74ad-16bd81dae530@huawei.com>
+        Thu, 5 May 2022 12:06:48 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B7F32DE5;
+        Thu,  5 May 2022 09:03:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651766588; x=1683302588;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=zlTpNAuOWVsLMZxKenOm6Jo9aWTy0OBhL/05VXpK+aU=;
+  b=EVhNcVEZkmrXQTUB+q24buU9l4oPOunAfEopPJU33di8leg7EaWXRuOX
+   uhvDB8JUsGXOCE+pck8Rv8TVqMkso22X0z3ziZ3Fojr5iHngHqIp9O2yi
+   ZbdCdFaPZLhGFIXhB8T+BEDLrurIDEfOFjGF0Et71d53tvMmGyMI+z1hV
+   OoFijJ2gT5yiZ5ZkVFeZ7qAk3+kEKDqXxO/7puxZfdfQhXX/JN8I6wbnR
+   K/IJrUR64RC36f8n6Ji0phpwnAeophrdttAbXTqSjER1MiqubHSOIKtPi
+   hg0ERLErcma8SiFT/1wXgjkTBDeG6HPVzEhdzpK5AD8B7zx5cL8vd3KPk
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10338"; a="354594634"
+X-IronPort-AV: E=Sophos;i="5.91,201,1647327600"; 
+   d="scan'208";a="354594634"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2022 08:54:44 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,201,1647327600"; 
+   d="scan'208";a="891389408"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 05 May 2022 08:54:40 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nmdoO-000CWs-2M;
+        Thu, 05 May 2022 15:54:40 +0000
+Date:   Thu, 5 May 2022 23:54:11 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Satya Priya <quic_c_skakit@quicinc.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     kbuild-all@lists.01.org, Lee Jones <lee.jones@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        swboyd@chromium.org, quic_collinsd@quicinc.com,
+        quic_subbaram@quicinc.com, quic_jprakash@quicinc.com,
+        Satya Priya <quic_c_skakit@quicinc.com>
+Subject: Re: [PATCH V11 6/9] mfd: pm8008: Use i2c_new_dummy_device() API
+Message-ID: <202205052333.90qqQnWQ-lkp@intel.com>
+References: <1651742739-12338-7-git-send-email-quic_c_skakit@quicinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <53e36000-ad70-9de7-74ad-16bd81dae530@huawei.com>
-X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DATE_IN_PAST_03_06,
-        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <1651742739-12338-7-git-send-email-quic_c_skakit@quicinc.com>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 05, 2022 at 11:10:55AM +0800, zhangjianhua (E) wrote:
-> 
-> 在 2022/4/29 14:39, Greg KH 写道:
-> > On Fri, Apr 29, 2022 at 09:48:14AM +0800, Zhang Jianhua wrote:
-> > > The global variables 'funcbufptr' 'funcbufsize' and 'funcbufleft' have
-> > > been initialized but not used, they are redundant and remove them.
-> > > 
-> > > --------
-> > Why this extra "------" line?
-> 
-> This line "------" means the end of commit message, if it is redundant, I will remove it in next version.
+Hi Satya,
 
-That is not used in kernel changelogs at all, sorry.  Please don't add
-it in future changes either.
+Thank you for the patch! Perhaps something to improve:
 
-thanks,
+[auto build test WARNING on lee-mfd/for-mfd-next]
+[also build test WARNING on robh/for-next broonie-regulator/for-next v5.18-rc5 next-20220505]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-greg k-h
+url:    https://github.com/intel-lab-lkp/linux/commits/Satya-Priya/Add-Qualcomm-Technologies-Inc-PM8008-regulator-driver/20220505-173045
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git for-mfd-next
+config: m68k-allyesconfig (https://download.01.org/0day-ci/archive/20220505/202205052333.90qqQnWQ-lkp@intel.com/config)
+compiler: m68k-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/28e91eacf6442c72c4f1ca25e5ad90fedc73ab73
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Satya-Priya/Add-Qualcomm-Technologies-Inc-PM8008-regulator-driver/20220505-173045
+        git checkout 28e91eacf6442c72c4f1ca25e5ad90fedc73ab73
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash drivers/mfd/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/mfd/qcom-pm8008.c:154:16: warning: no previous prototype for 'pm8008_get_regmap' [-Wmissing-prototypes]
+     154 | struct regmap *pm8008_get_regmap(struct pm8008_data *chip)
+         |                ^~~~~~~~~~~~~~~~~
+
+
+vim +/pm8008_get_regmap +154 drivers/mfd/qcom-pm8008.c
+
+   153	
+ > 154	struct regmap *pm8008_get_regmap(struct pm8008_data *chip)
+   155	{
+   156		return chip->regulators_regmap;
+   157	}
+   158	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

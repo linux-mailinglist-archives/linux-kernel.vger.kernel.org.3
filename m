@@ -2,66 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D53AC51C4E8
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 18:11:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC60651C4CE
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 18:11:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380472AbiEEQNX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 12:13:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60924 "EHLO
+        id S1381781AbiEEQOx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 12:14:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381957AbiEEQMg (ORCPT
+        with ESMTP id S1381875AbiEEQOu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 12:12:36 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62AF45D1A1;
-        Thu,  5 May 2022 09:08:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EEBDEB82DF4;
-        Thu,  5 May 2022 16:08:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99001C385B3;
-        Thu,  5 May 2022 16:08:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651766925;
-        bh=hnQ8FTvbYfHmdDeO+2tPAvxj7MSIfIdDGIMLidCR6js=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RuDff+Q9un/CKgL1sOUfO3uFwlRsxQ2LpJknIaQUD2SrSyv8Bsj/rtXnawy++SZcH
-         ybfRZeNsxbqsfJwvzx9/Rond/3g5YquyUaE8GVWcLn5hX60KHO1ZquJ7A2RzpFsKHF
-         xSKILFeJuxfYdMvsAZpC7oc/iyK0s4JGVVTy3F8F3mL5f73otE7kcZ4YKG3lFiPxBd
-         X+WqQjjL2el/HTMuRbj4q8E3t9nor5nB21HnLIbTwPsIAeMs46edENAJzZIZrBmBEA
-         72HqfGZR2qGXmX+UAw5QsUuMV+JaCZEGYk4WY+DhfiErKIBu0r1wsPVOnENMIJX8pU
-         PNBfeCKJ3kg0w==
-From:   Daniel Bristot de Oliveira <bristot@kernel.org>
-To:     Steven Rostedt <rostedt@goodmis.org>, linux-kernel@vger.kernel.org
-Cc:     Daniel Bristot de Oliveira <bristot@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Ingo Molnar <mingo@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Marco Elver <elver@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Gabriele Paoloni <gpaoloni@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Clark Williams <williams@redhat.com>,
-        linux-doc@vger.kernel.org, linux-trace-devel@vger.kernel.org,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>
-Subject: [RFC V3 20/20] Documentation/rv: Add watchdog-monitor documentation
-Date:   Thu,  5 May 2022 18:07:00 +0200
-Message-Id: <c1cddb4066effc00305da8d8600d6d8d3c2c9106.1651766361.git.bristot@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <cover.1651766361.git.bristot@kernel.org>
-References: <cover.1651766361.git.bristot@kernel.org>
+        Thu, 5 May 2022 12:14:50 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 599701D30B;
+        Thu,  5 May 2022 09:11:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651767060; x=1683303060;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=1eGeIh+xMiBRTxqWkXlfYujous1v8oMKzohvreSWsN8=;
+  b=FNMAdsi+bg+d8+nosUfVJUoMrzCP+ZwWMIIQ38Sis9BZBryE1ITu1E24
+   /F8BHqZsOr/ZDTPD3/safwHP+4+KVD6dds7ponxMCg40eon1sCWXVL/25
+   MgLPGzhmn4F/GvSULHgWYJsczT5Tn68ITVnCmq9TG4Os63l3rJxWGULVq
+   TqWTOrlj2Pa0QGs7LQUDgdYRrl0hzbogNCb1PQhwlzeDoN5ItvVN+6t4/
+   Ql8gC/WlZLP03T/ZV2OodXeDhsnXV6P3g0XvSGZUMRTFlXriAQQH6p7tK
+   ObfP/5DoCeyQ3wW46OXSGOvS7iwwOSAM3ZuwhUkRueHfCEKQJJY8iOCeX
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10338"; a="331155509"
+X-IronPort-AV: E=Sophos;i="5.91,201,1647327600"; 
+   d="scan'208";a="331155509"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2022 09:10:45 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,201,1647327600"; 
+   d="scan'208";a="665035013"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by fmsmga002.fm.intel.com with ESMTP; 05 May 2022 09:10:40 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nme3s-000CXj-Ac;
+        Thu, 05 May 2022 16:10:40 +0000
+Date:   Fri, 6 May 2022 00:09:59 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     cgel.zte@gmail.com, akpm@linux-foundation.org, hannes@cmpxchg.org,
+        willy@infradead.org, shy828301@gmail.com
+Cc:     kbuild-all@lists.01.org, mhocko@kernel.org,
+        roman.gushchin@linux.dev, shakeelb@google.com,
+        linmiaohe@huawei.com, william.kucharski@oracle.com,
+        peterx@redhat.com, hughd@google.com, vbabka@suse.cz,
+        songmuchun@bytedance.com, surenb@google.com,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        cgroups@vger.kernel.org, Yang Yang <yang.yang29@zte.com.cn>
+Subject: Re: [PATCH] mm/memcg: support control THP behaviour in cgroup
+Message-ID: <202205052327.RldmheYL-lkp@intel.com>
+References: <20220505033814.103256-1-xu.xin16@zte.com.cn>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220505033814.103256-1-xu.xin16@zte.com.cn>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,290 +70,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Adds documentation about the safe_wtd and safe_wtd_nwo RV monitors,
-and their usage via a safety application.
+Hi,
 
-Cc: Wim Van Sebroeck <wim@linux-watchdog.org>
-Cc: Guenter Roeck <linux@roeck-us.net>
-Cc: Jonathan Corbet <corbet@lwn.net>
-Cc: Steven Rostedt <rostedt@goodmis.org>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Will Deacon <will@kernel.org>
-Cc: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Marco Elver <elver@google.com>
-Cc: Dmitry Vyukov <dvyukov@google.com>
-Cc: "Paul E. McKenney" <paulmck@kernel.org>
-Cc: Shuah Khan <skhan@linuxfoundation.org>
-Cc: Gabriele Paoloni <gpaoloni@redhat.com>
-Cc: Juri Lelli <juri.lelli@redhat.com>
-Cc: Clark Williams <williams@redhat.com>
-Cc: linux-doc@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Cc: linux-trace-devel@vger.kernel.org
-Signed-off-by: Daniel Bristot de Oliveira <bristot@kernel.org>
----
- Documentation/trace/rv/watchdog-monitor.rst | 250 ++++++++++++++++++++
- 1 file changed, 250 insertions(+)
- create mode 100644 Documentation/trace/rv/watchdog-monitor.rst
+Thank you for the patch! Perhaps something to improve:
 
-diff --git a/Documentation/trace/rv/watchdog-monitor.rst b/Documentation/trace/rv/watchdog-monitor.rst
-new file mode 100644
-index 000000000000..6d98fc3af3f4
---- /dev/null
-+++ b/Documentation/trace/rv/watchdog-monitor.rst
-@@ -0,0 +1,250 @@
-+Watchdog monitor
-+----------------
-+
-+The watchdog is an essential building block for the usage of Linux in
-+safety-critical systems because it allows the system to be monitored from
-+an external element - the watchdog hardware, acting as a safety-monitor.
-+
-+A user-space application controls the watchdog device via the watchdog
-+interface. This application, hereafter safety_app, enables the watchdog
-+and periodically pets the watchdog upon correct completion of the safety
-+related processing.
-+
-+If the safety_app, for any reason, stops pinging the watchdog,
-+the watchdog hardware can set the system in a fail-safe state. For
-+example, shutting the system down.
-+
-+Given the importance of the safety_app / watchdog hardware couple,
-+the interaction between these software pieces also needs some
-+sort of monitoring. In other words, "who monitors the monitor?"
-+
-+The safe watchdog (safe_wtd) RV monitor monitors the interaction between
-+the safety_app and the watchdog device, enforcing the correct sequence of
-+events that leads the system to a safe state.
-+
-+Furthermore, the safety_app can monitor the RV monitor by collecting the
-+events generated by the RV monitor itself via tracing interface. In this way,
-+closing the monitoring loop with the safety_app.
-+
-+A diagram of the components and their interactions is::
-+
-+  user-space:
-+                  +--------------------------------+
-+                  | safety_app                     |-----------+
-+                  +--------------------------------+           |
-+                     |                    ^                    |
-+                     | Configure          | Enable and         |
-+                     |                    | check data         |
-+  ===================+====================+===============     |
-+  kernel-space:      |                    |                    |
-+                     v                    v                    |
-+                +----------+  instr.     +-------------+       |
-+                | watchdog | ----------->| RV Monitor  |----+  |
-+                | device   |             +-------------+    |  |
-+                +----------+                                |  |
-+                  |                                         |  |
-+                  |                                         |  |
-+  ================+======================================   |  |
-+  hardware:       |                                         |  |
-+                  v                                         |  +-> Bring the system
-+                +--------------------+                      +----> to a safe state,
-+                | watchdog hardware  |---------------------------> e.g., halt.
-+                +--------------------+
-+
-+Sample safety_app
-+-----------------
-+
-+The user-space safety_app sample code in ``tools/tracing/rv/safety_app/``
-+serves to illustrate the usage of the RV monitors for this use-case, as
-+well as the starting point to the development of a user-specific safety_app.
-+
-+Watchdog events
-+---------------
-+
-+The RV monitor observes the watchdog by using instrumentation to
-+process the events generated by the interaction between the
-+safety_app and the watchdog device layer in kernel.
-+
-+The monitored events are:
-+
-+  - watchdog:watchdog_open: open the watchdog device;
-+  - watchdog:watchdog_close: close the watchdog device;
-+  - watchdog:watchdog_start: start the watchdog;
-+  - watchdog:watchdog_stop: stop the watchdog;
-+  - watchdog:watchdog_set_timeout: set the watchdog timeout;
-+  - watchdog:watchdog_ping: reprogram the watchdog with the previously set
-+    timeout;
-+  - watchdog:watchdog_nowayout: prevents the watchdog from stopping;
-+  - watchdog:watchdog_set_keep_alive: set an intermediary ping to overcome
-+    the limitation of a hardware watchdog maximum timeout being shorter than
-+    the timeout set by the user-space tool;
-+  - watchdog:watchdog_keep_alive: the execution of the function that runs the
-+    intermediary keep alive ping;
-+
-+RV monitor events
-+-----------------
-+
-+The RV monitor monitors the relevant events as an outside observer,
-+interpreting all the components (the hardware; the watchdog device
-+interface; and the safety monitor) as an integrated component.
-+
-+The events selected for the monitor are:
-+
-+  - other_threads: an event generated by any thread other than the
-+    one that set nowayout or open the watchdog the last time.
-+  - open: a thread opens the watchdog to manipulate it;
-+  - close: a thread closes the watchdog;
-+  - start: starts the watchdog countdown;
-+  - stop: stops the watchdog;
-+  - set_safe_timeout: configures the watchdog with a given timeout;
-+  - ping: resets the watchdog countdown with the previously configured timeout;
-+  - nowayout: prevents the watchdog to be stopped until the system's shutdown;
-+  - sched_keep_alive: schedules a kernel worker to ping the watchdog if the
-+    timeout is longer than the watchdog hardware can handle.
-+  - keep_alive: executes the previously scheduled watchdog ping;
-+
-+Noting that the events that does not appear in the automata models are
-+considered blocked events, and their execution will always cause the
-+RV monitor to react to an unexpected event.
-+
-+RV monitor specification
-+------------------------
-+
-+The monitor's goal is to assess a set of specifications that conducts the
-+system to a safe state.
-+
-+These specifications are:
-+
-+  - 1: Once open, only one process manipulates the watchdog;
-+  - 2: Following 1, the keep-alive mechanisms will not be used;
-+  - 3: If required, nowayout will be set before opening the watchdog;
-+  - 4: A safe timeout must be set;
-+  - 5: At least one ping must be made before entering the safe/safe_nwo states
-+  - 6: The RV monitor does not react if the watchdog is closed without stopping.
-+       But the hardware watchdog is expected to react.
-+
-+Deterministic automata monitors
-+-------------------------------
-+
-+Following the specifications, a deterministic automata monitor
-+was developed. The monitor is modeled as Deterministic Automata model.
-+
-+The deterministic automata model for safe_wtd is::
-+
-+              #==================================#   other_threads
-+              H                                  H ----------------+
-+ -----------> H               init               H                 |
-+              H                                  H <---------------+
-+              #==================================#
-+                      |     |     ^
-+                      |     |     |               close
-+                      |     |     +----------------------------------------------------+
-+                      |     |                                                          |
-+                      |     |                     open                                 |
-+                      |     +------------------------------------------------------+   |
-+                      |                                                            |   |
-+                      |  nowayout                                                  |   |
-+                      v                                                            |   |
-+    nowayout        +-------------------+                                          |   |
-+    other_threads   |                   |          nowayout                        |   |
-+  +---------------- |        nwo        |<-------------------------------------+   |   |
-+  |                 |                   |                                      |   |   |
-+  +---------------> |                   | <+                                   |   |   |
-+                    +-------------------+  |                                   |   |   |
-+                      |                    |                                   |   |   |
-+                      | open               | close                             |   |   |
-+                      v                    |                                   |   |   |
-+                    +-------------------+  |                                   |   |   |
-+                    |    opened_nwo     | -+                                   |   |   |
-+                    +-------------------+                                      |   |   |
-+                      |                                                        |   |   |
-+                      | start                                                  |   |   |
-+                      v                                                        |   |   |
-+                    +-------------------+                                      |   |   |
-+  +---------------> |    started_nwo    | -+                                   |   |   |
-+  |                 +-------------------+  |                                   |   |   |
-+  |                   |                    |                                   |   |   |
-+  | open              | set_safe_timeout   |                                   |   |   |
-+  |                   v                    |                                   |   |   |
-+  |                 +-------------------+  |                                   |   |   |
-+  |                 |      set_nwo      |  |                                   |   |   |
-+  |                 +-------------------+  |                                   |   |   |
-+  |                           |            |                                   |   |   |
-+  |     +-------------+       | ping       |                                   |   |   |
-+  |     |             |       |            |                                   |   |   |
-+  |     | ping        v       v            |                                   |   |   |
-+  |     |           +-------------------+  |                                   |   |   |
-+  |     +-----------|     safe_nwo      |  |                                   |   |   |
-+  |                 +-------------------+  |                                   |   |   |
-+  |                   |                    |                                   |   |   |
-+  |                   | close              | close                             |   |   |
-+  |                   v                    v                                   |   |   |
-+  |                 +----------------------------------+   nowayout            |   |   |
-+  |                 |                                  |   other_threads       |   |   |
-+  |                 |        closed_running_nwo        | ----------------+     |   |   |
-+  |                 |                                  |                 |     |   |   |
-+  +---------------- |                                  | <---------------+     |   |   |
-+                    +----------------------------------+                       |   |   |
-+                        |        nowayout             ^                        |   |   |
-+                        +-----------------------------+                        |   |   |
-+                                                                               |   |   |
-+                                                                               |   |   |
-+                               +-------------------+           +--------+      |   |   |
-+                               |                   |           |        |------+---+   |
-+                               |      started      |  start    | opened |      |       |
-+             +---------------- |                   | <-------- |        |>-----+-------+
-+             |                 +-------------------+           +--------+      |       ^
-+             |                   |                                             |       |
-+             |                   | set_safe_timeout              +-------------+-------+
-+             |                   v                               |             |
-+             |                 +-------------------+             |             |
-+             |                 |                   |             |             |
-+             |                 |        set        |             |             |
-+  +----------+---------------> |                   |             |             |
-+  |          |                 +-------------------+             |             |
-+  |          |                   |                               |             |
-+  |          |                   | ping                          |             |
-+  |          |                   v                               |             |
-+  |          |                 +-------------------+   ping      |             |
-+  |          |                 |                   | -------+    |             |
-+  |          |           +---- |       safe        |        |    |             |
-+  |          |           |     |                   | <------+    |             |
-+  |          |           |     +-------------------+             |             |
-+  |          |           |       |                               |             |
-+  |          | stop      |       | stop                          |             |
-+  |          |           |       v                               |             |
-+  |          |           |     +-------------------+   close     |             |
-+  |          +-----------+---> |      stopped      |-------------+             |
-+  |                      |     +-------------------+                           |
-+  |                      +---+                                                 |
-+  |                          | close                                           |
-+  |                          v                                                 |
-+  |     other_threads  +----------------------------------------+              |
-+  |   +--------------> |                                        |              |
-+  |   |                |             closed_running             |              |
-+  |   +--------------- |                                        |--------------+
-+  |                    +----------------------------------------+
-+  |                               |          ^
-+  |                         open  |          | close
-+  |                               v          |
-+  |    set_safe_timeout       +-------------------+
-+  +-------------------------> |     reopened      |
-+                                +-------------------+
-+
-+It is important to note that the events sched_keep_alive and keep_alive
-+are not allowed in the monitor (they are said to be blocked events).
-+The execution of any blocked events leads the RV monitor to react.
-+
-+Additional options
-+------------------
-+
-+The RV monitor also has a set of options enabled via kernel command
-+line/module options. They are:
-+
-+ - watchdog_id: the device id to monitor (default 0);
-+ - dont_stop: once enabled, do not allow the RV monitor to be stopped (default off);
-+ - safe_timeout: define a maximum safe value that a user-space application can
-+   set as the watchdog timeout (default unlimited);
-+ - check_timeout: After every ping, check if the time left in the watchdog is less
-+   than or equal to the last timeout set for the watchdog. It only works for watchdog
-+   devices that provide the get_timeleft() function (default off);
+[auto build test WARNING on linux/master]
+[also build test WARNING on linus/master v5.18-rc5]
+[cannot apply to hnaz-mm/master]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/cgel-zte-gmail-com/mm-memcg-support-control-THP-behaviour-in-cgroup/20220505-114028
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 107c948d1d3e61d10aee9d0f7c3d81bbee9842af
+config: i386-randconfig-s001 (https://download.01.org/0day-ci/archive/20220505/202205052327.RldmheYL-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.2.0-20) 11.2.0
+reproduce:
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        # https://github.com/intel-lab-lkp/linux/commit/f08a35b9798572693a91c6a3d823ed9ae54ef688
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review cgel-zte-gmail-com/mm-memcg-support-control-THP-behaviour-in-cgroup/20220505-114028
+        git checkout f08a35b9798572693a91c6a3d823ed9ae54ef688
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=i386 SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+
+sparse warnings: (new ones prefixed by >>)
+   mm/huge_memory.c: note: in included file (through include/linux/mm.h):
+>> include/linux/huge_mm.h:272:43: sparse: sparse: marked inline, but without a definition
+   mm/huge_memory.c: note: in included file:
+>> include/linux/khugepaged.h:30:36: sparse: sparse: marked inline, but without a definition
+   include/linux/khugepaged.h:31:38: sparse: sparse: marked inline, but without a definition
+--
+   mm/memory.c:1024:17: sparse: sparse: context imbalance in 'copy_pte_range' - different lock contexts for basic block
+   mm/memory.c:1752:16: sparse: sparse: context imbalance in '__get_locked_pte' - different lock contexts for basic block
+   mm/memory.c:1800:9: sparse: sparse: context imbalance in 'insert_page' - different lock contexts for basic block
+   mm/memory.c:2302:17: sparse: sparse: context imbalance in 'remap_pte_range' - different lock contexts for basic block
+   mm/memory.c:2558:17: sparse: sparse: context imbalance in 'apply_to_pte_range' - unexpected unlock
+   mm/memory.c:2847:9: sparse: sparse: context imbalance in 'wp_page_copy' - different lock contexts for basic block
+   mm/memory.c:3185:17: sparse: sparse: context imbalance in 'wp_pfn_shared' - unexpected unlock
+   mm/memory.c:3248:19: sparse: sparse: context imbalance in 'do_wp_page' - different lock contexts for basic block
+   mm/memory.c: note: in included file (through include/linux/mm.h):
+>> include/linux/huge_mm.h:272:43: sparse: sparse: marked inline, but without a definition
+>> include/linux/huge_mm.h:272:43: sparse: sparse: marked inline, but without a definition
+--
+   mm/shmem.c: note: in included file:
+>> include/linux/khugepaged.h:30:36: sparse: sparse: marked inline, but without a definition
+   include/linux/khugepaged.h:31:38: sparse: sparse: marked inline, but without a definition
+>> include/linux/khugepaged.h:30:36: sparse: sparse: marked inline, but without a definition
+   include/linux/khugepaged.h:31:38: sparse: sparse: marked inline, but without a definition
+
+vim +272 include/linux/huge_mm.h
+
+   263	
+   264	static inline struct list_head *page_deferred_list(struct page *page)
+   265	{
+   266		/*
+   267		 * Global or memcg deferred list in the second tail pages is
+   268		 * occupied by compound_head.
+   269		 */
+   270		return &page[2].deferred_list;
+   271	}
+ > 272	inline bool __transparent_hugepage_enabled(struct vm_area_struct *vma);
+   273	
+
 -- 
-2.35.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

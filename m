@@ -2,137 +2,281 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 727FA51CBE8
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 00:09:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E639051CBED
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 00:10:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386186AbiEEWNF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 18:13:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60172 "EHLO
+        id S1386223AbiEEWOV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 18:14:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231304AbiEEWNB (ORCPT
+        with ESMTP id S1386209AbiEEWOS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 18:13:01 -0400
-Received: from mout01.posteo.de (mout01.posteo.de [185.67.36.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30FAA5DE4B
-        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 15:09:19 -0700 (PDT)
-Received: from submission (posteo.de [185.67.36.169]) 
-        by mout01.posteo.de (Postfix) with ESMTPS id D3AE924002A
-        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 00:09:17 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.de; s=2017;
-        t=1651788557; bh=KTIRId5INiLOEFZE9cS2PzPrI5XvgN1DeL7OKh0bXQU=;
-        h=From:To:Cc:Subject:Date:From;
-        b=Agvg9tXNaSmTX6uf5MMhb+M+wdVk1KF8lUF/85s4qI4Y10ZncThBJ2H+VKE3cZQjO
-         6yLNbnj7zsCtP+OoQFRnpGal61JxVqe1kqOoHWLnySdikl+n8T297RYjIaXCqIOhej
-         R9lEsYq2keAPesI0TweKFxrp82tFPmAgi4xBegCvWNUpKBAG8P1175AQGwOaSlRu+2
-         nlpmTYaavKJ6/qaK0UFvwXPTyplXc9NI1GlZhZ6+gF4q4/vcpOf9P0tGbrcIg0g6E9
-         ceKnEpKetTaPH2dxgvk1KUVMtfBV+YQcZ/Jwvaw4GllP9GCj7sXkw/DMsH3QNKIcSo
-         yRIaC3Vj+rgmg==
-Received: from customer (localhost [127.0.0.1])
-        by submission (posteo.de) with ESMTPSA id 4KvSXX0fjpz6tmb;
-        Fri,  6 May 2022 00:09:16 +0200 (CEST)
-From:   Manuel Ullmann <labre@posteo.de>
-To:     Igor Russkikh <irusskikh@marvell.com>
-Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        regressions@lists.linux.dev, davem@davemloft.net,
-        ndanilov@marvell.com, kuba@kernel.org, pabeni@redhat.com,
-        edumazet@google.com, Jordan Leppert <jordanleppert@protonmail.com>,
-        Holger =?utf-8?Q?Hoffst=C3=A4tte?= 
-        <holger@applied-asynchrony.com>, koo5 <kolman.jindrich@gmail.com>
-Subject: [PATCH v3] net: atlantic: always deep reset on pm op, fixing null
- deref regression
-Date:   Thu, 05 May 2022 22:09:29 +0000
-Message-ID: <8735hniqcm.fsf@posteo.de>
+        Thu, 5 May 2022 18:14:18 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B30135E76C
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 15:10:37 -0700 (PDT)
+Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 245Kj2dZ017268;
+        Thu, 5 May 2022 22:10:05 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=MrU29fcn14GDRfr2Wf0nuMab2K7bMjsFzwPUGCuHLms=;
+ b=IeOL0OKC1v1S8AboEcKHTeG1Y/8yZ0RxeBiJAUASflulOXG0vaFQWhRDTarIP4uU9+gA
+ TpFq/fJ3UQQzHWhU0NiDWS7JBfxQ875zib9fpRWTI2GrrDPf2FyXtGid1LFbTwjUzmO6
+ V76xshUe3NENMzJ/3PEsdCRFplqrua5Gs813jRY3RdquaOjEzMDdGNK3Hrl2Sha6PzPG
+ MT3s5KZ7w7yjbpjn69MMWkdyCF2IMq2Gvud9Q67pWPAFBdjsAbUUeQOl5dqPs4cQ40lV
+ F2vZ9sGgO9hZ4aAqE+vvTaLgxY/I9kjERAPYrJ7QihSI+u26p6yPIDshGx0MqCVRpg2R pg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3fvnvrs8ws-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 05 May 2022 22:10:05 +0000
+Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 245Lu081027541;
+        Thu, 5 May 2022 22:10:05 GMT
+Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3fvnvrs8wk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 05 May 2022 22:10:04 +0000
+Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
+        by ppma02wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 245M8KcJ015766;
+        Thu, 5 May 2022 22:10:04 GMT
+Received: from b03cxnp08028.gho.boulder.ibm.com (b03cxnp08028.gho.boulder.ibm.com [9.17.130.20])
+        by ppma02wdc.us.ibm.com with ESMTP id 3frvra4e00-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 05 May 2022 22:10:04 +0000
+Received: from b03ledav004.gho.boulder.ibm.com (b03ledav004.gho.boulder.ibm.com [9.17.130.235])
+        by b03cxnp08028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 245MA3uN24248682
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 5 May 2022 22:10:03 GMT
+Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8FA8C78060;
+        Thu,  5 May 2022 22:10:03 +0000 (GMT)
+Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 38FE57806A;
+        Thu,  5 May 2022 22:10:02 +0000 (GMT)
+Received: from [9.77.154.170] (unknown [9.77.154.170])
+        by b03ledav004.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Thu,  5 May 2022 22:10:02 +0000 (GMT)
+Message-ID: <2cfb2cd8-3bad-3c66-b8ee-918d615f7719@linux.ibm.com>
+Date:   Thu, 5 May 2022 15:10:01 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH] powerpc/pci: Add config option for using OF 'reg' for PCI
+ domain
+Content-Language: en-US
+To:     =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali@kernel.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
+References: <20220504175718.29011-1-pali@kernel.org>
+ <8ffa0287-de5e-4308-07d8-204ac2e7f63a@csgroup.eu>
+ <20220505093132.45ehu6pdfzmvt2xw@pali>
+From:   Tyrel Datwyler <tyreld@linux.ibm.com>
+In-Reply-To: <20220505093132.45ehu6pdfzmvt2xw@pali>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: eVQaPeDakQnT_t-afYqfmdwiYNj6v_v0
+X-Proofpoint-ORIG-GUID: F3tBA_U-4THprWI2NEKcngu3WBWHsgrj
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-05_09,2022-05-05_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 spamscore=0
+ clxscore=1011 lowpriorityscore=0 phishscore=0 mlxscore=0 mlxlogscore=999
+ malwarescore=0 bulkscore=0 impostorscore=0 priorityscore=1501 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
+ definitions=main-2205050142
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From d24052938345d456946be0e9ccc337e24d771c79 Mon Sep 17 00:00:00 2001
-Date: Wed, 4 May 2022 21:30:44 +0200
+On 5/5/22 02:31, Pali Rohár wrote:
+> Hello!
+> 
+> On Thursday 05 May 2022 07:16:40 Christophe Leroy wrote:
+>> Le 04/05/2022 à 19:57, Pali Rohár a écrit :
+>>> Since commit 63a72284b159 ("powerpc/pci: Assign fixed PHB number based on
+>>> device-tree properties"), powerpc kernel always fallback to PCI domain
+>>> assignment from OF / Device Tree 'reg' property of the PCI controller.
+>>>
+>>> PCI code for other Linux architectures use increasing assignment of the PCI
+>>> domain for individual controllers (assign the first free number), like it
+>>> was also for powerpc prior mentioned commit.
+>>>
+>>> Upgrading powerpc kernels from LTS 4.4 version (which does not contain
+>>> mentioned commit) to new LTS versions brings a regression in domain
+>>> assignment.
+>>
+>> Can you elaborate why it is a regression ?
+>>63a72284b159
+>> That commit says 'no functionnal changes', I'm having hard time 
+>> understanding how a nochange can be a regression.
+> 
+> It is not 'no functional change'. That commit completely changed PCI
+> domain assignment in a way that is incompatible with other architectures
+> and also incompatible with the way how it was done prior that commit.
 
-The impact of this regression is the same for resume that I saw on
-thaw: the kernel hangs and nothing except SysRq rebooting can be done.
+I agree that the "no functional change" statement is incorrect. However, for
+most powerpc platforms it ended up being simply a cosmetic behavior change. As
+far as I can tell there is nothing requiring domain ids to increase montonically
+from zero or that each architecture is required to use the same domain numbering
+scheme. Its hard to call this a true regression unless it actually broke
+something. The commit in question has been in the kernel since 4.8 which was
+released over 5 1/2 years ago.
 
-The null deref occurs at the same position as on thaw.
-BUG: kernel NULL pointer dereference
-RIP: aq_ring_rx_fill+0xcf/0x210 [atlantic]
+With all that said looking closer at the code in question I think it is fair to
+assume that the author only intended this change for powernv and pseries
+platforms and not every powerpc platform. That change was done to make
+persistent naming easier to manage in userspace. Your change defaults back to
+the old behavior which will now break both powernv and pseries platforms with
+regard to hotplugging and persistent naming.
 
-Fixes regression in commit cbe6c3a8f8f4 ("net: atlantic: invert deep
-par in pm functions, preventing null derefs"), where I disabled deep
-pm resets in suspend and resume, trying to make sense of the
-atl_resume_common deep parameter in the first place.
+We could properly limit it to powernv and pseries by using ibm,fw-phb-id instead
+of reg property in the look up that follows a failed ibm,opal-phbid lookup. I
+think this is acceptable as long as no other powerpc platforms have started
+using this behavior for persistent naming.
 
-It turns out, that atlantic always has to deep reset on pm operations
-and the parameter is useless. Even though I expected that and tested
-resume, I screwed up by kexec-rebooting into an unpatched kernel, thus
-missing the breakage.
+-Tyrel
 
-This fixup obsoletes the deep parameter of atl_resume_common, but I
-leave the cleanup for the maintainers to post to mainline.
+> For example, prior that commit on P2020 RDB board were PCI domains 0, 1 and 2.
+> 
+> $ lspci
+> 0000:00:00.0 PCI bridge: Freescale Semiconductor Inc P2020E (rev 21)
+> 0000:01:00.0 USB controller: Texas Instruments TUSB73x0 SuperSpeed USB 3.0 xHCI Host Controller (rev 02)
+> 0001:02:00.0 PCI bridge: Freescale Semiconductor Inc P2020E (rev 21)
+> 0001:03:00.0 Network controller: Qualcomm Atheros AR93xx Wireless Network Adapter (rev 01)
+> 0002:04:00.0 PCI bridge: Freescale Semiconductor Inc P2020E (rev 21)
+> 0002:05:00.0 Network controller: Qualcomm Atheros QCA986x/988x 802.11ac Wireless Network Adapter
+> 
+> After that commit on P2020 RDB board are PCI domains 0x8000, 0x9000 and 0xa000.
+> 
+> $ lspci
+> 8000:00:00.0 PCI bridge: Freescale Semiconductor Inc P2020E (rev 21)
+> 8000:01:00.0 USB controller: Texas Instruments TUSB73x0 SuperSpeed USB 3.0 xHCI Host Controller (rev 02)
+> 9000:02:00.0 PCI bridge: Freescale Semiconductor Inc P2020E (rev 21)
+> 9000:03:00.0 Network controller: Qualcomm Atheros AR93xx Wireless Network Adapter (rev 01)
+> a000:04:00.0 PCI bridge: Freescale Semiconductor Inc P2020E (rev 21)
+> a000:05:00.0 Network controller: Qualcomm Atheros QCA986x/988x 802.11ac Wireless Network Adapter
+> 
+> It is somehow strange that PCI domains are not indexed one by one and
+> also that there is no domain 0
+> 
+> With my patch when CONFIG_PPC_PCI_DOMAIN_FROM_OF_REG is not set, then
+> previous behavior used and PCI domains are again 0, 1 and 2.
+> 
+>> Usually we don't commit regressions to mainline ...
+>>
+>>
+>>>
+>>> Fix this issue by introducing a new option CONFIG_PPC_PCI_DOMAIN_FROM_OF_REG
+>>> When this options is disabled then powerpc kernel would assign PCI domains
+>>> in the similar way like it is doing kernel for other architectures and also
+>>> how it was done prior that commit.
+>>
+>> You don't define CONFIG_PPC_PCI_DOMAIN_FROM_OF_REG on by default, it 
+>> means this commit will change the behaviour. Is that expected ?
+>>
+>> Is that really worth a user selectable option ? Is the user able to 
+>> decide what he needs ?
+> 
+> Well, I hope that maintainers of that code answer to these questions.
+> 
+> In any case, I think that it could be a user selectable option as in
+> that commit is explained that in some situation is makes sense to do
+> PCI domain numbering based on DT reg.
+> 
+> But as I pointed above, upgrading from 4.4 TLS kernel to some new TLS
+> kernel brings above regression, so I think that there should be a way to
+> disable this behavior.
+> 
+> In my opinion, for people who are upgrading from 4.4 TLS kernel, this
+> option should be turned off by default (= do not change behavior). For
+> people who want same behaviour on powerpc as on other platforms, also it
+> should be turned off by default.
+> 
+>>>
+>>> Fixes: 63a72284b159 ("powerpc/pci: Assign fixed PHB number based on device-tree properties")
+>>
+>> Is that really a fix ? What is the problem really ?
+> 
+> Problem is that PCI domains were changed in a way that is not compatible
+> neither with version prior that commit and neither with how other linux
+> platforms assign PCI domains for controllers.
+> 
+>>> Signed-off-by: Pali Rohár <pali@kernel.org>
+>>> ---
+>>>   arch/powerpc/Kconfig             | 10 ++++++++++
+>>>   arch/powerpc/kernel/pci-common.c |  4 ++--
+>>>   2 files changed, 12 insertions(+), 2 deletions(-)
+>>>
+>>> diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
+>>> index 174edabb74fa..4dd3e3acddda 100644
+>>> --- a/arch/powerpc/Kconfig
+>>> +++ b/arch/powerpc/Kconfig
+>>> @@ -375,6 +375,16 @@ config PPC_OF_PLATFORM_PCI
+>>>   	depends on PCI
+>>>   	depends on PPC64 # not supported on 32 bits yet
+>>>   
+>>> +config PPC_PCI_DOMAIN_FROM_OF_REG
+>>> +	bool "Use OF reg property for PCI domain"
+>>> +	depends on PCI
+>>
+>> Should it depend on PPC_OF_PLATFORM_PCI instead ?
+> 
+> No, PPC_OF_PLATFORM_PCI has line "depends on PPC64 # not supported on 32
+> bits yet". But it is already used also for e.g. P2020 which is 32-bit
+> platform.
+> 
+>>> +	help
+>>> +	  By default PCI domain for host bridge during its registration is
+>>> +	  chosen as the lowest unused PCI domain number.
+>>> +
+>>> +	  When this option is enabled then PCI domain is determined from
+>>> +	  the OF / Device Tree 'reg' property.
+>>> +
+>>>   config ARCH_SUPPORTS_UPROBES
+>>>   	def_bool y
+>>>   
+>>> diff --git a/arch/powerpc/kernel/pci-common.c b/arch/powerpc/kernel/pci-common.c
+>>> index 8bc9cf62cd93..8cb6fc5302ae 100644
+>>> --- a/arch/powerpc/kernel/pci-common.c
+>>> +++ b/arch/powerpc/kernel/pci-common.c
+>>> @@ -74,7 +74,6 @@ void __init set_pci_dma_ops(const struct dma_map_ops *dma_ops)
+>>>   static int get_phb_number(struct device_node *dn)
+>>>   {
+>>>   	int ret, phb_id = -1;
+>>> -	u32 prop_32;
+>>>   	u64 prop;
+>>>   
+>>>   	/*
+>>> @@ -83,7 +82,8 @@ static int get_phb_number(struct device_node *dn)
+>>>   	 * reading "ibm,opal-phbid", only present in OPAL environment.
+>>>   	 */
+>>>   	ret = of_property_read_u64(dn, "ibm,opal-phbid", &prop);
+>>
+>> This looks like very specific, it is not reflected in the commit log.
+> 
+> I have not changed nor touched this "ibm,opal-phbid" setting. And it was
+> not also touched in that mentioned patch. I see that no DTS file in
+> kernel use this option (so probably only DTS files supplied by
+> bootloader use it). So I thought that there is not reason to mention in
+> commit message.
+> 
+> But if you think so, I can add some info to commit message about it.
+> 
+>>> -	if (ret) {
+>>> +	if (ret && IS_ENABLED(CONFIG_PPC_PCI_DOMAIN_FROM_OF_REG)) {
+>>> +		u32 prop_32;
+>>>   		ret = of_property_read_u32_index(dn, "reg", 1, &prop_32);
+>>>   		prop = prop_32;
+>>>   	}
 
-PS: I'm very sorry for this regression.
-
-Changes in v2:
-Patch formatting fixes
-- Fix Fixes tag
-=E2=80=93 Simplify stable Cc tag
-=E2=80=93 Fix Signed-off-by tag
-
-Changes in v3:
-=E2=80=93 Prefixed commit reference with "commit" aka I managed to use
-  checkpatch.pl.
-- Added Tested-by tags for the testing reporters.
-=E2=80=93 People start to get annoyed by my patch revision spamming. Should=
- be
-  the last one.
-
-Fixes: cbe6c3a8f8f4 ("net: atlantic: invert deep par in pm functions, preve=
-nting null derefs")
-Link: https://lore.kernel.org/regressions/9-Ehc_xXSwdXcvZqKD5aSqsqeNj5Izco4=
-MYEwnx5cySXVEc9-x_WC4C3kAoCqNTi-H38frroUK17iobNVnkLtW36V6VWGSQEOHXhmVMm5iQ=
-=3D@protonmail.com/
-Reported-by: Jordan Leppert <jordanleppert@protonmail.com>
-Reported-by: Holger Hoffst=C3=A4tte <holger@applied-asynchrony.com>
-Tested-by: Jordan Leppert <jordanleppert@protonmail.com>
-Tested-by: Holger Hoffst=C3=A4tte <holger@applied-asynchrony.com>
-Cc: <stable@vger.kernel.org> # 5.10+
-Signed-off-by: Manuel Ullmann <labre@posteo.de>
----
- drivers/net/ethernet/aquantia/atlantic/aq_pci_func.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/net/ethernet/aquantia/atlantic/aq_pci_func.c b/drivers=
-/net/ethernet/aquantia/atlantic/aq_pci_func.c
-index 3a529ee8c834..831833911a52 100644
---- a/drivers/net/ethernet/aquantia/atlantic/aq_pci_func.c
-+++ b/drivers/net/ethernet/aquantia/atlantic/aq_pci_func.c
-@@ -449,7 +449,7 @@ static int aq_pm_freeze(struct device *dev)
-=20
- static int aq_pm_suspend_poweroff(struct device *dev)
- {
--	return aq_suspend_common(dev, false);
-+	return aq_suspend_common(dev, true);
- }
-=20
- static int aq_pm_thaw(struct device *dev)
-@@ -459,7 +459,7 @@ static int aq_pm_thaw(struct device *dev)
-=20
- static int aq_pm_resume_restore(struct device *dev)
- {
--	return atl_resume_common(dev, false);
-+	return atl_resume_common(dev, true);
- }
-=20
- static const struct dev_pm_ops aq_pm_ops =3D {
-
-base-commit: 672c0c5173427e6b3e2a9bbb7be51ceeec78093a
---=20
-2.35.1

@@ -2,104 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 624ED51BFE2
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 14:53:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E4A551BFEB
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 14:54:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377812AbiEEM5I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 08:57:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36294 "EHLO
+        id S1378232AbiEEM5V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 08:57:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230176AbiEEM5G (ORCPT
+        with ESMTP id S234636AbiEEM5U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 08:57:06 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D4EEC527C5;
-        Thu,  5 May 2022 05:53:26 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A2D8F106F;
-        Thu,  5 May 2022 05:53:26 -0700 (PDT)
-Received: from FVFF77S0Q05N.cambridge.arm.com (FVFF77S0Q05N.cambridge.arm.com [10.1.29.132])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 027A53F885;
-        Thu,  5 May 2022 05:53:24 -0700 (PDT)
-Date:   Thu, 5 May 2022 13:53:22 +0100
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-Cc:     Marc Zyngier <maz@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        will Deacon <will@kernel.org>,
-        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Ard Biesheuvel <ardb@kernel.org>, broonie@kernel.org,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>
-Subject: Re: Should arm64 have a custom crash shutdown handler?
-Message-ID: <YnPIwjLMDXgII1vf@FVFF77S0Q05N.cambridge.arm.com>
-References: <427a8277-49f0-4317-d6c3-4a15d7070e55@igalia.com>
- <874k24igjf.wl-maz@kernel.org>
- <92645c41-96fd-2755-552f-133675721a24@igalia.com>
+        Thu, 5 May 2022 08:57:20 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7981D562D2
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 05:53:40 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id dk23so8538162ejb.8
+        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 05:53:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ZDiHbRXep/6+iyVjBExAePFQNEIwfM2Y++lVywpRZIA=;
+        b=JmUml4YWHv61GXiXI2JyoF4jHOy53241/JumCqgKvphO8ePrl++Lt2BRghiHYcCvxK
+         qD4nUjeFfiL8KGlWm4q1J0JF91/JuU4xySs6PCN3+zNheujLLq0P30PogHwssz1VUEwm
+         boBP+lF91KbEZ7nfoF+nUYr93RRXTlpBma/zcWHS4bqco/+Wmh+I5W2Oqzq9MgKac+yW
+         MkEietDQx61ArfpOTeE7ubKojSmqv9mqZO/4tOuXYnrVFMKsP+w45aVkQE4t964ZVyE7
+         2+ZcpXs1Vsnz3DfmFoGCzTGw9xqhNjzGjLxxWrJyrKtomt6DdTDVOURCeHHFNax8h/Yz
+         KQmA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ZDiHbRXep/6+iyVjBExAePFQNEIwfM2Y++lVywpRZIA=;
+        b=JDG6/6ZqzrbO1tuEdoaFN0WPW8FVK+6KhBR3NmmE9L8PwMAzRnPZ7FCbkRlvl8OWm1
+         5E3ikvsUjmLs2IqQS8UKYWtjOJBXeNxg1HFOGRXH3kOyFCZyjwYNGab5jZeR2mCzw1Zs
+         bbzo929uTON63mQbZwdC+WNZml0ShO9UcvTHTXio7g1ivnFXWF6Gbf74TrwgeBYI+xWv
+         Iorpnl615lS843ciLBD1Kf60IpvRrOuAvgDM1I5OJzbjN95OZIDQrFhxFp7QcPqVVBYa
+         jY10M4QAvmCSy3Qu3pUjzM4I5mMECq9sP3inL6cf+FBWM5xrx49B4JePmSe8s4Ifw6SA
+         iwgw==
+X-Gm-Message-State: AOAM532kbxTqLzgZfNSuJt7yzXLgTUturCwxc6d+p+isR+GGsQ9AJj6I
+        3U2ZCPzvgVPgr/oVply4fF6eFiJHnimtBjMZ8GuiCA==
+X-Google-Smtp-Source: ABdhPJx63A3bP0rjtjyKAom95/TvqkcnzhynHc/l8+zWlqYCcu2m88EFVmKf3AOCUbb+ftsGWYZgQtWf0j+Sf/0+vIc=
+X-Received: by 2002:a17:907:7e92:b0:6f4:c553:c734 with SMTP id
+ qb18-20020a1709077e9200b006f4c553c734mr8125613ejc.286.1651755219026; Thu, 05
+ May 2022 05:53:39 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <92645c41-96fd-2755-552f-133675721a24@igalia.com>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <1651703357-25154-1-git-send-email-justinpopo6@gmail.com>
+In-Reply-To: <1651703357-25154-1-git-send-email-justinpopo6@gmail.com>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Thu, 5 May 2022 14:53:28 +0200
+Message-ID: <CAMRc=Md811qriKCKR9wO0kq6FBW_Pq6WJ3vLnQ1EFno46gzYUQ@mail.gmail.com>
+Subject: Re: [PATCH v2 0/2] Add support for NXP PCA6408
+To:     Justin Chen <justinpopo6@gmail.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 05, 2022 at 09:44:25AM -0300, Guilherme G. Piccoli wrote:
-> On 05/05/2022 04:29, Marc Zyngier wrote:
-> > [...]
-> > Not having any 'machine_ops' indirection was a conscious decision on
-> > arm64, if only to avoid the nightmare that 32bit was at a time with
-> > every single platform doing their own stuff. Introducing them would
-> > not be an improvement, but simply the admission that hypervisors are
-> > simply too broken for words. And I don't buy the "but x86 has it!"
-> > argument. x86 is a nightmare of PV mess that we can happily ignore,
-> > because we don't do PV for core operations at all.
-> > 
-> > If something has to be done to quiesce the system, it probably is
-> > related to the system topology, and must be linked to it. We already
-> > have these requirements in order to correctly stop ongoing DMA, shut
-> > down IOMMUs, and other similar stuff. What other requirements does
-> > your favourite hypervisor have?
-> > 
-> 
-> Thanks Marc and Mark for the details. I agree with most part of it, and
-> in fact panic notifiers was the trigger for this discussion (and they
-> are in fact used for this purpose to some extent in Hyper-V).
-> 
-> The idea of having this custom handler from kexec comes from Hyper-V
-> discussion - I feel it's better to show the code, so please take a look
-> at functions: hv_machine_crash_shutdown()
-> [arch/x86/kernel/cpu/mshyperv.c] and the one called from there,
-> hv_crash_handler() [drivers/hv/vmbus_drv.c].
-> 
-> These routines perform last minute clean-ups, right before kdump/kexec
-> happens, but *after* the panic notifiers. It seems there is no way to
-> accomplish that without architecture involvement or core kexec code
-> pollution heh
+On Thu, May 5, 2022 at 12:30 AM Justin Chen <justinpopo6@gmail.com> wrote:
+>
+> The NXP PCA6408 is the 8 bit/8 GPIO version of the NXP PCA6416.
+>
+> Justin Chen (2):
+>   gpio: pca953xx: Add support for pca6408
+>   dt-bindings: gpio: pca95xx: add entry for pca6408
+>
+>  Documentation/devicetree/bindings/gpio/gpio-pca95xx.yaml | 1 +
+>  drivers/gpio/gpio-pca953x.c                              | 2 ++
+>  2 files changed, 3 insertions(+)
+>
+> --
+> 2.7.4
+>
 
-Looking at those, the cleanup work is all arch-specific. What exactly would we
-need to do on arm64, and why does it need to happen at that point specifically?
-On arm64 we don't expect as much paravirtualization as on x86, so it's not
-clear to me whether we need anything at all.
+Both applied, thanks!
 
-> Anyway, the idea here was to gather a feedback on how "receptive" arm64
-> community would be to allow such customization, appreciated your feedback =)
-
-... and are you trying to do this for Hyper-V or just using that as an example?
-
-I think we're not going to be very receptive without a more concrete example of
-what you want.
-
-What exactly do *you* need, and *why*? Is that for Hyper-V or another hypervisor?
-
-Thanks
-Mark.
+Bart

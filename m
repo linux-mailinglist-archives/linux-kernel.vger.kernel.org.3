@@ -2,375 +2,342 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9C3A51CA42
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 22:11:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C55251CA33
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 22:10:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385718AbiEEUPF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 16:15:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35232 "EHLO
+        id S1385695AbiEEUNt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 16:13:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384474AbiEEUPC (ORCPT
+        with ESMTP id S1385682AbiEEUNq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 16:15:02 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13D085F8EB;
-        Thu,  5 May 2022 13:11:17 -0700 (PDT)
-Received: from leknes.fjasle.eu ([46.142.98.182]) by mrelayeu.kundenserver.de
- (mreue106 [212.227.15.183]) with ESMTPSA (Nemesis) id
- 1Mbj7g-1oNfyF0MsY-00dBs2; Thu, 05 May 2022 22:09:49 +0200
-Received: by leknes.fjasle.eu (Postfix, from userid 1000)
-        id 4200C3C088; Thu,  5 May 2022 22:09:47 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=fjasle.eu; s=mail;
-        t=1651781387; bh=78ro9mZJoF+t7UFqUfx51nq549imwXNGprZ7dQU/WYQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=AeMjd5vv7SwW291xNlg6WB183s1Jtu2YpxLpSl8h+oMHbf2eD0NuEGGDNkSsxSOcP
-         duTMdPOI0uX4qo/fRdwpZDh6iePT81vhodqvBLZ0nBnLAjSvAT65EF9Ves9rWLqdxN
-         9OntH8UHafZgUVmBcTMyGrat+HDQcUWFHfZgEPKk=
-Date:   Thu, 5 May 2022 22:09:47 +0200
-From:   Nicolas Schier <nicolas@fjasle.eu>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     linux-kbuild@vger.kernel.org, clang-built-linux@googlegroups.com,
-        linux-kernel@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        linuxppc-dev@lists.ozlabs.org, linux-um@lists.infradead.org,
-        linux-s390@vger.kernel.org,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Kees Cook <keescook@chromium.org>
-Subject: Re: [PATCH v3 07/15] modpost: extract symbol versions from *.cmd
- files
-Message-ID: <YnQvC66wiDIGzeDo@fjasle.eu>
-References: <20220505072244.1155033-1-masahiroy@kernel.org>
- <20220505072244.1155033-8-masahiroy@kernel.org>
+        Thu, 5 May 2022 16:13:46 -0400
+Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2987F5F8EC
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 13:10:04 -0700 (PDT)
+Received: by mail-yb1-xb34.google.com with SMTP id m128so9501449ybm.5
+        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 13:10:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=hOBKsucs0VoUPv/ALOPSMFwlNoeZVWvVSpsNHH3v3zU=;
+        b=AA4C9n9/uPzc3x67Qqo7tjqnHMmEZimQVSDWh4HJZXGp7PnLD/AF78D6a6NbXnMsAT
+         T4B0XxP2sNU9lct8SNzj++iDDnvMVCr/ERNSJuuDGVmFG7qSCu/kgLE5KSGiJeyJ9Hkm
+         ks8Dnxeu+Gg5dJQEw9UkTbwD6BfpNHVTvEVa5IXPpnDlJyMBwyPLPKpmhDZ9a5+ISxMw
+         x9KbYot9lU6PUU0JvPXf+LnL0t55esNfWMgLg1C2spBnj/0BuTNUAhHATjXWZDuXZVYy
+         rtZDivqTbrX9lbY5KPQbgE1g70cdpZs6Xz36VyROHSF5JDUItQATRGBigfY3/MTP4zgL
+         Hv8w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=hOBKsucs0VoUPv/ALOPSMFwlNoeZVWvVSpsNHH3v3zU=;
+        b=DWCtZxkPcNEhBz3aAZoBhtW/Px76mIQ75SV70plWMUcDxG9CqMTAZ1XFOJ5IAbDr9F
+         hjIiK7TUlk294iYWVbbD1ER+aiqjlpFVFtPk7J1JylQ4TBdxKxH5H7z5EE/R7kKKXZqe
+         I1xsh52H+ezjgPhZpxHw2bYbhGxdxnh1nHbXQ77Zvx0myICcRJGUwyaZUN4WqOhWGR3V
+         SERMVVO3PlhZ0jt+23+MXbWuYjwPbb6Qk1FimI9FXK9c4OwDnzfAS+17akRBvJZETfiW
+         mlvFHG1TeBpeyq75g5UmHeGmvuXy41961IglSxHTJXt4/fI4VbKqZTqHpcmP5e3Q7w+a
+         g/aQ==
+X-Gm-Message-State: AOAM531qczDDbIb3Ge2ibi8SOLQOJ8NAMgE/1WXfsY1yrzAhldMJckoQ
+        g4OBHrxp8InIT3KLOkeeJ/Ow93M0dpE3nKv4S5VdNw==
+X-Google-Smtp-Source: ABdhPJwyvj9Iu2S8yS4YkWxx3iqyEMXrgK0r+Ye2GfjGKei4OPTpV0P5QARLOdRc6osLtJqC6ZZM/RCL4bH33VYoBQQ=
+X-Received: by 2002:a25:c0d7:0:b0:64a:250:996c with SMTP id
+ c206-20020a25c0d7000000b0064a0250996cmr9154563ybf.512.1651781403278; Thu, 05
+ May 2022 13:10:03 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220505072244.1155033-8-masahiroy@kernel.org>
-X-Provags-ID: V03:K1:F1/VS82Iexieq6BXZvrYKwem7arUucGMnRl5JUmDSL2Cn4toyRh
- BiZDMe2fIFL75Rkkgs4S9qPdoLef3nun3zgHr1agdSb0dLgsFCy3HBccOLELRBbYZkpWmfO
- lkxp6NAkYP9zIVnu1AC5zA5HKxr6+Gx4rk3QWVl4GGT64S9vC6H+uxwV7xDXUWiZDcDrumk
- Cobvs7bmX0PvIXypVN5vg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:8k2jbGGnYZE=:w4UWgqYcXXdjfLXk7fGV9Y
- UbT9TJ9Njv3XWYhfpGsbiqeTcpOApWH0njNVhoSFK8A1Vcnj3DX3/FVN2hk2im2AyRwdvSOSb
- tfdvmgC/S6OXv/DEMgQThgOHqPyLeaodIPfl/gPTnaLab7QpWMeVxRuD3CueU+TFwowSJ0sIX
- theIQpAqyfmTsahTvDGCRfAn8Ft6lSFzdSKvNyLbZiR/U9yPu2vzr8OYs3YijweODcT9fRjcF
- 3tMW7Usc+EUMxiBarv4U2FpcfrMMz89hKmmFZ5QYAW+OrDcyf8oq425Hq29dvqxjMk6AOJ30n
- UaDgHlBKM/OVcXroIgH0xErhsFFNUfE30iBJ/EGtDLXvtQhgPGAhjIwXmfrtg4fa8ldf7CX0g
- dlItE3BHTRQFJbSJeT6Sz33whx5OH4kaPnkXUmy64AW3NiXynncKaibwKvWg0ifGkpfoE2zHq
- 9L4WusTGAy/frl2cmtnDdWzi0JUVFEDe/XkrBLJDFP34eM5ile2kbA/lwr8tCw3au4uhKAarM
- d7j04mpm6IT9W1N8w3YMU2w+EiG1/JstVzR16tglhv5Sa6vUOT5rKF8I+qnuuMgQJUaS8uq2p
- LQlEWKlY4VMYN4ftOqpVVdestiCQxKeE8tLq0qD4eaDCS1JKZOP82/aQtKex2gDI/KFlIjWYM
- mrrBn4nlP+skECocJEVtdoIXvVqIi8lyhfW9kGi2FOR7bWpAXotkDnHOviRcpFjoOP5A=
+References: <20220503162033.1.Ia8651894026707e4fa61267da944ff739610d180@changeid>
+ <YnJv3B/85hTz54SC@intel.com> <CAD=FV=WndmKuEB0=OVQP9YuJaSmD0uxkNs5LE0wWsFj7gBvhBA@mail.gmail.com>
+ <1c6c9fde6e85f09cc89ea8dc6e8716fef58f3ee1.camel@redhat.com>
+ <YnPjO4kbjezQl5Da@intel.com> <CAD=FV=XbZEagm5qR207mcVm1Ry=bGeuRAqTYx3SBoZfyo6fSkg@mail.gmail.com>
+ <YnPoYsnx7IeBfJ5D@intel.com> <CAD=FV=WxxEGM4cLBHGMeRBFDAXGJJF105kLZ588JSFJRg8PM8A@mail.gmail.com>
+In-Reply-To: <CAD=FV=WxxEGM4cLBHGMeRBFDAXGJJF105kLZ588JSFJRg8PM8A@mail.gmail.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Thu, 5 May 2022 23:09:48 +0300
+Message-ID: <CAA8EJppSof0wZ9nph8v_2pgRZj2BJiZ1hTBfLgQ+CFsT+h_dyQ@mail.gmail.com>
+Subject: Re: [PATCH] drm: Document that power requirements for DP AUX transfers
+To:     Doug Anderson <dianders@chromium.org>
+Cc:     =?UTF-8?B?VmlsbGUgU3lyasOkbMOk?= <ville.syrjala@linux.intel.com>,
+        Lyude Paul <lyude@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Jani Nikula <jani.nikula@intel.com>,
+        Maxime Ripard <maxime@cerno.tech>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        freedreno <freedreno@lists.freedesktop.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 05, 2022 at 04:22:36PM +0900 Masahiro Yamada wrote:
-> Currently, CONFIG_MODVERSIONS needs extra link to embed the symbol
-> versions into ELF objects. Then, modpost extracts the version CRCs
-> from them.
-> 
-> The following figures show how it currently works, and how I am trying
-> to change it.
-> 
-> Current implementation
-> ======================
->                                                            |----------|
->                  embed CRC      -------------------------->| final    |
->       $(CC)        $(LD)       /  |---------|              | link for |
->   *.c ------> *.o -------> *.o -->| modpost |              | vmlinux  |
->                      /            |         |-- *.mod.c -->| or       |
->      genksyms       /             |---------|              | module   |
->   *.c ------> *.symversions                                |----------|
-> 
-> Genksyms outputs the calculated CRCs in the form of linker script
-> (*.symversions), which is used by $(LD) to update the object.
-> 
-> If CONFIG_LTO_CLANG=y, the build process becomes much more complex.
-> Embedding the CRCs is postponed until the LLVM bitcode is converted
-> into ELF, creating another intermediate *.prelink.o.
-> 
-> However, this complexity is unneeded. There is no reason why we must
-> embed version CRCs in objects so early.
-> 
-> There is final link stage for vmlinux (scripts/link-vmlinux.sh) and
-> modules (scripts/Makefile.modfinal). We can link CRCs at the very last
-> moment.
-> 
-> New implementation
-> ==================
->                                                            |----------|
->                    --------------------------------------->| final    |
->       $(CC)       /    |---------|                         | link for |
->   *.c ------> *.o ---->|         |                         | vmlinux  |
->                        | modpost |--- .vmlinux-symver.c -->| or       |
->      genksyms          |         |--- *.mod.c ------------>| module   |
->   *.c ------> *.cmd -->|---------|                         |----------|
-> 
-> Pass the symbol versions to modpost as separate text data, which are
-> available in *.cmd files.
-> 
-> This commit changes modpost to extract CRCs from *.cmd files instead of
-> from ELF objects.
-> 
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> ---
-> 
-> (no changes since v2)
-> 
-> Changes in v2:
->   - Simplify the implementation (parse .cmd files after ELF)
-> 
->  scripts/mod/modpost.c | 177 ++++++++++++++++++++++++++++++------------
->  1 file changed, 129 insertions(+), 48 deletions(-)
-> 
-> diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
-> index 78a7107fcc40..92ee1f454e29 100644
-> --- a/scripts/mod/modpost.c
-> +++ b/scripts/mod/modpost.c
-> @@ -383,19 +383,10 @@ static struct symbol *sym_add_exported(const char *name, struct module *mod,
->  	return s;
->  }
->  
-> -static void sym_set_crc(const char *name, unsigned int crc)
-> +static void sym_set_crc(struct symbol *sym, unsigned int crc)
->  {
-> -	struct symbol *s = find_symbol(name);
-> -
-> -	/*
-> -	 * Ignore stand-alone __crc_*, which might be auto-generated symbols
-> -	 * such as __*_veneer in ARM ELF.
-> -	 */
-> -	if (!s)
-> -		return;
-> -
-> -	s->crc = crc;
-> -	s->crc_valid = true;
-> +	sym->crc = crc;
-> +	sym->crc_valid = true;
->  }
->  
->  static void *grab_file(const char *filename, size_t *size)
-> @@ -618,33 +609,6 @@ static int ignore_undef_symbol(struct elf_info *info, const char *symname)
->  	return 0;
->  }
->  
-> -static void handle_modversion(const struct module *mod,
-> -			      const struct elf_info *info,
-> -			      const Elf_Sym *sym, const char *symname)
-> -{
-> -	unsigned int crc;
-> -
-> -	if (sym->st_shndx == SHN_UNDEF) {
-> -		warn("EXPORT symbol \"%s\" [%s%s] version generation failed, symbol will not be versioned.\n"
-> -		     "Is \"%s\" prototyped in <asm/asm-prototypes.h>?\n",
-> -		     symname, mod->name, mod->is_vmlinux ? "" : ".ko",
-> -		     symname);
-> -
-> -		return;
-> -	}
-> -
-> -	if (sym->st_shndx == SHN_ABS) {
-> -		crc = sym->st_value;
-> -	} else {
-> -		unsigned int *crcp;
-> -
-> -		/* symbol points to the CRC in the ELF object */
-> -		crcp = sym_get_data(info, sym);
-> -		crc = TO_NATIVE(*crcp);
-> -	}
-> -	sym_set_crc(symname, crc);
-> -}
-> -
->  static void handle_symbol(struct module *mod, struct elf_info *info,
->  			  const Elf_Sym *sym, const char *symname)
->  {
-> @@ -1955,6 +1919,102 @@ static char *remove_dot(char *s)
->  	return s;
->  }
->  
-> +/*
-> + * The CRCs are recorded in .*.cmd files in the form of:
-> + * #SYMVER <name> <crc>
-> + */
-> +static void extract_crcs_for_object(const char *object, struct module *mod)
-> +{
-> +	char cmd_file[PATH_MAX];
-> +	char *buf, *p;
-> +	const char *base;
-> +	int dirlen, ret;
-> +
-> +	base = strrchr(object, '/');
-> +	if (base) {
-> +		base++;
-> +		dirlen = base - object;
-> +	} else {
-> +		dirlen = 0;
-> +		base = object;
-> +	}
-> +
-> +	ret = snprintf(cmd_file, sizeof(cmd_file), "%.*s.%s.cmd",
-> +		       dirlen, object, base);
-> +	if (ret >= sizeof(cmd_file)) {
-> +		error("%s: too long path was truncated\n", cmd_file);
-> +		return;
-> +	}
-> +
-> +	buf = read_text_file(cmd_file);
-> +	p = buf;
-> +
-> +	while ((p = strstr(p, "\n#SYMVER "))) {
-> +		char *name;
-> +		size_t namelen;
-> +		unsigned int crc;
-> +		struct symbol *sym;
-> +
-> +		name = p + strlen("\n#SYMVER ");
-> +
-> +		p = strchr(name, ' ');
-> +		if (!p)
-> +			break;
-> +
-> +		namelen = p - name;
-> +		p++;
-> +
-> +		if (!isdigit(*p))
-> +			continue;	/* skip this line */
-> +
-> +		crc = strtol(p, &p, 0);
-> +		if (*p != '\n')
-> +			continue;	/* skip this line */
-> +
-> +		name[namelen] = '\0';
-> +
-> +		sym = sym_find_with_module(name, mod);
-> +		if (!sym) {
-> +			warn("Skip the version for unexported symbol \"%s\" [%s%s]\n",
-> +			     name, mod->name, mod->is_vmlinux ? "" : ".ko");
-> +			continue;
-> +		}
-> +		sym_set_crc(sym, crc);
-> +	}
-> +
-> +	free(buf);
-> +}
-> +
-> +/*
-> + * The symbol versions (CRC) are recorded in the .*.cmd files.
-> + * Parse them to retrieve CRCs for the current module.
-> + */
-> +static void mod_set_crcs(struct module *mod)
-> +{
-> +	char objlist[PATH_MAX];
-> +	char *buf, *p, *obj;
-> +	int ret;
-> +
-> +	if (mod->is_vmlinux) {
-> +		strcpy(objlist, ".vmlinux.objs");
-> +	} else {
-> +		/* objects for a module are listed in the *.mod file. */
-> +		ret = snprintf(objlist, sizeof(objlist), "%s.mod", mod->name);
-> +		if (ret >= sizeof(objlist)) {
-> +			error("%s: too long path was truncated\n", objlist);
-> +			return;
-> +		}
-> +	}
-> +
-> +	buf = read_text_file(objlist);
-> +	p = buf;
-> +
-> +	while ((obj = strsep(&p, "\n")) && obj[0])
-> +		extract_crcs_for_object(obj, mod);
-> +
-> +	free(buf);
-> +}
-> +
->  static void read_symbols(const char *modname)
->  {
->  	const char *symname;
-> @@ -2015,9 +2075,6 @@ static void read_symbols(const char *modname)
->  		if (strstarts(symname, "__kstrtabns_"))
->  			sym_update_namespace(symname + strlen("__kstrtabns_"),
->  					     sym_get_data(&info, sym));
-> -		if (strstarts(symname, "__crc_"))
-> -			handle_modversion(mod, &info, sym,
-> -					  symname + strlen("__crc_"));
->  	}
->  
->  	// check for static EXPORT_SYMBOL_* functions && global vars
-> @@ -2046,12 +2103,17 @@ static void read_symbols(const char *modname)
->  
->  	parse_elf_finish(&info);
->  
-> -	/* Our trick to get versioning for module struct etc. - it's
-> -	 * never passed as an argument to an exported function, so
-> -	 * the automatic versioning doesn't pick it up, but it's really
-> -	 * important anyhow */
-> -	if (modversions)
-> +	if (modversions) {
-> +		/*
-> +		 * Our trick to get versioning for module struct etc. - it's
-> +		 * never passed as an argument to an exported function, so
-> +		 * the automatic versioning doesn't pick it up, but it's really
-> +		 * important anyhow
-> +		 */
->  		sym_add_unresolved("module_layout", mod, false);
-> +
-> +		mod_set_crcs(mod);
-> +	}
->  }
->  
->  static void read_symbols_from_files(const char *filename)
-> @@ -2214,6 +2276,23 @@ static void add_header(struct buffer *b, struct module *mod)
->  		buf_printf(b, "\nMODULE_INFO(staging, \"Y\");\n");
->  }
->  
-> +static void check_symversions(struct module *mod)
-> +{
-> +	struct symbol *sym;
-> +
-> +	if (!modversions)
-> +		return;
-> +
-> +	list_for_each_entry(sym, &mod->exported_symbols, list) {
-> +		if (!sym->crc_valid) {
-> +			warn("EXPORT symbol \"%s\" [%s%s] version generation failed, symbol will not be versioned.\n"
-> +			     "Is \"%s\" prototyped in <asm/asm-prototypes.h>?\n",
-> +			     sym->name, mod->name, mod->is_vmlinux ? "" : ".ko",
-> +			     sym->name);
-> +		}
-> +	}
-> +}
-> +
->  /**
->   * Record CRCs for unresolved symbols
->   **/
-> @@ -2429,7 +2508,7 @@ static void read_dump(const char *fname)
->  		}
->  		s = sym_add_exported(symname, mod, gpl_only);
->  		s->is_static = false;
-> -		sym_set_crc(symname, crc);
-> +		sym_set_crc(s, crc);
->  		sym_update_namespace(symname, namespace);
->  	}
->  	free(buf);
-> @@ -2554,6 +2633,8 @@ int main(int argc, char **argv)
->  		if (mod->from_dump)
->  			continue;
->  
-> +		check_symversions(mod);
-> +
->  		if (!mod->is_vmlinux)
->  			write_mod_c_file(mod);
->  	}
-> -- 
-> 2.32.0
+On Thu, 5 May 2022 at 18:53, Doug Anderson <dianders@chromium.org> wrote:
+>
+> Hi,
+>
+> On Thu, May 5, 2022 at 8:29 AM Ville Syrj=C3=A4l=C3=A4
+> <ville.syrjala@linux.intel.com> wrote:
+> >
+> > On Thu, May 05, 2022 at 08:00:20AM -0700, Doug Anderson wrote:
+> > > Hi,
+> > >
+> > > On Thu, May 5, 2022 at 7:46 AM Ville Syrj=C3=A4l=C3=A4
+> > > <ville.syrjala@linux.intel.com> wrote:
+> > > >
+> > > > On Wed, May 04, 2022 at 02:10:08PM -0400, Lyude Paul wrote:
+> > > > > On Wed, 2022-05-04 at 09:04 -0700, Doug Anderson wrote:
+> > > > > > Hi,
+> > > > > >
+> > > > > > On Wed, May 4, 2022 at 5:21 AM Ville Syrj=C3=A4l=C3=A4
+> > > > > > <ville.syrjala@linux.intel.com> wrote:
+> > > > > > >
+> > > > > > > On Tue, May 03, 2022 at 04:21:08PM -0700, Douglas Anderson wr=
+ote:
+> > > > > > > > When doing DP AUX transfers there are two actors that need =
+to be
+> > > > > > > > powered in order for the DP AUX transfer to work: the DP so=
+urce and
+> > > > > > > > the DP sync. Commit bacbab58f09d ("drm: Mention the power s=
+tate
+> > > > > > > > requirement on side-channel operations") added some documen=
+tation
+> > > > > > > > saying that the DP source is required to power itself up (i=
+f needed)
+> > > > > > > > to do AUX transfers. However, that commit doesn't talk anyt=
+hing about
+> > > > > > > > the DP sink.
+> > > > > > > >
+> > > > > > > > For full fledged DP the sink isn't really a problem. It's e=
+xpected
+> > > > > > > > that if an external DP monitor isn't plugged in that attemp=
+ting to do
+> > > > > > > > AUX transfers won't work. It's also expected that if a DP m=
+onitor is
+> > > > > > > > plugged in (and thus asserting HPD) that it AUX transfers w=
+ill work.
+> > > > > > > >
+> > > > > > > > When we're looking at eDP, however, things are less obvious=
+. Let's add
+> > > > > > > > some documentation about expectations. Here's what we'll sa=
+y:
+> > > > > > > >
+> > > > > > > > 1. We don't expect the DP AUX transfer function to power on=
+ an eDP
+> > > > > > > > panel. If an eDP panel is physically connected but powered =
+off then it
+> > > > > > > > makes sense for the transfer to fail.
+> > > > > > >
+> > > > > > > I don't agree with this. I think the panel should just get po=
+wred up
+> > > > > > > for AUX transfers.
+> > > > > >
+> > > > > > That's definitely a fair thing to think about and I have at tim=
+es
+> > > > > > thought about trying to make it work that way. It always ends u=
+p
+> > > > > > hitting a roadblock.
+> > > >
+> > > > How do you even probe the panel initially if you can't power it on
+> > > > without doing some kind of full modeset/etc.?
+> > >
+> > > It's not that we can't power it on without a full modeset. It' that a=
+t
+> > > panel probe time all the DRM components haven't been hooked together
+> > > yet, so the bridge chain isn't available yet. The panel can power
+> > > itself on, though. This is why the documentation I added says: "if a
+> > > panel driver is initiating a DP AUX transfer it may power itself up
+> > > however it wants"
+> > >
+> > >
+> > > > > > The biggest roadblock that I recall is that to make this work t=
+hen
+> > > > > > you'd have to somehow ensure that the bridge chain's pre_enable=
+() call
+> > > > > > was made as part of the AUX transfer, right? Since the transfer
+> > > > > > function can be called in any context at all, we have to coordi=
+nate
+> > > > > > this with DRM. If, for instance, DRM is mid way through powerin=
+g the
+> > > > > > panel down then we need to wait for DRM to fully finish powerin=
+g down,
+> > > > > > then we need to power the panel back up. I don't believe that w=
+e can
+> > > > > > just force the panel to stay on if DRM is turning it off becaus=
+e of
+> > > > > > panel power sequencing requirements. At least I know it would h=
+ave the
+> > > > > > potential to break "samsung-atna33xc20.c" which absolutely need=
+s to
+> > > > > > see the panel power off after it's been disabled.
+> > > > > >
+> > > > > > We also, I believe, need to handle the fact that the bridge cha=
+in may
+> > > > > > not have even been created yet. We do AUX transfers to read the=
+ EDID
+> > > > > > and also to setup the backlight in the probe function of panel-=
+edp. At
+> > > > > > that point the panel hasn't been linked into the chain. We had =
+_long_
+> > > > > > discussions [1] about moving these out of probe and decided tha=
+t we
+> > > > > > could move the EDID read to be later but that it was going to r=
+eally
+> > > > > > ugly to move the AUX backlight later. The backlight would end u=
+p
+> > > > > > popping up at some point in time later (the first call to panel
+> > > > > > prepare() or maybe get_modes()) and that seemed weird.
+> > > > > >
+> > > > > > [1]
+> > > > > > https://lore.kernel.org/lkml/CAD=3DFV=3DU5-sTDLYdkeJWLAOG-0wgxR=
+49VxtwUyUO7z2PuibLGsg@mail.gmail.com/
+> > > > > >
+> > > > > >
+> > > > > > > Otherwise you can't trust that eg. the /dev/aux
+> > > > > > > stuff is actually usable.
+> > > > > >
+> > > > > > Yeah, it's been on my mind to talk more about /dev/aux. I think
+> > > > > > /dev/aux has some problems, at least with eDP. Specifically:
+> > > > > >
+> > > > > > 1. Even if we somehow figure out how to power the panel on as p=
+art of
+> > > > > > the aux transfer, we actually _still_ not guaranteed to be able=
+ to
+> > > > > > talk to it as far as I understand. My colleague reported to me =
+that on
+> > > > > > a system he was working with that had PSR (panel self refresh) =
+that
+> > > > > > when the panel was powered on but in PSR mode that it wouldn't =
+talk
+> > > > > > over AUX. Assuming that this is correct then I guess we'd also =
+have to
+> > > > > > do even more coordination with DRM to exit PSR and block future
+> > > > > > transitions of PSR. (NOTE: it's always possible that my colleag=
+ue ran
+> > > > > > into some other bug and that panels are _supposed_ to be able t=
+o talk
+> > > > > > in PSR. If you think this is the case, I can always try to dig =
+more).
+> > > > >
+> > > > > TBH - the coordination with drm I don't think would be the diffic=
+ult part, as
+> > > > > we'd just need to add some sort of property (ideally invisible to=
+ userspace)
+> > > > > that can be used in an atomic commit to disable PSR - similar to =
+how we enable
+> > > > > CRC readback from sysfs in the majority of DRM drivers. That bein=
+g said
+> > > > > though, I think we can just leave the work of solving this proble=
+m up to
+> > > > > whoever ends up needing this to work.
+> > > >
+> > > > The driver should just disable/prevent PSR when doing AUX if the ha=
+rdware
+> > > > can't guarantee the PSR and AUX won't interfere with each other.
+> > >
+> > > OK, fair enough. If we can solve the PSR problem that would be great.
+> > >
+> > >
+> > > > For i915 we have no problems with powering the panel on for AUX, bu=
+t
+> > > > there is still a race with PSR vs. AUX because both use the same ha=
+rdware
+> > > > internally. I've been nagging at people to fix this for i915 but I =
+don't
+> > > > think it still got done :( Originally we were supposed to get a har=
+dware
+> > > > mutex for this but that plan got scrapped for some reason.
+> > >
+> > > I haven't looked at the i915 DRM code much, but my understanding is
+> > > that it's more of an "all in one" approach. The one driver pretty muc=
+h
+> > > handles everything itself. That means that powering the panel up isn'=
+t
+> > > too hard. Is that right?
+> >
+> > Yeah, we don't have too many "helpful" abstractions in the way ;)
+> >
+> > > > > > for userspace to be mucking with /dev/aux. For DP's case I gues=
+s
+> > > > > > /dev/aux is essentially enabling userspace drivers to do things=
+ like
+> > > > > > update firmware on DP monitors or play with the backlight. I gu=
+ess we
+> > > > > > decided that we didn't want to add drivers in the kernel to han=
+dle
+> > > > > > this type of stuff so we left it for userspace? For eDP, though=
+, there
+> > > > >
+> > > > > The main reason DP AUX got exposed to userspace in the first plac=
+e was for
+> > > > > usecases like fwupd,
+> > > >
+> > > > My memory says the original reason was debugging. Or at least I had
+> > > > no idea fwupd had started to use this until I saw some weird lookin=
+g
+> > > > DPCD addresses in some debug log.
+> > > >
+> > > > But I suppose it's possible there were already plans for firmware
+> > > > updates and whatnot and it just wasn't being discussed when this wa=
+s
+> > > > being developed.
+> > >
+> > > If it's just for debugging, I'd argue that leaving it as-is should be
+> > > fine. Someone poking around with their system can find a way to make
+> > > sure that the panel stays on.
+> >
+> > That could require altering the state of the system quite a bit, which
+> > may defeat the purpose.
+>
+> It does? In my experience you just need to make sure that the panel is
+> turned on. ...or are you saying that you'd use this for debugging a
+> case where the system isn't probing properly?
+>
+> If things are truly in bad shape, at least on boards using device tree
+> it's easy to tweak the device tree to force a regulator to stay on. I
+> suppose we could also add a "debugfs" entry for the panel that also
+> forces it to be powered on.
+>
+>
+> >  At least I would not be willing to accept such
+> > a limitation.
+>
+> Hmm, so where does that leave us? Are you against landing this patch?
+> I've done a lot of cleanups recently and I just don't think I have the
+> time to rework all the AUX transfer functions and figure out how to
+> power the panel. It also seems like a lot of added complexity for a
+> debug path.
 
-Reviewed-by: Nicolas Schier <nicolas@fjasle.eu>
+If my 2c counts, I support landing this patch. It clearly documents
+current behaviour and expectations.
+
+If that helps,
+Acked-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+
+As for the /dev/aux, question, I think we can make the following plan work:
+- Document that eDP panel power up can be handled by using the
+pm_runtime API (which is the case for both panel-edp and atna33xc20)).
+I think this is a sensible requirement anyway. And both panels show
+how to handle different poweron/poweroff timings.
+- Make drm_dp_aux_dev_get_by_minor() pm_runtime_get() the attached panel.
+
+> > > This is similar to how if you're poking
+> > > around with /dev/i2c it's up to you to make sure that the i2c device
+> > > you're poking at stays powered.
+
+
+--=20
+With best wishes
+Dmitry

@@ -2,146 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FD9951C602
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 19:22:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C75CA51C60A
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 19:26:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382657AbiEERZv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 13:25:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45752 "EHLO
+        id S1382319AbiEER3k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 13:29:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243602AbiEERZt (ORCPT
+        with ESMTP id S1349464AbiEER3i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 13:25:49 -0400
-Received: from out01.mta.xmission.com (out01.mta.xmission.com [166.70.13.231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 002D55C351;
-        Thu,  5 May 2022 10:22:08 -0700 (PDT)
-Received: from in01.mta.xmission.com ([166.70.13.51]:54302)
-        by out01.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1nmfB1-004NL6-4O; Thu, 05 May 2022 11:22:07 -0600
-Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:37076 helo=email.froward.int.ebiederm.org.xmission.com)
-        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1nmfB0-001ruM-3z; Thu, 05 May 2022 11:22:06 -0600
-From:   "Eric W. Biederman" <ebiederm@xmission.com>
-To:     Oleg Nesterov <oleg@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, rjw@rjwysocki.net, mingo@kernel.org,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, mgorman@suse.de, bigeasy@linutronix.de,
-        Will Deacon <will@kernel.org>, tj@kernel.org,
-        linux-pm@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        linux-um@lists.infradead.org, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        linux-xtensa@linux-xtensa.org, Kees Cook <keescook@chromium.org>,
-        Jann Horn <jannh@google.com>, linux-ia64@vger.kernel.org
-References: <87k0b0apne.fsf_-_@email.froward.int.ebiederm.org>
-        <20220504224058.476193-8-ebiederm@xmission.com>
-        <20220505150158.GB13929@redhat.com>
-Date:   Thu, 05 May 2022 12:21:58 -0500
-In-Reply-To: <20220505150158.GB13929@redhat.com> (Oleg Nesterov's message of
-        "Thu, 5 May 2022 17:01:59 +0200")
-Message-ID: <87a6bv7v49.fsf@email.froward.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Thu, 5 May 2022 13:29:38 -0400
+Received: from us-smtp-delivery-74.mimecast.com (us-smtp-delivery-74.mimecast.com [170.10.129.74])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4EE5B5C86D
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 10:25:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1651771557;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=tT2BrC5wtpY98Xyl4U1QZDUp/OCUTw1Ys8ss+GOAfFE=;
+        b=IqXg+5hND66iCJuST0xzf5R+cyJ5uwKG9x2NpB8eCb1GCNi/7E2ZGPwCGJvfIV6l5NsXvT
+        znNyWixF6X1IWMjbENb5WbD57v1yVcX17Cr8iXqesv9miT0RG2gOYUxgi5b76+W0JhY2E8
+        qBeZ/TVt5a6JmPOmsC8YXoJWCkeKkXE=
+Received: from mail-io1-f71.google.com (mail-io1-f71.google.com
+ [209.85.166.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-145-R3UbHB9_NfmkjO8UPxzoAw-1; Thu, 05 May 2022 13:25:56 -0400
+X-MC-Unique: R3UbHB9_NfmkjO8UPxzoAw-1
+Received: by mail-io1-f71.google.com with SMTP id k2-20020a0566022a4200b00654c0f121a9so3356046iov.1
+        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 10:25:56 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=tT2BrC5wtpY98Xyl4U1QZDUp/OCUTw1Ys8ss+GOAfFE=;
+        b=8Jnu2usKG/SuNADQ6mLKsUpK7zMkDZX33rX2deAukwinqRVTpXcCQNg2/37HAfo5pi
+         6/enKRJpLq79vOtjZRiHItVdEQDikdGlebwKz6145Ckq1pEipX0AYtr3fB3W3DVz6+04
+         7CKm4CHkfjmJgZfyBD+EmxuY4fomfap50zQ2Wet5MjaE1YjwIOfZkYAXCGztvsbl6IdH
+         FG/CkZzPbSQet7jCudDSA9HQ5JzfUC1+opQH2JUZW9NTxME4cTfj2faOOwzG7jELc5jZ
+         YuXIZ2juxs+VO3ZaDlwNrcuZTIwKGQX4Sc2yJ4m9tMYakGB+gjQwuym8yFrFOKlSODPp
+         xSvA==
+X-Gm-Message-State: AOAM531oTxdpRfAOuVYFYMQcM88WHUTWlAULr4Poz16w9eCdyiCpLseh
+        HZcyWnad+b3tgYAD5ID0+cMdLrbFoSvElNlPZIMBUEb4+cN7vufLZWlw1THO2uMyZNbjCTPGtfm
+        h+cd6jl2inGiBaDcLe8F16C8v
+X-Received: by 2002:a05:6638:40ac:b0:328:6b81:f9e8 with SMTP id m44-20020a05663840ac00b003286b81f9e8mr11353107jam.153.1651771555622;
+        Thu, 05 May 2022 10:25:55 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwC+oM9RGzodl9hkJpceUHdPlHK9Zhnz05l6pq0+J+sejC41muNngNg+JonwkN9XxNJwtUZnA==
+X-Received: by 2002:a05:6638:40ac:b0:328:6b81:f9e8 with SMTP id m44-20020a05663840ac00b003286b81f9e8mr11353103jam.153.1651771555414;
+        Thu, 05 May 2022 10:25:55 -0700 (PDT)
+Received: from xz-m1.local (cpec09435e3e0ee-cmc09435e3e0ec.cpe.net.cable.rogers.com. [99.241.198.116])
+        by smtp.gmail.com with ESMTPSA id m2-20020a056e020de200b002cde6e352d4sm589943ilj.30.2022.05.05.10.25.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 May 2022 10:25:54 -0700 (PDT)
+Date:   Thu, 5 May 2022 13:25:53 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     Mike Kravetz <mike.kravetz@oracle.com>
+Cc:     Minchan Kim <minchan@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-mm <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        John Hubbard <jhubbard@nvidia.com>,
+        John Dias <joaodias@google.com>
+Subject: Re: [PATCH] mm: fix is_pinnable_page against on cma page
+Message-ID: <YnQIoVqXZQGILt6F@xz-m1.local>
+References: <20220502173558.2510641-1-minchan@kernel.org>
+ <29d0c1c3-a44e-4573-7e7e-32be07544dbe@redhat.com>
+ <YnAhaRNjmIhtGUjk@google.com>
+ <08e9855c-395d-f40c-de3d-1ec8b644bfe8@redhat.com>
+ <YnFJss0doXGCmq3w@google.com>
+ <da07530d-92ad-7aef-2f2b-d115f878ef76@redhat.com>
+ <YnMC1jFoPvNLWqnG@google.com>
+ <YnNzPlehofB57XXU@google.com>
+ <dd4588a4-c1ca-481c-ac33-06abef6cf70a@oracle.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1nmfB0-001ruM-3z;;;mid=<87a6bv7v49.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=softfail
-X-XM-AID: U2FsdGVkX1/R0B4YBqqFn6+USIbxA22SrHX567vNL3g=
-X-SA-Exim-Connect-IP: 68.227.174.4
-X-SA-Exim-Mail-From: ebiederm@xmission.com
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <dd4588a4-c1ca-481c-ac33-06abef6cf70a@oracle.com>
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-DCC: XMission; sa06 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: ***;Oleg Nesterov <oleg@redhat.com>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 426 ms - load_scoreonly_sql: 0.04 (0.0%),
-        signal_user_changed: 10 (2.3%), b_tie_ro: 8 (1.9%), parse: 0.98 (0.2%),
-         extract_message_metadata: 3.4 (0.8%), get_uri_detail_list: 1.52
-        (0.4%), tests_pri_-1000: 4.2 (1.0%), tests_pri_-950: 1.26 (0.3%),
-        tests_pri_-900: 1.05 (0.2%), tests_pri_-90: 116 (27.1%), check_bayes:
-        114 (26.8%), b_tokenize: 8 (1.9%), b_tok_get_all: 10 (2.4%),
-        b_comp_prob: 2.4 (0.6%), b_tok_touch_all: 90 (21.1%), b_finish: 0.91
-        (0.2%), tests_pri_0: 273 (64.0%), check_dkim_signature: 0.56 (0.1%),
-        check_dkim_adsp: 2.8 (0.7%), poll_dns_idle: 0.97 (0.2%), tests_pri_10:
-        2.3 (0.5%), tests_pri_500: 7 (1.6%), rewrite_mail: 0.00 (0.0%)
-Subject: Re: [PATCH v3 08/11] ptrace: Admit ptrace_stop can generate
- spuriuos SIGTRAPs
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Oleg Nesterov <oleg@redhat.com> writes:
+On Thu, May 05, 2022 at 10:00:07AM -0700, Mike Kravetz wrote:
+> Gigantic pages can only be migrated IF there is another (already allocated)
+> gigantic page available.  The routine to try and allocate a page 'on the fly'
+> for migration will fail if passed a gigantic size.  There 'might' be a free
+> pre-allocated gigantic page.  However, if the user set up CMA reserves for
+> gigantic page allocations it is likely the free gigantic page is also in CMA.
+> Therefore, it can not be used for this migration.  So, unless my reasoning
+> is wrong, FOLL_LONGTERM would almost always fail for gigantic pages in CMA.
 
-> On 05/04, Eric W. Biederman wrote:
->>
->> With the removal of the incomplete detection of the tracer going away
->> in ptrace_stop, ptrace_stop always sleeps in schedule after
->> ptrace_freeze_traced succeeds.  Modify ptrace_check_attach to
->> warn if wait_task_inactive fails.
->
-> Oh. Again, I don't understand the changelog. If we forget about RT,
-> ptrace_stop() will always sleep if ptrace_freeze_traced() succeeds.
-> may_ptrace_stop() has gone.
->
-> IOW. Lets forget about RT
->
->> --- a/kernel/ptrace.c
->> +++ b/kernel/ptrace.c
->> @@ -266,17 +266,9 @@ static int ptrace_check_attach(struct task_struct *child, bool ignore_state)
->>  	}
->>  	read_unlock(&tasklist_lock);
->>
->> -	if (!ret && !ignore_state) {
->> -		if (!wait_task_inactive(child, __TASK_TRACED)) {
->> -			/*
->> -			 * This can only happen if may_ptrace_stop() fails and
->> -			 * ptrace_stop() changes ->state back to TASK_RUNNING,
->> -			 * so we should not worry about leaking __TASK_TRACED.
->> -			 */
->> -			WARN_ON(READ_ONCE(child->__state) == __TASK_TRACED);
->> -			ret = -ESRCH;
->> -		}
->> -	}
->> +	if (!ret && !ignore_state &&
->> +	    WARN_ON_ONCE(!wait_task_inactive(child, __TASK_TRACED)))
->> +		ret = -ESRCH;
->>
->>  	return ret;
->>  }
->
-> Why do you think this change would be wrong without any other changes?
+I'm probably not familiar enough with CMA, but.. I just noticed that if CMA
+is destined to not be able to be pinned then maybe it'll lose quite a few
+scenarios where pinning is a possible use case.  It doesn't even need to be
+the major use case, but as long as it's possible (e.g. hypervisors hosting
+virtual machines with device assignment) it'll be a hard no to CMA, which
+seems to be a pity.
 
-For purposes of this analysis ptrace_detach and ptrace_exit (when the
-tracer exits) can't happen.  So the bug you spotted in ptrace_stop does
-not apply.
-
-I was thinking that the test against !current->ptrace that replaced
-the old may_ptrace_stop could trigger a failure here.  If the
-ptrace_freeze_traced happens before that test that branch clearly can
-not happen.
-
-*Looks twice* Both ptrace_check_attach and ptrace_stop taking a
-read_lock on tasklist_lock does not protect against concurrency by each
-other, but the write_lock on tasklist_lock in ptrace_attach does
-protect against a ptrace_attach coming in after the test and before
-__set_current_state(TASK_RUNNING).
-
-So yes. I should really split that part out into it's own patch.
-And yes that WARN_ON_ONCE can trigger on PREEMPT_RT but that is just
-because PREMPT_RT is currently broken with respect to ptrace.  Which
-makes a WARN_ON_ONCE appropriate.
-
-I will see how much of this analysis I can put in the changelog.
-
-Thank you,
-Eric
+-- 
+Peter Xu
 

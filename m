@@ -2,83 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7811951B754
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 07:04:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FC2651B755
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 07:04:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243184AbiEEFHq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 01:07:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45286 "EHLO
+        id S243226AbiEEFIc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 01:08:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234698AbiEEFHn (ORCPT
+        with ESMTP id S234698AbiEEFIb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 01:07:43 -0400
-X-Greylist: delayed 303 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 04 May 2022 22:04:04 PDT
-Received: from us-smtp-delivery-74.mimecast.com (us-smtp-delivery-74.mimecast.com [170.10.133.74])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 856D211A01
-        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 22:04:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651727043;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=rzUleSxK9nl8YlNcYVSjvCKZ2tNHw3I29yrW6MqQSZs=;
-        b=M2q9tnv2iErdPywBIGHQLsDyGyLEqRC5dKWJ95urQPLu2oxWxV6SXj+wZxoIDv+cC4+ttt
-        AwnoxlFwniQMigdcHUIFr2I5Val2efqRXj758G26tN+/mVi5bnhzCwiz8/Dw8ukMJy9Zmb
-        VNcyIeEc+HmiN36fwTsAc/gUwaIIW8Y=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-35-yvZhvujkO8e6wL7PHQFcZw-1; Thu, 05 May 2022 00:57:55 -0400
-X-MC-Unique: yvZhvujkO8e6wL7PHQFcZw-1
-Received: by mail-ed1-f71.google.com with SMTP id l24-20020a056402231800b00410f19a3103so1727113eda.5
-        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 21:57:55 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=rzUleSxK9nl8YlNcYVSjvCKZ2tNHw3I29yrW6MqQSZs=;
-        b=KBoZ9f9K/OOYQaFYTf78jUdcQ9OoGINT/0VrJgUT/cwt8CX9+bRdBDtWu1CmMJ2WIT
-         ETsnI7Tcc3QGE5r+jzmm5JdMICdmQUkw1VS0blRhV3VdixoqO2J9i9A6SyGrO17o0GLO
-         uQpeRGFwqcBGDRueJz6A8FYpqGBND+weVKuSYsljIqMT8zbxaBUy8/q8qEISSDNr0+ic
-         BTSBGsu+YfVVMVN3GOw3G9BF10eRFgAmm6UFgcsH3qxTZFy0gboqj9mRpZB3jfVlEdFo
-         8SbBBGm3DVnTwuVyDuGAwhE/r5jMeGO+tDl7hZu+07JiWNs9PtXeSLmj+g/Zj7JVf7KY
-         bYAQ==
-X-Gm-Message-State: AOAM530vWUWuFlQhQxc9u3eCXxz8W/P0Se9ejo+XjsyQFisQw1M6CQLS
-        FnnUI1yRqTy5goIUM/7O2xzHHz+asdxr09hztcvYog6/hMUFfstMvvanHcAqzxtQuCpaBjlMfrD
-        LNi6LsTjL8Am/nnDB4U84uUMR
-X-Received: by 2002:a17:906:4fcd:b0:6f4:b5c0:aa44 with SMTP id i13-20020a1709064fcd00b006f4b5c0aa44mr7687134ejw.445.1651726674813;
-        Wed, 04 May 2022 21:57:54 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwbX4SoVGMOKvRO7Omo/n5jSKXm67g9e9YispmVFqRKvn39kXm8wsjujTpuSP3Yg3lt2T129Q==
-X-Received: by 2002:a17:906:4fcd:b0:6f4:b5c0:aa44 with SMTP id i13-20020a1709064fcd00b006f4b5c0aa44mr7687117ejw.445.1651726674576;
-        Wed, 04 May 2022 21:57:54 -0700 (PDT)
-Received: from redhat.com ([2.53.134.204])
-        by smtp.gmail.com with ESMTPSA id q10-20020a1709064cca00b006f3ef214dd7sm311969ejt.61.2022.05.04.21.57.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 May 2022 21:57:53 -0700 (PDT)
-Date:   Thu, 5 May 2022 00:57:49 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     "Gonglei (Arei)" <arei.gonglei@huawei.com>
-Cc:     zhenwei pi <pizhenwei@bytedance.com>,
-        "jasowang@redhat.com" <jasowang@redhat.com>,
-        "herbert@gondor.apana.org.au" <herbert@gondor.apana.org.au>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "helei.sig11@bytedance.com" <helei.sig11@bytedance.com>,
-        "davem@davemloft.net" <davem@davemloft.net>
-Subject: Re: PING: [PATCH v4 0/5] virtio-crypto: Improve performance
-Message-ID: <20220505005607-mutt-send-email-mst@kernel.org>
-References: <20220424104140.44841-1-pizhenwei@bytedance.com>
- <cc9eb4aa-2e40-490f-f5a0-beee3a57313b@bytedance.com>
- <7f7ab8ae46174ed6b0888b5fbeb5849b@huawei.com>
+        Thu, 5 May 2022 01:08:31 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D925F36174
+        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 22:04:49 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9470AB82B79
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 05:04:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A2B8C385AC;
+        Thu,  5 May 2022 05:04:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651727087;
+        bh=JdN3zDO4dj3t7OPhPCs+YNC0AJuQ2IsUuVlmCRPStU4=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=iTcZRR1vooI5FXN7x9t09oy3eNbyztkSzg6Rg5zSMsP7TO6taaKQoF2bHEZ26qcEs
+         +qq8qfy133ZkWgOCgEkYzg5HBW6fLiiCPDd4jkUWxXHabzEq+1b3mImZImnFqshsHP
+         9prBoyW7YhIcmxRlwBl4LAYtgMLERi0cps6BIvGIc7ySiiDeXV2eUppUZeVxhUqqdE
+         XKuIrS0/OLvM9NOGOW8BgxTmiz7BdPm1SPpTHYc3hv08hY2SijaKO2Jmct0nIvFO5v
+         hEsDBAmy8G8B6/kaNCtXWK2VE1mTyZhRw34A7mX/eKJgPYmKbqF8Q2SDtxEjSlxc2H
+         GGZOksrK11XqA==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id F3AC15C038D; Wed,  4 May 2022 22:04:44 -0700 (PDT)
+Date:   Wed, 4 May 2022 22:04:44 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     Matthew Wilcox <willy@infradead.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: Wait for mutex to become unlocked
+Message-ID: <20220505050444.GA3738810@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <YnLzrGlBNCmCPLmS@casper.infradead.org>
+ <87pmksj0ah.ffs@tglx>
+ <YnMcdmx9ZwHcxTYe@casper.infradead.org>
+ <87k0b0ixv6.ffs@tglx>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <7f7ab8ae46174ed6b0888b5fbeb5849b@huawei.com>
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <87k0b0ixv6.ffs@tglx>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,109 +64,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 05, 2022 at 03:14:40AM +0000, Gonglei (Arei) wrote:
+On Thu, May 05, 2022 at 03:14:53AM +0200, Thomas Gleixner wrote:
+> On Thu, May 05 2022 at 01:38, Matthew Wilcox wrote:
+> > On Thu, May 05, 2022 at 02:22:30AM +0200, Thomas Gleixner wrote:
+> >> > That is, rwsem_wait_read() puts the thread on the rwsem's wait queue,
+> >> > and wakes it up without giving it the lock.  Now this thread will never
+> >> > be able to block any thread that tries to acquire mmap_sem for write.
+> >> 
+> >> Never?
+> >> 
+> >>  	if (down_read_trylock(&vma->sem)) {
+> >> 
+> >> ---> preemption by writer
+> >
+> > Ah!  This is a different semaphore.  Yes, it can be preempted while
+> > holding the VMA rwsem and block a thread which is trying to modify the
+> > VMA which will then block all threads from faulting _on that VMA_,
+> > but it won't affect page faults on any other VMA.
 > 
+> Ooops. Missed that detail. Too many semaphores here.
 > 
-> > -----Original Message-----
-> > From: zhenwei pi [mailto:pizhenwei@bytedance.com]
-> > Sent: Thursday, May 5, 2022 10:35 AM
-> > To: Gonglei (Arei) <arei.gonglei@huawei.com>; mst@redhat.com;
-> > jasowang@redhat.com
-> > Cc: herbert@gondor.apana.org.au; linux-kernel@vger.kernel.org;
-> > virtualization@lists.linux-foundation.org; linux-crypto@vger.kernel.org;
-> > helei.sig11@bytedance.com; davem@davemloft.net
-> > Subject: PING: [PATCH v4 0/5] virtio-crypto: Improve performance
-> > 
-> > Hi, Lei
-> > 
-> > Jason replied in another patch:
-> > Still hundreds of lines of changes, I'd leave this change to other maintainers to
-> > decide.
-> > 
-> > Quite frankly, the virtio crypto driver changed only a few in the past, and the
-> > performance of control queue is not good enough. I am in doubt about that this
-> > driver is not used widely. So I'd like to rework a lot, it would be best to complete
-> > this work in 5.18 window.
-> > 
-> > This gets different point with Jason. I would appreciate it if you could give me
-> > any hint.
-> > 
+> > It's only Better, not Best (the Best approach was proposed on Monday
+> > afternoon, and the other MM developers asked us to only go as far as
+> > Better and see if that was good enough).
 > 
-> This is already in my todo list.
+> :)
 > 
-> Regards,
-> -Gonglei
+> >> The information gathered from /proc/pid/smaps is unreliable at the point
+> >> where the lock is dropped already today. So it does not make a
+> >> difference whether the VMAs have a 'read me if you really think it's
+> >> useful' sideband information which gets updated when the VMA changes and
+> >> allows to do:
+> >
+> > Mmm.  I'm not sure that we want to maintain the smaps information on
+> > the off chance that somebody wants to query it.
+> 
+> Fair enough, but then the question is whether it's more reasonable to
+> document that if you want to read that nonsense, then you have to live
+> with the consequences. The problem with many of those interfaces is that
+> they have been added for whatever reasons, became ABI and people are
+> suddenly making performance claims which might not be justified at all.
+> 
+> We really have to make our mind up and make decisions whether we want to
+> solve every "I want a pony" complaint just because.
+> 
+> >> But looking at the stuff which gets recomputed and reevaluated in that
+> >> proc/smaps code this makes a lot of sense, because most if not all of
+> >> this information is already known at the point where the VMA is modified
+> >> while holding mmap_sem for useful reasons, no?
+> >
+> > I suspect the only way to know is to try to implement it, and then
+> > benchmark it.
+> 
+> Sure. There are other ways than having a RCU protected info, e.g. a
+> sequence count which ensures that the to be read information is
+> consistent.
 
-It's been out a month though, not really acceptable latency for review.
-So I would apply this for next,  but you need to address Dan Captenter's
-comment, and look for simular patterns elesewhere in your patch.
+So the thought is to maintain the /proc/smaps information separately,
+so that it can just be read out, correct?  If so...
 
+As you say, sequence counts can check consistency, but something else
+is required to protect any dereferences of pointers to data that might
+be freed.  One approach is to place the /proc/smaps information somewhere
+that cannot be freed during /proc/smaps scan.  The place that comes
+immediately to mind is the mm_struct, but I suspect that the /proc/smaps
+information will need to be variable length, especially on 64-bit systems.
 
-> > On 4/24/22 18:41, zhenwei pi wrote:
-> > > Hi, Lei
-> > > I'd like to move helper and callback functions(Eg, virtcrypto_clear_request
-> > >   and virtcrypto_ctrlq_callback) from xx_core.c to xx_common.c, then
-> > > the xx_core.c supports:
-> > >    - probe/remove/irq affinity seting for a virtio device
-> > >    - basic virtio related operations
-> > >
-> > > xx_common.c supports:
-> > >    - common helpers/functions for algos
-> > >
-> > > Do you have any suggestion about this?
-> > >
-> > > v3 -> v4:
-> > >   - Don't create new file virtio_common.c, the new functions are added
-> > >     into virtio_crypto_core.c
-> > >   - Split the first patch into two parts:
-> > >       1, change code style,
-> > >       2, use private buffer instead of shared buffer
-> > >   - Remove relevant change.
-> > >   - Other minor changes.
-> > >
-> > > v2 -> v3:
-> > >   - Jason suggested that spliting the first patch into two part:
-> > >       1, using private buffer
-> > >       2, remove the busy polling
-> > >     Rework as Jason's suggestion, this makes the smaller change in
-> > >     each one and clear.
-> > >
-> > > v1 -> v2:
-> > >   - Use kfree instead of kfree_sensitive for insensitive buffer.
-> > >   - Several coding style fix.
-> > >   - Use memory from current node, instead of memory close to device
-> > >   - Add more message in commit, also explain why removing per-device
-> > >     request buffer.
-> > >   - Add necessary comment in code to explain why using kzalloc to
-> > >     allocate struct virtio_crypto_ctrl_request.
-> > >
-> > > v1:
-> > > The main point of this series is to improve the performance for virtio
-> > > crypto:
-> > > - Use wait mechanism instead of busy polling for ctrl queue, this
-> > >    reduces CPU and lock racing, it's possiable to create/destroy session
-> > >    parallelly, QPS increases from ~40K/s to ~200K/s.
-> > > - Enable retry on crypto engine to improve performance for data queue,
-> > >    this allows the larger depth instead of 1.
-> > > - Fix dst data length in akcipher service.
-> > > - Other style fix.
-> > >
-> > > lei he (2):
-> > >    virtio-crypto: adjust dst_len at ops callback
-> > >    virtio-crypto: enable retry for virtio-crypto-dev
-> > >
-> > > zhenwei pi (3):
-> > >    virtio-crypto: change code style
-> > >    virtio-crypto: use private buffer for control request
-> > >    virtio-crypto: wait ctrl queue instead of busy polling
-> > >
-> > >   .../virtio/virtio_crypto_akcipher_algs.c      |  83 ++++++-----
-> > >   drivers/crypto/virtio/virtio_crypto_common.h  |  21 ++-
-> > >   drivers/crypto/virtio/virtio_crypto_core.c    |  55 ++++++-
-> > >   .../virtio/virtio_crypto_skcipher_algs.c      | 140 ++++++++----------
-> > >   4 files changed, 180 insertions(+), 119 deletions(-)
-> > >
-> > 
-> > --
-> > zhenwei pi
+Another approach is to allocate space for the /proc/smaps information
+dynamically, using RCU to protect only reads of only that information.
+But you seem to be thinking of something else.  Or maybe your point is
+that the use of RCU can be restricted to this /proc/smaps information?
 
+Yet another approach is to use reference counts, but of course the counts
+need to live outside of the structure being protected.  If the summary
+information is not to block expansion of the address space (which is
+the asked-for pony), this gets tricky due to the need to quickly and
+repeatedly enlarge the memory holding the /proc/smaps information.
+
+Or am I missing a trick here?
+
+							Thanx, Paul

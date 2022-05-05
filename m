@@ -2,418 +2,266 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DA1E51C46A
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 17:59:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D840951C469
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 17:59:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381531AbiEEQCJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 12:02:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49362 "EHLO
+        id S1381534AbiEEQCN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 12:02:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381583AbiEEQB6 (ORCPT
+        with ESMTP id S1381514AbiEEQCD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 12:01:58 -0400
-Received: from mail-wr1-x44a.google.com (mail-wr1-x44a.google.com [IPv6:2a00:1450:4864:20::44a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DD4C5C87E
-        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 08:57:52 -0700 (PDT)
-Received: by mail-wr1-x44a.google.com with SMTP id j27-20020adfb31b000000b0020c4ca11566so1613358wrd.14
-        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 08:57:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=yZSMsz3lHApatH1+y5/fyRvsi2DjienXyzr/lxzQLKY=;
-        b=YHkz8nlwHNNDjCy64kSs2Q7CA8cbgzDE8yO7SWJK6DxU2AwgXlx/f7DqTjjwtN/wnR
-         P5JdCoxacG9zxPHTR2bMLwUnShq6AjPgyH5Z6UathwTGxZgy6hZ7YSazpqLG4OA9jcB9
-         dRx++xo/lNc52sObat0Czyyaepnfra0Lfh3W1BmwawdfR1b9fEZOm5U+SzlRTTsHX6vA
-         C9kUrKsNXklL1FM8JWky2sEzsudJoFwi8aK+Nwk1Nbq+/4VjEew+G6nFd+XRgZhfBf3b
-         IOytXUn66YgMg+XW2j5AjVcVcR+ZU1wV3WxvfQpdIDJWlDM2AwDHgh6eSoMXd63yUsnf
-         MOSg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=yZSMsz3lHApatH1+y5/fyRvsi2DjienXyzr/lxzQLKY=;
-        b=aKDxXCCLOyqPdCycLEG9w+ROeZsaRqf28bZiK1obrY7D6yICq7/w5kFjF5oxdCHHtT
-         qsd6QUvUqXRgcuShCYA375U94WjopOEKH92UZBLLBJX+2bFx0y0uuExdF286K9V/sDzS
-         mItSrPNN/9d+hE8GaW4kvFi4BzyP34c3Cqd2S2YqpApPtyl7FbOyDDb844yDiygFpcDx
-         h7vn32G8IPTDndJdGWXUJXZP7uk40rSS7gRCe/25nlClwGXWhOk01TXYee9fEPNwY7S4
-         mXiDJNloio9EABVtofbqy/+V/CDWR1G/f9kdFVQZ1/3M+2KJE9TV43Qb3ygX8nzy86RI
-         o53Q==
-X-Gm-Message-State: AOAM531cQQR0OSEa84GcItfNf9IDJG7S4CHY7KQmvGcVIhf5a6kSLtvf
-        l+s64vNqhkZYrfvbtLBsGYzN7QeGNwNk
-X-Google-Smtp-Source: ABdhPJwgIlUgcb9zfEH522pMiby//Eoo7HwQmRytbFDpVIsSfNAQpunpFYClJdQTn94iPVKoJgjnYwGXMevI
-X-Received: from dvyukov-desk.muc.corp.google.com ([2a00:79e0:15:13:72a6:c116:9275:6a5])
- (user=dvyukov job=sendgmr) by 2002:a5d:5505:0:b0:20a:ce51:1c48 with SMTP id
- b5-20020a5d5505000000b0020ace511c48mr21821619wrv.351.1651766270752; Thu, 05
- May 2022 08:57:50 -0700 (PDT)
-Date:   Thu,  5 May 2022 17:57:45 +0200
-Message-Id: <20220505155745.1690906-1-dvyukov@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.36.0.464.gb9c8b46e94-goog
-Subject: [PATCH] tools/perf: add breakpoint benchmarks
-From:   Dmitry Vyukov <dvyukov@google.com>
-To:     peterz@infradead.org, mingo@redhat.com, acme@kernel.org,
-        mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
-        jolsa@kernel.org, namhyung@kernel.org
-Cc:     elver@google.com, Dmitry Vyukov <dvyukov@google.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Thu, 5 May 2022 12:02:03 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A35755C37F
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 08:58:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 36457B82DFA
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 15:58:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BAF60C385A8;
+        Thu,  5 May 2022 15:58:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651766299;
+        bh=5pUfo2MyeSPtQlJ6/Seg5OB6Y7gWeAVpaImnzVekwvc=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=qCOIjxLrxR8fGHFTm4B3UA9kitJgBgejRGVpD5ZP/WLMibAbyhozR2f5Gx5XchTNl
+         6PaNZRUtazu/gNgZru6M4ddDHFKV2jE8D9DWpGPXx+OhK3J6NpGifD5stPzs+8SC/S
+         Il62+gHhnmTmi7leLmnWLn34n4i//ai5x4sBHoOomhSAcOR/7ehCAlx5xY/anNjuW4
+         ToQtK5PQ2MGcJgapwRrc6Vys6ioywEcfvhaKQOdkylt5jaSKsR1d3cfBWVwRqqhqgp
+         VecqW+ZFA7T6HYD2WKYa+//iiCR0Am1TLRzUa/VMw2gQN7Bi/logg5eh57Xh5MjbtW
+         uzcVJ+ryMAREw==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nmdrt-009FcK-6H; Thu, 05 May 2022 16:58:17 +0100
+Date:   Thu, 05 May 2022 16:58:17 +0100
+Message-ID: <87v8uk6kfa.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Huacai Chen <chenhuacai@loongson.cn>
+Cc:     Thomas Gleixner <tglx@linutronix.de>, linux-kernel@vger.kernel.org,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Huacai Chen <chenhuacai@gmail.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>
+Subject: Re: [PATCH V11 00/10] irqchip: Add LoongArch-related irqchip drivers
+In-Reply-To: <20220430085344.3127346-1-chenhuacai@loongson.cn>
+References: <20220430085344.3127346-1-chenhuacai@loongson.cn>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: chenhuacai@loongson.cn, tglx@linutronix.de, linux-kernel@vger.kernel.org, lixuefeng@loongson.cn, chenhuacai@gmail.com, jiaxun.yang@flygoat.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add 2 benchmarks:
-1. Performance of thread creation/exiting in presence of breakpoints.
-2. Performance of breakpoint modification in presence of threads.
+On Sat, 30 Apr 2022 09:53:34 +0100,
+Huacai Chen <chenhuacai@loongson.cn> wrote:
+>=20
+> LoongArch is a new RISC ISA, which is a bit like MIPS or RISC-V.
+> LoongArch includes a reduced 32-bit version (LA32R), a standard 32-bit
+> version (LA32S) and a 64-bit version (LA64). LoongArch use ACPI as its
+> boot protocol LoongArch-specific interrupt controllers (similar to APIC)
+> are already added in the next revision of ACPI Specification (current
+> revision is 6.4).
+>=20
+> Currently, LoongArch based processors (e.g. Loongson-3A5000) can only
+> work together with LS7A chipsets. The irq chips in LoongArch computers
+> include CPUINTC (CPU Core Interrupt Controller), LIOINTC (Legacy I/O
+> Interrupt Controller), EIOINTC (Extended I/O Interrupt Controller),
+> HTVECINTC (Hyper-Transport Vector Interrupt Controller), PCH-PIC (Main
+> Interrupt Controller in LS7A chipset), PCH-LPC (LPC Interrupt Controller
+> in LS7A chipset) and PCH-MSI (MSI Interrupt Controller).
+>=20
+> CPUINTC is a per-core controller (in CPU), LIOINTC/EIOINTC/HTVECINTC are
+> per-package controllers (in CPU), while PCH-PIC/PCH-LPC/PCH-MSI are all
+> controllers out of CPU (i.e., in chipsets). These controllers (in other
+> words, irqchips) are linked in a hierarchy, and there are two models of
+> hierarchy (legacy model and extended model).
+>=20
+> Legacy IRQ model:
+>=20
+> In this model, the IPI (Inter-Processor Interrupt) and CPU Local Timer
+> interrupt go to CPUINTC directly, CPU UARTS interrupts go to LIOINTC,
+> while all other devices interrupts go to PCH-PIC/PCH-LPC/PCH-MSI and
+> gathered by HTVECINTC, and then go to LIOINTC, and then CPUINTC.
+>=20
+>  +---------------------------------------------+
+>  |                                             |
+>  |    +-----+     +---------+     +-------+    |
+>  |    | IPI | --> | CPUINTC | <-- | Timer |    |
+>  |    +-----+     +---------+     +-------+    |
+>  |                     ^                       |
+>  |                     |                       |
+>  |                +---------+     +-------+    |
+>  |                | LIOINTC | <-- | UARTs |    |
+>  |                +---------+     +-------+    |
+>  |                     ^                       |
+>  |                     |                       |
+>  |               +-----------+                 |
+>  |               | HTVECINTC |                 |
+>  |               +-----------+                 |
+>  |                ^         ^                  |
+>  |                |         |                  |
+>  |          +---------+ +---------+            |
+>  |          | PCH-PIC | | PCH-MSI |            |
+>  |          +---------+ +---------+            |
+>  |            ^     ^           ^              |
+>  |            |     |           |              |
+>  |    +---------+ +---------+ +---------+      |
+>  |    | PCH-LPC | | Devices | | Devices |      |
+>  |    +---------+ +---------+ +---------+      |
+>  |         ^                                   |
+>  |         |                                   |
+>  |    +---------+                              |
+>  |    | Devices |                              |
+>  |    +---------+                              |
+>  |                                             |
+>  |                                             |
+>  +---------------------------------------------+
+>=20
+> Extended IRQ model:
+>=20
+> In this model, the IPI (Inter-Processor Interrupt) and CPU Local Timer
+> interrupt go to CPUINTC directly, CPU UARTS interrupts go to LIOINTC,
+> while all other devices interrupts go to PCH-PIC/PCH-LPC/PCH-MSI and
+> gathered by EIOINTC, and then go to to CPUINTC directly.
+>=20
+>  +--------------------------------------------------------+
+>  |                                                        |
+>  |         +-----+     +---------+     +-------+          |
+>  |         | IPI | --> | CPUINTC | <-- | Timer |          |
+>  |         +-----+     +---------+     +-------+          |
+>  |                      ^       ^                         |
+>  |                      |       |                         |
+>  |               +---------+ +---------+     +-------+    |
+>  |               | EIOINTC | | LIOINTC | <-- | UARTs |    |
+>  |               +---------+ +---------+     +-------+    |
+>  |                ^       ^                               |
+>  |                |       |                               |
+>  |         +---------+ +---------+                        |
+>  |         | PCH-PIC | | PCH-MSI |                        |
+>  |         +---------+ +---------+                        |
+>  |           ^     ^           ^                          |
+>  |           |     |           |                          |
+>  |   +---------+ +---------+ +---------+                  |
+>  |   | PCH-LPC | | Devices | | Devices |                  |
+>  |   +---------+ +---------+ +---------+                  |
+>  |        ^                                               |
+>  |        |                                               |
+>  |   +---------+                                          |
+>  |   | Devices |                                          |
+>  |   +---------+                                          |
+>  |                                                        |
+>  |                                                        |
+>  +--------------------------------------------------------+
+>=20
+> This patchset adds some irqchip drivers for LoongArch, it is preparing
+> to add LoongArch support in mainline kernel, we can see a snapshot here:
+> https://github.com/loongson/linux/tree/loongarch-next
+>=20
+> Cross-compile tool chain to build kernel:
+> https://github.com/loongson/build-tools/releases/latest/download/loongarc=
+h64-clfs-20211202-cross-tools.tar.xz
+>=20
+> A CLFS-based Linux distro:
+> https://github.com/loongson/build-tools/releases/latest/download/loongarc=
+h64-clfs-system-2021-12-02.tar.bz2
+>=20
+> Loongson and LoongArch documentations:
+> https://github.com/loongson/LoongArch-Documentation
+>=20
+> LoongArch-specific interrupt controllers:
+> https://mantis.uefi.org/mantis/view.php?id=3D2203
 
-The benchmarks capture use cases that we are interested in:
-using inheritable breakpoints in large highly-threaded applications.
-The benchmarks show significant slowdown imposed by breakpoints
-(even when they don't fire).
+Nothing to see here, unfortunately (you need a login to access this
+information).
 
-Testing on Intel 8173M with 112 HW threads show:
+>=20
+> LoongArch use ACPI, but ACPI tables cannot describe the hierarchy of
+> irqchips, so we initilize the irqchip subsystem in this way (from arch
+> code):
+>=20
+>   cpu_domain =3D loongarch_cpu_irq_init();
+>   liointc_domain =3D liointc_acpi_init(cpu_domain, acpi_liointc);
+>   eiointc_domain =3D eiointc_acpi_init(cpu_domain, acpi_eiointc);
+>   pch_pic_domain =3D pch_pic_acpi_init(eiointc_domain, acpi_pchpic);
+>   pch_msi_domain =3D pch_msi_acpi_init(eiointc_domain, acpi_pchmsi);
 
-perf bench --repeat=56 breakpoint thread --breakpoints=0 --parallelism=56 --threads=20
-      78.675000 usecs/op
-perf bench --repeat=56 breakpoint thread --breakpoints=4 --parallelism=56 --threads=20
-   12967.135714 usecs/op
-That's 165x slowdown due to presence of the breakpoints.
+I said no to this in the past, and I'm going to reiterate: this is
+*not* acceptable. This obviously doesn't scale and isn't manageable in
+the long run. Hardcoding the topology and the probing order in the
+kernel code has repeatedly proved to be a disaster, and yet you refuse
+to take any input from past experience. This is pretty worrying.
 
-perf bench --repeat=20000 breakpoint enable --passive=0 --active=0
-       1.433250 usecs/op
-perf bench --repeat=20000 breakpoint enable --passive=224 --active=0
-     585.318400 usecs/op
-perf bench --repeat=20000 breakpoint enable --passive=0 --active=111
-     635.953000 usecs/op
-That's 408x and 444x slowdown due to presence of threads.
+>
+> Upstream irqchip init function return an irqdomain, and this domain
+> will be used by downstream irqchips as their parent domains. For more
+> infomation please refer:
+> https://lore.kernel.org/linux-arch/20210927064300.624279-11-chenhuacai@lo=
+ongson.cn/T/#u
+>=20
+> Q: Why we don't declare irqchips in ACPI DSDT where hierarchy is possible?
+> A: This is answered in V8 of this series as below:
+>=20
+>   - There are several kinds of irq chips(e.g. pchpic=E3=80=81eiointc=E3=
+=80=81cpuintc)
+>   for LoongArch. SCI interrupt (Fixed hardware is implemented for
+>   LoongArch in pch such as LS7A1000, and SCI interrupt is used for fixed
+>   event handling.) is an irq input of pch irq chip which routes
+>   interrupts to cpu as following irq chips path:
+>=20
+>   sci interrupt->|pchpic| ->|eiointc|->|cpuintc|
+>=20
+>   sci_interrupt will be transferred from gsi to irq through
+>   acpi_gsi_to_irq in acpi_enable_subsystem called from acpi_bus_init
+>   before acpi_scan_init where acpi device namespace is created, so we
+>   should build pch irq domain and related upstream irq domains before
+>   acpi_bus_init.
+>=20
+>   - PCI bus enumeration is executed from acpi_scan_init, and
+>   pci_set_msi_domain will be called for setting msi_domain of enumerated
+>   pci device. In pci_set_msi_domain, msi domain may be got through
+>   pcibios_device_add, fdt, iort(used for arm64) or inheriting from host
+>   bridge domain. And in each way, the msi domain needs to be found by
+>   calling irq_find_matching_fwnode(fwnode, DOMAIN_BUS_PCI_MSI) to match
+>   one from the registered msi domain before. So we build the msi domain
+>   as x86 and arm64 before acpi_scan_init. The msi domain is hierarchic
+>   as following:
+>=20
+>   msi interrupt->|msipic| ->|eiointc|->|cpuintc|
+>=20
+>   - Yes, a driver can be deferred probed when get -EPROBE_DEFER on
+>   probing, but both sci interrupt transfer and pci bus enumeration are
+>   common code (not private driver for LoongArch).
+>=20
+>   So, declaring pic devices in DSDT for seems not suitable, we can only
+>   select the X86-like way which is a bit ugly.
 
-Profiles show some overhead in toggle_bp_slot,
-but also very high contention:
+ACPI *can* describe these topologies if you teach it. ARM managed to
+do it with IORT, which is part of the ACPI specification. Given that
+you are starting from scratch and that your bindings aren't even in
+the official ACPI spec, there is zero reason not to do the right
+thing.
 
-    90.83%  breakpoint-thre  [kernel.kallsyms]  [k] osq_lock
-     4.69%  breakpoint-thre  [kernel.kallsyms]  [k] mutex_spin_on_owner
-     2.06%  breakpoint-thre  [kernel.kallsyms]  [k] __reserve_bp_slot
-     2.04%  breakpoint-thre  [kernel.kallsyms]  [k] toggle_bp_slot
+Until then, I'm not interested in reviewing more of these patches.
 
-    79.01%  breakpoint-enab  [kernel.kallsyms]  [k] smp_call_function_single
-     9.94%  breakpoint-enab  [kernel.kallsyms]  [k] llist_add_batch
-     5.70%  breakpoint-enab  [kernel.kallsyms]  [k] _raw_spin_lock_irq
-     1.84%  breakpoint-enab  [kernel.kallsyms]  [k] event_function_call
-     1.12%  breakpoint-enab  [kernel.kallsyms]  [k] send_call_function_single_ipi
-     0.37%  breakpoint-enab  [kernel.kallsyms]  [k] generic_exec_single
-     0.24%  breakpoint-enab  [kernel.kallsyms]  [k] __perf_event_disable
-     0.20%  breakpoint-enab  [kernel.kallsyms]  [k] _perf_event_enable
-     0.18%  breakpoint-enab  [kernel.kallsyms]  [k] toggle_bp_slot
+Thanks,
 
-Signed-off-by: Dmitry Vyukov <dvyukov@google.com>
-Cc: linux-perf-users@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
----
- tools/perf/bench/Build        |   1 +
- tools/perf/bench/bench.h      |   2 +
- tools/perf/bench/breakpoint.c | 235 ++++++++++++++++++++++++++++++++++
- tools/perf/builtin-bench.c    |   8 ++
- 4 files changed, 246 insertions(+)
- create mode 100644 tools/perf/bench/breakpoint.c
+	M.
 
-diff --git a/tools/perf/bench/Build b/tools/perf/bench/Build
-index 61d45fcb4057c..6b6155a8ad096 100644
---- a/tools/perf/bench/Build
-+++ b/tools/perf/bench/Build
-@@ -14,6 +14,7 @@ perf-y += kallsyms-parse.o
- perf-y += find-bit-bench.o
- perf-y += inject-buildid.o
- perf-y += evlist-open-close.o
-+perf-y += breakpoint.o
- 
- perf-$(CONFIG_X86_64) += mem-memcpy-x86-64-asm.o
- perf-$(CONFIG_X86_64) += mem-memset-x86-64-asm.o
-diff --git a/tools/perf/bench/bench.h b/tools/perf/bench/bench.h
-index b3480bc33fe84..6cefb4315d75e 100644
---- a/tools/perf/bench/bench.h
-+++ b/tools/perf/bench/bench.h
-@@ -49,6 +49,8 @@ int bench_synthesize(int argc, const char **argv);
- int bench_kallsyms_parse(int argc, const char **argv);
- int bench_inject_build_id(int argc, const char **argv);
- int bench_evlist_open_close(int argc, const char **argv);
-+int bench_breakpoint_thread(int argc, const char **argv);
-+int bench_breakpoint_enable(int argc, const char **argv);
- 
- #define BENCH_FORMAT_DEFAULT_STR	"default"
- #define BENCH_FORMAT_DEFAULT		0
-diff --git a/tools/perf/bench/breakpoint.c b/tools/perf/bench/breakpoint.c
-new file mode 100644
-index 0000000000000..56936fea246d7
---- /dev/null
-+++ b/tools/perf/bench/breakpoint.c
-@@ -0,0 +1,235 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <subcmd/parse-options.h>
-+#include <linux/hw_breakpoint.h>
-+#include <linux/perf_event.h>
-+#include <linux/time64.h>
-+#include <sys/syscall.h>
-+#include <sys/ioctl.h>
-+#include <sys/time.h>
-+#include <pthread.h>
-+#include <stddef.h>
-+#include <stdlib.h>
-+#include <unistd.h>
-+#include <stdio.h>
-+#include <errno.h>
-+#include "bench.h"
-+#include "futex.h"
-+
-+struct {
-+	unsigned int nbreakpoints;
-+	unsigned int nparallel;
-+	unsigned int nthreads;
-+} thread_params = {
-+	.nbreakpoints = 1,
-+	.nparallel = 1,
-+	.nthreads = 1,
-+};
-+
-+static const struct option thread_options[] = {
-+	OPT_UINTEGER('b', "breakpoints", &thread_params.nbreakpoints,
-+		"Specify amount of breakpoints"),
-+	OPT_UINTEGER('p', "parallelism", &thread_params.nparallel, "Specify amount of parallelism"),
-+	OPT_UINTEGER('t', "threads", &thread_params.nthreads, "Specify amount of threads"),
-+	OPT_END()
-+};
-+
-+static const char * const thread_usage[] = {
-+	"perf bench breakpoint thread <options>",
-+	NULL
-+};
-+
-+struct breakpoint {
-+	int fd;
-+	char watched;
-+};
-+
-+static int breakpoint_setup(void *addr)
-+{
-+	struct perf_event_attr attr = {0};
-+
-+	attr.type = PERF_TYPE_BREAKPOINT;
-+	attr.size = sizeof(attr);
-+	attr.inherit = 1;
-+	attr.exclude_kernel = 1;
-+	attr.exclude_hv = 1;
-+	attr.bp_addr = (uint64_t)addr;
-+	attr.bp_type = HW_BREAKPOINT_RW;
-+	attr.bp_len = HW_BREAKPOINT_LEN_1;
-+	return syscall(SYS_perf_event_open, &attr, 0, -1, -1, 0);
-+}
-+
-+static void *passive_thread(void *arg)
-+{
-+	unsigned int *done = (unsigned int *)arg;
-+
-+	while (!__atomic_load_n(done, __ATOMIC_RELAXED))
-+		futex_wait(done, 0, NULL, 0);
-+	return NULL;
-+}
-+
-+static void *active_thread(void *arg)
-+{
-+	unsigned int *done = (unsigned int *)arg;
-+
-+	while (!__atomic_load_n(done, __ATOMIC_RELAXED));
-+	return NULL;
-+}
-+
-+static void *breakpoint_thread(void *arg)
-+{
-+	unsigned int i, done;
-+	int *repeat = (int *)arg;
-+	pthread_t *threads;
-+
-+	threads = calloc(thread_params.nthreads, sizeof(threads[0]));
-+	while (__atomic_fetch_sub(repeat, 1, __ATOMIC_RELAXED) > 0) {
-+		done = 0;
-+		for (i = 0; i < thread_params.nthreads; i++) {
-+			if (pthread_create(&threads[i], NULL, passive_thread, &done))
-+				exit((perror("pthread_create"), EXIT_FAILURE));
-+		}
-+		__atomic_store_n(&done, 1, __ATOMIC_RELAXED);
-+		futex_wake(&done, thread_params.nthreads, 0);
-+		for (i = 0; i < thread_params.nthreads; i++)
-+			pthread_join(threads[i], NULL);
-+	}
-+	free(threads);
-+	return NULL;
-+}
-+
-+// The benchmark creates nbreakpoints inheritable breakpoints,
-+// then starts nparallel threads which create and join bench_repeat batches of nthreads threads.
-+int bench_breakpoint_thread(int argc, const char **argv)
-+{
-+	unsigned int i, result_usec;
-+	int repeat = bench_repeat;
-+	struct breakpoint *breakpoints;
-+	pthread_t *parallel;
-+	struct timeval start, stop, diff;
-+
-+	if (parse_options(argc, argv, thread_options, thread_usage, 0)) {
-+		usage_with_options(thread_usage, thread_options);
-+		exit(EXIT_FAILURE);
-+	}
-+	breakpoints = calloc(thread_params.nbreakpoints, sizeof(breakpoints[0]));
-+	parallel = calloc(thread_params.nparallel, sizeof(parallel[0]));
-+	for (i = 0; i < thread_params.nbreakpoints; i++) {
-+		breakpoints[i].fd = breakpoint_setup(&breakpoints[i].watched);
-+		if (breakpoints[i].fd == -1)
-+			exit((perror("perf_event_open"), EXIT_FAILURE));
-+	}
-+	gettimeofday(&start, NULL);
-+	for (i = 0; i < thread_params.nparallel; i++) {
-+		if (pthread_create(&parallel[i], NULL, breakpoint_thread, &repeat))
-+			exit((perror("pthread_create"), EXIT_FAILURE));
-+	}
-+	for (i = 0; i < thread_params.nparallel; i++)
-+		pthread_join(parallel[i], NULL);
-+	gettimeofday(&stop, NULL);
-+	timersub(&stop, &start, &diff);
-+	for (i = 0; i < thread_params.nbreakpoints; i++)
-+		close(breakpoints[i].fd);
-+	free(parallel);
-+	free(breakpoints);
-+	switch (bench_format) {
-+	case BENCH_FORMAT_DEFAULT:
-+		printf("# Created/joined %d threads with %d breakpoints and %d parallelism\n",
-+			bench_repeat, thread_params.nbreakpoints, thread_params.nparallel);
-+		printf(" %14s: %lu.%03lu [sec]\n\n", "Total time",
-+			(long)diff.tv_sec, (long)(diff.tv_usec / USEC_PER_MSEC));
-+		result_usec = diff.tv_sec * USEC_PER_SEC + diff.tv_usec;
-+		printf(" %14lf usecs/op\n",
-+			(double)result_usec / bench_repeat / thread_params.nthreads);
-+		printf(" %14lf usecs/op/cpu\n",
-+			(double)result_usec / bench_repeat /
-+			thread_params.nthreads * thread_params.nparallel);
-+		break;
-+	case BENCH_FORMAT_SIMPLE:
-+		printf("%lu.%03lu\n", (long)diff.tv_sec, (long)(diff.tv_usec / USEC_PER_MSEC));
-+		break;
-+	default:
-+		fprintf(stderr, "Unknown format: %d\n", bench_format);
-+		exit(EXIT_FAILURE);
-+	}
-+	return 0;
-+}
-+
-+struct {
-+	unsigned int npassive;
-+	unsigned int nactive;
-+} enable_params = {
-+	.nactive = 0,
-+	.npassive = 0,
-+};
-+
-+static const struct option enable_options[] = {
-+	OPT_UINTEGER('p', "passive", &enable_params.npassive, "Specify amount of passive threads"),
-+	OPT_UINTEGER('a', "active", &enable_params.nactive, "Specify amount of active threads"),
-+	OPT_END()
-+};
-+
-+static const char * const enable_usage[] = {
-+	"perf bench breakpoint enable <options>",
-+	NULL
-+};
-+
-+// The benchmark creates an inheritable breakpoint,
-+// then starts npassive threads that block and nactive threads that actively spin
-+// and then disables and enables the breakpoint bench_repeat times.
-+int bench_breakpoint_enable(int argc, const char **argv)
-+{
-+	unsigned int i, nthreads, result_usec, done = 0;
-+	char watched;
-+	int fd;
-+	pthread_t *threads;
-+	struct timeval start, stop, diff;
-+
-+	if (parse_options(argc, argv, enable_options, enable_usage, 0)) {
-+		usage_with_options(enable_usage, enable_options);
-+		exit(EXIT_FAILURE);
-+	}
-+	fd = breakpoint_setup(&watched);
-+	if (fd == -1)
-+		exit((perror("perf_event_open"), EXIT_FAILURE));
-+	nthreads = enable_params.npassive + enable_params.nactive;
-+	threads = calloc(nthreads, sizeof(threads[0]));
-+	for (i = 0; i < nthreads; i++) {
-+		if (pthread_create(&threads[i], NULL,
-+			i < enable_params.npassive ? passive_thread : active_thread, &done))
-+			exit((perror("pthread_create"), EXIT_FAILURE));
-+	}
-+	usleep(10000);  // let the threads block
-+	gettimeofday(&start, NULL);
-+	for (i = 0; i < bench_repeat; i++) {
-+		if (ioctl(fd, PERF_EVENT_IOC_DISABLE, 0))
-+			exit((perror("ioctl(PERF_EVENT_IOC_DISABLE)"), EXIT_FAILURE));
-+		if (ioctl(fd, PERF_EVENT_IOC_ENABLE, 0))
-+			exit((perror("ioctl(PERF_EVENT_IOC_ENABLE)"), EXIT_FAILURE));
-+	}
-+	gettimeofday(&stop, NULL);
-+	timersub(&stop, &start, &diff);
-+	__atomic_store_n(&done, 1, __ATOMIC_RELAXED);
-+	futex_wake(&done, enable_params.npassive, 0);
-+	for (i = 0; i < nthreads; i++)
-+		pthread_join(threads[i], NULL);
-+	free(threads);
-+	close(fd);
-+	switch (bench_format) {
-+	case BENCH_FORMAT_DEFAULT:
-+		printf("# Enabled/disabled breakpoint %d time with %d passive and %d active threads\n",
-+			bench_repeat, enable_params.npassive, enable_params.nactive);
-+		printf(" %14s: %lu.%03lu [sec]\n\n", "Total time",
-+			(long)diff.tv_sec, (long)(diff.tv_usec / USEC_PER_MSEC));
-+		result_usec = diff.tv_sec * USEC_PER_SEC + diff.tv_usec;
-+		printf(" %14lf usecs/op\n", (double)result_usec / bench_repeat);
-+		break;
-+	case BENCH_FORMAT_SIMPLE:
-+		printf("%lu.%03lu\n", (long)diff.tv_sec, (long)(diff.tv_usec / USEC_PER_MSEC));
-+		break;
-+	default:
-+		fprintf(stderr, "Unknown format: %d\n", bench_format);
-+		exit(EXIT_FAILURE);
-+	}
-+	return 0;
-+}
-diff --git a/tools/perf/builtin-bench.c b/tools/perf/builtin-bench.c
-index d291f3a8af5f2..334ab897aae3b 100644
---- a/tools/perf/builtin-bench.c
-+++ b/tools/perf/builtin-bench.c
-@@ -92,6 +92,13 @@ static struct bench internals_benchmarks[] = {
- 	{ NULL,		NULL,					NULL			}
- };
- 
-+static struct bench breakpoint_benchmarks[] = {
-+	{ "thread", "Benchmark thread start/finish with breakpoints", bench_breakpoint_thread},
-+	{ "enable", "Benchmark breakpoint enable/disable", bench_breakpoint_enable},
-+	{ "all", "Run all breakpoint benchmarks", NULL},
-+	{ NULL,	NULL, NULL },
-+};
-+
- struct collection {
- 	const char	*name;
- 	const char	*summary;
-@@ -110,6 +117,7 @@ static struct collection collections[] = {
- 	{"epoll",       "Epoll stressing benchmarks",                   epoll_benchmarks        },
- #endif
- 	{ "internals",	"Perf-internals benchmarks",			internals_benchmarks	},
-+	{ "breakpoint",	"Breakpoint benchmarks",			breakpoint_benchmarks	},
- 	{ "all",	"All benchmarks",				NULL			},
- 	{ NULL,		NULL,						NULL			}
- };
-
-base-commit: bd24325684029a48f20a188b899eb84900d0bc9c
--- 
-2.36.0.464.gb9c8b46e94-goog
-
+--=20
+Without deviation from the norm, progress is not possible.

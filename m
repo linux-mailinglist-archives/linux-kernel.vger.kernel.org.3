@@ -2,69 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76D4E51C2B3
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 16:34:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8B3651C2B1
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 16:34:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380704AbiEEOh2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 10:37:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60860 "EHLO
+        id S1380713AbiEEOhj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 10:37:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353097AbiEEOh0 (ORCPT
+        with ESMTP id S1353097AbiEEOhg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 10:37:26 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AC665AA67
-        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 07:33:46 -0700 (PDT)
-Received: from kwepemi500003.china.huawei.com (unknown [172.30.72.54])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4KvGPg0fVQz1JBgJ;
-        Thu,  5 May 2022 22:32:39 +0800 (CST)
-Received: from kwepemm600017.china.huawei.com (7.193.23.234) by
- kwepemi500003.china.huawei.com (7.221.188.51) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 5 May 2022 22:33:43 +0800
-Received: from [10.174.179.234] (10.174.179.234) by
- kwepemm600017.china.huawei.com (7.193.23.234) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 5 May 2022 22:33:41 +0800
-Message-ID: <618afddc-7110-d6bd-57a4-b80777d560b6@huawei.com>
-Date:   Thu, 5 May 2022 22:33:41 +0800
+        Thu, 5 May 2022 10:37:36 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5A9E5AA6B;
+        Thu,  5 May 2022 07:33:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3A00A6147B;
+        Thu,  5 May 2022 14:33:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1217BC385A8;
+        Thu,  5 May 2022 14:33:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651761235;
+        bh=BUPnKbKAdOnbjmg5XilzGiWe9VC31h4y8LapZ0CnZIo=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=CGCv80f6Voi3DgDCfKsq3364Z52DbeBXiYOVhcj6xaydr2sbFv8wrKmiJ8m7b0gJf
+         h/pZGAnSejlWsbgKh2EMmEjTucoxdx5AWzxV0i61Ouoiib1YWtsI8kfYfuPlfHHWvA
+         kfwWVJYE4uB/oYseFOnN5+fgZMe6L4Qep7IfWPDdSBtTD6GRiTxleBONpidH3XtuLl
+         Si07IH9rzTZQUgTvyk19dFMOMfoRCeiuAMEEWk0/7Bl26dyVuPhBAaV08RIr93JQO3
+         64w9uB2gNynW1abrId/+LBZkaoo5MDEb0PSwnFUzy72wt7sZJ+U8Rb3VIIstnArHGw
+         3yqI31zxNMr3Q==
+Message-ID: <142acf95-c940-8d4a-7f00-08f1bb816c49@kernel.org>
+Date:   Thu, 5 May 2022 22:33:51 +0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH -next v4 4/7] arm64: add copy_{to, from}_user to machine
- check safe
-To:     Catalin Marinas <catalin.marinas@arm.com>
-CC:     Mark Rutland <mark.rutland@arm.com>,
-        James Morse <james.morse@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Will Deacon <will@kernel.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        "Benjamin Herrenschmidt" <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>, <x86@kernel.org>,
-        "H . Peter Anvin" <hpa@zytor.com>, <linuxppc-dev@lists.ozlabs.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Xie XiuQi <xiexiuqi@huawei.com>,
-        Guohanjun <guohanjun@huawei.com>
-References: <20220420030418.3189040-1-tongtiangen@huawei.com>
- <20220420030418.3189040-5-tongtiangen@huawei.com> <YnJU4NIrJmHLawgk@arm.com>
- <7da54d72-e5fa-41b5-67ea-a0b084e4c94a@huawei.com> <YnPUHC3GlZs6XHU4@arm.com>
-From:   Tong Tiangen <tongtiangen@huawei.com>
-In-Reply-To: <YnPUHC3GlZs6XHU4@arm.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.179.234]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- kwepemm600017.china.huawei.com (7.193.23.234)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+ Thunderbird/91.8.1
+Subject: Re: [PATCH] f2fs: fix to do sanity check for inline inode
+Content-Language: en-US
+To:     Jaegeuk Kim <jaegeuk@kernel.org>
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Ming Yan <yanming@tju.edu.cn>, Chao Yu <chao.yu@oppo.com>
+References: <20220428024940.12102-1-chao@kernel.org>
+ <YnLwDx1smguDQ6qC@google.com>
+ <173c51c2-eff3-8d76-7041-e9c58024a97e@kernel.org>
+ <YnNFCEdSpyVSaTZq@google.com>
+From:   Chao Yu <chao@kernel.org>
+In-Reply-To: <YnNFCEdSpyVSaTZq@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-10.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,43 +61,145 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-在 2022/5/5 21:41, Catalin Marinas 写道:
-> On Thu, May 05, 2022 at 02:39:43PM +0800, Tong Tiangen wrote:
->> 在 2022/5/4 18:26, Catalin Marinas 写道:
->>> On Wed, Apr 20, 2022 at 03:04:15AM +0000, Tong Tiangen wrote:
->>>> Add copy_{to, from}_user() to machine check safe.
+On 2022/5/5 11:31, Jaegeuk Kim wrote:
+> On 05/05, Chao Yu wrote:
+>> On 2022/5/5 5:28, Jaegeuk Kim wrote:
+>>> On 04/28, Chao Yu wrote:
+>>>> As Yanming reported in bugzilla:
 >>>>
->>>> If copy fail due to hardware memory error, only the relevant processes are
->>>> affected, so killing the user process and isolate the user page with
->>>> hardware memory errors is a more reasonable choice than kernel panic.
+>>>> https://bugzilla.kernel.org/show_bug.cgi?id=215895
+>>>>
+>>>> I have encountered a bug in F2FS file system in kernel v5.17.
+>>>>
+>>>> The kernel message is shown below:
+>>>>
+>>>> kernel BUG at fs/inode.c:611!
+>>>> Call Trace:
+>>>>    evict+0x282/0x4e0
+>>>>    __dentry_kill+0x2b2/0x4d0
+>>>>    dput+0x2dd/0x720
+>>>>    do_renameat2+0x596/0x970
+>>>>    __x64_sys_rename+0x78/0x90
+>>>>    do_syscall_64+0x3b/0x90
+>>>>
+>>>> The root cause is: fuzzed inode has both inline_data flag and encrypted
+>>>> flag, so after it was deleted by rename(), during f2fs_evict_inode(),
+>>>> it will cause inline data conversion due to flags confilction, then
+>>>> page cache will be polluted and trigger panic in clear_inode().
+>>>>
+>>>> This patch tries to fix the issue by do more sanity checks for inline
+>>>> data inode in sanity_check_inode().
+>>>>
+>>>> Cc: stable@vger.kernel.org
+>>>> Reported-by: Ming Yan <yanming@tju.edu.cn>
+>>>> Signed-off-by: Chao Yu <chao.yu@oppo.com>
+>>>> ---
+>>>>    fs/f2fs/f2fs.h  | 7 +++++++
+>>>>    fs/f2fs/inode.c | 3 +--
+>>>>    2 files changed, 8 insertions(+), 2 deletions(-)
+>>>>
+>>>> diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
+>>>> index 27aa93caec06..64c511b498cc 100644
+>>>> --- a/fs/f2fs/f2fs.h
+>>>> +++ b/fs/f2fs/f2fs.h
+>>>> @@ -4173,6 +4173,13 @@ static inline void f2fs_set_encrypted_inode(struct inode *inode)
+>>>>     */
+>>>>    static inline bool f2fs_post_read_required(struct inode *inode)
+>>>>    {
+>>>> +	/*
+>>>> +	 * used by sanity_check_inode(), when disk layout fields has not
+>>>> +	 * been synchronized to inmem fields.
+>>>> +	 */
+>>>> +	if (file_is_encrypt(inode) || file_is_verity(inode) ||
+>>>> +			F2FS_I(inode)->i_flags & F2FS_COMPR_FL)
+>>>> +		return true;
+>>>>    	return f2fs_encrypted_file(inode) || fsverity_active(inode) ||
+>>>>    		f2fs_compressed_file(inode);
+>>>>    }
+>>>> diff --git a/fs/f2fs/inode.c b/fs/f2fs/inode.c
+>>>> index 83639238a1fe..234b8ed02644 100644
+>>>> --- a/fs/f2fs/inode.c
+>>>> +++ b/fs/f2fs/inode.c
+>>>> @@ -276,8 +276,7 @@ static bool sanity_check_inode(struct inode *inode, struct page *node_page)
+>>>>    		}
+>>>>    	}
+>>>> -	if (f2fs_has_inline_data(inode) &&
+>>>> -			(!S_ISREG(inode->i_mode) && !S_ISLNK(inode->i_mode))) {
+>>>> +	if (f2fs_has_inline_data(inode) && !f2fs_may_inline_data(inode)) {
 >>>
->>> Just to make sure I understand - we can only recover if the fault is in
->>> a user page. That is, for a copy_from_user(), we can only handle the
->>> faults in the source address, not the destination.
+>>> It seems f2fs_may_inline_data() is breaking the atomic write case. Please fix.
 >>
->> At the beginning, I also thought we can only recover if the fault is in a
->> user page.
->> After discussion with a Mark[1], I think no matter user page or kernel page,
->> as long as it is triggered by the user process, only related processes will
->> be affected. According to this
->> understanding, it seems that all uaccess can be recovered.
+>> sanity_check_inode() change only affect f2fs_iget(), during inode initialization,
+>> file should not be set as atomic one, right?
 >>
->> [1]https://patchwork.kernel.org/project/linux-arm-kernel/patch/20220406091311.3354723-6-tongtiangen@huawei.com/
+>> I didn't see any failure during 'f2fs_io write atomic_write' testcase... could you
+>> please provide me detail of the testcase?
 > 
-> We can indeed safely skip this copy and return an error just like
-> pretending there was a user page fault. However, my point was more
-> around the "isolate the user page with hardware memory errors". If the
-> fault is on a kernel address, there's not much you can do about. You'll
-> likely trigger it later when you try to access that address (maybe it
-> was freed and re-allocated). Do we hope we won't get the same error
-> again on that kernel address?
+> I just applied this into my device and was getting lots of the below error
+> messages resulting in open failures of database files.
 
-I think the page with memory error will be isolated by memory_failure(), 
-generally, isolation will succeed, if isolate failure(we need to find 
-out why), then maybe the same error will trigger it later.
+Could you please help to apply below patch and dump the log?
 
-Thanks.
+From: Chao Yu <chao@kernel.org>
+Subject: [PATCH] f2fs: fix to do sanity check for inline inode
+
+Signed-off-by: Chao Yu <chao.yu@oppo.com>
+---
+  fs/f2fs/f2fs.h  |  7 +++++++
+  fs/f2fs/inode.c | 11 +++++++----
+  2 files changed, 14 insertions(+), 4 deletions(-)
+
+diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
+index 0f8c426aed50..13a9212d6cb6 100644
+--- a/fs/f2fs/f2fs.h
++++ b/fs/f2fs/f2fs.h
+@@ -4159,6 +4159,13 @@ static inline void f2fs_set_encrypted_inode(struct inode *inode)
+   */
+  static inline bool f2fs_post_read_required(struct inode *inode)
+  {
++	/*
++	 * used by sanity_check_inode(), when disk layout fields has not
++	 * been synchronized to inmem fields.
++	 */
++	if (file_is_encrypt(inode) || file_is_verity(inode) ||
++			F2FS_I(inode)->i_flags & F2FS_COMPR_FL)
++		return true;
+  	return f2fs_encrypted_file(inode) || fsverity_active(inode) ||
+  		f2fs_compressed_file(inode);
+  }
+diff --git a/fs/f2fs/inode.c b/fs/f2fs/inode.c
+index 02630c17da93..a98614a24ad0 100644
+--- a/fs/f2fs/inode.c
++++ b/fs/f2fs/inode.c
+@@ -276,11 +276,14 @@ static bool sanity_check_inode(struct inode *inode, struct page *node_page)
+  		}
+  	}
+
+-	if (f2fs_has_inline_data(inode) &&
+-			(!S_ISREG(inode->i_mode) && !S_ISLNK(inode->i_mode))) {
++	if (f2fs_has_inline_data(inode) && !f2fs_may_inline_data(inode)) {
+  		set_sbi_flag(sbi, SBI_NEED_FSCK);
+-		f2fs_warn(sbi, "%s: inode (ino=%lx, mode=%u) should not have inline_data, run fsck to fix",
+-			  __func__, inode->i_ino, inode->i_mode);
++		f2fs_warn(sbi, "%s: inode (ino=%lx, mode=%u) reason(%d, %llu, %ld, %d, %d, %lu) should not have inline_data, run fsck to fix",
++			  __func__, inode->i_ino, inode->i_mode,
++			  f2fs_is_atomic_file(inode),
++			  i_size_read(inode), MAX_INLINE_DATA(inode),
++			  file_is_encrypt(inode), file_is_verity(inode),
++			  F2FS_I(inode)->i_flags & F2FS_COMPR_FL);
+  		return false;
+  	}
+
+-- 
+2.32.0
 
 > 
+>>
+>> Thanks,
+>>
+>>>
+>>>>    		set_sbi_flag(sbi, SBI_NEED_FSCK);
+>>>>    		f2fs_warn(sbi, "%s: inode (ino=%lx, mode=%u) should not have inline_data, run fsck to fix",
+>>>>    			  __func__, inode->i_ino, inode->i_mode);
+>>>> -- 
+>>>> 2.25.1

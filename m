@@ -2,62 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4A4B51B5BA
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 04:19:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFC5A51B5BE
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 04:19:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237947AbiEECVT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 22:21:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53904 "EHLO
+        id S238039AbiEECVx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 22:21:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237927AbiEECVP (ORCPT
+        with ESMTP id S234203AbiEECVv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 22:21:15 -0400
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5324A483B3
-        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 19:17:38 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id n18so3119115plg.5
-        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 19:17:38 -0700 (PDT)
+        Wed, 4 May 2022 22:21:51 -0400
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46919483AB
+        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 19:18:13 -0700 (PDT)
+Received: by mail-pg1-x531.google.com with SMTP id a191so2586287pge.2
+        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 19:18:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=F2nk/ssfCB0vTWyS6vaFNqXTpQUVylAvicTxU2kBcY8=;
-        b=GC3/Rj8Izk85qe05Uvsum7tPpxVZtjLFcopo+A3fa8s/5loDut8y7iWCNEvjQme2WX
-         EnmOc60vVyj8KiLzODlQ6vIc4N7UR5ztYnrnKC9I8VbRAiJLxxdpXtLE606l781T9l20
-         5ecROuPBCMlPt4JR4HtdNs0QLHYVKSVgVoXNGT04VLTisI7byfTH4z95mpUs4rapUc9Q
-         7aVMqa30ajkIpZ0g8BWQ7GjsJw8TipMOzn8T31rxkIqUD9anJ4X5bjAEbEiwRXyCq0Na
-         azH+2woprSkwLESH9c3T2/k+xULIgJgKTh82lSDmEPV4jrXQzQ/iYZ6OFAaITkSOCqnk
-         O+6g==
+        bh=pIXDVokFolVKrzalTPKUm2CP3QVEc7PDIydFuy2ELrg=;
+        b=VTMfiv/xxi6fGdCelW3OOBaUHSCm7CuZK+BQdtEUII66q8gebxTf/i43wtPpxuwg46
+         5OXvSyTPQJ4h5XCfeXHkYuEyDfjap7ZqgOq+130hL11jSuDpUzvwjrVjbo/uTaqtGsPe
+         msDZ7TOhh6Q62Cl41WK66/t5wy29qmqTdjeeo0wWa9CP411/IOJ8EcHvJgal+ZwepiMK
+         4HRNPzZWvsiVxGNUZQsbHKlaiwdWDw7d6hKuwuyNnQ6j8RCQGl7JYJvIbvHdXCSkg+hk
+         ARyfUqXY63VnGRzvh4aa/DJntuX5ziUFLzXtAGQOWXALdGZDcweQepSrO1tTJNUvo6W7
+         vfHw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=F2nk/ssfCB0vTWyS6vaFNqXTpQUVylAvicTxU2kBcY8=;
-        b=mI/D581KYhQO9YvKXDMV493nKbwved8/xLA3YeNyiuFySRnFGgKvksRQa1M4g7MUFw
-         vbgyOtuxdNowttffvz7Wy29jL4/bdcbuCqFcXQz6CbfwSO2d75yZZGamSC7mvy62bCbo
-         9VdMopVzqUE1tEfvzJ7dvgAvUOItMkNBJJg3yWZQ6Fxl+ixKnXquEauSHmXZGfQoxh39
-         u8I1iur833asme+7wfwldqwFV1VWuBbQEmL5fq1ihtvGuroiVJNHEMggK3YRd1TNQ5Ql
-         auozLFF47m1fzET3usIi1YuQhKYN6N8F9mY5Si3A3vYNIcg8LJ8e3iELwOGHBqEqWM8j
-         CsxQ==
-X-Gm-Message-State: AOAM533GWH/Ekv6LeYNr0ajLkGGV2Cir7ztXe5FSHLJY7XRxuxCp29VP
-        zyU62eTu0cqgV3+uGiMcFN4=
-X-Google-Smtp-Source: ABdhPJxIK9x8R05f9RBILPM4SBRiuoNiqtGSovQy5pR4hh+ZgLz2hy5Ac/8ilHaiMumxaeKAEigllw==
-X-Received: by 2002:a17:902:bf45:b0:15c:df47:3d6 with SMTP id u5-20020a170902bf4500b0015cdf4703d6mr24385071pls.58.1651717057904;
-        Wed, 04 May 2022 19:17:37 -0700 (PDT)
+        bh=pIXDVokFolVKrzalTPKUm2CP3QVEc7PDIydFuy2ELrg=;
+        b=NNZy+1zeCqhwShUf8ad0TZGVBZxaJ0j0PxzcA8Q3jWOj3nfX5eIjghiqkLQwcgdcYy
+         8e/Vx5xT4UoRLpU8B0kRDaniu6EMIbJpQnsV4fGK3KntYl7TzGd9rHMsSWKJXiov+xHS
+         Q0Otjf5A/YeIZDoC9sUEasDuRX/1eMBtRUcz0DPY1F+T/5bNidoSo4rV1J+QbBLfM3dM
+         F0+uoZhKaR1ncmJm2/QBP0KxX1xlmMhPJzfClpIHk1UjkJ5FlGLetzxM04SDBuG0+vex
+         Zz4yjahTd6yjGnggjLMxCgoDnWVNdPdwSZXRe99dn4moJph5W/QupFVOvUAQ8EiQwmOs
+         tHTA==
+X-Gm-Message-State: AOAM533RI1iLsY0kHW3PNILX6BE18JQ9kqYyC5V93M+7RVWJVFUTvfLX
+        4Ewz/gjs1H/sWDLw1Dbd1s8=
+X-Google-Smtp-Source: ABdhPJzWZdSl8kCzaGbBSh6IuuBwK7I7BYee0kVZukFZY0T4WG5+0idnYzYBVwUf4sMRTt4ffT1k1Q==
+X-Received: by 2002:a65:6cc9:0:b0:399:26da:29af with SMTP id g9-20020a656cc9000000b0039926da29afmr20022746pgw.489.1651717092863;
+        Wed, 04 May 2022 19:18:12 -0700 (PDT)
 Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id f19-20020a63dc53000000b003c14af50631sm60468pgj.73.2022.05.04.19.17.35
+        by smtp.gmail.com with ESMTPSA id m1-20020a17090aab0100b001cd4989fecesm3967290pjq.26.2022.05.04.19.18.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 May 2022 19:17:37 -0700 (PDT)
+        Wed, 04 May 2022 19:18:12 -0700 (PDT)
 From:   cgel.zte@gmail.com
 X-Google-Original-From: chi.minghao@zte.com.cn
 To:     lgirdwood@gmail.com
 Cc:     broonie@kernel.org, alsa-devel@alsa-project.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
         Minghao Chi <chi.minghao@zte.com.cn>,
         Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH] ASoC: uniphier: simplify the return expression of uniphier_aio_compr_set_params()
-Date:   Thu,  5 May 2022 02:17:33 +0000
-Message-Id: <20220505021733.54275-1-chi.minghao@zte.com.cn>
+Subject: [PATCH] ASoC: mediatek: simplify the return expression of mtk_dai_pcm_prepare()
+Date:   Thu,  5 May 2022 02:18:08 +0000
+Message-Id: <20220505021808.54337-1-chi.minghao@zte.com.cn>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -78,34 +79,35 @@ Simplify the return expression.
 Reported-by: Zeal Robot <zealci@zte.com.cn>
 Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
 ---
- sound/soc/uniphier/aio-compress.c | 7 +------
- 1 file changed, 1 insertion(+), 6 deletions(-)
+ sound/soc/mediatek/mt8195/mt8195-dai-pcm.c | 8 +-------
+ 1 file changed, 1 insertion(+), 7 deletions(-)
 
-diff --git a/sound/soc/uniphier/aio-compress.c b/sound/soc/uniphier/aio-compress.c
-index 0f76bc601ca9..7d1492c15b57 100644
---- a/sound/soc/uniphier/aio-compress.c
-+++ b/sound/soc/uniphier/aio-compress.c
-@@ -139,7 +139,6 @@ static int uniphier_aio_compr_set_params(struct snd_soc_component *component,
- 	struct uniphier_aio *aio = uniphier_priv(asoc_rtd_to_cpu(rtd, 0));
- 	struct uniphier_aio_sub *sub = &aio->sub[cstream->direction];
- 	struct device *dev = &aio->chip->pdev->dev;
+diff --git a/sound/soc/mediatek/mt8195/mt8195-dai-pcm.c b/sound/soc/mediatek/mt8195/mt8195-dai-pcm.c
+index 151914c873ac..12644ded83d5 100644
+--- a/sound/soc/mediatek/mt8195/mt8195-dai-pcm.c
++++ b/sound/soc/mediatek/mt8195/mt8195-dai-pcm.c
+@@ -213,8 +213,6 @@ static int mtk_dai_pcm_configure(struct snd_pcm_substream *substream,
+ static int mtk_dai_pcm_prepare(struct snd_pcm_substream *substream,
+ 			       struct snd_soc_dai *dai)
+ {
 -	int ret;
+-
+ 	dev_dbg(dai->dev, "%s(), id %d, stream %d, widget active p %d, c %d\n",
+ 		__func__, dai->id, substream->stream,
+ 		dai->playback_widget->active, dai->capture_widget->active);
+@@ -222,11 +220,7 @@ static int mtk_dai_pcm_prepare(struct snd_pcm_substream *substream,
+ 	if (dai->playback_widget->active || dai->capture_widget->active)
+ 		return 0;
  
- 	if (params->codec.id != SND_AUDIOCODEC_IEC61937) {
- 		dev_err(dev, "Codec ID is not supported(%d)\n",
-@@ -161,11 +160,7 @@ static int uniphier_aio_compr_set_params(struct snd_soc_component *component,
- 	aio_port_reset(sub);
- 	aio_src_reset(sub);
- 
--	ret = uniphier_aio_compr_prepare(component, cstream);
+-	ret = mtk_dai_pcm_configure(substream, dai);
 -	if (ret)
 -		return ret;
 -
 -	return 0;
-+	return uniphier_aio_compr_prepare(component, cstream);
++	return mtk_dai_pcm_configure(substream, dai);
  }
  
- static int uniphier_aio_compr_hw_free(struct snd_soc_component *component,
+ static int mtk_dai_pcm_set_fmt(struct snd_soc_dai *dai, unsigned int fmt)
 -- 
 2.25.1
 

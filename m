@@ -2,113 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B72C851BBE7
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 11:22:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D415D51BC27
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 11:30:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352675AbiEEJ0S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 05:26:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37536 "EHLO
+        id S1353588AbiEEJdD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 05:33:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352667AbiEEJ0C (ORCPT
+        with ESMTP id S1354160AbiEEJcW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 05:26:02 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 499734E390
-        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 02:22:23 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id i5so5241571wrc.13
-        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 02:22:23 -0700 (PDT)
+        Thu, 5 May 2022 05:32:22 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB541522D3
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 02:28:04 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id j14so3865509plx.3
+        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 02:28:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=YZkhX8VdSbRZKmQIOzgkSfpmToAIJcyGhKGvONZeKPM=;
-        b=wgm3Tdzap7kkOBihTP6T0IhnT9G6Oc8Ge/5nUNlrSnTPInQoGJ98CKanFTwb6sMccZ
-         9d4KCxdg9LCYphRKvE9rvwU1++xkoof4loKmHyCYfxAY0gBFhMA3oPXw7NTjEqqxyHfC
-         cNwAxA8oRijMoUjff4ROoa9YilWt5ieCB4F7ZaDx7bZ5NBlRq1XEjDizZ9ItDHbBrDJw
-         rdCoDCQ1En6Y5bGPfqpHlZRcg2m4vS6Y/g4KRAX51Favpx55TneHi7u6O0EF4FPDa2B0
-         NZ6FEyOLhsL2fcnruWZj5H0x5LOeT1KGIGqo+XJU4paF90d6jjbgSv1wgUCBUHYfU45r
-         HmpQ==
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=6F6fmtEjrSN7+MBeg46/Q6qwb0WfdkL+E9dyellACws=;
+        b=sOf3f5whdDiTUgn3OHFpXtRMBGXTZEEPUuM+Zito2LzukzrJA0js+qKWEu1AR+ffPB
+         HrrcRDbXA2W0pZnc7YvgqAQ8M7j+f8UQE7PllKnzfi2DCAs79RSnuR257TwY9k5NGT/G
+         0YYL4Qi3tZ5DOaMY1iE2/383nu1Cfkd/ZJWPSsDqcih1Sh+grDk4tl+isTcqe3QZzhoY
+         lJ+/0xzZwgOBfojAMRAGOpuk6A1Z5a+Gy+/dUfaHpfLL1PD3xJrpw4rtn14L13+0eyoq
+         flZWo8ZJsinybkKrTSavz7OQqfHkpeoGSZk2ERRE4NKq2QEjomDWp2zJwO2ytjLHnxOH
+         wNYg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=YZkhX8VdSbRZKmQIOzgkSfpmToAIJcyGhKGvONZeKPM=;
-        b=WqOlfamrJULRFJpbdhZ9Uh45xTL/+k45ibr0AUXWPdG6n8sftwDr8gabKmZvcVzgjS
-         C4NKozVTRrElm8IUUZy0IwiChzqzqcNvsAgUMe7YgEIorszOV6dsNjcN3sabfwJNs5sf
-         x3cDMomQwhP6r2Y810EHGLMruOpf6ImV/64iQ2N8bcqKUeyPFcGB6Ochy6i4JBFUTTwG
-         DoztMuEefGogrAtBI1fO5FM2e6uOgoEMBXQf3C+8BFwQXcRxuP//v/Phj8WguMUwb8G6
-         AMxmR2X5MRg8LIYwSe9elLAFSbxj3BNdyojuESheR1SPcYDqXG9PTzbOFWDRjohla/rr
-         Bzpg==
-X-Gm-Message-State: AOAM533eVOOg+nNCxrqdeaAurs8wVt8ELdF5FZEUv9MfWsnGFe3n4uJD
-        WT9jZ1EpDpA27MeHRM+1ZS9J3g==
-X-Google-Smtp-Source: ABdhPJwfam1b9VUuK2KiSROtjJ68KFyfCyHnaJU4kSRx96x9vSh8DG8UHpeSy1pcGwoX3pIR2XLwyg==
-X-Received: by 2002:a05:6000:1110:b0:20a:e113:8221 with SMTP id z16-20020a056000111000b0020ae1138221mr19276809wrw.271.1651742541836;
-        Thu, 05 May 2022 02:22:21 -0700 (PDT)
-Received: from [192.168.0.217] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id o9-20020a5d4089000000b0020c5253d8d2sm779379wrp.30.2022.05.05.02.22.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 05 May 2022 02:22:21 -0700 (PDT)
-Message-ID: <e9e03c19-cf65-28b8-a81a-10995b1f262f@linaro.org>
-Date:   Thu, 5 May 2022 11:22:20 +0200
+        bh=6F6fmtEjrSN7+MBeg46/Q6qwb0WfdkL+E9dyellACws=;
+        b=1N9VAdTrarBgLS9jKcjyz4Dyus1TWIriQDFFz2cuHtTJkJHtyMfw9cSjYZTNgG1XkD
+         Lz7+AApvrpAd8Oamt+tCCcAfyy+Ys+z/ZGlvBHZLkWp8wF8WEz/iCvSemOlkOJ3jwztJ
+         NdC8nzJm+V/EcS8wVYFpLlrCEW02BEP8BY024/fS3e0rKP1Jvm0UhHB6RW3x156IYO+m
+         6p8KBXUtj1AYA088m6K9iFre8fhv7tR4JWMysWzvdyw1U+LtMvywDH9xJVVVyHryNSuL
+         kns7kmEN7B3Hm+wxXnhCoSNtCOAlPOgca37wC7Df9XEORhL0iKvIuNlmCxH/UZf77Kli
+         du3A==
+X-Gm-Message-State: AOAM533UQQveuRtyZ+WSxmSxlGC4caoUJ4qICnWaUTO/s/vga1eOT25+
+        yawC98prz4gKPihcLco5pePDFNHhWV+HbA==
+X-Google-Smtp-Source: ABdhPJxURL31yAiE1Fmma/z4loT9dDh2LA26yErXvoNjLFqD0MP2V7b/jFxmB1xjT+/pEschQwl6Iw==
+X-Received: by 2002:a17:90b:3a8b:b0:1dc:4eb4:1f2a with SMTP id om11-20020a17090b3a8b00b001dc4eb41f2amr5017601pjb.50.1651742884373;
+        Thu, 05 May 2022 02:28:04 -0700 (PDT)
+Received: from always-x1.www.tendawifi.com ([139.177.225.255])
+        by smtp.gmail.com with ESMTPSA id t68-20020a625f47000000b0050dc76281dcsm884224pfb.182.2022.05.05.02.27.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 May 2022 02:28:03 -0700 (PDT)
+From:   zhenwei pi <pizhenwei@bytedance.com>
+To:     arei.gonglei@huawei.com, mst@redhat.com
+Cc:     jasowang@redhat.com, herbert@gondor.apana.org.au,
+        linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-crypto@vger.kernel.org, helei.sig11@bytedance.com,
+        pizhenwei@bytedance.com, davem@davemloft.net
+Subject: [PATCH v5 0/5] virtio-crypto: Improve performance
+Date:   Thu,  5 May 2022 17:24:03 +0800
+Message-Id: <20220505092408.53692-1-pizhenwei@bytedance.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [RFC v2 4/4] arm64: dts: rockchip: Add mt7531 dsa node to
- BPI-R2-Pro board
-Content-Language: en-US
-To:     frank-w@public-files.de, Vladimir Oltean <olteanv@gmail.com>
-Cc:     Frank Wunderlich <linux@fw-web.de>,
-        linux-mediatek@lists.infradead.org,
-        linux-rockchip@lists.infradead.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Peter Geis <pgwipeout@gmail.com>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-References: <20220430130347.15190-1-linux@fw-web.de>
- <20220430130347.15190-5-linux@fw-web.de>
- <20220504152450.cs2afa4hwkqp5b5m@skbuf>
- <trinity-9f557027-8e00-4a4a-bc19-bc576e163f7b-1651678399970@3c-app-gmx-bs42>
- <20220504154720.62cwrz7frjkjbb7u@skbuf>
- <313a5b2e-c571-a13f-3447-b1cd7200f4c9@linaro.org>
- <D201CE50-280C-4089-BB9F-053FEA28FE9A@public-files.de>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <D201CE50-280C-4089-BB9F-053FEA28FE9A@public-files.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/05/2022 11:06, Frank Wunderlich wrote:
->> You can make it "(ethernet-)?ports" as well. My comment was purely to
->> make it simpler, for bindings (goes into properties, not
->> patternProperties) and for us. If you prefer to keep it like DSA core,
->> also fine.
-> 
-> Ok, i'm also thinking, the dsa-definition will be the right way (pattern-properties with optional "ethernet-") in binding.
-> 
-> Should i use "ethernet-ports" instead of "ports" here? Current dts with mt7530/mt7531 switches using "ports" so i would use it here too. If dsa prefer ethernet-ports now it should be changed in other files too.
+v4 -> v5:
+ - Fix potentially dereferencing uninitialized variables in
+   'virtio-crypto: use private buffer for control request'.
+   Thanks to Dan Carpenter!
 
-I think bindings allow both, so choose something consistent with
-existing DTS sources.
+v3 -> v4:
+ - Don't create new file virtio_common.c, the new functions are added
+   into virtio_crypto_core.c
+ - Split the first patch into two parts:
+     1, change code style,
+     2, use private buffer instead of shared buffer
+ - Remove relevant change.
+ - Other minor changes.
 
-Best regards,
-Krzysztof
+v2 -> v3:
+ - Jason suggested that spliting the first patch into two part:
+     1, using private buffer
+     2, remove the busy polling
+   Rework as Jason's suggestion, this makes the smaller change in
+   each one and clear.
+
+v1 -> v2:
+ - Use kfree instead of kfree_sensitive for insensitive buffer.
+ - Several coding style fix.
+ - Use memory from current node, instead of memory close to device
+ - Add more message in commit, also explain why removing per-device
+   request buffer.
+ - Add necessary comment in code to explain why using kzalloc to
+   allocate struct virtio_crypto_ctrl_request.
+
+v1:
+The main point of this series is to improve the performance for
+virtio crypto:
+- Use wait mechanism instead of busy polling for ctrl queue, this
+  reduces CPU and lock racing, it's possiable to create/destroy session
+  parallelly, QPS increases from ~40K/s to ~200K/s.
+- Enable retry on crypto engine to improve performance for data queue,
+  this allows the larger depth instead of 1.
+- Fix dst data length in akcipher service.
+- Other style fix.
+
+lei he (2):
+  virtio-crypto: adjust dst_len at ops callback
+  virtio-crypto: enable retry for virtio-crypto-dev
+
+zhenwei pi (3):
+  virtio-crypto: change code style
+  virtio-crypto: use private buffer for control request
+  virtio-crypto: wait ctrl queue instead of busy polling
+
+ .../virtio/virtio_crypto_akcipher_algs.c      |  95 ++++++------
+ drivers/crypto/virtio/virtio_crypto_common.h  |  21 ++-
+ drivers/crypto/virtio/virtio_crypto_core.c    |  55 ++++++-
+ .../virtio/virtio_crypto_skcipher_algs.c      | 140 ++++++++----------
+ 4 files changed, 182 insertions(+), 129 deletions(-)
+
+-- 
+2.20.1
+

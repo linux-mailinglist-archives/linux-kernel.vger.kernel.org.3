@@ -2,93 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21B6151BAEA
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 10:47:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EE8051BAEF
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 10:48:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350353AbiEEIuk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 04:50:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32786 "EHLO
+        id S1350439AbiEEIw3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 04:52:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235438AbiEEIuh (ORCPT
+        with ESMTP id S1350432AbiEEIwY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 04:50:37 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02F3D49F35
-        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 01:46:59 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id i5so5115969wrc.13
-        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 01:46:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=KAi9SgYYEJZdQCddUzbx52lypx3cIglFyl/qHafebhw=;
-        b=tkNfdzaaxw1oNzzHEFi5PsCP9pSRB2g18WUgVkc6DnnNJz4opSwgzEVFoUUkq98Kud
-         DmFNXaVYExw1NuJr8DqujznLa2az0lWDiTc0qWvNUCAP5r5OW9iSR8QEqSlWZJONTS4P
-         F30VkUEk9v9uHoJqLqcvFr87lcceheNYz87udcrXOAHtFnIyEOvlcZaxaIZkOdNhT30Y
-         dB4ud6EWIxegH+EYbtLr/2s0zJ21Uw2TaCRSfxNT1dPyuAPqkA2Ti2WZXu8bcR/8mxNC
-         eMgh7vO/iGZwuEnOROZ+GPB0E6E/imyXgauO3i4m/vz/qEwWxwP3ttMVK1mz2Ist0shg
-         sbpQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=KAi9SgYYEJZdQCddUzbx52lypx3cIglFyl/qHafebhw=;
-        b=aV6mdcw+/rBxSXL815qPXnUMra4mY37Qg1/aVJt8GIkJFpDv+hvca1hqONe5e5sV01
-         JjVbQIlItWJf05zlGWYsa/5k3wE0YXfowFKZEsuS/ZSLIYPNGiPTfIXhwHRYWy57k8wP
-         PB3jE3IrN1KS9NDvNpyQ/mZ4AWBX1YmP5iZKLGdDgkMhxG5yZmoCUReLC09IKIvLQHUz
-         4cx3oTolMjC0zzfTtfCmrwDymKRUWZE4GPIA4CVSB+oBIAloTr769TypKK3LV6L6OIMF
-         XKirYkFExsql/R1pdIMH4R7Ii5eT7L/++EtFxbUY0LdSzsZFU9IkEJ8SIK1nAsCBUmF5
-         6ZSw==
-X-Gm-Message-State: AOAM530iKD2ggYtBDiOPESOtIWU6ljXGBKRX33twv7yvtI5WaYF0yIBV
-        U2oblTVbTmdvw02NnAsU9uqszQ==
-X-Google-Smtp-Source: ABdhPJx0cG82J35HyxF+U/lAjaHUyieUfdukDsGukXiyDflYgKWosvfKkWmN+5Kvijh4a8XoYMPHpw==
-X-Received: by 2002:a5d:6551:0:b0:20a:e23c:a7fa with SMTP id z17-20020a5d6551000000b0020ae23ca7famr19657153wrv.535.1651740417622;
-        Thu, 05 May 2022 01:46:57 -0700 (PDT)
-Received: from [192.168.0.217] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id 67-20020a1c1946000000b003942a244f2csm6771728wmz.5.2022.05.05.01.46.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 05 May 2022 01:46:57 -0700 (PDT)
-Message-ID: <313a5b2e-c571-a13f-3447-b1cd7200f4c9@linaro.org>
-Date:   Thu, 5 May 2022 10:46:55 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [RFC v2 4/4] arm64: dts: rockchip: Add mt7531 dsa node to
- BPI-R2-Pro board
-Content-Language: en-US
-To:     Vladimir Oltean <olteanv@gmail.com>,
-        Frank Wunderlich <frank-w@public-files.de>
-Cc:     Frank Wunderlich <linux@fw-web.de>,
-        linux-mediatek@lists.infradead.org,
-        linux-rockchip@lists.infradead.org,
-        Rob Herring <robh+dt@kernel.org>,
+        Thu, 5 May 2022 04:52:24 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53F754AE2D;
+        Thu,  5 May 2022 01:48:40 -0700 (PDT)
+X-UUID: b6a27cbdd49b4151970748d245fa15a2-20220505
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.4,REQID:b0e02674-ab0d-40a7-ad44-6868b5f9cd64,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:0
+X-CID-META: VersionHash:faefae9,CLOUDID:6a14acb2-56b5-4c9e-8d83-0070b288eb6a,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,File:nil,QS:0,BEC:nil
+X-UUID: b6a27cbdd49b4151970748d245fa15a2-20220505
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
+        (envelope-from <jiaxin.yu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1325095859; Thu, 05 May 2022 16:48:33 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Thu, 5 May 2022 16:48:32 +0800
+Received: from mhfsdcap04 (10.17.3.154) by mtkmbs11n2.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
+ Transport; Thu, 5 May 2022 16:48:31 +0800
+Message-ID: <cbf2fcbae25408b95875278eb37e829bf4671430.camel@mediatek.com>
+Subject: Re: [PATCH 1/3] ASoC: dt-bindings: mediatek: mt8192: Add i2s-share
+ properties
+From:   Jiaxin Yu <jiaxin.yu@mediatek.com>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        "=?ISO-8859-1?Q?N=EDcolas?= F. R. A. Prado" <nfraprado@collabora.com>,
+        "Mark Brown" <broonie@kernel.org>
+CC:     <kernel@collabora.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
         Matthias Brugger <matthias.bgg@gmail.com>,
-        Peter Geis <pgwipeout@gmail.com>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-References: <20220430130347.15190-1-linux@fw-web.de>
- <20220430130347.15190-5-linux@fw-web.de>
- <20220504152450.cs2afa4hwkqp5b5m@skbuf>
- <trinity-9f557027-8e00-4a4a-bc19-bc576e163f7b-1651678399970@3c-app-gmx-bs42>
- <20220504154720.62cwrz7frjkjbb7u@skbuf>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220504154720.62cwrz7frjkjbb7u@skbuf>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        Rob Herring <robh+dt@kernel.org>,
+        Shane Chien <shane.chien@mediatek.com>,
+        <alsa-devel@alsa-project.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>
+Date:   Thu, 5 May 2022 16:48:31 +0800
+In-Reply-To: <4826c824-40ce-5726-ed95-5be069233ca7@collabora.com>
+References: <20220429203039.2207848-1-nfraprado@collabora.com>
+         <20220429203039.2207848-2-nfraprado@collabora.com>
+         <4826c824-40ce-5726-ed95-5be069233ca7@collabora.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -96,32 +71,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/05/2022 17:47, Vladimir Oltean wrote:
->>
->> current device-tree nodes using "switch" and "ports"
->>
->> see discussioon here about make it fixed to "ports" property instead of PatternProperties including optional "ethernet-"
->>
->> https://patchwork.kernel.org/project/linux-mediatek/patch/20220502153238.85090-1-linux@fw-web.de/#24843155
+On Thu, 2022-05-05 at 10:08 +0200, AngeloGioacchino Del Regno wrote:
+> Il 29/04/22 22:30, Nícolas F. R. A. Prado ha scritto:
+> > The Mediatek AFE PCM controller for MT8192 allows sharing of an I2S
+> > bus
+> > between two busses. Add a pattern for these properties in the
+> > dt-binding.
+> > 
+> > Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+> > ---
+> > 
+> >   Documentation/devicetree/bindings/sound/mt8192-afe-pcm.yaml | 5
+> > +++++
+> >   1 file changed, 5 insertions(+)
+> > 
+> > diff --git a/Documentation/devicetree/bindings/sound/mt8192-afe-
+> > pcm.yaml b/Documentation/devicetree/bindings/sound/mt8192-afe-
+> > pcm.yaml
+> > index 7a25bc9b8060..5b03c8dbf318 100644
+> > --- a/Documentation/devicetree/bindings/sound/mt8192-afe-pcm.yaml
+> > +++ b/Documentation/devicetree/bindings/sound/mt8192-afe-pcm.yaml
+> > @@ -54,6 +54,11 @@ properties:
+> >         - const: aud_infra_clk
+> >         - const: aud_infra_26m_clk
+> >   
+> > +patternProperties:
+> > +  "^i2s[0-35-9]-share$":
+> > +    description: Name of the I2S bus that is shared with this bus
+> > +    pattern: "^I2S[0-35-9]$"
+> > +
+> >   required:
+> >     - compatible
+> >     - interrupts
+> > 
 > 
-> Hmm, I don't get why Krzysztof said to just keep what is used in
-> existing device trees. The schema validator should describe what is
-> valid, 
+> The only other way of doing this would be to complicate this in the
+> driver
+> so that we can do something like
+> 
+> "i2s-share = <0 2>";  instead of  i2s0-share = "I2S2";
+> 
+> ...and I don't think that this would be any more straightforward than
+> the
+> provided way.
+> 
+> There's an improvement that we can do to that pattern description
+> though,
+> which would be explaining that declaring 'i2s0-share = "I2S2"' means
+> that
+> I2S2's data pin will be used as DATA-OUT, while i2s0 is DATA-IN.
+> 
+> Another thing that comes to mind here is that this is a MediaTek
+> specific
+> property and *not* a generic one, which means that both the driver
+> and
+> this binding should be fixed to get a "mediatek," prefix, so, this
+> property
+> should - in reality - be "mediatek,i2s[0-35-9]-share" instead.
+> 
+> I think that everyone agrees about that, but let's see what the
+> others say.
+> 
+> Cheers,
+> Angelo
 
-These were talks about bindings which describe hardware. The node name,
-except Devicetree spec asking for generic names, does not matter here
-actually.
+Hi Angelo,
 
-> and since the mt7530 driver does not care one way or another
-> (some drivers do explicitly parse the "ports"/"ethernet-ports" node),
-> then whatever is valid for the DSA core is also valid for the mt7530
-> bindings. And "ethernet-ports" is valid too, so I think it should be
-> accepted by mediatek.yaml...
+'i2s0-share = "I2S2"' means that if we want use I2S0, there need open
+I2S2 to provide clock. Conversely, if we want to use I2S2, we don't
+need to open I2S0. However, MediaTek I2S0 and I2S2 hardware are
+generally designed as input. So usually we use 'i2s0-share = "I2S1"'.
+Even numbers represent input, odd numbers represent output.
 
-You can make it "(ethernet-)?ports" as well. My comment was purely to
-make it simpler, for bindings (goes into properties, not
-patternProperties) and for us. If you prefer to keep it like DSA core,
-also fine.
+Yes, I think adding the "mediatek," prefix is the right way to define a
+non-generic property.
 
-Best regards,
-Krzysztof
+Best Regards,
+Jiaxin Yu
+

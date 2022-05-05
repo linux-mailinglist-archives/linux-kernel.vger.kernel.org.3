@@ -2,116 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFF2951C0E4
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 15:34:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5198551C0E9
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 15:34:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377880AbiEENhJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 09:37:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47080 "EHLO
+        id S235928AbiEENhX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 09:37:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379805AbiEENga (ORCPT
+        with ESMTP id S1379808AbiEENgv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 09:36:30 -0400
-Received: from us-smtp-delivery-74.mimecast.com (us-smtp-delivery-74.mimecast.com [170.10.129.74])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A6D4F57114
-        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 06:32:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651757546;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=+kiADHH0OTUEekRfTTqboMY0mUFLqzmSHiGBuu3QXQA=;
-        b=UTMoBhW4SoONg1+zanmHNFXftfBWlFuobTeaCDOz/J1CgZJR2zF9qJaN5cLiGxwnojQ09P
-        XJCUMKnZdNWW8JuXQZU5P1R6o/GKodqunViH10vBltMaQCShVIWjlv+huAXO/OsE6yVxqw
-        PWjwak1p/BB4gtaqWRM+pTLoxFIQ3ME=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-127-ST_BgvSbPYivES7cdVsQXA-1; Thu, 05 May 2022 09:32:25 -0400
-X-MC-Unique: ST_BgvSbPYivES7cdVsQXA-1
-Received: by mail-ed1-f69.google.com with SMTP id k13-20020a50ce4d000000b00425e4447e64so2317206edj.22
-        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 06:32:25 -0700 (PDT)
+        Thu, 5 May 2022 09:36:51 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B39B05710F;
+        Thu,  5 May 2022 06:33:11 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id d6so5210242ede.8;
+        Thu, 05 May 2022 06:33:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:from:to:cc:subject:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=YBh4fSQX1SjtAOeTQBT6qh7xXgQX0hrw/vPZrDk8kl0=;
+        b=QVQdBUAr2fBR6TDsf/0Bgl+n2gsTKYcI99p8ef08EPIV+jTaXpUuMrzeItEXdo0Z0t
+         12MOwc14Q/vjwr1gUBSm/ifm5ZF38S/Hz8bZtibKyE8EOAKBA98qPHlEZU+Wl2OrsWHz
+         p+7EWpDGfQTPRS5JtfEi62gUygDtUScamZ7WRxTgJq97XLCcvN3RuJZUroJsBT5C/bbV
+         +XFoFBrvY5pESG3GsfRlGUdlcPm3RfWrknBTAvAGo/cxEK1tafk52xKtluBcFKvOt+sh
+         aOBWWpicZ3yIJZvAp6ISeiVblFpLgp6B37zcEqhrC5l6C3Kr+SO2EJoFx2RJnI639F61
+         JKPg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=+kiADHH0OTUEekRfTTqboMY0mUFLqzmSHiGBuu3QXQA=;
-        b=mOOrQ0kI+Hfy0Q+efie6JAOdzX4Im9mV0iuaF52VyUsnXYj692v+3C6gsMhH8vA8ng
-         MQZAL5mjhzN5g1N3WK3RNyhxPoXygMu6qMA9CWlXaDgJY9dLxTCdg4AlnOYMvW6vs0Pe
-         LAOvJDtd+LQWkQfqrSqPRYltzzjZfaVw9rOQKiHeOpoxNH0c6As19B66LX+i89MJsNti
-         TOL20gqk/J/RL+oaBXdyzbhLjWvH5WehVL/dar0+jojRBiJHRupxXk9tsnOP01QU2NMl
-         FpBuCtOrTB/HHZha4CLtf17kuB7mO7TlhvxffqVJgYMOFxu975H22M8QkxkxS56HRlTa
-         CsPg==
-X-Gm-Message-State: AOAM530+g2Z5uLVHGjyKid3s6YY1yBv+ppvwlZS9oBl7btVJbeCOmQeZ
-        aKEaGTZHAUYLYK6rRNQAnSqzSlYduxXoMPT1/eqIUGSmdCpPZdmP4OcwDp1mdN+NxR2XcgXwS3y
-        e0cmdfDLcUMBQhGJB8puNZndb
-X-Received: by 2002:a17:907:9053:b0:6f3:9f7e:5325 with SMTP id az19-20020a170907905300b006f39f7e5325mr26644991ejc.455.1651757544355;
-        Thu, 05 May 2022 06:32:24 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJy52UhctkwW9yt5QGwSz6n+bp/2FcbovNN8FC8hnhQ4d8qEEUMnISxAnpY/IrKzXNsv5I+1WQ==
-X-Received: by 2002:a17:907:9053:b0:6f3:9f7e:5325 with SMTP id az19-20020a170907905300b006f39f7e5325mr26644966ejc.455.1651757544125;
-        Thu, 05 May 2022 06:32:24 -0700 (PDT)
-Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
-        by smtp.googlemail.com with ESMTPSA id bc20-20020a056402205400b0042617ba63cesm812545edb.88.2022.05.05.06.32.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 05 May 2022 06:32:23 -0700 (PDT)
-Message-ID: <688a817f-b2e2-4620-ef4b-f3c5f73ae34d@redhat.com>
-Date:   Thu, 5 May 2022 15:32:19 +0200
+        h=x-gm-message-state:message-id:date:from:to:cc:subject:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=YBh4fSQX1SjtAOeTQBT6qh7xXgQX0hrw/vPZrDk8kl0=;
+        b=ZdY+OH1y4HJFhaxrmiNB6WiA74h404HZ5XuWUe5IHgy5rQtn0rXamisLNeUrZ+eikA
+         90U20bM6pOJ4F82WwJuoxOscc91V3UbvHH37XGvXKdUIkIXoUadK9FPxmm+h1XRpg3f+
+         RWQ81UtCtEp7+Ogg4YKgGz2qtoZTjy7E4LEQ79Mc+eOH9rj5itjZroaDqVNCKjv+iLUi
+         fdgQrUzl3st/wAM4NCzsjke2ZqNBBw0DSJr9iNWc9Y+m1Z9g9BdxQQq6+fhpOaQb8iPD
+         ZR0n98Qrfw6Cp8lDXD5WzQoHV4CwM6zZvXe8xw4j552nxM0PIsuXP0BzhcHJjkwOGD+N
+         smFg==
+X-Gm-Message-State: AOAM530wcJlbMQeIPPx38XWPoTLcU3OCvTzjIrv3fvwPKiezdldMicYs
+        MYtv7dTVXyoPNdw60i3rqKE=
+X-Google-Smtp-Source: ABdhPJyti2fzgy7lBZwv9hr5ITrughg8szQhWL+aoHoF5bRcpehFlY8kR4rXVtXHxFsTI13ub54YYg==
+X-Received: by 2002:a05:6402:42c8:b0:427:d087:29 with SMTP id i8-20020a05640242c800b00427d0870029mr19637136edc.53.1651757590119;
+        Thu, 05 May 2022 06:33:10 -0700 (PDT)
+Received: from Ansuel-xps. (93-42-70-190.ip85.fastwebnet.it. [93.42.70.190])
+        by smtp.gmail.com with ESMTPSA id el22-20020a170907285600b006f3ef214e1dsm756920ejc.131.2022.05.05.06.33.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 May 2022 06:33:09 -0700 (PDT)
+Message-ID: <6273d215.1c69fb81.b7a4a.4478@mx.google.com>
+X-Google-Original-Message-ID: <YnPSE5dM6YanWt9T@Ansuel-xps.>
+Date:   Thu, 5 May 2022 15:33:07 +0200
+From:   Ansuel Smith <ansuelsmth@gmail.com>
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>, Pavel Machek <pavel@ucw.cz>,
+        John Crispin <john@phrozen.org>, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-leds@vger.kernel.org
+Subject: Re: [RFC PATCH v6 10/11] net: dsa: qca8k: add LEDs support
+References: <20220503151633.18760-1-ansuelsmth@gmail.com>
+ <20220503151633.18760-11-ansuelsmth@gmail.com>
+ <YnMujjDHD5M9UdH0@lunn.ch>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH] selftests: KVM: aarch64: Let hypercalls use UAPI
- *_BIT_COUNT
-Content-Language: en-US
-To:     Marc Zyngier <maz@kernel.org>, Oliver Upton <oupton@google.com>
-Cc:     Raghavendra Rao Ananta <rananta@google.com>,
-        Andrew Jones <drjones@redhat.com>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Peter Shier <pshier@google.com>,
-        Ricardo Koller <ricarkol@google.com>,
-        Reiji Watanabe <reijiw@google.com>,
-        Jing Zhang <jingzhangos@google.com>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-References: <20220504184415.1905224-1-rananta@google.com>
- <YnLa8uH55/epyjlS@google.com> <87zgjw6v9k.wl-maz@kernel.org>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <87zgjw6v9k.wl-maz@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YnMujjDHD5M9UdH0@lunn.ch>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/5/22 14:04, Marc Zyngier wrote:
-> diff --git a/arch/arm64/include/uapi/asm/kvm.h b/arch/arm64/include/uapi/asm/kvm.h
-> index e523bb6eac67..3cde9f958eee 100644
-> --- a/arch/arm64/include/uapi/asm/kvm.h
-> +++ b/arch/arm64/include/uapi/asm/kvm.h
-> @@ -342,6 +342,10 @@ struct kvm_arm_copy_mte_tags {
->   
->   enum {
->   	KVM_REG_ARM_STD_BIT_TRNG_V1_0	= 0,
-> +	/*
-> +	 * KVM_REG_ARM_STD_BMAP_BIT_COUNT will vary as new services
-> +	 * are added, and is explicitely not part of the ABI.
-> +	 */
->   	KVM_REG_ARM_STD_BMAP_BIT_COUNT,
->   };
+On Thu, May 05, 2022 at 03:55:26AM +0200, Andrew Lunn wrote:
+> > +		ret = fwnode_property_read_string(led, "default-state", &state);
+> 
+> You should probably use led_default_state led_init_default_state_get()
+> 
+>     Andrew
 
-That seems like a bad idea.  Perhaps you can wrap it in #ifdef 
-__KERNEL_OR_SELFTESTS__?  I can't find any prior art.
+Oh, didn't know it was a thing, is this new? Anyway thanks.
 
-Paolo
-
+-- 
+	Ansuel

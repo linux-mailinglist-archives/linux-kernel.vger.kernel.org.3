@@ -2,177 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DC2351BD80
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 12:50:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7718151BD7D
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 12:50:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356158AbiEEKxf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 06:53:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59260 "EHLO
+        id S1356150AbiEEKyC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 06:54:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356098AbiEEKxa (ORCPT
+        with ESMTP id S1356246AbiEEKx6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 06:53:30 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF67C1704C;
-        Thu,  5 May 2022 03:49:51 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7B291B82C20;
-        Thu,  5 May 2022 10:49:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E01EEC385A8;
-        Thu,  5 May 2022 10:49:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651747789;
-        bh=4wRC8CnMoukaVD03+2+C4OVAxYGmYnDtIw/bitID6EY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=CEw6KXM4WlzscfjsuYVJyYEL3Q63NuQRaiaHJ5ly7tGrQUo6I1oBYRuQcIi9Fj/cG
-         7og9sIAzrtRP/geXRB4SsDzIuzrzt740Ig0ZDJVIqyTh6ueJLpjmtzBblm9W/EkK/B
-         wkVddlNxgXQP5sITTn6ergpsBeE/XAYsql0zwJlNYrqh3WJ07i+BldCtxwy9cJr5KU
-         R2t1tSoAeJ3T0z6AChj71OAVNUMgeEc20190RZlMhJyNUK5w6S6g09hZBANbvHumQF
-         T8OaQgLTqx7hcFdS1vLo6SzlEZu1U2rnSSlk2V9mc9V9oRHxT54QAq66SVlbdIWs1Y
-         I1Hd7/R6BDosw==
-Date:   Thu, 5 May 2022 11:49:43 +0100
-From:   Will Deacon <will@kernel.org>
-To:     Elliot Berman <quic_eberman@quicinc.com>
-Cc:     Juergen Gross <jgross@suse.com>,
-        "Srivatsa S. Bhat (VMware)" <srivatsa@csail.mit.edu>,
-        Alexey Makhalov <amakhalov@vmware.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>,
-        virtualization@lists.linux-foundation.org, x86@kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Murali Nalajala <quic_mnalajal@quicinc.com>,
-        stable@vger.kernel.org
-Subject: Re: [PATCH v2] arm64: paravirt: Use RCU read locks to guard
- stolen_time
-Message-ID: <20220505104942.GA21596@willie-the-truck>
-References: <20220428183536.2866667-1-quic_eberman@quicinc.com>
+        Thu, 5 May 2022 06:53:58 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26F691098
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 03:50:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651747817; x=1683283817;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=gNXW3vYXEa87grD2dJlfiCaeJqqIzvvO2Zq+ZoNHIds=;
+  b=Z/bXXGMM5KDTYokTr4uDn0hUyXLCnfnpW0w8CD7U0P1FHI0s2W6hpnso
+   AcFc80SdTs/2HqeFrCvnodE/W4qL5lrvinT79aviyLMhCF5HoX7unBMIK
+   VXaHKWbB7WzwbV0Z3kQcaQoBWrSpzt0Id/V6RSUGoQvY/cjYVqNwHhVbj
+   331FKUNzssnNHDon1smD82auAVeVfzOvcywQLLGVbobwfvX6ouHOEYYky
+   GP5ex2CdPRJFlDPQLkdBmVpa9kCsbqay+GuH0omUYq12jmWlclYd992eV
+   g2t7ZI9tH0vIi1fqXMfQLrP++rozYEVPZ9tROKAAypeQc5SPwc1XQQe2l
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10337"; a="255546134"
+X-IronPort-AV: E=Sophos;i="5.91,201,1647327600"; 
+   d="scan'208";a="255546134"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2022 03:50:16 -0700
+X-IronPort-AV: E=Sophos;i="5.91,201,1647327600"; 
+   d="scan'208";a="599994948"
+Received: from adgonzal-mobl2.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.254.3.146])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2022 03:50:11 -0700
+Message-ID: <1534b975275b78d61d851eb86faa226fd9be5c7a.camel@intel.com>
+Subject: Re: [PATCH v5 3/3] x86/tdx: Add Quote generation support
+From:   Kai Huang <kai.huang@intel.com>
+To:     Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Wander Lairson Costa <wander@redhat.com>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>,
+        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
+        khalid.elmously@canonical.com, philip.cox@canonical.com,
+        linux-kernel@vger.kernel.org
+Date:   Thu, 05 May 2022 22:50:09 +1200
+In-Reply-To: <40ccd0f0-35a1-5aa7-9e51-25ab196d79e5@linux.intel.com>
+References: <20220501183500.2242828-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+         <20220501183500.2242828-4-sathyanarayanan.kuppuswamy@linux.intel.com>
+         <243e918c523320ba3d216cbe22d24fe5ce33f370.camel@intel.com>
+         <20220503012721.ok7fbvxmnvsr6qny@box.shutemov.name>
+         <58d07b2d-cef5-17ed-9c57-e12fe5665e04@intel.com>
+         <40ccd0f0-35a1-5aa7-9e51-25ab196d79e5@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220428183536.2866667-1-quic_eberman@quicinc.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Elliot,
 
-On Thu, Apr 28, 2022 at 11:35:36AM -0700, Elliot Berman wrote:
-> From: Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>
-> 
-> During hotplug, the stolen time data structure is unmapped and memset.
-> There is a possibility of the timer IRQ being triggered before memset
-> and stolen time is getting updated as part of this timer IRQ handler. This
-> causes the below crash in timer handler -
-> 
->   [ 3457.473139][    C5] Unable to handle kernel paging request at virtual address ffffffc03df05148
->   ...
->   [ 3458.154398][    C5] Call trace:
->   [ 3458.157648][    C5]  para_steal_clock+0x30/0x50
->   [ 3458.162319][    C5]  irqtime_account_process_tick+0x30/0x194
->   [ 3458.168148][    C5]  account_process_tick+0x3c/0x280
->   [ 3458.173274][    C5]  update_process_times+0x5c/0xf4
->   [ 3458.178311][    C5]  tick_sched_timer+0x180/0x384
->   [ 3458.183164][    C5]  __run_hrtimer+0x160/0x57c
->   [ 3458.187744][    C5]  hrtimer_interrupt+0x258/0x684
->   [ 3458.192698][    C5]  arch_timer_handler_virt+0x5c/0xa0
->   [ 3458.198002][    C5]  handle_percpu_devid_irq+0xdc/0x414
->   [ 3458.203385][    C5]  handle_domain_irq+0xa8/0x168
->   [ 3458.208241][    C5]  gic_handle_irq.34493+0x54/0x244
->   [ 3458.213359][    C5]  call_on_irq_stack+0x40/0x70
->   [ 3458.218125][    C5]  do_interrupt_handler+0x60/0x9c
->   [ 3458.223156][    C5]  el1_interrupt+0x34/0x64
->   [ 3458.227560][    C5]  el1h_64_irq_handler+0x1c/0x2c
->   [ 3458.232503][    C5]  el1h_64_irq+0x7c/0x80
->   [ 3458.236736][    C5]  free_vmap_area_noflush+0x108/0x39c
->   [ 3458.242126][    C5]  remove_vm_area+0xbc/0x118
->   [ 3458.246714][    C5]  vm_remove_mappings+0x48/0x2a4
->   [ 3458.251656][    C5]  __vunmap+0x154/0x278
->   [ 3458.255796][    C5]  stolen_time_cpu_down_prepare+0xc0/0xd8
->   [ 3458.261542][    C5]  cpuhp_invoke_callback+0x248/0xc34
->   [ 3458.266842][    C5]  cpuhp_thread_fun+0x1c4/0x248
->   [ 3458.271696][    C5]  smpboot_thread_fn+0x1b0/0x400
->   [ 3458.276638][    C5]  kthread+0x17c/0x1e0
->   [ 3458.280691][    C5]  ret_from_fork+0x10/0x20
-> 
-> As a fix, introduce rcu lock to update stolen time structure.
-> 
-> Fixes: 75df529bec91 ("arm64: paravirt: Initialize steal time when cpu is online")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>
-> Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
-> ---
-> Changes since v1: https://lore.kernel.org/all/20220420204417.155194-1-quic_eberman@quicinc.com/
->  - Use RCU instead of disabling interrupts
-> 
->  arch/arm64/kernel/paravirt.c | 24 +++++++++++++++++++-----
->  1 file changed, 19 insertions(+), 5 deletions(-)
+> +       /* Submit GetQuote Request */
+> +       ret = tdx_get_quote_hypercall(buf);
+> +       if (ret) {
+> +               pr_err("GetQuote hypercall failed, status:%lx\n", ret);
+> +               ret = -EIO;
+> +               goto free_entry;
+> +       }
+> +
+> +       /* Add current quote entry to quote_list */
+> +       add_quote_entry(entry);
+> +
+> +       /* Wait for attestation completion */
+> +       ret = wait_for_completion_interruptible(&entry->compl);
+> +       if (ret < 0) {
+> +               ret = -EIO;
+> +               goto del_entry;
+> +       }
 
-I applied this locally, but sparse is complaining because the 'kaddr' field
-of 'struct pv_time_stolen_time_region' is missing an '__rcu' annotation:
+This is misuse of wait_for_completion_interruptible(). 
 
- | arch/arm64/kernel/paravirt.c:112:9: warning: cast adds address space '__rcu' to expression [sparse]
- | arch/arm64/kernel/paravirt.c:112:9: error: incompatible types in comparison expression (different address spaces): [sparse]
- | arch/arm64/kernel/paravirt.c:112:9:    struct pvclock_vcpu_stolen_time [noderef] __rcu * [sparse]
- | arch/arm64/kernel/paravirt.c:112:9:    struct pvclock_vcpu_stolen_time * [sparse]
- | arch/arm64/kernel/paravirt.c:67:17: warning: cast adds address space '__rcu' to expression [sparse]
- | arch/arm64/kernel/paravirt.c:67:17: error: incompatible types in comparison expression (different address spaces): [sparse]
- | arch/arm64/kernel/paravirt.c:67:17:    struct pvclock_vcpu_stolen_time [noderef] __rcu * [sparse]
- | arch/arm64/kernel/paravirt.c:67:17:    struct pvclock_vcpu_stolen_time * [sparse]
- | arch/arm64/kernel/paravirt.c:88:9: warning: cast adds address space '__rcu' to expression [sparse]
- | arch/arm64/kernel/paravirt.c:88:9: error: incompatible types in comparison expression (different address spaces): [sparse]
- | arch/arm64/kernel/paravirt.c:88:9:    struct pvclock_vcpu_stolen_time [noderef] __rcu * [sparse]
- | arch/arm64/kernel/paravirt.c:88:9:    struct pvclock_vcpu_stolen_time * [sparse]
+xxx_interruptible() essentially means this operation can be interrupted by
+signal.  Using xxx_interruptible() in driver IOCTL essentially means when it
+returns due to signal, the IOCTL should return -EINTR to let userspace know that
+your application received some signal needs handling, and this IOCTL isn't
+finished and you should retry.  So here we should return -EINTR (and cleanup all
+staff has been done) when wait_for_completion_interruptible() returns -
+ERESTARTSYS (in fact, it returns only -ERESTARTSYS or 0).
 
-The diff below seems to make it happy again, but please can you take a
-look?
+Since normally userspace application just ignore signals, and in this particular
+case, asking userspace to retry just makes things more complicated to handle, I
+think you can just use wait_for_completion_killable(), which only returns when
+the application receives signal that it is going to be killed.
 
-Cheers,
+> +
+> +       /* Copy output data back to user buffer */
+> +       if (copy_to_user((void __user *)quote_req.buf, buf->vmaddr, 
+> quote_req.len))
+> +               ret = -EFAULT;
+> +
+> +del_entry:
+> +       del_quote_entry(entry);
+> +free_entry:
+> +       free_quote_entry(entry);
 
-Will
+As I (and Isaku) mentioned before, when wait_for_completion_killable() returns
+with error, you cannot just convert the buffer to private and free it.  The VMM
+is still owning it (IN_FLIGHT).
 
---->8
+One way to handle is you can put those buffers that are still owned by VMM to a
+new list, and have some kernel thread to periodically check buffer's status and
+free those are already released by VMM.  I haven't thought thoroughly, so maybe
+there's better way to handle, though.
 
-diff --git a/arch/arm64/kernel/paravirt.c b/arch/arm64/kernel/paravirt.c
-index e724ea3d86f0..57c7c211f8c7 100644
---- a/arch/arm64/kernel/paravirt.c
-+++ b/arch/arm64/kernel/paravirt.c
-@@ -35,7 +35,7 @@ static u64 native_steal_clock(int cpu)
- DEFINE_STATIC_CALL(pv_steal_clock, native_steal_clock);
- 
- struct pv_time_stolen_time_region {
--       struct pvclock_vcpu_stolen_time *kaddr;
-+       struct pvclock_vcpu_stolen_time __rcu *kaddr;
- };
- 
- static DEFINE_PER_CPU(struct pv_time_stolen_time_region, stolen_time_region);
-@@ -84,8 +84,7 @@ static int stolen_time_cpu_down_prepare(unsigned int cpu)
-        if (!reg->kaddr)
-                return 0;
- 
--       kaddr = reg->kaddr;
--       rcu_assign_pointer(reg->kaddr, NULL);
-+       kaddr = rcu_replace_pointer(reg->kaddr, NULL, true);
-        synchronize_rcu();
-        memunmap(kaddr);
- 
-@@ -116,8 +115,8 @@ static int stolen_time_cpu_online(unsigned int cpu)
-                return -ENOMEM;
-        }
- 
--       if (le32_to_cpu(reg->kaddr->revision) != 0 ||
--           le32_to_cpu(reg->kaddr->attributes) != 0) {
-+       if (le32_to_cpu(kaddr->revision) != 0 ||
-+           le32_to_cpu(kaddr->attributes) != 0) {
-                pr_warn_once("Unexpected revision or attributes in stolen time data\n");
-                return -ENXIO;
-        }
+-- 
+Thanks,
+-Kai
+
 

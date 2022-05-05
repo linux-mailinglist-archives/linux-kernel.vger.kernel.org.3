@@ -2,198 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B26E051C0A6
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 15:27:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5963451C0AE
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 15:29:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354772AbiEENb0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 09:31:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42136 "EHLO
+        id S1379486AbiEENby (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 09:31:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379429AbiEENbY (ORCPT
+        with ESMTP id S1377471AbiEENbu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 09:31:24 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 388FC56C2C
-        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 06:27:41 -0700 (PDT)
-X-UUID: 8f401d8812624500b6e2ab25dd9203ab-20220505
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.4,REQID:a8d80591-ae10-4df5-a2b0-0dfe6c76701c,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:-20,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,AC
-        TION:release,TS:-20
-X-CID-META: VersionHash:faefae9,CLOUDID:da8f5316-2e53-443e-b81a-655c13977218,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,File:nil,QS:0,BEC:nil
-X-UUID: 8f401d8812624500b6e2ab25dd9203ab-20220505
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
-        (envelope-from <miles.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 172141199; Thu, 05 May 2022 21:27:34 +0800
-Received: from mtkmbs07n1.mediatek.inc (172.21.101.16) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Thu, 5 May 2022 21:27:33 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Thu, 5 May 2022 21:27:32 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
- mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.792.3 via Frontend Transport; Thu, 5 May 2022 21:27:32 +0800
-From:   Miles Chen <miles.chen@mediatek.com>
-To:     Yong Wu <yong.wu@mediatek.com>, Joerg Roedel <joro@8bytes.org>,
-        "Will Deacon" <will@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        "Mauro Carvalho Chehab" <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>
-CC:     Miles Chen <miles.chen@mediatek.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Joerg Roedel <jroedel@suse.de>,
-        <iommu@lists.linux-foundation.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v3] iommu/mediatek: Fix NULL pointer dereference when printing dev_name
-Date:   Thu, 5 May 2022 21:27:30 +0800
-Message-ID: <20220505132731.21628-1-miles.chen@mediatek.com>
-X-Mailer: git-send-email 2.18.0
+        Thu, 5 May 2022 09:31:50 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C343856F82;
+        Thu,  5 May 2022 06:28:10 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 79D65B82D55;
+        Thu,  5 May 2022 13:28:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B996AC385B0;
+        Thu,  5 May 2022 13:28:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651757288;
+        bh=LgiSSpGi9/Izwl+t6cGvmeuD0laNo4VcoH7MXWIY+cA=;
+        h=In-Reply-To:References:Subject:To:Cc:From:Date:From;
+        b=c5ep4bMKMm5WTVUQG9oPbSPBhr7yk4Gm+wM3dMTXytySi9kit9GM2X2/ahS6qcJpT
+         ILksp8TLJbjtGswmNAO03FfME1Xz1N1HZe9rARY5mFt31Fj6s0o2fjc7f5mALFj2Nw
+         uvlrNSs2cFUjReqcMSPsil/0UqUd+17qQTxfInB7uOfygEp7EKwEFTO3yeJn9b42UV
+         0T11vaUVIoUNsmK/lQrySDnpOhpaFa14KcgMsuQT6k483iCslvdt1nJmFajmvJccuI
+         +I3IBZGWW7sCo6XUe83+7ry+B9UeutQEpP2pSUYP7JjDfzZiVnSrD2fqwB2wsFPBQ/
+         r3k/XtmbbHQKg==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20220505123803.17553-1-carlos.fernandez@technica-engineering.de>
+References: <[PATCH] net/macsec copy salt to MACSec ctx for XPN> <20220505123803.17553-1-carlos.fernandez@technica-engineering.de>
+Subject: Re: [PATCH] net: macsec: XPN Salt copied before passing offload context
+To:     Carlos Fernandez <carlos.escuin@gmail.com>,
+        carlos.fernandez@technica-enineering.de, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, pabeni@redhat.com
+Cc:     Carlos Fernandez <carlos.fernandez@technica-engineering.de>
+From:   Antoine Tenart <atenart@kernel.org>
+Message-ID: <165175728541.217313.17093503108252590709@kwain>
+Date:   Thu, 05 May 2022 15:28:05 +0200
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When larbdev is NULL (in the case I hit, the node is incorrectly set
-iommus = <&iommu NUM>), it will cause device_link_add() fail and
-kernel crashes when we try to print dev_name(larbdev).
+Hello,
 
-Let's fail the probe if a larbdev is NULL to avoid invalid inputs from
-dts.
+(Note: please use "[PATCH net]" for fixes and "[PATCH net-next]" for
+improvements in the subject when submitting patches to the networking
+subsystem).
 
-It should work for normal correct setting and avoid the crash caused
-by my incorrect setting.
+Quoting Carlos Fernandez (2022-05-05 14:38:03)
+> When macsec offloading is used with XPN, before mdo_add_rxsa
+> and mdo_add_txsa functions are called, the key salt is not
+> copied to the macsec context struct.
+>=20
+> Fix by copying salt to context struct before calling the
+> offloading functions.
 
-Error log:
-[   18.189042][  T301] Unable to handle kernel NULL pointer dereference at virtual address 0000000000000050
-...
-[   18.344519][  T301] pstate: a0400005 (NzCv daif +PAN -UAO)
-[   18.345213][  T301] pc : mtk_iommu_probe_device+0xf8/0x118 [mtk_iommu]
-[   18.346050][  T301] lr : mtk_iommu_probe_device+0xd0/0x118 [mtk_iommu]
-[   18.346884][  T301] sp : ffffffc00a5635e0
-[   18.347392][  T301] x29: ffffffc00a5635e0 x28: ffffffd44a46c1d8
-[   18.348156][  T301] x27: ffffff80c39a8000 x26: ffffffd44a80cc38
-[   18.348917][  T301] x25: 0000000000000000 x24: ffffffd44a80cc38
-[   18.349677][  T301] x23: ffffffd44e4da4c6 x22: ffffffd44a80cc38
-[   18.350438][  T301] x21: ffffff80cecd1880 x20: 0000000000000000
-[   18.351198][  T301] x19: ffffff80c439f010 x18: ffffffc00a50d0c0
-[   18.351959][  T301] x17: ffffffffffffffff x16: 0000000000000004
-[   18.352719][  T301] x15: 0000000000000004 x14: ffffffd44eb5d420
-[   18.353480][  T301] x13: 0000000000000ad2 x12: 0000000000000003
-[   18.354241][  T301] x11: 00000000fffffad2 x10: c0000000fffffad2
-[   18.355003][  T301] x9 : a0d288d8d7142d00 x8 : a0d288d8d7142d00
-[   18.355763][  T301] x7 : ffffffd44c2bc640 x6 : 0000000000000000
-[   18.356524][  T301] x5 : 0000000000000080 x4 : 0000000000000001
-[   18.357284][  T301] x3 : 0000000000000000 x2 : 0000000000000005
-[   18.358045][  T301] x1 : 0000000000000000 x0 : 0000000000000000
-[   18.360208][  T301] Hardware name: MT6873 (DT)
-[   18.360771][  T301] Call trace:
-[   18.361168][  T301]  dump_backtrace+0xf8/0x1f0
-[   18.361737][  T301]  dump_stack_lvl+0xa8/0x11c
-[   18.362305][  T301]  dump_stack+0x1c/0x2c
-[   18.362816][  T301]  mrdump_common_die+0x184/0x40c [mrdump]
-[   18.363575][  T301]  ipanic_die+0x24/0x38 [mrdump]
-[   18.364230][  T301]  atomic_notifier_call_chain+0x128/0x2b8
-[   18.364937][  T301]  die+0x16c/0x568
-[   18.365394][  T301]  __do_kernel_fault+0x1e8/0x214
-[   18.365402][  T301]  do_page_fault+0xb8/0x678
-[   18.366934][  T301]  do_translation_fault+0x48/0x64
-[   18.368645][  T301]  do_mem_abort+0x68/0x148
-[   18.368652][  T301]  el1_abort+0x40/0x64
-[   18.368660][  T301]  el1h_64_sync_handler+0x54/0x88
-[   18.368668][  T301]  el1h_64_sync+0x68/0x6c
-[   18.368673][  T301]  mtk_iommu_probe_device+0xf8/0x118 [mtk_iommu]
-...
+The commit message and title are referring to the XPN salt only, but
+there is another XPN specific entry being moved by this commit. I would
+suggest to update the commit title to:
+"net: macsec: retrieve the XPN attributes before offloading"
 
-Cc: Robin Murphy <robin.murphy@arm.com>
-Cc: Yong Wu <yong.wu@mediatek.com>
-Reported-by: kernel test robot <lkp@intel.com>
-Fixes: 635319a4a744 ("media: iommu/mediatek: Add device_link between the consumer and the larb devices")
-Signed-off-by: Miles Chen <miles.chen@mediatek.com>
+> Fixes: 48ef50fa866a ("macsec: Netlink support of XPN cipher suites")
+> Signed-off-by: Carlos Fernandez <carlos.fernandez@technica-engineering.de>
+> ---
+>  drivers/net/macsec.c | 30 ++++++++++++++++--------------
+>  1 file changed, 16 insertions(+), 14 deletions(-)
+>=20
+> diff --git a/drivers/net/macsec.c b/drivers/net/macsec.c
+> index 832f09ac075e..4f2bd3d722c3 100644
+> --- a/drivers/net/macsec.c
+> +++ b/drivers/net/macsec.c
+> @@ -1804,6 +1804,14 @@ static int macsec_add_rxsa(struct sk_buff *skb, st=
+ruct genl_info *info)
+> =20
+>         rx_sa->sc =3D rx_sc;
+> =20
+> +       if (secy->xpn) {
+> +               rx_sa->ssci =3D nla_get_ssci(tb_sa[MACSEC_SA_ATTR_SSCI]);
+> +               nla_memcpy(rx_sa->key.salt.bytes, tb_sa[MACSEC_SA_ATTR_SA=
+LT],
+> +                          MACSEC_SALT_LEN);
+> +       }
+> +
+> +       nla_memcpy(rx_sa->key.id, tb_sa[MACSEC_SA_ATTR_KEYID], MACSEC_KEY=
+ID_LEN);
 
----
+Is the key id part related to the XPN offloading not working?
 
-Change since v2
-probe fail if larbdev is NULL so we do not have to worry about release logic
+Otherwise, it makes sense to copy all attributes before offloading the
+operation but this should probably be in its own patch targeted at
+net-next. (Same for the txsa part).
 
-Change since v1
-fix a build warning reported by kernel test robot https://lore.kernel.org/lkml/202204231446.IYKdZ674-lkp@intel.com/
+>         /* If h/w offloading is available, propagate to the device */
+>         if (macsec_is_offloaded(netdev_priv(dev))) {
+>                 const struct macsec_ops *ops;
+> @@ -1826,13 +1834,6 @@ static int macsec_add_rxsa(struct sk_buff *skb, st=
+ruct genl_info *info)
+>                         goto cleanup;
+>         }
+> =20
+> -       if (secy->xpn) {
+> -               rx_sa->ssci =3D nla_get_ssci(tb_sa[MACSEC_SA_ATTR_SSCI]);
+> -               nla_memcpy(rx_sa->key.salt.bytes, tb_sa[MACSEC_SA_ATTR_SA=
+LT],
+> -                          MACSEC_SALT_LEN);
+> -       }
+> -
+> -       nla_memcpy(rx_sa->key.id, tb_sa[MACSEC_SA_ATTR_KEYID], MACSEC_KEY=
+ID_LEN);
+>         rcu_assign_pointer(rx_sc->sa[assoc_num], rx_sa);
+> =20
+>         rtnl_unlock();
 
----
- drivers/iommu/mtk_iommu.c    | 6 ++++++
- drivers/iommu/mtk_iommu_v1.c | 7 +++++++
- 2 files changed, 13 insertions(+)
-
-diff --git a/drivers/iommu/mtk_iommu.c b/drivers/iommu/mtk_iommu.c
-index 6fd75a60abd6..155acfbce44f 100644
---- a/drivers/iommu/mtk_iommu.c
-+++ b/drivers/iommu/mtk_iommu.c
-@@ -572,6 +572,9 @@ static struct iommu_device *mtk_iommu_probe_device(struct device *dev)
- 	 * All the ports in each a device should be in the same larbs.
- 	 */
- 	larbid = MTK_M4U_TO_LARB(fwspec->ids[0]);
-+	if (larbid >= MTK_LARB_NR_MAX)
-+		return ERR_PTR(-EINVAL);
-+
- 	for (i = 1; i < fwspec->num_ids; i++) {
- 		larbidx = MTK_M4U_TO_LARB(fwspec->ids[i]);
- 		if (larbid != larbidx) {
-@@ -581,6 +584,9 @@ static struct iommu_device *mtk_iommu_probe_device(struct device *dev)
- 		}
- 	}
- 	larbdev = data->larb_imu[larbid].dev;
-+	if (!larbdev)
-+		return ERR_PTR(-EINVAL);
-+
- 	link = device_link_add(dev, larbdev,
- 			       DL_FLAG_PM_RUNTIME | DL_FLAG_STATELESS);
- 	if (!link)
-diff --git a/drivers/iommu/mtk_iommu_v1.c b/drivers/iommu/mtk_iommu_v1.c
-index ecff800656e6..74563f689fbd 100644
---- a/drivers/iommu/mtk_iommu_v1.c
-+++ b/drivers/iommu/mtk_iommu_v1.c
-@@ -80,6 +80,7 @@
- /* MTK generation one iommu HW only support 4K size mapping */
- #define MT2701_IOMMU_PAGE_SHIFT			12
- #define MT2701_IOMMU_PAGE_SIZE			(1UL << MT2701_IOMMU_PAGE_SHIFT)
-+#define MT2701_LARB_NR_MAX			3
- 
- /*
-  * MTK m4u support 4GB iova address space, and only support 4K page
-@@ -457,6 +458,9 @@ static struct iommu_device *mtk_iommu_probe_device(struct device *dev)
- 
- 	/* Link the consumer device with the smi-larb device(supplier) */
- 	larbid = mt2701_m4u_to_larb(fwspec->ids[0]);
-+	if (larbid >= MT2701_LARB_NR_MAX)
-+		return ERR_PTR(-EINVAL);
-+
- 	for (idx = 1; idx < fwspec->num_ids; idx++) {
- 		larbidx = mt2701_m4u_to_larb(fwspec->ids[idx]);
- 		if (larbid != larbidx) {
-@@ -467,6 +471,9 @@ static struct iommu_device *mtk_iommu_probe_device(struct device *dev)
- 	}
- 
- 	larbdev = data->larb_imu[larbid].dev;
-+	if (!larbdev)
-+		return ERR_PTR(-EINVAL);
-+
- 	link = device_link_add(dev, larbdev,
- 			       DL_FLAG_PM_RUNTIME | DL_FLAG_STATELESS);
- 	if (!link)
--- 
-2.18.0
-
+Thanks!
+Antoine

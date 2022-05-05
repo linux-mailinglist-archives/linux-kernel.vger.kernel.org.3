@@ -2,78 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E04A51BAF5
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 10:49:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECDC351BAF9
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 10:50:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350483AbiEEIxT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 04:53:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34524 "EHLO
+        id S239689AbiEEIyI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 04:54:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232713AbiEEIxR (ORCPT
+        with ESMTP id S239091AbiEEIxx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 04:53:17 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0782B4AE0F;
-        Thu,  5 May 2022 01:49:39 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Thu, 5 May 2022 04:53:53 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05605C4B;
+        Thu,  5 May 2022 01:50:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id B9E39218ED;
-        Thu,  5 May 2022 08:49:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1651740577; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=G98mln19ZgjcWOJ1EpprkkSYVYDttaLj17m3CPfaya0=;
-        b=fP+Z5rt/gxgHBIrKtnF8r6iXxmrS8OqhX5a0Jd2K/jAFSnh/hnzl6Y23ku2iKW7Ak3Wgjg
-        CP3DhBzzJdO+V4n/WY0mmOUNdrPcxAqbnRRr0STjn+uqGG7cUEr8zh2/MzNC2A1ONdESvN
-        6n0luq29P6mtKdlN0jkz8emg+8ozKdU=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1651740577;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=G98mln19ZgjcWOJ1EpprkkSYVYDttaLj17m3CPfaya0=;
-        b=f38ImMI5VE2CUGPJDEK5AU0qXgyiUT6TFQUq4oabCBu3l+IwipxnyrFPd6Vtr3017BXXde
-        04t5xS23Keci0uCQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 8C7B713B11;
-        Thu,  5 May 2022 08:49:37 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id gXkCIaGPc2LoGAAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Thu, 05 May 2022 08:49:37 +0000
-Message-ID: <e1797321-d901-45dc-713f-7f706147c341@suse.de>
-Date:   Thu, 5 May 2022 10:49:36 +0200
+        by ams.source.kernel.org (Postfix) with ESMTPS id B39EAB82C12;
+        Thu,  5 May 2022 08:50:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 4BC47C385AC;
+        Thu,  5 May 2022 08:50:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651740612;
+        bh=P4arw9lfvJgSArNnU3qzYoGZZpvEIT2ZGcRCPJ4Sm/Y=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=krXzWQD6GGNm2+N7gQthvdm56Oai6atR3npFNdyde9+DXjrwaVqaw55AvDgh+tskY
+         6HhmAaTZYcOJP751H4147oAJqPhaMsyMeE2+ueY+lpwvN58vst8aTBfyeOBuqe8TWC
+         vbdqkoDyP+pdLYkvTbCsKGplTLElDDp17Zapd4bh3rZR0H56Mz1XcBe/xGmFn/NjFe
+         iMwhAisyYCnjhbx7jde6fR93h1dLVo6UmPh+hzFN/dsekHz648UxbqVx69bkDUaf7l
+         uP8AlxAG6buTIY0fZJxzUo5GHO+sh4B7f73XFJyeq9TDkkOmUVUy6NL9Sj6wnSQUo1
+         EeDXxMMQSGxQw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 2CF57F03848;
+        Thu,  5 May 2022 08:50:12 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH 2/3] fbdev/simplefb: Cleanup fb_info in .fb_destroy rather
- than .remove
-Content-Language: en-US
-To:     Javier Martinez Canillas <javierm@redhat.com>,
-        linux-kernel@vger.kernel.org
-Cc:     Daniel Vetter <daniel.vetter@ffwll.ch>,
-        linux-fbdev@vger.kernel.org, Helge Deller <deller@gmx.de>,
-        dri-devel@lists.freedesktop.org,
-        Hans de Goede <hdegoede@redhat.com>
-References: <20220504215151.55082-1-javierm@redhat.com>
- <20220504215722.56970-1-javierm@redhat.com>
- <974f4d00-89bc-a2da-6d65-ca4207300794@suse.de>
- <d9a5cb30-2d9b-50b5-d287-0ead0fe252f3@redhat.com>
- <78167587-fd2e-354c-485b-db4ee9251178@suse.de>
- <237c7fa0-744d-97c2-2bba-3f714d6c2e9d@redhat.com>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <237c7fa0-744d-97c2-2bba-3f714d6c2e9d@redhat.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------bfNxQvqkcvpizuhcxOBwiAnc"
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net] NFC: netlink: fix sleep in atomic bug when firmware
+ download timeout
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <165174061217.13051.18017190469574513763.git-patchwork-notify@kernel.org>
+Date:   Thu, 05 May 2022 08:50:12 +0000
+References: <20220504055847.38026-1-duoming@zju.edu.cn>
+In-Reply-To: <20220504055847.38026-1-duoming@zju.edu.cn>
+To:     Duoming Zhou <duoming@zju.edu.cn>
+Cc:     krzysztof.kozlowski@linaro.org, linux-kernel@vger.kernel.org,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, netdev@vger.kernel.org
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -82,97 +59,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------bfNxQvqkcvpizuhcxOBwiAnc
-Content-Type: multipart/mixed; boundary="------------MF9XvBTem0bHn0z8Qv0sXD0P";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Javier Martinez Canillas <javierm@redhat.com>,
- linux-kernel@vger.kernel.org
-Cc: Daniel Vetter <daniel.vetter@ffwll.ch>, linux-fbdev@vger.kernel.org,
- Helge Deller <deller@gmx.de>, dri-devel@lists.freedesktop.org,
- Hans de Goede <hdegoede@redhat.com>
-Message-ID: <e1797321-d901-45dc-713f-7f706147c341@suse.de>
-Subject: Re: [PATCH 2/3] fbdev/simplefb: Cleanup fb_info in .fb_destroy rather
- than .remove
-References: <20220504215151.55082-1-javierm@redhat.com>
- <20220504215722.56970-1-javierm@redhat.com>
- <974f4d00-89bc-a2da-6d65-ca4207300794@suse.de>
- <d9a5cb30-2d9b-50b5-d287-0ead0fe252f3@redhat.com>
- <78167587-fd2e-354c-485b-db4ee9251178@suse.de>
- <237c7fa0-744d-97c2-2bba-3f714d6c2e9d@redhat.com>
-In-Reply-To: <237c7fa0-744d-97c2-2bba-3f714d6c2e9d@redhat.com>
+Hello:
 
---------------MF9XvBTem0bHn0z8Qv0sXD0P
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+This patch was applied to netdev/net.git (master)
+by Paolo Abeni <pabeni@redhat.com>:
 
-SGkNCg0KQW0gMDUuMDUuMjIgdW0gMTA6Mjggc2NocmllYiBKYXZpZXIgTWFydGluZXogQ2Fu
-aWxsYXM6DQo+IEhlbGxvIFRob21hcywNCj4gDQo+IE9uIDUvNS8yMiAxMDowNSwgVGhvbWFz
-IFppbW1lcm1hbm4gd3JvdGU6DQo+IA0KPiBbc25pcF0NCj4gDQo+Pj4NCj4+PiBJbiBvdGhl
-ciB3b3JkcywgaW4gbW9zdCBjYXNlcyAoaS5lOiBvbmx5IGZiY29uIGJvdW5kIHRvIHRoZSBm
-YmRldikNCj4+PiB0aGUgZHJpdmVyJ3MgcmVtb3ZhbC8gZGV2aWNlIHVuYmluZCBhbmQgdGhl
-IG1lbW9yeSByZWxlYXNlIHdpbGwgYmUNCj4+PiBhdCB0aGUgc2FtZSB0aW1lLg0KPj4+DQo+
-Pg0KPj4gV2UncmUgb25lIHRoZSBzYW1lIHBhZ2UgaGVyZSwgYnV0IGl0J3Mgc3RpbGwgc29y
-dCBvZiBhIG15c3RlcnkgdG8gbWUgd2h5DQo+PiB0aGlzIHdvcmtzIGluIHByYWN0aWNlLg0K
-Pj4NCj4+IEknbSBzcGVjaWZpY2FsbHkgdGFsa2luZyBhYm91dCBwY2lfcmVxdWVzdF9yZWdp
-b25zKCkgaW4gdm13Z2Z4IFsxXS4gSUlSQw0KPj4gdGhpcyB3b3VsZCBmYWlsIGlmIHNpbXBs
-ZWZiIHN0aWxsIG93bnMgdGhlIGZyYW1lYnVmZmVyIHJlZ2lvbi4gTG90cyBvZg0KPj4gc3lz
-dGVtcyBydW4gUGx5bW91dGggZHVyaW5nIGJvb3QgYW5kIHRoaXMgc2hvdWxkIHJlc3VsdCBp
-biBmYWlsdXJlcw0KPj4gb2NjYXNpb25hbGx5LiBTdGlsbCwgd2UgbmV2ZXIgaGVhcmQgYWJv
-dXQgYW55dGhpbmcuDQo+Pg0KPiANCj4gWWVzLCBJIHRoaW5rIGlzIGJlY2F1c2UgUGx5bW91
-dGggSUlVQyB3YWl0cyBmb3IgYSAvZGV2L2RyaS9jYXJkPyB0byBiZQ0KPiBwcmVzZW50IGFu
-ZCBvbmx5IHVzZXMgYSAvZGV2L2ZiPyBhcyBhIGZhbGxiYWNrIGlmIGEgdGltZW91dCBleHBp
-cmVzLg0KDQpPaCwgcmlnaHQhIFRoZSBpbmZhbW91cyBwbHltb3V0aCB0aW1lb3V0LiAnc2xl
-ZXAoMzApJyBpcyB0aGUgc3dpc3MtYXJteSANCmtuaWZlIG9mIGNvbmN1cnJlbnQgcHJvZ3Jh
-bW1pbmcuIDspDQoNCkJ1dCBJJ20gbm90IGJsYW1pbmcgYW55b25lLiBUaGVyZSBhcmUgc2l0
-dWF0aW9ucyB3aGVyZSBub3RoaW5nIGVsc2UgDQpoZWxwcy4gUGx5bW91dGggcmVhbGx5IGNh
-bid0IGRvIGFueXRoaW5nIGVsc2UgaGVyZS4gV2UndmUgcmVjZWl2ZWQgDQpyZXBvcnRzIGZv
-ciBnZngtaGFuZG92ZXIgYnVncyB3aGVuIHRoZSB0aW1lb3V0IGV4cGlyZWQgYW5kIHBseW1v
-dXRoIHVzZXMgDQp0aGUgZmJkZXYuIFRoZSBzeXN0ZW0gZ290IHN0dWNrIHRoZW4gYmVjYXVz
-ZSBvZiBmYmRldiBJSVJDLg0KDQpCZXN0IHJlZ2FyZHMNClRob21hcw0KDQo+IA0KPiBBdCBs
-ZWFzdCBpbiBGZWRvcmEgKGV2ZW4gYmVmb3JlIHRoZSBlZmlmYiAtPiBzaW1wbGVkcm0gY2hh
-bmdlKSBpdCB3aWxsDQo+IHVzZSBLTVMvRFJNIHNpbmNlIHRoZSBEUk0ga2VybmVsIG1vZHVs
-ZSBmb3IgdGhlIGdyYXBoaWNzIGRldmljZSBpbiB0aGUNCj4gbWFjaGluZSB3b3VsZCBiZSBp
-biB0aGUgaW50aXJkLg0KPiANCj4gU28gZWZpZmIgd2FzIG9ubHkgdXNlZCBmb3IgZmJjb24g
-YW5kIHBseW1vdXRoIHdvdWxkIG9ubHkgdXNlIERSTS9LTVMNCj4gYW5kIG5vdCBpdHMgZmJk
-ZXYgYmFja2VuZC4NCj4gDQo+IFRoaXMgc2VlbXMgdG8gYmUgc29ydCBvZiBhIGNvcm5lciBj
-YXNlIHdoZW4geW91IGhhdmUge2VmaSxzaW1wbGV9ZmINCj4gaW4gdGhlIGVhcmx5IGJvb3Qg
-YnV0IHRoZSByZWFsIERSTSBtb2R1bGUgb25seSBpbiB0aGUgcm9vdGZzIGFmdGVyIHRoZQ0K
-PiBpbml0cmQgaGFzIGRvbmUgYSBwaXZvdF9yb290KDIpLg0KPiAgIA0KPj4gT2YgY291cnNl
-LCBpdCdzIGFsd2F5cyBiZWVuIGJyb2tlbiAoZXZlbiBsb25nIGJlZm9yZSByZWFsIGZiZGV2
-DQo+PiBob3R1bnBsdWdnaW5nKS4gU3dpdGNoaW5nIHRvIHNpbXBsZWRybSByZXNvbHZlcyB0
-aGUgcHJvYmxlbS4NCj4+DQo+IA0KPiBJbmRlZWQuIE15IG9waW5pb24gYWZ0ZXIgZGVhbGlu
-ZyB3aXRoIHRoZXNlIGZiZGV2IHByb2JsZW1zIGlzIHRoYXQgd2UNCj4gc2hvdWxkbid0IHRy
-eSB0byBmaXggYWxsIHBvc3NpYmxlIGNvcm5lciBjYXNlcyBhbmQganVzdCB0cnkgdG8gZ2V0
-IHJpZA0KPiBvZiBmYmRldiBhcyBzb29uIGFzIHBvc3NpYmxlLg0KPiAgIC0tDQo+IEJlc3Qg
-cmVnYXJkcywNCj4gDQo+IEphdmllciBNYXJ0aW5leiBDYW5pbGxhcw0KPiBMaW51eCBFbmdp
-bmVlcmluZw0KPiBSZWQgSGF0DQo+IA0KDQotLSANClRob21hcyBaaW1tZXJtYW5uDQpHcmFw
-aGljcyBEcml2ZXIgRGV2ZWxvcGVyDQpTVVNFIFNvZnR3YXJlIFNvbHV0aW9ucyBHZXJtYW55
-IEdtYkgNCk1heGZlbGRzdHIuIDUsIDkwNDA5IE7DvHJuYmVyZywgR2VybWFueQ0KKEhSQiAz
-NjgwOSwgQUcgTsO8cm5iZXJnKQ0KR2VzY2jDpGZ0c2bDvGhyZXI6IEl2byBUb3Rldg0K
+On Wed,  4 May 2022 13:58:47 +0800 you wrote:
+> There are sleep in atomic bug that could cause kernel panic during
+> firmware download process. The root cause is that nlmsg_new with
+> GFP_KERNEL parameter is called in fw_dnld_timeout which is a timer
+> handler. The call trace is shown below:
+> 
+> BUG: sleeping function called from invalid context at include/linux/sched/mm.h:265
+> Call Trace:
+> kmem_cache_alloc_node
+> __alloc_skb
+> nfc_genl_fw_download_done
+> call_timer_fn
+> __run_timers.part.0
+> run_timer_softirq
+> __do_softirq
+> ...
+> 
+> [...]
 
---------------MF9XvBTem0bHn0z8Qv0sXD0P--
+Here is the summary with links:
+  - [net] NFC: netlink: fix sleep in atomic bug when firmware download timeout
+    https://git.kernel.org/netdev/net/c/4071bf121d59
 
---------------bfNxQvqkcvpizuhcxOBwiAnc
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
------BEGIN PGP SIGNATURE-----
 
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmJzj6AFAwAAAAAACgkQlh/E3EQov+AS
-bRAA0XI+TZwItuDpnm0hiVI3S04EtviZIWLBCjC9Z3Sv2jm60QyRUUv+S8+Up5EHoBCMGhy2kD40
-EGtnMIHqnCB9pahLx/yvy//bQ1lD6kIfRHQgqD0REZPxjf+WD7vVZ3jLdO3YqSOvxc7pamS3jcWr
-yd6lyjEpuYfwa8GA+n2stNk9w97SaRC8xRzrKw2SYY3dEgW+RJL6NwCD1DOMvnvrFj2+hN6LuWck
-lxw5JqT+i7zHRVeCGCMXBy9VL66+ZCnyYhwpAlrOjpTnV+YYT32Mk5y53kh+SYOmT3U3PJmtYdtN
-HwT4poXg2pQSs5WBbqW8qUUZJzj9nv/3Wo3j0G4GjjPECn49d6KMSHt2lqDVJbJoVaMNdmvbZ/5l
-1HTLiJblC7oszL+fqHbBArdQRCjwAFmiWXyfz4lBHhOT6VlEOGljEHVo2bVZ9u2DHu1EAeZVGUU2
-N8zw88QxwLV4dMUcTkEJ+mwGTw7Ois5KGqxLAeDxDHUqgIc+5GgPE5j6puj+rI/27GmB7xvhEVRv
-okR5eJLymIY2hHvIdF+1bDJmR2CmBbrRYzGrOqR/jQ4YCdfG2uYyG0AA5QX4Fsi/kbZ08HYk4H/l
-U/NmGFOmF1aygCAFSdzTlnav4eEgMpVdNWKBQmjuYohPr4MP+hbROebysqHbJo295u6UwUh8TSTZ
-t7I=
-=b7m2
------END PGP SIGNATURE-----
-
---------------bfNxQvqkcvpizuhcxOBwiAnc--

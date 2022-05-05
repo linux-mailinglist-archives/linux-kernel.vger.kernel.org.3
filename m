@@ -2,109 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52EBC51C906
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 21:30:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3180251C909
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 21:30:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385015AbiEETds (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 15:33:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46630 "EHLO
+        id S1385044AbiEETeX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 15:34:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351650AbiEETdp (ORCPT
+        with ESMTP id S1351650AbiEETeV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 15:33:45 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC56B55492;
-        Thu,  5 May 2022 12:30:04 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 50F6ACE3090;
-        Thu,  5 May 2022 19:30:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D1C0C385A8;
-        Thu,  5 May 2022 19:30:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651779001;
-        bh=vA5c3sAZlsEIF9GVy5xkKqdpy6kiCh58XJGgalns9Zk=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=Rur4thgH3tGLOLQ3PE4NfuLNRo6KD+P9KN8uPermkSvDV+RSnfCSVeH1+luL/JihO
-         nIaKMx8E+70C9NaPk2/MAZdAwmLF4e3A1hfmi9UlnnnoTKQho8krlzE40Wbg6ZaHul
-         OYtZXG3IuFld81DJDac/OHvgjqNqhrYnuLwwrWteLOCuvdNc9j5niJJLsBHQ8W0/2y
-         z9RZTjaqQRQGFIYZLlW7IPHuyDZpURyxIuE/iYgA47tjeVy6ZJDQCR5NQRf+cScAmZ
-         /RwMgI19giflsDT9cLsCAPRy/57WSVwMN2LGVT8+wgD6eawna6yodohAL9eQfWMj7U
-         U+VdD4wj/hjYw==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 43FBA5C2CB7; Thu,  5 May 2022 12:29:56 -0700 (PDT)
-Date:   Thu, 5 May 2022 12:29:56 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Zqiang <qiang1.zhang@intel.com>
-Cc:     frederic@kernel.org, rcu@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] rcu: Add rnp->cbovldmask check in
- rcutree_migrate_callbacks()
-Message-ID: <20220505192956.GX1790663@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20220505155236.1559619-1-qiang1.zhang@intel.com>
+        Thu, 5 May 2022 15:34:21 -0400
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7D6F5A178
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 12:30:40 -0700 (PDT)
+Received: by mail-pl1-x62d.google.com with SMTP id n8so5339158plh.1
+        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 12:30:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=gLvYPio/y1Rsy8ZWzpMgmaTLG4G8yUQ5M+BgkCxtwtA=;
+        b=XQIzSd9nao1kbun84GbUFcH2P6yyzDFG+N0A2uCHmVBYC8oODM70pXR7xtStMpfyc5
+         mtLLHkk0xuZbqCU7Z5wfpn1V3VrJczJhfpGwyYX1NsIjuxhnx3cpVEjvnU072DQm7TsC
+         gFykdkxKL30lcwxhTxXlO00viowVHb31o4Z2Loba1USEpkQpfNxxSXoUolf1lg7eK28D
+         gU4oWX58uS9Uc4wMyy34HH3NIIDZng79hu94xSbuNXAA5Q+YGYbWkVR7CXkiOn3GfgBN
+         5WSfh48VFtwZ0Z7T/OV4fH9LnOoWTy+y8fK8buNSTDzi/szVTBJSmmRLPwFRFH2lKvwh
+         WMhw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=gLvYPio/y1Rsy8ZWzpMgmaTLG4G8yUQ5M+BgkCxtwtA=;
+        b=gYI0dlKMrzv5zYtBefgxBhZFJPMBEav0F/JdKAFOylliqZDxHE6FAbeztEuNwPM8Gl
+         ElOdBzwjqY91Z4pDzPUqW2AFsEJHQEOU4zxL22lb8GsrX/Jz+VnbSwJK7FnTLz0LFfH9
+         RGTMJjH0cyRBOX0LXyOYBq4zfCVRy+nXdJbncrNiA30iGpRQoNUToYfQC78F9sH7xb2Z
+         wBTpUWsFIJsEH4fPIQBkYKY4FOgwQ2ZncJh74fkZnONR7F5nip4rdP0ILKdLzknlk/3r
+         hARTRm0O664WSG9VO2NPa49F3I0hQf61twFihBqZssMBSperJE8s3tenjZu3jpicI+A6
+         twbw==
+X-Gm-Message-State: AOAM531IxgpzZVRYcU3SC9fEfeV9QXWin7GG4igbYx8B2GI7zvujcXzE
+        yFPlUT/641/vfZ1NMEN41q1lcgXoKzyGIEUtIUY2uA==
+X-Google-Smtp-Source: ABdhPJyXcVPUUtmRGPX2KwjdTIb5ADyqBAf+SHZRA/wRfxH1x/C1g1gXItwmdL+70dkvEIL2og+nTKc+ICshlHYRZ8k=
+X-Received: by 2002:a17:902:f682:b0:15e:951b:8091 with SMTP id
+ l2-20020a170902f68200b0015e951b8091mr25548653plg.106.1651779040120; Thu, 05
+ May 2022 12:30:40 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220505155236.1559619-1-qiang1.zhang@intel.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220427160016.144237-1-hannes@cmpxchg.org> <20220427160016.144237-5-hannes@cmpxchg.org>
+ <Ymmnrkn0mSWcuvmH@google.com> <YmmznQ8AO5RLxicA@cmpxchg.org>
+ <Ymm3WpvJWby4gaD/@cmpxchg.org> <CALvZod5LBi5V6q1uHUTSNnLz64HbD499a+OZvdYsUcmcWSt8Jg@mail.gmail.com>
+ <YmqmWPrIagEEceN1@cmpxchg.org> <CALvZod7wOyXpA3pycM2dav9_F9sW5ezC84or-75u8GdQyu30nw@mail.gmail.com>
+ <Ymqv25+8IX2wqKzu@cmpxchg.org>
+In-Reply-To: <Ymqv25+8IX2wqKzu@cmpxchg.org>
+From:   Shakeel Butt <shakeelb@google.com>
+Date:   Thu, 5 May 2022 12:30:29 -0700
+Message-ID: <CALvZod7_5CNjMqEo_SseW7VoVW9gRC8ZoVy=f9SAOL4+-1jR4A@mail.gmail.com>
+Subject: Re: [PATCH 4/5] mm: zswap: add basic meminfo and vmstat coverage
+To:     Johannes Weiner <hannes@cmpxchg.org>,
+        Yosry Ahmed <yosryahmed@google.com>,
+        Yuanchu Xie <yuanchu@google.com>
+Cc:     Minchan Kim <minchan@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Michal Hocko <mhocko@suse.com>, Roman Gushchin <guro@fb.com>,
+        Seth Jennings <sjenning@redhat.com>,
+        Dan Streetman <ddstreet@ieee.org>,
+        Linux MM <linux-mm@kvack.org>,
+        Cgroups <cgroups@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Kernel Team <kernel-team@fb.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 05, 2022 at 11:52:36PM +0800, Zqiang wrote:
-> Currently, the rnp's cbovlmask is set in call_rcu(). when CPU going
-> offline, the outgoing CPU's callbacks is migrated to target CPU, the
-> number of callbacks on the my_rdp may be overloaded, if overload and
-> there is no call_rcu() call on target CPU for a long time, the rnp's
-> cbovldmask is not set in time. in order to fix this situation, add
-> check_cb_ovld_locked() in rcutree_migrate_callbacks() to help CPU more
-> quickly reach quiescent states.
-> 
-> Signed-off-by: Zqiang <qiang1.zhang@intel.com>
++Yosry & Yuanchu
 
-Doesn't this get set right at the end of the current grace period?
-Given that there is a callback overload, there should be a grace
-period in progress.
+On Thu, Apr 28, 2022 at 8:17 AM Johannes Weiner <hannes@cmpxchg.org> wrote:
+>
+[...]
+> >
+> > Yes, we have some modifications to zswap to make it work without any
+> > backing real swap.
+>
+> Not sure if you can share them, but I would be interested in those
+> changes. We have real backing swap, but because of the way swap
+> entries are allocated, pages stored in zswap will consume physical
+> disk slots. So on top of regular swap, you need to provision disk
+> space for zswap as well, which is unfortunate.
+>
+> What could be useful is a separate swap entry address space that maps
+> zswap slots and disk slots alike. This would fix the above problem. It
+> would have the added benefit of making swapoff much simpler and faster
+> too, as it doesn't need to chase down page tables to free disk slots.
+>
 
-See this code in rcu_gp_cleanup():
+I think we can share the code. Adding Yosry & Yuanchu who are
+currently maintaining that piece of code.
 
-		if (rcu_is_leaf_node(rnp))
-			for_each_leaf_node_cpu_mask(rnp, cpu, rnp->cbovldmask) {
-				rdp = per_cpu_ptr(&rcu_data, cpu);
-				check_cb_ovld_locked(rdp, rnp);
-			}
-
-So what am I missing here?  Or are you planning to remove the above code?
-
-If so, wouldn't you also need to clear the indication for the CPU that
-is going offline, being careful to handle the case where the two CPUs
-have different leaf rcu_node structures?
-
-							Thanx, Paul
-
-> ---
->  kernel/rcu/tree.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
-> index 9dc4c4e82db6..bcc5876c9753 100644
-> --- a/kernel/rcu/tree.c
-> +++ b/kernel/rcu/tree.c
-> @@ -4577,6 +4577,7 @@ void rcutree_migrate_callbacks(int cpu)
->  	needwake = needwake || rcu_advance_cbs(my_rnp, my_rdp);
->  	rcu_segcblist_disable(&rdp->cblist);
->  	WARN_ON_ONCE(rcu_segcblist_empty(&my_rdp->cblist) != !rcu_segcblist_n_cbs(&my_rdp->cblist));
-> +	check_cb_ovld_locked(my_rdp, my_rnp);
->  	if (rcu_rdp_is_offloaded(my_rdp)) {
->  		raw_spin_unlock_rcu_node(my_rnp); /* irqs remain disabled. */
->  		__call_rcu_nocb_wake(my_rdp, true, flags);
-> -- 
-> 2.25.1
-> 
+Though that code might not be in an upstreamable state. At the high
+level, it introduces a new type of swap (SWP_GHOST) which underlying
+is a truncated file, so no real disk space is needed. The zswap always
+accepts the page, so the kernel never tries to go to the underlying
+swapfile (reality is a bit more complicated due to the presence of
+incompressible memory and no real disk present on the system).

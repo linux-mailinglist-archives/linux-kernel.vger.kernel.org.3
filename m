@@ -2,144 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 718A651BD07
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 12:17:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 369E551BCF2
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 12:14:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233941AbiEEKT7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 06:19:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57426 "EHLO
+        id S1355133AbiEEKS0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 06:18:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355315AbiEEKTj (ORCPT
+        with ESMTP id S242584AbiEEKSY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 06:19:39 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E419351E68
-        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 03:16:00 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id g8so3288123pfh.5
-        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 03:16:00 -0700 (PDT)
+        Thu, 5 May 2022 06:18:24 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D91CB515BE;
+        Thu,  5 May 2022 03:14:45 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id iq10so3801557pjb.0;
+        Thu, 05 May 2022 03:14:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=GOAcDGlSWe2Jb33NzDcQaYtU804KKEt7OooYW1HA4U4=;
-        b=Fgh9cX+m5xcyqwOOpw5Jxn2Co881HgTaFW8hqLvN6T9iFRp6wJxkdwOH9WMnlguJ2B
-         STHoH/FFDYncrqxYbclQyprPLjc4cEQOxZC/21bpPmLblsfF4kHHuIHYd1Y9jDeEnmt2
-         r+Ygl25+//nu/1sfxpYdaCRv8oqzDVlqqyfdGxynS5IhwTbpbGsKiP6h7D38TakshvkX
-         J8xjRUmfLNowcTQsdX2YJt2leWTJHgOitQuFqz765cEPcMZmXFN2Y1D79t4ykHQCc+/I
-         Fg/e3eDPuu6H18cDUoOKpp4UZpOLEhnEpSJPlEu7BsbdHe0sJ/1MwSv1Ggz10GWgn7Lm
-         etzw==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=OW1SYqHDdzQ1HznA5LWZCuAo5BZ76JYOeNfHxD4Rcc8=;
+        b=CUyg5QW+W1vLB6vd6qExcOVZKR9ZlCQBWnIsjgywNmifR6Xq3e7IrLxJBOtKmFjPYf
+         121o+5HKbSaVN41Rj7Nr2ZZQYnsjSsYZ5dVYf9VQKUbbUOI+1sXDDXpa5LoY2UR0aqUU
+         ZkSTZ9qRf7KxnkihzLVpAB3XZA1lR2mDBio26cg1AiaXpvXbQpNWRRDEQOO4s57bmbVb
+         F4CnKroEIsc4/nKsByU/514Oy0aPDoyWV0hXkZzQ2lXGIbbnJ/sEVGKm/CY8ygqIcovv
+         J9KRKuffYi3lZRvl9iOq1lPx6nYynLd0B0Bb+NL5KQQ5PYFiRROGCmm4PZlBvFE5dnYo
+         hsEA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=GOAcDGlSWe2Jb33NzDcQaYtU804KKEt7OooYW1HA4U4=;
-        b=7kQ2MXs8Mb+FVgTxJtTcigQTeL1uKmlqtL9KImQPCOQKNqoO0iljDEW+wajPMEVlLn
-         S8CWIwDY3QmHTH1+zx8VKd9X2IOpOIOyjmvP1bDWh+iPrh/gH5UmNmpMdWLFTCAM8iEl
-         6Oq4A1fXLSTsdQvtqu3Fqo607B9G6xLsG/+IKXR7RqY/y3aUD/h78getW+euw/kNgfZg
-         2MSmbn8hE15a80KNyILfbjcb9NloecsIdZ8G1ev1ktVknjkrJ26tkfbDxYOJaGDpTsKf
-         Qt+fLUCkHxGiff9evZe+tl/kP2yXy5z2OT6s/1ayS3vYpQR8qF0G6hVawlc/gCtmG9wz
-         8OoQ==
-X-Gm-Message-State: AOAM5305yBiKHS8jurht9SZZw/BmN87yC3VPxnqnilNQdXGdmi7iELYM
-        yeUVa+1W1vos3lFtggsssLc=
-X-Google-Smtp-Source: ABdhPJzAKyeTBDuXcObkzQ4OmbkPGoejP7DzUn+3oqUTtVUamjS34DmwH7xv77k3N2gwPy2YJ9S1aA==
-X-Received: by 2002:a63:682:0:b0:3c1:5bb1:85ee with SMTP id 124-20020a630682000000b003c15bb185eemr21776271pgg.146.1651745760387;
-        Thu, 05 May 2022 03:16:00 -0700 (PDT)
-Received: from hyeyoo.. ([114.29.24.243])
-        by smtp.gmail.com with ESMTPSA id c4-20020aa78804000000b0050dc76281a7sm970648pfo.129.2022.05.05.03.15.56
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=OW1SYqHDdzQ1HznA5LWZCuAo5BZ76JYOeNfHxD4Rcc8=;
+        b=PfhkZUupyA2CvovPZ7y+9s94bVfrQ7awVe/hWE+o05ub2t/tvK+hh465yKWH/gUDu/
+         JDal9+ZeF9sPcqOJnYcNmYrw0fSvKAmEStCAgiD90mfO6mELaFaFF3ZQDOauVVDHbXIF
+         qXFjM8dqCrmNx5+VhVuAAyVKQP/4mUyJ+dTe9TEpl6bqzpRjT9jYbU9FTjOG7J4PeHda
+         6TSVA/zD/nn0pqjz/T8r+1zIvfoB99N0tLVsafnh0TsSazHLxZLtMnx7F9Eu/7G8xvOQ
+         DCJGfPaNhbnPU+7qETnBhOuoQpxJWIGD9nYMLDH7L8ZmFe2eeQGw05Afntr4WWCNi0WU
+         T2dw==
+X-Gm-Message-State: AOAM533LhJsy0zNg0pMeWjkCwTRSSlSG0gCha7dZx++Qzwh6ZZZAGbgJ
+        ms6fT34n0T5A/WDLnysq+hYafM5oiH8=
+X-Google-Smtp-Source: ABdhPJzCPuyrCXIcabZJGAL9MQp/URskwNuTJTzk9loEeTY/BHnC+ig4iM3xFuOHxKbsq79QmnnpWQ==
+X-Received: by 2002:a17:902:e809:b0:15e:c67d:14c5 with SMTP id u9-20020a170902e80900b0015ec67d14c5mr8064604plg.13.1651745685266;
+        Thu, 05 May 2022 03:14:45 -0700 (PDT)
+Received: from tj10039pcu.spreadtrum.com ([117.18.48.102])
+        by smtp.gmail.com with ESMTPSA id y10-20020a1709027c8a00b0015e8d4eb2d2sm1099717pll.284.2022.05.05.03.14.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 May 2022 03:15:59 -0700 (PDT)
-From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
-To:     Alexander Potapenko <glider@google.com>,
-        Marco Elver <elver@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Muchun Song <songmuchun@bytedance.com>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>
-Subject: [PATCH v3] mm/kfence: reset PG_slab and memcg_data before freeing __kfence_pool
-Date:   Thu,  5 May 2022 19:13:37 +0900
-Message-Id: <20220505101337.1997819-1-42.hyeyoo@gmail.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220505073920.1880661-1-42.hyeyoo@gmail.com>
-References: <20220505073920.1880661-1-42.hyeyoo@gmail.com>
+        Thu, 05 May 2022 03:14:44 -0700 (PDT)
+From:   Cixi Geng <gengcixi@gmail.com>
+To:     mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, orsonzhai@gmail.com,
+        baolin.wang7@gmail.com, zhang.lyra@gmail.com, lee.jones@linaro.org
+Cc:     linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v5 0/4] Add ums512 clocks and relative bindings file
+Date:   Thu,  5 May 2022 18:14:29 +0800
+Message-Id: <20220505101433.1575096-1-gengcixi@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When kfence fails to initialize kfence pool, it frees the pool.
-But it does not reset PG_slab flag and memcg_data of struct page.
+From: Cixi Geng <cixi.geng1@unisoc.com>
 
-Below is a BUG because of this. Let's fix it by resetting PG_slab
-and memcg_data before free.
+This patchset is add the UMS512 clocks support
 
-[    0.089149] BUG: Bad page state in process swapper/0  pfn:3d8e06
-[    0.089149] page:ffffea46cf638180 refcount:0 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x3d8e06
-[    0.089150] memcg:ffffffff94a475d1
-[    0.089150] flags: 0x17ffffc0000200(slab|node=0|zone=2|lastcpupid=0x1fffff)
-[    0.089151] raw: 0017ffffc0000200 ffffea46cf638188 ffffea46cf638188 0000000000000000
-[    0.089152] raw: 0000000000000000 0000000000000000 00000000ffffffff ffffffff94a475d1
-[    0.089152] page dumped because: page still charged to cgroup
-[    0.089153] Modules linked in:
-[    0.089153] CPU: 0 PID: 0 Comm: swapper/0 Tainted: G    B   W         5.18.0-rc1+ #965
-[    0.089154] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.14.0-2 04/01/2014
-[    0.089154] Call Trace:
-[    0.089155]  <TASK>
-[    0.089155]  dump_stack_lvl+0x49/0x5f
-[    0.089157]  dump_stack+0x10/0x12
-[    0.089158]  bad_page.cold+0x63/0x94
-[    0.089159]  check_free_page_bad+0x66/0x70
-[    0.089160]  __free_pages_ok+0x423/0x530
-[    0.089161]  __free_pages_core+0x8e/0xa0
-[    0.089162]  memblock_free_pages+0x10/0x12
-[    0.089164]  memblock_free_late+0x8f/0xb9
-[    0.089165]  kfence_init+0x68/0x92
-[    0.089166]  start_kernel+0x789/0x992
-[    0.089167]  x86_64_start_reservations+0x24/0x26
-[    0.089168]  x86_64_start_kernel+0xa9/0xaf
-[    0.089170]  secondary_startup_64_no_verify+0xd5/0xdb
-[    0.089171]  </TASK>
+v2 changes:
+  adjust description and add the "sprd,ums512-glbregs,syscon,simple-mfd"
+  compatibles to fix match failed logs in the dt_binding_check.
+  add the property license and copyright notice.
 
-Fixes: 0ce20dd84089 ("mm: add Kernel Electric-Fence infrastructure")
-Fixes: 8f0b36497303 ("mm: kfence: fix objcgs vector allocation")
-Signed-off-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
-Reviewed-by: Marco Elver <elver@google.com>
-Reviewed-by: Muchun Song <songmuchun@bytedance.com>
----
+v3 changes:
+  fix wrong indentation and hint: "maxItems" is not needed with an "items"
+  list when use the latest dtschema.
 
-v2 -> v3:
-	- Add Reviewed-by: tags from Marco and Muchun. Thanks!
-	- Initialize folio where it is defined.
+v4 changes:
+  move the syscon bindins from clk to glbreg yaml file by pickup 
+  chunyan's patch for global registers bindings
+  fix the comments from Krzysztof in v3 patchset
+  add the Acked-by: Krzysztof in patch v4 3/4
+  fix the  warning Prefer "GPL" over "GPL v2"
 
- mm/kfence/core.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+v5 changes:
+  Add review tags.
+  fix the comments in ums512-glbreg.yaml.
 
-diff --git a/mm/kfence/core.c b/mm/kfence/core.c
-index a203747ad2c0..b7d3a9667f00 100644
---- a/mm/kfence/core.c
-+++ b/mm/kfence/core.c
-@@ -642,6 +642,14 @@ static bool __init kfence_init_pool_early(void)
- 	 * fails for the first page, and therefore expect addr==__kfence_pool in
- 	 * most failure cases.
- 	 */
-+	for (char *p = (char *)addr; p < __kfence_pool + KFENCE_POOL_SIZE; p += PAGE_SIZE) {
-+		struct folio *folio = virt_to_folio(p);
-+
-+		__folio_clear_slab(folio);
-+#ifdef CONFIG_MEMCG
-+		folio->memcg_data = 0;
-+#endif
-+	}
- 	memblock_free_late(__pa(addr), KFENCE_POOL_SIZE - (addr - (unsigned long)__kfence_pool));
- 	__kfence_pool = NULL;
- 	return false;
+Chunyan Zhang (1):
+  dt-bindings: mfd: sprd: Add bindings for ums512 global registers
+
+Cixi Geng (3):
+  dt-bindings: clk: sprd: Add bindings for ums512 clock controller
+  clk: sprd: Add dt-bindings include file for UMS512
+  clk: sprd: Add clocks support for UMS512
+
+ .../bindings/clock/sprd,ums512-clk.yaml       |   71 +
+ .../bindings/mfd/sprd,ums512-glbreg.yaml      |   68 +
+ drivers/clk/sprd/Kconfig                      |    6 +
+ drivers/clk/sprd/Makefile                     |    1 +
+ drivers/clk/sprd/ums512-clk.c                 | 2199 +++++++++++++++++
+ include/dt-bindings/clock/sprd,ums512-clk.h   |  397 +++
+ 6 files changed, 2742 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/clock/sprd,ums512-clk.yaml
+ create mode 100644 Documentation/devicetree/bindings/mfd/sprd,ums512-glbreg.yaml
+ create mode 100644 drivers/clk/sprd/ums512-clk.c
+ create mode 100644 include/dt-bindings/clock/sprd,ums512-clk.h
+
 -- 
-2.32.0
+2.25.1
 

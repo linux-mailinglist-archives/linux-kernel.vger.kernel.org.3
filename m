@@ -2,84 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A115251BFE0
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 14:53:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 000C451BFE4
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 14:53:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378174AbiEEMzY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 08:55:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34344 "EHLO
+        id S1355833AbiEEM4g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 08:56:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378324AbiEEMzT (ORCPT
+        with ESMTP id S236445AbiEEM4e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 08:55:19 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFCC3562C8
-        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 05:51:38 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KvD915p86z4ySp;
-        Thu,  5 May 2022 22:51:33 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1651755093;
-        bh=ubB6SgfDI+P/k0hjAXWGeJL0PaKlzbLWzO8P81xOKRU=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UT76O0MVOxgFBUcqfS+zazksdH1WlzfSxD9DLhoC8ByPMcfUoMgpr87iGkGfjrKCd
-         +9abcqvXbSs4zO4Dywl7DiSOoS1M/gGuZMEWjZN6SILB2Xvmixiv6lMdaWij74v5q2
-         XwJXjOjeKGUwzS1UIJsh+uN0XvWGzkmIc0wkbJFyA03xNBRVynRVf3QQNgpPTsWeSe
-         PW9lhIRoDlCTLyNHqFVp8zCEvtqE5eXwRIKukVnqMCezRrCMRcE+igexH0wn1QobtB
-         fEfnKKfPfjIO5LlxkMrvG6mHsqErhh2wo1ocoPEYvyIqAcxN2TngT1Cw14sVrbaAxS
-         7AqF2QtIMDwrg==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     <linuxppc-dev@lists.ozlabs.org>
-Cc:     <linux-kernel@vger.kernel.org>
-Subject: [PATCH 2/2] arch/Kconfig: Drop references to powerpc PAGE_SIZE symbols
-Date:   Thu,  5 May 2022 22:51:23 +1000
-Message-Id: <20220505125123.2088143-2-mpe@ellerman.id.au>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220505125123.2088143-1-mpe@ellerman.id.au>
-References: <20220505125123.2088143-1-mpe@ellerman.id.au>
+        Thu, 5 May 2022 08:56:34 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AF7256216
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 05:52:51 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id bv19so8538882ejb.6
+        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 05:52:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ffwll.ch; s=google;
+        h=date:from:to:cc:subject:message-id:mail-followup-to:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=dMhPbH8YYksNDQWsYUNKHz6CMEzpio+MpfpxpHsuHBY=;
+        b=Q+F4YMFKbmp2KsE3LUay5GdA+juEREvkYz6rogZdVlySBdtrsWZokkOwvR/UIRqOuf
+         yWO64v1ha0Z1AqNjZsZtdxtJOE2l/Oz7sraJ1HMqAcocYPuyupTzDLhXt4k31YAymA9X
+         8rofUAYUyJM7LOh9REyEUWZxt9/v8D8wr/XDM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id
+         :mail-followup-to:references:mime-version:content-disposition
+         :in-reply-to;
+        bh=dMhPbH8YYksNDQWsYUNKHz6CMEzpio+MpfpxpHsuHBY=;
+        b=V9bT9ARZpOcNy56TBb2CqinmFD1lGkixE4Nhu9fYw9wGXZfyshAAg4GvSvNFozAZ3D
+         cD7kg/fylea7xXTmwgqYyEdjKo0TRI91s4yLtAE5//cdxwT1wLbJG4N8u6zbWTs8DbEf
+         ZsFgZL8NEcb6+HL08HsqqIkGbOadsEfXU02/FfSP1+Cuu6JmRy8h4mzZX5XkRg2zhN6z
+         TB/WJuGcnMpOTqc4tGVli6UIuPQcPrtwa6G4cw2/Tvp2IKyyvhoSh7td/RGY3p/cCSj6
+         Wx9koQBdIePemRUoE4vRMX271SJt6CSJQlAwE3ou2RDn8WEihJO/yffQdAbcrz/FF4x6
+         k+Lg==
+X-Gm-Message-State: AOAM5301NgtmKNCT4iga9RPguI8EIBF3SxsYCBr4o5mvl5WZzoy1NurW
+        Hmicm3lyPd+XVzxhuOqoRpjE1g==
+X-Google-Smtp-Source: ABdhPJwn4NiXRceP/yXAlHkWOcazdmg0trdBH+p11tn6Cs2WzVeV2J0TUG+/2PB6a2r4UskM+PDLhw==
+X-Received: by 2002:a17:907:94c5:b0:6f4:6de1:399c with SMTP id dn5-20020a17090794c500b006f46de1399cmr16128031ejc.336.1651755169715;
+        Thu, 05 May 2022 05:52:49 -0700 (PDT)
+Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
+        by smtp.gmail.com with ESMTPSA id l15-20020a17090612cf00b006f3ef214df9sm722670ejb.95.2022.05.05.05.52.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 May 2022 05:52:48 -0700 (PDT)
+Date:   Thu, 5 May 2022 14:52:46 +0200
+From:   Daniel Vetter <daniel@ffwll.ch>
+To:     Javier Martinez Canillas <javierm@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-fbdev@vger.kernel.org,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Helge Deller <deller@gmx.de>,
+        Hans de Goede <hdegoede@redhat.com>
+Subject: Re: [PATCH 2/3] fbdev/simplefb: Cleanup fb_info in .fb_destroy
+ rather than .remove
+Message-ID: <YnPInuayAYQa1jmz@phenom.ffwll.local>
+Mail-Followup-To: Javier Martinez Canillas <javierm@redhat.com>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-fbdev@vger.kernel.org, Helge Deller <deller@gmx.de>,
+        Hans de Goede <hdegoede@redhat.com>
+References: <20220504215151.55082-1-javierm@redhat.com>
+ <20220504215722.56970-1-javierm@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220504215722.56970-1-javierm@redhat.com>
+X-Operating-System: Linux phenom 5.10.0-8-amd64 
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In the previous commit powerpc added PAGE_SIZE related config symbols
-using the generic names.
+On Wed, May 04, 2022 at 11:57:22PM +0200, Javier Martinez Canillas wrote:
+> The driver is calling framebuffer_release() in its .remove callback, but
+> this will cause the struct fb_info to be freed too early. Since it could
+> be that a reference is still hold to it if user-space opened the fbdev.
+> 
+> This would lead to a use-after-free error if the framebuffer device was
+> unregistered but later a user-space process tries to close the fbdev fd.
+> 
+> The correct thing to do is to only unregister the framebuffer in the
+> driver's .remove callback, but do any cleanup in the fb_ops.fb_destroy.
+> 
+> Suggested-by: Daniel Vetter <daniel.vetter@ffwll.ch>
+> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
 
-So there's no need to refer to them in the definition of
-PAGE_SIZE_LESS_THAN_64KB etc, the negative dependency on the generic
-symbol is sufficient (in this case !PAGE_SIZE_64KB).
+I think this should have a Fixes: line for the patch from Thomas which
+changed the remove_conflicting_fb code:
 
-Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
----
- arch/Kconfig | 2 --
- 1 file changed, 2 deletions(-)
+27599aacbaef ("fbdev: Hot-unplug firmware fb devices on forced removal")
 
-diff --git a/arch/Kconfig b/arch/Kconfig
-index 31c4fdc4a4ba..d235c9089d17 100644
---- a/arch/Kconfig
-+++ b/arch/Kconfig
-@@ -1007,12 +1007,10 @@ config PAGE_SIZE_LESS_THAN_64KB
- 	depends on !IA64_PAGE_SIZE_64KB
- 	depends on !PAGE_SIZE_64KB
- 	depends on !PARISC_PAGE_SIZE_64KB
--	depends on !PPC_64K_PAGES
- 	depends on PAGE_SIZE_LESS_THAN_256KB
- 
- config PAGE_SIZE_LESS_THAN_256KB
- 	def_bool y
--	depends on !PPC_256K_PAGES
- 	depends on !PAGE_SIZE_256KB
- 
- # This allows to use a set of generic functions to determine mmap base
+I think we should also mention that strictly speaking the code flow is now
+wrong, because hw cleanup (like iounmap) should be done from ->remove
+while sw cleanup (like calling framebuffer_release()) is the only thing
+that should be done from ->fb_destroy. But the current code matches what
+was happening before 27599aacbaef so more minimal "fix"
+
+With those details added Reviewed-by: Daniel Vetter <daniel.vetter@ffwll.ch>
+
+Same for the next patch.
+-Daniel
+
+> ---
+> 
+>  drivers/video/fbdev/simplefb.c | 8 +++++++-
+>  1 file changed, 7 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/video/fbdev/simplefb.c b/drivers/video/fbdev/simplefb.c
+> index 94fc9c6d0411..2c198561c338 100644
+> --- a/drivers/video/fbdev/simplefb.c
+> +++ b/drivers/video/fbdev/simplefb.c
+> @@ -84,6 +84,10 @@ struct simplefb_par {
+>  static void simplefb_clocks_destroy(struct simplefb_par *par);
+>  static void simplefb_regulators_destroy(struct simplefb_par *par);
+>  
+> +/*
+> + * fb_ops.fb_destroy is called by the last put_fb_info() call at the end
+> + * of unregister_framebuffer() or fb_release(). Do any cleanup here.
+> + */
+>  static void simplefb_destroy(struct fb_info *info)
+>  {
+>  	struct simplefb_par *par = info->par;
+> @@ -94,6 +98,8 @@ static void simplefb_destroy(struct fb_info *info)
+>  	if (info->screen_base)
+>  		iounmap(info->screen_base);
+>  
+> +	framebuffer_release(info);
+> +
+>  	if (mem)
+>  		release_mem_region(mem->start, resource_size(mem));
+>  }
+> @@ -545,8 +551,8 @@ static int simplefb_remove(struct platform_device *pdev)
+>  {
+>  	struct fb_info *info = platform_get_drvdata(pdev);
+>  
+> +	/* simplefb_destroy takes care of info cleanup */
+>  	unregister_framebuffer(info);
+> -	framebuffer_release(info);
+>  
+>  	return 0;
+>  }
+> -- 
+> 2.35.1
+> 
+
 -- 
-2.35.1
-
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch

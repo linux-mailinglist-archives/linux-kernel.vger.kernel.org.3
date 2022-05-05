@@ -2,80 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5821751C399
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 17:13:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0938951C324
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 16:59:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381192AbiEEPRN convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 5 May 2022 11:17:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39526 "EHLO
+        id S1380935AbiEEPDO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 11:03:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381199AbiEEPRJ (ORCPT
+        with ESMTP id S233400AbiEEPDJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 11:17:09 -0400
-X-Greylist: delayed 902 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 05 May 2022 08:13:28 PDT
-Received: from mail.actia.se (212-181-117-226.customer.telia.com [212.181.117.226])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E90A5C35C;
-        Thu,  5 May 2022 08:13:27 -0700 (PDT)
-Received: from S036ANL.actianordic.se (10.12.31.117) by S035ANL.actianordic.se
- (10.12.31.116) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Thu, 5 May
- 2022 16:58:24 +0200
-Received: from S036ANL.actianordic.se ([fe80::e13e:1feb:4ea6:ec69]) by
- S036ANL.actianordic.se ([fe80::e13e:1feb:4ea6:ec69%10]) with mapi id
- 15.01.2375.024; Thu, 5 May 2022 16:58:24 +0200
-From:   John Ernberg <john.ernberg@actia.se>
-To:     "a.fatoum@pengutronix.de" <a.fatoum@pengutronix.de>
-CC:     "andreas@rammhold.de" <andreas@rammhold.de>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "david@sigma-star.at" <david@sigma-star.at>,
-        "dhowells@redhat.com" <dhowells@redhat.com>,
-        "ebiggers@kernel.org" <ebiggers@kernel.org>,
-        "franck.lenormand@nxp.com" <franck.lenormand@nxp.com>,
-        "herbert@gondor.apana.org.au" <herbert@gondor.apana.org.au>,
-        "horia.geanta@nxp.com" <horia.geanta@nxp.com>,
-        "j.luebbe@pengutronix.de" <j.luebbe@pengutronix.de>,
-        "jarkko@kernel.org" <jarkko@kernel.org>,
-        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-        "jmorris@namei.org" <jmorris@namei.org>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "matthias.schiffer@ew.tq-group.com" 
-        <matthias.schiffer@ew.tq-group.com>,
-        "pankaj.gupta@nxp.com" <pankaj.gupta@nxp.com>,
-        "richard@nod.at" <richard@nod.at>,
-        "s.trumtrar@pengutronix.de" <s.trumtrar@pengutronix.de>,
-        "serge@hallyn.com" <serge@hallyn.com>,
-        "sumit.garg@linaro.org" <sumit.garg@linaro.org>,
-        "tharvey@gateworks.com" <tharvey@gateworks.com>,
-        "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
-        John Ernberg <john.ernberg@actia.se>
-Subject: Re: [PATCH v8 0/6] KEYS: trusted: Introduce support for NXP
- CAAM-based trusted keys
-Thread-Topic: [PATCH v8 0/6] KEYS: trusted: Introduce support for NXP
- CAAM-based trusted keys
-Thread-Index: AQHYYJCRaP1BJI53pkGuwIjy0ObIWw==
-Date:   Thu, 5 May 2022 14:58:23 +0000
-Message-ID: <20220505145756.2492566-1-john.ernberg@actia.se>
-References: <20220428140145.870527-1-a.fatoum@pengutronix.de>
-In-Reply-To: <20220428140145.870527-1-a.fatoum@pengutronix.de>
-Accept-Language: en-US, sv-SE
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: git-send-email 2.35.1
-x-originating-ip: [10.12.12.58]
-x-esetresult: clean, is OK
-x-esetid: 37303A293105C852667D6B
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: 8BIT
+        Thu, 5 May 2022 11:03:09 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90A9C5A15F;
+        Thu,  5 May 2022 07:59:29 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id A7CF21F458A2
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1651762768;
+        bh=Sf7k/0OhMAAsnIEczTQGZSW4QzFAgs4S4sdWB28tCLI=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=JAYFAOPLuOcHT2NGoHGyAtRuK2Sg0/UD1HLKA8CEtiAdnyt2Ev+IbRuSbTWb4zhOh
+         a/VJysDId5WYcUfYdr7HmbAnVOw/pTJkLkhWZwB4aUXqxZiDY4brtTOtc/fTimUePy
+         8NN9vpeqgkcSR1ISUt56zn0dJW0w8ItJAfhsyL4VCXXlcSgA9M9Fp/eFSksxnRaxun
+         K65YRx+zSa5wyp3B6pXw1toIV7w6tQTmNbzKPriedDekfHmJjM4LPZA80X1PUZHApt
+         0/3J96n3qWRD/ncurNnqgwjqdy4hwIWbE+VeX2URuD5M00+lF9375ZRIcysbhCW5vO
+         CrTuwLvX8hGKg==
+Message-ID: <eb0cd3f6-6248-0494-9a5d-297c2247a4c4@collabora.com>
+Date:   Thu, 5 May 2022 16:59:25 +0200
 MIME-Version: 1.0
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,RDNS_DYNAMIC,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [RESEND v2] dt-bindings: gce: add the GCE header file for MT8186
+Content-Language: en-US
+To:     Rex-BC Chen <rex-bc.chen@mediatek.com>, jassisinghbrar@gmail.com,
+        robh+dt@kernel.org
+Cc:     jaswinder.singh@linaro.org, matthias.bgg@gmail.com,
+        yongqiang.niu@mediatek.com, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+References: <20220505034820.12759-1-rex-bc.chen@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220505034820.12759-1-rex-bc.chen@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,21 +58,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Gave this a go on iMX8QXP with Linux 5.17.5 and I can't quite get it working.
+Il 05/05/22 05:48, Rex-BC Chen ha scritto:
+> From: Yongqiang Niu <yongqiang.niu@mediatek.com>
+> 
+> Add the GCE header file to define GCE subsys ids, hardware event ids
+> and constants for MT8186.
+> 
+> Signed-off-by: Yongqiang Niu <yongqiang.niu@mediatek.com>
+> Acked-by: Rob Herring <robh@kernel.org>
 
-I get -ENODEV from add_key() via keyctl. When I traced it in dmesg I couldn't
-get an as clear picture as I would like but CAAM (and thus possibly JRs?)
-initialzing after trusted_key.
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-dmesg snips:
-[    1.296772] trusted_key: Job Ring Device allocation for transform failed
-...
-[    1.799768] caam 31400000.crypto: device ID = 0x0a16040000000100 (Era 9)
-[    1.807142] caam 31400000.crypto: job rings = 2, qi = 0
-[    1.822667] caam algorithms registered in /proc/crypto
-[    1.830541] caam 31400000.crypto: caam pkc algorithms registered in /proc/crypto
-[    1.841807] caam 31400000.crypto: registering rng-caam
-
-I didn't quite have the time to get a better trace than that.
-
-Best regards // John Ernberg

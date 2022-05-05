@@ -2,252 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8FEF51CA9C
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 22:29:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECFC451CAA4
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 22:31:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385860AbiEEUdR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 16:33:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47166 "EHLO
+        id S1385876AbiEEUfD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 16:35:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384948AbiEEUdO (ORCPT
+        with ESMTP id S1384978AbiEEUe5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 16:33:14 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 113CC5F8F5
-        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 13:29:32 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id p7-20020a05600c358700b00393e80c59daso4482562wmq.0
-        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 13:29:31 -0700 (PDT)
+        Thu, 5 May 2022 16:34:57 -0400
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99A015F8EA
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 13:31:16 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id d15so829348lfk.5
+        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 13:31:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=Nhiu0fngZGCp2SeeUlWWgcjMH+09fel050MQuuk+CH0=;
-        b=c1oSeU4BaXTY3ReYOr/uFAyO9izBH2dG1Qlnf+8Hr8Uw3vUsoKOHenuz7wpGz1G3lv
-         ym40wpjP1R1uTQtgYd8gikEnTIRqUlXoWrvkAnzPHg8AGFpeocUHG2kgkwMQX9NL3etq
-         +mxfkjnSDJDdW3HnR8hp/i6C1WPmJXk+LFZvFqsi3IRZIzWwmnN90bnnpRzXLIKPG6Zc
-         eHtIJrBosNasWd3p+NDNF3vx4pBQ+ez3FTfArfU5wI/onzupOfKc35+xFiIfqWc6qqRh
-         q7Ut2jUxdfhmab/DvgF8OIAbxIYnzwpEPb49AiYU/N0TsdomVI/zvfwD+IaQxuFI+dnI
-         g5xw==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=KzJXnZ7chU1+5zJp4Dgvp3VaPPi5u4rVhagYP/eqQQE=;
+        b=GcsLNO3ybt8b4qYioRwjRsGo24/f0OAD/JE388Gc5emmRyTIhlyYUbKzIgZyv53hb1
+         xhiVCmKW0WOkPCvBf1e4g28vMmUQUkmrVh+o51YOtKO8cBVzloYHCXntPyZO/l8A9u4M
+         5CxbT9nvJ8k+TaFHNOPLcGCSi7HogLmrn63TqdbSnLG4WHsAsFmI3EppXVPekhAxB05a
+         NEbtgx7QVCxIiRy2eSQmkdwO62yYlPePGIiYe39mbWzh5zAEXFGIG2orgZSXN6r69srE
+         z8JRd8pqir9+V0J5tZrITxsJOR+WTOS0fPBTlN8HA0KMIdLI2QtAq3P5nFh0k988K2Jw
+         qG+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Nhiu0fngZGCp2SeeUlWWgcjMH+09fel050MQuuk+CH0=;
-        b=VQvKR7CDIuvpPC310g7LVTJcqNUFWPKA0v/rK3jmF779qNKntzm97knR43Rb98WdFD
-         8z/UZv1JPTIooaSF96Ch2EG6lHJOmoRNUdQlFJLsnH7EZ4zdsfgQRF+Xi9FyNlZ/7TvJ
-         mj28o3BZ/JPlqgo4wvCUUUan4HlqGEk3YfgL3NaOTZuJdyN3rzzYlbPzNltCQk4JTGyD
-         19GxKL3OT552DbnWxvLqD75Ihk6Uw5Ezl552u7LqW0M07/FqQVi1FPlS2pjNAFY09shj
-         Siow6pka1MZpZ+eco2td0LfqWMWc/kaVfR6lcyJWnMSqZCBH/+V2M00ghTsgHQwjmIJc
-         bRUA==
-X-Gm-Message-State: AOAM533kBH0upmTsQILSdnpeAqYqCZCXV720hzZ5hqznDpA4tDjG3a6V
-        IjKtMTASQhOf+XYl/NDMfG4Jkg==
-X-Google-Smtp-Source: ABdhPJyTndqxOkEr/uFOGU4QF0R1aF80DfUbLWNbePR/UUOLh1w33usRsZPRT7oIn/7Jas5VFkmrmQ==
-X-Received: by 2002:a7b:cd15:0:b0:394:497d:ad1c with SMTP id f21-20020a7bcd15000000b00394497dad1cmr35505wmj.182.1651782570542;
-        Thu, 05 May 2022 13:29:30 -0700 (PDT)
-Received: from [192.168.0.222] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id n13-20020a056000170d00b0020c5253d911sm2035574wrc.93.2022.05.05.13.29.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 05 May 2022 13:29:30 -0700 (PDT)
-Message-ID: <6d45f060-85e6-f3ff-ef00-6c68a2ada7a1@linaro.org>
-Date:   Thu, 5 May 2022 22:29:28 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=KzJXnZ7chU1+5zJp4Dgvp3VaPPi5u4rVhagYP/eqQQE=;
+        b=76TfoIo6t6fxLOOgDcyAayxTaSpfSS6QWVzKmp81fNNcY7OckjoZR+4TOKt1H1qNyw
+         ehet1/hgrn6wflwRGo5ZgV+ho3AufNTyxx4xykhBYRIBUy7O43mUH0SS19zrXzqKFw23
+         SZdJjtdzhpxKUDRX4GtyzBRZel1xNJHlFe8I8RKFl83fALDycen9a+T20akSa0r69Crg
+         CVibjTTGbLT9XjmV+L8VR6/pMHCc4+ax4oWQHKART0VVsV9Tx/s3Sj1yNdGiDiJdFqvl
+         Jt5URuzJSv1H3K+V1bXPHIyXc8/GoX/pM5xqjOYLZyQ6fhuqPKOi3JN3rdv5sO2bkr6+
+         7IAQ==
+X-Gm-Message-State: AOAM53398cLJbqzt4rfKvtSANRCY/cZgG1PF14QTuTHVHALmDaMgfvEt
+        ZI7yXWT3FMGKWUnG1R7+rA0jyImKTp8+9ALh9IBYjA==
+X-Google-Smtp-Source: ABdhPJwbhs3kr3NEQrD1kb2FM5lFdKjT3Fw4s9E6Bf+BV+NG8NhQY5rDLxGeb5Ices7vG2JpejLiHgrpcihMdzG04I8=
+X-Received: by 2002:ac2:5e86:0:b0:473:d044:60f5 with SMTP id
+ b6-20020ac25e86000000b00473d04460f5mr49308lfq.87.1651782674718; Thu, 05 May
+ 2022 13:31:14 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [RFC v2] dt-bindings: net: dsa: convert binding for mediatek
- switches
-Content-Language: en-US
-To:     Frank Wunderlich <linux@fw-web.de>,
-        linux-mediatek@lists.infradead.org
-Cc:     Frank Wunderlich <frank-w@public-files.de>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Greg Ungerer <gerg@kernel.org>,
-        =?UTF-8?Q?Ren=c3=a9_van_Dorst?= <opensource@vdorst.com>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
-References: <20220505150008.126627-1-linux@fw-web.de>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220505150008.126627-1-linux@fw-web.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20220505072244.1155033-1-masahiroy@kernel.org> <20220505072244.1155033-15-masahiroy@kernel.org>
+In-Reply-To: <20220505072244.1155033-15-masahiroy@kernel.org>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Thu, 5 May 2022 13:31:03 -0700
+Message-ID: <CAKwvOdkTOv1VZti3KH9zxXT1xceogUPxdCV1JqoYbTKtdUy0qw@mail.gmail.com>
+Subject: Re: [PATCH v3 14/15] kbuild: make built-in.a rule robust against too
+ long argument error
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     linux-kbuild@vger.kernel.org, clang-built-linux@googlegroups.com,
+        linux-kernel@vger.kernel.org, Nicolas Schier a <nicolas@fjasle.eu>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linuxppc-dev@lists.ozlabs.org, linux-um@lists.infradead.org,
+        linux-s390@vger.kernel.org,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Kees Cook <keescook@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/05/2022 17:00, Frank Wunderlich wrote:
-> From: Frank Wunderlich <frank-w@public-files.de>
-> 
-> Convert txt binding to yaml binding for Mediatek switches.
-> 
-> Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
+On Thu, May 5, 2022 at 12:25 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
+>
+> Kbuild runs at the top of objtree instead of changing the working
+> directory to subdirectories. I think this design is nice overall but
+> some commands have a scapability issue.
 
-Thank you for your patch. There is something to discuss/improve.
-
-> +    const: 1
-> +
-> +  "#size-cells":
-> +    const: 0
-> +
-> +  core-supply:
-> +    description: |
-
-Drop | everywhere where it is not needed (so in all places, AFAICT)
-
-> +      Phandle to the regulator node necessary for the core power.
-> +
-> +  "#gpio-cells":
-> +    description: |
-> +      Must be 2 if gpio-controller is defined.
-
-Skip description, it's obvious from the GPIO controller schema.
-
-> +    const: 2
-> +
-> +  gpio-controller:
-> +    type: boolean
-> +    description: |
-> +      if defined, MT7530's LED controller will run on GPIO mode.
-> +
-> +  "#interrupt-cells":
-> +    const: 1
-> +
-> +  interrupt-controller:
-> +    type: boolean
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  io-supply:
-> +    description: |
-> +      Phandle to the regulator node necessary for the I/O power.
-> +      See Documentation/devicetree/bindings/regulator/mt6323-regulator.txt
-> +      for details for the regulator setup on these boards.
-> +
-> +  mediatek,mcm:
-> +    type: boolean
-> +    description: |
-> +      if defined, indicates that either MT7530 is the part on multi-chip
-> +      module belong to MT7623A has or the remotely standalone chip as the
-> +      function MT7623N reference board provided for.
-> +
-> +  reset-gpios:
-> +    description: |
-> +      Should be a gpio specifier for a reset line.
-
-Skip description.
-
-> +    maxItems: 1
-> +
-> +  reset-names:
-> +    description: |
-> +      Should be set to "mcm".
-
-Skip description.
-
-> +    const: mcm
-> +
-> +  resets:
-> +    description: |
-> +      Phandle pointing to the system reset controller with line index for
-> +      the ethsys.
-> +    maxItems: 1
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +
-> +allOf:
-> +  - $ref: "dsa.yaml#"
-> +  - if:
-> +      required:
-> +        - mediatek,mcm
-> +    then:
-> +      required:
-> +        - resets
-> +        - reset-names
-> +    else:
-> +      required:
-> +        - reset-gpios
-> +
-> +  - if:
-> +      required:
-> +        - interrupt-controller
-> +    then:
-> +      required:
-> +        - interrupts
-> +
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          items:
-> +            - const: mediatek,mt7530
-> +    then:
-> +      required:
-> +        - core-supply
-> +        - io-supply
-> +
-> +
-> +patternProperties:
-
-patternProperties go before allOf, just after regular properties.
-
-> +  "^(ethernet-)?ports$":
-> +    type: object
-
-Also on this level:
-    unevaluatedProperties: false
-
-> +
-> +    patternProperties:
-> +      "^(ethernet-)?port@[0-9]+$":
-> +        type: object
-> +        description: Ethernet switch ports
-> +
-> +        properties:
-> +          reg:
-> +            description: |
-> +              Port address described must be 6 for CPU port and from 0 to 5 for user ports.
-
-This looks like not wrapped @80 character.
-
-> +
-> +        unevaluatedProperties: false
-> +
-> +        allOf:
-> +          - $ref: dsa-port.yaml#
-> +          - if:
-> +              properties:
-> +                label:
-> +                  items:
-> +                    - const: cpu
-> +            then:
-> +              required:
-> +                - reg
-> +                - phy-mode
-> +
-> +unevaluatedProperties: false
+s/scapability/scalability/
 
 
-
-
-Best regards,
-Krzysztof
+-- 
+Thanks,
+~Nick Desaulniers

@@ -2,52 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77A5851B4F3
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 03:01:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76C5D51B4F6
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 03:02:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233853AbiEEBEv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 21:04:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49294 "EHLO
+        id S233975AbiEEBFZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 21:05:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233780AbiEEBEt (ORCPT
+        with ESMTP id S233895AbiEEBFV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 21:04:49 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 808972317C;
-        Wed,  4 May 2022 18:01:11 -0700 (PDT)
-Received: from kwepemi100013.china.huawei.com (unknown [172.30.72.57])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4KtwHR47MvzCsWV;
-        Thu,  5 May 2022 08:56:03 +0800 (CST)
-Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
- kwepemi100013.china.huawei.com (7.221.188.136) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 5 May 2022 09:00:44 +0800
-Received: from [10.174.176.73] (10.174.176.73) by
- kwepemm600009.china.huawei.com (7.193.23.164) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 5 May 2022 09:00:43 +0800
-Subject: Re: [PATCH -next v5 0/3] support concurrent sync io for bfq on a
- specail occasion
-To:     <paolo.valente@linaro.org>, <axboe@kernel.dk>
-CC:     <jack@suse.cz>, <tj@kernel.org>, <linux-block@vger.kernel.org>,
-        <cgroups@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <yi.zhang@huawei.com>
-References: <20220428120837.3737765-1-yukuai3@huawei.com>
-From:   "yukuai (C)" <yukuai3@huawei.com>
-Message-ID: <d50df657-d859-79cf-c292-412eaa383d2c@huawei.com>
-Date:   Thu, 5 May 2022 09:00:42 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Wed, 4 May 2022 21:05:21 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E22A14616E;
+        Wed,  4 May 2022 18:01:42 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KtwPr07YBz4xR1;
+        Thu,  5 May 2022 11:01:35 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1651712497;
+        bh=O28Fz7CzvoTnkVVnMBqZtMC7csy8lC3fCl7PzbR9WiA=;
+        h=Date:From:To:Cc:Subject:From;
+        b=cBi4I9HcmQDMj8QReRCBCp/GPiHAorpSaeNiugQPggK2XbDMO3OYef89INv9pjE3d
+         l7bGcKwm4zT+KnFCmdhFw+JenbQf5xByIZT2gxi+OtH+FNQdtOueO2jO/20l3T9dua
+         OBaqrMGpu12obgdwXWkAa8pbzpJkmmkbTfdHn5iAAdaLsXl1o2E0ddABMLLFb4iFK+
+         fQ15I0liLzRaMvdPA9hSIkw4aPOL/9zkwjYkJ16/YdpDvwzgJaJoa3w2BMKwz8VTTl
+         JwOY38F3AKEZVfbbqysuC2a+Gr3drhJmcGqmNvT+jb+BJBE1IVZClgD1CoVCAhXoi7
+         KObhTpAHn/VYA==
+Date:   Thu, 5 May 2022 11:01:34 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Rob Clark <robdclark@gmail.com>, Sean Paul <seanpaul@chromium.org>,
+        Dave Airlie <airlied@linux.ie>
+Cc:     DRI <dri-devel@lists.freedesktop.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>
+Subject: linux-next: manual merge of the drm-msm tree with the drm tree
+Message-ID: <20220505110134.583417b5@canb.auug.org.au>
 MIME-Version: 1.0
-In-Reply-To: <20220428120837.3737765-1-yukuai3@huawei.com>
-Content-Type: text/plain; charset="gbk"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.176.73]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- kwepemm600009.china.huawei.com (7.193.23.164)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: multipart/signed; boundary="Sig_/p6pn4M.mqrHXcKuX5ZM2SLb";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,132 +54,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Paolo
+--Sig_/p6pn4M.mqrHXcKuX5ZM2SLb
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Can you take a look at this patchset? It has been quite a long time
-since we spotted this problem...
+Hi all,
 
-Thanks,
-Kuai
+Today's linux-next merge of the drm-msm tree got a conflict in:
 
-ÔÚ 2022/04/28 20:08, Yu Kuai Ð´µÀ:
-> Changes in v5:
->   - rename bfq_add_busy_queues() to bfq_inc_busy_queues() in patch 1
->   - fix wrong definition in patch 1
->   - fix spelling mistake in patch 2: leaset -> least
->   - update comments in patch 3
->   - add reviewed-by tag in patch 2,3
-> 
-> Changes in v4:
->   - split bfq_update_busy_queues() to bfq_add/dec_busy_queues(),
->     suggested by Jan Kara.
->   - remove unused 'in_groups_with_pending_reqs',
-> 
-> Changes in v3:
->   - remove the cleanup patch that is irrelevant now(I'll post it
->     separately).
->   - instead of hacking wr queues and using weights tree insertion/removal,
->     using bfq_add/del_bfqq_busy() to count the number of groups
->     (suggested by Jan Kara).
-> 
-> Changes in v2:
->   - Use a different approch to count root group, which is much simple.
-> 
-> Currently, bfq can't handle sync io concurrently as long as they
-> are not issued from root group. This is because
-> 'bfqd->num_groups_with_pending_reqs > 0' is always true in
-> bfq_asymmetric_scenario().
-> 
-> The way that bfqg is counted into 'num_groups_with_pending_reqs':
-> 
-> Before this patchset:
->   1) root group will never be counted.
->   2) Count if bfqg or it's child bfqgs have pending requests.
->   3) Don't count if bfqg and it's child bfqgs complete all the requests.
-> 
-> After this patchset:
->   1) root group is counted.
->   2) Count if bfqg have at least one bfqq that is marked busy.
->   3) Don't count if bfqg doesn't have any busy bfqqs.
-> 
-> The main reason to use busy state of bfqq instead of 'pending requests'
-> is that bfqq can stay busy after dispatching the last request if idling
-> is needed for service guarantees.
-> 
-> With the above changes, concurrent sync io can be supported if only
-> one group is activated.
-> 
-> fio test script(startdelay is used to avoid queue merging):
-> [global]
-> filename=/dev/nvme0n1
-> allow_mounted_write=0
-> ioengine=psync
-> direct=1
-> ioscheduler=bfq
-> offset_increment=10g
-> group_reporting
-> rw=randwrite
-> bs=4k
-> 
-> [test1]
-> numjobs=1
-> 
-> [test2]
-> startdelay=1
-> numjobs=1
-> 
-> [test3]
-> startdelay=2
-> numjobs=1
-> 
-> [test4]
-> startdelay=3
-> numjobs=1
-> 
-> [test5]
-> startdelay=4
-> numjobs=1
-> 
-> [test6]
-> startdelay=5
-> numjobs=1
-> 
-> [test7]
-> startdelay=6
-> numjobs=1
-> 
-> [test8]
-> startdelay=7
-> numjobs=1
-> 
-> test result:
-> running fio on root cgroup
-> v5.18-rc1:	   550 Mib/s
-> v5.18-rc1-patched: 550 Mib/s
-> 
-> running fio on non-root cgroup
-> v5.18-rc1:	   349 Mib/s
-> v5.18-rc1-patched: 550 Mib/s
-> 
-> Note that I also test null_blk with "irqmode=2
-> completion_nsec=100000000(100ms) hw_queue_depth=1", and tests show
-> that service guarantees are still preserved.
-> 
-> Previous versions:
-> RFC: https://lore.kernel.org/all/20211127101132.486806-1-yukuai3@huawei.com/
-> v1: https://lore.kernel.org/all/20220305091205.4188398-1-yukuai3@huawei.com/
-> v2: https://lore.kernel.org/all/20220416093753.3054696-1-yukuai3@huawei.com/
-> v3: https://lore.kernel.org/all/20220427124722.48465-1-yukuai3@huawei.com/
-> v4: https://lore.kernel.org/all/20220428111907.3635820-1-yukuai3@huawei.com/
-> 
-> Yu Kuai (3):
->    block, bfq: record how many queues are busy in bfq_group
->    block, bfq: refactor the counting of 'num_groups_with_pending_reqs'
->    block, bfq: do not idle if only one group is activated
-> 
->   block/bfq-cgroup.c  |  1 +
->   block/bfq-iosched.c | 48 +++-----------------------------------
->   block/bfq-iosched.h | 57 +++++++--------------------------------------
->   block/bfq-wf2q.c    | 35 +++++++++++++++++-----------
->   4 files changed, 35 insertions(+), 106 deletions(-)
-> 
+  drivers/gpu/drm/msm/Kconfig
+
+between commit:
+
+  1e0f66420b13 ("drm/display: Introduce a DRM display-helper module")
+
+from the drm tree and commit:
+
+  f5d01644921b ("drm/msm: select DRM_DP_AUX_BUS for the AUX bus support")
+
+from the drm-msm tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc drivers/gpu/drm/msm/Kconfig
+index 864fdc20afef,a6110fc67ac4..000000000000
+--- a/drivers/gpu/drm/msm/Kconfig
++++ b/drivers/gpu/drm/msm/Kconfig
+@@@ -12,8 -12,8 +12,9 @@@ config DRM_MS
+  	select IOMMU_IO_PGTABLE
+  	select QCOM_MDT_LOADER if ARCH_QCOM
+  	select REGULATOR
++ 	select DRM_DP_AUX_BUS
+ -	select DRM_DP_HELPER
+ +	select DRM_DISPLAY_DP_HELPER
+ +	select DRM_DISPLAY_HELPER
+  	select DRM_KMS_HELPER
+  	select DRM_PANEL
+  	select DRM_BRIDGE
+
+--Sig_/p6pn4M.mqrHXcKuX5ZM2SLb
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJzIe4ACgkQAVBC80lX
+0GzzDggAgSZws/i/jFHBCSWfn/YAZYkglT/enoDLpdwpBCkILZB9zse94cdeCSGz
+P00mBrENxEVy2MFyx/Q9xbzqwpKzFAKTQ4Mvu+OndxiVL92hSjagBniR2IqGAFD1
+21CAiNWZdRtGwRfRrO01Z65EAKA6VLE9xmg+S7M9VqcY9AFeOum3ReZFgr1l+8fp
+SDnFoN1hp26HuNrwUVCaeAwFEGgQ7CYLFHEr0htko3VCnQ7fiA5q9I1nvLrN6hgr
+Flo0E1tkysgmYFaB+c/fma0HMT2rBBSTzl184Y6Kd8kKLiyhapAoSQ3M+cp0dIev
+n64Bv2btx3aFaB1TQo6Uwctg9sAAGQ==
+=clpE
+-----END PGP SIGNATURE-----
+
+--Sig_/p6pn4M.mqrHXcKuX5ZM2SLb--

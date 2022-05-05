@@ -2,225 +2,384 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A7CD51CBC7
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 00:00:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6D7F51CC16
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 00:33:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386162AbiEEWEK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 18:04:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52350 "EHLO
+        id S1386323AbiEEWgx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 18:36:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386112AbiEEWEI (ORCPT
+        with ESMTP id S1386314AbiEEWgt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 18:04:08 -0400
-Received: from na01-obe.outbound.protection.outlook.com (mail-cusazon11020023.outbound.protection.outlook.com [52.101.61.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE48811C3E;
-        Thu,  5 May 2022 15:00:22 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=lfFNIb0WqQ7Q0cS74kEwnNQGwQ6Gl1+1gxLgb4vOEGcZE9hgenzDrbpmno1DBsGYlfefFSxLDh7+gTFyMJU7irw98vlM9/qGf1zJKwbs+jmEXnI7938Io+klLqoVvUi6dIwJrmRjuhsPEH4Zgu0c92G94KdtGfivL33wnLTu4xXL1jI6yi6h4bbxJ7yzUZzEI5ErGdu+Nohfj40/M+Ehgkq3dgksVO9fvI4UyAVjQfcxj1RpN/GzHpktIkYkmwJGNIpkR5wcqEHKDytwSnhmxfvOMr2fOSdkQPxJVzAzBPfpBLJAw+roc6dOApsX1BwrpK8iaKMdMYrVS4sUun+miA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=nTwyU3I08js55lvmkGsAB+sLep8AJEICZ4BxL20Fwlc=;
- b=TBFQRs4OQDD7Y8dDrSNlDTVDw9wsbKy+/O042glHYMdxOVpuxnjqXUv77+1v8RJqPAn6QWN/QaEJMflmjyFomT48lNdEsTIx+8etDK/Wqs4PNS2hPtPbxpwdEDe4zgOHZg5pm//CmBxqhjblqVk2w7qC8zGjBTZY0+gmAkVuEpfmh686Cjn2Ei1pdsH5hj/x6txYhxK2kMBlVm1sjjUdLofk9eipxJeFcMginLZzK/I7Cd8fB9IfCt3cPorvuLwLsK9dztv5ub8FZoj8tXmi4zE9UAUBPflndLS/2UgE+WX36QSiBzo9nndXNt7rKker8MBoL1NuzQjnBkpbs/+asg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microsoft.com; dmarc=pass action=none
- header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=nTwyU3I08js55lvmkGsAB+sLep8AJEICZ4BxL20Fwlc=;
- b=QvWy3RTYcAjGMHsZED7lD9UF2Wuox1PWN/07vMjZH3QpnAGLZvG/BXCo9Z4z8ub9K2eImEhC4CLTWoizhNvnbtDViIsfK8MB+YU9PoLcOpggKKPFFUO6ndex40cnP2zjzc6tRKrGzNOoxYQOqsbrTem5zZLYxihHBE9pTzi2JUs=
-Received: from PH0PR21MB3025.namprd21.prod.outlook.com (2603:10b6:510:d2::21)
- by SA1PR21MB2051.namprd21.prod.outlook.com (2603:10b6:806:1b6::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5250.8; Thu, 5 May
- 2022 22:00:20 +0000
-Received: from PH0PR21MB3025.namprd21.prod.outlook.com
- ([fe80::dd77:2d4d:329e:87df]) by PH0PR21MB3025.namprd21.prod.outlook.com
- ([fe80::dd77:2d4d:329e:87df%5]) with mapi id 15.20.5250.008; Thu, 5 May 2022
- 22:00:20 +0000
-From:   "Michael Kelley (LINUX)" <mikelley@microsoft.com>
-To:     "Andrea Parri (Microsoft)" <parri.andrea@gmail.com>,
-        KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof Wilczynski <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>
-CC:     "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH 2/2] PCI: hv: Fix synchronization between channel callback
- and hv_pci_bus_exit()
-Thread-Topic: [PATCH 2/2] PCI: hv: Fix synchronization between channel
- callback and hv_pci_bus_exit()
-Thread-Index: AQHYX7WhwElYbDPDpUWGUtXwWEAy9K0Q11tg
-Date:   Thu, 5 May 2022 22:00:20 +0000
-Message-ID: <PH0PR21MB3025226119A4BB25473BC722D7C29@PH0PR21MB3025.namprd21.prod.outlook.com>
-References: <20220504125039.2598-1-parri.andrea@gmail.com>
- <20220504125039.2598-3-parri.andrea@gmail.com>
-In-Reply-To: <20220504125039.2598-3-parri.andrea@gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=db9f30b9-ccc7-4574-95bf-f92df033c7cd;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2022-05-05T21:59:26Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microsoft.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 939367b3-7fb5-491c-5a5a-08da2ee2a5a2
-x-ms-traffictypediagnostic: SA1PR21MB2051:EE_
-x-microsoft-antispam-prvs: <SA1PR21MB2051D650E815B1A9B4FB41D3D7C29@SA1PR21MB2051.namprd21.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 61hMWwGkkiuitfPHODBfckl0bveV5T0dWRqPdeKN9BBVD8dTyy+DhJXn+uim//MAp9CyiGsL/h2S78HRCF31GNmnf0xKnQdUqr9X+tMQ4lyiy50ZJ5v+YwN+Vhv/p90W1VMwZuFSeD2z3WSf+v6d6fKlPfkXm2FmJgRhm+18s7PclU/p3GvUs1riJ3m10g3VuvlsscLEANkJF9Bp70s/Im+8hpip/rLZNybRmzsGXTUaYKf27UVMHVozb3j5BwSwMo2yQ7oPdiPqYOJdi08eQNeYHoYqfYfrx90ckmoe+VLyK0kgf4O6Ex08YiAShq0ls6PXhY44rY1MF0GdoS8ePgXEOrpqZKga5hxerbnz/ZlxqeeBlSJdEGHq3Usqyohsbah5yGuCqNUNJZNFTQfLCgkXyUr4v/EeTkt5qZxv/NG/haU9n5dlNkVrk6shDfkgHZb+3RDCjcw/HQtsQ2EjKOeWGRmWEXDJq/XqpLOLdfU+keztH+sgXaCK1pjJ7OXBVvo3f3SbAMoiJTGWPeUiJONUnvkrPDvSxzvjo9P/TUsiI0vXvpFBTO62fI8ent487WJCPLqpXmKcBCFTRVqE3kYYSyx98E1PoBdhDL/ky5yYUEQjJhuiu5QPd5Gr+XTNSUybHGOkP7p4Fyq0YkbSmw9d8b88PALTyv0LnQMzihzAFBg53lBbYBfvq4KCqRUppBjHQ+YjBcxazRxv3FWIkUt10bg2G2kjECrirytWeADpt8FR8yyDIMJqtP2rpCYIUs19vw4XS+vHWwpOfMxVzA==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR21MB3025.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(451199009)(71200400001)(66556008)(186003)(33656002)(921005)(122000001)(52536014)(4326008)(64756008)(66446008)(66476007)(8676002)(110136005)(54906003)(55016003)(316002)(5660300002)(10290500003)(8990500004)(38100700002)(38070700005)(6506007)(83380400001)(9686003)(7696005)(2906002)(26005)(508600001)(82950400001)(82960400001)(86362001)(76116006)(66946007)(8936002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?k/vGL7L+vgdnAXeM+z3uQ8D9xrHGtA7iFUiy22lL4VIegVMyYRGom4AXA3s8?=
- =?us-ascii?Q?9uGmg3diWYm3hACV7TIAdVDpmq+akYyW4k85IOdaVWjK44XyFZt8efSXuSAH?=
- =?us-ascii?Q?pTwp2hciBfx3vLzCQwudZFsOjV+xFipXdi/m5ZAB9aDKCEkNhCSrH75ZoQN3?=
- =?us-ascii?Q?GRN2HpjaTDiJ+WmlOi5qQFgTOP/ygfzIn5Yl4vO2X0BEJpbKkhCV/kiqy2uS?=
- =?us-ascii?Q?rpHQIKnK1WUGg3OGUxrLF5XjujJEz/8p5eRAWR5BjbrAK9/6CqHaJneYQm/w?=
- =?us-ascii?Q?t3G6EZlWQcS/yRUoYAIE4mi95Srs/GypZlPqkzyb9Sqf2u3AUH/yiDk1jss0?=
- =?us-ascii?Q?SnBTjMYQx8Qo9oLaUlL5NYxQo7lM7uAXsWv6r7Gk8DJzoON9WJxFg63/MhII?=
- =?us-ascii?Q?J0a7p7iF8RBnR70+rkaOx+OAiB56iflDKiK/xh1XHhSeVYdHBaKdDUPTFstV?=
- =?us-ascii?Q?oOIPK8y/oFl6zIEDhEzYpycABl3qSp1Vku3IRTPrY1KfFhskN7BgPZE70+Yj?=
- =?us-ascii?Q?PB+knxAn+5ivBjAKyIaPiX1klB3vhq/IeNH69FXgIj2YLyIXvDopLgGYq9E8?=
- =?us-ascii?Q?1aJwHmNgDkXMdx+G+2A3VBo21S+M+lTkD+ZOqm0IFCsczy0Yvm/tE2/dm0xh?=
- =?us-ascii?Q?lAxVRzpwFh83lwvip1Goe3SNz9fCyej2FDQkrQugScX7XVbyvX2eYBHeDGcf?=
- =?us-ascii?Q?wZt6AvDRAdFRzLmUYzdCDBwGNJtqdRFotoiH7J4lVCn0o9iALs5UElL+EeQx?=
- =?us-ascii?Q?mhPDmfxF4GfD2xNy50RwUIv+PUhCYxaV5LFPBLvmt9KHlEHqdcxs6UFQInyK?=
- =?us-ascii?Q?kIdK/qxrMHHjvdbnWEdikD3baK68bDol1LHwxtdOQW19Ij7Uw7usFlnzfjpH?=
- =?us-ascii?Q?ucgROh0/Zvn/g9HNYQW9VdYlb8LBgyoDSKJcr3hWH56fEFE2reeYF8G/JM91?=
- =?us-ascii?Q?ge5Ef1tHy8o3kSMqvlRb04XCrvqEOHmQBcwr4au2YqPywdvFSYLJXlO2uRT/?=
- =?us-ascii?Q?3z9XALcZE4rfejSQLWzAodBUNXBQWrQD1CGcVlCxwvQ7UIrW6JFAiWvZsELn?=
- =?us-ascii?Q?vru0ilue8rGoxwuUqjU96l+mNZwh+LEyIQ1pCM+iJPrQEzKCtU60BzQB59CI?=
- =?us-ascii?Q?CXH7RqKwkMjLQzJCLcV4+P6f6r/Xg0OdDsq5M/BsVZg1C4VjI1PrOjwFecHm?=
- =?us-ascii?Q?8pDruJXgZP59dzkBlaA/hSVbX3qMd65ZQ1hn7tQ+sFfe9o+1Z9z8jAWE8Oop?=
- =?us-ascii?Q?o0GxYWS5w67qfOPwUDDIQCUP/AO0/q/Yu4Nc07zE0nApoGBWD1P7Z0lxIios?=
- =?us-ascii?Q?tnXmzTHSHq/igKwYT+Sxn8yAkx1YUu20HDjKFu3eaZcIgafQ006lSdXQOCcJ?=
- =?us-ascii?Q?PrarP1VxOlyiWEqBbKK+FmXO794Z1V7nrKuR8WhZLFl9ST566P3qr16mCmOl?=
- =?us-ascii?Q?ZScWb8yNZ5zl2FScQL8Ix1hbn3RSkrNJKPj71V+6Pnm/G+ThxF2uhFxedYVH?=
- =?us-ascii?Q?jVL5+h8Mn7Zs6PcUIkfbRc7ManzS9IGrCdSw8u/TLDylZlhdHMD+Lkke0jTV?=
- =?us-ascii?Q?gs2r1nso8f2j3G3SFvWD+ZsUiMG+b3pL+KzxY7+DK6wPm07bqzANf8Eubs9G?=
- =?us-ascii?Q?P6xHc6+qj6OE2uVHzp0Z/nkZGVoRGYNmDF04Hl/dsXCOeKy8rpBnbQbuUP8T?=
- =?us-ascii?Q?kz0oV90CrkExucZtwtYIfkgpi4BzX7fYwrN4u0vH/udBMMDF2NKlVNaf9o/p?=
- =?us-ascii?Q?+aDxTFWacNrIFWdsUGqpvhgScdZPLUc=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Thu, 5 May 2022 18:36:49 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EADAC53727
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 15:33:07 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 95D29B830E6
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 22:33:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C08BC385A4;
+        Thu,  5 May 2022 22:33:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1651789985;
+        bh=MaHdE8LQ+7KwTUrg0nIeawEp1kmAQn/vOtH5ihVko3Q=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=PipJedFDNNhLNUR2uhPQJC+uIKCE0+BEj929ZdpNpCK5JkYRHIn7ZjmI2/v5oYP4w
+         fwwqTU1+7bOBPDa5reIPv2DUSGwTvv4jwdqyznkdLNw2ECGNZpVUw6nN9SDXtrS35V
+         pbZd+AYVdrx8jK3awzcJSm4kO2JUANHJnRnIKUnY=
+Date:   Thu, 5 May 2022 21:20:38 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Manjunatha Venkatesh <manjunatha.venkatesh@nxp.com>
+Cc:     linux-kernel@vger.kernel.org, will@kernel.org, axboe@kernel.dk,
+        mb@lightnvm.io, ckeepax@opensource.cirrus.com, mst@redhat.com,
+        javier@javigon.com, mikelley@microsoft.com, jasowang@redhat.com,
+        sunilmut@microsoft.com, bjorn.andersson@linaro.org,
+        rvmanjumce@gmail.com, ashish.deshpande@nxp.com
+Subject: Re: [PATCH v3] [PATCH v3] uwb: nxp: sr1xx: UWB driver support for
+ sr1xx series chip
+Message-ID: <YnQjhoVsaI6IteIe@kroah.com>
+References: <20220504171337.3416983-1-manjunatha.venkatesh@nxp.com>
 MIME-Version: 1.0
-X-OriginatorOrg: microsoft.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR21MB3025.namprd21.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 939367b3-7fb5-491c-5a5a-08da2ee2a5a2
-X-MS-Exchange-CrossTenant-originalarrivaltime: 05 May 2022 22:00:20.2163
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: nh4VEazMnrt1yawkUywp9tgYwQKAcGQhX3fDzfNGYpn9lKDRt6bS+8+7wiaFrby+Edzxj9Ep5dC7z5de12Mtw8GgxrSAr/YuVJoBo8qhPvg=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR21MB2051
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220504171337.3416983-1-manjunatha.venkatesh@nxp.com>
+X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DATE_IN_PAST_03_06,
+        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andrea Parri (Microsoft) <parri.andrea@gmail.com> Sent: Wednesday, Ma=
-y 4, 2022 5:51 AM
->=20
-> [ Similarly to commit a765ed47e4516 ("PCI: hv: Fix synchronization
->   between channel callback and hv_compose_msi_msg()"): ]
->=20
-> The (on-stack) teardown packet becomes invalid once the completion
-> timeout in hv_pci_bus_exit() has expired and hv_pci_bus_exit() has
-> returned.  Prevent the channel callback from accessing the invalid
-> packet by removing the ID associated to such packet from the VMbus
-> requestor in hv_pci_bus_exit().
->=20
-> Signed-off-by: Andrea Parri (Microsoft) <parri.andrea@gmail.com>
+On Wed, May 04, 2022 at 10:43:37PM +0530, Manjunatha Venkatesh wrote:
+> Ultra-wideband (UWB) is a short-range wireless communication protocol
+> 
+> sr1xx is a new driver that supports the integrated UWB for
+> Nxp SoCs, especially the sr1xx series and depends on the SPI module.
+> 
+> sr1xx driver works with Nxp UWB Subsystem(UWBS) which is FiRa Complaint.
+
+What is the Nxp UWBS and where can it be found?  You have custom ioctls
+here with no public user so we really can't take them, right?
+
+> Corresponding UCI details available in Fira Consortuim website.
+
+Have a link for this?
+
+> sr1xx is flash less device  and it requires firmware download on every
+> device boot.
+
+Too many spaces in that sentence?
+
+Lots of devices need firmware, that's not a big deal if you are using
+the firmware api, right?  Wait, you are not using that api, so how is
+the firwmare being downloaded?
+
+> Internally driver will handle two modes of operation.
+> 1.HBCI mode (sr1xx BootROM Code Interface)
+>   Firmware download uses HBCI ptotocol packet structure which is
+>   Nxp proprietary,Firmware File(.bin) stored in user space context
+>   and during device init sequence pick the firmware packet in chunk
+>   and send it to the driver with write() api call.
+
+That's not ok, use the standard in-kernel firmware download api please.
+
+>   Firmware acknowledge for every chunk packet sent and same thing
+>   is monitored,in user space code(HAL layer).
+
+What does a HAL layer have to do with anything here?
+
+>   If any error Firmware download sequence will fail and reset the device.
+>   If firmware download packet sent successfully at the end device will
+>   send device status notification and its indication of device entered
+>   UCI mode.Here after any command/response/notification will follow
+>   UCI packet structure.
+
+Again, just use the normal fiwmare download logic and you will not need
+to worry about any of the above.  For obvious reasons you don't want us
+to take a custom firmware api for every individual device that Linux
+supports as that would be crazy :)
+
+> 2.UCI mode (UWB Command interface)
+>   Once Firmware download finishes sr1xx will switch to UCI mode packet
+>   structure.Here this driver exchange command/response between user space
+>   and sr1xx device.
+
+Please have someone proof read this changelog before you resend.
+
+>   Any response or notification received from sr1xx through SPI line
+>   will convey to user space.User space(UCI lib) will take care of
+>   UCI parsing logic.
+
+As I said when we met to talk about this driver, why do you have a
+custom api/interface at all?  Why can you not just use the normal
+user/kernel api for SPI devices?
+
+You should not need any read/write/ioctl api for this driver at all,
+it's just a simple spi driver from what I can tell.  This should not be
+complex to implement at all.
+
+>   Its IRQ based driver and sr1xx specific irq handshake mechanism logic
+>   implemented to avoid any race condition between write and read
+>   during ranging sequence.
+
+I do not understand this sentence at all, sorry.
+
+>   UCI mode Write is same as HBCI mode sequence whatever command received
+>   from user space will send to the sr1xx via SPI line.
+>   In UCI mode read api called first and waiting on the IRQ line status
+>   in order to avoid missing of interrupts after write sequence.
+> 
+>   This driver needs dts config update as per the sr1xx data sheet.
+>   Corresponding document will be added in
+>   Documentation/devicetree/bindings/uwb
+
+We can not take drivers with dts requirements without the dts updates as
+well, as you know.  Please make that the first patch in the series and
+properly cc: the needed DT maintainers.  For that reason alone I
+couldn't take this patch if I wanted to.
+
+> Link: https://lore.kernel.org/r/20220315105205.2381997-1-manjunatha.venkatesh@nxp.com
+
+What is this a link to?
+
+> Signed-off-by: Manjunatha Venkatesh <manjunatha.venkatesh@nxp.com>
 > ---
->  drivers/pci/controller/pci-hyperv.c | 26 +++++++++++++++++++-------
->  1 file changed, 19 insertions(+), 7 deletions(-)
->=20
-> diff --git a/drivers/pci/controller/pci-hyperv.c b/drivers/pci/controller=
-/pci-hyperv.c
-> index 9a3e17b682eb7..db4b3f86726b2 100644
-> --- a/drivers/pci/controller/pci-hyperv.c
-> +++ b/drivers/pci/controller/pci-hyperv.c
-> @@ -3620,6 +3620,7 @@ static int hv_pci_probe(struct hv_device *hdev,
->  static int hv_pci_bus_exit(struct hv_device *hdev, bool keep_devs)
->  {
->  	struct hv_pcibus_device *hbus =3D hv_get_drvdata(hdev);
-> +	struct vmbus_channel *chan =3D hdev->channel;
->  	struct {
->  		struct pci_packet teardown_packet;
->  		u8 buffer[sizeof(struct pci_message)];
-> @@ -3627,13 +3628,14 @@ static int hv_pci_bus_exit(struct hv_device *hdev=
-, bool
-> keep_devs)
->  	struct hv_pci_compl comp_pkt;
->  	struct hv_pci_dev *hpdev, *tmp;
->  	unsigned long flags;
-> +	u64 trans_id;
->  	int ret;
->=20
->  	/*
->  	 * After the host sends the RESCIND_CHANNEL message, it doesn't
->  	 * access the per-channel ringbuffer any longer.
->  	 */
-> -	if (hdev->channel->rescind)
-> +	if (chan->rescind)
->  		return 0;
->=20
->  	if (!keep_devs) {
-> @@ -3670,16 +3672,26 @@ static int hv_pci_bus_exit(struct hv_device *hdev=
-, bool
-> keep_devs)
->  	pkt.teardown_packet.compl_ctxt =3D &comp_pkt;
->  	pkt.teardown_packet.message[0].type =3D PCI_BUS_D0EXIT;
->=20
-> -	ret =3D vmbus_sendpacket(hdev->channel, &pkt.teardown_packet.message,
-> -			       sizeof(struct pci_message),
-> -			       (unsigned long)&pkt.teardown_packet,
-> -			       VM_PKT_DATA_INBAND,
-> -			       VMBUS_DATA_PACKET_FLAG_COMPLETION_REQUESTED);
-> +	ret =3D vmbus_sendpacket_getid(chan, &pkt.teardown_packet.message,
-> +				     sizeof(struct pci_message),
-> +				     (unsigned long)&pkt.teardown_packet,
-> +				     &trans_id, VM_PKT_DATA_INBAND,
+
+You forgot to list what changed from previous versions below the ---
+line like the documentation asks you to do.  Please fix that for the
+next submission.  My patch bot normally would just reject the change for
+that reason alone, documentation matters :)
+
+
+>  MAINTAINERS               |   6 +
+>  drivers/misc/Kconfig      |  15 +
+>  drivers/misc/Makefile     |   1 +
+>  drivers/misc/sr1xx.c      | 784 ++++++++++++++++++++++++++++++++++++++
+>  include/uapi/misc/sr1xx.h |  79 ++++
+>  5 files changed, 885 insertions(+)
+>  create mode 100644 drivers/misc/sr1xx.c
+>  create mode 100644 include/uapi/misc/sr1xx.h
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index edc96cdb85e8..2896d401dbc4 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -21888,3 +21888,9 @@ S:	Buried alive in reporters
+>  T:	git git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+>  F:	*
+>  F:	*/
 > +
-> VMBUS_DATA_PACKET_FLAG_COMPLETION_REQUESTED);
->  	if (ret)
->  		return ret;
->=20
-> -	if (wait_for_completion_timeout(&comp_pkt.host_event, 10 * HZ) =3D=3D 0=
-)
-> +	if (wait_for_completion_timeout(&comp_pkt.host_event, 10 * HZ) =3D=3D 0=
-) {
-> +		/*
-> +		 * The completion packet on the stack becomes invalid after
-> +		 * 'return'; remove the ID from the VMbus requestor if the
-> +		 * identifier is still mapped to/associated with the packet.
-> +		 *
-> +		 * Cf. hv_pci_onchannelcallback().
-> +		 */
-> +		vmbus_request_addr_match(chan, trans_id,
-> +					 (unsigned long)&pkt.teardown_packet);
->  		return -ETIMEDOUT;
-> +	}
->=20
->  	return 0;
->  }
-> --
-> 2.25.1
+> +UWB
 
-Reviewed-by: Michael Kelley <mikelley@microsoft.com>
+Note, this is NOT generic UWB.  This is a single spi device driver,
+right?
 
+> +M:	manjunatha.venkatesh@nxp.com
+
+No real name?
+
+> +S:	Maintained
+> +F:	drivers/misc/sr1xx.c
+> +F:	include/uapi/misc/sr1xx.h
+
+Please read the top of this file for how to correctly find where to
+place your new entry.
+
+> diff --git a/drivers/misc/Kconfig b/drivers/misc/Kconfig
+> index 41d2bb0ae23a..1ca97d168f26 100644
+> --- a/drivers/misc/Kconfig
+> +++ b/drivers/misc/Kconfig
+> @@ -483,6 +483,21 @@ config OPEN_DICE
+>  
+>  	  If unsure, say N.
+>  
+> +config NXP_UWB
+> +        tristate "Nxp UCI(Uwb Command Interface) protocol driver support"
+> +        depends on SPI
+> +        help
+> +        This option enables the UWB driver for Nxp sr1xx
+> +        device. Such device supports UCI packet structure,
+> +        FiRa complaint.
+> +
+> +
+> +
+> +        Say Y here to compile support for sr1xx into the kernel or
+> +        say M to compile it as a module. The module will be called
+> +        sr1xx.ko
+> +
+> +
+
+Why all the extra blank lines?
+
+And are you sure you indented the help properly?  Why no tabs like the
+rest of this file?  Did you run checkpatch.pl on your patch first?
+
+
+>  source "drivers/misc/c2port/Kconfig"
+>  source "drivers/misc/eeprom/Kconfig"
+>  source "drivers/misc/cb710/Kconfig"
+> diff --git a/drivers/misc/Makefile b/drivers/misc/Makefile
+> index 70e800e9127f..bbd4dd17cabc 100644
+> --- a/drivers/misc/Makefile
+> +++ b/drivers/misc/Makefile
+> @@ -60,3 +60,4 @@ obj-$(CONFIG_XILINX_SDFEC)	+= xilinx_sdfec.o
+>  obj-$(CONFIG_HISI_HIKEY_USB)	+= hisi_hikey_usb.o
+>  obj-$(CONFIG_HI6421V600_IRQ)	+= hi6421v600-irq.o
+>  obj-$(CONFIG_OPEN_DICE)		+= open-dice.o
+> +obj-$(CONFIG_NXP_UWB) 		+= sr1xx.o
+> diff --git a/drivers/misc/sr1xx.c b/drivers/misc/sr1xx.c
+> new file mode 100644
+> index 000000000000..100c36031fd2
+> --- /dev/null
+> +++ b/drivers/misc/sr1xx.c
+> @@ -0,0 +1,784 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * SPI driver for UWB SR1xx
+> + * Copyright (C) 2018-2022 NXP.
+> + *
+> + * Author: Manjunatha Venkatesh <manjunatha.venkatesh@nxp.com>
+> + */
+> +#include <linux/kernel.h>
+> +#include <linux/miscdevice.h>
+> +#include <linux/module.h>
+> +#include <linux/mutex.h>
+> +#include <linux/spinlock.h>
+> +#include <linux/delay.h>
+> +#include <linux/fs.h>
+> +#include <linux/gpio.h>
+> +#include <linux/init.h>
+> +#include <linux/interrupt.h>
+> +#include <linux/io.h>
+> +#include <linux/irq.h>
+> +#include <linux/jiffies.h>
+> +#include <linux/list.h>
+> +#include <linux/of_gpio.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/device.h>
+> +#include <linux/poll.h>
+> +#include <linux/regulator/consumer.h>
+> +#include <linux/sched.h>
+> +#include <linux/slab.h>
+> +#include <linux/spi/spi.h>
+> +#include <linux/uaccess.h>
+> +#include <uapi/misc/sr1xx.h>
+
+Do you really need all of these?  If so, great, but I think that's way
+too many for a simple driver like this.
+
+
+> +
+> +static int sr1xx_dev_open(struct inode *inode, struct file *filp)
+> +{
+> +	struct sr1xx_dev *sr1xx_dev = container_of(
+> +		filp->private_data, struct sr1xx_dev, sr1xx_device);
+
+Odd line break, please run checkpatch.pl.
+
+I'm not going to review the driver contents based on my above comments
+as this needs lots of reworking and most of the code here can go away.
+
+One meta-comment though, your uapi .h file:
+
+> --- /dev/null
+> +++ b/include/uapi/misc/sr1xx.h
+> @@ -0,0 +1,79 @@
+> +/* SPDX-License-Identifier: GPL-2.0-only
+> + *
+> + * Header file for UWB sr1xx device
+> + * Copyright (C) 2018-2022 NXP.
+> + *
+> + * Author: Manjunatha Venkatesh <manjunatha.venkatesh@nxp.com>
+> + */
+> +
+> +#include <linux/types.h>
+> +
+> +#define SR1XX_MAGIC 0xEA
+> +#define SR1XX_SET_PWR _IOW(SR1XX_MAGIC, 0x01, long)
+> +#define SR1XX_SET_FWD _IOW(SR1XX_MAGIC, 0x02, long)
+> +
+> +#define UCI_HEADER_LEN 4
+> +#define HBCI_HEADER_LEN 4
+> +#define UCI_PAYLOAD_LEN_OFFSET 3
+> +
+> +#define UCI_EXT_PAYLOAD_LEN_IND_OFFSET 1
+> +#define UCI_EXT_PAYLOAD_LEN_IND_OFFSET_MASK 0x80
+> +#define UCI_EXT_PAYLOAD_LEN_OFFSET 2
+> +
+> +#define SR1XX_TXBUF_SIZE 4200
+> +#define SR1XX_RXBUF_SIZE 4200
+> +#define SR1XX_MAX_TX_BUF_SIZE 4200
+> +
+> +#define MAX_RETRY_COUNT_FOR_IRQ_CHECK 100
+> +#define MAX_RETRY_COUNT_FOR_HANDSHAKE 1000
+> +
+> +/* Macro to define SPI clock frequency */
+> +#define SR1XX_SPI_CLOCK 16000000L
+> +#define WAKEUP_SRC_TIMEOUT (2000)
+> +
+> +/* Maximum UCI packet size supported from the driver */
+> +#define MAX_UCI_PKT_SIZE 4200
+> +
+> +struct sr1xx_spi_platform_data {
+> +	unsigned int irq_gpio; /* SR1XX will interrupt host for any ntf */
+> +	unsigned int ce_gpio; /* SW reset gpio */
+> +	unsigned int spi_handshake_gpio; /* Host ready to read data */
+> +};
+> +
+> +/* Device specific macro and structure */
+> +struct sr1xx_dev {
+> +	wait_queue_head_t read_wq; /* Wait queue for read interrupt */
+> +	struct spi_device *spi; /* Spi device structure */
+> +	struct miscdevice sr1xx_device; /* Char device as misc driver */
+> +	unsigned int ce_gpio; /* SW reset gpio */
+> +	unsigned int irq_gpio; /* SR1XX will interrupt host for any ntf */
+> +	unsigned int spi_handshake_gpio; /* Host ready to read data */
+> +	bool irq_enabled; /* Flag to indicate disable/enable irq sequence */
+> +	bool irq_received; /* Flag to indicate that irq is received */
+> +	spinlock_t irq_enabled_lock; /* Spin lock for read irq */
+> +	unsigned char *tx_buffer; /* Transmit buffer */
+> +	unsigned char *rx_buffer; /* Receive buffer */
+> +	unsigned int write_count; /* Holds nubers of byte written */
+> +	unsigned int read_count; /* Hold nubers of byte read */
+> +	struct mutex
+> +		sr1xx_access_lock; /* Lock used to synchronize read and write */
+> +	size_t total_bytes_to_read; /* Total bytes read from the device */
+> +	bool is_extended_len_bit_set; /* Variable to check ext payload Len */
+> +	bool read_abort_requested; /* Used to indicate read abort request */
+> +	bool is_fw_dwnld_enabled; /* Used to indicate fw download mode */
+> +	int mode; /* Indicate write or read mode */
+> +	long timeout_in_ms; /* Wait event interrupt timeout in ms */
+> +};
+> +
+> +/* Power enable/disable and read abort ioctl arguments */
+> +enum { PWR_DISABLE = 0, PWR_ENABLE, ABORT_READ_PENDING };
+> +
+> +enum spi_status_codes {
+> +	TRANSCEIVE_SUCCESS,
+> +	TRANSCEIVE_FAIL,
+> +	IRQ_WAIT_REQUEST,
+> +	IRQ_WAIT_TIMEOUT
+> +};
+> +
+> +/* Spi write/read operation mode */
+> +enum spi_operation_modes { SR1XX_WRITE_MODE, SR1XX_READ_MODE };
+
+
+You have loads of things in here that should NOT be exposed to userspace
+at all (your structure?)
+
+Does this even build properly if you have the header check build option
+enabled?  I would be amazed if it did.
+
+Anyway, you do not need a uapi .h file from what I can tell, so it
+shouldn't be needed for your next version.
+
+thanks,
+
+greg k-h

@@ -2,259 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C377D51C2D5
+	by mail.lfdr.de (Postfix) with ESMTP id 4D5F351C2D4
 	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 16:45:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380757AbiEEOtS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 10:49:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40782 "EHLO
+        id S1380748AbiEEOtC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 10:49:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231311AbiEEOtN (ORCPT
+        with ESMTP id S237470AbiEEOs7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 10:49:13 -0400
-Received: from us-smtp-delivery-74.mimecast.com (us-smtp-delivery-74.mimecast.com [170.10.133.74])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1482B15A09
-        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 07:45:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651761929;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=jyfGq7dMfrbIZ4AP54s9Y4BCxr+1pD8LVHEm2Fcyagk=;
-        b=CkVbdKQR8F8E1frVSxe9qgc9iBVz4cmT+aGJijL/8kwNZ999D8G9YUp8oJU5TkDgEdX7iV
-        ZAaJy6A8GfWn32/TlxRZ6r7O+TjtDPM4kXIYk8/DkFXvL1s2taFcug45DQl0S9p6ZbAIDC
-        y4EfdFIe6mdEKQWyRpgttnxbBHM3/mY=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-526-GtORjxlAO0WgK_p9jhgL8A-1; Thu, 05 May 2022 10:45:20 -0400
-X-MC-Unique: GtORjxlAO0WgK_p9jhgL8A-1
-Received: by mail-wr1-f72.google.com with SMTP id k29-20020adfb35d000000b0020adc94662dso1544084wrd.12
-        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 07:45:20 -0700 (PDT)
+        Thu, 5 May 2022 10:48:59 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63C0F6545
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 07:45:19 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id g23so5468362edy.13
+        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 07:45:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=NRsKFGIDkGHr/C8V+t8DnhNZU5FADxmt1ukPKfs0+qI=;
+        b=c5ikg0iw+xkhPe37FFEtC4U5qxSuDAe010fSVIvZHP2qT3yAjfouMmAQcaxBVsMJfz
+         e5tvSP60GpMwmnDf+0nbIH5nPVjrfyDoxyVc/Qd7kkRElsAMlHKGSs1pBqw3dxRe3yjb
+         eK1fLlHDMm/0JmhTd6vSfdr8bvaOwYYx3nKMHimIrNXKlluid+VMlPDsu8CiCv9LEw1q
+         xjWxDNezow5qnf3Nuu+3ln0TnK4cGO9afLc/ObNO+QfGRDhSrRU38Y0cKwB74VILuTdv
+         v/AjZpR4me2JP8kFISQlxJ2hFJNPmHB95I4oga3utOtX1GQFui0cKqalXpX4AOTvnPqx
+         LJ0w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:subject:in-reply-to
-         :content-transfer-encoding;
-        bh=jyfGq7dMfrbIZ4AP54s9Y4BCxr+1pD8LVHEm2Fcyagk=;
-        b=I2fAy62ab7+SZlNy0DaTn0jMRmeXmsZSXDnI1Nvf7y36uIcX0wlahy2GO//jDuFOkH
-         b7FFMJnoHEVhze7vvC1C/a6oWqQCy0zBVXgsodYirNsCCz/txrRyQ55HtKIRU//nOEFO
-         wfGPoezHuvqvLkL9hqfS+iqleeu27y4VE4K20nofntBWVMN8RDclHhF5yYwEiIfyvWqb
-         ADlG2p5mFOXZ3AQi9MB1ejOw5Jv5Ix0OhGifDp6wIqSP9zyfjZktCOfAjs8RDoi9OuBf
-         vPy02JGiYdOxyFD1XEuA4gtuOtPjVjF2VxuV+lVH6fnHf+FH3xiS7qYYdpdK3VCwbTBW
-         FfNA==
-X-Gm-Message-State: AOAM530mqu1NTypbbKP6otRuuu0pnBXvN8R09QZ72h+3Zkh7vP5Y1lJS
-        PneDkQwWvHvYENUjbEonm6Q+8ih191Lx8OPawsvuB82BevTb2MzRunmvLWsVehB7cqDPKaYCmMZ
-        CCm18UPj763wWTomgtRR53KHG
-X-Received: by 2002:adf:fe84:0:b0:20a:dc0b:4f2d with SMTP id l4-20020adffe84000000b0020adc0b4f2dmr21500155wrr.229.1651761919144;
-        Thu, 05 May 2022 07:45:19 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzZQq4VH2YS9CYoJkurgdMeySXi6KiIogT8HsYcwxJv74M68UxhhdX5HsfgALsw7hRyBw/cSA==
-X-Received: by 2002:adf:fe84:0:b0:20a:dc0b:4f2d with SMTP id l4-20020adffe84000000b0020adc0b4f2dmr21500139wrr.229.1651761918878;
-        Thu, 05 May 2022 07:45:18 -0700 (PDT)
-Received: from [192.168.8.104] (tmo-082-126.customers.d1-online.com. [80.187.82.126])
-        by smtp.gmail.com with ESMTPSA id l41-20020a05600c1d2900b0039456c00ba7sm6101976wms.1.2022.05.05.07.45.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 05 May 2022 07:45:18 -0700 (PDT)
-Message-ID: <08f78cc7-b34e-cdca-72b8-a0f9163f3ca7@redhat.com>
-Date:   Thu, 5 May 2022 16:45:13 +0200
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=NRsKFGIDkGHr/C8V+t8DnhNZU5FADxmt1ukPKfs0+qI=;
+        b=XLZFBICNIxFsHEow5vNVa7dSqHAVjiYBZKmENIb3Dq+ZzSqBJ3irl33k7fHX8+knm2
+         gYbBb8dp8RN51dhCi3gCZBufwnAEFL2A3rGtQf7psPxnPbWwt76vYd0uTIClu97T3zfr
+         z4WaVFhC++R9Fq15I9qEEvZ+p7Ule9yVgI1ThoXRhdOC7y5zQcxWAkQs5otNKFk7gqve
+         cXHvWRKQhFB5/qBJGxLof9mSGE5rPt9ICud2nuXuvpk7h9CVu/yA01rlK7AU23JDiPpJ
+         tnV0EnHPEkLiP0CUKfLEAxoE6VMn2yspsyAW91knVMqnHba27cpm7sMf2t7BZP9LsCul
+         j29w==
+X-Gm-Message-State: AOAM5333B6WPJX6JQ6Rk0vBcDCq82BaWDqMfWiwv4YixWgjregvikzF6
+        h9sFE0t7vw85ZB6rfQ/gtIY0LJ0HFB0SlY26Jpc=
+X-Google-Smtp-Source: ABdhPJxJW3mnnsG7aF7ISQP0hagAkmwFrWkCOhylR6YCeCbILtvUtuX3jKIPj0rAeiXauHgC+XUDFgTrFZWoYrnz4o8=
+X-Received: by 2002:a05:6402:35cd:b0:428:3831:1ba7 with SMTP id
+ z13-20020a05640235cd00b0042838311ba7mr4091593edc.311.1651761917975; Thu, 05
+ May 2022 07:45:17 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Content-Language: en-US
-To:     Claudio Imbrenda <imbrenda@linux.ibm.com>, kvm@vger.kernel.org
-Cc:     borntraeger@de.ibm.com, frankja@linux.ibm.com, pasic@linux.ibm.com,
-        david@redhat.com, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org, scgl@linux.ibm.com,
-        mimu@linux.ibm.com, nrb@linux.ibm.com
-References: <20220414080311.1084834-1-imbrenda@linux.ibm.com>
- <20220414080311.1084834-2-imbrenda@linux.ibm.com>
-From:   Thomas Huth <thuth@redhat.com>
-Subject: Re: [PATCH v10 01/19] KVM: s390: pv: leak the topmost page table when
- destroy fails
-In-Reply-To: <20220414080311.1084834-2-imbrenda@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Received: by 2002:a50:ee96:0:b0:425:f70b:1e42 with HTTP; Thu, 5 May 2022
+ 07:45:17 -0700 (PDT)
+Reply-To: sgtkaylam28@gmail.com
+From:   sgt kayla manthey <mamancherif2018@gmail.com>
+Date:   Thu, 5 May 2022 08:45:17 -0600
+Message-ID: <CAHTj9E5Sy1B3n43iYwh-jApsa-kQamLNu52pBMvNb0N-mNxe7g@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=4.8 required=5.0 tests=BAYES_20,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/04/2022 10.02, Claudio Imbrenda wrote:
-> Each secure guest must have a unique ASCE (address space control
-> element); we must avoid that new guests use the same page for their
-> ASCE, to avoid errors.
-> 
-> Since the ASCE mostly consists of the address of the topmost page table
-> (plus some flags), we must not return that memory to the pool unless
-> the ASCE is no longer in use.
-> 
-> Only a successful Destroy Secure Configuration UVC will make the ASCE
-> reusable again.
-> 
-> If the Destroy Configuration UVC fails, the ASCE cannot be reused for a
-> secure guest (either for the ASCE or for other memory areas). To avoid
-> a collision, it must not be used again. This is a permanent error and
-> the page becomes in practice unusable, so we set it aside and leak it.
-> On failure we already leak other memory that belongs to the ultravisor
-> (i.e. the variable and base storage for a guest) and not leaking the
-> topmost page table was an oversight.
-> 
-> This error (and thus the leakage) should not happen unless the hardware
-> is broken or KVM has some unknown serious bug.
-> 
-> Signed-off-by: Claudio Imbrenda <imbrenda@linux.ibm.com>
-> Fixes: 29b40f105ec8d55 ("KVM: s390: protvirt: Add initial vm and cpu lifecycle handling")
-> ---
->   arch/s390/include/asm/gmap.h |  2 +
->   arch/s390/kvm/pv.c           |  9 ++--
->   arch/s390/mm/gmap.c          | 80 ++++++++++++++++++++++++++++++++++++
->   3 files changed, 88 insertions(+), 3 deletions(-)
-> 
-> diff --git a/arch/s390/include/asm/gmap.h b/arch/s390/include/asm/gmap.h
-> index 40264f60b0da..746e18bf8984 100644
-> --- a/arch/s390/include/asm/gmap.h
-> +++ b/arch/s390/include/asm/gmap.h
-> @@ -148,4 +148,6 @@ void gmap_sync_dirty_log_pmd(struct gmap *gmap, unsigned long dirty_bitmap[4],
->   			     unsigned long gaddr, unsigned long vmaddr);
->   int gmap_mark_unmergeable(void);
->   void s390_reset_acc(struct mm_struct *mm);
-> +void s390_remove_old_asce(struct gmap *gmap);
-> +int s390_replace_asce(struct gmap *gmap);
->   #endif /* _ASM_S390_GMAP_H */
-> diff --git a/arch/s390/kvm/pv.c b/arch/s390/kvm/pv.c
-> index 7f7c0d6af2ce..3c59ef763dde 100644
-> --- a/arch/s390/kvm/pv.c
-> +++ b/arch/s390/kvm/pv.c
-> @@ -166,10 +166,13 @@ int kvm_s390_pv_deinit_vm(struct kvm *kvm, u16 *rc, u16 *rrc)
->   	atomic_set(&kvm->mm->context.is_protected, 0);
->   	KVM_UV_EVENT(kvm, 3, "PROTVIRT DESTROY VM: rc %x rrc %x", *rc, *rrc);
->   	WARN_ONCE(cc, "protvirt destroy vm failed rc %x rrc %x", *rc, *rrc);
-> -	/* Inteded memory leak on "impossible" error */
-> -	if (!cc)
-> +	/* Intended memory leak on "impossible" error */
-> +	if (!cc) {
->   		kvm_s390_pv_dealloc_vm(kvm);
-> -	return cc ? -EIO : 0;
-> +		return 0;
-> +	}
-> +	s390_replace_asce(kvm->arch.gmap);
-> +	return -EIO;
->   }
->   
->   int kvm_s390_pv_init_vm(struct kvm *kvm, u16 *rc, u16 *rrc)
-> diff --git a/arch/s390/mm/gmap.c b/arch/s390/mm/gmap.c
-> index af03cacf34ec..e8904cb9dc38 100644
-> --- a/arch/s390/mm/gmap.c
-> +++ b/arch/s390/mm/gmap.c
-> @@ -2714,3 +2714,83 @@ void s390_reset_acc(struct mm_struct *mm)
->   	mmput(mm);
->   }
->   EXPORT_SYMBOL_GPL(s390_reset_acc);
-> +
-> +/**
-> + * s390_remove_old_asce - Remove the topmost level of page tables from the
-> + * list of page tables of the gmap.
-> + * @gmap the gmap whose table is to be removed
-> + *
-> + * This means that it will not be freed when the VM is torn down, and needs
-> + * to be handled separately by the caller, unless an intentional leak is
-> + * intended. Notice that this function will only remove the page from the
-
-"intentional leak is intended" ... sounds redundant. Scratch the first 
-"intentional" ?
-
-> + * list, the page will still be used as a top level page table (and ASCE).
-> + */
-> +void s390_remove_old_asce(struct gmap *gmap)
-> +{
-> +	struct page *old;
-> +
-> +	old = virt_to_page(gmap->table);
-> +	spin_lock(&gmap->guest_table_lock);
-> +	list_del(&old->lru);
-> +	/*
-> +	 * In case the ASCE needs to be "removed" multiple times, for example
-> +	 * if the VM is rebooted into secure mode several times
-> +	 * concurrently, or if s390_replace_asce fails after calling
-> +	 * s390_remove_old_asce and is attempted again later. In that case
-
-"In case the ASCE ... . In that case" - this should be either one big 
-sentence, or better, scratch the first "In case" and use "Sometimes" or 
-something similar to start the first sentence.
-
-> +	 * the old asce has been removed from the list, and therefore it
-> +	 * will not be freed when the VM terminates, but the ASCE is still
-> +	 * in use and still pointed to.
-> +	 * A subsequent call to replace_asce will follow the pointer and try
-> +	 * to remove the same page from the list again.
-> +	 * Therefore it's necessary that the page of the ASCE has valid
-> +	 * pointers, so list_del can work (and do nothing) without
-> +	 * dereferencing stale or invalid pointers.
-> +	 */
-> +	INIT_LIST_HEAD(&old->lru);
-> +	spin_unlock(&gmap->guest_table_lock);
-> +}
-> +EXPORT_SYMBOL_GPL(s390_remove_old_asce);
-> +
-> +/**
-> + * s390_replace_asce - Try to replace the current ASCE of a gmap with
-> + * another equivalent one.
-> + * @gmap the gmap
-
-"the gmap" is not a very helpful description for a parmeter that is already 
-called gmap. Write at least "the guest map that should be replaced" ?
-
-> + *
-> + * If the allocation of the new top level page table fails, the ASCE is not
-> + * replaced.
-> + * In any case, the old ASCE is always removed from the list. Therefore the
-> + * caller has to make sure to save a pointer to it beforehands, unless an
-
-s/beforehands/beforehand/
-
-> + * intentional leak is intended.
-
-scratch "intentional".
-
-> + */
-> +int s390_replace_asce(struct gmap *gmap)
-> +{
-> +	unsigned long asce;
-> +	struct page *page;
-> +	void *table;
-> +
-> +	s390_remove_old_asce(gmap);
-> +
-> +	page = alloc_pages(GFP_KERNEL_ACCOUNT, CRST_ALLOC_ORDER);
-> +	if (!page)
-> +		return -ENOMEM;
-> +	table = page_to_virt(page);
-> +	memcpy(table, gmap->table, 1UL << (CRST_ALLOC_ORDER + PAGE_SHIFT));
-> +
-> +	/*
-> +	 * The caller has to deal with the old ASCE, but here we make sure
-> +	 * the new one is properly added to the list of page tables, so that
-> +	 * it will be freed when the VM is torn down.
-> +	 */
-> +	spin_lock(&gmap->guest_table_lock);
-> +	list_add(&page->lru, &gmap->crst_list);
-> +	spin_unlock(&gmap->guest_table_lock);
-> +
-> +	/* Set new table origin while preserving existing ASCE control bits */
-> +	asce = (gmap->asce & ~_ASCE_ORIGIN) | __pa(table);
-> +	WRITE_ONCE(gmap->asce, asce);
-> +	WRITE_ONCE(gmap->mm->context.gmap_asce, asce);
-> +	WRITE_ONCE(gmap->table, table);
-> +
-> +	return 0;
-> +}
-> +EXPORT_SYMBOL_GPL(s390_replace_asce);
-
-  Thomas
-
+--=20
+=C3=9Cdv=C3=B6zlettel,
+K=C3=A9rem, megkapta az el=C5=91z=C5=91 =C3=BCzenetem? =C3=8Drj vissza

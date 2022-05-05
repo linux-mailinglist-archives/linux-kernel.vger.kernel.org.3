@@ -2,134 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6581751B967
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 09:46:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6442A51B953
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 09:40:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345883AbiEEHtm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 03:49:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56012 "EHLO
+        id S1345568AbiEEHoX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 03:44:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234066AbiEEHtl (ORCPT
+        with ESMTP id S1345413AbiEEHoR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 03:49:41 -0400
-X-Greylist: delayed 341 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 05 May 2022 00:46:02 PDT
-Received: from us-smtp-delivery-74.mimecast.com (us-smtp-delivery-74.mimecast.com [170.10.129.74])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C6C131D311
-        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 00:46:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651736761;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=NhRL0x5JxNjh9559awUlQzavmJp0VQ+2PFdUhFoZcIo=;
-        b=YE+E/wMfI2VAHzwS4wt9hBWFmSJMW6bOb5ymBor3H2Eh+YanaxSYowGJ86DyBQOJhbUGDJ
-        s5WBtXI7TmrIkg4YHRS4Me57SqZW+zdzySknhArvP3TWC4PguZqXQQH63bekkxr+BcARWS
-        CKWsRUbPYqCzAh0CZ7/v03NKWVbnqtc=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-496-0JGUhcPYOGeqyfqyywo4kA-1; Thu, 05 May 2022 03:38:52 -0400
-X-MC-Unique: 0JGUhcPYOGeqyfqyywo4kA-1
-Received: by mail-wm1-f69.google.com with SMTP id o24-20020a05600c379800b003943412e81dso1418207wmr.6
-        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 00:38:52 -0700 (PDT)
+        Thu, 5 May 2022 03:44:17 -0400
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DB8218388
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 00:40:39 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id d25so3014887pfo.10
+        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 00:40:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=g5+cU6rju5q4PixcXKa5q0u5g3HxteJZ5Y7imLW6zec=;
+        b=aC1SKi4r1y8gQCHUieTZ02NfjxR/NT7PnVvgPER49hsL0t10jaJr0/EOvqWfXWWZbi
+         hui3ac+un3NS7SeDvijuxGNLKCFTPZ0nIGSJrX8WOBSC8RKLxx10nTmR9wmBMwkk0Ahi
+         pDRstdJIC4m7UfS73Z3CESXtKP116DxrNOTFNDtnRkZZFDe4HQ0KlWyN2ahpRwj75ZMp
+         0jjvUstov+9usyDNkTkyoFTMlL4VUEM4V5LMW5VkaaYQIQxeDOD60kh00nGp2sxg1MfB
+         pADNqPC4D2W/tHZfunItlxaXoJKfBQ0PFVRHV7WR01soQBeOpeQG4nQXd6srhyskD7Kw
+         1trA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=NhRL0x5JxNjh9559awUlQzavmJp0VQ+2PFdUhFoZcIo=;
-        b=qyxLnIAB3MTsJQzhp8zKUeNVK6kAmD6ChZv7zM6oqywB0vLi/ElFdhoqXKG0vgwYtf
-         uK8Aj2eQ+yAZlkFGCZgkF1d+Pf2Ak5agjHIA7hKGaYUw4T3XrK3al7z5J841mkCQMX+g
-         N3koTyBh+gQcCgbEKq0tkiEIQV+lj+jmDC9ghDWpRmP+D4I/TnPaGXm4/dIo6hwUhSfY
-         xdfVb1hUY1JlyJjLrpuxNsdSqccVBSk/zN6Qgs+GpSzaQvh0AqwRYwKzgkje2fA/2Qg+
-         OM0eIG+9HFdvK1TrLDTib9Np5mbP/vngBpbRFOoG6sOqS4NbaZ5/XKHiROGyG0kp4qJN
-         eIig==
-X-Gm-Message-State: AOAM530YshU6Tj/63bjdx0L1RI0tJWDapPvODPlf5LH+RuPkP+qDbBfQ
-        e5N+LyYDEZqbgdAK2DmKVA0M2ovak2JQxEe3/Ac2j4GG7IPP/pH6LpXyihz1TNLoLynlnlIVSjV
-        mQ57K+o53BpGhWxvmZLcyIMRV
-X-Received: by 2002:a5d:4585:0:b0:20a:da03:7131 with SMTP id p5-20020a5d4585000000b0020ada037131mr19047527wrq.693.1651736331459;
-        Thu, 05 May 2022 00:38:51 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwOiVrqfx6icK3c6hK4kQWSA8M7R4dWtYNn2w4VZryyBpTxL+R3XPp9/Z57KoRlU/8Sy+vNog==
-X-Received: by 2002:a5d:4585:0:b0:20a:da03:7131 with SMTP id p5-20020a5d4585000000b0020ada037131mr19047508wrq.693.1651736331173;
-        Thu, 05 May 2022 00:38:51 -0700 (PDT)
-Received: from [192.168.1.129] (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id x8-20020a7bc768000000b003942a244f2fsm5546131wmk.8.2022.05.05.00.38.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 05 May 2022 00:38:50 -0700 (PDT)
-Message-ID: <d9a5cb30-2d9b-50b5-d287-0ead0fe252f3@redhat.com>
-Date:   Thu, 5 May 2022 09:38:49 +0200
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=g5+cU6rju5q4PixcXKa5q0u5g3HxteJZ5Y7imLW6zec=;
+        b=UDGulMN6RF1nrmJKItnSf3t7fb0z4FaML6sjoHdLpguzaq3OmPgj77v1JXmIVZHaft
+         skoJBIVIMUSHaYtDZmzWiSnLDCvhnjzLCn2pXPUeSRdQUHIAG1noH52eZ67svPRl6g9H
+         b2Dhls2+3NA+TCoNkzaLMRITjA1yZG8zU6M80hUDoeSL6aKTw333u2ir141eInpRE/2k
+         ZzTkRTKZi4SfR1NMypDqquEtfB4fiWYlwWWWNTM5h0Qp8DYuSGv857zCQ/Yjz3ScXoMw
+         lenqDsD6hYWAIPPimvwM3Lb4ly83rpfpVunlgyDEFNl/PjvKNAfCaPT8dJWuYi9IJq/K
+         xsyQ==
+X-Gm-Message-State: AOAM532hfu/ZHWZBHOIF8tN1wX1tAjV6tyKXvNIc5lEuSwXAWVn3q/1C
+        rCci3y1KiS4MFn+szpTs+r4=
+X-Google-Smtp-Source: ABdhPJw20k22tZv728rddyr0QfZY9ymgsPLiRKtRYR7lT+jEnb5pM2AP2kMYj3hTQiSrMXTAZIqQlQ==
+X-Received: by 2002:a63:1d26:0:b0:3c1:eb3f:9daf with SMTP id d38-20020a631d26000000b003c1eb3f9dafmr18535970pgd.284.1651736438698;
+        Thu, 05 May 2022 00:40:38 -0700 (PDT)
+Received: from hyeyoo.. ([114.29.24.243])
+        by smtp.gmail.com with ESMTPSA id t68-20020a625f47000000b0050dc76281dcsm655084pfb.182.2022.05.05.00.40.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 May 2022 00:40:38 -0700 (PDT)
+From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
+To:     Alexander Potapenko <glider@google.com>,
+        Marco Elver <elver@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>
+Subject: [PATCH v2] mm/kfence: reset PG_slab and memcg_data before freeing __kfence_pool
+Date:   Thu,  5 May 2022 16:39:20 +0900
+Message-Id: <20220505073920.1880661-1-42.hyeyoo@gmail.com>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20220505070105.1835745-1-42.hyeyoo@gmail.com>
+References: <20220505070105.1835745-1-42.hyeyoo@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH 2/3] fbdev/simplefb: Cleanup fb_info in .fb_destroy rather
- than .remove
-Content-Language: en-US
-To:     Thomas Zimmermann <tzimmermann@suse.de>,
-        linux-kernel@vger.kernel.org
-Cc:     linux-fbdev@vger.kernel.org,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Helge Deller <deller@gmx.de>, dri-devel@lists.freedesktop.org,
-        Hans de Goede <hdegoede@redhat.com>
-References: <20220504215151.55082-1-javierm@redhat.com>
- <20220504215722.56970-1-javierm@redhat.com>
- <974f4d00-89bc-a2da-6d65-ca4207300794@suse.de>
-From:   Javier Martinez Canillas <javierm@redhat.com>
-In-Reply-To: <974f4d00-89bc-a2da-6d65-ca4207300794@suse.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Thomas,
+When kfence fails to initialize kfence pool, it frees the pool.
+But it does not reset PG_slab flag and memcg_data of struct page.
 
-On 5/5/22 09:29, Thomas Zimmermann wrote:
+Below is a BUG because of this. Let's fix it by resetting PG_slab
+and memcg_data before free.
 
-[snip]
+[    0.089149] BUG: Bad page state in process swapper/0  pfn:3d8e06
+[    0.089149] page:ffffea46cf638180 refcount:0 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x3d8e06
+[    0.089150] memcg:ffffffff94a475d1
+[    0.089150] flags: 0x17ffffc0000200(slab|node=0|zone=2|lastcpupid=0x1fffff)
+[    0.089151] raw: 0017ffffc0000200 ffffea46cf638188 ffffea46cf638188 0000000000000000
+[    0.089152] raw: 0000000000000000 0000000000000000 00000000ffffffff ffffffff94a475d1
+[    0.089152] page dumped because: page still charged to cgroup
+[    0.089153] Modules linked in:
+[    0.089153] CPU: 0 PID: 0 Comm: swapper/0 Tainted: G    B   W         5.18.0-rc1+ #965
+[    0.089154] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.14.0-2 04/01/2014
+[    0.089154] Call Trace:
+[    0.089155]  <TASK>
+[    0.089155]  dump_stack_lvl+0x49/0x5f
+[    0.089157]  dump_stack+0x10/0x12
+[    0.089158]  bad_page.cold+0x63/0x94
+[    0.089159]  check_free_page_bad+0x66/0x70
+[    0.089160]  __free_pages_ok+0x423/0x530
+[    0.089161]  __free_pages_core+0x8e/0xa0
+[    0.089162]  memblock_free_pages+0x10/0x12
+[    0.089164]  memblock_free_late+0x8f/0xb9
+[    0.089165]  kfence_init+0x68/0x92
+[    0.089166]  start_kernel+0x789/0x992
+[    0.089167]  x86_64_start_reservations+0x24/0x26
+[    0.089168]  x86_64_start_kernel+0xa9/0xaf
+[    0.089170]  secondary_startup_64_no_verify+0xd5/0xdb
+[    0.089171]  </TASK>
 
->>   static void simplefb_destroy(struct fb_info *info)
->>   {
->>   	struct simplefb_par *par = info->par;
->> @@ -94,6 +98,8 @@ static void simplefb_destroy(struct fb_info *info)
->>   	if (info->screen_base)
->>   		iounmap(info->screen_base);
->>   
->> +	framebuffer_release(info);
->> +
->>   	if (mem)
->>   		release_mem_region(mem->start, resource_size(mem));
-> 
-> The original problem with fbdev hot-unplug was that vmwgfx needed the 
-> framebuffer region to be released. If we release it only after userspace 
-> closed it's final file descriptor, vmwgfx could have already failed.
-> 
-> I still don't fully get why this code apparently works or at least 
-> doesn't blow up occasionally. Any ideas?
->
+Fixes: 0ce20dd84089 ("mm: add Kernel Electric-Fence infrastructure")
+Fixes: 8f0b36497303 ("mm: kfence: fix objcgs vector allocation")
+Signed-off-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
+---
 
-I believe that vmwgfx doesn't fail to probe (or any other DRM driver)
-only when there are not user-space processes with a fbdev node opened
-since otherwise as you said the memory wouldn't be released yet.
+v1 -> v2:
+	- Use folio instead of page
+	- Add Fixes: tags
+	- Wrap #ifdef ~ #endif around folio->memcg_data = 0;
 
-unregister_framebuffer() is called from the driver's .remove handler
-and that decrement the fb_info refcount, so if reaches zero it will
-call to the fb fops .destroy() handler and release the I/O memory.
+ mm/kfence/core.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-In other words, in most cases (i.e: only fbcon bound to the fbdev)
-the driver's removal/ device unbind and the memory release will be
-at the same time.
-
+diff --git a/mm/kfence/core.c b/mm/kfence/core.c
+index a203747ad2c0..bb1c6c489d0a 100644
+--- a/mm/kfence/core.c
++++ b/mm/kfence/core.c
+@@ -642,6 +642,15 @@ static bool __init kfence_init_pool_early(void)
+ 	 * fails for the first page, and therefore expect addr==__kfence_pool in
+ 	 * most failure cases.
+ 	 */
++	for (char *p = (char *)addr; p < __kfence_pool + KFENCE_POOL_SIZE; p += PAGE_SIZE) {
++		struct folio *folio;
++
++		folio = virt_to_folio(p);
++		__folio_clear_slab(folio);
++#ifdef CONFIG_MEMCG
++		folio->memcg_data = 0;
++#endif
++	}
+ 	memblock_free_late(__pa(addr), KFENCE_POOL_SIZE - (addr - (unsigned long)__kfence_pool));
+ 	__kfence_pool = NULL;
+ 	return false;
 -- 
-Best regards,
-
-Javier Martinez Canillas
-Linux Engineering
-Red Hat
+2.32.0
 

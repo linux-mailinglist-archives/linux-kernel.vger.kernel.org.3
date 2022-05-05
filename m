@@ -2,128 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 467DD51C6CD
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 20:13:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C732B51C7DF
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 20:37:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383051AbiEESQl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 14:16:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33406 "EHLO
+        id S1384149AbiEESdx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 14:33:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242421AbiEESQe (ORCPT
+        with ESMTP id S1385385AbiEESaY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 14:16:34 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2527E5C66B;
-        Thu,  5 May 2022 11:12:54 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 5 May 2022 14:30:24 -0400
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F9955DBC7;
+        Thu,  5 May 2022 11:21:08 -0700 (PDT)
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.0.0)
+ id af71f734f8f99855; Thu, 5 May 2022 20:19:34 +0200
+Received: from kreacher.localnet (unknown [213.134.161.219])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CC78EB82E2B;
-        Thu,  5 May 2022 18:12:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 166B9C385A4;
-        Thu,  5 May 2022 18:12:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651774371;
-        bh=WCTrfyIGMORRs4jTd94rX0toCSZo6++euRRkU7UoJ1k=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YeWCFMS6ouaJZXwFCFa913pvJPovGxKh9T3XXsWnAfH9Afh3cqp7rUi38sHHMqXMg
-         rVGJWDLlAWo0l+i0TLrAutyM0Yt0T7Z7ATsFf0vSNnydX8mVxlA6vRrx/sKD/EhP0/
-         2BRberpL5FYsumRjFD8BHx0PLRQ+4GvHRdZofiP8ISJS3iVtEIN5zyKJEZ1nDNOOTc
-         B22izljyLVHgqTXrXeqGajURvvWl+82r18kIBZFyQ8TQAopf5TeChuQ0Gz4/3E5dcd
-         sDw4WDNo7uR3YrUXYRGNUK+c8aX6ZQKjINYAv1qZcPtEa9MfK7QVzxZCw/kUQ0VBeS
-         SIR26kRfb0AxQ==
-Date:   Thu, 5 May 2022 11:12:49 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Alex Deucher <alexdeucher@gmail.com>,
-        Jack Xiao <Jack.Xiao@amd.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the amdgpu tree
-Message-ID: <YnQToaOno0MZzJ5r@dev-arch.thelio-3990X>
-References: <20220505194717.065db7ab@canb.auug.org.au>
+        by v370.home.net.pl (Postfix) with ESMTPSA id 8B3F666C2F2;
+        Thu,  5 May 2022 20:19:33 +0200 (CEST)
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Linux PCI <linux-pci@vger.kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Anders Roxell <anders.roxell@linaro.org>
+Subject: [PATCH v1 07/11] PCI/PM: Split pci_power_up()
+Date:   Thu, 05 May 2022 20:13:00 +0200
+Message-ID: <1942150.usQuhbGJ8B@kreacher>
+In-Reply-To: <4738492.GXAFRqVoOG@kreacher>
+References: <4738492.GXAFRqVoOG@kreacher>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220505194717.065db7ab@canb.auug.org.au>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 213.134.161.219
+X-CLIENT-HOSTNAME: 213.134.161.219
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedrfedugdduvdduucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgjfhgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepvdffueeitdfgvddtudegueejtdffteetgeefkeffvdeftddttdeuhfegfedvjefhnecukfhppedvudefrddufeegrdduiedurddvudelnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvddufedrudefgedrudeiuddrvdduledphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedpnhgspghrtghpthhtohepjedprhgtphhtthhopehlihhnuhigqdhptghisehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepmhhikhgrrdifvghsthgvrhgsvghrgheslhhinhhugidrihhnthgv
+ lhdrtghomhdprhgtphhtthhopehhvghlghgrrghssehkvghrnhgvlhdrohhrghdprhgtphhtthhopehnrghthhgrnheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprghnuggvrhhsrdhrohigvghllheslhhinhgrrhhordhorhhg
+X-DCC--Metrics: v370.home.net.pl 1024; Body=7 Fuz1=7 Fuz2=7
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Stephen,
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-On Thu, May 05, 2022 at 07:47:17PM +1000, Stephen Rothwell wrote:
-> Hi all,
-> 
-> After merging the amdgpu tree, today's linux-next build (powerpc
-> allyesconfig) failed like this:
-> 
+One of the two callers of pci_power_up() invokes
+pci_update_current_state() and pci_restore_state() right after calling
+it, in which case running the part of it happening after the mandatory
+transition delays is redundant, so move that part out of it into a new
+function called pci_set_full_power_state() that will be invoked from
+pci_set_power_state() which is the other caller of pci_power_up().
 
-<snip long error message>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+ drivers/pci/pci.c |   41 +++++++++++++++++++++++++++++++++++------
+ 1 file changed, 35 insertions(+), 6 deletions(-)
 
-> 
-> Caused by commit
-> 
->   028c3fb37e70 ("drm/amdgpu/mes11: initiate mes v11 support")
-> 
-> This build has __BIG_ENDIAN set.
-> 
-> I have applied the following patch for today.
-> 
-> From: Stephen Rothwell <sfr@canb.auug.org.au>
-> Date: Thu, 5 May 2022 19:14:25 +1000
-> Subject: [PATCH] mark CONFIG_DRM_AMDGPU as depending on CONFIG_CPU_LITTLE_ENDIAN
-> 
-> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> ---
->  drivers/gpu/drm/Kconfig | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/gpu/drm/Kconfig b/drivers/gpu/drm/Kconfig
-> index e88c497fa010..2aaa9ef1168d 100644
-> --- a/drivers/gpu/drm/Kconfig
-> +++ b/drivers/gpu/drm/Kconfig
-> @@ -244,6 +244,7 @@ source "drivers/gpu/drm/radeon/Kconfig"
->  config DRM_AMDGPU
->  	tristate "AMD GPU"
->  	depends on DRM && PCI && MMU
-> +	depends on CPU_LITTLE_ENDIAN
->  	select FW_LOADER
->  	select DRM_DISPLAY_DP_HELPER
->  	select DRM_DISPLAY_HDMI_HELPER
-> -- 
-> 2.35.1
+Index: linux-pm/drivers/pci/pci.c
+===================================================================
+--- linux-pm.orig/drivers/pci/pci.c
++++ linux-pm/drivers/pci/pci.c
+@@ -1189,6 +1189,9 @@ static int pci_dev_wait(struct pci_dev *
+ /**
+  * pci_power_up - Put the given device into D0
+  * @dev: PCI device to power up
++ *
++ * On success, return 0 or 1, depending on whether or not it is necessary to
++ * restore the device's BARs subsequently (1 is returned in that case).
+  */
+ int pci_power_up(struct pci_dev *dev)
+ {
+@@ -1224,10 +1227,8 @@ int pci_power_up(struct pci_dev *dev)
+ 	need_restore = (state == PCI_D3hot || dev->current_state >= PCI_D3hot) &&
+ 			!(pmcsr & PCI_PM_CTRL_NO_SOFT_RESET);
+ 
+-	if (state == PCI_D0) {
+-		dev->current_state = PCI_D0;
++	if (state == PCI_D0)
+ 		goto end;
+-	}
+ 
+ 	/*
+ 	 * Force the entire word to 0. This doesn't affect PME_Status, disables
+@@ -1241,13 +1242,41 @@ int pci_power_up(struct pci_dev *dev)
+ 	else if (state == PCI_D2)
+ 		udelay(PCI_PM_D2_DELAY);
+ 
++end:
++	dev->current_state = PCI_D0;
++	if (need_restore)
++		return 1;
++
++	return 0;
++}
++
++/**
++ * pci_set_full_power_state - Put a PCI device into D0 and update its state
++ * @dev: PCI device to power up
++ *
++ * Call pci_power_up() to put @dev into D0, read from its PCI_PM_CTRL register
++ * to confirm the state change, restore its BARs if they might be lost and
++ * reconfigure ASPM in acordance with the new power state.
++ *
++ * If pci_restore_state() is going to be called right after a power state change
++ * to D0, it is more efficient to use pci_power_up() directly instead of this
++ * function.
++ */
++static int pci_set_full_power_state(struct pci_dev *dev)
++{
++	u16 pmcsr;
++	int ret;
++
++	ret = pci_power_up(dev);
++	if (ret < 0)
++		return ret;
++
+ 	pci_read_config_word(dev, dev->pm_cap + PCI_PM_CTRL, &pmcsr);
+ 	dev->current_state = pmcsr & PCI_PM_CTRL_STATE_MASK;
+ 	if (dev->current_state != PCI_D0)
+ 		pci_info_ratelimited(dev, "Refused to change power state from %s to D0\n",
+ 				     pci_power_name(dev->current_state));
+ 
+-end:
+ 	/*
+ 	 * According to section 5.4.1 of the "PCI BUS POWER MANAGEMENT
+ 	 * INTERFACE SPECIFICATION, REV. 1.2", a device transitioning
+@@ -1261,7 +1290,7 @@ end:
+ 	 * restore at least the BARs so that the device will be
+ 	 * accessible to its driver.
+ 	 */
+-	if (need_restore)
++	if (ret > 0)
+ 		pci_restore_bars(dev);
+ 
+ 	if (dev->bus->self)
+@@ -1415,7 +1444,7 @@ int pci_set_power_state(struct pci_dev *
+ 		return 0;
+ 
+ 	if (state == PCI_D0)
+-		return pci_power_up(dev);
++		return pci_set_full_power_state(dev);
+ 
+ 	/*
+ 	 * This device is quirked not to be put into D3, so don't put it in
 
-This fixup makes CONFIG_DRM_AMDGPU unselectable on any architecture that
-does not have CONFIG_CPU_LITTLE_ENDIAN, such as x86_64. I was rather
-surprised when my AMD test system did not reach the login screen and
-there were no error messages in dmesg, only to find that
-CONFIG_DRM_AMDGPU had disappeared from my build.
 
-If this is not fixed by the time you do next-20220506, would you
-consider swapping the logic like so? This should allow all implicitly
-little endian architectures to work (at least, I tested it with x86_64),
-while preventing errors for CONFIG_CPU_BIG_ENDIAN configurations.
 
-Cheers,
-Nathan
-
-diff --git a/drivers/gpu/drm/Kconfig b/drivers/gpu/drm/Kconfig
-index 2aaa9ef1168d..a57843733a96 100644
---- a/drivers/gpu/drm/Kconfig
-+++ b/drivers/gpu/drm/Kconfig
-@@ -244,7 +244,7 @@ source "drivers/gpu/drm/radeon/Kconfig"
- config DRM_AMDGPU
- 	tristate "AMD GPU"
- 	depends on DRM && PCI && MMU
--	depends on CPU_LITTLE_ENDIAN
-+	depends on !CPU_BIG_ENDIAN
- 	select FW_LOADER
- 	select DRM_DISPLAY_DP_HELPER
- 	select DRM_DISPLAY_HDMI_HELPER

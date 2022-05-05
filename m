@@ -2,74 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9220451CD02
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 01:54:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CAEA51CD06
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 01:56:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347153AbiEEX6X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 19:58:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60424 "EHLO
+        id S1385987AbiEEX76 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 19:59:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238237AbiEEX6U (ORCPT
+        with ESMTP id S237355AbiEEX74 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 19:58:20 -0400
-Received: from mail-vs1-xe2e.google.com (mail-vs1-xe2e.google.com [IPv6:2607:f8b0:4864:20::e2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5862F60AA5
-        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 16:54:39 -0700 (PDT)
-Received: by mail-vs1-xe2e.google.com with SMTP id u205so5705213vsu.6
-        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 16:54:39 -0700 (PDT)
+        Thu, 5 May 2022 19:59:56 -0400
+Received: from mail-ua1-x930.google.com (mail-ua1-x930.google.com [IPv6:2607:f8b0:4864:20::930])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E97A647045
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 16:56:15 -0700 (PDT)
+Received: by mail-ua1-x930.google.com with SMTP id s1so2234008uac.6
+        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 16:56:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=tDDyzRVab5pN0l0Oc9TAGru6/qJIRko7NAIbkOiJF8A=;
-        b=r1hLylWIOOOhaGFz+p6F3AydVEizM2PBMopIl7xCwgCpXpdj2SokxxV2SHoaI7PsS5
-         O5XPHbELH3T7ucpExD9G9kVlFRitPY7R7wqnjKFPFLIxiMf35ksgPBUGvOAa8J2qSLnA
-         QyTdGasRks2Hu/SE+misUqRIisf3JSGLfx/+ngOcXh4xDTDaEcERE/5fhgMDAaNmg9eE
-         XxGq2KReyZ+PuXCPEUzSvCQVdKgX+qxpRhgSMBPttinWyGCEIuhX/kpStjsbylnebD2X
-         vAkIk10ud0IVJn1anD+35kseqge1JuMc50aIHwAcrX8491ZfphZk/mlv0nA3ZBCz5Afe
-         GC5w==
+        bh=y8uigy1rMB7YyP5N4Woy8fmkm4g+BMsdh26+oOrn6Lg=;
+        b=r3GxquI1Qu2H6I7N+9DosRuS1tLLLprYi+sMTXj2adq7nUjB+i1R5b8IsJhrDb98+y
+         vFRnMLWMwbI7lQZtrW2qqkMDIWhezMQUgBZGEwrjwZSV+I5FjeXigZybSzw6EY4L1fKO
+         cBHIb3PUHUjyGhc66QBdudWoxeJU6uV5wmUN/ylKjQ0CEKNprs31hNhf9nmS5PtEQjMf
+         I8qsUy/krWVw5zlRu9/seHopDdWbNQKjq2pHLCxbFDX8zmnqodbzuxhBJbXKkh0GLtNt
+         8b/8WGgEkxG1XqOP5MhR97Z5UbeuJeWFgVKywLfKQNpzbO7om/VzALiYZddyGEEojhDZ
+         7VTQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=tDDyzRVab5pN0l0Oc9TAGru6/qJIRko7NAIbkOiJF8A=;
-        b=KxCzbV0KkL6jvq7zK1XUSy8Ja2CwB8/xjPrT4vGOosHG6wYSNeWzScNaW+rchHfB1V
-         s9YsoMUrfv9wY5YkCxPjssj2W/Iqf0zOt9iA2oYASs8soqLoGf/cVMvcaen3v2FyPt7z
-         N1W+zvxZw0M9qsbCpkSK/TTgTKLdDwmcbwvie5kfGINeiCkYqK+/iqVPjMSSH0nf6/XR
-         dzBj5rBNepNOK6xpC+MzH3b8XBV8Fs7MetCs7U4uYfAKQH6WmXbbjMRuMSwpRwx4JdO4
-         GyuECbOxUeaFD2XCSo5GvyUudBvZ8zEhTUPqZJ1qYVvH4xe5inl23O+x+giDFr5SO0LA
-         Dn3A==
-X-Gm-Message-State: AOAM531wjlzD/kRNeytDPzSO+jrGDjmLAkLH+WC4gb2aX+0xOdnDe1E7
-        w/UolI0IXQK3HroqONCa3CFwxc5wsbCcmu7Y5kxK6A==
-X-Google-Smtp-Source: ABdhPJxopamlFqZOgSKVhG7nIetrG2PG7cgpRoI22LRBUGNQCpa8b8bZVtse6QuNZy6mGp6tZHSNhz6wiA/JWjuxyp0=
-X-Received: by 2002:a05:6102:c13:b0:32d:518f:feaf with SMTP id
- x19-20020a0561020c1300b0032d518ffeafmr174918vss.84.1651794878401; Thu, 05 May
- 2022 16:54:38 -0700 (PDT)
+        bh=y8uigy1rMB7YyP5N4Woy8fmkm4g+BMsdh26+oOrn6Lg=;
+        b=cIQcHTmO4QpNTfKaDTfkbWyEgO/bKpmwgW430hsYQYrWx2hfv5NUhzvfv1hBFv/lud
+         t5zKdFInD6L8JyqIPy6QfgxLFhuLbaLfVIjWqSeL5XdFF6r1dm4BV81x/PgdmQJPHkCz
+         6OPc+fb4gblCBhyuefRDmZBJK34PKQqBl94eAizlLMo3+MprXrK9BjzSxtQN0EVqao0G
+         qWyB+qouyKBUb0y9y0UiAgUctuz/YnXOkQf2JpFBWItXnIVXPByBlvoIL0itQAxiYgl2
+         r6h8NUJpiGg1t3qvBT6+t6ATGd+h7b2KXYmq/1pTMSN0QcTAFy2fVj1zDvlghsWI/160
+         oEvg==
+X-Gm-Message-State: AOAM531C8VCY2XHFE+iVgMqniUGUaplogCFz8zqoZvf20K3YR8xwVTTh
+        8R2gtQl82Ds/U8BwX8HOb5Gr4zCucxKR0NGXQRd/1bL0DEHPJQ==
+X-Google-Smtp-Source: ABdhPJza2ACGGrj5RXHyJxgkKinq3lID4bpRXaxtU+BpdglZhbBs1yCduhgFBU+hDCJALk09FS8GjGXo1LO+vh8PGBQ=
+X-Received: by 2002:ab0:240e:0:b0:360:325a:7352 with SMTP id
+ f14-20020ab0240e000000b00360325a7352mr182131uan.108.1651794974911; Thu, 05
+ May 2022 16:56:14 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220427160016.144237-1-hannes@cmpxchg.org> <20220427160016.144237-5-hannes@cmpxchg.org>
- <Ymmnrkn0mSWcuvmH@google.com> <YmmznQ8AO5RLxicA@cmpxchg.org>
- <Ymm3WpvJWby4gaD/@cmpxchg.org> <CALvZod5LBi5V6q1uHUTSNnLz64HbD499a+OZvdYsUcmcWSt8Jg@mail.gmail.com>
- <YmqmWPrIagEEceN1@cmpxchg.org> <CALvZod7wOyXpA3pycM2dav9_F9sW5ezC84or-75u8GdQyu30nw@mail.gmail.com>
- <CAHbLzkqOUkaud4hQZeAbnO3T6VJpku4aKn1EYv9RunB+Kmu9Sg@mail.gmail.com>
- <CALvZod5CReJZeGxkX9i6k7+R+3kF5dikXx9akbiP_L0j4Qu=6A@mail.gmail.com> <CABCjUKAoTmqvyBbFH7A188s8Hwi1XbLgfb6znzgFOuRWBMBxig@mail.gmail.com>
-In-Reply-To: <CABCjUKAoTmqvyBbFH7A188s8Hwi1XbLgfb6znzgFOuRWBMBxig@mail.gmail.com>
-From:   Yu Zhao <yuzhao@google.com>
-Date:   Thu, 5 May 2022 16:54:02 -0700
-Message-ID: <CAOUHufbnc3Q2qNd5f=SUgmzdSG6_c_ddZgDFEcxNajdSz=Ty3g@mail.gmail.com>
-Subject: Re: [PATCH 4/5] mm: zswap: add basic meminfo and vmstat coverage
-To:     Suleiman Souhlal <suleiman@google.com>,
-        Yang Shi <shy828301@gmail.com>
-Cc:     Shakeel Butt <shakeelb@google.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Minchan Kim <minchan@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Michal Hocko <mhocko@suse.com>, Roman Gushchin <guro@fb.com>,
-        Seth Jennings <sjenning@redhat.com>,
-        Dan Streetman <ddstreet@ieee.org>,
-        Linux MM <linux-mm@kvack.org>,
-        Cgroups <cgroups@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Kernel Team <kernel-team@fb.com>
+References: <20220505165639.361733-1-adrian.hunter@intel.com> <20220505165639.361733-14-adrian.hunter@intel.com>
+In-Reply-To: <20220505165639.361733-14-adrian.hunter@intel.com>
+From:   Ian Rogers <irogers@google.com>
+Date:   Thu, 5 May 2022 16:56:02 -0700
+Message-ID: <CAP-5=fWKOYiOSs=TppGCD+k283rUUsexzVuJP17Pm76EMOs+xA@mail.gmail.com>
+Subject: Re: [PATCH V1 13/23] perf evlist: Add evlist__add_system_wide_dummy()
+To:     Adrian Hunter <adrian.hunter@intel.com>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Leo Yan <leo.yan@linaro.org>, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
@@ -82,31 +70,101 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 5, 2022 at 3:25 PM Suleiman Souhlal <suleiman@google.com> wrote:
+On Thu, May 5, 2022 at 9:57 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
 >
-> On Fri, May 6, 2022 at 4:33 AM Shakeel Butt <shakeelb@google.com> wrote:
-> >
-> > On Thu, Apr 28, 2022 at 9:54 AM Yang Shi <shy828301@gmail.com> wrote:
-> > >
-> > [...]
-> > > > Yes, we have some modifications to zswap to make it work without any
-> > > > backing real swap. Though there is a future plan to move to zram
-> > > > eventually.
-> > >
-> > > Interesting, if so why not just simply use zram?
-> > >
-> >
-> > Historical reasons. When we started trying out the zswap, I think zram
-> > was still in staging or not stable enough (Suleiman can give a better
-> > answer).
+> Add evlist__add_system_wide_dummy() to enable creating a system-wide dummy
+> event that sets up the system-wide maps before map propagation.
+
+Perhaps this should be:
+evlist__add_dummy_on_all_online_cpus()
+my thoughts being that a system wide dummy sounds like the dummy CPU
+map, ie {-1} whilst what happens here is opening on all online CPUs
+{0-35} on a 36 hyperthread system. Note also that the libperf
+cpu_map__read_all_cpu_map code doesn't discover sysfs' mount properly,
+as done in:
+tools/lib/api/fs/fs.h
+Some tech debt.
+
+> For convenience, add evlist__add_aux_dummy() so that the logic can be used
+> whether or not the event needs to be system-wide.
 >
-> One of the reasons we chose zswap instead of zram is that zswap can
-> reject pages.
-> Also, we wanted to have per-memcg pools, which zswap made much easier to do.
+> Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
+> ---
+>  tools/perf/util/evlist.c | 40 ++++++++++++++++++++++++++++++++++++++++
+>  tools/perf/util/evlist.h |  5 +++++
+>  2 files changed, 45 insertions(+)
+>
+> diff --git a/tools/perf/util/evlist.c b/tools/perf/util/evlist.c
+> index 78c47cbafbc2..58ea562ddbd2 100644
+> --- a/tools/perf/util/evlist.c
+> +++ b/tools/perf/util/evlist.c
+> @@ -264,6 +264,46 @@ int evlist__add_dummy(struct evlist *evlist)
+>         return 0;
+>  }
+>
+> +static void evlist__add_system_wide(struct evlist *evlist, struct evsel *evsel)
 
-Yes, it was a design choice. zswap was cache-like (tiering) and zram
-was storage-like (endpoint). Though nowadays the distinction is
-blurry.
+This would be:
+evlist__add_on_all_online_cpus(..)
 
-It had nothing to do with zram being in staging -- when we took zswap,
-it was out of the tree.
+> +{
+> +       evsel->core.system_wide = true;
+> +
+> +       /* All CPUs */
+> +       perf_cpu_map__put(evsel->core.own_cpus);
+> +       evsel->core.own_cpus = perf_cpu_map__new(NULL);
+> +       perf_cpu_map__put(evsel->core.cpus);
+> +       evsel->core.cpus = perf_cpu_map__get(evsel->core.own_cpus);
+> +
+> +       /* No threads */
+> +       perf_thread_map__put(evsel->core.threads);
+> +       evsel->core.threads = perf_thread_map__new_dummy();
+> +
+> +       evlist__add(evlist, evsel);
+> +}
+> +
+> +struct evsel *evlist__add_aux_dummy(struct evlist *evlist, bool system_wide)
+> +{
+> +       struct evsel *evsel = evlist__dummy_event(evlist);
+> +
+> +       if (!evsel)
+> +               return NULL;
+> +
+> +       evsel->core.attr.exclude_kernel = 1;
+> +       evsel->core.attr.exclude_guest = 1;
+> +       evsel->core.attr.exclude_hv = 1;
+> +       evsel->core.attr.freq = 0;
+> +       evsel->core.attr.sample_period = 1;
+> +       evsel->no_aux_samples = true;
+> +       evsel->name = strdup("dummy:u");
+> +
+> +       if (system_wide)
+> +               evlist__add_system_wide(evlist, evsel);
+> +       else
+> +               evlist__add(evlist, evsel);
+> +
+> +       return evsel;
+> +}
+> +
+>  static int evlist__add_attrs(struct evlist *evlist, struct perf_event_attr *attrs, size_t nr_attrs)
+>  {
+>         struct evsel *evsel, *n;
+> diff --git a/tools/perf/util/evlist.h b/tools/perf/util/evlist.h
+> index 4062f5aebfc1..dd1af114e033 100644
+> --- a/tools/perf/util/evlist.h
+> +++ b/tools/perf/util/evlist.h
+> @@ -114,6 +114,11 @@ int arch_evlist__add_default_attrs(struct evlist *evlist);
+>  struct evsel *arch_evlist__leader(struct list_head *list);
+>
+>  int evlist__add_dummy(struct evlist *evlist);
+> +struct evsel *evlist__add_aux_dummy(struct evlist *evlist, bool system_wide);
+> +static inline struct evsel *evlist__add_system_wide_dummy(struct evlist *evlist)
+> +{
+> +       return evlist__add_aux_dummy(evlist, true);
+> +}
+>
+>  int evlist__add_sb_event(struct evlist *evlist, struct perf_event_attr *attr,
+>                          evsel__sb_cb_t cb, void *data);
+> --
+> 2.25.1
+>

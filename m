@@ -2,90 +2,235 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4792D51BC70
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 11:47:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F40CC51BC6F
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 11:47:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354347AbiEEJvP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 05:51:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34342 "EHLO
+        id S1354409AbiEEJvU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 05:51:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354302AbiEEJvA (ORCPT
+        with ESMTP id S1348259AbiEEJvD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 05:51:00 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7D2E4F9DB;
-        Thu,  5 May 2022 02:47:20 -0700 (PDT)
-X-UUID: 793874e842b54637a2b77ddf5a0cec4d-20220505
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.4,REQID:73cb7cf4-0bff-4b06-b0bf-bd17bb849a93,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:0
-X-CID-META: VersionHash:faefae9,CLOUDID:43e04e16-2e53-443e-b81a-655c13977218,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,File:nil,QS:0,BEC:nil
-X-UUID: 793874e842b54637a2b77ddf5a0cec4d-20220505
-Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
-        (envelope-from <rex-bc.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 742936293; Thu, 05 May 2022 17:47:14 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Thu, 5 May 2022 17:47:13 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n2.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
- Transport; Thu, 5 May 2022 17:47:13 +0800
-Message-ID: <9bddb8595ab7a8a9ca598aa7a90eb52c75916499.camel@mediatek.com>
-Subject: Re: [PATCH v5 0/9] cpufreq: mediatek: Cleanup and support MT8183
- and MT8186
-From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-CC:     <rafael@kernel.org>, <robh+dt@kernel.org>, <krzk+dt@kernel.org>,
-        <matthias.bgg@gmail.com>, <jia-wei.chang@mediatek.com>,
-        <roger.lu@mediatek.com>, <hsinyi@google.com>,
-        <khilman@baylibre.com>, <angelogioacchino.delregno@collabora.com>,
-        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Thu, 5 May 2022 17:47:13 +0800
-In-Reply-To: <20220505085358.nmohfx3akk7to46r@vireshk-i7>
-References: <20220504130540.5902-1-rex-bc.chen@mediatek.com>
-         <20220505085358.nmohfx3akk7to46r@vireshk-i7>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Thu, 5 May 2022 05:51:03 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5075A4F470;
+        Thu,  5 May 2022 02:47:24 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Kv84Q70ndz4ySn;
+        Thu,  5 May 2022 19:47:18 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1651744039;
+        bh=8K7OWDpXc0cEi6KPmmnFY0Qjde5xITIcHSPfGXDF4bQ=;
+        h=Date:From:To:Cc:Subject:From;
+        b=tIORQ+VT3JqyJQLIHBemC29hvqyP9DnkrSIrLRHXPJlHrS3e/qfWMXpeVc5Kj+b+t
+         wtO/B5VtgVzCWaIxMV3uYbNuLkfURE8nMJZ3VkFIFug1dSNxkC9xRtwW8Uvz5XZN17
+         LYSdaJFEhFN5KQq2njF96FwsWi//okm05d0wD7F8nFDof/jxjW1TWJfpc83Q88QBrQ
+         3KtbMg1fblCzMQHt1JuSFXf3dxSpMWnlFV6L4OQaH1tGUUGKJzCwO8/nAMVJZhMIQq
+         dpWosw0bAMBGkerw1HAazvNM0F7S/oMar372fHF25lFT+hHBKFo3P2V+KH9R7kTz7V
+         UiVHOdNCei6/Q==
+Date:   Thu, 5 May 2022 19:47:17 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Alex Deucher <alexdeucher@gmail.com>
+Cc:     Jack Xiao <Jack.Xiao@amd.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the amdgpu tree
+Message-ID: <20220505194717.065db7ab@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/4z9Q+UDxW1c+QVT8Qsuywg7";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-05-05 at 14:23 +0530, Viresh Kumar wrote:
-> On 04-05-22, 21:05, Rex-BC Chen wrote:
-> >   arm64: dts: mediatek: Add opp table and clock property for MT8183
-> >     cpufreq
-> >   arm64: dts: mediatek: Add MediaTek CCI node for MT8183
-> >   arm64: dts: mediatek: Add mediatek,cci property for MT8183
-> > cpufreq
-> 
-> I guess these would also go through my tree? Please get them acked by
-> SoC maintainers.
-> 
-> I would also need an Ack from Rob for the binding patch.
-> 
+--Sig_/4z9Q+UDxW1c+QVT8Qsuywg7
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Hello Viresh,
+Hi all,
 
-I also mail to Matthias who is mediatek soc maintainer.
-As for binding, I think we need to wait for the review from Rob or
-Krzysztof.
+After merging the amdgpu tree, today's linux-next build (powerpc
+allyesconfig) failed like this:
 
-BRs,
-Rex
+In file included from drivers/gpu/drm/amd/amdgpu/mes_v11_0.c:26:
+drivers/gpu/drm/amd/amdgpu/mes_v11_0.c: In function 'mes_v11_0_mqd_init':
+drivers/gpu/drm/amd/amdgpu/mes_v11_0.c:697:34: error: 'CP_HQD_PQ_CONTROL__E=
+NDIAN_SWAP_MASK' undeclared (first use in this function); did you mean 'CP_=
+HQD_PQ_CONTROL__PRIV_STATE_MASK'?
+  697 |         tmp =3D REG_SET_FIELD(tmp, CP_HQD_PQ_CONTROL, ENDIAN_SWAP, =
+1);
+      |                                  ^~~~~~~~~~~~~~~~~
+drivers/gpu/drm/amd/amdgpu/amdgpu.h:1177:36: note: in definition of macro '=
+REG_FIELD_MASK'
+ 1177 | #define REG_FIELD_MASK(reg, field) reg##__##field##_MASK
+      |                                    ^~~
+drivers/gpu/drm/amd/amdgpu/mes_v11_0.c:697:15: note: in expansion of macro =
+'REG_SET_FIELD'
+  697 |         tmp =3D REG_SET_FIELD(tmp, CP_HQD_PQ_CONTROL, ENDIAN_SWAP, =
+1);
+      |               ^~~~~~~~~~~~~
+drivers/gpu/drm/amd/amdgpu/mes_v11_0.c:697:34: note: each undeclared identi=
+fier is reported only once for each function it appears in
+  697 |         tmp =3D REG_SET_FIELD(tmp, CP_HQD_PQ_CONTROL, ENDIAN_SWAP, =
+1);
+      |                                  ^~~~~~~~~~~~~~~~~
+drivers/gpu/drm/amd/amdgpu/amdgpu.h:1177:36: note: in definition of macro '=
+REG_FIELD_MASK'
+ 1177 | #define REG_FIELD_MASK(reg, field) reg##__##field##_MASK
+      |                                    ^~~
+drivers/gpu/drm/amd/amdgpu/mes_v11_0.c:697:15: note: in expansion of macro =
+'REG_SET_FIELD'
+  697 |         tmp =3D REG_SET_FIELD(tmp, CP_HQD_PQ_CONTROL, ENDIAN_SWAP, =
+1);
+      |               ^~~~~~~~~~~~~
+drivers/gpu/drm/amd/amdgpu/mes_v11_0.c:697:34: error: 'CP_HQD_PQ_CONTROL__E=
+NDIAN_SWAP__SHIFT' undeclared (first use in this function); did you mean 'C=
+P_HQD_PQ_CONTROL__PRIV_STATE__SHIFT'?
+  697 |         tmp =3D REG_SET_FIELD(tmp, CP_HQD_PQ_CONTROL, ENDIAN_SWAP, =
+1);
+      |                                  ^~~~~~~~~~~~~~~~~
+drivers/gpu/drm/amd/amdgpu/amdgpu.h:1176:37: note: in definition of macro '=
+REG_FIELD_SHIFT'
+ 1176 | #define REG_FIELD_SHIFT(reg, field) reg##__##field##__SHIFT
+      |                                     ^~~
+drivers/gpu/drm/amd/amdgpu/mes_v11_0.c:697:15: note: in expansion of macro =
+'REG_SET_FIELD'
+  697 |         tmp =3D REG_SET_FIELD(tmp, CP_HQD_PQ_CONTROL, ENDIAN_SWAP, =
+1);
+      |               ^~~~~~~~~~~~~
+In file included from drivers/gpu/drm/amd/amdgpu/gfx_v11_0.c:28:
+drivers/gpu/drm/amd/amdgpu/gfx_v11_0.c: In function 'gfx_v11_0_cp_gfx_resum=
+e':
+drivers/gpu/drm/amd/amdgpu/gfx_v11_0.c:3413:34: error: 'CP_RB0_CNTL__BUF_SW=
+AP_MASK' undeclared (first use in this function); did you mean 'CP_RB0_CNTL=
+__TMZ_STATE_MASK'?
+ 3413 |         tmp =3D REG_SET_FIELD(tmp, CP_RB0_CNTL, BUF_SWAP, 1);
+      |                                  ^~~~~~~~~~~
+drivers/gpu/drm/amd/amdgpu/amdgpu.h:1177:36: note: in definition of macro '=
+REG_FIELD_MASK'
+ 1177 | #define REG_FIELD_MASK(reg, field) reg##__##field##_MASK
+      |                                    ^~~
+drivers/gpu/drm/amd/amdgpu/gfx_v11_0.c:3413:15: note: in expansion of macro=
+ 'REG_SET_FIELD'
+ 3413 |         tmp =3D REG_SET_FIELD(tmp, CP_RB0_CNTL, BUF_SWAP, 1);
+      |               ^~~~~~~~~~~~~
+drivers/gpu/drm/amd/amdgpu/gfx_v11_0.c:3413:34: note: each undeclared ident=
+ifier is reported only once for each function it appears in
+ 3413 |         tmp =3D REG_SET_FIELD(tmp, CP_RB0_CNTL, BUF_SWAP, 1);
+      |                                  ^~~~~~~~~~~
+drivers/gpu/drm/amd/amdgpu/amdgpu.h:1177:36: note: in definition of macro '=
+REG_FIELD_MASK'
+ 1177 | #define REG_FIELD_MASK(reg, field) reg##__##field##_MASK
+      |                                    ^~~
+drivers/gpu/drm/amd/amdgpu/gfx_v11_0.c:3413:15: note: in expansion of macro=
+ 'REG_SET_FIELD'
+ 3413 |         tmp =3D REG_SET_FIELD(tmp, CP_RB0_CNTL, BUF_SWAP, 1);
+      |               ^~~~~~~~~~~~~
+drivers/gpu/drm/amd/amdgpu/gfx_v11_0.c:3413:34: error: 'CP_RB0_CNTL__BUF_SW=
+AP__SHIFT' undeclared (first use in this function); did you mean 'CP_RB0_CN=
+TL__TMZ_STATE__SHIFT'?
+ 3413 |         tmp =3D REG_SET_FIELD(tmp, CP_RB0_CNTL, BUF_SWAP, 1);
+      |                                  ^~~~~~~~~~~
+drivers/gpu/drm/amd/amdgpu/amdgpu.h:1176:37: note: in definition of macro '=
+REG_FIELD_SHIFT'
+ 1176 | #define REG_FIELD_SHIFT(reg, field) reg##__##field##__SHIFT
+      |                                     ^~~
+drivers/gpu/drm/amd/amdgpu/gfx_v11_0.c:3413:15: note: in expansion of macro=
+ 'REG_SET_FIELD'
+ 3413 |         tmp =3D REG_SET_FIELD(tmp, CP_RB0_CNTL, BUF_SWAP, 1);
+      |               ^~~~~~~~~~~~~
+drivers/gpu/drm/amd/amdgpu/gfx_v11_0.c: In function 'gfx_v11_0_compute_mqd_=
+init':
+drivers/gpu/drm/amd/amdgpu/gfx_v11_0.c:4063:34: error: 'CP_HQD_PQ_CONTROL__=
+ENDIAN_SWAP_MASK' undeclared (first use in this function); did you mean 'CP=
+_HQD_PQ_CONTROL__PRIV_STATE_MASK'?
+ 4063 |         tmp =3D REG_SET_FIELD(tmp, CP_HQD_PQ_CONTROL, ENDIAN_SWAP, =
+1);
+      |                                  ^~~~~~~~~~~~~~~~~
+drivers/gpu/drm/amd/amdgpu/amdgpu.h:1177:36: note: in definition of macro '=
+REG_FIELD_MASK'
+ 1177 | #define REG_FIELD_MASK(reg, field) reg##__##field##_MASK
+      |                                    ^~~
+drivers/gpu/drm/amd/amdgpu/gfx_v11_0.c:4063:15: note: in expansion of macro=
+ 'REG_SET_FIELD'
+ 4063 |         tmp =3D REG_SET_FIELD(tmp, CP_HQD_PQ_CONTROL, ENDIAN_SWAP, =
+1);
+      |               ^~~~~~~~~~~~~
+drivers/gpu/drm/amd/amdgpu/gfx_v11_0.c:4063:34: error: 'CP_HQD_PQ_CONTROL__=
+ENDIAN_SWAP__SHIFT' undeclared (first use in this function); did you mean '=
+CP_HQD_PQ_CONTROL__PRIV_STATE__SHIFT'?
+ 4063 |         tmp =3D REG_SET_FIELD(tmp, CP_HQD_PQ_CONTROL, ENDIAN_SWAP, =
+1);
+      |                                  ^~~~~~~~~~~~~~~~~
+drivers/gpu/drm/amd/amdgpu/amdgpu.h:1176:37: note: in definition of macro '=
+REG_FIELD_SHIFT'
+ 1176 | #define REG_FIELD_SHIFT(reg, field) reg##__##field##__SHIFT
+      |                                     ^~~
+drivers/gpu/drm/amd/amdgpu/gfx_v11_0.c:4063:15: note: in expansion of macro=
+ 'REG_SET_FIELD'
+ 4063 |         tmp =3D REG_SET_FIELD(tmp, CP_HQD_PQ_CONTROL, ENDIAN_SWAP, =
+1);
+      |               ^~~~~~~~~~~~~
 
+Caused by commit
+
+  028c3fb37e70 ("drm/amdgpu/mes11: initiate mes v11 support")
+
+This build has __BIG_ENDIAN set.
+
+I have applied the following patch for today.
+
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Thu, 5 May 2022 19:14:25 +1000
+Subject: [PATCH] mark CONFIG_DRM_AMDGPU as depending on CONFIG_CPU_LITTLE_E=
+NDIAN
+
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ drivers/gpu/drm/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/gpu/drm/Kconfig b/drivers/gpu/drm/Kconfig
+index e88c497fa010..2aaa9ef1168d 100644
+--- a/drivers/gpu/drm/Kconfig
++++ b/drivers/gpu/drm/Kconfig
+@@ -244,6 +244,7 @@ source "drivers/gpu/drm/radeon/Kconfig"
+ config DRM_AMDGPU
+ 	tristate "AMD GPU"
+ 	depends on DRM && PCI && MMU
++	depends on CPU_LITTLE_ENDIAN
+ 	select FW_LOADER
+ 	select DRM_DISPLAY_DP_HELPER
+ 	select DRM_DISPLAY_HDMI_HELPER
+--=20
+2.35.1
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/4z9Q+UDxW1c+QVT8Qsuywg7
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJznSUACgkQAVBC80lX
+0Gz5HQf+MVdK1DIdSOWtEA/fkRVBGb/BMzWmQYZIqmeWUGv/LTjdhtqVdg9weslv
+7VIqaRhKogZQSqBYGgG7QdIm2vKrOTYtUc5MHW8NrNgS6kbuwnMvW7jlmk7OBbNW
+BUecCHsWi64gbmtINHT2Bjr8E+KGbNeu5RUzYvuS3zT9aguFPxaVmmAI58vyNt21
+icNs1cZsk0gBqg8yrxnyqOTYI2Siikgircum5S8sYEfqm/Lviq4agg0lxbw5pAko
+HmZEl9YHmXjXqwNEHqDl6PN3tj+BLmPNdgOYe17WUJrZ2vfB+/oYK9X74IMiQ6wR
+yLq1fmCbz1rY8H0JyeoB+QTDffiWFg==
+=NcuA
+-----END PGP SIGNATURE-----
+
+--Sig_/4z9Q+UDxW1c+QVT8Qsuywg7--

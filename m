@@ -2,120 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDC6551BD1C
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 12:25:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57C2951BD2A
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 12:27:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355484AbiEEK2i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 06:28:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34834 "EHLO
+        id S1355554AbiEEKay (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 06:30:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237623AbiEEK2g (ORCPT
+        with ESMTP id S1350947AbiEEKav (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 06:28:36 -0400
-Received: from mail-4316.protonmail.ch (mail-4316.protonmail.ch [185.70.43.16])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BA4951308
-        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 03:24:57 -0700 (PDT)
-Date:   Thu, 05 May 2022 10:24:49 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
-        s=protonmail2; t=1651746295;
-        bh=7RMfSj95e4pJ8ss9Rx/xXv2TRJDKB1JaewUmNggExWc=;
-        h=Date:To:From:Cc:Reply-To:Subject:Message-ID:In-Reply-To:
-         References:Feedback-ID:From:To:Cc:Date:Subject:Reply-To:
-         Feedback-ID:Message-ID;
-        b=IrA1bVuDjD4T8Oj7QRbuT4MDPja3TX1B4XrO/UDQKYBy7W9EJaTph/8p3kZvpRf3O
-         hHpwnHfyGqk7dt7PIH60BUY/jx+hNr1On98YOd1ylNGIQPOgW1yPXxzRZs8RIEn+SN
-         l9PvX4oTuR1wd9xRuoD2anSvkPn2PCCfeGHIwM+pXAgkr9FFFD/yDzT+vA5AiRPtZw
-         ehszACGUKvt+97ebgPZ3BB3KuBqdyMJ3yWKVO3j55QtkZu5iZTBiBX35JXImljJoDW
-         N1RjRM9QXbB8caEbgTY7nx7nKyqo55ZL8HiK/KYTsqAszEkhdIZWzpE4/CCeZHDPm9
-         cXFrhWuUXsc6w==
-To:     Igor Russkikh <irusskikh@marvell.com>
-From:   Jordan Leppert <jordanleppert@protonmail.com>
-Cc:     Manuel Ullmann <labre@posteo.de>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, regressions@lists.linux.dev,
-        davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
-        =?utf-8?Q?Holger_Hoffst=C3=A4tte?= <holger@applied-asynchrony.com>,
-        koo5 <kolman.jindrich@gmail.com>,
-        Dmitry Bezrukov <dbezrukov@marvell.com>
-Reply-To: Jordan Leppert <jordanleppert@protonmail.com>
-Subject: Re: [EXT] [PATCH] net: atlantic: always deep reset on pm op, fixing null deref regression
-Message-ID: <99KGBavpdWUsYAzz1AIlqoFSVt9JXUAmj3Sbso-671ku1gnhokcfi3D9bbh_2xYS_wWYRQOhGxgUsZKsgqkyIivlelLor9zNvpOLC0I3nxA=@protonmail.com>
-In-Reply-To: <1f4b595a-1553-f015-c7a0-6d3075bdbcda@marvell.com>
-References: <87czgt2bsb.fsf@posteo.de> <1f4b595a-1553-f015-c7a0-6d3075bdbcda@marvell.com>
-Feedback-ID: 43610911:user:proton
+        Thu, 5 May 2022 06:30:51 -0400
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8AB44B1EF;
+        Thu,  5 May 2022 03:27:11 -0700 (PDT)
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2458kk5s026502;
+        Thu, 5 May 2022 12:26:55 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=selector1;
+ bh=U6Bf9hl5wzM7Kpw0BRIGT7+zxjqmU+6MCbiv78o43HQ=;
+ b=uKxJBbrQebDAJL1hegBON8CuXGn3vGGx8dUygYvFjYDiYidzgmg5nfLJOEsoVBKZSOzB
+ TTRwyVs641g4Tw7P33i/You4WSEI00M6Lyo7xsrFaTLz31J5HjI84Z2hQEhupbKDifd2
+ UmNrGJqlqUehNEnaEEouJnvdaM2Iv0mC+djI8mFwy6W13jMfVmK65/JPTnihKnAokS6v
+ Jc3tBT0/bg0lhTVfUkNRsnxE9vUC4bjHT13rLgpNKBYE0HUb8AJByffNYGsOYssWqtGl
+ r9OgR9d2E8dh6q6y8wse7MRJheplgxVAT06ZSGMLNp9yaPnkYUf4ihIDwdZWLnC74xDH FA== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3frt8937f4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 05 May 2022 12:26:55 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id AD7A010002A;
+        Thu,  5 May 2022 12:26:53 +0200 (CEST)
+Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id A51622171CE;
+        Thu,  5 May 2022 12:26:53 +0200 (CEST)
+Received: from localhost (10.75.127.51) by SFHDAG2NODE2.st.com (10.75.127.5)
+ with Microsoft SMTP Server (TLS) id 15.0.1497.26; Thu, 5 May 2022 12:26:53
+ +0200
+From:   Amelie Delaunay <amelie.delaunay@foss.st.com>
+To:     Vinod Koul <vkoul@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>
+CC:     <dmaengine@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        Amelie Delaunay <amelie.delaunay@foss.st.com>
+Subject: [PATCH 0/4] STM32 DMA pause/resume support
+Date:   Thu, 5 May 2022 12:26:32 +0200
+Message-ID: <20220505102636.35506-1-amelie.delaunay@foss.st.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.75.127.51]
+X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SFHDAG2NODE2.st.com
+ (10.75.127.5)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-05_04,2022-05-05_01,2022-02-23_01
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-With the proposed patch (deep parameter is always true), I've managed to te=
-st:
-1. Hibernate/restore (with device down/up)
-2. Suspend/resume (with device down/up)
+This patchset introduces pause/resume support in stm32-dma driver.
+[1/4], [2/4] and [3/4] ease the introduction of device_pause/device_resume
+ops management in [4/4].
 
-I put the device down with the command:
-sudo ip link set <connection> down
+Amelie Delaunay (4):
+  dmaengine: stm32-dma: introduce stm32_dma_sg_inc to manage
+    chan->next_sg
+  dmaengine: stm32-dma: pass DMA_SxSCR value to
+    stm32_dma_handle_chan_done()
+  dmaengine: stm32-dma: rename pm ops before dma pause/resume
+    introduction
+  dmaengine: stm32-dma: add device_pause/device_resume support
 
-I hope that's correct, if not please let me know correct command.
+ drivers/dma/stm32-dma.c | 311 ++++++++++++++++++++++++++++++++++------
+ 1 file changed, 268 insertions(+), 43 deletions(-)
 
-Regards,
-Jordan
+-- 
+2.25.1
 
-
-------- Original Message -------
-On Thursday, May 5th, 2022 at 08:04, Igor Russkikh <irusskikh@marvell.com> =
-wrote:
-
-
->
->
-> > The impact of this regression is the same for resume that I saw on
-> > thaw: the kernel hangs and nothing except SysRq rebooting can be done.
-> >
-> > The null deref occurs at the same position as on thaw.
-> > BUG: kernel NULL pointer dereference
-> > RIP: aq_ring_rx_fill+0xcf/0x210 [atlantic]
-> >
-> > Fixes regression in cbe6c3a8f8f4 ("net: atlantic: invert deep par in
-> > pm functions, preventing null derefs"), where I disabled deep pm
-> > resets in suspend and resume, trying to make sense of the
-> > atl_resume_common deep parameter in the first place.
-> >
-> > It turns out, that atlantic always has to deep reset on pm operations
-> > and the parameter is useless. Even though I expected that and tested
-> > resume, I screwed up by kexec-rebooting into an unpatched kernel, thus
-> > missing the breakage.
-> >
-> > This fixup obsoletes the deep parameter of atl_resume_common, but I
-> > leave the cleanup for the maintainers to post to mainline.
-> >
-> > PS: I'm very sorry for this regression.
->
->
-> Hi Manuel,
->
-> Unfortunately I've missed to review and comment on previous patch - it wa=
-s too quickly accepted.
->
-> I'm still in doubt on your fixes, even after rereading the original probl=
-em.
-> Is it possible for you to test this with all the possible combinations?
-> suspend/resume with device up/down,
-> hibernate/restore with device up/down?
->
-> I'll try to do the same on our side, but we don't have much resources for=
- that now unfortunately..
->
-> > Fixes: cbe6c3a8f8f4315b96e46e1a1c70393c06d95a4c
->
->
-> That tag format is incorrect I think..
->
-> Igor

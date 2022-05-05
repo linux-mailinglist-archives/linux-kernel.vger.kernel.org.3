@@ -2,51 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E908151C295
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 16:29:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D624151C224
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 16:16:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380655AbiEEOdd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 10:33:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57220 "EHLO
+        id S1380511AbiEEOTn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 10:19:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229570AbiEEOdb (ORCPT
+        with ESMTP id S237840AbiEEOTk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 10:33:31 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 744A524BE0;
-        Thu,  5 May 2022 07:29:51 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 22306B82DA4;
-        Thu,  5 May 2022 14:29:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21FC8C385A8;
-        Thu,  5 May 2022 14:29:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651760988;
-        bh=N3cfcZ5R177Vy3ShBjYhQisk3rhZYNwWw0AXe+7cFhw=;
-        h=From:To:Cc:Subject:Date:From;
-        b=WVYXrUIFs641fCAlWtqH+Q3leAL9deBOOIh/RfcMd7tKmEr8vmjp+3qnxy++3zriP
-         oYpYWFiC4G/G5rPnqhkQja9Dgu6xxpeOfAMKxUKvXmBj7yM12b6H6e8s+wVERHmoHT
-         U7u8xPfTWb2axgiIk12fGizSgmPtpET6qPTlix1Q9rsTUlUYzrUYjdLBCH6LY3LHY6
-         S1fxVwLP/WWVnX0xuKq68GzxBpqezqd4k/a/ZvyNRbZ2VWPJoQ9C00daaKgYFQfpKU
-         BsxTfdrXtg5H0sgZwrA7YmgygM6RobbuR/jP6dcjSDhV/73umbK/ameX6YmU6X9n86
-         kXgAg2PTBq2RA==
-From:   Chao Yu <chao@kernel.org>
-To:     jaegeuk@kernel.org
-Cc:     linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, Chao Yu <chao@kernel.org>,
-        stable@vger.kernel.org, Ming Yan <yanming@tju.edu.cn>,
-        Chao Yu <chao.yu@oppo.com>
-Subject: [PATCH v2] f2fs: fix to do sanity check on total_data_blocks
-Date:   Thu,  5 May 2022 22:15:07 +0800
-Message-Id: <20220505141507.6616-1-chao@kernel.org>
-X-Mailer: git-send-email 2.32.0
+        Thu, 5 May 2022 10:19:40 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F085453B7A;
+        Thu,  5 May 2022 07:16:00 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: sre)
+        with ESMTPSA id C8CE51F457A9
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1651760159;
+        bh=W4SZhjT6xZkzhOrReGV1YPJvbxvwLaVfN3yGmI/6XVw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=btmxl3G8sDIAPPdG1+hUMFjECMvX+iri8m431iaZXu9AYDVoOa5I+oLD04/2xDKhU
+         YsITj8AwxTR14nLRzZWb1WxTFHHqatH58vjU55vtj/3YLoTXnrgyxwHt1G8/CsrrwC
+         /PMrgmjDsWrHXMKmPbkH+UlzqBuXSmKsHdyhebLhHeNP6kKxzlkpLsQrwWhmLD0i0T
+         9p3T48DW3IlxM6C9DHD7qD8dc0I0+tFcbbWETIaN/XArqfSS3PMD4UcjFg18T6+uGA
+         E60GT9kG09E6EXQu9XDKy9+zBR3hVTO2O2VW/AB0QqFUStuoJ4JVTlAAHndBRtMJAa
+         lG1LvrzgN7f2Q==
+Received: by mercury (Postfix, from userid 1000)
+        id 234601060437; Thu,  5 May 2022 16:15:57 +0200 (CEST)
+Date:   Thu, 5 May 2022 16:15:57 +0200
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Sebastian Reichel <sebastian.reichel@collabora.com>
+Cc:     Heiko Stuebner <heiko@sntech.de>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel@collabora.com,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCHv2 02/21] dt-bindings: mmc: sdhci-of-dwcmhsc: Add rk3588
+Message-ID: <20220505141557.txgr4ngcxhwr57oe@mercury.elektranox.org>
+References: <20220504213251.264819-1-sebastian.reichel@collabora.com>
+ <20220504213251.264819-3-sebastian.reichel@collabora.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="ikswav6d3jtgfdq4"
+Content-Disposition: inline
+In-Reply-To: <20220504213251.264819-3-sebastian.reichel@collabora.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,124 +66,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As Yanming reported in bugzilla:
 
-https://bugzilla.kernel.org/show_bug.cgi?id=215916
+--ikswav6d3jtgfdq4
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-The kernel message is shown below:
+Hi,
 
-kernel BUG at fs/f2fs/segment.c:2560!
-Call Trace:
- allocate_segment_by_default+0x228/0x440
- f2fs_allocate_data_block+0x13d1/0x31f0
- do_write_page+0x18d/0x710
- f2fs_outplace_write_data+0x151/0x250
- f2fs_do_write_data_page+0xef9/0x1980
- move_data_page+0x6af/0xbc0
- do_garbage_collect+0x312f/0x46f0
- f2fs_gc+0x6b0/0x3bc0
- f2fs_balance_fs+0x921/0x2260
- f2fs_write_single_data_page+0x16be/0x2370
- f2fs_write_cache_pages+0x428/0xd00
- f2fs_write_data_pages+0x96e/0xd50
- do_writepages+0x168/0x550
- __writeback_single_inode+0x9f/0x870
- writeback_sb_inodes+0x47d/0xb20
- __writeback_inodes_wb+0xb2/0x200
- wb_writeback+0x4bd/0x660
- wb_workfn+0x5f3/0xab0
- process_one_work+0x79f/0x13e0
- worker_thread+0x89/0xf60
- kthread+0x26a/0x300
- ret_from_fork+0x22/0x30
-RIP: 0010:new_curseg+0xe8d/0x15f0
+On Wed, May 04, 2022 at 11:32:32PM +0200, Sebastian Reichel wrote:
+> Add compatible value for the Rockchip rk3588 dwcmshc controller.
+>=20
+> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+> ---
 
-The root cause is: ckpt.valid_block_count is inconsistent with SIT table,
-stat info indicates filesystem has free blocks, but SIT table indicates
-filesystem has no free segment.
+This patch has already been applied, but I accidently resend it.
+Please ignore it.
 
-So that during garbage colloection, it triggers panic when LFS allocator
-fails to find free segment.
+-- Sebastian
 
-This patch tries to fix this issue by checking consistency in between
-ckpt.valid_block_count and block accounted from SIT.
+>  Documentation/devicetree/bindings/mmc/snps,dwcmshc-sdhci.yaml | 1 +
+>  1 file changed, 1 insertion(+)
+>=20
+> diff --git a/Documentation/devicetree/bindings/mmc/snps,dwcmshc-sdhci.yam=
+l b/Documentation/devicetree/bindings/mmc/snps,dwcmshc-sdhci.yaml
+> index f300ced4cdf3..71f8e726d641 100644
+> --- a/Documentation/devicetree/bindings/mmc/snps,dwcmshc-sdhci.yaml
+> +++ b/Documentation/devicetree/bindings/mmc/snps,dwcmshc-sdhci.yaml
+> @@ -17,6 +17,7 @@ properties:
+>    compatible:
+>      enum:
+>        - rockchip,rk3568-dwcmshc
+> +      - rockchip,rk3588-dwcmshc
+>        - snps,dwcmshc-sdhci
+> =20
+>    reg:
+> --=20
+> 2.35.1
+>=20
 
-Cc: stable@vger.kernel.org
-Reported-by: Ming Yan <yanming@tju.edu.cn>
-Signed-off-by: Chao Yu <chao.yu@oppo.com>
----
-v2:
-- adjust check condition according to the case Jaegeuk mentioned.
- fs/f2fs/segment.c | 24 +++++++++++++++++++++---
- 1 file changed, 21 insertions(+), 3 deletions(-)
+--ikswav6d3jtgfdq4
+Content-Type: application/pgp-signature; name="signature.asc"
 
-diff --git a/fs/f2fs/segment.c b/fs/f2fs/segment.c
-index 3a3e2cec2ac4..942d6d8c18e6 100644
---- a/fs/f2fs/segment.c
-+++ b/fs/f2fs/segment.c
-@@ -4462,6 +4462,7 @@ static int build_sit_entries(struct f2fs_sb_info *sbi)
- 	unsigned int readed, start_blk = 0;
- 	int err = 0;
- 	block_t total_node_blocks = 0;
-+	block_t total_data_blocks = 0;
- 
- 	do {
- 		readed = f2fs_ra_meta_pages(sbi, start_blk, BIO_MAX_VECS,
-@@ -4488,6 +4489,8 @@ static int build_sit_entries(struct f2fs_sb_info *sbi)
- 			seg_info_from_raw_sit(se, &sit);
- 			if (IS_NODESEG(se->type))
- 				total_node_blocks += se->valid_blocks;
-+			else
-+				total_data_blocks += se->valid_blocks;
- 
- 			if (f2fs_block_unit_discard(sbi)) {
- 				/* build discard map only one time */
-@@ -4529,6 +4532,8 @@ static int build_sit_entries(struct f2fs_sb_info *sbi)
- 		old_valid_blocks = se->valid_blocks;
- 		if (IS_NODESEG(se->type))
- 			total_node_blocks -= old_valid_blocks;
-+		else
-+			total_data_blocks -= old_valid_blocks;
- 
- 		err = check_block_count(sbi, start, &sit);
- 		if (err)
-@@ -4536,6 +4541,8 @@ static int build_sit_entries(struct f2fs_sb_info *sbi)
- 		seg_info_from_raw_sit(se, &sit);
- 		if (IS_NODESEG(se->type))
- 			total_node_blocks += se->valid_blocks;
-+		else
-+			total_data_blocks += se->valid_blocks;
- 
- 		if (f2fs_block_unit_discard(sbi)) {
- 			if (is_set_ckpt_flags(sbi, CP_TRIMMED_FLAG)) {
-@@ -4557,13 +4564,24 @@ static int build_sit_entries(struct f2fs_sb_info *sbi)
- 	}
- 	up_read(&curseg->journal_rwsem);
- 
--	if (!err && total_node_blocks != valid_node_count(sbi)) {
-+	if (err)
-+		return err;
-+
-+	if (total_node_blocks != valid_node_count(sbi)) {
- 		f2fs_err(sbi, "SIT is corrupted node# %u vs %u",
- 			 total_node_blocks, valid_node_count(sbi));
--		err = -EFSCORRUPTED;
-+		return -EFSCORRUPTED;
- 	}
- 
--	return err;
-+	if (total_data_blocks + total_node_blocks >
-+				valid_user_blocks(sbi)) {
-+		f2fs_err(sbi, "SIT is corrupted data# %u %u vs %u",
-+			 total_data_blocks, total_node_blocks,
-+			 valid_user_blocks(sbi));
-+		return -EFSCORRUPTED;
-+	}
-+
-+	return 0;
- }
- 
- static void init_free_segmap(struct f2fs_sb_info *sbi)
--- 
-2.32.0
+-----BEGIN PGP SIGNATURE-----
 
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmJz3BwACgkQ2O7X88g7
++przfg/9FbMnqzN7qvpUMSuTIRwd9SJSrzxF+gH4JtICrgZvUPmXt1N+Pk/gebXg
+jeG5x0ldbj/HLRJ+EqMkER8QGhB1aKHtDSLIT02XAh1kZEYEwUeNcIpdfLggfi41
+vqvMPtM7u5skv/Pbdq4VbRAgEeKuWHMHlvqETZQzykbsfbUH71zNTQspLAubtTy2
+AFev02lYfb/njlYgqdudSbHJwHORR0JP1Mmuy2M7Iuihbf0cBa22aHe0kXwgvY7m
+EXWopIIKJmWSSFFCt+ubRpwG4K7NY1LWMgHFEE9Mfaxt8YlnZht832Gn5FJTYyG4
+tDfw/cNNhl32b+W3qxFqdFsm1Wn29VZjOk/pO404Jexyu6PO2nlKgK3r2W5yDAhC
+Kc00Z+8pLMTlhwZktCx6Bs3vzFttkqRYxUMRgu5hmVFzNMidxBssYys+Ni+namvk
+588Wm2STU0kVg2yBTqUlJxlrfArbmC8hIOZ95N/oHkrWR9P2kO1wH6rhwAvUpJVV
+eTDDddmcLKXIrbV1EtcjF2OnwpQR/uLLP1cIGVccagmahiWrzjePFShYfQ0wPEnq
+CUQDIFfgtNUwKk2F8Ya/7Ytj/mHtQdahkR7FVhlCs9YwNB0OdoLSYQHKw0vvi3BD
+b2Rl3V2/IAF5AmWcHynuIZjbKf8dXo9X5o0R2DA6+7SOjcKO3mI=
+=MsHG
+-----END PGP SIGNATURE-----
+
+--ikswav6d3jtgfdq4--

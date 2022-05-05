@@ -2,40 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0B7B51CD47
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 02:00:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF78E51CD36
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 02:00:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387069AbiEFABr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 20:01:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35042 "EHLO
+        id S1387147AbiEFABz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 20:01:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1387048AbiEFAB2 (ORCPT
+        with ESMTP id S1387045AbiEFAB3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 20:01:28 -0400
+        Thu, 5 May 2022 20:01:29 -0400
 Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 307B360DB7
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A271160DA8
         for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 16:57:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1651795067; x=1683331067;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references;
-  bh=Jz5/GbztoMpO5f33w54Dy1VgumudmsMpWQzH5+E5s4I=;
-  b=XlZwEYI6/M/Oti/oKGwvzBgRy98haQGOy0pNl1ocMfxAxNWuh77VXoX8
-   mfn6j2B80IABNcm2f1O78T7HrFLtCiJjKHo2hMNbw33/X8Dk8y0kdMWqC
-   fGxZUMJgnuGpV9lnIBA2YtHsP6CCcbNoT5mwYUJ6VnlikYVSe3tqS9whK
-   m9aetlD8Dq2cnW1PFOzKRx4vf+D5jdptOJLtEXxoVv9mMX80y2xpfGVkZ
-   KP7dGaAydb0qbZhBi8RzIxrREpIw/4dKxnXCCs4oaDFPX5YI5CArhld5c
-   xKH4yHo0pWLiBnxXl+l//kY9iRCajNzs1b+Cc/OKRDspSQxpa1V1+6FF8
+  bh=D+sZP1VTaO2AD2PX2fNF30e9SIwhyViy7LM9jGqhP5M=;
+  b=bsFDga76t8yiZChb3uUw+latfT3p6I20MC2+fZHfDlCOAUBGkh1sfEnK
+   kpA+4PHEQeJp2QKk2dmULVMptvy+0tugwMIlITxS1dXtNcHIr8TTLsb+R
+   FBXUEP23YSB3msNH5hKY9OuEXCMmUFN26M95esj7vjiaHGZUNTdilajVW
+   aOSwA/bIspzJKJ3jESRzQ4fy6uNOS+26V3UT8MoEd1NtqX7Dc3c5P6Abd
+   +KzCkmzSOf+LnaKnCNi/zsWpQAxr0fqvN48Iy2djIyPkI4O3u9MiEkbCO
+   iD93KjAxh94L0XD/d7VA5jJ1GHbUcusVnvr1Cxs0yOCXclfmlAgeNSQBY
    g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10338"; a="250283617"
+X-IronPort-AV: E=McAfee;i="6400,9594,10338"; a="250283619"
 X-IronPort-AV: E=Sophos;i="5.91,203,1647327600"; 
-   d="scan'208";a="250283617"
+   d="scan'208";a="250283619"
 Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2022 16:57:45 -0700
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2022 16:57:46 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,203,1647327600"; 
-   d="scan'208";a="694914335"
+   d="scan'208";a="694914338"
 Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
   by orsmga004.jf.intel.com with ESMTP; 05 May 2022 16:57:45 -0700
 From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
@@ -53,9 +53,9 @@ Cc:     Tony Luck <tony.luck@intel.com>, Andi Kleen <ak@linux.intel.com>,
         iommu@lists.linux-foundation.org, linuxppc-dev@lists.ozlabs.org,
         linux-kernel@vger.kernel.org,
         Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-Subject: [PATCH v6 04/29] x86/apic: Add the X86_IRQ_ALLOC_AS_NMI irq allocation flag
-Date:   Thu,  5 May 2022 16:59:43 -0700
-Message-Id: <20220506000008.30892-5-ricardo.neri-calderon@linux.intel.com>
+Subject: [PATCH v6 05/29] x86/apic/vector: Do not allocate vectors for NMIs
+Date:   Thu,  5 May 2022 16:59:44 -0700
+Message-Id: <20220506000008.30892-6-ricardo.neri-calderon@linux.intel.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220506000008.30892-1-ricardo.neri-calderon@linux.intel.com>
 References: <20220506000008.30892-1-ricardo.neri-calderon@linux.intel.com>
@@ -68,9 +68,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There are cases in which it is necessary to set the delivery mode of an
-interrupt as NMI. Add a new flag that callers can specify when allocating
-an IRQ.
+Vectors are meaningless when allocating IRQs with NMI as the delivery mode.
+In such case, skip the reservation of IRQ vectors. Do it in the lowest-
+level functions where the actual IRQ reservation takes place.
+
+Since NMIs target specific CPUs, keep the functionality to find the best
+CPU.
 
 Cc: Andi Kleen <ak@linux.intel.com>
 Cc: "Ravi V. Shankar" <ravi.v.shankar@intel.com>
@@ -78,7 +81,6 @@ Cc: Stephane Eranian <eranian@google.com>
 Cc: iommu@lists.linux-foundation.org
 Cc: linuxppc-dev@lists.ozlabs.org
 Cc: x86@kernel.org
-Suggested-by: Thomas Gleixner <tglx@linutronix.de>
 Reviewed-by: Tony Luck <tony.luck@intel.com>
 Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
 ---
@@ -97,21 +99,79 @@ Changes since v2:
 Changes since v1:
  * N/A
 ---
- arch/x86/include/asm/irqdomain.h | 1 +
- 1 file changed, 1 insertion(+)
+ arch/x86/kernel/apic/vector.c | 27 +++++++++++++++++++++++++++
+ 1 file changed, 27 insertions(+)
 
-diff --git a/arch/x86/include/asm/irqdomain.h b/arch/x86/include/asm/irqdomain.h
-index 125c23b7bad3..de1cf2e80443 100644
---- a/arch/x86/include/asm/irqdomain.h
-+++ b/arch/x86/include/asm/irqdomain.h
-@@ -10,6 +10,7 @@ enum {
- 	/* Allocate contiguous CPU vectors */
- 	X86_IRQ_ALLOC_CONTIGUOUS_VECTORS		= 0x1,
- 	X86_IRQ_ALLOC_LEGACY				= 0x2,
-+	X86_IRQ_ALLOC_AS_NMI				= 0x4,
- };
+diff --git a/arch/x86/kernel/apic/vector.c b/arch/x86/kernel/apic/vector.c
+index 838e220e8860..11f881f45cec 100644
+--- a/arch/x86/kernel/apic/vector.c
++++ b/arch/x86/kernel/apic/vector.c
+@@ -245,11 +245,20 @@ assign_vector_locked(struct irq_data *irqd, const struct cpumask *dest)
+ 	if (apicd->move_in_progress || !hlist_unhashed(&apicd->clist))
+ 		return -EBUSY;
  
- extern int x86_fwspec_is_ioapic(struct irq_fwspec *fwspec);
++	if (apicd->hw_irq_cfg.delivery_mode == APIC_DELIVERY_MODE_NMI) {
++		cpu = irq_matrix_find_best_cpu(vector_matrix, dest);
++		apicd->cpu = cpu;
++		vector = 0;
++		goto no_vector;
++	}
++
+ 	vector = irq_matrix_alloc(vector_matrix, dest, resvd, &cpu);
+ 	trace_vector_alloc(irqd->irq, vector, resvd, vector);
+ 	if (vector < 0)
+ 		return vector;
+ 	apic_update_vector(irqd, vector, cpu);
++
++no_vector:
+ 	apic_update_irq_cfg(irqd, vector, cpu);
+ 
+ 	return 0;
+@@ -321,12 +330,22 @@ assign_managed_vector(struct irq_data *irqd, const struct cpumask *dest)
+ 	/* set_affinity might call here for nothing */
+ 	if (apicd->vector && cpumask_test_cpu(apicd->cpu, vector_searchmask))
+ 		return 0;
++
++	if (apicd->hw_irq_cfg.delivery_mode == APIC_DELIVERY_MODE_NMI) {
++		cpu = irq_matrix_find_best_cpu_managed(vector_matrix, dest);
++		apicd->cpu = cpu;
++		vector = 0;
++		goto no_vector;
++	}
++
+ 	vector = irq_matrix_alloc_managed(vector_matrix, vector_searchmask,
+ 					  &cpu);
+ 	trace_vector_alloc_managed(irqd->irq, vector, vector);
+ 	if (vector < 0)
+ 		return vector;
+ 	apic_update_vector(irqd, vector, cpu);
++
++no_vector:
+ 	apic_update_irq_cfg(irqd, vector, cpu);
+ 	return 0;
+ }
+@@ -376,6 +395,10 @@ static void x86_vector_deactivate(struct irq_domain *dom, struct irq_data *irqd)
+ 	if (apicd->has_reserved)
+ 		return;
+ 
++	/* NMI IRQs do not have associated vectors; nothing to do. */
++	if (apicd->hw_irq_cfg.delivery_mode == APIC_DELIVERY_MODE_NMI)
++		return;
++
+ 	raw_spin_lock_irqsave(&vector_lock, flags);
+ 	clear_irq_vector(irqd);
+ 	if (apicd->can_reserve)
+@@ -472,6 +495,10 @@ static void vector_free_reserved_and_managed(struct irq_data *irqd)
+ 	trace_vector_teardown(irqd->irq, apicd->is_managed,
+ 			      apicd->has_reserved);
+ 
++	/* NMI IRQs do not have associated vectors; nothing to do. */
++	if (apicd->hw_irq_cfg.delivery_mode == APIC_DELIVERY_MODE_NMI)
++		return;
++
+ 	if (apicd->has_reserved)
+ 		irq_matrix_remove_reserved(vector_matrix);
+ 	if (apicd->is_managed)
 -- 
 2.17.1
 

@@ -2,160 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3DC451C15B
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 15:51:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01C8551C151
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 15:50:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380109AbiEENxO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 09:53:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37868 "EHLO
+        id S1380125AbiEENya (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 09:54:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380076AbiEENxH (ORCPT
+        with ESMTP id S1380177AbiEENyJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 09:53:07 -0400
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::223])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1088C57B3B;
-        Thu,  5 May 2022 06:49:26 -0700 (PDT)
-Received: (Authenticated sender: clement.leger@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 5683160006;
-        Thu,  5 May 2022 13:49:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1651758565;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=vqDFbGmKNJruiByQjIrXNv8C+KNkeae3TcAb//Cv/EY=;
-        b=nOLhuyhIIqkvP7KRf+NXyjpJTXmH0yxAIjp/oMAZ0GOrCUrvr8n6FxwX5VZoXGn+zjt731
-        enmNxNiXH5C6XMhFrNwX5zkW+s96XPUwJt/T93XZHAWGYko/VMR2jYCp6i6+XokP/UCRD0
-        d+2E3gwjD8XX1hoafN7C910XMmgct9qEpS152tZsFJEs/6HjT4Hz0euYzwesZalC5Ywpdn
-        D0nfoKsKCn805Fn8iQAkMiLomxFriaE8EHYC08dbVLabJo8ZeQhAW4QqH3GJLbOavyE9Sk
-        6/9f3NjHRsTAuhB4Kv47b5p3tmM6zZlCFwIEiIr3NhLnd117PBqQ50UzBaMPtw==
-Date:   Thu, 5 May 2022 15:48:06 +0200
-From:   =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
-To:     Vladimir Oltean <olteanv@gmail.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Herve Codina <herve.codina@bootlin.com>,
-        =?UTF-8?B?TWlxdcOobA==?= Raynal <miquel.raynal@bootlin.com>,
-        Milan Stevanovic <milan.stevanovic@se.com>,
-        Jimmy Lalande <jimmy.lalande@se.com>,
-        Pascal Eberhard <pascal.eberhard@se.com>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH net-next v3 02/12] net: dsa: add Renesas RZ/N1 switch
- tag driver
-Message-ID: <20220505154806.7a7a182c@fixe.home>
-In-Reply-To: <20220504160039.5viu3cqd5zbmo6n2@skbuf>
-References: <20220504093000.132579-1-clement.leger@bootlin.com>
-        <20220504093000.132579-3-clement.leger@bootlin.com>
-        <20220504160039.5viu3cqd5zbmo6n2@skbuf>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-pc-linux-gnu)
+        Thu, 5 May 2022 09:54:09 -0400
+X-Greylist: delayed 23050 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 05 May 2022 06:50:27 PDT
+Received: from conssluserg-05.nifty.com (conssluserg-05.nifty.com [210.131.2.90])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B2421C4;
+        Thu,  5 May 2022 06:50:23 -0700 (PDT)
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174]) (authenticated)
+        by conssluserg-05.nifty.com with ESMTP id 245Do2Vm001524;
+        Thu, 5 May 2022 22:50:03 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-05.nifty.com 245Do2Vm001524
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1651758603;
+        bh=9oRpkNgyXXtV+zgGcTivzSiWJg6PL7lzsKUtb+il+xA=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=WCAi+X3iW2LWnS+cyU6Xwt+mVMFWGKNgvm1N4fQyjnqbm5kc3n8AZNfmfQahJf44C
+         8baCi4AzET7HA49g1FxlljYCIcyH27XetjJU5oHET938gKf0mwwJvz2T8HhpMNLCrz
+         P9Pn3Km3/Y/vQeek7U0RGRx1wEMV/zynJog1koCSG/7blY0+bz+o/+V+nd0dhDVIgT
+         ObLR1jGvcZqTTJusj3s304q3S0HOyD8i5NlnZKlgrayMMnTlwQhkOi3xewdpgkQ2UG
+         FMtXR+0Z3J9CI9yvcXTbq4t0xxUsKdPB9BdEjyOOS3D5O8xVFTCPswe5Ah2kSLCHdl
+         WLmJgONxSW2YA==
+X-Nifty-SrcIP: [209.85.214.174]
+Received: by mail-pl1-f174.google.com with SMTP id n18so4453578plg.5;
+        Thu, 05 May 2022 06:50:03 -0700 (PDT)
+X-Gm-Message-State: AOAM5337OApzlSjvMivzBuGPOcIlt85F07dCzPAk70PrPMKs1ZJpu0TO
+        ALyzMqaQ7j0d3brF4XksznGsKpYAul0EsDH8fk8=
+X-Google-Smtp-Source: ABdhPJwUvU2dd6I2MVotZAWGiD+mCtj6djZTY+lh8nRnnAK5x12OI9taA02MBGobfNqjKVY/3aiklbcYcNl4MlrBSIM=
+X-Received: by 2002:a17:90a:8405:b0:1bc:d521:b2c9 with SMTP id
+ j5-20020a17090a840500b001bcd521b2c9mr6301241pjn.119.1651758602352; Thu, 05
+ May 2022 06:50:02 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220505072244.1155033-1-masahiroy@kernel.org> <20220505072244.1155033-3-masahiroy@kernel.org>
+In-Reply-To: <20220505072244.1155033-3-masahiroy@kernel.org>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Thu, 5 May 2022 22:48:55 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAREQt5rPGK8zsti_UA-dGFKfqHsVWbSgMLw-yLoeNkJeA@mail.gmail.com>
+Message-ID: <CAK7LNAREQt5rPGK8zsti_UA-dGFKfqHsVWbSgMLw-yLoeNkJeA@mail.gmail.com>
+Subject: Re: [PATCH v3 02/15] modpost: change the license of EXPORT_SYMBOL to
+ bool type
+To:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
+Cc:     clang-built-linux <clang-built-linux@googlegroups.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Nicolas Schier a <nicolas@fjasle.eu>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        linux-um@lists.infradead.org,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Kees Cook <keescook@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le Wed, 4 May 2022 19:00:39 +0300,
-Vladimir Oltean <olteanv@gmail.com> a =C3=A9crit :
-
-> > +/* To define the outgoing port and to discover the incoming port a TAG=
- is
-> > + * inserted after Src MAC :
-> > + *
-> > + *       Dest MAC       Src MAC           TAG         Type
-> > + * ...| 1 2 3 4 5 6 | 1 2 3 4 5 6 | 1 2 3 4 5 6 7 8 | 1 2 |...
-> > + *                                |<--------------->|
-> > + *
-> > + * See struct a5psw_tag for layout
-> > + */
-> > +
-> > +#define A5PSW_TAG_VALUE			0xE001 =20
->=20
-> Maybe an ETH_P_DSA_A5PSW definition in include/uapi/linux/if_ether.h
-> would be appropriate? I'm not sure.
-
-That's a good question. Actually, this value is the default=20
-but is configurable in the hardware so I'm not sure this should be a
-reserved value. Maybe it would make sense to add it anyway to have the
-define shared between the switch driver and the tag driver.
-
->=20
-> > +#define A5PSW_TAG_LEN			8
-> > +#define A5PSW_CTRL_DATA_FORCE_FORWARD	BIT(0)
-> > +/* This is both used for xmit tag and rcv tagging */
-> > +#define A5PSW_CTRL_DATA_PORT		GENMASK(3, 0)
-> > +
-> > +struct a5psw_tag {
-> > +	__be16 ctrl_tag;
-> > +	__be16 ctrl_data;
-> > +	__be16 ctrl_data2_hi;
-> > +	__be16 ctrl_data2_lo;
-> > +};
-> > +
-> > +static struct sk_buff *a5psw_tag_xmit(struct sk_buff *skb, struct net_=
-device *dev)
-> > +{
-> > +	struct dsa_port *dp =3D dsa_slave_to_port(dev);
-> > +	struct a5psw_tag *ptag;
-> > +	u32 data2_val;
-> > +
-> > +	BUILD_BUG_ON(sizeof(*ptag) !=3D A5PSW_TAG_LEN);
-> > +
-> > +	/* The Ethernet switch we are interfaced with needs packets to be at
-> > +	 * least 64 bytes (including FCS) otherwise they will be discarded wh=
-en
-> > +	 * they enter the switch port logic. When tagging is enabled, we need
-> > +	 * to make sure that packets are at least 70 bytes (including FCS and
-> > +	 * tag).
-> > +	 */
-> > +	if (__skb_put_padto(skb, ETH_ZLEN + ETH_FCS_LEN + A5PSW_TAG_LEN, fals=
-e))
-> > +		return NULL; =20
->=20
-> I'm confused by the inclusion of the FCS length in this calculation,
-> since the FCS space isn't present in the skb buffer as far as I know?
-
-I'm not sure either, the documentation is not really clear on what is
-the requirement for the minimal size of a packet. This was the closest
-thing I could find about that requirement:
-
-"A frame has a valid length if it contains at least 64 octets and does
-not exceed the programmed maximum length"
-
-And the figure associated to the frame show that the frame length
-includes the FCS which lead to a 64bytes frame.
->=20
-> "64 bytes including FCS" means "60 bytes excluding FCS".
-> And ETH_ZLEN is 60...
->=20
-> And I'm also not sure how we got to the number 70? A5PSW_TAG_LEN is 8.
-> If we add it to 60 we get 68. If we add it to 64 we get 72?
+On Thu, May 5, 2022 at 4:24 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
 >
+> Currently, enum export is tristate, but export_unknown does not make
+> sense in any way.
+>
+> If the symbol name starts with "__ksymtab_", but the section name
+> does not start with "___ksymtab+" or "___ksymtab_gpl+", it is not
+> an exported symbol. The variable name just happens to start with
+> "__ksymtab_". Do not call sym_add_exported() in this case.
+>
+> __ksymtab_* is internally by EXPORT_SYMBOL(_GPL) but somebody may
 
-I'll check all these numbers and find the correct size that is expected
-by the switch.
+I mean
+"... is internally used by ..."
 
---=20
-Cl=C3=A9ment L=C3=A9ger,
-Embedded Linux and Kernel engineer at Bootlin
-https://bootlin.com
+
+
+
+-- 
+Best Regards
+Masahiro Yamada

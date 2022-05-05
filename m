@@ -2,100 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EC1B51CCA7
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 01:20:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3AA151CCAB
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 01:22:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386639AbiEEXYQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 19:24:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59456 "EHLO
+        id S1386709AbiEEXZb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 19:25:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235666AbiEEXYL (ORCPT
+        with ESMTP id S1386702AbiEEXZ2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 19:24:11 -0400
-Received: from smtp-relay-canonical-0.canonical.com (smtp-relay-canonical-0.canonical.com [185.125.188.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CEF02613C;
-        Thu,  5 May 2022 16:20:29 -0700 (PDT)
-Received: from [192.168.1.31] (097-089-247-249.biz.spectrum.com [97.89.247.249])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id 7FDD54107B;
-        Thu,  5 May 2022 23:20:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1651792827;
-        bh=tM2bqpnWq3TURhjdPEpDnGm/7GFfCQ3VVx3FiW0azaQ=;
-        h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-         In-Reply-To:Content-Type;
-        b=BZXX+xcSVCcCi8Gw4Dt9LNRoddJZ/j7pP5Zb45OhdkcMm9WSBwjK2GykoFXiWHZFY
-         O8qMD0q1+19AfnMLm7CrKzOWORZWYr08AJLca59mImPxSYqKcc0SqN8fRrun76fCcF
-         CbBmYXIar0RAsNSQCs6P9+tkfBnWE8lUtmTZd5P4gjOksV7qrt8pOkR7FVos3Y2NKH
-         HocBMy7VVnJacqouyOyiUShkWTDtMMmBDHMKZo+Cnd060EM38pZB0Ij0AcRHIIIVpR
-         Bijd9ZfVZHAtyTq/cA10tbWsnu34vbs9Mq8/DQ3uPwVpE9RHSjnu4iVbPeOdZcogpk
-         /OZ+D9hFMoh0w==
-Message-ID: <35c5a001-61b0-09d7-393c-b46836d0b676@canonical.com>
-Date:   Thu, 5 May 2022 19:20:24 -0400
+        Thu, 5 May 2022 19:25:28 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C3665F8D6
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 16:21:48 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id r9so5518568pjo.5
+        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 16:21:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=FsJQBm+KiPbU5oZFlb156b8rhBJ4Uorz+AB43axdvEs=;
+        b=b4QBt9I2EvR67CODikPi0a9mXhgWqX571i5/EdReKIE9EODbHkItMvjvwDbOCQysfV
+         OYPj+ES6jzaUAcaXntn5yP9xnuimsNNoETSjjEpKqFnZJq7HiU4QIoUizYG8dqlIAlRt
+         KFEUvFE02VVTOS1MXYfEMUXarlkOSW796wnzw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=FsJQBm+KiPbU5oZFlb156b8rhBJ4Uorz+AB43axdvEs=;
+        b=Z+GIE+5QtJwe8s+YKkxfkd7q3l5fdjbmPhrmG50cOheOC9xrnCo1gvXGbcDSrwPu0N
+         WPJv3RIHPmV/ZQCUiRntdQYi5g5oJpyE+Tf+Ml4taNfE7vwEhHaSJhtwQhp4CpblJjbn
+         eG7hSH+wAgSCcqJJvlPCHxWGvQN2LwCdKWhqQD2Evv+jLtc/o76/CbMy/WAOcko+SHUR
+         VO2AcTf3+bMVtQcgALupKK7YyXlmuIzqeH/N2BlyiWSxbdXbmYdc9/31XjRRWzaBdbZr
+         i9w1yB7jn4IsmAE0btojHqIGadv9RcjfSUlI4C/Wlk96En6bnxeqbk7qcm8lO9vTyPoA
+         xgJg==
+X-Gm-Message-State: AOAM532uOi68NgFFta/VcIRyRK+3PtvCGSasPcaOwXpHIqX5trlUs7Eu
+        MynXwM/NyoyA0l1OxkYrq1EvUTO2Kr5vlw==
+X-Google-Smtp-Source: ABdhPJzP9zRP08NXdI9jDsvHPqaceGoA2zYTGlw+nZr3rV2CSebijDo0y4t+sdVuBwBLJoTyc6pOsQ==
+X-Received: by 2002:a17:90a:589:b0:1d5:e1b1:2496 with SMTP id i9-20020a17090a058900b001d5e1b12496mr8887205pji.209.1651792907648;
+        Thu, 05 May 2022 16:21:47 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id y19-20020aa78f33000000b0050dc76281b0sm1912701pfr.138.2022.05.05.16.21.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 May 2022 16:21:46 -0700 (PDT)
+Date:   Thu, 5 May 2022 16:21:46 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     Raju Rangoju <rajur@chelsio.com>,
+        kernel test robot <lkp@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        stable@vger.kernel.org, Heiner Kallweit <hkallweit1@gmail.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] net: chelsio: cxgb4: Avoid potential negative array
+ offset
+Message-ID: <202205051611.7C4B6EB86@keescook>
+References: <20220503144425.2858110-1-keescook@chromium.org>
+ <20220504201358.0ba62232@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: Issue With real-time patches on 5.15.y
-Content-Language: en-US
-From:   Joseph Salisbury <joseph.salisbury@canonical.com>
-To:     tglx@linutronix.de
-Cc:     linux-kernel@vger.kernel.org, dave.hansen@linux.intel.com,
-        linux-rt-users@vger.kernel.org
-References: <bdb23fe5-51ae-8873-a3d7-85f377877c79@canonical.com>
-In-Reply-To: <bdb23fe5-51ae-8873-a3d7-85f377877c79@canonical.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SCC_BODY_URI_ONLY,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220504201358.0ba62232@kernel.org>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, May 04, 2022 at 08:13:58PM -0700, Jakub Kicinski wrote:
+> On Tue,  3 May 2022 07:44:25 -0700 Kees Cook wrote:
+> > diff --git a/drivers/net/ethernet/chelsio/cxgb4/t4_hw.c b/drivers/net/ethernet/chelsio/cxgb4/t4_hw.c
+> > index e7b4e3ed056c..f119ec7323e5 100644
+> > --- a/drivers/net/ethernet/chelsio/cxgb4/t4_hw.c
+> > +++ b/drivers/net/ethernet/chelsio/cxgb4/t4_hw.c
+> > @@ -2793,14 +2793,14 @@ int t4_get_raw_vpd_params(struct adapter *adapter, struct vpd_params *p)
+> >  		goto out;
+> >  	na = ret;
+> >  
+> > -	memcpy(p->id, vpd + id, min_t(int, id_len, ID_LEN));
+> > +	memcpy(p->id, vpd + id, clamp_t(int, id_len, 0, ID_LEN));
+> 
+> The typing is needed because of the enum, right? The variable is
+> unsigned, seems a little strange to use clamp(int, ..., 0, constant)
+> min(unsigned int, ..., constant) will be equivalent with fewer branches.
+> Is it just me?
 
+I just chased down the origin of "unsigned int", but it's actually a
+u16 out of the VPD:
 
-On 5/5/22 19:18, Joseph Salisbury wrote:
-> Hello,
->
-> I ran into a build failure after applying the rt40 real-time 
-> patches[0] to an Ubuntu 22.04 kernel. The Ubuntu kernel is based on 
-> upstream stable 5.15.y(5.15.34 currently).  I believe this patch is 
-> the specific one that introduces the build issue: 
-> 0086-locking-Allow-to-include-asm-spinlock_types.h-from-l.patch.
->
-> After a bisect, the following commit was identified as the cause for 
-> the build failure:
-> b50854eca0e0 ("x86/pkru: Remove useless include")
->
-> This commit was added to mainline as of 5.16-rc1 and not Cc'd to 
-> stable, so it should not exist in 5.15.y.  However, it was purposely 
-> added to the Ubuntu kernel to enable x86 AMX support[1].
->
-> The real-time kernel build failure can be resolved by reverting commit 
-> b50854eca0e0.  The failure seems to be due to the removal of an 
-> include of xstate.h from pkru.h and caused spinlock_t to not be 
-> defined.  The commit would only be reverted for the real-time kernel 
-> and not any other kernels.  I wanted to see if reverting the commit is 
-> the proper approach, or if cherry-picking additional commits might be 
-> a better solution in preparation for additional changes that might be 
-> coming in the future?
->
-> Any suggestions would be greatly appreciated.
->
-> Thanks,
->
-> Joe
->
->
-> [0] 
-> https://cdn.kernel.org/pub/linux/kernel/projects/rt/5.15/older/patches-5.15.34-rt40.tar.gz
-> [1] https://bugs.launchpad.net/ubuntu/+source/linux/+bug/1967750
-Also, the following is the build failure that happens:
-arch/x86/include/asm/pgtable.h:55:8: error: unknown type name 'spinlock_t'
-    55 | extern spinlock_t pgd_lock;
-       |        ^~~~~~~~~~
+static u16 pci_vpd_lrdt_size(const u8 *lrdt)
+{
+        return get_unaligned_le16(lrdt + 1);
+}
+
+static int pci_vpd_find_tag(const u8 *buf, unsigned int len, u8 rdt, unsigned int *size)
+{
+	...
+                unsigned int lrdt_len = pci_vpd_lrdt_size(buf + i);
+	...
+                                *size = lrdt_len;
+
+I'm not sure why it was expanded to unsigned int size, maybe in other
+call sites it was easier to deal with for possible math, etc?
+
+Anyway, doesn't need changing. I'll send the int/unsigned int shortly...
+
+-- 
+Kees Cook

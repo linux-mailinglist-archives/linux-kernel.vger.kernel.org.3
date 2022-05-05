@@ -2,131 +2,230 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39C0A51BF8D
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 14:36:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6CD751BF91
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 14:38:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354495AbiEEMka (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 08:40:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44976 "EHLO
+        id S1358965AbiEEMlE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 08:41:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244338AbiEEMkY (ORCPT
+        with ESMTP id S244338AbiEEMlC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 08:40:24 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDE0154FA0;
-        Thu,  5 May 2022 05:36:44 -0700 (PDT)
-Received: from canpemm500009.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KvCqJ4wbJzQj6q;
-        Thu,  5 May 2022 20:36:12 +0800 (CST)
-Received: from [10.67.102.169] (10.67.102.169) by
- canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 5 May 2022 20:36:42 +0800
-CC:     <bhelgaas@google.com>, <rafael@kernel.org>,
-        <linux-pci@vger.kernel.org>, <linux-acpi@vger.kernel.org>,
-        <lenb@kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linuxarm@huawei.com>
-Subject: Re: [PATCH] PCI/ACPI: Always advertise ASPM support if
- CONFIG_PCIEASPM=y
-To:     Bjorn Helgaas <helgaas@kernel.org>,
-        Yicong Yang <yangyicong@hisilicon.com>
-References: <20220503223857.GA414278@bhelgaas>
-From:   Yicong Yang <yangyicong@huawei.com>
-Message-ID: <38e81af3-e7fa-df0c-c3f7-14244dde5a21@huawei.com>
-Date:   Thu, 5 May 2022 20:36:42 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.1
+        Thu, 5 May 2022 08:41:02 -0400
+Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F90254F9A
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 05:37:23 -0700 (PDT)
+Received: by mail-yb1-xb2d.google.com with SMTP id e12so7341491ybc.11
+        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 05:37:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=tEMd/zLrxbYdbg2uuhvlaGmu3rjwRRkiLQsaE+nT+sg=;
+        b=rSUeAlDKusX2+al0u8A+A85/uZVhGP+J1QkMwzt2NnZ4d7ocNWq9b2IBTYhPp/4VKh
+         87YvbbZp5gnhae6xPQcPTR54g+VN2t16uW+U9RZr5bnSGOWTA2IiKtZt2BbAwEMEXQ86
+         gieOpgaZ2g1WYJribCRVSPATxLmApPf5ARgySCZjODJyMCGTzcs2NBM3bSHWwIMpesQB
+         2BYMzygA03okqq5Km+3pwbTlPKV1dhxwHkUyakuFhQPER5sZs4VXxFgB6wLy7Xjfpwj7
+         81naC6/CJCo/2wagHgnRucGMQTyt7oRB5MgMJWJTaAqooTVBYl8l1bZGLgM/nzuRRatn
+         PTLA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=tEMd/zLrxbYdbg2uuhvlaGmu3rjwRRkiLQsaE+nT+sg=;
+        b=kT9+HyOiAErJUW0x6vMn5nwwzIuDTd/V7YNcH+9O1Hv4KwB6WvnHNKFbEK0NnI7w18
+         mxtWDVqBzqrpn8XSkFHjjps2dfTE29Iud/4QEmR0Lq0BZQB73cbscuPPnd2ZNbFMAy3v
+         NfH6tSu/wRUelJogj+BxGaBIYhmSLI4QQv1HMACqIb/fcsbwJh6g/2zLX2DCFCZ81TpH
+         rfZwHhFJjgbzcIAhJSq8KdjtGOCOrmg/+0j/paQ/F1HwQGkkxp2y+YT+0gAV7FQ+4n3D
+         +FxkRMh0TzNoAw3oFdZRHJDcWb8Q/pH3L+kEqAXf3N/Z4Mz7l3UFumZ1IMqXLF/gX7G4
+         wxkg==
+X-Gm-Message-State: AOAM532NiKylP2akjmo/m8CacWKFSkiab1cNEa/vy+vUIvxynscIViAq
+        IS1GyvNqWfXRDGPNpqrlIObWQ/k6yqrHG5TsrPeMxA==
+X-Google-Smtp-Source: ABdhPJwMFIvRn4OMXBXw3D3Qu4dFidCuq9dp119PnmhLQ1I8MtR4sTkdLeM9mUvbtyd75IAGoxeEfuVvkkrWJTPtCkA=
+X-Received: by 2002:a25:c012:0:b0:648:4912:7b9a with SMTP id
+ c18-20020a25c012000000b0064849127b9amr22563848ybf.474.1651754242549; Thu, 05
+ May 2022 05:37:22 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20220503223857.GA414278@bhelgaas>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.102.169]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- canpemm500009.china.huawei.com (7.192.105.203)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220504152927.744120418@linuxfoundation.org>
+In-Reply-To: <20220504152927.744120418@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Thu, 5 May 2022 18:07:11 +0530
+Message-ID: <CA+G9fYt2Mv1hMeRLg4fv7+yyi9XBidO9dH3bW=svZJcYbm6NSg@mail.gmail.com>
+Subject: Re: [PATCH 5.4 00/84] 5.4.192-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/5/4 6:38, Bjorn Helgaas wrote:
-> On Mon, Apr 25, 2022 at 03:06:34PM +0800, Yicong Yang wrote:
->> When we have CONFIG_PCIEASPM enabled it means OS can always support ASPM no
->> matter user have disabled it through pcie_aspm=off or not. But currently we
->> won't advertise ASPM support in _OSC negotiation if user disables it, which
->> doesn't match the fact. This will also have side effects that other PCIe
->> services like AER and hotplug will be disabled as ASPM support is required
->> and we won't negotiate other services if ASPM support is absent.
->>
->> So this patch makes OS always advertising ASPM support if CONFIG_PCIEASPM=y.
->> It intends no functional change to pcie_aspm=off as it will still mark
->> aspm_disabled=1 and aspm_support_enabled=false, driver will check these
->> status before configuring ASPM.
->>
->> Tested this patch with pcie_aspm=off:
->> estuary:/$ dmesg | egrep -i "aspm|osc"
->> [    0.000000] PCIe ASPM is disabled
->> [    8.706961] acpi PNP0A08:00: _OSC: OS supports [ExtendedConfig ASPM
->> ClockPM Segments MSI EDR HPX-Type3]
->> [    8.726032] acpi PNP0A08:00: _OSC: platform does not support [LTR]
->> [    8.742818] acpi PNP0A08:00: _OSC: OS now controls [PCIeHotplug PME
->> AER PCIeCapability DPC]
->> estuary:/sys/module/pcie_aspm/parameters$ cat policy
->> [default] performance powersave powersupersave
->> estuary:/sys/module/pcie_aspm/parameters$ echo powersave > policy
->> bash: echo: write error: Operation not permitted
->>
->> Cc: Rafael J. Wysocki <rafael@kernel.org>
->> Suggested-by: Bjorn Helgaas <bhelgaas@google.com>
->> [https://lore.kernel.org/linux-pci/20220407154257.GA235990@bhelgaas/]
->> Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
->> ---
->>  drivers/acpi/pci_root.c | 2 +-
->>  1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/drivers/acpi/pci_root.c b/drivers/acpi/pci_root.c
->> index 6f9e75d14808..17e78582e633 100644
->> --- a/drivers/acpi/pci_root.c
->> +++ b/drivers/acpi/pci_root.c
->> @@ -393,7 +393,7 @@ static u32 calculate_support(void)
->>  	support |= OSC_PCI_HPX_TYPE_3_SUPPORT;
->>  	if (pci_ext_cfg_avail())
->>  		support |= OSC_PCI_EXT_CONFIG_SUPPORT;
->> -	if (pcie_aspm_support_enabled())
->> +	if (IS_ENABLED(CONFIG_PCIEASPM))
-> 
-> Is there any way firmware could tell the difference between
-> "CONFIG_PCIEASPM not set" and "CONFIG_PCIEASPM=y and booted with
-> 'pcie_aspm=off'"?
-> 
-> If not, why would we even check whether CONFIG_PCIEASPM is set?
-> 
+On Wed, 4 May 2022 at 22:18, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.4.192 release.
+> There are 84 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Fri, 06 May 2022 15:25:19 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
+5.4.192-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-5.4.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-If we announce ASPM support when CONFIG_PCIEASPM=n it'll work as well
-but negotiation and the log don't match the fact. We'll get misleading
-messages that ASPM is supported by OS by it cannot be enable as there's
-no driver.
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-As mentioned by the PCIe Firmware Spec r3.3,
-"ASPM Optionality supported
- The operating system sets this bit to 1 if it properly recognizes
- and manages ASPM support on PCI Express components which report
- support for ASPM L1 only in the ASPM Support field within the Link
- Capabilities Register. Otherwise, the operating system sets this
- bit to 0"
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-When CONFIG_PCIEASPM=n we have no aspm driver and apparently cannot
-support any ASPM features so we should set the bit to 0 to match the spec.
+## Build
+* kernel: 5.4.192-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-5.4.y
+* git commit: a4a4cbb413802e07ea4b9e45236bd75e241dd4ca
+* git describe: v5.4.191-85-ga4a4cbb41380
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.4.y/build/v5.4.1=
+91-85-ga4a4cbb41380
 
->>  		support |= OSC_PCI_ASPM_SUPPORT | OSC_PCI_CLOCK_PM_SUPPORT;
->>  	if (pci_msi_enabled())
->>  		support |= OSC_PCI_MSI_SUPPORT;
->> -- 
->> 2.24.0
->>
-> .
-> 
+## Test Regressions (compared to v5.4.191-74-g65a8a6ba51b6)
+No test regressions found.
+
+## Metric Regressions (compared to v5.4.191-74-g65a8a6ba51b6)
+No metric regressions found.
+
+## Test Fixes (compared to v5.4.191-74-g65a8a6ba51b6)
+No test fixes found.
+
+## Metric Fixes (compared to v5.4.191-74-g65a8a6ba51b6)
+No metric fixes found.
+
+## Test result summary
+total: 89238, pass: 74202, fail: 874, skip: 12971, xfail: 1191
+
+## Build Summary
+* arc: 10 total, 10 passed, 0 failed
+* arm: 290 total, 290 passed, 0 failed
+* arm64: 40 total, 34 passed, 6 failed
+* i386: 19 total, 19 passed, 0 failed
+* mips: 37 total, 37 passed, 0 failed
+* parisc: 12 total, 12 passed, 0 failed
+* powerpc: 60 total, 54 passed, 6 failed
+* riscv: 27 total, 27 passed, 0 failed
+* s390: 12 total, 12 passed, 0 failed
+* sh: 24 total, 24 passed, 0 failed
+* sparc: 12 total, 12 passed, 0 failed
+* x86_64: 40 total, 40 passed, 0 failed
+
+## Test suites summary
+* fwts
+* igt-gpu-tools
+* kselftest-android
+* kselftest-arm64
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* linux-log-parser
+* ltp-cap_bounds-tests
+* ltp-commands-tests
+* ltp-containers-tests
+* ltp-controllers-tests
+* ltp-cpuhotplug-tests
+* ltp-crypto-tests
+* ltp-cve-tests
+* ltp-dio-tests
+* ltp-fcntl-locktests-tests
+* ltp-filecaps-tests
+* ltp-fs-tests
+* ltp-fs_bind-tests
+* ltp-fs_perms_simple-tests
+* ltp-fsx-tests
+* ltp-hugetlb-tests
+* ltp-io-tests
+* ltp-ipc-tests
+* ltp-math-tests
+* ltp-mm-tests
+* ltp-nptl-tests
+* ltp-open-posix-tests
+* ltp-pty-tests
+* ltp-sched-tests
+* ltp-securebits-tests
+* ltp-syscalls-tests
+* ltp-tracing-tests
+* network-basic-tests
+* packetdrill
+* perf
+* perf/Zstd-perf.data-compression
+* rcutorture
+* ssuite
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org

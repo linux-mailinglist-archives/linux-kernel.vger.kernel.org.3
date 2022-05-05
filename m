@@ -2,55 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7EEC51C305
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 16:52:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 665E351C306
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 16:52:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380843AbiEEOz1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 10:55:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46406 "EHLO
+        id S1380855AbiEEOzo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 10:55:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350734AbiEEOzZ (ORCPT
+        with ESMTP id S1380847AbiEEOzj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 10:55:25 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 877542CC83;
-        Thu,  5 May 2022 07:51:45 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2C1A36198B;
-        Thu,  5 May 2022 14:51:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0CB37C385AE;
-        Thu,  5 May 2022 14:51:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651762304;
-        bh=UYCZjEShRpoFfzDqVuQUnq+KLuye9U/K272vgc4gV+M=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YaaCc8QxzSWDamM6l1uMJ+YHmA7aOpzQANULytCi/9o5dCqw1RSPG0BR8oFdVnyUF
-         0i7G3r879MfJ5V77awaQ7LC5UlfJkinLk+x5CMGge7jX6r9C4TxPDReme5nTSk9O5S
-         LiSdMJn8FEwGCq+H7IHWwD6YTLZVPqA8E9SBPRwoJCQcjlco142d+bUuL8/yRpAeFS
-         HTnfB+sQNA56TnlnoTZD8YpnEP07ihKWnGrYUMio0DwWlxAlOIfUGIcLJZeREAOSfW
-         7f3XgH12q4KaIrFhOB4kr654GI/2VXtYYYwJmlG+8fwYeDLzVX4ZtJ4Nr4JhDUUcjZ
-         hkEVYZlT/UfTA==
-Date:   Thu, 5 May 2022 07:51:42 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Michael Walle <michael@walle.cc>
-Cc:     Codrin Ciubotariu <codrin.ciubotariu@microchip.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v2] i2c: at91: use dma safe buffers
-Message-ID: <YnPkfrI4Udl9lMR8@dev-arch.thelio-3990X>
-References: <20220407150828.202513-1-michael@walle.cc>
+        Thu, 5 May 2022 10:55:39 -0400
+Received: from us-smtp-delivery-74.mimecast.com (us-smtp-delivery-74.mimecast.com [170.10.129.74])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 68A2156FBB
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 07:51:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1651762318;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=uM+ofZNcfgbacCYmlCH29DRYVtctL+nEHY0EJrvY55Y=;
+        b=AsMVoOj5RR2T7fIl62bIhAYSeht0nMfldc84T2HgkOn2K2+1vUCyOsEjeEDAPy43ptosYw
+        xLhnYc487J9SS6K2tUJUtcIDDrAjP5/yI2IocvZztzi2ma+Xqmpk0ATE9Jb8gaskWqIt1c
+        kjFOnedYsMtRa7OmusYLPMY/BI7qUws=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-101-bgtXw1kJNk2TCtSyx28gWA-1; Thu, 05 May 2022 10:51:58 -0400
+X-MC-Unique: bgtXw1kJNk2TCtSyx28gWA-1
+Received: by mail-wm1-f69.google.com with SMTP id o24-20020a05600c379800b003943412e81dso1848075wmr.6
+        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 07:51:57 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=uM+ofZNcfgbacCYmlCH29DRYVtctL+nEHY0EJrvY55Y=;
+        b=A4P7uCaf/ai/hiT9/xyZC8YJ5r0zgx6ZiSvxDk78HwYuQWfQsae3EqTKBr98eWSm0U
+         3fnbFM7hLU1XW09KD7cBk4nPxLA8PTyUFH0vT168Merxy7f9Xcgxu1prbfwZsQO8hV1X
+         8kzOqJ1B2Vrs9US7/lS7AomPcWbnaFlQwJnMtPt6xWMvVAgwmn5532Qrpq9OOWKbrjgY
+         bDAAg0MWMTuSkOoO/89sO1BupZAwEaU4YTXY3b+LGSk+BN6pHSr1oCm3/ns2yvD1mGKb
+         YW7ldS0uD09riG8LOpbaJtaZMhcgYlVqxGOcksQHXNyhJMmuRM3YtIwKloNfgJgI7FuV
+         iGeg==
+X-Gm-Message-State: AOAM532b91ViuOqd4GvMDtdiWY5MOzwAd4Fyhjmbmpu6zjqoIaNlmWKh
+        pVMfs6TBml8d8lz9Uow1O/IqES9XuKBDeZ+g1ICEiS3Ukkr2mAqUkTlvbC0lJkuI4NWvKmEZ5fX
+        DM8gkcVZYVyPO2sKspy0dggw9
+X-Received: by 2002:a1c:6a1a:0:b0:394:272e:5bdf with SMTP id f26-20020a1c6a1a000000b00394272e5bdfmr5347729wmc.55.1651762316173;
+        Thu, 05 May 2022 07:51:56 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwzZ199d4B0hb5YxHFT/G5vw6e8Q1vc2C0FJNM5txW7lPwaFe4IrmxdRb6YfGAM2P9o3lQ5lw==
+X-Received: by 2002:a1c:6a1a:0:b0:394:272e:5bdf with SMTP id f26-20020a1c6a1a000000b00394272e5bdfmr5347690wmc.55.1651762315893;
+        Thu, 05 May 2022 07:51:55 -0700 (PDT)
+Received: from fedora (nat-2.ign.cz. [91.219.240.2])
+        by smtp.gmail.com with ESMTPSA id 25-20020a05600c029900b003942a244ed1sm1524096wmk.22.2022.05.05.07.51.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 May 2022 07:51:55 -0700 (PDT)
+From:   Vitaly Kuznetsov <vkuznets@redhat.com>
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        will Deacon <will@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Ard Biesheuvel <ardb@kernel.org>, broonie@kernel.org,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>
+Subject: Re: Should arm64 have a custom crash shutdown handler?
+In-Reply-To: <YnPf3KPBXDNTpQoG@FVFF77S0Q05N.cambridge.arm.com>
+References: <427a8277-49f0-4317-d6c3-4a15d7070e55@igalia.com>
+ <874k24igjf.wl-maz@kernel.org>
+ <92645c41-96fd-2755-552f-133675721a24@igalia.com>
+ <YnPIwjLMDXgII1vf@FVFF77S0Q05N.cambridge.arm.com>
+ <3bee47db-f771-b502-82a3-d6fac388aa89@igalia.com>
+ <878rrg13zb.fsf@redhat.com>
+ <YnPf3KPBXDNTpQoG@FVFF77S0Q05N.cambridge.arm.com>
+Date:   Thu, 05 May 2022 16:51:54 +0200
+Message-ID: <87y1zgyqut.fsf@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220407150828.202513-1-michael@walle.cc>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,80 +90,99 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 07, 2022 at 05:08:28PM +0200, Michael Walle wrote:
-> The supplied buffer might be on the stack and we get the following error
-> message:
-> [    3.312058] at91_i2c e0070600.i2c: rejecting DMA map of vmalloc memory
-> 
-> Use i2c_{get,put}_dma_safe_msg_buf() to get a DMA-able memory region if
-> necessary.
-> 
-> Fixes: 60937b2cdbf9 ("i2c: at91: add dma support")
-> Signed-off-by: Michael Walle <michael@walle.cc>
-> Reviewed-by: Codrin Ciubotariu <codrin.ciubotariu@microchip.com>
-> ---
-> changes since v1:
->  - remove extra empty line
->  - add fixes tag as suggested by Codrin
-> 
->  drivers/i2c/busses/i2c-at91-master.c | 11 +++++++++++
->  1 file changed, 11 insertions(+)
-> 
-> diff --git a/drivers/i2c/busses/i2c-at91-master.c b/drivers/i2c/busses/i2c-at91-master.c
-> index b0eae94909f4..5eca3b3bb609 100644
-> --- a/drivers/i2c/busses/i2c-at91-master.c
-> +++ b/drivers/i2c/busses/i2c-at91-master.c
-> @@ -656,6 +656,7 @@ static int at91_twi_xfer(struct i2c_adapter *adap, struct i2c_msg *msg, int num)
->  	unsigned int_addr_flag = 0;
->  	struct i2c_msg *m_start = msg;
->  	bool is_read;
-> +	u8 *dma_buf;
->  
->  	dev_dbg(&adap->dev, "at91_xfer: processing %d messages:\n", num);
->  
-> @@ -703,7 +704,17 @@ static int at91_twi_xfer(struct i2c_adapter *adap, struct i2c_msg *msg, int num)
->  	dev->msg = m_start;
->  	dev->recv_len_abort = false;
->  
-> +	if (dev->use_dma) {
-> +		dma_buf = i2c_get_dma_safe_msg_buf(m_start, 1);
-> +		if (!dma_buf) {
-> +			ret = -ENOMEM;
-> +			goto out;
-> +		}
-> +		dev->buf = dma_buf;
-> +	}
-> +
->  	ret = at91_do_twi_transfer(dev);
-> +	i2c_put_dma_safe_msg_buf(dma_buf, m_start, !ret);
->  
->  	ret = (ret < 0) ? ret : num;
->  out:
-> -- 
-> 2.30.2
-> 
-> 
+Mark Rutland <mark.rutland@arm.com> writes:
 
-This change as commit 03fbb903c8bf ("i2c: at91: use dma safe buffers")
-causes the following clang warning:
+> On Thu, May 05, 2022 at 03:52:24PM +0200, Vitaly Kuznetsov wrote:
+>> "Guilherme G. Piccoli" <gpiccoli@igalia.com> writes:
+>> 
+>> > On 05/05/2022 09:53, Mark Rutland wrote:
+>> >> [...]
+>> >> Looking at those, the cleanup work is all arch-specific. What exactly would we
+>> >> need to do on arm64, and why does it need to happen at that point specifically?
+>> >> On arm64 we don't expect as much paravirtualization as on x86, so it's not
+>> >> clear to me whether we need anything at all.
+>> >> 
+>> >>> Anyway, the idea here was to gather a feedback on how "receptive" arm64
+>> >>> community would be to allow such customization, appreciated your feedback =)
+>> >> 
+>> >> ... and are you trying to do this for Hyper-V or just using that as an example?
+>> >> 
+>> >> I think we're not going to be very receptive without a more concrete example of
+>> >> what you want.
+>> >> 
+>> >> What exactly do *you* need, and *why*? Is that for Hyper-V or another hypervisor?
+>> >> 
+>> >> Thanks
+>> >> Mark.
+>> >
+>> > Hi Mark, my plan would be doing that for Hyper-V - kind of the same
+>> > code, almost. For example, in hv_crash_handler() there is a stimer
+>> > clean-up and the vmbus unload - my understanding is that this same code
+>> > would need to run in arm64. Michael Kelley is CCed, he was discussing
+>> > with me in the panic notifiers thread and may elaborate more on the needs.
+>> >
+>> > But also (not related with my specific plan), I've seen KVM quiesce code
+>> > on x86 as well [see kvm_crash_shutdown() on arch/x86] , I'm not sure if
+>> > this is necessary for arm64 or if this already executing in some
+>> > abstracted form, I didn't dig deep - probably Vitaly is aware of that,
+>> > hence I've CCed him here.
+>> 
+>> Speaking about the difference between reboot notifiers call chain and
+>> machine_ops.crash_shutdown for KVM/x86, the main difference is that
+>> reboot notifier is called on some CPU while the VM is fully functional,
+>> this way we may e.g. still use IPIs (see kvm_pv_reboot_notify() doing
+>> on_each_cpu()). When we're in a crash situation,
+>> machine_ops.crash_shutdown is called on the CPU which crashed. We can't
+>> count on IPIs still being functional so we do the very basic minimum so
+>> *this* CPU can boot kdump kernel. There's no guarantee other CPUs can
+>> still boot but normally we do kdump with 'nprocs=1'.
+>
+> Sure; IIUC the IPI problem doesn't apply to arm64, though, since that doesn't
+> use a PV mechanism (and practically speaking will either be GICv2 or GICv3).
+>
 
-drivers/i2c/busses/i2c-at91-master.c:707:6: error: variable 'dma_buf' is used uninitialized whenever 'if' condition is false [-Werror,-Wsometimes-uninitialized]
-        if (dev->use_dma) {
-            ^~~~~~~~~~~~
-drivers/i2c/busses/i2c-at91-master.c:717:27: note: uninitialized use occurs here
-        i2c_put_dma_safe_msg_buf(dma_buf, m_start, !ret);
-                                 ^~~~~~~
-drivers/i2c/busses/i2c-at91-master.c:707:2: note: remove the 'if' if its condition is always true
-        if (dev->use_dma) {
-        ^~~~~~~~~~~~~~~~~~
-drivers/i2c/busses/i2c-at91-master.c:659:13: note: initialize the variable 'dma_buf' to silence this warning
-        u8 *dma_buf;
-                   ^
-                    = NULL
-1 error generated.
+This isn't really about PV: when the kernel is crashing, you have no
+idea what's going on on other CPUs, they may be crashing too, locked in
+a tight loop, ... so sending an IPI there to do some work and expecting
+it to report back is dangerous.
 
-Should this variable be initialized or should the call to
-i2c_put_dma_safe_msg_buf() be moved into the if statement?
+>> For Hyper-V, the situation is similar: hv_crash_handler() intitiates
+>> VMbus unload on the crashing CPU only, there's no mechanism to do
+>> 'global' unload so other CPUs will likely not be able to connect Vmbus
+>> devices in kdump kernel but this should not be necessary.
+>
+> Given kdump is best-effort (and we can't rely on secondary CPUs even making it
+> into the kdump kernel), I also don't think that should be necessary.
 
-Cheers,
-Nathan
+Yes, exactly.
+
+>
+>> There's a crash_kexec_post_notifiers mechanism which can be used instead
+>> but it's disabled by default so using machine_ops.crash_shutdown is
+>> better.
+>
+> Another option is to defer this to the kdump kernel. On arm64 at least, we know
+> if we're in a kdump kernel early on, and can reset some state based upon that.
+>
+> Looking at x86's hyperv_cleanup(), everything relevant to arm64 can be deferred
+> to just before the kdump kernel detects and initializes anything relating to
+> hyperv. So AFAICT we could have hyperv_init() check is_kdump_kernel() prior to
+> the first hypercall, and do the cleanup/reset there.
+
+In theory yes, it is possible to try sending CHANNELMSG_UNLOAD on kdump
+kernel boot and not upon crash, I don't remember if this approach was
+tried in the past. 
+
+>
+> Maybe we need more data for the vmbus bits? ... if so it seems that could blow
+> up anyway when the first kernel was tearing down.
+
+Not sure I understood what you mean... From what I remember, there were
+issues with CHANNELMSG_UNLOAD handling on the Hyper-V host side in the
+past (it was taking *minutes* for the host to reply) but this is
+orthogonal to the fact that we need to do this cleanup so kdump kernel
+is able to connect to Vmbus devices again.
+
+-- 
+Vitaly
+

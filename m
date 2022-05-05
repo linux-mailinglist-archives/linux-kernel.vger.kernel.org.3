@@ -2,34 +2,34 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDB6351CC35
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 00:36:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84E3D51CC31
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 00:36:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346416AbiEEWjN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 18:39:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53876 "EHLO
+        id S1381706AbiEEWjW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 18:39:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386467AbiEEWia (ORCPT
+        with ESMTP id S1386405AbiEEWin (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 18:38:30 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15B6E6007A
-        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 15:34:45 -0700 (PDT)
+        Thu, 5 May 2022 18:38:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 134B0606C7
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 15:34:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9A28B61F51
-        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 22:34:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA4FAC385A4;
-        Thu,  5 May 2022 22:34:43 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9633D61F3C
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 22:34:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DAA22C385A8;
+        Thu,  5 May 2022 22:34:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651790084;
-        bh=fIcmMOB4OTzUhPRJw5zxd1he8Ws9Ea91j5a5noC1OwA=;
+        s=korg; t=1651790085;
+        bh=FGb5UR006KfZMpikx+bLVdLJYMjB2a8HujAnk3x3PNM=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=dDjiqn3iXIxsl95pJLRm9hrJchx4WfXEocyDn8SVGogcQ5ZgMmKnU384LgZ4FZvGP
-         cjgJqRC9zMQbrvZDuSbZJQboS77aP9g4SNbH88A0AC0dxpNfh0xc6f9SX6tp/JwV94
-         q2boySmrpnWmzzZqy8AB0OIdh4Qd7DbjWk6tC+fI=
-Date:   Thu, 5 May 2022 23:10:43 +0200
+        b=zPhbqAzN+cP39KbbUbk1rg1C5Bp0o3WxqSHIDNm36wQHJWrMicsuJo73I9FU2FKs8
+         uWIEbySkyFZLwESHkaH9n6tG7gQVSCYMLHzfZbf2eZOYl5uEJsnoWlK00AnXtOGiFc
+         17B45hda7Yr5Uc/LFYfapEEWuaiwne5vxdEZCPI0=
+Date:   Thu, 5 May 2022 23:11:35 +0200
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     Tinghan Shen <tinghan.shen@mediatek.com>
 Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
@@ -58,7 +58,7 @@ Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
         Project_Global_Chrome_Upstream_Group@mediatek.com
 Subject: Re: [RESEND PATCH v7 1/1] firmware: mediatek: add adsp ipc protocol
  interface
-Message-ID: <YnQ9UzeyMTkmyGgD@kroah.com>
+Message-ID: <YnQ9h6k0yFN8f+Ui@kroah.com>
 References: <20220505053048.13804-1-tinghan.shen@mediatek.com>
  <20220505053048.13804-2-tinghan.shen@mediatek.com>
 MIME-Version: 1.0
@@ -108,15 +108,110 @@ On Thu, May 05, 2022 at 01:30:48PM +0800, Tinghan Shen wrote:
 >  create mode 100644 drivers/firmware/mediatek/Makefile
 >  create mode 100644 drivers/firmware/mediatek/mtk-adsp-ipc.c
 >  create mode 100644 include/linux/firmware/mediatek/mtk-adsp-ipc.h
+> 
+> diff --git a/drivers/firmware/Kconfig b/drivers/firmware/Kconfig
+> index d65964996e8d..c4d149b28944 100644
+> --- a/drivers/firmware/Kconfig
+> +++ b/drivers/firmware/Kconfig
+> @@ -300,6 +300,7 @@ source "drivers/firmware/cirrus/Kconfig"
+>  source "drivers/firmware/google/Kconfig"
+>  source "drivers/firmware/efi/Kconfig"
+>  source "drivers/firmware/imx/Kconfig"
+> +source "drivers/firmware/mediatek/Kconfig"
+>  source "drivers/firmware/meson/Kconfig"
+>  source "drivers/firmware/psci/Kconfig"
+>  source "drivers/firmware/smccc/Kconfig"
+> diff --git a/drivers/firmware/Makefile b/drivers/firmware/Makefile
+> index 4e58cb474a68..88fbdc110100 100644
+> --- a/drivers/firmware/Makefile
+> +++ b/drivers/firmware/Makefile
+> @@ -34,6 +34,7 @@ obj-$(CONFIG_GOOGLE_FIRMWARE)	+= google/
+>  obj-$(CONFIG_EFI)		+= efi/
+>  obj-$(CONFIG_UEFI_CPER)		+= efi/
+>  obj-y				+= imx/
+> +obj-y				+= mediatek/
+>  obj-y				+= psci/
+>  obj-y				+= smccc/
+>  obj-y				+= tegra/
+> diff --git a/drivers/firmware/mediatek/Kconfig b/drivers/firmware/mediatek/Kconfig
+> new file mode 100644
+> index 000000000000..6d1e580b967b
+> --- /dev/null
+> +++ b/drivers/firmware/mediatek/Kconfig
+> @@ -0,0 +1,9 @@
+> +# SPDX-License-Identifier: GPL-2.0-only
+> +config MTK_ADSP_IPC
+> +	tristate "MTK ADSP IPC Protocol driver"
+> +	depends on MTK_ADSP_MBOX
+> +	help
+> +	  Say yes here to add support for the MediaTek ADSP IPC
+> +	  between host AP (Linux) and the firmware running on ADSP.
+> +	  ADSP exists on some mtk processors.
+> +	  Client might use shared memory to exchange information with ADSP side.
+> diff --git a/drivers/firmware/mediatek/Makefile b/drivers/firmware/mediatek/Makefile
+> new file mode 100644
+> index 000000000000..4e840b65650d
+> --- /dev/null
+> +++ b/drivers/firmware/mediatek/Makefile
+> @@ -0,0 +1,2 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +obj-$(CONFIG_MTK_ADSP_IPC)		+= mtk-adsp-ipc.o
+> diff --git a/drivers/firmware/mediatek/mtk-adsp-ipc.c b/drivers/firmware/mediatek/mtk-adsp-ipc.c
+> new file mode 100644
+> index 000000000000..87cee61dbf32
+> --- /dev/null
+> +++ b/drivers/firmware/mediatek/mtk-adsp-ipc.c
+> @@ -0,0 +1,161 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (c) 2022 MediaTek Corporation. All rights reserved.
+> + * Author: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+> + */
+> +
+> +#include <linux/firmware/mediatek/mtk-adsp-ipc.h>
+> +#include <linux/kernel.h>
+> +#include <linux/mailbox_client.h>
+> +#include <linux/module.h>
+> +#include <linux/of_platform.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/slab.h>
+> +
+> +/*
+> + * mtk_adsp_ipc_send - send ipc cmd to MTK ADSP
+> + *
+> + * @ipc: ADSP IPC handle
+> + * @idx: index of the mailbox channel
+> + * @msg: IPC cmd (reply or request)
+> + *
+> + * Returns zero for success from mbox_send_message
+> + * negative value for error
+> + */
+> +int mtk_adsp_ipc_send(struct mtk_adsp_ipc *ipc, unsigned int idx, uint32_t msg)
+> +{
+> +	struct mtk_adsp_chan *adsp_chan;
+> +	int ret;
+> +
+> +	if (idx >= MTK_ADSP_MBOX_NUM)
+> +		return -EINVAL;
+> +
+> +	adsp_chan = &ipc->chans[idx];
+> +	ret = mbox_send_message(adsp_chan->ch, &msg);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	/*
+> +	 * mbox_send_message returns non-negative value on success,
+> +	 * return zero for success
+> +	 */
+> +	return 0;
 
-Why do you have a .h file, and export symbols in your .c file, yet you
-have no user of these symbols or header file?
+You already said this up in the function comments, no need to duplicate
+it again.
 
-Without a user, we can not take this, sorry.
+> +}
+> +EXPORT_SYMBOL(mtk_adsp_ipc_send);
 
-This should just be one single .c file.
-
-Also, why a whole subdirectory for just one .c file?
+EXPORT_SYMBOL_GPL()?  I have to ask, sorry.
 
 thanks,
 

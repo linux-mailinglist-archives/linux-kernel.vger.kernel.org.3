@@ -2,47 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19AD251C38E
+	by mail.lfdr.de (Postfix) with ESMTP id B935751C390
 	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 17:12:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381129AbiEEPPy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 11:15:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38026 "EHLO
+        id S1381141AbiEEPP6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 11:15:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380513AbiEEPPt (ORCPT
+        with ESMTP id S1381117AbiEEPPx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 11:15:49 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D897012757
-        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 08:12:09 -0700 (PDT)
+        Thu, 5 May 2022 11:15:53 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 764852AE10
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 08:12:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 897ECB82DB5
-        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 15:12:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB8E2C385A8;
-        Thu,  5 May 2022 15:12:04 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2E0EAB82DB5
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 15:12:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1D15C385AE;
+        Thu,  5 May 2022 15:12:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651763527;
-        bh=6qY/H7PnXRQuP5EX1Md1pWAhX259HlPJLeGM/4Ewz2k=;
+        s=k20201202; t=1651763531;
+        bh=Y0IuJJqIEp7GuoZ8/5wFaics5bILpDhKmuqI09UXn+4=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=f3QG3rn/OIT/SgJu7aYWSfIAcUO43kIWsvpoIv1hAmJ81r7dzCoySPUXCH4xdy7Jn
-         oAYGJYtyxdiZs7nmzSD6aJ8nO9opWGvRnY0wBUsj7JmyaBXqIv6rvJjeuxpkOBJLZD
-         SqZRRRpHVXMsQnUptxYbaNRs740tFHIaCoLPwGS/+YM20cYSZ++/F6c5tf2S7mIVx/
-         1vhpRxDcdU+FqxvLPJBgytlzpjEEM3MfpeIVZXDUrk6RROMoqQ6AeBDSAEnKkGhXLM
-         KbACW6fxnEiUBWjpQ50kL+EviV/sGAm7jgs5Y2V7/0xjDGo9XL1kp5hZk1la1AQYhP
-         py3i9oCqaFLjQ==
+        b=qVTGJpl21CtUQBcmXS/xmx/XqtlBAbk638DuX90EtnFpySE34rSgEKSkN3MyiXAMe
+         vRVDkLuljCq7yUopS4s0z8S31+pcQzQLLaR34Ulm+oNTKPUt3CLhqc0yCCQ/VtuIc6
+         BsE9+sdEMBC+6ZqHsro9RKUTt8B3FAemxdYauPpOBRMHwMbenUcr1ONmiRfS+1kz4M
+         9OfwHphrwEQH4ItyV4QBRIjlPNOXIJPM17o+Jhn26X6+WqytzcDonQyKQovkZTjTPs
+         KS2252mZF/jnZb0rXyPFcGp+MZtPJHXyUv2wi/d/m3OIWlb9yFdmIfJNVOyS0p5E1b
+         pZS6vEVqNPuBg==
 From:   Mark Brown <broonie@kernel.org>
-To:     linux-kernel@vger.kernel.org, patches@opensource.cirrus.com,
-        alsa-devel@alsa-project.org, andriy.shevchenko@linux.intel.com
-Cc:     lgirdwood@gmail.com, tanureal@opensource.cirrus.com,
-        tiwai@suse.com, james.schulman@cirrus.com,
-        rf@opensource.cirrus.com, perex@perex.cz, david.rhodes@cirrus.com
-In-Reply-To: <20220502120455.84386-1-andriy.shevchenko@linux.intel.com>
-References: <20220502120455.84386-1-andriy.shevchenko@linux.intel.com>
-Subject: Re: [PATCH v1 1/1] ASoC: cs43130: Re-use generic struct u16_fract
-Message-Id: <165176352438.543130.16785839452900264536.b4-ty@kernel.org>
-Date:   Thu, 05 May 2022 16:12:04 +0100
+To:     lgirdwood@gmail.com, tiwai@suse.com, alsa-devel@alsa-project.org,
+        nicoleotsuka@gmail.com, Sascha Hauer <s.hauer@pengutronix.de>,
+        Xiubo.Lee@gmail.com, perex@perex.cz, festevam@gmail.com,
+        shengjiu.wang@nxp.com, shengjiu.wang@gmail.com
+Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
+In-Reply-To: <1651736047-28809-1-git-send-email-shengjiu.wang@nxp.com>
+References: <1651736047-28809-1-git-send-email-shengjiu.wang@nxp.com>
+Subject: Re: [PATCH] ASoC: fsl_micfil: fix the naming style for mask definition
+Message-Id: <165176352745.543130.8069953691884090444.b4-ty@kernel.org>
+Date:   Thu, 05 May 2022 16:12:07 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -56,9 +56,8 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2 May 2022 15:04:55 +0300, Andy Shevchenko wrote:
-> Instead of custom data type re-use generic struct u16_fract.
-> No changes intended.
+On Thu, 5 May 2022 15:34:07 +0800, Shengjiu Wang wrote:
+> Remove the _SHIFT for the mask definition.
 > 
 > 
 
@@ -68,8 +67,8 @@ Applied to
 
 Thanks!
 
-[1/1] ASoC: cs43130: Re-use generic struct u16_fract
-      commit: e14bd35ef44606c7d55ccb3660cededd421a14a1
+[1/1] ASoC: fsl_micfil: fix the naming style for mask definition
+      commit: 101b096bc2549618f18bc08ae3a0e364b3c8fff1
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during

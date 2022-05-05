@@ -2,92 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 144EC51C583
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 18:57:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCA3451C5A4
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 19:02:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382315AbiEERBL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 13:01:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48870 "EHLO
+        id S1356143AbiEERFe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 13:05:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354735AbiEERBC (ORCPT
+        with ESMTP id S231975AbiEERFU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 13:01:02 -0400
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88FBB5C84C;
-        Thu,  5 May 2022 09:57:04 -0700 (PDT)
-Received: by mail-pg1-x534.google.com with SMTP id 202so4060920pgc.9;
-        Thu, 05 May 2022 09:57:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=gLSrukFuN1JT85xjZBxcJ9Q6yUhYQqPZheqHwdhEg7U=;
-        b=EKhBGUnGBYw2xmGFpRKZDvm+Gh13g3mCjpWQiTZSpTPei0JV5ZgCBH9Oxvyji5VBuU
-         PqYXCDhWkvHLFMxZ/Ni2Kkub8AuPe4eyJaqzw4RvqWU7r3BqkE1kAD6OMsTO9vdurJKK
-         WyVB4xrkHIrnfDp43sbRELj93B3KdGhyoxHZ/jvQbbMaT57d0BEhNiCly7IQUbLdXeWO
-         psSrNSQyfu6EmEIqqjyaMVI8aSciM/mz7sVYxATpQ8S1ujE2qIpMALTJqL70cYML2Yj7
-         +ivv0MOzSpe/EwSDFcbJOumobB0gM+MX8/GF+jMfkGx5UuO8t85s6l1fA+jkLUfex2g/
-         fJRg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=gLSrukFuN1JT85xjZBxcJ9Q6yUhYQqPZheqHwdhEg7U=;
-        b=kiQWUAKBTG3JgWXOPKOHIg4Mke5aooRTNNrpr2yj1ZIB9cBHRZMl4Q47k12kv1auUT
-         XGHgqKOLwve2XduP8WMvnU2X1KlbtzQtqh43ljK3JT2AdJDsXhsH50O68eyAGXLQDrdY
-         c8XiPlAGBo3ehNmw5H47EgvOd2NqevTpnTuly6Ozv0A9a8fUvOlHQssmiUk1R0oq4BRF
-         gYwPhVwtAKEc1jn3V766NpbfFUxO43xXUW/MkWwl0E82tZu6P12xXtA61RMzp527SHtj
-         TEI7JvuNJRujjoYOKqmSAiApAYZPeHnXwPVWfbnG6aDzbVJI36S8dRV/8KWTvJteyYgC
-         SdHQ==
-X-Gm-Message-State: AOAM531qy/MkNP2j75ZYvdpeZgdkIwFcFjbCCXCizockQPHenh/jn5M6
-        afVjZpm+o6QsgXXrLEsTqiU=
-X-Google-Smtp-Source: ABdhPJy9XDrGdVUvOftS6Oi4+mMdvrkbx3+EWJx/3U1/ctK7WY72JKO4bqE965kTvk+ZECHhQ2ARuw==
-X-Received: by 2002:a05:6a00:26cf:b0:4f6:fc52:7b6a with SMTP id p15-20020a056a0026cf00b004f6fc527b6amr26567624pfw.39.1651769824001;
-        Thu, 05 May 2022 09:57:04 -0700 (PDT)
-Received: from google.com ([2620:15c:211:201:1c0c:8050:e4d3:12f5])
-        by smtp.gmail.com with ESMTPSA id z18-20020a170902ccd200b0015e8d4eb221sm1751056ple.107.2022.05.05.09.57.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 May 2022 09:57:03 -0700 (PDT)
-Sender: Minchan Kim <minchan.kim@gmail.com>
-Date:   Thu, 5 May 2022 09:57:01 -0700
-From:   Minchan Kim <minchan@kernel.org>
-To:     Alexey Romanov <avromanov@sberdevices.ru>
-Cc:     akpm@linux-foundation.org, ngupta@vflare.org,
-        senozhatsky@chromium.org, linux-block@vger.kernel.org,
-        axboe@chromium.org, kernel@sberdevices.ru,
-        linux-kernel@vger.kernel.org, mnitenko@gmail.com,
-        Dmitry Rokosov <ddrokosov@sberdevices.ru>
-Subject: Re: [PATCH v5] zram: remove double compression logic
-Message-ID: <YnQB3X2wy7lEku+y@google.com>
-References: <20220505094443.11728-1-avromanov@sberdevices.ru>
+        Thu, 5 May 2022 13:05:20 -0400
+Received: from out03.mta.xmission.com (out03.mta.xmission.com [166.70.13.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF48A5D674;
+        Thu,  5 May 2022 10:00:00 -0700 (PDT)
+Received: from in02.mta.xmission.com ([166.70.13.52]:48790)
+        by out03.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1nmepa-00GFfm-PE; Thu, 05 May 2022 10:59:58 -0600
+Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:37068 helo=email.froward.int.ebiederm.org.xmission.com)
+        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1nmepZ-0034rQ-GI; Thu, 05 May 2022 10:59:58 -0600
+From:   "Eric W. Biederman" <ebiederm@xmission.com>
+To:     Oleg Nesterov <oleg@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, rjw@rjwysocki.net, mingo@kernel.org,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, mgorman@suse.de, bigeasy@linutronix.de,
+        Will Deacon <will@kernel.org>, tj@kernel.org,
+        linux-pm@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        linux-um@lists.infradead.org, Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        linux-xtensa@linux-xtensa.org, Kees Cook <keescook@chromium.org>,
+        Jann Horn <jannh@google.com>, linux-ia64@vger.kernel.org
+References: <87k0b0apne.fsf_-_@email.froward.int.ebiederm.org>
+        <20220504224058.476193-8-ebiederm@xmission.com>
+        <20220505145721.GA13929@redhat.com>
+Date:   Thu, 05 May 2022 11:59:49 -0500
+In-Reply-To: <20220505145721.GA13929@redhat.com> (Oleg Nesterov's message of
+        "Thu, 5 May 2022 16:57:22 +0200")
+Message-ID: <87v8uj9apm.fsf@email.froward.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220505094443.11728-1-avromanov@sberdevices.ru>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-XM-SPF: eid=1nmepZ-0034rQ-GI;;;mid=<87v8uj9apm.fsf@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=softfail
+X-XM-AID: U2FsdGVkX18IlEhzpWaHAD1ZV6ZojjYGolgnLPbCqLQ=
+X-SA-Exim-Connect-IP: 68.227.174.4
+X-SA-Exim-Mail-From: ebiederm@xmission.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
+X-Spam-DCC: XMission; sa06 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: ***;Oleg Nesterov <oleg@redhat.com>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 480 ms - load_scoreonly_sql: 0.05 (0.0%),
+        signal_user_changed: 11 (2.3%), b_tie_ro: 9 (2.0%), parse: 0.93 (0.2%),
+         extract_message_metadata: 3.9 (0.8%), get_uri_detail_list: 2.0 (0.4%),
+         tests_pri_-1000: 3.9 (0.8%), tests_pri_-950: 1.16 (0.2%),
+        tests_pri_-900: 0.97 (0.2%), tests_pri_-90: 94 (19.6%), check_bayes:
+        93 (19.3%), b_tokenize: 9 (1.9%), b_tok_get_all: 9 (2.0%),
+        b_comp_prob: 2.4 (0.5%), b_tok_touch_all: 68 (14.1%), b_finish: 0.87
+        (0.2%), tests_pri_0: 348 (72.4%), check_dkim_signature: 0.55 (0.1%),
+        check_dkim_adsp: 3.0 (0.6%), poll_dns_idle: 1.24 (0.3%), tests_pri_10:
+        1.98 (0.4%), tests_pri_500: 6 (1.3%), rewrite_mail: 0.00 (0.0%)
+Subject: Re: [PATCH v3 08/11] ptrace: Admit ptrace_stop can generate
+ spuriuos SIGTRAPs
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 05, 2022 at 12:44:43PM +0300, Alexey Romanov wrote:
-> The 2nd trial allocation under per-cpu presumption has been used to
-> prevent regression of allocation failure. However, it makes trouble
-> for maintenance without significant benefit. The slowpath branch is
-> executed extremely rarely: getting there is problematic. Therefore,
-> we delete this branch.
-> 
-> Since b09ab054b69b, zram has used QUEUE_FLAG_STABLE_WRITES to prevent
-> buffer change between 1st and 2nd memory allocations. Since we remove
-> second trial memory allocation logic, we could remove the STABLE_WRITES
-> flag because there is no change buffer to be modified under us.
-> 
-> Signed-off-by: Alexey Romanov <avromanov@sberdevices.ru>
-> Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
+Oleg Nesterov <oleg@redhat.com> writes:
 
-Acked-by: Minchan Kim <minchan@kernel.org>
+> On 05/04, Eric W. Biederman wrote:
+>>
+>> -static int ptrace_stop(int exit_code, int why, int clear_code,
+>> -			unsigned long message, kernel_siginfo_t *info)
+>> +static int ptrace_stop(int exit_code, int why, unsigned long message,
+>> +		       kernel_siginfo_t *info)
+>>  	__releases(&current->sighand->siglock)
+>>  	__acquires(&current->sighand->siglock)
+>>  {
+>> @@ -2259,54 +2259,33 @@ static int ptrace_stop(int exit_code, int why, int clear_code,
+>>  
+>>  	spin_unlock_irq(&current->sighand->siglock);
+>>  	read_lock(&tasklist_lock);
+>> -	if (likely(current->ptrace)) {
+>> -		/*
+>> -		 * Notify parents of the stop.
+>> -		 *
+>> -		 * While ptraced, there are two parents - the ptracer and
+>> -		 * the real_parent of the group_leader.  The ptracer should
+>> -		 * know about every stop while the real parent is only
+>> -		 * interested in the completion of group stop.  The states
+>> -		 * for the two don't interact with each other.  Notify
+>> -		 * separately unless they're gonna be duplicates.
+>> -		 */
+>> +	/*
+>> +	 * Notify parents of the stop.
+>> +	 *
+>> +	 * While ptraced, there are two parents - the ptracer and
+>> +	 * the real_parent of the group_leader.  The ptracer should
+>> +	 * know about every stop while the real parent is only
+>> +	 * interested in the completion of group stop.  The states
+>> +	 * for the two don't interact with each other.  Notify
+>> +	 * separately unless they're gonna be duplicates.
+>> +	 */
+>> +	if (current->ptrace)
+>>  		do_notify_parent_cldstop(current, true, why);
+>> -		if (gstop_done && ptrace_reparented(current))
+>> -			do_notify_parent_cldstop(current, false, why);
+>> +	if (gstop_done && (!current->ptrace || ptrace_reparented(current)))
+>> +		do_notify_parent_cldstop(current, false, why);
+>>  
+>> -		/*
+>> -		 * Don't want to allow preemption here, because
+>> -		 * sys_ptrace() needs this task to be inactive.
+>> -		 *
+>> -		 * XXX: implement read_unlock_no_resched().
+>> -		 */
+>> -		preempt_disable();
+>> -		read_unlock(&tasklist_lock);
+>> -		cgroup_enter_frozen();
+>> -		preempt_enable_no_resched();
+>> -		freezable_schedule();
+>> -		cgroup_leave_frozen(true);
+>> -	} else {
+>> -		/*
+>> -		 * By the time we got the lock, our tracer went away.
+>> -		 * Don't drop the lock yet, another tracer may come.
+>> -		 *
+>> -		 * If @gstop_done, the ptracer went away between group stop
+>> -		 * completion and here.  During detach, it would have set
+>> -		 * JOBCTL_STOP_PENDING on us and we'll re-enter
+>> -		 * TASK_STOPPED in do_signal_stop() on return, so notifying
+>> -		 * the real parent of the group stop completion is enough.
+>> -		 */
+>> -		if (gstop_done)
+>> -			do_notify_parent_cldstop(current, false, why);
+>> -
+>> -		/* tasklist protects us from ptrace_freeze_traced() */
+>> -		__set_current_state(TASK_RUNNING);
+>> -		read_code = false;
+>> -		if (clear_code)
+>> -			exit_code = 0;
+>> -		read_unlock(&tasklist_lock);
+>> -	}
+>> +	/*
+>> +	 * Don't want to allow preemption here, because
+>> +	 * sys_ptrace() needs this task to be inactive.
+>> +	 *
+>> +	 * XXX: implement read_unlock_no_resched().
+>> +	 */
+>> +	preempt_disable();
+>> +	read_unlock(&tasklist_lock);
+>> +	cgroup_enter_frozen();
+>> +	preempt_enable_no_resched();
+>> +	freezable_schedule();
+>
+> I must have missed something.
+>
+> So the tracee calls ptrace_notify() but debugger goes away before the
+> ptrace_notify() takes siglock. After that the no longer traced task
+> will sleep in TASK_TRACED ?
+>
+> Looks like ptrace_stop() needs to check current->ptrace before it does
+> set_special_state(TASK_TRACED) with siglock held? Then we can rely on
+> ptrace_unlink() which will wake the tracee up even if debugger exits.
+>
+> No?
+
+Hmm.  If the debugger goes away when siglock is dropped and reaquired at
+the top of ptrace_stop, that would appear to set the debugged process up
+to sleep indefinitely.
+
+I was thinking of the SIGKILL case which is handled.
+
+Thank you for catching that.
+
+Eric
+
+

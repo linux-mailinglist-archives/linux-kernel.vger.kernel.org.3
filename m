@@ -2,95 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DED951C257
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 16:23:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B56651C264
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 16:23:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380581AbiEEOZu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 10:25:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50916 "EHLO
+        id S1380599AbiEEO0j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 10:26:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380562AbiEEOZn (ORCPT
+        with ESMTP id S1380124AbiEEO0h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 10:25:43 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 028225A59A;
-        Thu,  5 May 2022 07:22:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=nd7QNghQW8LARprbqtCzIE+R5+NJaXA4ski1ugmRTkM=; b=UhKdPC9O2krISj7KyPErZVIFze
-        5Hdt9X/vLTlYnLknZvrGnD58ETP7dTx9tEwgEdk5WDeoLcd3CEpadGYa9djMVHVrCSCufHlvQc/tu
-        w2bCfA1FKnpzjSNVFPgnUabDSDCRiuIsaHWt8xgivElTF1pdYmqdRQnwKtn2N+V0meR0=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1nmcMc-001NCa-1K; Thu, 05 May 2022 16:21:54 +0200
-Date:   Thu, 5 May 2022 16:21:54 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Ansuel Smith <ansuelsmth@gmail.com>
-Cc:     Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>, Pavel Machek <pavel@ucw.cz>,
-        John Crispin <john@phrozen.org>, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-leds@vger.kernel.org
-Subject: Re: [RFC PATCH v6 07/11] leds: trigger: netdev: use mutex instead of
- spinlocks
-Message-ID: <YnPdglC+QJ4Gw81C@lunn.ch>
-References: <20220503151633.18760-1-ansuelsmth@gmail.com>
- <20220503151633.18760-8-ansuelsmth@gmail.com>
- <YnMj/SY8BhJuebFO@lunn.ch>
- <6273d126.1c69fb81.7d047.4a30@mx.google.com>
+        Thu, 5 May 2022 10:26:37 -0400
+Received: from mail-oa1-f41.google.com (mail-oa1-f41.google.com [209.85.160.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F52A2898A;
+        Thu,  5 May 2022 07:22:57 -0700 (PDT)
+Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-edf9ddb312so3406838fac.8;
+        Thu, 05 May 2022 07:22:57 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=MYZ1J6FolI4230hKGE/4CLcUiPhVjInNSMzDjUnG2gg=;
+        b=JffR8KR7lhAjuEk+zR7mgxVE2OMKCTC3xTPwuLpbKHMFZ8MzcWLY8KvgHHhpxWQTrR
+         rFSUlW/oV0+9cB0C9GcPha7+slNgkLYSF/3KJ/x1GNp1aR7RpZcOnerwKzD2NITTSzdJ
+         zblDxLpmMcx9vsD0VkcdMW363wBY+cFsPxyujaUQ+YlSqKvbaXVMUGf3IOq7ZcotZYlR
+         N08+oOvtz4dvNqNhT6UX7Tc5M5+CROH/paxsXx7G/TfIItQoCMU3nANFPz71AtIHlfb0
+         VeC9Tb7Lx29/qZrkMWJwfXyzbpdZNyKBK9n7o0JddJR608VU5y6yMT0AeQRIkwsNY0K3
+         kpMg==
+X-Gm-Message-State: AOAM5330rGZ4L3KprjkdEAZFICCl0ywoaR0s+v7sE1zK4rH4E5EZirRR
+        hxe26mjz69MUcjdafvllig==
+X-Google-Smtp-Source: ABdhPJwGr8T5ltzNlq2hul6Yx7sRNv30V35Ouw3uymLa76juOWSteruivvJJLaWMZuN36v/Vy/DfBw==
+X-Received: by 2002:a05:6870:4624:b0:ed:977b:7842 with SMTP id z36-20020a056870462400b000ed977b7842mr2375196oao.89.1651760576568;
+        Thu, 05 May 2022 07:22:56 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id g4-20020a9d6184000000b0060603221250sm644698otk.32.2022.05.05.07.22.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 May 2022 07:22:56 -0700 (PDT)
+Received: (nullmailer pid 3826717 invoked by uid 1000);
+        Thu, 05 May 2022 14:22:55 -0000
+Date:   Thu, 5 May 2022 09:22:55 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        Manu Gautam <mgautam@codeaurora.org>, linux-usb@vger.kernel.org
+Subject: Re: [PATCH 02/13] dt-bindings: soc: qcom: qcom,smd-rpm: add
+ power-controller
+Message-ID: <YnPdv4wzYw5CTukU@robh.at.kernel.org>
+References: <20220504131923.214367-1-krzysztof.kozlowski@linaro.org>
+ <20220504131923.214367-3-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <6273d126.1c69fb81.7d047.4a30@mx.google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220504131923.214367-3-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 05, 2022 at 03:29:09PM +0200, Ansuel Smith wrote:
-> On Thu, May 05, 2022 at 03:10:21AM +0200, Andrew Lunn wrote:
-> > > @@ -400,7 +400,7 @@ static int netdev_trig_notify(struct notifier_block *nb,
-> > >  
-> > >  	cancel_delayed_work_sync(&trigger_data->work);
-> > >  
-> > > -	spin_lock_bh(&trigger_data->lock);
-> > > +	mutex_lock(&trigger_data->lock);
-> > 
-> > I'm not sure you can convert a spin_lock_bh() in a mutex_lock().
-> > 
-> > Did you check this? What context is the notifier called in?
-> > 
-> >     Andrew
+On Wed, 04 May 2022 15:19:12 +0200, Krzysztof Kozlowski wrote:
+> Document power-controller child of Qualcomm RPM over SMD to fix
+> dtbs_check warnings like:
 > 
-> I had to do this because qca8k use completion to set the value and that
-> can sleep... Mhhh any idea how to handle this?
+>   msm8916-huawei-g7.dtb: rpm-requests: 'power-controller' do not match any of the regexes: 'pinctrl-[0-9]+'
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  Documentation/devicetree/bindings/soc/qcom/qcom,smd-rpm.yaml | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
 
-First step is to define what the lock is protecting. Once you know
-that, you should be able to see what you can do without actually
-holding the lock.
-
-Do you need the lock when actually setting the LED?
-
-Or is the lock protecting state information inside trigger_data?
-
-Can you make a copy of what you need from trigger_data while holding
-the lock, release it and then set the LED?
-
-Maybe a nested mutex and a spin lock? The spin lock protecting
-trigger_data, and the mutex protecting setting the LED?
-
-	      Andrew
+Acked-by: Rob Herring <robh@kernel.org>

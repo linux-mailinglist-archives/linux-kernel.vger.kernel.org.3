@@ -2,111 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33A6951C6C7
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 20:11:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C49751C6C9
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 20:12:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383008AbiEESO6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 14:14:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60526 "EHLO
+        id S1383010AbiEESPf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 14:15:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382998AbiEESOz (ORCPT
+        with ESMTP id S242421AbiEESPd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 14:14:55 -0400
-Received: from us-smtp-delivery-74.mimecast.com (us-smtp-delivery-74.mimecast.com [170.10.133.74])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 450485AEE7
-        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 11:11:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651774274;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=kLRudaiszTccdqB1Vd77KpaI2iWJChA3O1GYOzzQuoc=;
-        b=VFIs+if8/Jo09Ye/qt8En1bHfTLtyA3UW6kcMVDzIY21J9rucG6cBg3m1kpSAT0xg5tL1d
-        I9JXF8I1MIK/uuNO/4QGsYtsPkKJLrSfbViFkxGOUHsmtwmVXZ31D6sWsYaO4d2QH5vbgc
-        HGLpb/uClCHYmncYDX/eZflD+ZLYrJ4=
-Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
- [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-288-2v3KpGYKOBuehafzgq_wcg-1; Thu, 05 May 2022 14:11:13 -0400
-X-MC-Unique: 2v3KpGYKOBuehafzgq_wcg-1
-Received: by mail-qt1-f197.google.com with SMTP id x5-20020a05622a000500b002f37cb8b803so3960166qtw.9
-        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 11:11:13 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=kLRudaiszTccdqB1Vd77KpaI2iWJChA3O1GYOzzQuoc=;
-        b=ZCz96utBmn1aSIoaanRmvuH6xP0/abm5KYQZKNEnR+x/UGog1c49eHvOAZybttGzqu
-         Tdpb2+wLDsUXKSdPJvgMP6Gu4cpGD9veHnotcp7EWZNpgRrfQh5qCPZGKol84+suxgKJ
-         jYZD9y6dpUQ/aZEpFVNGf5sPW3zutpgAzcIGTNBylB4nNS2EN1Cfu9puQ4jkkHZE4Os7
-         nnLQjytmygu5YCbGOAuexXm6JAyyYI0FmqfEQK6bPWqLb/2WrAKr0brtMwsOdYIXYSjJ
-         Utma3oZUJEA2ar0VFFP6CTtO/dd5PECvqUstandy4Zd152b5AVa01MbMKYolm/OCpRUp
-         xAkg==
-X-Gm-Message-State: AOAM530qU4ONmN6KHHX5Mr+/9GqeOIbgeLWfYiuSkMrhzvOrToCk1pdO
-        rlmOgXfWBFWyNxw6DKYx2IAyhZa7gdsdSwvrf6SWowNKdEZntMnmUXwdhxTcwxJQxAUUs1R3x1H
-        ojqCOgI9qwvc2vqfwLQ+H7hpA
-X-Received: by 2002:a05:622a:20f:b0:2f3:4e5c:3271 with SMTP id b15-20020a05622a020f00b002f34e5c3271mr25103849qtx.44.1651774272660;
-        Thu, 05 May 2022 11:11:12 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwODdZVXSmIrr3XKHkaq4AMOb8tfd+YHR41zI+HxWst1xMd12GMM8tAoRhnMZaQTl0FAyFWCg==
-X-Received: by 2002:a05:622a:20f:b0:2f3:4e5c:3271 with SMTP id b15-20020a05622a020f00b002f34e5c3271mr25103826qtx.44.1651774272473;
-        Thu, 05 May 2022 11:11:12 -0700 (PDT)
-Received: from fedora (modemcable200.11-22-96.mc.videotron.ca. [96.22.11.200])
-        by smtp.gmail.com with ESMTPSA id d9-20020ac85349000000b002f39b99f68bsm1167214qto.37.2022.05.05.11.11.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 May 2022 11:11:12 -0700 (PDT)
-Date:   Thu, 5 May 2022 14:11:10 -0400
-From:   Adrien Thierry <athierry@redhat.com>
-To:     Stefan Wahren <stefan.wahren@i2se.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        bcm-kernel-feedback-list@broadcom.com,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        linux-staging@lists.linux.dev,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/3] staging: vchiq_arm: get rid of global device
- structure
-Message-ID: <YnQTPmNAvpbQl5Ws@fedora>
-References: <20220502183045.206519-1-athierry@redhat.com>
- <20220502183045.206519-3-athierry@redhat.com>
- <8483a250-da97-1875-4ea3-598f46ae96ce@i2se.com>
+        Thu, 5 May 2022 14:15:33 -0400
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2088.outbound.protection.outlook.com [40.107.243.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD44F5AA71;
+        Thu,  5 May 2022 11:11:52 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=PgL0eCOGzjNyQGMuURSQkjsKkTcOul1h4J0rjfN+H//QlXCnGjJBne9PBQRWbJDxlQQq+6SvSa/ETnfly9HumwyN10FrYVvH411voWOfkI8gsrjRBTdkhRci2xxW0E5/FBldsN2QE/zM7qRp2aBO1uOOd/kSKdt4koqv01VgHA5syJ0pl4KjxvBKflgcbrdh+s8ViU9sqe5E5LPUFxgZykQwTjSVK7Z1ZJ7bXJsDKJv5I5GUFN4ldfVz5VyZFXhqSaJCRyreCkbVmu4l5Ua+DBw+iL9D482nw4s+J9vbwRgOyYgwcixcVA+E+cku2D12CXWLT4pvXIgYPBwWFvByBw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=fMEJC9KOqmW1s+PYiT39gpa5B0RarISMyIAFVv5haXM=;
+ b=hG6uD7u6/pxtviG0wrjSpKI5cnI4IeR9mImyHCF5JZowfE5gyxzKE7JFCjDVJYRsLwsFJ73a6Ap/Mly57mqKImUlVezCug6zFxtQirEVLlRJm2IrT9n68KdbVS11OYqwp/d9PqJwTbYspnzeFskDxxK8Xms0McPr4ggUQ5RfccRgBt8wMhHghs2J9ONAGx5B9vh9pxJHUX3sluOUbMnJZpasZDt1euFOWxIH3Qof5gnAcUmNm9LKjJbOZfoDpk8Tge2NdQ89ZmCkcjOeC+QxqsXtaNGRChYty5jzZR1xB54k1jGAWezn+FBIhqLR+qFm9jkQL1E4TvEboXdCCQLh2A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=fMEJC9KOqmW1s+PYiT39gpa5B0RarISMyIAFVv5haXM=;
+ b=p3MPQ1cTfl3IMUvDNIYQWv236N3ELOCVqPkMrxHHFYOFgD1SxvwVu0g1fAkr6/+UwCRUOJatigkDlkwBWJlEBLDG2qd5aEUgf2oqlGfebMfeaXpzIfH21I3U53IuD4Uyn+o5jizoc8RzlJs7ZgcQhhCah51xZMKLdrJFhRVCNS9+O2MGcnNQ1qXnyZMAEYbzTuyBt9SHRIZcNvUaiM94kblowJgiiJK/vmEo8t/6e/Ikhc42DP++orwG2IcWoXN8khYW63ySjVrDhILtXvrr59fOJ3+aE3p3wYfEqqX86qUDa4Qc9mWXkq/5D+WDpkTX+o+/RnPhTsd1O5s0YnZj7w==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from BY5PR12MB4116.namprd12.prod.outlook.com (2603:10b6:a03:210::13)
+ by DM6PR12MB4465.namprd12.prod.outlook.com (2603:10b6:5:28f::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5206.13; Thu, 5 May
+ 2022 18:11:50 +0000
+Received: from BY5PR12MB4116.namprd12.prod.outlook.com
+ ([fe80::b998:eed3:9088:780c]) by BY5PR12MB4116.namprd12.prod.outlook.com
+ ([fe80::b998:eed3:9088:780c%9]) with mapi id 15.20.5206.027; Thu, 5 May 2022
+ 18:11:50 +0000
+Message-ID: <77ad857b-bbb6-364e-afcd-d9c984aa5246@nvidia.com>
+Date:   Thu, 5 May 2022 11:11:50 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: linux-next: build failure after merge of the hte tree
+Content-Language: en-US
+To:     Thierry Reding <thierry.reding@gmail.com>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20220504165956.531c4b53@canb.auug.org.au>
+ <YnIlh++OJDRrK9sz@orome> <05e94e6a-86d3-5d60-081a-6adb3bcafb35@nvidia.com>
+ <YnPZffmJQjuU+8fI@orome>
+X-Nvconfidentiality: public
+From:   Dipen Patel <dipenp@nvidia.com>
+In-Reply-To: <YnPZffmJQjuU+8fI@orome>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: BYAPR21CA0005.namprd21.prod.outlook.com
+ (2603:10b6:a03:114::15) To BY5PR12MB4116.namprd12.prod.outlook.com
+ (2603:10b6:a03:210::13)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8483a250-da97-1875-4ea3-598f46ae96ce@i2se.com>
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 62c72bb8-cd3d-4164-2895-08da2ec2b9cc
+X-MS-TrafficTypeDiagnostic: DM6PR12MB4465:EE_
+X-Microsoft-Antispam-PRVS: <DM6PR12MB446554E90EF63FA741C6A693AEC29@DM6PR12MB4465.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 6DKehbacM9KwSIHlTfdysIs4tKwxj2GqVMXylYV0CUvLwOTHzxEuXzUySuCHZBb4p6yYvxf4y++IzGhaFzTR3/l96bXw/1Kf5a8ff2UPtaa0idEt1OSWsZ7GobHeAldq6TOvggzUB/Hqn6RtuNPgtPSY5C30DBfUq8E4kVD23eeiAWRHV98c+AfUDheLb4ThGW3r0ptwMNxa9ObD1jTDaSSe2uJv+NidaR8xz6lxyo0lwqlpmjr4IY+4z5xHJQH/MTtlhbrfENKkB753/1Zl82MpaBbvO09tuPHV8zpdgT5manM61JvR9u1EazI50sgpn13W45CKvHOS35IVxI2VnBJIiiPwsGmHxwak7UxmDd9wlWI9q13QsrDj4zvzBnoahnafhr8htsldIKWMY9j2VndJXm0IU3fm0WyNz2wv3FIRX0XuDYm2DSNXbfJLc1KnmTzphJPhW0z9Z35ZAdSEvhWyxtyh1w6zQV9pcS9CnwjyIoLvbAIOTAq8LXGtZdGHCSbsEhljsJHh0/4PRFymZWChI5ZAdb5SCLuH2gKVYY4ZyKcAhQxoCmXVTkScoCpoKWMzMU3m037cOcttut02Ci41Ru88Fd+mW7XDhQfOyJ9dq6iim86+5/MQwVwRpFHzSPUe1aYoF0Ctml2QASwQKE8OMKmo2EEMmIGORGPyQLlVTdQzyQAalzHV0Ktcllzly/zn+k/0JC5mlHFLqOQaoqw8lijmLuVyMqPCA76UfzEiZC8rDiPNqCdu0IGALU8lkoK31jqhIGqzcKEyZ4Xy0N4h3XaeG0VR4lJEpe4alTiUmtUTDCCRKROrlaj40xae53kY9MT6/dQvbKf2lrplbQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB4116.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(316002)(86362001)(31686004)(4326008)(2616005)(54906003)(38100700002)(31696002)(6486002)(966005)(6512007)(53546011)(36756003)(6506007)(6916009)(5660300002)(8676002)(66476007)(66556008)(2906002)(66946007)(8936002)(508600001)(186003)(83380400001)(26005)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?SXlLWkN2eWYxTU5BdERYYlo0Q1lPODdvazE1TytlbEdMZVdtWW1uUW9aRVM4?=
+ =?utf-8?B?MU5YdWU3Yit3c0IzK2hoYjcyQXA4WExmUTRpQ3VjUFhwSjhKTjBSUE0yNk9Y?=
+ =?utf-8?B?RDhwY09veXRpTk81bUVIZ0JBb2xQMGRzbUhUSFc4S0hBS0dEWm8rUFZrTWsr?=
+ =?utf-8?B?cXVPaElJTmtISEN2MGFkWFpIejhDcEFtdzFtQnRRTVlDKzkyMWYreHFjYUty?=
+ =?utf-8?B?SzhXUE5NVktRaG9sQXRzTHh6Mk90WkRFeXJic1JzNEFTWUg0azU3VDRiWEVK?=
+ =?utf-8?B?VnlRUmtwVHh2d1ZTZ3BmeXdFeUFaNFJJQW9DeGJoenFnK1BPK01TczUyQmhi?=
+ =?utf-8?B?QXRmK09CeTlUTkNNcHJUMUZQQzFtTWpQQ3RpbjJxOVJpMnYxYVhDVnk2Sk9o?=
+ =?utf-8?B?K2lPbkc2bUFTRmE4SmJyN1hISjBWcDZQTk1idVo2RWRnaDZLWkdOOGJMS2Rt?=
+ =?utf-8?B?bGdPbnFjMWNIVWZ0b3Z5R1cvTXNmZGZZYXFicGpVelQyNlcvcHhJN0N1NENo?=
+ =?utf-8?B?MU5KczI3SXdOb1V6WVBJRi9BZ3kxZjNwSkg1RU4yZnIzcnFxRXNQSlFnZERF?=
+ =?utf-8?B?ZXY0ZHNGUmkrRzZWbXF0SDFhKzU4VmJhaHVxazE5cldCVkJTdkZNVlBMZnRw?=
+ =?utf-8?B?VzdCWGoyMVZVV21yeEoxR3czZ0IzbWNjZ2dCeGZSS1lYR0hnV3ZKd1ZjQVo1?=
+ =?utf-8?B?S01ISjEwbjdTaDJpVXRvQXpwVnFiSXUwTmEreWRwOFZVYno4anhhdytqRW16?=
+ =?utf-8?B?RmFjb0cwRi9nWlpINEh3WFlGUGszMCtNUExKUE9LNEdqYVpGcCtnQjB1Y2dR?=
+ =?utf-8?B?amdMZVcybmtyeU1VS3pIc0hDTE4rMGdUNVlYT0Jjc3B4c1A0VnlzcHpZekN4?=
+ =?utf-8?B?a3dTdmZkeDZ6ZUh6c3NuVXhlTWFGTHAxbzc0MjdVdWVqTHgrL0l2c0ZvaWgy?=
+ =?utf-8?B?VDNvZTJReVJtS1BUc2R3aTkyT015YVRXS1c5NUFhUG5zd1dwTzVsMGVVUmF5?=
+ =?utf-8?B?NG0zU0lVbDcyZFB3a0FIRGF0dXFmU3hWbVExT1dRVEp2R0xhRXhBOVh6cUZU?=
+ =?utf-8?B?UjRqN25LcFFoYU4vYlR0ejg1Q0IrcEY5akFHRUhRT2FhcXNWL1FTTUFwYkhR?=
+ =?utf-8?B?bC91ditFNnNUWWZCaUQ5elJtRlhDV1Mra3NBc0Z0eHJOejZ6MnIxNmZkRnVU?=
+ =?utf-8?B?N1NYL0RySVB5SVpJUDVLMVYxSVNUbW4wZUFxcU44UFR3UzR0Ly9zZW5VVXJI?=
+ =?utf-8?B?ZTFaRnZjNTVaMThxMERGUWRMWGRQNGw5SGJ1SmZQZG4yaTZKclI0M3ZPTGxp?=
+ =?utf-8?B?UlJ0aDV4bzc4c25TOEcvOFAwb256cWt3K3MvTytDRy95c2dheC9GYXcwVytn?=
+ =?utf-8?B?UjNiMjg3TWJQWnVoU05YWjdRcm4xeW1XSi9BeEN6UDQ3TDNYdlplY2hmcHNI?=
+ =?utf-8?B?QzFNd29nUW9QZ0RQL1FhZGpSTE1UTVNPVkFiNTVzUGJFd0lFMzBRU2x0Vlpi?=
+ =?utf-8?B?cDhwd2xrYXY1WExGelY1VEtCeHJtREdLS1hkUTFnQStBYW5MY1RPYkVNZENQ?=
+ =?utf-8?B?dmJjTXBNT2I2eVpBVU5VZnZ6OTZsZmppbXllTEFCMlRxaTZoVlBQMmxROGZY?=
+ =?utf-8?B?S3JEN3J0UXA0OC9OMjFVWGxNdmhFT3hHcWZiRjA2Mk4zYmJ4akpHU0pwalk2?=
+ =?utf-8?B?TWZTc05vY211WjB5VDhJdm8vWVVzekJ3VDdWSnRPZkVDYVZ1K0Rhak1tNldJ?=
+ =?utf-8?B?RGF5NjRFUGhKcXBtOFpmbkRpL1ovSUpXdCtpeTRYZDY0Q3l2aG9xaHhVSUYv?=
+ =?utf-8?B?K0tTYUJUdnNQU041Q1M3eml5LzRRTS92OWFTWXdvZkx4SlRzTnZzczhNeEVa?=
+ =?utf-8?B?d0Ivb1NCWk9Wa3l0Mm5iN1VPQS9BQ2lFalQ1SGQ0V3oySUswKzNMRWd0SERW?=
+ =?utf-8?B?RkFVakYzakpNbThtWlkrR3RCaFVxTjd3dGxjNlNjc0EyRlhaK25lbk8vL243?=
+ =?utf-8?B?RnpaZ2hhdG1HVVZOdXVsQ3VTeExPVUprVG9paDFIalZjYjlSaEw4YVg0YTl5?=
+ =?utf-8?B?NWtsOWpKK3c0OGptTkthanU2NW9RWEV6bU01cDVHZmhoaHc4eFpIZHNBTnRh?=
+ =?utf-8?B?OFo3RGErK1BQaXJXei9Qd1VUSEhKTWhhaityZHY5N2dscG15UVpZTXFQd2Jn?=
+ =?utf-8?B?OHV1c0pZZXZzMHkySmV3Q05Qb3drVnpneTBhK2VHOGZKSENNME5RTE5QcXlk?=
+ =?utf-8?B?WVRMb0lZaG55STJBSENBTzdYL00rUjBwN2ZodnB0a3dFODFRbmRJa2l6Rk5h?=
+ =?utf-8?B?T2c0NFgrYXNLS0RXTDNaTEpYNzJvMEpwZU53bnBxNHFwNk1ST0lIUT09?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 62c72bb8-cd3d-4164-2895-08da2ec2b9cc
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB4116.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 May 2022 18:11:50.4543
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: lH2lHkt86ZQjmB+ldbjQNwIy1iqwckj1ftHle7L+xOKAV6peEqF9RQrU9X3/b8CXhW6ZY3gnVcwAdmjsYy80Zg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4465
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Stefan,
+Thanks for the help Thierry.
 
-Thanks for your feedback.
+Best Regards, Dipen Patel
 
-> i understand the motivation, but could you please explain more in detail
-> why you decided to add vchiq_instance instead of device reference? I
-> think vchiq_instance is a more internal structure which should be
-> avoided in kernel consumers like bcm2835-audio or mmal.
-
-I used the vchiq_instance instead of the device reference because in order
-to get rid of the vchiq_states array (patch 3/3 [1]), I needed another way
-to access the vchiq_state in the 'handle_to_service' function. So I passed
-the vchiq_instance to it (I could also have passed the state directly
-instead of the instance), and this propagated in the caller chain all the
-way up to 'vchiq_bulk_transmit' and friends which are used in the
-bcm2835-audio consumer.  Please let me know if you see a better way of
-doing this :)
-
-Thanks,
-
-Adrien
-
-[1] https://lore.kernel.org/all/20220502183045.206519-4-athierry@redhat.com/
-
+On 5/5/22 7:04 AM, Thierry Reding wrote:
+> On Wed, May 04, 2022 at 08:17:50PM -0700, Dipen Patel wrote:
+>> Hi Stephen, Thierry,
+>>
+>> Before sending patches I compiled and tested with or without HTE
+>> config successfully, I used gcc arm64 cross compiler. The initial
+>> problem kernel boat reported (reproduce step snippet below) used clang
+>> as compiler and that gives typedef issue which is what hte_return_t
+>> is. Do you know if we have to treat it differently with clang vs gcc
+>> or did I miss something?
+> It's probably a good idea to do builds with clang at this point since
+> apparently it can catch some cases that GCC doesn't. There's some
+> documentation on how to do that here:
+>
+> 	https://www.kernel.org/doc/html/latest/kbuild/llvm.html
+>
+> The process is quite similar to using GCC and it has the advantage that
+> clang ships with built-in cross-compilers, so less hassle setting things
+> up.
+>
+>> However below failure seems like (correct me if I am wrong) Thierry
+>> might have changed typedef to int in one place and possibly not all
+>> other places.
+> Yes, the hte_return_t failures were my fault. Turns out due to some
+> dependencies not being fulfilled my test builds didn't cover gpiolib
+> character devices, so I didn't catch those.
+>
+> I've not got a couple of configurations that I can build and a short
+> script that will verify that all the necessary files have been built, so
+> that should hopefully catch such issues in the future.
+>
+> I had also pushed a fixed branch yesterday and it looks like today's
+> linux-next built fine for HTE, so it's now included.
+>
+> Thierry

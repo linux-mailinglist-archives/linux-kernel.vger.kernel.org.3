@@ -2,62 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D989051B5D6
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 04:24:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3AF751B5D9
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 04:24:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238388AbiEECZ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 22:25:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59458 "EHLO
+        id S238472AbiEEC00 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 22:26:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232529AbiEECZy (ORCPT
+        with ESMTP id S232529AbiEEC0W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 22:25:54 -0400
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4796549F08
-        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 19:22:17 -0700 (PDT)
-Received: by mail-pg1-x530.google.com with SMTP id a191so2592150pge.2
-        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 19:22:17 -0700 (PDT)
+        Wed, 4 May 2022 22:26:22 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AF054B863
+        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 19:22:45 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id t11-20020a17090ad50b00b001d95bf21996so6779227pju.2
+        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 19:22:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=ef+sybKBAkUjKLs8tlJYfzgpqHk/AEhKYaj2VVeifvg=;
-        b=OG/lleGzbi4WRp3eEVn2Ky39PrCMOzoBfa81MHSat9WWdT6+lVMGwstvSB7TyQrK0O
-         ekPuX5JS4wq+jTGfYLENqJFAo8PYJ0lOsTN+qpSxH0S50gN1dgHXfv5wKC7rXy9o+CHx
-         o76liOhu+Mj7Pejjz3EZ6g0SV75SJazPqoOzQG5qTHicMLiqT8td7jtc+6D0Sv9GMq7L
-         BvNSCf/V9NPNxftEg3HDXhsHd9MsG9sXVL1ckLWa/boFegB5JA0RjPq7bxzR2O2I+wiz
-         xTel8KCWKQ8Wrz86uuQ/hrVRBvEzo21tlHd3jds4Hq7TejkqH2sb7A5t7AFv3bNIMnt3
-         +GWQ==
+        bh=4kWQfwEbK95xky/d4HhQ+FlkuBESmRWEkmfG0y0k6Yc=;
+        b=E0/AMlIWlX2QfzeIjcII6CLO40b23wuotJIrvhbNd29xWOYF75GL9IxyRjbMEH3naM
+         AsANCB3Fy3cr+5nzf3JHIOq+IjfbunSJufgQwTLzJbcW5i4TNAm/jUfGuve/2eOUzskf
+         qXW4/DtXMQVPBSUo5zeSWcV+yX7YMsXsG4EhHGrVql08nzJ55l01RXDHJxKNwPzdHGQX
+         bebb41ewRaKFw7OVwBKjJJgNLG7ib7GwVPZC3sivigfMwK1dVKPUz4fiEcy+v/U5yArC
+         fIt9K9Ov6hZRs+8jNuT6VW9MPd5jf/P+fNfC7AWpBWs6ybvF7ber7gshyXRhW3tSeJ79
+         NaOA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=ef+sybKBAkUjKLs8tlJYfzgpqHk/AEhKYaj2VVeifvg=;
-        b=QoqRW2Xr6ABXelNgGWBcBfoKikwR8fe1UXAul4P6alrN9iO/vjogwg2jVWa54l9DWn
-         u5YSUMeTzk+SUIPNiq/sM7fxJsouVEoLjzgC80rsDwUGF3OQO/2BsvCUFmKtMsfunXTn
-         CAOKCfEOWB2k8GIkunhfaIQvxMtgTBHKjMwvoUd0MMosWrj8ofIgeNeAcvoocmlcPE/k
-         oE25bCMI6ICSJ9PMxMq7iY3sD9lyY2jRc7SIRIZD0R1pOYf5tKUSBz0GdFozFTSW3i2L
-         DtTSfonS39NfP7Bo/OQz+J0B90uIrU4yZp5NMNkziPDvFoLhI9lrWM6yR2s9E5Nl77v4
-         x6jQ==
-X-Gm-Message-State: AOAM531doxTzGm0ui4wlqOLx/vXfwjDGnlDj8paNplQjj9lzy/4+C+Hz
-        4koCzcr50EUWj0OMtWFm0m0=
-X-Google-Smtp-Source: ABdhPJxwgs2AzWqDhC4ZlkGGOfEWL9n90q8upIDnCzYEAp4SHXBb9BBiuNWmzfxRnFREFEVH6h+mqA==
-X-Received: by 2002:a05:6a00:c83:b0:50e:eea:1b9 with SMTP id a3-20020a056a000c8300b0050e0eea01b9mr10598547pfv.47.1651717336875;
-        Wed, 04 May 2022 19:22:16 -0700 (PDT)
+        bh=4kWQfwEbK95xky/d4HhQ+FlkuBESmRWEkmfG0y0k6Yc=;
+        b=4YYmj0eh/dQhMVAAeMh6lVHlYe1S446Ht2HaLrBo4Sd4D0s+ulkUIGqwrIzT4mmbol
+         YnHB53GKf1urc9TnW7dHFEi0VWg4SeHa2q2HoTCgb0R4L7rboAXEkPWOtYUVUezCusAP
+         yqA/LLAVlT2UV9mffrvJSz77+IIyOjnuEdUpfgaf8Qjdws6VcO41d/rZxyZ1Xw54NOBt
+         ySS4PsMNvgoI4U0YuZZrGFbKBZPDwqm8RkrkUNDBSc2X2g10HJIZqBuJ/5DtMc9qI9lK
+         A2+GGNo9MM8wFHUumXEorSg4SBodG+tzp/eiwIr0p/pbrfJ2rNaqgrJ4SuUaj9XNsKnS
+         uaXw==
+X-Gm-Message-State: AOAM530Tk6P5UjCoLKM1OPiob8NHh/6yTnYpebUMZNMw+Ylq59XN7Ydr
+        YN+QMRogI1qtruvP00P0WpA=
+X-Google-Smtp-Source: ABdhPJw1cWNP932SAnVrBHZI77Y5r2z3v4pkPgX8TpSZkODTuCZDIKhl7JkWU4n/DJecOdGqzDQ5rw==
+X-Received: by 2002:a17:90b:380b:b0:1dc:6d24:76ff with SMTP id mq11-20020a17090b380b00b001dc6d2476ffmr3271725pjb.42.1651717364762;
+        Wed, 04 May 2022 19:22:44 -0700 (PDT)
 Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id v29-20020aa799dd000000b0050dc7628152sm99911pfi.44.2022.05.04.19.22.13
+        by smtp.gmail.com with ESMTPSA id q4-20020a056a00150400b0050dc76281a1sm86482pfu.123.2022.05.04.19.22.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 May 2022 19:22:16 -0700 (PDT)
+        Wed, 04 May 2022 19:22:44 -0700 (PDT)
 From:   cgel.zte@gmail.com
 X-Google-Original-From: chi.minghao@zte.com.cn
-To:     airlied@redhat.com
-Cc:     tzimmermann@suse.de, airlied@linux.ie,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Minghao Chi <chi.minghao@zte.com.cn>,
+To:     alexander.deucher@amd.com
+Cc:     christian.koenig@amd.com, Xinhui.Pan@amd.com, airlied@linux.ie,
+        daniel@ffwll.ch, andrey.grodzovsky@amd.com, Felix.Kuehling@amd.com,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, Minghao Chi <chi.minghao@zte.com.cn>,
         Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH] drm: simplify the return expression of ast_drm_resume()
-Date:   Thu,  5 May 2022 02:22:08 +0000
-Message-Id: <20220505022208.57157-1-chi.minghao@zte.com.cn>
+Subject: [PATCH] drm/amdgpu: simplify the return expression of vega10_ih_hw_init()
+Date:   Thu,  5 May 2022 02:22:39 +0000
+Message-Id: <20220505022239.58334-1-chi.minghao@zte.com.cn>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -78,30 +79,29 @@ Simplify the return expression.
 Reported-by: Zeal Robot <zealci@zte.com.cn>
 Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
 ---
- drivers/gpu/drm/ast/ast_drv.c | 7 +------
+ drivers/gpu/drm/amd/amdgpu/vega10_ih.c | 7 +------
  1 file changed, 1 insertion(+), 6 deletions(-)
 
-diff --git a/drivers/gpu/drm/ast/ast_drv.c b/drivers/gpu/drm/ast/ast_drv.c
-index 7465c4f0156a..760b27971557 100644
---- a/drivers/gpu/drm/ast/ast_drv.c
-+++ b/drivers/gpu/drm/ast/ast_drv.c
-@@ -159,15 +159,10 @@ static int ast_drm_thaw(struct drm_device *dev)
+diff --git a/drivers/gpu/drm/amd/amdgpu/vega10_ih.c b/drivers/gpu/drm/amd/amdgpu/vega10_ih.c
+index 3070466f54e1..cdd599a08125 100644
+--- a/drivers/gpu/drm/amd/amdgpu/vega10_ih.c
++++ b/drivers/gpu/drm/amd/amdgpu/vega10_ih.c
+@@ -521,14 +521,9 @@ static int vega10_ih_sw_fini(void *handle)
  
- static int ast_drm_resume(struct drm_device *dev)
+ static int vega10_ih_hw_init(void *handle)
  {
--	int ret;
--
- 	if (pci_enable_device(to_pci_dev(dev->dev)))
- 		return -EIO;
+-	int r;
+ 	struct amdgpu_device *adev = (struct amdgpu_device *)handle;
  
--	ret = ast_drm_thaw(dev);
--	if (ret)
--		return ret;
+-	r = vega10_ih_irq_init(adev);
+-	if (r)
+-		return r;
+-
 -	return 0;
-+	return ast_drm_thaw(dev);
++	return vega10_ih_irq_init(adev);
  }
  
- static int ast_pm_suspend(struct device *dev)
+ static int vega10_ih_hw_fini(void *handle)
 -- 
 2.25.1
 

@@ -2,144 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED79051BC87
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 11:50:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C42A51BC8B
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 11:53:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354560AbiEEJya (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 05:54:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37394 "EHLO
+        id S1350983AbiEEJ4g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 05:56:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231517AbiEEJyO (ORCPT
+        with ESMTP id S230073AbiEEJ4e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 05:54:14 -0400
-Received: from mail.schwermer.no (mail.schwermer.no [49.12.228.226])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E419140D7;
-        Thu,  5 May 2022 02:50:29 -0700 (PDT)
-X-Virus-Scanned: Yes
-From:   Sven Schwermer <sven@svenschwermer.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=svenschwermer.de;
-        s=mail; t=1651744226;
-        bh=lOGd00ODohYP+KMc0D1h92V6nZo00DPGfkd/bfgkdYw=;
-        h=From:To:Cc:Subject:In-Reply-To:References;
-        b=JZdNtDf77tM4Zs5MwXskT78cfYZLmrk/pLZ54LQmDnU5IHzW2XDNfeRxP2RYcK14+
-         TWyWIASbqtdYiIlRKuyKlWH6/gS0Lt9yJJGM6rHXnX9ff6xbtgprA/jSj3tzRaTxpx
-         nIJUaCWAnni5hEiyvcG1NwBcgfyq/mGnAOgodIFzY2swPU3yTYR/zTGDfLG/PG4n8C
-         6GGjQ0MuaApRj3n6qJUfnxAO5RyxBjkB6/nEGm/XU9JN/sVXht5EIVnnB7lMD8Edhi
-         mVR9Da2au8wKFPYavx2m/35pi7sSlpr5gg61ejBOifKoHtdPwUUOuoQaInDk/JX8hj
-         8+W0RhmXAVdvg==
-To:     linux-leds@vger.kernel.org, linux-kernel@vger.kernel.org,
-        pavel@ucw.cz, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org
-Cc:     Sven Schwermer <sven.schwermer@disruptive-technologies.com>,
-        schuchmann@schleissheimer.de
-Subject: [PATCH v3 2/2] leds: multicolor: Read default-intensities property
-Date:   Thu,  5 May 2022 11:50:09 +0200
-Message-Id: <9175a8b9fdd23a5b379457e7246ae4364cabc110.1651744128.git.sven.schwermer@disruptive-technologies.com>
-In-Reply-To: <eef2dba9633a860063527628a72f6a4523aaf6cd.1651744128.git.sven.schwermer@disruptive-technologies.com>
-References: <eef2dba9633a860063527628a72f6a4523aaf6cd.1651744128.git.sven.schwermer@disruptive-technologies.com>
-Mime-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 5 May 2022 05:56:34 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B39450070;
+        Thu,  5 May 2022 02:52:53 -0700 (PDT)
+Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1nmYAF-0007lg-8h; Thu, 05 May 2022 11:52:51 +0200
+Message-ID: <941f292d-2ce2-d7aa-3d70-01a11ba171cf@leemhuis.info>
+Date:   Thu, 5 May 2022 11:52:50 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Content-Language: en-US
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+Cc:     Samuel Clark <slc2015@gmail.com>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+        LKML <linux-kernel@vger.kernel.org>
+To:     Jarkko Nikula <jarkko.nikula@linux.intel.com>
+Subject: regression: Null pointer exception on resume from S3 with i2c
+ DesignWare driver
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1651744374;334872db;
+X-HE-SMSGID: 1nmYAF-0007lg-8h
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sven Schwermer <sven.schwermer@disruptive-technologies.com>
+Hi, this is your Linux kernel regression tracker.
 
-This allows to assign intensity values taken from the firmware interface
-(if available) to the indivisual sub LEDs (colors) at driver probe time,
-i.e. most commonly at kernel boot time. This is crucial for setting a
-specific color and early in the boot process. While it would be possible
-to set a static color in the bootloader, this mechanism allows setting a
-pattern (e.g. blinking) at a specific color.
+I noticed a regression report in bugzilla.kernel.org that afaics nobody
+acted upon since it was reported about a week ago, that's why I decided
+to forward it to the lists and all people that seemed to be relevant. To
+quote from https://bugzilla.kernel.org/show_bug.cgi?id=215907 :
 
-Signed-off-by: Sven Schwermer <sven.schwermer@disruptive-technologies.com>
----
+> Running Manjaro on a Gigabyte B660M DS3H DDR4 with custom 5.17 kernel. Confirmed on other distributions and kernels back to 5.12; issue is not present on most recent 5.11 kernel. dmesg traceback points to i2c DesignWare driver, specifically drivers/i2c/busses/i2c-designware-master.c:369. It seems the msgs struct passed in to i2c_dw_xfer_msg is null.
+> 
+> Similar issue seems to be reported here:  https://lore.kernel.org/lkml/YY5BRrE8bLyvd3PB@smile.fi.intel.com/t/  
+> 
+> lspci output: https://pastebin.com/MwFM2VBJ
+> dmesg from crashed kernel: https://pastebin.com/t6GsHjkq
+> kernel config: https://pastebin.com/awrSve5u
 
-Notes:
-    V1->V2: Fix mixup
-    V2->V3: Use color-intensity mapping instead of simple intensity array
+Could somebody take a look into this? Or was this discussed somewhere
+else already? Or even fixed?
 
- drivers/leds/led-class-multicolor.c | 48 +++++++++++++++++++++++++++++
- 1 file changed, 48 insertions(+)
+Anyway, to get this tracked:
 
-diff --git a/drivers/leds/led-class-multicolor.c b/drivers/leds/led-class-multicolor.c
-index e317408583df..2900dd02fe41 100644
---- a/drivers/leds/led-class-multicolor.c
-+++ b/drivers/leds/led-class-multicolor.c
-@@ -9,6 +9,7 @@
- #include <linux/module.h>
- #include <linux/slab.h>
- #include <linux/uaccess.h>
-+#include <linux/property.h>
- 
- #include "leds.h"
- 
-@@ -116,6 +117,50 @@ static struct attribute *led_multicolor_attrs[] = {
- };
- ATTRIBUTE_GROUPS(led_multicolor);
- 
-+static void multi_load_default_intensities(struct device *parent,
-+					   struct led_classdev_mc *mcled_cdev,
-+					   struct fwnode_handle *fwnode)
-+{
-+	u32 intensities[2 * LED_COLOR_ID_MAX];
-+	unsigned int j;
-+	int len;
-+	int ret;
-+	int i;
-+
-+	len = fwnode_property_read_u32_array(fwnode, "default-intensities",
-+					     NULL, 0);
-+	if (len < 0) {
-+		if (len != -ENODATA)
-+			dev_warn(parent,
-+				 "failed to read default-intensities property length: %d", ret);
-+		return;
-+	}
-+	if (len % 2 != 0) {
-+		dev_warn(parent, "default-intensities property has uneven number of values");
-+		return;
-+	}
-+	if (len > ARRAY_SIZE(intensities)) {
-+		dev_warn(parent, "default-intensities property has too many values");
-+		return;
-+	}
-+
-+	ret = fwnode_property_read_u32_array(fwnode, "default-intensities",
-+					     intensities, len);
-+	if (ret < 0) {
-+		dev_warn(parent, "failed to read default-intensities property values: %d", ret);
-+		return;
-+	}
-+
-+	for (i = 0; i < len; i += 2) {
-+		for (j = 0; j < mcled_cdev->num_colors; j++) {
-+			if (intensities[i] == mcled_cdev->subled_info[j].color_index) {
-+				mcled_cdev->subled_info[j].intensity = intensities[i + 1];
-+				break;
-+			}
-+		}
-+	}
-+}
-+
- int led_classdev_multicolor_register_ext(struct device *parent,
- 				     struct led_classdev_mc *mcled_cdev,
- 				     struct led_init_data *init_data)
-@@ -134,6 +179,9 @@ int led_classdev_multicolor_register_ext(struct device *parent,
- 	led_cdev = &mcled_cdev->led_cdev;
- 	mcled_cdev->led_cdev.groups = led_multicolor_groups;
- 
-+	if (init_data && init_data->fwnode)
-+		multi_load_default_intensities(parent, mcled_cdev, init_data->fwnode);
-+
- 	return led_classdev_register_ext(parent, led_cdev, init_data);
- }
- EXPORT_SYMBOL_GPL(led_classdev_multicolor_register_ext);
+#regzbot introduced: v5.11..v5.12
+#regzbot from: Samuel Clark <slc2015@gmail.com>
+#regzbot title: i2c: designware: Null pointer exception on resume from S3
+#regzbot link: https://bugzilla.kernel.org/show_bug.cgi?id=215907
+
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+
+P.S.: As the Linux kernel's regression tracker I deal with a lot of
+reports and sometimes miss something important when writing mails like
+this. If that's the case here, don't hesitate to tell me in a public
+reply, it's in everyone's interest to set the public record straight.
+
 -- 
-2.36.0
+Additional information about regzbot:
 
+If you want to know more about regzbot, check out its web-interface, the
+getting start guide, and the references documentation:
+
+https://linux-regtracking.leemhuis.info/regzbot/
+https://gitlab.com/knurd42/regzbot/-/blob/main/docs/getting_started.md
+https://gitlab.com/knurd42/regzbot/-/blob/main/docs/reference.md
+
+The last two documents will explain how you can interact with regzbot
+yourself if your want to.
+
+Hint for reporters: when reporting a regression it's in your interest to
+CC the regression list and tell regzbot about the issue, as that ensures
+the regression makes it onto the radar of the Linux kernel's regression
+tracker -- that's in your interest, as it ensures your report won't fall
+through the cracks unnoticed.
+
+Hint for developers: you normally don't need to care about regzbot once
+it's involved. Fix the issue as you normally would, just remember to
+include 'Link:' tag in the patch descriptions pointing to all reports
+about the issue. This has been expected from developers even before
+regzbot showed up for reasons explained in
+'Documentation/process/submitting-patches.rst' and
+'Documentation/process/5.Posting.rst'.

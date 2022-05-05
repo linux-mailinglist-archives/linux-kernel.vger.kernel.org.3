@@ -2,52 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C5C851B9A0
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 10:07:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92D4E51B997
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 10:05:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346452AbiEEIKl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 04:10:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43356 "EHLO
+        id S1346303AbiEEIJR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 04:09:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346334AbiEEIKj (ORCPT
+        with ESMTP id S239748AbiEEIJP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 04:10:39 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3877633E89;
-        Thu,  5 May 2022 01:07:01 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 5 May 2022 04:09:15 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EA6C21816;
+        Thu,  5 May 2022 01:05:35 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E182EB82BC9;
-        Thu,  5 May 2022 08:06:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89BE0C385A4;
-        Thu,  5 May 2022 08:06:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651738018;
-        bh=UNwgFxzOyBVqYbS3oWBRtI1/gUf7FweC/XLn5kiiO0k=;
-        h=From:To:Cc:Subject:Date:From;
-        b=P2ISyc72rtdI5UOj6t6FmX205voGerlKmzkyqq70JcvMTgEa0gdjjQeBa0hMHFxwE
-         HoAsJ+fe8olWrJxMDTZDP6ZOgi1C4bWzFeCTe/hIqH2vr1rGtgrVR1HtdK8IZIBwL8
-         xcyBBTvASnpvIfdjDxVc7QL7WEP0/+EJVHpuIfWpVVoJviYjf72LubQ4DQa3r16HS0
-         P/YLPz5qr1uJpFEcwcGQWxXNTH4MRHr473h82ZeJMpkenvEOy3zYwSSr2MpXooAbco
-         ZRTri52R5cdVTWdKmrjnYsz6T1Jow+lgveg+YqNlCX6SEhXYM/40YqiOZafpvhNmgJ
-         OgFoj/Qwrs1wg==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan+linaro@kernel.org>)
-        id 1nmWVl-0003Dh-Qb; Thu, 05 May 2022 10:06:58 +0200
-From:   Johan Hovold <johan+linaro@kernel.org>
-To:     Pavel Machek <pavel@ucw.cz>
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        linux-leds@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Johan Hovold <johan+linaro@kernel.org>
-Subject: [PATCH] leds: qcom-lpg: add missing PWM dependency
-Date:   Thu,  5 May 2022 10:03:58 +0200
-Message-Id: <20220505080358.12288-1-johan+linaro@kernel.org>
-X-Mailer: git-send-email 2.35.1
+        by smtp-out1.suse.de (Postfix) with ESMTPS id B3EF2210E7;
+        Thu,  5 May 2022 08:05:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1651737933; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=DyFvKk/4W60YxjAcVzDWN45Rwd9cCqYosDJPWwfh4ak=;
+        b=pvrOwLGXTEp+Ew9xOFHC//eYd03F8eROA9mXou6FTfb9tKF2XsY9FUQ1ybUc427NWCKFqD
+        gK+XokyvtMNxVEGj+rxjxwlo9YtQo543qwPLEzt5ZTDdH6qt148eDtx1v7RnNIQ7+tX9Y1
+        pObQIEq1tIEl5a6UrJT4vcwRvWK+pcI=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1651737933;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=DyFvKk/4W60YxjAcVzDWN45Rwd9cCqYosDJPWwfh4ak=;
+        b=HPWN8OVCi9cC9x+W7mKhzFEFWklVhgE1U/J7LQbcLVQMmrqEUvwQNQfDCtbqSoVGdLvWPL
+        FLr1wS7G+2ee+XCA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9081313A65;
+        Thu,  5 May 2022 08:05:33 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id n592Ik2Fc2JIAgAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Thu, 05 May 2022 08:05:33 +0000
+Message-ID: <78167587-fd2e-354c-485b-db4ee9251178@suse.de>
+Date:   Thu, 5 May 2022 10:05:33 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH 2/3] fbdev/simplefb: Cleanup fb_info in .fb_destroy rather
+ than .remove
+Content-Language: en-US
+To:     Javier Martinez Canillas <javierm@redhat.com>,
+        linux-kernel@vger.kernel.org
+Cc:     Daniel Vetter <daniel.vetter@ffwll.ch>,
+        linux-fbdev@vger.kernel.org, Helge Deller <deller@gmx.de>,
+        dri-devel@lists.freedesktop.org,
+        Hans de Goede <hdegoede@redhat.com>
+References: <20220504215151.55082-1-javierm@redhat.com>
+ <20220504215722.56970-1-javierm@redhat.com>
+ <974f4d00-89bc-a2da-6d65-ca4207300794@suse.de>
+ <d9a5cb30-2d9b-50b5-d287-0ead0fe252f3@redhat.com>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <d9a5cb30-2d9b-50b5-d287-0ead0fe252f3@redhat.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------zyMl9rGKFT3zaRjt2DtqjCrf"
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -56,27 +80,94 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Qualcomm LPG driver fails to probe unless PWM support is enabled so
-add the missing Kconfig dependency.
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------zyMl9rGKFT3zaRjt2DtqjCrf
+Content-Type: multipart/mixed; boundary="------------Cxs6xXOI46IUhSlhHJMDFV5H";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Javier Martinez Canillas <javierm@redhat.com>,
+ linux-kernel@vger.kernel.org
+Cc: Daniel Vetter <daniel.vetter@ffwll.ch>, linux-fbdev@vger.kernel.org,
+ Helge Deller <deller@gmx.de>, dri-devel@lists.freedesktop.org,
+ Hans de Goede <hdegoede@redhat.com>
+Message-ID: <78167587-fd2e-354c-485b-db4ee9251178@suse.de>
+Subject: Re: [PATCH 2/3] fbdev/simplefb: Cleanup fb_info in .fb_destroy rather
+ than .remove
+References: <20220504215151.55082-1-javierm@redhat.com>
+ <20220504215722.56970-1-javierm@redhat.com>
+ <974f4d00-89bc-a2da-6d65-ca4207300794@suse.de>
+ <d9a5cb30-2d9b-50b5-d287-0ead0fe252f3@redhat.com>
+In-Reply-To: <d9a5cb30-2d9b-50b5-d287-0ead0fe252f3@redhat.com>
 
-Fixes: 24e2d05d1b68 ("leds: Add driver for Qualcomm LPG")
-Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
----
- drivers/leds/rgb/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
+--------------Cxs6xXOI46IUhSlhHJMDFV5H
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-diff --git a/drivers/leds/rgb/Kconfig b/drivers/leds/rgb/Kconfig
-index 5dd27ad80856..1e35433d061a 100644
---- a/drivers/leds/rgb/Kconfig
-+++ b/drivers/leds/rgb/Kconfig
-@@ -5,6 +5,7 @@ if LEDS_CLASS_MULTICOLOR
- config LEDS_QCOM_LPG
- 	tristate "LED support for Qualcomm LPG"
- 	depends on OF
-+	depends on PWM
- 	depends on SPMI
- 	help
- 	  This option enables support for the Light Pulse Generator found in a
--- 
-2.35.1
+SGkNCg0KQW0gMDUuMDUuMjIgdW0gMDk6Mzggc2NocmllYiBKYXZpZXIgTWFydGluZXogQ2Fu
+aWxsYXM6DQo+IEhlbGxvIFRob21hcywNCj4gDQo+IE9uIDUvNS8yMiAwOToyOSwgVGhvbWFz
+IFppbW1lcm1hbm4gd3JvdGU6DQo+IA0KPiBbc25pcF0NCj4gDQo+Pj4gICAgc3RhdGljIHZv
+aWQgc2ltcGxlZmJfZGVzdHJveShzdHJ1Y3QgZmJfaW5mbyAqaW5mbykNCj4+PiAgICB7DQo+
+Pj4gICAgCXN0cnVjdCBzaW1wbGVmYl9wYXIgKnBhciA9IGluZm8tPnBhcjsNCj4+PiBAQCAt
+OTQsNiArOTgsOCBAQCBzdGF0aWMgdm9pZCBzaW1wbGVmYl9kZXN0cm95KHN0cnVjdCBmYl9p
+bmZvICppbmZvKQ0KPj4+ICAgIAlpZiAoaW5mby0+c2NyZWVuX2Jhc2UpDQo+Pj4gICAgCQlp
+b3VubWFwKGluZm8tPnNjcmVlbl9iYXNlKTsNCj4+PiAgICANCj4+PiArCWZyYW1lYnVmZmVy
+X3JlbGVhc2UoaW5mbyk7DQo+Pj4gKw0KPj4+ICAgIAlpZiAobWVtKQ0KPj4+ICAgIAkJcmVs
+ZWFzZV9tZW1fcmVnaW9uKG1lbS0+c3RhcnQsIHJlc291cmNlX3NpemUobWVtKSk7DQo+Pg0K
+Pj4gVGhlIG9yaWdpbmFsIHByb2JsZW0gd2l0aCBmYmRldiBob3QtdW5wbHVnIHdhcyB0aGF0
+IHZtd2dmeCBuZWVkZWQgdGhlDQo+PiBmcmFtZWJ1ZmZlciByZWdpb24gdG8gYmUgcmVsZWFz
+ZWQuIElmIHdlIHJlbGVhc2UgaXQgb25seSBhZnRlciB1c2Vyc3BhY2UNCj4+IGNsb3NlZCBp
+dCdzIGZpbmFsIGZpbGUgZGVzY3JpcHRvciwgdm13Z2Z4IGNvdWxkIGhhdmUgYWxyZWFkeSBm
+YWlsZWQuDQo+Pg0KPj4gSSBzdGlsbCBkb24ndCBmdWxseSBnZXQgd2h5IHRoaXMgY29kZSBh
+cHBhcmVudGx5IHdvcmtzIG9yIGF0IGxlYXN0DQo+PiBkb2Vzbid0IGJsb3cgdXAgb2NjYXNp
+b25hbGx5LiBBbnkgaWRlYXM/DQo+Pg0KPiANCj4gSSBiZWxpZXZlIHRoYXQgdm13Z2Z4IGRv
+ZXNuJ3QgZmFpbCB0byBwcm9iZSAob3IgYW55IG90aGVyIERSTSBkcml2ZXIpDQo+IG9ubHkg
+d2hlbiB0aGVyZSBhcmUgbm90IHVzZXItc3BhY2UgcHJvY2Vzc2VzIHdpdGggYSBmYmRldiBu
+b2RlIG9wZW5lZA0KPiBzaW5jZSBvdGhlcndpc2UgYXMgeW91IHNhaWQgdGhlIG1lbW9yeSB3
+b3VsZG4ndCBiZSByZWxlYXNlZCB5ZXQuDQo+IA0KPiB1bnJlZ2lzdGVyX2ZyYW1lYnVmZmVy
+KCkgaXMgY2FsbGVkIGZyb20gdGhlIGRyaXZlcidzIC5yZW1vdmUgaGFuZGxlcg0KPiBhbmQg
+dGhhdCBkZWNyZW1lbnQgdGhlIGZiX2luZm8gcmVmY291bnQsIHNvIGlmIHJlYWNoZXMgemVy
+byBpdCB3aWxsDQo+IGNhbGwgdG8gdGhlIGZiIGZvcHMgLmRlc3Ryb3koKSBoYW5kbGVyIGFu
+ZCByZWxlYXNlIHRoZSBJL08gbWVtb3J5Lg0KPiANCj4gSW4gb3RoZXIgd29yZHMsIGluIG1v
+c3QgY2FzZXMgKGkuZTogb25seSBmYmNvbiBib3VuZCB0byB0aGUgZmJkZXYpDQo+IHRoZSBk
+cml2ZXIncyByZW1vdmFsLyBkZXZpY2UgdW5iaW5kIGFuZCB0aGUgbWVtb3J5IHJlbGVhc2Ug
+d2lsbCBiZQ0KPiBhdCB0aGUgc2FtZSB0aW1lLg0KPiANCg0KV2UncmUgb25lIHRoZSBzYW1l
+IHBhZ2UgaGVyZSwgYnV0IGl0J3Mgc3RpbGwgc29ydCBvZiBhIG15c3RlcnkgdG8gbWUgd2h5
+IA0KdGhpcyB3b3JrcyBpbiBwcmFjdGljZS4NCg0KSSdtIHNwZWNpZmljYWxseSB0YWxraW5n
+IGFib3V0IHBjaV9yZXF1ZXN0X3JlZ2lvbnMoKSBpbiB2bXdnZnggWzFdLiBJSVJDIA0KdGhp
+cyB3b3VsZCBmYWlsIGlmIHNpbXBsZWZiIHN0aWxsIG93bnMgdGhlIGZyYW1lYnVmZmVyIHJl
+Z2lvbi4gTG90cyBvZiANCnN5c3RlbXMgcnVuIFBseW1vdXRoIGR1cmluZyBib290IGFuZCB0
+aGlzIHNob3VsZCByZXN1bHQgaW4gZmFpbHVyZXMgDQpvY2Nhc2lvbmFsbHkuIFN0aWxsLCB3
+ZSBuZXZlciBoZWFyZCBhYm91dCBhbnl0aGluZy4NCg0KT2YgY291cnNlLCBpdCdzIGFsd2F5
+cyBiZWVuIGJyb2tlbiAoZXZlbiBsb25nIGJlZm9yZSByZWFsIGZiZGV2IA0KaG90dW5wbHVn
+Z2luZykuIFN3aXRjaGluZyB0byBzaW1wbGVkcm0gcmVzb2x2ZXMgdGhlIHByb2JsZW0uDQoN
+CkJlc3QgcmVnYXJkcw0KVGhvbWFzDQoNClsxXSANCmh0dHBzOi8vZWxpeGlyLmJvb3RsaW4u
+Y29tL2xpbnV4L3Y1LjE3LjUvc291cmNlL2RyaXZlcnMvZ3B1L2RybS92bXdnZngvdm13Z2Z4
+X2Rydi5jI0w3MjcNCg0KLS0gDQpUaG9tYXMgWmltbWVybWFubg0KR3JhcGhpY3MgRHJpdmVy
+IERldmVsb3Blcg0KU1VTRSBTb2Z0d2FyZSBTb2x1dGlvbnMgR2VybWFueSBHbWJIDQpNYXhm
+ZWxkc3RyLiA1LCA5MDQwOSBOw7xybmJlcmcsIEdlcm1hbnkNCihIUkIgMzY4MDksIEFHIE7D
+vHJuYmVyZykNCkdlc2Now6RmdHNmw7xocmVyOiBJdm8gVG90ZXYNCg==
 
+--------------Cxs6xXOI46IUhSlhHJMDFV5H--
+
+--------------zyMl9rGKFT3zaRjt2DtqjCrf
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
+
+-----BEGIN PGP SIGNATURE-----
+
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmJzhU0FAwAAAAAACgkQlh/E3EQov+Dk
+MhAAgVKNyY2VlGbZxaBKoIwT/U7WDVYz3/SL6RFDoJKuuACkdIu3/xLRru2pBCw2w+gDpaQRes6n
+gRoF9KOXXgt/rsWnVXlHMi2gkA7oi/dDBrz814qAA2xHNwmKMSOyeVTZrSzAoViCkpj7n5YOhhet
+1EeFdDsttuzdrBsbzY4FsomAiIke/OM2d3X+rdr0iUElUz0WOd1059CvPj/aNgWeDCImVkeXwid7
+nZRIDVEdvULSZqufXY6vsE8bhYpR6XaJ3MgyTTmMrueOtqDWooGTTm8/0S6E+OJzsWso3i15PPp/
+ZFln0qNdhtuVrEKfO2badkyOmoR+yyTHYG0w1NTi1FuRXhdCKUNJXHNbI+tMReoHbIGmnH+gdMUO
+u7U64ZXTUsY8Jx+XmvkeAEgWldbn23KKi2zdkKgkcsaJuGOtHMVNfjmyVwBIHdgMYo3Fw8fcW8j7
+dnnAxH7axl67RIyvxYz8/SBp/FR2x1T7lb7c4L+38re7dF24uWIG9sU501lWSTS7RcApGEf/1p0u
+p8hJ2UXlBjhdKSVBlO4fT+Pxtsx1jWoCwnsPsEAzHRn1K3dusRuJ/C7sBb1fqLnduRxjY1V9HG7L
+5jMgHePfw2zNu6qaJmiYRheZM3iX6PlrpLTX7UKIc3XxgfnUewJYugEk5UnLZ+OaNDiSwfqqAl0p
+CSw=
+=P1yn
+-----END PGP SIGNATURE-----
+
+--------------zyMl9rGKFT3zaRjt2DtqjCrf--

@@ -2,144 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A4CC51BDB9
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 13:06:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 067C351BDBF
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 13:10:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356563AbiEELKY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 07:10:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44752 "EHLO
+        id S1355146AbiEELNi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 07:13:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344317AbiEELKU (ORCPT
+        with ESMTP id S1344317AbiEELNe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 07:10:20 -0400
-Received: from mail.marcansoft.com (marcansoft.com [IPv6:2a01:298:fe:f::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B86D313F06;
-        Thu,  5 May 2022 04:06:40 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: marcan@marcan.st)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id 7FB7E41F28;
-        Thu,  5 May 2022 11:06:34 +0000 (UTC)
-Message-ID: <39ad7d44-7320-bc7c-8645-6643a1e69c06@marcan.st>
-Date:   Thu, 5 May 2022 20:06:31 +0900
+        Thu, 5 May 2022 07:13:34 -0400
+Received: from outbound-smtp42.blacknight.com (outbound-smtp42.blacknight.com [46.22.139.226])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C596E13D28
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 04:09:52 -0700 (PDT)
+Received: from mail.blacknight.com (pemlinmail06.blacknight.ie [81.17.255.152])
+        by outbound-smtp42.blacknight.com (Postfix) with ESMTPS id 095B917A7
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 12:09:51 +0100 (IST)
+Received: (qmail 10219 invoked from network); 5 May 2022 11:09:50 -0000
+Received: from unknown (HELO techsingularity.net) (mgorman@techsingularity.net@[84.203.198.246])
+  by 81.17.254.9 with ESMTPSA (AES256-SHA encrypted, authenticated); 5 May 2022 11:09:50 -0000
+Date:   Thu, 5 May 2022 12:09:47 +0100
+From:   Mel Gorman <mgorman@techsingularity.net>
+To:     Aaron Lu <aaron.lu@intel.com>
+Cc:     kernel test robot <oliver.sang@intel.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Jesper Dangaard Brouer <brouer@redhat.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        LKML <linux-kernel@vger.kernel.org>, lkp@lists.01.org,
+        lkp@intel.com, ying.huang@intel.com, feng.tang@intel.com,
+        zhengjun.xing@linux.intel.com, fengwei.yin@intel.com
+Subject: Re: [mm/page_alloc]  f26b3fa046:  netperf.Throughput_Mbps -18.0%
+ regression
+Message-ID: <20220505110947.GD3441@techsingularity.net>
+References: <20220420013526.GB14333@xsang-OptiPlex-9020>
+ <YmvMDyx05UoPFtQy@ziqianlu-desk1>
+ <20220429133918.GC3441@techsingularity.net>
+ <YnOKWNE3PZzzohNH@ziqianlu-desk1>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Content-Language: es-ES
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Mark Kettenis <mark.kettenis@xs4all.nl>,
-        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220504075153.185208-1-marcan@marcan.st>
- <20220504075153.185208-3-marcan@marcan.st>
- <a7e87c9a-7b3e-ea46-6171-4a87d1052a98@linaro.org>
-From:   Hector Martin <marcan@marcan.st>
-Subject: Re: [PATCH v2 2/4] dt-bindings: cpufreq: apple,soc-cpufreq: Add
- binding for Apple SoC cpufreq
-In-Reply-To: <a7e87c9a-7b3e-ea46-6171-4a87d1052a98@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-15
+Content-Disposition: inline
+In-Reply-To: <YnOKWNE3PZzzohNH@ziqianlu-desk1>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/05/2022 17.43, Krzysztof Kozlowski wrote:
-> On 04/05/2022 09:51, Hector Martin wrote:
->> This binding represents the cpufreq/DVFS hardware present in Apple SoCs.
->> The hardware has an independent controller per CPU cluster, but we
->> represent them as a single cpufreq node since there can only be one
->> systemwide cpufreq device (and since in the future, interactions with
->> memory controller performance states will also involve cooperation
->> between multiple frequency domains).
->>
->> Signed-off-by: Hector Martin <marcan@marcan.st>
->> ---
->>  .../bindings/cpufreq/apple,soc-cpufreq.yaml   | 121 ++++++++++++++++++
->>  1 file changed, 121 insertions(+)
->>  create mode 100644 Documentation/devicetree/bindings/cpufreq/apple,soc-cpufreq.yaml
->>
->> diff --git a/Documentation/devicetree/bindings/cpufreq/apple,soc-cpufreq.yaml b/Documentation/devicetree/bindings/cpufreq/apple,soc-cpufreq.yaml
->> new file mode 100644
->> index 000000000000..f398c1bd5de5
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/cpufreq/apple,soc-cpufreq.yaml
->> @@ -0,0 +1,121 @@
->> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/cpufreq/apple,soc-cpufreq.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: Apple SoC cpufreq device
->> +
->> +maintainers:
->> +  - Hector Martin <marcan@marcan.st>
->> +
->> +description: |
->> +  Apple SoCs (e.g. M1) have a per-cpu-cluster DVFS controller that is part of
->> +  the cluster management register block. This binding uses the standard
->> +  operating-points-v2 table to define the CPU performance states, with the
->> +  opp-level property specifying the hardware p-state index for that level.
->> +
->> +properties:
->> +  compatible:
->> +    items:
->> +      - enum:
->> +          - apple,t8103-soc-cpufreq
->> +          - apple,t6000-soc-cpufreq
->> +      - const: apple,soc-cpufreq
->> +
->> +  reg:
->> +    minItems: 1
->> +    maxItems: 6
+On Thu, May 05, 2022 at 04:27:04PM +0800, Aaron Lu wrote:
+> On Fri, Apr 29, 2022 at 02:39:18PM +0100, Mel Gorman wrote:
+> > On Fri, Apr 29, 2022 at 07:29:19PM +0800, Aaron Lu wrote:
 > 
-> Is the number of clusters fixed for t8103 and t6000? Are these
-> compatibles strictly related to some specific M1 SoC? If yes, then you
-> should have constraints in allOf:if:then.
+> ... ...
+> 
+> > > The said change looks like this:
+> > > (relevant comment will have to be adjusted)
+> > > 
+> > > diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+> > > index 505d59f7d4fa..130a02af8321 100644
+> > > --- a/mm/page_alloc.c
+> > > +++ b/mm/page_alloc.c
+> > > @@ -3332,18 +3332,19 @@ static int nr_pcp_high(struct per_cpu_pages *pcp, struct zone *zone,
+> > >  		       bool free_high)
+> > >  {
+> > >  	int high = READ_ONCE(pcp->high);
+> > > +	int batch = READ_ONCE(pcp->batch);
+> > >  
+> > > -	if (unlikely(!high || free_high))
+> > > +	if (unlikely(!high))
+> > >  		return 0;
+> > >  
+> > > -	if (!test_bit(ZONE_RECLAIM_ACTIVE, &zone->flags))
+> > > -		return high;
+> > > -
+> > >  	/*
+> > >  	 * If reclaim is active, limit the number of pages that can be
+> > >  	 * stored on pcp lists
+> > >  	 */
+> > > -	return min(READ_ONCE(pcp->batch) << 2, high);
+> > > +	if (test_bit(ZONE_RECLAIM_ACTIVE, &zone->flags) || free_high)
+> > > +		return min(batch << 2, high);
+> > > +
+> > > +	return high;
+> > >  }
+> > >  
+> > >  static void free_unref_page_commit(struct page *page, int migratetype,
+> > > 
+> > > Does this look sane? If so, I can prepare a formal patch with proper
+> > > comment and changelog, thanks.
+> > 
+> > I think it looks reasonable sane. The corner case is that if
+> > ((high - (batch >> 2)) > cachesize) that the pages will not get recycled
+> 
+> When free_high is true, the above diff changed the return value of
+> nr_pcp_high() from 0 to min(batch << 2, pcp->high) so the corner case is
+> when (min(batch << 2, pcp->high) > cachesize)?
+> 
 
-No, t6000 includes t6002 which is a 2-die version and has 6 clusters,
-t6001 and t6000 have 3. t8103 always has 2, but it's conceivable that
-compatible could be used for other chips within the same generation with
-a different number.
-
-The general idea for these compats is as a fallback in case we need to
-quirk something for individual SoCs or start using registers which
-changed for some reason, but right now they are not used. But I think
-given how closely related t6000/t6001/t6002 are (t6002 is literally two
-t6001 dies, and t6000 is almost identical to t6001 with a chunk
-missing), I think spelling those out as 3 separate compatibles is
-overkill. In general we treat those 3 SoCs as identical in terms of
-compatibles, but the one-cpufreq-node limitation means t6002 does have
-twice the clusters.
-
-It's also conceivable that Apple could start releasing CPUs with entire
-clusters fused off, so then our bootloader would have to start mutating
-the reg entry to represent that.
-
-I can add constraints to express some of this if you really want me to,
-but I'm not sure it's that useful. The way I see it, the compatibles
-really *mean* "this soc has t8103 clusters" or "this soc has t6000
-clusters" and the number of clusters is arbitrary and the driver will
-never care about that. Honestly I'd rather have separate cpufreq nodes
-for each cluster, but nobody else does it like that and there's only one
-driver instance, so that gets complicated...
+Yes. It's not perfect due to cache aliasing so the actual point where it
+matters will be variable. Whatever the value is, there a value where the
+corner case applies that pages do not get recycled quickly enough and
+are no longer cache-hot.
 
 -- 
-Hector Martin (marcan@marcan.st)
-Public Key: https://mrcn.st/pub
+Mel Gorman
+SUSE Labs

@@ -2,139 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19A6951C653
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 19:40:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C03E151C62D
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 19:34:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233867AbiEERoF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 13:44:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34244 "EHLO
+        id S1382735AbiEERiJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 13:38:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382777AbiEERnm (ORCPT
+        with ESMTP id S1382709AbiEERiC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 13:43:42 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E5B05C86D;
-        Thu,  5 May 2022 10:40:02 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B1279B82DBE;
-        Thu,  5 May 2022 17:40:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F5AEC385AC;
-        Thu,  5 May 2022 17:39:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651772399;
-        bh=gOSgZEk3jsHNIB+ckRTLVRGCrgRIybWDts/FsyhHUkU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=c/ZwZULIsr3S3e6l2j6DfUiZogiPnOiwDrXq2MAgB7w6Drf7ILW4AXDb/CGofQjGX
-         LFHLjF/ekyxAgxdpg64X5AzSiYm0CgiReNVM9qPC/cS9kkyzcvrlSqr0u2MRqZGr2b
-         c1mblinTzxMmUt1Y+6x50UimQPyOwpQLVobTatGg=
-Date:   Thu, 5 May 2022 19:32:48 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     Russ Weight <russell.h.weight@intel.com>,
-        Tianfei zhang <tianfei.zhang@intel.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Shawn Guo <shawn.guo@linaro.org>, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH v2] test_firmware: fix end of loop test in
- upload_read_show()
-Message-ID: <YnQKQLMkUNgyN2+C@kroah.com>
-References: <YnPMt/syJAqqOBh3@kili>
+        Thu, 5 May 2022 13:38:02 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 977F055212
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 10:34:21 -0700 (PDT)
+Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[127.0.0.1])
+        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
+        (envelope-from <a.fatoum@pengutronix.de>)
+        id 1nmfMT-0002m8-KI; Thu, 05 May 2022 19:33:57 +0200
+Message-ID: <09e2552c-7392-e1da-926b-53c7db0b118d@pengutronix.de>
+Date:   Thu, 5 May 2022 19:33:45 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YnPMt/syJAqqOBh3@kili>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v8 0/6] KEYS: trusted: Introduce support for NXP
+ CAAM-based trusted keys
+Content-Language: en-US
+To:     John Ernberg <john.ernberg@actia.se>
+Cc:     "andreas@rammhold.de" <andreas@rammhold.de>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "david@sigma-star.at" <david@sigma-star.at>,
+        "dhowells@redhat.com" <dhowells@redhat.com>,
+        "ebiggers@kernel.org" <ebiggers@kernel.org>,
+        "franck.lenormand@nxp.com" <franck.lenormand@nxp.com>,
+        "herbert@gondor.apana.org.au" <herbert@gondor.apana.org.au>,
+        "horia.geanta@nxp.com" <horia.geanta@nxp.com>,
+        "j.luebbe@pengutronix.de" <j.luebbe@pengutronix.de>,
+        "jarkko@kernel.org" <jarkko@kernel.org>,
+        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
+        "jmorris@namei.org" <jmorris@namei.org>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>,
+        "matthias.schiffer@ew.tq-group.com" 
+        <matthias.schiffer@ew.tq-group.com>,
+        "pankaj.gupta@nxp.com" <pankaj.gupta@nxp.com>,
+        "richard@nod.at" <richard@nod.at>,
+        "s.trumtrar@pengutronix.de" <s.trumtrar@pengutronix.de>,
+        "serge@hallyn.com" <serge@hallyn.com>,
+        "sumit.garg@linaro.org" <sumit.garg@linaro.org>,
+        "tharvey@gateworks.com" <tharvey@gateworks.com>,
+        "zohar@linux.ibm.com" <zohar@linux.ibm.com>
+References: <20220428140145.870527-1-a.fatoum@pengutronix.de>
+ <20220505145756.2492566-1-john.ernberg@actia.se>
+From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
+In-Reply-To: <20220505145756.2492566-1-john.ernberg@actia.se>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
+X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 05, 2022 at 04:10:15PM +0300, Dan Carpenter wrote:
-> If a list_for_each_entry() loop exits without hitting a break statement
-> then the iterator points to invalid memory.  So in this code the
-> "tst->name" dereference is an out bounds read.  It's an offset from the
-> &test_upload_list pointer and it will likely work fine most of the time
-> but it's not correct.
+Hello John,
+
+On 05.05.22 16:58, John Ernberg wrote:
+> Gave this a go on iMX8QXP with Linux 5.17.5 and I can't quite get it working.
 > 
-> One alternative is to fix this this by changing the test to:
+> I get -ENODEV from add_key() via keyctl. When I traced it in dmesg I couldn't
+> get an as clear picture as I would like but CAAM (and thus possibly JRs?)
+> initialzing after trusted_key.
 > 
-> 	if (list_entry_is_head(tst, &test_upload_list, node)) {
+> dmesg snips:
+> [    1.296772] trusted_key: Job Ring Device allocation for transform failed
+> ...
+> [    1.799768] caam 31400000.crypto: device ID = 0x0a16040000000100 (Era 9)
+> [    1.807142] caam 31400000.crypto: job rings = 2, qi = 0
+> [    1.822667] caam algorithms registered in /proc/crypto
+> [    1.830541] caam 31400000.crypto: caam pkc algorithms registered in /proc/crypto
+> [    1.841807] caam 31400000.crypto: registering rng-caam
 > 
-> But the simpler, trendy new way is just create a new variable and test
-> for NULL.
-> 
-> Fixes: a31ad463b72d ("test_firmware: Add test support for firmware upload")
-> Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-> ---
->  lib/test_firmware.c | 11 +++++++----
->  1 file changed, 7 insertions(+), 4 deletions(-)
-> 
-> diff --git a/lib/test_firmware.c b/lib/test_firmware.c
-> index 76115c1a2629..c82b65947ce6 100644
-> --- a/lib/test_firmware.c
-> +++ b/lib/test_firmware.c
-> @@ -1392,7 +1392,8 @@ static ssize_t upload_read_show(struct device *dev,
->  				struct device_attribute *attr,
->  				char *buf)
->  {
-> -	struct test_firmware_upload *tst;
-> +	struct test_firmware_upload *tst = NULL;
-> +	struct test_firmware_upload *tst_iter;
->  	int ret = -EINVAL;
->  
->  	if (!test_fw_config->upload_name) {
-> @@ -1401,11 +1402,13 @@ static ssize_t upload_read_show(struct device *dev,
->  	}
->  
->  	mutex_lock(&test_fw_mutex);
-> -	list_for_each_entry(tst, &test_upload_list, node)
-> -		if (tst->name == test_fw_config->upload_name)
-> +	list_for_each_entry(tst_iter, &test_upload_list, node)
-> +		if (tst_iter->name == test_fw_config->upload_name) {
-> +			tst = tst_iter;
->  			break;
-> +		}
->  
-> -	if (tst->name != test_fw_config->upload_name) {
-> +	if (!tst) {
->  		pr_err("Firmware name not found: %s\n",
->  		       test_fw_config->upload_name);
->  		goto out;
-> -- 
-> 2.35.1
-> 
+> I didn't quite have the time to get a better trace than that.
 
-Hi,
+I don't see a crypto@31400000 node upstream. Where can I see your device tree?
+Initcall ordering does the right thing, but if CAAM device probe is deferred beyond
+late_initcall, then it won't help.
 
-This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
-a patch that has triggered this response.  He used to manually respond
-to these common problems, but in order to save his sanity (he kept
-writing the same thing over and over, yet to different people), I was
-created.  Hopefully you will not take offence and will fix the problem
-in your patch and resubmit it so that it can be accepted into the Linux
-kernel tree.
+This is a general limitation with trusted keys at the moment. Anything that's
+not there by the time of the late_initcall won't be tried again. You can work
+around it by having trusted keys as a module. We might be able to do something
+with fw_devlinks in the future and a look into your device tree would help here,
+but I think that should be separate from this patch series.
 
-You are receiving this message because of the following common error(s)
-as indicated below:
+Please let me know if the module build improves the situation for you.
 
-- This looks like a new version of a previously submitted patch, but you
-  did not list below the --- line any changes from the previous version.
-  Please read the section entitled "The canonical patch format" in the
-  kernel file, Documentation/SubmittingPatches for what needs to be done
-  here to properly describe this.
+Cheers,
+Ahmad
 
-If you wish to discuss this problem further, or you have questions about
-how to resolve this issue, please feel free to respond to this email and
-Greg will reply once he has dug out from the pending patches received
-from other developers.
+>
+> Best regards // John Ernberg
 
-thanks,
 
-greg k-h's patch email bot
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |

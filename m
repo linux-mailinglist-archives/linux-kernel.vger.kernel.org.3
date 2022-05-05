@@ -2,67 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6673851B5EA
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 04:28:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D602251B5F0
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 04:29:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239229AbiEEC33 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 22:29:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34724 "EHLO
+        id S239251AbiEECcK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 22:32:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239350AbiEEC3F (ORCPT
+        with ESMTP id S232555AbiEECcJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 22:29:05 -0400
-Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EE2713D34
-        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 19:25:26 -0700 (PDT)
-Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-d6e29fb3d7so3033391fac.7
-        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 19:25:26 -0700 (PDT)
+        Wed, 4 May 2022 22:32:09 -0400
+Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44A9326114
+        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 19:28:31 -0700 (PDT)
+Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-2f16645872fso34867357b3.4
+        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 19:28:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=28CuiJ6+N6QUrU1lecqpYcX63v6ThU0X4857o5oV5io=;
-        b=zYYJ4gxCz7Rlz1zA3z1mWjWcihgkxm223I46Ok5Nm9lfnRKOyEEWMzZ6+ESXn97qlW
-         IV5hv9zyswRHnyt0KToA+32MD4BUanp/HMkpULfd1PsPCV9/mXLgQzydj1pmum//cPww
-         KK1AFty7kGbDelttsupxw2rFMxaAHA3iETvL5zL0yV6FW7hfRxgKNaL5sh3FpCd3rSfo
-         ZCSH59wvQxiEHX/iwhgUVeQUFOq4dNKe8BTMTlFm+6F2CUmxrMYfZG6RKf+wmHgr8uTT
-         9CInciSk2RVv4qadDtYCs9fBq0QFLbQiaZCQa8Km2Ae9CxJJvxSGT699bM0dtGdb7wQg
-         kibQ==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=ymlQRBpbYvXfEl3HIzC/QEtILJ6ojNtKv+z7A5wo/TI=;
+        b=U242DbqhzCK4g4VSNlslMqq5Fqo4ervJvNF0hvQnQrOZ/O1TJV3KZo/+kDs+wpgXEG
+         95shw2d3u2JWAL4Tsethn+pYTshHBtdWcNp/r28P2LNIZEqnTXuGh1F93kRkHbz0Kh07
+         8+1HePMQGrfJ6QT9a8DdXgmZ4hLnE8AnafRc/D+Dt93c9+LUimH96SNRks3/6MK/rMNX
+         AHgNFXhFihCdjOnEjX8eto80htaPKJX/DpMch5PLCiUdq1A9M+WriFQ08RBO11cjq0E2
+         PwKRhaRJThoHmo2iP8FfGaFO+YRPw96RW80SUrsB3uCwJWsuHGKxq9Qj4a9m5+Aqd1Wl
+         wdTg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=28CuiJ6+N6QUrU1lecqpYcX63v6ThU0X4857o5oV5io=;
-        b=0TPBUqeKE1KU2ol5hTNOF9ZFgBhUuIReZJH5mTw7JBLrz4qOb1ZUzy6JrkpYc8HuBv
-         3BVmP0IfY4mwHeauKbly0x0W6BdcGbk8UtqSNnzpQ3uop+WBNviR+wBgqaQKAFuuGJQh
-         sJAhCYGX+3I040cUM2Y6plusVO8jFY5pQ4xMEW84Z3lShzOBqnVbEM7R/hTWuV4HYljk
-         9qb4wpuQPe0ei+S8SBRT1mH/Cq+So1rrach24AgG+3eA8OXoz957B3WyhII2wPFNLk/4
-         uJ/dA/5QmKnsSkFv2KGj5xKC/JEiFlEKriPAkmK0SW+tOcyKXwC8hkNwFN1KirpLgMtv
-         8Q/w==
-X-Gm-Message-State: AOAM533y0+fPw1pMIs633kj/pCYWcIuQ62RgAdzh+Q+aEMmCCSq6zhg6
-        wLzrGVKI4DTYuzCjcKVTkWQvUQ==
-X-Google-Smtp-Source: ABdhPJxktucYGoCB9lE0eXnZHIeEufCSHbz5dVcWr/o3lmQYRbhh11iXphH+jQ0Mt95gTCSGsIkxWg==
-X-Received: by 2002:a05:6870:1807:b0:d7:2a4c:14b8 with SMTP id t7-20020a056870180700b000d72a4c14b8mr1217692oaf.97.1651717526028;
-        Wed, 04 May 2022 19:25:26 -0700 (PDT)
-Received: from ripper.. (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id n8-20020a0568080a0800b00325cda1ff8csm238296oij.11.2022.05.04.19.25.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 May 2022 19:25:25 -0700 (PDT)
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 4/4] arm64: dts: qcom: db820c: Add user LEDs
-Date:   Wed,  4 May 2022 19:27:06 -0700
-Message-Id: <20220505022706.1692554-5-bjorn.andersson@linaro.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220505022706.1692554-1-bjorn.andersson@linaro.org>
-References: <20220505022706.1692554-1-bjorn.andersson@linaro.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=ymlQRBpbYvXfEl3HIzC/QEtILJ6ojNtKv+z7A5wo/TI=;
+        b=ZlJpQ5rnsNLwocbmhPaD9DsZi5LrvpQeu5bwgCxNUWzE7LwjAmJSvzkvUnCsMBltcX
+         eaeo/53I8rWCMfb2vqtsXPpUo211HL2IjZbsRNp6V4rn9h3bK9ZKeUL6VyyjSmdEWuvj
+         COyIC4ZqRU22+tk4V2DDmGe5Hg0cftu9sOQE6djjREwTJf3Fugu2ZDImc10EIkZYHCd/
+         ThMpyYKPNE3xFAdcvw8lFTtW0iTuAT39A3D7ZFiIrcQEwCNzL0Hv4YTcSG4Qj8t7h/1y
+         O/TLwI9ZTuCSMX8iClnhwFcEdac/Ou7X/UBWmhcQRG/bjZbVw9DmBIjnDAprkn1tZgsH
+         1w4w==
+X-Gm-Message-State: AOAM531pPDU3oWU7C6wE9PeIZpHE4zD1p/vJPB8pMGhV/pjo/w2Vfvow
+        iMARHkssfB946t8VS1E7Tbe6YZRwwq0Ren5qoTg16w==
+X-Google-Smtp-Source: ABdhPJxHFZWderjdQXAMhlRBz+1miG2x5VRcuiynmyoG5x4/Y6U0iKwvFR1JGJS2lb9GEQh9Md8FyqpXZLPt/+691sk=
+X-Received: by 2002:a81:23ce:0:b0:2f8:ad74:1185 with SMTP id
+ j197-20020a8123ce000000b002f8ad741185mr22174840ywj.120.1651717710328; Wed, 04
+ May 2022 19:28:30 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220504153110.096069935@linuxfoundation.org>
+In-Reply-To: <20220504153110.096069935@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Thu, 5 May 2022 07:58:19 +0530
+Message-ID: <CA+G9fYufCiCBuY4qDSnbdzDpwtMZpX96ROC8iYNvpO1w2=mxHA@mail.gmail.com>
+Subject: Re: [PATCH 5.17 000/225] 5.17.6-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,92 +73,198 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The db820c has 4 "user LEDs", all connected to the PMI8994. The first
-three are connected to the three current sinks provided by the TRILED
-and the fourth is connected to MPP2.
+On Wed, 4 May 2022 at 22:25, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.17.6 release.
+> There are 225 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Fri, 06 May 2022 15:25:19 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
+5.17.6-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-5.17.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-By utilizing the DTEST bus the MPP is fed the control signal from the
-fourth LPG block, providing a consistent interface to the user.
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
----
- arch/arm64/boot/dts/qcom/apq8096-db820c.dts | 56 +++++++++++++++++++++
- 1 file changed, 56 insertions(+)
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-diff --git a/arch/arm64/boot/dts/qcom/apq8096-db820c.dts b/arch/arm64/boot/dts/qcom/apq8096-db820c.dts
-index 56e54ce4d10e..e9039e68a095 100644
---- a/arch/arm64/boot/dts/qcom/apq8096-db820c.dts
-+++ b/arch/arm64/boot/dts/qcom/apq8096-db820c.dts
-@@ -10,6 +10,7 @@
- #include "pmi8994.dtsi"
- #include <dt-bindings/input/input.h>
- #include <dt-bindings/gpio/gpio.h>
-+#include <dt-bindings/leds/common.h>
- #include <dt-bindings/pinctrl/qcom,pmic-gpio.h>
- #include <dt-bindings/sound/qcom,q6afe.h>
- #include <dt-bindings/sound/qcom,q6asm.h>
-@@ -683,6 +684,61 @@ pinconf {
- 	};
- };
- 
-+&pmi8994_lpg {
-+	qcom,power-source = <1>;
-+
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pmi8994_mpp2_userled4>;
-+
-+	qcom,dtest = <0 0>,
-+		     <0 0>,
-+		     <0 0>,
-+		     <4 1>;
-+
-+	status = "okay";
-+
-+	led@1 {
-+		reg = <1>;
-+		color = <LED_COLOR_ID_GREEN>;
-+		function = LED_FUNCTION_HEARTBEAT;
-+		function-enumerator = <1>;
-+
-+		linux,default-trigger = "heartbeat";
-+		default-state = "on";
-+	};
-+
-+	led@2 {
-+		reg = <2>;
-+		color = <LED_COLOR_ID_GREEN>;
-+		function = LED_FUNCTION_HEARTBEAT;
-+		function-enumerator = <0>;
-+	};
-+
-+	led@3 {
-+		reg = <3>;
-+		color = <LED_COLOR_ID_GREEN>;
-+		function = LED_FUNCTION_HEARTBEAT;
-+		function-enumerator = <2>;
-+	};
-+
-+	led@4 {
-+		reg = <4>;
-+		color = <LED_COLOR_ID_GREEN>;
-+		function = LED_FUNCTION_HEARTBEAT;
-+		function-enumerator = <3>;
-+	};
-+};
-+
-+&pmi8994_mpps {
-+	pmi8994_mpp2_userled4: mpp2-userled4-state {
-+		pins = "mpp2";
-+		function = "sink";
-+
-+		output-low;
-+		qcom,dtest = <4>;
-+	};
-+};
-+
- &pmi8994_spmi_regulators {
- 	vdd_s2-supply = <&vph_pwr>;
- 
--- 
-2.35.1
+NOTE:
+Following deadlock warning noticed on stable rc 5.17.6-rc1 kernel.
+This has been reported 3days back on mainline kernel [1]
+Please find full log details [2] & [3].
 
+[   11.893309] remoteproc remoteproc1: Direct firmware load for
+qcom/sdm845/cdsp.mbn failed with error -2
+[   11.896749]        CPU0
+[   11.896752]        ----
+[   11.896753]   lock(&irq_desc_lock_class);
+[   11.896759]   lock(&irq_desc_lock_class);
+[   11.896764]
+[   11.896764]  *** DEADLOCK ***
+
+
+## Build
+* kernel: 5.17.6-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-5.17.y
+* git commit: d7a9320891735782606dab06b81711f1ea6fdff6
+* git describe: v5.17.5-226-gd7a932089173
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.17.y/build/v5.17=
+.5-226-gd7a932089173
+
+## Test Regressions (compared to v5.17.5-2-gb59a5f68feee)
+No test regressions found.
+
+## Metric Regressions (compared to v5.17.5-2-gb59a5f68feee)
+No metric regressions found.
+
+## Test Fixes (compared to v5.17.5-2-gb59a5f68feee)
+No test fixes found.
+
+## Metric Fixes (compared to v5.17.5-2-gb59a5f68feee)
+No metric fixes found.
+
+## Test result summary
+total: 104616, pass: 88616, fail: 743, skip: 14152, xfail: 1105
+
+## Build Summary
+* arc: 10 total, 10 passed, 0 failed
+* arm: 291 total, 291 passed, 0 failed
+* arm64: 41 total, 41 passed, 0 failed
+* i386: 39 total, 39 passed, 0 failed
+* mips: 37 total, 37 passed, 0 failed
+* parisc: 12 total, 12 passed, 0 failed
+* powerpc: 60 total, 54 passed, 6 failed
+* riscv: 27 total, 22 passed, 5 failed
+* s390: 21 total, 21 passed, 0 failed
+* sh: 24 total, 24 passed, 0 failed
+* sparc: 12 total, 12 passed, 0 failed
+* x86_64: 41 total, 41 passed, 0 failed
+
+## Test suites summary
+* 1[
+* fwts
+* igt-gpu-tools
+* kselftest-android
+* kselftest-arm64
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-net
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* linux-log-parser
+* ltp-cap_bounds-tests
+* ltp-commands-tests
+* ltp-containers-tests
+* ltp-controllers-tests
+* ltp-cpuhotplug-tests
+* ltp-crypto-tests
+* ltp-cve-tests
+* ltp-dio-tests
+* ltp-fcntl-locktests-tests
+* ltp-filecaps-tests
+* ltp-fs-tests
+* ltp-fs_bind-tests
+* ltp-fs_perms_simple-tests
+* ltp-fsx-tests
+* ltp-hugetlb-tests
+* ltp-io-tests
+* ltp-ipc-tests
+* ltp-math-tests
+* ltp-mm-tests
+* ltp-nptl-tests
+* ltp-open-posix-tests
+* ltp-pty-tests
+* ltp-sched-tests
+* ltp-securebits-tests
+* ltp-syscalls-tests
+* ltp-tracing-tests
+* network-basic-tests
+* packetdrill
+* perf
+* prep-inline/Zstd-perf.data-compression
+* rcutorture
+* ssuite
+* v4l2-compliance
+* vdso
+
+
+Upstream reported link,
+[1] https://lore.kernel.org/all/CA+G9fYuBNB+iuVLFG4t-=3D5fsRsPdeXSSafkQECf3=
+53VxikmW-w@mail.gmail.com/
+
+Full test link:
+[2] https://lkft.validation.linaro.org/scheduler/job/4989879#L3314
+[3] https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.17.y/build/v=
+5.17.5-226-gd7a932089173/testrun/9354932/suite/linux-log-parser/test/check-=
+kernel-warning-4989879/log
+
+
+--
+Linaro LKFT
+https://lkft.linaro.org

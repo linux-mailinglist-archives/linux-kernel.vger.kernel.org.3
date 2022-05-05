@@ -2,164 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0B9E51CA8B
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 22:25:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B484E51CA86
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 22:24:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384858AbiEEU3H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 16:29:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44616 "EHLO
+        id S1385811AbiEEU17 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 16:27:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385817AbiEEU27 (ORCPT
+        with ESMTP id S1384858AbiEEU15 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 16:28:59 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 873FBDC2;
-        Thu,  5 May 2022 13:25:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=g9KS680sylr141Y7EFEPAHf/H7cuGajRNWijrXb2NGk=; b=ABt4kLuOw6w/JeQBMYDB1HqmPh
-        7LsM4idgjz8oEiH/lY4uWKnQbA8np9cAnGRSKVNzlcsZkMbXq8JMvJn23/GczC3WY4ph+1yf4PiR9
-        tl4PfCCQNTvpNKzM9gGyT7W5J8g39grZu8Q0P+yXo97p7YY7kD5bYctzi1BDZk8pu/YcsuLW3wVXi
-        ZoOoplw8mH6uB2sSZGIudCJN9DfeCYKe6qSTFZnNAzgw1Z73dq69CM6uF1MQZgwuhCqDzX+t0c4rk
-        RHk0ldr8EoeFvIq46Y550Rdbp/kG0p9RLHBlZBqO/cZqV4m49cVgPKOGRr4vRKi/MUcvV/FXDP2/7
-        14S7i+8Q==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nmhz0-00BSux-7P; Thu, 05 May 2022 20:22:47 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 68A7A980EF5; Thu,  5 May 2022 22:21:52 +0200 (CEST)
-Date:   Thu, 5 May 2022 22:21:52 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     "Luck, Tony" <tony.luck@intel.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>, hdegoede@redhat.com,
-        markgross@kernel.org, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        corbet@lwn.net, gregkh@linuxfoundation.org,
-        andriy.shevchenko@linux.intel.com, jithu.joseph@intel.com,
-        ashok.raj@intel.com, rostedt@goodmis.org, dan.j.williams@intel.com,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org, patches@lists.linux.dev,
-        ravi.v.shankar@intel.com
-Subject: Re: [PATCH v5 07/10] platform/x86/intel/ifs: Add scan test support
-Message-ID: <20220505202152.GF2501@worktop.programming.kicks-ass.net>
-References: <20220422200219.2843823-1-tony.luck@intel.com>
- <20220428153849.295779-1-tony.luck@intel.com>
- <20220428153849.295779-8-tony.luck@intel.com>
- <87r159jxaq.ffs@tglx>
- <YnLLekoripdY2oQU@agluck-desk3.sc.intel.com>
- <87tua4j3es.ffs@tglx>
- <20220505082824.GD2501@worktop.programming.kicks-ass.net>
- <87bkwcic9k.ffs@tglx>
- <YnQYJIVC0scuL7D7@agluck-desk3.sc.intel.com>
+        Thu, 5 May 2022 16:27:57 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.74])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C98CC5F8E0;
+        Thu,  5 May 2022 13:24:13 -0700 (PDT)
+Received: from leknes.fjasle.eu ([46.142.98.182]) by mrelayeu.kundenserver.de
+ (mreue107 [212.227.15.183]) with ESMTPSA (Nemesis) id
+ 1Mz9EL-1o0vC22a9b-00wFu7; Thu, 05 May 2022 22:22:53 +0200
+Received: by leknes.fjasle.eu (Postfix, from userid 1000)
+        id 9326E3C088; Thu,  5 May 2022 22:22:49 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=fjasle.eu; s=mail;
+        t=1651782169; bh=gLnf95DDjaMYGCRgX6K1aWAnNa4DMAQkns7Hsushh60=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=P5JqnzKqtCgrYbwEuOhr7agnhA9+gQXyvraZM/aNsViPYwCcmXRoB0dY8HOQW2LE5
+         kRtHvppRbVwP87SX7/jDtlvgKxxbcffwdHVginnFLXVfXr1beojclNn2h078mxS1z1
+         9QMmT/PWzqeujd3d3jGPQuxQtQuuSt//isIYhAZI=
+Date:   Thu, 5 May 2022 22:22:49 +0200
+From:   Nicolas Schier <nicolas@fjasle.eu>
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     linux-kbuild@vger.kernel.org, clang-built-linux@googlegroups.com,
+        linux-kernel@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linuxppc-dev@lists.ozlabs.org, linux-um@lists.infradead.org,
+        linux-s390@vger.kernel.org,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Kees Cook <keescook@chromium.org>
+Subject: Re: [PATCH v3 10/15] genksyms: adjust the output format to modpost
+Message-ID: <YnQyGUlhvUIZwoNy@fjasle.eu>
+References: <20220505072244.1155033-1-masahiroy@kernel.org>
+ <20220505072244.1155033-11-masahiroy@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YnQYJIVC0scuL7D7@agluck-desk3.sc.intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220505072244.1155033-11-masahiroy@kernel.org>
+X-Provags-ID: V03:K1:RUI2NxERijqBLuHI7G+nXGlaQN7ojuvdXw0yIKPmaAmlM/WXDvD
+ z+undfnS5/BQmDavRN0dHs0z6ogRT8PP96LkZFU2gGTqewRhjkyZjh4El221JnzIHz6JwSJ
+ FIhTrT6LlR9hlmohtlQUd6uMFu6QJ7kd2iTahnc9SV5tIegCWreRierRRGI87knT1tQKDev
+ 5SuWioT/YknSjZKC8ulFg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:jxZ5y2jNwbs=:j0VaPvAClzfPiR1zMMPS2V
+ 4Blib3kzqTqZt1lgsARx53lSLe9k1NMGOsYT5OVcHQu4avv8lOHyCqM9ge5kRBsupEaTAiEDp
+ YZvw50YwnVmqQi2z5eHO7+xqfM2iaEAj8EwyYJV5eiCo34hRU0J2uw6Ci3L0x4cOjIIPgx9/1
+ zrcgC0WyzTJt9xSdNOKt0ektBE71fExhkTfIvbB1iEOfhOHXpF8jd0Ymtb0E8gOpN5eWtnVnB
+ wG6sDDKzE74ixKhLuiFNjzicAIlE4GuGpkzVaBidxwpjMmDm2UeZrWYuJPKY7s/x3CCknfg/8
+ WZn/PYyJjRa3LU9540K7cbgLBLPtalY1P8OwfhLXDst1Rjrb4WzFa3YuV+2aw6QjxcQr99jxo
+ YrA1gYvz6DCU9L+AZTrv+JYfyE7wGJqgW+qy11WUnp1Gobv3OoFfQOBFfqELZonNPBSZ4eE4U
+ XtlQV1ubC6gXN8m7nhZY3WwKKOswQGQ+cfwMy9MkT95n+ctFcpxNJrqVNM4T+3z6t8srLnLiu
+ 0/Mwgj0E1+RWwtUWEpRSSLSBj7QOBfYMDywGzq5JMDZQbXNiB5yMXV7TM7WvPZVi2iO3EYdQQ
+ 6TMgU4M620I5XBRPj1A7DVrOvt4A/uVy2Y44MtohxyNtOCaq4srTazIQazf69a2RHeiYwmpaJ
+ gyM61KOlwm1QMxusvpBmDh/WQ4qBNSIr1JDl4Ir2cAq1H3uxxCTd6skGJOE975VRrmMw=
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 05, 2022 at 11:32:04AM -0700, Luck, Tony wrote:
-
-> Patch now looks like this. Author credit to Peter ... are you willing
-> to add a Signed-off-by to stop checkpatch from whining at me?
-
-sure, see below.
-
-> There isn't a "Something-similar-suggested-by:" tag to credit Thomas
-> with this.  Perhaps "Inspired-by:"?
-
-I'm all for creative one off tags, there's some marvelous ones in the
-tree, but we always need more :-)
-
-> -Tony
+On Thu, May 05, 2022 at 04:22:39PM +0900 Masahiro Yamada wrote:
+> Make genksyms output symbol versions in the format modpost expects,
+> so the 'sed' is unneeded.
 > 
+> This commit makes *.symversions completely unneeded.
 > 
-> From df5ca8024997d3d782978d154cfbff5147f451ad Mon Sep 17 00:00:00 2001
-> From: Peter Zijlstra <peterz@infradead.org>
-> Date: Thu, 5 May 2022 08:55:09 -0700
-> Subject: [PATCH] stop_machine: Add stop_core_cpuslocked() for per-core
->  operations
+> I will keep *.symversions in .gitignore and 'make clean' for a while.
+> Otherwise, some people might be upset with 'git status'.
 > 
-> Hardware core level testing features require near simultaneous execution
-> of WRMSR instructions on all threads of a core to initiate a test.
-> 
-> Provide a customized cut down version of stop_machine_cpuslocked() that
-> just operates on the threads of a single core.
-> 
-Suggested-by: Thomas Gleixner <tglx@linutronix.de>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> Signed-off-by: Tony Luck <tony.luck@intel.com>
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 > ---
->  include/linux/stop_machine.h | 16 ++++++++++++++++
->  kernel/stop_machine.c        | 19 +++++++++++++++++++
->  2 files changed, 35 insertions(+)
 > 
-> diff --git a/include/linux/stop_machine.h b/include/linux/stop_machine.h
-> index 46fb3ebdd16e..ea7a74ea7389 100644
-> --- a/include/linux/stop_machine.h
-> +++ b/include/linux/stop_machine.h
-> @@ -124,6 +124,22 @@ int stop_machine(cpu_stop_fn_t fn, void *data, const struct cpumask *cpus);
->   */
->  int stop_machine_cpuslocked(cpu_stop_fn_t fn, void *data, const struct cpumask *cpus);
+> (no changes since v2)
+> 
+> Changes in v2:
+>   - New patch
+> 
+>  scripts/Makefile.build      | 6 ------
+>  scripts/genksyms/genksyms.c | 3 +--
+>  2 files changed, 1 insertion(+), 8 deletions(-)
+> 
+> diff --git a/scripts/Makefile.build b/scripts/Makefile.build
+> index dff9220135c4..461998a2ad2b 100644
+> --- a/scripts/Makefile.build
+> +++ b/scripts/Makefile.build
+> @@ -165,16 +165,10 @@ ifdef CONFIG_MODVERSIONS
+>  # o modpost will extract versions from that file and create *.c files that will
+>  #   be compiled and linked to the kernel and/or modules.
 >  
-> +/**
-> + * stop_core_cpuslocked: - stop all threads on just one core
-> + * @cpu: any cpu in the targeted core
-> + * @fn: the function to run
-> + * @data: the data ptr for @fn()
-> + *
-> + * Same as above, but instead of every CPU, only the logical CPUs of a
-> + * single core are affected.
-> + *
-> + * Context: Must be called from within a cpus_read_lock() protected region.
-> + *
-> + * Return: 0 if all executions of @fn returned 0, any non zero return
-> + * value if any returned non zero.
-> + */
-> +int stop_core_cpuslocked(unsigned int cpu, cpu_stop_fn_t fn, void *data);
-> +
->  int stop_machine_from_inactive_cpu(cpu_stop_fn_t fn, void *data,
->  				   const struct cpumask *cpus);
->  #else	/* CONFIG_SMP || CONFIG_HOTPLUG_CPU */
-> diff --git a/kernel/stop_machine.c b/kernel/stop_machine.c
-> index cbc30271ea4d..579761729836 100644
-> --- a/kernel/stop_machine.c
-> +++ b/kernel/stop_machine.c
-> @@ -633,6 +633,25 @@ int stop_machine(cpu_stop_fn_t fn, void *data, const struct cpumask *cpus)
+> -genksyms_format := __crc_\(.*\) = \(.*\);
+> -
+>  gen_symversions =								\
+>  	if $(NM) $@ 2>/dev/null | grep -q __ksymtab; then			\
+>  		$(call cmd_gensymtypes_$(1),$(KBUILD_SYMTYPES),$(@:.o=.symtypes)) \
+> -		    > $@.symversions;						\
+> -		sed -n 's/$(genksyms_format)/$(pound)SYMVER \1 \2/p' $@.symversions \
+>  			>> $(dot-target).cmd;					\
+> -	else									\
+> -		rm -f $@.symversions;						\
+>  	fi
+>  
+>  cmd_gen_symversions_c =	$(call gen_symversions,c)
+> diff --git a/scripts/genksyms/genksyms.c b/scripts/genksyms/genksyms.c
+> index 6e6933ae7911..f5dfdb9d80e9 100644
+> --- a/scripts/genksyms/genksyms.c
+> +++ b/scripts/genksyms/genksyms.c
+> @@ -680,8 +680,7 @@ void export_symbol(const char *name)
+>  		if (flag_dump_defs)
+>  			fputs(">\n", debugfile);
+>  
+> -		/* Used as a linker script. */
+> -		printf("__crc_%s = 0x%08lx;\n", name, crc);
+> +		printf("#SYMVER %s 0x%08lx\n", name, crc);
+>  	}
 >  }
->  EXPORT_SYMBOL_GPL(stop_machine);
 >  
-> +int stop_core_cpuslocked(unsigned int cpu, cpu_stop_fn_t fn, void *data)
-> +{
-> +	const struct cpumask *smt_mask = cpu_smt_mask(cpu);
-> +
-> +	struct multi_stop_data msdata = {
-> +		.fn = fn,
-> +		.data = data,
-> +		.num_threads = cpumask_weight(smt_mask),
-> +		.active_cpus = smt_mask,
-> +	};
-> +
-> +	lockdep_assert_cpus_held();
-> +
-> +	/* Set the initial state and stop all online cpus. */
-> +	set_state(&msdata, MULTI_STOP_PREPARE);
-> +	return stop_cpus(smt_mask, multi_cpu_stop, &msdata);
-> +}
-> +EXPORT_SYMBOL_GPL(stop_core_cpuslocked);
-> +
->  /**
->   * stop_machine_from_inactive_cpu - stop_machine() from inactive CPU
->   * @fn: the function to run
 > -- 
-> 2.35.1
-> 
+> 2.32.0
+
+Reviewed-by: Nicolas Schier <nicolas@fjasle.eu>

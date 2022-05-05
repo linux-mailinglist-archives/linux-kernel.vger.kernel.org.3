@@ -2,55 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0938951C324
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 16:59:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 615AC51C332
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 17:00:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380935AbiEEPDO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 11:03:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51704 "EHLO
+        id S233933AbiEEPDh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 11:03:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233400AbiEEPDJ (ORCPT
+        with ESMTP id S233400AbiEEPDe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 11:03:09 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90A9C5A15F;
-        Thu,  5 May 2022 07:59:29 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id A7CF21F458A2
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1651762768;
-        bh=Sf7k/0OhMAAsnIEczTQGZSW4QzFAgs4S4sdWB28tCLI=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=JAYFAOPLuOcHT2NGoHGyAtRuK2Sg0/UD1HLKA8CEtiAdnyt2Ev+IbRuSbTWb4zhOh
-         a/VJysDId5WYcUfYdr7HmbAnVOw/pTJkLkhWZwB4aUXqxZiDY4brtTOtc/fTimUePy
-         8NN9vpeqgkcSR1ISUt56zn0dJW0w8ItJAfhsyL4VCXXlcSgA9M9Fp/eFSksxnRaxun
-         K65YRx+zSa5wyp3B6pXw1toIV7w6tQTmNbzKPriedDekfHmJjM4LPZA80X1PUZHApt
-         0/3J96n3qWRD/ncurNnqgwjqdy4hwIWbE+VeX2URuD5M00+lF9375ZRIcysbhCW5vO
-         CrTuwLvX8hGKg==
-Message-ID: <eb0cd3f6-6248-0494-9a5d-297c2247a4c4@collabora.com>
-Date:   Thu, 5 May 2022 16:59:25 +0200
+        Thu, 5 May 2022 11:03:34 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A1C25A15F;
+        Thu,  5 May 2022 07:59:55 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B827661CC5;
+        Thu,  5 May 2022 14:59:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2171EC385BA;
+        Thu,  5 May 2022 14:59:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651762794;
+        bh=IhPlTG/RSP+SotNFea7Fr39MZz0OjsoIPseiihaGxkc=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=skKE7CkSWJipKAwKJCBrR71hl9l5yOYjQoARS41ioF8PPh7bxColWxsD4vdtmnrMC
+         mQBIqAunoSnIAL+eTFw6a87TENu1OZL3J0unpwvAapDjehQbL4dIYPVxYDr5E0f8H2
+         2Ut88XHuXmqK6oXMnJsfP9eSc86Q5HJlHS7nBYfK8IZe39hShNsGm5F+uG6l3Ohx8q
+         Y2qhl3pfwWmUs7JTRVGH5vJD27kQLOf6she+YLgBmzISzF3PWnvMRiH84FZiN5pT9f
+         vZW1FeaKkpy+VomhCOcOZ66ZN31g3fbgxTh0Rr9f2+J3tXb9yK6yeSyrs1M6tkoYJl
+         i07arWsPlHMPw==
+Received: by mail-wr1-f47.google.com with SMTP id e2so6474486wrh.7;
+        Thu, 05 May 2022 07:59:54 -0700 (PDT)
+X-Gm-Message-State: AOAM530MYMU8o7FNtrhlIEiSgBAJYTWan5euWHydKoFdBgiQSVdyQ1Ay
+        JyrECOUz9sQ7Dzw/+vBjIHbF09LRhwsqD32VXeM=
+X-Google-Smtp-Source: ABdhPJyKl/lyubFIqlgFQkig5zNAs/zvVqV8InTOhcfpAoriY4j8URNODYiLewygje3f2WDNulvuU9Rfg/N1L0FjaiU=
+X-Received: by 2002:a05:6000:707:b0:20c:4fd8:1d61 with SMTP id
+ bs7-20020a056000070700b0020c4fd81d61mr21866057wrb.407.1651762791921; Thu, 05
+ May 2022 07:59:51 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [RESEND v2] dt-bindings: gce: add the GCE header file for MT8186
-Content-Language: en-US
-To:     Rex-BC Chen <rex-bc.chen@mediatek.com>, jassisinghbrar@gmail.com,
-        robh+dt@kernel.org
-Cc:     jaswinder.singh@linaro.org, matthias.bgg@gmail.com,
-        yongqiang.niu@mediatek.com, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <20220505034820.12759-1-rex-bc.chen@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220505034820.12759-1-rex-bc.chen@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+References: <20220419163810.2118169-1-arnd@kernel.org> <20220419163810.2118169-19-arnd@kernel.org>
+ <CACRpkdac8dGKSEmc-HpgooJefrDtiKK+_A1Mv7AJM8yQV9UY-w@mail.gmail.com>
+ <CAK8P3a0w3gFzZoBzyRsi1Ta4prESf8Fp0=quAPSKMnaXvbXNTQ@mail.gmail.com>
+ <CACRpkdZNryYkidvdKuT57RM3fz6_X+3oOzF5xaOZd+TyScfUsw@mail.gmail.com>
+ <CAK8P3a0y0tVZODpp+GSf0EkMPWbbvMqA-4kNf0NJMc0M2=2WHw@mail.gmail.com>
+ <CACRpkdaNRX0RDYJd_uaGo5jtiXu_qGHmEDGniaCmR=TZvcHH8A@mail.gmail.com> <YnPhna5h1+kQGFLa@sirena.org.uk>
+In-Reply-To: <YnPhna5h1+kQGFLa@sirena.org.uk>
+From:   Arnd Bergmann <arnd@kernel.org>
+Date:   Thu, 5 May 2022 16:59:35 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a2cYUYMKSMo3VOLVTO0=LWc0sHf72Eph8t_es9axo_eeA@mail.gmail.com>
+Message-ID: <CAK8P3a2cYUYMKSMo3VOLVTO0=LWc0sHf72Eph8t_es9axo_eeA@mail.gmail.com>
+Subject: Re: [PATCH 18/48] ARM: pxa: hx4700: use gpio descriptors for audio
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Arnd Bergmann <arnd@arndb.de>, Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Marek Vasut <marek.vasut@gmail.com>,
+        Philipp Zabel <philipp.zabel@gmail.com>,
+        Lubomir Rintel <lkundrak@v3.sk>,
+        Paul Parsons <lost.distance@yahoo.com>,
+        Tomas Cech <sleep_walker@suse.com>,
+        Sergey Lapin <slapin@ossfans.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Helge Deller <deller@gmx.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        IDE-ML <linux-ide@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
+        patches@opensource.cirrus.com, linux-leds@vger.kernel.org,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        linux-mtd <linux-mtd@lists.infradead.org>,
+        linux-rtc@vger.kernel.org, USB list <linux-usb@vger.kernel.org>,
+        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        ALSA Development Mailing List <alsa-devel@alsa-project.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,14 +98,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 05/05/22 05:48, Rex-BC Chen ha scritto:
-> From: Yongqiang Niu <yongqiang.niu@mediatek.com>
-> 
-> Add the GCE header file to define GCE subsys ids, hardware event ids
-> and constants for MT8186.
-> 
-> Signed-off-by: Yongqiang Niu <yongqiang.niu@mediatek.com>
-> Acked-by: Rob Herring <robh@kernel.org>
+On Thu, May 5, 2022 at 4:39 PM Mark Brown <broonie@kernel.org> wrote:
+> On Thu, May 05, 2022 at 04:33:06PM +0200, Linus Walleij wrote:
+> > On Thu, May 5, 2022 at 8:04 AM Arnd Bergmann <arnd@kernel.org> wrote:
+>
+> > > /* Headphones jack detection DAPM pin */
+> > > static struct snd_soc_jack_pin hs_jack_pin[] = {
+> > >         {
+> > >                 .pin    = "Headphone Jack",
+> > >                 .mask   = SND_JACK_HEADPHONE,
+> > >         },
+> > >         {
+> > >                 .pin    = "Speaker",
+> > >                 /* disable speaker when hp jack is inserted */
+> > >                 .mask   = SND_JACK_HEADPHONE,
+> > >                 .invert = 1,
+> > >         },
+>
+> > Hm some ASoC thingie. No idea what that is, but I suppose another
+> > place where a subsystem for legacy reasons try to do the gpiolib
+> > inversion on it's own accord. That one isn't flagged as active low in the
+> > descriptor so it's fine I guess.
+>
+> It's saying that when the headphone is inserted the headphone output
+> should be enabled and the speaker output should be disabled, and vice
+> versa.
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Ok, that sounds like I should remove the flag here if I declare the
+GPIO line as GPIO_ACTIVE_LOW instead of GPIO_ACTIVE_HIGH, right?
 
+         Arnd

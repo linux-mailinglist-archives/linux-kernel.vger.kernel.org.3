@@ -2,75 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D97C951BE0E
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 13:32:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8513151BE13
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 13:32:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357369AbiEELf2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 07:35:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35560 "EHLO
+        id S1357543AbiEELfk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 07:35:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355141AbiEELfU (ORCPT
+        with ESMTP id S1357342AbiEELfY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 07:35:20 -0400
-Received: from us-smtp-delivery-74.mimecast.com (us-smtp-delivery-74.mimecast.com [170.10.133.74])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 47B5E25C54
-        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 04:31:40 -0700 (PDT)
+        Thu, 5 May 2022 07:35:24 -0400
+Received: from us-smtp-delivery-74.mimecast.com (us-smtp-delivery-74.mimecast.com [170.10.129.74])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5DB9D25C44
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 04:31:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651750299;
+        s=mimecast20190719; t=1651750303;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=bN3Uh2LhXlJZ1HGDsbuHnMTmS7+4/Zex2TjyKUB51Mw=;
-        b=YcDRqyWyCtbpyZrLZRnmxi7eomj1ajrMnXXw3S64gMeEfdUsPMkftHS1gBlpDySmDhSEe+
-        TCdT7AIWF5/U1eCszLRoMgs8UlZ4dRT/KicJXkARYx0jf/uw2VViHjT/xxe/3Uyx8k9eP6
-        p7DUlwbS2ZFKNIck5ol/og/JhHnwvXc=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ncwUrPXa6D//xAE+gUKX4W9jlEJvsWNrctcaxVQSCb8=;
+        b=h6ipqcuK2WSU7j9avNOGI+pZ19FNbegkvj/ZZVq4SdL/ExB2cvOJoA0I2LGqEExndhlhQC
+        E5ckoHdGmi3wKTh4nF+e1ZI+9L6XyOReqlt1Wj7impTDMm9HsgaZ1Ztw8V6PMtMszcNdUn
+        4sTwwQiRn9+XvrKy3gUghEPch4atmuE=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-324-0lIDF9mhOEOx5GTV-IQS1A-1; Thu, 05 May 2022 07:31:38 -0400
-X-MC-Unique: 0lIDF9mhOEOx5GTV-IQS1A-1
-Received: by mail-wm1-f70.google.com with SMTP id c62-20020a1c3541000000b0038ec265155fso4362443wma.6
-        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 04:31:38 -0700 (PDT)
+ us-mta-401-VF2-X5dTNzeNlOWMGnolBg-1; Thu, 05 May 2022 07:31:40 -0400
+X-MC-Unique: VF2-X5dTNzeNlOWMGnolBg-1
+Received: by mail-wr1-f70.google.com with SMTP id d28-20020adf9b9c000000b0020ad4a50e14so1356449wrc.3
+        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 04:31:39 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=bN3Uh2LhXlJZ1HGDsbuHnMTmS7+4/Zex2TjyKUB51Mw=;
-        b=QdHW84TqLyD9AXpQne3kaE3IXNIRlFjS60e11RmoZEUXm+w2n5p0T24uJrf5jkjpGj
-         nbba8kpdPSx8pe61s/tfh9Gqug1klJefbMVjJXIX+zsJbaf1sAV88uoHYYtFqdiWnIGp
-         r5+Ljw5+zm6I5Zf0ZjkFWM1hKElun++mjz/6RyxDTK+dCMEgIw16A+ZKqMqctw8hawRz
-         7YGc9geFTp5rKgaXR/e7nD/F2IsLcIsjYlgg5EFCVT3J0qJvyy/nAVnbuwG55K3rQq08
-         3CguXv43+1xvbaJi9p/pkxfptmGTyr8xlp1DAIij2sM2nMdWuAzQh1dUQuEBBTdBXzZe
-         EP3w==
-X-Gm-Message-State: AOAM531Sp/H2XpGdzI1bctm+46w9nGFt4IgaXWra0QgaySfxKzxmwb9K
-        KzICx4qtjmveQuAtCgSprVZQ3+rACUzPIv+IWHdiO2TZGjPFUDFJqWe/AbA6fr3NbkVPgNPIFZQ
-        I/RzyX49h8wb1FfNtXzoCUMRq3n8/4KfhPVbq2t7+lGnQHYzvlVALzqRjjysr24hL/0D4YEX4xt
-        k=
-X-Received: by 2002:a05:600c:1e8a:b0:394:a8:234 with SMTP id be10-20020a05600c1e8a00b0039400a80234mr4310556wmb.117.1651750296664;
-        Thu, 05 May 2022 04:31:36 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyYkJhU3npy2RP0EYd+TCS/YRsPqKFjNBTxwh4iOfYuxwgG9V/BfOG8Dx2RoPJjNmCfU8QlfQ==
-X-Received: by 2002:a05:600c:1e8a:b0:394:a8:234 with SMTP id be10-20020a05600c1e8a00b0039400a80234mr4310517wmb.117.1651750296280;
-        Thu, 05 May 2022 04:31:36 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=ncwUrPXa6D//xAE+gUKX4W9jlEJvsWNrctcaxVQSCb8=;
+        b=fu09bV349Z9KKfXSdl2/602R2dSxOWbIkcQ83y+p/RTsbuXcdBk9elKYTZfWB5TDdq
+         gyXBIQa2r0nEV7jPI5NxzhA2g4Qbg3EQTO8htViwVMG41vrH2Z4PuyaCK9IycuoA60vX
+         /Z2HkIy5nKC0FtFmDElYdy1XLDA3Boc+HF8zmReVD/5/2X8Nrz5tEDK3oLlmTCdlhOQT
+         DVKCFBwq6Ud8oTv3DQs4Ws8TgWUqkMfRtTl7c7l1UE233FE9EHnwffDocDvhtVYYpf+F
+         la0PiFIPFPdcaJeYewW8TTdEXcFqryDnZvPOAL1uc51aIKB7+AzpJcM+UE1TkYxzPwar
+         NMzw==
+X-Gm-Message-State: AOAM531QQCKz6QxWswdljL9HO2MbKJ0OO52jXw3kgG8cEfX8Eufwlbjk
+        kb4KYvyuN6cWde3MogT58pM6M/3uMLyzQe9ZlxS6IYkw8qm5deE+9zm9v5XvqWXUNIzWeSXn2yY
+        mE8R4p44y3ctK/dVAKTQc0wpyYK0B8xNE/V95xnFB/s9qhXJUCamCJY7NKi/GV7d/e/SY8jiyNY
+        Y=
+X-Received: by 2002:a7b:ce82:0:b0:394:2514:6f07 with SMTP id q2-20020a7bce82000000b0039425146f07mr4288650wmj.56.1651750298709;
+        Thu, 05 May 2022 04:31:38 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwTaX+emZRGME2XrbVDdeWq3PLdol9IHOXQKtajyniJm9UY0h9+OnzRg+JdW6I4XRxCo9UumA==
+X-Received: by 2002:a7b:ce82:0:b0:394:2514:6f07 with SMTP id q2-20020a7bce82000000b0039425146f07mr4288610wmj.56.1651750298397;
+        Thu, 05 May 2022 04:31:38 -0700 (PDT)
 Received: from minerva.. ([90.167.94.135])
-        by smtp.gmail.com with ESMTPSA id k1-20020a5d5181000000b0020c5253d8f5sm995809wrv.65.2022.05.05.04.31.35
+        by smtp.gmail.com with ESMTPSA id k1-20020a5d5181000000b0020c5253d8f5sm995809wrv.65.2022.05.05.04.31.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 May 2022 04:31:35 -0700 (PDT)
+        Thu, 05 May 2022 04:31:38 -0700 (PDT)
 From:   Javier Martinez Canillas <javierm@redhat.com>
 To:     linux-kernel@vger.kernel.org
-Cc:     Javier Martinez Canillas <javierm@redhat.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Helge Deller <deller@gmx.de>, Peter Jones <pjones@redhat.com>,
+Cc:     Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Daniel Vetter <daniel.vetter@intel.com>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Daniel Vetter <daniel@ffwll.ch>, Helge Deller <deller@gmx.de>,
         dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org
-Subject: [PATCH v2 0/4] fbdev: Fix use-after-free caused by wrong fb_info cleanup in drivers
-Date:   Thu,  5 May 2022 13:31:23 +0200
-Message-Id: <20220505113128.264963-1-javierm@redhat.com>
+Subject: [PATCH v2 1/4] fbdev: Prevent possible use-after-free in fb_release()
+Date:   Thu,  5 May 2022 13:31:24 +0200
+Message-Id: <20220505113128.264963-2-javierm@redhat.com>
 X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220505113128.264963-1-javierm@redhat.com>
+References: <20220505113128.264963-1-javierm@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,80 +82,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+From: Daniel Vetter <daniel.vetter@ffwll.ch>
 
-This series contains patches suggested by Daniel Vetter to fix a use-after-free
-error in the fb_release() function, due a fb_info associated with a fbdev being
-freed too early while a user-space process still has the fbdev dev node opened.
+Most fbdev drivers have issues with the fb_info lifetime, because call to
+framebuffer_release() from their driver's .remove callback, rather than
+doing from fbops.fb_destroy callback.
 
-That is caused by a wrong management of the struct fb_info lifetime in drivers,
-but the fbdev core can also be made more resilient about it an leak
+Doing that will destroy the fb_info too early, while references to it may
+still exist, leading to a use-after-free error.
 
-This can easily be reproduced with the simplefb driver doing the following:
+To prevent this, check the fb_info reference counter when attempting to
+kfree the data structure in framebuffer_release(). That will leak it but
+at least will prevent the mentioned error.
 
-$ cat < /dev/fb0 &
-$ echo simple-framebuffer.0 > /sys/bus/platform/drivers/simple-framebuffer/unbind
-$ kill %1
+Signed-off-by: Daniel Vetter <daniel.vetter@intel.com>
+Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
+Reviewed-by: Thomas Zimmermann <tzimmermann@suse.de>
+---
 
-[  257.490471] ------------[ cut here ]------------
-...
-[  257.495125] refcount_t: underflow; use-after-free.
-[  257.495222] WARNING: CPU: 0 PID: 975 at lib/refcount.c:28 refcount_warn_saturate+0xf4/0x144
-...
-[  257.637482] pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-[  257.644441] pc : refcount_warn_saturate+0xf4/0x144
-[  257.649226] lr : refcount_warn_saturate+0xf4/0x144
-[  257.654009] sp : ffff80000a06bbf0
-[  257.657315] x29: ffff80000a06bbf0 x28: 000000000000000a x27: 000000000000000a
-[  257.664448] x26: 0000000000000000 x25: ffff470b88c6a180 x24: 000000000000000a
-[  257.671581] x23: ffff470b81706480 x22: ffff470b808c2160 x21: ffff470b8922ba20
-[  257.678713] x20: ffff470b891f5810 x19: ffff470b891f5800 x18: ffffffffffffffff
-[  257.685846] x17: 3a725f7463656a62 x16: ffffbb18c6465fd4 x15: 0720072007200720
-[  257.692978] x14: 0720072d072d072d x13: 0a2e656572662d72 x12: 657466612d657375
-[  257.700110] x11: 203b776f6c667265 x10: 646e75203a745f74 x9 : ffffbb18c58f6c90
-[  257.707242] x8 : 75203b776f6c6672 x7 : 65646e75203a745f x6 : 0000000000000001
-[  257.714373] x5 : ffff470bff8ec418 x4 : 0000000000000000 x3 : 0000000000000027
-[  257.721506] x2 : 0000000000000000 x1 : 0000000000000027 x0 : 0000000000000026
-[  257.728638] Call trace:
-[  257.731075]  refcount_warn_saturate+0xf4/0x144
-[  257.735513]  put_fb_info+0x70/0x7c
-[  257.738916]  fb_release+0x60/0x74
-[  257.742225]  __fput+0x88/0x240
-[  257.745276]  ____fput+0x1c/0x30
-[  257.748410]  task_work_run+0xc4/0x21c
-[  257.752066]  do_exit+0x170/0x370
-[  257.755288]  do_group_exit+0x40/0xb4
-[  257.758858]  get_signal+0x8e0/0x90c
-[  257.762339]  do_signal+0x1a0/0x280
-[  257.765733]  do_notify_resume+0xc8/0x390
-[  257.769650]  el0_da+0xe8/0xf0
-[  257.772613]  el0t_64_sync_handler+0xe8/0x130
-[  257.776877]  el0t_64_sync+0x190/0x194
-[  257.780534] ---[ end trace 0000000000000000 ]---
+(no changes since v1)
 
-Patch #1 adds a WARN_ON() to framebuffer_release() to prevent the use-after-free
-to happen.
+ drivers/video/fbdev/core/fbsysfs.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Patch #2, #3 and #4 fix the simplefb, efifb and vesafb drivers respectively, to
-free the resources at the correct place.
-
-Changes in v2:
-- Also do the change for vesafb (Thomas Zimmermann).
-
-Daniel Vetter (1):
-  fbdev: Prevent possible use-after-free in fb_release()
-
-Javier Martinez Canillas (3):
-  fbdev: simplefb: Cleanup fb_info in .fb_destroy rather than .remove
-  fbdev: efifb: Cleanup fb_info in .fb_destroy rather than .remove
-  fbdev: vesafb: Cleanup fb_info in .fb_destroy rather than .remove
-
- drivers/video/fbdev/core/fbsysfs.c |  4 ++++
- drivers/video/fbdev/efifb.c        |  9 ++++++++-
- drivers/video/fbdev/simplefb.c     |  8 +++++++-
- drivers/video/fbdev/vesafb.c       | 14 +++++++++++---
- 4 files changed, 30 insertions(+), 5 deletions(-)
-
+diff --git a/drivers/video/fbdev/core/fbsysfs.c b/drivers/video/fbdev/core/fbsysfs.c
+index 8c1ee9ecec3d..c2a60b187467 100644
+--- a/drivers/video/fbdev/core/fbsysfs.c
++++ b/drivers/video/fbdev/core/fbsysfs.c
+@@ -80,6 +80,10 @@ void framebuffer_release(struct fb_info *info)
+ {
+ 	if (!info)
+ 		return;
++
++	if (WARN_ON(refcount_read(&info->count)))
++		return;
++
+ 	kfree(info->apertures);
+ 	kfree(info);
+ }
 -- 
 2.35.1
 

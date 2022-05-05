@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DD5B51BC0A
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 11:27:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 375FE51BC1C
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 11:29:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353490AbiEEJbM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 05:31:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43718 "EHLO
+        id S1353639AbiEEJb1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 05:31:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353375AbiEEJam (ORCPT
+        with ESMTP id S1353472AbiEEJau (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 05:30:42 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 032194C411;
-        Thu,  5 May 2022 02:27:02 -0700 (PDT)
+        Thu, 5 May 2022 05:30:50 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8C564EDED;
+        Thu,  5 May 2022 02:27:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1651742823; x=1683278823;
+  t=1651742827; x=1683278827;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version;
-  bh=ivtpQPArnDii4Ak4RagQBPep9wABiYjWaqMTgrBJNVU=;
-  b=rWM/qFOvqtOcImh4r85lV2po2Yw03igJu7gPVcLN+yyCps0Rurx0q2bp
-   bGqLHk/i0zC229x6e4oLusSyFEPvM1ymxaahbxn9gm8NDBP1zXhFN1qIY
-   ox40lqihrctv5neLuxSbi+5yRr5t0+bTTlGSLa7tnlJRoYS1v5B1r/5IS
+  bh=oNqAT14PeH8EIX0HW6o72oRLTcm0YTfwIHi0la7Zz1M=;
+  b=c8SQ+1C3EbFix3RG0lTYyYKZoZoMSql0JDho3yxXnrNHRRHvUp1zztY5
+   ljuwAMv9Xsow56dmNs6AMscOw3qZUe2qkiWi4gVPq6RVk14JzNfxWVY2P
+   Rd+McgeH+bKkUwHLIrUI+9L/wytWZVeltUCbInk+hGEedhg2aiCrN7P7a
    Q=;
-Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
-  by alexa-out.qualcomm.com with ESMTP; 05 May 2022 02:27:03 -0700
+Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 05 May 2022 02:27:07 -0700
 X-QCInternal: smtphost
 Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2022 02:27:02 -0700
+  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2022 02:27:07 -0700
 Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
  nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Thu, 5 May 2022 02:27:02 -0700
+ 15.2.986.22; Thu, 5 May 2022 02:27:07 -0700
 Received: from c-skakit-linux.qualcomm.com (10.80.80.8) by
  nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Thu, 5 May 2022 02:26:58 -0700
+ 15.2.986.22; Thu, 5 May 2022 02:27:02 -0700
 From:   Satya Priya <quic_c_skakit@quicinc.com>
 To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
         Rob Herring <robh+dt@kernel.org>
@@ -49,9 +49,9 @@ CC:     Lee Jones <lee.jones@linaro.org>,
         <quic_collinsd@quicinc.com>, <quic_subbaram@quicinc.com>,
         <quic_jprakash@quicinc.com>,
         Satya Priya <quic_c_skakit@quicinc.com>
-Subject: [PATCH V11 6/9] mfd: pm8008: Use i2c_new_dummy_device() API
-Date:   Thu, 5 May 2022 14:55:36 +0530
-Message-ID: <1651742739-12338-7-git-send-email-quic_c_skakit@quicinc.com>
+Subject: [PATCH V11 7/9] regulator: Add a regulator driver for the PM8008 PMIC
+Date:   Thu, 5 May 2022 14:55:37 +0530
+Message-ID: <1651742739-12338-8-git-send-email-quic_c_skakit@quicinc.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1651742739-12338-1-git-send-email-quic_c_skakit@quicinc.com>
 References: <1651742739-12338-1-git-send-email-quic_c_skakit@quicinc.com>
@@ -60,8 +60,8 @@ Content-Type: text/plain
 X-Originating-IP: [10.80.80.8]
 X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
  nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -70,116 +70,286 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use i2c_new_dummy_device() to register pm8008-regulator
-client present at a different address space, instead of
-defining a separate DT node. This avoids calling the probe
-twice for the same chip, once for each client pm8008-infra
-and pm8008-regulator.
-
-As a part of this define pm8008_regmap_init() to do regmap
-init for both the clients and define pm8008_get_regmap() to
-pass the regmap to the regulator driver.
+Qualcomm Technologies, Inc. PM8008 is an I2C controlled PMIC
+containing 7 LDO regulators.  Add a PM8008 regulator driver to
+support PMIC regulator management via the regulator framework.
 
 Signed-off-by: Satya Priya <quic_c_skakit@quicinc.com>
 ---
 Changes in V11:
- - Remove the for loop and register dummy directly as there are
-   only 2 clients.
- - Define pm8008_regmap_init() API to do the redundant init part.
+ - Added of_device_id table and compatible to register the ldos.
 
 Changes in V10:
- - Implement i2c_new_dummy_device to register extra clients.
+ - Changed the driver name.
+ - Removed unused header.
+ - Use get_voltage_sel.
 
- drivers/mfd/qcom-pm8008.c       | 31 +++++++++++++++++++++++++++++--
- include/linux/mfd/qcom_pm8008.h |  8 ++++++++
- 2 files changed, 37 insertions(+), 2 deletions(-)
- create mode 100644 include/linux/mfd/qcom_pm8008.h
+Changes in V9:
+ - Nothing has changed.
 
-diff --git a/drivers/mfd/qcom-pm8008.c b/drivers/mfd/qcom-pm8008.c
-index 40a67f0..25e8d0b 100644
---- a/drivers/mfd/qcom-pm8008.c
-+++ b/drivers/mfd/qcom-pm8008.c
-@@ -57,6 +57,7 @@ enum {
+Changes in V8:
+ - Changed the regulators_data struct name to pm8008_regulator_data
+
+ drivers/regulator/Kconfig                 |   9 ++
+ drivers/regulator/Makefile                |   1 +
+ drivers/regulator/qcom-pm8008-regulator.c | 216 ++++++++++++++++++++++++++++++
+ 3 files changed, 226 insertions(+)
+ create mode 100644 drivers/regulator/qcom-pm8008-regulator.c
+
+diff --git a/drivers/regulator/Kconfig b/drivers/regulator/Kconfig
+index cbe0f96..2c6d9c2 100644
+--- a/drivers/regulator/Kconfig
++++ b/drivers/regulator/Kconfig
+@@ -925,6 +925,15 @@ config REGULATOR_PWM
+ 	  This driver supports PWM controlled voltage regulators. PWM
+ 	  duty cycle can increase or decrease the voltage.
  
- struct pm8008_data {
- 	struct device *dev;
-+	struct regmap *regulators_regmap;
- 	int irq;
- 	struct regmap_irq_chip_data *irq_data;
- };
-@@ -150,6 +151,11 @@ static struct regmap_config qcom_mfd_regmap_cfg = {
- 	.max_register	= 0xFFFF,
- };
- 
-+struct regmap *pm8008_get_regmap(struct pm8008_data *chip)
-+{
-+	return chip->regulators_regmap;
-+}
++config REGULATOR_QCOM_PM8008
++	tristate "Qualcomm Technologies, Inc. PM8008 PMIC regulators"
++	depends on MFD_QCOM_PM8008
++	help
++	  Select this option to get support for the voltage regulators
++	  of Qualcomm Technologies, Inc. PM8008 PMIC chip. PM8008 has 7 LDO
++	  regulators. This driver provides support for basic operations like
++	  set/get voltage and enable/disable.
 +
- static int pm8008_init(struct regmap *regmap)
- {
- 	int rc;
-@@ -217,11 +223,25 @@ static int pm8008_probe_irq_peripherals(struct pm8008_data *chip,
- 	return 0;
- }
- 
-+static struct regmap *pm8008_regmap_init(struct i2c_client *client,
-+							struct pm8008_data *chip)
-+{
-+	struct regmap *regmap;
-+
-+	regmap = devm_regmap_init_i2c(client, &qcom_mfd_regmap_cfg);
-+	if (!regmap)
-+		return NULL;
-+
-+	i2c_set_clientdata(client, chip);
-+	return regmap;
-+}
-+
- static int pm8008_probe(struct i2c_client *client)
- {
- 	int rc;
- 	struct pm8008_data *chip;
- 	struct gpio_desc *reset_gpio;
-+	struct i2c_client *regulators_client;
- 	struct regmap *regmap;
- 
- 	chip = devm_kzalloc(&client->dev, sizeof(*chip), GFP_KERNEL);
-@@ -229,11 +249,18 @@ static int pm8008_probe(struct i2c_client *client)
- 		return -ENOMEM;
- 
- 	chip->dev = &client->dev;
--	regmap = devm_regmap_init_i2c(client, &qcom_mfd_regmap_cfg);
-+	regmap = pm8008_regmap_init(client, chip);
- 	if (!regmap)
- 		return -ENODEV;
- 
--	i2c_set_clientdata(client, chip);
-+	regulators_client = i2c_new_dummy_device(client->adapter, client->addr + 1);
-+	if (IS_ERR(regulators_client)) {
-+		dev_err(&client->dev, "can't attach client\n");
-+		return PTR_ERR(regulators_client);
-+	}
-+	chip->regulators_regmap = pm8008_regmap_init(regulators_client, chip);
-+	if (!chip->regulators_regmap)
-+		return -ENODEV;
- 
- 	if (of_property_read_bool(chip->dev->of_node, "interrupt-controller")) {
- 		rc = pm8008_probe_irq_peripherals(chip, regmap, client->irq);
-diff --git a/include/linux/mfd/qcom_pm8008.h b/include/linux/mfd/qcom_pm8008.h
+ config REGULATOR_QCOM_RPM
+ 	tristate "Qualcomm RPM regulator driver"
+ 	depends on MFD_QCOM_RPM
+diff --git a/drivers/regulator/Makefile b/drivers/regulator/Makefile
+index 8d3ee8b..169e686 100644
+--- a/drivers/regulator/Makefile
++++ b/drivers/regulator/Makefile
+@@ -101,6 +101,7 @@ obj-$(CONFIG_REGULATOR_MT6380)	+= mt6380-regulator.o
+ obj-$(CONFIG_REGULATOR_MT6397)	+= mt6397-regulator.o
+ obj-$(CONFIG_REGULATOR_MTK_DVFSRC) += mtk-dvfsrc-regulator.o
+ obj-$(CONFIG_REGULATOR_QCOM_LABIBB) += qcom-labibb-regulator.o
++obj-$(CONFIG_REGULATOR_QCOM_PM8008) += qcom-pm8008-regulator.o
+ obj-$(CONFIG_REGULATOR_QCOM_RPM) += qcom_rpm-regulator.o
+ obj-$(CONFIG_REGULATOR_QCOM_RPMH) += qcom-rpmh-regulator.o
+ obj-$(CONFIG_REGULATOR_QCOM_SMD_RPM) += qcom_smd-regulator.o
+diff --git a/drivers/regulator/qcom-pm8008-regulator.c b/drivers/regulator/qcom-pm8008-regulator.c
 new file mode 100644
-index 0000000..e79e578
+index 0000000..9e2d531
 --- /dev/null
-+++ b/include/linux/mfd/qcom_pm8008.h
-@@ -0,0 +1,8 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef __QCOM_PM8008_H__
-+#define __QCOM_PM8008_H__
++++ b/drivers/regulator/qcom-pm8008-regulator.c
+@@ -0,0 +1,216 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/* Copyright (c) 2022, The Linux Foundation. All rights reserved. */
 +
-+struct pm8008_data;
-+struct regmap *pm8008_get_regmap(struct pm8008_data *chip);
++#include <linux/device.h>
++#include <linux/kernel.h>
++#include <linux/mfd/qcom_pm8008.h>
++#include <linux/module.h>
++#include <linux/of.h>
++#include <linux/of_device.h>
++#include <linux/platform_device.h>
++#include <linux/regmap.h>
++#include <linux/regulator/driver.h>
++#include <linux/regulator/of_regulator.h>
 +
-+#endif
++#define VSET_STEP_MV			8
++#define VSET_STEP_UV			(VSET_STEP_MV * 1000)
++
++#define LDO_ENABLE_REG(base)		((base) + 0x46)
++#define ENABLE_BIT			BIT(7)
++
++#define LDO_VSET_LB_REG(base)		((base) + 0x40)
++
++#define LDO_STEPPER_CTL_REG(base)	((base) + 0x3b)
++#define DEFAULT_VOLTAGE_STEPPER_RATE	38400
++#define STEP_RATE_MASK			GENMASK(1, 0)
++
++struct pm8008_regulator_data {
++	const char			*name;
++	const char			*supply_name;
++	u16				base;
++	int				min_uv;
++	int				max_uv;
++	int				min_dropout_uv;
++	const struct linear_range	*voltage_range;
++};
++
++struct pm8008_regulator {
++	struct device		*dev;
++	struct regmap		*regmap;
++	struct regulator_desc	rdesc;
++	u16			base;
++	int			step_rate;
++	int			voltage_selector;
++};
++
++static const struct linear_range nldo_ranges[] = {
++	REGULATOR_LINEAR_RANGE(528000, 0, 122, 8000),
++};
++
++static const struct linear_range pldo_ranges[] = {
++	REGULATOR_LINEAR_RANGE(1504000, 0, 237, 8000),
++};
++
++static const struct pm8008_regulator_data reg_data[] = {
++	/* name  parent       base   min_uv  max_uv  headroom_uv voltage_range */
++	{ "ldo1", "vdd_l1_l2", 0x4000,  528000, 1504000, 225000, nldo_ranges, },
++	{ "ldo2", "vdd_l1_l2", 0x4100,  528000, 1504000, 225000, nldo_ranges, },
++	{ "ldo3", "vdd_l3_l4", 0x4200, 1504000, 3400000, 300000, pldo_ranges, },
++	{ "ldo4", "vdd_l3_l4", 0x4300, 1504000, 3400000, 300000, pldo_ranges, },
++	{ "ldo5", "vdd_l5",    0x4400, 1504000, 3400000, 200000, pldo_ranges, },
++	{ "ldo6", "vdd_l6",    0x4500, 1504000, 3400000, 200000, pldo_ranges, },
++	{ "ldo7", "vdd_l7",    0x4600, 1504000, 3400000, 200000, pldo_ranges, },
++};
++
++static int pm8008_regulator_get_voltage(struct regulator_dev *rdev)
++{
++	struct pm8008_regulator *pm8008_reg = rdev_get_drvdata(rdev);
++
++	return pm8008_reg->voltage_selector;
++}
++
++static inline int pm8008_write_voltage(struct pm8008_regulator *pm8008_reg,
++							int mV)
++{
++	__le16 vset_raw;
++
++	vset_raw = cpu_to_le16(mV);
++
++	return regmap_bulk_write(pm8008_reg->regmap,
++			LDO_VSET_LB_REG(pm8008_reg->base),
++			(const void *)&vset_raw, sizeof(vset_raw));
++}
++
++static int pm8008_regulator_set_voltage_time(struct regulator_dev *rdev,
++				int old_uV, int new_uv)
++{
++	struct pm8008_regulator *pm8008_reg = rdev_get_drvdata(rdev);
++
++	return DIV_ROUND_UP(abs(new_uv - old_uV), pm8008_reg->step_rate);
++}
++
++static int pm8008_regulator_set_voltage(struct regulator_dev *rdev,
++					unsigned int selector)
++{
++	struct pm8008_regulator *pm8008_reg = rdev_get_drvdata(rdev);
++	int rc, mV;
++
++	/* voltage control register is set with voltage in millivolts */
++	mV = DIV_ROUND_UP(regulator_list_voltage_linear_range(rdev, selector),
++						1000);
++	if (mV < 0)
++		return mV;
++
++	rc = pm8008_write_voltage(pm8008_reg, mV);
++	if (rc < 0)
++		return rc;
++
++	pm8008_reg->voltage_selector = selector;
++	dev_dbg(&rdev->dev, "voltage set to %d\n", mV * 1000);
++	return 0;
++}
++
++static const struct regulator_ops pm8008_regulator_ops = {
++	.enable			= regulator_enable_regmap,
++	.disable		= regulator_disable_regmap,
++	.is_enabled		= regulator_is_enabled_regmap,
++	.set_voltage_sel	= pm8008_regulator_set_voltage,
++	.get_voltage_sel	= pm8008_regulator_get_voltage,
++	.list_voltage		= regulator_list_voltage_linear,
++	.set_voltage_time	= pm8008_regulator_set_voltage_time,
++};
++
++static int pm8008_regulator_probe(struct platform_device *pdev)
++{
++	int rc, i;
++	unsigned int reg;
++	const char *name;
++	struct device *dev = &pdev->dev;
++	struct regulator_config reg_config = {};
++	struct regulator_dev    *rdev;
++	struct pm8008_data *chip = dev_get_drvdata(pdev->dev.parent);
++	struct pm8008_regulator *pm8008_reg;
++
++	pm8008_reg = devm_kzalloc(dev, sizeof(*pm8008_reg), GFP_KERNEL);
++	if (!pm8008_reg)
++		return -ENOMEM;
++
++	pm8008_reg->regmap = pm8008_get_regmap(chip);
++	if (!pm8008_reg->regmap) {
++		dev_err(dev, "parent regmap is missing\n");
++		return -EINVAL;
++	}
++
++	pm8008_reg->dev = dev;
++
++	rc = of_property_read_string(dev->of_node, "regulator-name", &name);
++	if (rc)
++		return rc;
++
++	/* get the required regulator data */
++	for (i = 0; i < ARRAY_SIZE(reg_data); i++)
++		if (strstr(name, reg_data[i].name))
++			break;
++
++	pm8008_reg->base = reg_data[i].base;
++
++	/* get slew rate */
++	rc = regmap_bulk_read(pm8008_reg->regmap,
++			LDO_STEPPER_CTL_REG(pm8008_reg->base), &reg, 1);
++	if (rc < 0) {
++		dev_err(dev, "failed to read step rate configuration rc=%d\n", rc);
++		return rc;
++	}
++	reg &= STEP_RATE_MASK;
++	pm8008_reg->step_rate = DEFAULT_VOLTAGE_STEPPER_RATE >> reg;
++
++	pm8008_reg->rdesc.type = REGULATOR_VOLTAGE;
++	pm8008_reg->rdesc.ops = &pm8008_regulator_ops;
++	pm8008_reg->rdesc.name = reg_data[i].name;
++	pm8008_reg->rdesc.supply_name = reg_data[i].supply_name;
++	pm8008_reg->rdesc.of_match = reg_data[i].name;
++	pm8008_reg->rdesc.uV_step = VSET_STEP_UV;
++	pm8008_reg->rdesc.min_uV = reg_data[i].min_uv;
++	pm8008_reg->rdesc.n_voltages
++		= ((reg_data[i].max_uv - reg_data[i].min_uv)
++			/ pm8008_reg->rdesc.uV_step) + 1;
++	pm8008_reg->rdesc.linear_ranges = reg_data[i].voltage_range;
++	pm8008_reg->rdesc.n_linear_ranges = 1;
++	pm8008_reg->rdesc.enable_reg = LDO_ENABLE_REG(pm8008_reg->base);
++	pm8008_reg->rdesc.enable_mask = ENABLE_BIT;
++	pm8008_reg->rdesc.min_dropout_uV = reg_data[i].min_dropout_uv;
++	pm8008_reg->voltage_selector = -ENOTRECOVERABLE;
++
++	reg_config.dev = dev->parent;
++	reg_config.driver_data = pm8008_reg;
++	reg_config.regmap = pm8008_reg->regmap;
++
++	rdev = devm_regulator_register(dev, &pm8008_reg->rdesc, &reg_config);
++	if (IS_ERR(rdev)) {
++		rc = PTR_ERR(rdev);
++		dev_err(dev, "%s: failed to register regulator rc=%d\n",
++				reg_data[i].name, rc);
++		return rc;
++	}
++
++	return 0;
++}
++
++static const struct of_device_id pm8008_regulator_match_table[] = {
++	{ .compatible = "qcom,pm8008-regulator", },
++	{ }
++};
++MODULE_DEVICE_TABLE(of, pm8008_regulator_match_table);
++
++static struct platform_driver pm8008_regulator_driver = {
++	.driver	= {
++		.name		= "qcom-pm8008-regulator",
++		.of_match_table	= pm8008_regulator_match_table,
++	},
++	.probe	= pm8008_regulator_probe,
++};
++
++module_platform_driver(pm8008_regulator_driver);
++
++MODULE_DESCRIPTION("Qualcomm PM8008 PMIC Regulator Driver");
++MODULE_LICENSE("GPL");
 -- 
 2.7.4
 

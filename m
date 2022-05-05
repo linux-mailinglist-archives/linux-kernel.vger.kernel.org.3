@@ -2,32 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F3DD51C99E
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 21:49:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCC5C51C990
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 21:49:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236603AbiEETvX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 15:51:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35868 "EHLO
+        id S1385437AbiEETv2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 15:51:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385457AbiEETul (ORCPT
+        with ESMTP id S1385368AbiEETun (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 15:50:41 -0400
+        Thu, 5 May 2022 15:50:43 -0400
 Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50B6E5E74C;
-        Thu,  5 May 2022 12:46:59 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A26D5DA7D;
+        Thu,  5 May 2022 12:47:02 -0700 (PDT)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: nfraprado)
-        with ESMTPSA id 6824E1F45CD7
+        with ESMTPSA id A6FE71F45CD3
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1651780018;
-        bh=66Gcdl/BCzrTY3JeghuLR7TheiL9yVTorpEjlpfyV/8=;
+        s=mail; t=1651780021;
+        bh=riKUyF3QA26FPC6IN4C9exUYKfoEiGvXUwpYMcRDj7M=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=clx1QUAk8PRxDtNJSmG0WHj2SvvJhV+eWQHT6V/uHzLDOmjgrAULRqO22jnVi4B7R
-         KrVPYpgopgTt1EP8r9ITnc8O+J0zWoALXltUIlU1cL330dOvZXLUCCC5WvpS1GByNC
-         ewX4Aw73EaPT9GEZizyuUoeVJNqZiHgp9asN6Ba70yDdGS2wfn0rFL+dZbBve2HE+u
-         Q03Q774WnoLME1E14XLDNaz5PbAhH+9Pu2D9IYS1kJWeONUh3TkMdgiwdAsqNOcs+a
-         llLphy1KdOCJ3XBNSMTNM9ajhJXzP+a/TX3NMush3nP/lmA/gxDydY6tACIvzxBENx
-         vz2hB6Q0KBEeg==
+        b=IEVITc3sCSDV2yoTf1mQwuHfgdj8nF+d/X2n/ZXKi5YwM4pS/WjEOl1DDvuWwo0cX
+         HRjoOZee/WLN0iYDbwq3L9ydeRrTcCQoKLpcx3sD6uXW+L9di4gL1P7yjES8JrRTZW
+         /PIYVbLAV0WClG+LBhsMYiLY/8LzDaRruJ/whCVuUVJngCTA1WixTyslwdSff4daGY
+         S1mjJ6Uv2yolUv3Wcyb5cKE92j4ate6tCwKPdN+rxgyrb2k6tY1s/Lt5JHd2DrTKJ1
+         F4I3r5vPy3rqobPCxOvXQ9V6zXFeE1WG9wn3UTDOOPczbAqri0k0AX1IX5CBw5MNrz
+         5qD5Q98uEZ7nQ==
 From:   =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
         <nfraprado@collabora.com>
 To:     Matthias Brugger <matthias.bgg@gmail.com>
@@ -40,9 +40,9 @@ Cc:     AngeloGioacchino Del Regno
         Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-mediatek@lists.infradead.org
-Subject: [PATCH v2 15/16] arm64: dts: mediatek: asurada: Add MT6359 PMIC
-Date:   Thu,  5 May 2022 15:45:49 -0400
-Message-Id: <20220505194550.3094656-16-nfraprado@collabora.com>
+Subject: [PATCH v2 16/16] arm64: dts: mediatek: asurada: Add SPMI regulators
+Date:   Thu,  5 May 2022 15:45:50 -0400
+Message-Id: <20220505194550.3094656-17-nfraprado@collabora.com>
 X-Mailer: git-send-email 2.36.0
 In-Reply-To: <20220505194550.3094656-1-nfraprado@collabora.com>
 References: <20220505194550.3094656-1-nfraprado@collabora.com>
@@ -59,8 +59,8 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-MT6359 is the primary PMIC present on the Asurada platform. Include its
-dtsi and configure properties specific for the platform.
+The Asurada platform uses regulators from MT6315 PMICs acessible through
+SPMI. Add support for them.
 
 Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
 Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
@@ -70,64 +70,76 @@ Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com
 Changes in v2:
 - Added this patch
 
- .../boot/dts/mediatek/mt8192-asurada.dtsi     | 30 +++++++++++++++++++
- 1 file changed, 30 insertions(+)
+ .../boot/dts/mediatek/mt8192-asurada.dtsi     | 49 +++++++++++++++++++
+ 1 file changed, 49 insertions(+)
 
 diff --git a/arch/arm64/boot/dts/mediatek/mt8192-asurada.dtsi b/arch/arm64/boot/dts/mediatek/mt8192-asurada.dtsi
-index 87a9a6b1eabc..a9ffa74b2764 100644
+index a9ffa74b2764..7f4cee928f71 100644
 --- a/arch/arm64/boot/dts/mediatek/mt8192-asurada.dtsi
 +++ b/arch/arm64/boot/dts/mediatek/mt8192-asurada.dtsi
-@@ -5,6 +5,7 @@
-  */
- /dts-v1/;
+@@ -7,6 +7,7 @@
  #include "mt8192.dtsi"
-+#include "mt6359.dtsi"
+ #include "mt6359.dtsi"
  #include <dt-bindings/gpio/gpio.h>
++#include <dt-bindings/spmi/spmi.h>
  
  / {
-@@ -168,6 +169,31 @@ &i2c7 {
- 	pinctrl-0 = <&i2c7_pins>;
- };
- 
-+/* for CORE */
-+&mt6359_vgpu11_buck_reg {
-+	regulator-always-on;
-+};
-+
-+&mt6359_vgpu11_sshub_buck_reg {
-+	regulator-always-on;
-+	regulator-min-microvolt = <575000>;
-+	regulator-max-microvolt = <575000>;
-+};
-+
-+&mt6359_vrf12_ldo_reg {
-+	regulator-always-on;
-+};
-+
-+&mt6359_vufs_ldo_reg {
-+	regulator-always-on;
-+};
-+
-+&mt6359codec {
-+	mediatek,dmic-mode = <1>; /* one-wire */
-+	mediatek,mic-type-0 = <2>; /* DMIC */
-+	mediatek,mic-type-2 = <2>; /* DMIC */
-+};
-+
- &pcie {
- 	pinctrl-names = "default";
- 	pinctrl-0 = <&pcie_pins>;
-@@ -559,6 +585,10 @@ pins-report-sw {
+ 	aliases {
+@@ -683,6 +684,54 @@ cr50@0 {
  	};
  };
  
-+&pmic {
-+	interrupts-extended = <&pio 214 IRQ_TYPE_LEVEL_HIGH>;
++&spmi {
++	#address-cells = <2>;
++	#size-cells = <0>;
++
++	mt6315_6: pmic@6 {
++		compatible = "mediatek,mt6315-regulator";
++		reg = <0x6 SPMI_USID>;
++
++		regulators {
++			mt6315_6_vbuck1: vbuck1 {
++				regulator-compatible = "vbuck1";
++				regulator-name = "Vbcpu";
++				regulator-min-microvolt = <300000>;
++				regulator-max-microvolt = <1193750>;
++				regulator-enable-ramp-delay = <256>;
++				regulator-allowed-modes = <0 1 2>;
++				regulator-always-on;
++			};
++
++			mt6315_6_vbuck3: vbuck3 {
++				regulator-compatible = "vbuck3";
++				regulator-name = "Vlcpu";
++				regulator-min-microvolt = <300000>;
++				regulator-max-microvolt = <1193750>;
++				regulator-enable-ramp-delay = <256>;
++				regulator-allowed-modes = <0 1 2>;
++				regulator-always-on;
++			};
++		};
++	};
++
++	mt6315_7: pmic@7 {
++		compatible = "mediatek,mt6315-regulator";
++		reg = <0x7 SPMI_USID>;
++
++		regulators {
++			mt6315_7_vbuck1: vbuck1 {
++				regulator-compatible = "vbuck1";
++				regulator-name = "Vgpu";
++				regulator-min-microvolt = <300000>;
++				regulator-max-microvolt = <1193750>;
++				regulator-enable-ramp-delay = <256>;
++				regulator-allowed-modes = <0 1 2>;
++			};
++		};
++	};
 +};
 +
- &spi1 {
+ &uart0 {
  	status = "okay";
- 
+ };
 -- 
 2.36.0
 

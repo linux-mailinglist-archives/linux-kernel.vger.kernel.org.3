@@ -2,81 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DBF051C2FB
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 16:51:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7EEC51C305
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 16:52:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380817AbiEEOyr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 10:54:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45738 "EHLO
+        id S1380843AbiEEOz1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 10:55:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240860AbiEEOyo (ORCPT
+        with ESMTP id S1350734AbiEEOzZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 10:54:44 -0400
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 073AC2EA
-        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 07:51:05 -0700 (PDT)
-Received: by mail-yb1-xb36.google.com with SMTP id m128so8028394ybm.5
-        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 07:51:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=NqjwoR4LlPEXRPjbSlmaKFR3JQ3ccpO0IwpzOZEqSNc=;
-        b=B6x3nqirj4jKgqwkXJ65eiR28GcKrtSEJZH9DLcTY7++7qa9LC/aG4yVzZ+rRcylJP
-         v62bGcO2lD2VyMZYvfCW5WeXr+/jXBH0cZT9vavqV9RhuW7wDQlRMoXk6YxXXGWQPUUU
-         baqR18caYVdlkM+npbZkkZCBidc7sXGmS9b8krjkLU0M/xYnShGIOZzvX5t24Iuh4uVI
-         F1s84M0OigPNk03gZmGW7QOzuTCf0x64m3PmmztfwLuc9Y0xlxXQwNk7lhHMNi3qaKqM
-         klihp8hNbJgYsU7dDD2l1IGBmwImn3GpTEzlWQREmo36WU6+k6sAOtzkCc+QyZH557e1
-         DEXw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=NqjwoR4LlPEXRPjbSlmaKFR3JQ3ccpO0IwpzOZEqSNc=;
-        b=wEY0fjKV4E9FV6tFn6sBQMPL291HUpQnYITVC4M37X/pBBCE1DTSEXI/K22GZdkI7p
-         Bt5d2lZUFIpG0clvdfFGZS4YlnbJoGqvttorpADP1VHK2vCzJxvcbNGSDEdAZbL+BwXf
-         OisYMLOF+xUITvJ8y+kOAaK+0U7RDoy1thCyYNOBAtN4yqX+3kCOHp0R9/XgvcpqNwqZ
-         hEBC4GuNYDLA0VO+RsH1NlsAz+lKeUhwwHsx2qcLWtaaCdW7QSXIinXxkNrPMEA+N33C
-         Q7dQ/lEmBl74418e5K0/4tk1Xg3cRYaYV0f0rtoi/HnVb6O4aVqICBUmnLkUBAceEK9w
-         glFw==
-X-Gm-Message-State: AOAM531Dm3/EofExmbpCs7Zer5yxYo6Pu62ePjhFzyZwlYU0FOL5Dh22
-        +vIEfSdnGz39UHZL4a67Fic699UvsTYehcyGjgOoFg==
-X-Google-Smtp-Source: ABdhPJzZtXGIA9v0MMiWZ4u+vtplZESU8b+FGk7W8udNaOea1IQGb1mGALrc3XNrMX6cmsg6QqM6DjwL3LWS1FGLXNM=
-X-Received: by 2002:a25:2905:0:b0:649:7a2b:ca72 with SMTP id
- p5-20020a252905000000b006497a2bca72mr15732697ybp.492.1651762264271; Thu, 05
- May 2022 07:51:04 -0700 (PDT)
+        Thu, 5 May 2022 10:55:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 877542CC83;
+        Thu,  5 May 2022 07:51:45 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2C1A36198B;
+        Thu,  5 May 2022 14:51:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0CB37C385AE;
+        Thu,  5 May 2022 14:51:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651762304;
+        bh=UYCZjEShRpoFfzDqVuQUnq+KLuye9U/K272vgc4gV+M=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=YaaCc8QxzSWDamM6l1uMJ+YHmA7aOpzQANULytCi/9o5dCqw1RSPG0BR8oFdVnyUF
+         0i7G3r879MfJ5V77awaQ7LC5UlfJkinLk+x5CMGge7jX6r9C4TxPDReme5nTSk9O5S
+         LiSdMJn8FEwGCq+H7IHWwD6YTLZVPqA8E9SBPRwoJCQcjlco142d+bUuL8/yRpAeFS
+         HTnfB+sQNA56TnlnoTZD8YpnEP07ihKWnGrYUMio0DwWlxAlOIfUGIcLJZeREAOSfW
+         7f3XgH12q4KaIrFhOB4kr654GI/2VXtYYYwJmlG+8fwYeDLzVX4ZtJ4Nr4JhDUUcjZ
+         hkEVYZlT/UfTA==
+Date:   Thu, 5 May 2022 07:51:42 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Michael Walle <michael@walle.cc>
+Cc:     Codrin Ciubotariu <codrin.ciubotariu@microchip.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH v2] i2c: at91: use dma safe buffers
+Message-ID: <YnPkfrI4Udl9lMR8@dev-arch.thelio-3990X>
+References: <20220407150828.202513-1-michael@walle.cc>
 MIME-Version: 1.0
-References: <20220419141846.598305-1-maz@kernel.org> <CACRpkda3L_itpqcnPq6xDoJtNHt8NuvE1MZk1bCNR+u2KKUpBA@mail.gmail.com>
- <874k2kccse.wl-maz@kernel.org> <CACRpkdb32NuJ8jdsk6ox7ViVjK=9WWWavS=aYcoWTCbaO3WkTg@mail.gmail.com>
- <CAMRc=MdwbzkpL5Vm2aEXVPKzj78GsFStk+3uZexyrJMB468U4g@mail.gmail.com>
-In-Reply-To: <CAMRc=MdwbzkpL5Vm2aEXVPKzj78GsFStk+3uZexyrJMB468U4g@mail.gmail.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Thu, 5 May 2022 16:50:52 +0200
-Message-ID: <CACRpkda3jPMj5ZgyXsaq34sW9E9n-t8A_BHUZbVsfxc7E=j3Aw@mail.gmail.com>
-Subject: Re: [PATCH v3 00/10] gpiolib: Handle immutable irq_chip structures
-To:     Bartosz Golaszewski <brgl@bgdev.pl>
-Cc:     Marc Zyngier <maz@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Joey Gouly <joey.gouly@arm.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Hector Martin <marcan@marcan.st>,
-        Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Jeffrey Hugo <jeffrey.l.hugo@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Basavaraj Natikar <Basavaraj.Natikar@amd.com>,
-        Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        linux-tegra@vger.kernel.org,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-arm-msm@vger.kernel.org, kernel-team@android.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220407150828.202513-1-michael@walle.cc>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -85,32 +58,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 5, 2022 at 2:58 PM Bartosz Golaszewski <brgl@bgdev.pl> wrote:
-> On Wed, May 4, 2022 at 11:22 PM Linus Walleij <linus.walleij@linaro.org> wrote:
-> >
-> > On Sat, Apr 23, 2022 at 12:30 PM Marc Zyngier <maz@kernel.org> wrote:
-> >
-> > > > Bartosz: if you're happy with this can you apply it to an immutable branch
-> > > > from v5.18-rc1 and merge that into the GPIO for-next and then I can also
-> > > > pull that into pinctrl?
-> > >
-> > > For what it is worth, I've pushed this branch into irqchip-next.
-> > >
-> > > You can pick it up from:
-> > >
-> > > https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms.git/log/?h=irq/gpio-immutable
-> >
-> > Bartosz are you pulling this? Most of the changes are in GPIO.
-> > Patches have started to arrive that go on top of these changes
-> > so would be nice to have it in both GPIO and pin control as a
-> > baseline.
-> >
-> > Yours,
-> > Linus Walleij
->
-> Yes! Sorry for the delay. Pulling now.
+On Thu, Apr 07, 2022 at 05:08:28PM +0200, Michael Walle wrote:
+> The supplied buffer might be on the stack and we get the following error
+> message:
+> [    3.312058] at91_i2c e0070600.i2c: rejecting DMA map of vmalloc memory
+> 
+> Use i2c_{get,put}_dma_safe_msg_buf() to get a DMA-able memory region if
+> necessary.
+> 
+> Fixes: 60937b2cdbf9 ("i2c: at91: add dma support")
+> Signed-off-by: Michael Walle <michael@walle.cc>
+> Reviewed-by: Codrin Ciubotariu <codrin.ciubotariu@microchip.com>
+> ---
+> changes since v1:
+>  - remove extra empty line
+>  - add fixes tag as suggested by Codrin
+> 
+>  drivers/i2c/busses/i2c-at91-master.c | 11 +++++++++++
+>  1 file changed, 11 insertions(+)
+> 
+> diff --git a/drivers/i2c/busses/i2c-at91-master.c b/drivers/i2c/busses/i2c-at91-master.c
+> index b0eae94909f4..5eca3b3bb609 100644
+> --- a/drivers/i2c/busses/i2c-at91-master.c
+> +++ b/drivers/i2c/busses/i2c-at91-master.c
+> @@ -656,6 +656,7 @@ static int at91_twi_xfer(struct i2c_adapter *adap, struct i2c_msg *msg, int num)
+>  	unsigned int_addr_flag = 0;
+>  	struct i2c_msg *m_start = msg;
+>  	bool is_read;
+> +	u8 *dma_buf;
+>  
+>  	dev_dbg(&adap->dev, "at91_xfer: processing %d messages:\n", num);
+>  
+> @@ -703,7 +704,17 @@ static int at91_twi_xfer(struct i2c_adapter *adap, struct i2c_msg *msg, int num)
+>  	dev->msg = m_start;
+>  	dev->recv_len_abort = false;
+>  
+> +	if (dev->use_dma) {
+> +		dma_buf = i2c_get_dma_safe_msg_buf(m_start, 1);
+> +		if (!dma_buf) {
+> +			ret = -ENOMEM;
+> +			goto out;
+> +		}
+> +		dev->buf = dma_buf;
+> +	}
+> +
+>  	ret = at91_do_twi_transfer(dev);
+> +	i2c_put_dma_safe_msg_buf(dma_buf, m_start, !ret);
+>  
+>  	ret = (ret < 0) ? ret : num;
+>  out:
+> -- 
+> 2.30.2
+> 
+> 
 
-Excellent, pulled it into pincontrol as well.
+This change as commit 03fbb903c8bf ("i2c: at91: use dma safe buffers")
+causes the following clang warning:
 
-Yours,
-Linus Walleij
+drivers/i2c/busses/i2c-at91-master.c:707:6: error: variable 'dma_buf' is used uninitialized whenever 'if' condition is false [-Werror,-Wsometimes-uninitialized]
+        if (dev->use_dma) {
+            ^~~~~~~~~~~~
+drivers/i2c/busses/i2c-at91-master.c:717:27: note: uninitialized use occurs here
+        i2c_put_dma_safe_msg_buf(dma_buf, m_start, !ret);
+                                 ^~~~~~~
+drivers/i2c/busses/i2c-at91-master.c:707:2: note: remove the 'if' if its condition is always true
+        if (dev->use_dma) {
+        ^~~~~~~~~~~~~~~~~~
+drivers/i2c/busses/i2c-at91-master.c:659:13: note: initialize the variable 'dma_buf' to silence this warning
+        u8 *dma_buf;
+                   ^
+                    = NULL
+1 error generated.
+
+Should this variable be initialized or should the call to
+i2c_put_dma_safe_msg_buf() be moved into the if statement?
+
+Cheers,
+Nathan

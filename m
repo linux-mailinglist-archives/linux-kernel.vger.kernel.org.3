@@ -2,40 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A739651CD42
+	by mail.lfdr.de (Postfix) with ESMTP id F225D51CD43
 	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 02:00:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387175AbiEFACJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 20:02:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35548 "EHLO
+        id S1387202AbiEFACZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 20:02:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1387094AbiEFABm (ORCPT
+        with ESMTP id S1387105AbiEFABm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 5 May 2022 20:01:42 -0400
 Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B030E60DA8
-        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 16:57:49 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 486E56128F
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 16:57:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651795069; x=1683331069;
+  t=1651795071; x=1683331071;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references;
-  bh=5M26CnkIjGrveCxZY+LFQe6aJhW+irvkad9bEfjWjOs=;
-  b=n3jyQnvYgV2Ow2qEPLCBV//jLqjdjsAS0ozlvOZFgTnHu7xkh9jTFrwQ
-   Em+Ml4GGTfwbio7do6pExzZjVJRQJFsPz50Cz6CrOY2fe3+J/hGd/0NnT
-   vWmcVN4GQ/WucrAfUSt7F2y6ghZVU0xUEq7Wzam+K128DPanK3NUK0KyK
-   YojAusZ3rROkD8qd82SZISlm6tzpDEsYoZe6Jvd6FCKi7wKM43rzAxx4v
-   mOAmcfHnYEgHtrI89Qwyav8xZWzUOyDy/UV4z8l6AJfaxPLMZvTG2/Ywe
-   7D/CG+x+WF37X1jknk4tAYOaTLES45ZbvkvVUY5DnwqeA0Km+nfKHqa/9
+  bh=fO8Z/cunSnljRh67cIhZwnOKie+7UxkAbp0EHXuT2pk=;
+  b=R/BZoREPEagQvkn9cTpfdazTWZh+mJ1svF8QIhLuUSTtcClwe8DCJdHy
+   HROzjNKx+tVbDE+f2A9b88/0GlmxtnRfAqp8uCe0X1kfUq8KnKzoIgLzI
+   TNplY29Fd8ew9sD41vB7w5X09sf8qnlTAOAo3+ctvYvueI7txZLsXAie0
+   ULfsgyecekv0bdBE/zJLr9oOmeLn4EQpaORaIvAmCW1uR3d/yG7t18mH7
+   v6dug/3Ok02NtAU7Dl5r6jtJhi1nyobTLq9pxKEt5YvDUqs5/GXpZXbFN
+   MWo0Mu0j4xw+d93mqyR55+Co1GiHwuMzRJC0qtJ1xQRhInBFB+xtAYqWN
    g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10338"; a="250283629"
+X-IronPort-AV: E=McAfee;i="6400,9594,10338"; a="250283630"
 X-IronPort-AV: E=Sophos;i="5.91,203,1647327600"; 
-   d="scan'208";a="250283629"
+   d="scan'208";a="250283630"
 Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2022 16:57:48 -0700
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2022 16:57:49 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,203,1647327600"; 
-   d="scan'208";a="694914357"
+   d="scan'208";a="694914361"
 Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
   by orsmga004.jf.intel.com with ESMTP; 05 May 2022 16:57:48 -0700
 From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
@@ -52,10 +52,11 @@ Cc:     Tony Luck <tony.luck@intel.com>, Andi Kleen <ak@linux.intel.com>,
         Ricardo Neri <ricardo.neri@intel.com>,
         iommu@lists.linux-foundation.org, linuxppc-dev@lists.ozlabs.org,
         linux-kernel@vger.kernel.org,
-        Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-Subject: [PATCH v6 10/29] iommu/vt-d: Implement minor tweaks for NMI irqs
-Date:   Thu,  5 May 2022 16:59:49 -0700
-Message-Id: <20220506000008.30892-11-ricardo.neri-calderon@linux.intel.com>
+        Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
+        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
+Subject: [PATCH v6 11/29] iommu/amd: Expose [set|get]_dev_entry_bit()
+Date:   Thu,  5 May 2022 16:59:50 -0700
+Message-Id: <20220506000008.30892-12-ricardo.neri-calderon@linux.intel.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220506000008.30892-1-ricardo.neri-calderon@linux.intel.com>
 References: <20220506000008.30892-1-ricardo.neri-calderon@linux.intel.com>
@@ -68,24 +69,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Intel IOMMU interrupt remapping driver already programs correctly the
-delivery mode of individual irqs as per their irq_data. Improve handling
-of NMIs. Allow only one irq per NMI. Also, it is not necessary to cleanup
-irq vectors after updating affinity. NMIs do not have associated vectors.
+These functions are used to check and set specific bits in a Device Table
+Entry. For instance, they can be used to modify the setting of the NMIPass
+field.
+
+Currently, these functions are used only for ACPI-specified devices.
+However, an interrupt is to be allocated with NMI as delivery mode, the
+Device Table Entry needs modified accordingly in irq_remapping_alloc().
+
+As a first step expose these two functions. No functional changes.
 
 Cc: Andi Kleen <ak@linux.intel.com>
-Cc: David Woodhouse <dwmw2@infradead.org>
 Cc: "Ravi V. Shankar" <ravi.v.shankar@intel.com>
-Cc: Lu Baolu <baolu.lu@linux.intel.com>
+Cc: Joerg Roedel <joro@8bytes.org>
+Cc: Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
 Cc: Stephane Eranian <eranian@google.com>
 Cc: iommu@lists.linux-foundation.org
 Cc: linuxppc-dev@lists.ozlabs.org
 Cc: x86@kernel.org
-Reviewed-by: Lu Baolu <baolu.lu@linux.intel.com>
 Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
 ---
 Changes since v5:
- * Introduced this patch.
+ * Introduced this patch
 
 Changes since v4:
  * N/A
@@ -99,37 +104,44 @@ Changes since v2:
 Changes since v1:
  * N/A
 ---
- drivers/iommu/intel/irq_remapping.c | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+ drivers/iommu/amd/amd_iommu.h | 3 +++
+ drivers/iommu/amd/init.c      | 4 ++--
+ 2 files changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/iommu/intel/irq_remapping.c b/drivers/iommu/intel/irq_remapping.c
-index fb2d71bea98d..791a9331e257 100644
---- a/drivers/iommu/intel/irq_remapping.c
-+++ b/drivers/iommu/intel/irq_remapping.c
-@@ -1198,8 +1198,12 @@ intel_ir_set_affinity(struct irq_data *data, const struct cpumask *mask,
- 	 * After this point, all the interrupts will start arriving
- 	 * at the new destination. So, time to cleanup the previous
- 	 * vector allocation.
-+	 *
-+	 * Do it only for non-NMI irqs. NMIs don't have associated
-+	 * vectors.
- 	 */
--	send_cleanup_vector(cfg);
-+	if (cfg->delivery_mode != APIC_DELIVERY_MODE_NMI)
-+		send_cleanup_vector(cfg);
+diff --git a/drivers/iommu/amd/amd_iommu.h b/drivers/iommu/amd/amd_iommu.h
+index 1ab31074f5b3..9f3d1564c84e 100644
+--- a/drivers/iommu/amd/amd_iommu.h
++++ b/drivers/iommu/amd/amd_iommu.h
+@@ -128,4 +128,7 @@ static inline void amd_iommu_apply_ivrs_quirks(void) { }
  
- 	return IRQ_SET_MASK_OK_DONE;
- }
-@@ -1352,6 +1356,9 @@ static int intel_irq_remapping_alloc(struct irq_domain *domain,
- 	if (info->type == X86_IRQ_ALLOC_TYPE_PCI_MSI)
- 		info->flags &= ~X86_IRQ_ALLOC_CONTIGUOUS_VECTORS;
- 
-+	if ((info->flags & X86_IRQ_ALLOC_AS_NMI) && nr_irqs != 1)
-+		return -EINVAL;
+ extern void amd_iommu_domain_set_pgtable(struct protection_domain *domain,
+ 					 u64 *root, int mode);
 +
- 	ret = irq_domain_alloc_irqs_parent(domain, virq, nr_irqs, arg);
- 	if (ret < 0)
- 		return ret;
++extern void set_dev_entry_bit(u16 devid, u8 bit);
++extern int get_dev_entry_bit(u16 devid, u8 bit);
+ #endif
+diff --git a/drivers/iommu/amd/init.c b/drivers/iommu/amd/init.c
+index b4a798c7b347..823e76b284f1 100644
+--- a/drivers/iommu/amd/init.c
++++ b/drivers/iommu/amd/init.c
+@@ -914,7 +914,7 @@ static void iommu_enable_gt(struct amd_iommu *iommu)
+ }
+ 
+ /* sets a specific bit in the device table entry. */
+-static void set_dev_entry_bit(u16 devid, u8 bit)
++void set_dev_entry_bit(u16 devid, u8 bit)
+ {
+ 	int i = (bit >> 6) & 0x03;
+ 	int _bit = bit & 0x3f;
+@@ -922,7 +922,7 @@ static void set_dev_entry_bit(u16 devid, u8 bit)
+ 	amd_iommu_dev_table[devid].data[i] |= (1UL << _bit);
+ }
+ 
+-static int get_dev_entry_bit(u16 devid, u8 bit)
++int get_dev_entry_bit(u16 devid, u8 bit)
+ {
+ 	int i = (bit >> 6) & 0x03;
+ 	int _bit = bit & 0x3f;
 -- 
 2.17.1
 

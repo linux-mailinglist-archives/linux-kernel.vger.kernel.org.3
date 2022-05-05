@@ -2,224 +2,237 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC26351C827
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 20:42:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9ECFC51C830
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 20:43:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234148AbiEESqD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 14:46:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49820 "EHLO
+        id S1383983AbiEESqw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 14:46:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386036AbiEESpb (ORCPT
+        with ESMTP id S1383122AbiEESqh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 14:45:31 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 453966D976;
-        Thu,  5 May 2022 11:34:30 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 7B5A51F8D0;
-        Thu,  5 May 2022 18:34:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1651775669; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=a/FDtzVo54pXU0gESSj26SSwrG94fNo021bRyTX+A3k=;
-        b=1F9xmGU8mi38n2qsqmP+U2Li8n9MNNkqef32m4DudMVBYZuU2owl3cwzuBkgOw1GYY0V3y
-        4Sah2K+jlLy1bpZHfPP8LA05KNksOebkeS/MqbpE484Tdo8K6fBCujjffhHIVNe8TI2h57
-        cUHNXH6hprmnpMFgHgNFN+UIUhynE3M=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1651775669;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=a/FDtzVo54pXU0gESSj26SSwrG94fNo021bRyTX+A3k=;
-        b=HIznE7wdpzarMMCgElyhzSrNA5djBc96qRHonsFvHT4EYq0BxwbX3JAW8WJ6L3szGiyy4I
-        b+HrFhfQGh2IJhCA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 3B43F13A65;
-        Thu,  5 May 2022 18:34:29 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id po4BDbUYdGLtFAAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Thu, 05 May 2022 18:34:29 +0000
-Message-ID: <a0342c52-6d39-cf16-632a-f45ff051210c@suse.de>
-Date:   Thu, 5 May 2022 20:34:28 +0200
+        Thu, 5 May 2022 14:46:37 -0400
+Received: from mail-vk1-xa2b.google.com (mail-vk1-xa2b.google.com [IPv6:2607:f8b0:4864:20::a2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5E2E1084
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 11:35:17 -0700 (PDT)
+Received: by mail-vk1-xa2b.google.com with SMTP id m203so2503005vke.13
+        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 11:35:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=JufbdLt+SWfkYpTCJFhIgk7esk5wdurajt/xNIS8xPY=;
+        b=Qu2w4rFzXy/2R1G5811MRpp76vihYyyBHhn0BmMDGdCm4ddX1nnKpSKuXxelwrYetI
+         p0NEa+GDbKeznpP+OtMD8I4dYD+AzVv9CpXny+htAdSFqEwCQCYRXH9MEW0FXxvCsHF8
+         mn43RtA3ObRe3RSSXKk1pKOX/qyrJBoS3kNBwUztpIU8mkq3NBO31vyaLqfb8wXpl8Ig
+         txRrylOYynvYtRCM5nDFK6Iw3h5YcbfjZdfflCQkUQakbURAcEtSOA5+bZMdq8KZ6VVy
+         7SZZx0McNjZ0tvNSkDhBPRfy6WMULQqh4Zv40BGHYphuiJ8ZJVYrpbwv0mP/ws13iHd5
+         eeRg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=JufbdLt+SWfkYpTCJFhIgk7esk5wdurajt/xNIS8xPY=;
+        b=E3GKOQAyIkEMmFtCEAa2+s+/kSdzBkfl1jyxXr2D9TV8DAU9dwm6DmdKPAwmxbXYaq
+         YtWdiEoqwZuzB4AEzGfVvwY8RIgYLAVwrmdVTPs9IyMdxnZ60VvUT3eZQuCIh4lfQzmt
+         vP+wtI0ZoBjSnY5WpbTQBRL2MxnJ7XTctkXmO2Fh/nD/l+Mnp0FnRPUvFenRfSZUTq07
+         je6ofYj1P6SCPLr5/Vj2mNbv+E1VRbYo21V7mqSnBcAdpD9UQk+w66sZuiqoVkipTSbk
+         D1ijpLEdRGv727pW0uiqFpz38/nr99CRBlI3S3wjYsG6cKzx7I7kI/4gSMM/8xetyp8B
+         AvdA==
+X-Gm-Message-State: AOAM530dorh1E2vA2OFek5dUabW4PBZPquwmfWNX0YbGPfiG0tntcJ24
+        p6NdQa2rIihqtNxMETYueEzuIoknerfQ/B/aKKQGfA==
+X-Google-Smtp-Source: ABdhPJypVe9Pe0paMzSMAvDCyrSNjXlEgOxD3XeX+Ux7c5JlavGbQh16rbe7I4ef5S2MwY0NzzxsoqxgVrD4LCstJT0=
+X-Received: by 2002:a05:6122:1810:b0:34e:8f1c:749d with SMTP id
+ ay16-20020a056122181000b0034e8f1c749dmr8271054vkb.20.1651775716626; Thu, 05
+ May 2022 11:35:16 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH 1/2] drm/probe-helper: Add helper for
- drm_helper_probe_single_connector_modes()
-Content-Language: en-US
-To:     Douglas Anderson <dianders@chromium.org>,
-        dri-devel@lists.freedesktop.org
-Cc:     quic_sbillaka@quicinc.com, David Airlie <airlied@linux.ie>,
-        linux-arm-msm@vger.kernel.org, quic_abhinavk@quicinc.com,
-        quic_khsieh@quicinc.com, dmitry.baryshkov@linaro.org,
-        quic_aravindh@quicinc.com, swboyd@chromium.org,
-        linux-kernel@vger.kernel.org
-References: <20220426114627.1.I2dd93486c6952bd52f2020904de0133970d11b29@changeid>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <20220426114627.1.I2dd93486c6952bd52f2020904de0133970d11b29@changeid>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------uvArjD8BBk0l8XSeSfNnFgOh"
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220505043846.3165303-1-irogers@google.com> <20220505043846.3165303-2-irogers@google.com>
+ <cb6065af-7e3f-53fa-5d82-67be04ca833f@linux.intel.com> <CAP-5=fV6Sj3PMjVBYtCRZUXXrwOJC9ETffQYscvcgJZ7gm2tFw@mail.gmail.com>
+ <e11e873c-6e61-5d50-ba6a-a99045e486bc@linux.intel.com>
+In-Reply-To: <e11e873c-6e61-5d50-ba6a-a99045e486bc@linux.intel.com>
+From:   Ian Rogers <irogers@google.com>
+Date:   Thu, 5 May 2022 11:35:03 -0700
+Message-ID: <CAP-5=fUGDkVS6zYUkeYWHMrgkX50Fao0iSKs95Yvyts+wUxpxQ@mail.gmail.com>
+Subject: Re: [PATCH 2/2] perf test: Add basic stat and topdown group test
+To:     "Liang, Kan" <kan.liang@linux.intel.com>
+Cc:     Caleb Biggers <caleb.biggers@intel.com>,
+        Perry Taylor <perry.taylor@intel.com>,
+        Kshipra Bopardikar <kshipra.bopardikar@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ravi Bangoria <ravi.bangoria@amd.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Haowen Bai <baihaowen@meizu.com>,
+        Riccardo Mancini <rickyman7@gmail.com>,
+        Kim Phillips <kim.phillips@amd.com>,
+        Madhavan Srinivasan <maddy@linux.ibm.com>,
+        Shunsuke Nakamura <nakamura.shun@fujitsu.com>,
+        Florian Fischer <florian.fischer@muhq.space>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
+        Stephane Eranian <eranian@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------uvArjD8BBk0l8XSeSfNnFgOh
-Content-Type: multipart/mixed; boundary="------------z9oIwSGpdljbtuDoAMPor8oJ";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Douglas Anderson <dianders@chromium.org>, dri-devel@lists.freedesktop.org
-Cc: quic_sbillaka@quicinc.com, David Airlie <airlied@linux.ie>,
- linux-arm-msm@vger.kernel.org, quic_abhinavk@quicinc.com,
- quic_khsieh@quicinc.com, dmitry.baryshkov@linaro.org,
- quic_aravindh@quicinc.com, swboyd@chromium.org, linux-kernel@vger.kernel.org
-Message-ID: <a0342c52-6d39-cf16-632a-f45ff051210c@suse.de>
-Subject: Re: [PATCH 1/2] drm/probe-helper: Add helper for
- drm_helper_probe_single_connector_modes()
-References: <20220426114627.1.I2dd93486c6952bd52f2020904de0133970d11b29@changeid>
-In-Reply-To: <20220426114627.1.I2dd93486c6952bd52f2020904de0133970d11b29@changeid>
+On Thu, May 5, 2022 at 11:19 AM Liang, Kan <kan.liang@linux.intel.com> wrot=
+e:
+>
+> On 5/5/2022 11:22 AM, Ian Rogers wrote:
+> > On Thu, May 5, 2022 at 5:12 AM Liang, Kan <kan.liang@linux.intel.com> w=
+rote:
+> >>
+> >> On 5/5/2022 12:38 AM, Ian Rogers wrote:
+> >>> Add a basic stat test.
+> >>> Add two tests of grouping behavior for topdown events. Topdown events
+> >>> are special as they must be grouped with the slots event first.
+> >>>
+> >>> Signed-off-by: Ian Rogers <irogers@google.com>
+> >>> ---
+> >>>    tools/perf/tests/shell/stat.sh | 65 ++++++++++++++++++++++++++++++=
+++++
+> >>>    1 file changed, 65 insertions(+)
+> >>>    create mode 100755 tools/perf/tests/shell/stat.sh
+> >>>
+> >>> diff --git a/tools/perf/tests/shell/stat.sh b/tools/perf/tests/shell/=
+stat.sh
+> >>> new file mode 100755
+> >>> index 000000000000..80869ea6debc
+> >>> --- /dev/null
+> >>> +++ b/tools/perf/tests/shell/stat.sh
+> >>> @@ -0,0 +1,65 @@
+> >>> +#!/bin/sh
+> >>> +# perf stat tests
+> >>> +# SPDX-License-Identifier: GPL-2.0
+> >>> +
+> >>> +set -e
+> >>> +
+> >>> +err=3D0
+> >>> +test_default_stat() {
+> >>> +  echo "Basic stat command test"
+> >>> +  if ! perf stat true 2>&1 | egrep -q "Performance counter stats for=
+ 'true':"
+> >>> +  then
+> >>> +    echo "Basic stat command test [Failed]"
+> >>> +    err=3D1
+> >>> +    return
+> >>> +  fi
+> >>> +  echo "Basic stat command test [Success]"
+> >>> +}
+> >>> +
+> >>> +test_topdown_groups() {
+> >>> +  # Topdown events must be grouped with the slots event first. Test =
+that
+> >>> +  # parse-events reorders this.
+> >>> +  echo "Topdown event group test"
+> >>> +  if ! perf stat -e '{slots,topdown-retiring}' true > /dev/null 2>&1
+> >>> +  then
+> >>> +    echo "Topdown event group test [Skipped event parsing failed]"
+> >>> +    return
+> >>> +  fi
+> >>> +  if perf stat -e '{slots,topdown-retiring}' true 2>&1 | egrep -q "<=
+not supported>"
+> >>> +  then
+> >>> +    echo "Topdown event group test [Failed events not supported]"
+> >>> +    err=3D1
+> >>> +    return
+> >>> +  fi
+> >>> +  if perf stat -e '{topdown-retiring,slots}' true 2>&1 | egrep -q "<=
+not supported>"
+> >>> +  then
+> >>> +    echo "Topdown event group test [Failed slots not reordered first=
+]"
+> >>> +    err=3D1
+> >>> +    return
+> >>> +  fi
+> >>> +  echo "Topdown event group test [Success]"
+> >>> +}
+> >>> +
+> >>> +test_topdown_weak_groups() {
+> >>> +  # Weak groups break if the perf_event_open of multiple grouped eve=
+nts
+> >>> +  # fails. Breaking a topdown group causes the events to fail. Test =
+a very large
+> >>> +  # grouping to see that the topdown events aren't broken out.
+> >>> +  echo "Topdown weak groups test"
+> >>> +  if ! perf stat -e '{slots,topdown-bad-spec,topdown-be-bound,topdow=
+n-fe-bound,topdown-retiring},branch-instructions,branch-misses,bus-cycles,c=
+ache-misses,cache-references,cpu-cycles,instructions,mem-loads,mem-stores,r=
+ef-cycles,baclears.any,ARITH.DIVIDER_ACTIVE' true > /dev/null 2>&1
+> >>> +  then
+> >>> +    echo "Topdown weak groups test [Skipped event parsing failed]"
+> >>> +    return
+> >>> +  fi
+> >>> +  if perf stat -e '{slots,topdown-bad-spec,topdown-be-bound,topdown-=
+fe-bound,topdown-retiring,branch-instructions,branch-misses,bus-cycles,cach=
+e-misses,cache-references,cpu-cycles,instructions,mem-loads,mem-stores,ref-=
+cycles,baclears.any,ARITH.DIVIDER_ACTIVE}:W' true 2>&1 | egrep -q "<not sup=
+ported>"
+> >>> +  then
+> >>> +    echo "Topdown weak groups test [Failed events not supported]"
+> >>> +    err=3D1
+> >>> +    return
+> >>> +  fi
+> >>> +  echo "Topdown weak groups test [Success]"
+> >>> +}
+> >>> +
+> >>
+> >> Should we check the existence of the slots event before the test?
+> >> The perf metrics feature only be available on the new platform after
+> >> ICL. It doesn't work on Atom.
+> >>
+> >> Also, I think the test may fails on the hybrid platform, since big cor=
+e
+> >> and small core have different formula for the topdown. I think we shou=
+ld
+> >> avoid the test for the hybrid platform for now.
+> >> +Zhengjun, who is fixing the topdown gap for the hybrid platform. I
+> >> think he may take care of the hybrid support later.
+> >
+> > Thanks Kan, the test filters out systems that don't support the events
+> > and silently skips the test. The main purpose of the test is to make
+> > sure the somewhat complicated grouping operations for Icelake have
+> > some coverage. Adding more coverage for hybrid would be great, but not
+> > something I think gates this change.
+> >
+>
+> Sure, we can add the coverage for hybrid later. But please make sure the
+> test can filter out both the systems which doesn't support perf metircs
+> and the hybrid system.
+>
+> Thanks,
+> Kan
 
---------------z9oIwSGpdljbtuDoAMPor8oJ
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+If the test fails on hybrid then that feels like value add :-) We
+genuinely have broken grouping functions. We could just add to the
+test a skip if /sys/devices/cpu_core and /sys/devices/cpu_atom
+directories exist (making assumptions on where sysfs is mounted). I'm
+not yet able to test on Alderlake hence not wanting to have a lot of
+untested code.
 
-SGkNCg0KQW0gMjYuMDQuMjIgdW0gMjA6NDYgc2NocmllYiBEb3VnbGFzIEFuZGVyc29uOg0K
-PiBUaGUgZHJtX2hlbHBlcl9wcm9iZV9zaW5nbGVfY29ubmVjdG9yX21vZGVzKCkgaXMgYSBi
-aXQgbG9uZy4gTGV0J3MNCj4gYnJlYWsgYSBjaHVuayBvZmYgdG8gdXBkYXRlIGFuZCB2YWxp
-ZGF0ZSBtb2Rlcy4gVGhpcyBoZWxwcyBhdm9pZCBvbmUNCj4gZ290byBhbmQgYWxzbyB3aWxs
-IGFsbG93IHVzIHRvIG1vcmUgZWFzaWx5IGNhbGwgdGhlIGhlbHBlciBhIHNlY29uZA0KPiB0
-aW1lIGluIGEgZnV0dXJlIHBhdGNoIHdpdGhvdXQgYWRkaW5nIGxvb3Bpbmcgb3IgYW5vdGhl
-ciBnb3RvLg0KPiANCj4gVGhpcyBjaGFuZ2UgaXMgaW50ZW5kZWQgdG8gYmUgYSBuby1vcCBj
-aGFuZ2UtLWp1c3QgY29kZSBtb3ZlbWVudC4NCj4gDQo+IFNpZ25lZC1vZmYtYnk6IERvdWds
-YXMgQW5kZXJzb24gPGRpYW5kZXJzQGNocm9taXVtLm9yZz4NCg0KDQo+IC0tLQ0KPiANCj4g
-ICBkcml2ZXJzL2dwdS9kcm0vZHJtX3Byb2JlX2hlbHBlci5jIHwgMTA1ICsrKysrKysrKysr
-KysrKystLS0tLS0tLS0tLS0tDQo+ICAgMSBmaWxlIGNoYW5nZWQsIDU5IGluc2VydGlvbnMo
-KyksIDQ2IGRlbGV0aW9ucygtKQ0KPiANCj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvZ3B1L2Ry
-bS9kcm1fcHJvYmVfaGVscGVyLmMgYi9kcml2ZXJzL2dwdS9kcm0vZHJtX3Byb2JlX2hlbHBl
-ci5jDQo+IGluZGV4IDY4MjM1OTUxMjk5Ni4uODE5MjI1NjI5MDEwIDEwMDY0NA0KPiAtLS0g
-YS9kcml2ZXJzL2dwdS9kcm0vZHJtX3Byb2JlX2hlbHBlci5jDQo+ICsrKyBiL2RyaXZlcnMv
-Z3B1L2RybS9kcm1fcHJvYmVfaGVscGVyLmMNCj4gQEAgLTM1NCw2ICszNTQsNjEgQEAgZHJt
-X2hlbHBlcl9wcm9iZV9kZXRlY3Qoc3RydWN0IGRybV9jb25uZWN0b3IgKmNvbm5lY3RvciwN
-Cj4gICB9DQo+ICAgRVhQT1JUX1NZTUJPTChkcm1faGVscGVyX3Byb2JlX2RldGVjdCk7DQo+
-ICAgDQo+ICtzdGF0aWMgYm9vbCBfZHJtX2hlbHBlcl91cGRhdGVfYW5kX3ZhbGlkYXRlKHN0
-cnVjdCBkcm1fY29ubmVjdG9yICpjb25uZWN0b3IsDQoNCkFGQUlLIGNvbnZlbnRpb24gaXMg
-dG8gdXNlIHR3byB1bmRlcnNjb3JlcyBmb3IgaW50ZXJuYWwgbmFtZXMuDQoNCj4gKwkJCQkJ
-ICAgIHVpbnQzMl90IG1heFgsIHVpbnQzMl90IG1heFksDQo+ICsJCQkJCSAgICBzdHJ1Y3Qg
-ZHJtX21vZGVzZXRfYWNxdWlyZV9jdHggKmN0eCkNCj4gK3sNCj4gKwlzdHJ1Y3QgZHJtX2Rl
-dmljZSAqZGV2ID0gY29ubmVjdG9yLT5kZXY7DQo+ICsJc3RydWN0IGRybV9kaXNwbGF5X21v
-ZGUgKm1vZGU7DQo+ICsJaW50IG1vZGVfZmxhZ3MgPSAwOw0KPiArCWludCByZXQ7DQo+ICsN
-Cj4gKwlkcm1fY29ubmVjdG9yX2xpc3RfdXBkYXRlKGNvbm5lY3Rvcik7DQo+ICsNCj4gKwlp
-ZiAoY29ubmVjdG9yLT5pbnRlcmxhY2VfYWxsb3dlZCkNCj4gKwkJbW9kZV9mbGFncyB8PSBE
-Uk1fTU9ERV9GTEFHX0lOVEVSTEFDRTsNCj4gKwlpZiAoY29ubmVjdG9yLT5kb3VibGVzY2Fu
-X2FsbG93ZWQpDQo+ICsJCW1vZGVfZmxhZ3MgfD0gRFJNX01PREVfRkxBR19EQkxTQ0FOOw0K
-PiArCWlmIChjb25uZWN0b3ItPnN0ZXJlb19hbGxvd2VkKQ0KPiArCQltb2RlX2ZsYWdzIHw9
-IERSTV9NT0RFX0ZMQUdfM0RfTUFTSzsNCj4gKw0KPiArCWxpc3RfZm9yX2VhY2hfZW50cnko
-bW9kZSwgJmNvbm5lY3Rvci0+bW9kZXMsIGhlYWQpIHsNCj4gKwkJaWYgKG1vZGUtPnN0YXR1
-cyAhPSBNT0RFX09LKQ0KPiArCQkJY29udGludWU7DQo+ICsNCj4gKwkJbW9kZS0+c3RhdHVz
-ID0gZHJtX21vZGVfdmFsaWRhdGVfZHJpdmVyKGRldiwgbW9kZSk7DQo+ICsJCWlmIChtb2Rl
-LT5zdGF0dXMgIT0gTU9ERV9PSykNCj4gKwkJCWNvbnRpbnVlOw0KPiArDQo+ICsJCW1vZGUt
-PnN0YXR1cyA9IGRybV9tb2RlX3ZhbGlkYXRlX3NpemUobW9kZSwgbWF4WCwgbWF4WSk7DQo+
-ICsJCWlmIChtb2RlLT5zdGF0dXMgIT0gTU9ERV9PSykNCj4gKwkJCWNvbnRpbnVlOw0KPiAr
-DQo+ICsJCW1vZGUtPnN0YXR1cyA9IGRybV9tb2RlX3ZhbGlkYXRlX2ZsYWcobW9kZSwgbW9k
-ZV9mbGFncyk7DQo+ICsJCWlmIChtb2RlLT5zdGF0dXMgIT0gTU9ERV9PSykNCj4gKwkJCWNv
-bnRpbnVlOw0KPiArDQo+ICsJCXJldCA9IGRybV9tb2RlX3ZhbGlkYXRlX3BpcGVsaW5lKG1v
-ZGUsIGNvbm5lY3RvciwgY3R4LA0KPiArCQkJCQkJICZtb2RlLT5zdGF0dXMpOw0KPiArCQlp
-ZiAocmV0KSB7DQo+ICsJCQlkcm1fZGJnX2ttcyhkZXYsDQo+ICsJCQkJICAgICJkcm1fbW9k
-ZV92YWxpZGF0ZV9waXBlbGluZSBmYWlsZWQ6ICVkXG4iLA0KPiArCQkJCSAgICByZXQpOw0K
-PiArDQo+ICsJCQlpZiAoZHJtX1dBUk5fT05fT05DRShkZXYsIHJldCAhPSAtRURFQURMSykp
-DQo+ICsJCQkJbW9kZS0+c3RhdHVzID0gTU9ERV9FUlJPUjsNCj4gKwkJCWVsc2UNCj4gKwkJ
-CQlyZXR1cm4gdHJ1ZTsNCg0KUmV0dXJuaW5nIHRydWUgaXMgbm9uLWludHVpdGl2ZS4gSXQg
-bG9va3MgYXMgaWYgd2UgcmVwb3J0IHN1Y2Nlc3Mgd2hlbiANCml0IGFjdHVhbGx5IHNpZ25h
-bHMgYSByZXRyeS4NCg0KSSBzdWdnZXN0IHRvIHJldHVybiAncmV0JyBoZXJlIGFuZCBsZXQg
-dGhlIGNhbGxlciBkZWNpZGUuIE9uIHN1Y2Nlc3MgYXQgDQp0aGUgZW5kIG9mIHRoZSBmdW5j
-dGlvbiwgaXQgd291bGQgcmV0dXJuIDAgYXMgdXN1YWwuDQoNCkJlc3QgcmVnYXJkcw0KVGhv
-bWFzDQoNCj4gKwkJfQ0KPiArDQo+ICsJCWlmIChtb2RlLT5zdGF0dXMgIT0gTU9ERV9PSykN
-Cj4gKwkJCWNvbnRpbnVlOw0KPiArCQltb2RlLT5zdGF0dXMgPSBkcm1fbW9kZV92YWxpZGF0
-ZV95Y2JjcjQyMChtb2RlLCBjb25uZWN0b3IpOw0KPiArCX0NCj4gKw0KPiArCXJldHVybiBm
-YWxzZTsNCj4gK30NCj4gKw0KPiAgIC8qKg0KPiAgICAqIGRybV9oZWxwZXJfcHJvYmVfc2lu
-Z2xlX2Nvbm5lY3Rvcl9tb2RlcyAtIGdldCBjb21wbGV0ZSBzZXQgb2YgZGlzcGxheSBtb2Rl
-cw0KPiAgICAqIEBjb25uZWN0b3I6IGNvbm5lY3RvciB0byBwcm9iZQ0KPiBAQCAtNDIxLDcg
-KzQ3Niw2IEBAIGludCBkcm1faGVscGVyX3Byb2JlX3NpbmdsZV9jb25uZWN0b3JfbW9kZXMo
-c3RydWN0IGRybV9jb25uZWN0b3IgKmNvbm5lY3RvciwNCj4gICAJY29uc3Qgc3RydWN0IGRy
-bV9jb25uZWN0b3JfaGVscGVyX2Z1bmNzICpjb25uZWN0b3JfZnVuY3MgPQ0KPiAgIAkJY29u
-bmVjdG9yLT5oZWxwZXJfcHJpdmF0ZTsNCj4gICAJaW50IGNvdW50ID0gMCwgcmV0Ow0KPiAt
-CWludCBtb2RlX2ZsYWdzID0gMDsNCj4gICAJYm9vbCB2ZXJib3NlX3BydW5lID0gdHJ1ZTsN
-Cj4gICAJZW51bSBkcm1fY29ubmVjdG9yX3N0YXR1cyBvbGRfc3RhdHVzOw0KPiAgIAlzdHJ1
-Y3QgZHJtX21vZGVzZXRfYWNxdWlyZV9jdHggY3R4Ow0KPiBAQCAtNTE5LDUyICs1NzMsMTEg
-QEAgaW50IGRybV9oZWxwZXJfcHJvYmVfc2luZ2xlX2Nvbm5lY3Rvcl9tb2RlcyhzdHJ1Y3Qg
-ZHJtX2Nvbm5lY3RvciAqY29ubmVjdG9yLA0KPiAgIAkJCSAgIGNvbm5lY3Rvci0+c3RhdHVz
-ID09IGNvbm5lY3Rvcl9zdGF0dXNfdW5rbm93bikpDQo+ICAgCQljb3VudCA9IGRybV9hZGRf
-bW9kZXNfbm9lZGlkKGNvbm5lY3RvciwgMTAyNCwgNzY4KTsNCj4gICAJY291bnQgKz0gZHJt
-X2hlbHBlcl9wcm9iZV9hZGRfY21kbGluZV9tb2RlKGNvbm5lY3Rvcik7DQo+IC0JaWYgKGNv
-dW50ID09IDApDQo+IC0JCWdvdG8gcHJ1bmU7DQo+IC0NCj4gLQlkcm1fY29ubmVjdG9yX2xp
-c3RfdXBkYXRlKGNvbm5lY3Rvcik7DQo+IC0NCj4gLQlpZiAoY29ubmVjdG9yLT5pbnRlcmxh
-Y2VfYWxsb3dlZCkNCj4gLQkJbW9kZV9mbGFncyB8PSBEUk1fTU9ERV9GTEFHX0lOVEVSTEFD
-RTsNCj4gLQlpZiAoY29ubmVjdG9yLT5kb3VibGVzY2FuX2FsbG93ZWQpDQo+IC0JCW1vZGVf
-ZmxhZ3MgfD0gRFJNX01PREVfRkxBR19EQkxTQ0FOOw0KPiAtCWlmIChjb25uZWN0b3ItPnN0
-ZXJlb19hbGxvd2VkKQ0KPiAtCQltb2RlX2ZsYWdzIHw9IERSTV9NT0RFX0ZMQUdfM0RfTUFT
-SzsNCj4gLQ0KPiAtCWxpc3RfZm9yX2VhY2hfZW50cnkobW9kZSwgJmNvbm5lY3Rvci0+bW9k
-ZXMsIGhlYWQpIHsNCj4gLQkJaWYgKG1vZGUtPnN0YXR1cyAhPSBNT0RFX09LKQ0KPiAtCQkJ
-Y29udGludWU7DQo+IC0NCj4gLQkJbW9kZS0+c3RhdHVzID0gZHJtX21vZGVfdmFsaWRhdGVf
-ZHJpdmVyKGRldiwgbW9kZSk7DQo+IC0JCWlmIChtb2RlLT5zdGF0dXMgIT0gTU9ERV9PSykN
-Cj4gLQkJCWNvbnRpbnVlOw0KPiAtDQo+IC0JCW1vZGUtPnN0YXR1cyA9IGRybV9tb2RlX3Zh
-bGlkYXRlX3NpemUobW9kZSwgbWF4WCwgbWF4WSk7DQo+IC0JCWlmIChtb2RlLT5zdGF0dXMg
-IT0gTU9ERV9PSykNCj4gLQkJCWNvbnRpbnVlOw0KPiAtDQo+IC0JCW1vZGUtPnN0YXR1cyA9
-IGRybV9tb2RlX3ZhbGlkYXRlX2ZsYWcobW9kZSwgbW9kZV9mbGFncyk7DQo+IC0JCWlmICht
-b2RlLT5zdGF0dXMgIT0gTU9ERV9PSykNCj4gLQkJCWNvbnRpbnVlOw0KPiAtDQo+IC0JCXJl
-dCA9IGRybV9tb2RlX3ZhbGlkYXRlX3BpcGVsaW5lKG1vZGUsIGNvbm5lY3RvciwgJmN0eCwN
-Cj4gLQkJCQkJCSAmbW9kZS0+c3RhdHVzKTsNCj4gLQkJaWYgKHJldCkgew0KPiAtCQkJZHJt
-X2RiZ19rbXMoZGV2LA0KPiAtCQkJCSAgICAiZHJtX21vZGVfdmFsaWRhdGVfcGlwZWxpbmUg
-ZmFpbGVkOiAlZFxuIiwNCj4gLQkJCQkgICAgcmV0KTsNCj4gLQ0KPiAtCQkJaWYgKGRybV9X
-QVJOX09OX09OQ0UoZGV2LCByZXQgIT0gLUVERUFETEspKSB7DQo+IC0JCQkJbW9kZS0+c3Rh
-dHVzID0gTU9ERV9FUlJPUjsNCj4gLQkJCX0gZWxzZSB7DQo+IC0JCQkJZHJtX21vZGVzZXRf
-YmFja29mZigmY3R4KTsNCj4gLQkJCQlnb3RvIHJldHJ5Ow0KPiAtCQkJfQ0KPiArCWlmIChj
-b3VudCAhPSAwKSB7DQo+ICsJCWlmIChfZHJtX2hlbHBlcl91cGRhdGVfYW5kX3ZhbGlkYXRl
-KGNvbm5lY3RvciwgbWF4WCwgbWF4WSwgJmN0eCkpIHsNCj4gKwkJCWRybV9tb2Rlc2V0X2Jh
-Y2tvZmYoJmN0eCk7DQo+ICsJCQlnb3RvIHJldHJ5Ow0KPiAgIAkJfQ0KPiAtDQo+IC0JCWlm
-IChtb2RlLT5zdGF0dXMgIT0gTU9ERV9PSykNCj4gLQkJCWNvbnRpbnVlOw0KPiAtCQltb2Rl
-LT5zdGF0dXMgPSBkcm1fbW9kZV92YWxpZGF0ZV95Y2JjcjQyMChtb2RlLCBjb25uZWN0b3Ip
-Ow0KPiAgIAl9DQo+ICAgDQo+ICAgcHJ1bmU6DQoNCi0tIA0KVGhvbWFzIFppbW1lcm1hbm4N
-CkdyYXBoaWNzIERyaXZlciBEZXZlbG9wZXINClNVU0UgU29mdHdhcmUgU29sdXRpb25zIEdl
-cm1hbnkgR21iSA0KTWF4ZmVsZHN0ci4gNSwgOTA0MDkgTsO8cm5iZXJnLCBHZXJtYW55DQoo
-SFJCIDM2ODA5LCBBRyBOw7xybmJlcmcpDQpHZXNjaMOkZnRzZsO8aHJlcjogSXZvIFRvdGV2
-DQo=
+Thanks,
+Ian
 
---------------z9oIwSGpdljbtuDoAMPor8oJ--
-
---------------uvArjD8BBk0l8XSeSfNnFgOh
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmJ0GLQFAwAAAAAACgkQlh/E3EQov+Dm
-Xw//ekn/CghDX1nF3tDJlSHHynP85U/OAl8Cd8yTePQ+JhcG6WKo44OFkcFTZxX1E/QolpVxrKGJ
-2SQ1H0mTWoJIN5lPiCvXzWOJmzRF12EFdJ+WDszSw7NC7j7FeiQZJfWKyUSRWZ+ccjG3rlWv5FMx
-BwBOBcVysIO9mqKrqEYf2pFRIuYJ3/hDgVNF/g7MWNFIbRdp+RKZe4hM3YeviP724GvZaOQRBpNe
-9/sZGs5yL4MQJ9lNb+oUfZKgeLjRdGXStHdrucgUhBWrBBVahVQfkG/NyEPMfekv5SRSL2Rf0F5Z
-ROfS6cStzTIVXS+hNt/7n7Eg3rgiUtvRWrB9+W1z1YbqPonZFd42zbNBiSO0vNAzkiqLjPv8jCTk
-4X+fOg/pbrqc2v2aJYUia2CGw7AvuLGyTZeTe8KCwA4ZB83B8nx1VmWfHIiu8XqPfPHS1Rqty8/r
-syP+n9wqrTm9HlcHoPm8R55SXsLJ0kO03DPXl+qqV76mC+2XC7N2oVEn8eGROEKY7oyf7AxDXX8Y
-uRKEUzqsYxTdI58Ng1Nhe2+77SEvcncegaoNvqDx5+Hfc746e1wjdEmY0VQLvTcWVQNgY9JTyOG1
-xiblvPlJ0llOhviy04n7oYPYIZZE8hKjBF8EwB59ArQNgx+RJU5xJTN43mVy9YBlBMPijEiqfwRG
-bDo=
-=h727
------END PGP SIGNATURE-----
-
---------------uvArjD8BBk0l8XSeSfNnFgOh--
+> > Thanks,
+> > Ian
+> >
+> >> Thanks,
+> >> Kan
+> >>> +test_default_stat
+> >>> +test_topdown_groups
+> >>> +test_topdown_weak_groups
+> >>> +exit $err

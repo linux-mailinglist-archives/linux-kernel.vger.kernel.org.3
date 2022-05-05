@@ -2,40 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C62C51CD41
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 02:00:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D13D751CD34
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 02:00:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387096AbiEFABv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 20:01:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35106 "EHLO
+        id S1387155AbiEFAB7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 20:01:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1387046AbiEFAB3 (ORCPT
+        with ESMTP id S1387056AbiEFAB3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 5 May 2022 20:01:29 -0400
 Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC32860DBA
-        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 16:57:47 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32C7E60DBD
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 16:57:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651795067; x=1683331067;
+  t=1651795068; x=1683331068;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references;
-  bh=eY8ASsd7/aj+9aYNbmEq9GanUaeYVEui2oMFa5HCVds=;
-  b=YMXxjxb13scJhai/c9kcuT3e1y9qaoy8f8nlPRARxffbHqPCprnB4xfO
-   hXwBos4I70Mr0AyRixDeh0aN79ZtIDaIG1Dz8PuAeI+PvSgy8G8bpns7S
-   cxeaF1gkEOeTa+Fx4vLn+VMg4qS7lHeWQd0g987MT5o2HktG/NKS+w+Sm
-   bhqDCKkDSeA+aROvxoKiHyhVomN3jeiXj8uFyD4cz01pGe7b6on/BNeAu
-   R7fjAvc1VUbT9L0kftyrHRrs9H2YY2tZabw9xYbnOtugI/6zp3kkuUdOd
-   ZdEun7Ym253F4N6UesRlY0S74D2prZjSJBNM4rOBQ4824LeMQ6MBAr7Yt
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10338"; a="250283621"
+  bh=s6kx2WD+U+gm4lQdJ9AXtLnfiPC2EdKdrJZetgovSOw=;
+  b=LAQSZFRt0VfLpAxWTIJ93sXM7+vniu54efLdIofxKBwFoy9j7jF3poZ5
+   YtcyHPYKJORJ67r9K34BiOafHzmMr7xizSFXrQIahVDwbd382b2M4r+2J
+   z7gCod/C8XrRSfOc4a0D4yuhlhXRUIKdp5pZkZ3jJk+PxhZZXYMyrnl1D
+   hE6bs1vl5j7gXoamhTPtbXo0Jq3bPAr2Ko5mSaZWHh4GoH0sFHCeBtiy7
+   VlIRq063rDeI1TUYi4Vd21NNwkMz/Eqi+Pr24XryCbfr0G2z/YRHn59em
+   3jT8t3/W+CgWaBuiSLhbCg8loti/KQDXj8LmcsLKgDvvSFuSiDVmEOwvB
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10338"; a="250283623"
 X-IronPort-AV: E=Sophos;i="5.91,203,1647327600"; 
-   d="scan'208";a="250283621"
+   d="scan'208";a="250283623"
 Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2022 16:57:46 -0700
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2022 16:57:47 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,203,1647327600"; 
-   d="scan'208";a="694914342"
+   d="scan'208";a="694914346"
 Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
   by orsmga004.jf.intel.com with ESMTP; 05 May 2022 16:57:46 -0700
 From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
@@ -53,9 +53,9 @@ Cc:     Tony Luck <tony.luck@intel.com>, Andi Kleen <ak@linux.intel.com>,
         iommu@lists.linux-foundation.org, linuxppc-dev@lists.ozlabs.org,
         linux-kernel@vger.kernel.org,
         Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-Subject: [PATCH v6 06/29] x86/apic/vector: Implement support for NMI delivery mode
-Date:   Thu,  5 May 2022 16:59:45 -0700
-Message-Id: <20220506000008.30892-7-ricardo.neri-calderon@linux.intel.com>
+Subject: [PATCH v6 07/29] iommu/vt-d: Clear the redirection hint when the destination mode is physical
+Date:   Thu,  5 May 2022 16:59:46 -0700
+Message-Id: <20220506000008.30892-8-ricardo.neri-calderon@linux.intel.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220506000008.30892-1-ricardo.neri-calderon@linux.intel.com>
 References: <20220506000008.30892-1-ricardo.neri-calderon@linux.intel.com>
@@ -68,20 +68,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The flag X86_IRQ_ALLOC_AS_NMI indicates to the interrupt controller that
-it should configure the delivery mode of an IRQ as NMI. Implement such
-request. This causes irq_domain children in the hierarchy to configure
-their irq_chips accordingly. When no specific delivery mode is requested,
-continue using the delivery mode of the APIC driver in use.
+When the destination mode of an interrupt is physical APICID, the interrupt
+is delivered only to the single CPU of which the physical APICID is
+specified in the destination ID field. Therefore, the redirection hint is
+meaningless.
+
+Furthermore, on certain processors, the IOMMU does not deliver the
+interrupt when the delivery mode is NMI, the redirection hint is set, and
+the destination mode is physical. Clearing the redirection hint ensures
+that the NMI is delivered.
 
 Cc: Andi Kleen <ak@linux.intel.com>
+Cc: David Woodhouse <dwmw2@infradead.org>
 Cc: "Ravi V. Shankar" <ravi.v.shankar@intel.com>
+Cc: Lu Baolu <baolu.lu@linux.intel.com>
 Cc: Stephane Eranian <eranian@google.com>
 Cc: iommu@lists.linux-foundation.org
 Cc: linuxppc-dev@lists.ozlabs.org
 Cc: x86@kernel.org
-Suggested-by: Thomas Gleixner <tglx@linutronix.de>
-Reviewed-by: Tony Luck <tony.luck@intel.com>
+Suggested-by: Ashok Raj <ashok.raj@intel.com>
+Reviewed-by: Lu Baolu <baolu.lu@linux.intel.com>
 Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
 ---
 Changes since v5:
@@ -99,40 +105,32 @@ Changes since v2:
 Changes since v1:
  * N/A
 ---
- arch/x86/kernel/apic/vector.c | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ drivers/iommu/intel/irq_remapping.c | 12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
 
-diff --git a/arch/x86/kernel/apic/vector.c b/arch/x86/kernel/apic/vector.c
-index 11f881f45cec..df4d7b9f6e27 100644
---- a/arch/x86/kernel/apic/vector.c
-+++ b/arch/x86/kernel/apic/vector.c
-@@ -570,6 +570,10 @@ static int x86_vector_alloc_irqs(struct irq_domain *domain, unsigned int virq,
- 	if ((info->flags & X86_IRQ_ALLOC_CONTIGUOUS_VECTORS) && nr_irqs > 1)
- 		return -ENOSYS;
- 
-+	/* Only one IRQ per NMI */
-+	if ((info->flags & X86_IRQ_ALLOC_AS_NMI) && nr_irqs != 1)
-+		return -EINVAL;
+diff --git a/drivers/iommu/intel/irq_remapping.c b/drivers/iommu/intel/irq_remapping.c
+index a67319597884..d2764a71f91a 100644
+--- a/drivers/iommu/intel/irq_remapping.c
++++ b/drivers/iommu/intel/irq_remapping.c
+@@ -1128,7 +1128,17 @@ static void prepare_irte(struct irte *irte, int vector, unsigned int dest)
+ 	irte->dlvry_mode = apic->delivery_mode;
+ 	irte->vector = vector;
+ 	irte->dest_id = IRTE_DEST(dest);
+-	irte->redir_hint = 1;
 +
- 	/*
- 	 * Catch any attempt to touch the cascade interrupt on a PIC
- 	 * equipped system.
-@@ -610,7 +614,15 @@ static int x86_vector_alloc_irqs(struct irq_domain *domain, unsigned int virq,
- 		 * default delivery mode of the APIC. Children irq domains
- 		 * may take the delivery mode from the individual irq
- 		 * configuration rather than from the APIC driver.
-+		 *
-+		 * Vectors are meaningless if the delivery mode is NMI. Since
-+		 * nr_irqs is 1, we can return.
- 		 */
-+		if (info->flags & X86_IRQ_ALLOC_AS_NMI) {
-+			apicd->hw_irq_cfg.delivery_mode = APIC_DELIVERY_MODE_NMI;
-+			return 0;
-+		}
-+
- 		apicd->hw_irq_cfg.delivery_mode = apic->delivery_mode;
++	/*
++	 * When using the destination mode of physical APICID, only the
++	 * processor specified in @dest receives the interrupt. Thus, the
++	 * redirection hint is meaningless.
++	 *
++	 * Furthermore, on some processors, NMIs with physical delivery mode
++	 * and the redirection hint set are delivered as regular interrupts
++	 * or not delivered at all.
++	 */
++	irte->redir_hint = apic->dest_mode_logical;
+ }
  
- 		/*
+ struct irq_remap_ops intel_irq_remap_ops = {
 -- 
 2.17.1
 

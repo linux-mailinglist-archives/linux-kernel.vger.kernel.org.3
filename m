@@ -2,58 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81AE351BC62
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 11:45:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79E2751BC61
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 11:45:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240864AbiEEJsu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 05:48:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59988 "EHLO
+        id S1348356AbiEEJsq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 05:48:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240358AbiEEJsn (ORCPT
+        with ESMTP id S232773AbiEEJsm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 05:48:43 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 291B94BB89;
-        Thu,  5 May 2022 02:45:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651743904; x=1683279904;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=ZK4Qw2SAAdbxMpdVelVruC4nwcuRXe+yXC9Vi4jRqLA=;
-  b=BIRIHmmCJEgijtK5rK+a+klY9HUHhUxBADnGll2ZlGzAVTXEUzXs+9iq
-   GyRpLLh7bPNnQKZGxvV+ae3GjJGCDC3inP+viZB7wLmxvpFOEbo5If8Av
-   LTzs2K3Pxjan80VTpcxCBawIdhYD8lKhss5AOyvvzty8/34iBgYpDiTh2
-   hvMMP23p7k+9OdzJqJiiCZhEWKrR9Fyk3ijW99omtvtYTWs15qg1kApJW
-   avkLao74vB7m0tCG8nk+/RSQU+Hu5Q59I9agQr4WC3lBB2ukpwuOlRqv/
-   LIijgul+kK6ZFPHbGulQ6Xil3RtwZkJLdGJJ4sTgxyu/e31QMM8qTxWff
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10337"; a="255532916"
-X-IronPort-AV: E=Sophos;i="5.91,200,1647327600"; 
-   d="scan'208";a="255532916"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2022 02:45:03 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,200,1647327600"; 
-   d="scan'208";a="734822629"
-Received: from unknown (HELO localhost.localdomain.sh.intel.com) ([10.238.175.107])
-  by orsmga005.jf.intel.com with ESMTP; 05 May 2022 02:45:00 -0700
-From:   Tianfei Zhang <tianfei.zhang@intel.com>
-To:     hao.wu@intel.com, trix@redhat.com, mdf@kernel.org,
-        yilun.xu@intel.com, linux-fpga@vger.kernel.org,
-        gregkh@linuxfoundation.org
-Cc:     linux-kernel@vger.kernel.org,
-        Matthew Gerlach <matthew.gerlach@linux.intel.com>,
-        Tianfei Zhang <tianfei.zhang@intel.com>
-Subject: [PATCH v5] uio: dfl: add HSSI subsystem feature id
-Date:   Thu,  5 May 2022 05:41:29 -0400
-Message-Id: <20220505094129.686535-1-tianfei.zhang@intel.com>
-X-Mailer: git-send-email 2.26.2
+        Thu, 5 May 2022 05:48:42 -0400
+Received: from mail.sberdevices.ru (mail.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39A7345AE2;
+        Thu,  5 May 2022 02:45:01 -0700 (PDT)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mail.sberdevices.ru (Postfix) with ESMTP id 74C345FD03;
+        Thu,  5 May 2022 12:44:58 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1651743898;
+        bh=i5sLLkk7MRAHF0tnt27EbWmGa4GeaDP9MgyR2p7p4dI=;
+        h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type;
+        b=sFHiU756bNxKHX8J1KS9ewF0sc3nqI+Kb7p0Shdz4IZ07GKha14E3/pjCbEda24HB
+         AmiI6N0qNbv8ZCxTeuk6Zy66LXEBRpKlaoTSYyfL2mYm5tRVoa+1gl5EpaswImK/6Z
+         i9moAx2i50uFrSHoqjdz+ZpHXi4mBrWotZkG73UJUqH3XFmR7hoReAecv42GKRf+Oj
+         2K8JsY9Ts+K/6iAr/JL71E+IkZ6Q1otTc0mifohxv0r2yeSn1N4W5xfb50hDN5b2h1
+         xjJmWXF18o6O7UkpDMN65IYyM9Sje/DRRq+l5i4V25J84upjTj+LQJzDyneHtF72qJ
+         DRlJyGIN+APCw==
+Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
+        by mail.sberdevices.ru (Postfix) with ESMTP;
+        Thu,  5 May 2022 12:44:57 +0300 (MSK)
+From:   Alexey Romanov <avromanov@sberdevices.ru>
+To:     <akpm@linux-foundation.org>
+CC:     <minchan@kernel.org>, <ngupta@vflare.org>,
+        <senozhatsky@chromium.org>, <linux-block@vger.kernel.org>,
+        <axboe@chromium.org>, <kernel@sberdevices.ru>,
+        <linux-kernel@vger.kernel.org>, <mnitenko@gmail.com>,
+        Alexey Romanov <avromanov@sberdevices.ru>,
+        Dmitry Rokosov <ddrokosov@sberdevices.ru>
+Subject: [PATCH v5] zram: remove double compression logic
+Date:   Thu, 5 May 2022 12:44:43 +0300
+Message-ID: <20220505094443.11728-1-avromanov@sberdevices.ru>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+Content-Type: text/plain
+X-Originating-IP: [172.16.1.6]
+X-ClientProxiedBy: S-MS-EXCH01.sberdevices.ru (172.16.1.4) To
+ S-MS-EXCH01.sberdevices.ru (172.16.1.4)
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2022/05/05 05:40:00 #19360487
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,52 +65,122 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+The 2nd trial allocation under per-cpu presumption has been used to
+prevent regression of allocation failure. However, it makes trouble
+for maintenance without significant benefit. The slowpath branch is
+executed extremely rarely: getting there is problematic. Therefore,
+we delete this branch.
 
-Add the Device Feature List (DFL) feature id for the
-High Speed Serial Interface (HSSI) Subsystem to the
-table of ids supported by the uio_dfl driver.
+Since b09ab054b69b, zram has used QUEUE_FLAG_STABLE_WRITES to prevent
+buffer change between 1st and 2nd memory allocations. Since we remove
+second trial memory allocation logic, we could remove the STABLE_WRITES
+flag because there is no change buffer to be modified under us.
 
-The HSSI Subsystem is a configurable set of IP blocks
-to be used as part of a Ethernet or PCS/FEC/PMA pipeline.
-Like the Ethernet group used by the N3000 card, the HSSI
-Subsystem does not fully implement a network device from
-a Linux netdev perspective and is controlled and monitored
-from user space software via the uio interface.
-
-The Feature ID table of DFL can be found:
-https://github.com/OPAE/dfl-feature-id
-
-Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
-Signed-off-by: Tianfei Zhang <tianfei.zhang@intel.com>
-Reviewed-by: Tom Rix <trix@redhat.com>
-Acked-by: Xu Yilun <yilun.xu@intel.com>
+Signed-off-by: Alexey Romanov <avromanov@sberdevices.ru>
+Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
 ---
-v5: re-order the SoB chains.
-v4: add Reviewed-by and Acked-by tag and add Feature ID table url in git message.
-v3: change the name of this feature id to HSSI_SUBSYS and rewrite
-    the git message.
-v2: add HSSI introduction and the git repo of Feature ID table.
----
- drivers/uio/uio_dfl.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/block/zram/zram_drv.c | 42 +++++++++--------------------------
+ drivers/block/zram/zram_drv.h |  1 -
+ 2 files changed, 10 insertions(+), 33 deletions(-)
 
-diff --git a/drivers/uio/uio_dfl.c b/drivers/uio/uio_dfl.c
-index 89c0fc7b0cbc..8f39cc8bb034 100644
---- a/drivers/uio/uio_dfl.c
-+++ b/drivers/uio/uio_dfl.c
-@@ -45,9 +45,11 @@ static int uio_dfl_probe(struct dfl_device *ddev)
- }
+diff --git a/drivers/block/zram/zram_drv.c b/drivers/block/zram/zram_drv.c
+index cb253d80d72b..e10066a10dcf 100644
+--- a/drivers/block/zram/zram_drv.c
++++ b/drivers/block/zram/zram_drv.c
+@@ -1147,15 +1147,14 @@ static ssize_t bd_stat_show(struct device *dev,
+ static ssize_t debug_stat_show(struct device *dev,
+ 		struct device_attribute *attr, char *buf)
+ {
+-	int version = 1;
++	int version = 2;
+ 	struct zram *zram = dev_to_zram(dev);
+ 	ssize_t ret;
  
- #define FME_FEATURE_ID_ETH_GROUP	0x10
-+#define FME_FEATURE_ID_HSSI_SUBSYS	0x15
+ 	down_read(&zram->init_lock);
+ 	ret = scnprintf(buf, PAGE_SIZE,
+-			"version: %d\n%8llu %8llu\n",
++			"version: %d\n%8llu\n",
+ 			version,
+-			(u64)atomic64_read(&zram->stats.writestall),
+ 			(u64)atomic64_read(&zram->stats.miss_free));
+ 	up_read(&zram->init_lock);
  
- static const struct dfl_device_id uio_dfl_ids[] = {
- 	{ FME_ID, FME_FEATURE_ID_ETH_GROUP },
-+	{ FME_ID, FME_FEATURE_ID_HSSI_SUBSYS },
- 	{ }
- };
- MODULE_DEVICE_TABLE(dfl, uio_dfl_ids);
+@@ -1373,7 +1372,6 @@ static int __zram_bvec_write(struct zram *zram, struct bio_vec *bvec,
+ 	}
+ 	kunmap_atomic(mem);
+ 
+-compress_again:
+ 	zstrm = zcomp_stream_get(zram->comp);
+ 	src = kmap_atomic(page);
+ 	ret = zcomp_compress(zstrm, src, &comp_len);
+@@ -1382,39 +1380,20 @@ static int __zram_bvec_write(struct zram *zram, struct bio_vec *bvec,
+ 	if (unlikely(ret)) {
+ 		zcomp_stream_put(zram->comp);
+ 		pr_err("Compression failed! err=%d\n", ret);
+-		zs_free(zram->mem_pool, handle);
+ 		return ret;
+ 	}
+ 
+ 	if (comp_len >= huge_class_size)
+ 		comp_len = PAGE_SIZE;
+-	/*
+-	 * handle allocation has 2 paths:
+-	 * a) fast path is executed with preemption disabled (for
+-	 *  per-cpu streams) and has __GFP_DIRECT_RECLAIM bit clear,
+-	 *  since we can't sleep;
+-	 * b) slow path enables preemption and attempts to allocate
+-	 *  the page with __GFP_DIRECT_RECLAIM bit set. we have to
+-	 *  put per-cpu compression stream and, thus, to re-do
+-	 *  the compression once handle is allocated.
+-	 *
+-	 * if we have a 'non-null' handle here then we are coming
+-	 * from the slow path and handle has already been allocated.
+-	 */
+-	if (!handle)
+-		handle = zs_malloc(zram->mem_pool, comp_len,
+-				__GFP_KSWAPD_RECLAIM |
+-				__GFP_NOWARN |
+-				__GFP_HIGHMEM |
+-				__GFP_MOVABLE);
+-	if (!handle) {
++
++	handle = zs_malloc(zram->mem_pool, comp_len,
++			__GFP_KSWAPD_RECLAIM |
++			__GFP_NOWARN |
++			__GFP_HIGHMEM |
++			__GFP_MOVABLE);
++
++	if (unlikely(!handle)) {
+ 		zcomp_stream_put(zram->comp);
+-		atomic64_inc(&zram->stats.writestall);
+-		handle = zs_malloc(zram->mem_pool, comp_len,
+-				GFP_NOIO | __GFP_HIGHMEM |
+-				__GFP_MOVABLE);
+-		if (handle)
+-			goto compress_again;
+ 		return -ENOMEM;
+ 	}
+ 
+@@ -1975,7 +1954,6 @@ static int zram_add(void)
+ 	if (ZRAM_LOGICAL_BLOCK_SIZE == PAGE_SIZE)
+ 		blk_queue_max_write_zeroes_sectors(zram->disk->queue, UINT_MAX);
+ 
+-	blk_queue_flag_set(QUEUE_FLAG_STABLE_WRITES, zram->disk->queue);
+ 	ret = device_add_disk(NULL, zram->disk, zram_disk_groups);
+ 	if (ret)
+ 		goto out_cleanup_disk;
+diff --git a/drivers/block/zram/zram_drv.h b/drivers/block/zram/zram_drv.h
+index 80c3b43b4828..158c91e54850 100644
+--- a/drivers/block/zram/zram_drv.h
++++ b/drivers/block/zram/zram_drv.h
+@@ -81,7 +81,6 @@ struct zram_stats {
+ 	atomic64_t huge_pages_since;	/* no. of huge pages since zram set up */
+ 	atomic64_t pages_stored;	/* no. of pages currently stored */
+ 	atomic_long_t max_used_pages;	/* no. of maximum pages stored */
+-	atomic64_t writestall;		/* no. of write slow paths */
+ 	atomic64_t miss_free;		/* no. of missed free */
+ #ifdef	CONFIG_ZRAM_WRITEBACK
+ 	atomic64_t bd_count;		/* no. of pages in backing device */
 -- 
-2.26.2
+2.30.1
 

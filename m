@@ -2,112 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F26951C1C0
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 15:59:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6914751C1C4
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 15:59:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380276AbiEEOB0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 10:01:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52490 "EHLO
+        id S1380288AbiEEOC1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 10:02:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238597AbiEEOBX (ORCPT
+        with ESMTP id S233206AbiEEOCY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 10:01:23 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71ADE220E4;
-        Thu,  5 May 2022 06:57:44 -0700 (PDT)
-Received: from canpemm500007.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KvFc53K4NzfbJY;
-        Thu,  5 May 2022 21:56:37 +0800 (CST)
-Received: from localhost (10.174.179.215) by canpemm500007.china.huawei.com
- (7.192.104.62) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Thu, 5 May
- 2022 21:57:42 +0800
-From:   YueHaibing <yuehaibing@huawei.com>
-To:     <peterz@infradead.org>, <mingo@redhat.com>, <acme@kernel.org>,
-        <mark.rutland@arm.com>, <alexander.shishkin@linux.intel.com>,
-        <jolsa@kernel.org>, <namhyung@kernel.org>, <ast@kernel.org>,
-        <daniel@iogearbox.net>, <andrii@kernel.org>, <kafai@fb.com>,
-        <songliubraving@fb.com>, <yhs@fb.com>, <john.fastabend@gmail.com>,
-        <kpsingh@kernel.org>, <christylee@fb.com>
-CC:     <linux-perf-users@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <netdev@vger.kernel.org>, <bpf@vger.kernel.org>,
-        YueHaibing <yuehaibing@huawei.com>
-Subject: [PATCH] perf: Fix pass 0 to PTR_ERR
-Date:   Thu, 5 May 2022 21:57:13 +0800
-Message-ID: <20220505135713.18496-1-yuehaibing@huawei.com>
-X-Mailer: git-send-email 2.10.2.windows.1
+        Thu, 5 May 2022 10:02:24 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32A3C23159;
+        Thu,  5 May 2022 06:58:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1651759125; x=1683295125;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=GMVMpKDn0PDDw4iO5jpTyKJm/l58XPckDe3I2ZWI29o=;
+  b=KJ8ABJlinMKizBTmRWT257bLB4kloc10qkE5DX6BzPYVkhHUn82IVNzM
+   hCu33xi5+qeTwQJXmblefNaowh3Bgjgc6XnAhr6xD+aQp765kh7o7YWOQ
+   5QNqRqIbTcEd0gS6FAUWsAAU2NeLPnorGEp+ZmAxDdIFP75LaTwVK4jpS
+   r1NVhnwHYx7mtmazNZxcpQpr0j4taaLxBMwRkzfyRHFAJ5GfgpiDkoaqM
+   T7Iu2fpu1CftRU/V963NdJnvwQyzviY1uWoZmUPEqmSpMwHucqlsZhBoq
+   dhsztjSkm9mRg/UiTJBIjP1njiBv4UJ7+mSfpU+NrK1OmCGXsz11Asvzw
+   g==;
+X-IronPort-AV: E=Sophos;i="5.91,201,1647327600"; 
+   d="scan'208";a="94666318"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 05 May 2022 06:58:44 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Thu, 5 May 2022 06:58:44 -0700
+Received: from [10.159.245.112] (10.10.115.15) by chn-vm-ex01.mchp-main.com
+ (10.10.85.143) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
+ Transport; Thu, 5 May 2022 06:58:41 -0700
+Message-ID: <d84e0e48-cf35-ae1a-e384-067d361457ba@microchip.com>
+Date:   Thu, 5 May 2022 15:58:34 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.174.179.215]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- canpemm500007.china.huawei.com (7.192.104.62)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v3 6/6] ARM: configs: at91: sama7_defconfig: add MCHP PDMC
+ and DMIC drivers
+Content-Language: en-US
+To:     Codrin Ciubotariu <codrin.ciubotariu@microchip.com>,
+        <alsa-devel@alsa-project.org>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+CC:     <lars@metafoo.de>, <broonie@kernel.org>, <perex@perex.cz>,
+        <tiwai@suse.com>, <robh+dt@kernel.org>
+References: <20220307122202.2251639-1-codrin.ciubotariu@microchip.com>
+ <20220307122202.2251639-7-codrin.ciubotariu@microchip.com>
+From:   Nicolas Ferre <nicolas.ferre@microchip.com>
+Organization: microchip
+In-Reply-To: <20220307122202.2251639-7-codrin.ciubotariu@microchip.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Passing NULL to PTR_ERR will result in 0 (success), also move
-evlist__find_evsel_by_str() behind for minor optimization.
+On 07/03/2022 at 13:22, Codrin Ciubotariu wrote:
+> Enable drivers needed for Microchip's PDMC and PDM microphones.
+> 
+> Signed-off-by: Codrin Ciubotariu <codrin.ciubotariu@microchip.com>
+> ---
+> 
+> Changes in v2,v3:
+>   - none;
+> 
+>   arch/arm/configs/sama7_defconfig | 2 ++
+>   1 file changed, 2 insertions(+)
+> 
+> diff --git a/arch/arm/configs/sama7_defconfig b/arch/arm/configs/sama7_defconfig
+> index 0368068e04d9..bc29badab890 100644
+> --- a/arch/arm/configs/sama7_defconfig
+> +++ b/arch/arm/configs/sama7_defconfig
+> @@ -138,6 +138,8 @@ CONFIG_SND_SOC_MIKROE_PROTO=m
+>   CONFIG_SND_MCHP_SOC_I2S_MCC=y
+>   CONFIG_SND_MCHP_SOC_SPDIFTX=y
+>   CONFIG_SND_MCHP_SOC_SPDIFRX=y
+> +CONFIG_SND_MCHP_SOC_PDMC=y
+> +CONFIG_SND_SOC_DMIC=y
 
-Fixes: 924b1cd61148 ("perf: Stop using bpf_map__def() API")
-Signed-off-by: YueHaibing <yuehaibing@huawei.com>
----
- tools/perf/util/bpf-loader.c | 15 ++++++++-------
- tools/perf/util/bpf_map.c    |  2 +-
- 2 files changed, 9 insertions(+), 8 deletions(-)
+I'm fine with that, but I see that some Kconfig entries "select" this 
+SND_SOC_DMIC directly (amd, intel, mediatek, stm).
+If it's absolutely needed for PDMC to work, what about doing the same as 
+it would prevent some broken configurations?
 
-diff --git a/tools/perf/util/bpf-loader.c b/tools/perf/util/bpf-loader.c
-index f8ad581ea247..b301ffc8c6e7 100644
---- a/tools/perf/util/bpf-loader.c
-+++ b/tools/perf/util/bpf-loader.c
-@@ -1253,21 +1253,22 @@ __bpf_map__config_event(struct bpf_map *map,
- 			struct parse_events_term *term,
- 			struct evlist *evlist)
- {
--	struct bpf_map_op *op;
- 	const char *map_name = bpf_map__name(map);
--	struct evsel *evsel = evlist__find_evsel_by_str(evlist, term->val.str);
-+	struct bpf_map_op *op;
-+	struct evsel *evsel;
- 
-+	if (!map) {
-+		pr_debug("Map '%s' is invalid\n", map_name);
-+		return -BPF_LOADER_ERRNO__INTERNAL;
-+	}
-+
-+	evsel = evlist__find_evsel_by_str(evlist, term->val.str);
- 	if (!evsel) {
- 		pr_debug("Event (for '%s') '%s' doesn't exist\n",
- 			 map_name, term->val.str);
- 		return -BPF_LOADER_ERRNO__OBJCONF_MAP_NOEVT;
- 	}
- 
--	if (!map) {
--		pr_debug("Map '%s' is invalid\n", map_name);
--		return PTR_ERR(map);
--	}
--
- 	/*
- 	 * No need to check key_size and value_size:
- 	 * kernel has already checked them.
-diff --git a/tools/perf/util/bpf_map.c b/tools/perf/util/bpf_map.c
-index c863ae0c5cb5..c72aee6a91ee 100644
---- a/tools/perf/util/bpf_map.c
-+++ b/tools/perf/util/bpf_map.c
-@@ -36,7 +36,7 @@ int bpf_map__fprintf(struct bpf_map *map, FILE *fp)
- 		return fd;
- 
- 	if (!map)
--		return PTR_ERR(map);
-+		return -EINVAL;
- 
- 	err = -ENOMEM;
- 	key = malloc(bpf_map__key_size(map));
+Regards,
+   Nicolas
+
+>   CONFIG_SND_SOC_PCM5102A=y
+>   CONFIG_SND_SOC_SPDIF=y
+>   CONFIG_SND_SIMPLE_CARD=y
+
+
 -- 
-2.17.1
-
+Nicolas Ferre

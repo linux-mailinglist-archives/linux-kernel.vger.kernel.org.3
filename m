@@ -2,64 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BBD651C5A7
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 19:02:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B6FC51C5AD
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 19:04:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382350AbiEERFw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 13:05:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54070 "EHLO
+        id S1382280AbiEERIV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 13:08:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344870AbiEERFd (ORCPT
+        with ESMTP id S240110AbiEERIS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 13:05:33 -0400
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63BD35B3DC;
-        Thu,  5 May 2022 10:01:52 -0700 (PDT)
-Received: by mail-wm1-x32b.google.com with SMTP id k126-20020a1ca184000000b003943fd07180so3006973wme.3;
-        Thu, 05 May 2022 10:01:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:subject:from:to:date:content-transfer-encoding
-         :user-agent:mime-version;
-        bh=WdAvXMilkjeXGxCjt4xSahrQ1dbVlNr+hNx2Eah+WlM=;
-        b=hTNmdPYIZqmJ813s+jCFPFG2FxNmfsZ1OymxifcGYmreRrJs6FAySX+Z8IlZ5qxpcX
-         V3QWT2s8/IsLlbXcnNM8SL9NsLo1XKhBgS9UZuyXYk7cPVrwMWQyJJB/L+yfRepwM8e9
-         KHl4uL7I/3cyXenNxV6FWEryxat4r1bg6E46kkj0vtEvDBBJm4E/B6ux8ak9MlOq9biI
-         4mYzdf1WfB4+iVRc8jVtaNyY68o/m8gfFsZ87CW3q+Q1Z2MI+6Ms2bXDjLu8Po24hPc8
-         aXKIpYyxq+kQuDokdWomLpkAl6/bU+GLb2ZExxsHJQTg6TDWcjKpmpCVpf3QVE3SGOgO
-         sZ8w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:date
-         :content-transfer-encoding:user-agent:mime-version;
-        bh=WdAvXMilkjeXGxCjt4xSahrQ1dbVlNr+hNx2Eah+WlM=;
-        b=AqO330shtCkFNr4P/yXzQxQekrB8dFO679MPsfvD7ToVbbVC8GMA5UzQB1U9mspBhW
-         DU5+EgqSmDXqcKIa7FCEXMTX1pUx/Gdm1P8N/RkX2j8Q9gqhP0rwp3BxHyxQKUgHo1Zw
-         SMEbjMb1fsyR1quU/3j5E2/qOc0y/g4LDJOJaWvT6q5ylwgwxwVCJyAoPpS7KVueeCMe
-         knREJ5HGT66iDAlH520QyINk+3UE5VZPpsRpZcZehhwF3y8C2+GSDOrI04hSfTGaOouz
-         QMbQq3NGO+k4cDRL++2m3Kcm45MKY+AG15N+uLL7U6zGmIsUvyPm7dAGZYRtm4RVJ3L/
-         JZsw==
-X-Gm-Message-State: AOAM532RDh3pf/iHvMsbQp8w/TdguWw+ZOBG1u9gQXPlnUF2gHXy4OMg
-        RogiUJcFPrEzJB8jRydZHIuJjphISeU=
-X-Google-Smtp-Source: ABdhPJwGhkNOC7bMhu95RxFbVVMEfYOF2frj3xLBCZmE2FFo4w9Rz+9PZHPCh0N0pN22TBVrX7RUyw==
-X-Received: by 2002:a05:600c:4fc6:b0:393:fb29:1f3f with SMTP id o6-20020a05600c4fc600b00393fb291f3fmr5964866wmq.60.1651770110800;
-        Thu, 05 May 2022 10:01:50 -0700 (PDT)
-Received: from [192.168.11.155] (94-21-221-167.pool.digikabel.hu. [94.21.221.167])
-        by smtp.gmail.com with ESMTPSA id g6-20020a056000118600b0020c5253d8d6sm1644791wrx.34.2022.05.05.10.01.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 May 2022 10:01:50 -0700 (PDT)
-Message-ID: <052a814001aaa46eab844f1d9693ddd9d731c164.camel@gmail.com>
-Subject: 9 bit serial / non-blocking TCSADRAIN
-From:   =?ISO-8859-1?Q?Baltaz=E1r?= Radics <baltazar.radics@gmail.com>
-To:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Thu, 05 May 2022 19:01:48 +0200
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.1 
+        Thu, 5 May 2022 13:08:18 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19ECF101C5
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 10:04:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651770279; x=1683306279;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=ppnTDlnUiSAwVHOZZyIHx8ErJ3z/pXNJDcAfk/v+Bes=;
+  b=OHIlLlBBpXHmaGOyin5ENaP2MbcXy8jUjDe5CGbP7kMpDgMjh+wK/3O9
+   qgzOa6HWrXCGdS0Pre5kfWcRJA3XIDGNvkOju36+9w6AXB3lutplj8hzy
+   AkHvmBGjtsnHbBnAqiacIkbr7ATWXVK96jkvTVA8zcHUDv2JjmaDxUEka
+   milkU1/eQYwPRGGb6AnL1uw0T/cewNKxsVHD8apU1uk3EZ/4dhLLHZaXB
+   Ji3K0Qn3oS9GdG0Wt9jNR4DdVgG825m+L+in819QJ2UmdktWXlxruf9DD
+   dOrWvlBXQQWC6I2tuIDQ3dBgoCTw1xXheyni6R7xWN7DyFlG2Rup3xjiz
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10338"; a="248720967"
+X-IronPort-AV: E=Sophos;i="5.91,201,1647327600"; 
+   d="scan'208";a="248720967"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2022 10:04:38 -0700
+X-IronPort-AV: E=Sophos;i="5.91,201,1647327600"; 
+   d="scan'208";a="694753447"
+Received: from evegaag-mobl1.amr.corp.intel.com (HELO [10.209.187.127]) ([10.209.187.127])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2022 10:04:35 -0700
+Message-ID: <0b501f18-a6b8-1d9b-e72a-ea6cb33720a2@intel.com>
+Date:   Thu, 5 May 2022 10:04:55 -0700
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v2 2/3] x86: Remove vendor checks from
+ prefer_mwait_c1_over_halt
+Content-Language: en-US
+To:     Wyes Karny <wyes.karny@amd.com>, linux-kernel@vger.kernel.org
+Cc:     Lewis.Carroll@amd.com, Mario.Limonciello@amd.com,
+        gautham.shenoy@amd.com, Ananth.Narayan@amd.com, bharata@amd.com,
+        len.brown@intel.com, x86@kernel.org, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        hpa@zytor.com, peterz@infradead.org, chang.seok.bae@intel.com,
+        keescook@chromium.org, metze@samba.org, zhengqi.arch@bytedance.com,
+        mark.rutland@arm.com, puwen@hygon.cn, rafael.j.wysocki@intel.com,
+        andrew.cooper3@citrix.com, jing2.liu@intel.com,
+        jmattson@google.com, pawan.kumar.gupta@linux.intel.com
+References: <20220505104856.452311-1-wyes.karny@amd.com>
+ <20220505110140.453184-1-wyes.karny@amd.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <20220505110140.453184-1-wyes.karny@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,17 +71,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello!
+On 5/5/22 04:01, Wyes Karny wrote:
+> -	if (c->x86_vendor != X86_VENDOR_INTEL)
+> +	/* MWAIT is not supported on this platform. Fallback to HALT */
+> +	if (!cpu_has(c, X86_FEATURE_MWAIT))
+> +		return 0;
+> +
+> +	/* Monitor has a bug. Fallback to HALT */
+> +	if (boot_cpu_has_bug(X86_BUG_MONITOR))
+>  		return 0;
+>  
+> -	if (!cpu_has(c, X86_FEATURE_MWAIT) || boot_cpu_has_bug(X86_BUG_MONITOR))
+> +	if (c->cpuid_level < CPUID_MWAIT_LEAF)
+>  		return 0;
 
-I want to use a raspberry pi's serial to communicate over a protocol
-that uses 9-bit characters, so currently I'm using the stick parity
-mode (CMSPAR) and toggling between odd and even parity, then using
-tcsetattr with TCSADRAIN as the second argument, which blocks until all
-bytes are transmitted. Is there a non-blocking api to do the same
-thing, so I can use it from poll / select? (If there's a better way to
-do 9 bit character size, that'd be even better. For my protocol, the
-9th bit is only used to tell address bytes from data bytes, so I don't
-have to change it often, so I guess my current method isn't too
-horrible.)
+First of all, thanks for all the detail in this new version of the patches!
 
-Thanks!
+In arch/x86/kernel/cpu/common.c, we have:
+
+cpuid_dependent_features[] = {
+        { X86_FEATURE_MWAIT,            0x00000005 },
+	...
+
+Shouldn't that clear X86_FEATURE_MWAIT on all systems without
+CPUID_MWAIT_LEAF?  That would make the c->cpuid_level check above
+unnecessary.
+
+> +	/*
+> +	 * If ECX doesn't have extended info about MWAIT,
+> +	 * don't need to check substates.
+> +	 */
+> +	if (!(ecx & CPUID5_ECX_EXTENSIONS_SUPPORTED))
+> +		return 1;
+
+Could you explain a bit more about this?  I don't know this CPUID leaf
+off the top of my head and the line after this is checking EDX.  It's
+not apparent from this comment why "!ECX_EXTENSIONS_SUPPORTED" means
+that MWAIT should be preferred.
+
+> +	/* Check, whether at least 1 MWAIT C1 substate is present */
+> +	return (edx & MWAIT_C1_SUBSTATE_MASK);
+

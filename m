@@ -2,90 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E30351C25F
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 16:23:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4597851C249
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 16:20:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380551AbiEEOXm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 10:23:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48058 "EHLO
+        id S1380596AbiEEOYO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 10:24:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240498AbiEEOXi (ORCPT
+        with ESMTP id S240498AbiEEOYL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 10:23:38 -0400
-Received: from mail-ot1-f48.google.com (mail-ot1-f48.google.com [209.85.210.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B74835A581;
-        Thu,  5 May 2022 07:19:59 -0700 (PDT)
-Received: by mail-ot1-f48.google.com with SMTP id k25-20020a056830169900b00605f215e55dso3006401otr.13;
-        Thu, 05 May 2022 07:19:59 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=DFmU3bB4XPToeXRmwdLwJrVFlyKt5rvtvjjuZuWJjM0=;
-        b=ARkgZ0w+t7zvG5RrJk7DvDiKpWRjD4AyLbUefxeADQd8hKAfqYFkWILihyMPoyfisA
-         cvpawxzToZ3KZLnswWKLc80Puuyc8gDz7jy+CAZqkFb2bXJU3IqlNo54r6o0uywt+I0s
-         uF2yIzd3X16WIf/vafvmywTwUm/X69HoJ6opy/kQBKZdTwzn+JNXyOWGqpXiyJM0+9PT
-         wsD4FHEJ4zFR54bVgakIia6gbFLUERgWpgI0itEhSBroOHGoPcAuRF9/E+LdDF5ETndg
-         pwGNDrK6RhxnJtYlCCMVg+TGZlfrsMi2E38Y9EGfomVI5tA2jb5uHNRRlGR19w8hgLIF
-         rIdw==
-X-Gm-Message-State: AOAM532FGdNNqYrlWQBmzTNINPWVXdcQGWtcL84m9PPzquTwRIP+eUyb
-        D2rxii5brlDWZOgebYRvkw==
-X-Google-Smtp-Source: ABdhPJww82Ke8WD/s2vuFaLiYXbwCJuO8OUCgIhRKNz28znZv+E5dG5ObG4va7gRi4szpcFYNLF9nA==
-X-Received: by 2002:a9d:6e83:0:b0:605:4a01:1d8c with SMTP id a3-20020a9d6e83000000b006054a011d8cmr9446080otr.174.1651760398945;
-        Thu, 05 May 2022 07:19:58 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id r41-20020a056870582900b000e92295f8acsm543810oap.2.2022.05.05.07.19.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 May 2022 07:19:58 -0700 (PDT)
-Received: (nullmailer pid 3822543 invoked by uid 1000);
-        Thu, 05 May 2022 14:19:57 -0000
-Date:   Thu, 5 May 2022 09:19:57 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-spi@vger.kernel.org
-Subject: Re: [PATCH qcom v2] spi: dt-bindings: qcom,spi-geni-qcom: allow
- three interconnects
-Message-ID: <YnPdDY9E2EFoonHK@robh.at.kernel.org>
-References: <20220505065233.28476-1-krzysztof.kozlowski@linaro.org>
+        Thu, 5 May 2022 10:24:11 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9558915A2D;
+        Thu,  5 May 2022 07:20:29 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D6F82B82D81;
+        Thu,  5 May 2022 14:20:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55907C385A4;
+        Thu,  5 May 2022 14:20:22 +0000 (UTC)
+Date:   Thu, 5 May 2022 15:20:18 +0100
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Baoquan He <bhe@redhat.com>
+Cc:     "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        linux-kernel@vger.kernel.org, Dave Young <dyoung@redhat.com>,
+        Vivek Goyal <vgoyal@redhat.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        kexec@lists.infradead.org, Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        devicetree@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        linux-doc@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
+        Feng Zhou <zhoufeng.zf@bytedance.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Chen Zhou <dingguo.cz@antgroup.com>,
+        John Donnelly <John.p.donnelly@oracle.com>,
+        Dave Kleikamp <dave.kleikamp@oracle.com>
+Subject: Re: [PATCH v22 5/9] arm64: kdump: Reimplement crashkernel=X
+Message-ID: <YnPdIvOktZBQYLjg@arm.com>
+References: <ae7211ad-e2ac-f5b1-5aa0-701802132e73@huawei.com>
+ <YmlphvZVMsGfFksp@arm.com>
+ <YmoMvV1wzHT5V1aw@MiWiFi-R3L-srv>
+ <YmoPhvkXQFZQOcIO@MiWiFi-R3L-srv>
+ <3fc41a94-4247-40f3-14e7-f11e3001ec33@huawei.com>
+ <YmtaiJhwIgP6m2Sk@MiWiFi-R3L-srv>
+ <a9c736a0-f2b3-5b8a-94d9-80742ccd2700@huawei.com>
+ <23e2dcf4-4e9a-5298-d5d8-8761b0bbbe21@huawei.com>
+ <YnGmCwaWkvCrJoU2@arm.com>
+ <YnM9w69l5dbE+k15@MiWiFi-R3L-srv>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220505065233.28476-1-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <YnM9w69l5dbE+k15@MiWiFi-R3L-srv>
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 05 May 2022 08:52:33 +0200, Krzysztof Kozlowski wrote:
-> Recent Qualcomm Geni SPI nodes, e.g. on SM8450, come also with three
-> interconnects.  This fixes dtbs_check warnings like:
+On Thu, May 05, 2022 at 11:00:19AM +0800, Baoquan He wrote:
+> On 05/03/22 at 11:00pm, Catalin Marinas wrote:
+> > So, to recap, IIUC you are fine with:
+> > 
+> > 	crashkernel=Y		- allocate within ZONE_DMA with fallback
+> > 				  above with a default in ZONE_DMA (like
+> > 				  x86, 256M or swiotlb size)
 > 
->   sm8450-qrd.dtb: spi@a98000: interconnects: [[46, 1, 0, 46, 4, 0], [47, 2, 0, 48, 12, 0], [49, 1, 0, 50, 1, 0]] is too long
->   sm8450-qrd.dtb: spi@a98000: interconnect-names: ['qup-core', 'qup-config', 'qup-memory'] is too long
+>         Ack to this one.
 > 
-> Fixes: 5bdcae1fe1c5 ("spi: dt-bindings: qcom,spi-geni-qcom: convert to dtschema")
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 > 
-> ---
+> > 	crashkernel=Y,high	- allocate from above ZONE_DMA
 > 
-> Fix for a commit in MSM/Bjorn's tree.
-> 
-> Changes since v1:
-> 1. Correct error msg (Rob).
-> ---
->  .../devicetree/bindings/spi/qcom,spi-geni-qcom.yaml          | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
-> 
+>         Not exactly. If there's only ZONE_DMA, crashkernel,high will
+>         be reserved in ZONE_DMA, and crashkernel,low will be ignored.
+>         Other than this, ack.
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Yes, that's fine.
+
+> > 	crashkernel=Y,low	- allocate within ZONE_DMA
+> 
+>         Ack to this one.
+> > 
+> > 'crashkernel' overrides the high and low while the latter two can be
+> > passed independently.
+> 
+>         crashkernel=,high can be passed independently, then a crashkernel=,low
+>         is needed implicitly. If people don't want crashkernel=,low
+>         explicitly, crashkernel=0,low need be specified.
+
+I find this complicating the interface. I don't know the background to
+the x86 implementation but we diverge already on arm64 since we talk
+about ZONE_DMA rather than 4G limit (though for most platforms these
+would be the same).
+
+I guess we could restate the difference between crashkernel= and
+crashkernel=,high as the hint to go for allocation above ZONE_DMA first.
+
+>         An independent crashkernel=,low makes no sense. Crashkernel=,low
+>         should be paird with crashkernel=,high.
+
+You could argue that crashkernel=,low gives the current crashkernel=
+behaviour, i.e. either all within ZONE_DMA or fail to allocate. So it
+may have some value on its own.
+
+>         My personal opinion according to the existed senmantics on x86.
+>         Otherwise, the guidance of crashkernel= |,high|,low reservation
+>         will be complicated to write.
+
+It's more that I find the current semantics unnecessarily confusing. But
+even reading the x86_64 text it's not that clear. For example the
+default low allocation for crashkernel= and crashkernel=,high is only
+mentioned in the crashkernel=,low description.
+
+-- 
+Catalin

@@ -2,108 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79C3B51C61C
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 19:30:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AD6D51C620
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 19:30:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382691AbiEERdx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 13:33:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52132 "EHLO
+        id S1355992AbiEEReL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 13:34:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230386AbiEERdv (ORCPT
+        with ESMTP id S1382709AbiEEReG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 13:33:51 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8116B5D5C1;
-        Thu,  5 May 2022 10:30:11 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id gh6so10101342ejb.0;
-        Thu, 05 May 2022 10:30:11 -0700 (PDT)
+        Thu, 5 May 2022 13:34:06 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2D92FFC;
+        Thu,  5 May 2022 10:30:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=AYoAdCdkT7PiEbbErCv6i3mZvm+YUlK175LWY0Bzz/E=;
-        b=ETpzOAYLa4fFqZFrmj9IvU3fXGkfXuYQQfd57DQ2qqkggZCI+0UiH7qkSKEtwI0Eai
-         mw9glO0bjOnoSv5ArnbCVp7RsOtIDIqwEMj3tZTwYPSlFn/Zv7Rpbwhq7k+OV9fsXJBH
-         0nLT14gjFbkXvSs31mA4MVU2bv/5XaRWL+WnuvSMFR/osx1zq1SruqXu0sE/7t4d6mnI
-         613nz1Pxm7DaeB/GwZcc4A4QFHAwY5nAGXDCfTl/8/U41gEAFTa/+n/L7oAxeiM2bycP
-         bykictkayyxQZa2miOM0Qove/fTbgbMbcbw66+/KJs7PU0hX492U/i+WwlGB6UUWNg7y
-         nhcw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=AYoAdCdkT7PiEbbErCv6i3mZvm+YUlK175LWY0Bzz/E=;
-        b=eSMEF4W/zUhYjDGBfH0svNK7c9x0nkfJERbZiM59er6X6ozHbJw2IgxGHujBbL4/fp
-         dysMUorUweJGjyXjIAStydEqJ1otO2eZ3Mirjyg1cOY7KCYyqkb/PiocQw7rI8chNbIn
-         IUit+TerscRci/YxCXCUT2lnkm/cQotqSKgsd1SJqWrA8T7T+MSxkewge1U/MkfBtaLh
-         CBD8QvNT4GmFfvuj0spTTjIfAsNQfXcx4tp4S1WkkSjsu7R99xefYdwlH9ziTYnpsMqy
-         mHC6Bgy15JzfdzE6h4DwiASK2Pb2MnVqFLqpWuBxyKSI6cN2l2JBTuu6aHpmCgRRgNXT
-         F2/A==
-X-Gm-Message-State: AOAM532Lyl5O2TfxuUQJ5zETzneV77M3QqMcXdnlnSFG2n5i2iD5LGi4
-        JExhrwp6Ty0jGIEmm35ZdwuANU3dB5Pv2nS4vNA=
-X-Google-Smtp-Source: ABdhPJwJ6yGxBuUMEhWaaOxxqNqSIRu0QKpM36bbmxkM5ZA73z9f6q7bCcRpX4x5v3gRRad/6IhNm37Ex0p6Kpk8HM4=
-X-Received: by 2002:a17:906:3ce9:b0:6ef:a8aa:ab46 with SMTP id
- d9-20020a1709063ce900b006efa8aaab46mr27580535ejh.579.1651771809991; Thu, 05
- May 2022 10:30:09 -0700 (PDT)
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1651771825; x=1683307825;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=iCeGrCNoaXFk7lqWLg9OVCRRI3luQc1dczMCJ5R8ELA=;
+  b=lIpBtyD2FGKJTO9Cb+1+t+PMqjWGF/eKzbes5+4c6qP5yy3Kh3qHOypD
+   w13ciQ267ENyJkpfKycXdRJIq4c76DzZ93BrS5ys6dXNefFqeEw0QpQdW
+   4jLaUJkkUOH0yAWgXVOPxDyMaOPgH4xYJoTcZYwjIfZxOj0V4PYpTfodM
+   I=;
+Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
+  by alexa-out.qualcomm.com with ESMTP; 05 May 2022 10:30:25 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2022 10:30:24 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Thu, 5 May 2022 10:30:24 -0700
+Received: from [10.110.120.9] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Thu, 5 May 2022
+ 10:30:23 -0700
+Message-ID: <01852b37-faf7-c4ab-b159-e525c03d6e54@quicinc.com>
+Date:   Thu, 5 May 2022 10:30:22 -0700
 MIME-Version: 1.0
-References: <20220505152521.71019-1-markuss.broks@gmail.com> <20220505152521.71019-2-markuss.broks@gmail.com>
-In-Reply-To: <20220505152521.71019-2-markuss.broks@gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Thu, 5 May 2022 19:29:34 +0200
-Message-ID: <CAHp75VfUA3qnZnkPQB3TRpPDwe+F+Q6rv9dQmq2xLfw9PmJ8LA@mail.gmail.com>
-Subject: Re: [PATCH v8 1/3] leds: ktd2692: Avoid duplicate error messages on
- probe deferral
-To:     Markuss Broks <markuss.broks@gmail.com>
-Cc:     pavel@ucw.cz, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH 2/2] drm/probe-helper: For DP, add 640x480 if all other
+ modes are bad
+Content-Language: en-US
+To:     Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Doug Anderson <dianders@chromium.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        =?UTF-8?B?VmlsbGUgU3lyasOkbMOk?= <ville.syrjala@linux.intel.com>
+CC:     Sankeerth Billakanti <quic_sbillaka@quicinc.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "Dmitry Baryshkov" <dmitry.baryshkov@linaro.org>,
+        "Aravind Venkateswaran (QUIC)" <quic_aravindh@quicinc.com>,
+        Stephen Boyd <swboyd@chromium.org>
+References: <20220426114627.1.I2dd93486c6952bd52f2020904de0133970d11b29@changeid>
+ <20220426114627.2.I4ac7f55aa446699f8c200a23c10463256f6f439f@changeid>
+ <CAD=FV=XzGOGc8pMics4=idQeCuLYWxj=bHcic4NZa9+3qbqpbg@mail.gmail.com>
+ <4186ab8f-d227-f2c7-ab3f-0729bb915f17@quicinc.com>
+From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
+In-Reply-To: <4186ab8f-d227-f2c7-ab3f-0729bb915f17@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 5, 2022 at 5:25 PM Markuss Broks <markuss.broks@gmail.com> wrote:
+
+On 5/5/2022 10:20 AM, Abhinav Kumar wrote:
+> Hi Doug
 >
-> Use dev_err_probe instead of dev_err to avoid duplicate error
-> messages if the GPIO allocation makes the probe defer.
-
-Thanks!
-
-There are two improvements we can make here.
-1) adding a Fixes tag, so it can be backported to stable kernels;
-2) see below.
-
-...
-
->         led->ctrl_gpio = devm_gpiod_get(dev, "ctrl", GPIOD_ASIS);
->         ret = PTR_ERR_OR_ZERO(led->ctrl_gpio);
-> -       if (ret) {
-> -               dev_err(dev, "cannot get ctrl-gpios %d\n", ret);
-> -               return ret;
-> -       }
-> +       if (ret)
-> +               return dev_err_probe(dev, ret, "cannot get ctrl-gpios\n");
-
-You may improve this and simultaneously prepare for the next change to
-be smaller
-
-       led->ctrl_gpio = devm_gpiod_get(dev, "ctrl", GPIOD_ASIS);
-       if (IS_ERR(led->ctrl_gpio))
-               return dev_err_probe(dev, PTR_ERR(led->ctrl_gpio),
-"cannot get ctrl-gpios\n");
-
-All the same for the other case.
-
--- 
-With Best Regards,
-Andy Shevchenko
+> On 5/5/2022 8:44 AM, Doug Anderson wrote:
+>> Ville,
+>>
+>> On Tue, Apr 26, 2022 at 11:47 AM Douglas Anderson 
+>> <dianders@chromium.org> wrote:
+>>>
+>>> As per Displayport spec section 5.2.1.2 ("Video Timing Format") says
+>>> that all detachable sinks shall support 640x480 @60Hz as a fail safe
+>>> mode.
+>>>
+>>> A DP compliance test expected us to utilize the above fact when all
+>>> modes it presented to the DP source were not achievable. It presented
+>>> only modes that would be achievable with more lanes and/or higher
+>>> speeds than we had available and expected that when we couldn't do
+>>> that then we'd fall back to 640x480 even though it didn't advertise
+>>> this size.
+>>>
+>>> In order to pass the compliance test (and also support any users who
+>>> might fall into a similar situation with their display), we need to
+>>> add 640x480 into the list of modes. However, we don't want to add
+>>> 640x480 all the time. Despite the fact that the DP spec says all sinks
+>>> _shall support_ 640x480, they're not guaranteed to support it
+>>> _well_. Continuing to read the spec you can see that the display is
+>>> not required to really treat 640x480 equal to all the other modes. It
+>>> doesn't need to scale or anything--just display the pixels somehow for
+>>> failsafe purposes. It should also be noted that it's not hard to find
+>>> a display hooked up via DisplayPort that _doesn't_ support 640x480 at
+>>> all. The HP ZR30w screen I'm sitting in front of has a native DP port
+>>> and doesn't work at 640x480. I also plugged in a tiny 800x480 HDMI
+>>> display via a DP to HDMI adapter and that screen definitely doesn't
+>>> support 640x480.
+>>>
+>>> As a compromise solution, let's only add the 640x480 mode if:
+>>> * We're on DP.
+>>> * All other modes have been pruned.
+>>>
+>>> This acknowledges that 640x480 might not be the best mode to use but,
+>>> since sinks are _supposed_ to support it, we will at least fall back
+>>> to it if there's nothing else.
+>>>
+>>> Note that we _don't_ add higher resolution modes like 1024x768 in this
+>>> case. We only add those modes for a failed EDID read where we have no
+>>> idea what's going on. In the case where we've pruned all modes then
+>>> instead we only want 640x480 which is the only defined "Fail Safe"
+>>> resolution.
+>>>
+>>> This patch originated in response to Kuogee Hsieh's patch [1].
+>>>
+>>> [1] 
+>>> https://lore.kernel.org/r/1650671124-14030-1-git-send-email-quic_khsieh@quicinc.com
+>>>
+>>> Signed-off-by: Douglas Anderson <dianders@chromium.org>
+>>> ---
+>>>
+>>>   drivers/gpu/drm/drm_probe_helper.c | 26 +++++++++++++++++++++-----
+>>>   1 file changed, 21 insertions(+), 5 deletions(-)
+>>
+>> I think this patch is fairly safe / non-controversial, but someone
+>> suggested you might have an opinion on it and another patch I posted
+>> recently [1] so I wanted to double-check. Just to be clear: I'm hoping
+>> to land _both_ this patch and [1]. If you don't have an opinion,
+>> that's OK too.
+>>
+>> Abhinav: I think maybe you're happy with this now? Would you be
+>> willing to give a Reviewed-by?
+>
+> Yes, I have no concerns with this approach from DP spec standpoint and 
+> in addition, kuogee has tested this out and this does help us to pass 
+> the tests.
+>
+> Although, I might be missing some historical context on why this is 
+> not already done.
+>
+> But apart from that, LGTM. Hence,
+>
+> Reviewed-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
+> Tested-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+>>
+>> [1] 
+>> https://lore.kernel.org/r/20220426132121.RFC.1.I31ec454f8d4ffce51a7708a8092f8a6f9c929092@changeid
+>>
+>> -Doug

@@ -2,109 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45F2051CB02
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 23:29:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E32D51CB4D
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 23:36:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385938AbiEEVcu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 17:32:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59674 "EHLO
+        id S1386030AbiEEVjx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 17:39:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385560AbiEEVcs (ORCPT
+        with ESMTP id S1385999AbiEEVjb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 17:32:48 -0400
-Received: from mail-oa1-x2a.google.com (mail-oa1-x2a.google.com [IPv6:2001:4860:4864:20::2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 901F950050;
-        Thu,  5 May 2022 14:29:08 -0700 (PDT)
-Received: by mail-oa1-x2a.google.com with SMTP id 586e51a60fabf-edeb6c3642so5509192fac.3;
-        Thu, 05 May 2022 14:29:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=8oe3sfqDkyfNUlcgiBtlkeMr/xCKR9BR/x7tlYGAaAg=;
-        b=cHpjKpSXs6kKH2wCI+zunweNKPfOCNIAvDTrpHekpLonqSfQxiUbe2GXfiulSuITgt
-         1RfU3k6AdLPHqIN4GdAADkktcMX2Bxba1aPbA/7ThNdj3kq5m2IoXZ/7wURcMGexW2rV
-         T7jcUArbOzAgjQJhJPQ7RZ0qvr9QpruL+6vl7A21eL0SE2PDRs4yE+ZJ8je79f9+Z292
-         imKsIL1OUvBqfY6XBiUzFDMndPHbo4aGspHMmdgyoh+Yw29iBZcWlTIju4waxNV9JKk8
-         YADUp1qbHA/l5s/UqLpSEAKra8v9eGmfvkBEkyJzdsTgQNtWM74KUenL4Qa0is+Kib8c
-         51Gg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=8oe3sfqDkyfNUlcgiBtlkeMr/xCKR9BR/x7tlYGAaAg=;
-        b=2zAkF6RoEgqgGsGR4mDIe+f7k2xObyGHpJgxxdCkBc9ny0E3odDns8IW/8DkXHUoTL
-         iY/atcBbHQK6j+ZXHy2iJZxssj8nZ2qlYJg9wq8+iwdTEir41LGgsRNAimIlbt3K0XJZ
-         wOkkQ6GEKirs7+fYBA13NgCnf/NxuAi6Y3HsfPNBKQYTJ0nfFuMB6UGli4nCeyXos3Au
-         heQe2RdGSwi8KJljzc7ahZCMjFP+HJu5/3E/NO3+sndPDYmIseERcIjGpeeNzNBTU25I
-         TUNjRCozrIvlKUlI5gBB8GHzg5QlVKxMtXWxkywmNZloaSHQ+naYa+6a2YBmeY12W7GU
-         WHhg==
-X-Gm-Message-State: AOAM532AiIqEFQt3swPy6PbdwGczoFNnbg3gDu+E+8+b1ME0j6hyqoMs
-        lTJtnfvsceSiUP/xsH1jWeaaD/9g1lcQeg==
-X-Google-Smtp-Source: ABdhPJxGgq1qnFkliFAawJ5WADwR3GbxkWdgTyuWmkSWwp7sBIM74NgVIv9e9rFX7ictyH8ZI1h61w==
-X-Received: by 2002:a05:6870:f206:b0:d6:ca78:94f0 with SMTP id t6-20020a056870f20600b000d6ca7894f0mr119445oao.4.1651786147940;
-        Thu, 05 May 2022 14:29:07 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id i19-20020a9d1713000000b006062d346083sm1023918ota.22.2022.05.05.14.29.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 May 2022 14:29:07 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Thu, 5 May 2022 14:29:05 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     "Hawkins, Nick" <nick.hawkins@hpe.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        "Verdun, Jean-Marie" <verdun@hpe.com>,
-        "joel@jms.id.au" <joel@jms.id.au>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>
-Subject: Re: [PATCH v6 3/8] watchdog: hpe-wdt: Introduce HPE GXP Watchdog
-Message-ID: <20220505212905.GC1988522@roeck-us.net>
-References: <20220502204050.88316-1-nick.hawkins@hpe.com>
- <20220502204050.88316-3-nick.hawkins@hpe.com>
- <c0262cf4-dfeb-c9a9-bcb2-24af006e6d4d@roeck-us.net>
- <PH0PR84MB1718D28F1846F54DB5766E6D88C09@PH0PR84MB1718.NAMPRD84.PROD.OUTLOOK.COM>
- <d88523a8-a240-915d-9ae7-54b2277e424a@roeck-us.net>
- <CAK8P3a3t7-ozDHu18vMKEWxfNS4yd_BNHUh7hQ24rfS20tssDg@mail.gmail.com>
- <PH0PR84MB1718D0238BEF9173AF5D5B7688C39@PH0PR84MB1718.NAMPRD84.PROD.OUTLOOK.COM>
+        Thu, 5 May 2022 17:39:31 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2792813E15;
+        Thu,  5 May 2022 14:35:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651786538; x=1683322538;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=bGKPoFs3oKrceGUWOKyLUpHxG8GVrtEbDeiLw6i4OsE=;
+  b=m6MhUgL6fX5ZMeg27UV7l4WMkpICqIU4xfE7syo2mpW9sEVddVg4GIyr
+   IcZ144Ud+mhHYZJ2PagG29hR5EWKRv3/5DTtI1N4qkmkfk6Z29bGH8rEX
+   7EVlWhrIyoCLZ7d3jSB6cYA/xAmf+wVQEKAgfacQv5CoNISKHKkFyUmiA
+   fxVASzSALgeQz0pnHEsA2HEW+xDqpxJKM7QgYQ8GQ/dXpAZdCa8YTynWb
+   dKxtXLZk3H9qKccPdVLlxTU7iOzzOeNzx0ztqRI8GdvAZpVEtKxAZUX6K
+   XQyMegif2vC32XN0k2s8UmrfT/dckVZVmSgq3kzhujxiOkUNsOluNYHww
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10338"; a="268152596"
+X-IronPort-AV: E=Sophos;i="5.91,203,1647327600"; 
+   d="scan'208";a="268152596"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2022 14:35:36 -0700
+X-IronPort-AV: E=Sophos;i="5.91,203,1647327600"; 
+   d="scan'208";a="735163599"
+Received: from blaesing-mobl.ger.corp.intel.com (HELO intel.com) ([10.251.218.207])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2022 14:35:32 -0700
+Date:   Thu, 5 May 2022 23:35:29 +0200
+From:   Andi Shyti <andi.shyti@linux.intel.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Luis Chamberlain <mcgrof@kernel.org>, alsa-devel@alsa-project.org,
+        mauro.chehab@linux.intel.com, David Airlie <airlied@linux.ie>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        intel-gfx@lists.freedesktop.org,
+        Lucas De Marchi <lucas.demarchi@intel.com>,
+        Takashi Iwai <tiwai@suse.com>, dri-devel@lists.freedesktop.org,
+        Jaroslav Kysela <perex@perex.cz>,
+        Kai Vehmanen <kai.vehmanen@intel.com>,
+        linux-modules@vger.kernel.org,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-kernel@vger.kernel.org,
+        Pierre-Louis Bossart <pierre-louis.bossart@intel.com>
+Subject: Re: [Intel-gfx] [PATCH v5 1/2] module: update dependencies at
+ try_module_get()
+Message-ID: <YnRDIfthGJXdY23h@intel.intel>
+References: <cover.1651348913.git.mchehab@kernel.org>
+ <ad2a9fe66cf502e2e2e2325f1f04d0fae36aa82b.1651348913.git.mchehab@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <PH0PR84MB1718D0238BEF9173AF5D5B7688C39@PH0PR84MB1718.NAMPRD84.PROD.OUTLOOK.COM>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <ad2a9fe66cf502e2e2e2325f1f04d0fae36aa82b.1651348913.git.mchehab@kernel.org>
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 04, 2022 at 04:25:59PM +0000, Hawkins, Nick wrote:
-> 
-> On Tue, May 3, 2022 at 6:53 PM Guenter Roeck <linux@roeck-us.net> wrote:
-> 
-> > > One bad deed tends to multiply.
-> > >
-> > > No, I didn't ask to pass a struct resource as platform data.
-> > > That would be no different to the current code. Resources can be added 
-> > > to a platform device using platform_device_add_resources(), and the 
-> > > platform driver can then use platform_get_resource() to use it. This 
-> > > would make it independent of a "private" mechanism.
-> 
-> > Unfortunately there is no resource type for __iomem tokens, only for physical addresses, so you'd end up having to do
-> ioremap() of the same address twice to map it into both the timer and the watchdog driver . Not the end of the world of course, but that doesn't seem much better than abusing the device private data.
-> 
-> Hello Guenter,
-> 
-> Given Arnd's feedback would you like me to proceed with this change still or do you have another recommendation?
-> 
+Hi Mauro,
 
-Just leave it as is and add a note explaining why it is done
-that way.
+[...]
 
-Guenter
+> +static int ref_module_dependency(struct module *mod, struct module *this)
+> +{
+> +	int ret;
+> +
+> +	if (!this || !this->name)
+> +		return -EINVAL;
+> +
+> +	if (mod == this)
+> +		return 0;
+> +
+> +	mutex_lock(&module_mutex);
+> +
+> +	ret = ref_module(this, mod);
+> +
+> +#ifdef CONFIG_MODULE_UNLOAD
+> +	if (ret)
+> +		goto ret;
+> +
+> +	ret = sysfs_create_link(mod->holders_dir,
+> +				&this->mkobj.kobj, this->name);
+> +#endif
+> +
+> +ret:
+> +	mutex_unlock(&module_mutex);
+> +	return ret;
+> +}
+> +
+>  /* Clear the unload stuff of the module. */
+>  static void module_unload_free(struct module *mod)
+>  {
+> @@ -841,24 +886,16 @@ void __module_get(struct module *module)
+>  }
+>  EXPORT_SYMBOL(__module_get);
+>  
+> -bool try_module_get(struct module *module)
+> +bool try_module_get_owner(struct module *module, struct module *this)
+>  {
+> -	bool ret = true;
+> +	int ret = __try_module_get(module);
+>  
+> -	if (module) {
+> -		preempt_disable();
+> -		/* Note: here, we can fail to get a reference */
+> -		if (likely(module_is_live(module) &&
+> -			   atomic_inc_not_zero(&module->refcnt) != 0))
+> -			trace_module_get(module, _RET_IP_);
+> -		else
+> -			ret = false;
+> +	if (ret)
+> +		ref_module_dependency(module, this);
+
+do we care about the return value here?
+
+Andi
+
+>  
+> -		preempt_enable();
+> -	}
+>  	return ret;
+>  }
+> -EXPORT_SYMBOL(try_module_get);
+> +EXPORT_SYMBOL(try_module_get_owner);
+>  
+>  void module_put(struct module *module)
+>  {
+> -- 
+> 2.35.1

@@ -2,194 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5211B51B7F8
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 08:31:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 529DB51B7F7
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 08:30:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244378AbiEEGeg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 02:34:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46494 "EHLO
+        id S244352AbiEEGdr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 02:33:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236110AbiEEGeZ (ORCPT
+        with ESMTP id S233342AbiEEGdm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 02:34:25 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C2831A83F
-        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 23:30:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651732245; x=1683268245;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=FWdkTJQPgfah88qi8uE8TAWSXAdTDOOpVO7WtKyi8WI=;
-  b=DrODq11zGXEEqZgmckXDhNsZn5q4UbDaS5hYOftg4Vo73VrCAOEqV0Y7
-   qoD0m81q1iv4q/gsv+L5mi3EstoBwfXZo1o7OJI4U8BH8OxSZcj9hDM7+
-   xXDjKz7xP/TWh9uOZ8HBeLLQKHoQewdLcJUV4Sztl4WtzkI/EAlGPmMC6
-   Vmpq5lOv27iDo5mjCWzLQ/dO6BHj8qi0T34+RgerU2Js3u8IPgI7gfvUe
-   e7dza+m3GYHpIn2xQotdpdA2N60xk2t9+NBtkeUmv5VXhF8siF7Qkg/NE
-   kc/HkvmBl9ZhTKGGfDpQUSH4veSfdGJ7uSG5KbQuwirV50rLDAC0gRsH6
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10337"; a="267610330"
-X-IronPort-AV: E=Sophos;i="5.91,200,1647327600"; 
-   d="scan'208";a="267610330"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2022 23:28:18 -0700
-X-IronPort-AV: E=Sophos;i="5.91,200,1647327600"; 
-   d="scan'208";a="563093444"
-Received: from minhaowa-mobl.ccr.corp.intel.com (HELO [10.255.30.75]) ([10.255.30.75])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2022 23:28:12 -0700
-Message-ID: <d0e78ba5-9698-1dbf-4834-553fbcef6aad@linux.intel.com>
-Date:   Thu, 5 May 2022 14:28:09 +0800
+        Thu, 5 May 2022 02:33:42 -0400
+Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09D271A05D;
+        Wed,  4 May 2022 23:30:04 -0700 (PDT)
+Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-2ef5380669cso38052897b3.9;
+        Wed, 04 May 2022 23:30:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=hPg/kHUDyxMY3LkVNBXDy7g4FaARqDwC2Ys4u38uvGI=;
+        b=Nm4Zz5nhKZ3HXeTj7BdPL1xu3o52ow/5uQwZaFOhdAcUzK/zag7Aj8mm1vQli0o6Iz
+         Hz7QCpbrWBxWo7rRBSwjU+ykaehOWrLsjSWvwuds/xNLnzNXGJItRFHFduf70lsHimoZ
+         khIrK/kIUZYwyRVDqVxtSYPVimSvCKKfA+YLSSn544yh/JR5TdSPCrxcathQbiwK3/hY
+         DFbRmkUQGoV78dXRWs7ca+EtE0UW20+ThPogonlP/WVlAORWPAzV7E4DmVeAtxtcKAOj
+         BiJ9kCIa4ltjnjRd+80t/lByJTNM68wldIpF9Y+Dcg8VC4TPC+cOsK3E6bz6hzRbwg7l
+         2iqQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=hPg/kHUDyxMY3LkVNBXDy7g4FaARqDwC2Ys4u38uvGI=;
+        b=Ez0hxVixKiHuXRrT4UTEOysPzSUkp+QB43Qi84t6ktgrGBn6dX9pZvndeCKxBY492/
+         1HLvAjBuisQ6ILTImZDSaG9vwNaKsWhKrNXc71eDdCvdduhU6HYlkXCsNZ9HkJKCoj1W
+         jQKIUYmcbfWstaFD64mqfdJ0fncoGdrougIq4dc5RdCbqFoAV6tnHoiLrDFmdOb4CLkK
+         PKRpCzvlSyvVcx9lX+uwkX/dxOLD4iqcmZ+ISB3AlrAPvRkvx5ENdzMBiMOXkeVZ+z9t
+         htqBhy0CD6ZvTL1hUU73t43WXJz9HbHiG+ioCwiNBFl0xXPKrzgZZLuuwC0e40K8sX9f
+         mljw==
+X-Gm-Message-State: AOAM531vlDWGAkXyhBVPlmHBCFPo12Q7UHFwd3mmy6MEDTlL34XFRFpj
+        KYG0CRVi0nMeXQDPLrc/iEMo5Imz++5kSecu/Q4=
+X-Google-Smtp-Source: ABdhPJzfiMmMi8049ryLbdTumFiEB2azt22RyodOw27TSrh1paFQRoNHRdA9rucfDC/0WVdKgBLZtWA8bqBV8pDTstE=
+X-Received: by 2002:a81:2143:0:b0:2fb:1274:247e with SMTP id
+ h64-20020a812143000000b002fb1274247emr5212506ywh.384.1651732203173; Wed, 04
+ May 2022 23:30:03 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH v5 03/12] iommu: Add attach/detach_dev_pasid domain ops
-Content-Language: en-US
-To:     Jean-Philippe Brucker <jean-philippe@linaro.org>
-Cc:     Joerg Roedel <joro@8bytes.org>, Jason Gunthorpe <jgg@nvidia.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Eric Auger <eric.auger@redhat.com>,
-        Liu Yi L <yi.l.liu@intel.com>,
-        Jacob jun Pan <jacob.jun.pan@intel.com>,
-        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org
-References: <20220502014842.991097-1-baolu.lu@linux.intel.com>
- <20220502014842.991097-4-baolu.lu@linux.intel.com> <YnFvX8IUwP2drNoj@myrica>
-From:   Baolu Lu <baolu.lu@linux.intel.com>
-In-Reply-To: <YnFvX8IUwP2drNoj@myrica>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+From:   Gonsolo <gonsolo@gmail.com>
+Date:   Thu, 5 May 2022 08:29:52 +0200
+Message-ID: <CANL0fFQRBZiVcEM0OOxkLqiAKf=rFssGetrwN6vWj5SsxX__mA@mail.gmail.com>
+Subject: Suspend/resume error with AWUS036ACM
+To:     Felix Fietkau <nbd@nbd.name>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Ryder Lee <ryder.lee@mediatek.com>,
+        Shayne Chen <shayne.chen@mediatek.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/5/4 02:07, Jean-Philippe Brucker wrote:
-> On Mon, May 02, 2022 at 09:48:33AM +0800, Lu Baolu wrote:
->> Attaching an IOMMU domain to a PASID of a device is a generic operation
->> for modern IOMMU drivers which support PASID-granular DMA address
->> translation. Currently visible usage scenarios include (but not limited):
->>
->>   - SVA (Shared Virtual Address)
->>   - kernel DMA with PASID
->>   - hardware-assist mediated device
->>
->> This adds a pair of common domain ops for this purpose and adds helpers
->> to attach/detach a domain to/from a {device, PASID}. Some buses, like
->> PCI, route packets without considering the PASID value. Thus a DMA target
->> address with PASID might be treated as P2P if the address falls into the
->> MMIO BAR of other devices in the group. To make things simple, these
->> interfaces only apply to devices belonging to the singleton groups, and
->> the singleton is immutable in fabric i.e. not affected by hotplug.
->>
->> Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
-> 
-> Reviewed-by: Jean-Philippe Brucker <jean-philippe@linaro.org>
-> 
-> just a nit below
-> 
->> ---
->>   include/linux/iommu.h | 21 ++++++++++++
->>   drivers/iommu/iommu.c | 76 +++++++++++++++++++++++++++++++++++++++++++
->>   2 files changed, 97 insertions(+)
->>
->> diff --git a/include/linux/iommu.h b/include/linux/iommu.h
->> index b8ffaf2cb1d0..ab36244d4e94 100644
->> --- a/include/linux/iommu.h
->> +++ b/include/linux/iommu.h
->> @@ -263,6 +263,8 @@ struct iommu_ops {
->>    * struct iommu_domain_ops - domain specific operations
->>    * @attach_dev: attach an iommu domain to a device
->>    * @detach_dev: detach an iommu domain from a device
->> + * @attach_dev_pasid: attach an iommu domain to a pasid of device
->> + * @detach_dev_pasid: detach an iommu domain from a pasid of device
->>    * @map: map a physically contiguous memory region to an iommu domain
->>    * @map_pages: map a physically contiguous set of pages of the same size to
->>    *             an iommu domain.
->> @@ -283,6 +285,10 @@ struct iommu_ops {
->>   struct iommu_domain_ops {
->>   	int (*attach_dev)(struct iommu_domain *domain, struct device *dev);
->>   	void (*detach_dev)(struct iommu_domain *domain, struct device *dev);
->> +	int (*attach_dev_pasid)(struct iommu_domain *domain,
->> +				struct device *dev, ioasid_t pasid);
->> +	void (*detach_dev_pasid)(struct iommu_domain *domain,
->> +				 struct device *dev, ioasid_t pasid);
->>   
->>   	int (*map)(struct iommu_domain *domain, unsigned long iova,
->>   		   phys_addr_t paddr, size_t size, int prot, gfp_t gfp);
->> @@ -678,6 +684,10 @@ int iommu_group_claim_dma_owner(struct iommu_group *group, void *owner);
->>   void iommu_group_release_dma_owner(struct iommu_group *group);
->>   bool iommu_group_dma_owner_claimed(struct iommu_group *group);
->>   
->> +int iommu_attach_device_pasid(struct iommu_domain *domain,
->> +			      struct device *dev, ioasid_t pasid);
->> +void iommu_detach_device_pasid(struct iommu_domain *domain,
->> +			       struct device *dev, ioasid_t pasid);
->>   #else /* CONFIG_IOMMU_API */
->>   
->>   struct iommu_ops {};
->> @@ -1051,6 +1061,17 @@ static inline bool iommu_group_dma_owner_claimed(struct iommu_group *group)
->>   {
->>   	return false;
->>   }
->> +
->> +static inline int iommu_attach_device_pasid(struct iommu_domain *domain,
->> +					    struct device *dev, ioasid_t pasid)
->> +{
->> +	return -ENODEV;
->> +}
->> +
->> +static inline void iommu_detach_device_pasid(struct iommu_domain *domain,
->> +					     struct device *dev, ioasid_t pasid)
->> +{
->> +}
->>   #endif /* CONFIG_IOMMU_API */
->>   
->>   /**
->> diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
->> index 29906bc16371..89c9d19ddb28 100644
->> --- a/drivers/iommu/iommu.c
->> +++ b/drivers/iommu/iommu.c
->> @@ -38,6 +38,7 @@ struct iommu_group {
->>   	struct kobject kobj;
->>   	struct kobject *devices_kobj;
->>   	struct list_head devices;
->> +	struct xarray pasid_array;
->>   	struct mutex mutex;
->>   	void *iommu_data;
->>   	void (*iommu_data_release)(void *iommu_data);
->> @@ -630,6 +631,7 @@ struct iommu_group *iommu_group_alloc(void)
->>   	mutex_init(&group->mutex);
->>   	INIT_LIST_HEAD(&group->devices);
->>   	INIT_LIST_HEAD(&group->entry);
->> +	xa_init(&group->pasid_array);
->>   
->>   	ret = ida_simple_get(&iommu_group_ida, 0, 0, GFP_KERNEL);
->>   	if (ret < 0) {
->> @@ -3190,3 +3192,77 @@ bool iommu_group_dma_owner_claimed(struct iommu_group *group)
->>   	return user;
->>   }
->>   EXPORT_SYMBOL_GPL(iommu_group_dma_owner_claimed);
->> +
->> +/*
->> + * Use standard PCI bus topology and isolation features to check immutable
->> + * singleton. Otherwise, assume the bus is static and then singleton can
->> + * know from the device count in the group.
->> + */
-> 
-> The comment doesn't really add anything that can't be directly understood
-> from the code.
+Hi all.
 
-Yes. It's fine to remove it.
+After a resume I get the following error:
 
-Best regards,
-baolu
+ +0,000007] UBSAN: invalid-load in
+/build/linux-lowlatency-fSdu7c/linux-lowlatency-5.15.0/net/mac80211/status.c:1164:21
+[  +0,000004] load of value 255 is not a valid value for type '_Bool'
+[  +0,000004] CPU: 22 PID: 387 Comm: kworker/u256:5 Tainted: P
+  OE     5.15.0-27-lowlatency #28-Ubuntu
+[  +0,000004] Hardware name: To Be Filled By O.E.M. To Be Filled By
+O.E.M./X399 Phantom Gaming 6, BIOS P1.31 01/14/2021
+[  +0,000003] Workqueue: phy0 mt76x02_mac_work [mt76x02_lib]
+[  +0,000014] Call Trace:
+[  +0,000003]  <TASK>
+[  +0,000003]  show_stack+0x52/0x58
+[  +0,000006]  dump_stack_lvl+0x4a/0x5f
+[  +0,000007]  dump_stack+0x10/0x12
+[  +0,000003]  ubsan_epilogue+0x9/0x45
+[  +0,000002]  __ubsan_handle_load_invalid_value.cold+0x44/0x49
+[  +0,000004]  ieee80211_tx_status_ext.cold+0x4e/0x5f [mac80211]
+[  +0,000068]  mt76_tx_status_unlock+0x111/0x160 [mt76]
+[  +0,000010]  mt76_tx_status_check+0x68/0x90 [mt76]
+[  +0,000009]  mt76x02_mac_work+0x14b/0x240 [mt76x02_lib]
+[  +0,000008]  process_one_work+0x222/0x3f0
+[  +0,000006]  worker_thread+0x50/0x3f0
+[  +0,000004]  ? process_one_work+0x3f0/0x3f0
+[  +0,000004]  kthread+0x13b/0x160
+[  +0,000003]  ? set_kthread_struct+0x50/0x50
+[  +0,000004]  ret_from_fork+0x22/0x30
+[  +0,000006]  </TASK>
+[  +0,000001] ================================================================================
+
+This is a stock Ubuntu Jammy lowlatency kernel (with Nvidia drivers).
+
+I would be happy to provide all the needed information to resolve this.
+
+I also want to note that the device is running quite unstable (lots of
+deauthenticating, network lost, etc...).
+
+Regards,
+g

@@ -2,145 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E49E051C1B3
+	by mail.lfdr.de (Postfix) with ESMTP id 53CEF51C1B1
 	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 15:57:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380303AbiEEN5B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 09:57:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43434 "EHLO
+        id S1380285AbiEEN7S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 09:59:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380280AbiEEN4u (ORCPT
+        with ESMTP id S1380298AbiEEN7A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 09:56:50 -0400
-Received: from us-smtp-delivery-74.mimecast.com (us-smtp-delivery-74.mimecast.com [170.10.133.74])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 024E957B18
-        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 06:52:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651758751;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=tg+1N9l4/UGQjj1ui3wLc+7zUF5Zg5FliDgij7q2A5E=;
-        b=NUpWL2Zd/ZLsWoIrzidnJV/jQ78+QfAVy9hLlEgEWqBPtltpQpnrIS7ePABJKbpAVhotto
-        4wdQdDA0VL3EWd/hsXVu+uxLWHJeV9QZxCixkUQaNA5Pl4YlaNPJQwofHYVLoc5bRsm7qr
-        ViKuDRCfuRBLxNPHXHY82CyXm4sHums=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-442-zp5FCNGgPK-AtHxsyktbOg-1; Thu, 05 May 2022 09:52:27 -0400
-X-MC-Unique: zp5FCNGgPK-AtHxsyktbOg-1
-Received: by mail-wr1-f69.google.com with SMTP id p10-20020adfaa0a000000b0020c4829af5fso1487878wrd.16
-        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 06:52:27 -0700 (PDT)
+        Thu, 5 May 2022 09:59:00 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B24756255;
+        Thu,  5 May 2022 06:55:20 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id gh6so8940803ejb.0;
+        Thu, 05 May 2022 06:55:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=yEHOMcuhZdD8iiVryYSYsQQJvPICrzWTzhkdXbqbOh4=;
+        b=f0oe8b34qhyHBhRStMC/F4qC80Gsw+fZFC2Ma/awi+7RWzk5h1+3HRlfNufs6nAMS8
+         7rIeRKou7pZ79oJx1CXV/FEgXdNFiURLRIn7gWMheU+a3IYR6whf27aLpqu/1YLgGWa/
+         7vMMQmkCL45KIR0LRq9xa9XnlheqZIy9GWcbfTqGJvNyRkmAcxUhj77BnXsEy0z4QbH3
+         hCs5XxwTQQehukEcWpaZ2MSgSs7HI/CVXdzhihcSZ9Gtg2QgAwFvR8pkSl/T+QxLHOSq
+         BIhklJ5fsYzBW+yDzpmOTx7WUYjUjaAZQM0jj75FmUEHFANokGeIIW4tiLE/TeeagWbi
+         K+0w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=tg+1N9l4/UGQjj1ui3wLc+7zUF5Zg5FliDgij7q2A5E=;
-        b=zqq2911aqfu64y6xakEDE351D/g49+1pifGKnzysOLiVLOJ7Si0UQDFx/Ys4NG4Swa
-         MwMgs2V7b4JAxdmDzN+XCCOFn0p2/2pBZKzy5e0qf2eVpvJuHWWdCpNkrPhVG0pF9VLN
-         wDX6P4U6fMhjo/AVO8I0ubizpNpgIY5hbK5Ce8KJxCe7To7dQuE1MqgAy7l/o9LNbJno
-         jWRvmUVE5twwnb+pS5EllIZVRQizA1rWsFM8JiSVyuh98PSM8zvNJn8ABFQqLTJbALEP
-         gUbRhxDJkqj3fwuTDQjuPbp25bQpGPw+LOmj9gzOlEJ1bMZvE9JB2gciyvb09s/hdAqG
-         gl7w==
-X-Gm-Message-State: AOAM531trp2jatdlObsgjlDnn8Eqc40dj4QjBnwTgEtF3lUYrqFy9+7a
-        TYtvuVvl1DgFMLoyi9YHN/ZAqKlk2TvYj/15tG7aAYkHAQJTthKP5DZAAa5GyYE4uGHOtuEIIPQ
-        T+ijLEg4XueA8ndbtRR+YbC5z
-X-Received: by 2002:a05:6000:136b:b0:20a:c416:e914 with SMTP id q11-20020a056000136b00b0020ac416e914mr21083123wrz.167.1651758745994;
-        Thu, 05 May 2022 06:52:25 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJz1N1cypAPDCQRCuIrBe7oEloHiYyuU7KVpyywETK6PeLOX9U0Cef0xV1mmkI0idV7FnO+yfQ==
-X-Received: by 2002:a05:6000:136b:b0:20a:c416:e914 with SMTP id q11-20020a056000136b00b0020ac416e914mr21083107wrz.167.1651758745771;
-        Thu, 05 May 2022 06:52:25 -0700 (PDT)
-Received: from fedora (nat-2.ign.cz. [91.219.240.2])
-        by smtp.gmail.com with ESMTPSA id s22-20020a1cf216000000b003942a244ee9sm1410841wmc.46.2022.05.05.06.52.24
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=yEHOMcuhZdD8iiVryYSYsQQJvPICrzWTzhkdXbqbOh4=;
+        b=y7NRw/JyHcv/vEdSaXeoThF5FJfWKzyn2TiANafympfQzstkUjJVtdl/a/yI36RBZW
+         Pm/KMfpMVwMCEQ168aZece4ImUD7qdzu6Ztw6Q4udTygDxYJ4EyNgDkasOzOW7sc8F/o
+         PSr1BCTxhzHd9cr/VEQtcIO8YCY7skcUfOLOsncLoBH4K8a+SCZ914AkxOBWiCWQEZZV
+         IFpIuqUCTgAgREOXyvA0n5veWxn8gEJHmdVUh2IE5ZI+0c59w1acYRdHG/ZswKdrAxkm
+         KU+ksoo4g0m0fTpE4lw56TA9vqz4OmssOAOv6kb4RAv1XGxdVRkhzHVg+WMyJwi7AUwj
+         /fQQ==
+X-Gm-Message-State: AOAM530uu8gBS1bJGlNVjSvgjHzg2vX241AYHPkDxKY1/6RhEyX7mtDL
+        L4adJlRLDnEHhSfQ8mrvTjo=
+X-Google-Smtp-Source: ABdhPJxktlUW+KP6G/s7o+RKbaEpK2t+eFGt0AQo9Buyj9Kw3iqH3RtqwEM0hoyWgp102NXkAmi8bg==
+X-Received: by 2002:a17:906:3ce9:b0:6ef:a8aa:ab46 with SMTP id d9-20020a1709063ce900b006efa8aaab46mr26563882ejh.579.1651758919171;
+        Thu, 05 May 2022 06:55:19 -0700 (PDT)
+Received: from localhost.lan (ip-194-187-74-233.konfederacka.maverick.com.pl. [194.187.74.233])
+        by smtp.gmail.com with ESMTPSA id e15-20020a50e44f000000b0042617ba63c7sm877949edm.81.2022.05.05.06.55.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 May 2022 06:52:25 -0700 (PDT)
-From:   Vitaly Kuznetsov <vkuznets@redhat.com>
-To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        "Michael Kelley (LINUX)" <mikelley@microsoft.com>
-Cc:     Marc Zyngier <maz@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        will Deacon <will@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Ard Biesheuvel <ardb@kernel.org>, broonie@kernel.org,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>
-Subject: Re: Should arm64 have a custom crash shutdown handler?
-In-Reply-To: <3bee47db-f771-b502-82a3-d6fac388aa89@igalia.com>
-References: <427a8277-49f0-4317-d6c3-4a15d7070e55@igalia.com>
- <874k24igjf.wl-maz@kernel.org>
- <92645c41-96fd-2755-552f-133675721a24@igalia.com>
- <YnPIwjLMDXgII1vf@FVFF77S0Q05N.cambridge.arm.com>
- <3bee47db-f771-b502-82a3-d6fac388aa89@igalia.com>
-Date:   Thu, 05 May 2022 15:52:24 +0200
-Message-ID: <878rrg13zb.fsf@redhat.com>
+        Thu, 05 May 2022 06:55:18 -0700 (PDT)
+From:   =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Pavel Machek <pavel@ucw.cz>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
+        devicetree@vger.kernel.org, netdev@vger.kernel.org,
+        linux-leds@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        bcm-kernel-feedback-list@broadcom.com, ansuelsmth@gmail.com,
+        andrew@lunn.ch, vivien.didelot@gmail.com,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        John Crispin <john@phrozen.org>, linux-doc@vger.kernel.org,
+        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>
+Subject: [PATCH RESEND 0/5] dt-bindings: support Ethernet devices as LED triggers
+Date:   Thu,  5 May 2022 15:55:07 +0200
+Message-Id: <20220505135512.3486-1-zajec5@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-"Guilherme G. Piccoli" <gpiccoli@igalia.com> writes:
+From: Rafał Miłecki <rafal@milecki.pl>
 
-> On 05/05/2022 09:53, Mark Rutland wrote:
->> [...]
->> Looking at those, the cleanup work is all arch-specific. What exactly would we
->> need to do on arm64, and why does it need to happen at that point specifically?
->> On arm64 we don't expect as much paravirtualization as on x86, so it's not
->> clear to me whether we need anything at all.
->> 
->>> Anyway, the idea here was to gather a feedback on how "receptive" arm64
->>> community would be to allow such customization, appreciated your feedback =)
->> 
->> ... and are you trying to do this for Hyper-V or just using that as an example?
->> 
->> I think we're not going to be very receptive without a more concrete example of
->> what you want.
->> 
->> What exactly do *you* need, and *why*? Is that for Hyper-V or another hypervisor?
->> 
->> Thanks
->> Mark.
->
-> Hi Mark, my plan would be doing that for Hyper-V - kind of the same
-> code, almost. For example, in hv_crash_handler() there is a stimer
-> clean-up and the vmbus unload - my understanding is that this same code
-> would need to run in arm64. Michael Kelley is CCed, he was discussing
-> with me in the panic notifiers thread and may elaborate more on the needs.
->
-> But also (not related with my specific plan), I've seen KVM quiesce code
-> on x86 as well [see kvm_crash_shutdown() on arch/x86] , I'm not sure if
-> this is necessary for arm64 or if this already executing in some
-> abstracted form, I didn't dig deep - probably Vitaly is aware of that,
-> hence I've CCed him here.
+Some LEDs are designed to represent a state of another device. That may
+be USB port, Ethernet interface, CPU, hard drive and more.
 
-Speaking about the difference between reboot notifiers call chain and
-machine_ops.crash_shutdown for KVM/x86, the main difference is that
-reboot notifier is called on some CPU while the VM is fully functional,
-this way we may e.g. still use IPIs (see kvm_pv_reboot_notify() doing
-on_each_cpu()). When we're in a crash situation,
-machine_ops.crash_shutdown is called on the CPU which crashed. We can't
-count on IPIs still being functional so we do the very basic minimum so
-*this* CPU can boot kdump kernel. There's no guarantee other CPUs can
-still boot but normally we do kdump with 'nprocs=1'.
+We already have support for LEDs that are designed to indicate USB port
+(e.g. light on when USB device gets connected). There is DT binding for
+that and Linux implementation in USB trigger.
 
-For Hyper-V, the situation is similar: hv_crash_handler() intitiates
-VMbus unload on the crashing CPU only, there's no mechanism to do
-'global' unload so other CPUs will likely not be able to connect Vmbus
-devices in kdump kernel but this should not be necessary.
+This patchset adds support for describing LEDs that should react to
+Ethernet interface status. That is commonly used in routers. They often
+have LED to display state and activity of selected physical port. It's
+also common to have multiple LEDs, each reacting to a specific link
+speed.
 
-There's a crash_kexec_post_notifiers mechanism which can be used instead
-but it's disabled by default so using machine_ops.crash_shutdown is
-better.
+Patch 5/5 is proof of concept and is not meant to be applied yet.
+
+Rafał Miłecki (5):
+  dt-bindings: net: add bitfield defines for Ethernet speeds
+  dt-bindings: net: allow Ethernet devices as LED triggers
+  dt-bindings: leds: add Ethernet triggered LEDs to example
+  ARM: dts: BCM5301X: Add triggers for Luxul XWR-1200 network LEDs
+  leds: trigger: netdev: support DT "trigger-sources" property
+
+ .../devicetree/bindings/leds/common.yaml      | 21 +++++++++++++++
+ .../bindings/net/ethernet-controller.yaml     |  3 +++
+ arch/arm/boot/dts/bcm47081-luxul-xwr-1200.dts | 22 +++++++++++----
+ drivers/leds/trigger/ledtrig-netdev.c         | 26 ++++++++++++++++++
+ include/dt-bindings/net/eth.h                 | 27 +++++++++++++++++++
+ 5 files changed, 94 insertions(+), 5 deletions(-)
+ create mode 100644 include/dt-bindings/net/eth.h
 
 -- 
-Vitaly
+2.34.1
 

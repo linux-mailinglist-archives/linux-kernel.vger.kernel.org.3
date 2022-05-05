@@ -2,208 +2,225 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 452A051C16E
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 15:53:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 745AC51C13A
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 15:49:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352518AbiEENzQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 09:55:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41362 "EHLO
+        id S243790AbiEENvS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 09:51:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380176AbiEENyt (ORCPT
+        with ESMTP id S1379994AbiEENvC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 09:54:49 -0400
-Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2137E57152
-        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 06:51:08 -0700 (PDT)
-Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20220505135106euoutp016d4d252032490a708909e55e91d8ef82~sOcGYCApU3179931799euoutp01T
-        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 13:51:06 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20220505135106euoutp016d4d252032490a708909e55e91d8ef82~sOcGYCApU3179931799euoutp01T
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1651758667;
-        bh=U9RzqUijJL5PmqUeIybgHDju5FpS85GPewMJfUjtd+U=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dajDSPIm+J5ZIlke5/YV9e8QtQCHo+mRazznUYNKVqub4GTahcH24RVAWtIN3XTTr
-         kEuH25BZUVHkGr+i2wLWwr/c0qxTKqzzLjjf0IGjHfbc2I393T/VvxubI/SKTvWAdt
-         TSNTWYUkTrn8q0meFwbt3RqgQ6c9MthUoow5rSFg=
-Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20220505135104eucas1p1f7413241441378ad3d8a2fcbfb72bd5d~sOcEh4oMU0188401884eucas1p1X;
-        Thu,  5 May 2022 13:51:04 +0000 (GMT)
-Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
-        eusmges1new.samsung.com (EUCPMTA) with SMTP id 19.FC.10009.846D3726; Thu,  5
-        May 2022 14:51:04 +0100 (BST)
-Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
-        20220505135104eucas1p1bed3e1e47255518296b4cb15ec0c042b~sOcD8lxBw1068810688eucas1p1D;
-        Thu,  5 May 2022 13:51:04 +0000 (GMT)
-Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
-        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20220505135104eusmtrp1758e1912f2f38f38511d760a6d5554ac~sOcD7cTl01310613106eusmtrp1O;
-        Thu,  5 May 2022 13:51:04 +0000 (GMT)
-X-AuditID: cbfec7f2-e95ff70000002719-37-6273d6484bb4
-Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
-        eusmgms2.samsung.com (EUCPMTA) with SMTP id 84.6A.09404.846D3726; Thu,  5
-        May 2022 14:51:04 +0100 (BST)
-Received: from localhost (unknown [106.210.248.170]) by eusmtip1.samsung.com
-        (KnoxPortal) with ESMTPA id
-        20220505135103eusmtip1f8faf002ab4e89d5bdd4994a68da949b~sOcDjxkyl0093500935eusmtip1H;
-        Thu,  5 May 2022 13:51:03 +0000 (GMT)
-From:   Pankaj Raghav <p.raghav@samsung.com>
-To:     axboe@kernel.dk, hch@lst.de, damien.lemoal@opensource.wdc.com,
-        dsterba@suse.com, jaegeuk@kernel.org, bvanassche@acm.org,
-        hare@suse.de
-Cc:     jonathan.derrick@linux.dev, jiangbo.365@bytedance.com,
-        matias.bjorling@wdc.com, gost.dev@samsung.com, pankydev8@gmail.com,
-        Pankaj Raghav <p.raghav@samsung.com>,
-        Luis Chamberlain <mcgrof@kernel.org>, Chris Mason <clm@fb.com>,
-        Josef Bacik <josef@toxicpanda.com>,
-        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 05/11] btrfs: zoned: Cache superblock location in
- btrfs_zoned_device_info
+        Thu, 5 May 2022 09:51:02 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A548757149;
+        Thu,  5 May 2022 06:47:22 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id l18so8835925ejc.7;
+        Thu, 05 May 2022 06:47:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=82ySVt2ChtjKl3QU+pguknZpdr/d2PyQOBQbWfayXGY=;
+        b=SfVmRiTTUxzjc+1QZoWxa1YWNdnZkZqKrIovzyZA7N4h5pTax32kYUqqkv5Qb9uxti
+         NlnIh7OU9kLgoTkHkU50NOjFPjJAjQXvG3nTSZ0J7Z9y7ugJsoXWR79WwG4/xVqwe2BB
+         ZjpR+y3MEZpzxT9uLMhs6x+wT/EUCMMmckm2a53HDHPP33m7MV0FNJ54ZDOczpu3yf3G
+         3OmN16ISbQmPrznnKOSILKAJtPup0JkgLrkBRO0RNTs97yB/6/h06mS8PQJ/y4zi9n8m
+         Hg6m9IKFVpXVqUz4qYfCsf3hw/Z6bNu/sIBtRy7WxkLkVgCyACPoYAUdZhk+XXlZSnuF
+         yMqQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=82ySVt2ChtjKl3QU+pguknZpdr/d2PyQOBQbWfayXGY=;
+        b=kuQWSk0XWVMaivVOEChs2B6NvRv1Lqq62X2lni06AvovikXoAHvWVZ3EPEKDG6wj3O
+         VTVe6kC7+D7pUTrbLaPjmUXD0NtDlD2vUc3dbzX9NiflV7hSw4OhPHZn+YYy2DWbnIDm
+         EBdc/I8fUInRARDgRn5+7Am2l7SYLJru7eDV+ipXvnx7UsWe2ezPgWieGnKTxze2F7ds
+         2CfWbJaYq4T7n3H4q8uSUx+Chw3M0mc7jm3LLjpN21r1kkMI9/rXec1+G79gTNV6BLDP
+         IluMGL4eFbOfOFCYyxNEAWhijs7wjhswk/kFkB+vI9+BqlzilHTPq3fvGAA6sLYjbHPU
+         ptMQ==
+X-Gm-Message-State: AOAM5330U+Gg2RKx3ScUSNviK+NQGSlerO46oxNJtMZVeZwXW69xqO36
+        5jYofeAjZkSjEPAN9SswcqI=
+X-Google-Smtp-Source: ABdhPJzIa3KAznxko5Ij9lTbofJCQziDWDQ/3MLAvLhDVUrzkmZMLbi/elDSrXqlTjrflBFhVYKmHw==
+X-Received: by 2002:a17:907:2d11:b0:6f4:7cf0:2275 with SMTP id gs17-20020a1709072d1100b006f47cf02275mr14868896ejc.72.1651758441223;
+        Thu, 05 May 2022 06:47:21 -0700 (PDT)
+Received: from linux.. (p5dd1ed70.dip0.t-ipconnect.de. [93.209.237.112])
+        by smtp.gmail.com with ESMTPSA id 26-20020a170906301a00b006f3ef214e69sm728324ejz.207.2022.05.05.06.47.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 May 2022 06:47:20 -0700 (PDT)
+From:   Bean Huo <huobean@gmail.com>
+To:     alim.akhtar@samsung.com, avri.altman@wdc.com,
+        asutoshd@codeaurora.org, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, stanley.chu@mediatek.com,
+        beanhuo@micron.com, bvanassche@acm.org, tomas.winkler@intel.com,
+        cang@codeaurora.org, daejun7.park@samsung.com,
+        peter.wang@mediatek.com, powen.kao@mediatek.com,
+        keosung.park@samsung.com
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v4 4/6] scsi: ufshpb: Change sysfs node hpb_stats/rb_* prefix to start with rcmd_*
 Date:   Thu,  5 May 2022 15:47:05 +0200
-Message-Id: <20220505134710.132630-6-p.raghav@samsung.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220505134710.132630-1-p.raghav@samsung.com>
+Message-Id: <20220505134707.35929-5-huobean@gmail.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220505134707.35929-1-huobean@gmail.com>
+References: <20220505134707.35929-1-huobean@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA02SfUxTZxTGfe+9vbdtqFxaEl5xbqMLJrgBEvfxjk7ncH/cxMRtMVnGyGBF
-        b4BZSm2tOnCjjAJSCNSiTrrK2Ijho12KgIayZTTEKisirp0MxmjtBEQo+IENMpTNclnmf79z
-        zvO8zznJy8fFIV4sP095iFUr5QopKSQuXl4aSmSGNdlb+z0IWcdrSXT63hKOTLVnKLQ8OISj
-        649KMDTqdGDop+9NGGq1ujA0YTfjqNp5j0Ct+gCOHgdSkOdWC4W8PRYSGctDOBoxTgK0cE5P
-        IdvoJLFTzHh/282s9NtI5kTpPMU4zOMU4x3UMh1tlSTzne4Uzvw4qiMZR5mfx9R0tQHG3nWD
-        YDoHihhj53kes9DxPFPhrMLej/xY+NZ+VpF3mFUn7/hUmPvIN0SonDFH7fMGUgeaJAYg4EP6
-        VTgVdJMGIOSL6RYAl275MK54CGCTq4viigUAG9zXgQHwVy2Lpte4fjOAM1VNvPBTYvoOgHWW
-        3LCGpLfAkspVbzRdBeBgaZAIFzjtxmDJjWUsbJDQmXC2/T4ZZoKOh1PdvtW+iE6Flxr0gNvv
-        BVjvWaTCLKBl0FIZ4HGaKPhL/QQRZvyppvTCN3g4ANLDArjw2I9x5nehP/Q3j2MJnLnSRXH8
-        HByoqyY4LoKTI8trZj2AtQ47yZ0pgzVXFWHE6QRo70nm5O/AwK8VFKdYD0fmorgV1kPTxa9x
-        ri2Cx8vFnFoKHUsTa6EQer+yrIUy8KytmzKCOPMzx5ifOcb8f24jwNtADKvV5OewmhQleyRJ
-        I8/XaJU5SfsK8jvA0585sHLlQTc4O3M/qQ9gfNAHIB+XRot2nVNli0X75Z8XsuqCLLVWwWr6
-        wEY+IY0R7ctrl4vpHPkh9gDLqlj1f1OML4jVYXtsBccSjkxFpEepei6kespkd2CWZTH2ZRTX
-        2XhTmPx6wI9OGRLnyuRWyQeZ2VaZm93c/0dkb/Oid2+cRFmwzcyyXu+yaad02/RYS8ZejWu3
-        +KTi/IsZvwdrXpquAzZj5J55kODemn4gmNZ88IEhq6JY5TlmDgzL7HDdpeLZXeb3BNX9bzcY
-        bwa+OLwhOLdjMuL4l77QmCv0kFf8oS0xPm2TuP3o9NiJH64ND/7F9r6xPdN/0Hk3Q9c6p484
-        U1n/JCl+dv6T8Uh8pTCeuazoTV33bUXhRp+16Pabd8dv//Pzyc3Rrwj1wavaP4Xo2meEKn36
-        o6wNovLUiOy0xoHtrEtKaHLlKVtwtUb+LxISiIcIBAAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrKIsWRmVeSWpSXmKPExsVy+t/xu7oe14qTDE5O5bNYfbefzWLah5/M
-        FpP6Z7Bb/D57ntniwo9GJoubB3YyWexZNInJYuXqo0wWT9bPYrboOfCBxWJly0Nmiz8PDS0u
-        PV7BbnF51xw2iwltX5ktbkx4ymjxeWkLu8Wam09ZHIQ8Ll/x9vh3Yg2bx8Tmd+weO2fdZfe4
-        fLbUY9OqTjaPhQ1TmT1232xg89jZep/Vo2/LKkaP9VuusnhsPl3tMWHzRlaPz5vkPNoPdDMF
-        8Efp2RTll5akKmTkF5fYKkUbWhjpGVpa6BmZWOoZGpvHWhmZKunb2aSk5mSWpRbp2yXoZfy4
-        d56l4IB4xfp3XWwNjIuFuxg5OCQETCS+TzLtYuTiEBJYyiixesNNpi5GTqC4hMTthU2MELaw
-        xJ9rXWwQRc8ZJX5fbWUBaWYT0JJo7GQHiYsITGWUuLD9AguIwyxwjUmi4eEuNpBuYYEYiT/v
-        FrKD2CwCqhLPdtwD28ArYCVxZF4L1AZ5iZmXvoPVcApYS8zpfMgKYgsB1Ux8+I4Nol5Q4uTM
-        JywgNjNQffPW2cwTGAVmIUnNQpJawMi0ilEktbQ4Nz232EivODG3uDQvXS85P3cTIzC+tx37
-        uWUH48pXH/UOMTJxMB5ilOBgVhLhdV5akCTEm5JYWZValB9fVJqTWnyI0RTo7onMUqLJ+cAE
-        k1cSb2hmYGpoYmZpYGppZqwkzutZ0JEoJJCeWJKanZpakFoE08fEwSnVwFSZWqW8un+6uf/m
-        7zvT2ri/vsq4tHHVtbt+n3PnCJiUGn1ZG/Zs3s6iv0dU9+9JMPJU7RB1yJn7wDt/JZ+dzGZn
-        87N79v5J1HV9fFxS5QpT8Yf1x7Ttnhj6cB/W32/8drKhiXHn75SIXRa5D6Mmsbx9q9Z4Nqne
-        vs6pVtxTfjfHnSAD9aO63CGsnX9Fz6Yk6d3xbVqbMPtFinCtnJXS3Vetj3l3aa09sq6meHL8
-        NJ0qiUAzibyr73ua+Arfbtzmc+78f/FHSw41Zh66+maa47oDvQc+zRU5uXjaHtPKCa2ztvFn
-        Lk05titzc5Jx2fefCzWOLdP7J3fg6sRVfO0cG0NP7VpXusDlV1jBoatHvScpsRRnJBpqMRcV
-        JwIA3qSA/ngDAAA=
-X-CMS-MailID: 20220505135104eucas1p1bed3e1e47255518296b4cb15ec0c042b
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20220505135104eucas1p1bed3e1e47255518296b4cb15ec0c042b
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20220505135104eucas1p1bed3e1e47255518296b4cb15ec0c042b
-References: <20220505134710.132630-1-p.raghav@samsung.com>
-        <CGME20220505135104eucas1p1bed3e1e47255518296b4cb15ec0c042b@eucas1p1.samsung.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Instead of calculating the superblock location every time, cache the
-superblock zone location in btrfs_zoned_device_info struct and use it to
-locate the zone index.
+From: Bean Huo <beanhuo@micron.com>
 
-The functions such as btrfs_sb_log_location_bdev() and
-btrfs_reset_sb_log_zones() which work directly on block_device shall
-continue to use the sb_zone_number because btrfs_zoned_device_info
-struct might not have been initialized at that point.
+According to the documentation of the sysfs nodes rb_noti_cnt, rb_active_cnt
+and rb_inactive_cnt, they are all related to HPB recommendation in UPIU response
+packet. 'rcmd' (recommendation) should be the correct abbreviation.
 
-This patch will enable non power-of-2 zoned devices to not perform
-division to lookup superblock and its mirror location.
+Change the sysfs documentation about these sysfs nodes to highlight what they mean
+under different HPB control modes.
 
-Reviewed-by: Luis Chamberlain <mcgrof@kernel.org>
-Signed-off-by: Pankaj Raghav <p.raghav@samsung.com>
+Reviewed-by: Keoseong Park <keosung.park@samsung.com>
+Signed-off-by: Bean Huo <beanhuo@micron.com>
 ---
- fs/btrfs/zoned.c | 13 +++++++++----
- fs/btrfs/zoned.h |  1 +
- 2 files changed, 10 insertions(+), 4 deletions(-)
+ Documentation/ABI/testing/sysfs-driver-ufs | 18 +++++++++-------
+ drivers/scsi/ufs/ufshpb.c                  | 24 +++++++++++-----------
+ drivers/scsi/ufs/ufshpb.h                  |  6 +++---
+ 3 files changed, 26 insertions(+), 22 deletions(-)
 
-diff --git a/fs/btrfs/zoned.c b/fs/btrfs/zoned.c
-index 06f22c021..e8c7cebb2 100644
---- a/fs/btrfs/zoned.c
-+++ b/fs/btrfs/zoned.c
-@@ -511,6 +511,11 @@ int btrfs_get_dev_zone_info(struct btrfs_device *device, bool populate_cache)
- 			   max_active_zones - nactive);
- 	}
+diff --git a/Documentation/ABI/testing/sysfs-driver-ufs b/Documentation/ABI/testing/sysfs-driver-ufs
+index a44ef8bfbadf..6b248abb1bd7 100644
+--- a/Documentation/ABI/testing/sysfs-driver-ufs
++++ b/Documentation/ABI/testing/sysfs-driver-ufs
+@@ -1518,7 +1518,7 @@ Description:	This entry shows the number of reads that cannot be changed to
  
-+	/* Cache the sb zone number */
-+	for (i = 0; i < BTRFS_SUPER_MIRROR_MAX; ++i) {
-+		zone_info->sb_zone_location[i] =
-+			sb_zone_number(zone_info->zone_size_shift, i);
-+	}
- 	/* Validate superblock log */
- 	nr_zones = BTRFS_NR_SB_LOG_ZONES;
- 	for (i = 0; i < BTRFS_SUPER_MIRROR_MAX; i++) {
-@@ -518,7 +523,7 @@ int btrfs_get_dev_zone_info(struct btrfs_device *device, bool populate_cache)
- 		u64 sb_wp;
- 		int sb_pos = BTRFS_NR_SB_LOG_ZONES * i;
+ 		The file is read only.
  
--		sb_zone = sb_zone_number(zone_info->zone_size_shift, i);
-+		sb_zone = zone_info->sb_zone_location[i];
- 		if (sb_zone + 1 >= zone_info->nr_zones)
- 			continue;
+-What:		/sys/class/scsi_device/*/device/hpb_stats/rb_noti_cnt
++What:		/sys/class/scsi_device/*/device/hpb_stats/rcmd_noti_cnt
+ Date:		June 2021
+ Contact:	Daejun Park <daejun7.park@samsung.com>
+ Description:	This entry shows the number of response UPIUs that has
+@@ -1526,19 +1526,23 @@ Description:	This entry shows the number of response UPIUs that has
  
-@@ -866,7 +871,7 @@ int btrfs_sb_log_location(struct btrfs_device *device, int mirror, int rw,
- 		return 0;
- 	}
+ 		The file is read only.
  
--	zone_num = sb_zone_number(zinfo->zone_size_shift, mirror);
-+	zone_num = zinfo->sb_zone_location[mirror];
- 	if (zone_num + 1 >= zinfo->nr_zones)
- 		return -ENOENT;
+-What:		/sys/class/scsi_device/*/device/hpb_stats/rb_active_cnt
++What:		/sys/class/scsi_device/*/device/hpb_stats/rcmd_active_cnt
+ Date:		June 2021
+ Contact:	Daejun Park <daejun7.park@samsung.com>
+-Description:	This entry shows the number of active sub-regions recommended by
+-		response UPIUs.
++Description:	For the HPB device control mode, this entry shows the number of
++        active sub-regions recommended by response UPIUs. For the HPB host control
++        mode, this entry shows the number of active sub-regions recommended by the
++        HPB host control mode heuristic algorithm.
  
-@@ -883,7 +888,7 @@ static inline bool is_sb_log_zone(struct btrfs_zoned_device_info *zinfo,
- 	if (!zinfo)
- 		return false;
+ 		The file is read only.
  
--	zone_num = sb_zone_number(zinfo->zone_size_shift, mirror);
-+	zone_num = zinfo->sb_zone_location[mirror];
- 	if (zone_num + 1 >= zinfo->nr_zones)
- 		return false;
+-What:		/sys/class/scsi_device/*/device/hpb_stats/rb_inactive_cnt
++What:		/sys/class/scsi_device/*/device/hpb_stats/rcmd_inactive_cnt
+ Date:		June 2021
+ Contact:	Daejun Park <daejun7.park@samsung.com>
+-Description:	This entry shows the number of inactive regions recommended by
+-		response UPIUs.
++Description:	For the HPB device control mode, this entry shows the number of
++        inactive regions recommended by response UPIUs. For the HPB host control
++        mode, this entry shows the number of inactive regions recommended by the
++        HPB host control mode heuristic algorithm.
  
-@@ -1011,7 +1016,7 @@ u64 btrfs_find_allocatable_zones(struct btrfs_device *device, u64 hole_start,
- 			u32 sb_zone;
- 			u64 sb_pos;
+ 		The file is read only.
  
--			sb_zone = sb_zone_number(shift, i);
-+			sb_zone = zinfo->sb_zone_location[i];
- 			if (!(end <= sb_zone ||
- 			      sb_zone + BTRFS_NR_SB_LOG_ZONES <= begin)) {
- 				have_sb = true;
-diff --git a/fs/btrfs/zoned.h b/fs/btrfs/zoned.h
-index 10f31d1c8..694ab6d1e 100644
---- a/fs/btrfs/zoned.h
-+++ b/fs/btrfs/zoned.h
-@@ -27,6 +27,7 @@ struct btrfs_zoned_device_info {
- 	unsigned long *active_zones;
- 	struct blk_zone *zone_cache;
- 	struct blk_zone sb_zones[2 * BTRFS_SUPER_MIRROR_MAX];
-+	u32 sb_zone_location[BTRFS_SUPER_MIRROR_MAX];
- };
+diff --git a/drivers/scsi/ufs/ufshpb.c b/drivers/scsi/ufs/ufshpb.c
+index 901e0a3d4836..4833f20cc7d0 100644
+--- a/drivers/scsi/ufs/ufshpb.c
++++ b/drivers/scsi/ufs/ufshpb.c
+@@ -563,7 +563,7 @@ static void ufshpb_update_active_info(struct ufshpb_lu *hpb, int rgn_idx,
+ 	if (list_empty(&srgn->list_act_srgn))
+ 		list_add_tail(&srgn->list_act_srgn, &hpb->lh_act_srgn);
  
- #ifdef CONFIG_BLK_DEV_ZONED
+-	hpb->stats.rb_active_cnt++;
++	hpb->stats.rcmd_active_cnt++;
+ }
+ 
+ static void ufshpb_update_inactive_info(struct ufshpb_lu *hpb, int rgn_idx)
+@@ -580,7 +580,7 @@ static void ufshpb_update_inactive_info(struct ufshpb_lu *hpb, int rgn_idx)
+ 	if (list_empty(&rgn->list_inact_rgn))
+ 		list_add_tail(&rgn->list_inact_rgn, &hpb->lh_inact_rgn);
+ 
+-	hpb->stats.rb_inactive_cnt++;
++	hpb->stats.rcmd_inactive_cnt++;
+ }
+ 
+ static void ufshpb_activate_subregion(struct ufshpb_lu *hpb,
+@@ -1321,7 +1321,7 @@ void ufshpb_rsp_upiu(struct ufs_hba *hba, struct ufshcd_lrb *lrbp)
+ 	if (!ufshpb_is_hpb_rsp_valid(hba, lrbp, rsp_field))
+ 		return;
+ 
+-	hpb->stats.rb_noti_cnt++;
++	hpb->stats.rcmd_noti_cnt++;
+ 
+ 	switch (rsp_field->hpb_op) {
+ 	case HPB_RSP_REQ_REGION_UPDATE:
+@@ -1724,18 +1724,18 @@ static DEVICE_ATTR_RO(__name)
+ 
+ ufshpb_sysfs_attr_show_func(hit_cnt);
+ ufshpb_sysfs_attr_show_func(miss_cnt);
+-ufshpb_sysfs_attr_show_func(rb_noti_cnt);
+-ufshpb_sysfs_attr_show_func(rb_active_cnt);
+-ufshpb_sysfs_attr_show_func(rb_inactive_cnt);
++ufshpb_sysfs_attr_show_func(rcmd_noti_cnt);
++ufshpb_sysfs_attr_show_func(rcmd_active_cnt);
++ufshpb_sysfs_attr_show_func(rcmd_inactive_cnt);
+ ufshpb_sysfs_attr_show_func(map_req_cnt);
+ ufshpb_sysfs_attr_show_func(umap_req_cnt);
+ 
+ static struct attribute *hpb_dev_stat_attrs[] = {
+ 	&dev_attr_hit_cnt.attr,
+ 	&dev_attr_miss_cnt.attr,
+-	&dev_attr_rb_noti_cnt.attr,
+-	&dev_attr_rb_active_cnt.attr,
+-	&dev_attr_rb_inactive_cnt.attr,
++	&dev_attr_rcmd_noti_cnt.attr,
++	&dev_attr_rcmd_active_cnt.attr,
++	&dev_attr_rcmd_inactive_cnt.attr,
+ 	&dev_attr_map_req_cnt.attr,
+ 	&dev_attr_umap_req_cnt.attr,
+ 	NULL,
+@@ -2098,9 +2098,9 @@ static void ufshpb_stat_init(struct ufshpb_lu *hpb)
+ {
+ 	hpb->stats.hit_cnt = 0;
+ 	hpb->stats.miss_cnt = 0;
+-	hpb->stats.rb_noti_cnt = 0;
+-	hpb->stats.rb_active_cnt = 0;
+-	hpb->stats.rb_inactive_cnt = 0;
++	hpb->stats.rcmd_noti_cnt = 0;
++	hpb->stats.rcmd_active_cnt = 0;
++	hpb->stats.rcmd_inactive_cnt = 0;
+ 	hpb->stats.map_req_cnt = 0;
+ 	hpb->stats.umap_req_cnt = 0;
+ }
+diff --git a/drivers/scsi/ufs/ufshpb.h b/drivers/scsi/ufs/ufshpb.h
+index b83b9ec9044a..0d6e6004d783 100644
+--- a/drivers/scsi/ufs/ufshpb.h
++++ b/drivers/scsi/ufs/ufshpb.h
+@@ -211,9 +211,9 @@ struct ufshpb_params {
+ struct ufshpb_stats {
+ 	u64 hit_cnt;
+ 	u64 miss_cnt;
+-	u64 rb_noti_cnt;
+-	u64 rb_active_cnt;
+-	u64 rb_inactive_cnt;
++	u64 rcmd_noti_cnt;
++	u64 rcmd_active_cnt;
++	u64 rcmd_inactive_cnt;
+ 	u64 map_req_cnt;
+ 	u64 pre_req_cnt;
+ 	u64 umap_req_cnt;
 -- 
-2.25.1
+2.34.1
 

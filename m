@@ -2,83 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9616351C553
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 18:47:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5E1D51C554
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 18:48:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381881AbiEEQvT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 12:51:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41428 "EHLO
+        id S1382039AbiEEQvo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 12:51:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244828AbiEEQvQ (ORCPT
+        with ESMTP id S229636AbiEEQvm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 12:51:16 -0400
-Received: from mail-oo1-xc33.google.com (mail-oo1-xc33.google.com [IPv6:2607:f8b0:4864:20::c33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 573EB443E0;
-        Thu,  5 May 2022 09:47:36 -0700 (PDT)
-Received: by mail-oo1-xc33.google.com with SMTP id m3-20020a4ac683000000b0035f13dde9ccso810942ooq.6;
-        Thu, 05 May 2022 09:47:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=mZ1v1Dle2stU/b+5xs8mW34KpIG2CizYWSGqBNU2Bz8=;
-        b=kIU1IzWI2h67CczNZjDrAqOu+7amMiU9BNzBUsm9+8eUorQIgmZj8BUaj81G12rNlE
-         68e+vrj64mqY2psH6XqJCnztqqa0PQYdUiFVwlZFCUdnB10Eq3yPNuX2et/Qb7IiyrBz
-         y4P4CTgj9qHdFctipJQQLZooa5lZ6p9+t/FJlW5OsvmErxS/8SHDugMU5U/PNC8J3vyD
-         1HBZIl3MmaWUixyDAUco2zkiEwyySzadAX4fbQwpaHfhPJt5wbSxkV0ayhNZoX6n7e5a
-         HyZWZIVKJQiHg1IN3LnTM/Yup1dPA9d0emXF3/6nbwpE3BNPdT1+QaKsJavswdrAetPZ
-         rYkA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=mZ1v1Dle2stU/b+5xs8mW34KpIG2CizYWSGqBNU2Bz8=;
-        b=aAnACA9isyJLX2Xg2uQJh+TDgOWpBcQTTM5m7EeXLU1Cz+FHBjBs93CdvKzaFiv3pW
-         wYfy1mrate6Ht3hKXfo2zKklHVNILRrCXxPhB2M6bdL4upqZZIaCjwyW6xlT+mFY2eeS
-         2jbufSTseuioo+IPYotC3UtkgXtp+4RTmnTgLpgrpXYTk1PWg+7hSZDMpmmOv6bZjpcF
-         KwarQ3noOkmk6JHyUzqw9BUSg5aMCxukn/eAMmVD3Oepx2I9eNqD3dgV4eWzavjO0fo/
-         o6uP8GnIWVWRzl6AngM8knNDxTaGMNwa1JKw8p0iPraNAOiLsreK5UH8/amlJBTV8D79
-         Vasw==
-X-Gm-Message-State: AOAM531KlSFacRHsNiiUgUaIywXcIpDxVxFOd2gJNOZu8ubqflCPm+cS
-        wZGryqDlYgDA5GDCNUKg8Dg=
-X-Google-Smtp-Source: ABdhPJx/mBD6xFVnxfzAwXo9hN2FbyZEsHhGERFB1m4oe7WTeGkz/+OsH6gYEs3iDqleRPT+1WANlg==
-X-Received: by 2002:a4a:b289:0:b0:35e:7d6e:97eb with SMTP id k9-20020a4ab289000000b0035e7d6e97ebmr9583599ooo.57.1651769255626;
-        Thu, 05 May 2022 09:47:35 -0700 (PDT)
-Received: from [192.168.1.145] ([207.188.167.132])
-        by smtp.gmail.com with ESMTPSA id t28-20020a05683019fc00b0060603221260sm799519ott.48.2022.05.05.09.47.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 05 May 2022 09:47:35 -0700 (PDT)
-Message-ID: <26c2fb0c-e58a-5864-4256-f60f948ca634@gmail.com>
-Date:   Thu, 5 May 2022 18:47:30 +0200
+        Thu, 5 May 2022 12:51:42 -0400
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37A4B443E0
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 09:48:00 -0700 (PDT)
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+        by localhost (Postfix) with ESMTP id 4KvKPp01sFz9sSn;
+        Thu,  5 May 2022 18:47:58 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id cyhOmyycsWZl; Thu,  5 May 2022 18:47:57 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase2.c-s.fr (Postfix) with ESMTP id 4KvKPn66Xmz9sSk;
+        Thu,  5 May 2022 18:47:57 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id C1D138B78C;
+        Thu,  5 May 2022 18:47:57 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id ZjXLIez351Rx; Thu,  5 May 2022 18:47:57 +0200 (CEST)
+Received: from [192.168.202.58] (unknown [192.168.202.58])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id F35A98B763;
+        Thu,  5 May 2022 18:47:56 +0200 (CEST)
+Message-ID: <c10a1d91-bf3e-a0d9-dd2b-05174eae6750@csgroup.eu>
+Date:   Thu, 5 May 2022 18:47:56 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH v2 1/2] dt-bindings: ARM: Mediatek: Remove msdc binding of
- MT8192 clock
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>, matthias.bgg@kernel.org
-Cc:     mturquette@baylibre.com, sboyd@kernel.org,
-        allen-kh.cheng@mediatek.com, weiyi.lu@mediatek.com,
-        chun-jie.chen@mediatek.com, linux-kernel@vger.kernel.org,
-        ikjn@chromium.org, miles.chen@mediatek.com,
-        linux-mediatek@lists.infradead.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        angelogioacchino.delregno@collabora.com,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        devicetree@vger.kernel.org
-References: <20220429123133.28869-1-matthias.bgg@kernel.org>
- <20220429123133.28869-2-matthias.bgg@kernel.org>
- <YnGjScfQA9axBYBO@robh.at.kernel.org>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <YnGjScfQA9axBYBO@robh.at.kernel.org>
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v1 13/22] powerpc/ftrace: Use PPC_RAW_xxx() macros instead
+ of opencoding.
+Content-Language: fr-FR
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Paul Mackerras <paulus@samba.org>,
+        Steven Rostedt <rostedt@goodmis.org>
+Cc:     "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <cover.1648131740.git.christophe.leroy@csgroup.eu>
+ <bf3b854ca8f6f5abd29a7b2d9f74a7724fe35e33.1648131740.git.christophe.leroy@csgroup.eu>
+ <1650267275.b63dsc56ds.naveen@linux.ibm.com>
+ <4d338e24-7801-d17c-04a4-9afd2d7f9fd8@csgroup.eu>
+In-Reply-To: <4d338e24-7801-d17c-04a4-9afd2d7f9fd8@csgroup.eu>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -87,60 +70,166 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 03/05/2022 23:48, Rob Herring wrote:
-> On Fri, Apr 29, 2022 at 02:31:31PM +0200, matthias.bgg@kernel.org wrote:
->> From: Matthias Brugger <matthias.bgg@gmail.com>
->>
->> The msdc gate is part of the MMC driver. Delete the binding description
->> of this node.
+Le 04/05/2022 à 14:39, Christophe Leroy a écrit :
 > 
-> An ABI break is okay because ...?
 > 
+> Le 18/04/2022 à 09:38, Naveen N. Rao a écrit :
+>> Christophe Leroy wrote:
+>>> PPC_RAW_xxx() macros are self explanatory and less error prone
+>>> than open coding.
+>>>
+>>> Use them in ftrace.c
+>>>
+>>> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+>>> ---
+>>>   arch/powerpc/include/asm/ppc-opcode.h |  3 +++
+>>>   arch/powerpc/kernel/trace/ftrace.c    | 32 +++++++++------------------
+>>>   2 files changed, 14 insertions(+), 21 deletions(-)
+>>>
+>>> diff --git a/arch/powerpc/include/asm/ppc-opcode.h
+>>> b/arch/powerpc/include/asm/ppc-opcode.h
+>>> index 82f1f0041c6f..281754aca0a3 100644
+>>> --- a/arch/powerpc/include/asm/ppc-opcode.h
+>>> +++ b/arch/powerpc/include/asm/ppc-opcode.h
+>>> @@ -294,6 +294,8 @@
+>>>   #define PPC_INST_BL            0x48000001
+>>>   #define PPC_INST_BRANCH_COND        0x40800000
+>>>
+>>> +#define PPC_INST_OFFSET24_MASK        0x03fffffc
+>>
+>> This corresponds to the LI field, per the ISA. See section 8.1.2/1.7:
+>> 'Instruction Fields'. Would it be better to name it PPC_INST_LI_MASK?
+> 
+> Isn't there a risk of confusing with the 'li' instruction ? Like we
+> could have PPC_INST_LI just like we have PPC_INST_ADD ?
 
-Because the code controlling the clock gate was moved to the consumer. This node 
-did never ever represent any working implementation of a peripheral. Just a 
-lonely clock gate that wasn't used.
+I called it PPC_LI() and PPC_LI_MASK, similar to PPC_LO, PPC_HI etc ...
 
-Regards,
-Matthias
+> 
+> 
+> 
+>>
+>>> +
+>>>   /* Prefixes */
+>>>   #define PPC_INST_LFS            0xc0000000
+>>>   #define PPC_INST_STFS            0xd0000000
+>>> @@ -572,6 +574,7 @@
+>>>   #define PPC_RAW_EIEIO()            (0x7c0006ac)
+>>>
+>>>   #define PPC_RAW_BRANCH(addr)        (PPC_INST_BRANCH | ((addr) &
+>>> 0x03fffffc))
+>>> +#define PPC_RAW_BL(offset)        (0x48000001 | ((offset) &
+>>> PPC_INST_OFFSET24_MASK))
+>>>
+>>>   /* Deal with instructions that older assemblers aren't aware of */
+>>>   #define    PPC_BCCTR_FLUSH        stringify_in_c(.long
+>>> PPC_INST_BCCTR_FLUSH)
+>>> diff --git a/arch/powerpc/kernel/trace/ftrace.c
+>>> b/arch/powerpc/kernel/trace/ftrace.c
+>>> index fdc0412c1d8a..afb1d12838c9 100644
+>>> --- a/arch/powerpc/kernel/trace/ftrace.c
+>>> +++ b/arch/powerpc/kernel/trace/ftrace.c
+>>> @@ -90,19 +90,19 @@ static int test_24bit_addr(unsigned long ip,
+>>> unsigned long addr)
+>>>
+>>>   static int is_bl_op(ppc_inst_t op)
+>>>   {
+>>> -    return (ppc_inst_val(op) & 0xfc000003) == 0x48000001;
+>>> +    return (ppc_inst_val(op) & ~PPC_INST_OFFSET24_MASK) ==
+>>> PPC_RAW_BL(0);
+>>>   }
+>>>
+>>>   static int is_b_op(ppc_inst_t op)
+>>>   {
+>>> -    return (ppc_inst_val(op) & 0xfc000003) == 0x48000000;
+>>> +    return (ppc_inst_val(op) & ~PPC_INST_OFFSET24_MASK) ==
+>>> PPC_RAW_BRANCH(0);
+>>>   }
+>>>
+>>>   static unsigned long find_bl_target(unsigned long ip, ppc_inst_t op)
+>>>   {
+>>>       int offset;
+>>>
+>>> -    offset = (ppc_inst_val(op) & 0x03fffffc);
+>>> +    offset = (ppc_inst_val(op) & PPC_INST_OFFSET24_MASK);
+>>>       /* make it signed */
+>>>       if (offset & 0x02000000)
+>>>           offset |= 0xfe000000;
+>>> @@ -182,7 +182,7 @@ __ftrace_make_nop(struct module *mod,
+>>>        * Use a b +8 to jump over the load.
+>>>        */
+>>>
+>>> -    pop = ppc_inst(PPC_INST_BRANCH | 8);    /* b +8 */
+>>> +    pop = ppc_inst(PPC_RAW_BRANCH(8));    /* b +8 */
+>>>
+>>>       /*
+>>>        * Check what is in the next instruction. We can see ld
+>>> r2,40(r1), but
+>>> @@ -394,17 +394,8 @@ int ftrace_make_nop(struct module *mod,
+>>>   static int
+>>>   expected_nop_sequence(void *ip, ppc_inst_t op0, ppc_inst_t op1)
+>>>   {
+>>> -    /*
+>>> -     * We expect to see:
+>>> -     *
+>>> -     * b +8
+>>> -     * ld r2,XX(r1)
+>>> -     *
+>>> -     * The load offset is different depending on the ABI. For simplicity
+>>> -     * just mask it out when doing the compare.
+>>> -     */
+>>> -    if (!ppc_inst_equal(op0, ppc_inst(0x48000008)) ||
+>>> -        (ppc_inst_val(op1) & 0xffff0000) != 0xe8410000)
+>>> +    if (!ppc_inst_equal(op0, ppc_inst(PPC_RAW_BRANCH(8))) ||
+>>> +        !ppc_inst_equal(op1, ppc_inst(PPC_INST_LD_TOC)))
+>>
+>> It would be good to move PPC_INST_LD_TOC to ppc-opcode.h
+> 
+> It's not really just an instruction, it's closely linked to the ABI, so
+> does it really belong to ppc-opcode.h ? Maybe it could be better to have
+> it in ppc_asm.h instead, which already contains ABI related definitions ?
+> 
+> If we move it into ppc-opcode.h, then we also have to move
+> R2_STACK_OFFSET. Or should we use STK_GOT defined in ppc_asm.h and drop
+> R2_STACK_OFFSET ?
 
->> Signed-off-by: Matthias Brugger <matthias.bgg@gmail.com>
+Looked at it in more details, looks like STK_GOT is an assembly only 
+symbol, and ppc_asm.h is dedicated to ASM allthough it has recently 
+leaked a bit into C.
+
+So I propose to leave it as is and do the change in a followup patch.
+
+
+> 
 >>
->> ---
+>>>           return 0;
+>>>       return 1;
+>>>   }
+>>> @@ -412,7 +403,6 @@ expected_nop_sequence(void *ip, ppc_inst_t op0,
+>>> ppc_inst_t op1)
+>>>   static int
+>>>   expected_nop_sequence(void *ip, ppc_inst_t op0, ppc_inst_t op1)
+>>>   {
+>>> -    /* look for patched "NOP" on ppc64 with -mprofile-kernel or ppc32 */
+>>>       if (!ppc_inst_equal(op0, ppc_inst(PPC_RAW_NOP())))
+>>>           return 0;
+>>>       return 1;
+>>> @@ -738,11 +728,11 @@ int __init ftrace_dyn_arch_init(void)
+>>>       int i;
+>>>       unsigned int *tramp[] = { ftrace_tramp_text, ftrace_tramp_init };
+>>>       u32 stub_insns[] = {
+>>> -        0xe98d0000 | PACATOC,    /* ld      r12,PACATOC(r13)    */
+>>> -        0x3d8c0000,        /* addis   r12,r12,<high>    */
+>>> -        0x398c0000,        /* addi    r12,r12,<low>    */
+>>> -        0x7d8903a6,        /* mtctr   r12            */
+>>> -        0x4e800420,        /* bctr                */
+>>> +        PPC_RAW_LD(_R12, _R13, PACATOC),
+>>> +        PPC_RAW_ADDIS(_R12, _R12, 0),
+>>> +        PPC_RAW_ADDIS(_R12, _R12, 0),
 >>
->> Changes in v2:
->> - Delete compatible in binding descprition as well
+>> This should be PPC_RAW_ADDI.
 >>
->>   .../bindings/arm/mediatek/mediatek,mt8192-clock.yaml      | 8 --------
->>   1 file changed, 8 deletions(-)
->>
->> diff --git a/Documentation/devicetree/bindings/arm/mediatek/mediatek,mt8192-clock.yaml b/Documentation/devicetree/bindings/arm/mediatek/mediatek,mt8192-clock.yaml
->> index c8c67c033f8c..b57cc2e69efb 100644
->> --- a/Documentation/devicetree/bindings/arm/mediatek/mediatek,mt8192-clock.yaml
->> +++ b/Documentation/devicetree/bindings/arm/mediatek/mediatek,mt8192-clock.yaml
->> @@ -24,7 +24,6 @@ properties:
->>             - mediatek,mt8192-imp_iic_wrap_w
->>             - mediatek,mt8192-imp_iic_wrap_n
->>             - mediatek,mt8192-msdc_top
->> -          - mediatek,mt8192-msdc
->>             - mediatek,mt8192-mfgcfg
->>             - mediatek,mt8192-imgsys
->>             - mediatek,mt8192-imgsys2
->> @@ -107,13 +106,6 @@ examples:
->>           #clock-cells = <1>;
->>       };
->>   
->> -  - |
->> -    msdc: clock-controller@11f60000 {
->> -        compatible = "mediatek,mt8192-msdc";
->> -        reg = <0x11f60000 0x1000>;
->> -        #clock-cells = <1>;
->> -    };
->> -
->>     - |
->>       mfgcfg: clock-controller@13fbf000 {
->>           compatible = "mediatek,mt8192-mfgcfg";
->> -- 
->> 2.34.1
->>
->>
+> 
+> Oops.
+> 
+> Christophe

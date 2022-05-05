@@ -2,57 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17B0551C5E1
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 19:14:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9881851C5E5
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 19:14:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382598AbiEERRh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 13:17:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38770 "EHLO
+        id S1382602AbiEERST (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 13:18:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382582AbiEERRe (ORCPT
+        with ESMTP id S1382089AbiEERSQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 13:17:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84A965D187;
-        Thu,  5 May 2022 10:13:53 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1EE6861EDF;
-        Thu,  5 May 2022 17:13:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80C79C385A4;
-        Thu,  5 May 2022 17:13:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651770832;
-        bh=4Cw2v6gdwkXljm2f8UrPWlUHep2z7zYACGpDeVD+35M=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=UOOFj9t9lLuJHoacWEg5paZ2PXpqB2J56xRUC4oWfs5KoGF86XoZgBffPber8YJ10
-         AlE/FF6HAJIytHkfFVbVjeoyOuqW0JdXGjqQ3odpkKfQVN3lYYrNKPKOsAirDu40hI
-         A6Okk4m+aFTpXJs6oeOTjTrQLO379rwX3R0/og5wiGpDs+mT4NyXc5ZUml/PUJF386
-         SurtgZjdmvc2N8buL0CKoj1ofOoA5C9cA+quUTbllndOW0LJqyhBvjqb3iWPOb/OiX
-         vO3GmrUK33DWYh3M91SzF9TOYnk/VfqkdJCGegOXHKi1Jy9dEa0VTQ2Myk1+NKqlp3
-         zhuDwpvIZWDiw==
-Date:   Thu, 5 May 2022 18:13:47 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-spi@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] spi: dt-bindings: qcom,spi-geni-qcom: allow three
- interconnects
-Message-ID: <YnQFy96kjgmlSgDB@sirena.org.uk>
-References: <20220505065233.28476-1-krzysztof.kozlowski@linaro.org>
+        Thu, 5 May 2022 13:18:16 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 671955C879;
+        Thu,  5 May 2022 10:14:36 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1E326106F;
+        Thu,  5 May 2022 10:14:36 -0700 (PDT)
+Received: from FVFF77S0Q05N.cambridge.arm.com (FVFF77S0Q05N.cambridge.arm.com [10.1.38.147])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id F09AD3FA31;
+        Thu,  5 May 2022 10:14:33 -0700 (PDT)
+Date:   Thu, 5 May 2022 18:14:25 +0100
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Sami Tolvanen <samitolvanen@google.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>, X86 ML <x86@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Joao Moreira <joao@overdrivepizza.com>,
+        Sedat Dilek <sedat.dilek@gmail.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        linux-hardening@vger.kernel.org,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        llvm@lists.linux.dev
+Subject: Re: [RFC PATCH 00/21] KCFI support
+Message-ID: <YnQF5hqsAdrX/UY/@FVFF77S0Q05N.cambridge.arm.com>
+References: <20220429203644.2868448-1-samitolvanen@google.com>
+ <YnKnLyyXPJl5Llc0@FVFF77S0Q05N>
+ <CABCJKudT9r=r0an4BwNp0-E1wC94wLWiHvUX4_vA8tDkQ=uHKQ@mail.gmail.com>
+ <CABCJKuc-6daZd8N6hQV6i_TtCtVpfzxJ2UW6xwxC2vxTmJ2deg@mail.gmail.com>
+ <YnPEzeab/R270gAZ@FVFF77S0Q05N.cambridge.arm.com>
+ <CABCJKuced3-MoZoBdpL+=h1PC32C-5C12HZH96+dfEp43dJwaQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="27YKxtB+W51W2fUF"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220505065233.28476-1-krzysztof.kozlowski@linaro.org>
-X-Cookie: Adapt.  Enjoy.  Survive.
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+In-Reply-To: <CABCJKuced3-MoZoBdpL+=h1PC32C-5C12HZH96+dfEp43dJwaQ@mail.gmail.com>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -61,30 +59,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, May 05, 2022 at 09:00:39AM -0700, Sami Tolvanen wrote:
+> On Thu, May 5, 2022 at 5:36 AM Mark Rutland <mark.rutland@arm.com> wrote:
+> > FWIW, a `-DLLVM_ENABLE_ASSERTIONS=ON` build also seems to work for me when
+> > building a kernel with CONFIG_CFI_CLANG=y. It's much slower than a regular
+> > Release build, so I'm still waiting for that to finish building a kernel, but
+> > it has gotten much further through the build without issues.
+> 
+> Thanks for confirming. This issue should be fixed here if you want to
+> give it another try:
+> 
+> https://github.com/samitolvanen/llvm-project/commits/kcfi
 
---27YKxtB+W51W2fUF
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+That works for me, building in Release mode. A defconfig + CFI_CLANG kernel
+built with that builds and boots clenaly.
 
-On Thu, May 05, 2022 at 08:52:33AM +0200, Krzysztof Kozlowski wrote:
-> Recent Qualcomm Geni SPI nodes, e.g. on SM8450, come also with three
-> interconnects.  This fixes dtbs_check warnings like:
+Thanks!
 
-Acked-by: Mark Brown <broonie@kernel.org>
-
---27YKxtB+W51W2fUF
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmJ0BcoACgkQJNaLcl1U
-h9CWXwf+PpSWEjCCcXFisV3Uq8feNv9iLaRSWwAvqMI76vND/kUcEAjVbOuf7fz4
-gED3jM5cY1KGncVvwoY7gWjQaP+SRQDdmGPUjoXl/X5cgNSQW6+oYOzuplcMZXrm
-HKThWqlVKr9uYlYJzV1FPdV4OQd9sLLUQF/w0LjgDqkzW64UmLwfyD76Sfex9A/8
-ncliJYQqgaAjD0pUum5ECcaex06AHmrhdm58gHG8YgdUkkRSPZhaVDAgy1+8eeoR
-PzbVw31OYr0GzrAvgXWLnjCWbxD9WewHW6g5TDL3h3IARMxlLSmRV0gV+F5ewQAy
-WYsoeZYVX/x5e8EjnP2afdloEB+0sQ==
-=Yxe0
------END PGP SIGNATURE-----
-
---27YKxtB+W51W2fUF--
+Mark.

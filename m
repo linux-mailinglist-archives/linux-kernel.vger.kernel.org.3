@@ -2,104 +2,237 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0304B51C372
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 17:08:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 737A951C3F5
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 17:29:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381092AbiEEPLO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 11:11:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34034 "EHLO
+        id S1381370AbiEEPck (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 11:32:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232149AbiEEPLI (ORCPT
+        with ESMTP id S232024AbiEEPci (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 11:11:08 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 279F638BDA;
-        Thu,  5 May 2022 08:07:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1651763249; x=1683299249;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=ofOX12TGojhwMN/6KVsscVM33pqSCNg+r9yu6HGPdus=;
-  b=cGLpXgNbtVFx4D+CRdVFagqWeSrVVAncL5Ipx/wq/bQEbvxaINDVv3PL
-   reOProTAjqEUoy9xpNsVDs09UIyfDcC/M8I5/UtashDpe6uM1F3ORwqtj
-   gLeJhiX9taAB15DYOpIrZkZvgFT65T4+fD+Gv6BGp6hjpME1PEu2aTL1w
-   D9CsZMOmLNGpsqN/Vq9593xiQQaQfBYWbWe4d0479eDaASSbRQUxFj3E0
-   PzQusMaUhCXrnMTx0xCybhc7Hngikd6Fodnt8hKWY61RN1p0+LYJbLJ28
-   gb4gLHgkH6bEwF2FEqs85RGCbBQW18Hh6l077fyL7WXGg6JAAo13jHyQG
-   Q==;
+        Thu, 5 May 2022 11:32:38 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 183845BE7B;
+        Thu,  5 May 2022 08:28:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651764536; x=1683300536;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=GyvmqhzHL+nS7FAawrKlmtuIIqJmkGLA4a4pCuECvyM=;
+  b=YVuxgaq6qRFhgrXU2q3oBPUTq/4uIVArWJZVe8ufQb2wLLMp16osNuLS
+   SkqvekrSakYvEujxeP67OE5l858MXKRyRuvicufEsTFtnLwRZIyYTy6iY
+   X2+VfD3+D7WVHfI9YGgxptQrnW8VMy9N6XLd4KQtgndaWRT9A0no09t2x
+   6u1+m8uY+FDymWD+Uf/lg7KUqlGD3Bui+HhQGmPjrB4JdOEFbS+w3K793
+   bJIFplPE6iKD7uW6ZGwiVs0et+MXFp1Qfn0v/V6u0ndF0g5Amdp4ubRoR
+   UUyTEuMYw8egPGM+LDfzMhgGbuWXUOORc2SMcsimuyTyKJF6NtZaTiQXw
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10338"; a="328682305"
 X-IronPort-AV: E=Sophos;i="5.91,201,1647327600"; 
-   d="scan'208";a="157932577"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 05 May 2022 08:07:28 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Thu, 5 May 2022 08:07:27 -0700
-Received: from [10.159.245.112] (10.10.115.15) by chn-vm-ex03.mchp-main.com
- (10.10.85.151) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
- Transport; Thu, 5 May 2022 08:07:25 -0700
-Message-ID: <ce1eeb0f-7211-f865-39d8-c0cc758de947@microchip.com>
-Date:   Thu, 5 May 2022 17:07:18 +0200
+   d="scan'208";a="328682305"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2022 08:08:24 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,201,1647327600"; 
+   d="scan'208";a="708972231"
+Received: from stinkpipe.fi.intel.com (HELO stinkbox) ([10.237.72.51])
+  by fmsmga001.fm.intel.com with SMTP; 05 May 2022 08:08:19 -0700
+Received: by stinkbox (sSMTP sendmail emulation); Thu, 05 May 2022 18:08:18 +0300
+Date:   Thu, 5 May 2022 18:08:18 +0300
+From:   Ville =?iso-8859-1?Q?Syrj=E4l=E4?= <ville.syrjala@linux.intel.com>
+To:     Doug Anderson <dianders@chromium.org>
+Cc:     Lyude Paul <lyude@redhat.com>, LKML <linux-kernel@vger.kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Jani Nikula <jani.nikula@intel.com>,
+        Maxime Ripard <maxime@cerno.tech>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        freedreno <freedreno@lists.freedesktop.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>
+Subject: Re: [PATCH] drm: Document that power requirements for DP AUX
+ transfers
+Message-ID: <YnPoYsnx7IeBfJ5D@intel.com>
+References: <20220503162033.1.Ia8651894026707e4fa61267da944ff739610d180@changeid>
+ <YnJv3B/85hTz54SC@intel.com>
+ <CAD=FV=WndmKuEB0=OVQP9YuJaSmD0uxkNs5LE0wWsFj7gBvhBA@mail.gmail.com>
+ <1c6c9fde6e85f09cc89ea8dc6e8716fef58f3ee1.camel@redhat.com>
+ <YnPjO4kbjezQl5Da@intel.com>
+ <CAD=FV=XbZEagm5qR207mcVm1Ry=bGeuRAqTYx3SBoZfyo6fSkg@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH v3 6/6] ARM: configs: at91: sama7_defconfig: add MCHP PDMC
- and DMIC drivers
-Content-Language: en-US
-To:     Mark Brown <broonie@kernel.org>, <Codrin.Ciubotariu@microchip.com>
-CC:     <alsa-devel@alsa-project.org>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <lars@metafoo.de>,
-        <perex@perex.cz>, <tiwai@suse.com>, <robh+dt@kernel.org>
-References: <20220307122202.2251639-1-codrin.ciubotariu@microchip.com>
- <20220307122202.2251639-7-codrin.ciubotariu@microchip.com>
- <d84e0e48-cf35-ae1a-e384-067d361457ba@microchip.com>
- <77c2b348-b7a6-458d-21b6-68c54efc317f@microchip.com>
- <YnPmyEujwByeFDdp@sirena.org.uk>
-From:   Nicolas Ferre <nicolas.ferre@microchip.com>
-Organization: microchip
-In-Reply-To: <YnPmyEujwByeFDdp@sirena.org.uk>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAD=FV=XbZEagm5qR207mcVm1Ry=bGeuRAqTYx3SBoZfyo6fSkg@mail.gmail.com>
+X-Patchwork-Hint: comment
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/05/2022 at 17:01, Mark Brown wrote:
-> On Thu, May 05, 2022 at 02:47:04PM +0000,Codrin.Ciubotariu@microchip.com  wrote:
->> On 05.05.2022 16:58, Nicolas Ferre wrote:
->>> I'm fine with that, but I see that some Kconfig entries "select" this
->>> SND_SOC_DMIC directly (amd, intel, mediatek, stm).
->>> If it's absolutely needed for PDMC to work, what about doing the same as
->>> it would prevent some broken configurations?
->> The only way it makes sense to me to have this driver selected somewhere
->> is in a sound card driver, used for a specific board, which we know it
->> has PDM microphones. Since, for now, we use the simple sound card for
->> our audio interfaces, we have no place to add this select.
->> The reason I do not like to add this select under the controller driver,
->> as some of the vendors did, is because, in the future, we might have
->> different PDM microphones that might not work with SND_SOC_DMIC and
->> might need a different driver.
->> I don't have a strong opinion on this. If you think I am overthinking,
->> please let me know and I will change this.
-> It's unlikely but possible that there could be some other device
-> connected (eg, you could have a DSP or something that generates PDM
-> output).  If the driver doesn't directly instantiate the DMIC itself
-> then it's probably reasonable for it to be user controllable if the DMIC
-> driver is there.
+On Thu, May 05, 2022 at 08:00:20AM -0700, Doug Anderson wrote:
+> Hi,
+> 
+> On Thu, May 5, 2022 at 7:46 AM Ville Syrjälä
+> <ville.syrjala@linux.intel.com> wrote:
+> >
+> > On Wed, May 04, 2022 at 02:10:08PM -0400, Lyude Paul wrote:
+> > > On Wed, 2022-05-04 at 09:04 -0700, Doug Anderson wrote:
+> > > > Hi,
+> > > >
+> > > > On Wed, May 4, 2022 at 5:21 AM Ville Syrjälä
+> > > > <ville.syrjala@linux.intel.com> wrote:
+> > > > >
+> > > > > On Tue, May 03, 2022 at 04:21:08PM -0700, Douglas Anderson wrote:
+> > > > > > When doing DP AUX transfers there are two actors that need to be
+> > > > > > powered in order for the DP AUX transfer to work: the DP source and
+> > > > > > the DP sync. Commit bacbab58f09d ("drm: Mention the power state
+> > > > > > requirement on side-channel operations") added some documentation
+> > > > > > saying that the DP source is required to power itself up (if needed)
+> > > > > > to do AUX transfers. However, that commit doesn't talk anything about
+> > > > > > the DP sink.
+> > > > > >
+> > > > > > For full fledged DP the sink isn't really a problem. It's expected
+> > > > > > that if an external DP monitor isn't plugged in that attempting to do
+> > > > > > AUX transfers won't work. It's also expected that if a DP monitor is
+> > > > > > plugged in (and thus asserting HPD) that it AUX transfers will work.
+> > > > > >
+> > > > > > When we're looking at eDP, however, things are less obvious. Let's add
+> > > > > > some documentation about expectations. Here's what we'll say:
+> > > > > >
+> > > > > > 1. We don't expect the DP AUX transfer function to power on an eDP
+> > > > > > panel. If an eDP panel is physically connected but powered off then it
+> > > > > > makes sense for the transfer to fail.
+> > > > >
+> > > > > I don't agree with this. I think the panel should just get powred up
+> > > > > for AUX transfers.
+> > > >
+> > > > That's definitely a fair thing to think about and I have at times
+> > > > thought about trying to make it work that way. It always ends up
+> > > > hitting a roadblock.
+> >
+> > How do you even probe the panel initially if you can't power it on
+> > without doing some kind of full modeset/etc.?
+> 
+> It's not that we can't power it on without a full modeset. It' that at
+> panel probe time all the DRM components haven't been hooked together
+> yet, so the bridge chain isn't available yet. The panel can power
+> itself on, though. This is why the documentation I added says: "if a
+> panel driver is initiating a DP AUX transfer it may power itself up
+> however it wants"
+> 
+> 
+> > > > The biggest roadblock that I recall is that to make this work then
+> > > > you'd have to somehow ensure that the bridge chain's pre_enable() call
+> > > > was made as part of the AUX transfer, right? Since the transfer
+> > > > function can be called in any context at all, we have to coordinate
+> > > > this with DRM. If, for instance, DRM is mid way through powering the
+> > > > panel down then we need to wait for DRM to fully finish powering down,
+> > > > then we need to power the panel back up. I don't believe that we can
+> > > > just force the panel to stay on if DRM is turning it off because of
+> > > > panel power sequencing requirements. At least I know it would have the
+> > > > potential to break "samsung-atna33xc20.c" which absolutely needs to
+> > > > see the panel power off after it's been disabled.
+> > > >
+> > > > We also, I believe, need to handle the fact that the bridge chain may
+> > > > not have even been created yet. We do AUX transfers to read the EDID
+> > > > and also to setup the backlight in the probe function of panel-edp. At
+> > > > that point the panel hasn't been linked into the chain. We had _long_
+> > > > discussions [1] about moving these out of probe and decided that we
+> > > > could move the EDID read to be later but that it was going to really
+> > > > ugly to move the AUX backlight later. The backlight would end up
+> > > > popping up at some point in time later (the first call to panel
+> > > > prepare() or maybe get_modes()) and that seemed weird.
+> > > >
+> > > > [1]
+> > > > https://lore.kernel.org/lkml/CAD=FV=U5-sTDLYdkeJWLAOG-0wgxR49VxtwUyUO7z2PuibLGsg@mail.gmail.com/
+> > > >
+> > > >
+> > > > > Otherwise you can't trust that eg. the /dev/aux
+> > > > > stuff is actually usable.
+> > > >
+> > > > Yeah, it's been on my mind to talk more about /dev/aux. I think
+> > > > /dev/aux has some problems, at least with eDP. Specifically:
+> > > >
+> > > > 1. Even if we somehow figure out how to power the panel on as part of
+> > > > the aux transfer, we actually _still_ not guaranteed to be able to
+> > > > talk to it as far as I understand. My colleague reported to me that on
+> > > > a system he was working with that had PSR (panel self refresh) that
+> > > > when the panel was powered on but in PSR mode that it wouldn't talk
+> > > > over AUX. Assuming that this is correct then I guess we'd also have to
+> > > > do even more coordination with DRM to exit PSR and block future
+> > > > transitions of PSR. (NOTE: it's always possible that my colleague ran
+> > > > into some other bug and that panels are _supposed_ to be able to talk
+> > > > in PSR. If you think this is the case, I can always try to dig more).
+> > >
+> > > TBH - the coordination with drm I don't think would be the difficult part, as
+> > > we'd just need to add some sort of property (ideally invisible to userspace)
+> > > that can be used in an atomic commit to disable PSR - similar to how we enable
+> > > CRC readback from sysfs in the majority of DRM drivers. That being said
+> > > though, I think we can just leave the work of solving this problem up to
+> > > whoever ends up needing this to work.
+> >
+> > The driver should just disable/prevent PSR when doing AUX if the hardware
+> > can't guarantee the PSR and AUX won't interfere with each other.
+> 
+> OK, fair enough. If we can solve the PSR problem that would be great.
+> 
+> 
+> > For i915 we have no problems with powering the panel on for AUX, but
+> > there is still a race with PSR vs. AUX because both use the same hardware
+> > internally. I've been nagging at people to fix this for i915 but I don't
+> > think it still got done :( Originally we were supposed to get a hardware
+> > mutex for this but that plan got scrapped for some reason.
+> 
+> I haven't looked at the i915 DRM code much, but my understanding is
+> that it's more of an "all in one" approach. The one driver pretty much
+> handles everything itself. That means that powering the panel up isn't
+> too hard. Is that right?
 
-Fair enough, It makes perfect sense to me as it is then.
-Thanks for the feedback!
+Yeah, we don't have too many "helpful" abstractions in the way ;)
 
-Best regards,
-   Nicolas
+> > > > for userspace to be mucking with /dev/aux. For DP's case I guess
+> > > > /dev/aux is essentially enabling userspace drivers to do things like
+> > > > update firmware on DP monitors or play with the backlight. I guess we
+> > > > decided that we didn't want to add drivers in the kernel to handle
+> > > > this type of stuff so we left it for userspace? For eDP, though, there
+> > >
+> > > The main reason DP AUX got exposed to userspace in the first place was for
+> > > usecases like fwupd,
+> >
+> > My memory says the original reason was debugging. Or at least I had
+> > no idea fwupd had started to use this until I saw some weird looking
+> > DPCD addresses in some debug log.
+> >
+> > But I suppose it's possible there were already plans for firmware
+> > updates and whatnot and it just wasn't being discussed when this was
+> > being developed.
+> 
+> If it's just for debugging, I'd argue that leaving it as-is should be
+> fine. Someone poking around with their system can find a way to make
+> sure that the panel stays on.
+
+That could require altering the state of the system quite a bit, which
+may defeat the purpose. At least I would not be willing to accept such 
+a limitation.
+
+> This is similar to how if you're poking
+> around with /dev/i2c it's up to you to make sure that the i2c device
+> you're poking at stays powered.
+> 
+> -Doug
 
 -- 
-Nicolas Ferre
+Ville Syrjälä
+Intel

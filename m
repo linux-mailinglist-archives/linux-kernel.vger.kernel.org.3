@@ -2,133 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6603B51B958
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 09:42:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8171751B940
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 09:36:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345698AbiEEHpp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 03:45:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52434 "EHLO
+        id S1345337AbiEEHkQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 03:40:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345513AbiEEHpn (ORCPT
+        with ESMTP id S235142AbiEEHkO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 03:45:43 -0400
-X-Greylist: delayed 302 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 05 May 2022 00:42:04 PDT
-Received: from us-smtp-delivery-74.mimecast.com (us-smtp-delivery-74.mimecast.com [170.10.133.74])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7356A488A0
-        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 00:42:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651736523;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=VLRlNqVxUT2J8rpKP9C1tMXllHlMCc2mtFE3UdmkF1o=;
-        b=ANme/2kUU5M7JshotflJC6kkKiABEn9g1Q4ANKtIRkIKCjtK9Pcf8rWzmXYKUj+rInedLF
-        /DCD5Jx6wdXRMDOzh6PK9KD6XgBUeHCVESZRytqcjaq4snGm5s08PAz3eo7L4J/QOH7XJ/
-        tl0mEFmF5ad4HK0xG6mBhjioAikVuWw=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-533-H4NCAMwpMLKptHmppoGcfw-1; Thu, 05 May 2022 03:35:01 -0400
-X-MC-Unique: H4NCAMwpMLKptHmppoGcfw-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 73A0C86B8AB;
-        Thu,  5 May 2022 07:35:00 +0000 (UTC)
-Received: from starship (unknown [10.40.192.26])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 5141640D2820;
-        Thu,  5 May 2022 07:34:58 +0000 (UTC)
-Message-ID: <c5cb5f62818a0d5aa03bd730312b93541cdeb97d.camel@redhat.com>
-Subject: Re: [PATCH v3 08/14] KVM: SVM: Update AVIC settings when changing
- APIC mode
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Cc:     pbonzini@redhat.com, seanjc@google.com, joro@8bytes.org,
-        jon.grimm@amd.com, wei.huang2@amd.com, terry.bowman@amd.com
-Date:   Thu, 05 May 2022 10:34:57 +0300
-In-Reply-To: <f308ae5c-968d-eab4-2caa-29517e5ac982@amd.com>
-References: <20220504073128.12031-1-suravee.suthikulpanit@amd.com>
-         <20220504073128.12031-9-suravee.suthikulpanit@amd.com>
-         <ff67344c0efe06d1422aa84e56738a0812c69bfc.camel@redhat.com>
-         <f308ae5c-968d-eab4-2caa-29517e5ac982@amd.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+        Thu, 5 May 2022 03:40:14 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2DD54838B;
+        Thu,  5 May 2022 00:36:35 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id p10so6055080lfa.12;
+        Thu, 05 May 2022 00:36:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=EvNPzmObJdLQoZe7mkFbV9lZXE5XGs6QumW7oyIXLLg=;
+        b=HjL+/0qWmEWMgyiEe4e0unetPVu7pERTINMfTVtGtp3kO1zXtYJRAuyHyPv64jg1bh
+         YhLUSfmqysBZuPqmB6XCgmDb2SEY5ocC4kCAPKnGm51CwF0BiD38pNcOyF4A1UoZBD7m
+         amtR0IXtpKofD2GGI6cIygG6YvWki3kN90f+MFz/AkjrhMcFhggWvs700Lr13W33NalE
+         et2ptnCYotWOX5aLb2Chy4K6L3v76wD2TihnEObTIIsQtnO4rCv/q9TI21gHBTNUmlHI
+         7vgqOmq+Yl4hW020s6SrGYQZ+Az/+DposHcglABsHqAVxtMy21eDhHFXokAo/W2FLMUU
+         BCUA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=EvNPzmObJdLQoZe7mkFbV9lZXE5XGs6QumW7oyIXLLg=;
+        b=glmVIxJ1aPeGIErmNqCLZHIL4jD8CzyVyL7uoNO2wSgap4xs+KFWPGDvrcZ2XQ86oz
+         udKcqyIAsEmABMoy2Fft306t1mK9rt4KYu9wabvkVxmJJR/MgPRQ+1BuozF14AI9IW7P
+         s+yLV4jc8KRM1xt8Jsa/eISYqWdcx1DPDwOthfUOeRmYjYqTsw4QnslpunAcmv+GAyqG
+         c4jPjrkGV6ACYr1fkl5P+HePOy/NEIWjDybKCZt6nK6l4FaR6D5ieWWu3fTCzIfVU9vN
+         0cAQarF5i3mKVKiXoLc/fMpHU0gVknwLyfD93b5OKpcCeBelwHKqvuJDj3wgbwjeM/08
+         /62g==
+X-Gm-Message-State: AOAM530pogvbhQHz5AGtY/+Kb+MdH7KI8skTpER+N2V1ROFv3xEIikIz
+        eaTm0kK9Bd103fiJ6svzgJ16ZzVdYfw9hVKaBY0=
+X-Google-Smtp-Source: ABdhPJzlCwN+zu+ztaxXdspnktpkbaSmCvx647Fl1CfKZFFvfCQpdiXXJZmh6tGGVGJJg0JoGRfpxnCdKl/iqzeKPdA=
+X-Received: by 2002:ac2:42d0:0:b0:471:fc7b:e53a with SMTP id
+ n16-20020ac242d0000000b00471fc7be53amr16112040lfl.185.1651736194069; Thu, 05
+ May 2022 00:36:34 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20220503094728.926-1-ctcchien@nuvoton.com> <20220503094728.926-4-ctcchien@nuvoton.com>
+ <d09f0131-65e2-d382-27b9-29ded4f47d84@molgen.mpg.de>
+In-Reply-To: <d09f0131-65e2-d382-27b9-29ded4f47d84@molgen.mpg.de>
+From:   Medad Young <medadyoung@gmail.com>
+Date:   Thu, 5 May 2022 15:36:22 +0800
+Message-ID: <CAHpyw9e+d20dVM3PO0UfqvxpTnkvU541ccEa0CGLCZFgjTr8vw@mail.gmail.com>
+Subject: Re: [PATCH v8 3/3] EDAC: nuvoton: Add NPCM memory controller driver
+To:     Paul Menzel <pmenzel@molgen.mpg.de>
+Cc:     rric@kernel.org, James Morse <james.morse@arm.com>,
+        tony.luck@intel.com, Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Patrick Venture <venture@google.com>, KWLIU@nuvoton.com,
+        YSCHU@nuvoton.com, JJLIU0@nuvoton.com, KFTING <KFTING@nuvoton.com>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>, ctcchien@nuvoton.com,
+        devicetree <devicetree@vger.kernel.org>,
+        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-edac <linux-edac@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-05-05 at 08:38 +0700, Suravee Suthikulpanit wrote:
-> Maxim,
-> 
-> On 5/4/22 7:19 PM, Maxim Levitsky wrote:
-> > On Wed, 2022-05-04 at 02:31 -0500, Suravee Suthikulpanit wrote:
-> > > Update and refresh AVIC settings when guest APIC mode is updated
-> > > (e.g. changing between disabled, xAPIC, or x2APIC).
-> > > 
-> > > Signed-off-by: Suravee Suthikulpanit<suravee.suthikulpanit@amd.com>
-> > > ---
-> > >   arch/x86/kvm/svm/avic.c | 16 ++++++++++++++++
-> > >   arch/x86/kvm/svm/svm.c  |  1 +
-> > >   2 files changed, 17 insertions(+)
-> > > 
-> > > diff --git a/arch/x86/kvm/svm/avic.c b/arch/x86/kvm/svm/avic.c
-> > > index 3ebeea19b487..d185dd8ddf17 100644
-> > > --- a/arch/x86/kvm/svm/avic.c
-> > > +++ b/arch/x86/kvm/svm/avic.c
-> > > @@ -691,6 +691,22 @@ void avic_apicv_post_state_restore(struct kvm_vcpu *vcpu)
-> > >   	avic_handle_ldr_update(vcpu);
-> > >   }
-> > >   
-> > > +void avic_set_virtual_apic_mode(struct kvm_vcpu *vcpu)
-> > > +{
-> > > +	struct vcpu_svm *svm = to_svm(vcpu);
-> > > +
-> > > +	if (!lapic_in_kernel(vcpu) || (avic_mode == AVIC_MODE_NONE))
-> > > +		return;
-> > > +
-> > > +	if (kvm_get_apic_mode(vcpu) == LAPIC_MODE_INVALID) {
-> > > +		WARN_ONCE(true, "Invalid local APIC state (vcpu_id=%d)", vcpu->vcpu_id);
-> > > +		return;
-> > > +	}
-> > > +
-> > > +	kvm_vcpu_update_apicv(&svm->vcpu);
-> > Why to have this call? I think that all that is needed is only to call the
-> > avic_refresh_apicv_exec_ctrl.
-> 
-> When APIC mode is updated on each vCPU, we need to check and update
-> vcpu->arch.apicv_active accordingly, which happens in the kvm_vcpu_update_apicv()
+Dear Paul,
 
-This makes sense, but IMHO it would be better then to call kvm_vcpu_update_apicv
-from the common code when apic mode changes then, because this logic should apply
-to APICv as well.
+Paul Menzel <pmenzel@molgen.mpg.de> =E6=96=BC 2022=E5=B9=B45=E6=9C=883=E6=
+=97=A5 =E9=80=B1=E4=BA=8C =E4=B8=8B=E5=8D=885:58=E5=AF=AB=E9=81=93=EF=BC=9A
+>
+> Dear Medad,
+>
+>
+> Thank you for v8.
+>
+> Am 03.05.22 um 11:47 schrieb Medad CChien:
+> > Add memory controller support for Nuvoton NPCM SoC.
+> >
+> > Signed-off-by: Medad CChien <ctcchien@nuvoton.com>
+> > Reviewed-by: Borislav Petkov <bp@alien8.de>
+> > Reviewed-by: Paul Menzel <pmenzel@molgen.mpg.de>
+> > Reported-by: kernel test robot <lkp@intel.com>
+>
+> This line is confusing.
 
-In fact that logic of not activating AVIC was added in patch 12 
-(and on second thought I think it  should be split to a separate patch), 
-was added to common code, thus calling kvm_vcpu_update_apicv when the condition
-of 'apic is disabled on this vCPU' should also be done by the common code.
+OK, I will add more description.
 
-Best regards,
-	Maxim Levitsky
+>
+> > error:
+> >     macro "edac_printk" requires 4 arguments, but only 2 given
+> >
+> > warnings:
+> >     performing pointer arithmetic on a null pointer has undefined behav=
+ior [-Wnull-pointer-arithmetic]
+> >     logical not is only applied to the left hand side of this bitwise o=
+perator [-Wlogical-not-parentheses]
+> >     mixing declarations and code is a C99 extension [-Wdeclaration-afte=
+r-statement]
+> >
+> > Note:
+> >     you can force an ecc event by writing a string to edac sysfs node
+> >     and remember to define CONFIG_EDAC_DEBUG to enable this feature
+> >     example: force a correctable event on checkcode bit 0
+> >     echo "CE checkcode 0" > /sys/devices/system/edac/mc/mc0/forced_ecc_=
+error
+>
+> Shouldn=E2=80=99t this go above all the tags?
 
-> 
-> One test case that would fail w/o the kvm_vcpu_update_apicv() is when
-> we boot a Linux guest w/ guest kernel option _nox2apic_, which Linux forces APIC
-> mode of vCPUs with APIC ID 255 and higher to disable. W/o this line of code, the VM
-> would not boot w/ more than 255 vCPUs.
-> 
-> Regards,
-> Suravee
-> 
+Yes, I should move this note above all the tags
 
+>
+> > ---
+> >   drivers/edac/Kconfig     |   9 +
+> >   drivers/edac/Makefile    |   1 +
+> >   drivers/edac/npcm_edac.c | 680 ++++++++++++++++++++++++++++++++++++++=
++
+> >   3 files changed, 690 insertions(+)
+> >   create mode 100644 drivers/edac/npcm_edac.c
+> >
+> > diff --git a/drivers/edac/Kconfig b/drivers/edac/Kconfig
+> > index 58ab63642e72..64149b524f98 100644
+> > --- a/drivers/edac/Kconfig
+> > +++ b/drivers/edac/Kconfig
+> > @@ -539,4 +539,13 @@ config EDAC_DMC520
+> >         Support for error detection and correction on the
+> >         SoCs with ARM DMC-520 DRAM controller.
+> >
+> > +config EDAC_NPCM
+> > +     tristate "Nuvoton NPCM DDR Memory Controller"
+> > +     depends on (ARCH_NPCM || COMPILE_TEST)
+> > +     help
+> > +       Support for error detection and correction on the Nuvoton NPCM =
+DDR
+> > +       memory controller.
+>
+> Please add a blank line below.
+>
+> > +       First, ECC must be configured in the BootBlock header. Then, th=
+is driver
+> > +       will expose error counters via the EDAC kernel framework.
+> > +
+> >   endif # EDAC
+>
+> [=E2=80=A6]
+> > +module_platform_driver(npcm_edac_mc_driver);
+> > +
+> > +MODULE_AUTHOR("Medad CChien<ctcchien@nuvoton.com>");
+>
+> Please add a space before the <.
 
+OK
+
+>
+> > +MODULE_DESCRIPTION("Nuvoton NPCM EDAC Driver");
+> > +MODULE_LICENSE("GPL v2");
+>
+>
+> Kind regards,
+>
+> Paul
+
+B.R.
+Medad

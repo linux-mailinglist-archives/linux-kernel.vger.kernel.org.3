@@ -2,67 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04C4451C62E
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 19:34:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40FD651C633
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 19:35:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382722AbiEERiD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 13:38:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55904 "EHLO
+        id S1382753AbiEERie (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 13:38:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382712AbiEERh6 (ORCPT
+        with ESMTP id S1382756AbiEERi1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 13:37:58 -0400
-Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A2CC54FB2;
-        Thu,  5 May 2022 10:34:18 -0700 (PDT)
-Received: by mail-qt1-x82e.google.com with SMTP id x9so3691897qts.6;
-        Thu, 05 May 2022 10:34:18 -0700 (PDT)
+        Thu, 5 May 2022 13:38:27 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 609325D5F6;
+        Thu,  5 May 2022 10:34:44 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id p18so6025543edr.7;
+        Thu, 05 May 2022 10:34:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=6KUqQF1hYwLVbFgt0lUUk/atcIlDD76wICPoFxoA1sk=;
-        b=fmVzt12UYi3gO1EmHrkXXLuqKTTb1ONpD6CjZXnHDx/+PI0UP23KcnMH796cgm1TgC
-         PalvAa6gvkldEikr9RpUPKLFvCx7gUDHLc1VrhSfzdbUBrTqFxYV55HhKnZJbwXTe3Hd
-         cedB4Q0BHJk8CKnB3H8UWaQ7P81WT/OK9/lo/Hh+17p+yh12pbebeZGHQ9MhL0yORmqf
-         0p9Sy8bQbRl0FaJtaXd507TO0ugYAvYJ08NAUM6zKqh0G2F7cilb/Wud8lQggsSbo9ev
-         yEh0NNRoY6fvJ6PuKwZuVzVBjJMcvNykLxeS+ia6kFnRSslrD4DzE3IJbQxcc1GfJreb
-         /yLw==
+        bh=J36psD3rFKW5Ka1G3ZnsSWZIunr7YdwdE2cf/mL9osk=;
+        b=Gg2LXPVobwp4o5mG9uKglG3BHaRDZIpvfVQeotr8r2wGV8xJdunSEbXkxMuyiSp2iX
+         3VawHmVZDLBxsGEZtc5IpMRU6QxVktJ13EKeH7DNy0XdSzT37nLrXluGkP5iD6LpIPyn
+         ElJTabd9OIdllU21SBxy4LANhKIQEsXI4QUPRMw0ToOvkTHl5ruIM0vJFQ1AVe8vVSih
+         xdi8qXRwDCZF8sUAa8SCUgNdAIlrnJhyql7rSoL/NgWYCma9BYPRjeA9CqmyZnsbVGZT
+         tlqPO5xgwD+rM2qBhghryfPw4DPRRyED5N3MGHSOViaYGBPbReY8OXi+3cVvfsVkZTLE
+         jAIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=6KUqQF1hYwLVbFgt0lUUk/atcIlDD76wICPoFxoA1sk=;
-        b=N6jhiS7d7DvfdYoyuMnR2gI/kUiyLZvQ7M3MmdqTTurlePgfKtSDVC0OR8fK+luzbx
-         B5ZzZ5pgz4E2+FUTrKed8O8GIbarsr6W+o8TFUVmYUzVOX1EjP41YsIz35/xe/ApPXnh
-         30f04bhyQzfSgV9J2rMQwtxh1fupjeuBLPMSF21VguseTkJtmtYcMxE1gBHCkReiHKRF
-         A52aHVP4/vx/u61oF7/JCwuEgGbYZoErmBuOZpC6gyP+oMC4kE+og87AthP+ttXxDz/h
-         h/ylAKQ5CE2PnxDvwUa6GZ2zOsSrAy3C3pum6hKN3+ZCvD/oH3WhIiwpYUnrKhDV2CUb
-         2YLA==
-X-Gm-Message-State: AOAM533OatgzMH5iiLCKA6CbfrhHTrRc46+9OiQv/gqCYM9elt9Y0kbg
-        F4Go9imh7YcOsBEFpJuhhr158TCACOmlXNh5o/a+/J6bVFt5IA==
-X-Google-Smtp-Source: ABdhPJylZ0ScI5h5Gjjsg/5c5jIyzmdgEwUGUHa4gdtD1jkOoeduNc4ZcCJIf10BMH/Hk9yGZuowwac78ErigrB8Uzo=
-X-Received: by 2002:a05:622a:1052:b0:2f3:c085:6316 with SMTP id
- f18-20020a05622a105200b002f3c0856316mr2476847qte.2.1651772057529; Thu, 05 May
- 2022 10:34:17 -0700 (PDT)
+        bh=J36psD3rFKW5Ka1G3ZnsSWZIunr7YdwdE2cf/mL9osk=;
+        b=Tqv+6iwIoH7Jrlwdah5Rpm7UhxZ07uIHg+ZFhRcIxBMu8uDilr28MOLZC5uymJWNjt
+         bffmyvnYuaVYSmflXghDfvadNkcx9t4BCdkgdZIPzUhZU2VpGhTjLq8xl1H2ZRQoSmNY
+         VC4PfcmFgMsJl6OMbTxTCp9xPIVoKO4rkIHpR55/J51Sw6nIssShu81PQpFN4FiFjObq
+         +e7bANQoQDsv8oi3fMu7CcBVGAAA2bycjsFZt8ax+LK80egIQB53Tp2S6vPLs4f8fwdl
+         us+Yh7qW27ET0+bW8Obkfgrck9dUFuWAF//fTz78PriM5/75HjyTznCxDZqao28XF65/
+         LvcQ==
+X-Gm-Message-State: AOAM530D6VRUsUfrjahLbMDrXfjblFV9K/ILzIvbsy5cVzNIZlLzk7Hl
+        dWseIdRW3Y2duRojtJAsfgQjdGniygsCtpMluDU=
+X-Google-Smtp-Source: ABdhPJzHFa4/201KxKWvXvIzAle09vJstgG8ZVqW0xdZ3Xd4qabmhd7jnoJgV/HYyztLG08q1inSAhpKX0wJqtjSlo0=
+X-Received: by 2002:a05:6402:54:b0:419:9b58:e305 with SMTP id
+ f20-20020a056402005400b004199b58e305mr31028257edu.158.1651772082896; Thu, 05
+ May 2022 10:34:42 -0700 (PDT)
 MIME-Version: 1.0
-References: <cover.1651174324.git.rgb@redhat.com> <17660b3f2817e5c0a19d1e9e5d40b53ff4561845.1651174324.git.rgb@redhat.com>
- <CAHC9VhQ3Qtpwhj6TeMR7rmdbUe_6VRHU9OymmDoDdsazeGuNKA@mail.gmail.com>
- <YnHX74E+COTp7AgY@madcap2.tricolour.ca> <20220505144456.nw6slyqw4pjizl5p@quack3.lan>
-In-Reply-To: <20220505144456.nw6slyqw4pjizl5p@quack3.lan>
-From:   Amir Goldstein <amir73il@gmail.com>
-Date:   Thu, 5 May 2022 20:34:06 +0300
-Message-ID: <CAOQ4uxjkJ37Nzke4YN_se4ztr-yZgm6SK_LhmBQ-ckWutOwWrQ@mail.gmail.com>
-Subject: Re: [PATCH v2 2/3] fanotify: define struct members to hold response
- decision context
-To:     Jan Kara <jack@suse.cz>
-Cc:     Richard Guy Briggs <rgb@redhat.com>,
-        Paul Moore <paul@paul-moore.com>,
-        Linux-Audit Mailing List <linux-audit@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Eric Paris <eparis@parisplace.org>,
-        Steve Grubb <sgrubb@redhat.com>
+References: <20220505152521.71019-1-markuss.broks@gmail.com>
+ <20220505152521.71019-2-markuss.broks@gmail.com> <CAHp75VfUA3qnZnkPQB3TRpPDwe+F+Q6rv9dQmq2xLfw9PmJ8LA@mail.gmail.com>
+In-Reply-To: <CAHp75VfUA3qnZnkPQB3TRpPDwe+F+Q6rv9dQmq2xLfw9PmJ8LA@mail.gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Thu, 5 May 2022 19:34:07 +0200
+Message-ID: <CAHp75VeVN_Ri2wbQ1ATJg6+R=K6ekQbqGKKNXPdti0rpDptzZA@mail.gmail.com>
+Subject: Re: [PATCH v8 1/3] leds: ktd2692: Avoid duplicate error messages on
+ probe deferral
+To:     Markuss Broks <markuss.broks@gmail.com>
+Cc:     pavel@ucw.cz, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
@@ -74,23 +73,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> One open question I have is what should the kernel do with 'info_type' in
-> response it does not understand (in the future when there are possibly more
-> different info types). It could just skip it because this should be just
-> additional info for introspection (the only mandatory part is in
-> fanotify_response, however it could surprise userspace that passed info is
-> just getting ignored. To solve this we would have to somewhere report
-> supported info types (maybe in fanotify fdinfo in proc). I guess we'll
-> cross that bridge when we get to it.
->
-> Amir, what do you think?
+On Thu, May 5, 2022 at 7:29 PM Andy Shevchenko
+<andy.shevchenko@gmail.com> wrote:
+> On Thu, May 5, 2022 at 5:25 PM Markuss Broks <markuss.broks@gmail.com> wrote:
 
-Regardless if and how we provide a way to enumerate supported info types,
-I would prefer to reject (EINVAL) unknown info types.
+...
 
-We can provide a command FAN_RESPONSE_TEST to write a test response with
-FAN_NOFD and some extra info so the program can test if certain info
-types are supported.
+> 1) adding a Fixes tag, so it can be backported to stable kernels;
 
-Thanks,
-Amir.
+To avoid additional versions in case you don't know how Fixes tag
+should look like:
+
+Fixes: b7da8c5c725c ("leds: Add ktd2692 flash LED driver")
+
+Just add this before other tags, like SoB or Reviewed-by (no blank
+lines in the tag block).
+
+-- 
+With Best Regards,
+Andy Shevchenko

@@ -2,111 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15D4351BFD5
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 14:51:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 987B251BFDB
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 14:51:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241868AbiEEMyG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 08:54:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59332 "EHLO
+        id S1378156AbiEEMyp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 08:54:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236913AbiEEMxx (ORCPT
+        with ESMTP id S1377827AbiEEMyO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 08:53:53 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D2D6187;
-        Thu,  5 May 2022 05:50:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651755013; x=1683291013;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=A9PXcXkJKXOiPlbiJL9+S1g3O2eDE4FkjAv8/9Dq67g=;
-  b=m7jai3T36OY75WFYibDaVdjr0qQkh5wOl6MtJyrjDpy0GNGycZEsFOar
-   /dBOLGgUexM0hUngYQfl9cz6/ws1xamE+ETcMHaZdDaU7XeuFVbi385in
-   GcLS5oPlMaUrh/BeQZ0jHL6aiLfuWPorXuJsTCB+B1/M3SVRCzv6DeIPY
-   gD4rOcg+eS7Oryj9kn7ZA36g2KNTCCJvbHw2OL40aA5fZMJH0F2D27VIt
-   9agn6HqRXoc5OSFpNwv3shpzmtS5Zsc8HUEKscCfi/s5SQFA4Fr+iwTeH
-   qErsDc1w0/Gh/74GnZiDhgPforyovwM4+dW2/lzhprO/K6mWKiT7AzhZk
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10337"; a="267693568"
-X-IronPort-AV: E=Sophos;i="5.91,201,1647327600"; 
-   d="scan'208";a="267693568"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2022 05:50:13 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,201,1647327600"; 
-   d="scan'208";a="585302810"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 05 May 2022 05:50:08 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nmavn-000CPo-Ur;
-        Thu, 05 May 2022 12:50:07 +0000
-Date:   Thu, 5 May 2022 20:49:47 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     cgel.zte@gmail.com, akpm@linux-foundation.org, hannes@cmpxchg.org,
-        willy@infradead.org, shy828301@gmail.com
-Cc:     kbuild-all@lists.01.org, mhocko@kernel.org,
-        roman.gushchin@linux.dev, shakeelb@google.com,
-        linmiaohe@huawei.com, william.kucharski@oracle.com,
-        peterx@redhat.com, hughd@google.com, vbabka@suse.cz,
-        songmuchun@bytedance.com, surenb@google.com,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        cgroups@vger.kernel.org, Yang Yang <yang.yang29@zte.com.cn>
-Subject: Re: [PATCH] mm/memcg: support control THP behaviour in cgroup
-Message-ID: <202205052006.qFYTjcyt-lkp@intel.com>
-References: <20220505033814.103256-1-xu.xin16@zte.com.cn>
+        Thu, 5 May 2022 08:54:14 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 220FC527CF;
+        Thu,  5 May 2022 05:50:34 -0700 (PDT)
+Date:   Thu, 5 May 2022 14:50:31 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1651755032;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=FLqE2JkFG6wskvkAF74RyMbEOiLynryLGT+inUSn7EA=;
+        b=3xp7O05OJNSxkbSR+9rQkTEF7CPouvJjOfPZM54VIo2k364AuWFNmO8OKNfPNKeIovxt6G
+        E67NYpC7+c+e88q7DAlFINhhg+TWgproY/2VKvIWJ/rQj6lYKkKXGIkRiUEIUh9rcg0L93
+        S38ZDBoGoqx7lzEhN/e3upw3cokfeN2+NWZLjndXSFXsBcmHfENnhwlqGLij/H2tqnirbz
+        +M+RZ0qtyPDwqhzCaIcIl0h0BQsTEbwdOwJY+3pVzBWQIpxPgww8MhNtSaTUqIYVGPj187
+        tcWFT7vizHDSNmjGcHgvQZuPg1y6WcNyIdgAjFLM0tgME7/kMaeez/a/GD/9JA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1651755032;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=FLqE2JkFG6wskvkAF74RyMbEOiLynryLGT+inUSn7EA=;
+        b=TPhpV6m2xTtkLaiPVVKbbScuDeSevE2Fbi+jxi7o95ROlDs4TtcmSSI3o+GZ87UnDDPR3T
+        j1P/gCiVWNqV+fAQ==
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     linux-kernel@vger.kernel.org, rjw@rjwysocki.net,
+        Oleg Nesterov <oleg@redhat.com>, mingo@kernel.org,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, mgorman@suse.de,
+        Will Deacon <will@kernel.org>, tj@kernel.org,
+        linux-pm@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        linux-um@lists.infradead.org, Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        linux-xtensa@linux-xtensa.org, Kees Cook <keescook@chromium.org>,
+        Jann Horn <jannh@google.com>, linux-ia64@vger.kernel.org
+Subject: Re: [PATCH v3 09/11] ptrace: Don't change __state
+Message-ID: <YnPIF9DvM9L0k+0U@linutronix.de>
+References: <87k0b0apne.fsf_-_@email.froward.int.ebiederm.org>
+ <20220504224058.476193-9-ebiederm@xmission.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220505033814.103256-1-xu.xin16@zte.com.cn>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220504224058.476193-9-ebiederm@xmission.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On 2022-05-04 17:40:56 [-0500], Eric W. Biederman wrote:
+> Stop playing with tsk->__state to remove TASK_WAKEKILL while a ptrace
+> command is executing.
+> 
+> Instead remove TASK_WAKEKILL from the definition of TASK_TRACED, and
+> implemention a new jobctl flag TASK_PTRACE_FROZEN.  This new flag is
+implement ?
 
-Thank you for the patch! Yet something to improve:
+> set in jobctl_freeze_task and cleared when ptrace_stop is awoken or in
+> jobctl_unfreeze_task (when ptrace_stop remains asleep).
 
-[auto build test ERROR on linux/master]
-[also build test ERROR on linus/master v5.18-rc5 next-20220505]
-[cannot apply to hnaz-mm/master]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/cgel-zte-gmail-com/mm-memcg-support-control-THP-behaviour-in-cgroup/20220505-114028
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 107c948d1d3e61d10aee9d0f7c3d81bbee9842af
-config: mips-decstation_64_defconfig (https://download.01.org/0day-ci/archive/20220505/202205052006.qFYTjcyt-lkp@intel.com/config)
-compiler: mips64el-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/f08a35b9798572693a91c6a3d823ed9ae54ef688
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review cgel-zte-gmail-com/mm-memcg-support-control-THP-behaviour-in-cgroup/20220505-114028
-        git checkout f08a35b9798572693a91c6a3d823ed9ae54ef688
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   mips64el-linux-ld: mm/memory.o: in function `__handle_mm_fault':
-   memory.c:(.text+0x60a8): undefined reference to `__transparent_hugepage_enabled'
->> mips64el-linux-ld: memory.c:(.text+0x6108): undefined reference to `__transparent_hugepage_enabled'
-   mips64el-linux-ld: mm/huge_memory.o: in function `transparent_hugepage_active':
-   huge_memory.c:(.text+0x21e4): undefined reference to `__transparent_hugepage_enabled'
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Sebastian

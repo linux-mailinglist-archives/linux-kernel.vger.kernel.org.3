@@ -2,159 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46E2351BAD3
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 10:43:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22BCD51BAD5
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 10:44:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350178AbiEEIrX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 04:47:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58116 "EHLO
+        id S1350246AbiEEIrb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 04:47:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350148AbiEEIrV (ORCPT
+        with ESMTP id S1350199AbiEEIr1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 04:47:21 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA3B74A3EB
-        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 01:43:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651740222; x=1683276222;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=SUc2K6comdlnqrnKwcvWNUqsJz6XJNkXDu/OllKP8Uc=;
-  b=WucST+fLcoI2xP5O9RrEXtttZFg3A+c3G/pQCienQ9c79rjOkaxZRTo1
-   828Qz7RpdP053zWO9RBdHGIPOWjpzwt8QL0NgwVmz9L1Cl37Cz28ENBf8
-   M6PYJR85LKg0HTxq95SeDADkoe3597OqYZ7FtdO2bnd8fnkI9+ZP8avjj
-   iqUg5VoUi/xITjTePBmyeqHKxUtKHbZFipZ9mLbJ0OtmQyb1BIgjXxfu+
-   ddxLtBqXX8JMrNKqrcfElZ8c1ays4kn62/FYQBY7cGhIhMGimg1jUuzsM
-   zcGP2rgKK9LCYbPBp2waGdsd5P671AXcnulIypQ9HxbD07SN6rjfjTkeS
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10337"; a="247952676"
-X-IronPort-AV: E=Sophos;i="5.91,200,1647327600"; 
-   d="scan'208";a="247952676"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2022 01:43:42 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,200,1647327600"; 
-   d="scan'208";a="517422892"
-Received: from orsmsx605.amr.corp.intel.com ([10.22.229.18])
-  by orsmga003.jf.intel.com with ESMTP; 05 May 2022 01:43:42 -0700
-Received: from orsmsx608.amr.corp.intel.com (10.22.229.21) by
- ORSMSX605.amr.corp.intel.com (10.22.229.18) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Thu, 5 May 2022 01:43:41 -0700
-Received: from orsmsx606.amr.corp.intel.com (10.22.229.19) by
- ORSMSX608.amr.corp.intel.com (10.22.229.21) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Thu, 5 May 2022 01:43:41 -0700
-Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
- orsmsx606.amr.corp.intel.com (10.22.229.19) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27 via Frontend Transport; Thu, 5 May 2022 01:43:41 -0700
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.172)
- by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2308.27; Thu, 5 May 2022 01:43:41 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=lPi/2I1PhBmK9Dk27VKY6eCk3K28oPJ5/IgUzN5bkZetTlbq3tf9JBtO+GkRxJjA2QwhuqpIwRRKOBKZX3kj6ECT9wOWv4RYYEb4lTlHGXHR0ueA4i6MW30S9uBwFUCpnyWxNKiR01emxJ4v8EAATqkiQ3rqySzKIcYH/3VcibyM/rwz9s4jFp1gsfUod/WXI1/UhwXIWJO3LFF2DES794QW3vozYKGS9mWYs73Wcy1gspOdy1cuGkrUYFyyHrvSGW7J8V8eauQ416U4tHaqjYMhvt4JXPRerWyEUcYSr/ZTjVsmTMmATel0Hme7InbSrFfSF1U9kh0zyZXT+jwuJQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=vYefwLX9f7oWwcdeIp/GLxp6FWE0Thz3wlEigzaLV6s=;
- b=P6UeQcPTHxrFcPcLx9hKu5ujkhkHliieSNH/xygxQ9kOnTteyeLO5T1w7aE2IVi12cFZPgnytac8sGmKgzeIg+XMumlpWm7IuIR2vaHu6kcxZZE7J/MJT5ZvATR3lh3NXD7aQBBpyqhMVpEdUlM/Bi8phUwofNbJNMt2EDOYZQl32uU/ganOjN6Gh13CuqsSism1GDf+jiXCdIKf8L0CFu63tdv6y0VejaG8AmoPykbez2gGPlIPDWvUVW2mnezxtwyH2xJO5ABd3ZthXyYCvh9uZ49W4nl2qrGJxyUq/AFb5s8JagiBPrzWoGRtKSg3trKNEb58ZmrULXPYBNM16w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from BN9PR11MB5276.namprd11.prod.outlook.com (2603:10b6:408:135::18)
- by DM5PR11MB1561.namprd11.prod.outlook.com (2603:10b6:4:a::17) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5206.13; Thu, 5 May 2022 08:43:39 +0000
-Received: from BN9PR11MB5276.namprd11.prod.outlook.com
- ([fe80::24dd:37c2:3778:1adb]) by BN9PR11MB5276.namprd11.prod.outlook.com
- ([fe80::24dd:37c2:3778:1adb%2]) with mapi id 15.20.5206.027; Thu, 5 May 2022
- 08:43:39 +0000
-From:   "Tian, Kevin" <kevin.tian@intel.com>
-To:     Lu Baolu <baolu.lu@linux.intel.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        "Jason Gunthorpe" <jgg@nvidia.com>,
-        Alex Williamson <alex.williamson@redhat.com>
-CC:     "Pan, Jacob jun" <jacob.jun.pan@intel.com>,
-        "Liu, Yi L" <yi.l.liu@intel.com>,
-        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v2 2/4] iommu/vt-d: Check domain force_snooping against
- attached devices
-Thread-Topic: [PATCH v2 2/4] iommu/vt-d: Check domain force_snooping against
- attached devices
-Thread-Index: AQHYYBzuZSlvkCOXq02FfaKKbfyMgK0P9qKQ
-Date:   Thu, 5 May 2022 08:43:39 +0000
-Message-ID: <BN9PR11MB5276F768185B4CB64C2D027E8CC29@BN9PR11MB5276.namprd11.prod.outlook.com>
-References: <20220505010710.1477739-1-baolu.lu@linux.intel.com>
- <20220505010710.1477739-3-baolu.lu@linux.intel.com>
-In-Reply-To: <20220505010710.1477739-3-baolu.lu@linux.intel.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: d69200bc-516d-4b78-fb76-08da2e735a44
-x-ms-traffictypediagnostic: DM5PR11MB1561:EE_
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-microsoft-antispam-prvs: <DM5PR11MB1561A3527F4ECD26333BD29F8CC29@DM5PR11MB1561.namprd11.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: ufh7gzMsJqOwq++W/yVlIduBcMokn04XZ0PamfwktjaRD+d3zElppJvvqN2HGISMBf2QQShbVw4wX0YDHlfshF0jmoD0UzgptdZZqH6AZWPHKCSD4iBXUqMNDoFGg0T/5BnJYaSFYFsdlTvvXC5+ABLAwPCXo3CBd1C6BZiKSeQZTM5l9V66nk3D6LFkAqnyBe0R5PbE+PyiC1eG7nho1dxg0p6uqYI+9aF0Poyf4Z+NDhDYFCnsblB4KUhI4e9FzzqF3EzDBxDlqss6IOrBeoYK09vx/TMhtaV0OAf+0gaL8yV2AlrD11cAdCjN8MP0xHmpe0qsylijW7Kl7uwmhKGdzD/87QKhahsxOAstOJJ0lpqeXstWYL0S2MF9hPkFLaVLWwGqQ1+dbImbw3r18yWd42pf9DAuZKA9bjlAQBWsS0R1fAZpllDP/MAkt4QxukegojKMEX1DCbGQEfzh/wog6rfDEOfppEh6kDGj5K2pINKo3/exhyAD/Y93XIJWolxLfa0Yb+O1Ff7B3Oh8vAAwFbFArdr7dhltHnuL8w0GKPZp1XGr1U8iODG8rJdAPaHrTfZ725+46GdS20OYY+SUHVffrga7YOGm15JNK4kz950SHxgICzonVpytYQhvg63Fm3T49AIldb1ESscldhD51mD7L9PZ6HO6GsoUxoKMNOIyVGcn0yA5Mtn2wbXvuCD7oGO8cQKqdUXcOpFa3w==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5276.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(2906002)(33656002)(83380400001)(316002)(64756008)(66446008)(5660300002)(66476007)(66946007)(4326008)(76116006)(8676002)(71200400001)(66556008)(110136005)(508600001)(54906003)(8936002)(52536014)(186003)(6506007)(7696005)(26005)(9686003)(38070700005)(86362001)(38100700002)(55016003)(82960400001)(122000001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?dLflfZH8Vc9EYWAd2K75npHIPLRdx5DHHAvah1AGk/4iMrG4ADAMtDEHolfu?=
- =?us-ascii?Q?RfaNFlPkhnkNUF5T6c38JKPPQydloJUbQVEgKpaZVzNUzmU61PY0bQDf3A1Z?=
- =?us-ascii?Q?ak/dtn280VVGqPIimJ7/ZakogVC5373JkVyVQWnOEmpqy92BcGkQYpz4yIa5?=
- =?us-ascii?Q?Yq6lpIcc8HWkRbYkSH8Wkiqqo3OH1R7WbOEwm43TdLcpYklp4a3sA3FmvkTc?=
- =?us-ascii?Q?SLQPLD2q5uVqVw2qOY8idFOnH6oGWckAxg537Vj68jgAbi3VkXcYLw3sGu9q?=
- =?us-ascii?Q?H9qmnpQybPM+IVmIFIa+CXFlLLFJYDFNoIwBHVj7HzIjsoUVgRY0zpWmDyCk?=
- =?us-ascii?Q?3Fr6SCIOhvQDEX/HyA+iLGuYFoSfkV75lZt21LpyPfY94AVBBF6VUBGS0Jls?=
- =?us-ascii?Q?tmB7gdcI3nDcldlLl4V+wl4wPgPHCMnpWq0kXOoi2RBUtIHG0/KCW4DHqdEz?=
- =?us-ascii?Q?IBI4QsYxWdHUuIEOdHxoI0sjxucdzpdtwY/jG3OInB/QFHghvwNd2W08mH8O?=
- =?us-ascii?Q?NrvKFxmBL/Y/Lsg1eFhjY3xOnjkJ7KnqikUyIEgOHb45cWK7IbZWAnzeEWYx?=
- =?us-ascii?Q?yY2ltfMhv2rjsNE2IAYz+NYy4j9P3R+HCx6zQtc7gPshGUeDM9EazqvZhKSJ?=
- =?us-ascii?Q?0U2QZpqxP/6h78ljDz7g34FQHeUOoJmtFXoz0Lo0bOufAlc7wW/DbL0vn4sS?=
- =?us-ascii?Q?QdVhxgA9E7OMW8SseZUyz47Wfjbard6fp1yiN6OC1QNJuYLmGWS3HoMzFC1f?=
- =?us-ascii?Q?CO/Uo78C0pA2yeSV+zGRBAiChTzyARQOV26lCmbXe8ntC3VT3BJxw6D9Tn23?=
- =?us-ascii?Q?xtyiQtDsXsBvX6lbRuMxE0gC4DN3gEii9VaOZuKZmuTshYTMkyCfyxCu2gcL?=
- =?us-ascii?Q?/MrVHMUAcHZae6RdBoGZpuEn62EFV+N1sZq93t6iG63tBzUakabEGjtsON3l?=
- =?us-ascii?Q?k3dhMuHUDiW2Jxo2VURb6QfdpZ9q4qtSgEDHPceW7QKvEd8TISiy7bSR93iM?=
- =?us-ascii?Q?eSDfLzOz9KTvtcH7efbA6q3rwovPo1a6IBZHxzLAiRlAP50AAb0nT54Z4OJ+?=
- =?us-ascii?Q?jhOGtXTHz6nTm5Yi7g+84rrBOQgwmCHV5HQ5JkJe5DuOrtemgVwswp/0xUEw?=
- =?us-ascii?Q?TaNSN4wSrz8P1uE8qvg4g3w6llAAwUyP09+2d4Dl+DqZEionirvvvmAad0sK?=
- =?us-ascii?Q?9s94K3MPVxP8RYtxAs9L12jSE8f3tYV2Cbm8ioMwc4XkF/y5V51ym30qu38H?=
- =?us-ascii?Q?sWN4ikylRW7x7pZbZ/0aebsxsnyOaPQFv7kovXjMc3EpJrbQSW2o4mvNSVwV?=
- =?us-ascii?Q?s8zlcmDMJqNtc8uOKp2rREnBCFvBduNGdKlzUjV/tYi0v2osdo/JHPnOb9bg?=
- =?us-ascii?Q?iic3KwPWwnhxUty7g/Zz6dqmLBFSVA4Rztx0HvV5pJpXKtbCrT/uJRZeq42Q?=
- =?us-ascii?Q?CGfxtQHI4V5EvUG96/XBKI+HBIuIJcU0lq6jnfbA8DzciKxrQkMAxl4flCSr?=
- =?us-ascii?Q?dF18lzOHYxsSOkvOFjUzboemEcnwI1ulBBuZLJDTAzoZ5Tz8NNrgR+e1D9qw?=
- =?us-ascii?Q?UUOEn0AcNLroehVmMpkZd/lERcDL1/NhAu7nGaDm8I1hvPFdcU1O1eE+HXX1?=
- =?us-ascii?Q?Rb60hUOM2Bjj5Ie00mIX/ejD/wXLzodRuff0d6VFeIbHqXLi8NkKH3VgecPH?=
- =?us-ascii?Q?jyKiK/TVVHyWKXi1+XZhvghSEGYjXXaUu59GbC3WqwSyfyqkoZZQJ6IO0ngE?=
- =?us-ascii?Q?onRllgCSKg=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Thu, 5 May 2022 04:47:27 -0400
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 281844A90E
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 01:43:48 -0700 (PDT)
+Received: by mail-pf1-x42a.google.com with SMTP id i24so3118060pfa.7
+        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 01:43:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=JIdmnFxfb9y9uHPy+Bax7qz9vXFbVwF1Bmo9V5O3V2Q=;
+        b=v6fe119NMTQTXytrwJqYkuEXKXCwN7r39KRnuTZBCEpJubliaHL/QlzGlxJSXzXI1g
+         vyLpUZ7cxn8RbrdU1naRF3Su3yAe4uBSni970hDFDrPQoPM+DiPcFto1uEMsPglQNtS+
+         VggCs1/eYFg9WECyAO68n/bccWpSRuawb/HyCZmzwtR9W15qOf/XDuCw9DAba/3qwxZQ
+         N4xP/CB5yZx3OhiYnw9vWfgkRnU5EJHk6eHJxRheByaAWZtTV8y7gWtQ2JO+0xveR0RF
+         ePaDOiZskAVw6r2r/PuZ+tQmJlSCP80NJiTy8oY+VXra8Yd83GnuiNYzjYJAUIaVip2M
+         oB9w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=JIdmnFxfb9y9uHPy+Bax7qz9vXFbVwF1Bmo9V5O3V2Q=;
+        b=dvTT/z4HWnVtaqPXtJBof7w5iEXicqtmcItcZFGV8nlTUtJcAPcNn0fVRvmo1KcfQs
+         NkEF+su6Db7G+YtOj4GJhoRXah69ADcSrSfNYF3tbfmNfpFsxfXd0yL3bh6GIvaUF6iJ
+         JnkEnn1b18HekNUAftaHHzB4QzBYjXv0nuq7hWec+ecRzjFrNmrC39Mm9dxFweZTtREq
+         q8+dbmU2ucQbEjMwg05tZqC+ofAbyBvfa8UZ/vnNRU2maz+tJx/9vSxOgX5ScGUxpFDR
+         4+vhr6tETZafBxVjP54QQfPZ6CvhzCYxTTKpRLb8hAYaQV+bia38GCQaFJt9rRclvMiI
+         0/2A==
+X-Gm-Message-State: AOAM532KrQiirA6Kidh0/Z6ebaF5rJCrlKnyiOG8E+DuT3qpRcvB9o2a
+        NOZF4Jq1f/N4HmoLCpnoLzYXVw==
+X-Google-Smtp-Source: ABdhPJyppwlHO3JoFGsjQtoSnaiRUdjztvdif3JofPWDcB7jlUyARstMHYURp1XYu6MD5ijz5x6ywg==
+X-Received: by 2002:a05:6a00:1411:b0:4fd:e594:fac0 with SMTP id l17-20020a056a00141100b004fde594fac0mr24945149pfu.79.1651740227677;
+        Thu, 05 May 2022 01:43:47 -0700 (PDT)
+Received: from localhost ([122.162.234.2])
+        by smtp.gmail.com with ESMTPSA id b1-20020a1709027e0100b0015e8d4eb2c8sm891578plm.274.2022.05.05.01.43.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 May 2022 01:43:47 -0700 (PDT)
+Date:   Thu, 5 May 2022 14:13:45 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Rex-BC Chen <rex-bc.chen@mediatek.com>
+Cc:     rafael@kernel.org, robh+dt@kernel.org, krzk+dt@kernel.org,
+        matthias.bgg@gmail.com, jia-wei.chang@mediatek.com,
+        roger.lu@mediatek.com, hsinyi@google.com, khilman@baylibre.com,
+        angelogioacchino.delregno@collabora.com, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        "Andrew-sh.Cheng" <andrew-sh.cheng@mediatek.com>
+Subject: Re: [PATCH v5 2/9] cpufreq: mediatek: Add opp notification support
+Message-ID: <20220505084345.e3qt3ocdft75tbxv@vireshk-i7>
+References: <20220504130540.5902-1-rex-bc.chen@mediatek.com>
+ <20220504130540.5902-3-rex-bc.chen@mediatek.com>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5276.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d69200bc-516d-4b78-fb76-08da2e735a44
-X-MS-Exchange-CrossTenant-originalarrivaltime: 05 May 2022 08:43:39.6621
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Zs1048R4LN4RxkG6gDK809TJI/xPkDdggla9f5YzrSfmb+/0l1YxfegO2WRM1fEcFYpADAOznt71fB/2WJuZHQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR11MB1561
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220504130540.5902-3-rex-bc.chen@mediatek.com>
+User-Agent: NeoMutt/20180716-391-311a52
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -162,45 +79,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> From: Lu Baolu <baolu.lu@linux.intel.com>
-> Sent: Thursday, May 5, 2022 9:07 AM
->=20
-> As domain->force_snooping only impacts the devices attached with the
-> domain, there's no need to check against all IOMMU units. At the same
-> time, for a brand new domain (hasn't been attached to any device), the
-> force_snooping field could be set, but the attach_dev callback will
-> return failure if it wants to attach to a device which IOMMU has no
-> snoop control capability.
+On 04-05-22, 21:05, Rex-BC Chen wrote:
+> From: "Andrew-sh.Cheng" <andrew-sh.cheng@mediatek.com>
+> 
+> >From this opp notifier, cpufreq should listen to opp notification and do
 
-The description about brand new domain is not very clear. I think the
-point here is that force_snooping could be set on a domain no matter
-whether it has been attached or not and once set it is an immutable
-flag. If no device attached the operation always succeeds then this
-empty domain can be only attached to a device of which the IOMMU
-supports snoop control.
+What happened with the extra ">" here ?
 
->  static bool intel_iommu_enforce_cache_coherency(struct iommu_domain
-> *domain)
+>  static int mtk_cpu_dvfs_info_init(struct mtk_cpu_dvfs_info *info, int cpu)
 >  {
->  	struct dmar_domain *dmar_domain =3D to_dmar_domain(domain);
->=20
-> -	if (!domain_update_iommu_snooping(NULL))
-> +	if (dmar_domain->force_snooping)
-> +		return true;
+>  	struct device *cpu_dev;
+> @@ -396,6 +458,17 @@ static int mtk_cpu_dvfs_info_init(struct mtk_cpu_dvfs_info *info, int cpu)
+>  	info->intermediate_voltage = dev_pm_opp_get_voltage(opp);
+>  	dev_pm_opp_put(opp);
+>  
+> +	info->opp_cpu = cpu;
+> +	info->opp_nb.notifier_call = mtk_cpufreq_opp_notifier;
+> +	ret = dev_pm_opp_register_notifier(cpu_dev, &info->opp_nb);
+> +	if (ret) {
+> +		dev_err(cpu_dev, "cpu%d: failed to register opp notifier\n", cpu);
+> +		goto out_disable_inter_clock;
+> +	}
 > +
-> +	if (!domain_support_force_snooping(dmar_domain))
->  		return false;
-> +
+> +	mutex_init(&info->reg_lock);
 
-Who guarantees that domain->devices won't change between
-above condition check and following set operation?
+You should always initialize a resource before its users. The notifier
+callback, which can get called right after
+dev_pm_opp_register_notifier() returns, will use this mutex.
 
-> +	domain_set_force_snooping(dmar_domain);
->  	dmar_domain->force_snooping =3D true;
+> +	info->opp_freq = clk_get_rate(info->cpu_clk);
 > +
->  	return true;
+>  	/*
+>  	 * If SRAM regulator is present, software "voltage tracking" is needed
+>  	 * for this CPU power domain.
+> @@ -451,6 +524,9 @@ static void mtk_cpu_dvfs_info_release(struct mtk_cpu_dvfs_info *info)
+>  	}
+>  
+>  	dev_pm_opp_of_cpumask_remove_table(&info->cpus);
+> +
+> +	if (!IS_ERR_OR_NULL(info->cpu_dev))
+
+cpu_dev can never be error here.
+
+> +		dev_pm_opp_unregister_notifier(info->cpu_dev, &info->opp_nb);
 >  }
->=20
+>  
+>  static int mtk_cpufreq_init(struct cpufreq_policy *policy)
 
-Thanks
-Kevin
+I also asked you last time to stack things in a order so they are
+easier for me to apply. Bugfixes, followed by simple cleanups, which
+don't make behavioral changes, followed by real patches.
+
+Now you have sent this patch at an early stage, which blocks me from
+applying anything after this.
+
+I can see the earlier comments weren't all considered, and it doesn't
+look nice.
+
+-- 
+viresh

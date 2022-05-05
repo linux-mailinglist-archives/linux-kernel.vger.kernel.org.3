@@ -2,78 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D35951C8B2
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 21:09:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4759351C8C3
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 21:14:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384893AbiEETNc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 15:13:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58196 "EHLO
+        id S1384919AbiEETSh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 15:18:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376888AbiEETNa (ORCPT
+        with ESMTP id S231905AbiEETSc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 15:13:30 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B04214EDDE;
-        Thu,  5 May 2022 12:09:49 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id t25so9014763lfg.7;
-        Thu, 05 May 2022 12:09:49 -0700 (PDT)
+        Thu, 5 May 2022 15:18:32 -0400
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FE511FA79
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 12:14:52 -0700 (PDT)
+Received: by mail-pf1-x435.google.com with SMTP id g8so4392208pfh.5
+        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 12:14:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to;
-        bh=95r8yUTj2H1m8JRx9bOkdg77cwQCDoRvR/+l/UIoyJ4=;
-        b=Dm5wM9hZ9u8lEUCIPdXFUtwIig97WpDmFrVoWrSpy7KBBDptnPwD117188AkTu+RoT
-         QvVIiPJemLXZLElpuXUQqZa8K1Q6tFrt1ci9ItQvqQuYs5unjXBC1eIxyFs2Rt+uxgjA
-         mkffEdUBwt4/RqFihQvTByVJp/L8vW2H057AjFDkGEmc0BmHt9I3hK/4eFzgqJvjErCT
-         9ECrRCAHmPy2Nc42gDjMaq+6VQ0wzBdMJkTWZ9ru6VdGGuD7sS48ywGgTF2udX7Ochyy
-         fO3TcZD2D5A/ntwJY13cUS2w8p4+BiljLXSo9oBpf5p3liHNE1Ee6e76kQKfoTglW0aT
-         WhQA==
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=e+FJ46/7Sy9VfribnYX6kNq/CwfrxVb5YsTgHdbMzYw=;
+        b=RPTG4z8cakasD5OVp+30Q1BSbjyv4oUbHU8Fojvj4vDLWZeCEb/iPIxaF9Uoz9Aeqi
+         1q4khR1N5XYVxxmYJiEZYDsu1AGelLC+IK2jurgtuq5vP9WTUPkWm95m9EdYHoxtuQkj
+         W3s5xidBprXymtQ6qhaqNCi67LSvL18u+mJOXRYHO+E2Z2fYaqB3387lwOq65MHkD0DN
+         ot/vs+zI1Od/WovlLOGqGioGy1OSVGdeVrmlXoOlCJARfIrpKixRRtaJCJf/Sn+M3i+m
+         8rIHUKd+hiYwzkCHovLRDunzuoFFSvcQl3sp5Mt7crE5V57Dkb6LSdEVXvC1AAwGJeSu
+         l60A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to;
-        bh=95r8yUTj2H1m8JRx9bOkdg77cwQCDoRvR/+l/UIoyJ4=;
-        b=cPALJqHmwRP2bYOhnkqULmSPUk82n+/ijG36F3OTfaYKXD3ZeKFEDvRPhoL544vJ6p
-         6htwtaTRe05xLe9iyt+Nc6NUMatI17V4lO8yhLB9VAO2VlsgX9qpM2sXeNm89mLNhUvu
-         ikcUORHzM2e9giiEImvJMTN20oZOm/n1FzjWStftgSs1b2Hjjb3wVQJ2LWDYPKUP0qJb
-         9dGQdOLw60Nram1odoFhwevxYxqzg7xEp/eywlZKGbMmCiy8dPnyVlMTjeQoTVFA67H3
-         g6sdQFeHYBVgU8F2Wd0jQ5Y+b/QDscbHG/UjXIKGdcZ6IN5uoItdx9ha9y82/csuyPsW
-         IjqA==
-X-Gm-Message-State: AOAM532AjY5UV0O4gr5KWOLMUz1Ftpk8jiLPzaE2Qw64Qa6qjOy7I1Bc
-        KEKoTpPRIjDCb+LDkft6ZIZq5+vCPpQ=
-X-Google-Smtp-Source: ABdhPJzs2WyDQbVtkHEsX9Z/BuUrxD5bCXGbt9D11Q0Vh136PQNvEb5nQvILOkyKI5Gxq0zNsSd5mQ==
-X-Received: by 2002:a05:6512:22d5:b0:473:a527:717 with SMTP id g21-20020a05651222d500b00473a5270717mr11084254lfu.510.1651777787788;
-        Thu, 05 May 2022 12:09:47 -0700 (PDT)
-Received: from [192.168.1.11] ([217.117.246.114])
-        by smtp.gmail.com with ESMTPSA id s6-20020a2eb8c6000000b0024f3d1daea2sm312947ljp.42.2022.05.05.12.09.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 05 May 2022 12:09:47 -0700 (PDT)
-Message-ID: <3cb712d9-c6be-94b7-6135-10b0eabba341@gmail.com>
-Date:   Thu, 5 May 2022 22:09:45 +0300
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=e+FJ46/7Sy9VfribnYX6kNq/CwfrxVb5YsTgHdbMzYw=;
+        b=C8p/DcfBTxzFlLUVJhvVKdZ/UtGt35bOjUazsYaZTj7Uhq/RWoqTst0VBHUSAysAaJ
+         Ze4LmyY+a5mtzy/UQ5ypwfLMSi0W2udUJVapUbXim49mcK1udwCCA36kijC1ts3TTIY/
+         nn94pk8ge603m3LXis2RaMjs12nuGZJC1BPhSfzR+Kr2Ub/wssN5Z2lnXKJJCNwRj3m0
+         NJraSXOoInAkGDt0qd7X8VzW2SZkF4qRYWqNQ1HzNahAOEHUP8M8c3iReImAJL0n/avH
+         4aDd+8869zsRpi5AbfM2XxSw5vOWMOLL/1zjAjgINjcyyxA+JwZ7jcExg59fq6RBnQlx
+         JSjg==
+X-Gm-Message-State: AOAM532av9HggQKqPcPrC6D+oip9UTBKICxwph+8M7TG4rCmAdz+qvPa
+        XQL5ta8ffnp+f0At0O33EVeo3g==
+X-Google-Smtp-Source: ABdhPJyT95WwbRXkrGVd4EpOotmnRFvktUdqrHky1EemmQS9SfP8FFAH2kPzRIBGRF3tuP4H20T2pQ==
+X-Received: by 2002:a63:5756:0:b0:36c:67bc:7f3f with SMTP id h22-20020a635756000000b0036c67bc7f3fmr23587816pgm.389.1651778091865;
+        Thu, 05 May 2022 12:14:51 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id x5-20020a170902b40500b0015e8d4eb29bsm1885958plr.229.2022.05.05.12.14.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 May 2022 12:14:51 -0700 (PDT)
+Date:   Thu, 5 May 2022 19:14:48 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Ben Gardon <bgardon@google.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Peter Xu <peterx@redhat.com>,
+        David Matlack <dmatlack@google.com>,
+        Jim Mattson <jmattson@google.com>,
+        David Dunn <daviddunn@google.com>,
+        Jing Zhang <jingzhangos@google.com>,
+        Junaid Shahid <junaids@google.com>
+Subject: Re: [PATCH v7 10/11] KVM: selftests: Test disabling NX hugepages on
+ a VM
+Message-ID: <YnQiKJcufscYYq/j@google.com>
+References: <20220503183045.978509-1-bgardon@google.com>
+ <20220503183045.978509-11-bgardon@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v3 1/2] ath9k: fix use-after-free in ath9k_hif_usb_rx_cb
-Content-Language: en-US
-To:     Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
-        =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rgensen?= <toke@toke.dk>,
-        ath9k-devel@qca.qualcomm.com, kvalo@kernel.org,
-        davem@davemloft.net, kuba@kernel.org, linville@tuxdriver.com
-Cc:     linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        syzbot+03110230a11411024147@syzkaller.appspotmail.com,
-        syzbot+c6dde1f690b60e0b9fbe@syzkaller.appspotmail.com
-References: <80962aae265995d1cdb724f5362c556d494c7566.1644265120.git.paskripkin@gmail.com>
- <87h799a007.fsf@toke.dk> <6f0615da-aa0b-df8e-589c-f5caf09d3449@gmail.com>
- <5fd22dda-01d6-cfae-3458-cb3fa23eb84d@I-love.SAKURA.ne.jp>
-From:   Pavel Skripkin <paskripkin@gmail.com>
-In-Reply-To: <5fd22dda-01d6-cfae-3458-cb3fa23eb84d@I-love.SAKURA.ne.jp>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------RwO6X2hG0PGwvossowR4eaBq"
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220503183045.978509-11-bgardon@google.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,63 +79,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------RwO6X2hG0PGwvossowR4eaBq
-Content-Type: multipart/mixed; boundary="------------BuTCYHRj8nx9zy0QljTTmpW0";
- protected-headers="v1"
-From: Pavel Skripkin <paskripkin@gmail.com>
-To: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
- =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rgensen?= <toke@toke.dk>,
- ath9k-devel@qca.qualcomm.com, kvalo@kernel.org, davem@davemloft.net,
- kuba@kernel.org, linville@tuxdriver.com
-Cc: linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org,
- syzbot+03110230a11411024147@syzkaller.appspotmail.com,
- syzbot+c6dde1f690b60e0b9fbe@syzkaller.appspotmail.com
-Message-ID: <3cb712d9-c6be-94b7-6135-10b0eabba341@gmail.com>
-Subject: Re: [PATCH v3 1/2] ath9k: fix use-after-free in ath9k_hif_usb_rx_cb
-References: <80962aae265995d1cdb724f5362c556d494c7566.1644265120.git.paskripkin@gmail.com>
- <87h799a007.fsf@toke.dk> <6f0615da-aa0b-df8e-589c-f5caf09d3449@gmail.com>
- <5fd22dda-01d6-cfae-3458-cb3fa23eb84d@I-love.SAKURA.ne.jp>
-In-Reply-To: <5fd22dda-01d6-cfae-3458-cb3fa23eb84d@I-love.SAKURA.ne.jp>
+On Tue, May 03, 2022, Ben Gardon wrote:
+> +	if (disable_nx_huge_pages) {
+> +		/*
+> +		 * Cannot run the test without NX huge pages if the kernel
+> +		 * does not support it.
+> +		 */
+> +		if (!kvm_check_cap(KVM_CAP_VM_DISABLE_NX_HUGE_PAGES))
+> +			return;
+> +
+> +		r = __vm_disable_nx_huge_pages(vm);
+> +		if (reboot_permissions) {
+> +			TEST_ASSERT(!r, "Disabling NX huge pages should succeed if process has reboot permissions");
+> +		} else {
+> +			TEST_ASSERT(r == -EPERM, "This process should not have permission to disable NX huge pages");
 
---------------BuTCYHRj8nx9zy0QljTTmpW0
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+This is wrong, the return value on ioctl() failure is -1, the error code is
+in errno and it's a positive value.
 
-SGkgVGV0c3VvLA0KDQpPbiA1LzIvMjIgMDk6MTAsIFRldHN1byBIYW5kYSB3cm90ZToNCj4+
-IEFuZCB3ZSBjYW4gbWVldCBOVUxMIGRlZmVyIGV2ZW4gaWYgd2UgbGVhdmUgZHJ2X3ByaXYg
-PSBwcml2IGluaXRpYWxpemF0aW9uDQo+PiBvbiBpdCdzIHBsYWNlLg0KPiANCj4gSSBkaWRu
-J3QgY2F0Y2ggdGhlIGxvY2F0aW9uLiBBcyBsb25nIGFzICJodGNfaGFuZGxlLT5kcnZfcHJp
-diA9IHByaXY7IiBpcyBkb25lDQo+IGJlZm9yZSBjb21wbGV0ZV9hbGwoJmhpZl9kZXYtPmZ3
-X2RvbmUpIGlzIGRvbmUsIGlzIHNvbWV0aGluZyB3cm9uZz8NCj4gDQoNCkkgZG9uJ3QgcmVh
-bGx5IHJlbWVtYmVyIHdoeSBJIHNhaWQgdGhhdCwgYnV0IGxvb2tzIGxpa2UgSSBqdXN0IGhh
-dmVuJ3QgDQpvcGVuZWQgY2FsbGJhY2tzJyBjb2RlLg0KDQpNeSBwb2ludCB3YXMgdGhhdCBt
-eSBwYXRjaCBkb2VzIG5vdCBjaGFuZ2UgdGhlIGxvZ2ljLCBidXQgb25seSBmaXhlcyAyIA0K
-cHJvYmxlbXM6IFVBRiBhbmQgTlVMTCBkZXJlZi4NCg0KDQoNCg0KV2l0aCByZWdhcmRzLA0K
-UGF2ZWwgU2tyaXBraW4NCg==
+LOL, but it passes because EPERM == 1, hilarious.  To avoid confusion:
 
---------------BuTCYHRj8nx9zy0QljTTmpW0--
+			TEST_ASSERT(r == -1 && errno == EPERM,
+				    "This process should not have permission to disable NX huge pages");
 
---------------RwO6X2hG0PGwvossowR4eaBq
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
+> diff --git a/tools/testing/selftests/kvm/x86_64/nx_huge_pages_test.sh b/tools/testing/selftests/kvm/x86_64/nx_huge_pages_test.sh
+> index 60bfed8181b9..c21c1f639141 100755
+> --- a/tools/testing/selftests/kvm/x86_64/nx_huge_pages_test.sh
+> +++ b/tools/testing/selftests/kvm/x86_64/nx_huge_pages_test.sh
+> @@ -16,6 +16,8 @@ HUGE_PAGES=$(sudo cat /sys/kernel/mm/hugepages/hugepages-2048kB/nr_hugepages)
+>  
+>  set +e
+>  
+> +NXECUTABLE="$(dirname $0)/nx_huge_pages_test"
+> +
+>  (
+>  	set -e
+>  
+> @@ -24,7 +26,15 @@ set +e
+>  	sudo echo 100 > /sys/module/kvm/parameters/nx_huge_pages_recovery_period_ms
+>  	sudo echo 3 > /sys/kernel/mm/hugepages/hugepages-2048kB/nr_hugepages
+>  
+> -	"$(dirname $0)"/nx_huge_pages_test 887563923
+> +	# Test with reboot permissions
+> +	sudo setcap cap_sys_boot+ep $NXECUTABLE
 
------BEGIN PGP SIGNATURE-----
+This leaves cap_sys_boot set on the executable if the script is run as root.
 
-wsF5BAABCAAjFiEER3XL3TplLQE8Qi40bk1w61LbBA0FAmJ0IPkFAwAAAAAACgkQbk1w61LbBA0T
-Qw//S89A5hXZn0QKDeJ5BiOPpbcWphz7JnMepW4YZ3+c0PSVsOJYnuTGuJP4ZgLCY2Xhlz555CiS
-CIG5CzUAPvisnD2hSVFZd6AxHNgbRi6L9kLzkmYcIdRDBCOHz9/BXyG8+SUQYI9aBGzAWAf6INpl
-Ox1cK9fAkWOPR52tEs5ee3bS82jWftq5Gej5HuXH/OOueDxcRDrvRon/qi8fEe61S4jGUNcPDJIN
-KX/uwWc6UeRWxtw7nl+r28eTLQbU228QR51bn3/rAPlMJ3B/x0lPhl06kuxonskvjY0ZYNZuXvzT
-S5swHOw1VwBbfSfSGBGiNrdzRKvEaygNGGW2NF6FrCkEnYNgykZTv1XuBPaE+E+ICxvPGrhe7X9P
-GFNBAj0Uktl0ULeEXnPjv93sXtZNjy+sz+cK7gcV7Cfb6JuW+myT59zVJBRc2oQJjY905mgtO820
-2CZiBO9Jn18i/VIchONjl62f31aZBblvgejXA69mpco3LIBLUoQ6N57HNp5iUwxZIJxgcBupnheH
-O33BAnFZ6n56OCe4bdRX/nvG7m9ETfpX7m4OOg3V+AEVbc+4aNUz8NK/z9U1ufK6yVQXqj6tuJ/J
-L/aLqJGdb8pGay4nzlmxEypPalLPDhg2U6KIxbasjTKS+u5qHsAm2u/Umnt3Yk/L/hMde+hal+N0
-OzI=
-=P47m
------END PGP SIGNATURE-----
+Probably this?  It's moderately user friendly without going too crazy on error
+handling.
 
---------------RwO6X2hG0PGwvossowR4eaBq--
+	# Test with reboot permissions
+	if [ $(whoami) != "root" ] ; then
+		sudo setcap cap_sys_boot+ep $NXECUTABLE
+	fi
+	$NXECUTABLE 887563923 1
+
+	# Test without reboot permissions
+	if [ $(whoami) != "root" ] ; then
+		sudo setcap cap_sys_boot-ep $NXECUTABLE
+		$NXECUTABLE 887563923 0
+	fi
+
+> +	$NXECUTABLE 887563923 1
+> +
+> +	# Test without reboot permissions
+> +	if [ $(whoami) != "root" ] ; then
+> +		sudo setcap cap_sys_boot-ep $NXECUTABLE
+> +		$NXECUTABLE 887563923 0
+
+I would much prefer a proper flag, not a magic 0 vs. 1.  
+
+> +	fi
+>  )
+>  RET=$?
+>  
+> -- 
+> 2.36.0.464.gb9c8b46e94-goog
+> 

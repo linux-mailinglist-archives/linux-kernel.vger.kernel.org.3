@@ -2,111 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40CC951B848
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 08:56:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84FDD51B859
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 09:00:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231454AbiEEG7t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 02:59:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38984 "EHLO
+        id S242573AbiEEHE0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 03:04:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238079AbiEEG7p (ORCPT
+        with ESMTP id S231975AbiEEHEV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 02:59:45 -0400
-Received: from mail-qv1-f47.google.com (mail-qv1-f47.google.com [209.85.219.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2825377EF;
-        Wed,  4 May 2022 23:56:06 -0700 (PDT)
-Received: by mail-qv1-f47.google.com with SMTP id kd11so2426566qvb.2;
-        Wed, 04 May 2022 23:56:06 -0700 (PDT)
+        Thu, 5 May 2022 03:04:21 -0400
+Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 567423916C
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 00:00:42 -0700 (PDT)
+Received: by mail-oi1-x22c.google.com with SMTP id l203so3511426oif.0
+        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 00:00:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=endlessos.org; s=google;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=GYb2qyeDXFpfHBcs3u1MbmVCzXSjcUG0qu6nWI0aQBY=;
+        b=ltzuFON4sacssZlcAtwXMz5GbnKSvVZaUwUQKVyMl+XFQ9LA6DmMRAMBetiiLTdxz1
+         8mHAXwJg/IdvB+T5t4DPfLLq89MFeMOCiy2yYPxfGy+IoLE2hFmvEofMokeOjIseKA3V
+         aLxHUzAKFr3t23SVRCMonUC9Jj3F+eXaKSmvTQVgx1d4MIOq27kFQahb8KMVyCHFKcH0
+         iSypWWzIy1qRNf2kxYFPoR80Bjzwmy6X9pAuIuT6SRJKSBMZSXB61Zb1oohk8u8OZiXB
+         nUVRX3M7Bqyq9+KQgxAOQJVumzaPpMeoNWopa6p8UhSoNIA0AckGfkc8+zyVSeN3J6mN
+         VXcw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=H63lRZ0aFf3Uo76l2TVh/QJRDaMCJkmpdWde3tg+LhI=;
-        b=cPwm6ZXgyQ2cTIJMEtRRARC53JUjs1pmcu4OQyZmKC14uK3I3TtMS3XmgZQ1NeQwIG
-         pnQT5gbnwFJ5BoL+DRu9crcxsbh6lV17HFODuZEUVwW89faDbUQeILJYgd8aQJGfy0YT
-         AGk/qi7epfw7Q7QaTnWfS0weLdCIE426hroSacPM0nLy0gAEofrW4VYfcUOioJzXIM7A
-         Vn6cypN7m7yGl0pgD9nTd2uGHX+erc6B33oWi60OEZ7dvREJ/wpil89J/QCLEPNtABCK
-         OSWRXwjn81oELKmTkcDJBkRJBLF3JoIZqO4mIuEiLeu5Lpnaz597JBMp4h54ArKcobUK
-         +8Wg==
-X-Gm-Message-State: AOAM53121veNiKmaW9JqgyyvHOwM3eDUMOzM27vPdgUAzI0HGOntX0Uo
-        7ove0PJssLHpWWppXgHRwiQqC9+lV2xv2w==
-X-Google-Smtp-Source: ABdhPJz1y9lRi4pNrieAI7o05QV3pJBfPjr3R/eTdXcGA44dXsGlJJQsq5OS/haoiOH+f/0ZDNxwbg==
-X-Received: by 2002:a0c:e409:0:b0:45a:8a6e:c771 with SMTP id o9-20020a0ce409000000b0045a8a6ec771mr15624117qvl.123.1651733765729;
-        Wed, 04 May 2022 23:56:05 -0700 (PDT)
-Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com. [209.85.128.176])
-        by smtp.gmail.com with ESMTPSA id l14-20020ac84a8e000000b002f39b99f68dsm417304qtq.39.2022.05.04.23.56.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 04 May 2022 23:56:05 -0700 (PDT)
-Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-2ef5380669cso38504037b3.9;
-        Wed, 04 May 2022 23:56:05 -0700 (PDT)
-X-Received: by 2002:a81:913:0:b0:2f7:c833:f304 with SMTP id
- 19-20020a810913000000b002f7c833f304mr23117982ywj.283.1651733765108; Wed, 04
- May 2022 23:56:05 -0700 (PDT)
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=GYb2qyeDXFpfHBcs3u1MbmVCzXSjcUG0qu6nWI0aQBY=;
+        b=1ji+lJyJEtDCaJS9R7GRwAFDfQZGLcqMEgWyzISYyAlVid3JzBOzzadeUPSnoSypI8
+         EPvzPUfrCdlnakVnvMD+NWyCabyvyeSNTBo+bCWfXazrnv2rihLjKrYAAnaDVbU3pJq5
+         bTwHlFObrZEDJGGpxXrB8W4JCNtj9pTt3QSE+cZuhlgQWwx3+zP2kE5rNTebZvtVGacS
+         h3lBydORFUjFx4NV3fdwijQR8LyeYl0t9iuHskGmOYjJNHvlD3HGZN+CJSGhbZKNCXIc
+         /dz3UL0alC34LcaVGeC/A8eutZzSSRUVCx698IgMb+wGZxhdUG/NNUwuUFlxgVZBDTbV
+         SSow==
+X-Gm-Message-State: AOAM5312vwM5K6mlIrt9vDf8+MMpwdiX6Fa8JxRWGICtI+S1112QuffI
+        3U0ocCJov7RPJngDmme9SAgUFFMQX8+baRWdTq2/HQ==
+X-Google-Smtp-Source: ABdhPJzIbrVzcDCPJMBPLSECStk77anISWTIvF2PH1N8TpB4sURyaOKd5cyPadiOr9DrZ+b3WQewur735l/o2y4cm30=
+X-Received: by 2002:a05:6808:180a:b0:322:bcd3:ddaf with SMTP id
+ bh10-20020a056808180a00b00322bcd3ddafmr1623748oib.35.1651734041647; Thu, 05
+ May 2022 00:00:41 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220504142333.8844-1-guozhengkui@vivo.com>
-In-Reply-To: <20220504142333.8844-1-guozhengkui@vivo.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 5 May 2022 08:55:53 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdW=V=92VnD2sPpuXwJ1CAj-swC10vcSssLArbrPULs4-A@mail.gmail.com>
-Message-ID: <CAMuHMdW=V=92VnD2sPpuXwJ1CAj-swC10vcSssLArbrPULs4-A@mail.gmail.com>
-Subject: Re: [PATCH] clk: renesas: rzg2l: remove repeated data
-To:     Guo Zhengkui <guozhengkui@vivo.com>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        zhengkui_guo@outlook.com
+From:   Jian-Hong Pan <jhp@endlessos.org>
+Date:   Thu, 5 May 2022 14:59:35 +0800
+Message-ID: <CAPpJ_edpzKpLzrwT-+gB2c-6qhVPs_iNHL6=uDOyc9Xr2wGCiQ@mail.gmail.com>
+Subject: [BUG] The UI hangs when system changes CPU frequency on Raspberry Pi 4B
+To:     Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
+Cc:     linux-pm@vger.kernel.org,
+        Linux Kernel <linux-kernel@vger.kernel.org>,
+        linux@endlessos.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Guo,
+Hi,
 
-On Wed, May 4, 2022 at 4:24 PM Guo Zhengkui <guozhengkui@vivo.com> wrote:
-> Remove a repeated CPG_SIPLL5_CLK1_REFDIV_WEN.
->
-> Signed-off-by: Guo Zhengkui <guozhengkui@vivo.com>
+We found the UI hangs totally when system changes CPU frequency on
+Raspberry Pi 4B.  The test kernel is mainline kernel 5.18-rc3.
 
-Thanks for your patch!
+According to the oops messages and the stack:
 
-> --- a/drivers/clk/renesas/rzg2l-cpg.c
-> +++ b/drivers/clk/renesas/rzg2l-cpg.c
-> @@ -601,9 +601,8 @@ static int rzg2l_cpg_sipll5_set_rate(struct clk_hw *hw,
->
->         /* Output clock setting 1 */
->         writel(CPG_SIPLL5_CLK1_POSTDIV1_WEN | CPG_SIPLL5_CLK1_REFDIV_WEN |
-> -              CPG_SIPLL5_CLK1_REFDIV_WEN  | (params.pl5_postdiv1 << 0) |
+[ 1330.166158] INFO: task kworker/0:0:6 blocked for more than 120 seconds.
+[ 1330.172963]       Tainted: G        W   E     5.18.0-rc3 #61
+[ 1330.178767] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs"
+disables this message.
+[ 1330.186742] task:kworker/0:0     state:D stack:    0 pid:    6
+ppid:     2 flags:0x00000008
+[ 1330.186762] Workqueue: events dbs_work_handler
+[ 1330.186779] Call trace:
+[ 1330.186782]  __switch_to+0xf8/0x150
+[ 1330.186793]  __schedule+0x37c/0x141c
+[ 1330.186800]  schedule+0x54/0xc4
+[ 1330.186807]  schedule_timeout+0xa4/0x190
+[ 1330.186813]  __wait_for_common+0xc4/0x224
+[ 1330.186818]  wait_for_completion_timeout+0x2c/0x40
+[ 1330.186822]  mbox_send_message+0xf0/0x1f4
+[ 1330.186828]  rpi_firmware_property_list+0xf8/0x280
+[ 1330.186834]  rpi_firmware_property+0x7c/0xc0
+[ 1330.186839]  raspberrypi_fw_set_rate+0x64/0xe4 [clk_raspberrypi]
+[ 1330.186851]  clk_change_rate+0xe4/0x470
+[ 1330.186859]  clk_core_set_rate_nolock+0x1d0/0x2ec
+[ 1330.186864]  clk_set_rate+0x44/0x190
+[ 1330.186870]  _set_opp+0x3b4/0x70c
+[ 1330.186876]  dev_pm_opp_set_rate+0x11c/0x2d0
+[ 1330.186881]  set_target+0x3c/0x4c
+[ 1330.186887]  __cpufreq_driver_target+0x400/0x7ac
+[ 1330.186893]  od_dbs_update+0xc8/0x1c0
+[ 1330.186898]  dbs_work_handler+0x4c/0x8c
+[ 1330.186903]  process_one_work+0x210/0x480
+[ 1330.186910]  worker_thread+0x180/0x520
+[ 1330.186915]  kthread+0xe4/0xf0
+[ 1330.186920]  ret_from_fork+0x10/0x20
+[ 1330.186928] INFO: task kworker/u8:0:8 blocked for more than 120 seconds.
+[ 1330.193744]       Tainted: G        W   E     5.18.0-rc3 #61
+[ 1330.199509] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs"
+disables this message.
+[ 1330.207467] task:kworker/u8:0    state:D stack:    0 pid:    8
+ppid:     2 flags:0x00000008
+[ 1330.207485] Workqueue: events_unbound commit_work [drm_kms_helper]
+[ 1330.207555] Call trace:
+[ 1330.207558]  __switch_to+0xf8/0x150
+[ 1330.207572]  __schedule+0x37c/0x141c
+[ 1330.207579]  schedule+0x54/0xc4
+[ 1330.207586]  schedule_preempt_disabled+0x1c/0x2c
+[ 1330.207593]  __mutex_lock.constprop.0+0x160/0x59c
+[ 1330.207598]  __mutex_lock_slowpath+0x40/0x8c
+[ 1330.207602]  mutex_lock+0x68/0x80
+[ 1330.207607]  clk_prepare_lock+0x4c/0xac
+[ 1330.207616]  clk_set_rate_range.part.0+0x3c/0x250
+[ 1330.207622]  clk_set_min_rate+0x3c/0xdc
+[ 1330.207627]  vc4_atomic_commit_tail+0x68c/0x77c [vc4]
+[ 1330.207664]  commit_tail+0xd8/0x210 [drm_kms_helper]
+[ 1330.207707]  commit_work+0x20/0x30 [drm_kms_helper]
+[ 1330.207748]  process_one_work+0x210/0x480
+[ 1330.207755]  worker_thread+0x180/0x520
+[ 1330.207760]  kthread+0xe4/0xf0
+[ 1330.207765]  ret_from_fork+0x10/0x20
 
-This is not correct: one of the CPG_SIPLL5_CLK1_REFDIV_WENs
-should have been CPG_SIPLL5_CLK1_POSTDIV2_WEN.
+Looks like clk_raspberrypi tries to set/change rate by invoking
+raspberrypi_fw_set_rate(), but the transaction with firmware is
+timeout. There might be a lock shared with others, but held by it. For
+example, the second oops message from drm_kms_helper -> vc4 shows
+clk_prepare_lock() is waiting to be scheduled.
 
-> -              (params.pl5_postdiv2 << 4) | (params.pl5_refdiv << 8),
-> -              priv->base + CPG_SIPLL5_CLK1);
-> +              (params.pl5_postdiv1 << 0) | (params.pl5_postdiv2 << 4) |
-> +              (params.pl5_refdiv << 8), priv->base + CPG_SIPLL5_CLK1);
->
->         /* Output clock setting, SSCG modulation value setting 3 */
->         writel((params.pl5_fracin << 8), priv->base + CPG_SIPLL5_CLK3);
+The UI hangs until raspberrypi-firmware gets the failed returned error
+from mbox_send_message().
 
+[ 4887.601985] raspberrypi-firmware soc:firmware: mbox_send_message returned -62
+[ 4887.609269] raspberrypi-clk soc:firmware:clocks: Failed to change
+fw-clk-arm frequency: -62
 
-So I'm going for Wan's fix instead
-https://lore.kernel.org/r/20220504142058.18704-1-wanjiabing@vivo.com/
+The serial console is alive when the UI hangs.
 
-Gr{oetje,eeting}s,
+I put all of the findings on https://bugzilla.kernel.org/show_bug.cgi?id=215875
 
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Jian-Hong Pan

@@ -2,281 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E639051CBED
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 00:10:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DC3551CBF2
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 00:13:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386223AbiEEWOV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 18:14:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34152 "EHLO
+        id S1386225AbiEEWRD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 18:17:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386209AbiEEWOS (ORCPT
+        with ESMTP id S1386177AbiEEWQ7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 18:14:18 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B30135E76C
-        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 15:10:37 -0700 (PDT)
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 245Kj2dZ017268;
-        Thu, 5 May 2022 22:10:05 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=MrU29fcn14GDRfr2Wf0nuMab2K7bMjsFzwPUGCuHLms=;
- b=IeOL0OKC1v1S8AboEcKHTeG1Y/8yZ0RxeBiJAUASflulOXG0vaFQWhRDTarIP4uU9+gA
- TpFq/fJ3UQQzHWhU0NiDWS7JBfxQ875zib9fpRWTI2GrrDPf2FyXtGid1LFbTwjUzmO6
- V76xshUe3NENMzJ/3PEsdCRFplqrua5Gs813jRY3RdquaOjEzMDdGNK3Hrl2Sha6PzPG
- MT3s5KZ7w7yjbpjn69MMWkdyCF2IMq2Gvud9Q67pWPAFBdjsAbUUeQOl5dqPs4cQ40lV
- F2vZ9sGgO9hZ4aAqE+vvTaLgxY/I9kjERAPYrJ7QihSI+u26p6yPIDshGx0MqCVRpg2R pg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3fvnvrs8ws-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 05 May 2022 22:10:05 +0000
-Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 245Lu081027541;
-        Thu, 5 May 2022 22:10:05 GMT
-Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3fvnvrs8wk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 05 May 2022 22:10:04 +0000
-Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
-        by ppma02wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 245M8KcJ015766;
-        Thu, 5 May 2022 22:10:04 GMT
-Received: from b03cxnp08028.gho.boulder.ibm.com (b03cxnp08028.gho.boulder.ibm.com [9.17.130.20])
-        by ppma02wdc.us.ibm.com with ESMTP id 3frvra4e00-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 05 May 2022 22:10:04 +0000
-Received: from b03ledav004.gho.boulder.ibm.com (b03ledav004.gho.boulder.ibm.com [9.17.130.235])
-        by b03cxnp08028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 245MA3uN24248682
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 5 May 2022 22:10:03 GMT
-Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8FA8C78060;
-        Thu,  5 May 2022 22:10:03 +0000 (GMT)
-Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 38FE57806A;
-        Thu,  5 May 2022 22:10:02 +0000 (GMT)
-Received: from [9.77.154.170] (unknown [9.77.154.170])
-        by b03ledav004.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Thu,  5 May 2022 22:10:02 +0000 (GMT)
-Message-ID: <2cfb2cd8-3bad-3c66-b8ee-918d615f7719@linux.ibm.com>
-Date:   Thu, 5 May 2022 15:10:01 -0700
+        Thu, 5 May 2022 18:16:59 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF8A85EBCF
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 15:13:18 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id x18so7799479wrc.0
+        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 15:13:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=pqUrx2G73vCZU3RKcd1QDtqQBikNfcSkQr6QFJTd/RI=;
+        b=S959801w4vdtlsza92BrRIUGnFjCeKV2Y+izFx2I3sC62pe/+7Q80xrV7Xagcv54Fn
+         /FjZsa8tjCnmwsnodGMvUZusxWjxV3N3JFU2H8caiVJtWfQLs41NJFrjt6gxbMKZFJtH
+         b8wIglZAzlG1/a3ILKWXxNnGeYFi99ORwFCt+NWdVZwFAFupXavZDZeH+5yDjoD4kbuv
+         pReCVEmFPYqNo3tqT++zHhzQlHfpGzodgaVdYmj9059hU6/Q/KzJEign6GoP+M/plv+J
+         DOwjlRDO8ni8Rw27n+4NNTkVOfnSPsdwimwRjMI7PhJgBPQcRaov/g0L9CMqtlIJk7A5
+         dgNQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=pqUrx2G73vCZU3RKcd1QDtqQBikNfcSkQr6QFJTd/RI=;
+        b=1FBE0KCvLnFAZCRWeGajs6d624HYVhfQQrPcIneEKa5kfSUFmfe0q6qJUAdfVMo4AD
+         X8rF88WtNgR40Unal8HeOkYfl7t3CaY5rCTgCIzje5kwUU/rNnYmh17AfKqED01BLb5U
+         JUfStmWyQgwxMvbaP+9hHccMefgvpiKC8LuiYRbf/xOPIPW/mwAaGPvsE07c2//C0NjB
+         AgL0A9nwNvnJPZytj7Oe11gq/hD7Y0r0KxkE20vM5ksu/0MO1BSylk0NoZg1QTHMp8dz
+         Z9cTur+KMDQyMmdr0Dj84Tlj4Sp3r2ZLXF/ZqwC9KrnOifbnWp4V4eBwTHAy5anmxdqN
+         na5A==
+X-Gm-Message-State: AOAM531iEolA7eOQr6nLd5lx4Du8tayETsfj/fgyUTr6CwyZrGtICXxA
+        HVtDlXzCl+VdkGmuCoO62BSmXiXhMY6dkEjBw+PuqytB31CEig==
+X-Google-Smtp-Source: ABdhPJyckM9L+k3pCxnqo7frUskiB7nV7HLmfhb3ujWuEI0FVvqnQKyEN431BiXvhMZ5xz7NjvJp5N84EUSm69biBaI=
+X-Received: by 2002:adf:d1e9:0:b0:20c:6c76:14d5 with SMTP id
+ g9-20020adfd1e9000000b0020c6c7614d5mr171232wrd.375.1651788797279; Thu, 05 May
+ 2022 15:13:17 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH] powerpc/pci: Add config option for using OF 'reg' for PCI
- domain
-Content-Language: en-US
-To:     =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali@kernel.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
-References: <20220504175718.29011-1-pali@kernel.org>
- <8ffa0287-de5e-4308-07d8-204ac2e7f63a@csgroup.eu>
- <20220505093132.45ehu6pdfzmvt2xw@pali>
-From:   Tyrel Datwyler <tyreld@linux.ibm.com>
-In-Reply-To: <20220505093132.45ehu6pdfzmvt2xw@pali>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: eVQaPeDakQnT_t-afYqfmdwiYNj6v_v0
-X-Proofpoint-ORIG-GUID: F3tBA_U-4THprWI2NEKcngu3WBWHsgrj
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-05_09,2022-05-05_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 spamscore=0
- clxscore=1011 lowpriorityscore=0 phishscore=0 mlxscore=0 mlxlogscore=999
- malwarescore=0 bulkscore=0 impostorscore=0 priorityscore=1501 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
- definitions=main-2205050142
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220505165639.361733-1-adrian.hunter@intel.com> <20220505165639.361733-12-adrian.hunter@intel.com>
+In-Reply-To: <20220505165639.361733-12-adrian.hunter@intel.com>
+From:   Ian Rogers <irogers@google.com>
+Date:   Thu, 5 May 2022 15:13:03 -0700
+Message-ID: <CAP-5=fVHsH5Q=nQpNdhPZGuYMDDB6HPYqPG5x24u7pjGLxsEcA@mail.gmail.com>
+Subject: Re: [PATCH V1 11/23] perf auxtrace: Remove auxtrace_mmap_params__set_idx()
+ per_cpu parameter
+To:     Adrian Hunter <adrian.hunter@intel.com>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Leo Yan <leo.yan@linaro.org>, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/5/22 02:31, Pali Rohár wrote:
-> Hello!
-> 
-> On Thursday 05 May 2022 07:16:40 Christophe Leroy wrote:
->> Le 04/05/2022 à 19:57, Pali Rohár a écrit :
->>> Since commit 63a72284b159 ("powerpc/pci: Assign fixed PHB number based on
->>> device-tree properties"), powerpc kernel always fallback to PCI domain
->>> assignment from OF / Device Tree 'reg' property of the PCI controller.
->>>
->>> PCI code for other Linux architectures use increasing assignment of the PCI
->>> domain for individual controllers (assign the first free number), like it
->>> was also for powerpc prior mentioned commit.
->>>
->>> Upgrading powerpc kernels from LTS 4.4 version (which does not contain
->>> mentioned commit) to new LTS versions brings a regression in domain
->>> assignment.
->>
->> Can you elaborate why it is a regression ?
->>63a72284b159
->> That commit says 'no functionnal changes', I'm having hard time 
->> understanding how a nochange can be a regression.
-> 
-> It is not 'no functional change'. That commit completely changed PCI
-> domain assignment in a way that is incompatible with other architectures
-> and also incompatible with the way how it was done prior that commit.
+On Thu, May 5, 2022 at 9:57 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
+>
+> Remove auxtrace_mmap_params__set_idx() per_cpu parameter because it isn't
+> needed.
+>
+> Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
+> ---
+>  tools/perf/util/auxtrace.c | 5 +++--
+>  tools/perf/util/auxtrace.h | 3 +--
+>  tools/perf/util/evlist.c   | 3 +--
+>  tools/perf/util/mmap.c     | 3 +--
+>  4 files changed, 6 insertions(+), 8 deletions(-)
+>
+> diff --git a/tools/perf/util/auxtrace.c b/tools/perf/util/auxtrace.c
+> index b446cfa66469..ac4e4660932d 100644
+> --- a/tools/perf/util/auxtrace.c
+> +++ b/tools/perf/util/auxtrace.c
+> @@ -169,9 +169,10 @@ void auxtrace_mmap_params__init(struct auxtrace_mmap_params *mp,
+>
+>  void auxtrace_mmap_params__set_idx(struct auxtrace_mmap_params *mp,
+>                                    struct evlist *evlist,
+> -                                  struct evsel *evsel, int idx,
+> -                                  bool per_cpu)
+> +                                  struct evsel *evsel, int idx)
+>  {
+> +       bool per_cpu = !perf_cpu_map__empty(evlist->core.user_requested_cpus);
+> +
+>         mp->mmap_needed = evsel->needs_auxtrace_mmap;
+>
+>         if (!mp->mmap_needed)
+> diff --git a/tools/perf/util/auxtrace.h b/tools/perf/util/auxtrace.h
+> index 4e715e2d9291..7931c34f749a 100644
+> --- a/tools/perf/util/auxtrace.h
+> +++ b/tools/perf/util/auxtrace.h
+> @@ -492,8 +492,7 @@ void auxtrace_mmap_params__init(struct auxtrace_mmap_params *mp,
+>                                 bool auxtrace_overwrite);
+>  void auxtrace_mmap_params__set_idx(struct auxtrace_mmap_params *mp,
+>                                    struct evlist *evlist,
+> -                                  struct evsel *evsel, int idx,
+> -                                  bool per_cpu);
+> +                                  struct evsel *evsel, int idx);
 
-I agree that the "no functional change" statement is incorrect. However, for
-most powerpc platforms it ended up being simply a cosmetic behavior change. As
-far as I can tell there is nothing requiring domain ids to increase montonically
-from zero or that each architecture is required to use the same domain numbering
-scheme. Its hard to call this a true regression unless it actually broke
-something. The commit in question has been in the kernel since 4.8 which was
-released over 5 1/2 years ago.
+A similar change is needed on line 868 for when HAVE_AUXTRACE_SUPPORT
+isn't defined.
 
-With all that said looking closer at the code in question I think it is fair to
-assume that the author only intended this change for powernv and pseries
-platforms and not every powerpc platform. That change was done to make
-persistent naming easier to manage in userspace. Your change defaults back to
-the old behavior which will now break both powernv and pseries platforms with
-regard to hotplugging and persistent naming.
+Thanks,
+Ian
 
-We could properly limit it to powernv and pseries by using ibm,fw-phb-id instead
-of reg property in the look up that follows a failed ibm,opal-phbid lookup. I
-think this is acceptable as long as no other powerpc platforms have started
-using this behavior for persistent naming.
-
--Tyrel
-
-> For example, prior that commit on P2020 RDB board were PCI domains 0, 1 and 2.
-> 
-> $ lspci
-> 0000:00:00.0 PCI bridge: Freescale Semiconductor Inc P2020E (rev 21)
-> 0000:01:00.0 USB controller: Texas Instruments TUSB73x0 SuperSpeed USB 3.0 xHCI Host Controller (rev 02)
-> 0001:02:00.0 PCI bridge: Freescale Semiconductor Inc P2020E (rev 21)
-> 0001:03:00.0 Network controller: Qualcomm Atheros AR93xx Wireless Network Adapter (rev 01)
-> 0002:04:00.0 PCI bridge: Freescale Semiconductor Inc P2020E (rev 21)
-> 0002:05:00.0 Network controller: Qualcomm Atheros QCA986x/988x 802.11ac Wireless Network Adapter
-> 
-> After that commit on P2020 RDB board are PCI domains 0x8000, 0x9000 and 0xa000.
-> 
-> $ lspci
-> 8000:00:00.0 PCI bridge: Freescale Semiconductor Inc P2020E (rev 21)
-> 8000:01:00.0 USB controller: Texas Instruments TUSB73x0 SuperSpeed USB 3.0 xHCI Host Controller (rev 02)
-> 9000:02:00.0 PCI bridge: Freescale Semiconductor Inc P2020E (rev 21)
-> 9000:03:00.0 Network controller: Qualcomm Atheros AR93xx Wireless Network Adapter (rev 01)
-> a000:04:00.0 PCI bridge: Freescale Semiconductor Inc P2020E (rev 21)
-> a000:05:00.0 Network controller: Qualcomm Atheros QCA986x/988x 802.11ac Wireless Network Adapter
-> 
-> It is somehow strange that PCI domains are not indexed one by one and
-> also that there is no domain 0
-> 
-> With my patch when CONFIG_PPC_PCI_DOMAIN_FROM_OF_REG is not set, then
-> previous behavior used and PCI domains are again 0, 1 and 2.
-> 
->> Usually we don't commit regressions to mainline ...
->>
->>
->>>
->>> Fix this issue by introducing a new option CONFIG_PPC_PCI_DOMAIN_FROM_OF_REG
->>> When this options is disabled then powerpc kernel would assign PCI domains
->>> in the similar way like it is doing kernel for other architectures and also
->>> how it was done prior that commit.
->>
->> You don't define CONFIG_PPC_PCI_DOMAIN_FROM_OF_REG on by default, it 
->> means this commit will change the behaviour. Is that expected ?
->>
->> Is that really worth a user selectable option ? Is the user able to 
->> decide what he needs ?
-> 
-> Well, I hope that maintainers of that code answer to these questions.
-> 
-> In any case, I think that it could be a user selectable option as in
-> that commit is explained that in some situation is makes sense to do
-> PCI domain numbering based on DT reg.
-> 
-> But as I pointed above, upgrading from 4.4 TLS kernel to some new TLS
-> kernel brings above regression, so I think that there should be a way to
-> disable this behavior.
-> 
-> In my opinion, for people who are upgrading from 4.4 TLS kernel, this
-> option should be turned off by default (= do not change behavior). For
-> people who want same behaviour on powerpc as on other platforms, also it
-> should be turned off by default.
-> 
->>>
->>> Fixes: 63a72284b159 ("powerpc/pci: Assign fixed PHB number based on device-tree properties")
->>
->> Is that really a fix ? What is the problem really ?
-> 
-> Problem is that PCI domains were changed in a way that is not compatible
-> neither with version prior that commit and neither with how other linux
-> platforms assign PCI domains for controllers.
-> 
->>> Signed-off-by: Pali Rohár <pali@kernel.org>
->>> ---
->>>   arch/powerpc/Kconfig             | 10 ++++++++++
->>>   arch/powerpc/kernel/pci-common.c |  4 ++--
->>>   2 files changed, 12 insertions(+), 2 deletions(-)
->>>
->>> diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
->>> index 174edabb74fa..4dd3e3acddda 100644
->>> --- a/arch/powerpc/Kconfig
->>> +++ b/arch/powerpc/Kconfig
->>> @@ -375,6 +375,16 @@ config PPC_OF_PLATFORM_PCI
->>>   	depends on PCI
->>>   	depends on PPC64 # not supported on 32 bits yet
->>>   
->>> +config PPC_PCI_DOMAIN_FROM_OF_REG
->>> +	bool "Use OF reg property for PCI domain"
->>> +	depends on PCI
->>
->> Should it depend on PPC_OF_PLATFORM_PCI instead ?
-> 
-> No, PPC_OF_PLATFORM_PCI has line "depends on PPC64 # not supported on 32
-> bits yet". But it is already used also for e.g. P2020 which is 32-bit
-> platform.
-> 
->>> +	help
->>> +	  By default PCI domain for host bridge during its registration is
->>> +	  chosen as the lowest unused PCI domain number.
->>> +
->>> +	  When this option is enabled then PCI domain is determined from
->>> +	  the OF / Device Tree 'reg' property.
->>> +
->>>   config ARCH_SUPPORTS_UPROBES
->>>   	def_bool y
->>>   
->>> diff --git a/arch/powerpc/kernel/pci-common.c b/arch/powerpc/kernel/pci-common.c
->>> index 8bc9cf62cd93..8cb6fc5302ae 100644
->>> --- a/arch/powerpc/kernel/pci-common.c
->>> +++ b/arch/powerpc/kernel/pci-common.c
->>> @@ -74,7 +74,6 @@ void __init set_pci_dma_ops(const struct dma_map_ops *dma_ops)
->>>   static int get_phb_number(struct device_node *dn)
->>>   {
->>>   	int ret, phb_id = -1;
->>> -	u32 prop_32;
->>>   	u64 prop;
->>>   
->>>   	/*
->>> @@ -83,7 +82,8 @@ static int get_phb_number(struct device_node *dn)
->>>   	 * reading "ibm,opal-phbid", only present in OPAL environment.
->>>   	 */
->>>   	ret = of_property_read_u64(dn, "ibm,opal-phbid", &prop);
->>
->> This looks like very specific, it is not reflected in the commit log.
-> 
-> I have not changed nor touched this "ibm,opal-phbid" setting. And it was
-> not also touched in that mentioned patch. I see that no DTS file in
-> kernel use this option (so probably only DTS files supplied by
-> bootloader use it). So I thought that there is not reason to mention in
-> commit message.
-> 
-> But if you think so, I can add some info to commit message about it.
-> 
->>> -	if (ret) {
->>> +	if (ret && IS_ENABLED(CONFIG_PPC_PCI_DOMAIN_FROM_OF_REG)) {
->>> +		u32 prop_32;
->>>   		ret = of_property_read_u32_index(dn, "reg", 1, &prop_32);
->>>   		prop = prop_32;
->>>   	}
-
+>
+>  typedef int (*process_auxtrace_t)(struct perf_tool *tool,
+>                                   struct mmap *map,
+> diff --git a/tools/perf/util/evlist.c b/tools/perf/util/evlist.c
+> index 996bdc203616..25eae096bdac 100644
+> --- a/tools/perf/util/evlist.c
+> +++ b/tools/perf/util/evlist.c
+> @@ -753,10 +753,9 @@ perf_evlist__mmap_cb_idx(struct perf_evlist *_evlist,
+>  {
+>         struct evlist *evlist = container_of(_evlist, struct evlist, core);
+>         struct mmap_params *mp = container_of(_mp, struct mmap_params, core);
+> -       bool per_cpu = !perf_cpu_map__empty(_evlist->user_requested_cpus);
+>         struct evsel *evsel = container_of(_evsel, struct evsel, core);
+>
+> -       auxtrace_mmap_params__set_idx(&mp->auxtrace_mp, evlist, evsel, idx, per_cpu);
+> +       auxtrace_mmap_params__set_idx(&mp->auxtrace_mp, evlist, evsel, idx);
+>  }
+>
+>  static struct perf_mmap*
+> diff --git a/tools/perf/util/mmap.c b/tools/perf/util/mmap.c
+> index de59c4da852b..a4dff881be39 100644
+> --- a/tools/perf/util/mmap.c
+> +++ b/tools/perf/util/mmap.c
+> @@ -63,8 +63,7 @@ void __weak auxtrace_mmap_params__init(struct auxtrace_mmap_params *mp __maybe_u
+>  void __weak auxtrace_mmap_params__set_idx(struct auxtrace_mmap_params *mp __maybe_unused,
+>                                           struct evlist *evlist __maybe_unused,
+>                                           struct evsel *evsel __maybe_unused,
+> -                                         int idx __maybe_unused,
+> -                                         bool per_cpu __maybe_unused)
+> +                                         int idx __maybe_unused)
+>  {
+>  }
+>
+> --
+> 2.25.1
+>

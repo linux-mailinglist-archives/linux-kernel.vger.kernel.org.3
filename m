@@ -2,83 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E465151C42C
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 17:45:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38A3851C42D
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 17:45:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381401AbiEEPso (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 11:48:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38280 "EHLO
+        id S1381416AbiEEPsr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 11:48:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381395AbiEEPsj (ORCPT
+        with ESMTP id S1381396AbiEEPso (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 11:48:39 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2B245A174
-        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 08:44:59 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id p4so5713154edx.0
-        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 08:44:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=1imTbFvxSu0eMtn2Ea7a1QwVSeRsNsaWdQpXFh00o/s=;
-        b=JfpSQd3gaJ+Ed4G9YtnYm6kZ+FIOM5VXR603FG7MY0xIZqMeY7V4l9wEpXstNwsAHP
-         cDfh4ZcNUGOGdlbv+HwQWvDMXX3/9wCujtPuU5aEMRr0agBAlVueTJrufPNjOVTdCUG7
-         eY47+K/EnXB1451xaJMDLF2X/0Wn3e5z2TpVc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=1imTbFvxSu0eMtn2Ea7a1QwVSeRsNsaWdQpXFh00o/s=;
-        b=N8iGrTZ5EF5jKt/8HFXo9Zl/jccerXa7wW1RfLgaLFtCeT+bZHnnnlK4uTq3qsZBDW
-         0JCst2274QGgC6hJxeIo4b/ZEsp0DkVuPyVG/dUfXXBKYEk2D5XA6gpbFvdX9qZedMVl
-         pHA8O3pFrquMXAbxHf/U8RhMWk/Q4p1yi6AnFqgicy0a/wY8MQZtwGEEnrQev4pMJizU
-         65fNLBsZ+XAM/EVaifFBP9bAHL6dGHZ9tHGZVJHgXK3bTu/7PkChlIILzaWXg2Z73Oot
-         HE9UNNg7aHhe4Q9CYrQ8BFaxd8A64NZviqgOaftS5ODjWUGY7iZiAlC5b9R4rPfK4SqX
-         ZVtw==
-X-Gm-Message-State: AOAM530AawMgU3UQzicqdRgy21oOx/SBli7Us9wR1Okc0TsswAham1jh
-        K3bDoLhkuKT1SBHNseb6igZuAzYpZyEBm0YeqmU=
-X-Google-Smtp-Source: ABdhPJzoMZWzr661sUJOWgSiCALsVaKOOoKWPvaeNLUqEs0jwG6WPWf6/grZqeAyCWn0DmUWNzMt0Q==
-X-Received: by 2002:a05:6402:42c3:b0:427:d0e6:77e4 with SMTP id i3-20020a05640242c300b00427d0e677e4mr19692436edc.49.1651765498120;
-        Thu, 05 May 2022 08:44:58 -0700 (PDT)
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com. [209.85.128.52])
-        by smtp.gmail.com with ESMTPSA id v8-20020a50a448000000b0042617ba6394sm963316edb.30.2022.05.05.08.44.55
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 05 May 2022 08:44:55 -0700 (PDT)
-Received: by mail-wm1-f52.google.com with SMTP id k126so2905266wme.2
-        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 08:44:55 -0700 (PDT)
-X-Received: by 2002:a7b:c7c2:0:b0:394:18b:4220 with SMTP id
- z2-20020a7bc7c2000000b00394018b4220mr5628302wmk.118.1651765494778; Thu, 05
- May 2022 08:44:54 -0700 (PDT)
+        Thu, 5 May 2022 11:48:44 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7B146532E2;
+        Thu,  5 May 2022 08:45:03 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B9535106F;
+        Thu,  5 May 2022 08:45:02 -0700 (PDT)
+Received: from FVFF77S0Q05N.cambridge.arm.com (FVFF77S0Q05N.cambridge.arm.com [10.1.38.147])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9F0413F85F;
+        Thu,  5 May 2022 08:45:00 -0700 (PDT)
+Date:   Thu, 5 May 2022 16:44:57 +0100
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Sami Tolvanen <samitolvanen@google.com>
+Cc:     linux-kernel@vger.kernel.org, Kees Cook <keescook@chromium.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Joao Moreira <joao@overdrivepizza.com>,
+        Sedat Dilek <sedat.dilek@gmail.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        linux-hardening@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev
+Subject: Re: [RFC PATCH 09/21] arm64: Add CFI error handling
+Message-ID: <YnPw+SiY9Ij/b7Yg@FVFF77S0Q05N.cambridge.arm.com>
+References: <20220429203644.2868448-1-samitolvanen@google.com>
+ <20220429203644.2868448-10-samitolvanen@google.com>
 MIME-Version: 1.0
-References: <20220426132121.RFC.1.I31ec454f8d4ffce51a7708a8092f8a6f9c929092@changeid>
-In-Reply-To: <20220426132121.RFC.1.I31ec454f8d4ffce51a7708a8092f8a6f9c929092@changeid>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Thu, 5 May 2022 08:44:41 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=XViHtOoQH3fm4yoRcUAkLkf0Wf4zPXUH0Zq5_09tZmjw@mail.gmail.com>
-Message-ID: <CAD=FV=XViHtOoQH3fm4yoRcUAkLkf0Wf4zPXUH0Zq5_09tZmjw@mail.gmail.com>
-Subject: Re: [RFC PATCH] drm/edid: drm_add_modes_noedid() should set lowest
- resolution as preferred
-To:     dri-devel <dri-devel@lists.freedesktop.org>,
-        =?UTF-8?B?VmlsbGUgU3lyasOkbMOk?= <ville.syrjala@linux.intel.com>
-Cc:     Rob Clark <robdclark@gmail.com>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        "Abhinav Kumar (QUIC)" <quic_abhinavk@quicinc.com>,
-        "Kuogee Hsieh (QUIC)" <quic_khsieh@quicinc.com>,
-        "Aravind Venkateswaran (QUIC)" <quic_aravindh@quicinc.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sankeerth Billakanti <quic_sbillaka@quicinc.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220429203644.2868448-10-samitolvanen@google.com>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -87,30 +54,205 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Ville,
+Hi Sami,
 
-On Tue, Apr 26, 2022 at 1:21 PM Douglas Anderson <dianders@chromium.org> wrote:
->
-> If we're unable to read the EDID for a display because it's corrupt /
-> bogus / invalid then we'll add a set of standard modes for the
-> display. When userspace looks at these modes it doesn't really have a
-> good concept for which mode to pick and it'll likely pick the highest
-> resolution one by default. That's probably not ideal because the modes
-> were purely guesses on the part of the Linux kernel.
->
-> Let's instead set 640x480 as the "preferred" mode when we have no EDID.
->
-> Signed-off-by: Douglas Anderson <dianders@chromium.org>
+On Fri, Apr 29, 2022 at 01:36:32PM -0700, Sami Tolvanen wrote:
+> With -fsanitize=kcfi, CFI always traps. Add arm64 support for handling
+> CFI failures and determining the target address.
+> 
+> Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
 > ---
+>  arch/arm64/include/asm/brk-imm.h |  2 ++
+>  arch/arm64/include/asm/insn.h    |  1 +
+>  arch/arm64/kernel/traps.c        | 57 ++++++++++++++++++++++++++++++++
+>  3 files changed, 60 insertions(+)
+> 
+> diff --git a/arch/arm64/include/asm/brk-imm.h b/arch/arm64/include/asm/brk-imm.h
+> index ec7720dbe2c8..3a50b70b4404 100644
+> --- a/arch/arm64/include/asm/brk-imm.h
+> +++ b/arch/arm64/include/asm/brk-imm.h
+> @@ -16,6 +16,7 @@
+>   * 0x400: for dynamic BRK instruction
+>   * 0x401: for compile time BRK instruction
+>   * 0x800: kernel-mode BUG() and WARN() traps
+> + * 0x801: Control-Flow Integrity traps
+>   * 0x9xx: tag-based KASAN trap (allowed values 0x900 - 0x9ff)
+
+As a high-level thing, it would be good if we could agree on some paritioning
+of the BRK immediate space between compiler usage and kernel usage (or have
+some way to ask the compiler to use specific values), so that we can allocate
+values without clashing.
+
+>   */
+>  #define KPROBES_BRK_IMM			0x004
+> @@ -25,6 +26,7 @@
+>  #define KGDB_DYN_DBG_BRK_IMM		0x400
+>  #define KGDB_COMPILED_DBG_BRK_IMM	0x401
+>  #define BUG_BRK_IMM			0x800
+> +#define CFI_BRK_IMM			0x801
+>  #define KASAN_BRK_IMM			0x900
+>  #define KASAN_BRK_MASK			0x0ff
+>  
+> diff --git a/arch/arm64/include/asm/insn.h b/arch/arm64/include/asm/insn.h
+> index 1e5760d567ae..12225bdfa776 100644
+> --- a/arch/arm64/include/asm/insn.h
+> +++ b/arch/arm64/include/asm/insn.h
+> @@ -334,6 +334,7 @@ __AARCH64_INSN_FUNCS(store_pre,	0x3FE00C00, 0x38000C00)
+>  __AARCH64_INSN_FUNCS(load_pre,	0x3FE00C00, 0x38400C00)
+>  __AARCH64_INSN_FUNCS(store_post,	0x3FE00C00, 0x38000400)
+>  __AARCH64_INSN_FUNCS(load_post,	0x3FE00C00, 0x38400400)
+> +__AARCH64_INSN_FUNCS(ldur,	0x3FE00C00, 0x38400000)
+>  __AARCH64_INSN_FUNCS(str_reg,	0x3FE0EC00, 0x38206800)
+>  __AARCH64_INSN_FUNCS(ldadd,	0x3F20FC00, 0x38200000)
+>  __AARCH64_INSN_FUNCS(ldclr,	0x3F20FC00, 0x38201000)
+> diff --git a/arch/arm64/kernel/traps.c b/arch/arm64/kernel/traps.c
+> index 0529fd57567e..b524411ba663 100644
+> --- a/arch/arm64/kernel/traps.c
+> +++ b/arch/arm64/kernel/traps.c
+> @@ -26,6 +26,7 @@
+>  #include <linux/syscalls.h>
+>  #include <linux/mm_types.h>
+>  #include <linux/kasan.h>
+> +#include <linux/cfi.h>
+>  
+>  #include <asm/atomic.h>
+>  #include <asm/bug.h>
+> @@ -990,6 +991,55 @@ static struct break_hook bug_break_hook = {
+>  	.imm = BUG_BRK_IMM,
+>  };
+>  
+> +#ifdef CONFIG_CFI_CLANG
+> +void *arch_get_cfi_target(unsigned long addr, struct pt_regs *regs)
+> +{
+> +	/* The expected CFI check instruction sequence:
+> +	 *   ldur    wA, [xN, #-4]
+> +	 *   movk    wB, #nnnnn
+> +	 *   movk    wB, #nnnnn, lsl #16
+> +	 *   cmp     wA, wB
+> +	 *   b.eq    .Ltmp1
+> +	 *   brk     #0x801		; <- addr
+> +	 *   .Ltmp1:
+> +	 *
+> +	 * Therefore, the target address is in the xN register, which we can
+> +	 * decode from the ldur instruction.
+> +	 */
+> +	u32 insn, rn;
+> +	void *p = (void *)(addr - 5 * AARCH64_INSN_SIZE);
+
+It would be a bit nicer if we could encode the register index into the BRK
+immediate, i.e. allocate a range of 32 immediates (or 31 given BLR XZR is
+nonsensical), and have:
+
+	BRK #CFI_BRK_IMM + n
+
+... where `n` is the Xn index.
+
+That way the kernel doesn't need to know the specific code sequence and
+wouldn't have to decode the instruction to find the relevant register -- we
+could determine that from the ESR alone. That would also avoid tying the
+compiler into a specific code sequence, and would allow that to change.
+
+Since the BRK immediate is 16 bits, we have enough space to also encode the
+index of the wB register, which would allow the kernel's BRK handler to recover
+and log the expected type value and the the value at the target of the branch
+(that latter we can recover from xN, so we don't need wA to be encoded into the
+immediate).
+
+With that, the handler can be something like:
+
+| #define CFI_BRK_IMM_TARGET	GENMASK(4,0)
+| #define CFI_BRK_IMM_TYPE	GENMASK(9,5)
+| 
+| #define CFI_BRK_IMM_BASE	0x8000
+| #define CFI_BRK_IMM_MASK	(CFI_BRK_IMM_TARGET | CFI_BRK_IMM_TYPE)
+| 
+| static int cfi_handler(struct pt_regs *regs, unsigned long esr)
+| {
+| 	int reg_target, reg_type;
+| 	unsigned long target, type;
+| 
+| 	reg_target = FIELD_GET(esr, BRK_CFI_IMM_TARGET);
+| 	target = pt_regs_read(regs, reg_target);
+| 	
+| 	reg_type = FIELD_GET(esr, BRK_CFI_IMM_TYPE);
+| 	type = pt_regs_read(regs, reg_type);
+| 
+| 	report_cfi_failure(regs,		// regs
+| 			   regs->pc,		// BRK address
+| 			   target,		// branch target
+| 			   type);		// expected type
+| 
+| 	// TODO: switch over the return value of report_cfi_failure()
+| }
+| 
+| struct break_hook cfi_break_hook = {
+| 	.fn = cfi_handler,
+| 	.imm = CFI_BRK_IMM_BASE,
+| 	.mask = CFI_BRK_IMM_MASK,
+| };
+
+... does the compiler side of that sound possible?
+
+Thanks,
+Mark.
+
 >
->  drivers/gpu/drm/drm_edid.c | 9 +++++++++
->  1 file changed, 9 insertions(+)
-
-Someone suggested that you might have an opinion on this patch and
-another one I posted recently [1]. Do you have any thoughts on it?
-Just to be clear: I'm hoping to land _both_ this patch and [1]. If you
-don't have an opinion, that's OK too.
-
-[1] https://lore.kernel.org/r/20220426114627.2.I4ac7f55aa446699f8c200a23c10463256f6f439f@changeid
-
--Doug
+> +
+> +	if (aarch64_insn_read(p, &insn) || !aarch64_insn_is_ldur(insn))
+> +		return NULL;
+> +
+> +	rn = aarch64_insn_decode_register(AARCH64_INSN_REGTYPE_RN, insn);
+> +	return (void *)regs->regs[rn];
+> +}
+> +
+> +static int cfi_handler(struct pt_regs *regs, unsigned int esr)
+> +{
+> +	switch (report_cfi(regs->pc, regs)) {
+> +	case BUG_TRAP_TYPE_BUG:
+> +		die("Oops - CFI", regs, 0);
+> +		break;
+> +
+> +	case BUG_TRAP_TYPE_WARN:
+> +		break;
+> +
+> +	default:
+> +		return DBG_HOOK_ERROR;
+> +	}
+> +
+> +	arm64_skip_faulting_instruction(regs, AARCH64_INSN_SIZE);
+> +	return DBG_HOOK_HANDLED;
+> +}
+> +
+> +static struct break_hook cfi_break_hook = {
+> +	.fn = cfi_handler,
+> +	.imm = CFI_BRK_IMM,
+> +};
+> +#endif /* CONFIG_CFI_CLANG */
+> +
+>  static int reserved_fault_handler(struct pt_regs *regs, unsigned int esr)
+>  {
+>  	pr_err("%s generated an invalid instruction at %pS!\n",
+> @@ -1063,6 +1113,10 @@ int __init early_brk64(unsigned long addr, unsigned int esr,
+>  
+>  	if ((comment & ~KASAN_BRK_MASK) == KASAN_BRK_IMM)
+>  		return kasan_handler(regs, esr) != DBG_HOOK_HANDLED;
+> +#endif
+> +#ifdef CONFIG_CFI_CLANG
+> +	if ((esr & ESR_ELx_BRK64_ISS_COMMENT_MASK) == CFI_BRK_IMM)
+> +		return cfi_handler(regs, esr) != DBG_HOOK_HANDLED;
+>  #endif
+>  	return bug_handler(regs, esr) != DBG_HOOK_HANDLED;
+>  }
+> @@ -1070,6 +1124,9 @@ int __init early_brk64(unsigned long addr, unsigned int esr,
+>  void __init trap_init(void)
+>  {
+>  	register_kernel_break_hook(&bug_break_hook);
+> +#ifdef CONFIG_CFI_CLANG
+> +	register_kernel_break_hook(&cfi_break_hook);
+> +#endif
+>  	register_kernel_break_hook(&fault_break_hook);
+>  #ifdef CONFIG_KASAN_SW_TAGS
+>  	register_kernel_break_hook(&kasan_break_hook);
+> -- 
+> 2.36.0.464.gb9c8b46e94-goog
+> 

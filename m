@@ -2,75 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFAD851C89B
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 20:59:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEF4051C8A1
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 21:04:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384340AbiEETDa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 15:03:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50554 "EHLO
+        id S239684AbiEETHg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 15:07:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232999AbiEETD2 (ORCPT
+        with ESMTP id S232999AbiEETHZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 15:03:28 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0E263B294
-        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 11:59:47 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id e24so5015521pjt.2
-        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 11:59:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=wCpcowAM0vgqZbW/i6EGm8F/PqCUq6WSEgcBbHIctY4=;
-        b=FOSXdjwYY+3UTCbqzQzs8mkttYPpNGGb3NsqLtj2FIpdNh229+ezVOtprB0pVomaBu
-         LhTzaZ61Qk34BrFxfxYqLmmRO9JWDClk4DCjqUrc2LEUsDvfmTswOiSz2LyoJ5Dp3u97
-         snYFyrOeJO7jQ3B9MjdPqbD2sTXGVDHR/9AWgLOXUTp1bC51K0EulSHD5CCFdpe7YrIJ
-         RGgmjTQDUciMcPbv7Wzt04lj63OzR76uOKzSynHm0DhFtUpkJSz1Q4s35X5AEnkOzjVX
-         gFndHrhoZBiMkxoShqR7Go9aMkXNlV0kxxYW58+FgstzVQockUc6ShkJy9S/2HIWRjMf
-         qSDQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=wCpcowAM0vgqZbW/i6EGm8F/PqCUq6WSEgcBbHIctY4=;
-        b=ntnY7s8qvsvjc1SlcZ6IaEoqta27hYTBEgKnLs+HfDaAFxOZDPoqAKvx3yhpXKMh2p
-         L4xtIkfyyruJrjYSvkIeOtkhDU9dV39mQIYth+RcXh32HyGfHlN+nY30DhpNhoPm3y3Q
-         NBHrMVWdqEZLmLbdmiBAmgNwZkNJJabv14FUd7z/+THr4Uyy0Y8bUtc6rJcIbJ+736CG
-         F/LNKfNusK+dK99GwsgFrQLPURBBUJVGUIJmne40gSHVXnL/KphCxxFLHm2KvDaVtmSo
-         yZPe7N6lqM4r1oO2jjNVAcQfse1USOvnVXHzB7eO+nGkV+Ou054uPLP47NnQCrRPTHHb
-         ob4A==
-X-Gm-Message-State: AOAM533q1+ey/2xt/9nR1I0OFasqSXaIKSqUqRLj03Rajioj6xAxhy0G
-        2hiKudCOeCCXs8D0UrBdl8pwPw==
-X-Google-Smtp-Source: ABdhPJwZksnVYlCSOf2n+0LS5XsuLxFB4fgJlq9S9y1eaaO5qNII/YpHSP8iYdd3sdvhKq1kPEUYig==
-X-Received: by 2002:a17:90b:4398:b0:1dc:7edf:c92a with SMTP id in24-20020a17090b439800b001dc7edfc92amr7888739pjb.136.1651777186947;
-        Thu, 05 May 2022 11:59:46 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id h125-20020a625383000000b0050dc76281dfsm1690853pfb.185.2022.05.05.11.59.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 May 2022 11:59:46 -0700 (PDT)
-Date:   Thu, 5 May 2022 18:59:43 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Ben Gardon <bgardon@google.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Peter Xu <peterx@redhat.com>,
-        David Matlack <dmatlack@google.com>,
-        Jim Mattson <jmattson@google.com>,
-        David Dunn <daviddunn@google.com>,
-        Jing Zhang <jingzhangos@google.com>,
-        Junaid Shahid <junaids@google.com>
-Subject: Re: [PATCH v7 06/11] KVM: selftests: Add NX huge pages test
-Message-ID: <YnQen5rO3t/2WiLi@google.com>
-References: <20220503183045.978509-1-bgardon@google.com>
- <20220503183045.978509-7-bgardon@google.com>
+        Thu, 5 May 2022 15:07:25 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2053.outbound.protection.outlook.com [40.107.92.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C4624B848;
+        Thu,  5 May 2022 12:03:41 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=VGYNxofcw3Zx8C/6nbhsbj3Xp+KBHGg7Mugwxope9dS7NiG35XQoUneQmEZwI7Jf123g/zYOzDvf8nJWvCsUUD19Asx6QawxLQFt+lSaNcPbdK0caKfQWNmbx0ow6q+3IzUdJDz2/VM4r3f1MV2Nw5tgVJf4MObzDjqPA0CP/KfxrlWzLf20adyZk3bXesQp/owPz/d5rZR3BCz2YBgwUDo90LplMJeuK2kDHFM++Jzn/asB09CeHpqs5dbiUInDkwmb5IYwDmoWaEZWF42ovgJmSkX9OmDHpgRITk+Hp0SSwntBmQn3gMGK47yGYqvktV/coLkEuehe2MlbaNX0oA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=lGPBcykiPLPirqHjHv8uX9ENA4sFwunJm68qHM5gtjA=;
+ b=ZJvDgiJ61X5cXZS7VitLb5+PqdrJSfVFjPdorPMk5TtCK1f5sYn2td6Mqz4IeeMh96m6s7dnPFsB6MzvqawhMimyS6mVWyt5vlcVm8K26mHm62t3xkIPaFs0pjSiQ2YnzcpT30qw1f0LMZcO7hibWV2hipONSMewFfSJLsV4q3M+SZJ/BiE5NEbVYkAVy0Q/VbMwRMicuhWZY8KSvLbFu/zfVIKlC1DvpVOcteiDGcEd5ynF94M+8waXypXIiZh8wvn5wYFrtUXHSSfPUO8BTGhgOA25TwN+8olxBnyQ2pr5oiDUJHQpVzLr9YhwE5yRmHS1TfjlhPuIXdyN31mDoQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=lGPBcykiPLPirqHjHv8uX9ENA4sFwunJm68qHM5gtjA=;
+ b=aSXx5fUDMTU9uBp8MsUdnOrnfzFq6BxtbMsfZ+MYJtK+gz8tL1KKgQIDA7Oy1xx16ieve1AAIUCyRycNECEvw3tA4f+0HC/CLBcMgg2raiPI8T4/GAqkUYp+yCtRzbONRDqJ+A5aDyGDyaj/oNIsp1654zRLWDhYObfFnUqNNJE=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BYAPR12MB2869.namprd12.prod.outlook.com (2603:10b6:a03:132::30)
+ by CH2PR12MB5004.namprd12.prod.outlook.com (2603:10b6:610:62::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5206.24; Thu, 5 May
+ 2022 19:03:38 +0000
+Received: from BYAPR12MB2869.namprd12.prod.outlook.com
+ ([fe80::c4e5:68d5:f7a5:7680]) by BYAPR12MB2869.namprd12.prod.outlook.com
+ ([fe80::c4e5:68d5:f7a5:7680%7]) with mapi id 15.20.5186.028; Thu, 5 May 2022
+ 19:03:38 +0000
+Message-ID: <f6d7de83-2054-89ab-98a8-b6ada3e6e166@amd.com>
+Date:   Thu, 5 May 2022 12:03:36 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v4 1/2] x86/mce: Check for writes ignored in MCA_STATUS
+ register
+Content-Language: en-US
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     x86@kernel.org, linux-edac@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Tony Luck <tony.luck@intel.com>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Yazen Ghannam <yazen.ghannam@amd.com>
+References: <20220214233640.70510-1-Smita.KoralahalliChannabasappa@amd.com>
+ <20220214233640.70510-2-Smita.KoralahalliChannabasappa@amd.com>
+ <Yk267A1MKOo2AlXQ@zn.tnic> <6cda2827-af75-589d-3e43-a287d6683e7a@amd.com>
+ <Yl/PupT3bAfc4IBW@zn.tnic> <5512261e-085b-65fa-605b-38692769f89c@amd.com>
+ <YmXQBbCz2T/Opv5+@zn.tnic> <3fd01af5-c665-6dbb-4ed4-dfc39109d63a@amd.com>
+ <YnGbHcMkLCsauzXF@zn.tnic>
+From:   Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
+In-Reply-To: <YnGbHcMkLCsauzXF@zn.tnic>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SJ0PR03CA0207.namprd03.prod.outlook.com
+ (2603:10b6:a03:2ef::32) To BYAPR12MB2869.namprd12.prod.outlook.com
+ (2603:10b6:a03:132::30)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220503183045.978509-7-bgardon@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: d94684fb-fe4a-4bb4-9938-08da2ec9f638
+X-MS-TrafficTypeDiagnostic: CH2PR12MB5004:EE_
+X-Microsoft-Antispam-PRVS: <CH2PR12MB50045317346930D59D0085E090C29@CH2PR12MB5004.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: O99DOxvZ/jEa9A6JDLbgXLM6p6GScx5jF8Yj9/DlJdcVe+4oG5U/ScmDK2eAD5VYCdUmCPrZ2w8yKp/XFBi1hZWbMvYo7MlFmoH9DfxZQxrzQWXdZ9e/LhKuj/WODbePTjwe4yWdvdjWJg+vdWafItvBmikp0e0qOaMFBK+35Hnx6b1FkujfEFDQe2fVPpybDwgFBm9JQ3DPhilcKag6Pc3lfjTEk7sK4Q2avVwmqOVkvP717eELuCvK0DkTMd8bT5YIvguDLSE0zHHP9bgA8ojS47um8utwyx4ykI0eTFoG7mv52YJlVrNvsyvTw2iZ+Qo9yL3OG2nwFtfVtQxBmOl+jiJIRLO7q/ujTAFUYec4iqB9QXI2gdcX0BgvU9TRV0gA375k0tIh419YfG86izNc2rnvGStVwEbtA6fdah+6XfRrG3PX3GOrxNAZpHqWohHI9Dc7jjE+2RuuQHte3Z9QPLG2rB8iRGY6dt/7JizvTsdWc3JtbuK2JQ1wvhbyyTzvL2f0/im+KSdpp9pm4Mf38ymbTeJq3vd9iC97da3HIck0+Tj8WDe2CL9NdwXPZj6w4AHSvHf7rlB3EUGgt7y2MehXMWmjpG9hUT4E0Grydqmb6G83HvUoucu2VOsnm/LdwT1EfpFIjCox2dEc1dSKujSPv5WSCoDQkGo5D35beM6FsL6ZO6AKoq+mnKj8IPNlBj1sDGH3eMBPJXOPAD9oAS3MgovwafkBO8XQaKi3O+bl03a7Nm9RIfOs/mLz
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB2869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(316002)(2906002)(6486002)(5660300002)(8936002)(186003)(6506007)(54906003)(31686004)(6916009)(508600001)(53546011)(6512007)(86362001)(38100700002)(2616005)(31696002)(83380400001)(4326008)(36756003)(8676002)(66946007)(66556008)(66476007)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 2
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?R2x0aWdzc1hoWXo0NXAxdjQ5Mmc0YkFINmcxU3plYjVQcVI3Z0dUUE5jQlpG?=
+ =?utf-8?B?bDc2clFINURydmFBQmYxZVo1Sk4xbkNuajVSTGdtSUR1UkhuMlk1by9LVE5S?=
+ =?utf-8?B?SjNIcSs1NG1Sdm5WbWg0R0ltL1ZpUWZFNi9vazAxRnN0cDcvYThLKzV0REJT?=
+ =?utf-8?B?d2tzeUh4a3RvRENuYlQ0QTZ2UmI3TzdhbldqMnp6amQ3OFV0KzIrV053T0VV?=
+ =?utf-8?B?bWJ1eXhqdVJUdkMvbW1TKzVvRmFWVEVhNkxiM0JlTzFLc2hOVldMT2Y5TnBW?=
+ =?utf-8?B?T1pGQzduMnQzQi9YaWZIR1N2MXdndUZhRjVjOExvWTdsTzlpWTZmc1dCWlJY?=
+ =?utf-8?B?TG5iZ2Rhc25tbWJNNWIzQnNaOFRjNGl1U0hxbkgwaWtUeFBmRUFyMml3K1Fs?=
+ =?utf-8?B?dWNvbldIcUVKQUpQQmFqeGw1WDdxdU90NXBMY3NnUUJvaHdPNytoUWloNmNn?=
+ =?utf-8?B?bndrNW5DYXc0WE16N2h6bk4wMDRmbFZxTmNqdkJwQ2w4Y0VySXFHNkl3bjRq?=
+ =?utf-8?B?eWl0eTF1OTdJTG1lTlN4RFFXTzR1a2oyeHdURkdxRUpBc2MrM2JSZFl0Yjhr?=
+ =?utf-8?B?OGV0Y2pMM1h4K2UyNmwxbzdUL0lFTzU2ZjJOdi9UOTM2SjhOVy95ZVprS0lG?=
+ =?utf-8?B?Y2o4a2pWNkFab0hJVldXcnBrUjNHT3Z2NXc0R0lUSVpxelhhZUR0TnA3TlN3?=
+ =?utf-8?B?VnFmZkQrN2JJcUxBdmJXaVRQeVMyRlJWUmpOR0hYS0xKUHhndmROcHp1dGtY?=
+ =?utf-8?B?RElCSmNwM09YbUU3d1ZhcTMwcEZhaVBiQVcra3p5VUFOejVRb3ZTZkVHdytr?=
+ =?utf-8?B?N1FjUnM1TG12bmsyM2wwY29XVit6OGsxcDFBd1VRYUp3WUd5YlJieGdPWHc0?=
+ =?utf-8?B?QUc5dk0waHZ6R21PMTBNUTgvRGFITEJkcUpsbVlTbzY2UmIzalp3MmxIc2dr?=
+ =?utf-8?B?YWR4cFZXVENOVkdaN09qbWFsT3B6UXluQm1EU3lTWFI0VSthdGdLaHNxMjVY?=
+ =?utf-8?B?bUN2WDRYN2JWcUE3ZWp1UnEvL0svNUl0RmtJSmNSVzA4RnlEM3dQTTB2bC9H?=
+ =?utf-8?B?aFlJQWdtN3VPSmIvMVIxK1pYZVpQVjdHd2dxY0FuMklqNGsrV1IxQXJBck9V?=
+ =?utf-8?B?TGtzamk1ZTR0Z3RYY3NDeUV4MFoyNDVjYTBFNmhVV0psVXRTamw0RTBVZlNR?=
+ =?utf-8?B?MUhyUE1xZGEzU3JrKzVtamVTM0x4cFhRR0VBSml1Vkdjc1N1SFdqWG92dTV2?=
+ =?utf-8?B?VW9WTURGTlBpRUlFU0NjR0JKR3p0dzlNK3FDMVNmT2ZsVWZwdHQxOUEreGNV?=
+ =?utf-8?B?Slp3aHQ0bEFEMUYxVFdOUkZxdW5wQUpvc2s4YnVyaGhQS0lZbUlMOGJKaDdy?=
+ =?utf-8?B?RWJyT3M2ZEM1eE9TNkFZSld5ZTh2T21HWmQ2SkJiSG1UR2hzLzJEcjFIN1hs?=
+ =?utf-8?B?akFmT09WM3JEUXI5RWp2bWJBY1I0dzhXM01ubmNrYzlubjJJVmRkeXcyOTI1?=
+ =?utf-8?B?Z1BQWkFEOU1OeENYVzU3TTV4ZnJTblJhODBhUkZXSml3RDZUcklRejhRWWl2?=
+ =?utf-8?B?dDhEL0h4dDFEUnB2U2t3MUliOXpiRmJyUkMwQVFlakxDUGIvdFVDNG1HVzgx?=
+ =?utf-8?B?ekh5LzI1eHFxb0krMThwZzROblVBUXVPcFllVjd1K0l6QkZDSEMrQ2cyMTZj?=
+ =?utf-8?B?M0FmVm1nNHFOUE5HbFZFMis2dlcvbEk4amFpVFpHTE1pSldhbmZFdVRVQ3FK?=
+ =?utf-8?B?a1RmTm1jSW1sUnpGRzV5d05LZ2dGaW54MlNkbk5jQi9sNmNMMWtRVUF3SDZs?=
+ =?utf-8?B?NXJETlpZRjZxKzJOcTRsM3I4bWt4M05zVEg5emRSRWlkTWp0cUVaOHduazhU?=
+ =?utf-8?B?b1dDa3dqc3lHQUpwTU95RGlmM2VGSHI0WjFNTnFmZjZKSlk2bStTSW1vVm5z?=
+ =?utf-8?B?UUM4UFdDeFZYcER5Z3pvME5NdEtWMDJ0TFhValZiWnEwWllZQ2VlSkZqT2N6?=
+ =?utf-8?B?d2lrRERGQTdOVnJaV1gzbmJaeW5qL3NUaEtzSXpRZVBUQU1rNm9JeDVtS2JL?=
+ =?utf-8?B?RFFRUzFRQWVqSTZHa1NxZzZud0xWeXVLUUh6NG83UmZSRzNhRktNbVhMdmIv?=
+ =?utf-8?B?Y0NhWjYweTNnaDd0dW9nRkYxM0d2WndUNXlzNGRTQzIzRmoxaHVqY3pQK2g0?=
+ =?utf-8?B?SW42UXJQQ2dMbmdRbzVpVWdCM0FxL3B5bzVjbldJTVJJZ0U3eUxIY1ZqbVVr?=
+ =?utf-8?B?YllIZlVZREEreFRyL2h5RzRTYWNXb1ZNMVE2blVwdXp3RCsya1lidVcrdzFn?=
+ =?utf-8?B?VUxMK2lZR0NHNno0MGFhOWtRcWowbHRYL0tQdEVCWFl1SitaWHVudk5uazFm?=
+ =?utf-8?Q?H2SKHN25TfJZgC7rBMvT0PDqOv69r1PjWaqDFjALUUOoC?=
+X-MS-Exchange-AntiSpam-MessageData-1: IHujF9yS47BrOg==
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d94684fb-fe4a-4bb4-9938-08da2ec9f638
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB2869.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 May 2022 19:03:38.2742
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: HArtXRyrdnZ90eW3iZ9cDXsNt9NKXvMc1R7+tbqUG2JuFWYmV5ASALND+DO0TOaVxBr0kIlF5g4EFxnK69Ma1Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB5004
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,349 +138,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 03, 2022, Ben Gardon wrote:
-> There's currently no test coverage of NX hugepages in KVM selftests, so
-> add a basic test to ensure that the feature works as intended.
+On 5/3/2022 2:14 PM, Borislav Petkov wrote:
+> On Mon, May 02, 2022 at 08:28:47PM -0700, Smita Koralahalli wrote:
+>> I'm bit more inclined towards your previous approach of
+>> hw_injection_possible
+>> check in do_inject(). This seems better than doing it in flags_write().
+> If you don't do it in flags_write() then the user would do
+>
+>     echo "hw" > flags
+>
+> the command will succeed and the user will think that hw injection is
+> possible and then wonder why it fails later.
+That's right!
+>
+> I even actually think that in the first run, when hw_injection_possible
+> is not determined yet, you should try to poke at MCi_STATUS of some
+> non-reserved bank - and we enumerate which those are at boot in
+> __mcheck_cpu_check_banks(), so you can pick a random, non-RAZ bank, save
+> its MCi_STATUS, try to write it and if it succeeds, restore it.
+>
+> This way you'll determine whether hw injection is possible, store it
+> in the static hw_injection_possible and then query only that variable.
+> I.e., you'll have to poke that MCi_STATUS only once on driver init.
 
-Please describe how the test actually validates the feature, here and/or as a
-file comment.  Doesn't have to be super detailed, but people shouldn't have to
-read the code just to understand that the test uses stats to verify the KVM is
-(or isn't) splitting pages as expected.
+Okay I agree too. I will work on this.
 
-> Reviewed-by: David Matlack <dmatlack@google.com>
-> Signed-off-by: Ben Gardon <bgardon@google.com>
-> ---
->  tools/testing/selftests/kvm/Makefile          |  10 +
->  .../selftests/kvm/include/kvm_util_base.h     |   1 +
->  tools/testing/selftests/kvm/lib/kvm_util.c    |  80 ++++++++
->  .../selftests/kvm/x86_64/nx_huge_pages_test.c | 180 ++++++++++++++++++
->  .../kvm/x86_64/nx_huge_pages_test.sh          |  36 ++++
+Thanks,
+Smita
+>   And
+> this way it'll be the most optimal, methinks.
+>
+> Thx.
+>
 
-Test needs to be added to .gitignore.
-
->  5 files changed, 307 insertions(+)
->  create mode 100644 tools/testing/selftests/kvm/x86_64/nx_huge_pages_test.c
->  create mode 100755 tools/testing/selftests/kvm/x86_64/nx_huge_pages_test.sh
-
-...
-
-> + * Input Args:
-> + *   vm - the VM for which the stat should be read
-> + *   stat_name - the name of the stat to read
-> + *   max_elements - the maximum number of 8-byte values to read into data
-> + *
-> + * Output Args:
-> + *   data - the buffer into which stat data should be read
-> + *
-> + * Return:
-> + *   The number of data elements read into data or -ERRNO on error.
-> + *
-> + * Read the data values of a specified stat from the binary stats interface.
-> + */
-> +static int __vm_get_stat(struct kvm_vm *vm, const char *stat_name,
-> +			 uint64_t *data, ssize_t max_elements)
-> +{
-> +	struct kvm_stats_desc *stats_desc;
-> +	struct kvm_stats_header header;
-> +	struct kvm_stats_desc *desc;
-> +	size_t size_desc;
-> +	int stats_fd;
-> +	int ret = -EINVAL;
-> +	int i;
-> +
-> +	stats_fd = vm_get_stats_fd(vm);
-> +
-> +	read_stats_header(stats_fd, &header);
-> +
-> +	stats_desc = read_stats_desc(stats_fd, &header);
-> +
-> +	size_desc = sizeof(struct kvm_stats_desc) + header.name_size;
-> +
-> +	/* Read kvm stats data one by one */
-
-Bad copy+paste.  This doesn't read every stat, it reads only the specified stat.
-
-> +	for (i = 0; i < header.num_desc; ++i) {
-> +		desc = (void *)stats_desc + (i * size_desc);
-
-		desc = get_stats_descriptor(vm->stats_desc, i, vm->stats_header);
-
-> +
-> +		if (strcmp(desc->name, stat_name))
-> +			continue;
-> +
-> +		ret = read_stat_data(stats_fd, &header, desc, data,
-> +				     max_elements);
-> +
-> +		break;
-> +	}
-> +
-> +	free(stats_desc);
-> +	close(stats_fd);
-> +	return ret;
-> +}
-> +
-> +/*
-> + * Read the value of the named stat
-> + *
-> + * Input Args:
-> + *   vm - the VM for which the stat should be read
-> + *   stat_name - the name of the stat to read
-> + *
-> + * Output Args: None
-> + *
-> + * Return:
-> + *   The value of the stat
-> + *
-> + * Reads the value of the named stat through the binary stat interface. If
-> + * the named stat has multiple data elements, only the first will be returned.
-> + */
-> +uint64_t vm_get_stat(struct kvm_vm *vm, const char *stat_name)
-
-One read_stat_data() doesn't return an int, this can be inlined.  Yeah, it'll
-expose __vm_get_stat(), but IMO there's no point in having __vm_get_stat() unless
-it's exposed.  At that point, drop the function comment and defer to the inner
-helper for that detailed info (or even drop it entirely).
-
-> +{
-> +	uint64_t data;
-> +	int ret;
-> +
-> +	ret = __vm_get_stat(vm, stat_name, &data, 1);
-> +	TEST_ASSERT(ret == 1,
-> +		    "Stat %s expected to have 1 element, but %d returned",
-> +		    stat_name, ret);
-> +	return data;
-> +}
-> diff --git a/tools/testing/selftests/kvm/x86_64/nx_huge_pages_test.c b/tools/testing/selftests/kvm/x86_64/nx_huge_pages_test.c
-> new file mode 100644
-> index 000000000000..238a6047791c
-> --- /dev/null
-> +++ b/tools/testing/selftests/kvm/x86_64/nx_huge_pages_test.c
-> @@ -0,0 +1,180 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * tools/testing/selftests/kvm/nx_huge_page_test.c
-> + *
-> + * Usage: to be run via nx_huge_page_test.sh, which does the necessary
-> + * environment setup and teardown
-> + *
-> + * Copyright (C) 2022, Google LLC.
-> + */
-> +
-> +#define _GNU_SOURCE
-> +
-> +#include <fcntl.h>
-> +#include <stdint.h>
-> +#include <time.h>
-> +
-> +#include <test_util.h>
-> +#include "kvm_util.h"
-> +
-> +#define HPAGE_SLOT		10
-> +#define HPAGE_GVA		(23*1024*1024)
-> +#define HPAGE_GPA		(10*1024*1024)
-
-Is there any special meaning behind the addresses?  If not, IMO it's safer to
-define the GPA to be 4gb, that way there's no chance of this colliding with
-memslot0 created by the framework.  10mb (if my math isn't terrible) isn't all
-that high.  And unless the GPA and GVA need to be different for some reason, just
-identity map them.
-
-> +#define HPAGE_SLOT_NPAGES	(512 * 3)
-> +#define PAGE_SIZE		4096
-
-commit e852be8b148e ("kvm: selftests: introduce and use more page size-related constants")
-in kvm/master defines PAGE_SIZE.  I bring that up, because rather than open code
-the "512" math in multiple places, I would much rather do something like
-
-#define PAGE_SIZE_2MB		(PAGE_SIZE * 512)
-
-or whatever, and then use that.
-
-> +
-> +/*
-> + * Passed by nx_huge_pages_test.sh to provide an easy warning if this test is
-> + * being run without it.
-> + */
-> +#define MAGIC_TOKEN 887563923
-> +
-> +/*
-> + * x86 opcode for the return instruction. Used to call into, and then
-> + * immediately return from, memory backed with hugepages.
-> + */
-> +#define RETURN_OPCODE 0xC3
-> +
-> +/*
-> + * Exit the VM after each memory access so that the userspace component of the
-> + * test can make assertions about the pages backing the VM.
-> + *
-> + * See the below for an explanation of how each access should affect the
-> + * backing mappings.
-> + */
-> +void guest_code(void)
-> +{
-> +	uint64_t hpage_1 = HPAGE_GVA;
-> +	uint64_t hpage_2 = hpage_1 + (PAGE_SIZE * 512);
-> +	uint64_t hpage_3 = hpage_2 + (PAGE_SIZE * 512);
-> +
-> +	READ_ONCE(*(uint64_t *)hpage_1);
-> +	GUEST_SYNC(1);
-> +
-> +	READ_ONCE(*(uint64_t *)hpage_2);
-> +	GUEST_SYNC(2);
-> +
-> +	((void (*)(void)) hpage_1)();
-
-LOL, nice.  It'd be very, very helpful for readers to add a helper for this, e.g.
-
-static guest_do_CALL(void *target)
-{
-	((void (*)(void)) target)();
-}
-
-and then the usage should be a little more obvious.
-
-	guest_do_CALL(hpage_1);
-
-> +	GUEST_SYNC(3);
-> +
-> +	((void (*)(void)) hpage_3)();
-> +	GUEST_SYNC(4);
-> +
-> +	READ_ONCE(*(uint64_t *)hpage_1);
-> +	GUEST_SYNC(5);
-> +
-> +	READ_ONCE(*(uint64_t *)hpage_3);
-> +	GUEST_SYNC(6);
-> +}
-
-...
-
-> +int main(int argc, char **argv)
-> +{
-> +       struct kvm_vm *vm;
-> +       struct timespec ts;
-> +       void *hva;
-> +
-> +       if (argc != 2 || strtol(argv[1], NULL, 0) != MAGIC_TOKEN) {
-
-Since this will take multiple params, I think it makes senes to skip on:
-
-	if (argc < 2 || strtol(argv[1], NULL, 0) != MAGIC_TOKEN) {
-
-And the error out on the remaining params.
-
-> +               printf("This test must be run through nx_huge_pages_test.sh");
-
-Needs a newline at the end.  Even better, just use print_skip().  And I strongly
-prefer that the skip message complain about not getting the correct magic token,
-not about the script.  It's totally valid to run the test without the script.
-I think it's a good idea to provide a redirect to the script, but yell about the
-magic token first.
-
-> +               return KSFT_SKIP;
-> +       }
-
-...
-
-> +	hva = addr_gpa2hva(vm, HPAGE_GPA);
-> +	memset(hva, RETURN_OPCODE, HPAGE_SLOT_NPAGES * PAGE_SIZE);
-
-Heh, no need to set the entire page, only the first byte needs to be written.  If
-you're going for paranoia, write 0xcc to the entire slot and then write only the
-first byte to RET.
-
-> +	/*
-> +	 * Give recovery thread time to run. The wrapper script sets
-> +	 * recovery_period_ms to 100, so wait 5x that.
-> +	 */
-> +	ts.tv_sec = 0;
-> +	ts.tv_nsec = 500000000;
-> +	nanosleep(&ts, NULL);
-
-Please pass in the configured nx_huge_pages_recovery_period_ms, or alternatively
-read it from within the test.  I assume the test will fail if the period is too
-low, so some sanity checks are likely in order.  It'll be unfortunate if someone
-changes the script and forgets to update the test.
-
-> +
-> +	/*
-> +	 * Now that the reclaimer has run, all the split pages should be gone.
-> +	 */
-> +	check_2m_page_count(vm, 1);
-> +	check_split_count(vm, 0);
-> +
-> +	/*
-> +	 * The 4k mapping on hpage 3 should have been removed, so check that
-> +	 * reading from it causes a huge page mapping to be installed.
-> +	 */
-> +	vcpu_run(vm, 0);
-> +	check_2m_page_count(vm, 2);
-> +	check_split_count(vm, 0);
-> +
-> +	kvm_vm_free(vm);
-> +
-> +	return 0;
-> +}
-> +
-> diff --git a/tools/testing/selftests/kvm/x86_64/nx_huge_pages_test.sh b/tools/testing/selftests/kvm/x86_64/nx_huge_pages_test.sh
-> new file mode 100755
-> index 000000000000..60bfed8181b9
-> --- /dev/null
-> +++ b/tools/testing/selftests/kvm/x86_64/nx_huge_pages_test.sh
-> @@ -0,0 +1,36 @@
-> +#!/bin/bash
-> +# SPDX-License-Identifier: GPL-2.0-only */
-> +#
-> +# Wrapper script which performs setup and cleanup for nx_huge_pages_test.
-> +# Makes use of root privileges to set up huge pages and KVM module parameters.
-> +#
-> +# tools/testing/selftests/kvm/nx_huge_page_test.sh
-> +# Copyright (C) 2022, Google LLC.
-> +
-> +set -e
-> +
-> +NX_HUGE_PAGES=$(sudo cat /sys/module/kvm/parameters/nx_huge_pages)
-> +NX_HUGE_PAGES_RECOVERY_RATIO=$(sudo cat /sys/module/kvm/parameters/nx_huge_pages_recovery_ratio)
-> +NX_HUGE_PAGES_RECOVERY_PERIOD=$(sudo cat /sys/module/kvm/parameters/nx_huge_pages_recovery_period_ms)
-> +HUGE_PAGES=$(sudo cat /sys/kernel/mm/hugepages/hugepages-2048kB/nr_hugepages)
-
-I think we can omit sudo on these.  Since we're assuming sysfs is mounted at the
-normal path, we can also likely assume it's mounted with normal permissions too,
-i.e. read-only for non-root users.
-
-> +
-> +set +e
-> +
-> +(
-> +	set -e
-> +
-> +	sudo echo 1 > /sys/module/kvm/parameters/nx_huge_pages
-
-"sudo echo" doesn't work, the redirection is done by the shell, not echo itself
-(which is run with sudo).  This needs to be e.g.
-
-	echo 1 | sudo tee -a /sys/module/kvm/parameters/nx_huge_pages > /dev/null
-
-> +	sudo echo 1 > /sys/module/kvm/parameters/nx_huge_pages_recovery_ratio
-> +	sudo echo 100 > /sys/module/kvm/parameters/nx_huge_pages_recovery_period_ms
-> +	sudo echo 3 > /sys/kernel/mm/hugepages/hugepages-2048kB/nr_hugepages
-
-So, what happens if the user is running something else that needs huge pages?  Feels
-like the script should read the value and add three, not just blindly write '3'.
-
-> +
-> +	"$(dirname $0)"/nx_huge_pages_test 887563923
-> +)
-> +RET=$?
-> +
-> +sudo echo $NX_HUGE_PAGES > /sys/module/kvm/parameters/nx_huge_pages
-> +sudo echo $NX_HUGE_PAGES_RECOVERY_RATIO > /sys/module/kvm/parameters/nx_huge_pages_recovery_ratio
-> +sudo echo $NX_HUGE_PAGES_RECOVERY_PERIOD > /sys/module/kvm/parameters/nx_huge_pages_recovery_period_ms
-> +sudo echo $HUGE_PAGES > /sys/kernel/mm/hugepages/hugepages-2048kB/nr_hugepages
-> +
-> +exit $RET
-> -- 
-> 2.36.0.464.gb9c8b46e94-goog
-> 

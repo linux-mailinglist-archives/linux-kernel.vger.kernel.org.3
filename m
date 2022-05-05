@@ -2,68 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18B7B51BA33
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 10:23:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2036951BA31
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 10:22:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347504AbiEEI01 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 04:26:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56092 "EHLO
+        id S1348312AbiEEI0e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 04:26:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349708AbiEEI0A (ORCPT
+        with ESMTP id S1349549AbiEEI0A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 5 May 2022 04:26:00 -0400
-Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0F8B53B60
-        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 01:21:13 -0700 (PDT)
-Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-2f7b815ac06so40503467b3.3
-        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 01:21:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=KWHwsHAH/QNPAWhLW8VZQ58/vBlErs9/usiIXf3KUrM=;
-        b=gfOnepr9p4T6e4DX9fXIsS/lXlfXLPOIMboG7QC7AhvSQqXD9OUAMPpF0z3/waGD0D
-         XeQghg5wasvlfwxOCcj1rq9vEqnZIz3MmdkM/lmUPiNgpIs29AEmze8LbdMbZjG6Ppl6
-         990cMEYj3x/t49XSKjftcWTDQn/E5JEpgrRT0u9kzb0//RgKeNF0xOmu9sYKwX8ShEPq
-         hFM/BtKmE6wilxejb0d/p4INQ2MlR3IqynuzdsiDhc+m6cs/zCnQPmRssYb1J/Dt3g5o
-         BUVFbMbCW93dS5zoMWZdOjlnAr2xmD0pCgGD+c7QRrbEmXlo4/wFaHNxx58GA4nDLwsR
-         xPuA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=KWHwsHAH/QNPAWhLW8VZQ58/vBlErs9/usiIXf3KUrM=;
-        b=VQ0PtPIxu53y+zbwk7epuBh1cTssfR+BmBxBan06rsfN2zGja9pcATd8zcvhZp+eKb
-         4Rq2qukIa21zxdCjxlbqhSnJf86D/asFE2711kc86md7o/s6mcd+alMELr5WfuM7evdo
-         Ork4FNtJ8Cajz0ogf6XPHFJ/vVZ28NaTlyiVKn8PPhkr8Awl0l5fgdbF0ErEsNdAR7K7
-         pASHJkHC4oJmux/aj66d73GgQIB1Gpds8eY8pLihn6i+8eLZSeTR7vMj1kSzEvBrClEn
-         sb16vLCWMZw/9bq0wMvQ/ysdJRBGeQmnbtEmcRFMMcyJJmfiVf/Fapc1ZG5/c4XZG/MU
-         kXJw==
-X-Gm-Message-State: AOAM5307DilBEB/xKweak2CMDbXq4VPy/b0uDTLnVt5ChUnb+Sf3fdwd
-        4eqBSP3YuqDZHrCCaXZXqHUiPJAi5/QGvpmHQNzo4zb+EEkAKQ==
-X-Google-Smtp-Source: ABdhPJzui0KnZztjb5KstyzUpmWxsYAZfym4/bUssFwP1MMh4zPXCOqTOLPEIjR0Y/5C69tQGwJC+KpVlnbcmXo2J/Q=
-X-Received: by 2002:a81:6189:0:b0:2eb:deb5:9f63 with SMTP id
- v131-20020a816189000000b002ebdeb59f63mr21498742ywb.319.1651738873208; Thu, 05
- May 2022 01:21:13 -0700 (PDT)
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 830424553A;
+        Thu,  5 May 2022 01:21:18 -0700 (PDT)
+Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.53])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4Kv67v667Pz1JBrY;
+        Thu,  5 May 2022 16:20:11 +0800 (CST)
+Received: from dggpeml500026.china.huawei.com (7.185.36.106) by
+ dggpeml500026.china.huawei.com (7.185.36.106) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 5 May 2022 16:21:15 +0800
+Received: from dggpeml500026.china.huawei.com ([7.185.36.106]) by
+ dggpeml500026.china.huawei.com ([7.185.36.106]) with mapi id 15.01.2375.024;
+ Thu, 5 May 2022 16:21:15 +0800
+From:   shaozhengchao <shaozhengchao@huawei.com>
+To:     =?utf-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>
+CC:     "ast@kernel.org" <ast@kernel.org>,
+        "daniel@iogearbox.net" <daniel@iogearbox.net>,
+        "hawk@kernel.org" <hawk@kernel.org>,
+        "john.fastabend@gmail.com" <john.fastabend@gmail.com>,
+        "andrii@kernel.org" <andrii@kernel.org>,
+        "kafai@fb.com" <kafai@fb.com>,
+        "songliubraving@fb.com" <songliubraving@fb.com>,
+        "yhs@fb.com" <yhs@fb.com>,
+        "kpsingh@kernel.org" <kpsingh@kernel.org>,
+        "bigeasy@linutronix.de" <bigeasy@linutronix.de>,
+        "imagedong@tencent.com" <imagedong@tencent.com>,
+        "petrm@nvidia.com" <petrm@nvidia.com>,
+        "memxor@gmail.com" <memxor@gmail.com>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "weiyongjun (A)" <weiyongjun1@huawei.com>,
+        yuehaibing <yuehaibing@huawei.com>
+Subject: =?utf-8?B?562U5aSNOiBbUEFUQ0ggYnBmLW5leHRdIGJwZi94ZHA6IENhbid0IGRldGFj?=
+ =?utf-8?Q?h_BPF_XDP_prog_if_not_exist?=
+Thread-Topic: [PATCH bpf-next] bpf/xdp: Can't detach BPF XDP prog if not exist
+Thread-Index: AQHYX2op2bNaMdSDska3w9BA56i4160ODMuAgAHk8MA=
+Date:   Thu, 5 May 2022 08:21:15 +0000
+Message-ID: <594b5198d54c4c729728c20d167d9c2d@huawei.com>
+References: <20220504035207.98221-1-shaozhengchao@huawei.com>
+ <875ymlwnmy.fsf@toke.dk>
+In-Reply-To: <875ymlwnmy.fsf@toke.dk>
+Accept-Language: zh-CN, en-US
+Content-Language: zh-CN
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.174.178.66]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-References: <39e39a7d30c8ee6af81fb64670a330abeb87402e.1651652493.git.viresh.kumar@linaro.org>
- <CAKfTPtDbsd+RLwY+0ZfnNWkQD+jOHmoX2K+ZfsOMnEH81ouVjw@mail.gmail.com> <20220505074408.ayzmd5kdbw2fagbq@vireshk-i7>
-In-Reply-To: <20220505074408.ayzmd5kdbw2fagbq@vireshk-i7>
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-Date:   Thu, 5 May 2022 10:21:01 +0200
-Message-ID: <CAKfTPtCuJGsrsBJ2jACr_YeKN3RXNVMkgRgo+cw9t7CAyGwHWQ@mail.gmail.com>
-Subject: Re: [PATCH] cpufreq: Avoid unnecessary frequency updates due to mismatch
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Rafael Wysocki <rjw@rjwysocki.net>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-pm@vger.kernel.org, Rex-BC Chen <rex-bc.chen@mediatek.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,45 +77,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 5 May 2022 at 09:44, Viresh Kumar <viresh.kumar@linaro.org> wrote:
->
-> On 05-05-22, 09:28, Vincent Guittot wrote:
-> > On Wed, 4 May 2022 at 10:21, Viresh Kumar <viresh.kumar@linaro.org> wrote:
-> > >
-> > > For some platforms, the frequency returned by hardware may be slightly
-> > > different from what is provided in the frequency table. For example,
-> >
-> > Do you have more details ?
->
-> This is where the problem was discussed.
->
-> https://lore.kernel.org/lkml/20220422075239.16437-8-rex-bc.chen@mediatek.com/
-
-Thanks for the link
-
->
-> > Do you mean that between 2 consecutives reads you can get either
-> > 500Mhz or 499Mhz ?
->
-> No, the hardware always returns something like 499,999,726 Hz, but the
-
-Part of your problem is that cpufreq use khz whereas clock uses hz
-
-Would it be better to do something like below in cpufreq_generic_get
-
-(clk_get_rate(policy->clk) + 500) / 1000
-
-so you round to closest instead of always floor rounding
-
-
-> OPP table contains the value 500 MHz. The field policy->cur is set
-> based on opp table eventually (target_index) and so contains 500MHz,
-> almost always. But when cpufreq_get() is called, it finds the current
-> freq is 499 MHz, instead of 500 MHz. And so the issue.
->
-> > Or is it a fixed mismatch between the table and the freq returned by HW ?
->
-> Yes.
->
-> --
-> viresh
+DQotLS0tLemCruS7tuWOn+S7ti0tLS0tDQrlj5Hku7bkuro6IFRva2UgSMO4aWxhbmQtSsO4cmdl
+bnNlbiBbbWFpbHRvOnRva2VAcmVkaGF0LmNvbV0gDQrlj5HpgIHml7bpl7Q6IDIwMjLlubQ15pyI
+NOaXpSAxOToyMA0K5pS25Lu25Lq6OiBzaGFvemhlbmdjaGFvIDxzaGFvemhlbmdjaGFvQGh1YXdl
+aS5jb20+OyBuZXRkZXZAdmdlci5rZXJuZWwub3JnOyBsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwu
+b3JnOyBicGZAdmdlci5rZXJuZWwub3JnOyBkYXZlbUBkYXZlbWxvZnQubmV0OyBlZHVtYXpldEBn
+b29nbGUuY29tOyBrdWJhQGtlcm5lbC5vcmc7IHBhYmVuaUByZWRoYXQuY29tDQrmioTpgIE6IGFz
+dEBrZXJuZWwub3JnOyBkYW5pZWxAaW9nZWFyYm94Lm5ldDsgaGF3a0BrZXJuZWwub3JnOyBqb2hu
+LmZhc3RhYmVuZEBnbWFpbC5jb207IGFuZHJpaUBrZXJuZWwub3JnOyBrYWZhaUBmYi5jb207IHNv
+bmdsaXVicmF2aW5nQGZiLmNvbTsgeWhzQGZiLmNvbTsga3BzaW5naEBrZXJuZWwub3JnOyBiaWdl
+YXN5QGxpbnV0cm9uaXguZGU7IGltYWdlZG9uZ0B0ZW5jZW50LmNvbTsgcGV0cm1AbnZpZGlhLmNv
+bTsgbWVteG9yQGdtYWlsLmNvbTsgYXJuZEBhcm5kYi5kZTsgd2VpeW9uZ2p1biAoQSkgPHdlaXlv
+bmdqdW4xQGh1YXdlaS5jb20+OyBzaGFvemhlbmdjaGFvIDxzaGFvemhlbmdjaGFvQGh1YXdlaS5j
+b20+OyB5dWVoYWliaW5nIDx5dWVoYWliaW5nQGh1YXdlaS5jb20+DQrkuLvpopg6IFJlOiBbUEFU
+Q0ggYnBmLW5leHRdIGJwZi94ZHA6IENhbid0IGRldGFjaCBCUEYgWERQIHByb2cgaWYgbm90IGV4
+aXN0DQoNClpoZW5nY2hhbyBTaGFvIDxzaGFvemhlbmdjaGFvQGh1YXdlaS5jb20+IHdyaXRlczoN
+Cg0KPiBpZiB1c2VyIHNldHMgbm9uZXhpc3RlbnQgeGRwX2ZsYWdzIHRvIGRldGFjaCB4ZHAgcHJv
+Zywga2VybmVsIHNob3VsZCANCj4gcmV0dXJuIGVyciBhbmQgdGVsbCB1c2VyIHRoYXQgZGV0YWNo
+IGZhaWxlZCB3aXRoIGRldGFpbCBpbmZvLg0KPg0KPiBTaWduZWQtb2ZmLWJ5OiBaaGVuZ2NoYW8g
+U2hhbyA8c2hhb3poZW5nY2hhb0BodWF3ZWkuY29tPg0KDQpJIGtpbmRhIHNlZSB5b3VyIHBvaW50
+LCBidXQgdGhpcyB3aWxsIGNoYW5nZSB1c2VyLXZpc2libGUgYmVoYXZpb3VyIHRoYXQgYXBwbGlj
+YXRpb25zIG1pZ2h0IGJlIHJlbHlpbmcgb24sIHNvIEkgZG9uJ3QgdGhpbmsgd2UgY2FuIG1ha2Ug
+dGhpcyBjaGFuZ2UgYXQgdGhpcyBzdGFnZS4gV2h5IGNhbid0IHlvdXIgYXBwbGljYXRpb24ganVz
+dCBxdWVyeSB0aGUgbGluayBmb3Igd2hldGhlciBhIHByb2dyYW0gaXMgYXR0YWNoZWQ/DQoNCi1U
+b2tlDQoNCg0KVGhhbmsgeW91IGZvciB5b3VyIHJlcGx5LiBJIHdpaWwgY2hhbmdlIHNhbXBsZSBh
+cHBsaWNhdGlvbiBmaXJzdGx5LiBCdXQgaWYga2VybmVsIGRvZXMgbm90aGluZyBhbmQgcmV0dXJu
+IDAsIG1heWJlIHVzZXIgd2lsbCB0aGluayBzZXR1cCBpcyBPSywgYWN0dWFsbHkgSXQgZmFpbGVk
+LiBJcyB0aGlzIGFjY2VwdGFibGU/DQo=

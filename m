@@ -2,55 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B55651BA17
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 10:19:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BAC451BA1F
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 10:19:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347313AbiEEIWk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 04:22:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54298 "EHLO
+        id S239706AbiEEIXD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 04:23:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347352AbiEEIU3 (ORCPT
+        with ESMTP id S1347356AbiEEIU3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 5 May 2022 04:20:29 -0400
 Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECC3F49926;
-        Thu,  5 May 2022 01:16:49 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C70949927;
+        Thu,  5 May 2022 01:16:50 -0700 (PDT)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 946131F8A3;
+        by smtp-out2.suse.de (Postfix) with ESMTPS id C77D11F8A6;
         Thu,  5 May 2022 08:16:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
         t=1651738608; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=0MG5If+wT1PFlFjSpPM4l/2JLJ70ISQLhBhO24AmiRY=;
-        b=jySglPOM/qmId9veILCMfWbXmbLP+gNn4u7XEfWwcN1T4/oJO4hATS7eTV+0YsaVudLyFb
-        aYaRxPRl6knBSXtSBo/g/lmKCyGWWV5cbs786fWksp1RjeOLzvSNCVsHa/oH4L1QHJObdw
-        88zVG8kaKeockHaPdWQ38AjKWsWoiqY=
+        bh=s4Z1RjFpyVDty3WoTn8qjFQASCN+ZRnPh5FcuU0Fko0=;
+        b=BhtFVaZFvCxw2q4uOqiGV6IV3CyJrE9Dw4JGcI3BpRoPiNqDCjWjoHDih934WXw7iqEQyg
+        YEMJJBedzXNNfme/6kZ/1j44R+ppHMB90m/u+85yIn4E5iYAKPb8s5fbntyx4w2hypvn8M
+        loMr0Bhpw9KIeQDLTwcA1mOnCSAVuQ0=
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5A8A413B11;
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9BF4413B11;
         Thu,  5 May 2022 08:16:48 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id IM5DFPCHc2K1BwAAMHmgww
+        id 2GSyJPCHc2K1BwAAMHmgww
         (envelope-from <jgross@suse.com>); Thu, 05 May 2022 08:16:48 +0000
 From:   Juergen Gross <jgross@suse.com>
-To:     xen-devel@lists.xenproject.org, linux-scsi@vger.kernel.org,
+To:     xen-devel@lists.xenproject.org, linux-usb@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Cc:     Juergen Gross <jgross@suse.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Subject: [PATCH v3 18/21] xen/scsifront: use xenbus_setup_ring() and xenbus_teardown_ring()
-Date:   Thu,  5 May 2022 10:16:37 +0200
-Message-Id: <20220505081640.17425-19-jgross@suse.com>
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: [PATCH v3 19/21] xen/usbfront: use xenbus_setup_ring() and xenbus_teardown_ring()
+Date:   Thu,  5 May 2022 10:16:38 +0200
+Message-Id: <20220505081640.17425-20-jgross@suse.com>
 X-Mailer: git-send-email 2.35.3
 In-Reply-To: <20220505081640.17425-1-jgross@suse.com>
 References: <20220505081640.17425-1-jgross@suse.com>
@@ -66,71 +63,101 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Simplify scsifront's ring creation and removal via xenbus_setup_ring()
+Simplify xen-hcd's ring creation and removal via xenbus_setup_ring()
 and xenbus_teardown_ring().
 
 Signed-off-by: Juergen Gross <jgross@suse.com>
+Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/scsi/xen-scsifront.c | 28 +++++++---------------------
- 1 file changed, 7 insertions(+), 21 deletions(-)
+ drivers/usb/host/xen-hcd.c | 61 ++++++++++----------------------------
+ 1 file changed, 15 insertions(+), 46 deletions(-)
 
-diff --git a/drivers/scsi/xen-scsifront.c b/drivers/scsi/xen-scsifront.c
-index 4c55e479fc36..51afc66e839d 100644
---- a/drivers/scsi/xen-scsifront.c
-+++ b/drivers/scsi/xen-scsifront.c
-@@ -798,27 +798,15 @@ static int scsifront_alloc_ring(struct vscsifrnt_info *info)
+diff --git a/drivers/usb/host/xen-hcd.c b/drivers/usb/host/xen-hcd.c
+index 9cbc7c2dab02..de1b09158318 100644
+--- a/drivers/usb/host/xen-hcd.c
++++ b/drivers/usb/host/xen-hcd.c
+@@ -1098,19 +1098,10 @@ static void xenhcd_destroy_rings(struct xenhcd_info *info)
+ 		unbind_from_irqhandler(info->irq, info);
+ 	info->irq = 0;
+ 
+-	if (info->urb_ring_ref != INVALID_GRANT_REF) {
+-		gnttab_end_foreign_access(info->urb_ring_ref,
+-					  (unsigned long)info->urb_ring.sring);
+-		info->urb_ring_ref = INVALID_GRANT_REF;
+-	}
+-	info->urb_ring.sring = NULL;
+-
+-	if (info->conn_ring_ref != INVALID_GRANT_REF) {
+-		gnttab_end_foreign_access(info->conn_ring_ref,
+-					  (unsigned long)info->conn_ring.sring);
+-		info->conn_ring_ref = INVALID_GRANT_REF;
+-	}
+-	info->conn_ring.sring = NULL;
++	xenbus_teardown_ring((void **)&info->urb_ring.sring, 1,
++			     &info->urb_ring_ref);
++	xenbus_teardown_ring((void **)&info->conn_ring.sring, 1,
++			     &info->conn_ring_ref);
+ }
+ 
+ static int xenhcd_setup_rings(struct xenbus_device *dev,
+@@ -1118,46 +1109,24 @@ static int xenhcd_setup_rings(struct xenbus_device *dev,
  {
- 	struct xenbus_device *dev = info->dev;
- 	struct vscsiif_sring *sring;
+ 	struct xenusb_urb_sring *urb_sring;
+ 	struct xenusb_conn_sring *conn_sring;
 -	grant_ref_t gref;
--	int err = -ENOMEM;
-+	int err;
+ 	int err;
  
- 	/***** Frontend to Backend ring start *****/
--	sring = (struct vscsiif_sring *)__get_free_page(GFP_KERNEL);
--	if (!sring) {
--		xenbus_dev_fatal(dev, err,
--			"fail to allocate shared ring (Front to Back)");
-+	err = xenbus_setup_ring(dev, GFP_KERNEL, (void **)&sring, 1,
-+				&info->ring_ref);
-+	if (err)
- 		return err;
+-	info->urb_ring_ref = INVALID_GRANT_REF;
+ 	info->conn_ring_ref = INVALID_GRANT_REF;
+-
+-	urb_sring = (struct xenusb_urb_sring *)get_zeroed_page(
+-							GFP_NOIO | __GFP_HIGH);
+-	if (!urb_sring) {
+-		xenbus_dev_fatal(dev, -ENOMEM, "allocating urb ring");
+-		return -ENOMEM;
 -	}
--	SHARED_RING_INIT(sring);
--	FRONT_RING_INIT(&info->ring, sring, PAGE_SIZE);
- 
--	err = xenbus_grant_ring(dev, sring, 1, &gref);
+-	SHARED_RING_INIT(urb_sring);
+-	FRONT_RING_INIT(&info->urb_ring, urb_sring, PAGE_SIZE);
+-
+-	err = xenbus_grant_ring(dev, urb_sring, 1, &gref);
 -	if (err < 0) {
--		free_page((unsigned long)sring);
--		xenbus_dev_fatal(dev, err,
--			"fail to grant shared ring (Front to Back)");
--		return err;
+-		free_page((unsigned long)urb_sring);
+-		info->urb_ring.sring = NULL;
+-		goto fail;
 -	}
--	info->ring_ref = gref;
-+	XEN_FRONT_RING_INIT(&info->ring, sring, PAGE_SIZE);
+-	info->urb_ring_ref = gref;
+-
+-	conn_sring = (struct xenusb_conn_sring *)get_zeroed_page(
+-							GFP_NOIO | __GFP_HIGH);
+-	if (!conn_sring) {
+-		xenbus_dev_fatal(dev, -ENOMEM, "allocating conn ring");
+-		err = -ENOMEM;
+-		goto fail;
++	err = xenbus_setup_ring(dev, GFP_NOIO | __GFP_HIGH,
++				(void **)&urb_sring, 1, &info->urb_ring_ref);
++	if (err) {
++		xenbus_dev_fatal(dev, err, "allocating urb ring");
++		return err;
+ 	}
+-	SHARED_RING_INIT(conn_sring);
+-	FRONT_RING_INIT(&info->conn_ring, conn_sring, PAGE_SIZE);
++	XEN_FRONT_RING_INIT(&info->urb_ring, urb_sring, PAGE_SIZE);
+ 
+-	err = xenbus_grant_ring(dev, conn_sring, 1, &gref);
+-	if (err < 0) {
+-		free_page((unsigned long)conn_sring);
+-		info->conn_ring.sring = NULL;
++	err = xenbus_setup_ring(dev, GFP_NOIO | __GFP_HIGH,
++				(void **)&conn_sring, 1, &info->conn_ring_ref);
++	if (err) {
++		xenbus_dev_fatal(dev, err, "allocating conn ring");
+ 		goto fail;
+ 	}
+-	info->conn_ring_ref = gref;
++	XEN_FRONT_RING_INIT(&info->conn_ring, conn_sring, PAGE_SIZE);
  
  	err = xenbus_alloc_evtchn(dev, &info->evtchn);
  	if (err) {
-@@ -847,8 +835,7 @@ static int scsifront_alloc_ring(struct vscsifrnt_info *info)
- free_irq:
- 	unbind_from_irqhandler(info->irq, info);
- free_gnttab:
--	gnttab_end_foreign_access(info->ring_ref,
--				  (unsigned long)info->ring.sring);
-+	xenbus_teardown_ring((void **)&sring, 1, &info->ring_ref);
- 
- 	return err;
- }
-@@ -856,8 +843,7 @@ static int scsifront_alloc_ring(struct vscsifrnt_info *info)
- static void scsifront_free_ring(struct vscsifrnt_info *info)
- {
- 	unbind_from_irqhandler(info->irq, info);
--	gnttab_end_foreign_access(info->ring_ref,
--				  (unsigned long)info->ring.sring);
-+	xenbus_teardown_ring((void **)&info->ring.sring, 1, &info->ring_ref);
- }
- 
- static int scsifront_init_ring(struct vscsifrnt_info *info)
 -- 
 2.35.3
 

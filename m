@@ -2,235 +2,211 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F40CC51BC6F
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 11:47:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A80A51BC6E
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 11:47:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354409AbiEEJvU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 05:51:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34336 "EHLO
+        id S1354260AbiEEJvG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 05:51:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348259AbiEEJvD (ORCPT
+        with ESMTP id S1354147AbiEEJvB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 05:51:03 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5075A4F470;
-        Thu,  5 May 2022 02:47:24 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Kv84Q70ndz4ySn;
-        Thu,  5 May 2022 19:47:18 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1651744039;
-        bh=8K7OWDpXc0cEi6KPmmnFY0Qjde5xITIcHSPfGXDF4bQ=;
-        h=Date:From:To:Cc:Subject:From;
-        b=tIORQ+VT3JqyJQLIHBemC29hvqyP9DnkrSIrLRHXPJlHrS3e/qfWMXpeVc5Kj+b+t
-         wtO/B5VtgVzCWaIxMV3uYbNuLkfURE8nMJZ3VkFIFug1dSNxkC9xRtwW8Uvz5XZN17
-         LYSdaJFEhFN5KQq2njF96FwsWi//okm05d0wD7F8nFDof/jxjW1TWJfpc83Q88QBrQ
-         3KtbMg1fblCzMQHt1JuSFXf3dxSpMWnlFV6L4OQaH1tGUUGKJzCwO8/nAMVJZhMIQq
-         dpWosw0bAMBGkerw1HAazvNM0F7S/oMar372fHF25lFT+hHBKFo3P2V+KH9R7kTz7V
-         UiVHOdNCei6/Q==
-Date:   Thu, 5 May 2022 19:47:17 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Alex Deucher <alexdeucher@gmail.com>
-Cc:     Jack Xiao <Jack.Xiao@amd.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the amdgpu tree
-Message-ID: <20220505194717.065db7ab@canb.auug.org.au>
+        Thu, 5 May 2022 05:51:01 -0400
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C58674F458
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 02:47:22 -0700 (PDT)
+Received: by mail-io1-f72.google.com with SMTP id y13-20020a056602164d00b0065a9dec1ef2so2506146iow.23
+        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 02:47:22 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=eV38iSYAFGjXt9JWlkIOLhHqsRAqY/eXwKHu9dO4WfM=;
+        b=WxDrIt5FiEEiyVShDlSDfpT9c5Dh2rZ4X7kKdeFXgnakKQClnNC4DQfnPkoOByb1QR
+         TmdWpqjjox8Yvv4Edx0/tQumJBVQJpPJafo+yFiRqj7zSleOWGF9xLKyWld/DS5WNYkb
+         uaZnyOG8kqnUCCSM53XfqojP6PVZ8mLxL3/fg7eHesWBOGG4+kXE6K1G80qfTOSKTRaO
+         b1nNXr04ZleRvBnQtLXK9ihSXpd0YyiGMPJBJiNc8Ap6VEOzr/13HurH4RTfcV3rbssP
+         jt2KsPMRVYpBCYTiZv82ylb/jSZUYIDMpPkTFX6XQOsetsaO3Bcui8Y0xOrK1/prR/N8
+         JHbA==
+X-Gm-Message-State: AOAM532lYM8UpX8FzRbTgQ+2LiohF2rWZsX7NCWC+H4ioP/Od1xyNvkj
+        lWpzOEW/aFL5Z4oux9IoNUmQwPQWtrbuB3Vwe2abfsIWOXiF
+X-Google-Smtp-Source: ABdhPJxL5XoOFhIWkIgGimlGzxLGs+KghxbThlHH0A4u3iFDaS4+GhJKngtIFRIFACuIz4GSRic/MRITFWOHKXmjlxt7C123rDYQ
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/4z9Q+UDxW1c+QVT8Qsuywg7";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6602:2e07:b0:65a:5818:2b3d with SMTP id
+ o7-20020a0566022e0700b0065a58182b3dmr8054370iow.128.1651744041879; Thu, 05
+ May 2022 02:47:21 -0700 (PDT)
+Date:   Thu, 05 May 2022 02:47:21 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000e04c5605de40a0dc@google.com>
+Subject: [syzbot] inconsistent lock state in rxrpc_put_call
+From:   syzbot <syzbot+7ff43f67d38f2d8e07ef@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, dhowells@redhat.com, edumazet@google.com,
+        kuba@kernel.org, linux-afs@lists.infradead.org,
+        linux-kernel@vger.kernel.org, marc.dionne@auristor.com,
+        netdev@vger.kernel.org, pabeni@redhat.com,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/4z9Q+UDxW1c+QVT8Qsuywg7
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hello,
 
-Hi all,
+syzbot found the following issue on:
 
-After merging the amdgpu tree, today's linux-next build (powerpc
-allyesconfig) failed like this:
+HEAD commit:    48cec73a891c net: lan966x: Fix compilation error
+git tree:       net-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=135956d8f00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=4f67580b287bc88d
+dashboard link: https://syzkaller.appspot.com/bug?extid=7ff43f67d38f2d8e07ef
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
-In file included from drivers/gpu/drm/amd/amdgpu/mes_v11_0.c:26:
-drivers/gpu/drm/amd/amdgpu/mes_v11_0.c: In function 'mes_v11_0_mqd_init':
-drivers/gpu/drm/amd/amdgpu/mes_v11_0.c:697:34: error: 'CP_HQD_PQ_CONTROL__E=
-NDIAN_SWAP_MASK' undeclared (first use in this function); did you mean 'CP_=
-HQD_PQ_CONTROL__PRIV_STATE_MASK'?
-  697 |         tmp =3D REG_SET_FIELD(tmp, CP_HQD_PQ_CONTROL, ENDIAN_SWAP, =
-1);
-      |                                  ^~~~~~~~~~~~~~~~~
-drivers/gpu/drm/amd/amdgpu/amdgpu.h:1177:36: note: in definition of macro '=
-REG_FIELD_MASK'
- 1177 | #define REG_FIELD_MASK(reg, field) reg##__##field##_MASK
-      |                                    ^~~
-drivers/gpu/drm/amd/amdgpu/mes_v11_0.c:697:15: note: in expansion of macro =
-'REG_SET_FIELD'
-  697 |         tmp =3D REG_SET_FIELD(tmp, CP_HQD_PQ_CONTROL, ENDIAN_SWAP, =
-1);
-      |               ^~~~~~~~~~~~~
-drivers/gpu/drm/amd/amdgpu/mes_v11_0.c:697:34: note: each undeclared identi=
-fier is reported only once for each function it appears in
-  697 |         tmp =3D REG_SET_FIELD(tmp, CP_HQD_PQ_CONTROL, ENDIAN_SWAP, =
-1);
-      |                                  ^~~~~~~~~~~~~~~~~
-drivers/gpu/drm/amd/amdgpu/amdgpu.h:1177:36: note: in definition of macro '=
-REG_FIELD_MASK'
- 1177 | #define REG_FIELD_MASK(reg, field) reg##__##field##_MASK
-      |                                    ^~~
-drivers/gpu/drm/amd/amdgpu/mes_v11_0.c:697:15: note: in expansion of macro =
-'REG_SET_FIELD'
-  697 |         tmp =3D REG_SET_FIELD(tmp, CP_HQD_PQ_CONTROL, ENDIAN_SWAP, =
-1);
-      |               ^~~~~~~~~~~~~
-drivers/gpu/drm/amd/amdgpu/mes_v11_0.c:697:34: error: 'CP_HQD_PQ_CONTROL__E=
-NDIAN_SWAP__SHIFT' undeclared (first use in this function); did you mean 'C=
-P_HQD_PQ_CONTROL__PRIV_STATE__SHIFT'?
-  697 |         tmp =3D REG_SET_FIELD(tmp, CP_HQD_PQ_CONTROL, ENDIAN_SWAP, =
-1);
-      |                                  ^~~~~~~~~~~~~~~~~
-drivers/gpu/drm/amd/amdgpu/amdgpu.h:1176:37: note: in definition of macro '=
-REG_FIELD_SHIFT'
- 1176 | #define REG_FIELD_SHIFT(reg, field) reg##__##field##__SHIFT
-      |                                     ^~~
-drivers/gpu/drm/amd/amdgpu/mes_v11_0.c:697:15: note: in expansion of macro =
-'REG_SET_FIELD'
-  697 |         tmp =3D REG_SET_FIELD(tmp, CP_HQD_PQ_CONTROL, ENDIAN_SWAP, =
-1);
-      |               ^~~~~~~~~~~~~
-In file included from drivers/gpu/drm/amd/amdgpu/gfx_v11_0.c:28:
-drivers/gpu/drm/amd/amdgpu/gfx_v11_0.c: In function 'gfx_v11_0_cp_gfx_resum=
-e':
-drivers/gpu/drm/amd/amdgpu/gfx_v11_0.c:3413:34: error: 'CP_RB0_CNTL__BUF_SW=
-AP_MASK' undeclared (first use in this function); did you mean 'CP_RB0_CNTL=
-__TMZ_STATE_MASK'?
- 3413 |         tmp =3D REG_SET_FIELD(tmp, CP_RB0_CNTL, BUF_SWAP, 1);
-      |                                  ^~~~~~~~~~~
-drivers/gpu/drm/amd/amdgpu/amdgpu.h:1177:36: note: in definition of macro '=
-REG_FIELD_MASK'
- 1177 | #define REG_FIELD_MASK(reg, field) reg##__##field##_MASK
-      |                                    ^~~
-drivers/gpu/drm/amd/amdgpu/gfx_v11_0.c:3413:15: note: in expansion of macro=
- 'REG_SET_FIELD'
- 3413 |         tmp =3D REG_SET_FIELD(tmp, CP_RB0_CNTL, BUF_SWAP, 1);
-      |               ^~~~~~~~~~~~~
-drivers/gpu/drm/amd/amdgpu/gfx_v11_0.c:3413:34: note: each undeclared ident=
-ifier is reported only once for each function it appears in
- 3413 |         tmp =3D REG_SET_FIELD(tmp, CP_RB0_CNTL, BUF_SWAP, 1);
-      |                                  ^~~~~~~~~~~
-drivers/gpu/drm/amd/amdgpu/amdgpu.h:1177:36: note: in definition of macro '=
-REG_FIELD_MASK'
- 1177 | #define REG_FIELD_MASK(reg, field) reg##__##field##_MASK
-      |                                    ^~~
-drivers/gpu/drm/amd/amdgpu/gfx_v11_0.c:3413:15: note: in expansion of macro=
- 'REG_SET_FIELD'
- 3413 |         tmp =3D REG_SET_FIELD(tmp, CP_RB0_CNTL, BUF_SWAP, 1);
-      |               ^~~~~~~~~~~~~
-drivers/gpu/drm/amd/amdgpu/gfx_v11_0.c:3413:34: error: 'CP_RB0_CNTL__BUF_SW=
-AP__SHIFT' undeclared (first use in this function); did you mean 'CP_RB0_CN=
-TL__TMZ_STATE__SHIFT'?
- 3413 |         tmp =3D REG_SET_FIELD(tmp, CP_RB0_CNTL, BUF_SWAP, 1);
-      |                                  ^~~~~~~~~~~
-drivers/gpu/drm/amd/amdgpu/amdgpu.h:1176:37: note: in definition of macro '=
-REG_FIELD_SHIFT'
- 1176 | #define REG_FIELD_SHIFT(reg, field) reg##__##field##__SHIFT
-      |                                     ^~~
-drivers/gpu/drm/amd/amdgpu/gfx_v11_0.c:3413:15: note: in expansion of macro=
- 'REG_SET_FIELD'
- 3413 |         tmp =3D REG_SET_FIELD(tmp, CP_RB0_CNTL, BUF_SWAP, 1);
-      |               ^~~~~~~~~~~~~
-drivers/gpu/drm/amd/amdgpu/gfx_v11_0.c: In function 'gfx_v11_0_compute_mqd_=
-init':
-drivers/gpu/drm/amd/amdgpu/gfx_v11_0.c:4063:34: error: 'CP_HQD_PQ_CONTROL__=
-ENDIAN_SWAP_MASK' undeclared (first use in this function); did you mean 'CP=
-_HQD_PQ_CONTROL__PRIV_STATE_MASK'?
- 4063 |         tmp =3D REG_SET_FIELD(tmp, CP_HQD_PQ_CONTROL, ENDIAN_SWAP, =
-1);
-      |                                  ^~~~~~~~~~~~~~~~~
-drivers/gpu/drm/amd/amdgpu/amdgpu.h:1177:36: note: in definition of macro '=
-REG_FIELD_MASK'
- 1177 | #define REG_FIELD_MASK(reg, field) reg##__##field##_MASK
-      |                                    ^~~
-drivers/gpu/drm/amd/amdgpu/gfx_v11_0.c:4063:15: note: in expansion of macro=
- 'REG_SET_FIELD'
- 4063 |         tmp =3D REG_SET_FIELD(tmp, CP_HQD_PQ_CONTROL, ENDIAN_SWAP, =
-1);
-      |               ^~~~~~~~~~~~~
-drivers/gpu/drm/amd/amdgpu/gfx_v11_0.c:4063:34: error: 'CP_HQD_PQ_CONTROL__=
-ENDIAN_SWAP__SHIFT' undeclared (first use in this function); did you mean '=
-CP_HQD_PQ_CONTROL__PRIV_STATE__SHIFT'?
- 4063 |         tmp =3D REG_SET_FIELD(tmp, CP_HQD_PQ_CONTROL, ENDIAN_SWAP, =
-1);
-      |                                  ^~~~~~~~~~~~~~~~~
-drivers/gpu/drm/amd/amdgpu/amdgpu.h:1176:37: note: in definition of macro '=
-REG_FIELD_SHIFT'
- 1176 | #define REG_FIELD_SHIFT(reg, field) reg##__##field##__SHIFT
-      |                                     ^~~
-drivers/gpu/drm/amd/amdgpu/gfx_v11_0.c:4063:15: note: in expansion of macro=
- 'REG_SET_FIELD'
- 4063 |         tmp =3D REG_SET_FIELD(tmp, CP_HQD_PQ_CONTROL, ENDIAN_SWAP, =
-1);
-      |               ^~~~~~~~~~~~~
+Unfortunately, I don't have any reproducer for this issue yet.
 
-Caused by commit
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+7ff43f67d38f2d8e07ef@syzkaller.appspotmail.com
 
-  028c3fb37e70 ("drm/amdgpu/mes11: initiate mes v11 support")
+================================
+WARNING: inconsistent lock state
+5.18.0-rc4-syzkaller-00910-g48cec73a891c #0 Not tainted
+--------------------------------
+inconsistent {SOFTIRQ-ON-W} -> {IN-SOFTIRQ-W} usage.
+swapper/0/0 [HC0[0]:SC1[1]:HE1:SE0] takes:
+ffff88805a1a4038 (&rxnet->call_lock){+.?.}-{2:2}, at: rxrpc_put_call+0x175/0x300 net/rxrpc/call_object.c:634
+{SOFTIRQ-ON-W} state was registered at:
+  lock_acquire kernel/locking/lockdep.c:5641 [inline]
+  lock_acquire+0x1ab/0x510 kernel/locking/lockdep.c:5606
+  __raw_write_lock include/linux/rwlock_api_smp.h:209 [inline]
+  _raw_write_lock+0x2a/0x40 kernel/locking/spinlock.c:300
+  rxrpc_service_prealloc_one+0xacf/0x1440 net/rxrpc/call_accept.c:143
+  rxrpc_kernel_charge_accept+0xd4/0x120 net/rxrpc/call_accept.c:487
+  afs_charge_preallocation+0xba/0x310 fs/afs/rxrpc.c:733
+  afs_open_socket+0x294/0x360 fs/afs/rxrpc.c:92
+  afs_net_init+0xa75/0xec0 fs/afs/main.c:126
+  ops_init+0xaf/0x470 net/core/net_namespace.c:134
+  __register_pernet_operations net/core/net_namespace.c:1146 [inline]
+  register_pernet_operations+0x35a/0x850 net/core/net_namespace.c:1215
+  register_pernet_device+0x26/0x70 net/core/net_namespace.c:1302
+  afs_init+0xe6/0x218 fs/afs/main.c:189
+  do_one_initcall+0x103/0x650 init/main.c:1298
+  do_initcall_level init/main.c:1371 [inline]
+  do_initcalls init/main.c:1387 [inline]
+  do_basic_setup init/main.c:1406 [inline]
+  kernel_init_freeable+0x6b1/0x73a init/main.c:1613
+  kernel_init+0x1a/0x1d0 init/main.c:1502
+  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:298
+irq event stamp: 474002
+hardirqs last  enabled at (474002): [<ffffffff89800c02>] asm_sysvec_apic_timer_interrupt+0x12/0x20 arch/x86/include/asm/idtentry.h:645
+hardirqs last disabled at (474001): [<ffffffff896a855b>] sysvec_apic_timer_interrupt+0xb/0xc0 arch/x86/kernel/apic/apic.c:1097
+softirqs last  enabled at (473854): [<ffffffff8147bb73>] invoke_softirq kernel/softirq.c:432 [inline]
+softirqs last  enabled at (473854): [<ffffffff8147bb73>] __irq_exit_rcu+0x123/0x180 kernel/softirq.c:637
+softirqs last disabled at (473975): [<ffffffff8147bb73>] invoke_softirq kernel/softirq.c:432 [inline]
+softirqs last disabled at (473975): [<ffffffff8147bb73>] __irq_exit_rcu+0x123/0x180 kernel/softirq.c:637
 
-This build has __BIG_ENDIAN set.
+other info that might help us debug this:
+ Possible unsafe locking scenario:
 
-I have applied the following patch for today.
+       CPU0
+       ----
+  lock(&rxnet->call_lock);
+  <Interrupt>
+    lock(&rxnet->call_lock);
 
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Thu, 5 May 2022 19:14:25 +1000
-Subject: [PATCH] mark CONFIG_DRM_AMDGPU as depending on CONFIG_CPU_LITTLE_E=
-NDIAN
+ *** DEADLOCK ***
 
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+1 lock held by swapper/0/0:
+ #0: ffffc90000007d70 ((&call->timer)){+.-.}-{0:0}, at: lockdep_copy_map include/linux/lockdep.h:35 [inline]
+ #0: ffffc90000007d70 ((&call->timer)){+.-.}-{0:0}, at: call_timer_fn+0xd5/0x6b0 kernel/time/timer.c:1411
+
+stack backtrace:
+CPU: 0 PID: 0 Comm: swapper/0 Not tainted 5.18.0-rc4-syzkaller-00910-g48cec73a891c #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Call Trace:
+ <IRQ>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ print_usage_bug kernel/locking/lockdep.c:3935 [inline]
+ valid_state kernel/locking/lockdep.c:3947 [inline]
+ mark_lock_irq kernel/locking/lockdep.c:4150 [inline]
+ mark_lock.part.0.cold+0x18/0xd8 kernel/locking/lockdep.c:4607
+ mark_lock kernel/locking/lockdep.c:4571 [inline]
+ mark_usage kernel/locking/lockdep.c:4502 [inline]
+ __lock_acquire+0x11e7/0x56c0 kernel/locking/lockdep.c:4983
+ lock_acquire kernel/locking/lockdep.c:5641 [inline]
+ lock_acquire+0x1ab/0x510 kernel/locking/lockdep.c:5606
+ __raw_write_lock include/linux/rwlock_api_smp.h:209 [inline]
+ _raw_write_lock+0x2a/0x40 kernel/locking/spinlock.c:300
+ rxrpc_put_call+0x175/0x300 net/rxrpc/call_object.c:634
+ rxrpc_call_timer_expired+0xa1/0xc0 net/rxrpc/call_object.c:58
+ call_timer_fn+0x1a5/0x6b0 kernel/time/timer.c:1421
+ expire_timers kernel/time/timer.c:1466 [inline]
+ __run_timers.part.0+0x679/0xa80 kernel/time/timer.c:1737
+ __run_timers kernel/time/timer.c:1715 [inline]
+ run_timer_softirq+0xb3/0x1d0 kernel/time/timer.c:1750
+ __do_softirq+0x29b/0x9c2 kernel/softirq.c:558
+ invoke_softirq kernel/softirq.c:432 [inline]
+ __irq_exit_rcu+0x123/0x180 kernel/softirq.c:637
+ irq_exit_rcu+0x5/0x20 kernel/softirq.c:649
+ sysvec_apic_timer_interrupt+0x93/0xc0 arch/x86/kernel/apic/apic.c:1097
+ </IRQ>
+ <TASK>
+ asm_sysvec_apic_timer_interrupt+0x12/0x20 arch/x86/include/asm/idtentry.h:645
+RIP: 0010:native_save_fl arch/x86/include/asm/irqflags.h:29 [inline]
+RIP: 0010:arch_local_save_flags arch/x86/include/asm/irqflags.h:70 [inline]
+RIP: 0010:arch_irqs_disabled arch/x86/include/asm/irqflags.h:130 [inline]
+RIP: 0010:acpi_safe_halt drivers/acpi/processor_idle.c:111 [inline]
+RIP: 0010:acpi_idle_do_entry+0x1c6/0x250 drivers/acpi/processor_idle.c:551
+Code: 89 de e8 ad a6 0b f8 84 db 75 ac e8 c4 a2 0b f8 e8 2f eb 11 f8 eb 0c e8 b8 a2 0b f8 0f 00 2d d1 4b c5 00 e8 ac a2 0b f8 fb f4 <9c> 5b 81 e3 00 02 00 00 fa 31 ff 48 89 de e8 27 a5 0b f8 48 85 db
+RSP: 0018:ffffffff8ba07d60 EFLAGS: 00000293
+RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
+RDX: ffffffff8babc700 RSI: ffffffff896d8694 RDI: 0000000000000000
+RBP: ffff88801639f864 R08: 0000000000000001 R09: 0000000000000001
+R10: ffffffff817f71e8 R11: 0000000000000000 R12: 0000000000000001
+R13: ffff88801639f800 R14: ffff88801639f864 R15: ffff888019952004
+ acpi_idle_enter+0x361/0x500 drivers/acpi/processor_idle.c:686
+ cpuidle_enter_state+0x1b1/0xc80 drivers/cpuidle/cpuidle.c:237
+ cpuidle_enter+0x4a/0xa0 drivers/cpuidle/cpuidle.c:351
+ call_cpuidle kernel/sched/idle.c:155 [inline]
+ cpuidle_idle_call kernel/sched/idle.c:236 [inline]
+ do_idle+0x3e8/0x590 kernel/sched/idle.c:303
+ cpu_startup_entry+0x14/0x20 kernel/sched/idle.c:400
+ start_kernel+0x47f/0x4a0 init/main.c:1140
+ secondary_startup_64_no_verify+0xc3/0xcb
+ </TASK>
+----------------
+Code disassembly (best guess):
+   0:	89 de                	mov    %ebx,%esi
+   2:	e8 ad a6 0b f8       	callq  0xf80ba6b4
+   7:	84 db                	test   %bl,%bl
+   9:	75 ac                	jne    0xffffffb7
+   b:	e8 c4 a2 0b f8       	callq  0xf80ba2d4
+  10:	e8 2f eb 11 f8       	callq  0xf811eb44
+  15:	eb 0c                	jmp    0x23
+  17:	e8 b8 a2 0b f8       	callq  0xf80ba2d4
+  1c:	0f 00 2d d1 4b c5 00 	verw   0xc54bd1(%rip)        # 0xc54bf4
+  23:	e8 ac a2 0b f8       	callq  0xf80ba2d4
+  28:	fb                   	sti
+  29:	f4                   	hlt
+* 2a:	9c                   	pushfq <-- trapping instruction
+  2b:	5b                   	pop    %rbx
+  2c:	81 e3 00 02 00 00    	and    $0x200,%ebx
+  32:	fa                   	cli
+  33:	31 ff                	xor    %edi,%edi
+  35:	48 89 de             	mov    %rbx,%rsi
+  38:	e8 27 a5 0b f8       	callq  0xf80ba564
+  3d:	48 85 db             	test   %rbx,%rbx
+
+
 ---
- drivers/gpu/drm/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-diff --git a/drivers/gpu/drm/Kconfig b/drivers/gpu/drm/Kconfig
-index e88c497fa010..2aaa9ef1168d 100644
---- a/drivers/gpu/drm/Kconfig
-+++ b/drivers/gpu/drm/Kconfig
-@@ -244,6 +244,7 @@ source "drivers/gpu/drm/radeon/Kconfig"
- config DRM_AMDGPU
- 	tristate "AMD GPU"
- 	depends on DRM && PCI && MMU
-+	depends on CPU_LITTLE_ENDIAN
- 	select FW_LOADER
- 	select DRM_DISPLAY_DP_HELPER
- 	select DRM_DISPLAY_HDMI_HELPER
---=20
-2.35.1
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/4z9Q+UDxW1c+QVT8Qsuywg7
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJznSUACgkQAVBC80lX
-0Gz5HQf+MVdK1DIdSOWtEA/fkRVBGb/BMzWmQYZIqmeWUGv/LTjdhtqVdg9weslv
-7VIqaRhKogZQSqBYGgG7QdIm2vKrOTYtUc5MHW8NrNgS6kbuwnMvW7jlmk7OBbNW
-BUecCHsWi64gbmtINHT2Bjr8E+KGbNeu5RUzYvuS3zT9aguFPxaVmmAI58vyNt21
-icNs1cZsk0gBqg8yrxnyqOTYI2Siikgircum5S8sYEfqm/Lviq4agg0lxbw5pAko
-HmZEl9YHmXjXqwNEHqDl6PN3tj+BLmPNdgOYe17WUJrZ2vfB+/oYK9X74IMiQ6wR
-yLq1fmCbz1rY8H0JyeoB+QTDffiWFg==
-=NcuA
------END PGP SIGNATURE-----
-
---Sig_/4z9Q+UDxW1c+QVT8Qsuywg7--
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

@@ -2,117 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8141B51C33E
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 17:02:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 350A451C353
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 17:06:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380969AbiEEPF5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 11:05:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55380 "EHLO
+        id S1381042AbiEEPIj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 11:08:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380949AbiEEPF4 (ORCPT
+        with ESMTP id S233617AbiEEPIf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 11:05:56 -0400
-Received: from us-smtp-delivery-74.mimecast.com (us-smtp-delivery-74.mimecast.com [170.10.129.74])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 73DCA222BD
-        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 08:02:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651762935;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=I3fL/x7Xenik54basEds0J2F7uKxunsCuMprnbYoyPM=;
-        b=NVBX972iFFolnrKC/n4Yc3N5vcFDro6HK4moQcTMZYO+RWSZAN8BeUBYsKAVNkfH97bcul
-        YQU9j9DbEJbUvMhq5tEmr3AJ36U/hqS8ULraA6s6uV8sHQ77q+Fh/ARAL3MSeqt34gqJU3
-        Fa+vgeO8/y0xZKqWfIoeTelB/vaqKx4=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-517-_OCgwZHFOa-R75Os49XEVg-1; Thu, 05 May 2022 11:02:09 -0400
-X-MC-Unique: _OCgwZHFOa-R75Os49XEVg-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id CEADA1014A69;
-        Thu,  5 May 2022 15:02:06 +0000 (UTC)
-Received: from dhcp-27-174.brq.redhat.com (unknown [10.40.192.3])
-        by smtp.corp.redhat.com (Postfix) with SMTP id AD2C49E94;
-        Thu,  5 May 2022 15:02:01 +0000 (UTC)
-Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
-        oleg@redhat.com; Thu,  5 May 2022 17:02:05 +0200 (CEST)
-Date:   Thu, 5 May 2022 17:01:59 +0200
-From:   Oleg Nesterov <oleg@redhat.com>
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     linux-kernel@vger.kernel.org, rjw@rjwysocki.net, mingo@kernel.org,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, mgorman@suse.de, bigeasy@linutronix.de,
-        Will Deacon <will@kernel.org>, tj@kernel.org,
-        linux-pm@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        linux-um@lists.infradead.org, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        linux-xtensa@linux-xtensa.org, Kees Cook <keescook@chromium.org>,
-        Jann Horn <jannh@google.com>, linux-ia64@vger.kernel.org
-Subject: Re: [PATCH v3 08/11] ptrace: Admit ptrace_stop can generate spuriuos
- SIGTRAPs
-Message-ID: <20220505150158.GB13929@redhat.com>
-References: <87k0b0apne.fsf_-_@email.froward.int.ebiederm.org>
- <20220504224058.476193-8-ebiederm@xmission.com>
+        Thu, 5 May 2022 11:08:35 -0400
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 296C85AA59;
+        Thu,  5 May 2022 08:04:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1651763095; x=1683299095;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=lK4AYco/HD5kRmKSXiIurHbHQwGh4G7Y3jLU0XeK+XY=;
+  b=lDdpF6g39b+xQ8dGMRYM/0PlnG+euko8Mlqb3azN6KAZnodZTcYrnyf2
+   IpgoIo3Ba3KJ7V1ru1OAtdIXFGRvvUureRbAYALuARE4RyNjkOapyrFh/
+   D4B8c99XcucaoxjA/S61OPIWQTBbn1XlPXQg7JoV2GDJOqinBcdEtnYHW
+   E=;
+Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 05 May 2022 08:04:54 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2022 08:04:54 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Thu, 5 May 2022 08:04:53 -0700
+Received: from hu-srivasam-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Thu, 5 May 2022 08:04:48 -0700
+From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+To:     <agross@kernel.org>, <bjorn.andersson@linaro.org>,
+        <robh+dt@kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <quic_rohkumar@quicinc.com>, <srinivas.kandagatla@linaro.org>,
+        <dianders@chromium.org>, <swboyd@chromium.org>,
+        <judyhsiao@chromium.org>
+CC:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+Subject: [PATCH v14 0/4] Add lpass pin control support for audio on sc7280 based targets
+Date:   Thu, 5 May 2022 20:33:20 +0530
+Message-ID: <1651763004-32533-1-git-send-email-quic_srivasam@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220504224058.476193-8-ebiederm@xmission.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/04, Eric W. Biederman wrote:
->
-> With the removal of the incomplete detection of the tracer going away
-> in ptrace_stop, ptrace_stop always sleeps in schedule after
-> ptrace_freeze_traced succeeds.  Modify ptrace_check_attach to
-> warn if wait_task_inactive fails.
+This patch set is to add lpass pin control support for Audio over I2S,
+wcd codec and digital mics.
 
-Oh. Again, I don't understand the changelog. If we forget about RT,
-ptrace_stop() will always sleep if ptrace_freeze_traced() succeeds.
-may_ptrace_stop() has gone.
+Changes Since V13:
+    -- Remove redundant properties in lpass lpi pin control nodes.
+    -- Sort lpass lpi pin control nodes.
+Changes Since V12:
+    -- Split common lpass lpi pin control nodes to functionality specific nodes.
+    -- Move common pin control properties to corresponding default nodes.
+Changes Since V11:
+    -- Move CRD specific pinmux nodes to crd specific file.
+Changes Since V10:
+    -- Add lpass lpi pinmux and MI2S pinmux support for rev5+ boards.
+    -- Remove dependency patches link in the cover-letter as it is merged.
+Changes Since V9:
+    -- Remove redundant prefix in node name.
+Changes Since V8:
+    -- Modify label and node names to lpass specific.
+    -- Sort nodes as per node names and kind of nodes like pinctrl and device nodes.
+Changes Since V7:
+    -- Sort mi2s pincontrol nodes as per node name.
+    -- Fix typo errors.
+Changes Since V6:
+    -- Move amp_en node to corresponding consumer patch.
+    -- Update label and node names.
+    -- Remove redundant drive-strengths.
+    -- Remove herobrine crd specific mi2s configuration.
+Changes Since V5:
+    -- Remove redundant function property in amp_en node.
+    -- Move board specific properties of lpass pin control node to board specific file.
+    -- Remove redundant properties in pin control nodes.
+    -- Move wcd938x codec reset and CTIA/OMTP pin control patches to other series.
+Changes Since V4:
+    -- Add primary and secondary I2S pinmux nodes for herobrine specific targets.
+Changes Since V3:
+    -- Add pinctrl nodes for wcd codec reset and CTIA/OMTP headset selection.
+Changes Since V2:
+    -- Move lpass pin control node to main dtsi file.
+    -- Sort nodes alphabetically.
+    -- Remove redundant wcd reset gpio nodes.
+    -- Remove redundant input-enable field in dmic pin control nodes.
+    -- Update amp_en node. 
+    -- Fix typo errors.
+    -- Modify node names.
+    -- Create patches on latest kernel.    
+Changes Since V1:
+    -- Merge pinmux and pinconf properties in amp_en and wcd pin reset node.
+    -- Split common i2s pin control nodes to functionality specific nodes.
+    -- Move board specific properties to board specific dtsi file.
+    -- Update dmic pin control node name.
 
-IOW. Lets forget about RT
+Srinivasa Rao Mandadapu (4):
+  arm64: dts: qcom: sc7280: Add pinmux for I2S speaker and Headset
+  arm64: dts: qcom: sc7280: Add secondary MI2S pinmux specifications for
+    CRD 3.0/3.1
+  arm64: dts: qcom: sc7280: add lpass lpi pin controller node
+  arm64: dts: qcom: sc7280-herobrine: Add lpi pinmux properties for CRD
+    3.0/3.1
 
-> --- a/kernel/ptrace.c
-> +++ b/kernel/ptrace.c
-> @@ -266,17 +266,9 @@ static int ptrace_check_attach(struct task_struct *child, bool ignore_state)
->  	}
->  	read_unlock(&tasklist_lock);
->
-> -	if (!ret && !ignore_state) {
-> -		if (!wait_task_inactive(child, __TASK_TRACED)) {
-> -			/*
-> -			 * This can only happen if may_ptrace_stop() fails and
-> -			 * ptrace_stop() changes ->state back to TASK_RUNNING,
-> -			 * so we should not worry about leaking __TASK_TRACED.
-> -			 */
-> -			WARN_ON(READ_ONCE(child->__state) == __TASK_TRACED);
-> -			ret = -ESRCH;
-> -		}
-> -	}
-> +	if (!ret && !ignore_state &&
-> +	    WARN_ON_ONCE(!wait_task_inactive(child, __TASK_TRACED)))
-> +		ret = -ESRCH;
->
->  	return ret;
->  }
+ arch/arm64/boot/dts/qcom/sc7280-herobrine-crd.dts |  75 +++++++++++++
+ arch/arm64/boot/dts/qcom/sc7280-idp.dtsi          |  76 +++++++++++++
+ arch/arm64/boot/dts/qcom/sc7280.dtsi              | 131 ++++++++++++++++++++++
+ 3 files changed, 282 insertions(+)
 
-Why do you think this change would be wrong without any other changes?
-
-Oleg.
+-- 
+2.7.4
 

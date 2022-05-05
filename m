@@ -2,60 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FC2651B755
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 07:04:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E142D51B765
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 07:15:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243226AbiEEFIc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 01:08:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45724 "EHLO
+        id S243293AbiEEFSn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 01:18:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234698AbiEEFIb (ORCPT
+        with ESMTP id S243252AbiEEFSm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 01:08:31 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D925F36174
-        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 22:04:49 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9470AB82B79
-        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 05:04:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A2B8C385AC;
-        Thu,  5 May 2022 05:04:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651727087;
-        bh=JdN3zDO4dj3t7OPhPCs+YNC0AJuQ2IsUuVlmCRPStU4=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=iTcZRR1vooI5FXN7x9t09oy3eNbyztkSzg6Rg5zSMsP7TO6taaKQoF2bHEZ26qcEs
-         +qq8qfy133ZkWgOCgEkYzg5HBW6fLiiCPDd4jkUWxXHabzEq+1b3mImZImnFqshsHP
-         9prBoyW7YhIcmxRlwBl4LAYtgMLERi0cps6BIvGIc7ySiiDeXV2eUppUZeVxhUqqdE
-         XKuIrS0/OLvM9NOGOW8BgxTmiz7BdPm1SPpTHYc3hv08hY2SijaKO2Jmct0nIvFO5v
-         hEsDBAmy8G8B6/kaNCtXWK2VE1mTyZhRw34A7mX/eKJgPYmKbqF8Q2SDtxEjSlxc2H
-         GGZOksrK11XqA==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id F3AC15C038D; Wed,  4 May 2022 22:04:44 -0700 (PDT)
-Date:   Wed, 4 May 2022 22:04:44 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     Matthew Wilcox <willy@infradead.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: Wait for mutex to become unlocked
-Message-ID: <20220505050444.GA3738810@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <YnLzrGlBNCmCPLmS@casper.infradead.org>
- <87pmksj0ah.ffs@tglx>
- <YnMcdmx9ZwHcxTYe@casper.infradead.org>
- <87k0b0ixv6.ffs@tglx>
+        Thu, 5 May 2022 01:18:42 -0400
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03EBF6441
+        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 22:15:04 -0700 (PDT)
+Received: by mail-pg1-x530.google.com with SMTP id 15so2826536pgf.4
+        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 22:15:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=rciyAge845BWG9mlD1S98CNzrOU1Orh/xcyyS8+TIrQ=;
+        b=bA31F5qeB2Pfmy2yJFw8I9b+3ot/zzHb/yJxojfnI+MNjJ3kI6s4rlc2gJU5lbtW79
+         PkpLTv6ge1hBlbzMb3QpHu4J+/8oHt0RjbIUUpFda0LgQsAeK+NmuXvBz7RQGO+3Sa+s
+         TZxoKfN4NTFpb4U/b24rLCVWtCQregrsErcv3FL+icWAlZMCYfuCOEWGa4aZTlZeAjqM
+         QreWzxf6FJfXQqqqSnsC+Cpb1hez/v+u80sfU/ANvJHJqQaqs0LyK+jASO6ZamI1d32m
+         T0yBuucNpxwGVFfrZTwK/iRSFRYEcupCdfUaipP1OQpAJXE4bOILUumfnQkY4wCKZOom
+         Uyjw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=rciyAge845BWG9mlD1S98CNzrOU1Orh/xcyyS8+TIrQ=;
+        b=Ns1kqG1IDoK/Q/DcMPOiMx7qhJh4Hr5O6kI6bF35vlh1KWs0ucP5Ie/NyHF9taj/WS
+         741dENBTNsgDguZA9Yp+LZ/BSUYRQFxzkEPk0gjhPc7SdzT6FO6YVt3T2GppDgIxLyCL
+         1Fpfm2sxvZHj07haWbbeDszj6aEu+W/hcOVwTle5mqIPq/wcoo7VkaWGFNiEP/EtkSxN
+         DgS1w2THS0mAIT2YvUZlmfDJTCNWIw7CEzleHwR2jDn0s3l1Na+tCbwz3l8GsLz9dA1G
+         ifcaBx1ecwquNIAfROAcfmqz/ynxAglCbbhAuW3rawOyuMDM3tCfOX/XWYD+8mclCNjA
+         30TQ==
+X-Gm-Message-State: AOAM5305lGzq4BhlE/RXr8/16SmqA/ZVygwlVcsrtVPTGqVUnJ6qbk05
+        AITu3nK2d/MCLeEea/XyeVWspM4rnGeRg9sruJ/XCPZxnOs=
+X-Google-Smtp-Source: ABdhPJxlwwNM4iOSdr/ZBBGMxgVjuOijnxzygeFIDXnlnvnoqmwR416mD5IiQuhTqX1wIGAHL1AWUNHtD7eb+tRgldM=
+X-Received: by 2002:a63:db17:0:b0:3c1:dc15:7a6e with SMTP id
+ e23-20020a63db17000000b003c1dc157a6emr19512781pgg.107.1651727703367; Wed, 04
+ May 2022 22:15:03 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87k0b0ixv6.ffs@tglx>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+References: <20220426073338.3048192-1-jens.wiklander@linaro.org>
+In-Reply-To: <20220426073338.3048192-1-jens.wiklander@linaro.org>
+From:   Jens Wiklander <jens.wiklander@linaro.org>
+Date:   Thu, 5 May 2022 07:14:52 +0200
+Message-ID: <CAHUa44HHR9Y5y-xM8Ss5+amUokV=yfpymJqMwPfNjcfi1aD4gw@mail.gmail.com>
+Subject: Re: [PATCH v4 0/4] OP-TEE RPC argument cache
+To:     linux-kernel@vger.kernel.org, op-tee@lists.trustedfirmware.org
+Cc:     Sumit Garg <sumit.garg@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -64,83 +65,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 05, 2022 at 03:14:53AM +0200, Thomas Gleixner wrote:
-> On Thu, May 05 2022 at 01:38, Matthew Wilcox wrote:
-> > On Thu, May 05, 2022 at 02:22:30AM +0200, Thomas Gleixner wrote:
-> >> > That is, rwsem_wait_read() puts the thread on the rwsem's wait queue,
-> >> > and wakes it up without giving it the lock.  Now this thread will never
-> >> > be able to block any thread that tries to acquire mmap_sem for write.
-> >> 
-> >> Never?
-> >> 
-> >>  	if (down_read_trylock(&vma->sem)) {
-> >> 
-> >> ---> preemption by writer
-> >
-> > Ah!  This is a different semaphore.  Yes, it can be preempted while
-> > holding the VMA rwsem and block a thread which is trying to modify the
-> > VMA which will then block all threads from faulting _on that VMA_,
-> > but it won't affect page faults on any other VMA.
-> 
-> Ooops. Missed that detail. Too many semaphores here.
-> 
-> > It's only Better, not Best (the Best approach was proposed on Monday
-> > afternoon, and the other MM developers asked us to only go as far as
-> > Better and see if that was good enough).
-> 
-> :)
-> 
-> >> The information gathered from /proc/pid/smaps is unreliable at the point
-> >> where the lock is dropped already today. So it does not make a
-> >> difference whether the VMAs have a 'read me if you really think it's
-> >> useful' sideband information which gets updated when the VMA changes and
-> >> allows to do:
-> >
-> > Mmm.  I'm not sure that we want to maintain the smaps information on
-> > the off chance that somebody wants to query it.
-> 
-> Fair enough, but then the question is whether it's more reasonable to
-> document that if you want to read that nonsense, then you have to live
-> with the consequences. The problem with many of those interfaces is that
-> they have been added for whatever reasons, became ABI and people are
-> suddenly making performance claims which might not be justified at all.
-> 
-> We really have to make our mind up and make decisions whether we want to
-> solve every "I want a pony" complaint just because.
-> 
-> >> But looking at the stuff which gets recomputed and reevaluated in that
-> >> proc/smaps code this makes a lot of sense, because most if not all of
-> >> this information is already known at the point where the VMA is modified
-> >> while holding mmap_sem for useful reasons, no?
-> >
-> > I suspect the only way to know is to try to implement it, and then
-> > benchmark it.
-> 
-> Sure. There are other ways than having a RCU protected info, e.g. a
-> sequence count which ensures that the to be read information is
-> consistent.
+On Tue, Apr 26, 2022 at 9:33 AM Jens Wiklander
+<jens.wiklander@linaro.org> wrote:
+>
+> Hi all,
+>
+> This patchset optimizes handling of the argument struct passed to
+> call_with_arg when doing a yielding call to OP-TEE.
+>
+> Prior to this was this struct allocated before the yielding call and
+> then freed after it had returned. In case many calls are made in succession
+> this results in quite a bit of unnecessary allocte/free and possibly also
+> switching back and forth to secure work in order to register if needed.
+>
+> Another optimization handles the way the argument struct needed to do RPC
+> is passed. Please see the patch "optee: add OPTEE_SMC_CALL_WITH_RPC_ARG and
+> OPTEE_SMC_CALL_WITH_REGD_ARG" for details.
+>
+> Thanks,
+> Jens
+>
+> v1->v2:
+> * Split out a separate commit "optee: rename rpc_arg_count to
+>   rpc_param_count"
+> * Check optee->rpc_param_count before calling optee_disable_shm_cache().
+> * Mention OPTEE_SMC_CALL_WITH_REGD_ARG in commit message.
+>
+> v2->v3:
+> * Applied Sumit's R-B to "optee: rename rpc_arg_count to rpc_param_count"
+>   and "optee: add OPTEE_SMC_CALL_WITH_RPC_ARG and OPTEE_SMC_CALL_WITH_REGD_ARG"
+> * Fixed some review comments to "optee: add OPTEE_SMC_CALL_WITH_RPC_ARG and
+>   OPTEE_SMC_CALL_WITH_REGD_ARG"
+> * Rebased on v5.18-rc1
+>
+> v3->v4:
+> * Updated "optee: cache argument shared memory structs" to work with older
+>   versions of the SMC-ABI when using dynamic shared memory.
+>
+> Jens Wiklander (4):
+>   optee: rename rpc_arg_count to rpc_param_count
+>   optee: add OPTEE_SMC_CALL_WITH_RPC_ARG and
+>     OPTEE_SMC_CALL_WITH_REGD_ARG
+>   optee: add FF-A capability OPTEE_FFA_SEC_CAP_ARG_OFFSET
+>   optee: cache argument shared memory structs
+>
+>  drivers/tee/optee/call.c          | 238 ++++++++++++++++++++++++------
+>  drivers/tee/optee/core.c          |   1 +
+>  drivers/tee/optee/ffa_abi.c       |  36 +++--
+>  drivers/tee/optee/optee_ffa.h     |  12 +-
+>  drivers/tee/optee/optee_private.h |  31 +++-
+>  drivers/tee/optee/optee_smc.h     |  48 +++++-
+>  drivers/tee/optee/smc_abi.c       | 197 ++++++++++++++++++++-----
+>  7 files changed, 461 insertions(+), 102 deletions(-)
+>
+> --
+> 2.31.1
+>
 
-So the thought is to maintain the /proc/smaps information separately,
-so that it can just be read out, correct?  If so...
+I've picked this up now.
 
-As you say, sequence counts can check consistency, but something else
-is required to protect any dereferences of pointers to data that might
-be freed.  One approach is to place the /proc/smaps information somewhere
-that cannot be freed during /proc/smaps scan.  The place that comes
-immediately to mind is the mm_struct, but I suspect that the /proc/smaps
-information will need to be variable length, especially on 64-bit systems.
-
-Another approach is to allocate space for the /proc/smaps information
-dynamically, using RCU to protect only reads of only that information.
-But you seem to be thinking of something else.  Or maybe your point is
-that the use of RCU can be restricted to this /proc/smaps information?
-
-Yet another approach is to use reference counts, but of course the counts
-need to live outside of the structure being protected.  If the summary
-information is not to block expansion of the address space (which is
-the asked-for pony), this gets tricky due to the need to quickly and
-repeatedly enlarge the memory holding the /proc/smaps information.
-
-Or am I missing a trick here?
-
-							Thanx, Paul
+Thanks,
+Jens

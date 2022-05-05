@@ -2,667 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22A3751CAF2
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 23:18:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BEA4051CAF8
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 23:24:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384921AbiEEVVl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 17:21:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54112 "EHLO
+        id S1385699AbiEEV16 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 17:27:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231739AbiEEVVj (ORCPT
+        with ESMTP id S245352AbiEEV15 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 17:21:39 -0400
-Received: from us-smtp-delivery-74.mimecast.com (us-smtp-delivery-74.mimecast.com [170.10.133.74])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0FCD5334
-        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 14:17:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651785475;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=9K6AxDmoVKWyWmgKNj1WgszhohOIVL+BytRE6hsfCAg=;
-        b=UrdJlHHeswEb9x8usl7xGCE9DewhAmaVDmeic6a28ou+Jn2uG8PceXTVlNkZbs3YzMhTXk
-        U55FM48oZgtEd/4HQVK2eb5mbnxCzICrUuB4RJhXlzH/lsNToy5rQG/s6TiHCho9DjHwAI
-        r0ebZSUs0I8RuyCrRmn8Jicnoks7pXg=
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com
- [209.85.166.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-114-pp7mfyQMP_KWixqLv8XYfg-1; Thu, 05 May 2022 17:17:54 -0400
-X-MC-Unique: pp7mfyQMP_KWixqLv8XYfg-1
-Received: by mail-il1-f197.google.com with SMTP id x1-20020a056e020f0100b002c98fce9c13so3103928ilj.3
-        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 14:17:54 -0700 (PDT)
+        Thu, 5 May 2022 17:27:57 -0400
+Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAD7E5E16C;
+        Thu,  5 May 2022 14:24:12 -0700 (PDT)
+Received: by mail-oi1-x230.google.com with SMTP id q8so5641782oif.13;
+        Thu, 05 May 2022 14:24:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=mYBkCrOjKsNELWgFHk4Rh2mSLPo6p/XEUcMC/Y8n7so=;
+        b=QLx6Dsr5kDEheU2O26ElBO0o5+yVyseG4+bpINUVi2CnDJTcRJmya4mb86DqZPQx0L
+         PdfXpvNlLr3vAoTNwug0VWTYnxn9nvTF8Se/b474gQjhmcmmpmrlM5PYB2v3x9soEJSX
+         1kF26eiHrp1yjRHAsaZ7+hdZdZg7VE4qlOLSu9QOxnVp7DRi/N2DE0Vl7la3s9sasU+D
+         EUQXVUCebHRpBlx2vj0TVqT+UOIfIjLy/PkBRRcO0mjX5cc2cFxAks6T8qNQAn91m+Lg
+         8qZ+NJUi3wCUq+F0eb16vHOFvV9hE7zr24TUhxwE+4hUzo3cHV7KIwnYKXWqBJYfHhXm
+         9dOg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=9K6AxDmoVKWyWmgKNj1WgszhohOIVL+BytRE6hsfCAg=;
-        b=gHn3vJu+ST/80vLlKkgqvSUGcAXRjl9aT70Qwp6vUc/bBbTxBJQ0eKPInFRDwCXn6F
-         WQ2PHWXzrWX3li7ixyDpttnVS0W3nvOAh898Ghnu7DrepoKTwN3LgTEA/vcivZ24V4aX
-         qsZwYUyFjfc8IqoBYckXBxV28A4FqxDBcACeCTfmBfGpjnUCDfzMUAHhdxH3QSbjEqFo
-         GF6GD3jKRDOMsnG0xvQgqHQYWiV6EVNYE5mQ2RNw4e95lbM1qN4tYjSgD9j8Pfrgs/+f
-         NbngNnY3s/wsLyGGozNwxIpJVwejfGKP/Hr20QP/3CfdgU1iQuAmvdc54/l9aOrNNWQH
-         HBSA==
-X-Gm-Message-State: AOAM5319NuDw/L1Mj+qJK0pGsyJxVGFS/poCmf86P+w4A6f20t9u02cf
-        3S0D7tkCbdLTDcMH8vhtesyEfTeljUMpMsE44vAxUqJbFeYMwqX8RMOxXryzkwYKHfWJ1XwNHkk
-        9D6G8WQGNh67qeBXrVIYmWId4
-X-Received: by 2002:a05:6e02:168f:b0:2cf:166b:bb10 with SMTP id f15-20020a056e02168f00b002cf166bbb10mr43801ila.89.1651785473131;
-        Thu, 05 May 2022 14:17:53 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzMWEmGfDfrA+jTZRBuKSCq1XX4QgrMEeWTLDPpl2wqRqVPv6x/0kKZnwIZmy5XFyOa4NjpRg==
-X-Received: by 2002:a05:6e02:168f:b0:2cf:166b:bb10 with SMTP id f15-20020a056e02168f00b002cf166bbb10mr43791ila.89.1651785472760;
-        Thu, 05 May 2022 14:17:52 -0700 (PDT)
-Received: from localhost.localdomain (cpec09435e3e0ee-cmc09435e3e0ec.cpe.net.cable.rogers.com. [99.241.198.116])
-        by smtp.gmail.com with ESMTPSA id z5-20020a92d6c5000000b002cde6e352c2sm719486ilp.12.2022.05.05.14.17.51
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Thu, 05 May 2022 14:17:52 -0700 (PDT)
-From:   Peter Xu <peterx@redhat.com>
-To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Cc:     Hugh Dickins <hughd@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>, peterx@redhat.com,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        David Hildenbrand <david@redhat.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Alistair Popple <apopple@nvidia.com>
-Subject: [PATCH] mm: Avoid unnecessary page fault retires on shared memory types
-Date:   Thu,  5 May 2022 17:17:48 -0400
-Message-Id: <20220505211748.41127-1-peterx@redhat.com>
-X-Mailer: git-send-email 2.32.0
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=mYBkCrOjKsNELWgFHk4Rh2mSLPo6p/XEUcMC/Y8n7so=;
+        b=MEyi4g4oxd/jcttNH7O1SR71kRR9yghkZaXXltwM8BIlJCdz4CpX5ySKehrOVeykma
+         8vT0T9Z++N+0ajYPp9nVRNehuTrGAsFxxc/8Ng5mdaiEAWdbHkw+933/RRSCXQCqlou7
+         wmhiUIKEwwcCNGf+ZzMAo6phshhsdyitLdjQQj+wy6wfwWD82g4r4+UmTcg3ob3lesiZ
+         82mUV2vj0uYNzmIqa4B2MrVbWTD1sZ1Br1/PJ+ZItpvmc8kfh5jdQctGo/4V5OOq89+z
+         q84Es1lNuaBYAwT3NSnENbrVvVzc3k0HMlxbzO2bRmcOBM1a44ibDSCa89Fn6lLBwdZ5
+         YZrg==
+X-Gm-Message-State: AOAM532MI53AIT6d0+njPzfeVkAGCsObWOGE6QRtvXZGueX8QPISOto5
+        ruF2OLuZUPvlnlXEAtiFrDEqwYIw5zwIGQ==
+X-Google-Smtp-Source: ABdhPJzb9+zk/Sp0SpidIkLIL8lnEDsKvmCJ3xNQmU8wf2aCLh8MHh09qJNpiUTPE9bTwWyoCxHsVg==
+X-Received: by 2002:a05:6808:1151:b0:326:479f:4413 with SMTP id u17-20020a056808115100b00326479f4413mr3411562oiu.63.1651785852103;
+        Thu, 05 May 2022 14:24:12 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id l8-20020aca1908000000b00325cda1ffbbsm980249oii.58.2022.05.05.14.24.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 May 2022 14:24:10 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Thu, 5 May 2022 14:24:09 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Liu Xinpeng <liuxp11@chinatelecom.cn>
+Cc:     wim@linux-watchdog.org, tzungbi@kernel.org,
+        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6 1/1] watchdog: iTCO_wdt: Using existing macro define
+ covers more scenarios
+Message-ID: <20220505212409.GA1988522@roeck-us.net>
+References: <1650967905-3199-1-git-send-email-liuxp11@chinatelecom.cn>
 MIME-Version: 1.0
-Content-type: text/plain
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1650967905-3199-1-git-send-email-liuxp11@chinatelecom.cn>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I observed that for each of the shared file-backed page faults, we're very
-likely to retry one more time for the 1st write fault upon no page.  It's
-because we'll need to release the mmap lock for dirty rate limit purpose
-with balance_dirty_pages_ratelimited() (in fault_dirty_shared_page()).
+On Tue, Apr 26, 2022 at 06:11:45PM +0800, Liu Xinpeng wrote:
+> For power management, SET_NOIRQ_SYSTEM_SLEEP_PM_OPS defined for
+> CONFIG_PM_SLEEP, will point ->suspend_noirq, ->freeze_noirq and
+> ->poweroff_noirq to the same function. Vice versa happens for
+> ->resume_noirq, ->thaw_noirq and ->restore_noirq.
+> 
+> Signed-off-by: Liu Xinpeng <liuxp11@chinatelecom.cn>
 
-Then after that throttling we return VM_FAULT_RETRY.
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-We did that probably because VM_FAULT_RETRY is the only way we can return
-to the fault handler at that time telling it we've released the mmap lock.
-
-However that's not ideal because it's very likely the fault does not need
-to be retried at all since the pgtable was well installed before the
-throttling, so the next continuous fault (including taking mmap read lock,
-walk the pgtable, etc.) could be in most cases unnecessary.
-
-It's not only slowing down page faults for shared file-backed, but also add
-more mmap lock contention which is in most cases not needed at all.
-
-To observe this, one could try to write to some shmem page and look at
-"pgfault" value in /proc/vmstat, then we should expect 2 counts for each
-shmem write simply because we retried, and vm event "pgfault" will capture
-that.
-
-To make it more efficient, add a new VM_FAULT_COMPLETED return code just to
-show that we've completed the whole fault and released the lock.  It's also
-a hint that we should very possibly not need another fault immediately on
-this page because we've just completed it.
-
-This patch provides a ~12% perf boost on my aarch64 test VM with a simple
-program sequentially dirtying 400MB shmem file being mmap()ed:
-
-  Before: 650980.20 (+-1.94%)
-  After:  569396.40 (+-1.38%)
-
-I believe it could help more than that.
-
-We need some special care on GUP and the s390 pgfault handler (for gmap
-code before returning from pgfault), the rest changes in the page fault
-handlers should be relatively straightforward.
-
-Another thing to mention is that mm_account_fault() does take this new
-fault as a generic fault to be accounted, unlike VM_FAULT_RETRY.
-
-I explicitly didn't touch hmm_vma_fault() and break_ksm() because they do
-not handle VM_FAULT_RETRY even with existing code, so I'm literally keeping
-them as-is.
-
-Signed-off-by: Peter Xu <peterx@redhat.com>
----
-
-Note: I didn't copy any arch maintainers yet because I want to get some
-feedback from the mm people first..  I'll start doing so when there's a new
-version.  Please have a look, thanks.
-
-Signed-off-by: Peter Xu <peterx@redhat.com>
----
- arch/alpha/mm/fault.c         |  4 ++++
- arch/arc/mm/fault.c           |  4 ++++
- arch/arm/mm/fault.c           |  4 ++++
- arch/arm64/mm/fault.c         |  4 ++++
- arch/csky/mm/fault.c          |  4 ++++
- arch/hexagon/mm/vm_fault.c    |  4 ++++
- arch/ia64/mm/fault.c          |  4 ++++
- arch/m68k/mm/fault.c          |  4 ++++
- arch/microblaze/mm/fault.c    |  4 ++++
- arch/mips/mm/fault.c          |  4 ++++
- arch/nios2/mm/fault.c         |  4 ++++
- arch/openrisc/mm/fault.c      |  4 ++++
- arch/parisc/mm/fault.c        |  4 ++++
- arch/powerpc/mm/copro_fault.c |  5 +++++
- arch/powerpc/mm/fault.c       |  5 +++++
- arch/riscv/mm/fault.c         |  4 ++++
- arch/s390/mm/fault.c          | 12 +++++++++++-
- arch/sh/mm/fault.c            |  4 ++++
- arch/sparc/mm/fault_32.c      |  7 +++++++
- arch/sparc/mm/fault_64.c      |  5 +++++
- arch/um/kernel/trap.c         |  4 ++++
- arch/x86/mm/fault.c           |  4 ++++
- arch/xtensa/mm/fault.c        |  4 ++++
- include/linux/mm_types.h      |  2 ++
- mm/gup.c                      | 34 +++++++++++++++++++++++++++++++++-
- mm/memory.c                   |  2 +-
- 26 files changed, 141 insertions(+), 3 deletions(-)
-
-diff --git a/arch/alpha/mm/fault.c b/arch/alpha/mm/fault.c
-index ec20c1004abf..ef427a6bdd1a 100644
---- a/arch/alpha/mm/fault.c
-+++ b/arch/alpha/mm/fault.c
-@@ -155,6 +155,10 @@ do_page_fault(unsigned long address, unsigned long mmcsr,
- 	if (fault_signal_pending(fault, regs))
- 		return;
- 
-+	/* The fault is fully completed (including releasing mmap lock) */
-+	if (fault & VM_FAULT_COMPLETED)
-+		return;
-+
- 	if (unlikely(fault & VM_FAULT_ERROR)) {
- 		if (fault & VM_FAULT_OOM)
- 			goto out_of_memory;
-diff --git a/arch/arc/mm/fault.c b/arch/arc/mm/fault.c
-index dad27e4d69ff..5ca59a482632 100644
---- a/arch/arc/mm/fault.c
-+++ b/arch/arc/mm/fault.c
-@@ -146,6 +146,10 @@ void do_page_fault(unsigned long address, struct pt_regs *regs)
- 		return;
- 	}
- 
-+	/* The fault is fully completed (including releasing mmap lock) */
-+	if (fault & VM_FAULT_COMPLETED)
-+		return;
-+
- 	/*
- 	 * Fault retry nuances, mmap_lock already relinquished by core mm
- 	 */
-diff --git a/arch/arm/mm/fault.c b/arch/arm/mm/fault.c
-index a062e07516dd..46cccd6bf705 100644
---- a/arch/arm/mm/fault.c
-+++ b/arch/arm/mm/fault.c
-@@ -322,6 +322,10 @@ do_page_fault(unsigned long addr, unsigned int fsr, struct pt_regs *regs)
- 		return 0;
- 	}
- 
-+	/* The fault is fully completed (including releasing mmap lock) */
-+	if (fault & VM_FAULT_COMPLETED)
-+		return 0;
-+
- 	if (!(fault & VM_FAULT_ERROR)) {
- 		if (fault & VM_FAULT_RETRY) {
- 			flags |= FAULT_FLAG_TRIED;
-diff --git a/arch/arm64/mm/fault.c b/arch/arm64/mm/fault.c
-index 77341b160aca..e401d416bbd6 100644
---- a/arch/arm64/mm/fault.c
-+++ b/arch/arm64/mm/fault.c
-@@ -607,6 +607,10 @@ static int __kprobes do_page_fault(unsigned long far, unsigned int esr,
- 		return 0;
- 	}
- 
-+	/* The fault is fully completed (including releasing mmap lock) */
-+	if (fault & VM_FAULT_COMPLETED)
-+		return 0;
-+
- 	if (fault & VM_FAULT_RETRY) {
- 		mm_flags |= FAULT_FLAG_TRIED;
- 		goto retry;
-diff --git a/arch/csky/mm/fault.c b/arch/csky/mm/fault.c
-index 7215a46b6b8e..e15f736cca4b 100644
---- a/arch/csky/mm/fault.c
-+++ b/arch/csky/mm/fault.c
-@@ -285,6 +285,10 @@ asmlinkage void do_page_fault(struct pt_regs *regs)
- 		return;
- 	}
- 
-+	/* The fault is fully completed (including releasing mmap lock) */
-+	if (fault & VM_FAULT_COMPLETED)
-+		return;
-+
- 	if (unlikely((fault & VM_FAULT_RETRY) && (flags & FAULT_FLAG_ALLOW_RETRY))) {
- 		flags |= FAULT_FLAG_TRIED;
- 
-diff --git a/arch/hexagon/mm/vm_fault.c b/arch/hexagon/mm/vm_fault.c
-index 4fac4b9eb316..f73c7cbfe326 100644
---- a/arch/hexagon/mm/vm_fault.c
-+++ b/arch/hexagon/mm/vm_fault.c
-@@ -96,6 +96,10 @@ void do_page_fault(unsigned long address, long cause, struct pt_regs *regs)
- 	if (fault_signal_pending(fault, regs))
- 		return;
- 
-+	/* The fault is fully completed (including releasing mmap lock) */
-+	if (fault & VM_FAULT_COMPLETED)
-+		return;
-+
- 	/* The most common case -- we are done. */
- 	if (likely(!(fault & VM_FAULT_ERROR))) {
- 		if (fault & VM_FAULT_RETRY) {
-diff --git a/arch/ia64/mm/fault.c b/arch/ia64/mm/fault.c
-index 07379d1a227f..ef78c2d66cdd 100644
---- a/arch/ia64/mm/fault.c
-+++ b/arch/ia64/mm/fault.c
-@@ -139,6 +139,10 @@ ia64_do_page_fault (unsigned long address, unsigned long isr, struct pt_regs *re
- 	if (fault_signal_pending(fault, regs))
- 		return;
- 
-+	/* The fault is fully completed (including releasing mmap lock) */
-+	if (fault & VM_FAULT_COMPLETED)
-+		return;
-+
- 	if (unlikely(fault & VM_FAULT_ERROR)) {
- 		/*
- 		 * We ran out of memory, or some other thing happened
-diff --git a/arch/m68k/mm/fault.c b/arch/m68k/mm/fault.c
-index 71aa9f6315dc..4d2837eb3e2a 100644
---- a/arch/m68k/mm/fault.c
-+++ b/arch/m68k/mm/fault.c
-@@ -141,6 +141,10 @@ int do_page_fault(struct pt_regs *regs, unsigned long address,
- 	if (fault_signal_pending(fault, regs))
- 		return 0;
- 
-+	/* The fault is fully completed (including releasing mmap lock) */
-+	if (fault & VM_FAULT_COMPLETED)
-+		return 0;
-+
- 	if (unlikely(fault & VM_FAULT_ERROR)) {
- 		if (fault & VM_FAULT_OOM)
- 			goto out_of_memory;
-diff --git a/arch/microblaze/mm/fault.c b/arch/microblaze/mm/fault.c
-index a9626e6a68af..5c40c3ebe52f 100644
---- a/arch/microblaze/mm/fault.c
-+++ b/arch/microblaze/mm/fault.c
-@@ -222,6 +222,10 @@ void do_page_fault(struct pt_regs *regs, unsigned long address,
- 	if (fault_signal_pending(fault, regs))
- 		return;
- 
-+	/* The fault is fully completed (including releasing mmap lock) */
-+	if (fault & VM_FAULT_COMPLETED)
-+		return;
-+
- 	if (unlikely(fault & VM_FAULT_ERROR)) {
- 		if (fault & VM_FAULT_OOM)
- 			goto out_of_memory;
-diff --git a/arch/mips/mm/fault.c b/arch/mips/mm/fault.c
-index 44f98100e84e..6f72bac39bf2 100644
---- a/arch/mips/mm/fault.c
-+++ b/arch/mips/mm/fault.c
-@@ -162,6 +162,10 @@ static void __kprobes __do_page_fault(struct pt_regs *regs, unsigned long write,
- 		return;
- 	}
- 
-+	/* The fault is fully completed (including releasing mmap lock) */
-+	if (fault & VM_FAULT_COMPLETED)
-+		return;
-+
- 	if (unlikely(fault & VM_FAULT_ERROR)) {
- 		if (fault & VM_FAULT_OOM)
- 			goto out_of_memory;
-diff --git a/arch/nios2/mm/fault.c b/arch/nios2/mm/fault.c
-index a32f14cd72f2..edaca0a6c1c1 100644
---- a/arch/nios2/mm/fault.c
-+++ b/arch/nios2/mm/fault.c
-@@ -139,6 +139,10 @@ asmlinkage void do_page_fault(struct pt_regs *regs, unsigned long cause,
- 	if (fault_signal_pending(fault, regs))
- 		return;
- 
-+	/* The fault is fully completed (including releasing mmap lock) */
-+	if (fault & VM_FAULT_COMPLETED)
-+		return;
-+
- 	if (unlikely(fault & VM_FAULT_ERROR)) {
- 		if (fault & VM_FAULT_OOM)
- 			goto out_of_memory;
-diff --git a/arch/openrisc/mm/fault.c b/arch/openrisc/mm/fault.c
-index 80bb66ad42f6..c18f7abd64df 100644
---- a/arch/openrisc/mm/fault.c
-+++ b/arch/openrisc/mm/fault.c
-@@ -167,6 +167,10 @@ asmlinkage void do_page_fault(struct pt_regs *regs, unsigned long address,
- 	if (fault_signal_pending(fault, regs))
- 		return;
- 
-+	/* The fault is fully completed (including releasing mmap lock) */
-+	if (fault & VM_FAULT_COMPLETED)
-+		return;
-+
- 	if (unlikely(fault & VM_FAULT_ERROR)) {
- 		if (fault & VM_FAULT_OOM)
- 			goto out_of_memory;
-diff --git a/arch/parisc/mm/fault.c b/arch/parisc/mm/fault.c
-index f114e102aaf2..fe57175a7792 100644
---- a/arch/parisc/mm/fault.c
-+++ b/arch/parisc/mm/fault.c
-@@ -309,6 +309,10 @@ void do_page_fault(struct pt_regs *regs, unsigned long code,
- 	if (fault_signal_pending(fault, regs))
- 		return;
- 
-+	/* The fault is fully completed (including releasing mmap lock) */
-+	if (fault & VM_FAULT_COMPLETED)
-+		return;
-+
- 	if (unlikely(fault & VM_FAULT_ERROR)) {
- 		/*
- 		 * We hit a shared mapping outside of the file, or some
-diff --git a/arch/powerpc/mm/copro_fault.c b/arch/powerpc/mm/copro_fault.c
-index c1cb21a00884..7c507fb48182 100644
---- a/arch/powerpc/mm/copro_fault.c
-+++ b/arch/powerpc/mm/copro_fault.c
-@@ -65,6 +65,11 @@ int copro_handle_mm_fault(struct mm_struct *mm, unsigned long ea,
- 
- 	ret = 0;
- 	*flt = handle_mm_fault(vma, ea, is_write ? FAULT_FLAG_WRITE : 0, NULL);
-+
-+	/* The fault is fully completed (including releasing mmap lock) */
-+	if (*flt & VM_FAULT_COMPLETED)
-+		return 0;
-+
- 	if (unlikely(*flt & VM_FAULT_ERROR)) {
- 		if (*flt & VM_FAULT_OOM) {
- 			ret = -ENOMEM;
-diff --git a/arch/powerpc/mm/fault.c b/arch/powerpc/mm/fault.c
-index d53fed4eccbd..014005428687 100644
---- a/arch/powerpc/mm/fault.c
-+++ b/arch/powerpc/mm/fault.c
-@@ -511,6 +511,10 @@ static int ___do_page_fault(struct pt_regs *regs, unsigned long address,
- 	if (fault_signal_pending(fault, regs))
- 		return user_mode(regs) ? 0 : SIGBUS;
- 
-+	/* The fault is fully completed (including releasing mmap lock) */
-+	if (fault & VM_FAULT_COMPLETED)
-+		goto out;
-+
- 	/*
- 	 * Handle the retry right now, the mmap_lock has been released in that
- 	 * case.
-@@ -525,6 +529,7 @@ static int ___do_page_fault(struct pt_regs *regs, unsigned long address,
- 	if (unlikely(fault & VM_FAULT_ERROR))
- 		return mm_fault_error(regs, address, fault);
- 
-+out:
- 	/*
- 	 * Major/minor page fault accounting.
- 	 */
-diff --git a/arch/riscv/mm/fault.c b/arch/riscv/mm/fault.c
-index 4e9efbe46d5f..d6a87f4137ca 100644
---- a/arch/riscv/mm/fault.c
-+++ b/arch/riscv/mm/fault.c
-@@ -330,6 +330,10 @@ asmlinkage void do_page_fault(struct pt_regs *regs)
- 	if (fault_signal_pending(fault, regs))
- 		return;
- 
-+	/* The fault is fully completed (including releasing mmap lock) */
-+	if (fault & VM_FAULT_COMPLETED)
-+		return;
-+
- 	if (unlikely(fault & VM_FAULT_RETRY)) {
- 		flags |= FAULT_FLAG_TRIED;
- 
-diff --git a/arch/s390/mm/fault.c b/arch/s390/mm/fault.c
-index e173b6187ad5..9503a7cfaf03 100644
---- a/arch/s390/mm/fault.c
-+++ b/arch/s390/mm/fault.c
-@@ -339,6 +339,7 @@ static inline vm_fault_t do_exception(struct pt_regs *regs, int access)
- 	unsigned long address;
- 	unsigned int flags;
- 	vm_fault_t fault;
-+	bool need_unlock = true;
- 	bool is_write;
- 
- 	tsk = current;
-@@ -433,6 +434,13 @@ static inline vm_fault_t do_exception(struct pt_regs *regs, int access)
- 			goto out_up;
- 		goto out;
- 	}
-+
-+	/* The fault is fully completed (including releasing mmap lock) */
-+	if (fault & VM_FAULT_COMPLETED) {
-+		need_unlock = false;
-+		goto out_gmap;
-+	}
-+
- 	if (unlikely(fault & VM_FAULT_ERROR))
- 		goto out_up;
- 
-@@ -452,6 +460,7 @@ static inline vm_fault_t do_exception(struct pt_regs *regs, int access)
- 		mmap_read_lock(mm);
- 		goto retry;
- 	}
-+out_gmap:
- 	if (IS_ENABLED(CONFIG_PGSTE) && gmap) {
- 		address =  __gmap_link(gmap, current->thread.gmap_addr,
- 				       address);
-@@ -466,7 +475,8 @@ static inline vm_fault_t do_exception(struct pt_regs *regs, int access)
- 	}
- 	fault = 0;
- out_up:
--	mmap_read_unlock(mm);
-+	if (need_unlock)
-+		mmap_read_unlock(mm);
- out:
- 	return fault;
- }
-diff --git a/arch/sh/mm/fault.c b/arch/sh/mm/fault.c
-index e175667b1363..acd2f5e50bfc 100644
---- a/arch/sh/mm/fault.c
-+++ b/arch/sh/mm/fault.c
-@@ -485,6 +485,10 @@ asmlinkage void __kprobes do_page_fault(struct pt_regs *regs,
- 		if (mm_fault_error(regs, error_code, address, fault))
- 			return;
- 
-+	/* The fault is fully completed (including releasing mmap lock) */
-+	if (fault & VM_FAULT_COMPLETED)
-+		return;
-+
- 	if (fault & VM_FAULT_RETRY) {
- 		flags |= FAULT_FLAG_TRIED;
- 
-diff --git a/arch/sparc/mm/fault_32.c b/arch/sparc/mm/fault_32.c
-index ad569d9bd124..bbdf78d170e3 100644
---- a/arch/sparc/mm/fault_32.c
-+++ b/arch/sparc/mm/fault_32.c
-@@ -190,6 +190,10 @@ asmlinkage void do_sparc_fault(struct pt_regs *regs, int text_fault, int write,
- 	if (fault_signal_pending(fault, regs))
- 		return;
- 
-+	/* The fault is fully completed (including releasing mmap lock) */
-+	if (fault & VM_FAULT_COMPLETED)
-+		return;
-+
- 	if (unlikely(fault & VM_FAULT_ERROR)) {
- 		if (fault & VM_FAULT_OOM)
- 			goto out_of_memory;
-@@ -339,6 +343,9 @@ static void force_user_fault(unsigned long address, int write)
- 	case VM_FAULT_OOM:
- 		goto do_sigbus;
- 	}
-+	/* The fault is fully completed (including releasing mmap lock) */
-+	if (fault & VM_FAULT_COMPLETED)
-+		return;
- 	mmap_read_unlock(mm);
- 	return;
- bad_area:
-diff --git a/arch/sparc/mm/fault_64.c b/arch/sparc/mm/fault_64.c
-index 253e07043298..4acc12eafbf5 100644
---- a/arch/sparc/mm/fault_64.c
-+++ b/arch/sparc/mm/fault_64.c
-@@ -427,6 +427,10 @@ asmlinkage void __kprobes do_sparc64_fault(struct pt_regs *regs)
- 	if (fault_signal_pending(fault, regs))
- 		goto exit_exception;
- 
-+	/* The fault is fully completed (including releasing mmap lock) */
-+	if (fault & VM_FAULT_COMPLETED)
-+		goto lock_released;
-+
- 	if (unlikely(fault & VM_FAULT_ERROR)) {
- 		if (fault & VM_FAULT_OOM)
- 			goto out_of_memory;
-@@ -449,6 +453,7 @@ asmlinkage void __kprobes do_sparc64_fault(struct pt_regs *regs)
- 	}
- 	mmap_read_unlock(mm);
- 
-+lock_released:
- 	mm_rss = get_mm_rss(mm);
- #if defined(CONFIG_TRANSPARENT_HUGEPAGE)
- 	mm_rss -= (mm->context.thp_pte_count * (HPAGE_SIZE / PAGE_SIZE));
-diff --git a/arch/um/kernel/trap.c b/arch/um/kernel/trap.c
-index d1d5d0be0308..d3ce21c4ca32 100644
---- a/arch/um/kernel/trap.c
-+++ b/arch/um/kernel/trap.c
-@@ -76,6 +76,10 @@ int handle_page_fault(unsigned long address, unsigned long ip,
- 		if ((fault & VM_FAULT_RETRY) && fatal_signal_pending(current))
- 			goto out_nosemaphore;
- 
-+		/* The fault is fully completed (including releasing mmap lock) */
-+		if (fault & VM_FAULT_COMPLETED)
-+			return 0;
-+
- 		if (unlikely(fault & VM_FAULT_ERROR)) {
- 			if (fault & VM_FAULT_OOM) {
- 				goto out_of_memory;
-diff --git a/arch/x86/mm/fault.c b/arch/x86/mm/fault.c
-index d0074c6ed31a..12ed70b432d6 100644
---- a/arch/x86/mm/fault.c
-+++ b/arch/x86/mm/fault.c
-@@ -1408,6 +1408,10 @@ void do_user_addr_fault(struct pt_regs *regs,
- 		return;
- 	}
- 
-+	/* The fault is fully completed (including releasing mmap lock) */
-+	if (fault & VM_FAULT_COMPLETED)
-+		return;
-+
- 	/*
- 	 * If we need to retry the mmap_lock has already been released,
- 	 * and if there is a fatal signal pending there is no guarantee
-diff --git a/arch/xtensa/mm/fault.c b/arch/xtensa/mm/fault.c
-index 06d0973a0d74..5f64305ba8d7 100644
---- a/arch/xtensa/mm/fault.c
-+++ b/arch/xtensa/mm/fault.c
-@@ -118,6 +118,10 @@ void do_page_fault(struct pt_regs *regs)
- 		return;
- 	}
- 
-+	/* The fault is fully completed (including releasing mmap lock) */
-+	if (fault & VM_FAULT_COMPLETED)
-+		return;
-+
- 	if (unlikely(fault & VM_FAULT_ERROR)) {
- 		if (fault & VM_FAULT_OOM)
- 			goto out_of_memory;
-diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
-index 8834e38c06a4..06b998d55e23 100644
---- a/include/linux/mm_types.h
-+++ b/include/linux/mm_types.h
-@@ -717,6 +717,7 @@ typedef __bitwise unsigned int vm_fault_t;
-  * @VM_FAULT_NEEDDSYNC:		->fault did not modify page tables and needs
-  *				fsync() to complete (for synchronous page faults
-  *				in DAX)
-+ * @VM_FAULT_COMPLETED:		->fault completed, meanwhile mmap lock released
-  * @VM_FAULT_HINDEX_MASK:	mask HINDEX value
-  *
-  */
-@@ -734,6 +735,7 @@ enum vm_fault_reason {
- 	VM_FAULT_FALLBACK       = (__force vm_fault_t)0x000800,
- 	VM_FAULT_DONE_COW       = (__force vm_fault_t)0x001000,
- 	VM_FAULT_NEEDDSYNC      = (__force vm_fault_t)0x002000,
-+	VM_FAULT_COMPLETED      = (__force vm_fault_t)0x004000,
- 	VM_FAULT_HINDEX_MASK    = (__force vm_fault_t)0x0f0000,
- };
- 
-diff --git a/mm/gup.c b/mm/gup.c
-index f598a037eb04..0b672625bfe4 100644
---- a/mm/gup.c
-+++ b/mm/gup.c
-@@ -876,6 +876,25 @@ static int faultin_page(struct vm_area_struct *vma,
- 	}
- 
- 	ret = handle_mm_fault(vma, address, fault_flags, NULL);
-+
-+	if (ret & VM_FAULT_COMPLETED) {
-+		/*
-+		 * With FAULT_FLAG_RETRY_NOWAIT we'll never release the
-+		 * mmap lock in the page fault handler. Sanity check this.
-+		 */
-+		WARN_ON_ONCE(fault_flags & FAULT_FLAG_RETRY_NOWAIT);
-+		if (locked)
-+			*locked = 0;
-+		/*
-+		 * We should do the same as VM_FAULT_RETRY, but let's not
-+		 * return -EBUSY since that's not reflecting the reality on
-+		 * what has happened - we've just fully completed a page
-+		 * fault, with the mmap lock released.  Use -EAGAIN to show
-+		 * that we want to take the mmap lock _again_.
-+		 */
-+		return -EAGAIN;
-+	}
-+
- 	if (ret & VM_FAULT_ERROR) {
- 		int err = vm_fault_to_errno(ret, *flags);
- 
-@@ -1101,6 +1120,7 @@ static long __get_user_pages(struct mm_struct *mm,
- 			case 0:
- 				goto retry;
- 			case -EBUSY:
-+			case -EAGAIN:
- 				ret = 0;
- 				fallthrough;
- 			case -EFAULT:
-@@ -1227,6 +1247,18 @@ int fixup_user_fault(struct mm_struct *mm,
- 		return -EINTR;
- 
- 	ret = handle_mm_fault(vma, address, fault_flags, NULL);
-+
-+	if (ret & VM_FAULT_COMPLETED) {
-+		/*
-+		 * NOTE: it's a pity that we need to retake the lock here
-+		 * to pair with the unlock() in the callers. Ideally we
-+		 * could tell the callers so they do not need to unlock.
-+		 */
-+		mmap_read_lock(mm);
-+		*unlocked = true;
-+		return 0;
-+	}
-+
- 	if (ret & VM_FAULT_ERROR) {
- 		int err = vm_fault_to_errno(ret, 0);
- 
-@@ -1292,7 +1324,7 @@ static __always_inline long __get_user_pages_locked(struct mm_struct *mm,
- 			/* VM_FAULT_RETRY couldn't trigger, bypass */
- 			return ret;
- 
--		/* VM_FAULT_RETRY cannot return errors */
-+		/* VM_FAULT_RETRY or VM_FAULT_COMPLETED cannot return errors */
- 		if (!*locked) {
- 			BUG_ON(ret < 0);
- 			BUG_ON(ret >= nr_pages);
-diff --git a/mm/memory.c b/mm/memory.c
-index 76e3af9639d9..4749205c3b70 100644
---- a/mm/memory.c
-+++ b/mm/memory.c
-@@ -2942,7 +2942,7 @@ static vm_fault_t fault_dirty_shared_page(struct vm_fault *vmf)
- 		balance_dirty_pages_ratelimited(mapping);
- 		if (fpin) {
- 			fput(fpin);
--			return VM_FAULT_RETRY;
-+			return VM_FAULT_COMPLETED;
- 		}
- 	}
- 
--- 
-2.32.0
-
+> ---
+>  drivers/watchdog/iTCO_wdt.c | 20 +++++++-------------
+>  1 file changed, 7 insertions(+), 13 deletions(-)
+> 
+> diff --git a/drivers/watchdog/iTCO_wdt.c b/drivers/watchdog/iTCO_wdt.c
+> index 3f2f4343644f..34693f11385f 100644
+> --- a/drivers/watchdog/iTCO_wdt.c
+> +++ b/drivers/watchdog/iTCO_wdt.c
+> @@ -596,7 +596,6 @@ static int iTCO_wdt_probe(struct platform_device *pdev)
+>  	return 0;
+>  }
+>  
+> -#ifdef CONFIG_PM_SLEEP
+>  /*
+>   * Suspend-to-idle requires this, because it stops the ticks and timekeeping, so
+>   * the watchdog cannot be pinged while in that state.  In ACPI sleep states the
+> @@ -604,15 +603,15 @@ static int iTCO_wdt_probe(struct platform_device *pdev)
+>   */
+>  
+>  #ifdef CONFIG_ACPI
+> -static inline bool need_suspend(void)
+> +static inline bool __maybe_unused need_suspend(void)
+>  {
+>  	return acpi_target_system_state() == ACPI_STATE_S0;
+>  }
+>  #else
+> -static inline bool need_suspend(void) { return true; }
+> +static inline bool __maybe_unused need_suspend(void) { return true; }
+>  #endif
+>  
+> -static int iTCO_wdt_suspend_noirq(struct device *dev)
+> +static int __maybe_unused iTCO_wdt_suspend_noirq(struct device *dev)
+>  {
+>  	struct iTCO_wdt_private *p = dev_get_drvdata(dev);
+>  	int ret = 0;
+> @@ -626,7 +625,7 @@ static int iTCO_wdt_suspend_noirq(struct device *dev)
+>  	return ret;
+>  }
+>  
+> -static int iTCO_wdt_resume_noirq(struct device *dev)
+> +static int __maybe_unused iTCO_wdt_resume_noirq(struct device *dev)
+>  {
+>  	struct iTCO_wdt_private *p = dev_get_drvdata(dev);
+>  
+> @@ -637,20 +636,15 @@ static int iTCO_wdt_resume_noirq(struct device *dev)
+>  }
+>  
+>  static const struct dev_pm_ops iTCO_wdt_pm = {
+> -	.suspend_noirq = iTCO_wdt_suspend_noirq,
+> -	.resume_noirq = iTCO_wdt_resume_noirq,
+> +	SET_NOIRQ_SYSTEM_SLEEP_PM_OPS(iTCO_wdt_suspend_noirq,
+> +				      iTCO_wdt_resume_noirq)
+>  };
+>  
+> -#define ITCO_WDT_PM_OPS	(&iTCO_wdt_pm)
+> -#else
+> -#define ITCO_WDT_PM_OPS	NULL
+> -#endif /* CONFIG_PM_SLEEP */
+> -
+>  static struct platform_driver iTCO_wdt_driver = {
+>  	.probe          = iTCO_wdt_probe,
+>  	.driver         = {
+>  		.name   = DRV_NAME,
+> -		.pm     = ITCO_WDT_PM_OPS,
+> +		.pm     = &iTCO_wdt_pm,
+>  	},
+>  };
+>  
+> -- 
+> 2.23.0
+> 

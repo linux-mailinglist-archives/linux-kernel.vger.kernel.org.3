@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4286A51C4E6
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 18:11:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6079151C4C0
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 18:11:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350954AbiEEQMw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 12:12:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60548 "EHLO
+        id S1379802AbiEEQM5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 12:12:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381810AbiEEQMN (ORCPT
+        with ESMTP id S1381867AbiEEQMP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 12:12:13 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C7535C748;
-        Thu,  5 May 2022 09:08:30 -0700 (PDT)
+        Thu, 5 May 2022 12:12:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 296605C75A;
+        Thu,  5 May 2022 09:08:33 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D0B73B82E09;
-        Thu,  5 May 2022 16:08:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8D1BC385B0;
-        Thu,  5 May 2022 16:08:23 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AB91961DCF;
+        Thu,  5 May 2022 16:08:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0AEE7C385B3;
+        Thu,  5 May 2022 16:08:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651766907;
-        bh=5AKYSmxnW0FaqfNy56mbUfuR7EJGkipx4bFc9d32fVk=;
+        s=k20201202; t=1651766912;
+        bh=xp5szzRsyHzfmBZJ6GrNJ30mR5ggLppYgYmYnc1wD+A=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Gwl7EpzFH63116kT4TkbvhvrjTbTYUwb0lgajaQ8dCZu3Z445ies/eXoCEvSS3fsS
-         cKYOE8VRdXWSS1Gx36ExSDOyPOlMJW/mXggB9xXuGwS8WVLaYUVC2p4sHBEp2zLE52
-         X1FuLXYspFoBGUX/c3LtV/3IpKxc3YfaQijbYXqkPRBfKD3YxemV61D8CYjLMjPtC/
-         MSKbQiaAzAd3d39NsO59tk+0ItPBxbwYsNNDzrztrKddAdF6X8pqSeyNGvPYP0qS97
-         af/d70M/fK3cBSTP/tdOS7pNMYTsyol3l+crupyXrky+wgYhbrLYlwrKmCrwTyB0PZ
-         tQhNncXKW84Jw==
+        b=Qxl6gUJ20C8kYghw2Ts+x91danrXXMHUblwGI4ksBBVoE8Zdc9mo113RDGU2RpQX/
+         u4Y2mwwjgR9gde+8txiQ5e+/a4T3XdaCcZA8j0k5mnTGnQUIaQzWK1CX5QykFHQrq8
+         aUHENc7tY0DAco0oIdwQoT0o2QVWg/JuGzo1/Hkb/ajhvMYLaRILQznhFeE3DzaSOX
+         I5Pv7Emm5cBz8hIbDHpB79ZjiCjwCb5lJP24Dffb4V+g+D7AE6KHm7hdhel3+xiY12
+         fwCgPWM/sw9Kx+CmbW4XvCYuS5ew3N+47ZfV5xXhDV7e8H7pN2OALwTf912D/9LiEM
+         7s2e8jsm9+Zwg==
 From:   Daniel Bristot de Oliveira <bristot@kernel.org>
 To:     Steven Rostedt <rostedt@goodmis.org>, linux-kernel@vger.kernel.org
 Cc:     Daniel Bristot de Oliveira <bristot@kernel.org>,
@@ -48,10 +48,12 @@ Cc:     Daniel Bristot de Oliveira <bristot@kernel.org>,
         Gabriele Paoloni <gpaoloni@redhat.com>,
         Juri Lelli <juri.lelli@redhat.com>,
         Clark Williams <williams@redhat.com>,
-        linux-doc@vger.kernel.org, linux-trace-devel@vger.kernel.org
-Subject: [RFC V3 16/20] Documentation/rv: Add deterministic automata instrumentation documentation
-Date:   Thu,  5 May 2022 18:06:56 +0200
-Message-Id: <9d97a7fd241c08ebbf86d32190d6ae376668495f.1651766361.git.bristot@kernel.org>
+        linux-doc@vger.kernel.org, linux-trace-devel@vger.kernel.org,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>
+Subject: [RFC V3 17/20] watchdog/dev: Add tracepoints
+Date:   Thu,  5 May 2022 18:06:57 +0200
+Message-Id: <819c29aea60e266894dd25e7838c504c93e7a8bb.1651766361.git.bristot@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <cover.1651766361.git.bristot@kernel.org>
 References: <cover.1651766361.git.bristot@kernel.org>
@@ -67,9 +69,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the da_monitor_instrumentation.rst. It describes the basics
-of RV monitor instrumentation.
+Add a set of tracepoints, enabling the observability of the watchdog
+device interactions with user-space.
 
+The events are:
+	watchdog:watchdog_open
+	watchdog:watchdog_close
+	watchdog:watchdog_start
+	watchdog:watchdog_stop
+	watchdog:watchdog_set_timeout
+	watchdog:watchdog_ping
+	watchdog:watchdog_nowayout
+	watchdog:watchdog_set_keep_alive
+	watchdog:watchdog_keep_alive
+	watchdog:watchdog_set_pretimeout
+	watchdog:watchdog_pretimeout
+
+Cc: Wim Van Sebroeck <wim@linux-watchdog.org>
+Cc: Guenter Roeck <linux@roeck-us.net>
 Cc: Jonathan Corbet <corbet@lwn.net>
 Cc: Steven Rostedt <rostedt@goodmis.org>
 Cc: Ingo Molnar <mingo@redhat.com>
@@ -89,239 +106,304 @@ Cc: linux-kernel@vger.kernel.org
 Cc: linux-trace-devel@vger.kernel.org
 Signed-off-by: Daniel Bristot de Oliveira <bristot@kernel.org>
 ---
- .../trace/rv/da_monitor_instrumentation.rst   | 223 ++++++++++++++++++
- 1 file changed, 223 insertions(+)
- create mode 100644 Documentation/trace/rv/da_monitor_instrumentation.rst
+ drivers/watchdog/watchdog_dev.c        |  43 ++++++++++-
+ drivers/watchdog/watchdog_pretimeout.c |   2 +
+ include/linux/watchdog.h               |   7 +-
+ include/trace/events/watchdog.h        | 101 +++++++++++++++++++++++++
+ 4 files changed, 143 insertions(+), 10 deletions(-)
+ create mode 100644 include/trace/events/watchdog.h
 
-diff --git a/Documentation/trace/rv/da_monitor_instrumentation.rst b/Documentation/trace/rv/da_monitor_instrumentation.rst
-new file mode 100644
-index 000000000000..bbc14cae7d6b
---- /dev/null
-+++ b/Documentation/trace/rv/da_monitor_instrumentation.rst
-@@ -0,0 +1,223 @@
-+Deterministic Automata Instrumentation
-+========================================
+diff --git a/drivers/watchdog/watchdog_dev.c b/drivers/watchdog/watchdog_dev.c
+index 54903f3c851e..2f28dc5ab763 100644
+--- a/drivers/watchdog/watchdog_dev.c
++++ b/drivers/watchdog/watchdog_dev.c
+@@ -44,6 +44,9 @@
+ #include <linux/watchdog.h>	/* For watchdog specific items */
+ #include <linux/uaccess.h>	/* For copy_to_user/put_user/... */
+ 
++#define CREATE_TRACE_POINTS
++#include <trace/events/watchdog.h>
 +
-+This document introduces some concepts behind the **Deterministic Automata
-+(DA)** monitor instrumentation.
+ #include "watchdog_core.h"
+ #include "watchdog_pretimeout.h"
+ 
+@@ -130,9 +133,11 @@ static inline void watchdog_update_worker(struct watchdog_device *wdd)
+ 	if (watchdog_need_worker(wdd)) {
+ 		ktime_t t = watchdog_next_keepalive(wdd);
+ 
+-		if (t > 0)
++		if (t > 0) {
+ 			hrtimer_start(&wd_data->timer, t,
+ 				      HRTIMER_MODE_REL_HARD);
++			trace_watchdog_set_keep_alive(wdd, ktime_to_ms(t));
++		}
+ 	} else {
+ 		hrtimer_cancel(&wd_data->timer);
+ 	}
+@@ -141,7 +146,7 @@ static inline void watchdog_update_worker(struct watchdog_device *wdd)
+ static int __watchdog_ping(struct watchdog_device *wdd)
+ {
+ 	struct watchdog_core_data *wd_data = wdd->wd_data;
+-	ktime_t earliest_keepalive, now;
++	ktime_t earliest_keepalive, now, next_keepalive;
+ 	int err;
+ 
+ 	earliest_keepalive = ktime_add(wd_data->last_hw_keepalive,
+@@ -149,14 +154,16 @@ static int __watchdog_ping(struct watchdog_device *wdd)
+ 	now = ktime_get();
+ 
+ 	if (ktime_after(earliest_keepalive, now)) {
+-		hrtimer_start(&wd_data->timer,
+-			      ktime_sub(earliest_keepalive, now),
++		next_keepalive = ktime_sub(earliest_keepalive, now);
++		hrtimer_start(&wd_data->timer, next_keepalive,
+ 			      HRTIMER_MODE_REL_HARD);
++		trace_watchdog_set_keep_alive(wdd, ktime_to_ms(next_keepalive));
+ 		return 0;
+ 	}
+ 
+ 	wd_data->last_hw_keepalive = now;
+ 
++	trace_watchdog_ping(wdd);
+ 	if (wdd->ops->ping)
+ 		err = wdd->ops->ping(wdd);  /* ping the watchdog */
+ 	else
+@@ -215,6 +222,7 @@ static void watchdog_ping_work(struct kthread_work *work)
+ 	wd_data = container_of(work, struct watchdog_core_data, work);
+ 
+ 	mutex_lock(&wd_data->lock);
++	trace_watchdog_keep_alive(wd_data->wdd);
+ 	if (watchdog_worker_should_ping(wd_data))
+ 		__watchdog_ping(wd_data->wdd);
+ 	mutex_unlock(&wd_data->lock);
+@@ -250,6 +258,8 @@ static int watchdog_start(struct watchdog_device *wdd)
+ 
+ 	set_bit(_WDOG_KEEPALIVE, &wd_data->status);
+ 
++	trace_watchdog_start(wdd);
 +
-+The synthesis of automata-based models into the Linux *RV monitor* abstraction
-+is automated by a tool named dot2k, and the "rv/da_monitor.h" provided
-+by the RV interface.
+ 	started_at = ktime_get();
+ 	if (watchdog_hw_running(wdd) && wdd->ops->ping) {
+ 		err = __watchdog_ping(wdd);
+@@ -294,6 +304,7 @@ static int watchdog_stop(struct watchdog_device *wdd)
+ 		return -EBUSY;
+ 	}
+ 
++	trace_watchdog_stop(wdd);
+ 	if (wdd->ops->stop) {
+ 		clear_bit(WDOG_HW_RUNNING, &wdd->status);
+ 		err = wdd->ops->stop(wdd);
+@@ -367,6 +378,7 @@ static int watchdog_set_timeout(struct watchdog_device *wdd,
+ 	if (watchdog_timeout_invalid(wdd, timeout))
+ 		return -EINVAL;
+ 
++	trace_watchdog_set_timeout(wdd, timeout);
+ 	if (wdd->ops->set_timeout) {
+ 		err = wdd->ops->set_timeout(wdd, timeout);
+ 	} else {
+@@ -399,6 +411,8 @@ static int watchdog_set_pretimeout(struct watchdog_device *wdd,
+ 	if (watchdog_pretimeout_invalid(wdd, timeout))
+ 		return -EINVAL;
+ 
++	trace_watchdog_set_pretimeout(wdd, timeout);
 +
-+For example, given a file "wip.dot", representing a per-cpu monitor, with
-+this content::
-+
-+  digraph state_automaton {
-+	center = true;
-+	size = "7,11";
-+	rankdir = LR;
-+	{node [shape = circle] "non_preemptive"};
-+	{node [shape = plaintext, style=invis, label=""] "__init_preemptive"};
-+	{node [shape = doublecircle] "preemptive"};
-+	{node [shape = circle] "preemptive"};
-+	"__init_preemptive" -> "preemptive";
-+	"non_preemptive" [label = "non_preemptive"];
-+	"non_preemptive" -> "non_preemptive" [ label = "sched_waking" ];
-+	"non_preemptive" -> "preemptive" [ label = "preempt_enable" ];
-+	"preemptive" [label = "preemptive"];
-+	"preemptive" -> "non_preemptive" [ label = "preempt_disable" ];
-+	{ rank = min ;
-+		"__init_preemptive";
-+		"preemptive";
+ 	if (wdd->ops->set_pretimeout && (wdd->info->options & WDIOF_PRETIMEOUT))
+ 		err = wdd->ops->set_pretimeout(wdd, timeout);
+ 	else
+@@ -430,6 +444,23 @@ static int watchdog_get_timeleft(struct watchdog_device *wdd,
+ 	return 0;
+ }
+ 
++/**
++ * watchdog_set_nowayout - set nowaout bit
++ * @wdd:	The watchdog device to set nowayoutbit
++ * @nowayout	A boolean on/off switcher
++ *
++ * If nowayout boolean is true, the nowayout option is set. No action is
++ * taken if nowayout is false.
++ */
++void watchdog_set_nowayout(struct watchdog_device *wdd, bool nowayout)
++{
++	if (nowayout) {
++		set_bit(WDOG_NO_WAY_OUT, &wdd->status);
++		trace_watchdog_nowayout(wdd);
 +	}
-+  }
++}
++EXPORT_SYMBOL(watchdog_set_nowayout);
 +
-+That is the "DOT" representation of this automata model::
+ #ifdef CONFIG_WATCHDOG_SYSFS
+ static ssize_t nowayout_show(struct device *dev, struct device_attribute *attr,
+ 				char *buf)
+@@ -861,6 +892,8 @@ static int watchdog_open(struct inode *inode, struct file *file)
+ 		goto out_clear;
+ 	}
+ 
++	trace_watchdog_open(wdd);
 +
-+                       preempt_enable
-+          +---------------------------------+
-+          v                                 |
-+        #============#  preempt_disable   +------------------+
-+    --> H preemptive H -----------------> |  non_preemptive  |
-+        #============#                    +------------------+
-+                                            ^ sched_waking |
-+                                            +--------------+
+ 	err = watchdog_start(wdd);
+ 	if (err < 0)
+ 		goto out_mod;
+@@ -883,6 +916,7 @@ static int watchdog_open(struct inode *inode, struct file *file)
+ 	return stream_open(inode, file);
+ 
+ out_mod:
++	trace_watchdog_close(wdd);
+ 	module_put(wd_data->wdd->ops->owner);
+ out_clear:
+ 	clear_bit(_WDOG_DEV_OPEN, &wd_data->status);
+@@ -944,6 +978,7 @@ static int watchdog_release(struct inode *inode, struct file *file)
+ 	/* make sure that /dev/watchdog can be re-opened */
+ 	clear_bit(_WDOG_DEV_OPEN, &wd_data->status);
+ 
++	trace_watchdog_close(wdd);
+ done:
+ 	running = wdd && watchdog_hw_running(wdd);
+ 	mutex_unlock(&wd_data->lock);
+diff --git a/drivers/watchdog/watchdog_pretimeout.c b/drivers/watchdog/watchdog_pretimeout.c
+index 376a495ab80c..58c391ed2205 100644
+--- a/drivers/watchdog/watchdog_pretimeout.c
++++ b/drivers/watchdog/watchdog_pretimeout.c
+@@ -8,6 +8,7 @@
+ #include <linux/spinlock.h>
+ #include <linux/string.h>
+ #include <linux/watchdog.h>
++#include <trace/events/watchdog.h>
+ 
+ #include "watchdog_core.h"
+ #include "watchdog_pretimeout.h"
+@@ -107,6 +108,7 @@ void watchdog_notify_pretimeout(struct watchdog_device *wdd)
+ 		return;
+ 	}
+ 
++	trace_watchdog_pretimeout(wdd);
+ 	wdd->gov->pretimeout(wdd);
+ 	spin_unlock_irqrestore(&pretimeout_lock, flags);
+ }
+diff --git a/include/linux/watchdog.h b/include/linux/watchdog.h
+index 99660197a36c..11d93407e492 100644
+--- a/include/linux/watchdog.h
++++ b/include/linux/watchdog.h
+@@ -139,12 +139,7 @@ static inline bool watchdog_hw_running(struct watchdog_device *wdd)
+ 	return test_bit(WDOG_HW_RUNNING, &wdd->status);
+ }
+ 
+-/* Use the following function to set the nowayout feature */
+-static inline void watchdog_set_nowayout(struct watchdog_device *wdd, bool nowayout)
+-{
+-	if (nowayout)
+-		set_bit(WDOG_NO_WAY_OUT, &wdd->status);
+-}
++void watchdog_set_nowayout(struct watchdog_device *wdd, bool nowayout);
+ 
+ /* Use the following function to stop the watchdog on reboot */
+ static inline void watchdog_stop_on_reboot(struct watchdog_device *wdd)
+diff --git a/include/trace/events/watchdog.h b/include/trace/events/watchdog.h
+new file mode 100644
+index 000000000000..145cd6cfaa02
+--- /dev/null
++++ b/include/trace/events/watchdog.h
+@@ -0,0 +1,101 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#undef TRACE_SYSTEM
++#define TRACE_SYSTEM watchdog
 +
++#if !defined(_TRACE_WATCHDOG_H) || defined(TRACE_HEADER_MULTI_READ)
++#define _TRACE_WATCHDOG_H
 +
-+Run the dot2k tool with the model, specifying that it is a "per-cpu"
-+model::
++#include <linux/tracepoint.h>
 +
-+  $ dot2k -d ~/wip.dot -t per_cpu
++/*
++ * These are all events whose sole argument is the watchdog id.
++ */
++DECLARE_EVENT_CLASS(dev_operations_template,
 +
-+This will create a directory named "wip/" with the following files:
++	TP_PROTO(struct watchdog_device *wdd),
 +
-+- model.h: the wip in C
-+- wip.h: tracepoints that report the execution of the events by the
-+  monitor
-+- wip.c: the RV monitor
++	TP_ARGS(wdd),
 +
-+The monitor instrumentation should be done entirely in the RV monitor,
-+in the example above, in the wip.c file.
++	TP_STRUCT__entry(
++		__field(__u32, id)
++	),
 +
-+The RV monitor instrumentation section
-+--------------------------------------
++	TP_fast_assign(
++		__entry->id = wdd->id;
++	),
 +
-+The RV monitor file created by dot2k, with the name "$MODEL_NAME.c"
-+will include a section dedicated to instrumentation.
++	TP_printk("id=%d",
++		  __entry->id)
++);
 +
-+In the example of the wip.dot above, it will look like::
++DEFINE_EVENT(dev_operations_template, watchdog_open,
++	     TP_PROTO(struct watchdog_device *wdd),
++	     TP_ARGS(wdd));
 +
-+  /*
-+   * This is the instrumentation part of the monitor.
-+   *
-+   * This is the section where manual work is required. Here the kernel events
-+   * are translated into model's event.
-+   *
-+   */
-+  static void handle_preempt_disable(void *data, /* XXX: fill header */)
-+  {
-+	da_handle_event_wip(preempt_disable);
-+  }
++DEFINE_EVENT(dev_operations_template, watchdog_close,
++	     TP_PROTO(struct watchdog_device *wdd),
++	     TP_ARGS(wdd));
 +
-+  static void handle_preempt_enable(void *data, /* XXX: fill header */)
-+  {
-+	da_handle_event_wip(preempt_enable);
-+  }
++DEFINE_EVENT(dev_operations_template, watchdog_start,
++	     TP_PROTO(struct watchdog_device *wdd),
++	     TP_ARGS(wdd));
 +
-+  static void handle_sched_waking(void *data, /* XXX: fill header */)
-+  {
-+	da_handle_event_wip(sched_waking);
-+  }
++DEFINE_EVENT(dev_operations_template, watchdog_stop,
++	     TP_PROTO(struct watchdog_device *wdd),
++	     TP_ARGS(wdd));
 +
-+  static int start_wip(void)
-+  {
-+	int retval;
++DEFINE_EVENT(dev_operations_template, watchdog_ping,
++	     TP_PROTO(struct watchdog_device *wdd),
++	     TP_ARGS(wdd));
 +
-+	retval = da_monitor_init_wip();
-+	if (retval)
-+		return retval;
++DEFINE_EVENT(dev_operations_template, watchdog_nowayout,
++	     TP_PROTO(struct watchdog_device *wdd),
++	     TP_ARGS(wdd));
 +
-+	rv_attach_trace_probe("wip", /* XXX: tracepoint */, handle_preempt_disable);
-+	rv_attach_trace_probe("wip", /* XXX: tracepoint */, handle_preempt_enable);
-+	rv_attach_trace_probe("wip", /* XXX: tracepoint */, handle_sched_waking);
++DEFINE_EVENT(dev_operations_template, watchdog_keep_alive,
++	     TP_PROTO(struct watchdog_device *wdd),
++	     TP_ARGS(wdd));
 +
-+	return 0;
-+  }
++DEFINE_EVENT(dev_operations_template, watchdog_pretimeout,
++	     TP_PROTO(struct watchdog_device *wdd),
++	     TP_ARGS(wdd));
 +
-+The comment at the top of the section explains the general idea: the
-+instrumentation section translates *kernel events* into the *events
-+accepted by the model*.
++/*
++ * These are all events with a device ID and a given timeout.
++ */
++DECLARE_EVENT_CLASS(watchdog_timeout_template,
 +
-+Tracing callback functions
-+-----------------------------
++	TP_PROTO(struct watchdog_device *wdd, u64 timeout),
 +
-+The first three functions are skeletons for callback *handler functions* for
-+each of the three events from the wip model. The developer does not
-+necessarily need to use them: they are just starting points.
++	TP_ARGS(wdd, timeout),
 +
-+Using the example of::
++	TP_STRUCT__entry(
++		__field(__u32, id)
++		__field(__u64, timeout)
++	),
 +
-+ void handle_preempt_disable(void *data, /* XXX: fill header */)
-+ {
-+        da_handle_event_wip(preempt_disable);
-+ }
++	TP_fast_assign(
++		__entry->id		= wdd->id;
++		__entry->timeout	= timeout;
++	),
 +
-+The "preempt_disable" event from the model conects directly to the
-+"preemptirq:preempt_disable". The "preemptirq:preempt_disable" event
-+has the following signature, from "include/trace/events/preemptirq.h"::
++	TP_printk("id=%d timeout=%llus",
++		  __entry->id, __entry->timeout)
++);
 +
-+  TP_PROTO(unsigned long ip, unsigned long parent_ip)
++DEFINE_EVENT(watchdog_timeout_template, watchdog_set_timeout,
++	     TP_PROTO(struct watchdog_device *wdd, u64 timeout),
++	     TP_ARGS(wdd, timeout));
 +
-+Hence, the "handle_preempt_disable()" function will look like::
++DEFINE_EVENT(watchdog_timeout_template, watchdog_set_pretimeout,
++	     TP_PROTO(struct watchdog_device *wdd, u64 timeout),
++	     TP_ARGS(wdd, timeout));
 +
-+  void handle_preempt_disable(void *data, unsigned long ip, unsigned long parent_ip)
++DEFINE_EVENT(watchdog_timeout_template, watchdog_set_keep_alive,
++	     TP_PROTO(struct watchdog_device *wdd, u64 timeout),
++	     TP_ARGS(wdd, timeout));
 +
-+In this case, the kernel even translates one to one with the automata event,
-+and indeed, no other change is needed for this function.
++#endif /* _TRACE_WATCHDOG_H */
 +
-+The next handler function, "handle_preempt_enable()" has the same argument
-+list from the "handle_preempt_disable()". The difference is that the
-+"preempt_enable" event will be used to synchronize the system to the model.
-+
-+Initially, the *model* is placed in the initial state. However, the *system*
-+might, or might not be in the initial state. The monitor cannot start
-+processing events until it knows that the system reached the initial state.
-+Otherwise the monitor and the system could be out-of-sync.
-+
-+Looking at the automata definition, it is possible to see that the system
-+and the model are expected to return to the initial state after the
-+"preempt_enable" execution. Hence, it can be used to synchronize the
-+system and the model at the initialization of the monitoring section.
-+
-+The initialization is informed via an special handle function, the
-+"da_handle_init_event_$(MONITOR)(event)", in this case::
-+
-+  da_handle_event_wip(preempt_disable);
-+
-+So, the callback function will look like::
-+
-+  void handle_preempt_enable(void *data, unsigned long ip, unsigned long parent_ip)
-+  {
-+        da_handle_init_event_wip(preempt_enable);
-+  }
-+
-+Finally, the "handle_sched_waking()" will look like::
-+
-+  void handle_sched_waking(void *data, struct task_struct *task)
-+  {
-+        da_handle_event_wip(sched_waking);
-+  }
-+
-+And the explanation is left for the reader as an exercise.
-+
-+Start and Stop functions
-+------------------------
-+
-+dot2k automatically creates two special functions::
-+
-+  start_$MODELNAME()
-+  stop_$MODELNAME()
-+
-+These functions are called when the monitor is enabled and disabled,
-+respectivelly.
-+
-+They should be used to *attach* and *detach* the instrumentation to the running
-+system. The developer must add to the relative function all that is needed to
-+*attach* and *detach* its monitor to the system.
-+
-+For the wip case, these functions were named::
-+
-+ start_wip()
-+ stop_wip()
-+
-+But no change was required because: by default, these functions *attach* and
-+*detach* the tracepoints_to_attach, which was enough for this case.
-+
-+Instrumentation helpers
-+--------------------------
-+
-+To complete the instrumentation, the *handler functions* need to be attached to a
-+kernel event, at the monitoring start phase.
-+
-+The RV interface also facilitates this step. For example, the macro "rv_attach_trace_probe()"
-+is used to connect the wip model events to the relative kernel event. dot2k automatically
-+adds "rv_attach_trace_probe()" function call for each model event in the start phase, as
-+a suggestion.
-+
-+For example, from the wip sample model::
-+
-+  static int start_wip(void)
-+  {
-+        int retval;
-+
-+        retval = da_monitor_init_wip();
-+        if (retval)
-+                return retval;
-+
-+        rv_attach_trace_probe("wip", /* XXX: tracepoint */, handle_preempt_disable);
-+        rv_attach_trace_probe("wip", /* XXX: tracepoint */, handle_preempt_enable);
-+        rv_attach_trace_probe("wip", /* XXX: tracepoint */, handle_sched_waking);
-+
-+        return 0;
-+  }
-+
-+The probes then need to be detached at the stop phase.
++/* This part must be outside protection */
++#include <trace/define_trace.h>
 -- 
 2.35.1
 

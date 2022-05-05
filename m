@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 016ED51CC84
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 01:08:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA73851CC85
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 01:09:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386608AbiEEXMB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 19:12:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48114 "EHLO
+        id S1386585AbiEEXMg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 19:12:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378983AbiEEXL7 (ORCPT
+        with ESMTP id S233868AbiEEXMf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 19:11:59 -0400
+        Thu, 5 May 2022 19:12:35 -0400
 Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86FE95EDCA
-        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 16:08:18 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id b19so7864583wrh.11
-        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 16:08:18 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 705E75EDCB
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 16:08:54 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id e2so7876553wrh.7
+        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 16:08:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=bpnL7Y34VkNl+QPwMDgzggjgR+jtF3skcJLn7tbi1vw=;
-        b=ZztM9mhS6W2/C6sELpPS8Cmn+ajskHdr12C60QjWwmhGDVntb/M6q2E3u7zuHgva2K
-         TsYgCt0PHrn/LhjnTI5e8oWPpy5CsmpGe/5ZdU7x9MObFwZGWkSpH1x95TtbhGr9I3hx
-         eh8lzsfQL3d4Keq7k89mXLwrwD6rLsHEA1jwDjOA1HbVaG3dteJ0CNhPpnwzJOvB9Cke
-         GQVekz0U7OnpB/1ULtr4CyEFAMHJXURmb/tgCpMe9t8P5o2UuB86dyXyeZBRX1WHWBVP
-         /QlWq30d3qwOwVf3tyMdDMF6fXUpq4rWXGyAeYGRBdu/2a/KOaNYIJb5u1fMxJZ74LJZ
-         /D4w==
+        bh=pmCkDNpwH+4l8mVyBprXxHl161Mq2BAlrvB4VyEbFSc=;
+        b=dBj0ChooYJVQ1cX8CLka9qMcWZmUKJ6M1AWxgdq8bfFmMD+NwUqK/d0fQ3YCwHvhHt
+         lqhQABaos7wqUfsU9yVR2Sr7G70bjnzHkFXTAhPUOzZ1X4DwcAEyTdWiwwQxYp/uO30W
+         a9i6EUYkr2vxSlh2/ovH3PkFim4ahmCeTpLswWAypT5GiRd5DlFaAqQD0pDXVBaXS71W
+         GpjSxeQ6oWLlZJGuw7MEHwSR/VnSznnwGTu4Sm09QIe4S0o+rjHiCmUlLzXneRFLEAC/
+         yxpl9Bn0jKBMySn4/6yWgR7v03rFV8s2aU+0tE5LiX2Tmj1lZsYTA0VrZj3H8wIQVcR2
+         Lm8g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=bpnL7Y34VkNl+QPwMDgzggjgR+jtF3skcJLn7tbi1vw=;
-        b=0iDdjvM7bobILRmW5l0TH8PZZlYGyKXNRJdWjKfjPoodHvwj5+pyEj1VEZKbJx/14r
-         FHhj2QTMA/J5jCG5C+ZyCGvs72GAwFc9MNMGsQbWErF7780AX23G5Ri1qmW53J0GD8ru
-         5gFviOtbPSO3gk5/Zfc7On0u3DKluXVjgaSyRM5uLlVHhR/5zGMHDNAD5quVgNUnJ0KK
-         GomnUZI9/y3IcycDL+/Wc6Ihov/vwApO2HRQwpjedgZznl9rIdE0aG5rJCvwRuaRDD6/
-         zSXv9sMz9U6tCuD2U9pewQZbL6nUmDSJOgIGkkfDdQhlb1gUg+2BS1c4SzoYhwTUd1UH
-         AVyQ==
-X-Gm-Message-State: AOAM532H8tIYxA/fiQ5n8g1OxT7H86efMO8AaNfZUPamDALAjSD1CAPU
-        rxy9tt/ZLmk8Co7Knfj6WlAnSi2TsqvPkwH2sfeJY8SZMYA=
-X-Google-Smtp-Source: ABdhPJxmpa/79Wa00IBx1Yr+7b5P0w6mEY3KDDMtMib2IINUnQwdXSj0ICsLBkizN5ifCGSYNtdT/puyV96rVIhi3wg=
-X-Received: by 2002:adf:dd0e:0:b0:20a:c689:f44a with SMTP id
- a14-20020adfdd0e000000b0020ac689f44amr312612wrm.40.1651792096846; Thu, 05 May
- 2022 16:08:16 -0700 (PDT)
+        bh=pmCkDNpwH+4l8mVyBprXxHl161Mq2BAlrvB4VyEbFSc=;
+        b=romD14DAwoa9tJkWWSHvoj+cP7xAAlzU7NE+sOSK5XQ+8LOhnGNiKYN6vsGbwiFCNh
+         GzZ0DDKLUbm1cpIqCKxx6/pg/V7Bxzg96yQTef+T5C7XoDDL92TVaLnYE6TbnpFUWINT
+         ZVzGgYThhVn+lIRS28EdlPQeG2SgDV5RjSKaIl+bWKzOIu5OBLmTpSq3/pR5VSdXa20Q
+         tNCXUH01rR9/esCTfNxu1iXnpm5mek5L8BXsCvzY6/xU8Gm45Yu8XkAWyUpcSKOLpUI6
+         FzxABFYe6LdanWBmfkptD8CzpY9/1rulGPywzQS3TYGuvlb8Nm8T8BdDPpjP/qxSPsQS
+         BkSg==
+X-Gm-Message-State: AOAM530GtOwKAHYBniWgWUPCqlFTYtSywIKUQFt27bGyZNueOKqlaEb4
+        KO+4t2RfDar4ZPOnUKKrs84CKewiYBcxGXY9bOkaDQ==
+X-Google-Smtp-Source: ABdhPJySogy/rQv0nFUZB/fIIXB9Pko+BoWxa7lwTLZLdkqs8Hxs4cyn/qTDQxriXnnj+cHQsecHsVWDjSZ0JUTAEmM=
+X-Received: by 2002:adf:f30a:0:b0:20a:e193:6836 with SMTP id
+ i10-20020adff30a000000b0020ae1936836mr305477wro.654.1651792132888; Thu, 05
+ May 2022 16:08:52 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220505165639.361733-1-adrian.hunter@intel.com> <20220505165639.361733-6-adrian.hunter@intel.com>
-In-Reply-To: <20220505165639.361733-6-adrian.hunter@intel.com>
+References: <20220505165639.361733-1-adrian.hunter@intel.com> <20220505165639.361733-7-adrian.hunter@intel.com>
+In-Reply-To: <20220505165639.361733-7-adrian.hunter@intel.com>
 From:   Ian Rogers <irogers@google.com>
-Date:   Thu, 5 May 2022 16:08:03 -0700
-Message-ID: <CAP-5=fUepmFkTxmOKrgfHrttind+hdGciQ4-ZUjArZJ4XQq9iA@mail.gmail.com>
-Subject: Re: [PATCH V1 05/23] perf auxtrace: Do not mix up mmap idx
+Date:   Thu, 5 May 2022 16:08:39 -0700
+Message-ID: <CAP-5=fWO5Nq2DdU7bndtFX4g+uFk+9s8XDkeZOLnp5RB_g88mA@mail.gmail.com>
+Subject: Re: [PATCH V1 06/23] libperf evlist: Remove ->idx() per_cpu parameter
 To:     Adrian Hunter <adrian.hunter@intel.com>
 Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
         Jiri Olsa <jolsa@redhat.com>,
@@ -72,10 +72,7 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 On Thu, May 5, 2022 at 9:57 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
 >
-> The idx is with respect to evlist not evsel. That hasn't mattered because
-> they are the same at present. Prepare for that not being the case, which it
-> won't be when sideband tracking events are allowed on all CPUs even when
-> auxtrace is limited to selected CPUs.
+> Remove ->idx() per_cpu parameter because it isn't needed.
 >
 > Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
 
@@ -85,29 +82,62 @@ Thanks,
 Ian
 
 > ---
->  tools/perf/util/auxtrace.c | 10 ++++++++--
->  1 file changed, 8 insertions(+), 2 deletions(-)
+>  tools/lib/perf/evlist.c                  | 4 ++--
+>  tools/lib/perf/include/internal/evlist.h | 2 +-
+>  tools/perf/util/evlist.c                 | 3 ++-
+>  3 files changed, 5 insertions(+), 4 deletions(-)
 >
-> diff --git a/tools/perf/util/auxtrace.c b/tools/perf/util/auxtrace.c
-> index 10936a38031f..b11549ae39df 100644
-> --- a/tools/perf/util/auxtrace.c
-> +++ b/tools/perf/util/auxtrace.c
-> @@ -640,8 +640,14 @@ static int evlist__enable_event_idx(struct evlist *evlist, struct evsel *evsel,
+> diff --git a/tools/lib/perf/evlist.c b/tools/lib/perf/evlist.c
+> index a09315538a30..6d0fa7b2f417 100644
+> --- a/tools/lib/perf/evlist.c
+> +++ b/tools/lib/perf/evlist.c
+> @@ -517,7 +517,7 @@ mmap_per_thread(struct perf_evlist *evlist, struct perf_evlist_mmap_ops *ops,
+>                 int output_overwrite = -1;
+>
+>                 if (ops->idx)
+> -                       ops->idx(evlist, mp, thread, false);
+> +                       ops->idx(evlist, mp, thread);
+>
+>                 if (mmap_per_evsel(evlist, ops, thread, mp, 0, thread,
+>                                    &output, &output_overwrite))
+> @@ -544,7 +544,7 @@ mmap_per_cpu(struct perf_evlist *evlist, struct perf_evlist_mmap_ops *ops,
+>                 int output_overwrite = -1;
+>
+>                 if (ops->idx)
+> -                       ops->idx(evlist, mp, cpu, true);
+> +                       ops->idx(evlist, mp, cpu);
+>
+>                 for (thread = 0; thread < nr_threads; thread++) {
+>                         if (mmap_per_evsel(evlist, ops, cpu, mp, cpu,
+> diff --git a/tools/lib/perf/include/internal/evlist.h b/tools/lib/perf/include/internal/evlist.h
+> index e3e64f37db7b..0d5c830431a7 100644
+> --- a/tools/lib/perf/include/internal/evlist.h
+> +++ b/tools/lib/perf/include/internal/evlist.h
+> @@ -38,7 +38,7 @@ struct perf_evlist {
+>  };
+>
+>  typedef void
+> -(*perf_evlist_mmap__cb_idx_t)(struct perf_evlist*, struct perf_mmap_param*, int, bool);
+> +(*perf_evlist_mmap__cb_idx_t)(struct perf_evlist*, struct perf_mmap_param*, int);
+>  typedef struct perf_mmap*
+>  (*perf_evlist_mmap__cb_get_t)(struct perf_evlist*, bool, int);
+>  typedef int
+> diff --git a/tools/perf/util/evlist.c b/tools/perf/util/evlist.c
+> index f1309b39afe4..09a1d3400fd9 100644
+> --- a/tools/perf/util/evlist.c
+> +++ b/tools/perf/util/evlist.c
+> @@ -748,10 +748,11 @@ static struct mmap *evlist__alloc_mmap(struct evlist *evlist,
+>  static void
+>  perf_evlist__mmap_cb_idx(struct perf_evlist *_evlist,
+>                          struct perf_mmap_param *_mp,
+> -                        int idx, bool per_cpu)
+> +                        int idx)
 >  {
->         bool per_cpu_mmaps = !perf_cpu_map__empty(evlist->core.user_requested_cpus);
+>         struct evlist *evlist = container_of(_evlist, struct evlist, core);
+>         struct mmap_params *mp = container_of(_mp, struct mmap_params, core);
+> +       bool per_cpu = !perf_cpu_map__empty(_evlist->user_requested_cpus);
 >
-> -       if (per_cpu_mmaps)
-> -               return perf_evsel__enable_cpu(&evsel->core, idx);
-> +       if (per_cpu_mmaps) {
-> +               struct perf_cpu evlist_cpu = perf_cpu_map__cpu(evlist->core.all_cpus, idx);
-> +               int cpu_map_idx = perf_cpu_map__idx(evsel->core.cpus, evlist_cpu);
-> +
-> +               if (cpu_map_idx == -1)
-> +                       return -EINVAL;
-> +               return perf_evsel__enable_cpu(&evsel->core, cpu_map_idx);
-> +       }
->
->         return perf_evsel__enable_thread(&evsel->core, idx);
+>         auxtrace_mmap_params__set_idx(&mp->auxtrace_mp, evlist, idx, per_cpu);
 >  }
 > --
 > 2.25.1

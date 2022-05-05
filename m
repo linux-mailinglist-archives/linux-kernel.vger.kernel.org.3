@@ -2,128 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70A2F51B7C5
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 08:08:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6158051B7C7
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 08:09:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243273AbiEEGLo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 02:11:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60924 "EHLO
+        id S239622AbiEEGNY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 02:13:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230304AbiEEGLm (ORCPT
+        with ESMTP id S230304AbiEEGNW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 02:11:42 -0400
-Received: from mail-0201.mail-europe.com (mail-0201.mail-europe.com [51.77.79.158])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CA0537BC0;
-        Wed,  4 May 2022 23:08:03 -0700 (PDT)
-Date:   Thu, 05 May 2022 06:07:52 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
-        s=protonmail2; t=1651730879;
-        bh=7wV3nEqPSepuWRAWthSPZD1tqykwAgSdmFsPCIxH7/8=;
-        h=Date:To:From:Cc:Reply-To:Subject:Message-ID:In-Reply-To:
-         References:Feedback-ID:From:To:Cc:Date:Subject:Reply-To:
-         Feedback-ID:Message-ID;
-        b=m5ncVI+42u1olzmIdRjOX7p/YpFN8gJhka+4KasJ4F9b/8M8Wbr+EHNLponmiC1p2
-         0HelPzW8rdUyEdAj8Plbx4pVoXPeevt35PmsWEhQoUXeGWAayOGScA5Iwaqo+2W6Tj
-         L1/mjeGT2klut1BMqZgTw0RcTg4QUKvy3siiemP1ohX/i27G6KT79GT91emgtEtnJq
-         q6VXdb4srwETpPE5hZfSsqO5nsb5DfyPZ57JOrQxSEB9rERMTjNBd5v3dwXk/Gn5aM
-         s346iSqeWMTq71yTlQweFGtAgyCFKFVsJQy/OxUV8epgrPgusJmZiT+HoGCCPVVW3F
-         FYD3P/5JI1olw==
-To:     Marcel Holtmann <marcel@holtmann.org>
-From:   Juerg Haefliger <juergh@protonmail.com>
-Cc:     Johan Hedberg <johan.hedberg@gmail.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        BlueZ <linux-bluetooth@vger.kernel.org>,
-        linux-kernel@vger.kernel.org
-Reply-To: Juerg Haefliger <juergh@protonmail.com>
-Subject: Re: [PATCH RESEND] Bluetooth: ath3k: Add MODULE_FIRMWARE for patch and config files
-Message-ID: <20220505080744.0343a857@smeagol>
-In-Reply-To: <6A323366-2AB3-443E-A605-C18EA7A2E161@holtmann.org>
-References: <20220504074606.15505-1-juergh@protonmail.com> <6A323366-2AB3-443E-A605-C18EA7A2E161@holtmann.org>
-Feedback-ID: 10260306:user:proton
+        Thu, 5 May 2022 02:13:22 -0400
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6598537BC0;
+        Wed,  4 May 2022 23:09:43 -0700 (PDT)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 24569RBA039067;
+        Thu, 5 May 2022 01:09:27 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1651730968;
+        bh=chtKfKi9u7JhqpHsYOv3fc2Cp6hTVUa04Y0qSDCul9s=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=J7968Gekoogq4yQZ/VFMVf9yKcMiih7fW0qpww3zY9mC6LFZ9DUdZNpQWRgrl9MoM
+         FYnq21eg2vvoqDx+FZhiK08uuuGiy05VobcF8jpbX93dUNpkzCdL5WtH1lrwgLSFL/
+         D9CJxK3Ehd5h2GWKYhhBR+jWAlKf8GLxbWnTdDjQ=
+Received: from DLEE114.ent.ti.com (dlee114.ent.ti.com [157.170.170.25])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 24569RI4016516
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 5 May 2022 01:09:27 -0500
+Received: from DLEE112.ent.ti.com (157.170.170.23) by DLEE114.ent.ti.com
+ (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Thu, 5
+ May 2022 01:09:27 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE112.ent.ti.com
+ (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Thu, 5 May 2022 01:09:27 -0500
+Received: from [172.24.219.78] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 24569N1Q009111;
+        Thu, 5 May 2022 01:09:24 -0500
+Message-ID: <80ed87e2-c987-1421-842a-1040f95279bb@ti.com>
+Date:   Thu, 5 May 2022 11:39:04 +0530
 MIME-Version: 1.0
-Content-Type: multipart/mixed;
- boundary="b1_8zeict0kE8yCg0ChFWUkcf4Hel9dCyVf4xhoRkb9k"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v3 0/2] arm64: ti: k3-am62: Enable audio output
+Content-Language: en-US
+To:     Jai Luthra <j-luthra@ti.com>, Nishanth Menon <nm@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+CC:     <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, Jayesh Choudhary <j-choudhary@ti.com>
+References: <20220427085053.14964-1-j-luthra@ti.com>
+From:   Devarsh Thakkar <devarsht@ti.com>
+In-Reply-To: <20220427085053.14964-1-j-luthra@ti.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is a multi-part message in MIME format.
-
---b1_8zeict0kE8yCg0ChFWUkcf4Hel9dCyVf4xhoRkb9k
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-
-Hi Marcel,
-
-
-> Hi Juerg,
+On 27/04/22 14:20, Jai Luthra wrote:
+> This patch series adds support for audio output via headphone jack on the 
+> AM62-SK board. The jack is wired to TLV320AIC3106 (codec), which is 
+> connected to McASP (serializer).
 >
-> > The ath3k driver loads patch and configuration files so add MODULE_FIRM=
-WARE
-> > macros to povide that information via modinfo.
-> >
-> > Signed-off-by: Juerg Haefliger <juergh@protonmail.com>
-> > ---
-> > RESEND:
-> >  Resend from protonmail email account to please the test bot.
-> > ---
-> > drivers/bluetooth/ath3k.c | 2 ++
-> > 1 file changed, 2 insertions(+)
-> >
-> > diff --git a/drivers/bluetooth/ath3k.c b/drivers/bluetooth/ath3k.c
-> > index 88262d3a9392..56e9a64177ae 100644
-> > --- a/drivers/bluetooth/ath3k.c
-> > +++ b/drivers/bluetooth/ath3k.c
-> > @@ -538,3 +538,5 @@ MODULE_DESCRIPTION("Atheros AR30xx firmware driver"=
-);
-> > MODULE_VERSION(VERSION);
-> > MODULE_LICENSE("GPL");
-> > MODULE_FIRMWARE(ATH3K_FIRMWARE);
-> > +MODULE_FIRMWARE("ar3k/AthrBT_0x*.dfu");
-> > +MODULE_FIRMWARE("ar3k/ramps_0x*_*.dfu");
+> The same 3.5mm jack can be used for combined playback+recording, but audio 
+> input is currently disabled on McASP until further testing and debugging.
 >
-> I am still not convinced by the glob file matching. How would that actual=
-ly work?
-
-In my case I need to remove firmware blobs that the kernel doesn't need to
-reduce disk usage. This information helps. While it might retain unneeded
-versions it's still better than nothing.
-
-...Juerg
-
-
-> Regards
+> For testing, please apply this series on top of 
+> https://lore.kernel.org/all/20220427072954.8821-1-vigneshr@ti.com/ and
+> https://lore.kernel.org/alsa-devel/20220422054001.3738-1-j-luthra@ti.com/
 >
-> Marcel
+> v3:
+> Fix regulator, clock and codec node names
+
+The series looks good to me.
+
+Reviewed-by: Devarsh Thakkar <devarsht@ti.com>
+
 >
-
-
---b1_8zeict0kE8yCg0ChFWUkcf4Hel9dCyVf4xhoRkb9k
-Content-Type: application/pgp-signature; name=attachment.sig
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename=attachment.sig
-
-LS0tLS1CRUdJTiBQR1AgU0lHTkFUVVJFLS0tLS0NCg0KaVFJekJBRUJDZ0FkRmlFRWhaZlU5Nkl1
-cHJ2aUxkZUxEOU9MQ1F1bVFyY0ZBbUp6YWJBQUNna1FEOU9MQ1F1bQ0KUXJjcEpCQUFxVnl6K1dE
-K20yUEd1TGgvVituQzc1eHVNT3NGeURWcjNTYm9rcGZ5UGxyUCtUUFRpTmxWeE5vUg0KdjRBejNm
-b3BLamh1Vit6bDFwSWl0bUE0Ym9wOTNHbnFTeFlpbEVJdzdYZ1o5NlJTYVVqQ3ZwWHpsZTd3ZXJY
-Zw0KT040TkFqY1pjbk56V2dIckdaYnZWL1AxZ3ZaaXpiL3h4MWNwSFVUT3huS1FPVjR6MkZtWVRB
-ZlZESFJVenlqag0KSHg4ZzJuazFJSGlNaDlyampSYjdhWTBxWkdIeWhNNlFHVWlKMHBRTWkzT0xo
-eEhDWnN0NkFzWnBYM3kvRFNZNw0KeVRVWXd4eWp6K2NHSHo3cDRhZ1BPOCt0LzRjaCs4YzIxalVJ
-K3d0b1NnZG5XZnJJWWhkYUhxMkljK21sazZoeQ0KVHB4ekRvdkRJQ1B1WTVvc2luek9IcHN0dGpI
-MEJ6cXY2b2ZhcUpScytTenBRZ0NaSlBlOWloSUNQQ3pJVldnaw0KWCtFb3ljRDFUZG04ZnFYMk50
-czR3UkxDTm9tdkZ2WjNXVHJpQTJwWFliSnA0bVpCZ2d6VEZ0YVRob1N4WVlDaw0KazRnN09mNnlH
-UXZPQjk4ZGNLTDBPWERwU2Z1S29oSkZTSjE0Tkl5OEVXMFh0V01YczQvN1hibDkybGpVMnMrag0K
-Ty91TjlFcHIvVm1KY0M0ZFc3M1VrSUUyTEJLUVk2cGpPRDZ3d0JrV01NbkF3Y05mUC9yempsNnVw
-cUY2ZDlneQ0KU01TYW1keFgvaFRxMnlLRnN4a2NoV0dUMWYzOXBsNDRSSFB6d080b2FpUXpDelUw
-b0k2bllqenVzTWZZajhpeg0KTFRkbXVvMmQ4UUJqOWRaZXdxRXVSVkFNRnJjdzZLYXNBMlFuM05z
-U3NGTnZPR0F4MFRvPQ0KPXVwSDkNCi0tLS0tRU5EIFBHUCBTSUdOQVRVUkUtLS0tLQ0K
-
---b1_8zeict0kE8yCg0ChFWUkcf4Hel9dCyVf4xhoRkb9k--
-
+> v2:
+> Move out the patch for sound/soc/ti/davinici-mcasp.c into a separate series
+>
+> v2: https://lore.kernel.org/all/20220422060052.8548-1-j-luthra@ti.com/
+> v1: https://lore.kernel.org/all/20220421132224.8601-1-j-luthra@ti.com/
+>
+> Jai Luthra (1):
+>   arm64: dts: ti: am625-sk: Add audio output support
+>
+> Jayesh Choudhary (1):
+>   arm64: dts: ti: k3-am62-main: Add McASP nodes
+>
+>  arch/arm64/boot/dts/ti/k3-am62-main.dtsi | 51 ++++++++++++++
+>  arch/arm64/boot/dts/ti/k3-am625-sk.dts   | 89 ++++++++++++++++++++++++
+>  2 files changed, 140 insertions(+)
+>

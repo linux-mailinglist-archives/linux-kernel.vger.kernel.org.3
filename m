@@ -2,97 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACFCF51B4FB
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 03:03:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 501C051B50A
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 03:06:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234117AbiEEBHR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 21:07:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50620 "EHLO
+        id S234253AbiEEBKE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 21:10:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbiEEBHO (ORCPT
+        with ESMTP id S234132AbiEEBKB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 21:07:14 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30C2746B3D
-        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 18:03:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651712617; x=1683248617;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=qOSz0AKPSbFvIvpie91xKPn7qKoU9FAQzv9HLB3JR6U=;
-  b=DbjFbCbSDBJAij6Pf5HwIAJTM3dU4gaWofsDm56aoHSn8C4wcSx0uVi/
-   0/dGKmubbZE4tKvhikm8JnL74kjEFMAjqAiOya/kc+41DIKnkacN5L/Gy
-   t+L3tTH0wb8JUTuWNn/jOxrao7ktbRVz08yhsNOoOSYfr3kBSzKeFq3xk
-   o0ZUea2h/lGbn2UQrjgS2X3ObWByK5JvPxikD3ZtdGzpF6EuD5Yr3FhQW
-   K+ThPHBFgtZIDOakA72nKVTesSpTpBzzJOVwhzyxbxSK57FwqcVEfCT2V
-   uBr/ojpJLSrf0vglbSQBFpaavkMR3pmxAPFc+Fx80xWI6c0mOQU7OtkPq
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10337"; a="268100423"
-X-IronPort-AV: E=Sophos;i="5.91,199,1647327600"; 
-   d="scan'208";a="268100423"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2022 18:03:36 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,199,1647327600"; 
-   d="scan'208";a="517277550"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 04 May 2022 18:03:35 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nmPu3-000Bwp-5w;
-        Thu, 05 May 2022 01:03:35 +0000
-Date:   Thu, 5 May 2022 09:03:04 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Niklas Schnelle <schnelle@linux.ibm.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [niks:has_ioport_v3 5/39] ERROR: modpost:
- "comedi_8254_subdevice_init" [drivers/comedi/drivers/amplc_dio200_common.ko]
- undefined!
-Message-ID: <202205050846.zTVarmg5-lkp@intel.com>
+        Wed, 4 May 2022 21:10:01 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E69D849255;
+        Wed,  4 May 2022 18:06:23 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KtwWL2m53z4xLR;
+        Thu,  5 May 2022 11:06:22 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1651712782;
+        bh=RZnJ0Bs+kbVt1yem4FzbL5vfR8id23cYqPzyEgoi81c=;
+        h=Date:From:To:Cc:Subject:From;
+        b=RBVw8GZ8R3A/EwTg6NUH+P9cm5DupsyP4ld8AKiOVhydvtIUVS/z0WIHeT/bg454b
+         zEHmN7iUOEcsDL6nT72OQLZF3PQyaakQNH3bUej2KfiT3aq2jsmIGHtXkEup2SBbuK
+         ccFebvsj2pGx9nceyhMAeeQ+Iv+NXI37xY+R1b+5AJ0QgzfahOzwmRQH031WTesUKh
+         TbHvXBzKXOBUMMiUv8uyvr2C+MUBKABUtaHJDCIcmhoIDKq0ogqOEG/yTE5a6jajsf
+         Zd9YY0JI55DTYwSBg3cjZXvlFrOeNBkAQeuasD3ikJrTLVzqkaHCkYbpuihUmKCIwX
+         TuoMjOUn4PrsQ==
+Date:   Thu, 5 May 2022 11:06:21 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Rob Clark <robdclark@gmail.com>, Sean Paul <seanpaul@chromium.org>,
+        Dave Airlie <airlied@linux.ie>
+Cc:     DRI <dri-devel@lists.freedesktop.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>
+Subject: linux-next: manual merge of the drm-msm tree with the drm tree
+Message-ID: <20220505110621.66f8420c@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/kJJbsRGS0nnN8.2vkWr5UrV";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/niks/linux.git has_ioport_v3
-head:   2d239b86b347751644338b1dc5b64d25beb640ce
-commit: b3a6a085f28524130749e016e1cbc17f811b6ea4 [5/39] comedi: add HAS_IOPORT dependencies
-config: riscv-randconfig-r042-20220501 (https://download.01.org/0day-ci/archive/20220505/202205050846.zTVarmg5-lkp@intel.com/config)
-compiler: riscv64-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/niks/linux.git/commit/?id=b3a6a085f28524130749e016e1cbc17f811b6ea4
-        git remote add niks https://git.kernel.org/pub/scm/linux/kernel/git/niks/linux.git
-        git fetch --no-tags niks has_ioport_v3
-        git checkout b3a6a085f28524130749e016e1cbc17f811b6ea4
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
+--Sig_/kJJbsRGS0nnN8.2vkWr5UrV
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Hi all,
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
+Today's linux-next merge of the drm-msm tree got conflicts in:
 
->> ERROR: modpost: "comedi_8254_subdevice_init" [drivers/comedi/drivers/amplc_dio200_common.ko] undefined!
->> ERROR: modpost: "comedi_8254_init" [drivers/comedi/drivers/amplc_dio200_common.ko] undefined!
->> ERROR: modpost: "comedi_8254_mm_init" [drivers/comedi/drivers/amplc_dio200_common.ko] undefined!
+  drivers/gpu/drm/msm/edp/edp.h
+  drivers/gpu/drm/msm/edp/edp_ctrl.c
 
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for COMEDI_AMPLC_DIO200
-   Depends on COMEDI && COMEDI_8254
-   Selected by
-   - COMEDI_AMPLC_DIO200_PCI && COMEDI && COMEDI_PCI_DRIVERS
+between commit:
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+  da68386d9edb ("drm: Rename dp/ to display/")
+
+from the drm tree and commit:
+
+  f1fc2b87de47 ("drm/msm: drop old eDP block support (again)")
+
+from the drm-msm tree.
+
+I fixed it up (I just removed the files) and can carry the fix as
+necessary. This is now fixed as far as linux-next is concerned, but any
+non trivial conflicts should be mentioned to your upstream maintainer
+when your tree is submitted for merging.  You may also want to consider
+cooperating with the maintainer of the conflicting tree to minimise any
+particularly complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/kJJbsRGS0nnN8.2vkWr5UrV
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJzIw0ACgkQAVBC80lX
+0GwAwgf7BHcAx9ccnxJxgWEJEcGjyL2UQRZmwg4SaWyjbRygl+eaXZH60jyIQap3
+hmcm3ujc6Fs0Lxt79qdmNYCGMniFP0NGtR0eXA+Ga35z/hwPqafqF+2eLKn7iTZt
+yTRbd6Hm4LthV2Gz0eNTfsdrJWmVXtY2VK55Th4lhBrPkk3Uk8/E8LrO+CG5Dj4/
+HptzKNckTu105pNNkkulJeNIcjqBjegnA0Uz0u/M2mAcL4TiIHUsKS0l2SvZ6mvT
+c7oSL/FngmSLMiIXvWz7yISCqupTxT1x6bZjvJL+dORXn5HmxYeiR0Gm58lP5weP
+v2vJ5klirdUqSFTU0q7b3qxa3wkXyQ==
+=KdJg
+-----END PGP SIGNATURE-----
+
+--Sig_/kJJbsRGS0nnN8.2vkWr5UrV--

@@ -2,133 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA63B51C0D4
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 15:34:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFF2951C0E4
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 15:34:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379828AbiEENge (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 09:36:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46870 "EHLO
+        id S1377880AbiEENhJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 09:37:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379840AbiEENgT (ORCPT
+        with ESMTP id S1379805AbiEENga (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 09:36:19 -0400
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC7C157981;
-        Thu,  5 May 2022 06:31:58 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id k2so6128736wrd.5;
-        Thu, 05 May 2022 06:31:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=5pSUK+NARKQGP0RSfhMDxUAusxVl8fziSm0RmmnAc6E=;
-        b=bretBRaPEZmVMji52YIT2cPIghpPUcOUPpBAKJc5YUPDThrBkg42K5pCLeNarY+bxW
-         17Kof9p/ykq91o+GLZ6upG204f288SaZmouWEERoOkA3JVyL/+I8lYCAsxCsvXAzSiK6
-         YQUZs7GQZed3srmxxNEKyXoD3mjbkSwvELw5yX4A/0hQ1wTlNAaF7hRs6nIkEPjBaRli
-         UydZcr4EHMgsFPIt0gvmmkM8PK1ZWa5Dzkl4UUTAFCoW6d9puNs82UtG8dHweLdcGeU8
-         pcIoKLh9o2TiGNDb9LdiQtI9TP7L6G6A3wIjD4EFRVJ7c0VR1oKEKYzvhUH28cxyeHfd
-         FmVw==
+        Thu, 5 May 2022 09:36:30 -0400
+Received: from us-smtp-delivery-74.mimecast.com (us-smtp-delivery-74.mimecast.com [170.10.129.74])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A6D4F57114
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 06:32:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1651757546;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=+kiADHH0OTUEekRfTTqboMY0mUFLqzmSHiGBuu3QXQA=;
+        b=UTMoBhW4SoONg1+zanmHNFXftfBWlFuobTeaCDOz/J1CgZJR2zF9qJaN5cLiGxwnojQ09P
+        XJCUMKnZdNWW8JuXQZU5P1R6o/GKodqunViH10vBltMaQCShVIWjlv+huAXO/OsE6yVxqw
+        PWjwak1p/BB4gtaqWRM+pTLoxFIQ3ME=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-127-ST_BgvSbPYivES7cdVsQXA-1; Thu, 05 May 2022 09:32:25 -0400
+X-MC-Unique: ST_BgvSbPYivES7cdVsQXA-1
+Received: by mail-ed1-f69.google.com with SMTP id k13-20020a50ce4d000000b00425e4447e64so2317206edj.22
+        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 06:32:25 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=5pSUK+NARKQGP0RSfhMDxUAusxVl8fziSm0RmmnAc6E=;
-        b=F+8jZig9fx2F0bAMy8Lmeo6Ou0NlfuNurGAehq/jnnuizgze7I6cM1kfP1omDyvOmd
-         KV0bs2p9HDz3NIzf1MLS8CXhE1pkg9wViHwwAjLnFlWwFHzTCRNkNCzWji5kfAqMBVs6
-         vZoAKhe4HffjoELHrQ3iKrHnjEr4UAxSFheFNYcBrRrqV2EPDkkhF8PZTpJWkVuIfoy1
-         b7Y/0GHk6KF0hP5TcBwLcbzxarD+Osh8oYmh7EFUgBUMIjWSJJlwWGxmBiz2pHM7fFqL
-         86zyFSiHzeZ26gX281pazgUnSnTgDHKLZkAVV6d/DdFyPgWJbshbaTqcRLXRug8WBcE3
-         /uYQ==
-X-Gm-Message-State: AOAM5310I5Srs8RPPnVv2zt2WmaaT4Q1sofj+8gREoSKiUkcI44Fq+9k
-        M/CZLzO6ScXvVJyNb/13SAE=
-X-Google-Smtp-Source: ABdhPJy6T3JY2QzQ/ndLAhrjpHqo9Ok+/mi3IOHf5OfKw5JxhwBq4ViMM7UYjpOnxVCjgszbhN88aw==
-X-Received: by 2002:a05:6000:100c:b0:20a:c68a:e9a with SMTP id a12-20020a056000100c00b0020ac68a0e9amr21047454wrx.314.1651757516554;
-        Thu, 05 May 2022 06:31:56 -0700 (PDT)
-Received: from [192.168.1.145] ([207.188.167.132])
-        by smtp.gmail.com with ESMTPSA id b15-20020a7bc24f000000b003942a244ecfsm1422829wmj.20.2022.05.05.06.31.55
+        bh=+kiADHH0OTUEekRfTTqboMY0mUFLqzmSHiGBuu3QXQA=;
+        b=mOOrQ0kI+Hfy0Q+efie6JAOdzX4Im9mV0iuaF52VyUsnXYj692v+3C6gsMhH8vA8ng
+         MQZAL5mjhzN5g1N3WK3RNyhxPoXygMu6qMA9CWlXaDgJY9dLxTCdg4AlnOYMvW6vs0Pe
+         LAOvJDtd+LQWkQfqrSqPRYltzzjZfaVw9rOQKiHeOpoxNH0c6As19B66LX+i89MJsNti
+         TOL20gqk/J/RL+oaBXdyzbhLjWvH5WehVL/dar0+jojRBiJHRupxXk9tsnOP01QU2NMl
+         FpBuCtOrTB/HHZha4CLtf17kuB7mO7TlhvxffqVJgYMOFxu975H22M8QkxkxS56HRlTa
+         CsPg==
+X-Gm-Message-State: AOAM530+g2Z5uLVHGjyKid3s6YY1yBv+ppvwlZS9oBl7btVJbeCOmQeZ
+        aKEaGTZHAUYLYK6rRNQAnSqzSlYduxXoMPT1/eqIUGSmdCpPZdmP4OcwDp1mdN+NxR2XcgXwS3y
+        e0cmdfDLcUMBQhGJB8puNZndb
+X-Received: by 2002:a17:907:9053:b0:6f3:9f7e:5325 with SMTP id az19-20020a170907905300b006f39f7e5325mr26644991ejc.455.1651757544355;
+        Thu, 05 May 2022 06:32:24 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJy52UhctkwW9yt5QGwSz6n+bp/2FcbovNN8FC8hnhQ4d8qEEUMnISxAnpY/IrKzXNsv5I+1WQ==
+X-Received: by 2002:a17:907:9053:b0:6f3:9f7e:5325 with SMTP id az19-20020a170907905300b006f39f7e5325mr26644966ejc.455.1651757544125;
+        Thu, 05 May 2022 06:32:24 -0700 (PDT)
+Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
+        by smtp.googlemail.com with ESMTPSA id bc20-20020a056402205400b0042617ba63cesm812545edb.88.2022.05.05.06.32.19
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 05 May 2022 06:31:56 -0700 (PDT)
-Message-ID: <0b9e332d-f479-ed3d-78ce-6386383d827b@gmail.com>
-Date:   Thu, 5 May 2022 15:31:54 +0200
+        Thu, 05 May 2022 06:32:23 -0700 (PDT)
+Message-ID: <688a817f-b2e2-4620-ef4b-f3c5f73ae34d@redhat.com>
+Date:   Thu, 5 May 2022 15:32:19 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH] cpufreq: Avoid unnecessary frequency updates due to
- mismatch
+ Thunderbird/91.8.0
+Subject: Re: [PATCH] selftests: KVM: aarch64: Let hypercalls use UAPI
+ *_BIT_COUNT
 Content-Language: en-US
-To:     Viresh Kumar <viresh.kumar@linaro.org>,
-        Rafael Wysocki <rjw@rjwysocki.net>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Rex-BC Chen <rex-bc.chen@mediatek.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-References: <39e39a7d30c8ee6af81fb64670a330abeb87402e.1651652493.git.viresh.kumar@linaro.org>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <39e39a7d30c8ee6af81fb64670a330abeb87402e.1651652493.git.viresh.kumar@linaro.org>
+To:     Marc Zyngier <maz@kernel.org>, Oliver Upton <oupton@google.com>
+Cc:     Raghavendra Rao Ananta <rananta@google.com>,
+        Andrew Jones <drjones@redhat.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Peter Shier <pshier@google.com>,
+        Ricardo Koller <ricarkol@google.com>,
+        Reiji Watanabe <reijiw@google.com>,
+        Jing Zhang <jingzhangos@google.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+References: <20220504184415.1905224-1-rananta@google.com>
+ <YnLa8uH55/epyjlS@google.com> <87zgjw6v9k.wl-maz@kernel.org>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <87zgjw6v9k.wl-maz@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 04/05/2022 10:21, Viresh Kumar wrote:
-> For some platforms, the frequency returned by hardware may be slightly
-> different from what is provided in the frequency table. For example,
-> hardware may return 499 MHz instead of 500 MHz. In such cases it is
-> better to avoid getting into unnecessary frequency updates, as we may
-> end up switching policy->cur between the two and sending unnecessary
-> pre/post update notifications, etc.
-> 
-> This patch has chosen allows the hardware frequency and table frequency
-> to deviate by 1 MHz for now, we may want to increase it a bit later on
-> if someone still complains.
-> 
-> Reported-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
-> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
-
-Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
-
-> ---
->   drivers/cpufreq/cpufreq.c | 11 +++++++++++
->   1 file changed, 11 insertions(+)
-> 
-> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-> index 0d58b0f8f3af..233e8af48848 100644
-> --- a/drivers/cpufreq/cpufreq.c
-> +++ b/drivers/cpufreq/cpufreq.c
-> @@ -28,6 +28,7 @@
->   #include <linux/suspend.h>
->   #include <linux/syscore_ops.h>
->   #include <linux/tick.h>
-> +#include <linux/units.h>
->   #include <trace/events/power.h>
+On 5/5/22 14:04, Marc Zyngier wrote:
+> diff --git a/arch/arm64/include/uapi/asm/kvm.h b/arch/arm64/include/uapi/asm/kvm.h
+> index e523bb6eac67..3cde9f958eee 100644
+> --- a/arch/arm64/include/uapi/asm/kvm.h
+> +++ b/arch/arm64/include/uapi/asm/kvm.h
+> @@ -342,6 +342,10 @@ struct kvm_arm_copy_mte_tags {
 >   
->   static LIST_HEAD(cpufreq_policy_list);
-> @@ -1708,6 +1709,16 @@ static unsigned int cpufreq_verify_current_freq(struct cpufreq_policy *policy, b
->   		return new_freq;
->   
->   	if (policy->cur != new_freq) {
-> +		/*
-> +		 * For some platforms, the frequency returned by hardware may be
-> +		 * slightly different from what is provided in the frequency
-> +		 * table, for example hardware may return 499 MHz instead of 500
-> +		 * MHz. In such cases it is better to avoid getting into
-> +		 * unnecessary frequency updates.
-> +		 */
-> +		if (abs(policy->cur - new_freq) < HZ_PER_MHZ)
-> +			return policy->cur;
-> +
->   		cpufreq_out_of_sync(policy, new_freq);
->   		if (update)
->   			schedule_work(&policy->update);
+>   enum {
+>   	KVM_REG_ARM_STD_BIT_TRNG_V1_0	= 0,
+> +	/*
+> +	 * KVM_REG_ARM_STD_BMAP_BIT_COUNT will vary as new services
+> +	 * are added, and is explicitely not part of the ABI.
+> +	 */
+>   	KVM_REG_ARM_STD_BMAP_BIT_COUNT,
+>   };
+
+That seems like a bad idea.  Perhaps you can wrap it in #ifdef 
+__KERNEL_OR_SELFTESTS__?  I can't find any prior art.
+
+Paolo
+

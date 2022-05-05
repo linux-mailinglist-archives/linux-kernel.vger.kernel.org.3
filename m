@@ -2,126 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B7CD51C081
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 15:20:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CE9351C087
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 15:21:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379279AbiEENX0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 09:23:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35510 "EHLO
+        id S1379248AbiEENZR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 09:25:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236579AbiEENXO (ORCPT
+        with ESMTP id S235258AbiEENZP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 09:23:14 -0400
-Received: from us-smtp-delivery-74.mimecast.com (us-smtp-delivery-74.mimecast.com [170.10.133.74])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4D381532D2
-        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 06:19:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651756774;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=IW6fOs7e5307KfibthmglvTovnRowFL+yzU/9f+OYUE=;
-        b=a+/cQB3/ytrQ4GXerRzjZmwV4PbYFMPOH9cJt2HPMHvavlQb2AVIr9A00uAo/kzkO2BeQ8
-        q7u3dzbDRVGpXnfxazuqdFIX+igQotxoEUBagJx8fFlRU3YWQNyTFalS4JYebbfLAGpYgN
-        dWtfkS5ppyUlmatIp2znQ1SQDsABk5c=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-374-ZG-mPil3MV-6GXp4zB39yg-1; Thu, 05 May 2022 09:19:33 -0400
-X-MC-Unique: ZG-mPil3MV-6GXp4zB39yg-1
-Received: by mail-wm1-f70.google.com with SMTP id r186-20020a1c44c3000000b00393f52ed5ceso4477973wma.7
-        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 06:19:33 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=IW6fOs7e5307KfibthmglvTovnRowFL+yzU/9f+OYUE=;
-        b=xQrDlwUMKesR8vMlQ3z7fB6UdG94AJG7GuVbv+jTtdXFTmvxQ5XQubbxRCbE7K7OBY
-         vIuORDi/FGXmBdD1tcXuxyp4/ij4ZBiYVepSdnku7G2o5UDLnnzS6iIel/DtuGqhXFCY
-         aDqmWVf77Rn0/S39ejBxQXJAmriFZn6TxDz92Upr3XCzrS0DPXScHV6J71xM2B0n9wAb
-         aAjSBjbvmUk7YdT2QtU4OI0xw1jVERkvNdtHjlhI8YMrwji/ybdBlNZ/UgrXYlCPlc4V
-         XvxyVmRSK0fpI13DXUNPlIzVuLMVwOlSVx7jpEW1V2ziDDe+wSW6MUnRgwA17VA/vShv
-         RVIA==
-X-Gm-Message-State: AOAM533SlaMuOGpI8HeWWAAk4BOFbxn+yC7pR/D5z9YLtE2u7D1yfsDn
-        Qi9rumZuEU+kbtjzf6m5QaoAqd3WL7ii0LlUfCxW5s6ISYISyGP5Fied4dSZWfj5NKFQSif8nWF
-        Cnv96q5Pjm8s8xbAiAx66QDTr5oShYvzq8vn+r1eYSrXGLLi5eZTL55RXvWU5sI4uZ5cSj9/7R7
-        Q=
-X-Received: by 2002:a05:600c:1d18:b0:394:6469:abec with SMTP id l24-20020a05600c1d1800b003946469abecmr4767706wms.89.1651756771955;
-        Thu, 05 May 2022 06:19:31 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJznOboZJQssf1bkI3Rw7a6NAaieRAgtKHnzU4znuTG9Om0VUyJQMtC9zyn0YmSBtfpe6zPe9g==
-X-Received: by 2002:a05:600c:1d18:b0:394:6469:abec with SMTP id l24-20020a05600c1d1800b003946469abecmr4767666wms.89.1651756771561;
-        Thu, 05 May 2022 06:19:31 -0700 (PDT)
-Received: from [192.168.1.129] (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id c17-20020a7bc011000000b003942a244f40sm6395959wmb.25.2022.05.05.06.19.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 05 May 2022 06:19:31 -0700 (PDT)
-Message-ID: <d53319d8-acaf-7b57-20cf-f35cc5969895@redhat.com>
-Date:   Thu, 5 May 2022 15:19:30 +0200
+        Thu, 5 May 2022 09:25:15 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6434A44A0A;
+        Thu,  5 May 2022 06:21:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1651756896; x=1683292896;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=Kq5s4HkqETdpFGmupob4Ar1Psqe2LdMq9WDLKKEnRjQ=;
+  b=Z/jgZoxK4/2fmmOSQ1j+STBfn42JulH3+qJrTGamTvjjqveJdcQd4sLH
+   oJMV1f/tPeK8ioSmektT03KrTnlqr5yakUqMi5FSfv9pXWtue4gIdKFec
+   BVxigLlT8jPsxdDqWOI5Rtcnhp/9q39Cz83ykXOUvg3s69JQKL1rC34iQ
+   P7uYxeUxIHmzC8MiUlv+OzMj4uJ6rPw0AZ3BQ/EdWlCjzA+Y1+XE0N47Z
+   9OXesKhDqqsk/XDXMyNaoAHR+UvIvzhmZAe0fmt1S5syXzn6x89e4JPaW
+   aUFFqj6xrv84VRhzthQLuAhZpGJwD88zBw9n6uA3UBBIQOdR2geZEIpi9
+   w==;
+X-IronPort-AV: E=Sophos;i="5.91,201,1647327600"; 
+   d="scan'208";a="157919934"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 05 May 2022 06:21:35 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Thu, 5 May 2022 06:21:34 -0700
+Received: from ROB-ULT-M18282.microchip.com (10.10.115.15) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
+ 15.1.2375.17 via Frontend Transport; Thu, 5 May 2022 06:21:33 -0700
+From:   Eugen Hristev <eugen.hristev@microchip.com>
+To:     <linux-media@vger.kernel.org>, <hverkuil@xs4all.nl>
+CC:     <linux-kernel@vger.kernel.org>,
+        Eugen Hristev <eugen.hristev@microchip.com>
+Subject: [RFC PATCH] media: atmel: atmel-isc: move media_pipeline_* to (un)prepare cb
+Date:   Thu, 5 May 2022 16:21:31 +0300
+Message-ID: <20220505132131.50994-1-eugen.hristev@microchip.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v2 4/4] fbdev: vesafb: Cleanup fb_info in .fb_destroy
- rather than .remove
-Content-Language: en-US
-To:     linux-kernel@vger.kernel.org, Helge Deller <deller@gmx.de>,
-        dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org
-References: <20220505113128.264963-1-javierm@redhat.com>
- <20220505113128.264963-5-javierm@redhat.com>
- <YnPK3RLPdtvFze+8@phenom.ffwll.local>
-From:   Javier Martinez Canillas <javierm@redhat.com>
-In-Reply-To: <YnPK3RLPdtvFze+8@phenom.ffwll.local>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Daniel,
+Move the media_pipeline_start/stop calls from start/stop streaming to
+the new prepare_streaming and unprepare_streaming callbacks.
 
-On 5/5/22 15:02, Daniel Vetter wrote:
+Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
+---
 
-[snip]
+Only applies on top of
+[RFC PATCHv2] vb2: add support for (un)prepare_streaming queue ops
 
->>  static void vesafb_destroy(struct fb_info *info)
->>  {
->>  	struct vesafb_par *par = info->par;
->> @@ -187,7 +191,13 @@ static void vesafb_destroy(struct fb_info *info)
->>  	arch_phys_wc_del(par->wc_cookie);
->>  	if (info->screen_base)
->>  		iounmap(info->screen_base);
->> +
->> +	if (((struct vesafb_par *)(info->par))->region)
->> +		release_region(0x3c0, 32);
-> 
-> This move seems rather iffy, so maybe justify it with "makes the code
-> exactly as busted before 27599aacbaef ("fbdev: Hot-unplug firmware fb
-> devices on forced removal")"
->
+and the series
+[PATCH v10 0/5] media: atmel: atmel-isc: implement media controller
++
+[PATCH v10 0/8] media: atmel: atmel-isc: various fixes
 
-I think that will just drop this change. While being here I wanted the release
-order to be the inverse of the order in which the driver acquires them. But I
-will only move the framebuffer_release() that is the problematic bit.
 
-Someone if care enough could fix the rest of the driver.
+
+ drivers/media/platform/atmel/atmel-isc-base.c | 27 ++++++++++++-------
+ 1 file changed, 17 insertions(+), 10 deletions(-)
+
+diff --git a/drivers/media/platform/atmel/atmel-isc-base.c b/drivers/media/platform/atmel/atmel-isc-base.c
+index 4d71e92aa5ea..894c22081397 100644
+--- a/drivers/media/platform/atmel/atmel-isc-base.c
++++ b/drivers/media/platform/atmel/atmel-isc-base.c
+@@ -324,6 +324,13 @@ static int isc_configure(struct isc_device *isc)
+ 	return isc_update_profile(isc);
+ }
  
-> Also same comments as on v1 about adding more details about what/how this
-> fixes, with that: Reviewed-by: Daniel Vetter <daniel.vetter@ffwll.ch>
->
-
-Yes, I'll do that too. Thanks again for your comments and feedback.
-
++static int isc_prepare_streaming(struct vb2_queue *vq)
++{
++	struct isc_device *isc = vb2_get_drv_priv(vq);
++
++	return media_pipeline_start(&isc->video_dev.entity, &isc->mpipe);
++}
++
+ static int isc_start_streaming(struct vb2_queue *vq, unsigned int count)
+ {
+ 	struct isc_device *isc = vb2_get_drv_priv(vq);
+@@ -332,10 +339,6 @@ static int isc_start_streaming(struct vb2_queue *vq, unsigned int count)
+ 	unsigned long flags;
+ 	int ret;
+ 
+-	ret = media_pipeline_start(&isc->video_dev.entity, &isc->mpipe);
+-	if (ret)
+-		goto err_pipeline_start;
+-
+ 	/* Enable stream on the sub device */
+ 	ret = v4l2_subdev_call(isc->current_subdev->sd, video, s_stream, 1);
+ 	if (ret && ret != -ENOIOCTLCMD) {
+@@ -384,9 +387,6 @@ static int isc_start_streaming(struct vb2_queue *vq, unsigned int count)
+ 	v4l2_subdev_call(isc->current_subdev->sd, video, s_stream, 0);
+ 
+ err_start_stream:
+-	media_pipeline_stop(&isc->video_dev.entity);
+-
+-err_pipeline_start:
+ 	spin_lock_irqsave(&isc->dma_queue_lock, flags);
+ 	list_for_each_entry(buf, &isc->dma_queue, list)
+ 		vb2_buffer_done(&buf->vb.vb2_buf, VB2_BUF_STATE_QUEUED);
+@@ -396,6 +396,14 @@ static int isc_start_streaming(struct vb2_queue *vq, unsigned int count)
+ 	return ret;
+ }
+ 
++static void isc_unprepare_streaming(struct vb2_queue *vq)
++{
++	struct isc_device *isc = vb2_get_drv_priv(vq);
++
++	/* Stop media pipeline */
++	media_pipeline_stop(&isc->video_dev.entity);
++}
++
+ static void isc_stop_streaming(struct vb2_queue *vq)
+ {
+ 	struct isc_device *isc = vb2_get_drv_priv(vq);
+@@ -425,9 +433,6 @@ static void isc_stop_streaming(struct vb2_queue *vq)
+ 	if (ret && ret != -ENOIOCTLCMD)
+ 		v4l2_err(&isc->v4l2_dev, "stream off failed in subdev\n");
+ 
+-	/* Stop media pipeline */
+-	media_pipeline_stop(&isc->video_dev.entity);
+-
+ 	/* Release all active buffers */
+ 	spin_lock_irqsave(&isc->dma_queue_lock, flags);
+ 	if (unlikely(isc->cur_frm)) {
+@@ -466,6 +471,8 @@ static const struct vb2_ops isc_vb2_ops = {
+ 	.start_streaming	= isc_start_streaming,
+ 	.stop_streaming		= isc_stop_streaming,
+ 	.buf_queue		= isc_buffer_queue,
++	.prepare_streaming	= isc_prepare_streaming,
++	.unprepare_streaming	= isc_unprepare_streaming,
+ };
+ 
+ static int isc_querycap(struct file *file, void *priv,
 -- 
-Best regards,
-
-Javier Martinez Canillas
-Linux Engineering
-Red Hat
+2.25.1
 

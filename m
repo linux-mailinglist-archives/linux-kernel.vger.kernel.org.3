@@ -2,82 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D30D951B598
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 04:01:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6689351B547
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 03:33:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237021AbiEECDo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 22:03:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39346 "EHLO
+        id S235577AbiEEBea (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 21:34:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233202AbiEECDm (ORCPT
+        with ESMTP id S230176AbiEEBeY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 22:03:42 -0400
-X-Greylist: delayed 1801 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 04 May 2022 19:00:03 PDT
-Received: from geosincoor.roylabs.com (geosincoor.roylabs.com [193.233.182.222])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA1AC473BD
-        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 19:00:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha1; c=relaxed/relaxed; s=dkim; d=roylabs.com;
- h=Content-Type:MIME-Version:Content-Transfer-Encoding:Content-Description:Subject:To:From:Date:Reply-To:Message-ID; i=cas.geo@roylabs.com;
- bh=bh9iyPqTwXbBCUbKpWQh+6Svj3M=;
- b=kZvxq3sLDHxsR9YUAkZl/H2sXsq3C/2UblKPhnwFMmf1DWdJXTarExGTIy6YXv7Ck/Kp+ajzx8Xc
-   RI6ATzYr+4msm+YelCJA6ejr0MLrO2v023sF4MhoH4VC66IsJH4VTZ709l5mtz/B0zMfuSUpeveN
-   kdf+uNq7VGXkDmMO02Eabsa1FT0jsl5dVVcN6Du9zAmGk3WldcuJcsyQ9WaTVyeK+2yKS+4+EhkD
-   tR/UrZRrWDoCrM3eEUzIyJ6rxyQ/FCkMNbu6SJar1mer91ierWQ/+Ngkl2OBv5e7rye6mhKwlohA
-   UF4zkDMSkdPtMANecGOXiXYfVb76lhS86rAU5Q==
-DomainKey-Signature: a=rsa-sha1; c=nofws; q=dns; s=dkim; d=roylabs.com;
- b=NAwu26RrWU/kGiVz1hv/hzUBmo8Mh+5bfG2LKlLH2XnHv5hKpyUeesOIxQWEVVrxndTnFjQRQL2P
-   XGD2lP/JCyWEIM6MiEz2fk2qwVcP91lqoLh1VEjT7yh4wTeoaMUboO+eAUUKcF5t9yIY0U4EsDKA
-   CYEyhYchlhqWOsjt6HOeBV9G14f0avnmMq4+UvGxZj5T9zdATDRbP490yldmSV53Pyo+IYTbPEs7
-   eEIaeSJgxoXLl9KVL9iP+NDfsl2OB70yxnDd97wahgM0yhIYGJC9AVc3wJNj6h6AHuAS1pB0vUGk
-   ZAc5AeOruBnX//yhvNQko5PpMtsGcjtC1P05RA==;
-Content-Type: text/plain; charset="iso-8859-1"
+        Wed, 4 May 2022 21:34:24 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5BB84BFC3;
+        Wed,  4 May 2022 18:30:46 -0700 (PDT)
+Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Ktx334ltpzhYnV;
+        Thu,  5 May 2022 09:30:23 +0800 (CST)
+Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
+ dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 5 May 2022 09:30:45 +0800
+Received: from [10.174.178.174] (10.174.178.174) by
+ dggpemm500007.china.huawei.com (7.185.36.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 5 May 2022 09:30:44 +0800
+Subject: Re: [PATCH] net: dpaa2-mac: add missing of_node_put() in
+ dpaa2_mac_get_node()
+To:     Jakub Kicinski <kuba@kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <ioana.ciornei@nxp.com>, <davem@davemloft.net>,
+        <robert-ionut.alexa@nxp.com>
+References: <20220428100127.542399-1-yangyingliang@huawei.com>
+ <20220429192950.5a1d23cc@kernel.org>
+From:   Yang Yingliang <yangyingliang@huawei.com>
+Message-ID: <61393ca9-618c-017b-c463-93d0afe33c12@huawei.com>
+Date:   Thu, 5 May 2022 09:30:44 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: Re: Good morning.
-To:     linux-kernel@vger.kernel.org
-From:   "Collins Fuller" <cas.geo@roylabs.com>
-Date:   Thu, 05 May 2022 03:29:56 +0200
-Reply-To: collinsfuller1@yandex.com
-Message-ID: <0.0.0.7FF.1D8601FA1DD2B10.0@geosincoor.roylabs.com>
-X-Spam-Status: Yes, score=5.8 required=5.0 tests=BAYES_99,BAYES_999,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        FREEMAIL_FORGED_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Report: *  0.2 BAYES_999 BODY: Bayes spam probability is 99.9 to 100%
-        *      [score: 1.0000]
-        *  3.5 BAYES_99 BODY: Bayes spam probability is 99 to 100%
-        *      [score: 1.0000]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [collinsfuller1[at]yandex.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  2.1 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
-X-Spam-Level: *****
+In-Reply-To: <20220429192950.5a1d23cc@kernel.org>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Originating-IP: [10.174.178.174]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpemm500007.china.huawei.com (7.185.36.183)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Good morning,
+Hi,
 
-How are you doing today?
+On 2022/4/30 10:29, Jakub Kicinski wrote:
+> On Thu, 28 Apr 2022 18:01:27 +0800 Yang Yingliang wrote:
+>> Add missing of_node_put() in error path in dpaa2_mac_get_node().
+>>
+>> Fixes: 5b1e38c0792c ("dpaa2-mac: bail if the dpmacs fwnode is not found")
+>> Reported-by: Hulk Robot <hulkci@huawei.com>
+>> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+>> ---
+>>   drivers/net/ethernet/freescale/dpaa2/dpaa2-mac.c | 5 ++++-
+>>   1 file changed, 4 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/net/ethernet/freescale/dpaa2/dpaa2-mac.c b/drivers/net/ethernet/freescale/dpaa2/dpaa2-mac.c
+>> index c48811d3bcd5..a91446685526 100644
+>> --- a/drivers/net/ethernet/freescale/dpaa2/dpaa2-mac.c
+>> +++ b/drivers/net/ethernet/freescale/dpaa2/dpaa2-mac.c
+>> @@ -108,8 +108,11 @@ static struct fwnode_handle *dpaa2_mac_get_node(struct device *dev,
+>>   		return ERR_PTR(-EPROBE_DEFER);
+>>   	}
+>>   
+>> -	if (!parent)
+>> +	if (!parent) {
+>> +		if (dpmacs)
+>> +			of_node_put(dpmacs);
+> of_node_put() accepts NULL. I know this because unlike you I did
+> at least the bare minimum looking at the surrounding code and saw
+> other places not checking if it's NULL.
+I missed that, I will send a v2 later.
 
-My name is Collins Fuller and I am a Research Analyst with an Organization =
-based in the UK. I have a lucrative business proposal which will be mutuall=
-y beneficial to the both of us. Kindly respond to my email, so I can give y=
-ou more details.
-
-Regards,
-Collins Fuller
+Thanks,
+Yang
+> .

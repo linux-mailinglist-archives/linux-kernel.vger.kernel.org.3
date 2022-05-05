@@ -2,97 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D2C151C1EC
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 16:08:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBC8851C1F1
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 16:09:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380376AbiEEOMD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 10:12:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35106 "EHLO
+        id S1380398AbiEEOMw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 10:12:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379552AbiEEOMB (ORCPT
+        with ESMTP id S1380411AbiEEOMr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 10:12:01 -0400
-Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F41D58E7D;
-        Thu,  5 May 2022 07:08:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=8JT2x37xZIzthLtBDgRsuH3ctJdQtVKBakBAtylmM70=; b=qN2OUQgURSd4atQ9ojy4KcXFfS
-        sWIuQHbJNPSlD2E1P1AYNseX/DMWERL/XxEbWf0Ln92hnX/LfynfNczq+DBV+OfTxTdwclMkS5O6d
-        B5pUIzXuLcTs3oRrMsYvREgCNbi1rr5E3v9eP0PQNFUGlIsbZX30nT8Z7Fpfecrj+UabZnxoHILmC
-        IezNI+AEM6kk7OR9ISOTKj+1sLlzN+Rsx6OlZrdElqLfko1pgXkuoNqmKFgsMlZClu9X31T7ETWdv
-        z9SR8j82Tnr31zFYqSmR5Oiq0X3V605KjIFs9rF6sWuG7ul+kFFzulfPRxRkmmUjPVDw00dreV/2j
-        icYj7m/A==;
-Received: from [179.113.53.197] (helo=[192.168.1.60])
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-        id 1nmc9I-0005v2-8O; Thu, 05 May 2022 16:08:08 +0200
-Message-ID: <53d516d2-a991-05c2-981d-640b05fc5e29@igalia.com>
-Date:   Thu, 5 May 2022 11:07:47 -0300
+        Thu, 5 May 2022 10:12:47 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 519065A092;
+        Thu,  5 May 2022 07:09:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=1AnGlm7IYrdrbVjEpzCqloAFW5BU13ZTcRkgwwA7TRk=; b=WbXXXIkI9uJM3lyo4ApulNzhZ6
+        5g+bqUk5FwJf+sxy8D6V/uBqs6znjc2ELqZSPWsngJXvfSxdoXVjJ+PMJIOhcHC3McJ1x9idYN9fQ
+        XaNs+wkERk6ou9DGnCM4FzSlV7g3YvYzlxyear/nU5ZiH7Wdwhz5JYSLkm8dMCRuhc5ugcfIMF4pG
+        0uxc22/wKLxtz5cFEbDSHlWS1AZ4vNIWQcqc0k6COxZEI89Q+z+0VJTi2m/IclklK+hkL0HFs9Jx7
+        uQbltv6S2SPhAAfIgUtaKyth2n/YZpCi8VHIIXQdTV+bLu4GtsGR0/F2zHnvz4bQqPtCuLYjBRS1e
+        IouEPXMQ==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:60602)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1nmc9v-0004xy-LZ; Thu, 05 May 2022 15:08:48 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1nmc9o-0001NI-QR; Thu, 05 May 2022 15:08:40 +0100
+Date:   Thu, 5 May 2022 15:08:40 +0100
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     kernel test robot <lkp@intel.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, kbuild-all@lists.01.org,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Tony Lindgren <tony@atomide.com>, linux-omap@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] ARM: dove: fix returnvar.cocci warnings
+Message-ID: <YnPaaDalmN6ky0HM@shell.armlinux.org.uk>
+References: <202205031017.4TwMan3l-lkp@intel.com>
+ <YnCXTPrbLhvfRVDm@e3a974050dc4>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: Should arm64 have a custom crash shutdown handler?
-Content-Language: en-US
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        "Michael Kelley (LINUX)" <mikelley@microsoft.com>
-Cc:     Marc Zyngier <maz@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        will Deacon <will@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Ard Biesheuvel <ardb@kernel.org>, broonie@kernel.org,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>
-References: <427a8277-49f0-4317-d6c3-4a15d7070e55@igalia.com>
- <874k24igjf.wl-maz@kernel.org>
- <92645c41-96fd-2755-552f-133675721a24@igalia.com>
- <YnPIwjLMDXgII1vf@FVFF77S0Q05N.cambridge.arm.com>
- <3bee47db-f771-b502-82a3-d6fac388aa89@igalia.com> <878rrg13zb.fsf@redhat.com>
-From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-In-Reply-To: <878rrg13zb.fsf@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YnCXTPrbLhvfRVDm@e3a974050dc4>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/05/2022 10:52, Vitaly Kuznetsov wrote:
-> [...]
-> For Hyper-V, the situation is similar: hv_crash_handler() intitiates
-> VMbus unload on the crashing CPU only, there's no mechanism to do
-> 'global' unload so other CPUs will likely not be able to connect Vmbus
-> devices in kdump kernel but this should not be necessary.
+On Tue, May 03, 2022 at 10:45:32AM +0800, kernel test robot wrote:
+> From: kernel test robot <lkp@intel.com>
 > 
-> There's a crash_kexec_post_notifiers mechanism which can be used instead
-> but it's disabled by default so using machine_ops.crash_shutdown is
-> better.
+> arch/arm/mach-omap2/dma.c:82:10-16: Unneeded variable: "errata". Return "0" on line 161
 > 
+> 
+>  Remove unneeded variable used to store return value.
+> 
+> Generated by: scripts/coccinelle/misc/returnvar.cocci
+> 
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: kernel test robot <lkp@intel.com>
 
-Thanks a bunch Vitaly, for the clarification!
+NAK. The analysis is wrong.
 
-Just as a heads-up: there's been a panic notifiers refactor proposed [0]
-in which some notifiers will run before kdump by default, not requiring
-"crash_kexec_post_notifiers" (which BTW is *unfortunately* hardcoded as
-'Y' for hyper-v, since a11589563e96).
-
-Cheers,
-
-
-Guilherme
-
-
-[0]
-https://lore.kernel.org/lkml/20220427224924.592546-1-gpiccoli@igalia.com/
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!

@@ -2,110 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0637551BFBB
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 14:46:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 677BD51BFC6
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 14:48:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377652AbiEEMuM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 08:50:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56428 "EHLO
+        id S1377763AbiEEMvu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 08:51:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229704AbiEEMuI (ORCPT
+        with ESMTP id S1377741AbiEEMvk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 08:50:08 -0400
-Received: from us-smtp-delivery-74.mimecast.com (us-smtp-delivery-74.mimecast.com [170.10.129.74])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2143B2ED61
-        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 05:46:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651754788;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=6vaRlr/7ULHx6gWuSvnNnjYCo18hzcHoYJDQoD2144Y=;
-        b=RlXiVtwzIuSSasclZbDEuYYbJDaeiRODIcJXUWITNsO+ELous0ZMX1cm53bmFB87RXvA3P
-        fz7AXq8g1pw9y8+qNLI6exGxrxzz2Ui6PbwRY7l9RZXHzLtVSpx1qeo/i7sARBqUUHr2xi
-        rgCsKxkDow1u3HGAF89M9Lw8UsoooEQ=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-231-UPzqFBThPDiSu2HIUQ-rPQ-1; Thu, 05 May 2022 08:46:27 -0400
-X-MC-Unique: UPzqFBThPDiSu2HIUQ-rPQ-1
-Received: by mail-ed1-f69.google.com with SMTP id s29-20020a50ab1d000000b00427e495f00cso2251881edc.14
-        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 05:46:26 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:subject:in-reply-to
-         :content-transfer-encoding;
-        bh=6vaRlr/7ULHx6gWuSvnNnjYCo18hzcHoYJDQoD2144Y=;
-        b=Vkzl3asfTo7JOQ5jZsEvwnhfBSOr4UqK4O2LqRUf7Tr6wDwNTMzBijSIV7tg4fmxbE
-         ZAEtaArO5NRJCrrdjmQesFTv+P/vKVGmmGN+TzHhJ0bixSDRie4fUpIwaRoDsQItlwHu
-         EGFHF9FCQqUeHR/vbKfYMq1iPS/7+VdIAYg+fAZgx+c8cQ0pgjVKfqvRAJk0k6c3imxu
-         x3EmDRwGZqqYyCwVqSqKcKhEmbmBjTUk071Vg0U/B92/p7tSmpWXiiEbu3QwWXw3RX58
-         dCUrNKZS3IygtFfZxmx3wcjkjGlZHIsWTBIGKNTJe449q0KXv0ME6oE4Icx7McURAXEQ
-         unZw==
-X-Gm-Message-State: AOAM532r91LWP5/wNBw2oJMgQfaIX/gUmHpf9vDLKa3bTFkqK+CnwvGH
-        ZBPrKImgXLBC/GgkED86ibiNKm/3ReXg6EEFWVoQXsf6Vv4I50SoxaWw6HGW18/aRmPj+k5OvF0
-        0qkhQBbjdA43tVbwI0M3UMZxc
-X-Received: by 2002:a17:907:2d93:b0:6f3:8524:6f92 with SMTP id gt19-20020a1709072d9300b006f385246f92mr26104538ejc.556.1651754785964;
-        Thu, 05 May 2022 05:46:25 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxh0AuoTLb4NtFUKSzSmvuWG14SE3dq6/K9LQkEcxHXLqwacGXBsP3Jh5c8evy8eiZw9cDE4w==
-X-Received: by 2002:a17:907:2d93:b0:6f3:8524:6f92 with SMTP id gt19-20020a1709072d9300b006f385246f92mr26104509ejc.556.1651754785685;
-        Thu, 05 May 2022 05:46:25 -0700 (PDT)
-Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
-        by smtp.googlemail.com with ESMTPSA id c21-20020a056402121500b0042617ba63bdsm776943edw.71.2022.05.05.05.46.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 05 May 2022 05:46:24 -0700 (PDT)
-Message-ID: <8342100d-a9f6-2f6d-30d0-b3950661d0c6@redhat.com>
-Date:   Thu, 5 May 2022 14:46:22 +0200
+        Thu, 5 May 2022 08:51:40 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97D3C5548D;
+        Thu,  5 May 2022 05:48:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Transfer-Encoding:Content-Disposition:
+        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:From:
+        Sender:Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Content-Disposition:
+        In-Reply-To:References; bh=fbetl70oZ0vZnWSXLoFnWrsoXubOKY3J/3Z8Hk4eMTc=; b=Pi
+        jLlDfq5PMT7+/FemaIfSg0gNilq1mWd+aLdGJ+2W5IIhseYTdzr772Xw7+TE+SuiAfkmvoE6twUJS
+        7Dqx5T+iK7Dcb6VDabOQb+remyjJxUqyNQc+4bhwjfLyMo7GrIil1wYzTKtS5H580z4UGBnXJ3TCY
+        KnmhyMF4Cpj/+U4=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1nmatb-001M5R-8O; Thu, 05 May 2022 14:47:51 +0200
+Date:   Thu, 5 May 2022 14:47:51 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Jiabing Wan <wanjiabing@vivo.com>
+Cc:     Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] net: phy: micrel: Remove unnecessary comparison in
+ lan8814_handle_interrupt
+Message-ID: <YnPHdzegs33G4JJ8@lunn.ch>
+References: <20220505030217.1651422-1-wanjiabing@vivo.com>
+ <YnO/VGKVHfFJG7/7@lunn.ch>
+ <2ec61428-d9af-7712-b008-cf6b7e445aaa@vivo.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Content-Language: en-US
-To:     Heiko Carstens <hca@linux.ibm.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <YnPFjuBYZw/dj01U@osiris>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-Subject: Re: [GIT PULL] s390 updates for 5.18-rc6
-In-Reply-To: <YnPFjuBYZw/dj01U@osiris>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <2ec61428-d9af-7712-b008-cf6b7e445aaa@vivo.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/5/22 14:39, Heiko Carstens wrote:
-> Hi Linus,
+> Yes, I actually check the lanphy_read_page_reg and I notice 'data' is
+> declared
+> as a 'u32' variable. So I think the comparison is meaningless. But the
+> return type is int.
 > 
-> please pull s390 updates for 5.18-rc6. Please note that this pull
-> request includes two s390 specific kvm commits, which normally would
-> have been routed via the kvm tree.
+> 1960  static int lanphy_read_page_reg(struct phy_device *phydev, int page,
+> u32 addr)
+> 1961  {
+> 1962      u32 data;
+> 1963
+> 1964      phy_lock_mdio_bus(phydev);
+> 1965      __phy_write(phydev, LAN_EXT_PAGE_ACCESS_CONTROL, page);
+> 1966      __phy_write(phydev, LAN_EXT_PAGE_ACCESS_ADDRESS_DATA, addr);
+> 1967      __phy_write(phydev, LAN_EXT_PAGE_ACCESS_CONTROL,
+> 1968              (page | LAN_EXT_PAGE_ACCESS_CTRL_EP_FUNC));
+> 1969      data = __phy_read(phydev, LAN_EXT_PAGE_ACCESS_ADDRESS_DATA);
+> 1970      phy_unlock_mdio_bus(phydev);
+> 1971
+> 1972      return data;
+> 1973  }
+> > 
+> > So the real problem here is, tsu_irq_status is defined as u16, when in
+> > fact it should be an int.
 > 
-> Due to lack of other patches in the kvm tree Christian Borntraeger
-> asked to get them upstream via the s390 tree:
-> https://lore.kernel.org/linux-s390/249d0100-fa58-bf48-b1d2-f28e94c3a5f2@linux.ibm.com/
+> Should the 'data' in lanphy_read_page_reg be declared by 'int'?
 
-Needless to say, kvm patches have since materialized and I'll send a 
-pull request later this week.
+Yes.
 
-But anyway s390 is the architecture where I expect zero issues if KVM 
-patches go in through arch maintainers.  Compared to other 
-architectures, there are a lot more points of contact between KVM and 
-the rest of arch/s390; you know the KVM code well; and honestly the 
-whole architecture is mostly Amharic to me when it comes to the 
-privileged interface.
+Another one of those learning over time. If you find a bug, look
+around and you will probably find the same bug in other places nearby.
 
-Thanks,
+This is actually a pretty common issue we have with Ethernet PHY
+drivers, the sign bit getting thrown away. Developers look at the
+datasheet and see 16 bit registers, and so use u16, and forget about
+the error code. Maybe somebody can write a coccicheck script looking
+for calls to and of the phy_read() variants and the result value is
+assigned to an unsigned int?
 
-Paolo
+> Finally, I also find other variable, for example, 'u16 addr' in
+> lan8814_probe.
+> I think they all should be declared by 'int'.
 
+addr should never be used as a return type, so can never carry an
+error code. Also, PHYs only have 32 registers, so address is never
+greater than 0x1f. So this is O.K.
+
+	Andrew

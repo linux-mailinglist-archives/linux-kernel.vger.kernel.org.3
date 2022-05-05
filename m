@@ -2,216 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE93651C6BB
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 20:06:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3EE351C7E2
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 20:37:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382987AbiEESKA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 14:10:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56772 "EHLO
+        id S1355303AbiEESc1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 14:32:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347541AbiEESJ6 (ORCPT
+        with ESMTP id S1384135AbiEESX5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 14:09:58 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3CC03A714
-        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 11:06:18 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id r9so4880576pjo.5
-        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 11:06:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=csa5Mj5E+ZKvHVZb+3IE/GuCgzkqVA+V6IRZnVKxYjQ=;
-        b=BDoPQjE5lYzOYbFxxPfMObdUUb96/hnlzMC2QQ3J9l8h+pnj7Akud0FVhawwEah6R2
-         NtYhsKmxx7l2g8bQrYlZ2iHixqIqRhvXrDqjQAAaDtErX4k1eQ2ccAFSuEa+2jVL7RR8
-         fDbSJ76yzER0JwcZVw7fzLN5KkV/V3hRa2RFgmuDBXgj9zdge/MdYmLaFFET1+dfTglS
-         I6T8gyYdDI58sHz0V9F6duONXsoeCNJy5+5CYd+vu++4guK+roeUCnxPyTOHRf32oq5w
-         NGT+/AXzUaKPKT5atnwbCpk19p5KUrGrn9vT6xwMtAX7ZJN21ZKSproidUMh93/oQg6o
-         Cxlw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=csa5Mj5E+ZKvHVZb+3IE/GuCgzkqVA+V6IRZnVKxYjQ=;
-        b=mtdksHsk21aSHelm0xuM9hgVvqlzKhlaDrUaHl6+LL2AaRFEwt2dhPDbEkvKQxxv5V
-         0HO0DySO/HMe/10Cs0Dv4cLeWGbGiU56tg3Q3Z3wMUQJFLr44MQKTpui3qLfx16+NveD
-         MMwAuaL4gOB7RhY6gU2Y+A7qMmh9G905eH2Jm3KCAyNzotzhJEj4qpEUJaScOVSrgrxw
-         Nr3naISi6i+2TbJ9taQuLZT4YRJHegCfNIw6ObBFPx/bgTrI+0XNE+8FmDBgeHsPIdEZ
-         mVPYQTlj2TdhJEBt6/qonHxdm+QWDkj+eGRA32J0VGrEmhCZTY1Hremo/uJvokILU33F
-         +TFw==
-X-Gm-Message-State: AOAM5319clPs3P5VhiD8eJjm6wQG6ytQnM5G+WRqU4yuLxjZTtN2bvcu
-        XvkGZkdi3oRVTQ8aUhIXNgNLGw==
-X-Google-Smtp-Source: ABdhPJwNktaPZjslvuxXyp8B21Tg5wZCqPH78HxSFnAeo0EZwJhjpESx7WUTNVNgOEdA6HqZWY1BZg==
-X-Received: by 2002:a17:90b:4a4e:b0:1dc:55ca:6f33 with SMTP id lb14-20020a17090b4a4e00b001dc55ca6f33mr7653761pjb.4.1651773978039;
-        Thu, 05 May 2022 11:06:18 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id d133-20020a621d8b000000b0050dc7628196sm1671225pfd.112.2022.05.05.11.06.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 May 2022 11:06:17 -0700 (PDT)
-Date:   Thu, 5 May 2022 18:06:14 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Ben Gardon <bgardon@google.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Peter Xu <peterx@redhat.com>,
-        David Matlack <dmatlack@google.com>,
-        Jim Mattson <jmattson@google.com>,
-        David Dunn <daviddunn@google.com>,
-        Jing Zhang <jingzhangos@google.com>,
-        Junaid Shahid <junaids@google.com>
-Subject: Re: [PATCH v7 05/11] KVM: selftests: Read binary stat data in lib
-Message-ID: <YnQSFmNArNUMs9/U@google.com>
-References: <20220503183045.978509-1-bgardon@google.com>
- <20220503183045.978509-6-bgardon@google.com>
+        Thu, 5 May 2022 14:23:57 -0400
+Received: from mr85p00im-ztdg06021101.me.com (mr85p00im-ztdg06021101.me.com [17.58.23.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AE6B5EBF1
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 11:17:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=me.com; s=1a1hai;
+        t=1651774030; bh=vV23b489VnzdeEn4Z7rQnBMy0kazXjtap6IBmGHeeE8=;
+        h=From:To:Subject:Date:Message-Id:MIME-Version;
+        b=DwS7D4ptU2KXBmq0w02Ka2EqgTtUKV656G6JlQgYSAYw8k87Io2+joE37XcH+GGKJ
+         ChDTo4Hu1RvjPBMcnl6Ewhw2eBnoPwN7fDGO5KdgtfAlkw1bnF0eFgfvJgyLSVtne7
+         bs84FoM+oMr0MGIiQ0iqkq2hyAWYzH1Ffej0a57nI1EjQNXhxxtb2rKGJ0j0hEV+xb
+         OaknqB/HKhZnt5Wu3UPs+gwWsjd8UTUyEJ+mY/fjr1qmdgBS3hisRAXQ5TnA4QYLpt
+         YBI0bW9gZfQ7c1UtoCWQ5SMMNAnSRebmDEvFjGg/fy+LM83Iz8dmbTyVeVJn37zT21
+         Q7c1ASv5CJ6WA==
+Received: from hitch.danm.net (mr38p00im-dlb-asmtp-mailmevip.me.com [17.57.152.18])
+        by mr85p00im-ztdg06021101.me.com (Postfix) with ESMTPSA id 955A280C8E;
+        Thu,  5 May 2022 18:07:09 +0000 (UTC)
+From:   Dan Moulding <dmoulding@me.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-doc@vger.kernel.org, tglx@linutronix.de,
+        akpm@linux-foundation.org, corbet@lwn.net,
+        Dan Moulding <dmoulding@me.com>
+Subject: [PATCH 0/1] Allow setting hostname before userspace starts
+Date:   Thu,  5 May 2022 12:06:50 -0600
+Message-Id: <20220505180651.22849-1-dmoulding@me.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220503183045.978509-6-bgardon@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-GUID: 7yxFzX1JusZoB8njsR0L-PwOAlnBWngT
+X-Proofpoint-ORIG-GUID: 7yxFzX1JusZoB8njsR0L-PwOAlnBWngT
+X-Proofpoint-Virus-Version: =?UTF-8?Q?vendor=3Dfsecure_engine=3D1.1.170-22c6f66c430a71ce266a39bfe25bc?=
+ =?UTF-8?Q?2903e8d5c8f:6.0.425,18.0.572,17.0.605.474.0000000_definitions?=
+ =?UTF-8?Q?=3D2022-01-14=5F01:2022-01-14=5F01,2020-02-14=5F11,2020-01-23?=
+ =?UTF-8?Q?=5F02_signatures=3D0?=
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 suspectscore=0 bulkscore=0
+ clxscore=1011 mlxlogscore=414 spamscore=0 malwarescore=0 mlxscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2205050123
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 03, 2022, Ben Gardon wrote:
-> Move the code to read the binary stats data to the KVM selftests
-> library. It will be re-used by other tests to check KVM behavior.
-> 
-> Reviewed-by: David Matlack <dmatlack@google.com>
-> Reviewed-by: Peter Xu <peterx@redhat.com>
-> Signed-off-by: Ben Gardon <bgardon@google.com>
-> ---
->  .../selftests/kvm/include/kvm_util_base.h     |  3 ++
->  .../selftests/kvm/kvm_binary_stats_test.c     |  7 ++--
->  tools/testing/selftests/kvm/lib/kvm_util.c    | 36 +++++++++++++++++++
->  3 files changed, 41 insertions(+), 5 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/kvm/include/kvm_util_base.h b/tools/testing/selftests/kvm/include/kvm_util_base.h
-> index fabe46ddc1b2..2a3a4d9ed8e3 100644
-> --- a/tools/testing/selftests/kvm/include/kvm_util_base.h
-> +++ b/tools/testing/selftests/kvm/include/kvm_util_base.h
-> @@ -403,6 +403,9 @@ int vcpu_get_stats_fd(struct kvm_vm *vm, uint32_t vcpuid);
->  void read_stats_header(int stats_fd, struct kvm_stats_header *header);
->  struct kvm_stats_desc *read_stats_desc(int stats_fd,
->  				       struct kvm_stats_header *header);
-> +int read_stat_data(int stats_fd, struct kvm_stats_header *header,
-> +		   struct kvm_stats_desc *desc, uint64_t *data,
-> +		   ssize_t max_elements);
->  
->  uint32_t guest_get_vcpuid(void);
->  
-> diff --git a/tools/testing/selftests/kvm/kvm_binary_stats_test.c b/tools/testing/selftests/kvm/kvm_binary_stats_test.c
-> index 8b31f8fc7e08..59677fae26e5 100644
-> --- a/tools/testing/selftests/kvm/kvm_binary_stats_test.c
-> +++ b/tools/testing/selftests/kvm/kvm_binary_stats_test.c
-> @@ -160,11 +160,8 @@ static void stats_test(int stats_fd)
->  	size_data = 0;
->  	for (i = 0; i < header.num_desc; ++i) {
->  		pdesc = (void *)stats_desc + i * size_desc;
-> -		ret = pread(stats_fd, stats_data,
-> -				pdesc->size * sizeof(*stats_data),
-> -				header.data_offset + size_data);
-> -		TEST_ASSERT(ret == pdesc->size * sizeof(*stats_data),
-> -				"Read data of KVM stats: %s", pdesc->name);
-> +		read_stat_data(stats_fd, &header, pdesc, stats_data,
-> +			       pdesc->size);
->  		size_data += pdesc->size * sizeof(*stats_data);
+Some userspace processes may rely on gethostname to always return the
+correct machine name. However, the only way that the hostname may be
+set is by some other userspace process calling sethostname
+first. During boot, if a process that depends on gethostname runs
+before sethostname has been called, then the process that called
+gethostname is going to get an incorrect result.
 
-Not your code, but updating size_data is pointless and confusing.  It's especially
-confusing as of this patch because it ignores the return read_stat_data().  I vote
-to opportunistically delete this code.
+A real-world case where this comes up is with mdadm, which if
+gethostname returns the wrong name, can cause local md-raid arrays to
+appear to be foreign arrays. This can alter how mdadm assembles the
+array, or can even cause array assembly to fail. I imagine there are
+probbaly other real-world cases where undesirable behavior results when
+the hostname is not set early enough.
 
->  	}
->  
-> diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
-> index 12fa8cc88043..ea4ab64e5997 100644
-> --- a/tools/testing/selftests/kvm/lib/kvm_util.c
-> +++ b/tools/testing/selftests/kvm/lib/kvm_util.c
-> @@ -2615,3 +2615,39 @@ struct kvm_stats_desc *read_stats_desc(int stats_fd,
->  
->  	return stats_desc;
->  }
-> +
-> +/*
-> + * Read stat data for a particular stat
-> + *
-> + * Input Args:
-> + *   stats_fd - the file descriptor for the binary stats file from which to read
-> + *   header - the binary stats metadata header corresponding to the given FD
-> + *   desc - the binary stat metadata for the particular stat to be read
-> + *   max_elements - the maximum number of 8-byte values to read into data
-> + *
-> + * Output Args:
-> + *   data - the buffer into which stat data should be read
-> + *
-> + * Return:
-> + *   The number of data elements read into data or -ERRNO on error.
+I'm proposing adding the option to set the hostname from a kernel
+parameter, so that the correct host name can be guaranteed to be set
+before any userspace process can call gethostname.
 
-This is a lie, it can never return -ERRNO.  Well, unless the caller is mean and
-passes in -EINVAL for max_elements I guess.
+I can imagine an even better way to do this would be to have the
+hostname written to some non-volatile storage (like a firmware NVRAM
+variable or such), which the kernel could read out during early
+boot. But, alas, such designs require hardware support, standards, and
+cooperation. This proposal is an alternative that can provide a simple
+and immediate solution.
 
-> + *
-> + * Read the data values of a specified stat from the binary stats interface.
-> + */
-> +int read_stat_data(int stats_fd, struct kvm_stats_header *header,
-> +		   struct kvm_stats_desc *desc, uint64_t *data,
-> +		   ssize_t max_elements)
+I'm sending this to linux-kernel since I don't see any list that's a
+better fit. If there is any other I should send to instead, please let
+me know. (linux-doc also included since kernel-parameters.txt is
+touched).
 
-Uber nit, @max_elements should be unsigned size_t, only the return from pread()
-is signed, the input is unsigned.
+Thank you for consideration,
 
-> +{
-> +	ssize_t size = min_t(ssize_t, desc->size, max_elements);
+  -- Dan
 
-Not your fault (I blame struct kvm_stats_desc), but "nr_elements" would be far
-more appropriate than "size".  And that frees up "size" to be the actual size,
-which eliminates the division.
+Dan Moulding (1):
+  init: Add "hostname" kernel parameter
 
-> +	ssize_t ret;
-> +
-> +	ret = pread(stats_fd, data, size * sizeof(*data),
-> +		    header->data_offset + desc->offset);
-> +
-> +	/* ret from pread is in bytes. */
-> +	ret = ret / sizeof(*data);
-> +
-> +	TEST_ASSERT(ret == size,
-> +		    "Read data of KVM stats: %s", desc->name);
+ Documentation/admin-guide/kernel-parameters.txt | 13 +++++++++++++
+ init/version.c                                  | 17 +++++++++++++++++
+ 2 files changed, 30 insertions(+)
 
-It'd be very helpful to print the expected vs. actual.
-
-> +
-> +	return ret;
-
-Eww.  I really, really hate code that asserts on a value and then returns that
-same value.  E.g. looking at just the declaration of read_stat_data() and the
-change in stats_test(), I genuinely thought this patch dropped the assert.  The
-assert in vm_get_stat() also added to the confusion (I was reviewing that patch,
-not this one).
-
-Rather than return the number of entries read, just assert that the number of
-elements to be read is non-zero, then vm_get_stat() doesn't need to assert because
-it'll be impossible to read anything but one entry without asserting.
-
-void read_stat_data(int stats_fd, struct kvm_stats_header *header,
-		    struct kvm_stats_desc *desc, uint64_t *data,
-		    size_t max_elements)
-{
-	size_t nr_elements = min_t(size_t, desc->size, max_elements);
-	size_t size = nr_elements * sizeof(*data);
-	ssize_t ret;
-
-	TEST_ASSERT(size, "No elements in stat '%s'", desc->name);
-
-	ret = pread(stats_fd, data, size, header->data_offset + desc->offset);
-
-	TEST_ASSERT(ret == size,
-		    "pread() failed on stat '%s', wanted %lu bytes, got %ld",
-		    desc->name, size, ret);
-}
+-- 
+2.35.1
 

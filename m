@@ -2,211 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A80A51BC6E
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 11:47:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F94A51BC74
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 11:49:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354260AbiEEJvG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 05:51:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34328 "EHLO
+        id S1347249AbiEEJwe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 05:52:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354147AbiEEJvB (ORCPT
+        with ESMTP id S229576AbiEEJwc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 05:51:01 -0400
-Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C58674F458
-        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 02:47:22 -0700 (PDT)
-Received: by mail-io1-f72.google.com with SMTP id y13-20020a056602164d00b0065a9dec1ef2so2506146iow.23
-        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 02:47:22 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=eV38iSYAFGjXt9JWlkIOLhHqsRAqY/eXwKHu9dO4WfM=;
-        b=WxDrIt5FiEEiyVShDlSDfpT9c5Dh2rZ4X7kKdeFXgnakKQClnNC4DQfnPkoOByb1QR
-         TmdWpqjjox8Yvv4Edx0/tQumJBVQJpPJafo+yFiRqj7zSleOWGF9xLKyWld/DS5WNYkb
-         uaZnyOG8kqnUCCSM53XfqojP6PVZ8mLxL3/fg7eHesWBOGG4+kXE6K1G80qfTOSKTRaO
-         b1nNXr04ZleRvBnQtLXK9ihSXpd0YyiGMPJBJiNc8Ap6VEOzr/13HurH4RTfcV3rbssP
-         jt2KsPMRVYpBCYTiZv82ylb/jSZUYIDMpPkTFX6XQOsetsaO3Bcui8Y0xOrK1/prR/N8
-         JHbA==
-X-Gm-Message-State: AOAM532lYM8UpX8FzRbTgQ+2LiohF2rWZsX7NCWC+H4ioP/Od1xyNvkj
-        lWpzOEW/aFL5Z4oux9IoNUmQwPQWtrbuB3Vwe2abfsIWOXiF
-X-Google-Smtp-Source: ABdhPJxL5XoOFhIWkIgGimlGzxLGs+KghxbThlHH0A4u3iFDaS4+GhJKngtIFRIFACuIz4GSRic/MRITFWOHKXmjlxt7C123rDYQ
+        Thu, 5 May 2022 05:52:32 -0400
+Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [IPv6:2001:4b98:dc4:8::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D67E31531;
+        Thu,  5 May 2022 02:48:52 -0700 (PDT)
+Received: (Authenticated sender: clement.leger@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 48466240011;
+        Thu,  5 May 2022 09:48:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1651744130;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Dz9x7hjALAYRR1gzE0vRrtltM7FrhiyILR91Rd0tJPA=;
+        b=J7jAKmhcgDJCHrO7ALoOQwG8k12UJRZJ8RSrEmyRLi/ATbqoN8r/E31uF01Is2wbZTjKfs
+        Qde9j+3NYsdvMR61MBMwOhcQoNPcogEq4U0B0QHFS3nb+bG3b3etfxUa2BG9Jz70ocP+z4
+        akXu5tMH7e4iHNG5ZdbRP2dKcdP6L6JIv5KkZ88ayUyoN8JDg1q/B8WwlwLRyknYSz2u6+
+        ifth7DXaMUp7qZar3f0n9pwi3WyHO5AtPBboFt589pV4tYOQ0b2Nm5PzLI9bVL/UpwJWHW
+        XkRa8iedTPVbdbINhI3EPb+vpclOSkojjT92UNbpIfIODzOXzpeUlIe8fhGJAA==
+Date:   Thu, 5 May 2022 11:47:28 +0200
+From:   =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Nathan Lynch <nathanl@linux.ibm.com>,
+        Laurent Dufour <ldufour@linux.ibm.com>,
+        Daniel Henrique Barboza <danielhb413@gmail.com>,
+        David Gibson <david@gibson.dropbear.id.au>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Hildenbrand <david@redhat.com>,
+        Ohhoon Kwon <ohoono.kwon@samsung.com>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        YueHaibing <yuehaibing@huawei.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        Steen Hegelund <steen.hegelund@microchip.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Allan Nielsen <allan.nielsen@microchip.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        Horatiu Vultur <horatiu.vultur@microchip.com>
+Subject: Re: [PATCH 1/3] of: dynamic: add of_property_alloc() and
+ of_property_free()
+Message-ID: <20220505114728.4b2de3a5@fixe.home>
+In-Reply-To: <9e470414-67a5-10ce-95eb-f8093fde70d4@csgroup.eu>
+References: <20220504154033.750511-1-clement.leger@bootlin.com>
+        <20220504154033.750511-2-clement.leger@bootlin.com>
+        <9e470414-67a5-10ce-95eb-f8093fde70d4@csgroup.eu>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-X-Received: by 2002:a05:6602:2e07:b0:65a:5818:2b3d with SMTP id
- o7-20020a0566022e0700b0065a58182b3dmr8054370iow.128.1651744041879; Thu, 05
- May 2022 02:47:21 -0700 (PDT)
-Date:   Thu, 05 May 2022 02:47:21 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000e04c5605de40a0dc@google.com>
-Subject: [syzbot] inconsistent lock state in rxrpc_put_call
-From:   syzbot <syzbot+7ff43f67d38f2d8e07ef@syzkaller.appspotmail.com>
-To:     davem@davemloft.net, dhowells@redhat.com, edumazet@google.com,
-        kuba@kernel.org, linux-afs@lists.infradead.org,
-        linux-kernel@vger.kernel.org, marc.dionne@auristor.com,
-        netdev@vger.kernel.org, pabeni@redhat.com,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Le Thu, 5 May 2022 07:30:47 +0000,
+Christophe Leroy <christophe.leroy@csgroup.eu> a =C3=A9crit :
 
-syzbot found the following issue on:
+> >   	/*
+> > -	 * NOTE: There is no check for zero length value.
+> > -	 * In case of a boolean property, this will allocate a value
+> > -	 * of zero bytes. We do this to work around the use
+> > -	 * of of_get_property() calls on boolean values.
+> > +	 * Even if the property has no value, it must be set to a
+> > +	 * non-null value since of_get_property() is used to check
+> > +	 * some values that might or not have a values (ranges for
+> > +	 * instance). Moreover, when the node is released, prop->value
+> > +	 * is kfreed so the memory must come from kmalloc.
+> >   	 */
+> > -	new->name =3D kstrdup(prop->name, allocflags);
+> > -	new->value =3D kmemdup(prop->value, prop->length, allocflags);
+> > -	new->length =3D prop->length;
+> > -	if (!new->name || !new->value)
+> > -		goto err_free;
+> > +	if (!alloc_len)
+> > +		alloc_len =3D 1;
+> >  =20
+> > -	/* mark the property as dynamic */
+> > -	of_property_set_flag(new, OF_DYNAMIC);
+> > +	prop->value =3D kzalloc(alloc_len, allocflags);
+> > +	if (!prop->value)
+> > +		goto out_err;
+> >  =20
+> > -	return new;
+> > +	if (value)
+> > +		memcpy(prop->value, value, value_len); =20
+>=20
+> Could you use kmemdup() instead of kzalloc+memcpy ?
 
-HEAD commit:    48cec73a891c net: lan966x: Fix compilation error
-git tree:       net-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=135956d8f00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=4f67580b287bc88d
-dashboard link: https://syzkaller.appspot.com/bug?extid=7ff43f67d38f2d8e07ef
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+I could but then, we won't be able to allocate a property value that is
+larger than the original one. This is used by the powerpc code to
+recopy an existing value and add some extra space after it.
 
-Unfortunately, I don't have any reproducer for this issue yet.
+> > diff --git a/include/linux/of.h b/include/linux/of.h
+> > index 04971e85fbc9..6b345eb71c19 100644
+> > --- a/include/linux/of.h
+> > +++ b/include/linux/of.h
+> > @@ -1463,6 +1463,11 @@ enum of_reconfig_change {
+> >   };
+> >  =20
+> >   #ifdef CONFIG_OF_DYNAMIC
+> > +extern struct property *of_property_alloc(const char *name, const void=
+ *value,
+> > +					  int value_len, int len,
+> > +					  gfp_t allocflags);
+> > +extern void of_property_free(const struct property *prop);
+> > + =20
+>=20
+> 'extern' is pointless for function prototypes, you should not add new=20
+> ones. Checkpatch complain about it:
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+7ff43f67d38f2d8e07ef@syzkaller.appspotmail.com
+I did so that, but I kept that since the existing code is full of them.
+Since you mention it, I'll remove the extern.
 
-================================
-WARNING: inconsistent lock state
-5.18.0-rc4-syzkaller-00910-g48cec73a891c #0 Not tainted
---------------------------------
-inconsistent {SOFTIRQ-ON-W} -> {IN-SOFTIRQ-W} usage.
-swapper/0/0 [HC0[0]:SC1[1]:HE1:SE0] takes:
-ffff88805a1a4038 (&rxnet->call_lock){+.?.}-{2:2}, at: rxrpc_put_call+0x175/0x300 net/rxrpc/call_object.c:634
-{SOFTIRQ-ON-W} state was registered at:
-  lock_acquire kernel/locking/lockdep.c:5641 [inline]
-  lock_acquire+0x1ab/0x510 kernel/locking/lockdep.c:5606
-  __raw_write_lock include/linux/rwlock_api_smp.h:209 [inline]
-  _raw_write_lock+0x2a/0x40 kernel/locking/spinlock.c:300
-  rxrpc_service_prealloc_one+0xacf/0x1440 net/rxrpc/call_accept.c:143
-  rxrpc_kernel_charge_accept+0xd4/0x120 net/rxrpc/call_accept.c:487
-  afs_charge_preallocation+0xba/0x310 fs/afs/rxrpc.c:733
-  afs_open_socket+0x294/0x360 fs/afs/rxrpc.c:92
-  afs_net_init+0xa75/0xec0 fs/afs/main.c:126
-  ops_init+0xaf/0x470 net/core/net_namespace.c:134
-  __register_pernet_operations net/core/net_namespace.c:1146 [inline]
-  register_pernet_operations+0x35a/0x850 net/core/net_namespace.c:1215
-  register_pernet_device+0x26/0x70 net/core/net_namespace.c:1302
-  afs_init+0xe6/0x218 fs/afs/main.c:189
-  do_one_initcall+0x103/0x650 init/main.c:1298
-  do_initcall_level init/main.c:1371 [inline]
-  do_initcalls init/main.c:1387 [inline]
-  do_basic_setup init/main.c:1406 [inline]
-  kernel_init_freeable+0x6b1/0x73a init/main.c:1613
-  kernel_init+0x1a/0x1d0 init/main.c:1502
-  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:298
-irq event stamp: 474002
-hardirqs last  enabled at (474002): [<ffffffff89800c02>] asm_sysvec_apic_timer_interrupt+0x12/0x20 arch/x86/include/asm/idtentry.h:645
-hardirqs last disabled at (474001): [<ffffffff896a855b>] sysvec_apic_timer_interrupt+0xb/0xc0 arch/x86/kernel/apic/apic.c:1097
-softirqs last  enabled at (473854): [<ffffffff8147bb73>] invoke_softirq kernel/softirq.c:432 [inline]
-softirqs last  enabled at (473854): [<ffffffff8147bb73>] __irq_exit_rcu+0x123/0x180 kernel/softirq.c:637
-softirqs last disabled at (473975): [<ffffffff8147bb73>] invoke_softirq kernel/softirq.c:432 [inline]
-softirqs last disabled at (473975): [<ffffffff8147bb73>] __irq_exit_rcu+0x123/0x180 kernel/softirq.c:637
+>=20
+> CHECK: extern prototypes should be avoided in .h files
+> #172: FILE: include/linux/of.h:1466:
+> +extern struct property *of_property_alloc(const char *name, const void=20
+> *value,
+>=20
+> CHECK: extern prototypes should be avoided in .h files
+> #175: FILE: include/linux/of.h:1469:
+> +extern void of_property_free(const struct property *prop);
+>=20
+>=20
+>=20
+>=20
+> >   extern int of_reconfig_notifier_register(struct notifier_block *);
+> >   extern int of_reconfig_notifier_unregister(struct notifier_block *);
+> >   extern int of_reconfig_notify(unsigned long, struct of_reconfig_data =
+*rd);
+> > @@ -1507,6 +1512,17 @@ static inline int of_changeset_update_property(s=
+truct of_changeset *ocs,
+> >   	return of_changeset_action(ocs, OF_RECONFIG_UPDATE_PROPERTY, np, pro=
+p);
+> >   }
+> >   #else /* CONFIG_OF_DYNAMIC */
+> > +
+> > +static inline struct property *of_property_alloc(const char *name,
+> > +						 const void *value,
+> > +						 int value_len, int len,
+> > +						 gfp_t allocflags) =20
+>=20
+> Can that fit on less lines ?
+>=20
+> May be:
+>=20
+> static inline struct property
+> *of_property_alloc(const char *name, const void *value, int value_len,
+> 		   int len, gfp_t allocflags)
 
-other info that might help us debug this:
- Possible unsafe locking scenario:
+Yes, that seems a better split.
 
-       CPU0
-       ----
-  lock(&rxnet->call_lock);
-  <Interrupt>
-    lock(&rxnet->call_lock);
-
- *** DEADLOCK ***
-
-1 lock held by swapper/0/0:
- #0: ffffc90000007d70 ((&call->timer)){+.-.}-{0:0}, at: lockdep_copy_map include/linux/lockdep.h:35 [inline]
- #0: ffffc90000007d70 ((&call->timer)){+.-.}-{0:0}, at: call_timer_fn+0xd5/0x6b0 kernel/time/timer.c:1411
-
-stack backtrace:
-CPU: 0 PID: 0 Comm: swapper/0 Not tainted 5.18.0-rc4-syzkaller-00910-g48cec73a891c #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Call Trace:
- <IRQ>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- print_usage_bug kernel/locking/lockdep.c:3935 [inline]
- valid_state kernel/locking/lockdep.c:3947 [inline]
- mark_lock_irq kernel/locking/lockdep.c:4150 [inline]
- mark_lock.part.0.cold+0x18/0xd8 kernel/locking/lockdep.c:4607
- mark_lock kernel/locking/lockdep.c:4571 [inline]
- mark_usage kernel/locking/lockdep.c:4502 [inline]
- __lock_acquire+0x11e7/0x56c0 kernel/locking/lockdep.c:4983
- lock_acquire kernel/locking/lockdep.c:5641 [inline]
- lock_acquire+0x1ab/0x510 kernel/locking/lockdep.c:5606
- __raw_write_lock include/linux/rwlock_api_smp.h:209 [inline]
- _raw_write_lock+0x2a/0x40 kernel/locking/spinlock.c:300
- rxrpc_put_call+0x175/0x300 net/rxrpc/call_object.c:634
- rxrpc_call_timer_expired+0xa1/0xc0 net/rxrpc/call_object.c:58
- call_timer_fn+0x1a5/0x6b0 kernel/time/timer.c:1421
- expire_timers kernel/time/timer.c:1466 [inline]
- __run_timers.part.0+0x679/0xa80 kernel/time/timer.c:1737
- __run_timers kernel/time/timer.c:1715 [inline]
- run_timer_softirq+0xb3/0x1d0 kernel/time/timer.c:1750
- __do_softirq+0x29b/0x9c2 kernel/softirq.c:558
- invoke_softirq kernel/softirq.c:432 [inline]
- __irq_exit_rcu+0x123/0x180 kernel/softirq.c:637
- irq_exit_rcu+0x5/0x20 kernel/softirq.c:649
- sysvec_apic_timer_interrupt+0x93/0xc0 arch/x86/kernel/apic/apic.c:1097
- </IRQ>
- <TASK>
- asm_sysvec_apic_timer_interrupt+0x12/0x20 arch/x86/include/asm/idtentry.h:645
-RIP: 0010:native_save_fl arch/x86/include/asm/irqflags.h:29 [inline]
-RIP: 0010:arch_local_save_flags arch/x86/include/asm/irqflags.h:70 [inline]
-RIP: 0010:arch_irqs_disabled arch/x86/include/asm/irqflags.h:130 [inline]
-RIP: 0010:acpi_safe_halt drivers/acpi/processor_idle.c:111 [inline]
-RIP: 0010:acpi_idle_do_entry+0x1c6/0x250 drivers/acpi/processor_idle.c:551
-Code: 89 de e8 ad a6 0b f8 84 db 75 ac e8 c4 a2 0b f8 e8 2f eb 11 f8 eb 0c e8 b8 a2 0b f8 0f 00 2d d1 4b c5 00 e8 ac a2 0b f8 fb f4 <9c> 5b 81 e3 00 02 00 00 fa 31 ff 48 89 de e8 27 a5 0b f8 48 85 db
-RSP: 0018:ffffffff8ba07d60 EFLAGS: 00000293
-RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
-RDX: ffffffff8babc700 RSI: ffffffff896d8694 RDI: 0000000000000000
-RBP: ffff88801639f864 R08: 0000000000000001 R09: 0000000000000001
-R10: ffffffff817f71e8 R11: 0000000000000000 R12: 0000000000000001
-R13: ffff88801639f800 R14: ffff88801639f864 R15: ffff888019952004
- acpi_idle_enter+0x361/0x500 drivers/acpi/processor_idle.c:686
- cpuidle_enter_state+0x1b1/0xc80 drivers/cpuidle/cpuidle.c:237
- cpuidle_enter+0x4a/0xa0 drivers/cpuidle/cpuidle.c:351
- call_cpuidle kernel/sched/idle.c:155 [inline]
- cpuidle_idle_call kernel/sched/idle.c:236 [inline]
- do_idle+0x3e8/0x590 kernel/sched/idle.c:303
- cpu_startup_entry+0x14/0x20 kernel/sched/idle.c:400
- start_kernel+0x47f/0x4a0 init/main.c:1140
- secondary_startup_64_no_verify+0xc3/0xcb
- </TASK>
-----------------
-Code disassembly (best guess):
-   0:	89 de                	mov    %ebx,%esi
-   2:	e8 ad a6 0b f8       	callq  0xf80ba6b4
-   7:	84 db                	test   %bl,%bl
-   9:	75 ac                	jne    0xffffffb7
-   b:	e8 c4 a2 0b f8       	callq  0xf80ba2d4
-  10:	e8 2f eb 11 f8       	callq  0xf811eb44
-  15:	eb 0c                	jmp    0x23
-  17:	e8 b8 a2 0b f8       	callq  0xf80ba2d4
-  1c:	0f 00 2d d1 4b c5 00 	verw   0xc54bd1(%rip)        # 0xc54bf4
-  23:	e8 ac a2 0b f8       	callq  0xf80ba2d4
-  28:	fb                   	sti
-  29:	f4                   	hlt
-* 2a:	9c                   	pushfq <-- trapping instruction
-  2b:	5b                   	pop    %rbx
-  2c:	81 e3 00 02 00 00    	and    $0x200,%ebx
-  32:	fa                   	cli
-  33:	31 ff                	xor    %edi,%edi
-  35:	48 89 de             	mov    %rbx,%rsi
-  38:	e8 27 a5 0b f8       	callq  0xf80ba564
-  3d:	48 85 db             	test   %rbx,%rbx
+Thanks,
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+--=20
+Cl=C3=A9ment L=C3=A9ger,
+Embedded Linux and Kernel engineer at Bootlin
+https://bootlin.com

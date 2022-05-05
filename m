@@ -2,63 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C50951C290
+	by mail.lfdr.de (Postfix) with ESMTP id B46AB51C291
 	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 16:28:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380647AbiEEOar (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 10:30:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55422 "EHLO
+        id S232839AbiEEObU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 10:31:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240964AbiEEOab (ORCPT
+        with ESMTP id S229570AbiEEObR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 10:30:31 -0400
+        Thu, 5 May 2022 10:31:17 -0400
 Received: from us-smtp-delivery-74.mimecast.com (us-smtp-delivery-74.mimecast.com [170.10.129.74])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 283EFAE46
-        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 07:26:52 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 06941AE46
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 07:27:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651760811;
+        s=mimecast20190719; t=1651760857;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=ufj/Nlucm7lyP1dfA8xRF4xBk3E8pv5QO2sw8rt5hZc=;
-        b=Q9X06U2adN3qxpLUhThNwFf+4u+lqdRnrV4PbC3cG0jZtJREY3Hn569Dr3ZBuXPM0XspWD
-        ZLyTYCnawF+0Fnv3S+M3B6zkuvKvV3P9IpemmlZAOlTKlN3KoW4Pr/j8jdYWt+SVoHDcmQ
-        eggln107dqUV9enRp7s5qwQ+DyO7fjI=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=hz8cN3gu7AH5J5jQIlr6+13kmwxut9ycO89aQGaXRjo=;
+        b=gGm/eOSLp7Gr5275ZDi6X+l0di8QO+vvX9DFTdCCoTMe8dqlt0SpB6BCoyaBNmc4JZLU2G
+        YgYm0EiLUSHLx4m63XqWTuKN0rx6O//xuWZxIcCI2ENjvMEiy0Ny6wYv/DvKUQd96KEuxU
+        0rtDIICTfh7cdY0BCobNsgqbb08vilQ=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-639-mXF5wrXIPMyBqqmGco25Zg-1; Thu, 05 May 2022 10:26:50 -0400
-X-MC-Unique: mXF5wrXIPMyBqqmGco25Zg-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3001E3C10233;
-        Thu,  5 May 2022 14:26:49 +0000 (UTC)
-Received: from horse.redhat.com (unknown [10.22.32.26])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 18C341121339;
-        Thu,  5 May 2022 14:26:49 +0000 (UTC)
-Received: by horse.redhat.com (Postfix, from userid 10451)
-        id CF89A220463; Thu,  5 May 2022 10:26:48 -0400 (EDT)
-Date:   Thu, 5 May 2022 10:26:48 -0400
-From:   Vivek Goyal <vgoyal@redhat.com>
-To:     Dharmendra Hans <dharamhans87@gmail.com>
-Cc:     Miklos Szeredi <miklos@szeredi.hu>, linux-fsdevel@vger.kernel.org,
-        fuse-devel <fuse-devel@lists.sourceforge.net>,
-        linux-kernel@vger.kernel.org, Bernd Schubert <bschubert@ddn.com>,
-        Dharmendra Singh <dsingh@ddn.com>
-Subject: Re: [PATCH v4 1/3] FUSE: Implement atomic lookup + create
-Message-ID: <YnPeqPTny1Eeat9r@redhat.com>
-References: <20220502102521.22875-1-dharamhans87@gmail.com>
- <20220502102521.22875-2-dharamhans87@gmail.com>
- <YnGIUOP2BezDAb1k@redhat.com>
- <CACUYsyGoX+o19u41cZyF92eDBO-9rFN_EEWBvWBGrEMuNn29Mw@mail.gmail.com>
- <YnKR9CFYPXT1bM1F@redhat.com>
- <CACUYsyG+QRyObnD5eaD8pXygwBRRcBrGHLCUZb2hmMZbFOfFTg@mail.gmail.com>
+ us-mta-111-Y_1Qq3JJMj6nqwpw2ohXEA-1; Thu, 05 May 2022 10:27:36 -0400
+X-MC-Unique: Y_1Qq3JJMj6nqwpw2ohXEA-1
+Received: by mail-ed1-f70.google.com with SMTP id s24-20020a05640217d800b00425e19e7deaso2414321edy.3
+        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 07:27:35 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=hz8cN3gu7AH5J5jQIlr6+13kmwxut9ycO89aQGaXRjo=;
+        b=Z7G05LmAXd9mP8AKtVLOJQ9/mlE3pg9UrIZOyWvred+aPbTAQHoT9XbdHofNBkvmqS
+         pngHHgH9aybHGSr/AlB5ykWrVSV8pCtQ+/LIZL4jrerrNu3DiRWwDp1N/fXGzrnUCCJg
+         eb8Tj5YQ2UNRypyMp+5gLwPOZhE7CSRd+L/FECczP1qYxtw9nlFPrUpUw7+pl7xzXRnM
+         o7hnSiwHj+6pnDEEmhzD4/s/MBBRDc0gfZDre0zpxtdvG7qAezHecat1i42bPtZSxUGl
+         M/3G4S2CGb5r57ESiaAyfMtu9Y+46kTtZmlPiPNyqFU4bx/ocQ1F7vm6j+kBTLOKk3dA
+         k48Q==
+X-Gm-Message-State: AOAM53284q+qHik7JQgvYY93U0dO1tzA9atEKFH3Y8c885PU/pyLTi40
+        Kl0jqN3S+6k+CTHws+qF08yzwX+wDVEBo42dxtAY3SXUDbdsOzAlEG44L7z0nQm+SwsOPHjRRXA
+        6T2cemT9J1JHpTnm1VA24i89B
+X-Received: by 2002:a17:907:6294:b0:6e1:ea4:74a3 with SMTP id nd20-20020a170907629400b006e10ea474a3mr26223923ejc.168.1651760854354;
+        Thu, 05 May 2022 07:27:34 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwv7wnqPWL1ffvs/IM4PL/CBY4zMVBL4inCsI3m/n3fhEsCLH0JW5UDS797AgWj/J9aY6TrsQ==
+X-Received: by 2002:a17:907:6294:b0:6e1:ea4:74a3 with SMTP id nd20-20020a170907629400b006e10ea474a3mr26223834ejc.168.1651760853491;
+        Thu, 05 May 2022 07:27:33 -0700 (PDT)
+Received: from alrua-x1.borgediget.toke.dk ([2a0c:4d80:42:443::2])
+        by smtp.gmail.com with ESMTPSA id k20-20020a170906971400b006f3ef214dc9sm805808ejx.47.2022.05.05.07.27.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 May 2022 07:27:32 -0700 (PDT)
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+        id B4CF734D4E7; Thu,  5 May 2022 16:27:31 +0200 (CEST)
+From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+To:     shaozhengchao <shaozhengchao@huawei.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>
+Cc:     "ast@kernel.org" <ast@kernel.org>,
+        "daniel@iogearbox.net" <daniel@iogearbox.net>,
+        "hawk@kernel.org" <hawk@kernel.org>,
+        "john.fastabend@gmail.com" <john.fastabend@gmail.com>,
+        "andrii@kernel.org" <andrii@kernel.org>,
+        "kafai@fb.com" <kafai@fb.com>,
+        "songliubraving@fb.com" <songliubraving@fb.com>,
+        "yhs@fb.com" <yhs@fb.com>,
+        "kpsingh@kernel.org" <kpsingh@kernel.org>,
+        "bigeasy@linutronix.de" <bigeasy@linutronix.de>,
+        "imagedong@tencent.com" <imagedong@tencent.com>,
+        "petrm@nvidia.com" <petrm@nvidia.com>,
+        "memxor@gmail.com" <memxor@gmail.com>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "weiyongjun (A)" <weiyongjun1@huawei.com>,
+        yuehaibing <yuehaibing@huawei.com>
+Subject: Re: =?utf-8?B?562U5aSNOg==?= [PATCH bpf-next] bpf/xdp: Can't detach
+ BPF XDP prog if not
+ exist
+In-Reply-To: <594b5198d54c4c729728c20d167d9c2d@huawei.com>
+References: <20220504035207.98221-1-shaozhengchao@huawei.com>
+ <875ymlwnmy.fsf@toke.dk> <594b5198d54c4c729728c20d167d9c2d@huawei.com>
+X-Clacks-Overhead: GNU Terry Pratchett
+Date:   Thu, 05 May 2022 16:27:31 +0200
+Message-ID: <87tua43vho.fsf@toke.dk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CACUYsyG+QRyObnD5eaD8pXygwBRRcBrGHLCUZb2hmMZbFOfFTg@mail.gmail.com>
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.3
+Content-Type: text/plain
 X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -69,242 +102,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 05, 2022 at 10:21:21AM +0530, Dharmendra Hans wrote:
-> On Wed, May 4, 2022 at 8:17 PM Vivek Goyal <vgoyal@redhat.com> wrote:
-> >
-> > On Wed, May 04, 2022 at 09:56:49AM +0530, Dharmendra Hans wrote:
-> > > On Wed, May 4, 2022 at 1:24 AM Vivek Goyal <vgoyal@redhat.com> wrote:
-> > > >
-> > > > On Mon, May 02, 2022 at 03:55:19PM +0530, Dharmendra Singh wrote:
-> > > > > From: Dharmendra Singh <dsingh@ddn.com>
-> > > > >
-> > > > > When we go for creating a file (O_CREAT), we trigger
-> > > > > a lookup to FUSE USER SPACE. It is very  much likely
-> > > > > that file does not exist yet as O_CREAT is passed to
-> > > > > open(). This lookup can be avoided and can be performed
-> > > > > as part of create call into libfuse.
-> > > > >
-> > > > > This lookup + create in single call to libfuse and finally
-> > > > > to USER SPACE has been named as atomic create. It is expected
-> > > > > that USER SPACE create the file, open it and fills in the
-> > > > > attributes which are then used to make inode stand/revalidate
-> > > > > in the kernel cache. Also if file was newly created(does not
-> > > > > exist yet by this time) in USER SPACE then it should be indicated
-> > > > > in `struct fuse_file_info` by setting a bit which is again used by
-> > > > > libfuse to send some flags back to fuse kernel to indicate that
-> > > > > that file was newly created. These flags are used by kernel to
-> > > > > indicate changes in parent directory.
-> > > >
-> > > > Reading the existing code a little bit more and trying to understand
-> > > > existing semantics. And that will help me unerstand what new is being
-> > > > done.
-> > > >
-> > > > So current fuse_atomic_open() does following.
-> > > >
-> > > > A. Looks up dentry (if d_in_lookup() is set).
-> > > > B. If dentry is positive or O_CREAT is not set, return.
-> > > > C. If server supports atomic create + open, use that to create file and
-> > > >    open it as well.
-> > > > D. If server does not support atomic create + open, just create file
-> > > >    using "mknod" and return. VFS will take care of opening the file.
-> > > >
-> > > > Now with this patch, new flow is.
-> > > >
-> > > > A. Look up dentry if d_in_lookup() is set as well as either file is not
-> > > >    being created or fc->no_atomic_create is set. This basiclally means
-> > > >    skip lookup if atomic_create is supported and file is being created.
-> > > >
-> > > > B. Remains same. if dentry is positive or O_CREATE is not set, return.
-> > > >
-> > > > C. If server supports new atomic_create(), use that.
-> > > >
-> > > > D. If not, if server supports atomic create + open, use that
-> > > >
-> > > > E. If not, fall back to mknod and do not open file.
-> > > >
-> > > > So to me this new functionality is basically atomic "lookup + create +
-> > > > open"?
-> > > >
-> > > > Or may be not. I see we check "fc->no_create" and fallback to mknod.
-> > > >
-> > > >         if (fc->no_create)
-> > > >                 goto mknod;
-> > > >
-> > > > So fc->no_create is representing both old atomic "create + open" as well
-> > > > as new "lookup + create + open" ?
-> > > >
-> > > > It might be obvious to you, but it is not to me. So will be great if
-> > > > you shed some light on this.
-> > > >
-> > >
-> > > I think you got it right now. New atomic create does what you
-> > > mentioned as new flow.  It does  lookup + create + open in single call
-> > > (being called as atomic create) to USER SPACE.mknod is a special case
-> >
-> > Ok, naming is little confusing. I think we will have to put it in
-> > commit message and where you define FUSE_ATOMIC_CREATE that what's
-> > the difference between FUSE_CREATE and FUSE_ATOMIC_CREATE. This is
-> > ATOMIC w.r.t what?
-> 
-> Sure, I would update the commit message to make the distinction clear
-> between the two. This operation is atomic w.r.t to USER SPACE FUSE
-> implementations. i.e USER SPACE would be performing all these
-> operations in a single call to it.
+shaozhengchao <shaozhengchao@huawei.com> writes:
 
-I think even FUSE_CREAT is doing same thing. Creating file, opening and
-doing lookup and sending all the data. So that's not the difference
-between the two, IMHO. And that's why I am getting confused with the
-naming.
+> Thank you for your reply. I wiil change sample application firstly.
+> But if kernel does nothing and return 0, maybe user will think setup
+> is OK, actually It failed. Is this acceptable?
 
-From user space file server perspective, only extra operation seems
-to be that it sends a flag in response telling the client whether
-file was actually created or it already existed. So to me it just
-sounds little extension of existing FUSE_CREATE command and that's
-why I thought calling it FUSE_CREATE_EXT is probably better naming.
+Your patch was about detach; what has that got to do with "setup is OK"?
 
+As for detaching, it's possible to write the application in a way that
+it will always get a consistent result. There are basically two cases
+when using netlink to detach an XDP program (bpf_link has its own
+semantics, so setting that aside here):
 
-> 
-> 
-> > May be atomic here means that "lookup + create + open" is a single operation.
-> > But then even FUSE_CREATE is atomic because "creat + open" is a single
-> > operation.
-> >
-> > In fact FUSE_CREATE does lookup anyway and returns all the information
-> > in fuse_entry_out.
-> >
-> > IIUC, only difference between FUSE_CREATE and FUSE_ATOMIC_CREATE is that
-> > later also carries information in reply whether file was actually created
-> > or not (FOPEN_FILE_CREATED). This will be set if file did not exist
-> > already and it was created indeed. Is that right?
-> 
-> FUSE_CREATE is atomic but upto level of libfuse. Libfuse separates it
-> into two calls, create and lookup separately into USER SPACE FUSE
-> implementation.
+1. The application just wants to turn off XDP entirely on the interface
+   (e.g., 'ip link set dev XXX xdp off'). In this case you just send a
+   RTM_SETLINK message with an IFLA_XDP_FD of -1, and if you don't get
+   an error you can be sure that there is now no XDP program attached.
+   Whether this was because there was already no program attached, or
+   because you just detached it doesn't really matter in this case,
+   since you're doing an unspecific detach anyway.
 
-I am not sure what do you mean by "libfuse separates it into two calls,
-create and lookup separately". I guess you are referring to lo_create()
-in example/passthrough_ll.c which first creates and opens file and
-then looks it up and replies.
+2. You attached a program earlier, and now you want to detach that (and
+   only that) program. Or, equivalently, you queried the link and want
+   to detach the program you know is attached there. In this case you
+   send an RTM_SETLINK message with an IFLA_XDP_FD of -1 and an
+   IFLA_XDP_EXPECTED_FD referring to the existing program. In this case
+   you will get an error if that specific program is not in fact
+   attached, whether because it was detached or swapped out in the
+   meantime.
 
-        fd = openat(lo_fd(req, parent), name,
-                    (fi->flags | O_CREAT) & ~O_NOFOLLOW, mode);
-	err = lo_do_lookup(req, parent, name, &e);
-	fuse_reply_create(req, &e, fi);
+I don't see how case 1. is improved by returning ENOENT if there is no
+program attached; if you care about detaching a specific program you'd
+use case 2. anyway, and if you just want to check if a program is
+attached, you'd do an RTM_GETLINK.
 
-I am looking at your proposal for atomic_create implementation here.
-
-https://github.com/libfuse/libfuse/pull/673/commits/88cd25b2857f2bb213d01afbcfd666787d1e6893#diff-a36385ec8fb753d6f4492a5f0d3c6a5750bd370b50df6ef0610efdcd3f8880ffR787
-
-It is doing exactly same thing as lo_create(), except one difference that
-it is checking first if file exists. It essentially is doing this.
-
-A. newfd = openat(lo_fd(req, parent), name, O_PATH | O_NOFOLLOW);
-B. fd = openat(lo_fd(req, parent), name,
-		    (fi->flags | O_CREAT) & ~O_NOFOLLOW, mode);
-C. err = lo_do_lookup(req, parent, name, &e);
-D. fuse_reply_create(req, &e, fi);
-
-So what do you mean by libfuse makes it two calls. 
-
-And I think above implementation is racy. What if filesystem is
-shared and another client creates the file between calls to
-A and B. You will think you created the file but some other
-client created it.
-
-So if intent is to know whether we created the file or not, then
-you should probably do openat() with O_EXCL flag. If that succeeds
-you know you created the file. If it fails with -EEXIST, then you
-know file is already there. That's what virtiofs does.
-
-Anyway, coming back to the point. IMHO, from server perspective,
-there is no atomicity difference between FUSE_CREATE and
-FUSE_ATOMIC_CREATE. Only difference seems to be to send addditional
-information back to the client to tell it whether file was created
-or not.
-
-In fact for shared filesystem this is probably a problem. What if
-guest's cache is stale and it does not know about the file. A client
-B creates the file and we think we did not create the file. And we
-will return with FOPEN_FILE_CREATED = 0. And in that case client
-will not call fuse_dir_changed(). But that seems wrong in case
-of shared filesystems. I am concerned about virtiofs which can
-be shared between different guests.
-
-Miklos, WDYT?
-
-May be it is not a huge concern. If one guest drops a file, other guest
-will not invalidate its dir attrs till timeout happens. Case of shared
-filesystem is very tricky with fuse. And sometimes it is not clear
-to me what kind of coherency matters.
-
-So in this case say I am booted with cache=auto, if guest B drops a file
-bar/foo.txt and guest A does open(bar/foo.txt, O_CREAT), then should
-guest A invalidate the attrs of bar/ right away or it will be invalidated
-anyway after a second. 
-
-Anyway.., my core point is that difference between FUSE_CREATE and
-FUSE_ATOMIC_CREATE is just one flag FOPEN_FILE_CREATED which tells
-client whether file was actually created or not. And that is used
-to determine whether to invalidate parent dir attributes or not. It
-does not have anything extra in terms of ATOMICITY as far as I can
-see and that's what confuses me.
-
-
-
-> This FUSE_ATOMIC_CREATE does all these ops in a single call to FUSE
-> implementations.  We do not want to break any existing FUSE
-> implementations, therefore it is being introduced as a new feature. I
-> forgot to include links to libfuse patches as well. That would have
-> made it much clearer.  Here is the link to libfuse patch for this call
-> https://github.com/libfuse/libfuse/pull/673.
-> 
-> >
-> > I see FOPEN_FILE_CREATED is being used to avoid calling
-> > fuse_dir_changed(). That sounds like a separate optimization and probably
-> > should be in a separate patch.
-> 
-> FUSE_ATOMIC_CREATE needs to send back info about if  file was actually
-> created or not (This is suggestion from Miklos) to correctly convey if
-> the parent dir is really changing or not. I included this as part of
-> this patch itself instead of having it as a separate patch.
-
-This needs little more thought w.r.t shared filesystems.
-
-> 
-> > IOW, I think this patch should be broken in to multiple pieces. First
-> > piece seems to be avoiding lookup() and given the way it is implemented,
-> > looks like we can avoid lookup() even by using existing FUSE_CREATE
-> > command. We don't necessarily need FUSE_ATOMIC_CREATE. Is that right?
-> 
-> Its not only about changing fuse kernel code but USER SPACE
-> implementations also. If we change the you are suggesting we would be
-> required to twist many things at libfuse and FUSE low level API. So to
-> keep things simple and not to break any existing implementations we
-> have kept it as new call (we now pass `struct stat` to USER SPACE FUSE
-> to filled in).
-> 
-> > And once that is done, a separate patch should probably should explain
-> > the problem and say fuse_dir_changed() call can be avoided if we knew
-> > if file was actually created or it was already existing there. And that's
-> > when one need to introduce a new command. Given this is just an extension
-> > of existing FUSE_CREATE command and returns additiona info about
-> > FOPEN_FILE_CREATED, we probably should simply call it FUSE_CREATE_EXT
-> > and explain how this operation is different from FUSE_CREATE.
-> 
-> As explained above, we are not doing this way as we have kept in mind
-> all existing libfuse APIs as well.
->
-
-I am not seeing what will break in existing passthrough_ll.c if I
-simply used FUSE_CREATE for a file which already exists.
-
-        fd = openat(lo_fd(req, parent), name,
-                    (fi->flags | O_CREAT) & ~O_NOFOLLOW, mode);
-
-This call should still succeed even if file already exists. (until and
-unless called it with O_EXCL and in that case failing is the correct
-behavior). 
-
-Thanks
-Vivek
+-Toke
 

@@ -2,195 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1231251C79E
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 20:36:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08E4A51C6C4
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 20:10:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383179AbiEESfm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 14:35:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56332 "EHLO
+        id S1382818AbiEESOX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 14:14:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385318AbiEESaU (ORCPT
+        with ESMTP id S1382358AbiEESOU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 14:30:20 -0400
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A22E54BF4;
-        Thu,  5 May 2022 11:21:00 -0700 (PDT)
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.0.0)
- id cb2124d2900a9eb5; Thu, 5 May 2022 20:19:37 +0200
-Received: from kreacher.localnet (unknown [213.134.161.219])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Thu, 5 May 2022 14:14:20 -0400
+Received: from us-smtp-delivery-74.mimecast.com (us-smtp-delivery-74.mimecast.com [170.10.133.74])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1F32D5AA40
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 11:10:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1651774239;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=g+jtLZCY0oS2j8cHAT4ilKEWmUoISrpplfkP+mfinMM=;
+        b=Q3nA9WE2DxvuE3yqa6dt/4f0sAyOwYW46xgwA+hxEUCScmkef3TNjQUwjfMK+XXABDlXf/
+        R8ELAIcRLADagxgcGrg5rc49X80n09d8vconJv19UP/tVSTtIeByEVPj+NOdwIzU3T9n0d
+        sLBM6iHgEojOF/eUdqlV4mkAMf97Nqc=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-562-ISsz3zr1Nae_YvWmOWeKIw-1; Thu, 05 May 2022 14:10:35 -0400
+X-MC-Unique: ISsz3zr1Nae_YvWmOWeKIw-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id BEF7266C2F2;
-        Thu,  5 May 2022 20:19:36 +0200 (CEST)
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Linux PCI <linux-pci@vger.kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Anders Roxell <anders.roxell@linaro.org>
-Subject: [PATCH v1 05/11] PCI/PM: Do not call pci_update_current_state() from pci_power_up()
-Date:   Thu, 05 May 2022 20:09:12 +0200
-Message-ID: <3695055.kQq0lBPeGt@kreacher>
-In-Reply-To: <4738492.GXAFRqVoOG@kreacher>
-References: <4738492.GXAFRqVoOG@kreacher>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 035CA1014A62;
+        Thu,  5 May 2022 18:10:34 +0000 (UTC)
+Received: from dhcp-27-174.brq.redhat.com (unknown [10.40.192.3])
+        by smtp.corp.redhat.com (Postfix) with SMTP id D69755690D9;
+        Thu,  5 May 2022 18:10:28 +0000 (UTC)
+Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
+        oleg@redhat.com; Thu,  5 May 2022 20:10:33 +0200 (CEST)
+Date:   Thu, 5 May 2022 20:10:27 +0200
+From:   Oleg Nesterov <oleg@redhat.com>
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     linux-kernel@vger.kernel.org, rjw@rjwysocki.net, mingo@kernel.org,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, mgorman@suse.de, bigeasy@linutronix.de,
+        Will Deacon <will@kernel.org>, tj@kernel.org,
+        linux-pm@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        linux-um@lists.infradead.org, Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        linux-xtensa@linux-xtensa.org, Kees Cook <keescook@chromium.org>,
+        Jann Horn <jannh@google.com>, linux-ia64@vger.kernel.org
+Subject: Re: [PATCH v3 08/11] ptrace: Admit ptrace_stop can generate spuriuos
+ SIGTRAPs
+Message-ID: <20220505181027.GA14011@redhat.com>
+References: <87k0b0apne.fsf_-_@email.froward.int.ebiederm.org>
+ <20220504224058.476193-8-ebiederm@xmission.com>
+ <20220505152801.GC13929@redhat.com>
+ <87zgjv6f2u.fsf@email.froward.int.ebiederm.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 213.134.161.219
-X-CLIENT-HOSTNAME: 213.134.161.219
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedrfedugdduvdduucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgjfhgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepvdffueeitdfgvddtudegueejtdffteetgeefkeffvdeftddttdeuhfegfedvjefhnecukfhppedvudefrddufeegrdduiedurddvudelnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvddufedrudefgedrudeiuddrvdduledphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedpnhgspghrtghpthhtohepjedprhgtphhtthhopehlihhnuhigqdhptghisehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepmhhikhgrrdifvghsthgvrhgsvghrgheslhhinhhugidrihhnthgv
- lhdrtghomhdprhgtphhtthhopehhvghlghgrrghssehkvghrnhgvlhdrohhrghdprhgtphhtthhopehnrghthhgrnheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprghnuggvrhhsrdhrohigvghllheslhhinhgrrhhordhorhhg
-X-DCC--Metrics: v370.home.net.pl 1024; Body=7 Fuz1=7 Fuz2=7
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87zgjv6f2u.fsf@email.froward.int.ebiederm.org>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On 05/05, Eric W. Biederman wrote:
+>
+> So I vote for deleting code, and making ptrace_stop easier to reason
+> about.
 
-Notice that calling pci_update_current_state() from pci_power_up() is
-redundant and may be harmful in some cases.
+Yes, yes, agreed.
 
-First, if the device is in a low-power state before pci_power_up()
-gets called for it and platform_pci_set_power_state() successfully
-changes its power state to D0, pci_update_current_state() will update
-current_state to reflect that and pci_power_up() will return success
-right away without restoring the device's BARs or reconfiguring ASPM
-which may be necessary.  This is arguably incorrect and definitely
-inconsistent with the case when platform_pci_set_power_state() returns
-an error (for example, because the device is not power-manageable by
-the platform firmware).
-
-Second, current_state should not be overwritten until the decision
-whether or not to restore the device's BARs is made, because that
-decision generally depends on its value.  Again, calling
-pci_update_current_state() in pci_power_up() is not consistent with
-this observation.
-
-Next, pci_power_up() attempts to read from the device's PCI_PM_CTRL
-register regardless of the current_state value unless it is PCI_D0,
-including the case when pci_update_current_state() sets current_state
-to PCI_D3cold to indicate that the device is not accessible.  If the
-register read is not successful, current_state will be set to
-PCI_D3cold anyway, so that pci_update_current_state() action is
-redundant.
-
-Further, if pci_update_current_state() reads the device's PCI_PM_CTRL
-register, pci_power_up() will repeat that read going forward and
-it is not necessary to update current_state in the meantime.
-
-Finally, if pm_cap is not set (in which case the PCI_PM_CTRL register
-is not present), the power state of the device should be determined
-with the help of the platform firmware or set to D0 if that's not
-possible and pci_update_current_state() does not do that.
-
-Accordingly, rearrange pci_power_up() so as to address the above
-shortcomings.
-
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- drivers/pci/pci.c |   49 ++++++++++++++++++++++++++++---------------------
- 1 file changed, 28 insertions(+), 21 deletions(-)
-
-Index: linux-pm/drivers/pci/pci.c
-===================================================================
---- linux-pm.orig/drivers/pci/pci.c
-+++ linux-pm/drivers/pci/pci.c
-@@ -1192,23 +1192,24 @@ static int pci_dev_wait(struct pci_dev *
-  */
- int pci_power_up(struct pci_dev *dev)
- {
--	bool need_restore = false;
-+	bool need_restore;
-+	pci_power_t state;
- 	u16 pmcsr;
--	int ret;
- 
--	ret = platform_pci_set_power_state(dev, PCI_D0);
--	if (!ret) {
--		pci_update_current_state(dev, PCI_D0);
--	} else if (!dev->pm_cap) { /* Fall back to PCI_D0 */
--		dev->current_state = PCI_D0;
--		return 0;
--	}
-+	platform_pci_set_power_state(dev, PCI_D0);
-+
-+	if (!dev->pm_cap) {
-+		state = platform_pci_get_power_state(dev);
-+		if (state == PCI_UNKNOWN)
-+			dev->current_state = PCI_D0;
-+		else
-+			dev->current_state = state;
- 
--	if (dev->current_state == PCI_D0)
--		return 0;
-+		if (state == PCI_D0)
-+			return 0;
- 
--	if (!dev->pm_cap)
- 		return -EIO;
-+	}
- 
- 	pci_read_config_word(dev, dev->pm_cap + PCI_PM_CTRL, &pmcsr);
- 	if (PCI_POSSIBLE_ERROR(pmcsr)) {
-@@ -1218,26 +1219,31 @@ int pci_power_up(struct pci_dev *dev)
- 		return -EIO;
- 	}
- 
-+	state = pmcsr & PCI_PM_CTRL_STATE_MASK;
-+
-+	need_restore = (state == PCI_D3hot || dev->current_state >= PCI_D3hot) &&
-+			!(pmcsr & PCI_PM_CTRL_NO_SOFT_RESET);
-+
-+	if (state == PCI_D0) {
-+		dev->current_state = PCI_D0;
-+		goto end;
-+	}
-+
- 	/*
- 	 * If we're (effectively) in D3, force entire word to 0. This doesn't
- 	 * affect PME_Status, disables PME_En, and sets PowerState to 0.
- 	 */
--	if (dev->current_state >= PCI_D3hot) {
--		if ((pmcsr & PCI_PM_CTRL_STATE_MASK) == PCI_D3hot &&
--		    !(pmcsr & PCI_PM_CTRL_NO_SOFT_RESET))
--			need_restore = true;
--
-+	if (state == PCI_D3hot)
- 		pmcsr = 0;
--	} else {
-+	else
- 		pmcsr &= ~PCI_PM_CTRL_STATE_MASK;
--	}
- 
- 	pci_write_config_word(dev, dev->pm_cap + PCI_PM_CTRL, pmcsr);
- 
- 	/* Mandatory transition delays; see PCI PM 1.2. */
--	if (dev->current_state == PCI_D3hot)
-+	if (state == PCI_D3hot)
- 		pci_dev_d3_sleep(dev);
--	else if (dev->current_state == PCI_D2)
-+	else if (state == PCI_D2)
- 		udelay(PCI_PM_D2_DELAY);
- 
- 	pci_read_config_word(dev, dev->pm_cap + PCI_PM_CTRL, &pmcsr);
-@@ -1246,6 +1252,7 @@ int pci_power_up(struct pci_dev *dev)
- 		pci_info_ratelimited(dev, "Refused to change power state from %s to D0\n",
- 				     pci_power_name(dev->current_state));
- 
-+end:
- 	/*
- 	 * According to section 5.4.1 of the "PCI BUS POWER MANAGEMENT
- 	 * INTERFACE SPECIFICATION, REV. 1.2", a device transitioning
-
-
+Oleg.
 

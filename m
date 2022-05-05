@@ -2,128 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCCEC51B8A0
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 09:20:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6F7C51B8D9
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 09:26:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343684AbiEEHYG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 03:24:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60152 "EHLO
+        id S1343947AbiEEHaV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 03:30:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343736AbiEEHX4 (ORCPT
+        with ESMTP id S1343736AbiEEH34 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 03:23:56 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEB3D21F;
-        Thu,  5 May 2022 00:20:14 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Kv4pg3ljzz4xTX;
-        Thu,  5 May 2022 17:20:11 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1651735213;
-        bh=0RQfHmyeqA9KUgkuozR1e0eVsVJQ0X/wUaMhxVJaBEg=;
-        h=Date:From:To:Cc:Subject:From;
-        b=peUeJiCGct+ZGMxOTZTJ/PkaS+rkvm4k9pOtOFmvrnsnEFkauhuT+Vefomoh577+C
-         6JJww0/4XAwqDj1pNWZtzhKEZ/s5v083lLo9NjXHbjQNeGQFZvvVMfem+n0Ek+6FDL
-         QVJWvyW7HPt586zM8itedFubZrISEwp++8FYkq0iksevGNma4BlswXWgqrc7pjsEnC
-         GyMmU0k5hlnlcTGIFi+drF6JfDxWoSvlEd8+vTt4IE5VGXGrWw/jrlQXmsEx/rfJhn
-         sUj971VHoEOzYdyya/js0C+/3g2FsfHlDRloKRF8J+Sx9aWRdqg93TqBThy+tqsRIU
-         ER3eCmniChKkQ==
-Date:   Thu, 5 May 2022 17:20:10 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Kees Cook <keescook@chromium.org>, Greg KH <greg@kroah.com>,
-        Arnd Bergmann <arnd@arndb.de>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>
-Subject: linux-next: manual merge of the kspp tree with the char-misc tree
-Message-ID: <20220505172010.19545e84@canb.auug.org.au>
+        Thu, 5 May 2022 03:29:56 -0400
+Received: from conuserg-12.nifty.com (conuserg-12.nifty.com [210.131.2.79])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDBAB31DE9;
+        Thu,  5 May 2022 00:26:17 -0700 (PDT)
+Received: from grover.sesame (133-32-177-133.west.xps.vectant.ne.jp [133.32.177.133]) (authenticated)
+        by conuserg-12.nifty.com with ESMTP id 2457Neni019426;
+        Thu, 5 May 2022 16:23:40 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-12.nifty.com 2457Neni019426
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1651735421;
+        bh=mq8Yk8ot1m2mhjLX32XL2W0Bgs0dGB51vVKxKbSTMUk=;
+        h=From:To:Cc:Subject:Date:From;
+        b=T77AYbWp+W8B/eXgnFGulan20TeHw3N6W7RIXt54h6dPGoOqBWyaZNhM/USm2COY1
+         1ai4VjljO6SS+KIZdz9zDlbPcqhQnBQeKneHyAHJdZ84G+BLsISEwrf5tO5Dr/i9PB
+         F94bzoe3Oo0TSu1N115G9q5JVECDckPxmFdLpg9iBzUQAI0aY2wPXdhmYVFSHyMMFO
+         q9se3e2KHp4ASisYM7uhuvaAfDDmUKe07fp1pOQ7PQebdARYuQLzr56U6xU38UYJDq
+         pBOrMk+PhVZ1hXHhscAEgaCyhjpTKX5PIofvTZP38NtlwKytBpwbg0AN2yAxcYmtWJ
+         JIz/mJfS9d9Bw==
+X-Nifty-SrcIP: [133.32.177.133]
+From:   Masahiro Yamada <masahiroy@kernel.org>
+To:     linux-kbuild@vger.kernel.org
+Cc:     clang-built-linux@googlegroups.com, linux-kernel@vger.kernel.org,
+        Nicolas Schier a <nicolas@fjasle.eu>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linuxppc-dev@lists.ozlabs.org, linux-um@lists.infradead.org,
+        linux-s390@vger.kernel.org,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        Masahiro Yamada <masahiroy@kernel.org>
+Subject: [PATCH v3 00/15] kbuild: yet another series of cleanups (modpost, LTO, MODULE_REL_CRCS)
+Date:   Thu,  5 May 2022 16:22:29 +0900
+Message-Id: <20220505072244.1155033-1-masahiroy@kernel.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/su1yPshIWnwWUQV2/xQTAPF";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/su1yPshIWnwWUQV2/xQTAPF
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+This is the third batch of cleanups in this development cycle.
 
-Today's linux-next merge of the kspp tree got a conflict in:
+Major changes in v3:
 
-  drivers/misc/lkdtm/stackleak.c
+ - Generate symbol CRCs as C code, and remove CONFIG_MODULE_REL_CRCS.
 
-between commit:
+Major changes in v2:
 
-  73f62e60d80c ("lkdtm: Move crashtype definitions into each category")
+ - V1 did not work with CONFIG_MODULE_REL_CRCS.
+   I fixed this for v2.
 
-from the char-misc tree and commit:
+ - Reflect some review comments in v1
 
-  c393c0b98d75 ("lkdtm/stackleak: prevent unexpected stack usage")
+ - Refactor the code more
 
-from the kspp tree.
+ - Avoid too long argument error
 
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
 
---=20
-Cheers,
-Stephen Rothwell
+Masahiro Yamada (15):
+  modpost: mitigate false-negatives for static EXPORT_SYMBOL checks
+  modpost: change the license of EXPORT_SYMBOL to bool type
+  modpost: merge add_{intree_flag,retpoline,staging_flag} to add_header
+  modpost: move *.mod.c generation to write_mod_c_files()
+  kbuild: generate a list of objects in vmlinux
+  kbuild: record symbol versions in *.cmd files
+  modpost: extract symbol versions from *.cmd files
+  kbuild: link symbol CRCs at final link, removing
+    CONFIG_MODULE_REL_CRCS
+  kbuild: stop merging *.symversions
+  genksyms: adjust the output format to modpost
+  kbuild: do not create *.prelink.o for Clang LTO or IBT
+  modpost: simplify the ->is_static initialization
+  modpost: use hlist for hash table implementation
+  kbuild: make built-in.a rule robust against too long argument error
+  kbuild: make *.mod rule robust against too long argument error
 
-diff --cc drivers/misc/lkdtm/stackleak.c
-index 210c84dfe1d2,52800583fd05..000000000000
---- a/drivers/misc/lkdtm/stackleak.c
-+++ b/drivers/misc/lkdtm/stackleak.c
-@@@ -81,11 -115,11 +115,20 @@@ out
-  	}
-  }
- =20
- -void lkdtm_STACKLEAK_ERASING(void)
-++static void lkdtm_STACKLEAK_ERASING(void)
-+ {
-+ 	unsigned long flags;
-+=20
-+ 	local_irq_save(flags);
-+ 	check_stackleak_irqoff();
-+ 	local_irq_restore(flags);
-+ }
-++
- +static struct crashtype crashtypes[] =3D {
- +	CRASHTYPE(STACKLEAK_ERASING),
- +};
- +
- +struct crashtype_category stackleak_crashtypes =3D {
- +	.crashtypes =3D crashtypes,
- +	.len	    =3D ARRAY_SIZE(crashtypes),
- +};
+ arch/powerpc/Kconfig         |   1 -
+ arch/s390/Kconfig            |   1 -
+ arch/um/Kconfig              |   1 -
+ include/asm-generic/export.h |  22 +-
+ include/linux/export.h       |  30 +--
+ include/linux/symversion.h   |  13 +
+ init/Kconfig                 |   4 -
+ kernel/module.c              |  10 +-
+ scripts/Kbuild.include       |   4 +
+ scripts/Makefile.build       | 118 +++------
+ scripts/Makefile.lib         |   7 -
+ scripts/Makefile.modfinal    |   5 +-
+ scripts/Makefile.modpost     |   9 +-
+ scripts/genksyms/genksyms.c  |  18 +-
+ scripts/link-vmlinux.sh      |  46 ++--
+ scripts/mod/file2alias.c     |   2 -
+ scripts/mod/list.h           |  52 ++++
+ scripts/mod/modpost.c        | 449 ++++++++++++++++++++---------------
+ scripts/mod/modpost.h        |   2 +
+ 19 files changed, 402 insertions(+), 392 deletions(-)
+ create mode 100644 include/linux/symversion.h
 
---Sig_/su1yPshIWnwWUQV2/xQTAPF
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+-- 
+2.32.0
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJzeqoACgkQAVBC80lX
-0Gzyawf+IjL+0oQohkkUjMk3c6Uut80GjFdAKKTspcMLpx/cUMjtGNCklV5hL/yz
-iAW38NEVXcDrjw1Y2MPTF7tcARPQuqPPK64CxOUkm4YapxTMpwE+MDYJK6yAoW+5
-dF90TixdA7z8W02UgCNgQ+d8mjo2KmTAvOj/MsY5yf+lHCskZrf7c9PPrQcCQLEf
-sEZR1RFtx9QtIXsuZeqwZdJkGmFyeAlAU5dnqqw1s1Tu83CuGe1H+8H0Pjog+f0u
-G6OsNr1fcvnfjz7BFSMHXYdgUxk4PpxTm3nQDgIR5T3yfRXyQNBtEq+uisEwxpFz
-KVscjVcvFdFAPO72Jf0alWsu7bV3hg==
-=yG1J
------END PGP SIGNATURE-----
-
---Sig_/su1yPshIWnwWUQV2/xQTAPF--

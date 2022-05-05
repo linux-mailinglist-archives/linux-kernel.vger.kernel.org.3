@@ -2,53 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92C6051B648
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 05:05:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F02C51B653
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 05:09:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240520AbiEEDI3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 23:08:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40234 "EHLO
+        id S231529AbiEEDMt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 23:12:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240491AbiEEDI0 (ORCPT
+        with ESMTP id S232469AbiEEDMr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 23:08:26 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7B344C7B2
-        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 20:04:46 -0700 (PDT)
-Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Ktz6h5kHlzfbNy;
-        Thu,  5 May 2022 11:03:40 +0800 (CST)
-Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
- dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 5 May 2022 11:04:45 +0800
-Received: from [10.174.177.243] (10.174.177.243) by
- dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 5 May 2022 11:04:44 +0800
-Message-ID: <42ca037f-e1ea-4b75-3819-fdccd17f6a29@huawei.com>
-Date:   Thu, 5 May 2022 11:04:44 +0800
+        Wed, 4 May 2022 23:12:47 -0400
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 351EF419A5;
+        Wed,  4 May 2022 20:09:10 -0700 (PDT)
+Received: by mail-pg1-x529.google.com with SMTP id v10so2639068pgl.11;
+        Wed, 04 May 2022 20:09:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=gkNQqEbbkruVWkng/pZ8wLPYUCsyQDLfstvvroGwtmY=;
+        b=FkZpbrERaZgztqu+q3tt0oQXMN56E8V3NkzluNp4lcnUA8ruIoCFrWZ8qVXsogWQbS
+         4v5egGWo1mPeM+xUxCYv56PQNwGMgDYYd9nS6FYseeC7KfiWWLnvH8BsFwLMffQhV4VK
+         ujL1mvQ8AzLco29S4nfuIj8x7MihRBL/18jFobRJ6FH1KP73WTKziQ1Xo76CcIDXB+Vz
+         FIW5AJlCP7LmHIwHQJVeftXtBFBDm5N1gOkRStrnaLBiwYpziLOwEl8E6Tr6zLgtyVDU
+         yF1IfkMJAwBc8NMRpoVyfMW/td7Kvmn20eJxjcXmS7J4c/lobPLNpziCVsmG06hAZ3nc
+         pWLg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=gkNQqEbbkruVWkng/pZ8wLPYUCsyQDLfstvvroGwtmY=;
+        b=2Ph7XbpyfByiZt38Cp8eI5hky3i6torgwgCZnniyW4SpLXInnz7IbGM3shqdjdZXh7
+         GZvU3Pgl1pIQISLx5l6DSD2E+kzsBOU9puxFMxYsw2C2df8HYCiwZqxkI85eUd2MObii
+         xOEQPebBKAtpLsMIrrbNckZSCEw+LwIHJp246gshKC13LuL+/ktatQpwM0uCPr5rf9JT
+         R9e4pFnyGA+G9ymSqb1EGOwztYB9TCGIAaM7mf+OML6vR3+J6Ib9WEqunTt3vE29eBUY
+         lV9SlQ659luB9yjTCsp7XMF3Rt4sZVWVu8cLZsmSpVpk7xkxuG3ajTNRHEZTSjv577U6
+         ollQ==
+X-Gm-Message-State: AOAM532hSlXAN8omE92/oB0SYd5SW6uA6Q5zVccwyOZCAiXeVWrh7Ad1
+        QA+g+eFz/ZBgil6IkHIlUt4=
+X-Google-Smtp-Source: ABdhPJx/GbXzY7EOKpnPiPcOJ7hWH8iPNx5yh8LuSsrsWe65Z+k615Qv5N4rZUcHYA9mvoBP5H1v1A==
+X-Received: by 2002:a65:6149:0:b0:3a9:7e8f:6429 with SMTP id o9-20020a656149000000b003a97e8f6429mr20407601pgv.613.1651720149564;
+        Wed, 04 May 2022 20:09:09 -0700 (PDT)
+Received: from [10.230.29.214] ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id cb10-20020a056a00430a00b0050dc7628141sm151641pfb.27.2022.05.04.20.09.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 04 May 2022 20:09:09 -0700 (PDT)
+Message-ID: <b6843e9b-0a70-2564-363d-0224f017e564@gmail.com>
+Date:   Wed, 4 May 2022 20:09:06 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH v3 0/3] arm64: mm: Do not defer reserve_crashkernel()
+ Thunderbird/91.9.0
+Subject: Re: [PATCH 5.4 00/84] 5.4.192-rc1 review
 Content-Language: en-US
-To:     Catalin Marinas <catalin.marinas@arm.com>
-CC:     <will@kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <vijayb@linux.microsoft.com>,
-        <f.fainelli@gmail.com>
-References: <20220411092455.1461-1-wangkefeng.wang@huawei.com>
- <YnFyYm93IVNlCQ4c@arm.com>
-From:   Kefeng Wang <wangkefeng.wang@huawei.com>
-In-Reply-To: <YnFyYm93IVNlCQ4c@arm.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+References: <20220504152927.744120418@linuxfoundation.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20220504152927.744120418@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.177.243]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpemm500001.china.huawei.com (7.185.36.107)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,39 +79,28 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On 2022/5/4 2:20, Catalin Marinas wrote:
-> On Mon, Apr 11, 2022 at 05:24:52PM +0800, Kefeng Wang wrote:
->> Commit 031495635b46 ("arm64: Do not defer reserve_crashkernel() for
->> platforms with no DMA memory zones"), this lets the kernel benifit
->> due to BLOCK_MAPPINGS, we could do more if ZONE_DMA and ZONE_DMA32
->> enabled.
->>
->> 1) Don't defer reserve_crashkernel() if only ZONE_DMA32
->> 2) Don't defer reserve_crashkernel() if ZONE_DMA with dma_force_32bit
->>     kernel parameter(newly added)
-> I'm not really keen on a new kernel parameter for this. But even with
-> such parameter, there is another series that allows crashkernel
-> reservations above ZONE_DMA32, so that would also need
-> NO_BLOCK_MAPPINGS, at least initially. I think there was a proposal to
-> do the high reservation first and only defer the low one in ZONE_DMA but
-> suggested we get the reservations sorted first and look at optimisations
-> later.
-OK, we could look it again after patch "support reserving crashkernel
-above 4G on arm64 kdump".
 
-The patch3 is a small cleanup, could you pick it up?
+On 5/4/2022 9:43 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.4.192 release.
+> There are 84 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Fri, 06 May 2022 15:25:19 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.4.192-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.4.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
-> If hardware is so bad with page mappings, I think we need to look at
-> different ways to enable the block mappings, e.g. some safe break
-> before make change of the mappings or maybe switching to another TTBR1
-> during boot.
->
-> Does FEAT_BBM level 2 allow us to change the block size without a break
-> before make? I think that can still trigger a TLB conflict abort, maybe
-> we can trap it and invalidate the TLBs (the conflict should be on the
-> linear map not where the kernel image is mapped).
+On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels:
 
-Block mapping is better than page mapping in some testcase(unixbench,
-booting time, and mysql, maybe more). KFENCE will make the liner
-mapping to page mapping too. If there is a new way to let's enable
-the block mapping, that's great.
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+-- 
+Florian

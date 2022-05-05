@@ -2,147 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C96C51C0E6
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 15:34:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA63B51C0D4
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 15:34:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237883AbiEENgi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 09:36:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48338 "EHLO
+        id S1379828AbiEENge (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 09:36:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379888AbiEENgU (ORCPT
+        with ESMTP id S1379840AbiEENgT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 09:36:20 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46BEE57987;
-        Thu,  5 May 2022 06:32:00 -0700 (PDT)
-Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1nmbaD-0001OP-HI; Thu, 05 May 2022 15:31:54 +0200
-Message-ID: <237660ea-794e-8347-4e1a-869ccef9ba3c@leemhuis.info>
-Date:   Thu, 5 May 2022 15:31:48 +0200
+        Thu, 5 May 2022 09:36:19 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC7C157981;
+        Thu,  5 May 2022 06:31:58 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id k2so6128736wrd.5;
+        Thu, 05 May 2022 06:31:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=5pSUK+NARKQGP0RSfhMDxUAusxVl8fziSm0RmmnAc6E=;
+        b=bretBRaPEZmVMji52YIT2cPIghpPUcOUPpBAKJc5YUPDThrBkg42K5pCLeNarY+bxW
+         17Kof9p/ykq91o+GLZ6upG204f288SaZmouWEERoOkA3JVyL/+I8lYCAsxCsvXAzSiK6
+         YQUZs7GQZed3srmxxNEKyXoD3mjbkSwvELw5yX4A/0hQ1wTlNAaF7hRs6nIkEPjBaRli
+         UydZcr4EHMgsFPIt0gvmmkM8PK1ZWa5Dzkl4UUTAFCoW6d9puNs82UtG8dHweLdcGeU8
+         pcIoKLh9o2TiGNDb9LdiQtI9TP7L6G6A3wIjD4EFRVJ7c0VR1oKEKYzvhUH28cxyeHfd
+         FmVw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=5pSUK+NARKQGP0RSfhMDxUAusxVl8fziSm0RmmnAc6E=;
+        b=F+8jZig9fx2F0bAMy8Lmeo6Ou0NlfuNurGAehq/jnnuizgze7I6cM1kfP1omDyvOmd
+         KV0bs2p9HDz3NIzf1MLS8CXhE1pkg9wViHwwAjLnFlWwFHzTCRNkNCzWji5kfAqMBVs6
+         vZoAKhe4HffjoELHrQ3iKrHnjEr4UAxSFheFNYcBrRrqV2EPDkkhF8PZTpJWkVuIfoy1
+         b7Y/0GHk6KF0hP5TcBwLcbzxarD+Osh8oYmh7EFUgBUMIjWSJJlwWGxmBiz2pHM7fFqL
+         86zyFSiHzeZ26gX281pazgUnSnTgDHKLZkAVV6d/DdFyPgWJbshbaTqcRLXRug8WBcE3
+         /uYQ==
+X-Gm-Message-State: AOAM5310I5Srs8RPPnVv2zt2WmaaT4Q1sofj+8gREoSKiUkcI44Fq+9k
+        M/CZLzO6ScXvVJyNb/13SAE=
+X-Google-Smtp-Source: ABdhPJy6T3JY2QzQ/ndLAhrjpHqo9Ok+/mi3IOHf5OfKw5JxhwBq4ViMM7UYjpOnxVCjgszbhN88aw==
+X-Received: by 2002:a05:6000:100c:b0:20a:c68a:e9a with SMTP id a12-20020a056000100c00b0020ac68a0e9amr21047454wrx.314.1651757516554;
+        Thu, 05 May 2022 06:31:56 -0700 (PDT)
+Received: from [192.168.1.145] ([207.188.167.132])
+        by smtp.gmail.com with ESMTPSA id b15-20020a7bc24f000000b003942a244ecfsm1422829wmj.20.2022.05.05.06.31.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 05 May 2022 06:31:56 -0700 (PDT)
+Message-ID: <0b9e332d-f479-ed3d-78ce-6386383d827b@gmail.com>
+Date:   Thu, 5 May 2022 15:31:54 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-X-Mozilla-News-Host: news://nntp.lore.kernel.org:119
+ Thunderbird/91.8.1
+Subject: Re: [PATCH] cpufreq: Avoid unnecessary frequency updates due to
+ mismatch
 Content-Language: en-US
-To:     Mathias Nyman <mathias.nyman@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     =?UTF-8?Q?Piotr_Pi=c3=b3rkowski?= <qba100@gmail.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
-        LKML <linux-kernel@vger.kernel.org>
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
-Subject: regression v5.13..v5.15: USB hub stopped working -- DMAR fault when
- connected usb hub
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1651757520;e15163b9;
-X-HE-SMSGID: 1nmbaD-0001OP-HI
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+To:     Viresh Kumar <viresh.kumar@linaro.org>,
+        Rafael Wysocki <rjw@rjwysocki.net>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Rex-BC Chen <rex-bc.chen@mediatek.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <39e39a7d30c8ee6af81fb64670a330abeb87402e.1651652493.git.viresh.kumar@linaro.org>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <39e39a7d30c8ee6af81fb64670a330abeb87402e.1651652493.git.viresh.kumar@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, this is your Linux kernel regression tracker.
 
-I noticed a regression report in bugzilla.kernel.org that afaics nobody
-acted upon since it was reported about a week ago. That's why I decided
-to forward it to a few maintainers and mailing lists. To quote from
-https://bugzilla.kernel.org/show_bug.cgi?id=215906 :
 
-> Since kernel 5.15 (with kernel 5.13 I see no problem) I have a problem with my USB hub. The device stops working shortly after starting the system.
-> In dmesg log I see DMAR fault on usb controller
+On 04/05/2022 10:21, Viresh Kumar wrote:
+> For some platforms, the frequency returned by hardware may be slightly
+> different from what is provided in the frequency table. For example,
+> hardware may return 499 MHz instead of 500 MHz. In such cases it is
+> better to avoid getting into unnecessary frequency updates, as we may
+> end up switching policy->cur between the two and sending unnecessary
+> pre/post update notifications, etc.
 > 
+> This patch has chosen allows the hardware frequency and table frequency
+> to deviate by 1 MHz for now, we may want to increase it a bit later on
+> if someone still complains.
 > 
-> [kwi27 22:03] usb 5-1.2: new high-speed USB device number 3 using xhci_hcd
-> [  +0,100440] usb 5-1.2: New USB device found, idVendor=1a40, idProduct=0101, bcdDevice= 1.11
-> [  +0,000004] usb 5-1.2: New USB device strings: Mfr=0, Product=1, SerialNumber=0
-> [  +0,000002] usb 5-1.2: Product: USB 2.0 Hub
-> [  +0,001002] hub 5-1.2:1.0: USB hub found
-> [  +0,000133] hub 5-1.2:1.0: 4 ports detected
-> [  +0,702453] usb 5-1.2.2: new full-speed USB device number 4 using xhci_hcd
-> [  +0,471198] usb 5-1.2.2: New USB device found, idVendor=047f, idProduct=c025, bcdDevice= 1.35
-> [  +0,000004] usb 5-1.2.2: New USB device strings: Mfr=1, Product=2, SerialNumber=3
-> [  +0,000002] usb 5-1.2.2: Product: Plantronics C320-M
-> [  +0,000001] usb 5-1.2.2: Manufacturer: Plantronics
-> [  +0,000001] usb 5-1.2.2: SerialNumber: B13D8BE491B04E73AEB4C95E162DBE2B
-> [  +0,255862] mc: Linux media interface: v0.10
-> [  +0,001057] input: Plantronics Plantronics C320-M as /devices/pci0000:00/0000:00:1c.5/0000:04:00.0/usb5/5-1/5-1.2/5-1.2.2/5-1.2.2:1.3/0003:047F:C025.0004/input/input21
-> [  +0,060275] plantronics 0003:047F:C025.0004: input,hiddev1,hidraw3: USB HID v1.11 Device [Plantronics Plantronics C320-M] on usb-0000:04:00.0-1.2.2/input3
-> [  +0,859655] usb 5-1.2.2: Warning! Unlikely big volume range (=8192), cval->res is probably wrong.
-> [  +0,000003] usb 5-1.2.2: [11] FU [Sidetone Playback Volume] ch = 1, val = 0/8192/1
-> [  +0,584234] usbcore: registered new interface driver snd-usb-audio
-> [  +0,229229] xhci_hcd 0000:04:00.0: WARNING: Host System Error
-> [  +0,000014] DMAR: DRHD: handling fault status reg 2
-> [  +0,000004] DMAR: [DMA Read NO_PASID] Request device [04:00.0] fault addr 0xfffca000 [fault reason 0x06] PTE Read access is not set
-> [  +0,031993] xhci_hcd 0000:04:00.0: Host halt failed, -110
-> [kwi27 22:04] xhci_hcd 0000:04:00.0: xHCI host not responding to stop endpoint command.
-> [  +0,000003] xhci_hcd 0000:04:00.0: USBSTS: HSE EINT
-> [  +0,032011] xhci_hcd 0000:04:00.0: Host halt failed, -110
-> [  +0,000002] xhci_hcd 0000:04:00.0: xHCI host controller not responding, assume dead
-> [  +0,000017] xhci_hcd 0000:04:00.0: HC died; cleaning up
-> [  +0,000042] usb 5-1: USB disconnect, device number 2
-> [  +0,000003] usb 5-1.2: USB disconnect, device number 3
-> [  +0,000002] usb 5-1.2.2: USB disconnect, device number 4
-> [  +0,000114] usb 5-1.2.2: 1:0: usb_set_interface failed (-110)
-> [  +0,000016] usb 5-1.2.2: 1:1: usb_set_interface failed (-19)
-> [  +0,000011] usb 5-1.2.2: 1:0: usb_set_interface failed (-19)
-See the ticket for details and further comments. According to the latest
-one the problem is still present in 5.18-rc5.
+> Reported-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
+> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
 
-Was this issue discussed or even addressed somewhere already? Or does
-anyone at least have a good idea what might be causing this problem?
-@reporter: If neither is the case, you most likely will need to perform
-a bisection with git to identify the change causing the problem.
+Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
 
-Anyway, could one of the kernel developers among the recipients please
-help with this? BTW, I was unsure where to send this to the DMA/IOMMU
-maintainers or the USB/xhci maintainers. I settled for the latter; I
-apologize in advance if that was the wrong choice.
-
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
-
-P.S.: As the Linux kernel's regression tracker I defsdal with a lot of
-reports and sometimes miss something important when writing mails like
-this. If that's the case here, don't hesitate to tell me in a public
-reply, it's in everyone's interest to set the public record straight.
-
-P.P.S: to get this tracked by the the Linux kernel regression tracking bot:
-
-#regzbot introduced: v5.13..v5.15
-#regzbot from: Piotr Piórkowski <qba100@gmail.com>
-#regzbot title: usb/dma/iommu/???: USB hub stopped working -- DMAR fault
-when connected usb hub
-#regzbot link: https://bugzilla.kernel.org/show_bug.cgi?id=215906
-#regzbot monitor:
-https://lore.kernel.org/all/bug-215906-208809@https.bugzilla.kernel.org%2F/
--- 
-Additional information about regzbot:
-
-If you want to know more about regzbot, check out its web-interface, the
-getting start guide, and the references documentation:
-
-https://linux-regtracking.leemhuis.info/regzbot/
-https://gitlab.com/knurd42/regzbot/-/blob/main/docs/getting_started.md
-https://gitlab.com/knurd42/regzbot/-/blob/main/docs/reference.md
-
-The last two documents will explain how you can interact with regzbot
-yourself if your want to.
-
-Hint for reporters: when reporting a regression it's in your interest to
-CC the regression list and tell regzbot about the issue, as that ensures
-the regression makes it onto the radar of the Linux kernel's regression
-tracker -- that's in your interest, as it ensures your report won't fall
-through the cracks unnoticed.
-
-Hint for developers: you normally don't need to care about regzbot once
-it's involved. Fix the issue as you normally would, just remember to
-include 'Link:' tag in the patch descriptions pointing to all reports
-about the issue. This has been expected from developers even before
-regzbot showed up for reasons explained in
-'Documentation/process/submitting-patches.rst' and
-'Documentation/process/5.Posting.rst'.
+> ---
+>   drivers/cpufreq/cpufreq.c | 11 +++++++++++
+>   1 file changed, 11 insertions(+)
+> 
+> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+> index 0d58b0f8f3af..233e8af48848 100644
+> --- a/drivers/cpufreq/cpufreq.c
+> +++ b/drivers/cpufreq/cpufreq.c
+> @@ -28,6 +28,7 @@
+>   #include <linux/suspend.h>
+>   #include <linux/syscore_ops.h>
+>   #include <linux/tick.h>
+> +#include <linux/units.h>
+>   #include <trace/events/power.h>
+>   
+>   static LIST_HEAD(cpufreq_policy_list);
+> @@ -1708,6 +1709,16 @@ static unsigned int cpufreq_verify_current_freq(struct cpufreq_policy *policy, b
+>   		return new_freq;
+>   
+>   	if (policy->cur != new_freq) {
+> +		/*
+> +		 * For some platforms, the frequency returned by hardware may be
+> +		 * slightly different from what is provided in the frequency
+> +		 * table, for example hardware may return 499 MHz instead of 500
+> +		 * MHz. In such cases it is better to avoid getting into
+> +		 * unnecessary frequency updates.
+> +		 */
+> +		if (abs(policy->cur - new_freq) < HZ_PER_MHZ)
+> +			return policy->cur;
+> +
+>   		cpufreq_out_of_sync(policy, new_freq);
+>   		if (update)
+>   			schedule_work(&policy->update);

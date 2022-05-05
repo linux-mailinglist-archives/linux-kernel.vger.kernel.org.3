@@ -2,78 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0042451C283
+	by mail.lfdr.de (Postfix) with ESMTP id 6363451C281
 	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 16:25:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380615AbiEEO2m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 10:28:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53160 "EHLO
+        id S1380624AbiEEO3C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 10:29:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349409AbiEEO2h (ORCPT
+        with ESMTP id S1380650AbiEEO2z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 10:28:37 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BFDC5AA62;
-        Thu,  5 May 2022 07:24:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=aVV/FwrdQSe5VUKj28vMBhWJEvtyjJumJbTPBeKHAWg=; b=bhNRXf37ysGVvqgfPD0sDjMUPS
-        VUNS4DWIxcWDP44WFABcP97dqKD5KopTf5I88KCOHIrH0i6i2wP3ILw7g44QY0PaLHkP6U72IS7sL
-        83CmAhVe2pPvFviTDx2syFXOQc25/zWiOqxBjwr5CIBUWndZderzbAeDloAu0fapwJ9I=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1nmcPS-001NF1-Nv; Thu, 05 May 2022 16:24:50 +0200
-Date:   Thu, 5 May 2022 16:24:50 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Ansuel Smith <ansuelsmth@gmail.com>
-Cc:     Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>, Pavel Machek <pavel@ucw.cz>,
-        John Crispin <john@phrozen.org>, netdev@vger.kernel.org,
+        Thu, 5 May 2022 10:28:55 -0400
+Received: from mail-oi1-f173.google.com (mail-oi1-f173.google.com [209.85.167.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36254BCA;
+        Thu,  5 May 2022 07:25:14 -0700 (PDT)
+Received: by mail-oi1-f173.google.com with SMTP id l16so4480059oil.6;
+        Thu, 05 May 2022 07:25:14 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=kGBOPc3N9qF/C4mARfPp8CmuxJczywQ4J4cT073/c6E=;
+        b=LZd5m8NC3oKzEH95JQhjqiSQk8DDSzVtjcUzyQog/mCYQV6L9Xvpz1rXSQF7m2uVKl
+         /vZA77pyVeZhfcliJygz9DPy1pPi1dZf89r+9gLWelWbIn2+ouMAGSJ/EYP8eLB1EfhC
+         s+0edXcOgtIWK2Q5hw5vx9oSacO4SFyJXsVsxyf32aIncBGw5UDw2dgWkQvThbtIEH0k
+         GqKnWoeRuydjfezmHXKBIF5hZsb9X1f2twXHyGgu/YQaUsM89lwj04JD8XBMdzzuu97x
+         EZL2UC/fvIyAu8H6fp7NyLn7VR7Rl5Fp3wUcq7DIIvOFugVQ8LJRKpEdsgYpT+1+E63h
+         sHfA==
+X-Gm-Message-State: AOAM533tmaq01Lglypjd4ukS8mLGQPtP8aa+JE33UoPXhyVpf7cr5ONQ
+        452+sfT9CG5YwKzGbDJL9w==
+X-Google-Smtp-Source: ABdhPJzwjLod3NVGLJDzAyv5wuRrPg6RCXoSMnpnBe0GnShykiuEYPnvw17HlvMTk49r/Pol/G1lSg==
+X-Received: by 2002:a05:6808:30a7:b0:322:f55c:1338 with SMTP id bl39-20020a05680830a700b00322f55c1338mr2493900oib.161.1651760713161;
+        Thu, 05 May 2022 07:25:13 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id 15-20020a54418f000000b00325cda1ff8dsm691529oiy.12.2022.05.05.07.25.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 May 2022 07:25:12 -0700 (PDT)
+Received: (nullmailer pid 3830401 invoked by uid 1000);
+        Thu, 05 May 2022 14:25:11 -0000
+Date:   Thu, 5 May 2022 09:25:11 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-leds@vger.kernel.org
-Subject: Re: [RFC PATCH v6 10/11] net: dsa: qca8k: add LEDs support
-Message-ID: <YnPeMmioATk63DKZ@lunn.ch>
-References: <20220503151633.18760-1-ansuelsmth@gmail.com>
- <20220503151633.18760-11-ansuelsmth@gmail.com>
- <YnMujjDHD5M9UdH0@lunn.ch>
- <6273d215.1c69fb81.b7a4a.4478@mx.google.com>
+        linux-arm-msm@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, linux-usb@vger.kernel.org,
+        Manu Gautam <mgautam@codeaurora.org>
+Subject: Re: [PATCH 04/13] dt-bindings: usb: qcom,dwc3: fix clock matching
+Message-ID: <YnPeR88iAFyudMm5@robh.at.kernel.org>
+References: <20220504131923.214367-1-krzysztof.kozlowski@linaro.org>
+ <20220504131923.214367-5-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <6273d215.1c69fb81.b7a4a.4478@mx.google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220504131923.214367-5-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 05, 2022 at 03:33:07PM +0200, Ansuel Smith wrote:
-> On Thu, May 05, 2022 at 03:55:26AM +0200, Andrew Lunn wrote:
-> > > +		ret = fwnode_property_read_string(led, "default-state", &state);
-> > 
-> > You should probably use led_default_state led_init_default_state_get()
-> > 
-> >     Andrew
+On Wed, 04 May 2022 15:19:14 +0200, Krzysztof Kozlowski wrote:
+> The bindings defined strict clocks but several variants do not use them
+> in such order.  Split the clocks and clock-names per variants to match
+> current DTS usage.  In few cases this might not be complete match, due
+> to incomplete DTS.
 > 
-> Oh, didn't know it was a thing, is this new? Anyway thanks.
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  .../devicetree/bindings/usb/qcom,dwc3.yaml    | 222 ++++++++++++++++--
+>  1 file changed, 200 insertions(+), 22 deletions(-)
+> 
 
-No idea. But my thinking was, you cannot be the first to implement the
-binding, there probably exists some helpers somewhere...
-
-General rule of thumb: Assume somebody has already been there and done
-it, you just need to find it and reuse it.
-
-    Andrew
+Reviewed-by: Rob Herring <robh@kernel.org>

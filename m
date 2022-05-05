@@ -2,143 +2,245 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22ADC51B697
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 05:31:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0266951B69B
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 05:33:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241416AbiEEDfF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 23:35:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33340 "EHLO
+        id S241470AbiEEDgw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 23:36:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229999AbiEEDfA (ORCPT
+        with ESMTP id S229999AbiEEDgu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 23:35:00 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E288A48E4C;
-        Wed,  4 May 2022 20:31:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 83B6E61950;
-        Thu,  5 May 2022 03:31:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF665C385A4;
-        Thu,  5 May 2022 03:31:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651721482;
-        bh=IV3Mf95tV8RyHlUqSjHikLwYM8HbN6LL9XwPEkV1Fvs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ftjzWD5NQavEZdwSc9mBnUJzli9C/rymLutCH7nfMwdOaa2x7QKMh1SrOKmQo2qGI
-         fke1S4GddSirPfEDSgYIwN8ZlGK6hEV8FL4bWb4a2JXB62p/KUFQwSsmb1i5n9LAKu
-         zF7rt3YbTY6/jEo3D4+NihJIyx8Nvha/7KASPCGxewc04KBV46kLabFQvqbkv4hq/D
-         hYTJJN6uv12HjxCvkNO6+R5gJzvtI8GcO4J/sSA8mtCGlqyfMrowSVerNlBL8DulO1
-         gvK0DQE7EJFvP6HsEYJw8FHamZRsCbxEVAi+4OCrXzldTI9a3WWPRKkwxbok3rlT6J
-         ozjTpY2cKN9uw==
-Date:   Wed, 4 May 2022 20:31:20 -0700
-From:   Jaegeuk Kim <jaegeuk@kernel.org>
-To:     Chao Yu <chao@kernel.org>
-Cc:     linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Ming Yan <yanming@tju.edu.cn>, Chao Yu <chao.yu@oppo.com>
-Subject: Re: [PATCH] f2fs: fix to do sanity check for inline inode
-Message-ID: <YnNFCEdSpyVSaTZq@google.com>
-References: <20220428024940.12102-1-chao@kernel.org>
- <YnLwDx1smguDQ6qC@google.com>
- <173c51c2-eff3-8d76-7041-e9c58024a97e@kernel.org>
+        Wed, 4 May 2022 23:36:50 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82DB549FAF
+        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 20:33:11 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id k2so4353699wrd.5
+        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 20:33:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=YqfZfQpmXVHETuF1B0xNE9EmPpUhhrjqT9Nbme9K0BI=;
+        b=oE/mLb9s7n5byBWoAzgTvwR7m4Ag4TuYbKdpZGwy317zKrDgD/ijP+QcPOvbnGKfFZ
+         HgA/N6I5JCAnSqpCNdPAtqx4tF72aOkDa8c6PiBJ/0S9o1WQtO9XtYrtY2DPL+FAhMr9
+         Fwwn6sapCh9U+2Cobw4FhaJ+gt/NHS7u75uNtiLOpBBSwKCK1kzYOpkDmkTLuFXZiMyV
+         Z58Bczyl93yd2t1JKeeZPWw5TCvgMbRQrzL0bbf4FRhkyJG1jX6TEle6qkULxq9j5z8y
+         Ix9VOjP40Y3RXKgykDrJlOuYobWA+1KfxQV43D0PLu3Be+xmeAGTR9xl8l2F/EoG9WOM
+         ifMA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=YqfZfQpmXVHETuF1B0xNE9EmPpUhhrjqT9Nbme9K0BI=;
+        b=TicHeFATuRRHr5nMwk7M+ahHvLnJs+2X10BD+FEx7sl7DDxGAE2wSkFGJLvYyPPB+3
+         M8dkMJgkunpq0BHEk4FX8ZIHZTMENbwCnGu5ghwxuk7fXBy/6NMmECkyxUMZKIt5cAF/
+         nIjdKcN2+eFHdhZzLf+mPAfgQKq7vPFc1UPDzBySfY3vdkiTqWi2T1+BUI2bSDT6ZCya
+         TXztNI2hlpMcethRbpnminMD3bk5tw7pXL2KLY0RUCURVqyKASzve9eV4efjTlZLOz3D
+         cQZiS8oznavn967N57Q3bIeKvcjJ26QXZu+fFh3Fn3tOqU7C12VKNt2jjY3AVyvLKoBW
+         XuBA==
+X-Gm-Message-State: AOAM533CAYVvrfuRX2xeWscEnp+RMnaS8p0NtfUK7Ps3L7mIeLATg7Ci
+        vWm+p5iVA4Zqo4AAwR+alJfpyNyO9T/DwX1THnOs
+X-Google-Smtp-Source: ABdhPJwWYpcnPUCH3PNkFBMqlRujbkaS6Bc/qHhso4xOhHj4K4edZv8Cb6cHarVPyslAEAAvUUKW0DR1qpT4+/9ckHs=
+X-Received: by 2002:a05:6000:10cc:b0:20a:de6f:3c48 with SMTP id
+ b12-20020a05600010cc00b0020ade6f3c48mr18325890wrx.650.1651721590030; Wed, 04
+ May 2022 20:33:10 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <173c51c2-eff3-8d76-7041-e9c58024a97e@kernel.org>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <cover.1651174324.git.rgb@redhat.com> <17660b3f2817e5c0a19d1e9e5d40b53ff4561845.1651174324.git.rgb@redhat.com>
+ <CAHC9VhQ3Qtpwhj6TeMR7rmdbUe_6VRHU9OymmDoDdsazeGuNKA@mail.gmail.com> <YnHX74E+COTp7AgY@madcap2.tricolour.ca>
+In-Reply-To: <YnHX74E+COTp7AgY@madcap2.tricolour.ca>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Wed, 4 May 2022 23:32:59 -0400
+Message-ID: <CAHC9VhR-3xNFgSdK7LUKmhfw5uGHo9gnmKb7K62=3TVBONJ2nQ@mail.gmail.com>
+Subject: Re: [PATCH v2 2/3] fanotify: define struct members to hold response
+ decision context
+To:     Richard Guy Briggs <rgb@redhat.com>
+Cc:     Linux-Audit Mailing List <linux-audit@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-fsdevel@vger.kernel.org, Eric Paris <eparis@parisplace.org>,
+        Steve Grubb <sgrubb@redhat.com>, Jan Kara <jack@suse.cz>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/05, Chao Yu wrote:
-> On 2022/5/5 5:28, Jaegeuk Kim wrote:
-> > On 04/28, Chao Yu wrote:
-> > > As Yanming reported in bugzilla:
-> > > 
-> > > https://bugzilla.kernel.org/show_bug.cgi?id=215895
-> > > 
-> > > I have encountered a bug in F2FS file system in kernel v5.17.
-> > > 
-> > > The kernel message is shown below:
-> > > 
-> > > kernel BUG at fs/inode.c:611!
-> > > Call Trace:
-> > >   evict+0x282/0x4e0
-> > >   __dentry_kill+0x2b2/0x4d0
-> > >   dput+0x2dd/0x720
-> > >   do_renameat2+0x596/0x970
-> > >   __x64_sys_rename+0x78/0x90
-> > >   do_syscall_64+0x3b/0x90
-> > > 
-> > > The root cause is: fuzzed inode has both inline_data flag and encrypted
-> > > flag, so after it was deleted by rename(), during f2fs_evict_inode(),
-> > > it will cause inline data conversion due to flags confilction, then
-> > > page cache will be polluted and trigger panic in clear_inode().
-> > > 
-> > > This patch tries to fix the issue by do more sanity checks for inline
-> > > data inode in sanity_check_inode().
-> > > 
-> > > Cc: stable@vger.kernel.org
-> > > Reported-by: Ming Yan <yanming@tju.edu.cn>
-> > > Signed-off-by: Chao Yu <chao.yu@oppo.com>
+On Tue, May 3, 2022 at 9:33 PM Richard Guy Briggs <rgb@redhat.com> wrote:
+> On 2022-05-02 20:16, Paul Moore wrote:
+> > On Thu, Apr 28, 2022 at 8:45 PM Richard Guy Briggs <rgb@redhat.com> wrote:
+> > > This patch adds 2 structure members to the response returned from user
+> > > space on a permission event. The first field is 16 bits for the context
+> > > type.  The context type will describe what the meaning is of the second
+> > > field. The default is none. The patch defines one additional context
+> > > type which means that the second field is a 32-bit rule number. This
+> > > will allow for the creation of other context types in the future if
+> > > other users of the API identify different needs.  The second field size
+> > > is defined by the context type and can be used to pass along the data
+> > > described by the context.
+> > >
+> > > To support this, there is a macro for user space to check that the data
+> > > being sent is valid. Of course, without this check, anything that
+> > > overflows the bit field will trigger an EINVAL based on the use of
+> > > FAN_INVALID_RESPONSE_MASK in process_access_response().
+> > >
+> > > Suggested-by: Steve Grubb <sgrubb@redhat.com>
+> > > Link: https://lore.kernel.org/r/2745105.e9J7NaK4W3@x2
+> > > Suggested-by: Jan Kara <jack@suse.cz>
+> > > Link: https://lore.kernel.org/r/20201001101219.GE17860@quack2.suse.cz
+> > > Signed-off-by: Richard Guy Briggs <rgb@redhat.com>
+> > > Link: https://lore.kernel.org/r/17660b3f2817e5c0a19d1e9e5d40b53ff4561845.1651174324.git.rgb@redhat.com
 > > > ---
-> > >   fs/f2fs/f2fs.h  | 7 +++++++
-> > >   fs/f2fs/inode.c | 3 +--
-> > >   2 files changed, 8 insertions(+), 2 deletions(-)
-> > > 
-> > > diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
-> > > index 27aa93caec06..64c511b498cc 100644
-> > > --- a/fs/f2fs/f2fs.h
-> > > +++ b/fs/f2fs/f2fs.h
-> > > @@ -4173,6 +4173,13 @@ static inline void f2fs_set_encrypted_inode(struct inode *inode)
-> > >    */
-> > >   static inline bool f2fs_post_read_required(struct inode *inode)
-> > >   {
-> > > +	/*
-> > > +	 * used by sanity_check_inode(), when disk layout fields has not
-> > > +	 * been synchronized to inmem fields.
-> > > +	 */
-> > > +	if (file_is_encrypt(inode) || file_is_verity(inode) ||
-> > > +			F2FS_I(inode)->i_flags & F2FS_COMPR_FL)
-> > > +		return true;
-> > >   	return f2fs_encrypted_file(inode) || fsverity_active(inode) ||
-> > >   		f2fs_compressed_file(inode);
-> > >   }
-> > > diff --git a/fs/f2fs/inode.c b/fs/f2fs/inode.c
-> > > index 83639238a1fe..234b8ed02644 100644
-> > > --- a/fs/f2fs/inode.c
-> > > +++ b/fs/f2fs/inode.c
-> > > @@ -276,8 +276,7 @@ static bool sanity_check_inode(struct inode *inode, struct page *node_page)
-> > >   		}
-> > >   	}
-> > > -	if (f2fs_has_inline_data(inode) &&
-> > > -			(!S_ISREG(inode->i_mode) && !S_ISLNK(inode->i_mode))) {
-> > > +	if (f2fs_has_inline_data(inode) && !f2fs_may_inline_data(inode)) {
-> > 
-> > It seems f2fs_may_inline_data() is breaking the atomic write case. Please fix.
-> 
-> sanity_check_inode() change only affect f2fs_iget(), during inode initialization,
-> file should not be set as atomic one, right?
-> 
-> I didn't see any failure during 'f2fs_io write atomic_write' testcase... could you
-> please provide me detail of the testcase?
+> > >  fs/notify/fanotify/fanotify.c      |  1 -
+> > >  fs/notify/fanotify/fanotify.h      |  4 +-
+> > >  fs/notify/fanotify/fanotify_user.c | 59 ++++++++++++++++++++----------
+> > >  include/linux/fanotify.h           |  3 ++
+> > >  include/uapi/linux/fanotify.h      | 27 +++++++++++++-
+> > >  5 files changed, 72 insertions(+), 22 deletions(-)
 
-I just applied this into my device and was getting lots of the below error
-messages resulting in open failures of database files.
+...
 
-> 
-> Thanks,
-> 
-> > 
-> > >   		set_sbi_flag(sbi, SBI_NEED_FSCK);
-> > >   		f2fs_warn(sbi, "%s: inode (ino=%lx, mode=%u) should not have inline_data, run fsck to fix",
-> > >   			  __func__, inode->i_ino, inode->i_mode);
-> > > -- 
-> > > 2.25.1
+> > > diff --git a/fs/notify/fanotify/fanotify_user.c b/fs/notify/fanotify/fanotify_user.c
+> > > index 694516470660..f1ff4cf683fb 100644
+> > > --- a/fs/notify/fanotify/fanotify_user.c
+> > > +++ b/fs/notify/fanotify/fanotify_user.c
+> > > @@ -289,13 +289,19 @@ static int create_fd(struct fsnotify_group *group, struct path *path,
+> > >   */
+> > >  static void finish_permission_event(struct fsnotify_group *group,
+> > >                                     struct fanotify_perm_event *event,
+> > > -                                   __u32 response)
+> > > +                                   struct fanotify_response *response)
+> > >                                     __releases(&group->notification_lock)
+> > >  {
+> > >         bool destroy = false;
+> > >
+> > >         assert_spin_locked(&group->notification_lock);
+> > > -       event->response = response;
+> > > +       event->response = response->response;
+> > > +       event->extra_info_type = response->extra_info_type;
+> > > +       switch (event->extra_info_type) {
+> > > +       case FAN_RESPONSE_INFO_AUDIT_RULE:
+> > > +               memcpy(event->extra_info_buf, response->extra_info_buf,
+> > > +                      sizeof(struct fanotify_response_audit_rule));
+> >
+> > Since the fanotify_perm_event:extra_info_buf and
+> > fanotify_response:extra_info_buf are the same type/length, and they
+> > will be the same regardless of the extra_info_type field, why not
+> > simply get rid of the above switch statement and do something like
+> > this:
+> >
+> >   memcpy(event->extra_info_buf, response->extra_info_buf,
+> >          sizeof(response->extra_info_buf));
+>
+> I've been wrestling with the possibility of doing a split between what
+> is presented to userspace and what's used in the kernel for struct
+> fanotify_response, while attempting to future-proof it.
+
+You really only need to worry about what is presented to userspace,
+the kernel internals can always change if needed.  Right now I would
+focus on making sure the userspace visible data structures are done
+properly: preserve the existing data offsets/lengths, and ensure that
+the new additions do not make it harder to extend the structure again
+in the future.
+
+> > > @@ -827,26 +845,25 @@ static ssize_t fanotify_read(struct file *file, char __user *buf,
+> > >
+> > >  static ssize_t fanotify_write(struct file *file, const char __user *buf, size_t count, loff_t *pos)
+> > >  {
+> > > -       struct fanotify_response response = { .fd = -1, .response = -1 };
+> > > +       struct fanotify_response response;
+> > >         struct fsnotify_group *group;
+> > >         int ret;
+> > > +       size_t size = min(count, sizeof(struct fanotify_response));
+> > >
+> > >         if (!IS_ENABLED(CONFIG_FANOTIFY_ACCESS_PERMISSIONS))
+> > >                 return -EINVAL;
+> > >
+> > >         group = file->private_data;
+> > >
+> > > -       if (count < sizeof(response))
+> > > +       if (count < offsetof(struct fanotify_response, extra_info_buf))
+> > >                 return -EINVAL;
+> >
+> > Is this why you decided to shrink the fanotify_response:response field
+> > from 32-bits to 16-bits?  I hope not.  I would suggest both keeping
+> > the existing response field as 32-bits and explicitly checking for
+> > writes that are either the existing/compat length as well as the
+> > newer, longer length.
+>
+> No.  I shrank it at Jan's suggestion.  I think I agree with you that
+> the response field should be kept at u32 as it is defined in userspace
+> and purge the doubt about what would happen with a new userspace with
+> an old kernel.
+
+I'm struggling to think of why shrinking an existing field is a good
+idea.  Unfortunately, there is a possibility that any problems this
+would cause might not be caught until it has been in a couple of
+kernel releases and some applications have been written/updated to use
+the new struct definition, at which point restoring the field to a u32
+value will break all of these new applications.
+
+I think changing the fanotify_response:response field is an
+unnecessary risk, and I'll leave it at that.
+
+> > > diff --git a/include/uapi/linux/fanotify.h b/include/uapi/linux/fanotify.h
+> > > index e8ac38cc2fd6..efb5a3a6f814 100644
+> > > --- a/include/uapi/linux/fanotify.h
+> > > +++ b/include/uapi/linux/fanotify.h
+> > > @@ -179,9 +179,34 @@ struct fanotify_event_info_error {
+> > >         __u32 error_count;
+> > >  };
+> > >
+> > > +/*
+> > > + * User space may need to record additional information about its decision.
+> > > + * The extra information type records what kind of information is included.
+> > > + * The default is none. We also define an extra informaion buffer whose
+> > > + * size is determined by the extra information type.
+> > > + *
+> > > + * If the context type is Rule, then the context following is the rule number
+> > > + * that triggered the user space decision.
+> > > + */
+> > > +
+> > > +#define FAN_RESPONSE_INFO_AUDIT_NONE   0
+> > > +#define FAN_RESPONSE_INFO_AUDIT_RULE   1
+> > > +
+> > > +struct fanotify_response_audit_rule {
+> > > +       __u32 rule;
+> > > +};
+> > > +
+> > > +#define FANOTIFY_RESPONSE_EXTRA_LEN_MAX        \
+> > > +       (sizeof(union { \
+> > > +               struct fanotify_response_audit_rule r; \
+> > > +               /* add other extra info structures here */ \
+> > > +       }))
+> > > +
+> > >  struct fanotify_response {
+> > >         __s32 fd;
+> > > -       __u32 response;
+> > > +       __u16 response;
+> > > +       __u16 extra_info_type;
+> > > +       char extra_info_buf[FANOTIFY_RESPONSE_EXTRA_LEN_MAX];
+> > >  };
+> >
+> > Since both the kernel and userspace are going to need to agree on the
+> > content and formatting of the fanotify_response:extra_info_buf field,
+> > why is it hidden behind a char array?  You might as well get rid of
+> > that abstraction and put the union directly in the fanotify_response
+> > struct.  It is possible you could also get rid of the
+> > fanotify_response_audit_rule struct this way too and just access the
+> > rule scalar directly.
+>
+> This does make sense and my only concern would be a variable-length
+> type.  There isn't any reason to hide it.  If userspace chooses to use
+> the old interface and omit the type field then it defaults to NONE.
+
+There is no reason you couldn't put flexible-array field in a union if
+that is what was needed.  Of you could have the flexible-array field
+outside of the union and use a union field as the length value.
+There's probably other clever solutions to this too.
+
+-- 
+paul-moore.com

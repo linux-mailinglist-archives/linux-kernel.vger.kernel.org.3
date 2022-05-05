@@ -2,92 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CFB351BA44
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 10:26:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70BDC51BA48
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 10:26:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347593AbiEEI3x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 04:29:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38666 "EHLO
+        id S1348147AbiEEIaC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 04:30:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347493AbiEEI3E (ORCPT
+        with ESMTP id S1349011AbiEEI3f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 04:29:04 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 479FABC28
-        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 01:25:24 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D5BD161D62
-        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 08:25:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9EC0EC385A4;
-        Thu,  5 May 2022 08:25:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651739123;
-        bh=xFZaEfusF51fcI6minBqpSu8EX5dZ7pi25JoflQQgiQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=E4/+gXch9nu8BJWq4mU3INHk/WhcLE51aUeUrL8ghk5CQ2i5Ci5RNJkyK/CvRJhuP
-         TFVTMdk+6pOV5bMyZiJ/ihnzvXrHGQEK8ASEcx4mvmIkZTzaGrBLM9QnxO1sZ4fXqV
-         Z8TPwuy5aIvdsKRkZqCv9ChyqTj/6gYbSqwWYXlGOrkjbZE93xlOLYielgxlMjzz7G
-         fVs5iOsGR+p/J96t36y2st4/p5q9mUWHSdsUUEwdoQusLGHNKhHg9kSi5/cdZl0v0R
-         fmhqg4/32gWECO6n6MHa6UG/satNGQVbSXbzrFrBY8198qrGmEdeBtI1CfFHK/0yzv
-         rYtwa2gyo0fmQ==
-Date:   Thu, 5 May 2022 09:25:17 +0100
-From:   Will Deacon <will@kernel.org>
-To:     Catalin Marinas <catalin.marinas@arm.com>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        linux-arm-kernel@lists.infradead.org, akpm@linux-foundation.org,
-        alex.popov@linux.com, linux-kernel@vger.kernel.org, luto@kernel.org
-Subject: Re: [PATCH v2 01/13] arm64: stackleak: fix current_top_of_stack()
-Message-ID: <20220505082517.GA21170@willie-the-truck>
-References: <20220427173128.2603085-1-mark.rutland@arm.com>
- <20220427173128.2603085-2-mark.rutland@arm.com>
- <YnKsvNtIlE6cZEOa@arm.com>
- <202205041200.147A737@keescook>
- <YnLaOw49WTbhmflw@arm.com>
+        Thu, 5 May 2022 04:29:35 -0400
+Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 475F02D1CE
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 01:25:56 -0700 (PDT)
+Received: by mail-yb1-xb2e.google.com with SMTP id i38so6356695ybj.13
+        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 01:25:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=BKvsgWQUg0gMqeUR3q7cJz8EBr7iOI0sJ8d081w4vJA=;
+        b=kGfS3bGeiu6lveuQ4kdgVfruOGv7LsufFzgu9lf9V0T2ClNwGvDnrvaQkeK2PA23E0
+         KC3TG3PugQIuIhH2FBbL+CwiX86nuxjvCbp2+P+wCG4BJKqIfdUiTkHwKn/cEbPh+5e3
+         9BPMW39rsRGeQ4Wp1Uxad6wfVYCYa+zFEdPOQSfS6IcrGt1fq/UQLdqTBXqyPQ/RirrW
+         E14o7WY4KgkgPIPb8o+xighdKDYzbwQsabrDkFahK5prFANSmmuOO8oqXcn+nT/e5yHC
+         VNVkuCWImM+/0ZfzczOUxVYm1ynprxg8TtFGrUpQ8X/mBc4zM8Em4doz3Q+JKXglsxHJ
+         TnBQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=BKvsgWQUg0gMqeUR3q7cJz8EBr7iOI0sJ8d081w4vJA=;
+        b=p5ZlrX53mCG0E2BjI0ACqLTOneoJ1eICljqSK0P3zFCbOE4Rl3Vv+a4IkZOi+Hhdjj
+         S6F10/3nzDdDZTGZJQ98n3QsgocMCrWNZz4s1L1+XpRPmVTSwt8BvNznSuGTo+AuZrxC
+         CT+qQcMNe7Rxbkh1okYlGbGqb7mmKQGBgioGC+RTSpGMezI7pPzQnG6f+Ulvy5Fr5qrL
+         lZFr46xAZINaoeEJQEBLc28640xNkKN1YaBWHy0uoPxdXyf5ntCt/Ekf9A7VfX9dQ3kU
+         lUUGN86Nd52xELTWh4m8N/vUOGXyq0ZaUDs1qO6HBFCZj4HXmjaXuMthmLtU1ZJNze+y
+         KIWg==
+X-Gm-Message-State: AOAM5328T8IRYG6u8jk9ANojjrAfWtVhjuv6j7BxVi4hNHdsGIBsBRXh
+        CA0GLAQakyQrr5UHa5odXuJhCIydT2nJ5KufaeSnFs02DpxzJg==
+X-Google-Smtp-Source: ABdhPJxqgWPxdPhlMUn8kNuFyUpKwS8p9b4ea4HxMHa89K1lYxYllNEbIlUwBXh6PYFp3d5EDBwvUyhY9/TKJS1OH5I=
+X-Received: by 2002:a05:6902:1342:b0:648:a4d2:ff43 with SMTP id
+ g2-20020a056902134200b00648a4d2ff43mr19964190ybu.425.1651739155360; Thu, 05
+ May 2022 01:25:55 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YnLaOw49WTbhmflw@arm.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220505070105.1835745-1-42.hyeyoo@gmail.com> <20220505073920.1880661-1-42.hyeyoo@gmail.com>
+In-Reply-To: <20220505073920.1880661-1-42.hyeyoo@gmail.com>
+From:   Marco Elver <elver@google.com>
+Date:   Thu, 5 May 2022 10:25:18 +0200
+Message-ID: <CANpmjNPBFMtxZKZqveoZwggjJozSoJGYLrJ+DY=R9=H5cOKOFw@mail.gmail.com>
+Subject: Re: [PATCH v2] mm/kfence: reset PG_slab and memcg_data before freeing __kfence_pool
+To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>
+Cc:     Alexander Potapenko <glider@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 04, 2022 at 08:55:39PM +0100, Catalin Marinas wrote:
-> On Wed, May 04, 2022 at 12:01:11PM -0700, Kees Cook wrote:
-> > On Wed, May 04, 2022 at 05:41:32PM +0100, Catalin Marinas wrote:
-> > > On Wed, Apr 27, 2022 at 06:31:16PM +0100, Mark Rutland wrote:
-> > > > [...]
-> > > > Fixes: 0b3e336601b82c6a ("arm64: Add support for STACKLEAK gcc plugin")
-> > > > Signed-off-by: Mark Rutland <mark.rutland@arm.com>
-> > > > Cc: Alexander Popov <alex.popov@linux.com>
-> > > > Cc: Andrew Morton <akpm@linux-foundation.org>
-> > > > Cc: Andy Lutomirski <luto@kernel.org>
-> > > > Cc: Catalin Marinas <catalin.marinas@arm.com>
-> > > > Cc: Kees Cook <keescook@chromium.org>
-> > > > Cc: Will Deacon <will@kernel.org>
-> > > 
-> > > I thought this was queued already but I couldn't find it in -next. So:
-> > > 
-> > > Acked-by: Catalin Marinas <catalin.marinas@arm.com>
-> > 
-> > Should this patch go via the arm64 tree for -rc6, or should I just carry
-> > it as part of the overall stackleak series?
-> 
-> I'll leave this up to Will (we take turns in managing the kernel
-> releases) but it doesn't look urgent at all to me since it fixes a
-> commit in 4.19.
+On Thu, 5 May 2022 at 09:40, Hyeonggon Yoo <42.hyeyoo@gmail.com> wrote:
+>
+> When kfence fails to initialize kfence pool, it frees the pool.
+> But it does not reset PG_slab flag and memcg_data of struct page.
+>
+> Below is a BUG because of this. Let's fix it by resetting PG_slab
+> and memcg_data before free.
+>
+> [    0.089149] BUG: Bad page state in process swapper/0  pfn:3d8e06
+> [    0.089149] page:ffffea46cf638180 refcount:0 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x3d8e06
+> [    0.089150] memcg:ffffffff94a475d1
+> [    0.089150] flags: 0x17ffffc0000200(slab|node=0|zone=2|lastcpupid=0x1fffff)
+> [    0.089151] raw: 0017ffffc0000200 ffffea46cf638188 ffffea46cf638188 0000000000000000
+> [    0.089152] raw: 0000000000000000 0000000000000000 00000000ffffffff ffffffff94a475d1
+> [    0.089152] page dumped because: page still charged to cgroup
+> [    0.089153] Modules linked in:
+> [    0.089153] CPU: 0 PID: 0 Comm: swapper/0 Tainted: G    B   W         5.18.0-rc1+ #965
+> [    0.089154] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.14.0-2 04/01/2014
+> [    0.089154] Call Trace:
+> [    0.089155]  <TASK>
+> [    0.089155]  dump_stack_lvl+0x49/0x5f
+> [    0.089157]  dump_stack+0x10/0x12
+> [    0.089158]  bad_page.cold+0x63/0x94
+> [    0.089159]  check_free_page_bad+0x66/0x70
+> [    0.089160]  __free_pages_ok+0x423/0x530
+> [    0.089161]  __free_pages_core+0x8e/0xa0
+> [    0.089162]  memblock_free_pages+0x10/0x12
+> [    0.089164]  memblock_free_late+0x8f/0xb9
+> [    0.089165]  kfence_init+0x68/0x92
+> [    0.089166]  start_kernel+0x789/0x992
+> [    0.089167]  x86_64_start_reservations+0x24/0x26
+> [    0.089168]  x86_64_start_kernel+0xa9/0xaf
+> [    0.089170]  secondary_startup_64_no_verify+0xd5/0xdb
+> [    0.089171]  </TASK>
+>
+> Fixes: 0ce20dd84089 ("mm: add Kernel Electric-Fence infrastructure")
+> Fixes: 8f0b36497303 ("mm: kfence: fix objcgs vector allocation")
+> Signed-off-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
 
-Agreed, and nobody has actually experienced a problem with the current code
-afaict, so I'd prefer to leave this with the rest of the series rather than
-run the risk of a late regression.
+Reviewed-by: Marco Elver <elver@google.com>
 
-Will
+, with small comment below.
+
+> ---
+>
+> v1 -> v2:
+>         - Use folio instead of page
+>         - Add Fixes: tags
+>         - Wrap #ifdef ~ #endif around folio->memcg_data = 0;
+>
+>  mm/kfence/core.c | 9 +++++++++
+>  1 file changed, 9 insertions(+)
+>
+> diff --git a/mm/kfence/core.c b/mm/kfence/core.c
+> index a203747ad2c0..bb1c6c489d0a 100644
+> --- a/mm/kfence/core.c
+> +++ b/mm/kfence/core.c
+> @@ -642,6 +642,15 @@ static bool __init kfence_init_pool_early(void)
+>          * fails for the first page, and therefore expect addr==__kfence_pool in
+>          * most failure cases.
+>          */
+> +       for (char *p = (char *)addr; p < __kfence_pool + KFENCE_POOL_SIZE; p += PAGE_SIZE) {
+> +               struct folio *folio;
+> +
+> +               folio = virt_to_folio(p);
+
+Assign folio where it is defined above. Better to always initialize
+and guard against accidental uninit use in future.
+
+Thanks,
+-- Marco

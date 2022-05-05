@@ -2,71 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C1D151C21D
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 16:15:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E908151C295
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 16:29:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352112AbiEEOTU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 10:19:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42878 "EHLO
+        id S1380655AbiEEOdd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 10:33:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240196AbiEEOSe (ORCPT
+        with ESMTP id S229570AbiEEOdb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 10:18:34 -0400
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 481585A08B;
-        Thu,  5 May 2022 07:14:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1651760093; x=1683296093;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=1QeWKZKXMa6Yso2QWy5AgePC5WLU/2DhcKlxt+f67nE=;
-  b=HcdNuBgvvCuVLNAGDJefLubNAaAMkEGZAzRKkx9Mbdhmb9z7LRAwRTCU
-   EAF+creWN34mKGA5QaBvqvJccHJFxPRSh9OX3XlFkuU8GadEb5afyW6nX
-   11Cl1oTUVnGvRxWBewkygrvFPvXnUQg95urS3hy8B2cwv9kHQTOSOzqSD
-   4=;
-Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 05 May 2022 07:14:52 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2022 07:14:52 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Thu, 5 May 2022 07:14:51 -0700
-Received: from [10.216.34.221] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Thu, 5 May 2022
- 07:14:47 -0700
-Message-ID: <7ccbbc02-a3bb-f42e-13b2-abb84693f1da@quicinc.com>
-Date:   Thu, 5 May 2022 19:44:44 +0530
+        Thu, 5 May 2022 10:33:31 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 744A524BE0;
+        Thu,  5 May 2022 07:29:51 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 22306B82DA4;
+        Thu,  5 May 2022 14:29:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21FC8C385A8;
+        Thu,  5 May 2022 14:29:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651760988;
+        bh=N3cfcZ5R177Vy3ShBjYhQisk3rhZYNwWw0AXe+7cFhw=;
+        h=From:To:Cc:Subject:Date:From;
+        b=WVYXrUIFs641fCAlWtqH+Q3leAL9deBOOIh/RfcMd7tKmEr8vmjp+3qnxy++3zriP
+         oYpYWFiC4G/G5rPnqhkQja9Dgu6xxpeOfAMKxUKvXmBj7yM12b6H6e8s+wVERHmoHT
+         U7u8xPfTWb2axgiIk12fGizSgmPtpET6qPTlix1Q9rsTUlUYzrUYjdLBCH6LY3LHY6
+         S1fxVwLP/WWVnX0xuKq68GzxBpqezqd4k/a/ZvyNRbZ2VWPJoQ9C00daaKgYFQfpKU
+         BsxTfdrXtg5H0sgZwrA7YmgygM6RobbuR/jP6dcjSDhV/73umbK/ameX6YmU6X9n86
+         kXgAg2PTBq2RA==
+From:   Chao Yu <chao@kernel.org>
+To:     jaegeuk@kernel.org
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, Chao Yu <chao@kernel.org>,
+        stable@vger.kernel.org, Ming Yan <yanming@tju.edu.cn>,
+        Chao Yu <chao.yu@oppo.com>
+Subject: [PATCH v2] f2fs: fix to do sanity check on total_data_blocks
+Date:   Thu,  5 May 2022 22:15:07 +0800
+Message-Id: <20220505141507.6616-1-chao@kernel.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH v13 3/4] arm64: dts: qcom: sc7280: add lpass lpi pin
- controller node
-Content-Language: en-US
-To:     Matthias Kaehlcke <mka@chromium.org>
-CC:     <agross@kernel.org>, <bjorn.andersson@linaro.org>,
-        <robh+dt@kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <quic_rohkumar@quicinc.com>, <srinivas.kandagatla@linaro.org>,
-        <dianders@chromium.org>, <swboyd@chromium.org>,
-        <judyhsiao@chromium.org>,
-        Venkata Prasad Potturu <quic_potturu@quicinc.com>
-References: <1651662987-11704-1-git-send-email-quic_srivasam@quicinc.com>
- <1651662987-11704-4-git-send-email-quic_srivasam@quicinc.com>
- <YnL3m1gzggaSZ+c5@google.com>
-From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-Organization: Qualcomm
-In-Reply-To: <YnL3m1gzggaSZ+c5@google.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -75,239 +54,124 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+As Yanming reported in bugzilla:
 
-On 5/5/2022 3:30 AM, Matthias Kaehlcke wrote:
-Thanks for your time Matthias!!!
-> On Wed, May 04, 2022 at 04:46:26PM +0530, Srinivasa Rao Mandadapu wrote:
->> Add LPASS LPI pinctrl node required for Audio functionality on sc7280
->> based platforms.
->>
->> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
->> Co-developed-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
->> Signed-off-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
->> Reviewed-by: Stephen Boyd <swboyd@chromium.org>
->> Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
-> Please remove my tag for now, the patch changed quite a bit since the
-> last version.
-Okay. Will remove it.
->
->> ---
->>   arch/arm64/boot/dts/qcom/sc7280-idp.dtsi | 64 ++++++++++++++++++++++
->>   arch/arm64/boot/dts/qcom/sc7280.dtsi     | 91 ++++++++++++++++++++++++++++++++
->>   2 files changed, 155 insertions(+)
->>
->> diff --git a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
->> index 754da58..fb0e313 100644
->> --- a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
->> +++ b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
->> @@ -367,6 +367,70 @@
->>   	bias-disable;
->>   };
->>   
->> +&lpass_dmic01_clk {
->> +	drive-strength = <8>;
->> +	bias-disable;
->> +};
->> +
->> +&lpass_dmic01_data {
->> +	bias-pull-down;
->> +};
->> +
->> +&lpass_dmic01_clk_sleep {
->> +	drive-strength = <2>;
->> +};
-> Should be after 'lpass_dmic01_clk', not only because of alphanumerical sorting
-> order, but also because the two belong together.
-Okay. Will sort accordingly.
->
->> +
->> +&lpass_dmic23_clk {
->> +	drive-strength = <8>;
->> +	bias-disable;
->> +};
->> +
->> +&lpass_dmic23_data {
->> +	bias-pull-down;
->> +};
->> +
->> +&lpass_dmic23_clk_sleep {
->> +	drive-strength = <2>;
->> +};
-> ditto
-Okay.
->
->> +
->> +&lpass_rx_swr_clk {
->> +	drive-strength = <2>;
->> +	slew-rate = <1>;
->> +	bias-disable;
->> +};
->> +
->> +&lpass_rx_swr_data {
->> +	drive-strength = <2>;
->> +	slew-rate = <1>;
->> +	bias-bus-hold;
->> +};
->> +
->> +&lpass_rx_swr_clk_sleep {
->> +	drive-strength = <2>;
-> The drive strength is the same as for 'lpass_rx_swr_clk', so I think you
-> could omit it?
-Okay. will remove it and re post.
->
->> +	bias-pull-down;
->> +};
-> fix sorting order
-Okay. Will sort accordingly.
->
->> +
->> +&lpass_rx_swr_data_sleep {
->> +	drive-strength = <2>;
-> drive strength not needed?
-Okay.
->
->> +	bias-pull-down;
->> +};
->> +
->> +&lpass_tx_swr_clk {
->> +	drive-strength = <2>;
->> +	slew-rate = <1>;
->> +	bias-disable;
->> +};
->> +
->> +&lpass_tx_swr_data {
->> +	slew-rate = <1>;
->> +	bias-bus-hold;
->> +};
->> +
->> +&lpass_tx_swr_clk_sleep {
->> +	drive-strength = <2>;
-> drive strength not needed?
-Okay.
->
->> +	bias-pull-down;
->> +};
-> fix sorting order
-Okay. Will sort accordingly.
->
->> +
->>   &mi2s1_data0 {
->>   	drive-strength = <6>;
->>   	bias-disable;
->> diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
->> index c5b6b46..c961ca1 100644
->> --- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
->> +++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
->> @@ -2224,6 +2224,97 @@
->>   			qcom,bcm-voters = <&apps_bcm_voter>;
->>   		};
->>   
->> +		lpass_tlmm: pinctrl@33c0000 {
->> +			compatible = "qcom,sc7280-lpass-lpi-pinctrl";
->> +			reg = <0 0x033c0000 0x0 0x20000>,
->> +				<0 0x03550000 0x0 0x10000>;
->> +			gpio-controller;
->> +			#gpio-cells = <2>;
->> +			gpio-ranges = <&lpass_tlmm 0 0 15>;
->> +
->> +			#clock-cells = <1>;
->> +
->> +			lpass_dmic01_clk: dmic01-clk {
->> +				pins = "gpio6";
->> +				function = "dmic1_clk";
->> +			};
->> +
->> +			lpass_dmic01_data: dmic01-data {
->> +				pins = "gpio7";
->> +				function = "dmic1_data";
->> +			};
->> +
->> +			lpass_dmic01_clk_sleep: dmic01-clk-sleep {
->> +				pins = "gpio6";
->> +				function = "dmic1_clk";
->> +			};
-> fix sorting order
-Okay. Will sort accordingly.
->
->> +
->> +			lpass_dmic01_data_sleep: dmic01-data-sleep {
->> +				pins = "gpio7";
->> +				function = "dmic1_data";
->> +			};
->> +
->> +			lpass_dmic23_clk: dmic23-clk {
->> +				pins = "gpio8";
->> +				function = "dmic2_clk";
->> +			};
->> +
->> +			lpass_dmic23_data: dmic23-data {
->> +				pins = "gpio9";
->> +				function = "dmic2_data";
->> +			};
->> +
->> +			lpass_dmic23_clk_sleep: dmic23-clk-sleep {
->> +				pins = "gpio8";
->> +				function = "dmic2_clk";
->> +			};
-> fix sorting order
-Okay. Will sort accordingly.
->
->> +
->> +			lpass_dmic23_data_sleep: dmic23-data-sleep {
->> +				pins = "gpio9";
->> +				function = "dmic2_data";
->> +			};
->> +
->> +			lpass_rx_swr_clk: rx-swr-clk {
->> +				pins = "gpio3";
->> +				function = "swr_rx_clk";
->> +			};
->> +
->> +			lpass_rx_swr_data: rx-swr-data {
->> +				pins = "gpio4", "gpio5";
->> +				function = "swr_rx_data";
->> +			};
->> +
->> +			lpass_rx_swr_clk_sleep: rx-swr-clk-sleep {
->> +				pins = "gpio3";
->> +				function = "swr_rx_clk";
->> +			};
-> fix sorting order
-Okay. Will sort accordingly.
->
->> +
->> +			lpass_rx_swr_data_sleep: rx-swr-data-sleep {
->> +				pins = "gpio4", "gpio5";
->> +				function = "swr_rx_data";
->> +			};
->> +
->> +			lpass_tx_swr_clk: tx-swr-clk {
->> +				pins = "gpio0";
->> +				function = "swr_tx_clk";
->> +			};
->> +
->> +			lpass_tx_swr_data: tx-swr-data {
->> +				pins = "gpio1", "gpio2", "gpio14";
->> +				function = "swr_tx_data";
->> +			};
->> +
->> +			lpass_tx_swr_clk_sleep: tx-swr-clk-sleep {
->> +				pins = "gpio0";
->> +				function = "swr_tx_clk";
->> +			};
-> fix sorting order
-Okay. Will sort accordingly.
->
->> +
->> +			lpass_tx_swr_data_sleep: tx-swr-data-sleep {
->> +				pins = "gpio1", "gpio2", "gpio14";
->> +				function = "swr_tx_data";
->> +			};
->> +		};
->> +
->>   		gpu: gpu@3d00000 {
->>   			compatible = "qcom,adreno-635.0", "qcom,adreno";
->>   			reg = <0 0x03d00000 0 0x40000>,
->> -- 
->> 2.7.4
->>
+https://bugzilla.kernel.org/show_bug.cgi?id=215916
+
+The kernel message is shown below:
+
+kernel BUG at fs/f2fs/segment.c:2560!
+Call Trace:
+ allocate_segment_by_default+0x228/0x440
+ f2fs_allocate_data_block+0x13d1/0x31f0
+ do_write_page+0x18d/0x710
+ f2fs_outplace_write_data+0x151/0x250
+ f2fs_do_write_data_page+0xef9/0x1980
+ move_data_page+0x6af/0xbc0
+ do_garbage_collect+0x312f/0x46f0
+ f2fs_gc+0x6b0/0x3bc0
+ f2fs_balance_fs+0x921/0x2260
+ f2fs_write_single_data_page+0x16be/0x2370
+ f2fs_write_cache_pages+0x428/0xd00
+ f2fs_write_data_pages+0x96e/0xd50
+ do_writepages+0x168/0x550
+ __writeback_single_inode+0x9f/0x870
+ writeback_sb_inodes+0x47d/0xb20
+ __writeback_inodes_wb+0xb2/0x200
+ wb_writeback+0x4bd/0x660
+ wb_workfn+0x5f3/0xab0
+ process_one_work+0x79f/0x13e0
+ worker_thread+0x89/0xf60
+ kthread+0x26a/0x300
+ ret_from_fork+0x22/0x30
+RIP: 0010:new_curseg+0xe8d/0x15f0
+
+The root cause is: ckpt.valid_block_count is inconsistent with SIT table,
+stat info indicates filesystem has free blocks, but SIT table indicates
+filesystem has no free segment.
+
+So that during garbage colloection, it triggers panic when LFS allocator
+fails to find free segment.
+
+This patch tries to fix this issue by checking consistency in between
+ckpt.valid_block_count and block accounted from SIT.
+
+Cc: stable@vger.kernel.org
+Reported-by: Ming Yan <yanming@tju.edu.cn>
+Signed-off-by: Chao Yu <chao.yu@oppo.com>
+---
+v2:
+- adjust check condition according to the case Jaegeuk mentioned.
+ fs/f2fs/segment.c | 24 +++++++++++++++++++++---
+ 1 file changed, 21 insertions(+), 3 deletions(-)
+
+diff --git a/fs/f2fs/segment.c b/fs/f2fs/segment.c
+index 3a3e2cec2ac4..942d6d8c18e6 100644
+--- a/fs/f2fs/segment.c
++++ b/fs/f2fs/segment.c
+@@ -4462,6 +4462,7 @@ static int build_sit_entries(struct f2fs_sb_info *sbi)
+ 	unsigned int readed, start_blk = 0;
+ 	int err = 0;
+ 	block_t total_node_blocks = 0;
++	block_t total_data_blocks = 0;
+ 
+ 	do {
+ 		readed = f2fs_ra_meta_pages(sbi, start_blk, BIO_MAX_VECS,
+@@ -4488,6 +4489,8 @@ static int build_sit_entries(struct f2fs_sb_info *sbi)
+ 			seg_info_from_raw_sit(se, &sit);
+ 			if (IS_NODESEG(se->type))
+ 				total_node_blocks += se->valid_blocks;
++			else
++				total_data_blocks += se->valid_blocks;
+ 
+ 			if (f2fs_block_unit_discard(sbi)) {
+ 				/* build discard map only one time */
+@@ -4529,6 +4532,8 @@ static int build_sit_entries(struct f2fs_sb_info *sbi)
+ 		old_valid_blocks = se->valid_blocks;
+ 		if (IS_NODESEG(se->type))
+ 			total_node_blocks -= old_valid_blocks;
++		else
++			total_data_blocks -= old_valid_blocks;
+ 
+ 		err = check_block_count(sbi, start, &sit);
+ 		if (err)
+@@ -4536,6 +4541,8 @@ static int build_sit_entries(struct f2fs_sb_info *sbi)
+ 		seg_info_from_raw_sit(se, &sit);
+ 		if (IS_NODESEG(se->type))
+ 			total_node_blocks += se->valid_blocks;
++		else
++			total_data_blocks += se->valid_blocks;
+ 
+ 		if (f2fs_block_unit_discard(sbi)) {
+ 			if (is_set_ckpt_flags(sbi, CP_TRIMMED_FLAG)) {
+@@ -4557,13 +4564,24 @@ static int build_sit_entries(struct f2fs_sb_info *sbi)
+ 	}
+ 	up_read(&curseg->journal_rwsem);
+ 
+-	if (!err && total_node_blocks != valid_node_count(sbi)) {
++	if (err)
++		return err;
++
++	if (total_node_blocks != valid_node_count(sbi)) {
+ 		f2fs_err(sbi, "SIT is corrupted node# %u vs %u",
+ 			 total_node_blocks, valid_node_count(sbi));
+-		err = -EFSCORRUPTED;
++		return -EFSCORRUPTED;
+ 	}
+ 
+-	return err;
++	if (total_data_blocks + total_node_blocks >
++				valid_user_blocks(sbi)) {
++		f2fs_err(sbi, "SIT is corrupted data# %u %u vs %u",
++			 total_data_blocks, total_node_blocks,
++			 valid_user_blocks(sbi));
++		return -EFSCORRUPTED;
++	}
++
++	return 0;
+ }
+ 
+ static void init_free_segmap(struct f2fs_sb_info *sbi)
+-- 
+2.32.0
+

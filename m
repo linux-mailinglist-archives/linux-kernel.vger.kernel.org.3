@@ -2,63 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B617C51B5CA
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 04:22:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A36E751B5C7
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 04:22:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238496AbiEECYN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 22:24:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57808 "EHLO
+        id S238514AbiEECYq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 22:24:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238258AbiEECYK (ORCPT
+        with ESMTP id S236575AbiEECYo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 22:24:10 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 228F049C89;
-        Wed,  4 May 2022 19:20:33 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id fv2so2889762pjb.4;
-        Wed, 04 May 2022 19:20:33 -0700 (PDT)
+        Wed, 4 May 2022 22:24:44 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 923EE4AE0F
+        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 19:21:07 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id p6so2902122pjm.1
+        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 19:21:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=rNxRZjPsLxGtvu4jqqbMJl1peYsf82mPfHpY5Wt/9NM=;
-        b=U7of+IyeNWIoWfwrDy3FFvAGacCPeD5+Yq3OyPIZVOxmpzNO154UkJP5mzG7PXbhMv
-         Ial0ITVa67FRkYqGTvyh27Yxo0Kg5eJZXFLqNsokgvLBO7M2MlLTuP1cgq00EK8h/tON
-         K86HqvTq5/X2sJbli7DT7tJ+hoPxI1pL8cb/qJCd4VpmlN7jg6v6Xbv3ivvbUxeC9r6g
-         oG3D3opiSUjc6OMZbIsc0eBcQU2HuDz4icNlmQZHGwjtAdAFbdOfXOXx4KtDCBd2N2jt
-         x9IQX/PhhNhw2DoR5o7FQXkMPk0L5Yj6IV9XXdstD0eyJBSEAW3MnCAMjNpP1q84VtkA
-         LHTw==
+        bh=L29beijmOBItkkHFe0zAs3en1lXL5wQ+ii6bOfyDx3w=;
+        b=nsnFguKB2NLOrLnOrTZKwKhFp50jdrWPHzz6A8Y+5pjtxjvPbb9s1WBIppo7QlrXwD
+         avUxyjTz7indRQhqjLDUmu5sbkeimM/DVnwNPjRFQOXQzD8aaKPOkVkeCvP8B8mZEkaj
+         F1ND3RyphXaRjQ5/g1sRfVdm5zcnNIcYt3ZIjaojw42cxY6/Q3RWG9gTLu3oxxU6slK8
+         T8xm3Tg8V2VUvIZRh42HUHHIif1w/NVb5o8IdFMkup7DhZYTmK8qYxOc1xBTQXnRqU35
+         5G8Pu/PGDRyWDOiio8KEnZ4go+wl4QSM0pcwsxXDE80Et4U0lz2ccrxcP5oPvy5i2jHs
+         dxBQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=rNxRZjPsLxGtvu4jqqbMJl1peYsf82mPfHpY5Wt/9NM=;
-        b=cewlzybC6cvme2TcChGRMDoSso9LLNsyuOTBObcRC5yfwW7abW6xw5NZvp5qgMAepN
-         hn93LSZuDqWIKY9X5cTbpbAnWBls4FOY7RmZZBwXNAVg86NMdkBGfsTzeuZRdXGWQKeW
-         isCm3dRr1hs4p8J5ZhSaPWiBpS9nSRv3kUZVUMi/VYBZnRX2yB3cDzmCFhs7oLdAbiWV
-         ADNjltsNCFfE3pN8luvfKorIcvvwCQ5sPUVuHFUyp67ise0mseE+qxslhSzytPN9RiwA
-         n3pv/QGZruyWr6juf26ugv41rIw/vw0VIB50D0mW2fX7F+5VUZ2EF64UcsaiVumEgzZ5
-         eGSg==
-X-Gm-Message-State: AOAM5317FMD+I6pR5w9cuHw2dZpmqdSi8QO2/kk5Ia7XLhbWmmMPHSJ0
-        bVoVBjNpXB7jMIPDGVbcCPQ=
-X-Google-Smtp-Source: ABdhPJxxkplJqxShrGBVhiiwV4wDAmTzqef/PIHgbEK/FxkOV4pp1Kz4V6oB91OzUcUhTzAp2ZHjOQ==
-X-Received: by 2002:a17:902:ea06:b0:15e:8367:150b with SMTP id s6-20020a170902ea0600b0015e8367150bmr24274391plg.167.1651717232671;
-        Wed, 04 May 2022 19:20:32 -0700 (PDT)
+        bh=L29beijmOBItkkHFe0zAs3en1lXL5wQ+ii6bOfyDx3w=;
+        b=ipDR1IEF7d6aXtZ9QXGRqGj6uT9D4o/K2cg82DrEsF3md2OLrMNB/HdS8VNdzUrqwg
+         ucO/+ExRbyjJkfrHJ0jYqKfHcf4n4vJ29/iU9ywwsSKH1lCanBdZp+yxBDJ2IowVAv2x
+         BtpgMAkXoqOpIDzM4kqPmMjjp56y/D4z+kY/izJXxgY/TfXoOTyBJ+Mtj8h+CAtcob/7
+         gKPrM7iGNzIeRzg6UyE0eyuEGB+YIriGJQG/4syEwc6jdPgsOjCVW2iO9iBy4aG2BtQG
+         B9UBWxwTBC4v4G/YoliC/VaNBIO97jFCy9oCtyxtc36CThK4LUBg+idV9WoIWAYGnrvm
+         /uzg==
+X-Gm-Message-State: AOAM533gdJU5y6p0GIGnP+idKHuOOc3UEgb1kxgPqbg4bFO/lg+fQsQk
+        vAyt1RShofDiFcG4VwvbFZpTGmoAwuQ=
+X-Google-Smtp-Source: ABdhPJwnuY6Oc5ajFtJMUAPrBiE+7/kofVgYm1v0VyH9aYzBuzJEFEQA5gUvaeQyUiPKz/3ZOWN8Dw==
+X-Received: by 2002:a17:902:c2d5:b0:15e:d84a:b24a with SMTP id c21-20020a170902c2d500b0015ed84ab24amr916063pla.69.1651717267153;
+        Wed, 04 May 2022 19:21:07 -0700 (PDT)
 Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id w2-20020a17090ac98200b001cd4989fecdsm3943686pjt.25.2022.05.04.19.20.28
+        by smtp.gmail.com with ESMTPSA id 28-20020a17090a1a5c00b001cd4989ff41sm235507pjl.8.2022.05.04.19.21.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 May 2022 19:20:32 -0700 (PDT)
+        Wed, 04 May 2022 19:21:06 -0700 (PDT)
 From:   cgel.zte@gmail.com
 X-Google-Original-From: chi.minghao@zte.com.cn
-To:     bbrezillon@kernel.org
-Cc:     arno@natisbad.org, schalla@marvell.com,
-        herbert@gondor.apana.org.au, davem@davemloft.net,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Minghao Chi <chi.minghao@zte.com.cn>,
+To:     lgirdwood@gmail.com
+Cc:     broonie@kernel.org, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org, Minghao Chi <chi.minghao@zte.com.cn>,
         Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH] crypto: octeontx2: simplify the return expression of otx2_cpt_aead_cbc_aes_sha_setkey()
-Date:   Thu,  5 May 2022 02:20:24 +0000
-Message-Id: <20220505022024.54586-1-chi.minghao@zte.com.cn>
+Subject: [PATCH] ASoC: pcm186x: simplify the return expression of pcm186x_power_off()
+Date:   Thu,  5 May 2022 02:21:02 +0000
+Message-Id: <20220505022102.54650-1-chi.minghao@zte.com.cn>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -79,34 +77,34 @@ Simplify the return expression.
 Reported-by: Zeal Robot <zealci@zte.com.cn>
 Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
 ---
- drivers/crypto/marvell/octeontx2/otx2_cptvf_algs.c | 7 +------
+ sound/soc/codecs/pcm186x.c | 7 +------
  1 file changed, 1 insertion(+), 6 deletions(-)
 
-diff --git a/drivers/crypto/marvell/octeontx2/otx2_cptvf_algs.c b/drivers/crypto/marvell/octeontx2/otx2_cptvf_algs.c
-index f8f8542ce3e4..67530e90bbfe 100644
---- a/drivers/crypto/marvell/octeontx2/otx2_cptvf_algs.c
-+++ b/drivers/crypto/marvell/octeontx2/otx2_cptvf_algs.c
-@@ -896,7 +896,6 @@ static int otx2_cpt_aead_cbc_aes_sha_setkey(struct crypto_aead *cipher,
- 	struct crypto_authenc_key_param *param;
- 	int enckeylen = 0, authkeylen = 0;
- 	struct rtattr *rta = (void *)key;
--	int status;
+diff --git a/sound/soc/codecs/pcm186x.c b/sound/soc/codecs/pcm186x.c
+index 2c78dccb3f62..fda9d7ee3fe6 100644
+--- a/sound/soc/codecs/pcm186x.c
++++ b/sound/soc/codecs/pcm186x.c
+@@ -534,19 +534,14 @@ static int pcm186x_power_on(struct snd_soc_component *component)
+ static int pcm186x_power_off(struct snd_soc_component *component)
+ {
+ 	struct pcm186x_priv *priv = snd_soc_component_get_drvdata(component);
+-	int ret;
  
- 	if (!RTA_OK(rta, keylen))
- 		return -EINVAL;
-@@ -938,11 +937,7 @@ static int otx2_cpt_aead_cbc_aes_sha_setkey(struct crypto_aead *cipher,
- 	ctx->enc_key_len = enckeylen;
- 	ctx->auth_key_len = authkeylen;
+ 	snd_soc_component_update_bits(component, PCM186X_POWER_CTRL,
+ 			    PCM186X_PWR_CTRL_PWRDN, PCM186X_PWR_CTRL_PWRDN);
  
--	status = aead_hmac_init(cipher);
--	if (status)
--		return status;
+ 	regcache_cache_only(priv->regmap, true);
+ 
+-	ret = regulator_bulk_disable(ARRAY_SIZE(priv->supplies),
++	return regulator_bulk_disable(ARRAY_SIZE(priv->supplies),
+ 				     priv->supplies);
+-	if (ret)
+-		return ret;
 -
 -	return 0;
-+	return aead_hmac_init(cipher);
  }
  
- static int otx2_cpt_aead_ecb_null_sha_setkey(struct crypto_aead *cipher,
+ static int pcm186x_set_bias_level(struct snd_soc_component *component,
 -- 
 2.25.1
 

@@ -2,231 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC49351C9CD
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 21:59:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4049C51C9D8
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 22:02:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385525AbiEEUC6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 16:02:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49674 "EHLO
+        id S1384559AbiEEUFg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 16:05:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383706AbiEEUCw (ORCPT
+        with ESMTP id S244961AbiEEUFf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 16:02:52 -0400
-Received: from us-smtp-delivery-74.mimecast.com (us-smtp-delivery-74.mimecast.com [170.10.133.74])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2B5AE5F253
-        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 12:59:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651780751;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=qBYz8oIHOIDYp4BEZnUrEb3KsOkemOKPjddPARtaHag=;
-        b=M8mRL19OlAFR+3O6CoJz+Zx9UNcryoxShkiMwy7DcPcd98W7HSoXdXOnDOs/Jc4/8mVuqp
-        heKepdCBO4S4JIJdKtDKGGgCGFYu53wa0UA4Na+/UVQGL4Ybe2EKw0NS9xYbvkAY2XDoG5
-        Xn7zWVn74BpNR+//RBLcZCqS+MOlN+o=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-112-04jmGuanPTOPvZVvO1TW4g-1; Thu, 05 May 2022 15:59:08 -0400
-X-MC-Unique: 04jmGuanPTOPvZVvO1TW4g-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7C54A299E76A;
-        Thu,  5 May 2022 19:59:07 +0000 (UTC)
-Received: from horse.redhat.com (unknown [10.22.32.26])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 650B241616B;
-        Thu,  5 May 2022 19:59:07 +0000 (UTC)
-Received: by horse.redhat.com (Postfix, from userid 10451)
-        id 1FAFB220463; Thu,  5 May 2022 15:59:07 -0400 (EDT)
-Date:   Thu, 5 May 2022 15:59:07 -0400
-From:   Vivek Goyal <vgoyal@redhat.com>
-To:     Bernd Schubert <bschubert@ddn.com>
-Cc:     Dharmendra Hans <dharamhans87@gmail.com>,
-        Miklos Szeredi <miklos@szeredi.hu>,
-        linux-fsdevel@vger.kernel.org,
-        fuse-devel <fuse-devel@lists.sourceforge.net>,
+        Thu, 5 May 2022 16:05:35 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 832085EDF0
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 13:01:54 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id fv2so5138003pjb.4
+        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 13:01:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=pgblE3j4iKhz7YnaakiOSpHlbjQP4SAyavbRgdtpp8I=;
+        b=Fpczt1Rmo9bey40PtYJ41u9aQTEn4i74wmc8/xVaITuombJTgbBwdwhuoo8Da5pw/Z
+         8erpU+uD0pDZ0o01228ZgmGm0cgCuGbgwdGB6JwmoWNdO5HkSq94CrZZhvxzzoY/CMLE
+         VDgwPcqO66XU8yGHYqVJR6Pl+x10LQkTz7W89lTrnzVOP2xCQeWsvTCCOaI+LJ346+gn
+         jEgpseOVNtomk93eXvWarsB52hyROlIyAwsFaEM/sD+ZkQwV5d47sK7oHOBFVEsZFX8v
+         +ZDg+PHi2e5K1y1ZhQbObIX1gZ/xS0307712RoViSArPBFAWzxVSIeksKwyj+3AwPt//
+         JnjQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=pgblE3j4iKhz7YnaakiOSpHlbjQP4SAyavbRgdtpp8I=;
+        b=GAClRsbQAMdyglMSfXcwktFFSltiaSYEagL29l93SaGIcmcAIkWnZE3+/IUbf/31r2
+         nG6HESFTMPEYOmSt4WUltyCeZFZ3pUmIil4l3qjQuDWOhqEsiqdFzp5dfaewLK7OHnbo
+         DA+hBYZl7A3XLKRy67HNoPBB69t+2/DyGFRp05gqhMwdowx7l/1plzOqjIlddPL/QUbB
+         64/sAxPqGHi2b70GU/FXiwAzB2Y+M7Y+GC65lR7gGUQF4+MQEsc3+jsV9dm/Hpf7YhLb
+         jKgrjXTGlaFx/hyUQEcGBTnfkSI3mjv69a7xwdSfU/R4KU0hX/CBPSmRRVoRrwLA1bDu
+         IFfA==
+X-Gm-Message-State: AOAM530KiTZvEMd7B3j7e/nAAMcoCVJDeBGhBuJ08DqZeWJmuFIAr5jk
+        psPxHvGoGBlRtzVITuaxvaK0JyMeBEs=
+X-Google-Smtp-Source: ABdhPJz3KAefvYlFE9BMykoe7YrxFjSJmSecI5KPAZIy2k3yzWGkd2x7eYYZKZMXiHO2cKu/E96BIg==
+X-Received: by 2002:a17:902:8608:b0:158:b827:7721 with SMTP id f8-20020a170902860800b00158b8277721mr28760064plo.149.1651780913900;
+        Thu, 05 May 2022 13:01:53 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:400::4:29a5])
+        by smtp.gmail.com with ESMTPSA id s66-20020a625e45000000b0050dc76281dbsm1737123pfb.181.2022.05.05.13.01.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 May 2022 13:01:53 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Thu, 5 May 2022 10:01:51 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Imran Khan <imran.f.khan@oracle.com>
+Cc:     viro@zeniv.linux.org.uk, gregkh@linuxfoundation.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 0/3] FUSE: Implement atomic lookup + open/create
-Message-ID: <YnQsizX5Q1sMnlI2@redhat.com>
-References: <20220502102521.22875-1-dharamhans87@gmail.com>
- <YnLRnR3Xqu0cYPdb@redhat.com>
- <CACUYsyEsRph+iFC_fj3F6Ceqhq7NCTuFPH3up8R6C+_bGHktZg@mail.gmail.com>
- <YnPI6f2fRZUXbCFP@redhat.com>
- <882fbf7f-a56b-1e82-a158-9e2186ec7c4c@ddn.com>
+Subject: Re: [PATCH 2/5] kernfs: make ->attr.open RCU protected.
+Message-ID: <YnQtL7+GYHwpo4n2@slm.duckdns.org>
+References: <20220428055431.3826852-1-imran.f.khan@oracle.com>
+ <20220428055431.3826852-3-imran.f.khan@oracle.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <882fbf7f-a56b-1e82-a158-9e2186ec7c4c@ddn.com>
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220428055431.3826852-3-imran.f.khan@oracle.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 05, 2022 at 05:13:00PM +0200, Bernd Schubert wrote:
-> 
-> 
-> On 5/5/22 14:54, Vivek Goyal wrote:
-> > On Thu, May 05, 2022 at 11:42:51AM +0530, Dharmendra Hans wrote:
-> > > Here are the numbers I took last time. These were taken on tmpfs to
-> > > actually see the effect of reduced calls. On local file systems it
-> > > might not be that much visible. But we have observed that on systems
-> > > where we have thousands of clients hammering the metadata servers, it
-> > > helps a lot (We did not take numbers yet as  we are required to change
-> > > a lot of our client code but would be doing it later on).
-> > > 
-> > > Note that for a change in performance number due to the new version of
-> > > these patches, we have just refactored the code and functionality has
-> > > remained the same since then.
-> > > 
-> > > here is the link to the performance numbers
-> > > https://lore.kernel.org/linux-fsdevel/20220322121212.5087-1-dharamhans87@gmail.com/
-> > 
-> > There is a lot going in that table. Trying to understand it.
-> > 
-> > - Why care about No-Flush. I mean that's independent of these changes,
-> >    right?  I am assuming this means that upon file close do not send
-> >    a flush to fuse server. Not sure how bringing No-Flush into the
-> >    mix is helpful here.
-> 
-> 
-> It is a basically removing another call from kernel to user space. The calls
-> there are, the lower is the resulting percentage for atomic-open.
+On Thu, Apr 28, 2022 at 03:54:28PM +1000, Imran Khan wrote:
+> +static struct kernfs_open_node *kernfs_deref_on_raw(struct kernfs_node *kn)
+> +{
+> +	return rcu_dereference_raw(kn->attr.open);
+> +}
 
-Ok. You want to get rid of FUSE_FLUSH call so that % of FUSE_LOOKUP calls
-go up and that will effectively show higher % of improvement due to
-this. 
+Wrapping the above probably isn't helping anything.
 
-> 
-> 
-> > 
-> > - What is "Patched Libfuse"? I am assuming that these are changes
-> >    needed in libfuse to support atomic create + atomic open. Similarly
-> >    assuming "Patched FuseK" means patched kernel with your changes.
-> 
-> Yes, I did that to ensure there is no regression with the patches, when the
-> other side is not patched.
-> 
-> > 
-> >    If this is correct, I would probably only be interested in
-> >    looking at "Patched Libfuse + Patched FuseK" numbers to figure out
-> >    what's the effect of your changes w.r.t vanilla kernel + libfuse.
-> >    Am I understanding it right?
-> 
-> Yes.
-> 
-> > 
-> > - I am wondering why do we measure "Sequential" and "Random" patterns.
-> >    These optimizations are primarily for file creation + file opening
-> >    and I/O pattern should not matter.
-> 
-> bonnie++ does this automatically and it just convenient to take the bonnie++
-> csv value and to paste them into a table.
-> 
-> In our HPC world mdtest is more common, but it has MPI as requirement - make
-> it harder to run. Reproducing the values with bonnie++ should be rather easy
-> for you.
-> 
-> Only issue with bonnie++ is that bonnie++ by default does not run
-> multi-threaded and the old 3rd party perl scripts I had to let it run with
-> multiple processes and to sum up the values don't work anymore with recent
-> perl versions. I need to find some time to fix that.
-> 
-> 
-> > 
-> > - Also wondering why performance of Read/s improves. Assuming once
-> >    file has been opened, I think your optimizations get out of the
-> >    way (no create, no open) and we are just going through data path of
-> >    reading file data and no lookups happening. If that's the case, why
-> >    do Read/s numbers show an improvement.
-> 
-> That is now bonnie++ works. It creates the files, closes them (which causes
-> the flush) and then re-opens for stat and read - atomic open comes into the
-> picture here. Also read() is totally skipped when the files are empty -
-> which is why one should use something like 1B files.
-> 
-> If you have another metadata benchmark - please let us know.
+> +/*
+> + * Check ->attr.open corresponding to @kn while holding kernfs_open_file_mutex.
+> + * ->attr.open is modified under kernfs_open_file_mutex. So it can be safely
+> + * accessed outside RCU read-side critical section, while holding the mutex.
+> + */
+> +static struct kernfs_open_node *kernfs_check_on_protected(struct kernfs_node *kn)
+> +{
+> +	return rcu_dereference_check(kn->attr.open,
+> +				      lockdep_is_held(&kernfs_open_file_mutex));
+> +}
 
-Once I was pointed at smallfile.
+Maybe name this just kernfs_deref_on()?
 
-https://github.com/distributed-system-analysis/smallfile
+> @@ -156,8 +188,9 @@ static void kernfs_seq_stop(struct seq_file *sf, void *v)
+>  static int kernfs_seq_show(struct seq_file *sf, void *v)
+>  {
+>  	struct kernfs_open_file *of = sf->private;
+> +	struct kernfs_open_node *on = kernfs_deref_on_raw(of->kn);
 
-I ran this when I was posting the patches for virtiofs.
+I suppose this is protected by the fact that @of is on @on? If so, just add
+the condition to the checked version. The condition doesn't have to be
+perfect - e.g. you can just say that neither @on's and @of's list_head isn't
+empty. While not comprehensive, it'd still provide meaningful protection
+against mistakes and be easier to understand if the deref accessor clearly
+explains the expectations.
 
-https://patchwork.kernel.org/project/linux-fsdevel/cover/20181210171318.16998-1-vgoyal@redhat.com/
+> @@ -201,7 +235,8 @@ static ssize_t kernfs_file_read_iter(struct kiocb *iocb, struct iov_iter *iter)
+>  		goto out_free;
+>  	}
+>  
+> -	of->event = atomic_read(&of->kn->attr.open->event);
+> +	on = kernfs_deref_on_raw(of->kn);
+> +	of->event = atomic_read(&unrcu_pointer(on)->event);
 
-See if this is something interesting to you.
+Ditto here.
 
+> @@ -815,7 +843,7 @@ void kernfs_drain_open_files(struct kernfs_node *kn)
+>  __poll_t kernfs_generic_poll(struct kernfs_open_file *of, poll_table *wait)
+>  {
+>  	struct kernfs_node *kn = kernfs_dentry_node(of->file->f_path.dentry);
+> -	struct kernfs_open_node *on = kn->attr.open;
+> +	struct kernfs_open_node *on = kernfs_deref_on_raw(kn);
 
-> 
-> > 
-> > - Why do we measure "Patched Libfuse". It shows performance regression
-> >    of 4-5% in table 0B, Sequential workoad. That sounds bad. So without
-> >    any optimization kicking in, it has a performance cost.
-> 
-> Yes, I'm not sure yet. There is not so much code that has changed on the
-> libfuse side.
-> However the table needs to be redone with fixed libfuse - limiting the
-> number of threads caused a permanent libfuse thread creation and destruction
-> 
-> https://github.com/libfuse/libfuse/pull/652
-> 
-> The numbers in table are also with paththrough_ll, which has its own issue
-> due to linear inode search. paththrough_hp uses a C++ map and avoids that. I
-> noticed too late when I started to investigate why there are regressions....
-> 
-> Also the table made me to investigate/profile all the fuse operations, which
-> resulted in my waitq question. Please see that thread for more details https://lore.kernel.org/lkml/9326bb76-680f-05f6-6f78-df6170afaa2c@fastmail.fm/T/
-> 
-> Regarding atomic-open/create with avoiding lookup/revalidate, our primary
-> goal is to reduce network calls. A file system that handles it locally only
-> reduces the number of fuse kernel/user space crossing. A network file system
-> that fully supports it needs to do the atomic open (or in old terms
-> lookup-intent-open) on the server side of the network and needs to transfer
-> attributes together with the open result.
+and here.
 
-Oh, I have no issues with the intent. I will like to see cut in network
-traffic too (if we can do this without introducing problems). My primary
-interest is that this kind of change should benefit virtiofs as well.
+> @@ -922,13 +950,13 @@ void kernfs_notify(struct kernfs_node *kn)
+>  		return;
+>  
+>  	/* kick poll immediately */
+> -	spin_lock_irqsave(&kernfs_open_node_lock, flags);
+> -	on = kn->attr.open;
+> +	rcu_read_lock();
+> +	on = rcu_dereference(kn->attr.open);
 
-I am just trying to understand how much performance improvement is
-actually there. And also trying to improve the quality of implementation.
-Frankly speaking, it all seems very twisted and hard to read (and
-hence maintain) code at this point fo time.
+Shouldn't this be kernfs_deref_on() too?
 
-That's why I am going into the details to understand and suggest some
-improvements.
+Thanks.
 
-Thanks
-Vivek
-
-> 
-> Lustre does this, although I cannot easily point you to the right code. It
-> all started almost two decades ago:
-> https://groups.google.com/g/lucky.linux.fsdevel/c/iYNFIIrkJ1s
-> 
-> 
-> BeeGFS does this as well
-> https://git.beegfs.io/pub/v7/-/blob/master/client_module/source/filesystem/FhgfsOpsInode.c
-> See for examaple FhgfsOps_atomicOpen() and FhgfsOps_createIntent()
-> 
-> (FhGFS is the old name when I was still involved in the project.)
-> 
-> From my head I'm not sure if NFS does it over the wire, maybe v4.
-> 
-> 
-> Thanks,
-> Bernd
-> 
-> 
-> 
-> 
-> 
-> 
-
+-- 
+tejun

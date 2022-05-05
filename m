@@ -2,83 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6452351B542
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 03:30:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D30D951B598
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 04:01:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235463AbiEEBdQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 21:33:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47558 "EHLO
+        id S237021AbiEECDo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 22:03:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230176AbiEEBdN (ORCPT
+        with ESMTP id S233202AbiEECDm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 21:33:13 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 930594BBB4;
-        Wed,  4 May 2022 18:29:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=Cj4UGQhE5SbBl27xX4oKe/1UFslY5BYuOULnOrIDVz0=; b=nwH0yzV32VnmqT9/Mt4VEzDmja
-        0HscqFeiPjCwOip27unrxVYfqQP7fenifZazDDwQzeQcSTf232OVyp0aeR9gPTbqWvjW2SuyCTSxS
-        Qb25QSydS0u/xB4YJanEQPhHHHo90umugQKByRLtouW6A1SbyhmGEaaW7Dt6wj8SDMEw=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1nmQJ4-001Hs8-4L; Thu, 05 May 2022 03:29:26 +0200
-Date:   Thu, 5 May 2022 03:29:26 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Ansuel Smith <ansuelsmth@gmail.com>
-Cc:     Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>, Pavel Machek <pavel@ucw.cz>,
-        John Crispin <john@phrozen.org>, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-leds@vger.kernel.org
-Subject: Re: [RFC PATCH v6 09/11] leds: trigger: netdev: add additional
- hardware only triggers
-Message-ID: <YnModmKCG3BD5nvd@lunn.ch>
-References: <20220503151633.18760-1-ansuelsmth@gmail.com>
- <20220503151633.18760-10-ansuelsmth@gmail.com>
+        Wed, 4 May 2022 22:03:42 -0400
+X-Greylist: delayed 1801 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 04 May 2022 19:00:03 PDT
+Received: from geosincoor.roylabs.com (geosincoor.roylabs.com [193.233.182.222])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA1AC473BD
+        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 19:00:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha1; c=relaxed/relaxed; s=dkim; d=roylabs.com;
+ h=Content-Type:MIME-Version:Content-Transfer-Encoding:Content-Description:Subject:To:From:Date:Reply-To:Message-ID; i=cas.geo@roylabs.com;
+ bh=bh9iyPqTwXbBCUbKpWQh+6Svj3M=;
+ b=kZvxq3sLDHxsR9YUAkZl/H2sXsq3C/2UblKPhnwFMmf1DWdJXTarExGTIy6YXv7Ck/Kp+ajzx8Xc
+   RI6ATzYr+4msm+YelCJA6ejr0MLrO2v023sF4MhoH4VC66IsJH4VTZ709l5mtz/B0zMfuSUpeveN
+   kdf+uNq7VGXkDmMO02Eabsa1FT0jsl5dVVcN6Du9zAmGk3WldcuJcsyQ9WaTVyeK+2yKS+4+EhkD
+   tR/UrZRrWDoCrM3eEUzIyJ6rxyQ/FCkMNbu6SJar1mer91ierWQ/+Ngkl2OBv5e7rye6mhKwlohA
+   UF4zkDMSkdPtMANecGOXiXYfVb76lhS86rAU5Q==
+DomainKey-Signature: a=rsa-sha1; c=nofws; q=dns; s=dkim; d=roylabs.com;
+ b=NAwu26RrWU/kGiVz1hv/hzUBmo8Mh+5bfG2LKlLH2XnHv5hKpyUeesOIxQWEVVrxndTnFjQRQL2P
+   XGD2lP/JCyWEIM6MiEz2fk2qwVcP91lqoLh1VEjT7yh4wTeoaMUboO+eAUUKcF5t9yIY0U4EsDKA
+   CYEyhYchlhqWOsjt6HOeBV9G14f0avnmMq4+UvGxZj5T9zdATDRbP490yldmSV53Pyo+IYTbPEs7
+   eEIaeSJgxoXLl9KVL9iP+NDfsl2OB70yxnDd97wahgM0yhIYGJC9AVc3wJNj6h6AHuAS1pB0vUGk
+   ZAc5AeOruBnX//yhvNQko5PpMtsGcjtC1P05RA==;
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220503151633.18760-10-ansuelsmth@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: Re: Good morning.
+To:     linux-kernel@vger.kernel.org
+From:   "Collins Fuller" <cas.geo@roylabs.com>
+Date:   Thu, 05 May 2022 03:29:56 +0200
+Reply-To: collinsfuller1@yandex.com
+Message-ID: <0.0.0.7FF.1D8601FA1DD2B10.0@geosincoor.roylabs.com>
+X-Spam-Status: Yes, score=5.8 required=5.0 tests=BAYES_99,BAYES_999,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        FREEMAIL_FORGED_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Report: *  0.2 BAYES_999 BODY: Bayes spam probability is 99.9 to 100%
+        *      [score: 1.0000]
+        *  3.5 BAYES_99 BODY: Bayes spam probability is 99 to 100%
+        *      [score: 1.0000]
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [collinsfuller1[at]yandex.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  2.1 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 03, 2022 at 05:16:31PM +0200, Ansuel Smith wrote:
-> Add additional hardware only triggers commonly supported by switch LEDs.
-> 
-> Additional modes:
-> link_10: LED on with link up AND speed 10mbps
-> link_100: LED on with link up AND speed 100mbps
-> link_1000: LED on with link up AND speed 1000mbps
-> half_duplex: LED on with link up AND half_duplex mode
-> full_duplex: LED on with link up AND full duplex mode
-> 
-> Additional blink interval modes:
-> blink_2hz: LED blink on any even at 2Hz (250ms)
-> blink_4hz: LED blink on any even at 4Hz (125ms)
-> blink_8hz: LED blink on any even at 8Hz (62ms)
+Good morning,
 
-I would suggest separating blink intervals into a patch of their own,
-because they are orthogonal to the other modes. Most PHYs are not
-going to support them, or they have to be the same across all LEDs, or
-don't for example make sense with duplex etc. We need to first
-concentrate on the basics, get that correct. Then we can add nice to
-have features like this.
+How are you doing today?
 
-     Andrew
+My name is Collins Fuller and I am a Research Analyst with an Organization =
+based in the UK. I have a lucrative business proposal which will be mutuall=
+y beneficial to the both of us. Kindly respond to my email, so I can give y=
+ou more details.
+
+Regards,
+Collins Fuller

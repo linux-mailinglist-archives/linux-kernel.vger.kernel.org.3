@@ -2,247 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2B9A51C81D
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 20:37:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D24251C6AD
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 20:03:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383061AbiEESdN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 14:33:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57048 "EHLO
+        id S1382965AbiEESG5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 14:06:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385290AbiEESaU (ORCPT
+        with ESMTP id S1382959AbiEESGz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 14:30:20 -0400
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9BDD5F266;
-        Thu,  5 May 2022 11:20:55 -0700 (PDT)
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.0.0)
- id c5f090cacb785d8c; Thu, 5 May 2022 20:19:42 +0200
-Received: from kreacher.localnet (unknown [213.134.161.219])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id 63EBB66C2F2;
-        Thu,  5 May 2022 20:19:41 +0200 (CEST)
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Linux PCI <linux-pci@vger.kernel.org>
+        Thu, 5 May 2022 14:06:55 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 04B0D53E32;
+        Thu,  5 May 2022 11:03:15 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BDD20106F;
+        Thu,  5 May 2022 11:03:14 -0700 (PDT)
+Received: from FVFF77S0Q05N.cambridge.arm.com (FVFF77S0Q05N.cambridge.arm.com [10.1.38.147])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A0C0E3FA31;
+        Thu,  5 May 2022 11:03:12 -0700 (PDT)
+Date:   Thu, 5 May 2022 19:03:08 +0100
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Sami Tolvanen <samitolvanen@google.com>
 Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Bjorn Helgaas <helgaas@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>, X86 ML <x86@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
         Nathan Chancellor <nathan@kernel.org>,
-        Anders Roxell <anders.roxell@linaro.org>
-Subject: [PATCH v1 02/11] PCI/PM: Relocate pci_set_low_power_state()
-Date:   Thu, 05 May 2022 20:02:52 +0200
-Message-ID: <3202976.44csPzL39Z@kreacher>
-In-Reply-To: <4738492.GXAFRqVoOG@kreacher>
-References: <4738492.GXAFRqVoOG@kreacher>
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Joao Moreira <joao@overdrivepizza.com>,
+        Sedat Dilek <sedat.dilek@gmail.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        linux-hardening@vger.kernel.org,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        llvm@lists.linux.dev
+Subject: Re: [RFC PATCH 10/21] treewide: Drop function_nocfi
+Message-ID: <YnQRXCqBW/Ggu3pc@FVFF77S0Q05N.cambridge.arm.com>
+References: <20220429203644.2868448-1-samitolvanen@google.com>
+ <20220429203644.2868448-11-samitolvanen@google.com>
+ <YnP7j+miotxYM6fu@FVFF77S0Q05N.cambridge.arm.com>
+ <CABCJKue6c0FMpKXysdoT0Lc+RBqGFhp52iM03tttWwRv7CZr5w@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 213.134.161.219
-X-CLIENT-HOSTNAME: 213.134.161.219
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedrfedugdduvdduucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgjfhgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepvdffueeitdfgvddtudegueejtdffteetgeefkeffvdeftddttdeuhfegfedvjefhnecukfhppedvudefrddufeegrdduiedurddvudelnecuvehluhhsthgvrhfuihiivgepudenucfrrghrrghmpehinhgvthepvddufedrudefgedrudeiuddrvdduledphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedpnhgspghrtghpthhtohepjedprhgtphhtthhopehlihhnuhigqdhptghisehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepmhhikhgrrdifvghsthgvrhgsvghrgheslhhinhhugidrihhnthgv
- lhdrtghomhdprhgtphhtthhopehhvghlghgrrghssehkvghrnhgvlhdrohhrghdprhgtphhtthhopehnrghthhgrnheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprghnuggvrhhsrdhrohigvghllheslhhinhgrrhhordhorhhg
-X-DCC--Metrics: v370.home.net.pl 1024; Body=7 Fuz1=7 Fuz2=7
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CABCJKue6c0FMpKXysdoT0Lc+RBqGFhp52iM03tttWwRv7CZr5w@mail.gmail.com>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On Thu, May 05, 2022 at 09:51:39AM -0700, Sami Tolvanen wrote:
+> On Thu, May 5, 2022 at 9:30 AM Mark Rutland <mark.rutland@arm.com> wrote:
+> > I also believe that in most cases we can drop the __nocfi annotation on callers
+> > now that we can mark the called assembly function with SYM_TYPED_FUNC_START().
+> 
+> Good point, thanks for pointing that out. I'll add these to the next
+> version of the series.
 
-Because pci_set_power_state() is the only caller of
-pci_set_low_power_state(), put the latter next to the former.
+Also, I *think* we can drop __nocfi from __init, and always check calls to
+functions in .init.text. IIUC we made those __nocfi because it leads to section
+mismatches, and dangling entries in the jump tables after we discarded the init
+text, neither of which should be a problem with kCFI.
 
-No functional impact.
+Unfortuantely, that appears to be masking some existing type mismatches; e.g.
+psci_dt_init() blows up because it uses the wrong type for its callees (a
+mismatched `const`). With that fixed up, arm64 boots fine.
 
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- drivers/pci/pci.c |  158 +++++++++++++++++++++++++++---------------------------
- 1 file changed, 79 insertions(+), 79 deletions(-)
+> > There' a latent bug here with the existing CFI scheme, since
+> > `kpti_install_ng_mappings` isn't marked with __nocfi, and should explode when
+> > calling `idmap_kpti_install_ng_mappings` via the idmap.
+> 
+> The CONFIG_UNMAP_KERNEL_AT_EL0 version of kpti_install_ng_mappings is
+> marked __nocfi
 
-Index: linux-pm/drivers/pci/pci.c
-===================================================================
---- linux-pm.orig/drivers/pci/pci.c
-+++ linux-pm/drivers/pci/pci.c
-@@ -1068,85 +1068,6 @@ static inline bool platform_pci_bridge_d
- }
- 
- /**
-- * pci_set_low_power_state - Put a PCI device into a low-power state.
-- * @dev: PCI device to handle.
-- * @state: PCI power state (D1, D2, D3hot) to put the device into.
-- *
-- * Use the device's PCI_PM_CTRL register to put it into a low-power state.
-- *
-- * RETURN VALUE:
-- * -EINVAL if the requested state is invalid.
-- * -EIO if device does not support PCI PM or its PM capabilities register has a
-- * wrong version, or device doesn't support the requested state.
-- * 0 if device already is in the requested state.
-- * 0 if device's power state has been successfully changed.
-- */
--static int pci_set_low_power_state(struct pci_dev *dev, pci_power_t state)
--{
--	u16 pmcsr;
--
--	/* Check if we're already there */
--	if (dev->current_state == state)
--		return 0;
--
--	if (!dev->pm_cap)
--		return -EIO;
--
--	if (state < PCI_D1 || state > PCI_D3hot)
--		return -EINVAL;
--
--	/*
--	 * Validate transition: We can enter D0 from any state, but if
--	 * we're already in a low-power state, we can only go deeper.  E.g.,
--	 * we can go from D1 to D3, but we can't go directly from D3 to D1;
--	 * we'd have to go from D3 to D0, then to D1.
--	 */
--	if (dev->current_state <= PCI_D3cold && dev->current_state > state) {
--		pci_err(dev, "invalid power transition (from %s to %s)\n",
--			pci_power_name(dev->current_state),
--			pci_power_name(state));
--		return -EINVAL;
--	}
--
--	/* Check if this device supports the desired state */
--	if ((state == PCI_D1 && !dev->d1_support)
--	   || (state == PCI_D2 && !dev->d2_support))
--		return -EIO;
--
--	pci_read_config_word(dev, dev->pm_cap + PCI_PM_CTRL, &pmcsr);
--	if (PCI_POSSIBLE_ERROR(pmcsr)) {
--		pci_err(dev, "Unable to change power state from %s to %s, device inaccessible\n",
--			pci_power_name(dev->current_state),
--			pci_power_name(state));
--		return -EIO;
--	}
--
--	pmcsr &= ~PCI_PM_CTRL_STATE_MASK;
--	pmcsr |= state;
--
--	/* Enter specified state */
--	pci_write_config_word(dev, dev->pm_cap + PCI_PM_CTRL, pmcsr);
--
--	/* Mandatory power management transition delays; see PCI PM 1.2. */
--	if (state == PCI_D3hot)
--		pci_dev_d3_sleep(dev);
--	else if (state == PCI_D2)
--		udelay(PCI_PM_D2_DELAY);
--
--	pci_read_config_word(dev, dev->pm_cap + PCI_PM_CTRL, &pmcsr);
--	dev->current_state = pmcsr & PCI_PM_CTRL_STATE_MASK;
--	if (dev->current_state != state)
--		pci_info_ratelimited(dev, "Refused to change power state from %s to %s\n",
--				     pci_power_name(dev->current_state),
--				     pci_power_name(state));
--
--	if (dev->bus->self)
--		pcie_aspm_pm_state_change(dev->bus->self);
--
--	return 0;
--}
--
--/**
-  * pci_update_current_state - Read power state of given device and cache it
-  * @dev: PCI device to handle.
-  * @state: State to cache in case the device doesn't have the PM capability
-@@ -1364,6 +1285,85 @@ void pci_bus_set_current_state(struct pc
- }
- 
- /**
-+ * pci_set_low_power_state - Put a PCI device into a low-power state.
-+ * @dev: PCI device to handle.
-+ * @state: PCI power state (D1, D2, D3hot) to put the device into.
-+ *
-+ * Use the device's PCI_PM_CTRL register to put it into a low-power state.
-+ *
-+ * RETURN VALUE:
-+ * -EINVAL if the requested state is invalid.
-+ * -EIO if device does not support PCI PM or its PM capabilities register has a
-+ * wrong version, or device doesn't support the requested state.
-+ * 0 if device already is in the requested state.
-+ * 0 if device's power state has been successfully changed.
-+ */
-+static int pci_set_low_power_state(struct pci_dev *dev, pci_power_t state)
-+{
-+	u16 pmcsr;
-+
-+	/* Check if we're already there */
-+	if (dev->current_state == state)
-+		return 0;
-+
-+	if (!dev->pm_cap)
-+		return -EIO;
-+
-+	if (state < PCI_D1 || state > PCI_D3hot)
-+		return -EINVAL;
-+
-+	/*
-+	 * Validate transition: We can enter D0 from any state, but if
-+	 * we're already in a low-power state, we can only go deeper.  E.g.,
-+	 * we can go from D1 to D3, but we can't go directly from D3 to D1;
-+	 * we'd have to go from D3 to D0, then to D1.
-+	 */
-+	if (dev->current_state <= PCI_D3cold && dev->current_state > state) {
-+		pci_err(dev, "invalid power transition (from %s to %s)\n",
-+			pci_power_name(dev->current_state),
-+			pci_power_name(state));
-+		return -EINVAL;
-+	}
-+
-+	/* Check if this device supports the desired state */
-+	if ((state == PCI_D1 && !dev->d1_support)
-+	   || (state == PCI_D2 && !dev->d2_support))
-+		return -EIO;
-+
-+	pci_read_config_word(dev, dev->pm_cap + PCI_PM_CTRL, &pmcsr);
-+	if (PCI_POSSIBLE_ERROR(pmcsr)) {
-+		pci_err(dev, "Unable to change power state from %s to %s, device inaccessible\n",
-+			pci_power_name(dev->current_state),
-+			pci_power_name(state));
-+		return -EIO;
-+	}
-+
-+	pmcsr &= ~PCI_PM_CTRL_STATE_MASK;
-+	pmcsr |= state;
-+
-+	/* Enter specified state */
-+	pci_write_config_word(dev, dev->pm_cap + PCI_PM_CTRL, pmcsr);
-+
-+	/* Mandatory power management transition delays; see PCI PM 1.2. */
-+	if (state == PCI_D3hot)
-+		pci_dev_d3_sleep(dev);
-+	else if (state == PCI_D2)
-+		udelay(PCI_PM_D2_DELAY);
-+
-+	pci_read_config_word(dev, dev->pm_cap + PCI_PM_CTRL, &pmcsr);
-+	dev->current_state = pmcsr & PCI_PM_CTRL_STATE_MASK;
-+	if (dev->current_state != state)
-+		pci_info_ratelimited(dev, "Refused to change power state from %s to %s\n",
-+				     pci_power_name(dev->current_state),
-+				     pci_power_name(state));
-+
-+	if (dev->bus->self)
-+		pcie_aspm_pm_state_change(dev->bus->self);
-+
-+	return 0;
-+}
-+
-+/**
-  * pci_set_power_state - Set the power state of a PCI device
-  * @dev: PCI device to handle.
-  * @state: PCI power state (D0, D1, D2, D3hot) to put the device into.
+Ah, so it is. Sorry for the noise!
 
+> > There' a latent bug here with the existing CFI scheme, since
+> > `machine_kexec` isn't marked with __nocfi, and should explode when calling
+> > `cpu_soft_restart` via the idmap.
+> 
+> But it's indeed missing from this one.
 
+Cool; I'll prep a patch that fixes just this, then.
 
+Thanks,
+Mark.

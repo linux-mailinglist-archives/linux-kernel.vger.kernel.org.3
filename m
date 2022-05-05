@@ -2,163 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DB4A51C509
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 18:22:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A67951C512
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 18:23:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242475AbiEEQ0C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 12:26:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47526 "EHLO
+        id S1381939AbiEEQ1K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 12:27:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234298AbiEEQZ7 (ORCPT
+        with ESMTP id S1381916AbiEEQ1F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 12:25:59 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0062D5BE4D
-        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 09:22:18 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C8152106F;
-        Thu,  5 May 2022 09:22:18 -0700 (PDT)
-Received: from [10.57.0.226] (unknown [10.57.0.226])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A28163FA31;
-        Thu,  5 May 2022 09:22:17 -0700 (PDT)
-Message-ID: <2c5761ce-6520-9101-e7de-69731114eea0@arm.com>
-Date:   Thu, 5 May 2022 17:22:14 +0100
+        Thu, 5 May 2022 12:27:05 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1022D5C36B
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 09:23:25 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id j6so4016944pfe.13
+        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 09:23:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=k7gsNgCyT247Xr3GRAEbCammiSXa3uZGYJnST76Cxwk=;
+        b=RVmSgg0C3UldZ+RyZHl8yul90x5S8rTQUwsgOGpohyALNMZJb/dKn2xVWmFGTEdiCF
+         icfX7tNfqVo8lyPRr4qhsubbnPL6smsK5FrE89rk26zXP9NU1q5YzSGTVVsN+a9RvN3j
+         7Nh4h4OV9IkVcLQcUo42aryIa4qPP4r88jB+k=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=k7gsNgCyT247Xr3GRAEbCammiSXa3uZGYJnST76Cxwk=;
+        b=GaoTbvs3+AbTrFtkne0PnlApK3SoRAQSNNLHV5XOV9NlqVGTNT+di6EjitbxaPqS13
+         BKO0S5Mre/ALtvEH+oGB6QfaGH+auoVfSnTm5+TumpbjRyom2JQS+xlNSCQbVXTvbDLs
+         hCGrA+QaUOXRdiMnQI9NM4iJ5FLcUKfTs0mxMiJ9ClztviXO2GLUkm6yJVlS5w0WPzOS
+         kU3Q1qX8BAfwA+ZEKhS3huEISkKDUPSgnHBbMr8vXZMxggLkJzH12PKuKJJX1rZw13Ff
+         Vj6SzE/2sFMSeGF9QiVz9jb+QxeYB4WHgP14XtSCpyXED+sSMybUbBnPUbxeVbceswNO
+         uzuA==
+X-Gm-Message-State: AOAM530P7uQb9lV+AF0CW7TxmH36vmCmlFIRs0/O0uPHJdNlm8mJsAPB
+        Kzj9HEs/qz7QwTotNC8IEJyJaA==
+X-Google-Smtp-Source: ABdhPJyCbUJfJSClHIgPHI9ZfCXrp9dbwQQvNWyR2JsIOw5em9iwuILh3Nu7K4NFe7FWksDwPqmjug==
+X-Received: by 2002:a63:2c53:0:b0:3c1:7367:3a0 with SMTP id s80-20020a632c53000000b003c1736703a0mr22747842pgs.516.1651767804424;
+        Thu, 05 May 2022 09:23:24 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id o184-20020a625ac1000000b0050dc76281c3sm1555418pfb.157.2022.05.05.09.23.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 May 2022 09:23:23 -0700 (PDT)
+Date:   Thu, 5 May 2022 09:23:23 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     Raju Rangoju <rajur@chelsio.com>,
+        kernel test robot <lkp@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        stable@vger.kernel.org, Heiner Kallweit <hkallweit1@gmail.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] net: chelsio: cxgb4: Avoid potential negative array
+ offset
+Message-ID: <202205050919.496AC46@keescook>
+References: <20220503144425.2858110-1-keescook@chromium.org>
+ <20220504201358.0ba62232@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.8.1
-Subject: Re: [PATCH v5 2/2] Documentation: Add document for UltraSoc SMB
- drivers
-To:     Qi Liu <liuqi115@huawei.com>, mathieu.poirier@linaro.org
-Cc:     coresight@lists.linaro.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linuxarm@huawei.com,
-        Jonathan_Lucas@mentor.com
-References: <20220416083953.52610-1-liuqi115@huawei.com>
- <20220416083953.52610-3-liuqi115@huawei.com>
-From:   Suzuki K Poulose <suzuki.poulose@arm.com>
-In-Reply-To: <20220416083953.52610-3-liuqi115@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220504201358.0ba62232@kernel.org>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16/04/2022 09:39, Qi Liu wrote:
-> This patch bring in a documentation for UltraSoc SMB drivers.
-> It simple descripts the device, sysfs interface and the
-> firmware bindings.
+On Wed, May 04, 2022 at 08:13:58PM -0700, Jakub Kicinski wrote:
+> On Tue,  3 May 2022 07:44:25 -0700 Kees Cook wrote:
+> > Using min_t(int, ...) as a potential array index implies to the compiler
+> > that negative offsets should be allowed. This is not the case, though.
+> > Replace min_t() with clamp_t(). Fixes the following warning exposed
+> > under future CONFIG_FORTIFY_SOURCE improvements:
 > 
-> Signed-off-by: Qi Liu <liuqi115@huawei.com>
-> ---
->   .../trace/coresight/ultrasoc-smb.rst          | 79 +++++++++++++++++++
->   1 file changed, 79 insertions(+)
->   create mode 100644 Documentation/trace/coresight/ultrasoc-smb.rst
+> > Additionally remove needless cast from u8[] to char * in last strim()
+> > call.
+> > 
+> > Reported-by: kernel test robot <lkp@intel.com>
+> > Link: https://lore.kernel.org/lkml/202205031926.FVP7epJM-lkp@intel.com
+> > Fixes: fc9279298e3a ("cxgb4: Search VPD with pci_vpd_find_ro_info_keyword()")
+> > Fixes: 24c521f81c30 ("cxgb4: Use pci_vpd_find_id_string() to find VPD ID string")
 > 
-> diff --git a/Documentation/trace/coresight/ultrasoc-smb.rst b/Documentation/trace/coresight/ultrasoc-smb.rst
-> new file mode 100644
-> index 000000000000..024fa4492f42
-> --- /dev/null
-> +++ b/Documentation/trace/coresight/ultrasoc-smb.rst
-> @@ -0,0 +1,79 @@
-> +.. SPDX-License-Identifier: GPL-2.0
-> +
-> +======================================
-> +UltraSoc - HW Assisted Tracing on SoC
-> +======================================
-> +   :Author:   Qi Liu <liuqi115@huawei.com>
-> +   :Date:     March 2022
-> +
-> +Introduction
-> +------------
-> +
-> +UltraSoc SMB is a per SCCL hardware, and it provides a way to buffer and store
+> Is it needed in the current release?
 
-nit: what is SCCL ?
+No, the build warning isn't in the current release, but I'm expecting to
+enable the next step of the FORTIFY work in the coming merge window.
 
-> +CPU trace messages in a region of shared system memory. SMB is plugged as
-> +a coresight sink device and the corresponding trace generators (ETM) are
-> +plugged in as source devices.
-> +
-> +Sysfs files and directories
-> +---------------------------
-> +
-> +The SMB devices appear on the existing coresight bus alongside the other
-> +coresight devices::
-> +
-> +	$# ls /sys/bus/coresight/devices/
-> +	ultra_smb0   ultra_smb1   ultra_smb2   ultra_smb3
-> +
-> +The ``ultra_smb<N>`` named SMB associated with SCCL.::
-> +
-> +	$# ls /sys/bus/coresight/devices/ultra_smb0
-> +	enable_sink   mgmt
-> +	$# ls /sys/bus/coresight/devices/ultra_smb0/mgmt
-> +	buf_size  buf_status  read_pos  write_pos
-> +
-> +*Key file items are:-*
-> +   * ``read_pos``: Shows the value held by UltraSoc SMB Read Pointer register.
-> +   * ``write_pos``: Shows the value held by UltraSoc SMB Write Pointer register.
-> +   * ``buf_status``: Shows the value held by UltraSoc SMB status register.
-> +		     BIT(0) is zero means buffer is empty.
-> +   * ``buf_size``: Shows the buffer size of each UltraSoc SMB device.
-> +
-> +Firmware Bindings
-> +---------------------------
-> +
-> +Firmware binding of SMB device describes SMB device indentifier, resource
-> +information and graph structure.
-> +
-> +SMB is platform device and device id is "HISI03A1", resource of device is
-> +declared using the _CRS method. Each SMB must present two base address,
-> +the first one is the configuration base address of SMB device, the second
-> +one is the base address of shared system memory.
-> +
-> +examples::
-> +
-> +    Device(USMB) {                                               \
-> +      Name(_HID, "HISI03A1")                                     \
-> +      Name(_CRS, ResourceTemplate() {                            \
-> +          MEM_RESRC(0x95100000, 0x951FFFFF, 0x100000)            \
-> +          MEM_RESRC(0x50000000, 0x53FFFFFF, 0x4000000)           \
-> +      })                                                         \
+> > -	memcpy(p->id, vpd + id, min_t(int, id_len, ID_LEN));
+> > +	memcpy(p->id, vpd + id, clamp_t(int, id_len, 0, ID_LEN));
+> 
+> The typing is needed because of the enum, right? The variable is
+> unsigned, seems a little strange to use clamp(int, ..., 0, constant)
+> min(unsigned int, ..., constant) will be equivalent with fewer branches.
+> Is it just me?
 
+Yes, due to the enum, but you're right; this could just use min_t(uint...
 
-> +      Name(_DSD, Package() {                                     \
-> +        ToUUID("ab02a46b-74c7-45a2-bd68-f7d344ef2153"),          \
+I'll respin!
 
-nit: May be add a comment here to explain, use Arm CoreSight Graph
-ACPI bindings to describe the connections.
-
-> +        Package() {                                              \
-> +          0,                                                     \
-> +          1,                                                     \
-> +          Package() {                                            \
-> +            1,                                                   \
-> +            ToUUID("3ecbc8b6-1d0e-4fb3-8107-e627f805c6cd"),      \
-> +            8,                                                   \
-> +            Package() {0x8, 0, \_SB.S00.SL11.CL28.F008, 0},       \
-> +            Package() {0x9, 0, \_SB.S00.SL11.CL29.F009, 0},       \
-> +            Package() {0xa, 0, \_SB.S00.SL11.CL2A.F010, 0},       \
-> +            Package() {0xb, 0, \_SB.S00.SL11.CL2B.F011, 0},       \
-> +            Package() {0xc, 0, \_SB.S00.SL11.CL2C.F012, 0},       \
-> +            Package() {0xd, 0, \_SB.S00.SL11.CL2D.F013, 0},       \
-> +            Package() {0xe, 0, \_SB.S00.SL11.CL2E.F014, 0},       \
-> +            Package() {0xf, 0, \_SB.S00.SL11.CL2F.F015, 0},       \
-> +          }                                                      \
-
-Interesting, are there multiple input ports for the SMB ? We haven't
-seen an instance of a "sink" that supports this. So, would be
-interesting to see how the driver copes with that scenario.
-
-Suzuki
-
-
-
-> +        }                                                        \
-> +      })                                                         \
-> +    }
-
+-- 
+Kees Cook

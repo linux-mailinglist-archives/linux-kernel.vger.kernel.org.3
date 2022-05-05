@@ -2,104 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D87651C467
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 17:58:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCC9151C476
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 18:01:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354277AbiEEQBu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 12:01:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49752 "EHLO
+        id S1381535AbiEEQDS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 12:03:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381560AbiEEQBS (ORCPT
+        with ESMTP id S239474AbiEEQDQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 12:01:18 -0400
-X-Greylist: delayed 519 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 05 May 2022 08:57:15 PDT
-Received: from relay.hostedemail.com (smtprelay0011.hostedemail.com [216.40.44.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 588B25C667
-        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 08:57:14 -0700 (PDT)
-Received: from omf11.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay07.hostedemail.com (Postfix) with ESMTP id 7E18621BEE;
-        Thu,  5 May 2022 15:48:34 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf11.hostedemail.com (Postfix) with ESMTPA id E73062002D;
-        Thu,  5 May 2022 15:48:32 +0000 (UTC)
-Message-ID: <ed8f50726d0a8b8e5dc9da14ce64039891b77b53.camel@perches.com>
-Subject: Re: [PATCH] checkpatch: warn about flushing system-wide workqueues
-From:   Joe Perches <joe@perches.com>
-To:     Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
-        Tejun Heo <tj@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andy Whitcroft <apw@canonical.com>,
-        Dwaipayan Ray <dwaipayanray1@gmail.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Date:   Thu, 05 May 2022 08:48:31 -0700
-In-Reply-To: <738afe71-2983-05d5-f0fc-d94efbdf7634@I-love.SAKURA.ne.jp>
-References: <d34dac10-c12f-8bda-35c4-9cb158781db2@I-love.SAKURA.ne.jp>
-         <a6288570ed3534b0316723061f5604e3871accef.camel@perches.com>
-         <6e4ed62e-888b-6e7a-c13d-67656f39ca94@I-love.SAKURA.ne.jp>
-         <738afe71-2983-05d5-f0fc-d94efbdf7634@I-love.SAKURA.ne.jp>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.40.4-1ubuntu2 
+        Thu, 5 May 2022 12:03:16 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2A28515A3;
+        Thu,  5 May 2022 08:59:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651766377; x=1683302377;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=4xPb5hYDEuqAvEmIzib3MGbfqSg4B/cO3p6boPn/ylU=;
+  b=BqTAWosly3ieVB3EZ002q1J4C6FzRvEhir7aYD3yAz0ULz7ABCIUvE2K
+   gPoHyCMbH46bfeCHIJ2IIYI9Rww/tkEkLM2BxtnahN95GJTNgRiEpc1bA
+   aCX3YIUZiTRd9OkD6B7EL6NbahdpEMmTJSUJ10IX4e9yyej54zvTITZK6
+   bRh6Uvi5iVdA/FzIuvCjIS7ODRxKJH97RGyD0z+ekqEVp/oQIoD5Fwt+P
+   YN2SPXyTu3tNNekoZWHMwYxDpvndODyT1VXixRPqBSw1Sfd8wXD94GZ/K
+   4D+2hguwzUuJCZLhwRGunUT83PEV44jKg/PunNEhpj7pZ+c125e1izWDw
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10338"; a="267756537"
+X-IronPort-AV: E=Sophos;i="5.91,201,1647327600"; 
+   d="scan'208";a="267756537"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2022 08:52:27 -0700
+X-IronPort-AV: E=Sophos;i="5.91,201,1647327600"; 
+   d="scan'208";a="585394297"
+Received: from zq-optiplex-7090.bj.intel.com ([10.238.156.125])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2022 08:52:26 -0700
+From:   Zqiang <qiang1.zhang@intel.com>
+To:     paulmck@kernel.org, frederic@kernel.org
+Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] rcu: Add rnp->cbovldmask check in rcutree_migrate_callbacks()
+Date:   Thu,  5 May 2022 23:52:36 +0800
+Message-Id: <20220505155236.1559619-1-qiang1.zhang@intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
-        KHOP_HELO_FCRDNS,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=no
-        autolearn_force=no version=3.4.6
-X-Stat-Signature: arimd99ims9sz1xexr6t1zgiaym4ssx6
-X-Rspamd-Server: rspamout08
-X-Rspamd-Queue-Id: E73062002D
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX18U2wAxqfm+TPfR8ZOIlZZ2wsrQkLgB3BM=
-X-HE-Tag: 1651765712-606268
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-05-05 at 22:42 +0900, Tetsuo Handa wrote:
-> On 2022/04/25 9:33, Tetsuo Handa wrote:
-> > On 2022/04/25 8:45, Joe Perches wrote:
-> > > And it's probably more readable using separate lines and it looks as
-> > > if the 3rd test is unnecessary as it could be combined with the 2nd.
-> > > 
-> > > 		if ($line =~ /\bflush_scheduled_work\s*\(/ ||
-> > > 		    $line =~ /\bflush_workqueue\s*\(\s*system(_\w*)?_wq\s*\)/) {
-> > 
-> > We don't need to worry about possibility like
-> > 
-> > 	flush_workqueue(system_module1_wq);
-> > 
-> > ? Then, we can simplify like you suggested.
-> 
-> I initially thought that also doing static checks by scripts/checkpatch.pl
-> is better than only doing runtime WARN_ON(). But not all patches are checked
-> by scripts/checkpatch.pl . Thus, as an attempt to check without exemptions,
-> I now think that doing static checks via BUILD_BUG_ON() is better than
-> scripts/checkpatch.pl . I sent below patch to linux-next.git , and so far
-> it seems working (I mean, no build failure reports caused by compilers).
-> 
-> Subject: workqueue: Wrap flush_workqueue() using a macro
-> 
-> A conversion to stop flushing kernel-global workqueues is in progress.
-> Wrap flush_workqueue() and inject BUILD_BUG_ON() checks, in order to
-> prevent users who are not aware of this conversion from again start
-> flushing kernel-global workqueues.
-[]
-> diff --git a/kernel/workqueue.c b/kernel/workqueue.c
-[]
-> @@ -2813,6 +2813,7 @@ static void warn_flush_attempt(struct workqueue_struct *wq)
->   * This function sleeps until all work items which were queued on entry
->   * have finished execution, but it is not livelocked by new incoming ones.
->   */
-> +#undef flush_workqueue
->  void flush_workqueue(struct workqueue_struct *wq)
+Currently, the rnp's cbovlmask is set in call_rcu(). when CPU going
+offline, the outgoing CPU's callbacks is migrated to target CPU, the
+number of callbacks on the my_rdp may be overloaded, if overload and
+there is no call_rcu() call on target CPU for a long time, the rnp's
+cbovldmask is not set in time. in order to fix this situation, add
+check_cb_ovld_locked() in rcutree_migrate_callbacks() to help CPU more
+quickly reach quiescent states.
 
-The #undef flush_workqueue could be removed by using
+Signed-off-by: Zqiang <qiang1.zhang@intel.com>
+---
+ kernel/rcu/tree.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-void (flush_workqueue)(struct workqueue_struct *wq)
-{
-	...
-}
-
+diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+index 9dc4c4e82db6..bcc5876c9753 100644
+--- a/kernel/rcu/tree.c
++++ b/kernel/rcu/tree.c
+@@ -4577,6 +4577,7 @@ void rcutree_migrate_callbacks(int cpu)
+ 	needwake = needwake || rcu_advance_cbs(my_rnp, my_rdp);
+ 	rcu_segcblist_disable(&rdp->cblist);
+ 	WARN_ON_ONCE(rcu_segcblist_empty(&my_rdp->cblist) != !rcu_segcblist_n_cbs(&my_rdp->cblist));
++	check_cb_ovld_locked(my_rdp, my_rnp);
+ 	if (rcu_rdp_is_offloaded(my_rdp)) {
+ 		raw_spin_unlock_rcu_node(my_rnp); /* irqs remain disabled. */
+ 		__call_rcu_nocb_wake(my_rdp, true, flags);
+-- 
+2.25.1
 

@@ -2,106 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61DD051B672
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 05:19:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 254DB51B685
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 05:21:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240992AbiEEDX0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 23:23:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49468 "EHLO
+        id S241089AbiEEDX3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 23:23:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231352AbiEEDXV (ORCPT
+        with ESMTP id S236815AbiEEDXV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 4 May 2022 23:23:21 -0400
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF4964A914;
-        Wed,  4 May 2022 20:19:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1651720784; x=1683256784;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=EjKATgGynEAXwguJ/QTN/z+daoE6vOAcRSvMpeZK+tM=;
-  b=tY+ocKKdIsKuzpS5L/sNJAVTom2Cl2STml8zxzkqnMBTzdynjmE4+Oih
-   JhaL9HTLe9MccgzW+VLmxfwXiVkgiIt3voJtDc4TwbHiSYP45tNe4b6Xc
-   07crhdBlWRDqx/VlqCTz4b3Y37kVJC9vu29v+ShvIu4tC6RpVDoInxGbj
-   Q=;
-Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 04 May 2022 20:19:43 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2022 20:19:43 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Wed, 4 May 2022 20:19:42 -0700
-Received: from [10.50.60.188] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Wed, 4 May 2022
- 20:19:38 -0700
-Message-ID: <3ea26a88-bdff-f7bc-0887-8678939912b1@quicinc.com>
-Date:   Thu, 5 May 2022 08:49:33 +0530
+Received: from mail-ot1-f43.google.com (mail-ot1-f43.google.com [209.85.210.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22CA44DF44;
+        Wed,  4 May 2022 20:19:44 -0700 (PDT)
+Received: by mail-ot1-f43.google.com with SMTP id c5-20020a9d75c5000000b00605ff3b9997so2197196otl.0;
+        Wed, 04 May 2022 20:19:44 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Yqvha5JiEOg0BqFJb68cq4K7lvQBkFi6q99HJWKVi7I=;
+        b=icSsnMl+MtK2B5fzF/5U9TNqq9Gzsknouk5GYbsqvlkdPEYHLMmC6z+OO7kX08HPiF
+         FE4pimbvDo1i+KIGB+ybNJT01LvJ9zEoL3soMQSkwrx9D3qlPPhFIlMdB6x6ljuMDaf8
+         fpHsERR195z5lMs4okroaCg0INudxmerxigz6U2wDLMUTqHYY7p+AlA++BmkkjW1VqQA
+         QCjioFC45s11bupcnqT1PFZiOADKqj6Mj5bGKCxJF7xPsz4UX5jKsKIL9LMPz1evo7Zv
+         wW7KJOboHSoGz/lOxH0sW1Wn8wJV5+X1Ip6tdykcoy3wH3kACJudYMEfSNxMjT3uN1j/
+         at6w==
+X-Gm-Message-State: AOAM531njWFcrdtCD39wWkpHFt+id/MAKnFxRn7z3KOmDNbMy6rklrvw
+        KjvimQItChxBfQjJ1wipQQ==
+X-Google-Smtp-Source: ABdhPJznORmirZQGS7vd9EyHowL4V4l2q++7ZFFUosNNbliY0OsyuT1Hz46Ncjg4IYM0YxRGp7esNA==
+X-Received: by 2002:a05:6830:33ca:b0:605:e2f6:d39c with SMTP id q10-20020a05683033ca00b00605e2f6d39cmr8367138ott.123.1651720783380;
+        Wed, 04 May 2022 20:19:43 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id l21-20020a544515000000b00325cda1ffb8sm240936oil.55.2022.05.04.20.19.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 May 2022 20:19:42 -0700 (PDT)
+Received: (nullmailer pid 2748179 invoked by uid 1000);
+        Thu, 05 May 2022 03:19:42 -0000
+Date:   Wed, 4 May 2022 22:19:42 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+Cc:     Peng Fan <peng.fan@nxp.com>, kernel@pengutronix.de,
+        linux-imx@nxp.com, robh+dt@kernel.org, s.hauer@pengutronix.de,
+        shawnguo@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, festevam@gmail.com
+Subject: Re: [PATCH V2 1/3] arm64: dts: freescale: Add i.MX93 dtsi support
+Message-ID: <YnNCTlM75jwRiyq2@robh.at.kernel.org>
+References: <20220503122951.4147636-1-peng.fan@oss.nxp.com>
+ <20220503122951.4147636-2-peng.fan@oss.nxp.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH 0/2] Disable MMIO tracing from QUP wrapper and serial
- driver
-Content-Language: en-US
-To:     Greg KH <gregkh@linuxfoundation.org>,
-        Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
-CC:     <agross@kernel.org>, <bjorn.andersson@linaro.org>,
-        <jirislaby@kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-serial@vger.kernel.org>,
-        <quic_msavaliy@quicinc.com>, <quic_vtanuku@quicinc.com>
-References: <1651488314-19382-1-git-send-email-quic_vnivarth@quicinc.com>
- <Ym/JYr3ltaKWqHQn@kroah.com>
-From:   Sai Prakash Ranjan <quic_saipraka@quicinc.com>
-In-Reply-To: <Ym/JYr3ltaKWqHQn@kroah.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220503122951.4147636-2-peng.fan@oss.nxp.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/2/2022 5:36 PM, Greg KH wrote:
-> On Mon, May 02, 2022 at 04:15:12PM +0530, Vijaya Krishna Nivarthi wrote:
->> Register read/write tracing is causing excessive
->> logging and filling the rtb buffer and effecting
->> performance.
->>
->> Disabled MMIO tracing from QUP wrapper and serial
->> driver to disable register read/write tracing.
->>
->> Vijaya Krishna Nivarthi (2):
->>    soc: qcom: geni: Disable MMIO tracing
->>    tty: serial: qcom_geni_serial: Disable MMIO tracing
->>
->>   drivers/soc/qcom/qcom-geni-se.c       | 8 +++++++-
->>   drivers/tty/serial/qcom_geni_serial.c | 8 +++++++-
->>   2 files changed, 14 insertions(+), 2 deletions(-)
->>
->> -- 
->>
-> Doesn't this series depend on the MMIO tracing series?  Why not just
-> make it part of that one?
->
-> confused,
->
-> greg k-h
->
->
+On Tue, 03 May 2022 20:29:49 +0800, Peng Fan (OSS) wrote:
+> From: Peng Fan <peng.fan@nxp.com>
+> 
+> The i.MX 93 applications processors are the first in the i.MX portfolio
+> to integrate the scalable Arm Cortex-A55 core, bringing performance
+> and energy efficiency to Linux-based edge applications and the
+> Arm Ethos-U65 microNPU, enabling developers to create more capable,
+> cost-effective and energy-efficient ML applications.
+> 
+> Add the basic dtsi support for i.MX93.
+> 
+> Signed-off-by: Peng Fan <peng.fan@nxp.com>
+> ---
+>  arch/arm64/boot/dts/freescale/imx93-pinfunc.h | 623 ++++++++++++++++++
+>  arch/arm64/boot/dts/freescale/imx93.dtsi      | 337 ++++++++++
+>  2 files changed, 960 insertions(+)
+>  create mode 100755 arch/arm64/boot/dts/freescale/imx93-pinfunc.h
+>  create mode 100644 arch/arm64/boot/dts/freescale/imx93.dtsi
+> 
 
-It is already a part of MMIO tracing series - https://lore.kernel.org/lkml/cover.1651663123.git.quic_saipraka@quicinc.com/
-There was some disconnect before but they have been informed. Now this series will be dropped and
-will be taken as part of MMIO tracing series.
-
-Thanks,
-Sai
+Acked-by: Rob Herring <robh@kernel.org>

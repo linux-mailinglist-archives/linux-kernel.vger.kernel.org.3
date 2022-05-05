@@ -2,162 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 590F051C67A
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 19:45:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F96C51C68B
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 19:51:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382895AbiEERsh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 13:48:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41718 "EHLO
+        id S1382519AbiEERyy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 13:54:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382959AbiEERsZ (ORCPT
+        with ESMTP id S237406AbiEERyu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 13:48:25 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D37CA3DDEF;
-        Thu,  5 May 2022 10:44:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6C17B61EF3;
-        Thu,  5 May 2022 17:44:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94A9DC385A4;
-        Thu,  5 May 2022 17:44:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651772683;
-        bh=Teb3Q304BRPr9GHaFHkSX1FTTJZAg7bcpJ2gS2O1gUk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=fyZnxm6EmNhd5VkUQQOadMjjpQ3ZBsdNhvPIKRNH4I5RMAV8E9Y1HXwvdEGjpIlqh
-         4GVvJuLTsrIJzQAMFNH3w+IfFdmWXZ1az03YUcBOqfhX24h05OMFWpH1v+qJui1jA3
-         ylJzkoL959AO0ibK/zq7NkKOqM1qNwTk8Rq1uXyguOFfnMNDmuCmjMPH0GIB51jZOP
-         yuSXZxVa0NYmIOEK8b2XuftHhl0CCUiXgOVl6zlqxtm/SaSy/c7tgiuUUdU7z/qwji
-         IpWT3/L2clXQVeV5K/Kq85QY/PbfG1wW8NRbt/KWCDBDJUaKh3GhIWE0uKK6h4sYBk
-         1aLgQvUMCafdg==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 08FED400B1; Thu,  5 May 2022 14:44:40 -0300 (-03)
-Date:   Thu, 5 May 2022 14:44:40 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Ian Rogers <irogers@google.com>
-Cc:     Thomas Richter <tmricht@linux.ibm.com>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>, svens@linux.ibm.com,
-        gor@linux.ibm.com, sumanthk@linux.ibm.com, hca@linux.ibm.com
-Subject: Re: [PATCH v2] perf test: Add skip to --per-thread test
-Message-ID: <YnQNCN2qbCBvkyqr@kernel.org>
-References: <20220503043400.2374052-1-irogers@google.com>
+        Thu, 5 May 2022 13:54:50 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E052D28E33;
+        Thu,  5 May 2022 10:51:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1651773059;
+        bh=r9fBrr7FwH7W9LRmDQgfqli9/FO04mumkS5KUN+Fqio=;
+        h=X-UI-Sender-Class:Date:In-Reply-To:References:Subject:Reply-to:To:
+         CC:From;
+        b=gk/gSaTLSzaEoiFc2mPGZ4K1Rcys0i28Eu+WHzlAwTPXZPcF4UZ0vaKG2hp9tVV55
+         66ffgtdUSYkY+u17Fs8qY7qKrrQHoDl8FmX7AKi4UoNrZOL2AFWtfHYJGirGT/RDb1
+         qr1qDpOBp/meL4FauWeqbtlI0O0nj602bgj15t7Y=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from frank-s9 ([217.61.145.208]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1N2mBQ-1nwnV92Sy4-0132QR; Thu, 05
+ May 2022 19:50:59 +0200
+Date:   Thu, 05 May 2022 19:50:56 +0200
+User-Agent: K-9 Mail for Android
+In-Reply-To: <YnLEwEIOqnLGxFjJ@kroah.com>
+References: <20220504174823.156709-1-linux@fw-web.de> <YnLEwEIOqnLGxFjJ@kroah.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220503043400.2374052-1-irogers@google.com>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [RFC v1] opp: add config option for debug
+Reply-to: frank-w@public-files.de
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Frank Wunderlich <linux@fw-web.de>
+CC:     linux-pm@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-kernel@vger.kernel.org
+From:   Frank Wunderlich <frank-w@public-files.de>
+Message-ID: <E08A9747-2F96-42A7-A427-0E00D4075CF0@public-files.de>
+X-Provags-ID: V03:K1:+1AIM9qLsiUaMHn1Nne6xcZJg75ywWG9yhRsl+x8MvbEGOmmlfp
+ qZpIE8jgusQpzDhDiY4rw7YkuilHUSmy2ZOHuRr55RyLCxjcAVlNurRUd6zfAxNweovbANH
+ i/GlkpQ9M/bYyE0Ni277f0DEpE9LcCv8G/jEq31y7gc4xfMvsxP5Jk0tuLBqkzbdHglQZCV
+ f35GRXSnaYNmzVvNlqIkg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:2kcDMSfUhf8=:AbmWbmcTdR0wPNlPXIiz4g
+ oeB1RaYHEq+d2O81QmMN0uGRAE6vHKJh+WhgUqfaP5HucWNFZ2NKvDfE+NRF5NciJgH2UT404
+ ptybWn+0c8XHuGQ3lyoFWgxC6eP6vz17WzafeTYv1iZYtM+JeyU6w+BpbJRb84qmTaOxTkhuL
+ vGdjwh1pYDRkb1Di0T4HEKKhoGK5ueG+Hx+GZgnhQc6THLbHoR4pivPuH9KwW3GE/fvZ08OZs
+ utCsXFhOiDzEY5nqVXUNMQi2bB8RVpuCRitIXX+opA3Y6x4nyqW3XLn2DBAqs/Nm5WiV2PnQi
+ XUGBIi1qnafm7v6aUB9OYdQ/twl9zeXk065KukswR5lchPJnk8moO6dEgSgk1GBa7Yz1G39Z2
+ /HgmUpECfU9G/sJwdf92/yHoUFUctGX84fZAxkJ+Y6ZzoF/dY/3kJvJPEzQ6jqvmrjIAXslCD
+ Vlfit+G+COaO+JIcKYE1kYeTJrAAJf9M/AYqLlicvA37aIKjo3P6QCu0eSJuLmpt86tXgjN8I
+ kaAiifZ6IXv70zsViKX1fnQ64Gw+mIO0UeNXg2Av/nqTcYGhtxxDC0prV2dG63rpJSqDq7h5y
+ CvxNXw5A+ECzYYKaaqXZg11lniHmRCaJNB6feYDz73lOyx5jPc7/TzE55X6V1gdZuB9KFIBwI
+ 7wqlaJEa6RytvkstCIhniRGIpE8RKpeG6Z30RC2WuePEM8RlkRUEOWh8zRepT/jueOu2Lp5CY
+ 8gCk0hKUBDG0UVOCd9PmHtfqFfmS1i3wiTqxOqGfigq1CXstH/MPnDfWhCKAFUjw7mo3LaJCR
+ TwQC8s17vuRdEwjGHBv5tAref4irinYqZ2yVRGbAtfvbdarQ3JxpK2oU1XP0TXQoRhoA3iOYv
+ sQBHlaNIOwCKKWKoFc5g+kLsT/FIYxTw46Xm4Prauk1JztZfMkVhJ6rAsqbt9SAC4zaMFPeOc
+ megI8Bz2IEW0LjiaCC/JJjhQoh7gBARKNEPw2pT1l0w2UJBNa/PNsr7TxsVW8LShovDayH1fY
+ v60872N04dtQguPn3OM5c/TPLVNObhfzgoLyh7AkCZyugELIM23neSrZ/bhkTtHqycJpM/0Jr
+ ZQHR07KcNiI3ig=
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Mon, May 02, 2022 at 09:34:00PM -0700, Ian Rogers escreveu:
-> As reported in:
-> https://lore.kernel.org/linux-perf-users/20220428122821.3652015-1-tmricht@linux.ibm.com/
-> the 'instructions:u' event may not be supported. Add a skip using 'perf
-> record'.
-> 
-> Switch some code away from pipe to make the failures clearer.
+Hi,
 
-Can you please resubmit this on top of my perf/core branch? I had
-already applied Thomas fix and published perf/core publicly, so I rather
-not rebase at this point.
+Am 4=2E Mai 2022 20:24:00 MESZ schrieb Greg Kroah-Hartman <gregkh@linuxfou=
+ndation=2Eorg>:
+>On Wed, May 04, 2022 at 07:48:23PM +0200, Frank Wunderlich wrote:
+>> From: Frank Wunderlich <frank-w@public-files=2Ede>
+>>=20
+>> Currently OPP debug is enabled by DEBUG_DRIVER option=2E This is
+>generic
+>> driver debug and opp floods serial console=2E This is annoying if opp
+>is
+>> not needed so give it an additional config-key=2E
+>>=20
+>> Signed-off-by: Frank Wunderlich <frank-w@public-files=2Ede>
+>> ---
+>>  drivers/base/Kconfig | 1 +
+>>  drivers/opp/Kconfig  | 7 +++++++
+>>  drivers/opp/Makefile | 2 +-
+>>  3 files changed, 9 insertions(+), 1 deletion(-)
+>>=20
+>> diff --git a/drivers/base/Kconfig b/drivers/base/Kconfig
+>> index 6f04b831a5c0=2E=2E8ae826c95d5f 100644
+>> --- a/drivers/base/Kconfig
+>> +++ b/drivers/base/Kconfig
+>> @@ -130,6 +130,7 @@ config DEV_COREDUMP
+>>  config DEBUG_DRIVER
+>>  	bool "Driver Core verbose debug messages"
+>>  	depends on DEBUG_KERNEL
+>> +	imply DEBUG_OPP
+>
+>This should not be needed, otherwise we would have to do that for all
+>random driver subsystem in the kernel=2E
 
-Basically get your current tools/perf/tests/shell/record.sh file, with
-this fix, copy it, clone my perf/core branch, copy
-tools/perf/tests/shell/record.sh there and commit, then please resubmit
-:-)
+Have added this to have same behaviour if anyone sets DEBUG_DRIVER via def=
+config=2E Else this is disabled by default=2E
 
-- Arnaldo
- 
-> Reported-by: Thomas Richter <tmricht@linux.ibm.com>
-> Tested-by: Thomas Richter <tmricht@linux.ibm.com>
-> Signed-off-by: Ian Rogers <irogers@google.com>
-> ---
->  tools/perf/tests/shell/record.sh | 44 +++++++++++++++++++++++++++++---
->  1 file changed, 41 insertions(+), 3 deletions(-)
-> 
-> diff --git a/tools/perf/tests/shell/record.sh b/tools/perf/tests/shell/record.sh
-> index cd1cf14259b8..00c7285ce1ac 100755
-> --- a/tools/perf/tests/shell/record.sh
-> +++ b/tools/perf/tests/shell/record.sh
-> @@ -5,11 +5,43 @@
->  set -e
->  
->  err=0
-> +perfdata=$(mktemp /tmp/__perf_test.perf.data.XXXXX)
-> +
-> +cleanup() {
-> +  rm -f ${perfdata}
-> +  rm -f ${perfdata}.old
-> +  trap - exit term int
-> +}
-> +
-> +trap_cleanup() {
-> +  cleanup
-> +  exit 1
-> +}
-> +trap trap_cleanup exit term int
-> +
->  test_per_thread() {
->    echo "Basic --per-thread mode test"
-> -  perf record -e instructions:u --per-thread -o- true 2> /dev/null \
-> -    | perf report -i- -q \
-> -    | egrep -q true
-> +  if ! perf record -e instructions:u -o ${perfdata} --quiet true 2> /dev/null
-> +  then
-> +    echo "Per-thread record [Skipped instructions:u not supported]"
-> +    if [ $err -ne 1 ]
-> +    then
-> +      err=2
-> +    fi
-> +    return
-> +  fi
-> +  if ! perf record -e instructions:u --per-thread -o ${perfdata} true 2> /dev/null
-> +  then
-> +    echo "Per-thread record of instructions:u [Failed]"
-> +    err=1
-> +    return
-> +  fi
-> +  if ! perf report -i ${perfdata} -q | egrep -q true
-> +  then
-> +    echo "Per-thread record [Failed missing output]"
-> +    err=1
-> +    return
-> +  fi
->    echo "Basic --per-thread mode test [Success]"
->  }
->  
-> @@ -18,6 +50,10 @@ test_register_capture() {
->    if ! perf list | egrep -q 'br_inst_retired.near_call'
->    then
->      echo "Register capture test [Skipped missing instruction]"
-> +    if [ $err -ne 1 ]
-> +    then
-> +      err=2
-> +    fi
->      return
->    fi
->    if ! perf record --intr-regs=\? 2>&1 | egrep -q 'available registers: AX BX CX DX SI DI BP SP IP FLAGS CS SS R8 R9 R10 R11 R12 R13 R14 R15'
-> @@ -39,4 +75,6 @@ test_register_capture() {
->  
->  test_per_thread
->  test_register_capture
-> +
-> +cleanup
->  exit $err
-> -- 
-> 2.36.0.464.gb9c8b46e94-goog
+>>  	help
+>>  	  Say Y here if you want the Driver core to produce a bunch of
+>>  	  debug messages to the system log=2E Select this if you are having a
+>> diff --git a/drivers/opp/Kconfig b/drivers/opp/Kconfig
+>> index e8ce47b32735=2E=2E6a2d2c6c1143 100644
+>> --- a/drivers/opp/Kconfig
+>> +++ b/drivers/opp/Kconfig
+>> @@ -12,3 +12,10 @@ config PM_OPP
+>>  	  representing individual voltage domains and provides SOC
+>>  	  implementations a ready to use framework to manage OPPs=2E
+>>  	  For more information, read <file:Documentation/power/opp=2Erst>
+>> +
+>> +menu "Operating Performance Points (OPP)"
+>> +config DEBUG_OPP
+>> +	bool "Debug Operating Performance Points"
+>> +	help
+>> +	  enable opp debugging
+>> +endmenu
+>> diff --git a/drivers/opp/Makefile b/drivers/opp/Makefile
+>> index f65ed5985bb4=2E=2E2589915eef95 100644
+>> --- a/drivers/opp/Makefile
+>> +++ b/drivers/opp/Makefile
+>> @@ -1,5 +1,5 @@
+>>  # SPDX-License-Identifier: GPL-2=2E0-only
+>> -ccflags-$(CONFIG_DEBUG_DRIVER)	:=3D -DDEBUG
+>> +ccflags-$(CONFIG_DEBUG_OPP)	:=3D -DDEBUG
+>
+>This feels wrong, you shouldn't need a -DDEBUG for anything if all is
+>going correctly=2E  Why is opp so odd this way?  Just use the normal
+>dev_dbg() macros and all will be fine, nothing special should be needed
+>at all=2E
 
--- 
+I have looked more into it,just wanted to get driver debug (probing/bindin=
+g) and dev_dbg messages without the opp spam (floods serial console)=2E
 
-- Arnaldo
+>And don't use a config option for it either, no one will turn it on, it
+>needs to "just work" for all systems=2E
+
+Config option is to enable if needed and not via driver-debug=2E
+
+>thanks,
+>
+>greg k-h
+
+
+regards Frank

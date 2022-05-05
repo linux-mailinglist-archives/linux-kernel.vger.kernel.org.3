@@ -2,98 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94AEA51BB84
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 11:10:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D65A51BBA2
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 11:12:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351806AbiEEJOH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 05:14:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52454 "EHLO
+        id S1352025AbiEEJQ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 05:16:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351713AbiEEJOE (ORCPT
+        with ESMTP id S1351912AbiEEJQ1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 05:14:04 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4380D6165
-        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 02:10:22 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id dk23so7490411ejb.8
-        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 02:10:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=c8YCaE+5K/dsPc+9iPR/du6PTroxvuxyU+b5yayfxT0=;
-        b=BR9/PiFUmueB+D/dPuLP5gschdU/Btt/V6TifIiCR9DF9iMhXyAll6y6HgiXExHK5f
-         LCVDrMZOR/Kn+bqkWVXn1PHgfgjAbOlqka3Iu1awF0njedHmUvHbvwbnMVW/mnuaJcTN
-         zSe0NjynuCAT9rJckKeozN4VOfdarIDSP2C4abZ3zH6fK8QCWzDJH3bFgx23pC0e10yX
-         a8nPQqMNzz4Ftzl9gTIDqvSo8tyjX09k6MqEhCJ71sPOqnY3ZuW59KgBVzv6f2V4Vdwp
-         VBbQ6bvT6rn4vslTrJSz8so4skmLZe5YuaKHws5ojTgR5418yqOhNzZUMdzZY3Xp84Ir
-         LPtg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=c8YCaE+5K/dsPc+9iPR/du6PTroxvuxyU+b5yayfxT0=;
-        b=iEJeNFLpF6AL5gWoWk22a5eZA3fWeegGYVKugPPW5d+u3q0cpS/ctG2pbkEvpdnG06
-         EDAOrSBS/PEppIMGsHAL4lA2LAB3HysuHBaDagoWNOL2HssaAlJbeP4QgiRulvFelQ3P
-         /bnMfF3oibrnGSoNLmdWVx2Y8esPn4o9zwaUThsviBHdaUglc9HJGbBilVTPs4ZPq5uc
-         5SEifxe9jb7sfc+cV8F9oVXCB27S227UZ4vRZLjqYp4+VYY2UT7GTfBrbBnfKC8S7r6S
-         w3Mw86ROfvqe8GNDypAiu6SJNGnj02vvZga/+dBzk62YsC3t9Ly6k7u0U6agDkku2o/f
-         KV2Q==
-X-Gm-Message-State: AOAM530PnYXLow8Iwvy8oog6eOPqQdMkwmDg3nQc8vjDMqTDjA3420qW
-        2ga+JW3+1n3esqpMhPY9NouD8A==
-X-Google-Smtp-Source: ABdhPJz7tsXlNRMPlAktkJhnba7TvMyZHIV5xs8SGanC49KbwY/dkQKKC6fYnLD9+ao8S0FbRuugvg==
-X-Received: by 2002:a17:907:1c24:b0:6f4:ff62:a393 with SMTP id nc36-20020a1709071c2400b006f4ff62a393mr643548ejc.154.1651741820790;
-        Thu, 05 May 2022 02:10:20 -0700 (PDT)
-Received: from [192.168.0.217] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id el22-20020a170907285600b006f3ef214e1dsm511229ejc.131.2022.05.05.02.10.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 05 May 2022 02:10:20 -0700 (PDT)
-Message-ID: <e0af5143-7fe1-fa68-25c0-eb81d695844a@linaro.org>
-Date:   Thu, 5 May 2022 11:10:19 +0200
+        Thu, 5 May 2022 05:16:27 -0400
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66D3A4BFCB;
+        Thu,  5 May 2022 02:12:48 -0700 (PDT)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2459CaQP083383;
+        Thu, 5 May 2022 04:12:36 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1651741956;
+        bh=ikGXkgdLE1DkMj1btIvsFn4UR8U22+rJPBhuFGJ5eJ8=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=MNzJbU/JMAvu+V2Fg092jIbIPFypbpkdLhhWUBD3bKafF0Cjs/K/ANN6VkVdcr/S8
+         UAteGvcYiIE1E96p/Ps+rzdoDFj1tAwyCmV9zA+CvuaJ0XlvSYmiB9ym3lKea/4Xpp
+         8m8Ux7IU6EnFuXVo/Em7BdEzOi9yR/1pR8Ctm7cE=
+Received: from DFLE106.ent.ti.com (dfle106.ent.ti.com [10.64.6.27])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2459Ca94121330
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 5 May 2022 04:12:36 -0500
+Received: from DFLE102.ent.ti.com (10.64.6.23) by DFLE106.ent.ti.com
+ (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Thu, 5
+ May 2022 04:12:35 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE102.ent.ti.com
+ (10.64.6.23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Thu, 5 May 2022 04:12:35 -0500
+Received: from [172.24.223.223] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2459CVlv094171;
+        Thu, 5 May 2022 04:12:32 -0500
+Message-ID: <205118bb-d74d-3966-d89e-95e385154760@ti.com>
+Date:   Thu, 5 May 2022 14:42:31 +0530
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.8.1
-Subject: Re: [PATCH] dt-bindings: remoteproc: Fix phandle-array parameters
- description
+Subject: Re: [PATCH v5 0/2] DSS: Add support for DisplayPort
 Content-Language: en-US
-To:     Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>
-Cc:     devicetree@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org,
-        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220504094143.1272200-1-arnaud.pouliquen@foss.st.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220504094143.1272200-1-arnaud.pouliquen@foss.st.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Rahul T R <r-ravikumar@ti.com>, <nm@ti.com>
+CC:     <vigneshr@ti.com>, <kristo@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <tomi.valkeinen@ideasonboard.com>,
+        <laurent.pinchart@ideasonboard.com>, <kishon@ti.com>
+References: <20220429112639.13004-1-r-ravikumar@ti.com>
+From:   Aradhya Bhatia <a-bhatia1@ti.com>
+In-Reply-To: <20220429112639.13004-1-r-ravikumar@ti.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/05/2022 11:41, Arnaud Pouliquen wrote:
-> Replace the FIXME by appropriate description.
+
+On 29/04/22 16:56, Rahul T R wrote:
+> The following series of patches enables DisplayPort on
+> j721e-evm
 > 
-> Fixes: 39bd2b6a3783 ("dt-bindings: Improve phandle-array schemas")
-> Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
-> ---
->  .../bindings/remoteproc/st,stm32-rproc.yaml      | 16 ++++++++--------
+> v2:
+>    - use phandle with a parameter to refer clocks insted of
+>      sub nodes in serdes_wiz node
+>    - move phy link node to board DTS file
+> 
+> v3:
+>    - Fix the regulator node name as per the DT spec
+>    - Use Macro for GPIO type
+> 
+> v4:
+>    - Move adding of phy link nodes from 2/2 to 1/2, to fix dtbs checks warnings
+>    - Add leading zeros to align reg property addresses and sizes
+>    - Add empty ports for mhdp node in dtsi file to fix dtbs checks warnings
+> 
+> v5:
+>    - Fix a typo in regulator name
+> 
+> boot logs:
+>    https://gist.githubusercontent.com/ravi-rahul/1bdbc3f77ab381e486c8394650c2e85d/raw/2327c9894c3236950a00f4511ae668ac4399b71e/j7_DP_upstream.log
+> 
+> kernel patch verify report:
+>    https://gist.githubusercontent.com/ravi-rahul/a982fef3fae03ec0dbdd5cb475a4cb25/raw/9ef482f96fa351cff7980e4340e9bcb8471ec3ab/report-kernel-patch-verify.txt
+> 
+> Tomi Valkeinen (2):
+>   arm64: dts: ti: k3-j721e-*: add DP & DP PHY
+>   arm64: dts: ti: k3-j721e-common-proc-board: add DP to j7 evm
+> 
+>  .../dts/ti/k3-j721e-common-proc-board.dts     | 77 ++++++++++++++++++-
+>  arch/arm64/boot/dts/ti/k3-j721e-main.dtsi     | 75 +++++++++++++++++-
+>  arch/arm64/boot/dts/ti/k3-j721e-sk.dts        | 16 ++++
+>  3 files changed, 162 insertions(+), 6 deletions(-)
+> 
 
-Please add "st,stm32-rproc" as last prefix in the subject. With that:
-
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-
-Best regards,
-Krzysztof
+Reviewed-by: Aradhya Bhatia <a-bhatia1@ti.com>

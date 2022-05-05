@@ -2,87 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 665E351C306
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 16:52:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C95151C314
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 16:55:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380855AbiEEOzo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 10:55:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46574 "EHLO
+        id S1380377AbiEEO7D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 10:59:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380847AbiEEOzj (ORCPT
+        with ESMTP id S1380882AbiEEO6x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 10:55:39 -0400
-Received: from us-smtp-delivery-74.mimecast.com (us-smtp-delivery-74.mimecast.com [170.10.129.74])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 68A2156FBB
-        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 07:51:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651762318;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=uM+ofZNcfgbacCYmlCH29DRYVtctL+nEHY0EJrvY55Y=;
-        b=AsMVoOj5RR2T7fIl62bIhAYSeht0nMfldc84T2HgkOn2K2+1vUCyOsEjeEDAPy43ptosYw
-        xLhnYc487J9SS6K2tUJUtcIDDrAjP5/yI2IocvZztzi2ma+Xqmpk0ATE9Jb8gaskWqIt1c
-        kjFOnedYsMtRa7OmusYLPMY/BI7qUws=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-101-bgtXw1kJNk2TCtSyx28gWA-1; Thu, 05 May 2022 10:51:58 -0400
-X-MC-Unique: bgtXw1kJNk2TCtSyx28gWA-1
-Received: by mail-wm1-f69.google.com with SMTP id o24-20020a05600c379800b003943412e81dso1848075wmr.6
-        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 07:51:57 -0700 (PDT)
+        Thu, 5 May 2022 10:58:53 -0400
+Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45AB01AC
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 07:55:13 -0700 (PDT)
+Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-2f7d7e3b5bfso51237497b3.5
+        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 07:55:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=aGHiFO3Q2GyTnfB7Hhe97atxz9YJ8sx20qf9bbbh8jo=;
+        b=VFh+snB9uGYQmmKtSbOCoSL8JSFtaNxu2zjGmnaWE9f+P24swIN4CwpvPFCiTmB628
+         54hkjrMLWS3tFUDpDwJ4ucT4uHnT6B1BkgT38p24AQDA6NKt+F6EUMVzD3R3K2BOavDL
+         xjwfg7WGPF16Q9jWNhiEpU1P0xJOUOzBhsWNtjzQjzbKxchDwjGZBr+jtIZFm3tLAY8J
+         4eQE98LGsT3IC/DEU4oFJk3os0o/RRc7mNal1DrKji7OvhOoKROfHtENqL7cepYScYsm
+         nHRW/F7NiYhTVXGlZWWWRgBnPO+yMZizGlIFUm2nrgsP2gGW/j/Tckcsc08ulup4jrDo
+         V9yQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=uM+ofZNcfgbacCYmlCH29DRYVtctL+nEHY0EJrvY55Y=;
-        b=A4P7uCaf/ai/hiT9/xyZC8YJ5r0zgx6ZiSvxDk78HwYuQWfQsae3EqTKBr98eWSm0U
-         3fnbFM7hLU1XW09KD7cBk4nPxLA8PTyUFH0vT168Merxy7f9Xcgxu1prbfwZsQO8hV1X
-         8kzOqJ1B2Vrs9US7/lS7AomPcWbnaFlQwJnMtPt6xWMvVAgwmn5532Qrpq9OOWKbrjgY
-         bDAAg0MWMTuSkOoO/89sO1BupZAwEaU4YTXY3b+LGSk+BN6pHSr1oCm3/ns2yvD1mGKb
-         YW7ldS0uD09riG8LOpbaJtaZMhcgYlVqxGOcksQHXNyhJMmuRM3YtIwKloNfgJgI7FuV
-         iGeg==
-X-Gm-Message-State: AOAM532b91ViuOqd4GvMDtdiWY5MOzwAd4Fyhjmbmpu6zjqoIaNlmWKh
-        pVMfs6TBml8d8lz9Uow1O/IqES9XuKBDeZ+g1ICEiS3Ukkr2mAqUkTlvbC0lJkuI4NWvKmEZ5fX
-        DM8gkcVZYVyPO2sKspy0dggw9
-X-Received: by 2002:a1c:6a1a:0:b0:394:272e:5bdf with SMTP id f26-20020a1c6a1a000000b00394272e5bdfmr5347729wmc.55.1651762316173;
-        Thu, 05 May 2022 07:51:56 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwzZ199d4B0hb5YxHFT/G5vw6e8Q1vc2C0FJNM5txW7lPwaFe4IrmxdRb6YfGAM2P9o3lQ5lw==
-X-Received: by 2002:a1c:6a1a:0:b0:394:272e:5bdf with SMTP id f26-20020a1c6a1a000000b00394272e5bdfmr5347690wmc.55.1651762315893;
-        Thu, 05 May 2022 07:51:55 -0700 (PDT)
-Received: from fedora (nat-2.ign.cz. [91.219.240.2])
-        by smtp.gmail.com with ESMTPSA id 25-20020a05600c029900b003942a244ed1sm1524096wmk.22.2022.05.05.07.51.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 May 2022 07:51:55 -0700 (PDT)
-From:   Vitaly Kuznetsov <vkuznets@redhat.com>
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        will Deacon <will@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Ard Biesheuvel <ardb@kernel.org>, broonie@kernel.org,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>
-Subject: Re: Should arm64 have a custom crash shutdown handler?
-In-Reply-To: <YnPf3KPBXDNTpQoG@FVFF77S0Q05N.cambridge.arm.com>
-References: <427a8277-49f0-4317-d6c3-4a15d7070e55@igalia.com>
- <874k24igjf.wl-maz@kernel.org>
- <92645c41-96fd-2755-552f-133675721a24@igalia.com>
- <YnPIwjLMDXgII1vf@FVFF77S0Q05N.cambridge.arm.com>
- <3bee47db-f771-b502-82a3-d6fac388aa89@igalia.com>
- <878rrg13zb.fsf@redhat.com>
- <YnPf3KPBXDNTpQoG@FVFF77S0Q05N.cambridge.arm.com>
-Date:   Thu, 05 May 2022 16:51:54 +0200
-Message-ID: <87y1zgyqut.fsf@redhat.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=aGHiFO3Q2GyTnfB7Hhe97atxz9YJ8sx20qf9bbbh8jo=;
+        b=1gkqOqXiO0U4DmKYvb1wZoG+qPI+2EKGoUvXOBjpy3iVHP9HEzXjJpv7ypcdKOZoLt
+         t2uiH2BaASIAdC9PW9aJDr7QWGx9wL0hau/odUKVy/MhFevS5KgsYzpYhVGvhRzpvjun
+         1OnYhQbZX7BJ8tsj6KxgIJuESJZQRcAWGW9mMnarkfhb33J1BDUHDR313C7wzYh+QFUO
+         cDqC1/izLMZegckjLsN/CmnDgI0M9zZjhUjf5ntpN3TRN7B0etA61XaLVbLhg/V1pDE8
+         0BMSIIrHpjDE6gN6QSQ4pksDhX8JEFt6QL4MJzjpy+FzL795A/zHISIAi1orBJuaFrG9
+         tOXA==
+X-Gm-Message-State: AOAM531qaCbnybfcl9F5TmyjIBdsHd/XwCV19aUsTRolZR2aC2IsUmux
+        cc0UWwfEiRCCXYjAzNOpQB+8w8PDNhu5tkgqnnwA5w==
+X-Google-Smtp-Source: ABdhPJwZc6opbBFF0AOuDeLOhjI04yiu7l0ndLHKUYTUT+szpJdEcuwMXuAdroZkyOb5a8tN6a5PD9Kx4r+L4KF5Ti4=
+X-Received: by 2002:a81:2154:0:b0:2f4:d79e:35dc with SMTP id
+ h81-20020a812154000000b002f4d79e35dcmr25016995ywh.126.1651762512406; Thu, 05
+ May 2022 07:55:12 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20220428111622.1395831-1-michael@walle.cc>
+In-Reply-To: <20220428111622.1395831-1-michael@walle.cc>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Thu, 5 May 2022 16:55:01 +0200
+Message-ID: <CACRpkdZjsdkq2KP-k0pwB5KZo25AeTgW_-iAZ4K84A=s1_+gnQ@mail.gmail.com>
+Subject: Re: [PATCH] pinctrl: microchip-sgpio: make irq_chip immutable
+To:     Michael Walle <michael@walle.cc>
+Cc:     Marc Zyngier <maz@kernel.org>,
+        Lars Povlsen <lars.povlsen@microchip.com>,
+        Steen Hegelund <Steen.Hegelund@microchip.com>,
+        UNGLinuxDriver@microchip.com, linux-arm-kernel@lists.infradead.org,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,99 +69,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Mark Rutland <mark.rutland@arm.com> writes:
+On Thu, Apr 28, 2022 at 1:16 PM Michael Walle <michael@walle.cc> wrote:
 
-> On Thu, May 05, 2022 at 03:52:24PM +0200, Vitaly Kuznetsov wrote:
->> "Guilherme G. Piccoli" <gpiccoli@igalia.com> writes:
->> 
->> > On 05/05/2022 09:53, Mark Rutland wrote:
->> >> [...]
->> >> Looking at those, the cleanup work is all arch-specific. What exactly would we
->> >> need to do on arm64, and why does it need to happen at that point specifically?
->> >> On arm64 we don't expect as much paravirtualization as on x86, so it's not
->> >> clear to me whether we need anything at all.
->> >> 
->> >>> Anyway, the idea here was to gather a feedback on how "receptive" arm64
->> >>> community would be to allow such customization, appreciated your feedback =)
->> >> 
->> >> ... and are you trying to do this for Hyper-V or just using that as an example?
->> >> 
->> >> I think we're not going to be very receptive without a more concrete example of
->> >> what you want.
->> >> 
->> >> What exactly do *you* need, and *why*? Is that for Hyper-V or another hypervisor?
->> >> 
->> >> Thanks
->> >> Mark.
->> >
->> > Hi Mark, my plan would be doing that for Hyper-V - kind of the same
->> > code, almost. For example, in hv_crash_handler() there is a stimer
->> > clean-up and the vmbus unload - my understanding is that this same code
->> > would need to run in arm64. Michael Kelley is CCed, he was discussing
->> > with me in the panic notifiers thread and may elaborate more on the needs.
->> >
->> > But also (not related with my specific plan), I've seen KVM quiesce code
->> > on x86 as well [see kvm_crash_shutdown() on arch/x86] , I'm not sure if
->> > this is necessary for arm64 or if this already executing in some
->> > abstracted form, I didn't dig deep - probably Vitaly is aware of that,
->> > hence I've CCed him here.
->> 
->> Speaking about the difference between reboot notifiers call chain and
->> machine_ops.crash_shutdown for KVM/x86, the main difference is that
->> reboot notifier is called on some CPU while the VM is fully functional,
->> this way we may e.g. still use IPIs (see kvm_pv_reboot_notify() doing
->> on_each_cpu()). When we're in a crash situation,
->> machine_ops.crash_shutdown is called on the CPU which crashed. We can't
->> count on IPIs still being functional so we do the very basic minimum so
->> *this* CPU can boot kdump kernel. There's no guarantee other CPUs can
->> still boot but normally we do kdump with 'nprocs=1'.
+> Since recently, the kernel is nagging about mutable irq_chips:
 >
-> Sure; IIUC the IPI problem doesn't apply to arm64, though, since that doesn't
-> use a PV mechanism (and practically speaking will either be GICv2 or GICv3).
+> [    4.967050] gpio gpiochip1: (e2004190.gpio-input): not an immutable chip, please consider fixing it!
 >
-
-This isn't really about PV: when the kernel is crashing, you have no
-idea what's going on on other CPUs, they may be crashing too, locked in
-a tight loop, ... so sending an IPI there to do some work and expecting
-it to report back is dangerous.
-
->> For Hyper-V, the situation is similar: hv_crash_handler() intitiates
->> VMbus unload on the crashing CPU only, there's no mechanism to do
->> 'global' unload so other CPUs will likely not be able to connect Vmbus
->> devices in kdump kernel but this should not be necessary.
+> Drop the unneeded copy, flag it as IRQCHIP_IMMUTABLE, add the new
+> helper functions and call the appropriate gpiolib functions.
 >
-> Given kdump is best-effort (and we can't rely on secondary CPUs even making it
-> into the kdump kernel), I also don't think that should be necessary.
+> Signed-off-by: Michael Walle <michael@walle.cc>
 
-Yes, exactly.
+Patch applied after pulling in Marc's immutable branch.
 
->
->> There's a crash_kexec_post_notifiers mechanism which can be used instead
->> but it's disabled by default so using machine_ops.crash_shutdown is
->> better.
->
-> Another option is to defer this to the kdump kernel. On arm64 at least, we know
-> if we're in a kdump kernel early on, and can reset some state based upon that.
->
-> Looking at x86's hyperv_cleanup(), everything relevant to arm64 can be deferred
-> to just before the kdump kernel detects and initializes anything relating to
-> hyperv. So AFAICT we could have hyperv_init() check is_kdump_kernel() prior to
-> the first hypercall, and do the cleanup/reset there.
+(Hm a bit confusing since it is a immutable branch with code
+for immutable GPIO chips ... I assume it is both.)
 
-In theory yes, it is possible to try sending CHANNELMSG_UNLOAD on kdump
-kernel boot and not upon crash, I don't remember if this approach was
-tried in the past. 
-
->
-> Maybe we need more data for the vmbus bits? ... if so it seems that could blow
-> up anyway when the first kernel was tearing down.
-
-Not sure I understood what you mean... From what I remember, there were
-issues with CHANNELMSG_UNLOAD handling on the Hyper-V host side in the
-past (it was taking *minutes* for the host to reply) but this is
-orthogonal to the fact that we need to do this cleanup so kdump kernel
-is able to connect to Vmbus devices again.
-
--- 
-Vitaly
-
+Yours,
+Linus Walleij

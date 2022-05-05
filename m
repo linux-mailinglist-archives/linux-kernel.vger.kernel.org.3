@@ -2,538 +2,428 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3473751B7A4
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 07:56:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8B7351B79A
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 07:49:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243918AbiEEF7f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 01:59:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50070 "EHLO
+        id S243853AbiEEFxO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 01:53:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243889AbiEEF7b (ORCPT
+        with ESMTP id S243631AbiEEFxM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 01:59:31 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E86825E81;
-        Wed,  4 May 2022 22:55:45 -0700 (PDT)
-X-UUID: 809fa0c2bdf147d594d6b23e33d32a82-20220505
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.4,REQID:7eadf22f-04c3-40a6-862d-bf403d77d3de,OB:0,LO
-        B:0,IP:0,URL:8,TC:0,Content:-20,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,AC
-        TION:release,TS:-12
-X-CID-META: VersionHash:faefae9,CLOUDID:b8f7a2b2-56b5-4c9e-8d83-0070b288eb6a,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,File:nil,QS:0,BEC:nil
-X-UUID: 809fa0c2bdf147d594d6b23e33d32a82-20220505
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
-        (envelope-from <lina.wang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 372878867; Thu, 05 May 2022 13:55:39 +0800
-Received: from MTKMBS07N2.mediatek.inc (172.21.101.141) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Thu, 5 May 2022 13:55:38 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Thu, 5 May 2022 13:55:37 +0800
-Received: from mbjsdccf07.mediatek.inc (10.15.20.246) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 5 May 2022 13:55:35 +0800
-From:   Lina Wang <lina.wang@mediatek.com>
-To:     "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-CC:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        "Jesper Dangaard Brouer" <hawk@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        "Nick Desaulniers" <ndesaulniers@google.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Willem de Bruijn <willemb@google.com>,
-        Maciej enczykowski <maze@google.com>,
-        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>, <bpf@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>, <llvm@lists.linux.dev>,
-        Lina Wang <lina.wang@mediatek.com>
-Subject: [PATCH v6 2/2] selftests net: add UDP GRO fraglist + bpf self-tests
-Date:   Thu, 5 May 2022 13:48:50 +0800
-Message-ID: <20220505054850.4878-2-lina.wang@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20220505054850.4878-1-lina.wang@mediatek.com>
-References: <20220505054850.4878-1-lina.wang@mediatek.com>
+        Thu, 5 May 2022 01:53:12 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F51B3299A;
+        Wed,  4 May 2022 22:49:32 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id d17so3477368plg.0;
+        Wed, 04 May 2022 22:49:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=X576lo3WK/wfBZLVox973EzQRlXLtAxy+a/vpLCTsOw=;
+        b=cKXXOBOyRo1PZNtDIyD0jrZn0WiN9TAYVxG8TtSS4Rr679HoMlEOp1sM8t7LP6ND8n
+         iNAq7yT9Uz8w8ktK6mf241eZVlZkvKNhVucvqaeQ0Daek2EL3xJv/YOFzgMKpV1oM2vc
+         1GApY5XWo2KRcBC78yPqO1qhtLk+9xBxbA+uK+Dpjhiabv7wxOZ8924Lhu36jr3BN72P
+         VNjAajRJP6jNtS+1fe6LzIHDaIfi0I+EGktB2cNOg1C4m8cxS0nYwadW7qrg27YXe/L0
+         WuTwiUOunvtz0u7kV+IGwrsNAXHfxWtqmqyowmPLjdN48REILMs2yykukFlZ+pJgc0kK
+         hWng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=X576lo3WK/wfBZLVox973EzQRlXLtAxy+a/vpLCTsOw=;
+        b=xVyl+VlxOKrgZIAM+9jdRGTn5V9fS5mmfp5qrglkfSACUCDlJ8vo7NuaTWzT6sYYYR
+         yv0ubZAU4sXg3J/D47/55vYfLrSzhz3JTZZsQ9YvQfklqzUNRR/c08RcQkar61aDZMpc
+         YI9CzgliCYZS+UCeWmOUP/HLF6jDUJTJmxlvHm744rz8tUqpWQz04nJh9uCv4zCmMisq
+         Y57RFnKhY4+fjV0J0LdZlpHhBGwbijOpY8m5oJ4KEzWKT4/ozDB/PLhkDCHffxL5JrAr
+         D0lQ4JXVXu1UqjVYbgdaNAwX6ZblnKMgW3uqo2wzKnQapXOU0y3U6StIppHrDDU1wmxV
+         1aew==
+X-Gm-Message-State: AOAM530ox5BMV0qgls4CtJI3tJbutlWM/Q4lTH3blLNqQJzRgaGuZkWm
+        VtZ1Ifm5DHkTETIFD46rDkCsEsFflL6XxTFzEVOGK7+nrpNG4w==
+X-Google-Smtp-Source: ABdhPJxucZbc0sp4T2MwUlPRGbsd6+A2iSmGzCb8+v0NGRKfK4MP0dqH7GvJzBfY4qjt9xPPQooov7m/7TfJSZ3s7OY=
+X-Received: by 2002:a17:903:20f:b0:158:d86a:f473 with SMTP id
+ r15-20020a170903020f00b00158d86af473mr25683953plh.92.1651729771596; Wed, 04
+ May 2022 22:49:31 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="y"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220502102521.22875-1-dharamhans87@gmail.com>
+ <20220502102521.22875-4-dharamhans87@gmail.com> <YnLkjDhcmEqTSpRr@redhat.com>
+In-Reply-To: <YnLkjDhcmEqTSpRr@redhat.com>
+From:   Dharmendra Hans <dharamhans87@gmail.com>
+Date:   Thu, 5 May 2022 11:19:20 +0530
+Message-ID: <CACUYsyFNU62OPq7_mq9c=RZXdbtaNgwsq6Y+ww3ugxo7u2sdkA@mail.gmail.com>
+Subject: Re: [PATCH v4 3/3] FUSE: Avoid lookup in d_revalidate()
+To:     Vivek Goyal <vgoyal@redhat.com>
+Cc:     Miklos Szeredi <miklos@szeredi.hu>, linux-fsdevel@vger.kernel.org,
+        fuse-devel <fuse-devel@lists.sourceforge.net>,
+        linux-kernel@vger.kernel.org, Bernd Schubert <bschubert@ddn.com>,
+        Dharmendra Singh <dsingh@ddn.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When NET_F_F_GRO_FRAGLIST is enabled and bpf_skb_change_proto is used,
-check if udp packets and tcp packets are successfully delivered to user
-space. If wrong udp packets are delivered, udpgso_bench_rx will exit
-with "Initial byte out of range"
+On Thu, May 5, 2022 at 2:09 AM Vivek Goyal <vgoyal@redhat.com> wrote:
+>
+> On Mon, May 02, 2022 at 03:55:21PM +0530, Dharmendra Singh wrote:
+> > From: Dharmendra Singh <dsingh@ddn.com>
+> >
+> > With atomic open + lookup implemented, it is possible
+> > to avoid lookups in FUSE d_revalidate() for objects
+> > other than directories.
+> >
+> > If FUSE is mounted with default permissions then this
+> > optimization is not possible as we need to fetch fresh
+> > inode attributes for permission check. This lookup
+> > skipped in d_revalidate() can be performed  as part of
+> > open call into libfuse which is made from fuse_file_open().
+> > And when we return from USER SPACE with file opened and
+> > fresh attributes, we can revalidate the inode.
+> >
+> > Signed-off-by: Dharmendra Singh <dsingh@ddn.com>
+> > Reported-by: kernel test robot <lkp@intel.com>
+> >
+> > ---
+> >  fs/fuse/dir.c    | 89 ++++++++++++++++++++++++++++++++++++++++++------
+> >  fs/fuse/file.c   | 30 ++++++++++++++--
+> >  fs/fuse/fuse_i.h | 10 +++++-
+> >  fs/fuse/ioctl.c  |  2 +-
+> >  4 files changed, 115 insertions(+), 16 deletions(-)
+> >
+> > diff --git a/fs/fuse/dir.c b/fs/fuse/dir.c
+> > index 6879d3a86796..1594fecc920f 100644
+> > --- a/fs/fuse/dir.c
+> > +++ b/fs/fuse/dir.c
+> > @@ -196,6 +196,7 @@ static void fuse_lookup_init(struct fuse_conn *fc, struct fuse_args *args,
+> >   * the lookup once more.  If the lookup results in the same inode,
+> >   * then refresh the attributes, timeouts and mark the dentry valid.
+> >   */
+> > +
+> >  static int fuse_dentry_revalidate(struct dentry *entry, unsigned int flags)
+> >  {
+> >       struct inode *inode;
+> > @@ -224,6 +225,17 @@ static int fuse_dentry_revalidate(struct dentry *entry, unsigned int flags)
+> >
+> >               fm = get_fuse_mount(inode);
+> >
+> > +             /* If atomic open is supported by FUSE then use this opportunity
+> > +              * (only for non-dir) to avoid this lookup and combine
+> > +              * lookup + open into single call.
+> > +              */
+> > +             if (!fm->fc->default_permissions && fm->fc->do_atomic_open &&
+> > +                 !(flags & (LOOKUP_EXCL | LOOKUP_REVAL)) &&
+> > +                 (flags & LOOKUP_OPEN) && !S_ISDIR(inode->i_mode)) {
+> > +                     ret = 1;
+>
+> So basically we think that VFS is going to do OPEN and calling
+> ->revalidate() before that. So we are returning "1" to vfs saying
+> dentry is valid (despite the fact that we have no idea at this
+> point of time).
+>
+> And later when open comes we are opening and revalidating inode etc.
+>
+> Seriously, IMHO, all this seems very fragile and hard to understand
+> and maintain code. Things can go easily wrong if even little bit
+> of assumptions change in VFS.
+>
+> This sounds more like VFS should know about it and if VFS knows
+> that filesystem supports facility where it can open + revalidate
+> at the same time, it should probably call that. Something like
+> ->open_revalidate() etc. That would be much more maintainable code but
+> this feels like very fragile to me, IMHO.
 
-Signed-off-by: Maciej enczykowski <maze@google.com>
-Signed-off-by: Lina Wang <lina.wang@mediatek.com>
----
- tools/testing/selftests/net/Makefile          |   3 +
- tools/testing/selftests/net/bpf/Makefile      |  17 ++
- tools/testing/selftests/net/bpf/nat6to4.c     | 286 ++++++++++++++++++
- tools/testing/selftests/net/udpgro_frglist.sh | 101 +++++++
- 4 files changed, 407 insertions(+)
- create mode 100644 tools/testing/selftests/net/bpf/Makefile
- create mode 100644 tools/testing/selftests/net/bpf/nat6to4.c
- create mode 100755 tools/testing/selftests/net/udpgro_frglist.sh
+Actually we did not want to do it this way. We understand that code is
+hard to understand and  maintain.  But we found that VFS does not have
+support for this kind of functionalities i.e to combine a couple of
+ops into one except 'atomic open' which would have made it very easier
+for File systems.
+As of now I think VFS does not do much (it calls inode permissions
+checks though but we are optimising only if default permissions are
+not enabled) with inode till the time it opens it. Since we are
+revalidating inode after opening, it detects issues if any with the
+file.
 
-diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
-index 3fe2515aa616..f670c20fbc57 100644
---- a/tools/testing/selftests/net/Makefile
-+++ b/tools/testing/selftests/net/Makefile
-@@ -25,6 +25,7 @@ TEST_PROGS += bareudp.sh
- TEST_PROGS += amt.sh
- TEST_PROGS += unicast_extensions.sh
- TEST_PROGS += udpgro_fwd.sh
-+TEST_PROGS += udpgro_frglist.sh
- TEST_PROGS += veth.sh
- TEST_PROGS += ioam6.sh
- TEST_PROGS += gro.sh
-@@ -60,6 +61,8 @@ TEST_FILES := settings
- KSFT_KHDR_INSTALL := 1
- include ../lib.mk
- 
-+include bpf/Makefile
-+
- $(OUTPUT)/reuseport_bpf_numa: LDLIBS += -lnuma
- $(OUTPUT)/tcp_mmap: LDLIBS += -lpthread
- $(OUTPUT)/tcp_inq: LDLIBS += -lpthread
-diff --git a/tools/testing/selftests/net/bpf/Makefile b/tools/testing/selftests/net/bpf/Makefile
-new file mode 100644
-index 000000000000..47e715e54cab
---- /dev/null
-+++ b/tools/testing/selftests/net/bpf/Makefile
-@@ -0,0 +1,17 @@
-+# SPDX-License-Identifier: GPL-2.0
-+
-+CLANG ?= clang
-+CCINCLUDE += -I../../bpf 
-+CCINCLUDE += -I../../../../../usr/include/
-+
-+TEST_CUSTOM_PROGS = $(OUTPUT)/bpf/nat6to4.o
-+all: $(TEST_CUSTOM_PROGS)
-+
-+$(OUTPUT)/%.o: %.c
-+	$(CLANG) -O2 -target bpf -c $< $(CCINCLUDE) -o $@
-+
-+clean:
-+	rm -f $(TEST_CUSTOM_PROGS)
-+
-+
-+
-diff --git a/tools/testing/selftests/net/bpf/nat6to4.c b/tools/testing/selftests/net/bpf/nat6to4.c
-new file mode 100644
-index 000000000000..fe30f260cde6
---- /dev/null
-+++ b/tools/testing/selftests/net/bpf/nat6to4.c
-@@ -0,0 +1,286 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * This code is taken from the Android Open Source Project and the author
-+ * (Maciej Żenczykowski) has gave permission to relicense it under the
-+ * GPLv2. Therefore this program is free software;
-+ * You can redistribute it and/or modify it under the terms of the GNU
-+ * General Public License version 2 as published by the Free Software
-+ * Foundation
-+
-+ * The original headers, including the original license headers, are
-+ * included below for completeness.
-+ *
-+ * Copyright (C) 2019 The Android Open Source Project
-+ *
-+ * Licensed under the Apache License, Version 2.0 (the "License");
-+ * you may not use this file except in compliance with the License.
-+ * You may obtain a copy of the License at
-+ *
-+ *      http://www.apache.org/licenses/LICENSE-2.0
-+ *
-+ * Unless required by applicable law or agreed to in writing, software
-+ * distributed under the License is distributed on an "AS IS" BASIS,
-+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-+ * See the License for the specific language governing permissions and
-+ * limitations under the License.
-+ */
-+#include <linux/bpf.h>
-+#include <linux/if.h>
-+#include <linux/if_ether.h>
-+#include <linux/if_packet.h>
-+#include <linux/in.h>
-+#include <linux/in6.h>
-+#include <linux/ip.h>
-+#include <linux/ipv6.h>
-+#include <linux/pkt_cls.h>
-+#include <linux/swab.h>
-+#include <stdbool.h>
-+#include <stdint.h>
-+
-+
-+#include <linux/udp.h>
-+
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_endian.h>
-+
-+#define IP_DF 0x4000  // Flag: "Don't Fragment"
-+
-+SEC("schedcls/ingress6/nat_6")
-+int sched_cls_ingress6_nat_6_prog(struct __sk_buff *skb)
-+{
-+	const int l2_header_size =  sizeof(struct ethhdr);
-+	void *data = (void *)(long)skb->data;
-+	const void *data_end = (void *)(long)skb->data_end;
-+	const struct ethhdr * const eth = data;  // used iff is_ethernet
-+	const struct ipv6hdr * const ip6 =  (void *)(eth + 1);
-+
-+	// Require ethernet dst mac address to be our unicast address.
-+	if  (skb->pkt_type != PACKET_HOST)
-+		return TC_ACT_OK;
-+
-+	// Must be meta-ethernet IPv6 frame
-+	if (skb->protocol != bpf_htons(ETH_P_IPV6))
-+		return TC_ACT_OK;
-+
-+	// Must have (ethernet and) ipv6 header
-+	if (data + l2_header_size + sizeof(*ip6) > data_end)
-+		return TC_ACT_OK;
-+
-+	// Ethertype - if present - must be IPv6
-+	if (eth->h_proto != bpf_htons(ETH_P_IPV6))
-+		return TC_ACT_OK;
-+
-+	// IP version must be 6
-+	if (ip6->version != 6)
-+		return TC_ACT_OK;
-+	// Maximum IPv6 payload length that can be translated to IPv4
-+	if (bpf_ntohs(ip6->payload_len) > 0xFFFF - sizeof(struct iphdr))
-+		return TC_ACT_OK;
-+	switch (ip6->nexthdr) {
-+	case IPPROTO_TCP:  // For TCP & UDP the checksum neutrality of the chosen IPv6
-+	case IPPROTO_UDP:  // address means there is no need to update their checksums.
-+	case IPPROTO_GRE:  // We do not need to bother looking at GRE/ESP headers,
-+	case IPPROTO_ESP:  // since there is never a checksum to update.
-+		break;
-+	default:  // do not know how to handle anything else
-+		return TC_ACT_OK;
-+	}
-+
-+	struct ethhdr eth2;  // used iff is_ethernet
-+
-+	eth2 = *eth;                     // Copy over the ethernet header (src/dst mac)
-+	eth2.h_proto = bpf_htons(ETH_P_IP);  // But replace the ethertype
-+
-+	struct iphdr ip = {
-+		.version = 4,                                                      // u4
-+		.ihl = sizeof(struct iphdr) / sizeof(__u32),                       // u4
-+		.tos = (ip6->priority << 4) + (ip6->flow_lbl[0] >> 4),             // u8
-+		.tot_len = bpf_htons(bpf_ntohs(ip6->payload_len) + sizeof(struct iphdr)),  // u16
-+		.id = 0,                                                           // u16
-+		.frag_off = bpf_htons(IP_DF),                                          // u16
-+		.ttl = ip6->hop_limit,                                             // u8
-+		.protocol = ip6->nexthdr,                                          // u8
-+		.check = 0,                                                        // u16
-+		.saddr = 0x0201a8c0,                            // u32
-+		.daddr = 0x0101a8c0,                                         // u32
-+	};
-+
-+	// Calculate the IPv4 one's complement checksum of the IPv4 header.
-+	__wsum sum4 = 0;
-+
-+	for (int i = 0; i < sizeof(ip) / sizeof(__u16); ++i)
-+		sum4 += ((__u16 *)&ip)[i];
-+
-+	// Note that sum4 is guaranteed to be non-zero by virtue of ip.version == 4
-+	sum4 = (sum4 & 0xFFFF) + (sum4 >> 16);  // collapse u32 into range 1 .. 0x1FFFE
-+	sum4 = (sum4 & 0xFFFF) + (sum4 >> 16);  // collapse any potential carry into u16
-+	ip.check = (__u16)~sum4;                // sum4 cannot be zero, so this is never 0xFFFF
-+
-+	// Calculate the *negative* IPv6 16-bit one's complement checksum of the IPv6 header.
-+	__wsum sum6 = 0;
-+	// We'll end up with a non-zero sum due to ip6->version == 6 (which has '0' bits)
-+	for (int i = 0; i < sizeof(*ip6) / sizeof(__u16); ++i)
-+		sum6 += ~((__u16 *)ip6)[i];  // note the bitwise negation
-+
-+	// Note that there is no L4 checksum update: we are relying on the checksum neutrality
-+	// of the ipv6 address chosen by netd's ClatdController.
-+
-+	// Packet mutations begin - point of no return, but if this first modification fails
-+	// the packet is probably still pristine, so let clatd handle it.
-+	if (bpf_skb_change_proto(skb, bpf_htons(ETH_P_IP), 0))
-+		return TC_ACT_OK;
-+	bpf_csum_update(skb, sum6);
-+
-+	data = (void *)(long)skb->data;
-+	data_end = (void *)(long)skb->data_end;
-+	if (data + l2_header_size + sizeof(struct iphdr) > data_end)
-+		return TC_ACT_SHOT;
-+
-+	struct ethhdr *new_eth = data;
-+
-+	// Copy over the updated ethernet header
-+	*new_eth = eth2;
-+
-+	// Copy over the new ipv4 header.
-+	*(struct iphdr *)(new_eth + 1) = ip;
-+	return bpf_redirect(skb->ifindex, BPF_F_INGRESS);
-+}
-+
-+SEC("schedcls/egress4/snat4")
-+int sched_cls_egress4_snat4_prog(struct __sk_buff *skb)
-+{
-+	const int l2_header_size =  sizeof(struct ethhdr);
-+	void *data = (void *)(long)skb->data;
-+	const void *data_end = (void *)(long)skb->data_end;
-+	const struct ethhdr *const eth = data;  // used iff is_ethernet
-+	const struct iphdr *const ip4 = (void *)(eth + 1);
-+
-+	// Must be meta-ethernet IPv4 frame
-+	if (skb->protocol != bpf_htons(ETH_P_IP))
-+		return TC_ACT_OK;
-+
-+	// Must have ipv4 header
-+	if (data + l2_header_size + sizeof(struct ipv6hdr) > data_end)
-+		return TC_ACT_OK;
-+
-+	// Ethertype - if present - must be IPv4
-+	if (eth->h_proto != bpf_htons(ETH_P_IP))
-+		return TC_ACT_OK;
-+
-+	// IP version must be 4
-+	if (ip4->version != 4)
-+		return TC_ACT_OK;
-+
-+	// We cannot handle IP options, just standard 20 byte == 5 dword minimal IPv4 header
-+	if (ip4->ihl != 5)
-+		return TC_ACT_OK;
-+
-+	// Maximum IPv6 payload length that can be translated to IPv4
-+	if (bpf_htons(ip4->tot_len) > 0xFFFF - sizeof(struct ipv6hdr))
-+		return TC_ACT_OK;
-+
-+	// Calculate the IPv4 one's complement checksum of the IPv4 header.
-+	__wsum sum4 = 0;
-+
-+	for (int i = 0; i < sizeof(*ip4) / sizeof(__u16); ++i)
-+		sum4 += ((__u16 *)ip4)[i];
-+
-+	// Note that sum4 is guaranteed to be non-zero by virtue of ip4->version == 4
-+	sum4 = (sum4 & 0xFFFF) + (sum4 >> 16);  // collapse u32 into range 1 .. 0x1FFFE
-+	sum4 = (sum4 & 0xFFFF) + (sum4 >> 16);  // collapse any potential carry into u16
-+	// for a correct checksum we should get *a* zero, but sum4 must be positive, ie 0xFFFF
-+	if (sum4 != 0xFFFF)
-+		return TC_ACT_OK;
-+
-+	// Minimum IPv4 total length is the size of the header
-+	if (bpf_ntohs(ip4->tot_len) < sizeof(*ip4))
-+		return TC_ACT_OK;
-+
-+	// We are incapable of dealing with IPv4 fragments
-+	if (ip4->frag_off & ~bpf_htons(IP_DF))
-+		return TC_ACT_OK;
-+
-+	switch (ip4->protocol) {
-+	case IPPROTO_TCP:  // For TCP & UDP the checksum neutrality of the chosen IPv6
-+	case IPPROTO_GRE:  // address means there is no need to update their checksums.
-+	case IPPROTO_ESP:  // We do not need to bother looking at GRE/ESP headers,
-+		break;         // since there is never a checksum to update.
-+
-+	case IPPROTO_UDP:  // See above comment, but must also have UDP header...
-+		if (data + sizeof(*ip4) + sizeof(struct udphdr) > data_end)
-+			return TC_ACT_OK;
-+		const struct udphdr *uh = (const struct udphdr *)(ip4 + 1);
-+		// If IPv4/UDP checksum is 0 then fallback to clatd so it can calculate the
-+		// checksum.  Otherwise the network or more likely the NAT64 gateway might
-+		// drop the packet because in most cases IPv6/UDP packets with a zero checksum
-+		// are invalid. See RFC 6935.  TODO: calculate checksum via bpf_csum_diff()
-+		if (!uh->check)
-+			return TC_ACT_OK;
-+		break;
-+
-+	default:  // do not know how to handle anything else
-+		return TC_ACT_OK;
-+	}
-+	struct ethhdr eth2;  // used iff is_ethernet
-+
-+	eth2 = *eth;                     // Copy over the ethernet header (src/dst mac)
-+	eth2.h_proto = bpf_htons(ETH_P_IPV6);  // But replace the ethertype
-+
-+	struct ipv6hdr ip6 = {
-+		.version = 6,                                    // __u8:4
-+		.priority = ip4->tos >> 4,                       // __u8:4
-+		.flow_lbl = {(ip4->tos & 0xF) << 4, 0, 0},       // __u8[3]
-+		.payload_len = bpf_htons(bpf_ntohs(ip4->tot_len) - 20),  // __be16
-+		.nexthdr = ip4->protocol,                        // __u8
-+		.hop_limit = ip4->ttl,                           // __u8
-+	};
-+	ip6.saddr.in6_u.u6_addr32[0] = bpf_htonl(0x20010db8);
-+	ip6.saddr.in6_u.u6_addr32[1] = 0;
-+	ip6.saddr.in6_u.u6_addr32[2] = 0;
-+	ip6.saddr.in6_u.u6_addr32[3] = bpf_htonl(1);
-+	ip6.daddr.in6_u.u6_addr32[0] = bpf_htonl(0x20010db8);
-+	ip6.daddr.in6_u.u6_addr32[1] = 0;
-+	ip6.daddr.in6_u.u6_addr32[2] = 0;
-+	ip6.daddr.in6_u.u6_addr32[3] = bpf_htonl(2);
-+
-+	// Calculate the IPv6 16-bit one's complement checksum of the IPv6 header.
-+	__wsum sum6 = 0;
-+	// We'll end up with a non-zero sum due to ip6.version == 6
-+	for (int i = 0; i < sizeof(ip6) / sizeof(__u16); ++i)
-+		sum6 += ((__u16 *)&ip6)[i];
-+
-+	// Packet mutations begin - point of no return, but if this first modification fails
-+	// the packet is probably still pristine, so let clatd handle it.
-+	if (bpf_skb_change_proto(skb, bpf_htons(ETH_P_IPV6), 0))
-+		return TC_ACT_OK;
-+
-+	// This takes care of updating the skb->csum field for a CHECKSUM_COMPLETE packet.
-+	// In such a case, skb->csum is a 16-bit one's complement sum of the entire payload,
-+	// thus we need to subtract out the ipv4 header's sum, and add in the ipv6 header's sum.
-+	// However, we've already verified the ipv4 checksum is correct and thus 0.
-+	// Thus we only need to add the ipv6 header's sum.
-+	//
-+	// bpf_csum_update() always succeeds if the skb is CHECKSUM_COMPLETE and returns an error
-+	// (-ENOTSUPP) if it isn't.  So we just ignore the return code (see above for more details).
-+	bpf_csum_update(skb, sum6);
-+
-+	// bpf_skb_change_proto() invalidates all pointers - reload them.
-+	data = (void *)(long)skb->data;
-+	data_end = (void *)(long)skb->data_end;
-+
-+	// I cannot think of any valid way for this error condition to trigger, however I do
-+	// believe the explicit check is required to keep the in kernel ebpf verifier happy.
-+	if (data + l2_header_size + sizeof(ip6) > data_end)
-+		return TC_ACT_SHOT;
-+
-+	struct ethhdr *new_eth = data;
-+
-+	// Copy over the updated ethernet header
-+	*new_eth = eth2;
-+	// Copy over the new ipv4 header.
-+	*(struct ipv6hdr *)(new_eth + 1) = ip6;
-+	return TC_ACT_OK;
-+}
-+
-+char _license[] SEC("license") = ("GPL");
-+
-diff --git a/tools/testing/selftests/net/udpgro_frglist.sh b/tools/testing/selftests/net/udpgro_frglist.sh
-new file mode 100755
-index 000000000000..807b74c8fd80
---- /dev/null
-+++ b/tools/testing/selftests/net/udpgro_frglist.sh
-@@ -0,0 +1,101 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+# Run a series of udpgro benchmarks
-+
-+readonly PEER_NS="ns-peer-$(mktemp -u XXXXXX)"
-+
-+cleanup() {
-+	local -r jobs="$(jobs -p)"
-+	local -r ns="$(ip netns list|grep $PEER_NS)"
-+
-+	[ -n "${jobs}" ] && kill -INT ${jobs} 2>/dev/null
-+	[ -n "$ns" ] && ip netns del $ns 2>/dev/null
-+}
-+trap cleanup EXIT
-+
-+run_one() {
-+	# use 'rx' as separator between sender args and receiver args
-+	local -r all="$@"
-+	local -r tx_args=${all%rx*}
-+	local rx_args=${all#*rx}
-+
-+
-+
-+	ip netns add "${PEER_NS}"
-+	ip -netns "${PEER_NS}" link set lo up
-+	ip link add type veth
-+	ip link set dev veth0 up
-+	ip addr add dev veth0 192.168.1.2/24
-+	ip addr add dev veth0 2001:db8::2/64 nodad
-+
-+	ip link set dev veth1 netns "${PEER_NS}"
-+	ip -netns "${PEER_NS}" addr add dev veth1 192.168.1.1/24
-+	ip -netns "${PEER_NS}" addr add dev veth1 2001:db8::1/64 nodad
-+	ip -netns "${PEER_NS}" link set dev veth1 up
-+	ip netns exec "${PEER_NS}" ethtool -K veth1 rx-gro-list on
-+
-+
-+	ip -n "${PEER_NS}" link set veth1 xdp object ../bpf/xdp_dummy.o section xdp_dummy
-+	tc -n "${PEER_NS}" qdisc add dev veth1 clsact
-+	tc -n "${PEER_NS}" filter add dev veth1 ingress prio 4 protocol ipv6 bpf object-file ../bpf/nat6to4.o section schedcls/ingress6/nat_6  direct-action
-+	tc -n "${PEER_NS}" filter add dev veth1 egress prio 4 protocol ip bpf object-file ../bpf/nat6to4.o section schedcls/egress4/snat4 direct-action
-+        echo ${rx_args}
-+	ip netns exec "${PEER_NS}" ./udpgso_bench_rx ${rx_args} -r &
-+
-+	# Hack: let bg programs complete the startup
-+	sleep 0.1
-+	./udpgso_bench_tx ${tx_args}
-+}
-+
-+run_in_netns() {
-+	local -r args=$@
-+  echo ${args}
-+	./in_netns.sh $0 __subprocess ${args}
-+}
-+
-+run_udp() {
-+	local -r args=$@
-+
-+	echo "udp gso - over veth touching data"
-+	run_in_netns ${args} -u -S 0 rx -4 -v
-+
-+	echo "udp gso and gro - over veth touching data"
-+	run_in_netns ${args} -S 0 rx -4 -G
-+}
-+
-+run_tcp() {
-+	local -r args=$@
-+
-+	echo "tcp - over veth touching data"
-+	run_in_netns ${args} -t rx -4 -t
-+}
-+
-+run_all() {
-+	local -r core_args="-l 4"
-+	local -r ipv4_args="${core_args} -4  -D 192.168.1.1"
-+	local -r ipv6_args="${core_args} -6  -D 2001:db8::1"
-+
-+	echo "ipv6"
-+	run_tcp "${ipv6_args}"
-+	run_udp "${ipv6_args}"
-+}
-+
-+if [ ! -f ../bpf/xdp_dummy.o ]; then
-+	echo "Missing xdp_dummy helper. Build bpf selftest first"
-+	exit -1
-+fi
-+
-+if [ ! -f bpf/nat6to4.o ]; then
-+	echo "Missing nat6to4 helper. Build bpfnat6to4.o selftest first"
-+	exit -1
-+fi
-+
-+if [[ $# -eq 0 ]]; then
-+	run_all
-+elif [[ $1 == "__subprocess" ]]; then
-+	shift
-+	run_one $@
-+else
-+	run_in_netns $@
-+fi
--- 
-2.18.0
-
+>
+>
+>
+> > +                     goto out;
+> > +             }
+> > +
+> >               forget = fuse_alloc_forget();
+> >               ret = -ENOMEM;
+> >               if (!forget)
+> > @@ -515,14 +527,52 @@ static int get_security_context(struct dentry *entry, umode_t mode,
+> >       return err;
+> >  }
+> >
+> > +/*
+> > + * Revalidate the inode after we got fresh attributes from user space.
+> > + */
+> > +static int fuse_atomic_open_revalidate_inode(struct inode *reval_inode,
+> > +                                          struct dentry *entry,
+> > +                                          struct fuse_forget_link *forget,
+> > +                                          struct fuse_entry_out *outentry,
+> > +                                          u64 attr_version)
+> > +{
+> > +     struct fuse_inode *fi;
+> > +     struct fuse_conn *fc = get_fuse_conn(reval_inode);
+> > +
+> > +     /* Mode should be other than directory */
+> > +     BUG_ON(S_ISDIR(reval_inode->i_mode));
+> > +
+> > +     if (outentry->nodeid != get_node_id(reval_inode)) {
+> > +             fuse_queue_forget(fc, forget, outentry->nodeid, 1);
+> > +             return -ESTALE;
+> > +     }
+> > +     if (fuse_stale_inode(reval_inode, outentry->generation,
+> > +                          &outentry->attr)) {
+> > +             fuse_make_bad(reval_inode);
+> > +             return -ESTALE;
+> > +     }
+> > +     fi = get_fuse_inode(reval_inode);
+> > +     spin_lock(&fi->lock);
+> > +     fi->nlookup++;
+> > +     spin_unlock(&fi->lock);
+> > +
+> > +     forget_all_cached_acls(reval_inode);
+> > +     fuse_change_attributes(reval_inode, &outentry->attr,
+> > +                            entry_attr_timeout(outentry), attr_version);
+> > +     fuse_change_entry_timeout(entry, outentry);
+> > +     return 0;
+> > +}
+> > +
+> > +
+> >  /*
+> >   * This is common function for initiating atomic operations into libfuse.
+> >   * Currently being used by Atomic create(atomic lookup + create) and
+> >   * Atomic open(atomic lookup + open).
+> >   */
+> > -static int fuse_atomic_do_common(struct inode *dir, struct dentry *entry,
+> > +static int fuse_do_atomic_common(struct inode *dir, struct dentry *entry,
+> >                                struct dentry **alias, struct file *file,
+> > -                              unsigned int flags, umode_t mode, uint32_t opcode)
+> > +                              struct inode *reval_inode, unsigned int flags,
+> > +                              umode_t mode, uint32_t opcode)
+> >  {
+> >       int err;
+> >       struct inode *inode;
+> > @@ -541,6 +591,8 @@ static int fuse_atomic_do_common(struct inode *dir, struct dentry *entry,
+> >       bool atomic_create = (opcode == FUSE_ATOMIC_CREATE ? true : false);
+> >       bool create_op = (opcode == FUSE_CREATE ||
+> >                         opcode == FUSE_ATOMIC_CREATE) ? true : false;
+> > +     u64 attr_version = fuse_get_attr_version(fm->fc);
+> > +
+> >       if (alias)
+> >               *alias = NULL;
+> >
+> > @@ -609,6 +661,20 @@ static int fuse_atomic_do_common(struct inode *dir, struct dentry *entry,
+> >       ff->fh = outopen.fh;
+> >       ff->nodeid = outentry.nodeid;
+> >       ff->open_flags = outopen.open_flags;
+> > +
+> > +     /* Inode revalidation was bypassed previously for type other than
+> > +      * directories, revalidate now as we got fresh attributes.
+> > +      */
+> > +     if (reval_inode) {
+> > +             err = fuse_atomic_open_revalidate_inode(reval_inode, entry,
+> > +                                                     forget, &outentry,
+> > +                                                     attr_version);
+> > +             if (err)
+> > +                     goto out_free_ff;
+> > +             inode = reval_inode;
+> > +             kfree(forget);
+> > +             goto out_finish_open;
+> > +     }
+> >       inode = fuse_iget(dir->i_sb, outentry.nodeid, outentry.generation,
+> >                         &outentry.attr, entry_attr_timeout(&outentry), 0);
+> >       if (!inode) {
+> > @@ -659,6 +725,7 @@ static int fuse_atomic_do_common(struct inode *dir, struct dentry *entry,
+> >       if (!atomic_create || (outopen.open_flags & FOPEN_FILE_CREATED))
+> >               fuse_dir_changed(dir);
+> >       err = finish_open(file, entry, generic_file_open);
+> > +out_finish_open:
+> >       if (err) {
+> >               fi = get_fuse_inode(inode);
+> >               fuse_sync_release(fi, ff, flags);
+> > @@ -686,7 +753,7 @@ static int fuse_atomic_create(struct inode *dir, struct dentry *entry,
+> >       if (fc->no_atomic_create)
+> >               return -ENOSYS;
+> >
+> > -     err = fuse_atomic_do_common(dir, entry, NULL, file, flags, mode,
+> > +     err = fuse_do_atomic_common(dir, entry, NULL, file, NULL, flags, mode,
+> >                                   FUSE_ATOMIC_CREATE);
+> >       /* If atomic create is not implemented then indicate in fc so that next
+> >        * request falls back to normal create instead of going into libufse and
+> > @@ -699,9 +766,10 @@ static int fuse_atomic_create(struct inode *dir, struct dentry *entry,
+> >       return err;
+> >  }
+> >
+> > -static int fuse_do_atomic_open(struct inode *dir, struct dentry *entry,
+> > -                             struct dentry **alias, struct file *file,
+> > -                             unsigned int flags, umode_t mode)
+> > +int fuse_do_atomic_open(struct inode *dir, struct dentry *entry,
+> > +                     struct dentry **alias, struct file *file,
+> > +                     struct inode *reval_inode, unsigned int flags,
+> > +                     umode_t mode)
+> >  {
+> >       int err;
+> >       struct fuse_conn *fc = get_fuse_conn(dir);
+> > @@ -709,8 +777,8 @@ static int fuse_do_atomic_open(struct inode *dir, struct dentry *entry,
+> >       if (!fc->do_atomic_open)
+> >               return -ENOSYS;
+> >
+> > -     err = fuse_atomic_do_common(dir, entry, alias, file, flags, mode,
+> > -                                 FUSE_ATOMIC_OPEN);
+> > +     err = fuse_do_atomic_common(dir, entry, alias, file, reval_inode, flags,
+> > +                                 mode, FUSE_ATOMIC_OPEN);
+> >       /* Atomic open imply atomic trunc as well i.e truncate should be performed
+> >        * as part of atomic open call itself.
+> >        */
+> > @@ -718,7 +786,6 @@ static int fuse_do_atomic_open(struct inode *dir, struct dentry *entry,
+> >               if (fc->do_atomic_open)
+> >                       fc->atomic_o_trunc = 1;
+> >       }
+> > -
+> >       return err;
+> >  }
+> >
+> > @@ -738,7 +805,7 @@ static int fuse_atomic_open(struct inode *dir, struct dentry *entry,
+> >
+> >       if (!create) {
+> >               err = fuse_do_atomic_open(dir, entry, &alias,
+> > -                                       file, flags, mode);
+> > +                                       file, NULL, flags, mode);
+> >               res = alias;
+> >               if (!err || err != -ENOSYS)
+> >                       goto out_dput;
+> > @@ -774,7 +841,7 @@ static int fuse_atomic_open(struct inode *dir, struct dentry *entry,
+> >        * 'mknod' + 'open' requests.
+> >        */
+> >       if (err == -ENOSYS) {
+> > -             err = fuse_atomic_do_common(dir, entry, NULL, file, flags,
+> > +             err = fuse_do_atomic_common(dir, entry, NULL, file, NULL, flags,
+> >                                           mode, FUSE_CREATE);
+> >       }
+> >       if (err == -ENOSYS) {
+> > diff --git a/fs/fuse/file.c b/fs/fuse/file.c
+> > index 829094451774..2b0548163249 100644
+> > --- a/fs/fuse/file.c
+> > +++ b/fs/fuse/file.c
+> > @@ -125,11 +125,15 @@ static void fuse_file_put(struct fuse_file *ff, bool sync, bool isdir)
+> >  }
+> >
+> >  struct fuse_file *fuse_file_open(struct fuse_mount *fm, u64 nodeid,
+> > -                              unsigned int open_flags, bool isdir)
+> > +                              struct file *file, unsigned int open_flags,
+> > +                              bool isdir)
+> >  {
+> >       struct fuse_conn *fc = fm->fc;
+> >       struct fuse_file *ff;
+> > +     struct dentry *dentry = NULL;
+> > +     struct dentry *parent = NULL;
+> >       int opcode = isdir ? FUSE_OPENDIR : FUSE_OPEN;
+> > +     int ret;
+> >
+> >       ff = fuse_file_alloc(fm);
+> >       if (!ff)
+> > @@ -138,6 +142,11 @@ struct fuse_file *fuse_file_open(struct fuse_mount *fm, u64 nodeid,
+> >       ff->fh = 0;
+> >       /* Default for no-open */
+> >       ff->open_flags = FOPEN_KEEP_CACHE | (isdir ? FOPEN_CACHE_DIR : 0);
+> > +
+> > +     /* For directories we already had lookup */
+> > +     if (!isdir && fc->do_atomic_open && file != NULL)
+> > +             goto revalidate_atomic_open;
+> > +
+> >       if (isdir ? !fc->no_opendir : !fc->no_open) {
+> >               struct fuse_open_out outarg;
+> >               int err;
+> > @@ -164,12 +173,27 @@ struct fuse_file *fuse_file_open(struct fuse_mount *fm, u64 nodeid,
+> >       ff->nodeid = nodeid;
+> >
+> >       return ff;
+> > +
+> > +revalidate_atomic_open:
+> > +     dentry = file->f_path.dentry;
+> > +     /* Get ref on parent */
+> > +     parent = dget_parent(dentry);
+> > +     open_flags &= ~(O_CREAT | O_EXCL | O_NOCTTY);
+> > +     ret = fuse_do_atomic_open(d_inode_rcu(parent), dentry, NULL, file,
+> > +                               d_inode_rcu(dentry), open_flags, 0);
+> > +     dput(parent);
+> > +     if (ret)
+> > +             goto err_out;
+> > +     ff = file->private_data;
+> > +     return ff;
+> > +err_out:
+> > +     return ERR_PTR(ret);
+> >  }
+> >
+> >  int fuse_do_open(struct fuse_mount *fm, u64 nodeid, struct file *file,
+> >                bool isdir)
+> >  {
+> > -     struct fuse_file *ff = fuse_file_open(fm, nodeid, file->f_flags, isdir);
+> > +     struct fuse_file *ff = fuse_file_open(fm, nodeid, file, file->f_flags, isdir);
+> >
+> >       if (!IS_ERR(ff))
+> >               file->private_data = ff;
+> > @@ -252,7 +276,7 @@ int fuse_open_common(struct inode *inode, struct file *file, bool isdir)
+> >       }
+> >
+> >       err = fuse_do_open(fm, get_node_id(inode), file, isdir);
+> > -     if (!err)
+> > +     if (!err && (!fc->do_atomic_open || isdir))
+> >               fuse_finish_open(inode, file);
+> >
+> >  out:
+> > diff --git a/fs/fuse/fuse_i.h b/fs/fuse/fuse_i.h
+> > index 24793b82303f..5c83e4249b7e 100644
+> > --- a/fs/fuse/fuse_i.h
+> > +++ b/fs/fuse/fuse_i.h
+> > @@ -1014,6 +1014,13 @@ void fuse_finish_open(struct inode *inode, struct file *file);
+> >  void fuse_sync_release(struct fuse_inode *fi, struct fuse_file *ff,
+> >                      unsigned int flags);
+> >
+> > +/**
+> > + * Send atomic create + open or lookup + open
+> > + */
+> > +int fuse_do_atomic_open(struct inode *dir, struct dentry *entry,
+> > +                     struct dentry **alias, struct file *file,
+> > +                     struct inode *reval_inode, unsigned int flags,
+> > +                     umode_t mode);
+> >  /**
+> >   * Send RELEASE or RELEASEDIR request
+> >   */
+> > @@ -1317,7 +1324,8 @@ int fuse_fileattr_set(struct user_namespace *mnt_userns,
+> >  /* file.c */
+> >
+> >  struct fuse_file *fuse_file_open(struct fuse_mount *fm, u64 nodeid,
+> > -                              unsigned int open_flags, bool isdir);
+> > +                              struct file *file, unsigned int open_flags,
+> > +                              bool isdir);
+> >  void fuse_file_release(struct inode *inode, struct fuse_file *ff,
+> >                      unsigned int open_flags, fl_owner_t id, bool isdir);
+> >
+> > diff --git a/fs/fuse/ioctl.c b/fs/fuse/ioctl.c
+> > index fbc09dab1f85..63106a54ba1a 100644
+> > --- a/fs/fuse/ioctl.c
+> > +++ b/fs/fuse/ioctl.c
+> > @@ -408,7 +408,7 @@ static struct fuse_file *fuse_priv_ioctl_prepare(struct inode *inode)
+> >       if (!S_ISREG(inode->i_mode) && !isdir)
+> >               return ERR_PTR(-ENOTTY);
+> >
+> > -     return fuse_file_open(fm, get_node_id(inode), O_RDONLY, isdir);
+> > +     return fuse_file_open(fm, get_node_id(inode), NULL, O_RDONLY, isdir);
+> >  }
+> >
+> >  static void fuse_priv_ioctl_cleanup(struct inode *inode, struct fuse_file *ff)
+> > --
+> > 2.17.1
+> >
+>

@@ -2,163 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCD6C51C2E0
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 16:48:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59E8851C318
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 16:56:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380772AbiEEOvF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 10:51:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42120 "EHLO
+        id S1380878AbiEEO7d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 10:59:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237688AbiEEOvC (ORCPT
+        with ESMTP id S1380880AbiEEO73 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 10:51:02 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 705315AA7E;
-        Thu,  5 May 2022 07:47:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1651762040; x=1683298040;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=MCJ7uiC5xwsC+tmnEtqtzhLDdZjHSuSpZSz3eteHGew=;
-  b=GuAkEwdBDVzWmHbRXHBF7QIkw8h+1S74Ux7+ZWv8xUdwn9EkxK3Mv07O
-   xjSDVfxqnX6OPrhFMNbn+kAS2jJiZKYvMThfD/u7ZGPTccRwwMrFrifbj
-   XPIAi0rZdij+IQ0lQeX/xBXnsHAE1z9Y7w28KHwJDNfRmJzOp9T0pa2XB
-   r+hIRVXDQCdUa2KoUMq3KSn6BvLl+58QFsSAyPAFIvJC92PpDC7kTecQX
-   tDxbUvPe2P3qf+KD2U89oLOwODAUD20j4Bg4bAXbuSLLngBt1Uo4bDG80
-   kZi68ds2vnvWYS2/ec5x4CdhMfDtizt0aI7iQcjOm5Teuoile/kL0zS9L
-   g==;
-X-IronPort-AV: E=Sophos;i="5.91,201,1647327600"; 
-   d="scan'208";a="154937663"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 05 May 2022 07:47:19 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Thu, 5 May 2022 07:47:19 -0700
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (10.10.215.89) by
- email.microchip.com (10.10.87.71) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.17 via Frontend
- Transport; Thu, 5 May 2022 07:47:18 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=lRCiqNcqRYQ9+6PGpYwk9uVECp/Nomdiad/FMOlHC7OBtINwfBrT4LDIfWJaKIyXGee63XKPuWXBdOppLsxSwYipx0c5htFIo7Uiqmh9gNUcrFcugHrFddvN7hyjjSlUiz2A5ut86G8cT4Etx9gHegPRXd10aYMhKpd6fJOOTQ9uPcVTaMcpFRnyjZ613B4jNFYyOm1bvsa2IjeH+4VSOZQ3oOTIKup+VOZPEaSlYuxAf7prN3F8URjkjM3tV8BkVXGGWVuzqnjlVCuLoprnQr8wy98++Xi1kzEMG5TmCZzgQV2+y2D68Qte1bhpXrv9NXWeV9DO1HKR8lGBLwR8cw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=MCJ7uiC5xwsC+tmnEtqtzhLDdZjHSuSpZSz3eteHGew=;
- b=g0Mneq0j6o8FvrJQ6HLGRDW8479ugMaVNYavzOYcwWCZLUXfGcOra3noniWBjfHD9ON9884YjtcBRI17X/jfcnzrhrK9I25fkm88dEl2q9fJqRXzO5sKmGypRZsHS34eMvLx2A75q8l97kXMj/lCVb7S1mQWkuTLhlkLga3i17eVJPALhpJ+Ii5aPgsvusG9QpIlnufV5htVMPd8B0FhAYJ+Xgbs3Iq/chh0dX5XPvn+08zx3z8BV8mdioMBXoyg1J3X2OXLIujNGwREb4XzcMU0MtezS9CADkisGXA0+EsOn2a0lOnR09KC+8QZuW6mzG1kR78zjImE5nLsRaRcaQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microchip.com; dmarc=pass action=none
- header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
+        Thu, 5 May 2022 10:59:29 -0400
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BAC95676C
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 07:55:49 -0700 (PDT)
+Received: by mail-lj1-x235.google.com with SMTP id 16so5917893lju.13
+        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 07:55:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=microchiptechnology.onmicrosoft.com;
- s=selector2-microchiptechnology-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=MCJ7uiC5xwsC+tmnEtqtzhLDdZjHSuSpZSz3eteHGew=;
- b=FSSiQ59VtrXYvKxcp+0+aftHbyaRQHaPUyaO6eOinhNaIZGho+ptO33PZuItxJIsbjD0D8L8eh/Ce0qkkTrh8GioMJgDm4nYAVN4R1Qx1RBaBfpMno6nokH7HrV5zm6OFjpETupflOJ73C5+DZZmwmjpvaXlLlMUWF6FMljlAAA=
-Received: from MW4PR11MB5936.namprd11.prod.outlook.com (2603:10b6:303:16b::11)
- by BY5PR11MB4165.namprd11.prod.outlook.com (2603:10b6:a03:18c::26) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5206.24; Thu, 5 May
- 2022 14:47:04 +0000
-Received: from MW4PR11MB5936.namprd11.prod.outlook.com
- ([fe80::3c24:30c4:ee81:9f1c]) by MW4PR11MB5936.namprd11.prod.outlook.com
- ([fe80::3c24:30c4:ee81:9f1c%2]) with mapi id 15.20.5186.028; Thu, 5 May 2022
- 14:47:04 +0000
-From:   <Codrin.Ciubotariu@microchip.com>
-To:     <Nicolas.Ferre@microchip.com>, <alsa-devel@alsa-project.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-CC:     <lars@metafoo.de>, <broonie@kernel.org>, <perex@perex.cz>,
-        <tiwai@suse.com>, <robh+dt@kernel.org>
-Subject: Re: [PATCH v3 6/6] ARM: configs: at91: sama7_defconfig: add MCHP PDMC
- and DMIC drivers
-Thread-Topic: [PATCH v3 6/6] ARM: configs: at91: sama7_defconfig: add MCHP
- PDMC and DMIC drivers
-Thread-Index: AQHYMh4rISj+T8AMLkuRkvsVTHdSE60QrC8AgAANi4A=
-Date:   Thu, 5 May 2022 14:47:04 +0000
-Message-ID: <77c2b348-b7a6-458d-21b6-68c54efc317f@microchip.com>
-References: <20220307122202.2251639-1-codrin.ciubotariu@microchip.com>
- <20220307122202.2251639-7-codrin.ciubotariu@microchip.com>
- <d84e0e48-cf35-ae1a-e384-067d361457ba@microchip.com>
-In-Reply-To: <d84e0e48-cf35-ae1a-e384-067d361457ba@microchip.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microchip.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 79ccd753-dddf-4b9c-7700-08da2ea61ef1
-x-ms-traffictypediagnostic: BY5PR11MB4165:EE_
-x-microsoft-antispam-prvs: <BY5PR11MB41651CFC826BEF65C64189A3E7C29@BY5PR11MB4165.namprd11.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: hH45HwC4OXYJoOy5ARIkF/CdSXLnMhjVp2PtdfsKvIPgJFFMsnohBCfmouOm95Bk5dnIeJSC2ycUuQG5FVxeI3z68kPonXOLdDvsaVmVeVicnmYNA95oCDhE1GQIs/L2THHPD+FtaKCx/NDFTbsciwWKB4BTbA5RamP3Pc80zpFvkZ+UliErJ0e6pk1MK70Y77gXq3ZsdEbMzuMv19V3IcX1oJpECigN0WPVayeVCeZb5Hz2pVoQ595T2nc6pWzMgzTDjiztUi8w/Bla7YxAhwcXf+RiwzkEP/HNKKhpsQcJGo6OVwn8u8C8o1ux/NncRC4qnauSDayGo1+g7NXaYrkcSggH+LYa54n/wyjXCSblYdeUUbcSvKl/RMCf63fxY08zVzRx62+a20nR0q0Z9B3ef3aJ+TWv+j6mFjqNhpWx9Rkruc3xvN+L7v8Lmjs/72lTSEj2rQpedQRrPcWyIIhgwDiIxOufJT4uiSvrmeembtP82XdtBQgWfCo5FwtMQsiwYR/Un3V+5T8lUtK6CZOJ9ok40xIIw5jKOfekyES1DIEMi/ah81Flx0b9Wc4xMDOEP7M+ungQl9m+KFW05ylriAWHH/kwjfSw78I+O9eZ20O1azsdLIQR77DUitkssf8bMsq0yeuMggWMAm1zHK7i5pctS0ciGQvHs/o4/Rr5cvX6Oc8L2/hvWe990j9RcxjsbEEDses1vCU2jC+QAllEYL+BEdqgq5/SPfUX+GsbrILjGs4ZTxXtCL9xMlw8tUAwlOYHr5Udd+UPasz1RA==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW4PR11MB5936.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(316002)(36756003)(71200400001)(2906002)(5660300002)(2616005)(6486002)(38070700005)(8936002)(38100700002)(110136005)(54906003)(508600001)(91956017)(66476007)(66446008)(4326008)(66946007)(66556008)(76116006)(8676002)(31686004)(6506007)(53546011)(86362001)(64756008)(122000001)(186003)(6512007)(31696002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 2
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?TUQ5OVd2QjJRekRSbGdvUEpIc2tKZ0haZm5rNzZTNHE0TGxnYisydXgvWmQx?=
- =?utf-8?B?UEI3QVBqdWVLZEE4VHkxSmRhblljMTBZTGZwM1FpaDU2K0JNbndENWU2UzJu?=
- =?utf-8?B?YmdROGNSczBnbUlENWpGWFdCWnZ4N0ZmZzdTOTF5dnFYdlhyUEVrT1NYOU1P?=
- =?utf-8?B?WGpELzhqczVGQWM2OXVEQnVWb09FcnpPaE83aENhclphL1pXbHRZUGdLc2xM?=
- =?utf-8?B?UDlwMjlJN0gwV2llcEF0dk5TbkFaamozbDdMUmJqUjd0SkZDcWd0YUVVNDhZ?=
- =?utf-8?B?RGdid0VBYmFjd2VnbVdpb3p3Zmh6M2NGKyt2aXYrY0FSVHdJSjVRazlCb2JF?=
- =?utf-8?B?L2lsK3Q5VEtORHM4TS9adTJYWVE0aStMVUZOZFVHT3FRcFJNd3JqUjJKeHFB?=
- =?utf-8?B?bFg3ZXRWSEdmNHBhbW5aMGxZMUhDYlhQSW85ZGE3NFZjTG9QaHNEMGw1WTV5?=
- =?utf-8?B?aHZ4S0hkNjczeDFURFBTWkJZNCtzdlBnTDFzRGtnM0dGQkFneGp6UlQ3TXJZ?=
- =?utf-8?B?OEVGWHJCOUcxRStPUGxOSGh5ZEhIYk1zUnNSQTJrNVhzVVJZSGQ4YVNkbWJp?=
- =?utf-8?B?U1BBV2g1VlN3V1ZLRTlVVmp5RmpRM2UvMGNLeDh6cjM3ckNKWXA3cmZzc3hy?=
- =?utf-8?B?aHozbVN0dnRVbzBxVFRXMXhzaU5IeFpoTHlMTzhKbEpmVU5Jb01Kdjc3TDV2?=
- =?utf-8?B?THFxZnQxa2JoUEhkcHorYWFmVHV4bEswcjVvNWdEek1rSnpRUVRhUG9BQmhp?=
- =?utf-8?B?SnpnTEdacVc2dWFaT0VEZlpxbExMQXBUSnptSm5DaFQxcGcyT054M3U1YXd6?=
- =?utf-8?B?S3RJSUZlYUZ3TTFJaXlJYlZXbzlMZUt2ME9hU1BJdHp5QjJ5bGZTMndlY1RC?=
- =?utf-8?B?U29GU0dlM01mbWo1ZzVZYzNYdFNmR0lHR0R2dFpRMmdqRWpNVE9vQ015VG1Y?=
- =?utf-8?B?aTJ5akV3NkZIcFpHNEoxa2s4SzJyL3JZekVONzBmcUJLRTZDQVBka3R0bHNJ?=
- =?utf-8?B?L213NGFaK2x5TjFDQmFkVlUraXo1WGttY3pRakdmUmRoK0JJdWtBVzh4Z0dG?=
- =?utf-8?B?MjYzNUJCSmpOb3MxTCtMc0RGaDdSeWZnbHl5Uzl6QWpiRkZoSk51RWtPOS9t?=
- =?utf-8?B?SE1RNVpIblFTMjJWN0NrYXkxVWdEaXRRYnBGRWhOUmpIWTRDbWVtUkpRWEl5?=
- =?utf-8?B?UE52dDRPREgxOEJNVTFlNE1jdkxqSmFQWTlxS094WENQZ2Y0MUorbkpaTnJX?=
- =?utf-8?B?Y2VNc0ZJYlVuaExwYkRnK2NqQnZFeEJ6cndSNWlRSC9IRHhFNWU0czYzVytp?=
- =?utf-8?B?alQyM05xMExUZzdkM0dVeFA0RGV4UHp4cWpKSkVGRlVhVUh1RmlyVHVUZjNH?=
- =?utf-8?B?TmZVMzN1Ty9RZU54cHkzM3pMbWhtOC9zajdnL1p6UVFRWldOdFU3TlRORXIw?=
- =?utf-8?B?RlB5aE1ZSXZsM2FUM2RpZXVtc0dyN3hSeXpuVDlITUlkOGNibWpraEZ5ekh2?=
- =?utf-8?B?NzZwSFI4RzhQV3VxKzJKNklTZGdkZUhkM2IxRE9iSDN0d3hoY0QvM29qclJs?=
- =?utf-8?B?MGxvN3pGZ01PR0U0WXgvVCtHWEJlRm9XTFdXSzdUaXNMaFoxTHQyWmNaYUQr?=
- =?utf-8?B?d2IyMThyV3FOOXRsVk1zZVc2bmJoWEdDRzU0TmtoZVlMQlZXcFBDNzZtRlpl?=
- =?utf-8?B?b2xJc2NIYlZPN0tPaTZ1UTZNR2ZubUJUWTRzTWxFNEdhTTJPdjdzbWlDd01Q?=
- =?utf-8?B?dmFjdnE4ZGJXZ3lzZUdob3JzSjM4WjB2N3NJSlVqeUlXaVVyL2R5NWJNYlVL?=
- =?utf-8?B?RmdOdCsxUWJQcnVZUHBOa0NDcXdWT0U5V1ZFZjQvQ2JFZTFIakN0UnhoZDkv?=
- =?utf-8?B?aW8xVUluUnFJTXRKOUdYU0o3TGFIVHp6NkRuSTlDdWFvNzNVd3BOYWdmOUVO?=
- =?utf-8?B?d0ozc0haOVg5RkwxZjRLeW9nTjh6OWRVN0JkbytoR0lEcWpmT29wMG1lbEVX?=
- =?utf-8?B?dzdRRXhxRml6SFNiRjdybHdHQksvRFNNSkdVV0EzN0M5TWtrcUF3YkxvZlJR?=
- =?utf-8?B?dkVKRW9FTy9CdnZmL0lCRE9pOFloZWZnSE13cEkvdk53RC9yOXo3VmRwQ2Jw?=
- =?utf-8?B?ejRFbE55STVUU1lCZ2ZLZnBwMnF3amdsYW9jek5QZTlQZEJsdkxjNkRGVWE1?=
- =?utf-8?B?TW9kQm1rOFJuNzZ5a25kUEZBRzNSUGVTL0hycElXOFhJakVsZmRuZno1YUtO?=
- =?utf-8?B?U1UrVGZGSW44c1JoY2FDUHg0RzlWZzJHdDZidWNqbElFUTlzMzNJOE5MakdJ?=
- =?utf-8?B?VDkxT0JVSTUweGVqTGdHTEh2ZWFUM0ZXRzJ5ZThGQWdYWlM2dDdBNFdNdm1R?=
- =?utf-8?Q?lH4Tss+W2NBwhSEswSB2JBovIQhS7Vh9GbZuEYIGPz9kQ?=
-x-ms-exchange-antispam-messagedata-1: DmeSfaB0bg2OkgOoXFc9ATHJQEaxjiJ+Xwk=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <D89D3F722AA73C4BA7092D74330E1007@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=+N9gEqu1WkvYNw5+yo890P99LWHgEFq2ugJIKH1/Y2c=;
+        b=iIsm1DofvLas9Il8wcWTQZj7FvTHkzneaE3ytMEmGGwdQeL60O/82Fh/sCbP5pGdLT
+         2hdFMN9FpQEvruASiokNVsQAMCe/pD/nV2WilCEssTA4Po9j2y+VXhYHS3dW50SwFjmq
+         uO9MAy7h4YVCrcLnudyisvtr+NnwTDweIyPaE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=+N9gEqu1WkvYNw5+yo890P99LWHgEFq2ugJIKH1/Y2c=;
+        b=Wlz7bXyaBDDw9P6946p2eE1+HdSRswgLMNSLmB0OtspTmSEo4eujkWH8K0dcJvUHir
+         FrjXtuFTzjmwjmUDGtyP6UYBHyYfkaBmUE9lbdzkUjAiRwIYEzRfjprR/qLrwH8jEDXT
+         o6O2leIXBnOTQGUU2XuKm8sBcVCOTI5PmC2iwNhtzwIC5EU/t8/HaB0EHNRQ7bzhSK7X
+         k8RLdgVXHA+mFYnAVpvN7b7MgAkjpv9/XfU7CrSfphc8dNj/d4MvKoZjkxtGOJkHyais
+         9H6mv0XF8az6pqzAUbk3vr4uSIumR8jDTzsy+HXClyKmOEtFOmo9gOMJZ18WisK2szVR
+         WrSw==
+X-Gm-Message-State: AOAM530G+4omyDTeCbyh1NzLzUC0GdlLGrC12olRKpCpYivbbxB1G31w
+        upGxwgs4lgykq2ozipJOvpn9KjuYvVs04Xjr3p8=
+X-Google-Smtp-Source: ABdhPJwXIGKpUdQUmFZby5F2SAoavyntUzAopVgKYL367/ESrpsLFN12gyl6jULzaYiVZXD4bNSWdQ==
+X-Received: by 2002:a2e:b006:0:b0:24f:a85:94a3 with SMTP id y6-20020a2eb006000000b0024f0a8594a3mr16345458ljk.21.1651762547089;
+        Thu, 05 May 2022 07:55:47 -0700 (PDT)
+Received: from mail-lj1-f176.google.com (mail-lj1-f176.google.com. [209.85.208.176])
+        by smtp.gmail.com with ESMTPSA id s16-20020a197710000000b004725b99d2fdsm243801lfc.164.2022.05.05.07.55.46
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 05 May 2022 07:55:46 -0700 (PDT)
+Received: by mail-lj1-f176.google.com with SMTP id g16so5939587lja.3
+        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 07:55:46 -0700 (PDT)
+X-Received: by 2002:adf:f50d:0:b0:20a:e096:ef with SMTP id q13-20020adff50d000000b0020ae09600efmr21138648wro.679.1651762065131;
+ Thu, 05 May 2022 07:47:45 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MW4PR11MB5936.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 79ccd753-dddf-4b9c-7700-08da2ea61ef1
-X-MS-Exchange-CrossTenant-originalarrivaltime: 05 May 2022 14:47:04.4311
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: qBcmgtLWVDDxHxBv4beGkspqIHmwmdNYofIyZo7TekRQHP8V3Rfvq9Ls1IrNYNe8OuqGxCJlxZkqEn3Jgak7PWWKPBVN8E/r+XIU/LVMOeo=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR11MB4165
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20220503162033.1.Ia8651894026707e4fa61267da944ff739610d180@changeid>
+ <YnJv3B/85hTz54SC@intel.com> <CAD=FV=WndmKuEB0=OVQP9YuJaSmD0uxkNs5LE0wWsFj7gBvhBA@mail.gmail.com>
+ <1c6c9fde6e85f09cc89ea8dc6e8716fef58f3ee1.camel@redhat.com>
+In-Reply-To: <1c6c9fde6e85f09cc89ea8dc6e8716fef58f3ee1.camel@redhat.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Thu, 5 May 2022 07:47:32 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=V01S2hKPmA0VR_RedW1SWY3Mor8z9ZGy76NH9Cd3D4Cw@mail.gmail.com>
+Message-ID: <CAD=FV=V01S2hKPmA0VR_RedW1SWY3Mor8z9ZGy76NH9Cd3D4Cw@mail.gmail.com>
+Subject: Re: [PATCH] drm: Document that power requirements for DP AUX transfers
+To:     Lyude Paul <lyude@redhat.com>
+Cc:     =?UTF-8?B?VmlsbGUgU3lyasOkbMOk?= <ville.syrjala@linux.intel.com>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Maxime Ripard <maxime@cerno.tech>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        freedreno <freedreno@lists.freedesktop.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Imre Deak <imre.deak@intel.com>,
+        Jani Nikula <jani.nikula@intel.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -166,34 +90,228 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gMDUuMDUuMjAyMiAxNjo1OCwgTmljb2xhcyBGZXJyZSB3cm90ZToNCj4gT24gMDcvMDMvMjAy
-MiBhdCAxMzoyMiwgQ29kcmluIENpdWJvdGFyaXUgd3JvdGU6DQo+PiBFbmFibGUgZHJpdmVycyBu
-ZWVkZWQgZm9yIE1pY3JvY2hpcCdzIFBETUMgYW5kIFBETSBtaWNyb3Bob25lcy4NCj4+DQo+PiBT
-aWduZWQtb2ZmLWJ5OiBDb2RyaW4gQ2l1Ym90YXJpdSA8Y29kcmluLmNpdWJvdGFyaXVAbWljcm9j
-aGlwLmNvbT4NCj4+IC0tLQ0KPj4NCj4+IENoYW5nZXMgaW4gdjIsdjM6DQo+PiDCoCAtIG5vbmU7
-DQo+Pg0KPj4gwqAgYXJjaC9hcm0vY29uZmlncy9zYW1hN19kZWZjb25maWcgfCAyICsrDQo+PiDC
-oCAxIGZpbGUgY2hhbmdlZCwgMiBpbnNlcnRpb25zKCspDQo+Pg0KPj4gZGlmZiAtLWdpdCBhL2Fy
-Y2gvYXJtL2NvbmZpZ3Mvc2FtYTdfZGVmY29uZmlnIA0KPj4gYi9hcmNoL2FybS9jb25maWdzL3Nh
-bWE3X2RlZmNvbmZpZw0KPj4gaW5kZXggMDM2ODA2OGUwNGQ5Li5iYzI5YmFkYWI4OTAgMTAwNjQ0
-DQo+PiAtLS0gYS9hcmNoL2FybS9jb25maWdzL3NhbWE3X2RlZmNvbmZpZw0KPj4gKysrIGIvYXJj
-aC9hcm0vY29uZmlncy9zYW1hN19kZWZjb25maWcNCj4+IEBAIC0xMzgsNiArMTM4LDggQEAgQ09O
-RklHX1NORF9TT0NfTUlLUk9FX1BST1RPPW0NCj4+IMKgIENPTkZJR19TTkRfTUNIUF9TT0NfSTJT
-X01DQz15DQo+PiDCoCBDT05GSUdfU05EX01DSFBfU09DX1NQRElGVFg9eQ0KPj4gwqAgQ09ORklH
-X1NORF9NQ0hQX1NPQ19TUERJRlJYPXkNCj4+ICtDT05GSUdfU05EX01DSFBfU09DX1BETUM9eQ0K
-Pj4gK0NPTkZJR19TTkRfU09DX0RNSUM9eQ0KPiANCj4gSSdtIGZpbmUgd2l0aCB0aGF0LCBidXQg
-SSBzZWUgdGhhdCBzb21lIEtjb25maWcgZW50cmllcyAic2VsZWN0IiB0aGlzIA0KPiBTTkRfU09D
-X0RNSUMgZGlyZWN0bHkgKGFtZCwgaW50ZWwsIG1lZGlhdGVrLCBzdG0pLg0KPiBJZiBpdCdzIGFi
-c29sdXRlbHkgbmVlZGVkIGZvciBQRE1DIHRvIHdvcmssIHdoYXQgYWJvdXQgZG9pbmcgdGhlIHNh
-bWUgYXMgDQo+IGl0IHdvdWxkIHByZXZlbnQgc29tZSBicm9rZW4gY29uZmlndXJhdGlvbnM/DQoN
-ClRoZSBvbmx5IHdheSBpdCBtYWtlcyBzZW5zZSB0byBtZSB0byBoYXZlIHRoaXMgZHJpdmVyIHNl
-bGVjdGVkIHNvbWV3aGVyZSANCmlzIGluIGEgc291bmQgY2FyZCBkcml2ZXIsIHVzZWQgZm9yIGEg
-c3BlY2lmaWMgYm9hcmQsIHdoaWNoIHdlIGtub3cgaXQgDQpoYXMgUERNIG1pY3JvcGhvbmVzLiBT
-aW5jZSwgZm9yIG5vdywgd2UgdXNlIHRoZSBzaW1wbGUgc291bmQgY2FyZCBmb3IgDQpvdXIgYXVk
-aW8gaW50ZXJmYWNlcywgd2UgaGF2ZSBubyBwbGFjZSB0byBhZGQgdGhpcyBzZWxlY3QuDQpUaGUg
-cmVhc29uIEkgZG8gbm90IGxpa2UgdG8gYWRkIHRoaXMgc2VsZWN0IHVuZGVyIHRoZSBjb250cm9s
-bGVyIGRyaXZlciwgDQphcyBzb21lIG9mIHRoZSB2ZW5kb3JzIGRpZCwgaXMgYmVjYXVzZSwgaW4g
-dGhlIGZ1dHVyZSwgd2UgbWlnaHQgaGF2ZSANCmRpZmZlcmVudCBQRE0gbWljcm9waG9uZXMgdGhh
-dCBtaWdodCBub3Qgd29yayB3aXRoIFNORF9TT0NfRE1JQyBhbmQgDQptaWdodCBuZWVkIGEgZGlm
-ZmVyZW50IGRyaXZlci4NCkkgZG9uJ3QgaGF2ZSBhIHN0cm9uZyBvcGluaW9uIG9uIHRoaXMuIElm
-IHlvdSB0aGluayBJIGFtIG92ZXJ0aGlua2luZywgDQpwbGVhc2UgbGV0IG1lIGtub3cgYW5kIEkg
-d2lsbCBjaGFuZ2UgdGhpcy4NCg0KQmVzdCByZWdhcmRzLA0KQ29kcmluDQo=
+Hi,
+
+On Wed, May 4, 2022 at 11:10 AM Lyude Paul <lyude@redhat.com> wrote:
+>
+> On Wed, 2022-05-04 at 09:04 -0700, Doug Anderson wrote:
+> > Hi,
+> >
+> > On Wed, May 4, 2022 at 5:21 AM Ville Syrj=C3=A4l=C3=A4
+> > <ville.syrjala@linux.intel.com> wrote:
+> > >
+> > > On Tue, May 03, 2022 at 04:21:08PM -0700, Douglas Anderson wrote:
+> > > > When doing DP AUX transfers there are two actors that need to be
+> > > > powered in order for the DP AUX transfer to work: the DP source and
+> > > > the DP sync. Commit bacbab58f09d ("drm: Mention the power state
+> > > > requirement on side-channel operations") added some documentation
+> > > > saying that the DP source is required to power itself up (if needed=
+)
+> > > > to do AUX transfers. However, that commit doesn't talk anything abo=
+ut
+> > > > the DP sink.
+> > > >
+> > > > For full fledged DP the sink isn't really a problem. It's expected
+> > > > that if an external DP monitor isn't plugged in that attempting to =
+do
+> > > > AUX transfers won't work. It's also expected that if a DP monitor i=
+s
+> > > > plugged in (and thus asserting HPD) that it AUX transfers will work=
+.
+> > > >
+> > > > When we're looking at eDP, however, things are less obvious. Let's =
+add
+> > > > some documentation about expectations. Here's what we'll say:
+> > > >
+> > > > 1. We don't expect the DP AUX transfer function to power on an eDP
+> > > > panel. If an eDP panel is physically connected but powered off then=
+ it
+> > > > makes sense for the transfer to fail.
+> > >
+> > > I don't agree with this. I think the panel should just get powred up
+> > > for AUX transfers.
+> >
+> > That's definitely a fair thing to think about and I have at times
+> > thought about trying to make it work that way. It always ends up
+> > hitting a roadblock.
+> >
+> > The biggest roadblock that I recall is that to make this work then
+> > you'd have to somehow ensure that the bridge chain's pre_enable() call
+> > was made as part of the AUX transfer, right? Since the transfer
+> > function can be called in any context at all, we have to coordinate
+> > this with DRM. If, for instance, DRM is mid way through powering the
+> > panel down then we need to wait for DRM to fully finish powering down,
+> > then we need to power the panel back up. I don't believe that we can
+> > just force the panel to stay on if DRM is turning it off because of
+> > panel power sequencing requirements. At least I know it would have the
+> > potential to break "samsung-atna33xc20.c" which absolutely needs to
+> > see the panel power off after it's been disabled.
+> >
+> > We also, I believe, need to handle the fact that the bridge chain may
+> > not have even been created yet. We do AUX transfers to read the EDID
+> > and also to setup the backlight in the probe function of panel-edp. At
+> > that point the panel hasn't been linked into the chain. We had _long_
+> > discussions [1] about moving these out of probe and decided that we
+> > could move the EDID read to be later but that it was going to really
+> > ugly to move the AUX backlight later. The backlight would end up
+> > popping up at some point in time later (the first call to panel
+> > prepare() or maybe get_modes()) and that seemed weird.
+> >
+> > [1]
+> > https://lore.kernel.org/lkml/CAD=3DFV=3DU5-sTDLYdkeJWLAOG-0wgxR49VxtwUy=
+UO7z2PuibLGsg@mail.gmail.com/
+> >
+> >
+> > > Otherwise you can't trust that eg. the /dev/aux
+> > > stuff is actually usable.
+> >
+> > Yeah, it's been on my mind to talk more about /dev/aux. I think
+> > /dev/aux has some problems, at least with eDP. Specifically:
+> >
+> > 1. Even if we somehow figure out how to power the panel on as part of
+> > the aux transfer, we actually _still_ not guaranteed to be able to
+> > talk to it as far as I understand. My colleague reported to me that on
+> > a system he was working with that had PSR (panel self refresh) that
+> > when the panel was powered on but in PSR mode that it wouldn't talk
+> > over AUX. Assuming that this is correct then I guess we'd also have to
+> > do even more coordination with DRM to exit PSR and block future
+> > transitions of PSR. (NOTE: it's always possible that my colleague ran
+> > into some other bug and that panels are _supposed_ to be able to talk
+> > in PSR. If you think this is the case, I can always try to dig more).
+>
+> TBH - the coordination with drm I don't think would be the difficult part=
+, as
+> we'd just need to add some sort of property (ideally invisible to userspa=
+ce)
+> that can be used in an atomic commit to disable PSR - similar to how we e=
+nable
+> CRC readback from sysfs in the majority of DRM drivers. That being said
+> though, I think we can just leave the work of solving this problem up to
+> whoever ends up needing this to work.
+>
+> >
+> > 2. I'm not totally convinced that it's a great idea, at least for eDP,
+> > for userspace to be mucking with /dev/aux. For DP's case I guess
+> > /dev/aux is essentially enabling userspace drivers to do things like
+> > update firmware on DP monitors or play with the backlight. I guess we
+> > decided that we didn't want to add drivers in the kernel to handle
+> > this type of stuff so we left it for userspace? For eDP, though, there
+>
+> The main reason DP AUX got exposed to userspace in the first place was fo=
+r
+> usecases like fwupd, where some MST docks actually do their firmware upda=
+tes
+> over DPCD. I don't know of any equivalent usecase for eDP at the moment, =
+but I
+> can definitely try asking some of the OEM contacts I have whether this is=
+/may
+> eventually be a thing or not.
+
+Thanks for the history. Even if we want to do firmware updates for eDP
+with this, then having the AUX transfer function temporarily power the
+panel would almost certainly not be enough. You can't update the
+firmware in one AUX transfer and you certainly wouldn't want any
+chance of the panel being powered down mid-update.
+
+That means either:
+
+a) Userspace has to have some way itself of ensuring that the panel
+stays powered on. If this is true then we don't need to worry about
+powering it on as part of the AUX transfer.
+
+b) We shouldn't use the DP AUX transfer function for panel FW updates
+and should come up with a solution for eDP where FW updates are
+coordinated by the panel driver.
+
+As you said above, this can wait until someone has the need to
+implement this. Neither a) nor b) contradicts my documentation.
+
+
+> > is a panel driver and we if we have an AUX backlight we create a real
+> > backlight device. If we needed to do a firmware update of an eDP panel
+> > it would make sense for the panel driver to present some interface for
+> > the firmware update so that the panel driver could make sure that the
+> > panel stayed powered for the duration of the firmware update, not just
+> > for the duration of a single AUX transfer.
+>
+> Yeah, I tried adding this at one point actually but ran into some issues
+> finding a nice solution. It wasn't the most important thing at the time, =
+so I
+> ended up shifting my attention to other things. Honestly the biggest
+> complicating factor of this is the fact that we can't synchronously wake =
+up a
+> device from sysfs without introducing a deadlock due to lock order invers=
+ion
+> between DRM and sysfs. If this could be solved nicely, I think a lot of t=
+his
+> would become far easier.
+>
+> >
+> > 3. In general it feels a little awkward for userspace to be directly
+> > poking at the same set of registers that a kernel driver is also
+> > poking at.
+>
+> We could always consider limiting the ranges that the DP AUX interface al=
+lows
+> userspace to read from, although I haven't thought too hard about that si=
+nce I
+> don't know that would fix the issue entirely.
+>
+> >
+> > To me it feels like /dev/aux is much like the /dev/i2c interface. Yes,
+> > userspace can go talk to random i2c devices and can even talk to them
+> > after a kernel driver has "claimed" an i2c device, but:
+> > a) If an i2c device is powered off, then the i2c transfer won't work.
+> > b) If you set a register of a device managed by a kernel driver behind
+> > the back of the kernel driver, you're really asking for trouble.
+> >
+> >
+> > So I guess my proposals would be to pick one of:
+> >
+> > a) Leave things they way they are as I've documented. NOTE that my
+> > documentation does document the way things are today. No aux transfer
+> > function that I'm aware of powers up an eDP panel. In this case if
+> > someone wants to use /dev/aux for an eDP panel it's really up to them
+> > not to shoot themselves in the foot.
+>
+> To be honest, I do totally agree though that /dev/aux has very limited
+> usecases for eDP. I do think it's definitely a useful debugging tool, and=
+ it's
+> been a big help in figuring out how things like backlight interfaces work=
+ when
+> I'm otherwise lacking in docs (and sometimes it's still useful, since you=
+ can
+> test various subleties of panel controllers). So at a bare minimum, I'd v=
+ery
+> much like it if we can at least keep it around in some form (perhaps hidd=
+en
+> behind a kernel config option). Although, that brings up the question of =
+if
+> that makes it harder for someone without kernel debugging experience to g=
+et me
+> DPCD output from a panel outside of what got logged to the kernel=E2=80=
+=A6
+
+My opinion is to simply land this documentation patch but otherwise
+leave it alone. Any chance you'd be willing to provide a Reviewed-by
+(assuming I fix the typo that Dmitry pointed out)?
+
+
+> > b) Stop populating /dev/aux for eDP panels and only do it for DP and
+> > then if/when someone yells we figure out how they were using /dev/aux
+> > and why it was safe. This is definitely an ABI change but I have no
+> > idea if it would really break anyone. I suppose we could take a first
+> > step by spewing a WARN_ON if someone directly uses /dev/aux for eDP?
+> >
+> > c) Somehow dynamically create / remove the /dev/aux device as the eDP
+> > panel turns off and on again. If /dev/aux is there then we know that
+> > the panel is on. NOTE: this ignores PSR. I don't think we'd want to
+> > delete / create the /dev/aux node that often. So we'd either have to
+> > still accept that the transfers will sometimes fail (c1) or make it a
+> > requirement that we bring the panel out of PSR for an AUX transfer
+> > (c2).
+> >
+> >
+> > Technically we could list option (d) to power the panel up, but as per
+> > above I think it's pretty awkward and doesn't feel like the right way
+> > to go. Obviously happy to hear other opinions, though.

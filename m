@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0299151C4C2
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 18:11:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BEA6C51C4EB
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 18:11:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381846AbiEEQMc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 12:12:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60574 "EHLO
+        id S1381710AbiEEQMg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 12:12:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381783AbiEEQME (ORCPT
+        with ESMTP id S1381854AbiEEQMH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 12:12:04 -0400
+        Thu, 5 May 2022 12:12:07 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A75355C87E;
-        Thu,  5 May 2022 09:08:17 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0606F5C67A;
+        Thu,  5 May 2022 09:08:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 54B76B82C77;
-        Thu,  5 May 2022 16:08:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5FB7DC385AC;
-        Thu,  5 May 2022 16:08:11 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 92564B82E07;
+        Thu,  5 May 2022 16:08:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B86FC385A4;
+        Thu,  5 May 2022 16:08:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651766895;
-        bh=04e05OAKWC2KY4pkzZtKCOzJ9fpqL4EQCIgXq+rMlvE=;
+        s=k20201202; t=1651766899;
+        bh=Gr5HXneY+YlFzVpV0ID6Kk4ix4V8odMH5G7YzXxq2gA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KIHxHyN9YW2suHkYlCm4RYTGhWew76GPFITeEsy9Angkqk2Z9w44YXhf8cNL+ze7h
-         SL43xpSDL0Dmsqr04V68YD/r1vNejQZDFWwYn8PpHy43v2eWo8OG2ShjzqEa5QSN9Q
-         bJUmU9fTogLy80j0nLCXDXW63NE4o8lhZT8x5GE2LiAL4LyQM8OKUOyk91XburhoFl
-         i+2vdqjoZhtrmFI5uTt9q3Om3PASY24DyHKTAxqhXw0/8sIQyGUgGuyzfL2p/atfPc
-         dxhsSgwIFzU/baSL10TZ0tWNXZ7tzZvSMinx/KAuUlYAsUHB9jrl+p78Gv1YU7d4t+
-         a3QfGeIgPrg+Q==
+        b=h3WswNMhOgHIjnTLVYN6nzFjR3QFrmAfQRe34V59+r3iEc0ln/oX5U5x+caeBvTft
+         +/3cQEgNgip9RV3q36ckQgRYTo9P1S5F37tJ6LKC5HbVFkKktkHyqRwAPy+iKACJJT
+         JMkxLJSvyzYnfDE8l7pm+v36Pa6Orrkf0Pxr1MGXhqzrUl3Pyys7eAieGhrYzSc/Sp
+         Z6H/kReboNKbqEHpJFJ7BI3MBtT0FEi6E72MZ+GhugY8GlLnbh1oIXXe4OZYCuCWo5
+         xzqCRvpJ9UBvNSPfbcQf5JR7SxuwhvlWd/mukTuFfgUTqS18kv9fboybnT73aos6h0
+         +ui26PTwj+Gfg==
 From:   Daniel Bristot de Oliveira <bristot@kernel.org>
 To:     Steven Rostedt <rostedt@goodmis.org>, linux-kernel@vger.kernel.org
 Cc:     Daniel Bristot de Oliveira <bristot@kernel.org>,
@@ -49,9 +49,9 @@ Cc:     Daniel Bristot de Oliveira <bristot@kernel.org>,
         Juri Lelli <juri.lelli@redhat.com>,
         Clark Williams <williams@redhat.com>,
         linux-doc@vger.kernel.org, linux-trace-devel@vger.kernel.org
-Subject: [RFC V3 13/20] rv/reactor: Add the panic reactor
-Date:   Thu,  5 May 2022 18:06:53 +0200
-Message-Id: <37da65fd7f07334fdd71cb747decf4947f53e8f7.1651766361.git.bristot@kernel.org>
+Subject: [RFC V3 14/20] Documentation/rv: Add a basic documentation
+Date:   Thu,  5 May 2022 18:06:54 +0200
+Message-Id: <00b64fe4e61687d6d65b6953c389b76b48761fd0.1651766361.git.bristot@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <cover.1651766361.git.bristot@kernel.org>
 References: <cover.1651766361.git.bristot@kernel.org>
@@ -67,8 +67,8 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sample reactor that panics the system when an exception is found. This
-is useful both to capture a vmcore, or to fail-safe a critical system.
+Add the runtime-verification.rst document, explaining the basics of RV
+and how to use the interface.
 
 Cc: Jonathan Corbet <corbet@lwn.net>
 Cc: Steven Rostedt <rostedt@goodmis.org>
@@ -89,88 +89,291 @@ Cc: linux-kernel@vger.kernel.org
 Cc: linux-trace-devel@vger.kernel.org
 Signed-off-by: Daniel Bristot de Oliveira <bristot@kernel.org>
 ---
- kernel/trace/rv/Kconfig         |  8 ++++++
- kernel/trace/rv/Makefile        |  1 +
- kernel/trace/rv/reactor_panic.c | 44 +++++++++++++++++++++++++++++++++
- 3 files changed, 53 insertions(+)
- create mode 100644 kernel/trace/rv/reactor_panic.c
+ Documentation/trace/index.rst                 |   1 +
+ Documentation/trace/rv/index.rst              |   9 +
+ .../trace/rv/runtime-verification.rst         | 233 ++++++++++++++++++
+ kernel/trace/rv/Kconfig                       |   3 +
+ 4 files changed, 246 insertions(+)
+ create mode 100644 Documentation/trace/rv/index.rst
+ create mode 100644 Documentation/trace/rv/runtime-verification.rst
 
+diff --git a/Documentation/trace/index.rst b/Documentation/trace/index.rst
+index f9b7bcb5a630..2d73e8697523 100644
+--- a/Documentation/trace/index.rst
++++ b/Documentation/trace/index.rst
+@@ -32,3 +32,4 @@ Linux Tracing Technologies
+    sys-t
+    coresight/index
+    user_events
++   rv/index
+diff --git a/Documentation/trace/rv/index.rst b/Documentation/trace/rv/index.rst
+new file mode 100644
+index 000000000000..92338dceffab
+--- /dev/null
++++ b/Documentation/trace/rv/index.rst
+@@ -0,0 +1,9 @@
++===================================
++RV - Runtime Verification Interface
++===================================
++
++.. toctree::
++   :maxdepth: 2
++   :glob:
++
++   *
+diff --git a/Documentation/trace/rv/runtime-verification.rst b/Documentation/trace/rv/runtime-verification.rst
+new file mode 100644
+index 000000000000..4624cad8ab04
+--- /dev/null
++++ b/Documentation/trace/rv/runtime-verification.rst
+@@ -0,0 +1,233 @@
++====================
++Runtime Verification
++====================
++
++Runtime Verification (RV) is a lightweight (yet rigorous) method that
++complements classical exhaustive verification techniques (such as *model
++checking* and *theorem proving*) with a more practical approach for complex
++systems.
++
++
++Instead of relying on a fine-grained model of a system (e.g., a
++re-implementation a instruction level), RV works by analyzing the trace of the
++system's actual execution, comparing it against a formal specification of
++the system behavior.
++
++The main advantage is that RV can give precise information on the runtime
++behavior of the monitored system, without the pitfalls of developing models
++that require a re-implementation of the entire system in a modeling language.
++Moreover, given an efficient monitoring method, it is possible execute an
++*online* verification of a system, enabling the *reaction* for unexpected
++events, avoiding, for example, the propagation of a failure on safety-critical
++systems.
++
++Runtime Monitors and Reactors
++=============================
++
++A monitor is the central part of the runtime verification of a system. The
++monitor stands in between the formal specification of the desired (or
++undesired) behavior, and the trace of the actual system.
++
++In Linux terms, the runtime verification monitors are encapsulated inside the
++*RV monitor* abstraction. A *RV monitor* includes a reference model of the
++system, a set of instances of the monitor (per-cpu monitor, per-task monitor,
++and so on), and the helper functions that glue the monitor to the system via
++trace, as depicted bellow::
++
++ Linux   +---- RV Monitor ----------------------------------+ Formal
++  Realm  |                                                  |  Realm
++  +-------------------+     +----------------+     +-----------------+
++  |   Linux kernel    |     |     Monitor    |     |     Reference   |
++  |     Tracing       |  -> |   Instance(s)  | <-  |       Model     |
++  | (instrumentation) |     | (verification) |     | (specification) |
++  +-------------------+     +----------------+     +-----------------+
++         |                          |                       |
++         |                          V                       |
++         |                     +----------+                 |
++         |                     | Reaction |                 |
++         |                     +--+--+--+-+                 |
++         |                        |  |  |                   |
++         |                        |  |  +-> trace output ?  |
++         +------------------------|--|----------------------+
++                                  |  +----> panic ?
++                                  +-------> <user-specified>
++
++In addition to the verification and monitoring of the system, a monitor can
++react to an unexpected event. The forms of reaction can vary from logging the
++event occurrence to the enforcement of the correct behavior to the extreme
++action of taking a system down to avoid the propagation of a failure.
++
++In Linux terms, a *reactor* is an reaction method available for *RV monitors*.
++By default, all monitors should provide a trace output of their actions,
++which is already a reaction. In addition, other reactions will be available
++so the user can enable them as needed.
++
++For further information about the principles of runtime verification and
++RV applied to Linux:
++
++  BARTOCCI, Ezio, et al. *Introduction to runtime verification.* In: Lectures on
++  Runtime Verification. Springer, Cham, 2018. p. 1-33.
++
++  FALCONE, Ylies, et al. *A taxonomy for classifying runtime verification tools.*
++  In: International Conference on Runtime Verification. Springer, Cham, 2018. p.
++  241-262.
++
++  DE OLIVEIRA, Daniel Bristot, et al. *Automata-based formal analysis and
++  verification of the real-time Linux kernel.* Ph.D. Thesis, 2020.
++
++Online RV monitors
++==================
++
++Monitors can be classified as *offline* and *online* monitors. *Offline*
++monitor process the traces generated by a system after the events, generally by
++reading the trace execution from a permanent storage system. *Online* monitors
++process the trace during the execution of the system. Online monitors are said
++to be *synchronous* if the processing of an event is attached to the system
++execution, blocking the system during the event monitoring. On the other hand,
++an *asynchronous* monitor has its execution detached from the system. Each type
++of monitor has a set of advantages. For example, *offline* monitors can be
++executed on different machines but require operations to save the log to a
++file. In contrast, *synchronous online* method can react at the exact moment
++a violation occurs.
++
++Another important aspect regarding monitors is the overhead associated with the
++event analysis. If the system generates events at a frequency higher than the
++monitor's ability to process them in the same system, only the *offline*
++methods are viable. On the other hand, if the tracing of the events incurs
++on higher overhead than the simple handling of an event by a monitor, then a
++*synchronous online* monitors will incur on lower overhead.
++
++Indeed, the research presented in:
++
++  DE OLIVEIRA, Daniel Bristot; CUCINOTTA, Tommaso; DE OLIVEIRA, Romulo Silva.
++  *Efficient formal verification for the Linux kernel.* In: International
++  Conference on Software Engineering and Formal Methods. Springer, Cham, 2019.
++  p. 315-332.
++
++Shows that for Deterministic Automata models, the synchronous processing of
++events in-kernel causes lower overhead than saving the same events to the trace
++buffer, not even considering collecting the trace for user-space analysis.
++This motivated the development of an in-kernel interface for online monitors.
++
++For further information about modeling of Linux kernel behavior using automata,
++please read:
++
++  DE OLIVEIRA, Daniel B.; DE OLIVEIRA, Romulo S.; CUCINOTTA, Tommaso. *A thread
++  synchronization model for the PREEMPT_RT Linux kernel.* Journal of Systems
++  Architecture, 2020, 107: 101729.
++
++The user interface
++==================
++
++The user interface resembles the tracing interface (on purpose). It is
++currently at "/sys/kernel/tracing/rv/".
++
++The following files/folders are currently available:
++
++**available_monitors**
++
++- Reading list the available monitors, one per line
++
++For example::
++
++   [root@f32 rv]# cat available_monitors
++   wip
++   wwnr
++
++**available_reactors**
++
++- Reading shows the available reactors, one per line.
++
++For example::
++
++   [root@f32 rv]# cat available_reactors
++   nop
++   panic
++   printk
++
++**enabled_monitors**:
++
++- Reading lists the enabled monitors, one per line
++- Writing to it enables a given monitor
++- Writing a monitor name with a '-' prefix disables it
++- Truncating the file disables all enabled monitors
++
++For example::
++
++   [root@f32 rv]# cat enabled_monitors
++   [root@f32 rv]# echo wip > enabled_monitors
++   [root@f32 rv]# echo wwnr >> enabled_monitors
++   [root@f32 rv]# cat enabled_monitors
++   wip
++   wwnr
++   [root@f32 rv]# echo -wip >> enabled_monitors
++   [root@f32 rv]# cat enabled_monitors
++   wwnr
++   [root@f32 rv]# echo > enabled_monitors
++   [root@f32 rv]# cat enabled_monitors
++   [root@f32 rv]#
++
++Note that it is possible to enable more than one monitor concurrently.
++
++
++**monitoring_on**
++
++This is an on/off general switcher for monitoring. It resembles the
++"tracing_on" switcher in the trace interface.
++
++- Writing "0" stops the monitoring
++- Writing "1" continues the monitoring
++- Reading returns the current status of the monitoring
++
++Note that it does not disable enabled monitors but stop the per-entity
++monitors monitoring the events received from the system.
++
++**reacting_on**
++
++- Writing "0" prevents reactions for happening
++- Writing "1" enable reactions
++- Reading returns the current status of the monitoring
++
++**monitors/**
++
++Each monitor will have its own directory inside "monitors/". There the
++monitor-specific files will be presented. The "monitors/" directory resembles
++the "events" directory on tracefs.
++
++For example::
++
++   [root@f32 rv]# cd monitors/wip/
++   [root@f32 wip]# ls
++   desc  enable
++   [root@f32 wip]# cat desc
++   auto-generated wakeup in preemptive monitor.
++   [root@f32 wip]# cat enable
++   0
++
++**monitors/$MONITOR/desc**
++
++- Reading shows a description of the monitor *$MONITOR*
++
++**monitors/$MONITOR/enable**
++
++- Writing "0" disables the *$MONITOR*
++- Writing "1" enables the *$MONITOR*
++- Reading return the current status of the *$MONITOR*
++
++**monitors/$MONITOR/reactors**
++
++- List available reactors, with the select reaction for the given *MONITOR*
++  inside "[]". The default one is the nop (no operation) reactor.
++- Writing the name of a reactor enables it to the given MONITOR.
++
++For example::
++
++   [root@f32 rv]# cat monitors/wip/reactors
++   [nop]
++   panic
++   printk
++   [root@f32 rv]# echo panic > monitors/wip/reactors
++   [root@f32 rv]# cat monitors/wip/reactors
++   nop
++   [panic]
++   printk
 diff --git a/kernel/trace/rv/Kconfig b/kernel/trace/rv/Kconfig
-index 8c54ae473846..a2999c37c037 100644
+index a2999c37c037..931f09bcd2dc 100644
 --- a/kernel/trace/rv/Kconfig
 +++ b/kernel/trace/rv/Kconfig
-@@ -45,4 +45,12 @@ config RV_REACT_PRINTK
- 	  Enables the printk reactor. The printk reactor emmits a printk()
- 	  message if an exception is found.
+@@ -11,6 +11,9 @@ menuconfig RV
+ 	  actual execution, comparing it against a formal specification of
+ 	  the system behavior.
  
-+config RV_REACT_PANIC
-+	bool "Panic reactor"
-+	depends on RV_REACTORS
-+	default y if RV_REACTORS
-+	help
-+	  Enables the panic reactor. The panic reactor emmits a printk()
-+	  message if an exception is found and panic()s the system.
++	  For further information, see:
++	    Documentation/trace/rv/runtime-verification.rst
 +
- endif # RV
-diff --git a/kernel/trace/rv/Makefile b/kernel/trace/rv/Makefile
-index d86ceb103ef2..1f5747f065ce 100644
---- a/kernel/trace/rv/Makefile
-+++ b/kernel/trace/rv/Makefile
-@@ -5,3 +5,4 @@ obj-$(CONFIG_RV_MON_WIP) += monitor_wip/wip.o
- obj-$(CONFIG_RV_MON_WWNR) += monitor_wwnr/wwnr.o
- obj-$(CONFIG_RV_REACTORS) += rv_reactors.o
- obj-$(CONFIG_RV_REACT_PRINTK) += reactor_printk.o
-+obj-$(CONFIG_RV_REACT_PANIC) += reactor_panic.o
-diff --git a/kernel/trace/rv/reactor_panic.c b/kernel/trace/rv/reactor_panic.c
-new file mode 100644
-index 000000000000..9d8d78a337a3
---- /dev/null
-+++ b/kernel/trace/rv/reactor_panic.c
-@@ -0,0 +1,44 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Panic RV reactor:
-+ *   Prints the exception msg to the kernel message log and panic().
-+ *
-+ * Copyright (C) 2019-2022 Daniel Bristot de Oliveira <bristot@kernel.org>
-+ *
-+ */
-+
-+#include <linux/ftrace.h>
-+#include <linux/tracepoint.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/init.h>
-+#include <linux/rv.h>
-+
-+static void rv_panic_reaction(char *msg)
-+{
-+	panic(msg);
-+}
-+
-+struct rv_reactor rv_panic = {
-+	.name = "panic",
-+	.description = "panic the system if an exception is found.",
-+	.react = rv_panic_reaction
-+};
-+
-+int register_react_panic(void)
-+{
-+	rv_register_reactor(&rv_panic);
-+	return 0;
-+}
-+
-+void unregister_react_panic(void)
-+{
-+	rv_unregister_reactor(&rv_panic);
-+}
-+
-+module_init(register_react_panic);
-+module_exit(unregister_react_panic);
-+
-+MODULE_LICENSE("GPL");
-+MODULE_AUTHOR("Daniel Bristot de Oliveira");
-+MODULE_DESCRIPTION("panic rv reactor: panic if an exception is found");
+ if RV
+ 
+ config RV_MON_WIP
 -- 
 2.35.1
 

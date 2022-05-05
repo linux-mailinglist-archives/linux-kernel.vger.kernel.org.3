@@ -2,102 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5BFA51CB00
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 23:27:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45F2051CB02
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 23:29:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385916AbiEEVao (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 17:30:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58914 "EHLO
+        id S1385938AbiEEVcu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 17:32:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385616AbiEEVag (ORCPT
+        with ESMTP id S1385560AbiEEVcs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 17:30:36 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C39164BB8E
-        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 14:26:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651786015; x=1683322015;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=iuqFmlGTItxGsNc0Xs2oz0mIeZSptY8ovrLsK52ti4s=;
-  b=Otl8hdgz9q4NUfcCTqKHI3/BYWZjAMQOTb6jIlVonA/nfk6sU90+eadX
-   f5lVJ9/WqlqifuGIQhDFl89UTmVZ05jY78GaO5xScd7Y9d4y/D8TSvqH4
-   nKx2SuOKld450WBXGWAUkDbfpNBMxdWYzt5kbOGL08i21KtT5a5XQPE09
-   7JVp00fZak+LJwPb32evyAcwiuSPv6hpssixUbhOJFgMrUUjSK99DVdZR
-   RJnhrEBMwkIH6GDbNVcXoYLQ90R1pE8X9Osqzx207xTy+FYXX+29DU1Ig
-   fAufpJQcuE8h652AuJDqURylYbmenKy5SqDVMsT0Q1p8IMCP19KiMo6sh
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10338"; a="354690704"
-X-IronPort-AV: E=Sophos;i="5.91,203,1647327600"; 
-   d="scan'208";a="354690704"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2022 14:26:55 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,203,1647327600"; 
-   d="scan'208";a="632623928"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 05 May 2022 14:26:54 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nmizt-000CmC-LK;
-        Thu, 05 May 2022 21:26:53 +0000
-Date:   Fri, 6 May 2022 05:26:48 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Chao Gao <chao.gao@intel.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Isaku Yamahata <isaku.yamahata@intel.com>,
-        Zeng Guang <guang.zeng@intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Subject: [intel-tdx:kvm-upstream-workaround 99/361]
- arch/x86/kvm/vmx/vmx.c:4410:5: warning: no previous prototype for
- 'vmx_get_pid_table_order'
-Message-ID: <202205060503.iU8bElBs-lkp@intel.com>
+        Thu, 5 May 2022 17:32:48 -0400
+Received: from mail-oa1-x2a.google.com (mail-oa1-x2a.google.com [IPv6:2001:4860:4864:20::2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 901F950050;
+        Thu,  5 May 2022 14:29:08 -0700 (PDT)
+Received: by mail-oa1-x2a.google.com with SMTP id 586e51a60fabf-edeb6c3642so5509192fac.3;
+        Thu, 05 May 2022 14:29:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=8oe3sfqDkyfNUlcgiBtlkeMr/xCKR9BR/x7tlYGAaAg=;
+        b=cHpjKpSXs6kKH2wCI+zunweNKPfOCNIAvDTrpHekpLonqSfQxiUbe2GXfiulSuITgt
+         1RfU3k6AdLPHqIN4GdAADkktcMX2Bxba1aPbA/7ThNdj3kq5m2IoXZ/7wURcMGexW2rV
+         T7jcUArbOzAgjQJhJPQ7RZ0qvr9QpruL+6vl7A21eL0SE2PDRs4yE+ZJ8je79f9+Z292
+         imKsIL1OUvBqfY6XBiUzFDMndPHbo4aGspHMmdgyoh+Yw29iBZcWlTIju4waxNV9JKk8
+         YADUp1qbHA/l5s/UqLpSEAKra8v9eGmfvkBEkyJzdsTgQNtWM74KUenL4Qa0is+Kib8c
+         51Gg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=8oe3sfqDkyfNUlcgiBtlkeMr/xCKR9BR/x7tlYGAaAg=;
+        b=2zAkF6RoEgqgGsGR4mDIe+f7k2xObyGHpJgxxdCkBc9ny0E3odDns8IW/8DkXHUoTL
+         iY/atcBbHQK6j+ZXHy2iJZxssj8nZ2qlYJg9wq8+iwdTEir41LGgsRNAimIlbt3K0XJZ
+         wOkkQ6GEKirs7+fYBA13NgCnf/NxuAi6Y3HsfPNBKQYTJ0nfFuMB6UGli4nCeyXos3Au
+         heQe2RdGSwi8KJljzc7ahZCMjFP+HJu5/3E/NO3+sndPDYmIseERcIjGpeeNzNBTU25I
+         TUNjRCozrIvlKUlI5gBB8GHzg5QlVKxMtXWxkywmNZloaSHQ+naYa+6a2YBmeY12W7GU
+         WHhg==
+X-Gm-Message-State: AOAM532AiIqEFQt3swPy6PbdwGczoFNnbg3gDu+E+8+b1ME0j6hyqoMs
+        lTJtnfvsceSiUP/xsH1jWeaaD/9g1lcQeg==
+X-Google-Smtp-Source: ABdhPJxGgq1qnFkliFAawJ5WADwR3GbxkWdgTyuWmkSWwp7sBIM74NgVIv9e9rFX7ictyH8ZI1h61w==
+X-Received: by 2002:a05:6870:f206:b0:d6:ca78:94f0 with SMTP id t6-20020a056870f20600b000d6ca7894f0mr119445oao.4.1651786147940;
+        Thu, 05 May 2022 14:29:07 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id i19-20020a9d1713000000b006062d346083sm1023918ota.22.2022.05.05.14.29.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 May 2022 14:29:07 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Thu, 5 May 2022 14:29:05 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     "Hawkins, Nick" <nick.hawkins@hpe.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        "Verdun, Jean-Marie" <verdun@hpe.com>,
+        "joel@jms.id.au" <joel@jms.id.au>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>
+Subject: Re: [PATCH v6 3/8] watchdog: hpe-wdt: Introduce HPE GXP Watchdog
+Message-ID: <20220505212905.GC1988522@roeck-us.net>
+References: <20220502204050.88316-1-nick.hawkins@hpe.com>
+ <20220502204050.88316-3-nick.hawkins@hpe.com>
+ <c0262cf4-dfeb-c9a9-bcb2-24af006e6d4d@roeck-us.net>
+ <PH0PR84MB1718D28F1846F54DB5766E6D88C09@PH0PR84MB1718.NAMPRD84.PROD.OUTLOOK.COM>
+ <d88523a8-a240-915d-9ae7-54b2277e424a@roeck-us.net>
+ <CAK8P3a3t7-ozDHu18vMKEWxfNS4yd_BNHUh7hQ24rfS20tssDg@mail.gmail.com>
+ <PH0PR84MB1718D0238BEF9173AF5D5B7688C39@PH0PR84MB1718.NAMPRD84.PROD.OUTLOOK.COM>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <PH0PR84MB1718D0238BEF9173AF5D5B7688C39@PH0PR84MB1718.NAMPRD84.PROD.OUTLOOK.COM>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/intel/tdx.git kvm-upstream-workaround
-head:   3b5b338cdf10dca7a2435d1f86b2dd9f1a3ad833
-commit: 833404c859e4357ba656b2d19d5a405ba7bf4ec4 [99/361] KVM: VMX: enable IPI virtualization
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20220506/202205060503.iU8bElBs-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.2.0-20) 11.2.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel/tdx/commit/833404c859e4357ba656b2d19d5a405ba7bf4ec4
-        git remote add intel-tdx https://github.com/intel/tdx.git
-        git fetch --no-tags intel-tdx kvm-upstream-workaround
-        git checkout 833404c859e4357ba656b2d19d5a405ba7bf4ec4
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/kvm/
+On Wed, May 04, 2022 at 04:25:59PM +0000, Hawkins, Nick wrote:
+> 
+> On Tue, May 3, 2022 at 6:53 PM Guenter Roeck <linux@roeck-us.net> wrote:
+> 
+> > > One bad deed tends to multiply.
+> > >
+> > > No, I didn't ask to pass a struct resource as platform data.
+> > > That would be no different to the current code. Resources can be added 
+> > > to a platform device using platform_device_add_resources(), and the 
+> > > platform driver can then use platform_get_resource() to use it. This 
+> > > would make it independent of a "private" mechanism.
+> 
+> > Unfortunately there is no resource type for __iomem tokens, only for physical addresses, so you'd end up having to do
+> ioremap() of the same address twice to map it into both the timer and the watchdog driver . Not the end of the world of course, but that doesn't seem much better than abusing the device private data.
+> 
+> Hello Guenter,
+> 
+> Given Arnd's feedback would you like me to proceed with this change still or do you have another recommendation?
+> 
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Just leave it as is and add a note explaining why it is done
+that way.
 
-All warnings (new ones prefixed by >>):
-
->> arch/x86/kvm/vmx/vmx.c:4410:5: warning: no previous prototype for 'vmx_get_pid_table_order' [-Wmissing-prototypes]
-    4410 | int vmx_get_pid_table_order(struct kvm *kvm)
-         |     ^~~~~~~~~~~~~~~~~~~~~~~
-
-
-vim +/vmx_get_pid_table_order +4410 arch/x86/kvm/vmx/vmx.c
-
-  4409	
-> 4410	int vmx_get_pid_table_order(struct kvm *kvm)
-  4411	{
-  4412		return get_order(kvm->arch.max_vcpu_ids * sizeof(*to_kvm_vmx(kvm)->pid_table));
-  4413	}
-  4414	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Guenter

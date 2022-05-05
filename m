@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC8F451C4B8
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 18:08:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C3D551C4AF
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 18:08:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381691AbiEEQLR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 12:11:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58980 "EHLO
+        id S1381695AbiEEQL1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 12:11:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235722AbiEEQLK (ORCPT
+        with ESMTP id S1348873AbiEEQLY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 12:11:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C0D55C377;
-        Thu,  5 May 2022 09:07:30 -0700 (PDT)
+        Thu, 5 May 2022 12:11:24 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECA885C652;
+        Thu,  5 May 2022 09:07:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AC09361DCB;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9D257B82DF6;
+        Thu,  5 May 2022 16:07:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8FB5DC385B2;
         Thu,  5 May 2022 16:07:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A889C385A4;
-        Thu,  5 May 2022 16:07:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651766849;
-        bh=1Um1v2pbsXWVzfuOFhwnCRlaKUyCQMuNW2iqZGU5beE=;
+        s=k20201202; t=1651766853;
+        bh=4te1Bd+VH7D/hV8R2OCebEM13y3PtjE0NQc1V1XOvJk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uMOE3D4fCNUykHj6y7vqEfSS6w2+oXfDFbPRaC053ASaXrHFIdImGUjfIalRHKWSZ
-         xBuzFWi6ucvPhO4kUZMTlHRoc8D7+P0Bemq8qX256sUzj3hsyLPOQr8ZRUyF4DUi1x
-         IdcuGXr0FzZlMG/6tQtj8SFXvPYCrgdA6WqJp+LCKyQ7flLMaExjJ7/BOYCPya1Jol
-         FjZo7jBgT83rqlWeBi0q4AieWOZB0zyAFUA9YnmOnZRMB/bN3cB09F9E6bDvIsjnIh
-         vdUYOTxf9e6mkQh7OKGAfs7ZzNYJeRkDHzQ0WSUksbPXKw5/lHrVVgnAVQfWFc+msc
-         jXzCnMcj4YUcA==
+        b=ojslhMYXFeVMKID15yyDysFN8N03Qd7iivzyaOXVmzoRSoozUO1cUlFKuDo3z9DJJ
+         FV5U+k+K96NoPzgraY9lXxKopXfVlNQR2dQ74QMvhOBF2eZwEOsSTsgrM0X0KO0WgK
+         XplWkf7dH08CqiQcq2ce4j1o9I7wd8lCoO6uVJP7oCpoLGkBLyCbGD/WZYZCD6s6Vi
+         7KeYWRotXfNj2gwrmbmTvieJDwEY4Yvas9Oipr6JuSrdnnfAnWZzKL8w+zNX/K7kKS
+         fI/aQmZ+1ZAi6auy0A4r49MJz/KVyvKI5PgKK2VEDcHbaMnMIBK4EggLCp522GTSF4
+         XUxcWhf+hBE4A==
 From:   Daniel Bristot de Oliveira <bristot@kernel.org>
 To:     Steven Rostedt <rostedt@goodmis.org>, linux-kernel@vger.kernel.org
 Cc:     Daniel Bristot de Oliveira <bristot@kernel.org>,
@@ -49,9 +49,9 @@ Cc:     Daniel Bristot de Oliveira <bristot@kernel.org>,
         Juri Lelli <juri.lelli@redhat.com>,
         Clark Williams <williams@redhat.com>,
         linux-doc@vger.kernel.org, linux-trace-devel@vger.kernel.org
-Subject: [RFC V3 02/20] rv: Add runtime reactors interface
-Date:   Thu,  5 May 2022 18:06:42 +0200
-Message-Id: <c4ec12dbc54faf148e40bdf154402e56d7d3f0dd.1651766361.git.bristot@kernel.org>
+Subject: [RFC V3 03/20] rv/include: Add helper functions for deterministic automata
+Date:   Thu,  5 May 2022 18:06:43 +0200
+Message-Id: <8bf4ec82431ab1e5983c4436463aba9ce77ca5d0.1651766361.git.bristot@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <cover.1651766361.git.bristot@kernel.org>
 References: <cover.1651766361.git.bristot@kernel.org>
@@ -67,44 +67,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A runtime monitor can cause a reaction to the detection of an
-exception on the model's execution. By default, the monitors have
-tracing reactions, printing the monitor output via tracepoints.
-But other reactions can be added (on-demand) via this interface.
+Formally, a deterministic automaton, denoted by G, is defined as a
+quintuple:
 
-The user interface resembles the kernel tracing interface and
-presents these files:
+  G = { X, E, f, x_0, X_m }
 
-"available_reactors"
-  - Reading shows the available reactors, one per line.
+where:
+	- X is the set of states;
+	- E is the finite set of events;
+	- x_0 is the initial state;
+	- X_m (subset of X) is the set of marked states.
+	- f : X x E -> X $ is the transition function. It defines the
+	  state transition in the occurrence of a event from E in
+	  the state X. In the special case of deterministic automata,
+	  the occurrence of the event in E in a state in X has a
+	  deterministic next state from X.
 
-   For example:
-   [root@f32 rv]# cat available_reactors
-   nop
-   panic
-   printk
+An automaton can also be represented using a graphical format of
+vertices (nodes) and edges. The open-source tool Graphviz can produce
+this graphic format using the (textual) DOT language as the source code.
 
- "reacting_on"
-   - It is an on/off general switch for reactors, disabling
-   all reactions.
+The dot2c tool presented in this paper:
 
- "monitors/MONITOR/reactors"
-   - List available reactors, with the select reaction for the given
-   MONITOR inside []. The default one is the nop (no operation)
-   reactor.
-   - Writing the name of a reactor enables it to the given
-   MONITOR.
+DE OLIVEIRA, Daniel Bristot; CUCINOTTA, Tommaso; DE OLIVEIRA, Romulo
+Silva. Efficient formal verification for the Linux kernel. In:
+International Conference on Software Engineering and Formal Methods.
+Springer, Cham, 2019. p. 315-332.
 
-   For example:
-   [root@f32 rv]# cat monitors/wip/reactors
-   [nop]
-   panic
-   printk
-   [root@f32 rv]# echo panic > monitors/wip/reactors
-   [root@f32 rv]# cat monitors/wip/reactors
-   nop
-   [panic]
-   printk
+Translates a deterministic automaton in the DOT format into a C
+source code representation that to be used for monitoring.
+
+This header file implements helper functions to facilitate the usage
+of the C output from dot2c for monitoring.
 
 Cc: Jonathan Corbet <corbet@lwn.net>
 Cc: Steven Rostedt <rostedt@goodmis.org>
@@ -125,165 +119,65 @@ Cc: linux-kernel@vger.kernel.org
 Cc: linux-trace-devel@vger.kernel.org
 Signed-off-by: Daniel Bristot de Oliveira <bristot@kernel.org>
 ---
- include/linux/rv.h       | 13 +++++++++++++
- kernel/trace/rv/Kconfig  | 14 ++++++++++++++
- kernel/trace/rv/Makefile |  1 +
- kernel/trace/rv/rv.c     | 18 ++++++++++++++++--
- kernel/trace/rv/rv.h     | 20 ++++++++++++++++++++
- 5 files changed, 64 insertions(+), 2 deletions(-)
+ include/rv/automata.h | 49 +++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 49 insertions(+)
+ create mode 100644 include/rv/automata.h
 
-diff --git a/include/linux/rv.h b/include/linux/rv.h
-index 205e65f57637..1e48c6bb74bf 100644
---- a/include/linux/rv.h
-+++ b/include/linux/rv.h
-@@ -8,6 +8,13 @@
-  */
- #ifndef _LINUX_RV_H
- #define _LINUX_RV_H
+diff --git a/include/rv/automata.h b/include/rv/automata.h
+new file mode 100644
+index 000000000000..39a1cfda17e6
+--- /dev/null
++++ b/include/rv/automata.h
+@@ -0,0 +1,49 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Deterministic automata helper functions, to be used with the automata
++ * models in C generated by the dot2k tool.
++ *
++ * Copyright (C) 2019-2022 Daniel Bristot de Oliveira <bristot@kernel.org>
++ */
 +
-+struct rv_reactor {
-+	char			*name;
-+	char			*description;
-+	void			(*react)(char *msg);
-+};
-+
- struct rv_monitor {
- 	const char		*name;
- 	const char		*description;
-@@ -15,9 +22,15 @@ struct rv_monitor {
- 	int			(*start)(void);
- 	void			(*stop)(void);
- 	void			(*reset)(void);
-+	void			(*react)(char *msg);
-+
- };
- 
- extern bool monitoring_on;
- int rv_unregister_monitor(struct rv_monitor *monitor);
- int rv_register_monitor(struct rv_monitor *monitor);
-+
-+extern bool reacting_on;
-+int rv_unregister_reactor(struct rv_reactor *reactor);
-+int rv_register_reactor(struct rv_reactor *reactor);
- #endif /* _LINUX_RV_H */
-diff --git a/kernel/trace/rv/Kconfig b/kernel/trace/rv/Kconfig
-index 6d127cdb00dd..560408fec0c8 100644
---- a/kernel/trace/rv/Kconfig
-+++ b/kernel/trace/rv/Kconfig
-@@ -10,3 +10,17 @@ menuconfig RV
- 	  theorem proving). RV works by analyzing the trace of the system's
- 	  actual execution, comparing it against a formal specification of
- 	  the system behavior.
-+
-+if RV
-+
-+config RV_REACTORS
-+	bool "Runtime verification reactors"
-+	default y if RV
-+	help
-+	  Enables the online runtime verification reactors. A runtime
-+	  monitor can cause a reaction to the detection of an exception
-+	  on the model's execution. By default, the monitors have
-+	  tracing reactions, printing the monitor output via tracepoints,
-+	  but other reactions can be added (on-demand) via this interface.
-+
-+endif # RV
-diff --git a/kernel/trace/rv/Makefile b/kernel/trace/rv/Makefile
-index fd995379df67..8944274d9b41 100644
---- a/kernel/trace/rv/Makefile
-+++ b/kernel/trace/rv/Makefile
-@@ -1,3 +1,4 @@
- # SPDX-License-Identifier: GPL-2.0
- 
- obj-$(CONFIG_RV) += rv.o
-+obj-$(CONFIG_RV_REACTORS) += rv_reactors.o
-diff --git a/kernel/trace/rv/rv.c b/kernel/trace/rv/rv.c
-index 11735e431a09..ea013dec93d8 100644
---- a/kernel/trace/rv/rv.c
-+++ b/kernel/trace/rv/rv.c
-@@ -362,8 +362,13 @@ static int create_monitor_dir(struct rv_monitor_def *mdef)
- 		retval = -ENOMEM;
- 		goto out_remove_root;
- 	}
-+#ifdef CONFIG_RV_REACTORS
-+	retval = reactor_create_monitor_files(mdef);
-+	if (retval)
-+		goto out_remove_root;
-+#endif
- 
--	return retval;
-+	return 0;
- 
- out_remove_root:
- 	rv_remove(mdef->root_d);
-@@ -674,7 +679,11 @@ int rv_register_monitor(struct rv_monitor *monitor)
- 
- 	r->monitor = monitor;
- 
--	create_monitor_dir(r);
-+	retval = create_monitor_dir(r);
-+	if (retval) {
-+		kfree(r);
-+		goto out_unlock;
-+	}
- 
- 	list_add_tail(&r->list, &rv_monitors_list);
- 
-@@ -732,6 +741,11 @@ int __init rv_init_interface(void)
- 	rv_create_file("monitoring_on", 0600, rv_root.root_dir, NULL,
- 		       &monitoring_on_fops);
- 
-+#ifdef CONFIG_RV_REACTORS
-+	init_rv_reactors(rv_root.root_dir);
-+	reacting_on = true;
-+#endif
-+
- 	monitoring_on = true;
- 
- 	return 0;
-diff --git a/kernel/trace/rv/rv.h b/kernel/trace/rv/rv.h
-index 0796867a7b1e..6d43f52d72a9 100644
---- a/kernel/trace/rv/rv.h
-+++ b/kernel/trace/rv/rv.h
-@@ -15,14 +15,28 @@ struct rv_interface {
- #define rv_remove			tracefs_remove
- 
- #define MAX_RV_MONITOR_NAME_SIZE	32
-+#define MAX_RV_REACTOR_NAME_SIZE	32
- 
- extern struct mutex rv_interface_lock;
- 
-+#ifdef CONFIG_RV_REACTORS
-+struct rv_reactor_def {
-+	struct list_head list;
-+	struct rv_reactor *reactor;
-+	/* protected by the monitor interface lock */
-+	int counter;
-+};
-+#endif
-+
- struct rv_monitor_def {
- 	struct list_head list;
- 	struct rv_monitor *monitor;
-+#ifdef CONFIG_RV_REACTORS
-+	struct rv_reactor_def *rdef;
-+#endif
- 	struct dentry *root_d;
- 	bool enabled;
-+	bool reacting;
- 	bool task_monitor;
- };
- 
-@@ -32,3 +46,9 @@ void reset_all_monitors(void);
- int init_rv_monitors(struct dentry *root_dir);
- int get_task_monitor_slot(void);
- void put_task_monitor_slot(int slot);
-+
-+#ifdef CONFIG_RV_REACTORS
-+extern bool reacting_on;
-+int reactor_create_monitor_files(struct rv_monitor_def *mdef);
-+int init_rv_reactors(struct dentry *root_dir);
-+#endif
++#define DECLARE_AUTOMATA_HELPERS(name, type)					\
++										\
++static inline void *model_get_model_##name(void)				\
++{										\
++	return (void *) &automaton_##name;					\
++}										\
++										\
++static char *model_get_state_name_##name(enum states_##name state)		\
++{										\
++	return automaton_##name.state_names[state];				\
++}										\
++										\
++static char *model_get_event_name_##name(enum events_##name event)		\
++{										\
++	return automaton_##name.event_names[event];				\
++}										\
++										\
++static inline type model_get_init_state_##name(void)				\
++{										\
++	return automaton_##name.initial_state;					\
++}										\
++										\
++static inline type model_get_next_state_##name(enum states_##name curr_state,	\
++					       enum events_##name event)	\
++{										\
++	if ((curr_state < 0) || (curr_state > state_max))			\
++		return -1;							\
++										\
++	if ((event < 0) || (event > event_max))					\
++		return -1;							\
++										\
++	return automaton_##name.function[curr_state][event];			\
++}										\
++										\
++static inline bool model_is_final_state_##name(enum states_##name state)	\
++{										\
++	if ((state < 0) || (state > state_max))					\
++		return 0;							\
++										\
++	return !!automaton_##name.final_states[state];				\
++}
 -- 
 2.35.1
 

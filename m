@@ -2,70 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40FD651C633
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 19:35:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A16D51C657
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 19:40:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382753AbiEERie (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 13:38:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56416 "EHLO
+        id S1382799AbiEERoQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 13:44:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382756AbiEERi1 (ORCPT
+        with ESMTP id S1382782AbiEERno (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 13:38:27 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 609325D5F6;
-        Thu,  5 May 2022 10:34:44 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id p18so6025543edr.7;
-        Thu, 05 May 2022 10:34:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=J36psD3rFKW5Ka1G3ZnsSWZIunr7YdwdE2cf/mL9osk=;
-        b=Gg2LXPVobwp4o5mG9uKglG3BHaRDZIpvfVQeotr8r2wGV8xJdunSEbXkxMuyiSp2iX
-         3VawHmVZDLBxsGEZtc5IpMRU6QxVktJ13EKeH7DNy0XdSzT37nLrXluGkP5iD6LpIPyn
-         ElJTabd9OIdllU21SBxy4LANhKIQEsXI4QUPRMw0ToOvkTHl5ruIM0vJFQ1AVe8vVSih
-         xdi8qXRwDCZF8sUAa8SCUgNdAIlrnJhyql7rSoL/NgWYCma9BYPRjeA9CqmyZnsbVGZT
-         tlqPO5xgwD+rM2qBhghryfPw4DPRRyED5N3MGHSOViaYGBPbReY8OXi+3cVvfsVkZTLE
-         jAIw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=J36psD3rFKW5Ka1G3ZnsSWZIunr7YdwdE2cf/mL9osk=;
-        b=Tqv+6iwIoH7Jrlwdah5Rpm7UhxZ07uIHg+ZFhRcIxBMu8uDilr28MOLZC5uymJWNjt
-         bffmyvnYuaVYSmflXghDfvadNkcx9t4BCdkgdZIPzUhZU2VpGhTjLq8xl1H2ZRQoSmNY
-         VC4PfcmFgMsJl6OMbTxTCp9xPIVoKO4rkIHpR55/J51Sw6nIssShu81PQpFN4FiFjObq
-         +e7bANQoQDsv8oi3fMu7CcBVGAAA2bycjsFZt8ax+LK80egIQB53Tp2S6vPLs4f8fwdl
-         us+Yh7qW27ET0+bW8Obkfgrck9dUFuWAF//fTz78PriM5/75HjyTznCxDZqao28XF65/
-         LvcQ==
-X-Gm-Message-State: AOAM530D6VRUsUfrjahLbMDrXfjblFV9K/ILzIvbsy5cVzNIZlLzk7Hl
-        dWseIdRW3Y2duRojtJAsfgQjdGniygsCtpMluDU=
-X-Google-Smtp-Source: ABdhPJzHFa4/201KxKWvXvIzAle09vJstgG8ZVqW0xdZ3Xd4qabmhd7jnoJgV/HYyztLG08q1inSAhpKX0wJqtjSlo0=
-X-Received: by 2002:a05:6402:54:b0:419:9b58:e305 with SMTP id
- f20-20020a056402005400b004199b58e305mr31028257edu.158.1651772082896; Thu, 05
- May 2022 10:34:42 -0700 (PDT)
+        Thu, 5 May 2022 13:43:44 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE74C5BD30;
+        Thu,  5 May 2022 10:40:03 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 81117B82E15;
+        Thu,  5 May 2022 17:40:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 177E8C385C9;
+        Thu,  5 May 2022 17:40:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1651772401;
+        bh=cpQMmbRVdDBMeuI5w6SyoGllIexfXaT+hvXuJPkJ0rE=;
+        h=Subject:To:From:Date:From;
+        b=fmJYRjOeNzbiQDIhsV87ddjKMnPXufI6koKm+QksbT0YlpRsV+8EIPerfGsfklkab
+         FBQcUbd84dWAQrR9kq73l+rkBeiA+pSGYhgJB7p3VgGRrEl6d1H82N5lpzJFx8v55x
+         LOYoTBCw6VRb0zeE9VgL6kBekQ2+RPhvg3i7NcU0=
+Subject: patch "firmware_loader: describe 'module' parameter of" added to driver-core-next
+To:     bagasdotme@gmail.com, gregkh@linuxfoundation.org,
+        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
+        mcgrof@kernel.org, rafael@kernel.org, russell.h.weight@intel.com,
+        sfr@canb.auug.org.au
+From:   <gregkh@linuxfoundation.org>
+Date:   Thu, 05 May 2022 19:35:25 +0200
+Message-ID: <16517721257181@kroah.com>
 MIME-Version: 1.0
-References: <20220505152521.71019-1-markuss.broks@gmail.com>
- <20220505152521.71019-2-markuss.broks@gmail.com> <CAHp75VfUA3qnZnkPQB3TRpPDwe+F+Q6rv9dQmq2xLfw9PmJ8LA@mail.gmail.com>
-In-Reply-To: <CAHp75VfUA3qnZnkPQB3TRpPDwe+F+Q6rv9dQmq2xLfw9PmJ8LA@mail.gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Thu, 5 May 2022 19:34:07 +0200
-Message-ID: <CAHp75VeVN_Ri2wbQ1ATJg6+R=K6ekQbqGKKNXPdti0rpDptzZA@mail.gmail.com>
-Subject: Re: [PATCH v8 1/3] leds: ktd2692: Avoid duplicate error messages on
- probe deferral
-To:     Markuss Broks <markuss.broks@gmail.com>
-Cc:     pavel@ucw.cz, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=ANSI_X3.4-1968
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,22 +50,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 5, 2022 at 7:29 PM Andy Shevchenko
-<andy.shevchenko@gmail.com> wrote:
-> On Thu, May 5, 2022 at 5:25 PM Markuss Broks <markuss.broks@gmail.com> wrote:
 
-...
+This is a note to let you know that I've just added the patch titled
 
-> 1) adding a Fixes tag, so it can be backported to stable kernels;
+    firmware_loader: describe 'module' parameter of
 
-To avoid additional versions in case you don't know how Fixes tag
-should look like:
+to my driver-core git tree which can be found at
+    git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/driver-core.git
+in the driver-core-next branch.
 
-Fixes: b7da8c5c725c ("leds: Add ktd2692 flash LED driver")
+The patch will show up in the next release of the linux-next tree
+(usually sometime within the next 24 hours during the week.)
 
-Just add this before other tags, like SoB or Reviewed-by (no blank
-lines in the tag block).
+The patch will also be merged in the next major kernel release
+during the merge window.
 
+If you have any questions about this process, please let me know.
+
+
+From 6370b04f24bc10c1f2056c0f12dd651ac0121a6f Mon Sep 17 00:00:00 2001
+From: Bagas Sanjaya <bagasdotme@gmail.com>
+Date: Mon, 2 May 2022 12:14:56 +0700
+Subject: firmware_loader: describe 'module' parameter of
+ firmware_upload_register()
+
+Stephen Rothwell reported kernel-doc warning:
+
+drivers/base/firmware_loader/sysfs_upload.c:285: warning: Function parameter or member 'module' not described in 'firmware_upload_register'
+
+Fix the warning by describing the 'module' parameter.
+
+Link: https://lore.kernel.org/linux-next/20220502083658.266d55f8@canb.auug.org.au/
+Fixes: 97730bbb242cde ("firmware_loader: Add firmware-upload support")
+Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Russ Weight <russell.h.weight@intel.com>
+Cc: Luis Chamberlain <mcgrof@kernel.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Cc: Linux Next Mailing List <linux-next@vger.kernel.org>
+Reviewed-by: Russ Weight <russell.h.weight@intel.com>
+Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
+Link: https://lore.kernel.org/r/20220502051456.30741-1-bagasdotme@gmail.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ drivers/base/firmware_loader/sysfs_upload.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/base/firmware_loader/sysfs_upload.c b/drivers/base/firmware_loader/sysfs_upload.c
+index 8cdcf3516c7e..87044d52322a 100644
+--- a/drivers/base/firmware_loader/sysfs_upload.c
++++ b/drivers/base/firmware_loader/sysfs_upload.c
+@@ -266,6 +266,7 @@ int fw_upload_start(struct fw_sysfs *fw_sysfs)
+ 
+ /**
+  * firmware_upload_register() - register for the firmware upload sysfs API
++ * @module: kernel module of this device
+  * @parent: parent device instantiating firmware upload
+  * @name: firmware name to be associated with this device
+  * @ops: pointer to structure of firmware upload ops
 -- 
-With Best Regards,
-Andy Shevchenko
+2.36.0
+
+

@@ -2,93 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D6B851C916
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 21:31:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52EBC51C906
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 21:30:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385067AbiEETey (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 15:34:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48366 "EHLO
+        id S1385015AbiEETds (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 15:33:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351650AbiEETel (ORCPT
+        with ESMTP id S1351650AbiEETdp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 15:34:41 -0400
-Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AD1A55492;
-        Thu,  5 May 2022 12:31:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=26sf2Bz2SDgQmdCQw3Y4ZTnImgJ2MyGCiyio6ZL3q3Y=; b=OX97Z/D1CJSI6hriVTxC2kAnOw
-        1KITEk45cAtwCpY9rkRCDUh3KDg2O2YzMgXcmuPrqXaafenIhWWC1+LyxgtF/580Mzq9ZdOBGqQII
-        szuZz7L+gnBGPa0DhyrfUrxKFOKAOdS+/7tX8dF3YT6RRRi5n+Pvq9GzAiarMSPSGIbrEUOikWcQ4
-        luIwkR5QmpMMR3ULcRXOtddO+8na/Jrhq18XXAepQbZ7X+3+2omWFwgyxPBez0WA9LEkMMiNJ8gOK
-        /vnX5br4i70krbeAId+z+Wo/kxx7sPLDtH+XBAxzqCS0vo9z0RVsXdy6BbySPaaEQO2JnHI7/cIaw
-        LlqXpVFA==;
-Received: from [179.113.53.197] (helo=[192.168.1.60])
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-        id 1nmhB9-0009Pt-2n; Thu, 05 May 2022 21:30:24 +0200
-Message-ID: <95fd6c2b-8a80-7161-953c-0660c9cc046f@igalia.com>
-Date:   Thu, 5 May 2022 16:28:55 -0300
+        Thu, 5 May 2022 15:33:45 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC56B55492;
+        Thu,  5 May 2022 12:30:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 50F6ACE3090;
+        Thu,  5 May 2022 19:30:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D1C0C385A8;
+        Thu,  5 May 2022 19:30:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651779001;
+        bh=vA5c3sAZlsEIF9GVy5xkKqdpy6kiCh58XJGgalns9Zk=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=Rur4thgH3tGLOLQ3PE4NfuLNRo6KD+P9KN8uPermkSvDV+RSnfCSVeH1+luL/JihO
+         nIaKMx8E+70C9NaPk2/MAZdAwmLF4e3A1hfmi9UlnnnoTKQho8krlzE40Wbg6ZaHul
+         OYtZXG3IuFld81DJDac/OHvgjqNqhrYnuLwwrWteLOCuvdNc9j5niJJLsBHQ8W0/2y
+         z9RZTjaqQRQGFIYZLlW7IPHuyDZpURyxIuE/iYgA47tjeVy6ZJDQCR5NQRf+cScAmZ
+         /RwMgI19giflsDT9cLsCAPRy/57WSVwMN2LGVT8+wgD6eawna6yodohAL9eQfWMj7U
+         U+VdD4wj/hjYw==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 43FBA5C2CB7; Thu,  5 May 2022 12:29:56 -0700 (PDT)
+Date:   Thu, 5 May 2022 12:29:56 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Zqiang <qiang1.zhang@intel.com>
+Cc:     frederic@kernel.org, rcu@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] rcu: Add rnp->cbovldmask check in
+ rcutree_migrate_callbacks()
+Message-ID: <20220505192956.GX1790663@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220505155236.1559619-1-qiang1.zhang@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH 08/30] powerpc/setup: Refactor/untangle panic notifiers
-Content-Language: en-US
-To:     Hari Bathini <hbathini@linux.ibm.com>, akpm@linux-foundation.org,
-        bhe@redhat.com, pmladek@suse.com, kexec@lists.infradead.org
-Cc:     linux-kernel@vger.kernel.org,
-        bcm-kernel-feedback-list@broadcom.com,
-        linuxppc-dev@lists.ozlabs.org, linux-alpha@vger.kernel.org,
-        linux-edac@vger.kernel.org, linux-hyperv@vger.kernel.org,
-        linux-leds@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-um@lists.infradead.org,
-        linux-xtensa@linux-xtensa.org, netdev@vger.kernel.org,
-        openipmi-developer@lists.sourceforge.net, rcu@vger.kernel.org,
-        sparclinux@vger.kernel.org, xen-devel@lists.xenproject.org,
-        x86@kernel.org, kernel-dev@igalia.com, kernel@gpiccoli.net,
-        halves@canonical.com, fabiomirmar@gmail.com,
-        alejandro.j.jimenez@oracle.com, andriy.shevchenko@linux.intel.com,
-        arnd@arndb.de, bp@alien8.de, corbet@lwn.net,
-        d.hatayama@jp.fujitsu.com, dave.hansen@linux.intel.com,
-        dyoung@redhat.com, feng.tang@intel.com, gregkh@linuxfoundation.org,
-        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
-        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
-        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
-        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
-        senozhatsky@chromium.org, stern@rowland.harvard.edu,
-        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
-        will@kernel.org, Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Paul Mackerras <paulus@samba.org>
-References: <20220427224924.592546-1-gpiccoli@igalia.com>
- <20220427224924.592546-9-gpiccoli@igalia.com>
- <3c34d8e2-6f84-933f-a4ed-338cd300d6b0@linux.ibm.com>
-From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-In-Reply-To: <3c34d8e2-6f84-933f-a4ed-338cd300d6b0@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220505155236.1559619-1-qiang1.zhang@intel.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/05/2022 15:55, Hari Bathini wrote:
-> [...] 
+On Thu, May 05, 2022 at 11:52:36PM +0800, Zqiang wrote:
+> Currently, the rnp's cbovlmask is set in call_rcu(). when CPU going
+> offline, the outgoing CPU's callbacks is migrated to target CPU, the
+> number of callbacks on the my_rdp may be overloaded, if overload and
+> there is no call_rcu() call on target CPU for a long time, the rnp's
+> cbovldmask is not set in time. in order to fix this situation, add
+> check_cb_ovld_locked() in rcutree_migrate_callbacks() to help CPU more
+> quickly reach quiescent states.
 > 
-> The change looks good. I have tested it on an LPAR (ppc64).
-> 
-> Reviewed-by: Hari Bathini <hbathini@linux.ibm.com>
+> Signed-off-by: Zqiang <qiang1.zhang@intel.com>
 
-Thanks a bunch Hari, much appreciated!
+Doesn't this get set right at the end of the current grace period?
+Given that there is a callback overload, there should be a grace
+period in progress.
+
+See this code in rcu_gp_cleanup():
+
+		if (rcu_is_leaf_node(rnp))
+			for_each_leaf_node_cpu_mask(rnp, cpu, rnp->cbovldmask) {
+				rdp = per_cpu_ptr(&rcu_data, cpu);
+				check_cb_ovld_locked(rdp, rnp);
+			}
+
+So what am I missing here?  Or are you planning to remove the above code?
+
+If so, wouldn't you also need to clear the indication for the CPU that
+is going offline, being careful to handle the case where the two CPUs
+have different leaf rcu_node structures?
+
+							Thanx, Paul
+
+> ---
+>  kernel/rcu/tree.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+> index 9dc4c4e82db6..bcc5876c9753 100644
+> --- a/kernel/rcu/tree.c
+> +++ b/kernel/rcu/tree.c
+> @@ -4577,6 +4577,7 @@ void rcutree_migrate_callbacks(int cpu)
+>  	needwake = needwake || rcu_advance_cbs(my_rnp, my_rdp);
+>  	rcu_segcblist_disable(&rdp->cblist);
+>  	WARN_ON_ONCE(rcu_segcblist_empty(&my_rdp->cblist) != !rcu_segcblist_n_cbs(&my_rdp->cblist));
+> +	check_cb_ovld_locked(my_rdp, my_rnp);
+>  	if (rcu_rdp_is_offloaded(my_rdp)) {
+>  		raw_spin_unlock_rcu_node(my_rnp); /* irqs remain disabled. */
+>  		__call_rcu_nocb_wake(my_rdp, true, flags);
+> -- 
+> 2.25.1
+> 

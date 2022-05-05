@@ -2,63 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9354151BED3
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 14:05:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE2AC51BED7
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 14:06:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237149AbiEEMJL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 08:09:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45622 "EHLO
+        id S240971AbiEEMJ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 08:09:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232917AbiEEMJI (ORCPT
+        with ESMTP id S1359765AbiEEMJS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 08:09:08 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F84E13CF7;
-        Thu,  5 May 2022 05:05:28 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 5 May 2022 08:09:18 -0400
+Received: from mail.marcansoft.com (marcansoft.com [IPv6:2a01:298:fe:f::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE96D1A066;
+        Thu,  5 May 2022 05:05:36 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2DD64B82B79;
-        Thu,  5 May 2022 12:05:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5618C385A8;
-        Thu,  5 May 2022 12:05:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651752326;
-        bh=YOSvkdiD9YeJgj4aRLVreDoeI4SdaGNCAtWBB3qrsZo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=MC2c9NhE+Pp2MlVr3eXkpI9xcJh1KF7xIr04oUTt6jPiN4MhfDWrvX4CmOp/8DIkx
-         6lLS9h6njGu+8KOSenAdgP5CoTDXKWtmfFqjh4LLgii3NS7DVLesGnm9Gs7r9ymxic
-         g0DNA2Dz3sfBQAJ7NYg0FcGyPHC54ylRSMHbAtZo8btjuEaXYeSXqK6KkY/t8J6ZbT
-         WPc4AabJ9vePARuVBWs1TjOjVg1JPToqG8IyIEdHtf8h0UHcYYTtljfxsDoZqmFH6M
-         hNBQRcMltqpyX/xHW8zQKpLnymUyV8sXagxEvYa8dlASeDdK2OsxqiHFp6goiTffCW
-         iNDW434jhq2zw==
-Date:   Thu, 5 May 2022 13:05:19 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Zev Weiss <zev@bewilderbeest.net>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        openbmc@lists.ozlabs.org, MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>
-Subject: Re: [PATCH 2/6] dt-bindings: regulator: Add reg-external-output
- binding
-Message-ID: <YnO9fxkuk6AnEhLl@sirena.org.uk>
-References: <20220504065252.6955-1-zev@bewilderbeest.net>
- <20220504065252.6955-2-zev@bewilderbeest.net>
- <YnJ32bG4IkSrRtHV@sirena.org.uk>
- <YnLjNn9WVhvd4izZ@hatter.bewilderbeest.net>
- <YnLmyHwMGnRL18LD@sirena.org.uk>
- <YnLxjJI8Vu3LqAnL@hatter.bewilderbeest.net>
+        (Authenticated sender: marcan@marcan.st)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id 44F9E41F5D;
+        Thu,  5 May 2022 12:05:32 +0000 (UTC)
+Message-ID: <1e04603d-5fb2-9c39-4c68-7bcb7428f667@marcan.st>
+Date:   Thu, 5 May 2022 21:05:29 +0900
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="7moZXgHmwiy4vUEp"
-Content-Disposition: inline
-In-Reply-To: <YnLxjJI8Vu3LqAnL@hatter.bewilderbeest.net>
-X-Cookie: Real programs don't eat cache.
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Content-Language: es-ES
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     Jacky Chou <jackychou@asix.com.tw>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220502110644.167179-1-marcan@marcan.st>
+ <20220504193047.1e4b97b7@kernel.org>
+From:   Hector Martin <marcan@marcan.st>
+Subject: Re: [PATCH v2] net: usb: ax88179_178a: Bind only to vendor-specific
+ interface
+In-Reply-To: <20220504193047.1e4b97b7@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -67,54 +51,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 05/05/2022 11.30, Jakub Kicinski wrote:
+> On Mon,  2 May 2022 20:06:44 +0900 Hector Martin wrote:
+>> The Anker PowerExpand USB-C to Gigabit Ethernet adapter uses this
+>> chipset, but exposes CDC Ethernet configurations as well as the
+>> vendor specific one. 
+> 
+> And we have reasons to believe all dongle vendors may have a similar
+> problem?
 
---7moZXgHmwiy4vUEp
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Given this is a vendor-specific driver it seems correct to have it only
+bind to vendor-specific interfaces. That shouldn't break anything as
+long as nobody is implementing this interface with the wrong protocol
+IDs (which seems like quite a weird thing to do and fairly unlikely).
 
-On Wed, May 04, 2022 at 02:35:08PM -0700, Zev Weiss wrote:
-> On Wed, May 04, 2022 at 01:49:12PM PDT, Mark Brown wrote:
+FWIW, the one I have has the generic VID/PID, not a custom vendor one.
+If you prefer I can change just that one or both of the generic ones.
 
-> > For example if the output comes out on a socket then that socket should
-> > be described.
+>> diff --git a/drivers/net/usb/ax88179_178a.c b/drivers/net/usb/ax88179_178a.c
+>> index e2fa56b92685..7c7c2f31d9f1 100644
+>> --- a/drivers/net/usb/ax88179_178a.c
+>> +++ b/drivers/net/usb/ax88179_178a.c
+>> @@ -1914,55 +1914,55 @@ static const struct driver_info at_umc2000sp_info = {
+>>  static const struct usb_device_id products[] = {
+>>  {
+>>  	/* ASIX AX88179 10/100/1000 */
+>> -	USB_DEVICE(0x0b95, 0x1790),
+>> +	USB_DEVICE_AND_INTERFACE_INFO(0x0b95, 0x1790, 0xff, 0xff, 0),
+>>  	.driver_info = (unsigned long)&ax88179_info,
+>>  }, 
+> 
+> Should we use USB_CLASS_VENDOR_SPEC and USB_SUBCLASS_VENDOR_SPEC ?
+> Maybe define a local macro wrapper for USB_DEVICE_AND.. which will
+> fill those in to avoid long lines?
 
-> Okay -- in the case of an Open19 power shelf like the ahe-50dc, there are 50
-> instances of this, 48 of which are in four ganged connectors each with 12
-> pairs of pins, but two of which have their own dedicated little individual
-> sockets.  The connectors are physically different, but they're all identical
-> as far as software is concerned, so I'm not clear on why it would need to be
-> expressed in any DT properties or the like.  Or did you just mean
-> explanatory free-form text in the description field?
+Sure, I'll do that!
 
-Explanatory description would be one example of something that should be
-described, yes - if there is control for switching the supplies on and
-off the user is going to need to be able to figure out which software
-control corresponds to which physical connection.  Other devices may
-have more things that need autoamtion (eg, jack detection).
-
-> > Sure, but there's no reason why it can't scale down to something
-> > simpler.  It's easier to support something simpler than have to extend
-> > to support something more complicated.
-
-> Alright, so would you suggest creating something like
-> drivers/extcon/extcon-regulator-output.c, and just having its extcon
-> functionality be something of a stub for now?
-
-I'm not super familiar with extcon but that seems plausible.
-
---7moZXgHmwiy4vUEp
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmJzvX8ACgkQJNaLcl1U
-h9A8UAf/fie/0qtJtkcTIuxOavIxjrhnkZVoXgVXIZQkG30kKpFcFusvyLn7WqXr
-gpDsmSfB5Z2Eg2pd6Vqx58Gst7G7sDnZJt5O7PubZzenBQCMkyiWZiyqc5Rufp9F
-vtG6Zfsj1xhkkmZiXuuLuoDm+xLqFTuybFX0WiFCyis5gqvJdMnESUYcxrAhqafh
-YnxdpGueFPqxO/tT8kXNrt62bk5xZ1VpJDtesx1FvQ/tGj1I0alTPs30SRrNRNyc
-UkYI4t+wLyPh/NGIukqN+yzllWgjjHM7LCMnAM+VyM9vMtNunlRtx/M+T4E8K1b3
-j4fLzaFv8XLddtp/924vcwv2ZG/nnw==
-=k/3z
------END PGP SIGNATURE-----
-
---7moZXgHmwiy4vUEp--
+-- 
+Hector Martin (marcan@marcan.st)
+Public Key: https://mrcn.st/pub

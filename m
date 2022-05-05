@@ -2,104 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C42A51BC8B
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 11:53:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3956051BC8F
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 11:54:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350983AbiEEJ4g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 05:56:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38736 "EHLO
+        id S1354588AbiEEJ6b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 05:58:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230073AbiEEJ4e (ORCPT
+        with ESMTP id S230073AbiEEJ61 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 05:56:34 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B39450070;
-        Thu,  5 May 2022 02:52:53 -0700 (PDT)
-Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1nmYAF-0007lg-8h; Thu, 05 May 2022 11:52:51 +0200
-Message-ID: <941f292d-2ce2-d7aa-3d70-01a11ba171cf@leemhuis.info>
-Date:   Thu, 5 May 2022 11:52:50 +0200
+        Thu, 5 May 2022 05:58:27 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D511D140D7;
+        Thu,  5 May 2022 02:54:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651744486; x=1683280486;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=+IIdzhi2wpaIkl6R/rnZ2YgMFMMb8WS0hD6EgHwqztw=;
+  b=LYiFMsp4zHRfnDe/xzMdd4/VXl8faf7S6BfDl/mOUDXAJzxxo9iGtx70
+   H5OYuYunfybdoIL1WBRDvVw5Y57eYuV4j+JdYDXLrbCbiyez3z341a1B0
+   7dWy7bWmHsuHCAeTU2xD6uPdGWaeW5kZEOlRClYi/cjS0dUashYJpMypY
+   Ftg7HQD8VdkJ2jAg0YWMZSXhTl2iq+eghoubtcg0yMhBsJsP1Vj4HwbW2
+   mkBQMbeDehxIRwhKwkg1kadTKfobOkrP7bQ71EUvT8fSRjplVDLLS8guY
+   lMNs14g4TeD+/SZNOtV6v5iaHwiUnf8OXvebgjuFk+VqUCa/dJuf1bt5G
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10337"; a="267656701"
+X-IronPort-AV: E=Sophos;i="5.91,200,1647327600"; 
+   d="scan'208";a="267656701"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2022 02:54:46 -0700
+X-IronPort-AV: E=Sophos;i="5.91,200,1647327600"; 
+   d="scan'208";a="568528376"
+Received: from adgonzal-mobl2.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.254.3.146])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2022 02:54:43 -0700
+Message-ID: <6bb89ca6e7346f4334f06ea293f29fd12df70fe4.camel@intel.com>
+Subject: Re: [PATCH v3 00/21] TDX host kernel support
+From:   Kai Huang <kai.huang@intel.com>
+To:     Dave Hansen <dave.hansen@intel.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+Cc:     seanjc@google.com, pbonzini@redhat.com, len.brown@intel.com,
+        tony.luck@intel.com, rafael.j.wysocki@intel.com,
+        reinette.chatre@intel.com, dan.j.williams@intel.com,
+        peterz@infradead.org, ak@linux.intel.com,
+        kirill.shutemov@linux.intel.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com,
+        isaku.yamahata@intel.com
+Date:   Thu, 05 May 2022 21:54:41 +1200
+In-Reply-To: <8bf596b45f68363134f431bcc550e16a9a231b80.camel@intel.com>
+References: <cover.1649219184.git.kai.huang@intel.com>
+         <522e37eb-68fc-35db-44d5-479d0088e43f@intel.com>
+         <ecf718abf864bbb2366209f00d4315ada090aedc.camel@intel.com>
+         <de24ac7e-349c-e49a-70bb-31b9bc867b10@intel.com>
+         <9b388f54f13b34fe684ef77603fc878952e48f87.camel@intel.com>
+         <d98ca73b-2d2d-757d-e937-acc83cfedfb0@intel.com>
+         <c90a10763969077826f42be6f492e3a3e062326b.camel@intel.com>
+         <fc1ca04d94ad45e79c0297719d5ef50a7c33c352.camel@intel.com>
+         <664f8adeb56ba61774f3c845041f016c54e0f96e.camel@intel.com>
+         <1b681365-ef98-ec78-96dc-04e28316cf0e@intel.com>
+         <8bf596b45f68363134f431bcc550e16a9a231b80.camel@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Content-Language: en-US
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
-Cc:     Samuel Clark <slc2015@gmail.com>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
-        LKML <linux-kernel@vger.kernel.org>
-To:     Jarkko Nikula <jarkko.nikula@linux.intel.com>
-Subject: regression: Null pointer exception on resume from S3 with i2c
- DesignWare driver
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1651744374;334872db;
-X-HE-SMSGID: 1nmYAF-0007lg-8h
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, this is your Linux kernel regression tracker.
-
-I noticed a regression report in bugzilla.kernel.org that afaics nobody
-acted upon since it was reported about a week ago, that's why I decided
-to forward it to the lists and all people that seemed to be relevant. To
-quote from https://bugzilla.kernel.org/show_bug.cgi?id=215907 :
-
-> Running Manjaro on a Gigabyte B660M DS3H DDR4 with custom 5.17 kernel. Confirmed on other distributions and kernels back to 5.12; issue is not present on most recent 5.11 kernel. dmesg traceback points to i2c DesignWare driver, specifically drivers/i2c/busses/i2c-designware-master.c:369. It seems the msgs struct passed in to i2c_dw_xfer_msg is null.
+On Wed, 2022-05-04 at 13:15 +1200, Kai Huang wrote:
+> On Tue, 2022-05-03 at 17:25 -0700, Dave Hansen wrote:
+> > On 5/3/22 16:59, Kai Huang wrote:
+> > > Should be:
+> > > 
+> > > 	// prevent racing with TDX module initialization */
+> > > 	tdx_init_disable();
+> > > 
+> > > 	if (tdx_module_initialized()) {
+> > > 		if (new_memory_resource in TDMRs)
+> > > 			// allow memory hot-add
+> > > 		else
+> > > 			// reject memory hot-add
+> > > 	} else if (new_memory_resource in CMR) {
+> > > 		// add new memory to TDX memory so it can be
+> > > 		// included into TDMRs
+> > > 
+> > > 		// allow memory hot-add
+> > > 	}
+> > > 	else
+> > > 		// reject memory hot-add
+> > > 	
+> > > 	tdx_module_enable();
+> > > 
+> > > And when platform doesn't TDX, always allow memory hot-add.
+> > 
+> > I don't think it even needs to be *that* complicated.
+> > 
+> > It could just be winner take all: if TDX is initialized first, don't
+> > allow memory hotplug.  If memory hotplug happens first, don't allow TDX
+> > to be initialized.
+> > 
+> > That's fine at least for a minimal patch set.
 > 
-> Similar issue seems to be reported here:  https://lore.kernel.org/lkml/YY5BRrE8bLyvd3PB@smile.fi.intel.com/t/  
+> OK. This should also work.
 > 
-> lspci output: https://pastebin.com/MwFM2VBJ
-> dmesg from crashed kernel: https://pastebin.com/t6GsHjkq
-> kernel config: https://pastebin.com/awrSve5u
+> We will need tdx_init_disable() which grabs the mutex to prevent TDX module
+> initialization from running concurrently, and to disable TDX module
+> initialization once for all.
+>  
+> 
+> > 
+> > What you have up above is probably where you want to go eventually, but
+> > it means doing things like augmenting the e820 since it's the single
+> > source of truth for creating the TMDRs right now.
+> > 
+> 
+> Yes.  But in this case, I am thinking about probably we should switch from
+> consulting e820 to consulting memblock.  The advantage of using e820 is it's
+> easy to include legacy PMEM as TDX memory, but the disadvantage is (as you can
+> see in e820_for_each_mem() loop) I am actually merging contiguous different
+> types of RAM entries in order to be consistent with the behavior of
+> e820_memblock_setup().  This is not nice.
+> 
+> If memory hot-add and TDX can only be one winner, legacy PMEM actually won't be
+> used as TDX memory anyway now.  The reason is TDX guest will very likely needing
+> to use the new fd-based backend (see my reply in other emails), but not just
+> some random backend.  To me it's totally fine to not support using legacy PMEM
+> directly as TD guest backend (and if we create a TD with real NVDIMM as backend
+> using dax, the TD cannot be created anyway).  Given we cannot kmem-hot-add
+> legacy PMEM back as system RAM, to me it's pointless to include legacy PMEM into
+> TDMRs.
+> 
+> In this case, we can just create TDMRs based on memblock directly.  One problem
+> is memblock will be gone after kernel boots, but this can be solved either by
+> keeping the memblock, or build the TDX memory early when memblock is still
+> alive.
+> 
+> Btw, eventually, as it's likely we need to support different source of TDX
+> memory (CLX memory, etc), I think eventually we will need some data structures
+> to represent TDX memory block and APIs to add those blocks to the whole TDX
+> memory so those TDX memory ranges from different source can be added before
+> initializing the TDX module.
+> 
+> 	struct tdx_memblock {
+> 		struct list_head list;
+> 		phys_addr_t start;
+> 		phys_addr_t end;
+> 		int nid;
+> 		...
+> 	};
+> 
+> 	struct tdx_memory {
+> 		struct list_head tmb_list;
+> 		...
+> 	};
+> 
+> 	int tdx_memory_add_memblock(start, end, nid, ...);
+> 
+> And the TDMRs can be created based on 'struct tdx_memory'.
+> 
+> For now, we only need to add memblock to TDX memory.
+> 
+> Any comments?
+> 
 
-Could somebody take a look into this? Or was this discussed somewhere
-else already? Or even fixed?
+Hi Dave,
 
-Anyway, to get this tracked:
+Sorry to ping (trying to close this).
 
-#regzbot introduced: v5.11..v5.12
-#regzbot from: Samuel Clark <slc2015@gmail.com>
-#regzbot title: i2c: designware: Null pointer exception on resume from S3
-#regzbot link: https://bugzilla.kernel.org/show_bug.cgi?id=215907
+Given we don't need to consider kmem-hot-add legacy PMEM after TDX module
+initialization, I think for now it's totally fine to exclude legacy PMEMs from
+TDMRs.  The worst case is when someone tries to use them as TD guest backend
+directly, the TD will fail to create.  IMO it's acceptable, as it is supposedly
+that no one should just use some random backend to run TD.
 
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+I think w/o needing to include legacy PMEM, it's better to get all TDX memory
+blocks based on memblock, but not e820.  The pages managed by page allocator are
+from memblock anyway (w/o those from memory hotplug).
 
-P.S.: As the Linux kernel's regression tracker I deal with a lot of
-reports and sometimes miss something important when writing mails like
-this. If that's the case here, don't hesitate to tell me in a public
-reply, it's in everyone's interest to set the public record straight.
+And I also think it makes more sense to introduce 'tdx_memblock' and
+'tdx_memory' data structures to gather all TDX memory blocks during boot when
+memblock is still alive.  When TDX module is initialized during runtime, TDMRs
+can be created based on the 'struct tdx_memory' which contains all TDX memory
+blocks we gathered based on memblock during boot.  This is also more flexible to
+support other TDX memory from other sources such as CLX memory in the future.
+
+Please let me know if you have any objection?  Thanks!
 
 -- 
-Additional information about regzbot:
+Thanks,
+-Kai
 
-If you want to know more about regzbot, check out its web-interface, the
-getting start guide, and the references documentation:
 
-https://linux-regtracking.leemhuis.info/regzbot/
-https://gitlab.com/knurd42/regzbot/-/blob/main/docs/getting_started.md
-https://gitlab.com/knurd42/regzbot/-/blob/main/docs/reference.md
-
-The last two documents will explain how you can interact with regzbot
-yourself if your want to.
-
-Hint for reporters: when reporting a regression it's in your interest to
-CC the regression list and tell regzbot about the issue, as that ensures
-the regression makes it onto the radar of the Linux kernel's regression
-tracker -- that's in your interest, as it ensures your report won't fall
-through the cracks unnoticed.
-
-Hint for developers: you normally don't need to care about regzbot once
-it's involved. Fix the issue as you normally would, just remember to
-include 'Link:' tag in the patch descriptions pointing to all reports
-about the issue. This has been expected from developers even before
-regzbot showed up for reasons explained in
-'Documentation/process/submitting-patches.rst' and
-'Documentation/process/5.Posting.rst'.

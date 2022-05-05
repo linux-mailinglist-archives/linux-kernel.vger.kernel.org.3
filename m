@@ -2,179 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B060651BFED
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 14:54:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E3C151BFB6
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 14:45:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378145AbiEEMzj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 08:55:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60436 "EHLO
+        id S1377864AbiEEMtM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 08:49:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377743AbiEEMyM (ORCPT
+        with ESMTP id S241946AbiEEMtH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 08:54:12 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9622A4C782;
-        Thu,  5 May 2022 05:50:31 -0700 (PDT)
-Received: from kwepemi500006.china.huawei.com (unknown [172.30.72.55])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4KvD6Y1GB5z1JBq6;
-        Thu,  5 May 2022 20:49:25 +0800 (CST)
-Received: from kwepemm600016.china.huawei.com (7.193.23.20) by
- kwepemi500006.china.huawei.com (7.221.188.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 5 May 2022 20:50:29 +0800
-Received: from localhost.localdomain (10.67.165.24) by
- kwepemm600016.china.huawei.com (7.193.23.20) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 5 May 2022 20:50:29 +0800
-From:   Guangbin Huang <huangguangbin2@huawei.com>
-To:     <davem@davemloft.net>, <kuba@kernel.org>
-CC:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <lipeng321@huawei.com>, <huangguangbin2@huawei.com>,
-        <chenhao288@hisilicon.com>
-Subject: [PATCH net-next 5/5] net: hns3: add query vf ring and vector map relation
-Date:   Thu, 5 May 2022 20:44:44 +0800
-Message-ID: <20220505124444.2233-6-huangguangbin2@huawei.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20220505124444.2233-1-huangguangbin2@huawei.com>
-References: <20220505124444.2233-1-huangguangbin2@huawei.com>
+        Thu, 5 May 2022 08:49:07 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CF4FE086
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 05:45:26 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id d22so4262653plr.9
+        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 05:45:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
+        bh=F7HMG+OVhPOos/cU+pyZ4Uh+EgyQ7cM2dbYtA5UL2Io=;
+        b=FliSKDjWtBxb7sHTcZuxqXvrzycO2HY1qnLgfgN0JxJBZoqrNfUBaMen+TDkvlhUV4
+         nNH1yczPMbCbdQZszx01TxDN5R7CYc0/qpex13veQqYJbnKd6pn7F+z+Hi+v1bcUjBzw
+         dixZ2W+1YVmTRjlHGNp00kV6lcMaZyqV9eKWK1ItGE2jfGzJs85k2PEQkSoNnVUnyR/w
+         ik39nS88yAb6Jqw8TBRsY/SUWdjGjLKhCCamMrkmzcC75UyK6WT1eKLZ0pgjTF21uu5x
+         EdcoHsuaZaAyaEcdonRTWtd4ia7oxAdlGICgPpLUGzkvTtOiwwJ/cUJyBPx8Kof5NhhN
+         BEtw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=F7HMG+OVhPOos/cU+pyZ4Uh+EgyQ7cM2dbYtA5UL2Io=;
+        b=MdcHW5Emf4DiUNU84NCkrV5cKR4m4lPsKMzyXIGy5+Zm/4chkfGcoUkKRxExq6WT5p
+         cMo4UjJmtDFpGvPRpGDaFY4/aZZe38/GV7F29OHw5FLMeABjKuqrVmN8+zNI5avPrqtu
+         HfSSMx8ItfcDZEvljiyujy0ZluJK+wDhSzmb6FZ0byJFUGnIWQiUwsEBu+FD43sxWMoC
+         JbtEeZn560bvSNwAOEd6GN27hUTsKuYSAtyRYwAe18HkrDVPmQUxlaC+cRAB0CAHpbUq
+         bkJRmOc9bxs6z5vIYhJNBcMfN4hdfrCZARB7dsaTFcWGZ4r9GdDFxK0KXiXDksfTtMdQ
+         HoeA==
+X-Gm-Message-State: AOAM532jFhg8jZGSe1ClrVPWNs9/OezL0KOg5Mm2aJ8m02jw3GmF0Am3
+        RoOHmCvLyDn4LtgSL1QDXgw=
+X-Google-Smtp-Source: ABdhPJzwQrMHYTwtniSHPVkeMU50/jRdLb4QENkxiLwIbU63QlDYPWoRGcR7d0QfrhaLzXg99SB6Aw==
+X-Received: by 2002:a17:903:40c2:b0:15c:fd2a:7198 with SMTP id t2-20020a17090340c200b0015cfd2a7198mr22407514pld.0.1651754725679;
+        Thu, 05 May 2022 05:45:25 -0700 (PDT)
+Received: from hyeyoo ([114.29.24.243])
+        by smtp.gmail.com with ESMTPSA id jf20-20020a17090b175400b001d6510cbbaesm5230422pjb.46.2022.05.05.05.45.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 May 2022 05:45:25 -0700 (PDT)
+Date:   Thu, 5 May 2022 21:45:18 +0900
+From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
+To:     Marco Elver <elver@google.com>
+Cc:     Muchun Song <songmuchun@bytedance.com>,
+        Alexander Potapenko <glider@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, Hyeonggon Yoo <42.hyeyoo@gmail.com>
+Subject: [PATCH v4] mm/kfence: reset PG_slab and memcg_data before freeing
+ __kfence_pool
+Message-ID: <YnPG3pQrqfcgOlVa@hyeyoo>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.67.165.24]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- kwepemm600016.china.huawei.com (7.193.23.20)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch adds a new mailbox opcode to query map relation between
-vf ring and vector.
+When kfence fails to initialize kfence pool, it frees the pool.
+But it does not reset memcg_data and PG_slab flag.
 
-Signed-off-by: Guangbin Huang <huangguangbin2@huawei.com>
+Below is a BUG because of this. Let's fix it by resetting memcg_data
+and PG_slab flag before free.
+
+[    0.089149] BUG: Bad page state in process swapper/0  pfn:3d8e06
+[    0.089149] page:ffffea46cf638180 refcount:0 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x3d8e06
+[    0.089150] memcg:ffffffff94a475d1
+[    0.089150] flags: 0x17ffffc0000200(slab|node=0|zone=2|lastcpupid=0x1fffff)
+[    0.089151] raw: 0017ffffc0000200 ffffea46cf638188 ffffea46cf638188 0000000000000000
+[    0.089152] raw: 0000000000000000 0000000000000000 00000000ffffffff ffffffff94a475d1
+[    0.089152] page dumped because: page still charged to cgroup
+[    0.089153] Modules linked in:
+[    0.089153] CPU: 0 PID: 0 Comm: swapper/0 Tainted: G    B   W         5.18.0-rc1+ #965
+[    0.089154] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.14.0-2 04/01/2014
+[    0.089154] Call Trace:
+[    0.089155]  <TASK>
+[    0.089155]  dump_stack_lvl+0x49/0x5f
+[    0.089157]  dump_stack+0x10/0x12
+[    0.089158]  bad_page.cold+0x63/0x94
+[    0.089159]  check_free_page_bad+0x66/0x70
+[    0.089160]  __free_pages_ok+0x423/0x530
+[    0.089161]  __free_pages_core+0x8e/0xa0
+[    0.089162]  memblock_free_pages+0x10/0x12
+[    0.089164]  memblock_free_late+0x8f/0xb9
+[    0.089165]  kfence_init+0x68/0x92
+[    0.089166]  start_kernel+0x789/0x992
+[    0.089167]  x86_64_start_reservations+0x24/0x26
+[    0.089168]  x86_64_start_kernel+0xa9/0xaf
+[    0.089170]  secondary_startup_64_no_verify+0xd5/0xdb
+[    0.089171]  </TASK>
+
+Fixes: 0ce20dd84089 ("mm: add Kernel Electric-Fence infrastructure")
+Fixes: 8f0b36497303 ("mm: kfence: fix objcgs vector allocation")
+Signed-off-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
 ---
- .../net/ethernet/hisilicon/hns3/hclge_mbx.h   |  1 +
- .../hisilicon/hns3/hns3pf/hclge_mbx.c         | 83 +++++++++++++++++++
- 2 files changed, 84 insertions(+)
 
-diff --git a/drivers/net/ethernet/hisilicon/hns3/hclge_mbx.h b/drivers/net/ethernet/hisilicon/hns3/hclge_mbx.h
-index 9001a3abc26c..0bff2d834c4b 100644
---- a/drivers/net/ethernet/hisilicon/hns3/hclge_mbx.h
-+++ b/drivers/net/ethernet/hisilicon/hns3/hclge_mbx.h
-@@ -46,6 +46,7 @@ enum HCLGE_MBX_OPCODE {
- 	HCLGE_MBX_PUSH_PROMISC_INFO,	/* (PF -> VF) push vf promisc info */
- 	HCLGE_MBX_VF_UNINIT,            /* (VF -> PF) vf is unintializing */
- 	HCLGE_MBX_HANDLE_VF_TBL,	/* (VF -> PF) store/clear hw table */
-+	HCLGE_MBX_GET_RING_VECTOR_MAP,	/* (VF -> PF) get ring-to-vector map */
- 
- 	HCLGE_MBX_GET_VF_FLR_STATUS = 200, /* (M7 -> PF) get vf flr status */
- 	HCLGE_MBX_PUSH_LINK_STATUS,	/* (M7 -> PF) get port link status */
-diff --git a/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_mbx.c b/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_mbx.c
-index 6957b5e158c9..e1012f7f9b73 100644
---- a/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_mbx.c
-+++ b/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_mbx.c
-@@ -251,6 +251,81 @@ static int hclge_map_unmap_ring_to_vf_vector(struct hclge_vport *vport, bool en,
- 	return ret;
- }
- 
-+static int hclge_query_ring_vector_map(struct hclge_vport *vport,
-+				       struct hnae3_ring_chain_node *ring_chain,
-+				       struct hclge_desc *desc)
-+{
-+	struct hclge_ctrl_vector_chain_cmd *req =
-+		(struct hclge_ctrl_vector_chain_cmd *)desc->data;
-+	struct hclge_dev *hdev = vport->back;
-+	u16 tqp_type_and_id;
-+	int status;
+v3 -> v4:
+	- Use struct slab instead of folio and reset memcg_data and
+	  clear PG_slab only if PG_slab flag is set (virt_to_slab() != NULL).
+	  
+	  Thanks Muchun. Now it looks much better and still works.
+
+	- Remove Reviewed-by: tags as the code changed. Please add new
+	  one if the patch still looks good to you.
+
+ mm/kfence/core.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
+
+diff --git a/mm/kfence/core.c b/mm/kfence/core.c
+index a203747ad2c0..58dfac1828ce 100644
+--- a/mm/kfence/core.c
++++ b/mm/kfence/core.c
+@@ -642,6 +642,16 @@ static bool __init kfence_init_pool_early(void)
+ 	 * fails for the first page, and therefore expect addr==__kfence_pool in
+ 	 * most failure cases.
+ 	 */
++	for (char *p = (char *)addr; p < __kfence_pool + KFENCE_POOL_SIZE; p += PAGE_SIZE) {
++		struct slab *slab = virt_to_slab(p);
 +
-+	hclge_cmd_setup_basic_desc(desc, HCLGE_OPC_ADD_RING_TO_VECTOR, true);
-+
-+	tqp_type_and_id = le16_to_cpu(req->tqp_type_and_id[0]);
-+	hnae3_set_field(tqp_type_and_id, HCLGE_INT_TYPE_M, HCLGE_INT_TYPE_S,
-+			hnae3_get_bit(ring_chain->flag, HNAE3_RING_TYPE_B));
-+	hnae3_set_field(tqp_type_and_id, HCLGE_TQP_ID_M, HCLGE_TQP_ID_S,
-+			ring_chain->tqp_index);
-+	req->tqp_type_and_id[0] = cpu_to_le16(tqp_type_and_id);
-+	req->vfid = vport->vport_id;
-+
-+	status = hclge_cmd_send(&hdev->hw, desc, 1);
-+	if (status)
-+		dev_err(&hdev->pdev->dev,
-+			"Get VF ring vector map info fail, status is %d.\n",
-+			status);
-+
-+	return status;
-+}
-+
-+static int hclge_get_vf_ring_vector_map(struct hclge_vport *vport,
-+					struct hclge_mbx_vf_to_pf_cmd *req,
-+					struct hclge_respond_to_vf_msg *resp)
-+{
-+#define HCLGE_LIMIT_RING_NUM			1
-+#define HCLGE_RING_TYPE_OFFSET			0
-+#define HCLGE_TQP_INDEX_OFFSET			1
-+#define HCLGE_INT_GL_INDEX_OFFSET		2
-+#define HCLGE_VECTOR_ID_OFFSET			3
-+#define HCLGE_RING_VECTOR_MAP_INFO_LEN		4
-+	struct hnae3_ring_chain_node ring_chain;
-+	struct hclge_desc desc;
-+	struct hclge_ctrl_vector_chain_cmd *data =
-+		(struct hclge_ctrl_vector_chain_cmd *)desc.data;
-+	u16 tqp_type_and_id;
-+	u8 int_gl_index;
-+	int ret;
-+
-+	req->msg.ring_num = HCLGE_LIMIT_RING_NUM;
-+
-+	memset(&ring_chain, 0, sizeof(ring_chain));
-+	ret = hclge_get_ring_chain_from_mbx(req, &ring_chain, vport);
-+	if (ret)
-+		return ret;
-+
-+	ret = hclge_query_ring_vector_map(vport, &ring_chain, &desc);
-+	if (ret) {
-+		hclge_free_vector_ring_chain(&ring_chain);
-+		return ret;
++		if (!slab)
++			continue;
++#ifdef CONFIG_MEMCG
++		slab->memcg_data = 0;
++#endif
++		__folio_clear_slab(slab_folio(slab));
 +	}
-+
-+	tqp_type_and_id = le16_to_cpu(data->tqp_type_and_id[0]);
-+	int_gl_index = hnae3_get_field(tqp_type_and_id,
-+				       HCLGE_INT_GL_IDX_M, HCLGE_INT_GL_IDX_S);
-+
-+	resp->data[HCLGE_RING_TYPE_OFFSET] = req->msg.param[0].ring_type;
-+	resp->data[HCLGE_TQP_INDEX_OFFSET] = req->msg.param[0].tqp_index;
-+	resp->data[HCLGE_INT_GL_INDEX_OFFSET] = int_gl_index;
-+	resp->data[HCLGE_VECTOR_ID_OFFSET] = data->int_vector_id_l;
-+	resp->len = HCLGE_RING_VECTOR_MAP_INFO_LEN;
-+
-+	hclge_free_vector_ring_chain(&ring_chain);
-+
-+	return ret;
-+}
-+
- static void hclge_set_vf_promisc_mode(struct hclge_vport *vport,
- 				      struct hclge_mbx_vf_to_pf_cmd *req)
- {
-@@ -755,6 +830,14 @@ void hclge_mbx_handler(struct hclge_dev *hdev)
- 			ret = hclge_map_unmap_ring_to_vf_vector(vport, false,
- 								req);
- 			break;
-+		case HCLGE_MBX_GET_RING_VECTOR_MAP:
-+			ret = hclge_get_vf_ring_vector_map(vport, req,
-+							   &resp_msg);
-+			if (ret)
-+				dev_err(&hdev->pdev->dev,
-+					"PF fail(%d) to get VF ring vector map\n",
-+					ret);
-+			break;
- 		case HCLGE_MBX_SET_PROMISC_MODE:
- 			hclge_set_vf_promisc_mode(vport, req);
- 			break;
+ 	memblock_free_late(__pa(addr), KFENCE_POOL_SIZE - (addr - (unsigned long)__kfence_pool));
+ 	__kfence_pool = NULL;
+ 	return false;
 -- 
-2.33.0
-
+2.32.0

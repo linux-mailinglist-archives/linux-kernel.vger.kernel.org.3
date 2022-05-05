@@ -2,63 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D943551C516
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 18:26:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DD1E51C517
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 18:26:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381957AbiEEQ3b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 12:29:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51926 "EHLO
+        id S1381950AbiEEQ3Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 12:29:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380217AbiEEQ31 (ORCPT
+        with ESMTP id S234298AbiEEQ3U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 12:29:27 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C207318E1C;
-        Thu,  5 May 2022 09:25:45 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: nfraprado)
-        with ESMTPSA id 393751F45ABD
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1651767943;
-        bh=us6VQcZonVRZDNCqwnPC3/ZUDrCZ5LkU3g8yGafttv4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=DsrqAmPPKwC1WvZxKzkbXTRjRJEiP/WizLShBmIu304hhlhhHNQSz9qLISwTIbG4W
-         v+6C9yOSV7c/7M3TEtnFvJe94HChoUgbpjOn6Wq2SqjrQtu0kwsVmCwnUlmEmIBirc
-         Po88xEbIChaOX6eNz/QE3ZfTlD8UWv0968oKjyBsx0JJoQrR9SVC1tIhACa4HxuwZG
-         WLyeqN2LlBDs+gUf5pcSTlu3ulu/pfIYCtS/nxaM7Dy24gZUCy/W8KtsAuNrOhSj8m
-         PA8F2q4XiLyQWx9Yhov61BeZXMt2Dkpy3lcK9Bvw6Uo5MNELIFEBZRKrFFCt+7MaRc
-         BmlcLSapwch7g==
-Date:   Thu, 5 May 2022 12:25:37 -0400
-From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
-        <nfraprado@collabora.com>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     Jiaxin Yu <jiaxin.yu@mediatek.com>,
-        Mark Brown <broonie@kernel.org>, kernel@collabora.com,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Shane Chien <shane.chien@mediatek.com>,
-        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH 1/3] ASoC: dt-bindings: mediatek: mt8192: Add i2s-share
- properties
-Message-ID: <20220505162537.byiwfe2ghomxhezl@notapiano>
-References: <20220429203039.2207848-1-nfraprado@collabora.com>
- <20220429203039.2207848-2-nfraprado@collabora.com>
- <4826c824-40ce-5726-ed95-5be069233ca7@collabora.com>
- <cbf2fcbae25408b95875278eb37e829bf4671430.camel@mediatek.com>
- <d1c548bb-8a36-79bf-498d-c909bf7e7679@collabora.com>
+        Thu, 5 May 2022 12:29:20 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBE1913D41
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 09:25:40 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id r9so4638195pjo.5
+        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 09:25:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=AMszwqVGUUkRlqT3bH9KZgvoJEDUJqYcdmFvwR43CTQ=;
+        b=nqkUAGbObnsBEq0E+RdFzEBv9xuAOfg+/oONK+DfcjkFJ+Lqbk1Lxsyuf4E2dI9W0p
+         wL4xpitBmfFa56MgN1186scmSSm3YB/7qrUEctUAW/Fk6aTk2AAkifz9WkeNpn+XaQUH
+         SdP5hM0JRdmsjkaCO7o5uz9TiBKRdlWD+/Djg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=AMszwqVGUUkRlqT3bH9KZgvoJEDUJqYcdmFvwR43CTQ=;
+        b=l+8kk/3jbUYdOEKWWAefkcTGkw9FJYlKPJ5iQi4NWpm2g2eqOT9d2uJKKv4TGWy6q7
+         vP+LS2RGXORQGlfc23M+zccJW7Vcfo+Y/PGNe+XVhtpjbW3OcAQQ7I+mHiA64+Why0SJ
+         7Ul5+CAC/p2tq+IQyOWrosk8BkjFKwHR2G9qSCebwwmmcf02jreltSKufePcxVuMJVCN
+         hU0gacJvb2dzqLfoCi3B+K40CeMXPjzOLV6tHFihvJ9y4ERewXY04KOFzfzTdNB3ttx0
+         gSM+cQ0BKY1Duo9WiBXyBT8sZj3TTzzmnp/ybXjS4P4W6fTkC4n4prXWJVI3HtxYFAs+
+         B7Tg==
+X-Gm-Message-State: AOAM532btAZMPl3LrDQ1Yn7WSLAigEYDxOajBa46TbBi/XRrs+EO6R/G
+        3tpU4iCYbQrKgtaI9zEMsK+0dw==
+X-Google-Smtp-Source: ABdhPJx6wPVrYHxsa68KRgQKpBYm+86c0ZSHTSAAubzPSZ9HEe2FvIzxPyT8mlJ1clOyQ1w2FcrXkQ==
+X-Received: by 2002:a17:903:2312:b0:15e:a6c8:a313 with SMTP id d18-20020a170903231200b0015ea6c8a313mr20672636plh.122.1651767940456;
+        Thu, 05 May 2022 09:25:40 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id c23-20020a170902849700b0015e8d4eb287sm1749040plo.209.2022.05.05.09.25.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 May 2022 09:25:40 -0700 (PDT)
+Date:   Thu, 5 May 2022 09:25:39 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
+        kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: Re: [kees:for-next/kspp 21/25] drivers/misc/lkdtm/stackleak.c:17:39:
+ error: call to undeclared function 'stackleak_task_low_bound'; ISO C99 and
+ later do not support implicit function declarations
+Message-ID: <202205050924.7D219E774@keescook>
+References: <202205050943.HDgeO9iV-lkp@intel.com>
+ <YnPG8dGulGqxMHt6@FVFF77S0Q05N.cambridge.arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <d1c548bb-8a36-79bf-498d-c909bf7e7679@collabora.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+In-Reply-To: <YnPG8dGulGqxMHt6@FVFF77S0Q05N.cambridge.arm.com>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,125 +70,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 05, 2022 at 10:52:45AM +0200, AngeloGioacchino Del Regno wrote:
-> Il 05/05/22 10:48, Jiaxin Yu ha scritto:
-> > On Thu, 2022-05-05 at 10:08 +0200, AngeloGioacchino Del Regno wrote:
-> > > Il 29/04/22 22:30, Nícolas F. R. A. Prado ha scritto:
-> > > > The Mediatek AFE PCM controller for MT8192 allows sharing of an I2S
-> > > > bus
-> > > > between two busses. Add a pattern for these properties in the
-> > > > dt-binding.
-> > > > 
-> > > > Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
-> > > > ---
-> > > > 
-> > > >    Documentation/devicetree/bindings/sound/mt8192-afe-pcm.yaml | 5
-> > > > +++++
-> > > >    1 file changed, 5 insertions(+)
-> > > > 
-> > > > diff --git a/Documentation/devicetree/bindings/sound/mt8192-afe-
-> > > > pcm.yaml b/Documentation/devicetree/bindings/sound/mt8192-afe-
-> > > > pcm.yaml
-> > > > index 7a25bc9b8060..5b03c8dbf318 100644
-> > > > --- a/Documentation/devicetree/bindings/sound/mt8192-afe-pcm.yaml
-> > > > +++ b/Documentation/devicetree/bindings/sound/mt8192-afe-pcm.yaml
-> > > > @@ -54,6 +54,11 @@ properties:
-> > > >          - const: aud_infra_clk
-> > > >          - const: aud_infra_26m_clk
-> > > > +patternProperties:
-> > > > +  "^i2s[0-35-9]-share$":
-> > > > +    description: Name of the I2S bus that is shared with this bus
-> > > > +    pattern: "^I2S[0-35-9]$"
-> > > > +
-> > > >    required:
-> > > >      - compatible
-> > > >      - interrupts
-> > > > 
-> > > 
-> > > The only other way of doing this would be to complicate this in the
-> > > driver
-> > > so that we can do something like
-> > > 
-> > > "i2s-share = <0 2>";  instead of  i2s0-share = "I2S2";
-> > > 
-> > > ...and I don't think that this would be any more straightforward than
-> > > the
-> > > provided way.
-> > > 
-> > > There's an improvement that we can do to that pattern description
-> > > though,
-> > > which would be explaining that declaring 'i2s0-share = "I2S2"' means
-> > > that
-> > > I2S2's data pin will be used as DATA-OUT, while i2s0 is DATA-IN.
-> > > 
-> > > Another thing that comes to mind here is that this is a MediaTek
-> > > specific
-> > > property and *not* a generic one, which means that both the driver
-> > > and
-> > > this binding should be fixed to get a "mediatek," prefix, so, this
-> > > property
-> > > should - in reality - be "mediatek,i2s[0-35-9]-share" instead.
-> > > 
-> > > I think that everyone agrees about that, but let's see what the
-> > > others say.
-> > > 
-> > > Cheers,
-> > > Angelo
-> > 
-> > Hi Angelo,
-> > 
-> > 'i2s0-share = "I2S2"' means that if we want use I2S0, there need open
-> > I2S2 to provide clock. Conversely, if we want to use I2S2, we don't
-> > need to open I2S0. However, MediaTek I2S0 and I2S2 hardware are
-> > generally designed as input. So usually we use 'i2s0-share = "I2S1"'.
-> > Even numbers represent input, odd numbers represent output.
-> > 
-> > Yes, I think adding the "mediatek," prefix is the right way to define a
-> > non-generic property.
-> > 
-
-Hi Jiaxin,
-
-thank you for the insights.
-
+On Thu, May 05, 2022 at 01:45:37PM +0100, Mark Rutland wrote:
+> Hi Kees,
 > 
-> Hello Jiaxin,
+> I hadn't realised the LKDTM STACKLEAK test could be built with
+> CONFIG_STACKLEAK=n, and my rework of that depends upon helpers that only exist
+> when CONFIG_STACKLEAK=y.
 > 
-> if I get this correctly, i2s0-share = "I2S2" would be *invalid*... as you
-> just explained, i2sX, where:
+> IMO the test is nonsensical for CONFIG_STACKLEAK=n, and I reckon we should
+> either:
 > 
-> X = even number -> always DATA IN
-> X = odd number  -> always DATA OUT
+> a) Not build the stackleak test at all when CONFIG_STACKLEAK=n
 > 
-> ...this means that the dt-binding needs a pattern to specify that only odd
-> can be assigned to only even.
-
-So, the situation seems different at least on mt8192-asurada-spherion.
-Here, I2S8 is used for the headset microphone and I2S9 for the headset audio.
-Even for input and odd for output agree with Jiaxin's description. However, the
-input bus seems to be the main one, that is, disabling I2S8:
-
-	amixer cset name='UL2_CH1 I2S8_CH1' 0
-	amixer cset name='UL2_CH2 I2S8_CH2' 0
-
-not only disables the microphone but also the audio on the headset. If I add 
-
-	i2s9-share = "I2S8";
-
-on the DT, then everything works, I can disable I2S8 without impacting the
-headset audio. So the pattern for the property on this platform is the opposite
-that Jiaxin mentioned. This tells me that we should keep the binding more
-generic (not assume where odds and evens go). I will still apply the other
-suggestions mentioned though.
-
-Thanks,
-Nícolas
-
+> b) Have a small stub that just logs that CONFIG_STACKLEAK=n and the test is
+>    being skipped.
 > 
-> Nicolas, take note! :-) :-)
-> 
-> Thanks,
-> Angelo
-> 
-> -- 
-> To unsubscribe, send mail to kernel-unsubscribe@lists.collabora.co.uk.
+> Do you have any preference between the two?
+
+Since it's looking for a specific poison, it doesn't make sense to look
+for this property as magically appearing (where as this kind of thing
+sometimes exists for other tests: did the hypervisor block it instead of
+the kernel, etc)
+
+So, yeah, I'd wrap it in an ifdef with an else: XFAIL.
+
+-- 
+Kees Cook

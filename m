@@ -2,284 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23CE051CC17
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 00:33:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA82651CC1B
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 00:33:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386334AbiEEWg5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 18:36:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51902 "EHLO
+        id S1386377AbiEEWhM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 18:37:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386316AbiEEWgt (ORCPT
+        with ESMTP id S1386329AbiEEWg4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 18:36:49 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3352453A47
-        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 15:33:08 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id ECFA5B8306F
-        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 22:33:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C1BBC385AE;
-        Thu,  5 May 2022 22:33:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651789985;
-        bh=IwLNVdmXkWJlJv1H8DWp3R3tO+S7/oJXphfMgwAIYX0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qKyg1DejWTFAApJVOCIcjdgkYAfj42ZnoJqTr6/Qiqb/9HcOUG0IMxlQ/mKLX1qce
-         u0e/CrnAjZc3WRX9AQbSlUlhzqucLUXIFZGkDfyp9z00pKR/qwqRnwAKeuPh0mFEtY
-         D6E6gxIgfy4xf6gKYwWVkZbYMuncSQWVuNgANsVkJtnlF8DRKQIFTRafRFx6b5dqIj
-         +faqz+HBw7hpnUZnJ4Zf3RQFul4vF10NDE2dz0OyBqEqYbyb9pZDgUl9MxloFNXBp2
-         RDrkPsNlE+BWmFpZkOqtujVxyLfXAyMHHzXGU4nsdUCwWq8TLvQ72kCSWDCw5zZHJ6
-         NltmTW3w6AmXA==
-Received: by pali.im (Postfix)
-        id 56A46945; Fri,  6 May 2022 00:33:02 +0200 (CEST)
-Date:   Fri, 6 May 2022 00:33:02 +0200
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Tyrel Datwyler <tyreld@linux.ibm.com>
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
-Subject: Re: [PATCH] powerpc/pci: Add config option for using OF 'reg' for
- PCI domain
-Message-ID: <20220505223302.2ydcssvdgoyqv7e5@pali>
-References: <20220504175718.29011-1-pali@kernel.org>
- <8ffa0287-de5e-4308-07d8-204ac2e7f63a@csgroup.eu>
- <20220505093132.45ehu6pdfzmvt2xw@pali>
- <2cfb2cd8-3bad-3c66-b8ee-918d615f7719@linux.ibm.com>
+        Thu, 5 May 2022 18:36:56 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 934025EDE6
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 15:33:15 -0700 (PDT)
+From:   John Ogness <john.ogness@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1651789992;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ytVIAaWj8JkkieFnBNn80sd5MHBlsGGI9hhLKU4M3Z8=;
+        b=VAy6FEbOpeb56a7INHKsrf9wsvUNOSo5OmKF/jizF6zYy9jrDiH+sh+x2Yj4l9T+h5Ft6x
+        /M93lCjGJvnbLREe2aIQ7FxJ13ihv+6n7osGG27pl2Hz7864N0h5uhadNiCyRgvb4w2fVZ
+        TGMxOIpx/xSoLcMxJqycJLqJTN5jWs6oJ4JUyk0emud05VKgfQBlFPG5jlIEe+p65m5gQx
+        yM7LsmQxSFK7q5JroqYTOioAs0FcXFNZEpAHTaPbWtLjbK0xZRhZye7VwJ0vgLxwyvx/x9
+        CQuA/7fZ6f4pJxXVIKCa1rgp817C2iZW9MwWNRLHkYQuy12HW1OZiD6MqnQo+g==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1651789992;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ytVIAaWj8JkkieFnBNn80sd5MHBlsGGI9hhLKU4M3Z8=;
+        b=hVuRU6SaPQT/sqsKWRakw4yG0K01vOAxP5l3nObGvb02uuuD99UdKwFPIKbgaPf8A+BIsA
+        MH9UFSxf9WdaXYCg==
+To:     Marek Szyprowski <m.szyprowski@samsung.com>,
+        Petr Mladek <pmladek@suse.com>
+Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-amlogic@lists.infradead.org
+Subject: Re: [PATCH printk v5 1/1] printk: extend console_lock for
+ per-console locking
+In-Reply-To: <87a6bwapij.fsf@jogness.linutronix.de>
+References: <Ymfgis0EAw0Oxoa5@alley> <Ymfwk+X0CHq6ex3s@alley>
+ <CGME20220427070833eucas1p27a32ce7c41c0da26f05bd52155f0031c@eucas1p2.samsung.com>
+ <2a82eae7-a256-f70c-fd82-4e510750906e@samsung.com>
+ <Ymjy3rHRenba7r7R@alley>
+ <b6c1a8ac-c691-a84d-d3a1-f99984d32f06@samsung.com>
+ <87fslyv6y3.fsf@jogness.linutronix.de>
+ <51dfc4a0-f6cf-092f-109f-a04eeb240655@samsung.com>
+ <87k0b6blz2.fsf@jogness.linutronix.de>
+ <32bba8f8-dec7-78aa-f2e5-f62928412eda@samsung.com>
+ <Ym/Z7PYPqvWPEjuL@alley>
+ <45849b63-d7a8-5cc3-26ad-256a28d09991@samsung.com>
+ <87pmktm2a9.fsf@jogness.linutronix.de>
+ <87a6bwapij.fsf@jogness.linutronix.de>
+Date:   Fri, 06 May 2022 00:39:12 +0206
+Message-ID: <87zgjvd2zb.fsf@jogness.linutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <2cfb2cd8-3bad-3c66-b8ee-918d615f7719@linux.ibm.com>
-User-Agent: NeoMutt/20180716
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INVALID_DATE_TZ_ABSURD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thursday 05 May 2022 15:10:01 Tyrel Datwyler wrote:
-> On 5/5/22 02:31, Pali Rohár wrote:
-> > Hello!
-> > 
-> > On Thursday 05 May 2022 07:16:40 Christophe Leroy wrote:
-> >> Le 04/05/2022 à 19:57, Pali Rohár a écrit :
-> >>> Since commit 63a72284b159 ("powerpc/pci: Assign fixed PHB number based on
-> >>> device-tree properties"), powerpc kernel always fallback to PCI domain
-> >>> assignment from OF / Device Tree 'reg' property of the PCI controller.
-> >>>
-> >>> PCI code for other Linux architectures use increasing assignment of the PCI
-> >>> domain for individual controllers (assign the first free number), like it
-> >>> was also for powerpc prior mentioned commit.
-> >>>
-> >>> Upgrading powerpc kernels from LTS 4.4 version (which does not contain
-> >>> mentioned commit) to new LTS versions brings a regression in domain
-> >>> assignment.
-> >>
-> >> Can you elaborate why it is a regression ?
-> >>63a72284b159
-> >> That commit says 'no functionnal changes', I'm having hard time 
-> >> understanding how a nochange can be a regression.
-> > 
-> > It is not 'no functional change'. That commit completely changed PCI
-> > domain assignment in a way that is incompatible with other architectures
-> > and also incompatible with the way how it was done prior that commit.
-> 
-> I agree that the "no functional change" statement is incorrect. However, for
-> most powerpc platforms it ended up being simply a cosmetic behavior change. As
-> far as I can tell there is nothing requiring domain ids to increase montonically
-> from zero or that each architecture is required to use the same domain numbering
-> scheme.
+Hi Marek,
 
-That is truth. But it looks really suspicious why domains are not
-assigned monotonically. Some scripts / applications are using PCI
-location (domain:bus:dev:func) for remembering PCI device and domain
-change can cause issue for config files. And some (older) applications
-expects existence of domain zero. In systems without hot plug support
-with small number of domains (e.g. 3) it means that there are always
-domains 0, 1 and 2.
+On 2022-05-05, John Ogness <john.ogness@linutronix.de> wrote:
+> I will go through and check if all access to AML_UART_CONTROL is
+> protected by port->lock.
 
-> Its hard to call this a true regression unless it actually broke
-> something. The commit in question has been in the kernel since 4.8 which was
-> released over 5 1/2 years ago.
+The startup() callback of the uart_ops is not called with the port
+locked. I'm having difficulties identifying if the startup() callback
+can occur after the console was already registered via meson_uart_init()
+and could be actively printing, but I see other serial drivers are
+protecting their registers in the startup() callback with the
+port->lock.
 
-I agree, it really depends on how you look at it.
+Could you try booting the meson hardware with the following change? (And
+removing any previous debug changes I posted?)
 
-The important is that lot of people are using LTS versions and are doing
-upgrades when LTS support is dropped. Which for 4.4 now happened. So not
-all smaller or "cosmetic" changes could be detected until longer LTS
-period pass.
+John
 
-> With all that said looking closer at the code in question I think it is fair to
-> assume that the author only intended this change for powernv and pseries
-> platforms and not every powerpc platform. That change was done to make
-> persistent naming easier to manage in userspace.
-
-I agree that this behavior change may be useful in some situations and I
-do not object this need.
-
-> Your change defaults back to
-> the old behavior which will now break both powernv and pseries platforms with
-> regard to hotplugging and persistent naming.
-
-I was aware of it, that change could cause issues. And that is why I
-added config option for choosing behavior. So users would be able to
-choose what they need.
-
-> We could properly limit it to powernv and pseries by using ibm,fw-phb-id instead
-> of reg property in the look up that follows a failed ibm,opal-phbid lookup. I
-> think this is acceptable as long as no other powerpc platforms have started
-> using this behavior for persistent naming.
-
-And what about setting that new config option to enabled by default for
-those series?
-
-Or is there issue with introduction of the new config option?
-
-One of the point is that it is really a good idea to have similar/same
-behavior for all linux platforms. And if it cannot be enabled by default
-(for backward compatibility) add at least some option, so new platforms
-can start using it or users can decide to switch behavior.
-
-> -Tyrel
-> 
-> > For example, prior that commit on P2020 RDB board were PCI domains 0, 1 and 2.
-> > 
-> > $ lspci
-> > 0000:00:00.0 PCI bridge: Freescale Semiconductor Inc P2020E (rev 21)
-> > 0000:01:00.0 USB controller: Texas Instruments TUSB73x0 SuperSpeed USB 3.0 xHCI Host Controller (rev 02)
-> > 0001:02:00.0 PCI bridge: Freescale Semiconductor Inc P2020E (rev 21)
-> > 0001:03:00.0 Network controller: Qualcomm Atheros AR93xx Wireless Network Adapter (rev 01)
-> > 0002:04:00.0 PCI bridge: Freescale Semiconductor Inc P2020E (rev 21)
-> > 0002:05:00.0 Network controller: Qualcomm Atheros QCA986x/988x 802.11ac Wireless Network Adapter
-> > 
-> > After that commit on P2020 RDB board are PCI domains 0x8000, 0x9000 and 0xa000.
-> > 
-> > $ lspci
-> > 8000:00:00.0 PCI bridge: Freescale Semiconductor Inc P2020E (rev 21)
-> > 8000:01:00.0 USB controller: Texas Instruments TUSB73x0 SuperSpeed USB 3.0 xHCI Host Controller (rev 02)
-> > 9000:02:00.0 PCI bridge: Freescale Semiconductor Inc P2020E (rev 21)
-> > 9000:03:00.0 Network controller: Qualcomm Atheros AR93xx Wireless Network Adapter (rev 01)
-> > a000:04:00.0 PCI bridge: Freescale Semiconductor Inc P2020E (rev 21)
-> > a000:05:00.0 Network controller: Qualcomm Atheros QCA986x/988x 802.11ac Wireless Network Adapter
-> > 
-> > It is somehow strange that PCI domains are not indexed one by one and
-> > also that there is no domain 0
-> > 
-> > With my patch when CONFIG_PPC_PCI_DOMAIN_FROM_OF_REG is not set, then
-> > previous behavior used and PCI domains are again 0, 1 and 2.
-> > 
-> >> Usually we don't commit regressions to mainline ...
-> >>
-> >>
-> >>>
-> >>> Fix this issue by introducing a new option CONFIG_PPC_PCI_DOMAIN_FROM_OF_REG
-> >>> When this options is disabled then powerpc kernel would assign PCI domains
-> >>> in the similar way like it is doing kernel for other architectures and also
-> >>> how it was done prior that commit.
-> >>
-> >> You don't define CONFIG_PPC_PCI_DOMAIN_FROM_OF_REG on by default, it 
-> >> means this commit will change the behaviour. Is that expected ?
-> >>
-> >> Is that really worth a user selectable option ? Is the user able to 
-> >> decide what he needs ?
-> > 
-> > Well, I hope that maintainers of that code answer to these questions.
-> > 
-> > In any case, I think that it could be a user selectable option as in
-> > that commit is explained that in some situation is makes sense to do
-> > PCI domain numbering based on DT reg.
-> > 
-> > But as I pointed above, upgrading from 4.4 TLS kernel to some new TLS
-> > kernel brings above regression, so I think that there should be a way to
-> > disable this behavior.
-> > 
-> > In my opinion, for people who are upgrading from 4.4 TLS kernel, this
-> > option should be turned off by default (= do not change behavior). For
-> > people who want same behaviour on powerpc as on other platforms, also it
-> > should be turned off by default.
-> > 
-> >>>
-> >>> Fixes: 63a72284b159 ("powerpc/pci: Assign fixed PHB number based on device-tree properties")
-> >>
-> >> Is that really a fix ? What is the problem really ?
-> > 
-> > Problem is that PCI domains were changed in a way that is not compatible
-> > neither with version prior that commit and neither with how other linux
-> > platforms assign PCI domains for controllers.
-> > 
-> >>> Signed-off-by: Pali Rohár <pali@kernel.org>
-> >>> ---
-> >>>   arch/powerpc/Kconfig             | 10 ++++++++++
-> >>>   arch/powerpc/kernel/pci-common.c |  4 ++--
-> >>>   2 files changed, 12 insertions(+), 2 deletions(-)
-> >>>
-> >>> diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
-> >>> index 174edabb74fa..4dd3e3acddda 100644
-> >>> --- a/arch/powerpc/Kconfig
-> >>> +++ b/arch/powerpc/Kconfig
-> >>> @@ -375,6 +375,16 @@ config PPC_OF_PLATFORM_PCI
-> >>>   	depends on PCI
-> >>>   	depends on PPC64 # not supported on 32 bits yet
-> >>>   
-> >>> +config PPC_PCI_DOMAIN_FROM_OF_REG
-> >>> +	bool "Use OF reg property for PCI domain"
-> >>> +	depends on PCI
-> >>
-> >> Should it depend on PPC_OF_PLATFORM_PCI instead ?
-> > 
-> > No, PPC_OF_PLATFORM_PCI has line "depends on PPC64 # not supported on 32
-> > bits yet". But it is already used also for e.g. P2020 which is 32-bit
-> > platform.
-> > 
-> >>> +	help
-> >>> +	  By default PCI domain for host bridge during its registration is
-> >>> +	  chosen as the lowest unused PCI domain number.
-> >>> +
-> >>> +	  When this option is enabled then PCI domain is determined from
-> >>> +	  the OF / Device Tree 'reg' property.
-> >>> +
-> >>>   config ARCH_SUPPORTS_UPROBES
-> >>>   	def_bool y
-> >>>   
-> >>> diff --git a/arch/powerpc/kernel/pci-common.c b/arch/powerpc/kernel/pci-common.c
-> >>> index 8bc9cf62cd93..8cb6fc5302ae 100644
-> >>> --- a/arch/powerpc/kernel/pci-common.c
-> >>> +++ b/arch/powerpc/kernel/pci-common.c
-> >>> @@ -74,7 +74,6 @@ void __init set_pci_dma_ops(const struct dma_map_ops *dma_ops)
-> >>>   static int get_phb_number(struct device_node *dn)
-> >>>   {
-> >>>   	int ret, phb_id = -1;
-> >>> -	u32 prop_32;
-> >>>   	u64 prop;
-> >>>   
-> >>>   	/*
-> >>> @@ -83,7 +82,8 @@ static int get_phb_number(struct device_node *dn)
-> >>>   	 * reading "ibm,opal-phbid", only present in OPAL environment.
-> >>>   	 */
-> >>>   	ret = of_property_read_u64(dn, "ibm,opal-phbid", &prop);
-> >>
-> >> This looks like very specific, it is not reflected in the commit log.
-> > 
-> > I have not changed nor touched this "ibm,opal-phbid" setting. And it was
-> > not also touched in that mentioned patch. I see that no DTS file in
-> > kernel use this option (so probably only DTS files supplied by
-> > bootloader use it). So I thought that there is not reason to mention in
-> > commit message.
-> > 
-> > But if you think so, I can add some info to commit message about it.
-> > 
-> >>> -	if (ret) {
-> >>> +	if (ret && IS_ENABLED(CONFIG_PPC_PCI_DOMAIN_FROM_OF_REG)) {
-> >>> +		u32 prop_32;
-> >>>   		ret = of_property_read_u32_index(dn, "reg", 1, &prop_32);
-> >>>   		prop = prop_32;
-> >>>   	}
-> 
+diff --git a/drivers/tty/serial/meson_uart.c b/drivers/tty/serial/meson_uart.c
+index 2bf1c57e0981..f551b8603817 100644
+--- a/drivers/tty/serial/meson_uart.c
++++ b/drivers/tty/serial/meson_uart.c
+@@ -267,9 +267,12 @@ static void meson_uart_reset(struct uart_port *port)
+ 
+ static int meson_uart_startup(struct uart_port *port)
+ {
++	unsigned long flags;
+ 	u32 val;
+ 	int ret = 0;
+ 
++	spin_lock_irqsave(&port->lock, flags);
++
+ 	val = readl(port->membase + AML_UART_CONTROL);
+ 	val |= AML_UART_CLEAR_ERR;
+ 	writel(val, port->membase + AML_UART_CONTROL);
+@@ -285,6 +288,8 @@ static int meson_uart_startup(struct uart_port *port)
+ 	val = (AML_UART_RECV_IRQ(1) | AML_UART_XMIT_IRQ(port->fifosize / 2));
+ 	writel(val, port->membase + AML_UART_MISC);
+ 
++	spin_unlock_irqrestore(&port->lock, flags);
++
+ 	ret = request_irq(port->irq, meson_uart_interrupt, 0,
+ 			  port->name, port);
+ 

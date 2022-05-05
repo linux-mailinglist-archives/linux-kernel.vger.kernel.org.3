@@ -2,72 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05ECF51C185
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 15:56:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C32251C1E3
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 16:06:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344211AbiEEN50 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 09:57:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45258 "EHLO
+        id S1380448AbiEEOJt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 10:09:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346749AbiEEN5R (ORCPT
+        with ESMTP id S1379404AbiEEOJr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 09:57:17 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48DA92FE52;
-        Thu,  5 May 2022 06:53:37 -0700 (PDT)
-Received: from kwepemi500019.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KvFX900GxzhYr7;
-        Thu,  5 May 2022 21:53:12 +0800 (CST)
-Received: from kwepemm600004.china.huawei.com (7.193.23.242) by
- kwepemi500019.china.huawei.com (7.221.188.117) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 5 May 2022 21:53:34 +0800
-Received: from huawei.com (10.175.124.27) by kwepemm600004.china.huawei.com
- (7.193.23.242) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Thu, 5 May
- 2022 21:53:34 +0800
-From:   Guo Xuenan <guoxuenan@huawei.com>
-To:     <axboe@kernel.dk>, <asml.silence@gmail.com>
-CC:     <lee.jones@linaro.org>, <linux-kernel@vger.kernel.org>,
-        <io-uring@vger.kernel.org>, <guoxuenan@huawei.com>,
-        <yi.zhang@huawei.com>, <houtao1@huawei.com>
-Subject: linux-stable-5.10-y CVE-2022-1508 of io_uring module
-Date:   Thu, 5 May 2022 22:11:59 +0800
-Message-ID: <20220505141159.3182874-1-guoxuenan@huawei.com>
-X-Mailer: git-send-email 2.22.0
-In-Reply-To: <dd122760-5f87-10b1-e50d-388c2631c01a@kernel.dk>
-References: <dd122760-5f87-10b1-e50d-388c2631c01a@kernel.dk>
+        Thu, 5 May 2022 10:09:47 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAA982CE0D;
+        Thu,  5 May 2022 07:06:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651759568; x=1683295568;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=h+QOZAobM0lRBZYbKWlwOpQ6isKFqzqT/SdzJuZTeck=;
+  b=LQvHbM7IPVgU7pTjVLaMv0oum2m8tqTnX7f07g3AWBtUh6ju/j64hTuA
+   QOCl4Ihlckj/Ht0rcr5IaSY+MMrPUZz19ZQCzXVw/z7SB7DyuaKrHWvtQ
+   /8XWgrZEOm+bMTiyWjDSePgWaruQYJgxu0CivfU6LgEEQBjrURX2K4IyK
+   6yODI12XZyu8eLnndz0cjRqMVvb2y3PILIOmtX4f8BUZsvAVcLy9k/Mao
+   E4P8uBh5EVbANnz4fmGVm2vht/aH1Ud52HP3vGrhFHV6v0ICxvXkx1xuQ
+   cETLgn59cGW9ltzgeHgIkJnFsdim7s7dmJNoE/4EeoNZuSbcsh9Zmb9vz
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10338"; a="293318140"
+X-IronPort-AV: E=Sophos;i="5.91,201,1647327600"; 
+   d="scan'208";a="293318140"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2022 07:05:43 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,201,1647327600"; 
+   d="scan'208";a="891340211"
+Received: from irvmail001.ir.intel.com ([10.43.11.63])
+  by fmsmga005.fm.intel.com with ESMTP; 05 May 2022 07:05:39 -0700
+Received: from lincoln.igk.intel.com (lincoln.igk.intel.com [10.102.21.235])
+        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 245E5cMV022368;
+        Thu, 5 May 2022 15:05:38 +0100
+From:   Larysa Zaremba <larysa.zaremba@intel.com>
+To:     andrii.nakryiko@gmail.com
+Cc:     alexandr.lobakin@intel.com, andrii@kernel.org, ast@kernel.org,
+        bpf@vger.kernel.org, daniel@iogearbox.net, kafai@fb.com,
+        larysa.zaremba@intel.com, linux-kernel@vger.kernel.org,
+        maciej.fijalkowski@intel.com, netdev@vger.kernel.org,
+        songliubraving@fb.com, yhs@fb.com
+Subject: Re: [PATCH] bpftool: Use sysfs vmlinux when dumping BTF by ID
+Date:   Thu,  5 May 2022 15:56:26 +0200
+Message-Id: <20220505135626.137133-1-larysa.zaremba@intel.com>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <CAEf4BzZRioYpgsUFP1TLsqtjtvA3WLyuWjSyq12ctUoMqkUorg@mail.gmail.com>
+References: <CAEf4BzZRioYpgsUFP1TLsqtjtvA3WLyuWjSyq12ctUoMqkUorg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.124.27]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- kwepemm600004.china.huawei.com (7.193.23.242)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Pavel & Jens
+On Thu, 28 Apr 2022 21:58:58 -0700 Andrii Nakryiko <andrii@kernel.org> wrote:
+> On Thu, Apr 28, 2022 at 4:17 AM Larysa Zaremba <larysa.zaremba@intel.com> wrote:
+> >
+> > Currently, dumping almost all BTFs specified by id requires
+>
+> It should and will work only for kernel modules. It won't and
+> shouldn't work for BTFs coming from BPF programs. We shouldn't blindly
+> guess and substitute vmlinux BTF as base BTF, let's fetch
+> bpf_btf_info, check that BTF is from kernel and is not vmlinux, and
+> only in such case substitute vmlinux BTF as base BTF.
 
-CVE-2022-1508[1] contains an patch[2] of io_uring. As Jones reported,
-it is not enough only apply [2] to stable-5.10. 
-Io_uring is very valuable and active module of linux kernel.
-I've tried to apply these two patches[3] [4] to my local 5.10 code, I
-found my understanding of io_uring is not enough to resolve all conflicts.
+I agree, this is taken into account in v2
 
-Since 5.10 is an important stable branch of linux, we would appreciate
-your help in soloving this problem.
+> > using the -B option to pass the base BTF. For most cases
+> > the vmlinux BTF sysfs path should work.
+> >
+> > This patch simplifies dumping by ID usage by attempting to
+> > use vmlinux BTF from sysfs, if the first try of loading BTF by ID
+> > fails with certain conditions.
+> >
+> > Signed-off-by: Larysa Zaremba <larysa.zaremba@intel.com>
+> > Reviewed-by: Alexander Lobakin <alexandr.lobakin@intel.com>
+> > ---
+> >  tools/bpf/bpftool/btf.c | 35 ++++++++++++++++++++++++++---------
+> >  1 file changed, 26 insertions(+), 9 deletions(-)
+> >
 
-[1] https://access.redhat.com/security/cve/cve-2022-1508
-[2] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=89c2b3b7491
-[3] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=8fb0f47a9d7
-[4] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=cd65869512a
-
-Best regards
-Xuenan
+Best Regards,
+Larysa Zaremba

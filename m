@@ -2,211 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D583251C3D3
+	by mail.lfdr.de (Postfix) with ESMTP id 2259551C3D1
 	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 17:23:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381263AbiEEP0K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 11:26:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50768 "EHLO
+        id S1381284AbiEEP0o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 11:26:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234984AbiEEP0I (ORCPT
+        with ESMTP id S1380635AbiEEP0k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 11:26:08 -0400
-Received: from mail-ua1-x92c.google.com (mail-ua1-x92c.google.com [IPv6:2607:f8b0:4864:20::92c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36EEE562E4
-        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 08:22:29 -0700 (PDT)
-Received: by mail-ua1-x92c.google.com with SMTP id x5so1779924uap.8
-        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 08:22:29 -0700 (PDT)
+        Thu, 5 May 2022 11:26:40 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60EAE5640D
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 08:23:00 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id d22so4686855plr.9
+        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 08:23:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=qPfQvLyUbmHVNZw+TAo0YgVkjOr4uX9NXBiJG8Mn/l8=;
-        b=nSfw2fQyJsl7DKOxKW4Xwy1DGfVltFyP9da0IbVvD2QTVqa2245czWi4oGozeeV5qY
-         muiUUE2Mk5D90HSE+fDn6+18Tadnbpo8/T1JZJYR+AVL+rNFYDZpOucN/CDQtp8ZdBbA
-         zYBIpc6HV4mAijPIpD3Lp+XzeuRJ8PLG/eHB0Dq5vTCYNJaTLJ4NkpSodbziqJ/pt/V7
-         oNSrkph6Gy8FioTleMP/T5SCdSZCDArNgB8++d908AQ+NplA90o3txi8RPspfg5N7gQ+
-         KDj8tVGWLqkjZqOZDXHF+E6DdL4IYiTAcd8yzwhl3GJir9Ex88PV8p9THc/WNygKqrb4
-         tQRA==
+        d=networkplumber-org.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=HJq/qvj4FZwE6s96MeqFpqf47Ys+qQjfKC+Vl3h47kk=;
+        b=0ZXwdSgZILgbSfTpRkGbOJLVKuFNZdzEMsvyDK9VwGYCP4HAvpLQqNRHaQFb347qjx
+         sMhXEbywu0DRM8W+2CmTVBhZiERNFd466mUcCNFBvbbLb0hgAvd4AlPdm2Nrd7zOXoPX
+         GDR3wBK5Lwh/pzItEnf7XXi4WfM0GqS0ElL49JvpA+EKoV+e8mRvVOQlhWkWKYrcu+P+
+         D8D/diMJGVSskmjPOWEB46Jypy6v9lxrQus7d4p9hc9c0kTFrBl4pa+BE4bOIrKm5DpW
+         D9Vz4bytZ/mBDRg/dbwbTK7ZK+vc69do+KtwVbP7CzWumFO6LpcTZdp/ZCY0XSrHe/GA
+         d/Uw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=qPfQvLyUbmHVNZw+TAo0YgVkjOr4uX9NXBiJG8Mn/l8=;
-        b=uC1F0gcArNBhTaYJVj0mqnTGmfWMHlebFXUOsGSJV88bZQLjvjmwgnTdyK/+7ru/P+
-         tCOViAVEFtcGQku8lihpcYtENc5OQpaSPWlnfp9qS7qrxd0TAozfeDWQOgHVn9ZxafGy
-         LK9qQ3zzfxVPos0Uxn7y34cxdw3KBZ10lPaDQZB7eCH0xH3uPovmSGnN1xeBRok062QR
-         X+otX9lCgWbg38YRVrYuKQXwNpic4OXslCZBbbXgksbvXT+xo54ZmjoBRqgMDZZ2oa+z
-         ThsM6iV/O0RjuLrX9olSl9RrsntA/+CQqRoadKYL2Brz1a5ZE8efZL2POL1GeYD7gr09
-         eT3w==
-X-Gm-Message-State: AOAM531HFTowkVQEN33bZDBssoSKE9MKQiKMQkzrDlYpGxvWFmB9z2IW
-        oDRjqmr0mUXg2J3HMo3ZPAorlmG0V3SDCDVhixI+uA==
-X-Google-Smtp-Source: ABdhPJwbz5sQPxXCrjImAmPsDa2i0PbxuSSm2hbm+OVphjRIsqQavkMTrDIRP76ZbM2Z5EMeVcHLlAVg3qndoBvXNpA=
-X-Received: by 2002:a9f:2048:0:b0:352:9b4f:ac98 with SMTP id
- 66-20020a9f2048000000b003529b4fac98mr8489353uam.12.1651764148121; Thu, 05 May
- 2022 08:22:28 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=HJq/qvj4FZwE6s96MeqFpqf47Ys+qQjfKC+Vl3h47kk=;
+        b=bPKw9Y5ZoKEUwKNQuK7PONz++zOe9KLWwt2t7E6MeUQ+hIpx1kZFJMmW1U9b5TWc9s
+         77nuGDILWXU1InC5/uhJU4zvGFKAi4rVkJf5yDEntqu4/eOd6Ax6YDAhRuQ9ulZmfV+L
+         uQ4wj8QQM+pbCS7x8m/FJkzeEcIFQloLTiCup53wO8GTZ/naem1Y06kpjZcOK8Pferw0
+         fgdN7RtfuL+MTQcEWLWhbv7h3BfdFRrl+WE+UIpu9ue90qzigBTV6BV18bASlYxpPorP
+         yejUMEpcmfmcjUCV6EwrmwMWZ4kZbD0midd+jnzmPsXkGhUUwttSRqA9CzUFNsbvXdMp
+         /8dQ==
+X-Gm-Message-State: AOAM532+/QqFPsbA4n3J7WcT5iOe68/7ZOcRk6iKEGPfKZSftG+1X+TA
+        MBT1SevWHtErHrISCrLyxGL7Dw==
+X-Google-Smtp-Source: ABdhPJzxxrHLaaFrj4SdCqEuXu2hYIOTSHOTO75S5Lm125KA7NuKgtEdnmV4IUFHvVLXOo11hjpJ1w==
+X-Received: by 2002:a17:903:1d1:b0:15e:9607:d4c9 with SMTP id e17-20020a17090301d100b0015e9607d4c9mr24712752plh.41.1651764179686;
+        Thu, 05 May 2022 08:22:59 -0700 (PDT)
+Received: from hermes.local (204-195-112-199.wavecable.com. [204.195.112.199])
+        by smtp.gmail.com with ESMTPSA id i14-20020a62870e000000b0050dc76281ecsm1496229pfe.198.2022.05.05.08.22.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 May 2022 08:22:59 -0700 (PDT)
+Date:   Thu, 5 May 2022 08:22:56 -0700
+From:   Stephen Hemminger <stephen@networkplumber.org>
+To:     Gonsolo <gonsolo@gmail.com>
+Cc:     Felix Fietkau <nbd@nbd.name>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Ryder Lee <ryder.lee@mediatek.com>,
+        Shayne Chen <shayne.chen@mediatek.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: Suspend/resume error with AWUS036ACM
+Message-ID: <20220505082256.72c9ee43@hermes.local>
+In-Reply-To: <CANL0fFQRBZiVcEM0OOxkLqiAKf=rFssGetrwN6vWj5SsxX__mA@mail.gmail.com>
+References: <CANL0fFQRBZiVcEM0OOxkLqiAKf=rFssGetrwN6vWj5SsxX__mA@mail.gmail.com>
 MIME-Version: 1.0
-References: <20220505043846.3165303-1-irogers@google.com> <20220505043846.3165303-2-irogers@google.com>
- <cb6065af-7e3f-53fa-5d82-67be04ca833f@linux.intel.com>
-In-Reply-To: <cb6065af-7e3f-53fa-5d82-67be04ca833f@linux.intel.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Thu, 5 May 2022 08:22:15 -0700
-Message-ID: <CAP-5=fV6Sj3PMjVBYtCRZUXXrwOJC9ETffQYscvcgJZ7gm2tFw@mail.gmail.com>
-Subject: Re: [PATCH 2/2] perf test: Add basic stat and topdown group test
-To:     "Liang, Kan" <kan.liang@linux.intel.com>
-Cc:     Caleb Biggers <caleb.biggers@intel.com>,
-        Perry Taylor <perry.taylor@intel.com>,
-        Kshipra Bopardikar <kshipra.bopardikar@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ravi Bangoria <ravi.bangoria@amd.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Haowen Bai <baihaowen@meizu.com>,
-        Riccardo Mancini <rickyman7@gmail.com>,
-        Kim Phillips <kim.phillips@amd.com>,
-        Madhavan Srinivasan <maddy@linux.ibm.com>,
-        Shunsuke Nakamura <nakamura.shun@fujitsu.com>,
-        Florian Fischer <florian.fischer@muhq.space>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
-        Stephane Eranian <eranian@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 5, 2022 at 5:12 AM Liang, Kan <kan.liang@linux.intel.com> wrote=
-:
->
-> On 5/5/2022 12:38 AM, Ian Rogers wrote:
-> > Add a basic stat test.
-> > Add two tests of grouping behavior for topdown events. Topdown events
-> > are special as they must be grouped with the slots event first.
-> >
-> > Signed-off-by: Ian Rogers <irogers@google.com>
-> > ---
-> >   tools/perf/tests/shell/stat.sh | 65 +++++++++++++++++++++++++++++++++=
-+
-> >   1 file changed, 65 insertions(+)
-> >   create mode 100755 tools/perf/tests/shell/stat.sh
-> >
-> > diff --git a/tools/perf/tests/shell/stat.sh b/tools/perf/tests/shell/st=
-at.sh
-> > new file mode 100755
-> > index 000000000000..80869ea6debc
-> > --- /dev/null
-> > +++ b/tools/perf/tests/shell/stat.sh
-> > @@ -0,0 +1,65 @@
-> > +#!/bin/sh
-> > +# perf stat tests
-> > +# SPDX-License-Identifier: GPL-2.0
-> > +
-> > +set -e
-> > +
-> > +err=3D0
-> > +test_default_stat() {
-> > +  echo "Basic stat command test"
-> > +  if ! perf stat true 2>&1 | egrep -q "Performance counter stats for '=
-true':"
-> > +  then
-> > +    echo "Basic stat command test [Failed]"
-> > +    err=3D1
-> > +    return
-> > +  fi
-> > +  echo "Basic stat command test [Success]"
-> > +}
-> > +
-> > +test_topdown_groups() {
-> > +  # Topdown events must be grouped with the slots event first. Test th=
-at
-> > +  # parse-events reorders this.
-> > +  echo "Topdown event group test"
-> > +  if ! perf stat -e '{slots,topdown-retiring}' true > /dev/null 2>&1
-> > +  then
-> > +    echo "Topdown event group test [Skipped event parsing failed]"
-> > +    return
-> > +  fi
-> > +  if perf stat -e '{slots,topdown-retiring}' true 2>&1 | egrep -q "<no=
-t supported>"
-> > +  then
-> > +    echo "Topdown event group test [Failed events not supported]"
-> > +    err=3D1
-> > +    return
-> > +  fi
-> > +  if perf stat -e '{topdown-retiring,slots}' true 2>&1 | egrep -q "<no=
-t supported>"
-> > +  then
-> > +    echo "Topdown event group test [Failed slots not reordered first]"
-> > +    err=3D1
-> > +    return
-> > +  fi
-> > +  echo "Topdown event group test [Success]"
-> > +}
-> > +
-> > +test_topdown_weak_groups() {
-> > +  # Weak groups break if the perf_event_open of multiple grouped event=
-s
-> > +  # fails. Breaking a topdown group causes the events to fail. Test a =
-very large
-> > +  # grouping to see that the topdown events aren't broken out.
-> > +  echo "Topdown weak groups test"
-> > +  if ! perf stat -e '{slots,topdown-bad-spec,topdown-be-bound,topdown-=
-fe-bound,topdown-retiring},branch-instructions,branch-misses,bus-cycles,cac=
-he-misses,cache-references,cpu-cycles,instructions,mem-loads,mem-stores,ref=
--cycles,baclears.any,ARITH.DIVIDER_ACTIVE' true > /dev/null 2>&1
-> > +  then
-> > +    echo "Topdown weak groups test [Skipped event parsing failed]"
-> > +    return
-> > +  fi
-> > +  if perf stat -e '{slots,topdown-bad-spec,topdown-be-bound,topdown-fe=
--bound,topdown-retiring,branch-instructions,branch-misses,bus-cycles,cache-=
-misses,cache-references,cpu-cycles,instructions,mem-loads,mem-stores,ref-cy=
-cles,baclears.any,ARITH.DIVIDER_ACTIVE}:W' true 2>&1 | egrep -q "<not suppo=
-rted>"
-> > +  then
-> > +    echo "Topdown weak groups test [Failed events not supported]"
-> > +    err=3D1
-> > +    return
-> > +  fi
-> > +  echo "Topdown weak groups test [Success]"
-> > +}
-> > +
->
-> Should we check the existence of the slots event before the test?
-> The perf metrics feature only be available on the new platform after
-> ICL. It doesn't work on Atom.
->
-> Also, I think the test may fails on the hybrid platform, since big core
-> and small core have different formula for the topdown. I think we should
-> avoid the test for the hybrid platform for now.
-> +Zhengjun, who is fixing the topdown gap for the hybrid platform. I
-> think he may take care of the hybrid support later.
+On Thu, 5 May 2022 08:29:52 +0200
+Gonsolo <gonsolo@gmail.com> wrote:
 
-Thanks Kan, the test filters out systems that don't support the events
-and silently skips the test. The main purpose of the test is to make
-sure the somewhat complicated grouping operations for Icelake have
-some coverage. Adding more coverage for hybrid would be great, but not
-something I think gates this change.
+> Hi all.
+> 
+> After a resume I get the following error:
+> 
+>  +0,000007] UBSAN: invalid-load in
+> /build/linux-lowlatency-fSdu7c/linux-lowlatency-5.15.0/net/mac80211/status.c:1164:21
+> [  +0,000004] load of value 255 is not a valid value for type '_Bool'
+> [  +0,000004] CPU: 22 PID: 387 Comm: kworker/u256:5 Tainted: P
+>   OE     5.15.0-27-lowlatency #28-Ubuntu
+> [  +0,000004] Hardware name: To Be Filled By O.E.M. To Be Filled By
+> O.E.M./X399 Phantom Gaming 6, BIOS P1.31 01/14/2021
+> [  +0,000003] Workqueue: phy0 mt76x02_mac_work [mt76x02_lib]
+> [  +0,000014] Call Trace:
+> [  +0,000003]  <TASK>
+> [  +0,000003]  show_stack+0x52/0x58
+> [  +0,000006]  dump_stack_lvl+0x4a/0x5f
+> [  +0,000007]  dump_stack+0x10/0x12
+> [  +0,000003]  ubsan_epilogue+0x9/0x45
+> [  +0,000002]  __ubsan_handle_load_invalid_value.cold+0x44/0x49
+> [  +0,000004]  ieee80211_tx_status_ext.cold+0x4e/0x5f [mac80211]
+> [  +0,000068]  mt76_tx_status_unlock+0x111/0x160 [mt76]
+> [  +0,000010]  mt76_tx_status_check+0x68/0x90 [mt76]
+> [  +0,000009]  mt76x02_mac_work+0x14b/0x240 [mt76x02_lib]
+> [  +0,000008]  process_one_work+0x222/0x3f0
+> [  +0,000006]  worker_thread+0x50/0x3f0
+> [  +0,000004]  ? process_one_work+0x3f0/0x3f0
+> [  +0,000004]  kthread+0x13b/0x160
+> [  +0,000003]  ? set_kthread_struct+0x50/0x50
+> [  +0,000004]  ret_from_fork+0x22/0x30
+> [  +0,000006]  </TASK>
+> [  +0,000001] ================================================================================
+> 
+> This is a stock Ubuntu Jammy lowlatency kernel (with Nvidia drivers).
 
-Thanks,
-Ian
-
-> Thanks,
-> Kan
-> > +test_default_stat
-> > +test_topdown_groups
-> > +test_topdown_weak_groups
-> > +exit $err
+Contact Ubuntu.  The rule for upstream is if you load out of tree drivers
+than that kernel is unsupported.

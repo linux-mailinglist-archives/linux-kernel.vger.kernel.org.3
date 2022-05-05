@@ -2,115 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E55B851C33A
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 17:01:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B95151C343
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 17:02:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380356AbiEEPFU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 11:05:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55014 "EHLO
+        id S1380984AbiEEPGT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 11:06:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233555AbiEEPFR (ORCPT
+        with ESMTP id S1380949AbiEEPGO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 11:05:17 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF0F622280;
-        Thu,  5 May 2022 08:01:36 -0700 (PDT)
+        Thu, 5 May 2022 11:06:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29B1926563;
+        Thu,  5 May 2022 08:02:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 99E5DB82B7A;
-        Thu,  5 May 2022 15:01:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14047C385A4;
-        Thu,  5 May 2022 15:01:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651762894;
-        bh=UUh4IAYvnUeRl0+FGz9aUqMk1V1C/5Mv1s6gce1m4PY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=S8Y4NKxoe5tibidDLQ1YsIqidmaB/VrEldK+Y9cbMH5jS/+MM5rgrPY10yHnZuKpA
-         Vx9PHYyx0ctjGVYN0AW2U+dj9sQF9nYeW19rmlBAaro91ZcvrnCEvQGSa4AOhWe4F+
-         AORKwgkynESpVtUsLkKVDuj91k0fG9nqnFkW+X74VADC85jI/SoExoUCj45dBUkPpw
-         Xi936/6T6rBsBBkB/rBLDpE8NcvgzDUFSfZGqCKN4nIruGHpACikgCGzflWOu6DwGI
-         kpfzOf2U/DAZwBv3TrR1gbINOSQxTB6NUvESyu3p4jsN3Y180ej0joxdrI7Y7frWDd
-         SCwA7xo4UFLIw==
-Date:   Thu, 5 May 2022 16:01:28 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Codrin.Ciubotariu@microchip.com
-Cc:     Nicolas.Ferre@microchip.com, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, lars@metafoo.de,
-        perex@perex.cz, tiwai@suse.com, robh+dt@kernel.org
-Subject: Re: [PATCH v3 6/6] ARM: configs: at91: sama7_defconfig: add MCHP
- PDMC and DMIC drivers
-Message-ID: <YnPmyEujwByeFDdp@sirena.org.uk>
-References: <20220307122202.2251639-1-codrin.ciubotariu@microchip.com>
- <20220307122202.2251639-7-codrin.ciubotariu@microchip.com>
- <d84e0e48-cf35-ae1a-e384-067d361457ba@microchip.com>
- <77c2b348-b7a6-458d-21b6-68c54efc317f@microchip.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B92BC61A8E;
+        Thu,  5 May 2022 15:02:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1746C385A4;
+        Thu,  5 May 2022 15:02:32 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="UAm57+66"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1651762950;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=GKKGKklZtLoueldeDqbHGUe+e5mxdO5wc2FitHQweAI=;
+        b=UAm57+66t9js5iNsUd4NJhcrHsN0ZJCSk7spExq888H5JnUbOJj0DtydKlMh837bMHQuGc
+        8+9UDXRmoOmOkjW3ssF8RM3gH85+rvCnIlN56oveLJhf39ErLsvUP5yOsMpsT6H4EWKV4a
+        mn9UBcm2SfRDScZPeqs0GRZDPAge4qI=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 1d7d722a (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Thu, 5 May 2022 15:02:30 +0000 (UTC)
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     linux-acpi@vger.kernel.org, stable@vger.kernel.org,
+        rafael@kernel.org, gregkh@linuxfoundation.org,
+        linux-kernel@vger.kernel.org
+Cc:     Vegard Nossum <vegard.nossum@oracle.com>,
+        Jan Kiszka <jan.kiszka@siemens.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Kees Cook <keescook@chromium.org>,
+        Bob Moore <robert.moore@intel.com>,
+        Erik Kaneda <erik.kaneda@intel.com>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>
+Subject: [PATCH 5.4] ACPICA: Always create namespace nodes using acpi_ns_create_node()
+Date:   Thu,  5 May 2022 17:01:40 +0200
+Message-Id: <20220505150140.159449-1-Jason@zx2c4.com>
+In-Reply-To: <YnPmDlf3KD9ckpM1@zx2c4.com>
+References: <YnPmDlf3KD9ckpM1@zx2c4.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="V6OcCftqYTAkRMmU"
-Content-Disposition: inline
-In-Reply-To: <77c2b348-b7a6-458d-21b6-68c54efc317f@microchip.com>
-X-Cookie: Real programs don't eat cache.
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Vegard Nossum <vegard.nossum@oracle.com>
 
---V6OcCftqYTAkRMmU
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+commit 25928deeb1e4e2cdae1dccff349320c6841eb5f8 upstream.
 
-On Thu, May 05, 2022 at 02:47:04PM +0000, Codrin.Ciubotariu@microchip.com w=
-rote:
-> On 05.05.2022 16:58, Nicolas Ferre wrote:
+ACPICA commit 29da9a2a3f5b2c60420893e5c6309a0586d7a329
 
-> > I'm fine with that, but I see that some Kconfig entries "select" this=
-=20
-> > SND_SOC_DMIC directly (amd, intel, mediatek, stm).
-> > If it's absolutely needed for PDMC to work, what about doing the same a=
-s=20
-> > it would prevent some broken configurations?
+ACPI is allocating an object using kmalloc(), but then frees it
+using kmem_cache_free(<"Acpi-Namespace" kmem_cache>).
 
-> The only way it makes sense to me to have this driver selected somewhere=
-=20
-> is in a sound card driver, used for a specific board, which we know it=20
-> has PDM microphones. Since, for now, we use the simple sound card for=20
-> our audio interfaces, we have no place to add this select.
-> The reason I do not like to add this select under the controller driver,=
-=20
-> as some of the vendors did, is because, in the future, we might have=20
-> different PDM microphones that might not work with SND_SOC_DMIC and=20
-> might need a different driver.
-> I don't have a strong opinion on this. If you think I am overthinking,=20
-> please let me know and I will change this.
+This is wrong and can lead to boot failures manifesting like this:
 
-It's unlikely but possible that there could be some other device
-connected (eg, you could have a DSP or something that generates PDM
-output).  If the driver doesn't directly instantiate the DMIC itself
-then it's probably reasonable for it to be user controllable if the DMIC
-driver is there.
+    hpet0: 3 comparators, 64-bit 100.000000 MHz counter
+    clocksource: Switched to clocksource tsc-early
+    BUG: unable to handle page fault for address: 000000003ffe0018
+    #PF: supervisor read access in kernel mode
+    #PF: error_code(0x0000) - not-present page
+    PGD 0 P4D 0
+    Oops: 0000 [#1] SMP PTI
+    CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.6.0+ #211
+    Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
+Ubuntu-1.8.2-1ubuntu1 04/01/2014
+    RIP: 0010:kmem_cache_alloc+0x70/0x1d0
+    Code: 00 00 4c 8b 45 00 65 49 8b 50 08 65 4c 03 05 6f cc e7 7e 4d 8b
+20 4d 85 e4 0f 84 3d 01 00 00 8b 45 20 48 8b 7d 00 48 8d 4a 01 <49> 8b
+   1c 04 4c 89 e0 65 48 0f c7 0f 0f 94 c0 84 c0 74 c5 8b 45 20
+    RSP: 0000:ffffc90000013df8 EFLAGS: 00010206
+    RAX: 0000000000000018 RBX: ffffffff81c49200 RCX: 0000000000000002
+    RDX: 0000000000000001 RSI: 0000000000000dc0 RDI: 000000000002b300
+    RBP: ffff88803e403d00 R08: ffff88803ec2b300 R09: 0000000000000001
+    R10: 0000000000000dc0 R11: 0000000000000006 R12: 000000003ffe0000
+    R13: ffffffff8110a583 R14: 0000000000000dc0 R15: ffffffff81c49a80
+    FS:  0000000000000000(0000) GS:ffff88803ec00000(0000)
+knlGS:0000000000000000
+    CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+    CR2: 000000003ffe0018 CR3: 0000000001c0a001 CR4: 00000000003606f0
+    DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+    DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+    Call Trace:
+     __trace_define_field+0x33/0xa0
+     event_trace_init+0xeb/0x2b4
+     tracer_init_tracefs+0x60/0x195
+     ? register_tracer+0x1e7/0x1e7
+     do_one_initcall+0x74/0x160
+     kernel_init_freeable+0x190/0x1f0
+     ? rest_init+0x9a/0x9a
+     kernel_init+0x5/0xf6
+     ret_from_fork+0x35/0x40
+    CR2: 000000003ffe0018
+    ---[ end trace 707efa023f2ee960 ]---
+    RIP: 0010:kmem_cache_alloc+0x70/0x1d0
 
---V6OcCftqYTAkRMmU
-Content-Type: application/pgp-signature; name="signature.asc"
+Bisection leads to unrelated changes in slab; Vlastimil Babka
+suggests an unrelated layout or slab merge change merely exposed
+the underlying bug.
 
------BEGIN PGP SIGNATURE-----
+Link: https://lore.kernel.org/lkml/4dc93ff8-f86e-f4c9-ebeb-6d3153a78d03@oracle.com/
+Link: https://lore.kernel.org/r/a1461e21-c744-767d-6dfc-6641fd3e3ce2@siemens.com
+Link: https://github.com/acpica/acpica/commit/29da9a2a
+Fixes: f79c8e4136ea ("ACPICA: Namespace: simplify creation of the initial/default namespace")
+Reported-by: Jan Kiszka <jan.kiszka@siemens.com>
+Diagnosed-by: Vlastimil Babka <vbabka@suse.cz>
+Diagnosed-by: Kees Cook <keescook@chromium.org>
+Signed-off-by: Vegard Nossum <vegard.nossum@oracle.com>
+Signed-off-by: Bob Moore <robert.moore@intel.com>
+Signed-off-by: Erik Kaneda <erik.kaneda@intel.com>
+Cc: 5.10+ <stable@vger.kernel.org> # 5.10+
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+Greg/Rafael - tihs was marked as 5.10, but 5.4 crashes without it. So
+maybe it was mistagged? Will let you guys decide. -Jason
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmJz5scACgkQJNaLcl1U
-h9BoAQf/RxATTm9oBfzFYiQDmMZnY6nSvVtROk9XiCIp4BRvt4ezstNodFEGlLKQ
-fWhTWfMmr7rGF9Syj1Zb6W/2Fahc/R04bml6dXcDHBKeW5a9Tnslg4U0brWHd2oT
-SeE9ZVLQzoFgUcCh6DrwxpYIkfbPrZwrBS0YNHHgjw3LAc2voYJiNm8njcOXop9i
-+kpz1RZs60mULxSPGoNOr/9HNfNc2H3lZcSG6ZkdjkiXMJ4TjedzB5YpaOFGrYLN
-hCy9jHw/mzCFq9EnV8ubaTI05RFwIusQd0doLtRxlgrrS94+mwNqHggZLnFK95Z/
-BnnQHFiY+49FUwRU4NPZhfcFayakzQ==
-=TVpY
------END PGP SIGNATURE-----
+ drivers/acpi/acpica/nsaccess.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
---V6OcCftqYTAkRMmU--
+diff --git a/drivers/acpi/acpica/nsaccess.c b/drivers/acpi/acpica/nsaccess.c
+index 3f045b5953b2..a0c1a665dfc1 100644
+--- a/drivers/acpi/acpica/nsaccess.c
++++ b/drivers/acpi/acpica/nsaccess.c
+@@ -99,13 +99,12 @@ acpi_status acpi_ns_root_initialize(void)
+ 		 * just create and link the new node(s) here.
+ 		 */
+ 		new_node =
+-		    ACPI_ALLOCATE_ZEROED(sizeof(struct acpi_namespace_node));
++		    acpi_ns_create_node(*ACPI_CAST_PTR(u32, init_val->name));
+ 		if (!new_node) {
+ 			status = AE_NO_MEMORY;
+ 			goto unlock_and_exit;
+ 		}
+ 
+-		ACPI_COPY_NAMESEG(new_node->name.ascii, init_val->name);
+ 		new_node->descriptor_type = ACPI_DESC_TYPE_NAMED;
+ 		new_node->type = init_val->type;
+ 
+-- 
+2.35.1
+

@@ -2,93 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB7C951CB84
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 23:41:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24C9A51CB87
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 23:41:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386036AbiEEVo4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 17:44:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40168 "EHLO
+        id S1386040AbiEEVpQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 17:45:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386011AbiEEVoz (ORCPT
+        with ESMTP id S1386039AbiEEVpM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 17:44:55 -0400
-Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B28F52B06;
-        Thu,  5 May 2022 14:41:14 -0700 (PDT)
-Received: by mail-oi1-x22f.google.com with SMTP id e189so5690799oia.8;
-        Thu, 05 May 2022 14:41:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=6fkvWesuqVSeQrv7o/AhOsdNZtds9JzjGo6Hvkg4xtk=;
-        b=C4/3UM6gnhghXmp+ZKWYnPdzmbSn0qgXkxImylft+ABW35qXiL74sUrGlFW01aEx51
-         Q+KwBzX4tc0oUfhaMH7muodHS1o42IZZHJlyq1MEkBDwINFMOdWB+CZBXuYscxsxtEiZ
-         uoWOiE3yt+W7MP3kVz/wk1FUAtUP6Ipaa/DI3sneIydlPwAJHTuS9HSUepYs2SSPXxR4
-         WdKUgfQqf3CIKDPgwr0JCSlVvGUv+kq7gl6ptZ+jl4me/zFojTaaN0eDj2fs0qBCkDAL
-         05y5jBveAVTMNjwhVG8dC5q3Mq2KWmVL1K/8NVa3lB3DNwZ0dYOx6TmtRzmUc1aoWPT+
-         3Ksw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=6fkvWesuqVSeQrv7o/AhOsdNZtds9JzjGo6Hvkg4xtk=;
-        b=6Feio0wVMOq/LaOHdTPPAyOIzFLq8f4wYbah5vWZ0nGOJqozJiWepBoN4/0duw0uLz
-         eIVnPyhq0an8r+bFHbaVOcVenVh6Q2+kivXbVAu80xCcbFdJqGN4Crlf7CS+HAJH1YTI
-         1UXTo7uWHNPFFR+PsJFJ1WTvRX/kMwqh2cHsenxTscvvm3ftX5g0OKQN8Q9qVBFjP3RI
-         VnjCxAsZO9/Iy+b57BcsQ8O1qAuTEusKvik3ea6lMNAJsI450WkuWjriacyfwjAQ/qv6
-         BeH36uAniX4LMJer3cCgCuShG/6r3GhzVOn4xMUNWXuWLSsW8Zn6+GHKLGTRwBFh3/yW
-         skKQ==
-X-Gm-Message-State: AOAM531xoD9mYuufiXeXz97d4vScZDG5mNH/1PXi3oDozGObHxKsGNEm
-        QljV8m6Z4FmAWvQOhatAgYg=
-X-Google-Smtp-Source: ABdhPJyJzpkpDN5wSZ+ywjNRGeIBokULB4kjj1j/pENvCB9ckg5BSZK2gaKsziGOSifRT3xCfRnVAw==
-X-Received: by 2002:a05:6808:118a:b0:322:35d7:77f2 with SMTP id j10-20020a056808118a00b0032235d777f2mr3451707oil.79.1651786873815;
-        Thu, 05 May 2022 14:41:13 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id k1-20020a9d7dc1000000b006060322126csm1001613otn.60.2022.05.05.14.41.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 May 2022 14:41:13 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Thu, 5 May 2022 14:41:11 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Subject: Re: [PATCH 5.4 00/84] 5.4.192-rc1 review
-Message-ID: <20220505214111.GA1988936@roeck-us.net>
-References: <20220504152927.744120418@linuxfoundation.org>
+        Thu, 5 May 2022 17:45:12 -0400
+Received: from mout01.posteo.de (mout01.posteo.de [185.67.36.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 729F552B13
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 14:41:31 -0700 (PDT)
+Received: from submission (posteo.de [185.67.36.169]) 
+        by mout01.posteo.de (Postfix) with ESMTPS id 12F39240029
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 23:41:29 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.de; s=2017;
+        t=1651786889; bh=bPb1kqwTN0xfUWA9/0wHbJECuxh+OsfFhhPsmRIveHU=;
+        h=From:To:Cc:Subject:Date:From;
+        b=mgxwNJ57cOkMTtZQ8Ij0d2a9HKiG/02Ow6ajM4qlk4M4vPF8soQh0ubJanHUwZl04
+         jRn2LXVZHd6m7HjlbQO9/6Uk4xUCZs7ezNZyVAarqXQPsH6CFqCgLZe+yhUrCJtm6h
+         kTw9UFFpyFyLa7PTpdm4q2kE60SSWo/xAagQ8kl+HfbHHxtx3a+alRaRGtQvpYSOh6
+         bnYL0RvSFz0xy8WaatlgXzPwedU1A5eTWZiEDvvSuB67wMU3Ix04Trtvw2v/BG7iu9
+         kW6OlyP8KnGg7Fhk6gzP5xj4nH0rL7ln/YbmqARRvaNScHdZCSC9z5Qrv/SK6a0NjJ
+         /6Y+clGza1tDA==
+Received: from customer (localhost [127.0.0.1])
+        by submission (posteo.de) with ESMTPSA id 4KvRwQ6d7Jz6tpp;
+        Thu,  5 May 2022 23:41:26 +0200 (CEST)
+From:   Manuel Ullmann <labre@posteo.de>
+To:     Igor Russkikh <irusskikh@marvell.com>
+Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        regressions@lists.linux.dev, davem@davemloft.net,
+        ndanilov@marvell.com, kuba@kernel.org, pabeni@redhat.com,
+        edumazet@google.com, Jordan Leppert <jordanleppert@protonmail.com>,
+        Holger =?utf-8?Q?Hoffst=C3=A4tte?= 
+        <holger@applied-asynchrony.com>, koo5 <kolman.jindrich@gmail.com>
+Subject: [PATCH v2] net: atlantic: always deep reset on pm op, fixing null
+ deref regression
+Date:   Thu, 05 May 2022 21:41:41 +0000
+Message-ID: <877d6zirmy.fsf@posteo.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220504152927.744120418@linuxfoundation.org>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 04, 2022 at 06:43:41PM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.4.192 release.
-> There are 84 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Fri, 06 May 2022 15:25:19 +0000.
-> Anything received after that time might be too late.
-> 
+From 86ba48e4c5e1b34cea471b8f5a64b085763e0c57 Mon Sep 17 00:00:00 2001
+From: Manuel Ullmann <labre@posteo.de>
+Date: Wed, 4 May 2022 21:30:44 +0200
 
-Build results:
-	total: 159 pass: 159 fail: 0
-Qemu test results:
-	total: 449 pass: 449 fail: 0
+The impact of this regression is the same for resume that I saw on
+thaw: the kernel hangs and nothing except SysRq rebooting can be done.
 
-Guenter
+The null deref occurs at the same position as on thaw.
+BUG: kernel NULL pointer dereference
+RIP: aq_ring_rx_fill+0xcf/0x210 [atlantic]
+
+Fixes regression in cbe6c3a8f8f4 ("net: atlantic: invert deep par in
+pm functions, preventing null derefs"), where I disabled deep pm
+resets in suspend and resume, trying to make sense of the
+atl_resume_common deep parameter in the first place.
+
+It turns out, that atlantic always has to deep reset on pm operations
+and the parameter is useless. Even though I expected that and tested
+resume, I screwed up by kexec-rebooting into an unpatched kernel, thus
+missing the breakage.
+
+This fixup obsoletes the deep parameter of atl_resume_common, but I
+leave the cleanup for the maintainers to post to mainline.
+
+PS: I'm very sorry for this regression.
+
+Changes in v2:
+Patch formatting fixes
+- Fix Fixes tag
+=E2=80=93 Simplify stable Cc tag
+=E2=80=93 Fix Signed-off-by tag
+
+Fixes: cbe6c3a8f8f4 ("net: atlantic: invert deep par in pm functions, preve=
+nting null derefs")
+Link: https://lore.kernel.org/regressions/9-Ehc_xXSwdXcvZqKD5aSqsqeNj5Izco4=
+MYEwnx5cySXVEc9-x_WC4C3kAoCqNTi-H38frroUK17iobNVnkLtW36V6VWGSQEOHXhmVMm5iQ=
+=3D@protonmail.com/
+Reported-by: Jordan Leppert <jordanleppert@protonmail.com>
+Reported-by: Holger Hoffst=C3=A4tte <holger@applied-asynchrony.com>
+Cc: <stable@vger.kernel.org> # 5.10+
+Signed-off-by: Manuel Ullmann <labre@posteo.de>
+---
+ drivers/net/ethernet/aquantia/atlantic/aq_pci_func.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/net/ethernet/aquantia/atlantic/aq_pci_func.c b/drivers=
+/net/ethernet/aquantia/atlantic/aq_pci_func.c
+index 3a529ee8c834..831833911a52 100644
+--- a/drivers/net/ethernet/aquantia/atlantic/aq_pci_func.c
++++ b/drivers/net/ethernet/aquantia/atlantic/aq_pci_func.c
+@@ -449,7 +449,7 @@ static int aq_pm_freeze(struct device *dev)
+=20
+ static int aq_pm_suspend_poweroff(struct device *dev)
+ {
+-	return aq_suspend_common(dev, false);
++	return aq_suspend_common(dev, true);
+ }
+=20
+ static int aq_pm_thaw(struct device *dev)
+@@ -459,7 +459,7 @@ static int aq_pm_thaw(struct device *dev)
+=20
+ static int aq_pm_resume_restore(struct device *dev)
+ {
+-	return atl_resume_common(dev, false);
++	return atl_resume_common(dev, true);
+ }
+=20
+ static const struct dev_pm_ops aq_pm_ops =3D {
+
+base-commit: 672c0c5173427e6b3e2a9bbb7be51ceeec78093a
+--=20
+2.35.1

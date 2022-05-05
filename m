@@ -2,105 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 002F251BFB3
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 14:45:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 790FD51BFD3
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 14:51:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377648AbiEEMsu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 08:48:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52624 "EHLO
+        id S1377929AbiEEMye (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 08:54:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241946AbiEEMsr (ORCPT
+        with ESMTP id S1348152AbiEEMyJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 08:48:47 -0400
-Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBB495535D;
-        Thu,  5 May 2022 05:45:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=u3aGIMaSKSuXe0aOwXTF+DSUOA0MrbhCM2LmuOADZeQ=; b=JlBfZ7HAD+GX8IyDFPeDjKpa7U
-        thWd55Q2hoN9Dylk9JbG2sonLgz2vPTLyafarA9yaQ2+bRtEdIuXAu6s+IS+eKcwGhgkHs1YboGg1
-        kIF8UmjfEkGaQM4HFJzQfUlYB6jUDcfOGncazwv+9yiUFbIJ+2c0FgrURCMJZgSCffX9RRezrkphr
-        JP1/NAwGnhbG8ZHeKzyc04ogsHi4OOph7P3hQfPirKsJ+e0PL04kijgaNntmGyf0GyLiGi3bKWcX/
-        LIrIOW9KKvPCAYi8LfaTML0RpI7uF8NhdkSm6MISGSsUTiWI3Y7++P7XJfU1vMAsQ0rhGOYaCsp6v
-        6y6eIGxg==;
-Received: from [179.113.53.197] (helo=[192.168.1.60])
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-        id 1nmaqX-000C4H-C3; Thu, 05 May 2022 14:44:41 +0200
-Message-ID: <92645c41-96fd-2755-552f-133675721a24@igalia.com>
-Date:   Thu, 5 May 2022 09:44:25 -0300
+        Thu, 5 May 2022 08:54:09 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B5EB43EDB;
+        Thu,  5 May 2022 05:50:30 -0700 (PDT)
+Received: from kwepemi500009.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KvD794drWzhYp0;
+        Thu,  5 May 2022 20:49:57 +0800 (CST)
+Received: from kwepemm600016.china.huawei.com (7.193.23.20) by
+ kwepemi500009.china.huawei.com (7.221.188.199) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 5 May 2022 20:50:27 +0800
+Received: from localhost.localdomain (10.67.165.24) by
+ kwepemm600016.china.huawei.com (7.193.23.20) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 5 May 2022 20:50:27 +0800
+From:   Guangbin Huang <huangguangbin2@huawei.com>
+To:     <davem@davemloft.net>, <kuba@kernel.org>
+CC:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <lipeng321@huawei.com>, <huangguangbin2@huawei.com>,
+        <chenhao288@hisilicon.com>
+Subject: [PATCH net-next 0/5] net: hns3: updates for -next
+Date:   Thu, 5 May 2022 20:44:39 +0800
+Message-ID: <20220505124444.2233-1-huangguangbin2@huawei.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: Should arm64 have a custom crash shutdown handler?
-Content-Language: en-US
-To:     Marc Zyngier <maz@kernel.org>, mark.rutland@arm.com
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        will Deacon <will@kernel.org>,
-        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Ard Biesheuvel <ardb@kernel.org>, broonie@kernel.org,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>
-References: <427a8277-49f0-4317-d6c3-4a15d7070e55@igalia.com>
- <874k24igjf.wl-maz@kernel.org>
-From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-In-Reply-To: <874k24igjf.wl-maz@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.67.165.24]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ kwepemm600016.china.huawei.com (7.193.23.20)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/05/2022 04:29, Marc Zyngier wrote:
-> [...]
-> Not having any 'machine_ops' indirection was a conscious decision on
-> arm64, if only to avoid the nightmare that 32bit was at a time with
-> every single platform doing their own stuff. Introducing them would
-> not be an improvement, but simply the admission that hypervisors are
-> simply too broken for words. And I don't buy the "but x86 has it!"
-> argument. x86 is a nightmare of PV mess that we can happily ignore,
-> because we don't do PV for core operations at all.
-> 
-> If something has to be done to quiesce the system, it probably is
-> related to the system topology, and must be linked to it. We already
-> have these requirements in order to correctly stop ongoing DMA, shut
-> down IOMMUs, and other similar stuff. What other requirements does
-> your favourite hypervisor have?
-> 
+This series includes some updates for the HNS3 ethernet driver.
 
-Thanks Marc and Mark for the details. I agree with most part of it, and
-in fact panic notifiers was the trigger for this discussion (and they
-are in fact used for this purpose to some extent in Hyper-V).
+Guangbin Huang (1):
+  net: hns3: add query vf ring and vector map relation
 
-The idea of having this custom handler from kexec comes from Hyper-V
-discussion - I feel it's better to show the code, so please take a look
-at functions: hv_machine_crash_shutdown()
-[arch/x86/kernel/cpu/mshyperv.c] and the one called from there,
-hv_crash_handler() [drivers/hv/vmbus_drv.c].
+Hao Chen (1):
+  net: hns3: fix access null pointer issue when set tx-buf-size as 0
 
-These routines perform last minute clean-ups, right before kdump/kexec
-happens, but *after* the panic notifiers. It seems there is no way to
-accomplish that without architecture involvement or core kexec code
-pollution heh
+Jie Wang (2):
+  net: hns3: add byte order conversion for PF to VF mailbox message
+  net: hns3: add byte order conversion for VF to PF mailbox message
 
-Anyway, the idea here was to gather a feedback on how "receptive" arm64
-community would be to allow such customization, appreciated your feedback =)
+Yufeng Mo (1):
+  net: hns3: remove the affinity settings of vector0
 
-Cheers,
+ .../net/ethernet/hisilicon/hns3/hclge_mbx.h   |  60 +++++-
+ .../ethernet/hisilicon/hns3/hns3_ethtool.c    |   7 +-
+ .../hisilicon/hns3/hns3pf/hclge_main.c        |  27 +--
+ .../hisilicon/hns3/hns3pf/hclge_main.h        |   2 -
+ .../hisilicon/hns3/hns3pf/hclge_mbx.c         | 193 +++++++++++++-----
+ .../hisilicon/hns3/hns3vf/hclgevf_main.c      |  58 +++---
+ .../hisilicon/hns3/hns3vf/hclgevf_main.h      |   2 +-
+ .../hisilicon/hns3/hns3vf/hclgevf_mbx.c       |  80 +++++---
+ 8 files changed, 269 insertions(+), 160 deletions(-)
 
+-- 
+2.33.0
 
-Guilherme

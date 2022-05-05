@@ -2,121 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAE0351CD0B
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 01:57:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CEB2351CD15
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 01:58:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387020AbiEFAAk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 20:00:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34358 "EHLO
+        id S1387029AbiEFABV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 20:01:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386990AbiEFAAi (ORCPT
+        with ESMTP id S1386990AbiEFABT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 20:00:38 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACD3160DA8
-        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 16:56:57 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id j6so11493576ejc.13
-        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 16:56:57 -0700 (PDT)
+        Thu, 5 May 2022 20:01:19 -0400
+Received: from mail-vk1-xa2a.google.com (mail-vk1-xa2a.google.com [IPv6:2607:f8b0:4864:20::a2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB01C47045
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 16:57:38 -0700 (PDT)
+Received: by mail-vk1-xa2a.google.com with SMTP id m203so2840229vke.13
+        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 16:57:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=VvFMpzRd3f5HOLZivGIaiJD1ZP3hh+AxpWSTf89n1T0=;
-        b=LHAmBR4rXfqs1vhxinJbl8NDwSEWy62HrFVgBmifLXL/yTuw5QPat09BJ4dMwG/1nA
-         l5RVXL4eVFyjMEF5Iv1k8eKRoV5VclTCvRe84/b6anAg4r02lTrN5bdFEEhobKNRLth3
-         nz986sSoAVJa+QzvEDKqNgydg6qsTqkENspWffK/bIqW5Xs3J8XozPTDh1CcKbhWKwRg
-         LWcH9kSyH1gvn2q3yDFesk164XBtY3K+GNoi6iGClpA7ct3dDnH0L57fHaIdNulErE2j
-         TVN1C+LkyHh48XJp1C/q7YVoZJkeAVXvVCU6D4W4x7GoBZxqB55ZcGff8i7OHIyMaqzU
-         65fg==
+         :cc;
+        bh=EnctbVRxORYL/0JLzkbjpDO1QpbSv8VPedLCJeymXws=;
+        b=GZGKufs159IzQbmQa2jGRBm4oU2IeCAHIDpl0rZpRPSFcib0hgIoQla62MnIwNTRLw
+         yPaysfAdwIt2N7SGmV8Jnq53j0Y+VDeyOc591q1mYvt9aLKLrrNxCH0zQstouafxN5NK
+         uGVMTXlq3N5xFqqO5eSkP4owtzgePS7xgcWLeY/oey8Y4sKTjwT4YorIPn9SvQihYy45
+         bUV844O2hHyb6JHKJlx/s6zNQteaOLMalVlJEtLS1a6OtXk2ZjnsKFvHQFSKoIklSS0o
+         s40Uf8I1LXuvXNDCEpasUwBWrc0bfxZJcGhGe4v2ivqcsrtJdGqqFuktGeF1u7fcWimS
+         67BA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=VvFMpzRd3f5HOLZivGIaiJD1ZP3hh+AxpWSTf89n1T0=;
-        b=r13Ue6VaCKRYn1fLLkbCxpngD0X/IzjbGED84FIGK0YaqJ+yK8731f2BDH0XR7b6+E
-         8+GUwo+tqq7HOIUUAGipXG5NWU2OGrEFOrI0UUU+dyrZ4vLMeMocWsAcTnIQ1desSWl+
-         ccJsrFd7CUwsW8GnTKvsvnyvSRTKe+QLeY5/CXGAU4U5tDLaEcoMaM1cH1WoZwmH79+z
-         whpSxAQeq4IXXAp5XKCE+d9AMMKlxYhAjhf74TX3/THGI6bZVWEy9Re9+csd/1nTBJsL
-         7dpZbEdeQDrKnNhtFwGKSw5klLVJFrVHpbs//icbT7HRCrx3cnTomlomFZH8hzVU/vrA
-         Wtfg==
-X-Gm-Message-State: AOAM530TaddVlgSm3vdEMIEtKeYgJY37f9TIqfDDqnSMW4nGsnIoch7M
-        VhcdtJUSPgSA1yS6zIiio/MPQIlOQNNuRjkrDwWHAw==
-X-Google-Smtp-Source: ABdhPJw2x82fC2kWVYLDqjdzrSO+4kUjJWyKyLNfDkPRL2J42FmpMBGOtu9De+v1HCvfUYPgeLlWmn8nojS0FJjy2nI=
-X-Received: by 2002:a17:907:16a2:b0:6f4:eeb1:f7de with SMTP id
- hc34-20020a17090716a200b006f4eeb1f7demr611227ejc.446.1651795016098; Thu, 05
- May 2022 16:56:56 -0700 (PDT)
+         :message-id:subject:to:cc;
+        bh=EnctbVRxORYL/0JLzkbjpDO1QpbSv8VPedLCJeymXws=;
+        b=PVkn0NYK7rjNFYI/WSCuJzAQp4kaGYDN2+zYelwNzqs4KrNAyzP7JsI6HGbCpv1LCn
+         wkpgbcCqkdDceVYu0kv7tGwVgyco34jZ68YTlbK9SQAN4MRpzOIpVnnP8jBb/UqFNrBj
+         rqYuvS3h25LKi3bqKASPnf/mQoYrbju0D2yJWqa1iXn3PB3u3pRtj1fqLP6XeEOvo2eE
+         mLm3p9JQRDF+TJFT8f6jtI+rsCLOnECCGok8+a2qSDQ62S90NRZ4ObaXrumeeSG696d1
+         MzciXcoaF3B/O4fefoBV6jhXpdgvFiv41LAmIrHqcBd3nzoc8KqZYWNBD0av8uvkfvIA
+         GTkA==
+X-Gm-Message-State: AOAM532YVG0cdtR/VqYraCRH1v+D7KkKt4SBmZoT5jb1jdkxHYt2f2CH
+        tKYfCucVFzFWXV+YeX8Hu8pXXnOM34rSnZsVMe7ASg==
+X-Google-Smtp-Source: ABdhPJx44pqdhLjjSdrM1mmTwdTAKr2042ce2vn9Hs2n0hz0YPZtitRVuqnnCDEFYLmmG49/aTRlo9ab/OrUxHQMlYk=
+X-Received: by 2002:a05:6122:1810:b0:34e:8f1c:749d with SMTP id
+ ay16-20020a056122181000b0034e8f1c749dmr258086vkb.20.1651795057756; Thu, 05
+ May 2022 16:57:37 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220502231944.3891435-1-tjmercier@google.com>
- <20220502231944.3891435-3-tjmercier@google.com> <20220504122558.GB24172@blackbody.suse.cz>
- <CABdmKX2DJy0i3XAP7xTduZ8KFVKtgto24w714YJNUb_=pfYiKw@mail.gmail.com> <20220505115015.GD10890@blackbody.suse.cz>
-In-Reply-To: <20220505115015.GD10890@blackbody.suse.cz>
-From:   "T.J. Mercier" <tjmercier@google.com>
-Date:   Thu, 5 May 2022 16:56:45 -0700
-Message-ID: <CABdmKX2gaWn9X9V3sr9Oyqs3WRsCFr_GTx2A1ifS-cJxGg9RCQ@mail.gmail.com>
-Subject: Re: [PATCH v6 2/6] cgroup: gpu: Add a cgroup controller for allocator
- attribution of GPU memory
-To:     =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>
-Cc:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Hridya Valsaraju <hridya@google.com>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        John Stultz <jstultz@google.com>,
-        Todd Kjos <tkjos@android.com>,
-        Carlos Llamas <cmllamas@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Kalesh Singh <kaleshsingh@google.com>, Kenny.Ho@amd.com,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        kernel-team@android.com, linux-kernel@vger.kernel.org,
-        cgroups@vger.kernel.org
+References: <20220505165639.361733-1-adrian.hunter@intel.com> <20220505165639.361733-15-adrian.hunter@intel.com>
+In-Reply-To: <20220505165639.361733-15-adrian.hunter@intel.com>
+From:   Ian Rogers <irogers@google.com>
+Date:   Thu, 5 May 2022 16:57:25 -0700
+Message-ID: <CAP-5=fWHAE-fwPO7kQWJpQMn4XvK8+BFQg885xv6aOjbP+j4NA@mail.gmail.com>
+Subject: Re: [PATCH V1 14/23] perf record: Use evlist__add_system_wide_dummy()
+ in record__config_text_poke()
+To:     Adrian Hunter <adrian.hunter@intel.com>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Leo Yan <leo.yan@linaro.org>, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 5, 2022 at 4:50 AM 'Michal Koutn=C3=BD' via kernel-team
-<kernel-team@android.com> wrote:
+On Thu, May 5, 2022 at 9:57 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
 >
-> On Wed, May 04, 2022 at 10:19:20AM -0700, "T.J. Mercier" <tjmercier@googl=
-e.com> wrote:
-> > Should I export these now for this series?
+> Use evlist__add_system_wide_dummy() in record__config_text_poke() in
+> preparation for allowing system-wide events on all CPUs while the user
+> requested events are on only user requested CPUs.
 >
-> Hehe, _I_ don't know.
-> Depends on the likelihood this lands in and is built upon.
->
-Ok, I'll leave these unexported for now unless I hear otherwise.
+> Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
 
-> > No, except maybe the gpucg_bucket name which I can add an accessor
-> > function for. Won't this mean depending on LTO for potential inlining
-> > of the functions currently implemented in the header?
->
-> Yes.  Also depends how much inlining here would be performance relevant.
-> I suggested this with an OS vendor hat on, i.e. the less such ABI, the
-> simpler.
->
-> > I'm happy to make this change, but I wonder why some parts of the
-> > kernel take this approach and others do not.
->
-> I think there is no convention (see also
-> Documentation/process/stable-api-nonsense.rst ;-)).
->
-Alright I'll queue this change up for the next rev.
+Delta function names.
 
-> Regards,
-> Michal
+Acked-by: Ian Rogers <irogers@google.com>
 
-Thanks again!
+Thanks,
+Ian
 
+> ---
+>  tools/perf/builtin-record.c | 21 +++------------------
+>  1 file changed, 3 insertions(+), 18 deletions(-)
 >
+> diff --git a/tools/perf/builtin-record.c b/tools/perf/builtin-record.c
+> index 069825c48d40..83d2f2b5dcda 100644
+> --- a/tools/perf/builtin-record.c
+> +++ b/tools/perf/builtin-record.c
+> @@ -869,7 +869,6 @@ static int record__auxtrace_init(struct record *rec __maybe_unused)
+>  static int record__config_text_poke(struct evlist *evlist)
+>  {
+>         struct evsel *evsel;
+> -       int err;
+>
+>         /* Nothing to do if text poke is already configured */
+>         evlist__for_each_entry(evlist, evsel) {
+> @@ -877,27 +876,13 @@ static int record__config_text_poke(struct evlist *evlist)
+>                         return 0;
+>         }
+>
+> -       err = parse_events(evlist, "dummy:u", NULL);
+> -       if (err)
+> -               return err;
+> -
+> -       evsel = evlist__last(evlist);
+> +       evsel = evlist__add_system_wide_dummy(evlist);
+> +       if (!evsel)
+> +               return -ENOMEM;
+>
+> -       evsel->core.attr.freq = 0;
+> -       evsel->core.attr.sample_period = 1;
+>         evsel->core.attr.text_poke = 1;
+>         evsel->core.attr.ksymbol = 1;
+> -
+> -       evsel->core.system_wide = true;
+> -       evsel->no_aux_samples = true;
+>         evsel->immediate = true;
+> -
+> -       /* Text poke must be collected on all CPUs */
+> -       perf_cpu_map__put(evsel->core.own_cpus);
+> -       evsel->core.own_cpus = perf_cpu_map__new(NULL);
+> -       perf_cpu_map__put(evsel->core.cpus);
+> -       evsel->core.cpus = perf_cpu_map__get(evsel->core.own_cpus);
+> -
+>         evsel__set_sample_bit(evsel, TIME);
+>
+>         return 0;
 > --
-> To unsubscribe from this group and stop receiving emails from it, send an=
- email to kernel-team+unsubscribe@android.com.
+> 2.25.1
 >

@@ -2,72 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EDA351BE34
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 13:39:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B1B651BE4C
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 13:41:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358226AbiEELmK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 07:42:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44648 "EHLO
+        id S1354211AbiEELnI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 07:43:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358337AbiEELmA (ORCPT
+        with ESMTP id S231760AbiEELnF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 07:42:00 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0438B53B7A
-        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 04:38:17 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id i27so8145734ejd.9
-        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 04:38:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=eLgQPwziK+ko4kQyG3I37Mp7K7CNGQrMU0x5X86Viy4=;
-        b=hHO6dNn457mwN8ZY11w+Ya9foj5hhTMPgJvqcokiXZmXsKrOgOfZy01GeiOTTGHYlC
-         nIJL2+pu+smRvh8aT+so+QIIMTOYU6H2spQh7fW0nVbrPhzNOhJ/x8ESXZtWfrVnYPmj
-         UDs1MWCcftcp3a6X1fUm31l8Bb23z/boJHsKoUvUj40B+sMPI/nxzNQB+OpcK2eX0r4U
-         KEYzoVHeskta63tNXL67NKXh6vXJnrCcJba1jmD82sbrtwEKOcohKaGgibns/U922LxO
-         jRJvwTD+XtnBxNYQoz1KWBe2Rsj3mtz5b/F5/Mv2fUasPz3OFXipG5405qodDVHrj0pf
-         vAAQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=eLgQPwziK+ko4kQyG3I37Mp7K7CNGQrMU0x5X86Viy4=;
-        b=3snvY78xHJm1RIWWYL7lcMsQIjylqFWWjTxVZGAdwnMjmO0UWdpaWHnqqVMs1r7qB1
-         4EQd71YTbJiHvfGa8dMjxfUZU/A4R8y3jjSkzSBq3jm0XX2TiXK61N/V++nR/qI2qY4C
-         wAGR952tgBZzVdzW8Wymdk56BirVm87iPY0/+urnafwmEyIvJhkcT2Xc1yG+Y7Wxeom/
-         YZsyescgIhBNMPOKAC3MlPWDXhaAXg7SBHRWv9XpmLe2Fvrwtwx2NJwsXoWWoEBVh8in
-         WODl70PRjC1RxNw9oQcGOXTBMmsac0mYNL+XsU/xzzOKGnPTk9DCyUaiWlHzVWKYYJjU
-         h3Ow==
-X-Gm-Message-State: AOAM5338UQdMDpT/dpPMxS0ULhLEWXcGdvPBYp5QtV2qv3icBCdQ5zON
-        Z0DD3Gq+JAwNThMpY8YbwHweYw==
-X-Google-Smtp-Source: ABdhPJz56RQddCKde8syNeZ99IESBlDy9ESB9ITrwMeCYoMWTZUXN/j4oCItchLbl2oXlmaZPfTRcw==
-X-Received: by 2002:a17:907:8a0c:b0:6f4:7fc2:b0b0 with SMTP id sc12-20020a1709078a0c00b006f47fc2b0b0mr13945675ejc.251.1651750695502;
-        Thu, 05 May 2022 04:38:15 -0700 (PDT)
-Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id g9-20020a1709063b0900b006f3ef214db6sm661006ejf.28.2022.05.05.04.38.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 May 2022 04:38:15 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 6/6] arm64: dts: qcom: sdm630: correct QFPROM byte offsets
-Date:   Thu,  5 May 2022 13:38:02 +0200
-Message-Id: <20220505113802.243301-6-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220505113802.243301-1-krzysztof.kozlowski@linaro.org>
-References: <20220505113802.243301-1-krzysztof.kozlowski@linaro.org>
+        Thu, 5 May 2022 07:43:05 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E58AC49922
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 04:39:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651750766; x=1683286766;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=AD2yT7DFP+hTGlKNWiI4lemreQHZJLeyzDnOs058URo=;
+  b=CEnDzXoGLNfY6yvhGTd8JiNhh1uR0PiUseu6QTszpSEAK4ewXw+woxqU
+   CpG6Drt9ez9mYNhS0Ga38NoZgJraZih6/iF6WrEoNjinbHhqDlMyuYZ0V
+   2oapnRd0qGMBHYSoOBkYgPhOBBrmiDdrSJOK9RSaGUCFBeXHMKqGLXgR1
+   mGp4SqCvHaLAHQCejo6ZG3vINcH7WHyv42SYnQlIqQhBXr+8MLj3xGT9Q
+   jn4qEKAyZ04qUQR5p3HskMCPcXA8Nezkr9FRH0zrg1aK6M6obEcSl/E5A
+   tAo3iSUUBXR7J7g8POd2Zvv8axLGrjYYR7MkPli2RMsDsScRSAcvrHBOm
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10337"; a="266922604"
+X-IronPort-AV: E=Sophos;i="5.91,201,1647327600"; 
+   d="scan'208";a="266922604"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2022 04:39:26 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,201,1647327600"; 
+   d="scan'208";a="734857195"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 05 May 2022 04:39:24 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nmZpM-000CMB-7R;
+        Thu, 05 May 2022 11:39:24 +0000
+Date:   Thu, 5 May 2022 19:38:36 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [jgunthorpe:vfio_group_locking 24/28] drivers/vfio/vfio.c:1152:16:
+ sparse: sparse: Using plain integer as NULL pointer
+Message-ID: <202205051928.3PBzM39q-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,48 +61,95 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The NVMEM bindings expect that 'bits' property holds offset and size of
-region within a byte, so it applies a constraint of <0, 7> for the
-offset.  Using 25 as HSTX trim offset is within 4-byte QFPROM word, but
-outside of the byte:
+tree:   https://github.com/jgunthorpe/linux vfio_group_locking
+head:   0459b33a59543ac21e35b3c9c1ce106968109e6c
+commit: bc90cf758ddd2ba50b99a407ec35b5f3c8218662 [24/28] vfio: Split up vfio_group_get_device_fd()
+config: h8300-randconfig-s032-20220505 (https://download.01.org/0day-ci/archive/20220505/202205051928.3PBzM39q-lkp@intel.com/config)
+compiler: h8300-linux-gcc (GCC) 11.3.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        # https://github.com/jgunthorpe/linux/commit/bc90cf758ddd2ba50b99a407ec35b5f3c8218662
+        git remote add jgunthorpe https://github.com/jgunthorpe/linux
+        git fetch --no-tags jgunthorpe vfio_group_locking
+        git checkout bc90cf758ddd2ba50b99a407ec35b5f3c8218662
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=h8300 SHELL=/bin/bash drivers/vfio/
 
-  sdm630-sony-xperia-nile-discovery.dtb: qfprom@780000: hstx-trim@240:bits:0:0: 25 is greater than the maximum of 7
-  sdm630-sony-xperia-nile-discovery.dtb: qfprom@780000: gpu-speed-bin@41a0:bits:0:0: 21 is greater than the maximum of 7
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Align the offsets to match the bindings.
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+sparse warnings: (new ones prefixed by >>)
+>> drivers/vfio/vfio.c:1152:16: sparse: sparse: Using plain integer as NULL pointer
 
----
+vim +1152 drivers/vfio/vfio.c
 
-Not tested on SDM630 hardware, but similar behavior on SDM845 works
-fine (although causes a read of 4 bytes instead of 1).
----
- arch/arm64/boot/dts/qcom/sdm630.dtsi | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+  1106	
+  1107	static struct file *vfio_device_open(struct vfio_device *device)
+  1108	{
+  1109		struct file *filep;
+  1110		int ret;
+  1111	
+  1112		ret = vfio_device_assign_container(device);
+  1113		if (ret)
+  1114			return ERR_PTR(ret);
+  1115	
+  1116		if (!try_module_get(device->dev->driver->owner)) {
+  1117			ret = -ENODEV;
+  1118			goto err_unassign_container;
+  1119		}
+  1120	
+  1121		mutex_lock(&device->dev_set->lock);
+  1122		device->open_count++;
+  1123		if (device->open_count == 1 && device->ops->open_device) {
+  1124			ret = device->ops->open_device(device);
+  1125			if (ret)
+  1126				goto err_undo_count;
+  1127		}
+  1128		mutex_unlock(&device->dev_set->lock);
+  1129	
+  1130		/*
+  1131		 * We can't use anon_inode_getfd() because we need to modify
+  1132		 * the f_mode flags directly to allow more than just ioctls
+  1133		 */
+  1134		filep = anon_inode_getfile("[vfio-device]", &vfio_device_fops,
+  1135					   device, O_RDWR);
+  1136		if (IS_ERR(filep)) {
+  1137			ret = PTR_ERR(filep);
+  1138			goto err_close_device;
+  1139		}
+  1140	
+  1141		/*
+  1142		 * TODO: add an anon_inode interface to do this.
+  1143		 * Appears to be missing by lack of need rather than
+  1144		 * explicitly prevented.  Now there's need.
+  1145		 */
+  1146		filep->f_mode |= (FMODE_LSEEK | FMODE_PREAD | FMODE_PWRITE);
+  1147	
+  1148		/*
+  1149		 * On success the ref of device is moved to the file and
+  1150		 * put in vfio_device_fops_release()
+  1151		 */
+> 1152		return 0;
+  1153	
+  1154	err_close_device:
+  1155		mutex_lock(&device->dev_set->lock);
+  1156		if (device->open_count == 1 && device->ops->close_device)
+  1157			device->ops->close_device(device);
+  1158	err_undo_count:
+  1159		device->open_count--;
+  1160		mutex_unlock(&device->dev_set->lock);
+  1161		module_put(device->dev->driver->owner);
+  1162	err_unassign_container:
+  1163		vfio_group_try_dissolve_container(device->group);
+  1164		return ERR_PTR(ret);
+  1165	}
+  1166	
 
-diff --git a/arch/arm64/boot/dts/qcom/sdm630.dtsi b/arch/arm64/boot/dts/qcom/sdm630.dtsi
-index 505e10674cb6..c713aa6e7044 100644
---- a/arch/arm64/boot/dts/qcom/sdm630.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sdm630.dtsi
-@@ -558,13 +558,13 @@ qfprom: qfprom@780000 {
- 			#size-cells = <1>;
- 
- 			qusb2_hstx_trim: hstx-trim@240 {
--				reg = <0x240 0x1>;
--				bits = <25 3>;
-+				reg = <0x243 0x1>;
-+				bits = <1 3>;
- 			};
- 
- 			gpu_speed_bin: gpu-speed-bin@41a0 {
--				reg = <0x41a0 0x1>;
--				bits = <21 7>;
-+				reg = <0x41a2 0x1>;
-+				bits = <5 7>;
- 			};
- 		};
- 
 -- 
-2.32.0
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

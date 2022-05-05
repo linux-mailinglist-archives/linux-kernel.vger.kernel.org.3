@@ -2,58 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1911351BA5A
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 10:27:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C90CD51BA5E
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 10:28:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348481AbiEEIb3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 04:31:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41926 "EHLO
+        id S245388AbiEEIbf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 04:31:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347885AbiEEIbW (ORCPT
+        with ESMTP id S1348260AbiEEIb0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 04:31:22 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 540622D1EB;
-        Thu,  5 May 2022 01:27:43 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id 72C5A1F44D84
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1651739262;
-        bh=mFMc9Q2nDIQR0sOpjH1myPXm3e8CImboII/qXcWq5JU=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=GMIp6mRlSS7KAQ8A9IVcFvFyA43EZx2MPS9THZM+iZp6wpQiki8+SaO1lrUujJzUm
-         XFpVDRI7ZuxDVrblKkw9SzZ95TX7oitciWHideclbO2hu+2iPvKcv4hMOcQH9b2N+J
-         d6erKHQJefc2MvAkjyyOIFrIuQ30TUY/10s7wUGPryG3A/8KmfGrgsWSHgsPLvv7Oe
-         O1OQPK0t5Hv36s59X6fG1lbTmXe6VwCjL6iOiRFw/1+xhqqtegNSkEstE71eZCJBLK
-         xv8Lx4XPlRt3ycvFmuvQ0IYO+VFDxQn4fDCysKSIwFF/UTu5OCkPMJDmA+PG/K3Ub1
-         gn/ZBPqYeHCtQ==
-Message-ID: <2d50b30d-ed3a-29db-266e-9e395e9e4c6a@collabora.com>
-Date:   Thu, 5 May 2022 10:27:39 +0200
+        Thu, 5 May 2022 04:31:26 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E74A31203
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 01:27:46 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id be20so4311748edb.12
+        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 01:27:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=5tSgyVPoIjIJTnk8pwe9iFq2l8iCcKVYBSDyP0RRtUw=;
+        b=SZERI1K6Set/ar7XavDlXSuhC6TM4i6vWi504UalqyeoSF37mRcDmyXuFm72cjChwb
+         gx8eJmlAQ08OwR75gbT5wWjbaTEDH6y0+WG5hTVJgmLcV8bE2/CZ0UEjZWd7zuWEQ5gP
+         aqwOZz+mZLlHnttDl8wcoxsMblrTJTC7FOjN2TDCxD9Lw8wj9YPovvTCxinZAOU3K99U
+         NNFg1Nifl8dX9/pCm1pVbxMFtmAGYax5uE5a59iLzA46eD9e3EvaF+r09rBd3yFwCvwN
+         u1eZiPAt/Ue7aJ0uQOjr8mYBqSG3ByZerT5YRHjoStToy/heQveso+yUiIKVliq/yP9R
+         78tg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=5tSgyVPoIjIJTnk8pwe9iFq2l8iCcKVYBSDyP0RRtUw=;
+        b=OeuUdDRyIBruF/eRwBYiyJri+VUFhBBXzXwG8QTS2vW6bUfUoj+Az9nH7+dg8ehAI7
+         mA5/S6wADWRG7IsQRylutSB1Kgt/jy8xhnvn6qAMMUDEL9PqHqVmDCzcVDAKskNvMLyV
+         t3gWn/bmhA9Dt5eAHXSKUVyYnQW4tFPz31DhTZ/4z01Oem4bICg7H6Hu3EduDKpn4fmq
+         9aaztOsr256agDxhQVJVByy618w2FX8Cc3KHdKd5HNLiaTJykTLdVDOLmjFfHXiQNwV4
+         E7pF8h4N0EX7Iu1YiWF6vZdBp/IXB9oCuwqoxWnP1hGDwZfrFb1MjKQvzQwz1LFvyFD9
+         Ifsg==
+X-Gm-Message-State: AOAM532ee0917pJjAhX8CWXuQm9qXC4Fz+bY6hzvCTmYlSLuWOtc+igQ
+        tk6a1cVzukp+ntm7wBR5rGaZJQ==
+X-Google-Smtp-Source: ABdhPJwgese7bUTlRcmGO1mVDEwMWHdoEWyOzOI+Igy+m5JwTam3fT/88Xt9SiMpZxojkp+JqaQVSw==
+X-Received: by 2002:a05:6402:358a:b0:428:136f:766a with SMTP id y10-20020a056402358a00b00428136f766amr7731609edc.403.1651739264889;
+        Thu, 05 May 2022 01:27:44 -0700 (PDT)
+Received: from [192.168.0.217] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id f6-20020a05640214c600b0042617ba639dsm496805edx.39.2022.05.05.01.27.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 05 May 2022 01:27:44 -0700 (PDT)
+Message-ID: <7674659c-20f4-68da-5a62-5c8e8ebdfe5a@linaro.org>
+Date:   Thu, 5 May 2022 10:27:43 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v3] PCI: mediatek-gen3: Change driver name to
- mtk-pcie-gen3
+ Thunderbird/91.8.1
+Subject: Re: [PATCH 2/4] Input: mt-matrix-keypad: Add Bosch mt matrix keypad
+ driver
 Content-Language: en-US
-To:     Felix Fietkau <nbd@nbd.name>, Ryder Lee <ryder.lee@mediatek.com>,
-        Jianjun Wang <jianjun.wang@mediatek.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     linux-pci@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-References: <20220504172128.27489-1-nbd@nbd.name>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220504172128.27489-1-nbd@nbd.name>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Marco Felsch <m.felsch@pengutronix.de>,
+        Gireesh.Hiremath@in.bosch.com
+Cc:     linux-omap@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
+        bcousson@baylibre.com, tony@atomide.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, dmitry.torokhov@gmail.com,
+        mkorpershoek@baylibre.com, davidgow@google.com,
+        swboyd@chromium.org, fengping.yu@mediatek.com,
+        y.oudjana@protonmail.com, rdunlap@infradead.org,
+        colin.king@intel.com, sjoerd.simons@collabora.co.uk,
+        VinayKumar.Shettar@in.bosch.com,
+        Govindaraji.Sivanantham@in.bosch.com, anaclaudia.dias@de.bosch.com
+References: <20220504105254.1576-2-Gireesh.Hiremath@in.bosch.com>
+ <20220504134817.1490-1-Gireesh.Hiremath@in.bosch.com>
+ <20220504141404.onom7x5lycyg3b22@pengutronix.de>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220504141404.onom7x5lycyg3b22@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,45 +86,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 04/05/22 19:21, Felix Fietkau ha scritto:
-> driver_register() will refuse to register another driver with the same name.
-> This change allows pcie-mediatek-gen3 to coexist with pcie-mediatek built into
-> the kernel.
+On 04/05/2022 16:14, Marco Felsch wrote:
+> On 22-05-04, Gireesh.Hiremath@in.bosch.com wrote:
+>> From: Gireesh Hiremath <Gireesh.Hiremath@in.bosch.com>
+>>
+>> The existing matric_keypad.c use different gpio line for row and colunm,
+>> where in mt_matrix_kepad.c use same gpio line for row as well as column.
+>> a key can be placed at each intersection of a unique row number 
+>> not equal to a unique column and they are diagonally symmetric.
+>> Advantage of this is with existed gpio line we can get more keys
+>>   
+>> example: in matrix_keypad.c for 5 gpio line possible matrix is 2X3 or 3X2
+>> and maximum possible keys are 6 but 
+>> in mt_matrix_kepad.c for same 5 gpio line possible matrix is 5X5 and maximum
+>> possible buttons are 10, below table will discribe that
 > 
-> Signed-off-by: Felix Fietkau <nbd@nbd.name>
-> ---
->   drivers/pci/controller/pcie-mediatek-gen3.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
+> Nobody should stop you to increase the amount of max. possible keys, so
+> this isn't a real block.
 > 
-> diff --git a/drivers/pci/controller/pcie-mediatek-gen3.c b/drivers/pci/controller/pcie-mediatek-gen3.c
-> index 3e8d70bfabc6..2e665cd7e735 100644
-> --- a/drivers/pci/controller/pcie-mediatek-gen3.c
-> +++ b/drivers/pci/controller/pcie-mediatek-gen3.c
-> @@ -1021,7 +1021,7 @@ static struct platform_driver mtk_pcie_driver = {
->   	.probe = mtk_pcie_probe,
->   	.remove = mtk_pcie_remove,
->   	.driver = {
-> -		.name = "mtk-pcie",
-> +		.name = "mtk-pcie-gen3",
->   		.of_match_table = mtk_pcie_of_match,
->   		.pm = &mtk_pcie_pm_ops,
->   	},
+>> 	------------------------------------------------------
+>> 	|Row\Col |GPIO 0 | GPIO 1 | GPIO 2 | GPIO 3 | GPIO 4 |
+>> 	------------------------------------------------------
+>> 	| GPIO 0 |  X    | KEY_9  | KEY_2  | KEY_3  | KEY_1  |
+>> 	------------------------------------------------------
+>> 	| GPIO 1 | KEY_9 |  X     | KEY_6  | KEY_5  |  KEY_0 |
+>> 	------------------------------------------------------
+>> 	| GPIO 2 | KEY_2 | KEY_6  |  X     | KEY_4  | KEY_7  |
+>> 	------------------------------------------------------
+>> 	| GPIO 3 | KEY_3 | KEY_5  | KEY_4  |  X     | KEY_8  |
+>> 	------------------------------------------------------
+>> 	| GPIO 4 | KEY_1 |  KEY_0 | KEY_7  | KEY_8  |  X     |
+>> 	------------------------------------------------------
+>> 	X - invalid key
+>> 	KEY_x - preferred key code
 > 
+> That should be pointed somewhere very clearly, thanks for the
+> description. Also what is than the benefit of the original matrix_keypad
+> driver?
 
-Hello Felix,
+It looks like this driver has smaller number of features than
+matrix-keypad, so it should be integrated into the matrix-keypad.
+matrix-keypad features are superset to this one.
 
-this is a good fix - and being it a fix, this requires a Fixes: tag - which also
-gets this scheduled for backporting, which is important to solve this issue on
-all of the affected kernels.
-
-I'll make it easy for you as I've already checked the commit hash:
-
-Fixes: d3bf75b579b9 ("PCI: mediatek-gen3: Add MediaTek Gen3 driver for MT8192")
-
-
-After adding that:
-
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-
-Cheers,
-Angelo
+Best regards,
+Krzysztof

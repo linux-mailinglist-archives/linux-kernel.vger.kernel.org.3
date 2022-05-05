@@ -2,77 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 122C551BEE6
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 14:11:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00D8851BEE8
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 14:12:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359589AbiEEMPR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 08:15:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49828 "EHLO
+        id S1359765AbiEEMPq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 08:15:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244504AbiEEMPN (ORCPT
+        with ESMTP id S244504AbiEEMPo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 08:15:13 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C709B6412
-        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 05:11:33 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id bv19so8332944ejb.6
-        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 05:11:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=date:from:to:cc:subject:message-id:mail-followup-to:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=N08Sho3YmOzZV4Xmv5ubYbgs6HE2xL/dzKMzdTYL8gA=;
-        b=iWDokVh+M+PJFJ4WXspIWRIr4xZBwoG5kib0tP8dS8ZnRJkbDIW9+ZVzIN8uQ6TuBY
-         PkUxBRJ9j/Ko3VCKffcIo1diKYGul7Av4a273Hf7+ApnJcM872uaXA50YZoUmfwhuo0U
-         /WjIA5wjPYH/gD0rGarI+Mm1TBf+hDrr/JtHo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id
-         :mail-followup-to:references:mime-version:content-disposition
-         :in-reply-to;
-        bh=N08Sho3YmOzZV4Xmv5ubYbgs6HE2xL/dzKMzdTYL8gA=;
-        b=SCLWH9O1stmQrKJyyyh75Js/olDLbrZRr+B0WGXedx5av/ft63aY5q5/xukXB2+7p9
-         SL9/W8Dd5QjXjJFne4Y0vrVa++HDd/I9h+NtltWAxsNr3u2PkD2T2GWRtD+eympo+wF0
-         R2gg7SlblyAQOWIA8d6KgAVCt86qTKE+p5sRzKPtEC5EJ7zswVPRZeIBHksRZJagrOmG
-         hrKw+ikwCY/j8PYGNhhAxs7OPnWP6SYN9lXAzVAuD2rb1RmrGNuu3dbdAGaUQuO05ORR
-         UgPxwcnxDlCQ5KYYzVfay+CxSVxeCa5A8hlus+JHPeDRlWQsOm4wPcV7oMKJ7PaPn8EU
-         n2Mg==
-X-Gm-Message-State: AOAM531nNwMkR43qvTY/wGE8vZxYd3MdcQnXs9d5IG3WJ60iSyQNkHJp
-        KclQPMoPq9P23nwHZxBAG3cgjA==
-X-Google-Smtp-Source: ABdhPJwq3J4tX4uCUfKvT72QVZzU32c80ZumjeVZ0kKs7MA8Ur8AGGK7TytwyRYTa7mQmaP6Et++tA==
-X-Received: by 2002:a17:906:c156:b0:6f3:9e3c:5cc8 with SMTP id dp22-20020a170906c15600b006f39e3c5cc8mr25652607ejc.17.1651752692375;
-        Thu, 05 May 2022 05:11:32 -0700 (PDT)
-Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
-        by smtp.gmail.com with ESMTPSA id a13-20020aa7c80d000000b0042617ba63d6sm715903edt.96.2022.05.05.05.11.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 May 2022 05:11:31 -0700 (PDT)
-Date:   Thu, 5 May 2022 14:11:30 +0200
-From:   Daniel Vetter <daniel@ffwll.ch>
-To:     Javier Martinez Canillas <javierm@redhat.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH v3 3/3] drm: Allow simpledrm to setup its emulated FB as
- firmware provided
-Message-ID: <YnO+8hZ0ozPaZUEj@phenom.ffwll.local>
-Mail-Followup-To: Javier Martinez Canillas <javierm@redhat.com>,
-        linux-kernel@vger.kernel.org,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        dri-devel@lists.freedesktop.org
-References: <20220503071540.471667-1-javierm@redhat.com>
- <20220503071540.471667-4-javierm@redhat.com>
- <YnJcaaDcIsJKhSwQ@phenom.ffwll.local>
- <bfb03d40-a023-12a9-9554-1b6e6c474134@redhat.com>
+        Thu, 5 May 2022 08:15:44 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31C166411;
+        Thu,  5 May 2022 05:12:05 -0700 (PDT)
+X-UUID: 85c1ab05184f4bf5b38b80821f60b2ec-20220505
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.4,REQID:a9a785a5-7a76-42bf-98a6-8a23df82c485,OB:0,LO
+        B:0,IP:0,URL:8,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:8
+X-CID-META: VersionHash:faefae9,CLOUDID:144d5216-2e53-443e-b81a-655c13977218,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,File:nil,QS:0,BEC:nil
+X-UUID: 85c1ab05184f4bf5b38b80821f60b2ec-20220505
+Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw01.mediatek.com
+        (envelope-from <jianjun.wang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1724677628; Thu, 05 May 2022 20:12:00 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Thu, 5 May 2022 20:11:59 +0800
+Received: from mhfsdcap04 (10.17.3.154) by mtkmbs11n2.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
+ Transport; Thu, 5 May 2022 20:11:58 +0800
+Message-ID: <d017583a2472e7d4bf4684b1aabeebd93c80c68b.camel@mediatek.com>
+Subject: Re: [PATCH v7 2/2] phy: mediatek: Add PCIe PHY driver
+From:   Jianjun Wang <jianjun.wang@mediatek.com>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        "Chen-Yu Tsai" <wenst@chromium.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>
+CC:     Wei-Shun Chang <weishunc@google.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-phy@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <rex-bc.chen@mediatek.com>,
+        <randy.wu@mediatek.com>, <jieyy.yang@mediatek.com>,
+        <chuanjia.liu@mediatek.com>, <qizhong.cheng@mediatek.com>,
+        <jian.yang@mediatek.com>
+Date:   Thu, 5 May 2022 20:11:58 +0800
+In-Reply-To: <bad44be8-abc7-169f-bc7a-cef3692c9a71@collabora.com>
+References: <20220422142331.17173-1-jianjun.wang@mediatek.com>
+         <20220422142331.17173-3-jianjun.wang@mediatek.com>
+         <bad44be8-abc7-169f-bc7a-cef3692c9a71@collabora.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <bfb03d40-a023-12a9-9554-1b6e6c474134@redhat.com>
-X-Operating-System: Linux phenom 5.10.0-8-amd64 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,56 +73,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 04, 2022 at 01:32:37PM +0200, Javier Martinez Canillas wrote:
-> On 5/4/22 12:58, Daniel Vetter wrote:
-> > On Tue, May 03, 2022 at 09:15:40AM +0200, Javier Martinez Canillas wrote:
-> >> Indicate to fbdev subsystem that the registered framebuffer is provided by
-> >> the system firmware, so that it can handle accordingly. For example, would
-> >> unregister the FB devices if asked to remove the conflicting framebuffers.
-> >>
-> >> Add a new DRM_FB_FW field to drm_fbdev_generic_setup() options parameter.
-> >> Drivers can use this to indicate the FB helper initialization that the FB
-> >> registered is provided by the firmware, so it can be configured as such.
-> >>
-> >> Suggested-by: Thomas Zimmermann <tzimmermann@suse.de>
-> >> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
-> >> Reviewed-by: Thomas Zimmermann <tzimmermann@suse.de>
-> >> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> >> ---
-> >>
-> >> Changes in v3:
-> >> - Drop the firmware local variable (Laurent Pinchart).
-> >> - Use DRM_FB_OPTION() since DRM_FB_SET_OPTION() got renamed (kernel test robot).
+Hi Angelo,
+
+On Tue, 2022-04-26 at 18:06 +0200, AngeloGioacchino Del Regno wrote:
+> Il 22/04/22 16:23, Jianjun Wang ha scritto:
+> > Add PCIe GEN3 PHY driver support on MediaTek chipsets.
 > > 
-> > Just for the record what I brought up on irc already:
+> > Signed-off-by: Jianjun Wang <jianjun.wang@mediatek.com>
+> 
+> Hello Jianjun,
+> there's only one last bit to fix, check below:
+> 
+> > ---
+> >   drivers/phy/mediatek/Kconfig        |  11 ++
+> >   drivers/phy/mediatek/Makefile       |   1 +
+> >   drivers/phy/mediatek/phy-mtk-pcie.c | 267
+> > ++++++++++++++++++++++++++++
+> >   3 files changed, 279 insertions(+)
+> >   create mode 100644 drivers/phy/mediatek/phy-mtk-pcie.c
 > > 
-> > FBINFO_MISC_FIRMWARE is purely an internal flag with no uapi impact, and
-> > it's only to control whether we nuke this from
-> > remove_conflicting_framebuffer or not. Since simpledrm only ever binds
-> > against sysfb I think it'd be cleaner to only rely on that, and relegate
 > 
-> That's not actually true. The OF subsystem also registers "simple-framebuffer"
-> devices when there are Device Tree nodes that contain a "simple-framebuffer"
-> compatible string. In that case these pdev will also bind against simpledrm.
-
-TIL.
-
-> > that entire FBINFO_MISC_FIRMWARE misc hack to the fbdev dungeons and let
-> > it quietly wither away there.
-> >
-> > Also I'm not a huge fan of these midlayer flags in general :-)
+> ..snip..
 > 
-> And while I agree with you that these midlayer flags are horrible, that is
-> what any other fbdev that makes use of a firmware-provided framebuffer set,
-> so simpledrm emulated fbdev shouldn't be the exception IMO.
+> > +static int mtk_pcie_read_efuse(struct mtk_pcie_phy *pcie_phy)
+> > +{
+> > +	struct device *dev = pcie_phy->dev;
+> > +	bool nvmem_enabled;
+> > +	int ret, i;
+> > +
+> > +	/* nvmem data is optional */
+> > +	nvmem_enabled = device_property_read_bool(dev, "nvmem-cells");
+> 
+> device_property_read_bool() returns device_property_present().
+> 
+> I would prefer that, instead, you call the latter:
+> 
+> 	nvmem_enabled = device_property_present(dev, "nvmem-cells");
+> 
+> It's the same, yes, but this will increase human readability, as the
+> function
+> name clearly states the intention here.
 
-So we discussed this a pile more on irc, and at least my take is that
-people who run simpledrm but want to combine that with fbdev drivers and
-expect it to all work nicely we can probably ignore. At least until all
-this sysfb stuff is nicely unified, and at that point we shouldn't need
-special flags anymore.
--Daniel
--- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+Thanks for your review and sorry for the late response, I'll replace it
+with 'device_property_present' in the next version.
+
+Thanks.
+
+> 
+> Thanks,
+> Angelo
+> 
+

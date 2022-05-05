@@ -2,111 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46BEE51B83A
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 08:52:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C62651B844
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 08:54:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245359AbiEEGyX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 02:54:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33282 "EHLO
+        id S238200AbiEEG5i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 02:57:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245561AbiEEGyU (ORCPT
+        with ESMTP id S240646AbiEEGzw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 02:54:20 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D0F517E12
-        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 23:50:39 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id g6so6905788ejw.1
-        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 23:50:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=J2j9EXhNS02qzUZ4UKY8kx4CRlU9zWWbcZ0qt22oRDQ=;
-        b=o2ewtQwCad4qB8oEZ6CSRXAKP3RXy8osCcV8RtqCxRykFSeKI4939xfIVft7NG+WX4
-         bgDllbsziJhSc2Up9zO20yXWT/dWJtghb0XDA79rVfqlIWmDOjzpR8hHtMmq5/I5nVUZ
-         +bUZm95fcmLgAEiMONC557BWLNcFZRui0B7Zwqh4yGyWW8grgSxtXxlWiha7a9O68hsy
-         J1DjrRQJl/MZJH2wYxLCrCz0MKRWBTtkuXQLS+6NaVrDNj4AT3ZtdphLdPjZiVLcGm69
-         EWWTPKox93BFEGMmOKYBa5BjK5bE458hWGzVl48J8b4pMBO+5AVmWBsqyzY/gWvb0hXQ
-         /ZCA==
+        Thu, 5 May 2022 02:55:52 -0400
+Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com [209.85.160.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7171547045;
+        Wed,  4 May 2022 23:52:14 -0700 (PDT)
+Received: by mail-qt1-f182.google.com with SMTP id x22so2544641qto.2;
+        Wed, 04 May 2022 23:52:14 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=J2j9EXhNS02qzUZ4UKY8kx4CRlU9zWWbcZ0qt22oRDQ=;
-        b=r7l89Eq7XS/nRtQPCFhcv4UbkrgRWsP6lBBJ2+gMVO4rSCiOlIichlv0Lsgb4IMmKP
-         O5bM3dbJPfP3appZ/ZDw3rTLnuyNfAoaXudKGdp+KpB8dYKjjhmZrOqsO0SmbD2Z6tL/
-         8nBGbDESrunLsZaj+QClOBM7UU85BobPu1lpfbEMmupLHM+W2aT9aTzr0BLclV5oJEzG
-         vqclw/9KBsvXLwL0i9nxi98ei+JK0WFJqZTKt8kSOpEMG8ZpHIuUuI82m414snl9e18y
-         Npy/xDvbd4DaaBYTl8GbztDU5Z9gdmD9gmOJSWm1mtT1cRRwuIJSKTi58XJRIPQbaojY
-         b5aQ==
-X-Gm-Message-State: AOAM533jmNnA7PH3RafRGQtjKlaZbeI3i1CWrSF9shdp1btogydoMYZv
-        WHS5oBsGo/qo9cJyzyuexcV6ow==
-X-Google-Smtp-Source: ABdhPJxpmx592NBbH6ZMLepBK/ioYRGh0mxSUaPeeCkwN4NbZ1s0jljmd+KE7DfQyzyt9/jQL3gTQA==
-X-Received: by 2002:a17:907:3f25:b0:6b0:5e9a:83 with SMTP id hq37-20020a1709073f2500b006b05e9a0083mr24966683ejc.659.1651733437862;
-        Wed, 04 May 2022 23:50:37 -0700 (PDT)
-Received: from [192.168.0.215] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id h6-20020a1709062dc600b006f3ef214df5sm393388eji.91.2022.05.04.23.50.36
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=QGcj3wvDLBvz1Kbr4GVQBUSS7NWwZ5P79yidz10v/bo=;
+        b=ZeO0k5UeQE8maxbeBLKN7hDUdqJ0aKSJIcZdkpkiEi30MPAVz3OWprfbbrQYE6zYoE
+         Swf8i9IhODBoOqq0KX6N4VJcsVxwnbzogQw6/7lHKcMTRYhF7G3yNi0TKRpiJgOhMJlp
+         C2sw0wL8uDCx8gBkmxlHsh2sGgBXzLxaj7kfLof1kMVvozVt71gkzMkYR6EfEvP5Soaa
+         TA/gLHBGX5jKsLbimITI8iEnFjLWwDvpHofcvRs1XgvN6C5KT/P8N12vPSXz0u1mbTDq
+         ueYo4mX1kFOq3ffY98vnZBzbHYAu06tohr2IVSmTcagXAzV5m7eueBvIbBEBrGt3CTra
+         i3iw==
+X-Gm-Message-State: AOAM531I5IN/rnVruuUGxg3gfy3WhITimBAZQikrv3wDF/0meqIH+u6U
+        697a5nFKT73rlBoVPQNwbebiMSG5tt47gQ==
+X-Google-Smtp-Source: ABdhPJy7oZ7r8vYP284fktErF3MGwUYv4pMQ6rbI7MWzcZJi8n3Fja02FUsZD6gOXUF25JzZbDV05g==
+X-Received: by 2002:a05:622a:6205:b0:2f1:e9d9:df34 with SMTP id hj5-20020a05622a620500b002f1e9d9df34mr22337612qtb.86.1651733533183;
+        Wed, 04 May 2022 23:52:13 -0700 (PDT)
+Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com. [209.85.219.175])
+        by smtp.gmail.com with ESMTPSA id q21-20020a05620a0c9500b006a0098f029fsm408183qki.13.2022.05.04.23.52.12
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 04 May 2022 23:50:37 -0700 (PDT)
-Message-ID: <172f168f-4253-f63f-e0df-c64fd77a2580@linaro.org>
-Date:   Thu, 5 May 2022 08:50:36 +0200
+        Wed, 04 May 2022 23:52:12 -0700 (PDT)
+Received: by mail-yb1-f175.google.com with SMTP id e12so6074277ybc.11;
+        Wed, 04 May 2022 23:52:12 -0700 (PDT)
+X-Received: by 2002:a05:6902:120e:b0:634:6f29:6b84 with SMTP id
+ s14-20020a056902120e00b006346f296b84mr21041538ybu.604.1651733532336; Wed, 04
+ May 2022 23:52:12 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH] spi: dt-bindings: qcom,spi-geni-qcom: allow three
- interconnects
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-spi@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220504125119.190526-1-krzysztof.kozlowski@linaro.org>
- <YnKdnv69vueSURiU@robh.at.kernel.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <YnKdnv69vueSURiU@robh.at.kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20220504142058.18704-1-wanjiabing@vivo.com>
+In-Reply-To: <20220504142058.18704-1-wanjiabing@vivo.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 5 May 2022 08:52:01 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdX57C0o65AY=9H=_mge=ee0nwYtiZ6q5JVa3SHB1VnVeg@mail.gmail.com>
+Message-ID: <CAMuHMdX57C0o65AY=9H=_mge=ee0nwYtiZ6q5JVa3SHB1VnVeg@mail.gmail.com>
+Subject: Re: [PATCH] clk: renesas: rzg2l: Fix duplicate argument in rzg2l-cpg
+To:     Wan Jiabing <wanjiabing@vivo.com>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        kael_w@yeah.net
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/05/2022 17:37, Rob Herring wrote:
-> On Wed, May 04, 2022 at 02:51:19PM +0200, Krzysztof Kozlowski wrote:
->> Recent Qualcomm Geni SPI nodes, e.g. on SM8450, come with three
->> interconnects.  This fixes dtbs_check warnings like:
->>
->>   sm8450-qrd.dtb: geniqup@8c0000: spi@880000:interconnect-names: ['qup-core', 'qup-config'] is too short
-> 
-> I'm confused. A length of 2 was already allowed before this change.
+Hi Wan,
 
-Me too... I think I copied that message not from original code, but from
-intermediary fix setting it to three elements. This was also wrong
-because some of nodes have two some three interconnects.
+On Wed, May 4, 2022 at 4:21 PM Wan Jiabing <wanjiabing@vivo.com> wrote:
+> Fix following coccicheck warning:
+> ./drivers/clk/renesas/rzg2l-cpg.c:603:39-65: duplicated argument to & or |
+>
+> The CPG_SIPLL5_CLK1_REFDIV_WEN here is duplicated.
+> Here should be CPG_SIPLL5_CLK1_POSTDIV2_WEN.
 
-The actual error is:
+Thanks, nice catch!
 
-arch/arm64/boot/dts/qcom/sm8450-qrd.dtb: spi@a98000: interconnects:
-[[46, 1, 0, 46, 4, 0], [47, 2, 0, 48, 12, 0], [49, 1, 0, 50, 1, 0]] is
-too long
+> Fixes: a16ed737e62b ("clk: renesas: rzg2l: Add FOUTPOSTDIV clk support")
+> Signed-off-by: Wan Jiabing <wanjiabing@vivo.com>
 
-	From schema: Documentation/devicetree/bindings/spi/qcom,spi-geni-qcom.yaml
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+As I haven't sent a pull request yet, I will fix up the original commit in
+renesas-clk-for-v5.19.
 
-arch/arm64/boot/dts/qcom/sm8450-qrd.dtb: spi@a98000: interconnect-names:
-['qup-core', 'qup-config', 'qup-memory'] is too long
+Gr{oetje,eeting}s,
 
-	From schema: Documentation/devicetree/bindings/spi/qcom,spi-geni-qcom.yaml
+                        Geert
 
-I will send a v2.
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-Best regards,
-Krzysztof
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

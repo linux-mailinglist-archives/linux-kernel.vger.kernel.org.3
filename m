@@ -2,56 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35E0451CCBC
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 01:28:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1FD751CCBE
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 01:29:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386771AbiEEXbr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 19:31:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39682 "EHLO
+        id S1386780AbiEEXc5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 19:32:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354447AbiEEXbp (ORCPT
+        with ESMTP id S241255AbiEEXcu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 19:31:45 -0400
-Received: from mail-vs1-xe29.google.com (mail-vs1-xe29.google.com [IPv6:2607:f8b0:4864:20::e29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D763606C4
-        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 16:28:04 -0700 (PDT)
-Received: by mail-vs1-xe29.google.com with SMTP id y74so5651273vsy.7
-        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 16:28:04 -0700 (PDT)
+        Thu, 5 May 2022 19:32:50 -0400
+Received: from mail-ua1-x930.google.com (mail-ua1-x930.google.com [IPv6:2607:f8b0:4864:20::930])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46F7D606C4
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 16:29:07 -0700 (PDT)
+Received: by mail-ua1-x930.google.com with SMTP id q4so2223564uas.0
+        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 16:29:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=IhQflZE2kOz5iQfI0XCphcVBDGFV9bgpYklPf0EzaxU=;
-        b=lCuDggdgmHDg+vHogr+Me/hfOr3FKfk8M0OI07+q0NM8dFU3EyeDHQvOgwkMAhav6Y
-         cvA9lFGbZ+kMu2qsDbZ3u4I9UfC6IqXFgi7e+kV4oPGHnByYml/EyL2l8RJdUkHVRM8Z
-         5pl61o/3BCKiBv52aQ07Ppnh+j1a2fNgLMxiPpdsuQbLW07chLLlt4eTIRDac9EfsOxc
-         hsSiryCWUhqsIxFZZgU0HWeqc321MsvyQuwXECyX0rJOqIDgS3JY18vvCGVlj6t57mxf
-         TwkCprjB6r0G9MKrZoO+Y8L6w71ZTExlRsHqZZjlwfkO5WmDrDlIsPQYgqC4wyNG1uFQ
-         BkRg==
+        bh=mdbqApY4mXOrsopHiwTuXyJqO4fovzNIApQhEhiIOIs=;
+        b=cSBJbzSUlf0wo0uXhF33Ck9A95SE897nbI9zqLy9bXeOUif8YE8fsYF5w377jCCID4
+         vrwLC+HkrWQew+zOmB0TeXyI7+e1QrXlSL7wG9O23y7RT56KuMXuzsixWX6Gl3sEZrPw
+         oxb291qtOa6XUtZfTib/a6/u1pCCXXfNn4F9+14MuqUepackp42j9UhX3q6YeoFb3PnB
+         Fgn8TNYnGi1FPM7rbw+uFmDwd1urobCWtI4SL+l6M3NsUe+EP5bWhJnviUKmTAYt0DEG
+         Ao5LTrS+ODiCSK7Z2UOyURz/Z22GFHWs/LdUedaL5lVdBleGwxKuWt7Xw2S0Z+VMztt3
+         zQdQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=IhQflZE2kOz5iQfI0XCphcVBDGFV9bgpYklPf0EzaxU=;
-        b=05Ku8FBIqqN//gQGIzgxBI5PUvg+N8delQVwyk63kVkD1synoz7mCpsKrJe8V3N+w4
-         7zCydU2up9Xwf0/HvkxvojTOTZkAshA+W+uZ1OLbu9YBORphUhB3XnNTXbrNnR54c/wB
-         3DmKgi0yJJ0ETRGkX6edMtbQ0jMbbnPOUCtRc5o+1dFbv2czmGFDXFHW2bZ/+BOxb+y8
-         uncbAVQxiIYJc+q9oMx1QcK4Izdlgy06QPEFy+UzAvYIponASGtj7Lf7NS9+4RkiZEfj
-         JWJ52OeaKUMHMTzhIo5vLqiOhN/lu3Xrzn3YJIo4Dj5SAv43JMer3bWfc7q19vMPE3PM
-         UzFQ==
-X-Gm-Message-State: AOAM530i/0OEJv7tfpiIHK5z2idR81K0P49hwL4cnQNrry9AkrN7QzC5
-        N7rusHZB+I08tfOgDjSXcfYGl+R19GupacItUaEkaw==
-X-Google-Smtp-Source: ABdhPJymhSRWTgUPQ4NYhHFHHhmwSkdehHtlSphdiOGWDNnaXVkjFhwqLIKzUuKMVuYKsonNBC+ZJe8UyV6YGYq7jVM=
-X-Received: by 2002:a05:6102:2929:b0:32d:6662:72e2 with SMTP id
- cz41-20020a056102292900b0032d666272e2mr151259vsb.56.1651793283117; Thu, 05
- May 2022 16:28:03 -0700 (PDT)
+        bh=mdbqApY4mXOrsopHiwTuXyJqO4fovzNIApQhEhiIOIs=;
+        b=7MXjBpI9Z0mlJj8fUzxHuDVcukCu4NWIYr9D/qX1dpTSCeTVT4E07TsgLLwvjvoXlK
+         HW2ZX9iFGquXhtKo4tFPOHkOaLqPZ4BmgRx5rHPQ/Aq8pHF7pyAMunGyu0sOppZjFDnE
+         vY5kpsxCB2k6l17wUidH7XP0u6lf9xAxAaH2+p/GcKv65zZcCliEuJjUb9o2CZg7KEC/
+         +iG1a9BRqCDosdYIvp4j0PbZ6r5wFG+TJidc5dRT9cZp4h9TK0MRlNnvaFCABDmgJFA9
+         4oC1tnEyZ2RfZFLUnH5aC38dg3YQpa7sc+DqR3IL6KuKGflFy5wkKKUAbCTKw3izhCZL
+         1jJQ==
+X-Gm-Message-State: AOAM532XLhEozcGPmD7jzxTBuiHfqdmhdcbb1DDR7ivOqa7hPnjvTqXk
+        pp786bJI6c98iuXGgG1O7ZDE+PoQSSF38Bd6u1OVyg==
+X-Google-Smtp-Source: ABdhPJy5p2odCHH/eWHwLIrBfAIUIWsyad2BVsfuWLkY6Nu6P0KXfS/h6cDL1Zv3x1sboQ0cOMPV+qVZsc5+ZQIjOF0=
+X-Received: by 2002:ab0:2a87:0:b0:362:9cdb:8b64 with SMTP id
+ h7-20020ab02a87000000b003629cdb8b64mr148066uar.83.1651793346155; Thu, 05 May
+ 2022 16:29:06 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220505165639.361733-1-adrian.hunter@intel.com> <20220505165639.361733-9-adrian.hunter@intel.com>
-In-Reply-To: <20220505165639.361733-9-adrian.hunter@intel.com>
+References: <20220505165639.361733-1-adrian.hunter@intel.com> <20220505165639.361733-10-adrian.hunter@intel.com>
+In-Reply-To: <20220505165639.361733-10-adrian.hunter@intel.com>
 From:   Ian Rogers <irogers@google.com>
-Date:   Thu, 5 May 2022 16:27:50 -0700
-Message-ID: <CAP-5=fVbRGw15=XzpLqZEvZM9hh0PwXemqXvNZcWxSH7N2Kscw@mail.gmail.com>
-Subject: Re: [PATCH V1 08/23] libperf evlist: Add evsel as a parameter to ->idx()
+Date:   Thu, 5 May 2022 16:28:53 -0700
+Message-ID: <CAP-5=fXxjJfb+Cm3ZJjKU7P266QUDB8ZVBPJKtf5-eAh9a=NpA@mail.gmail.com>
+Subject: Re: [PATCH V1 09/23] perf auxtrace: Record whether an auxtrace mmap
+ is needed
 To:     Adrian Hunter <adrian.hunter@intel.com>
 Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
         Jiri Olsa <jolsa@redhat.com>,
@@ -72,14 +73,11 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 On Thu, May 5, 2022 at 9:57 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
 >
-> Add evsel as a parameter to ->idx() in preparation for correctly
-> determining whether an auxtrace mmap is needed.
+> Add a flag needs_auxtrace_mmap to record whether an auxtrace mmap is
+> needed, in preparation for correctly determining whether or not an
+> auxtrace mmap is needed.
 >
 > Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
-
-Just to note that in the non-lib version of evsel there is a back link
-to the evlist. If we ever had that in the lib version then there'd be
-no need to pass the evsel and evlist.
 
 Acked-by: Ian Rogers <irogers@google.com>
 
@@ -87,50 +85,86 @@ Thanks,
 Ian
 
 > ---
->  tools/lib/perf/evlist.c                  | 2 +-
->  tools/lib/perf/include/internal/evlist.h | 3 ++-
->  tools/perf/util/evlist.c                 | 1 +
->  3 files changed, 4 insertions(+), 2 deletions(-)
+>  tools/perf/arch/arm/util/cs-etm.c    | 1 +
+>  tools/perf/arch/arm64/util/arm-spe.c | 1 +
+>  tools/perf/arch/s390/util/auxtrace.c | 1 +
+>  tools/perf/arch/x86/util/intel-bts.c | 1 +
+>  tools/perf/arch/x86/util/intel-pt.c  | 1 +
+>  tools/perf/util/evsel.h              | 1 +
+>  6 files changed, 6 insertions(+)
 >
-> diff --git a/tools/lib/perf/evlist.c b/tools/lib/perf/evlist.c
-> index 673c267f900e..ad04da81c367 100644
-> --- a/tools/lib/perf/evlist.c
-> +++ b/tools/lib/perf/evlist.c
-> @@ -475,7 +475,7 @@ mmap_per_evsel(struct perf_evlist *evlist, struct perf_evlist_mmap_ops *ops,
->                         refcount_set(&map->refcnt, 2);
->
->                         if (ops->idx)
-> -                               ops->idx(evlist, mp, idx);
-> +                               ops->idx(evlist, evsel, mp, idx);
->
->                         if (ops->mmap(map, mp, *output, evlist_cpu) < 0)
->                                 return -1;
-> diff --git a/tools/lib/perf/include/internal/evlist.h b/tools/lib/perf/include/internal/evlist.h
-> index 0d5c830431a7..6f89aec3e608 100644
-> --- a/tools/lib/perf/include/internal/evlist.h
-> +++ b/tools/lib/perf/include/internal/evlist.h
-> @@ -38,7 +38,8 @@ struct perf_evlist {
->  };
->
->  typedef void
-> -(*perf_evlist_mmap__cb_idx_t)(struct perf_evlist*, struct perf_mmap_param*, int);
-> +(*perf_evlist_mmap__cb_idx_t)(struct perf_evlist*, struct perf_evsel*,
-> +                             struct perf_mmap_param*, int);
->  typedef struct perf_mmap*
->  (*perf_evlist_mmap__cb_get_t)(struct perf_evlist*, bool, int);
->  typedef int
-> diff --git a/tools/perf/util/evlist.c b/tools/perf/util/evlist.c
-> index 09a1d3400fd9..7ae56b062f44 100644
-> --- a/tools/perf/util/evlist.c
-> +++ b/tools/perf/util/evlist.c
-> @@ -747,6 +747,7 @@ static struct mmap *evlist__alloc_mmap(struct evlist *evlist,
->
->  static void
->  perf_evlist__mmap_cb_idx(struct perf_evlist *_evlist,
-> +                        struct perf_evsel *_evsel __maybe_unused,
->                          struct perf_mmap_param *_mp,
->                          int idx)
->  {
+> diff --git a/tools/perf/arch/arm/util/cs-etm.c b/tools/perf/arch/arm/util/cs-etm.c
+> index 11c71aa219f7..1b54638d53b0 100644
+> --- a/tools/perf/arch/arm/util/cs-etm.c
+> +++ b/tools/perf/arch/arm/util/cs-etm.c
+> @@ -319,6 +319,7 @@ static int cs_etm_recording_options(struct auxtrace_record *itr,
+>                         }
+>                         evsel->core.attr.freq = 0;
+>                         evsel->core.attr.sample_period = 1;
+> +                       evsel->needs_auxtrace_mmap = true;
+>                         cs_etm_evsel = evsel;
+>                         opts->full_auxtrace = true;
+>                 }
+> diff --git a/tools/perf/arch/arm64/util/arm-spe.c b/tools/perf/arch/arm64/util/arm-spe.c
+> index e8b577d33e53..6f4db2ac5420 100644
+> --- a/tools/perf/arch/arm64/util/arm-spe.c
+> +++ b/tools/perf/arch/arm64/util/arm-spe.c
+> @@ -160,6 +160,7 @@ static int arm_spe_recording_options(struct auxtrace_record *itr,
+>                         }
+>                         evsel->core.attr.freq = 0;
+>                         evsel->core.attr.sample_period = arm_spe_pmu->default_config->sample_period;
+> +                       evsel->needs_auxtrace_mmap = true;
+>                         arm_spe_evsel = evsel;
+>                         opts->full_auxtrace = true;
+>                 }
+> diff --git a/tools/perf/arch/s390/util/auxtrace.c b/tools/perf/arch/s390/util/auxtrace.c
+> index 0db5c58c98e8..5068baa3e092 100644
+> --- a/tools/perf/arch/s390/util/auxtrace.c
+> +++ b/tools/perf/arch/s390/util/auxtrace.c
+> @@ -98,6 +98,7 @@ struct auxtrace_record *auxtrace_record__init(struct evlist *evlist,
+>         evlist__for_each_entry(evlist, pos) {
+>                 if (pos->core.attr.config == PERF_EVENT_CPUM_SF_DIAG) {
+>                         diagnose = 1;
+> +                       pos->needs_auxtrace_mmap = true;
+>                         break;
+>                 }
+>         }
+> diff --git a/tools/perf/arch/x86/util/intel-bts.c b/tools/perf/arch/x86/util/intel-bts.c
+> index d68a0f48e41e..bcccfbade5c6 100644
+> --- a/tools/perf/arch/x86/util/intel-bts.c
+> +++ b/tools/perf/arch/x86/util/intel-bts.c
+> @@ -129,6 +129,7 @@ static int intel_bts_recording_options(struct auxtrace_record *itr,
+>                         }
+>                         evsel->core.attr.freq = 0;
+>                         evsel->core.attr.sample_period = 1;
+> +                       evsel->needs_auxtrace_mmap = true;
+>                         intel_bts_evsel = evsel;
+>                         opts->full_auxtrace = true;
+>                 }
+> diff --git a/tools/perf/arch/x86/util/intel-pt.c b/tools/perf/arch/x86/util/intel-pt.c
+> index 38ec2666ec12..2eaac4638aab 100644
+> --- a/tools/perf/arch/x86/util/intel-pt.c
+> +++ b/tools/perf/arch/x86/util/intel-pt.c
+> @@ -649,6 +649,7 @@ static int intel_pt_recording_options(struct auxtrace_record *itr,
+>                         evsel->core.attr.freq = 0;
+>                         evsel->core.attr.sample_period = 1;
+>                         evsel->no_aux_samples = true;
+> +                       evsel->needs_auxtrace_mmap = true;
+>                         intel_pt_evsel = evsel;
+>                         opts->full_auxtrace = true;
+>                 }
+> diff --git a/tools/perf/util/evsel.h b/tools/perf/util/evsel.h
+> index 45d674812239..544fbed98df1 100644
+> --- a/tools/perf/util/evsel.h
+> +++ b/tools/perf/util/evsel.h
+> @@ -124,6 +124,7 @@ struct evsel {
+>         bool                    merged_stat;
+>         bool                    reset_group;
+>         bool                    errored;
+> +       bool                    needs_auxtrace_mmap;
+>         struct hashmap          *per_pkg_mask;
+>         int                     err;
+>         struct {
 > --
 > 2.25.1
 >

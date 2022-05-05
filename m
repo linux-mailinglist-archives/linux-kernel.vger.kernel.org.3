@@ -2,107 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB5AD51B6C7
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 05:53:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F163851B6CB
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 05:55:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242084AbiEED5R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 23:57:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52466 "EHLO
+        id S242154AbiEED7Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 23:59:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234446AbiEED5H (ORCPT
+        with ESMTP id S232757AbiEED7V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 23:57:07 -0400
-Received: from conuserg-08.nifty.com (conuserg-08.nifty.com [210.131.2.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A435614027;
-        Wed,  4 May 2022 20:53:27 -0700 (PDT)
-Received: from grover.sesame (133-32-177-133.west.xps.vectant.ne.jp [133.32.177.133]) (authenticated)
-        by conuserg-08.nifty.com with ESMTP id 2453qiRH021346;
-        Thu, 5 May 2022 12:52:46 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-08.nifty.com 2453qiRH021346
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1651722766;
-        bh=24jtj+UYB0xv342M0DAJe77XkxPBb78c2WJx0IEENiY=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dIbXKrf05r1Y4YxHOmc4jtJgcvH4V+h2lx5ydXY+efkZW+vFlpmpz0Pa2wesNvy9C
-         G3kHE50VhBIPpkY3VpBTrH1/UaxIW8MBAuWDETlbm8RDSnQNFYwsYcQ0xr6qVRvCv/
-         3kK0DC4XvlpHbFuGyAtj7JGMWeWv4I8wbfax9SFg7Z/TQVS772fWmv2wou9U24CWrn
-         buhad7efVW3TKU0u/DyZiGmuPsnv9lVpA6puXgyZXQID+jI9DFB4p9jSJRUufangcN
-         wVzllHHxmylVOvz+smzYoY4/z3S493lVMisRiUiFY501rYnVyzJoPoki9Lznfjt+Vd
-         NsWhkgufBfuwA==
-X-Nifty-SrcIP: [133.32.177.133]
-From:   Masahiro Yamada <masahiroy@kernel.org>
-To:     Luis Chamberlain <mcgrof@kernel.org>,
-        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Masahiro Yamada <masahiroy@kernel.org>
-Subject: [PATCH v2 3/3] module: merge check_exported_symbol() into find_exported_symbol_in_section()
-Date:   Thu,  5 May 2022 12:52:12 +0900
-Message-Id: <20220505035212.1130858-4-masahiroy@kernel.org>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220505035212.1130858-1-masahiroy@kernel.org>
-References: <20220505035212.1130858-1-masahiroy@kernel.org>
+        Wed, 4 May 2022 23:59:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33DF62528B;
+        Wed,  4 May 2022 20:55:43 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A6FBE619F4;
+        Thu,  5 May 2022 03:55:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3AD2C385AC;
+        Thu,  5 May 2022 03:55:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651722942;
+        bh=WtKfSSpJyyg8U7WnHs0+h877cAtlMW6k7Jts1zje+Yc=;
+        h=From:To:Cc:Subject:Date:From;
+        b=BLyjvww/B/ExPUb6b/Pk1RsHg+gDHh12Smnakuo3vtpcjA/Gfyrrl5GbQmSy7NSkz
+         Sa90xNvLa5TzNNJtPCNdhdslVHc2fuiGV6Ra9c38lZrH+PznvaswjdiDo29al//gV1
+         /P464VGIHNqGjDdaz7ETsrsjCrNH5j2kL4qHay5NTK+dJLnBrIV+aAMWxQvmYFk732
+         s9O0mpeYfo2QG3X9NIOTe6UiuOm3DCwMij+65LerUhc6nwkLzpN8Q4CpNW3wALir8U
+         p15YjkTYyRb66N056wfPtxuv8SfS8m0GdhRJPPExolHzQvm7jWYrkivUwe3IAGQD/2
+         zw8LPryNF0SbQ==
+From:   guoren@kernel.org
+To:     guoren@kernel.org, arnd@arndb.de, palmer@dabbelt.com,
+        mark.rutland@arm.com, will@kernel.org, peterz@infradead.org,
+        boqun.feng@gmail.com, dlustig@nvidia.com, parri.andrea@gmail.com
+Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, Guo Ren <guoren@linux.alibaba.com>
+Subject: [PATCH V4 0/5] riscv: Optimize atomic implementation
+Date:   Thu,  5 May 2022 11:55:21 +0800
+Message-Id: <20220505035526.2974382-1-guoren@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now check_exported_symbol() always succeeds.
+From: Guo Ren <guoren@linux.alibaba.com>
 
-Merge it into find_exported_symbol_in_search() to make the code concise.
+Here are some optimizations for riscv atomic implementation, the first
+three patches are normal cleanup and custom implementation without
+relating to atomic semantics.
 
-Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
----
+The 4th is the same as arm64 LSE with using embedded .aq/.rl
+annotation.
 
- kernel/module/main.c | 22 +++++++---------------
- 1 file changed, 7 insertions(+), 15 deletions(-)
+The 5th is good for riscv implementation with reducing a full-barrier
+cost.
 
-diff --git a/kernel/module/main.c b/kernel/module/main.c
-index 22a860d42c16..14686571d4fc 100644
---- a/kernel/module/main.c
-+++ b/kernel/module/main.c
-@@ -243,17 +243,6 @@ static __maybe_unused void *any_section_objs(const struct load_info *info,
- #define symversion(base, idx) ((base != NULL) ? ((base) + (idx)) : NULL)
- #endif
- 
--static bool check_exported_symbol(const struct symsearch *syms,
--				  struct module *owner, unsigned int symnum,
--				  struct find_symbol_arg *fsa)
--{
--	fsa->owner = owner;
--	fsa->crc = symversion(syms->crcs, symnum);
--	fsa->sym = &syms->start[symnum];
--	fsa->license = syms->license;
--	return true;
--}
--
- static const char *kernel_symbol_name(const struct kernel_symbol *sym)
- {
- #ifdef CONFIG_HAVE_ARCH_PREL32_RELOCATIONS
-@@ -290,12 +279,15 @@ static bool find_exported_symbol_in_section(const struct symsearch *syms,
- 
- 	sym = bsearch(fsa->name, syms->start, syms->stop - syms->start,
- 			sizeof(struct kernel_symbol), cmp_name);
-+	if (!sym)
-+		return false;
- 
--	if (sym != NULL && check_exported_symbol(syms, owner,
--						 sym - syms->start, fsa))
--		return true;
-+	fsa->owner = owner;
-+	fsa->crc = symversion(syms->crcs, sym - syms->start);
-+	fsa->sym = sym;
-+	fsa->license = syms->license;
- 
--	return false;
-+	return true;
- }
- 
- /*
+Changes in V4:
+ - Coding convention & optimize the comments
+ - Re-order the patchset
+
+Changes in V3:
+ - Fixup usage of lr.rl & sc.aq with violation of ISA
+ - Add Optimize dec_if_positive functions
+ - Add conditional atomic operations' optimization
+
+Changes in V2:
+ - Fixup LR/SC memory barrier semantic problems which pointed by
+   Rutland
+ - Combine patches into one patchset series
+ - Separate AMO optimization & LRSC optimization for convenience
+   patch review
+
+Guo Ren (5):
+  riscv: atomic: Cleanup unnecessary definition
+  riscv: atomic: Optimize acquire and release for AMO operations
+  riscv: atomic: Optimize memory barrier semantics of LRSC-pairs
+  riscv: atomic: Optimize dec_if_positive functions
+  riscv: atomic: Add conditional atomic operations' optimization
+
+Guo Ren (5):
+  riscv: atomic: Cleanup unnecessary definition
+  riscv: atomic: Optimize dec_if_positive functions
+  riscv: atomic: Add custom conditional atomic operation implementation
+  riscv: atomic: Optimize atomic_ops & xchg with .aq/rl annotation
+  riscv: atomic: Optimize LRSC-pairs atomic ops with .aqrl annotation
+
+ arch/riscv/include/asm/atomic.h  | 174 +++++++++++++++++++++++++++----
+ arch/riscv/include/asm/cmpxchg.h |  30 ++----
+ 2 files changed, 162 insertions(+), 42 deletions(-)
+
 -- 
-2.32.0
+2.25.1
 

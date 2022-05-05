@@ -2,89 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD24951C168
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 15:53:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A879051C176
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 15:53:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380135AbiEENyo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 09:54:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41172 "EHLO
+        id S1380175AbiEEN4N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 09:56:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380128AbiEENym (ORCPT
+        with ESMTP id S1380343AbiEENze (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 09:54:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACE0657145;
-        Thu,  5 May 2022 06:51:01 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5146961E9A;
-        Thu,  5 May 2022 13:51:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4F7FC385A4;
-        Thu,  5 May 2022 13:51:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651758660;
-        bh=iPXVsUeefsSXMgAyzKINU9dFR0i49AXp7kY8lMNocSY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kICzedcjShQGtfptdoI3ZF6md244nv/qOUtAG75Vfr84Rte56ijtdFWkysZ3hCSC0
-         ftzgZksXOOKaUW2+zzxmQJdZEdFMC33cdsXZxhaiBQfedW0T9OJP0QfQ3BqlQB3x3K
-         1jHTCNgPyUyV/8DQD/dEbcVghPCzMfHY9hKt22QdTZdFu8cGixph6U5FeNTAHJmgiF
-         VPuRwwVWFw36bLkWqTJ6rl4bV6gVGHm3MRAJVcZz/HZABXoILJB9zk8GLl84eo7x2d
-         gawfKya/kmLxCSpiBdU/DMJq/LqfCWWXfnzRbanCjKZau2+qb4OgCw0vSdc9UAGDrs
-         W/W6K1x7zjBpQ==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1nmbsi-0008EU-KU; Thu, 05 May 2022 15:51:01 +0200
-Date:   Thu, 5 May 2022 15:51:00 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Ethan Yang <etyang@sierrawireless.com>
-Cc:     =?utf-8?B?55qT5a6HIO+/vQ==?= <ipis.yang@gmail.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Glen Chiang <GChiang@sierrawireless.com>
-Subject: Re: [PATCH v3] usb: serial: qcserial: add support for Sierra
- Wireless EM7590
-Message-ID: <YnPWRJT+NoxQcp7a@hovoldconsulting.com>
-References: <YmYvPXeqQzyms91m@kroah.com>
- <20220425055840.5693-1-etyang@sierrawireless.com>
- <YnO1NHWCFCIfydBI@hovoldconsulting.com>
- <BL0PR02MB4451F88B384BA9D7FCE6A7C3ABC29@BL0PR02MB4451.namprd02.prod.outlook.com>
+        Thu, 5 May 2022 09:55:34 -0400
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E7E459325
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 06:51:31 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id j6so3676430pfe.13
+        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 06:51:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=intel-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=oIH9/l+jKgs9B5DRYw7FbS58vVe4zVtylGwe2TjrN9M=;
+        b=iWb/KiI5Nh4F/zht1nOaD5nXxGZBVUw70MvhbB/MJ6c+5LPqpREBzsf6zsAQsrRDm8
+         rx/RYqOl+t8yV2aaX7MVFWaZvRX9f5nKsomJH2A+eg3KYprH4WqxwzJSyMckr3iJaKXk
+         JiCQBoCdirntvgQwkNUj81coh+byvO158gtCySbTKTu7QRCz3MZhlApdPH//ifXBchv0
+         UvitkHWl28bD8tdx70HEP8vaf9H3st3Uu54CmlDnMyBi7D2FUbHJQVrUAG71YMXAoyw8
+         GcDd05HWhgN9qLBr6esb2aJMpkMvKgXc/DFPVtmeJ6Fnr1DS5S6T0cBS3lXFfjEVmAnn
+         Zh/g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=oIH9/l+jKgs9B5DRYw7FbS58vVe4zVtylGwe2TjrN9M=;
+        b=BvQgHn7lAvFLTk5e9yMwoBydHCXwKIwpzZz30u63GGLTpvKAhai2U8C5NevFsyqwaI
+         +9tEV+BvOU6p59ZXpgJ0Fpq07T7zQRk6ggqTxWkXr5EXumuBMgyMXyI9ga1LXWoeghbe
+         uXKRVdaEV9YgOhaNB6G01eQJ+rEqqr4BO0prfxHuxPwWWajls6r/jYQvRBmTFcaxqrQ9
+         UVdhu37/R0U7AZcnk5LgX/MsC4T1O9jb3QGCwnrko4y08fNd5JiLEWGNfVkw5kAt6goo
+         /sHik6vBmJbLhDRXgta+YRSj1pyPFTJ+0L1lOPC3L+oGg+KavcSp7KCDvxj3xEIhATIA
+         H0yA==
+X-Gm-Message-State: AOAM531qNMnHKUvSwZof9gTXQDDMOt19B//1ADaLXszHUuViLboimDNp
+        WDDYgTdVa4t0Vjzoc4Cw+0B8cSaZ/ePJwRCaWYiV9g==
+X-Google-Smtp-Source: ABdhPJxpS0BcW8ju409ItQiIAiHo+aqD0i1wKv4dQJui6EWLaCpdb50z1BFUKtJYPkQggkeD3Blgh/QiSI1KJedl4Ug=
+X-Received: by 2002:a05:6a02:283:b0:342:703e:1434 with SMTP id
+ bk3-20020a056a02028300b00342703e1434mr21850337pgb.74.1651758691003; Thu, 05
+ May 2022 06:51:31 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <BL0PR02MB4451F88B384BA9D7FCE6A7C3ABC29@BL0PR02MB4451.namprd02.prod.outlook.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <cover.1649219184.git.kai.huang@intel.com> <522e37eb-68fc-35db-44d5-479d0088e43f@intel.com>
+ <ecf718abf864bbb2366209f00d4315ada090aedc.camel@intel.com>
+ <de24ac7e-349c-e49a-70bb-31b9bc867b10@intel.com> <9b388f54f13b34fe684ef77603fc878952e48f87.camel@intel.com>
+ <d98ca73b-2d2d-757d-e937-acc83cfedfb0@intel.com> <c90a10763969077826f42be6f492e3a3e062326b.camel@intel.com>
+ <fc1ca04d94ad45e79c0297719d5ef50a7c33c352.camel@intel.com>
+ <664f8adeb56ba61774f3c845041f016c54e0f96e.camel@intel.com>
+ <1b681365-ef98-ec78-96dc-04e28316cf0e@intel.com> <8bf596b45f68363134f431bcc550e16a9a231b80.camel@intel.com>
+ <6bb89ca6e7346f4334f06ea293f29fd12df70fe4.camel@intel.com>
+In-Reply-To: <6bb89ca6e7346f4334f06ea293f29fd12df70fe4.camel@intel.com>
+From:   Dan Williams <dan.j.williams@intel.com>
+Date:   Thu, 5 May 2022 06:51:20 -0700
+Message-ID: <CAPcyv4iP3hcNNDxNdPT+iB0E4aUazfqFWwaa_dtHpVf+qKPNcQ@mail.gmail.com>
+Subject: Re: [PATCH v3 00/21] TDX host kernel support
+To:     Kai Huang <kai.huang@intel.com>
+Cc:     Dave Hansen <dave.hansen@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        KVM list <kvm@vger.kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        "Brown, Len" <len.brown@intel.com>,
+        "Luck, Tony" <tony.luck@intel.com>,
+        Rafael J Wysocki <rafael.j.wysocki@intel.com>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Isaku Yamahata <isaku.yamahata@intel.com>,
+        Mike Rapoport <rppt@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 05, 2022 at 12:35:41PM +0000, Ethan Yang wrote:
-> Hi Johan,
-> 
-> Here is the change log:
-> To revise the correct composition for QDL/APP mode.
-> 1199:c080 is for QDL, and 1199:c081 is for APP mode.
+[ add Mike ]
 
-I meant that when you when you resend a new version of a patch you
-should include a changelog for what changed since the previous
-version(s) (below the --- line).
 
-In this case I think you only changed the From address from v1 to v2,
-but I'm not sure.
+On Thu, May 5, 2022 at 2:54 AM Kai Huang <kai.huang@intel.com> wrote:
+[..]
+>
+> Hi Dave,
+>
+> Sorry to ping (trying to close this).
+>
+> Given we don't need to consider kmem-hot-add legacy PMEM after TDX module
+> initialization, I think for now it's totally fine to exclude legacy PMEMs from
+> TDMRs.  The worst case is when someone tries to use them as TD guest backend
+> directly, the TD will fail to create.  IMO it's acceptable, as it is supposedly
+> that no one should just use some random backend to run TD.
 
-No need to resend, but please keep that in mind for your future
-submissions.
+The platform will already do this, right? I don't understand why this
+is trying to take proactive action versus documenting the error
+conditions and steps someone needs to take to avoid unconvertible
+memory. There is already the CONFIG_HMEM_REPORTING that describes
+relative performance properties between initiators and targets, it
+seems fitting to also add security properties between initiators and
+targets so someone can enumerate the numa-mempolicy that avoids
+unconvertible memory.
 
-> I also enclose the lsusb -v output for both compositions.
+No, special casing in hotplug code paths needed.
 
-Thanks a lot for that.
+>
+> I think w/o needing to include legacy PMEM, it's better to get all TDX memory
+> blocks based on memblock, but not e820.  The pages managed by page allocator are
+> from memblock anyway (w/o those from memory hotplug).
+>
+> And I also think it makes more sense to introduce 'tdx_memblock' and
+> 'tdx_memory' data structures to gather all TDX memory blocks during boot when
+> memblock is still alive.  When TDX module is initialized during runtime, TDMRs
+> can be created based on the 'struct tdx_memory' which contains all TDX memory
+> blocks we gathered based on memblock during boot.  This is also more flexible to
+> support other TDX memory from other sources such as CLX memory in the future.
+>
+> Please let me know if you have any objection?  Thanks!
 
-I've applied the patch now.
-
-Johan
+It's already the case that x86 maintains sideband structures to
+preserve memory after exiting the early memblock code. Mike, correct
+me if I am wrong, but adding more is less desirable than just keeping
+the memblock around?

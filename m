@@ -2,104 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E3C551BCA8
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 12:00:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7F4351BCB6
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 12:01:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354951AbiEEKDz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 06:03:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44058 "EHLO
+        id S1354814AbiEEKFW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 06:05:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354948AbiEEKDq (ORCPT
+        with ESMTP id S229956AbiEEKFR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 06:03:46 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AAA2515AB
-        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 02:59:59 -0700 (PDT)
-Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2459Link023224;
-        Thu, 5 May 2022 09:59:33 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=4f9TCyJmfwhNz86GUhIMUr/Inn9YarjHOEI/su76mao=;
- b=ZLW02lBYxh0XF5/T8M+8+/bqKF7JXFjb9gAIzEAYUoyfBcSTRPqks7rVSKZYtWdnHmLe
- ImHAdvAdcWgJbaRIMhfENEtXlB8GkTGV1LUsL5+JrG57mtRjzR1mKo1sO7K3eyhbrgyq
- Cbnc1e5zEDK6ll6sHxXFdW2AzWh63jfoeiLzNWh456xgQiI9PajEhXMkORkl/IbXl+rp
- S6OLTMGSueYwbkHttpfs4VWMujAPctbH4ZNw21rryhIbqo+9fl1B4B6p8Ez1+c6NLLkH
- RYF8Vwjnk8Kex1Nl3aoFlkpfUddckXVXnSFHqsPrsd35rSsg2+iXtvi4AfsM4ijwrowc hQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fvbvq8jx9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 05 May 2022 09:59:32 +0000
-Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2459jmEK015866;
-        Thu, 5 May 2022 09:59:32 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fvbvq8jwp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 05 May 2022 09:59:31 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2459v8Cu021832;
-        Thu, 5 May 2022 09:59:29 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma03ams.nl.ibm.com with ESMTP id 3ftp7fuukm-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 05 May 2022 09:59:29 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2459xQmd58720518
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 5 May 2022 09:59:26 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B82ADAE051;
-        Thu,  5 May 2022 09:59:26 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 369A1AE04D;
-        Thu,  5 May 2022 09:59:21 +0000 (GMT)
-Received: from [9.43.97.174] (unknown [9.43.97.174])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Thu,  5 May 2022 09:59:20 +0000 (GMT)
-Message-ID: <e677f11b-32f9-0c89-9592-b987b00c4353@linux.ibm.com>
-Date:   Thu, 5 May 2022 15:29:19 +0530
+        Thu, 5 May 2022 06:05:17 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 853BE3FBE6;
+        Thu,  5 May 2022 03:01:37 -0700 (PDT)
+Date:   Thu, 05 May 2022 10:01:34 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1651744895;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Z4GOj4AlaUGIahgAX8O+PASWinkQN7XkOfhPgLMO7ZY=;
+        b=F/AAhowoiki3Y7LOBUdCOa2aLBUPgmZLQt196f2M2W7RN5crt3iNQt4OM4vlIySx7er66t
+        3uZqNQiBtK2p2tefemFi6WoWYPCsDzE3BHste1FhpDcRS67gw7EYylqvgbxKQ/IE3uTIOU
+        SXprWChiMNyMV4+ksxS6bR2Cq1DKVEeHcnEe29+Deh8SWaIBUBXo0S8mOTmErRghp5QYLl
+        nIARhxunO3ATGRFh1qKuYi4nxqePRhsMbBm/FqaXZuj2hmv3vPsQI7y1OQI4/fskUWD0Ug
+        u54+y5MAptKM+HacxKBveHRN3SY87BnSgtrHKFchX0lcaN2aAK8ghZ6bSlc+Cw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1651744895;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Z4GOj4AlaUGIahgAX8O+PASWinkQN7XkOfhPgLMO7ZY=;
+        b=u7rkUkdE/5wdsEOifSbGd5duU2+TP/YlIoellLuMjLtaRUTDEvfyiIQT6iKep0P4GMqBr3
+        CM8xuFlhYLk1U/Aw==
+From:   "tip-bot2 for Thomas Pfaff" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: irq/urgent] genirq: Synchronize interrupt thread startup
+Cc:     Thomas Pfaff <tpfaff@pcs.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>, stable@vger.kernel.org,
+        x86@kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <552fe7b4-9224-b183-bb87-a8f36d335690@pcs.com>
+References: <552fe7b4-9224-b183-bb87-a8f36d335690@pcs.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v7 4/8] crash: add generic infrastructure for crash
- hotplug support
-Content-Language: en-US
-To:     Baoquan He <bhe@redhat.com>
-Cc:     Eric DeVolder <eric.devolder@oracle.com>,
-        linux-kernel@vger.kernel.org, x86@kernel.org,
-        kexec@lists.infradead.org, ebiederm@xmission.com,
-        dyoung@redhat.com, vgoyal@redhat.com, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        hpa@zytor.com, nramas@linux.microsoft.com, thomas.lendacky@amd.com,
-        robh@kernel.org, efault@gmx.de, rppt@kernel.org, david@redhat.com,
-        konrad.wilk@oracle.com, boris.ostrovsky@oracle.com
-References: <20220413164237.20845-1-eric.devolder@oracle.com>
- <20220413164237.20845-5-eric.devolder@oracle.com>
- <YleK3J/4HNuFioIh@MiWiFi-R3L-srv>
- <4eea2373-32f3-9960-cbec-21dc1a428807@oracle.com>
- <6f3a6cbb-0ac4-f178-fc17-18f9594da319@linux.ibm.com>
- <YmeBjrChOHsIYG3e@MiWiFi-R3L-srv>
- <f2dbd4fe-6201-b5c4-2725-dec9c3dbf13e@linux.ibm.com>
- <YnNkgfnHlUTky0lt@MiWiFi-R3L-srv>
-From:   Sourabh Jain <sourabhjain@linux.ibm.com>
-In-Reply-To: <YnNkgfnHlUTky0lt@MiWiFi-R3L-srv>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: riO467bZk1GEKDvNY0gtA-uIMYYmnSVN
-X-Proofpoint-GUID: 0FFMLvnEDNQ88y31Gu4q-c3ooFWEbZsg
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-05_03,2022-05-05_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- lowpriorityscore=0 priorityscore=1501 malwarescore=0 bulkscore=0
- spamscore=0 mlxlogscore=724 adultscore=0 clxscore=1015 suspectscore=0
- phishscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2205050063
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+Message-ID: <165174489401.4207.10702670782105619927.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -108,76 +66,183 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The following commit has been merged into the irq/urgent branch of tip:
 
-On 05/05/22 11:15, Baoquan He wrote:
-> On 04/28/22 at 10:48am, Sourabh Jain wrote:
->> Hi Baoquan,
->>
->> On 26/04/22 10:52, Baoquan He wrote:
->>> On 04/26/22 at 09:36am, Sourabh Jain wrote:
->>>> On 15/04/22 03:59, Eric DeVolder wrote:
-> ......
->
->>>>>>> +#if defined(CONFIG_MEMORY_HOTPLUG)
->>>>>>> +static int crash_memhp_notifier(struct notifier_block *nb,
->>>>>>> +    unsigned long val, void *v)
->>>>>>> +{
->>>>>>> +    struct memory_notify *mhp = v;
->>>>>>> +
->>>>>>> +    switch (val) {
->>>>>>> +    case MEM_ONLINE:
->>>>>>> +        crash_hotplug_handler(KEXEC_CRASH_HP_ADD_MEMORY, -1U);
->>>>>> We don't differentiate the memory add/remove, cpu add, except of cpu
->>>>>> remove. Means the hp_action only differentiate cpu remove from the other
->>>>>> action. Maybe only making two types?
->>>>>>
->>>>>> #define KEXEC_CRASH_HP_REMOVE_CPU   0
->>>>>> #define KEXEC_CRASH_HP_UPDATE_OTHER      1
->>>>>>
->>>>> Sourabh Jain's work with PPC uses REMOVE_CPU, REMOVE_MEMORY, and
->>>>> ADD_MEMORY.
->>>>> Do you still want to consolidate these?
->>>> On PowerPC different actions are needed for CPU add and memory add/remove.
->>>> For CPU add case only FDT is updated whereas for the memory hotplug we will
->>>> be
->>>> updating FDT and elfcorehdr.
->>> I don't understand. For elfcorehdr updating, we only need regenerate it.
->>> Do you update them different for memory add/remove?
->> We have different actions for cpu remove, CPU add and memory add/remove
->> case.
->>
->> CPU remove: no action
->> CPU add: update flattened device tree (FDT)
->> memory add/remove: update FDT and regenerate/update elfcorehdr
->>
->> Since memory add/remove action is same we can have common hp_action for
->> them.
-> For memory hot add/remove, we need rengereate elfcorehdr, and add the
-> new elfcorehdr into fdt. Except of this, FDT need to know the hp_action
-> and the hot added/removed memory region, namely the start and end, e.g
-> [start, end]?
->
-> I checked arm64 kexec code, seems we only need to know if mem hotplug
-> event happened, then regenerate elfcorehdr and embed the new elfcorehdr
-> into fdt. Then we don't know pass the [start, end] info into the
-> handler. Please tell if ppc is different or I missed anything.
+Commit-ID:     8707898e22fd665bc1d7b18b809be4b56ce25bdd
+Gitweb:        https://git.kernel.org/tip/8707898e22fd665bc1d7b18b809be4b56ce25bdd
+Author:        Thomas Pfaff <tpfaff@pcs.com>
+AuthorDate:    Mon, 02 May 2022 13:28:29 +02:00
+Committer:     Thomas Gleixner <tglx@linutronix.de>
+CommitterDate: Thu, 05 May 2022 11:54:05 +02:00
 
-Yes we don't need start and end info as such but we expect arch
-handler to have info about which hotplug action is performed.
-It is just that I don't see an significant advantage of consolidation of
-CPU ADD, memory ADD and Memory REMOVE in one hp_action as
-KEXEC_CRASH_HP_UPDATE_OTHER.
+genirq: Synchronize interrupt thread startup
 
-> If I am right, I would like the handler interface as Boris has made
-> in his draft patch.
->
-> void __weak arch_crash_handle_hotplug_event(struct kimage *image, unsigned int hp_action,
->                                             unsigned int cpu)
->
-> static void handle_hotplug_event(unsigned int hp_action, unsigned int cpu)
-The above template works fine for PowerPC as long we have four different 
-hp_action
-to indicate CPU add/remove and memory add/remove.
+A kernel hang can be observed when running setserial in a loop on a kernel
+with force threaded interrupts. The sequence of events is:
 
-Thanks,
-Sourabh Jain
+   setserial
+     open("/dev/ttyXXX")
+       request_irq()
+     do_stuff()
+      -> serial interrupt
+         -> wake(irq_thread)
+	      desc->threads_active++;
+     close()
+       free_irq()
+         kthread_stop(irq_thread)
+     synchronize_irq() <- hangs because desc->threads_active != 0
+
+The thread is created in request_irq() and woken up, but does not get on a
+CPU to reach the actual thread function, which would handle the pending
+wake-up. kthread_stop() sets the should stop condition which makes the
+thread immediately exit, which in turn leaves the stale threads_active
+count around.
+
+This problem was introduced with commit 519cc8652b3a, which addressed a
+interrupt sharing issue in the PCIe code.
+
+Before that commit free_irq() invoked synchronize_irq(), which waits for
+the hard interrupt handler and also for associated threads to complete.
+
+To address the PCIe issue synchronize_irq() was replaced with
+__synchronize_hardirq(), which only waits for the hard interrupt handler to
+complete, but not for threaded handlers.
+
+This was done under the assumption, that the interrupt thread already
+reached the thread function and waits for a wake-up, which is guaranteed to
+be handled before acting on the stop condition. The problematic case, that
+the thread would not reach the thread function, was obviously overlooked.
+
+Make sure that the interrupt thread is really started and reaches
+thread_fn() before returning from __setup_irq().
+
+This utilizes the existing wait queue in the interrupt descriptor. The
+wait queue is unused for non-shared interrupts. For shared interrupts the
+usage might cause a spurious wake-up of a waiter in synchronize_irq() or the
+completion of a threaded handler might cause a spurious wake-up of the
+waiter for the ready flag. Both are harmless and have no functional impact.
+
+[ tglx: Amended changelog ]
+
+Fixes: 519cc8652b3a ("genirq: Synchronize only with single thread on free_irq()")
+Signed-off-by: Thomas Pfaff <tpfaff@pcs.com>
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Reviewed-by: Marc Zyngier <maz@kernel.org>
+Cc: stable@vger.kernel.org
+Link: https://lore.kernel.org/r/552fe7b4-9224-b183-bb87-a8f36d335690@pcs.com
+---
+ kernel/irq/internals.h |  2 ++
+ kernel/irq/irqdesc.c   |  2 ++
+ kernel/irq/manage.c    | 39 +++++++++++++++++++++++++++++----------
+ 3 files changed, 33 insertions(+), 10 deletions(-)
+
+diff --git a/kernel/irq/internals.h b/kernel/irq/internals.h
+index 99cbdf5..f09c603 100644
+--- a/kernel/irq/internals.h
++++ b/kernel/irq/internals.h
+@@ -29,12 +29,14 @@ extern struct irqaction chained_action;
+  * IRQTF_WARNED    - warning "IRQ_WAKE_THREAD w/o thread_fn" has been printed
+  * IRQTF_AFFINITY  - irq thread is requested to adjust affinity
+  * IRQTF_FORCED_THREAD  - irq action is force threaded
++ * IRQTF_READY     - signals that irq thread is ready
+  */
+ enum {
+ 	IRQTF_RUNTHREAD,
+ 	IRQTF_WARNED,
+ 	IRQTF_AFFINITY,
+ 	IRQTF_FORCED_THREAD,
++	IRQTF_READY,
+ };
+ 
+ /*
+diff --git a/kernel/irq/irqdesc.c b/kernel/irq/irqdesc.c
+index 939d21c..0099b87 100644
+--- a/kernel/irq/irqdesc.c
++++ b/kernel/irq/irqdesc.c
+@@ -407,6 +407,7 @@ static struct irq_desc *alloc_desc(int irq, int node, unsigned int flags,
+ 	lockdep_set_class(&desc->lock, &irq_desc_lock_class);
+ 	mutex_init(&desc->request_mutex);
+ 	init_rcu_head(&desc->rcu);
++	init_waitqueue_head(&desc->wait_for_threads);
+ 
+ 	desc_set_defaults(irq, desc, node, affinity, owner);
+ 	irqd_set(&desc->irq_data, flags);
+@@ -575,6 +576,7 @@ int __init early_irq_init(void)
+ 		raw_spin_lock_init(&desc[i].lock);
+ 		lockdep_set_class(&desc[i].lock, &irq_desc_lock_class);
+ 		mutex_init(&desc[i].request_mutex);
++		init_waitqueue_head(&desc[i].wait_for_threads);
+ 		desc_set_defaults(i, &desc[i], node, NULL, NULL);
+ 	}
+ 	return arch_early_irq_init();
+diff --git a/kernel/irq/manage.c b/kernel/irq/manage.c
+index c03f71d..e3e245a 100644
+--- a/kernel/irq/manage.c
++++ b/kernel/irq/manage.c
+@@ -1249,6 +1249,31 @@ static void irq_wake_secondary(struct irq_desc *desc, struct irqaction *action)
+ }
+ 
+ /*
++ * Internal function to notify that a interrupt thread is ready.
++ */
++static void irq_thread_set_ready(struct irq_desc *desc,
++				 struct irqaction *action)
++{
++	set_bit(IRQTF_READY, &action->thread_flags);
++	wake_up(&desc->wait_for_threads);
++}
++
++/*
++ * Internal function to wake up a interrupt thread and wait until it is
++ * ready.
++ */
++static void wake_up_and_wait_for_irq_thread_ready(struct irq_desc *desc,
++						  struct irqaction *action)
++{
++	if (!action || !action->thread)
++		return;
++
++	wake_up_process(action->thread);
++	wait_event(desc->wait_for_threads,
++		   test_bit(IRQTF_READY, &action->thread_flags));
++}
++
++/*
+  * Interrupt handler thread
+  */
+ static int irq_thread(void *data)
+@@ -1259,6 +1284,8 @@ static int irq_thread(void *data)
+ 	irqreturn_t (*handler_fn)(struct irq_desc *desc,
+ 			struct irqaction *action);
+ 
++	irq_thread_set_ready(desc, action);
++
+ 	sched_set_fifo(current);
+ 
+ 	if (force_irqthreads() && test_bit(IRQTF_FORCED_THREAD,
+@@ -1683,8 +1710,6 @@ __setup_irq(unsigned int irq, struct irq_desc *desc, struct irqaction *new)
+ 	}
+ 
+ 	if (!shared) {
+-		init_waitqueue_head(&desc->wait_for_threads);
+-
+ 		/* Setup the type (level, edge polarity) if configured: */
+ 		if (new->flags & IRQF_TRIGGER_MASK) {
+ 			ret = __irq_set_trigger(desc,
+@@ -1780,14 +1805,8 @@ __setup_irq(unsigned int irq, struct irq_desc *desc, struct irqaction *new)
+ 
+ 	irq_setup_timings(desc, new);
+ 
+-	/*
+-	 * Strictly no need to wake it up, but hung_task complains
+-	 * when no hard interrupt wakes the thread up.
+-	 */
+-	if (new->thread)
+-		wake_up_process(new->thread);
+-	if (new->secondary)
+-		wake_up_process(new->secondary->thread);
++	wake_up_and_wait_for_irq_thread_ready(desc, new);
++	wake_up_and_wait_for_irq_thread_ready(desc, new->secondary);
+ 
+ 	register_irq_proc(irq, desc);
+ 	new->dir = NULL;

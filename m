@@ -2,90 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6FA451C4F3
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 18:14:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A638F51C4FB
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 18:17:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381814AbiEEQRj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 12:17:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38886 "EHLO
+        id S1381817AbiEEQUc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 12:20:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240127AbiEEQRg (ORCPT
+        with ESMTP id S1381266AbiEEQU2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 12:17:36 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BB8A5F96;
-        Thu,  5 May 2022 09:13:56 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id w4so6736361wrg.12;
-        Thu, 05 May 2022 09:13:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=0i9RkkeLX/a8FzO4tLn2BkIX5lR98eNO9g+/uG49UQE=;
-        b=TFfCLhoxYT56Nn3x7jCyVrlcC07sWTbmQD1AANF/ehbQxFzjKfx9p0RhCXiQ9vZATC
-         vT5nje7UrDRvgKIr44wPnSwPQG+pY1XmJFE4xlRE/mevmlBZUcwA4wvh3YOS0sW8jD01
-         RkyB1FsNIQX4gNXT/Lf6truNDyI/Weeenh7pNiIH3v48Wa1mIvHKXHJW8gTMaiplaplb
-         Mlyp0zQn+e+A3PxkBqku7eWW5U9iGPWxfYsQplvI6Qe8UCk8ZRUyV6G8IoIU7oOphOC7
-         WMz7KJEMFeVpjJNnuVAHWTpqXMQlRlBpiphHq//udnTragjcHo48ZNDk4aPxXFEQHL6i
-         QTIg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=0i9RkkeLX/a8FzO4tLn2BkIX5lR98eNO9g+/uG49UQE=;
-        b=YFqYbqU0XlzDs3hkNggjjKPMkB92AtIB3Lo9OjjZGOfBSw6HOaTo1/qt8qK+mXUBiG
-         qTb9cFJBvSPKlU7CW43LIAeKYubTWnKoLF50KUJaWtCIFVwHD9KTtxJiuM3WRWXP2w+M
-         an4FVhLPprdh43LMqP+8LkxGat9AWynpNHskAoO7yKbwhAaee0BhwZX6mWjr2EtTmjU1
-         FtX+tj0tObX+x7j95ZkKi8FO2hbgDXCS6HFtTYz6Do7E6bNNsgs9CFEL/C89FloqRymS
-         o5bKFQSkmleXoKUwMXqQuz4lLsQWfIbLRIVIlDMfJ4lWxL6uy/ErkfQ0tVA6ZWRF5h8c
-         0PYg==
-X-Gm-Message-State: AOAM530uNLgmVgtFYk3BefbuTMntFkrrra7rirFK7uiRI93NaVz23ekX
-        VHe4dr0SCe7fQKXg2VPWJsE=
-X-Google-Smtp-Source: ABdhPJwN1Z2UQzvnntlWy/amZSNuSoBj/nJlFK1rINxD93dAb5bOGKvY2oKNVEC6Zjj1GuDmcVJhpg==
-X-Received: by 2002:a5d:680f:0:b0:20a:d858:f703 with SMTP id w15-20020a5d680f000000b0020ad858f703mr21357176wru.414.1651767234914;
-        Thu, 05 May 2022 09:13:54 -0700 (PDT)
-Received: from [192.168.1.7] ([212.22.223.21])
-        by smtp.gmail.com with ESMTPSA id n13-20020a056000170d00b0020c5253d911sm1595572wrc.93.2022.05.05.09.13.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 05 May 2022 09:13:54 -0700 (PDT)
-Subject: Re: [PATCH v3 0/2] kernel: add new infrastructure for platform_has()
- support
-To:     Juergen Gross <jgross@suse.com>
-Cc:     xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, x86@kernel.org,
-        linux-s390@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Christoph Hellwig <hch@infradead.org>
-References: <20220504155703.13336-1-jgross@suse.com>
-From:   Oleksandr <olekstysh@gmail.com>
-Message-ID: <f7b43321-eb31-b8fb-0a65-0f5f04526be5@gmail.com>
-Date:   Thu, 5 May 2022 19:13:52 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Thu, 5 May 2022 12:20:28 -0400
+Received: from smtp2.infineon.com (smtp2.infineon.com [IPv6:2a00:18f0:1e00:4::4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34ACC5B8AB;
+        Thu,  5 May 2022 09:16:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=infineon.com; i=@infineon.com; q=dns/txt; s=IFXMAIL;
+  t=1651767408; x=1683303408;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=e4ygsikyJl0tMYtfWtwA8j3Qi+E39Mbf/ZG9ORl73wk=;
+  b=LGu7GDoybbUgiB7+LbMIePQzOrWIaWWnEu9lzUYEwG3011bsjXHOW+Fc
+   7K1b9qbi/NcXPtRILU+ZnbMxJlDSFpSf8MjJH9Jgk517zGrX6VuzruzAM
+   IO8Bv8q7MTk8vQgNKeiW7nbbihP6nhJ/oBomklEFLin8pQTy9AIvrKJ6U
+   E=;
+X-SBRS: None
+X-IronPort-AV: E=McAfee;i="6400,9594,10338"; a="176210663"
+X-IronPort-AV: E=Sophos;i="5.91,201,1647298800"; 
+   d="scan'208";a="176210663"
+Received: from unknown (HELO mucxv002.muc.infineon.com) ([172.23.11.17])
+  by smtp2.infineon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2022 18:16:46 +0200
+Received: from MUCSE812.infineon.com (MUCSE812.infineon.com [172.23.29.38])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mucxv002.muc.infineon.com (Postfix) with ESMTPS;
+        Thu,  5 May 2022 18:16:46 +0200 (CEST)
+Received: from MUCSE807.infineon.com (172.23.29.33) by MUCSE812.infineon.com
+ (172.23.29.38) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Thu, 5 May 2022
+ 18:16:46 +0200
+Received: from [10.160.221.24] (172.23.8.247) by MUCSE807.infineon.com
+ (172.23.29.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Thu, 5 May 2022
+ 18:16:45 +0200
+Message-ID: <d35fff90-ded7-2b1a-0e1a-f2db14cc4d07@infineon.com>
+Date:   Thu, 5 May 2022 18:16:44 +0200
 MIME-Version: 1.0
-In-Reply-To: <20220504155703.13336-1-jgross@suse.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH 1/2] dt-bindings: net: broadcom-bluetooth: Add property
+ for autobaud mode
 Content-Language: en-US
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+To:     Linus Walleij <linus.walleij@linaro.org>
+CC:     "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        <netdev@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        "Luiz Augusto von Dentz" <luiz.dentz@gmail.com>,
+        <linux-bluetooth@vger.kernel.org>
+References: <cover.1651647576.git.hakan.jansson@infineon.com>
+ <64b59ca66cc22e6433a044e7bba2b3e97c810dc2.1651647576.git.hakan.jansson@infineon.com>
+ <CACRpkdY3xPcyNcJfdGbSP5rdcUV6hr87yJNDVDGZdRCfN+MqLA@mail.gmail.com>
+ <1e8cfbc6-8452-0e87-9713-536d235e5b51@infineon.com>
+ <CACRpkda4ByrS8RGAunno_S59+Y2yado4eObzwsVkM2Q=n-B+CQ@mail.gmail.com>
+From:   Hakan Jansson <hakan.jansson@infineon.com>
+In-Reply-To: <CACRpkda4ByrS8RGAunno_S59+Y2yado4eObzwsVkM2Q=n-B+CQ@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [172.23.8.247]
+X-ClientProxiedBy: MUCSE816.infineon.com (172.23.29.42) To
+ MUCSE807.infineon.com (172.23.29.33)
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -93,168 +87,51 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On 04.05.22 18:57, Juergen Gross wrote:
 
-
-Hello Juergen
-
-> In another patch series [1] the need has come up to have support for
-> a generic feature flag infrastructure.
+On 5/5/2022 4:13 PM, Linus Walleij wrote:
+> I suppose a general flag could be useful but to be honest I don't know
+>> if any other devices besides the ones using the Broadcom driver has any
+>> use for it. You would probably also still want to be able to use
+>> current-speed to set the link speed and end up using both
+>> current-speed=x and current-speed-auto at the same time, which might
+>> look a little confusing?
+> I do not think it is more confusing than being able to use
+> current-speed and brcm,uses-autobaud-mode at the same time.
 >
-> This patch series is introducing that infrastructure and adds the first
-> use case.
+>> Please let me know if you'd still prefer "current-speed-auto" over
+>> "brcm,uses-autobaud-mode" and I'll revise the patch and rename it!
+> It actually depends a bit.
 >
-> I have decided to use a similar interface as the already known x86
-> cpu_has() function. As the new infrastructure is meant to be usable for
-> general and arch-specific feature flags, the flags are being spread
-> between a general bitmap and an arch specific one.
+> This:
 >
-> The bitmaps start all being zero, single features can be set or reset
-> at any time by using the related platform_[re]set_feature() functions.
->
-> The platform_has() function is using a simple test_bit() call for now,
-> further optimization might be added when needed.
->
-> [1]: https://lore.kernel.org/lkml/1650646263-22047-1-git-send-email-olekstysh@gmail.com/T/#t
+>>>> +      The controller should be started in autobaud mode by asserting
+>>>> +      BT_UART_CTS_N (i.e. host RTS) during startup. Only HCI commands supported
+>>>> +      in autobaud mode should be used until patch FW has been loaded.
+> sounds a bit vague?
 
-
-For both patches:
-
-Reviewed-by: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
-
-
-Also I haven't faced any issues with testing current series (w/ and w/o 
-xen-virtio series [1] applied) in Xen guest (Linux v5.18-rc4) on Arm64 
-based board.
-
-So, you can also add:
-
-[Arm64 only]
-
-Tested-by: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
-
-
-Thanks!
-
-
-Note, I reworked patch #3 [1] to use new platform_xxx functionality:
-
-
-diff --git a/arch/arm/xen/enlighten.c b/arch/arm/xen/enlighten.c
-index 07eb69f..1f9c3ba 100644
---- a/arch/arm/xen/enlighten.c
-+++ b/arch/arm/xen/enlighten.c
-@@ -443,6 +443,8 @@ static int __init xen_guest_init(void)
-         if (!xen_domain())
-                 return 0;
-
-+       xen_set_restricted_virtio_memory_access();
-+
-         if (!acpi_disabled)
-                 xen_acpi_guest_init();
-         else
-diff --git a/arch/x86/xen/enlighten_hvm.c b/arch/x86/xen/enlighten_hvm.c
-index 517a9d8..8b71b1d 100644
---- a/arch/x86/xen/enlighten_hvm.c
-+++ b/arch/x86/xen/enlighten_hvm.c
-@@ -195,6 +195,8 @@ static void __init xen_hvm_guest_init(void)
-         if (xen_pv_domain())
-                 return;
-
-+       xen_set_restricted_virtio_memory_access();
-+
-         init_hvm_pv_info();
-
-         reserve_shared_info();
-diff --git a/arch/x86/xen/enlighten_pv.c b/arch/x86/xen/enlighten_pv.c
-index 5038edb..fcd5d5d 100644
---- a/arch/x86/xen/enlighten_pv.c
-+++ b/arch/x86/xen/enlighten_pv.c
-@@ -109,6 +109,8 @@ static DEFINE_PER_CPU(struct tls_descs, 
-shadow_tls_desc);
-
-  static void __init xen_pv_init_platform(void)
-  {
-+       xen_set_restricted_virtio_memory_access();
-+
-         populate_extra_pte(fix_to_virt(FIX_PARAVIRT_BOOTMAP));
-
-         set_fixmap(FIX_PARAVIRT_BOOTMAP, xen_start_info->shared_info);
-diff --git a/drivers/xen/Kconfig b/drivers/xen/Kconfig
-index 313a9127..a7bd8ce 100644
---- a/drivers/xen/Kconfig
-+++ b/drivers/xen/Kconfig
-@@ -339,4 +339,15 @@ config XEN_GRANT_DMA_OPS
-         bool
-         select DMA_OPS
-
-+config XEN_VIRTIO
-+       bool "Xen virtio support"
-+       depends on VIRTIO
-+       select XEN_GRANT_DMA_OPS
-+       help
-+         Enable virtio support for running as Xen guest. Depending on the
-+         guest type this will require special support on the backend side
-+         (qemu or kernel, depending on the virtio device types used).
-+
-+         If in doubt, say n.
-+
-  endmenu
-diff --git a/include/xen/xen.h b/include/xen/xen.h
-index a99bab8..0780a81 100644
---- a/include/xen/xen.h
-+++ b/include/xen/xen.h
-@@ -52,6 +52,14 @@ bool xen_biovec_phys_mergeable(const struct bio_vec 
-*vec1,
-  extern u64 xen_saved_max_mem_size;
-  #endif
-
-+#include <linux/platform-feature.h>
-+
-+static inline void xen_set_restricted_virtio_memory_access(void)
-+{
-+       if (IS_ENABLED(CONFIG_XEN_VIRTIO) && xen_domain())
-+ platform_set(PLATFORM_VIRTIO_RESTRICTED_MEM_ACCESS);
-+}
-+
-  #ifdef CONFIG_XEN_UNPOPULATED_ALLOC
-  int xen_alloc_unpopulated_pages(unsigned int nr_pages, struct page 
-**pages);
-  void xen_free_unpopulated_pages(unsigned int nr_pages, struct page 
-**pages);
-(END)
-
-
-
-
-
+Yes, perhaps. I was thinking the details could be helpful but I can see 
+how they might be perceived as vague and confusing. Maybe it would be 
+better to just leave it at "The controller should be started in autobaud 
+mode"?
 
 >
-> Juergen Gross (2):
->    kernel: add platform_has() infrastructure
->    virtio: replace arch_has_restricted_virtio_memory_access()
->
->   MAINTAINERS                            |  8 ++++++++
->   arch/s390/Kconfig                      |  1 -
->   arch/s390/mm/init.c                    | 13 +++----------
->   arch/x86/Kconfig                       |  1 -
->   arch/x86/mm/mem_encrypt.c              |  7 -------
->   arch/x86/mm/mem_encrypt_amd.c          |  4 ++++
->   drivers/virtio/Kconfig                 |  6 ------
->   drivers/virtio/virtio.c                |  5 ++---
->   include/asm-generic/Kbuild             |  1 +
->   include/asm-generic/platform-feature.h |  8 ++++++++
->   include/linux/platform-feature.h       | 19 ++++++++++++++++++
->   include/linux/virtio_config.h          |  9 ---------
->   kernel/Makefile                        |  2 +-
->   kernel/platform-feature.c              | 27 ++++++++++++++++++++++++++
->   14 files changed, 73 insertions(+), 38 deletions(-)
->   create mode 100644 include/asm-generic/platform-feature.h
->   create mode 100644 include/linux/platform-feature.h
->   create mode 100644 kernel/platform-feature.c
->
--- 
-Regards,
+> Does it mean that CTS is asserted, then you send a bit (CTS then goes low)
+> and then CTS is asserted again when the device is ready to receieve more
+> data? i.e is this some kind of one-bit mode, because it doesn't sound like
+> it is using CTS as it was used in legacy modems.
 
-Oleksandr Tyshchenko
+CTS and RTS are actually used in the normal way during communication. 
+The host will assert its RTS to indicate being ready to receive data 
+from the controller. This flag just controls whether this happens before 
+or after the controller is powered on. The controller will check the 
+initial state of its BT_UART_CTS_N pin (connected to host's RTS) when 
+starting up. It will enter autobaud mode if the signal is already asserted.
 
+> Some more explanation of this mode is needed so we can understand if
+> this is something generic or a BRCM-only thing.
+>
+> Yours,
+> Linus Walleij
+
+Thanks,
+Håkan

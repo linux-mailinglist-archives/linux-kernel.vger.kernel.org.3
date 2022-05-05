@@ -2,71 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5682551BF3C
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 14:25:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD1D151BF42
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 14:29:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357913AbiEEM2j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 08:28:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33114 "EHLO
+        id S1376403AbiEEMdJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 08:33:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240218AbiEEM2h (ORCPT
+        with ESMTP id S237718AbiEEMdD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 08:28:37 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE1EB55228;
-        Thu,  5 May 2022 05:24:58 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id c9so3534384plh.2;
-        Thu, 05 May 2022 05:24:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=aqYca05I1CobNL11/ZSAuzkYP3pUA9+44TaUIjQq30E=;
-        b=HlU4f2mdgIGU44zymXGfRAKrheE60x7GHocboHNZBnucHDvCi30LYg8qdMKXH+VE1S
-         9TqYxAC81WJbZAn/9sW3DGUP/tOSj+ABuQhvOj7ipczBHPMF9x1Xifw9u72TT2nB6/8x
-         6u4uF5DnbzvfJtFkvZ0R8Kbpz27c3xoAPVfehY3D8fk/N9GKpTAzPniDb32fZl0j91tU
-         qZqwhlKZp05SdRnt2rKR6l2bwOqxD8C9ChT8sOttFeAxNO83LD0/QXo3cNJ/o9guHw6A
-         py3MvonaowbfyTdnEUS+CzbwJVSv9hfKLStfAdD5JOVNIYyYqrFIGIvC5d59eqtaMDWq
-         qkGA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=aqYca05I1CobNL11/ZSAuzkYP3pUA9+44TaUIjQq30E=;
-        b=MuYgrHT+RZi7EKlFE5r03lgUui5YleREVUyG1kUfAtcB9eyIS1zqZw/srMxA0FCod+
-         YYtyif+UUCNuBxYlEEg9ShHByqxM6BmGoFnsC2UdzJ5BOySvgnp/Jf/rOIE+nQpDIfA7
-         Ui0ZFjAO/BUzSOdk1lv+9aexiXEvCcV9sqqckTc6xpahffSQimDRcnVWjZ4vS88ENyWr
-         jLM1aicwGD3YkFLQzvPAIwtr3Xq24TvQQuwHRWLHiubigIianqECCpDg5j2216Iwg3DI
-         AVuEOW6yAUp0aDnfCk7X5X8elTPaM2USYgQTdExoif9NM4WvzYu3vKsqbEoB7gKh4J8B
-         u7XA==
-X-Gm-Message-State: AOAM532BsCGXY2SDvaahNwMsDn3KOxVUEHdTNbutgGM0EwqWmoWeAkh5
-        UzEauMF+k0LV6mCSjKulbs4jVfZ4jhk2Rg==
-X-Google-Smtp-Source: ABdhPJxBCkQ1cAkRLOXaQKmquOvLrvigW73ZlxaRyHHUoVzYwqfQEHbFvnHA6iO/7W/8X+DY6gwJ2g==
-X-Received: by 2002:a17:902:f70b:b0:14d:643d:9c99 with SMTP id h11-20020a170902f70b00b0014d643d9c99mr27704828plo.18.1651753498148;
-        Thu, 05 May 2022 05:24:58 -0700 (PDT)
-Received: from sol ([118.209.204.33])
-        by smtp.gmail.com with ESMTPSA id 6-20020a17090a000600b001cd4989ff44sm1412787pja.11.2022.05.05.05.24.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 May 2022 05:24:56 -0700 (PDT)
-Date:   Thu, 5 May 2022 20:24:50 +0800
-From:   Kent Gibson <warthog618@gmail.com>
-To:     Bartosz Golaszewski <brgl@bgdev.pl>
-Cc:     Yihao Han <hanyihao@vivo.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        kernel@vivo.com
-Subject: Re: [PATCH] gpiolib: cdev: fix stream_open.cocci warnings
-Message-ID: <20220505122450.GA23659@sol>
-References: <20220505115011.3435-1-hanyihao@vivo.com>
- <CAMRc=MdkbZVW_vFxyJbKh9oDo3mdud2omfS=cW5=Gn=nMrM37A@mail.gmail.com>
+        Thu, 5 May 2022 08:33:03 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 575914E3B1;
+        Thu,  5 May 2022 05:29:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=tu0GYIgzFnGdNrFJk4cGqBy448paO4C9DBmXUxuFC4M=; b=mnVeiXCT0hPDIsj4ns8MaGaimT
+        bYiHgf+x3yY72yPp69OpkpXqNYwdU2xn5eBvKJtphyqjtNUzQAhCmJrLyoulhNgAfip2XnljVNkM+
+        23rpq7G1zZFM6edHYqnaQaexNbDoEm8ww1KyCRMbOPP1llL57r80W4eg1X9spTV6pMec=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1nmabb-001Lt6-K9; Thu, 05 May 2022 14:29:15 +0200
+Date:   Thu, 5 May 2022 14:29:15 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Oleksij Rempel <o.rempel@pengutronix.de>
+Cc:     Heiner Kallweit <hkallweit1@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, kernel@pengutronix.de,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [PATCH net-next v3 2/7] net: phy: introduce
+ genphy_c45_pma_base1_setup_master_slave()
+Message-ID: <YnPDGxqbawnLDfAd@lunn.ch>
+References: <20220505063318.296280-1-o.rempel@pengutronix.de>
+ <20220505063318.296280-3-o.rempel@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAMRc=MdkbZVW_vFxyJbKh9oDo3mdud2omfS=cW5=Gn=nMrM37A@mail.gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+In-Reply-To: <20220505063318.296280-3-o.rempel@pengutronix.de>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,48 +53,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 05, 2022 at 02:18:48PM +0200, Bartosz Golaszewski wrote:
-> On Thu, May 5, 2022 at 1:50 PM Yihao Han <hanyihao@vivo.com> wrote:
-> >
-> > ./drivers/gpio/gpiolib-cdev.c:2498:7-23: WARNING:
-> > gpio_fileops: .read() has stream semantic;
-> > safe to change nonseekable_open -> stream_open.
-> >
-> > Generated by: scripts/coccinelle/api/stream_open.cocci
-> >
-> > Signed-off-by: Yihao Han <hanyihao@vivo.com>
-> > ---
-> >  drivers/gpio/gpiolib-cdev.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/gpio/gpiolib-cdev.c b/drivers/gpio/gpiolib-cdev.c
-> > index f5aa5f93342a..d03c8e012c8c 100644
-> > --- a/drivers/gpio/gpiolib-cdev.c
-> > +++ b/drivers/gpio/gpiolib-cdev.c
-> > @@ -2495,7 +2495,7 @@ static int gpio_chrdev_open(struct inode *inode, struct file *file)
-> >         get_device(&gdev->dev);
-> >         file->private_data = cdev;
-> >
-> > -       ret = nonseekable_open(inode, file);
-> > +       ret = stream_open(inode, file);
-> >         if (ret)
-> >                 goto out_unregister_notifier;
-> >
-> > --
-> > 2.17.1
-> >
-> 
-> Cc'ing Kent.
-> 
-> This patch doesn't seem to target current master or rc1.
-> 
-> It also can't be right - we specifically mark all filesystem objects
-> exposed by the GPIO character device as non-seekable.
-> 
+> +/**
+> + * genphy_c45_pma_base1_setup_master_slave - configures forced master/slave
+> + * role of BaseT1 devices.
+> + * @phydev: target phy_device struct
+> + */
+> +int genphy_c45_pma_base1_setup_master_slave(struct phy_device *phydev)
 
-Agreed.  I took the coccinelle warning as being a false positive.
-If I recall correctly I had a quick look to see if it could be disabled,
-but didn't find anything, and so just ignored it.
+The naming convection is baset1
 
-Cheers,
-Kent.
+Please add my
+
+Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+
+when you respin.
+
+    Andrew

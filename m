@@ -2,102 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 917B251BDEB
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 13:21:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EE6051BDED
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 13:21:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357177AbiEELYg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 07:24:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55520 "EHLO
+        id S1354957AbiEELZZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 07:25:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238682AbiEELYd (ORCPT
+        with ESMTP id S236651AbiEELZT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 07:24:33 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFE66205F3;
-        Thu,  5 May 2022 04:20:52 -0700 (PDT)
-Received: from dggpeml500023.china.huawei.com (unknown [172.30.72.55])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4KvB2x6FckzHnV5;
-        Thu,  5 May 2022 19:16:09 +0800 (CST)
-Received: from ubuntu1804.huawei.com (10.67.174.58) by
- dggpeml500023.china.huawei.com (7.185.36.114) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 5 May 2022 19:20:51 +0800
-From:   Xiu Jianfeng <xiujianfeng@huawei.com>
-To:     <mpe@ellerman.id.au>, <benh@kernel.crashing.org>,
-        <paulus@samba.org>, <npiggin@gmail.com>,
-        <christophe.leroy@csgroup.eu>, <tglx@linutronix.de>,
-        <mark.rutland@arm.com>
-CC:     <linuxppc-dev@lists.ozlabs.org>, <linux-kernel@vger.kernel.org>,
-        <linux-hardening@vger.kernel.org>
-Subject: [PATCH -next] powerpc: add support for syscall stack randomization
-Date:   Thu, 5 May 2022 19:19:32 +0800
-Message-ID: <20220505111932.228814-1-xiujianfeng@huawei.com>
-X-Mailer: git-send-email 2.17.1
+        Thu, 5 May 2022 07:25:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B37F4EF56
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 04:21:40 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4064C61CE6
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 11:21:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E43AFC385A4;
+        Thu,  5 May 2022 11:21:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651749699;
+        bh=IEGwp11v+XWOBcZIXxbJqS0+XkO/ZxJHw7PTpy7YXkw=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=uVWDH1F/bcDYSL1K2jAVsYwx5/Ue4/zMDYq9RD86PXqERhK1OvBTv9DZj0aZeU32u
+         s3ibzjOX01kkdrb6lMVU++JepDSZVluYjc+w4G6rjtEZClVWi3WF1nvSQZ+xkvG3Vv
+         NOB8Sj6qjI3Eh6Q4/WTxhjSCewUafhzC1gr7lN/36QzmPcc6Wir5tNyOuFpx4+i6BX
+         iZLgMy5pkSVqlZGgPScNzsa4G66WoblShQXl7sOeAHYCfuqsAV1cijYohwCq2INy0e
+         Ps6PJ/Co7z/i8BBeROx22t4vn9OJjT1jL3jT65bFjZ5/7sslKdgLIO5ohFy7oQ0gMr
+         6ILJoijzSFQQg==
+Message-ID: <5157b1b3-520a-769c-b031-5a9d1f7039dc@kernel.org>
+Date:   Thu, 5 May 2022 19:21:37 +0800
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.67.174.58]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpeml500023.china.huawei.com (7.185.36.114)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [f2fs-dev] [PATCH 1/2] f2fs: write checkpoint during FG_GC
+Content-Language: en-US
+To:     Jaegeuk Kim <jaegeuk@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net
+Cc:     Byungki Lee <dominicus79@gmail.com>
+References: <20220503203040.365028-1-jaegeuk@kernel.org>
+From:   Chao Yu <chao@kernel.org>
+In-Reply-To: <20220503203040.365028-1-jaegeuk@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-10.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for adding a random offset to the stack while handling
-syscalls. This patch uses mftb() instead of get_random_int() for better
-performance.
+On 2022/5/4 4:30, Jaegeuk Kim wrote:
+> From: Byungki Lee <dominicus79@gmail.com>
+> 
+> If there's not enough free sections each of which consistis of large segments,
+> we can hit no free section for upcoming section allocation. Let's reclaim some
+> prefree segments by writing checkpoints.
+> 
+> Signed-off-by: Byungki Lee <dominicus79@gmail.com>
+> Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
 
-Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
----
- arch/powerpc/Kconfig            | 1 +
- arch/powerpc/kernel/interrupt.c | 3 +++
- 2 files changed, 4 insertions(+)
+Reviewed-by: Chao Yu <chao@kernel.org>
 
-diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
-index 5fc9153927ac..7e04c9f80cbc 100644
---- a/arch/powerpc/Kconfig
-+++ b/arch/powerpc/Kconfig
-@@ -192,6 +192,7 @@ config PPC
- 	select HAVE_ARCH_KASAN			if PPC32 && PPC_PAGE_SHIFT <= 14
- 	select HAVE_ARCH_KASAN_VMALLOC		if PPC32 && PPC_PAGE_SHIFT <= 14
- 	select HAVE_ARCH_KFENCE			if PPC_BOOK3S_32 || PPC_8xx || 40x
-+	select HAVE_ARCH_RANDOMIZE_KSTACK_OFFSET
- 	select HAVE_ARCH_KGDB
- 	select HAVE_ARCH_MMAP_RND_BITS
- 	select HAVE_ARCH_MMAP_RND_COMPAT_BITS	if COMPAT
-diff --git a/arch/powerpc/kernel/interrupt.c b/arch/powerpc/kernel/interrupt.c
-index 784ea3289c84..459385769721 100644
---- a/arch/powerpc/kernel/interrupt.c
-+++ b/arch/powerpc/kernel/interrupt.c
-@@ -4,6 +4,7 @@
- #include <linux/err.h>
- #include <linux/compat.h>
- #include <linux/sched/debug.h> /* for show_regs */
-+#include <linux/randomize_kstack.h>
- 
- #include <asm/kup.h>
- #include <asm/cputime.h>
-@@ -82,6 +83,7 @@ notrace long system_call_exception(long r3, long r4, long r5,
- 
- 	kuap_lock();
- 
-+	add_random_kstack_offset();
- 	regs->orig_gpr3 = r3;
- 
- 	if (IS_ENABLED(CONFIG_PPC_IRQ_SOFT_MASK_DEBUG))
-@@ -405,6 +407,7 @@ interrupt_exit_user_prepare_main(unsigned long ret, struct pt_regs *regs)
- 
- 	/* Restore user access locks last */
- 	kuap_user_restore(regs);
-+	choose_random_kstack_offset(mftb() & 0xFF);
- 
- 	return ret;
- }
--- 
-2.17.1
-
+Thanks,

@@ -2,157 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A41651C136
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 15:49:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4810351C178
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 15:53:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380057AbiEENvN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 09:51:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35138 "EHLO
+        id S1380270AbiEENzG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 09:55:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236424AbiEENvB (ORCPT
+        with ESMTP id S1380150AbiEENyr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 09:51:01 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D826F56FB1;
-        Thu,  5 May 2022 06:47:21 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id k27so5281177edk.4;
-        Thu, 05 May 2022 06:47:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=oUzFHC3hE5t2h2hEpNC3yEJlY0mdKqM3EtV1DCmd8D0=;
-        b=Hw4Rv1FZo857VMcMzkbP/NlRckMrjb6LaVc/W34rmifYwa+w+HtW7CToobuVOZKHxe
-         uYSmGpIUDOezRUgnWOyUdedYrRTxMfNuinkCZY5SABW3g4uWkXitK+Q2tJFaVAtEHl8T
-         Har554npwR3GdE0C70jj1HmYVE65I9pPYOGNo84evkk38HuCnJUMfZVKeWAAm1dsP1FU
-         sbZhA+m1mcEdWVw37GPDwF2kE5xCldSED5hfjZgvQDHU9YQrJeiThM7qv5AK4ruXWP3Z
-         DW1xNgC6JODXYZ5V2VES9BLmDmNF8bY6FhfkO/f2PvBqTKUA73vlZIUBEWvzLAzFaG32
-         axfg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=oUzFHC3hE5t2h2hEpNC3yEJlY0mdKqM3EtV1DCmd8D0=;
-        b=u+uhP1qN5X0KKCt+YibBVf4+kdNYPcW0MNtWDfVz/lU3mw7940VNV6YIHb1gK52OUB
-         t6LgQAsSYc2H+scUXVeBhnmB4Vtd29m5ch94mOQNjDJlzeZzTcFX/2bLFHpKTXtDvjBl
-         63K3uYNbINotp++B60sPOfsZze/suNKiW95ESe9j+ND4bfHzADeRx3ViKzSsT8zX1AxM
-         tBWqw7R52ztKTyaJAtBzAVQ8Yz5v8r0eX1PewxX7FhtYnq6vP5gVljzTgZ/AC9TuSfzP
-         fKVgaIaliXDzeI8MjwsCApgIfWbSKDWm0rUGcz4po6ErCmqLMEeBuhTr+L5kfpSAgfQV
-         FnEQ==
-X-Gm-Message-State: AOAM5300K78bxdcpnqQ10J8F5/WSCFGK7UMfQ8a4PIWi9T41MnyV5t/v
-        BD7pYJ1mzFUGUxSBujyTh3Y=
-X-Google-Smtp-Source: ABdhPJyJdL4q8U7oYwe/rnrFKTifXUV7fNxTuXLNvsxOMg3y+OWIWr5uIetiADuFzBU7w5ZsyVb0VA==
-X-Received: by 2002:a05:6402:5114:b0:427:cbe5:e9bd with SMTP id m20-20020a056402511400b00427cbe5e9bdmr21532765edd.255.1651758440492;
-        Thu, 05 May 2022 06:47:20 -0700 (PDT)
-Received: from linux.. (p5dd1ed70.dip0.t-ipconnect.de. [93.209.237.112])
-        by smtp.gmail.com with ESMTPSA id 26-20020a170906301a00b006f3ef214e69sm728324ejz.207.2022.05.05.06.47.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 May 2022 06:47:20 -0700 (PDT)
-From:   Bean Huo <huobean@gmail.com>
-To:     alim.akhtar@samsung.com, avri.altman@wdc.com,
-        asutoshd@codeaurora.org, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, stanley.chu@mediatek.com,
-        beanhuo@micron.com, bvanassche@acm.org, tomas.winkler@intel.com,
-        cang@codeaurora.org, daejun7.park@samsung.com,
-        peter.wang@mediatek.com, powen.kao@mediatek.com,
-        keosung.park@samsung.com
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v4 3/6] scsi: ufshpb: Cleanup the handler when device reset HPB information
+        Thu, 5 May 2022 09:54:47 -0400
+Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C761357110
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 06:51:06 -0700 (PDT)
+Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
+        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20220505135105euoutp02240f53b68a05e844191e5550b7395df6~sOcFJ5MDd0043500435euoutp02f
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 13:51:05 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20220505135105euoutp02240f53b68a05e844191e5550b7395df6~sOcFJ5MDd0043500435euoutp02f
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1651758665;
+        bh=vrYMM/cTOrW0/UYYWyRRUQC9LsDHx9p6dz/qEYyG7Ug=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=b9vcZ7tQ94f3VdiXUlJw+T1XLGmoWXNflO074KduS8EF9ysX5kXm1rt2m1oyipPJF
+         U50l3s5pkVpoTOl0YLZI8MqqXX9N6AQmW707OVASef5mBymqwItd13057wGOgNgTDD
+         KO6hTkj5nwC4MhPJeWVTwHKOJIMsISUeYasAXfkU=
+Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
+        20220505135103eucas1p23cfe1abbea461339e96795ea1bacf823~sOcDQPzY83233532335eucas1p2q;
+        Thu,  5 May 2022 13:51:03 +0000 (GMT)
+Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
+        eusmges2new.samsung.com (EUCPMTA) with SMTP id 1C.AC.09887.746D3726; Thu,  5
+        May 2022 14:51:03 +0100 (BST)
+Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
+        20220505135102eucas1p10efc01a623d97cbd6634943faa506353~sOcCcJ-_r2600826008eucas1p1D;
+        Thu,  5 May 2022 13:51:02 +0000 (GMT)
+Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
+        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20220505135102eusmtrp2d6c56ae84c8e8295e4cea35a306dff91~sOcCX3XLs2658826588eusmtrp2C;
+        Thu,  5 May 2022 13:51:02 +0000 (GMT)
+X-AuditID: cbfec7f4-45bff7000000269f-e9-6273d6477c32
+Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
+        eusmgms1.samsung.com (EUCPMTA) with SMTP id 5D.F2.09522.646D3726; Thu,  5
+        May 2022 14:51:02 +0100 (BST)
+Received: from localhost (unknown [106.210.248.170]) by eusmtip1.samsung.com
+        (KnoxPortal) with ESMTPA id
+        20220505135102eusmtip1164954ce909a59d1b207a210c6e6fd14~sOcCAQS_N0093500935eusmtip1F;
+        Thu,  5 May 2022 13:51:02 +0000 (GMT)
+From:   Pankaj Raghav <p.raghav@samsung.com>
+To:     axboe@kernel.dk, hch@lst.de, damien.lemoal@opensource.wdc.com,
+        dsterba@suse.com, jaegeuk@kernel.org, bvanassche@acm.org,
+        hare@suse.de
+Cc:     jonathan.derrick@linux.dev, jiangbo.365@bytedance.com,
+        matias.bjorling@wdc.com, gost.dev@samsung.com, pankydev8@gmail.com,
+        Pankaj Raghav <p.raghav@samsung.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        linux-nvme@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-block@vger.kernel.org
+Subject: [PATCH v2 04/11] nvmet: Allow ZNS target to support non-power_of_2
+ zone sizes
 Date:   Thu,  5 May 2022 15:47:04 +0200
-Message-Id: <20220505134707.35929-4-huobean@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220505134707.35929-1-huobean@gmail.com>
-References: <20220505134707.35929-1-huobean@gmail.com>
+Message-Id: <20220505134710.132630-5-p.raghav@samsung.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220505134710.132630-1-p.raghav@samsung.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Brightmail-Tracker: H4sIAAAAAAAAA02SfUxTVxiHc+69vb1UW6/FyZkumjXKFBTFme1sGja3JZ5EDQvbH7rvonfI
+        VhBbihuMCLTCCvId2doBwgSRD1cKlVHAjHUOJNBBVmXthG4aajal6ASGBaGjvZj53/Oe87zn
+        977JYUjpvGANE5+YzCkT5QoZLaLaeryDW/cOq2K3/1WyHjWOFtKo7L6XRHO2QRINPcwkkLPb
+        QqCub0sIVN/4M4HGjAYSne6+T6F67U0Sua8bCHT593Bk7yin0dnzbiEqyp4mkaPIDdBkrVaI
+        mpxuCn139x71ajC2X9uHF6420dhiGBXiQZeJwnabGrc06GhcnXGGxK01J3GnM4PG+ZqJRevU
+        HwJcYG4A2Gi+TuHW/jQ82bIO53TnEW+y74h2H+EU8SmcclvUR6Kjg54hIskn+UzvdIEM4Fye
+        C4IYyO6EFdoJKheIGCl7AcBzraalYgrAHMM5IV9MAthumwOPW+51dgVYytYBeLuG4PlvAG/Y
+        ns8FDEOzYTBTF+hdxeYBaNOMB14l2WkCXs6aFfobgtmDUGeeFviZYjfCiw5f4CEx+zI8f6uO
+        5MPWQ/2vMwE/iN0Fy3U3BbyzEvbpxyg/k4uO5tI3S74rCBqvCHh+Az7qcy9xMLzTaxby/Az0
+        Wc4SPKdBt2OO9A8HWS2AhRYj7d8ALoYVDCj8SLKbobFjG6/vgT/mVgt5QwIdnpX8BBJY0vYV
+        yR+L4ZfZUt6WQYt3bCkUQntWOcUzhhW3KkEReNbwxC6GJ3Yx/J9bBcgGEMKpVQlxnGpHInci
+        QiVPUKkT4yIOH0toAYs/tH+hd6od1N35J8IKCAZYAWRI2Srx67VJsVLxEfnnqZzy2IdKtYJT
+        WcFahpKFiA/HN8ulbJw8mfuU45I45eNbgglak0GU6nczX8yOp9f1r167ovFktWizyFRWseGt
+        1zw/hKfl+S6KvVFzipGfnFWFzcULO8Eh6wFvWbx56KWwcbW9xOMLYfNPvdc45Xg6NkofY++1
+        vh/ZevVfzxYwsScySxY63+Q1NIP9MQ1R6avVSX8+yCvt9IRqU9or+rtPxz/3fUd9+okdbc6s
+        rj5sMZfNF3wwMWBMbcnXVGUX+2zWaNfwvoNbBo5vXbGp8kKK5JFa8kAxMvPwk+Se2Y177aFf
+        /5azXeL+5ZqpFpe+QLuWc1W6ZeGll158m75rqi6Oju4KPTD8ruXj/T2bjs9XbnhFeyOmJ9Xz
+        VOayK7dHD43MoHW7cmr6NNIxGaU6Ko8MI5Uq+X8AVbthEAQAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrHIsWRmVeSWpSXmKPExsVy+t/xu7pu14qTDL5MUbNYfbefzWLah5/M
+        Fr/Pnme2uPCjkcni5oGdTBZ7Fk1isli5+iiTxZP1s5gteg58YLFY2fKQ2eLp1VlMFntvaVtc
+        3jWHzWL+sqfsFhPavjJb3JjwlNHi89IWdos1N5+yWKx7/Z7FQdjj8hVvj38n1rB57Jx1l93j
+        /L2NLB6Xz5Z6bFrVyeaxsGEqs8fmJfUeu282sHn0Nr8Dqmq9z+rRt2UVo8f6LVdZPDafrvb4
+        vEnOo/1AN1OAQJSeTVF+aUmqQkZ+cYmtUrShhZGeoaWFnpGJpZ6hsXmslZGpkr6dTUpqTmZZ
+        apG+XYJexvm3F5gK/vNVzLx5j7GB8SZPFyMnh4SAicT73XsYuxi5OIQEljJKbD15lwUiISFx
+        e2ETI4QtLPHnWhcbRNFzRok57e3MXYwcHGwCWhKNnewgcRGBqYwSF7ZfAGtmFmhkltj5xxbE
+        FhYIk1j96y4riM0ioCqx9sZ/JhCbV8BKYtmj5cwQC+QlZl76zg5icwpYS8zpfAhWLwRUM/Hh
+        OzaIekGJkzOfQM2Xl2jeOpt5AqPALCSpWUhSCxiZVjGKpJYW56bnFhvqFSfmFpfmpesl5+du
+        YgRG/LZjPzfvYJz36qPeIUYmDsZDjBIczEoivM5LC5KEeFMSK6tSi/Lji0pzUosPMZoC3T2R
+        WUo0OR+YcvJK4g3NDEwNTcwsDUwtzYyVxHk9CzoShQTSE0tSs1NTC1KLYPqYODilGphKuspK
+        bD6uuW+lPm/djEuaGncerrdn0hZYvHhpON+hnNMh/32tbD11n+ifXqBesupTKRNr12uJtHPd
+        /lHCDRY5dUJPGDVUWLiDl03duFNN33jqvZ1Nj/cxa7Yr33r9qqOorGXt+3Pe6+cut18j/O/x
+        JA+pWYes32zcd/1T/Ldbu3PLIjPqbZdw7XC54SxzY2e9dtDLTwZpksfWlarPtlPiKyti2Zh3
+        Wa9+n8qnm6+fZp66Y/84Y94uiwKp1udFrprqVmfaJbc1OWx/f2rvpS2s52/7rPaX6FtvGa8+
+        a+X65yGxqetNzVd+7WoMnmD388vu4xdvONxZ+uxbjFPqgfqkucuXbI6VsFJ+J6fx/M09JZbi
+        jERDLeai4kQAFrE/TYEDAAA=
+X-CMS-MailID: 20220505135102eucas1p10efc01a623d97cbd6634943faa506353
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20220505135102eucas1p10efc01a623d97cbd6634943faa506353
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20220505135102eucas1p10efc01a623d97cbd6634943faa506353
+References: <20220505134710.132630-1-p.raghav@samsung.com>
+        <CGME20220505135102eucas1p10efc01a623d97cbd6634943faa506353@eucas1p1.samsung.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Bean Huo <beanhuo@micron.com>
+A generic bdev_zone_no helper is added to calculate zone number for a given
+sector in a block device. This helper internally uses blk_queue_zone_no to
+find the zone number.
 
-"When the device is powered off by the host, the device may restore L2P map data
-upon power up or build from the host’s HPB READ command. In case device powered
-up and lost HPB information, device can signal to the host through HPB Sense data,
-by setting HPB Operation as ‘2’ which will inform the host that device reset HPB
-information."
+Use the helper bdev_zone_no() to calculate nr of zones. This let's us
+make modifications to the math if needed in one place and adds now
+support for npo2 zone devices.
 
-This patch is to clean up the handler and make the intent of this handler more
-readable, no functional change.
-
-Signed-off-by: Bean Huo <beanhuo@micron.com>
-Reviewed-by: Keoseong Park <keosung.park@samsung.com>
+Reviewed by: Adam Manzanares <a.manzanares@samsung.com>
+Reviewed-by: Bart Van Assche <bvanassche@acm.org>
+Reviewed-by: Hannes Reinecke <hare@suse.de>
+Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
+Signed-off-by: Pankaj Raghav <p.raghav@samsung.com>
 ---
- drivers/scsi/ufs/ufshpb.c | 35 +++++++++++++++++++++++------------
- 1 file changed, 23 insertions(+), 12 deletions(-)
+ drivers/nvme/target/zns.c | 2 +-
+ include/linux/blkdev.h    | 7 +++++++
+ 2 files changed, 8 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/ufs/ufshpb.c b/drivers/scsi/ufs/ufshpb.c
-index 5412ce6309df..901e0a3d4836 100644
---- a/drivers/scsi/ufs/ufshpb.c
-+++ b/drivers/scsi/ufs/ufshpb.c
-@@ -1225,7 +1225,10 @@ static void ufshpb_rsp_req_region_update(struct ufshpb_lu *hpb,
- 		queue_work(ufshpb_wq, &hpb->map_work);
+diff --git a/drivers/nvme/target/zns.c b/drivers/nvme/target/zns.c
+index 82b61acf7..5516dd6cc 100644
+--- a/drivers/nvme/target/zns.c
++++ b/drivers/nvme/target/zns.c
+@@ -242,7 +242,7 @@ static unsigned long nvmet_req_nr_zones_from_slba(struct nvmet_req *req)
+ 	unsigned int sect = nvmet_lba_to_sect(req->ns, req->cmd->zmr.slba);
+ 
+ 	return blkdev_nr_zones(req->ns->bdev->bd_disk) -
+-		(sect >> ilog2(bdev_zone_sectors(req->ns->bdev)));
++	       bdev_zone_no(req->ns->bdev, sect);
  }
  
--static void ufshpb_dev_reset_handler(struct ufshpb_lu *hpb)
-+/*
-+ * Set the flags of all active regions to RGN_FLAG_UPDATE to let host side reload L2P entries later
-+ */
-+static void ufshpb_set_regions_update(struct ufshpb_lu *hpb)
- {
- 	struct victim_select_info *lru_info = &hpb->lru_info;
- 	struct ufshpb_region *rgn;
-@@ -1239,6 +1242,24 @@ static void ufshpb_dev_reset_handler(struct ufshpb_lu *hpb)
- 	spin_unlock_irqrestore(&hpb->rgn_state_lock, flags);
+ static unsigned long get_nr_zones_from_buf(struct nvmet_req *req, u32 bufsize)
+diff --git a/include/linux/blkdev.h b/include/linux/blkdev.h
+index 32d7bd7b1..967790f51 100644
+--- a/include/linux/blkdev.h
++++ b/include/linux/blkdev.h
+@@ -1370,6 +1370,13 @@ static inline sector_t bdev_zone_sectors(struct block_device *bdev)
+ 	return 0;
  }
  
-+static void ufshpb_dev_reset_handler(struct ufs_hba *hba)
++static inline unsigned int bdev_zone_no(struct block_device *bdev, sector_t sec)
 +{
-+	struct scsi_device *sdev;
-+	struct ufshpb_lu *hpb;
++	struct request_queue *q = bdev_get_queue(bdev);
 +
-+	__shost_for_each_device(sdev, hba->host) {
-+		hpb = ufshpb_get_hpb_data(sdev);
-+		if (hpb && hpb->is_hcm)
-+			/*
-+			 * For the HPB host mode, in case device powered up and lost HPB
-+			 * information, we will set the region flag to be RGN_FLAG_UPDATE,
-+			 * it will let host reload its L2P entries(re-activate the region
-+			 * in the UFS device).
-+			 */
-+			ufshpb_set_regions_update(hpb);
-+	}
++	return blk_queue_zone_no(q, sec);
 +}
 +
- /*
-  * This function will parse recommended active subregion information in sense
-  * data field of response UPIU with SAM_STAT_GOOD state.
-@@ -1313,17 +1334,7 @@ void ufshpb_rsp_upiu(struct ufs_hba *hba, struct ufshcd_lrb *lrbp)
- 	case HPB_RSP_DEV_RESET:
- 		dev_warn(&hpb->sdev_ufs_lu->sdev_dev,
- 			 "UFS device lost HPB information during PM.\n");
--
--		if (hpb->is_hcm) {
--			struct scsi_device *sdev;
--
--			__shost_for_each_device(sdev, hba->host) {
--				struct ufshpb_lu *h = sdev->hostdata;
--
--				if (h)
--					ufshpb_dev_reset_handler(h);
--			}
--		}
-+		ufshpb_dev_reset_handler(hba);
- 
- 		break;
- 	default:
+ static inline unsigned int bdev_max_open_zones(struct block_device *bdev)
+ {
+ 	struct request_queue *q = bdev_get_queue(bdev);
 -- 
-2.34.1
+2.25.1
 

@@ -2,55 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFAAF51C0EE
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 15:36:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B9C651C0F2
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 15:36:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241136AbiEENiI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 09:38:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50778 "EHLO
+        id S1377771AbiEENik (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 09:38:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233559AbiEENiG (ORCPT
+        with ESMTP id S233559AbiEENih (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 09:38:06 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CDFB1AD99
-        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 06:34:27 -0700 (PDT)
-Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.53])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4KvF5D5PwWz1JBYf;
-        Thu,  5 May 2022 21:33:20 +0800 (CST)
-Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 5 May 2022 21:34:25 +0800
-Received: from [10.174.178.55] (10.174.178.55) by
- dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 5 May 2022 21:34:24 +0800
-Subject: Re: [PATCH v3] arm64: add the printing of tpidr_elx in __show_regs()
-From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
-To:     Mark Rutland <mark.rutland@arm.com>
-CC:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20220505095640.312-1-thunder.leizhen@huawei.com>
- <YnPLQJhu5B1Cxvoh@FVFF77S0Q05N.cambridge.arm.com>
- <c6c22386-af37-1acc-63e9-2bb85028aa8c@huawei.com>
-Message-ID: <307e4def-1e4a-1110-e644-d485b9959ab1@huawei.com>
-Date:   Thu, 5 May 2022 21:34:24 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+        Thu, 5 May 2022 09:38:37 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2F1B1AD99;
+        Thu,  5 May 2022 06:34:57 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id l18so8765672ejc.7;
+        Thu, 05 May 2022 06:34:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:from:to:cc:subject:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=UPQKk6k7iZjBvDBrSwiqjZZBhXacN0AVsfOq9/Z93RE=;
+        b=P58lRPzo06h3imubgpZe523Pph7le52PJEYuSZv1mDJnO16H81MRvQJ9KuwDonmwBD
+         6k1GU7Xesh2MZcdOES8S67Mt8O5z1RUY3xMZMv4gmvJ5hv5RcnAVkE09FNcEKYfhgHBn
+         rtnuS6JjnDFOeObCU4rTGJ2M3jKcNegqxXAzgG/Ha9rdwBKCTl/Ce9w1Vq7qOhTfMdEQ
+         144K73yQcNmW4de48pzWMWqZsM0qPMw/E9ylQm1XHD8HfBUsnxAMptpN7ycL58Pehpps
+         08XeL4BUqSutr5bwYeXMaF184+KbNa+Um0wIY6T1UmYNgwpDeE9eDMc1Ptd2/EMQZuk5
+         qo/w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:from:to:cc:subject:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=UPQKk6k7iZjBvDBrSwiqjZZBhXacN0AVsfOq9/Z93RE=;
+        b=DLdIc33rIPxsq+EU6NmPKgSnnvZlYjuRnRCeyxFyhOIZa/RP4/9QH0QEDZSjYrRooO
+         aDup8kZuWOx5NBQELTs3pA8Y5hjVf1V1KbyZq5Y1op0g7EXPOCe8xgRM3QpiZpmN3HeF
+         3r1PHoOGPUWy9svTm06bt15l5/eZEMAKReqDVIaq0eEJfHhhm4Y6+KAT5kU7Z3pYegDx
+         oFC+zrm5FhhP+nFu/abJSAnq1AC0nx9arqOpt8zjnLiiPlFqcoeBXq+MtzW5YJJ0wllb
+         gfqijl5rgHjmQhuLt9Wws99TTvhDhWa5PbzZ7xCGaAQpHEJYQfZni+fG5ZVh0JurwPvB
+         yI3A==
+X-Gm-Message-State: AOAM5319AtvbWFbYajiAdevF9++MC4NdyoTeZuNQIMkA9vwMZ4dt9bzv
+        foTjcCNb16vO+lZGMJ1LWJP+7Flf23w=
+X-Google-Smtp-Source: ABdhPJzPbgp1O6nSwALSCxsYipeQz7C8LafxJDsmZA0CjnA+ucU/sR54+B09i+/QQGyS79tGfcnk2A==
+X-Received: by 2002:a17:906:a08b:b0:6b9:2e20:f139 with SMTP id q11-20020a170906a08b00b006b92e20f139mr27451391ejy.463.1651757695463;
+        Thu, 05 May 2022 06:34:55 -0700 (PDT)
+Received: from Ansuel-xps. (93-42-70-190.ip85.fastwebnet.it. [93.42.70.190])
+        by smtp.gmail.com with ESMTPSA id mm27-20020a170906cc5b00b006f3ef214e1csm758571ejb.130.2022.05.05.06.34.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 May 2022 06:34:54 -0700 (PDT)
+Message-ID: <6273d27e.1c69fb81.95534.43c8@mx.google.com>
+X-Google-Original-Message-ID: <YnPSfWaN4LlOfwjD@Ansuel-xps.>
+Date:   Thu, 5 May 2022 15:34:53 +0200
+From:   Ansuel Smith <ansuelsmth@gmail.com>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>, Pavel Machek <pavel@ucw.cz>,
+        John Crispin <john@phrozen.org>, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-leds@vger.kernel.org
+Subject: Re: [RFC PATCH v6 11/11] dt-bindings: net: dsa: qca8k: add LEDs
+ definition example
+References: <20220503151633.18760-1-ansuelsmth@gmail.com>
+ <20220503151633.18760-12-ansuelsmth@gmail.com>
+ <YnK0xHOkfXI+rgzs@robh.at.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <c6c22386-af37-1acc-63e9-2bb85028aa8c@huawei.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.55]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpemm500006.china.huawei.com (7.185.36.236)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YnK0xHOkfXI+rgzs@robh.at.kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,88 +84,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, May 04, 2022 at 12:15:48PM -0500, Rob Herring wrote:
+> On Tue, May 03, 2022 at 05:16:33PM +0200, Ansuel Smith wrote:
+> > Add LEDs definition example for qca8k using the offload trigger as the
+> > default trigger and add all the supported offload triggers by the
+> > switch.
+> > 
+> > Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
+> > ---
+> >  .../devicetree/bindings/net/dsa/qca8k.yaml    | 20 +++++++++++++++++++
+> >  1 file changed, 20 insertions(+)
+> > 
+> > diff --git a/Documentation/devicetree/bindings/net/dsa/qca8k.yaml b/Documentation/devicetree/bindings/net/dsa/qca8k.yaml
+> > index f3c88371d76c..9b46ef645a2d 100644
+> > --- a/Documentation/devicetree/bindings/net/dsa/qca8k.yaml
+> > +++ b/Documentation/devicetree/bindings/net/dsa/qca8k.yaml
+> > @@ -65,6 +65,8 @@ properties:
+> >                   internal mdio access is used.
+> >                   With the legacy mapping the reg corresponding to the internal
+> >                   mdio is the switch reg with an offset of -1.
+> > +                 Each phy have at least 3 LEDs connected and can be declared
+> 
+> s/at least/up to/ ?
+> 
+> Or your example is wrong with only 2.
+>
 
+Up to. Internally the regs are there but 99% of the times OEM just
+connect 2 of 3 LEDs. Will fix. 
 
-On 2022/5/5 21:26, Leizhen (ThunderTown) wrote:
-> 
-> 
-> On 2022/5/5 21:04, Mark Rutland wrote:
->> On Thu, May 05, 2022 at 05:56:40PM +0800, Zhen Lei wrote:
->>> Commit 7158627686f0 ("arm64: percpu: implement optimised pcpu access
->>> using tpidr_el1") and commit 6d99b68933fb ("arm64: alternatives: use
->>> tpidr_el2 on VHE hosts") use tpidr_elx to cache my_cpu_offset to optimize
->>> pcpu access. However, when performing reverse execution based on the
->>> registers and the memory contents in kdump, this information is sometimes
->>> required if there is a pcpu access.
->>>
->>> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
->>> ---
->>>  arch/arm64/kernel/process.c | 5 +++++
->>>  1 file changed, 5 insertions(+)
->>>
->>> v2 --> v3:
->>> 1) Relace "switch (read_sysreg(CurrentEL))" statement with
->>>    "if (is_kernel_in_hyp_mode())" statement.
->>> 2) Change the register name to lowercase.
->>>
->>> v1 --> v2:
->>> Directly print the tpidr_elx register of the current exception level.
->>> Avoid coupling with the implementation of 'my_cpu_offset'.
->>>
->>> diff --git a/arch/arm64/kernel/process.c b/arch/arm64/kernel/process.c
->>> index 7fa97df55e3ad3f..7b6bccce9721c36 100644
->>> --- a/arch/arm64/kernel/process.c
->>> +++ b/arch/arm64/kernel/process.c
->>> @@ -216,6 +216,11 @@ void __show_regs(struct pt_regs *regs)
->>>  	show_regs_print_info(KERN_DEFAULT);
->>>  	print_pstate(regs);
->>>  
->>> +	if (is_kernel_in_hyp_mode())
->>> +		printk("tpidr_el2 : %016llx\n", read_sysreg(tpidr_el2));
->>> +	else
->>> +		printk("tpidr_el1 : %016llx\n", read_sysreg(tpidr_el1));
->>
->> If we care about the offset specifically, this would be simpler as:
->>
->> 	printk("cpu offset : 0x%016lx\n", __my_cpu_offset());
-> 
-> The function name is __show_regs(), so not using register name may not be good.
-> In fact, some other architectures may also have this problem. If we use my_cpu_offset,
-> we may need to put it in a public.
-
-The other idea is to back up each my_cpu_offset in an array. In this way, the offset can
-be queried through vmcore even if it is not printed.
-
-> 
->>
->> ... which should do the right thing even if we repurpose the TPIDRs and move the offset elsewhere.
->>
->> As Will says, we should only log this for !user_mode(regs), so it could
->> be placed in the block below, immediately before we print the kernel PC, i.e.
->>
->> 	if (!user_mode_regs) {
->> 		printk("cpu offset : %016lx\n", __my_cpu_offset());
->> 		printk("pc : %pS\n", (void *)regs->pc);
->> 		printk("lr : %pS\n", (void *)ptrauth_strip_insn_pac(lr));
->> 		...
->> 	}
->>
->> ... or in a separate block which checks the same condition.
->>
->> Thanks,
->> Mark.
->>
->>> +
->>>  	if (!user_mode(regs)) {
->>>  		printk("pc : %pS\n", (void *)regs->pc);
->>>  		printk("lr : %pS\n", (void *)ptrauth_strip_insn_pac(lr));
->>> -- 
->>> 2.25.1
->>>
->> .
->>
-> 
+> > +                 using the standard LEDs structure.
+> >  
+> >  patternProperties:
+> >    "^(ethernet-)?ports$":
+> > @@ -287,6 +289,24 @@ examples:
+> >  
+> >                  internal_phy_port1: ethernet-phy@0 {
+> >                      reg = <0>;
+> > +
+> > +                    leds {
+> > +                        led@0 {
+> > +                            reg = <0>;
+> > +                            color = <LED_COLOR_ID_WHITE>;
+> > +                            function = LED_FUNCTION_LAN;
+> > +                            function-enumerator = <1>;
+> > +                            linux,default-trigger = "netdev";
+> > +                        };
+> > +
+> > +                        led@1 {
+> > +                            reg = <1>;
+> > +                            color = <LED_COLOR_ID_AMBER>;
+> > +                            function = LED_FUNCTION_LAN;
+> > +                            function-enumerator = <1>;
+> > +                            linux,default-trigger = "netdev";
+> > +                        };
+> > +                    };
+> >                  };
+> >  
+> >                  internal_phy_port2: ethernet-phy@1 {
+> > -- 
+> > 2.34.1
+> > 
+> > 
 
 -- 
-Regards,
-  Zhen Lei
+	Ansuel

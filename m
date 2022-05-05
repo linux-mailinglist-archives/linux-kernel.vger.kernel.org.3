@@ -2,185 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79E2751BC61
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 11:45:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03BCD51BC65
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 11:45:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348356AbiEEJsq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 05:48:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59974 "EHLO
+        id S1354122AbiEEJtb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 05:49:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232773AbiEEJsm (ORCPT
+        with ESMTP id S1354097AbiEEJt3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 05:48:42 -0400
-Received: from mail.sberdevices.ru (mail.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39A7345AE2;
-        Thu,  5 May 2022 02:45:01 -0700 (PDT)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mail.sberdevices.ru (Postfix) with ESMTP id 74C345FD03;
-        Thu,  5 May 2022 12:44:58 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1651743898;
-        bh=i5sLLkk7MRAHF0tnt27EbWmGa4GeaDP9MgyR2p7p4dI=;
-        h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type;
-        b=sFHiU756bNxKHX8J1KS9ewF0sc3nqI+Kb7p0Shdz4IZ07GKha14E3/pjCbEda24HB
-         AmiI6N0qNbv8ZCxTeuk6Zy66LXEBRpKlaoTSYyfL2mYm5tRVoa+1gl5EpaswImK/6Z
-         i9moAx2i50uFrSHoqjdz+ZpHXi4mBrWotZkG73UJUqH3XFmR7hoReAecv42GKRf+Oj
-         2K8JsY9Ts+K/6iAr/JL71E+IkZ6Q1otTc0mifohxv0r2yeSn1N4W5xfb50hDN5b2h1
-         xjJmWXF18o6O7UkpDMN65IYyM9Sje/DRRq+l5i4V25J84upjTj+LQJzDyneHtF72qJ
-         DRlJyGIN+APCw==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
-        by mail.sberdevices.ru (Postfix) with ESMTP;
-        Thu,  5 May 2022 12:44:57 +0300 (MSK)
-From:   Alexey Romanov <avromanov@sberdevices.ru>
-To:     <akpm@linux-foundation.org>
-CC:     <minchan@kernel.org>, <ngupta@vflare.org>,
-        <senozhatsky@chromium.org>, <linux-block@vger.kernel.org>,
-        <axboe@chromium.org>, <kernel@sberdevices.ru>,
-        <linux-kernel@vger.kernel.org>, <mnitenko@gmail.com>,
-        Alexey Romanov <avromanov@sberdevices.ru>,
-        Dmitry Rokosov <ddrokosov@sberdevices.ru>
-Subject: [PATCH v5] zram: remove double compression logic
-Date:   Thu, 5 May 2022 12:44:43 +0300
-Message-ID: <20220505094443.11728-1-avromanov@sberdevices.ru>
-X-Mailer: git-send-email 2.33.0
+        Thu, 5 May 2022 05:49:29 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEC841AF04
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 02:45:50 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id r9so3700202pjo.5
+        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 02:45:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=Xd+tFU4G6DiHT7gIjy4KKIDQKgemXk6bnmPVHdW1sAc=;
+        b=qnlHZ+v6nzaiWZnsSkygEbiKNIGLS53iBtlot9+8u+KvtVnyMzeKoOksnY+xVHxKrT
+         Lz9CpGjYrEpC/QZm9KT19CItp17cgx9gnp66neRlQzxRR72//DpI7C2PjnWDdxmn6+xL
+         VB/f84cTCRcZtYxzRUtQRuth4nPhqyvZpgTlxP3bTcSy6JwuA1TDmdWaBdqfc3WcpXgn
+         njlIJ3XWnXC8lRMus63hIKZygsLUiOFbtjF2OFwogfhZtcexsS7PSwgZKTCYHXraU4pA
+         JJ5+KORlvZ6bAevhfRsviXyvZxUmJtCleiEb8C0sDrgfGL08z2Zv4uTbc1sNH4wiCMM0
+         /ndw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=Xd+tFU4G6DiHT7gIjy4KKIDQKgemXk6bnmPVHdW1sAc=;
+        b=KTPNLAFQuARXusQ5ifsBvd3bV/v8gnlyhrn5iBVNakDstxoLeKaSSpmXL0Eq4SBATH
+         dlR7sD1Imt2SvoaKzOTkzSNLMUOOk/eXjKQc3BUQtVo/w2kgUgNVU3QVi1NU7TnDAycp
+         +LDmYoKI9tAZwbMDyxPetytZKKLnQ98/1bqO0H3LR49dv4VDReqyHNtObdjoIImihlSA
+         ACAuEf0+v8a7h9ilyDrz+lMSL4l0ilKMk+40QrtyB2G+OzvqOEg+gJYZfQlJSMrpC2Ls
+         ceAoKvm1nuso/vMjnrzirkBdkaLoOUp4nZq2bM+qFL24FQ8iULj8NW9vDsQOJB0oe1gO
+         DpdA==
+X-Gm-Message-State: AOAM532+PjrCqpLIQoi5vXWSLiOyI5FGEPCU6fM3drooP95hK1sbUtb0
+        DCbBpjSjKnSOohWk59O5eVAoFQ==
+X-Google-Smtp-Source: ABdhPJxhUO8FQ8vO2QKxlT51BGpwvAlvoIbwqpuo53kcnys/cWG/navnqZwc2uKd+K7E2NDJU85rDQ==
+X-Received: by 2002:a17:902:a987:b0:158:b020:e5b8 with SMTP id bh7-20020a170902a98700b00158b020e5b8mr26451166plb.103.1651743950207;
+        Thu, 05 May 2022 02:45:50 -0700 (PDT)
+Received: from localhost ([122.162.234.2])
+        by smtp.gmail.com with ESMTPSA id f18-20020a63f112000000b003c14af50603sm859049pgi.27.2022.05.05.02.45.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 May 2022 02:45:49 -0700 (PDT)
+Date:   Thu, 5 May 2022 15:15:47 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Vincent Guittot <vincent.guittot@linaro.org>
+Cc:     Rafael Wysocki <rjw@rjwysocki.net>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-pm@vger.kernel.org, Rex-BC Chen <rex-bc.chen@mediatek.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH] cpufreq: Avoid unnecessary frequency updates due to
+ mismatch
+Message-ID: <20220505094547.skkwuthq454ajo7l@vireshk-i7>
+References: <39e39a7d30c8ee6af81fb64670a330abeb87402e.1651652493.git.viresh.kumar@linaro.org>
+ <CAKfTPtDbsd+RLwY+0ZfnNWkQD+jOHmoX2K+ZfsOMnEH81ouVjw@mail.gmail.com>
+ <20220505074408.ayzmd5kdbw2fagbq@vireshk-i7>
+ <CAKfTPtCuJGsrsBJ2jACr_YeKN3RXNVMkgRgo+cw9t7CAyGwHWQ@mail.gmail.com>
+ <20220505082801.oks7ko2sbqazyenn@vireshk-i7>
+ <CAKfTPtCfKBiQkghY6gw+sSYYOXFRWMZNXsr64Vn5G-Oo1HF8ew@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [172.16.1.6]
-X-ClientProxiedBy: S-MS-EXCH01.sberdevices.ru (172.16.1.4) To
- S-MS-EXCH01.sberdevices.ru (172.16.1.4)
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2022/05/05 05:40:00 #19360487
-X-KSMG-AntiVirus-Status: Clean, skipped
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAKfTPtCfKBiQkghY6gw+sSYYOXFRWMZNXsr64Vn5G-Oo1HF8ew@mail.gmail.com>
+User-Agent: NeoMutt/20180716-391-311a52
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The 2nd trial allocation under per-cpu presumption has been used to
-prevent regression of allocation failure. However, it makes trouble
-for maintenance without significant benefit. The slowpath branch is
-executed extremely rarely: getting there is problematic. Therefore,
-we delete this branch.
+On 05-05-22, 11:40, Vincent Guittot wrote:
+> On Thu, 5 May 2022 at 10:28, Viresh Kumar <viresh.kumar@linaro.org> wrote:
+> >
+> > On 05-05-22, 10:21, Vincent Guittot wrote:
+> > > Part of your problem is that cpufreq use khz whereas clock uses hz
+> >
+> > Not in this case at least as the value mentioned in OPP table DT is in
+> > Hz.
+> 
+> But dev_pm_opp_init_cpufreq_table make it kHz anyway
 
-Since b09ab054b69b, zram has used QUEUE_FLAG_STABLE_WRITES to prevent
-buffer change between 1st and 2nd memory allocations. Since we remove
-second trial memory allocation logic, we could remove the STABLE_WRITES
-flag because there is no change buffer to be modified under us.
+Yes.
 
-Signed-off-by: Alexey Romanov <avromanov@sberdevices.ru>
-Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
----
- drivers/block/zram/zram_drv.c | 42 +++++++++--------------------------
- drivers/block/zram/zram_drv.h |  1 -
- 2 files changed, 10 insertions(+), 33 deletions(-)
+> > > Would it be better to do something like below in cpufreq_generic_get
+> > >
+> > > (clk_get_rate(policy->clk) + 500) / 1000
+> > >
+> > > so you round to closest instead of always floor rounding
+> >
+> > That would be a fine thing to do anyway, though I am not sure if it
+> > will fix the problem at hand.
+> >
+> > If the hardware returns 499,999,499 Hz, we will still have the
+> > problem.
+> 
+> But in this case, cpufreq table should use 499,999Khz IMO.
 
-diff --git a/drivers/block/zram/zram_drv.c b/drivers/block/zram/zram_drv.c
-index cb253d80d72b..e10066a10dcf 100644
---- a/drivers/block/zram/zram_drv.c
-+++ b/drivers/block/zram/zram_drv.c
-@@ -1147,15 +1147,14 @@ static ssize_t bd_stat_show(struct device *dev,
- static ssize_t debug_stat_show(struct device *dev,
- 		struct device_attribute *attr, char *buf)
- {
--	int version = 1;
-+	int version = 2;
- 	struct zram *zram = dev_to_zram(dev);
- 	ssize_t ret;
- 
- 	down_read(&zram->init_lock);
- 	ret = scnprintf(buf, PAGE_SIZE,
--			"version: %d\n%8llu %8llu\n",
-+			"version: %d\n%8llu\n",
- 			version,
--			(u64)atomic64_read(&zram->stats.writestall),
- 			(u64)atomic64_read(&zram->stats.miss_free));
- 	up_read(&zram->init_lock);
- 
-@@ -1373,7 +1372,6 @@ static int __zram_bvec_write(struct zram *zram, struct bio_vec *bvec,
- 	}
- 	kunmap_atomic(mem);
- 
--compress_again:
- 	zstrm = zcomp_stream_get(zram->comp);
- 	src = kmap_atomic(page);
- 	ret = zcomp_compress(zstrm, src, &comp_len);
-@@ -1382,39 +1380,20 @@ static int __zram_bvec_write(struct zram *zram, struct bio_vec *bvec,
- 	if (unlikely(ret)) {
- 		zcomp_stream_put(zram->comp);
- 		pr_err("Compression failed! err=%d\n", ret);
--		zs_free(zram->mem_pool, handle);
- 		return ret;
- 	}
- 
- 	if (comp_len >= huge_class_size)
- 		comp_len = PAGE_SIZE;
--	/*
--	 * handle allocation has 2 paths:
--	 * a) fast path is executed with preemption disabled (for
--	 *  per-cpu streams) and has __GFP_DIRECT_RECLAIM bit clear,
--	 *  since we can't sleep;
--	 * b) slow path enables preemption and attempts to allocate
--	 *  the page with __GFP_DIRECT_RECLAIM bit set. we have to
--	 *  put per-cpu compression stream and, thus, to re-do
--	 *  the compression once handle is allocated.
--	 *
--	 * if we have a 'non-null' handle here then we are coming
--	 * from the slow path and handle has already been allocated.
--	 */
--	if (!handle)
--		handle = zs_malloc(zram->mem_pool, comp_len,
--				__GFP_KSWAPD_RECLAIM |
--				__GFP_NOWARN |
--				__GFP_HIGHMEM |
--				__GFP_MOVABLE);
--	if (!handle) {
-+
-+	handle = zs_malloc(zram->mem_pool, comp_len,
-+			__GFP_KSWAPD_RECLAIM |
-+			__GFP_NOWARN |
-+			__GFP_HIGHMEM |
-+			__GFP_MOVABLE);
-+
-+	if (unlikely(!handle)) {
- 		zcomp_stream_put(zram->comp);
--		atomic64_inc(&zram->stats.writestall);
--		handle = zs_malloc(zram->mem_pool, comp_len,
--				GFP_NOIO | __GFP_HIGHMEM |
--				__GFP_MOVABLE);
--		if (handle)
--			goto compress_again;
- 		return -ENOMEM;
- 	}
- 
-@@ -1975,7 +1954,6 @@ static int zram_add(void)
- 	if (ZRAM_LOGICAL_BLOCK_SIZE == PAGE_SIZE)
- 		blk_queue_max_write_zeroes_sectors(zram->disk->queue, UINT_MAX);
- 
--	blk_queue_flag_set(QUEUE_FLAG_STABLE_WRITES, zram->disk->queue);
- 	ret = device_add_disk(NULL, zram->disk, zram_disk_groups);
- 	if (ret)
- 		goto out_cleanup_disk;
-diff --git a/drivers/block/zram/zram_drv.h b/drivers/block/zram/zram_drv.h
-index 80c3b43b4828..158c91e54850 100644
---- a/drivers/block/zram/zram_drv.h
-+++ b/drivers/block/zram/zram_drv.h
-@@ -81,7 +81,6 @@ struct zram_stats {
- 	atomic64_t huge_pages_since;	/* no. of huge pages since zram set up */
- 	atomic64_t pages_stored;	/* no. of pages currently stored */
- 	atomic_long_t max_used_pages;	/* no. of maximum pages stored */
--	atomic64_t writestall;		/* no. of write slow paths */
- 	atomic64_t miss_free;		/* no. of missed free */
- #ifdef	CONFIG_ZRAM_WRITEBACK
- 	atomic64_t bd_count;		/* no. of pages in backing device */
+I did think about it earlier, but then left it.
+
+> We already
+> have OPP/cpufreq table being updated at boot with actual value.
+
+I don't think we update the frequency values there yet, but yes one
+way to fix it is via DT.
+
 -- 
-2.30.1
-
+viresh

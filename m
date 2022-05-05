@@ -2,172 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2B4051CC50
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 00:48:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B970151CC53
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 00:49:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386491AbiEEWwR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 18:52:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34986 "EHLO
+        id S1386500AbiEEWwr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 18:52:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381253AbiEEWwO (ORCPT
+        with ESMTP id S1386487AbiEEWwn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 18:52:14 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 844F55BD2B
-        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 15:48:33 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id t11-20020a17090ad50b00b001d95bf21996so9265439pju.2
-        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 15:48:33 -0700 (PDT)
+        Thu, 5 May 2022 18:52:43 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFAD65BD2B
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 15:49:02 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id k2so7837116wrd.5
+        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 15:49:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=dOvtahK956Ivo+8wYfwH4F2X00Zrm/MhoFWEgCAUD/s=;
-        b=B7YNLeILdO7JIZFMjaI+Xd8odazymDoK4JVXXm9WjQBUXwPcVdvv181pdkz8Rfur+F
-         FUzUwcFS19U1qZci1rlkeuziHXEPZn8EAndNdzobYO4AIDtnHzXFv13BJUBdHRo3Xh7Z
-         NmBdNrIz0woYjhvJcS49lKoQ6idyX5XwFdNjk=
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Uedg4qEa719vdJ+Zqn6AbL/3oPXYxbSNoFRml+lJnds=;
+        b=jHJfv2myfbFEuc1bQulthDC61DAKRpfqYvgRqvL1Otueop0POr35oaBjJLvt6Z0k4Y
+         mFqJbl7wIl3HYtcQWeKaLewdcWJYwgWu5bXPl4NQh3Gy7lmjXa+QOLiJy3hq0ZnL2Sbb
+         9+7IAMqNqJ7ylSwvbzDoRE7+1Bvv+eLETsglPLnWd6lGplvyAKFPqRWcu3WcGOQb8qCs
+         fQLAtmzY7uiEA5EKLvdqSaEbBxAWor0F5c54KTV/wWE9cXHuGjShxX2lvGCzxfidmBjL
+         bvMGC9kT78OkkEejU620M1L+MfGXAy8eWsyxb2/zhdoO+Mohc7KAmkwj4uFGZ6QGGUbg
+         SfeA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=dOvtahK956Ivo+8wYfwH4F2X00Zrm/MhoFWEgCAUD/s=;
-        b=zHaA6oKjmTl7fOfwGRG5H6eSY+h4XxtciZGA90G9vdu0HYwE/gCnB6sa0co5k+ypKI
-         sD587bkhCC3XiXchOHMuFjGT1/oQmiLXWLc3ZiWjnWbtlqK5jCyZMMpOhkrOT52cAk+6
-         t4YvskRXmu0QSxZQr00hvj+ObR5JswkHRHnba332tateNMviJVMwPnjek46GOtjJgiar
-         jc78pobrP063bsfxSIKwTucvsPiL8CelEzxRcLdw856O154X8MviBz19njd7w0lG4af8
-         cQXs+jNY5RNiPZQOit4rF5Z1bpec2zWHB37+GVj+V7JNAQ6OscK6PVayjqWZ8zBZ6C0r
-         nd2A==
-X-Gm-Message-State: AOAM531vbKkABycg/vgDqykqOKWdGuEZWKYQlaunj2oUwmSoL5DNuhSb
-        NBm5Sy/fWLglv14k7uS81v6/sQ==
-X-Google-Smtp-Source: ABdhPJwji52geo2qkgFpp9fgSwaUVZ9VbcOfLrtQ81fQp2II80rTvMrsuXG7lN58lVPelZ2IgJ9q+g==
-X-Received: by 2002:a17:902:f64e:b0:14d:20db:8478 with SMTP id m14-20020a170902f64e00b0014d20db8478mr485373plg.158.1651790913052;
-        Thu, 05 May 2022 15:48:33 -0700 (PDT)
-Received: from localhost ([2620:15c:202:201:5605:d5cd:699b:1b26])
-        by smtp.gmail.com with UTF8SMTPSA id 2-20020a621702000000b0050dc76281f6sm1876448pfx.208.2022.05.05.15.48.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 05 May 2022 15:48:32 -0700 (PDT)
-Date:   Thu, 5 May 2022 15:48:31 -0700
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Krishna Kurapati <quic_kriskura@quicinc.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, quic_pkondeti@quicinc.com,
-        quic_ppratap@quicinc.com, quic_vpulyala@quicinc.com,
-        Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-Subject: Re: [v15 3/6] usb: dwc3: core: Host wake up support from system
- suspend
-Message-ID: <YnRUPxBZB55TPmf2@google.com>
-References: <1651740973-7944-1-git-send-email-quic_kriskura@quicinc.com>
- <1651740973-7944-4-git-send-email-quic_kriskura@quicinc.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Uedg4qEa719vdJ+Zqn6AbL/3oPXYxbSNoFRml+lJnds=;
+        b=ysHMV6/qPh/nKa1ZB9hhph7/rkXUnx35Jh4q9ajxrN7iDEhN85dOIyqRkhK84McKVH
+         V5gqppYEMIEcrVNVm3b/8c/EGzlDezfFFijeIRI3RY1dYPZ4emc24C+8rwYwgAbtKCbk
+         QnK9Zp9ZxGWwVYsTYrpI5EHjQUOciDfGHXwlF7muwUVlQ9AUNrAOw5OHWkEkZAmbBQmH
+         pqK+7yhwY/yBV6Wy7FsDf2ZA59qeh5sF5l6fqC2woLMe6wbyfQkGEA2G/AiKLLr4h3ID
+         htmcwUQKGemM7XxYXWGqALtyGnZBx1MyQIGHlpC5gwUBrl6NRdYVImrCj54eBCUhA/Oa
+         de0w==
+X-Gm-Message-State: AOAM53189i8thGYXfKvnSPUtkfspOqdkeqnmYyNcPwdX8+sUNEkNe5D7
+        a5dBvtAIPZYXlPToiX7yEHCQ5XJApGUHY8P5NDuvCw==
+X-Google-Smtp-Source: ABdhPJyMM74FcrKHXOKHdDPgZ+MvJIvdnRAR+kCrGVUGABu640Wn09LPsNuOy7fAnd8IO+AvQlPpcw3yTGSqd6B5cqQ=
+X-Received: by 2002:adf:f30a:0:b0:20a:e193:6836 with SMTP id
+ i10-20020adff30a000000b0020ae1936836mr260174wro.654.1651790941279; Thu, 05
+ May 2022 15:49:01 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <1651740973-7944-4-git-send-email-quic_kriskura@quicinc.com>
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220505165639.361733-1-adrian.hunter@intel.com> <20220505165639.361733-3-adrian.hunter@intel.com>
+In-Reply-To: <20220505165639.361733-3-adrian.hunter@intel.com>
+From:   Ian Rogers <irogers@google.com>
+Date:   Thu, 5 May 2022 15:48:47 -0700
+Message-ID: <CAP-5=fWyYQbgs99-wm7frfaHQXUFO6b-Lur=BEy48beEsYnehQ@mail.gmail.com>
+Subject: Re: [PATCH V1 02/23] libperf evsel: Add perf_evsel__enable_thread()
+To:     Adrian Hunter <adrian.hunter@intel.com>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Leo Yan <leo.yan@linaro.org>, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 05, 2022 at 02:26:10PM +0530, Krishna Kurapati wrote:
-> From: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-> 
-> During suspend read the status of all port and set hs phy mode
-> based on current speed. Use this hs phy mode to configure wakeup
-> interrupts in qcom glue driver.
-> 
-> Check wakeup-source property for dwc3 core node to set the
-> wakeup capability. Drop the device_init_wakeup call from
-> runtime suspend and resume.
-> 
-> Also check during suspend if any wakeup capable devices are
-> connected to the controller (directly or through hubs), if there
-> are none set a flag to indicate that the PHY is powered
-> down during suspend.
-> 
-> Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+On Thu, May 5, 2022 at 9:56 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
+>
+> Add perf_evsel__enable_thread() as a counterpart to
+> perf_evsel__enable_cpu(), to enable all events for a thread.
+>
+> Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
 > ---
->  drivers/usb/dwc3/core.c | 33 ++++++++++++++++++++-------------
->  drivers/usb/dwc3/core.h |  4 ++++
->  drivers/usb/dwc3/host.c | 24 ++++++++++++++++++++++++
->  3 files changed, 48 insertions(+), 13 deletions(-)
-> 
-> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-> index 950e238..cf377f5 100644
-> --- a/drivers/usb/dwc3/core.c
-> +++ b/drivers/usb/dwc3/core.c
-> @@ -33,6 +33,7 @@
->  #include <linux/usb/gadget.h>
->  #include <linux/usb/of.h>
->  #include <linux/usb/otg.h>
-> +#include <linux/usb/hcd.h>
-
-This is not needed anymore
-
->  
->  #include "core.h"
->  #include "gadget.h"
-> @@ -1787,6 +1788,7 @@ static int dwc3_probe(struct platform_device *pdev)
->  
->  	platform_set_drvdata(pdev, dwc);
->  	dwc3_cache_hwparams(dwc);
-> +	device_init_wakeup(&pdev->dev, of_property_read_bool(dev->of_node, "wakeup-source"));
->  
->  	spin_lock_init(&dwc->lock);
->  	mutex_init(&dwc->mutex);
-> @@ -1936,6 +1938,7 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
->  {
->  	unsigned long	flags;
->  	u32 reg;
-> +	struct usb_hcd  *hcd = platform_get_drvdata(dwc->xhci);
-
-This isn't used anymore, delete it
-
->  
->  	switch (dwc->current_dr_role) {
->  	case DWC3_GCTL_PRTCAP_DEVICE:
-> @@ -1948,10 +1951,7 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
->  		dwc3_core_exit(dwc);
->  		break;
->  	case DWC3_GCTL_PRTCAP_HOST:
-> -		if (!PMSG_IS_AUTO(msg)) {
-> -			dwc3_core_exit(dwc);
-> -			break;
-> -		}
-> +		dwc3_check_phy_speed_mode(dwc);
->  
->  		/* Let controller to suspend HSPHY before PHY driver suspends */
->  		if (dwc->dis_u2_susphy_quirk ||
-> @@ -1967,6 +1967,16 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
->  
->  		phy_pm_runtime_put_sync(dwc->usb2_generic_phy);
->  		phy_pm_runtime_put_sync(dwc->usb3_generic_phy);
+>  tools/lib/perf/evsel.c              | 10 ++++++++++
+>  tools/lib/perf/include/perf/evsel.h |  1 +
+>  2 files changed, 11 insertions(+)
+>
+> diff --git a/tools/lib/perf/evsel.c b/tools/lib/perf/evsel.c
+> index 20ae9f5f8b30..dcc928dd25f8 100644
+> --- a/tools/lib/perf/evsel.c
+> +++ b/tools/lib/perf/evsel.c
+> @@ -360,6 +360,16 @@ int perf_evsel__enable_cpu(struct perf_evsel *evsel, int cpu_map_idx)
+>         return perf_evsel__run_ioctl(evsel, PERF_EVENT_IOC_ENABLE, NULL, cpu_map_idx);
+>  }
+>
+> +int perf_evsel__enable_thread(struct perf_evsel *evsel, int thread)
+> +{
+> +       int err = 0;
+> +       int idx;
 > +
-> +		if (!PMSG_IS_AUTO(msg)) {
-> +			if (device_may_wakeup(dwc->dev) &&
-> +					device_wakeup_path(dwc->dev)) {
+> +       for (idx = 0; idx < xyarray__max_x(evsel->fd) && !err; idx++)
+> +               err = perf_evsel__ioctl(evsel, PERF_EVENT_IOC_ENABLE, NULL, idx, thread);
 
-nit: the indentation is odd, align it with device_may_wakeup()?
+For perf_cpu_map code like this has been replaced with
+perf_cpu_map__for_each_cpu, it would be nice here to use a
+perf_thread_map__for_each_thread. I understand we don't have that at
+the moment. It would be easier to find places to add this if there is
+a call to perf_thread_map__nr. Adding an assert of:
 
-> +				dwc->phy_power_off = false;
-> +			} else {
-> +				dwc->phy_power_off = true;
-> +				dwc3_core_exit(dwc);
+assert(perf_thread_map__nr(evsel->thread_map) == xyarray__max_x(evsel->fd));
 
-As commented earlier, taking the controller and PHYs completely down causes a
-significant power draw in some USB clients. Let's clarify what the specific
-benefits are of doing dwc3_core_exit() vs. entering a low power mode.
+Would help, or we could add the loop.
 
+Thanks,
+Ian
+
+> +       return err;
+> +}
+> +
+>  int perf_evsel__enable(struct perf_evsel *evsel)
+>  {
+>         int i;
+> diff --git a/tools/lib/perf/include/perf/evsel.h b/tools/lib/perf/include/perf/evsel.h
+> index 2a9516b42d15..699c0ed97d34 100644
+> --- a/tools/lib/perf/include/perf/evsel.h
+> +++ b/tools/lib/perf/include/perf/evsel.h
+> @@ -36,6 +36,7 @@ LIBPERF_API int perf_evsel__read(struct perf_evsel *evsel, int cpu_map_idx, int
+>                                  struct perf_counts_values *count);
+>  LIBPERF_API int perf_evsel__enable(struct perf_evsel *evsel);
+>  LIBPERF_API int perf_evsel__enable_cpu(struct perf_evsel *evsel, int cpu_map_idx);
+> +LIBPERF_API int perf_evsel__enable_thread(struct perf_evsel *evsel, int thread);
+>  LIBPERF_API int perf_evsel__disable(struct perf_evsel *evsel);
+>  LIBPERF_API int perf_evsel__disable_cpu(struct perf_evsel *evsel, int cpu_map_idx);
+>  LIBPERF_API struct perf_cpu_map *perf_evsel__cpus(struct perf_evsel *evsel);
+> --
+> 2.25.1
+>

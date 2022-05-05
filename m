@@ -2,91 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED86051C527
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 18:31:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41ACD51C528
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 18:31:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382007AbiEEQeX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 12:34:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56918 "EHLO
+        id S1382014AbiEEQem (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 12:34:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381473AbiEEQeT (ORCPT
+        with ESMTP id S232478AbiEEQek (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 12:34:19 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E82A4B1D4;
-        Thu,  5 May 2022 09:30:38 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id ks9so3342073ejb.2;
-        Thu, 05 May 2022 09:30:38 -0700 (PDT)
+        Thu, 5 May 2022 12:34:40 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A7D44ECD8
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 09:31:00 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id cx11-20020a17090afd8b00b001d9fe5965b3so8471776pjb.3
+        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 09:31:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=google.com; s=20210112;
         h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=uWtgKKcajdz2BPJdKiwyTVbFB4omDy6DEJqy2lfeeqQ=;
-        b=hkFRRzh9WGqFiiEo6JXUDGQShvw+35UMlB1e48yZYL74nqgUp4F6N77zk7wy8fwGMU
-         06gFBKaka/bekg+u6rGJY15zZi/8VlqzmcSCYNaGOrOtq0oV/JXDW6JD4LtozAcAALg8
-         6qXMWhUo8xw2085Ytqj/3ds32GixLQVZc4r8skTAnJqkj/+4e86l3CYAvy6uD3IOmV+5
-         Op+yFcEdOAoC35xx+rXa7keTNiLNOij2so3hiiC5JjTPe4BX5aq5DUD4xq6QXJ2L/zdF
-         G2y7yJPWVfmKQyjc1VxIS/CiM8Pd/FHPehthhPo8THoNvaozDKUKPEsxX2wz/hkkXxl6
-         /bTA==
+         :content-disposition:in-reply-to;
+        bh=v9OcuXb9vFCkW+RJjZNp2f7Wxc2CJq8/73BL58AUb1Y=;
+        b=CfQPl9zIqEqyrneW7slih37AsNDG3C4Yt86bIfhHoUSWlAqxd9VZsBq1tIr91BD3Gw
+         5lJ2J3XGN7F80FeT3tHzXA2z6BwDXmS+TQH9zQk+wp3ML8T3ce0Gb+dxsNvpBUkA/m25
+         oelaYhJku2SSImqmN86k0tnG9hRjJtLwGK4dNMUgFDQ/78ywrnk8B5FrIl7RFc6Ip0lp
+         RUMo8TbMUf+Zr7SRLJ4o5kd/xlnpgOAu4HAJjzeYQ/AQTbq5sUAiozxRq4ISYkMls5xe
+         00WUrAdDbdSNLPqmDK3R05epOuKaXbQMBnDn8/SZxx1+uOOJfRh3BLlNf9CXPfRgucVu
+         lFaQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=uWtgKKcajdz2BPJdKiwyTVbFB4omDy6DEJqy2lfeeqQ=;
-        b=OpS95CFFU3xG2zwkup0W83jtk+jE1ZpLQsdttDJeVfaaV9u7H3pdXaA/j5Yq3kTyO9
-         YiHo4lfp2sI2WlFhMyQY9HlDvtP0QgkbWxNp0t3ky9fYSM1tAg+scnXtXWoaz4+S9MiK
-         YKKWWf+zkvz55YLSyrLjQM32R1+nuf2sSD2Ghl3pl0LoK+IUdNYYUw4A5oQ8oOWBsfGf
-         z3dQBlOkE3EvnGXeUQVRQvlxawKuTRj577anpO0uX+H+27aiGGqNi96Qa4b8X/Hzk1JL
-         1+NKJL8L/nOD1c2hqsHO2Os9KZVavlG++OT+Eq0Ca4z/17D/d5EZJnekGZ3mvM6K8NFk
-         naYw==
-X-Gm-Message-State: AOAM531sdOXCyUm9kAVh3Wusix60KnyhY4D4+7AbPl+FKfnhpRS/vq13
-        IfWcPaO4G0CCcedBpL6aW/k=
-X-Google-Smtp-Source: ABdhPJwBr27HFxzPJMx0nDaKSh9v9aTcDqMdXyURyBRGkHhqFvQBwM7hybPN+cL10Oaq1xuUGtuyfw==
-X-Received: by 2002:a17:906:29c2:b0:6f3:da29:8304 with SMTP id y2-20020a17090629c200b006f3da298304mr27312343eje.569.1651768236826;
-        Thu, 05 May 2022 09:30:36 -0700 (PDT)
-Received: from skbuf ([188.25.160.86])
-        by smtp.gmail.com with ESMTPSA id gx13-20020a1709068a4d00b006f3ef214e6asm918877ejc.208.2022.05.05.09.30.34
+         :mime-version:content-disposition:in-reply-to;
+        bh=v9OcuXb9vFCkW+RJjZNp2f7Wxc2CJq8/73BL58AUb1Y=;
+        b=e+aDbs0E9SDS92WWwb2hFLEquQzLvacAKgKgDenWB0qzLX84kfXMWOATOyPupDDWk8
+         KaWj3no2RM71pFRNwFCUKK2n5J7Od8gO4t5SR/kRBeHvOcqPzoLjC59YVS8a92UwZbQe
+         FPaAUDyqVt5ZHJXqW+Cgb4y5M4dyZVecMKKLHXqZtKmzn21zwgONks3EeYSO/7qy72um
+         At7VTBvrmLvUw2VPeSqieVdrvZjay4Vg7le4Af+jL6Dm9ebr8zq0seRTVVh1XeT8COSG
+         Vu4JHq3u2zcwfqC2uXy8xBRMLDzxSRO0YrdhTEOw+A3aPQnvrZznqKrmlPsMjywqlDn3
+         +84Q==
+X-Gm-Message-State: AOAM533A1PnT/OufdBYqoLRchRlh56+LZeEtDkR9krEttF0fhviWu9BH
+        W7Tt0XGkSi3SGrpnAHiZWbG3/qdPV3tHRg==
+X-Google-Smtp-Source: ABdhPJyPgmuNVn9/GTEDuPTE+EjZqvCDEfBpij2BKs2l/YSZJTlAJ5JUC4ICAf4B+LBTEGWM2diwtw==
+X-Received: by 2002:a17:90a:170c:b0:1dc:20c4:6354 with SMTP id z12-20020a17090a170c00b001dc20c46354mr7134882pjd.113.1651768259547;
+        Thu, 05 May 2022 09:30:59 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id 6-20020a170902c14600b0015e8d4eb23bsm1750865plj.133.2022.05.05.09.30.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 May 2022 09:30:35 -0700 (PDT)
-Date:   Thu, 5 May 2022 19:30:33 +0300
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     =?utf-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Herve Codina <herve.codina@bootlin.com>,
-        =?utf-8?Q?Miqu=C3=A8l?= Raynal <miquel.raynal@bootlin.com>,
-        Milan Stevanovic <milan.stevanovic@se.com>,
-        Jimmy Lalande <jimmy.lalande@se.com>,
-        Pascal Eberhard <pascal.eberhard@se.com>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH net-next v3 08/12] net: dsa: rzn1-a5psw: add FDB support
-Message-ID: <20220505163033.3n744lm2ipsjmrlt@skbuf>
-References: <20220504093000.132579-1-clement.leger@bootlin.com>
- <20220504093000.132579-9-clement.leger@bootlin.com>
- <20220504162457.eeggo4xenvxddpkr@skbuf>
- <20220505154431.06174a04@fixe.home>
+        Thu, 05 May 2022 09:30:58 -0700 (PDT)
+Date:   Thu, 5 May 2022 16:30:55 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Vipin Sharma <vipinsh@google.com>
+Cc:     pbonzini@redhat.com, dmatlack@google.com, vkuznets@redhat.com,
+        wanpengli@tencent.com, jmattson@google.com, joro@8bytes.org,
+        bgardon@google.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RFC] KVM: x86/mmu: Remove KVM memory shrinker
+Message-ID: <YnP7v0osIshCIPZH@google.com>
+References: <20220503221357.943536-1-vipinsh@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220505154431.06174a04@fixe.home>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+In-Reply-To: <20220503221357.943536-1-vipinsh@google.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -94,22 +73,136 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 05, 2022 at 03:44:31PM +0200, Clément Léger wrote:
-> Indeed, I'll simply remove these error message. Should I still return
-> an error value however ? Seems like I should not to avoid triggering
-> any error that might confuse the user.
+On Tue, May 03, 2022, Vipin Sharma wrote:
+> KVM memory shrinker is only used in the shadow paging. Most of the L1
+> guests are backed by TDP (Two Dimensional Paging) which do not use the
+> shrinker, only L2 guests are backed by shadow paging.
 
-The error code will not be propagated to the bridge driver anyway, but
-will trigger prints in dsa_slave_switchdev_event_work() however.
+Nit, the TDP MMU doesn't use the shrinker, but legacy MMU, which supports TDP,
+does.
 
-You have to choose between 2 alternatives
-(a) keep the FDB entry around until it gets removed from all VLANs
-(b) delete the FDB entry as soon as it gets removed from the first VLAN
+> KVM memory shrinker can cause guests performance to degrade if any other
+> process (VM or non-VM) in the same or different cgroup in kernel causes
+> memory shrinker to run.
 
-Both options are going to raise eyebrows. (a) will result in "huh, why
-did my packet get delivered to this port when the address wasn't in the
-FDB?", while (b) will result in "huh, why was my packet flooded when the
-address was in the FDB?"
+Ah, but digging into this aspect reveals that per-memcg shrinkers were added in
+2015 by commit cb731d6c62bb ("vmscan: per memory cgroup slab shrinkers").  I
+haven't dug too deep, but presumably it wouldn't be all that difficult to support
+SHRINKER_MEMCG_AWARE in KVM.  That's quite tempting to support as it would/could
+guard against an unintentional DoS of sorts against L1 from L2, e.g. if L1 doesn't
+cap the number of TDP SPTEs it creates (*cough* TDP MMU *cough*) and ends up
+creating a large number of SPTEs for L2.  IIUC, that sort of scenario was the
+primary motivation for commit 2de4085cccea ("KVM: x86/MMU: Recursively zap nested
+TDP SPs when zapping last/only parent").
 
-And since (b) is of lower complexity than (a), I'd just silently exit,
-maybe add a comment explaining why, and hope for the best.
+> The KVM memory shrinker was introduced in 2008,
+> commit 3ee16c814511 ("KVM: MMU: allow the vm to shrink the kvm mmu
+> shadow caches"), each invocation of shrinker only released 1 shadow page
+> in 1 VM. This behavior was not effective until the batch zapping commit
+> was added in 2020, commit ebdb292dac79 ("KVM: x86/mmu: Batch zap MMU
+> pages when shrinking the slab"), which zaps multiple pages but still in
+> 1 VM for each shrink invocation. Overall, this feature existed for many
+> years without providing meaningful benefit.
+> 
+> Signed-off-by: Vipin Sharma <vipinsh@google.com>
+> ---
+>  arch/x86/kvm/mmu/mmu.c | 99 ++----------------------------------------
+>  1 file changed, 3 insertions(+), 96 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> index 4e8d546431eb..80618c847ce2 100644
+> --- a/arch/x86/kvm/mmu/mmu.c
+> +++ b/arch/x86/kvm/mmu/mmu.c
+> @@ -178,7 +178,6 @@ struct kvm_shadow_walk_iterator {
+>  
+>  static struct kmem_cache *pte_list_desc_cache;
+>  struct kmem_cache *mmu_page_header_cache;
+> -static struct percpu_counter kvm_total_used_mmu_pages;
+>  
+>  static void mmu_spte_set(u64 *sptep, u64 spte);
+>  
+> @@ -1658,16 +1657,9 @@ static int is_empty_shadow_page(u64 *spt)
+>  }
+>  #endif
+>  
+> -/*
+> - * This value is the sum of all of the kvm instances's
+> - * kvm->arch.n_used_mmu_pages values.  We need a global,
+> - * aggregate version in order to make the slab shrinker
+> - * faster
+> - */
+> -static inline void kvm_mod_used_mmu_pages(struct kvm *kvm, long nr)
+> +static inline void kvm_used_mmu_pages(struct kvm *kvm, long nr)
+
+This rename is unnecessary, and I much prefer the existing name, kvm_used_mmu_pages()
+sounds like an accessor to get the number of used pages.
+
+>  {
+>  	kvm->arch.n_used_mmu_pages += nr;
+> -	percpu_counter_add(&kvm_total_used_mmu_pages, nr);
+>  }
+>  
+>  static void kvm_mmu_free_page(struct kvm_mmu_page *sp)
+
+...
+
+> -static bool kvm_has_zapped_obsolete_pages(struct kvm *kvm)
+> -{
+> -	return unlikely(!list_empty_careful(&kvm->arch.zapped_obsolete_pages));
+> -}
+
+zapped_obsolete_pages can be dropped, its sole purposed was to expose those pages
+to the shrinker.
+
+diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+index c59fea4bdb6e..15b71de6f6fe 100644
+--- a/arch/x86/include/asm/kvm_host.h
++++ b/arch/x86/include/asm/kvm_host.h
+@@ -1065,7 +1065,6 @@ struct kvm_arch {
+        u8 mmu_valid_gen;
+        struct hlist_head mmu_page_hash[KVM_NUM_MMU_PAGES];
+        struct list_head active_mmu_pages;
+-       struct list_head zapped_obsolete_pages;
+        struct list_head lpage_disallowed_mmu_pages;
+        struct kvm_page_track_notifier_node mmu_sp_tracker;
+        struct kvm_page_track_notifier_head track_notifier_head;
+diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+index 51443a8e779a..299c9297418e 100644
+--- a/arch/x86/kvm/mmu/mmu.c
++++ b/arch/x86/kvm/mmu/mmu.c
+@@ -5657,6 +5657,7 @@ static void kvm_zap_obsolete_pages(struct kvm *kvm)
+ {
+        struct kvm_mmu_page *sp, *node;
+        int nr_zapped, batch = 0;
++       LIST_HEAD(zapped_pages);
+
+ restart:
+        list_for_each_entry_safe_reverse(sp, node,
+@@ -5688,8 +5689,7 @@ static void kvm_zap_obsolete_pages(struct kvm *kvm)
+                        goto restart;
+                }
+
+-               if (__kvm_mmu_prepare_zap_page(kvm, sp,
+-                               &kvm->arch.zapped_obsolete_pages, &nr_zapped)) {
++               if (__kvm_mmu_prepare_zap_page(kvm, sp, &zapped_pages, &nr_zapped)) {
+                        batch += nr_zapped;
+                        goto restart;
+                }
+@@ -5704,7 +5704,7 @@ static void kvm_zap_obsolete_pages(struct kvm *kvm)
+         * kvm_mmu_load()), and the reload in the caller ensure no vCPUs are
+         * running with an obsolete MMU.
+         */
+-       kvm_mmu_commit_zap_page(kvm, &kvm->arch.zapped_obsolete_pages);
++       kvm_mmu_commit_zap_page(kvm, &zapped_pages);
+ }
+
+ /*
+@@ -5780,7 +5780,6 @@ int kvm_mmu_init_vm(struct kvm *kvm)
+        int r;
+
+        INIT_LIST_HEAD(&kvm->arch.active_mmu_pages);
+-       INIT_LIST_HEAD(&kvm->arch.zapped_obsolete_pages);
+        INIT_LIST_HEAD(&kvm->arch.lpage_disallowed_mmu_pages);
+        spin_lock_init(&kvm->arch.mmu_unsync_pages_lock);
+
+

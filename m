@@ -2,152 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE1DA51C7D9
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 20:37:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CD2F51C81B
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 20:37:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384324AbiEESgq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 14:36:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37606 "EHLO
+        id S1383226AbiEESii (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 14:38:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385620AbiEESfZ (ORCPT
+        with ESMTP id S1354257AbiEEShG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 14:35:25 -0400
-Received: from out01.mta.xmission.com (out01.mta.xmission.com [166.70.13.231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EABF17E1B;
-        Thu,  5 May 2022 11:26:35 -0700 (PDT)
-Received: from in02.mta.xmission.com ([166.70.13.52]:35900)
-        by out01.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        Thu, 5 May 2022 14:37:06 -0400
+Received: from out03.mta.xmission.com (out03.mta.xmission.com [166.70.13.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5B5F5DBE2;
+        Thu,  5 May 2022 11:27:14 -0700 (PDT)
+Received: from in01.mta.xmission.com ([166.70.13.51]:59294)
+        by out03.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.93)
         (envelope-from <ebiederm@xmission.com>)
-        id 1nmgAw-004YvQ-5P; Thu, 05 May 2022 12:26:06 -0600
-Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:37108 helo=email.froward.int.ebiederm.org.xmission.com)
-        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        id 1nmgC1-00GUiV-Jg; Thu, 05 May 2022 12:27:13 -0600
+Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:37118 helo=localhost.localdomain)
+        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.93)
         (envelope-from <ebiederm@xmission.com>)
-        id 1nmgAv-003VYC-3m; Thu, 05 May 2022 12:26:05 -0600
+        id 1nmgC0-002BtP-9P; Thu, 05 May 2022 12:27:13 -0600
 From:   "Eric W. Biederman" <ebiederm@xmission.com>
 To:     linux-kernel@vger.kernel.org
-Cc:     rjw@rjwysocki.net, oleg@redhat.com, mingo@kernel.org,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, mgorman@suse.de, bigeasy@linutronix.de,
-        Will Deacon <will@kernel.org>, tj@kernel.org,
-        linux-pm@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
+Cc:     rjw@rjwysocki.net, Oleg Nesterov <oleg@redhat.com>,
+        mingo@kernel.org, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, mgorman@suse.de,
+        bigeasy@linutronix.de, Will Deacon <will@kernel.org>,
+        tj@kernel.org, linux-pm@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
         Richard Weinberger <richard@nod.at>,
         Anton Ivanov <anton.ivanov@cambridgegreys.com>,
         Johannes Berg <johannes@sipsolutions.net>,
         linux-um@lists.infradead.org, Chris Zankel <chris@zankel.net>,
         Max Filippov <jcmvbkbc@gmail.com>,
-        linux-xtensa@linux-xtensa.org, Jann Horn <jannh@google.com>,
-        Kees Cook <keescook@chromium.org>, linux-ia64@vger.kernel.org
-References: <20220421150248.667412396@infradead.org>
-        <20220421150654.817117821@infradead.org>
-        <87czhap9dy.fsf@email.froward.int.ebiederm.org>
-        <878rrrh32q.fsf_-_@email.froward.int.ebiederm.org>
-        <87k0b7v9yk.fsf_-_@email.froward.int.ebiederm.org>
-        <87k0b0apne.fsf_-_@email.froward.int.ebiederm.org>
-Date:   Thu, 05 May 2022 13:25:57 -0500
-In-Reply-To: <87k0b0apne.fsf_-_@email.froward.int.ebiederm.org> (Eric
-        W. Biederman's message of "Wed, 04 May 2022 17:39:33 -0500")
-Message-ID: <87a6bv6dl6.fsf_-_@email.froward.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        linux-xtensa@linux-xtensa.org, Kees Cook <keescook@chromium.org>,
+        Jann Horn <jannh@google.com>, linux-ia64@vger.kernel.org,
+        "Eric W. Biederman" <ebiederm@xmission.com>
+Date:   Thu,  5 May 2022 13:26:34 -0500
+Message-Id: <20220505182645.497868-1-ebiederm@xmission.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <87a6bv6dl6.fsf_-_@email.froward.int.ebiederm.org>
+References: <87a6bv6dl6.fsf_-_@email.froward.int.ebiederm.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1nmgAv-003VYC-3m;;;mid=<87a6bv6dl6.fsf_-_@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=softfail
-X-XM-AID: U2FsdGVkX18JBIioV2PhpJQppVzrfu1tMMPl3nYOVbs=
+Content-Transfer-Encoding: 8bit
+X-XM-SPF: eid=1nmgC0-002BtP-9P;;;mid=<20220505182645.497868-1-ebiederm@xmission.com>;;;hst=in01.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=softfail
+X-XM-AID: U2FsdGVkX1+sxj7RG91YT/pP21A3hNOLeyrzh/sWVtM=
 X-SA-Exim-Connect-IP: 68.227.174.4
 X-SA-Exim-Mail-From: ebiederm@xmission.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-DCC: XMission; sa08 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: **;linux-kernel@vger.kernel.org
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
+X-Spam-DCC: XMission; sa07 1397; Body=1 Fuz1=1 Fuz2=38 
+X-Spam-Combo: ***;linux-kernel@vger.kernel.org
 X-Spam-Relay-Country: 
-X-Spam-Timing: total 462 ms - load_scoreonly_sql: 0.04 (0.0%),
-        signal_user_changed: 12 (2.6%), b_tie_ro: 10 (2.2%), parse: 0.85
-        (0.2%), extract_message_metadata: 3.0 (0.7%), get_uri_detail_list:
-        1.19 (0.3%), tests_pri_-1000: 3.7 (0.8%), tests_pri_-950: 1.39 (0.3%),
-        tests_pri_-900: 1.24 (0.3%), tests_pri_-90: 97 (20.9%), check_bayes:
-        95 (20.5%), b_tokenize: 8 (1.7%), b_tok_get_all: 12 (2.6%),
-        b_comp_prob: 2.8 (0.6%), b_tok_touch_all: 68 (14.6%), b_finish: 1.14
-        (0.2%), tests_pri_0: 326 (70.5%), check_dkim_signature: 0.56 (0.1%),
-        check_dkim_adsp: 3.2 (0.7%), poll_dns_idle: 1.30 (0.3%), tests_pri_10:
-        2.2 (0.5%), tests_pri_500: 9 (1.9%), rewrite_mail: 0.00 (0.0%)
-Subject: [PATCH v4 0/12] ptrace: cleaning up ptrace_stop
+X-Spam-Timing: total 636 ms - load_scoreonly_sql: 0.06 (0.0%),
+        signal_user_changed: 9 (1.4%), b_tie_ro: 8 (1.2%), parse: 1.36 (0.2%),
+        extract_message_metadata: 14 (2.2%), get_uri_detail_list: 2.7 (0.4%),
+        tests_pri_-1000: 15 (2.4%), tests_pri_-950: 1.39 (0.2%),
+        tests_pri_-900: 1.11 (0.2%), tests_pri_-90: 175 (27.5%), check_bayes:
+        173 (27.3%), b_tokenize: 12 (1.9%), b_tok_get_all: 9 (1.4%),
+        b_comp_prob: 2.6 (0.4%), b_tok_touch_all: 146 (22.9%), b_finish: 0.93
+        (0.1%), tests_pri_0: 402 (63.2%), check_dkim_signature: 0.72 (0.1%),
+        check_dkim_adsp: 2.7 (0.4%), poll_dns_idle: 0.94 (0.1%), tests_pri_10:
+        2.2 (0.4%), tests_pri_500: 11 (1.7%), rewrite_mail: 0.00 (0.0%)
+Subject: [PATCH v4 01/12] signal: Rename send_signal send_signal_locked
 X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
+X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Rename send_signal and __send_signal to send_signal_locked and
+__send_signal_locked to make send_signal usable outside of
+signal.c.
 
-The states TASK_STOPPED and TASK_TRACE are special in they can not
-handle spurious wake-ups.  This plus actively depending upon and
-changing the value of tsk->__state causes problems for PREEMPT_RT and
-Peter's freezer rewrite.
+Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
+---
+ include/linux/signal.h |  2 ++
+ kernel/signal.c        | 24 ++++++++++++------------
+ 2 files changed, 14 insertions(+), 12 deletions(-)
 
-There are a lot of details we have to get right to sort out the
-technical challenges and this is my parred back version of the changes
-that contains just those problems I see good solutions to that I believe
-are ready.
+diff --git a/include/linux/signal.h b/include/linux/signal.h
+index a6db6f2ae113..55605bdf5ce9 100644
+--- a/include/linux/signal.h
++++ b/include/linux/signal.h
+@@ -283,6 +283,8 @@ extern int do_send_sig_info(int sig, struct kernel_siginfo *info,
+ extern int group_send_sig_info(int sig, struct kernel_siginfo *info,
+ 			       struct task_struct *p, enum pid_type type);
+ extern int __group_send_sig_info(int, struct kernel_siginfo *, struct task_struct *);
++extern int send_signal_locked(int sig, struct kernel_siginfo *info,
++			      struct task_struct *p, enum pid_type type);
+ extern int sigprocmask(int, sigset_t *, sigset_t *);
+ extern void set_current_blocked(sigset_t *);
+ extern void __set_current_blocked(const sigset_t *);
+diff --git a/kernel/signal.c b/kernel/signal.c
+index 30cd1ca43bcd..b0403197b0ad 100644
+--- a/kernel/signal.c
++++ b/kernel/signal.c
+@@ -1071,8 +1071,8 @@ static inline bool legacy_queue(struct sigpending *signals, int sig)
+ 	return (sig < SIGRTMIN) && sigismember(&signals->signal, sig);
+ }
+ 
+-static int __send_signal(int sig, struct kernel_siginfo *info, struct task_struct *t,
+-			enum pid_type type, bool force)
++static int __send_signal_locked(int sig, struct kernel_siginfo *info,
++				struct task_struct *t, enum pid_type type, bool force)
+ {
+ 	struct sigpending *pending;
+ 	struct sigqueue *q;
+@@ -1212,8 +1212,8 @@ static inline bool has_si_pid_and_uid(struct kernel_siginfo *info)
+ 	return ret;
+ }
+ 
+-static int send_signal(int sig, struct kernel_siginfo *info, struct task_struct *t,
+-			enum pid_type type)
++int send_signal_locked(int sig, struct kernel_siginfo *info,
++		       struct task_struct *t, enum pid_type type)
+ {
+ 	/* Should SIGKILL or SIGSTOP be received by a pid namespace init? */
+ 	bool force = false;
+@@ -1245,7 +1245,7 @@ static int send_signal(int sig, struct kernel_siginfo *info, struct task_struct
+ 			force = true;
+ 		}
+ 	}
+-	return __send_signal(sig, info, t, type, force);
++	return __send_signal_locked(sig, info, t, type, force);
+ }
+ 
+ static void print_fatal_signal(int signr)
+@@ -1284,7 +1284,7 @@ __setup("print-fatal-signals=", setup_print_fatal_signals);
+ int
+ __group_send_sig_info(int sig, struct kernel_siginfo *info, struct task_struct *p)
+ {
+-	return send_signal(sig, info, p, PIDTYPE_TGID);
++	return send_signal_locked(sig, info, p, PIDTYPE_TGID);
+ }
+ 
+ int do_send_sig_info(int sig, struct kernel_siginfo *info, struct task_struct *p,
+@@ -1294,7 +1294,7 @@ int do_send_sig_info(int sig, struct kernel_siginfo *info, struct task_struct *p
+ 	int ret = -ESRCH;
+ 
+ 	if (lock_task_sighand(p, &flags)) {
+-		ret = send_signal(sig, info, p, type);
++		ret = send_signal_locked(sig, info, p, type);
+ 		unlock_task_sighand(p, &flags);
+ 	}
+ 
+@@ -1347,7 +1347,7 @@ force_sig_info_to_task(struct kernel_siginfo *info, struct task_struct *t,
+ 	if (action->sa.sa_handler == SIG_DFL &&
+ 	    (!t->ptrace || (handler == HANDLER_EXIT)))
+ 		t->signal->flags &= ~SIGNAL_UNKILLABLE;
+-	ret = send_signal(sig, info, t, PIDTYPE_PID);
++	ret = send_signal_locked(sig, info, t, PIDTYPE_PID);
+ 	spin_unlock_irqrestore(&t->sighand->siglock, flags);
+ 
+ 	return ret;
+@@ -1567,7 +1567,7 @@ int kill_pid_usb_asyncio(int sig, int errno, sigval_t addr,
+ 
+ 	if (sig) {
+ 		if (lock_task_sighand(p, &flags)) {
+-			ret = __send_signal(sig, &info, p, PIDTYPE_TGID, false);
++			ret = __send_signal_locked(sig, &info, p, PIDTYPE_TGID, false);
+ 			unlock_task_sighand(p, &flags);
+ 		} else
+ 			ret = -ESRCH;
+@@ -2103,7 +2103,7 @@ bool do_notify_parent(struct task_struct *tsk, int sig)
+ 	 * parent's namespaces.
+ 	 */
+ 	if (valid_signal(sig) && sig)
+-		__send_signal(sig, &info, tsk->parent, PIDTYPE_TGID, false);
++		__send_signal_locked(sig, &info, tsk->parent, PIDTYPE_TGID, false);
+ 	__wake_up_parent(tsk, tsk->parent);
+ 	spin_unlock_irqrestore(&psig->siglock, flags);
+ 
+@@ -2601,7 +2601,7 @@ static int ptrace_signal(int signr, kernel_siginfo_t *info, enum pid_type type)
+ 	/* If the (new) signal is now blocked, requeue it.  */
+ 	if (sigismember(&current->blocked, signr) ||
+ 	    fatal_signal_pending(current)) {
+-		send_signal(signr, info, current, type);
++		send_signal_locked(signr, info, current, type);
+ 		signr = 0;
+ 	}
+ 
+@@ -4793,7 +4793,7 @@ void kdb_send_sig(struct task_struct *t, int sig)
+ 			   "the deadlock.\n");
+ 		return;
+ 	}
+-	ret = send_signal(sig, SEND_SIG_PRIV, t, PIDTYPE_PID);
++	ret = send_signal_locked(sig, SEND_SIG_PRIV, t, PIDTYPE_PID);
+ 	spin_unlock(&t->sighand->siglock);
+ 	if (ret)
+ 		kdb_printf("Fail to deliver Signal %d to process %d.\n",
+-- 
+2.35.3
 
-A couple of issues have been pointed but I think this parred back set of
-changes is still on the right track.  The biggest change in v4 is the
-split of "ptrace: Admit ptrace_stop can generate spuriuos SIGTRAPs" into
-two patches because the dependency I thought exited between two
-different changes did not exist.  The rest of the changes are minor
-tweaks to "ptrace: Admit ptrace_stop can generate spuriuos SIGTRAPs";
-removing an always true branch, and adding an early  test to see if the
-ptracer had gone, before TASK_TRAPPING was set.
-
-This set of changes should support Peter's freezer rewrite, and with the
-addition of changing wait_task_inactive(TASK_TRACED) to be
-wait_task_inactive(0) in ptrace_check_attach I don't think there are any
-races or issues to be concerned about from the ptrace side.
-
-More work is needed to support PREEMPT_RT, but these changes get things
-closer.
-
-This set of changes continues to look like it will provide a firm
-foundation for solving the PREEMPT_RT and freezer challenges.
-
-Eric W. Biederman (11):
-      signal: Rename send_signal send_signal_locked
-      signal: Replace __group_send_sig_info with send_signal_locked
-      ptrace/um: Replace PT_DTRACE with TIF_SINGLESTEP
-      ptrace/xtensa: Replace PT_SINGLESTEP with TIF_SINGLESTEP
-      ptrace: Remove arch_ptrace_attach
-      signal: Use lockdep_assert_held instead of assert_spin_locked
-      ptrace: Reimplement PTRACE_KILL by always sending SIGKILL
-      ptrace: Document that wait_task_inactive can't fail
-      ptrace: Admit ptrace_stop can generate spuriuos SIGTRAPs
-      ptrace: Don't change __state
-      ptrace: Always take siglock in ptrace_resume
-
-Peter Zijlstra (1):
-      sched,signal,ptrace: Rework TASK_TRACED, TASK_STOPPED state
-
- arch/ia64/include/asm/ptrace.h    |   4 --
- arch/ia64/kernel/ptrace.c         |  57 ----------------
- arch/um/include/asm/thread_info.h |   2 +
- arch/um/kernel/exec.c             |   2 +-
- arch/um/kernel/process.c          |   2 +-
- arch/um/kernel/ptrace.c           |   8 +--
- arch/um/kernel/signal.c           |   4 +-
- arch/x86/kernel/step.c            |   3 +-
- arch/xtensa/kernel/ptrace.c       |   4 +-
- arch/xtensa/kernel/signal.c       |   4 +-
- drivers/tty/tty_jobctrl.c         |   4 +-
- include/linux/ptrace.h            |   7 --
- include/linux/sched.h             |  10 ++-
- include/linux/sched/jobctl.h      |   8 +++
- include/linux/sched/signal.h      |  20 ++++--
- include/linux/signal.h            |   3 +-
- kernel/ptrace.c                   |  87 ++++++++---------------
- kernel/sched/core.c               |   5 +-
- kernel/signal.c                   | 140 +++++++++++++++++---------------------
- kernel/time/posix-cpu-timers.c    |   6 +-
- 20 files changed, 140 insertions(+), 240 deletions(-)
-
-Eric

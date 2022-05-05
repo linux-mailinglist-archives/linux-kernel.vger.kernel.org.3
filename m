@@ -2,64 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C672A51C068
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 15:18:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AEEA251C06B
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 15:18:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379015AbiEENVH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 09:21:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33420 "EHLO
+        id S1379088AbiEENWC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 09:22:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379004AbiEENVE (ORCPT
+        with ESMTP id S1377912AbiEENV5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 09:21:04 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FB0232ED5;
-        Thu,  5 May 2022 06:17:25 -0700 (PDT)
-X-IronPort-AV: E=McAfee;i="6400,9594,10338"; a="248013547"
-X-IronPort-AV: E=Sophos;i="5.91,201,1647327600"; 
-   d="scan'208";a="248013547"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2022 06:17:08 -0700
-X-IronPort-AV: E=Sophos;i="5.91,201,1647327600"; 
-   d="scan'208";a="654216218"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2022 06:17:05 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andy.shevchenko@gmail.com>)
-        id 1nmbLp-00CI1C-TO;
-        Thu, 05 May 2022 16:17:01 +0300
-Date:   Thu, 5 May 2022 16:17:01 +0300
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-To:     Bartosz Golaszewski <brgl@bgdev.pl>
-Cc:     Neil Armstrong <narmstrong@baylibre.com>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-amlogic <linux-amlogic@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>
-Subject: Re: [PATCH v5 1/6] gpiolib: Introduce a helper to get first GPIO
- controller node
-Message-ID: <YnPOTTRhzM5O7OlD@smile.fi.intel.com>
-References: <20220414190242.22178-1-andriy.shevchenko@linux.intel.com>
- <20220414190242.22178-2-andriy.shevchenko@linux.intel.com>
- <CAMRc=MfE0othcfwETf13_K3sOLKmUGwCnjapzVjLMk1cD+ihVQ@mail.gmail.com>
- <CAHp75VcpZPB12Y4FVN4h9RdkvYQfELtbRnd08FfPpG1cJG-99g@mail.gmail.com>
- <CAMRc=Mef77ejvzx2Pg1P_xzozxb1VjxGtArfvFdS=Cgq-8Mbwg@mail.gmail.com>
+        Thu, 5 May 2022 09:21:57 -0400
+Received: from us-smtp-delivery-74.mimecast.com (us-smtp-delivery-74.mimecast.com [170.10.129.74])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D8FF32E684
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 06:18:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1651756698;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=y4U5A3QRLZZuYGkS/ZCvQGsfk/VtHZAdLZlUMBaLLSs=;
+        b=iSlHU6m2lCto68GhgNoK7Fg6P8icYzWwLIy9SiHircHIVBnGTmdgiMHzryzdqQMrcxUE1a
+        NZOq85LAiMa3+FQLsfvvQQlD9BOhRZ8+S3iOBBTjyqp/Zxj9xxEUsdC4EA8uvZebNCwY2I
+        mXJLD9PT7NLj2uaquDwSo5PW5z5i/ao=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-139-x5RIIweAMa-7fGeTvQYMFA-1; Thu, 05 May 2022 09:18:14 -0400
+X-MC-Unique: x5RIIweAMa-7fGeTvQYMFA-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 53086397968C;
+        Thu,  5 May 2022 13:18:14 +0000 (UTC)
+Received: from shodan.usersys.redhat.com (unknown [10.43.17.22])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 159987B64;
+        Thu,  5 May 2022 13:18:14 +0000 (UTC)
+Received: by shodan.usersys.redhat.com (Postfix, from userid 1000)
+        id ED0F51C0223; Thu,  5 May 2022 15:18:12 +0200 (CEST)
+From:   Artem Savkov <asavkov@redhat.com>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Josh Poimboeuf <jpoimboe@redhat.com>
+Cc:     Anna-Maria Behnsen <anna-maria@linutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Artem Savkov <asavkov@redhat.com>
+Subject: [PATCH v5 0/2] Upper bound kernel timers
+Date:   Thu,  5 May 2022 15:18:09 +0200
+Message-Id: <20220505131811.3744503-1-asavkov@redhat.com>
+In-Reply-To: <87zgkwjtq2.ffs@tglx>
+References: <87zgkwjtq2.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMRc=Mef77ejvzx2Pg1P_xzozxb1VjxGtArfvFdS=Cgq-8Mbwg@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
-        FORGED_GMAIL_RCVD,FREEMAIL_FROM,NML_ADSP_CUSTOM_MED,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,32 +66,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 05, 2022 at 03:05:52PM +0200, Bartosz Golaszewski wrote:
-> On Tue, Apr 26, 2022 at 12:29 PM Andy Shevchenko
-> <andy.shevchenko@gmail.com> wrote:
-> > On Tue, Apr 26, 2022 at 12:27 AM Bartosz Golaszewski <brgl@bgdev.pl> wrote:
-> > > On Thu, Apr 14, 2022 at 9:02 PM Andy Shevchenko
-> > > <andriy.shevchenko@linux.intel.com> wrote:
+As previously discussed [1] we had a report of a regression in TCP keepalive
+timer where timers were up to 4 minutes late resulting in disconnects.
 
-...
+This patchset tries to fix the problem by introducing upper bound kernel timers
+and making tcp keepalive timer use those.
 
-> > > Any chance you could name it get_first_gpiochip_node()? It's static so
-> > > we don't have to worry about the prefix and it would make the purpose
-> > > more clear.
-> >
-> > There are two things why I prefer it as is:
-> > 1) it's static inline, so it's part of (internal) but still exported API;
-> > 2) it's already in my for-next branch which I would like not to
-> > rebase, until it's a really serious issue.
-> >
-> > That said, if you still insist I can rename it.
-> 
-> No that's fine and I also pulled that into my tree.
+[1] https://lore.kernel.org/all/20210302001054.4qgrvnkltvkgikzr@treble/T/#u
 
-Thank you!
+---
+Changes in v5:
+  - The least intrusive and most straightforward approach. This avoids touching
+    any of existing code. The timeout supplied is always reduced by a known
+    timer wheel error margin of 12.5%.
+  - Commit message adjustments.
+
+Changes in v4:
+  - Drop any attempts to be smart when calculating timer adjustment and always
+    substract LVL_GRAN so that base clock lag won't be such a problem. This
+    means that in some cases we will always be early, but all we want is not to
+    be late.
+
+Changes in v3:
+  - A different approach: instead of introducing upper bound timers try to
+    account for timer wheen granularity on timer (re)arming step.
+  - Not sure whether moving lvl calculation into a separate function is worth
+    it.
+  - Had a hard time naming the upper_bount_timeout() function - any suggestions
+    welcome.
+
+Changes in v2:
+  - TIMER_UPPER_BOUND flag description added as a comment in timer.h
+  - Code style fixes
+  - More elaborate commit message in timer commit
+
+Artem Savkov (2):
+  timer: add a function to adjust timeouts to be upper bound
+  net: make tcp keepalive timer upper bound
+
+ include/linux/timer.h           |  1 +
+ kernel/time/timer.c             | 14 ++++++++++++++
+ net/ipv4/inet_connection_sock.c |  2 +-
+ 3 files changed, 16 insertions(+), 1 deletion(-)
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.34.1
 

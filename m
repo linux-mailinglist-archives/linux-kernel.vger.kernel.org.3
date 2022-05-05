@@ -2,146 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5D0351B4EF
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 03:00:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77A5851B4F3
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 03:01:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233776AbiEEBEG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 21:04:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46858 "EHLO
+        id S233853AbiEEBEv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 21:04:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233759AbiEEBDu (ORCPT
+        with ESMTP id S233780AbiEEBEt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 21:03:50 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98F6E22298;
-        Wed,  4 May 2022 18:00:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=kIQQrRnRI0vk/O19gDTge/P4HrJOYt2OZJvWm9t1XRo=; b=RTGnzZefu3QBxVW32cySexw2+J
-        oCJG44ZZH9m44UHiOTw3UeB5Zedpi2CPepgcaEak2r1Qa+xwv7QhkNQsr2CHEAhWYXMEXYOuBi2TY
-        2ug9kxDvPLDyJCHxT/XGmh9sV8zeBApSHJv+ewWsp0M800JKy0V3zSGdH+i3x7QWkySs=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1nmPqd-001Hk9-MA; Thu, 05 May 2022 03:00:03 +0200
-Date:   Thu, 5 May 2022 03:00:03 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Ansuel Smith <ansuelsmth@gmail.com>
-Cc:     Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>, Pavel Machek <pavel@ucw.cz>,
-        John Crispin <john@phrozen.org>, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-leds@vger.kernel.org
-Subject: Re: [RFC PATCH v6 06/11] leds: trigger: netdev: add hardware control
- support
-Message-ID: <YnMhk1F0LrIMK5hp@lunn.ch>
-References: <20220503151633.18760-1-ansuelsmth@gmail.com>
- <20220503151633.18760-7-ansuelsmth@gmail.com>
+        Wed, 4 May 2022 21:04:49 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 808972317C;
+        Wed,  4 May 2022 18:01:11 -0700 (PDT)
+Received: from kwepemi100013.china.huawei.com (unknown [172.30.72.57])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4KtwHR47MvzCsWV;
+        Thu,  5 May 2022 08:56:03 +0800 (CST)
+Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
+ kwepemi100013.china.huawei.com (7.221.188.136) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 5 May 2022 09:00:44 +0800
+Received: from [10.174.176.73] (10.174.176.73) by
+ kwepemm600009.china.huawei.com (7.193.23.164) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 5 May 2022 09:00:43 +0800
+Subject: Re: [PATCH -next v5 0/3] support concurrent sync io for bfq on a
+ specail occasion
+To:     <paolo.valente@linaro.org>, <axboe@kernel.dk>
+CC:     <jack@suse.cz>, <tj@kernel.org>, <linux-block@vger.kernel.org>,
+        <cgroups@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <yi.zhang@huawei.com>
+References: <20220428120837.3737765-1-yukuai3@huawei.com>
+From:   "yukuai (C)" <yukuai3@huawei.com>
+Message-ID: <d50df657-d859-79cf-c292-412eaa383d2c@huawei.com>
+Date:   Thu, 5 May 2022 09:00:42 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220503151633.18760-7-ansuelsmth@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220428120837.3737765-1-yukuai3@huawei.com>
+Content-Type: text/plain; charset="gbk"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.176.73]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ kwepemm600009.china.huawei.com (7.193.23.164)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> +struct netdev_led_attr_detail {
-> +	char *name;
-> +	bool hardware_only;
-> +	enum led_trigger_netdev_modes bit;
-> +};
-> +
-> +static struct netdev_led_attr_detail attr_details[] = {
-> +	{ .name = "link", .bit = TRIGGER_NETDEV_LINK},
-> +	{ .name = "tx", .bit = TRIGGER_NETDEV_TX},
-> +	{ .name = "rx", .bit = TRIGGER_NETDEV_RX},
+Hi, Paolo
 
-hardware_only is never set. Maybe it is used in a later patch? If so,
-please introduce it there.
+Can you take a look at this patchset? It has been quite a long time
+since we spotted this problem...
 
->  static void set_baseline_state(struct led_netdev_data *trigger_data)
->  {
-> +	int i;
->  	int current_brightness;
-> +	struct netdev_led_attr_detail *detail;
->  	struct led_classdev *led_cdev = trigger_data->led_cdev;
+Thanks,
+Kuai
 
-This file mostly keeps with reverse christmas tree, probably because
-it was written by a netdev developer. It is probably not required for
-the LED subsystem, but it would be nice to keep the file consistent.
-
-> @@ -100,10 +195,15 @@ static ssize_t device_name_store(struct device *dev,
->  				 size_t size)
->  {
->  	struct led_netdev_data *trigger_data = led_trigger_get_drvdata(dev);
-> +	struct net_device *old_net = trigger_data->net_dev;
-> +	char old_device_name[IFNAMSIZ];
->  
->  	if (size >= IFNAMSIZ)
->  		return -EINVAL;
->  
-> +	/* Backup old device name */
-> +	memcpy(old_device_name, trigger_data->device_name, IFNAMSIZ);
-> +
->  	cancel_delayed_work_sync(&trigger_data->work);
->  
->  	spin_lock_bh(&trigger_data->lock);
-> @@ -122,6 +222,19 @@ static ssize_t device_name_store(struct device *dev,
->  		trigger_data->net_dev =
->  		    dev_get_by_name(&init_net, trigger_data->device_name);
->  
-> +	if (!validate_baseline_state(trigger_data)) {
-
-You probably want to validate trigger_data->net_dev is not NULL first. The current code
-is a little odd with that, 
-
-> +		/* Restore old net_dev and device_name */
-> +		if (trigger_data->net_dev)
-> +			dev_put(trigger_data->net_dev);
-> +
-> +		dev_hold(old_net);
-
-This dev_hold() looks wrong. It is trying to undo a dev_put()
-somewhere? You should not actually do a put until you know you really
-do not old_net, otherwise there is a danger it disappears and you
-cannot undo.
-
-> @@ -228,13 +349,22 @@ static ssize_t interval_store(struct device *dev,
->  		return ret;
->  
->  	/* impose some basic bounds on the timer interval */
-> -	if (value >= 5 && value <= 10000) {
-> -		cancel_delayed_work_sync(&trigger_data->work);
-> +	if (value < 5 || value > 10000)
-> +		return -EINVAL;
-> +
-> +	cancel_delayed_work_sync(&trigger_data->work);
-> +
-> +	atomic_set(&trigger_data->interval, msecs_to_jiffies(value));
->  
-> -		atomic_set(&trigger_data->interval, msecs_to_jiffies(value));
-> -		set_baseline_state(trigger_data);	/* resets timer */
-> +	if (!validate_baseline_state(trigger_data)) {
-> +		/* Restore old interval on validation error */
-> +		atomic_set(&trigger_data->interval, old_interval);
-> +		trigger_data->mode = old_mode;
-
-I think you need to schedule the work again, since you cancelled
-it. It is at the end of the work that the next work is scheduled, and
-so it will not self recover.
-
-   Andrew
+ÔÚ 2022/04/28 20:08, Yu Kuai Ð´µÀ:
+> Changes in v5:
+>   - rename bfq_add_busy_queues() to bfq_inc_busy_queues() in patch 1
+>   - fix wrong definition in patch 1
+>   - fix spelling mistake in patch 2: leaset -> least
+>   - update comments in patch 3
+>   - add reviewed-by tag in patch 2,3
+> 
+> Changes in v4:
+>   - split bfq_update_busy_queues() to bfq_add/dec_busy_queues(),
+>     suggested by Jan Kara.
+>   - remove unused 'in_groups_with_pending_reqs',
+> 
+> Changes in v3:
+>   - remove the cleanup patch that is irrelevant now(I'll post it
+>     separately).
+>   - instead of hacking wr queues and using weights tree insertion/removal,
+>     using bfq_add/del_bfqq_busy() to count the number of groups
+>     (suggested by Jan Kara).
+> 
+> Changes in v2:
+>   - Use a different approch to count root group, which is much simple.
+> 
+> Currently, bfq can't handle sync io concurrently as long as they
+> are not issued from root group. This is because
+> 'bfqd->num_groups_with_pending_reqs > 0' is always true in
+> bfq_asymmetric_scenario().
+> 
+> The way that bfqg is counted into 'num_groups_with_pending_reqs':
+> 
+> Before this patchset:
+>   1) root group will never be counted.
+>   2) Count if bfqg or it's child bfqgs have pending requests.
+>   3) Don't count if bfqg and it's child bfqgs complete all the requests.
+> 
+> After this patchset:
+>   1) root group is counted.
+>   2) Count if bfqg have at least one bfqq that is marked busy.
+>   3) Don't count if bfqg doesn't have any busy bfqqs.
+> 
+> The main reason to use busy state of bfqq instead of 'pending requests'
+> is that bfqq can stay busy after dispatching the last request if idling
+> is needed for service guarantees.
+> 
+> With the above changes, concurrent sync io can be supported if only
+> one group is activated.
+> 
+> fio test script(startdelay is used to avoid queue merging):
+> [global]
+> filename=/dev/nvme0n1
+> allow_mounted_write=0
+> ioengine=psync
+> direct=1
+> ioscheduler=bfq
+> offset_increment=10g
+> group_reporting
+> rw=randwrite
+> bs=4k
+> 
+> [test1]
+> numjobs=1
+> 
+> [test2]
+> startdelay=1
+> numjobs=1
+> 
+> [test3]
+> startdelay=2
+> numjobs=1
+> 
+> [test4]
+> startdelay=3
+> numjobs=1
+> 
+> [test5]
+> startdelay=4
+> numjobs=1
+> 
+> [test6]
+> startdelay=5
+> numjobs=1
+> 
+> [test7]
+> startdelay=6
+> numjobs=1
+> 
+> [test8]
+> startdelay=7
+> numjobs=1
+> 
+> test result:
+> running fio on root cgroup
+> v5.18-rc1:	   550 Mib/s
+> v5.18-rc1-patched: 550 Mib/s
+> 
+> running fio on non-root cgroup
+> v5.18-rc1:	   349 Mib/s
+> v5.18-rc1-patched: 550 Mib/s
+> 
+> Note that I also test null_blk with "irqmode=2
+> completion_nsec=100000000(100ms) hw_queue_depth=1", and tests show
+> that service guarantees are still preserved.
+> 
+> Previous versions:
+> RFC: https://lore.kernel.org/all/20211127101132.486806-1-yukuai3@huawei.com/
+> v1: https://lore.kernel.org/all/20220305091205.4188398-1-yukuai3@huawei.com/
+> v2: https://lore.kernel.org/all/20220416093753.3054696-1-yukuai3@huawei.com/
+> v3: https://lore.kernel.org/all/20220427124722.48465-1-yukuai3@huawei.com/
+> v4: https://lore.kernel.org/all/20220428111907.3635820-1-yukuai3@huawei.com/
+> 
+> Yu Kuai (3):
+>    block, bfq: record how many queues are busy in bfq_group
+>    block, bfq: refactor the counting of 'num_groups_with_pending_reqs'
+>    block, bfq: do not idle if only one group is activated
+> 
+>   block/bfq-cgroup.c  |  1 +
+>   block/bfq-iosched.c | 48 +++-----------------------------------
+>   block/bfq-iosched.h | 57 +++++++--------------------------------------
+>   block/bfq-wf2q.c    | 35 +++++++++++++++++-----------
+>   4 files changed, 35 insertions(+), 106 deletions(-)
+> 

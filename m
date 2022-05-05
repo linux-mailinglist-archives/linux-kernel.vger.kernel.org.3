@@ -2,94 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC8F751C814
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 20:37:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33A6951C6C7
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 20:11:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383933AbiEESgE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 14:36:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55026 "EHLO
+        id S1383008AbiEESO6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 14:14:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385227AbiEESaQ (ORCPT
+        with ESMTP id S1382998AbiEESOz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 14:30:16 -0400
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BC5F5F241;
-        Thu,  5 May 2022 11:20:50 -0700 (PDT)
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.0.0)
- id 1873c2b789deefa0; Thu, 5 May 2022 20:19:36 +0200
-Received: from kreacher.localnet (unknown [213.134.161.219])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id 2DF7D66C2F2;
-        Thu,  5 May 2022 20:19:35 +0200 (CEST)
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Linux PCI <linux-pci@vger.kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Anders Roxell <anders.roxell@linaro.org>
-Subject: [PATCH v1 06/11] PCI/PM: Write 0 to PMCSR in pci_power_up() in all cases
-Date:   Thu, 05 May 2022 20:10:43 +0200
-Message-ID: <5748066.MhkbZ0Pkbq@kreacher>
-In-Reply-To: <4738492.GXAFRqVoOG@kreacher>
-References: <4738492.GXAFRqVoOG@kreacher>
+        Thu, 5 May 2022 14:14:55 -0400
+Received: from us-smtp-delivery-74.mimecast.com (us-smtp-delivery-74.mimecast.com [170.10.133.74])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 450485AEE7
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 11:11:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1651774274;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=kLRudaiszTccdqB1Vd77KpaI2iWJChA3O1GYOzzQuoc=;
+        b=VFIs+if8/Jo09Ye/qt8En1bHfTLtyA3UW6kcMVDzIY21J9rucG6cBg3m1kpSAT0xg5tL1d
+        I9JXF8I1MIK/uuNO/4QGsYtsPkKJLrSfbViFkxGOUHsmtwmVXZ31D6sWsYaO4d2QH5vbgc
+        HGLpb/uClCHYmncYDX/eZflD+ZLYrJ4=
+Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
+ [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-288-2v3KpGYKOBuehafzgq_wcg-1; Thu, 05 May 2022 14:11:13 -0400
+X-MC-Unique: 2v3KpGYKOBuehafzgq_wcg-1
+Received: by mail-qt1-f197.google.com with SMTP id x5-20020a05622a000500b002f37cb8b803so3960166qtw.9
+        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 11:11:13 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=kLRudaiszTccdqB1Vd77KpaI2iWJChA3O1GYOzzQuoc=;
+        b=ZCz96utBmn1aSIoaanRmvuH6xP0/abm5KYQZKNEnR+x/UGog1c49eHvOAZybttGzqu
+         Tdpb2+wLDsUXKSdPJvgMP6Gu4cpGD9veHnotcp7EWZNpgRrfQh5qCPZGKol84+suxgKJ
+         jYZD9y6dpUQ/aZEpFVNGf5sPW3zutpgAzcIGTNBylB4nNS2EN1Cfu9puQ4jkkHZE4Os7
+         nnLQjytmygu5YCbGOAuexXm6JAyyYI0FmqfEQK6bPWqLb/2WrAKr0brtMwsOdYIXYSjJ
+         Utma3oZUJEA2ar0VFFP6CTtO/dd5PECvqUstandy4Zd152b5AVa01MbMKYolm/OCpRUp
+         xAkg==
+X-Gm-Message-State: AOAM530qU4ONmN6KHHX5Mr+/9GqeOIbgeLWfYiuSkMrhzvOrToCk1pdO
+        rlmOgXfWBFWyNxw6DKYx2IAyhZa7gdsdSwvrf6SWowNKdEZntMnmUXwdhxTcwxJQxAUUs1R3x1H
+        ojqCOgI9qwvc2vqfwLQ+H7hpA
+X-Received: by 2002:a05:622a:20f:b0:2f3:4e5c:3271 with SMTP id b15-20020a05622a020f00b002f34e5c3271mr25103849qtx.44.1651774272660;
+        Thu, 05 May 2022 11:11:12 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwODdZVXSmIrr3XKHkaq4AMOb8tfd+YHR41zI+HxWst1xMd12GMM8tAoRhnMZaQTl0FAyFWCg==
+X-Received: by 2002:a05:622a:20f:b0:2f3:4e5c:3271 with SMTP id b15-20020a05622a020f00b002f34e5c3271mr25103826qtx.44.1651774272473;
+        Thu, 05 May 2022 11:11:12 -0700 (PDT)
+Received: from fedora (modemcable200.11-22-96.mc.videotron.ca. [96.22.11.200])
+        by smtp.gmail.com with ESMTPSA id d9-20020ac85349000000b002f39b99f68bsm1167214qto.37.2022.05.05.11.11.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 May 2022 11:11:12 -0700 (PDT)
+Date:   Thu, 5 May 2022 14:11:10 -0400
+From:   Adrien Thierry <athierry@redhat.com>
+To:     Stefan Wahren <stefan.wahren@i2se.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        linux-staging@lists.linux.dev,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/3] staging: vchiq_arm: get rid of global device
+ structure
+Message-ID: <YnQTPmNAvpbQl5Ws@fedora>
+References: <20220502183045.206519-1-athierry@redhat.com>
+ <20220502183045.206519-3-athierry@redhat.com>
+ <8483a250-da97-1875-4ea3-598f46ae96ce@i2se.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 213.134.161.219
-X-CLIENT-HOSTNAME: 213.134.161.219
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedrfedugdduvdduucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgjfhgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepvdffueeitdfgvddtudegueejtdffteetgeefkeffvdeftddttdeuhfegfedvjefhnecukfhppedvudefrddufeegrdduiedurddvudelnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvddufedrudefgedrudeiuddrvdduledphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedpnhgspghrtghpthhtohepjedprhgtphhtthhopehlihhnuhigqdhptghisehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepmhhikhgrrdifvghsthgvrhgsvghrgheslhhinhhugidrihhnthgv
- lhdrtghomhdprhgtphhtthhopehhvghlghgrrghssehkvghrnhgvlhdrohhrghdprhgtphhtthhopehnrghthhgrnheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprghnuggvrhhsrdhrohigvghllheslhhinhgrrhhordhorhhg
-X-DCC--Metrics: v370.home.net.pl 1024; Body=7 Fuz1=7 Fuz2=7
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8483a250-da97-1875-4ea3-598f46ae96ce@i2se.com>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Hi Stefan,
 
-Make pci_power_up() write 0 to the device's PCI_PM_CTRL register in
-order to put it into D0 regardless of the power state returned by
-the previous read from that register which should not matter.
+Thanks for your feedback.
 
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- drivers/pci/pci.c |   11 +++--------
- 1 file changed, 3 insertions(+), 8 deletions(-)
+> i understand the motivation, but could you please explain more in detail
+> why you decided to add vchiq_instance instead of device reference? I
+> think vchiq_instance is a more internal structure which should be
+> avoided in kernel consumers like bcm2835-audio or mmal.
 
-Index: linux-pm/drivers/pci/pci.c
-===================================================================
---- linux-pm.orig/drivers/pci/pci.c
-+++ linux-pm/drivers/pci/pci.c
-@@ -1230,15 +1230,10 @@ int pci_power_up(struct pci_dev *dev)
- 	}
- 
- 	/*
--	 * If we're (effectively) in D3, force entire word to 0. This doesn't
--	 * affect PME_Status, disables PME_En, and sets PowerState to 0.
-+	 * Force the entire word to 0. This doesn't affect PME_Status, disables
-+	 * PME_En, and sets PowerState to 0.
- 	 */
--	if (state == PCI_D3hot)
--		pmcsr = 0;
--	else
--		pmcsr &= ~PCI_PM_CTRL_STATE_MASK;
--
--	pci_write_config_word(dev, dev->pm_cap + PCI_PM_CTRL, pmcsr);
-+	pci_write_config_word(dev, dev->pm_cap + PCI_PM_CTRL, 0);
- 
- 	/* Mandatory transition delays; see PCI PM 1.2. */
- 	if (state == PCI_D3hot)
+I used the vchiq_instance instead of the device reference because in order
+to get rid of the vchiq_states array (patch 3/3 [1]), I needed another way
+to access the vchiq_state in the 'handle_to_service' function. So I passed
+the vchiq_instance to it (I could also have passed the state directly
+instead of the instance), and this propagated in the caller chain all the
+way up to 'vchiq_bulk_transmit' and friends which are used in the
+bcm2835-audio consumer.  Please let me know if you see a better way of
+doing this :)
 
+Thanks,
 
+Adrien
 
+[1] https://lore.kernel.org/all/20220502183045.206519-4-athierry@redhat.com/
 

@@ -2,63 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C77FF51BD90
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 12:57:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B257251BD93
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 12:58:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356325AbiEELAZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 07:00:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36708 "EHLO
+        id S1356518AbiEELBa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 07:01:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233038AbiEELAJ (ORCPT
+        with ESMTP id S1356365AbiEELAz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 07:00:09 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E057645AE2
-        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 03:56:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1651748190; x=1683284190;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=xA3N4B1Oq7NN/T+qdPN5HDE/pIMyStNJQREGSATatw4=;
-  b=SvRP8/pMII7KnXoiis0LRNzC6StEcyeMLQ9YEnmwdXI10fxsmy/aApnh
-   CO2OhiPiUzcyXYenpW3SIGZiL1h7Oy4FuCL9QRacyiMTeRnM2kOF0UrZ/
-   aSogkK+4YyCHW+mB/SpjgUWR9QYWUJs3gVyhOxeKttV8oqIlrbPueX/j0
-   Z7kj0O8BWsHKXcPLdpKiNV2wD4veM5HfesXdwRpzCvpDqURxr5qQ60TDW
-   zdo9qzD0CHeay298T+qVaKKZHJo09sIN90Mk2yOibYh0npUMCOBY8qZFq
-   zwOuOEP9EVchn8vHFgGKf7nz4z4axKXMfkXo2Eqd7xM9lick70kgPv1dH
-   w==;
-X-IronPort-AV: E=Sophos;i="5.91,201,1647327600"; 
-   d="scan'208";a="162828731"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 05 May 2022 03:56:30 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Thu, 5 May 2022 03:56:29 -0700
-Received: from wendy.microchip.com (10.10.115.15) by chn-vm-ex04.mchp-main.com
- (10.10.85.152) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
- Transport; Thu, 5 May 2022 03:56:27 -0700
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Palmer Dabbelt <palmer@dabbelt.com>
-CC:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        <linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
-        <daire.mcnamara@microchip.com>, <lewis.hanly@microchip.com>,
-        <cyril.jean@microchip.com>,
-        Conor Dooley <conor.dooley@microchip.com>
-Subject: [PATCH v4 1/1] MAINTAINERS: add polarfire rng, pci and clock drivers
-Date:   Thu, 5 May 2022 11:55:26 +0100
-Message-ID: <20220505105525.3881259-2-conor.dooley@microchip.com>
-X-Mailer: git-send-email 2.35.2
-In-Reply-To: <20220505105525.3881259-1-conor.dooley@microchip.com>
-References: <20220505105525.3881259-1-conor.dooley@microchip.com>
+        Thu, 5 May 2022 07:00:55 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 852754EA0F;
+        Thu,  5 May 2022 03:56:54 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5544A106F;
+        Thu,  5 May 2022 03:56:54 -0700 (PDT)
+Received: from FVFF77S0Q05N.cambridge.arm.com (FVFF77S0Q05N.cambridge.arm.com [10.1.29.132])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1F9233FA27;
+        Thu,  5 May 2022 03:56:52 -0700 (PDT)
+Date:   Thu, 5 May 2022 11:56:45 +0100
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Chen Zhongjin <chenzhongjin@huawei.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-arch@vger.kernel.org, jthierry@redhat.com,
+        catalin.marinas@arm.com, will@kernel.org, masahiroy@kernel.org,
+        jpoimboe@redhat.com, ycote@redhat.com, herbert@gondor.apana.org.au,
+        davem@davemloft.net, ardb@kernel.org, maz@kernel.org,
+        tglx@linutronix.de, luc.vanoostenryck@gmail.com
+Subject: Re: [RFC PATCH v4 22/37] arm64: kernel: Skip validation of kuser32.o
+Message-ID: <YnOtbYOIT5OP7F0g@FVFF77S0Q05N.cambridge.arm.com>
+References: <20220429094355.122389-1-chenzhongjin@huawei.com>
+ <20220429094355.122389-23-chenzhongjin@huawei.com>
+ <YmvGja62yWdPHPOW@hirez.programming.kicks-ass.net>
+ <a57f7d73-6e01-8f41-9be3-8e90807ec08f@huawei.com>
+ <20220505092448.GE2501@worktop.programming.kicks-ass.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220505092448.GE2501@worktop.programming.kicks-ass.net>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,37 +51,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hardware random, PCI and clock drivers for the PolarFire SoC have been
-upstreamed but are not covered by the MAINTAINERS entry, so add them.
-Daire is the author of the clock & PCI drivers, so add him as a
-maintainer in place of Lewis.
+On Thu, May 05, 2022 at 11:24:48AM +0200, Peter Zijlstra wrote:
+> On Thu, May 05, 2022 at 11:36:12AM +0800, Chen Zhongjin wrote:
+> > Hi Peter,
+> > 
+> > IIRC now the blacklist mechanisms all run on check stage, which after
+> > decoding, but the problem of kuser32.S happens in decoding stage. Other
+> > than that the assembly symbols in kuser32 is STT_NOTYPE and
+> > STACK_FRAME_NON_STANDARD will throw an error for this.
+> > 
+> > OBJECT_FILES_NON_STANDARD works for the single file but as you said
+> > after LTO it's invalid. However STACK_FRAME_NON_STANDARD doesn't work
+> > for kuser32 case at all.
+> > 
+> > Now my strategy for undecodable instructions is: show an error message
+> > and mark insn->ignore = true, but do not stop anything so decoding work
+> > can going on.
+> > 
+> > To totally solve this my idea is that applying blacklist before decode.
+> > However for this part objtool doesn't have any insn or func info, so we
+> > should add a new blacklist just for this case...
+> 
+> OK, so Mark explained that this is 32bit userspace (VDSO) code.
+> 
+> And as such there's really no point in running objtool on it. Does all
+> that live in it's own section? Should it?
 
-Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
----
- MAINTAINERS | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+It's placed in .rodata by a linker script:
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index fd768d43e048..d7602658b0a5 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -16939,12 +16939,15 @@ N:	riscv
- K:	riscv
- 
- RISC-V/MICROCHIP POLARFIRE SOC SUPPORT
--M:	Lewis Hanly <lewis.hanly@microchip.com>
- M:	Conor Dooley <conor.dooley@microchip.com>
-+M:	Daire McNamara <daire.mcnamara@microchip.com>
- L:	linux-riscv@lists.infradead.org
- S:	Supported
- F:	arch/riscv/boot/dts/microchip/
-+F:	drivers/char/hw_random/mpfs-rng.c
-+F:	drivers/clk/microchip/clk-mpfs.c
- F:	drivers/mailbox/mailbox-mpfs.c
-+F:	drivers/pci/controller/pcie-microchip-host.c
- F:	drivers/soc/microchip/
- F:	include/soc/microchip/mpfs.h
- 
--- 
-2.35.2
+* The 32-bit vdso + kuser code is placed in .rodata, between the `vdso32_start`
+  and `vdso32_end` symbols, as raw bytes (via .incbin).
+  See arch/arm64/kernel/vdso32-wrap.S.
 
+* The 64-bit vdso code is placed in .rodata, between the `vdso_start`
+  and `vdso32` symbols, as raw bytes (via .incbin).
+  See arch/arm64/kernel/vdso-wrap.S.
+
+The objects under arch/arm64/kernel/{vdso,vdso32}/ are all userspace objects,
+and from userspace's PoV the existing secrtions within those objects are
+correct, so I don't think those should change.
+
+How does x86 deal with its vdso objects?
+
+Thanks,
+Mark.

@@ -2,108 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A7F051BFA8
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 14:42:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DEFE51BFAE
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 14:43:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377594AbiEEMob (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 08:44:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48628 "EHLO
+        id S1377650AbiEEMqQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 08:46:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377632AbiEEMnz (ORCPT
+        with ESMTP id S1377588AbiEEMqO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 08:43:55 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B743BDE;
-        Thu,  5 May 2022 05:40:14 -0700 (PDT)
-Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 245Bg3Xw015706;
-        Thu, 5 May 2022 12:40:07 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=Ks6pYfzwIPhTp1sognpwdkSoA5PQDLGHHd0QN8T6+hY=;
- b=mVjoeuaqKck8rz1dceuTdo6jKSdO5d8lqRGQJVI/qb9PUB8REgS339i+PXIgUasdGNTJ
- evkpPUh8eEcXyC1uFI8cZ0UzVmz9y/03tQqPlCuOXHL2v9o44h1r+aONlviMdvpqNa6K
- F8WZXt/mL4m0gNa6pkoaiVBJ77+ys7txi34cn2b3rFtW2W0jz8h22hhMRzJ6daoCDwXK
- BE5Qzr7I1CBepXHUg7k/o83+tcV7XxMqpSjWq7bjyweV1LmjqtYzf/Y094tXr6ZS6Pi+
- zLGXAXzom8k2aBWve21sh+s1YC2lxVePMen+qGKhkw7VdoU0FBEaIt+4jjvXlSp4nMs7 Tw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fvdxbs4vj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 05 May 2022 12:40:06 +0000
-Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 245CHevX023064;
-        Thu, 5 May 2022 12:40:06 GMT
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fvdxbs4ty-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 05 May 2022 12:40:06 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 245CcfxP017432;
-        Thu, 5 May 2022 12:40:03 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma04ams.nl.ibm.com with ESMTP id 3frvr8y729-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 05 May 2022 12:40:03 +0000
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 245Cdui534669024
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 5 May 2022 12:39:56 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 649CD52051;
-        Thu,  5 May 2022 12:40:01 +0000 (GMT)
-Received: from sig-9-65-81-94.ibm.com (unknown [9.65.81.94])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 7164152050;
-        Thu,  5 May 2022 12:40:00 +0000 (GMT)
-Message-ID: <f7d8ebad78e184dd391b920f72ed7a49d3e14aa3.camel@linux.ibm.com>
-Subject: Re: [PATCH v3 1/1] ima: remove the IMA_TEMPLATE Kconfig option
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     "Guozihua (Scott)" <guozihua@huawei.com>,
-        linux-integrity@vger.kernel.org
-Cc:     dmitry.kasatkin@gmail.com, roberto.sassu@huawei.com,
-        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Thu, 05 May 2022 08:39:59 -0400
-In-Reply-To: <1f40a55b-7489-5e87-3584-73e2b1948615@huawei.com>
-References: <20220407021619.146410-1-guozihua@huawei.com>
-         <20220407021619.146410-2-guozihua@huawei.com>
-         <fbc9cda8eacc0a701d7b336bf45ecb6dfd450be9.camel@linux.ibm.com>
-         <1f40a55b-7489-5e87-3584-73e2b1948615@huawei.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 9cQlf0iSe6D5WwgOw4f-6EzQQyitWHPU
-X-Proofpoint-GUID: 3jzMLRszO8yu8gk7R7IleO0E1xufR-fE
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Thu, 5 May 2022 08:46:14 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5248A55364;
+        Thu,  5 May 2022 05:42:34 -0700 (PDT)
+Received: from canpemm500009.china.huawei.com (unknown [172.30.72.57])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4KvCwc1CLKz1JBr3;
+        Thu,  5 May 2022 20:40:48 +0800 (CST)
+Received: from [10.67.102.169] (10.67.102.169) by
+ canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 5 May 2022 20:41:52 +0800
+CC:     <linux-kernel@vger.kernel.org>, <linuxarm@huawei.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>
+Subject: Re: [PATCH v5] PCI: Make sure the bus bridge powered on when scanning
+ bus
+To:     Yicong Yang <yangyicong@hisilicon.com>, <bhelgaas@google.com>,
+        <rafael@kernel.org>, <linux-pci@vger.kernel.org>
+References: <20220424020710.17589-1-yangyicong@hisilicon.com>
+From:   Yicong Yang <yangyicong@huawei.com>
+Message-ID: <39c4793e-836f-0d94-4a0e-b3c76b1a8ce2@huawei.com>
+Date:   Thu, 5 May 2022 20:41:52 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.1
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-05_05,2022-05-05_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 suspectscore=0
- phishscore=0 priorityscore=1501 clxscore=1011 bulkscore=0 impostorscore=0
- mlxscore=0 adultscore=0 mlxlogscore=790 spamscore=0 lowpriorityscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
- definitions=main-2205050091
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220424020710.17589-1-yangyicong@hisilicon.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.102.169]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ canpemm500009.china.huawei.com (7.192.105.203)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-05-05 at 09:35 +0800, Guozihua (Scott) wrote:
-> Hi,
+Hi Bjorn,
+
+Any comment? Is it ok to take this?
+
+Thanks.
+
+On 2022/4/24 10:07, Yicong Yang wrote:
+> When the bus bridge is runtime suspended, we'll fail to rescan
+> the devices through sysfs as we cannot access the configuration
+> space correctly when the bridge is in D3hot.
+> It can be reproduced like:
 > 
-> Is this patch picked?
-
-Yes, the patch is queued in next-integrity, which feeds into linux-
-next.  For the future, you can check 
-https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git.
-
--- 
-thanks,
-
-Mimi
-
+> $ echo 1 > /sys/bus/pci/devices/0000:80:00.0/0000:81:00.1/remove
+> $ echo 1 > /sys/bus/pci/devices/0000:80:00.0/pci_bus/0000:81/rescan
+> 
+> 0000:80:00.0 is a Root Port and it is runtime-suspended, so
+> 0000:81:00.1 is unreachable after a rescan.
+> 
+> Power up the bridge when scanning the child bus and allow it to
+> suspend again by adding pm_runtime_get_sync()/pm_runtime_put()
+> in pci_scan_child_bus_extend().
+> 
+> Cc: Rafael J. Wysocki <rafael@kernel.org>
+> Cc: Mika Westerberg <mika.westerberg@linux.intel.com>
+> Cc: Bjorn Helgaas <bhelgaas@google.com>
+> Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
+> Reviewed-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> ---
+> Change since v4:
+> - rephrase the commit suggested by Rafael
+> Link: https://lore.kernel.org/lkml/20220422080404.27724-1-yangyicong@hisilicon.com/
+> 
+> Change since v3:
+> - retain the pm_runtime_*() calls in pci_scan_bridge_extend() as Rafael points
+>   out that it's necessary when the brigde is in D3cold
+> Link: https://lore.kernel.org/linux-pci/20220414123736.34150-1-yangyicong@hisilicon.com/
+> 
+> Change since v2:
+> - just rebase it on v5.18-rc2
+> Link: https://lore.kernel.org/linux-pci/1601029386-4928-1-git-send-email-yangyicong@hisilicon.com/
+> 
+> Change since v1:
+> - use an intermediate variable *bridge as suggested
+> - remove the pm_runtime_*() calls in pci_scan_bridge_extend()
+> Link: https://lore.kernel.org/linux-pci/1596022223-4765-1-git-send-email-yangyicong@hisilicon.com/
+> 
+>  drivers/pci/probe.c | 12 ++++++++++++
+>  1 file changed, 12 insertions(+)
+> 
+> diff --git a/drivers/pci/probe.c b/drivers/pci/probe.c
+> index 17a969942d37..b108e72b6586 100644
+> --- a/drivers/pci/probe.c
+> +++ b/drivers/pci/probe.c
+> @@ -2859,11 +2859,20 @@ static unsigned int pci_scan_child_bus_extend(struct pci_bus *bus,
+>  	unsigned int used_buses, normal_bridges = 0, hotplug_bridges = 0;
+>  	unsigned int start = bus->busn_res.start;
+>  	unsigned int devfn, fn, cmax, max = start;
+> +	struct pci_dev *bridge = bus->self;
+>  	struct pci_dev *dev;
+>  	int nr_devs;
+>  
+>  	dev_dbg(&bus->dev, "scanning bus\n");
+>  
+> +	/*
+> +	 * Make sure the bus bridge is powered on, otherwise we may not be
+> +	 * able to scan the devices as we may fail to access the configuration
+> +	 * space of subordinates.
+> +	 */
+> +	if (bridge)
+> +		pm_runtime_get_sync(&bridge->dev);
+> +
+>  	/* Go find them, Rover! */
+>  	for (devfn = 0; devfn < 256; devfn += 8) {
+>  		nr_devs = pci_scan_slot(bus, devfn);
+> @@ -2976,6 +2985,9 @@ static unsigned int pci_scan_child_bus_extend(struct pci_bus *bus,
+>  		}
+>  	}
+>  
+> +	if (bridge)
+> +		pm_runtime_put(&bridge->dev);
+> +
+>  	/*
+>  	 * We've scanned the bus and so we know all about what's on
+>  	 * the other side of any bridges that may be on this bus plus
+> 

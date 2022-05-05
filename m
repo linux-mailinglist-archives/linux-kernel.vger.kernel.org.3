@@ -2,93 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01C8551C151
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 15:50:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1352151C159
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 15:51:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380125AbiEENya (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 09:54:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39910 "EHLO
+        id S245639AbiEENwx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 09:52:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380177AbiEENyJ (ORCPT
+        with ESMTP id S231135AbiEENwu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 09:54:09 -0400
-X-Greylist: delayed 23050 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 05 May 2022 06:50:27 PDT
-Received: from conssluserg-05.nifty.com (conssluserg-05.nifty.com [210.131.2.90])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B2421C4;
-        Thu,  5 May 2022 06:50:23 -0700 (PDT)
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174]) (authenticated)
-        by conssluserg-05.nifty.com with ESMTP id 245Do2Vm001524;
-        Thu, 5 May 2022 22:50:03 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-05.nifty.com 245Do2Vm001524
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1651758603;
-        bh=9oRpkNgyXXtV+zgGcTivzSiWJg6PL7lzsKUtb+il+xA=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=WCAi+X3iW2LWnS+cyU6Xwt+mVMFWGKNgvm1N4fQyjnqbm5kc3n8AZNfmfQahJf44C
-         8baCi4AzET7HA49g1FxlljYCIcyH27XetjJU5oHET938gKf0mwwJvz2T8HhpMNLCrz
-         P9Pn3Km3/Y/vQeek7U0RGRx1wEMV/zynJog1koCSG/7blY0+bz+o/+V+nd0dhDVIgT
-         ObLR1jGvcZqTTJusj3s304q3S0HOyD8i5NlnZKlgrayMMnTlwQhkOi3xewdpgkQ2UG
-         FMtXR+0Z3J9CI9yvcXTbq4t0xxUsKdPB9BdEjyOOS3D5O8xVFTCPswe5Ah2kSLCHdl
-         WLmJgONxSW2YA==
-X-Nifty-SrcIP: [209.85.214.174]
-Received: by mail-pl1-f174.google.com with SMTP id n18so4453578plg.5;
-        Thu, 05 May 2022 06:50:03 -0700 (PDT)
-X-Gm-Message-State: AOAM5337OApzlSjvMivzBuGPOcIlt85F07dCzPAk70PrPMKs1ZJpu0TO
-        ALyzMqaQ7j0d3brF4XksznGsKpYAul0EsDH8fk8=
-X-Google-Smtp-Source: ABdhPJwUvU2dd6I2MVotZAWGiD+mCtj6djZTY+lh8nRnnAK5x12OI9taA02MBGobfNqjKVY/3aiklbcYcNl4MlrBSIM=
-X-Received: by 2002:a17:90a:8405:b0:1bc:d521:b2c9 with SMTP id
- j5-20020a17090a840500b001bcd521b2c9mr6301241pjn.119.1651758602352; Thu, 05
- May 2022 06:50:02 -0700 (PDT)
+        Thu, 5 May 2022 09:52:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A81357B13;
+        Thu,  5 May 2022 06:49:11 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E912761EA1;
+        Thu,  5 May 2022 13:49:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68828C385A4;
+        Thu,  5 May 2022 13:49:09 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="OoBA75oD"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1651758547;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=GcYjK1pB4trYMEK7Jg+WFSNQr3tC4Ghpb0u1HgTVVCs=;
+        b=OoBA75oDsRoDieLgtuW7alWNT5/odoKZW2NCx4PzT2OBe01vwUzxaEWwzX07MLErTfTahr
+        yqlCZlL8hPmNY6FSZgJfRmDgUVOhIIm87rlu3GPCqXfjAPVyFzelPrbvjMz9oeqpOwMUVL
+        WTjfYzN6a+YpFPgZzVz3b81iIvAXRb0=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id a05ca93b (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Thu, 5 May 2022 13:49:07 +0000 (UTC)
+Date:   Thu, 5 May 2022 15:48:55 +0200
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Borislav Petkov <bp@alien8.de>,
+        LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
+        Filipe Manana <fdmanana@suse.com>, linux-crypto@vger.kernel.org
+Subject: Re: [patch 3/3] x86/fpu: Make FPU protection more robust
+Message-ID: <YnPVx3epmwUWKfvl@zx2c4.com>
+References: <87fslpjomx.ffs@tglx>
+ <YnKh96isoB7jiFrv@zx2c4.com>
+ <87czgtjlfq.ffs@tglx>
+ <YnLOXZp6WgH7ULVU@zx2c4.com>
+ <87wnf1huwj.ffs@tglx>
+ <YnMRwPFfvB0RlBow@zx2c4.com>
+ <87mtfwiyqp.ffs@tglx>
+ <YnMkRLcxczMxdE5z@zx2c4.com>
+ <87h764ixjs.ffs@tglx>
+ <YnOuqh4YZT8ww96W@zx2c4.com>
 MIME-Version: 1.0
-References: <20220505072244.1155033-1-masahiroy@kernel.org> <20220505072244.1155033-3-masahiroy@kernel.org>
-In-Reply-To: <20220505072244.1155033-3-masahiroy@kernel.org>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Thu, 5 May 2022 22:48:55 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAREQt5rPGK8zsti_UA-dGFKfqHsVWbSgMLw-yLoeNkJeA@mail.gmail.com>
-Message-ID: <CAK7LNAREQt5rPGK8zsti_UA-dGFKfqHsVWbSgMLw-yLoeNkJeA@mail.gmail.com>
-Subject: Re: [PATCH v3 02/15] modpost: change the license of EXPORT_SYMBOL to
- bool type
-To:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
-Cc:     clang-built-linux <clang-built-linux@googlegroups.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Nicolas Schier a <nicolas@fjasle.eu>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        linux-um@lists.infradead.org,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Kees Cook <keescook@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <YnOuqh4YZT8ww96W@zx2c4.com>
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 5, 2022 at 4:24 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
->
-> Currently, enum export is tristate, but export_unknown does not make
-> sense in any way.
->
-> If the symbol name starts with "__ksymtab_", but the section name
-> does not start with "___ksymtab+" or "___ksymtab_gpl+", it is not
-> an exported symbol. The variable name just happens to start with
-> "__ksymtab_". Do not call sym_add_exported() in this case.
->
-> __ksymtab_* is internally by EXPORT_SYMBOL(_GPL) but somebody may
+Hey again Thomas,
 
-I mean
-"... is internally used by ..."
+On Thu, May 05, 2022 at 01:02:02PM +0200, Jason A. Donenfeld wrote:
+> Interestingly, disabling the simd paths makes things around 283 cycles
+> slower on my Tiger Lake laptop, just doing ordinary things. I'm actually
+> slightly surprised, so I'll probably keep playing with this. My patch
+> for this is attached. Let me know if you have a different methodology in
+> mind...
 
+Using RDPMC/perf, the performance is shown to be even closer for real
+world cases, with the simd code only ~80 cycles faster. Bench code
+follows below. If the observation on this hardware holds for other
+hardware, we can probably improve the performance of the generic code a
+bit, and then the difference really won't matter. Any thoughts about
+this and the test code?
 
+Jason
 
-
--- 
-Best Regards
-Masahiro Yamada
+diff --git a/drivers/char/random.c b/drivers/char/random.c
+index bd292927654c..6577e9f2f3b7 100644
+--- a/drivers/char/random.c
++++ b/drivers/char/random.c
+@@ -53,6 +53,7 @@
+ #include <linux/uuid.h>
+ #include <linux/uaccess.h>
+ #include <linux/suspend.h>
++#include <linux/sort.h>
+ #include <crypto/chacha.h>
+ #include <crypto/blake2s.h>
+ #include <asm/processor.h>
+@@ -755,9 +756,54 @@ static struct {
+ 	.lock = __SPIN_LOCK_UNLOCKED(input_pool.lock),
+ };
+ 
++static DEFINE_PER_CPU(int, pmc_index) = -1;
++static struct {
++	u32 durations[1 << 20];
++	u32 pos, len;
++} irqbench;
++
+ static void _mix_pool_bytes(const void *in, size_t nbytes)
+ {
++	int idx = *this_cpu_ptr(&pmc_index);
++	u32 ctr = input_pool.hash.t[0], reg = 0;
++	cycles_t end, start;
++
++
++	native_cpuid(&reg, &reg, &reg, &reg);
++	start = idx == -1 ? 0 : native_read_pmc(idx);
+ 	blake2s_update(&input_pool.hash, in, nbytes);
++	end = idx == -1 ? 0 : native_read_pmc(idx);
++
++	if (ctr == input_pool.hash.t[0] || !in_hardirq() || idx == -1)
++		return;
++
++	irqbench.durations[irqbench.pos++ % ARRAY_SIZE(irqbench.durations)] = end - start;
++	irqbench.len = min_t(u32, irqbench.len + 1, ARRAY_SIZE(irqbench.durations));
++}
++
++static int cmp_u32(const void *a, const void *b)
++{
++	return *(const u32 *)a - *(const u32 *)b;
++}
++
++static int proc_do_irqbench_median(struct ctl_table *table, int write, void *buffer,
++				   size_t *lenp, loff_t *ppos)
++{
++	u32 len = READ_ONCE(irqbench.len), median, *sorted;
++	struct ctl_table fake_table = {
++		.data = &median,
++		.maxlen = sizeof(median)
++	};
++	if (!len)
++		return -ENODATA;
++	sorted = kmalloc_array(len, sizeof(*sorted), GFP_KERNEL);
++	if (!sorted)
++		return -ENOMEM;
++	memcpy(sorted, irqbench.durations, len * sizeof(*sorted));
++	sort(sorted, len, sizeof(*sorted), cmp_u32, NULL);
++	median = sorted[len / 2];
++	kfree(sorted);
++	return write ? 0 : proc_douintvec(&fake_table, 0, buffer, lenp, ppos);
+ }
+ 
+ /*
+@@ -1709,6 +1755,18 @@ static struct ctl_table random_table[] = {
+ 		.mode		= 0444,
+ 		.proc_handler	= proc_do_uuid,
+ 	},
++	{
++		.procname	= "irqbench_median",
++		.mode		= 0444,
++		.proc_handler	= proc_do_irqbench_median,
++	},
++	{
++		.procname	= "irqbench_count",
++		.data		= &irqbench.len,
++		.maxlen		= sizeof(irqbench.len),
++		.mode		= 0444,
++		.proc_handler	= proc_douintvec,
++	},
+ 	{ }
+ };
+ 
+@@ -1718,6 +1776,21 @@ static struct ctl_table random_table[] = {
+  */
+ static int __init random_sysctls_init(void)
+ {
++	int i;
++	struct perf_event *cycles_event;
++	struct perf_event_attr perf_cycles_attr = {
++		.type = PERF_TYPE_HARDWARE,
++		.config = PERF_COUNT_HW_CPU_CYCLES,
++		.size = sizeof(struct perf_event_attr),
++		.pinned = true
++	};
++	for_each_possible_cpu(i) {
++		cycles_event = perf_event_create_kernel_counter(&perf_cycles_attr, i, NULL, NULL, NULL);
++		if (IS_ERR(cycles_event))
++			pr_err("unable to create perf counter on cpu %d: %ld\n", i, PTR_ERR(cycles_event));
++		else
++			*per_cpu_ptr(&pmc_index, i) = cycles_event->hw.event_base_rdpmc;
++	}
+ 	register_sysctl_init("kernel/random", random_table);
+ 	return 0;
+ }
+ 

@@ -2,104 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 501C051B50A
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 03:06:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB0B851B515
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 03:10:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234253AbiEEBKE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 21:10:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55376 "EHLO
+        id S234494AbiEEBNu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 21:13:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234132AbiEEBKB (ORCPT
+        with ESMTP id S232787AbiEEBNr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 21:10:01 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E69D849255;
-        Wed,  4 May 2022 18:06:23 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KtwWL2m53z4xLR;
-        Thu,  5 May 2022 11:06:22 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1651712782;
-        bh=RZnJ0Bs+kbVt1yem4FzbL5vfR8id23cYqPzyEgoi81c=;
-        h=Date:From:To:Cc:Subject:From;
-        b=RBVw8GZ8R3A/EwTg6NUH+P9cm5DupsyP4ld8AKiOVhydvtIUVS/z0WIHeT/bg454b
-         zEHmN7iUOEcsDL6nT72OQLZF3PQyaakQNH3bUej2KfiT3aq2jsmIGHtXkEup2SBbuK
-         ccFebvsj2pGx9nceyhMAeeQ+Iv+NXI37xY+R1b+5AJ0QgzfahOzwmRQH031WTesUKh
-         TbHvXBzKXOBUMMiUv8uyvr2C+MUBKABUtaHJDCIcmhoIDKq0ogqOEG/yTE5a6jajsf
-         Zd9YY0JI55DTYwSBg3cjZXvlFrOeNBkAQeuasD3ikJrTLVzqkaHCkYbpuihUmKCIwX
-         TuoMjOUn4PrsQ==
-Date:   Thu, 5 May 2022 11:06:21 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Rob Clark <robdclark@gmail.com>, Sean Paul <seanpaul@chromium.org>,
-        Dave Airlie <airlied@linux.ie>
-Cc:     DRI <dri-devel@lists.freedesktop.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>
-Subject: linux-next: manual merge of the drm-msm tree with the drm tree
-Message-ID: <20220505110621.66f8420c@canb.auug.org.au>
+        Wed, 4 May 2022 21:13:47 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACC0749275
+        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 18:10:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651713009; x=1683249009;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=bObumrYm1BRiO8NC7JGkJj5WU3DlBUMAdCew4SD9ic0=;
+  b=J8bb7iBtLkNUf6sIqIkROBwztiAw2ABtRPOkYBT7Q5RVJsjeF3hIj7e+
+   5hhx2W/Dfy3RQL8tO7gjO2I8yruz78rYZIc+JJO5dA0UGYojkZgi76YQu
+   FjW4JkNRYlQ9+z7zfFcb7pbUyHE6dYl4rl84FMX4PsqitFpuoDw3K1Y5C
+   3ZbNzRwUSbOmkV3bVsEf9AbUy6BSSvrEN984IgLI7dIdKtEQ76fVGmpvB
+   7Hy9kq5YLM1XWR2xVnsIpRnlWqSKo74mU8zDjbkiHmqDJL09hQ3+mmCYt
+   MlZJLJzI4nbFwEkcxj0O9N1wMrfohAQrb/Fij/t7l8JIb4mbD3KRtKGTp
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10337"; a="267832591"
+X-IronPort-AV: E=Sophos;i="5.91,199,1647327600"; 
+   d="scan'208";a="267832591"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2022 18:10:09 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,199,1647327600"; 
+   d="scan'208";a="708713892"
+Received: from allen-box.sh.intel.com ([10.239.159.48])
+  by fmsmga001.fm.intel.com with ESMTP; 04 May 2022 18:10:06 -0700
+From:   Lu Baolu <baolu.lu@linux.intel.com>
+To:     Joerg Roedel <joro@8bytes.org>, Jason Gunthorpe <jgg@nvidia.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Kevin Tian <kevin.tian@intel.com>
+Cc:     Jacob jun Pan <jacob.jun.pan@intel.com>,
+        Liu Yi L <yi.l.liu@intel.com>,
+        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org,
+        Lu Baolu <baolu.lu@linux.intel.com>
+Subject: [PATCH v2 0/4] iommu/vt-d: Force snooping improvement
+Date:   Thu,  5 May 2022 09:07:06 +0800
+Message-Id: <20220505010710.1477739-1-baolu.lu@linux.intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/kJJbsRGS0nnN8.2vkWr5UrV";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/kJJbsRGS0nnN8.2vkWr5UrV
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hi folks,
 
-Hi all,
+Previously, the IOMMU capability of enforcing cache coherency was queried
+through iommu_capable(IOMMU_CAP_CACHE_COHERENCY). This is a global
+capability, hence the IOMMU driver reports support for this capability
+only when all IOMMUs in the system has this support.
 
-Today's linux-next merge of the drm-msm tree got conflicts in:
+Commit 6043257b1de06 ("iommu: Introduce the domain op
+enforce_cache_coherency()") converts this into a per-domain test-and-set
+option, and the previous iommu_capable(IOMMU_CAP_CACHE_COHERENCY) is
+deprecated.
 
-  drivers/gpu/drm/msm/edp/edp.h
-  drivers/gpu/drm/msm/edp/edp_ctrl.c
+This is a follow-up series which improves the Intel IOMMU driver to
+support the per-domain scheme better.
 
-between commit:
+Best regards,
+baolu
 
-  da68386d9edb ("drm: Rename dp/ to display/")
+Change log:
+v2:
+ - Check whether force_snooping has already been set in
+   intel_iommu_enforce_cache_coherency().
+ - Set PGSNP pasid bit field during domain attaching if forcing_snooping
+   is set.
+ - Remove redundant list_empty() checks.
+ - Add dmar_domain->set_pte_snp and set it if force snooping is enforced
+   on a domain with 2nd-level translation.
 
-from the drm tree and commit:
+v1:
+ - https://lore.kernel.org/linux-iommu/20220501112434.874236-1-baolu.lu@linux.intel.com
+ - Initial post.
 
-  f1fc2b87de47 ("drm/msm: drop old eDP block support (again)")
+Lu Baolu (4):
+  iommu/vt-d: Block force-snoop domain attaching if no SC support
+  iommu/vt-d: Check domain force_snooping against attached devices
+  iommu/vt-d: Remove domain_update_iommu_snooping()
+  iommu/vt-d: Remove hard coding PGSNP bit in PASID entries
 
-from the drm-msm tree.
+ include/linux/intel-iommu.h |  1 +
+ drivers/iommu/intel/pasid.h |  2 +
+ drivers/iommu/intel/iommu.c | 88 ++++++++++++++++++++++---------------
+ drivers/iommu/intel/pasid.c | 26 +++++++++--
+ 4 files changed, 78 insertions(+), 39 deletions(-)
 
-I fixed it up (I just removed the files) and can carry the fix as
-necessary. This is now fixed as far as linux-next is concerned, but any
-non trivial conflicts should be mentioned to your upstream maintainer
-when your tree is submitted for merging.  You may also want to consider
-cooperating with the maintainer of the conflicting tree to minimise any
-particularly complex conflicts.
+-- 
+2.25.1
 
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/kJJbsRGS0nnN8.2vkWr5UrV
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJzIw0ACgkQAVBC80lX
-0GwAwgf7BHcAx9ccnxJxgWEJEcGjyL2UQRZmwg4SaWyjbRygl+eaXZH60jyIQap3
-hmcm3ujc6Fs0Lxt79qdmNYCGMniFP0NGtR0eXA+Ga35z/hwPqafqF+2eLKn7iTZt
-yTRbd6Hm4LthV2Gz0eNTfsdrJWmVXtY2VK55Th4lhBrPkk3Uk8/E8LrO+CG5Dj4/
-HptzKNckTu105pNNkkulJeNIcjqBjegnA0Uz0u/M2mAcL4TiIHUsKS0l2SvZ6mvT
-c7oSL/FngmSLMiIXvWz7yISCqupTxT1x6bZjvJL+dORXn5HmxYeiR0Gm58lP5weP
-v2vJ5klirdUqSFTU0q7b3qxa3wkXyQ==
-=KdJg
------END PGP SIGNATURE-----
-
---Sig_/kJJbsRGS0nnN8.2vkWr5UrV--

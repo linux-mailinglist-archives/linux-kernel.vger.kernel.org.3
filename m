@@ -2,61 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82F2751B5C0
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 04:20:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B617C51B5CA
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 04:22:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238222AbiEECXj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 22:23:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55488 "EHLO
+        id S238496AbiEECYN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 22:24:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234203AbiEECXg (ORCPT
+        with ESMTP id S238258AbiEECYK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 22:23:36 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 991D94889F
-        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 19:19:58 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id h1so2531324pfv.12
-        for <linux-kernel@vger.kernel.org>; Wed, 04 May 2022 19:19:58 -0700 (PDT)
+        Wed, 4 May 2022 22:24:10 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 228F049C89;
+        Wed,  4 May 2022 19:20:33 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id fv2so2889762pjb.4;
+        Wed, 04 May 2022 19:20:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=Moay9sBk8rVdbaL64S3jDlKhD4QT9fJRTKr12K5jA4Q=;
-        b=m2o/3KXUn3ZQ20LMuY5L26YynIH0bHNe0Fuf3ch/mnqdG+uF0EhIGNRoA94CF7hkkU
-         DICEutWk4PRZI4AgQ8JvG5IkzCYvyR4tmrErX7caGBsnZUMCBejo6+xhAxENgPsaMHhK
-         ueKhrdkcSY04Yv5M7PPd3D42BeiiPApWaVfUxe9vSaHQ3Dlg7JWpS2NEtItND9bzw1dP
-         YGGxf0Y0M5Jnt/pw4tYfLUN47x1o/BiRsOEFtnthcKW/oQQvaxmZFnWlTr6XuhLZJFdZ
-         1vufCkBVn6X7bcLuzA9meKQLomIuFG+ictp7pKua3eHxp+fyx3yYdGwkTfrlAX9SmSWO
-         TW7w==
+        bh=rNxRZjPsLxGtvu4jqqbMJl1peYsf82mPfHpY5Wt/9NM=;
+        b=U7of+IyeNWIoWfwrDy3FFvAGacCPeD5+Yq3OyPIZVOxmpzNO154UkJP5mzG7PXbhMv
+         Ial0ITVa67FRkYqGTvyh27Yxo0Kg5eJZXFLqNsokgvLBO7M2MlLTuP1cgq00EK8h/tON
+         K86HqvTq5/X2sJbli7DT7tJ+hoPxI1pL8cb/qJCd4VpmlN7jg6v6Xbv3ivvbUxeC9r6g
+         oG3D3opiSUjc6OMZbIsc0eBcQU2HuDz4icNlmQZHGwjtAdAFbdOfXOXx4KtDCBd2N2jt
+         x9IQX/PhhNhw2DoR5o7FQXkMPk0L5Yj6IV9XXdstD0eyJBSEAW3MnCAMjNpP1q84VtkA
+         LHTw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=Moay9sBk8rVdbaL64S3jDlKhD4QT9fJRTKr12K5jA4Q=;
-        b=tq1vT3i4LXFv0svFWQMIl4O+Co14tAbOCIA+jdvMv65ys5fbvZRq2MgdHayNaJnLw8
-         kPXp6RXaHoMGoup/X8XpTYL+9+4fZ0sgtk+Y1+r6wNxf9q+T0bHhbO5OhoTnvwfQO8e8
-         JvxqRJJqJnDS4QZEBbQvRAjt920yFEldMNcG7yHj5qKplHavlhWYOzMLIr2V/CYf1O/j
-         +ULAebfkg+jOdcPCF6ddbOge/iec3TODTu5gYiXjbbWQosS17MbquuRvy8zo9X8C7ZKF
-         pFgmf0DHX8Cgb8dPBjuOiIrvhxixgwuCV77l77LSFASg++W9LGIW1qAvG7jNQEf3dkwg
-         zqAQ==
-X-Gm-Message-State: AOAM533BZrDXnzTMX3eJhHURZbl8XWC7cS5g4VzWwQm1CHAYA7x5e/Ir
-        QFM9iRGo3q5EBl1MbjVmkJvTmFuameY=
-X-Google-Smtp-Source: ABdhPJze9fMC3XNJanQ45X3LhX0fh8loKWHwpc0KslufZ+Vjs8bB8YGm37Bc3hMJTtbcubwSHdG/sQ==
-X-Received: by 2002:a05:6a00:1353:b0:50e:982:6a4f with SMTP id k19-20020a056a00135300b0050e09826a4fmr11808215pfu.50.1651717198174;
-        Wed, 04 May 2022 19:19:58 -0700 (PDT)
+        bh=rNxRZjPsLxGtvu4jqqbMJl1peYsf82mPfHpY5Wt/9NM=;
+        b=cewlzybC6cvme2TcChGRMDoSso9LLNsyuOTBObcRC5yfwW7abW6xw5NZvp5qgMAepN
+         hn93LSZuDqWIKY9X5cTbpbAnWBls4FOY7RmZZBwXNAVg86NMdkBGfsTzeuZRdXGWQKeW
+         isCm3dRr1hs4p8J5ZhSaPWiBpS9nSRv3kUZVUMi/VYBZnRX2yB3cDzmCFhs7oLdAbiWV
+         ADNjltsNCFfE3pN8luvfKorIcvvwCQ5sPUVuHFUyp67ise0mseE+qxslhSzytPN9RiwA
+         n3pv/QGZruyWr6juf26ugv41rIw/vw0VIB50D0mW2fX7F+5VUZ2EF64UcsaiVumEgzZ5
+         eGSg==
+X-Gm-Message-State: AOAM5317FMD+I6pR5w9cuHw2dZpmqdSi8QO2/kk5Ia7XLhbWmmMPHSJ0
+        bVoVBjNpXB7jMIPDGVbcCPQ=
+X-Google-Smtp-Source: ABdhPJxxkplJqxShrGBVhiiwV4wDAmTzqef/PIHgbEK/FxkOV4pp1Kz4V6oB91OzUcUhTzAp2ZHjOQ==
+X-Received: by 2002:a17:902:ea06:b0:15e:8367:150b with SMTP id s6-20020a170902ea0600b0015e8367150bmr24274391plg.167.1651717232671;
+        Wed, 04 May 2022 19:20:32 -0700 (PDT)
 Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id e185-20020a621ec2000000b0050dc76281bdsm76984pfe.151.2022.05.04.19.19.56
+        by smtp.gmail.com with ESMTPSA id w2-20020a17090ac98200b001cd4989fecdsm3943686pjt.25.2022.05.04.19.20.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 May 2022 19:19:57 -0700 (PDT)
+        Wed, 04 May 2022 19:20:32 -0700 (PDT)
 From:   cgel.zte@gmail.com
 X-Google-Original-From: chi.minghao@zte.com.cn
-To:     alexandre.belloni@bootlin.com
-Cc:     npitre@baylibre.com, linux-i3c@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Minghao Chi <chi.minghao@zte.com.cn>,
+To:     bbrezillon@kernel.org
+Cc:     arno@natisbad.org, schalla@marvell.com,
+        herbert@gondor.apana.org.au, davem@davemloft.net,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Minghao Chi <chi.minghao@zte.com.cn>,
         Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH] i3c/master: simplify the return expression of i3c_hci_remove()
-Date:   Thu,  5 May 2022 02:19:54 +0000
-Message-Id: <20220505021954.54524-1-chi.minghao@zte.com.cn>
+Subject: [PATCH] crypto: octeontx2: simplify the return expression of otx2_cpt_aead_cbc_aes_sha_setkey()
+Date:   Thu,  5 May 2022 02:20:24 +0000
+Message-Id: <20220505022024.54586-1-chi.minghao@zte.com.cn>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -77,28 +79,34 @@ Simplify the return expression.
 Reported-by: Zeal Robot <zealci@zte.com.cn>
 Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
 ---
- drivers/i3c/master/mipi-i3c-hci/core.c | 7 +------
+ drivers/crypto/marvell/octeontx2/otx2_cptvf_algs.c | 7 +------
  1 file changed, 1 insertion(+), 6 deletions(-)
 
-diff --git a/drivers/i3c/master/mipi-i3c-hci/core.c b/drivers/i3c/master/mipi-i3c-hci/core.c
-index 8c01123dc4ed..6aef5ce43cc1 100644
---- a/drivers/i3c/master/mipi-i3c-hci/core.c
-+++ b/drivers/i3c/master/mipi-i3c-hci/core.c
-@@ -768,13 +768,8 @@ static int i3c_hci_probe(struct platform_device *pdev)
- static int i3c_hci_remove(struct platform_device *pdev)
- {
- 	struct i3c_hci *hci = platform_get_drvdata(pdev);
--	int ret;
+diff --git a/drivers/crypto/marvell/octeontx2/otx2_cptvf_algs.c b/drivers/crypto/marvell/octeontx2/otx2_cptvf_algs.c
+index f8f8542ce3e4..67530e90bbfe 100644
+--- a/drivers/crypto/marvell/octeontx2/otx2_cptvf_algs.c
++++ b/drivers/crypto/marvell/octeontx2/otx2_cptvf_algs.c
+@@ -896,7 +896,6 @@ static int otx2_cpt_aead_cbc_aes_sha_setkey(struct crypto_aead *cipher,
+ 	struct crypto_authenc_key_param *param;
+ 	int enckeylen = 0, authkeylen = 0;
+ 	struct rtattr *rta = (void *)key;
+-	int status;
  
--	ret = i3c_master_unregister(&hci->master);
--	if (ret)
--		return ret;
+ 	if (!RTA_OK(rta, keylen))
+ 		return -EINVAL;
+@@ -938,11 +937,7 @@ static int otx2_cpt_aead_cbc_aes_sha_setkey(struct crypto_aead *cipher,
+ 	ctx->enc_key_len = enckeylen;
+ 	ctx->auth_key_len = authkeylen;
+ 
+-	status = aead_hmac_init(cipher);
+-	if (status)
+-		return status;
 -
 -	return 0;
-+	return i3c_master_unregister(&hci->master);
++	return aead_hmac_init(cipher);
  }
  
- static const __maybe_unused struct of_device_id i3c_hci_of_match[] = {
+ static int otx2_cpt_aead_ecb_null_sha_setkey(struct crypto_aead *cipher,
 -- 
 2.25.1
 

@@ -2,103 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 049A151DCC7
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 18:03:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC7CA51DCBF
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 18:02:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1443345AbiEFQG6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 12:06:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38154 "EHLO
+        id S1443320AbiEFQFn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 12:05:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1443330AbiEFQGv (ORCPT
+        with ESMTP id S245722AbiEFQFh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 12:06:51 -0400
-X-Greylist: delayed 1950 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 06 May 2022 09:03:05 PDT
-Received: from bues.ch (bues.ch [IPv6:2a01:138:9005::1:4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D025369CCB;
-        Fri,  6 May 2022 09:03:05 -0700 (PDT)
-Received: by bues.ch with esmtpsa (Exim 4.92)
-        (envelope-from <m@bues.ch>)
-        id 1nmzuZ-0005Zh-4F; Fri, 06 May 2022 17:30:31 +0200
-Date:   Fri, 6 May 2022 17:29:56 +0200
-From:   Michael =?UTF-8?B?QsO8c2No?= <m@bues.ch>
-To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-Cc:     linux-wireless@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: Re: [PATCH] ssb: remove unreachable code
-Message-ID: <20220506172956.25004612@barney>
-In-Reply-To: <20220506075814.115059-1-jiapeng.chong@linux.alibaba.com>
-References: <20220506075814.115059-1-jiapeng.chong@linux.alibaba.com>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-pc-linux-gnu)
+        Fri, 6 May 2022 12:05:37 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CABD04FC76;
+        Fri,  6 May 2022 09:01:53 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id d5so10620121wrb.6;
+        Fri, 06 May 2022 09:01:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=AwSYpzjiuqhVZgVPF7sxtuhyEtMKkN0i872NpkdZC/o=;
+        b=K4ZCXudwqosKXBiPTFH14TBwZpj5m6O78LEVT7YneZpZBQiBG19Qbwn/jB0RIQHD5V
+         bCi1BEccpXG0iBXo+uYUcTbcDyXZmgBM/G1XPXH01W4KzzfMKtG/sd1hU5cg7xIdwstC
+         tg9pfsTRDvhwMViw4CnA1TukBbBilgJUq4T2nrBHiNhqGU1asEXvV2yyQhFCQl4huUTv
+         Hi4zlJagsH3CD3gbwcKbjIuLufD+UlF9rE/xS81VH8zJz49qrg2nMw3A5NwIrG3IQQZ0
+         2Ei3TU1eI5thG0LYe6hP+m/gAWzvZ7IqdpbZq6N9wNfUSDm6U1iGjERhywvMsM4S1zqJ
+         gbWw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=AwSYpzjiuqhVZgVPF7sxtuhyEtMKkN0i872NpkdZC/o=;
+        b=HVXbf2QFfHRDNxIXcSnZyrvMgxOFc6s76McXMsPIa7tdYDYiIOQGsY178MNPv8TAQ+
+         LkyOCp81TEiVnImXOQdt8W8qneYwEH8iqYtKEYf5uq1mbCTI3Gt2/AeeElkS479Erti5
+         RBu8SIIGfWKIhEr+HSEfIOuZ0yRT6fzpfP87hrN2Jof+Aly1THdYyqLL4uKG8e/hM9H0
+         Ws0lgpiB9IJDLoppdfQT5HhMVSdB6rILg2tispx5nIoF1OXcyCyuRvkbb76lpO54tWsE
+         UG/pCJHTTpee5Sg+dlj/DjbbMU9nisEZish29I/Qs2QlEIf31J7A9qG8+meMi2n3hxLI
+         O1wQ==
+X-Gm-Message-State: AOAM530Kr4PuHW/SaW4HxxO7Kdpz+TN1b5BsFYzc14bYS+IWfO/u5uDJ
+        cT3KmOpQhUtLT9vchE1/mSI=
+X-Google-Smtp-Source: ABdhPJzL7lS0966E7B6W4dvbvOQeEUGgPCOuIk2MX/tVqezgIyS8z33FYy1vbahu5shC4On0eo14eA==
+X-Received: by 2002:adf:d1ec:0:b0:20c:61ef:93b6 with SMTP id g12-20020adfd1ec000000b0020c61ef93b6mr3263663wrd.694.1651852912296;
+        Fri, 06 May 2022 09:01:52 -0700 (PDT)
+Received: from [192.168.8.198] ([85.255.237.75])
+        by smtp.gmail.com with ESMTPSA id x18-20020adfdd92000000b0020c5253d915sm3907343wrl.97.2022.05.06.09.01.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 06 May 2022 09:01:51 -0700 (PDT)
+Message-ID: <3f940dad-73ce-4ea6-dc76-f877c64dbb9a@gmail.com>
+Date:   Fri, 6 May 2022 17:01:25 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/X0fbrmtqHTaRTxhiMw+aYS4";
- protocol="application/pgp-signature"; micalg=pgp-sha512
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v2 0/5] fast poll multishot mode
+Content-Language: en-US
+To:     Jens Axboe <axboe@kernel.dk>, Hao Xu <haoxu.linux@gmail.com>,
+        io-uring@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org
+References: <20220506070102.26032-1-haoxu.linux@gmail.com>
+ <b4d23f42-36f4-353a-1f44-c12178f0a2b3@gmail.com>
+ <5ce3d6c7-42f9-28c3-0800-4da399adaaea@kernel.dk>
+From:   Pavel Begunkov <asml.silence@gmail.com>
+In-Reply-To: <5ce3d6c7-42f9-28c3-0800-4da399adaaea@kernel.dk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/X0fbrmtqHTaRTxhiMw+aYS4
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+On 5/6/22 15:18, Jens Axboe wrote:
+> On 5/6/22 1:36 AM, Hao Xu wrote:
+>> Hi All,
+>> I actually had a question about the current poll code, from the code it
+>> seems when we cancel a poll-like request, it will ignore the existing
+>> events and just raise a -ECANCELED cqe though I haven't tested it. Is
+>> this by design or am I missing something?
+> 
+> That's by design, but honestly I don't think anyone considered the case
+> where it's being canceled but has events already. For that case, I think
+> we should follow the usual logic of only returning an error (canceled)
+> if we don't have events, if we have events just return them. For
+> multi-shot, obviously also terminate, but same logic there.
 
-On Fri,  6 May 2022 15:58:14 +0800
-Jiapeng Chong <jiapeng.chong@linux.alibaba.com> wrote:
+Why would we care? It's inherently racy in any case and any
+user not handling this is already screwed.
 
-> Clean up the following smatch warning:
->=20
-> drivers/ssb/pci.c:917 ssb_pci_sprom_get() warn: ignoring unreachable
-> code.
->=20
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-> ---
->  drivers/ssb/pci.c | 1 -
->  1 file changed, 1 deletion(-)
->=20
-> diff --git a/drivers/ssb/pci.c b/drivers/ssb/pci.c
-> index 148bcb99c212..493bebbba521 100644
-> --- a/drivers/ssb/pci.c
-> +++ b/drivers/ssb/pci.c
-> @@ -914,7 +914,6 @@ static int ssb_pci_sprom_get(struct ssb_bus *bus,
->  				err =3D 0;
->  				goto out_free;
->  			}
-> -			pr_warn("WARNING: Invalid SPROM CRC (corrupt
-> SPROM)\n"); }
->  	}
->  	err =3D sprom_extract(bus, sprom, buf, bus->sprom_size);
-
-
-
-Acked-by: Michael B=C3=BCsch <m@bues.ch>
-
---=20
-Michael B=C3=BCsch
-https://bues.ch/
-
---Sig_/X0fbrmtqHTaRTxhiMw+aYS4
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCgAdFiEEihRzkKVZOnT2ipsS9TK+HZCNiw4FAmJ1PvQACgkQ9TK+HZCN
-iw6NthAAyKfzsQpLYd9idoiE9ulR6GvTJkpq+syShMJB6lWxn4gK/pFXaHrz18Ko
-zM+cdWQnId/P1zlNH5UDw8wBL6CjCDdSAl0FfJX9Fsdiz9Mp0bM+cjPprI4Fn+Qx
-NO3pWKEIwy2C2DV4iK2QpgLUPgu7kIOfpCTevDmwXxMT9PIjl/DFGrqmZFo7X326
-MKVisT7nmoKQpCdeso7MkaXPFVRklE35KcHkQFlwtroo50IHn3Dt+Q+rrqqDN0nd
-D/aOh0rHgFDRlPn5CGj9oz+5/Mxy4soV7d+/VIIEdi4fhuywBw34stn4No+X/1v4
-JgrCU/tl2HSQemrhH+P8zkDaIziVLCYdDMZIj01WVnLEEAuaWezKladxqJkIHPKW
-Bm9qJ/e3t1ZekZ/SRPHXi+HTA+aetxjOWGgWgy1t0+ZOdT16Ail2ERxPvD5yGAo1
-EoFlHMzPuh3XYLWbwHajMj4U1uVNbwQfQCPE2xLbs1Vvl98x6vDoNPWMBvL8Uxzv
-l8MM9XtkPARm7fxsQPRwGWW3s++1IQot5U1CIWvpNlnHcscIJXdAEOmijb+lqLy/
-qinal+mbJ+9VQOvMRQ60yD27YcIHLTgFBqNEpXLBpq01kNtX6A3zEvAcmDnl/buZ
-kSQzM8TC02drF+Mmtr7bTcSd2FxD5tHZmgWww+pA3v6r9Q3Lrv0=
-=flqY
------END PGP SIGNATURE-----
-
---Sig_/X0fbrmtqHTaRTxhiMw+aYS4--
+-- 
+Pavel Begunkov

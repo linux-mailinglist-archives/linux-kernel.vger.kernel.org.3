@@ -2,259 +2,320 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C388351D5D3
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 12:37:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0E6551D5DB
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 12:40:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1391001AbiEFKkv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 06:40:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46474 "EHLO
+        id S1391027AbiEFKo2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 06:44:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343916AbiEFKkt (ORCPT
+        with ESMTP id S1391031AbiEFKoX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 06:40:49 -0400
-Received: from us-smtp-delivery-74.mimecast.com (us-smtp-delivery-74.mimecast.com [170.10.129.74])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E24455C85B
-        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 03:37:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651833426;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=cv6Um2mNgqN77rJjF7DdFteH1AUkMIP/GRKLYfSGdLs=;
-        b=GonQ2npVVvxRXlBF/T72hl0NLolATgYbsguXFlPkTM5W34CSXK7ZRyqKFb0wlnq2IYh2by
-        AtL5Y9rISQRJ7GKH4IZ4X9o/oVbrz+gGtyqdqAyMN8AyK4jZ6pPgClEVD68WtG1IYlDpTt
-        5sS4zCJy/7fkcIdRhVst5N9gl4HJB+c=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-199-M3-RDpwBO7qPDmNnno4HAw-1; Fri, 06 May 2022 06:37:02 -0400
-X-MC-Unique: M3-RDpwBO7qPDmNnno4HAw-1
-Received: by mail-ed1-f72.google.com with SMTP id k13-20020a50ce4d000000b00425e4447e64so3780553edj.22
-        for <linux-kernel@vger.kernel.org>; Fri, 06 May 2022 03:37:02 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=cv6Um2mNgqN77rJjF7DdFteH1AUkMIP/GRKLYfSGdLs=;
-        b=a/lvUJTDAL0Y+7HbYvSt3XuCavUCAUevV/+6usXKLTJDKwegsb718lUJMRJOtp2GpR
-         r6JPEjoDwNRGKA6OP+pmgT1a133DCsOoL/dZ97JVG/UTMKbw1m6g4U+ifxas3xr4ASI5
-         urkpzSMwnKISYxydViBQKCUp8vvhhqoH5AfTia5dQwum+SIyJAkQLOLvN3qoVYxNG8fF
-         +L7TKxsGvqKhK1g6929Hx6Vlo8yNj0KDfUe57GTx67S14Cg9p5qIKcqqOt+kUsEMtupX
-         9fSu/sc8RTnyJ788MPRRVyKByXmAjJrl3ApWKh4twLF0LZeibjW9yKdU7zVLOEsmB3gs
-         c6cg==
-X-Gm-Message-State: AOAM531VODPS9pTu/x67+ip0lPHzwXD2dHafK9hijSHvhmV7jzZJxfGv
-        q55jnR2/w3iTu/1x/Q1aGCuBJvKdLT5JzmGDxCpWOLLAup9jxCGVKQuUw02awDRQA8UuXVu1iWo
-        WoZTebaSN7NxzR7sr2Q1W8+tl
-X-Received: by 2002:a17:906:544e:b0:6f3:bd59:1a93 with SMTP id d14-20020a170906544e00b006f3bd591a93mr2298266ejp.421.1651833421544;
-        Fri, 06 May 2022 03:37:01 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxRZuobLIG2hExUdnsLH7VTyOALMwM2hx+csjBKvRIcgESKMGA5D5X+qrb3QIJJDbrRqu6Dtg==
-X-Received: by 2002:a17:906:544e:b0:6f3:bd59:1a93 with SMTP id d14-20020a170906544e00b006f3bd591a93mr2298237ejp.421.1651833421287;
-        Fri, 06 May 2022 03:37:01 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
-        by smtp.gmail.com with ESMTPSA id u10-20020aa7d88a000000b0042617ba638csm2090816edq.22.2022.05.06.03.37.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 06 May 2022 03:37:00 -0700 (PDT)
-Message-ID: <f73836d2-913a-87c1-af44-56429ffcb963@redhat.com>
-Date:   Fri, 6 May 2022 12:37:00 +0200
+        Fri, 6 May 2022 06:44:23 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0869765D21;
+        Fri,  6 May 2022 03:40:39 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 909E3152B;
+        Fri,  6 May 2022 03:40:39 -0700 (PDT)
+Received: from FVFF77S0Q05N (unknown [10.57.65.197])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C05713FA31;
+        Fri,  6 May 2022 03:40:35 -0700 (PDT)
+Date:   Fri, 6 May 2022 11:40:31 +0100
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Josh Poimboeuf <jpoimboe@kernel.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org
+Subject: Re: [PATCH] bug: Use normal relative pointers in 'struct bug_entry'
+Message-ID: <YnT7H1wsviLlBmEG@FVFF77S0Q05N>
+References: <afddb4548e93f6458ec1d9ec185a834c348eda33.1651798983.git.jpoimboe@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH -next] platform/x86: amd-pmc: Fix build error
- unused-function
-Content-Language: en-US
-To:     Ren Zhijie <renzhijie2@huawei.com>, Shyam-sundar.S-k@amd.com,
-        markgross@kernel.org
-Cc:     weiyongjun1@huawei.com, yuehaibing@huawei.com,
-        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220505121958.138905-1-renzhijie2@huawei.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20220505121958.138905-1-renzhijie2@huawei.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <afddb4548e93f6458ec1d9ec185a834c348eda33.1651798983.git.jpoimboe@kernel.org>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On 5/5/22 14:19, Ren Zhijie wrote:
-> If CONFIG_SUSPEND and CONFIG_DEBUG_FS are not set.
+On Thu, May 05, 2022 at 06:09:45PM -0700, Josh Poimboeuf wrote:
+> With CONFIG_GENERIC_BUG_RELATIVE_POINTERS, the addr/file relative
+> pointers are calculated weirdly: based on the beginning of the bug_entry
+> struct address, rather than their respective pointer addresses.
 > 
-> compile error:
-> drivers/platform/x86/amd-pmc.c:323:12: error: ‘get_metrics_table’ defined but not used [-Werror=unused-function]
->  static int get_metrics_table(struct amd_pmc_dev *pdev, struct smu_metrics *table)
->             ^~~~~~~~~~~~~~~~~
-> drivers/platform/x86/amd-pmc.c:298:12: error: ‘amd_pmc_idlemask_read’ defined but not used [-Werror=unused-function]
->  static int amd_pmc_idlemask_read(struct amd_pmc_dev *pdev, struct device *dev,
->             ^~~~~~~~~~~~~~~~~~~~~
-> drivers/platform/x86/amd-pmc.c:196:12: error: ‘amd_pmc_get_smu_version’ defined but not used [-Werror=unused-function]
->  static int amd_pmc_get_smu_version(struct amd_pmc_dev *dev)
->             ^~~~~~~~~~~~~~~~~~~~~~~
-> cc1: all warnings being treated as errors
+> Make the relative pointers less surprising to both humans and tools by
+> calculating them the normal way.
 > 
-> To fix building warning, wrap all related code with CONFIG_SUSPEND or CONFIG_DEBUG_FS.
-> 
-> Reported-by: Hulk Robot <hulkci@huawei.com>
-> Signed-off-by: Ren Zhijie <renzhijie2@huawei.com>
+> Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
 
-Thanks for the patch, the issue with amd_pmc_get_smu_version() not being
-wrapped in #ifdef CONFIG_DEBUG_FS was already fixed by:
-https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/commit/?h=for-next&id=acd51562e07d17aaf4ac652f1dc55c743685bf41
+This looks good to me.
 
-Moving amd_pmc_setup_smu_logging + amd_pmc_idlemask_read +
-get_metrics_table under:
+Just in case, I gave this a spin on arm64 defconfig atop v5.18-rc4. This builds
+cleanly with both GCC 11.1.0 and LLVM 14.0.0, and works correctly in testing
+on both with the LKDTM BUG/WARNING/WARNING_MESSAGE tests, i.e.
 
-#if defined(CONFIG_SUSPEND) || defined(CONFIG_DEBUG_FS)
+  echo WARNING > /sys/kernel/debug/provoke-crash/DIRECT
+  echo WARNING_MESSAGE > /sys/kernel/debug/provoke-crash/DIRECT
+  echo BUG > /sys/kernel/debug/provoke-crash/DIRECT
 
-is still necessary though, so I've merged that part of your patch:
+FWIW:
 
-Thank you for your patch, I've applied this patch to my review-hans 
-branch:
-https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/log/?h=review-hans
+Reviewed-by: Mark Rutland <mark.rutland@arm.com>
+Tested-by: Mark Rutland <mark.rutland@arm.com> [arm64]
 
-Note it will show up in my review-hans branch once I've pushed my
-local branch there, which might take a while.
+As an aside (and for anyone else trying to duplicate my results), on arm64
+there's a latent issue (prior to this patch) where BUG() will always result in
+a WARN_ON_ONCE() in rcu_eqs_enter(). Since BUG() uses a BRK, and we treat the
+BRK exception as an NMI, when we kill the task we do that in NMI context, but
+schedule another task in regular task context, and RCU doesn't like that:
 
-Once I've run some tests on this branch the patches there will be
-added to the platform-drivers-x86/for-next branch and eventually
-will be included in the pdx86 pull-request to Linus for the next
-merge-window.
+# echo BUG > /sys/kernel/debug/provoke-crash/DIRECT
+[   28.284180] lkdtm: Performing direct entry BUG
+[   28.285052] ------------[ cut here ]------------
+[   28.285940] kernel BUG at drivers/misc/lkdtm/bugs.c:78!
+[   28.287008] Internal error: Oops - BUG: 0 [#1] PREEMPT SMP
+[   28.288143] Modules linked in:
+[   28.288798] CPU: 0 PID: 151 Comm: bash Not tainted 5.18.0-rc4 #1
+[   28.290040] Hardware name: linux,dummy-virt (DT)
+[   28.290979] pstate: 60400005 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+[   28.292380] pc : lkdtm_BUG+0x4/0xc
+[   28.293084] lr : lkdtm_do_action+0x24/0x30
+[   28.293923] sp : ffff8000083bbce0
+[   28.294624] x29: ffff8000083bbce0 x28: ffff3c5743440000 x27: 0000000000000000
+[   28.296057] x26: 0000000000000000 x25: ffffa4bc19c480b0 x24: ffff8000083bbdf0
+[   28.297493] x23: 0000000000000004 x22: ffff3c57440f3000 x21: ffffa4bc1a0bfba0
+[   28.298933] x20: ffffa4bc19c480c0 x19: 0000000000000001 x18: ffffffffffffffff
+[   28.300369] x17: 0000000000000000 x16: 0000000000000000 x15: 0720072007200720
+[   28.301823] x14: 0720072007200747 x13: ffffa4bc1a8d2520 x12: 00000000000003b1
+[   28.303257] x11: 000000000000013b x10: ffffa4bc1a92a520 x9 : ffffa4bc1a8d2520
+[   28.304689] x8 : 00000000ffffefff x7 : ffffa4bc1a92a520 x6 : 0000000000000000
+[   28.306120] x5 : 0000000000000000 x4 : ffff3c57bfbcc9e8 x3 : 0000000000000000
+[   28.307550] x2 : 0000000000000000 x1 : ffff3c5743440000 x0 : ffffa4bc19279284
+[   28.308981] Call trace:
+[   28.309496]  lkdtm_BUG+0x4/0xc
+[   28.310134]  direct_entry+0x11c/0x1cc
+[   28.310888]  full_proxy_write+0x60/0xbc
+[   28.311690]  vfs_write+0xc4/0x2a4
+[   28.312383]  ksys_write+0x68/0xf4
+[   28.313056]  __arm64_sys_write+0x20/0x2c
+[   28.313851]  invoke_syscall+0x48/0x114
+[   28.314623]  el0_svc_common.constprop.0+0xd4/0xfc
+[   28.315584]  do_el0_svc+0x28/0x90
+[   28.316276]  el0_svc+0x34/0xb0
+[   28.316917]  el0t_64_sync_handler+0xa4/0x130
+[   28.317786]  el0t_64_sync+0x18c/0x190
+[   28.318560] Code: b90027e0 17ffffea 941b4d4c d503245f (d4210000) 
+[   28.319796] ---[ end trace 0000000000000000 ]---
+[   28.320736] note: bash[151] exited with preempt_count 1
+[   28.329377] ------------[ cut here ]------------
+[   28.330327] WARNING: CPU: 0 PID: 0 at kernel/rcu/tree.c:624 rcu_eqs_enter.constprop.0+0x7c/0x84
+[   28.332103] Modules linked in:
+[   28.332757] CPU: 0 PID: 0 Comm: swapper/0 Tainted: G      D           5.18.0-rc4 #1
+[   28.334355] Hardware name: linux,dummy-virt (DT)
+[   28.335318] pstate: 204000c5 (nzCv daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+[   28.336745] pc : rcu_eqs_enter.constprop.0+0x7c/0x84
+[   28.337766] lr : rcu_idle_enter+0x10/0x1c
+[   28.338609] sp : ffffa4bc1a8b3d40
+[   28.339309] x29: ffffa4bc1a8b3d40 x28: 0000000041168458 x27: 0000000000000000
+[   28.340788] x26: ffffa4bc1a8c3340 x25: 0000000000000000 x24: 0000000000000000
+[   28.342255] x23: ffffa4bc1a8b9b4c x22: ffffa4bc1a37a6f8 x21: ffffa4bc1a8b9a38
+[   28.343705] x20: ffffa4bc1a8b9b40 x19: ffff3c57bfbd4800 x18: 0000000000000000
+[   28.345159] x17: 0000000000000000 x16: 0000000000000000 x15: 000006a1d2912376
+[   28.346632] x14: 000000000000018a x13: 000000000000018a x12: 0000000000000000
+[   28.348089] x11: 0000000000000001 x10: 0000000000000a50 x9 : ffffa4bc1a8b3ce0
+[   28.349551] x8 : ffffa4bc1a8c3df0 x7 : ffff3c57bfbd3b80 x6 : 0000000154de2486
+[   28.351040] x5 : 03ffffffffffffff x4 : 0000000000000a5c x3 : ffffa4bc1a8b79c0
+[   28.352505] x2 : 0000000000000a5c x1 : 4000000000000002 x0 : 4000000000000000
+[   28.353966] Call trace:
+[   28.354496]  rcu_eqs_enter.constprop.0+0x7c/0x84
+[   28.355467]  rcu_idle_enter+0x10/0x1c
+[   28.356230]  default_idle_call+0x20/0x6c
+[   28.357061]  do_idle+0x22c/0x29c
+[   28.357743]  cpu_startup_entry+0x24/0x30
+[   28.358579]  rest_init+0xe4/0xf4
+[   28.359265]  arch_call_rest_init+0x10/0x1c
+[   28.360123]  start_kernel+0x628/0x668
+[   28.360890]  __primary_switched+0xc0/0xc8
+[   28.361742] ---[ end trace 0000000000000000 ]---
 
-Regards,
+... ideally we'd rework the way we handle BRK such that we can treat BUG() as a
+regular synchronous exception that inherits the original context (as if it were
+a special function call within that context).
 
-Hans
-
-
-
+Thanks,
+Mark.
 
 > ---
->  drivers/platform/x86/amd-pmc.c | 72 ++++++++++++++++++----------------
->  1 file changed, 39 insertions(+), 33 deletions(-)
+>  arch/arm64/include/asm/asm-bug.h |  4 ++--
+>  arch/powerpc/include/asm/bug.h   |  5 +++--
+>  arch/riscv/include/asm/bug.h     |  4 ++--
+>  arch/s390/include/asm/bug.h      |  5 +++--
+>  arch/x86/include/asm/bug.h       |  2 +-
+>  lib/bug.c                        | 15 +++++++--------
+>  6 files changed, 18 insertions(+), 17 deletions(-)
 > 
-> diff --git a/drivers/platform/x86/amd-pmc.c b/drivers/platform/x86/amd-pmc.c
-> index 668a1d6c11ee..8f004673b23f 100644
-> --- a/drivers/platform/x86/amd-pmc.c
-> +++ b/drivers/platform/x86/amd-pmc.c
-> @@ -164,7 +164,6 @@ static int amd_pmc_read_stb(struct amd_pmc_dev *dev, u32 *buf);
->  #ifdef CONFIG_SUSPEND
->  static int amd_pmc_write_stb(struct amd_pmc_dev *dev, u32 data);
+> diff --git a/arch/arm64/include/asm/asm-bug.h b/arch/arm64/include/asm/asm-bug.h
+> index 03f52f84a4f3..c762038ba400 100644
+> --- a/arch/arm64/include/asm/asm-bug.h
+> +++ b/arch/arm64/include/asm/asm-bug.h
+> @@ -14,7 +14,7 @@
+>  	14472:	.string file;					\
+>  		.popsection;					\
+>  								\
+> -		.long 14472b - 14470b;				\
+> +		.long 14472b - .;				\
+>  		.short line;
+>  #else
+>  #define _BUGVERBOSE_LOCATION(file, line)
+> @@ -25,7 +25,7 @@
+>  #define __BUG_ENTRY(flags) 				\
+>  		.pushsection __bug_table,"aw";		\
+>  		.align 2;				\
+> -	14470:	.long 14471f - 14470b;			\
+> +	14470:	.long 14471f - .;			\
+>  _BUGVERBOSE_LOCATION(__FILE__, __LINE__)		\
+>  		.short flags; 				\
+>  		.popsection;				\
+> diff --git a/arch/powerpc/include/asm/bug.h b/arch/powerpc/include/asm/bug.h
+> index ecbae1832de3..76252576d889 100644
+> --- a/arch/powerpc/include/asm/bug.h
+> +++ b/arch/powerpc/include/asm/bug.h
+> @@ -13,7 +13,8 @@
+>  #ifdef CONFIG_DEBUG_BUGVERBOSE
+>  .macro __EMIT_BUG_ENTRY addr,file,line,flags
+>  	 .section __bug_table,"aw"
+> -5001:	 .4byte \addr - 5001b, 5002f - 5001b
+> +5001:	 .4byte \addr - .
+> +	 .4byte 5002f - .
+>  	 .short \line, \flags
+>  	 .org 5001b+BUG_ENTRY_SIZE
+>  	 .previous
+> @@ -24,7 +25,7 @@
+>  #else
+>  .macro __EMIT_BUG_ENTRY addr,file,line,flags
+>  	 .section __bug_table,"aw"
+> -5001:	 .4byte \addr - 5001b
+> +5001:	 .4byte \addr - .
+>  	 .short \flags
+>  	 .org 5001b+BUG_ENTRY_SIZE
+>  	 .previous
+> diff --git a/arch/riscv/include/asm/bug.h b/arch/riscv/include/asm/bug.h
+> index d3804a2f9aad..1aaea81fb141 100644
+> --- a/arch/riscv/include/asm/bug.h
+> +++ b/arch/riscv/include/asm/bug.h
+> @@ -30,8 +30,8 @@
+>  typedef u32 bug_insn_t;
+>  
+>  #ifdef CONFIG_GENERIC_BUG_RELATIVE_POINTERS
+> -#define __BUG_ENTRY_ADDR	RISCV_INT " 1b - 2b"
+> -#define __BUG_ENTRY_FILE	RISCV_INT " %0 - 2b"
+> +#define __BUG_ENTRY_ADDR	RISCV_INT " 1b - ."
+> +#define __BUG_ENTRY_FILE	RISCV_INT " %0 - ."
+>  #else
+>  #define __BUG_ENTRY_ADDR	RISCV_PTR " 1b"
+>  #define __BUG_ENTRY_FILE	RISCV_PTR " %0"
+> diff --git a/arch/s390/include/asm/bug.h b/arch/s390/include/asm/bug.h
+> index 0b25f28351ed..aebe1e22c7be 100644
+> --- a/arch/s390/include/asm/bug.h
+> +++ b/arch/s390/include/asm/bug.h
+> @@ -15,7 +15,8 @@
+>  		"1:	.asciz	\""__FILE__"\"\n"		\
+>  		".previous\n"					\
+>  		".section __bug_table,\"awM\",@progbits,%2\n"	\
+> -		"2:	.long	0b-2b,1b-2b\n"			\
+> +		"2:	.long	0b-.\n"				\
+> +		"	.long	1b-.\n"				\
+>  		"	.short	%0,%1\n"			\
+>  		"	.org	2b+%2\n"			\
+>  		".previous\n"					\
+> @@ -30,7 +31,7 @@
+>  	asm_inline volatile(					\
+>  		"0:	mc	0,0\n"				\
+>  		".section __bug_table,\"awM\",@progbits,%1\n"	\
+> -		"1:	.long	0b-1b\n"			\
+> +		"1:	.long	0b-.\n"				\
+>  		"	.short	%0\n"				\
+>  		"	.org	1b+%1\n"			\
+>  		".previous\n"					\
+> diff --git a/arch/x86/include/asm/bug.h b/arch/x86/include/asm/bug.h
+> index aaf0cb0db4ae..a3ec87d198ac 100644
+> --- a/arch/x86/include/asm/bug.h
+> +++ b/arch/x86/include/asm/bug.h
+> @@ -18,7 +18,7 @@
+>  #ifdef CONFIG_X86_32
+>  # define __BUG_REL(val)	".long " __stringify(val)
+>  #else
+> -# define __BUG_REL(val)	".long " __stringify(val) " - 2b"
+> +# define __BUG_REL(val)	".long " __stringify(val) " - ."
 >  #endif
-> -static int amd_pmc_setup_smu_logging(struct amd_pmc_dev *dev);
 >  
->  static inline u32 amd_pmc_reg_read(struct amd_pmc_dev *dev, int reg_offset)
+>  #ifdef CONFIG_DEBUG_BUGVERBOSE
+> diff --git a/lib/bug.c b/lib/bug.c
+> index 45a0584f6541..c223a2575b72 100644
+> --- a/lib/bug.c
+> +++ b/lib/bug.c
+> @@ -6,8 +6,7 @@
+>  
+>    CONFIG_BUG - emit BUG traps.  Nothing happens without this.
+>    CONFIG_GENERIC_BUG - enable this code.
+> -  CONFIG_GENERIC_BUG_RELATIVE_POINTERS - use 32-bit pointers relative to
+> -	the containing struct bug_entry for bug_addr and file.
+> +  CONFIG_GENERIC_BUG_RELATIVE_POINTERS - use 32-bit relative pointers for bug_addr and file
+>    CONFIG_DEBUG_BUGVERBOSE - emit full file+line information for each BUG
+>  
+>    CONFIG_BUG and CONFIG_DEBUG_BUGVERBOSE are potentially user-settable
+> @@ -53,10 +52,10 @@ extern struct bug_entry __start___bug_table[], __stop___bug_table[];
+>  
+>  static inline unsigned long bug_addr(const struct bug_entry *bug)
 >  {
-> @@ -193,6 +192,7 @@ struct smu_metrics {
->  	u64 timecondition_notmet_totaltime[SOC_SUBSYSTEM_IP_MAX];
->  } __packed;
->  
-> +#ifdef CONFIG_DEBUG_FS
->  static int amd_pmc_get_smu_version(struct amd_pmc_dev *dev)
->  {
->  	int rc;
-> @@ -212,6 +212,7 @@ static int amd_pmc_get_smu_version(struct amd_pmc_dev *dev)
->  
->  	return 0;
->  }
-> +#endif /* CONFIG_DEBUG_FS */
->  
->  static int amd_pmc_stb_debugfs_open(struct inode *inode, struct file *filp)
->  {
-> @@ -295,6 +296,9 @@ static const struct file_operations amd_pmc_stb_debugfs_fops_v2 = {
->  	.release = amd_pmc_stb_debugfs_release_v2,
->  };
->  
-> +#if defined(CONFIG_SUSPEND) || defined(CONFIG_DEBUG_FS)
-> +static int amd_pmc_setup_smu_logging(struct amd_pmc_dev *dev);
-> +
->  static int amd_pmc_idlemask_read(struct amd_pmc_dev *pdev, struct device *dev,
->  				 struct seq_file *s)
->  {
-> @@ -335,6 +339,40 @@ static int get_metrics_table(struct amd_pmc_dev *pdev, struct smu_metrics *table
->  	return 0;
+> -#ifndef CONFIG_GENERIC_BUG_RELATIVE_POINTERS
+> -	return bug->bug_addr;
+> +#ifdef CONFIG_GENERIC_BUG_RELATIVE_POINTERS
+> +	return (unsigned long)&bug->bug_addr_disp + bug->bug_addr_disp;
+>  #else
+> -	return (unsigned long)bug + bug->bug_addr_disp;
+> +	return bug->bug_addr;
+>  #endif
 >  }
 >  
-> +static int amd_pmc_setup_smu_logging(struct amd_pmc_dev *dev)
-> +{
-> +	if (dev->cpu_id == AMD_CPU_ID_PCO) {
-> +		dev_warn_once(dev->dev, "SMU debugging info not supported on this platform\n");
-> +		return -EINVAL;
-> +	}
-> +
-> +	/* Get Active devices list from SMU */
-> +	if (!dev->active_ips)
-> +		amd_pmc_send_cmd(dev, 0, &dev->active_ips, SMU_MSG_GET_SUP_CONSTRAINTS, 1);
-> +
-> +	/* Get dram address */
-> +	if (!dev->smu_virt_addr) {
-> +		u32 phys_addr_low, phys_addr_hi;
-> +		u64 smu_phys_addr;
-> +
-> +		amd_pmc_send_cmd(dev, 0, &phys_addr_low, SMU_MSG_LOG_GETDRAM_ADDR_LO, 1);
-> +		amd_pmc_send_cmd(dev, 0, &phys_addr_hi, SMU_MSG_LOG_GETDRAM_ADDR_HI, 1);
-> +		smu_phys_addr = ((u64)phys_addr_hi << 32 | phys_addr_low);
-> +
-> +		dev->smu_virt_addr = devm_ioremap(dev->dev, smu_phys_addr,
-> +						  sizeof(struct smu_metrics));
-> +		if (!dev->smu_virt_addr)
-> +			return -ENOMEM;
-> +	}
-> +
-> +	/* Start the logging */
-> +	amd_pmc_send_cmd(dev, 0, NULL, SMU_MSG_LOG_RESET, 0);
-> +	amd_pmc_send_cmd(dev, 0, NULL, SMU_MSG_LOG_START, 0);
-> +
-> +	return 0;
-> +}
-> +#endif /* CONFIG_SUSPEND || CONFIG_DEBUG_FS */
-> +
->  #ifdef CONFIG_SUSPEND
->  static void amd_pmc_validate_deepest(struct amd_pmc_dev *pdev)
+> @@ -131,10 +130,10 @@ void bug_get_file_line(struct bug_entry *bug, const char **file,
+>  		       unsigned int *line)
 >  {
-> @@ -475,38 +513,6 @@ static inline void amd_pmc_dbgfs_unregister(struct amd_pmc_dev *dev)
->  }
->  #endif /* CONFIG_DEBUG_FS */
->  
-> -static int amd_pmc_setup_smu_logging(struct amd_pmc_dev *dev)
-> -{
-> -	if (dev->cpu_id == AMD_CPU_ID_PCO) {
-> -		dev_warn_once(dev->dev, "SMU debugging info not supported on this platform\n");
-> -		return -EINVAL;
-> -	}
-> -
-> -	/* Get Active devices list from SMU */
-> -	if (!dev->active_ips)
-> -		amd_pmc_send_cmd(dev, 0, &dev->active_ips, SMU_MSG_GET_SUP_CONSTRAINTS, 1);
-> -
-> -	/* Get dram address */
-> -	if (!dev->smu_virt_addr) {
-> -		u32 phys_addr_low, phys_addr_hi;
-> -		u64 smu_phys_addr;
-> -
-> -		amd_pmc_send_cmd(dev, 0, &phys_addr_low, SMU_MSG_LOG_GETDRAM_ADDR_LO, 1);
-> -		amd_pmc_send_cmd(dev, 0, &phys_addr_hi, SMU_MSG_LOG_GETDRAM_ADDR_HI, 1);
-> -		smu_phys_addr = ((u64)phys_addr_hi << 32 | phys_addr_low);
-> -
-> -		dev->smu_virt_addr = devm_ioremap(dev->dev, smu_phys_addr,
-> -						  sizeof(struct smu_metrics));
-> -		if (!dev->smu_virt_addr)
-> -			return -ENOMEM;
-> -	}
-> -
-> -	/* Start the logging */
-> -	amd_pmc_send_cmd(dev, 0, NULL, SMU_MSG_LOG_RESET, 0);
-> -	amd_pmc_send_cmd(dev, 0, NULL, SMU_MSG_LOG_START, 0);
-> -
-> -	return 0;
-> -}
->  
->  static void amd_pmc_dump_registers(struct amd_pmc_dev *dev)
->  {
-
+>  #ifdef CONFIG_DEBUG_BUGVERBOSE
+> -#ifndef CONFIG_GENERIC_BUG_RELATIVE_POINTERS
+> -	*file = bug->file;
+> +#ifdef CONFIG_GENERIC_BUG_RELATIVE_POINTERS
+> +	*file = (const char *)&bug->file_disp + bug->file_disp;
+>  #else
+> -	*file = (const char *)bug + bug->file_disp;
+> +	*file = bug->file;
+>  #endif
+>  	*line = bug->line;
+>  #else
+> -- 
+> 2.34.1
+> 

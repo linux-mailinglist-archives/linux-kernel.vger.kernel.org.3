@@ -2,106 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E546751CFD4
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 05:47:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B4F351CFD8
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 05:49:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1388835AbiEFDu5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 23:50:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49968 "EHLO
+        id S1388816AbiEFDxY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 23:53:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1388627AbiEFDuq (ORCPT
+        with ESMTP id S1385096AbiEFDxU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 23:50:46 -0400
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADEF2443E1
-        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 20:47:04 -0700 (PDT)
-Received: by mail-pg1-x533.google.com with SMTP id x12so5132141pgj.7
-        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 20:47:04 -0700 (PDT)
+        Thu, 5 May 2022 23:53:20 -0400
+Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6456845510
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 20:49:38 -0700 (PDT)
+Received: by mail-ot1-x334.google.com with SMTP id y14-20020a9d460e000000b00605ee347da1so4206163ote.8
+        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 20:49:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=0GBnsUFI480KyuDDKiDj6EO0c5V7IXRlhq6lrsQR2EY=;
-        b=k7uvdMBTxQMDq6M3LascyGTaiuxi2yT1elp1Bszljqv5oQ019q15F7QRpLZ+v1AwDR
-         lO7ycwTQEmQQSfqcXkDIXY3Diu5PwWZmmgNHECwmCVNcXktbcpsr/CEtiOvs6y2orAk/
-         SkMqSa4AXgPTI36JKkzNiGI47w67B2KjdIxEy/jk2jiLCJkAa7CQGY/OJdehRZLn72ca
-         aVBe6NaCeqffUuvNNxvTBYNjI+uipnvNQKhXi5Uo9qhgPv6zfBIdVlFT7pX7Xwy2z8u/
-         PqAisoU/4c+03vj7Hb2QgV8gxPPQJALYjiTG/WCMwlXqqjtNTK+IxyJ1rUt+uzsKqnmJ
-         A1Wg==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=gY3JG7TDfX21nMa2WGN3YpZ2LNRhrr+YzDEPbalak5Q=;
+        b=rm12KW9WahZ+pwPBKCJVM2MEWPGf3QaPgdfV77GxfU+PL9qPHhQVxFbBNl1/wX6mMb
+         33mlJ2qzs/GataHnbdbJbQFsz94LjdsexJKnrSK4xud5V34rQsH0Qnjmfl1s3dJ1isoB
+         49+bB0vzHKrwQM2YNOsVxZHVe7mnBW/dsJTBJaUYxSZwR/g4aTpFnDVXJz0BIQBJwGAo
+         csegzBQNKgbI+Cr0+u7SiO4kMSkoFuSfcHOjPE9kFqfD+BQeecZKjqxYmg4gWXdIMx6K
+         t3c3SdZcrqBCnZZb3wt5DxgF2PPaMG6vq3yaTpGrZpvJAHkxUjF8L4FifGsxvJygyJZj
+         LVhQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=0GBnsUFI480KyuDDKiDj6EO0c5V7IXRlhq6lrsQR2EY=;
-        b=0vgh8y9lKqlhp4W5dCqMMLlVULEX6CyD69pU6GEzU5MlUCneDcOki80YYA/3fEqIGY
-         zAimJY2uaP2ldt+zxsmwA7BZbDKHFm6eRFK/AwjJQbfS2SkXP/s6P04pKRUmqwu6913e
-         KgcnjPuXAWfCCFOQWqXx/ghPYTe0dT/q56HzUElLB87yVmlodFiMR4eSunkMT2RBRExm
-         PXbcFWc8ytVJkMcBCf1EZPj04uVuhzi7rYxzYSE3KxEVk/V9LacRUcn6rvSqxpI7xW1K
-         I7ML1ki/YcetK6CXLONe/ckffMFil4wN5YhhesVJjdRakLJN4m25YG/rhnWsksp9F/GC
-         q0hw==
-X-Gm-Message-State: AOAM531TQZltiCGoB95BupbO5JLWpnOE8HZem8adq4FGfjx9N4r7Jx7e
-        +VHjrJ1ubukfvNFGEEo9GLc=
-X-Google-Smtp-Source: ABdhPJyzdQZ2piTp+gk+/6EcJp5EzxsQPyiqNKXt9xJG3Eh1hHllS3jVdx2Ud8lyihP6lkN3sbk42w==
-X-Received: by 2002:aa7:962e:0:b0:50d:5ed8:aa23 with SMTP id r14-20020aa7962e000000b0050d5ed8aa23mr1602069pfg.43.1651808824217;
-        Thu, 05 May 2022 20:47:04 -0700 (PDT)
-Received: from lbmac.lan ([119.28.81.66])
-        by smtp.gmail.com with ESMTPSA id p18-20020a1709028a9200b0015e8d4eb2cdsm398139plo.279.2022.05.05.20.47.02
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=gY3JG7TDfX21nMa2WGN3YpZ2LNRhrr+YzDEPbalak5Q=;
+        b=tVJcp/sFdNAvDt9c/0jTYPkQdoImUNsLAgx8OZ8Upu/9BokqZ17E/Ul7IUZJbmulio
+         hE3T+6Y4tOxQ6MNgHOxlzJ+4z7dAMCaxEmNF2Or3mJSxzbB90HKS44MIMuP2h3QjmbbO
+         oL/0sMlOOKi9ViFYh3y6CWuHjIhA7jxn9FNysRfDiikvOHBFRXEx3DWKj/RPOp1HsbEQ
+         /EIWGN9CmdHnPDvyolV25/QqbiGoflcNDcVw00w4B8dKGQsi2xIFRrsTyXCZTHwzKtAB
+         dSoK3u/Uc8rHrJYEhWWkHQs3IpKP5205yGHiy+w/AbBiocINI9J0JL4+WoBi9BtK7ww8
+         iHWA==
+X-Gm-Message-State: AOAM531F1Gv4XjVtAe89CioiHvgkQ4r/ss4Zd6PA4r3Qz2mnZX4GOScs
+        Cjx3OIOWd1Svr0/4lp9/Y36v/A==
+X-Google-Smtp-Source: ABdhPJxdBvt/VaAntv7NqdoCyyrKBD09j8Ynb47Z79pap61Oi/wfCocwQtV6PkRBZzAZIdQJH633Kw==
+X-Received: by 2002:a05:6830:4420:b0:606:64a6:1deb with SMTP id q32-20020a056830442000b0060664a61debmr93692otv.236.1651808977637;
+        Thu, 05 May 2022 20:49:37 -0700 (PDT)
+Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id w14-20020a056870e2ce00b000e686d13887sm1150364oad.33.2022.05.05.20.49.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 May 2022 20:47:03 -0700 (PDT)
-From:   Liangbin Lian <jjm2473@gmail.com>
-To:     ntfs3@lists.linux.dev, almaz.alexandrovich@paragon-software.com
-Cc:     linux-kernel@vger.kernel.org, Liangbin Lian <jjm2473@gmail.com>
-Subject: [PATCH] fs/ntfs3: fix null pointer dereference in d_flags_for_inode
-Date:   Fri,  6 May 2022 11:46:56 +0800
-Message-Id: <20220506034656.50038-1-jjm2473@gmail.com>
-X-Mailer: git-send-email 2.32.0 (Apple Git-132)
+        Thu, 05 May 2022 20:49:36 -0700 (PDT)
+Date:   Thu, 5 May 2022 22:49:34 -0500
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Luca Weiss <luca@z3ntu.xyz>
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@somainline.org>
+Subject: Re: [PATCH 1/2] ARM: dts: qcom: Add LPG node to pm8941
+Message-ID: <YnSazu3rcBMFPxYw@builder.lan>
+References: <20220504205411.1510667-1-bjorn.andersson@linaro.org>
+ <12122358.O9o76ZdvQC@g550jk>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <12122358.O9o76ZdvQC@g550jk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ntfs_read_mft may return inode with null i_op, cause null pointer dereference in d_flags_for_inode (inode->i_op->get_link).
-Reproduce:
- - sudo mount -t ntfs3 -o loop ntfs.img ntfs
- - ls ntfs/'$Extend/$Quota'
+On Thu 05 May 03:01 CDT 2022, Luca Weiss wrote:
 
-The call trace is shown below (striped):
- BUG: kernel NULL pointer dereference, address: 0000000000000008
- CPU: 0 PID: 577 Comm: ls Tainted: G           OE     5.16.0-0.bpo.4-amd64 #1  Debian 5.16.12-1~bpo11+1
- RIP: 0010:d_flags_for_inode+0x65/0x90
- Call Trace:
- ntfs_lookup
- +--- dir_search_u
- |    +--- ntfs_iget5
- |         +--- ntfs_read_mft
- +--- d_splice_alias
-      +--- __d_add
-           +--- d_flags_for_inode
+> Hi Bjorn,
+> 
+> On Mittwoch, 4. Mai 2022 22:54:10 CEST Bjorn Andersson wrote:
+> > The PM8941 contains 8 LPG channels, as well as TRILED and LUT blocks.
+> > Add a node for these.
+> > 
+> > Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> > ---
+> >  arch/arm/boot/dts/qcom-pm8941.dtsi | 9 +++++++++
+> >  1 file changed, 9 insertions(+)
+> > 
+> > diff --git a/arch/arm/boot/dts/qcom-pm8941.dtsi
+> > b/arch/arm/boot/dts/qcom-pm8941.dtsi index cdd2bdb77b32..7881a071b372
+> > 100644
+> > --- a/arch/arm/boot/dts/qcom-pm8941.dtsi
+> > +++ b/arch/arm/boot/dts/qcom-pm8941.dtsi
+> > @@ -144,6 +144,15 @@ pm8941_1: pm8941@1 {
+> >  		#address-cells = <1>;
+> >  		#size-cells = <0>;
+> > 
+> > +		pm8941_lpg: lpg {
+> > +			compatible = "qcom,pm8941-lpg";
+> > +
+> > +			#address-cells = <1>;
+> > +			#size-cells = <0>;
+> 
+> Just curious, why doesn't pm8941 have #pwm-cells = <2>; like the other lpg 
+> nodes in [0]?
 
-Signed-off-by: Liangbin Lian <jjm2473@gmail.com>
----
- fs/ntfs3/inode.c | 1 -
- 1 file changed, 1 deletion(-)
+I guess I didn't have a need for the lpg to be a pwm-chip on this pmic,
+yet. This could be added now, or at a later point when someone has a
+usecase for the pwm-chip.
 
-diff --git a/fs/ntfs3/inode.c b/fs/ntfs3/inode.c
-index 9eab11e3b..b68d26fa8 100644
---- a/fs/ntfs3/inode.c
-+++ b/fs/ntfs3/inode.c
-@@ -45,7 +45,6 @@ static struct inode *ntfs_read_mft(struct inode *inode,
- 	struct MFT_REC *rec;
- 	struct runs_tree *run;
- 
--	inode->i_op = NULL;
- 	/* Setup 'uid' and 'gid' */
- 	inode->i_uid = sbi->options->fs_uid;
- 	inode->i_gid = sbi->options->fs_gid;
--- 
-2.32.0 (Apple Git-132)
+> Other than that, the node works fine on pm8941. Will send a patch for enabling 
+> notification LED on msm8974-FP2 soon.
+> 
 
+If you turn that into a Tested-by, and preferably a Reviewed-by, I would
+have what I need to merge the two changes.
+
+Looking forward to the FP2 patch.
+
+Thanks,
+Bjorn
+
+> Regards
+> Luca
+> 
+> [0] https://lore.kernel.org/linux-arm-msm/20220505022706.1692554-2-bjorn.andersson@linaro.org/
+> 
+> 
+> > +
+> > +			status = "disabled";
+> > +		};
+> > +
+> >  		pm8941_wled: wled@d800 {
+> >  			compatible = "qcom,pm8941-wled";
+> >  			reg = <0xd800>;
+> 
+> 
+> 
+> 

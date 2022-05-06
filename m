@@ -2,312 +2,251 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D211151CF5F
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 05:23:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E5F451CF62
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 05:23:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376581AbiEFD0m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 23:26:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55034 "EHLO
+        id S238827AbiEFD0w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 23:26:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238827AbiEFD0k (ORCPT
+        with ESMTP id S1388507AbiEFD0s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 23:26:40 -0400
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B87405EDF7
-        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 20:22:57 -0700 (PDT)
-Received: by mail-yb1-xb31.google.com with SMTP id w187so10831103ybe.2
-        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 20:22:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=sYeOKYw6kwfaILJY6bEHCOKM5bFjhmE1ze1/LSaaovw=;
-        b=BLsVEaTG9U91396ZOP2b2MwVake7ojEipUon5OHt1Gy89SB9TslU1tsdVRhaxC4q/1
-         jR53S2m613SbxCgxn+k3UaVkQWznyQ9jxkBYcSvw3h+ZKQN0sfVfZucfjoplsMN+OlSp
-         oj3a/RwNhQcS0xIC9KsOHEHLYceThRr9bvcs0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=sYeOKYw6kwfaILJY6bEHCOKM5bFjhmE1ze1/LSaaovw=;
-        b=CW+Kx3cV+4Q8IYL8FcRQiYt04puwcRko/MI8Se9Xo+i6/bR/DjmF6qino/ZmNnK+JD
-         ekjumNP+i9xPKoxOwQoKs4XK5MQUHz3UYx0g547MftL6GSyR/AkT5YIWCeYuOncujJo7
-         WqMf6A0qBbqfzEZbOP3gHkY/ivRVny/wDIEKU4HU5Ccy03QxF+Bs2I8YhtVDYhNNC4Dd
-         YVPgGmrEK4mJ6328WeGtvw6GDpwVd9yrOU1QhbDGnHwkCadN1Pe93UrIWaHYUk3eqoGo
-         NkD2kukdtCUxmiLxXqwKfAPFahXkVFgYEbAeCxQ8JI0LgXOwvo8ZvtnFl3Yn8cSSbhNT
-         0Q+A==
-X-Gm-Message-State: AOAM5330bDn/Oofg30pv3y4Y4OsIEOpQmFVNKFcs4oov8zYWKwHd9PCf
-        wE4Ydwj7ImEQwBPSNKgGWaNm4t87YaeXpL8z40ERrA==
-X-Google-Smtp-Source: ABdhPJzFrU6lJVs+NCit9LuyTEGNDWdMffiHdTCFRjgdhz+G0uAPff2R6owz9lUHYA3QGONqEJvI6agU3HSeStN62Qk=
-X-Received: by 2002:a25:4c2:0:b0:648:6a77:5da0 with SMTP id
- 185-20020a2504c2000000b006486a775da0mr867811ybe.203.1651807376928; Thu, 05
- May 2022 20:22:56 -0700 (PDT)
+        Thu, 5 May 2022 23:26:48 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF6E05EDD5;
+        Thu,  5 May 2022 20:23:05 -0700 (PDT)
+Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KvbV05frpzhYqf;
+        Fri,  6 May 2022 11:22:32 +0800 (CST)
+Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
+ dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 6 May 2022 11:23:04 +0800
+Received: from [10.174.178.55] (10.174.178.55) by
+ dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 6 May 2022 11:23:02 +0800
+Subject: Re: [PATCH v23 3/6] arm64: kdump: Reimplement crashkernel=X
+To:     Catalin Marinas <catalin.marinas@arm.com>
+CC:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        <x86@kernel.org>, "H . Peter Anvin" <hpa@zytor.com>,
+        <linux-kernel@vger.kernel.org>, Dave Young <dyoung@redhat.com>,
+        Baoquan He <bhe@redhat.com>, Vivek Goyal <vgoyal@redhat.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        <kexec@lists.infradead.org>, Will Deacon <will@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        <devicetree@vger.kernel.org>, "Jonathan Corbet" <corbet@lwn.net>,
+        <linux-doc@vger.kernel.org>, Randy Dunlap <rdunlap@infradead.org>,
+        Feng Zhou <zhoufeng.zf@bytedance.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Chen Zhou <dingguo.cz@antgroup.com>,
+        "John Donnelly" <John.p.donnelly@oracle.com>,
+        Dave Kleikamp <dave.kleikamp@oracle.com>
+References: <20220505091845.167-1-thunder.leizhen@huawei.com>
+ <20220505091845.167-4-thunder.leizhen@huawei.com> <YnQC44KVKirH0vyB@arm.com>
+From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
+Message-ID: <189f24a8-9e9b-b3e9-7ac5-935433ea575b@huawei.com>
+Date:   Fri, 6 May 2022 11:22:51 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-References: <20220505115226.20130-1-rex-bc.chen@mediatek.com>
- <20220505115226.20130-6-rex-bc.chen@mediatek.com> <89dc58a34ea080ca50a94187e24cabc22aba3304.camel@mediatek.com>
-In-Reply-To: <89dc58a34ea080ca50a94187e24cabc22aba3304.camel@mediatek.com>
-From:   Chen-Yu Tsai <wenst@chromium.org>
-Date:   Fri, 6 May 2022 11:22:45 +0800
-Message-ID: <CAGXv+5EOdXFjwbtZWY4_KBdp6BaQdp389JqUS18ifAgdcQiAtQ@mail.gmail.com>
-Subject: Re: [PATCH v6 05/10] cpufreq: mediatek: Add opp notification support
-To:     Rex-BC Chen <rex-bc.chen@mediatek.com>
-Cc:     rafael@kernel.org, viresh.kumar@linaro.org, robh+dt@kernel.org,
-        krzk+dt@kernel.org, matthias.bgg@gmail.com,
-        jia-wei.chang@mediatek.com, roger.lu@mediatek.com,
-        hsinyi@google.com, khilman@baylibre.com,
-        angelogioacchino.delregno@collabora.com, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        "Andrew-sh . Cheng" <andrew-sh.cheng@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <YnQC44KVKirH0vyB@arm.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.55]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpemm500006.china.huawei.com (7.185.36.236)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 6, 2022 at 9:56 AM Rex-BC Chen <rex-bc.chen@mediatek.com> wrote:
->
-> On Thu, 2022-05-05 at 19:52 +0800, Rex-BC Chen wrote:
-> > From this opp notifier, cpufreq should listen to opp notification and
-> > do
->
-> Hello Viresh,
->
-> There is still ">" in this patch...
-> I think the root cause could be the "From" word in the beginning of
-> this message.
-> I will not use "From" in next version..
-
-Could this be a bug in lore?
-
-I'm not seeing this extra ">" in either the email in my inbox, viewed
-raw, nor the patch downloaded from patchwork [1].
 
 
-ChenYu
+On 2022/5/6 1:01, Catalin Marinas wrote:
+> On Thu, May 05, 2022 at 05:18:42PM +0800, Zhen Lei wrote:
+>> From: Chen Zhou <chenzhou10@huawei.com>
+>>
+>> There are following issues in arm64 kdump:
+>> 1. We use crashkernel=X to reserve crashkernel in DMA zone, which
+>> will fail when there is not enough low memory.
+>> 2. If reserving crashkernel above DMA zone, in this case, crash dump
+>> kernel will fail to boot because there is no low memory available
+>> for allocation.
+>>
+>> To solve these issues, introduce crashkernel=X,[high,low].
+>> The "crashkernel=X,high" is used to select a region above DMA zone, and
+>> the "crashkernel=Y,low" is used to allocate specified size low memory.
+> 
+> Thanks for posting the simplified version, though the discussion with
+> Baoquan is still ongoing. AFAICT there is no fallback if crashkernel=
+> fails. The advantage with this series is cleaner code, we set the limits
+> during parsing and don't have to adjust them if some of the first
+> allocation failed.
 
-[1] https://patchwork.kernel.org/project/linux-mediatek/patch/20220505115226.20130-6-rex-bc.chen@mediatek.com/mbox/
+Yes, I'm currently implementing it in the simplest version, providing only
+the most basic functions. Because the conclusions of this part of the discussion
+are clear. I think I can send the fallback, default low size, and mapping optimization
+patches separately after this basic version is merged. These three functions can
+be discussed separately.
 
+> 
+>> diff --git a/arch/arm64/mm/init.c b/arch/arm64/mm/init.c
+>> index 51863f1448c6989..11406f3e1443168 100644
+>> --- a/arch/arm64/mm/init.c
+>> +++ b/arch/arm64/mm/init.c
+>> @@ -90,6 +90,32 @@ phys_addr_t __ro_after_init arm64_dma_phys_limit;
+>>  phys_addr_t __ro_after_init arm64_dma_phys_limit = PHYS_MASK + 1;
+>>  #endif
+>>  
+>> +/* Current arm64 boot protocol requires 2MB alignment */
+>> +#define CRASH_ALIGN			SZ_2M
+>> +
+>> +#define CRASH_ADDR_LOW_MAX		arm64_dma_phys_limit
+>> +#define CRASH_ADDR_HIGH_MAX		memblock.current_limit
+> 
+> Better use memblock_get_current_limit() if you need to or just
+> MEMBLOCK_ALLOC_ANYWHERE, memblock.current_limit is just a memblock
+> internal. But I think we can go for (PHYS_MASK + 1) if you need
+> something other than MEMBLOCK_ALLOC_ANYWHERE, memblock knows what to
+> allocate anyway.
 
->
-> BRs,
-> Rex
->
-> > proper actions when receiving events of disable and voltage
-> > adjustment.
-> >
-> > One of the user for this opp notifier is MediaTek SVS.
-> > The MediaTek Smart Voltage Scaling (SVS) is a hardware which
-> > calculates
-> > suitable SVS bank voltages to OPP voltage table.
-> >
-> > Signed-off-by: Andrew-sh.Cheng <andrew-sh.cheng@mediatek.com>
-> > Signed-off-by: Jia-Wei Chang <jia-wei.chang@mediatek.com>
-> > Signed-off-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
-> > Reviewed-by: AngeloGioacchino Del Regno <
-> > angelogioacchino.delregno@collabora.com>
-> > ---
-> >  drivers/cpufreq/mediatek-cpufreq.c | 91 +++++++++++++++++++++++++++-
-> > --
-> >  1 file changed, 83 insertions(+), 8 deletions(-)
-> >
-> > diff --git a/drivers/cpufreq/mediatek-cpufreq.c
-> > b/drivers/cpufreq/mediatek-cpufreq.c
-> > index fe205eca657d..06d80ee06bbf 100644
-> > --- a/drivers/cpufreq/mediatek-cpufreq.c
-> > +++ b/drivers/cpufreq/mediatek-cpufreq.c
-> > @@ -46,6 +46,11 @@ struct mtk_cpu_dvfs_info {
-> >       int intermediate_voltage;
-> >       bool need_voltage_tracking;
-> >       int pre_vproc;
-> > +     /* Avoid race condition for regulators between notify and
-> > policy */
-> > +     struct mutex reg_lock;
-> > +     struct notifier_block opp_nb;
-> > +     unsigned int opp_cpu;
-> > +     unsigned long opp_freq;
-> >       const struct mtk_cpufreq_platform_data *soc_data;
-> >       int vtrack_max;
-> >  };
-> > @@ -182,6 +187,8 @@ static int mtk_cpufreq_set_target(struct
-> > cpufreq_policy *policy,
-> >
-> >       pre_freq_hz = clk_get_rate(cpu_clk);
-> >
-> > +     mutex_lock(&info->reg_lock);
-> > +
-> >       if (unlikely(info->pre_vproc <= 0))
-> >               pre_vproc = regulator_get_voltage(info->proc_reg);
-> >       else
-> > @@ -214,7 +221,7 @@ static int mtk_cpufreq_set_target(struct
-> > cpufreq_policy *policy,
-> >                       dev_err(cpu_dev,
-> >                               "cpu%d: failed to scale up voltage!\n",
-> > policy->cpu);
-> >                       mtk_cpufreq_set_voltage(info, pre_vproc);
-> > -                     return ret;
-> > +                     goto out;
-> >               }
-> >       }
-> >
-> > @@ -224,8 +231,7 @@ static int mtk_cpufreq_set_target(struct
-> > cpufreq_policy *policy,
-> >               dev_err(cpu_dev,
-> >                       "cpu%d: failed to re-parent cpu clock!\n",
-> > policy->cpu);
-> >               mtk_cpufreq_set_voltage(info, pre_vproc);
-> > -             WARN_ON(1);
-> > -             return ret;
-> > +             goto out;
-> >       }
-> >
-> >       /* Set the original PLL to target rate. */
-> > @@ -235,7 +241,7 @@ static int mtk_cpufreq_set_target(struct
-> > cpufreq_policy *policy,
-> >                       "cpu%d: failed to scale cpu clock rate!\n",
-> > policy->cpu);
-> >               clk_set_parent(cpu_clk, armpll);
-> >               mtk_cpufreq_set_voltage(info, pre_vproc);
-> > -             return ret;
-> > +             goto out;
-> >       }
-> >
-> >       /* Set parent of CPU clock back to the original PLL. */
-> > @@ -244,8 +250,7 @@ static int mtk_cpufreq_set_target(struct
-> > cpufreq_policy *policy,
-> >               dev_err(cpu_dev,
-> >                       "cpu%d: failed to re-parent cpu clock!\n",
-> > policy->cpu);
-> >               mtk_cpufreq_set_voltage(info, inter_vproc);
-> > -             WARN_ON(1);
-> > -             return ret;
-> > +             goto out;
-> >       }
-> >
-> >       /*
-> > @@ -260,15 +265,72 @@ static int mtk_cpufreq_set_target(struct
-> > cpufreq_policy *policy,
-> >                       clk_set_parent(cpu_clk, info->inter_clk);
-> >                       clk_set_rate(armpll, pre_freq_hz);
-> >                       clk_set_parent(cpu_clk, armpll);
-> > -                     return ret;
-> > +                     goto out;
-> >               }
-> >       }
-> >
-> > -     return 0;
-> > +     info->opp_freq = freq_hz;
-> > +
-> > +out:
-> > +     mutex_unlock(&info->reg_lock);
-> > +
-> > +     return ret;
-> >  }
-> >
-> >  #define DYNAMIC_POWER "dynamic-power-coefficient"
-> >
-> > +static int mtk_cpufreq_opp_notifier(struct notifier_block *nb,
-> > +                                 unsigned long event, void *data)
-> > +{
-> > +     struct dev_pm_opp *opp = data;
-> > +     struct dev_pm_opp *new_opp;
-> > +     struct mtk_cpu_dvfs_info *info;
-> > +     unsigned long freq, volt;
-> > +     struct cpufreq_policy *policy;
-> > +     int ret = 0;
-> > +
-> > +     info = container_of(nb, struct mtk_cpu_dvfs_info, opp_nb);
-> > +
-> > +     if (event == OPP_EVENT_ADJUST_VOLTAGE) {
-> > +             freq = dev_pm_opp_get_freq(opp);
-> > +
-> > +             mutex_lock(&info->reg_lock);
-> > +             if (info->opp_freq == freq) {
-> > +                     volt = dev_pm_opp_get_voltage(opp);
-> > +                     ret = mtk_cpufreq_set_voltage(info, volt);
-> > +                     if (ret)
-> > +                             dev_err(info->cpu_dev,
-> > +                                     "failed to scale voltage:
-> > %d\n", ret);
-> > +             }
-> > +             mutex_unlock(&info->reg_lock);
-> > +     } else if (event == OPP_EVENT_DISABLE) {
-> > +             freq = dev_pm_opp_get_freq(opp);
-> > +
-> > +             /* case of current opp item is disabled */
-> > +             if (info->opp_freq == freq) {
-> > +                     freq = 1;
-> > +                     new_opp = dev_pm_opp_find_freq_ceil(info-
-> > >cpu_dev,
-> > +                                                         &freq);
-> > +                     if (IS_ERR(new_opp)) {
-> > +                             dev_err(info->cpu_dev,
-> > +                                     "all opp items are
-> > disabled\n");
-> > +                             ret = PTR_ERR(new_opp);
-> > +                             return notifier_from_errno(ret);
-> > +                     }
-> > +
-> > +                     dev_pm_opp_put(new_opp);
-> > +                     policy = cpufreq_cpu_get(info->opp_cpu);
-> > +                     if (policy) {
-> > +                             cpufreq_driver_target(policy, freq /
-> > 1000,
-> > +                                                   CPUFREQ_RELATION_
-> > L);
-> > +                             cpufreq_cpu_put(policy);
-> > +                     }
-> > +             }
-> > +     }
-> > +
-> > +     return notifier_from_errno(ret);
-> > +}
-> > +
-> >  static int mtk_cpu_dvfs_info_init(struct mtk_cpu_dvfs_info *info,
-> > int cpu)
-> >  {
-> >       struct device *cpu_dev;
-> > @@ -357,6 +419,18 @@ static int mtk_cpu_dvfs_info_init(struct
-> > mtk_cpu_dvfs_info *info, int cpu)
-> >       info->intermediate_voltage = dev_pm_opp_get_voltage(opp);
-> >       dev_pm_opp_put(opp);
-> >
-> > +     mutex_init(&info->reg_lock);
-> > +
-> > +     info->opp_cpu = cpu;
-> > +     info->opp_nb.notifier_call = mtk_cpufreq_opp_notifier;
-> > +     ret = dev_pm_opp_register_notifier(cpu_dev, &info->opp_nb);
-> > +     if (ret) {
-> > +             dev_err(cpu_dev, "cpu%d: failed to register opp
-> > notifier\n", cpu);
-> > +             goto out_disable_inter_clock;
-> > +     }
-> > +
-> > +     info->opp_freq = clk_get_rate(info->cpu_clk);
-> > +
-> >       /*
-> >        * If SRAM regulator is present, software "voltage tracking" is
-> > needed
-> >        * for this CPU power domain.
-> > @@ -421,6 +495,7 @@ static void mtk_cpu_dvfs_info_release(struct
-> > mtk_cpu_dvfs_info *info)
-> >       }
-> >
-> >       dev_pm_opp_of_cpumask_remove_table(&info->cpus);
-> > +     dev_pm_opp_unregister_notifier(info->cpu_dev, &info->opp_nb);
-> >  }
-> >
-> >  static int mtk_cpufreq_init(struct cpufreq_policy *policy)
->
->
-> _______________________________________________
-> Linux-mediatek mailing list
-> Linux-mediatek@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-mediatek
+Yes, it would be better to use (PHYS_MASK + 1).
+
+> 
+>> +static int __init reserve_crashkernel_low(unsigned long long low_size)
+>> +{
+>> +	unsigned long long low_base;
+>> +
+>> +	low_base = memblock_phys_alloc_range(low_size, CRASH_ALIGN, 0, CRASH_ADDR_LOW_MAX);
+>> +	if (!low_base) {
+>> +		pr_err("cannot allocate crashkernel low memory (size:0x%llx).\n", low_size);
+>> +		return -ENOMEM;
+>> +	}
+>> +
+>> +	pr_info("crashkernel low memory reserved: 0x%08llx - 0x%08llx (%lld MB)\n",
+>> +		low_base, low_base + low_size, low_size >> 20);
+>> +
+>> +	crashk_low_res.start = low_base;
+>> +	crashk_low_res.end   = low_base + low_size - 1;
+>> +	insert_resource(&iomem_resource, &crashk_low_res);
+>> +
+>> +	return 0;
+>> +}
+>> +
+>>  /*
+>>   * reserve_crashkernel() - reserves memory for crash kernel
+>>   *
+>> @@ -100,17 +126,32 @@ phys_addr_t __ro_after_init arm64_dma_phys_limit = PHYS_MASK + 1;
+>>  static void __init reserve_crashkernel(void)
+>>  {
+>>  	unsigned long long crash_base, crash_size;
+>> -	unsigned long long crash_max = arm64_dma_phys_limit;
+>> +	unsigned long long crash_low_size = 0;
+>> +	unsigned long long crash_max = CRASH_ADDR_LOW_MAX;
+>> +	char *cmdline = boot_command_line;
+>>  	int ret;
+>>  
+>>  	if (!IS_ENABLED(CONFIG_KEXEC_CORE))
+>>  		return;
+>>  
+>> -	ret = parse_crashkernel(boot_command_line, memblock_phys_mem_size(),
+>> +	/* crashkernel=X[@offset] */
+>> +	ret = parse_crashkernel(cmdline, memblock_phys_mem_size(),
+>>  				&crash_size, &crash_base);
+>> -	/* no crashkernel= or invalid value specified */
+>> -	if (ret || !crash_size)
+>> -		return;
+>> +	if (ret || !crash_size) {
+> 
+> I think we should check for ret == -ENOENT only. If the crashkernel=
+> exists but is malformed or the size is 0, we shouldn't bother with
+> high/low at all.
+
+That's right.
+
+> 
+>> +		ret = parse_crashkernel_high(cmdline, 0, &crash_size, &crash_base);
+>> +		if (ret || !crash_size)
+>> +			return;
+>> +
+>> +		/*
+>> +		 * crashkernel=Y,low can be specified or not, but invalid value
+>> +		 * is not allowed.
+>> +		 */
+>> +		ret = parse_crashkernel_low(cmdline, 0, &crash_low_size, &crash_base);
+>> +		if (ret && (ret != -ENOENT))
+>> +			return;
+>> +
+>> +		crash_max = CRASH_ADDR_HIGH_MAX;
+>> +	}
+>>  
+>>  	crash_size = PAGE_ALIGN(crash_size);
+>>  
+>> @@ -118,8 +159,7 @@ static void __init reserve_crashkernel(void)
+>>  	if (crash_base)
+>>  		crash_max = crash_base + crash_size;
+>>  
+>> -	/* Current arm64 boot protocol requires 2MB alignment */
+>> -	crash_base = memblock_phys_alloc_range(crash_size, SZ_2M,
+>> +	crash_base = memblock_phys_alloc_range(crash_size, CRASH_ALIGN,
+>>  					       crash_base, crash_max);
+>>  	if (!crash_base) {
+>>  		pr_warn("cannot allocate crashkernel (size:0x%llx)\n",
+> 
+> I personally like this but let's see how the other thread goes. I guess
+
+Me too. This fallback complicates code logic more than just a little.
+I'm not sure why someone would rather add fallback than change the bootup
+options to crashkernel=X,[high|low]. Perhaps fallback to high/low is a better
+compatible and extended mode when crashkernel=X fails to reserve memory. And
+the code logic will be much clearer.
+
+//parse crashkernel=X		//To simplify the discussion, Ignore [@offset]
+crash_base = memblock_phys_alloc_range()
+if (!crash_base || /* crashkernel=X is not specified */) {
+	//parse crashkernel=X,[high,low]
+	//reserve high/low memory
+}
+
+So that, the following three modes are supported:
+1) crashkernel=X[@offset]
+2) crashkernel=X,high crashkernel=X,low
+3) crashkernel=X[@offset] crashkernel=X,high [crashkernel=Y,low]
+
+For case 3), try "crashkernel=X[@offset]" first, if it can not work, fallback
+to "crashkernel=X,high crashkernel=X,low". This looks better than the old "crashkernel=X"
+fallback ---- Select a region under 4G first, and fall back to reserve region above 4G.
+
+Note: when the X of crashkernel=X and crashkernel=X,high are the same, It's equivalent
+to the old "crashkernel=X" fallback.
+
+> if we want a fallback, it would come just before the check the above:
+> 
+> 	if (!crash_base && crash_max != CRASH_ADDR_HIGH_MAX) {
+> 		/* attempt high allocation with default low */
+> 		if (!crash_low_size)
+> 			crash_low_size = some default;
+> 		crash_max = CRASH_ADDR_LOW_MAX;
+
+crash_max = CRASH_ADDR_HIGH_MAX; We should fallback to high memory now.
+
+> 		crash_base = memblock_phys_alloc_range();
+> 	}
+> 
+> Well, I guess we end up with your earlier proposal but I think I
+> understand it better now ;).
+> 
+
+-- 
+Regards,
+  Zhen Lei

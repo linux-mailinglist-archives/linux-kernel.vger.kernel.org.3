@@ -2,204 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F2D251DE18
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 19:05:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B0BE51DE05
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 19:00:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1444101AbiEFRJE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 13:09:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42762 "EHLO
+        id S1444032AbiEFREf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 13:04:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1444093AbiEFRJB (ORCPT
+        with ESMTP id S1382740AbiEFREd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 13:09:01 -0400
-Received: from smtp2.infineon.com (smtp2.infineon.com [IPv6:2a00:18f0:1e00:4::4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C06A84D9E7;
-        Fri,  6 May 2022 10:05:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=infineon.com; i=@infineon.com; q=dns/txt; s=IFXMAIL;
-  t=1651856717; x=1683392717;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=8R9iqVwlSWBcLxOnV282bKq83f750AtG8muuAs3ZADI=;
-  b=HBs7GtUEFQ5Pe2zrwVGT48QaT3OOxGu86ca5aVglAO72xdEFFV5693YE
-   bhm/AVRB6/9Ps9TQKi/OOl2/ALvvkZbGPbk5lmtZFGmBG6gTVBbegCAVm
-   x+INJdBhXBO2w3KPFq2AJaVYu6JZXm3aaLOjSBgZ7UM1/Bmbf0rq/Io57
-   A=;
-X-SBRS: None
-X-IronPort-AV: E=McAfee;i="6400,9594,10339"; a="176373805"
-X-IronPort-AV: E=Sophos;i="5.91,203,1647298800"; 
-   d="scan'208";a="176373805"
-Received: from unknown (HELO mucxv001.muc.infineon.com) ([172.23.11.16])
-  by smtp2.infineon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2022 19:05:15 +0200
-Received: from MUCSE819.infineon.com (MUCSE819.infineon.com [172.23.29.45])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mucxv001.muc.infineon.com (Postfix) with ESMTPS;
-        Fri,  6 May 2022 19:05:15 +0200 (CEST)
-Received: from ISCN5CG1067W80.agb.infineon.com (172.23.8.247) by
- MUCSE819.infineon.com (172.23.29.45) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Fri, 6 May 2022 19:05:14 +0200
-From:   Johannes Holland <johannes.holland@infineon.com>
-To:     <jarkko@kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-integrity@vger.kernel.org>, <robh+dt@kernel.org>,
-        <devicetree@vger.kernel.org>
-CC:     <peterhuewe@gmx.de>, <jgg@ziepe.ca>,
-        <krzysztof.kozlowski+dt@linaro.org>,
-        Johannes Holland <johannes.holland@infineon.com>
-Subject: [PATCH v2 4/4] dt-bindings: doc/devicetree/bindings/security/tpm: Move tpm-i2c.txt to YAML
-Date:   Fri, 6 May 2022 19:00:17 +0200
-Message-ID: <20220506170013.22598-4-johannes.holland@infineon.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220506170013.22598-1-johannes.holland@infineon.com>
-References: <20220506170013.22598-1-johannes.holland@infineon.com>
+        Fri, 6 May 2022 13:04:33 -0400
+Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C477423BF2;
+        Fri,  6 May 2022 10:00:49 -0700 (PDT)
+Received: by mail-il1-x131.google.com with SMTP id z12so5163450ilp.8;
+        Fri, 06 May 2022 10:00:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=3hv4at3JYf4y09rWLgIApsDSX2KKaSl4kYTsB/P5mJ0=;
+        b=gua7RI8qZk25ZAewCZAiAJMawwqFhhz80joRswrrSwHhsVDCOOYu8i13fjCzBt77/h
+         NbNLUJDn8YVcp1T+41qtfChmCn5sms9aEYSKHPEUFPjKcWBvSgi2cSMdHJb/lJ8Rkvz+
+         X2anB5H7ASVH7YcisrXDldbK8a3ib96x3P5dL08H/Rcybuo+zLoc9AA6dRB1m/ubO4dF
+         Fha/oqnTvNexNyXgQgkDoLs44Yt0NUj037nxdZaV2JfHyv3ZxHmgu7FeN5koqiKFiSwp
+         IX7eH+Yic3HhFj4z4mEikD/Zhgyb0iSyeRznbJVTZhpmXlFiF8PCQ0akxhk6PRcU/cge
+         PEmA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=3hv4at3JYf4y09rWLgIApsDSX2KKaSl4kYTsB/P5mJ0=;
+        b=bk0GOKLQu4+KMDvfYPa3X/7/QFTMe/TdtM2kuM3ZskuL2W/UZP/rW7/gijgdySK+iH
+         DwgTGyZ3r4WJ+LDPE5dSvQ8BkCC1vc/h0HHRyvEcrZ6Nkt9d4pkuOEom4fj4R7iiday6
+         qZw7lkd7iGfGW3XvtlYpubxbB4VkfiszkbfgnSSz30A8jBEDhcfQrz4EW5deiy+Xls5p
+         HNfQtxoBX5rgei47Y8gnqZURXg0Q5iA+/gu/KTU6PA9onE9NDaSMrz6IIsjA/WMQVgus
+         uBDSTMuw7mDDAMvMSZ1QQ3L22cltQ1jn/jtE/8zBhfHMCT6K4Q3onjzg2hcObwr0fMaU
+         eGTA==
+X-Gm-Message-State: AOAM530JUse//jvhNiUFPz+pMFUbpTLt3YbJbpAZwb+QkzXYf5lPCJ1l
+        nq9oixlea94EOvyi0WQ245ODiGbGG3TguXxK
+X-Google-Smtp-Source: ABdhPJwjp2QyOO3aX6GanfAOk4ePC/7fufotuPndabaMczq0WyiENpJP23ShZvUPg96s0ojmnnoBWA==
+X-Received: by 2002:a05:6e02:198e:b0:2cf:4a7a:faf8 with SMTP id g14-20020a056e02198e00b002cf4a7afaf8mr1589453ilf.206.1651856449165;
+        Fri, 06 May 2022 10:00:49 -0700 (PDT)
+Received: from localhost (ec2-13-59-0-164.us-east-2.compute.amazonaws.com. [13.59.0.164])
+        by smtp.gmail.com with UTF8SMTPSA id f21-20020a05660215d500b0065a47e16f63sm1411863iow.53.2022.05.06.10.00.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 06 May 2022 10:00:48 -0700 (PDT)
+From:   Schspa Shi <schspa@gmail.com>
+To:     rafael@kernel.org, viresh.kumar@linaro.org,
+        dan.carpenter@oracle.com
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        schspa@gmail.com
+Subject: [PATCH] cpufreq: fix double unlock when cpufreq online
+Date:   Sat,  7 May 2022 01:00:35 +0800
+Message-Id: <20220506170035.32115-1-schspa@gmail.com>
+X-Mailer: git-send-email 2.24.3 (Apple Git-128)
+In-Reply-To: <20220506072146.GD4031@kadam>
+References: <20220506072146.GD4031@kadam>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [172.23.8.247]
-X-ClientProxiedBy: MUCSE812.infineon.com (172.23.29.38) To
- MUCSE819.infineon.com (172.23.29.45)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Migrate the existing plain text I2c driver schema to YAML and extend by
-the options of the generic TIS driver for I2C TPMs which comply to the
-TCG PC Client Platform TPM Profile (PTP) specification for TPM 2.0 v1.04
-Revision 14.
+The patch f346e96267cd: ("cpufreq: Fix possible race in cpufreq online
+error path") expand the critical region. But policy->rwsem is not held when
+calling cpufreq_driver->online and cpufreq_driver->init calls, which lead to bad
+unlock.
 
-Signed-off-by: Johannes Holland <johannes.holland@infineon.com>
+And it's well to hold this lock when calling cpufreq_driver->online, which
+provide more protects without bad influence.
+
+Fixes: f346e96267cd: ("cpufreq: Fix possible race in cpufreq online error path")
+Link: https://lore.kernel.org/all/YnKZCGaig+EXSowf@kili/
+
+Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+Signed-off-by: Schspa Shi <schspa@gmail.com>
 ---
-Changelog:
- * v2:
-   * move existing device tree instead of just adding a new one
-   * do not use wildcard compatibles
-   * make properties "label", "linux,sml-base" and "linux,sml-size"
-     optional, as they should be
+ drivers/cpufreq/cpufreq.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-All properties are listed, even if some drivers do not implement them.
-
-As mentioned, I kept the generic compatible in there because the TPM
-is a standardized device. For vendor-specific features and bugs, the
-specific compatibles can be used. Please let me know if you need it
-removed.
-
- .../bindings/security/tpm/tpm-i2c.txt         | 26 --------
- .../bindings/security/tpm/tpm-i2c.yaml        | 66 +++++++++++++++++++
- 2 files changed, 66 insertions(+), 26 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/security/tpm/tpm-i2c.txt
- create mode 100644 Documentation/devicetree/bindings/security/tpm/tpm-i2c.yaml
-
-diff --git a/Documentation/devicetree/bindings/security/tpm/tpm-i2c.txt b/Documentation/devicetree/bindings/security/tpm/tpm-i2c.txt
-deleted file mode 100644
-index a65d7b71e81a..000000000000
---- a/Documentation/devicetree/bindings/security/tpm/tpm-i2c.txt
-+++ /dev/null
-@@ -1,26 +0,0 @@
--* Device Tree Bindings for I2C based Trusted Platform Module(TPM)
--
--Required properties:
--
--- compatible     : 'manufacturer,model', eg. nuvoton,npct650
--- label          : human readable string describing the device, eg. "tpm"
--- linux,sml-base : 64-bit base address of the reserved memory allocated for
--                   the firmware event log
--- linux,sml-size : size of the memory allocated for the firmware event log
--
--Optional properties:
--
--- powered-while-suspended: present when the TPM is left powered on between
--                           suspend and resume (makes the suspend/resume
--                           callbacks do nothing).
--
--Example (for OpenPower Systems with Nuvoton TPM 2.0 on I2C)
------------------------------------------------------------
--
--tpm@57 {
--	reg = <0x57>;
--	label = "tpm";
--	compatible = "nuvoton,npct650", "nuvoton,npct601";
--	linux,sml-base = <0x7f 0xfd450000>;
--	linux,sml-size = <0x10000>;
--};
-diff --git a/Documentation/devicetree/bindings/security/tpm/tpm-i2c.yaml b/Documentation/devicetree/bindings/security/tpm/tpm-i2c.yaml
-new file mode 100644
-index 000000000000..952605ab8611
---- /dev/null
-+++ b/Documentation/devicetree/bindings/security/tpm/tpm-i2c.yaml
-@@ -0,0 +1,66 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/security/tpm/tpm-i2c.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: I2C PTP based TPM Device Tree Bindings
-+
-+maintainers:
-+  - Johannes Holland <johannes.holland@infineon.com>
-+
-+description:
-+  Device Tree Bindings for I2C based Trusted Platform Module (TPM).
-+
-+properties:
-+  compatible:
-+    items:
-+      - enum:
-+          # Infineon's Trusted Platform Module (TPM) (SLB9673)
-+          - infineon,slb9673
-+          - nuvoton,npct601
-+          - nuvoton,npct650
-+      - const: tcg,tpm-tis-i2c
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupt:
-+    maxItems: 1
-+
-+  label:
-+    description: |
-+      Human readable string describing the device, eg. "tpm".
-+
-+  linux,sml-base:
-+    description: |
-+      64-bit base address of the reserved memory allocated
-+      for the firmware event log.
-+
-+  linux,sml-size:
-+    description: |
-+      Size of the memory allocated for the firmware event log.
-+
-+  powered-while-suspended:
-+    description: |
-+      Present when the TPM is left powered on between suspend and
-+      resume (makes the suspend/resume callbacks do nothing).
-+
-+required:
-+  - compatible
-+  - reg
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    i2c {
-+      #address-cells = <1>;
-+      #size-cells = <0>;
-+
-+      tpm@2e {
-+        compatible = "infineon,slb9673", "tcg,tpm-tis-i2c";
-+        reg = <0x2e>;
-+      };
-+    };
-+...
+diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+index 0d58b0f8f3af..43dfaa8124e2 100644
+--- a/drivers/cpufreq/cpufreq.c
++++ b/drivers/cpufreq/cpufreq.c
+@@ -1337,12 +1337,12 @@ static int cpufreq_online(unsigned int cpu)
+ 		down_write(&policy->rwsem);
+ 		policy->cpu = cpu;
+ 		policy->governor = NULL;
+-		up_write(&policy->rwsem);
+ 	} else {
+ 		new_policy = true;
+ 		policy = cpufreq_policy_alloc(cpu);
+ 		if (!policy)
+ 			return -ENOMEM;
++		down_write(&policy->rwsem);
+ 	}
+ 
+ 	if (!new_policy && cpufreq_driver->online) {
+@@ -1382,7 +1382,6 @@ static int cpufreq_online(unsigned int cpu)
+ 		cpumask_copy(policy->related_cpus, policy->cpus);
+ 	}
+ 
+-	down_write(&policy->rwsem);
+ 	/*
+ 	 * affected cpus must always be the one, which are online. We aren't
+ 	 * managing offline cpus here.
+@@ -1542,9 +1541,9 @@ static int cpufreq_online(unsigned int cpu)
+ 		cpufreq_driver->exit(policy);
+ 
+ 	cpumask_clear(policy->cpus);
+-	up_write(&policy->rwsem);
+ 
+ out_free_policy:
++	up_write(&policy->rwsem);
+ 	cpufreq_policy_free(policy);
+ 	return ret;
+ }
 -- 
-2.34.1
+2.24.3 (Apple Git-128)
 

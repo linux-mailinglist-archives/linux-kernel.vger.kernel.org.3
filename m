@@ -2,118 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E271651DCC6
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 18:03:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20D4151DCE0
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 18:04:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1443338AbiEFQGy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 12:06:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38156 "EHLO
+        id S1443422AbiEFQIW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 12:08:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349769AbiEFQGu (ORCPT
+        with ESMTP id S1443373AbiEFQHp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 12:06:50 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C744B6D953;
-        Fri,  6 May 2022 09:03:06 -0700 (PDT)
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 246FJ2hg006723;
-        Fri, 6 May 2022 16:03:03 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=h1mRJFz3KXf6mcG6pwaIzuIGePhCUavy98pjI+tyvyY=;
- b=LQ2EXzzy0U8sVXMvXR6UOCpAeq1ZtryHOWAF0OxiKBzJWiiR01Dc4D8NBOSXbnG0Rea3
- fr8k8aEAEDh9d/t64s9iRDTiKPYmezdjCtICt3EZ0rmeHXCF/uqAsoEm29t9VY/3dGwY
- vEy6r53Ihn9m64rSMY8Nm2FSb8PypbX4PCdJr7eNAL6cghh3iMjn6aEHi0aNksfdUSW8
- vPLJfnOUFBrH3n/P0cQdXT+WPIuqPBe5ESfd1NcZ+OOKomVRiP8PHDHAGZD+N9u7EpGh
- iW6zVYJQ+Wu5lSOpdOTYviXMwnkwiIfj26TudKhybSEJA8MaNqY9I9A4+7fEA1hPY3VQ kg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fw678rtm9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 06 May 2022 16:03:03 +0000
-Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 246FhEHb013132;
-        Fri, 6 May 2022 16:03:02 GMT
-Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fw678rtkt-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 06 May 2022 16:03:02 +0000
-Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
-        by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 246G01bj019745;
-        Fri, 6 May 2022 16:03:00 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma02fra.de.ibm.com with ESMTP id 3fuyn7a7aj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 06 May 2022 16:03:00 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 246FnWMt50921834
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 6 May 2022 15:49:32 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 93C19A405F;
-        Fri,  6 May 2022 16:02:57 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 50BA4A4054;
-        Fri,  6 May 2022 16:02:56 +0000 (GMT)
-Received: from [9.171.60.83] (unknown [9.171.60.83])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri,  6 May 2022 16:02:56 +0000 (GMT)
-Message-ID: <6792c469-9a48-d1b3-47fc-5a7b408ae22b@linux.ibm.com>
-Date:   Fri, 6 May 2022 18:02:56 +0200
+        Fri, 6 May 2022 12:07:45 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA0406D975
+        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 09:04:00 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id iq10so7432328pjb.0
+        for <linux-kernel@vger.kernel.org>; Fri, 06 May 2022 09:04:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=0uUTR9z98utauBqj+KmjxPc4gxj1gteGLGPvj7webUo=;
+        b=J4IvR3uUluzPVJPujF5iGP7CnGMFRxS4C+JdTXPQeYnSh3W80C91i9wOSOsN7J/kGv
+         bkX4yeeMmFTGNs2RiGiQ7rLi5NpfOmOCdMNV59m1D1X568tUCbKlXVN6Fc7MsWjfQrHc
+         vbCNlfjkVHr8WjXmvxtOwRxpyh6SKRcrhQy/BW+7bcTZ5Fw72tYvnAXXD4DeN8+qaeSj
+         /iU3XP4qgOgPzLD31X97EYpS874M9TrJZR4vF8sNIGilZSCOmMYryQJ4IP1aabvQ+V7H
+         J5E/pxWQRHLJp0OCqreWvFF7K0+tNgFlQpHpHM5D88RoTNN6ZL072kF2+f0Xrue43ues
+         1hrA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=0uUTR9z98utauBqj+KmjxPc4gxj1gteGLGPvj7webUo=;
+        b=ThyprhFnsKOnKg4gz9rE5DGMGmOX6xYuptOkU5OpMSf4gXHgZXzhtbgEYMdOngznQJ
+         PhxAFge2PiDegDn2SZ/45IZVX97dv99TcEn9taz75WXFDxau/vcEp5WOOz5gBe5jcrrt
+         52km62S8f3D3nUjdHM4vIexpSvX7vmwgcc2rcv3VBQjrUGJsQCWPnbs4m4tOQntrIsU+
+         hBqHlEetVQ7Ivb8t9DozFGXkV/4ISvgELluzFVx3fu0DR9q6yGjz4+WDGVuMiN7HXJdX
+         MoGWQQIHV4+O46QDdcZfTvlhi6hDGHEEDR/ie/2Y/yNmjqgF11o7o5VsM1mbPYZxHMS/
+         WnJg==
+X-Gm-Message-State: AOAM531eAGD5M2lh05bpP471oRgVjn6xBCQeLJyb5Y9dtwh3ZrYNWjxn
+        W+6tbZ6VcV0e8eKsS2tHSwmPGU4zVDOBAA==
+X-Google-Smtp-Source: ABdhPJzaRrmoWWC0zULoNyAQrgE1JZUQBrth1vEB2/dmiHbMGv30IIErYnu0FnK0crc6nCQ0X0BZdw==
+X-Received: by 2002:a17:903:22c1:b0:15e:c3b2:d632 with SMTP id y1-20020a17090322c100b0015ec3b2d632mr4462885plg.0.1651853040377;
+        Fri, 06 May 2022 09:04:00 -0700 (PDT)
+Received: from [192.168.4.166] (cpe-72-132-29-68.dc.res.rr.com. [72.132.29.68])
+        by smtp.gmail.com with ESMTPSA id 6-20020a631546000000b003c14af50628sm3419968pgv.64.2022.05.06.09.03.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 06 May 2022 09:03:59 -0700 (PDT)
+Message-ID: <05e99d9e-4c66-6d7c-604c-1e52d8d0b5b2@kernel.dk>
+Date:   Fri, 6 May 2022 10:03:58 -0600
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v6 17/21] vfio-pci/zdev: add function handle to clp base
- capability
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v2 0/5] fast poll multishot mode
 Content-Language: en-US
-To:     Matthew Rosato <mjrosato@linux.ibm.com>, linux-s390@vger.kernel.org
-Cc:     alex.williamson@redhat.com, cohuck@redhat.com,
-        schnelle@linux.ibm.com, farman@linux.ibm.com, pmorel@linux.ibm.com,
-        hca@linux.ibm.com, gor@linux.ibm.com,
-        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
-        svens@linux.ibm.com, frankja@linux.ibm.com, david@redhat.com,
-        imbrenda@linux.ibm.com, vneethv@linux.ibm.com,
-        oberpar@linux.ibm.com, freude@linux.ibm.com, thuth@redhat.com,
-        pasic@linux.ibm.com, pbonzini@redhat.com, corbet@lwn.net,
-        jgg@nvidia.com, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org
-References: <20220426200842.98655-1-mjrosato@linux.ibm.com>
- <20220426200842.98655-18-mjrosato@linux.ibm.com>
-From:   Christian Borntraeger <borntraeger@linux.ibm.com>
-In-Reply-To: <20220426200842.98655-18-mjrosato@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Pavel Begunkov <asml.silence@gmail.com>,
+        Hao Xu <haoxu.linux@gmail.com>, io-uring@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org
+References: <20220506070102.26032-1-haoxu.linux@gmail.com>
+ <b4d23f42-36f4-353a-1f44-c12178f0a2b3@gmail.com>
+ <5ce3d6c7-42f9-28c3-0800-4da399adaaea@kernel.dk>
+ <3f940dad-73ce-4ea6-dc76-f877c64dbb9a@gmail.com>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <3f940dad-73ce-4ea6-dc76-f877c64dbb9a@gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: aSSbkTo0FPhbDgZh3j8ogjet6yXOZD6L
-X-Proofpoint-ORIG-GUID: Ac3SHA8M_OqXgWVpcVuFqksaBleycRSX
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-06_04,2022-05-06_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 impostorscore=0
- adultscore=0 lowpriorityscore=0 bulkscore=0 mlxscore=0 malwarescore=0
- suspectscore=0 priorityscore=1501 spamscore=0 clxscore=1015
- mlxlogscore=853 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2205060082
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-Am 26.04.22 um 22:08 schrieb Matthew Rosato:
-> The function handle is a system-wide unique identifier for a zPCI
-> device.  With zPCI instruction interpretation, the host will no
-> longer be executing the zPCI instructions on behalf of the guest.
-> As a result, the guest needs to use the real function handle in
-> order for firmware to associate the instruction with the proper
-> PCI function.  Let's provide that handle to the guest.
+On 5/6/22 10:01 AM, Pavel Begunkov wrote:
+> On 5/6/22 15:18, Jens Axboe wrote:
+>> On 5/6/22 1:36 AM, Hao Xu wrote:
+>>> Hi All,
+>>> I actually had a question about the current poll code, from the code it
+>>> seems when we cancel a poll-like request, it will ignore the existing
+>>> events and just raise a -ECANCELED cqe though I haven't tested it. Is
+>>> this by design or am I missing something?
+>>
+>> That's by design, but honestly I don't think anyone considered the case
+>> where it's being canceled but has events already. For that case, I think
+>> we should follow the usual logic of only returning an error (canceled)
+>> if we don't have events, if we have events just return them. For
+>> multi-shot, obviously also terminate, but same logic there.
 > 
-> Reviewed-by: Pierre Morel <pmorel@linux.ibm.com>
-> Signed-off-by: Matthew Rosato <mjrosato@linux.ibm.com>
-Reviewed-by: Christian Borntraeger <borntraeger@de.ibm.com>
+> Why would we care? It's inherently racy in any case and any
+> user not handling this is already screwed.
+
+We don't really need to care, but the normal logic is "return error if
+we have no result, return result otherwise". No reason this should be
+any different imho, it's not really a correctness thing.
+
+-- 
+Jens Axboe
+

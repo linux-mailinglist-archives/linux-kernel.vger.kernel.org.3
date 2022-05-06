@@ -2,60 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47B3E51DFDD
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 21:57:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C86C051DFDC
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 21:57:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1392186AbiEFUBE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 16:01:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60318 "EHLO
+        id S1392311AbiEFUBI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 16:01:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352249AbiEFUBB (ORCPT
+        with ESMTP id S1376965AbiEFUBC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 16:01:01 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0654C5AECB
-        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 12:57:18 -0700 (PDT)
+        Fri, 6 May 2022 16:01:02 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88D274F45B
+        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 12:57:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651867038; x=1683403038;
+  t=1651867037; x=1683403037;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ujPzMQlsgtyIkXLvesiz7KFNXn2wm3EPCKXAhVER8p8=;
-  b=Ppmpi8bEpDh0Ao4c00MEXWEqaU3sYMRdQ4kwL2gu6cw1RvxGwGwxEHPO
-   yWSSCmY+pmWPQ2HeBVX1P4zS9AamvY7uxZ4+HWBIlE+GtnPOmyXCqAKsT
-   HHya98KoR7S9MpUa0My903/svnz7+dXnCZTle4D3DUYm0Ho40dRIMstxg
-   pGLzREG8SHk5fAicOyZ91A/Mww6Z+u4vEIvCmGBdmpPQ+nXZwcTrWZ3bE
-   LuhSQb4WXXNPOGXYsjLZ3i+iec7o6ZxlGXaviebtRgIgZmVqD362OD/+O
-   j0Un1jW7BZ2ZlhZQe+xXkvWjn3u0sJtcS8NrGysDdgKzgHcX5rtDn0+m1
+  bh=uYRkZxq284hBgLYVBBOMExlEwOFRqIM06/cOZnkT7fg=;
+  b=csNxO+t1CYkZukQYvNnELqcDN758fgwJEvuWyg2lWL6lYTBlTUDR28K1
+   nDlJA+2Nc8dDe0MpDlA9OGMwhKzP1NgG9uH5vUrACL5+dzoFQDyvFlUkk
+   HNwTXPXVhNPT0QGLcgC8CJiFrTraPLtRifLz2Fc7UwV+4MSty2gXdZ8XA
+   qyrnwQdqW2QLdYnhzZBiO6aJo/MCC5/gnMRk2F2II0ZaNDo4jaqRIOS8t
+   WX+p1YRpRydWiptd5Ain/e7P4LnJPyQ8Ry6lNppExUkHy0xYL0y7W5GAp
+   pxHZ2ZTJdcrQQNxALsquHsx367pUfVSzGEb3Ao738tpVVBASG0m4Iku9Q
    Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10339"; a="331551063"
+X-IronPort-AV: E=McAfee;i="6400,9594,10339"; a="267401014"
 X-IronPort-AV: E=Sophos;i="5.91,205,1647327600"; 
-   d="scan'208";a="331551063"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2022 12:57:17 -0700
+   d="scan'208";a="267401014"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2022 12:57:17 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,205,1647327600"; 
-   d="scan'208";a="563996693"
+   d="scan'208";a="621960221"
 Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 06 May 2022 12:57:16 -0700
+  by fmsmga008.fm.intel.com with ESMTP; 06 May 2022 12:57:15 -0700
 Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
         (envelope-from <lkp@intel.com>)
-        id 1nn44g-000DpQ-T0;
+        id 1nn44g-000DpV-Ud;
         Fri, 06 May 2022 19:57:14 +0000
-Date:   Sat, 7 May 2022 03:56:53 +0800
+Date:   Sat, 7 May 2022 03:57:05 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     Krzysztof Kozlowski <krzk@kernel.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
 Subject: [krzk-github:n/qcom-ufs-opp-cleanups-v2-drv-owner-wip 7/7]
- drivers/scsi/ufs/ufshcd.c:8267:10: error: 'struct scsi_host_template' has no
- member named 'module'
-Message-ID: <202205070312.tniIfReM-lkp@intel.com>
+ drivers/scsi/hosts.c:380: warning: expecting prototype for
+ scsi_host_alloc(). Prototype was for __scsi_host_alloc() instead
+Message-ID: <202205070318.9CFPkpJP-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -65,91 +66,197 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 tree:   https://github.com/krzk/linux n/qcom-ufs-opp-cleanups-v2-drv-owner-wip
 head:   17609caecd53df20f631703ea084a70e7735b5d7
 commit: 17609caecd53df20f631703ea084a70e7735b5d7 [7/7] WIP
-config: m68k-allyesconfig (https://download.01.org/0day-ci/archive/20220507/202205070312.tniIfReM-lkp@intel.com/config)
-compiler: m68k-linux-gcc (GCC) 11.3.0
+config: arm-collie_defconfig (https://download.01.org/0day-ci/archive/20220507/202205070318.9CFPkpJP-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 5e004fb787698440a387750db7f8028e7cb14cfc)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
         # https://github.com/krzk/linux/commit/17609caecd53df20f631703ea084a70e7735b5d7
         git remote add krzk-github https://github.com/krzk/linux
         git fetch --no-tags krzk-github n/qcom-ufs-opp-cleanups-v2-drv-owner-wip
         git checkout 17609caecd53df20f631703ea084a70e7735b5d7
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash drivers/scsi/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/scsi/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> drivers/scsi/ufs/ufshcd.c:8267:10: error: 'struct scsi_host_template' has no member named 'module'
-    8267 |         .module                 = THIS_MODULE,
-         |          ^~~~~~
-   In file included from include/linux/linkage.h:7,
-                    from include/linux/preempt.h:10,
-                    from arch/m68k/include/asm/irqflags.h:6,
-                    from include/linux/irqflags.h:16,
-                    from arch/m68k/include/asm/atomic.h:6,
-                    from include/linux/atomic.h:7,
-                    from include/linux/rcupdate.h:25,
-                    from include/linux/rculist.h:11,
-                    from include/linux/pid.h:5,
-                    from include/linux/sched.h:14,
-                    from include/linux/ratelimit.h:6,
-                    from include/linux/dev_printk.h:16,
-                    from include/linux/device.h:15,
-                    from include/linux/async.h:14,
-                    from drivers/scsi/ufs/ufshcd.c:12:
-   include/linux/export.h:19:21: warning: initialization of 'unsigned int' from 'struct module *' makes integer from pointer without a cast [-Wint-conversion]
-      19 | #define THIS_MODULE ((struct module *)0)
-         |                     ^
-   drivers/scsi/ufs/ufshcd.c:8267:35: note: in expansion of macro 'THIS_MODULE'
-    8267 |         .module                 = THIS_MODULE,
-         |                                   ^~~~~~~~~~~
-   include/linux/export.h:19:21: note: (near initialization for 'ufshcd_driver_template.cmd_size')
-      19 | #define THIS_MODULE ((struct module *)0)
-         |                     ^
-   drivers/scsi/ufs/ufshcd.c:8267:35: note: in expansion of macro 'THIS_MODULE'
-    8267 |         .module                 = THIS_MODULE,
-         |                                   ^~~~~~~~~~~
+   drivers/scsi/hosts.c:380: warning: Function parameter or member 'owner' not described in '__scsi_host_alloc'
+>> drivers/scsi/hosts.c:380: warning: expecting prototype for scsi_host_alloc(). Prototype was for __scsi_host_alloc() instead
 
 
-vim +8267 drivers/scsi/ufs/ufshcd.c
+vim +380 drivers/scsi/hosts.c
 
-90b8491c003391 Stanley Chu        2020-05-09  8265  
-7a3e97b0dc4bba Santosh Yaraganavi 2012-02-29  8266  static struct scsi_host_template ufshcd_driver_template = {
-7a3e97b0dc4bba Santosh Yaraganavi 2012-02-29 @8267  	.module			= THIS_MODULE,
-7a3e97b0dc4bba Santosh Yaraganavi 2012-02-29  8268  	.name			= UFSHCD,
-7a3e97b0dc4bba Santosh Yaraganavi 2012-02-29  8269  	.proc_name		= UFSHCD,
-eaab9b57305496 Bart Van Assche    2021-12-03  8270  	.map_queues		= ufshcd_map_queues,
-7a3e97b0dc4bba Santosh Yaraganavi 2012-02-29  8271  	.queuecommand		= ufshcd_queuecommand,
-eaab9b57305496 Bart Van Assche    2021-12-03  8272  	.mq_poll		= ufshcd_poll,
-7a3e97b0dc4bba Santosh Yaraganavi 2012-02-29  8273  	.slave_alloc		= ufshcd_slave_alloc,
-eeda47499f0187 Akinobu Mita       2014-07-01  8274  	.slave_configure	= ufshcd_slave_configure,
-7a3e97b0dc4bba Santosh Yaraganavi 2012-02-29  8275  	.slave_destroy		= ufshcd_slave_destroy,
-4264fd613a6a4b Sujit Reddy Thumma 2014-06-29  8276  	.change_queue_depth	= ufshcd_change_queue_depth,
-7a3e97b0dc4bba Santosh Yaraganavi 2012-02-29  8277  	.eh_abort_handler	= ufshcd_abort,
-3441da7ddbdedf Sujit Reddy Thumma 2014-05-26  8278  	.eh_device_reset_handler = ufshcd_eh_device_reset_handler,
-3441da7ddbdedf Sujit Reddy Thumma 2014-05-26  8279  	.eh_host_reset_handler   = ufshcd_eh_host_reset_handler,
-7a3e97b0dc4bba Santosh Yaraganavi 2012-02-29  8280  	.this_id		= -1,
-7a3e97b0dc4bba Santosh Yaraganavi 2012-02-29  8281  	.sg_tablesize		= SG_ALL,
-7a3e97b0dc4bba Santosh Yaraganavi 2012-02-29  8282  	.cmd_per_lun		= UFSHCD_CMD_PER_LUN,
-7a3e97b0dc4bba Santosh Yaraganavi 2012-02-29  8283  	.can_queue		= UFSHCD_CAN_QUEUE,
-552a990ca16688 Christoph Hellwig  2019-06-17  8284  	.max_segment_size	= PRDT_DATA_BYTE_COUNT_MAX,
-1ab27c9cf8b63d Sahitya Tummala    2014-09-25  8285  	.max_host_blocked	= 1,
-c40ecc12cfdb63 Christoph Hellwig  2014-11-13  8286  	.track_queue_depth	= 1,
-d829fc8a105885 Stanislav Nijnikov 2018-02-15  8287  	.sdev_groups		= ufshcd_driver_groups,
-4af14d113bcf95 Christoph Hellwig  2018-12-13  8288  	.dma_boundary		= PAGE_SIZE - 1,
-49615ba144a092 Stanley Chu        2019-09-16  8289  	.rpm_autosuspend_delay	= RPM_AUTOSUSPEND_DELAY_MS,
-7a3e97b0dc4bba Santosh Yaraganavi 2012-02-29  8290  };
-7a3e97b0dc4bba Santosh Yaraganavi 2012-02-29  8291  
+b0ed43360fdca2 Hannes Reinecke     2008-03-18  364  
+^1da177e4c3f41 Linus Torvalds      2005-04-16  365  /**
+^1da177e4c3f41 Linus Torvalds      2005-04-16  366   * scsi_host_alloc - register a scsi host adapter instance.
+^1da177e4c3f41 Linus Torvalds      2005-04-16  367   * @sht:	pointer to scsi host template
+^1da177e4c3f41 Linus Torvalds      2005-04-16  368   * @privsize:	extra bytes to allocate for driver
+^1da177e4c3f41 Linus Torvalds      2005-04-16  369   *
+^1da177e4c3f41 Linus Torvalds      2005-04-16  370   * Note:
+^1da177e4c3f41 Linus Torvalds      2005-04-16  371   * 	Allocate a new Scsi_Host and perform basic initialization.
+^1da177e4c3f41 Linus Torvalds      2005-04-16  372   * 	The host is not published to the scsi midlayer until scsi_add_host
+^1da177e4c3f41 Linus Torvalds      2005-04-16  373   * 	is called.
+^1da177e4c3f41 Linus Torvalds      2005-04-16  374   *
+^1da177e4c3f41 Linus Torvalds      2005-04-16  375   * Return value:
+^1da177e4c3f41 Linus Torvalds      2005-04-16  376   * 	Pointer to a new Scsi_Host
+^1da177e4c3f41 Linus Torvalds      2005-04-16  377   **/
+17609caecd53df Krzysztof Kozlowski 2022-05-06  378  struct Scsi_Host *__scsi_host_alloc(struct scsi_host_template *sht, int privsize,
+17609caecd53df Krzysztof Kozlowski 2022-05-06  379  				    struct module *owner)
+^1da177e4c3f41 Linus Torvalds      2005-04-16 @380  {
+^1da177e4c3f41 Linus Torvalds      2005-04-16  381  	struct Scsi_Host *shost;
+0a84486d6c1da1 Bart Van Assche     2021-11-16  382  	int index;
+^1da177e4c3f41 Linus Torvalds      2005-04-16  383  
+aaff5ebaa2694f Christoph Hellwig   2021-03-31  384  	shost = kzalloc(sizeof(struct Scsi_Host) + privsize, GFP_KERNEL);
+^1da177e4c3f41 Linus Torvalds      2005-04-16  385  	if (!shost)
+^1da177e4c3f41 Linus Torvalds      2005-04-16  386  		return NULL;
+^1da177e4c3f41 Linus Torvalds      2005-04-16  387  
+4f777ed2608645 Christoph Hellwig   2006-11-04  388  	shost->host_lock = &shost->default_lock;
+4f777ed2608645 Christoph Hellwig   2006-11-04  389  	spin_lock_init(shost->host_lock);
+d3301874083874 Mike Anderson       2005-06-16  390  	shost->shost_state = SHOST_CREATED;
+^1da177e4c3f41 Linus Torvalds      2005-04-16  391  	INIT_LIST_HEAD(&shost->__devices);
+^1da177e4c3f41 Linus Torvalds      2005-04-16  392  	INIT_LIST_HEAD(&shost->__targets);
+5ae17501bc62a4 Ewan D. Milne       2021-10-29  393  	INIT_LIST_HEAD(&shost->eh_abort_list);
+^1da177e4c3f41 Linus Torvalds      2005-04-16  394  	INIT_LIST_HEAD(&shost->eh_cmd_q);
+^1da177e4c3f41 Linus Torvalds      2005-04-16  395  	INIT_LIST_HEAD(&shost->starved_list);
+^1da177e4c3f41 Linus Torvalds      2005-04-16  396  	init_waitqueue_head(&shost->host_wait);
+0b9506723826c6 Arjan van de Ven    2006-01-11  397  	mutex_init(&shost->scan_mutex);
+^1da177e4c3f41 Linus Torvalds      2005-04-16  398  
+126a4fe010fd86 Lee Duncan          2016-01-20  399  	index = ida_simple_get(&host_index_ida, 0, 0, GFP_KERNEL);
+66a834d092930c Ming Lei            2021-06-02  400  	if (index < 0) {
+66a834d092930c Ming Lei            2021-06-02  401  		kfree(shost);
+66a834d092930c Ming Lei            2021-06-02  402  		return NULL;
+66a834d092930c Ming Lei            2021-06-02  403  	}
+126a4fe010fd86 Lee Duncan          2016-01-20  404  	shost->host_no = index;
+126a4fe010fd86 Lee Duncan          2016-01-20  405  
+^1da177e4c3f41 Linus Torvalds      2005-04-16  406  	shost->dma_channel = 0xff;
+^1da177e4c3f41 Linus Torvalds      2005-04-16  407  
+^1da177e4c3f41 Linus Torvalds      2005-04-16  408  	/* These three are default values which can be overridden */
+^1da177e4c3f41 Linus Torvalds      2005-04-16  409  	shost->max_channel = 0;
+^1da177e4c3f41 Linus Torvalds      2005-04-16  410  	shost->max_id = 8;
+^1da177e4c3f41 Linus Torvalds      2005-04-16  411  	shost->max_lun = 8;
+^1da177e4c3f41 Linus Torvalds      2005-04-16  412  
+^1da177e4c3f41 Linus Torvalds      2005-04-16  413  	/* Give each shost a default transportt */
+^1da177e4c3f41 Linus Torvalds      2005-04-16  414  	shost->transportt = &blank_transport_template;
+^1da177e4c3f41 Linus Torvalds      2005-04-16  415  
+^1da177e4c3f41 Linus Torvalds      2005-04-16  416  	/*
+^1da177e4c3f41 Linus Torvalds      2005-04-16  417  	 * All drivers right now should be able to handle 12 byte
+^1da177e4c3f41 Linus Torvalds      2005-04-16  418  	 * commands.  Every so often there are requests for 16 byte
+^1da177e4c3f41 Linus Torvalds      2005-04-16  419  	 * commands, but individual low-level drivers need to certify that
+^1da177e4c3f41 Linus Torvalds      2005-04-16  420  	 * they actually do something sensible with such commands.
+^1da177e4c3f41 Linus Torvalds      2005-04-16  421  	 */
+^1da177e4c3f41 Linus Torvalds      2005-04-16  422  	shost->max_cmd_len = 12;
+17609caecd53df Krzysztof Kozlowski 2022-05-06  423  	shost->owner = owner;
+^1da177e4c3f41 Linus Torvalds      2005-04-16  424  	shost->hostt = sht;
+^1da177e4c3f41 Linus Torvalds      2005-04-16  425  	shost->this_id = sht->this_id;
+^1da177e4c3f41 Linus Torvalds      2005-04-16  426  	shost->can_queue = sht->can_queue;
+^1da177e4c3f41 Linus Torvalds      2005-04-16  427  	shost->sg_tablesize = sht->sg_tablesize;
+13f05c8d8e98bb Martin K. Petersen  2010-09-10  428  	shost->sg_prot_tablesize = sht->sg_prot_tablesize;
+^1da177e4c3f41 Linus Torvalds      2005-04-16  429  	shost->cmd_per_lun = sht->cmd_per_lun;
+54b2b50c20a61b Martin K. Petersen  2013-10-23  430  	shost->no_write_same = sht->no_write_same;
+bdb01301f3ea51 Hannes Reinecke     2020-08-19  431  	shost->host_tagset = sht->host_tagset;
+^1da177e4c3f41 Linus Torvalds      2005-04-16  432  
+ad469a57643b32 Hannes Reinecke     2014-01-17  433  	if (shost_eh_deadline == -1 || !sht->eh_host_reset_handler)
+bb3b621a33d60f Ren Mingxin         2013-11-11  434  		shost->eh_deadline = -1;
+bb3b621a33d60f Ren Mingxin         2013-11-11  435  	else if ((ulong) shost_eh_deadline * HZ > INT_MAX) {
+bb3b621a33d60f Ren Mingxin         2013-11-11  436  		shost_printk(KERN_WARNING, shost,
+bb3b621a33d60f Ren Mingxin         2013-11-11  437  			     "eh_deadline %u too large, setting to %u\n",
+bb3b621a33d60f Ren Mingxin         2013-11-11  438  			     shost_eh_deadline, INT_MAX / HZ);
+bb3b621a33d60f Ren Mingxin         2013-11-11  439  		shost->eh_deadline = INT_MAX;
+bb3b621a33d60f Ren Mingxin         2013-11-11  440  	} else
+bb3b621a33d60f Ren Mingxin         2013-11-11  441  		shost->eh_deadline = shost_eh_deadline * HZ;
+bb3b621a33d60f Ren Mingxin         2013-11-11  442  
+7a39ac3f25bef0 James Bottomley     2007-09-25  443  	if (sht->supported_mode == MODE_UNKNOWN)
+7a39ac3f25bef0 James Bottomley     2007-09-25  444  		/* means we didn't set it ... default to INITIATOR */
+7a39ac3f25bef0 James Bottomley     2007-09-25  445  		shost->active_mode = MODE_INITIATOR;
+7a39ac3f25bef0 James Bottomley     2007-09-25  446  	else
+7a39ac3f25bef0 James Bottomley     2007-09-25  447  		shost->active_mode = sht->supported_mode;
+7a39ac3f25bef0 James Bottomley     2007-09-25  448  
+^1da177e4c3f41 Linus Torvalds      2005-04-16  449  	if (sht->max_host_blocked)
+^1da177e4c3f41 Linus Torvalds      2005-04-16  450  		shost->max_host_blocked = sht->max_host_blocked;
+^1da177e4c3f41 Linus Torvalds      2005-04-16  451  	else
+^1da177e4c3f41 Linus Torvalds      2005-04-16  452  		shost->max_host_blocked = SCSI_DEFAULT_HOST_BLOCKED;
+^1da177e4c3f41 Linus Torvalds      2005-04-16  453  
+^1da177e4c3f41 Linus Torvalds      2005-04-16  454  	/*
+^1da177e4c3f41 Linus Torvalds      2005-04-16  455  	 * If the driver imposes no hard sector transfer limit, start at
+^1da177e4c3f41 Linus Torvalds      2005-04-16  456  	 * machine infinity initially.
+^1da177e4c3f41 Linus Torvalds      2005-04-16  457  	 */
+^1da177e4c3f41 Linus Torvalds      2005-04-16  458  	if (sht->max_sectors)
+^1da177e4c3f41 Linus Torvalds      2005-04-16  459  		shost->max_sectors = sht->max_sectors;
+^1da177e4c3f41 Linus Torvalds      2005-04-16  460  	else
+^1da177e4c3f41 Linus Torvalds      2005-04-16  461  		shost->max_sectors = SCSI_DEFAULT_MAX_SECTORS;
+^1da177e4c3f41 Linus Torvalds      2005-04-16  462  
+50c2e9107f176a Christoph Hellwig   2018-12-13  463  	if (sht->max_segment_size)
+50c2e9107f176a Christoph Hellwig   2018-12-13  464  		shost->max_segment_size = sht->max_segment_size;
+50c2e9107f176a Christoph Hellwig   2018-12-13  465  	else
+50c2e9107f176a Christoph Hellwig   2018-12-13  466  		shost->max_segment_size = BLK_MAX_SEGMENT_SIZE;
+50c2e9107f176a Christoph Hellwig   2018-12-13  467  
+^1da177e4c3f41 Linus Torvalds      2005-04-16  468  	/*
+^1da177e4c3f41 Linus Torvalds      2005-04-16  469  	 * assume a 4GB boundary, if not set
+^1da177e4c3f41 Linus Torvalds      2005-04-16  470  	 */
+^1da177e4c3f41 Linus Torvalds      2005-04-16  471  	if (sht->dma_boundary)
+^1da177e4c3f41 Linus Torvalds      2005-04-16  472  		shost->dma_boundary = sht->dma_boundary;
+^1da177e4c3f41 Linus Torvalds      2005-04-16  473  	else
+^1da177e4c3f41 Linus Torvalds      2005-04-16  474  		shost->dma_boundary = 0xffffffff;
+^1da177e4c3f41 Linus Torvalds      2005-04-16  475  
+7ad388d8e4c703 Christoph Hellwig   2019-06-17  476  	if (sht->virt_boundary_mask)
+7ad388d8e4c703 Christoph Hellwig   2019-06-17  477  		shost->virt_boundary_mask = sht->virt_boundary_mask;
+7ad388d8e4c703 Christoph Hellwig   2019-06-17  478  
+^1da177e4c3f41 Linus Torvalds      2005-04-16  479  	device_initialize(&shost->shost_gendev);
+71610f55fa4db6 Kay Sievers         2008-12-03  480  	dev_set_name(&shost->shost_gendev, "host%d", shost->host_no);
+b0ed43360fdca2 Hannes Reinecke     2008-03-18  481  	shost->shost_gendev.bus = &scsi_bus_type;
+b0ed43360fdca2 Hannes Reinecke     2008-03-18  482  	shost->shost_gendev.type = &scsi_host_type;
+a19a93e4c6a98c Bart Van Assche     2021-10-06  483  	scsi_enable_async_suspend(&shost->shost_gendev);
+^1da177e4c3f41 Linus Torvalds      2005-04-16  484  
+ee959b00c335d7 Tony Jones          2008-02-22  485  	device_initialize(&shost->shost_dev);
+ee959b00c335d7 Tony Jones          2008-02-22  486  	shost->shost_dev.parent = &shost->shost_gendev;
+ee959b00c335d7 Tony Jones          2008-02-22  487  	shost->shost_dev.class = &shost_class;
+71610f55fa4db6 Kay Sievers         2008-12-03  488  	dev_set_name(&shost->shost_dev, "host%d", shost->host_no);
+0a84486d6c1da1 Bart Van Assche     2021-11-16  489  	shost->shost_dev.groups = sht->shost_groups;
+^1da177e4c3f41 Linus Torvalds      2005-04-16  490  
+c5478def7a3a2d Christoph Hellwig   2005-09-06  491  	shost->ehandler = kthread_run(scsi_error_handler, shost,
+c5478def7a3a2d Christoph Hellwig   2005-09-06  492  			"scsi_eh_%d", shost->host_no);
+c5478def7a3a2d Christoph Hellwig   2005-09-06  493  	if (IS_ERR(shost->ehandler)) {
+91921e016a2199 Hannes Reinecke     2014-06-25  494  		shost_printk(KERN_WARNING, shost,
+91921e016a2199 Hannes Reinecke     2014-06-25  495  			"error handler thread failed to spawn, error = %ld\n",
+91921e016a2199 Hannes Reinecke     2014-06-25  496  			PTR_ERR(shost->ehandler));
+93aa71ad737990 Tyrel Datwyler      2021-07-01  497  		shost->ehandler = NULL;
+66a834d092930c Ming Lei            2021-06-02  498  		goto fail;
+c5478def7a3a2d Christoph Hellwig   2005-09-06  499  	}
+^1da177e4c3f41 Linus Torvalds      2005-04-16  500  
+e494f6a728394a Hannes Reinecke     2013-11-11  501  	shost->tmf_work_q = alloc_workqueue("scsi_tmf_%d",
+6292130093c5d1 Bob Liu             2020-07-01  502  					WQ_UNBOUND | WQ_MEM_RECLAIM | WQ_SYSFS,
+e494f6a728394a Hannes Reinecke     2013-11-11  503  					   1, shost->host_no);
+e494f6a728394a Hannes Reinecke     2013-11-11  504  	if (!shost->tmf_work_q) {
+a222b1e2fe4299 Hannes Reinecke     2014-10-24  505  		shost_printk(KERN_WARNING, shost,
+a222b1e2fe4299 Hannes Reinecke     2014-10-24  506  			     "failed to create tmf workq\n");
+66a834d092930c Ming Lei            2021-06-02  507  		goto fail;
+e494f6a728394a Hannes Reinecke     2013-11-11  508  	}
+^1da177e4c3f41 Linus Torvalds      2005-04-16  509  	scsi_proc_hostdir_add(shost->hostt);
+^1da177e4c3f41 Linus Torvalds      2005-04-16  510  	return shost;
+66a834d092930c Ming Lei            2021-06-02  511   fail:
+66a834d092930c Ming Lei            2021-06-02  512  	/*
+66a834d092930c Ming Lei            2021-06-02  513  	 * Host state is still SHOST_CREATED and that is enough to release
+66a834d092930c Ming Lei            2021-06-02  514  	 * ->shost_gendev. scsi_host_dev_release() will free
+66a834d092930c Ming Lei            2021-06-02  515  	 * dev_name(&shost->shost_dev).
+66a834d092930c Ming Lei            2021-06-02  516  	 */
+66a834d092930c Ming Lei            2021-06-02  517  	put_device(&shost->shost_gendev);
+^1da177e4c3f41 Linus Torvalds      2005-04-16  518  
+^1da177e4c3f41 Linus Torvalds      2005-04-16  519  	return NULL;
+^1da177e4c3f41 Linus Torvalds      2005-04-16  520  }
+17609caecd53df Krzysztof Kozlowski 2022-05-06  521  EXPORT_SYMBOL(__scsi_host_alloc);
+^1da177e4c3f41 Linus Torvalds      2005-04-16  522  
 
-:::::: The code at line 8267 was first introduced by commit
-:::::: 7a3e97b0dc4bbac2ba7803564ab0057722689921 [SCSI] ufshcd: UFS Host controller driver
+:::::: The code at line 380 was first introduced by commit
+:::::: 1da177e4c3f41524e886b7f1b8a0c1fc7321cac2 Linux-2.6.12-rc2
 
-:::::: TO: Santosh Yaraganavi <santoshsy@gmail.com>
-:::::: CC: James Bottomley <JBottomley@Parallels.com>
+:::::: TO: Linus Torvalds <torvalds@ppc970.osdl.org>
+:::::: CC: Linus Torvalds <torvalds@ppc970.osdl.org>
 
 -- 
 0-DAY CI Kernel Test Service

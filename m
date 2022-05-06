@@ -2,61 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E524D51D455
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 11:26:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 200D751D458
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 11:27:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1390472AbiEFJaO convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 6 May 2022 05:30:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42924 "EHLO
+        id S1390469AbiEFJa2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 05:30:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240072AbiEFJaI (ORCPT
+        with ESMTP id S240072AbiEFJaS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 05:30:08 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBE1D64BC3;
-        Fri,  6 May 2022 02:26:25 -0700 (PDT)
-Received: from kwepemi100011.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KvlVg205nzGpPT;
-        Fri,  6 May 2022 17:23:39 +0800 (CST)
-Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- kwepemi100011.china.huawei.com (7.221.188.134) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 6 May 2022 17:26:23 +0800
-Received: from dggpemm500006.china.huawei.com ([7.185.36.236]) by
- dggpemm500006.china.huawei.com ([7.185.36.236]) with mapi id 15.01.2375.024;
- Fri, 6 May 2022 17:26:23 +0800
-From:   "Gonglei (Arei)" <arei.gonglei@huawei.com>
-To:     zhenwei pi <pizhenwei@bytedance.com>,
-        "mst@redhat.com" <mst@redhat.com>
-CC:     "jasowang@redhat.com" <jasowang@redhat.com>,
-        "herbert@gondor.apana.org.au" <herbert@gondor.apana.org.au>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "helei.sig11@bytedance.com" <helei.sig11@bytedance.com>,
-        "davem@davemloft.net" <davem@davemloft.net>
-Subject: RE: [PATCH v5 3/5] virtio-crypto: wait ctrl queue instead of busy
- polling
-Thread-Topic: [PATCH v5 3/5] virtio-crypto: wait ctrl queue instead of busy
- polling
-Thread-Index: AQHYYGJ3j3V9/tMOWkSHO0wnVUQtWq0RldRg
-Date:   Fri, 6 May 2022 09:26:23 +0000
-Message-ID: <a65d3b24384a4932903bdddbdc5388e6@huawei.com>
-References: <20220505092408.53692-1-pizhenwei@bytedance.com>
- <20220505092408.53692-4-pizhenwei@bytedance.com>
-In-Reply-To: <20220505092408.53692-4-pizhenwei@bytedance.com>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.174.149.11]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        Fri, 6 May 2022 05:30:18 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39C7F64BC4;
+        Fri,  6 May 2022 02:26:34 -0700 (PDT)
+X-UUID: 9beafb3a830248e9b83f2ea36d21e084-20220506
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.4,REQID:38918bd6-b015-4132-a85f-715ef2a5f7e0,OB:0,LO
+        B:0,IP:0,URL:8,TC:0,Content:-20,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,AC
+        TION:release,TS:-12
+X-CID-META: VersionHash:faefae9,CLOUDID:bf2e7416-2e53-443e-b81a-655c13977218,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,File:nil,QS:0,BEC:nil
+X-UUID: 9beafb3a830248e9b83f2ea36d21e084-20220506
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
+        (envelope-from <yunfei.dong@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1742012006; Fri, 06 May 2022 17:26:30 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Fri, 6 May 2022 17:26:29 +0800
+Received: from mhfsdcap04 (10.17.3.154) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Fri, 6 May 2022 17:26:28 +0800
+Message-ID: <e02ab5098878f4c59cecb84a277fb89fb5ca9da1.camel@mediatek.com>
+Subject: Re: [DKIM] [PATCH v10, 00/15] media: mtk-vcodec: support for M8192
+ decoder
+From:   "yunfei.dong@mediatek.com" <yunfei.dong@mediatek.com>
+To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Alexandre Courbot <acourbot@chromium.org>,
+        Nicolas Dufresne <nicolas@ndufresne.ca>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Tiffany Lin <tiffany.lin@mediatek.com>,
+        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        "Tomasz Figa" <tfiga@google.com>
+CC:     George Sun <george.sun@mediatek.com>,
+        Xiaoyong Lu <xiaoyong.lu@mediatek.com>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        "Fritz Koenig" <frkoenig@chromium.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Irui Wang <irui.wang@mediatek.com>,
+        Steve Cho <stevecho@chromium.org>,
+        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date:   Fri, 6 May 2022 17:26:27 +0800
+In-Reply-To: <4334520e-af49-fe32-fb23-ef9af6388529@xs4all.nl>
+References: <20220426100828.13429-1-yunfei.dong@mediatek.com>
+         <4334520e-af49-fe32-fb23-ef9af6388529@xs4all.nl>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,333 +81,364 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Hans,
 
+Thanks for your suggestion.
 
-> -----Original Message-----
-> From: zhenwei pi [mailto:pizhenwei@bytedance.com]
-> Sent: Thursday, May 5, 2022 5:24 PM
-> To: Gonglei (Arei) <arei.gonglei@huawei.com>; mst@redhat.com
-> Cc: jasowang@redhat.com; herbert@gondor.apana.org.au;
-> linux-kernel@vger.kernel.org; virtualization@lists.linux-foundation.org;
-> linux-crypto@vger.kernel.org; helei.sig11@bytedance.com;
-> pizhenwei@bytedance.com; davem@davemloft.net
-> Subject: [PATCH v5 3/5] virtio-crypto: wait ctrl queue instead of busy polling
-> 
-> Originally, after submitting request into virtio crypto control queue, the guest
-> side polls the result from the virt queue. This works like following:
->     CPU0   CPU1               ...             CPUx  CPUy
->      |      |                                  |     |
->      \      \                                  /     /
->       \--------spin_lock(&vcrypto->ctrl_lock)-------/
->                            |
->                  virtqueue add & kick
->                            |
->                   busy poll virtqueue
->                            |
->               spin_unlock(&vcrypto->ctrl_lock)
->                           ...
-> 
-> There are two problems:
-> 1, The queue depth is always 1, the performance of a virtio crypto
->    device gets limited. Multi user processes share a single control
->    queue, and hit spin lock race from control queue. Test on Intel
->    Platinum 8260, a single worker gets ~35K/s create/close session
->    operations, and 8 workers get ~40K/s operations with 800% CPU
->    utilization.
-> 2, The control request is supposed to get handled immediately, but
->    in the current implementation of QEMU(v6.2), the vCPU thread kicks
->    another thread to do this work, the latency also gets unstable.
->    Tracking latency of virtio_crypto_alg_akcipher_close_session in 5s:
->         usecs               : count     distribution
->          0 -> 1          : 0        |                        |
->          2 -> 3          : 7        |                        |
->          4 -> 7          : 72       |                        |
->          8 -> 15         : 186485   |************************|
->         16 -> 31         : 687      |                        |
->         32 -> 63         : 5        |                        |
->         64 -> 127        : 3        |                        |
->        128 -> 255        : 1        |                        |
->        256 -> 511        : 0        |                        |
->        512 -> 1023       : 0        |                        |
->       1024 -> 2047       : 0        |                        |
->       2048 -> 4095       : 0        |                        |
->       4096 -> 8191       : 0        |                        |
->       8192 -> 16383      : 2        |                        |
-> This means that a CPU may hold vcrypto->ctrl_lock as long as 8192~16383us.
-> 
-> To improve the performance of control queue, a request on control queue waits
-> completion instead of busy polling to reduce lock racing, and gets completed by
-> control queue callback.
->     CPU0   CPU1               ...             CPUx  CPUy
->      |      |                                  |     |
->      \      \                                  /     /
->       \--------spin_lock(&vcrypto->ctrl_lock)-------/
->                            |
->                  virtqueue add & kick
->                            |
->       ---------spin_unlock(&vcrypto->ctrl_lock)------
->      /      /                                  \     \
->      |      |                                  |     |
->     wait   wait                               wait  wait
-> 
-> Test this patch, the guest side get ~200K/s operations with 300% CPU
-> utilization.
-> 
-> Cc: Michael S. Tsirkin <mst@redhat.com>
-> Cc: Jason Wang <jasowang@redhat.com>
-> Cc: Gonglei <arei.gonglei@huawei.com>
-> Signed-off-by: zhenwei pi <pizhenwei@bytedance.com>
-> ---
->  .../virtio/virtio_crypto_akcipher_algs.c      | 29 ++---------
->  drivers/crypto/virtio/virtio_crypto_common.h  |  4 ++
->  drivers/crypto/virtio/virtio_crypto_core.c    | 52 ++++++++++++++++++-
->  .../virtio/virtio_crypto_skcipher_algs.c      | 34 ++----------
->  4 files changed, 64 insertions(+), 55 deletions(-)
-> 
+I will fix below check fails in patch v11.
 
-Reviewed-by: Gonglei <arei.gonglei@huawei.com>
-
-Regards,
--Gonglei 
-
-> diff --git a/drivers/crypto/virtio/virtio_crypto_akcipher_algs.c
-> b/drivers/crypto/virtio/virtio_crypto_akcipher_algs.c
-> index 698ea57e2649..382ccec9ab12 100644
-> --- a/drivers/crypto/virtio/virtio_crypto_akcipher_algs.c
-> +++ b/drivers/crypto/virtio/virtio_crypto_akcipher_algs.c
-> @@ -103,7 +103,6 @@ static int
-> virtio_crypto_alg_akcipher_init_session(struct virtio_crypto_akcipher
->  	struct scatterlist outhdr_sg, key_sg, inhdr_sg, *sgs[3];
->  	struct virtio_crypto *vcrypto = ctx->vcrypto;
->  	uint8_t *pkey;
-> -	unsigned int inlen;
->  	int err;
->  	unsigned int num_out = 0, num_in = 0;
->  	struct virtio_crypto_op_ctrl_req *ctrl; @@ -135,18 +134,9 @@ static int
-> virtio_crypto_alg_akcipher_init_session(struct virtio_crypto_akcipher
->  	sg_init_one(&inhdr_sg, input, sizeof(*input));
->  	sgs[num_out + num_in++] = &inhdr_sg;
+Best Regards,
+Yunfei Dong
+On Fri, 2022-04-29 at 11:44 +0200, Hans Verkuil wrote:
+> Hi Yunfei,
 > 
-> -	spin_lock(&vcrypto->ctrl_lock);
-> -	err = virtqueue_add_sgs(vcrypto->ctrl_vq, sgs, num_out, num_in, vcrypto,
-> GFP_ATOMIC);
-> -	if (err < 0) {
-> -		spin_unlock(&vcrypto->ctrl_lock);
-> +	err = virtio_crypto_ctrl_vq_request(vcrypto, sgs, num_out, num_in,
-> vc_ctrl_req);
-> +	if (err < 0)
->  		goto out;
-> -	}
-> -
-> -	virtqueue_kick(vcrypto->ctrl_vq);
-> -	while (!virtqueue_get_buf(vcrypto->ctrl_vq, &inlen) &&
-> -	       !virtqueue_is_broken(vcrypto->ctrl_vq))
-> -		cpu_relax();
-> -	spin_unlock(&vcrypto->ctrl_lock);
+> On 26/04/2022 12:08, Yunfei Dong wrote:
+> > This series adds support for mt8192 h264/vp8/vp9 decoder drivers.
+> > Firstly, refactor
+> > power/clock/interrupt interfaces for mt8192 is lat and core
+> > architecture.
+> > 
+> > Secondly, add new functions to get frame buffer size and resolution
+> > according
+> > to decoder capability from scp side. Then add callback function to
+> > get/put
+> > capture buffer in order to enable lat and core decoder in parallel,
+> > need to
+> > adjust GStreamer at the same time. 
+> > 
+> > Then add to support MT21C compressed mode and fix v4l2-compliance
+> > fail.
+> > 
+> > Next, extract H264 request api driver to let mt8183 and mt8192 use
+> > the same
+> > code, and adds mt8192 frame based h264 driver for stateless
+> > decoder.
+> > 
+> > Lastly, add vp8 and vp9 stateless decoder drivers.
+> > 
+> > Patches 1 refactor power/clock/interrupt interface.
+> > Patches 2~4 get frame buffer size and resolution according to
+> > decoder capability.
+> > Patches 5 set capture queue bytesused.
+> > Patches 6 adjust GStreamer.
+> > Patch 7~11 add to support MT21C compressed mode and fix v4l2-
+> > compliance fail.
+> > patch 12 record capture queue format type.
+> > Patch 13~14 extract h264 driver and add mt8192 frame based driver
+> > for h264 decoder.
+> > Patch 15~16 add vp8 and vp9 stateless decoder drivers.
+> > Patch 17 prevent kernel crash when rmmod mtk-vcodec-dec.ko
 > 
->  	if (le32_to_cpu(input->status) != VIRTIO_CRYPTO_OK) {
->  		pr_err("virtio_crypto: Create session failed status: %u\n", @@
-> -171,7 +161,7 @@ static int virtio_crypto_alg_akcipher_close_session(struct
-> virtio_crypto_akciphe
->  	struct scatterlist outhdr_sg, inhdr_sg, *sgs[2];
->  	struct virtio_crypto_destroy_session_req *destroy_session;
->  	struct virtio_crypto *vcrypto = ctx->vcrypto;
-> -	unsigned int num_out = 0, num_in = 0, inlen;
-> +	unsigned int num_out = 0, num_in = 0;
->  	int err;
->  	struct virtio_crypto_op_ctrl_req *ctrl;
->  	struct virtio_crypto_inhdr *ctrl_status; @@ -199,18 +189,9 @@ static int
-> virtio_crypto_alg_akcipher_close_session(struct virtio_crypto_akciphe
->  	sg_init_one(&inhdr_sg, &ctrl_status->status, sizeof(ctrl_status->status));
->  	sgs[num_out + num_in++] = &inhdr_sg;
+> I'm getting loads of sparse and smatch warnings/errors:
 > 
-> -	spin_lock(&vcrypto->ctrl_lock);
-> -	err = virtqueue_add_sgs(vcrypto->ctrl_vq, sgs, num_out, num_in, vcrypto,
-> GFP_ATOMIC);
-> -	if (err < 0) {
-> -		spin_unlock(&vcrypto->ctrl_lock);
-> +	err = virtio_crypto_ctrl_vq_request(vcrypto, sgs, num_out, num_in,
-> vc_ctrl_req);
-> +	if (err < 0)
->  		goto out;
-> -	}
-> -
-> -	virtqueue_kick(vcrypto->ctrl_vq);
-> -	while (!virtqueue_get_buf(vcrypto->ctrl_vq, &inlen) &&
-> -	       !virtqueue_is_broken(vcrypto->ctrl_vq))
-> -		cpu_relax();
-> -	spin_unlock(&vcrypto->ctrl_lock);
+> SPARSE:/home/hans/work/build/media-
+> git/drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_common.
+> c
+> /home/hans/work/build/media-
+> git/drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_common.
+> c:20:28: warning: incorrect type in argument 1 (different address
+> spaces)
+> SPARSE:/home/hans/work/build/media-
+> git/drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_common.
+> c
+> /home/hans/work/build/media-
+> git/drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_common.
+> c:176:21: warning: incorrect type in argument 1 (different address
+> spaces)
+> SPARSE:/home/hans/work/build/media-
+> git/drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_common.
+> c
+> /home/hans/work/build/media-
+> git/drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_common.
+> c:179:21: warning: incorrect type in argument 1 (different address
+> spaces)
+> SPARSE:/home/hans/work/build/media-
+> git/drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_multi_i
+> f.c
+> /home/hans/work/build/media-
+> git/drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_multi_i
+> f.c:463:26: warning: incorrect type in argument 1 (different address
+> spaces)
+> SPARSE:/home/hans/work/build/media-
+> git/drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_multi_i
+> f.c
+> /home/hans/work/build/media-
+> git/drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_multi_i
+> f.c:647:60: warning: incorrect type in argument 2 (different address
+> spaces)
+> SPARSE:/home/hans/work/build/media-
+> git/drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_multi_i
+> f.c
+> /home/hans/work/build/media-
+> git/drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_multi_i
+> f.c:723:30: warning: incorrect type in argument 1 (different address
+> spaces)
+> SPARSE:/home/hans/work/build/media-
+> git/drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_multi_i
+> f.c
+> /home/hans/work/build/media-
+> git/drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_multi_i
+> f.c:740:48: warning: incorrect type in argument 2 (different address
+> spaces)
+> SPARSE:/home/hans/work/build/media-
+> git/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c
+> /home/hans/work/build/media-
+> git/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c
+> :1995:44: warning: incorrect type in argument 2 (different address
+> spaces)
+> SPARSE:/home/hans/work/build/media-
+> git/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c
+> /home/hans/work/build/media-
+> git/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c
+> :532:34: warning: incorrect type in argument 2 (different address
+> spaces)
+> SPARSE:/home/hans/work/build/media-
+> git/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c
+> /home/hans/work/build/media-
+> git/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c
+> :673:40: warning: incorrect type in argument 2 (different address
+> spaces)
+> SPARSE:/home/hans/work/build/media-
+> git/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c
+> /home/hans/work/build/media-
+> git/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c
+> :674:48: warning: incorrect type in argument 2 (different address
+> spaces)
+> SPARSE:/home/hans/work/build/media-
+> git/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c
+> /home/hans/work/build/media-
+> git/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c
+> :675:45: warning: incorrect type in argument 2 (different address
+> spaces)
+> SPARSE:/home/hans/work/build/media-
+> git/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c
+> /home/hans/work/build/media-
+> git/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c
+> :678:37: warning: incorrect type in argument 2 (different address
+> spaces)
+> SPARSE:/home/hans/work/build/media-
+> git/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c
+> /home/hans/work/build/media-
+> git/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c
+> :684:21: warning: incorrect type in argument 1 (different address
+> spaces)
+> SPARSE:/home/hans/work/build/media-
+> git/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c
+> /home/hans/work/build/media-
+> git/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c
+> :1912:45: warning: Using plain integer as NULL pointer
+> SPARSE:/home/hans/work/build/media-
+> git/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c
+> /home/hans/work/build/media-
+> git/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c
+> :1924:44: warning: incorrect type in argument 2 (different address
+> spaces)
 > 
->  	if (ctrl_status->status != VIRTIO_CRYPTO_OK) {
->  		pr_err("virtio_crypto: Close session failed status: %u, session_id:
-> 0x%llx\n", diff --git a/drivers/crypto/virtio/virtio_crypto_common.h
-> b/drivers/crypto/virtio/virtio_crypto_common.h
-> index 2422237ec4e6..59a4c0259456 100644
-> --- a/drivers/crypto/virtio/virtio_crypto_common.h
-> +++ b/drivers/crypto/virtio/virtio_crypto_common.h
-> @@ -90,6 +90,7 @@ struct virtio_crypto_ctrl_request {
->  	struct virtio_crypto_op_ctrl_req ctrl;
->  	struct virtio_crypto_session_input input;
->  	struct virtio_crypto_inhdr ctrl_status;
-> +	struct completion compl;
->  };
 > 
->  struct virtio_crypto_request;
-> @@ -141,5 +142,8 @@ int virtio_crypto_skcipher_algs_register(struct
-> virtio_crypto *vcrypto);  void virtio_crypto_skcipher_algs_unregister(struct
-> virtio_crypto *vcrypto);  int virtio_crypto_akcipher_algs_register(struct
-> virtio_crypto *vcrypto);  void virtio_crypto_akcipher_algs_unregister(struct
-> virtio_crypto *vcrypto);
-> +int virtio_crypto_ctrl_vq_request(struct virtio_crypto *vcrypto, struct
-> scatterlist *sgs[],
-> +				  unsigned int out_sgs, unsigned int in_sgs,
-> +				  struct virtio_crypto_ctrl_request *vc_ctrl_req);
+> smatch: ERRORS
+> /home/hans/work/build/media-
+> git/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c
+> :
+> /home/hans/work/build/media-
+> git/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c
+> :1192 vdec_vp9_slice_map_counts_eob_coef() error: buffer overflow
+> 'counts->coef_probs[i][j][k]->band_0'
+> 3 <= 5
+> /home/hans/work/build/media-
+> git/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c
+> :
+> /home/hans/work/build/media-
+> git/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c
+> :1194 vdec_vp9_slice_map_counts_eob_coef() error: buffer overflow
+> 'counts->eob_branch[i][j][k]->band_0'
+> 3 <= 5
+> /home/hans/work/build/media-
+> git/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c
+> :
+> /home/hans/work/build/media-
+> git/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c
+> :1196 vdec_vp9_slice_map_counts_eob_coef() error: buffer overflow
+> 'counts->coef_probs[i][j][k]->band_0'
+> 3 <= 5
+> /home/hans/work/build/media-
+> git/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c
+> :
+> /home/hans/work/build/media-
+> git/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c
+> :2018 vdec_vp9_slice_core_decode() error: we previously assumed 'pfc'
+> could be null (see line 1963)
+> /home/hans/work/build/media-
+> git/drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_multi_i
+> f.c:
+> /home/hans/work/build/media-
+> git/drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_multi_i
+> f.c:700 vdec_h264_slice_single_decode() warn: unsigned
+> 'nal_start_idx' is never less than zero.
 > 
->  #endif /* _VIRTIO_CRYPTO_COMMON_H */
-> diff --git a/drivers/crypto/virtio/virtio_crypto_core.c
-> b/drivers/crypto/virtio/virtio_crypto_core.c
-> index c6f482db0bc0..60490ffa3df1 100644
-> --- a/drivers/crypto/virtio/virtio_crypto_core.c
-> +++ b/drivers/crypto/virtio/virtio_crypto_core.c
-> @@ -22,6 +22,56 @@ virtcrypto_clear_request(struct virtio_crypto_request
-> *vc_req)
->  	}
->  }
+> And also one compile warning when compiling on a 32 bit platform
+> (i.e. arm or i686):
 > 
-> +static void virtio_crypto_ctrlq_callback(struct
-> +virtio_crypto_ctrl_request *vc_ctrl_req) {
-> +	complete(&vc_ctrl_req->compl);
-> +}
-> +
-> +static void virtcrypto_ctrlq_callback(struct virtqueue *vq) {
-> +	struct virtio_crypto *vcrypto = vq->vdev->priv;
-> +	struct virtio_crypto_ctrl_request *vc_ctrl_req;
-> +	unsigned long flags;
-> +	unsigned int len;
-> +
-> +	spin_lock_irqsave(&vcrypto->ctrl_lock, flags);
-> +	do {
-> +		virtqueue_disable_cb(vq);
-> +		while ((vc_ctrl_req = virtqueue_get_buf(vq, &len)) != NULL) {
-> +			spin_unlock_irqrestore(&vcrypto->ctrl_lock, flags);
-> +			virtio_crypto_ctrlq_callback(vc_ctrl_req);
-> +			spin_lock_irqsave(&vcrypto->ctrl_lock, flags);
-> +		}
-> +		if (unlikely(virtqueue_is_broken(vq)))
-> +			break;
-> +	} while (!virtqueue_enable_cb(vq));
-> +	spin_unlock_irqrestore(&vcrypto->ctrl_lock, flags); }
-> +
-> +int virtio_crypto_ctrl_vq_request(struct virtio_crypto *vcrypto, struct
-> scatterlist *sgs[],
-> +		unsigned int out_sgs, unsigned int in_sgs,
-> +		struct virtio_crypto_ctrl_request *vc_ctrl_req) {
-> +	int err;
-> +	unsigned long flags;
-> +
-> +	init_completion(&vc_ctrl_req->compl);
-> +
-> +	spin_lock_irqsave(&vcrypto->ctrl_lock, flags);
-> +	err = virtqueue_add_sgs(vcrypto->ctrl_vq, sgs, out_sgs, in_sgs,
-> vc_ctrl_req, GFP_ATOMIC);
-> +	if (err < 0) {
-> +		spin_unlock_irqrestore(&vcrypto->ctrl_lock, flags);
-> +		return err;
-> +	}
-> +
-> +	virtqueue_kick(vcrypto->ctrl_vq);
-> +	spin_unlock_irqrestore(&vcrypto->ctrl_lock, flags);
-> +
-> +	wait_for_completion(&vc_ctrl_req->compl);
-> +
-> +	return 0;
-> +}
-> +
->  static void virtcrypto_dataq_callback(struct virtqueue *vq)  {
->  	struct virtio_crypto *vcrypto = vq->vdev->priv; @@ -73,7 +123,7 @@
-> static int virtcrypto_find_vqs(struct virtio_crypto *vi)
->  		goto err_names;
+> In file included from /home/hans/work/build/media-
+> git/include/linux/kernel.h:29,
+>                  from /home/hans/work/build/media-
+> git/include/linux/cpumask.h:10,
+>                  from /home/hans/work/build/media-
+> git/include/linux/mm_types_task.h:14,
+>                  from /home/hans/work/build/media-
+> git/include/linux/mm_types.h:5,
+>                  from /home/hans/work/build/media-
+> git/include/linux/buildid.h:5,
+>                  from /home/hans/work/build/media-
+> git/include/linux/module.h:14,
+>                  from /home/hans/work/build/media-
+> git/drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_multi_i
+> f.c:7:
+> /home/hans/work/build/media-
+> git/drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_multi_i
+> f.c: In function 'vdec_h264_slice_single_decode':
+> /home/hans/work/build/media-
+> git/drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_multi_i
+> f.c:684:76: warning: cast from pointer to integer of different size
+> [-Wpointer-to-int-cast]
+>   684 |                          inst->ctx->decoded_frame_cnt,
+> y_fb_dma, c_fb_dma, (u64)fb);
+>       |                                                              
+>               ^
+> /home/hans/work/build/media-git/include/linux/printk.h:418:33: note:
+> in definition of macro 'printk_index_wrap'
+>   418 |                 _p_func(_fmt,
+> ##__VA_ARGS__);                           \
+>       |                                 ^~~~~~~~~~~
+> /home/hans/work/build/media-git/include/linux/printk.h:132:17: note:
+> in expansion of macro 'printk'
+>   132 |                 printk(fmt, ##__VA_ARGS__);             \
+>       |                 ^~~~~~
+> /home/hans/work/build/media-git/include/linux/printk.h:576:9: note:
+> in expansion of macro 'no_printk'
+>   576 |         no_printk(KERN_DEBUG pr_fmt(fmt), ##__VA_ARGS__)
+>       |         ^~~~~~~~~
+> /home/hans/work/build/media-
+> git/drivers/media/platform/mediatek/vcodec/vdec/../mtk_vcodec_util.h:
+> 45:9: note: in expansion of macro 'pr_debug'
+>    45 |         pr_debug("[MTK_VCODEC][%d]: " fmt
+> "\n",                 \
+>       |         ^~~~~~~~
+> /home/hans/work/build/media-
+> git/drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_multi_i
+> f.c:683:9: note: in expansion of macro 'mtk_vcodec_debug'
+>   683 |         mtk_vcodec_debug(inst, "+ [%d] FB y_dma=%llx
+> c_dma=%llx va=0x%llx",
+>       |         ^~~~~~~~~~~~~~~~
 > 
->  	/* Parameters for control virtqueue */
-> -	callbacks[total_vqs - 1] = NULL;
-> +	callbacks[total_vqs - 1] = virtcrypto_ctrlq_callback;
->  	names[total_vqs - 1] = "controlq";
+> Regards,
 > 
->  	/* Allocate/initialize parameters for data virtqueues */ diff --git
-> a/drivers/crypto/virtio/virtio_crypto_skcipher_algs.c
-> b/drivers/crypto/virtio/virtio_crypto_skcipher_algs.c
-> index 6aaf0869b211..e553ccadbcbc 100644
-> --- a/drivers/crypto/virtio/virtio_crypto_skcipher_algs.c
-> +++ b/drivers/crypto/virtio/virtio_crypto_skcipher_algs.c
-> @@ -118,7 +118,6 @@ static int virtio_crypto_alg_skcipher_init_session(
->  		int encrypt)
->  {
->  	struct scatterlist outhdr, key_sg, inhdr, *sgs[3];
-> -	unsigned int tmp;
->  	struct virtio_crypto *vcrypto = ctx->vcrypto;
->  	int op = encrypt ? VIRTIO_CRYPTO_OP_ENCRYPT :
-> VIRTIO_CRYPTO_OP_DECRYPT;
->  	int err;
-> @@ -170,23 +169,9 @@ static int virtio_crypto_alg_skcipher_init_session(
->  	sg_init_one(&inhdr, input, sizeof(*input));
->  	sgs[num_out + num_in++] = &inhdr;
+> 	Hans
 > 
-> -	spin_lock(&vcrypto->ctrl_lock);
-> -	err = virtqueue_add_sgs(vcrypto->ctrl_vq, sgs, num_out,
-> -				num_in, vcrypto, GFP_ATOMIC);
-> -	if (err < 0) {
-> -		spin_unlock(&vcrypto->ctrl_lock);
-> +	err = virtio_crypto_ctrl_vq_request(vcrypto, sgs, num_out, num_in,
-> vc_ctrl_req);
-> +	if (err < 0)
->  		goto out;
-> -	}
-> -	virtqueue_kick(vcrypto->ctrl_vq);
-> -
-> -	/*
-> -	 * Trapping into the hypervisor, so the request should be
-> -	 * handled immediately.
-> -	 */
-> -	while (!virtqueue_get_buf(vcrypto->ctrl_vq, &tmp) &&
-> -	       !virtqueue_is_broken(vcrypto->ctrl_vq))
-> -		cpu_relax();
-> -	spin_unlock(&vcrypto->ctrl_lock);
+> > ---
+> > changes compared with v9:
+> > - fix kernel robot build fail for patch 16
+> > changes compared with v8:
+> > - fix vp9 build error
+> > - fix kernel-doc fail
+> > changes compared with v7:
+> > - adjust GStreamer, separate src buffer done with
+> > v4l2_ctrl_request_complete for patch 6.
+> > - remove v4l2_m2m_set_dst_buffered.
+> > - add new patch to set each plane bytesused in buf prepare for
+> > patch 5.
+> > - using upstream interface to update vp9 prob tables for patch 16.
+> > - fix maintainer comments.
+> > - test the driver with chrome VD and GStreamer(H264/VP9/VP8/AV1).
+> > changes compared with v6:
+> > - rebase to the latest media stage and fix conficts
+> > - fix memcpy to memcpy_fromio or memcpy_toio
+> > - fix h264 crash when test field bitstream
+> > changes compared with v5:
+> > - fix vp9 comments for patch 15
+> > - fix vp8 comments for patch 14.
+> > - fix comments for patch 12.
+> > - fix build errors.
+> > changes compared with v4:
+> > - fix checkpatch.pl fail.
+> > - fix kernel-doc fail.
+> > - rebase to the latest media codec driver.
+> > changes compared with v3:
+> > - remove enum mtk_chip for patch 2.
+> > - add vp8 stateless decoder drivers for patch 14.
+> > - add vp9 stateless decoder drivers for patch 15.
+> > changes compared with v2:
+> > - add new patch 11 to record capture queue format type.
+> > - separate patch 4 according to tzung-bi's suggestion.
+> > - re-write commit message for patch 5 according to tzung-bi's
+> > suggestion.
+> > changes compared with v1:
+> > - rewrite commit message for patch 12.
+> > - rewrite cover-letter message.
+> > ---
+> > Yunfei Dong (17):
+> >   media: mediatek: vcodec: Add vdec enable/disable hardware helpers
+> >   media: mediatek: vcodec: Using firmware type to separate
+> > different
+> >     firmware architecture
+> >   media: mediatek: vcodec: get capture queue buffer size from scp
+> >   media: mediatek: vcodec: Read max resolution from dec_capability
+> >   media: mediatek: vcodec: set each plane bytesused in buf prepare
+> >   media: mediatek: vcodec: Refactor get and put capture buffer flow
+> >   media: mediatek: vcodec: Refactor supported vdec formats and
+> >     framesizes
+> >   media: mediatek: vcodec: Getting supported decoder format types
+> >   media: mediatek: vcodec: Add format to support MT21C
+> >   media: mediatek: vcodec: disable vp8 4K capability
+> >   media: mediatek: vcodec: Fix v4l2-compliance fail
+> >   media: mediatek: vcodec: record capture queue format type
+> >   media: mediatek: vcodec: Extract H264 common code
+> >   media: mediatek: vcodec: support stateless H.264 decoding for
+> > mt8192
+> >   media: mediatek: vcodec: support stateless VP8 decoding
+> >   media: mediatek: vcodec: support stateless VP9 decoding
+> >   media: mediatek: vcodec: prevent kernel crash when rmmod
+> >     mtk-vcodec-dec.ko
+> > 
+> >  .../media/platform/mediatek/vcodec/Makefile   |    4 +
+> >  .../platform/mediatek/vcodec/mtk_vcodec_dec.c |   62 +-
+> >  .../mediatek/vcodec/mtk_vcodec_dec_drv.c      |    8 +-
+> >  .../mediatek/vcodec/mtk_vcodec_dec_pm.c       |  166 +-
+> >  .../mediatek/vcodec/mtk_vcodec_dec_pm.h       |    6 +-
+> >  .../mediatek/vcodec/mtk_vcodec_dec_stateful.c |   19 +-
+> >  .../vcodec/mtk_vcodec_dec_stateless.c         |  257 ++-
+> >  .../platform/mediatek/vcodec/mtk_vcodec_drv.h |   41 +-
+> >  .../mediatek/vcodec/mtk_vcodec_enc_drv.c      |    5 -
+> >  .../platform/mediatek/vcodec/mtk_vcodec_fw.c  |    6 +
+> >  .../platform/mediatek/vcodec/mtk_vcodec_fw.h  |    1 +
+> >  .../vcodec/vdec/vdec_h264_req_common.c        |  310 +++
+> >  .../vcodec/vdec/vdec_h264_req_common.h        |  274 +++
+> >  .../mediatek/vcodec/vdec/vdec_h264_req_if.c   |  438 +---
+> >  .../vcodec/vdec/vdec_h264_req_multi_if.c      |  626 +++++
+> >  .../mediatek/vcodec/vdec/vdec_vp8_req_if.c    |  437 ++++
+> >  .../vcodec/vdec/vdec_vp9_req_lat_if.c         | 2031
+> > +++++++++++++++++
+> >  .../platform/mediatek/vcodec/vdec_drv_if.c    |   37 +-
+> >  .../platform/mediatek/vcodec/vdec_drv_if.h    |    3 +
+> >  .../platform/mediatek/vcodec/vdec_ipi_msg.h   |   36 +
+> >  .../platform/mediatek/vcodec/vdec_msg_queue.c |    2 +
+> >  .../platform/mediatek/vcodec/vdec_msg_queue.h |    2 +
+> >  .../platform/mediatek/vcodec/vdec_vpu_if.c    |   53 +-
+> >  .../platform/mediatek/vcodec/vdec_vpu_if.h    |   15 +
+> >  .../platform/mediatek/vcodec/venc_vpu_if.c    |    2 +-
+> >  include/linux/remoteproc/mtk_scp.h            |    2 +
+> >  26 files changed, 4242 insertions(+), 601 deletions(-)
+> >  create mode 100644
+> > drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_common.c
+> >  create mode 100644
+> > drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_common.h
+> >  create mode 100644
+> > drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_multi_if.
+> > c
+> >  create mode 100644
+> > drivers/media/platform/mediatek/vcodec/vdec/vdec_vp8_req_if.c
+> >  create mode 100644
+> > drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c
+> > 
 > 
->  	if (le32_to_cpu(input->status) != VIRTIO_CRYPTO_OK) {
->  		pr_err("virtio_crypto: Create session failed status: %u\n", @@
-> -212,7 +197,6 @@ static int virtio_crypto_alg_skcipher_close_session(
->  		int encrypt)
->  {
->  	struct scatterlist outhdr, status_sg, *sgs[2];
-> -	unsigned int tmp;
->  	struct virtio_crypto_destroy_session_req *destroy_session;
->  	struct virtio_crypto *vcrypto = ctx->vcrypto;
->  	int err;
-> @@ -247,19 +231,9 @@ static int virtio_crypto_alg_skcipher_close_session(
->  	sg_init_one(&status_sg, &ctrl_status->status,
-> sizeof(ctrl_status->status));
->  	sgs[num_out + num_in++] = &status_sg;
 > 
-> -	spin_lock(&vcrypto->ctrl_lock);
-> -	err = virtqueue_add_sgs(vcrypto->ctrl_vq, sgs, num_out,
-> -			num_in, vcrypto, GFP_ATOMIC);
-> -	if (err < 0) {
-> -		spin_unlock(&vcrypto->ctrl_lock);
-> +	err = virtio_crypto_ctrl_vq_request(vcrypto, sgs, num_out, num_in,
-> vc_ctrl_req);
-> +	if (err < 0)
->  		goto out;
-> -	}
-> -	virtqueue_kick(vcrypto->ctrl_vq);
-> -
-> -	while (!virtqueue_get_buf(vcrypto->ctrl_vq, &tmp) &&
-> -	       !virtqueue_is_broken(vcrypto->ctrl_vq))
-> -		cpu_relax();
-> -	spin_unlock(&vcrypto->ctrl_lock);
-> 
->  	if (ctrl_status->status != VIRTIO_CRYPTO_OK) {
->  		pr_err("virtio_crypto: Close session failed status: %u, session_id:
-> 0x%llx\n",
-> --
-> 2.20.1
 

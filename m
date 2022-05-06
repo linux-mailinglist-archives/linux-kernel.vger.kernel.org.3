@@ -2,163 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B3B551D1F2
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 09:05:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB40F51D1F8
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 09:08:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1388410AbiEFHJ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 03:09:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57450 "EHLO
+        id S1388742AbiEFHLs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 03:11:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1388382AbiEFHJU (ORCPT
+        with ESMTP id S1386803AbiEFHLq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 03:09:20 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 853E75DD34
-        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 00:05:37 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id a15-20020a17090ad80f00b001dc2e23ad84so10047609pjv.4
-        for <linux-kernel@vger.kernel.org>; Fri, 06 May 2022 00:05:37 -0700 (PDT)
+        Fri, 6 May 2022 03:11:46 -0400
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F25C644F2;
+        Fri,  6 May 2022 00:08:02 -0700 (PDT)
+Received: by mail-pf1-x435.google.com with SMTP id bo5so5552665pfb.4;
+        Fri, 06 May 2022 00:08:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=cGsWnmcdsW5+Xbz2FC0gnC+YhC9gKY5ai2q+ZLxNWKk=;
-        b=iGfeU6j4YOla+JtEHUOB09UfEODgM9SORI0CjiGCK3q2DfKIne0qOPtu0MdS35Rotn
-         Hx32nUuF+ubpNJfY6lFTixhB70XxgTCUCCJoFGINp7JQUwqslisT8ONxyMiucPfwmVQo
-         BcFb8kYte/P5jcgoSxwC16k4VOUSXc8gItHA/Ex91Ubt4UdlZTQ6mexhIy/yn5JqZsmj
-         Fr6aheufgPglMQ0D7EQSMolgLewxrLfZaHj1bxb3I0gKzPRzRQQemhkTmtazoSrtpyMr
-         nzwuClYjHKZW6ndVApHAanUqj7vWmsckKD0+ywNg+CaxDC4w/gXYRww+HpnawMjnneyQ
-         aFrA==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=qJZVl5EvwvcXVjSPcNvmPIb3iIpc3e94gPZeNfEIGDE=;
+        b=RquPcCEtPTQ8NBVOkNpgpfhMCaOU7gI0N2vmjXVEjeXEe47eK3VzRCiPPHMYYCxLg1
+         P6CPTSsRWdUdNnPe/pRgZi+CAMTXOUW0aypCBBwy8+E+GZt1qfHSrSgiWhFOXQrDerPl
+         DatPmAPOlMB2tmNlha9NwkZVVfrkt7/5nPmmGw1r/xOKTjKETDCaCs0tDLHNU6qL6xi7
+         zAW9JgkwQRnxFAMqJeCE+U8r5dQmqbrlgs9EClh2uSa24oGIURlPYADWhRa9yFHAXrQC
+         CnveAh8yJez5ypZvu1OL+WLOuhds+4ACEz2XKq+7SS60PyrasC1F8NQ9g5oL9GzwDwCI
+         gxUA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=cGsWnmcdsW5+Xbz2FC0gnC+YhC9gKY5ai2q+ZLxNWKk=;
-        b=kWdbGihqfVD1cYwm31efqOyvUjWovYNo+KpPavtRN/CgBjl56cDu/wmyqGj18Yad7s
-         vmCzKLFHAc3ZkqXJBSdiN8VfHtuv+Cniw566sTQrWEucUQbfVklL0GO3Ceha/F4ghRVi
-         sRzy461/qqM7c6p53rZ02tED0VBHfDyiOVDCmh6bhqnKtsBoFYox4PRceqp8xyzjVp3l
-         vaLaYUDPHYsX1s/dteJO91PFMt2rerD73GUzUgj+ghfNxqAYGogQ5Wut8ylYklDtTIox
-         v8SjZvA4PFfKqwYpvbRYQOvjx0EKChqMKO0OOmT9sZXlHiOICRxBt9ekYls0dIDeVMiC
-         r2zA==
-X-Gm-Message-State: AOAM5315vLiTtIoXUZvdv5dgznL31HKePau9RocGv1UvXZtxzl+/bmL2
-        s1z4d8w1OVQuePQu/PsBN5ez
-X-Google-Smtp-Source: ABdhPJzsB3eC1EyI0ybZRmYrUTNiZQMxNEEm9JOshBJBQsw2h5Kg3NaX5TAl6/ej75kNHI1+th2v3Q==
-X-Received: by 2002:a17:903:244c:b0:15e:b3f7:950d with SMTP id l12-20020a170903244c00b0015eb3f7950dmr2086414pls.9.1651820737005;
-        Fri, 06 May 2022 00:05:37 -0700 (PDT)
-Received: from thinkpad ([117.207.26.33])
-        by smtp.gmail.com with ESMTPSA id v1-20020a622f01000000b0050dc76281c5sm2573828pfv.159.2022.05.06.00.05.33
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=qJZVl5EvwvcXVjSPcNvmPIb3iIpc3e94gPZeNfEIGDE=;
+        b=qK1vn2nqt1Md+hdox47ytmman1cEfeu4t+wX4oFgwPxSYFqL0Cr91BAwhJVAUjzeCd
+         oJCpFatfpdUV+mIj5meHZrPPp3gLlLm8mGm5w2tDd/+3isk8y9RtDN1QH5vXeum4x/wW
+         SeZa5ohmRDSCmVsuKxI+RtH46iNAuLrOjp5RsD6IykQKgiiLTQilew/66OkeRYRv+VEz
+         /yPNjw8ZcoLtEjLPPsmqp1S3LsGZNNoD3hmd1Xq0B2epc6fzrc3tFh1PWb+wIXYvqwek
+         JOn+LQyoBUiZjgVpiDdmhFK9RGKJBRoW9WcPueevYjnYiBoGy3wyNqH4pfpV+ZhqklxO
+         3SUg==
+X-Gm-Message-State: AOAM533lWyDP9QXbS3jX3ggBZl6SRdxnfnhSUVQDOr0tarnLREPBY1nj
+        2xWwjydIgQOFW5EKMhJKvxV7+GSZ+HMtG42g
+X-Google-Smtp-Source: ABdhPJyQwhu+TLbFod80h890qcGGw9VNP9GSkzdKgcSkhgYmo6vXqdsuzS9lzJ1uVtzCOtokQbwb6A==
+X-Received: by 2002:a63:ee50:0:b0:3c5:f762:c709 with SMTP id n16-20020a63ee50000000b003c5f762c709mr1648410pgk.222.1651820881250;
+        Fri, 06 May 2022 00:08:01 -0700 (PDT)
+Received: from debian.me (subs03-180-214-233-93.three.co.id. [180.214.233.93])
+        by smtp.gmail.com with ESMTPSA id i12-20020a170902e48c00b0015e8d4eb26dsm844317ple.183.2022.05.06.00.07.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 May 2022 00:05:36 -0700 (PDT)
-Date:   Fri, 6 May 2022 12:35:31 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Rohit Agarwal <quic_rohiagar@quicinc.com>
-Cc:     agross@kernel.org, bjorn.andersson@linaro.org,
-        gregkh@linuxfoundation.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 4/4] ARM: dts: qcom: sdx65-mtp: Enable USB3 and PHY
- support
-Message-ID: <20220506070531.GE17659@thinkpad>
-References: <1651482395-29443-1-git-send-email-quic_rohiagar@quicinc.com>
- <1651482395-29443-5-git-send-email-quic_rohiagar@quicinc.com>
+        Fri, 06 May 2022 00:08:00 -0700 (PDT)
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     linux-doc@vger.kernel.org
+Cc:     Bagas Sanjaya <bagasdotme@gmail.com>,
+        kernel test robot <lkp@intel.com>,
+        Suresh Warrier <warrier@linux.vnet.ibm.com>,
+        Paul Mackerras <paulus@samba.org>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Fabiano Rosas <farosas@linux.ibm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Alexey Kardashevskiy <aik@ozlabs.ru>,
+        linuxppc-dev@lists.ozlabs.org, kvm@vger.kernel.org,
+        stable@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH RESEND] KVM: powerpc: remove extraneous asterisk from rm_host_ipi_action comment
+Date:   Fri,  6 May 2022 14:07:47 +0700
+Message-Id: <20220506070747.16309-1-bagasdotme@gmail.com>
+X-Mailer: git-send-email 2.36.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <1651482395-29443-5-git-send-email-quic_rohiagar@quicinc.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 02, 2022 at 02:36:35PM +0530, Rohit Agarwal wrote:
-> Enable the support for USB3 controller, QMP PHY and HS PHY on SDX65 MTP.
-> 
-> Signed-off-by: Rohit Agarwal <quic_rohiagar@quicinc.com>
+kernel test robot reported kernel-doc warning for rm_host_ipi_action():
 
-I hope you have tested the interface using a gadget driver.
+>> arch/powerpc/kvm/book3s_hv_rm_xics.c:887: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+    * Host Operations poked by RM KVM
 
-Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Since the function is static, remove the extraneous (second) asterisk at
+the head of function comment.
 
-Thanks,
-Mani
+Fixes: 0c2a66062470cd ("KVM: PPC: Book3S HV: Host side kick VCPU when poked by real-mode KVM")
+Link: https://lore.kernel.org/linux-doc/202204252334.Cd2IsiII-lkp@intel.com/
+Reported-by: kernel test robot <lkp@intel.com>
+Cc: Suresh Warrier <warrier@linux.vnet.ibm.com>
+Cc: Paul Mackerras <paulus@samba.org>
+Cc: Anders Roxell <anders.roxell@linaro.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Michael Ellerman <mpe@ellerman.id.au>
+Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
+Cc: Nicholas Piggin <npiggin@gmail.com>
+Cc: Fabiano Rosas <farosas@linux.ibm.com>
+Cc: Paolo Bonzini <pbonzini@redhat.com>
+Cc: Alexey Kardashevskiy <aik@ozlabs.ru>
+Cc: linuxppc-dev@lists.ozlabs.org
+Cc: kvm@vger.kernel.org
+Cc: stable@vger.kernel.org # v5.15, v5.17
+Cc: linux-kernel@vger.kernel.org
+Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
+---
+ arch/powerpc/kvm/book3s_hv_rm_xics.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> ---
->  arch/arm/boot/dts/qcom-sdx65-mtp.dts | 29 +++++++++++++++++++++++++----
->  1 file changed, 25 insertions(+), 4 deletions(-)
-> 
-> diff --git a/arch/arm/boot/dts/qcom-sdx65-mtp.dts b/arch/arm/boot/dts/qcom-sdx65-mtp.dts
-> index 79dc31a..6920524 100644
-> --- a/arch/arm/boot/dts/qcom-sdx65-mtp.dts
-> +++ b/arch/arm/boot/dts/qcom-sdx65-mtp.dts
-> @@ -123,7 +123,7 @@
->  			regulator-max-microvolt = <1300000>;
->  		};
->  
-> -		ldo1 {
-> +		vreg_l1b_1p2: ldo1 {
->  			regulator-min-microvolt = <1200000>;
->  			regulator-max-microvolt = <1200000>;
->  			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-> @@ -141,13 +141,13 @@
->  			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
->  		};
->  
-> -		ldo4 {
-> +		vreg_l4b_0p88: ldo4 {
->  			regulator-min-microvolt = <880000>;
->  			regulator-max-microvolt = <912000>;
->  			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
->  		};
->  
-> -		ldo5 {
-> +		vreg_l5b_1p8: ldo5 {
->  			regulator-min-microvolt = <1800000>;
->  			regulator-max-microvolt = <1800000>;
->  			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-> @@ -177,7 +177,7 @@
->  			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
->  		};
->  
-> -		ldo10 {
-> +		vreg_l10b_3p08: ldo10 {
->  			regulator-min-microvolt = <3088000>;
->  			regulator-max-microvolt = <3088000>;
->  			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-> @@ -244,3 +244,24 @@
->  		};
->  	};
->  };
-> +
-> +&usb {
-> +	status = "okay";
-> +};
-> +
-> +&usb_dwc3 {
-> +	dr_mode = "peripheral";
-> +};
-> +
-> +&usb_hsphy {
-> +	status = "okay";
-> +	vdda-pll-supply = <&vreg_l4b_0p88>;
-> +	vdda33-supply = <&vreg_l10b_3p08>;
-> +	vdda18-supply = <&vreg_l5b_1p8>;
-> +};
-> +
-> +&usb_qmpphy {
-> +	status = "okay";
-> +	vdda-phy-supply = <&vreg_l4b_0p88>;
-> +	vdda-pll-supply = <&vreg_l1b_1p2>;
-> +};
-> -- 
-> 2.7.4
-> 
+diff --git a/arch/powerpc/kvm/book3s_hv_rm_xics.c b/arch/powerpc/kvm/book3s_hv_rm_xics.c
+index 587c33fc45640f..6e16bd751c8423 100644
+--- a/arch/powerpc/kvm/book3s_hv_rm_xics.c
++++ b/arch/powerpc/kvm/book3s_hv_rm_xics.c
+@@ -883,7 +883,7 @@ long kvmppc_deliver_irq_passthru(struct kvm_vcpu *vcpu,
+ 
+ /*  --- Non-real mode XICS-related built-in routines ---  */
+ 
+-/**
++/*
+  * Host Operations poked by RM KVM
+  */
+ static void rm_host_ipi_action(int action, void *data)
 
+base-commit: a7391ad3572431a354c927cf8896e86e50d7d0bf
 -- 
-மணிவண்ணன் சதாசிவம்
+An old man doll... just what I always wanted! - Clara
+

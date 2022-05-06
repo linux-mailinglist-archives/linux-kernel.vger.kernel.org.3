@@ -2,143 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73B1F51E15F
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 23:50:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C09E51E165
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 23:52:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358144AbiEFVy0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 17:54:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43912 "EHLO
+        id S1444581AbiEFVzl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 17:55:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355238AbiEFVyO (ORCPT
+        with ESMTP id S1355406AbiEFVzj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 17:54:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D268613E9A
-        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 14:50:26 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5A75C611EE
-        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 21:50:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32CB8C385A8;
-        Fri,  6 May 2022 21:50:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651873825;
-        bh=C1WgvDTrsdFQDpie7GvorQalkinTyCMq4IOsxxaE93s=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=H0vA0cSnSY8xX+24xCc0Gk0rX2+exhkFMnIoLQ1DWP3FgTGSMzx0YzRbHFS8jLRVG
-         HH8xcJ4lj7fg8p4fWH+3S8SuQbqTzvJmUrZmTN1BZVyLSLxjoLbX4S2c7hD22GY5Hb
-         059JfWfLHnfbcEJBxgK6/fxglazs7y55jlaYqnuG/tpSNJY4l/k+r8RrDt/p3sJEGc
-         zcansRzWIAHShUvhrwKs+8ezR4guqYk/AeQunHWS/Awlpg5Xoit+W463JYvLNVhOwm
-         u4qw34cRe1HaFmnfuhw6bSRU118Mc14GJ+1YvHp/XrFV3xVSxw3sltOMgMDAE2B4Dk
-         yPy/srrMTzVgg==
-Date:   Fri, 6 May 2022 14:50:23 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     ksummit-discuss@lists.linuxfoundation.org,
-        linux-kernel@vger.kernel.org, kbuild@lists.01.org, lkp@intel.com,
-        llvm@lists.linux.dev, Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>
-Subject: Re: uninitialized variables bugs
-Message-ID: <YnWYHzQC4Y55sOsT@dev-arch.thelio-3990X>
-References: <20220506091338.GE4031@kadam>
+        Fri, 6 May 2022 17:55:39 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 007F16FA20
+        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 14:51:54 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1651873913;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=kJ3McpVzRFsgMBX23wgT/+qwHu2rZPiW0v6oIUJCIkI=;
+        b=igj0qkwuwc7TJty88qJFZzgeFNtRFh7UFPJIoYtA35jxy2m3y6o5O4BdduJ2eTQP9yoEOj
+        Y/Pma7uZ5nWvIQhbGPHLJmY6SG3i1CJVChRqzHb1xg1wCqo9z7wxEHAXtt5f9+bWp12aKl
+        yxCDDHDVcTytIFMWLuivfqlaAY9rBazDQQyIjF1A+y1F0wqODasPHnEJyRNpLJt15J6YsH
+        E5X1+fUKoagpdADMaiiKzhZbUA2CMwr6sDFvgkwLGqIpuqPfaj+XgnRcnoX0GKhhe7+t9y
+        p/OQVpvdQapJpV5hYP5MRwR5/f2imVDr8Suxn6wvt2CDlZBIK6rpU9RNXp1y6w==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1651873913;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=kJ3McpVzRFsgMBX23wgT/+qwHu2rZPiW0v6oIUJCIkI=;
+        b=JhebiFX5xqgDI1pfgNQ3AdRq6c3Eu2eESoBA4srTY5Ncp8q55tWwCzdaaNdIoRN0NdxHUo
+        pfYq18JFAjczX9Dg==
+To:     Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
+        x86@kernel.org
+Cc:     Tony Luck <tony.luck@intel.com>, Andi Kleen <ak@linux.intel.com>,
+        Stephane Eranian <eranian@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Joerg Roedel <joro@8bytes.org>,
+        Suravee Suthikulpanit <Suravee.Suthikulpanit@amd.com>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Ricardo Neri <ricardo.neri@intel.com>,
+        iommu@lists.linux-foundation.org, linuxppc-dev@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org,
+        Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+Subject: Re: [PATCH v6 15/29] x86/hpet: Add helper function
+ hpet_set_comparator_periodic()
+In-Reply-To: <87mtfufifa.ffs@tglx>
+References: <20220506000008.30892-1-ricardo.neri-calderon@linux.intel.com>
+ <20220506000008.30892-16-ricardo.neri-calderon@linux.intel.com>
+ <87mtfufifa.ffs@tglx>
+Date:   Fri, 06 May 2022 23:51:52 +0200
+Message-ID: <87ilqifhxj.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220506091338.GE4031@kadam>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dan,
+On Fri, May 06 2022 at 23:41, Thomas Gleixner wrote:
+> On Thu, May 05 2022 at 16:59, Ricardo Neri wrote:
+>> Programming an HPET channel as periodic requires setting the
+>> HPET_TN_SETVAL bit in the channel configuration. Plus, the comparator
+>> register must be written twice (once for the comparator value and once for
+>> the periodic value). Since this programming might be needed in several
+>> places (e.g., the HPET clocksource and the HPET-based hardlockup detector),
+>> add a helper function for this purpose.
+>>
+>> A helper function hpet_set_comparator_oneshot() could also be implemented.
+>> However, such function would only program the comparator register and the
+>> function would be quite small. Hence, it is better to not bloat the code
+>> with such an obvious function.
+>
+> This word salad above does not provide a single reason why the periodic
+> programming function is required and better suited for the NMI watchdog
+> case and then goes on and blurbs about why a function which is not
+> required is not implemented. The argument about not bloating the code
+> with an "obvious???" function which is quite small is slightly beyond my
+> comprehension level.
 
-On Fri, May 06, 2022 at 12:13:38PM +0300, Dan Carpenter wrote:
-> Ever since commit 78a5255ffb6a ("Stop the ad-hoc games with
-> -Wno-maybe-initialized"), GCC's uninitialized variable warnings have
-> been disabled by default.  Now, you have to turn on W=1 or W=2 to see
-> the warnings which nobody except Arnd does.
+What's even more uncomprehensible is that the patch which actually sets
+up that NMI watchdog cruft has:
 
-Thank you a lot for bringing this up; the situation does leave much to
-be desired from my side, as I am having to fix quite a number of these
-issues because people just are not seeing them and they break our builds
-because of CONFIG_WERROR (as they should).
+> +       if (hc->boot_cfg & HPET_TN_PERIODIC_CAP)
+> +               hld_data->has_periodic = true;
 
-> Disabling that has lead to a bunch of embarrassing bugs where variables
-> are *never* initialized.  Very unsubtle bugs.  The bugs doesn't reach
-> users because Nathan Chancellor and I review Clang and Smatch warnings
-> respectively.  Also the kbuild-bot reports uninitialized variables.
+So how the heck does that work with a HPET which does not support
+periodic mode?
 
-Thankfully, I believe the situation is a lot less worse than it could be
-because the kbuild test robot tests with clang and finds these before
-they make it into any tree:
+That watchdog muck will still happily invoke that set periodic function
+in the hope that it works by chance?
 
-https://lore.kernel.org/llvm/?q=f%3Alkp%40intel.com+Wuninitialized
-https://lore.kernel.org/llvm/?q=f%3Alkp%40intel.com+Wsometimes-uninitialized
+Thanks,
 
-> It's a lot to deal with.  Uninitialized variable bugs are probably the
-> most common bug I have to deal with.
-
-Agreed.
-
-> It's frustrating.  Sometimes the false positives are hard to analyse
-> because I have to read through multiple functions.  A lot of times
-> when I write a patch and a commit message Nathan has already fixed it
-> so it's just a waste of time.
-
-Sorry :( I should be better about either cc'ing you directly or adding
-the kernel-janitors mailing list, as there are others who would benefit
-from seeing these patches fly by. I know that isn't really the point of
-the email but I'll try to make your life easier in the future.
-
-> It's risky as well.  The Smatch check for uninitialized variables was
-> broken for most of 2021.  Nathan sometimes goes on vacation.
-> 
-> I guess I would hope that one day we can turn on the GCC uninitialized
-> variable warnings again.  That would mean silencing false positives
-> which a lot of people don't want to do...  Maybe Clang has fewer false
-> positives than GCC?
-
-Yes, clang does have fewer false positives than GCC for a couple of
-reasons:
-
-1. As Arnd touched on, Clang's -Wuninitialized and
--Wsometimes-uninitialized do not check for initializations across
-function boundaries. In your example below with 'read(&val)', clang will
-assume that read() initializes val. While that does mean that there is
-slightly less coverage, it does drives the false positive rate way down,
-almost to zero. There are occasionally times where clang fails to figure
-out certain conditions which will avoid an uninitialized use but I
-believe that means the code is not as clear as it could be. For example,
-commit 118de6106735 ("net: ethernet: rmnet: Restructure if checks to
-avoid uninitialized warning").
-
-2. clang used to only have these warnings under
--Wconditional-uninitialized, which suffers from the same issue as
--Wmaybe-uninitialized ("maybe it is uninitialized?").
--Wsometimes-uninitialized was split off from that warning back in 2011
-to be more assertive ("this IS uninitialized if these conditions hold"):
-
-https://github.com/llvm/llvm-project/commit/4323bf8e2e5135c49f814940b2b546298c01ecbc
-
-Perhaps GCC could consider something to this?
-
-Clang's static analyzer, which Tom regularly runs, will check variables
-across function boundaries. I am not sure what the false positive rate
-on that check is but it does turn up issues like smatch does.
-
-> The Smatch check for uninitialized variable was deliberately written to
-> be more strict than GCC because GCC was missing bugs.  So I think
-> leaving Smatch false positives is fine.  There is a trade off between
-> fewer false positives and missing bugs and Smatch is meant to err on the
-> side of finding bugs but with the cost of false positives.
-
-I would agree with this too.
-
-Cheers,
-Nathan
+        tglx

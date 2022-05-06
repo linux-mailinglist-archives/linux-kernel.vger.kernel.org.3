@@ -2,70 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC59951D8E5
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 15:22:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8337B51D8B4
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 15:17:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1392376AbiEFNZg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 09:25:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48492 "EHLO
+        id S1392329AbiEFNUs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 09:20:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1392450AbiEFNZN (ORCPT
+        with ESMTP id S1392303AbiEFNUn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 09:25:13 -0400
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A523F69CC0
-        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 06:21:18 -0700 (PDT)
-Received: by mail-pl1-x62d.google.com with SMTP id c9so6712725plh.2
-        for <linux-kernel@vger.kernel.org>; Fri, 06 May 2022 06:21:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=snAq8vOceBJQXNtHaQrKZKIzrWkN2Ytbsg/b/TMNKmk=;
-        b=RcbJboymTfiVvIkRHCgMojUfl9bLvh+A2nG+XBtgmx0u4q3MuN7jucM7/yuVKMzlwh
-         UnMU2h/tV8bvG7ApiCvCmir6sodCeLyONGmHHscGkU0RofG2yjBLERzmHarv3zKNdn3c
-         W1qDNbeb8vuDdLXbyGwpLxh4as5TGCG+DtP5oGtMuiJwcz9+Ocnj6sZ9xOBb211wgbSW
-         lsRhEZHd8CZ93wsB7gNlHbWHuwdNKtEIzUYtmdB/cxqBRweoDwfSlHs4aj/ZF7ZTmad+
-         TDCC2YheRyFnYFVnvg1YVHCxdu5HESG/g1d4BiK1Ixu56OjuAOLXVlpoBk9MzY19DPQI
-         qzKQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=snAq8vOceBJQXNtHaQrKZKIzrWkN2Ytbsg/b/TMNKmk=;
-        b=PV/ihsG/eKi4WoKvZAISF1Rjt0QPYa6op1a/isOedTY0euxwEZRogFP/vRl9k+yX7/
-         qOiedaFdg761z7QaWgt8TerABHQuAPsKlFozpSNVgVU1EAEmd1AJdqFFatZ1/8IW6ksM
-         6AryvKEF9vpDf0fcBGXJsdIzX1qfHaPXvhpYMTNHVn/T5sfzY0xI0hFSsApfecoa0sC/
-         XNRqLQDJX+Fv+Y8ySowdLyBzdVpQ3HibaG9xb05DOA16AqnIfGxfjgrn4O4IT/8nfSb/
-         pSMGoQ8l/bvHmFq+4+0ROEajEOo32NJDWcn5KRf0KKIsH22HhhIa4pmln01A572cYhG9
-         3Jzw==
-X-Gm-Message-State: AOAM530pST1tP3Rl+0lw4CiE3uXDlJKy953cFlFXmcnbTnFCAccEr/d4
-        G0gmL5ft5JMpXXHlGJI0rG/zgw==
-X-Google-Smtp-Source: ABdhPJyFm1OdK877ATfQ8sTTUFDzZf6kwJX19vO8QKfl9vfzuJo5UneDBXKKQgQprvUGJ1o25mQvVQ==
-X-Received: by 2002:a17:902:8605:b0:15d:10dc:1c6f with SMTP id f5-20020a170902860500b0015d10dc1c6fmr3781372plo.4.1651843277875;
-        Fri, 06 May 2022 06:21:17 -0700 (PDT)
-Received: from always-x1.www.tendawifi.com ([139.177.225.255])
-        by smtp.gmail.com with ESMTPSA id i22-20020a63e916000000b003c14af50643sm3256986pgh.91.2022.05.06.06.21.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 May 2022 06:21:17 -0700 (PDT)
-From:   zhenwei pi <pizhenwei@bytedance.com>
-To:     arei.gonglei@huawei.com, mst@redhat.com
-Cc:     jasowang@redhat.com, herbert@gondor.apana.org.au,
-        linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        linux-crypto@vger.kernel.org, helei.sig11@bytedance.com,
-        pizhenwei@bytedance.com, davem@davemloft.net
-Subject: [PATCH v6 5/5] virtio-crypto: enable retry for virtio-crypto-dev
-Date:   Fri,  6 May 2022 21:16:27 +0800
-Message-Id: <20220506131627.180784-6-pizhenwei@bytedance.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220506131627.180784-1-pizhenwei@bytedance.com>
-References: <20220506131627.180784-1-pizhenwei@bytedance.com>
+        Fri, 6 May 2022 09:20:43 -0400
+Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1494369702;
+        Fri,  6 May 2022 06:16:58 -0700 (PDT)
+Received: by angie.orcam.me.uk (Postfix, from userid 500)
+        id B0FF19200BB; Fri,  6 May 2022 15:16:56 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by angie.orcam.me.uk (Postfix) with ESMTP id ACEFD92009E;
+        Fri,  6 May 2022 14:16:56 +0100 (BST)
+Date:   Fri, 6 May 2022 14:16:56 +0100 (BST)
+From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
+To:     Arnd Bergmann <arnd@kernel.org>
+cc:     Bjorn Helgaas <helgaas@kernel.org>,
+        Niklas Schnelle <schnelle@linux.ibm.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        linux-pci <linux-pci@vger.kernel.org>,
+        Richard Henderson <rth@twiddle.net>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Michal Simek <monstr@monstr.eu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        "open list:ALPHA PORT" <linux-alpha@vger.kernel.org>,
+        "moderated list:ARM PORT" <linux-arm-kernel@lists.infradead.org>,
+        "open list:IA64 (Itanium) PLATFORM" <linux-ia64@vger.kernel.org>,
+        "open list:M68K ARCHITECTURE" <linux-m68k@lists.linux-m68k.org>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        "open list:PARISC ARCHITECTURE" <linux-parisc@vger.kernel.org>,
+        "open list:LINUX FOR POWERPC (32-BIT AND 64-BIT)" 
+        <linuxppc-dev@lists.ozlabs.org>,
+        "open list:RISC-V ARCHITECTURE" <linux-riscv@lists.infradead.org>,
+        "open list:SUPERH" <linux-sh@vger.kernel.org>,
+        "open list:SPARC + UltraSPARC (sparc/sparc64)" 
+        <sparclinux@vger.kernel.org>
+Subject: Re: [RFC v2 01/39] Kconfig: introduce HAS_IOPORT option and select
+ it as necessary
+In-Reply-To: <CAK8P3a0EMK0gHOmb-jvtfVLb1dun72kYUMKpb11T_GgXiuR9Mw@mail.gmail.com>
+Message-ID: <alpine.DEB.2.21.2205061415100.52331@angie.orcam.me.uk>
+References: <CAK8P3a0sJgMSpZB_Butx2gO0hapYZy-Dm_QH-hG5rOaq_ZgsXg@mail.gmail.com> <20220505161028.GA492600@bhelgaas> <CAK8P3a3fmPExr70+fVb564hZdGAuPtYa-QxgMMe5KLpnY_sTrQ@mail.gmail.com> <alpine.DEB.2.21.2205061058540.52331@angie.orcam.me.uk>
+ <CAK8P3a0NzG=3tDLCdPj2=A__2r_+xiiUTW=WJCBNp29x_A63Og@mail.gmail.com> <alpine.DEB.2.21.2205061314110.52331@angie.orcam.me.uk> <CAK8P3a0EMK0gHOmb-jvtfVLb1dun72kYUMKpb11T_GgXiuR9Mw@mail.gmail.com>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,35 +82,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: lei he <helei.sig11@bytedance.com>
+On Fri, 6 May 2022, Arnd Bergmann wrote:
 
-Enable retry for virtio-crypto-dev, so that crypto-engine
-can process cipher-requests parallelly.
+> >  So what happens if the instruction is given an I/O rather than memory BAR
+> > as the relevant argument?  Is the address space indicator bit (bit #0)
+> > simply ignored or what?
+> 
+> Not sure. My best guess is that it would actually work as you'd expect,
+> but is deliberately left out of the architecture specification so they don't
+> have to to validate the correctness.  Note that only a small number of
+> PCIe cards are actually supported by IBM, and I think the firmware
+> only passes devices to the OS if they are whitelisted.
 
-Cc: Michael S. Tsirkin <mst@redhat.com>
-Cc: Jason Wang <jasowang@redhat.com>
-Cc: Gonglei <arei.gonglei@huawei.com>
-Reviewed-by: Gonglei <arei.gonglei@huawei.com>
-Signed-off-by: lei he <helei.sig11@bytedance.com>
-Signed-off-by: zhenwei pi <pizhenwei@bytedance.com>
----
- drivers/crypto/virtio/virtio_crypto_core.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ That makes sense, thanks!
 
-diff --git a/drivers/crypto/virtio/virtio_crypto_core.c b/drivers/crypto/virtio/virtio_crypto_core.c
-index 60490ffa3df1..1198bd306365 100644
---- a/drivers/crypto/virtio/virtio_crypto_core.c
-+++ b/drivers/crypto/virtio/virtio_crypto_core.c
-@@ -144,7 +144,8 @@ static int virtcrypto_find_vqs(struct virtio_crypto *vi)
- 		spin_lock_init(&vi->data_vq[i].lock);
- 		vi->data_vq[i].vq = vqs[i];
- 		/* Initialize crypto engine */
--		vi->data_vq[i].engine = crypto_engine_alloc_init(dev, 1);
-+		vi->data_vq[i].engine = crypto_engine_alloc_init_and_set(dev, true, NULL, true,
-+						virtqueue_get_vring_size(vqs[i]));
- 		if (!vi->data_vq[i].engine) {
- 			ret = -ENOMEM;
- 			goto err_engine;
--- 
-2.20.1
-
+  Maciej

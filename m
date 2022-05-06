@@ -2,98 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CB7851DA92
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 16:31:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BF6B51DA94
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 16:32:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1442207AbiEFOer (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 10:34:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56070 "EHLO
+        id S1442216AbiEFOgE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 10:36:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1442205AbiEFOen (ORCPT
+        with ESMTP id S1343536AbiEFOgB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 10:34:43 -0400
-Received: from mail-oa1-x2c.google.com (mail-oa1-x2c.google.com [IPv6:2001:4860:4864:20::2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AF3659BAD
-        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 07:31:00 -0700 (PDT)
-Received: by mail-oa1-x2c.google.com with SMTP id 586e51a60fabf-d6e29fb3d7so7350457fac.7
-        for <linux-kernel@vger.kernel.org>; Fri, 06 May 2022 07:31:00 -0700 (PDT)
+        Fri, 6 May 2022 10:36:01 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D15B69291
+        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 07:32:18 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id a15-20020a17090ad80f00b001dc2e23ad84so10960734pjv.4
+        for <linux-kernel@vger.kernel.org>; Fri, 06 May 2022 07:32:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
-         :subject:to:cc;
-        bh=Z3BhvNnZeKv1IcmAFTPQ8BjykroeJGCMjBhzdl/UNHM=;
-        b=jO3oHxuDXU4qKNmreCjjYaiO4yOFVMLlHvrgsIknXQpO28ujlFHIX+YGJMNDAohf0S
-         DZNeyUI7z2EDLgUqTLJxUWdlh1QK08j28ZN3csKfsdDpAqlRFloCzirijmDCbWZLcZyE
-         C6gdUaugeCxwk+y28GBfLl9pvOmB54KmpIvUA=
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=IKnXMed6jjWK05WYFoholdPPT2WTMXKXyNFJA5ty2Dk=;
+        b=0kcU7geC2AF508oHhQS9Aw5hC5iqBBoisB+DWdgDAmQYPIJ2O/4jUueZ78D02Yd2LQ
+         OUN1VDfPfgyoRSDtWDQK8jb3VfQXYCRR4IzNQYQ3ut427FFO7QTLye+05E9x9zEXhr2F
+         wlJ102s3dIPqTpCCTth4dsluVPd3FdGvhpJUl6NVrBAnEZIS1cwbij+kmqjxuab3grqE
+         ti4uAHJY1Gce2w08VRZb4Tug+1v1RNH5/X/e6Ib7dRPhvSyGY+9ta/Eja+uyQ67Mfv0h
+         K3XaKKIDr2asH+uZLMvaFbwmplP2XJCqIUDiFbqTtALM+5WISexAHhuyzz/kMigmsI5D
+         o0OA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from
-         :user-agent:date:message-id:subject:to:cc;
-        bh=Z3BhvNnZeKv1IcmAFTPQ8BjykroeJGCMjBhzdl/UNHM=;
-        b=KtDlxUTvZGA9SnEcz3N8Y6a/thqkeZGmmFMkn5IxZis9h0gkXqZhFA7NKR6OOiZm4N
-         q+7Bk0nDDklVP+D4y3pv1mWkai/JqPN/LrEvZPM3CQk6ivx4IzJw7lalp7Tfh+WZYMf1
-         HECCYliT/cCGHmp8hPNcKepT/kVBRV719cc8wnJ8BQtxNrhKBjRGCL289XuMSod/uMza
-         nU8si/Po+sU6LkBXKKOgvPI5IxWZ8BRkCRMsdqHt0f93ikL2quFVkRzuS7YrBqCzjmtb
-         bfxsP5OFs2nHcovM3yvldCoo9mDlaVo/XZqAOtzYtqPFgLONGeFqMzkusBsw7ZvEbNx3
-         6IAw==
-X-Gm-Message-State: AOAM530S2aq+cMiEQnvyUwKyV0V5MCrgMAQdVghHP4J1DDV3b1FgiZJD
-        wM9pFkppc+qxM3DT5nQvtPOr+OvtxAJ572M53aDJ09q0ISo=
-X-Google-Smtp-Source: ABdhPJzE+vXk1hqtD9UBfXOO2I3rdrl0PyEIZMyce2ypHXN0n1NbIBLqFN65uSkfs/ck6n2qBT6ImYvZZMQRqp20FeQ=
-X-Received: by 2002:a05:6870:40c1:b0:ed:9a12:3f95 with SMTP id
- l1-20020a05687040c100b000ed9a123f95mr1383802oal.193.1651847457937; Fri, 06
- May 2022 07:30:57 -0700 (PDT)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Fri, 6 May 2022 10:30:57 -0400
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=IKnXMed6jjWK05WYFoholdPPT2WTMXKXyNFJA5ty2Dk=;
+        b=u2ZEqCr4/diy93Zq79tlJD+aVN5v/YHV4NX4W77Fw/+Aldazv4Q9M8o1ZCh37+74+b
+         H59hy9OY5JXDMHBmXkicaM+mua1r3L2dkrdfAwOPK35AfriMfkVVdXYKdm4PpoMLyHkD
+         /tg32ypKu2g/zVOOsmVlroNCAGOYm1wK6ifeJpegluGNqdmqIGN8qbjomLPXQMco1m2r
+         L847rnjE94VmlOTFQ2e/m6sOnZq0j1NgNYYewEcI/tIOlZOR/JJhgUmXPg1xO9U+Oepy
+         WRpgXUtRanG33QDaXu+AIUMrDUItwLYCqSUgc8CBvpr9Sg3FlHksZb3QqT4e6Ofprt7X
+         x1fA==
+X-Gm-Message-State: AOAM533K5ZYrWEadbOOpR/CG0ccOKaCk3ma+AS1YQnoAmkkV41QG0PhM
+        FELP0qf5omgw0cHVzMRIpSJPWw==
+X-Google-Smtp-Source: ABdhPJwVyFybgmdHBomugJ71MT4xk5tQqyokCS5kc4G+IAjCk8YTvnuhoAqBC71a7VwwMtOibv+lAg==
+X-Received: by 2002:a17:903:2ca:b0:156:f1cc:7cb6 with SMTP id s10-20020a17090302ca00b00156f1cc7cb6mr3939764plk.174.1651847537881;
+        Fri, 06 May 2022 07:32:17 -0700 (PDT)
+Received: from [192.168.4.166] (cpe-72-132-29-68.dc.res.rr.com. [72.132.29.68])
+        by smtp.gmail.com with ESMTPSA id w5-20020a170902ca0500b0015e8d4eb285sm1773280pld.207.2022.05.06.07.32.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 06 May 2022 07:32:17 -0700 (PDT)
+Message-ID: <b60eb1c5-4836-5f62-315e-211a0fe03362@kernel.dk>
+Date:   Fri, 6 May 2022 08:32:16 -0600
 MIME-Version: 1.0
-In-Reply-To: <YnSYppSYwaoZRXb4@builder.lan>
-References: <20220426225748.324759-1-swboyd@chromium.org> <YnSYppSYwaoZRXb4@builder.lan>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date:   Fri, 6 May 2022 10:30:56 -0400
-Message-ID: <CAE-0n50PaacK_zT1NPoj+9YA9GX4oqpADEHObFdK+Zyu67Guig@mail.gmail.com>
-Subject: Re: [PATCH] arm64: dts: qcom: sc7180-trogdor: Remove cros-ec keyboard
- from detachables
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>, linux-kernel@vger.kernel.org,
-        patches@lists.linux.dev, linux-arm-msm@vger.kernel.org,
-        Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        "Joseph S. Barrera III" <joebar@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH 1/5] io_uring: add IORING_ACCEPT_MULTISHOT for accept
+Content-Language: en-US
+To:     Hao Xu <haoxu.linux@gmail.com>, io-uring@vger.kernel.org
+Cc:     Pavel Begunkov <asml.silence@gmail.com>,
+        linux-kernel@vger.kernel.org
+References: <20220506070102.26032-1-haoxu.linux@gmail.com>
+ <20220506070102.26032-2-haoxu.linux@gmail.com>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <20220506070102.26032-2-haoxu.linux@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Bjorn Andersson (2022-05-05 20:40:22)
-> On Tue 26 Apr 17:57 CDT 2022, Stephen Boyd wrote:
->
-> > Trogdor devices that have a detachable keyboard still have a
-> > non-detachable keyboard input device present because we include the
-> > cros-ec-keyboard.dtsi snippet in the top-level sc7180-trogdor.dtsi file
-> > that every variant board includes. We do this because the
-> > keyboard-controller node also provides some buttons like the power
-> > button and volume buttons. Unfortunately, this means we register a
-> > keyboard input device that doesn't do anything on boards with a
-> > detachable keyboard. Let's delete the rows/columns properties of the
-> > device node to indicate that there isn't a matrix keyboard on these
-> > boards.
-> >
->
-> As this seems to directly relate to the final design of each device,
-> would it make sense to push out the &keyboard_controller from
-> trogdor.dtsi? Or do you think it would be too much duplication for it to
-> be worth it?
+On 5/6/22 1:00 AM, Hao Xu wrote:
+> From: Hao Xu <howeyxu@tencent.com>
+> 
+> add an accept_flag IORING_ACCEPT_MULTISHOT for accept, which is to
+> support multishot.
+> 
+> Signed-off-by: Hao Xu <howeyxu@tencent.com>
+> ---
+>  include/uapi/linux/io_uring.h | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
+> diff --git a/include/uapi/linux/io_uring.h b/include/uapi/linux/io_uring.h
+> index fad63564678a..73bc7e54ac18 100644
+> --- a/include/uapi/linux/io_uring.h
+> +++ b/include/uapi/linux/io_uring.h
+> @@ -213,6 +213,11 @@ enum {
+>  #define IORING_ASYNC_CANCEL_FD	(1U << 1)
+>  #define IORING_ASYNC_CANCEL_ANY	(1U << 2)
+>  
+> +/*
+> + * accept flags stored in accept_flags
+> + */
+> +#define IORING_ACCEPT_MULTISHOT	(1U << 15)
 
-I tried it out a few days ago but I'm waiting to see how the driver
-patch goes before sending the dts bits. See the WIP patches up to the
-end of the chain on chromium gerrit[1].
+It isn't stored in accept_flags, is it? This is an io_uring private
+flag, and it's in ioprio. Which is honestly a good place for per-op
+private flags, since nobody really uses ioprio outside of read/write
+style requests. But the comment is wrong :-)
 
-[1] https://chromium-review.googlesource.com/c/chromiumos/third_party/kernel/+/3609017
+-- 
+Jens Axboe
+

@@ -2,186 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A4DD51D68D
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 13:20:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D00C51D684
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 13:20:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344744AbiEFLYU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 07:24:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55710 "EHLO
+        id S1391272AbiEFLXp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 07:23:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1391303AbiEFLYH (ORCPT
+        with ESMTP id S243024AbiEFLXm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 07:24:07 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE6D61136;
-        Fri,  6 May 2022 04:20:22 -0700 (PDT)
-Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 246AxYnp014029;
-        Fri, 6 May 2022 11:18:58 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=y5OiXKtWxrE9jkRNnZnUPIxSoW5NO888lYPMeY8p20o=;
- b=KUrZVHNedJMQHXRUcjFYRz49EjLPt/z8Enxpe963RBRHVwRMBIajjKHTbAEmyQygRzWc
- lvtblkDBEv0KM5s9aGvgB1VbknJOF47xy4utbk/2sTFacNlPn+6id8sHDSEmtYqCHgce
- bb8f78CA6OZEGHds6XuwyfyNYtjQ/Sz14sYUz2gP0WSwg3pg800hXKb7bnHzDJeiHtFZ
- dZaiepyf5OYOjy0JX7QcOFu7TIf6eefQLMPf+V2/m05DTHXeyKaCpGjGJHSckMTQJXTK
- 0SdLpB5S8k05thmQVCh28GCCFzfAXO02Xps+YQB3gva5HPAW0rJhQpu/5Dq/ASHPVitd Ng== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3fw2dm8asx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 06 May 2022 11:18:58 +0000
-Received: from m0098413.ppops.net (m0098413.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 246BI0IY021612;
-        Fri, 6 May 2022 11:18:57 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3fw2dm8asf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 06 May 2022 11:18:57 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 246BHWn0005982;
-        Fri, 6 May 2022 11:18:55 GMT
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
-        by ppma03ams.nl.ibm.com with ESMTP id 3ftp7fwcut-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 06 May 2022 11:18:55 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 246BIrKO46924078
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 6 May 2022 11:18:53 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 27ED14C044;
-        Fri,  6 May 2022 11:18:53 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 641CB4C046;
-        Fri,  6 May 2022 11:18:51 +0000 (GMT)
-Received: from sig-9-145-46-59.uk.ibm.com (unknown [9.145.46.59])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri,  6 May 2022 11:18:51 +0000 (GMT)
-Message-ID: <105ccec439f709846e82b69cb854ac825d7a6a49.camel@linux.ibm.com>
-Subject: Re: [RFC v2 01/39] Kconfig: introduce HAS_IOPORT option and select
- it as necessary
-From:   Niklas Schnelle <schnelle@linux.ibm.com>
-To:     Finn Thain <fthain@linux-m68k.org>,
-        Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Arnd Bergmann <arnd@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        Richard Henderson <rth@twiddle.net>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        "open list:ALPHA PORT" <linux-alpha@vger.kernel.org>,
-        "moderated list:ARM PORT" <linux-arm-kernel@lists.infradead.org>,
-        "open list:IA64 (Itanium) PLATFORM" <linux-ia64@vger.kernel.org>,
-        "open list:M68K ARCHITECTURE" <linux-m68k@lists.linux-m68k.org>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        "open list:PARISC ARCHITECTURE" <linux-parisc@vger.kernel.org>,
-        "open list:LINUX FOR POWERPC (32-BIT AND 64-BIT)" 
-        <linuxppc-dev@lists.ozlabs.org>,
-        "open list:RISC-V ARCHITECTURE" <linux-riscv@lists.infradead.org>,
-        "open list:SUPERH" <linux-sh@vger.kernel.org>,
-        "open list:SPARC + UltraSPARC (sparc/sparc64)" 
-        <sparclinux@vger.kernel.org>
-Date:   Fri, 06 May 2022 13:18:51 +0200
-In-Reply-To: <22bec167-241f-2cbe-829f-a3f65e40e71@linux-m68k.org>
-References: <20220505195342.GA509942@bhelgaas>
-         <22bec167-241f-2cbe-829f-a3f65e40e71@linux-m68k.org>
+        Fri, 6 May 2022 07:23:42 -0400
+Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [96.44.175.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFCC45DA36
+        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 04:19:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+        d=hansenpartnership.com; s=20151216; t=1651835994;
+        bh=58oURv2d1sC3UHpxw7+6haohpmNCYl41EdKlr3w1Gzs=;
+        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
+        b=rvRyz0Ty4ATkdIMBIHIdYONhNe2YlbhcwWSrfooDFsQJnvKfp2c0Cez0KAyMxmAPt
+         3B0P3qDYuTN4e2t5lelQBef5mvIqr+cBBZJsMKQF1317pJ4wc0La9yYVZbJYjsAhjA
+         wy8cfSVRmK3GBfw+O/Q3/owPxgHBeMoEOubUByV8=
+Received: from localhost (localhost [127.0.0.1])
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 01D4D12868AC;
+        Fri,  6 May 2022 07:19:54 -0400 (EDT)
+Received: from bedivere.hansenpartnership.com ([127.0.0.1])
+        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id QzPQXx1m3v7s; Fri,  6 May 2022 07:19:53 -0400 (EDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+        d=hansenpartnership.com; s=20151216; t=1651835993;
+        bh=58oURv2d1sC3UHpxw7+6haohpmNCYl41EdKlr3w1Gzs=;
+        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
+        b=cAIErAhXSrfSYxHPIDMU2Hy+rQ0GY1U1TOPJy96YHxQErIgBAR+1zcUr90dCnkQ+f
+         iIOTTzVLJ/lsCZLxlhyq4UbbXOzrPHO9g7F28fzugCtsQUhra9+kVRVEt3zD0d6w+Z
+         XIQ7CkKROdKS/AErgxI8vBAn6sI6c2vh9U0ek9uA=
+Received: from [172.20.4.189] (unknown [173.211.218.201])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 0687A1286866;
+        Fri,  6 May 2022 07:19:52 -0400 (EDT)
+Message-ID: <7e20c844dadacb3dac822220ca108f4d786ceb7d.camel@HansenPartnership.com>
+Subject: Re: [PATCH v1 1/3] kallsyms: avoid hardcoding the buffer size
+From:   James Bottomley <James.Bottomley@HansenPartnership.com>
+To:     Miguel Ojeda <ojeda@kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Changbin Du <changbin.du@intel.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        linux-kernel@vger.kernel.org
+Cc:     rust-for-linux@vger.kernel.org, Boqun Feng <boqun.feng@gmail.com>
+Date:   Fri, 06 May 2022 07:19:51 -0400
+In-Reply-To: <20220505191704.22812-2-ojeda@kernel.org>
+References: <20220505191704.22812-1-ojeda@kernel.org>
+         <20220505191704.22812-2-ojeda@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 5UqqC9GevofRxBeHStbLnLlUH6eZ3euH
-X-Proofpoint-ORIG-GUID: w_xuM4uo82W1hTrsAd4vNrc6YUx1BE02
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+User-Agent: Evolution 3.34.4 
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-06_03,2022-05-06_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- malwarescore=0 mlxlogscore=999 clxscore=1011 spamscore=0 adultscore=0
- priorityscore=1501 lowpriorityscore=0 phishscore=0 bulkscore=0
- suspectscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2205060062
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-05-06 at 19:12 +1000, Finn Thain wrote:
+On Thu, 2022-05-05 at 21:16 +0200, Miguel Ojeda wrote:
+> From: Boqun Feng <boqun.feng@gmail.com>
 > 
-> On Thu, 5 May 2022, Bjorn Helgaas wrote:
+> This makes it easier to update the size later on.
 > 
-> > On Thu, May 05, 2022 at 07:39:42PM +0200, Arnd Bergmann wrote:
-> > > On Thu, May 5, 2022 at 6:10 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
-> > > > On Wed, May 04, 2022 at 11:31:28PM +0200, Arnd Bergmann wrote:
-> > > > > The main goal is to avoid c), which is what happens on s390, but
-> > > > > can also happen elsewhere. Catching b) would be nice as well,
-> > > > > but is much harder to do from generic code as you'd need an
-> > > > > architecture specific inline asm statement to insert a ex_table
-> > > > > fixup, or a runtime conditional on each access.
-> > > > 
-> > > > Or s390 could implement its own inb().
-> > > > 
-> > > > I'm hearing that generic powerpc kernels have to run both on machines
-> > > > that have I/O port space and those that don't.  That makes me think
-> > > > s390 could do something similar.
-> > > 
-> > > No, this is actually the current situation, and it makes absolutely no
-> > > sense. s390 has no way of implementing inb()/outb() because there
-> > > are no instructions for it and it cannot tunnel them through a virtual
-> > > address mapping like on most of the other architectures. (it has special
-> > > instructions for accessing memory space, which is not the same as
-> > > a pointer dereference here).
-> > > 
-> > > The existing implementation gets flagged as a NULL pointer dereference
-> > > by a compiler warning because it effectively is.
-> > 
-> > I think s390 currently uses the inb() in asm-generic/io.h, i.e.,
-> > "__raw_readb(PCI_IOBASE + addr)".  I understand that's a NULL pointer
-> > dereference because the default PCI_IOBASE is 0.
-> > 
-> > I mooted a s390 inb() implementation like "return ~0" because that's
-> > what happens on most arches when there's no device to respond to the
-> > inb().
-> > 
-> > The HAS_IOPORT dependencies are fairly ugly IMHO, and they clutter
-> > drivers that use I/O ports in some cases but not others.  But maybe
-> > it's the most practical way.
-> > 
+> Furthermore, a static assert is added to ensure both are updated
+> when that happens. The relationship used is one that keeps the new
+> size (512+1) close to the original buffer size (500).
 > 
-> Do you mean, "the most practical way to avoid a compiler warning on s390"? 
-> What about "#pragma GCC diagnostic ignored"?
+> Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
+> Co-developed-by: Miguel Ojeda <ojeda@kernel.org>
+> Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
+> ---
+>  scripts/kallsyms.c | 16 +++++++++++++---
+>  1 file changed, 13 insertions(+), 3 deletions(-)
+> 
+> diff --git a/scripts/kallsyms.c b/scripts/kallsyms.c
+> index 8caabddf817c..880c4404731b 100644
+> --- a/scripts/kallsyms.c
+> +++ b/scripts/kallsyms.c
+> @@ -27,8 +27,18 @@
+>  
+>  #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof(arr[0]))
+>  
+> +#define _stringify_1(x)	#x
+> +#define _stringify(x)	_stringify_1(x)
+> +
+>  #define KSYM_NAME_LEN		128
+>  
+> +/* A substantially bigger size than the current maximum. */
+> +#define KSYM_NAME_LEN_BUFFER	512
+> +_Static_assert(
+> +	KSYM_NAME_LEN_BUFFER == KSYM_NAME_LEN * 4,
+> +	"Please keep KSYM_NAME_LEN_BUFFER in sync with KSYM_NAME_LEN"
+> +);
+> +
+>  struct sym_entry {
+>  	unsigned long long addr;
+>  	unsigned int len;
+> @@ -197,15 +207,15 @@ static void check_symbol_range(const char *sym,
+> unsigned long long addr,
+>  
+>  static struct sym_entry *read_symbol(FILE *in)
+>  {
+> -	char name[500], type;
+> +	char name[KSYM_NAME_LEN_BUFFER+1], type;
 
-This actually happens with clang. Apart from that, I think this would
-also fall under the same argument as the original patch Linus unpulled.
-We would just paint over someting that we know at compile time won't
-work:
+When you raise KSYM_NAME_LEN to 512, this on stack allocation becomes
+2049 bytes.  How did you manage not to trigger the frame size warning,
+which is 1024 on 32 bit and 2048 on 64 bit by default?
 
-https://lore.kernel.org/lkml/CAHk-=wg80je=K7madF4e7WrRNp37e3qh6y10Svhdc7O8SZ_-8g@mail.gmail.com/
+James
 

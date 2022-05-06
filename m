@@ -2,82 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05A8951D5C0
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 12:26:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93A2951D5C2
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 12:30:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1390973AbiEFK3X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 06:29:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39146 "EHLO
+        id S1390983AbiEFKe0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 06:34:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1390999AbiEFK3M (ORCPT
+        with ESMTP id S1390977AbiEFKeY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 06:29:12 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 636DBB87D;
-        Fri,  6 May 2022 03:25:26 -0700 (PDT)
-X-UUID: a148a2a02f9c4c62a3e8622a000cbf10-20220506
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.4,REQID:ce892f98-26f0-42bb-8fd1-5a14f64b524d,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACT
-        ION:release,TS:45
-X-CID-INFO: VERSION:1.1.4,REQID:ce892f98-26f0-42bb-8fd1-5a14f64b524d,OB:0,LOB:
-        0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACTIO
-        N:release,TS:45
-X-CID-META: VersionHash:faefae9,CLOUDID:0323d6b2-56b5-4c9e-8d83-0070b288eb6a,C
-        OID:IGNORED,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,File:nil,QS:0
-        ,BEC:nil
-X-UUID: a148a2a02f9c4c62a3e8622a000cbf10-20220506
-Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw02.mediatek.com
-        (envelope-from <rex-bc.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1840432069; Fri, 06 May 2022 18:25:22 +0800
-Received: from mtkmbs07n1.mediatek.inc (172.21.101.16) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Fri, 6 May 2022 18:25:21 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Fri, 6 May 2022 18:25:21 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 6 May 2022 18:25:20 +0800
-Message-ID: <21767265818ad000f3bfea576d26b919347126c2.camel@mediatek.com>
-Subject: Re: [PATCH V5 00/16] Cleanup MediaTek clk reset drivers and support
- MT8192/MT8195
-From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
-To:     "mturquette@baylibre.com" <mturquette@baylibre.com>,
-        "sboyd@kernel.org" <sboyd@kernel.org>,
-        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>
-CC:     "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
-        "angelogioacchino.delregno@collabora.com" 
-        <angelogioacchino.delregno@collabora.com>,
-        Chun-Jie Chen =?UTF-8?Q?=28=E9=99=B3=E6=B5=9A=E6=A1=80=29?= 
-        <Chun-Jie.Chen@mediatek.com>,
-        "wenst@chromium.org" <wenst@chromium.org>,
-        Runyang Chen =?UTF-8?Q?=28=E9=99=88=E6=B6=A6=E6=B4=8B=29?= 
-        <Runyang.Chen@mediatek.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        Project_Global_Chrome_Upstream_Group 
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Fri, 6 May 2022 18:25:20 +0800
-In-Reply-To: <20220428115620.13512-1-rex-bc.chen@mediatek.com>
-References: <20220428115620.13512-1-rex-bc.chen@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Fri, 6 May 2022 06:34:24 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C14D60D9F
+        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 03:30:41 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7E80DB834C4
+        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 10:30:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84C69C385A8;
+        Fri,  6 May 2022 10:30:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651833039;
+        bh=DiC3LgVjn8hlSeyL4s67pXS3JbouAUm5Bbc8inASkBc=;
+        h=From:To:Cc:Subject:Date:From;
+        b=U/OBdulIAlCLfqgoEGO6OKme7mlmOgrkvdCfo+kMlaJ9tvprCQ3QCQKZHRAqk4Jni
+         /JRHqTtVcfkjg797uWMZKsN7tfaZNoUt0D9SkTlcZCaJ+dMu18vtPECsDWB1lZkAPO
+         vPF5+JE1tDVMWnE4TALzoSwFeG4mSs6R1mDb5rmJokymVJVGu/dufbonYLd/SIaa82
+         yrU+VavrzivCk6C45doAsgqA2Yve0s0omBFoXH1qriBo5SHmDuyR5H7O8g6imqVV4A
+         I++/Na+TvE1JW4FgQPPSRunA+45voIAVqM7/Y9/Aeaksjg9dVOeLS8P95YbcKM28qy
+         Z0cj8ZgYRk+vw==
+From:   Chao Yu <chao@kernel.org>
+To:     jaegeuk@kernel.org
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, Chao Yu <chao@kernel.org>,
+        Chao Yu <chao.yu@oppo.com>
+Subject: [PATCH v6] f2fs: give priority to select unpinned section for foreground GC
+Date:   Fri,  6 May 2022 18:30:31 +0800
+Message-Id: <20220506103031.2883390-1-chao@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,106 +53,210 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-04-28 at 19:56 +0800, Rex-BC Chen wrote:
-> In this series, we cleanup MediaTek clock reset drivers in
-> clk/mediatek
-> folder. MediaTek clock reset driver is used to provide reset control
-> of modules controlled in clk, like infra_ao.
-> 
-> Changes for V5:
-> 1. Add all infra reset bits for MT8192 and MT8195.
-> 2. Fix reviewers' comments.
-> 
-> Changes for V4:
-> 1. Abandon the implementation of reset-cell = 2, and use reset index
-> to
->    determine which reset bit is used.
-> 2. Add documentation for enum/structure/function in reset.h.
-> 3. Combine binding/drvier support patch for MT8192 and MT8195.
-> 4. The MT8195 DTS is accepted by Matthias, and I add new DTS patch to
->    support infracfg_ao reset for MT8195. The DTS of MT8195 is still
->    not merged into mainline. Please refer to [1].
-> 
-> [1]: 
-> https://git.kernel.org/pub/scm/linux/kernel/git/matthias.bgg/linux.git/commit/?h=for-next&id=37f2582883be7218dc69f9af135959a8e93de223
-> 
-> Changes for V3:
-> 1. Modify drivers for reviewers' comments.
-> 2. Add dt-binding patch for MT8192/MT8195 infra.
-> 3. Add reset property of infra node for MT8192.
-> 4. Use original function for simple operation.
-> 
-> Changes for V2:
-> 1. Modify drivers for reviewers' comments.
-> 2. Use simple reset to replace v1.
-> 3. Recover v2 to set_clr.
-> 4. Separate error handling to another patch.
-> 5. Add support for input offset and bit from DT.
-> 6. Add support for MT8192 and MT8195.
-> 
-> Rex-BC Chen (16):
->   clk: mediatek: reset: Add reset.h
->   clk: mediatek: reset: Fix written reset bit offset
->   clk: mediatek: reset: Refine and reorder functions in reset.c
->   clk: mediatek: reset: Extract common drivers to update function
->   clk: mediatek: reset: Merge and revise reset register function
->   clk: mediatek: reset: Revise structure to control reset register
->   clk: mediatek: reset: Support nonsequence base offsets of reset
-> registers
->   clk: mediatek: reset: Change return type for clock reset register
-> function
->   clk: mediatek: reset: Add new register reset function with device
->   clk: mediatek: reset: Add reset support for simple probe
->   dt-bindings: arm: mediatek: Add #reset-cells property for
-> MT8192/MT8195
->   dt-bindings: reset: mediatek: Add infra_ao reset bit for MT8195
->   dt-bindings: reset: mediatek: Add infra_ao reset bit for MT8192
->   clk: mediatek: reset: Add infra_ao reset support for MT8192/MT8195
->   arm64: dts: mediatek: Add infra #reset-cells property for MT8192
->   arm64: dts: mediatek: Add infra #reset-cells property for MT8195
-> 
->  .../mediatek/mediatek,mt8192-sys-clock.yaml   |   3 +
->  .../mediatek/mediatek,mt8195-sys-clock.yaml   |   3 +
->  arch/arm64/boot/dts/mediatek/mt8192.dtsi      |   1 +
->  arch/arm64/boot/dts/mediatek/mt8195.dtsi      |  13 +-
->  drivers/clk/mediatek/clk-mt2701-eth.c         |  10 +-
->  drivers/clk/mediatek/clk-mt2701-g3d.c         |  10 +-
->  drivers/clk/mediatek/clk-mt2701-hif.c         |  10 +-
->  drivers/clk/mediatek/clk-mt2701.c             |  22 ++-
->  drivers/clk/mediatek/clk-mt2712.c             |  22 ++-
->  drivers/clk/mediatek/clk-mt7622-eth.c         |  10 +-
->  drivers/clk/mediatek/clk-mt7622-hif.c         |  12 +-
->  drivers/clk/mediatek/clk-mt7622.c             |  22 ++-
->  drivers/clk/mediatek/clk-mt7629-eth.c         |  10 +-
->  drivers/clk/mediatek/clk-mt7629-hif.c         |  12 +-
->  drivers/clk/mediatek/clk-mt8135.c             |  22 ++-
->  drivers/clk/mediatek/clk-mt8173.c             |  22 ++-
->  drivers/clk/mediatek/clk-mt8183.c             |  18 +-
->  drivers/clk/mediatek/clk-mt8192.c             |  18 ++
->  drivers/clk/mediatek/clk-mt8195-infra_ao.c    |  15 ++
->  drivers/clk/mediatek/clk-mtk.c                |   7 +
->  drivers/clk/mediatek/clk-mtk.h                |   9 +-
->  drivers/clk/mediatek/reset.c                  | 172 ++++++++++++--
-> ----
->  drivers/clk/mediatek/reset.h                  |  77 ++++++++
->  include/dt-bindings/reset/mt8192-resets.h     | 163
-> +++++++++++++++++
->  include/dt-bindings/reset/mt8195-resets.h     | 170
-> +++++++++++++++++
->  25 files changed, 759 insertions(+), 94 deletions(-)
->  create mode 100644 drivers/clk/mediatek/reset.h
-> 
-> -- 
-> 2.18.0
-> 
+Previously, during foreground GC, if victims contain data of pinned file,
+it will fail migration of the data, and meanwhile i_gc_failures of that
+pinned file may increase, and when it exceeds threshold, GC will unpin
+the file, result in breaking pinfile's semantics.
 
-Hello Stephen and Michael,
+In order to mitigate such condition, let's record and skip section which
+has pinned file's data and give priority to select unpinned one.
 
-Could you spare some time to give us some suggestion?
-Patches of this series are all reviewed.
+Signed-off-by: Chao Yu <chao.yu@oppo.com>
+---
+v6:
+- fix f2fs_pinned_section_exists() to allow reenabling pin_section.
+ fs/f2fs/gc.c      | 85 +++++++++++++++++++++++++++++++++++++++--------
+ fs/f2fs/segment.c |  8 +++++
+ fs/f2fs/segment.h |  3 ++
+ 3 files changed, 82 insertions(+), 14 deletions(-)
 
-Many thanks!
-
-BRs,
-Rex
+diff --git a/fs/f2fs/gc.c b/fs/f2fs/gc.c
+index 6a7e4148ff9d..3d027198f536 100644
+--- a/fs/f2fs/gc.c
++++ b/fs/f2fs/gc.c
+@@ -646,6 +646,54 @@ static void release_victim_entry(struct f2fs_sb_info *sbi)
+ 	f2fs_bug_on(sbi, !list_empty(&am->victim_list));
+ }
+ 
++static bool f2fs_pin_section(struct f2fs_sb_info *sbi, unsigned int segno)
++{
++	struct dirty_seglist_info *dirty_i = DIRTY_I(sbi);
++	unsigned int secno = GET_SEC_FROM_SEG(sbi, segno);
++
++	if (!dirty_i->enable_pin_section)
++		return false;
++	if (!test_and_set_bit(secno, dirty_i->pinned_secmap))
++		dirty_i->pinned_secmap_cnt++;
++	return true;
++}
++
++static bool f2fs_pinned_section_exists(struct dirty_seglist_info *dirty_i)
++{
++	return dirty_i->pinned_secmap_cnt;
++}
++
++static bool f2fs_section_is_pinned(struct dirty_seglist_info *dirty_i,
++						unsigned int secno)
++{
++	return dirty_i->enable_pin_section &&
++		f2fs_pinned_section_exists(dirty_i) &&
++		test_bit(secno, dirty_i->pinned_secmap);
++}
++
++static void f2fs_unpin_all_sections(struct f2fs_sb_info *sbi, bool enable)
++{
++	unsigned int bitmap_size = f2fs_bitmap_size(MAIN_SECS(sbi));
++
++	if (f2fs_pinned_section_exists(DIRTY_I(sbi))) {
++		memset(DIRTY_I(sbi)->pinned_secmap, 0, bitmap_size);
++		DIRTY_I(sbi)->pinned_secmap_cnt = 0;
++	}
++	DIRTY_I(sbi)->enable_pin_section = enable;
++}
++
++static int f2fs_gc_pinned_control(struct inode *inode, int gc_type,
++							unsigned int segno)
++{
++	if (!f2fs_is_pinned_file(inode))
++		return 0;
++	if (gc_type != FG_GC)
++		return -EBUSY;
++	if (!f2fs_pin_section(F2FS_I_SB(inode), segno))
++		f2fs_pin_file_control(inode, true);
++	return -EAGAIN;
++}
++
+ /*
+  * This function is called from two paths.
+  * One is garbage collection and the other is SSR segment selection.
+@@ -787,6 +835,9 @@ static int get_victim_by_default(struct f2fs_sb_info *sbi,
+ 		if (gc_type == BG_GC && test_bit(secno, dirty_i->victim_secmap))
+ 			goto next;
+ 
++		if (gc_type == FG_GC && f2fs_section_is_pinned(dirty_i, secno))
++			goto next;
++
+ 		if (is_atgc) {
+ 			add_victim_entry(sbi, &p, segno);
+ 			goto next;
+@@ -1201,12 +1252,9 @@ static int move_data_block(struct inode *inode, block_t bidx,
+ 		goto out;
+ 	}
+ 
+-	if (f2fs_is_pinned_file(inode)) {
+-		if (gc_type == FG_GC)
+-			f2fs_pin_file_control(inode, true);
+-		err = -EAGAIN;
++	err = f2fs_gc_pinned_control(inode, gc_type, segno);
++	if (err)
+ 		goto out;
+-	}
+ 
+ 	set_new_dnode(&dn, inode, NULL, NULL, 0);
+ 	err = f2fs_get_dnode_of_data(&dn, bidx, LOOKUP_NODE);
+@@ -1351,12 +1399,9 @@ static int move_data_page(struct inode *inode, block_t bidx, int gc_type,
+ 		err = -EAGAIN;
+ 		goto out;
+ 	}
+-	if (f2fs_is_pinned_file(inode)) {
+-		if (gc_type == FG_GC)
+-			f2fs_pin_file_control(inode, true);
+-		err = -EAGAIN;
++	err = f2fs_gc_pinned_control(inode, gc_type, segno);
++	if (err)
+ 		goto out;
+-	}
+ 
+ 	if (gc_type == BG_GC) {
+ 		if (PageWriteback(page)) {
+@@ -1476,14 +1521,15 @@ static int gc_data_segment(struct f2fs_sb_info *sbi, struct f2fs_summary *sum,
+ 		ofs_in_node = le16_to_cpu(entry->ofs_in_node);
+ 
+ 		if (phase == 3) {
++			int err;
++
+ 			inode = f2fs_iget(sb, dni.ino);
+ 			if (IS_ERR(inode) || is_bad_inode(inode) ||
+ 					special_file(inode->i_mode))
+ 				continue;
+ 
+-			if (is_inode_flag_set(inode, FI_PIN_FILE) &&
+-							gc_type == FG_GC) {
+-				f2fs_pin_file_control(inode, true);
++			err = f2fs_gc_pinned_control(inode, gc_type, segno);
++			if (err == -EAGAIN) {
+ 				iput(inode);
+ 				return submitted;
+ 			}
+@@ -1766,9 +1812,17 @@ int f2fs_gc(struct f2fs_sb_info *sbi, bool sync,
+ 		ret = -EINVAL;
+ 		goto stop;
+ 	}
++retry:
+ 	ret = __get_victim(sbi, &segno, gc_type);
+-	if (ret)
++	if (ret) {
++		/* allow to search victim from sections has pinned data */
++		if (ret == -ENODATA && gc_type == FG_GC &&
++				f2fs_pinned_section_exists(DIRTY_I(sbi))) {
++			f2fs_unpin_all_sections(sbi, false);
++			goto retry;
++		}
+ 		goto stop;
++	}
+ 
+ 	seg_freed = do_garbage_collect(sbi, segno, &gc_list, gc_type, force);
+ 	if (gc_type == FG_GC &&
+@@ -1811,6 +1865,9 @@ int f2fs_gc(struct f2fs_sb_info *sbi, bool sync,
+ 	SIT_I(sbi)->last_victim[ALLOC_NEXT] = 0;
+ 	SIT_I(sbi)->last_victim[FLUSH_DEVICE] = init_segno;
+ 
++	if (gc_type == FG_GC)
++		f2fs_unpin_all_sections(sbi, true);
++
+ 	trace_f2fs_gc_end(sbi->sb, ret, total_freed, sec_freed,
+ 				get_pages(sbi, F2FS_DIRTY_NODES),
+ 				get_pages(sbi, F2FS_DIRTY_DENTS),
+diff --git a/fs/f2fs/segment.c b/fs/f2fs/segment.c
+index c9b3224ef936..8c17fed8987e 100644
+--- a/fs/f2fs/segment.c
++++ b/fs/f2fs/segment.c
+@@ -4643,6 +4643,13 @@ static int init_victim_secmap(struct f2fs_sb_info *sbi)
+ 	dirty_i->victim_secmap = f2fs_kvzalloc(sbi, bitmap_size, GFP_KERNEL);
+ 	if (!dirty_i->victim_secmap)
+ 		return -ENOMEM;
++
++	dirty_i->pinned_secmap = f2fs_kvzalloc(sbi, bitmap_size, GFP_KERNEL);
++	if (!dirty_i->pinned_secmap)
++		return -ENOMEM;
++
++	dirty_i->pinned_secmap_cnt = 0;
++	dirty_i->enable_pin_section = true;
+ 	return 0;
+ }
+ 
+@@ -5231,6 +5238,7 @@ static void destroy_victim_secmap(struct f2fs_sb_info *sbi)
+ {
+ 	struct dirty_seglist_info *dirty_i = DIRTY_I(sbi);
+ 
++	kvfree(dirty_i->pinned_secmap);
+ 	kvfree(dirty_i->victim_secmap);
+ }
+ 
+diff --git a/fs/f2fs/segment.h b/fs/f2fs/segment.h
+index 5c94caf0c0a1..8a591455d796 100644
+--- a/fs/f2fs/segment.h
++++ b/fs/f2fs/segment.h
+@@ -294,6 +294,9 @@ struct dirty_seglist_info {
+ 	struct mutex seglist_lock;		/* lock for segment bitmaps */
+ 	int nr_dirty[NR_DIRTY_TYPE];		/* # of dirty segments */
+ 	unsigned long *victim_secmap;		/* background GC victims */
++	unsigned long *pinned_secmap;		/* pinned victims from foreground GC */
++	unsigned int pinned_secmap_cnt;		/* count of victims which has pinned data */
++	bool enable_pin_section;		/* enable pinning section */
+ };
+ 
+ /* victim selection function for cleaning and SSR */
+-- 
+2.25.1
 

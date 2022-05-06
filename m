@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A738C51E285
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 01:41:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63CBC51E203
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 01:40:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1444746AbiEFWdO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 18:33:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40880 "EHLO
+        id S1444763AbiEFWe1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 18:34:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229912AbiEFWdL (ORCPT
+        with ESMTP id S1376814AbiEFWeW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 18:33:11 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52F0F5E153;
-        Fri,  6 May 2022 15:29:26 -0700 (PDT)
+        Fri, 6 May 2022 18:34:22 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE27F1DA55;
+        Fri,  6 May 2022 15:30:36 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1A187B839E6;
-        Fri,  6 May 2022 22:29:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A067C385A8;
-        Fri,  6 May 2022 22:29:22 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 98439B839E4;
+        Fri,  6 May 2022 22:30:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA910C385A8;
+        Fri,  6 May 2022 22:30:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651876163;
-        bh=y0FngmsSSvJom30mMBhLoZvRrNbqeZl4qnTn2t+QXjI=;
+        s=k20201202; t=1651876234;
+        bh=sxTU7PppLMUUauXKN/Szps48K3+Yp2KuJRpingZK3pc=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=vLWpiL6W1i7NALe3Gr1u0yqXziOB2D1Y79FbmrcBm6ez0KEs8X2L2Xg6dGtG+UuM5
-         kQG4w38vN1g4pYSLCWI7rgZc283xkPUrFja+fD+v1YFscqyKdq/cvgsAaYPsLei/nf
-         BWuoKQiXm34Gs1xfReP3QoxC2ZhjrdGHkUnI0KC6vSOiHli5y/nlmeIFkBgbpu+KnO
-         TIjLVVvdcJx2f/OvbcDVoZ2EIg3g9++OfPd7eqsiE0SaqFx4UKA2aLoPcP9ieWe7yu
-         OQc+PnxI8onIBUc3Az541pmd3zndBZ+rwn+NVpaLrPL5ThN8OO3HdoYAnkhhB5nbea
-         kwbVGmHVd0Zmg==
-Date:   Sat, 7 May 2022 01:30:48 +0300
+        b=SDBkPEfCg1pTGI8Srn8739MyPkk2qMvSwV5sgShyDnzwm2lTu+dc0YamxXpUd+wDB
+         kQej8guNE45PJAKhANDPCD6M2I4/LJ6fWESpOBSJWaVip8jbACe5/ga4LBByuK1YpK
+         AkA//mqxjAC19szynaJE4BOdiKcR5dJRdP20m/z89Xetfoy9/QHLLoGPEcA8dhdJRl
+         QHnws7EP1tPtJMFxLJyPzZzlukTQpemzHiWMBmJH0EYpwV6nae3L38HZu1twa4HhPm
+         2FYcfdXI14oxzvGIIlBpMyRbIBw8gIRil/yEq9nphSPTscJeQdv5AoP7tRldrWfj7x
+         4IJ1vYhpVH4gA==
+Date:   Sat, 7 May 2022 01:32:08 +0300
 From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     cgel.zte@gmail.com, dave.hansen@linux.intel.com,
-        tglx@linutronix.de, linux-sgx@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Minghao Chi <chi.minghao@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: Re: [PATCH] x86/sgx: simplify the return expression of sgx_drv_init()
-Message-ID: <YnWhmNMHG4yE5qhX@kernel.org>
-References: <20220505021659.54210-1-chi.minghao@zte.com.cn>
- <a29146f2-271b-8471-f846-15f0f50e614d@intel.com>
+To:     Juergen Gross <jgross@suse.com>
+Cc:     xen-devel@lists.xenproject.org, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Peter Huewe <peterhuewe@gmx.de>,
+        Jason Gunthorpe <jgg@ziepe.ca>
+Subject: Re: [PATCH v3 15/21] xen/tpmfront: use xenbus_setup_ring() and
+ xenbus_teardown_ring()
+Message-ID: <YnWh6P7kBtPa2aTA@kernel.org>
+References: <20220505081640.17425-1-jgross@suse.com>
+ <20220505081640.17425-16-jgross@suse.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <a29146f2-271b-8471-f846-15f0f50e614d@intel.com>
+In-Reply-To: <20220505081640.17425-16-jgross@suse.com>
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -57,23 +57,13 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 05, 2022 at 10:31:41AM -0700, Dave Hansen wrote:
-> On 5/4/22 19:16, cgel.zte@gmail.com wrote:
-> > From: Minghao Chi <chi.minghao@zte.com.cn>
-> > 
-> > Simplify the return expression.
-> > 
-> > Reported-by: Zeal Robot <zealci@zte.com.cn>
-> > Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
+On Thu, May 05, 2022 at 10:16:34AM +0200, Juergen Gross wrote:
+> Simplify tpmfront's ring creation and removal via xenbus_setup_ring()
+> and xenbus_teardown_ring().
 > 
-> Folks, I'd really encourage you to spend your time elsewhere.  These
-> "cleanup" or "simplify" patches as a whole have high rates of bugs.  I
-> don't trust them.  Plus, they don't really make the code easier to
-> understand.
+> Signed-off-by: Juergen Gross <jgross@suse.com>
 
-I agree. I get this kind of clean up in the context of doing something
-to the functionality (in the same path) but it does not live by its own.
-
-Plus, these type of patches add to the effort backporting fixes.
+Please add to the commit message why these provide an equivalent
+functionality.
 
 BR, Jarkko

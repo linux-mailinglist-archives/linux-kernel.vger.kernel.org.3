@@ -2,62 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44B9451DE5E
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 19:31:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D4B851DE63
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 19:32:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1444212AbiEFRfc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 13:35:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33918 "EHLO
+        id S1444219AbiEFRgN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 13:36:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1444142AbiEFRf2 (ORCPT
+        with ESMTP id S1444142AbiEFRgK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 13:35:28 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 612C650449;
-        Fri,  6 May 2022 10:31:45 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F02FFB8381C;
-        Fri,  6 May 2022 17:31:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B3C9C385AC;
-        Fri,  6 May 2022 17:31:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651858302;
-        bh=XM4Gk5T8GH7GMEQf6U7SdCZ/bJ3i7FcXCA8a6u/+Phw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=uuEgS8uT/cx0rVZpl3sJSdC+aa46jfK7MQTmuUq1/7k/Q1utE92cfKe2AwGDY4Szm
-         zqucEQ9F4R+MHnozBuS4/elW/i5mKokD5lKRwYCRpx+Pa6HXThFwzqoWdApxm1HsX9
-         ODHxvi5F7XaFwBO5T64FGZTtnOWHhNGzQ/wbffhcqHRORum3xp1cvXJqRUyGQXm81F
-         rXChqOeKXsj0KYO38Bi7qpGWDKvTg5nSi19tvRpYc2rYYqR7ROT3ZwxU3IPtFK8EbC
-         k1Nex2dBChoxmrlm4S/SIaSepRjZqL/Yv4T1Fc/0CroYXjyRrbedY4OFjB8sCb0g45
-         brfTNsHvA284A==
-Date:   Fri, 6 May 2022 10:31:40 -0700
-From:   Josh Poimboeuf <jpoimboe@kernel.org>
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Chen Zhongjin <chenzhongjin@huawei.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-arch@vger.kernel.org, jthierry@redhat.com,
-        catalin.marinas@arm.com, will@kernel.org, masahiroy@kernel.org,
-        jpoimboe@redhat.com, ycote@redhat.com, herbert@gondor.apana.org.au,
-        davem@davemloft.net, ardb@kernel.org, maz@kernel.org,
-        tglx@linutronix.de, luc.vanoostenryck@gmail.com
-Subject: Re: [RFC PATCH v4 22/37] arm64: kernel: Skip validation of kuser32.o
-Message-ID: <20220506173140.gkuhf3kzxq7mxfi2@treble>
-References: <20220429094355.122389-1-chenzhongjin@huawei.com>
- <20220429094355.122389-23-chenzhongjin@huawei.com>
- <YmvGja62yWdPHPOW@hirez.programming.kicks-ass.net>
- <a57f7d73-6e01-8f41-9be3-8e90807ec08f@huawei.com>
- <20220505092448.GE2501@worktop.programming.kicks-ass.net>
- <YnOtbYOIT5OP7F0g@FVFF77S0Q05N.cambridge.arm.com>
+        Fri, 6 May 2022 13:36:10 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33FE05047B;
+        Fri,  6 May 2022 10:32:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651858347; x=1683394347;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=RJIpyH4aTtIDi9aTnRTxdWTTpZ/zrmSOQtRCRTJZbRw=;
+  b=iTnFYc4gmZeuC0UJYgs0IHP/gXEyWLz5sU5Aae/3yIdSAGaEhjYehT2P
+   jtR7dnX5e3opm0UFej3f3BerB90zB1Ty0Xfg+TUpOIl1q+1qfD31Ou/jx
+   8ZEc0HOp1TUQLfSrgytNjrMNCJU1p+WReTiehU+7RY8hueiTb86hMv1rE
+   rIL3TDSCj6caMQXFsq3rW9ownSDu7LYDeMzPROrcZ1ZvbK+PCyjLN5XfC
+   wGyPDspl9U6bQ6KjeyKPdzCEV8MWe++tG0+cePTP7J58uq53hm3pmmObN
+   qcmBguNYF/C4yQC22M7u1kTZcWlZYGH/kKII92lVG/Bku3bOYaLLxg1vs
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10339"; a="268425255"
+X-IronPort-AV: E=Sophos;i="5.91,205,1647327600"; 
+   d="scan'208";a="268425255"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2022 10:32:26 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,205,1647327600"; 
+   d="scan'208";a="812475599"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by fmsmga006.fm.intel.com with ESMTP; 06 May 2022 10:32:23 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nn1oV-000DiS-2G;
+        Fri, 06 May 2022 17:32:23 +0000
+Date:   Sat, 7 May 2022 01:31:56 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Luca Weiss <luca@z3ntu.xyz>, linux-arm-msm@vger.kernel.org
+Cc:     kbuild-all@lists.01.org, ~postmarketos/upstreaming@lists.sr.ht,
+        phone-devel@vger.kernel.org, Luca Weiss <luca@z3ntu.xyz>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] ARM: dts: qcom: msm8974-FP2: Add notification LED
+Message-ID: <202205070100.8DCDwfSb-lkp@intel.com>
+References: <20220505163029.6541-1-luca@z3ntu.xyz>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YnOtbYOIT5OP7F0g@FVFF77S0Q05N.cambridge.arm.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20220505163029.6541-1-luca@z3ntu.xyz>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,18 +69,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 05, 2022 at 11:56:45AM +0100, Mark Rutland wrote:
-> The objects under arch/arm64/kernel/{vdso,vdso32}/ are all userspace objects,
-> and from userspace's PoV the existing secrtions within those objects are
-> correct, so I don't think those should change.
-> 
-> How does x86 deal with its vdso objects?
+Hi Luca,
 
-On x86, we just use OBJECT_FILES_NON_STANDARD (like the up-thread patch)
-to tell objtool to ignore all the vdso objects.
+Thank you for the patch! Yet something to improve:
 
-That should be fine for vdso, since it doesn't actually end up as text
-in vmlinux.
+[auto build test ERROR on next-20220505]
+[cannot apply to robh/for-next v5.18-rc5 v5.18-rc4 v5.18-rc3 v5.18-rc5]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Luca-Weiss/ARM-dts-qcom-msm8974-FP2-Add-notification-LED/20220506-003524
+base:    632a8c88e339fe86ae6e420a24dfc641d4dd0ab5
+config: arm-allmodconfig (https://download.01.org/0day-ci/archive/20220507/202205070100.8DCDwfSb-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/45445147f88f2416d7bc32c8a72c714818fe466c
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Luca-Weiss/ARM-dts-qcom-msm8974-FP2-Add-notification-LED/20220506-003524
+        git checkout 45445147f88f2416d7bc32c8a72c714818fe466c
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> Error: arch/arm/boot/dts/qcom-msm8974pro-fairphone-fp2.dts:123.1-12 Label or path pm8941_lpg not found
+   FATAL ERROR: Syntax error parsing input tree
 
 -- 
-Josh
+0-DAY CI Kernel Test Service
+https://01.org/lkp

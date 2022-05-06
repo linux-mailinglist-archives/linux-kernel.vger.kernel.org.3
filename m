@@ -2,167 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B44A51DA2C
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 16:10:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38BB951DBBC
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 17:16:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1442052AbiEFOO3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 10:14:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38426 "EHLO
+        id S1442747AbiEFPUC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 11:20:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1442080AbiEFOO0 (ORCPT
+        with ESMTP id S1347956AbiEFPT5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 10:14:26 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3877529C96;
-        Fri,  6 May 2022 07:10:39 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: dmitry.osipenko)
-        with ESMTPSA id C4EBD1F46719
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1651846231;
-        bh=aPzN11eOYyBmn6uYxSJ4z+OxGW0B11goKlzatjEFOG4=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=A5kW1JJmvHfMp+G3BYZfs1DtIoJxwTSAkQcm9HkU230sGHCbaarPy3d3ylVb7ghQK
-         QFidNeP16CsPIu7NGef5buR6vQrZaa2Bu2Ol7ocivR52MK99+p14lZHhPhckFBadHq
-         LWO8HGz0L5XHJgOXIl4zHum9KGrTPQ8XNRCAiPLiBFHqfgiXkDJFYnZvSeZjgWY6Sf
-         b+r6JcWvC90AjEGx12tTLe293/2dwUtSGPf4vDeIZmmldanQoeJoRJ1W5+Zs/dm4mK
-         YMULBdy55mQ6HS0+7WhL/7UJ3ikAvXuW+YZrNYtURWDPqYm9/aozEGozBwUb1cqkv6
-         H0OATVRjsYPpg==
-Message-ID: <ca422804-0fa0-5fef-07e2-a9ff005a495c@collabora.com>
-Date:   Fri, 6 May 2022 17:10:24 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v7 04/20] kernel: Add combined power-off+restart handler
- call chain API
-Content-Language: en-US
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Greg Ungerer <gerg@linux-m68k.org>,
-        Joshua Thompson <funaho@jurai.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Sebastian Reichel <sre@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Greentime Hu <green.hu@gmail.com>,
-        Vincent Chen <deanbo422@gmail.com>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
+        Fri, 6 May 2022 11:19:57 -0400
+Received: from out02.mta.xmission.com (out02.mta.xmission.com [166.70.13.232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8031A66203;
+        Fri,  6 May 2022 08:16:13 -0700 (PDT)
+Received: from in01.mta.xmission.com ([166.70.13.51]:52514)
+        by out02.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1nmygm-009mY8-CM; Fri, 06 May 2022 08:12:12 -0600
+Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:37200 helo=email.froward.int.ebiederm.org.xmission.com)
+        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1nmygj-007Bpk-Tg; Fri, 06 May 2022 08:12:11 -0600
+From:   "Eric W. Biederman" <ebiederm@xmission.com>
+To:     <linux-arch@vger.kernel.org>
+Cc:     Tejun Heo <tj@kernel.org>, Peter Zijlstra <peterz@infradead.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Al Viro <viro@ZenIV.linux.org.uk>,
+        Jens Axboe <axboe@kernel.dk>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Juergen Gross <jgross@suse.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, Pavel Machek <pavel@ucw.cz>,
-        Lee Jones <lee.jones@linaro.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-csky@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
-        Linux-sh list <linux-sh@vger.kernel.org>,
-        xen-devel@lists.xenproject.org,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        linux-tegra <linux-tegra@vger.kernel.org>
-References: <20220411233832.391817-1-dmitry.osipenko@collabora.com>
- <20220411233832.391817-5-dmitry.osipenko@collabora.com>
- <CAJZ5v0gnTSoeNP+QXwrZ45FQY4howVkJMuCjM=j+_-2BngJdQg@mail.gmail.com>
- <990621e7-9f8a-8b4a-02ec-fd6c1e1f48ff@collabora.com>
- <CAJZ5v0jxXtwot0qpib4UG8Tz8Hd1dEbgo58tEdPFboU8xwKHNw@mail.gmail.com>
-From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
-In-Reply-To: <CAJZ5v0jxXtwot0qpib4UG8Tz8Hd1dEbgo58tEdPFboU8xwKHNw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+        Linus Torvalds <torvalds@linuxfoundation.org>,
+        <linux-kernel@vger.kernel.org>
+References: <CANpfEhOnNZa5d_G3e0dzzbbEtSuqxWY-fUCqzSiFpiQ2k0hJyw@mail.gmail.com>
+        <CAHk-=wjfecvcUk2vNQM1GiUz_G=WQEJ8i8JS7yjnxjq_f-OgKw@mail.gmail.com>
+        <87a6czifo7.fsf@email.froward.int.ebiederm.org>
+        <CAHk-=wj=EHvH-DEUHbkoB3vDZJ1xRzrk44JibtNOepNkachxPw@mail.gmail.com>
+        <87ilrn1drx.ffs@tglx> <877d7zk1cf.ffs@tglx>
+        <CAHk-=wiJPeANKYU4imYaeEuV6sNP+EDR=rWURSKv=y4Mhcn1hA@mail.gmail.com>
+        <87y20fid4d.ffs@tglx>
+        <87bkx5q3pk.fsf_-_@email.froward.int.ebiederm.org>
+Date:   Fri, 06 May 2022 09:11:36 -0500
+In-Reply-To: <87bkx5q3pk.fsf_-_@email.froward.int.ebiederm.org> (Eric
+        W. Biederman's message of "Tue, 12 Apr 2022 18:31:03 -0500")
+Message-ID: <87mtfu4up3.fsf@email.froward.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Content-Type: text/plain
+X-XM-SPF: eid=1nmygj-007Bpk-Tg;;;mid=<87mtfu4up3.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=softfail
+X-XM-AID: U2FsdGVkX19t4gV9Zdd4oP1qG3l/gRiLHnzIm5vjIGg=
+X-SA-Exim-Connect-IP: 68.227.174.4
+X-SA-Exim-Mail-From: ebiederm@xmission.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-DCC: XMission; sa06 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: ***;<linux-arch@vger.kernel.org>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 1843 ms - load_scoreonly_sql: 0.07 (0.0%),
+        signal_user_changed: 13 (0.7%), b_tie_ro: 11 (0.6%), parse: 1.21
+        (0.1%), extract_message_metadata: 4.4 (0.2%), get_uri_detail_list:
+        1.57 (0.1%), tests_pri_-1000: 7 (0.4%), tests_pri_-950: 1.86 (0.1%),
+        tests_pri_-900: 1.71 (0.1%), tests_pri_-90: 503 (27.3%), check_bayes:
+        501 (27.2%), b_tokenize: 9 (0.5%), b_tok_get_all: 9 (0.5%),
+        b_comp_prob: 2.8 (0.2%), b_tok_touch_all: 475 (25.8%), b_finish: 1.22
+        (0.1%), tests_pri_0: 1290 (70.0%), check_dkim_signature: 0.69 (0.0%),
+        check_dkim_adsp: 3.1 (0.2%), poll_dns_idle: 1.08 (0.1%), tests_pri_10:
+        2.4 (0.1%), tests_pri_500: 8 (0.5%), rewrite_mail: 0.00 (0.0%)
+Subject: [PATCH 0/7] fork: Make init and umh ordinary tasks
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/20/22 21:47, Rafael J. Wysocki wrote:
->>>> +       POWEROFF_PREPARE,
->>>> +};
->>>> +
->>>> +/**
->>>> + * struct power_off_data - Power-off callback argument
->>>> + *
->>>> + * @cb_data: Callback data.
->>>> + */
->>>> +struct power_off_data {
->>>> +       void *cb_data;
->>>> +};
->>>> +
->>>> +/**
->>>> + * struct power_off_prep_data - Power-off preparation callback argument
->>>> + *
->>>> + * @cb_data: Callback data.
->>>> + */
->>>> +struct power_off_prep_data {
->>>> +       void *cb_data;
->>>> +};
->>> Why does this need to be a separate data type?
->> To allow us extend the "struct power_off_prep_data" with more parameters
->> later on without a need to update each driver with the new arguments.
 
-> I'm not really sure what you mean here.  Can you give an example?
-> 
+In commit 40966e316f86 ("kthread: Ensure struct kthread is present for
+all kthreads") caused init and the user mode helper threads that call
+kernel_execve to have struct kthread allocated for them.
 
-The restart callbacks use more than the cb_data and we have:
+I believe my first patch in this series is enough to fix the bug
+and is simple enough and obvious enough to be backportable.
 
-struct restart_data {
-	void *cb_data;
-	const char *cmd;
-	bool stop_chain;
-	enum reboot_mode mode;
-};
+The rest of the changes pass struct kernel_clone_args to clean things
+up and cause the code to make sense.
 
-If we'll ever need to extended struct power_off_data similarly to the
-restart_data, then we will need to update all the power-off callbacks
-instead of adding a new field to the power_off_data.
+There is one rough spot in this change.  In the init process before the
+user space init process is exec'd there is a lot going on.  I have found
+when async_schedule_domain is low on memory or has more than 32K callers
+executing do_populate_rootfs will now run in a user space thread making
+flush_delayed_fput meaningless, and __fput_sync is unusable.  I solved
+this as I did in usermode_driver.c with an added explicit task_work_run.
+I point this out as I have seen some talk about making flushing file
+handles more explicit.
 
-Hence, for example, if you'll want to extend power_off_data with "enum
-poweroff_mode mode", then for each driver you'll need to do this change:
+Eric W. Biederman (7):
+      kthread: Don't allocate kthread_struct for init and umh
+      fork: Pass struct kernel_clone_args into copy_thread
+      fork: Explicity test for idle tasks in copy_thread
+      fork: Generalize PF_IO_WORKER handling
+      init: Deal with the init process being a user mode process
+      fork: Explicitly set PF_KTHREAD
+      fork: Stop allowing kthreads to call execve
 
--power_off(void *cb_data)
-+power_off(void *cb_data, enum poweroff_mode mode)
+ arch/alpha/kernel/process.c      | 13 ++++++------
+ arch/arc/kernel/process.c        | 13 ++++++------
+ arch/arm/kernel/process.c        | 12 ++++++-----
+ arch/arm64/kernel/process.c      | 12 ++++++-----
+ arch/csky/kernel/process.c       | 15 ++++++-------
+ arch/h8300/kernel/process.c      | 10 ++++-----
+ arch/hexagon/kernel/process.c    | 12 ++++++-----
+ arch/ia64/kernel/process.c       | 15 +++++++------
+ arch/m68k/kernel/process.c       | 12 ++++++-----
+ arch/microblaze/kernel/process.c | 12 ++++++-----
+ arch/mips/kernel/process.c       | 13 ++++++------
+ arch/nios2/kernel/process.c      | 12 ++++++-----
+ arch/openrisc/kernel/process.c   | 12 ++++++-----
+ arch/parisc/kernel/process.c     | 18 +++++++++-------
+ arch/powerpc/kernel/process.c    | 15 +++++++------
+ arch/riscv/kernel/process.c      | 12 ++++++-----
+ arch/s390/kernel/process.c       | 12 ++++++-----
+ arch/sh/kernel/process_32.c      | 12 ++++++-----
+ arch/sparc/kernel/process_32.c   | 12 ++++++-----
+ arch/sparc/kernel/process_64.c   | 12 ++++++-----
+ arch/um/kernel/process.c         | 15 +++++++------
+ arch/x86/include/asm/fpu/sched.h |  2 +-
+ arch/x86/include/asm/switch_to.h |  8 +++----
+ arch/x86/kernel/fpu/core.c       |  4 ++--
+ arch/x86/kernel/process.c        | 18 +++++++++-------
+ arch/xtensa/kernel/process.c     | 17 ++++++++-------
+ fs/exec.c                        |  8 ++++---
+ include/linux/sched/task.h       |  8 +++++--
+ init/initramfs.c                 |  2 ++
+ init/main.c                      |  2 +-
+ kernel/fork.c                    | 46 +++++++++++++++++++++++++++++++++-------
+ kernel/umh.c                     |  6 +++---
+ 32 files changed, 233 insertions(+), 159 deletions(-)
 
-and you won't need to do that using struct power_off_data.
-
-Why do we need this? Because I saw in the past people changing kernel
-APIs that way when they wanted to add new arguments and then needed to
-update every call site around the kernel.
-
--- 
-Best regards,
-Dmitry
+Eric

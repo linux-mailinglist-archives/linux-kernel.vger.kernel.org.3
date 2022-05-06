@@ -2,158 +2,467 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F6AF51DEFA
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 20:19:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57F8451DF01
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 20:20:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1391220AbiEFSXG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 14:23:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43272 "EHLO
+        id S235427AbiEFSYE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 14:24:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235427AbiEFSXE (ORCPT
+        with ESMTP id S1386409AbiEFSXe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 14:23:04 -0400
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2084.outbound.protection.outlook.com [40.107.93.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5909120AD
-        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 11:19:19 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=kpd5+CTQUCNO/cyOvDBNq9N6DyKExO5xjj7y4xM7Ja9e2PXAPmsK7OHi0zTuox/Y3NZFkxUwcaXqeBHWlxYzXwHE35JX7zzRJ3TphFHKk8A2f9SDelka0O0st1EcZygGcRncO7mopmEQTcs8uPhVUspASEwljg1UhxriYB0MXfcemCcOGgUFZi2COGj1HUr9SqpX4+YUAVfizElNEtPiISRzdsqILQ7S02Re04rXHn18KhU+IKLu2HQZAzJEehY7PZxl5YD36z553Nx28WgyERAh9ybiFqXj/0Asziq0zNIt1bS2Dh1Q60LjuA2qQDo0lpd27mO0oxJC3SWiIFcKBQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=2TJiqtcisY8lA0q7Q/q4lYk2ugio9dnvazu6xoDdec0=;
- b=BeMiwiGPedIFnILxUMwxtylLkeKi1KDO7RATDhLvD4W1W1yqNL8kU/OKY5TsoKsxfsGgooMGMpeXaE0UwC2GjoGBHevO4G5CBCzA+Q//CxQn/lqw53fbFgI8DH5eIf3ahc/+B3tIbRY5nAKBJttwqQJvzh/hP4pgTWQvM9RRMcnjrCAm9JCNBVHIK93EpXEayvL8WAsVd6YpeNKokI0FtkmhrIQzQX3jKMU8zNQxzz7tK1bnR6rcxPzkymTAvN4LF65lHfjcdJCEA4LvsgxYCwstK0tCAH8TDYsfOWCezs69HOyt++X+hCplnlcuuc9b1sA8HkDwPg+s44PsJo9ZpQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=2TJiqtcisY8lA0q7Q/q4lYk2ugio9dnvazu6xoDdec0=;
- b=23dPtIWnePd+LnP3PmED3BHrRr+Nqvku/T6VExoXxBMLlWumptGkXLCM91/40kyIDf7ojCYqYX3amrpIRU50jRp5pnA6WAPXjA5PJ17vsRWkXaYQOT7BsXZcJYhLwRF7mVQtXq3HFDwAtKAKmmFfT6M9J+n8S+Fr/hKrzzyRzps=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BYAPR12MB3368.namprd12.prod.outlook.com (2603:10b6:a03:dc::20)
- by CH0PR12MB5139.namprd12.prod.outlook.com (2603:10b6:610:be::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5206.24; Fri, 6 May
- 2022 18:19:17 +0000
-Received: from BYAPR12MB3368.namprd12.prod.outlook.com
- ([fe80::1c22:8110:ebf0:f38d]) by BYAPR12MB3368.namprd12.prod.outlook.com
- ([fe80::1c22:8110:ebf0:f38d%7]) with mapi id 15.20.5186.028; Fri, 6 May 2022
- 18:19:17 +0000
-Message-ID: <4b8b9ae0-07ba-0d54-d1ac-1844062f1c4b@amd.com>
-Date:   Fri, 6 May 2022 23:49:00 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v2 2/3] x86: Remove vendor checks from
- prefer_mwait_c1_over_halt
-Content-Language: en-US
-To:     Dave Hansen <dave.hansen@intel.com>, linux-kernel@vger.kernel.org
-Cc:     Lewis.Carroll@amd.com, Mario.Limonciello@amd.com,
-        gautham.shenoy@amd.com, Ananth.Narayan@amd.com, bharata@amd.com,
-        len.brown@intel.com, x86@kernel.org, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        hpa@zytor.com, peterz@infradead.org, chang.seok.bae@intel.com,
-        keescook@chromium.org, metze@samba.org, zhengqi.arch@bytedance.com,
-        mark.rutland@arm.com, puwen@hygon.cn, rafael.j.wysocki@intel.com,
-        andrew.cooper3@citrix.com, jing2.liu@intel.com,
-        jmattson@google.com, pawan.kumar.gupta@linux.intel.com
-References: <20220505104856.452311-1-wyes.karny@amd.com>
- <20220505110140.453184-1-wyes.karny@amd.com>
- <0b501f18-a6b8-1d9b-e72a-ea6cb33720a2@intel.com>
- <fa4e26df-d2e7-7b13-a961-4f741b319e79@amd.com>
- <1a806ced-4bb9-c18f-e614-75e9d9722d08@intel.com>
-From:   Wyes Karny <wyes.karny@amd.com>
-In-Reply-To: <1a806ced-4bb9-c18f-e614-75e9d9722d08@intel.com>
+        Fri, 6 May 2022 14:23:34 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1B7D6E8F6;
+        Fri,  6 May 2022 11:19:50 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6FB486211D;
+        Fri,  6 May 2022 18:19:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB7BCC385A9;
+        Fri,  6 May 2022 18:19:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651861189;
+        bh=F8OZZkP2VCHLM+mFrp5QDGv1xHS8ckfdGAQvYzcVY7Y=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=CxFcRt2W8R/2CfHJ1kJIK6DpbkFRyRblymXIh7LUrOVMd5W11l1shKAC2BQG8nG8G
+         QQupTw66h7pCGhAEjkpyG42MlPdQnclc1sSudXsVzmIRyOOd8FjgsVGmRRWWV+QUma
+         rD4pdd+8ByoVzetqrxsKMaITP6PijA8lofpp9xr/wRlhC1gXGSeefovRsyUk65Wcva
+         /IMS8efd5u+f/saSw8uISjQPWH0nyeD+eetTf5XMBXb5UzhyDJvo8oIrieAqA0BJyC
+         rmEhLVU3RAdqbuLnm+E4zgE9ghOWubRqDAvEiRBlk/Q8lUkaHzzkBWOQdhCp5YXwe7
+         IQUyzm4DgbkxA==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nn2YN-009X4h-4G; Fri, 06 May 2022 19:19:47 +0100
+Date:   Fri, 06 May 2022 19:19:46 +0100
+Message-ID: <87mtfu7ccd.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Pali =?UTF-8?B?Um9ow6Fy?= <pali@kernel.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Krzysztof =?UTF-8?B?V2lsY3p5xYRza2k=?= <kw@linux.com>,
+        Marek =?UTF-8?B?QmVow7pu?= <kabel@kernel.org>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH 2/6] irqchip/armada-370-xp: Implement SoC Error interrupts
+In-Reply-To: <20220506134029.21470-3-pali@kernel.org>
+References: <20220506134029.21470-1-pali@kernel.org>
+        <20220506134029.21470-3-pali@kernel.org>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: PN0PR01CA0037.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:49::17) To BYAPR12MB3368.namprd12.prod.outlook.com
- (2603:10b6:a03:dc::20)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: ff4d4d7a-591e-473b-f184-08da2f8cee04
-X-MS-TrafficTypeDiagnostic: CH0PR12MB5139:EE_
-X-Microsoft-Antispam-PRVS: <CH0PR12MB51392535C7A18BE5729835C584C59@CH0PR12MB5139.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: uBewFQ0z0H6ESXw9riK8eI2USh9u7MDgrr2//DWzGRMWWd/KMHn0ymaoIynCe+PPep6rieB9eJMa5JsUfktyyCYDqh7bbH1OktVF9bTTyxDKoVopvqewCIVYcdy+bXxoeKPDsMD71+2eRxvr+EnnRaPL2gnXyJLlTz/Vs1V9juMsZ2qUnNkt+oFD1YLnpDnbZBmYzqidok8ZFye6jjhiF3hrax3urYYX6A3v/bxY/zmrlRcF/Fpyydv0aEqrzNhO0P796XxqzZooBq8JQOondl+nv0igYe/ZznmbNZtz9OowEb1L+f3yGWqSjTWwC1TDr3b/8HoRMC880dtGZ9aI/TntEF2exuAOMrF0HXKjW0Me+3R2hIgOypO9TJfCAfODEeCFjLlQ9Iv4/h0HaSER9ANkIZ8nzW08bhVvNca9gNXm4VAOEsGfTmT26ZxX8zk3b60jPxL/Kem4r/u8mhphu647gWY951VM67pDszDtvHqtP+XgklYNSKhPfYpd3nQ2proBTv9x0G6BnHkihnq+elWFydq2ZE5q9TMLT3m6Iko+9+KmJB9nC48Xum3AZt4OX6AOHGEQ0HXUy3rKAwYPjn0XG4TD4Y7AHvVe/gsOjQPc1Yv91Cyq/5K0pqtjCNFjZUk8CJumtVPF4yxI44u0cpJj8TGTROd2kz2Zr+uYLNqsMpuIY9Xs6krXKT5/hpK1Pjyx2WfnLtYMY78Pbdo/l2qK53Bt6ijOYQeXZqRXHqA=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB3368.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(5660300002)(6506007)(508600001)(44832011)(7416002)(53546011)(55236004)(316002)(4744005)(38100700002)(6486002)(86362001)(4326008)(31696002)(8676002)(66946007)(66556008)(66476007)(6666004)(8936002)(186003)(36756003)(2616005)(2906002)(6512007)(26005)(31686004)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?QnF6NnFzY05rOU1sRVVHM3BvRU50SDVhalFVUnJpQ25sVnNRWGluK3hjb2c5?=
- =?utf-8?B?RWlKa09hc25DM1NkQzZlWUxsMUJEbEU3M3RsZFA3K0U3bi9iQm16bFJTazVq?=
- =?utf-8?B?SG9PUjlPTFdWMDVqMmYxOVpVQ3R0aHhoRElxRlpFZGJmSWs2T3dQaTd5QXBY?=
- =?utf-8?B?dEpydlQ2Nk5KS0s3ZTYzaWF4UU4rTDNqUXIyZkhRSDJaOEMvdFBSL0EyM0xm?=
- =?utf-8?B?WU96bTVsN0RUaVhCRkZvam90a25WTjFoNDFwME9adUVwSnA0TjJCakUwU2tu?=
- =?utf-8?B?TXdjN1dnMi9SRS94MmllYWF1eFBGVDcvOE9jMVdtK05vMmxwUzFRbWpPVC9S?=
- =?utf-8?B?eWJwMG1lRFI5cTNtY1FmZ3NwL1hSQ2pJRXY5bDVDTlc1ZHh0QTgyWWw4emkx?=
- =?utf-8?B?OW5xYnRqd05GYVJCL3l0SjltUk5pdllmMDdUeDZhRkV6bDlMZ3J3OVdSc3Ux?=
- =?utf-8?B?OUhyeHRLK3A1dUs2VTJPMDRIazFFcWtHWjhpUTYzOUxOM01XUVZzRGt3M0hP?=
- =?utf-8?B?YjZwNkphVVlXQTRrQzZ1NEJXZHJKM2N4VFJGMVBFVjIyeUYxbzV4ZXBPSklW?=
- =?utf-8?B?Q2ZPSXoyd2VHWXI3aTZncitCVkFManhpYURNYVVsc09iTHh2QkNwaGh5amxh?=
- =?utf-8?B?Q1Evd3JKaTBJSkRnZlRUUXJIV3FBT1k2eDdRaFpZU3NRcFRKNFNCZkNrU3dR?=
- =?utf-8?B?UnIzWFFST0swRTVZZUpEU0lnWWJKZDdWVUx6RC9WZTh5RUdrRC81RVRkMW96?=
- =?utf-8?B?MUdqalVyUHNzWmpMNVlwbE9uc3A2V3c1czJCMXlackQxNGVhL3JpWDZhUzNs?=
- =?utf-8?B?a3lGWnlsaEFESU45eThjbWU2Szl5OUJVbS9BNDVSR04rTE5wUzF0ZHBxR29R?=
- =?utf-8?B?eHpkT3V3Vnl6M1dVRkg1Z1JEbzJlUlh1YS9RZFFoWVhoQ1hNVzdYRVNkZThn?=
- =?utf-8?B?NWU2d3BRQWhRNDBpMHZzS2xFK29oNk10ZDRvblhzb0c3d0UvZURYb0hFNjlP?=
- =?utf-8?B?YnVxcFBKYUZtTDhBOE4yWlpGRk5UZlpGSUFBUXdxSGZmb2JvRW95c2ZLcWNH?=
- =?utf-8?B?VWlmSERYK2dCNWhjcEZLNnFtVk5vRkhHQS9UYW9xMGVDbTM2STBxb2tDak1u?=
- =?utf-8?B?dTZEa3ZCcEhOQTVRNCtTcDQrYVVZeWt3UURRK0RkYktRNjJPdUdnTVd1S1BF?=
- =?utf-8?B?T3VyeFhKTTM2OU5FUGNtMStJZ1Y5VGNrejBQS1lEL0psZmVXS04yREd2RWdz?=
- =?utf-8?B?eDJYZFo3a004ek9Gemd3amlzQURCUzlCbng5ZFFMSktKK2ZoUG9zS01xUkdH?=
- =?utf-8?B?S0hCTk9ZRFJTK3RVUm5wa1RGQTZadE9PUjhMYk5zbmZmZ0Nra3dwQ0gzQTdQ?=
- =?utf-8?B?aEk5VUpOTnZTaFh2RXRSR2tGWmtLNExXQmJOVXRjTkprRzdxa0txN1hobTJi?=
- =?utf-8?B?YTZqekZFU3BpNjBuQjFIdVo2d1pkYmJxa09YcFFHVUkrUU5hTWVGbEdUTHV1?=
- =?utf-8?B?TnB6RXlzSDJRYjNzZjNzK3c3ZFp3WGR6dnUwN0tsb3BjdlIwa3pUeDZMNXlB?=
- =?utf-8?B?Smd4WStwTURBa294dFU1Z1grZDZnU2V2dkpUdEs2TzlobVJGS0x6eDZxU2ww?=
- =?utf-8?B?TVJ0dE9qZjB6UkZKMUJlMnJSOWdQU01INnkvdnMrS2F3M1g4cFA2TjVGVzJV?=
- =?utf-8?B?SVVmaFo3YXl3UXpsWVJGMFdlai9tdEFrM1Z4dUF0M2JsUHJXWmFNM3VHUWNY?=
- =?utf-8?B?eUVpMVA1dXBiYkIwS2lBc0dRZlRCZ2lBWURYUjNtYjlrUnV0cDkzd29lanl2?=
- =?utf-8?B?RktJWkM3ZURDZm9CNGtkUmtJTFZSQndRN1dZb0lNQjJRbFJueUxDWGJjdGFa?=
- =?utf-8?B?aThlSnFJZ3hzV0U2N3BXNDNZeGFGSkRGLzlZN0pqdGtMbE5adFFjSXRLSmhK?=
- =?utf-8?B?OVhiQ2pUeVNBdGFIS1cweWpGSU01aFBFb3pJZEF0Z2ZKeHVBTVYrcHJTWlJR?=
- =?utf-8?B?L1NNdytVK2Q0Wk1oQ1lTL3VtQ1dEQUhEeGxRZFVpTENyVjJwcXFVVGxIQ0JV?=
- =?utf-8?B?VVNVRk13U3h6Ri8xdmVuQWtwb0tqUWV0Q21zYjAwc2xQR0JMZytia2FXOEVL?=
- =?utf-8?B?azJGWmQyVXdJNmZlR2ZSaEltQUhCQSttaTAyTDFXcEhCSy9PQjNoWG9wRUVK?=
- =?utf-8?B?c2lJbmdWSXBHSjgrRDJMT0VYUnh2SGI4L0pML0w2ZWpBZFRkcllKRUJ6Szd1?=
- =?utf-8?B?VndCc0pGR1lKSW5xUy9KNzR1bUlZMzNVV2JxcDkzMTQrOVh2bkJtU2FKbEFR?=
- =?utf-8?B?YlN6K0tia2Rza0tONVVUR0JIQmdUREJpN3FUaWViUzFBUHJWYWhLUT09?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ff4d4d7a-591e-473b-f184-08da2f8cee04
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB3368.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 May 2022 18:19:16.7824
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 6riIaK6CeIjF6nOq8Pc4UYf27Jdja6R9qvyTTjTbUyQRufIgcg6EukiXxsZdTG38uiYN45BlZ15TFlZKM7YCUA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR12MB5139
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: pali@kernel.org, tglx@linutronix.de, robh+dt@kernel.org, bhelgaas@google.com, andrew@lunn.ch, gregory.clement@bootlin.com, sebastian.hesselbarth@gmail.com, thomas.petazzoni@bootlin.com, lorenzo.pieralisi@arm.com, kw@linux.com, kabel@kernel.org, linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/6/2022 9:22 PM, Dave Hansen wrote:
-> On 5/6/22 02:42, Wyes Karny wrote:
->>
->> So, if CPUID.05H:ECX[0] = 0, MWAIT extensions are not available (not allowed) and hence 
->> it is safe to use MWAIT with EAX=0,ECX=0. Otherwise, we have to check CPUID.05H:EDX[bit 7:4]
->> to get the number of C1 substates and this should be greater than equal to 1.
-> 
-> Ahh, I misread the comment.  I was confusing the CPUID leaf ECX data
-> with the use of ECX hints to MWAIT.
-> 
-> Could you add maybe a sentence or two more in that comment to help
-> clarify the situation?
+On Fri, 06 May 2022 14:40:25 +0100,
+Pali Roh=C3=A1r <pali@kernel.org> wrote:
+>=20
+> MPIC IRQ 4 is used as SoC Error Summary interrupt and provides access to
+> another hierarchy of SoC Error interrupts. Implement a new IRQ chip and
+> domain for accessing this IRQ hierarchy.
+>=20
+> Signed-off-by: Pali Roh=C3=A1r <pali@kernel.org>
+> ---
+>  drivers/irqchip/irq-armada-370-xp.c | 213 +++++++++++++++++++++++++++-
+>  1 file changed, 210 insertions(+), 3 deletions(-)
+>=20
+> diff --git a/drivers/irqchip/irq-armada-370-xp.c b/drivers/irqchip/irq-ar=
+mada-370-xp.c
+> index ebd76ea1c69b..71578b65f5c8 100644
+> --- a/drivers/irqchip/irq-armada-370-xp.c
+> +++ b/drivers/irqchip/irq-armada-370-xp.c
+> @@ -117,6 +117,8 @@
+>  /* Registers relative to main_int_base */
+>  #define ARMADA_370_XP_INT_CONTROL		(0x00)
+>  #define ARMADA_370_XP_SW_TRIG_INT_OFFS		(0x04)
+> +#define ARMADA_370_XP_INT_SOC_ERR_0_CAUSE_OFFS	(0x20)
+> +#define ARMADA_370_XP_INT_SOC_ERR_1_CAUSE_OFFS	(0x24)
+>  #define ARMADA_370_XP_INT_SET_ENABLE_OFFS	(0x30)
+>  #define ARMADA_370_XP_INT_CLEAR_ENABLE_OFFS	(0x34)
+>  #define ARMADA_370_XP_INT_SOURCE_CTL(irq)	(0x100 + irq*4)
+> @@ -130,6 +132,8 @@
+>  #define ARMADA_370_XP_CPU_INTACK_OFFS		(0x44)
+>  #define ARMADA_370_XP_INT_SET_MASK_OFFS		(0x48)
+>  #define ARMADA_370_XP_INT_CLEAR_MASK_OFFS	(0x4C)
+> +#define ARMADA_370_XP_INT_SOC_ERR_0_MASK_OFF	(0x50)
+> +#define ARMADA_370_XP_INT_SOC_ERR_1_MASK_OFF	(0x54)
+>  #define ARMADA_370_XP_INT_FABRIC_MASK_OFFS	(0x54)
+>  #define ARMADA_370_XP_INT_CAUSE_PERF(cpu)	(1 << cpu)
+> =20
+> @@ -146,6 +150,8 @@
+>  static void __iomem *per_cpu_int_base;
+>  static void __iomem *main_int_base;
+>  static struct irq_domain *armada_370_xp_mpic_domain;
+> +static struct irq_domain *armada_370_xp_soc_err_domain;
+> +static unsigned int soc_err_irq_num_regs;
+>  static u32 doorbell_mask_reg;
+>  static int parent_irq;
+>  #ifdef CONFIG_PCI_MSI
+> @@ -156,6 +162,8 @@ static DEFINE_MUTEX(msi_used_lock);
+>  static phys_addr_t msi_doorbell_addr;
+>  #endif
+> =20
+> +static void armada_370_xp_soc_err_irq_unmask(struct irq_data *d);
+> +
+>  static inline bool is_percpu_irq(irq_hw_number_t irq)
+>  {
+>  	if (irq <=3D ARMADA_370_XP_MAX_PER_CPU_IRQS)
+> @@ -509,6 +517,27 @@ static void armada_xp_mpic_reenable_percpu(void)
+>  		armada_370_xp_irq_unmask(data);
+>  	}
+> =20
+> +	/* Re-enable per-CPU SoC Error interrupts that were enabled before susp=
+end */
+> +	for (irq =3D 0; irq < soc_err_irq_num_regs * 32; irq++) {
+> +		struct irq_data *data;
+> +		int virq;
+> +
+> +		virq =3D irq_linear_revmap(armada_370_xp_soc_err_domain, irq);
+> +		if (virq =3D=3D 0)
+> +			continue;
+> +
+> +		data =3D irq_get_irq_data(virq);
+> +
+> +		if (!irq_percpu_is_enabled(virq))
+> +			continue;
+> +
+> +		armada_370_xp_soc_err_irq_unmask(data);
+> +	}
 
-Sure, will do. Thanks!
+So you do this loop and all these lookups, both here and in the resume
+function (duplicated code!) just to be able to call the unmask
+function?  This would be better served by two straight writes of the
+mask register, which you'd conveniently save on suspend.
 
-> 
+Yes, you have only duplicated the existing logic. But surely there is
+something better to do.
 
+> +
+> +	/* Unmask summary SoC Error Interrupt */
+> +	if (soc_err_irq_num_regs > 0)
+> +		writel(4, per_cpu_int_base + ARMADA_370_XP_INT_CLEAR_MASK_OFFS);
+> +
+>  	ipi_resume();
+>  }
+> =20
+> @@ -546,8 +575,8 @@ static struct irq_chip armada_370_xp_irq_chip =3D {
+>  static int armada_370_xp_mpic_irq_map(struct irq_domain *h,
+>  				      unsigned int virq, irq_hw_number_t hw)
+>  {
+> -	/* IRQs 0 and 1 cannot be mapped, they are handled internally */
+> -	if (hw <=3D 1)
+> +	/* IRQs 0, 1 and 4 cannot be mapped, they are handled internally */
+> +	if (hw <=3D 1 || hw =3D=3D 4)
+>  		return -EINVAL;
+> =20
+>  	armada_370_xp_irq_mask(irq_get_irq_data(virq));
+> @@ -577,6 +606,99 @@ static const struct irq_domain_ops armada_370_xp_mpi=
+c_irq_ops =3D {
+>  	.xlate =3D irq_domain_xlate_onecell,
+>  };
+> =20
+> +static DEFINE_RAW_SPINLOCK(armada_370_xp_soc_err_lock);
+> +
+> +static void armada_370_xp_soc_err_irq_mask(struct irq_data *d)
+> +{
+> +	irq_hw_number_t hwirq =3D irqd_to_hwirq(d);
+> +	u32 reg, mask;
+> +
+> +	reg =3D hwirq >=3D 32 ? ARMADA_370_XP_INT_SOC_ERR_1_MASK_OFF
+> +			  : ARMADA_370_XP_INT_SOC_ERR_0_MASK_OFF;
+> +
+> +	raw_spin_lock(&armada_370_xp_soc_err_lock);
+> +	mask =3D readl(per_cpu_int_base + reg);
+> +	mask &=3D ~BIT(hwirq % 32);
+> +	writel(mask, per_cpu_int_base + reg);
+> +	raw_spin_unlock(&armada_370_xp_soc_err_lock);
+> +}
+> +
+> +static void armada_370_xp_soc_err_irq_unmask(struct irq_data *d)
+> +{
+> +	irq_hw_number_t hwirq =3D irqd_to_hwirq(d);
+> +	u32 reg, mask;
+> +
+> +	reg =3D hwirq >=3D 32 ? ARMADA_370_XP_INT_SOC_ERR_1_MASK_OFF
+> +			  : ARMADA_370_XP_INT_SOC_ERR_0_MASK_OFF;
+> +
+> +	raw_spin_lock(&armada_370_xp_soc_err_lock);
+> +	mask =3D readl(per_cpu_int_base + reg);
+> +	mask |=3D BIT(hwirq % 32);
+> +	writel(mask, per_cpu_int_base + reg);
+> +	raw_spin_unlock(&armada_370_xp_soc_err_lock);
+> +}
+> +
+> +static int armada_370_xp_soc_err_irq_mask_on_cpu(void *par)
+> +{
+> +	struct irq_data *d =3D par;
+> +	armada_370_xp_soc_err_irq_mask(d);
+> +	return 0;
+> +}
+> +
+> +static int armada_370_xp_soc_err_irq_unmask_on_cpu(void *par)
+> +{
+> +	struct irq_data *d =3D par;
+> +	armada_370_xp_soc_err_irq_unmask(d);
+> +	return 0;
+> +}
+> +
+> +static int armada_xp_soc_err_irq_set_affinity(struct irq_data *d,
+> +					      const struct cpumask *mask,
+> +					      bool force)
+> +{
+> +	unsigned int cpu;
+> +
+> +	cpus_read_lock();
+> +
+> +	/* First disable IRQ on all cores */
+> +	for_each_online_cpu(cpu)
+> +		smp_call_on_cpu(cpu, armada_370_xp_soc_err_irq_mask_on_cpu, d, true);
+> +
+> +	/* Select a single core from the affinity mask which is online */
+> +	cpu =3D cpumask_any_and(mask, cpu_online_mask);
+> +	smp_call_on_cpu(cpu, armada_370_xp_soc_err_irq_unmask_on_cpu, d, true);
+> +
+> +	cpus_read_unlock();
+> +
+> +	irq_data_update_effective_affinity(d, cpumask_of(cpu));
+> +
+> +	return IRQ_SET_MASK_OK;
+> +}
+
+Aren't these per-CPU interrupts anyway? What does it mean to set their
+affinity? /me rolls eyes...
+
+> +
+> +static struct irq_chip armada_370_xp_soc_err_irq_chip =3D {
+> +	.name =3D "MPIC SOC",
+> +	.irq_mask =3D armada_370_xp_soc_err_irq_mask,
+> +	.irq_unmask =3D armada_370_xp_soc_err_irq_unmask,
+> +	.irq_set_affinity =3D armada_xp_soc_err_irq_set_affinity,
+> +};
+> +
+> +static int armada_370_xp_soc_err_irq_map(struct irq_domain *h,
+> +					 unsigned int virq, irq_hw_number_t hw)
+> +{
+> +	armada_370_xp_soc_err_irq_mask(irq_get_irq_data(virq));
+> +	irq_set_status_flags(virq, IRQ_LEVEL);
+> +	irq_set_percpu_devid(virq);
+> +	irq_set_chip_and_handler(virq, &armada_370_xp_soc_err_irq_chip,
+> +				 handle_percpu_devid_irq);
+> +	irq_set_probe(virq);
+> +	return 0;
+> +}
+> +
+> +static const struct irq_domain_ops armada_370_xp_soc_err_irq_ops =3D {
+> +	.map =3D armada_370_xp_soc_err_irq_map,
+> +	.xlate =3D irq_domain_xlate_onecell,
+> +};
+> +
+>  #ifdef CONFIG_PCI_MSI
+>  static void armada_370_xp_handle_msi_irq(struct pt_regs *regs, bool is_c=
+hained)
+>  {
+> @@ -605,6 +727,32 @@ static void armada_370_xp_handle_msi_irq(struct pt_r=
+egs *regs, bool is_chained)
+>  static void armada_370_xp_handle_msi_irq(struct pt_regs *r, bool b) {}
+>  #endif
+> =20
+> +static void armada_370_xp_handle_soc_err_irq(void)
+> +{
+> +	unsigned long status, bit;
+> +	u32 mask, cause;
+> +
+> +	if (soc_err_irq_num_regs < 1)
+> +		return;
+> +
+> +	mask =3D readl(per_cpu_int_base + ARMADA_370_XP_INT_SOC_ERR_0_MASK_OFF);
+> +	cause =3D readl(main_int_base + ARMADA_370_XP_INT_SOC_ERR_0_CAUSE_OFFS);
+> +	status =3D cause & mask;
+> +
+> +	for_each_set_bit(bit, &status, 32)
+> +		generic_handle_domain_irq(armada_370_xp_soc_err_domain, bit);
+> +
+> +	if (soc_err_irq_num_regs < 2)
+> +		return;
+> +
+> +	mask =3D readl(per_cpu_int_base + ARMADA_370_XP_INT_SOC_ERR_1_MASK_OFF);
+> +	cause =3D readl(main_int_base + ARMADA_370_XP_INT_SOC_ERR_1_CAUSE_OFFS);
+> +	status =3D cause & mask;
+> +
+> +	for_each_set_bit(bit, &status, 32)
+> +		generic_handle_domain_irq(armada_370_xp_soc_err_domain, bit + 32);
+> +}
+> +
+>  static void armada_370_xp_mpic_handle_cascade_irq(struct irq_desc *desc)
+>  {
+>  	struct irq_chip *chip =3D irq_desc_get_chip(desc);
+> @@ -630,6 +778,11 @@ static void armada_370_xp_mpic_handle_cascade_irq(st=
+ruct irq_desc *desc)
+>  			continue;
+>  		}
+> =20
+> +		if (irqn =3D=3D 4) {
+> +			armada_370_xp_handle_soc_err_irq();
+> +			continue;
+> +		}
+> +
+>  		generic_handle_domain_irq(armada_370_xp_mpic_domain, irqn);
+>  	}
+> =20
+> @@ -649,7 +802,7 @@ armada_370_xp_handle_irq(struct pt_regs *regs)
+>  		if (irqnr > 1022)
+>  			break;
+> =20
+> -		if (irqnr > 1) {
+> +		if (irqnr > 1 && irqnr !=3D 4) {
+>  			generic_handle_domain_irq(armada_370_xp_mpic_domain,
+>  						  irqnr);
+>  			continue;
+> @@ -659,6 +812,10 @@ armada_370_xp_handle_irq(struct pt_regs *regs)
+>  		if (irqnr =3D=3D 1)
+>  			armada_370_xp_handle_msi_irq(regs, false);
+> =20
+> +		/* SoC Error handling */
+> +		if (irqnr =3D=3D 4)
+> +			armada_370_xp_handle_soc_err_irq();
+> +
+>  #ifdef CONFIG_SMP
+>  		/* IPI Handling */
+>  		if (irqnr =3D=3D 0) {
+> @@ -722,6 +879,26 @@ static void armada_370_xp_mpic_resume(void)
+>  		}
+>  	}
+> =20
+> +	/* Re-enable per-CPU SoC Error interrupts */
+> +	for (irq =3D 0; irq < soc_err_irq_num_regs * 32; irq++) {
+> +		struct irq_data *data;
+> +		int virq;
+> +
+> +		virq =3D irq_linear_revmap(armada_370_xp_soc_err_domain, irq);
+> +		if (virq =3D=3D 0)
+> +			continue;
+> +
+> +		data =3D irq_get_irq_data(virq);
+> +
+> +		/*
+> +		 * Re-enable on the current CPU,
+> +		 * armada_xp_mpic_reenable_percpu() will take
+> +		 * care of secondary CPUs when they come up.
+> +		 */
+> +		if (irq_percpu_is_enabled(virq))
+> +			armada_370_xp_soc_err_irq_unmask(data);
+> +	}
+
+As I said above, this is duplicated code that should be replaced with
+a simple write to the corresponding MMIO registers.
+
+> +
+>  	/* Reconfigure doorbells for IPIs and MSIs */
+>  	writel(doorbell_mask_reg,
+>  	       per_cpu_int_base + ARMADA_370_XP_IN_DRBEL_MSK_OFFS);
+> @@ -730,6 +907,10 @@ static void armada_370_xp_mpic_resume(void)
+>  	if (doorbell_mask_reg & PCI_MSI_DOORBELL_MASK)
+>  		writel(1, per_cpu_int_base + ARMADA_370_XP_INT_CLEAR_MASK_OFFS);
+> =20
+> +	/* Unmask summary SoC Error Interrupt */
+> +	if (soc_err_irq_num_regs > 0)
+> +		writel(4, per_cpu_int_base + ARMADA_370_XP_INT_CLEAR_MASK_OFFS);
+
+Magic value?
+
+Also, writing to this register tends to indicate that the whole thing
+should really be a chained irqchip... Maybe that's overkill in this
+instance, but the whole thing is rather oddly architected.
+
+> +
+>  	ipi_resume();
+>  }
+> =20
+> @@ -742,6 +923,7 @@ static int __init armada_370_xp_mpic_of_init(struct d=
+evice_node *node,
+>  					     struct device_node *parent)
+>  {
+>  	struct resource main_int_res, per_cpu_int_res;
+> +	struct device_node *soc_err_node;
+>  	int nr_irqs, i;
+>  	u32 control;
+> =20
+> @@ -775,12 +957,37 @@ static int __init armada_370_xp_mpic_of_init(struct=
+ device_node *node,
+>  	BUG_ON(!armada_370_xp_mpic_domain);
+>  	irq_domain_update_bus_token(armada_370_xp_mpic_domain, DOMAIN_BUS_WIRED=
+);
+> =20
+> +	soc_err_node =3D of_get_next_child(node, NULL);
+> +	if (!soc_err_node) {
+> +		pr_warn("Missing SoC Error Interrupt Controller node\n");
+> +		pr_warn("Extended interrupts are not supported\n");
+> +	} else {
+> +		pr_info("Registering MPIC SoC Error Interrupt Controller\n");
+> +		/*
+> +		 * Armada 370 and XP have only 32 SoC Error IRQs in one register
+> +		 * and other Armada platforms have 64 IRQs in two registers.
+> +		 */
+> +		soc_err_irq_num_regs =3D
+> +			of_machine_is_compatible("marvell,armada-370-xp") ? 1 : 2;
+
+Don't you have an actual compatible string for the interrupt
+controller?  It seems odd to rely on the SoC name.
+
+> +		armada_370_xp_soc_err_domain =3D
+> +			irq_domain_add_hierarchy(armada_370_xp_mpic_domain, 0,
+> +						 soc_err_irq_num_regs * 32,
+> +						 soc_err_node,
+> +						 &armada_370_xp_soc_err_irq_ops,
+> +						 NULL);
+> +		BUG_ON(!armada_370_xp_soc_err_domain);
+> +	}
+> +
+>  	/* Setup for the boot CPU */
+>  	armada_xp_mpic_perf_init();
+>  	armada_xp_mpic_smp_cpu_init();
+> =20
+>  	armada_370_xp_msi_init(node, main_int_res.start);
+> =20
+> +	/* Unmask summary SoC Error Interrupt */
+> +	if (soc_err_irq_num_regs > 0)
+> +		writel(4, per_cpu_int_base + ARMADA_370_XP_INT_CLEAR_MASK_OFFS);
+> +
+
+Magic value, duplicated this time?
+
+>  	parent_irq =3D irq_of_parse_and_map(node, 0);
+>  	if (parent_irq <=3D 0) {
+>  		irq_set_default_host(armada_370_xp_mpic_domain);
+> --=20
+> 2.20.1
+>=20
+>=20
+
+	M.
+
+--=20
+Without deviation from the norm, progress is not possible.

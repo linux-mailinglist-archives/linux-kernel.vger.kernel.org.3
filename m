@@ -2,97 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77A3A51D37C
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 10:36:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51B5A51D376
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 10:35:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1389535AbiEFIkQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 04:40:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57232 "EHLO
+        id S1390179AbiEFIir (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 04:38:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238317AbiEFIkO (ORCPT
+        with ESMTP id S1390172AbiEFIin (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 04:40:14 -0400
-Received: from mx1.cqplus1.com (unknown [113.204.237.245])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2C2CB24BCA
-        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 01:36:10 -0700 (PDT)
-X-MailGates: (flag:1,DYNAMIC,RELAY,NOHOST,LAN:PASS)(compute_score:DELIVE
-        R,40,3)
-Received: from 172.27.96.203
-        by mx1.cqplus1.com with MailGates ESMTP Server V5.0(24042:0:AUTH_RELAY)
-        (envelope-from <qinjian@cqplus1.com>); Fri, 06 May 2022 16:34:24 +0800 (CST)
-Received: from CQEXMAIL01.cqplus1.com (172.27.96.203) by
- CQEXMAIL01.cqplus1.com (172.27.96.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.6; Fri, 6 May 2022 16:34:17 +0800
-Received: from CQEXMAIL01.cqplus1.com ([::1]) by CQEXMAIL01.cqplus1.com
- ([::1]) with mapi id 15.01.2507.006; Fri, 6 May 2022 16:34:17 +0800
-From:   =?utf-8?B?cWluamlhblvopoPlgaVd?= <qinjian@cqplus1.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-CC:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        "Stephen Boyd" <sboyd@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        "Russell King - ARM Linux" <linux@armlinux.org.uk>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        DTML <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>
-Subject: RE: [PATCH v14 0/9] Add Sunplus SP7021 SoC Support
-Thread-Topic: [PATCH v14 0/9] Add Sunplus SP7021 SoC Support
-Thread-Index: AQHYYPmpoyLFCwENCkOMTsBsGD1pya0Q7muAgACVJHA=
-Date:   Fri, 6 May 2022 08:34:17 +0000
-Message-ID: <23e22e4e8b9e4d7ab02caaa1c3f7b599@cqplus1.com>
-References: <cover.1651805790.git.qinjian@cqplus1.com>
- <CAK8P3a0W4wpVwDmCXDkm_u9W=JozrnCnxW7zK3h2XD8f_ODy6w@mail.gmail.com>
-In-Reply-To: <CAK8P3a0W4wpVwDmCXDkm_u9W=JozrnCnxW7zK3h2XD8f_ODy6w@mail.gmail.com>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.28.110.18]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Fri, 6 May 2022 04:38:43 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 598E862BF1;
+        Fri,  6 May 2022 01:35:01 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id AB3B021A63;
+        Fri,  6 May 2022 08:34:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1651826099; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=E8fz2Qj+5LloVB8vVJMGmoituacjkJeR6Cyj3S17Ync=;
+        b=kdq0pyczu0FGQoWPRbX1YpR0o5BSPmfjwNvpAxR1AlStsynwpp7SB/tNoYJxLftFy/aiUv
+        TZXJf8hGYPOFT/rqwaq/jR8vnukH8M+voTZMHiaqCo+4BZBydvA2Tph0SGDOBhQj3nX2Vs
+        RrOb1FgrjYdDKxGn/SJkjE9UrMN8MUY=
+Received: from suse.cz (unknown [10.100.201.202])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id C16E32C142;
+        Fri,  6 May 2022 08:34:58 +0000 (UTC)
+Date:   Fri, 6 May 2022 10:34:58 +0200
+From:   Petr Mladek <pmladek@suse.com>
+To:     Miguel Ojeda <ojeda@kernel.org>
+Cc:     Josh Poimboeuf <jpoimboe@redhat.com>,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Helge Deller <deller@gmx.de>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Changbin Du <changbin.du@intel.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kees Cook <keescook@chromium.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-kernel@vger.kernel.org, live-patching@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, rust-for-linux@vger.kernel.org,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@google.com>,
+        Gary Guo <gary@garyguo.net>, Boqun Feng <boqun.feng@gmail.com>
+Subject: Re: [PATCH v1 3/3] kallsyms: increase maximum kernel symbol length
+ to 512
+Message-ID: <YnTdslR0jhUNo0lu@alley>
+References: <20220505191704.22812-1-ojeda@kernel.org>
+ <20220505191704.22812-4-ojeda@kernel.org>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220505191704.22812-4-ojeda@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PiANCj4gT24gRnJpLCBNYXkgNiwgMjAyMiBhdCA1OjIzIEFNIFFpbiBKaWFuIDxxaW5qaWFuQGNx
-cGx1czEuY29tPiB3cm90ZToNCj4gPg0KPiA+IFRoaXMgcGF0Y2ggc2VyaWVzIGFkZCBTdW5wbHVz
-IFNQNzAyMSBTb0Mgc3VwcG9ydC4NCj4gPg0KPiA+IFN1bnBsdXMgU1A3MDIxIGlzIGFuIEFSTSBD
-b3J0ZXggQTcgKDQgY29yZXMpIGJhc2VkIFNvQy4gSXQgaW50ZWdyYXRlcyBtYW55DQo+ID4gcGVy
-aXBoZXJhbHMgKGV4OiBVQVJULCBJMkMsIFNQSSwgU0RJTywgZU1NQywgVVNCLCBTRCBjYXJkIGFu
-ZCBldGMuKSBpbnRvIGENCj4gPiBzaW5nbGUgY2hpcC4gSXQgaXMgZGVzaWduZWQgZm9yIGluZHVz
-dHJpYWwgY29udHJvbC4NCj4gPg0KPiA+IFNQNzAyMSBjb25zaXN0cyBvZiB0d28gY2hpcHMgKGRp
-ZXMpIGluIGEgcGFja2FnZS4gT25lIGlzIGNhbGxlZCBDLWNoaXANCj4gPiAoY29tcHV0aW5nIGNo
-aXApLiBJdCBpcyBhIDQtY29yZSBBUk0gQ29ydGV4IEE3IENQVS4gSXQgYWRvcHRzIGhpZ2gtbGV2
-ZWwNCj4gPiBwcm9jZXNzICgyMiBubSkgZm9yIGhpZ2ggcGVyZm9ybWFuY2UgY29tcHV0aW5nLiBU
-aGUgb3RoZXIgaXMgY2FsbGVkIFAtDQo+ID4gY2hpcCAocGVyaXBoZXJhbCBjaGlwKS4gSXQgaGFz
-IG1hbnkgcGVyaXBoZXJhbHMgYW5kIGFuIEFSTSBBOTI2IGFkZGVkDQo+ID4gZXNwZWNpYWxseSBm
-b3IgcmVhbC10aW1lIGNvbnRyb2wuIFAtY2hpcCBpcyBtYWRlIGZvciBjdXN0b21lcnMuIEl0IGFk
-b3B0cw0KPiA+IGxvdy1sZXZlbCBwcm9jZXNzIChleDogMC4xMSB1bSkgdG8gcmVkdWNlIGNvc3Qu
-DQo+IA0KPiBKdXN0IGFuIHVwZGF0ZSBmcm9tIG15IHNpZGUgYWJvdXQgbWVyZ2luZyB0aGUgcGxh
-dGZvcm0gY29kZTogdGhlDQo+IHN1Ym1pc3Npb24gbG9va3MgbW9zdGx5IHNlbnNpYmxlIHRvIG1l
-LCBidXQgYXMgbG9uZyBhcyB0aGUgY2xrIGFuZCBpcnFjaGlwDQo+IGRyaXZlcnMgaGF2ZSBub3Qg
-ZmluaXNoZWQgdGhlIHJldmlldywgSSBjYW5ub3QgdGFrZSB0aGlzIHRocm91Z2ggdGhlIHNvYw0K
-PiB0cmVlLiBXZSBjb3VsZCBjb25zaWRlciBtZXJnaW5nIHRoZSBwbGF0Zm9ybSBjb2RlIHdpdGhv
-dXQgdGhvc2UgdHdvDQo+IGRyaXZlcnMsIGJ1dCB0aGF0IHNlZW1zIHBvaW50bGVzcyBiZWNhdXNl
-IGl0IHdpbGwgbm90IGJvb3QuDQo+IA0KDQpUaGUgcmV2aWV3ZXJzIG5vIHJlcGx5LCBJIGRvbuKA
-mXQga25vdyB3aHkuDQoNCj4gV2hhdCBpcyB0aGUgcmVhc29uIHlvdSBkb24ndCBpbmNsdWRlIGEg
-LmR0c2kgZmlsZSBpbiB0aGlzIHNlcmllcz8gVXN1YWxseQ0KPiB0aGVyZSBzaG91bGQgYmUgYXQg
-bGVhc3Qgb25lIGJvYXJkIGFuZCB0aGUgZGVzY3JpcHRpb24gb2YgdGhlIFNvQyBpdHNlbGYuDQo+
-IEFnYWluLCB3aXRob3V0IHRob3NlIEknbSBub3Qgc3VyZSBpdCdzIHdvcnRoIG1lcmdpbmcuDQo+
-IA0KDQpTb3JyeSwgSSdsbCBhZGQgdGhlIGR0cyBmaWxlIGluIG5leHQgcGF0Y2guDQoNCj4gRm9y
-IHRoZSB0aW1pbmcsIHdlIGFyZSBnZXR0aW5nIGNsb3NlIHRvIHRoZSA1LjE5IG1lcmdlIHdpbmRv
-dyB0aGF0DQo+IHN0YXJ0cyBvbmNlIHY1LjE4IGlzIG91dCwgYW5kIEkgZG9uJ3QgZXhwZWN0IHRo
-YXQgYWxsIHRoZSBhYm92ZSB3aWxsDQo+IGJlIHJlc29sdmVkIGluIHRpbWUsIHNvIGl0IGxvb2tz
-IHdlIHdpbGwgaGF2ZSB0byBkZWZlciBpdCBieSBvbmUgbW9yZQ0KPiByZWxlYXNlIHRvIDUuMjAu
-DQo+IA0KPiAgICAgICAgICAgQXJuZA0K
+On Thu 2022-05-05 21:16:45, Miguel Ojeda wrote:
+> Rust symbols can become quite long due to namespacing introduced
+> by modules, types, traits, generics, etc. For instance,
+> the following code:
+> 
+>     pub mod my_module {
+>         pub struct MyType;
+>         pub struct MyGenericType<T>(T);
+> 
+>         pub trait MyTrait {
+>             fn my_method() -> u32;
+>         }
+> 
+>         impl MyTrait for MyGenericType<MyType> {
+>             fn my_method() -> u32 {
+>                 42
+>             }
+>         }
+>     }
+> 
+> generates a symbol of length 96 when using the upcoming v0 mangling scheme:
+> 
+>     _RNvXNtCshGpAVYOtgW1_7example9my_moduleINtB2_13MyGenericTypeNtB2_6MyTypeENtB2_7MyTrait9my_method
+> 
+> At the moment, Rust symbols may reach up to 300 in length.
+> Setting 512 as the maximum seems like a reasonable choice to
+> keep some headroom.
+> 
+> Co-developed-by: Alex Gaynor <alex.gaynor@gmail.com>
+> Signed-off-by: Alex Gaynor <alex.gaynor@gmail.com>
+> Co-developed-by: Wedson Almeida Filho <wedsonaf@google.com>
+> Signed-off-by: Wedson Almeida Filho <wedsonaf@google.com>
+> Co-developed-by: Gary Guo <gary@garyguo.net>
+> Signed-off-by: Gary Guo <gary@garyguo.net>
+> Co-developed-by: Boqun Feng <boqun.feng@gmail.com>
+> Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
+> Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
+
+I was primary interested into the livepatching code.
+But the entire patch looks good:
+
+Reviewed-by: Petr Mladek <pmladek@suse.com>
+
+I just hope that it will not cause stack overflows
+somewhere.
+
+Best Regards,
+Petr

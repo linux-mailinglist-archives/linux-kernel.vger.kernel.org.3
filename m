@@ -2,174 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E842851DFA2
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 21:27:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D24EE51DFA5
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 21:29:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1390582AbiEFTbB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 15:31:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39936 "EHLO
+        id S1390848AbiEFTdP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 15:33:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236285AbiEFTbA (ORCPT
+        with ESMTP id S236285AbiEFTdN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 15:31:00 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BD6B6A071;
-        Fri,  6 May 2022 12:27:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651865236; x=1683401236;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=AW906yaOruqYoLxGe4BkeNY7iQOHYqZeONTXC8+tXQs=;
-  b=Yhf5rPi2R7+jgFG71/+bgThISjVgAL3nsVyVw0np9Uc7468BZvObfy/x
-   JgyJOfliO/UtfYauC513Jd+uKdSh8gMAUnLYRQ9WgFsrmlm1m/iqUnVeF
-   QooJGnYKE8xITLP/Bfl5oV5SaDK73WeBHI2JXmrYFKz7zw2a9YfZp/Q5y
-   bkr2kutmrDQouZGSia8lydTDhXVz3OqmjEXyeUnwav4p3qumx5aEG9XKJ
-   JFQlLx+H4mxHvyl1/ixNUZK232KvAJWXjYnQHuHZZWl8g1KfgpUVjKqVw
-   V5JLRWodAZKafrRkSmtiLwY832IBOFpV7Z1ecFnMk3kTjyHP8OtxdKfRu
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10339"; a="266148817"
-X-IronPort-AV: E=Sophos;i="5.91,205,1647327600"; 
-   d="scan'208";a="266148817"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2022 12:27:15 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,205,1647327600"; 
-   d="scan'208";a="586155393"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 06 May 2022 12:27:01 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nn3bQ-000Dnw-GL;
-        Fri, 06 May 2022 19:27:00 +0000
-Date:   Sat, 7 May 2022 03:26:08 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Qin Jian <qinjian@cqplus1.com>, krzysztof.kozlowski@linaro.org
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org, robh+dt@kernel.org,
-        mturquette@baylibre.com, sboyd@kernel.org, tglx@linutronix.de,
-        maz@kernel.org, p.zabel@pengutronix.de, linux@armlinux.org.uk,
-        arnd@arndb.de, linux-arm-kernel@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, Qin Jian <qinjian@cqplus1.com>
-Subject: Re: [PATCH v14 7/9] irqchip: Add Sunplus SP7021 interrupt controller
- driver
-Message-ID: <202205070356.RRuPT69d-lkp@intel.com>
-References: <7e469fb049959f88cf2b37649e6f3eb1d0fd3440.1651805790.git.qinjian@cqplus1.com>
+        Fri, 6 May 2022 15:33:13 -0400
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF57F6D868
+        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 12:29:28 -0700 (PDT)
+Received: by mail-lj1-x22c.google.com with SMTP id m23so10387642ljb.8
+        for <linux-kernel@vger.kernel.org>; Fri, 06 May 2022 12:29:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=openvz-org.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:from:subject:to:cc
+         :references:content-language:in-reply-to:content-transfer-encoding;
+        bh=KWAb658hWnEyrNgr/yyrfE4nucb98F+3qRmQt1CMXNA=;
+        b=G/TjzTQMF1GsQTZOCwfujliBF5HfJ5GxX8JkT7vDeyvg5KUQUOMV7XEtC6MmaPQGPx
+         vhCqL1NN0ajISS2f5/HLS0G4JOZ6J0ehLRpNWgpeo3/byghb7omWCXJKirrgPdRi4h+G
+         elmvcOwiVB0KrZMyC6FV+JiyRVKQY667j3Vl70wZnt6RZJwD7IIHdFX0mrzOo/FuDgz5
+         /ViZkoq02gVCwy3ERveiYb6XZe0GEe1DdKy2aiPGKGAUo38kAuG+rBL50vxkpDyaMyos
+         G9bVpgU0U8+7maS6R2RLUVPa1mK/ghZnh2yhqf+bP6IvFBrl9Ll2C1tJYNMQDzvMvr82
+         tMrg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
+         :subject:to:cc:references:content-language:in-reply-to
+         :content-transfer-encoding;
+        bh=KWAb658hWnEyrNgr/yyrfE4nucb98F+3qRmQt1CMXNA=;
+        b=NTTsTdmSl79WcN5XkXDeAvl+mz+ckwPQxzp7m66+zenaiDYUkRCCfRf29cJ2tsAece
+         yWKErHvKmIWY1tSGgzNgJc41uisYEMUcpS6/tloI33sqfwod4k+VG90wGMJ/QcWdsXcg
+         6DfjQkwRUgyef5h/+eaCXf3/bNke/s9xafmuOMr7jA03HiervOkFF6RL173knwAE+6PV
+         bMvE4HFPetPpWMztFZN65pouVKDfWzZ2VPwXgrqFnnlEBgxc4pAL8EKNXhXVDEmsXoJk
+         41EdNVKEQQS1UDrH0X9hAVU0o2ACqZVZcpqCQa0mF4n7VLNow6pQrPoNDlyoVPS/wplI
+         FTXw==
+X-Gm-Message-State: AOAM533p3X3rnZTOpgduw6qjj43W6699wNGSzikLA8YTwNDcGTNfprnJ
+        rAS7BFbUuqbTL3ANINrDPEAH4PFf+JUBc8Dz
+X-Google-Smtp-Source: ABdhPJyWWGiCkdIxMCIxqsLpBldxBZhSAlwBUjCRBsmjDFAzoM8XzNWYWeUahljwmbUXpjrOAeyuEg==
+X-Received: by 2002:a2e:a794:0:b0:250:5de1:1ec5 with SMTP id c20-20020a2ea794000000b002505de11ec5mr2859520ljf.270.1651865367120;
+        Fri, 06 May 2022 12:29:27 -0700 (PDT)
+Received: from [192.168.1.65] ([46.188.121.177])
+        by smtp.gmail.com with ESMTPSA id u24-20020a196a18000000b0047255d21180sm791507lfu.175.2022.05.06.12.29.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 06 May 2022 12:29:26 -0700 (PDT)
+Message-ID: <a07be858-c8a3-7851-9086-e3262cbcf707@openvz.org>
+Date:   Fri, 6 May 2022 22:29:25 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7e469fb049959f88cf2b37649e6f3eb1d0fd3440.1651805790.git.qinjian@cqplus1.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+From:   Vasily Averin <vvs@openvz.org>
+Subject: [PATCH v2] percpu: improve percpu_alloc_percpu event trace
+To:     Shakeel Butt <shakeelb@google.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>
+Cc:     kernel@openvz.org, linux-kernel@vger.kernel.org,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Michal Hocko <mhocko@suse.com>, cgroups@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>,
+        Christoph Lameter <cl@linux.com>, linux-mm@kvack.org
+References: <2b388d09-940e-990f-1f8a-2fdaa9210fa0@openvz.org>
+Content-Language: en-US
+In-Reply-To: <2b388d09-940e-990f-1f8a-2fdaa9210fa0@openvz.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Qin,
+Added call_site, bytes_alloc and gfp_flags fields to the output
+of the percpu_alloc_percpu ftrace event:
 
-I love your patch! Perhaps something to improve:
+mkdir-4393  [001]   169.334788: percpu_alloc_percpu:
+ call_site=mem_cgroup_css_alloc+0xa6 reserved=0 is_atomic=0 size=2408 align=8
+  base_addr=0xffffc7117fc00000 off=402176 ptr=0x3dc867a62300 bytes_alloc=14448
+   gfp_flags=GFP_KERNEL_ACCOUNT
 
-[auto build test WARNING on pza/reset/next]
-[also build test WARNING on clk/clk-next tip/irq/core linus/master v5.18-rc5 next-20220506]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+This is required to track memcg-accounted percpu allocations.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Qin-Jian/Add-Sunplus-SP7021-SoC-Support/20220506-113239
-base:   https://git.pengutronix.de/git/pza/linux reset/next
-config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20220507/202205070356.RRuPT69d-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 5e004fb787698440a387750db7f8028e7cb14cfc)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/e4d57016693163887d81dfa4c0b0db3e4437cf2b
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Qin-Jian/Add-Sunplus-SP7021-SoC-Support/20220506-113239
-        git checkout e4d57016693163887d81dfa4c0b0db3e4437cf2b
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/irqchip/
+Signed-off-by: Vasily Averin <vvs@openvz.org>
+---
+v2: added call_site, improved patch description
+---
+ include/trace/events/percpu.h | 23 +++++++++++++++++------
+ mm/percpu-internal.h          |  8 ++++----
+ mm/percpu.c                   |  5 +++--
+ 3 files changed, 24 insertions(+), 12 deletions(-)
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> drivers/irqchip/irq-sp7021-intc.c:170:16: warning: cast to smaller integer type 'int' from 'void *' [-Wvoid-pointer-to-int-cast]
-           int ext_num = (int)irq_desc_get_handler_data(desc);
-                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/irqchip/irq-sp7021-intc.c:218:69: warning: cast to 'void *' from smaller integer type 'int' [-Wint-to-void-pointer-cast]
-           irq_set_chained_handler_and_data(irq, sp_intc_handle_ext_cascaded, (void *)i);
-                                                                              ^~~~~~~~~
-   2 warnings generated.
-
-
-vim +170 drivers/irqchip/irq-sp7021-intc.c
-
-   166	
-   167	static void sp_intc_handle_ext_cascaded(struct irq_desc *desc)
-   168	{
-   169		struct irq_chip *chip = irq_desc_get_chip(desc);
- > 170		int ext_num = (int)irq_desc_get_handler_data(desc);
-   171		int hwirq;
-   172	
-   173		chained_irq_enter(chip, desc);
-   174	
-   175		while ((hwirq = sp_intc_get_ext_irq(ext_num)) >= 0) {
-   176			if (unlikely(IS_GPIO_INT(hwirq) && TEST_STATE(hwirq, _IS_ACTIVE))) { // WORKAROUND
-   177				ASSIGN_STATE(hwirq, _IS_ACTIVE, false);
-   178				sp_intc_assign_bit(hwirq, REG_INTR_POLARITY, TEST_STATE(hwirq, _IS_LOW));
-   179			} else {
-   180				generic_handle_domain_irq(sp_intc.domain, hwirq);
-   181			}
-   182		}
-   183	
-   184		chained_irq_exit(chip, desc);
-   185	}
-   186	
-   187	static struct irq_chip sp_intc_chip = {
-   188		.name = "sp_intc",
-   189		.irq_ack = sp_intc_ack_irq,
-   190		.irq_mask = sp_intc_mask_irq,
-   191		.irq_unmask = sp_intc_unmask_irq,
-   192		.irq_set_type = sp_intc_set_type,
-   193	};
-   194	
-   195	static int sp_intc_irq_domain_map(struct irq_domain *domain,
-   196					  unsigned int irq, irq_hw_number_t hwirq)
-   197	{
-   198		irq_set_chip_and_handler(irq, &sp_intc_chip, handle_level_irq);
-   199		irq_set_chip_data(irq, &sp_intc_chip);
-   200		irq_set_noprobe(irq);
-   201	
-   202		return 0;
-   203	}
-   204	
-   205	static const struct irq_domain_ops sp_intc_dm_ops = {
-   206		.xlate = irq_domain_xlate_twocell,
-   207		.map = sp_intc_irq_domain_map,
-   208	};
-   209	
-   210	static int sp_intc_irq_map(struct device_node *node, int i)
-   211	{
-   212		unsigned int irq;
-   213	
-   214		irq = irq_of_parse_and_map(node, i);
-   215		if (!irq)
-   216			return -ENOENT;
-   217	
- > 218		irq_set_chained_handler_and_data(irq, sp_intc_handle_ext_cascaded, (void *)i);
-   219	
-   220		return 0;
-   221	}
-   222	
-
+diff --git a/include/trace/events/percpu.h b/include/trace/events/percpu.h
+index df112a64f6c9..e989cefc0def 100644
+--- a/include/trace/events/percpu.h
++++ b/include/trace/events/percpu.h
+@@ -6,15 +6,20 @@
+ #define _TRACE_PERCPU_H
+ 
+ #include <linux/tracepoint.h>
++#include <trace/events/mmflags.h>
+ 
+ TRACE_EVENT(percpu_alloc_percpu,
+ 
+-	TP_PROTO(bool reserved, bool is_atomic, size_t size,
+-		 size_t align, void *base_addr, int off, void __percpu *ptr),
++	TP_PROTO(unsigned long call_site,
++		 bool reserved, bool is_atomic, size_t size,
++		 size_t align, void *base_addr, int off,
++		 void __percpu *ptr, size_t bytes_alloc, gfp_t gfp_flags),
+ 
+-	TP_ARGS(reserved, is_atomic, size, align, base_addr, off, ptr),
++	TP_ARGS(call_site, reserved, is_atomic, size, align, base_addr, off,
++		ptr, bytes_alloc, gfp_flags),
+ 
+ 	TP_STRUCT__entry(
++		__field(	unsigned long,		call_site	)
+ 		__field(	bool,			reserved	)
+ 		__field(	bool,			is_atomic	)
+ 		__field(	size_t,			size		)
+@@ -22,9 +27,11 @@ TRACE_EVENT(percpu_alloc_percpu,
+ 		__field(	void *,			base_addr	)
+ 		__field(	int,			off		)
+ 		__field(	void __percpu *,	ptr		)
++		__field(	size_t,			bytes_alloc	)
++		__field(	gfp_t,			gfp_flags	)
+ 	),
+-
+ 	TP_fast_assign(
++		__entry->call_site	= call_site;
+ 		__entry->reserved	= reserved;
+ 		__entry->is_atomic	= is_atomic;
+ 		__entry->size		= size;
+@@ -32,12 +39,16 @@ TRACE_EVENT(percpu_alloc_percpu,
+ 		__entry->base_addr	= base_addr;
+ 		__entry->off		= off;
+ 		__entry->ptr		= ptr;
++		__entry->bytes_alloc	= bytes_alloc;
++		__entry->gfp_flags	= gfp_flags;
+ 	),
+ 
+-	TP_printk("reserved=%d is_atomic=%d size=%zu align=%zu base_addr=%p off=%d ptr=%p",
++	TP_printk("call_site=%pS reserved=%d is_atomic=%d size=%zu align=%zu base_addr=%p off=%d ptr=%p bytes_alloc=%zu gfp_flags=%s",
++		  (void *)__entry->call_site,
+ 		  __entry->reserved, __entry->is_atomic,
+ 		  __entry->size, __entry->align,
+-		  __entry->base_addr, __entry->off, __entry->ptr)
++		  __entry->base_addr, __entry->off, __entry->ptr,
++		  __entry->bytes_alloc, show_gfp_flags(__entry->gfp_flags))
+ );
+ 
+ TRACE_EVENT(percpu_free_percpu,
+diff --git a/mm/percpu-internal.h b/mm/percpu-internal.h
+index 411d1593ef23..70b1ea23f4d2 100644
+--- a/mm/percpu-internal.h
++++ b/mm/percpu-internal.h
+@@ -113,7 +113,6 @@ static inline int pcpu_chunk_map_bits(struct pcpu_chunk *chunk)
+ 	return pcpu_nr_pages_to_map_bits(chunk->nr_pages);
+ }
+ 
+-#ifdef CONFIG_MEMCG_KMEM
+ /**
+  * pcpu_obj_full_size - helper to calculate size of each accounted object
+  * @size: size of area to allocate in bytes
+@@ -123,13 +122,14 @@ static inline int pcpu_chunk_map_bits(struct pcpu_chunk *chunk)
+  */
+ static inline size_t pcpu_obj_full_size(size_t size)
+ {
+-	size_t extra_size;
++	size_t extra_size = 0;
+ 
+-	extra_size = size / PCPU_MIN_ALLOC_SIZE * sizeof(struct obj_cgroup *);
++#ifdef CONFIG_MEMCG_KMEM
++	extra_size += size / PCPU_MIN_ALLOC_SIZE * sizeof(struct obj_cgroup *);
++#endif
+ 
+ 	return size * num_possible_cpus() + extra_size;
+ }
+-#endif /* CONFIG_MEMCG_KMEM */
+ 
+ #ifdef CONFIG_PERCPU_STATS
+ 
+diff --git a/mm/percpu.c b/mm/percpu.c
+index ea28db283044..3633eeefaa0d 100644
+--- a/mm/percpu.c
++++ b/mm/percpu.c
+@@ -1884,8 +1884,9 @@ static void __percpu *pcpu_alloc(size_t size, size_t align, bool reserved,
+ 	ptr = __addr_to_pcpu_ptr(chunk->base_addr + off);
+ 	kmemleak_alloc_percpu(ptr, size, gfp);
+ 
+-	trace_percpu_alloc_percpu(reserved, is_atomic, size, align,
+-			chunk->base_addr, off, ptr);
++	trace_percpu_alloc_percpu(_RET_IP_, reserved, is_atomic, size, align,
++				  chunk->base_addr, off, ptr,
++				  pcpu_obj_full_size(size), gfp);
+ 
+ 	pcpu_memcg_post_alloc_hook(objcg, chunk, off, size);
+ 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.31.1
+

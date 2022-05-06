@@ -2,137 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7A2A51E051
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 22:50:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21DF751E054
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 22:51:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1443784AbiEFUxq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 16:53:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47416 "EHLO
+        id S1443828AbiEFUyh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 16:54:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1443555AbiEFUxp (ORCPT
+        with ESMTP id S1443783AbiEFUyg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 16:53:45 -0400
-Received: from bee.birch.relay.mailchannels.net (bee.birch.relay.mailchannels.net [23.83.209.14])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A8546A000;
-        Fri,  6 May 2022 13:50:00 -0700 (PDT)
-X-Sender-Id: dreamhost|x-authsender|ian@linux.cowan.aero
-Received: from relay.mailchannels.net (localhost [127.0.0.1])
-        by relay.mailchannels.net (Postfix) with ESMTP id 1EF5676116A;
-        Fri,  6 May 2022 20:50:00 +0000 (UTC)
-Received: from pdx1-sub0-mail-a267.dreamhost.com (unknown [127.0.0.6])
-        (Authenticated sender: dreamhost)
-        by relay.mailchannels.net (Postfix) with ESMTPA id 866987611B8;
-        Fri,  6 May 2022 20:49:59 +0000 (UTC)
-ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1651870199; a=rsa-sha256;
-        cv=none;
-        b=n6dTuqe0V3FJ3aRB9KvPOEzKNB9dUS+P1xMLRoDk1mgAJCRfDL0mwolk6oOKAAHk1nVzO/
-        /GywrCz8wmPZ5M71rtUGiX5SWdtqAg2xbeVf8MboCI+6bvGfe0U+vDQJCKfKl4IwD3kqZY
-        gXBM2tSlS2Zx+jglhLtSIUVbSUPhjHkRc4iOBunU+mM3bKXidXGZ0kVchi1LxREGqXSJKv
-        9ScgVEyk+MiWZhSzl0S1jTCI3+cqya3054oRvHrRVtu8tnbxIaNSOeyQyQxRPEJ2zi7sQk
-        85NoUR5iO39DPk7wYQZTj4fVRAvS/xGPu27J/uHO3Axw35yAYDpsv0A2Zfep7A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mailchannels.net;
-        s=arc-2022; t=1651870199;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references:dkim-signature;
-        bh=C+3kDtZyTEFcDrjJVXV0xCqHGqid0l8Y5T5jgapYTQ4=;
-        b=VNQTEsQOLV0/WFoc/YlZNgVKg8G2++ug6oWR+T6Wu5GnPOqubgpj9TBXOt9DCS0AxngXRd
-        tOz1si/aVyfzBGJb0MyK94Vsx/YRNVKPKaLjb9ghhE3ULysberKKe56Z1bSXf1yKdvraHo
-        vF72/STgiGCU21ke7NcR9b7VVwDa+62UY1mKZIcfU6EbFVxAdWVOcC5nWJN1HDkkG/qOwD
-        gjAyqkwij98To29TDzbTpWUaH/L31UUoSKIQGqg/b0VjOSl60EBeI+6FYbKSqfai5QWBUn
-        aJd6G3JcP8CmUxNQ6k5LncYdUAonKI8hclZUsLGr2gj9uZE7YGk45aaDBobCLQ==
-ARC-Authentication-Results: i=1;
-        rspamd-c4dc5ff8f-qm9bp;
-        auth=pass smtp.auth=dreamhost smtp.mailfrom=ian@linux.cowan.aero
-X-Sender-Id: dreamhost|x-authsender|ian@linux.cowan.aero
-X-MC-Relay: Neutral
-X-MailChannels-SenderId: dreamhost|x-authsender|ian@linux.cowan.aero
-X-MailChannels-Auth-Id: dreamhost
-X-Gusty-Imminent: 088f61e760f53c4d_1651870199940_3946215459
-X-MC-Loop-Signature: 1651870199940:1452148033
-X-MC-Ingress-Time: 1651870199940
-Received: from pdx1-sub0-mail-a267.dreamhost.com (pop.dreamhost.com
- [64.90.62.162])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
-        by 100.115.45.49 (trex/6.7.1);
-        Fri, 06 May 2022 20:49:59 +0000
-Received: from fedora (unknown [69.12.38.97])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: ian@linux.cowan.aero)
-        by pdx1-sub0-mail-a267.dreamhost.com (Postfix) with ESMTPSA id 4Kw2kY6smCz3V;
-        Fri,  6 May 2022 13:49:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.cowan.aero;
-        s=dreamhost; t=1651870198;
-        bh=C+3kDtZyTEFcDrjJVXV0xCqHGqid0l8Y5T5jgapYTQ4=;
-        h=Date:From:To:Cc:Subject:Content-Type;
-        b=aZ2JeXQk/iWcH5lnZ4lU6SoqriVdbAipjKJ1WCOI0+irhIU76G6/f+mn2UP2Tt1Gl
-         RK4vJPKozshbE8CCvNzwAKEr0SXVky/gSC3Ssezw+ofrvx4J5Zil2Wrh3QHvrgdpbu
-         BXhoyUN97urARPKUoNkN23aI77DTIvwI+gNwNuZ5djpEqCe0AEEfVAQfXM727zcIjc
-         ekYtJbyYbcE4FOAs8hY0Jp9BT25wknzvAEtlsWCHVwaF7j8ZbGoQEYqktNtndmiXWa
-         98LlAwSSWyFJ1nBnwW627X9Vt4Xdlf9NayVJqRPEXeDQtlqUzWMFv6n7LQinlhiPJ2
-         opfS8r0C6I6BA==
-Date:   Fri, 6 May 2022 16:49:56 -0400
-From:   Ian Cowan <ian@linux.cowan.aero>
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     Hans Verkuil <hverkuil@xs4all.nl>,
-        Corentin Labbe <clabbe@baylibre.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        mjpeg-users@lists.sourceforge.net, linux-media@vger.kernel.org,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 4/4] staging: media: zoran: replace dprintk with new
- debugging macros
-Message-ID: <YnWJ9M19t57yqRz/@fedora>
-References: <20220425144110.133316-1-ian@linux.cowan.aero>
- <3270dd49-0d68-5b60-d766-940b39aa463e@xs4all.nl>
- <YnSyZEF8n7luVvHM@fedora>
- <20220506071455.GC4031@kadam>
+        Fri, 6 May 2022 16:54:36 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80CE638DAB
+        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 13:50:51 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id j14so8558340plx.3
+        for <linux-kernel@vger.kernel.org>; Fri, 06 May 2022 13:50:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=svtm70vhrtwaUzMmCsUIT6Egi2IpF5lFJHBTBSUBifA=;
+        b=k93eJcUdX4CDEojINJyEsXxp6BPwyVW0KU81y0Fd5DXNq0r3T3Jeg9kORS0Pslclu7
+         qQBednLjdPTuAgXRX8k+dnJCDa38FqSlf/fRGoognCApgzR9LJ39k0X0tEdOwsDj+Yk8
+         yHioi/AfZUJFw91f/azWral+2pdGQm7lPu5MIXCzuw0I0Ymd6euxNkkwrXuaDqZ4L+Mh
+         iYnM61GI/pQVI/bY3g1GcH4dzeEYDnTewGQh1mJciqNVDJwWZwDGklWYX9KazGwqBNIY
+         EX0Wzq83DRzhpKoeoPLOo6N6t49kYd+3kj/9udQGiIOnD/GwLKnQQdkMlmmc7NAtZ4kR
+         Xmfg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=svtm70vhrtwaUzMmCsUIT6Egi2IpF5lFJHBTBSUBifA=;
+        b=WRIFt4l1iaIVtpN06e9swyOAmPAHMZ7m5noMjtg5Mgqk5QXyH6hXtR0PyMLGsHOxbz
+         P7gBJGnXbinEQ1ajD+6mVRsM2eH9gOwlKDIBO6dVwpaQzHmlO7dkuvosOk539xRg0jLf
+         K7MgYDK30DaDEq/LsZq4EK/21BkbL3Eg/gsl7vdkjfC0bv78FNfRJTJmLTIaL5poqsWX
+         LrrPb3L5rMe2lG2YodpB97Ku8LfV70VDZaAQ0suue42sw6KyjWzupMcC/7PLmx8QaBDy
+         MqEeLXda0yrFizd0T7iFbjLZA7nVAC1A1BA1Jnnuek/6qs3tkvnvcydsAOBb7OH4NiVP
+         Z/SQ==
+X-Gm-Message-State: AOAM530VrSDpR0vNij+2zVlFENVxbO/isVB2yLo39B+8GL6iVxYhFYje
+        xIY9QQvD2DgtM+8y3Z1ofFVv9smp6lUTMw==
+X-Google-Smtp-Source: ABdhPJzopfreODKpfWBSy4m9Jlxx414DAMKUaiFGwW300IDx3Eid79W0qvrPDksQwXeQ4gBlT/S2oA==
+X-Received: by 2002:a17:903:32c4:b0:15e:9f30:75e9 with SMTP id i4-20020a17090332c400b0015e9f3075e9mr5560293plr.123.1651870251011;
+        Fri, 06 May 2022 13:50:51 -0700 (PDT)
+Received: from [192.168.4.166] (cpe-72-132-29-68.dc.res.rr.com. [72.132.29.68])
+        by smtp.gmail.com with ESMTPSA id g5-20020a17090a7d0500b001d7faf357b7sm7880977pjl.4.2022.05.06.13.50.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 06 May 2022 13:50:50 -0700 (PDT)
+Message-ID: <3b302e60-cb5a-a193-db13-5ca0ef5603cc@kernel.dk>
+Date:   Fri, 6 May 2022 14:50:49 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220506071455.GC4031@kadam>
-X-Spam-Status: No, score=-0.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLACK autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH 5/5] io_uring: implement multishot mode for accept
+Content-Language: en-US
+To:     Hao Xu <haoxu.linux@gmail.com>, io-uring@vger.kernel.org
+Cc:     Pavel Begunkov <asml.silence@gmail.com>,
+        linux-kernel@vger.kernel.org
+References: <20220506070102.26032-1-haoxu.linux@gmail.com>
+ <20220506070102.26032-6-haoxu.linux@gmail.com>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <20220506070102.26032-6-haoxu.linux@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 06, 2022 at 10:14:55AM +0300, Dan Carpenter wrote:
-> On Fri, May 06, 2022 at 01:30:12AM -0400, Ian Cowan wrote:
-> > On Thu, Apr 28, 2022 at 10:15:03AM +0200, Hans Verkuil wrote:
-> > > Hi Ian,
-> > > 
-> > > When I compiled this patch series with smatch I got these warnings:
-> > > 
-> > > zoran/videocodec.c:45 videocodec_attach() warn: variable dereferenced before check 'master' (see line 40)
-> > > zoran/videocodec.c:115 videocodec_detach() warn: variable dereferenced before check 'codec' (see line 111)
-> > > zoran/videocodec.c:168 videocodec_register() warn: variable dereferenced before check 'codec' (see line 166)
-> > > zoran/videocodec.c:200 videocodec_unregister() warn: variable dereferenced before check 'codec' (see line 198)
-> > > 
-> > > And I also got this warning when checking the kerneldoc:
-> > > 
-> > > zoran/zoran.h:307: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
-> > >
-> > What did you use to see these issues? When I ran the checkpatch script
-> > and compiled, I did not see any of this.
-> > 
-> 
-> I have written a blog entry about checking kernel code with Smatch:
-> 
-> https://staticthinking.wordpress.com/2022/04/25/how-to-run-smatch-on-your-code/
-> 
-> regards,
-> dan carpenter
-> 
+On 5/6/22 1:01 AM, Hao Xu wrote:
+> @@ -5748,8 +5758,12 @@ static int io_accept(struct io_kiocb *req, unsigned int issue_flags)
+>  		if (!fixed)
+>  			put_unused_fd(fd);
+>  		ret = PTR_ERR(file);
+> -		if (ret == -EAGAIN && force_nonblock)
+> -			return -EAGAIN;
+> +		if (ret == -EAGAIN && force_nonblock) {
+> +			if ((req->flags & REQ_F_APOLL_MULTI_POLLED) ==
+> +			    REQ_F_APOLL_MULTI_POLLED)
+> +				ret = 0;
+> +			return ret;
 
-Fantastic, I'll give that a read.
+FWIW, this
 
-Thanks!
-Ian
+	if ((req->flags & REQ_F_APOLL_MULTI_POLLED) == REQ_F_APOLL_MULTI_POLLED)
+
+is identical to
+
+	if (req->flags & REQ_F_APOLL_MULTI_POLLED)
+
+but I suspect this used to check more flags (??), because as it stands
+it seems a bit nonsensical.
+
+-- 
+Jens Axboe
+

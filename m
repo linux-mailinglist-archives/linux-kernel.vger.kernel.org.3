@@ -2,253 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6FCB51DF0B
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 20:22:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3513451DF15
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 20:25:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1391955AbiEFSZz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 14:25:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46016 "EHLO
+        id S1351512AbiEFS3Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 14:29:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1391722AbiEFSZw (ORCPT
+        with ESMTP id S230050AbiEFS3W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 14:25:52 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05EA553714
-        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 11:22:06 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id p8so6895855pfh.8
-        for <linux-kernel@vger.kernel.org>; Fri, 06 May 2022 11:22:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language
-         :from:to:cc:references:in-reply-to:content-transfer-encoding;
-        bh=1Bn6Fj0TZ3zGdE4UsPeAIY1KIpMO6I3COOb6LVgm5QM=;
-        b=k1mPzfH8bNMMBToxDKvurgphXSGrDcJjmoP7k2lH3ZL1n7AEcjQtChmQQNsTFpv/Ub
-         27bb5/4uvjqUEhel5uJOHOGGV3ybtQQutaheYUQ2O0vbFG7SFAnWTUPIdy3vLlrpGWOy
-         PMpzjdVloEDB0WqV+Ubp4r0O/xsPdZkZXxrVnHeBxbyExNR/dZaXwZRQDqdYLPMdwphG
-         0HwuI0+My5YnhRHlclWjhT2J3osLnRmlAZ4M0ukVVvfia3XvRKyxn2WPZuwsUM1Rnbk3
-         SLR/rSeCVgcbudtssulz+gjOVU1PYSrSUFrLYC2PeGssRbDOyPYIl1+e/US4EwXl90T8
-         RbOQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:from:to:cc:references:in-reply-to
-         :content-transfer-encoding;
-        bh=1Bn6Fj0TZ3zGdE4UsPeAIY1KIpMO6I3COOb6LVgm5QM=;
-        b=ElkHuJdN199Rlv77jx6Y3d0Dph2/SOvQZy+vPiDlNWcdbjgd0f7wr38Wr56e684c35
-         FE53nLkRl4fItrdbdV2vp+pS5iIpbTPDZQWchE5iXqUQyt9zAyq71yhqiaBb8E271o9o
-         JMD6zw9r0ioAixBFbKvVjvzYjvJhqsbVVUq40OohbZhnOkkx+m+Sawd96ndKM4rdld47
-         W9vhhH3B8aZxsdxAxc81gFdt1j8hBuF11mXJsD8uHyTjw3R1YzkdrJQU2im0b0BZxi7l
-         8ESOPhaiuV2/SIUPT5CMWeNQ8J5Co3kK/0SimiAQvfxEHAkHkCh08lM0c0vMkZPgZPn4
-         XMRA==
-X-Gm-Message-State: AOAM5315at5K9biZV9eHmuOaMgT3l/nwf0s+s49KdGqkEZtJxWDpP7NL
-        2agUzmln0tHJYYZ+wacFCZZ3yw==
-X-Google-Smtp-Source: ABdhPJxNuWDQCcDn422nk7Ac5VbSjn/9TFQs3vXE0ndMEe/9s/U+8P3RxatnzrpBV925WgRr8xissA==
-X-Received: by 2002:a63:2a4a:0:b0:3c1:5f7e:beb3 with SMTP id q71-20020a632a4a000000b003c15f7ebeb3mr3690362pgq.441.1651861324894;
-        Fri, 06 May 2022 11:22:04 -0700 (PDT)
-Received: from [192.168.4.166] (cpe-72-132-29-68.dc.res.rr.com. [72.132.29.68])
-        by smtp.gmail.com with ESMTPSA id h19-20020a170902eed300b0015eaa9797e8sm2071976plb.172.2022.05.06.11.22.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 06 May 2022 11:22:04 -0700 (PDT)
-Message-ID: <4fc454ca-8b3a-28f6-2246-3ffb998f9f11@kernel.dk>
-Date:   Fri, 6 May 2022 12:22:03 -0600
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: linux-stable-5.10-y CVE-2022-1508 of io_uring module
+        Fri, 6 May 2022 14:29:22 -0400
+Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam07on2064.outbound.protection.outlook.com [40.107.95.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 874EB4616C;
+        Fri,  6 May 2022 11:25:38 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=X5j50jCCfFRUYSBgpWRo8WYINllHB5FQF3eBv2HCsZgu20EAotq0SzwrRX+8Y7PxaEnRntpFQVcOK0wCI9EgeCc7itaE/7+oX7CoUW16ewNoa9r4ZxOb4ZsvH729ffjvqgmubPzWJlEua7TUYqJel1ziNumHv1kYagjKbP1RyjRyyT0RqQq+Ae1EzHS3KTS+RHloLy2U459kVpmUlYG+Zu82ZJTysqa/dE0FKHg00aXS4CfK2EqqqrT+rqOKxTb3RnAWnjyvzBXVq+eUP3Eq3tqC5posGZMaLl++o9xpgKgK9yRopqj2ZpPHSEbWKmi6mUFO0ll3CVGWXCOTCerqqw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=brOoYI9LbTbK9ZeyRCKEf7LQPxCcXKDBLcFWVioCF0s=;
+ b=WgZxYMAN+y/xK6FKL7oowDmGx1TcEWOAkexgOKGMLV+XL5XyBERXMdNAhPYeOPfNM5NNP+dZMQHw4I+ImpSI6kmHuG9TdpB+DuEEWbxesneOuUYI8X00db0s0lqwswi2OZ0F3dUo2CTsWLZBm4sF0/hR0ypAad+92VaFn1bLwFTTu/E/UCHdLNkT9CZUnEe8rtuxFCCnLiENXgep4Hu69GhngdEb8SFoyT8BXCspJ3573fSVZGMn58bGh7jVUDpEFmXXLahB8HaJlk8+1BZtuVXTctfV9qGOZD939TOqgntcjMEPYFQgg8E797mPbHKHyAX5awjsmbIqcdvmOvxK6g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=brOoYI9LbTbK9ZeyRCKEf7LQPxCcXKDBLcFWVioCF0s=;
+ b=VbrTfiXAr4bX5S8mDrqXQpA0IEg3kv2Gy2jzMGBKLjlL3lI29n0hBE13s6FGJke0zO3WaE0NTOaz43grTe036iohgt0ySohpdJlC1plUPw3vtEmL82Su7j//ttx6ihvXpHE8uPq/XC+dJNXaj54iXlf3lcX8rxw150b+fLOO7G6sXAqzweEoA27YjPulkBrEfNKbY+0VIrjowmb4G8D4872dIJFhB3un/z5KHGQMx8VlaaVOURmCtWY53rBouZ9iDZPlhwCcDCYP0pMAbICq2gsdi4cEWaTyqj8Ya04Pw48m2g53O8T5SQlC/Y0MBNkVLAhRCyvCoASs0M9x65NRyQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from BY5PR12MB4116.namprd12.prod.outlook.com (2603:10b6:a03:210::13)
+ by CH2PR12MB4053.namprd12.prod.outlook.com (2603:10b6:610:7c::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5206.24; Fri, 6 May
+ 2022 18:25:34 +0000
+Received: from BY5PR12MB4116.namprd12.prod.outlook.com
+ ([fe80::b998:eed3:9088:780c]) by BY5PR12MB4116.namprd12.prod.outlook.com
+ ([fe80::b998:eed3:9088:780c%9]) with mapi id 15.20.5206.028; Fri, 6 May 2022
+ 18:25:29 +0000
+Message-ID: <6e5ae4c2-abe2-048a-21b5-783f1c77bb08@nvidia.com>
+Date:   Fri, 6 May 2022 11:25:29 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 1/2] hte: fix off by one in hte_push_ts_ns()
 Content-Language: en-US
-From:   Jens Axboe <axboe@kernel.dk>
-To:     Pavel Begunkov <asml.silence@gmail.com>,
-        Guo Xuenan <guoxuenan@huawei.com>
-Cc:     lee.jones@linaro.org, linux-kernel@vger.kernel.org,
-        io-uring@vger.kernel.org, yi.zhang@huawei.com, houtao1@huawei.com
-References: <dd122760-5f87-10b1-e50d-388c2631c01a@kernel.dk>
- <20220505141159.3182874-1-guoxuenan@huawei.com>
- <7d54523e-372b-759b-1ebb-e0dbc181f18d@kernel.dk>
- <31ae3426-b835-3a3f-f6d1-aecad24066e8@gmail.com>
- <6c417ba7-d677-5076-5ce3-d3e174eb8899@kernel.dk>
-In-Reply-To: <6c417ba7-d677-5076-5ce3-d3e174eb8899@kernel.dk>
+To:     Dan Carpenter <dan.carpenter@oracle.com>
+Cc:     Thierry Reding <treding@nvidia.com>, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org
+References: <YnU2gHe+QZOAuNyV@kili>
+From:   Dipen Patel <dipenp@nvidia.com>
+In-Reply-To: <YnU2gHe+QZOAuNyV@kili>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-ClientProxiedBy: BY3PR10CA0007.namprd10.prod.outlook.com
+ (2603:10b6:a03:255::12) To BY5PR12MB4116.namprd12.prod.outlook.com
+ (2603:10b6:a03:210::13)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: c6bbad61-b4ff-4318-386d-08da2f8dcc16
+X-MS-TrafficTypeDiagnostic: CH2PR12MB4053:EE_
+X-Microsoft-Antispam-PRVS: <CH2PR12MB405351003D179285355A2F85AEC59@CH2PR12MB4053.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 5nKrvkYLIm2mctLhygkRIxJCpcZBEfis5h2/Wd4nby76za+KUZmYMcmcuyKVXRJp9taBEAEOsShsSi3w4/UbuwQ4HvyEn6HFBcyU2rR+J16jn7WW2yaarJc7zp6BP3DTPy5OWN42W3UWu+VrQ+qQTacDrrUGnluxFQfcCVzp0EWcVPDuMuluqUwqonFu41i0Pc4OxpnoFvmwbKy6gy4AoQraBIi7HA5XLHfFTbxi7+alkg86rJUJWw3J5NZfXyuxqptHEG5Ghata3jkB1l0MPcUUOnvuHBKkNMsjT39rJC2nb6VNJ34hnMr9E3NUI1TQVD24gpKvP/Mt9XVs1ekMRTprjVH77QS9fLOkhINPFfNZbk6jqSj0q2ob0vcGiS4jugxNBU1HwMNUArHnjJg+A+mOg19LRSUl/Bf0AMpEzLIMF0Jo1UVyUUS+0e/uZUfSYOPp5IhJ9ngjDAghZnAg+OuxhbtyHfSzIneKOgA/vFKm+x/eUiYdkk4BUEr//JPpmCRCD6/6Hm4PQvKaHehCYBBPjuLcdikxJ/9X1tri4DLLZdJ/Q0Kdo1Pr6iSvqqRJSYvBxiZfyUNqCxNXIDFPG30nTRWM63uezgBGz7o192TSIRjd/F1itsj53dm00mS3lQQmqOSCH8wUg1Gwa682e07BGcDKFXWjxCmgnaTMvyUIY4SmbGpfDOzCD7NpPpkQnyquVyFQG9lm4n4QPPFz5elwFADg4bYSPwttsKRk7MIgRiNCx9DVwfgeMJAFQomf
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB4116.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(8936002)(66556008)(66946007)(26005)(4744005)(86362001)(8676002)(4326008)(66476007)(31686004)(6486002)(2906002)(6512007)(36756003)(53546011)(316002)(6916009)(6506007)(508600001)(2616005)(83380400001)(5660300002)(38100700002)(31696002)(186003)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?TDRYVXEwUWVvQ1BUZE9iZVdCaXhYYXJOdUlMTStGRWtoMW91TkZuclZUVGZr?=
+ =?utf-8?B?eUxsU0xWOTl1MEV1cWE1VS94WGNVYmlKbFdUZGhuZkl2WDdPM3ZSak40bkFO?=
+ =?utf-8?B?UUwycDh2cTFrdFZOWE91anBGT2o0bjVnY1BGM0N1cjFPeEhYOUdBdVV3aTY5?=
+ =?utf-8?B?d0trNVFsN3NDazVXLy82M29XMzQ1Z3hybUhneTJiRXdPSGVCLzlSV2NXSFMv?=
+ =?utf-8?B?RmY1Yk0wbDhuUFE4YzVHN3l5eTBrdWFHcXpHTnByalh6QnRZSEJFV0JkbTVL?=
+ =?utf-8?B?ODl6SkM0S2xVdnFoQXpVNExHQjMzNDNreHVqVzRSWDRSTkVoeFZ2bU8zS0NH?=
+ =?utf-8?B?Y1c2dHhMVEU3MloxbVlvY0l0aFpVdkNZMmREOGpuOTR6bW1XMHUxRlVja1hG?=
+ =?utf-8?B?WFZpR3Y0d2ZBeHU0TExKRmk2Y0ZQTHJiNW9laUtqNWlLUjgzYWs3K210TXZF?=
+ =?utf-8?B?OGI5N2xhZW5aeVV1M2wvMWhEcDhCb3lPTERDbms3YXZCT0FWNk05di9ITUJO?=
+ =?utf-8?B?VDMrdEs0RFpQTkJOaUtybGpBUUxXVEl1b2diUmlabTRrVFNHVStoQnVXbHhi?=
+ =?utf-8?B?M282eEtEaVhjWVlrRnlKN2kzUU5xRU1JZTdScVA0UXZvTmRBcUNLRTIwMy9t?=
+ =?utf-8?B?Y0FldVhWY0hodmR0dWx1OVdudEFhK2d5TUJyNjYwWkFiOExBeWpiVUVDTTdE?=
+ =?utf-8?B?bGpjRjNoREtlNzR6NFFNa3hMUElSeWJocWVyclJUNW1PcGpBVEwwYTlQSWda?=
+ =?utf-8?B?UWd5azBVeGRDYW03T0x3bHlnN0ZoVnFuUUFVLzBQcjlKZTBMdWRQajBpWGRm?=
+ =?utf-8?B?MG1VVGMxbTc4K3kzNWFMdXlUcEs3Z250OTF1VmZXMmgrM0xLdjFvRDVwV2xZ?=
+ =?utf-8?B?K2V4cDJXLy8xS1RYdzBDMXdDeUNmcWVTdFhDeGRzQWxyRFJ3VmdUalRFN2Np?=
+ =?utf-8?B?OTg5ZU5PRjE2eENudUorbjl4ajQzRDVKc3h5SThzNUpLaUw0MVN6UVErVVB3?=
+ =?utf-8?B?dVdmZjZKSE5uRGNHbTlsK0dFSGk1aWR3NDQrS1Zzb0o2ZE1aNVNhTjVEQk1m?=
+ =?utf-8?B?Q3Fra0lYSnNxTFA2dWl2Q0thei9jaVpxZnAxbUdmTDJEL2h4ZVFNM1liYk5r?=
+ =?utf-8?B?UjBBay9YaGF3Y3BvZG9ZbWlkYk9RaWxyVkhvSTR5Q3NHNnM3a2kzc1k0OXpH?=
+ =?utf-8?B?K2FNdTJvL0NVN3h3cE1rdEZnMHI5OVhRdjZwRUhqSTFpMmJGbStSaGxDTWQv?=
+ =?utf-8?B?K2dDdWJ3anF0SWNzdUpzVmdSbUg3bEJxTzdNalNiZnFld3RNakxKSWVhQW52?=
+ =?utf-8?B?YnFWUFBRVFdUeTdrUm5Ta2V1NUhBd0VIMmJuR3o4U25PZk1SblhzUFFmWG1u?=
+ =?utf-8?B?V21ZanRYRXBaN0RqRW9tZ1RCZWFWdytHTUdLM3NGQUNRZTI3RFkwQ3QvM2Rk?=
+ =?utf-8?B?RzZRbUhZd2REUHhPM2pXdXhzQjFIRkl1ZTR2aEQ3RldiVThVTi81a1lkQjFQ?=
+ =?utf-8?B?SS9xU3hzb0dnYlB1aEkySFlUd3BhVEpqK3kyMC95YjZXUjFKSjhLNU8yTWhV?=
+ =?utf-8?B?WnpOMnBka2oybTVmaW9Uck9Hc0ZaSTRaK2FZVTNxRG96N2xLQXBkYlVaUnFp?=
+ =?utf-8?B?a3ZBSW04dGVoVVlzSW0rcTdWZEFheEJqWnZXcWVRb2tlVVhCTHEvWVpWam1q?=
+ =?utf-8?B?dUV1SVF1eTN5bzAzM2ZROS9XS2FDemVSd2g5UjBURXlHQU5QV3J5ZmVxK2hM?=
+ =?utf-8?B?MGRKRXZ4MlhsRFhPZzJ0Zk43NHVqWGhxOXpQV3U3U1dKVGV4am9TYzZXQmkx?=
+ =?utf-8?B?OGNLU0ppcC93ZUlZbzBFR3h0R1E1dXRNUEl2cEQyQm91MWpRTnJpaDdvZ3ZQ?=
+ =?utf-8?B?ZCtTdjdHY0V3MEthT2c2QjFubGZTTkFlRDB5b3JGQnNtMWZpMm9VTVZIZWph?=
+ =?utf-8?B?OGp2bCtQNnppbkdoTnd6OStLY0tRRDlsM0dNUkxzUUMyK0FsQS9FWC9XWlFU?=
+ =?utf-8?B?TVlPNGNaaWVmY2pQT29ndWFmZ1M2aUVlVWNFcm9uOTJURDZhSG9iQVo1VGc4?=
+ =?utf-8?B?Ni85a1ZmL1JwSkF1ejU5dWN1Nm9FYWw2YUpPSEpKV2RaTlJXVmt2L3BwQ3Bj?=
+ =?utf-8?B?S1pGZmtXTXE0UHh1d0NTTTRiN3dVT2lxWi9NY1dzZXBHL1ZIdXNPUUJPT3dW?=
+ =?utf-8?B?L2Nna1dVYmhuVG1NTlBRNXR0S0hxWkhRVEptRWpNcWd3RERCblJMYno3R3RP?=
+ =?utf-8?B?QkJXU1dKTUcxSE9xcjYwcjJQYllNNWszc1JLazlpN1RicWQyM0dESFB3T0Qw?=
+ =?utf-8?B?UGo5MjRiMStVMnZneVl5MEtEVHVrS0FmOU9LTy9sajNrbllCRXlvZz09?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c6bbad61-b4ff-4318-386d-08da2f8dcc16
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB4116.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 May 2022 18:25:28.8811
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: mrRQoljztsT6pG8Zduc7i76nfsZLXYADQHbkwjyl/1nUBIGGtVbLZHCno1c9KYXv0vT7dT/KpaJa2TppshQ2yg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB4053
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/6/22 10:15 AM, Jens Axboe wrote:
-> On 5/6/22 9:57 AM, Pavel Begunkov wrote:
->> On 5/6/22 03:16, Jens Axboe wrote:
->>> On 5/5/22 8:11 AM, Guo Xuenan wrote:
->>>> Hi, Pavel & Jens
->>>>
->>>> CVE-2022-1508[1] contains an patch[2] of io_uring. As Jones reported,
->>>> it is not enough only apply [2] to stable-5.10.
->>>> Io_uring is very valuable and active module of linux kernel.
->>>> I've tried to apply these two patches[3] [4] to my local 5.10 code, I
->>>> found my understanding of io_uring is not enough to resolve all conflicts.
->>>>
->>>> Since 5.10 is an important stable branch of linux, we would appreciate
->>>> your help in solving this problem.
->>>
->>> Yes, this really needs to get buttoned up for 5.10. I seem to recall
->>> there was a reproducer for this that was somewhat saner than the
->>> syzbot one (which doesn't do anything for me). Pavel, do you have one?
->>
->> No, it was the only repro and was triggering the problem
->> just fine back then
-> 
-> I modified it a bit and I can now trigger it.
+good catch. Thanks.
 
-Pavel, why don't we just keep it really simple and just always save the
-iter state in read/write, and use the restore instead of the revert?
+Reviewed-by: Dipen Patel
 
-Then it's just a trivial backport of ff6165b2d7f6 and the trivial
-io_uring patch after that.
+Acked-by: Dipen Patel
 
-
-diff --git a/fs/io_uring.c b/fs/io_uring.c
-index ab9290ab4cae..138f204db72a 100644
---- a/fs/io_uring.c
-+++ b/fs/io_uring.c
-@@ -3429,6 +3429,7 @@ static int io_read(struct io_kiocb *req, bool force_nonblock,
- 	struct kiocb *kiocb = &req->rw.kiocb;
- 	struct iov_iter __iter, *iter = &__iter;
- 	struct io_async_rw *rw = req->async_data;
-+	struct iov_iter_state iter_state;
- 	ssize_t io_size, ret, ret2;
- 	bool no_async;
- 
-@@ -3458,6 +3459,7 @@ static int io_read(struct io_kiocb *req, bool force_nonblock,
- 	if (unlikely(ret))
- 		goto out_free;
- 
-+	iov_iter_save_state(iter, &iter_state);
- 	ret = io_iter_do_read(req, iter);
- 
- 	if (!ret) {
-@@ -3473,7 +3475,7 @@ static int io_read(struct io_kiocb *req, bool force_nonblock,
- 		if (req->file->f_flags & O_NONBLOCK)
- 			goto done;
- 		/* some cases will consume bytes even on error returns */
--		iov_iter_revert(iter, io_size - iov_iter_count(iter));
-+		iov_iter_restore(iter, &iter_state);
- 		ret = 0;
- 		goto copy_iov;
- 	} else if (ret < 0) {
-@@ -3557,6 +3559,7 @@ static int io_write(struct io_kiocb *req, bool force_nonblock,
- 	struct kiocb *kiocb = &req->rw.kiocb;
- 	struct iov_iter __iter, *iter = &__iter;
- 	struct io_async_rw *rw = req->async_data;
-+	struct iov_iter_state iter_state;
- 	ssize_t ret, ret2, io_size;
- 
- 	if (rw)
-@@ -3574,6 +3577,8 @@ static int io_write(struct io_kiocb *req, bool force_nonblock,
- 	else
- 		kiocb->ki_flags |= IOCB_NOWAIT;
- 
-+	iov_iter_save_state(iter, &iter_state);
-+
- 	/* If the file doesn't support async, just async punt */
- 	if (force_nonblock && !io_file_supports_async(req->file, WRITE))
- 		goto copy_iov;
-@@ -3626,7 +3631,7 @@ static int io_write(struct io_kiocb *req, bool force_nonblock,
- 	} else {
- copy_iov:
- 		/* some cases will consume bytes even on error returns */
--		iov_iter_revert(iter, io_size - iov_iter_count(iter));
-+		iov_iter_restore(iter, &iter_state);
- 		ret = io_setup_async_rw(req, iovec, inline_vecs, iter, false);
- 		if (!ret)
- 			return -EAGAIN;
-diff --git a/include/linux/uio.h b/include/linux/uio.h
-index 27ff8eb786dc..cedb68e49e4f 100644
---- a/include/linux/uio.h
-+++ b/include/linux/uio.h
-@@ -26,6 +26,12 @@ enum iter_type {
- 	ITER_DISCARD = 64,
- };
- 
-+struct iov_iter_state {
-+	size_t iov_offset;
-+	size_t count;
-+	unsigned long nr_segs;
-+};
-+
- struct iov_iter {
- 	/*
- 	 * Bit 0 is the read/write bit, set if we're writing.
-@@ -55,6 +61,14 @@ static inline enum iter_type iov_iter_type(const struct iov_iter *i)
- 	return i->type & ~(READ | WRITE);
- }
- 
-+static inline void iov_iter_save_state(struct iov_iter *iter,
-+				       struct iov_iter_state *state)
-+{
-+	state->iov_offset = iter->iov_offset;
-+	state->count = iter->count;
-+	state->nr_segs = iter->nr_segs;
-+}
-+
- static inline bool iter_is_iovec(const struct iov_iter *i)
- {
- 	return iov_iter_type(i) == ITER_IOVEC;
-@@ -226,6 +240,7 @@ ssize_t iov_iter_get_pages(struct iov_iter *i, struct page **pages,
- ssize_t iov_iter_get_pages_alloc(struct iov_iter *i, struct page ***pages,
- 			size_t maxsize, size_t *start);
- int iov_iter_npages(const struct iov_iter *i, int maxpages);
-+void iov_iter_restore(struct iov_iter *i, struct iov_iter_state *state);
- 
- const void *dup_iter(struct iov_iter *new, struct iov_iter *old, gfp_t flags);
- 
-diff --git a/lib/iov_iter.c b/lib/iov_iter.c
-index 1b0a349fbcd9..00a66229d182 100644
---- a/lib/iov_iter.c
-+++ b/lib/iov_iter.c
-@@ -1857,3 +1857,39 @@ int iov_iter_for_each_range(struct iov_iter *i, size_t bytes,
- 	return err;
- }
- EXPORT_SYMBOL(iov_iter_for_each_range);
-+
-+/**
-+ * iov_iter_restore() - Restore a &struct iov_iter to the same state as when
-+ *     iov_iter_save_state() was called.
-+ *
-+ * @i: &struct iov_iter to restore
-+ * @state: state to restore from
-+ *
-+ * Used after iov_iter_save_state() to bring restore @i, if operations may
-+ * have advanced it.
-+ *
-+ * Note: only works on ITER_IOVEC, ITER_BVEC, and ITER_KVEC
-+ */
-+void iov_iter_restore(struct iov_iter *i, struct iov_iter_state *state)
-+{
-+	if (WARN_ON_ONCE(!iov_iter_is_bvec(i) && !iter_is_iovec(i)) &&
-+			 !iov_iter_is_kvec(i))
-+		return;
-+	i->iov_offset = state->iov_offset;
-+	i->count = state->count;
-+	/*
-+	 * For the *vec iters, nr_segs + iov is constant - if we increment
-+	 * the vec, then we also decrement the nr_segs count. Hence we don't
-+	 * need to track both of these, just one is enough and we can deduct
-+	 * the other from that. ITER_KVEC and ITER_IOVEC are the same struct
-+	 * size, so we can just increment the iov pointer as they are unionzed.
-+	 * ITER_BVEC _may_ be the same size on some archs, but on others it is
-+	 * not. Be safe and handle it separately.
-+	 */
-+	BUILD_BUG_ON(sizeof(struct iovec) != sizeof(struct kvec));
-+	if (iov_iter_is_bvec(i))
-+		i->bvec -= state->nr_segs - i->nr_segs;
-+	else
-+		i->iov -= state->nr_segs - i->nr_segs;
-+	i->nr_segs = state->nr_segs;
-+}
-
--- 
-Jens Axboe
-
+On 5/6/22 7:53 AM, Dan Carpenter wrote:
+> The &chip->gdev->ei[] array has chip->nlines elements so this >
+> comparison needs to be >= to prevent an out of bounds access. The
+> gdev->ei[] array is allocated in hte_register_chip().
+>
+> Fixes: 31ab09b42188 ("drivers: Add hardware timestamp engine (HTE) subsystem")
+> Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+> ---
+>  drivers/hte/hte.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/hte/hte.c b/drivers/hte/hte.c
+> index 891b98ad609e..a14c5bf290ff 100644
+> --- a/drivers/hte/hte.c
+> +++ b/drivers/hte/hte.c
+> @@ -811,7 +811,7 @@ int hte_push_ts_ns(const struct hte_chip *chip, u32 xlated_id,
+>  	if (!chip || !data || !chip->gdev)
+>  		return -EINVAL;
+>  
+> -	if (xlated_id > chip->nlines)
+> +	if (xlated_id >= chip->nlines)
+>  		return -EINVAL;
+>  
+>  	ei = &chip->gdev->ei[xlated_id];

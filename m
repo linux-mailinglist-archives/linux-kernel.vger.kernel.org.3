@@ -2,120 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 682FC51DD3C
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 18:11:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B42251DD4C
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 18:12:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1443558AbiEFQO7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 12:14:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44596 "EHLO
+        id S1443635AbiEFQPx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 12:15:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1443676AbiEFQNd (ORCPT
+        with ESMTP id S1443971AbiEFQOv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 12:13:33 -0400
-Received: from smtp-42ae.mail.infomaniak.ch (smtp-42ae.mail.infomaniak.ch [84.16.66.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A4686EB1B
-        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 09:09:48 -0700 (PDT)
-Received: from smtp-3-0001.mail.infomaniak.ch (unknown [10.4.36.108])
-        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4KvwWH1WXnzMqTZm;
-        Fri,  6 May 2022 18:09:47 +0200 (CEST)
-Received: from localhost (unknown [23.97.221.149])
-        by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4KvwWG6XmtzlhMBP;
-        Fri,  6 May 2022 18:09:46 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
-        s=20191114; t=1651853387;
-        bh=ZDryU4YCGeAlBj3UmZfjsG1L2XAydajY89QXvphUw5g=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nIOdNUaDfCq7/HTHeI2gajSnrvZXuId9Gu/WQzRpgEfvmihY6jJiwasP5hzdqt86q
-         BG56+DUc5KY7kZGWp9Fv6RS6XoWU7NbJEu88RSerW2tc7Y+fyUVR6/DOpJIM6/MfqV
-         2EF31mpkU5Ls5W4ALvgfqvHeLVLrOXiaDH73HITc=
-From:   =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
-To:     James Morris <jmorris@namei.org>,
-        "Serge E . Hallyn" <serge@hallyn.com>
-Cc:     =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Jann Horn <jannh@google.com>,
-        John Johansen <john.johansen@canonical.com>,
-        Kees Cook <keescook@chromium.org>,
-        Konstantin Meskhidze <konstantin.meskhidze@huawei.com>,
-        Paul Moore <paul@paul-moore.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
-        linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org
-Subject: [PATCH v3 12/12] landlock: Add design choices documentation for filesystem access rights
-Date:   Fri,  6 May 2022 18:11:02 +0200
-Message-Id: <20220506161102.525323-13-mic@digikod.net>
-In-Reply-To: <20220506161102.525323-1-mic@digikod.net>
-References: <20220506161102.525323-1-mic@digikod.net>
+        Fri, 6 May 2022 12:14:51 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C83BD83;
+        Fri,  6 May 2022 09:11:07 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id ba17so9247884edb.5;
+        Fri, 06 May 2022 09:11:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=3tVCRctusR50NsJqvwU9ayy4TOZg/tJq1P3xPHYXtsk=;
+        b=i1diYqUiflUn78SzAR+JrxbLULT9uZMaQSTddCm1jzoW63mWs9o/6wUCZCkPpxzSmo
+         KcoTpc0j+8g6QFq54SoaRdLe0avqJ+Sl5W6MS1qkr1BnWf0Y85jq/ajYjP0l0cMQ53aD
+         37fTe/MYOAilcDfsrCXwhGLp5+5U+dTPWX3xKnZr/pI12HA5VJ1J2Ny7vOuGQNpBaJZh
+         iXEqX+Pq6PJq50V2ZnFgbU7Q71vjZyQeYyiQOfcGP+jEe/rSNqb2G+j2qAh8YHlbqkFy
+         wzfPuETIcT9/lCIIrUFAcuC0n99X8oxK2sfUgwBb0qVr6UvIU9BMaP2VGa21SkTiR2VR
+         Ziug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=3tVCRctusR50NsJqvwU9ayy4TOZg/tJq1P3xPHYXtsk=;
+        b=RTgGkYbNQ6alckWeZhzAQc4m6yfrcZJEqvxG2j2cM3+/U7rWHfDCT3O1DBBjjaOKjg
+         F6ZSPKQ3zmA4ZaTdVRPMe5BczYXxx7Cs0sbgwMjkMHO9aFQo977WaE0wwlkcXzC03/VO
+         M6nu8c1//x0qZP8w5VOjEyWpQcmI7naM+gXrQU2A33z+PhPOB84cdhOKJyyFpxxj1SJk
+         UMXuvh9J2wBsIgGuS68pLgjcm1CbQsn4UkG9uAKudo/w+w3aTrmUccr1eLkqlGt7tYEL
+         tBMpGYZd7YxGyxGBjoU80lcLF33rXIj5XFKF0b/V8Y+a+6nQnVdvsJiUCOkckSYL52Ou
+         zgjg==
+X-Gm-Message-State: AOAM531Z+82Xij5feVGsAWj8Jfo5Iy+UOWf89AXlAMW8c/qOeOjP8dse
+        ZsqRIHTO8YpYK7V2McCEfDk=
+X-Google-Smtp-Source: ABdhPJz6k0eo2Uhvh2qOblVPcJzuQ5qSlxygttmHjSaUEbOY57FCjq8PIQAgtt3jlGaXjKhpf9kmdg==
+X-Received: by 2002:a05:6402:520e:b0:428:22d0:e996 with SMTP id s14-20020a056402520e00b0042822d0e996mr4135931edd.250.1651853465786;
+        Fri, 06 May 2022 09:11:05 -0700 (PDT)
+Received: from kista.localnet (cpe1-3-76.cable.triera.net. [213.161.3.76])
+        by smtp.gmail.com with ESMTPSA id qs24-20020a170906459800b006f3ef214e1bsm2027255ejc.129.2022.05.06.09.11.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 06 May 2022 09:11:05 -0700 (PDT)
+From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+To:     Samuel Holland <samuel@sholland.org>, Chen-Yu Tsai <wens@csie.org>,
+        Andre Przywara <andre.przywara@arm.com>
+Cc:     Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Icenowy Zheng <icenowy@aosc.io>,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        linux-clk@vger.kernel.org
+Subject: Re: [PATCH v11 2/6] clk: sunxi-ng: h616: Add PLL derived 32KHz clock
+Date:   Fri, 06 May 2022 18:11:04 +0200
+Message-ID: <3607837.MHq7AAxBmi@kista>
+In-Reply-To: <20220428230933.15262-3-andre.przywara@arm.com>
+References: <20220428230933.15262-1-andre.przywara@arm.com> <20220428230933.15262-3-andre.przywara@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Summarize the rationale of filesystem access rights according to the
-file type.
+Dne petek, 29. april 2022 ob 01:09:29 CEST je Andre Przywara napisal(a):
+> The RTC section of the H616 manual mentions in a half-sentence the
+> existence of a clock "32K divided by PLL_PERI(2X)". This is used as
+> one of the possible inputs for the mux that selects the clock for the
+> 32 KHz fanout pad. On the H616 this is routed to pin PG10, and some
+> boards use that clock output to compensate for a missing 32KHz crystal.
+> On the OrangePi Zero2 this is for instance connected to the LPO pin of
+> the WiFi/BT chip.
+> The new RTC clock binding requires this clock to be named as one input
+> clock, so we need to expose this to the DT. In contrast to the D1 SoC
+> there does not seem to be a gate for this clock, so just use a fixed
+> divider clock, using a newly assigned clock number.
+> 
+> Signed-off-by: Andre Przywara <andre.przywara@arm.com>
+> Reviewed-by: Samuel Holland <samuel@sholland.org>
 
-Update the document date.
+Applied to sunxi/clk-for-5.19, thanks!
 
-Reviewed-by: Paul Moore <paul@paul-moore.com>
-Signed-off-by: Mickaël Salaün <mic@digikod.net>
-Link: https://lore.kernel.org/r/20220506161102.525323-13-mic@digikod.net
----
+Best regards,
+Jernej
 
-Changes since v2:
-* Add more explanation in the commit message.
-* Update date.
+> ---
+>  drivers/clk/sunxi-ng/ccu-sun50i-h616.c      | 8 ++++++++
+>  drivers/clk/sunxi-ng/ccu-sun50i-h616.h      | 2 +-
+>  include/dt-bindings/clock/sun50i-h616-ccu.h | 1 +
+>  3 files changed, 10 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/clk/sunxi-ng/ccu-sun50i-h616.c b/drivers/clk/sunxi-ng/
+ccu-sun50i-h616.c
+> index 49a2474cf314..21e918582aa5 100644
+> --- a/drivers/clk/sunxi-ng/ccu-sun50i-h616.c
+> +++ b/drivers/clk/sunxi-ng/ccu-sun50i-h616.c
+> @@ -704,6 +704,13 @@ static CLK_FIXED_FACTOR_HWS(pll_periph0_2x_clk, "pll-
+periph0-2x",
+>  			    pll_periph0_parents,
+>  			    1, 2, 0);
+>  
+> +static const struct clk_hw *pll_periph0_2x_hws[] = {
+> +	&pll_periph0_2x_clk.hw
+> +};
+> +
+> +static CLK_FIXED_FACTOR_HWS(pll_system_32k_clk, "pll-system-32k",
+> +			    pll_periph0_2x_hws, 36621, 1, 0);
+> +
+>  static const struct clk_hw *pll_periph1_parents[] = {
+>  	&pll_periph1_clk.common.hw
+>  };
+> @@ -852,6 +859,7 @@ static struct clk_hw_onecell_data sun50i_h616_hw_clks = 
+{
+>  		[CLK_PLL_DDR1]		= 
+&pll_ddr1_clk.common.hw,
+>  		[CLK_PLL_PERIPH0]	= &pll_periph0_clk.common.hw,
+>  		[CLK_PLL_PERIPH0_2X]	= &pll_periph0_2x_clk.hw,
+> +		[CLK_PLL_SYSTEM_32K]	= &pll_system_32k_clk.hw,
+>  		[CLK_PLL_PERIPH1]	= &pll_periph1_clk.common.hw,
+>  		[CLK_PLL_PERIPH1_2X]	= &pll_periph1_2x_clk.hw,
+>  		[CLK_PLL_GPU]		= 
+&pll_gpu_clk.common.hw,
+> diff --git a/drivers/clk/sunxi-ng/ccu-sun50i-h616.h b/drivers/clk/sunxi-ng/
+ccu-sun50i-h616.h
+> index dd671b413f22..fdd2f4d5103f 100644
+> --- a/drivers/clk/sunxi-ng/ccu-sun50i-h616.h
+> +++ b/drivers/clk/sunxi-ng/ccu-sun50i-h616.h
+> @@ -51,6 +51,6 @@
+>  
+>  #define CLK_BUS_DRAM		56
+>  
+> -#define CLK_NUMBER		(CLK_BUS_HDCP + 1)
+> +#define CLK_NUMBER		(CLK_PLL_SYSTEM_32K + 1)
+>  
+>  #endif /* _CCU_SUN50I_H616_H_ */
+> diff --git a/include/dt-bindings/clock/sun50i-h616-ccu.h b/include/dt-
+bindings/clock/sun50i-h616-ccu.h
+> index 4fc08b0df2f3..1191aca53ac6 100644
+> --- a/include/dt-bindings/clock/sun50i-h616-ccu.h
+> +++ b/include/dt-bindings/clock/sun50i-h616-ccu.h
+> @@ -111,5 +111,6 @@
+>  #define CLK_BUS_TVE0		125
+>  #define CLK_HDCP		126
+>  #define CLK_BUS_HDCP		127
+> +#define CLK_PLL_SYSTEM_32K	128
+>  
+>  #endif /* _DT_BINDINGS_CLK_SUN50I_H616_H_ */
+> -- 
+> 2.35.3
+> 
+> 
 
-Changes since v1:
-* Add Reviewed-by: Paul Moore.
-* Update date.
----
- Documentation/security/landlock.rst | 17 ++++++++++++++++-
- 1 file changed, 16 insertions(+), 1 deletion(-)
-
-diff --git a/Documentation/security/landlock.rst b/Documentation/security/landlock.rst
-index 3df68cb1d10f..5c77730b4479 100644
---- a/Documentation/security/landlock.rst
-+++ b/Documentation/security/landlock.rst
-@@ -7,7 +7,7 @@ Landlock LSM: kernel documentation
- ==================================
- 
- :Author: Mickaël Salaün
--:Date: March 2021
-+:Date: May 2022
- 
- Landlock's goal is to create scoped access-control (i.e. sandboxing).  To
- harden a whole system, this feature should be available to any process,
-@@ -42,6 +42,21 @@ Guiding principles for safe access controls
- * Computation related to Landlock operations (e.g. enforcing a ruleset) shall
-   only impact the processes requesting them.
- 
-+Design choices
-+==============
-+
-+Filesystem access rights
-+------------------------
-+
-+All access rights are tied to an inode and what can be accessed through it.
-+Reading the content of a directory doesn't imply to be allowed to read the
-+content of a listed inode.  Indeed, a file name is local to its parent
-+directory, and an inode can be referenced by multiple file names thanks to
-+(hard) links.  Being able to unlink a file only has a direct impact on the
-+directory, not the unlinked inode.  This is the reason why
-+`LANDLOCK_ACCESS_FS_REMOVE_FILE` or `LANDLOCK_ACCESS_FS_REFER` are not allowed
-+to be tied to files but only to directories.
-+
- Tests
- =====
- 
--- 
-2.35.1
 

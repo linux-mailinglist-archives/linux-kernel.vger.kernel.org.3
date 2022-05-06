@@ -2,162 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A54351D525
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 12:04:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DCD051D530
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 12:07:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1390791AbiEFKIT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 06:08:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48844 "EHLO
+        id S1390807AbiEFKKo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 06:10:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245092AbiEFKIS (ORCPT
+        with ESMTP id S1390800AbiEFKKl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 06:08:18 -0400
-Received: from us-smtp-delivery-74.mimecast.com (us-smtp-delivery-74.mimecast.com [170.10.129.74])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5095D5BD22
-        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 03:04:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651831474;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=bHY4VDg+ah70TicV7Rfgy/3c2lRATR8HIfCmkjcH/Oc=;
-        b=EBBF1w/tsdjvq9gqaANcNuvF+dcxYCX8kGzpyOtj10w/7SvIkfwfDBdXvhGA/bWTbEdxJI
-        65KY+iLnJwJzhns/l4G0P/rwIYzc3B65IUQady+K5xk5rN58CNOnqhZQUBxChoFntH7NTW
-        hbE9AArJ4O6qxvp7i6T9km8bLB3b10k=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-149-M18tM8b2OJy95Q0nzBIyHQ-1; Fri, 06 May 2022 06:04:33 -0400
-X-MC-Unique: M18tM8b2OJy95Q0nzBIyHQ-1
-Received: by mail-ed1-f70.google.com with SMTP id cf16-20020a0564020b9000b00425d543c75dso3751514edb.11
-        for <linux-kernel@vger.kernel.org>; Fri, 06 May 2022 03:04:33 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=bHY4VDg+ah70TicV7Rfgy/3c2lRATR8HIfCmkjcH/Oc=;
-        b=iOVIlC8Fd2/hB6uwlvae/tTtLxT1iCqum8PyVGFr8qxqKtNPxZx46cr1vqzVGh4HSB
-         YdJ+GXzmPM9EtNhkWI9G3+vdcySCUaAUMyDupMXVuP5VvxTRtorZ8Unhai8oq5S+RL1A
-         drjhj41PASepcRzOljS0i7FrzyJYbIUlWyrmv+gEn8Z/MLiZwBp74edJCVJXXIwXq3fo
-         c/clZPTERnKWgFVoYoaU8H6xvpI2kgWFGUC2zxVlx5jEYitSC+fKa1kQlu12Olfexw5n
-         a2dfd3DeR+eVnZ9upHYiRmkvGyDuc6MebQVhlCUd5IM6Gm2DiucxmTfhULSNoTW4GUJ5
-         yeHA==
-X-Gm-Message-State: AOAM533TN6FgbzpfKTS8zmc5ChPgptam0solxFyvTaoOtY66IfsDvPxK
-        cM+1VQFDBRsISPpGG4/y3Z4pjIXKL6LuhpmWEbJoO3sWEghJWnRd/IdVAWUaJOAQv8bR5uAZ3In
-        md7F1UUTSzg77Pg6MAgcPz1gf
-X-Received: by 2002:a17:906:2989:b0:6f3:a215:8426 with SMTP id x9-20020a170906298900b006f3a2158426mr2179958eje.725.1651831470962;
-        Fri, 06 May 2022 03:04:30 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJw00aYNt3RKDL8C1p1bUN4+NsjLxXRo4/823/OnQVTFKXu+rcbvHVRjmFNcVwCoe0MclOGQNA==
-X-Received: by 2002:a17:906:2989:b0:6f3:a215:8426 with SMTP id x9-20020a170906298900b006f3a2158426mr2179940eje.725.1651831470771;
-        Fri, 06 May 2022 03:04:30 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
-        by smtp.gmail.com with ESMTPSA id zd9-20020a17090698c900b006f3ef214e28sm1814747ejb.142.2022.05.06.03.04.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 06 May 2022 03:04:30 -0700 (PDT)
-Message-ID: <0d048b50-ee27-b5d6-11e2-f2f11ae17b79@redhat.com>
-Date:   Fri, 6 May 2022 12:04:29 +0200
+        Fri, 6 May 2022 06:10:41 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 379DE5DA7F;
+        Fri,  6 May 2022 03:06:58 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id F384C14BF;
+        Fri,  6 May 2022 03:06:57 -0700 (PDT)
+Received: from FVFF77S0Q05N (unknown [10.57.65.197])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 583A13FA31;
+        Fri,  6 May 2022 03:06:55 -0700 (PDT)
+Date:   Fri, 6 May 2022 11:06:51 +0100
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Chen Zhongjin <chenzhongjin@huawei.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-arch@vger.kernel.org, jthierry@redhat.com,
+        catalin.marinas@arm.com, will@kernel.org, masahiroy@kernel.org,
+        jpoimboe@redhat.com, ycote@redhat.com, herbert@gondor.apana.org.au,
+        davem@davemloft.net, ardb@kernel.org, maz@kernel.org,
+        tglx@linutronix.de, luc.vanoostenryck@gmail.com
+Subject: Re: [RFC PATCH v4 22/37] arm64: kernel: Skip validation of kuser32.o
+Message-ID: <YnTzO3imkSUAuIKx@FVFF77S0Q05N>
+References: <20220429094355.122389-1-chenzhongjin@huawei.com>
+ <20220429094355.122389-23-chenzhongjin@huawei.com>
+ <YmvGja62yWdPHPOW@hirez.programming.kicks-ass.net>
+ <a57f7d73-6e01-8f41-9be3-8e90807ec08f@huawei.com>
+ <20220505092448.GE2501@worktop.programming.kicks-ass.net>
+ <YnOtbYOIT5OP7F0g@FVFF77S0Q05N.cambridge.arm.com>
+ <51ce37b5-f527-9743-36d3-50247cb0939f@huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH] platform/x86: thinkpad_acpi: Fix compilation without
- CONFIG_SUSPEND
-Content-Language: en-US
-To:     Mario Limonciello <mario.limonciello@amd.com>,
-        Mark Pearson <markpearson@lenovo.com>
-Cc:     Henrique de Moraes Holschuh <hmh@hmh.eng.br>,
-        Mark Gross <mgross@linux.intel.com>,
-        "open list:THINKPAD ACPI EXTRAS DRIVER" 
-        <ibm-acpi-devel@lists.sourceforge.net>,
-        "open list:THINKPAD ACPI EXTRAS DRIVER" 
-        <platform-driver-x86@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        kernel test robot <lkp@intel.com>
-References: <20220503012700.1273-1-mario.limonciello@amd.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20220503012700.1273-1-mario.limonciello@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <51ce37b5-f527-9743-36d3-50247cb0939f@huawei.com>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On 5/3/22 03:27, Mario Limonciello wrote:
-> When compiled without `CONFIG_SUSPEND` the extra s2idle quirk handling
-> doesn't make any sense and causes a kernel build failure.
+On Fri, May 06, 2022 at 10:18:10AM +0800, Chen Zhongjin wrote:
+> On 2022/5/5 18:56, Mark Rutland wrote:
+> > On Thu, May 05, 2022 at 11:24:48AM +0200, Peter Zijlstra wrote:
+> >> On Thu, May 05, 2022 at 11:36:12AM +0800, Chen Zhongjin wrote:
+> >>> Hi Peter,
+> >>>
+> >>> IIRC now the blacklist mechanisms all run on check stage, which after
+> >>> decoding, but the problem of kuser32.S happens in decoding stage. Other
+> >>> than that the assembly symbols in kuser32 is STT_NOTYPE and
+> >>> STACK_FRAME_NON_STANDARD will throw an error for this.
+> >>>
+> >>> OBJECT_FILES_NON_STANDARD works for the single file but as you said
+> >>> after LTO it's invalid. However STACK_FRAME_NON_STANDARD doesn't work
+> >>> for kuser32 case at all.
+> >>>
+> >>> Now my strategy for undecodable instructions is: show an error message
+> >>> and mark insn->ignore = true, but do not stop anything so decoding work
+> >>> can going on.
+> >>>
+> >>> To totally solve this my idea is that applying blacklist before decode.
+> >>> However for this part objtool doesn't have any insn or func info, so we
+> >>> should add a new blacklist just for this case...
+> >>
+> >> OK, so Mark explained that this is 32bit userspace (VDSO) code.
+> >>
+> >> And as such there's really no point in running objtool on it. Does all
+> >> that live in it's own section? Should it?
+> > 
+> > It's placed in .rodata by a linker script:
+> > 
+> > * The 32-bit vdso + kuser code is placed in .rodata, between the `vdso32_start`
+> >   and `vdso32_end` symbols, as raw bytes (via .incbin).
+> >   See arch/arm64/kernel/vdso32-wrap.S.
+> > 
+> > * The 64-bit vdso code is placed in .rodata, between the `vdso_start`
+> >   and `vdso32` symbols, as raw bytes (via .incbin).
+> >   See arch/arm64/kernel/vdso-wrap.S.
+> > 
+> > The objects under arch/arm64/kernel/{vdso,vdso32}/ are all userspace objects,
+> > and from userspace's PoV the existing secrtions within those objects are
+> > correct, so I don't think those should change.
+> > 
+> > How does x86 deal with its vdso objects?
+> > 
+> > Thanks,
+> > Mark.
+> > .
 > 
-> Disable the new code with `CONFIG_SUSPEND` not set.
-> 
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+> However for my build kuser32.o content is in .text 
 
-Thanks, since the original patch was still in my review-hans
-branch (and not yet in for-next) I've squashed this fix into
-the original patch.
+We should be able to move that into .rodata; it's never executed in kernel context.
 
-Regards,
+> and there is only `vdso` symbol in .rodata without `vdso32`.
 
-Hans
+That means you're not building with CROSS_COMPILE_COMPAT, and so we can't build
+the 32-bit VDSO.
 
+> And for defconfig the CONFIG_KUSER_HELPERS=y is on.
 
+Yes.
 
+> According to your description, it seems something wrong here?
 
-> ---
->  drivers/platform/x86/thinkpad_acpi.c | 6 ++++++
->  1 file changed, 6 insertions(+)
-> 
-> diff --git a/drivers/platform/x86/thinkpad_acpi.c b/drivers/platform/x86/thinkpad_acpi.c
-> index f385450af864..2833609fade7 100644
-> --- a/drivers/platform/x86/thinkpad_acpi.c
-> +++ b/drivers/platform/x86/thinkpad_acpi.c
-> @@ -4482,6 +4482,7 @@ static const struct dmi_system_id fwbug_list[] __initconst = {
->  	{}
->  };
->  
-> +#ifdef CONFIG_SUSPEND
->  /*
->   * Lenovo laptops from a variety of generations run a SMI handler during the D3->D0
->   * transition that occurs specifically when exiting suspend to idle which can cause
-> @@ -4517,6 +4518,7 @@ static void thinkpad_acpi_amd_s2idle_restore(void)
->  static struct acpi_s2idle_dev_ops thinkpad_acpi_s2idle_dev_ops = {
->  	.restore = thinkpad_acpi_amd_s2idle_restore,
->  };
-> +#endif
->  
->  static const struct pci_device_id fwbug_cards_ids[] __initconst = {
->  	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, 0x24F3) },
-> @@ -11569,8 +11571,10 @@ static void thinkpad_acpi_module_exit(void)
->  
->  	tpacpi_lifecycle = TPACPI_LIFE_EXITING;
->  
-> +#ifdef CONFIG_SUSPEND
->  	if (tp_features.quirks && tp_features.quirks->s2idle_bug_mmio)
->  		acpi_unregister_lps0_dev(&thinkpad_acpi_s2idle_dev_ops);
-> +#endif
->  	if (tpacpi_hwmon)
->  		hwmon_device_unregister(tpacpi_hwmon);
->  	if (tp_features.sensors_pdrv_registered)
-> @@ -11743,11 +11747,13 @@ static int __init thinkpad_acpi_module_init(void)
->  	dmi_id = dmi_first_match(fwbug_list);
->  	if (dmi_id) {
->  		tp_features.quirks = dmi_id->driver_data;
-> +#ifdef CONFIG_SUSPEND
->  		if (tp_features.quirks->s2idle_bug_mmio) {
->  			if (!acpi_register_lps0_dev(&thinkpad_acpi_s2idle_dev_ops))
->  				pr_info("Using s2idle quirk to avoid %s platform firmware bug\n",
->  					dmi_id->ident ? dmi_id->ident : "");
->  		}
-> +#endif
->  	}
->  
->  	return 0;
+Sorry, I was wrong about how we linked the kuser32 code.
 
+I believe we can move that into .rodata by adding:
+
+	.section .rodata
+
+... to the start of that.
+
+I think that'd be a nice cleanup to do regardless of objtool.
+
+Thanks,
+Mark.

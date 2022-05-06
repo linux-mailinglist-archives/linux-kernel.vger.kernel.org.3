@@ -2,164 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82F5351DE6C
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 19:42:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80A3251DE73
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 19:45:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1444242AbiEFRqA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 13:46:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39470 "EHLO
+        id S1444258AbiEFRtH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 13:49:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1444236AbiEFRp6 (ORCPT
+        with ESMTP id S1378615AbiEFRtE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 13:45:58 -0400
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEBA353717
-        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 10:42:14 -0700 (PDT)
-Received: by mail-yb1-xb32.google.com with SMTP id s30so14099575ybi.8
-        for <linux-kernel@vger.kernel.org>; Fri, 06 May 2022 10:42:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=YKfnJFHuOviCdMg0UB5UffT9B/WVcObEOxiRN5y2Kug=;
-        b=emmUN3k1bPN4J6n6aBe2FemprgUT+FF6VAYxV6ekMwnHvd4yMg9T5KGYmUYmFa9oAe
-         l8wgj8tdCP2FJPIShfAg2Fk/rOBVcSKoqvKeqjnUKen1LIajvaEdZt/TPfqzH6t/XrSo
-         syM1kjCv3gSDfacEuEc3EgG0lwGjeC2hWNg5U2El7kqEz+o0tsjk8MjpqNijR6o+XqPs
-         q3onvlApQgHZ5xOXxhHzjSgk18UOnvT+GgtT76x6XFC/llE4jgVQddy0F0CFkFJAkHTB
-         0S9hvZkV7X0lPAIZLLytf/7qjnZXN3mz9RqswI5f966807Geg/q/71UbscP2MlkhGUSo
-         7bxw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=YKfnJFHuOviCdMg0UB5UffT9B/WVcObEOxiRN5y2Kug=;
-        b=GMnNev09V0zakOmDaz8vN6vtmn2Gj3z8u8XJ4MhttvAi2UQHXRj6ZCk88vbc1F/JJI
-         AYy7HnFs39wTvjI5qf6DWacY3oBWFMJU6uJXR5iZ2qr1kxwkRIJ1339GpCw+4CCWikhT
-         +RgK+6Z9vJP02ZOG536Ux5TIuDd/bwjLIkyWRJgvqhv/YX2WtQs5m1d+433I+4nnMEpw
-         J4KDUd7bOzdu7wOXoyiLHAEBQAYOut1u0C4h/OFHEEP0eUoXajKyuWTHGzsWbBq68x4J
-         ExBmDcKf+AqiFocWxT2aFha4OrI07e4LsKnyJ6BkF5qwam14ca1/ofq6iVDIZ6/zDFQ6
-         zGEQ==
-X-Gm-Message-State: AOAM532VAhmTrjg4ueCGKjkctKauTkvWNgt3dftCV95eAS0EOelw4yhb
-        Rq+76G/av/yG+ox/zz7NnwdqmQNa2slpypzkGOlEJw==
-X-Google-Smtp-Source: ABdhPJws5njwDWJ9xDpRYMne8cwuzMbwVAp2MzFRAKHvjVIKPSom5y1drK/dJlbHrWExYpCexhrZLlT5LtJ6/fdqUbo=
-X-Received: by 2002:a25:bb0f:0:b0:61d:60f9:aaf9 with SMTP id
- z15-20020a25bb0f000000b0061d60f9aaf9mr3038082ybg.199.1651858933696; Fri, 06
- May 2022 10:42:13 -0700 (PDT)
+        Fri, 6 May 2022 13:49:04 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE148B57;
+        Fri,  6 May 2022 10:45:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6CE44B83736;
+        Fri,  6 May 2022 17:45:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22E16C385A8;
+        Fri,  6 May 2022 17:45:13 +0000 (UTC)
+Date:   Fri, 6 May 2022 18:45:10 +0100
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Baoquan He <bhe@redhat.com>
+Cc:     "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        linux-kernel@vger.kernel.org, Dave Young <dyoung@redhat.com>,
+        Vivek Goyal <vgoyal@redhat.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        kexec@lists.infradead.org, Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        devicetree@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        linux-doc@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
+        Feng Zhou <zhoufeng.zf@bytedance.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Chen Zhou <dingguo.cz@antgroup.com>,
+        John Donnelly <John.p.donnelly@oracle.com>,
+        Dave Kleikamp <dave.kleikamp@oracle.com>
+Subject: Re: [PATCH v23 3/6] arm64: kdump: Reimplement crashkernel=X
+Message-ID: <YnVept85UJCaZp6p@arm.com>
+References: <20220505091845.167-1-thunder.leizhen@huawei.com>
+ <20220505091845.167-4-thunder.leizhen@huawei.com>
+ <YnQC44KVKirH0vyB@arm.com>
+ <189f24a8-9e9b-b3e9-7ac5-935433ea575b@huawei.com>
+ <YnUfmMmON2c1FZrx@MiWiFi-R3L-srv>
 MIME-Version: 1.0
-References: <20220426164315.625149-1-glider@google.com> <20220426164315.625149-29-glider@google.com>
- <87a6c6y7mg.ffs@tglx> <CAG_fn=U7PPBmmkgxFcWFQUCqZitzMizr1e69D9f26sGGzeitLQ@mail.gmail.com>
- <87y1zjlhmj.ffs@tglx> <CAG_fn=XxAhBEBP2KJvahinbaxLAd1xvqTfRJdAu1Tk5r8=01jw@mail.gmail.com>
- <878rrfiqyr.ffs@tglx> <CAG_fn=XVchXCcOhFt+rP=vinRhkyrXJSP46cyvcZeHJWaDquGg@mail.gmail.com>
- <87k0ayhc43.ffs@tglx>
-In-Reply-To: <87k0ayhc43.ffs@tglx>
-From:   Alexander Potapenko <glider@google.com>
-Date:   Fri, 6 May 2022 19:41:37 +0200
-Message-ID: <CAG_fn=UpcXMqJiZvho6_G3rjvjQA-3Ax6X8ONVO0D+4Pttc9dA@mail.gmail.com>
-Subject: Re: [PATCH v3 28/46] kmsan: entry: handle register passing from
- uninstrumented code
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Christoph Hellwig <hch@lst.de>,
-        Christoph Lameter <cl@linux.com>,
-        David Rientjes <rientjes@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Ilya Leoshkevich <iii@linux.ibm.com>,
-        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Kees Cook <keescook@chromium.org>,
-        Marco Elver <elver@google.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Vegard Nossum <vegard.nossum@oracle.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YnUfmMmON2c1FZrx@MiWiFi-R3L-srv>
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 6, 2022 at 6:14 PM Thomas Gleixner <tglx@linutronix.de> wrote:
->
-> On Fri, May 06 2022 at 16:52, Alexander Potapenko wrote:
-> > On Thu, May 5, 2022 at 11:56 PM Thomas Gleixner <tglx@linutronix.de> wrote:
-> >> @@ -452,6 +455,7 @@ irqentry_state_t noinstr irqentry_nmi_en
-> >>         rcu_nmi_enter();
-> >>
-> >>         instrumentation_begin();
-> >> +       unpoison(regs);
-> >>         trace_hardirqs_off_finish();
-> >>         ftrace_nmi_enter();
-> >>         instrumentation_end();
-> >>
-> >> As I said: 4 places :)
-> >
-> > These four instances still do not look sufficient.
-> > Right now I am seeing e.g. reports with the following stack trace:
-> >
-> > BUG: KMSAN: uninit-value in irqtime_account_process_tick+0x255/0x580
-> > kernel/sched/cputime.c:382
-> >  irqtime_account_process_tick+0x255/0x580 kernel/sched/cputime.c:382
-> >  account_process_tick+0x98/0x450 kernel/sched/cputime.c:476
-> >  update_process_times+0xe4/0x3e0 kernel/time/timer.c:1786
-> >  tick_sched_handle kernel/time/tick-sched.c:243
-> >  tick_sched_timer+0x83e/0x9e0 kernel/time/tick-sched.c:1473
-> >  __run_hrtimer+0x518/0xe50 kernel/time/hrtimer.c:1685
-> >  __hrtimer_run_queues kernel/time/hrtimer.c:1749
-> >  hrtimer_interrupt+0x838/0x15a0 kernel/time/hrtimer.c:1811
-> >  local_apic_timer_interrupt arch/x86/kernel/apic/apic.c:1086
-> >  __sysvec_apic_timer_interrupt+0x1ae/0x680 arch/x86/kernel/apic/apic.c:1103
-> >  sysvec_apic_timer_interrupt+0x95/0xc0 arch/x86/kernel/apic/apic.c:1097
-> > ...
-> > (uninit creation stack trace is irrelevant here, because it is some
-> > random value from the stack)
-> >
-> > sysvec_apic_timer_interrupt() receives struct pt_regs from
-> > uninstrumented code, so regs can be partially uninitialized.
-> > They are not passed down the call stack directly, but are instead
-> > saved by set_irq_regs() in sysvec_apic_timer_interrupt() and loaded by
-> > get_irq_regs() in tick_sched_timer().
->
-> sysvec_apic_timer_interrupt() invokes irqentry_enter() _before_
-> set_irq_regs() and irqentry_enter() unpoisons @reg.
->
-> Confused...
+On Fri, May 06, 2022 at 09:16:08PM +0800, Baoquan He wrote:
+> On 05/06/22 at 11:22am, Leizhen (ThunderTown) wrote:
+> ......  
+> > >> @@ -118,8 +159,7 @@ static void __init reserve_crashkernel(void)
+> > >>  	if (crash_base)
+> > >>  		crash_max = crash_base + crash_size;
+> > >>  
+> > >> -	/* Current arm64 boot protocol requires 2MB alignment */
+> > >> -	crash_base = memblock_phys_alloc_range(crash_size, SZ_2M,
+> > >> +	crash_base = memblock_phys_alloc_range(crash_size, CRASH_ALIGN,
+> > >>  					       crash_base, crash_max);
+> > >>  	if (!crash_base) {
+> > >>  		pr_warn("cannot allocate crashkernel (size:0x%llx)\n",
+> > > 
+> > > I personally like this but let's see how the other thread goes. I guess
+> > 
+> > Me too. This fallback complicates code logic more than just a little.
+> > I'm not sure why someone would rather add fallback than change the bootup
+> > options to crashkernel=X,[high|low]. Perhaps fallback to high/low is a better
+> > compatible and extended mode when crashkernel=X fails to reserve memory. And
+> > the code logic will be much clearer.
+> 
+> The fallback does complicates code, while it was not made at the
+> beginning, but added later. The original crahskernel=xM can only reserve
+> low memory under 896M on x86 to be back compatible with the case in which
+> normal kernel is x86_64, while kdump kernel could be i386. Then customer
+> complained why crashkernel=xM can't be put anywhere so that they don't
+> need to know the details of limited low memory and huge high memory fact 
+> in system.
+> 
+> The implementation of fallback is truly complicated, but its use is
+> quite simple. And it makes crashkernel reservation setting simple.
+> Most of users don't need to know crashkernel=,high, ,low things, unless
+> the crashkernel region is too big. Nobody wants to take away 1G or more
+> from low memory for kdump just in case bad thing happens, while normal
+> kernel itself is seriously impacted by limited low memory.
 
-As far as I can tell in this case sysvect_apic_timer_interrupt() is
-called by the following code in arch/x86/kernel/idt.c:
+IIUC, that's exactly what happens even on x86, it may take away a
+significant chunk of the low memory. Let's say we have 1.2GB of 'low'
+memory (below 4GB) on an arm64 platform. A crashkernel=1G would succeed
+in a low allocation, pretty much affecting the whole system. It would
+only fall back to 'high' _if_ you pass something like crashkernel=1.2G
+so that the low allocation fails. So if I got this right, I find the
+fall-back from crashkernel=X pretty useless, we shouldn't even try it.
 
-  INTG(LOCAL_TIMER_VECTOR,                asm_sysvec_apic_timer_interrupt),
+It makes more sense if crashkernel=X,high is a hint to attempt a high
+allocation first with a default low (overridden by a ,low option) or
+even fall-back to low if there's no memory above 4GB.
 
-, which does not use IDTENTRY_SYSVEC framework and thus does not call
-irqentry_enter().
+Could you please have a look at Zhen Lei's latest series without any
+fall-backs? I'd like to queue that if you are happy with it. We can then
+look at adding some fall-back options on top.
 
-I guess handling those will require wrapping every interrupt gate into
-a function that performs register unpoisoning?
+IMO, we should only aim for:
 
-By the way, if it helps, I think we don't necessarily have to call
-kmsan_unpoison_memory() from within the
-instrumentation_begin()/instrumentation_end() region?
-We could move the call to the beginning of irqentry_enter(), removing
-unnecessary duplication.
+	crashkernel=X		ZONE_DMA allocation, no fall-back
+	crashkernel=X,high	hint for high allocation, small default
+				low, fall back to low if alloc fails
+	crashkernel=X,low	control the default low allocation, only
+				high is passed
+
+With the above, I'd expect admins to just go for crashkernel=X,high on
+modern hardware with up to date kexec tools and it does the right thing.
+The crashkernel=X can lead to unexpected results if it eats up all the
+low memory. Let's say this option is for backwards compatibility only.
+
+Thanks.
+
+-- 
+Catalin

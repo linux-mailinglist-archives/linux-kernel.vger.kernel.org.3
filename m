@@ -2,139 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92FDF51DD51
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 18:13:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B10A51DD62
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 18:14:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1443697AbiEFQRV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 12:17:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51626 "EHLO
+        id S1443590AbiEFQSY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 12:18:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1443743AbiEFQRK (ORCPT
+        with ESMTP id S238954AbiEFQSW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 12:17:10 -0400
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3F327092D
-        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 09:12:15 -0700 (PDT)
-Received: by mail-lj1-x230.google.com with SMTP id v4so9804827ljd.10
-        for <linux-kernel@vger.kernel.org>; Fri, 06 May 2022 09:12:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=shutemov-name.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=3LVCF+EC61p3SRHqy5+HBfYg8g8sBVA6E2RSjLMm3ic=;
-        b=71gELqa8e3JZdAR40f88qYRAendRWwJy32RDkq6jbbgAR1oFpqUnUAh7JDtx9eVM4b
-         hXnwylvyfzfwO1l5pR5a8tj6McjLg1BgMlPCXYajEuS9KSDUdhDD4IEadqjiXDqkc5MN
-         jgRnaEFuE4vFyEl8fmIM9iQXW9RSsk/YvT+UGEyx56ucVrRD6B9KQ/k3MQeUHryYIjuD
-         6HSmA9SD2cmqfM/Rtv+U/n0Ew972cSEgHdE7tNtlrRWpD4u3DVdtKECy53If23SgbnzR
-         xej7+9vB9kXXhnte6xgRsD1WPNIKMmy+MI5P0vF2w3FABpNop43zQpwmMAvrts8IUo6u
-         Ay6Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=3LVCF+EC61p3SRHqy5+HBfYg8g8sBVA6E2RSjLMm3ic=;
-        b=ekI7FLX72cEUxJflVKzfUfla3NGr3Rh6BlvIWiS3ZsnEvOsFhjhKtvgsj3lrzfuX+l
-         rPHdRqzSzwvMk54NP5GTdYnVsKG2ZD+RXAjkY2eEhKWaJGj8Qbqzr5mMMTldX8ceZwA8
-         40ntm+IXOc8rWFhj8xITsTLXXZaB9bIBGUjDJZkBAURQDE8F2GEpF1LRSBAbfV/zhIrQ
-         FulZehrpj8z3rMqYhe33q0jepiXjC7YDU2BaoZtTV6AoZrdVhF9JMaAleTQJ7bbjsBAN
-         c6mjZy0FjL5vwgqugASHeTyCVjwZ8CAn9JXBosAlrt9u/70VfOZS+MSXEBWMEGNobhxQ
-         vBlw==
-X-Gm-Message-State: AOAM531E/9wnLKniGyU/BnV1KfqhKeb+xv9XCISqTXdJhNN2KpnaAN2F
-        xsDpTk0KgmaKnMELK8HxF8M6kg==
-X-Google-Smtp-Source: ABdhPJxcoFt3N3AtHGRW62qNedg2H/hvHQ56BxLep0ct05gnPOlLMPFLw3EGV7t5IJpESnjqgxaHQQ==
-X-Received: by 2002:a2e:b6c6:0:b0:24f:3919:5923 with SMTP id m6-20020a2eb6c6000000b0024f39195923mr2365023ljo.398.1651853533664;
-        Fri, 06 May 2022 09:12:13 -0700 (PDT)
-Received: from box.localdomain ([86.57.175.117])
-        by smtp.gmail.com with ESMTPSA id v17-20020a2e9611000000b0024f3d1daed9sm680999ljh.97.2022.05.06.09.12.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 May 2022 09:12:13 -0700 (PDT)
-Received: by box.localdomain (Postfix, from userid 1000)
-        id 27825104AFD; Fri,  6 May 2022 19:13:59 +0300 (+03)
-Date:   Fri, 6 May 2022 19:13:59 +0300
-From:   "Kirill A. Shutemov" <kirill@shutemov.name>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Sean Christopherson <seanjc@google.com>,
+        Fri, 6 May 2022 12:18:22 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D50FE0AC;
+        Fri,  6 May 2022 09:14:39 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1651853677;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=eGIaI6FR4z9ZKAajKHVzAuOrHeyDOTq0yBE9J83Z0DM=;
+        b=BP8TefPhONS8kML5NOLtpqXmzambUy0GK8jRF4v5uGIa0Q+/JF67dmyIKUFDZXdtkdgEH3
+        gAIhBHABcrOC2He1B7b5Y7v73xCxBS1QCOPiUZhjc5BsFx/1mQksKoyoU4EwvNH7+h4aoz
+        Bdq07PrVDHsH6ZEYlsN/pWktW+cUEYejiG3BdFq0bzOTbDXcFeG37Hs5/mJ034JuqT7+PV
+        3VKnqbSUd17z9NG8jDKj3nc5kv+pcwotIX+kChEH2NIVF828gwNWslAaUqeIUokFPXDJ5d
+        GbN2LPaEKfDIabQrU9y03/pgCGy8JVUc125APHZoRU6jo7tzc4Oq+ThteyikYQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1651853677;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=eGIaI6FR4z9ZKAajKHVzAuOrHeyDOTq0yBE9J83Z0DM=;
+        b=pcMuIo9aq1DOq5bWbaoANP7IgoaUD36hkEleH8xagaT73ZawBHhxDCvKJEKK5auc97xb+k
+        alDKkQkLUmqNSHAQ==
+To:     Alexander Potapenko <glider@google.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Joerg Roedel <jroedel@suse.de>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Christoph Hellwig <hch@lst.de>,
+        Christoph Lameter <cl@linux.com>,
         David Rientjes <rientjes@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Kees Cook <keescook@chromium.org>,
+        Marco Elver <elver@google.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Pekka Enberg <penberg@kernel.org>,
         Peter Zijlstra <peterz@infradead.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Varad Gautam <varad.gautam@suse.com>,
-        Dario Faggioli <dfaggioli@suse.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        David Hildenbrand <david@redhat.com>, x86@kernel.org,
-        linux-mm@kvack.org, linux-coco@lists.linux.dev,
-        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCHv5 08/12] x86/mm: Provide helpers for unaccepted memory
-Message-ID: <20220506161359.4j5j5fxrw53fdbyr@box.shutemov.name>
-References: <20220425033934.68551-1-kirill.shutemov@linux.intel.com>
- <20220425033934.68551-9-kirill.shutemov@linux.intel.com>
- <YnJfhiiHn+48H2vb@zn.tnic>
+        Petr Mladek <pmladek@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Vegard Nossum <vegard.nossum@oracle.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3 28/46] kmsan: entry: handle register passing from
+ uninstrumented code
+In-Reply-To: <CAG_fn=XVchXCcOhFt+rP=vinRhkyrXJSP46cyvcZeHJWaDquGg@mail.gmail.com>
+References: <20220426164315.625149-1-glider@google.com>
+ <20220426164315.625149-29-glider@google.com> <87a6c6y7mg.ffs@tglx>
+ <CAG_fn=U7PPBmmkgxFcWFQUCqZitzMizr1e69D9f26sGGzeitLQ@mail.gmail.com>
+ <87y1zjlhmj.ffs@tglx>
+ <CAG_fn=XxAhBEBP2KJvahinbaxLAd1xvqTfRJdAu1Tk5r8=01jw@mail.gmail.com>
+ <878rrfiqyr.ffs@tglx>
+ <CAG_fn=XVchXCcOhFt+rP=vinRhkyrXJSP46cyvcZeHJWaDquGg@mail.gmail.com>
+Date:   Fri, 06 May 2022 18:14:36 +0200
+Message-ID: <87k0ayhc43.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YnJfhiiHn+48H2vb@zn.tnic>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 04, 2022 at 01:12:06PM +0200, Borislav Petkov wrote:
-> On Mon, Apr 25, 2022 at 06:39:30AM +0300, Kirill A. Shutemov wrote:
-> > +	unaccepted_memory = __va(boot_params.unaccepted_memory);
-> > +	range_start = start / PMD_SIZE;
-> > +
-> > +	spin_lock_irqsave(&unaccepted_memory_lock, flags);
-> > +	for_each_set_bitrange_from(range_start, range_end, unaccepted_memory,
-> > +				   DIV_ROUND_UP(end, PMD_SIZE)) {
-> > +		unsigned long len = range_end - range_start;
-> > +
-> > +		/* Platform-specific memory-acceptance call goes here */
-> > +		panic("Cannot accept memory");
-> 
-> Yeah, no, WARN_ON_ONCE() pls.
+On Fri, May 06 2022 at 16:52, Alexander Potapenko wrote:
+> On Thu, May 5, 2022 at 11:56 PM Thomas Gleixner <tglx@linutronix.de> wrote:
+>> @@ -452,6 +455,7 @@ irqentry_state_t noinstr irqentry_nmi_en
+>>         rcu_nmi_enter();
+>>
+>>         instrumentation_begin();
+>> +       unpoison(regs);
+>>         trace_hardirqs_off_finish();
+>>         ftrace_nmi_enter();
+>>         instrumentation_end();
+>>
+>> As I said: 4 places :)
+>
+> These four instances still do not look sufficient.
+> Right now I am seeing e.g. reports with the following stack trace:
+>
+> BUG: KMSAN: uninit-value in irqtime_account_process_tick+0x255/0x580
+> kernel/sched/cputime.c:382
+>  irqtime_account_process_tick+0x255/0x580 kernel/sched/cputime.c:382
+>  account_process_tick+0x98/0x450 kernel/sched/cputime.c:476
+>  update_process_times+0xe4/0x3e0 kernel/time/timer.c:1786
+>  tick_sched_handle kernel/time/tick-sched.c:243
+>  tick_sched_timer+0x83e/0x9e0 kernel/time/tick-sched.c:1473
+>  __run_hrtimer+0x518/0xe50 kernel/time/hrtimer.c:1685
+>  __hrtimer_run_queues kernel/time/hrtimer.c:1749
+>  hrtimer_interrupt+0x838/0x15a0 kernel/time/hrtimer.c:1811
+>  local_apic_timer_interrupt arch/x86/kernel/apic/apic.c:1086
+>  __sysvec_apic_timer_interrupt+0x1ae/0x680 arch/x86/kernel/apic/apic.c:1103
+>  sysvec_apic_timer_interrupt+0x95/0xc0 arch/x86/kernel/apic/apic.c:1097
+> ...
+> (uninit creation stack trace is irrelevant here, because it is some
+> random value from the stack)
+>
+> sysvec_apic_timer_interrupt() receives struct pt_regs from
+> uninstrumented code, so regs can be partially uninitialized.
+> They are not passed down the call stack directly, but are instead
+> saved by set_irq_regs() in sysvec_apic_timer_interrupt() and loaded by
+> get_irq_regs() in tick_sched_timer().
 
-Failure to accept the memory is fatal. Why pretend it is not?
+sysvec_apic_timer_interrupt() invokes irqentry_enter() _before_
+set_irq_regs() and irqentry_enter() unpoisons @reg.
 
-For TDX it will result in a crash on the first access. Prolonging the
-suffering just make it harder to understand what happened.
+Confused...
 
-> > +	unsigned long flags;
-> > +	bool ret = false;
-> > +
-> > +	spin_lock_irqsave(&unaccepted_memory_lock, flags);
-> > +	while (start < end) {
-> > +		if (test_bit(start / PMD_SIZE, unaccepted_memory)) {
-> > +			ret = true;
-> 
-> Wait, what?
-> 
-> That thing is lying: it'll return true for *some* PMD which is accepted
-> but not the whole range of [start, end].
 
-That's true. Note also that the check is inherently racy. Other CPU can
-get the range or subrange accepted just after spin_unlock().
 
-The check indicates that accept_memory() has to be called on the range
-before first access.
 
-Do you have problem with a name? Maybe has_unaccepted_memory()?
-
--- 
- Kirill A. Shutemov

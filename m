@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9722651E22F
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 01:40:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E7FB51E228
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 01:40:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1444848AbiEFW6Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 18:58:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35050 "EHLO
+        id S1444861AbiEFW6T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 18:58:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1444490AbiEFW6D (ORCPT
+        with ESMTP id S1444521AbiEFW6D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 6 May 2022 18:58:03 -0400
 Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F10B66D383;
-        Fri,  6 May 2022 15:54:18 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA4896D384;
+        Fri,  6 May 2022 15:54:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1651877659; x=1683413659;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=a9Sj55r0oDzPq8XuV+WBmGfDvwQYjjBRUJ/HaL14VLQ=;
-  b=FOxEbSqIRTDnRY99XroHz7OfeO6BNOdalgZ49HhkmgisG8V3sPpkCbx5
-   /ZD+KvLcKsDi9anWzCZ/e66bNZNjnXvMymBwfW0Y2MfK/34rt0zvs2mId
-   ZJIMoFilx2Lx/SSmj6ip2cxViAx46LDaDHkw0PM+FbzwPG4Hsu3jJf9Ki
-   Qud7gs9CPmYlD4GsK/gwdpEVFKrx5sNK5MztJqgoRAW53ane90qb7fJ5P
-   jMvcwe7CZnnpPLHkZN6Hwtb01t5nLnKIrMyMMeKFLGSE/uZ5bHfb5nYwZ
-   ylklhxySeEtmmgTfzVySfypVpk8EbAhoIDDDqTt8w9FWbvO2nPOKYyqCC
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10339"; a="256080783"
+  bh=caep34WgZSvPyz713lBbhCJDWIsKpnx2psF2WpckZJs=;
+  b=jJst+hgZp4Pw/pYbeQutuj6KdweELVJhrZI6of/sFzdWDwO/vX+ktjZi
+   A4FA2gzmRFLTjGondK0QfBlbDWUFtqDG9UgyjpaHNmHtdH+OtO84z6ngY
+   OwV8xX+g2AB27c7BDKPbpJg0XDXGBTc9YC6+J11J/+kYg3SEBcpHjjwaX
+   7TKSaJ4lvVUx1GhRV4F0A0oDUDDiSLHzLSeyHTp3k5gA7ywAyhOcfHy+j
+   IKa+ATENmy5bAca1yqPz+3lOAtCTbsDhf28wO2bFoRogANE1tF0AODVuU
+   ePkY3CArA+BcLNqZZqalG8y5/iiOHNi5QrM9BYJrsGzwawhXY4TEFcPfW
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10339"; a="256080786"
 X-IronPort-AV: E=Sophos;i="5.91,205,1647327600"; 
-   d="scan'208";a="256080783"
+   d="scan'208";a="256080786"
 Received: from orsmga004.jf.intel.com ([10.7.209.38])
   by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2022 15:54:18 -0700
 X-IronPort-AV: E=Sophos;i="5.91,205,1647327600"; 
-   d="scan'208";a="695383620"
+   d="scan'208";a="695383623"
 Received: from agluck-desk3.sc.intel.com ([172.25.222.78])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2022 15:54:17 -0700
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2022 15:54:18 -0700
 From:   Tony Luck <tony.luck@intel.com>
 To:     hdegoede@redhat.com, markgross@kernel.org
 Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
@@ -46,10 +46,11 @@ Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
         ashok.raj@intel.com, tony.luck@intel.com, rostedt@goodmis.org,
         dan.j.williams@intel.com, linux-kernel@vger.kernel.org,
         linux-doc@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        patches@lists.linux.dev, ravi.v.shankar@intel.com
-Subject: [PATCH v7 02/12] x86/msr-index: Define INTEGRITY_CAPABILITIES MSR
-Date:   Fri,  6 May 2022 15:54:00 -0700
-Message-Id: <20220506225410.1652287-3-tony.luck@intel.com>
+        patches@lists.linux.dev, ravi.v.shankar@intel.com,
+        Peter Zijlstra <peterz@infradead.org>
+Subject: [PATCH v7 03/12] stop_machine: Add stop_core_cpuslocked() for per-core operations
+Date:   Fri,  6 May 2022 15:54:01 -0700
+Message-Id: <20220506225410.1652287-4-tony.luck@intel.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220506225410.1652287-1-tony.luck@intel.com>
 References: <20220506014035.1173578-1-tony.luck@intel.com>
@@ -66,45 +67,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The INTEGRITY_CAPABILITIES MSR is enumerated by bit 2 of the
-CORE_CAPABILITIES MSR.
+From: Peter Zijlstra <peterz@infradead.org>
 
-Add defines for the CORE_CAPS enumeration as well as for the integrity
-MSR.
+Hardware core level testing features require near simultaneous execution
+of WRMSR instructions on all threads of a core to initiate a test.
 
-Reviewed-by: Dan Williams <dan.j.williams@intel.com>
+Provide a customized cut down version of stop_machine_cpuslocked() that
+just operates on the threads of a single core.
+
+Suggested-by: Thomas Gleixner <tglx@linutronix.de>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 Signed-off-by: Tony Luck <tony.luck@intel.com>
-Reviewed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Reviewed-by: Thomas Gleixner <tglx@linutronix.de>
 ---
- arch/x86/include/asm/msr-index.h | 7 +++++++
- 1 file changed, 7 insertions(+)
+ include/linux/stop_machine.h | 16 ++++++++++++++++
+ kernel/stop_machine.c        | 19 +++++++++++++++++++
+ 2 files changed, 35 insertions(+)
 
-diff --git a/arch/x86/include/asm/msr-index.h b/arch/x86/include/asm/msr-index.h
-index ee15311b6be1..c3dc7ae32f1f 100644
---- a/arch/x86/include/asm/msr-index.h
-+++ b/arch/x86/include/asm/msr-index.h
-@@ -76,6 +76,8 @@
+diff --git a/include/linux/stop_machine.h b/include/linux/stop_machine.h
+index 46fb3ebdd16e..ea7a74ea7389 100644
+--- a/include/linux/stop_machine.h
++++ b/include/linux/stop_machine.h
+@@ -124,6 +124,22 @@ int stop_machine(cpu_stop_fn_t fn, void *data, const struct cpumask *cpus);
+  */
+ int stop_machine_cpuslocked(cpu_stop_fn_t fn, void *data, const struct cpumask *cpus);
  
- /* Abbreviated from Intel SDM name IA32_CORE_CAPABILITIES */
- #define MSR_IA32_CORE_CAPS			  0x000000cf
-+#define MSR_IA32_CORE_CAPS_INTEGRITY_CAPS_BIT	  2
-+#define MSR_IA32_CORE_CAPS_INTEGRITY_CAPS	  BIT(MSR_IA32_CORE_CAPS_INTEGRITY_CAPS_BIT)
- #define MSR_IA32_CORE_CAPS_SPLIT_LOCK_DETECT_BIT  5
- #define MSR_IA32_CORE_CAPS_SPLIT_LOCK_DETECT	  BIT(MSR_IA32_CORE_CAPS_SPLIT_LOCK_DETECT_BIT)
- 
-@@ -154,6 +156,11 @@
- #define MSR_IA32_POWER_CTL		0x000001fc
- #define MSR_IA32_POWER_CTL_BIT_EE	19
- 
-+/* Abbreviated from Intel SDM name IA32_INTEGRITY_CAPABILITIES */
-+#define MSR_INTEGRITY_CAPS			0x000002d9
-+#define MSR_INTEGRITY_CAPS_PERIODIC_BIST_BIT	4
-+#define MSR_INTEGRITY_CAPS_PERIODIC_BIST	BIT(MSR_INTEGRITY_CAPS_PERIODIC_BIST_BIT)
++/**
++ * stop_core_cpuslocked: - stop all threads on just one core
++ * @cpu: any cpu in the targeted core
++ * @fn: the function to run
++ * @data: the data ptr for @fn()
++ *
++ * Same as above, but instead of every CPU, only the logical CPUs of a
++ * single core are affected.
++ *
++ * Context: Must be called from within a cpus_read_lock() protected region.
++ *
++ * Return: 0 if all executions of @fn returned 0, any non zero return
++ * value if any returned non zero.
++ */
++int stop_core_cpuslocked(unsigned int cpu, cpu_stop_fn_t fn, void *data);
 +
- #define MSR_LBR_NHM_FROM		0x00000680
- #define MSR_LBR_NHM_TO			0x000006c0
- #define MSR_LBR_CORE_FROM		0x00000040
+ int stop_machine_from_inactive_cpu(cpu_stop_fn_t fn, void *data,
+ 				   const struct cpumask *cpus);
+ #else	/* CONFIG_SMP || CONFIG_HOTPLUG_CPU */
+diff --git a/kernel/stop_machine.c b/kernel/stop_machine.c
+index cbc30271ea4d..579761729836 100644
+--- a/kernel/stop_machine.c
++++ b/kernel/stop_machine.c
+@@ -633,6 +633,25 @@ int stop_machine(cpu_stop_fn_t fn, void *data, const struct cpumask *cpus)
+ }
+ EXPORT_SYMBOL_GPL(stop_machine);
+ 
++int stop_core_cpuslocked(unsigned int cpu, cpu_stop_fn_t fn, void *data)
++{
++	const struct cpumask *smt_mask = cpu_smt_mask(cpu);
++
++	struct multi_stop_data msdata = {
++		.fn = fn,
++		.data = data,
++		.num_threads = cpumask_weight(smt_mask),
++		.active_cpus = smt_mask,
++	};
++
++	lockdep_assert_cpus_held();
++
++	/* Set the initial state and stop all online cpus. */
++	set_state(&msdata, MULTI_STOP_PREPARE);
++	return stop_cpus(smt_mask, multi_cpu_stop, &msdata);
++}
++EXPORT_SYMBOL_GPL(stop_core_cpuslocked);
++
+ /**
+  * stop_machine_from_inactive_cpu - stop_machine() from inactive CPU
+  * @fn: the function to run
 -- 
 2.35.1
 

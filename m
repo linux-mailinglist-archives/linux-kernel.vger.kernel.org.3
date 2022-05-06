@@ -2,88 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D43651DCA8
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 17:57:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2B1651DCAC
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 17:58:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1443249AbiEFQBf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 12:01:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60452 "EHLO
+        id S1443255AbiEFQCc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 12:02:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1443245AbiEFQB3 (ORCPT
+        with ESMTP id S236869AbiEFQC3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 12:01:29 -0400
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 400E86D4D9
-        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 08:57:44 -0700 (PDT)
-Received: by mail-pg1-x536.google.com with SMTP id 202so6440097pgc.9
-        for <linux-kernel@vger.kernel.org>; Fri, 06 May 2022 08:57:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=intel-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=BH6y7X/82o8jIZUQV4ebaHgoKtpRylvhrmOIif0JHwU=;
-        b=FQhYcGmNfKHc1nnYiFgAXEoKwFxv8E28pcK4R/dONCWBEiC1KWQT83UhrS3Ajqa5VF
-         v1SWMP9e6Rg+48/I+dc2lGF88e6H4ntTd5o420D6U++RSzF1rIMH6/KCT3fxL+5fArcE
-         Gp4H0ZVou5JZiL+9Xp+BAY5cGWZCLXT8Mim+gAw57kqy4ZPdAFgaSzxpcGDuoTOAWprM
-         rvywKTsamApwQjG3U6DSE1Rh2s4AnO9KZGHKMYlbV7HmlPgH8ZQwvzWoUgyP+5xVLxMp
-         TKgJKkAvLDit+a+mwShx7MiCTMMsauXQxEQABZ5QRmBrX2F+NIc+CYZx7sne5erKdKYq
-         7o+g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=BH6y7X/82o8jIZUQV4ebaHgoKtpRylvhrmOIif0JHwU=;
-        b=snXRyFJkHyudbdqX1JyDCrQDOjHIcUiS5HDdi8lQAqAXh1Sf4KZxxAcWVe1Jx/5U3A
-         UjFod0Fhh81Ir6SAfGu+x6d1XuH2SMZ+0ZIS51ebDxm00CrvbX7vaIcd9W23aHR7my/V
-         IBu9UVukmfdlOw9N86q8I8MLxmReJ+Tp217NQjQwrnKlClfEEDnJNcS7n08EEIlNh47H
-         +Ytsb46M7ZEA/KMIArMcgfyVZ6orFxprqZGgZ5lO6xmnEDhHvfUmdAFeefyY7Ep+Zfb0
-         7VM/S3xyb7hJ3UaJZhJXe0392ixDJWTmw+QvDAJBPgi0GbpEk792SaXuOKlqRsbOIEYm
-         hegg==
-X-Gm-Message-State: AOAM532WAwjmWgoH7bebjcnj9NQMnV+txGOk4pep0wApcKoXCShNRHsm
-        NeCiv2Ge5BCx3rS4sVmuYEWyv+sBGFyfsXjdtqjSVw==
-X-Google-Smtp-Source: ABdhPJzNvlbxqVqoMGNz5y2CN+HqEdAlvGnqMhpxWV4GqovWrOQCGE/1RxMaOtDYaNPYBFkT+NVxyrcy8oC2CTVA74E=
-X-Received: by 2002:a63:1117:0:b0:399:2df0:7fb9 with SMTP id
- g23-20020a631117000000b003992df07fb9mr3434149pgl.40.1651852663992; Fri, 06
- May 2022 08:57:43 -0700 (PDT)
+        Fri, 6 May 2022 12:02:29 -0400
+Received: from mout.perfora.net (mout.perfora.net [74.208.4.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBAD16D1B6;
+        Fri,  6 May 2022 08:58:45 -0700 (PDT)
+Received: from toolbox.int.toradex.com ([81.221.85.15]) by mrelay.perfora.net
+ (mreueus003 [74.208.5.2]) with ESMTPSA (Nemesis) id 0MDiSu-1nbVt62E8c-00HAUO;
+ Fri, 06 May 2022 17:58:27 +0200
+From:   Marcel Ziswiler <marcel@ziswiler.com>
+To:     linux-arm-kernel@lists.infradead.org
+Cc:     Arnd Bergmann <arnd@arndb.de>, Fabio Estevam <festevam@gmail.com>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Olof Johansson <olof@lixom.net>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, soc@kernel.org
+Subject: [PATCH v1 24/24] ARM: dts: imx7-colibri: add support for Toradex Iris carrier boards
+Date:   Fri,  6 May 2022 17:58:21 +0200
+Message-Id: <20220506155821.297686-1-marcel@ziswiler.com>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220506152809.295409-1-marcel@ziswiler.com>
+References: <20220506152809.295409-1-marcel@ziswiler.com>
 MIME-Version: 1.0
-References: <cover.1649219184.git.kai.huang@intel.com> <522e37eb-68fc-35db-44d5-479d0088e43f@intel.com>
- <ecf718abf864bbb2366209f00d4315ada090aedc.camel@intel.com>
- <de24ac7e-349c-e49a-70bb-31b9bc867b10@intel.com> <9b388f54f13b34fe684ef77603fc878952e48f87.camel@intel.com>
- <d98ca73b-2d2d-757d-e937-acc83cfedfb0@intel.com> <c90a10763969077826f42be6f492e3a3e062326b.camel@intel.com>
- <fc1ca04d94ad45e79c0297719d5ef50a7c33c352.camel@intel.com>
- <664f8adeb56ba61774f3c845041f016c54e0f96e.camel@intel.com>
- <1b681365-ef98-ec78-96dc-04e28316cf0e@intel.com> <8bf596b45f68363134f431bcc550e16a9a231b80.camel@intel.com>
- <6bb89ca6e7346f4334f06ea293f29fd12df70fe4.camel@intel.com>
- <CAPcyv4iP3hcNNDxNdPT+iB0E4aUazfqFWwaa_dtHpVf+qKPNcQ@mail.gmail.com>
- <cbb2ea1343079aee546fb44cd59c82f66c875d76.camel@intel.com>
- <CAPcyv4jNYqPA2HBaO+9a+ije4jnb6a3Sx_1knrmRF9HCCXQuqg@mail.gmail.com>
- <b40b3658e1fc7ec15d2adafe7f9562d42bc256f3.camel@intel.com>
- <CAPcyv4hdM+0zntuTez9n1-dJ_ODsF_TxAct=VpTs-tWJzBPJqQ@mail.gmail.com> <b0d1ed15d8bf99efe1c49182f4a98f4a23f61d0d.camel@intel.com>
-In-Reply-To: <b0d1ed15d8bf99efe1c49182f4a98f4a23f61d0d.camel@intel.com>
-From:   Dan Williams <dan.j.williams@intel.com>
-Date:   Fri, 6 May 2022 08:57:32 -0700
-Message-ID: <CAPcyv4gfRFUdeSqQE51BKdunJvNMP_DkvthDLvX9v7=kOrN8uA@mail.gmail.com>
-Subject: Re: [PATCH v3 00/21] TDX host kernel support
-To:     Kai Huang <kai.huang@intel.com>
-Cc:     Dave Hansen <dave.hansen@intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        KVM list <kvm@vger.kernel.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        "Brown, Len" <len.brown@intel.com>,
-        "Luck, Tony" <tony.luck@intel.com>,
-        Rafael J Wysocki <rafael.j.wysocki@intel.com>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Isaku Yamahata <isaku.yamahata@intel.com>,
-        Mike Rapoport <rppt@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+Content-Transfer-Encoding: 8bit
+X-Provags-ID: V03:K1:yRWcy8MKdSGDIQxT6vwlwChUUwElSPtTpT4etGI8iGfj48gnvBD
+ 3J4hAC/Gmyp3Kv3zDU3bV418EvSV7n0ppwkYH5BryxaL/b9J9PvTEnjQE22v2j2KrnsyhB3
+ HpafVq1kSnBZHDxFStBub7EJA8p6fARFGBPkzdsBG4gyM1eZIth//Oo0W4RoGTV2xVHq3YZ
+ l6hFoi8+878cFZSkLeV6A==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:iFSraCP1FAQ=:jR+L9QJeM9i5ZQyaSAYlo2
+ vQvmfhemrQp10ZpNKiXxN6X/QAs42+oEHRB2ezu8bR5fK/gH/lWeOqxnuHdOOt8Dvfhaov4AE
+ x2QHP/PzDU2NsOuR9kGz8jJYxSvv+eVLCH4VZFgLEgYPGvQx5w+A5kBCBljaL6RqHxr325ZSp
+ IhZL9EhVc17ob0XVpymu8wbYorcReLVzQOkFg8ATzWwqQli6qPFPCpPGU1OC1bstQmp6X0TwA
+ tiXaJBHPtGWaE8OUqmlMo3S6c/T3rU8XgnO9v01nzqtewKqbNkfhjus+u04olOwKXssHP3Aaj
+ XzAJBr1PnRCLw/MuKl5KDa1FtlrcU6L8yanuXQsUng0uDf+OIHr5DCqbFgklZQsCth3nmQtNO
+ 2aaHLCUMpyioDNbqk/XsrtliT5fie0gnCBj4tSEp9ZPQP6YDRTDCfzMpHCAeIdDaZnkbDGwPR
+ khdyp8h/OOkPQ8+k5xA9+F0U0kDOJCu0MEQLDtK0Hr70aTlX4S9ivcZwNi1hxFOvBBsnUH7z2
+ Utkk1/tcgatHtOij/H8k3iVrDn5ZruikqBzS8EYK4+XHQz5AY9OAnnIgv5oIjbe0sylZt40nW
+ 9zTMhhpso7Vp39/PRSMlx6uCqGRrwWOmLa72FbNMLaRw3mKMn6DUa43h+iXXmp4dYMsiIjJxi
+ O877SdftN51Eh8PoFtnfxPfeoNS6o2nRAaRiqocv14vCja/sEQRJr3mU4X6NB8fQsCD4AIGSk
+ 4EWZ6UPoUfbZ0rLfI6PWQfcL1nv0WA0ZwPfdFniUNXCJJHU6ZNVmklYcs9k=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -91,160 +65,662 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 5, 2022 at 6:47 PM Kai Huang <kai.huang@intel.com> wrote:
->
-> On Thu, 2022-05-05 at 18:15 -0700, Dan Williams wrote:
-> > On Thu, May 5, 2022 at 5:46 PM Kai Huang <kai.huang@intel.com> wrote:
-> > >
-> > > On Thu, 2022-05-05 at 17:22 -0700, Dan Williams wrote:
-> > > > On Thu, May 5, 2022 at 3:14 PM Kai Huang <kai.huang@intel.com> wrote:
-> > > > >
-> > > > > Thanks for feedback!
-> > > > >
-> > > > > On Thu, 2022-05-05 at 06:51 -0700, Dan Williams wrote:
-> > > > > > [ add Mike ]
-> > > > > >
-> > > > > >
-> > > > > > On Thu, May 5, 2022 at 2:54 AM Kai Huang <kai.huang@intel.com> wrote:
-> > > > > > [..]
-> > > > > > >
-> > > > > > > Hi Dave,
-> > > > > > >
-> > > > > > > Sorry to ping (trying to close this).
-> > > > > > >
-> > > > > > > Given we don't need to consider kmem-hot-add legacy PMEM after TDX module
-> > > > > > > initialization, I think for now it's totally fine to exclude legacy PMEMs from
-> > > > > > > TDMRs.  The worst case is when someone tries to use them as TD guest backend
-> > > > > > > directly, the TD will fail to create.  IMO it's acceptable, as it is supposedly
-> > > > > > > that no one should just use some random backend to run TD.
-> > > > > >
-> > > > > > The platform will already do this, right?
-> > > > > >
-> > > > >
-> > > > > In the current v3 implementation, we don't have any code to handle memory
-> > > > > hotplug, therefore nothing prevents people from adding legacy PMEMs as system
-> > > > > RAM using kmem driver.  In order to guarantee all pages managed by page
-> > > >
-> > > > That's the fundamental question I am asking why is "guarantee all
-> > > > pages managed by page allocator are TDX memory". That seems overkill
-> > > > compared to indicating the incompatibility after the fact.
-> > >
-> > > As I explained, the reason is I don't want to modify page allocator to
-> > > distinguish TDX and non-TDX allocation, for instance, having to have a ZONE_TDX
-> > > and GFP_TDX.
-> >
-> > Right, TDX details do not belong at that level, but it will work
-> > almost all the time if you do nothing to "guarantee" all TDX capable
-> > pages all the time.
->
-> "almost all the time" do you mean?
->
-> >
-> > > KVM depends on host's page fault handler to allocate the page.  In fact KVM only
-> > > consumes PFN from host's page tables.  For now only RAM is TDX memory.  By
-> > > guaranteeing all pages in page allocator is TDX memory, we can easily use
-> > > anonymous pages as TD guest memory.
-> >
-> > Again, TDX capable pages will be the overwhelming default, why are you
-> > worried about cluttering the memory hotplug path for nice corner
-> > cases.
->
-> Firstly perhaps I forgot to mention there are two concepts about TDX memory, so
-> let me clarify first:
->
-> 1) Convertible Memory Regions (CMRs).  This is reported by BIOS (thus static) to
-> indicate which memory regions *can* be used as TDX memory.  This basically means
-> all RAM during boot for now.
->
-> 2) TD Memory Regions (TDMRs).  Memory pages in CMRs are not automatically TDX
-> usable memory.  The TDX module needs to be configured which (convertible) memory
-> regions can be used as TDX memory.  Kernel is responsible for choosing the
-> ranges, and configure to the TDX module.  If a convertible memory page is not
-> included into TDMRs, the TDX module will report error when it is assigned to  a
-> TD.
->
-> >
-> > Consider the fact that end users can break the kernel by specifying
-> > invalid memmap= command line options. The memory hotplug code does not
-> > take any steps to add safety in those cases because there are already
-> > too many ways it can go wrong. TDX is just one more corner case where
-> > the memmap= user needs to be careful. Otherwise, it is up to the
-> > platform firmware to make sure everything in the base memory map is
-> > TDX capable, and then all you need is documentation about the failure
-> > mode when extending "System RAM" beyond that baseline.
->
-> So the fact is, if we don't include legacy PMEMs into TDMRs, and don't do
-> anything in memory hotplug, then if user does kmem-hot-add legacy PMEMs as
-> system RAM, a live TD may eventually be killed.
->
-> If such case is a corner case that we don't need to guarantee, then even better.
-> And we have an additional reason that those legacy PMEMs don't need to be in
-> TDMRs.  As you suggested,  we can add some documentation to point out.
->
-> But the point we want to do some code check and prevent memory hotplug is, as
-> Dave said, we want this piece of code to work on *ANY* TDX capable machines,
-> including future machines which may, i.e. supports NVDIMM/CLX memory as TDX
-> memory.  If we don't do any code check in  memory hotplug in this series, then
-> when this code runs in future platforms, user can plug NVDIMM or CLX memory as
-> system RAM thus break the assumption "all pages in page allocator are TDX
-> memory", which eventually leads to live TDs being killed potentially.
->
-> Dave said we need to guarantee this code can work on *ANY* TDX machines.  Some
-> documentation saying it only works one some platforms and you shouldn't do
-> things on other platforms are not good enough:
->
-> https://lore.kernel.org/lkml/cover.1649219184.git.kai.huang@intel.com/T/#m6df45b6e1702bb03dcb027044a0dabf30a86e471
+From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
 
-Yes, the incompatible cases cannot be ignored, but I disagree that
-they actively need to be prevented. One way to achieve that is to
-explicitly enumerate TDX capable memory and document how mempolicy can
-be used to avoid killing TDs.
+Add support for Toradex Iris, small form-factor Pico-ITX Colibri Arm
+Computer Module family Carrier Board.
 
-> > > shmem to support a new fd-based backend which doesn't require having to mmap()
-> > > TD guest memory to host userspace:
-> > >
-> > > https://lore.kernel.org/kvm/20220310140911.50924-1-chao.p.peng@linux.intel.com/
-> > >
-> > > Also, besides TD guest memory, there are some per-TD control data structures
-> > > (which must be TDX memory too) need to be allocated for each TD.  Normal memory
-> > > allocation APIs can be used for such allocation if we guarantee all pages in
-> > > page allocator is TDX memory.
-> >
-> > You don't need that guarantee, just check it after the fact and fail
-> > if that assertion fails. It should almost always be the case that it
-> > succeeds and if it doesn't then something special is happening with
-> > that system and the end user has effectively opt-ed out of TDX
-> > operation.
->
-> This doesn't guarantee consistent behaviour.  For instance, for one TD it can be
-> created, while the second may fail.  We should provide a consistent service.
+Additional details available at
+https://www.toradex.com/products/carrier-board/iris-carrier-board
 
-Yes, there needs to be enumeration and policy knobs to avoid failures,
-hard coded "no memory hotplug" hacks do not seem the right enumeration
-and policy knobs to me.
+Signed-off-by: Marcel Ziswiler <marcel.ziswiler@toradex.com>
 
-> The thing is anyway we need to configure some memory regions to the TDX module.
-> To me there's no reason we don't want to guarantee all pages in page allocator
-> are TDX memory.
->
-> >
-> > > > > allocator are all TDX memory, the v3 implementation needs to always include
-> > > > > legacy PMEMs as TDX memory so that even people truly add  legacy PMEMs as system
-> > > > > RAM, we can still guarantee all pages in page allocator are TDX memory.
-> > > >
-> > > > Why?
-> > >
-> > > If we don't include legacy PMEMs as TDX memory, then after they are hot-added as
-> > > system RAM using kmem driver, the assumption of "all pages in page allocator are
-> > > TDX memory" is broken.  A TD can be killed during runtime.
-> >
-> > Yes, that is what the end user asked for. If they don't want that to
-> > happen then the policy decision about using kmem needs to be updated
-> > in userspace, not hard code that policy decision towards TDX inside
-> > the kernel.
->
-> This is also fine to me.  But please also see above Dave's comment.
+---
 
-Dave is right, the implementation can not just ignore the conflict. To
-me, enumeration plus error reporting allows for flexibility without
-hard coding policy in the kernel.
+ arch/arm/boot/dts/Makefile                    |   6 +
+ arch/arm/boot/dts/imx6dl-colibri-iris.dts     |   9 +-
+ arch/arm/boot/dts/imx7-colibri-iris-v2.dtsi   | 112 ++++++++++++++++++
+ arch/arm/boot/dts/imx7-colibri-iris.dtsi      | 108 +++++++++++++++++
+ .../boot/dts/imx7d-colibri-emmc-iris-v2.dts   |  21 ++++
+ arch/arm/boot/dts/imx7d-colibri-emmc-iris.dts |  21 ++++
+ arch/arm/boot/dts/imx7d-colibri-iris-v2.dts   |  83 +++++++++++++
+ arch/arm/boot/dts/imx7d-colibri-iris.dts      |  56 +++++++++
+ arch/arm/boot/dts/imx7s-colibri-iris-v2.dts   |  78 ++++++++++++
+ arch/arm/boot/dts/imx7s-colibri-iris.dts      |  51 ++++++++
+ 10 files changed, 540 insertions(+), 5 deletions(-)
+ create mode 100644 arch/arm/boot/dts/imx7-colibri-iris-v2.dtsi
+ create mode 100644 arch/arm/boot/dts/imx7-colibri-iris.dtsi
+ create mode 100644 arch/arm/boot/dts/imx7d-colibri-emmc-iris-v2.dts
+ create mode 100644 arch/arm/boot/dts/imx7d-colibri-emmc-iris.dts
+ create mode 100644 arch/arm/boot/dts/imx7d-colibri-iris-v2.dts
+ create mode 100644 arch/arm/boot/dts/imx7d-colibri-iris.dts
+ create mode 100644 arch/arm/boot/dts/imx7s-colibri-iris-v2.dts
+ create mode 100644 arch/arm/boot/dts/imx7s-colibri-iris.dts
+
+diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+index b711d4423b42..5a9c805dbc84 100644
+--- a/arch/arm/boot/dts/Makefile
++++ b/arch/arm/boot/dts/Makefile
+@@ -726,8 +726,12 @@ dtb-$(CONFIG_SOC_IMX7D) += \
+ 	imx7d-cl-som-imx7.dtb \
+ 	imx7d-colibri-aster.dtb \
+ 	imx7d-colibri-emmc-aster.dtb \
++	imx7d-colibri-emmc-iris.dtb \
++	imx7d-colibri-emmc-iris-v2.dtb \
+ 	imx7d-colibri-emmc-eval-v3.dtb \
+ 	imx7d-colibri-eval-v3.dtb \
++	imx7d-colibri-iris.dtb \
++	imx7d-colibri-iris-v2.dtb \
+ 	imx7d-flex-concentrator.dtb \
+ 	imx7d-flex-concentrator-mfg.dtb \
+ 	imx7d-mba7.dtb \
+@@ -747,6 +751,8 @@ dtb-$(CONFIG_SOC_IMX7D) += \
+ 	imx7d-zii-rpu2.dtb \
+ 	imx7s-colibri-aster.dtb \
+ 	imx7s-colibri-eval-v3.dtb \
++	imx7s-colibri-iris.dtb \
++	imx7s-colibri-iris-v2.dtb \
+ 	imx7s-mba7.dtb \
+ 	imx7s-warp.dtb
+ dtb-$(CONFIG_SOC_IMX7ULP) += \
+diff --git a/arch/arm/boot/dts/imx6dl-colibri-iris.dts b/arch/arm/boot/dts/imx6dl-colibri-iris.dts
+index cf77d894f6d7..6e048d696c77 100644
+--- a/arch/arm/boot/dts/imx6dl-colibri-iris.dts
++++ b/arch/arm/boot/dts/imx6dl-colibri-iris.dts
+@@ -40,11 +40,10 @@ &gpio2 {
+ 	pinctrl-0 = <&pinctrl_uart1_forceoff &pinctrl_uart23_forceoff>;
+ 
+ 	/*
+-	 * uart-a-on-x13-enable turns the UART transceiver for UART_A on. If one
+-	 * wants to turn the transceiver off, that property has to be deleted
+-	 * and the gpio handled in userspace.
+-	 * The same applies to uart-b-c-on-x14-enable where the UART_B and
+-	 * UART_C transceiver is turned on.
++	 * uart-a-on-x13-enable-hog turns the UART transceiver for UART_A on. If one wants to turn
++	 * the transceiver off, that property has to be deleted and the gpio handled in userspace.
++	 * The same applies to uart-b-c-on-x14-enable-hog where the UART_B and UART_C transceiver is
++	 * turned on.
+ 	 */
+ 	uart-a-on-x13-enable-hog {
+ 		gpio-hog;
+diff --git a/arch/arm/boot/dts/imx7-colibri-iris-v2.dtsi b/arch/arm/boot/dts/imx7-colibri-iris-v2.dtsi
+new file mode 100644
+index 000000000000..6e199613583c
+--- /dev/null
++++ b/arch/arm/boot/dts/imx7-colibri-iris-v2.dtsi
+@@ -0,0 +1,112 @@
++// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
++/*
++ * Copyright 2022 Toradex
++ */
++
++/ {
++	reg_3v3_vmmc: regulator-3v3-vmmc {
++		compatible = "regulator-fixed";
++		enable-active-high;
++		gpio = <&gpio5 16 GPIO_ACTIVE_HIGH>; /* SODIMM 100 */
++		regulator-max-microvolt = <3300000>;
++		regulator-min-microvolt = <3300000>;
++		regulator-name = "3v3_vmmc";
++		startup-delay-us = <100>;
++	};
++};
++
++/* Colibri AD0 to AD3 */
++&adc1 {
++	status = "okay";
++};
++
++/* Colibri SSP */
++&ecspi3 {
++	status = "okay";
++};
++
++/* Colibri Fast Ethernet */
++&fec1 {
++	status = "okay";
++};
++
++&gpio2 {
++	/*
++	 * uart_b_c_on_x14_enable turns the UART transceiver for UART2 and 5 on. If one wants to
++	 * turn the transceiver off, that property has to be deleted and the gpio handled in
++	 * userspace.
++	 * The same applies to uart_a_on_x13_enable where the UART_A transceiver is turned on.
++	 */
++	uart-b-c-on-x14-enable-hog {
++		gpio-hog;
++		gpios = <27 GPIO_ACTIVE_HIGH>; /* SODIMM 104 */
++		output-high;
++	};
++};
++
++&gpio5 {
++	uart-a-on-x13-enable-hog {
++		gpio-hog;
++		gpios = <17 GPIO_ACTIVE_HIGH>; /* SODIMM 102 */
++		output-high;
++	};
++};
++
++/* Colibri I2C: I2C3_SDA/SCL on SODIMM 194/196 */
++&i2c4 {
++	status = "okay";
++};
++
++/* Colibri PWM<A> */
++&pwm1 {
++	status = "okay";
++};
++
++/* Colibri PWM<B> */
++&pwm2 {
++	status = "okay";
++};
++
++/* Colibri PWM<C> */
++&pwm3 {
++	status = "okay";
++};
++
++/* Colibri PWM<D> */
++&pwm4 {
++	status = "okay";
++};
++
++/* M41T0M6 real time clock */
++&rtc {
++	status = "okay";
++};
++
++/* Colibri UART_A */
++&uart1 {
++	status = "okay";
++};
++
++/* Colibri UART_B */
++&uart2 {
++	status = "okay";
++};
++
++/* Colibri UART_C */
++&uart3 {
++	status = "okay";
++};
++
++/* Colibri USBC */
++&usbotg1 {
++	status = "okay";
++};
++
++/* Colibri MMC/SD, UHS-I capable uSD slot */
++&usdhc1 {
++	cap-power-off-card;
++	/delete-property/ keep-power-in-suspend;
++	/delete-property/ no-1-8-v;
++	vmmc-supply = <&reg_3v3_vmmc>;
++	status = "okay";
++};
+diff --git a/arch/arm/boot/dts/imx7-colibri-iris.dtsi b/arch/arm/boot/dts/imx7-colibri-iris.dtsi
+new file mode 100644
+index 000000000000..175c5d478d2e
+--- /dev/null
++++ b/arch/arm/boot/dts/imx7-colibri-iris.dtsi
+@@ -0,0 +1,108 @@
++// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
++/*
++ * Copyright 2022 Toradex
++ */
++
++/* Colibri AD0 to AD3 */
++&adc1 {
++	status = "okay";
++};
++
++/*
++ * The Atmel maxtouch controller uses SODIMM 28/30, also used for PWM<B>, PWM<C>, aka pwm2, pwm3.
++ * So if you enable following capacitive touch controller, disable pwm2/pwm3 first.
++ */
++&atmel_mxt_ts {
++	interrupt-parent = <&gpio1>;
++	interrupts = <9 IRQ_TYPE_EDGE_FALLING>;		/* SODIMM 28 / INT */
++	pinctrl-0 = <&pinctrl_atmel_adapter>;
++	reset-gpios = <&gpio1 10 GPIO_ACTIVE_LOW>;	/* SODIMM 30 / RST */
++};
++
++/* Colibri SSP */
++&ecspi3 {
++	status = "okay";
++};
++
++/* Colibri Fast Ethernet */
++&fec1 {
++	status = "okay";
++};
++
++&gpio2 {
++	/*
++	 * uart25 turns the UART transceiver for UART2 and 5 on. If one wants to turn the
++	 * transceiver off, that property has to be deleted and the gpio handled in userspace.
++	 * The same applies to uart1_tx_on where the UART1 transceiver is turned on.
++	 */
++	uart25-tx-on-hog {
++		gpio-hog;
++		gpios = <27 GPIO_ACTIVE_HIGH>; /* SODIMM 104 */
++		output-high;
++	};
++};
++
++&gpio5 {
++	uart1-tx-on-hog {
++		gpio-hog;
++		gpios = <17 GPIO_ACTIVE_HIGH>; /* SODIMM 102 */
++		output-high;
++	};
++};
++
++/* Colibri I2C: I2C3_SDA/SCL on SODIMM 194/196 */
++&i2c4 {
++	status = "okay";
++};
++
++/* Colibri PWM<A> */
++&pwm1 {
++	status = "okay";
++};
++
++/* Colibri PWM<B> */
++&pwm2 {
++	/* The pwm2 should be disabled to enable atmel_mxt_ts touchscreen for adapter. */
++	status = "okay";
++};
++
++/* Colibri PWM<C> */
++&pwm3 {
++	/* The pwm3 should be disabled to enable atmel_mxt_ts touchscreen for adapter. */
++	status = "okay";
++};
++
++/* Colibri PWM<D> */
++&pwm4 {
++	status = "okay";
++};
++
++/* M41T0M6 real time clock */
++&rtc {
++	status = "okay";
++};
++
++/* Colibri UART_A */
++&uart1 {
++	status = "okay";
++};
++
++/* Colibri UART_B */
++&uart2 {
++	status = "okay";
++};
++
++/* Colibri UART_C */
++&uart3 {
++	status = "okay";
++};
++
++/* Colibri USBC */
++&usbotg1 {
++	status = "okay";
++};
++
++/* Colibri MMC/SD */
++&usdhc1 {
++	status = "okay";
++};
+diff --git a/arch/arm/boot/dts/imx7d-colibri-emmc-iris-v2.dts b/arch/arm/boot/dts/imx7d-colibri-emmc-iris-v2.dts
+new file mode 100644
+index 000000000000..7347659557f3
+--- /dev/null
++++ b/arch/arm/boot/dts/imx7d-colibri-emmc-iris-v2.dts
+@@ -0,0 +1,21 @@
++// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
++/*
++ * Copyright 2022 Toradex
++ */
++
++/dts-v1/;
++#include "imx7d-colibri-emmc.dtsi"
++#include "imx7-colibri-iris-v2.dtsi"
++
++/ {
++	model = "Toradex Colibri iMX7D 1GB on Iris V2 Carrier Board";
++	compatible = "toradex,colibri-imx7d-emmc-iris-v2",
++		     "toradex,colibri-imx7d-emmc",
++		     "toradex,colibri-imx7d",
++		     "fsl,imx7d";
++};
++
++/* Colibri USBH */
++&usbotg2 {
++	status = "okay";
++};
+diff --git a/arch/arm/boot/dts/imx7d-colibri-emmc-iris.dts b/arch/arm/boot/dts/imx7d-colibri-emmc-iris.dts
+new file mode 100644
+index 000000000000..5324c92e368d
+--- /dev/null
++++ b/arch/arm/boot/dts/imx7d-colibri-emmc-iris.dts
+@@ -0,0 +1,21 @@
++// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
++/*
++ * Copyright 2022 Toradex
++ */
++
++/dts-v1/;
++#include "imx7d-colibri-emmc.dtsi"
++#include "imx7-colibri-iris.dtsi"
++
++/ {
++	model = "Toradex Colibri iMX7D 1GB on Iris Carrier Board";
++	compatible = "toradex,colibri-imx7d-emmc-iris",
++		     "toradex,colibri-imx7d-emmc",
++		     "toradex,colibri-imx7d",
++		     "fsl,imx7d";
++};
++
++/* Colibri USBH */
++&usbotg2 {
++	status = "okay";
++};
+diff --git a/arch/arm/boot/dts/imx7d-colibri-iris-v2.dts b/arch/arm/boot/dts/imx7d-colibri-iris-v2.dts
+new file mode 100644
+index 000000000000..5762f51d5f0f
+--- /dev/null
++++ b/arch/arm/boot/dts/imx7d-colibri-iris-v2.dts
+@@ -0,0 +1,83 @@
++// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
++/*
++ * Copyright 2022 Toradex
++ */
++
++/dts-v1/;
++#include "imx7d-colibri.dtsi"
++#include "imx7-colibri-iris-v2.dtsi"
++
++/ {
++	model = "Toradex Colibri iMX7D on Iris V2 Carrier Board";
++	compatible = "toradex,colibri-imx7d-iris-v2",
++		     "toradex,colibri-imx7d",
++		     "fsl,imx7d";
++};
++
++&ad7879_ts {
++	status = "okay";
++};
++
++&atmel_mxt_ts {
++	status = "okay";
++};
++
++&backlight {
++	status = "okay";
++};
++
++&gpio2 {
++	/*
++	 * This switches the LVDS transceiver to VESA color mapping mode.
++	 */
++	lvds-color-map-hog {
++		gpio-hog;
++		gpios = <13 GPIO_ACTIVE_HIGH>; /* SODIMM 95 */
++		line-name = "LVDS_COLOR_MAP";
++		output-low;
++	};
++};
++
++&gpio7 {
++	/*
++	 * This switches the LVDS transceiver to the 24-bit RGB mode.
++	 */
++	lvds-rgb-mode-hog {
++		gpio-hog;
++		gpios = <2 GPIO_ACTIVE_HIGH>; /* SODIMM 63 */
++		line-name = "LVDS_RGB_MODE";
++		output-low;
++	};
++
++	/*
++	 * This switches the LVDS transceiver to the single-channel
++	 * output mode.
++	 */
++	lvds-ch-mode-hog {
++		gpio-hog;
++		gpios = <3 GPIO_ACTIVE_HIGH>; /* SODIMM 55 */
++		line-name = "LVDS_CH_MODE";
++		output-high;
++	};
++
++	/* This turns the LVDS transceiver on */
++	lvds-power-on-hog {
++		gpio-hog;
++		gpios = <11 GPIO_ACTIVE_HIGH>; /* SODIMM 99 */
++		line-name = "LVDS_POWER_ON";
++		output-high;
++	};
++};
++
++&lcdif {
++	status = "okay";
++};
++
++&panel_dpi {
++	status = "okay";
++};
++
++/* Colibri USBH */
++&usbotg2 {
++	status = "okay";
++};
+diff --git a/arch/arm/boot/dts/imx7d-colibri-iris.dts b/arch/arm/boot/dts/imx7d-colibri-iris.dts
+new file mode 100644
+index 000000000000..9c63cb9d9a64
+--- /dev/null
++++ b/arch/arm/boot/dts/imx7d-colibri-iris.dts
+@@ -0,0 +1,56 @@
++// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
++/*
++ * Copyright 2022 Toradex
++ */
++
++/dts-v1/;
++#include "imx7d-colibri.dtsi"
++#include "imx7-colibri-iris.dtsi"
++
++/ {
++	model = "Toradex Colibri iMX7D on Iris Carrier Board";
++	compatible = "toradex,colibri-imx7d-iris",
++		     "toradex,colibri-imx7d",
++		     "fsl,imx7d";
++};
++
++&ad7879_ts {
++	status = "okay";
++};
++
++/*
++ * The Atmel maxtouch controller uses SODIMM 28/30, also used for PWM<B>, PWM<C>, aka pwm2, pwm3.
++ * So if you enable following capacitive touch controller, disable pwm2/pwm3 first.
++ */
++&atmel_mxt_ts {
++	status = "disabled";
++};
++
++&backlight {
++	status = "okay";
++};
++
++&lcdif {
++	status = "okay";
++};
++
++&panel_dpi {
++	status = "okay";
++};
++
++/* Colibri PWM<B> */
++&pwm2 {
++	/* The pwm2 should be disabled to enable atmel_mxt_ts touchscreen for adapter. */
++	status = "okay";
++};
++
++/* Colibri PWM<C> */
++&pwm3 {
++	/* The pwm3 should be disabled to enable atmel_mxt_ts touchscreen for adapter. */
++	status = "okay";
++};
++
++/* Colibri USBH */
++&usbotg2 {
++	status = "okay";
++};
+diff --git a/arch/arm/boot/dts/imx7s-colibri-iris-v2.dts b/arch/arm/boot/dts/imx7s-colibri-iris-v2.dts
+new file mode 100644
+index 000000000000..72b5c17ab1ab
+--- /dev/null
++++ b/arch/arm/boot/dts/imx7s-colibri-iris-v2.dts
+@@ -0,0 +1,78 @@
++// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
++/*
++ * Copyright 2022 Toradex
++ */
++
++/dts-v1/;
++#include "imx7s-colibri.dtsi"
++#include "imx7-colibri-iris-v2.dtsi"
++
++/ {
++	model = "Toradex Colibri iMX7S on Iris V2 Carrier Board";
++	compatible = "toradex,colibri-imx7s-iris-v2",
++		     "toradex,colibri-imx7s",
++		     "fsl,imx7s";
++};
++
++&ad7879_ts {
++	status = "okay";
++};
++
++&atmel_mxt_ts {
++	status = "okay";
++};
++
++&backlight {
++	status = "okay";
++};
++
++&gpio2 {
++	/*
++	 * This switches the LVDS transceiver to VESA color mapping mode.
++	 */
++	lvds-color-map-hog {
++		gpio-hog;
++		gpios = <13 GPIO_ACTIVE_HIGH>; /* SODIMM 95 */
++		line-name = "LVDS_COLOR_MAP";
++		output-low;
++	};
++};
++
++&gpio7 {
++	/*
++	 * This switches the LVDS transceiver to the 24-bit RGB mode.
++	 */
++	lvds-rgb-mode-hog {
++		gpio-hog;
++		gpios = <2 GPIO_ACTIVE_HIGH>; /* SODIMM 63 */
++		line-name = "LVDS_RGB_MODE";
++		output-low;
++	};
++
++	/*
++	 * This switches the LVDS transceiver to the single-channel
++	 * output mode.
++	 */
++	lvds-ch-mode-hog {
++		gpio-hog;
++		gpios = <3 GPIO_ACTIVE_HIGH>; /* SODIMM 55 */
++		line-name = "LVDS_CH_MODE";
++		output-high;
++	};
++
++	/* This turns the LVDS transceiver on */
++	lvds-power-on-hog {
++		gpio-hog;
++		gpios = <11 GPIO_ACTIVE_HIGH>; /* SODIMM 99 */
++		line-name = "LVDS_POWER_ON";
++		output-high;
++	};
++};
++
++&lcdif {
++	status = "okay";
++};
++
++&panel_dpi {
++	status = "okay";
++};
+diff --git a/arch/arm/boot/dts/imx7s-colibri-iris.dts b/arch/arm/boot/dts/imx7s-colibri-iris.dts
+new file mode 100644
+index 000000000000..26ba72c17feb
+--- /dev/null
++++ b/arch/arm/boot/dts/imx7s-colibri-iris.dts
+@@ -0,0 +1,51 @@
++// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
++/*
++ * Copyright 2022 Toradex
++ */
++
++/dts-v1/;
++#include "imx7s-colibri.dtsi"
++#include "imx7-colibri-iris.dtsi"
++
++/ {
++	model = "Toradex Colibri iMX7S on Iris Carrier Board";
++	compatible = "toradex,colibri-imx7s-iris",
++		     "toradex,colibri-imx7s",
++		     "fsl,imx7s";
++};
++
++&ad7879_ts {
++	status = "okay";
++};
++
++/*
++ * The Atmel maxtouch controller uses SODIMM 28/30, also used for PWM<B>, PWM<C>, aka pwm2, pwm3.
++ * So if you enable following capacitive touch controller, disable pwm2/pwm3 first.
++ */
++&atmel_mxt_ts {
++	status = "disabled";
++};
++
++&backlight {
++	status = "okay";
++};
++
++&lcdif {
++	status = "okay";
++};
++
++&panel_dpi {
++	status = "okay";
++};
++
++/* Colibri PWM<B> */
++&pwm2 {
++	/* The pwm2 should be disabled to enable atmel_mxt_ts touchscreen for adapter. */
++	status = "okay";
++};
++
++/* Colibri PWM<C> */
++&pwm3 {
++	/* The pwm3 should be disabled to enable atmel_mxt_ts touchscreen for adapter. */
++	status = "okay";
++};
+-- 
+2.35.1
+

@@ -2,81 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 391AC51D57C
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 12:17:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E82551D582
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 12:19:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1390858AbiEFKUu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 06:20:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59156 "EHLO
+        id S1390864AbiEFKW3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 06:22:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1390854AbiEFKUk (ORCPT
+        with ESMTP id S239719AbiEFKW0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 06:20:40 -0400
-Received: from us-smtp-delivery-74.mimecast.com (us-smtp-delivery-74.mimecast.com [170.10.129.74])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9BD0F5DE56
-        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 03:16:57 -0700 (PDT)
+        Fri, 6 May 2022 06:22:26 -0400
+Received: from us-smtp-delivery-74.mimecast.com (us-smtp-delivery-74.mimecast.com [170.10.133.74])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2E9EF5DE59
+        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 03:18:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651832216;
+        s=mimecast20190719; t=1651832323;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=2Xud7uwrBJQp09CDp6iWu0jKEwddEsa6/N5MDwrytMs=;
-        b=Eu6t7zLmnEp3clEeZEeGhn8AQC07QiBIYyrSh5Ty9yjnwEh0XxgvEsVaz8DbyQW+QJC/IK
-        kmjeKg9tQFefkTS9r+bKNTzwgOXvaZGBaRv6E/pnM2fWflRvrYpEDLTgegvZl9r/U9xwKc
-        9o5Kg1TLpa5Xx9i3BWDLO7Fq+9bxl9w=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=iu7ch3lFZ/rvnkTE15PMZ9rAZCAf+Uerimsw5YSLRGs=;
+        b=UJn6gFbM4PIQWgFqht6SvgXGR5grtlT3d4M3oSk9lXntjdGIzhg3bTK+gxNRE7DPDU+bm0
+        l63AYdo14TT+ViG/CziYmiWw1fCauR3E0mxQC574J2anlbEmFTnabckiL4ZR3Y1qxehzgp
+        I6WtpF2X0tyDCzZPJg3CzEWipISEBFQ=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-401-XAtlhIV2OuGWk2OHsezADQ-1; Fri, 06 May 2022 06:16:55 -0400
-X-MC-Unique: XAtlhIV2OuGWk2OHsezADQ-1
-Received: by mail-ed1-f71.google.com with SMTP id l24-20020a056402231800b00410f19a3103so3777684eda.5
-        for <linux-kernel@vger.kernel.org>; Fri, 06 May 2022 03:16:55 -0700 (PDT)
+ us-mta-168-28kTslioNOmtVUDfcHg7ng-1; Fri, 06 May 2022 06:18:42 -0400
+X-MC-Unique: 28kTslioNOmtVUDfcHg7ng-1
+Received: by mail-ed1-f70.google.com with SMTP id e3-20020a50a683000000b00427afcc840aso3737588edc.13
+        for <linux-kernel@vger.kernel.org>; Fri, 06 May 2022 03:18:42 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=2Xud7uwrBJQp09CDp6iWu0jKEwddEsa6/N5MDwrytMs=;
-        b=f6ACgbXTCEZw83bcN2jDqxtA3ab1IzrYQbhhKpB1xF39SMXCKURpBChK1DLNMR5jUb
-         LBcXigOrkGMUV3ec14TjwKHJNudh9FE1gMQ8Q94plI2ZJdq8X3/TUudGrgiBfka6lRL4
-         EjHK27TXdAWUtlyR/iQd8bJoe8nTVaEDvoA6eiYCozKBjoq7MhURsuDi6fBRAWrXYW5M
-         jbqibxl/jvthPHYVetrzwqkuj4LQCSf0gNHNUHF9Bpc06WJOGni5OFLEfHChy3SOrsME
-         Zo0QSeNVoyQ8b5GS8WA5pqkb6Oo4unYPPisGnTBDyTiiIATDsLZq7gQbujr+Vulc5clQ
-         uVcg==
-X-Gm-Message-State: AOAM531WTVIYA1LbuE5cUi/o+ml1qWKN2Ddz2BcPpEJSE2FH4AcKNa59
-        yOM8AqQexWBsGcFlTcAhjsU6sOYiotCrI6LvTluDsMixg4eviTXwKbYz2F9AtQqM+22ggbJ7rwt
-        U+wRJg5+1ED5cUNkhPFKdaKFK
-X-Received: by 2002:a50:8dca:0:b0:425:e8a3:a79f with SMTP id s10-20020a508dca000000b00425e8a3a79fmr2617237edh.155.1651832214300;
-        Fri, 06 May 2022 03:16:54 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyPp70x5jydjKAjbzZnfZubFIs/Gv63VewFlYk6NVOg+/LbYRr24IiG4Bf7XvMh/SheFZdFTg==
-X-Received: by 2002:a50:8dca:0:b0:425:e8a3:a79f with SMTP id s10-20020a508dca000000b00425e8a3a79fmr2617220edh.155.1651832214082;
-        Fri, 06 May 2022 03:16:54 -0700 (PDT)
+        bh=iu7ch3lFZ/rvnkTE15PMZ9rAZCAf+Uerimsw5YSLRGs=;
+        b=C6O7a6xGk9kzJeoZgCOqUNH8N9g1X/ukEvqhZA4xHkr5glCZdl0H8AxcSH/KCXO2Hx
+         FA6cGm9Fodc+D6RjrWrMLGiehpKP2v+LQahKqsxtSJcRbx0n4hPKsRptZTkd2ENTXRVa
+         VIx83UPwe4AMGWkW8Ht/sNg/IK3j7keh9t1EH0/St2W+w6/Or8PZtuzYKqodncQ2Z2Nt
+         faftbRUohFIcG1t+u9htA8WOvd3cS9LMdyfq4m1STOLCjhDIcaszDZOhMktU5/weuULY
+         GdDbFRyjyDfGGJLR/CFSZDmuEpGn5ljakhWfPguJ3F1paFOgfoKFqwfH61btEoFrkHpZ
+         5Q0A==
+X-Gm-Message-State: AOAM533yesacBUUXxpLNKDmliwtPgSU/3MwAUgjK61/ri+UtlIhkr3/m
+        UDpYPvt1H0RlltX86RsJ7RwEfBJ2B4FYkB1DHLuMi6XGEt4VcSlXvZbZ0vaIBLZiatPfklaRKcO
+        jnrnevYuSRNKJHMhxKOLqY/Nl
+X-Received: by 2002:a05:6402:35cb:b0:427:d231:3741 with SMTP id z11-20020a05640235cb00b00427d2313741mr2651069edc.369.1651832321142;
+        Fri, 06 May 2022 03:18:41 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJz6uXTig16v/KF0Sf68c1jorh0YVHM0KHakRadSICnB+8bE8+Q4X+Ko/OdMKSEN1+Ga4NvJEg==
+X-Received: by 2002:a05:6402:35cb:b0:427:d231:3741 with SMTP id z11-20020a05640235cb00b00427d2313741mr2651058edc.369.1651832320976;
+        Fri, 06 May 2022 03:18:40 -0700 (PDT)
 Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
-        by smtp.gmail.com with ESMTPSA id dk20-20020a0564021d9400b0042617ba63c0sm2078264edb.74.2022.05.06.03.16.53
+        by smtp.gmail.com with ESMTPSA id og9-20020a1709071dc900b006f3ef214e58sm1697197ejc.190.2022.05.06.03.18.40
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 06 May 2022 03:16:53 -0700 (PDT)
-Message-ID: <f0af4593-78ad-f277-39b8-002c156ffed4@redhat.com>
-Date:   Fri, 6 May 2022 12:16:53 +0200
+        Fri, 06 May 2022 03:18:40 -0700 (PDT)
+Message-ID: <86b00878-7d53-90b1-0891-e004094dc8b3@redhat.com>
+Date:   Fri, 6 May 2022 12:18:39 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.8.0
-Subject: Re: [PATCH] platform/surface: aggregator: Fix initialization order
- when compiling as builtin module
+Subject: Re: [PATCH] platform/x86: hp-wmi: simplify the return expression of
+ platform_profile_omen_set()
 Content-Language: en-US
-To:     Maximilian Luz <luzmaximilian@gmail.com>,
-        Mark Gross <markgross@kernel.org>,
-        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     =?UTF-8?Q?Bla=c5=be_Hrastnik?= <blaz@mxxn.io>
-References: <20220429195738.535751-1-luzmaximilian@gmail.com>
+To:     cgel.zte@gmail.com
+Cc:     markgross@kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Minghao Chi <chi.minghao@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+References: <20220505021919.54462-1-chi.minghao@zte.com.cn>
 From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20220429195738.535751-1-luzmaximilian@gmail.com>
+In-Reply-To: <20220505021919.54462-1-chi.minghao@zte.com.cn>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
         RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -85,38 +85,17 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hi,
 
-On 4/29/22 21:57, Maximilian Luz wrote:
-> When building the Surface Aggregator Module (SAM) core, registry, and
-> other SAM client drivers as builtin modules (=y), proper initialization
-> order is not guaranteed. Due to this, client driver registration
-> (triggered by device registration in the registry) races against bus
-> initialization in the core.
+On 5/5/22 04:19, cgel.zte@gmail.com wrote:
+> From: Minghao Chi <chi.minghao@zte.com.cn>
 > 
-> If any attempt is made at registering the device driver before the bus
-> has been initialized (i.e. if bus initialization fails this race) driver
-> registration will fail with a message similar to:
+> Simplify the return expression.
 > 
->     Driver surface_battery was unable to register with bus_type surface_aggregator because the bus was not initialized
-> 
-> Switch from module_init() to subsys_initcall() to resolve this issue.
-> Note that the serdev subsystem uses postcore_initcall() so we are still
-> able to safely register the serdev device driver for the core.
-> 
-> Fixes: c167b9c7e3d6 ("platform/surface: Add Surface Aggregator subsystem")
-> Reported-by: Blaž Hrastnik <blaz@mxxn.io>
-> Signed-off-by: Maximilian Luz <luzmaximilian@gmail.com>
+> Reported-by: Zeal Robot <zealci@zte.com.cn>
+> Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
 
-Thank you for your patch, I've applied this patch to my review-hans 
-branch:
-https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/log/?h=review-hans
-
-Note it will show up in my review-hans branch once I've pushed my
-local branch there, which might take a while.
-
-Once I've run some tests on this branch the patches there will be
-added to the platform-drivers-x86/for-next branch and eventually
-will be included in the pdx86 pull-request to Linus for the next
-merge-window.
+omen_thermal_profile_set(tp) returns the value of tp on
+success which is not necessarily always 0, so this
+patch is invalid.
 
 Regards,
 
@@ -125,20 +104,33 @@ Hans
 
 
 > ---
->  drivers/platform/surface/aggregator/core.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  drivers/platform/x86/hp-wmi.c | 8 ++------
+>  1 file changed, 2 insertions(+), 6 deletions(-)
 > 
-> diff --git a/drivers/platform/surface/aggregator/core.c b/drivers/platform/surface/aggregator/core.c
-> index d384d36098c2..a62c5dfe42d6 100644
-> --- a/drivers/platform/surface/aggregator/core.c
-> +++ b/drivers/platform/surface/aggregator/core.c
-> @@ -817,7 +817,7 @@ static int __init ssam_core_init(void)
->  err_bus:
->  	return status;
->  }
-> -module_init(ssam_core_init);
-> +subsys_initcall(ssam_core_init);
->  
->  static void __exit ssam_core_exit(void)
+> diff --git a/drivers/platform/x86/hp-wmi.c b/drivers/platform/x86/hp-wmi.c
+> index 667f94bba905..9edb1f877189 100644
+> --- a/drivers/platform/x86/hp-wmi.c
+> +++ b/drivers/platform/x86/hp-wmi.c
+> @@ -1119,7 +1119,7 @@ static int platform_profile_omen_get(struct platform_profile_handler *pprof,
+>  static int platform_profile_omen_set(struct platform_profile_handler *pprof,
+>  				     enum platform_profile_option profile)
 >  {
+> -	int err, tp, tp_version;
+> +	int tp, tp_version;
+>  
+>  	tp_version = omen_get_thermal_policy_version();
+>  
+> @@ -1149,11 +1149,7 @@ static int platform_profile_omen_set(struct platform_profile_handler *pprof,
+>  		return -EOPNOTSUPP;
+>  	}
+>  
+> -	err = omen_thermal_profile_set(tp);
+> -	if (err < 0)
+> -		return err;
+> -
+> -	return 0;
+> +	return omen_thermal_profile_set(tp);
+>  }
+>  
+>  static int thermal_profile_get(void)
 

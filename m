@@ -2,244 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6BE351DF45
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 20:47:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CAB1351DF4A
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 20:47:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387628AbiEFSuo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 14:50:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33618 "EHLO
+        id S1388577AbiEFSvP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 14:51:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386541AbiEFSul (ORCPT
+        with ESMTP id S1388545AbiEFSvG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 14:50:41 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id ABB6856403
-        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 11:46:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651862816;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=H9hyrJtgSJBROZmr5JA9E52TKsWkV2WqTP+Jz63/Ddo=;
-        b=Gd8yY2S9gt9wufkw5ZsPYD8d1mYEYZFo0hDMB/ZJ8LcKjOPASBPK/ZCGSB1SXFZT3g3Jow
-        g/ssbkFRwUSHQnyGTwHgj0E5EH6lMnSrmL1Nk5s0yVDah1jrSTGiRKQa6wQ/QOWVPpcpUy
-        KRxQV1ni11/TQypuKDExIpv6JS2aZ70=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-445--T9cKKHEPkyyc-nDhO56-Q-1; Fri, 06 May 2022 14:46:53 -0400
-X-MC-Unique: -T9cKKHEPkyyc-nDhO56-Q-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 35A0E39F9CA7;
-        Fri,  6 May 2022 18:46:53 +0000 (UTC)
-Received: from madcap2.tricolour.ca (unknown [10.22.50.7])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id AE84841047E9;
-        Fri,  6 May 2022 18:46:51 +0000 (UTC)
-Date:   Fri, 6 May 2022 14:46:49 -0400
-From:   Richard Guy Briggs <rgb@redhat.com>
-To:     Jan Kara <jack@suse.cz>
-Cc:     Paul Moore <paul@paul-moore.com>,
-        Linux-Audit Mailing List <linux-audit@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org, Eric Paris <eparis@parisplace.org>,
-        Steve Grubb <sgrubb@redhat.com>,
-        Amir Goldstein <amir73il@gmail.com>
-Subject: Re: [PATCH v2 2/3] fanotify: define struct members to hold response
- decision context
-Message-ID: <YnVtGRmrZpvoaEKg@madcap2.tricolour.ca>
-References: <cover.1651174324.git.rgb@redhat.com>
- <17660b3f2817e5c0a19d1e9e5d40b53ff4561845.1651174324.git.rgb@redhat.com>
- <CAHC9VhQ3Qtpwhj6TeMR7rmdbUe_6VRHU9OymmDoDdsazeGuNKA@mail.gmail.com>
- <YnHX74E+COTp7AgY@madcap2.tricolour.ca>
- <20220505144456.nw6slyqw4pjizl5p@quack3.lan>
+        Fri, 6 May 2022 14:51:06 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FF6B63533;
+        Fri,  6 May 2022 11:47:22 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id k2so11115942wrd.5;
+        Fri, 06 May 2022 11:47:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=Vt0OWBct8YhWCch2+2OkXoGqDKSr3TcXp5y1WslSxb0=;
+        b=Cjo/YUaxkMwPxpg/1jrCgoxVaa0657POk8MVPJtu2fSAfdjI9N/0OoJ8AMA/b5qVBF
+         NhjbTxO8G7FOzu+75usLEAjKTwDOxFC9pMH94Y2sWjRxRuRqXzh9MIdC/rBP8uAhE9vu
+         wpZWRYwVM36ejJ4OkCrsMyiKKRCWPaxivl/2pB0eksZ/gGQQBycu9nzwrU6Uc9Jla/uh
+         AAjg1kIsvvuEkmRyQZLlBrHMQHlpjmzmfjIhKDdBInawqPxEZbK5CtxsyeZoo9eUdeAX
+         SKoCrIfnb+z5xt5J4shDn4p32/zUzn1qhxlkb+Ecz4Dla2jKxDvywirWavYdpD9wgCZX
+         mamQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Vt0OWBct8YhWCch2+2OkXoGqDKSr3TcXp5y1WslSxb0=;
+        b=pN6PqhPwbIAecp49E6SzZUZQ4+kUqUyHLu+Q4SHOoWyFFiwXpt1yepr1Wr9vssWah9
+         /EjnwT45blLKbx5vz51u+CgtRZsgx+ya0oMVx+7WiHaX+h623uqi1sd4xV0b9Ormuk+q
+         lASHapa5aS+iGZSS50JSxOK2GMIfDQ+QoQwa8YcR5VrCmxaGp5ms9Ih5f5O++2EObhvq
+         u2MDdIhFCf6EPizOQvU7ZFyI4kY7RHrV/Jyavn8VKHcRlwqw7/VV2E8qfsghp7p2HqCm
+         qd9CPy0zNXur7VUCdOz051whwuFcsoUqzjUgiiBn4B24ZVX7F3DBnQEa2tHoS5DAu3oh
+         RpjQ==
+X-Gm-Message-State: AOAM530IBM4IhMMGskux1wV9xhYxxsZiQzFectfC+5k1KZeCluhQKKRo
+        r99+iP/6gOiwFZgKBV7fKxKUAhzXJDg=
+X-Google-Smtp-Source: ABdhPJw5T/i5wLRQpeYYOhW8GC1eO03llyK9BZ8FVVykkMSjfn1KbnufqxCOOZAjOvJxiOjSC7dMjg==
+X-Received: by 2002:adf:e7c1:0:b0:20a:b724:cedd with SMTP id e1-20020adfe7c1000000b0020ab724ceddmr3894091wrn.409.1651862840866;
+        Fri, 06 May 2022 11:47:20 -0700 (PDT)
+Received: from [10.17.0.15] ([194.126.177.12])
+        by smtp.gmail.com with ESMTPSA id e13-20020a5d530d000000b0020c5253d8fasm4276785wrv.70.2022.05.06.11.47.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 06 May 2022 11:47:20 -0700 (PDT)
+Message-ID: <40c3033e-b9d8-0cf6-4009-35701f02c8aa@gmail.com>
+Date:   Fri, 6 May 2022 20:47:18 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220505144456.nw6slyqw4pjizl5p@quack3.lan>
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH] ACPI: battery: Add "Not Charging" quirk for Microsoft
+ Surface devices
+Content-Language: en-US
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Len Brown <lenb@kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20220429174114.1277799-1-luzmaximilian@gmail.com>
+ <CAJZ5v0hoE0vn5BX586Ag4oLFRn3WoZJCUQZ1+jM1O6Vm+yyc4A@mail.gmail.com>
+From:   Maximilian Luz <luzmaximilian@gmail.com>
+In-Reply-To: <CAJZ5v0hoE0vn5BX586Ag4oLFRn3WoZJCUQZ1+jM1O6Vm+yyc4A@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-05-05 16:44, Jan Kara wrote:
-> On Tue 03-05-22 21:33:35, Richard Guy Briggs wrote:
-> > On 2022-05-02 20:16, Paul Moore wrote:
-> > > On Thu, Apr 28, 2022 at 8:45 PM Richard Guy Briggs <rgb@redhat.com> wrote:
-> > > > This patch adds 2 structure members to the response returned from user
-> > > > space on a permission event. The first field is 16 bits for the context
-> > > > type.  The context type will describe what the meaning is of the second
-> > > > field. The default is none. The patch defines one additional context
-> > > > type which means that the second field is a 32-bit rule number. This
-> > > > will allow for the creation of other context types in the future if
-> > > > other users of the API identify different needs.  The second field size
-> > > > is defined by the context type and can be used to pass along the data
-> > > > described by the context.
-> > > >
-> > > > To support this, there is a macro for user space to check that the data
-> > > > being sent is valid. Of course, without this check, anything that
-> > > > overflows the bit field will trigger an EINVAL based on the use of
-> > > > FAN_INVALID_RESPONSE_MASK in process_access_response().
-> > > >
+On 5/6/22 20:43, Rafael J. Wysocki wrote:
+> On Fri, Apr 29, 2022 at 7:41 PM Maximilian Luz <luzmaximilian@gmail.com> wrote:
+>>
+>> Microsoft Surface devices have a limiter that sets a fixed maximum
+>> charge capacity for the battery. When that maximum capacity has been
+>> reached, charging stops. In that case, _BST returns a battery state
+>> field with both "charging" and "discharging" bits cleared. The battery
+>> driver, however, returns "unknown" as status.
+>>
+>> This seems to be the same behavior as observed on the ThinkPads, so
+>> let's use the same quirk to handle that.
+>>
+>> Signed-off-by: Maximilian Luz <luzmaximilian@gmail.com>
+>> ---
+>>
+>> For what it's worth, I don't think the ACPI spec explicitly states that
+>> any of the status bits need to be set, or that there are only the
+>> "charging" and "discharging" states. As far as I can tell, ACPI only
+>> states:
+>>
+>>      Notice that the Charging bit and the Discharging bit are mutually
+>>      exclusive and must not both be set at the same time. Even in
+>>      critical state, hardware should report the corresponding
+>>      charging/discharging state.
+>>
+>> But that does not exclude the case that no bit is set. So, strictly
+>> going by spec, I don't think it's necessary to put all of this behind a
+>> quirk.
 > 
-> ...
+> I think that this should be covered by the patch I've just applied:
 > 
-> > > >  static ssize_t fanotify_write(struct file *file, const char __user *buf, size_t count, loff_t *pos)
-> > > >  {
-> > > > -       struct fanotify_response response = { .fd = -1, .response = -1 };
-> > > > +       struct fanotify_response response;
-> > > >         struct fsnotify_group *group;
-> > > >         int ret;
-> > > > +       size_t size = min(count, sizeof(struct fanotify_response));
-> > > >
-> > > >         if (!IS_ENABLED(CONFIG_FANOTIFY_ACCESS_PERMISSIONS))
-> > > >                 return -EINVAL;
-> > > >
-> > > >         group = file->private_data;
-> > > >
-> > > > -       if (count < sizeof(response))
-> > > > +       if (count < offsetof(struct fanotify_response, extra_info_buf))
-> > > >                 return -EINVAL;
-> > > 
-> > > Is this why you decided to shrink the fanotify_response:response field
-> > > from 32-bits to 16-bits?  I hope not.  I would suggest both keeping
-> > > the existing response field as 32-bits and explicitly checking for
-> > > writes that are either the existing/compat length as well as the
-> > > newer, longer length.
-> > 
-> > No.  I shrank it at Jan's suggestion.  I think I agree with you that
-> > the response field should be kept at u32 as it is defined in userspace
-> > and purge the doubt about what would happen with a new userspace with
-> > an old kernel.
+> https://patchwork.kernel.org/project/linux-acpi/patch/20220427154053.499203-1-wse@tuxedocomputers.com/
 > 
-> Hum, for the life of me I cannot find my response you mention here. Can you
-> send a link so that I can refresh my memory? It has been a long time...
+> Shouldn't it?
 
-https://listman.redhat.com/archives/linux-audit/2020-October/017066.html
-https://listman.redhat.com/archives/linux-audit/2020-October/017067.html
+It does, thank you!
 
-> > > > +
-> > > > +#define FANOTIFY_RESPONSE_EXTRA_LEN_MAX        \
-> > > > +       (sizeof(union { \
-> > > > +               struct fanotify_response_audit_rule r; \
-> > > > +               /* add other extra info structures here */ \
-> > > > +       }))
-> > > > +
-> > > >  struct fanotify_response {
-> > > >         __s32 fd;
-> > > > -       __u32 response;
-> > > > +       __u16 response;
-> > > > +       __u16 extra_info_type;
-> > > > +       char extra_info_buf[FANOTIFY_RESPONSE_EXTRA_LEN_MAX];
-> > > >  };
-> > > 
-> > > Since both the kernel and userspace are going to need to agree on the
-> > > content and formatting of the fanotify_response:extra_info_buf field,
-> > > why is it hidden behind a char array?  You might as well get rid of
-> > > that abstraction and put the union directly in the fanotify_response
-> > > struct.  It is possible you could also get rid of the
-> > > fanotify_response_audit_rule struct this way too and just access the
-> > > rule scalar directly.
-> > 
-> > This does make sense and my only concern would be a variable-length
-> > type.  There isn't any reason to hide it.  If userspace chooses to use
-> > the old interface and omit the type field then it defaults to NONE.
-> > 
-> > If future types with variable data are defined, the first field could be
-> > a u32 that unions with the rule number that won't change the struct
-> > size.
-> 
-> Struct fanotify_response size must not change, it is part of the kernel
-> ABI. In particular your above change would break userspace code that is
-> currently working just fine (e.g. allocating 8 bytes and expecting struct
-> fanotify_response fits there, or just writing sizeof(struct
-> fanotify_response) as a response while initializing only first 8 bytes).
+Sorry for having missed that one.
 
-Many kernel ABIs have been expanded without breaking them.
-
-Is it reasonable for a userspace program to use a kernel structure
-without also using its size for allocation and initialization?
-
-> How I'd suggest doing it now (and I'd like to refresh my memory from my
-> past emails you mention because in the past I might have thought something
-> else ;)) is that you add another flag to 'response' field similar to
-> FAN_AUDIT - like FAN_EXTRA_INFO. If that is present, it means extra info is
-> to be expected after struct fanotify_response.
-
-That's an interesting possibility...  I'm trying to predict if that
-would be a problem for an old kernel...  In process_access_response() it
-would fallthrough to the default case of -EINVAL but do so safely.
-
-> The extra info would always start with a header like:
-> 
-> struct fanotify_response_info_header {
->         __u8 info_type;
->         __u8 pad;
->         __u16 len;		/* This is including the header itself */
-> }
-> 
-> And after such header there would be the 'blob' of data 'len - header size'
-> long.  We use this same scheme when passing fanotify events to userspace
-> and it has proven to be lightweight and extensible. It covers the situation
-> when in the future audit would decide it wants other data (just change data
-> type), it would also cover the situation when some other subsystem wants
-> its information passed as well - there can be more structures like this
-> attached at the end, we can process the response up to the length of the
-> write.
-
-This reminds me of the RFC2367 (PF_KEYv2, why is that still right there
-at the tip of my fingers?)
-
-> Now these are just possible future extensions making sure we can extend the
-> ABI without too much pain. In the current implementation I'd just return
-> EINVAL whenever more than FANOTIFY_RESPONSE_MAX_LEN (16 bytes) is written 
-> and do very strict checks on what gets passed in. It is also trivially
-> backwards compatible (old userspace on new kernel works just fine).
-
-Old userspace on new kernel would work fine with this idea, the v2 patch
-posted, or with leaving the response field of struct fanotify_response
-as __u32.
-
-> If you want to achieve compatibility of running new userspace on old kernel
-> (I guess that's desirable), we have group flags for that - like we
-> introduced FAN_ENABLE_AUDIT to allow for FAN_AUDIT flag in response we now
-> need to add a flag like FAN_EXTENDED_PERMISSION_INFO telling the kernel it
-> should expect an allow more info returning for permission events. At the
-> same time this is the way for userspace to be able to tell whether the
-> kernel supports this. I know this sounds tedious but that's the cost of
-> extending the ABI in the compatible way. We've made various API mistakes in
-> the past having to add weird workarounds to fanotify and we don't want to
-> repeat those mistakes :).
-> 
-> One open question I have is what should the kernel do with 'info_type' in
-> response it does not understand (in the future when there are possibly more
-> different info types). It could just skip it because this should be just
-> additional info for introspection (the only mandatory part is in
-> fanotify_response, however it could surprise userspace that passed info is
-> just getting ignored. To solve this we would have to somewhere report
-> supported info types (maybe in fanotify fdinfo in proc). I guess we'll
-> cross that bridge when we get to it.
-
-Well, one possibility is to return -EINVAL to signal the kernel is out
-of date.
-
-> Amir, what do you think?
-> 
-> Jan Kara <jack@suse.com>
-
-- RGB
-
---
-Richard Guy Briggs <rgb@redhat.com>
-Sr. S/W Engineer, Kernel Security, Base Operating Systems
-Remote, Ottawa, Red Hat Canada
-IRC: rgb, SunRaycer
-Voice: +1.647.777.2635, Internal: (81) 32635
-
+Regards,
+Max

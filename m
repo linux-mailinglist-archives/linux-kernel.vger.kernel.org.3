@@ -2,62 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 048D651DDE9
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 18:51:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AD8351DDEF
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 18:51:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1443940AbiEFQy7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 12:54:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56770 "EHLO
+        id S1443968AbiEFQzf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 12:55:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346165AbiEFQy5 (ORCPT
+        with ESMTP id S1357151AbiEFQzd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 12:54:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 207EE633A9;
-        Fri,  6 May 2022 09:51:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9CD3761FEF;
-        Fri,  6 May 2022 16:51:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B90B5C385AC;
-        Fri,  6 May 2022 16:51:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651855872;
-        bh=JLOPe7is6n6Rmcoo4s0ssyBJhamRXROIw2bTQJTX4u4=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=qElFZ11li7gXN1H+bAlgkcrSrCJ0uRCkHCB9jwQKD/r9hOaTKUVZobEeLhILWPDY8
-         QQCwWagoimnRG3zfDjEBKY5HsiTq3IroD7PBtnndHQ4gdDzRItrc99Mj2SGhXcEAqc
-         MrTgLn3NEt5iRtGt21i6HDUfU9/EzPbSuL1PWh2zpfZg3/mZseoHDWS2CBxJb5fF9K
-         2n/HcLahg7iU3X3F6At9IbCWgpN1exT94uIwJA/A50xm4s1GvXsZNaP0cCt3i8EId0
-         nZM6SGEk2hPyl1ZZIgt8aQtjOp1yxaK9dBhftQH9fifYuHtBmuJ92JU6QAh49ILwQF
-         g7pejc3Hlbhxw==
-Date:   Fri, 6 May 2022 11:51:10 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Myron Stowe <myron.stowe@redhat.com>,
-        Juha-Pekka Heikkila <juhapekka.heikkila@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Benoit =?iso-8859-1?Q?Gr=E9goire?= <benoitg@coeus.ca>,
-        Hui Wang <hui.wang@canonical.com>, linux-acpi@vger.kernel.org,
-        linux-pci@vger.kernel.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v7 1/1] x86/PCI: Ignore E820 reservations for bridge
- windows on newer systems
-Message-ID: <20220506165110.GA509329@bhelgaas>
+        Fri, 6 May 2022 12:55:33 -0400
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4F246D4E1
+        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 09:51:49 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id d25so6710919pfo.10
+        for <linux-kernel@vger.kernel.org>; Fri, 06 May 2022 09:51:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=8CjPh+bfg9FeD4L33j+vl0as/9NZnd8bSEbyXP8g7WM=;
+        b=Hmb66AOkOay154HlbmrZiCSrPZhss1uyez/WWDvOU1oYt4IH/+ZcEiBDia0jEf1SpT
+         ENKTAoBFILmVfQgb7K/+vOcsUbe5WUIlXIr8x6J8wOcDvo2wfiIyG2hP2ko5zymHscYB
+         YT6hd2RpFiQVZQoZaFfWe06fyCbLvU4RmbfSw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=8CjPh+bfg9FeD4L33j+vl0as/9NZnd8bSEbyXP8g7WM=;
+        b=j1ov8U9VrFBazx1uf/mgZsJ8cvMhIm9wZwCyFBXBb5J6GCgKlo5MMvIZJs1n2PFoU+
+         GntyihJDq4mmzyY29RXq1GHymJ0atrReCFT67SNaETagp3t5FrXKmtw89X/O4O6Ql6Gl
+         q90Dd+u6eTaidWZYsHE3sFAAA9iBHHf1F9OzLWpuAPeCR1bqKxtwPdaeNcxkmxjOUn4Z
+         vxZ4elEilCicXGgs2EHPOTE50VHuZ+IZNrHyqCidCWMD4nwp8c/jjmyTkS0R2EILUnzq
+         o5i29SjUzqjT7CYuPAwYNyG0ighYrZtabD32z/GoBcMo9T5x8NFYOzk1ACDKGCdtb0RD
+         GtJQ==
+X-Gm-Message-State: AOAM530q193PFK2BBebqUzZs/3B1rOjuwU5yrCV9sqOuYa2zKhy56MVe
+        VDHzRO5/DW3ZGWj2G5YHV2ypSg==
+X-Google-Smtp-Source: ABdhPJxgMQ1i3BHka8S2fWHqHyjIQLDycbKmqf5OsGqno4rWYcWYXY5wJezWWIGw+N85L117g6Iauw==
+X-Received: by 2002:a63:2c8a:0:b0:3c5:f760:2e36 with SMTP id s132-20020a632c8a000000b003c5f7602e36mr3494211pgs.372.1651855909179;
+        Fri, 06 May 2022 09:51:49 -0700 (PDT)
+Received: from localhost ([2620:15c:202:201:5605:d5cd:699b:1b26])
+        by smtp.gmail.com with UTF8SMTPSA id u10-20020a170902e80a00b0015e8d4eb24asm2111268plg.148.2022.05.06.09.51.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 06 May 2022 09:51:48 -0700 (PDT)
+Date:   Fri, 6 May 2022 09:51:46 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Pavan Kondeti <quic_pkondeti@quicinc.com>
+Cc:     Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, quic_ppratap@quicinc.com,
+        quic_vpulyala@quicinc.com
+Subject: Re: [v15 3/6] usb: dwc3: core: Host wake up support from system
+ suspend
+Message-ID: <YnVSIvwXsKySg33M@google.com>
+References: <1651740973-7944-1-git-send-email-quic_kriskura@quicinc.com>
+ <1651740973-7944-4-git-send-email-quic_kriskura@quicinc.com>
+ <YnRUPxBZB55TPmf2@google.com>
+ <a83dea08-0920-17e6-ec1c-f9d8a490a08d@quicinc.com>
+ <20220506051448.GE4640@hu-pkondeti-hyd.qualcomm.com>
+ <YnVD+ltiQhKE+jPf@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220505152016.5059-2-hdegoede@redhat.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+In-Reply-To: <YnVD+ltiQhKE+jPf@google.com>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -66,115 +85,133 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 05, 2022 at 05:20:16PM +0200, Hans de Goede wrote:
-> Some BIOS-es contain bugs where they add addresses which are already
-> used in some other manner to the PCI host bridge window returned by
-> the ACPI _CRS method. To avoid this Linux by default excludes
-> E820 reservations when allocating addresses since 2010, see:
-> commit 4dc2287c1805 ("x86: avoid E820 regions when allocating address
-> space").
+On Fri, May 06, 2022 at 08:51:22AM -0700, Matthias Kaehlcke wrote:
+> On Fri, May 06, 2022 at 10:44:48AM +0530, Pavan Kondeti wrote:
+> > On Fri, May 06, 2022 at 10:41:01AM +0530, Krishna Kurapati PSSNV wrote:
+> > > 
+> > > On 5/6/2022 4:18 AM, Matthias Kaehlcke wrote:
+> > > >On Thu, May 05, 2022 at 02:26:10PM +0530, Krishna Kurapati wrote:
+> > > >>From: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+> > > >>
+> > > >>During suspend read the status of all port and set hs phy mode
+> > > >>based on current speed. Use this hs phy mode to configure wakeup
+> > > >>interrupts in qcom glue driver.
+> > > >>
+> > > >>Check wakeup-source property for dwc3 core node to set the
+> > > >>wakeup capability. Drop the device_init_wakeup call from
+> > > >>runtime suspend and resume.
+> > > >>
+> > > >>Also check during suspend if any wakeup capable devices are
+> > > >>connected to the controller (directly or through hubs), if there
+> > > >>are none set a flag to indicate that the PHY is powered
+> > > >>down during suspend.
+> > > >>
+> > > >>Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+> > > >>Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+> > > >>---
+> > > >>  drivers/usb/dwc3/core.c | 33 ++++++++++++++++++++-------------
+> > > >>  drivers/usb/dwc3/core.h |  4 ++++
+> > > >>  drivers/usb/dwc3/host.c | 24 ++++++++++++++++++++++++
+> > > >>  3 files changed, 48 insertions(+), 13 deletions(-)
+> > > >>
+> > > >>diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+> > > >>index 950e238..cf377f5 100644
+> > > >>--- a/drivers/usb/dwc3/core.c
+> > > >>+++ b/drivers/usb/dwc3/core.c
+> > > >>@@ -33,6 +33,7 @@
+> > > >>  #include <linux/usb/gadget.h>
+> > > >>  #include <linux/usb/of.h>
+> > > >>  #include <linux/usb/otg.h>
+> > > >>+#include <linux/usb/hcd.h>
+> > > >This is not needed anymore
+> > > >
+> > > >>  #include "core.h"
+> > > >>  #include "gadget.h"
+> > > >>@@ -1787,6 +1788,7 @@ static int dwc3_probe(struct platform_device *pdev)
+> > > >>  	platform_set_drvdata(pdev, dwc);
+> > > >>  	dwc3_cache_hwparams(dwc);
+> > > >>+	device_init_wakeup(&pdev->dev, of_property_read_bool(dev->of_node, "wakeup-source"));
+> > > >>  	spin_lock_init(&dwc->lock);
+> > > >>  	mutex_init(&dwc->mutex);
+> > > >>@@ -1936,6 +1938,7 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
+> > > >>  {
+> > > >>  	unsigned long	flags;
+> > > >>  	u32 reg;
+> > > >>+	struct usb_hcd  *hcd = platform_get_drvdata(dwc->xhci);
+> > > >This isn't used anymore, delete it
+> > > My bad, Will fix this in next version.
+> > > >>  	switch (dwc->current_dr_role) {
+> > > >>  	case DWC3_GCTL_PRTCAP_DEVICE:
+> > > >>@@ -1948,10 +1951,7 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
+> > > >>  		dwc3_core_exit(dwc);
+> > > >>  		break;
+> > > >>  	case DWC3_GCTL_PRTCAP_HOST:
+> > > >>-		if (!PMSG_IS_AUTO(msg)) {
+> > > >>-			dwc3_core_exit(dwc);
+> > > >>-			break;
+> > > >>-		}
+> > > >>+		dwc3_check_phy_speed_mode(dwc);
+> > > >>  		/* Let controller to suspend HSPHY before PHY driver suspends */
+> > > >>  		if (dwc->dis_u2_susphy_quirk ||
+> > > >>@@ -1967,6 +1967,16 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
+> > > >>  		phy_pm_runtime_put_sync(dwc->usb2_generic_phy);
+> > > >>  		phy_pm_runtime_put_sync(dwc->usb3_generic_phy);
+> > > >>+
+> > > >>+		if (!PMSG_IS_AUTO(msg)) {
+> > > >>+			if (device_may_wakeup(dwc->dev) &&
+> > > >>+					device_wakeup_path(dwc->dev)) {
+> > > >nit: the indentation is odd, align it with device_may_wakeup()?
+> > > Sure, Will take care of it.
+> > > >>+				dwc->phy_power_off = false;
+> > > >>+			} else {
+> > > >>+				dwc->phy_power_off = true;
+> > > >>+				dwc3_core_exit(dwc);
+> > > >As commented earlier, taking the controller and PHYs completely down causes a
+> > > >significant power draw in some USB clients. Let's clarify what the specific
+> > > >benefits are of doing dwc3_core_exit() vs. entering a low power mode.
+> > > Sure, once we come to a conclusion on this, I will refresh the patches.
+> > 
+> > I think, Matthias is asking you to clarify in the commit description. we can
+> > even quote Matthias observations.
 > 
-> Recently (2019) some systems have shown-up with E820 reservations which
-> cover the entire _CRS returned PCI bridge memory window, causing all
-> attempts to assign memory to PCI BARs which have not been setup by the
-> BIOS to fail. For example here are the relevant dmesg bits from a
-> Lenovo IdeaPad 3 15IIL 81WE:
-> 
->  [mem 0x000000004bc50000-0x00000000cfffffff] reserved
->  pci_bus 0000:00: root bus resource [mem 0x65400000-0xbfffffff window]
-> 
-> The ACPI specifications appear to allow this new behavior:
-> 
-> The relationship between E820 and ACPI _CRS is not really very clear.
-> ACPI v6.3, sec 15, table 15-374, says AddressRangeReserved means:
-> 
->   This range of addresses is in use or reserved by the system and is
->   not to be included in the allocatable memory pool of the operating
->   system's memory manager.
-> 
-> and it may be used when:
-> 
->   The address range is in use by a memory-mapped system device.
-> 
-> Furthermore, sec 15.2 says:
-> 
->   Address ranges defined for baseboard memory-mapped I/O devices, such
->   as APICs, are returned as reserved.
-> 
-> A PCI host bridge qualifies as a baseboard memory-mapped I/O device,
-> and its apertures are in use and certainly should not be included in
-> the general allocatable pool, so the fact that some BIOS-es reports
-> the PCI aperture as "reserved" in E820 doesn't seem like a BIOS bug.
-> 
-> So it seems that the excluding of E820 reserved addresses is a mistake.
-> 
-> Ideally Linux would fully stop excluding E820 reserved addresses,
-> but then various old systems will regress.
-> Instead keep the old behavior for old systems, while ignoring
-> the E820 reservations for any systems from now on.
-> 
-> Old systems are defined here as BIOS year < 2018, this was chosen to
-> make sure that pci_use_e820 will not be set on the currently affected
-> systems, the oldest known one is from 2019.
-> 
-> Testing has shown that some newer systems also have a bad _CRS return.
-> The pci_crs_quirks DMI table is used to keep excluding E820 reservations
-> from the bridge window on these systems.
-> 
-> Also add pci=no_e820 and pci=use_e820 options to allow overriding
-> the BIOS year + DMI matching logic.
-> 
-> BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=206459
-> BugLink: https://bugzilla.redhat.com/show_bug.cgi?id=1868899
-> BugLink: https://bugzilla.redhat.com/show_bug.cgi?id=1871793
-> BugLink: https://bugs.launchpad.net/bugs/1878279
-> BugLink: https://bugs.launchpad.net/bugs/1931715
-> BugLink: https://bugs.launchpad.net/bugs/1932069
-> BugLink: https://bugs.launchpad.net/bugs/1921649
-> Cc: Benoit Grégoire <benoitg@coeus.ca>
-> Cc: Hui Wang <hui.wang@canonical.com>
-> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+> Actually I would like to have a discussion about the benefits of powering down
+> the controller and PHYs vs. entering a low power state. Maybe there are good
+> reasons for powering everything down (e.g. significant power savings), but
+> as we have seen there are also significant downsides, so let's make sure
+> we understand both.
 
-> +	 * Ideally Linux would fully stop using E820 reservations, but then
-> +	 * various old systems will regress. Instead keep the old behavior for
-> +	 * old systems + known to be broken newer systems in pci_crs_quirks.
-> +	 */
-> +	if (year >= 0 && year < 2018)
-> +		pci_use_e820 = true;
+I found this, as I commented on the other thread:
 
-How did you pick 2018?  Prior to this patch, we used E820 reservations
-for all machines.  This patch would change that for 2019-2022
-machines, so there's a risk of breaking some of them.
+  commit c4a5153e87fdf6805f63ff57556260e2554155a5
+  Author: Manu Gautam <mgautam@codeaurora.org>
+  Date:   Thu Jan 18 16:54:30 2018 +0530
 
-I'm hesitant about changing the behavior for machines already in the
-field because if they were tested at all with Linux, it was without
-this patch.  So I would lean toward preserving the current behavior
-for BIOS year < 2023.
+  usb: dwc3: core: Power-off core/PHYs on system_suspend in host mode
 
-> diff --git a/arch/x86/pci/common.c b/arch/x86/pci/common.c
-> index 9e1e6b8d8876..7e6f79aab6a8 100644
-> --- a/arch/x86/pci/common.c
-> +++ b/arch/x86/pci/common.c
-> @@ -595,6 +595,12 @@ char *__init pcibios_setup(char *str)
->  	} else if (!strcmp(str, "nocrs")) {
->  		pci_probe |= PCI_ROOT_NO_CRS;
->  		return NULL;
-> +	} else if (!strcmp(str, "use_e820")) {
-> +		pci_probe |= PCI_USE_E820;
+  Commit 689bf72c6e0d ("usb: dwc3: Don't reinitialize core during
+  host bus-suspend/resume") updated suspend/resume routines to not
+  power_off and reinit PHYs/core for host mode.
+  It broke platforms that rely on DWC3 core to power_off PHYs to
+  enter low power state on system suspend.
 
-I think we should add_taint(TAINT_FIRMWARE_WORKAROUND) for both these
-cases.
+  Perform dwc3_core_exit/init only during host mode system_suspend/
+  resume to addresses power regression from above mentioned patch
+  and also allow USB session to stay connected across
+  runtime_suspend/resume in host mode. While at it also replace
+  existing checks for HOST only dr_mode with current_dr_role to
+  have similar core driver behavior for both Host-only and DRD+Host
+  configurations.
 
-We probably should do it for *all* the parameters here, but that would
-be a separate discussion.
+  Fixes: 689bf72c6e0d ("usb: dwc3: Don't reinitialize core during host bus-suspend/resume")
+  Reviewed-by: Roger Quadros <rogerq@ti.com>
+  Signed-off-by: Manu Gautam <mgautam@codeaurora.org>
+  Signed-off-by: Felipe Balbi <felipe.balbi@linux.intel.com>
 
-> +		return NULL;
-> +	} else if (!strcmp(str, "no_e820")) {
-> +		pci_probe |= PCI_NO_E820;
-> +		return NULL;
->  #ifdef CONFIG_PHYS_ADDR_T_64BIT
->  	} else if (!strcmp(str, "big_root_window")) {
->  		pci_probe |= PCI_BIG_ROOT_WINDOW;
-> -- 
-> 2.36.0
-> 
+
+So apparently powering off the core and PHYs is needed on some
+platforms.
+
+Let's move forward with the core/PHYs off for now and try to
+come up with a solution (e.g. a DT property that indicates
+that the core/PHYs can remain powererd) in a separate
+patch/series.

@@ -2,57 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEAE951E015
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 22:20:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48C9B51E016
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 22:20:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1442470AbiEFUXL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 16:23:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49966 "EHLO
+        id S1442518AbiEFUYb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 16:24:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1442204AbiEFUXJ (ORCPT
+        with ESMTP id S1349908AbiEFUY2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 16:23:09 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23B73674D2
-        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 13:19:24 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id q20so5064548wmq.1
-        for <linux-kernel@vger.kernel.org>; Fri, 06 May 2022 13:19:24 -0700 (PDT)
+        Fri, 6 May 2022 16:24:28 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EA9E4BBA2
+        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 13:20:44 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id e24so11365047wrc.9
+        for <linux-kernel@vger.kernel.org>; Fri, 06 May 2022 13:20:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=NXHGT7eAwQNZJisRbYmzy/j4OMoccRHNIAHZL+cKALE=;
-        b=T92xlA48yS6euj6Jjfo13thOHVcvhiHfDU6mvhWuSnpM1cz9yh5nresijUC0NxLFXu
-         Z/RAhOS69n3tiwBCrpd5XDXt8Di+tDA5lBZoXf03Xf+22OaqLzj2u1fUWvunBpHlKw6P
-         0uFADPdiz7Mv58oWw6SkrkqJArzJ+f9ohiilOaTIgLJQvP9OVsWd7dssBIKmuX0LpXaq
-         VfSWIFkj3M5/p9lDAjCsijsdsP/SomG17bsVZXdRhDF1h+F/HpP41xLbFVTdYBVMhqxh
-         XAgL59b//rtFW9e5lDaPxM3e7NEznXdcJxHsH7rU5bSkut0E0JlgpuYw+SwjYEHygavB
-         JVMw==
+        bh=+/Ki13NLL1sGncQQ3Tu315inUGCwrgf2ZKaT9XZCXrI=;
+        b=Xt4rBM6Cueut4roNHdvKpKyWCLj0hsBaQfBuLbbZFUok36pVDM6J46E9zOOH37fFP4
+         WkPnQGh/pFyRJ6KwelsrO1vnXO3fzLKXBKzumy+C/9jMlF0IcNq4XX/NkxJMuNkMfkj3
+         tqIdSWz7APiFra4+7eoUY6Xt3x07zb4EAvnm+YP5g3BAVTJ+yXt1yO5EBaSVznyu6Tk/
+         7u5LcjH2nPmu/tqAsDl1N5Ecc2ldXyVggzb9VKVnUToU+RGfM+P4W+9lC4kwNU+/fhZJ
+         Ipy7tec6WJOmF1kzG+Akw3OkAtudXrgGmIGx7DWgqToBMk/hH2nh1AB/uhaOjuSgN/+P
+         RxCw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=NXHGT7eAwQNZJisRbYmzy/j4OMoccRHNIAHZL+cKALE=;
-        b=OIEDxulXq/S7waLJrqU7AlcpOEAMXChYn04NxYhCdou7Hr6KniZ/Ym98fiQefttRXp
-         Ex73r2P4KtfehvjuMVa2VlrAcdsZ4qE6TiBpZTF29JE++1SOvzYbe7xQk5yYPKLUQ8V9
-         gFEWYufxi21PTrmZ4fKyg7IdMewPeJz13MUDKBPeb5gvhnCrqFCl42VPla9M0sZ4hqyQ
-         Zyfzk3DLJRe9oViKk86uB7rrLRMFaTfmzFyqP90yTLHnuRPP5TxMKJvzmJBHQTWowomY
-         bU3FSjGvw2Y5zskom7QR+UlLbc2xccHEOrA9VfPfv9l46zrfzw3rdy9gbRGfz59zbgc2
-         K9KA==
-X-Gm-Message-State: AOAM530SJn7veZwcJ1LOlxKzz3QiKz06xOrc9Syb2oVAKujbQJhji72N
-        nbX9lktiXFcf2hNornaWzXHE+Sv9Ks1YrUyGpO2DGw==
-X-Google-Smtp-Source: ABdhPJwDpsgM59vWaZYLsLHq+9cow2DWryndl3KG4C8usFGBDtbgT88dbouz41f0dJ4tmxUWMEaCGOjSYE+A2Ppd/Qg=
-X-Received: by 2002:a05:600c:2258:b0:394:2045:bed with SMTP id
- a24-20020a05600c225800b0039420450bedmr5015943wmm.174.1651868362460; Fri, 06
- May 2022 13:19:22 -0700 (PDT)
+        bh=+/Ki13NLL1sGncQQ3Tu315inUGCwrgf2ZKaT9XZCXrI=;
+        b=7iqYOM2FPW8aQsyeBN0zazhmyMCEcUVA7nNin0AErXx6mSChb4LcDBbKIRjIMQDqw1
+         TdQGvAs70PJLkdLIWzmnt0e6W7QvJgdjhrla7vyel1Jn5O1V4gAoXxtjKuQNQryYHWqN
+         uEFUrEbgx7OOcw2O6A0tDoxRePTbEQOIaMudgyEKJLoKw8rZntF5elhg5RMfrBc0vZco
+         D6BgPeACcjPMePU8U12qkG3Nczgml9o4bTbwYOpN8uPg0e4V/ByRp4xAggkk3AAi36Cg
+         0zpP9wJD2m5h5kt0py2dCo46dT/nKwCCO7uyy/+0gjLdbjMabfKy4KE5N4GSs+H+Mw52
+         5Sow==
+X-Gm-Message-State: AOAM5301v7S8tVUy7pnhMe/HUXx0KpHvAoETSNg2UIAx9is9MM7ieQM8
+        kNyPmF2jVYPur6JoOgpXXJj3Mbbe1ykOr9bLny49IA==
+X-Google-Smtp-Source: ABdhPJy7u+4ml3zz4oUN4dutVgZe3akMeXH6fMY+7p+pSUrZLSQC5HCntH3CHWvZCFCcIR23hTHQQ/80DcL/OWPh7Rs=
+X-Received: by 2002:adf:dd0e:0:b0:20a:c689:f44a with SMTP id
+ a14-20020adfdd0e000000b0020ac689f44amr4023039wrm.40.1651868442397; Fri, 06
+ May 2022 13:20:42 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220506122601.367589-1-adrian.hunter@intel.com> <20220506122601.367589-12-adrian.hunter@intel.com>
-In-Reply-To: <20220506122601.367589-12-adrian.hunter@intel.com>
+References: <20220506122601.367589-1-adrian.hunter@intel.com> <20220506122601.367589-20-adrian.hunter@intel.com>
+In-Reply-To: <20220506122601.367589-20-adrian.hunter@intel.com>
 From:   Ian Rogers <irogers@google.com>
-Date:   Fri, 6 May 2022 13:19:08 -0700
-Message-ID: <CAP-5=fWCAs5cmqzruqEsp_sJ-1BfB4zT+CovwJOKFxBPpFzgkg@mail.gmail.com>
-Subject: Re: [PATCH V2 11/23] perf auxtrace: Remove auxtrace_mmap_params__set_idx()
- per_cpu parameter
+Date:   Fri, 6 May 2022 13:20:28 -0700
+Message-ID: <CAP-5=fUPwVupGkO+h+SnXAi9hHxZJhc-OfuQh_x-OUVxp3FqyA@mail.gmail.com>
+Subject: Re: [PATCH V2 19/23] libperf evlist: Check nr_mmaps is correct
 To:     Adrian Hunter <adrian.hunter@intel.com>
 Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
         Jiri Olsa <jolsa@redhat.com>,
@@ -73,8 +72,8 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 On Fri, May 6, 2022 at 5:26 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
 >
-> Remove auxtrace_mmap_params__set_idx() per_cpu parameter because it isn't
-> needed.
+> Print an error message if the predetermined number of mmaps is
+> incorrect.
 >
 > Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
 
@@ -84,83 +83,63 @@ Thanks,
 Ian
 
 > ---
->  tools/perf/util/auxtrace.c | 5 +++--
->  tools/perf/util/auxtrace.h | 6 ++----
->  tools/perf/util/evlist.c   | 3 +--
->  tools/perf/util/mmap.c     | 3 +--
->  4 files changed, 7 insertions(+), 10 deletions(-)
+>  tools/lib/perf/evlist.c | 11 +++++++++--
+>  1 file changed, 9 insertions(+), 2 deletions(-)
 >
-> diff --git a/tools/perf/util/auxtrace.c b/tools/perf/util/auxtrace.c
-> index b446cfa66469..ac4e4660932d 100644
-> --- a/tools/perf/util/auxtrace.c
-> +++ b/tools/perf/util/auxtrace.c
-> @@ -169,9 +169,10 @@ void auxtrace_mmap_params__init(struct auxtrace_mmap_params *mp,
+> diff --git a/tools/lib/perf/evlist.c b/tools/lib/perf/evlist.c
+> index eae1f6179dad..f51fdb899d19 100644
+> --- a/tools/lib/perf/evlist.c
+> +++ b/tools/lib/perf/evlist.c
+> @@ -23,6 +23,7 @@
+>  #include <perf/cpumap.h>
+>  #include <perf/threadmap.h>
+>  #include <api/fd/array.h>
+> +#include "internal.h"
 >
->  void auxtrace_mmap_params__set_idx(struct auxtrace_mmap_params *mp,
->                                    struct evlist *evlist,
-> -                                  struct evsel *evsel, int idx,
-> -                                  bool per_cpu)
-> +                                  struct evsel *evsel, int idx)
+>  void perf_evlist__init(struct perf_evlist *evlist)
 >  {
-> +       bool per_cpu = !perf_cpu_map__empty(evlist->core.user_requested_cpus);
+> @@ -428,7 +429,7 @@ static void perf_evlist__set_mmap_first(struct perf_evlist *evlist, struct perf_
+>  static int
+>  mmap_per_evsel(struct perf_evlist *evlist, struct perf_evlist_mmap_ops *ops,
+>                int idx, struct perf_mmap_param *mp, int cpu_idx,
+> -              int thread, int *_output, int *_output_overwrite)
+> +              int thread, int *_output, int *_output_overwrite, int *nr_mmaps)
+>  {
+>         struct perf_cpu evlist_cpu = perf_cpu_map__cpu(evlist->all_cpus, cpu_idx);
+>         struct perf_evsel *evsel;
+> @@ -484,6 +485,8 @@ mmap_per_evsel(struct perf_evlist *evlist, struct perf_evlist_mmap_ops *ops,
+>                         if (ops->mmap(map, mp, *output, evlist_cpu) < 0)
+>                                 return -1;
+>
+> +                       *nr_mmaps += 1;
 > +
->         mp->mmap_needed = evsel->needs_auxtrace_mmap;
->
->         if (!mp->mmap_needed)
-> diff --git a/tools/perf/util/auxtrace.h b/tools/perf/util/auxtrace.h
-> index 37feae003904..87a3b564a7de 100644
-> --- a/tools/perf/util/auxtrace.h
-> +++ b/tools/perf/util/auxtrace.h
-> @@ -493,8 +493,7 @@ void auxtrace_mmap_params__init(struct auxtrace_mmap_params *mp,
->                                 bool auxtrace_overwrite);
->  void auxtrace_mmap_params__set_idx(struct auxtrace_mmap_params *mp,
->                                    struct evlist *evlist,
-> -                                  struct evsel *evsel, int idx,
-> -                                  bool per_cpu);
-> +                                  struct evsel *evsel, int idx);
->
->  typedef int (*process_auxtrace_t)(struct perf_tool *tool,
->                                   struct mmap *map,
-> @@ -867,8 +866,7 @@ void auxtrace_mmap_params__init(struct auxtrace_mmap_params *mp,
->                                 bool auxtrace_overwrite);
->  void auxtrace_mmap_params__set_idx(struct auxtrace_mmap_params *mp,
->                                    struct evlist *evlist,
-> -                                  struct evsel *evsel, int idx,
-> -                                  bool per_cpu);
-> +                                  struct evsel *evsel, int idx);
->
->  #define ITRACE_HELP ""
->
-> diff --git a/tools/perf/util/evlist.c b/tools/perf/util/evlist.c
-> index 996bdc203616..25eae096bdac 100644
-> --- a/tools/perf/util/evlist.c
-> +++ b/tools/perf/util/evlist.c
-> @@ -753,10 +753,9 @@ perf_evlist__mmap_cb_idx(struct perf_evlist *_evlist,
+>                         if (!idx)
+>                                 perf_evlist__set_mmap_first(evlist, map, overwrite);
+>                 } else {
+> @@ -518,6 +521,7 @@ mmap_per_cpu(struct perf_evlist *evlist, struct perf_evlist_mmap_ops *ops,
 >  {
->         struct evlist *evlist = container_of(_evlist, struct evlist, core);
->         struct mmap_params *mp = container_of(_mp, struct mmap_params, core);
-> -       bool per_cpu = !perf_cpu_map__empty(_evlist->user_requested_cpus);
->         struct evsel *evsel = container_of(_evsel, struct evsel, core);
+>         int nr_threads = perf_thread_map__nr(evlist->threads);
+>         int nr_cpus    = perf_cpu_map__nr(evlist->all_cpus);
+> +       int nr_mmaps = 0;
+>         int cpu, thread;
 >
-> -       auxtrace_mmap_params__set_idx(&mp->auxtrace_mp, evlist, evsel, idx, per_cpu);
-> +       auxtrace_mmap_params__set_idx(&mp->auxtrace_mp, evlist, evsel, idx);
->  }
+>         for (cpu = 0; cpu < nr_cpus; cpu++) {
+> @@ -526,11 +530,14 @@ mmap_per_cpu(struct perf_evlist *evlist, struct perf_evlist_mmap_ops *ops,
 >
->  static struct perf_mmap*
-> diff --git a/tools/perf/util/mmap.c b/tools/perf/util/mmap.c
-> index de59c4da852b..a4dff881be39 100644
-> --- a/tools/perf/util/mmap.c
-> +++ b/tools/perf/util/mmap.c
-> @@ -63,8 +63,7 @@ void __weak auxtrace_mmap_params__init(struct auxtrace_mmap_params *mp __maybe_u
->  void __weak auxtrace_mmap_params__set_idx(struct auxtrace_mmap_params *mp __maybe_unused,
->                                           struct evlist *evlist __maybe_unused,
->                                           struct evsel *evsel __maybe_unused,
-> -                                         int idx __maybe_unused,
-> -                                         bool per_cpu __maybe_unused)
-> +                                         int idx __maybe_unused)
->  {
->  }
+>                 for (thread = 0; thread < nr_threads; thread++) {
+>                         if (mmap_per_evsel(evlist, ops, cpu, mp, cpu,
+> -                                          thread, &output, &output_overwrite))
+> +                                          thread, &output, &output_overwrite, &nr_mmaps))
+>                                 goto out_unmap;
+>                 }
+>         }
 >
+> +       if (nr_mmaps != evlist->nr_mmaps)
+> +               pr_err("Miscounted nr_mmaps %d vs %d\n", nr_mmaps, evlist->nr_mmaps);
+> +
+>         return 0;
+>
+>  out_unmap:
 > --
 > 2.25.1
 >

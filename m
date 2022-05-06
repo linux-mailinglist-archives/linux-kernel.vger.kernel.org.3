@@ -2,125 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4079751CF1E
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 04:55:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C0D351CF20
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 04:57:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1388379AbiEFC6v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 22:58:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32924 "EHLO
+        id S1388393AbiEFDAb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 23:00:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238954AbiEFC6u (ORCPT
+        with ESMTP id S238954AbiEFDA2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 22:58:50 -0400
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 977725E766
-        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 19:55:08 -0700 (PDT)
-Received: by mail-pf1-x432.google.com with SMTP id 204so2392416pfx.3
-        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 19:55:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=3hj/jfOaQXOkC4b3O+Uwk43J8h5RNvR2pkooULEnEqo=;
-        b=ZHWVqdJvM3snMYIQCQ03G97OmyaRbKSWVLPFV6RXnmCiaWbeNIyTkoa7bBbix9VOmX
-         WHLmokvAOwlvsqgTukFucC0JKQ6549H2l1JJ5aYDY8KMJdf8cXH0MYgOuGh9Jx2J5rT/
-         s0iUpSM5E1hPMNtulZETEay1z9nQihakar8oIozmgFNDD+KTksMwO8x9e0JFuBCJdatB
-         4nx/VKl+f/RzcADM7m4Kni3mLbHw680egpnxxcc3d+22daJmj+1gHAI7f8EPHh2OJnUA
-         TK3JQdxFh4hNLIukCLDgIQqpQhIYLFe7w9c1dt5Y11Yu/teWrSBZIHWGoTgmFsfIk34o
-         eh/g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=3hj/jfOaQXOkC4b3O+Uwk43J8h5RNvR2pkooULEnEqo=;
-        b=3P0EciXcB3W91fqe6HjvF+HdCnS0krAoijVF3lf+1hyA/DY3MoRjmwnRGQ9OWh0pVQ
-         dKQK8VwYtYl4TagJ/4yod8O/g3IM0temUm10ma2kEDUB4jYGv8A5InB0LXKqj1Kk0nW3
-         g18TR+FjgLzYTZu7BGafp8w5YxJzRtk7nFrB3YqqaOclrJ3nZ02RDU75A9wnk+mQzOCB
-         IWucq7ulEcNxO1r5Bekgz5GZxb6KA0fm2DDiVTXRbkqjimaUlT1+n27taqchRhBcO35T
-         bj8mTbqThvkAt/8CF3kjTxjBJP9do0cUIogTD1QPoEywaWVs/mMfXAqpo0Lc2VpvGTyv
-         SMBA==
-X-Gm-Message-State: AOAM533eKX8fB8SQ1/l434Nv0pRGKrv/PkT/83al/hXKYM726NVrxQYo
-        0ad0a9SsFeabTly6O091dNk=
-X-Google-Smtp-Source: ABdhPJwKj9SB16lHRYLUthWb1REni4wQf/jwdMI/rg/2pvxdWrn/0GbG5PaBhd44x4u3YvSZ6E8g/A==
-X-Received: by 2002:a63:4e45:0:b0:39d:4d2d:815e with SMTP id o5-20020a634e45000000b0039d4d2d815emr1032891pgl.198.1651805707989;
-        Thu, 05 May 2022 19:55:07 -0700 (PDT)
-Received: from [192.168.11.5] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
-        by smtp.gmail.com with ESMTPSA id d2-20020a170902f14200b0015e8d4eb1efsm372434plb.57.2022.05.05.19.55.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 05 May 2022 19:55:07 -0700 (PDT)
-Message-ID: <18d2ad1d-c2a5-682a-91e8-2d8067e62b30@gmail.com>
-Date:   Fri, 6 May 2022 11:55:02 +0900
+        Thu, 5 May 2022 23:00:28 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABFD15C65F;
+        Thu,  5 May 2022 19:56:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651805806; x=1683341806;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=bm/ECb2jddD2tXLPLMb1gNbwUfVlj/otmAhjYIFTg4o=;
+  b=mvE0HPZdX+AV7TTGgcw3iNdXXL9LVt6gTqIePgswCwBZSgluwtWLFVtO
+   KJYegzsNjzwIgWKUGaYEEge6jOy2NtTS80A/ZIM8+etfdA8fLYWsmLMgt
+   S9esM+JM932gumOuFWxFNPY0PwiF85rIpspCQf0u1+f32mn74UV8dQdxv
+   xU8PpF8ZGIrxjdTlpSQKTD+jt9chhw7uD6RlKuSame6MIb6VyikmMCGYn
+   FIbnU3iNN3xqft0l6rKgxOqUFxqDELCNNk1frOdPUqiCYY/1R3+nr8GMQ
+   ukxUIQDszr8TAaqUJZaCfG08/isfXIz5BaH7Qvb3oKgwsbQd390DtgD/9
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10338"; a="248864370"
+X-IronPort-AV: E=Sophos;i="5.91,203,1647327600"; 
+   d="scan'208";a="248864370"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2022 19:56:46 -0700
+X-IronPort-AV: E=Sophos;i="5.91,203,1647327600"; 
+   d="scan'208";a="735337943"
+Received: from fulaizha-mobl1.ccr.corp.intel.com ([10.254.213.163])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2022 19:56:43 -0700
+Message-ID: <e63ac163c9283ca93d8309be1cdfed6c6ea97e5e.camel@intel.com>
+Subject: Re: [PATCH 1/2] MM: handle THP in swap_*page_fs()
+From:   "ying.huang@intel.com" <ying.huang@intel.com>
+To:     NeilBrown <neilb@suse.de>, Yang Shi <shy828301@gmail.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Christoph Hellwig <hch@lst.de>,
+        Miaohe Lin <linmiaohe@huawei.com>, linux-nfs@vger.kernel.org,
+        Linux MM <linux-mm@kvack.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Date:   Fri, 06 May 2022 10:56:40 +0800
+In-Reply-To: <165170771676.24672.16520001373464213119@noble.neil.brown.name>
+References: <165119280115.15698.2629172320052218921.stgit@noble.brown>
+        , <165119301488.15698.9457662928942765453.stgit@noble.brown>
+        , <CAHbLzko+9nBem8GnxQJ8RQu7bizQMMmS1TNqbRXcgkjUs+JuMw@mail.gmail.com>
+        , <165146539609.24404.4051313590023463843@noble.neil.brown.name>
+        , <CAHbLzkpF4zedBmipjX8Zy5F=Fffez+xgxTAvveaz1nRHb9Wg_Q@mail.gmail.com>
+         <165170771676.24672.16520001373464213119@noble.neil.brown.name>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.38.3-1 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH -lkmm] tools/memory-model/README: Update klitmus7 compat
- table
-Content-Language: en-US
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     Luc Maranget <luc.maranget@inria.fr>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        linux-kernel@vger.kernel.org
-References: <2b237126-88d1-17f2-ce94-2cb679f0b285@gmail.com>
- <20220502165058.GA1790663@paulmck-ThinkPad-P17-Gen-1>
-From:   Akira Yokosawa <akiyks@gmail.com>
-In-Reply-To: <20220502165058.GA1790663@paulmck-ThinkPad-P17-Gen-1>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2 May 2022 09:50:58 -0700,
-Paul E. McKenney wrote:
-> On Mon, May 02, 2022 at 09:05:09PM +0900, Akira Yokosawa wrote:
->> EXPORT_SYMBOL of do_exec() was removed in v5.17.  Unfortunately,
->> kernel modules from klitmus7 7.56 have do_exec() at the end of
->> each kthread.
->>
->> herdtools7 7.56.1 has addressed the issue.
->>
->> Update the compatibility table accordingly.
->>
->> Signed-off-by: Akira Yokosawa <akiyks@gmail.com>
->> Cc: Luc Maranget <luc.maranget@inria.fr>
->> Cc: Jade Alglave <j.alglave@ucl.ac.uk>
->> Cc: stable@vger.kernel.org # v5.17+
->> ---
->> Hi Paul,
->>
->> herdtools7 release 7.56.1 is available at
->> https://github.com/herd/herdtools7/releases/tag/7.56.1,
->> and "opam update/upgrade" should catch it soon.
-
-With the help of Luc, opam repository has accepted 7.56.1.
-
+On Thu, 2022-05-05 at 09:41 +1000, NeilBrown wrote:
+> On Tue, 03 May 2022, Yang Shi wrote:
+> > On Sun, May 1, 2022 at 9:23 PM NeilBrown <neilb@suse.de> wrote:
+> > > 
+> > > On Sat, 30 Apr 2022, Yang Shi wrote:
+> > > > On Thu, Apr 28, 2022 at 5:44 PM NeilBrown <neilb@suse.de> wrote:
+> > > > > 
+> > > > > Pages passed to swap_readpage()/swap_writepage() are not necessarily all
+> > > > > the same size - there may be transparent-huge-pages involves.
+> > > > > 
+> > > > > The BIO paths of swap_*page() handle this correctly, but the SWP_FS_OPS
+> > > > > path does not.
+> > > > > 
+> > > > > So we need to use thp_size() to find the size, not just assume
+> > > > > PAGE_SIZE, and we need to track the total length of the request, not
+> > > > > just assume it is "page * PAGE_SIZE".
+> > > > 
+> > > > Swap-over-nfs doesn't support THP swap IIUC. So SWP_FS_OPS should not
+> > > > see THP at all. But I agree to remove the assumption about page size
+> > > > in this path.
+> > > 
+> > > Can you help me understand this please.  How would the swap code know
+> > > that swap-over-NFS doesn't support THP swap?  There is no reason that
+> > > NFS wouldn't be able to handle 2MB writes.  Even 1GB should work though
+> > > NFS would have to split into several smaller WRITE requests.
+> > 
+> > AFAICT, THP swap is only supported on non-rotate block devices, for
+> > example, SSD, PMEM, etc. IIRC, the swap device has to support the
+> > cluster in order to swap THP. The cluster is only supported by
+> > non-rotate block devices.
+> > 
+> > Looped Ying in, who is the author of THP swap.
 > 
-> Good catch, thank you!
+> I hunted around the code and found that THP swap only happens if a
+> 'cluster_info' is allocated, and that only happens if 
+> 	if (p->bdev && bdev_nonrot(p->bdev)) {
+> in the swapon syscall.
 > 
->> I think this is worth for v5.18, albeit it is a minor update
->> in documentation.
+
+And in get_swap_pages(), the cluster is only allocated for block
+devices.
+
+		if (size == SWAPFILE_CLUSTER) {
+			if (si->flags & SWP_BLKDEV)
+				n_ret = swap_alloc_cluster(si, swp_entries);
+		} else
+			n_ret = scan_swap_map_slots(si, SWAP_HAS_CACHE,
+						    n_goal, swp_entries);
+
+We may remove this restriction in the future if someone can show the
+benefit.
+
+Best Regards,
+Huang, Ying
+
+> I guess "nonrot" is being use as a synonym for "low latency"...
+> So even if NFS was low-latency it couldn't benefit from THP swap.
 > 
-> Good point, but let me give it some thought.
-
-On the second thought, as v5.18-rc6 is expected this weekend,
-I'm OK if this update makes the next (v5.19) merge window.
-
-This is more of a "news" type update and the "Cc: stable" tag
-should work either way.
-
-        Thanks, Akira
-
+> So as you say it is not currently possible for THP pages to be send to
+> NFS for swapout.  It makes sense to prepare for it though I think - if
+> only so that the code is more consistent and less confusing.
 > 
-> 							Thanx, Paul
-> 
->> Thoughts?
->>
->>         Thanks, Akira
-[...]
+> Thanks,
+> NeilBrown
+
+

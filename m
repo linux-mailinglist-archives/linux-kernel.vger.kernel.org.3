@@ -2,251 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E5F451CF62
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 05:23:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CC2751CF88
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 05:31:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238827AbiEFD0w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 23:26:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55146 "EHLO
+        id S1388645AbiEFDet (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 23:34:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1388507AbiEFD0s (ORCPT
+        with ESMTP id S1388596AbiEFDeF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 23:26:48 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF6E05EDD5;
-        Thu,  5 May 2022 20:23:05 -0700 (PDT)
-Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KvbV05frpzhYqf;
-        Fri,  6 May 2022 11:22:32 +0800 (CST)
-Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 6 May 2022 11:23:04 +0800
-Received: from [10.174.178.55] (10.174.178.55) by
- dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 6 May 2022 11:23:02 +0800
-Subject: Re: [PATCH v23 3/6] arm64: kdump: Reimplement crashkernel=X
-To:     Catalin Marinas <catalin.marinas@arm.com>
-CC:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        <x86@kernel.org>, "H . Peter Anvin" <hpa@zytor.com>,
-        <linux-kernel@vger.kernel.org>, Dave Young <dyoung@redhat.com>,
-        Baoquan He <bhe@redhat.com>, Vivek Goyal <vgoyal@redhat.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        <kexec@lists.infradead.org>, Will Deacon <will@kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        <devicetree@vger.kernel.org>, "Jonathan Corbet" <corbet@lwn.net>,
-        <linux-doc@vger.kernel.org>, Randy Dunlap <rdunlap@infradead.org>,
-        Feng Zhou <zhoufeng.zf@bytedance.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Chen Zhou <dingguo.cz@antgroup.com>,
-        "John Donnelly" <John.p.donnelly@oracle.com>,
-        Dave Kleikamp <dave.kleikamp@oracle.com>
-References: <20220505091845.167-1-thunder.leizhen@huawei.com>
- <20220505091845.167-4-thunder.leizhen@huawei.com> <YnQC44KVKirH0vyB@arm.com>
-From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
-Message-ID: <189f24a8-9e9b-b3e9-7ac5-935433ea575b@huawei.com>
-Date:   Fri, 6 May 2022 11:22:51 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+        Thu, 5 May 2022 23:34:05 -0400
+Received: from mx1.cqplus1.com (unknown [113.204.237.245])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 54275D46
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 20:30:14 -0700 (PDT)
+X-MailGates: (flag:4,DYNAMIC,BADHELO,RELAY,NOHOST:PASS)(compute_score:DE
+        LIVER,40,3)
+Received: from 172.28.114.216
+        by mx1.cqplus1.com with MailGates ESMTP Server V5.0(24048:0:AUTH_RELAY)
+        (envelope-from <qinjian@cqplus1.com>); Fri, 06 May 2022 11:23:27 +0800 (CST)
+From:   Qin Jian <qinjian@cqplus1.com>
+To:     krzysztof.kozlowski@linaro.org
+Cc:     robh+dt@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
+        tglx@linutronix.de, maz@kernel.org, p.zabel@pengutronix.de,
+        linux@armlinux.org.uk, arnd@arndb.de,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        Qin Jian <qinjian@cqplus1.com>
+Subject: [PATCH v14 0/9] Add Sunplus SP7021 SoC Support
+Date:   Fri,  6 May 2022 11:23:14 +0800
+Message-Id: <cover.1651805790.git.qinjian@cqplus1.com>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-In-Reply-To: <YnQC44KVKirH0vyB@arm.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.55]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpemm500006.china.huawei.com (7.185.36.236)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This patch series add Sunplus SP7021 SoC support.
 
+Sunplus SP7021 is an ARM Cortex A7 (4 cores) based SoC. It integrates many
+peripherals (ex: UART, I2C, SPI, SDIO, eMMC, USB, SD card and etc.) into a
+single chip. It is designed for industrial control.
 
-On 2022/5/6 1:01, Catalin Marinas wrote:
-> On Thu, May 05, 2022 at 05:18:42PM +0800, Zhen Lei wrote:
->> From: Chen Zhou <chenzhou10@huawei.com>
->>
->> There are following issues in arm64 kdump:
->> 1. We use crashkernel=X to reserve crashkernel in DMA zone, which
->> will fail when there is not enough low memory.
->> 2. If reserving crashkernel above DMA zone, in this case, crash dump
->> kernel will fail to boot because there is no low memory available
->> for allocation.
->>
->> To solve these issues, introduce crashkernel=X,[high,low].
->> The "crashkernel=X,high" is used to select a region above DMA zone, and
->> the "crashkernel=Y,low" is used to allocate specified size low memory.
-> 
-> Thanks for posting the simplified version, though the discussion with
-> Baoquan is still ongoing. AFAICT there is no fallback if crashkernel=
-> fails. The advantage with this series is cleaner code, we set the limits
-> during parsing and don't have to adjust them if some of the first
-> allocation failed.
+SP7021 consists of two chips (dies) in a package. One is called C-chip
+(computing chip). It is a 4-core ARM Cortex A7 CPU. It adopts high-level
+process (22 nm) for high performance computing. The other is called P-
+chip (peripheral chip). It has many peripherals and an ARM A926 added
+especially for real-time control. P-chip is made for customers. It adopts
+low-level process (ex: 0.11 um) to reduce cost.
 
-Yes, I'm currently implementing it in the simplest version, providing only
-the most basic functions. Because the conclusions of this part of the discussion
-are clear. I think I can send the fallback, default low size, and mapping optimization
-patches separately after this basic version is merged. These three functions can
-be discussed separately.
+Refer to (for documentations):
+https://sunplus-tibbo.atlassian.net/wiki/spaces/doc/overview
 
-> 
->> diff --git a/arch/arm64/mm/init.c b/arch/arm64/mm/init.c
->> index 51863f1448c6989..11406f3e1443168 100644
->> --- a/arch/arm64/mm/init.c
->> +++ b/arch/arm64/mm/init.c
->> @@ -90,6 +90,32 @@ phys_addr_t __ro_after_init arm64_dma_phys_limit;
->>  phys_addr_t __ro_after_init arm64_dma_phys_limit = PHYS_MASK + 1;
->>  #endif
->>  
->> +/* Current arm64 boot protocol requires 2MB alignment */
->> +#define CRASH_ALIGN			SZ_2M
->> +
->> +#define CRASH_ADDR_LOW_MAX		arm64_dma_phys_limit
->> +#define CRASH_ADDR_HIGH_MAX		memblock.current_limit
-> 
-> Better use memblock_get_current_limit() if you need to or just
-> MEMBLOCK_ALLOC_ANYWHERE, memblock.current_limit is just a memblock
-> internal. But I think we can go for (PHYS_MASK + 1) if you need
-> something other than MEMBLOCK_ALLOC_ANYWHERE, memblock knows what to
-> allocate anyway.
+Refer to (applications):
+https://tibbo.com/store/plus1.html
 
-Yes, it would be better to use (PHYS_MASK + 1).
+Refer to (applications):
+http://www.sinovoip.com.cn/ecp_view.asp?id=586
 
-> 
->> +static int __init reserve_crashkernel_low(unsigned long long low_size)
->> +{
->> +	unsigned long long low_base;
->> +
->> +	low_base = memblock_phys_alloc_range(low_size, CRASH_ALIGN, 0, CRASH_ADDR_LOW_MAX);
->> +	if (!low_base) {
->> +		pr_err("cannot allocate crashkernel low memory (size:0x%llx).\n", low_size);
->> +		return -ENOMEM;
->> +	}
->> +
->> +	pr_info("crashkernel low memory reserved: 0x%08llx - 0x%08llx (%lld MB)\n",
->> +		low_base, low_base + low_size, low_size >> 20);
->> +
->> +	crashk_low_res.start = low_base;
->> +	crashk_low_res.end   = low_base + low_size - 1;
->> +	insert_resource(&iomem_resource, &crashk_low_res);
->> +
->> +	return 0;
->> +}
->> +
->>  /*
->>   * reserve_crashkernel() - reserves memory for crash kernel
->>   *
->> @@ -100,17 +126,32 @@ phys_addr_t __ro_after_init arm64_dma_phys_limit = PHYS_MASK + 1;
->>  static void __init reserve_crashkernel(void)
->>  {
->>  	unsigned long long crash_base, crash_size;
->> -	unsigned long long crash_max = arm64_dma_phys_limit;
->> +	unsigned long long crash_low_size = 0;
->> +	unsigned long long crash_max = CRASH_ADDR_LOW_MAX;
->> +	char *cmdline = boot_command_line;
->>  	int ret;
->>  
->>  	if (!IS_ENABLED(CONFIG_KEXEC_CORE))
->>  		return;
->>  
->> -	ret = parse_crashkernel(boot_command_line, memblock_phys_mem_size(),
->> +	/* crashkernel=X[@offset] */
->> +	ret = parse_crashkernel(cmdline, memblock_phys_mem_size(),
->>  				&crash_size, &crash_base);
->> -	/* no crashkernel= or invalid value specified */
->> -	if (ret || !crash_size)
->> -		return;
->> +	if (ret || !crash_size) {
-> 
-> I think we should check for ret == -ENOENT only. If the crashkernel=
-> exists but is malformed or the size is 0, we shouldn't bother with
-> high/low at all.
+Changes in v14:
+- clock/sp-sp7021.h: Fix the comments from Krzysztof
+- sunplus,sp7021-clkc.yaml: Fix the comments from Rob
 
-That's right.
+Changes in v13:
+- reset/sp-sp7021.h: Move HW mapping from dt-binding header to driver
+- reset-sunplus.c: Move HW mapping from dt-binding header to driver
+- clock/sp-sp7021.h: Move HW mapping from dt-binding header to driver
+- clk-sp7021.c: Fix the comments from Arnd
+- irq-sp7021-intc.c: Remove empty set_affinity callback function
+- sp7021_defconfig: Fix the comments from Arnd
 
-> 
->> +		ret = parse_crashkernel_high(cmdline, 0, &crash_size, &crash_base);
->> +		if (ret || !crash_size)
->> +			return;
->> +
->> +		/*
->> +		 * crashkernel=Y,low can be specified or not, but invalid value
->> +		 * is not allowed.
->> +		 */
->> +		ret = parse_crashkernel_low(cmdline, 0, &crash_low_size, &crash_base);
->> +		if (ret && (ret != -ENOENT))
->> +			return;
->> +
->> +		crash_max = CRASH_ADDR_HIGH_MAX;
->> +	}
->>  
->>  	crash_size = PAGE_ALIGN(crash_size);
->>  
->> @@ -118,8 +159,7 @@ static void __init reserve_crashkernel(void)
->>  	if (crash_base)
->>  		crash_max = crash_base + crash_size;
->>  
->> -	/* Current arm64 boot protocol requires 2MB alignment */
->> -	crash_base = memblock_phys_alloc_range(crash_size, SZ_2M,
->> +	crash_base = memblock_phys_alloc_range(crash_size, CRASH_ALIGN,
->>  					       crash_base, crash_max);
->>  	if (!crash_base) {
->>  		pr_warn("cannot allocate crashkernel (size:0x%llx)\n",
-> 
-> I personally like this but let's see how the other thread goes. I guess
+Changes in v12:
+- sunplus,sp7021-clkc.yaml: Move 'reg' after 'compatible'
+- sunplus,sp7021-intc.yaml: Move 'reg' after 'compatible'
+- sunplus,reset.yaml: Move 'reg' after 'compatible'
+- Remove wrong reviewed-tags
 
-Me too. This fallback complicates code logic more than just a little.
-I'm not sure why someone would rather add fallback than change the bootup
-options to crashkernel=X,[high|low]. Perhaps fallback to high/low is a better
-compatible and extended mode when crashkernel=X fails to reserve memory. And
-the code logic will be much clearer.
+Changes in v11:
+- clk-sp7021.c: Remove the dead code
 
-//parse crashkernel=X		//To simplify the discussion, Ignore [@offset]
-crash_base = memblock_phys_alloc_range()
-if (!crash_base || /* crashkernel=X is not specified */) {
-	//parse crashkernel=X,[high,low]
-	//reserve high/low memory
-}
+Changes in v10:
+- arm/sunplus,sp7021.yaml: Add SoC compatible: "sunplus,sp7021"
+- clock/sunplus,sp7021-clkc.yaml: Remove the internal clock parent from DTS
+- clk-sp7021.c: Refine the macro DBG_CLK
+- clk-sp7021.c: Refine the clock_parent_data
 
-So that, the following three modes are supported:
-1) crashkernel=X[@offset]
-2) crashkernel=X,high crashkernel=X,low
-3) crashkernel=X[@offset] crashkernel=X,high [crashkernel=Y,low]
+Changes in v9:
+- clk/Kconfig: fix the comments form Stephen Boyd
+- clk-sp7021.c: fix the comments form Stephen Boyd
 
-For case 3), try "crashkernel=X[@offset]" first, if it can not work, fallback
-to "crashkernel=X,high crashkernel=X,low". This looks better than the old "crashkernel=X"
-fallback ---- Select a region under 4G first, and fall back to reserve region above 4G.
+Changes in v8:
+- clk-sp7021.c: fix the comments form Stephen Boyd
 
-Note: when the X of crashkernel=X and crashkernel=X,high are the same, It's equivalent
-to the old "crashkernel=X" fallback.
+Changes in v7:
+- sunplus,sp7021-clkc.yaml: Add clocks & clock-names
+- clk-sp7021.c: fix the comments form Stephen Boyd
+- irq-sp7021-intc.c: fix the comments from Marc
 
-> if we want a fallback, it would come just before the check the above:
-> 
-> 	if (!crash_base && crash_max != CRASH_ADDR_HIGH_MAX) {
-> 		/* attempt high allocation with default low */
-> 		if (!crash_low_size)
-> 			crash_low_size = some default;
-> 		crash_max = CRASH_ADDR_LOW_MAX;
+Changes in v6:
+- reset-sunplus.c: fix the comments from Philipp
+- irq-sp7021-intc.c: fix the comments from Marc
+- mach-sunplus: fix the comments from Arnd
 
-crash_max = CRASH_ADDR_HIGH_MAX; We should fallback to high memory now.
+Changes in v5:
+- reset-sunplus.c: fix strict checks
+- clk/Kconfig: fix spell
+- clk-sp7021.c: using bitfield ops, fix strict checks
+- irqchip/Kconfig: fix spell
+- irq-sp7021-intc.c: cleanup error path in probe, fix strict checks
+- arm/Kconfig: fix spell & typo, remove CONFIG_SERIAL_SUNPLUS
+- mach-sunplus/Kconfig: fix typo
+- sp7021_defconfig: add CONFIG_SERIAL_SUNPLUS
 
-> 		crash_base = memblock_phys_alloc_range();
-> 	}
-> 
-> Well, I guess we end up with your earlier proposal but I think I
-> understand it better now ;).
-> 
+Changes in v4:
+- mach-sunplus: add initial support for SP7021
+- sp7021_defconfig: add generic SP7021 defconfig
+- reset-sunplus: remove Q645 support
+- reset-sunplus.c: refine code based on Philipp's review
+- clk-sp7021: clock defines add prefix, more clean up
+
+Changes in v3:
+- sp7021-intc: remove primary controller mode due to P-chip running Linux
+  not supported any more.
+- sp7021-intc.h: removed, not set ext through the DT but sp_intc_set_ext()
+- sunplus,sp7021-intc.yaml: update descriptions for above changes
+- irq-sp7021-intc.c: more cleanup based on Marc's review
+- all driver's Kconfig removed default, it's selected by platform config
+
+Changes in v2:
+- sunplus,sp7021-intc.yaml: add descrption for "#interrupt-cells", interrupts
+- sunplus,sp7021-intc.yaml: drop "ext0-mask"/"ext1-mask" from DT
+- sunplus,sp7021-intc.yaml: fix example.dt too long error
+- irq-sp7021-intc.c: major rewrite
+- all files with dual license
+
+Qin Jian (9):
+  dt-bindings: arm: sunplus: Add bindings for Sunplus SP7021 SoC boards
+  dt-bindings: reset: Add bindings for SP7021 reset driver
+  reset: Add Sunplus SP7021 reset driver
+  dt-bindings: clock: Add bindings for SP7021 clock driver
+  clk: Add Sunplus SP7021 clock driver
+  dt-bindings: interrupt-controller: Add bindings for SP7021 interrupt
+    controller
+  irqchip: Add Sunplus SP7021 interrupt controller driver
+  ARM: sunplus: Add initial support for Sunplus SP7021 SoC
+  ARM: sp7021_defconfig: Add Sunplus SP7021 defconfig
+
+ .../bindings/arm/sunplus,sp7021.yaml          |  28 +
+ .../bindings/clock/sunplus,sp7021-clkc.yaml   |  51 ++
+ .../sunplus,sp7021-intc.yaml                  |  62 ++
+ .../bindings/reset/sunplus,reset.yaml         |  38 +
+ MAINTAINERS                                   |  17 +
+ arch/arm/Kconfig                              |   2 +
+ arch/arm/Makefile                             |   1 +
+ arch/arm/configs/multi_v7_defconfig           |   1 +
+ arch/arm/configs/sp7021_defconfig             |  59 ++
+ arch/arm/mach-sunplus/Kconfig                 |  27 +
+ arch/arm/mach-sunplus/Makefile                |   9 +
+ arch/arm/mach-sunplus/sp7021.c                |  16 +
+ drivers/clk/Kconfig                           |  10 +
+ drivers/clk/Makefile                          |   1 +
+ drivers/clk/clk-sp7021.c                      | 721 ++++++++++++++++++
+ drivers/irqchip/Kconfig                       |   9 +
+ drivers/irqchip/Makefile                      |   2 +
+ drivers/irqchip/irq-sp7021-intc.c             | 278 +++++++
+ drivers/reset/Kconfig                         |   9 +
+ drivers/reset/Makefile                        |   1 +
+ drivers/reset/reset-sunplus.c                 | 212 +++++
+ include/dt-bindings/clock/sp-sp7021.h         |  88 +++
+ include/dt-bindings/reset/sp-sp7021.h         |  87 +++
+ 23 files changed, 1729 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/arm/sunplus,sp7021.yaml
+ create mode 100644 Documentation/devicetree/bindings/clock/sunplus,sp7021-clkc.yaml
+ create mode 100644 Documentation/devicetree/bindings/interrupt-controller/sunplus,sp7021-intc.yaml
+ create mode 100644 Documentation/devicetree/bindings/reset/sunplus,reset.yaml
+ create mode 100644 arch/arm/configs/sp7021_defconfig
+ create mode 100644 arch/arm/mach-sunplus/Kconfig
+ create mode 100644 arch/arm/mach-sunplus/Makefile
+ create mode 100644 arch/arm/mach-sunplus/sp7021.c
+ create mode 100644 drivers/clk/clk-sp7021.c
+ create mode 100644 drivers/irqchip/irq-sp7021-intc.c
+ create mode 100644 drivers/reset/reset-sunplus.c
+ create mode 100644 include/dt-bindings/clock/sp-sp7021.h
+ create mode 100644 include/dt-bindings/reset/sp-sp7021.h
 
 -- 
-Regards,
-  Zhen Lei
+2.33.1
+

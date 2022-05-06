@@ -2,107 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB82951DFD1
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 21:49:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D584751DFD2
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 21:50:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1391996AbiEFTx3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 15:53:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54774 "EHLO
+        id S1392089AbiEFTyM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 15:54:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229881AbiEFTx0 (ORCPT
+        with ESMTP id S1392131AbiEFTx6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 15:53:26 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8F8C6A42A;
-        Fri,  6 May 2022 12:49:41 -0700 (PDT)
-Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 246JR4Tv013111;
-        Fri, 6 May 2022 19:49:12 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pp1; bh=d9tDzOxYoFTHwKqeI3nR0c9QSnmMLpO3R25jvjp2BoU=;
- b=oBf02/jq4fdEQVxkleC/MlOIWitIXlmDNmH6iVaz73a4/RTmhqoaHsbr3LmNhQhQcKbq
- SDAuG8CfY0NM448DClIM0MywyPbSyX7qhzdeBcRRbUpkj4cqIboWLXuPQ2jDEZ4eBo1S
- FSlI4aYBhrZrwcGzWHE9z7gdx4kKZyr6RB5eY4Fl1IRPW2aOtXDmu+Z5txJtXKQN5Uae
- ID2WhS+8VmbgKyGO2nuNLtVcvVBEkIp8a5dfix6sTuPQ6b6fvY79JJ5Rm0uJ00rMJCww
- 7VAGORGtMzpq93DNidNcxeYmlJtdEKMjZP6xgJpj0h7gInZae6mr9TjEWMPs9yxbcb1J aw== 
-Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fw9ug0anm-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 06 May 2022 19:49:12 +0000
-Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
-        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 246JnAs3021632;
-        Fri, 6 May 2022 19:49:10 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma03fra.de.ibm.com with ESMTP id 3fscdk6mwa-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 06 May 2022 19:49:10 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 246JZfNT55247200
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 6 May 2022 19:35:41 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E162111C050;
-        Fri,  6 May 2022 19:49:06 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 9394F11C04A;
-        Fri,  6 May 2022 19:49:06 +0000 (GMT)
-Received: from osiris (unknown [9.145.25.133])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Fri,  6 May 2022 19:49:06 +0000 (GMT)
-Date:   Fri, 6 May 2022 21:49:04 +0200
-From:   Heiko Carstens <hca@linux.ibm.com>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     Thomas Richter <tmricht@linux.ibm.com>,
-        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andy Lutomirski <luto@kernel.org>
-Subject: Re: [PATCH 1/2] entry: Rename arch_check_user_regs() to
- arch_enter_from_user_mode()
-Message-ID: <YnV7sD3r/PzY+1lA@osiris>
-References: <20220504062351.2954280-1-tmricht@linux.ibm.com>
- <20220504062351.2954280-2-tmricht@linux.ibm.com>
- <87bkwah2p1.ffs@tglx>
+        Fri, 6 May 2022 15:53:58 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 473B26A42F;
+        Fri,  6 May 2022 12:50:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E00B5B80E9E;
+        Fri,  6 May 2022 19:50:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 65DDCC385AC;
+        Fri,  6 May 2022 19:50:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651866612;
+        bh=PYVzOsaqyIFnBW0vYPhJBYe8z0KWXMzyyEIw8eb7s3Y=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=j7e50OOPWY4QBsefK2HmKkaVW3t5lBTw0e4ErIx6d1vctqofZ/SdFXPSXpfjAVj9T
+         0wNAyWw1ICesH1eQRYdKtGy/Lyp4bvK4SHyOl+CaVQZ8SBD8lhWwNsgDOfrLyRQsbq
+         lv3qs3Zao0ygNzliLNbyKgSxDvkxLPCwvGiOLdpsS7ieSa1pK0zJJvZO2eL6NUruvK
+         odDyWsYFZURFe3APoqhtmbFgNag8npt+scpL9TLe15+PmrSDrFmnpcl1ENmMLjefkU
+         eJaPS9B5r2Q/dF8Xig93HajNlHgZ5h9z1gQv9+N2MAtyiXPGvBpyk7t154ICXceNNB
+         pM2ZDftmBmIGw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 495FFF03876;
+        Fri,  6 May 2022 19:50:12 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87bkwah2p1.ffs@tglx>
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: k95cZwgzi8r50lA6U3iXLeytjjD2Udxx
-X-Proofpoint-ORIG-GUID: k95cZwgzi8r50lA6U3iXLeytjjD2Udxx
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-06_07,2022-05-06_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 clxscore=1015
- mlxlogscore=710 impostorscore=0 lowpriorityscore=0 suspectscore=0
- spamscore=0 adultscore=0 phishscore=0 bulkscore=0 priorityscore=1501
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2205060098
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [net PATCH] ipv4: drop dst in multicast routing path
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <165186661229.28900.13083700844153444313.git-patchwork-notify@kernel.org>
+Date:   Fri, 06 May 2022 19:50:12 +0000
+References: <20220505020017.3111846-1-chris.packham@alliedtelesis.co.nz>
+In-Reply-To: <20220505020017.3111846-1-chris.packham@alliedtelesis.co.nz>
+To:     Chris Packham <chris.packham@alliedtelesis.co.nz>
+Cc:     davem@davemloft.net, yoshfuji@linux-ipv6.org, dsahern@kernel.org,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        tgraf@suug.ch, lokesh.dhoundiyal@alliedtelesis.co.nz,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 06, 2022 at 09:38:02PM +0200, Thomas Gleixner wrote:
-> On Wed, May 04 2022 at 08:23, Thomas Richter wrote:
-> > From: Sven Schnelle <svens@linux.ibm.com>
-> >
-> > arch_check_user_regs() is used at the moment to verify that struct pt_regs
-> > contains valid values when entering the kernel from userspace. s390 needs
-> > a place in the generic entry code to modify a cpu data structure when
-> > switching from userspace to kernel mode. As arch_check_user_regs() is
-> > exactly this, rename it to arch_enter_from_user_mode().
-> >
-> > Cc: Thomas Gleixner <tglx@linutronix.de>
-> > Cc: Peter Zijlstra <peterz@infradead.org>
-> > Cc: Andy Lutomirski <luto@kernel.org>
-> > Signed-off-by: Sven Schnelle <svens@linux.ibm.com>
-> 
-> Reviewed-by: Thomas Gleixner <tglx@linutronix.de>
+Hello:
 
-Is it ok for you if this gets routed via the s390 tree?
+This patch was applied to netdev/net.git (master)
+by Jakub Kicinski <kuba@kernel.org>:
+
+On Thu,  5 May 2022 14:00:17 +1200 you wrote:
+> From: Lokesh Dhoundiyal <lokesh.dhoundiyal@alliedtelesis.co.nz>
+> 
+> kmemleak reports the following when routing multicast traffic over an
+> ipsec tunnel.
+> 
+> Kmemleak output:
+> unreferenced object 0x8000000044bebb00 (size 256):
+>   comm "softirq", pid 0, jiffies 4294985356 (age 126.810s)
+>   hex dump (first 32 bytes):
+>     00 00 00 00 00 00 00 00 80 00 00 00 05 13 74 80  ..............t.
+>     80 00 00 00 04 9b bf f9 00 00 00 00 00 00 00 00  ................
+>   backtrace:
+>     [<00000000f83947e0>] __kmalloc+0x1e8/0x300
+>     [<00000000b7ed8dca>] metadata_dst_alloc+0x24/0x58
+>     [<0000000081d32c20>] __ipgre_rcv+0x100/0x2b8
+>     [<00000000824f6cf1>] gre_rcv+0x178/0x540
+>     [<00000000ccd4e162>] gre_rcv+0x7c/0xd8
+>     [<00000000c024b148>] ip_protocol_deliver_rcu+0x124/0x350
+>     [<000000006a483377>] ip_local_deliver_finish+0x54/0x68
+>     [<00000000d9271b3a>] ip_local_deliver+0x128/0x168
+>     [<00000000bd4968ae>] xfrm_trans_reinject+0xb8/0xf8
+>     [<0000000071672a19>] tasklet_action_common.isra.16+0xc4/0x1b0
+>     [<0000000062e9c336>] __do_softirq+0x1fc/0x3e0
+>     [<00000000013d7914>] irq_exit+0xc4/0xe0
+>     [<00000000a4d73e90>] plat_irq_dispatch+0x7c/0x108
+>     [<000000000751eb8e>] handle_int+0x16c/0x178
+>     [<000000001668023b>] _raw_spin_unlock_irqrestore+0x1c/0x28
+> 
+> [...]
+
+Here is the summary with links:
+  - [net] ipv4: drop dst in multicast routing path
+    https://git.kernel.org/netdev/net/c/9e6c6d17d1d6
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+

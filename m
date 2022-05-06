@@ -2,95 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9294351DB13
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 16:48:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C97351DB1D
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 16:51:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1442449AbiEFOvw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 10:51:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48722 "EHLO
+        id S1442477AbiEFOyx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 10:54:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237385AbiEFOvu (ORCPT
+        with ESMTP id S1351730AbiEFOyu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 10:51:50 -0400
-X-Greylist: delayed 12488 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 06 May 2022 07:48:07 PDT
-Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [96.44.175.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65D866AA5C;
-        Fri,  6 May 2022 07:48:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=hansenpartnership.com; s=20151216; t=1651848487;
-        bh=mYBYsb4+IcqpXrniKQp6OcZ7ENW1vFpyI82r9PoW1UM=;
-        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-        b=e/Lc4cT6B8c1Tm4QY5U1muirjRqkwoPTuJpxSkWn+NQQX+Zs0JMVkQGKhHmgZP+WL
-         sfCmchYkopaUYYg5oHuh+nXDeHHhqwrdqPqUUjF2iA7mhSqcHby3gCAEqQrQCIJ1eT
-         nx63fKEamNyzn5K7zKaDf1h/08Wz0HrCFALN/CnU=
-Received: from localhost (localhost [127.0.0.1])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 0B9B3128694D;
-        Fri,  6 May 2022 10:48:07 -0400 (EDT)
-Received: from bedivere.hansenpartnership.com ([127.0.0.1])
-        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id Hfu_FKLUTw1k; Fri,  6 May 2022 10:48:07 -0400 (EDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=hansenpartnership.com; s=20151216; t=1651848486;
-        bh=mYBYsb4+IcqpXrniKQp6OcZ7ENW1vFpyI82r9PoW1UM=;
-        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-        b=pOXX8GI578qtb2rtCb9mYA7vAb4F3V/Ra/z6yIkl6XjdXSjbSetj+XStYQLIlev1g
-         GMVHeakSGIcSEO+4y6dxOljb5rFamXyuxaQah/3IeElP+vLNnpoCKnNMc8vmSabs48
-         OMm/TFP9ZkesKIvsvTtR1RCGP8R0fnPyY01AeBhY=
-Received: from lingrow.rcx-us.ibmmobiledemo.com (unknown [129.41.87.19])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Fri, 6 May 2022 10:54:50 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0311469732
+        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 07:51:06 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 6FD3D1F8DA;
+        Fri,  6 May 2022 14:51:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1651848665; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=2EeefnG5AGR7PlyADAb1h9k2ib8JA+PQGwQZqxKTjr0=;
+        b=qC4Ctuw5+kcP018ILN1cRymV/JDSO8f5FOhxv7A+KVGopmMy/H/mO0Fx96EmvoWpfkfmxx
+        qAUK39iCKPMctBFzKtUXns9izomLttyNbA2Uqd2CPukpa75Bv5hOz7UGLYsAS2Dx7r5h8/
+        MjQDu2roNTDB3aRgiDo9DxRRBp8gsMw=
+Received: from suse.cz (unknown [10.100.201.202])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id F0DC912868FE;
-        Fri,  6 May 2022 10:48:05 -0400 (EDT)
-Message-ID: <80715dbbf1f34853697e3aa6b3c74bc381000cc4.camel@HansenPartnership.com>
-Subject: Re: [PATCH v1 1/3] kallsyms: avoid hardcoding the buffer size
-From:   James Bottomley <James.Bottomley@HansenPartnership.com>
-To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc:     Miguel Ojeda <ojeda@kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Changbin Du <changbin.du@intel.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        rust-for-linux <rust-for-linux@vger.kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>
-Date:   Fri, 06 May 2022 10:48:04 -0400
-In-Reply-To: <CANiq72m0unKrwRrb-tnYZ5w5oodJQ+3wNHMaQazeUSCOfUBJiQ@mail.gmail.com>
-References: <20220505191704.22812-1-ojeda@kernel.org>
-         <20220505191704.22812-2-ojeda@kernel.org>
-         <7e20c844dadacb3dac822220ca108f4d786ceb7d.camel@HansenPartnership.com>
-         <CANiq72m0unKrwRrb-tnYZ5w5oodJQ+3wNHMaQazeUSCOfUBJiQ@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.34.4 
+        by relay2.suse.de (Postfix) with ESMTPS id 1C6572C142;
+        Fri,  6 May 2022 14:51:04 +0000 (UTC)
+Date:   Fri, 6 May 2022 16:51:03 +0200
+From:   Petr Mladek <pmladek@suse.com>
+To:     John Ogness <john.ogness@linutronix.de>
+Cc:     Marco Elver <elver@google.com>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Johannes Berg <johannes.berg@intel.com>,
+        Alexander Potapenko <glider@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Linux Kernel Functional Testing <lkft@linaro.org>
+Subject: Re: [PATCH -printk] printk, tracing: fix console tracepoint
+Message-ID: <YnU113/cOtv7k9tH@alley>
+References: <20220503073844.4148944-1-elver@google.com>
+ <87r15ae8d7.fsf@jogness.linutronix.de>
+ <20220504094636.GA8069@pathway.suse.cz>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220504094636.GA8069@pathway.suse.cz>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-05-06 at 14:58 +0200, Miguel Ojeda wrote:
-> Hi James,
+On Wed 2022-05-04 11:46:36, Petr Mladek wrote:
+> On Tue 2022-05-03 21:20:44, John Ogness wrote:
+> > On 2022-05-03, Marco Elver <elver@google.com> wrote:
+> > > One notable difference is that by moving tracing into printk_sprint(),
+> > > the 'text' will no longer include the "header" (loglevel and timestamp),
+> > > but only the raw message. Arguably this is less of a problem now that
+> > > the console tracepoint happens on the printk() call and isn't delayed.
+> > 
+> > Another slight difference is that messages composed of LOG_CONT pieces
+> > will trigger the tracepoint for each individual piece and _never_ as a
+> > complete line.
+> > 
+> > It was never guaranteed that all LOG_CONT pieces make it into the final
+> > printed line anyway, but with this change it will be guaranteed that
+> > they are always handled separately.
+> > 
+> > I am OK with this change, but like Steven, I agree the the users of that
+> > tracepoint need to chime in.
 > 
-> On Fri, May 6, 2022 at 1:19 PM James Bottomley
-> <James.Bottomley@hansenpartnership.com> wrote:
-> > When you raise KSYM_NAME_LEN to 512, this on stack allocation
-> > becomes 2049 bytes.  How did you manage not to trigger the frame
-> > size warning, which is 1024 on 32 bit and 2048 on 64 bit by
-> > default?
+> My feeling is that the feature is not used much. Otherwise people
+> would complain that it was asynchronous and hard to use.
 > 
-> Thanks for taking a look!
+> I mean that the printk() messages appeared in the trace log
+> asynchronously. So it required some post processing to correctly
+> sort them against other tracing messages. The same result can be
+> achieved by processing printk log buffer, dmesg.log, journalctl.
 > 
-> If you mean `CONFIG_FRAME_WARN`, that applies to kernel objects, not
-> scripts.
+> I guess that we will only find the answer when we push the change
+> into linux-next and mainline. I am going to do so.
 
-Oh, right, I missed that it was a script.  Forget the comment then; we
-only have a restricted stack inside the kernel not in userspace.
+JFYI, the patch has been committed into printk/linux.git,
+branch rework/kthreads.
 
-James
-
-
+Best Regards,
+Petr

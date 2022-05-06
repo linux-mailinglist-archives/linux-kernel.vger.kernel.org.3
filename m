@@ -2,82 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC2CB51CF71
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 05:29:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CE7951CFCC
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 05:42:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1388565AbiEFDcq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 23:32:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59266 "EHLO
+        id S1388811AbiEFDqK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 23:46:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1388539AbiEFDcn (ORCPT
+        with ESMTP id S1388787AbiEFDqG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 23:32:43 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AECA8644C8;
-        Thu,  5 May 2022 20:29:02 -0700 (PDT)
-Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KvbZJ6RLrzGpVl;
-        Fri,  6 May 2022 11:26:16 +0800 (CST)
-Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
- dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 6 May 2022 11:29:01 +0800
-Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
- (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Fri, 6 May
- 2022 11:29:00 +0800
-From:   Yang Yingliang <yangyingliang@huawei.com>
-To:     <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>
-CC:     <snelson@pensando.io>, <davem@davemloft.net>, <kuba@kernel.org>
-Subject: [PATCH] ionic: fix missing pci_release_regions() on error in ionic_probe()
-Date:   Fri, 6 May 2022 11:40:40 +0800
-Message-ID: <20220506034040.2614129-1-yangyingliang@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 5 May 2022 23:46:06 -0400
+Received: from out30-45.freemail.mail.aliyun.com (out30-45.freemail.mail.aliyun.com [115.124.30.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E272B140DA;
+        Thu,  5 May 2022 20:42:23 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R121e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04423;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0VCPvNGc_1651808530;
+Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0VCPvNGc_1651808530)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Fri, 06 May 2022 11:42:21 +0800
+From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+To:     dipenp@nvidia.com
+Cc:     thierry.reding@gmail.com, jonathanh@nvidia.com,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: [PATCH] hte: Remove unused including <linux/version.h>
+Date:   Fri,  6 May 2022 11:42:09 +0800
+Message-Id: <20220506034209.59848-1-jiapeng.chong@linux.alibaba.com>
+X-Mailer: git-send-email 2.20.1.7.g153144c
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.103.91]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpemm500007.china.huawei.com (7.185.36.183)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If ionic_map_bars() fails, pci_release_regions() need be called.
+Eliminate the follow versioncheck warning:
 
-Fixes: fbfb8031533c ("ionic: Add hardware init and device commands")
-Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+./drivers/hte/hte-tegra194-test.c: 8 linux/version.h not needed.
+
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
 ---
- drivers/net/ethernet/pensando/ionic/ionic_bus_pci.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/hte/hte-tegra194-test.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/pensando/ionic/ionic_bus_pci.c b/drivers/net/ethernet/pensando/ionic/ionic_bus_pci.c
-index 6ffc62c41165..0a7a757494bc 100644
---- a/drivers/net/ethernet/pensando/ionic/ionic_bus_pci.c
-+++ b/drivers/net/ethernet/pensando/ionic/ionic_bus_pci.c
-@@ -256,7 +256,7 @@ static int ionic_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
+diff --git a/drivers/hte/hte-tegra194-test.c b/drivers/hte/hte-tegra194-test.c
+index bc3ab18dfdc5..6a3e57b57a34 100644
+--- a/drivers/hte/hte-tegra194-test.c
++++ b/drivers/hte/hte-tegra194-test.c
+@@ -5,7 +5,6 @@
+  * Author: Dipen Patel <dipenp@nvidia.com>
+  */
  
- 	err = ionic_map_bars(ionic);
- 	if (err)
--		goto err_out_pci_disable_device;
-+		goto err_out_pci_release_regions;
- 
- 	/* Configure the device */
- 	err = ionic_setup(ionic);
-@@ -360,6 +360,7 @@ static int ionic_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
- 
- err_out_unmap_bars:
- 	ionic_unmap_bars(ionic);
-+err_out_pci_release_regions:
- 	pci_release_regions(pdev);
- err_out_pci_disable_device:
- 	pci_disable_device(pdev);
+-#include <linux/version.h>
+ #include <linux/err.h>
+ #include <linux/module.h>
+ #include <linux/moduleparam.h>
 -- 
-2.25.1
+2.20.1.7.g153144c
 

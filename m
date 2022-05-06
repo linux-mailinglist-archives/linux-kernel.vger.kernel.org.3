@@ -2,100 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD93D51E13D
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 23:36:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91D2451E13F
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 23:36:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1444544AbiEFVj0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 17:39:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57028 "EHLO
+        id S1345910AbiEFVjm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 17:39:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1444570AbiEFVjG (ORCPT
+        with ESMTP id S1354971AbiEFVjk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 17:39:06 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 372F1290;
-        Fri,  6 May 2022 14:35:20 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id z5-20020a17090a468500b001d2bc2743c4so7937216pjf.0;
-        Fri, 06 May 2022 14:35:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=i4ODuIClhs3mPszvinEDNPwzFTB2SCM7aKWWSn8J0uI=;
-        b=ZobUQTJx+NEoOz7HvidPGdMS7pGKQYEvaMWHSkM0LrrT6xvFzsqRlO8aabdUfk5mzA
-         WAA2gQ7JSMyXLNUMRob2kQl5ERwLxOJ2TkuCeceApSb8CPToTX5+rYaOc+1tcw5gg1Br
-         7SVE3oSloMmZlo6LHAFw4xmpUoIo3tI/ITUkxK5fr1rV84MGytDKKoGyceW6oPKJpYzu
-         /roz5hcWkLX7E2Wm1fgGGypKwUltKCTWHToCeXoq5qEMdzN1UN5eWqvyC1KKII/boOsN
-         9XxfX8biWIIfNEmkVv2/GQ0CM3ODhwDpG3bBlExPQabUZdRprNM2RcKRAcEsCwuNKBdJ
-         vnxQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=i4ODuIClhs3mPszvinEDNPwzFTB2SCM7aKWWSn8J0uI=;
-        b=1CokWBJ4/UWZYRM7o7AbkoYHJqqb3kOQ/yhizM3BYvJuYi2Z/yt8XvkAkgEJovZZa/
-         MRtpVCzn9MWwc61abQ5nScsX64bvrkg2H1KQESu60/e451xYexv45+/365rMYraKrJ8j
-         rcknpiEEm01PddEpH+6fq4tUUxmN8fdUT6v9vCgTkhuTEohO+MVveUE6Np98g5XNz8MG
-         shCRg91GTqls8r5lHcY/GuZFPPUrlPAXziedYxzleDECdrrwYUqlW0jkyEUcsMYK6aAi
-         eIaVwlBw9XVIf3gwdReQwNBz6Aphh78cdNVy0HMYJZ6DNkpfqopFcu4lbG+IHMXV6LvM
-         1F9w==
-X-Gm-Message-State: AOAM533yzY4HsDvfPFULcwUmW34XgfU1ryVfetLJbcElxKWcrUGqmg3O
-        KkAWXQLbnzF5r5qMfvh8ODliwRjWlec=
-X-Google-Smtp-Source: ABdhPJxfE2Zwmmn+Pr9mn2jUdfULvWEfYj/0IErCyVgFBWuR1SqIzLe8Zj3cUVEiQ+lBKOLIVVylRQ==
-X-Received: by 2002:a17:90a:9ea:b0:1dc:1c48:eda with SMTP id 97-20020a17090a09ea00b001dc1c480edamr14473942pjo.38.1651872919617;
-        Fri, 06 May 2022 14:35:19 -0700 (PDT)
-Received: from localhost (c-107-3-154-88.hsd1.ca.comcast.net. [107.3.154.88])
-        by smtp.gmail.com with ESMTPSA id n3-20020a056a0007c300b0050e0dadb28dsm3846324pfu.205.2022.05.06.14.35.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 May 2022 14:35:19 -0700 (PDT)
-Date:   Fri, 6 May 2022 14:35:18 -0700
-From:   Isaku Yamahata <isaku.yamahata@gmail.com>
-To:     Xiaoyao Li <xiaoyao.li@intel.com>
-Cc:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, isaku.yamahata@gmail.com,
-        Paolo Bonzini <pbonzini@redhat.com>, erdemaktas@google.com,
-        Sean Christopherson <seanjc@google.com>,
-        Sagi Shahar <sagis@google.com>
-Subject: Re: [RFC PATCH v6 017/104] KVM: TDX: Add C wrapper functions for
- SEAMCALLs to the TDX module
-Message-ID: <20220506213518.GB2145958@private.email.ne.jp>
-References: <cover.1651774250.git.isaku.yamahata@intel.com>
- <b4cfd2e1b4daf91899a95ab3e2a4e2ea1d25773c.1651774250.git.isaku.yamahata@intel.com>
- <16632b27-7a0d-887b-c86e-9e1673840f55@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <16632b27-7a0d-887b-c86e-9e1673840f55@intel.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 6 May 2022 17:39:40 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A254E11C14;
+        Fri,  6 May 2022 14:35:55 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 114ACB839B1;
+        Fri,  6 May 2022 21:35:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id CC4DAC385A9;
+        Fri,  6 May 2022 21:35:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651872951;
+        bh=uif5qSoOd4svX7t8pgNrtqryaK/4SsZVfdNrsbtTDyU=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=GEPhz76vRWYhkGuPG0SJ6UDZcOg0S06M0Ol4YkCQ0ozCtl8jHRk41Osd7DfQ4p9Yg
+         UQARd0a1v87nvKuPX7qDSsmvi2klWtcvgeKay6rELdCV04tHi9Kc9PBkcIKNml9yI5
+         J7WrhU2mCMca6v8f2y6bHiTorn28AaknhW+wVp55js7p3QQsEK7N+cPvFAvQIhvTSj
+         56shF2WbctDK8kX93wy4bfhBYnGLdE+nodoH4qZ535yV6bu/4zo7Pxal+vGMgNwwEG
+         c6lpS9rey5JuBrOjpViPm4grviM9i8BOulGLnPNnfx2iqVDfXdfX/9i1qFFhPMSGYU
+         csRkrOQJh5zOA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B7F42F03876;
+        Fri,  6 May 2022 21:35:51 +0000 (UTC)
+Subject: Re: [GIT PULL] Btrfs fixes for 5.18-rc6, part 2
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <cover.1651860315.git.dsterba@suse.com>
+References: <cover.1651860315.git.dsterba@suse.com>
+X-PR-Tracked-List-Id: <linux-btrfs.vger.kernel.org>
+X-PR-Tracked-Message-Id: <cover.1651860315.git.dsterba@suse.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/kdave/linux.git for-5.18-rc5-tag
+X-PR-Tracked-Commit-Id: 3e1ad196385c65c1454aceab1226d9a4baca27d5
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 4b97bac0756a81cda5afd45417a99b5bccdcff67
+Message-Id: <165187295174.17607.2726486271724468528.pr-tracker-bot@kernel.org>
+Date:   Fri, 06 May 2022 21:35:51 +0000
+To:     David Sterba <dsterba@suse.com>
+Cc:     torvalds@linux-foundation.org, linux-btrfs@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 06, 2022 at 04:56:52PM +0800,
-Xiaoyao Li <xiaoyao.li@intel.com> wrote:
+The pull request you sent on Fri, 6 May 2022 22:55:06 +0200:
 
-> On 5/6/2022 2:14 AM, isaku.yamahata@intel.com wrote:
-> > diff --git a/arch/x86/virt/vmx/tdx/seamcall.S b/arch/x86/virt/vmx/tdx/seamcall.S
-> > index 8df7a16f7685..b4fc8182e1cf 100644
-> > --- a/arch/x86/virt/vmx/tdx/seamcall.S
-> > +++ b/arch/x86/virt/vmx/tdx/seamcall.S
-> > @@ -50,3 +50,4 @@ SYM_FUNC_START(__seamcall)
-> >   	FRAME_END
-> >   	ret
-> >   SYM_FUNC_END(__seamcall)
-> > +EXPORT_SYMBOL_GPL(__seamcall)
-> 
-> It cannot compile, we need
-> 
-> #include <asm/export.h>
+> git://git.kernel.org/pub/scm/linux/kernel/git/kdave/linux.git for-5.18-rc5-tag
 
-Thanks, will fix it.
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/4b97bac0756a81cda5afd45417a99b5bccdcff67
+
+Thank you!
 
 -- 
-Isaku Yamahata <isaku.yamahata@gmail.com>
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html

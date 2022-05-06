@@ -2,161 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E85BB51DF73
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 21:05:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5403751DF76
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 21:06:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1388891AbiEFTJU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 15:09:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46224 "EHLO
+        id S1389460AbiEFTKY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 15:10:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386675AbiEFTJN (ORCPT
+        with ESMTP id S245289AbiEFTKV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 15:09:13 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26DF51115B
-        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 12:05:28 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id o69so7796050pjo.3
-        for <linux-kernel@vger.kernel.org>; Fri, 06 May 2022 12:05:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=XY52lokW3Gz896dORyk3XbXtZ36Z+nGvhDg4ZfkIyOw=;
-        b=nrZYCL9vNGmBRbVEBTZhmaePhgNibPPAvI1Ko/g0AOz0bOG4W9sIEtGysQh3cEmzBs
-         zXGxN0uMR+Orc2tDBLFiEfS/yb48EqYdNmEE6CwZHTJpjavlfVk9w4BiZRSR+0VzdKBK
-         28QbwtVSMjLavuMay9vGRa81DfVb3cv8CgOl6vdELBAyk7WWjv7fBq8I3tWaoRzvDgJk
-         pZ95y0n6N4qBhzWRiTQnMFQv+ZTFXbFjxAb1CNW7Db4sSyEiNS13b6kPAkrH+ReLf+g8
-         +YQybLKwPlyDZ00e6pYM00rWFSOaf2FHX1h8c0jLr0wNxhYjn8UyQ2nszC6707Kej2Gh
-         GzxQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=XY52lokW3Gz896dORyk3XbXtZ36Z+nGvhDg4ZfkIyOw=;
-        b=LguR+Ycq+iNrT/O548r3ZuV7m+CDWfkBMcOUGgszq/ttxuXd5znebYcHE383B0s6hM
-         NFmNL4gBBjkxg3dOP61MwQjf7f+u5dsZkgd7Ur3eTvw0gr9lgwVDZTDyth+5p9kBNcrA
-         GWB1J79dR6syDgaBMBh2zSWRtsJYPLfJ86ieupdSs3RBnR2NsDmx60LHy3DqlwlELrql
-         9qvHQXAW3ZQRkJ6t8cr0ylwSDsZ55PxeOWiydGYFdHXFP0Ix7K6AhEH3sPqNQbF59aRm
-         lGqvlc08ikrgX4dQMwvOcWHqKth7ow6kuZkVivDQVkLuke9F+KZy+E65ZVL+Cx9gYDGQ
-         cufg==
-X-Gm-Message-State: AOAM530KRRZyY8VmP1k++0VgeUvUVtsXhPjl+B9+otcIMLM9JBVhAjHE
-        FUdj2buF51sqefFF/VNfSWlVwBwNgLLzf7TUKc0=
-X-Google-Smtp-Source: ABdhPJyd+cRv1GOJhxyYaGhWmVSwV+3xawEPq8StjvWp2gy3AptjgQf6GqaQLBqehGf7+oR/DcvFTkbbqoE8JKCoGXY=
-X-Received: by 2002:a17:902:e851:b0:15e:93ac:41db with SMTP id
- t17-20020a170902e85100b0015e93ac41dbmr5065327plg.26.1651863928520; Fri, 06
- May 2022 12:05:28 -0700 (PDT)
+        Fri, 6 May 2022 15:10:21 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC262FD1A;
+        Fri,  6 May 2022 12:06:34 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1651863992;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=wxjZwQifAYdhM0J4VQYq2cjp3Wo71QrUD1AE1URfaSg=;
+        b=vOcUd/lmDHJJL+Wjm7RLEdKcEcChnT4ZknvyLz64mOH/YEleSdhoaACEWCfVrpMZf3A2am
+        Xyd7ivGV3f4PUKlHc9Z46RGJK4DMUAkgmDEBZlybFFaob76fScq/QSdbFGudmcwauravCz
+        vOS6gK9DMgTuoGviLkslDRGocC6PWKDkn9qxcoCnBMeKj/g0sbk8LAkGdlMH/YL2PQ9UUD
+        xxd/1a/oiEv1Af2UivDg66d0eQ1XtEAIZ8ljQT9SfOwCdbCyPpdsoWol7rd2OyC3LRe1WC
+        xhs30NLrjE0Ac4eiJCcLyftkzVrZzu7TdS8Nq0nhaHAxhMNBR+0UlZvSWdD+PQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1651863992;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=wxjZwQifAYdhM0J4VQYq2cjp3Wo71QrUD1AE1URfaSg=;
+        b=p8bHn1UkvG9MTT6yYjW8yIhIvMPQ05zlVK7KctnyNqRnOmtOfthHCPxamNZoKpTvMHi0N8
+        /B8gZ//KBFrmRQDg==
+To:     "Luck, Tony" <tony.luck@intel.com>
+Cc:     hdegoede@redhat.com, markgross@kernel.org, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, corbet@lwn.net, gregkh@linuxfoundation.org,
+        andriy.shevchenko@linux.intel.com, jithu.joseph@intel.com,
+        ashok.raj@intel.com, rostedt@goodmis.org, dan.j.williams@intel.com,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org, patches@lists.linux.dev,
+        ravi.v.shankar@intel.com
+Subject: Re: [PATCH v6 08/11] platform/x86/intel/ifs: Add scan test support
+In-Reply-To: <YnVtvJgWU5KDnGSl@agluck-desk3.sc.intel.com>
+References: <20220428153849.295779-1-tony.luck@intel.com>
+ <20220506014035.1173578-1-tony.luck@intel.com>
+ <20220506014035.1173578-9-tony.luck@intel.com> <87r156hjpl.ffs@tglx>
+ <YnVtvJgWU5KDnGSl@agluck-desk3.sc.intel.com>
+Date:   Fri, 06 May 2022 21:06:32 +0200
+Message-ID: <87ee16h45j.ffs@tglx>
 MIME-Version: 1.0
-References: <CAAPL-u9sVx94ACSuCVN8V0tKp+AMxiY89cro0japtyB=xNfNBw@mail.gmail.com>
- <CAHbLzkq1YXXLMiREpGnzhJjPssu4WpSsnkTmrLJ=hAEhZVUr9w@mail.gmail.com> <CAPcyv4g7kyPsSKGT1rR4yy680VD6UJ8V7wzj0OUqN2y2-PjOpQ@mail.gmail.com>
-In-Reply-To: <CAPcyv4g7kyPsSKGT1rR4yy680VD6UJ8V7wzj0OUqN2y2-PjOpQ@mail.gmail.com>
-From:   Yang Shi <shy828301@gmail.com>
-Date:   Fri, 6 May 2022 12:05:16 -0700
-Message-ID: <CAHbLzko9PxCzDUdVGOFQuy0o8R4H2k5Qo_+gkMUSdd3=b1tSWw@mail.gmail.com>
-Subject: Re: RFC: Memory Tiering Kernel Interfaces
-To:     Dan Williams <dan.j.williams@intel.com>
-Cc:     Wei Xu <weixugc@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Huang Ying <ying.huang@intel.com>,
-        Linux MM <linux-mm@kvack.org>,
-        Greg Thelen <gthelen@google.com>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Jagdish Gediya <jvgediya@linux.ibm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Alistair Popple <apopple@nvidia.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Michal Hocko <mhocko@kernel.org>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Brice Goglin <brice.goglin@gmail.com>,
-        Feng Tang <feng.tang@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 1, 2022 at 11:35 AM Dan Williams <dan.j.williams@intel.com> wrote:
+On Fri, May 06 2022 at 11:49, Luck, Tony wrote:
+> On Fri, May 06, 2022 at 03:30:30PM +0200, Thomas Gleixner wrote:
+>> 1) How is that supposed to work on a system which has HT enabled in BIOS,
+>>    but disabled on the kernel command line or via /sys/..../smt/control or
+>>    when a HT sibling is offlined temporarily?
+>> 
+>>    I assume it cannot work, but I can't see anything which handles those
+>>    cases.
 >
-> On Fri, Apr 29, 2022 at 8:59 PM Yang Shi <shy828301@gmail.com> wrote:
-> >
-> > Hi Wei,
-> >
-> > Thanks for the nice writing. Please see the below inline comments.
-> >
-> > On Fri, Apr 29, 2022 at 7:10 PM Wei Xu <weixugc@google.com> wrote:
-> > >
-> > > The current kernel has the basic memory tiering support: Inactive
-> > > pages on a higher tier NUMA node can be migrated (demoted) to a lower
-> > > tier NUMA node to make room for new allocations on the higher tier
-> > > NUMA node.  Frequently accessed pages on a lower tier NUMA node can be
-> > > migrated (promoted) to a higher tier NUMA node to improve the
-> > > performance.
-> > >
-> > > A tiering relationship between NUMA nodes in the form of demotion path
-> > > is created during the kernel initialization and updated when a NUMA
-> > > node is hot-added or hot-removed.  The current implementation puts all
-> > > nodes with CPU into the top tier, and then builds the tiering hierarchy
-> > > tier-by-tier by establishing the per-node demotion targets based on
-> > > the distances between nodes.
-> > >
-> > > The current memory tiering interface needs to be improved to address
-> > > several important use cases:
-> > >
-> > > * The current tiering initialization code always initializes
-> > >   each memory-only NUMA node into a lower tier.  But a memory-only
-> > >   NUMA node may have a high performance memory device (e.g. a DRAM
-> > >   device attached via CXL.mem or a DRAM-backed memory-only node on
-> > >   a virtual machine) and should be put into the top tier.
-> > >
-> > > * The current tiering hierarchy always puts CPU nodes into the top
-> > >   tier. But on a system with HBM (e.g. GPU memory) devices, these
-> > >   memory-only HBM NUMA nodes should be in the top tier, and DRAM nodes
-> > >   with CPUs are better to be placed into the next lower tier.
-> > >
-> > > * Also because the current tiering hierarchy always puts CPU nodes
-> > >   into the top tier, when a CPU is hot-added (or hot-removed) and
-> > >   triggers a memory node from CPU-less into a CPU node (or vice
-> > >   versa), the memory tiering hierarchy gets changed, even though no
-> > >   memory node is added or removed.  This can make the tiering
-> > >   hierarchy much less stable.
-> >
-> > I'd prefer the firmware builds up tiers topology then passes it to
-> > kernel so that kernel knows what nodes are in what tiers. No matter
-> > what nodes are hot-removed/hot-added they always stay in their tiers
-> > defined by the firmware. I think this is important information like
-> > numa distances. NUMA distance alone can't satisfy all the usecases
-> > IMHO.
+> Correct. If HT is disabled in BIOS, then there is no other thread, so
+> core tests just use a single thread.
 >
-> Just want to note here that the platform firmware can only describe
-> the tiers of static memory present at boot. CXL hotplug breaks this
-> model and the kernel is left to dynamically determine the device's
-> performance characteristics and the performance of the topology to
-> reach that device. Now, the platform firmware does set expectations
-> for the perfomance class of different memory ranges, but there is no
-> way to know in advance the performance of devices that will be asked
-> to be physically or logically added to the memory configuration. That
-> said, it's probably still too early to define ABI for those
-> exceptional cases where the kernel needs to make a policy decision
-> about a device that does not fit into the firmware's performance
-> expectations, but just note that there are limits to the description
-> that platform firmware can provide.
+> If a logical CPU is "offline" due to Linux actions, then core test will
+> fail. In an earlier version we did attempt to detect this before trying
+> to run the test. But we didn't find a simple way to determine that a
+> core has one thread online, and another offline. Rather than a bunch of
+> code to detect an operator error it seemed better to let it run &
+> fail.
 
-Thanks, Dan. I don't know too much about CXL. Is it possible to make
-it static? For example, put it into a default tier (for example, the
-lowest tier) as long as CXL is available regardless of whether there
-is any device connected or not? Then the kernel driver could probe
-some information and move it to the proper tier once the device is hot
-plugged. Anyway, just off the top of my head.
+Fair enough.
 
+> GregKH wasn't a fan of this itty bitty driver cluttering up
+> Documentation/x86. He said:
 >
-> I agree that NUMA distance alone is inadequate and the kernel needs to
-> make better use of data like ACPI HMAT to determine the default
-> tiering order.
+>    I don't know which is better, it's just that creating a whole new
+>    documentation file for a single tiny driver feels very odd as it will
+>    get out of date and is totally removed from the driver itself.
+>
+>    I'd prefer that drivers be self-contained, including the documentation,
+>    as it is much more obvious what is happening with that.  Spreading stuff
+>    around the tree only causes stuff to get out of sync easier.
 
-Yeah, we are on the same page.
+Well, I agree to some extent, but the documentation which I want to see
+is documentation for admins. I'm not sure whether we want them to search
+the code. Those are consumers of Documentation/ AFAICT.
+
+> So the documentation patch was dropped after v3. Last version here:
+>
+> https://lore.kernel.org/r/20220419163859.2228874-3-tony.luck@intel.com
+>
+> That doc would need pathnames updated to match the move from a platform
+> device to a virtual misc device. But otherwise seems still accurate.
+>
+> Does that cover what you want from documentation for this driver
+> (wherever it gets located in the tree)? Are you looking for more?
+
+It's pretty detailed on the inner workings, but lacks a big fat warning
+for the admin vs. the impact, i.e. that it makes the core go out for
+lunch for a while, which has consequences on workloads and interrupts
+directed at that core. Plus some explanation vs. the HT (SMT=off, soft
+offline) case above. Similar to what we have e.g. for buslocks.
+
+Thanks,
+
+        tglx
+

@@ -2,112 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C09B151D197
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 08:46:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D295451D194
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 08:46:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382873AbiEFGtN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 02:49:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41132 "EHLO
+        id S1382331AbiEFGtV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 02:49:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381506AbiEFGsj (ORCPT
+        with ESMTP id S1386293AbiEFGtQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 02:48:39 -0400
-Received: from smtp-fw-6001.amazon.com (smtp-fw-6001.amazon.com [52.95.48.154])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96ED266ACE;
-        Thu,  5 May 2022 23:44:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.de; i=@amazon.de; q=dns/txt; s=amazon201209;
-  t=1651819497; x=1683355497;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=FXnVciHi1BeC9OQGqN0ZXnjBw90BfiK1awUcDweGloY=;
-  b=ftp+1IGDWU/0YFjqy+5c0/IlxEgkM7Y9GHxbFg4M9mpOZXVdTfhyyymd
-   QGFaERVGEygvwsaL8CPjtTx7mx76EGeSEkd5qRprD97mfEo1s0se/XYFr
-   i9auM0gbyXTalP1NiX/PDEPQXvMygbEhKbpa5Ut5UJPOtKea+xbtuqkkq
-   c=;
-X-IronPort-AV: E=Sophos;i="5.91,203,1647302400"; 
-   d="scan'208";a="200507439"
-Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-pdx-2b-1f9d5b26.us-west-2.amazon.com) ([10.43.8.6])
-  by smtp-border-fw-6001.iad6.amazon.com with ESMTP; 06 May 2022 06:44:46 +0000
-Received: from EX13D08EUC002.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
-        by email-inbound-relay-pdx-2b-1f9d5b26.us-west-2.amazon.com (Postfix) with ESMTPS id 5E8764181F;
-        Fri,  6 May 2022 06:44:44 +0000 (UTC)
-Received: from EX13MTAUWA001.ant.amazon.com (10.43.160.58) by
- EX13D08EUC002.ant.amazon.com (10.43.164.124) with Microsoft SMTP Server (TLS)
- id 15.0.1497.32; Fri, 6 May 2022 06:44:42 +0000
-Received: from dev-dsk-mheyne-1b-c1524648.eu-west-1.amazon.com (10.15.60.66)
- by mail-relay.amazon.com (10.43.160.118) with Microsoft SMTP Server id
- 15.0.1497.32 via Frontend Transport; Fri, 6 May 2022 06:44:41 +0000
-Received: by dev-dsk-mheyne-1b-c1524648.eu-west-1.amazon.com (Postfix, from userid 5466572)
-        id 3198D4111F; Fri,  6 May 2022 06:44:40 +0000 (UTC)
-From:   Maximilian Heyne <mheyne@amazon.de>
-To:     Jakub Kicinski <kuba@kernel.org>
-CC:     Maximilian Heyne <mheyne@amazon.de>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Paolo Abeni <pabeni@redhat.com>,
-        <intel-wired-lan@lists.osuosl.org>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH net-next v2] drivers, ixgbe: show VF statistics
-Date:   Fri, 6 May 2022 06:44:40 +0000
-Message-ID: <20220506064440.57940-1-mheyne@amazon.de>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220504201632.2a41a3b9@kernel.org>
-References: 
+        Fri, 6 May 2022 02:49:16 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63C8213CD0
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 23:45:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651819533; x=1683355533;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=fi8z3mSzHPLzas4HaqdOJ94WwBNJNYKXF7/1Em0DvKA=;
+  b=TZnlYrlu4ReqLWWtr3sahTLr5NbdY9tF6cJbiuWJKtpigwdXN8r0kKC4
+   EkHaI9RKHm3bG9Ga45OkNcJ296HDbLgtlNiPyZEFebmQWVYQBOLi6j6Ns
+   qBlnnv8tefTlIsCoL4bGGFyE6BSXSrwjb2AiFTTRlOltIuxPSIB1I3UTw
+   Y/nbElrkB7JTKHgnuJ8F2bJemxLr+PIdfUB/LwOT/QSxABFj09M5bGngc
+   gr2R9o7Eup5tDTkzvYK8uc8nLc+Y8BqaZng+KGYVwD7rG4TaCS9Jel1ME
+   DIfmNstgs61wgehtGsoNmvb46JwfkxUaQ0Z0rrvD3mkBq5HbpUVNZpWko
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10338"; a="255853046"
+X-IronPort-AV: E=Sophos;i="5.91,203,1647327600"; 
+   d="scan'208";a="255853046"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2022 23:45:33 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,203,1647327600"; 
+   d="scan'208";a="549726550"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 05 May 2022 23:45:31 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nmriU-000DED-CR;
+        Fri, 06 May 2022 06:45:30 +0000
+Date:   Fri, 6 May 2022 14:45:18 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Chengming Gui <Jack.Gui@amd.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Evan Quan <evan.quan@amd.com>
+Subject: [agd5f:drm-next 523/573]
+ drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_7_ppt.c:206:5:
+ warning: no previous prototype for function 'smu_v13_0_7_check_fw_status'
+Message-ID: <202205061407.MF1Stxst-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-05-04T20:16:32-07:00   Jakub Kicinski <kuba@kernel.org> wrote:
+tree:   https://gitlab.freedesktop.org/agd5f/linux.git drm-next
+head:   e7b25ac8f27f561894f8f65caec0dfafed3ddbb5
+commit: 113cc31dde66e3153f7290141b6c008dce8ab2bf [523/573] drm/amd/pm: add SMU_13_0_7 ppt_funcs for SMU_13_0_7
+config: arm64-randconfig-r006-20220505 (https://download.01.org/0day-ci/archive/20220506/202205061407.MF1Stxst-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 5e004fb787698440a387750db7f8028e7cb14cfc)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        git remote add agd5f https://gitlab.freedesktop.org/agd5f/linux.git
+        git fetch --no-tags agd5f drm-next
+        git checkout 113cc31dde66e3153f7290141b6c008dce8ab2bf
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/gpu/drm/
 
-> On Tue, 3 May 2022 15:00:17 +0000 Maximilian Heyne wrote:
-> > +		for (i =3D 0; i < adapter->num_vfs; i++) {
-> > +			ethtool_sprintf(&p, "VF %u Rx Packets", i);
-> > +			ethtool_sprintf(&p, "VF %u Rx Bytes", i);
-> > +			ethtool_sprintf(&p, "VF %u Tx Packets", i);
-> > +			ethtool_sprintf(&p, "VF %u Tx Bytes", i);
-> > +			ethtool_sprintf(&p, "VF %u MC Packets", i);
-> > +		}
-> =
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-> Please drop the ethtool stats. We've been trying to avoid duplicating
-> the same stats in ethtool and iproute2 for a while now.
-> =
+All warnings (new ones prefixed by >>):
 
-
-I can see the point that standard metrics should only be reported via the
-iproute2 interface. However, in this special case this patch was intended to
-converge the out-of-tree driver with the in-tree version. These missing sta=
-ts
-were breaking our userspace. If we now switch solely to iproute2 based
-statistics both driver versions would diverge even more. So depending on wh=
-ere a
-user gets the ixgbe driver from, they have to work-around.
-
-I can change the patch as requested, but it will contradict the inital
-intention. At least Intel should then port this change to the external driv=
-er as
-well. Let's get a statement from them.
-
-
-
-Amazon Development Center Germany GmbH
-Krausenstr. 38
-10117 Berlin
-Geschaeftsfuehrung: Christian Schlaeger, Jonathan Weiss
-Eingetragen am Amtsgericht Charlottenburg unter HRB 149173 B
-Sitz: Berlin
-Ust-ID: DE 289 237 879
-
+>> drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_7_ppt.c:206:5: warning: no previous prototype for function 'smu_v13_0_7_check_fw_status' [-Wmissing-prototypes]
+   int smu_v13_0_7_check_fw_status(struct smu_context *smu) {
+       ^
+   drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_7_ppt.c:206:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int smu_v13_0_7_check_fw_status(struct smu_context *smu) {
+   ^
+   static 
+   drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_7_ppt.c:281:24: warning: unused variable 'adev' [-Wunused-variable]
+           struct amdgpu_device *adev = smu->adev;
+                                 ^
+   drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_7_ppt.c:359:24: warning: unused variable 'adev' [-Wunused-variable]
+           struct amdgpu_device *adev = smu->adev;
+                                 ^
+   drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_7_ppt.c:464:24: warning: unused variable 'adev' [-Wunused-variable]
+           struct amdgpu_device *adev = smu->adev;
+                                 ^
+   4 warnings generated.
 
 
+vim +/smu_v13_0_7_check_fw_status +206 drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_7_ppt.c
+
+   205	
+ > 206	int smu_v13_0_7_check_fw_status(struct smu_context *smu) {
+   207		struct amdgpu_device *adev = smu->adev;
+   208		uint32_t mp1_fw_flags;
+   209	
+   210		mp1_fw_flags = RREG32_PCIE(MP1_Public |
+   211					   (smnMP1_FIRMWARE_FLAGS_SMU_13_0_7 & 0xffffffff));
+   212	
+   213		if ((mp1_fw_flags & MP1_FIRMWARE_FLAGS__INTERRUPTS_ENABLED_MASK) >>
+   214				MP1_FIRMWARE_FLAGS__INTERRUPTS_ENABLED__SHIFT)
+   215			return 0;
+   216	
+   217		return -EIO;
+   218	}
+   219	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

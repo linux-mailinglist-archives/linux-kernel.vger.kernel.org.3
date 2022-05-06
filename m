@@ -2,69 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B4F351CFD8
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 05:49:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11DF051CFEA
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 05:58:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1388816AbiEFDxY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 23:53:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51192 "EHLO
+        id S1388870AbiEFEBt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 00:01:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385096AbiEFDxU (ORCPT
+        with ESMTP id S236381AbiEFEBp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 23:53:20 -0400
-Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6456845510
-        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 20:49:38 -0700 (PDT)
-Received: by mail-ot1-x334.google.com with SMTP id y14-20020a9d460e000000b00605ee347da1so4206163ote.8
-        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 20:49:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=gY3JG7TDfX21nMa2WGN3YpZ2LNRhrr+YzDEPbalak5Q=;
-        b=rm12KW9WahZ+pwPBKCJVM2MEWPGf3QaPgdfV77GxfU+PL9qPHhQVxFbBNl1/wX6mMb
-         33mlJ2qzs/GataHnbdbJbQFsz94LjdsexJKnrSK4xud5V34rQsH0Qnjmfl1s3dJ1isoB
-         49+bB0vzHKrwQM2YNOsVxZHVe7mnBW/dsJTBJaUYxSZwR/g4aTpFnDVXJz0BIQBJwGAo
-         csegzBQNKgbI+Cr0+u7SiO4kMSkoFuSfcHOjPE9kFqfD+BQeecZKjqxYmg4gWXdIMx6K
-         t3c3SdZcrqBCnZZb3wt5DxgF2PPaMG6vq3yaTpGrZpvJAHkxUjF8L4FifGsxvJygyJZj
-         LVhQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=gY3JG7TDfX21nMa2WGN3YpZ2LNRhrr+YzDEPbalak5Q=;
-        b=tVJcp/sFdNAvDt9c/0jTYPkQdoImUNsLAgx8OZ8Upu/9BokqZ17E/Ul7IUZJbmulio
-         hE3T+6Y4tOxQ6MNgHOxlzJ+4z7dAMCaxEmNF2Or3mJSxzbB90HKS44MIMuP2h3QjmbbO
-         oL/0sMlOOKi9ViFYh3y6CWuHjIhA7jxn9FNysRfDiikvOHBFRXEx3DWKj/RPOp1HsbEQ
-         /EIWGN9CmdHnPDvyolV25/QqbiGoflcNDcVw00w4B8dKGQsi2xIFRrsTyXCZTHwzKtAB
-         dSoK3u/Uc8rHrJYEhWWkHQs3IpKP5205yGHiy+w/AbBiocINI9J0JL4+WoBi9BtK7ww8
-         iHWA==
-X-Gm-Message-State: AOAM531F1Gv4XjVtAe89CioiHvgkQ4r/ss4Zd6PA4r3Qz2mnZX4GOScs
-        Cjx3OIOWd1Svr0/4lp9/Y36v/A==
-X-Google-Smtp-Source: ABdhPJxdBvt/VaAntv7NqdoCyyrKBD09j8Ynb47Z79pap61Oi/wfCocwQtV6PkRBZzAZIdQJH633Kw==
-X-Received: by 2002:a05:6830:4420:b0:606:64a6:1deb with SMTP id q32-20020a056830442000b0060664a61debmr93692otv.236.1651808977637;
-        Thu, 05 May 2022 20:49:37 -0700 (PDT)
-Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id w14-20020a056870e2ce00b000e686d13887sm1150364oad.33.2022.05.05.20.49.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 May 2022 20:49:36 -0700 (PDT)
-Date:   Thu, 5 May 2022 22:49:34 -0500
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Luca Weiss <luca@z3ntu.xyz>
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@somainline.org>
-Subject: Re: [PATCH 1/2] ARM: dts: qcom: Add LPG node to pm8941
-Message-ID: <YnSazu3rcBMFPxYw@builder.lan>
-References: <20220504205411.1510667-1-bjorn.andersson@linaro.org>
- <12122358.O9o76ZdvQC@g550jk>
+        Fri, 6 May 2022 00:01:45 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 313A37662
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 20:58:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651809483; x=1683345483;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=jqrdA0ssjCDy9Tr530uvuCttUfxwA+67fzeMSQGXudc=;
+  b=Z8Fytt/tnDJwrsKNLWbrfndOhyjnGp8UL6eoDPYP/GDrroGwCP8IV0PD
+   s2ZeI0KnR5GKM2UX6c/Nl/VXbrcvqZzASjTxEeAmGCoQiBr5Lrt9A9oz0
+   HJIhpp2AGF7ZgWtoZlAR9Xw1T0bAOe2Kqt/X0hZIRjC+q8oybbpwfiNtl
+   uioCvwn0VJ+47fCkehG2eNASf6TUKvWDauF/RH1BMAq/N/vHVyIm80z1O
+   FW0IDifTht7URmoE/e9y9ury7lri3ivdIlBS+id76jRa8XCCbj5yldn6P
+   O5KNVlFbKwFXEMEKMPvWjJZdzI5ZG/P7wG2Z+DbztLzZD+bZOCIzltXVl
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10338"; a="248875826"
+X-IronPort-AV: E=Sophos;i="5.91,203,1647327600"; 
+   d="scan'208";a="248875826"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2022 20:58:02 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,203,1647327600"; 
+   d="scan'208";a="891639841"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 05 May 2022 20:58:01 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nmp6P-000D4u-0m;
+        Fri, 06 May 2022 03:58:01 +0000
+Date:   Fri, 6 May 2022 11:57:16 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Allison Henderson <allison.henderson@oracle.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [allisonhenderson-xfs-work:xfs-5.19-compose_pptrs 32/32]
+ fs/xfs/libxfs/xfs_parent.c:38:1: warning: no previous prototype for
+ 'xfs_init_parent_ptr'
+Message-ID: <202205061153.IFAjcpvT-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <12122358.O9o76ZdvQC@g550jk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,67 +62,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 05 May 03:01 CDT 2022, Luca Weiss wrote:
+tree:   https://github.com/allisonhenderson/xfs_work.git xfs-5.19-compose_pptrs
+head:   74ecccf0e89a132c2490f3a63661c535974c6a08
+commit: 74ecccf0e89a132c2490f3a63661c535974c6a08 [32/32] xfs: Add parent pointer ioctl
+config: arc-randconfig-r001-20220505 (https://download.01.org/0day-ci/archive/20220506/202205061153.IFAjcpvT-lkp@intel.com/config)
+compiler: arc-elf-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/allisonhenderson/xfs_work/commit/74ecccf0e89a132c2490f3a63661c535974c6a08
+        git remote add allisonhenderson-xfs-work https://github.com/allisonhenderson/xfs_work.git
+        git fetch --no-tags allisonhenderson-xfs-work xfs-5.19-compose_pptrs
+        git checkout 74ecccf0e89a132c2490f3a63661c535974c6a08
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash fs/xfs/
 
-> Hi Bjorn,
-> 
-> On Mittwoch, 4. Mai 2022 22:54:10 CEST Bjorn Andersson wrote:
-> > The PM8941 contains 8 LPG channels, as well as TRILED and LUT blocks.
-> > Add a node for these.
-> > 
-> > Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> > ---
-> >  arch/arm/boot/dts/qcom-pm8941.dtsi | 9 +++++++++
-> >  1 file changed, 9 insertions(+)
-> > 
-> > diff --git a/arch/arm/boot/dts/qcom-pm8941.dtsi
-> > b/arch/arm/boot/dts/qcom-pm8941.dtsi index cdd2bdb77b32..7881a071b372
-> > 100644
-> > --- a/arch/arm/boot/dts/qcom-pm8941.dtsi
-> > +++ b/arch/arm/boot/dts/qcom-pm8941.dtsi
-> > @@ -144,6 +144,15 @@ pm8941_1: pm8941@1 {
-> >  		#address-cells = <1>;
-> >  		#size-cells = <0>;
-> > 
-> > +		pm8941_lpg: lpg {
-> > +			compatible = "qcom,pm8941-lpg";
-> > +
-> > +			#address-cells = <1>;
-> > +			#size-cells = <0>;
-> 
-> Just curious, why doesn't pm8941 have #pwm-cells = <2>; like the other lpg 
-> nodes in [0]?
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-I guess I didn't have a need for the lpg to be a pwm-chip on this pmic,
-yet. This could be added now, or at a later point when someone has a
-usecase for the pwm-chip.
+All warnings (new ones prefixed by >>):
 
-> Other than that, the node works fine on pm8941. Will send a patch for enabling 
-> notification LED on msm8974-FP2 soon.
-> 
+>> fs/xfs/libxfs/xfs_parent.c:38:1: warning: no previous prototype for 'xfs_init_parent_ptr' [-Wmissing-prototypes]
+      38 | xfs_init_parent_ptr(struct xfs_parent_ptr               *xpp,
+         | ^~~~~~~~~~~~~~~~~~~
+   fs/xfs/libxfs/xfs_parent.c:65:1: warning: no previous prototype for 'xfs_init_parent_name_rec' [-Wmissing-prototypes]
+      65 | xfs_init_parent_name_rec(
+         | ^~~~~~~~~~~~~~~~~~~~~~~~
+   fs/xfs/libxfs/xfs_parent.c:80:1: warning: no previous prototype for 'xfs_init_parent_name_irec' [-Wmissing-prototypes]
+      80 | xfs_init_parent_name_irec(
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~
+--
+>> fs/xfs/xfs_parent_utils.c:42:1: warning: no previous prototype for 'xfs_attr_get_parent_pointer' [-Wmissing-prototypes]
+      42 | xfs_attr_get_parent_pointer(struct xfs_inode            *ip,
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-If you turn that into a Tested-by, and preferably a Reviewed-by, I would
-have what I need to merge the two changes.
 
-Looking forward to the FP2 patch.
+vim +/xfs_init_parent_ptr +38 fs/xfs/libxfs/xfs_parent.c
 
-Thanks,
-Bjorn
+    35	
+    36	/* Initializes a xfs_parent_ptr from an xfs_parent_name_rec */
+    37	void
+  > 38	xfs_init_parent_ptr(struct xfs_parent_ptr		*xpp,
+    39			     struct xfs_parent_name_rec	*rec)
+    40	{
+    41		xpp->xpp_ino = be64_to_cpu(rec->p_ino);
+    42		xpp->xpp_gen = be32_to_cpu(rec->p_gen);
+    43		xpp->xpp_diroffset = be32_to_cpu(rec->p_diroffset);
+    44	}
+    45	
 
-> Regards
-> Luca
-> 
-> [0] https://lore.kernel.org/linux-arm-msm/20220505022706.1692554-2-bjorn.andersson@linaro.org/
-> 
-> 
-> > +
-> > +			status = "disabled";
-> > +		};
-> > +
-> >  		pm8941_wled: wled@d800 {
-> >  			compatible = "qcom,pm8941-wled";
-> >  			reg = <0xd800>;
-> 
-> 
-> 
-> 
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

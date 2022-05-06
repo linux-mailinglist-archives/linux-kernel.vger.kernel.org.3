@@ -2,215 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C229051E115
+	by mail.lfdr.de (Postfix) with ESMTP id 767E551E114
 	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 23:29:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1444470AbiEFVdR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 17:33:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51170 "EHLO
+        id S1444462AbiEFVdP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 17:33:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343890AbiEFVdN (ORCPT
+        with ESMTP id S1344521AbiEFVdN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 6 May 2022 17:33:13 -0400
-Received: from mail104.syd.optusnet.com.au (mail104.syd.optusnet.com.au [211.29.132.246])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 538436F48A;
-        Fri,  6 May 2022 14:29:28 -0700 (PDT)
-Received: from dread.disaster.area (pa49-181-2-147.pa.nsw.optusnet.com.au [49.181.2.147])
-        by mail104.syd.optusnet.com.au (Postfix) with ESMTPS id 68B6C5345CA;
-        Sat,  7 May 2022 07:29:25 +1000 (AEST)
-Received: from dave by dread.disaster.area with local (Exim 4.92.3)
-        (envelope-from <david@fromorbit.com>)
-        id 1nn5Vs-008rXR-Qn; Sat, 07 May 2022 07:29:24 +1000
-Date:   Sat, 7 May 2022 07:29:24 +1000
-From:   Dave Chinner <david@fromorbit.com>
-To:     kernel test robot <oliver.sang@intel.com>
-Cc:     0day robot <lkp@intel.com>, LKML <linux-kernel@vger.kernel.org>,
-        lkp@lists.01.org, ying.huang@intel.com, feng.tang@intel.com,
-        zhengjun.xing@linux.intel.com, fengwei.yin@intel.com,
-        linux-xfs@vger.kernel.org
-Subject: Re: [xfs]  32678f1513:  aim7.jobs-per-min -5.6% regression
-Message-ID: <20220506212924.GJ1098723@dread.disaster.area>
-References: <20220502082018.1076561-2-david@fromorbit.com>
- <20220506092250.GI23061@xsang-OptiPlex-9020>
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 041046F4A8
+        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 14:29:29 -0700 (PDT)
+Received: by mail-pf1-x435.google.com with SMTP id p8so7250870pfh.8
+        for <linux-kernel@vger.kernel.org>; Fri, 06 May 2022 14:29:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language
+         :from:to:cc:references:in-reply-to:content-transfer-encoding;
+        bh=N1UhE90kw7eZKOYH701CqkEpipu4X6Khp12ykHwyDEg=;
+        b=k00gdPq2HnCTH01gmR2exswNoAGEKizY6tgRHeIKF5Mr2EilFTePHuYedBdp8dLD0E
+         a20dNsh8kTTsFTUaCmPp2J3yVng+Atu6hsY33ljETSxP1aWm/LSpPgOyUdYYzI55cXt7
+         xI0jf9fSDR6Q9QtvZmr8g+W6w8bQIiDsxFX7XrCoXwiDJnP++/H7tulJnvHVXrRLveFU
+         dgt6RYQldSybimwmhUdi3Pk/8tW/lpPBo3FGMWb091Dtcf5LM5OXfStm1okzFRDXaEF1
+         y3luTFIufV4bn1PA0vCQskZHMQ85d7fyhX6YCoRM6N7pHjfbBengi2GN72kvr3Co4m3I
+         0HDQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:from:to:cc:references:in-reply-to
+         :content-transfer-encoding;
+        bh=N1UhE90kw7eZKOYH701CqkEpipu4X6Khp12ykHwyDEg=;
+        b=EjUUmLi7+v/15ddyy/nIvkhZk86SSh+AebnJyIpC1gLw4uGhVGu05wXYWfM/M6Qib6
+         fGnOw6alHjVY/h+fuY/amN3yKft+kuCo/EgJjlM5NtSJnAfVjqR/yIIPshwsQ3KvLmdu
+         M1KgwGaW2Q47GTwJV058b4md66Btxi0RZ9JEQvxfOOyaAWKF7FohEK0gu8M4CwI24G0a
+         lmYyzVzjSTyZjb0vlG1VKA/CVABRcJEvb68wUMb65pzI+aEHD90JgdPmHInY+uNFKxBv
+         1FaCvwEbsdi4mS6OkLaLpL3BYQUTFov8NBTrOTyW2dpCUgWBVoC92yT3dKyUg51cRC5j
+         q6yA==
+X-Gm-Message-State: AOAM532uWmt2keJKCC+C/Hog0nq8ZJ3ORAmaZXEexASJyKliG4UAEAQ+
+        bptSvQmJ5r+BlDXmrP9JU+/KBA==
+X-Google-Smtp-Source: ABdhPJySrRnB5vcgVacNSmmJabqKLfFQtmtEqtQ6no8yHvK2BoEaOPrdDqhN/RqXAzVDkArKeW2oGA==
+X-Received: by 2002:aa7:962e:0:b0:50d:5ed8:aa23 with SMTP id r14-20020aa7962e000000b0050d5ed8aa23mr5421341pfg.43.1651872568458;
+        Fri, 06 May 2022 14:29:28 -0700 (PDT)
+Received: from [192.168.4.166] (cpe-72-132-29-68.dc.res.rr.com. [72.132.29.68])
+        by smtp.gmail.com with ESMTPSA id s7-20020a170902a50700b0015e8d4eb206sm2264597plq.80.2022.05.06.14.29.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 06 May 2022 14:29:27 -0700 (PDT)
+Message-ID: <8e9bf420-0405-fd71-826d-7924528f2d09@kernel.dk>
+Date:   Fri, 6 May 2022 15:29:26 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220506092250.GI23061@xsang-OptiPlex-9020>
-X-Optus-CM-Score: 0
-X-Optus-CM-Analysis: v=2.4 cv=deDjYVbe c=1 sm=1 tr=0 ts=62759337
-        a=ivVLWpVy4j68lT4lJFbQgw==:117 a=ivVLWpVy4j68lT4lJFbQgw==:17
-        a=8nJEP1OIZ-IA:10 a=oZkIemNP1mAA:10 a=NEAV23lmAAAA:8 a=VwQbUJbxAAAA:8
-        a=7-415B0cAAAA:8 a=20KFwNOVAAAA:8 a=QyXUC8HyAAAA:8 a=xEvadSHMmT4qNSc8GvgA:9
-        a=wPNLvfGTeEIA:10 a=AjGcO6oz07-iQ99wixmX:22 a=biEYGPWJfzWAr4FL6Ov7:22
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH 5/5] io_uring: implement multishot mode for accept
+Content-Language: en-US
+From:   Jens Axboe <axboe@kernel.dk>
+To:     Hao Xu <haoxu.linux@gmail.com>, io-uring@vger.kernel.org
+Cc:     Pavel Begunkov <asml.silence@gmail.com>,
+        linux-kernel@vger.kernel.org
+References: <20220506070102.26032-1-haoxu.linux@gmail.com>
+ <20220506070102.26032-6-haoxu.linux@gmail.com>
+ <3b302e60-cb5a-a193-db13-5ca0ef5603cc@kernel.dk>
+In-Reply-To: <3b302e60-cb5a-a193-db13-5ca0ef5603cc@kernel.dk>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 06, 2022 at 05:22:50PM +0800, kernel test robot wrote:
+On 5/6/22 2:50 PM, Jens Axboe wrote:
+> On 5/6/22 1:01 AM, Hao Xu wrote:
+>> @@ -5748,8 +5758,12 @@ static int io_accept(struct io_kiocb *req, unsigned int issue_flags)
+>>  		if (!fixed)
+>>  			put_unused_fd(fd);
+>>  		ret = PTR_ERR(file);
+>> -		if (ret == -EAGAIN && force_nonblock)
+>> -			return -EAGAIN;
+>> +		if (ret == -EAGAIN && force_nonblock) {
+>> +			if ((req->flags & REQ_F_APOLL_MULTI_POLLED) ==
+>> +			    REQ_F_APOLL_MULTI_POLLED)
+>> +				ret = 0;
+>> +			return ret;
 > 
+> FWIW, this
 > 
-> Greeting,
+> 	if ((req->flags & REQ_F_APOLL_MULTI_POLLED) == REQ_F_APOLL_MULTI_POLLED)
 > 
-> FYI, we noticed a -5.6% regression of aim7.jobs-per-min due to commit:
+> is identical to
 > 
+> 	if (req->flags & REQ_F_APOLL_MULTI_POLLED)
 > 
-> commit: 32678f151338b9a321e9e27139a63c81f353acb7 ("[PATCH 1/4] xfs: detect self referencing btree sibling pointers")
-> url: https://github.com/intel-lab-lkp/linux/commits/Dave-Chinner/xfs-fix-random-format-verification-issues/20220502-162206
-> base: https://git.kernel.org/cgit/fs/xfs/xfs-linux.git for-next
-> patch link: https://lore.kernel.org/linux-xfs/20220502082018.1076561-2-david@fromorbit.com
+> but I suspect this used to check more flags (??), because as it stands
+> it seems a bit nonsensical.
 
-Well, that answers the concern I had about the impact of 
-changing the way endian conversions were done in that patch.
+Looking deeper, it is indeed a mask and not a single flag! So the check
+looks fine.
 
-> a44a027a8b2a20fe 32678f151338b9a321e9e27139a 
-> ---------------- --------------------------- 
->          %stddev     %change         %stddev
->              \          |                \  
->     464232            -5.6%     438315        aim7.jobs-per-min
-....
->       0.13 ±  5%      +0.2        0.33 ±  6%  perf-profile.children.cycles-pp.__xfs_btree_check_sblock
-....
->       0.11 ±  4%      +0.2        0.30 ±  5%  perf-profile.self.cycles-pp.__xfs_btree_check_sblock
-
-Because there is it, right at the bottom of the profile.
-
-Can you try the patch below and see if that fixes the issue?
-
-Cheers,
-
-Dave.
 -- 
-Dave Chinner
-david@fromorbit.com
+Jens Axboe
 
-
-xfs: avoid unnecessary runtime sibling pointer endian conversions
-
-From: Dave Chinner <dchinner@redhat.com>
-
-Commit dc04db2aa7c9 has caused a small aim7 regression, showing a
-small increase in CPU usage in __xfs_btree_check_sblock() as a
-result of the extra checking.
-
-This is likely due to the endian conversion of the sibling poitners
-being unconditional instead of relying on the compiler to endian
-convert the NULL pointer at compile time and avoiding the runtime
-conversion for this common case.
-
-Rework the checks so that endian conversion of the sibling pointers
-is only done if they are not null as the original code did.
-
-Fixes: dc04db2aa7c9 ("xfs: detect self referencing btree sibling pointers")
-Reported-by: kernel test robot <oliver.sang@intel.com>
-Signed-off-by: Dave Chinner <dchinner@redhat.com>
----
- fs/xfs/libxfs/xfs_btree.c | 37 +++++++++++++++++++++++++------------
- 1 file changed, 25 insertions(+), 12 deletions(-)
-
-diff --git a/fs/xfs/libxfs/xfs_btree.c b/fs/xfs/libxfs/xfs_btree.c
-index 2aa300f7461f..4d673e943317 100644
---- a/fs/xfs/libxfs/xfs_btree.c
-+++ b/fs/xfs/libxfs/xfs_btree.c
-@@ -51,16 +51,25 @@ xfs_btree_magic(
- 	return magic;
- }
- 
-+/*
-+ * These sibling pointer checks are optimised for null sibling pointers. This
-+ * happens a lot, and we don't need to byte swap at runtime if the sibling
-+ * pointer is NULL.
-+ */
- static xfs_failaddr_t
- xfs_btree_check_lblock_siblings(
- 	struct xfs_mount	*mp,
- 	struct xfs_btree_cur	*cur,
- 	int			level,
- 	xfs_fsblock_t		fsb,
--	xfs_fsblock_t		sibling)
-+	__be64			dsibling)
- {
--	if (sibling == NULLFSBLOCK)
-+	xfs_fsblock_t		sibling;
-+
-+	if (dsibling == cpu_to_be64(NULLFSBLOCK))
- 		return NULL;
-+
-+	sibling = be64_to_cpu(dsibling);
- 	if (sibling == fsb)
- 		return __this_address;
- 	if (level >= 0) {
-@@ -81,10 +90,14 @@ xfs_btree_check_sblock_siblings(
- 	int			level,
- 	xfs_agnumber_t		agno,
- 	xfs_agblock_t		agbno,
--	xfs_agblock_t		sibling)
-+	__be32			dsibling)
- {
--	if (sibling == NULLAGBLOCK)
-+	xfs_agblock_t		sibling;
-+
-+	if (dsibling == cpu_to_be32(NULLAGBLOCK))
- 		return NULL;
-+
-+	sibling = be32_to_cpu(dsibling);
- 	if (sibling == agbno)
- 		return __this_address;
- 	if (level >= 0) {
-@@ -136,10 +149,10 @@ __xfs_btree_check_lblock(
- 		fsb = XFS_DADDR_TO_FSB(mp, xfs_buf_daddr(bp));
- 
- 	fa = xfs_btree_check_lblock_siblings(mp, cur, level, fsb,
--			be64_to_cpu(block->bb_u.l.bb_leftsib));
-+			block->bb_u.l.bb_leftsib);
- 	if (!fa)
- 		fa = xfs_btree_check_lblock_siblings(mp, cur, level, fsb,
--				be64_to_cpu(block->bb_u.l.bb_rightsib));
-+				block->bb_u.l.bb_rightsib);
- 	return fa;
- }
- 
-@@ -204,10 +217,10 @@ __xfs_btree_check_sblock(
- 	}
- 
- 	fa = xfs_btree_check_sblock_siblings(mp, cur, level, agno, agbno,
--			be32_to_cpu(block->bb_u.s.bb_leftsib));
-+			block->bb_u.s.bb_leftsib);
- 	if (!fa)
- 		fa = xfs_btree_check_sblock_siblings(mp, cur, level, agno,
--				 agbno, be32_to_cpu(block->bb_u.s.bb_rightsib));
-+				 agbno, block->bb_u.s.bb_rightsib);
- 	return fa;
- }
- 
-@@ -4523,10 +4536,10 @@ xfs_btree_lblock_verify(
- 	/* sibling pointer verification */
- 	fsb = XFS_DADDR_TO_FSB(mp, xfs_buf_daddr(bp));
- 	fa = xfs_btree_check_lblock_siblings(mp, NULL, -1, fsb,
--			be64_to_cpu(block->bb_u.l.bb_leftsib));
-+			block->bb_u.l.bb_leftsib);
- 	if (!fa)
- 		fa = xfs_btree_check_lblock_siblings(mp, NULL, -1, fsb,
--				be64_to_cpu(block->bb_u.l.bb_rightsib));
-+				block->bb_u.l.bb_rightsib);
- 	return fa;
- }
- 
-@@ -4580,10 +4593,10 @@ xfs_btree_sblock_verify(
- 	agno = xfs_daddr_to_agno(mp, xfs_buf_daddr(bp));
- 	agbno = xfs_daddr_to_agbno(mp, xfs_buf_daddr(bp));
- 	fa = xfs_btree_check_sblock_siblings(mp, NULL, -1, agno, agbno,
--			be32_to_cpu(block->bb_u.s.bb_leftsib));
-+			block->bb_u.s.bb_leftsib);
- 	if (!fa)
- 		fa = xfs_btree_check_sblock_siblings(mp, NULL, -1, agno, agbno,
--				be32_to_cpu(block->bb_u.s.bb_rightsib));
-+				block->bb_u.s.bb_rightsib);
- 	return fa;
- }
- 

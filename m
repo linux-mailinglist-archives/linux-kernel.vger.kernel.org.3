@@ -2,191 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EE1A51D643
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 13:08:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 197D551D64B
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 13:12:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348136AbiEFLLo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 07:11:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43590 "EHLO
+        id S1391187AbiEFLQR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 07:16:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1391181AbiEFLLj (ORCPT
+        with ESMTP id S1352587AbiEFLQM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 07:11:39 -0400
-Received: from us-smtp-delivery-74.mimecast.com (us-smtp-delivery-74.mimecast.com [170.10.133.74])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A65916833C
-        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 04:07:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651835267;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=2HuLCNJx05zSHUlmMHT6S4qU45txmydxhGQw118xWYA=;
-        b=J/gBGU1JU9cndh2UZNwRXPhdspvt7SEWS0ZmlttkWmbTH6x5yrAasGMNqpz8FwYDXpWzzL
-        tOjVB6FfA3n6m3GpvW+ZgFURdIHfsfzSPip1TnEVnmzbrsh3m3z+rDm5/cT4760zIH+Rn5
-        SghJlCb+Fmsge507aFGGEqJRA2mTYIU=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-662-DIl5JVsaPuGr1-aZpcB71w-1; Fri, 06 May 2022 07:07:46 -0400
-X-MC-Unique: DIl5JVsaPuGr1-aZpcB71w-1
-Received: by mail-ed1-f69.google.com with SMTP id dk9-20020a0564021d8900b00425a9c3d40cso3839438edb.7
-        for <linux-kernel@vger.kernel.org>; Fri, 06 May 2022 04:07:46 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:from:to:cc:references:in-reply-to
-         :content-transfer-encoding;
-        bh=2HuLCNJx05zSHUlmMHT6S4qU45txmydxhGQw118xWYA=;
-        b=xXd5UlI6OsLEunqLk0KTLlhfZsVrS9tM+tFNSatN7VR2opkLnGmsYekFbvNCmRIjHq
-         iFhCXa1QIjYaH0Y5vcUa01n8/jVASzhoX44hCi4B6Sy+6UeSXU/xAGIIpvbzLeUwACHc
-         ep5aHME64hB2jOHNj2IEIvKEPFKXuC8CJz07s+AZJ7fqZUuvzdBwdiCluS0Av3uWAC+Z
-         afScEvvJqbV/LYA7ox4HzHbVofWrMrA0l8ORyBgdl4N6dsmD76qz0Hn1KigXd0WR2j/u
-         erjhWK8UQ92clXnKGijmJqzrhaF6Z2niQArU76XNrUHB0YxCC2KZn6Aaj/DyDpNErAKV
-         9paQ==
-X-Gm-Message-State: AOAM5315rIz6ZT4Ivs8GUndVw5gMHB32x1ZRt3jcJn1VWvHW3nHlCv3B
-        oW5+oGBq5VSA2sw9O1pFcgThBJtEvXFCoID3/5T/0DVsxcXB2AlfySpxWGEref55P75VYbqf4ys
-        tXrjezNF27h45epY1HQEkYvnS
-X-Received: by 2002:a17:906:7304:b0:6da:9243:865 with SMTP id di4-20020a170906730400b006da92430865mr2426216ejc.665.1651835265100;
-        Fri, 06 May 2022 04:07:45 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwtt/k2RqUCTLzZmSJ4UcadrnPC2p2no+9LACk99FJ0/KvCTo6d0VDn6NtS0MTVYVpgZY2MQQ==
-X-Received: by 2002:a17:906:7304:b0:6da:9243:865 with SMTP id di4-20020a170906730400b006da92430865mr2426195ejc.665.1651835264887;
-        Fri, 06 May 2022 04:07:44 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
-        by smtp.gmail.com with ESMTPSA id i24-20020a05640200d800b0042617ba63a8sm2205496edu.50.2022.05.06.04.07.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 06 May 2022 04:07:44 -0700 (PDT)
-Message-ID: <565fd863-49b2-5dca-8271-579a94b3b860@redhat.com>
-Date:   Fri, 6 May 2022 13:07:43 +0200
+        Fri, 6 May 2022 07:16:12 -0400
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2060.outbound.protection.outlook.com [40.107.244.60])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19FA5562F7;
+        Fri,  6 May 2022 04:12:29 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=RruUjGwnmq8uYIHjAYH2Fh+DuCG4bd6UPw8DSYaVHOyZcOIP6I3YFVd6WRoCIBSdAYJpMhuDIBjO7slL6mjOX5vLpmkVdOtrOYQkV4atO1imrI9z/9jynrmni1ZiDokB15nTf7cIcEIE1orIx40hdcL6mQkaWTWGgsf/BSpYoSywe567OVX6np7C3uAWsayR9I6zgsMvj4lOW+9VBbva2DAzVSb8kwkJ1zSv9lNQVKdW2cpmTHHAkG7gO8yJew1jue430/CjHKO7g8XpUAyWfVzKyFSqc1BahlpUx6IXouXB8VVUZek+s7FNgXzRoGNfBbDicFPwdGfytfxl39lEJA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=BvNapFuKF+U68xbMDSb9hJETc6pY3y6WGu7F7jVfEGQ=;
+ b=k6Nc859l5OBuiDgzs+whhvguxUzezPr2rYy05DL1YSm3jQhsU7l55KCd4lXBS7WdJbNdEitwGGGNGhI4y+gZFpjCdLpt1QF6Y9zx1dOdZQMgIbEmA4L5+kUPOU9e7aNXfDbxq8yy9TmOyJp4fU5jZectVeggW1yktr7sokRpW47Ajy7cAZpJcrFqoA8plRWrwu4cTxJhggzH7foNpuwKWiFOuIKiashkvQZBv6nJEDugq2DwAXurp/exXVkzgDyuWNCixaRXDRNWu1qRJqQsV+1qJQbnGgMAqUf/dkFT8lXy97OTbObCGlY/IKwVQP0HcC6jXhalOFEfJbB/YIVQow==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 12.22.5.238) smtp.rcpttodomain=gmail.com smtp.mailfrom=nvidia.com; dmarc=pass
+ (p=reject sp=reject pct=100) action=none header.from=nvidia.com; dkim=none
+ (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=BvNapFuKF+U68xbMDSb9hJETc6pY3y6WGu7F7jVfEGQ=;
+ b=VglA5mY3T0O99V7cZo4q3Y9Y25yTTbl1fKAngJ/npZ6/sEgCHC1yx69H8gE8bVgW+MtiV9sVmBSH63lhcFMEfV8x6xZ0z6aOUiZ0VZTvGocmFB6Qe0LAzLqMkcda6YB5lLOdiYjrwQ/EI0V08jbhjoJF/4IU4h+RuflVetePd+THXNgpVIVSIEMhk94QRfDY33PfiRJ4e3Q2qA6kwT3ZjWsD+kmh3VO6BcejFicexqPPuNNvx4zqb3eDfQiLfX6MCpR/zSRBRkehXC3AZv84zFssLABQDqcUnSV2doTeY0q7nujuKJTbIDLDDDvfV3JZyy47xkWJzWxENEj5T7ZW/g==
+Received: from MW4PR03CA0186.namprd03.prod.outlook.com (2603:10b6:303:b8::11)
+ by PH7PR12MB6633.namprd12.prod.outlook.com (2603:10b6:510:212::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5227.18; Fri, 6 May
+ 2022 11:12:27 +0000
+Received: from CO1NAM11FT047.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:b8:cafe::e1) by MW4PR03CA0186.outlook.office365.com
+ (2603:10b6:303:b8::11) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5206.24 via Frontend
+ Transport; Fri, 6 May 2022 11:12:27 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.238)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 12.22.5.238 as permitted sender) receiver=protection.outlook.com;
+ client-ip=12.22.5.238; helo=mail.nvidia.com;
+Received: from mail.nvidia.com (12.22.5.238) by
+ CO1NAM11FT047.mail.protection.outlook.com (10.13.174.132) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.5227.15 via Frontend Transport; Fri, 6 May 2022 11:12:26 +0000
+Received: from drhqmail201.nvidia.com (10.126.190.180) by
+ DRHQMAIL105.nvidia.com (10.27.9.14) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.32; Fri, 6 May 2022 11:12:26 +0000
+Received: from drhqmail201.nvidia.com (10.126.190.180) by
+ drhqmail201.nvidia.com (10.126.190.180) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Fri, 6 May 2022 04:12:25 -0700
+Received: from sumitg-l4t.nvidia.com (10.127.8.10) by mail.nvidia.com
+ (10.126.190.180) with Microsoft SMTP Server id 15.2.986.22 via Frontend
+ Transport; Fri, 6 May 2022 04:12:22 -0700
+From:   Sumit Gupta <sumitg@nvidia.com>
+To:     <linux-tegra@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <thierry.reding@gmail.com>,
+        <jonathanh@nvidia.com>, <robh+dt@kernel.org>,
+        <kbuild-all@lists.01.org>
+CC:     <sumitg@nvidia.com>, <bbasu@nvidia.com>, <vsethi@nvidia.com>,
+        <jsequeira@nvidia.com>
+Subject: [Patch v5 0/9] CBB driver for Tegra194, Tegra234 & Tegra-Grace
+Date:   Fri, 6 May 2022 16:42:08 +0530
+Message-ID: <20220506111217.8833-1-sumitg@nvidia.com>
+X-Mailer: git-send-email 2.17.1
+X-NVConfidentiality: public
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [RFC PATCH pdx86-platform-drivers-x86] platform/x86:
- thinkpad_acpi: quirk_btusb_bug can be static
-Content-Language: en-US
-From:   Hans de Goede <hdegoede@redhat.com>
-To:     "Limonciello, Mario" <Mario.Limonciello@amd.com>,
-        kernel test robot <lkp@intel.com>
-Cc:     "kbuild-all@lists.01.org" <kbuild-all@lists.01.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <202205031944.EP1ElC1B-lkp@intel.com>
- <YnEPbSO2rBJq37Ez@74ccfaeec2ea>
- <BL1PR12MB5157478736D9C5E82B4D9B1DE2C09@BL1PR12MB5157.namprd12.prod.outlook.com>
- <69b622c0-550b-f562-eb1e-7614e97acc25@redhat.com>
-In-Reply-To: <69b622c0-550b-f562-eb1e-7614e97acc25@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 20d187db-18c6-4501-4894-08da2f514db9
+X-MS-TrafficTypeDiagnostic: PH7PR12MB6633:EE_
+X-Microsoft-Antispam-PRVS: <PH7PR12MB6633E0EBCD9D8515190EFE94B9C59@PH7PR12MB6633.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: FcNWNs/eLq/O0NuECz1BqvbXuYZHnZnzmZUep0+3AyaQrduxCf5Fn/KpFiRDR2DlhJHJ7ZEGl4T9Hkmmm5fqpKyjNkmsskrRqCv95LgBpbiUlZGt1qzh+TBkzG+PwcQOYUqmsOy2+NbHrxakdF0VI91lCJ9muEcAo5cLPfZRVgH/AVR5jlVIW9v1unumhKUSw7kD3fRVTQTr8VCx8jaTZU2P2e5p97rCFsAteW0lfu4SLZfxAaH0EyGji+rKOV4wO/fT3qFdb4X18JwMrf1X3oTEu5djsAgMhpINZcdRy2JqWtfTmwMDsN0cZQFdkGVClRj7OHodgXpV4lDAKmbEYh3DfaLeM0O6YWEUKEp1lwaL8NVOh4xo9Y5ttNVWUTwFi4dH0rBAltsSdecv4gnpMVeZ3vRfqJ4qajG7PfDRrz9OP5d20kPy27i455nwBQ9JAII0gfle3hP2AEnFEIiRHlmyXpeZRX/HIURxO9ne8LyyTxcPoRU+Ngx6ALlfXY1orMcMMN6vn1sJqErS5CultcpqFfyFKvtnXIXUUIf/vhFCxjNBCKVY87yl8+UBj165lglyqm22oIY58R3J8VSLaDt4lxeEZlFA3cTgwY+/whsZ8NwVtx1OdXYLrurDV8ZBk0ETxX/4OTqOwBOgAkOtiEn8Y20VfVcAd/plnK1ADma1o9p4+P2qTdFFYe9KQvXZAEapRkACGPuWjOGSXSDN/A==
+X-Forefront-Antispam-Report: CIP:12.22.5.238;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230001)(4636009)(46966006)(36840700001)(40470700004)(54906003)(508600001)(83380400001)(36860700001)(110136005)(8936002)(36756003)(70586007)(70206006)(8676002)(4326008)(316002)(5660300002)(1076003)(26005)(6666004)(2906002)(7696005)(336012)(47076005)(426003)(186003)(40460700003)(107886003)(356005)(81166007)(2616005)(86362001)(82310400005)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 May 2022 11:12:26.8097
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 20d187db-18c6-4501-4894-08da2f514db9
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.238];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT047.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB6633
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+The patch series adds Control BackBone(CBB) error handling
+driver for Tegra194, Tegra234 and Tegra-Grace SOC's.
+Tegra194 is using CBB version 1.0. Tegra234 and Tegra-Grace
+are using CBB version 2.0. Both CBB1.0 and CBB2.0 have
+different internal architecture. So, separate drivers are
+required.
+Tegra194 and Tegra234 are using Device Tree. Tegra-Grace is
+using ACPI.
 
-On 5/6/22 12:09, Hans de Goede wrote:
-> Hi,
-> 
-> On 5/3/22 15:07, Limonciello, Mario wrote:
->> [Public]
->>
->>
->>
->>> -----Original Message-----
->>> From: kernel test robot <lkp@intel.com>
->>> Sent: Tuesday, May 3, 2022 06:18
->>> To: Limonciello, Mario <Mario.Limonciello@amd.com>
->>> Cc: kbuild-all@lists.01.org; Andy Shevchenko
->>> <andriy.shevchenko@linux.intel.com>; Hans de Goede
->>> <hdegoede@redhat.com>; linux-kernel@vger.kernel.org
->>> Subject: [RFC PATCH pdx86-platform-drivers-x86] platform/x86:
->>> thinkpad_acpi: quirk_btusb_bug can be static
->>>
->>> drivers/platform/x86/thinkpad_acpi.c:317:20: warning: symbol
->>> 'quirk_btusb_bug' was not declared. Should it be static?
->>>
->>> Fixes: 25eecc2ff6cc ("platform/x86: thinkpad_acpi: Convert btusb DMI list to
->>> quirks")
->>> Reported-by: kernel test robot <lkp@intel.com>
->>> Signed-off-by: kernel test robot <lkp@intel.com>
->>
->> Reviewed-by: Mario Limonciello <mario.limonciello@amd.com>
-> 
-> Thanks, since the original patch was still in my review-hans
-> branch (and not yet in for-next) I've squashed this fix into
-> the original patch.
+Request to queue the patch series for 5.19.
 
-I've just realized there is another issue with this
-("platform/x86: thinkpad_acpi: Convert btusb DMI list to quirks")
+---
+v4 -> v5:
+- fix warnings on diabling CONFIG_ACPI reported by kernel test robot.
 
-Patch, it only sets tp_features.quirks after bluetooth_init()
-has already run, so the:
+v3 -> v4:
+- rebased patches on 5.18-rc5.
 
-	if (tp_features.quirks && tp_features.quirks->btusb_bug && ...
+v2 -> v3:
+- fixed warnings with GCC 11.2 and W=1 reported by kernel test robot.
+- changed some function names to make consistent with tegra_cbb_*.
 
-check will never be true since tp_features.quirks is being set
-too late.
+v1 -> v2:
+- moved err-notifier-base and off-mask-erd from DT to driver.
+- yaml fixes by Thierry.
 
-I'll squash in a change moving the:
+Sumit Gupta (9):
+  soc: tegra: set ERD bit to mask inband errors
+  dt-bindings: arm: tegra: Add NVIDIA Tegra194 CBB1.0 binding
+  dt-bindings: arm: tegra: Add NVIDIA Tegra194 axi2apb binding
+  arm64: tegra: Add node for CBB1.0 in Tegra194 SOC
+  soc: tegra: cbb: Add CBB1.0 driver for Tegra194
+  dt-bindings: arm: tegra: Add NVIDIA Tegra234 CBB2.0 binding
+  arm64: tegra: Add node for CBB2.0 in Tegra234 SOC
+  soc: tegra: cbb: Add driver for Tegra234 CBB2.0
+  soc: tegra: cbb: Add support for tegra-grace SOC
 
-        dmi_id = dmi_first_match(fwbug_list);
-        if (dmi_id)
-                tp_features.quirks = dmi_id->driver_data;
+ .../arm/tegra/nvidia,tegra194-axi2apb.yaml    |   40 +
+ .../arm/tegra/nvidia,tegra194-cbb.yaml        |   93 +
+ .../arm/tegra/nvidia,tegra234-cbb.yaml        |   70 +
+ arch/arm64/boot/dts/nvidia/tegra194.dtsi      |   62 +-
+ arch/arm64/boot/dts/nvidia/tegra234.dtsi      |   42 +
+ drivers/soc/tegra/Kconfig                     |    9 +
+ drivers/soc/tegra/Makefile                    |    1 +
+ drivers/soc/tegra/cbb/Makefile                |    9 +
+ drivers/soc/tegra/cbb/tegra-cbb.c             |  198 ++
+ drivers/soc/tegra/cbb/tegra194-cbb.c          | 2261 +++++++++++++++++
+ drivers/soc/tegra/cbb/tegra234-cbb.c          |  833 ++++++
+ drivers/soc/tegra/fuse/tegra-apbmisc.c        |   29 +-
+ include/soc/tegra/fuse.h                      |    6 +
+ include/soc/tegra/tegra-cbb.h                 |   43 +
+ include/soc/tegra/tegra-grace-cbb.h           |  219 ++
+ include/soc/tegra/tegra194-cbb.h              |  158 ++
+ include/soc/tegra/tegra234-cbb.h              |  342 +++
+ 17 files changed, 4412 insertions(+), 3 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/arm/tegra/nvidia,tegra194-axi2apb.yaml
+ create mode 100644 Documentation/devicetree/bindings/arm/tegra/nvidia,tegra194-cbb.yaml
+ create mode 100644 Documentation/devicetree/bindings/arm/tegra/nvidia,tegra234-cbb.yaml
+ create mode 100644 drivers/soc/tegra/cbb/Makefile
+ create mode 100644 drivers/soc/tegra/cbb/tegra-cbb.c
+ create mode 100644 drivers/soc/tegra/cbb/tegra194-cbb.c
+ create mode 100644 drivers/soc/tegra/cbb/tegra234-cbb.c
+ create mode 100644 include/soc/tegra/tegra-cbb.h
+ create mode 100644 include/soc/tegra/tegra-grace-cbb.h
+ create mode 100644 include/soc/tegra/tegra194-cbb.h
+ create mode 100644 include/soc/tegra/tegra234-cbb.h
 
-to higher inside thinkpad_acpi_module_init() to fix this,
-while keeping the:
-
-#ifdef CONFIG_SUSPEND
-       if (tp_features.quirks && tp_features.quirks->s2idle_bug_mmio) {
-               if (!acpi_register_lps0_dev(&thinkpad_acpi_s2idle_dev_ops))
-                       pr_info("Using s2idle quirk to avoid %s platform firmware bug\n",
-                               (dmi_id && dmi_id->ident) ? dmi_id->ident : "");
-       }
-#endif
-
-block at then end of thinkpad_acpi_module_init() so as to not change
-the ordering wrt registering the lps0_dev.
-
-Regards,
-
-Hans
-
-
-
-
-
-> 
-> Regards,
-> 
-> Hans
-> 
-> 
-> 
-> 
-> 
->>
->>> ---
->>>  drivers/platform/x86/thinkpad_acpi.c |    2 +-
->>>  1 file changed, 1 insertion(+), 1 deletion(-)
->>>
->>> diff --git a/drivers/platform/x86/thinkpad_acpi.c
->>> b/drivers/platform/x86/thinkpad_acpi.c
->>> index aed17d32ed84b..eefa22e86ae10 100644
->>> --- a/drivers/platform/x86/thinkpad_acpi.c
->>> +++ b/drivers/platform/x86/thinkpad_acpi.c
->>> @@ -314,7 +314,7 @@ struct quirk_entry {
->>>  	bool btusb_bug;
->>>  };
->>>
->>> -struct quirk_entry quirk_btusb_bug = {
->>> +static struct quirk_entry quirk_btusb_bug = {
->>>  	.btusb_bug = true,
->>>  };
->>>
->>
+-- 
+2.17.1
 

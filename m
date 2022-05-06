@@ -2,66 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F0BD51D3A6
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 10:47:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C11C51D3A7
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 10:47:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1390273AbiEFIvK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 04:51:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39856 "EHLO
+        id S1390283AbiEFIvR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 04:51:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1390267AbiEFIvB (ORCPT
+        with ESMTP id S242702AbiEFIvE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 04:51:01 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAE9957127
-        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 01:47:14 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id x18so9122911wrc.0
-        for <linux-kernel@vger.kernel.org>; Fri, 06 May 2022 01:47:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=7LQd7iQdqQi625fScqqUgHbyBnZ+6vFhX41p9tiKGP0=;
-        b=IMscpR8PfJpHILzYcvylriVA5ovdlSmxZrGEyN8QyRyGkOIt2J2TgzSLvmKypmI5NW
-         ro/p3Mou7emqGjRj/MS2mserpj9t5GFyhxt3wz6C0usU9tF9ynFSS5gcILBENYBIG4V3
-         pjukkVG2qOCKx7MLAtwcgew8GJF+xHexsU2B9QRja11CqGmRCiUF+DmN7jljGh0uimSF
-         pDBctRlBEpWvlKE6JDMsbNO+MsSCimMP3nsQVWIe7JzmUHgCgQRf2HA1igkX1zKOprQt
-         j+adMdy+mNLIPOijwOxn6jIgfBDKWIamR7pPW+8iq0vQyh2HQXo959bVD9QDWDMVSSMx
-         i9Hw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=7LQd7iQdqQi625fScqqUgHbyBnZ+6vFhX41p9tiKGP0=;
-        b=E2SWAJgvi3vEmWaCsAcY7t7/BX4fdRPVa4i3uHLDzn8MgWP/4Re0JhAPASvUFgiHGs
-         psxfu21KpZC9UDejQrXF733Ja0gf/QctrT9UJ2A91bolo8UOMQyz7KEv5wQnPn3pkggw
-         v27oYCIGWl01/uWrSYRNPLMcLao6dWANoOiYfCyjNnZrGeHs7NEhbJ6fxciCxNYH42Id
-         YW0cN90sZlz+2eQ0I7Utowbb90sZkqo0ml1HzfWMA1h5TzLoqRWkhV6xDp8e0idl06b/
-         LqNNmEZUm+D9DUSdjzbHqiTDAJm3Mbs/9B/L8G+Jj1g2YqkjAKeKCh2G/eZkLbZllkZB
-         vI4A==
-X-Gm-Message-State: AOAM533ndzcRssBGkGVmng6Lr9sW4oRKinaSSH4udHUi6S3/kasETX/c
-        Vvkut6TPPjnX5k5prHivhr1wsw==
-X-Google-Smtp-Source: ABdhPJx4WNtOGpGgOD2ShjcgQm2jF+xPxTjiXdlFjdV8rdMqU7AYWO6RI//SkfzYV9xgRDf/GROpyQ==
-X-Received: by 2002:a5d:6345:0:b0:20a:d69f:8126 with SMTP id b5-20020a5d6345000000b0020ad69f8126mr1775273wrw.276.1651826833431;
-        Fri, 06 May 2022 01:47:13 -0700 (PDT)
-Received: from srini-hackbox.lan (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
-        by smtp.gmail.com with ESMTPSA id o9-20020a5d62c9000000b0020c5253d903sm3071349wrv.79.2022.05.06.01.47.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 May 2022 01:47:12 -0700 (PDT)
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-To:     vkoul@kernel.org
-Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-        pierre-louis.bossart@linux.intel.com, bard.liao@intel.com,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-Subject: [PATCH v2] soundwire: qcom: adjust autoenumeration timeout
-Date:   Fri,  6 May 2022 09:47:05 +0100
-Message-Id: <20220506084705.18525-1-srinivas.kandagatla@linaro.org>
-X-Mailer: git-send-email 2.21.0
+        Fri, 6 May 2022 04:51:04 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1172A580D7;
+        Fri,  6 May 2022 01:47:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2D828B83408;
+        Fri,  6 May 2022 08:47:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 426CEC385A8;
+        Fri,  6 May 2022 08:47:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651826835;
+        bh=+ufjvO7P96KYb2XbcCIj9uJ7p81LI1Ql3CZxkOp2IaU=;
+        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
+        b=Fvj9B9xwDSiPeqEcTecehkOah/pHPFo0wISr1GNyf7fNRbmQ8ren8viMRQBOVWYKH
+         uza5c4k+QYCDlJz7Zk9jNMiz+aAp71dtHDBq48jJcmk6NGZ/shsA9k6ogJkhfm9DeP
+         Vs2XUIW1UfQpsoflkv7RZb4IbfVT4Wbqew31JVOhvKWiMzgQSqkKUIqckbAC9mhhAL
+         1W1lsrUVX0Dk1/f9abAk030teC/FIk4+G+oR1LeMrGRfPYeC9Z4lQCaSlwScXnqzjz
+         djS9RfIn5OaKj7Z8fQ/WkDZqQ7cW4NLp9y4dYKiXrFENCk24KBh9x0+4OMYwqIZgfD
+         lWe61DUP3XbVA==
+Date:   Fri, 6 May 2022 10:47:11 +0200 (CEST)
+From:   Jiri Kosina <jikos@kernel.org>
+To:     Dongliang Mu <dzm91@hust.edu.cn>
+cc:     Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Dongliang Mu <mudongliangabcd@gmail.com>,
+        syzkaller <syzkaller@googlegroups.com>,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] HID: bigben: fix slab-out-of-bounds Write in
+ bigben_probe
+In-Reply-To: <20220506072425.1121900-1-dzm91@hust.edu.cn>
+Message-ID: <nycvar.YFH.7.76.2205061046570.28985@cbobk.fhfr.pm>
+References: <20220506072425.1121900-1-dzm91@hust.edu.cn>
+User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -70,37 +57,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently timeout for autoenumeration during probe and bus reset is set to
-2 secs which is really a big value. This can have an adverse effect on
-boot time if the slave device is not ready/reset.
-This was the case with wcd938x which was not reset yet but we spent 2
-secs waiting in the soundwire controller probe. Reduce this time to
-1/10 of Hz which should be good enough time to finish autoenumeration
-if any slaves are available on the bus.
+On Fri, 6 May 2022, Dongliang Mu wrote:
 
-Reported-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
----
+> From: Dongliang Mu <mudongliangabcd@gmail.com>
+> 
+> There is a slab-out-of-bounds Write bug in hid-bigbenff driver.
+> The problem is the driver assumes the device must have an input but
+> some malicious devices violate this assumption.
+> 
+> Fix this by checking hid_device's input is non-empty before its usage.
+> 
+> Reported-by: syzkaller <syzkaller@googlegroups.com>
+> Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
 
-Changes since v1:
-	replaced HZ/10 with 100 as suggested by Pierre
+Applied. thanks.
 
- drivers/soundwire/qcom.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/soundwire/qcom.c b/drivers/soundwire/qcom.c
-index 7367aa88b8ac..d6111f69d320 100644
---- a/drivers/soundwire/qcom.c
-+++ b/drivers/soundwire/qcom.c
-@@ -105,7 +105,7 @@
- 
- #define SWRM_SPECIAL_CMD_ID	0xF
- #define MAX_FREQ_NUM		1
--#define TIMEOUT_MS		(2 * HZ)
-+#define TIMEOUT_MS		100
- #define QCOM_SWRM_MAX_RD_LEN	0x1
- #define QCOM_SDW_MAX_PORTS	14
- #define DEFAULT_CLK_FREQ	9600000
 -- 
-2.21.0
+Jiri Kosina
+SUSE Labs
 

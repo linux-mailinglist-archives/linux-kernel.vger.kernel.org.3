@@ -2,173 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6EDC51D8A9
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 15:16:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D64F51D89D
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 15:16:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1392323AbiEFNU2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 09:20:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42408 "EHLO
+        id S1392298AbiEFNUG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 09:20:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1392303AbiEFNUZ (ORCPT
+        with ESMTP id S1392292AbiEFNUC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 09:20:25 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAD3163BEA;
-        Fri,  6 May 2022 06:16:41 -0700 (PDT)
-Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 246CvoBq027748;
-        Fri, 6 May 2022 13:15:25 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=xscNj3LKneLSbobsh3Ku1jl1vBQ8kIYhyMEEDDClgkk=;
- b=oBJQd8ZmQELQLadl/nTQ3LRaxIO/aB6J2HboQ8BtrRYXRlcTMjQ42tG86DF5+sRI/Us2
- 6yu8YnHriU0eFlcupkHKrl5OxO6l9qZQOtyx5XnV8n6fWIF5tm+4Xe6HLE0FVlZwA4u6
- kFoAKCVEO22F/gM0owTO4fXUMywSG4eelo40bGXyRJwUwJP8fgeMEf2giutmEehQ3ILo
- VMW19KhYJUNwWTFL+36LFCX1mTzjraYcsur9KBqO1jctjg9DQeNWddzlAAqMquqYAopw
- YD8BUDGUByovfvkdobmUJ/1Kk4HpVfdE5WguUCW42hdJhdEFoqQmDOfvveZrLJzKpLro VQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3fw451rbr6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 06 May 2022 13:15:25 +0000
-Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 246DFOoT003453;
-        Fri, 6 May 2022 13:15:24 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3fw451rbpu-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 06 May 2022 13:15:24 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 246D7fbj009330;
-        Fri, 6 May 2022 13:15:21 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma03ams.nl.ibm.com with ESMTP id 3ftp7fwh3v-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 06 May 2022 13:15:21 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 246DFIxB41288002
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 6 May 2022 13:15:18 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 9686A4C04A;
-        Fri,  6 May 2022 13:15:18 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C4FBB4C044;
-        Fri,  6 May 2022 13:15:16 +0000 (GMT)
-Received: from sig-9-145-46-59.uk.ibm.com (unknown [9.145.46.59])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri,  6 May 2022 13:15:16 +0000 (GMT)
-Message-ID: <1424b9289049d0ad8b5c37a4e23ef70f0ef0f83d.camel@linux.ibm.com>
-Subject: Re: [RFC v2 01/39] Kconfig: introduce HAS_IOPORT option and select
- it as necessary
-From:   Niklas Schnelle <schnelle@linux.ibm.com>
-To:     Arnd Bergmann <arnd@kernel.org>,
-        "Maciej W. Rozycki" <macro@orcam.me.uk>
-Cc:     Bjorn Helgaas <helgaas@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        Richard Henderson <rth@twiddle.net>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        "David S. Miller" <davem@davemloft.net>,
+        Fri, 6 May 2022 09:20:02 -0400
+Received: from us-smtp-delivery-74.mimecast.com (us-smtp-delivery-74.mimecast.com [170.10.129.74])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7F7B663516
+        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 06:16:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1651842978;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=8wPDA2gsA8PtLts/9kHE8ZGbzgkULXlMPGcav5wmzQU=;
+        b=ccuXqQD7UwzYVucc3HfNsIr3iL+qEtX2ZOAYbQaO8WltyJqaTdgr+mrbpr1scJuLRBVbm4
+        GUm5dyIWNKscaIgulXPPuIsM8WUJhEBUUUfLM6LgG2T61QxmmVbd7CZMpHZl37cl58emE9
+        T6DlmUIzpKjuAA/VvMhC1xCuUxp5QsQ=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-583-j9olosgBNA2Z3YsZN10Vzw-1; Fri, 06 May 2022 09:16:14 -0400
+X-MC-Unique: j9olosgBNA2Z3YsZN10Vzw-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7D9F8803E2E;
+        Fri,  6 May 2022 13:16:13 +0000 (UTC)
+Received: from localhost (ovpn-13-105.pek2.redhat.com [10.72.13.105])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id A3EAD463EDC;
+        Fri,  6 May 2022 13:16:11 +0000 (UTC)
+Date:   Fri, 6 May 2022 21:16:08 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
         Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        "open list:ALPHA PORT" <linux-alpha@vger.kernel.org>,
-        "moderated list:ARM PORT" <linux-arm-kernel@lists.infradead.org>,
-        "open list:IA64 (Itanium) PLATFORM" <linux-ia64@vger.kernel.org>,
-        "open list:M68K ARCHITECTURE" <linux-m68k@lists.linux-m68k.org>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        "open list:PARISC ARCHITECTURE" <linux-parisc@vger.kernel.org>,
-        "open list:LINUX FOR POWERPC (32-BIT AND 64-BIT)" 
-        <linuxppc-dev@lists.ozlabs.org>,
-        "open list:RISC-V ARCHITECTURE" <linux-riscv@lists.infradead.org>,
-        "open list:SUPERH" <linux-sh@vger.kernel.org>,
-        "open list:SPARC + UltraSPARC (sparc/sparc64)" 
-        <sparclinux@vger.kernel.org>
-Date:   Fri, 06 May 2022 15:15:16 +0200
-In-Reply-To: <CAK8P3a0EMK0gHOmb-jvtfVLb1dun72kYUMKpb11T_GgXiuR9Mw@mail.gmail.com>
-References: <CAK8P3a0sJgMSpZB_Butx2gO0hapYZy-Dm_QH-hG5rOaq_ZgsXg@mail.gmail.com>
-         <20220505161028.GA492600@bhelgaas>
-         <CAK8P3a3fmPExr70+fVb564hZdGAuPtYa-QxgMMe5KLpnY_sTrQ@mail.gmail.com>
-         <alpine.DEB.2.21.2205061058540.52331@angie.orcam.me.uk>
-         <CAK8P3a0NzG=3tDLCdPj2=A__2r_+xiiUTW=WJCBNp29x_A63Og@mail.gmail.com>
-         <alpine.DEB.2.21.2205061314110.52331@angie.orcam.me.uk>
-         <CAK8P3a0EMK0gHOmb-jvtfVLb1dun72kYUMKpb11T_GgXiuR9Mw@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: -L36l-JGRIpdeUlE9r-XG_S8uzvQEAie
-X-Proofpoint-GUID: C-8WDwnxsOa89z3OSfQYEbBf2zCP5zSo
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-06_04,2022-05-06_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 spamscore=0
- bulkscore=0 mlxscore=0 adultscore=0 phishscore=0 suspectscore=0
- priorityscore=1501 clxscore=1015 mlxlogscore=852 malwarescore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2205060074
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        linux-kernel@vger.kernel.org, Dave Young <dyoung@redhat.com>,
+        Vivek Goyal <vgoyal@redhat.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        kexec@lists.infradead.org, Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        devicetree@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        linux-doc@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
+        Feng Zhou <zhoufeng.zf@bytedance.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Chen Zhou <dingguo.cz@antgroup.com>,
+        John Donnelly <John.p.donnelly@oracle.com>,
+        Dave Kleikamp <dave.kleikamp@oracle.com>
+Subject: Re: [PATCH v23 3/6] arm64: kdump: Reimplement crashkernel=X
+Message-ID: <YnUfmMmON2c1FZrx@MiWiFi-R3L-srv>
+References: <20220505091845.167-1-thunder.leizhen@huawei.com>
+ <20220505091845.167-4-thunder.leizhen@huawei.com>
+ <YnQC44KVKirH0vyB@arm.com>
+ <189f24a8-9e9b-b3e9-7ac5-935433ea575b@huawei.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <189f24a8-9e9b-b3e9-7ac5-935433ea575b@huawei.com>
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-05-06 at 14:53 +0200, Arnd Bergmann wrote:
-> On Fri, May 6, 2022 at 2:27 PM Maciej W. Rozycki <macro@orcam.me.uk> wrote:
-> > On Fri, 6 May 2022, Arnd Bergmann wrote:
+On 05/06/22 at 11:22am, Leizhen (ThunderTown) wrote:
+......  
+> >> @@ -118,8 +159,7 @@ static void __init reserve_crashkernel(void)
+> >>  	if (crash_base)
+> >>  		crash_max = crash_base + crash_size;
+> >>  
+> >> -	/* Current arm64 boot protocol requires 2MB alignment */
+> >> -	crash_base = memblock_phys_alloc_range(crash_size, SZ_2M,
+> >> +	crash_base = memblock_phys_alloc_range(crash_size, CRASH_ALIGN,
+> >>  					       crash_base, crash_max);
+> >>  	if (!crash_base) {
+> >>  		pr_warn("cannot allocate crashkernel (size:0x%llx)\n",
 > > 
-> > > >  If this is PCI/PCIe indeed, then an I/O access is just a different bit
-> > > > pattern put on the bus/in the TLP in the address phase.  So what is there
-> > > > inherent to the s390 architecture that prevents that different bit pattern
-> > > > from being used?
-> > > 
-> > > The hardware design for PCI on s390 is very different from any other
-> > > architecture, and more abstract. Rather than implementing MMIO register
-> > > access as pointer dereference, this is a separate CPU instruction that
-> > > takes a device/bar plus offset as arguments rather than a pointer, and
-> > > Linux encodes this back into a fake __iomem token.
-> > 
-> >  OK, that seems to me like a reasonable and quite a clean design (on the
-> > hardware side).
-> > 
-> >  So what happens if the instruction is given an I/O rather than memory BAR
-> > as the relevant argument?  Is the address space indicator bit (bit #0)
-> > simply ignored or what?
+> > I personally like this but let's see how the other thread goes. I guess
 > 
-> Not sure. My best guess is that it would actually work as you'd expect,
-> but is deliberately left out of the architecture specification so they don't
-> have to to validate the correctness.  Note that only a small number of
-> PCIe cards are actually supported by IBM, and I think the firmware
-> only passes devices to the OS if they are whitelisted.
-> 
->         Arnd
+> Me too. This fallback complicates code logic more than just a little.
+> I'm not sure why someone would rather add fallback than change the bootup
+> options to crashkernel=X,[high|low]. Perhaps fallback to high/low is a better
+> compatible and extended mode when crashkernel=X fails to reserve memory. And
+> the code logic will be much clearer.
 
-Yes, though in Linux we do try hard to work with whatever is plugged
-in. We did benefit from this in the past working with a new NIC from a
-different vendor with 0 additional changes. Also you can use vfio-pci
-to pass-through arbitrary PCI devices to a QEMU emulating s390x.
+The fallback does complicates code, while it was not made at the
+beginning, but added later. The original crahskernel=xM can only reserve
+low memory under 896M on x86 to be back compatible with the case in which
+normal kernel is x86_64, while kdump kernel could be i386. Then customer
+complained why crashkernel=xM can't be put anywhere so that they don't
+need to know the details of limited low memory and huge high memory fact 
+in system.
+
+The implementation of fallback is truly complicated, but its use is
+quite simple. And it makes crashkernel reservation setting simple.
+Most of users don't need to know crashkernel=,high, ,low things, unless
+the crashkernel region is too big. Nobody wants to take away 1G or more
+from low memory for kdump just in case bad thing happens, while normal
+kernel itself is seriously impacted by limited low memory.
+
+> 
+> //parse crashkernel=X		//To simplify the discussion, Ignore [@offset]
+> crash_base = memblock_phys_alloc_range()
+> if (!crash_base || /* crashkernel=X is not specified */) {
+> 	//parse crashkernel=X,[high,low]
+> 	//reserve high/low memory
+> }
+> 
+> So that, the following three modes are supported:
+> 1) crashkernel=X[@offset]
+> 2) crashkernel=X,high crashkernel=X,low
+> 3) crashkernel=X[@offset] crashkernel=X,high [crashkernel=Y,low]
+> 
+> For case 3), try "crashkernel=X[@offset]" first, if it can not work, fallback
+> to "crashkernel=X,high crashkernel=X,low". This looks better than the old "crashkernel=X"
+> fallback ---- Select a region under 4G first, and fall back to reserve region above 4G.
+
+Don't get it. Aren't they the same?
+
+> 
+> Note: when the X of crashkernel=X and crashkernel=X,high are the same, It's equivalent
+> to the old "crashkernel=X" fallback.
+> 
+> > if we want a fallback, it would come just before the check the above:
+> > 
+> > 	if (!crash_base && crash_max != CRASH_ADDR_HIGH_MAX) {
+> > 		/* attempt high allocation with default low */
+> > 		if (!crash_low_size)
+> > 			crash_low_size = some default;
+> > 		crash_max = CRASH_ADDR_LOW_MAX;
+> 
+> crash_max = CRASH_ADDR_HIGH_MAX; We should fallback to high memory now.
+> 
+> > 		crash_base = memblock_phys_alloc_range();
+> > 	}
+> > 
+> > Well, I guess we end up with your earlier proposal but I think I
+> > understand it better now ;).
+> > 
+> 
+> -- 
+> Regards,
+>   Zhen Lei
+> 
 

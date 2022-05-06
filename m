@@ -2,49 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BFBF51E237
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 01:40:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 315D551E274
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 01:41:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381732AbiEFXZz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 19:25:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57340 "EHLO
+        id S1444992AbiEFX0w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 19:26:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236547AbiEFXZv (ORCPT
+        with ESMTP id S236547AbiEFX0u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 19:25:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65F3B70917;
-        Fri,  6 May 2022 16:22:06 -0700 (PDT)
+        Fri, 6 May 2022 19:26:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BBEC7092B
+        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 16:23:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 03386617CF;
-        Fri,  6 May 2022 23:22:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3AC7DC385A9;
-        Fri,  6 May 2022 23:22:05 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 254A461A28
+        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 23:23:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 781F1C385A9;
+        Fri,  6 May 2022 23:23:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651879325;
-        bh=0KxPlUem/CmfBocjj06kFOXXVyKwRj4DKawIeoBMDZU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=DytsWlQv+vlTfw3SyKSmWAsf//Ttg/uqV9gzpcRjh6OX5v6e80FekiBsaG0wC4rFZ
-         ecUCSYAwNtVtum8eH0otLcUaLW+D3a4p/JvxLleZBj2Sv0zViSLTAXakViif5mlAZl
-         Eh2gWhdePTkHf0krStnVVgRxW14buxVzy1KFrCLBNxcZhsN9jDPEfAHlCp7bNgc5VA
-         uX2Oa6GExgVkNfyLgZNILxCfpmEWA5PxWivr7PXvGObIoEjgHEsSaCY1XtoDwLFhDm
-         Ad5GAFCrXPFxgoYArKqguaL7+DiGzC46W8wEOTIy6oKcPrTeCQv+pdX1uTQZeNvikv
-         iYOIHUIieMaQA==
-Date:   Fri, 6 May 2022 16:22:03 -0700
+        s=k20201202; t=1651879384;
+        bh=vo5043PSzfcS7GsGaGcTVAsUJxoZIcBgRSYY43iCzdc=;
+        h=From:To:Cc:Subject:Date:From;
+        b=piVAQ5xZtAgFz/A39pa1ElTPXE+AJsFJg54DWNPBmm3fNG+NW3g/3LIBf0SiGFf+3
+         uQqAicY4A5ZowlkxJrW4T+QGJ0XifH8bzIeus41CBTE30fZbMyElybiRRowao5/vyR
+         U//6RuRFBDYAk3IGAQ5oBN8DhxqPRyOw+k55aYrlc0jjh0WbJK/8X4auYou9zn1J/1
+         2RmCw7Hu1o5F2WaQDB57E+7EMNhFbqrnmwO5AogAfi7OrzaoLvgQ4ep6XaOuUuweFp
+         nuJl7fEcZlsvlV090iDxFztzcfUcii/gcjPd3vcLVSEE7tgqSlK+rIYCmLrkexWrVU
+         o57aBtLqbyzhg==
 From:   Jaegeuk Kim <jaegeuk@kernel.org>
-To:     Chao Yu <chao@kernel.org>
-Cc:     linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Ming Yan <yanming@tju.edu.cn>, Chao Yu <chao.yu@oppo.com>
-Subject: Re: [PATCH v4] f2fs: fix to do sanity check on total_data_blocks
-Message-ID: <YnWtm4opVq3JypW9@google.com>
-References: <20220506013306.3563504-1-chao@kernel.org>
+To:     linux-kernel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net
+Cc:     Jaegeuk Kim <jaegeuk@kernel.org>
+Subject: [PATCH] f2fs: kill volatile write support
+Date:   Fri,  6 May 2022 16:23:02 -0700
+Message-Id: <20220506232302.1264915-1-jaegeuk@kernel.org>
+X-Mailer: git-send-email 2.36.0.512.ge40c2bad7a-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220506013306.3563504-1-chao@kernel.org>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -55,138 +52,354 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I added a macro to clean up. Could you please check this out?
+There's no user, since all can use atomic writes simply.
+Let's kill it.
 
-https://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs.git/commit/?h=dev&id=6b8beca0edd32075a769bfe4178ca00c0dcd22a9
+Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
+---
+ fs/f2fs/checkpoint.c |   4 +-
+ fs/f2fs/data.c       |   5 --
+ fs/f2fs/debug.c      |  10 +---
+ fs/f2fs/f2fs.h       |  27 +---------
+ fs/f2fs/file.c       | 116 ++-----------------------------------------
+ fs/f2fs/segment.c    |   3 +-
+ fs/f2fs/verity.c     |   2 +-
+ 7 files changed, 10 insertions(+), 157 deletions(-)
 
-On 05/06, Chao Yu wrote:
-> As Yanming reported in bugzilla:
-> 
-> https://bugzilla.kernel.org/show_bug.cgi?id=215916
-> 
-> The kernel message is shown below:
-> 
-> kernel BUG at fs/f2fs/segment.c:2560!
-> Call Trace:
->  allocate_segment_by_default+0x228/0x440
->  f2fs_allocate_data_block+0x13d1/0x31f0
->  do_write_page+0x18d/0x710
->  f2fs_outplace_write_data+0x151/0x250
->  f2fs_do_write_data_page+0xef9/0x1980
->  move_data_page+0x6af/0xbc0
->  do_garbage_collect+0x312f/0x46f0
->  f2fs_gc+0x6b0/0x3bc0
->  f2fs_balance_fs+0x921/0x2260
->  f2fs_write_single_data_page+0x16be/0x2370
->  f2fs_write_cache_pages+0x428/0xd00
->  f2fs_write_data_pages+0x96e/0xd50
->  do_writepages+0x168/0x550
->  __writeback_single_inode+0x9f/0x870
->  writeback_sb_inodes+0x47d/0xb20
->  __writeback_inodes_wb+0xb2/0x200
->  wb_writeback+0x4bd/0x660
->  wb_workfn+0x5f3/0xab0
->  process_one_work+0x79f/0x13e0
->  worker_thread+0x89/0xf60
->  kthread+0x26a/0x300
->  ret_from_fork+0x22/0x30
-> RIP: 0010:new_curseg+0xe8d/0x15f0
-> 
-> The root cause is: ckpt.valid_block_count is inconsistent with SIT table,
-> stat info indicates filesystem has free blocks, but SIT table indicates
-> filesystem has no free segment.
-> 
-> So that during garbage colloection, it triggers panic when LFS allocator
-> fails to find free segment.
-> 
-> This patch tries to fix this issue by checking consistency in between
-> ckpt.valid_block_count and block accounted from SIT.
-> 
-> Cc: stable@vger.kernel.org
-> Reported-by: Ming Yan <yanming@tju.edu.cn>
-> Signed-off-by: Chao Yu <chao.yu@oppo.com>
-> ---
-> v4:
-> - fix to set data/node type correctly.
->  fs/f2fs/segment.c | 37 ++++++++++++++++++++++++++-----------
->  1 file changed, 26 insertions(+), 11 deletions(-)
-> 
-> diff --git a/fs/f2fs/segment.c b/fs/f2fs/segment.c
-> index 3a3e2cec2ac4..4735d477059d 100644
-> --- a/fs/f2fs/segment.c
-> +++ b/fs/f2fs/segment.c
-> @@ -4461,7 +4461,8 @@ static int build_sit_entries(struct f2fs_sb_info *sbi)
->  	unsigned int i, start, end;
->  	unsigned int readed, start_blk = 0;
->  	int err = 0;
-> -	block_t total_node_blocks = 0;
-> +	block_t sit_valid_blocks[2] = {0, 0};
-> +	int type;
->  
->  	do {
->  		readed = f2fs_ra_meta_pages(sbi, start_blk, BIO_MAX_VECS,
-> @@ -4486,8 +4487,9 @@ static int build_sit_entries(struct f2fs_sb_info *sbi)
->  			if (err)
->  				return err;
->  			seg_info_from_raw_sit(se, &sit);
-> -			if (IS_NODESEG(se->type))
-> -				total_node_blocks += se->valid_blocks;
-> +
-> +			type = IS_NODESEG(se->type) ? NODE : DATA;
-> +			sit_valid_blocks[type] += se->valid_blocks;
->  
->  			if (f2fs_block_unit_discard(sbi)) {
->  				/* build discard map only one time */
-> @@ -4527,15 +4529,17 @@ static int build_sit_entries(struct f2fs_sb_info *sbi)
->  		sit = sit_in_journal(journal, i);
->  
->  		old_valid_blocks = se->valid_blocks;
-> -		if (IS_NODESEG(se->type))
-> -			total_node_blocks -= old_valid_blocks;
-> +
-> +		type = IS_NODESEG(se->type) ? NODE : DATA;
-> +		sit_valid_blocks[type] -= old_valid_blocks;
->  
->  		err = check_block_count(sbi, start, &sit);
->  		if (err)
->  			break;
->  		seg_info_from_raw_sit(se, &sit);
-> -		if (IS_NODESEG(se->type))
-> -			total_node_blocks += se->valid_blocks;
-> +
-> +		type = IS_NODESEG(se->type) ? NODE : DATA;
-> +		sit_valid_blocks[type] += se->valid_blocks;
->  
->  		if (f2fs_block_unit_discard(sbi)) {
->  			if (is_set_ckpt_flags(sbi, CP_TRIMMED_FLAG)) {
-> @@ -4557,13 +4561,24 @@ static int build_sit_entries(struct f2fs_sb_info *sbi)
->  	}
->  	up_read(&curseg->journal_rwsem);
->  
-> -	if (!err && total_node_blocks != valid_node_count(sbi)) {
-> +	if (err)
-> +		return err;
-> +
-> +	if (sit_valid_blocks[NODE] != valid_node_count(sbi)) {
->  		f2fs_err(sbi, "SIT is corrupted node# %u vs %u",
-> -			 total_node_blocks, valid_node_count(sbi));
-> -		err = -EFSCORRUPTED;
-> +			 sit_valid_blocks[NODE], valid_node_count(sbi));
-> +		return -EFSCORRUPTED;
->  	}
->  
-> -	return err;
-> +	if (sit_valid_blocks[DATA] + sit_valid_blocks[NODE] >
-> +				valid_user_blocks(sbi)) {
-> +		f2fs_err(sbi, "SIT is corrupted data# %u %u vs %u",
-> +			 sit_valid_blocks[DATA], sit_valid_blocks[NODE],
-> +			 valid_user_blocks(sbi));
-> +		return -EFSCORRUPTED;
-> +	}
-> +
-> +	return 0;
->  }
->  
->  static void init_free_segmap(struct f2fs_sb_info *sbi)
-> -- 
-> 2.25.1
+diff --git a/fs/f2fs/checkpoint.c b/fs/f2fs/checkpoint.c
+index beceac9885c3..63ab8c9d674e 100644
+--- a/fs/f2fs/checkpoint.c
++++ b/fs/f2fs/checkpoint.c
+@@ -1004,9 +1004,7 @@ static void __add_dirty_inode(struct inode *inode, enum inode_type type)
+ 		return;
+ 
+ 	set_inode_flag(inode, flag);
+-	if (!f2fs_is_volatile_file(inode))
+-		list_add_tail(&F2FS_I(inode)->dirty_list,
+-						&sbi->inode_list[type]);
++	list_add_tail(&F2FS_I(inode)->dirty_list, &sbi->inode_list[type]);
+ 	stat_inc_dirty_inode(sbi, type);
+ }
+ 
+diff --git a/fs/f2fs/data.c b/fs/f2fs/data.c
+index 8763a4690aaf..54a7a8ad994d 100644
+--- a/fs/f2fs/data.c
++++ b/fs/f2fs/data.c
+@@ -2741,11 +2741,6 @@ int f2fs_write_single_data_page(struct page *page, int *submitted,
+ write:
+ 	if (f2fs_is_drop_cache(inode))
+ 		goto out;
+-	/* we should not write 0'th page having journal header */
+-	if (f2fs_is_volatile_file(inode) && (!page->index ||
+-			(!wbc->for_reclaim &&
+-			f2fs_available_free_memory(sbi, BASE_CHECK))))
+-		goto redirty_out;
+ 
+ 	/* Dentry/quota blocks are controlled by checkpoint */
+ 	if (S_ISDIR(inode->i_mode) || IS_NOQUOTA(inode)) {
+diff --git a/fs/f2fs/debug.c b/fs/f2fs/debug.c
+index 65f0bcf498bb..c92625ef16d0 100644
+--- a/fs/f2fs/debug.c
++++ b/fs/f2fs/debug.c
+@@ -92,9 +92,7 @@ static void update_general_status(struct f2fs_sb_info *sbi)
+ 	si->nquota_files = sbi->nquota_files;
+ 	si->ndirty_all = sbi->ndirty_inode[DIRTY_META];
+ 	si->aw_cnt = sbi->atomic_files;
+-	si->vw_cnt = atomic_read(&sbi->vw_cnt);
+ 	si->max_aw_cnt = atomic_read(&sbi->max_aw_cnt);
+-	si->max_vw_cnt = atomic_read(&sbi->max_vw_cnt);
+ 	si->nr_dio_read = get_pages(sbi, F2FS_DIO_READ);
+ 	si->nr_dio_write = get_pages(sbi, F2FS_DIO_WRITE);
+ 	si->nr_wb_cp_data = get_pages(sbi, F2FS_WB_CP_DATA);
+@@ -511,10 +509,8 @@ static int stat_show(struct seq_file *s, void *v)
+ 			   si->flush_list_empty,
+ 			   si->nr_discarding, si->nr_discarded,
+ 			   si->nr_discard_cmd, si->undiscard_blks);
+-		seq_printf(s, "  - atomic IO: %4d (Max. %4d), "
+-			"volatile IO: %4d (Max. %4d)\n",
+-			   si->aw_cnt, si->max_aw_cnt,
+-			   si->vw_cnt, si->max_vw_cnt);
++		seq_printf(s, "  - atomic IO: %4d (Max. %4d)\n",
++			   si->aw_cnt, si->max_aw_cnt);
+ 		seq_printf(s, "  - compress: %4d, hit:%8d\n", si->compress_pages, si->compress_page_hit);
+ 		seq_printf(s, "  - nodes: %4d in %4d\n",
+ 			   si->ndirty_node, si->node_pages);
+@@ -615,9 +611,7 @@ int f2fs_build_stats(struct f2fs_sb_info *sbi)
+ 	for (i = META_CP; i < META_MAX; i++)
+ 		atomic_set(&sbi->meta_count[i], 0);
+ 
+-	atomic_set(&sbi->vw_cnt, 0);
+ 	atomic_set(&sbi->max_aw_cnt, 0);
+-	atomic_set(&sbi->max_vw_cnt, 0);
+ 
+ 	raw_spin_lock_irqsave(&f2fs_stat_lock, flags);
+ 	list_add_tail(&si->stat_list, &f2fs_stat_list);
+diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
+index 2787797df576..492af5b96de1 100644
+--- a/fs/f2fs/f2fs.h
++++ b/fs/f2fs/f2fs.h
+@@ -737,7 +737,6 @@ enum {
+ 	FI_UPDATE_WRITE,	/* inode has in-place-update data */
+ 	FI_NEED_IPU,		/* used for ipu per file */
+ 	FI_ATOMIC_FILE,		/* indicate atomic file */
+-	FI_VOLATILE_FILE,	/* indicate volatile file */
+ 	FI_FIRST_BLOCK_WRITTEN,	/* indicate #0 data block was written */
+ 	FI_DROP_CACHE,		/* drop dirty page cache */
+ 	FI_DATA_EXIST,		/* indicate data exists */
+@@ -1747,9 +1746,7 @@ struct f2fs_sb_info {
+ 	atomic_t inline_dir;			/* # of inline_dentry inodes */
+ 	atomic_t compr_inode;			/* # of compressed inodes */
+ 	atomic64_t compr_blocks;		/* # of compressed blocks */
+-	atomic_t vw_cnt;			/* # of volatile writes */
+ 	atomic_t max_aw_cnt;			/* max # of atomic writes */
+-	atomic_t max_vw_cnt;			/* max # of volatile writes */
+ 	unsigned int io_skip_bggc;		/* skip background gc for in-flight IO */
+ 	unsigned int other_skip_bggc;		/* skip background gc for other reasons */
+ 	unsigned int ndirty_inode[NR_INODE_TYPE];	/* # of dirty inodes */
+@@ -3200,11 +3197,6 @@ static inline bool f2fs_is_atomic_file(struct inode *inode)
+ 	return is_inode_flag_set(inode, FI_ATOMIC_FILE);
+ }
+ 
+-static inline bool f2fs_is_volatile_file(struct inode *inode)
+-{
+-	return is_inode_flag_set(inode, FI_VOLATILE_FILE);
+-}
+-
+ static inline bool f2fs_is_first_block_written(struct inode *inode)
+ {
+ 	return is_inode_flag_set(inode, FI_FIRST_BLOCK_WRITTEN);
+@@ -3823,7 +3815,7 @@ struct f2fs_stat_info {
+ 	int inline_xattr, inline_inode, inline_dir, append, update, orphans;
+ 	int compr_inode;
+ 	unsigned long long compr_blocks;
+-	int aw_cnt, max_aw_cnt, vw_cnt, max_vw_cnt;
++	int aw_cnt, max_aw_cnt;
+ 	unsigned int valid_count, valid_node_count, valid_inode_count, discard_blks;
+ 	unsigned int bimodal, avg_vblocks;
+ 	int util_free, util_valid, util_invalid;
+@@ -3934,17 +3926,6 @@ static inline struct f2fs_stat_info *F2FS_STAT(struct f2fs_sb_info *sbi)
+ 		if (cur > max)						\
+ 			atomic_set(&F2FS_I_SB(inode)->max_aw_cnt, cur);	\
+ 	} while (0)
+-#define stat_inc_volatile_write(inode)					\
+-		(atomic_inc(&F2FS_I_SB(inode)->vw_cnt))
+-#define stat_dec_volatile_write(inode)					\
+-		(atomic_dec(&F2FS_I_SB(inode)->vw_cnt))
+-#define stat_update_max_volatile_write(inode)				\
+-	do {								\
+-		int cur = atomic_read(&F2FS_I_SB(inode)->vw_cnt);	\
+-		int max = atomic_read(&F2FS_I_SB(inode)->max_vw_cnt);	\
+-		if (cur > max)						\
+-			atomic_set(&F2FS_I_SB(inode)->max_vw_cnt, cur);	\
+-	} while (0)
+ #define stat_inc_seg_count(sbi, type, gc_type)				\
+ 	do {								\
+ 		struct f2fs_stat_info *si = F2FS_STAT(sbi);		\
+@@ -4006,9 +3987,6 @@ void f2fs_update_sit_info(struct f2fs_sb_info *sbi);
+ #define stat_add_compr_blocks(inode, blocks)		do { } while (0)
+ #define stat_sub_compr_blocks(inode, blocks)		do { } while (0)
+ #define stat_update_max_atomic_write(inode)		do { } while (0)
+-#define stat_inc_volatile_write(inode)			do { } while (0)
+-#define stat_dec_volatile_write(inode)			do { } while (0)
+-#define stat_update_max_volatile_write(inode)		do { } while (0)
+ #define stat_inc_meta_count(sbi, blkaddr)		do { } while (0)
+ #define stat_inc_seg_type(sbi, curseg)			do { } while (0)
+ #define stat_inc_block_count(sbi, curseg)		do { } while (0)
+@@ -4411,8 +4389,7 @@ static inline bool f2fs_lfs_mode(struct f2fs_sb_info *sbi)
+ static inline bool f2fs_may_compress(struct inode *inode)
+ {
+ 	if (IS_SWAPFILE(inode) || f2fs_is_pinned_file(inode) ||
+-				f2fs_is_atomic_file(inode) ||
+-				f2fs_is_volatile_file(inode))
++				f2fs_is_atomic_file(inode))
+ 		return false;
+ 	return S_ISREG(inode->i_mode) || S_ISDIR(inode->i_mode);
+ }
+diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
+index b7d7c609b407..09287876dbb7 100644
+--- a/fs/f2fs/file.c
++++ b/fs/f2fs/file.c
+@@ -1820,13 +1820,6 @@ static int f2fs_release_file(struct inode *inode, struct file *filp)
+ 
+ 	if (f2fs_is_atomic_file(inode))
+ 		f2fs_abort_atomic_write(inode, true);
+-	if (f2fs_is_volatile_file(inode)) {
+-		set_inode_flag(inode, FI_DROP_CACHE);
+-		filemap_fdatawrite(inode->i_mapping);
+-		clear_inode_flag(inode, FI_DROP_CACHE);
+-		clear_inode_flag(inode, FI_VOLATILE_FILE);
+-		stat_dec_volatile_write(inode);
+-	}
+ 	return 0;
+ }
+ 
+@@ -2100,15 +2093,10 @@ static int f2fs_ioc_commit_atomic_write(struct file *filp)
+ 
+ 	inode_lock(inode);
+ 
+-	if (f2fs_is_volatile_file(inode)) {
+-		ret = -EINVAL;
+-		goto err_out;
+-	}
+-
+ 	if (f2fs_is_atomic_file(inode)) {
+ 		ret = f2fs_commit_atomic_write(inode);
+ 		if (ret)
+-			goto err_out;
++			goto unlock_out;
+ 
+ 		ret = f2fs_do_sync_file(filp, 0, LLONG_MAX, 0, true);
+ 		if (!ret)
+@@ -2116,108 +2104,12 @@ static int f2fs_ioc_commit_atomic_write(struct file *filp)
+ 	} else {
+ 		ret = f2fs_do_sync_file(filp, 0, LLONG_MAX, 1, false);
+ 	}
+-err_out:
++unlock_out:
+ 	inode_unlock(inode);
+ 	mnt_drop_write_file(filp);
+ 	return ret;
+ }
+ 
+-static int f2fs_ioc_start_volatile_write(struct file *filp)
+-{
+-	struct inode *inode = file_inode(filp);
+-	struct user_namespace *mnt_userns = file_mnt_user_ns(filp);
+-	int ret;
+-
+-	if (!inode_owner_or_capable(mnt_userns, inode))
+-		return -EACCES;
+-
+-	if (!S_ISREG(inode->i_mode))
+-		return -EINVAL;
+-
+-	ret = mnt_want_write_file(filp);
+-	if (ret)
+-		return ret;
+-
+-	inode_lock(inode);
+-
+-	if (f2fs_is_volatile_file(inode))
+-		goto out;
+-
+-	ret = f2fs_convert_inline_inode(inode);
+-	if (ret)
+-		goto out;
+-
+-	stat_inc_volatile_write(inode);
+-	stat_update_max_volatile_write(inode);
+-
+-	set_inode_flag(inode, FI_VOLATILE_FILE);
+-	f2fs_update_time(F2FS_I_SB(inode), REQ_TIME);
+-out:
+-	inode_unlock(inode);
+-	mnt_drop_write_file(filp);
+-	return ret;
+-}
+-
+-static int f2fs_ioc_release_volatile_write(struct file *filp)
+-{
+-	struct inode *inode = file_inode(filp);
+-	struct user_namespace *mnt_userns = file_mnt_user_ns(filp);
+-	int ret;
+-
+-	if (!inode_owner_or_capable(mnt_userns, inode))
+-		return -EACCES;
+-
+-	ret = mnt_want_write_file(filp);
+-	if (ret)
+-		return ret;
+-
+-	inode_lock(inode);
+-
+-	if (!f2fs_is_volatile_file(inode))
+-		goto out;
+-
+-	if (!f2fs_is_first_block_written(inode)) {
+-		ret = truncate_partial_data_page(inode, 0, true);
+-		goto out;
+-	}
+-
+-	ret = punch_hole(inode, 0, F2FS_BLKSIZE);
+-out:
+-	inode_unlock(inode);
+-	mnt_drop_write_file(filp);
+-	return ret;
+-}
+-
+-static int f2fs_ioc_abort_volatile_write(struct file *filp)
+-{
+-	struct inode *inode = file_inode(filp);
+-	struct user_namespace *mnt_userns = file_mnt_user_ns(filp);
+-	int ret;
+-
+-	if (!inode_owner_or_capable(mnt_userns, inode))
+-		return -EACCES;
+-
+-	ret = mnt_want_write_file(filp);
+-	if (ret)
+-		return ret;
+-
+-	inode_lock(inode);
+-
+-	if (f2fs_is_atomic_file(inode))
+-		f2fs_abort_atomic_write(inode, true);
+-	if (f2fs_is_volatile_file(inode)) {
+-		clear_inode_flag(inode, FI_VOLATILE_FILE);
+-		stat_dec_volatile_write(inode);
+-		ret = f2fs_do_sync_file(filp, 0, LLONG_MAX, 0, true);
+-	}
+-
+-	inode_unlock(inode);
+-
+-	mnt_drop_write_file(filp);
+-	f2fs_update_time(F2FS_I_SB(inode), REQ_TIME);
+-	return ret;
+-}
+-
+ static int f2fs_ioc_shutdown(struct file *filp, unsigned long arg)
+ {
+ 	struct inode *inode = file_inode(filp);
+@@ -4174,11 +4066,9 @@ static long __f2fs_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
+ 	case F2FS_IOC_COMMIT_ATOMIC_WRITE:
+ 		return f2fs_ioc_commit_atomic_write(filp);
+ 	case F2FS_IOC_START_VOLATILE_WRITE:
+-		return f2fs_ioc_start_volatile_write(filp);
+ 	case F2FS_IOC_RELEASE_VOLATILE_WRITE:
+-		return f2fs_ioc_release_volatile_write(filp);
+ 	case F2FS_IOC_ABORT_VOLATILE_WRITE:
+-		return f2fs_ioc_abort_volatile_write(filp);
++		return -EOPNOTSUPP;
+ 	case F2FS_IOC_SHUTDOWN:
+ 		return f2fs_ioc_shutdown(filp, arg);
+ 	case FITRIM:
+diff --git a/fs/f2fs/segment.c b/fs/f2fs/segment.c
+index 268f341d8963..0a4180f64291 100644
+--- a/fs/f2fs/segment.c
++++ b/fs/f2fs/segment.c
+@@ -3173,8 +3173,7 @@ static int __get_segment_type_6(struct f2fs_io_info *fio)
+ 			return CURSEG_COLD_DATA;
+ 		if (file_is_hot(inode) ||
+ 				is_inode_flag_set(inode, FI_HOT_DATA) ||
+-				f2fs_is_atomic_file(inode) ||
+-				f2fs_is_volatile_file(inode))
++				f2fs_is_atomic_file(inode))
+ 			return CURSEG_HOT_DATA;
+ 		return f2fs_rw_hint_to_seg_type(inode->i_write_hint);
+ 	} else {
+diff --git a/fs/f2fs/verity.c b/fs/f2fs/verity.c
+index 3d793202cc9f..5ac7e756a1bb 100644
+--- a/fs/f2fs/verity.c
++++ b/fs/f2fs/verity.c
+@@ -128,7 +128,7 @@ static int f2fs_begin_enable_verity(struct file *filp)
+ 	if (f2fs_verity_in_progress(inode))
+ 		return -EBUSY;
+ 
+-	if (f2fs_is_atomic_file(inode) || f2fs_is_volatile_file(inode))
++	if (f2fs_is_atomic_file(inode))
+ 		return -EOPNOTSUPP;
+ 
+ 	/*
+-- 
+2.36.0.512.ge40c2bad7a-goog
+

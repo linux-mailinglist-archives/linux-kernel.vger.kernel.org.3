@@ -2,66 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B24551D257
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 09:32:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4D7351D251
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 09:31:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353234AbiEFHfv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 03:35:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53446 "EHLO
+        id S1389548AbiEFHfH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 03:35:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231643AbiEFHfk (ORCPT
+        with ESMTP id S231643AbiEFHfE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 03:35:40 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D606F5D1B1;
-        Fri,  6 May 2022 00:31:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651822317; x=1683358317;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=SkwnacsNYIuKuqUXcnje2/FShCNjGYncVyvTKO9Qoz4=;
-  b=DxQulxvfjkQmf2kZEqMPCMGYgcLKjLr0cqiBFUzSbcH9cG5hbl5I3UOV
-   tf50Fw9QgJueTPphn3GyaovCGjlpNIISHI1TYmS+BDcO5vyizbEW4vdw3
-   p56SWaH8i5Cya7VYbhEvUzTb8U/0JeMufZnTwQhajM8ivQnLRKB7evzGh
-   /ioC0nm4Mz6eeJ1zhOSvOOxxJQC/Gk2Oclm/KzRVYUYsZLu48KdrXYBpu
-   bNpzoI3AZU7ofs9wAdfhZRstnYXS/6KHFAYQf+gjNPkjoAgqMQdIAqfJA
-   FpvDYZukra/FYDePJZsheFaIcdKz023yBnCCQj9YA6xfNpX5iQcsfwgOw
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10338"; a="268527422"
-X-IronPort-AV: E=Sophos;i="5.91,203,1647327600"; 
-   d="scan'208";a="268527422"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2022 00:31:57 -0700
-X-IronPort-AV: E=Sophos;i="5.91,203,1647327600"; 
-   d="scan'208";a="563686566"
-Received: from rli9-dbox.sh.intel.com (HELO rli9-dbox) ([10.239.159.142])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2022 00:31:54 -0700
-Date:   Fri, 6 May 2022 15:30:05 +0800
-From:   Philip Li <philip.li@intel.com>
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     Dave Hansen <dave.hansen@intel.com>, Arnd Bergmann <arnd@arndb.de>,
-        kernel test robot <lkp@intel.com>, kbuild-all@lists.01.org,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Tony Lindgren <tony@atomide.com>,
-        Russell King <linux@armlinux.org.uk>,
-        linux-omap <linux-omap@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] ARM: dove: fix returnvar.cocci warnings
-Message-ID: <YnTOff2tzQIjREd2@rli9-dbox>
-References: <202205031017.4TwMan3l-lkp@intel.com>
- <YnCXTPrbLhvfRVDm@e3a974050dc4>
- <CAK8P3a1xMeLa72YKMufdej6KguDwiSXtZmMqRxOt5B05x_fx3A@mail.gmail.com>
- <8704209d-d487-a297-b05a-5db99f5f808c@intel.com>
- <YnR1OTpYADQy6Xa8@rli9-dbox>
- <CAMj1kXEznFy3GeJJwwyHCHTQoYKmE92BDHisqNM84FoyFFw7rg@mail.gmail.com>
+        Fri, 6 May 2022 03:35:04 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5EB62ADC;
+        Fri,  6 May 2022 00:31:21 -0700 (PDT)
+Received: from mail-wr1-f47.google.com ([209.85.221.47]) by
+ mrelayeu.kundenserver.de (mreue109 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1MlfCm-1oDifl3jvu-00ijHY; Fri, 06 May 2022 09:31:19 +0200
+Received: by mail-wr1-f47.google.com with SMTP id j15so8866084wrb.2;
+        Fri, 06 May 2022 00:31:19 -0700 (PDT)
+X-Gm-Message-State: AOAM53027olsIfusuF9JqixzwazVMz+N19EknKk3MlZUEJ1Eejx6f5q8
+        vdVn9LN0B2L25MeEIGV8riAadZAeb6uekQtVpYM=
+X-Google-Smtp-Source: ABdhPJyl6B+Yi3fxE4xYEmk7s5ew/zzP2lC0ZNV1xGO5Lxor38jlzAsOmsx8UdBKNigE8R5SnwqPF7txxIHsenYD3Hk=
+X-Received: by 2002:a5d:6da4:0:b0:20c:6d76:cc54 with SMTP id
+ u4-20020a5d6da4000000b0020c6d76cc54mr1442466wrs.317.1651822279542; Fri, 06
+ May 2022 00:31:19 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMj1kXEznFy3GeJJwwyHCHTQoYKmE92BDHisqNM84FoyFFw7rg@mail.gmail.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+References: <cover.1651805790.git.qinjian@cqplus1.com>
+In-Reply-To: <cover.1651805790.git.qinjian@cqplus1.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Fri, 6 May 2022 09:31:03 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a0W4wpVwDmCXDkm_u9W=JozrnCnxW7zK3h2XD8f_ODy6w@mail.gmail.com>
+Message-ID: <CAK8P3a0W4wpVwDmCXDkm_u9W=JozrnCnxW7zK3h2XD8f_ODy6w@mail.gmail.com>
+Subject: Re: [PATCH v14 0/9] Add Sunplus SP7021 SoC Support
+To:     Qin Jian <qinjian@cqplus1.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Russell King - ARM Linux <linux@armlinux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        DTML <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:NQJFiB5aaAr1QxCc6CwwI/7WQQAm7AUc/Evgzf6oHg0rxpc9Yv0
+ mNJrl2eWgwUoiGDYH9Rw2wRKnmYPPp701bj4b0KpNN2n24OUAEFFJs/yoFYM+u0fiFQ3Ckx
+ +bY3pPP0tVasSXlzV85KGbFiCdASWZbUGJ7Y//DtcARcrVWmX6cYGTvtzQhem7X0DAxRNi7
+ yHhAWN4IIU6+geR4wLkmw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:z8dN+VPP6q0=:12rMX5qXV6n0RGYINhZsK+
+ 6wBfnDRr9aNZsb+dzhRZygl56Zew1C5jBlS3rrZQ9LQRwwzYJ6AmMiAuxMILbcqCKT+6rRzoA
+ xtFv3eVQmhgI2VwdsbFxTTP4ekvlnWpr4XDKVy6tu5NqPRSQp2J4pMkBZFKQFuudS6sN1tffF
+ KjAPTi7vIRre/WenLAdOMnavbmVikI2GJBrUPnNAk7Tuw+nNds/UGVe2sl8iyHs24cSLCgzJ+
+ CcLzTIi+4jKoMHGRPslimN8TjsZ2AOVWKmwqQf19RN6REpSwek1lf/Z79FLczQf7XJuobwz7c
+ kcfX2sMoM1kw6mci1vhT/VuU2Hv6Wdye9c+0IWOskAreKWTKSyJCM5KJeHtqVPnId8mZ/4v4O
+ JEB7R8sEjQopuEWW2aLQTSSZS+lj3/3NnAOx/sdBgFY4xzAzDEB03m5feKzv/+EYTT1KhAmU+
+ D/koRw9+MKNSmpuZnYbmlwINl9UvhjoolK8QCyw1DlHjGVrPDLDcDmotPwVLi+HaWcaqspeAk
+ nmEVnrF1WrPcFyQyp3i24f91E3zNYP3CzdfooJAm+377DUt+vMq5BBrdzJr3tlngmJXuFfGO2
+ VAKICwMa5ruUNqO9LC5/556ACRfkQ2z9IJeoPGIW3CXZEqJvxa03m/7taiy2BX9HB480m0QIk
+ XlXcEF1/JMgCrWRQPZZSIkYPL1r9LY7YY+zXnadmsnQwaxrBadOaD+Gt+pLR0HrtMfig1ELXL
+ cTT3sMHhAmXPZWEBOjkX2xklSqgstnrztqvyu+3uKq3y8xbpOnlSHUZN3JJyL4/3zkkFvp36r
+ PXw/0AgUlCVV4wjX0OECVNaSiXluujgw5yvLlgBQeTS8L6sH0o=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -70,53 +75,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 06, 2022 at 09:24:26AM +0200, Ard Biesheuvel wrote:
-> On Fri, 6 May 2022 at 03:12, Philip Li <philip.li@intel.com> wrote:
-> >
-> > On Thu, May 05, 2022 at 09:31:37AM -0700, Dave Hansen wrote:
-> > > On 5/3/22 00:21, Arnd Bergmann wrote:
-> > > > On Tue, May 3, 2022 at 4:45 AM kernel test robot <lkp@intel.com> wrote:
-> > > >> From: kernel test robot <lkp@intel.com>
-> > > >>
-> > > >> arch/arm/mach-omap2/dma.c:82:10-16: Unneeded variable: "errata". Return "0" on line 161
-> > > >>
-> > > >>  Remove unneeded variable used to store return value.
-> > > >>
-> > > >> Generated by: scripts/coccinelle/misc/returnvar.cocci
-> > > >>
-> > > >> Reported-by: kernel test robot <lkp@intel.com>
-> > > >> Signed-off-by: kernel test robot <lkp@intel.com>
-> > > > I checked the patch, and unfortunately it is wrong, the current code
-> > > > needs to stay.
-> > > > The problem is the SET_DMA_ERRATA() macro that accesses the
-> > > > local 'errata' variable.
-> > >
-> > > 0day folks, do we have humans looking over these before they're going
-> > > out to the list?  If not, can we add some?  If so, can the humans get a
-> > > little more discerning? ;)
-> >
-> > Sorry all for the bad patch. So far, we pick up several cocci warnings that
-> > we have confidence based on early result analysis and feedback, for these
-> > warnings, 0day sends out patch automatically.
-> >
-> 
-> Could you please add a special header or something to such emails so I
-> can filter them out? I am strongly opposed to such automatic spambot
-> patch generation, as it wastes valuable reviewer bandwidth to save the
-> bot operator some time, but it think it should be the other way
-> around.
+On Fri, May 6, 2022 at 5:23 AM Qin Jian <qinjian@cqplus1.com> wrote:
+>
+> This patch series add Sunplus SP7021 SoC support.
+>
+> Sunplus SP7021 is an ARM Cortex A7 (4 cores) based SoC. It integrates many
+> peripherals (ex: UART, I2C, SPI, SDIO, eMMC, USB, SD card and etc.) into a
+> single chip. It is designed for industrial control.
+>
+> SP7021 consists of two chips (dies) in a package. One is called C-chip
+> (computing chip). It is a 4-core ARM Cortex A7 CPU. It adopts high-level
+> process (22 nm) for high performance computing. The other is called P-
+> chip (peripheral chip). It has many peripherals and an ARM A926 added
+> especially for real-time control. P-chip is made for customers. It adopts
+> low-level process (ex: 0.11 um) to reduce cost.
 
-Sorry for the trouble, we will stop sending the patch automatically and
-only send out patch after human confirmed/reviewed.
+Just an update from my side about merging the platform code: the
+submission looks mostly sensible to me, but as long as the clk and irqchip
+drivers have not finished the review, I cannot take this through the soc
+tree. We could consider merging the platform code without those two
+drivers, but that seems pointless because it will not boot.
 
-> 
-> We expect contributors to carefully prepare their patch submissions
-> before sending them to the list, and automatically generated patches
-> simply don't mesh with that. The fact that you use a bot does not mean
-> you can ignore these rules.
+What is the reason you don't include a .dtsi file in this series? Usually
+there should be at least one board and the description of the SoC itself.
+Again, without those I'm not sure it's worth merging.
 
-Got it, we will improve this to follow the right way to send out patches.
+For the timing, we are getting close to the 5.19 merge window that
+starts once v5.18 is out, and I don't expect that all the above will
+be resolved in time, so it looks we will have to defer it by one more
+release to 5.20.
 
-Thanks
-
-
+          Arnd

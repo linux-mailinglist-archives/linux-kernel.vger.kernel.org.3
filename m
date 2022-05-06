@@ -2,133 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C43B51E287
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 01:41:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44A4E51E222
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 01:40:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1444920AbiEFXO2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 19:14:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50084 "EHLO
+        id S1444925AbiEFXQr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 19:16:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1444892AbiEFXO0 (ORCPT
+        with ESMTP id S1344728AbiEFXQp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 19:14:26 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 20A125F25D
-        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 16:10:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651878641;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=QDEUBZQi2gkd5vGN65bG0cDs8TDhy97WSz0PhVlgRoE=;
-        b=QehyvxK9vxssxcAaeIMW4ZqUmBjfWfq2Avxxo0n4VXqexANly7NPcqWmhrym3YmpoiMCOi
-        u72ukTxVDj0Pap1JVmP/D1bvz0UoZPNmkrFuYCP3v4WUAhJ54cJuf9H5geYrdO2wWk2/eq
-        YxaCku6uESjbMcvmavgWAOnfc1mZuco=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-668-TAhXEYwDNG2uu1lmYE4cTA-1; Fri, 06 May 2022 19:10:38 -0400
-X-MC-Unique: TAhXEYwDNG2uu1lmYE4cTA-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0110F3C01C00;
-        Fri,  6 May 2022 23:10:37 +0000 (UTC)
-Received: from localhost (ovpn-12-33.pek2.redhat.com [10.72.12.33])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id A3ABC40CF8E8;
-        Fri,  6 May 2022 23:10:35 +0000 (UTC)
-Date:   Sat, 7 May 2022 07:10:32 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Zhen Lei <thunder.leizhen@huawei.com>,
-        Catalin Marinas <catalin.marinas@arm.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        linux-kernel@vger.kernel.org, Dave Young <dyoung@redhat.com>,
-        Vivek Goyal <vgoyal@redhat.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        kexec@lists.infradead.org, Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        devicetree@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        linux-doc@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
-        Feng Zhou <zhoufeng.zf@bytedance.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Chen Zhou <dingguo.cz@antgroup.com>,
-        John Donnelly <John.p.donnelly@oracle.com>,
-        Dave Kleikamp <dave.kleikamp@oracle.com>
-Subject: Re: [PATCH v24 3/6] arm64: kdump: Reimplement crashkernel=X
-Message-ID: <20220506231032.GA122876@MiWiFi-R3L-srv>
-References: <20220506114402.365-1-thunder.leizhen@huawei.com>
- <20220506114402.365-4-thunder.leizhen@huawei.com>
+        Fri, 6 May 2022 19:16:45 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 899CA6D38B;
+        Fri,  6 May 2022 16:13:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651878780; x=1683414780;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ivKLSc3Gz/VoaAyyf+KCJfvGkIFxkKCWMielKh/Fppg=;
+  b=GVG6h9CZA1jfByghGDw1R65aQ32f9pMEAdoBEWbj90Q0r5YLFXDnmcc6
+   dh1y0+Gc0N/ECEjmrkCTLfd7tnJ4sn/Ukd4PFBc3r1uNYrfCl8iWoghnc
+   IYW/1mujkVQVidenIlzhdOTOd8YRtrBDcCPG8wqOsUmta/rkddahyW0M/
+   q0HT1+3COSeLNnyxnWEQgY2k5ZnqblheXYJN5ZuVT47571pdmUBx3ctuH
+   xh/k4jgxKjA0rxZ5RSJA2naZCe0I84Yf+iM56o2B0mSyttNGpFq57oSGh
+   khYBJZMBc20RExNu/JfzomMgjw2OdoQC5iF3tvdqgsPyLljBy3G/W72Fa
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10339"; a="250609349"
+X-IronPort-AV: E=Sophos;i="5.91,205,1647327600"; 
+   d="scan'208";a="250609349"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2022 16:13:00 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,205,1647327600"; 
+   d="scan'208";a="812601743"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by fmsmga006.fm.intel.com with ESMTP; 06 May 2022 16:12:55 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nn782-000E0I-Eu;
+        Fri, 06 May 2022 23:12:54 +0000
+Date:   Sat, 7 May 2022 07:12:20 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     cgel.zte@gmail.com, akpm@linux-foundation.org, hannes@cmpxchg.org,
+        willy@infradead.org, shy828301@gmail.com
+Cc:     kbuild-all@lists.01.org, mhocko@kernel.org,
+        roman.gushchin@linux.dev, shakeelb@google.com,
+        linmiaohe@huawei.com, hughd@google.com, songmuchun@bytedance.com,
+        surenb@google.com, vbabka@suse.cz, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, cgroups@vger.kernel.org,
+        william.kucharski@oracle.com, peterx@redhat.com,
+        Yang Yang <yang.yang29@zte.com.cn>
+Subject: Re: [PATCH v2] mm/memcg: support control THP behaviour in cgroup
+Message-ID: <202205070730.ekn8xxfz-lkp@intel.com>
+References: <20220506031804.437642-1-yang.yang29@zte.com.cn>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220506114402.365-4-thunder.leizhen@huawei.com>
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220506031804.437642-1-yang.yang29@zte.com.cn>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/06/22 at 07:43pm, Zhen Lei wrote:
-......  
-> @@ -118,8 +162,7 @@ static void __init reserve_crashkernel(void)
->  	if (crash_base)
->  		crash_max = crash_base + crash_size;
->  
-> -	/* Current arm64 boot protocol requires 2MB alignment */
-> -	crash_base = memblock_phys_alloc_range(crash_size, SZ_2M,
-> +	crash_base = memblock_phys_alloc_range(crash_size, CRASH_ALIGN,
->  					       crash_base, crash_max);
->  	if (!crash_base) {
->  		pr_warn("cannot allocate crashkernel (size:0x%llx)\n",
-> @@ -127,6 +170,11 @@ static void __init reserve_crashkernel(void)
->  		return;
->  	}
->  
+Hi,
 
-There's corner case missed, e.g
-1) ,high and ,low are specified, CONFIG_ZONE_DMA|DMA32 is not enabled;
-2) ,high and ,low are specified, the whole system memory is under 4G.
+Thank you for the patch! Yet something to improve:
 
-Below judgement can filter them away:
-        
-	if (crash_base > arm64_dma_phys_limit && crash_low_size &&
-	    reserve_crashkernel_low(crash_low_size)) {
+[auto build test ERROR on akpm-mm/mm-everything]
+[also build test ERROR on linux/master linus/master v5.18-rc5 next-20220506]
+[cannot apply to hnaz-mm/master]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-What's your opinion? Leave it and add document to notice user, or fix it
-with code change?
+url:    https://github.com/intel-lab-lkp/linux/commits/cgel-zte-gmail-com/mm-memcg-support-control-THP-behaviour-in-cgroup/20220506-112100
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+config: arm64-randconfig-r005-20220506 (https://download.01.org/0day-ci/archive/20220507/202205070730.ekn8xxfz-lkp@intel.com/config)
+compiler: aarch64-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/01b750c350f3c12ca3908e94dc4447041ac9d89b
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review cgel-zte-gmail-com/mm-memcg-support-control-THP-behaviour-in-cgroup/20220506-112100
+        git checkout 01b750c350f3c12ca3908e94dc4447041ac9d89b
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
 
-I would suggest merging this series, Lei can add this corner case
-handling on top. Since this is a newly added support, we don't have
-to make it one step. Doing step by step can make reviewing easier.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-> +	if (crash_low_size && reserve_crashkernel_low(crash_low_size)) {
-> +		memblock_phys_free(crash_base, crash_size);
-> +		return;
-> +	}
-> +
->  	pr_info("crashkernel reserved: 0x%016llx - 0x%016llx (%lld MB)\n",
->  		crash_base, crash_base + crash_size, crash_size >> 20);
->  
-> @@ -135,6 +183,9 @@ static void __init reserve_crashkernel(void)
->  	 * map. Inform kmemleak so that it won't try to access it.
->  	 */
->  	kmemleak_ignore_phys(crash_base);
-> +	if (crashk_low_res.end)
-> +		kmemleak_ignore_phys(crashk_low_res.start);
-> +
->  	crashk_res.start = crash_base;
->  	crashk_res.end = crash_base + crash_size - 1;
->  	insert_resource(&iomem_resource, &crashk_res);
-> -- 
-> 2.25.1
-> 
+All errors (new ones prefixed by >>):
 
+   aarch64-linux-ld: Unexpected GOT/PLT entries detected!
+   aarch64-linux-ld: Unexpected run-time procedure linkages detected!
+   aarch64-linux-ld: mm/shmem.o: in function `shmem_zero_setup':
+   shmem.c:(.text+0x6a0): undefined reference to `khugepaged_always'
+>> aarch64-linux-ld: shmem.c:(.text+0x6b4): undefined reference to `khugepaged_req_madv'
+   aarch64-linux-ld: mm/huge_memory.o: in function `do_huge_pmd_anonymous_page':
+   huge_memory.c:(.text+0x3a78): undefined reference to `khugepaged_always'
+>> aarch64-linux-ld: huge_memory.c:(.text+0x3a8c): undefined reference to `khugepaged_req_madv'
+   aarch64-linux-ld: mm/khugepaged.o: in function `hugepage_vma_check':
+   khugepaged.c:(.text+0x1370): undefined reference to `khugepaged_always'
+   aarch64-linux-ld: mm/khugepaged.o: in function `set_recommended_min_free_kbytes':
+   khugepaged.c:(.text+0x1654): undefined reference to `khugepaged_enabled'
+   aarch64-linux-ld: mm/khugepaged.o: in function `khugepaged_wait_work':
+   khugepaged.c:(.text+0x1b08): undefined reference to `khugepaged_enabled'
+>> aarch64-linux-ld: khugepaged.c:(.text+0x1c4c): undefined reference to `khugepaged_enabled'
+   aarch64-linux-ld: mm/khugepaged.o: in function `khugepaged_do_scan':
+   khugepaged.c:(.text+0x3a58): undefined reference to `khugepaged_enabled'
+   aarch64-linux-ld: khugepaged.c:(.text+0x3b10): undefined reference to `khugepaged_enabled'
+   aarch64-linux-ld: mm/khugepaged.o: in function `khugepaged_enter_vma_merge':
+   khugepaged.c:(.text+0x3f6c): undefined reference to `khugepaged_always'
+>> aarch64-linux-ld: khugepaged.c:(.text+0x3f80): undefined reference to `khugepaged_req_madv'
+   aarch64-linux-ld: mm/khugepaged.o: in function `start_stop_khugepaged':
+   khugepaged.c:(.text+0x42ec): undefined reference to `khugepaged_enabled'
+   aarch64-linux-ld: mm/khugepaged.o: in function `khugepaged_min_free_kbytes_update':
+   khugepaged.c:(.text+0x442c): undefined reference to `khugepaged_enabled'
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

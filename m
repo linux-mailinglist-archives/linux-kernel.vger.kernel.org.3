@@ -2,108 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E36251D31B
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 10:15:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE9EE51D327
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 10:15:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1389999AbiEFISw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 04:18:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34458 "EHLO
+        id S1390033AbiEFIS7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 04:18:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1389927AbiEFISb (ORCPT
+        with ESMTP id S1389887AbiEFISe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 04:18:31 -0400
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D30B67D37
-        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 01:14:49 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id i5so8968362wrc.13
-        for <linux-kernel@vger.kernel.org>; Fri, 06 May 2022 01:14:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=IlnEP2sEnpgHaHWLHUGilGQAFmisSdzAhYbMeYmMi38=;
-        b=HqSMS5/QlpxxyQty/G7buZbiKC5JZBv493X9X2wC0oEUBsDKonsGh5N+pJWAqUlriL
-         4jbbBCHGNWI4fTFip4nCrlLzTFclcrwmUKq426LSzcP9HdAOo4MO6fkoV71h7VM4Y5GJ
-         hGGfoINQ/AsPkTBqg/RSyIX4rTNSGNWHkTN2m/sIbeaqJzaFq0fL0s2Ub9lKrMNJObqT
-         mINHjAY5qaruojjVCNnYRQsgfwtt129XbEifzC5LiYdNSZdPTv9G3+kIFl/aFpRXx3hf
-         y5z7LMANXEbOGvWsayJ+GdBPonvtH+/xgfP6oNBaJhlMKZ0FG0lkAsrWmUXHY44l1Okm
-         agvw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=IlnEP2sEnpgHaHWLHUGilGQAFmisSdzAhYbMeYmMi38=;
-        b=h2vQaBU+SdoNXeNePJ+gyAXGWhKXYB3Dri3Du9GUUnfnIPxm5xGlHr1SzTHedeN4dN
-         IXkpuBsMw9fkYu+FVFNIT0cn2tmnMBshcRL5CxoIfA1Sg8MXIaGOHgcS9Hd8AsvbxjQZ
-         I58Wimi+fbDwyHRHu8w6QBGiKMW9vrViRSeki+tw3U3Hy3xLp5qaglvQETDuXniTqJc9
-         F6RMCMsR2aViRdWPZvuSk85+d1mVPl5Ipw9z+5QtlnU7vVy/P2Xelm32PmAKSgi0/Poz
-         69VUvB7Q8gVdwj/3Zt7dr3ClGK1DT5wbz6f5ceS8dK4h60mE5Zb5QsrNBPA0phliIs58
-         u4xw==
-X-Gm-Message-State: AOAM5317CTm8OFE4bnh7InMCPuYnDeynMAWPZip69HGG6Pz8inHfKpGp
-        bVpcWTslc0f6OK6i+HokUi2ELYRcLHBBhIt5
-X-Google-Smtp-Source: ABdhPJxXi6eJey+rbbTnYO7gBOA1PeS4alROquDDvhJbrStjJoPV9oexn9EDcYsYdGvcpMk/Lvd0lw==
-X-Received: by 2002:a5d:6949:0:b0:20a:e021:f8e0 with SMTP id r9-20020a5d6949000000b0020ae021f8e0mr1720729wrw.231.1651824889058;
-        Fri, 06 May 2022 01:14:49 -0700 (PDT)
-Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id c14-20020adffb0e000000b0020c6fa5a797sm3059657wrr.91.2022.05.06.01.14.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 May 2022 01:14:48 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
-        arm@kernel.org, soc@kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>
-Subject: [GIT PULL 6/6] ARM: soc: samsung: for v5.19
-Date:   Fri,  6 May 2022 10:14:38 +0200
-Message-Id: <20220506081438.149192-6-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220506081438.149192-1-krzysztof.kozlowski@linaro.org>
-References: <20220506081438.149192-1-krzysztof.kozlowski@linaro.org>
+        Fri, 6 May 2022 04:18:34 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECE8A53A53
+        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 01:14:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651824891; x=1683360891;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=L+4hvJSyARAbmutHP7vBVuwKFd7gJRIQrq17OPeLVUA=;
+  b=mw1nAPUpoPQxFpPihsRckcvaQpAnf7BPQNgpl043sJXJpKpydgPxt3i0
+   uINW1pM7zaZ9XFPtANlAjJABS8U5Q68mBukzoionhYkrTajerLRBmQqzf
+   l4OAK/4RoDzoX9YFS6j6V4xGuDuv+Nqi7OXA2N2TNLlbX366FeiPsujh9
+   c4Dk4LgBXRiQXFv7EvIF13VntrwA4p7hFUc5tm1EkkQtNT09l4Ax7tR6W
+   O5I4JxDF/HgQfxhCGRl89UyQ7g7UwxDjrS5Hl44dghwHkclIbW1bhYxu5
+   x8jxMWD0DVIX4PEsvAZdbOg932ev+AnrTMAhLkCD/gI0hGpQvZ0jnVHEg
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10338"; a="255872840"
+X-IronPort-AV: E=Sophos;i="5.91,203,1647327600"; 
+   d="scan'208";a="255872840"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2022 01:14:51 -0700
+X-IronPort-AV: E=Sophos;i="5.91,203,1647327600"; 
+   d="scan'208";a="563704869"
+Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.62.152])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2022 01:14:49 -0700
+Message-ID: <fed8d256-b214-e25f-9a5f-492442c4b849@intel.com>
+Date:   Fri, 6 May 2022 11:14:45 +0300
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.8.1
+Subject: Re: [PATCH V1 13/23] perf evlist: Add evlist__add_system_wide_dummy()
+Content-Language: en-US
+To:     Ian Rogers <irogers@google.com>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Leo Yan <leo.yan@linaro.org>, linux-kernel@vger.kernel.org
+References: <20220505165639.361733-1-adrian.hunter@intel.com>
+ <20220505165639.361733-14-adrian.hunter@intel.com>
+ <CAP-5=fWKOYiOSs=TppGCD+k283rUUsexzVuJP17Pm76EMOs+xA@mail.gmail.com>
+From:   Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <CAP-5=fWKOYiOSs=TppGCD+k283rUUsexzVuJP17Pm76EMOs+xA@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit 3123109284176b1532874591f7c81f3837bbdc17:
+On 6/05/22 02:56, Ian Rogers wrote:
+> On Thu, May 5, 2022 at 9:57 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
+>>
+>> Add evlist__add_system_wide_dummy() to enable creating a system-wide dummy
+>> event that sets up the system-wide maps before map propagation.
+> 
+> Perhaps this should be:
+> evlist__add_dummy_on_all_online_cpus()
 
-  Linux 5.18-rc1 (2022-04-03 14:08:21 -0700)
+Ok, but offline isn't an option, so I'll drop 'online' from the name.
 
-are available in the Git repository at:
+> my thoughts being that a system wide dummy sounds like the dummy CPU
+> map, ie {-1} whilst what happens here is opening on all online CPUs
+> {0-35} on a 36 hyperthread system. Note also that the libperf
+> cpu_map__read_all_cpu_map code doesn't discover sysfs' mount properly,
+> as done in:
+> tools/lib/api/fs/fs.h
+> Some tech debt.
+> 
+>> For convenience, add evlist__add_aux_dummy() so that the logic can be used
+>> whether or not the event needs to be system-wide.
+>>
+>> Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
+>> ---
+>>  tools/perf/util/evlist.c | 40 ++++++++++++++++++++++++++++++++++++++++
+>>  tools/perf/util/evlist.h |  5 +++++
+>>  2 files changed, 45 insertions(+)
+>>
+>> diff --git a/tools/perf/util/evlist.c b/tools/perf/util/evlist.c
+>> index 78c47cbafbc2..58ea562ddbd2 100644
+>> --- a/tools/perf/util/evlist.c
+>> +++ b/tools/perf/util/evlist.c
+>> @@ -264,6 +264,46 @@ int evlist__add_dummy(struct evlist *evlist)
+>>         return 0;
+>>  }
+>>
+>> +static void evlist__add_system_wide(struct evlist *evlist, struct evsel *evsel)
+> 
+> This would be:
+> evlist__add_on_all_online_cpus(..)
+> 
+>> +{
+>> +       evsel->core.system_wide = true;
+>> +
+>> +       /* All CPUs */
+>> +       perf_cpu_map__put(evsel->core.own_cpus);
+>> +       evsel->core.own_cpus = perf_cpu_map__new(NULL);
+>> +       perf_cpu_map__put(evsel->core.cpus);
+>> +       evsel->core.cpus = perf_cpu_map__get(evsel->core.own_cpus);
+>> +
+>> +       /* No threads */
+>> +       perf_thread_map__put(evsel->core.threads);
+>> +       evsel->core.threads = perf_thread_map__new_dummy();
+>> +
+>> +       evlist__add(evlist, evsel);
+>> +}
+>> +
+>> +struct evsel *evlist__add_aux_dummy(struct evlist *evlist, bool system_wide)
+>> +{
+>> +       struct evsel *evsel = evlist__dummy_event(evlist);
+>> +
+>> +       if (!evsel)
+>> +               return NULL;
+>> +
+>> +       evsel->core.attr.exclude_kernel = 1;
+>> +       evsel->core.attr.exclude_guest = 1;
+>> +       evsel->core.attr.exclude_hv = 1;
+>> +       evsel->core.attr.freq = 0;
+>> +       evsel->core.attr.sample_period = 1;
+>> +       evsel->no_aux_samples = true;
+>> +       evsel->name = strdup("dummy:u");
+>> +
+>> +       if (system_wide)
+>> +               evlist__add_system_wide(evlist, evsel);
+>> +       else
+>> +               evlist__add(evlist, evsel);
+>> +
+>> +       return evsel;
+>> +}
+>> +
+>>  static int evlist__add_attrs(struct evlist *evlist, struct perf_event_attr *attrs, size_t nr_attrs)
+>>  {
+>>         struct evsel *evsel, *n;
+>> diff --git a/tools/perf/util/evlist.h b/tools/perf/util/evlist.h
+>> index 4062f5aebfc1..dd1af114e033 100644
+>> --- a/tools/perf/util/evlist.h
+>> +++ b/tools/perf/util/evlist.h
+>> @@ -114,6 +114,11 @@ int arch_evlist__add_default_attrs(struct evlist *evlist);
+>>  struct evsel *arch_evlist__leader(struct list_head *list);
+>>
+>>  int evlist__add_dummy(struct evlist *evlist);
+>> +struct evsel *evlist__add_aux_dummy(struct evlist *evlist, bool system_wide);
+>> +static inline struct evsel *evlist__add_system_wide_dummy(struct evlist *evlist)
+>> +{
+>> +       return evlist__add_aux_dummy(evlist, true);
+>> +}
+>>
+>>  int evlist__add_sb_event(struct evlist *evlist, struct perf_event_attr *attr,
+>>                          evsel__sb_cb_t cb, void *data);
+>> --
+>> 2.25.1
+>>
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git tags/samsung-soc-5.19
-
-for you to fetch changes up to 170a0c56c5ec597fa15447e63272827a80a19be1:
-
-  ARM: s3c: fix typos in comments (2022-04-04 18:57:34 +0200)
-
-----------------------------------------------------------------
-Samsung mach/soc changes for v5.19
-
-Cleanup: drop unneeded CONFIG_S3C24XX_PWM and fix some typos.
-
-----------------------------------------------------------------
-Julia Lawall (1):
-      ARM: s3c: fix typos in comments
-
-Uwe Kleine-König (1):
-      ARM: s3c: Drop config symbol S3C24XX_PWM
-
- arch/arm/configs/mini2440_defconfig  | 3 ++-
- arch/arm/configs/s3c2410_defconfig   | 2 ++
- arch/arm/mach-s3c/Kconfig            | 8 --------
- arch/arm/mach-s3c/Kconfig.s3c24xx    | 2 --
- arch/arm/mach-s3c/iotiming-s3c2410.c | 2 +-
- arch/arm/mach-s3c/pm-s3c64xx.c       | 2 +-
- arch/arm/mach-s3c/s3c24xx.c          | 2 +-
- 7 files changed, 7 insertions(+), 14 deletions(-)

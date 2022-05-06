@@ -2,49 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 674E751D779
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 14:21:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D17951D778
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 14:20:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1391769AbiEFMYg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 08:24:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48846 "EHLO
+        id S1391743AbiEFMYa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 08:24:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233215AbiEFMYS (ORCPT
+        with ESMTP id S234150AbiEFMYS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 6 May 2022 08:24:18 -0400
 Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07F2C19009
-        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 05:20:30 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0705618E3A
+        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 05:20:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=desiato.20200630; h=Content-Type:MIME-Version:References:
         Subject:Cc:To:From:Date:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
         Content-ID:Content-Description:In-Reply-To;
-        bh=DbI3NROzKgqky3q1EnQYQDCliSlXuhU9e8/qWo7OJHQ=; b=EdxRPWBW4RXtOVEqFsqqfyfIBL
-        j5GX/5b82kjuEXEAT8ID/WHRkaIljtbzopgoLtMuGchE+Tdv971kEffQPNjE60PKBFMNO8um9ffTN
-        mF0zXBur9qGZrbSZLxtgCwpBcvuUO/VopWZEBfUWqU+lwFssgV3aRebzugpTQ2w6WwB9xXD5DrFcT
-        BvvsX7uQPa+4LW6J5L1twWjl9XFtQ9N+k3cEQHhxAIyIMeWASUa9LmTJGUrWhqN1rohVSmg+ixa6J
-        923xLQIzfZjkSqPdg4U7QrOiztb7rQH7dc7VHNN6t7FaRNsx18nmG+lQNR5iQoxIKAYyZ0baTqcoE
-        lfRs0o/A==;
+        bh=mFmzTI5Jo03LraXZTYkocBmZeHsWILnBwKFw/f1K7rw=; b=pt4LB9+M5XKlyUtn4fETy686Wd
+        KxEK/BBAFxufij8k8IEjUUTnBXmzG1/um+FUQr5bt1u2TLgBA9oACNnTOqCYsV17t7IsL45bfolWC
+        q4oo9iA0X34NoDaBKcBK6vnw4w/ZI1JmpxOzW01AOc2HTtCDN3IFreOvCGprRSBr10iW+/9kdXeAU
+        UK5x2NSxhnLhh7devnMvLKD8WvGCJieU4xi6c6wiVHiNgJcQgoJ9Rfq/ZlNBLjb/PxRMuWKDIJ/hL
+        zTlyIMwoYy9mWe1fk1j6pJ/cYLUeHwIwzm+0Z3dNvkAYIYfXyhHSQTobcZyEjd8BwqumE/9eEwYlP
+        cQXH6oRw==;
 Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
         by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nmwwU-00BfTY-AG; Fri, 06 May 2022 12:20:18 +0000
+        id 1nmwwU-00BfTX-Ab; Fri, 06 May 2022 12:20:18 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 428E3300B80;
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 428BA3007E8;
         Fri,  6 May 2022 14:20:16 +0200 (CEST)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
-        id F20452026BB46; Fri,  6 May 2022 14:20:15 +0200 (CEST)
-Message-ID: <20220506121631.437480085@infradead.org>
+        id 03D7E2026BB48; Fri,  6 May 2022 14:20:16 +0200 (CEST)
+Message-ID: <20220506121631.508692613@infradead.org>
 User-Agent: quilt/0.66
-Date:   Fri, 06 May 2022 14:14:36 +0200
+Date:   Fri, 06 May 2022 14:14:37 +0200
 From:   Peter Zijlstra <peterz@infradead.org>
 To:     x86@kernel.org
 Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org,
         jpoimboe@redhat.com, brgerst@gmail.com, jiangshanlai@gmail.com,
         Andrew.Cooper3@citrix.com, mark.rutland@arm.com
-Subject: [PATCH 5/6] linkage: Fix issue with missing symbol size
+Subject: [PATCH 6/6] objtool: Fix STACK_FRAME_NON_STANDARD reloc type
 References: <20220506121431.563656641@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,69 +58,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Occasionally, typically when a function doesn't end with 'ret', an
-alias on that function will have 0 size.
+STACK_FRAME_NON_STANDARD results in inconsistent relocation types
+depending on .c or .S usage:
 
-The difference between what GCC generates and our linkage magic, is
-that GCC doesn't appear to provide .size for the alias'ed symbol at
-all. And indeed, removing this directive cures the issue.
+  Relocation section '.rela.discard.func_stack_frame_non_standard' at offset 0x3c01090 contains 5 entries:
+  Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
+  0000000000000000  00020c2200000002 R_X86_64_PC32          0000000000047b40 do_suspend_lowlevel + 0
+  0000000000000008  0002461e00000001 R_X86_64_64            00000000000480a0 machine_real_restart + 0
+  0000000000000010  0000001400000001 R_X86_64_64            0000000000000000 .rodata + b3d4
+  0000000000000018  0002444600000002 R_X86_64_PC32          00000000000678a0 __efi64_thunk + 0
+  0000000000000020  0002659d00000001 R_X86_64_64            0000000000113160 __crash_kexec + 0
 
-Additionally, GCC also doesn't emit .type for alias symbols either, so
-also omit that.
-
-Fixes: e0891269a8c2 ("linkage: add SYM_FUNC_ALIAS{,_LOCAL,_WEAK}()")
-Suggested-by: Mark Rutland <mark.rutland@arm.com>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Reviewed-by: Mark Rutland <mark.rutland@arm.com>
-Acked-by: Josh Poimboeuf <jpoimboe@redhat.com>
 ---
- include/linux/linkage.h |   15 ++++++---------
- 1 file changed, 6 insertions(+), 9 deletions(-)
+ include/linux/objtool.h       |    4 +++-
+ tools/include/linux/objtool.h |    4 +++-
+ 2 files changed, 6 insertions(+), 2 deletions(-)
 
---- a/include/linux/linkage.h
-+++ b/include/linux/linkage.h
-@@ -171,12 +171,9 @@
+--- a/include/linux/objtool.h
++++ b/include/linux/objtool.h
+@@ -2,6 +2,8 @@
+ #ifndef _LINUX_OBJTOOL_H
+ #define _LINUX_OBJTOOL_H
  
- /* SYM_ALIAS -- use only if you have to */
- #ifndef SYM_ALIAS
--#define SYM_ALIAS(alias, name, sym_type, linkage)			\
--	linkage(alias) ASM_NL						\
--	.set alias, name ASM_NL						\
--	.type alias sym_type ASM_NL					\
--	.set .L__sym_size_##alias, .L__sym_size_##name ASM_NL		\
--	.size alias, .L__sym_size_##alias
-+#define SYM_ALIAS(alias, name, linkage)			\
-+	linkage(alias) ASM_NL				\
-+	.set alias, name ASM_NL
- #endif
++#include <asm/asm.h>
++
+ #ifndef __ASSEMBLY__
  
- /* === code annotations === */
-@@ -261,7 +258,7 @@
-  */
- #ifndef SYM_FUNC_ALIAS
- #define SYM_FUNC_ALIAS(alias, name)					\
--	SYM_ALIAS(alias, name, SYM_T_FUNC, SYM_L_GLOBAL)
-+	SYM_ALIAS(alias, name, SYM_L_GLOBAL)
- #endif
+ #include <linux/types.h>
+@@ -137,7 +139,7 @@ struct unwind_hint {
  
- /*
-@@ -269,7 +266,7 @@
-  */
- #ifndef SYM_FUNC_ALIAS_LOCAL
- #define SYM_FUNC_ALIAS_LOCAL(alias, name)				\
--	SYM_ALIAS(alias, name, SYM_T_FUNC, SYM_L_LOCAL)
-+	SYM_ALIAS(alias, name, SYM_L_LOCAL)
- #endif
+ .macro STACK_FRAME_NON_STANDARD func:req
+ 	.pushsection .discard.func_stack_frame_non_standard, "aw"
+-		.long \func - .
++	_ASM_PTR \func
+ 	.popsection
+ .endm
  
- /*
-@@ -277,7 +274,7 @@
-  */
- #ifndef SYM_FUNC_ALIAS_WEAK
- #define SYM_FUNC_ALIAS_WEAK(alias, name)				\
--	SYM_ALIAS(alias, name, SYM_T_FUNC, SYM_L_WEAK)
-+	SYM_ALIAS(alias, name, SYM_L_WEAK)
- #endif
+--- a/tools/include/linux/objtool.h
++++ b/tools/include/linux/objtool.h
+@@ -2,6 +2,8 @@
+ #ifndef _LINUX_OBJTOOL_H
+ #define _LINUX_OBJTOOL_H
  
- /* SYM_CODE_START -- use for non-C (special) functions */
++#include <asm/asm.h>
++
+ #ifndef __ASSEMBLY__
+ 
+ #include <linux/types.h>
+@@ -137,7 +139,7 @@ struct unwind_hint {
+ 
+ .macro STACK_FRAME_NON_STANDARD func:req
+ 	.pushsection .discard.func_stack_frame_non_standard, "aw"
+-		.long \func - .
++	_ASM_PTR \func
+ 	.popsection
+ .endm
+ 
 
 

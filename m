@@ -2,27 +2,25 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41A2151D906
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 15:25:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F9F351D90B
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 15:25:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1392512AbiEFN3U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 09:29:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52496 "EHLO
+        id S1392522AbiEFN31 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 09:29:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1392503AbiEFN2h (ORCPT
+        with ESMTP id S1392520AbiEFN2s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 09:28:37 -0400
+        Fri, 6 May 2022 09:28:48 -0400
 Received: from mout.perfora.net (mout.perfora.net [74.208.4.194])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C55866972A;
-        Fri,  6 May 2022 06:24:53 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 226A369CD9;
+        Fri,  6 May 2022 06:24:55 -0700 (PDT)
 Received: from toolbox.int.toradex.com ([81.221.85.15]) by mrelay.perfora.net
- (mreueus003 [74.208.5.2]) with ESMTPSA (Nemesis) id 0M1m9M-1o7X062cDS-00ti3N;
- Fri, 06 May 2022 15:24:41 +0200
+ (mreueus003 [74.208.5.2]) with ESMTPSA (Nemesis) id 0M0fge-1o6R4X1T9q-00uoW5;
+ Fri, 06 May 2022 15:24:43 +0200
 From:   Marcel Ziswiler <marcel@ziswiler.com>
 To:     linux-arm-kernel@lists.infradead.org
-Cc:     Philippe Schenker <philippe.schenker@toradex.com>,
-        Denys Drozdov <denys.drozdov@toradex.com>,
-        Andrejs Cainikovs <andrejs.cainikovs@toradex.com>,
+Cc:     Denys Drozdov <denys.drozdov@toradex.com>,
         Marcel Ziswiler <marcel.ziswiler@toradex.com>,
         Fabio Estevam <festevam@gmail.com>,
         Frank Rowand <frowand.list@gmail.com>,
@@ -34,29 +32,29 @@ Cc:     Philippe Schenker <philippe.schenker@toradex.com>,
         Sascha Hauer <s.hauer@pengutronix.de>,
         Shawn Guo <shawnguo@kernel.org>, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v3 05/13] ARM: dts: imx6ull-colibri: update usdhc1 pixmux and signaling
-Date:   Fri,  6 May 2022 15:24:08 +0200
-Message-Id: <20220506132416.273965-6-marcel@ziswiler.com>
+Subject: [PATCH v3 06/13] ARM: dts: imx6ull-colibri: update device trees to support overlays
+Date:   Fri,  6 May 2022 15:24:09 +0200
+Message-Id: <20220506132416.273965-7-marcel@ziswiler.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220506132416.273965-1-marcel@ziswiler.com>
 References: <20220506132416.273965-1-marcel@ziswiler.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:9jTQUi0FQdHyIXM/FBLSNDoQB3bT5f3Hv89Zc84bMhDg/y7nJ7/
- 2/JLhov/jxEpT8zyfPdT/wdPvF5Dj/cTicQon4W0hoi2RhQ/v2ewZxSEok2KsqD6MzVQ0FO
- aX3qp0YtySU/UlJGYDPf0Pcl3xi28uP8JDI1J5L+JJIWZYsKPxwQXY8CtR4NRV3J071Lqr3
- DLkHTaxJ/xUFsH2PTMi0g==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:g/cQV3B+G7E=:7iyZbjpogHAr47Oi4XQRu4
- JpL3BLCqMQmyHuWqx6cbLy50F5Pc/q/nDcnlLZxVlRLXYVUAbE9tOVR+4XV8mutNCfW7ExmXE
- OsL/uWR5/pSV6H7pGAQOHpi7m2DRGY05KjRJNNTcoeEIccIqhSg7a5sUKxdMcq/7nw/4jtGMi
- 6HIU/4RerYITkwhBBUzX+Y2pljEAZWgeMSMWiZj2Tvn4unb/bu8xRZcChEDU5VS59zvN/J4Rz
- +kcdvcILBF4xCBi2CvQqoUBuLjwMwYVSRT/NlgSswL5FrcTQGi8X00fifsWk3zIJiugRJYrCF
- G+oeXPOqeFT4SoekEcdM2alAr8mjbqgpjo8cFd1pTSbUajbgXBzDXm/47VEZneV9m60WuWiUe
- vFvmlp4wSzr2pjZu53lPlhXck0ulFekmxTwjQiEEGwIJhTtlKH3iaoIfHKAxb4qdkAOfdz2gL
- SwSi/TlwftxPYMP3L8gxPb2HwgOSUkO4ldQTe3xC2zDlWcUY4t2IrdigEMf9zqFhNDSFlceP9
- 0OG8xj/GyMe1ptnciZjgpkpeL2fJHXqrqBswr8zwgG+FDv3k3msJW9FkwnymOJynHN1x3fkGe
- cSUO4Oxe4keym/779DVqBL8Rot59d0gswG9VJ5k2uGV1J33Uvth7iAIceO8epNRoFtL+BqWMT
- qU8kxGMRGHBU6dwmajnBZcBFCXKb+1DJ8LTS0w6BE+p9ciqzWJXTbuQVmdQ8hT8D96mg=
+X-Provags-ID: V03:K1:Y+KHdTdOAJTiItaIdQpfXfwJHvCoYEyTTzVPAC/1y8B4wO7s2C8
+ Sb4UDZUHs9VbLggOEqTijXLtZi2a1WleBGrLW3AQxp/igV9Lb9fENn6fGU4uNxipP9byyHU
+ 0i/ap/Gg5hixITUto7BXrkAs6RNpJNfGMq/VXFgq1y0ZJbIYipt8xvD3R1yDmQgQvbzKvpn
+ 2ST1i7nV3Gs998fwk+JoA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:NQTj//WwDBQ=:emh555MUqzab00HdP4in69
+ DCLGlQWph1tapDNo7AJaVOMD4aowxVYpmAgSA/oselL+Oa43zzvOpksnQBlWODsUmBMt3UGNu
+ wVTuHddKPZNS2/X5jmCkk329f7BMP1sa2Y7+1j4er4d1jDswPZEPNRoFwhac7VP29Sb3Wyv0G
+ Hd7jHF9ILGObZQw+LbCG2m+m7ebj+NCFoMRZ0Ee3EasmdmO4fP4CL28vUmfO3NSIKvrr2Jz4Z
+ mp+wziYe9EsWNzGNvBPGvgHx77iZs1ZqPM8ricWkvZK2FhuwJT3Jbmk5soj8uJ0xzavzDXynw
+ 4dEey7ZHN5Ntbk+bVTQTR7xCnz9G9rmV9oWrLI/GBIoqZuLlJUtqEBd1UMwVCivh7sSJZQqtB
+ 7PWDRlh2eDnSQJAGYivHzsetzvCXM5Gsp+6HGmiDyrS7/r7+tZlV7zOBKVKAdgp3Kmeav3buW
+ daSq93kT2aHY7FpcgiPlXP6r15QYXM5E1SdBv+680S3IBPkVDPoj8hqsaS7b85JPQD9jrXVnd
+ /lOnKINzUoExRiPiLdsfT/wOesfDKktkbK0uGT1YMdXZCOjZ7c9gXlAPZzzHzPX4QWbfGMwwp
+ 8qflE6SGesnH70svr1siNSd672PADqgC5t0TNQmmBVbTlOZ4Cxpi8qjRHikMF2Ud8jHfcQH8v
+ iTijY7TtBnzjQ6OeC/DCxpjofqPAUzLJpQm95MZThIHhJbtDw44W9eF1sTof2h9vNmbU=
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
@@ -66,142 +64,140 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Philippe Schenker <philippe.schenker@toradex.com>
+From: Denys Drozdov <denys.drozdov@toradex.com>
 
-Due to many carrier boards pulling the usdhc1 signals up to 3.3 volt we
-need to disable 1.8 volt signaling. Adding the no-1-8-v property
-basically disables UHS-I modes by default.
+Prepare in-tree device trees for out-of-tree device tree overlay support
+(eMMC SKU only).
 
-Also pull-up the command and data lines to the +V3.3_1.8_SD rail and
-set them to the 200 MHz speed grade (e.g. pinmux bits 7-6: meaning 11
-SPEED_3_max_200MHz).
+Relocate panel-dpi default to edt,et057090dhu (RGB 18bit VGA 640x480)
+to the module-level dtsi and remove it from the carrier board dtsi.
 
-Explicitly specify a bus-width of <4> in the module-level device tree
-include file and drop the no-1-8-v property from the carrier boards
-device trees.
+Keep backlight, resistive touch and Atmel maxtouch nodes enabled
+for both eMMC and NAND modules.
 
-Signed-off-by: Philippe Schenker <philippe.schenker@toradex.com>
 Signed-off-by: Denys Drozdov <denys.drozdov@toradex.com>
-Signed-off-by: Andrejs Cainikovs <andrejs.cainikovs@toradex.com>
 Signed-off-by: Marcel Ziswiler <marcel.ziswiler@toradex.com>
 ---
 
 (no changes since v1)
 
- .../arm/boot/dts/imx6ull-colibri-eval-v3.dtsi | 14 --------
- arch/arm/boot/dts/imx6ull-colibri.dtsi        | 36 ++++++++++++-------
- 2 files changed, 24 insertions(+), 26 deletions(-)
+ .../arm/boot/dts/imx6ull-colibri-eval-v3.dtsi | 29 -----------------
+ arch/arm/boot/dts/imx6ull-colibri.dtsi        | 31 ++++++++++++++++---
+ 2 files changed, 27 insertions(+), 33 deletions(-)
 
 diff --git a/arch/arm/boot/dts/imx6ull-colibri-eval-v3.dtsi b/arch/arm/boot/dts/imx6ull-colibri-eval-v3.dtsi
-index a78849fd2afa..ea086b305d22 100644
+index ea086b305d22..3c07b4273e80 100644
 --- a/arch/arm/boot/dts/imx6ull-colibri-eval-v3.dtsi
 +++ b/arch/arm/boot/dts/imx6ull-colibri-eval-v3.dtsi
-@@ -159,20 +159,6 @@ &usbotg2 {
- };
+@@ -29,17 +29,6 @@ clk16m: clk16m {
+ 		clock-frequency = <16000000>;
+ 	};
  
- &usdhc1 {
--	pinctrl-names = "default", "state_100mhz", "state_200mhz", "sleep";
--	pinctrl-0 = <&pinctrl_usdhc1 &pinctrl_snvs_usdhc1_cd>;
--	pinctrl-1 = <&pinctrl_usdhc1_100mhz &pinctrl_snvs_usdhc1_cd>;
--	pinctrl-2 = <&pinctrl_usdhc1_200mhz &pinctrl_snvs_usdhc1_cd>;
--	pinctrl-3 = <&pinctrl_usdhc1 &pinctrl_snvs_usdhc1_sleep_cd>;
--	cd-gpios = <&gpio5 0 GPIO_ACTIVE_LOW>;
--	disable-wp;
--	wakeup-source;
--	keep-power-in-suspend;
- 	vmmc-supply = <&reg_3v3>;
--	vqmmc-supply = <&reg_sd1_vmmc>;
--	sd-uhs-sdr12;
--	sd-uhs-sdr25;
--	sd-uhs-sdr50;
--	sd-uhs-sdr104;
+-	panel: panel {
+-		compatible = "edt,et057090dhu";
+-		backlight = <&bl>;
+-		power-supply = <&reg_3v3>;
+-
+-		port {
+-			panel_in: endpoint {
+-				remote-endpoint = <&lcdif_out>;
+-			};
+-		};
+-	};
+ 
+ 	reg_3v3: regulator-3v3 {
+ 		compatible = "regulator-fixed";
+@@ -71,14 +60,6 @@ &adc1 {
  	status = "okay";
  };
+ 
+-&bl {
+-	brightness-levels = <0 4 8 16 32 64 128 255>;
+-	default-brightness-level = <6>;
+-	power-supply = <&reg_3v3>;
+-	pwms = <&pwm4 0 5000000 1>;
+-	status = "okay";
+-};
+-
+ &ecspi1 {
+ 	status = "okay";
+ 
+@@ -107,16 +88,6 @@ m41t0m6: rtc@68 {
+ 	};
+ };
+ 
+-&lcdif {
+-	status = "okay";
+-
+-	port {
+-		lcdif_out: endpoint {
+-			remote-endpoint = <&panel_in>;
+-		};
+-	};
+-};
+-
+ /* PWM <A> */
+ &pwm4 {
+ 	status = "okay";
 diff --git a/arch/arm/boot/dts/imx6ull-colibri.dtsi b/arch/arm/boot/dts/imx6ull-colibri.dtsi
-index c89b209be316..351ea2acd5a6 100644
+index 351ea2acd5a6..28baffcef096 100644
 --- a/arch/arm/boot/dts/imx6ull-colibri.dtsi
 +++ b/arch/arm/boot/dts/imx6ull-colibri.dtsi
-@@ -35,7 +35,7 @@ reg_module_3v3_avdd: regulator-module-3v3-avdd {
- 		regulator-max-microvolt = <3300000>;
+@@ -11,12 +11,29 @@ aliases {
+ 		ethernet1 = &fec1;
  	};
  
--	reg_sd1_vmmc: regulator-sd1-vmmc {
-+	reg_sd1_vqmmc: regulator-sd1-vqmmc {
- 		compatible = "regulator-gpio";
- 		gpio = <&gpio5 9 GPIO_ACTIVE_HIGH>;
+-	bl: backlight {
++	backlight: backlight {
+ 		compatible = "pwm-backlight";
++		brightness-levels = <0 4 8 16 32 64 128 255>;
++		default-brightness-level = <6>;
++		enable-gpios = <&gpio1 11 GPIO_ACTIVE_HIGH>;
  		pinctrl-names = "default";
-@@ -232,9 +232,21 @@ &usbotg2 {
- };
- 
- &usdhc1 {
-+	pinctrl-names = "default", "state_100mhz", "state_200mhz", "sleep";
-+	pinctrl-0 = <&pinctrl_usdhc1 &pinctrl_snvs_usdhc1_cd>;
-+	pinctrl-1 = <&pinctrl_usdhc1_100mhz &pinctrl_snvs_usdhc1_cd>;
-+	pinctrl-2 = <&pinctrl_usdhc1_200mhz &pinctrl_snvs_usdhc1_cd>;
-+	pinctrl-3 = <&pinctrl_usdhc1 &pinctrl_snvs_usdhc1_sleep_cd>;
- 	assigned-clocks = <&clks IMX6UL_CLK_USDHC1_SEL>, <&clks IMX6UL_CLK_USDHC1>;
- 	assigned-clock-parents = <&clks IMX6UL_CLK_PLL2_PFD2>;
- 	assigned-clock-rates = <0>, <198000000>;
-+	bus-width = <4>;
-+	cd-gpios = <&gpio5 0 GPIO_ACTIVE_LOW>;
-+	disable-wp;
-+	keep-power-in-suspend;
-+	no-1-8-v;
-+	vqmmc-supply = <&reg_sd1_vqmmc>;
-+	wakeup-source;
- };
- 
- &wdog1 {
-@@ -550,8 +562,8 @@ MX6UL_PAD_GPIO1_IO02__GPIO1_IO02	0x10b0 /* SODIMM 129 */
- 
- 	pinctrl_usdhc1: usdhc1-grp {
- 		fsl,pins = <
--			MX6UL_PAD_SD1_CLK__USDHC1_CLK		0x17059 /* SODIMM 47 */
--			MX6UL_PAD_SD1_CMD__USDHC1_CMD		0x10059 /* SODIMM 190 */
-+			MX6UL_PAD_SD1_CLK__USDHC1_CLK		0x10059 /* SODIMM 47 */
-+			MX6UL_PAD_SD1_CMD__USDHC1_CMD		0x17059 /* SODIMM 190 */
- 			MX6UL_PAD_SD1_DATA0__USDHC1_DATA0	0x17059 /* SODIMM 192 */
- 			MX6UL_PAD_SD1_DATA1__USDHC1_DATA1	0x17059 /* SODIMM 49 */
- 			MX6UL_PAD_SD1_DATA2__USDHC1_DATA2	0x17059 /* SODIMM 51 */
-@@ -561,8 +573,8 @@ MX6UL_PAD_SD1_DATA3__USDHC1_DATA3	0x17059 /* SODIMM 53 */
- 
- 	pinctrl_usdhc1_100mhz: usdhc1-100mhz-grp {
- 		fsl,pins = <
--			MX6UL_PAD_SD1_CLK__USDHC1_CLK		0x170b9
--			MX6UL_PAD_SD1_CMD__USDHC1_CMD		0x100b9
-+			MX6UL_PAD_SD1_CLK__USDHC1_CLK		0x100b9
-+			MX6UL_PAD_SD1_CMD__USDHC1_CMD		0x170b9
- 			MX6UL_PAD_SD1_DATA0__USDHC1_DATA0	0x170b9
- 			MX6UL_PAD_SD1_DATA1__USDHC1_DATA1	0x170b9
- 			MX6UL_PAD_SD1_DATA2__USDHC1_DATA2	0x170b9
-@@ -572,12 +584,12 @@ MX6UL_PAD_SD1_DATA3__USDHC1_DATA3	0x170b9
- 
- 	pinctrl_usdhc1_200mhz: usdhc1-200mhz-grp {
- 		fsl,pins = <
--			MX6UL_PAD_SD1_CLK__USDHC1_CLK		0x170f9
--			MX6UL_PAD_SD1_CMD__USDHC1_CMD		0x100f9
--			MX6UL_PAD_SD1_DATA0__USDHC1_DATA0	0x170b9
--			MX6UL_PAD_SD1_DATA1__USDHC1_DATA1	0x170b9
--			MX6UL_PAD_SD1_DATA2__USDHC1_DATA2	0x170b9
--			MX6UL_PAD_SD1_DATA3__USDHC1_DATA3	0x170b9
-+			MX6UL_PAD_SD1_CLK__USDHC1_CLK		0x100f9
-+			MX6UL_PAD_SD1_CMD__USDHC1_CMD		0x170f9
-+			MX6UL_PAD_SD1_DATA0__USDHC1_DATA0	0x170f9
-+			MX6UL_PAD_SD1_DATA1__USDHC1_DATA1	0x170f9
-+			MX6UL_PAD_SD1_DATA2__USDHC1_DATA2	0x170f9
-+			MX6UL_PAD_SD1_DATA3__USDHC1_DATA3	0x170f9
- 		>;
+ 		pinctrl-0 = <&pinctrl_gpio_bl_on>;
+-		enable-gpios = <&gpio1 11 GPIO_ACTIVE_HIGH>;
+-		status = "disabled";
++		power-supply = <&reg_3v3>;
++		pwms = <&pwm4 0 5000000 1>;
++		status = "okay";
++	};
++
++	panel_dpi: panel-dpi {
++		compatible = "edt,et057090dhu";
++		backlight = <&backlight>;
++		power-supply = <&reg_3v3>;
++		status = "okay";
++
++		port {
++			lcd_panel_in: endpoint {
++				remote-endpoint = <&lcdif_out>;
++			};
++		};
  	};
  
-@@ -588,7 +600,7 @@ MX6UL_PAD_CSI_DATA01__USDHC2_DATA1	0x17069
- 			MX6UL_PAD_CSI_DATA02__USDHC2_DATA2	0x17069
- 			MX6UL_PAD_CSI_DATA03__USDHC2_DATA3	0x17069
- 			MX6UL_PAD_CSI_HSYNC__USDHC2_CMD		0x17069
--			MX6UL_PAD_CSI_VSYNC__USDHC2_CLK		0x17069
-+			MX6UL_PAD_CSI_VSYNC__USDHC2_CLK		0x10069
+ 	reg_module_3v3: regulator-module-3v3 {
+@@ -149,7 +166,7 @@ &i2c2 {
+ 	scl-gpios = <&gpio1 30 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
+ 	status = "okay";
  
- 			MX6UL_PAD_GPIO1_IO03__OSC32K_32K_OUT	0x10
- 		>;
+-	ad7879@2c {
++	ad7879_ts: touchscreen@2c {
+ 		compatible = "adi,ad7879-1";
+ 		pinctrl-names = "default";
+ 		pinctrl-0 = <&pinctrl_snvs_ad7879_int>;
+@@ -170,6 +187,12 @@ &lcdif {
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&pinctrl_lcdif_dat
+ 		     &pinctrl_lcdif_ctrl>;
++
++	port {
++		lcdif_out: endpoint {
++			remote-endpoint = <&lcd_panel_in>;
++		};
++	};
+ };
+ 
+ &pwm4 {
 -- 
 2.35.1
 

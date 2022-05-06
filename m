@@ -2,73 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8491651D0E0
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 07:45:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBE5B51D0EE
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 07:55:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1389279AbiEFFtY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 01:49:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50594 "EHLO
+        id S1381212AbiEFF7V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 01:59:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1389259AbiEFFtT (ORCPT
+        with ESMTP id S241386AbiEFF7I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 01:49:19 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C0B418371;
-        Thu,  5 May 2022 22:45:32 -0700 (PDT)
-X-UUID: e4f81d8e1d9c4eef92bb575f724971fd-20220506
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.4,REQID:16b711ea-c820-44a0-a1c3-3cd2ab4b618b,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:0
-X-CID-META: VersionHash:faefae9,CLOUDID:b5656916-2e53-443e-b81a-655c13977218,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,File:nil,QS:0,BEC:nil
-X-UUID: e4f81d8e1d9c4eef92bb575f724971fd-20220506
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
-        (envelope-from <jiaxin.yu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 62907079; Fri, 06 May 2022 13:45:28 +0800
-Received: from mtkmbs07n1.mediatek.inc (172.21.101.16) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Fri, 6 May 2022 13:45:27 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Fri, 6 May 2022 13:45:27 +0800
-Received: from mhfsdcap04 (10.17.3.154) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 6 May 2022 13:45:24 +0800
-Message-ID: <559a1e189613484b8528dc4eaf19099e9162fcc6.camel@mediatek.com>
-Subject: Re: [PATCH 1/3] ASoC: dt-bindings: mediatek: mt8192: Add i2s-share
- properties
-From:   Jiaxin Yu <jiaxin.yu@mediatek.com>
-To:     "=?ISO-8859-1?Q?N=EDcolas?= F. R. A. Prado" <nfraprado@collabora.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-CC:     Mark Brown <broonie@kernel.org>, <kernel@collabora.com>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        Shane Chien <shane.chien@mediatek.com>,
-        <alsa-devel@alsa-project.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>
-Date:   Fri, 6 May 2022 13:45:24 +0800
-In-Reply-To: <20220505162537.byiwfe2ghomxhezl@notapiano>
-References: <20220429203039.2207848-1-nfraprado@collabora.com>
-         <20220429203039.2207848-2-nfraprado@collabora.com>
-         <4826c824-40ce-5726-ed95-5be069233ca7@collabora.com>
-         <cbf2fcbae25408b95875278eb37e829bf4671430.camel@mediatek.com>
-         <d1c548bb-8a36-79bf-498d-c909bf7e7679@collabora.com>
-         <20220505162537.byiwfe2ghomxhezl@notapiano>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Fri, 6 May 2022 01:59:08 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 891CB14080
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 22:55:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651816524; x=1683352524;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=nBcSQ+bH6N1ZIWtxa+y19KMySwpFva4ce5UPpYGkOxY=;
+  b=IhTQ82MzQO7qEYYoVX8sp5tve3rkFX9jCLIwckEZcm8EuIVoguD32CU4
+   mAh1bqGerAVmSPACcr6jxkBDkFrGaXyNomfvc7B6BH9XmRwyIvUTxZeGQ
+   mFWz4z4S/MwTE6bGMSlkT85aj1Ggtv+fFJgc4hy3Tj1ZmWv5+kvwoXSdm
+   uBQvgymjguxyf54yL1NHI8LPEPLQ+qyIiEHQAlMOIHB1GXl+PJ8ns1NJc
+   j1tSKSWTSnNBzDyG6XUCymk6+XVE7B9Tze8BXH5Jn+T1jdofpukLYZgIr
+   iAzRiuF7hFGs3r4rwIKz9l90p+f5CK7Yj3phregO42CDqOnK4F5/A0MNe
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10338"; a="331349397"
+X-IronPort-AV: E=Sophos;i="5.91,203,1647327600"; 
+   d="scan'208";a="331349397"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2022 22:55:24 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,203,1647327600"; 
+   d="scan'208";a="735415204"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 05 May 2022 22:55:22 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nmqvy-000DBl-7q;
+        Fri, 06 May 2022 05:55:22 +0000
+Date:   Fri, 6 May 2022 13:54:40 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Emil Renner Berthing <kernel@esmil.dk>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [esmil:visionfive 50/55]
+ drivers/soc/sifive/sifive_l2_cache.c:158:17: error: implicit declaration of
+ function 'writeq'; did you mean 'writeb'?
+Message-ID: <202205061336.GeLV3Aeo-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,177 +62,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-05-05 at 12:25 -0400, Nícolas F. R. A. Prado wrote:
-> > 
+Hi Emil,
 
-> On Thu, May 05, 2022 at 10:52:45AM +0200, AngeloGioacchino Del Regno
-> wrote:
-> > Il 05/05/22 10:48, Jiaxin Yu ha scritto:
-> > > On Thu, 2022-05-05 at 10:08 +0200, AngeloGioacchino Del Regno
-> > > wrote:
-> > > > Il 29/04/22 22:30, Nícolas F. R. A. Prado ha scritto:
-> > > > > The Mediatek AFE PCM controller for MT8192 allows sharing of
-> > > > > an I2S
-> > > > > bus
-> > > > > between two busses. Add a pattern for these properties in the
-> > > > > dt-binding.
-> > > > > 
-> > > > > Signed-off-by: Nícolas F. R. A. Prado <
-> > > > > nfraprado@collabora.com>
-> > > > > ---
-> > > > > 
-> > > > >    Documentation/devicetree/bindings/sound/mt8192-afe-
-> > > > > pcm.yaml | 5
-> > > > > +++++
-> > > > >    1 file changed, 5 insertions(+)
-> > > > > 
-> > > > > diff --git a/Documentation/devicetree/bindings/sound/mt8192-
-> > > > > afe-
-> > > > > pcm.yaml b/Documentation/devicetree/bindings/sound/mt8192-
-> > > > > afe-
-> > > > > pcm.yaml
-> > > > > index 7a25bc9b8060..5b03c8dbf318 100644
-> > > > > --- a/Documentation/devicetree/bindings/sound/mt8192-afe-
-> > > > > pcm.yaml
-> > > > > +++ b/Documentation/devicetree/bindings/sound/mt8192-afe-
-> > > > > pcm.yaml
-> > > > > @@ -54,6 +54,11 @@ properties:
-> > > > >          - const: aud_infra_clk
-> > > > >          - const: aud_infra_26m_clk
-> > > > > +patternProperties:
-> > > > > +  "^i2s[0-35-9]-share$":
-> > > > > +    description: Name of the I2S bus that is shared with
-> > > > > this bus
-> > > > > +    pattern: "^I2S[0-35-9]$"
-> > > > > +
-> > > > >    required:
-> > > > >      - compatible
-> > > > >      - interrupts
-> > > > > 
-> > > > 
-> > > > The only other way of doing this would be to complicate this in
-> > > > the
-> > > > driver
-> > > > so that we can do something like
-> > > > 
-> > > > "i2s-share = <0 2>";  instead of  i2s0-share = "I2S2";
-> > > > 
-> > > > ...and I don't think that this would be any more
-> > > > straightforward than
-> > > > the
-> > > > provided way.
-> > > > 
-> > > > There's an improvement that we can do to that pattern
-> > > > description
-> > > > though,
-> > > > which would be explaining that declaring 'i2s0-share = "I2S2"'
-> > > > means
-> > > > that
-> > > > I2S2's data pin will be used as DATA-OUT, while i2s0 is DATA-
-> > > > IN.
-> > > > 
-> > > > Another thing that comes to mind here is that this is a
-> > > > MediaTek
-> > > > specific
-> > > > property and *not* a generic one, which means that both the
-> > > > driver
-> > > > and
-> > > > this binding should be fixed to get a "mediatek," prefix, so,
-> > > > this
-> > > > property
-> > > > should - in reality - be "mediatek,i2s[0-35-9]-share" instead.
-> > > > 
-> > > > I think that everyone agrees about that, but let's see what the
-> > > > others say.
-> > > > 
-> > > > Cheers,
-> > > > Angelo
-> > > 
-> > > Hi Angelo,
-> > > 
-> > > 'i2s0-share = "I2S2"' means that if we want use I2S0, there need
-> > > open
-> > > I2S2 to provide clock. Conversely, if we want to use I2S2, we
-> > > don't
-> > > need to open I2S0. However, MediaTek I2S0 and I2S2 hardware are
-> > > generally designed as input. So usually we use 'i2s0-share =
-> > > "I2S1"'.
-> > > Even numbers represent input, odd numbers represent output.
-> > > 
-> > > Yes, I think adding the "mediatek," prefix is the right way to
-> > > define a
-> > > non-generic property.
-> > > 
-> 
-> Hi Jiaxin,
-> 
-> thank you for the insights.
-> 
-> > 
-> > Hello Jiaxin,
-> > 
-> > if I get this correctly, i2s0-share = "I2S2" would be *invalid*...
-> > as you
-> > just explained, i2sX, where:
-> > 
-> > X = even number -> always DATA IN
-> > X = odd number  -> always DATA OUT
-> > 
-> > ...this means that the dt-binding needs a pattern to specify that
-> > only odd
-> > can be assigned to only even.
-> 
-> So, the situation seems different at least on mt8192-asurada-
-> spherion.
-> Here, I2S8 is used for the headset microphone and I2S9 for the
-> headset audio.
-> Even for input and odd for output agree with Jiaxin's description.
-> However, the
-> input bus seems to be the main one, that is, disabling I2S8:
-> 
-> 	amixer cset name='UL2_CH1 I2S8_CH1' 0
-> 	amixer cset name='UL2_CH2 I2S8_CH2' 0
-> 
-> not only disables the microphone but also the audio on the headset.
-> If I add 
-> 
-> 	i2s9-share = "I2S8";
-> 
-> on the DT, then everything works, I can disable I2S8 without
-> impacting the
-> headset audio. So the pattern for the property on this platform is
-> the opposite
-> that Jiaxin mentioned. This tells me that we should keep the binding
-> more
-> generic (not assume where odds and evens go). I will still apply the
-> other
-> suggestions mentioned though.
-> 
-> Thanks,
-> Nícolas
-> 
-Hi Nícolas,
+First bad commit (maybe != root cause):
 
-From software point, I2S8 and I2S9 belong to different hardware, so if
-you turn off I2S8 with CMD1, of course it will not affect I2S9.
+tree:   https://github.com/esmil/linux visionfive
+head:   f568ecc24aebec8ce1c59b86f2a85098675a4091
+commit: d9e1bb9d10657e8b58ea1d59ef125e674d1a3cf5 [50/55] RISC-V: Enable SIFIVE_L2_FLUSH for StarFive SoCs
+config: riscv-randconfig-r024-20220505 (https://download.01.org/0day-ci/archive/20220506/202205061336.GeLV3Aeo-lkp@intel.com/config)
+compiler: riscv32-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/esmil/linux/commit/d9e1bb9d10657e8b58ea1d59ef125e674d1a3cf5
+        git remote add esmil https://github.com/esmil/linux
+        git fetch --no-tags esmil visionfive
+        git checkout d9e1bb9d10657e8b58ea1d59ef125e674d1a3cf5
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/soc/sifive/
 
-CMD1:
-amixer cset name='UL2_CH1 I2S8_CH1' 0
-amixer cset name='UL2_CH2 I2S8_CH2' 0
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Frome hardware point, I2S9 will use(share) I2S8's clock. If we don't
-want the user to perceive this, the driver need to help do something.
-So this property 'i2s9-share = "I2S8";' will be added to inform the
-driver.
+All errors (new ones prefixed by >>):
 
-Best Regards,
-Jiaxin Yu
+   drivers/soc/sifive/sifive_l2_cache.c: In function 'sifive_l2_flush64_range':
+>> drivers/soc/sifive/sifive_l2_cache.c:158:17: error: implicit declaration of function 'writeq'; did you mean 'writeb'? [-Werror=implicit-function-declaration]
+     158 |                 writeq(line, l2_base + SIFIVE_L2_FLUSH64);
+         |                 ^~~~~~
+         |                 writeb
+   cc1: some warnings being treated as errors
 
-> > Nicolas, take note! :-) :-)
-> > 
-> > Thanks,
-> > Angelo
-> > 
-> > To unsubscribe, send mail to 
-> > kernel-unsubscribe@lists.collabora.co.uk.
 
+vim +158 drivers/soc/sifive/sifive_l2_cache.c
+
+a967a289f16969 arch/riscv/mm/sifive_l2_cache.c      Yash Shah          2019-05-06  126  
+7fa12d2f832a42 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  127  #ifdef CONFIG_SIFIVE_L2_FLUSH
+7fa12d2f832a42 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  128  void sifive_l2_flush64_range(unsigned long start, unsigned long len)
+7fa12d2f832a42 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  129  {
+7fa12d2f832a42 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  130  	unsigned long line;
+7fa12d2f832a42 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  131  
+7fa12d2f832a42 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  132  	if(!l2_base) {
+7fa12d2f832a42 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  133  		pr_warn("L2CACHE: base addr invalid, skipping flush\n");
+7fa12d2f832a42 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  134  		return;
+7fa12d2f832a42 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  135  	}
+7fa12d2f832a42 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  136  
+7fa12d2f832a42 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  137  	/* TODO: if (len == 0), skipping flush or going on? */
+7fa12d2f832a42 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  138  	if(!len) {
+7fa12d2f832a42 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  139  		pr_debug("L2CACHE: flush64 range @ 0x%lx(len:0)\n", start);
+7fa12d2f832a42 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  140  		return;
+7fa12d2f832a42 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  141  	}
+7fa12d2f832a42 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  142  
+9b74c210c71a83 drivers/soc/sifive/sifive_l2_cache.c Atish Patra        2021-06-12  143  	len = len + (start % SIFIVE_L2_FLUSH64_LINE_LEN);
+9b74c210c71a83 drivers/soc/sifive/sifive_l2_cache.c Atish Patra        2021-06-12  144  	start = ALIGN_DOWN(start, SIFIVE_L2_FLUSH64_LINE_LEN);
+9b74c210c71a83 drivers/soc/sifive/sifive_l2_cache.c Atish Patra        2021-06-12  145  
+7fa12d2f832a42 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  146  	/* make sure the address is in the range */
+7fa12d2f832a42 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  147  	if(start < CONFIG_SIFIVE_L2_FLUSH_START ||
+7fa12d2f832a42 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  148  	   (start + len) > (CONFIG_SIFIVE_L2_FLUSH_START +
+7fa12d2f832a42 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  149  			     CONFIG_SIFIVE_L2_FLUSH_SIZE)) {
+0725139bb25fb2 drivers/soc/sifive/sifive_l2_cache.c Geert Uytterhoeven 2021-05-21  150  		WARN(1, "L2CACHE: flush64 out of range: %lx(%lx), skip flush\n",
+7fa12d2f832a42 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  151  		     start, len);
+7fa12d2f832a42 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  152  		return;
+7fa12d2f832a42 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  153  	}
+7fa12d2f832a42 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  154  
+7fa12d2f832a42 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  155  	mb();	/* sync */
+7fa12d2f832a42 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  156  	for (line = start; line < start + len;
+7fa12d2f832a42 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  157  	     line += SIFIVE_L2_FLUSH64_LINE_LEN) {
+7fa12d2f832a42 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08 @158  		writeq(line, l2_base + SIFIVE_L2_FLUSH64);
+7fa12d2f832a42 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  159  		mb();
+7fa12d2f832a42 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  160  	}
+7fa12d2f832a42 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  161  }
+7fa12d2f832a42 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  162  EXPORT_SYMBOL_GPL(sifive_l2_flush64_range);
+7fa12d2f832a42 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  163  #endif
+7fa12d2f832a42 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  164  
+
+:::::: The code at line 158 was first introduced by commit
+:::::: 7fa12d2f832a42a37ff0d8f4dd7569cee4b0b82f sifive/sifive_l2_cache: Add sifive_l2_flush64_range function
+
+:::::: TO: Tom <support@vamrs.com>
+:::::: CC: Emil Renner Berthing <kernel@esmil.dk>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

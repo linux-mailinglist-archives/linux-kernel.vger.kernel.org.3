@@ -2,85 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81F4151CE42
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 04:16:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A915A51CE4D
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 04:16:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387614AbiEFAto (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 20:49:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51122 "EHLO
+        id S1387621AbiEFAt6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 20:49:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234996AbiEFAtl (ORCPT
+        with ESMTP id S1387617AbiEFAtq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 20:49:41 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DE5815A3F;
-        Thu,  5 May 2022 17:46:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651797960; x=1683333960;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=CEMQwyKyC2z3crG2gLQ2v/yWIWfTJd1sWTDPTFk+RlE=;
-  b=RAzjpYdxabP8OD8PwZDgtifc7MSIZ6QjxSgTswM7Gmh2rbfyt8cHa7bK
-   9f7OMVFGVFKiORijLIUskqr0m/2FaqYbysczMo2oBqurN4QOT/9loELeQ
-   hrjgUltM3iKv9u3sXbjhNK4yqww9wq5ENuHbUap6N/s7QikEfEWC+g1ce
-   4/51zFiCnmlf4HUibY6zJDJrndwsDN3BqgPC/gG5fhRzLNScJRKtR8AyZ
-   nV6a1MGKCHQrjG4JFjpJJcGxivG3hg9Wu3VmsscnQIk+4d9unnF3lZwvC
-   8A7CcnJU4+ySEdVwAyT7ljmzA28fJz5ljqILZMndQmHB1yC703Zj99GYJ
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10338"; a="354738487"
-X-IronPort-AV: E=Sophos;i="5.91,203,1647327600"; 
-   d="scan'208";a="354738487"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2022 17:46:00 -0700
-X-IronPort-AV: E=Sophos;i="5.91,203,1647327600"; 
-   d="scan'208";a="600317222"
-Received: from anthienn-mobl1.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.254.4.139])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2022 17:45:56 -0700
-Message-ID: <b40b3658e1fc7ec15d2adafe7f9562d42bc256f3.camel@intel.com>
-Subject: Re: [PATCH v3 00/21] TDX host kernel support
-From:   Kai Huang <kai.huang@intel.com>
-To:     Dan Williams <dan.j.williams@intel.com>
-Cc:     Dave Hansen <dave.hansen@intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        KVM list <kvm@vger.kernel.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        "Brown, Len" <len.brown@intel.com>,
-        "Luck, Tony" <tony.luck@intel.com>,
-        Rafael J Wysocki <rafael.j.wysocki@intel.com>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Isaku Yamahata <isaku.yamahata@intel.com>,
-        Mike Rapoport <rppt@kernel.org>
-Date:   Fri, 06 May 2022 12:45:54 +1200
-In-Reply-To: <CAPcyv4jNYqPA2HBaO+9a+ije4jnb6a3Sx_1knrmRF9HCCXQuqg@mail.gmail.com>
-References: <cover.1649219184.git.kai.huang@intel.com>
-         <522e37eb-68fc-35db-44d5-479d0088e43f@intel.com>
-         <ecf718abf864bbb2366209f00d4315ada090aedc.camel@intel.com>
-         <de24ac7e-349c-e49a-70bb-31b9bc867b10@intel.com>
-         <9b388f54f13b34fe684ef77603fc878952e48f87.camel@intel.com>
-         <d98ca73b-2d2d-757d-e937-acc83cfedfb0@intel.com>
-         <c90a10763969077826f42be6f492e3a3e062326b.camel@intel.com>
-         <fc1ca04d94ad45e79c0297719d5ef50a7c33c352.camel@intel.com>
-         <664f8adeb56ba61774f3c845041f016c54e0f96e.camel@intel.com>
-         <1b681365-ef98-ec78-96dc-04e28316cf0e@intel.com>
-         <8bf596b45f68363134f431bcc550e16a9a231b80.camel@intel.com>
-         <6bb89ca6e7346f4334f06ea293f29fd12df70fe4.camel@intel.com>
-         <CAPcyv4iP3hcNNDxNdPT+iB0E4aUazfqFWwaa_dtHpVf+qKPNcQ@mail.gmail.com>
-         <cbb2ea1343079aee546fb44cd59c82f66c875d76.camel@intel.com>
-         <CAPcyv4jNYqPA2HBaO+9a+ije4jnb6a3Sx_1knrmRF9HCCXQuqg@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
+        Thu, 5 May 2022 20:49:46 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA124205CB
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 17:46:02 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id s14so5932510plk.8
+        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 17:46:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=rEvFIvhULsTu5Dt2JyC1H8DHz0diohEBqq9Wfv/TaLQ=;
+        b=XiZCtbHwBXkRB9FjJAPpxFXk5S7pkWpN0/qRV09kIcMf3ndqXRdoDG5YgoelfezSJA
+         f9FkIYotBF+mbHvOdQWVijAs8S1DLF/7I+oquBBMun6crSbUF2eHWJE4sg1rCbeldbvK
+         PTSRPwC0N6Ki7+GO4pixHVO5+GgMrm/ibrX8c=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=rEvFIvhULsTu5Dt2JyC1H8DHz0diohEBqq9Wfv/TaLQ=;
+        b=G3W+CoT5U3MuEGYXghXMli3/ZqW9VkLzPYuB0yy0pfdP8GMRayU0SHrF5xyFoy6/UR
+         QAUfHSg6v9TEfQVj/FT5qAY0JV3OlItbxnx7Mhsj16FJRKDfYy3BKT76gh73BYb1Z8TN
+         jJxLvZawaJGyoocOyfndq/8vhTypcZVBDJcaSgfp9etmXAbm5JsmfOjsDe2QnperWxLB
+         FO1utdHs6fgetYkibY96PzPcpQhPDXkuzjDLKUEQ+QzIihkW5Sgq8sbKCGq2Y/juXETJ
+         v7x73NmSkOufwXxA1ZGFT2OojuVp7qJGYh9yiqFMH1GXhLb/y8dYb9nrB/ICh/EsFQwa
+         +G1g==
+X-Gm-Message-State: AOAM533KmZNoZl222zrFP/sI0u7hbEEZ29ixNBSeuywEYK6iMLQXoLYx
+        LaalpacYUZQ4JmoPpvIWpcOyxA==
+X-Google-Smtp-Source: ABdhPJxIX9aV1YZ3wVX8cOfdPZ4Epc6UiSnVPrfdIrdND5WRcMHiPW5HO09/5oCkj1AjqaaFVYvm8Q==
+X-Received: by 2002:a17:90b:1e03:b0:1dc:5a7d:bba8 with SMTP id pg3-20020a17090b1e0300b001dc5a7dbba8mr1140413pjb.156.1651797962295;
+        Thu, 05 May 2022 17:46:02 -0700 (PDT)
+Received: from localhost ([2620:15c:202:201:5605:d5cd:699b:1b26])
+        by smtp.gmail.com with UTF8SMTPSA id w2-20020a1709029a8200b0015e8d4eb28bsm225278plp.213.2022.05.05.17.46.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 05 May 2022 17:46:01 -0700 (PDT)
+Date:   Thu, 5 May 2022 17:46:00 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Doug Anderson <dianders@chromium.org>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+        quic_rohkumar@quicinc.com,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Judy Hsiao <judyhsiao@chromium.org>,
+        Venkata Prasad Potturu <quic_potturu@quicinc.com>
+Subject: Re: [PATCH v12 4/4] arm64: dts: qcom: sc7280-herobrine: Add lpi
+ pinmux properties for CRD 3.0/3.1
+Message-ID: <YnRvyICa9kxFc/nE@google.com>
+References: <1651079383-7665-1-git-send-email-quic_srivasam@quicinc.com>
+ <1651079383-7665-5-git-send-email-quic_srivasam@quicinc.com>
+ <YmsrB6Q89II5w1+9@google.com>
+ <CAD=FV=XxeZsiOVVBDK_vmx0nhT7roB2FqcaPXsH3+jzTHFXMxw@mail.gmail.com>
+ <YnKyzxPEolSVUhqD@builder.lan>
+ <CAD=FV=VUL4GmjaibAMhKNdpEso_Hg_R=XeMaqah1LSj_9-Ce4Q@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAD=FV=VUL4GmjaibAMhKNdpEso_Hg_R=XeMaqah1LSj_9-Ce4Q@mail.gmail.com>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,132 +83,114 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-05-05 at 17:22 -0700, Dan Williams wrote:
-> On Thu, May 5, 2022 at 3:14 PM Kai Huang <kai.huang@intel.com> wrote:
-> > 
-> > Thanks for feedback!
-> > 
-> > On Thu, 2022-05-05 at 06:51 -0700, Dan Williams wrote:
-> > > [ add Mike ]
-> > > 
-> > > 
-> > > On Thu, May 5, 2022 at 2:54 AM Kai Huang <kai.huang@intel.com> wrote:
-> > > [..]
-> > > > 
-> > > > Hi Dave,
-> > > > 
-> > > > Sorry to ping (trying to close this).
-> > > > 
-> > > > Given we don't need to consider kmem-hot-add legacy PMEM after TDX module
-> > > > initialization, I think for now it's totally fine to exclude legacy PMEMs from
-> > > > TDMRs.  The worst case is when someone tries to use them as TD guest backend
-> > > > directly, the TD will fail to create.  IMO it's acceptable, as it is supposedly
-> > > > that no one should just use some random backend to run TD.
-> > > 
-> > > The platform will already do this, right?
-> > > 
-> > 
-> > In the current v3 implementation, we don't have any code to handle memory
-> > hotplug, therefore nothing prevents people from adding legacy PMEMs as system
-> > RAM using kmem driver.  In order to guarantee all pages managed by page
+On Thu, May 05, 2022 at 05:06:08PM -0700, Doug Anderson wrote:
+> Hi,
 > 
-> That's the fundamental question I am asking why is "guarantee all
-> pages managed by page allocator are TDX memory". That seems overkill
-> compared to indicating the incompatibility after the fact.
-
-As I explained, the reason is I don't want to modify page allocator to
-distinguish TDX and non-TDX allocation, for instance, having to have a ZONE_TDX
-and GFP_TDX.
-
-KVM depends on host's page fault handler to allocate the page.  In fact KVM only
-consumes PFN from host's page tables.  For now only RAM is TDX memory.  By
-guaranteeing all pages in page allocator is TDX memory, we can easily use
-anonymous pages as TD guest memory.  This also allows us to easily extend the
-shmem to support a new fd-based backend which doesn't require having to mmap()
-TD guest memory to host userspace:
-
-https://lore.kernel.org/kvm/20220310140911.50924-1-chao.p.peng@linux.intel.com/
-
-Also, besides TD guest memory, there are some per-TD control data structures
-(which must be TDX memory too) need to be allocated for each TD.  Normal memory
-allocation APIs can be used for such allocation if we guarantee all pages in
-page allocator is TDX memory.
-
+> On Wed, May 4, 2022 at 10:07 AM Bjorn Andersson
+> <bjorn.andersson@linaro.org> wrote:
+> >
+> > On Fri 29 Apr 11:10 CDT 2022, Doug Anderson wrote:
+> >
+> > > Hi,
+> > >
+> > > On Thu, Apr 28, 2022 at 5:02 PM Matthias Kaehlcke <mka@chromium.org> wrote:
+> > > >
+> > > > On Wed, Apr 27, 2022 at 10:39:43PM +0530, Srinivasa Rao Mandadapu wrote:
+> > > > > Add LPASS LPI pinctrl properties, which are required for Audio
+> > > > > functionality on herobrine based platforms of rev5+
+> > > > > (aka CRD 3.0/3.1) boards.
+> > > > >
+> > > > > Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+> > > > > Co-developed-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
+> > > > > Signed-off-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
+> > > >
+> > > > I'm not super firm in pinctrl territory, a few maybe silly questions
+> > > > below.
+> > > >
+> > > > >  arch/arm64/boot/dts/qcom/sc7280-herobrine-crd.dts | 84 +++++++++++++++++++++++
+> > > > >  1 file changed, 84 insertions(+)
+> > > > >
+> > > > > diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine-crd.dts b/arch/arm64/boot/dts/qcom/sc7280-herobrine-crd.dts
+> > > > > index deaea3a..dfc42df 100644
+> > > > > --- a/arch/arm64/boot/dts/qcom/sc7280-herobrine-crd.dts
+> > > > > +++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine-crd.dts
+> > > > > @@ -111,6 +111,90 @@ ap_ts_pen_1v8: &i2c13 {
+> > > > >   * - If a pin is not hooked up on Qcard, it gets no name.
+> > > > >   */
+> > > > >
+> > > > > +&lpass_dmic01 {
+> > > > > +     clk {
+> > > > > +             drive-strength = <8>;
+> > > > > +     };
+> > >
+> > > Ugh, I've been distracted and I hadn't realized we were back to the
+> > > two-level syntax. Definitely not my favorite for all the reasons I
+> > > talked about [1]. I guess you took Bjorn's silence to my response to
+> > > mean that you should switch back to this way? :(
+> > >
+> > > Bjorn: can you clarify?
+> > >
+> >
+> > I didn't think through the fact that &mi2s0_state was specified in the
+> > .dtsi and as such will be partially be overridden by the baord dts.
+> >
+> >
+> > I do prefer the two level style and describing full "states", but as you
+> > say whenever we provide something that will have to be overwritten it's
+> > suboptimal.
+> >
+> > As such, I think your flattened model is preferred in this case
 > 
-> > allocator are all TDX memory, the v3 implementation needs to always include
-> > legacy PMEMs as TDX memory so that even people truly add  legacy PMEMs as system
-> > RAM, we can still guarantee all pages in page allocator are TDX memory.
+> How about for future patches we just provided labels at both levels
+> (I'm not suggesting we churn this patch series more):
 > 
-> Why?
+> lpass_dmic01_sleep: dmic01-sleep {
 
-If we don't include legacy PMEMs as TDX memory, then after they are hot-added as
-system RAM using kmem driver, the assumption of "all pages in page allocator are
-TDX memory" is broken.  A TD can be killed during runtime.
+is the outer label ('lpass_dmic01_sleep') actually needed if we don't
+intend to replicate the hierarchy?
 
+>   lpass_dmic01_sleep_clk: clk {
+>     pins = "gpio6";
+>     function = "dmic1_clk";
+>   };
 > 
-> > Of course, a side benefit of always including legacy PMEMs is people
-> > theoretically can use them directly as TD guest backend, but this is just a
-> > bonus but not something that we need to guarantee.
-> > 
-> > 
-> > > I don't understand why this
-> > > is trying to take proactive action versus documenting the error
-> > > conditions and steps someone needs to take to avoid unconvertible
-> > > memory. There is already the CONFIG_HMEM_REPORTING that describes
-> > > relative performance properties between initiators and targets, it
-> > > seems fitting to also add security properties between initiators and
-> > > targets so someone can enumerate the numa-mempolicy that avoids
-> > > unconvertible memory.
-> > 
-> > I don't think there's anything related to performance properties here.  The only
-> > goal here is to make sure all pages in page allocator are TDX memory pages.
+>   lpass_dmic01_sleep_data: data {
+>     pins = "gpio7";
+>     function = "dmic1_data";
+>   };
+> };
 > 
-> Please reconsider or re-clarify that goal.
+> Then you can in your pinctrl reference you can just reference the
+> top-level node but boards can override without having to replicate
+> hierarchy...
 > 
-> > 
-> > > 
-> > > No, special casing in hotplug code paths needed.
-> > > 
-> > > > 
-> > > > I think w/o needing to include legacy PMEM, it's better to get all TDX memory
-> > > > blocks based on memblock, but not e820.  The pages managed by page allocator are
-> > > > from memblock anyway (w/o those from memory hotplug).
-> > > > 
-> > > > And I also think it makes more sense to introduce 'tdx_memblock' and
-> > > > 'tdx_memory' data structures to gather all TDX memory blocks during boot when
-> > > > memblock is still alive.  When TDX module is initialized during runtime, TDMRs
-> > > > can be created based on the 'struct tdx_memory' which contains all TDX memory
-> > > > blocks we gathered based on memblock during boot.  This is also more flexible to
-> > > > support other TDX memory from other sources such as CLX memory in the future.
-> > > > 
-> > > > Please let me know if you have any objection?  Thanks!
-> > > 
-> > > It's already the case that x86 maintains sideband structures to
-> > > preserve memory after exiting the early memblock code.
-> > > 
-> > 
-> > May I ask what data structures are you referring to?
+> > but it
+> > makes me dislike the partial definition between the dtsi and dts even
+> > more (but I don't have any better suggestion).
 > 
-> struct numa_meminfo.
-> 
-> > Btw, the purpose of 'tdx_memblock' and 'tdx_memory' is not only just to preserve
-> > memblock info during boot.  It is also used to provide a common data structure
-> > that the "constructing TDMRs" code can work on.  If you look at patch 11-14, the
-> > logic (create TDMRs, allocate PAMTs, sets up reserved areas) around how to
-> > construct TDMRs doesn't have hard dependency on e820.  If we construct TDMRs
-> > based on a common 'tdx_memory' like below:
-> > 
-> >         int construct_tdmrs(struct tdx_memory *tmem, ...);
-> > 
-> > It would be much easier to support other TDX memory resources in the future.
-> 
-> "in the future" is a prompt to ask "Why not wait until that future /
-> need arrives before adding new infrastructure?"
+> One other proposal I'd make is that maybe we should change the rules
+> about never putting drive strength in the soc.dtsi file. While it
+> should still be OK for boards to override the drive strength, it seems
+> like a whole lot of biolerplate code to have every board override
+> every pin and say that its drive strength is 2. Similarly, if there's
+> a high speed interface (like eMMC) where a drive strength of 2 is
+> nonsense for any board, it doesn't seem ridiculous to specify a
+> default drive strength of something higher in the soc.dtsi file.
 
-Fine to me.
+Indeed, that could make sense.
 
--- 
-Thanks,
--Kai
+> I would like to say the same thing goes for for pulls, but it's
+> unfortunately uglier for pulls. :( For instance, nearly everyone has
+> an external pullup for i2c busses. The strength of the pullup needs to
+> be tuned for the i2c bus speed and the impedance of the line. Thus, it
+> would ideally make sense to specify this in the soc.dtsi file.
+> Unfortunately, if we do that and some board _wants_ to use the
+> internal pulls (maybe they're running at a really low speed and/or
+> forgot to add external pulls) then they have to do an ugly
+> "/delete-property/ bias-disable" because adding the "bias-pull-up"
+> doesn't delete the other property and you end up with both. :( That
+> seems bad, so I guess I'd vote to keep banning bias definitions in the
+> soc.dtsi file.
 
-
+I agree, having to use 'delete-property' to change a pull setting
+doesn't seem a good idea.

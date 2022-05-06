@@ -2,124 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE74D51DEF2
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 20:16:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0551451DEF3
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 20:16:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1390676AbiEFSTj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 14:19:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38594 "EHLO
+        id S1385504AbiEFSTh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 14:19:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1390808AbiEFSSO (ORCPT
+        with ESMTP id S233843AbiEFSTf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 14:18:14 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 363A36E8FE;
-        Fri,  6 May 2022 11:14:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651860844; x=1683396844;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=WizXc0R3BJTlovfE/8nWaCi8wLxJyfq2X70P9CYgneY=;
-  b=Nt6KVKoAJx/UyC2TCKY/WmsNmcFLkdYXPB973USQLk654sxB7knmaLqN
-   H/22pgspLeiRiWhbku69vm+A3oCcACkS5U/pGARvx6r32aH3jp5a1nlOj
-   M/AJ6k21303jzbIAA/Zgpd8Xh65SCogjGcPb90ZdO3YXa/+5u1OwHX9yK
-   GDQRHB5ntaD3TurVb2nzZgU0hXSZDcE3EmDhEi2zsFyghu8xzfU6eK6ig
-   CZV+Jsr323QVAc7dEjhXp6xVwMmpLCsRmCM/KTOQ+h+OTzXNLlKjgPkU6
-   oIrxttoKSGGUX+tu4Uv1IDK/+4fXDW8KEIPSyeu626wHO/sKGmii4L5lj
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10339"; a="329084903"
-X-IronPort-AV: E=Sophos;i="5.91,205,1647327600"; 
-   d="scan'208";a="329084903"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2022 11:14:03 -0700
-X-IronPort-AV: E=Sophos;i="5.91,205,1647327600"; 
-   d="scan'208";a="695293311"
-Received: from hgadiraj-mobl2.amr.corp.intel.com (HELO [10.212.44.56]) ([10.212.44.56])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2022 11:14:01 -0700
-Message-ID: <6abea873-52a2-f506-b21b-4b567bee1874@intel.com>
-Date:   Fri, 6 May 2022 11:14:00 -0700
+        Fri, 6 May 2022 14:19:35 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B084A4D9FE;
+        Fri,  6 May 2022 11:15:50 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D03B1B83882;
+        Fri,  6 May 2022 18:15:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52452C385A8;
+        Fri,  6 May 2022 18:15:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651860947;
+        bh=HZhuEiXqbxhd9fR3VaMws+c8YgJggiG/REZXjlbhj18=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=SbmKMuE4NMYBwSFmCjQO0fmQYNuHL4sHqBwee1oxEcLsDZ/hLL8UAq2s3MUOr5Z8w
+         y565I0qstxIOWuzcW428eNk1WunYU+neAu+5eCwcn0oKMEZZo6lVrQddWyqoYal8Hg
+         umu5w8HFMKhvDtlMucA3qqav0ZNVhO9KWViRPaUreU4K9ZfQOu5H+/2IGJmUw5D1qs
+         p9mdDlhuBa3He8mklEiSWFIP0VCuEyRo2MVwKKNdgpWYzsYm/w0tO/Jr/mUW/rQfrU
+         LctRvFwD3/xgvQ/l5sF5TU4e/ORTOmmDLQE5Uup1xLrrvqGemKRykhaJYPGtxuKPLo
+         9OOjWq+J5IJRg==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 8796F400B1; Fri,  6 May 2022 15:15:44 -0300 (-03)
+Date:   Fri, 6 May 2022 15:15:44 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Ian Rogers <irogers@google.com>
+Cc:     Thomas Richter <tmricht@linux.ibm.com>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>, svens@linux.ibm.com,
+        gor@linux.ibm.com, sumanthk@linux.ibm.com, hca@linux.ibm.com
+Subject: Re: [PATCH v3] perf test: Add skip to --per-thread test
+Message-ID: <YnVl0PxKboCxuke4@kernel.org>
+References: <20220505182505.3313191-1-irogers@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH v8 0/8] x86: Show in sysfs if a memory node is able to do
- encryption
-Content-Language: en-US
-To:     Boris Petkov <bp@alien8.de>,
-        Dan Williams <dan.j.williams@intel.com>
-Cc:     Martin Fernandez <martin.fernandez@eclypsium.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-efi <linux-efi@vger.kernel.org>,
-        Linux MM <linux-mm@kvack.org>,
-        platform-driver-x86@vger.kernel.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>, X86 ML <x86@kernel.org>,
-        "Schofield, Alison" <alison.schofield@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Andy Shevchenko <andy@infradead.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Ard Biesheuvel <ardb@kernel.org>, daniel.gutson@eclypsium.com,
-        "H. Peter Anvin" <hpa@zytor.com>, alex.bazhaniuk@eclypsium.com,
-        hughsient@gmail.com, Kees Cook <keescook@chromium.org>,
-        Darren Hart <dvhart@infradead.org>,
-        Ben Widawsky <ben.widawsky@intel.com>,
-        "Huang, Kai" <kai.huang@intel.com>
-References: <20220429201717.1946178-1-martin.fernandez@eclypsium.com>
- <YnKr+aMf4PspDpHZ@zn.tnic>
- <CAKgze5YDD02AsrF0yESv2sptZ4qxyTMgCDmnOKcbQWjKQsJRsw@mail.gmail.com>
- <YnUYLDjIThbIz/Uf@zn.tnic> <6d90c832-af4a-7ed6-4f72-dae08bb69c37@intel.com>
- <CAPcyv4i73m6iPPfJE9CBdxf-OWGXahvGqvh6G-pqVO=3LB6ktQ@mail.gmail.com>
- <47140A56-D3F8-4292-B355-5F92E3BA9F67@alien8.de>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <47140A56-D3F8-4292-B355-5F92E3BA9F67@alien8.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220505182505.3313191-1-irogers@google.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/6/22 10:55, Boris Petkov wrote:
-> So here's the deal: we can say in the kernel that memory encryption
-> is enabled and active.  But then all those different devices and so
-> on,  can or cannot support encryption. IO devices do not support
-> encryption either, afaict.
+Em Thu, May 05, 2022 at 11:25:05AM -0700, Ian Rogers escreveu:
+> As reported in:
+> https://lore.kernel.org/linux-perf-users/20220428122821.3652015-1-tmricht@linux.ibm.com/
+> the 'instructions:u' event may not be supported. Add a skip using 'perf
+> record'.
+> 
+> Switch some code away from pipe to make the failures clearer.
 
-At least on MKTME platforms, if a device does DMA to a physical address
-with the KeyID bits set, it gets memory encryption.  That's because all
-the encryption magic is done in the memory controller itself.  The CPU's
-memory controller doesn't actually care if the access comes from a
-device or a CPU as long as the right physical bits are set.
+Thanks, applied.
 
-The reason we're talking about this in terms of CXL devices is that CXL
-devices have their *OWN* memory controllers.  Those memory controllers
-might or might not support encryption.
+- Arnaldo
 
-> But that is not the question - they don't wanna say in fwupd whether
-> every transaction was encrypted or not - they wanna say that
-> encryption is active. And that we can give them now.
+ 
+> Reported-by: Thomas Richter <tmricht@linux.ibm.com>
+> Tested-by: Thomas Richter <tmricht@linux.ibm.com>
+> Signed-off-by: Ian Rogers <irogers@google.com>
+> ---
+>  tools/perf/tests/shell/record.sh | 46 ++++++++++++++++++++++++++++----
+>  1 file changed, 41 insertions(+), 5 deletions(-)
+> 
+> diff --git a/tools/perf/tests/shell/record.sh b/tools/perf/tests/shell/record.sh
+> index d98f4d4a00e1..00c7285ce1ac 100755
+> --- a/tools/perf/tests/shell/record.sh
+> +++ b/tools/perf/tests/shell/record.sh
+> @@ -5,11 +5,43 @@
+>  set -e
+>  
+>  err=0
+> +perfdata=$(mktemp /tmp/__perf_test.perf.data.XXXXX)
+> +
+> +cleanup() {
+> +  rm -f ${perfdata}
+> +  rm -f ${perfdata}.old
+> +  trap - exit term int
+> +}
+> +
+> +trap_cleanup() {
+> +  cleanup
+> +  exit 1
+> +}
+> +trap trap_cleanup exit term int
+> +
+>  test_per_thread() {
+>    echo "Basic --per-thread mode test"
+> -  perf record -e instructions:u --per-thread -o- true 2> /dev/null \
+> -    | perf report -i- -q \
+> -    | egrep -q true
+> +  if ! perf record -e instructions:u -o ${perfdata} --quiet true 2> /dev/null
+> +  then
+> +    echo "Per-thread record [Skipped instructions:u not supported]"
+> +    if [ $err -ne 1 ]
+> +    then
+> +      err=2
+> +    fi
+> +    return
+> +  fi
+> +  if ! perf record -e instructions:u --per-thread -o ${perfdata} true 2> /dev/null
+> +  then
+> +    echo "Per-thread record of instructions:u [Failed]"
+> +    err=1
+> +    return
+> +  fi
+> +  if ! perf report -i ${perfdata} -q | egrep -q true
+> +  then
+> +    echo "Per-thread record [Failed missing output]"
+> +    err=1
+> +    return
+> +  fi
+>    echo "Basic --per-thread mode test [Success]"
+>  }
+>  
+> @@ -18,6 +50,10 @@ test_register_capture() {
+>    if ! perf list | egrep -q 'br_inst_retired.near_call'
+>    then
+>      echo "Register capture test [Skipped missing instruction]"
+> +    if [ $err -ne 1 ]
+> +    then
+> +      err=2
+> +    fi
+>      return
+>    fi
+>    if ! perf record --intr-regs=\? 2>&1 | egrep -q 'available registers: AX BX CX DX SI DI BP SP IP FLAGS CS SS R8 R9 R10 R11 R12 R13 R14 R15'
+> @@ -37,8 +73,8 @@ test_register_capture() {
+>    echo "Register capture test [Success]"
+>  }
+>  
+> -# Test for platform support and return TEST_SKIP
+> -[ $(uname -m) = s390x ] && exit 2
+>  test_per_thread
+>  test_register_capture
+> +
+> +cleanup
+>  exit $err
+> -- 
+> 2.36.0.512.ge40c2bad7a-goog
 
-The reason we went down this per-node thing instead of something
-system-wide is EFI_MEMORY_CPU_CRYPTO.  It's in the standard because EFI
-systems are not expected to have uniform crypto capabilities across the
-entire memory map.  Some memory will be capable of CPU crypto and some not.
+-- 
 
-As an example, if I were to build a system today with TDX and NVDIMMs,
-I'd probably mark the RAM as EFI_MEMORY_CPU_CRYPTO=1 and the NVDIMMs as
-EFI_MEMORY_CPU_CRYPTO=0.
-
-I think you're saying that current AMD SEV systems have no need for
-EFI_MEMORY_CPU_CRYPTO since their encryption capabilities *ARE* uniform.
- I'm not challenging that at all.  This interface is total overkill for
-systems with guaranteed uniform encryption capabilities.
-
-But, this interface will *work* both for the uniform and non-uniform
-systems alike.
+- Arnaldo

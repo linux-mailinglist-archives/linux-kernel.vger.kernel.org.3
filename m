@@ -2,150 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DC9F51CFC6
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 05:39:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1AC851CFC4
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 05:38:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1388786AbiEFDmm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 23:42:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44658 "EHLO
+        id S1388758AbiEFDmU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 23:42:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1388762AbiEFDmg (ORCPT
+        with ESMTP id S234539AbiEFDmS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 23:42:36 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67EA1B3C;
-        Thu,  5 May 2022 20:38:55 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id iq2-20020a17090afb4200b001d93cf33ae9so9711570pjb.5;
-        Thu, 05 May 2022 20:38:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Thh8y0B9U/Ip36Z1pHukPlR3kRPTnswuR34K+vKB1hc=;
-        b=jsSM5j5/VLW8HThEJQ93pP3WnLRDj8yZPD+jNB+uxemWTHylJixdD/TP2lI1S55jZy
-         KyB5sUKuBuNGn+2pyep9IjJX7VbnCLCVyR7UaUWiS+zKLAoms9MX+fECPaMmuANKm3Jo
-         rUkXmDyDBPG7addk/1Jd38sw3uKMAXnu2x3kTCFpunj8Nm92etBwD7TmsZhPp4R535oL
-         koYWD3EHcMX6efoKpmiZleep8nO5AWFeWCpkTesK07bW5CIecpNf8RfqmnThB+eXT1su
-         lfIIx4/ljqVoozDaIwYSA8QFGWqrI1wf25CJQLP6s9hIslttbGdAYDL5Tnub6v7jVYXW
-         fz6A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Thh8y0B9U/Ip36Z1pHukPlR3kRPTnswuR34K+vKB1hc=;
-        b=23NJWDVc4IygW6mQZXrPbrj8zq16Ppo1zJacVXTh8nM6hHQDBansInFCpb2AUjF8AP
-         VcP2xta5nZm235e0blTb02/FzfUXZ1cc6rrrG67Stykl2vO/sIJu0ikKbQKWmWTp2iNF
-         V+IGV2gHNfebeEt0pqk1NRy5AiOm8FWmNl1kG7V0RLH31mgtcpK9diUBo7R23bhpNr9l
-         jQ6eSkSKMyeGA0LsILqXpCaMpCg5QvmrLwrJv8P/N+IYNSDMenEqhap+A0zuFNKiJPZ/
-         kPtFLzyXLOmlHeCrtMdM2CJgqZNBtwDqlfyW/CscO3STnaUnLX2SSHH9NRU8nyGa/k2r
-         C9zQ==
-X-Gm-Message-State: AOAM531KcksQzF7wt0DcJszmveLMok/0bPCZo1A6TXSC7Uv7gOGUeza4
-        BrHdntbctytFsnxnTnxCfoA=
-X-Google-Smtp-Source: ABdhPJxD8Oz0oOTM/oDFE5euDEomfuAH3/F7pvBij12hDEABwIFX21X+VhyiYg8cC1T2dVdGBBo7qQ==
-X-Received: by 2002:a17:902:f684:b0:15e:8c4a:c54b with SMTP id l4-20020a170902f68400b0015e8c4ac54bmr1433588plg.21.1651808334809;
-        Thu, 05 May 2022 20:38:54 -0700 (PDT)
-Received: from sol ([118.209.204.33])
-        by smtp.gmail.com with ESMTPSA id t7-20020a170902e84700b0015e8d4eb242sm412700plg.140.2022.05.05.20.38.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 May 2022 20:38:54 -0700 (PDT)
-Date:   Fri, 6 May 2022 11:38:49 +0800
-From:   Kent Gibson <warthog618@gmail.com>
-To:     Bartosz Golaszewski <brgl@bgdev.pl>
-Cc:     Yihao Han <hanyihao@vivo.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] gpiolib: cdev: fix stream_open.cocci warnings
-Message-ID: <20220506033849.GA12555@sol>
-References: <20220505115011.3435-1-hanyihao@vivo.com>
- <CAMRc=MdkbZVW_vFxyJbKh9oDo3mdud2omfS=cW5=Gn=nMrM37A@mail.gmail.com>
- <20220505122450.GA23659@sol>
+        Thu, 5 May 2022 23:42:18 -0400
+Received: from out30-130.freemail.mail.aliyun.com (out30-130.freemail.mail.aliyun.com [115.124.30.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7CF3F7;
+        Thu,  5 May 2022 20:38:30 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R191e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04426;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=30;SR=0;TI=SMTPD_---0VCPvMM9_1651808302;
+Received: from 30.32.96.193(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VCPvMM9_1651808302)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Fri, 06 May 2022 11:38:24 +0800
+Message-ID: <21b11024-e893-8c11-9b98-ab1d13413b61@linux.alibaba.com>
+Date:   Fri, 6 May 2022 11:39:05 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220505122450.GA23659@sol>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH 2/3] mm: rmap: Fix CONT-PTE/PMD size hugetlb issue when
+ migration
+To:     Mike Kravetz <mike.kravetz@oracle.com>, akpm@linux-foundation.org,
+        catalin.marinas@arm.com, will@kernel.org
+Cc:     tsbogend@alpha.franken.de, James.Bottomley@HansenPartnership.com,
+        deller@gmx.de, mpe@ellerman.id.au, benh@kernel.crashing.org,
+        paulus@samba.org, hca@linux.ibm.com, gor@linux.ibm.com,
+        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
+        svens@linux.ibm.com, ysato@users.sourceforge.jp, dalias@libc.org,
+        davem@davemloft.net, arnd@arndb.de,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-mm@kvack.org
+References: <cover.1651216964.git.baolin.wang@linux.alibaba.com>
+ <11b92502b3df0e0bba6a1dc71476d79cab6c79ba.1651216964.git.baolin.wang@linux.alibaba.com>
+ <5cab0eca-9630-a7c6-4f5d-5cb45ff82c83@oracle.com>
+From:   Baolin Wang <baolin.wang@linux.alibaba.com>
+In-Reply-To: <5cab0eca-9630-a7c6-4f5d-5cb45ff82c83@oracle.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-12.4 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 05, 2022 at 08:24:50PM +0800, Kent Gibson wrote:
-> On Thu, May 05, 2022 at 02:18:48PM +0200, Bartosz Golaszewski wrote:
-> > On Thu, May 5, 2022 at 1:50 PM Yihao Han <hanyihao@vivo.com> wrote:
-> > >
-> > > ./drivers/gpio/gpiolib-cdev.c:2498:7-23: WARNING:
-> > > gpio_fileops: .read() has stream semantic;
-> > > safe to change nonseekable_open -> stream_open.
-> > >
-> > > Generated by: scripts/coccinelle/api/stream_open.cocci
-> > >
-> > > Signed-off-by: Yihao Han <hanyihao@vivo.com>
-> > > ---
-> > >  drivers/gpio/gpiolib-cdev.c | 2 +-
-> > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > >
-> > > diff --git a/drivers/gpio/gpiolib-cdev.c b/drivers/gpio/gpiolib-cdev.c
-> > > index f5aa5f93342a..d03c8e012c8c 100644
-> > > --- a/drivers/gpio/gpiolib-cdev.c
-> > > +++ b/drivers/gpio/gpiolib-cdev.c
-> > > @@ -2495,7 +2495,7 @@ static int gpio_chrdev_open(struct inode *inode, struct file *file)
-> > >         get_device(&gdev->dev);
-> > >         file->private_data = cdev;
-> > >
-> > > -       ret = nonseekable_open(inode, file);
-> > > +       ret = stream_open(inode, file);
-> > >         if (ret)
-> > >                 goto out_unregister_notifier;
-> > >
-> > > --
-> > > 2.17.1
-> > >
-> > 
-> > Cc'ing Kent.
-> > 
-> > This patch doesn't seem to target current master or rc1.
-> > 
-> > It also can't be right - we specifically mark all filesystem objects
-> > exposed by the GPIO character device as non-seekable.
-> > 
+
+
+On 5/6/2022 7:53 AM, Mike Kravetz wrote:
+> On 4/29/22 01:14, Baolin Wang wrote:
+>> On some architectures (like ARM64), it can support CONT-PTE/PMD size
+>> hugetlb, which means it can support not only PMD/PUD size hugetlb:
+>> 2M and 1G, but also CONT-PTE/PMD size: 64K and 32M if a 4K page
+>> size specified.
+> <snip>
+>> diff --git a/mm/rmap.c b/mm/rmap.c
+>> index 6fdd198..7cf2408 100644
+>> --- a/mm/rmap.c
+>> +++ b/mm/rmap.c
+>> @@ -1924,13 +1924,15 @@ static bool try_to_migrate_one(struct folio *folio, struct vm_area_struct *vma,
+>>   					break;
+>>   				}
+>>   			}
+>> +
+>> +			/* Nuke the hugetlb page table entry */
+>> +			pteval = huge_ptep_clear_flush(vma, address, pvmw.pte);
+>>   		} else {
+>>   			flush_cache_page(vma, address, pte_pfn(*pvmw.pte));
+>> +			/* Nuke the page table entry. */
+>> +			pteval = ptep_clear_flush(vma, address, pvmw.pte);
+>>   		}
+>>   
 > 
-> Agreed.  I took the coccinelle warning as being a false positive.
-> If I recall correctly I had a quick look to see if it could be disabled,
-> but didn't find anything, and so just ignored it.
+> On arm64 with CONT-PTE/PMD the returned pteval will have dirty or young set
+> if ANY of the PTE/PMDs had dirty or young set.
+
+Right.
+
 > 
+>> -		/* Nuke the page table entry. */
+>> -		pteval = ptep_clear_flush(vma, address, pvmw.pte);
+>> -
+>>   		/* Set the dirty flag on the folio now the pte is gone. */
+>>   		if (pte_dirty(pteval))
+>>   			folio_mark_dirty(folio);
+>> @@ -2015,7 +2017,10 @@ static bool try_to_migrate_one(struct folio *folio, struct vm_area_struct *vma,
+>>   			pte_t swp_pte;
+>>   
+>>   			if (arch_unmap_one(mm, vma, address, pteval) < 0) {
+>> -				set_pte_at(mm, address, pvmw.pte, pteval);
+>> +				if (folio_test_hugetlb(folio))
+>> +					set_huge_pte_at(mm, address, pvmw.pte, pteval);
+> 
+> And, we will use that pteval for ALL the PTE/PMDs here.  So, we would set
+> the dirty or young bit in ALL PTE/PMDs.
+> 
+> Could that cause any issues?  May be more of a question for the arm64 people.
 
-Further to this...
+I don't think this will cause any issues. Since the hugetlb can not be 
+split, and we should not lose the the dirty or young state if any 
+subpages were set. Meanwhile we already did like this in hugetlb.c:
 
-The coccinelle warning says:
-
-// Search for stream-like files that are using nonseekable_open and convert
-// them to stream_open. A stream-like file is a file that does not use ppos in
-// its read and write. Rationale for the conversion is to avoid deadlock in
-// between read and write.
-
-The rationale is not applicable here, as all cdev files are non-writeable,
-as well as being non-seekable.
-But switching to stream_open(), as coccinelle suggests, is probably fine.
-
-The doco for stream_open() says:
-
- * stream_open is used by subsystems that want stream-like file descriptors.
- * Such file descriptors are not seekable and don't have notion of position
- * (file.f_pos is always 0 and ppos passed to .read()/.write() is always NULL).
- * Contrary to file descriptors of other regular files, .read() and .write()
- * can run simultaneously.
-
-so it would also produce nonseekable files.
-Comparing nonseekable_open() with stream_open(), the latter clears
-FMODE_ATOMIC_POS and sets FMODE_STREAM, neither of which are relevant for
-the cdev use cases, so that should be ok.
-So I would be ok with the patch if it were updated to apply to the
-current gpiolib-cdev.c.
-
-Cheers,
-Kent.
+pte = huge_ptep_get_and_clear(mm, address, ptep);
+tlb_remove_huge_tlb_entry(h, tlb, ptep, address);
+if (huge_pte_dirty(pte))
+	set_page_dirty(page);

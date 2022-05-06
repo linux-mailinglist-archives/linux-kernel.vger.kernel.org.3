@@ -2,157 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18D0351D6B9
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 13:34:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6613051D6BB
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 13:34:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1391384AbiEFLhh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 07:37:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36598 "EHLO
+        id S1391420AbiEFLhp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 07:37:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1391381AbiEFLhc (ORCPT
+        with ESMTP id S1391378AbiEFLhd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 07:37:32 -0400
-Received: from us-smtp-delivery-74.mimecast.com (us-smtp-delivery-74.mimecast.com [170.10.133.74])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A070F61604
-        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 04:33:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651836813;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=1ucCpzTQkF8XhUkvL7+8cXDWEm9SjV8gZcvK7m79UBU=;
-        b=iwQlSqppV8VrifkdFeUlpdDrJO8ITcuW1FkIRqj7JDhKxuvQOCEKysExFcZvv716u950vN
-        TZi+f8HSfRE6NEE5SIlwtJRrdgX1QC67FTuO1BS3G8AUksDQg1sypUCOX5+sXaAhVyEz5h
-        JJv7ssgzvh0OPTqMj3GA/vVPoZtaZIs=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-126-A4BTPGmvO2G4ezxyM-ut9Q-1; Fri, 06 May 2022 07:33:32 -0400
-X-MC-Unique: A4BTPGmvO2G4ezxyM-ut9Q-1
-Received: by mail-ed1-f71.google.com with SMTP id b65-20020a509f47000000b00427b34634d3so3844939edf.20
-        for <linux-kernel@vger.kernel.org>; Fri, 06 May 2022 04:33:32 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=1ucCpzTQkF8XhUkvL7+8cXDWEm9SjV8gZcvK7m79UBU=;
-        b=vsq+3Y+l+ilklhhNYZJ6Acyn0nVTIQ1M/NiCrmt+CQaPdaUBmCftqi3AmUaeSEaIYv
-         fW1HBeUcFtGPgXYt+6DjXD+z+Gha5DT/6tnhzJwnFe+rpDU3BljLEGlTtDwi+pmsNNEN
-         IcN6NcLttpgpDoGk7K0Kzk3IDBzLH+BIcU+C4UcGkhhI1kvoMRFQoqdH1n9QXfL9Hw80
-         /hzONCOyiw7l5aWKTkicSYPSQMs+D5GOPRWaI0jdNRI4JlZgJO3k+SNJdnu04ZBSIH8M
-         MfeZbIgODIXsuyK3ac3aTEIzicR7VcH0UAXYSd45EGGFy8DEV3bsXkbifIyKgsQT3Iom
-         OCjA==
-X-Gm-Message-State: AOAM531vdjEENRDdHEQ+gl4jrRVwnt7LpKf8heRRsVFNtmeTx4v+oCod
-        L069aGQgQvvq/0SQVdn1VNGPl1WVd+u3EI7AWHqR1zhW27xJjpROTEUURTDlENVVHXOI18wr0Cp
-        p8r9EZCMeQd++5haqn3WexyW3
-X-Received: by 2002:a17:906:148a:b0:6f3:833d:5a0f with SMTP id x10-20020a170906148a00b006f3833d5a0fmr2560120ejc.49.1651836811510;
-        Fri, 06 May 2022 04:33:31 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwWqNhgRcK629dCnuKAST3WbCl+p9Mce05cC+BHLm/aKmxrKARyEIXE+pvxtLSGIpCklwFmrA==
-X-Received: by 2002:a17:906:148a:b0:6f3:833d:5a0f with SMTP id x10-20020a170906148a00b006f3833d5a0fmr2560103ejc.49.1651836811295;
-        Fri, 06 May 2022 04:33:31 -0700 (PDT)
-Received: from redhat.com ([2a03:c5c0:107e:a6f7:2ba7:16e9:af89:1a95])
-        by smtp.gmail.com with ESMTPSA id hy5-20020a1709068a6500b006f3ef214ddcsm1808167ejc.66.2022.05.06.04.33.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 May 2022 04:33:30 -0700 (PDT)
-Date:   Fri, 6 May 2022 07:33:26 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     zhenwei pi <pizhenwei@bytedance.com>
-Cc:     "Gonglei (Arei)" <arei.gonglei@huawei.com>,
-        "jasowang@redhat.com" <jasowang@redhat.com>,
-        "herbert@gondor.apana.org.au" <herbert@gondor.apana.org.au>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "helei.sig11@bytedance.com" <helei.sig11@bytedance.com>,
-        "davem@davemloft.net" <davem@davemloft.net>
-Subject: Re: RE: [PATCH v5 5/5] virtio-crypto: enable retry for
- virtio-crypto-dev
-Message-ID: <20220506073316-mutt-send-email-mst@kernel.org>
-References: <20220505092408.53692-1-pizhenwei@bytedance.com>
- <20220505092408.53692-6-pizhenwei@bytedance.com>
- <ad61b1ae4bd145eaa18fc28696e9502a@huawei.com>
- <48c9b073-0b03-5769-633b-5b668cea6fa4@bytedance.com>
+        Fri, 6 May 2022 07:37:33 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89C1062A0A;
+        Fri,  6 May 2022 04:33:40 -0700 (PDT)
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 246BEGaT028215;
+        Fri, 6 May 2022 11:33:39 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : in-reply-to : references : mime-version :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=j164G7uED0eN6dY0LEDq4vcZtaflgdo9SaomxX5XB7k=;
+ b=I27eNDNzVBtX0FVxDzqDzbYQ9w3Ylzeah7Ztuj23vqAgcxZkWDL1GW5G4eIibNimivSq
+ 6pOAc6ZE/s5eFfpxRHIw4rQQSyWi+DbpFBLLWvBwGNJi8JOm3FvcjK2Bms4LgklWuPCc
+ eJoPc+7wyk48u07oQv39k8RjjV4YzXB0mvkp1YnzV/YJL0O0ZSxhjSo/xbG6fix5n3Xx
+ gFjOV4QDZHkhFQKs/IC+Se5kGb1GGkDs1+Vqg5Q496CWWswY8eq9ivnBsfsz26DJqUlj
+ mAQJWItHaQrt4J9LMog7hcsOpxC9VpIMOup7PjNmGqT1WSLhXCEeBdQtIAhCSYKjMf6J 0w== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fw2m78a2p-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 06 May 2022 11:33:39 +0000
+Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 246BREc2013207;
+        Fri, 6 May 2022 11:33:39 GMT
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fw2m78a25-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 06 May 2022 11:33:38 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 246BSgj1011907;
+        Fri, 6 May 2022 11:33:37 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma04ams.nl.ibm.com with ESMTP id 3fvnaqgv47-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 06 May 2022 11:33:37 +0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 246BXY6J45089080
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 6 May 2022 11:33:34 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id EB8794C044;
+        Fri,  6 May 2022 11:33:33 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4A9A74C052;
+        Fri,  6 May 2022 11:33:33 +0000 (GMT)
+Received: from p-imbrenda (unknown [9.145.15.58])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Fri,  6 May 2022 11:33:33 +0000 (GMT)
+Date:   Fri, 6 May 2022 13:33:26 +0200
+From:   Claudio Imbrenda <imbrenda@linux.ibm.com>
+To:     Thomas Huth <thuth@redhat.com>
+Cc:     kvm@vger.kernel.org, borntraeger@de.ibm.com, frankja@linux.ibm.com,
+        pasic@linux.ibm.com, david@redhat.com, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org, scgl@linux.ibm.com,
+        mimu@linux.ibm.com, nrb@linux.ibm.com
+Subject: Re: [PATCH v10 02/19] KVM: s390: pv: handle secure storage
+ violations for protected guests
+Message-ID: <20220506133326.09e9a887@p-imbrenda>
+In-Reply-To: <9d79d8c9-9d3f-de6e-e910-62549fc2ac5d@redhat.com>
+References: <20220414080311.1084834-1-imbrenda@linux.ibm.com>
+        <20220414080311.1084834-3-imbrenda@linux.ibm.com>
+        <9d79d8c9-9d3f-de6e-e910-62549fc2ac5d@redhat.com>
+Organization: IBM
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <48c9b073-0b03-5769-633b-5b668cea6fa4@bytedance.com>
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: _fupn4z-WVOrs5Ne7ZpektPGch_-Q_TD
+X-Proofpoint-GUID: gxJy_8sUn4t94Lkv9s_9oo7nG50zbHa4
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-06_04,2022-05-06_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0
+ priorityscore=1501 adultscore=0 clxscore=1015 mlxlogscore=999
+ impostorscore=0 mlxscore=0 lowpriorityscore=0 bulkscore=0 suspectscore=0
+ malwarescore=0 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2205060064
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 06, 2022 at 05:55:33PM +0800, zhenwei pi wrote:
-> On 5/6/22 17:34, Gonglei (Arei) wrote:
-> > 
-> > 
-> > > -----Original Message-----
-> > > From: zhenwei pi [mailto:pizhenwei@bytedance.com]
-> > > Sent: Thursday, May 5, 2022 5:24 PM
-> > > To: Gonglei (Arei) <arei.gonglei@huawei.com>; mst@redhat.com
-> > > Cc: jasowang@redhat.com; herbert@gondor.apana.org.au;
-> > > linux-kernel@vger.kernel.org; virtualization@lists.linux-foundation.org;
-> > > linux-crypto@vger.kernel.org; helei.sig11@bytedance.com;
-> > > pizhenwei@bytedance.com; davem@davemloft.net
-> > > Subject: [PATCH v5 5/5] virtio-crypto: enable retry for virtio-crypto-dev
-> > > 
-> > > From: lei he <helei.sig11@bytedance.com>
-> > > 
-> > > Enable retry for virtio-crypto-dev, so that crypto-engine can process
-> > > cipher-requests parallelly.
-> > > 
-> > > Cc: Michael S. Tsirkin <mst@redhat.com>
-> > > Cc: Jason Wang <jasowang@redhat.com>
-> > > Cc: Gonglei <arei.gonglei@huawei.com>
-> > > Signed-off-by: lei he <helei.sig11@bytedance.com>
-> > > Signed-off-by: zhenwei pi <pizhenwei@bytedance.com>
-> > > ---
-> > >   drivers/crypto/virtio/virtio_crypto_core.c | 3 ++-
-> > >   1 file changed, 2 insertions(+), 1 deletion(-)
-> > > 
-> > > diff --git a/drivers/crypto/virtio/virtio_crypto_core.c
-> > > b/drivers/crypto/virtio/virtio_crypto_core.c
-> > > index 60490ffa3df1..f67e0d4c1b0c 100644
-> > > --- a/drivers/crypto/virtio/virtio_crypto_core.c
-> > > +++ b/drivers/crypto/virtio/virtio_crypto_core.c
-> > > @@ -144,7 +144,8 @@ static int virtcrypto_find_vqs(struct virtio_crypto *vi)
-> > >   		spin_lock_init(&vi->data_vq[i].lock);
-> > >   		vi->data_vq[i].vq = vqs[i];
-> > >   		/* Initialize crypto engine */
-> > > -		vi->data_vq[i].engine = crypto_engine_alloc_init(dev, 1);
-> > > +		vi->data_vq[i].engine = crypto_engine_alloc_init_and_set(dev, true,
-> > > NULL, 1,
-> > > +						virtqueue_get_vring_size(vqs[i]));
-> > 
-> > Here the '1' can be 'true' too.
-> > 
-> > Sure, you can add
-> > 
-> > Reviewed-by: Gonglei <arei.gonglei@huawei.com>
-> > 
-> > Regards,
-> > -Gonglei
-> > 
-> > >   		if (!vi->data_vq[i].engine) {
-> > >   			ret = -ENOMEM;
-> > >   			goto err_engine;
-> > > --
-> > > 2.20.1
-> > 
-> 
-> Thanks to Lei!
-> 
-> Hi, Michael
-> I would appreciate it if you could apply this minor change, or I send the v6
-> series, which one do you prefer?
-> 
-> -- 
+On Thu, 5 May 2022 19:10:39 +0200
+Thomas Huth <thuth@redhat.com> wrote:
 
+> On 14/04/2022 10.02, Claudio Imbrenda wrote:
+> > With upcoming patches, protected guests will be able to trigger secure
+> > storage violations in normal operation.
+> > 
+> > A secure storage violation is triggered when a protected guest tries to
+> > access secure memory that has been mapped erroneously, or that belongs
+> > to a different protected guest or to the ultravisor.
+> > 
+> > With upcoming patches, protected guests will be able to trigger secure
+> > storage violations in normal operation.  
+> 
+> You've already used this sentence as 1st sentence of the patch description. 
+> Looks weird to read it again. Maybe scratch the 1st sentence?
 
-send v6 with acks and change pls
+oops!
+
+> 
+> > This happens for example if a
+> > protected guest is rebooted with lazy destroy enabled and the new guest
+> > is also protected.
+> > 
+> > When the new protected guest touches pages that have not yet been
+> > destroyed, and thus are accounted to the previous protected guest, a
+> > secure storage violation is raised.
+> > 
+> > This patch adds handling of secure storage violations for protected
+> > guests.
+> > 
+> > This exception is handled by first trying to destroy the page, because
+> > it is expected to belong to a defunct protected guest where a destroy
+> > should be possible. If that fails, a normal export of the page is
+> > attempted.
+>  >
+> > Therefore, pages that trigger the exception will be made non-secure
+> > before attempting to use them again for a different secure guest.  
+> 
+> I'm an complete ignorant here, but isn't this somewhat dangerous? Could it 
+> happen that a VM could destroy/export the pages of another secure guest that 
+> way?
+
+this is a good question, perhaps I should add a comment explaining that
+the destroy page UVC will only work on protected VMs with no CPUs.
+
+Exporting instead is not an issue, if/when the page is needed, it will
+get imported again. Unless some things went really wrong, but that can
+only happen in case of a bug in the hypervisor.
+
+> 
+>   Thomas
+> 
 

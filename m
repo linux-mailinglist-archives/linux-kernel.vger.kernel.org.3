@@ -2,56 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E12351CEE6
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 04:16:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B53AD51CE2C
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 04:16:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358735AbiEFCET (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 22:04:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56382 "EHLO
+        id S1388250AbiEFCHF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 22:07:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1388289AbiEFCDz (ORCPT
+        with ESMTP id S233914AbiEFCHB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 22:03:55 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFFCC13F35;
-        Thu,  5 May 2022 19:00:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6AFAE62043;
-        Fri,  6 May 2022 02:00:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id C6FADC385A4;
-        Fri,  6 May 2022 02:00:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651802412;
-        bh=xDruWFRHuePEkAyV8YC+1fdTRTDjM7xot3ryjvi6KmY=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=sbOW0MbyCW31eK0pDQ2MeiM2gCoK4YqlEd/QIuCsUXSqGMOgEOT8lnqSvxondDESh
-         Ker5wyE0kEGYzJQ+rVHEhofS26vW1IuqOb8WsJl4DTUXUEfndYefT1SEYz0qOEv+G6
-         97PGWxh1bpQoWlXtnzLiNTtI7hMqQkooYTZaEJ0CP1QRhHrjEWi8PQ+Kj4xeY8AUaE
-         GAv61+aYExyDEYhjcdT068TWbmhbDwKwdcw4PddUeJ5yl82oUUeTvZXJ7Mm1yEOKHk
-         TR/+hmtilVRx9s+Z4t+sl/cOFnidMx3GuV6XTWNa+OD/fvK71Cakr+j+akD+9b/Gzn
-         WOkd7KEKTHQrw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id A4809F03874;
-        Fri,  6 May 2022 02:00:12 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Thu, 5 May 2022 22:07:01 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 703512C137;
+        Thu,  5 May 2022 19:03:19 -0700 (PDT)
+Received: from canpemm500007.china.huawei.com (unknown [172.30.72.55])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KvYjJ1mD2zfbKk;
+        Fri,  6 May 2022 10:02:12 +0800 (CST)
+Received: from localhost (10.174.179.215) by canpemm500007.china.huawei.com
+ (7.192.104.62) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Fri, 6 May
+ 2022 10:03:09 +0800
+From:   YueHaibing <yuehaibing@huawei.com>
+To:     <robdclark@gmail.com>, <sean@poorly.run>,
+        <quic_abhinavk@quicinc.com>, <airlied@linux.ie>, <daniel@ffwll.ch>,
+        <dmitry.baryshkov@linaro.org>
+CC:     <linux-arm-msm@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+        <freedreno@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
+        YueHaibing <yuehaibing@huawei.com>
+Subject: [PATCH -next] drm/msm: Add missing OF dependency for DRM_MSM
+Date:   Fri, 6 May 2022 10:03:00 +0800
+Message-ID: <20220506020300.20704-1-yuehaibing@huawei.com>
+X-Mailer: git-send-email 2.10.2.windows.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v4 1/1] firmware: tee_bnxt: Use UUID API for exporting the
- UUID
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <165180241267.2024.13062789128039053176.git-patchwork-notify@kernel.org>
-Date:   Fri, 06 May 2022 02:00:12 +0000
-References: <20220504091407.70661-1-andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20220504091407.70661-1-andriy.shevchenko@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     apais@linux.microsoft.com, netdev@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        zajec5@gmail.com, michael.chan@broadcom.com, f.fainelli@gmail.com,
-        hch@lst.de
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Type: text/plain
+X-Originating-IP: [10.174.179.215]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ canpemm500007.china.huawei.com (7.192.104.62)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -60,29 +48,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+WARNING: unmet direct dependencies detected for DRM_DP_AUX_BUS
+  Depends on [n]: HAS_IOMEM [=y] && DRM [=y] && OF [=n]
+  Selected by [y]:
+  - DRM_MSM [=y] && HAS_IOMEM [=y] && DRM [=y] && (ARCH_QCOM || SOC_IMX5 || COMPILE_TEST [=y]) && COMMON_CLK [=y] && IOMMU_SUPPORT [=y] && (QCOM_OCMEM [=n] || QCOM_OCMEM [=n]=n) && (QCOM_LLCC [=y] || QCOM_LLCC [=y]=n) && (QCOM_COMMAND_DB [=n] || QCOM_COMMAND_DB [=n]=n)
 
-This patch was applied to netdev/net-next.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
+DRM_DP_AUX_BUS depends on OF, so DRM_MSM also should depends on it.
 
-On Wed,  4 May 2022 12:14:07 +0300 you wrote:
-> There is export_uuid() function which exports uuid_t to the u8 array.
-> Use it instead of open coding variant.
-> 
-> This allows to hide the uuid_t internals.
-> 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Reviewed-by: Christoph Hellwig <hch@lst.de>
-> 
-> [...]
+Fixes: f5d01644921b ("drm/msm: select DRM_DP_AUX_BUS for the AUX bus support")
+Signed-off-by: YueHaibing <yuehaibing@huawei.com>
+---
+ drivers/gpu/drm/msm/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-Here is the summary with links:
-  - [v4,1/1] firmware: tee_bnxt: Use UUID API for exporting the UUID
-    https://git.kernel.org/netdev/net-next/c/10b4a11fe70f
-
-You are awesome, thank you!
+diff --git a/drivers/gpu/drm/msm/Kconfig b/drivers/gpu/drm/msm/Kconfig
+index 4e0cbd682725..1d710a20ffdd 100644
+--- a/drivers/gpu/drm/msm/Kconfig
++++ b/drivers/gpu/drm/msm/Kconfig
+@@ -3,6 +3,7 @@
+ config DRM_MSM
+ 	tristate "MSM DRM"
+ 	depends on DRM
++	depends on OF
+ 	depends on ARCH_QCOM || SOC_IMX5 || COMPILE_TEST
+ 	depends on COMMON_CLK
+ 	depends on IOMMU_SUPPORT
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.17.1
 

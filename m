@@ -2,102 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20D4151DCE0
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 18:04:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C996A51DCDF
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 18:04:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1443422AbiEFQIW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 12:08:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39036 "EHLO
+        id S1443398AbiEFQI1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 12:08:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1443373AbiEFQHp (ORCPT
+        with ESMTP id S1443384AbiEFQHt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 12:07:45 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA0406D975
-        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 09:04:00 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id iq10so7432328pjb.0
-        for <linux-kernel@vger.kernel.org>; Fri, 06 May 2022 09:04:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=0uUTR9z98utauBqj+KmjxPc4gxj1gteGLGPvj7webUo=;
-        b=J4IvR3uUluzPVJPujF5iGP7CnGMFRxS4C+JdTXPQeYnSh3W80C91i9wOSOsN7J/kGv
-         bkX4yeeMmFTGNs2RiGiQ7rLi5NpfOmOCdMNV59m1D1X568tUCbKlXVN6Fc7MsWjfQrHc
-         vbCNlfjkVHr8WjXmvxtOwRxpyh6SKRcrhQy/BW+7bcTZ5Fw72tYvnAXXD4DeN8+qaeSj
-         /iU3XP4qgOgPzLD31X97EYpS874M9TrJZR4vF8sNIGilZSCOmMYryQJ4IP1aabvQ+V7H
-         J5E/pxWQRHLJp0OCqreWvFF7K0+tNgFlQpHpHM5D88RoTNN6ZL072kF2+f0Xrue43ues
-         1hrA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=0uUTR9z98utauBqj+KmjxPc4gxj1gteGLGPvj7webUo=;
-        b=ThyprhFnsKOnKg4gz9rE5DGMGmOX6xYuptOkU5OpMSf4gXHgZXzhtbgEYMdOngznQJ
-         PhxAFge2PiDegDn2SZ/45IZVX97dv99TcEn9taz75WXFDxau/vcEp5WOOz5gBe5jcrrt
-         52km62S8f3D3nUjdHM4vIexpSvX7vmwgcc2rcv3VBQjrUGJsQCWPnbs4m4tOQntrIsU+
-         hBqHlEetVQ7Ivb8t9DozFGXkV/4ISvgELluzFVx3fu0DR9q6yGjz4+WDGVuMiN7HXJdX
-         MoGWQQIHV4+O46QDdcZfTvlhi6hDGHEEDR/ie/2Y/yNmjqgF11o7o5VsM1mbPYZxHMS/
-         WnJg==
-X-Gm-Message-State: AOAM531eAGD5M2lh05bpP471oRgVjn6xBCQeLJyb5Y9dtwh3ZrYNWjxn
-        W+6tbZ6VcV0e8eKsS2tHSwmPGU4zVDOBAA==
-X-Google-Smtp-Source: ABdhPJzaRrmoWWC0zULoNyAQrgE1JZUQBrth1vEB2/dmiHbMGv30IIErYnu0FnK0crc6nCQ0X0BZdw==
-X-Received: by 2002:a17:903:22c1:b0:15e:c3b2:d632 with SMTP id y1-20020a17090322c100b0015ec3b2d632mr4462885plg.0.1651853040377;
-        Fri, 06 May 2022 09:04:00 -0700 (PDT)
-Received: from [192.168.4.166] (cpe-72-132-29-68.dc.res.rr.com. [72.132.29.68])
-        by smtp.gmail.com with ESMTPSA id 6-20020a631546000000b003c14af50628sm3419968pgv.64.2022.05.06.09.03.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 06 May 2022 09:03:59 -0700 (PDT)
-Message-ID: <05e99d9e-4c66-6d7c-604c-1e52d8d0b5b2@kernel.dk>
-Date:   Fri, 6 May 2022 10:03:58 -0600
+        Fri, 6 May 2022 12:07:49 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 603A96D95C;
+        Fri,  6 May 2022 09:04:06 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 15AD1B832EB;
+        Fri,  6 May 2022 16:04:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95A9FC385AA;
+        Fri,  6 May 2022 16:04:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651853043;
+        bh=ItN/NKAQBycs8x8pKOyjx+zGBlvvesdrf9msspQsjLM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=FynfHUdWPlTrUorsRobYtyaloV/KWX21xqAVCVUIUsjYzMICrn4L3Jb9LheYdwqsz
+         YsQuXjn4797Ce8k/zdsCheDUJ7UQWN6Z/w1JGm/DY8AeVgJtUsoS9hTvwXbULHxLKE
+         M1VTFbwMyb7AvOkdBRL8g0u+n5V+XnPWFBvp1pwPgHQ9E4mr1m0+pl4qqBCFTfIBpN
+         NENIWwYUtyGYdQVsUiOqpLmAS0lcB+MkCnK8RP9McAKVHEx0ISPaZx2nl1JVmoE/B5
+         SDxhrkYBWfrL+DwavGH62PYjDU3nnMsHfjgMQChEpNbaC+V659s7bzaIZaRbEn952E
+         dlH0jmUqHViwg==
+Date:   Fri, 6 May 2022 09:04:02 -0700
+From:   "Darrick J. Wong" <djwong@kernel.org>
+To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+Cc:     linux-xfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: Re: [PATCH] xfs: remove unreachable code
+Message-ID: <20220506160402.GO27195@magnolia>
+References: <20220506082615.19328-1-jiapeng.chong@linux.alibaba.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH v2 0/5] fast poll multishot mode
-Content-Language: en-US
-To:     Pavel Begunkov <asml.silence@gmail.com>,
-        Hao Xu <haoxu.linux@gmail.com>, io-uring@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org
-References: <20220506070102.26032-1-haoxu.linux@gmail.com>
- <b4d23f42-36f4-353a-1f44-c12178f0a2b3@gmail.com>
- <5ce3d6c7-42f9-28c3-0800-4da399adaaea@kernel.dk>
- <3f940dad-73ce-4ea6-dc76-f877c64dbb9a@gmail.com>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <3f940dad-73ce-4ea6-dc76-f877c64dbb9a@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220506082615.19328-1-jiapeng.chong@linux.alibaba.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/6/22 10:01 AM, Pavel Begunkov wrote:
-> On 5/6/22 15:18, Jens Axboe wrote:
->> On 5/6/22 1:36 AM, Hao Xu wrote:
->>> Hi All,
->>> I actually had a question about the current poll code, from the code it
->>> seems when we cancel a poll-like request, it will ignore the existing
->>> events and just raise a -ECANCELED cqe though I haven't tested it. Is
->>> this by design or am I missing something?
->>
->> That's by design, but honestly I don't think anyone considered the case
->> where it's being canceled but has events already. For that case, I think
->> we should follow the usual logic of only returning an error (canceled)
->> if we don't have events, if we have events just return them. For
->> multi-shot, obviously also terminate, but same logic there.
+On Fri, May 06, 2022 at 04:26:15PM +0800, Jiapeng Chong wrote:
+> Clean up the following smatch warning:
 > 
-> Why would we care? It's inherently racy in any case and any
-> user not handling this is already screwed.
+> fs/xfs/xfs_icache.c:1768 xfs_icwalk() warn: ignoring unreachable code.
+> 
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+> ---
+>  fs/xfs/xfs_icache.c | 1 -
+>  1 file changed, 1 deletion(-)
+> 
+> diff --git a/fs/xfs/xfs_icache.c b/fs/xfs/xfs_icache.c
+> index 5269354b1b69..5af272c20934 100644
+> --- a/fs/xfs/xfs_icache.c
+> +++ b/fs/xfs/xfs_icache.c
+> @@ -1765,7 +1765,6 @@ xfs_icwalk(
+>  		}
+>  	}
+>  	return last_error;
+> -	BUILD_BUG_ON(XFS_ICWALK_PRIVATE_FLAGS & XFS_ICWALK_FLAGS_VALID);
 
-We don't really need to care, but the normal logic is "return error if
-we have no result, return result otherwise". No reason this should be
-any different imho, it's not really a correctness thing.
+<cough> Do you know what you're removing?
 
--- 
-Jens Axboe
+--D
 
+>  }
+>  
+>  #ifdef DEBUG
+> -- 
+> 2.20.1.7.g153144c
+> 

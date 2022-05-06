@@ -2,83 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14DE751DC76
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 17:44:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7551C51DC7A
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 17:44:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1443117AbiEFPsH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 11:48:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44310 "EHLO
+        id S1443124AbiEFPsi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 11:48:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358212AbiEFPsG (ORCPT
+        with ESMTP id S1442930AbiEFPsf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 11:48:06 -0400
-Received: from mr85p00im-ztdg06011101.me.com (mr85p00im-ztdg06011101.me.com [17.58.23.185])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0961568F93
-        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 08:44:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=me.com; s=1a1hai;
-        t=1651851862; bh=+CCBnZzUUMptTEB5E31LJJ2qM8kVspBxIFEt8rpQAWM=;
-        h=From:To:Subject:Date:Message-Id:MIME-Version;
-        b=AArtFYBMwG7CWnZExqc3XKE8kFfPy7L0UitCaXx+DOM8QjELFmgfXMtYb0Rsehqzh
-         wIym9qEDfPWhP2uYHVi4LqRqbM6uUDiGCiLaM05acnGKB0IKcHl9F0vVsP5j/64vCi
-         ttBH2b9fYdOGlwMASdssX9e0nbpnG9m+pziCKcWTvD3w9a6C2K2sIoqe/tVNIA/JhA
-         Q5UiaFz6N6C+F7fGbmH1C8PAWkaj0ECF+Hcb0dTUeQ+O4FvurBdQ9UrXTZvIggP2y2
-         LpFy+5hzaXUcGp3N0UvGg6Lfa82q39iL9dZA52sEYsXit708lkclf0t9bNIX6Pp5a8
-         mUrAnaXDXvWLQ==
-Received: from hitch.danm.net (mr38p00im-dlb-asmtp-mailmevip.me.com [17.57.152.18])
-        by mr85p00im-ztdg06011101.me.com (Postfix) with ESMTPSA id 05797DA0504;
-        Fri,  6 May 2022 15:44:21 +0000 (UTC)
-From:   Dan Moulding <dmoulding@me.com>
-To:     pavel@ucw.cz
-Cc:     akpm@linux-foundation.org, corbet@lwn.net, dmoulding@me.com,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        tglx@linutronix.de
-Subject: Re: [PATCH v2 0/1] Allow setting hostname before userspace starts
-Date:   Fri,  6 May 2022 09:44:20 -0600
-Message-Id: <20220506154420.26456-1-dmoulding@me.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220506072322.GA3925@amd>
-References: <20220506072322.GA3925@amd>
+        Fri, 6 May 2022 11:48:35 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDD356D85F;
+        Fri,  6 May 2022 08:44:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651851891; x=1683387891;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=nyZ5t8pD3rFxQXXz8gDpvzek8yDDoj/KX1ArnB2/pcM=;
+  b=j0QDWj1uqgYKDMPFQDudQ4+fqP3w1GcWSbxWyATSAgDkpJDmivBZb/k6
+   EHoJ83AdhIpRWIacYPKMn8YnpIO4GqknJCsxKSp+pamCHwuONvF2L9Pnp
+   ndP8egJrqnvafGr8iFcWfJUe+8+h+NcrEEmTQSKgSmwRllOylp5ElznnK
+   UFkqS6OUiY/xiMS6hVuI65MEbo6rTJwiPjtyf+vy/sICRc5kF2Op0sGo8
+   qVOF0ZeoneuxPUWAWLRkdKHTnJhBX1jJj3W+u0zix3twyLYJ1/HXCElOA
+   nLAsFIvoVbTIKWk8BzVrx0dGsqTV9mCSKegiFCih6Opy4H+N5cCPD9pAs
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10339"; a="255984466"
+X-IronPort-AV: E=Sophos;i="5.91,203,1647327600"; 
+   d="scan'208";a="255984466"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2022 08:44:51 -0700
+X-IronPort-AV: E=Sophos;i="5.91,203,1647327600"; 
+   d="scan'208";a="586039009"
+Received: from hbourgeo-mobl2.ger.corp.intel.com (HELO intel.com) ([10.249.35.81])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2022 08:44:48 -0700
+Date:   Fri, 6 May 2022 17:44:44 +0200
+From:   Andi Shyti <andi.shyti@linux.intel.com>
+To:     Javier Martinez Canillas <javierm@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        Peter Jones <pjones@redhat.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Helge Deller <deller@gmx.de>
+Subject: Re: [Intel-gfx] [PATCH] fbdev: efifb: Fix a use-after-free due early
+ fb_info cleanup
+Message-ID: <YnVCbJJ5DmhkD5WA@intel.intel>
+References: <20220506132225.588379-1-javierm@redhat.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-15
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-ORIG-GUID: vhIztAh_zrA-Bqk8Qdgy362NLq39rH8I
-X-Proofpoint-GUID: vhIztAh_zrA-Bqk8Qdgy362NLq39rH8I
-X-Proofpoint-Virus-Version: =?UTF-8?Q?vendor=3Dfsecure_engine=3D1.1.170-22c6f66c430a71ce266a39bfe25bc?=
- =?UTF-8?Q?2903e8d5c8f:6.0.425,18.0.816,17.0.605.474.0000000_definitions?=
- =?UTF-8?Q?=3D2022-01-18=5F01:2022-01-14=5F01,2022-01-18=5F01,2020-01-23?=
- =?UTF-8?Q?=5F02_signatures=3D0?=
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 bulkscore=0 malwarescore=0
- clxscore=1015 mlxlogscore=316 mlxscore=0 adultscore=0 suspectscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2205060083
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220506132225.588379-1-javierm@redhat.com>
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On May 6, 2022, at 1:23 AM, Pavel Machek <pavel@ucw.cz> wrote:
+Hi Javier,
 
-> init gets passed command line parameters kernel did not use. So init
-> can do that easily.
+On Fri, May 06, 2022 at 03:22:25PM +0200, Javier Martinez Canillas wrote:
+> Commit d258d00fb9c7 ("fbdev: efifb: Cleanup fb_info in .fb_destroy rather
+> than .remove") attempted to fix a use-after-free error due driver freeing
+> the fb_info in the .remove handler instead of doing it in .fb_destroy.
+> 
+> But ironically that change introduced yet another use-after-free since the
+> fb_info was still used after the free.
+> 
+> This should fix for good by freeing the fb_info at the end of the handler.
+> 
+> Fixes: d258d00fb9c7 ("fbdev: efifb: Cleanup fb_info in .fb_destroy rather than .remove")
+> Reported-by: Ville Syrjälä <ville.syrjala@linux.intel.com>
+> Reported-by: Andrzej Hajda <andrzej.hajda@intel.com>
+> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
 
-I agree this is a problem that *can* be delegated to init to solve.
-But is it *better* to do that? Why have the kernel pass the the hostname
-to the init system, just so that the init system has to pass it back to the
-kernel later?
+Reviewed-by: Andi Shyti <andi.shyti@linux.intel.com>
 
-> Plus, there's initrd.
-
-This to me is a reason why it's better for the kernel to do this. If left up
-to the init system, it must be sure it gets done correctly both when an
-initramfs is used, and when one is not.
-
-P.S. Apologies to anyone who received this twice, my first reply was
-bounced by the list servers.
-
-Cheers,
-
-  -- Dan
+Andi

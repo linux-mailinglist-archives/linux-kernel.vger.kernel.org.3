@@ -2,201 +2,276 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C404651DADC
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 16:42:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94FE951DADE
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 16:42:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1442315AbiEFOqV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 10:46:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41246 "EHLO
+        id S1442339AbiEFOq1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 10:46:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351465AbiEFOqT (ORCPT
+        with ESMTP id S1442336AbiEFOqY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 10:46:19 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F4236AA4B
-        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 07:42:36 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id t11-20020a17090ad50b00b001d95bf21996so11013183pju.2
-        for <linux-kernel@vger.kernel.org>; Fri, 06 May 2022 07:42:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=fCciWKwTtYjCwNzpF3uMXMWEkDONEDvB+Ly+sSMPNak=;
-        b=wrOqFYEkCQ+YzMwOOjALqGyukOLH/diDf+vy0c4cJ6aUqtB8BbdvUtYl+g0KilNVK5
-         pMAaA4i/fIZrgiohj11pnygG6BWoFBl5CEBN5OCAk+08Z2C7toBtfO/n3mkUcxs4vnGJ
-         ZB3dgLdk1A8/KseauRYWHj4YZLqB4Oq1zyLER7Enj6OiG6zAdNX95r2NSN8PK+TAfgDQ
-         4tduZsKli4CGnthIWFnM/C/QweWo1k2Ye3edNEoI3YLGXwBXKtpdajYuhDzlhMSYQ4hY
-         oit9H/vw9iinaHjQW9gLh86OATlS2XnCl69HA/ssRStZ7YjeiwQhjdRYGbpOg8uO+WpR
-         hBpQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=fCciWKwTtYjCwNzpF3uMXMWEkDONEDvB+Ly+sSMPNak=;
-        b=2NJwe2Tq6bv96LsbjCvMliccCkBJWf5BgB4cfrwepPPg28cKdhNEKEsUz8SE4L/Kpr
-         X8Ijy9QstR7oi8hoChJOct4NZHx5oFhyWMvIMxfDvsji21wCcvJcs+C4gi24v6J/SN91
-         xeyTp0CXOI9Cb6pE54NpKRp7KEh/LKH/uw8Gi6fdBKsi2SSDtTXtRIY28Pz+nIGzby60
-         IJayOzwM0QIdgm5heB2xnQmL580JVSE+GGu5zt00hH29w2r7vWJhEgRmHCodczpnhBlh
-         tkJn3J5jCiQ59wBYJcFcAmlb0zLk2hLrLZqYUNVoJOTvjJ0oUJuLERTikYirBvieQin0
-         AAQQ==
-X-Gm-Message-State: AOAM533dunn77oELLR36ii0+ZCqmh9H5g0t3cJo8tBioxW2mcU1aFiQM
-        M7lvzdp3ohxJnuNIsOkQ5WPnlA==
-X-Google-Smtp-Source: ABdhPJzPtNv0cBFsNLBY6bdCulNip6hoEv6/qyGMEUFFiMrRWalrbdojDjQvkYWP5OH9bWQFKANPFA==
-X-Received: by 2002:a17:90b:4a05:b0:1dc:1a2c:8c69 with SMTP id kk5-20020a17090b4a0500b001dc1a2c8c69mr12603286pjb.9.1651848155723;
-        Fri, 06 May 2022 07:42:35 -0700 (PDT)
-Received: from [192.168.4.166] (cpe-72-132-29-68.dc.res.rr.com. [72.132.29.68])
-        by smtp.gmail.com with ESMTPSA id j4-20020a170902da8400b0015e8d4eb216sm1901124plx.96.2022.05.06.07.42.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 06 May 2022 07:42:35 -0700 (PDT)
-Message-ID: <afb1be12-5284-79bf-8006-26448e594443@kernel.dk>
-Date:   Fri, 6 May 2022 08:42:34 -0600
+        Fri, 6 May 2022 10:46:24 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21B146AA5E;
+        Fri,  6 May 2022 07:42:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651848161; x=1683384161;
+  h=message-id:date:mime-version:subject:to:references:from:
+   in-reply-to:content-transfer-encoding;
+  bh=yz3Dxyfah2BWSEZ5E5WEVnMK0YAKT4foldmHAV7BYok=;
+  b=P9Li0QvT6/2SPYukE6KB8Mnfzmg6byOl1froiwB9SdVmG/HLFm55Tn/I
+   seYqiEbzh7t7NYQiuo8Pp+jeJ4tCIA94E5Bmf8npNEME01dx5vFdIknjU
+   9ninMsgQHKEprA+a7Fccp87axyFfmTIYonnwc8IIPb2J88j/o9UQuiJav
+   1GblWKsgc+JOTRgq14D8lmPZ8eCwwKh6Z71a+6Bufvvkg1FPeocblsgCt
+   QVLr10gblmLgp+T8IneDp//Y+DWLqajkNSH/AOmcTtdKVbLlq2/bMVfv3
+   UG4jKHwvkIYAJOiB83zIsqosS5G8sAkk8skjDoHtyCowYPQVS9C8wh6zG
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10339"; a="354916795"
+X-IronPort-AV: E=Sophos;i="5.91,203,1647327600"; 
+   d="scan'208";a="354916795"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2022 07:42:40 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,203,1647327600"; 
+   d="scan'208";a="537916186"
+Received: from linux.intel.com ([10.54.29.200])
+  by orsmga006.jf.intel.com with ESMTP; 06 May 2022 07:42:39 -0700
+Received: from [10.252.212.236] (kliang2-MOBL.ccr.corp.intel.com [10.252.212.236])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by linux.intel.com (Postfix) with ESMTPS id 0AF2158093E;
+        Fri,  6 May 2022 07:42:37 -0700 (PDT)
+Message-ID: <a98cd80a-f9dc-efcb-ba20-31e36499f1a0@linux.intel.com>
+Date:   Fri, 6 May 2022 10:42:36 -0400
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
  Thunderbird/91.8.1
-Subject: Re: [PATCH 5/5] io_uring: implement multishot mode for accept
+Subject: Re: [PATCH v11 07/16] KVM: vmx/pmu: Emulate MSR_ARCH_LBR_CTL for
+ guest Arch LBR
 Content-Language: en-US
-To:     Hao Xu <haoxu.linux@gmail.com>, io-uring@vger.kernel.org
-Cc:     Pavel Begunkov <asml.silence@gmail.com>,
+To:     Yang Weijiang <weijiang.yang@intel.com>, pbonzini@redhat.com,
+        jmattson@google.com, seanjc@google.com, like.xu.linux@gmail.com,
+        vkuznets@redhat.com, wei.w.wang@intel.com, kvm@vger.kernel.org,
         linux-kernel@vger.kernel.org
-References: <20220506070102.26032-1-haoxu.linux@gmail.com>
- <20220506070102.26032-6-haoxu.linux@gmail.com>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <20220506070102.26032-6-haoxu.linux@gmail.com>
-Content-Type: text/plain; charset=UTF-8
+References: <20220506033305.5135-1-weijiang.yang@intel.com>
+ <20220506033305.5135-8-weijiang.yang@intel.com>
+From:   "Liang, Kan" <kan.liang@linux.intel.com>
+In-Reply-To: <20220506033305.5135-8-weijiang.yang@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-8.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/6/22 1:01 AM, Hao Xu wrote:
-> diff --git a/fs/io_uring.c b/fs/io_uring.c
-> index 0a83ecc457d1..9febe7774dc3 100644
-> --- a/fs/io_uring.c
-> +++ b/fs/io_uring.c
-> @@ -1254,6 +1254,7 @@ static int io_close_fixed(struct io_kiocb *req, unsigned int issue_flags);
->  static enum hrtimer_restart io_link_timeout_fn(struct hrtimer *timer);
->  static void io_eventfd_signal(struct io_ring_ctx *ctx);
->  static void io_req_tw_post_queue(struct io_kiocb *req, s32 res, u32 cflags);
-> +static void io_poll_remove_entries(struct io_kiocb *req);
->  
->  static struct kmem_cache *req_cachep;
->  
-> @@ -5690,24 +5691,29 @@ static int io_recv(struct io_kiocb *req, unsigned int issue_flags)
->  static int io_accept_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
->  {
->  	struct io_accept *accept = &req->accept;
-> +	bool multishot;
->  
->  	if (unlikely(req->ctx->flags & IORING_SETUP_IOPOLL))
->  		return -EINVAL;
-> -	if (sqe->ioprio || sqe->len || sqe->buf_index)
-> +	if (sqe->len || sqe->buf_index)
->  		return -EINVAL;
->  
->  	accept->addr = u64_to_user_ptr(READ_ONCE(sqe->addr));
->  	accept->addr_len = u64_to_user_ptr(READ_ONCE(sqe->addr2));
->  	accept->flags = READ_ONCE(sqe->accept_flags);
->  	accept->nofile = rlimit(RLIMIT_NOFILE);
-> +	multishot = !!(READ_ONCE(sqe->ioprio) & IORING_ACCEPT_MULTISHOT);
 
-I tend to like:
 
-	multishot = READ_ONCE(sqe->ioprio) & IORING_ACCEPT_MULTISHOT) != 0;
+On 5/5/2022 11:32 PM, Yang Weijiang wrote:
+> From: Like Xu <like.xu@linux.intel.com>
+> 
+> Arch LBR is enabled by setting MSR_ARCH_LBR_CTL.LBREn to 1. A new guest
+> state field named "Guest IA32_LBR_CTL" is added to enhance guest LBR usage.
+> When guest Arch LBR is enabled, a guest LBR event will be created like the
+> model-specific LBR does. Clear guest LBR enable bit on host PMI handling so
+> guest can see expected config.
+> 
+> On processors that support Arch LBR, MSR_IA32_DEBUGCTLMSR[bit 0] has no
+> meaning. It can be written to 0 or 1, but reads will always return 0.
+> Like IA32_DEBUGCTL, IA32_ARCH_LBR_CTL msr is also preserved on INIT.
+> 
+> Regardless of the Arch LBR or legacy LBR, when the LBR_EN bit 0 of the
+> corresponding control MSR is set to 1, LBR recording will be enabled.
+> 
+> Signed-off-by: Like Xu <like.xu@linux.intel.com>
+> Co-developed-by: Yang Weijiang <weijiang.yang@intel.com>
+> Signed-off-by: Yang Weijiang <weijiang.yang@intel.com>
 
-as I think it's more readable. But I think we really want it ala:
+Reviewed-by: Kan Liang <kan.liang@linux.intel.com>
 
-	u16 poll_flags;
-
-	poll_flags = READ_ONCE(sqe->ioprio);
-	if (poll_flags & ~IORING_ACCEPT_MULTISHOT)
-		return -EINVAL;
-
-	...
-
-to ensure that we can add more flags later, hence only accepting this
-single flag right now.
-
-Do we need REQ_F_APOLL_MULTI_POLLED, or can we just store whether this
-is a multishot request in struct io_accept?
-
-> @@ -5760,7 +5774,35 @@ static int io_accept(struct io_kiocb *req, unsigned int issue_flags)
->  		ret = io_install_fixed_file(req, file, issue_flags,
->  					    accept->file_slot - 1);
->  	}
-> -	__io_req_complete(req, issue_flags, ret, 0);
+> ---
+>   arch/x86/events/intel/lbr.c      |  2 --
+>   arch/x86/include/asm/msr-index.h |  1 +
+>   arch/x86/include/asm/vmx.h       |  2 ++
+>   arch/x86/kvm/vmx/pmu_intel.c     | 57 ++++++++++++++++++++++++++++----
+>   arch/x86/kvm/vmx/vmx.c           | 12 +++++++
+>   5 files changed, 66 insertions(+), 8 deletions(-)
+> 
+> diff --git a/arch/x86/events/intel/lbr.c b/arch/x86/events/intel/lbr.c
+> index 4529ce448b2e..4fe6c3b50fc3 100644
+> --- a/arch/x86/events/intel/lbr.c
+> +++ b/arch/x86/events/intel/lbr.c
+> @@ -160,8 +160,6 @@ enum {
+>   	 ARCH_LBR_RETURN		|\
+>   	 ARCH_LBR_OTHER_BRANCH)
+>   
+> -#define ARCH_LBR_CTL_MASK			0x7f000e
+> -
+>   static void intel_pmu_lbr_filter(struct cpu_hw_events *cpuc);
+>   
+>   static __always_inline bool is_lbr_call_stack_bit_set(u64 config)
+> diff --git a/arch/x86/include/asm/msr-index.h b/arch/x86/include/asm/msr-index.h
+> index ee15311b6be1..fdf0e3097e0b 100644
+> --- a/arch/x86/include/asm/msr-index.h
+> +++ b/arch/x86/include/asm/msr-index.h
+> @@ -169,6 +169,7 @@
+>   #define LBR_INFO_BR_TYPE		(0xfull << LBR_INFO_BR_TYPE_OFFSET)
+>   
+>   #define MSR_ARCH_LBR_CTL		0x000014ce
+> +#define ARCH_LBR_CTL_MASK		0x7f000e
+>   #define ARCH_LBR_CTL_LBREN		BIT(0)
+>   #define ARCH_LBR_CTL_CPL_OFFSET		1
+>   #define ARCH_LBR_CTL_CPL		(0x3ull << ARCH_LBR_CTL_CPL_OFFSET)
+> diff --git a/arch/x86/include/asm/vmx.h b/arch/x86/include/asm/vmx.h
+> index 0ffaa3156a4e..ea3be961cc8e 100644
+> --- a/arch/x86/include/asm/vmx.h
+> +++ b/arch/x86/include/asm/vmx.h
+> @@ -245,6 +245,8 @@ enum vmcs_field {
+>   	GUEST_BNDCFGS_HIGH              = 0x00002813,
+>   	GUEST_IA32_RTIT_CTL		= 0x00002814,
+>   	GUEST_IA32_RTIT_CTL_HIGH	= 0x00002815,
+> +	GUEST_IA32_LBR_CTL		= 0x00002816,
+> +	GUEST_IA32_LBR_CTL_HIGH		= 0x00002817,
+>   	HOST_IA32_PAT			= 0x00002c00,
+>   	HOST_IA32_PAT_HIGH		= 0x00002c01,
+>   	HOST_IA32_EFER			= 0x00002c02,
+> diff --git a/arch/x86/kvm/vmx/pmu_intel.c b/arch/x86/kvm/vmx/pmu_intel.c
+> index e2b5fc1f4f1a..aa36d2072b91 100644
+> --- a/arch/x86/kvm/vmx/pmu_intel.c
+> +++ b/arch/x86/kvm/vmx/pmu_intel.c
+> @@ -19,6 +19,7 @@
+>   #include "pmu.h"
+>   
+>   #define MSR_PMC_FULL_WIDTH_BIT      (MSR_IA32_PMC0 - MSR_IA32_PERFCTR0)
+> +#define KVM_ARCH_LBR_CTL_MASK  (ARCH_LBR_CTL_MASK | ARCH_LBR_CTL_LBREN)
+>   
+>   static struct kvm_event_hw_type_mapping intel_arch_events[] = {
+>   	[0] = { 0x3c, 0x00, PERF_COUNT_HW_CPU_CYCLES },
+> @@ -192,7 +193,7 @@ static bool intel_pmu_is_valid_lbr_msr(struct kvm_vcpu *vcpu, u32 index)
+>   	if (!intel_pmu_lbr_is_enabled(vcpu))
+>   		return ret;
+>   
+> -	if (index == MSR_ARCH_LBR_DEPTH) {
+> +	if (index == MSR_ARCH_LBR_DEPTH || index == MSR_ARCH_LBR_CTL) {
+>   		if (kvm_cpu_cap_has(X86_FEATURE_ARCH_LBR))
+>   			ret = guest_cpuid_has(vcpu, X86_FEATURE_ARCH_LBR);
+>   		return ret;
+> @@ -363,6 +364,33 @@ static bool arch_lbr_depth_is_valid(struct kvm_vcpu *vcpu, u64 depth)
+>   	return (depth == pmu->kvm_arch_lbr_depth);
+>   }
+>   
+> +static bool arch_lbr_ctl_is_valid(struct kvm_vcpu *vcpu, u64 ctl)
+> +{
+> +	struct kvm_cpuid_entry2 *entry;
 > +
-> +	if (req->flags & REQ_F_APOLL_MULTISHOT) {
-> +		if (ret >= 0) {
-> +			bool filled;
+> +	if (!kvm_cpu_cap_has(X86_FEATURE_ARCH_LBR))
+> +		return false;
 > +
-> +			spin_lock(&ctx->completion_lock);
-> +			filled = io_fill_cqe_aux(ctx, req->cqe.user_data, ret,
-> +						 IORING_CQE_F_MORE);
-> +			io_commit_cqring(ctx);
-> +			spin_unlock(&ctx->completion_lock);
-> +			if (unlikely(!filled)) {
-> +				io_poll_clean(req);
-> +				return -ECANCELED;
-> +			}
-> +			io_cqring_ev_posted(ctx);
-> +			goto retry;
-> +		} else {
-> +			/*
-> +			 * the apoll multishot req should handle poll
-> +			 * cancellation by itself since the upper layer
-> +			 * who called io_queue_sqe() cannot get errors
-> +			 * happened here.
-> +			 */
-> +			io_poll_clean(req);
-> +			return ret;
-> +		}
-> +	} else {
-> +		__io_req_complete(req, issue_flags, ret, 0);
+> +	if (ctl & ~KVM_ARCH_LBR_CTL_MASK)
+> +		goto warn;
+> +
+> +	entry = kvm_find_cpuid_entry(vcpu, 0x1c, 0);
+> +	if (!entry)
+> +		return false;
+> +
+> +	if (!(entry->ebx & BIT(0)) && (ctl & ARCH_LBR_CTL_CPL))
+> +		return false;
+> +	if (!(entry->ebx & BIT(2)) && (ctl & ARCH_LBR_CTL_STACK))
+> +		return false;
+> +	if (!(entry->ebx & BIT(1)) && (ctl & ARCH_LBR_CTL_FILTER))
+> +		return false;
+> +	return true;
+> +warn:
+> +	pr_warn_ratelimited("kvm: vcpu-%d: invalid arch lbr ctl.\n",
+> +			    vcpu->vcpu_id);
+> +	return false;
+> +}
+> +
+>   static int intel_pmu_get_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
+>   {
+>   	struct kvm_pmu *pmu = vcpu_to_pmu(vcpu);
+> @@ -386,6 +414,9 @@ static int intel_pmu_get_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
+>   	case MSR_ARCH_LBR_DEPTH:
+>   		msr_info->data = lbr_desc->records.nr;
+>   		return 0;
+> +	case MSR_ARCH_LBR_CTL:
+> +		msr_info->data = vmcs_read64(GUEST_IA32_LBR_CTL);
+> +		return 0;
+>   	default:
+>   		if ((pmc = get_gp_pmc(pmu, msr, MSR_IA32_PERFCTR0)) ||
+>   		    (pmc = get_gp_pmc(pmu, msr, MSR_IA32_PMC0))) {
+> @@ -457,6 +488,16 @@ static int intel_pmu_set_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
+>   		 */
+>   		wrmsrl(MSR_ARCH_LBR_DEPTH, lbr_desc->records.nr);
+>   		return 0;
+> +	case MSR_ARCH_LBR_CTL:
+> +		if (!arch_lbr_ctl_is_valid(vcpu, data))
+> +			break;
+> +
+> +		vmcs_write64(GUEST_IA32_LBR_CTL, data);
+> +
+> +		if (intel_pmu_lbr_is_enabled(vcpu) && !lbr_desc->event &&
+> +		    (data & ARCH_LBR_CTL_LBREN))
+> +			intel_pmu_create_guest_lbr_event(vcpu);
+> +		return 0;
+>   	default:
+>   		if ((pmc = get_gp_pmc(pmu, msr, MSR_IA32_PERFCTR0)) ||
+>   		    (pmc = get_gp_pmc(pmu, msr, MSR_IA32_PMC0))) {
+> @@ -666,12 +707,16 @@ static void intel_pmu_reset(struct kvm_vcpu *vcpu)
+>    */
+>   static void intel_pmu_legacy_freezing_lbrs_on_pmi(struct kvm_vcpu *vcpu)
+>   {
+> -	u64 data = vmcs_read64(GUEST_IA32_DEBUGCTL);
+> +	u32 lbr_ctl_field = GUEST_IA32_DEBUGCTL;
+>   
+> -	if (data & DEBUGCTLMSR_FREEZE_LBRS_ON_PMI) {
+> -		data &= ~DEBUGCTLMSR_LBR;
+> -		vmcs_write64(GUEST_IA32_DEBUGCTL, data);
+> -	}
+> +	if (!(vmcs_read64(GUEST_IA32_DEBUGCTL) & DEBUGCTLMSR_FREEZE_LBRS_ON_PMI))
+> +		return;
+> +
+> +	if (kvm_cpu_cap_has(X86_FEATURE_ARCH_LBR) &&
+> +	    guest_cpuid_has(vcpu, X86_FEATURE_ARCH_LBR))
+> +		lbr_ctl_field = GUEST_IA32_LBR_CTL;
+> +
+> +	vmcs_write64(lbr_ctl_field, vmcs_read64(lbr_ctl_field) & ~0x1ULL);
+>   }
+>   
+>   static void intel_pmu_deliver_pmi(struct kvm_vcpu *vcpu)
+> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+> index d58b763df855..b6bc7d97e4b4 100644
+> --- a/arch/x86/kvm/vmx/vmx.c
+> +++ b/arch/x86/kvm/vmx/vmx.c
+> @@ -2022,6 +2022,13 @@ static int vmx_set_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
+>   						VM_EXIT_SAVE_DEBUG_CONTROLS)
+>   			get_vmcs12(vcpu)->guest_ia32_debugctl = data;
+>   
+> +		/*
+> +		 * For Arch LBR, IA32_DEBUGCTL[bit 0] has no meaning.
+> +		 * It can be written to 0 or 1, but reads will always return 0.
+> +		 */
+> +		if (guest_cpuid_has(vcpu, X86_FEATURE_ARCH_LBR))
+> +			data &= ~DEBUGCTLMSR_LBR;
+> +
+>   		vmcs_write64(GUEST_IA32_DEBUGCTL, data);
+>   		if (intel_pmu_lbr_is_enabled(vcpu) && !to_vmx(vcpu)->lbr_desc.event &&
+>   		    (data & DEBUGCTLMSR_LBR))
+> @@ -4553,6 +4560,11 @@ static void vmx_vcpu_reset(struct kvm_vcpu *vcpu, bool init_event)
+>   	kvm_make_request(KVM_REQ_APIC_PAGE_RELOAD, vcpu);
+>   
+>   	vpid_sync_context(vmx->vpid);
+> +
+> +	if (!init_event) {
+> +		if (static_cpu_has(X86_FEATURE_ARCH_LBR))
+> +			vmcs_write64(GUEST_IA32_LBR_CTL, 0);
 > +	}
->  	return 0;
->  }
-
-I'd probably just make that:
-
-	if (!(req->flags & REQ_F_APOLL_MULTISHOT)) {
-		__io_req_complete(req, issue_flags, ret, 0);
-		return 0;
-	}
-	if (ret >= 0) {
-		bool filled;
-
-		spin_lock(&ctx->completion_lock);
-		filled = io_fill_cqe_aux(ctx, req->cqe.user_data, ret,
-					 IORING_CQE_F_MORE);
-		io_commit_cqring(ctx);
-		spin_unlock(&ctx->completion_lock);
-		if (filled) {
-			io_cqring_ev_posted(ctx);
-			goto retry;
-		}
-		/* fall through to error case */
-		ret = -ECANCELED;
-	}
-
-	/*
-	 * the apoll multishot req should handle poll
-	 * cancellation by itself since the upper layer
-	 * who called io_queue_sqe() cannot get errors
-	 * happened here.
-	 */
-	io_poll_clean(req);
-	return ret;
-
-which I think is a lot easier to read and keeps the indentation at a
-manageable level and reduces duplicate code.
-
--- 
-Jens Axboe
-
+>   }
+>   
+>   static void vmx_enable_irq_window(struct kvm_vcpu *vcpu)

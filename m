@@ -2,92 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEEBC51DB9E
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 17:09:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1F8E51DBAA
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 17:10:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1442755AbiEFPNX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 11:13:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37860 "EHLO
+        id S1442748AbiEFPNm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 11:13:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1442724AbiEFPNF (ORCPT
+        with ESMTP id S1442777AbiEFPNc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 11:13:05 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8651C6D1A6
-        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 08:09:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651849757;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=uan3YSckKD+F0UyoMcwlRwcC7eK4puADfdJggDA8Ug8=;
-        b=J4LFNwMTAVdNxv0smgzrWR17rQGXWplFC5KJpNtrOzNuvPgJJF4SYgQSHRiQf/Ot+EKEMT
-        zof64U+s/TQLPxWH5uKGQKBPijbJwBL+u01Q91gwEYaCTZRvHbuasv4vgjXfwEHRn8Qsb/
-        8asoskWQSARsAPXWYevuNHavPbNdCxM=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-152-9PYLU4-DOXGJvQCz3IoESg-1; Fri, 06 May 2022 11:09:13 -0400
-X-MC-Unique: 9PYLU4-DOXGJvQCz3IoESg-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 549788039D7;
-        Fri,  6 May 2022 15:09:11 +0000 (UTC)
-Received: from dhcp-27-174.brq.redhat.com (unknown [10.40.192.95])
-        by smtp.corp.redhat.com (Postfix) with SMTP id 91E7440CF8E8;
-        Fri,  6 May 2022 15:09:05 +0000 (UTC)
-Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
-        oleg@redhat.com; Fri,  6 May 2022 17:09:11 +0200 (CEST)
-Date:   Fri, 6 May 2022 17:09:04 +0200
-From:   Oleg Nesterov <oleg@redhat.com>
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     linux-kernel@vger.kernel.org, rjw@rjwysocki.net, mingo@kernel.org,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, mgorman@suse.de, bigeasy@linutronix.de,
-        Will Deacon <will@kernel.org>, tj@kernel.org,
-        linux-pm@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        linux-um@lists.infradead.org, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        linux-xtensa@linux-xtensa.org, Kees Cook <keescook@chromium.org>,
-        Jann Horn <jannh@google.com>, linux-ia64@vger.kernel.org
-Subject: Re: [PATCH v4 10/12] ptrace: Don't change __state
-Message-ID: <20220506150903.GB16084@redhat.com>
-References: <87a6bv6dl6.fsf_-_@email.froward.int.ebiederm.org>
- <20220505182645.497868-10-ebiederm@xmission.com>
+        Fri, 6 May 2022 11:13:32 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C0516D3A8
+        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 08:09:44 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id k1so7711931pll.4
+        for <linux-kernel@vger.kernel.org>; Fri, 06 May 2022 08:09:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=12UMdmYoYrrFYK3VfNeGnEK3WmXz254CwsHVBYebRMk=;
+        b=LASvZd/kr+O0L5A3bEKuR8CTk3fHm5Tsd9lUjfYwpqn33d7k3Q1zsMSLxqM2Wvmjfi
+         U9X9eV7HuBPN5VQdn6QkXC7TyhZPYAzEmjTJjpaD5GIOeD6QowBVqIADEj4QvOrPEVtg
+         ixMVdzrHVAvfbZZWmaW4tVERpTCm8iDa/gmWxbCttBjaVWUI+z2M45U6eU6/izM7UmEw
+         06W6+xGWjrV9ntNXVSJcxZeWZPlDMQeHyRKnhuxcRvfzKtHy8hThyvLAr/AALg2Mc12H
+         wnFPOPC2IlEl29O2OH/A+ASOIh9PPps0VTvp/TnkmuOcnlQwc43q1Oz0o8B4VKCBOUQ8
+         GpDQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=12UMdmYoYrrFYK3VfNeGnEK3WmXz254CwsHVBYebRMk=;
+        b=RRBBGJCUXlDxdC6EPQ8IlvOS/8GXdjUMo5rAg4lyVCdHGJN+HV7sJJYrUbg4xGThNK
+         P9lBqdwsxh9N4jPApoBGbq827KCDZzA28fHHBWDkywGryof1ignGtPfxAzmEG829kawS
+         iE2qN/9uAxBjRdSBWjWUsAhgiXEQmfgXqu9JNtmxo7ZffTRYhiqMSmjKJ4GYNqKy2RfE
+         pfQHzAVkS/5hFW0JEYbzKQn7MXA7bpqFOpvmgPm3n5UBQj0mmZK2RSBRSWk4Uy6pu/2y
+         vn+1XG9vwW9toenWlMmnaiZcFUpVPXIIQgFppZuI0YK2PICejpE71UbFXm3AjjjeST5K
+         OReg==
+X-Gm-Message-State: AOAM533V5vCP7cfvp0uRsgogo0VKNkk/oTmC/XPskiOmMayo5CZ+BYLm
+        Tqqs01rqSejH+JS1yhPAIJld2w==
+X-Google-Smtp-Source: ABdhPJyXNCnjMbf233x1TRm9Ax9LXKujaxCcbwMHpOtAWrTw2hiA71j0kvmsMI4qbPaIDzeMtLIaSQ==
+X-Received: by 2002:a17:902:ec83:b0:15e:b5d2:a81b with SMTP id x3-20020a170902ec8300b0015eb5d2a81bmr4083716plg.64.1651849783670;
+        Fri, 06 May 2022 08:09:43 -0700 (PDT)
+Received: from [192.168.4.166] (cpe-72-132-29-68.dc.res.rr.com. [72.132.29.68])
+        by smtp.gmail.com with ESMTPSA id d15-20020a170902b70f00b0015ea0a679ddsm1868392pls.251.2022.05.06.08.09.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 06 May 2022 08:09:43 -0700 (PDT)
+Message-ID: <4a87c2d9-89fa-2cec-7707-08fc78c88bf8@kernel.dk>
+Date:   Fri, 6 May 2022 09:09:41 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220505182645.497868-10-ebiederm@xmission.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH] nvme: Ensure ret is always initialized in
+Content-Language: en-US
+To:     Nathan Chancellor <nathan@kernel.org>, Jens Axboe <axboe@fb.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Keith Busch <kbusch@kernel.org>,
+        Sagi Grimberg <sagi@grimberg.me>
+Cc:     Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, Kanchan Joshi <joshi.k@samsung.com>,
+        Anuj Gupta <anuj20.g@samsung.com>,
+        linux-nvme@lists.infradead.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, kernel test robot <lkp@intel.com>
+References: <20220506150357.2443040-1-nathan@kernel.org>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <20220506150357.2443040-1-nathan@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/05, Eric W. Biederman wrote:
->
-> --- a/include/linux/sched.h
-> +++ b/include/linux/sched.h
-> @@ -103,7 +103,7 @@ struct task_group;
->  /* Convenience macros for the sake of set_current_state: */
->  #define TASK_KILLABLE			(TASK_WAKEKILL | TASK_UNINTERRUPTIBLE)
->  #define TASK_STOPPED			(TASK_WAKEKILL | __TASK_STOPPED)
-> -#define TASK_TRACED			(TASK_WAKEKILL | __TASK_TRACED)
-> +#define TASK_TRACED			__TASK_TRACED
+On 5/6/22 9:03 AM, Nathan Chancellor wrote:
+> Clang warns:
+> 
+>   drivers/nvme/host/ioctl.c:674:6: error: variable 'ret' is used uninitialized whenever 'if' condition is false [-Werror,-Wsometimes-uninitialized]
+>           if (ns)
+>               ^~
+>   drivers/nvme/host/ioctl.c:677:9: note: uninitialized use occurs here
+>           return ret;
+>                  ^~~
+>   drivers/nvme/host/ioctl.c:674:2: note: remove the 'if' if its condition is always true
+>           if (ns)
+>           ^~~~~~~
+>   drivers/nvme/host/ioctl.c:672:9: note: initialize the variable 'ret' to silence this warning
+>           int ret;
+>                  ^
+>                   = 0
+>   1 error generated.
+> 
+> Initialize ret to zero so that it cannot be used uninitialized.
 
-however I personally still dislike this change. But let me read the
-code with this series applied, perhaps I will change my mind. If not,
-I will argue ;)
+Thanks, will fold this in.
 
-Oleg.
+> Or alternatively, remove the 'if (ns)' if ns can never be NULL; I tried
+> going down the rabbit hole to see if that is possible but I got a little
+> lost :^)
+
+For the admin queue, ns can be NULL.
+
+-- 
+Jens Axboe
 

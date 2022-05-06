@@ -2,68 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A50E151D62D
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 13:04:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 273BE51D630
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 13:06:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1391099AbiEFLIE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 07:08:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38380 "EHLO
+        id S1348325AbiEFLJh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 07:09:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233719AbiEFLIA (ORCPT
+        with ESMTP id S233719AbiEFLJg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 07:08:00 -0400
-Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AECB366F9C
-        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 04:04:17 -0700 (PDT)
-Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-2ef5380669cso77053147b3.9
-        for <linux-kernel@vger.kernel.org>; Fri, 06 May 2022 04:04:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=4tHVHA8aVbeVaFoDlPql88Q/9NJ6rAQwn4GhNFwxTwM=;
-        b=Y9CFhcWaUhjrECjyuSeOchnKMM/ukpyTQez4VqVCH4TtE9eAnEld+/aUwLzu6PDSaT
-         ITUMkpj0Pq0svMYhThzFdRj8XblDNogk1iUv15ZpiS6X4YsqXQb101vDE7JxA4TT7Rdi
-         3cQH5mDUrSBM6buak1ZnZKR89mpRc9JsOJAeY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=4tHVHA8aVbeVaFoDlPql88Q/9NJ6rAQwn4GhNFwxTwM=;
-        b=0X/bnlXSkfRnc4Ahkmv4MMNnvMI8f+3ZJQiMmUAbDxteGnxfMc4yfbDs7TZoIPP0ka
-         8K+0kPjpXQDC1DtcOGl9D9jQV7Q1MlY0SH6XkEyqXIDtYHaeWmRfC1FlpUTdvBAyHXOT
-         IyWVPTPDB8TDu0sR7pnseci6qcGJI9xVUq6aBYMokdvH/dvU/bDqT6ZbETwQ60uLNJw3
-         61rRIW4afKsEe2KkP/cgvuGU50dHCcpYxc5Hp6BYhTcTickD3JtvUp/MB3U6s22JT6Ro
-         EdsFAbV3T/ravLRtB2SkRMNSfdzWH3ReSZPl02Lq+gr8cx6dTgB5eUUxvEdXRgTzCA7l
-         jWjg==
-X-Gm-Message-State: AOAM532o1H0bpQZZ0aBGoh72ylb/qpjM95JOY/+SNj8gyuYma8plWVLM
-        7HJa4gYZZFFvf+pXyqHgXxakpXpHXFVeH/w89Ws8Ew==
-X-Google-Smtp-Source: ABdhPJzrxlYT0o+pbPyAyvmWw1o6bUmiDPRnLGsburai31NprtPoykzH2hgAePXKTKi3HgMgQsIV/TZZ2+XmP9IUnSc=
-X-Received: by 2002:a81:998a:0:b0:2f9:5d24:e362 with SMTP id
- q132-20020a81998a000000b002f95d24e362mr2181373ywg.161.1651835056969; Fri, 06
- May 2022 04:04:16 -0700 (PDT)
+        Fri, 6 May 2022 07:09:36 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 821462B1A2;
+        Fri,  6 May 2022 04:05:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651835152; x=1683371152;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=/COp8gUNtv/XMz0nfxIIgbYPQUzYcinwKw57ktyNo6g=;
+  b=EDOWJefL2kjeDVss2qb+KwExVf49dfaIPQyi5E8z8b15fe38hjKGPN71
+   nYz2ByZJBWFc+I9ELfWloYfqVH3TjIChD+s6kz/mAsAfbV0D5j42H1wTs
+   8DASpao2qTBIV8eNEO64Jp9ruotRstFEBXFgJm1X7Pn+FX9ccGqEowiFQ
+   6KyhkJRa85PRg73XfUOyyflJB1brVlpFCQxFXSCqpoqfm6wgWEoWCZUxL
+   S3ueBXrcAVfNeCiB/ixy/ma7wj+iLQHsBUUJNylZ9rqAF8uUmiQ2uEBQC
+   JfCoxfpS2y7l8zHMVPtI8Zkm1Lb+Q47Lp/C1BuE5irElWTZRvqmaCEr/F
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10338"; a="268582732"
+X-IronPort-AV: E=Sophos;i="5.91,203,1647327600"; 
+   d="scan'208";a="268582732"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2022 04:05:52 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,203,1647327600"; 
+   d="scan'208";a="621781981"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 06 May 2022 04:05:50 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nmvmP-000DNW-Uk;
+        Fri, 06 May 2022 11:05:49 +0000
+Date:   Fri, 6 May 2022 19:04:50 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Hao Xu <haoxu.linux@gmail.com>, io-uring@vger.kernel.org
+Cc:     kbuild-all@lists.01.org, Jens Axboe <axboe@kernel.dk>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 4/5] io_uring: add a helper for poll clean
+Message-ID: <202205061844.HxnOWhwG-lkp@intel.com>
+References: <20220506070102.26032-5-haoxu.linux@gmail.com>
 MIME-Version: 1.0
-References: <20220505194550.3094656-1-nfraprado@collabora.com> <20220505194550.3094656-9-nfraprado@collabora.com>
-In-Reply-To: <20220505194550.3094656-9-nfraprado@collabora.com>
-From:   Chen-Yu Tsai <wenst@chromium.org>
-Date:   Fri, 6 May 2022 19:04:06 +0800
-Message-ID: <CAGXv+5H4r+OjFrtxQwoBBHttLo+YJa2+LWveVcL6YMhP0-xF2w@mail.gmail.com>
-Subject: Re: [PATCH v2 08/16] arm64: dts: mediatek: asurada: Add keyboard
- mapping for the top row
-To:     =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
-        <nfraprado@collabora.com>
-Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>, kernel@collabora.com,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220506070102.26032-5-haoxu.linux@gmail.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,81 +65,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hi Hao,
 
-On Fri, May 6, 2022 at 3:46 AM N=C3=ADcolas F. R. A. Prado
-<nfraprado@collabora.com> wrote:
->
-> Chromebooks' embedded keyboards differ from standard layouts for the
-> top row in that they have shortcuts in place of the standard function
-> keys. Map these keys to achieve the functionality that is pictured on
-> the printouts.
->
-> Signed-off-by: N=C3=ADcolas F. R. A. Prado <nfraprado@collabora.com>
-> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collab=
-ora.com>
-> ---
->
-> (no changes since v1)
->
->  .../boot/dts/mediatek/mt8192-asurada.dtsi     | 29 +++++++++++++++++++
->  1 file changed, 29 insertions(+)
->
-> diff --git a/arch/arm64/boot/dts/mediatek/mt8192-asurada.dtsi b/arch/arm6=
-4/boot/dts/mediatek/mt8192-asurada.dtsi
-> index 662207d0eb75..a1cbf7a375b6 100644
-> --- a/arch/arm64/boot/dts/mediatek/mt8192-asurada.dtsi
-> +++ b/arch/arm64/boot/dts/mediatek/mt8192-asurada.dtsi
-> @@ -525,3 +525,32 @@ &uart0 {
->
->  #include <arm/cros-ec-keyboard.dtsi>
->  #include <arm/cros-ec-sbs.dtsi>
-> +
-> +&keyboard_controller {
-> +       function-row-physmap =3D <
-> +               MATRIX_KEY(0x00, 0x02, 0)       /* T1 */
-> +               MATRIX_KEY(0x03, 0x02, 0)       /* T2 */
-> +               MATRIX_KEY(0x02, 0x02, 0)       /* T3 */
-> +               MATRIX_KEY(0x01, 0x02, 0)       /* T4 */
-> +               MATRIX_KEY(0x03, 0x04, 0)       /* T5 */
-> +               MATRIX_KEY(0x02, 0x04, 0)       /* T6 */
-> +               MATRIX_KEY(0x01, 0x04, 0)       /* T7 */
-> +               MATRIX_KEY(0x02, 0x09, 0)       /* T8 */
-> +               MATRIX_KEY(0x01, 0x09, 0)       /* T9 */
-> +               MATRIX_KEY(0x00, 0x04, 0)       /* T10 */
-> +       >;
-> +       linux,keymap =3D <
-> +               MATRIX_KEY(0x00, 0x02, KEY_BACK)
-> +               MATRIX_KEY(0x03, 0x02, KEY_REFRESH)
-> +               MATRIX_KEY(0x02, 0x02, KEY_ZOOM)
-> +               MATRIX_KEY(0x01, 0x02, KEY_SCALE)
-> +               MATRIX_KEY(0x03, 0x04, KEY_SYSRQ)
-> +               MATRIX_KEY(0x02, 0x04, KEY_BRIGHTNESSDOWN)
-> +               MATRIX_KEY(0x01, 0x04, KEY_BRIGHTNESSUP)
-> +               MATRIX_KEY(0x02, 0x09, KEY_MUTE)
-> +               MATRIX_KEY(0x01, 0x09, KEY_VOLUMEDOWN)
-> +               MATRIX_KEY(0x00, 0x04, KEY_VOLUMEUP)
+Thank you for the patch! Yet something to improve:
 
-There's a slight nuance here, the keyboards for Hayato and Spherion
-are not the same one. Hayato follows the keyboard design of older
-Chromebooks, such as Kevin:
+[auto build test ERROR on f2e030dd7aaea5a937a2547dc980fab418fbc5e7]
 
-    back, forward, refresh, zoom, scale, brightness up ...
-    (the right side part is the same)
+url:    https://github.com/intel-lab-lkp/linux/commits/Hao-Xu/fast-poll-multishot-mode/20220506-150750
+base:   f2e030dd7aaea5a937a2547dc980fab418fbc5e7
+config: m68k-randconfig-r025-20220506 (https://download.01.org/0day-ci/archive/20220506/202205061844.HxnOWhwG-lkp@intel.com/config)
+compiler: m68k-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/acb232e81643bd097278ebdc17038e6f280e7212
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Hao-Xu/fast-poll-multishot-mode/20220506-150750
+        git checkout acb232e81643bd097278ebdc17038e6f280e7212
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash
 
-Spherion's keyboard layout matches what you have above.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Also, "zoom" should probably be full-screen, even though the two
-map to the same keycode.
+All errors (new ones prefixed by >>):
+
+   fs/io_uring.c: In function '__io_submit_flush_completions':
+   fs/io_uring.c:2785:40: warning: variable 'prev' set but not used [-Wunused-but-set-variable]
+    2785 |         struct io_wq_work_node *node, *prev;
+         |                                        ^~~~
+   fs/io_uring.c: In function 'io_apoll_task_func':
+>> fs/io_uring.c:6067:9: error: implicit declaration of function '__io_poll_clean'; did you mean '__io_fill_cqe'? [-Werror=implicit-function-declaration]
+    6067 |         __io_poll_clean(req);
+         |         ^~~~~~~~~~~~~~~
+         |         __io_fill_cqe
+   cc1: some warnings being treated as errors
 
 
-Regards
-ChenYu
+vim +6067 fs/io_uring.c
 
-> +
-> +               CROS_STD_MAIN_KEYMAP
-> +       >;
-> +};
-> --
-> 2.36.0
->
+  6058	
+  6059	static void io_apoll_task_func(struct io_kiocb *req, bool *locked)
+  6060	{
+  6061		int ret;
+  6062	
+  6063		ret = io_poll_check_events(req, locked);
+  6064		if (ret > 0)
+  6065			return;
+  6066	
+> 6067		__io_poll_clean(req);
+  6068	
+  6069		if (!ret)
+  6070			io_req_task_submit(req, locked);
+  6071		else
+  6072			io_req_complete_failed(req, ret);
+  6073	}
+  6074	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

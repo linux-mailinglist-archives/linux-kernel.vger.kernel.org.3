@@ -2,51 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EB5C51CEC2
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 04:16:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDD4C51CE69
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 04:16:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1388204AbiEFCB3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 22:01:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53510 "EHLO
+        id S1388052AbiEFBpy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 21:45:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349212AbiEFCBZ (ORCPT
+        with ESMTP id S1388101AbiEFBpL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 22:01:25 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4016615D;
-        Thu,  5 May 2022 18:57:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 495C561B96;
-        Fri,  6 May 2022 01:57:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6DDC3C385AC;
-        Fri,  6 May 2022 01:57:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651802263;
-        bh=GeHdkr2ZO4kmGx/9U2bw97L/SWe5YfhsVGtl0N4MQus=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=NhqDevJKpqzSnUuqL/tpGdvIFH11cZzDNm5Hm500j1Wo0EVqgV37EO4yHfCAgyjQ5
-         2k+mh9p8Kq2G/n5Scg+2++7nS69cctsbfozfwkaVabsRskVhOSYM4RTZ+pOaExpnRd
-         g6FpeWxeuBufeVTDsh+9dq6EU4iZWBt5GAyO5H7dliy2LaFHMuKUUL4Mxz6oPImxLP
-         iyxvVwgqN+GN1plq9fT2fId8SKcyFIqFl2teJsgh+mbnUWAPaDakv4rrsx+B23QCcp
-         hAb7ljc6jM9LzLviskcnArIlz/FcFgYOJJ+hzVIsXsxe+R29Vju/eZ8PMUc8bxhQBP
-         ktRJocE9mHXEQ==
-Date:   Thu, 5 May 2022 18:57:42 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Min Li <min.li.xe@renesas.com>
-Cc:     richardcochran@gmail.com, lee.jones@linaro.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH net v4 1/2] ptp: ptp_clockmatrix: Add PTP_CLK_REQ_EXTTS
- support
-Message-ID: <20220505185742.1246d738@kernel.org>
-In-Reply-To: <1651697455-1588-1-git-send-email-min.li.xe@renesas.com>
-References: <1651697455-1588-1-git-send-email-min.li.xe@renesas.com>
+        Thu, 5 May 2022 21:45:11 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66AAF62129;
+        Thu,  5 May 2022 18:41:27 -0700 (PDT)
+Received: from kwepemi100025.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KvYB84Mk6zGpVF;
+        Fri,  6 May 2022 09:38:40 +0800 (CST)
+Received: from kwepemm600017.china.huawei.com (7.193.23.234) by
+ kwepemi100025.china.huawei.com (7.221.188.158) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 6 May 2022 09:41:24 +0800
+Received: from localhost.localdomain (10.175.112.125) by
+ kwepemm600017.china.huawei.com (7.193.23.234) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 6 May 2022 09:41:22 +0800
+From:   Peng Liu <liupeng256@huawei.com>
+To:     <bhelgaas@google.com>, <tglx@linutronix.de>, <mingo@redhat.com>,
+        <bp@alien8.de>, <dave.hansen@linux.intel.com>, <x86@kernel.org>,
+        <hpa@zytor.com>, <lorenzo.pieralisi@arm.com>,
+        <guohanjun@huawei.com>, <sudeep.holla@arm.com>,
+        <rafael@kernel.org>, <lenb@kernel.org>,
+        <akpm@linux-foundation.org>, <logang@deltatee.com>,
+        <martin.oliveira@eideticom.com>, <thunder.leizhen@huawei.com>,
+        <axboe@kernel.dk>, <kch@nvidia.com>, <ming.lei@redhat.com>,
+        <shinichiro.kawasaki@wdc.com>, <mcgrof@kernel.org>,
+        <jiangguoqing@kylinos.cn>, <jpittman@redhat.com>,
+        <dave@stgolabs.net>, <liupeng256@huawei.com>,
+        <wangkefeng.wang@huawei.com>, <linux-block@vger.kernel.org>,
+        <linux-ia64@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-pci@vger.kernel.org>, <linux-acpi@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <linux-mm@kvack.org>
+Subject: [PATCH 0/2] null_blk: fix wrong use of nr_online_nodes
+Date:   Fri, 6 May 2022 01:57:59 +0000
+Message-ID: <20220506015801.757918-1-liupeng256@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.112.125]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ kwepemm600017.china.huawei.com (7.193.23.234)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -55,36 +62,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed,  4 May 2022 16:50:54 -0400 Min Li wrote:
-> Use TOD_READ_SECONDARY for extts to keep TOD_READ_PRIMARY
-> for gettime and settime exclusively
+Helper node_available is introduced to judge whether a node can be
+used, and it is used to fix the wrong use of nr_online_nodes when
+numa node is sparse.
 
-Can you fill in more details about what the user visible problem is?
-Judging by the fact that you haven't tagged the patch as 
-[PATCH net-next] after my previous explanation you do think this 
-is a fix. But "Add xyz support" sounds like a feature, not a fix.
+Peng Liu (2):
+  include/linux/nodemask.h: create node_available() helper
+  null_blk: fix wrong use of nr_online_nodes
 
-> Signed-off-by: Min Li <min.li.xe@renesas.com>
-> Acked-by: Richard Cochran <richardcochran@gmail.com>
+ arch/ia64/hp/common/sba_iommu.c |  2 +-
+ arch/x86/pci/acpi.c             |  2 +-
+ drivers/acpi/arm64/iort.c       |  2 +-
+ drivers/block/null_blk/main.c   | 45 ++++++++++++++++++++-------------
+ drivers/pci/pci-sysfs.c         |  2 +-
+ include/linux/nodemask.h        |  3 +++
+ mm/mempolicy.c                  |  2 +-
+ 7 files changed, 36 insertions(+), 22 deletions(-)
 
-> -	err = char_array_to_timespec(buf, sizeof(buf), ts);
-> -
-> -	return err;
-> +	return char_array_to_timespec(buf, sizeof(buf), ts);
-
-I don't think you were modifying this code, so no need to clean it up
-in this commit. It's unrelated to the change you're making now.
-
->  }
-
-> -	/* Re-enable extts */
-> -	if (extts_mask)
-> -		idtcm_enable_extts_mask(channel, extts_mask, true);
-> +	err = _idtcm_gettime(channel, ts, 10);
->  
->  	return err;
->  }
-
-Here, tho, you are changing the code, and yet you haven't done what 
-I asked.
+-- 
+2.25.1
 

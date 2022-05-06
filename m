@@ -2,180 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90AE451CE3C
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 04:16:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB4A751CE05
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 04:16:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387717AbiEFA45 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 20:56:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56486 "EHLO
+        id S1387724AbiEFA5E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 20:57:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1387704AbiEFA44 (ORCPT
+        with ESMTP id S1387707AbiEFA44 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 5 May 2022 20:56:56 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4464B5AA55;
-        Thu,  5 May 2022 17:53:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DDC6C61FE3;
-        Fri,  6 May 2022 00:53:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D4D2C385A4;
-        Fri,  6 May 2022 00:53:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651798394;
-        bh=CNebCznOeFAnc8qF6ffneuM6vdU/dd66WedXNIT0M8w=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=dovigtcA3VXNPZG51qgWyU8q0YoWECeHnTSiLjpmlFf0s6FHu8gmNtyzrjM3QjwdE
-         ZTEkQutbBE7obZqc+pVF9qImpxq6To8kdZ0zyDJSK2zvXzH5tdN2baXbYz9dOseVSy
-         2JmaTI+vriQVf/XM0MQt+z8+kK39heOSmrfX4csfZfvVenpQ5E5fl6rmMdWgMdn/vz
-         Qg0OpLoFDUWCbeuoSXX7EKBjRr3F3xXuMMo/RnxlqR2tEv6W8Mxx8afKsDVwx9Kjs9
-         CL8W2vdRZ72MswASqWHK89vVKYTYPWZzIQcF1f59iJlwwFPJydG8Aa6YLAWABubtbg
-         m90KJo5ySD3dA==
-Date:   Thu, 5 May 2022 17:53:12 -0700
-From:   Jaegeuk Kim <jaegeuk@kernel.org>
-To:     Chao Yu <chao@kernel.org>
-Cc:     linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Ming Yan <yanming@tju.edu.cn>, Chao Yu <chao.yu@oppo.com>
-Subject: Re: [PATCH v2] f2fs: fix to do sanity check on total_data_blocks
-Message-ID: <YnRxeJbYNC9eHgtr@google.com>
-References: <20220505141507.6616-1-chao@kernel.org>
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 826FD5E179
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 17:53:15 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id j4so10140033lfh.8
+        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 17:53:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=shutemov-name.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=C5GPnJUVP3BtQbsY0hrSBcmaxNZOUF97hX/9OQsx+nA=;
+        b=nLZPkQ5PVl8ydEQfOubz8On/1Fq63lQN6lh/vZ5Aegg+xPA34KIVO26IrV87jX5wPe
+         8M10ylUu9YV8TQM8HP2/8undJLvbVcL1/dVTkVcECHb9CzEEqKq07m14/HgnXxA7Njia
+         YFD9HYkWHYF6sWGhtvKCPmH/IStLKZu+wd185XNNJDESn6HYZEa+2g+/xT6nMw6+t8/g
+         39BKxahY18nOyAdMZrhMfCYQLCIMFGLV4qB/FupV+3jv+iDHAqrfEb52qkY/VpnQPsI8
+         KTvsIBhr+lDuXx6BCqyiYijMMAKSx6DWRCL3X9YV0fdlAgTdw+PmU7XeCeBdqNxsFuvW
+         hzmg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=C5GPnJUVP3BtQbsY0hrSBcmaxNZOUF97hX/9OQsx+nA=;
+        b=KEOR1/FEKvQFHWnTdDDEa9txPxFJoaIZ0+l9rGuPDpX3uVfXXKPuVDU5rYPtBuE2Qs
+         SApVBzyCkiBzADS51k2Ur2rbO21a++e1g8PTcFt9Cr98KqGldPgiOk6DzsJkJd1xg0Z1
+         cstFgomMx7qYOtPCTQPtXqY1BWRQhYcqgUOUF9vHFgPBsma8quB3lTWYEQvm0HS5P3Ex
+         8Czj6xPPF2UnWEZ3Q96RBvcV1qYPi8w3ebxHUlpxX4mA1C85SX8onYEhjZ5F5UsF7Q7K
+         6qktsORguLTrjdMX7mWfWC0INq3XcgklUzAE5SLcDyg9OxImsZ/PA9zcQIqsUN8/BUJB
+         Lz8w==
+X-Gm-Message-State: AOAM5337jQ/r5b2Tg6xnqTsb7ERZWGTLf2/Gru/yDTs1vc1S95ohtj3i
+        hZTghTb3J/nMg6t2cNpaSOmUTQ==
+X-Google-Smtp-Source: ABdhPJxBGAyRzcf0ZNYdABhMRx6y2moZzNV7QFboqJg1pD4XhwD22Dkio7DKSmS7KcErp6zO6RaPpQ==
+X-Received: by 2002:a05:6512:3b87:b0:473:9e36:5f0d with SMTP id g7-20020a0565123b8700b004739e365f0dmr715960lfv.424.1651798393878;
+        Thu, 05 May 2022 17:53:13 -0700 (PDT)
+Received: from box.localdomain ([86.57.175.117])
+        by smtp.gmail.com with ESMTPSA id c33-20020a05651223a100b0047255d21113sm443339lfv.66.2022.05.05.17.53.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 May 2022 17:53:13 -0700 (PDT)
+Received: by box.localdomain (Postfix, from userid 1000)
+        id A1C92104AF0; Fri,  6 May 2022 03:54:58 +0300 (+03)
+Date:   Fri, 6 May 2022 03:54:58 +0300
+From:   "Kirill A. Shutemov" <kirill@shutemov.name>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Joerg Roedel <jroedel@suse.de>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Varad Gautam <varad.gautam@suse.com>,
+        Dario Faggioli <dfaggioli@suse.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Mike Rapoport <rppt@kernel.org>, x86@kernel.org,
+        linux-mm@kvack.org, linux-coco@lists.linux.dev,
+        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mike Rapoport <rppt@linux.ibm.com>
+Subject: Re: [PATCHv5 02/12] mm: Add support for unaccepted memory
+Message-ID: <20220506005458.jrebaho2w55ojwyb@box.shutemov.name>
+References: <20220425033934.68551-1-kirill.shutemov@linux.intel.com>
+ <20220425033934.68551-3-kirill.shutemov@linux.intel.com>
+ <2bb92a84-18f4-d007-9465-fdc19f6f1c86@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220505141507.6616-1-chao@kernel.org>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <2bb92a84-18f4-d007-9465-fdc19f6f1c86@redhat.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/05, Chao Yu wrote:
-> As Yanming reported in bugzilla:
+On Tue, May 03, 2022 at 10:21:03PM +0200, David Hildenbrand wrote:
 > 
-> https://bugzilla.kernel.org/show_bug.cgi?id=215916
+> >  
+> > +/*
+> > + * Page acceptance can be very slow. Do not call under critical locks.
+> > + */
+> > +static void accept_page(struct page *page, unsigned int order)
+> > +{
+> > +	phys_addr_t start = page_to_phys(page);
+> > +	int i;
+> > +
+> > +	accept_memory(start, start + (PAGE_SIZE << order));
+> > +
+> > +	for (i = 0; i < (1 << order); i++) {
+> > +		if (PageUnaccepted(page + i))
+> > +			__ClearPageUnaccepted(page + i);
+> > +	}
+> > +}
 > 
-> The kernel message is shown below:
+> What was the rationale of leaving PageUnaccepted() set on sub-pages when
+> merging pages?
 > 
-> kernel BUG at fs/f2fs/segment.c:2560!
-> Call Trace:
->  allocate_segment_by_default+0x228/0x440
->  f2fs_allocate_data_block+0x13d1/0x31f0
->  do_write_page+0x18d/0x710
->  f2fs_outplace_write_data+0x151/0x250
->  f2fs_do_write_data_page+0xef9/0x1980
->  move_data_page+0x6af/0xbc0
->  do_garbage_collect+0x312f/0x46f0
->  f2fs_gc+0x6b0/0x3bc0
->  f2fs_balance_fs+0x921/0x2260
->  f2fs_write_single_data_page+0x16be/0x2370
->  f2fs_write_cache_pages+0x428/0xd00
->  f2fs_write_data_pages+0x96e/0xd50
->  do_writepages+0x168/0x550
->  __writeback_single_inode+0x9f/0x870
->  writeback_sb_inodes+0x47d/0xb20
->  __writeback_inodes_wb+0xb2/0x200
->  wb_writeback+0x4bd/0x660
->  wb_workfn+0x5f3/0xab0
->  process_one_work+0x79f/0x13e0
->  worker_thread+0x89/0xf60
->  kthread+0x26a/0x300
->  ret_from_fork+0x22/0x30
-> RIP: 0010:new_curseg+0xe8d/0x15f0
-> 
-> The root cause is: ckpt.valid_block_count is inconsistent with SIT table,
-> stat info indicates filesystem has free blocks, but SIT table indicates
-> filesystem has no free segment.
-> 
-> So that during garbage colloection, it triggers panic when LFS allocator
-> fails to find free segment.
-> 
-> This patch tries to fix this issue by checking consistency in between
-> ckpt.valid_block_count and block accounted from SIT.
-> 
-> Cc: stable@vger.kernel.org
-> Reported-by: Ming Yan <yanming@tju.edu.cn>
-> Signed-off-by: Chao Yu <chao.yu@oppo.com>
-> ---
-> v2:
-> - adjust check condition according to the case Jaegeuk mentioned.
->  fs/f2fs/segment.c | 24 +++++++++++++++++++++---
->  1 file changed, 21 insertions(+), 3 deletions(-)
-> 
-> diff --git a/fs/f2fs/segment.c b/fs/f2fs/segment.c
-> index 3a3e2cec2ac4..942d6d8c18e6 100644
-> --- a/fs/f2fs/segment.c
-> +++ b/fs/f2fs/segment.c
-> @@ -4462,6 +4462,7 @@ static int build_sit_entries(struct f2fs_sb_info *sbi)
->  	unsigned int readed, start_blk = 0;
->  	int err = 0;
->  	block_t total_node_blocks = 0;
-> +	block_t total_data_blocks = 0;
+> I'd just clear the flag when merging and avoid the loop here. You could
+> even assert here that we don't have any PageUnaccepted() on tail pages.
 
-How about something like "sit_valid_blocks[DATA | NODE]"?
+Okay, fair enough. I will change the code.
 
->  
->  	do {
->  		readed = f2fs_ra_meta_pages(sbi, start_blk, BIO_MAX_VECS,
-> @@ -4488,6 +4489,8 @@ static int build_sit_entries(struct f2fs_sb_info *sbi)
->  			seg_info_from_raw_sit(se, &sit);
->  			if (IS_NODESEG(se->type))
->  				total_node_blocks += se->valid_blocks;
-> +			else
-> +				total_data_blocks += se->valid_blocks;
->  
->  			if (f2fs_block_unit_discard(sbi)) {
->  				/* build discard map only one time */
-> @@ -4529,6 +4532,8 @@ static int build_sit_entries(struct f2fs_sb_info *sbi)
->  		old_valid_blocks = se->valid_blocks;
->  		if (IS_NODESEG(se->type))
->  			total_node_blocks -= old_valid_blocks;
-> +		else
-> +			total_data_blocks -= old_valid_blocks;
->  
->  		err = check_block_count(sbi, start, &sit);
->  		if (err)
-> @@ -4536,6 +4541,8 @@ static int build_sit_entries(struct f2fs_sb_info *sbi)
->  		seg_info_from_raw_sit(se, &sit);
->  		if (IS_NODESEG(se->type))
->  			total_node_blocks += se->valid_blocks;
-> +		else
-> +			total_data_blocks += se->valid_blocks;
->  
->  		if (f2fs_block_unit_discard(sbi)) {
->  			if (is_set_ckpt_flags(sbi, CP_TRIMMED_FLAG)) {
-> @@ -4557,13 +4564,24 @@ static int build_sit_entries(struct f2fs_sb_info *sbi)
->  	}
->  	up_read(&curseg->journal_rwsem);
->  
-> -	if (!err && total_node_blocks != valid_node_count(sbi)) {
-> +	if (err)
-> +		return err;
-> +
-> +	if (total_node_blocks != valid_node_count(sbi)) {
->  		f2fs_err(sbi, "SIT is corrupted node# %u vs %u",
->  			 total_node_blocks, valid_node_count(sbi));
-> -		err = -EFSCORRUPTED;
-> +		return -EFSCORRUPTED;
->  	}
->  
-> -	return err;
-> +	if (total_data_blocks + total_node_blocks >
-> +				valid_user_blocks(sbi)) {
-> +		f2fs_err(sbi, "SIT is corrupted data# %u %u vs %u",
-> +			 total_data_blocks, total_node_blocks,
-> +			 valid_user_blocks(sbi));
-> +		return -EFSCORRUPTED;
-> +	}
-> +
-> +	return 0;
->  }
->  
->  static void init_free_segmap(struct f2fs_sb_info *sbi)
-> -- 
-> 2.32.0
+-- 
+ Kirill A. Shutemov

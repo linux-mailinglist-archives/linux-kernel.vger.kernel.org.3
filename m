@@ -2,303 +2,384 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 069DF51E093
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 23:02:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5E6C51E098
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 23:04:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1444319AbiEFVFe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 17:05:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59338 "EHLO
+        id S1444322AbiEFVHo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 17:07:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386740AbiEFVFb (ORCPT
+        with ESMTP id S1378271AbiEFVHh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 17:05:31 -0400
-Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D42E67D2A;
-        Fri,  6 May 2022 14:01:47 -0700 (PDT)
-Received: by mail-io1-xd2f.google.com with SMTP id e194so9348844iof.11;
-        Fri, 06 May 2022 14:01:47 -0700 (PDT)
+        Fri, 6 May 2022 17:07:37 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 895AE6EB14;
+        Fri,  6 May 2022 14:03:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=1YZT8Q5gNPdhz2HKcCZACwGlpa3VPKGgoNpznG8DFQ0=;
-        b=izKO7nbMwlnej8sDjsX1Kx9zFvAM8LzHFHHc+t+TfIv9ivhXrTaviRvKNmKLh0BYug
-         gG216cohLbLuqkS+AVVQ1W6RSKxZY43s0Esua2tjB/2q4DyiUIFAUC9uf0h0jcmG5nri
-         TRd7EivPenyKB8p1WsO0pVJAnSoN02PeZh3MVXEDoyA1YItQQDjU9/GIHM7KebsccJ/k
-         sNh0horTbWmC/ZXx4SJ99uLbiBtiVqRwUUjRkgnLZ0tnNVn7trMF28vwkRuDpQkm0b0b
-         7JbZ5vgv3kv79fUC5ghAyfhA1mct8qvdpRlPYzpbrByqq1uClylgxOGGwLSrlP1QzlIL
-         0TTQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=1YZT8Q5gNPdhz2HKcCZACwGlpa3VPKGgoNpznG8DFQ0=;
-        b=1wKH6wA+DybzNyr0V0ixYuE2/xfytWTsmT8Qkv45Ky+CAxbuwajOo3cPftxBRecMMO
-         ifXx5TEF6adjgFIDr9nmjWHLojYfunWejKrbr2CBwVg0HYog4tu7YsQ0Ru8id/KWkzVX
-         PULLQDSTTkCLixblC0DNDZVH7MOEdISdcFJ8s5ButmXe5XXydh3ht3xdTBtfcPHs3dSJ
-         JxPT1Plsc/wmW0FgN0JSh3q7NUYi0a5ffg/kxa0L/I48g72AbZHFMXZobktuNw1Ykwrp
-         EzEOkRQL1A6geC+1AvPpS3VhtjJFugg/6TdLQjWfq3pejyplAc8MbJE5fm11z/KTVDaX
-         k5fg==
-X-Gm-Message-State: AOAM533FooMdP9Ue/AmtDngTLiPKbmPCa9eDwgRUBMKJEdwPNsdpiERx
-        innDwbKh74c4njrOaaXA6TtnpBe48E1p4cTZT38=
-X-Google-Smtp-Source: ABdhPJwd4wUYX8+IWkqoEimKTpfwS/3lXAvq8zfZnEvIJyoTUy27SqnBGylGFnellmYWJIlFEvAgnmpiT9uzvzWxgGs=
-X-Received: by 2002:a5e:8e42:0:b0:657:bc82:64e5 with SMTP id
- r2-20020a5e8e42000000b00657bc8264e5mr2032977ioo.112.1651870906577; Fri, 06
- May 2022 14:01:46 -0700 (PDT)
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1651871032; x=1683407032;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=mbrFtqvXowI/g08jyHxbBzncqQqEwGurYhPKIhLlXMM=;
+  b=lvZazIL/W8KYX03DDimDxbtknXD/isiqY4qd2CAL/YGUMh1tn5YGjVdr
+   URwUJBwbxszPYTOYsHDYINtmPBDqJJL+Kqsc5MQ5UzR3H3fYCDTdibSt8
+   3K9ts/7l3FIJ8r5pSq7LheCFdjiixK8y2Yd2FDhpDGytz1EUpVPIqs0+T
+   s=;
+Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
+  by alexa-out.qualcomm.com with ESMTP; 06 May 2022 14:03:52 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2022 14:03:51 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Fri, 6 May 2022 14:03:50 -0700
+Received: from [10.111.168.240] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Fri, 6 May 2022
+ 14:03:46 -0700
+Message-ID: <30e4f4db-9c4c-af90-f1d2-ec39019f95a5@quicinc.com>
+Date:   Fri, 6 May 2022 14:03:43 -0700
 MIME-Version: 1.0
-References: <20220426140924.3308472-1-pulehui@huawei.com> <20220426140924.3308472-2-pulehui@huawei.com>
- <CAEf4BzYvGaskrquK1hsKv6h7iz0NXWCNYn_zJEHvYUBYC=2UoA@mail.gmail.com> <f1777267-7904-e993-24f9-8071cd4b5bf7@huawei.com>
-In-Reply-To: <f1777267-7904-e993-24f9-8071cd4b5bf7@huawei.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Fri, 6 May 2022 14:01:35 -0700
-Message-ID: <CAEf4BzZ-eDcdJZgJ+Np7Y=V-TVjDDvOMqPwzKjyWrh=i5juv4w@mail.gmail.com>
-Subject: Re: [PATCH -next 1/2] bpf: Unify data extension operation of
- jited_ksyms and jited_linfo
-To:     Pu Lehui <pulehui@huawei.com>
-Cc:     bpf <bpf@vger.kernel.org>, linux-riscv@lists.infradead.org,
-        Networking <netdev@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
-        Luke Nelson <luke.r.nels@gmail.com>,
-        Xi Wang <xi.wang@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, Martin Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        john fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [PATCH v10 1/4] drm/msm/dp: Add eDP support via aux_bus
+Content-Language: en-US
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sankeerth Billakanti <quic_sbillaka@quicinc.com>,
+        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
+        <freedreno@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>
+CC:     <robdclark@gmail.com>, <seanpaul@chromium.org>,
+        <swboyd@chromium.org>, <quic_kalyant@quicinc.com>,
+        <dianders@chromium.org>, <quic_khsieh@quicinc.com>,
+        <bjorn.andersson@linaro.org>, <sean@poorly.run>,
+        <airlied@linux.ie>, <daniel@ffwll.ch>, <quic_vproddut@quicinc.com>,
+        <quic_aravindh@quicinc.com>, <steev@kali.org>
+References: <1650887072-16652-1-git-send-email-quic_sbillaka@quicinc.com>
+ <1650887072-16652-2-git-send-email-quic_sbillaka@quicinc.com>
+ <8fe3f9cd-546d-539b-cba4-8479d780a4c5@linaro.org>
+From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
+In-Reply-To: <8fe3f9cd-546d-539b-cba4-8479d780a4c5@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 28, 2022 at 2:47 AM Pu Lehui <pulehui@huawei.com> wrote:
->
-> Hi Andrii,
->
-> On 2022/4/28 6:33, Andrii Nakryiko wrote:
-> > On Tue, Apr 26, 2022 at 6:40 AM Pu Lehui <pulehui@huawei.com> wrote:
-> >>
-> >> We found that 32-bit environment can not print bpf line info due
-> >> to data inconsistency between jited_ksyms[0] and jited_linfo[0].
-> >>
-> >> For example:
-> >> jited_kyms[0] = 0xb800067c, jited_linfo[0] = 0xffffffffb800067c
-> >>
-> >> We know that both of them store bpf func address, but due to the
-> >> different data extension operations when extended to u64, they may
-> >> not be the same. We need to unify the data extension operations of
-> >> them.
-> >>
-> >> Signed-off-by: Pu Lehui <pulehui@huawei.com>
-> >> ---
-> >>   kernel/bpf/syscall.c                         |  5 ++++-
-> >>   tools/lib/bpf/bpf_prog_linfo.c               |  8 ++++----
-> >>   tools/testing/selftests/bpf/prog_tests/btf.c | 18 +++++++++---------
-> >
-> > please split kernel changes, libbpf changes, and selftests/bpf changes
-> > into separate patches
-> Thanks for your review. Alright, I will split it next time.
->
-> >
-> >>   3 files changed, 17 insertions(+), 14 deletions(-)
-> >>
-> >> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-> >> index e9621cfa09f2..4c417c806d92 100644
-> >> --- a/kernel/bpf/syscall.c
-> >> +++ b/kernel/bpf/syscall.c
-> >> @@ -3868,13 +3868,16 @@ static int bpf_prog_get_info_by_fd(struct file *file,
-> >>                  info.nr_jited_line_info = 0;
-> >>          if (info.nr_jited_line_info && ulen) {
-> >>                  if (bpf_dump_raw_ok(file->f_cred)) {
-> >> +                       unsigned long jited_linfo_addr;
-> >>                          __u64 __user *user_linfo;
-> >>                          u32 i;
-> >>
-> >>                          user_linfo = u64_to_user_ptr(info.jited_line_info);
-> >>                          ulen = min_t(u32, info.nr_jited_line_info, ulen);
-> >>                          for (i = 0; i < ulen; i++) {
-> >> -                               if (put_user((__u64)(long)prog->aux->jited_linfo[i],
-> >> +                               jited_linfo_addr = (unsigned long)
-> >> +                                       prog->aux->jited_linfo[i];
-> >> +                               if (put_user((__u64) jited_linfo_addr,
-> >>                                               &user_linfo[i]))
-> >>                                          return -EFAULT;
-> >>                          }
-> Please let me to explain more detail, sorry if I'm wordy.
-> The main reason that 32-bit env does not print bpf line info is here:
->
-> kernel/bpf/syscall.c:
-> bpf_prog_get_info_by_fd {
->         ...
->         user_ksyms = u64_to_user_ptr(info.jited_ksyms);
->         ksym_addr = (unsigned long)prog->aux->func[i]->bpf_func;
->         if (put_user((u64) ksym_addr, &user_ksyms[i]))
->         ...
->
->         user_linfo = u64_to_user_ptr(info.jited_line_info);
->         if (put_user((__u64)(long)prog->aux->jited_linfo[i],
->                      &user_linfo[i]))
->         ...
-> }
->
-> In 32-bit env, ksym_addr and prog->aux->jited_linfo[0] both store the
-> 32-bit address of bpf_func, but the first one is zero-extension to u64,
-> while the other is sign-extension to u64.
-> For example:
->         prog->aux->func[0]->bpf_func = 0xb800067c
->         user_ksyms[0] = 0xb800067c, user_linfo[0] = 0xffffffffb800067c
->
-> Both zero-extension and sign-extension are fine, but if operating
-> directly between them without casting in 32-bit env, there will have
-> some potential problems. Such as:
->
-> tools/lib/bpf/bpf_prog_linfo.c:
-> dissect_jited_func {
->         ...
->         if (ksym_func[0] != *jited_linfo) //always missmatch in 32 env
->                 goto errout;
->         ...
->         if (ksym_func[f] == *jited_linfo) {
->         ...
->         last_jited_linfo = *jited_linfo;
->         if (last_jited_linfo - ksym_func[f - 1] + 1 >
->             ksym_len[f - 1])
->         ...
-> }
->
-> We could cast them to 32-bit data type, but I think unify data extension
-> operation will be better.
->
-> >> diff --git a/tools/lib/bpf/bpf_prog_linfo.c b/tools/lib/bpf/bpf_prog_linfo.c
-> >> index 5c503096ef43..5cf41a563ef5 100644
-> >> --- a/tools/lib/bpf/bpf_prog_linfo.c
-> >> +++ b/tools/lib/bpf/bpf_prog_linfo.c
-> >> @@ -127,7 +127,7 @@ struct bpf_prog_linfo *bpf_prog_linfo__new(const struct bpf_prog_info *info)
-> >>          prog_linfo->raw_linfo = malloc(data_sz);
-> >>          if (!prog_linfo->raw_linfo)
-> >>                  goto err_free;
-> >> -       memcpy(prog_linfo->raw_linfo, (void *)(long)info->line_info, data_sz);
-> >> +       memcpy(prog_linfo->raw_linfo, (void *)(unsigned long)info->line_info, data_sz);
-> >>
-> >>          nr_jited_func = info->nr_jited_ksyms;
-> >>          if (!nr_jited_func ||
-> >> @@ -148,7 +148,7 @@ struct bpf_prog_linfo *bpf_prog_linfo__new(const struct bpf_prog_info *info)
-> >>          if (!prog_linfo->raw_jited_linfo)
-> >>                  goto err_free;
-> >>          memcpy(prog_linfo->raw_jited_linfo,
-> >> -              (void *)(long)info->jited_line_info, data_sz);
-> >> +              (void *)(unsigned long)info->jited_line_info, data_sz);
-> >>
-> >>          /* Number of jited_line_info per jited func */
-> >>          prog_linfo->nr_jited_linfo_per_func = malloc(nr_jited_func *
-> >> @@ -166,8 +166,8 @@ struct bpf_prog_linfo *bpf_prog_linfo__new(const struct bpf_prog_info *info)
-> >>                  goto err_free;
-> >>
-> >>          if (dissect_jited_func(prog_linfo,
-> >> -                              (__u64 *)(long)info->jited_ksyms,
-> >> -                              (__u32 *)(long)info->jited_func_lens))
-> >> +                              (__u64 *)(unsigned long)info->jited_ksyms,
-> >> +                              (__u32 *)(unsigned long)info->jited_func_lens))
-> >
-> > so I'm trying to understand how this is changing anything for 32-bit
-> > architecture and I must be missing something, sorry if I'm being
-> > dense. The example you used below
-> >
-> > jited_kyms[0] = 0xb800067c, jited_linfo[0] = 0xffffffffb800067c
-> >
-> > Wouldn't (unsigned long)0xffffffffb800067c == (long)0xffffffffb800067c
-> > == 0xb800067c ?
-> If I understand correctly, info->jited_ksyms or info->jited_func_lens is
-> just a u64 address that point to the corresponding space. The bpf_func
-> address is stored in the item of info->jited_ksyms but not
-> info->jited_ksyms.
->
-> And here, I may have misled you. Both (__u64 *)(long)info->jited_ksyms
-> and (__u64 *)(unsigned long)info->jited_ksyms are the same, I just want
-> to unify the style. I will remove them in v2.
->
-> Please let me know if there is any problem with my understanding.
->
-
-Thanks for explanation. I guess in my mind I was always sign extending
-32-bit to 64-bit, but I think memory addresses are conceptually
-unsigned, so (unsigned long) casting makes more sense, and u64
-representation of 0xb800067c should be 0x00000000b800067c and not
-0xffffffffb800067c. So your changes make sense, and I agree that
-libbpf-side changes for conceptual uniformity are also good.
 
 
-> Thanks,
-> Lehui
-> >
-> > isn't sizeof(long) == sizeof(void*) == 4?
-> >
-> > It would be nice if you could elaborate a bit more on what problems
-> > did you see in practice?
-> >
-> >>                  goto err_free;
-> >>
-> >>          return prog_linfo;
-> >> diff --git a/tools/testing/selftests/bpf/prog_tests/btf.c b/tools/testing/selftests/bpf/prog_tests/btf.c
-> >> index 84aae639ddb5..d9ba1ec1d5b3 100644
-> >> --- a/tools/testing/selftests/bpf/prog_tests/btf.c
-> >> +++ b/tools/testing/selftests/bpf/prog_tests/btf.c
-> >> @@ -6451,8 +6451,8 @@ static int test_get_linfo(const struct prog_info_raw_test *test,
-> >>                    info.nr_jited_line_info, jited_cnt,
-> >>                    info.line_info_rec_size, rec_size,
-> >>                    info.jited_line_info_rec_size, jited_rec_size,
-> >> -                 (void *)(long)info.line_info,
-> >> -                 (void *)(long)info.jited_line_info)) {
-> >> +                 (void *)(unsigned long)info.line_info,
-> >> +                 (void *)(unsigned long)info.jited_line_info)) {
-> >>                  err = -1;
-> >>                  goto done;
-> >>          }
-> >> @@ -6500,8 +6500,8 @@ static int test_get_linfo(const struct prog_info_raw_test *test,
-> >>          }
-> >>
-> >>          if (CHECK(jited_linfo[0] != jited_ksyms[0],
-> >> -                 "jited_linfo[0]:%lx != jited_ksyms[0]:%lx",
-> >> -                 (long)(jited_linfo[0]), (long)(jited_ksyms[0]))) {
-> >> +                 "jited_linfo[0]:%llx != jited_ksyms[0]:%llx",
-> >> +                 jited_linfo[0], jited_ksyms[0])) {
-> >>                  err = -1;
-> >>                  goto done;
-> >>          }
-> >> @@ -6519,16 +6519,16 @@ static int test_get_linfo(const struct prog_info_raw_test *test,
-> >>                  }
-> >>
-> >>                  if (CHECK(jited_linfo[i] <= jited_linfo[i - 1],
-> >> -                         "jited_linfo[%u]:%lx <= jited_linfo[%u]:%lx",
-> >> -                         i, (long)jited_linfo[i],
-> >> -                         i - 1, (long)(jited_linfo[i - 1]))) {
-> >> +                         "jited_linfo[%u]:%llx <= jited_linfo[%u]:%llx",
-> >> +                         i, jited_linfo[i],
-> >> +                         i - 1, (jited_linfo[i - 1]))) {
-> >>                          err = -1;
-> >>                          goto done;
-> >>                  }
-> >>
-> >>                  if (CHECK(jited_linfo[i] - cur_func_ksyms > cur_func_len,
-> >> -                         "jited_linfo[%u]:%lx - %lx > %u",
-> >> -                         i, (long)jited_linfo[i], (long)cur_func_ksyms,
-> >> +                         "jited_linfo[%u]:%llx - %llx > %u",
-> >> +                         i, jited_linfo[i], cur_func_ksyms,
-> >>                            cur_func_len)) {
-> >>                          err = -1;
-> >>                          goto done;
-> >> --
-> >> 2.25.1
-> >>
-> > .
-> >
+On 5/6/2022 1:49 PM, Dmitry Baryshkov wrote:
+> On 25/04/2022 14:44, Sankeerth Billakanti wrote:
+>> This patch adds support for generic eDP sink through aux_bus. The eDP/DP
+>> controller driver should support aux transactions originating from the
+>> panel-edp driver and hence should be initialized and ready.
+>>
+>> The panel bridge supporting the panel should be ready before the bridge
+>> connector is initialized. The generic panel probe needs the controller
+>> resources to be enabled to support the aux transactions originating from
+>> the panel probe.
+>>
+>> Signed-off-by: Sankeerth Billakanti <quic_sbillaka@quicinc.com>
+>> Reviewed-by: Douglas Anderson <dianders@chromium.org>
+>> Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+> 
+> An additional side effect from this patch. Previously missing panel 
+> would have caused the bind error. Now it is the dp_modeset_init error, 
+> which translates to kms_hw_init returning -517. I kind ask to move the 
+> next_bridge acquisition back to the dp_bind in one of the followup patches.
+> 
+
+This is true. But the end result would be same isnt it?
+
+When dp_display_bind() failed earlier, it would cause master bind 
+failure too due to component model.
+
+Even now, it causes the same result?
+
+>> ---
+>> Changes in v10:
+>>    - modify the error handling condition
+>>    - modify the kernel doc
+>>
+>> Changes in v9:
+>>    - add comments for panel probe
+>>    - modify the error handling checks
+>>
+>> Changes in v8:
+>>    - handle corner cases
+>>    - add comment for the bridge ops
+>>
+>> Changes in v7:
+>>    - aux_bus is mandatory for eDP
+>>    - connector type check modified to just check for eDP
+>>
+>> Changes in v6:
+>>    - Remove initialization
+>>    - Fix aux_bus node leak
+>>    - Split the patches
+>>
+>>   drivers/gpu/drm/msm/dp/dp_display.c | 72 
+>> ++++++++++++++++++++++++++++++++++---
+>>   drivers/gpu/drm/msm/dp/dp_display.h |  1 +
+>>   drivers/gpu/drm/msm/dp/dp_drm.c     | 21 ++++++++---
+>>   drivers/gpu/drm/msm/dp/dp_parser.c  | 23 ++----------
+>>   drivers/gpu/drm/msm/dp/dp_parser.h  | 14 +++++++-
+>>   5 files changed, 101 insertions(+), 30 deletions(-)
+>>
+>> diff --git a/drivers/gpu/drm/msm/dp/dp_display.c 
+>> b/drivers/gpu/drm/msm/dp/dp_display.c
+>> index d7a19d6..f772d84 100644
+>> --- a/drivers/gpu/drm/msm/dp/dp_display.c
+>> +++ b/drivers/gpu/drm/msm/dp/dp_display.c
+>> @@ -10,6 +10,7 @@
+>>   #include <linux/component.h>
+>>   #include <linux/of_irq.h>
+>>   #include <linux/delay.h>
+>> +#include <drm/dp/drm_dp_aux_bus.h>
+>>   #include "msm_drv.h"
+>>   #include "msm_kms.h"
+>> @@ -259,14 +260,12 @@ static int dp_display_bind(struct device *dev, 
+>> struct device *master,
+>>       dp->dp_display.drm_dev = drm;
+>>       priv->dp[dp->id] = &dp->dp_display;
+>> -    rc = dp->parser->parse(dp->parser, dp->dp_display.connector_type);
+>> +    rc = dp->parser->parse(dp->parser);
+>>       if (rc) {
+>>           DRM_ERROR("device tree parsing failed\n");
+>>           goto end;
+>>       }
+>> -    dp->dp_display.next_bridge = dp->parser->next_bridge;
+>> -
+>>       dp->aux->drm_dev = drm;
+>>       rc = dp_aux_register(dp->aux);
+>>       if (rc) {
+>> @@ -1319,6 +1318,8 @@ static int dp_display_probe(struct 
+>> platform_device *pdev)
+>>       dp->pdev = pdev;
+>>       dp->name = "drm_dp";
+>>       dp->dp_display.connector_type = desc->connector_type;
+>> +    dp->dp_display.is_edp =
+>> +        (dp->dp_display.connector_type == DRM_MODE_CONNECTOR_eDP);
+>>       rc = dp_init_sub_modules(dp);
+>>       if (rc) {
+>> @@ -1508,7 +1509,8 @@ void msm_dp_irq_postinstall(struct msm_dp 
+>> *dp_display)
+>>       dp_hpd_event_setup(dp);
+>> -    dp_add_event(dp, EV_HPD_INIT_SETUP, 0, 100);
+>> +    if (!dp_display->is_edp)
+>> +        dp_add_event(dp, EV_HPD_INIT_SETUP, 0, 100);
+>>   }
+>>   void msm_dp_debugfs_init(struct msm_dp *dp_display, struct drm_minor 
+>> *minor)
+>> @@ -1530,6 +1532,64 @@ void msm_dp_debugfs_init(struct msm_dp 
+>> *dp_display, struct drm_minor *minor)
+>>       }
+>>   }
+>> +static int dp_display_get_next_bridge(struct msm_dp *dp)
+>> +{
+>> +    int rc;
+>> +    struct dp_display_private *dp_priv;
+>> +    struct device_node *aux_bus;
+>> +    struct device *dev;
+>> +
+>> +    dp_priv = container_of(dp, struct dp_display_private, dp_display);
+>> +    dev = &dp_priv->pdev->dev;
+>> +    aux_bus = of_get_child_by_name(dev->of_node, "aux-bus");
+>> +
+>> +    if (aux_bus && dp->is_edp) {
+>> +        dp_display_host_init(dp_priv);
+>> +        dp_catalog_ctrl_hpd_config(dp_priv->catalog);
+>> +        dp_display_host_phy_init(dp_priv);
+>> +        enable_irq(dp_priv->irq);
+>> +
+>> +        /*
+>> +         * The code below assumes that the panel will finish probing
+>> +         * by the time devm_of_dp_aux_populate_ep_devices() returns.
+>> +         * This isn't a great assumption since it will fail if the
+>> +         * panel driver is probed asynchronously but is the best we
+>> +         * can do without a bigger driver reorganization.
+>> +         */
+>> +        rc = devm_of_dp_aux_populate_ep_devices(dp_priv->aux);
+>> +        of_node_put(aux_bus);
+>> +        if (rc)
+>> +            goto error;
+>> +    } else if (dp->is_edp) {
+>> +        DRM_ERROR("eDP aux_bus not found\n");
+>> +        return -ENODEV;
+>> +    }
+>> +
+>> +    /*
+>> +     * External bridges are mandatory for eDP interfaces: one has to
+>> +     * provide at least an eDP panel (which gets wrapped into 
+>> panel-bridge).
+>> +     *
+>> +     * For DisplayPort interfaces external bridges are optional, so
+>> +     * silently ignore an error if one is not present (-ENODEV).
+>> +     */
+>> +    rc = dp_parser_find_next_bridge(dp_priv->parser);
+>> +    if (!dp->is_edp && rc == -ENODEV)
+>> +        return 0;
+>> +
+>> +    if (!rc) {
+>> +        dp->next_bridge = dp_priv->parser->next_bridge;
+>> +        return 0;
+>> +    }
+>> +
+>> +error:
+>> +    if (dp->is_edp) {
+>> +        disable_irq(dp_priv->irq);
+>> +        dp_display_host_phy_exit(dp_priv);
+>> +        dp_display_host_deinit(dp_priv);
+>> +    }
+>> +    return rc;
+>> +}
+>> +
+>>   int msm_dp_modeset_init(struct msm_dp *dp_display, struct drm_device 
+>> *dev,
+>>               struct drm_encoder *encoder)
+>>   {
+>> @@ -1553,6 +1613,10 @@ int msm_dp_modeset_init(struct msm_dp 
+>> *dp_display, struct drm_device *dev,
+>>       dp_display->encoder = encoder;
+>> +    ret = dp_display_get_next_bridge(dp_display);
+>> +    if (ret)
+>> +        return ret;
+>> +
+>>       dp_display->bridge = dp_bridge_init(dp_display, dev, encoder);
+>>       if (IS_ERR(dp_display->bridge)) {
+>>           ret = PTR_ERR(dp_display->bridge);
+>> diff --git a/drivers/gpu/drm/msm/dp/dp_display.h 
+>> b/drivers/gpu/drm/msm/dp/dp_display.h
+>> index 49a1d89..1377cc3 100644
+>> --- a/drivers/gpu/drm/msm/dp/dp_display.h
+>> +++ b/drivers/gpu/drm/msm/dp/dp_display.h
+>> @@ -21,6 +21,7 @@ struct msm_dp {
+>>       bool audio_enabled;
+>>       bool power_on;
+>>       unsigned int connector_type;
+>> +    bool is_edp;
+>>       hdmi_codec_plugged_cb plugged_cb;
+>> diff --git a/drivers/gpu/drm/msm/dp/dp_drm.c 
+>> b/drivers/gpu/drm/msm/dp/dp_drm.c
+>> index 7ce1aca..8a75c55 100644
+>> --- a/drivers/gpu/drm/msm/dp/dp_drm.c
+>> +++ b/drivers/gpu/drm/msm/dp/dp_drm.c
+>> @@ -114,10 +114,23 @@ struct drm_bridge *dp_bridge_init(struct msm_dp 
+>> *dp_display, struct drm_device *
+>>       bridge->funcs = &dp_bridge_ops;
+>>       bridge->type = dp_display->connector_type;
+>> -    bridge->ops =
+>> -        DRM_BRIDGE_OP_DETECT |
+>> -        DRM_BRIDGE_OP_HPD |
+>> -        DRM_BRIDGE_OP_MODES;
+>> +    /*
+>> +     * Many ops only make sense for DP. Why?
+>> +     * - Detect/HPD are used by DRM to know if a display is _physically_
+>> +     *   there, not whether the display is powered on / finished 
+>> initting.
+>> +     *   On eDP we assume the display is always there because you can't
+>> +     *   know until power is applied. If we don't implement the ops 
+>> DRM will
+>> +     *   assume our display is always there.
+>> +     * - Currently eDP mode reading is driven by the panel driver. This
+>> +     *   allows the panel driver to properly power itself on to read the
+>> +     *   modes.
+>> +     */
+>> +    if (!dp_display->is_edp) {
+>> +        bridge->ops =
+>> +            DRM_BRIDGE_OP_DETECT |
+>> +            DRM_BRIDGE_OP_HPD |
+>> +            DRM_BRIDGE_OP_MODES;
+>> +    }
+>>       rc = drm_bridge_attach(encoder, bridge, NULL, 
+>> DRM_BRIDGE_ATTACH_NO_CONNECTOR);
+>>       if (rc) {
+>> diff --git a/drivers/gpu/drm/msm/dp/dp_parser.c 
+>> b/drivers/gpu/drm/msm/dp/dp_parser.c
+>> index 1056b8d..4bdbf91 100644
+>> --- a/drivers/gpu/drm/msm/dp/dp_parser.c
+>> +++ b/drivers/gpu/drm/msm/dp/dp_parser.c
+>> @@ -265,7 +265,7 @@ static int dp_parser_clock(struct dp_parser *parser)
+>>       return 0;
+>>   }
+>> -static int dp_parser_find_next_bridge(struct dp_parser *parser)
+>> +int dp_parser_find_next_bridge(struct dp_parser *parser)
+>>   {
+>>       struct device *dev = &parser->pdev->dev;
+>>       struct drm_bridge *bridge;
+>> @@ -279,7 +279,7 @@ static int dp_parser_find_next_bridge(struct 
+>> dp_parser *parser)
+>>       return 0;
+>>   }
+>> -static int dp_parser_parse(struct dp_parser *parser, int connector_type)
+>> +static int dp_parser_parse(struct dp_parser *parser)
+>>   {
+>>       int rc = 0;
+>> @@ -300,25 +300,6 @@ static int dp_parser_parse(struct dp_parser 
+>> *parser, int connector_type)
+>>       if (rc)
+>>           return rc;
+>> -    /*
+>> -     * External bridges are mandatory for eDP interfaces: one has to
+>> -     * provide at least an eDP panel (which gets wrapped into 
+>> panel-bridge).
+>> -     *
+>> -     * For DisplayPort interfaces external bridges are optional, so
+>> -     * silently ignore an error if one is not present (-ENODEV).
+>> -     */
+>> -    rc = dp_parser_find_next_bridge(parser);
+>> -    if (rc == -ENODEV) {
+>> -        if (connector_type == DRM_MODE_CONNECTOR_eDP) {
+>> -            DRM_ERROR("eDP: next bridge is not present\n");
+>> -            return rc;
+>> -        }
+>> -    } else if (rc) {
+>> -        if (rc != -EPROBE_DEFER)
+>> -            DRM_ERROR("DP: error parsing next bridge: %d\n", rc);
+>> -        return rc;
+>> -    }
+>> -
+>>       /* Map the corresponding regulator information according to
+>>        * version. Currently, since we only have one supported platform,
+>>        * mapping the regulator directly.
+>> diff --git a/drivers/gpu/drm/msm/dp/dp_parser.h 
+>> b/drivers/gpu/drm/msm/dp/dp_parser.h
+>> index d371bae..3a4d797 100644
+>> --- a/drivers/gpu/drm/msm/dp/dp_parser.h
+>> +++ b/drivers/gpu/drm/msm/dp/dp_parser.h
+>> @@ -125,7 +125,7 @@ struct dp_parser {
+>>       u32 max_dp_lanes;
+>>       struct drm_bridge *next_bridge;
+>> -    int (*parse)(struct dp_parser *parser, int connector_type);
+>> +    int (*parse)(struct dp_parser *parser);
+>>   };
+>>   /**
+>> @@ -141,4 +141,16 @@ struct dp_parser {
+>>    */
+>>   struct dp_parser *dp_parser_get(struct platform_device *pdev);
+>> +/**
+>> + * dp_parser_find_next_bridge() - find an additional bridge to DP
+>> + *
+>> + * @parser: dp_parser data from client
+>> + *
+>> + * This function is used to find any additional bridge attached to
+>> + * the DP controller. The eDP interface requires a panel bridge.
+>> + *
+>> + * Return: 0 if able to get the bridge, otherwise negative errno for 
+>> failure.
+>> + */
+>> +int dp_parser_find_next_bridge(struct dp_parser *parser);
+>> +
+>>   #endif
+> 
+> 

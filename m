@@ -2,72 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE1E251CEAC
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 04:16:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD9A851CE27
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 04:16:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1388130AbiEFBwv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 21:52:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44016 "EHLO
+        id S1388138AbiEFBxo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 21:53:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349717AbiEFBwt (ORCPT
+        with ESMTP id S1349717AbiEFBxl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 21:52:49 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECDB662A1A;
-        Thu,  5 May 2022 18:49:07 -0700 (PDT)
-X-UUID: e22ab0cec2694569aba31fdfa791b297-20220506
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.4,REQID:f32d2ef3-d71b-41f4-a4e3-01aebce32f80,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACT
-        ION:release,TS:45
-X-CID-INFO: VERSION:1.1.4,REQID:f32d2ef3-d71b-41f4-a4e3-01aebce32f80,OB:0,LOB:
-        0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACTIO
-        N:release,TS:45
-X-CID-META: VersionHash:faefae9,CLOUDID:c3f46016-2e53-443e-b81a-655c13977218,C
-        OID:IGNORED,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,File:nil,QS:0
-        ,BEC:nil
-X-UUID: e22ab0cec2694569aba31fdfa791b297-20220506
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
-        (envelope-from <rex-bc.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1728532245; Fri, 06 May 2022 09:49:02 +0800
-Received: from MTKMBS07N2.mediatek.inc (172.21.101.141) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Fri, 6 May 2022 09:49:01 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Fri, 6 May 2022 09:49:01 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n2.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
- Transport; Fri, 6 May 2022 09:49:01 +0800
-Message-ID: <774c87ffdcac2ca97efef9fc6140f85ddc30e513.camel@mediatek.com>
-Subject: Re: [PATCH v6 02/10] cpufreq: mediatek: Add
- platform_device_unregister when driver exit
-From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>, <rafael@kernel.org>,
-        <viresh.kumar@linaro.org>, <robh+dt@kernel.org>,
-        <krzk+dt@kernel.org>, <matthias.bgg@gmail.com>
-CC:     <jia-wei.chang@mediatek.com>, <roger.lu@mediatek.com>,
-        <hsinyi@google.com>, <khilman@baylibre.com>,
-        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Fri, 6 May 2022 09:49:01 +0800
-In-Reply-To: <af9724fe-181d-3ba4-79b9-bf3fab1ca80d@collabora.com>
-References: <20220505115226.20130-1-rex-bc.chen@mediatek.com>
-         <20220505115226.20130-3-rex-bc.chen@mediatek.com>
-         <af9724fe-181d-3ba4-79b9-bf3fab1ca80d@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Thu, 5 May 2022 21:53:41 -0400
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61C1062A1A
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 18:50:00 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id n8so6051409plh.1
+        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 18:50:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:references:from:message-id:date:user-agent:mime-version
+         :in-reply-to:content-transfer-encoding:content-language;
+        bh=qiHKrawCSEYS4sdc87s3HzBAfn4f+VmuSVImw7uTP4A=;
+        b=F98Lin7aPfGaSoPtPZEE8s+NM6NRh+0LKMImQjIgs0Zkhyv4XBwnzeLr8M9xrKogiu
+         MwPofz7GmCqWLwIYjwHHM2U9nChNxdi8IKbXrgyry5F8/nwQUIoIBTiLwepu5hFc9h9S
+         Buk/6mnCToI+v5w5kHbUsgiq2ieqxGS0uF2/RfcC0fN0dRrJN39t9jiWC/r1OBOKg8X6
+         TCEfurvSr2eUBAf49iIySJ3ketcUOPXYYAa+F/0aKBAugNQt+5rCgD/LnXRlsS01F3Wf
+         76QjYjIAzAZ5Ha2+ba3B+G6D3MdQ0RXu7hi6jiAKGLfCOZJGhWUe50K3DqxQP9z33Je+
+         LLlA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=qiHKrawCSEYS4sdc87s3HzBAfn4f+VmuSVImw7uTP4A=;
+        b=7olDX/JUeXOaan7JwZn1x0o7TgBkenQT25xNtCaGHJK+ZovXf8o2DPYNY2nVF/ya0o
+         SaMJNAeQB2Y/D1GoY7wF4nJoDFulclsd4Cw2gqguaQNdDaEk7EFAP9bXUVwjuuiheFNp
+         NrHZOAHHxmTZksTk2TF2/s3MXM6ZZKAPe6Uz1Pa3J/EKXvReuNjSZrJuM5VFfoO/xtL8
+         9/sESiJb6SDYvdzdeaIvxGXRiQzHOjYuULpXqL6QEKDvZL9/4pFE1Q1tLr0EYmwVhC1P
+         Q5A38/6LxIr/Z/KMF6n93ujZb92PnDOU3dZnB3B4g7iPRS6i12qRFxC/8OSEQsw0KEwz
+         /pUw==
+X-Gm-Message-State: AOAM531HDX/sPP8T0voHO99vp71NAw33syfVBAn2OYM9NcL6i/wFeUpt
+        7YLkIHGBDQWJam5XoH5mvhzBMg==
+X-Google-Smtp-Source: ABdhPJyputnUi3a7shAhiw4xAnFex5EGDJvGRHdrQg+0QCuQstO9afbIuS5G8cxY4+jApO0x5q6rZw==
+X-Received: by 2002:a17:90b:1651:b0:1dc:aec3:c17 with SMTP id il17-20020a17090b165100b001dcaec30c17mr1405190pjb.43.1651801799549;
+        Thu, 05 May 2022 18:49:59 -0700 (PDT)
+Received: from [10.44.0.6] ([94.177.118.48])
+        by smtp.gmail.com with ESMTPSA id e5-20020a636905000000b003aaf27b5ceasm2042378pgc.1.2022.05.05.18.49.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 05 May 2022 18:49:58 -0700 (PDT)
+Subject: Re: [PATCH v2] iommu/sva: Fix PASID use-after-free issue
+To:     Fenghua Yu <fenghua.yu@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        Borislav Petkov <bp@alien8.de>, Ingo Molnar <mingo@redhat.com>,
+        Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        Ravi V Shankar <ravi.v.shankar@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andy Lutomirski <luto@kernel.org>, x86 <x86@kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        iommu@lists.linux-foundation.org
+References: <20220428180041.806809-1-fenghua.yu@intel.com>
+ <8f50c673-fe92-3c42-993d-43e65fc7235c@linaro.org>
+From:   Zhangfei Gao <zhangfei.gao@linaro.org>
+Message-ID: <da5eafcc-1cb0-07fc-aa0d-0dccb8b8875a@linaro.org>
+Date:   Fri, 6 May 2022 09:49:50 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+In-Reply-To: <8f50c673-fe92-3c42-993d-43e65fc7235c@linaro.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,32 +86,93 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-05-05 at 17:04 +0200, AngeloGioacchino Del Regno wrote:
-> Il 05/05/22 13:52, Rex-BC Chen ha scritto:
-> > We register the platform device when driver inits. However, we do
-> > not
-> > unregister it when driver exits.
-> > To resolve this, we declare the platform data to be a global static
-> > variable and rename it to be "cpufreq_pdev".
-> > With this global variable, we can do platform_device_unregister()
-> > when
-> > driver exits.
-> > 
-> > Signed-off-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
-> 
-> Hello Rex,
-> this commit needs a Fixes: tag.
-> 
-> Cheers,
-> Angelo
-> 
 
-Hello Angelo,
 
-Thanks for the reminder.
-I will add "Fixes: 501c574f4e3a ("cpufreq: mediatek: Add support of
-cpufreq to MT2701/MT7623 SoC")"
+On 2022/4/29 上午9:39, Zhangfei Gao wrote:
+>
+>
+> On 2022/4/29 上午2:00, Fenghua Yu wrote:
+>> The PASID is being freed too early.  It needs to stay around until after
+>> device drivers that might be using it have had a chance to clear it out
+>> of the hardware.
+>>
+>> As a reminder:
+>>
+>> mmget() /mmput()  refcount the mm's address space
+>> mmgrab()/mmdrop() refcount the mm itself
+>>
+>> The PASID is currently tied to the life of the mm's address space and
+>> freed in __mmput().  This makes logical sense because the PASID can't be
+>> used once the address space is gone.
+>>
+>> But, this misses an important point: even after the address space is
+>> gone, the PASID will still be programmed into a device.  Device drivers
+>> might, for instance, still need to flush operations that are outstanding
+>> and need to use that PASID.  They do this at file->release() time.
+>>
+>> Device drivers call the IOMMU driver to hold a reference on the mm 
+>> itself
+>> and drop it at file->release() time.  But, the IOMMU driver holds a
+>> reference on the mm itself, not the address space.  The address space
+>> (and the PASID) is long gone by the time the driver tries to clean up.
+>> This is effectively a use-after-free bug on the PASID.
+>>
+>> To fix this, move the PASID free operation from __mmput() to __mmdrop().
+>> This ensures that the IOMMU driver's existing mmgrab() keeps the PASID
+>> allocated until it drops its mm reference.
+>>
+>> Fixes: 701fac40384f ("iommu/sva: Assign a PASID to mm on PASID 
+>> allocation and free it on mm exit")
+>>
+>> Reported-by: Zhangfei Gao <zhangfei.gao@foxmail.com>
+>> Tested-by: Zhangfei Gao <zhangfei.gao@foxmail.com>
+>
+> Tested-by: Zhangfei Gao <zhangfei.gao@linaro.org>
+>
+> Use the formal email, thanks
+>
+>> Suggested-by: Jean-Philippe Brucker <jean-philippe@linaro.org>
+>> Suggested-by: Jacob Pan <jacob.jun.pan@linux.intel.com>
+>> Reviewed-by: Jean-Philippe Brucker <jean-philippe@linaro.org>
+>> Signed-off-by: Fenghua Yu <fenghua.yu@intel.com>
 
-BRs,
-Rex
+Hi,
+
+Will this be taken for 5.18?
+
+Thanks
+
+>> ---
+>>
+>> v2:
+>> - Dave Hansen rewrites the change log.
+>> - Add Tested-by: Zhangfei Gao <zhangfei.gao@foxmail.com>
+>> - Add Reviewed-by: Jean-Philippe Brucker <jean-philippe@linaro.org>
+>>
+>> The original patch was posted and discussed in:
+>> https://lore.kernel.org/lkml/YmdzFFx7fN586jcf@fyu1.sc.intel.com/
+>>
+>>   kernel/fork.c | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/kernel/fork.c b/kernel/fork.c
+>> index 9796897560ab..35a3beff140b 100644
+>> --- a/kernel/fork.c
+>> +++ b/kernel/fork.c
+>> @@ -792,6 +792,7 @@ void __mmdrop(struct mm_struct *mm)
+>>       mmu_notifier_subscriptions_destroy(mm);
+>>       check_mm(mm);
+>>       put_user_ns(mm->user_ns);
+>> +    mm_pasid_drop(mm);
+>>       free_mm(mm);
+>>   }
+>>   EXPORT_SYMBOL_GPL(__mmdrop);
+>> @@ -1190,7 +1191,6 @@ static inline void __mmput(struct mm_struct *mm)
+>>       }
+>>       if (mm->binfmt)
+>>           module_put(mm->binfmt->module);
+>> -    mm_pasid_drop(mm);
+>>       mmdrop(mm);
+>>   }
+>
 

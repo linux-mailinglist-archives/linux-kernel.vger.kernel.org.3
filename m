@@ -2,138 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC19F51D5B4
+	by mail.lfdr.de (Postfix) with ESMTP id 70ECB51D5B3
 	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 12:22:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352096AbiEFKZm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 06:25:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35426 "EHLO
+        id S1390948AbiEFK0G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 06:26:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1390947AbiEFKZe (ORCPT
+        with ESMTP id S234196AbiEFK0C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 06:25:34 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F30213E3B
-        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 03:21:51 -0700 (PDT)
-Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KvmnL4V3KzhYhJ;
-        Fri,  6 May 2022 18:21:26 +0800 (CST)
-Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 6 May 2022 18:21:49 +0800
-Received: from [10.174.178.55] (10.174.178.55) by
- dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 6 May 2022 18:21:49 +0800
-Subject: Re: [PATCH v3] arm64: add the printing of tpidr_elx in __show_regs()
-To:     Mark Rutland <mark.rutland@arm.com>
-CC:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20220505095640.312-1-thunder.leizhen@huawei.com>
- <YnPLQJhu5B1Cxvoh@FVFF77S0Q05N.cambridge.arm.com>
- <c6c22386-af37-1acc-63e9-2bb85028aa8c@huawei.com>
- <307e4def-1e4a-1110-e644-d485b9959ab1@huawei.com>
- <7c1207fa-56aa-1b33-31fd-3ec395b08f2b@huawei.com>
- <YnTz6oFEQGDBrIpi@FVFF77S0Q05N>
-From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
-Message-ID: <cc8180ee-1c17-aab4-c883-4f8794edceb5@huawei.com>
-Date:   Fri, 6 May 2022 18:21:37 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+        Fri, 6 May 2022 06:26:02 -0400
+Received: from fornost.hmeau.com (helcar.hmeau.com [216.24.177.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C933B5DBFD;
+        Fri,  6 May 2022 03:22:19 -0700 (PDT)
+Received: from gwarestrin.arnor.me.apana.org.au ([192.168.103.7])
+        by fornost.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
+        id 1nmv6F-00AgIF-If; Fri, 06 May 2022 20:22:17 +1000
+Received: by gwarestrin.arnor.me.apana.org.au (sSMTP sendmail emulation); Fri, 06 May 2022 18:22:15 +0800
+Date:   Fri, 6 May 2022 18:22:15 +0800
+From:   Herbert Xu <herbert@gondor.apana.org.au>
+To:     meenakshi.aggarwal@nxp.com
+Cc:     Horia Geanta <horia.geanta@nxp.com>,
+        Pankaj Gupta <pankaj.gupta@nxp.com>,
+        Gaurav Jain <gaurav.jain@nxp.com>,
+        Varun Sethi <V.Sethi@nxp.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-imx@nxp.com
+Subject: Re: [PATCH v5 1/1] crypto: caam/rng: Add support for PRNG
+Message-ID: <YnT2142SXfPkZqG8@gondor.apana.org.au>
+References: <20220429084527.2069402-1-meenakshi.aggarwal@nxp.com>
+ <20220429114808.147108-1-meenakshi.aggarwal@nxp.com>
+ <20220429114808.147108-2-meenakshi.aggarwal@nxp.com>
 MIME-Version: 1.0
-In-Reply-To: <YnTz6oFEQGDBrIpi@FVFF77S0Q05N>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.55]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpemm500006.china.huawei.com (7.185.36.236)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220429114808.147108-2-meenakshi.aggarwal@nxp.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2022/5/6 18:09, Mark Rutland wrote:
-> On Fri, May 06, 2022 at 04:16:55PM +0800, Leizhen (ThunderTown) wrote:
->>
->>
->> On 2022/5/5 21:34, Leizhen (ThunderTown) wrote:
->>> On 2022/5/5 21:26, Leizhen (ThunderTown) wrote:
->>>> On 2022/5/5 21:04, Mark Rutland wrote:
->>>>> On Thu, May 05, 2022 at 05:56:40PM +0800, Zhen Lei wrote:
->>>>>> Commit 7158627686f0 ("arm64: percpu: implement optimised pcpu access
->>>>>> using tpidr_el1") and commit 6d99b68933fb ("arm64: alternatives: use
->>>>>> tpidr_el2 on VHE hosts") use tpidr_elx to cache my_cpu_offset to optimize
->>>>>> pcpu access. However, when performing reverse execution based on the
->>>>>> registers and the memory contents in kdump, this information is sometimes
->>>>>> required if there is a pcpu access.
->>>>>>
->>>>>> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
->>>>>> ---
->>>>>>  arch/arm64/kernel/process.c | 5 +++++
->>>>>>  1 file changed, 5 insertions(+)
->>>>>>
->>>>>> v2 --> v3:
->>>>>> 1) Relace "switch (read_sysreg(CurrentEL))" statement with
->>>>>>    "if (is_kernel_in_hyp_mode())" statement.
->>>>>> 2) Change the register name to lowercase.
->>>>>>
->>>>>> v1 --> v2:
->>>>>> Directly print the tpidr_elx register of the current exception level.
->>>>>> Avoid coupling with the implementation of 'my_cpu_offset'.
->>>>>>
->>>>>> diff --git a/arch/arm64/kernel/process.c b/arch/arm64/kernel/process.c
->>>>>> index 7fa97df55e3ad3f..7b6bccce9721c36 100644
->>>>>> --- a/arch/arm64/kernel/process.c
->>>>>> +++ b/arch/arm64/kernel/process.c
->>>>>> @@ -216,6 +216,11 @@ void __show_regs(struct pt_regs *regs)
->>>>>>  	show_regs_print_info(KERN_DEFAULT);
->>>>>>  	print_pstate(regs);
->>>>>>  
->>>>>> +	if (is_kernel_in_hyp_mode())
->>>>>> +		printk("tpidr_el2 : %016llx\n", read_sysreg(tpidr_el2));
->>>>>> +	else
->>>>>> +		printk("tpidr_el1 : %016llx\n", read_sysreg(tpidr_el1));
->>>>>
->>>>> If we care about the offset specifically, this would be simpler as:
->>>>>
->>>>> 	printk("cpu offset : 0x%016lx\n", __my_cpu_offset());
->>>>
->>>> The function name is __show_regs(), so not using register name may not be good.
->>>> In fact, some other architectures may also have this problem. If we use my_cpu_offset,
->>>> we may need to put it in a public.
->>>
->>> The other idea is to back up each my_cpu_offset in an array. In this way, the offset can
->>> be queried through vmcore even if it is not printed.
->>
->> Sorry, __per_cpu_offset[NR_CPUS] is always defined.
+On Fri, Apr 29, 2022 at 01:48:08PM +0200, meenakshi.aggarwal@nxp.com wrote:
+> From: Meenakshi Aggarwal <meenakshi.aggarwal@nxp.com>
 > 
-> Surely that's in the vmcore already? It's just data in memory.
-
-Yes. There is also a definition in drivers/base/arch_numa.c. I didn't search the drivers directory
-at first. I thought there would be no definition when CONFIG_HAVE_SETUP_PER_CPU_AREA=y.
-
-crash> p -x __per_cpu_offset
-__per_cpu_offset = $1 =
- {0xffff8003f460d000, 0xffff8003f4621000, 0xffff8003f4635000, 0xffff8003f4649000
-
-
+> Add support for random number generation using PRNG
+> mode of CAAM and expose the interface through crypto API.
 > 
-> Thanks,
-> Mark.
-> .
+> According to the RM, the HW implementation of the DRBG follows
+> NIST SP 800-90A specification for DRBG_Hash SHA-256 function
 > 
+> Signed-off-by: Meenakshi Aggarwal <meenakshi.aggarwal@nxp.com>
+> Reviewed-by: Horia Geant <horia.geanta@nxp.com>
+> ---
+>  drivers/crypto/caam/Kconfig    |   8 ++
+>  drivers/crypto/caam/Makefile   |   1 +
+>  drivers/crypto/caam/caamprng.c | 235 +++++++++++++++++++++++++++++++++
+>  drivers/crypto/caam/intern.h   |  15 +++
+>  drivers/crypto/caam/jr.c       |   3 +-
+>  5 files changed, 261 insertions(+), 1 deletion(-)
+>  create mode 100644 drivers/crypto/caam/caamprng.c
 
+Patch applied.  Thanks.
 -- 
-Regards,
-  Zhen Lei
+Email: Herbert Xu <herbert@gondor.apana.org.au>
+Home Page: http://gondor.apana.org.au/~herbert/
+PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt

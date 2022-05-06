@@ -2,60 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C543051D7FE
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 14:37:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFCA051D805
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 14:38:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1392049AbiEFMlL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 08:41:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43146 "EHLO
+        id S1392073AbiEFMmT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 08:42:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237378AbiEFMlJ (ORCPT
+        with ESMTP id S237378AbiEFMmN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 08:41:09 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFE2D6623A
-        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 05:37:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651840646; x=1683376646;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=E99yS/6lFv1ViQoRyA+VeilhiYOJCJSzmc3tlfp3hQA=;
-  b=W+v/J4YjuYYsDnZPrZzfEu2vFFDNJdI1nsgXKfJrWnEMiQYTQICJzCX+
-   J9dN1x7XnJQR2ud9xvNjv/R9REJhuntKtKCh3U2egFvVM/sjlrF+dKC8K
-   t+g1F1yYXlVU42vYlbrrI9VLE021kpqHTRK6DrfVLVeGKMhkmjr6ka+08
-   ELBo5zE+D9veoUY+In5VX/ottnZjgOCWFa6IQuJrjeUNG3GQtzFYnpPrm
-   iUXe61EPtnEXeFWFGMMSbOCplXuUXayMQTs/McIdz5ejFuMHoDtynH3R8
-   ezu3BSxkMZMAjAFyKYvnxyxMg5bLtCcfSgeuubXSdvBDJ87xMVQKWfI+M
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10338"; a="268351006"
-X-IronPort-AV: E=Sophos;i="5.91,203,1647327600"; 
-   d="scan'208";a="268351006"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2022 05:37:26 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,203,1647327600"; 
-   d="scan'208";a="812376140"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 06 May 2022 05:37:24 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nmxD1-000DT0-PZ;
-        Fri, 06 May 2022 12:37:23 +0000
-Date:   Fri, 6 May 2022 20:36:47 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Peter Collingbourne <pcc@google.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>
-Subject: mm/kasan/sw_tags.c:211:6: warning: no previous prototype for
- 'kasan_tag_mismatch'
-Message-ID: <202205062027.SAVss66t-lkp@intel.com>
+        Fri, 6 May 2022 08:42:13 -0400
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E2D4692B5
+        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 05:38:30 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id d15so3849657lfk.5
+        for <linux-kernel@vger.kernel.org>; Fri, 06 May 2022 05:38:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=+oJnfCTdPWSag7AGc8jPKi4ghzl83dJN2OES5/aYaT4=;
+        b=K0LgiS5p/Fz0/dtEboraGPOSwQFdkSth+xonysTtThr4NDxYGzK/K3nu0zsyiFDZT4
+         wH+vkseShFMadY6qbBA9VCYSxJStYbmQ12RP1M1PK2Dr7oMpncHl+awCQ0xKY/4Seud3
+         Qxuw8La5C2Sn7s2ktVCoBLaHLGPw4DaeJBm8Zuj5grwPxwJKD4sVKvP3WaHErXlx+zHB
+         4Qv36qrKnEV1Hn0BAZ424T8LhFExbDFMkBmMfW+3IdQCEwjRtOpPt9epMgHm6ruwSFs1
+         5uzjKg1q05qwpNrTVJwkvRJGgqgbAs+/Us6yj6QhLGbYGCAZM5gYHSST06ZtkmTtrqrU
+         hvHA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=+oJnfCTdPWSag7AGc8jPKi4ghzl83dJN2OES5/aYaT4=;
+        b=vbOcCU8NKvbTWKcpwAVlu0YuhJ8H0L6MiITUIep9RFqrilmVc0Rm1Oz23hrde7ICVf
+         Pb28zvznwyFdef2VeGDPb54zYfhNeF/fAVJLBtrqYgzx04Nv7y3xKCKX//Y+rTb+fOUz
+         VD+Yv6PqQ86BXR0dX0MuEc4wtzfmihKloNFaWprb58Cw1CticKMVmrBH1ESeev/uN10g
+         kgiPYjFnUaea9YRphjmOYtr2jYpQH6aPGcDg9tXpthBjABft0Girft9Que4qQwsEZErA
+         RfPdHXm4Yfr57G6kf75uj+V30rflszpFRrucILwA9xjP3qtOuSYeQt1SyrrMkcnrV1Zq
+         WaIA==
+X-Gm-Message-State: AOAM532Iytj1oB0rk8+937uEeNPZ18672gCb8jFGIsInHULue2VgwBEX
+        Nv2/J4MNtSBhjwdpYKPfMwoyQDRGuFIKeuC8j+n+E8aRxUo=
+X-Google-Smtp-Source: ABdhPJz/OG8nf/9MLik6vYRgPr2lDfjBYFJEYvIXAjy7Uu3UKsDMG/VrjItMgN2nY1YHO2G+QCSuzBVNZ4F4342VvEw=
+X-Received: by 2002:a05:6512:5cb:b0:472:f7e:a5f5 with SMTP id
+ o11-20020a05651205cb00b004720f7ea5f5mr2255189lfo.358.1651840708488; Fri, 06
+ May 2022 05:38:28 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20220504213251.264819-1-sebastian.reichel@collabora.com>
+ <20220504213251.264819-10-sebastian.reichel@collabora.com>
+ <CAPDyKFqLn4LfPRbhoWw_9BF26Lgmzq_1j=RB31NDGn9YvMnB5w@mail.gmail.com> <20220506091837.bbwupigb4f3hwgp4@mercury.elektranox.org>
+In-Reply-To: <20220506091837.bbwupigb4f3hwgp4@mercury.elektranox.org>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Fri, 6 May 2022 14:37:52 +0200
+Message-ID: <CAPDyKFoiDunWM28fHKDc6q_c3fwUQGxPGurF0tChMJKwvDdhtQ@mail.gmail.com>
+Subject: Re: [PATCHv2 09/21] mmc: sdhci-of-dwcmshc: add reset call back for
+ rockchip Socs
+To:     Sebastian Reichel <sebastian.reichel@collabora.com>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Yifeng Zhao <yifeng.zhao@rock-chips.com>, kernel@collabora.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,42 +81,120 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Peter,
+On Fri, 6 May 2022 at 11:18, Sebastian Reichel
+<sebastian.reichel@collabora.com> wrote:
+>
+> Hi,
+>
+> On Fri, May 06, 2022 at 10:52:42AM +0200, Ulf Hansson wrote:
+> > On Wed, 4 May 2022 at 23:33, Sebastian Reichel
+> > <sebastian.reichel@collabora.com> wrote:
+> > >
+> > > From: Yifeng Zhao <yifeng.zhao@rock-chips.com>
+> > >
+> > > The reset function build in the SDHCI will not reset the logic
+> > > circuit related to the tuning function, which may cause data
+> > > reading errors. Resetting the complete SDHCI controller through
+> > > the reset controller fixes the issue.
+> > >
+> > > Signed-off-by: Yifeng Zhao <yifeng.zhao@rock-chips.com>
+> > > [rebase, use optional variant of reset getter]
+> > > Acked-by: Adrian Hunter <adrian.hunter@intel.com>
+> > > Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+> >
+> > I think this needs a corresponding update of the DT docs. Otherwise
+> > this looks good to me.
+>
+> I do have 'resets' and 'reset-names' properties in the rk3588s.dtsi
+> for the sdhci interface and 'make dtbs_check' did not complain about
+> anything but missing 'arm,sdei-1.0' compatible for the rk3588 EVB
+> (sdei binding has not yet been converted to yaml). Thus I assume the
+> resets property is inferred from somewhere?
 
-FYI, the error/warning still remains.
+I don't think it should, but I may be wrong.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   fe27d189e3f42e31d3c8223d5daed7285e334c5e
-commit: 1cbdf60bd1b74e397d48aa877367cfc621f45ffe kasan: arm64: support specialized outlined tag mismatch checks
-date:   12 months ago
-config: arm64-randconfig-r003-20220506 (https://download.01.org/0day-ci/archive/20220506/202205062027.SAVss66t-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=1cbdf60bd1b74e397d48aa877367cfc621f45ffe
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 1cbdf60bd1b74e397d48aa877367cfc621f45ffe
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash mm/kasan/
+How about if you extend the example in the DT doc with a reset
+property, will that cause the DT tools to complain?
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Kind regards
+Uffe
 
-All warnings (new ones prefixed by >>):
-
->> mm/kasan/sw_tags.c:211:6: warning: no previous prototype for 'kasan_tag_mismatch' [-Wmissing-prototypes]
-     211 | void kasan_tag_mismatch(unsigned long addr, unsigned long access_info,
-         |      ^~~~~~~~~~~~~~~~~~
-
-
-vim +/kasan_tag_mismatch +211 mm/kasan/sw_tags.c
-
-   210	
- > 211	void kasan_tag_mismatch(unsigned long addr, unsigned long access_info,
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+>
+> -- Sebastian
+>
+> >
+> > Kind regards
+> > Uffe
+> >
+> > > ---
+> > >  drivers/mmc/host/sdhci-of-dwcmshc.c | 26 +++++++++++++++++++++++++-
+> > >  1 file changed, 25 insertions(+), 1 deletion(-)
+> > >
+> > > diff --git a/drivers/mmc/host/sdhci-of-dwcmshc.c b/drivers/mmc/host/sdhci-of-dwcmshc.c
+> > > index bac874ab0b33..3a1b5ba36405 100644
+> > > --- a/drivers/mmc/host/sdhci-of-dwcmshc.c
+> > > +++ b/drivers/mmc/host/sdhci-of-dwcmshc.c
+> > > @@ -15,6 +15,7 @@
+> > >  #include <linux/module.h>
+> > >  #include <linux/of.h>
+> > >  #include <linux/of_device.h>
+> > > +#include <linux/reset.h>
+> > >  #include <linux/sizes.h>
+> > >
+> > >  #include "sdhci-pltfm.h"
+> > > @@ -63,6 +64,7 @@
+> > >  struct rk3568_priv {
+> > >         /* Rockchip specified optional clocks */
+> > >         struct clk_bulk_data rockchip_clks[RK3568_MAX_CLKS];
+> > > +       struct reset_control *reset;
+> > >         u8 txclk_tapnum;
+> > >  };
+> > >
+> > > @@ -255,6 +257,21 @@ static void dwcmshc_rk3568_set_clock(struct sdhci_host *host, unsigned int clock
+> > >         sdhci_writel(host, extra, DWCMSHC_EMMC_DLL_STRBIN);
+> > >  }
+> > >
+> > > +static void rk35xx_sdhci_reset(struct sdhci_host *host, u8 mask)
+> > > +{
+> > > +       struct sdhci_pltfm_host *pltfm_host = sdhci_priv(host);
+> > > +       struct dwcmshc_priv *dwc_priv = sdhci_pltfm_priv(pltfm_host);
+> > > +       struct rk35xx_priv *priv = dwc_priv->priv;
+> > > +
+> > > +       if (mask & SDHCI_RESET_ALL && priv->reset) {
+> > > +               reset_control_assert(priv->reset);
+> > > +               udelay(1);
+> > > +               reset_control_deassert(priv->reset);
+> > > +       }
+> > > +
+> > > +       sdhci_reset(host, mask);
+> > > +}
+> > > +
+> > >  static const struct sdhci_ops sdhci_dwcmshc_ops = {
+> > >         .set_clock              = sdhci_set_clock,
+> > >         .set_bus_width          = sdhci_set_bus_width,
+> > > @@ -269,7 +286,7 @@ static const struct sdhci_ops sdhci_dwcmshc_rk3568_ops = {
+> > >         .set_bus_width          = sdhci_set_bus_width,
+> > >         .set_uhs_signaling      = dwcmshc_set_uhs_signaling,
+> > >         .get_max_clock          = sdhci_pltfm_clk_get_max_clock,
+> > > -       .reset                  = sdhci_reset,
+> > > +       .reset                  = rk35xx_sdhci_reset,
+> > >         .adma_write_desc        = dwcmshc_adma_write_desc,
+> > >  };
+> > >
+> > > @@ -292,6 +309,13 @@ static int dwcmshc_rk3568_init(struct sdhci_host *host, struct dwcmshc_priv *dwc
+> > >         int err;
+> > >         struct rk3568_priv *priv = dwc_priv->priv;
+> > >
+> > > +       priv->reset = devm_reset_control_array_get_optional_exclusive(mmc_dev(host->mmc));
+> > > +       if (IS_ERR(priv->reset)) {
+> > > +               err = PTR_ERR(priv->reset);
+> > > +               dev_err(mmc_dev(host->mmc), "failed to get reset control %d\n", err);
+> > > +               return err;
+> > > +       }
+> > > +
+> > >         priv->rockchip_clks[0].id = "axi";
+> > >         priv->rockchip_clks[1].id = "block";
+> > >         priv->rockchip_clks[2].id = "timer";
+> > > --
+> > > 2.35.1
+> > >

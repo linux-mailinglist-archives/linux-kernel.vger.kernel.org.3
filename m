@@ -2,67 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A64B51D1A5
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 08:49:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA79451D205
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 09:12:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386520AbiEFGxL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 02:53:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44866 "EHLO
+        id S1389424AbiEFHPg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 03:15:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229870AbiEFGxI (ORCPT
+        with ESMTP id S1389409AbiEFHP3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 02:53:08 -0400
-Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0249366C8F
-        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 23:49:26 -0700 (PDT)
-Received: by mail-yb1-xb2a.google.com with SMTP id i38so11285791ybj.13
-        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 23:49:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=atishpatra.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=weHGg5UCU8E3S0rXn0FmJqBvYZnpJng/4vwpZ6z6tgw=;
-        b=V1BclOkuFKbUOjIDISvHG3QiN40ycpMYleJAtaCckYJH2XbP0BwjaY0vwYLMnehqk2
-         dXXtMGHoy/FzIxANpNLeScoWO8oUW2zezQM8VdAi+9JJmqq3GGA652292/eqBDaH6gb2
-         JgdLQCxw72KbtOKi8iAd/Md9KyaLi8AhNceWg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=weHGg5UCU8E3S0rXn0FmJqBvYZnpJng/4vwpZ6z6tgw=;
-        b=NYH4RmKeNofS4Isj4jz5dRGyPUkKpl/pZSy2//F34TDf5M4oDTWO/DgsyUVkHAg1dA
-         7zBnyN2UrvxdKazcBqKidgCV2ha3cJT74Fn1/BEhH4Z4TZgMrExigWeJsnr4tviD+Ovf
-         XG62SEEHhApmn65uWhKNsmzkaGkYs0JztgSFtzxmxXWpWy4/rmoLekFJOS4smQe2JP83
-         GrMN+aN4eD8VDr7CJp3G/19TIHo05YXG2JnE35nBwyzg4xQzo/ZVtNKFAIPWYIDEdvIM
-         U4syItj/i2iO4p71u0VaCsSbUwfCgFElPeGG620/sGOZ+4oYDBt5S/6dBWrJwIjHwT6D
-         L52g==
-X-Gm-Message-State: AOAM531V/veaYQLmekw49nS4Qu3BTbgqZsbkkTrUgyqifar3K3FDTdJU
-        H/tWpsOvmU0qT0qr2/JdEI9rMpE1aSXZcgMn9zy3
-X-Google-Smtp-Source: ABdhPJzWNfCWXn+zGDITWtxh8FfQCoFMhyExrdDlozXPFr8ol8Vo2gbl9KwQHNcX/9OmL2PV2PXLR7j4J6fnxCkitaY=
-X-Received: by 2002:a25:9247:0:b0:645:ddd5:a182 with SMTP id
- e7-20020a259247000000b00645ddd5a182mr1246046ybo.289.1651819765188; Thu, 05
- May 2022 23:49:25 -0700 (PDT)
+        Fri, 6 May 2022 03:15:29 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 115D266CA0
+        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 00:11:48 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nmrmX-0000sR-Qk; Fri, 06 May 2022 08:49:41 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nmrmO-000egL-IQ; Fri, 06 May 2022 08:49:31 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nmrmM-007tsw-Dy; Fri, 06 May 2022 08:49:30 +0200
+Date:   Fri, 6 May 2022 08:49:27 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     lizhe <sensor1010@163.com>
+Cc:     lee.jones@linaro.org, fthain@linux-m68k.org,
+        akrowiak@linux.ibm.com, pasic@linux.ibm.com, jjherne@linux.ibm.com,
+        freude@linux.ibm.com, hca@linux.ibm.com, gor@linux.ibm.com,
+        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
+        svens@linux.ibm.com, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, zbr@ioremap.net, perex@perex.cz,
+        tiwai@suse.com, bvanassche@acm.org, dan.j.williams@intel.com,
+        srinivas.kandagatla@linaro.org, wens@csie.org,
+        colin.king@intel.com, hare@suse.de, linux-kernel@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-s390@vger.kernel.org,
+        linux-scsi@vger.kernel.org, target-devel@vger.kernel.org,
+        alsa-devel@alsa-project.org
+Subject: Re: [PATCH] kernel/drivers: Remove redundant driver match function
+Message-ID: <20220506064927.7y7a422jqbse22fr@pengutronix.de>
+References: <20220506045952.136290-1-sensor1010@163.com>
 MIME-Version: 1.0
-References: <20220420112450.155624-1-apatel@ventanamicro.com> <20220420112450.155624-5-apatel@ventanamicro.com>
-In-Reply-To: <20220420112450.155624-5-apatel@ventanamicro.com>
-From:   Atish Patra <atishp@atishpatra.org>
-Date:   Thu, 5 May 2022 23:49:14 -0700
-Message-ID: <CAOnJCULvR3xwUY7LT1ALpnovujEM44aC2P4tcFDe0-18D=KENg@mail.gmail.com>
-Subject: Re: [PATCH v2 4/7] RISC-V: KVM: Introduce range based local HFENCE functions
-To:     Anup Patel <apatel@ventanamicro.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Alistair Francis <Alistair.Francis@wdc.com>,
-        Anup Patel <anup@brainfault.org>,
-        KVM General <kvm@vger.kernel.org>,
-        kvm-riscv@lists.infradead.org,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="o5fzikc3dnjeidfk"
+Content-Disposition: inline
+In-Reply-To: <20220506045952.136290-1-sensor1010@163.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,419 +63,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 20, 2022 at 4:25 AM Anup Patel <apatel@ventanamicro.com> wrote:
->
-> Various  __kvm_riscv_hfence_xyz() functions implemented in the
-> kvm/tlb.S are equivalent to corresponding HFENCE.GVMA instructions
-> and we don't have range based local HFENCE functions.
->
-> This patch provides complete set of local HFENCE functions which
-> supports range based TLB invalidation and supports HFENCE.VVMA
-> based functions. This is also a preparatory patch for upcoming
-> Svinval support in KVM RISC-V.
->
-> Signed-off-by: Anup Patel <apatel@ventanamicro.com>
-> ---
->  arch/riscv/include/asm/kvm_host.h |  25 +++-
->  arch/riscv/kvm/mmu.c              |   4 +-
->  arch/riscv/kvm/tlb.S              |  74 -----------
->  arch/riscv/kvm/tlb.c              | 213 ++++++++++++++++++++++++++++++
->  arch/riscv/kvm/vcpu.c             |   2 +-
->  arch/riscv/kvm/vmid.c             |   2 +-
->  6 files changed, 237 insertions(+), 83 deletions(-)
->  delete mode 100644 arch/riscv/kvm/tlb.S
->  create mode 100644 arch/riscv/kvm/tlb.c
->
-> diff --git a/arch/riscv/include/asm/kvm_host.h b/arch/riscv/include/asm/kvm_host.h
-> index 3e2cbbd7d1c9..806f74dc0bfc 100644
-> --- a/arch/riscv/include/asm/kvm_host.h
-> +++ b/arch/riscv/include/asm/kvm_host.h
-> @@ -204,11 +204,26 @@ static inline void kvm_arch_sched_in(struct kvm_vcpu *vcpu, int cpu) {}
->
->  #define KVM_ARCH_WANT_MMU_NOTIFIER
->
-> -void __kvm_riscv_hfence_gvma_vmid_gpa(unsigned long gpa_divby_4,
-> -                                     unsigned long vmid);
-> -void __kvm_riscv_hfence_gvma_vmid(unsigned long vmid);
-> -void __kvm_riscv_hfence_gvma_gpa(unsigned long gpa_divby_4);
-> -void __kvm_riscv_hfence_gvma_all(void);
-> +#define KVM_RISCV_GSTAGE_TLB_MIN_ORDER         12
-> +
-> +void kvm_riscv_local_hfence_gvma_vmid_gpa(unsigned long vmid,
-> +                                         gpa_t gpa, gpa_t gpsz,
-> +                                         unsigned long order);
-> +void kvm_riscv_local_hfence_gvma_vmid_all(unsigned long vmid);
-> +void kvm_riscv_local_hfence_gvma_gpa(gpa_t gpa, gpa_t gpsz,
-> +                                    unsigned long order);
-> +void kvm_riscv_local_hfence_gvma_all(void);
-> +void kvm_riscv_local_hfence_vvma_asid_gva(unsigned long vmid,
-> +                                         unsigned long asid,
-> +                                         unsigned long gva,
-> +                                         unsigned long gvsz,
-> +                                         unsigned long order);
-> +void kvm_riscv_local_hfence_vvma_asid_all(unsigned long vmid,
-> +                                         unsigned long asid);
-> +void kvm_riscv_local_hfence_vvma_gva(unsigned long vmid,
-> +                                    unsigned long gva, unsigned long gvsz,
-> +                                    unsigned long order);
-> +void kvm_riscv_local_hfence_vvma_all(unsigned long vmid);
->
->  int kvm_riscv_gstage_map(struct kvm_vcpu *vcpu,
->                          struct kvm_memory_slot *memslot,
-> diff --git a/arch/riscv/kvm/mmu.c b/arch/riscv/kvm/mmu.c
-> index 8823eb32dcde..1e07603c905b 100644
-> --- a/arch/riscv/kvm/mmu.c
-> +++ b/arch/riscv/kvm/mmu.c
-> @@ -745,7 +745,7 @@ void kvm_riscv_gstage_update_hgatp(struct kvm_vcpu *vcpu)
->         csr_write(CSR_HGATP, hgatp);
->
->         if (!kvm_riscv_gstage_vmid_bits())
-> -               __kvm_riscv_hfence_gvma_all();
-> +               kvm_riscv_local_hfence_gvma_all();
->  }
->
->  void kvm_riscv_gstage_mode_detect(void)
-> @@ -768,7 +768,7 @@ void kvm_riscv_gstage_mode_detect(void)
->  skip_sv48x4_test:
->
->         csr_write(CSR_HGATP, 0);
-> -       __kvm_riscv_hfence_gvma_all();
-> +       kvm_riscv_local_hfence_gvma_all();
->  #endif
->  }
->
-> diff --git a/arch/riscv/kvm/tlb.S b/arch/riscv/kvm/tlb.S
-> deleted file mode 100644
-> index 899f75d60bad..000000000000
-> --- a/arch/riscv/kvm/tlb.S
-> +++ /dev/null
-> @@ -1,74 +0,0 @@
-> -/* SPDX-License-Identifier: GPL-2.0 */
-> -/*
-> - * Copyright (C) 2019 Western Digital Corporation or its affiliates.
-> - *
-> - * Authors:
-> - *     Anup Patel <anup.patel@wdc.com>
-> - */
-> -
-> -#include <linux/linkage.h>
-> -#include <asm/asm.h>
-> -
-> -       .text
-> -       .altmacro
-> -       .option norelax
-> -
-> -       /*
-> -        * Instruction encoding of hfence.gvma is:
-> -        * HFENCE.GVMA rs1, rs2
-> -        * HFENCE.GVMA zero, rs2
-> -        * HFENCE.GVMA rs1
-> -        * HFENCE.GVMA
-> -        *
-> -        * rs1!=zero and rs2!=zero ==> HFENCE.GVMA rs1, rs2
-> -        * rs1==zero and rs2!=zero ==> HFENCE.GVMA zero, rs2
-> -        * rs1!=zero and rs2==zero ==> HFENCE.GVMA rs1
-> -        * rs1==zero and rs2==zero ==> HFENCE.GVMA
-> -        *
-> -        * Instruction encoding of HFENCE.GVMA is:
-> -        * 0110001 rs2(5) rs1(5) 000 00000 1110011
-> -        */
-> -
-> -ENTRY(__kvm_riscv_hfence_gvma_vmid_gpa)
-> -       /*
-> -        * rs1 = a0 (GPA >> 2)
-> -        * rs2 = a1 (VMID)
-> -        * HFENCE.GVMA a0, a1
-> -        * 0110001 01011 01010 000 00000 1110011
-> -        */
-> -       .word 0x62b50073
-> -       ret
-> -ENDPROC(__kvm_riscv_hfence_gvma_vmid_gpa)
-> -
-> -ENTRY(__kvm_riscv_hfence_gvma_vmid)
-> -       /*
-> -        * rs1 = zero
-> -        * rs2 = a0 (VMID)
-> -        * HFENCE.GVMA zero, a0
-> -        * 0110001 01010 00000 000 00000 1110011
-> -        */
-> -       .word 0x62a00073
-> -       ret
-> -ENDPROC(__kvm_riscv_hfence_gvma_vmid)
-> -
-> -ENTRY(__kvm_riscv_hfence_gvma_gpa)
-> -       /*
-> -        * rs1 = a0 (GPA >> 2)
-> -        * rs2 = zero
-> -        * HFENCE.GVMA a0
-> -        * 0110001 00000 01010 000 00000 1110011
-> -        */
-> -       .word 0x62050073
-> -       ret
-> -ENDPROC(__kvm_riscv_hfence_gvma_gpa)
-> -
-> -ENTRY(__kvm_riscv_hfence_gvma_all)
-> -       /*
-> -        * rs1 = zero
-> -        * rs2 = zero
-> -        * HFENCE.GVMA
-> -        * 0110001 00000 00000 000 00000 1110011
-> -        */
-> -       .word 0x62000073
-> -       ret
-> -ENDPROC(__kvm_riscv_hfence_gvma_all)
-> diff --git a/arch/riscv/kvm/tlb.c b/arch/riscv/kvm/tlb.c
-> new file mode 100644
-> index 000000000000..e2d4fd610745
-> --- /dev/null
-> +++ b/arch/riscv/kvm/tlb.c
-> @@ -0,0 +1,213 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright (c) 2022 Ventana Micro Systems Inc.
-> + */
-> +
-> +#include <linux/bitops.h>
-> +#include <linux/errno.h>
-> +#include <linux/err.h>
-> +#include <linux/module.h>
-> +#include <linux/kvm_host.h>
-> +#include <asm/csr.h>
-> +
-> +/*
-> + * Instruction encoding of hfence.gvma is:
-> + * HFENCE.GVMA rs1, rs2
-> + * HFENCE.GVMA zero, rs2
-> + * HFENCE.GVMA rs1
-> + * HFENCE.GVMA
-> + *
-> + * rs1!=zero and rs2!=zero ==> HFENCE.GVMA rs1, rs2
-> + * rs1==zero and rs2!=zero ==> HFENCE.GVMA zero, rs2
-> + * rs1!=zero and rs2==zero ==> HFENCE.GVMA rs1
-> + * rs1==zero and rs2==zero ==> HFENCE.GVMA
-> + *
-> + * Instruction encoding of HFENCE.GVMA is:
-> + * 0110001 rs2(5) rs1(5) 000 00000 1110011
-> + */
-> +
-> +void kvm_riscv_local_hfence_gvma_vmid_gpa(unsigned long vmid,
-> +                                         gpa_t gpa, gpa_t gpsz,
-> +                                         unsigned long order)
-> +{
-> +       gpa_t pos;
-> +
-> +       if (PTRS_PER_PTE < (gpsz >> order)) {
-> +               kvm_riscv_local_hfence_gvma_vmid_all(vmid);
-> +               return;
-> +       }
-> +
-> +       for (pos = gpa; pos < (gpa + gpsz); pos += BIT(order)) {
-> +               /*
-> +                * rs1 = a0 (GPA >> 2)
-> +                * rs2 = a1 (VMID)
-> +                * HFENCE.GVMA a0, a1
-> +                * 0110001 01011 01010 000 00000 1110011
-> +                */
-> +               asm volatile ("srli a0, %0, 2\n"
-> +                             "add a1, %1, zero\n"
-> +                             ".word 0x62b50073\n"
-> +                             :: "r" (pos), "r" (vmid)
-> +                             : "a0", "a1", "memory");
-> +       }
-> +}
-> +
-> +void kvm_riscv_local_hfence_gvma_vmid_all(unsigned long vmid)
-> +{
-> +       /*
-> +        * rs1 = zero
-> +        * rs2 = a0 (VMID)
-> +        * HFENCE.GVMA zero, a0
-> +        * 0110001 01010 00000 000 00000 1110011
-> +        */
-> +       asm volatile ("add a0, %0, zero\n"
-> +                     ".word 0x62a00073\n"
-> +                     :: "r" (vmid) : "a0", "memory");
-> +}
-> +
-> +void kvm_riscv_local_hfence_gvma_gpa(gpa_t gpa, gpa_t gpsz,
-> +                                    unsigned long order)
-> +{
-> +       gpa_t pos;
-> +
-> +       if (PTRS_PER_PTE < (gpsz >> order)) {
-> +               kvm_riscv_local_hfence_gvma_all();
-> +               return;
-> +       }
-> +
-> +       for (pos = gpa; pos < (gpa + gpsz); pos += BIT(order)) {
-> +               /*
-> +                * rs1 = a0 (GPA >> 2)
-> +                * rs2 = zero
-> +                * HFENCE.GVMA a0
-> +                * 0110001 00000 01010 000 00000 1110011
-> +                */
-> +               asm volatile ("srli a0, %0, 2\n"
-> +                             ".word 0x62050073\n"
-> +                             :: "r" (pos) : "a0", "memory");
-> +       }
-> +}
-> +
-> +void kvm_riscv_local_hfence_gvma_all(void)
-> +{
-> +       /*
-> +        * rs1 = zero
-> +        * rs2 = zero
-> +        * HFENCE.GVMA
-> +        * 0110001 00000 00000 000 00000 1110011
-> +        */
-> +       asm volatile (".word 0x62000073" ::: "memory");
-> +}
-> +
-> +/*
-> + * Instruction encoding of hfence.gvma is:
-> + * HFENCE.VVMA rs1, rs2
-> + * HFENCE.VVMA zero, rs2
-> + * HFENCE.VVMA rs1
-> + * HFENCE.VVMA
-> + *
-> + * rs1!=zero and rs2!=zero ==> HFENCE.VVMA rs1, rs2
-> + * rs1==zero and rs2!=zero ==> HFENCE.VVMA zero, rs2
-> + * rs1!=zero and rs2==zero ==> HFENCE.VVMA rs1
-> + * rs1==zero and rs2==zero ==> HFENCE.VVMA
-> + *
-> + * Instruction encoding of HFENCE.VVMA is:
-> + * 0010001 rs2(5) rs1(5) 000 00000 1110011
-> + */
-> +
-> +void kvm_riscv_local_hfence_vvma_asid_gva(unsigned long vmid,
-> +                                         unsigned long asid,
-> +                                         unsigned long gva,
-> +                                         unsigned long gvsz,
-> +                                         unsigned long order)
-> +{
-> +       unsigned long pos, hgatp;
-> +
-> +       if (PTRS_PER_PTE < (gvsz >> order)) {
-> +               kvm_riscv_local_hfence_vvma_asid_all(vmid, asid);
-> +               return;
-> +       }
-> +
-> +       hgatp = csr_swap(CSR_HGATP, vmid << HGATP_VMID_SHIFT);
-> +
-> +       for (pos = gva; pos < (gva + gvsz); pos += BIT(order)) {
-> +               /*
-> +                * rs1 = a0 (GVA)
-> +                * rs2 = a1 (ASID)
-> +                * HFENCE.VVMA a0, a1
-> +                * 0010001 01011 01010 000 00000 1110011
-> +                */
-> +               asm volatile ("add a0, %0, zero\n"
-> +                             "add a1, %1, zero\n"
-> +                             ".word 0x22b50073\n"
-> +                             :: "r" (pos), "r" (asid)
-> +                             : "a0", "a1", "memory");
-> +       }
-> +
-> +       csr_write(CSR_HGATP, hgatp);
-> +}
-> +
-> +void kvm_riscv_local_hfence_vvma_asid_all(unsigned long vmid,
-> +                                         unsigned long asid)
-> +{
-> +       unsigned long hgatp;
-> +
-> +       hgatp = csr_swap(CSR_HGATP, vmid << HGATP_VMID_SHIFT);
-> +
-> +       /*
-> +        * rs1 = zero
-> +        * rs2 = a0 (ASID)
-> +        * HFENCE.VVMA zero, a0
-> +        * 0010001 01010 00000 000 00000 1110011
-> +        */
-> +       asm volatile ("add a0, %0, zero\n"
-> +                     ".word 0x22a00073\n"
-> +                     :: "r" (asid) : "a0", "memory");
-> +
-> +       csr_write(CSR_HGATP, hgatp);
-> +}
-> +
-> +void kvm_riscv_local_hfence_vvma_gva(unsigned long vmid,
-> +                                    unsigned long gva, unsigned long gvsz,
-> +                                    unsigned long order)
-> +{
-> +       unsigned long pos, hgatp;
-> +
-> +       if (PTRS_PER_PTE < (gvsz >> order)) {
-> +               kvm_riscv_local_hfence_vvma_all(vmid);
-> +               return;
-> +       }
-> +
-> +       hgatp = csr_swap(CSR_HGATP, vmid << HGATP_VMID_SHIFT);
-> +
-> +       for (pos = gva; pos < (gva + gvsz); pos += BIT(order)) {
-> +               /*
-> +                * rs1 = a0 (GVA)
-> +                * rs2 = zero
-> +                * HFENCE.VVMA a0
-> +                * 0010001 00000 01010 000 00000 1110011
-> +                */
-> +               asm volatile ("add a0, %0, zero\n"
-> +                             ".word 0x22050073\n"
-> +                             :: "r" (pos) : "a0", "memory");
-> +       }
-> +
-> +       csr_write(CSR_HGATP, hgatp);
-> +}
-> +
-> +void kvm_riscv_local_hfence_vvma_all(unsigned long vmid)
-> +{
-> +       unsigned long hgatp;
-> +
-> +       hgatp = csr_swap(CSR_HGATP, vmid << HGATP_VMID_SHIFT);
-> +
-> +       /*
-> +        * rs1 = zero
-> +        * rs2 = zero
-> +        * HFENCE.VVMA
-> +        * 0010001 00000 00000 000 00000 1110011
-> +        */
-> +       asm volatile (".word 0x22000073" ::: "memory");
-> +
-> +       csr_write(CSR_HGATP, hgatp);
-> +}
-> diff --git a/arch/riscv/kvm/vcpu.c b/arch/riscv/kvm/vcpu.c
-> index e87af6480dfd..2b7e27bc946c 100644
-> --- a/arch/riscv/kvm/vcpu.c
-> +++ b/arch/riscv/kvm/vcpu.c
-> @@ -693,7 +693,7 @@ static void kvm_riscv_check_vcpu_requests(struct kvm_vcpu *vcpu)
->                         kvm_riscv_gstage_update_hgatp(vcpu);
->
->                 if (kvm_check_request(KVM_REQ_TLB_FLUSH, vcpu))
-> -                       __kvm_riscv_hfence_gvma_all();
-> +                       kvm_riscv_local_hfence_gvma_all();
->         }
->  }
->
-> diff --git a/arch/riscv/kvm/vmid.c b/arch/riscv/kvm/vmid.c
-> index 01fdc342ad76..8987e76aa6db 100644
-> --- a/arch/riscv/kvm/vmid.c
-> +++ b/arch/riscv/kvm/vmid.c
-> @@ -33,7 +33,7 @@ void kvm_riscv_gstage_vmid_detect(void)
->         csr_write(CSR_HGATP, old);
->
->         /* We polluted local TLB so flush all guest TLB */
-> -       __kvm_riscv_hfence_gvma_all();
-> +       kvm_riscv_local_hfence_gvma_all();
->
->         /* We don't use VMID bits if they are not sufficient */
->         if ((1UL << vmid_bits) < num_possible_cpus())
-> --
-> 2.25.1
->
 
-LGTM.
-Reviewed-by: Atish Patra <atishp@rivosinc.com>
+--o5fzikc3dnjeidfk
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
--- 
-Regards,
-Atish
+Hello,
+
+On Thu, May 05, 2022 at 09:59:52PM -0700, lizhe wrote:
+> If there is no driver match function, the driver core assumes that each
+> candidate pair (driver, device) matches, see driver_match_device().
+>=20
+> Signed-off-by: lizhe <sensor1010@163.com>
+
+Reviewed-by: Uwe Kleine-K=F6nig <u.kleine-koenig.org>
+
+Side note: While looking through this patch I was surprised to see there
+are two different busses for ac97: sound/ac97/bus.c + sound/ac97_bus.c .
+It seems the duplication exists since 2017.
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--o5fzikc3dnjeidfk
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmJ0xPQACgkQwfwUeK3K
+7Ak9lwf+LvgkLmWcst9CMzoJ2w5AdNZjtnWS36MvuyEFgHUH2e6lrfReaAAj9LGp
+1EPinO6S6UBPvzVTbTVcduAlnaWER3O6XDIiS1b0Z2NOchX6AHUfHjQzckmL7ZU6
+6W3P8jmVsNgbwmD2NXh98qjpmKMnmw56AjbBfYKSM1jWGookg2NUKkvN5175wSnQ
+FNAIVdMaTspMZKRJU8bhkXSCARu9oAYn88U3QFUsgfzRK4KZu3UfqU75+QZjAzE3
+q7A4nOBFl0GHZUE/kQMPWdYm1OgPbvxaDYz2DmWN+7Dqc+0HkUUYYeATdYs8OUO0
+SBdhfXzll9P8xFZvdeusA+8B6DgGYg==
+=nsQs
+-----END PGP SIGNATURE-----
+
+--o5fzikc3dnjeidfk--

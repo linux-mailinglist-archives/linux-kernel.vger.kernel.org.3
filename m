@@ -2,40 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CC2751CF88
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 05:31:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1A4D51CF60
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 05:23:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1388645AbiEFDet (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 23:34:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60354 "EHLO
+        id S1388521AbiEFD1C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 23:27:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1388596AbiEFDeF (ORCPT
+        with ESMTP id S1388514AbiEFD1A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 23:34:05 -0400
-Received: from mx1.cqplus1.com (unknown [113.204.237.245])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 54275D46
-        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 20:30:14 -0700 (PDT)
-X-MailGates: (flag:4,DYNAMIC,BADHELO,RELAY,NOHOST:PASS)(compute_score:DE
-        LIVER,40,3)
-Received: from 172.28.114.216
-        by mx1.cqplus1.com with MailGates ESMTP Server V5.0(24048:0:AUTH_RELAY)
-        (envelope-from <qinjian@cqplus1.com>); Fri, 06 May 2022 11:23:27 +0800 (CST)
-From:   Qin Jian <qinjian@cqplus1.com>
-To:     krzysztof.kozlowski@linaro.org
-Cc:     robh+dt@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
-        tglx@linutronix.de, maz@kernel.org, p.zabel@pengutronix.de,
-        linux@armlinux.org.uk, arnd@arndb.de,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        Qin Jian <qinjian@cqplus1.com>
-Subject: [PATCH v14 0/9] Add Sunplus SP7021 SoC Support
-Date:   Fri,  6 May 2022 11:23:14 +0800
-Message-Id: <cover.1651805790.git.qinjian@cqplus1.com>
-X-Mailer: git-send-email 2.33.1
+        Thu, 5 May 2022 23:27:00 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6046D5EDF3
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 20:23:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651807399; x=1683343399;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=gJAhDIHMWpivM5Pb0+lUmlrgmemgOFXzFUKg/utqTFs=;
+  b=ewNcwe4LmzPv9AdsDBCK0640PRoGEVCujQoyks3SW/saVxVCCBVM6BXu
+   bjdRxybUwpCXEdwG5hVP0by8EUxstl2gWX35mBind3SguqgMksfpXHKGx
+   d4/l9ZcBmSzgZrd5HLZrCwgqTxUNmiwxCwG57fiJCB0qf/ARJwBiTCmPs
+   l2+FJRjMi+FnpqGVnvKjnwXB8TxNK25RdF7Tt6Mlz3kvyYhlflwk0FfG7
+   HtFio9Z8Cg2xhZJvy9tce9U+dkU6/G9Oe5W04iWX+732fS8cW0VJYr5KC
+   Dai3u3N+SLmcrwThWG6CudcpX0wKpBLu6iqpuE2JYr5wDydME1+nQbw9D
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10338"; a="267173951"
+X-IronPort-AV: E=Sophos;i="5.91,203,1647327600"; 
+   d="scan'208";a="267173951"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2022 20:23:19 -0700
+X-IronPort-AV: E=Sophos;i="5.91,203,1647327600"; 
+   d="scan'208";a="517828846"
+Received: from fulaizha-mobl1.ccr.corp.intel.com ([10.254.213.163])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2022 20:23:16 -0700
+Message-ID: <d260e8b178defbe4facda3cd8f0b534ec812268a.camel@intel.com>
+Subject: Re: [PATCH v2 1/4] mm/migration: reduce the rcu lock duration
+From:   "ying.huang@intel.com" <ying.huang@intel.com>
+To:     Miaohe Lin <linmiaohe@huawei.com>, akpm@linux-foundation.org,
+        mike.kravetz@oracle.com, naoya.horiguchi@nec.com
+Cc:     hch@lst.de, dhowells@redhat.com, cl@linux.com, david@redhat.com,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Date:   Fri, 06 May 2022 11:23:14 +0800
+In-Reply-To: <20220425132723.34824-2-linmiaohe@huawei.com>
+References: <20220425132723.34824-1-linmiaohe@huawei.com>
+         <20220425132723.34824-2-linmiaohe@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.38.3-1 
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -43,154 +62,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch series add Sunplus SP7021 SoC support.
+On Mon, 2022-04-25 at 21:27 +0800, Miaohe Lin wrote:
+> rcu_read_lock is required by grabbing the task refcount but it's not
+> needed for ptrace_may_access. So we could release the rcu lock after
+> task refcount is successfully grabbed to reduce the rcu holding time.
+> 
+> Reviewed-by: Muchun Song <songmuchun@bytedance.com>
+> Reviewed-by: Christoph Hellwig <hch@lst.de>
+> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+> Cc: Huang Ying <ying.huang@intel.com>
+> Cc: David Howells <dhowells@redhat.com>
+> Cc: Christoph Lameter <cl@linux.com>
+> ---
+>  mm/migrate.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+> 
+> diff --git a/mm/migrate.c b/mm/migrate.c
+> index b2678279eb43..b779646665fe 100644
+> --- a/mm/migrate.c
+> +++ b/mm/migrate.c
+> @@ -1902,17 +1902,16 @@ static struct mm_struct *find_mm_struct(pid_t pid, nodemask_t *mem_nodes)
+>  		return ERR_PTR(-ESRCH);
+>  	}
+>  	get_task_struct(task);
+> +	rcu_read_unlock();
+>  
+> 
+>  	/*
+>  	 * Check if this process has the right to modify the specified
+>  	 * process. Use the regular "ptrace_may_access()" checks.
+>  	 */
+>  	if (!ptrace_may_access(task, PTRACE_MODE_READ_REALCREDS)) {
+> -		rcu_read_unlock();
+>  		mm = ERR_PTR(-EPERM);
+>  		goto out;
+>  	}
+> -	rcu_read_unlock();
+>  
+> 
+>  	mm = ERR_PTR(security_task_movememory(task));
+>  	if (IS_ERR(mm))
 
-Sunplus SP7021 is an ARM Cortex A7 (4 cores) based SoC. It integrates many
-peripherals (ex: UART, I2C, SPI, SDIO, eMMC, USB, SD card and etc.) into a
-single chip. It is designed for industrial control.
+Hi, Miaohe,
 
-SP7021 consists of two chips (dies) in a package. One is called C-chip
-(computing chip). It is a 4-core ARM Cortex A7 CPU. It adopts high-level
-process (22 nm) for high performance computing. The other is called P-
-chip (peripheral chip). It has many peripherals and an ARM A926 added
-especially for real-time control. P-chip is made for customers. It adopts
-low-level process (ex: 0.11 um) to reduce cost.
+Please check the previous discussion and verify whether the original
+reported race condition is stll valid by yourself before resending this
+patch again.  If you find that the original race condition isn't
+possible now, please add the analysis in your change log.
 
-Refer to (for documentations):
-https://sunplus-tibbo.atlassian.net/wiki/spaces/doc/overview
-
-Refer to (applications):
-https://tibbo.com/store/plus1.html
-
-Refer to (applications):
-http://www.sinovoip.com.cn/ecp_view.asp?id=586
-
-Changes in v14:
-- clock/sp-sp7021.h: Fix the comments from Krzysztof
-- sunplus,sp7021-clkc.yaml: Fix the comments from Rob
-
-Changes in v13:
-- reset/sp-sp7021.h: Move HW mapping from dt-binding header to driver
-- reset-sunplus.c: Move HW mapping from dt-binding header to driver
-- clock/sp-sp7021.h: Move HW mapping from dt-binding header to driver
-- clk-sp7021.c: Fix the comments from Arnd
-- irq-sp7021-intc.c: Remove empty set_affinity callback function
-- sp7021_defconfig: Fix the comments from Arnd
-
-Changes in v12:
-- sunplus,sp7021-clkc.yaml: Move 'reg' after 'compatible'
-- sunplus,sp7021-intc.yaml: Move 'reg' after 'compatible'
-- sunplus,reset.yaml: Move 'reg' after 'compatible'
-- Remove wrong reviewed-tags
-
-Changes in v11:
-- clk-sp7021.c: Remove the dead code
-
-Changes in v10:
-- arm/sunplus,sp7021.yaml: Add SoC compatible: "sunplus,sp7021"
-- clock/sunplus,sp7021-clkc.yaml: Remove the internal clock parent from DTS
-- clk-sp7021.c: Refine the macro DBG_CLK
-- clk-sp7021.c: Refine the clock_parent_data
-
-Changes in v9:
-- clk/Kconfig: fix the comments form Stephen Boyd
-- clk-sp7021.c: fix the comments form Stephen Boyd
-
-Changes in v8:
-- clk-sp7021.c: fix the comments form Stephen Boyd
-
-Changes in v7:
-- sunplus,sp7021-clkc.yaml: Add clocks & clock-names
-- clk-sp7021.c: fix the comments form Stephen Boyd
-- irq-sp7021-intc.c: fix the comments from Marc
-
-Changes in v6:
-- reset-sunplus.c: fix the comments from Philipp
-- irq-sp7021-intc.c: fix the comments from Marc
-- mach-sunplus: fix the comments from Arnd
-
-Changes in v5:
-- reset-sunplus.c: fix strict checks
-- clk/Kconfig: fix spell
-- clk-sp7021.c: using bitfield ops, fix strict checks
-- irqchip/Kconfig: fix spell
-- irq-sp7021-intc.c: cleanup error path in probe, fix strict checks
-- arm/Kconfig: fix spell & typo, remove CONFIG_SERIAL_SUNPLUS
-- mach-sunplus/Kconfig: fix typo
-- sp7021_defconfig: add CONFIG_SERIAL_SUNPLUS
-
-Changes in v4:
-- mach-sunplus: add initial support for SP7021
-- sp7021_defconfig: add generic SP7021 defconfig
-- reset-sunplus: remove Q645 support
-- reset-sunplus.c: refine code based on Philipp's review
-- clk-sp7021: clock defines add prefix, more clean up
-
-Changes in v3:
-- sp7021-intc: remove primary controller mode due to P-chip running Linux
-  not supported any more.
-- sp7021-intc.h: removed, not set ext through the DT but sp_intc_set_ext()
-- sunplus,sp7021-intc.yaml: update descriptions for above changes
-- irq-sp7021-intc.c: more cleanup based on Marc's review
-- all driver's Kconfig removed default, it's selected by platform config
-
-Changes in v2:
-- sunplus,sp7021-intc.yaml: add descrption for "#interrupt-cells", interrupts
-- sunplus,sp7021-intc.yaml: drop "ext0-mask"/"ext1-mask" from DT
-- sunplus,sp7021-intc.yaml: fix example.dt too long error
-- irq-sp7021-intc.c: major rewrite
-- all files with dual license
-
-Qin Jian (9):
-  dt-bindings: arm: sunplus: Add bindings for Sunplus SP7021 SoC boards
-  dt-bindings: reset: Add bindings for SP7021 reset driver
-  reset: Add Sunplus SP7021 reset driver
-  dt-bindings: clock: Add bindings for SP7021 clock driver
-  clk: Add Sunplus SP7021 clock driver
-  dt-bindings: interrupt-controller: Add bindings for SP7021 interrupt
-    controller
-  irqchip: Add Sunplus SP7021 interrupt controller driver
-  ARM: sunplus: Add initial support for Sunplus SP7021 SoC
-  ARM: sp7021_defconfig: Add Sunplus SP7021 defconfig
-
- .../bindings/arm/sunplus,sp7021.yaml          |  28 +
- .../bindings/clock/sunplus,sp7021-clkc.yaml   |  51 ++
- .../sunplus,sp7021-intc.yaml                  |  62 ++
- .../bindings/reset/sunplus,reset.yaml         |  38 +
- MAINTAINERS                                   |  17 +
- arch/arm/Kconfig                              |   2 +
- arch/arm/Makefile                             |   1 +
- arch/arm/configs/multi_v7_defconfig           |   1 +
- arch/arm/configs/sp7021_defconfig             |  59 ++
- arch/arm/mach-sunplus/Kconfig                 |  27 +
- arch/arm/mach-sunplus/Makefile                |   9 +
- arch/arm/mach-sunplus/sp7021.c                |  16 +
- drivers/clk/Kconfig                           |  10 +
- drivers/clk/Makefile                          |   1 +
- drivers/clk/clk-sp7021.c                      | 721 ++++++++++++++++++
- drivers/irqchip/Kconfig                       |   9 +
- drivers/irqchip/Makefile                      |   2 +
- drivers/irqchip/irq-sp7021-intc.c             | 278 +++++++
- drivers/reset/Kconfig                         |   9 +
- drivers/reset/Makefile                        |   1 +
- drivers/reset/reset-sunplus.c                 | 212 +++++
- include/dt-bindings/clock/sp-sp7021.h         |  88 +++
- include/dt-bindings/reset/sp-sp7021.h         |  87 +++
- 23 files changed, 1729 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/arm/sunplus,sp7021.yaml
- create mode 100644 Documentation/devicetree/bindings/clock/sunplus,sp7021-clkc.yaml
- create mode 100644 Documentation/devicetree/bindings/interrupt-controller/sunplus,sp7021-intc.yaml
- create mode 100644 Documentation/devicetree/bindings/reset/sunplus,reset.yaml
- create mode 100644 arch/arm/configs/sp7021_defconfig
- create mode 100644 arch/arm/mach-sunplus/Kconfig
- create mode 100644 arch/arm/mach-sunplus/Makefile
- create mode 100644 arch/arm/mach-sunplus/sp7021.c
- create mode 100644 drivers/clk/clk-sp7021.c
- create mode 100644 drivers/irqchip/irq-sp7021-intc.c
- create mode 100644 drivers/reset/reset-sunplus.c
- create mode 100644 include/dt-bindings/clock/sp-sp7021.h
- create mode 100644 include/dt-bindings/reset/sp-sp7021.h
-
--- 
-2.33.1
+Best Regards,
+Huang, Ying
 

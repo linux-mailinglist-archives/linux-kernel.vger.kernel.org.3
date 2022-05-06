@@ -2,142 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7939C51D0A9
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 07:28:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0145251D0AA
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 07:28:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1389143AbiEFFb6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 01:31:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37484 "EHLO
+        id S1389153AbiEFFcC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 01:32:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380574AbiEFFb4 (ORCPT
+        with ESMTP id S1389116AbiEFFb4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 6 May 2022 01:31:56 -0400
-Received: from beige.elm.relay.mailchannels.net (beige.elm.relay.mailchannels.net [23.83.212.16])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20919B54;
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 213E1B853;
         Thu,  5 May 2022 22:28:14 -0700 (PDT)
-X-Sender-Id: dreamhost|x-authsender|ian@linux.cowan.aero
-Received: from relay.mailchannels.net (localhost [127.0.0.1])
-        by relay.mailchannels.net (Postfix) with ESMTP id 61A432C0E70;
-        Fri,  6 May 2022 05:28:13 +0000 (UTC)
-Received: from pdx1-sub0-mail-a243.dreamhost.com (unknown [127.0.0.6])
-        (Authenticated sender: dreamhost)
-        by relay.mailchannels.net (Postfix) with ESMTPA id D74002C0F78;
-        Fri,  6 May 2022 05:28:12 +0000 (UTC)
-ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1651814893; a=rsa-sha256;
-        cv=none;
-        b=Yg2xDVG4lFNdurDew2nkCoScQvcbN35P1j5R/YWLJE6ExSrTmSs70Fzf5Kd5/cBsc+yaeX
-        Lz53rDTT89uralHWOz5MBChAwv9eE8yWcCCHR88MGTOKIvHN/r0yHFmG2J4/7ydyW5zED3
-        OdTZGXJN/mxWZ38f80kkaUO9TbSqypT+8sjtQt4sXGI2Ice7t//DI2nYoAt43Qs4IQYQfo
-        bnULBIyxlwIeiCTwRiX9oudSuX9j7iZI7y8bnAa/2rL/sVs9j3ezS8BneRkZNHEEYZRVr6
-        dS7tQ42GXP+Yz6u4eP5Pup9enTny24GaziL+n1Noc85YJoArv17Vlor7esJohg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mailchannels.net;
-        s=arc-2022; t=1651814893;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:dkim-signature;
-        bh=0dA6jT+EL40ZJ+80iJLHF2mzSScBCF9xe9/bVhB5W28=;
-        b=Dh8FTbUJUdfjHUmULAI8Q3XT9xaJ/G7D2xy476UYUEB3Ao9ezd8gjMW6VCtlyZN479r5WG
-        EmphkvekoGLp3bDrnVABGZGEgc9gKsYMBBb2sdihg1pAmKcvqUPfeMWbAQbT6Vw4axav3M
-        RkYo8se9/AP0RNVEmfO0cqZxwGrHPmoW5fTFTeAIqlcw1jpM7qIrkI1q9wVC4xp5m++WFJ
-        RJdKvKkVUiMLyKDCKyZOVCWsiUdKsT/YwIZVRcITe1PjT0ft7x1fsuk6x82pgfvTjSXcSD
-        613P213oAcZREPlSKmJxvWbIEmtjxtaoyZaWpNOzPNCX3kVZt89JI9JrztidyQ==
-ARC-Authentication-Results: i=1;
-        rspamd-fdd564cbf-jzqrc;
-        auth=pass smtp.auth=dreamhost smtp.mailfrom=ian@linux.cowan.aero
-X-Sender-Id: dreamhost|x-authsender|ian@linux.cowan.aero
-X-MC-Relay: Neutral
-X-MailChannels-SenderId: dreamhost|x-authsender|ian@linux.cowan.aero
-X-MailChannels-Auth-Id: dreamhost
-X-Bored-Descriptive: 396a819c38b86c9f_1651814893244_2034114551
-X-MC-Loop-Signature: 1651814893244:2277536638
-X-MC-Ingress-Time: 1651814893244
-Received: from pdx1-sub0-mail-a243.dreamhost.com (pop.dreamhost.com
- [64.90.62.162])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
-        by 100.120.38.172 (trex/6.7.1);
-        Fri, 06 May 2022 05:28:13 +0000
-Received: from localhost.localdomain (unknown [69.12.38.97])
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        (Authenticated sender: ian@linux.cowan.aero)
-        by pdx1-sub0-mail-a243.dreamhost.com (Postfix) with ESMTPSA id 4KvfH003mrz2M;
-        Thu,  5 May 2022 22:28:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.cowan.aero;
-        s=dreamhost; t=1651814892;
-        bh=0dA6jT+EL40ZJ+80iJLHF2mzSScBCF9xe9/bVhB5W28=;
-        h=From:To:Cc:Subject:Date:Content-Transfer-Encoding;
-        b=1gMNUGpJqSsaK7jLCkEZAv7l8lp1tF5c3N7tvJIPR4rI6v/QBZGWT0hOMbyl5RZT9
-         s9N8oSmmkEiULdzfQPPXEhfMfxwmrtjDx3/j3wycroJAJ3+YGXNSJiQgQ2vCACEcfB
-         /7NbMQ00PiyoKnMD5EV/AQnQXRlhxWZYVceNQRyclWvbk3sR3cA00O4xghsMPii1tF
-         8oGmgkzeIH6Ng79NODYjuiuvVo7MxCFVGtJ27P7z1GW2sVZe96xAmJX4sBdR9CwVPP
-         Uo/zcyF6p18eObAr7fxeiouZydyFErMm6Z6SaeCpJ9DKeKA1ipI0/WvcRHUE5zL+TA
-         WMu3LPWlPfgbQ==
-From:   Ian Cowan <ian@linux.cowan.aero>
-To:     Corentin Labbe <clabbe@baylibre.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        mjpeg-users@lists.sourceforge.net, linux-media@vger.kernel.org,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Ian Cowan <ian@linux.cowan.aero>
-Subject: [PATCH v3 1/4] staging: media: zoran: add logging macros
-Date:   Fri,  6 May 2022 01:28:00 -0400
-Message-Id: <20220506052800.191910-1-ian@linux.cowan.aero>
-X-Mailer: git-send-email 2.35.1
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KvfGz1cGmz4ySZ;
+        Fri,  6 May 2022 15:28:11 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1651814892;
+        bh=fKUMqt9F3o+EnUvm0e9MmalqPDqw2qHRQSLf9kpzP8o=;
+        h=Date:From:To:Cc:Subject:From;
+        b=qc3vQoMLTWvZTbgibcqFlhzLIhYD3c2Crrr4o7y9Xo3HvWBGA4NNFGOHc8IRFCxD6
+         a9gM/ZB9dqaU7+K6dI+wkPeXXyKT7j9WWVGNDTk4ucp2qca49u8xi79JGGwPSJ+jSW
+         wvRAmHOXrK3nk5KdNtbvSH+lh7Fsd1RVfK4aDj7XcLkpCcyHGUdLw3woIO0pMwkK9+
+         W3NxdewXrkCAzh/zT12ND6S2Q5dzI7igspGlUYiR+N/yhACuVAXdCHn3hHgmfKN7NT
+         TW9Op284yFvZtXms5n2esIe/PCBln/IgQQSQBbeEtamhJcmwnPyKvZt/jPe7CshRno
+         QOp6Kfs3PLQmA==
+Date:   Fri, 6 May 2022 15:28:09 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>
+Cc:     ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Sven Peter <sven@svenpeter.dev>
+Subject: linux-next: manual merge of the nvmem tree with the arm-soc tree
+Message-ID: <20220506152809.530ddde8@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; boundary="Sig_/573cbl5NHlMeyYe_w9Xv67f";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This adds the zrdev_dbg() (pointing to pci_dbg()), zrdev_err() (pointing
-to pci_err()), and zrdev_info() (pointing to pci_info()) macros to the
-zoran drivers. These are the preferred method for debugging and this
-will allow to extract the device from the zoran struct to make the call.
+--Sig_/573cbl5NHlMeyYe_w9Xv67f
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Ian Cowan <ian@linux.cowan.aero>
----
- drivers/staging/media/zoran/zoran.h | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
+Hi all,
 
-diff --git a/drivers/staging/media/zoran/zoran.h b/drivers/staging/media/zoran/zoran.h
-index 654c95fa5aba..4f7f71d8e93c 100644
---- a/drivers/staging/media/zoran/zoran.h
-+++ b/drivers/staging/media/zoran/zoran.h
-@@ -19,6 +19,7 @@
- #define _BUZ_H_
- 
- #include <linux/debugfs.h>
-+#include <linux/pci.h>
- #include <media/v4l2-device.h>
- #include <media/v4l2-ctrls.h>
- #include <media/videobuf2-core.h>
-@@ -301,6 +302,18 @@ static inline struct zoran *to_zoran(struct v4l2_device *v4l2_dev)
- 
- #endif
- 
-+/*
-+ * Debugging macros
-+ */
-+#define zrdev_dbg(zr, format, args...) \
-+	pci_dbg(zr->pci_dev, format, ##args) \
-+
-+#define zrdev_err(zr, format, args...) \
-+	pci_err(zr->pci_dev, format, ##args) \
-+
-+#define zrdev_info(zr, format, args...) \
-+	pci_info(zr->pci_dev, format, ##args) \
-+
- int zoran_queue_init(struct zoran *zr, struct vb2_queue *vq, int dir);
- void zoran_queue_exit(struct zoran *zr);
- int zr_set_buf(struct zoran *zr);
--- 
-2.35.1
+Today's linux-next merge of the nvmem tree got a conflict in:
 
+  MAINTAINERS
+
+between commits:
+
+  82b96552f15a ("dt-bindings: nvme: Add Apple ANS NVMe")
+  5bd2927aceba ("nvme-apple: Add initial Apple SoC NVMe driver")
+
+from the arm-soc tree and commit:
+
+  e99e7f098c06 ("MAINTAINERS: Add apple efuses nvmem files to ARM/APPLE MAC=
+HINE")
+
+from the nvmem tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc MAINTAINERS
+index 644b27c889ee,1bf57fd937b5..000000000000
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@@ -1837,10 -1836,8 +1837,11 @@@ F:	Documentation/devicetree/bindings/ar
+  F:	Documentation/devicetree/bindings/clock/apple,nco.yaml
+  F:	Documentation/devicetree/bindings/i2c/apple,i2c.yaml
+  F:	Documentation/devicetree/bindings/interrupt-controller/apple,*
+ +F:	Documentation/devicetree/bindings/iommu/apple,sart.yaml
+ +F:	Documentation/devicetree/bindings/iommu/apple,dart.yaml
+  F:	Documentation/devicetree/bindings/mailbox/apple,mailbox.yaml
+ +F:	Documentation/devicetree/bindings/nvme/apple,nvme-ans.yaml
++ F:	Documentation/devicetree/bindings/nvmem/apple,efuses.yaml
+  F:	Documentation/devicetree/bindings/pci/apple,pcie.yaml
+  F:	Documentation/devicetree/bindings/pinctrl/apple,pinctrl.yaml
+  F:	Documentation/devicetree/bindings/power/apple*
+@@@ -1849,10 -1846,9 +1850,11 @@@ F:	arch/arm64/boot/dts/apple
+  F:	drivers/clk/clk-apple-nco.c
+  F:	drivers/i2c/busses/i2c-pasemi-core.c
+  F:	drivers/i2c/busses/i2c-pasemi-platform.c
+ +F:	drivers/iommu/apple-dart.c
+  F:	drivers/irqchip/irq-apple-aic.c
+  F:	drivers/mailbox/apple-mailbox.c
+ +F:	drivers/nvme/host/apple.c
++ F:	drivers/nvmem/apple-efuses.c
+  F:	drivers/pinctrl/pinctrl-apple-gpio.c
+  F:	drivers/soc/apple/*
+  F:	drivers/watchdog/apple_wdt.c
+
+--Sig_/573cbl5NHlMeyYe_w9Xv67f
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJ0sekACgkQAVBC80lX
+0GxLegf/ZvoFYj7UJ888DcU5C1VxYDp0/gymdO8oPK6zWM4FQESge0Oem+lrR+gL
+o2eW4ExSs5n4GiMjHJQLL9Sfv6xp7jPIi/SrfRbAiu/ID/8WYh9zBG1vMeAFcqHu
+tbbsxPTWuhWpbYy0NwSyFe/FtAiWJqEH2PU6UpI30g44TfyfNAKoB6WPxFkFaT9k
+2w6ns/PfLhLs9Itku+hv/rYwr6rPyIWFSP8mwve60ssZVgn8Q/x7OdqXWtvwqJI0
+Z3nXzXF8RQ6MC5sXzoiDctol7Vkve8sOibVynLSLSWSEnT4zRSQikzWt9T6rwEWI
+dseqZ+4kCDY75w0lQtd0B8sIB9ZkRw==
+=t8qa
+-----END PGP SIGNATURE-----
+
+--Sig_/573cbl5NHlMeyYe_w9Xv67f--

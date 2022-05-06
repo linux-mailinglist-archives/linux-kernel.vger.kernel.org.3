@@ -2,113 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1862451E280
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 01:41:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFEFC51E1F2
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 01:40:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1444432AbiEFWtW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 18:49:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54460 "EHLO
+        id S1444545AbiEFW6E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 18:58:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355180AbiEFWtT (ORCPT
+        with ESMTP id S1355654AbiEFW6C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 18:49:19 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3D9A6178;
-        Fri,  6 May 2022 15:45:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 16CA3B839F2;
-        Fri,  6 May 2022 22:45:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0507C385A9;
-        Fri,  6 May 2022 22:45:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651877131;
-        bh=ftQi9qulEY2Jbu8EVZNt2L7N4exOH1BNtakTytErLyc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=c8d3OOqMGXj57v4mi+9T4R02tGJd+aIpFoPUq1lqiKNoidczMWLbMRGQHKRaqxEDb
-         3iar4mxH9WpOaj+4EFGsZFgsrMl4Nv28WRylquof1j76ehM95x7wvKGXEzugGX0aUU
-         o7cFkxS9vIYv/2cBM5QeE32yx9Lec7fw/pJvbdkna+mYV15ezSV487sy6eTtQbqVVp
-         mpya6rWs3lYSY0H2tJaoWp4dV4mrxtsDMH6POX7AhX5ivnT/Mc5eYCQNQkhPk30Vvi
-         AGBNyp4l9x8+gUIW6Q2Iz1L+Ds6Db3DRBK+xMurkRKps68aO5G1dO6DiVKnTJTxTYp
-         JmZdd9U6zUszA==
-Date:   Fri, 6 May 2022 15:45:28 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     linux-kbuild@vger.kernel.org, clang-built-linux@googlegroups.com,
-        linux-kernel@vger.kernel.org, Nicolas Schier a <nicolas@fjasle.eu>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        linuxppc-dev@lists.ozlabs.org, linux-um@lists.infradead.org,
-        linux-s390@vger.kernel.org,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Kees Cook <keescook@chromium.org>
-Subject: Re: [PATCH v3 00/15] kbuild: yet another series of cleanups
- (modpost, LTO, MODULE_REL_CRCS)
-Message-ID: <YnWlCH2tfr5YMb1/@dev-arch.thelio-3990X>
-References: <20220505072244.1155033-1-masahiroy@kernel.org>
+        Fri, 6 May 2022 18:58:02 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A19286D383;
+        Fri,  6 May 2022 15:54:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651877657; x=1683413657;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=K49HW2lGdqLpqgHUeIlMgvOoThkBm11e0LDnwNiLuac=;
+  b=StUKBB1rIOLrM5GpEjH0RPSHuDghlii/27ProeW/c0ZR2Ye1Xekp6akq
+   syqs6w0BwNv4ZuPTu+fzs1vEz7NJD7r+m30y+HCCGNEgKgngzoocQGM4R
+   qh17HZbM7EsyxO16esH6Sh/leOa0QG3T6lMnFQEmLSjXuzAdoJjm9o3CR
+   G3YNvZOQJQEXMTV5mNKccJ3JeKnyep2LqASTb0Ef/zrPrI/ZvEbUuhCk/
+   pJsAZ7bECa2ZevyvCbtosUZ1qVU2v9SzE8lgkzzg5YbPE/wi/X50djVH/
+   2RSxB3+qk4jQTSkAyriaQFrNgpdK39R324fkoDuL7+jTdUusFn7Ukk9fo
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10339"; a="256080777"
+X-IronPort-AV: E=Sophos;i="5.91,205,1647327600"; 
+   d="scan'208";a="256080777"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2022 15:54:17 -0700
+X-IronPort-AV: E=Sophos;i="5.91,205,1647327600"; 
+   d="scan'208";a="695383613"
+Received: from agluck-desk3.sc.intel.com ([172.25.222.78])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2022 15:54:16 -0700
+From:   Tony Luck <tony.luck@intel.com>
+To:     hdegoede@redhat.com, markgross@kernel.org
+Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        corbet@lwn.net, gregkh@linuxfoundation.org,
+        andriy.shevchenko@linux.intel.com, jithu.joseph@intel.com,
+        ashok.raj@intel.com, tony.luck@intel.com, rostedt@goodmis.org,
+        dan.j.williams@intel.com, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        patches@lists.linux.dev, ravi.v.shankar@intel.com
+Subject: [PATCH v7 00/12] Introduce In Field Scan driver
+Date:   Fri,  6 May 2022 15:53:58 -0700
+Message-Id: <20220506225410.1652287-1-tony.luck@intel.com>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220506014035.1173578-1-tony.luck@intel.com>
+References: <20220506014035.1173578-1-tony.luck@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220505072244.1155033-1-masahiroy@kernel.org>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Masahiro,
+TL;DR this driver loads scan test files that can check whether silicon
+in a CPU core is still running correctly. It is expected that these tests
+would be run several times per day to catch problems as silicon ages.
 
-On Thu, May 05, 2022 at 04:22:29PM +0900, Masahiro Yamada wrote:
-> 
-> This is the third batch of cleanups in this development cycle.
-> 
-> Major changes in v3:
-> 
->  - Generate symbol CRCs as C code, and remove CONFIG_MODULE_REL_CRCS.
-> 
-> Major changes in v2:
-> 
->  - V1 did not work with CONFIG_MODULE_REL_CRCS.
->    I fixed this for v2.
-> 
->  - Reflect some review comments in v1
-> 
->  - Refactor the code more
-> 
->  - Avoid too long argument error
-> 
-> 
-> Masahiro Yamada (15):
->   modpost: mitigate false-negatives for static EXPORT_SYMBOL checks
->   modpost: change the license of EXPORT_SYMBOL to bool type
->   modpost: merge add_{intree_flag,retpoline,staging_flag} to add_header
->   modpost: move *.mod.c generation to write_mod_c_files()
->   kbuild: generate a list of objects in vmlinux
->   kbuild: record symbol versions in *.cmd files
->   modpost: extract symbol versions from *.cmd files
->   kbuild: link symbol CRCs at final link, removing
->     CONFIG_MODULE_REL_CRCS
->   kbuild: stop merging *.symversions
->   genksyms: adjust the output format to modpost
->   kbuild: do not create *.prelink.o for Clang LTO or IBT
->   modpost: simplify the ->is_static initialization
->   modpost: use hlist for hash table implementation
->   kbuild: make built-in.a rule robust against too long argument error
->   kbuild: make *.mod rule robust against too long argument error
+Changes since v6
 
-I merged this series into mainline and tested an Arch Linux
-x86_64 configuration and Fedora aarch64 configuration with ThinLTO and
-saw no new warnings or issues. Modules loaded just fine in QEMU for Arch
-Linux and I did not notice any boot issues or warnings.
+Thomas Gleixner
+---------------
+"struct workqueue_struct *ifs_wq; Seems to be unused."
 
-Tested-by: Nathan Chancellor <nathan@kernel.org>
+True. Deleted.
 
-Cheers,
-Nathan
+"static bool oscan_enabled = true; What changes this?"
+
+Code that cleared it deleted. Drop this too.
+
+"Please add curly brackets as these are not one-line statements"
+
+Added
+
+cpumask_first(topology_sibling_cpumask(cpu)); Shouldn't that be cpu_smt_mask()?"
+
+Changed (and several other places)
+
+"take up to 200 milliseconds before it retires.  200ms per test chunk?"
+
+Updated comment to note that 200ms is for all chunks.
+
+"Documentation lost in the intertubes"
+
+Dredged up the version from v3 series and changed:
+1) Fixed pathnames now this is a virtual misc device instead of platform
+device
+2) Put all the text into a "/** DOC:" comment section in ifs.h with just
+a "kernel-doc:: drivers/platform/x86/intel/ifs/ifs.h" in the ifs.rst
+file under Documentation/x86.
+3) Added a "big fat warning" (in all CAPS) pointing out that a core test
+can take up to 200 milliseconds. So admins must take extra steps if they
+are running latency sensitive workloads.
+4) Added note that all HT threads of a core must be online to run a
+test.
+
+Tony Luck
+---------
+Off-by-one on retries check (#define set to 5, but tried 6 times). Fixed
+Fixed kerneldoc description of "integrity_cap_bit" (was missing a ":")
+
+Jithu Joseph (7):
+  x86/microcode/intel: Expose collect_cpu_info_early() for IFS
+  platform/x86/intel/ifs: Read IFS firmware image
+  platform/x86/intel/ifs: Check IFS Image sanity
+  platform/x86/intel/ifs: Authenticate and copy to secured memory
+  platform/x86/intel/ifs: Add scan test support
+  platform/x86/intel/ifs: Add IFS sysfs interface
+  platform/x86/intel/ifs: add ABI documentation for IFS
+
+Peter Zijlstra (1):
+  stop_machine: Add stop_core_cpuslocked() for per-core operations
+
+Tony Luck (4):
+  x86/msr-index: Define INTEGRITY_CAPABILITIES MSR
+  platform/x86/intel/ifs: Add stub driver for In-Field Scan
+  trace: platform/x86/intel/ifs: Add trace point to track Intel IFS
+    operations
+  Documentation: In-Field Scan
+
+ .../ABI/testing/sysfs-platform-intel-ifs      |  39 +++
+ Documentation/x86/ifs.rst                     |   2 +
+ Documentation/x86/index.rst                   |   1 +
+ MAINTAINERS                                   |   8 +
+ arch/x86/include/asm/cpu.h                    |  18 ++
+ arch/x86/include/asm/msr-index.h              |   7 +
+ arch/x86/kernel/cpu/intel.c                   |  32 +++
+ arch/x86/kernel/cpu/microcode/intel.c         |  59 +---
+ drivers/platform/x86/intel/Kconfig            |   1 +
+ drivers/platform/x86/intel/Makefile           |   1 +
+ drivers/platform/x86/intel/ifs/Kconfig        |  13 +
+ drivers/platform/x86/intel/ifs/Makefile       |   3 +
+ drivers/platform/x86/intel/ifs/core.c         |  73 +++++
+ drivers/platform/x86/intel/ifs/ifs.h          | 234 +++++++++++++++
+ drivers/platform/x86/intel/ifs/load.c         | 266 ++++++++++++++++++
+ drivers/platform/x86/intel/ifs/runtest.c      | 252 +++++++++++++++++
+ drivers/platform/x86/intel/ifs/sysfs.c        | 149 ++++++++++
+ include/linux/stop_machine.h                  |  16 ++
+ include/trace/events/intel_ifs.h              |  41 +++
+ kernel/stop_machine.c                         |  19 ++
+ 20 files changed, 1182 insertions(+), 52 deletions(-)
+ create mode 100644 Documentation/ABI/testing/sysfs-platform-intel-ifs
+ create mode 100644 Documentation/x86/ifs.rst
+ create mode 100644 drivers/platform/x86/intel/ifs/Kconfig
+ create mode 100644 drivers/platform/x86/intel/ifs/Makefile
+ create mode 100644 drivers/platform/x86/intel/ifs/core.c
+ create mode 100644 drivers/platform/x86/intel/ifs/ifs.h
+ create mode 100644 drivers/platform/x86/intel/ifs/load.c
+ create mode 100644 drivers/platform/x86/intel/ifs/runtest.c
+ create mode 100644 drivers/platform/x86/intel/ifs/sysfs.c
+ create mode 100644 include/trace/events/intel_ifs.h
+
+
+base-commit: 672c0c5173427e6b3e2a9bbb7be51ceeec78093a
+-- 
+2.35.1
+

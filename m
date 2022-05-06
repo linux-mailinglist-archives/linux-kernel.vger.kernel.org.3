@@ -2,118 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1AC851CFC4
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 05:38:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3919C51CFC9
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 05:41:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1388758AbiEFDmU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 23:42:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44278 "EHLO
+        id S1388939AbiEFDof (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 23:44:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234539AbiEFDmS (ORCPT
+        with ESMTP id S1388838AbiEFDoL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 23:42:18 -0400
-Received: from out30-130.freemail.mail.aliyun.com (out30-130.freemail.mail.aliyun.com [115.124.30.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7CF3F7;
-        Thu,  5 May 2022 20:38:30 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R191e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04426;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=30;SR=0;TI=SMTPD_---0VCPvMM9_1651808302;
-Received: from 30.32.96.193(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VCPvMM9_1651808302)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Fri, 06 May 2022 11:38:24 +0800
-Message-ID: <21b11024-e893-8c11-9b98-ab1d13413b61@linux.alibaba.com>
-Date:   Fri, 6 May 2022 11:39:05 +0800
+        Thu, 5 May 2022 23:44:11 -0400
+Received: from mail-oa1-x33.google.com (mail-oa1-x33.google.com [IPv6:2001:4860:4864:20::33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC0CF12AD0
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 20:40:28 -0700 (PDT)
+Received: by mail-oa1-x33.google.com with SMTP id 586e51a60fabf-e2fa360f6dso6109950fac.2
+        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 20:40:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=WNNx5SqqknTge4y9/eUvRrcsh9m9RTE+BK27SVwwwhs=;
+        b=Y3oK9ZklCqUyV2UCcurb2SZie0KVUZBoED2gV1ZMI54pHlaObR+Yu0zT/4B4URslXU
+         L6G/3lv1KbX/2evOvCIeoR+ixzyEP7ORlBdMS+PejkXygXxDWjojZ4QdbvqK5khV4Rg+
+         aXl6hBUofLH6/lhsMPnD+Gt3DCuNIGLHpSNROar9lyMsILkTt10qVoPg0fRQ0Hf0/KrI
+         Lj322x0AfrbEWjvlMqlNrdgw7jX0QnytRFVMrU9EEqlKnocZzr8VhMqvFztq1OGJQhvk
+         wfcTyWXHicx0+w5PgU+0YCbmio7sD6DwE8qEznkr0GpxszA/CS1dyVzU3Q/FoAIlePWV
+         74/g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=WNNx5SqqknTge4y9/eUvRrcsh9m9RTE+BK27SVwwwhs=;
+        b=Fh8nlKDZpSZmYqj7dGxZz8fPJ9W2HaupuyX7EsBTvuCyFRmQN8fZpfXNVf+lSMROGp
+         i7RgbwBW4hVtLI6e23dg/TIDDZNhMUBrugWXOZ85t47pCLGHD2vBs0qnrGb0n0Z+vZ44
+         uSvI0GFbt5AE69HMp44DRDHYo9SA3SRqVP19qLlnDN3vwZQNUBQZ5LrmFzQfPtd3l1Md
+         SKsFE38jvvmSWa0yx08wbA+0KoERCqgGvg2+q4Bfhw/rParqOxaYKBTOm1boh2xPJOT0
+         ldEYMvKqGMK68Ew+DcVct3h/MrF08dp+7P1HgBgmNPWiC5URJN+Lxg2738PAm5LYUpmn
+         mQsw==
+X-Gm-Message-State: AOAM531jYt4qAvhB4Z4aYZMaSPd0ZNGiRIPFFFEAe4JgCSghQGIxkJyA
+        qmi2ZwbRzBuRDcjdH7mjdxu05Q==
+X-Google-Smtp-Source: ABdhPJydCEUimIJyazQBa8BRPeEcgTzNUlC4nBe5TecKYIwIBr2ZbEo9p+gDmXN3dQu5R6BUoL3UXg==
+X-Received: by 2002:a05:6870:f5a3:b0:e1:944b:6450 with SMTP id eh35-20020a056870f5a300b000e1944b6450mr526370oab.254.1651808428175;
+        Thu, 05 May 2022 20:40:28 -0700 (PDT)
+Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id p22-20020a056870831600b000eb0e40b4b8sm1260245oae.48.2022.05.05.20.40.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 May 2022 20:40:27 -0700 (PDT)
+Date:   Thu, 5 May 2022 22:40:22 -0500
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Stephen Boyd <swboyd@chromium.org>
+Cc:     Andy Gross <agross@kernel.org>, linux-kernel@vger.kernel.org,
+        patches@lists.linux.dev, linux-arm-msm@vger.kernel.org,
+        Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        "Joseph S. Barrera III" <joebar@chromium.org>
+Subject: Re: [PATCH] arm64: dts: qcom: sc7180-trogdor: Remove cros-ec
+ keyboard from detachables
+Message-ID: <YnSYppSYwaoZRXb4@builder.lan>
+References: <20220426225748.324759-1-swboyd@chromium.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH 2/3] mm: rmap: Fix CONT-PTE/PMD size hugetlb issue when
- migration
-To:     Mike Kravetz <mike.kravetz@oracle.com>, akpm@linux-foundation.org,
-        catalin.marinas@arm.com, will@kernel.org
-Cc:     tsbogend@alpha.franken.de, James.Bottomley@HansenPartnership.com,
-        deller@gmx.de, mpe@ellerman.id.au, benh@kernel.crashing.org,
-        paulus@samba.org, hca@linux.ibm.com, gor@linux.ibm.com,
-        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
-        svens@linux.ibm.com, ysato@users.sourceforge.jp, dalias@libc.org,
-        davem@davemloft.net, arnd@arndb.de,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-ia64@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-mm@kvack.org
-References: <cover.1651216964.git.baolin.wang@linux.alibaba.com>
- <11b92502b3df0e0bba6a1dc71476d79cab6c79ba.1651216964.git.baolin.wang@linux.alibaba.com>
- <5cab0eca-9630-a7c6-4f5d-5cb45ff82c83@oracle.com>
-From:   Baolin Wang <baolin.wang@linux.alibaba.com>
-In-Reply-To: <5cab0eca-9630-a7c6-4f5d-5cb45ff82c83@oracle.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-12.4 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220426225748.324759-1-swboyd@chromium.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue 26 Apr 17:57 CDT 2022, Stephen Boyd wrote:
 
-
-On 5/6/2022 7:53 AM, Mike Kravetz wrote:
-> On 4/29/22 01:14, Baolin Wang wrote:
->> On some architectures (like ARM64), it can support CONT-PTE/PMD size
->> hugetlb, which means it can support not only PMD/PUD size hugetlb:
->> 2M and 1G, but also CONT-PTE/PMD size: 64K and 32M if a 4K page
->> size specified.
-> <snip>
->> diff --git a/mm/rmap.c b/mm/rmap.c
->> index 6fdd198..7cf2408 100644
->> --- a/mm/rmap.c
->> +++ b/mm/rmap.c
->> @@ -1924,13 +1924,15 @@ static bool try_to_migrate_one(struct folio *folio, struct vm_area_struct *vma,
->>   					break;
->>   				}
->>   			}
->> +
->> +			/* Nuke the hugetlb page table entry */
->> +			pteval = huge_ptep_clear_flush(vma, address, pvmw.pte);
->>   		} else {
->>   			flush_cache_page(vma, address, pte_pfn(*pvmw.pte));
->> +			/* Nuke the page table entry. */
->> +			pteval = ptep_clear_flush(vma, address, pvmw.pte);
->>   		}
->>   
+> Trogdor devices that have a detachable keyboard still have a
+> non-detachable keyboard input device present because we include the
+> cros-ec-keyboard.dtsi snippet in the top-level sc7180-trogdor.dtsi file
+> that every variant board includes. We do this because the
+> keyboard-controller node also provides some buttons like the power
+> button and volume buttons. Unfortunately, this means we register a
+> keyboard input device that doesn't do anything on boards with a
+> detachable keyboard. Let's delete the rows/columns properties of the
+> device node to indicate that there isn't a matrix keyboard on these
+> boards.
 > 
-> On arm64 with CONT-PTE/PMD the returned pteval will have dirty or young set
-> if ANY of the PTE/PMDs had dirty or young set.
 
-Right.
+As this seems to directly relate to the final design of each device,
+would it make sense to push out the &keyboard_controller from
+trogdor.dtsi? Or do you think it would be too much duplication for it to
+be worth it?
 
+Regards,
+Bjorn
+
+> Cc: Benson Leung <bleung@chromium.org>
+> Cc: Guenter Roeck <groeck@chromium.org>
+> Cc: Douglas Anderson <dianders@chromium.org>
+> Cc: Hsin-Yi Wang <hsinyi@chromium.org>
+> Cc: "Joseph S. Barrera III" <joebar@chromium.org>
+> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+> ---
+>  arch/arm64/boot/dts/qcom/sc7180-trogdor-coachz.dtsi   | 5 +++++
+>  arch/arm64/boot/dts/qcom/sc7180-trogdor-homestar.dtsi | 5 +++++
+>  2 files changed, 10 insertions(+)
 > 
->> -		/* Nuke the page table entry. */
->> -		pteval = ptep_clear_flush(vma, address, pvmw.pte);
->> -
->>   		/* Set the dirty flag on the folio now the pte is gone. */
->>   		if (pte_dirty(pteval))
->>   			folio_mark_dirty(folio);
->> @@ -2015,7 +2017,10 @@ static bool try_to_migrate_one(struct folio *folio, struct vm_area_struct *vma,
->>   			pte_t swp_pte;
->>   
->>   			if (arch_unmap_one(mm, vma, address, pteval) < 0) {
->> -				set_pte_at(mm, address, pvmw.pte, pteval);
->> +				if (folio_test_hugetlb(folio))
->> +					set_huge_pte_at(mm, address, pvmw.pte, pteval);
+> diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-coachz.dtsi b/arch/arm64/boot/dts/qcom/sc7180-trogdor-coachz.dtsi
+> index c81805ef2250..4173623cc241 100644
+> --- a/arch/arm64/boot/dts/qcom/sc7180-trogdor-coachz.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-coachz.dtsi
+> @@ -119,6 +119,11 @@ &i2c9 {
+>  	status = "disabled";
+>  };
+>  
+> +&keyboard_controller {
+> +	/delete-property/keypad,num-rows;
+> +	/delete-property/keypad,num-columns;
+> +};
+> +
+>  &panel {
+>  	compatible = "boe,nv110wtm-n61";
+>  };
+> diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-homestar.dtsi b/arch/arm64/boot/dts/qcom/sc7180-trogdor-homestar.dtsi
+> index bff2b556cc75..7205062e88b4 100644
+> --- a/arch/arm64/boot/dts/qcom/sc7180-trogdor-homestar.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-homestar.dtsi
+> @@ -121,6 +121,11 @@ &camcc {
+>  	status = "okay";
+>  };
+>  
+> +&keyboard_controller {
+> +	/delete-property/keypad,num-rows;
+> +	/delete-property/keypad,num-columns;
+> +};
+> +
+>  &panel {
+>  	compatible = "samsung,atna33xc20";
+>  	enable-gpios = <&tlmm 12 GPIO_ACTIVE_HIGH>;
+> -- 
+> https://chromeos.dev
 > 
-> And, we will use that pteval for ALL the PTE/PMDs here.  So, we would set
-> the dirty or young bit in ALL PTE/PMDs.
-> 
-> Could that cause any issues?  May be more of a question for the arm64 people.
-
-I don't think this will cause any issues. Since the hugetlb can not be 
-split, and we should not lose the the dirty or young state if any 
-subpages were set. Meanwhile we already did like this in hugetlb.c:
-
-pte = huge_ptep_get_and_clear(mm, address, ptep);
-tlb_remove_huge_tlb_entry(h, tlb, ptep, address);
-if (huge_pte_dirty(pte))
-	set_page_dirty(page);

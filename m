@@ -2,139 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B10A51DD62
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 18:14:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF36C51DD65
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 18:15:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1443590AbiEFQSY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 12:18:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54620 "EHLO
+        id S1443693AbiEFQSv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 12:18:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238954AbiEFQSW (ORCPT
+        with ESMTP id S1443669AbiEFQSq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 12:18:22 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D50FE0AC;
-        Fri,  6 May 2022 09:14:39 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1651853677;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=eGIaI6FR4z9ZKAajKHVzAuOrHeyDOTq0yBE9J83Z0DM=;
-        b=BP8TefPhONS8kML5NOLtpqXmzambUy0GK8jRF4v5uGIa0Q+/JF67dmyIKUFDZXdtkdgEH3
-        gAIhBHABcrOC2He1B7b5Y7v73xCxBS1QCOPiUZhjc5BsFx/1mQksKoyoU4EwvNH7+h4aoz
-        Bdq07PrVDHsH6ZEYlsN/pWktW+cUEYejiG3BdFq0bzOTbDXcFeG37Hs5/mJ034JuqT7+PV
-        3VKnqbSUd17z9NG8jDKj3nc5kv+pcwotIX+kChEH2NIVF828gwNWslAaUqeIUokFPXDJ5d
-        GbN2LPaEKfDIabQrU9y03/pgCGy8JVUc125APHZoRU6jo7tzc4Oq+ThteyikYQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1651853677;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=eGIaI6FR4z9ZKAajKHVzAuOrHeyDOTq0yBE9J83Z0DM=;
-        b=pcMuIo9aq1DOq5bWbaoANP7IgoaUD36hkEleH8xagaT73ZawBHhxDCvKJEKK5auc97xb+k
-        alDKkQkLUmqNSHAQ==
-To:     Alexander Potapenko <glider@google.com>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Christoph Hellwig <hch@lst.de>,
-        Christoph Lameter <cl@linux.com>,
-        David Rientjes <rientjes@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Ilya Leoshkevich <iii@linux.ibm.com>,
-        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Kees Cook <keescook@chromium.org>,
-        Marco Elver <elver@google.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Vegard Nossum <vegard.nossum@oracle.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3 28/46] kmsan: entry: handle register passing from
- uninstrumented code
-In-Reply-To: <CAG_fn=XVchXCcOhFt+rP=vinRhkyrXJSP46cyvcZeHJWaDquGg@mail.gmail.com>
-References: <20220426164315.625149-1-glider@google.com>
- <20220426164315.625149-29-glider@google.com> <87a6c6y7mg.ffs@tglx>
- <CAG_fn=U7PPBmmkgxFcWFQUCqZitzMizr1e69D9f26sGGzeitLQ@mail.gmail.com>
- <87y1zjlhmj.ffs@tglx>
- <CAG_fn=XxAhBEBP2KJvahinbaxLAd1xvqTfRJdAu1Tk5r8=01jw@mail.gmail.com>
- <878rrfiqyr.ffs@tglx>
- <CAG_fn=XVchXCcOhFt+rP=vinRhkyrXJSP46cyvcZeHJWaDquGg@mail.gmail.com>
-Date:   Fri, 06 May 2022 18:14:36 +0200
-Message-ID: <87k0ayhc43.ffs@tglx>
+        Fri, 6 May 2022 12:18:46 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B65CE0AC
+        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 09:15:03 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id cx11-20020a17090afd8b00b001d9fe5965b3so11219898pjb.3
+        for <linux-kernel@vger.kernel.org>; Fri, 06 May 2022 09:15:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=w7Q6FHT5P7kuoH3lLIOpulNCMvZrKfSc9d1fbtcgZsM=;
+        b=g0T98pkT0/A1yfrSdlv8Wdwab/TGcvY+QTB/bMbAaj13vbp6qOdkZnbYaMpuKRTQih
+         uuclSGU5flfxHZMT3fPBhyg+nTeYyW816JYwNyfK64pDuBCNtg2FNEALJKMUTy6Xp156
+         oKqraAV/A4Tws0wva8qLJGbJWhVqJvobkRAZUvCUEDqLU7EwAtAPUJOuok2394XWj7Vi
+         Gli1rqJKL95m6Ewf1Y5ZKXo5EnnZiCIEElEl1/0TE892AnYkXVuzfwHmolBdH2rxitGR
+         ZIQz1X5lQUPs6fWmSoQNeI1Mi3qgilYl/Pdg9GznDnY6mSMpSZNGrNROn8g4blOuggte
+         pLAQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=w7Q6FHT5P7kuoH3lLIOpulNCMvZrKfSc9d1fbtcgZsM=;
+        b=aAJWYWBUDFC7ey0dYVTXEEsFVeYuugJbciyKHXDiHGRvsgHCTQIayov8TNFtB637W+
+         8EVSWm0RoiSB0Dp7FIqoWl24bqGJLKtc3UXIR6dJ8ZZN3vRd4jRG5A98dFUpfGzPTF7j
+         6Vxe67Z9f6MatK43M8N2U65JdErIPmVXcrSg4196OBR5f+h+7Gv98da2/htu7I3+rD7c
+         14XOstAxIjRDTwfxhEkNa/+w4iGzkNOHhEOWtvNYSJFyDo5xbn0tSTVDqmiwwwrs/qxS
+         6tQxy8CocF0V/+fbHULmwkxoh6qL7wep2FPV9DEjDI6TsiLxwJQTGRW3D6I4w+iyvl68
+         MD8g==
+X-Gm-Message-State: AOAM532DGXWFlJyKagyeuOWXw2CxEArFNHs5gg5ROvwzBf7FE+gD7cY7
+        9xl3zFO6AFPliBLlzyGZ6GLuPA==
+X-Google-Smtp-Source: ABdhPJwPCvubHbHQnMQNJdaL6+neV5ypGRrKA9WYKHYQz09LFlORufQb/PW30SNBJ06GCJNJKJjFJg==
+X-Received: by 2002:a17:903:32c6:b0:15e:c1cc:2405 with SMTP id i6-20020a17090332c600b0015ec1cc2405mr4515091plr.117.1651853702959;
+        Fri, 06 May 2022 09:15:02 -0700 (PDT)
+Received: from [192.168.4.166] (cpe-72-132-29-68.dc.res.rr.com. [72.132.29.68])
+        by smtp.gmail.com with ESMTPSA id lk17-20020a17090b33d100b001cd4989ff5esm3819354pjb.37.2022.05.06.09.15.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 06 May 2022 09:15:02 -0700 (PDT)
+Message-ID: <6c417ba7-d677-5076-5ce3-d3e174eb8899@kernel.dk>
+Date:   Fri, 6 May 2022 10:15:01 -0600
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: linux-stable-5.10-y CVE-2022-1508 of io_uring module
+Content-Language: en-US
+To:     Pavel Begunkov <asml.silence@gmail.com>,
+        Guo Xuenan <guoxuenan@huawei.com>
+Cc:     lee.jones@linaro.org, linux-kernel@vger.kernel.org,
+        io-uring@vger.kernel.org, yi.zhang@huawei.com, houtao1@huawei.com
+References: <dd122760-5f87-10b1-e50d-388c2631c01a@kernel.dk>
+ <20220505141159.3182874-1-guoxuenan@huawei.com>
+ <7d54523e-372b-759b-1ebb-e0dbc181f18d@kernel.dk>
+ <31ae3426-b835-3a3f-f6d1-aecad24066e8@gmail.com>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <31ae3426-b835-3a3f-f6d1-aecad24066e8@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 06 2022 at 16:52, Alexander Potapenko wrote:
-> On Thu, May 5, 2022 at 11:56 PM Thomas Gleixner <tglx@linutronix.de> wrote:
->> @@ -452,6 +455,7 @@ irqentry_state_t noinstr irqentry_nmi_en
->>         rcu_nmi_enter();
+On 5/6/22 9:57 AM, Pavel Begunkov wrote:
+> On 5/6/22 03:16, Jens Axboe wrote:
+>> On 5/5/22 8:11 AM, Guo Xuenan wrote:
+>>> Hi, Pavel & Jens
+>>>
+>>> CVE-2022-1508[1] contains an patch[2] of io_uring. As Jones reported,
+>>> it is not enough only apply [2] to stable-5.10.
+>>> Io_uring is very valuable and active module of linux kernel.
+>>> I've tried to apply these two patches[3] [4] to my local 5.10 code, I
+>>> found my understanding of io_uring is not enough to resolve all conflicts.
+>>>
+>>> Since 5.10 is an important stable branch of linux, we would appreciate
+>>> your help in solving this problem.
 >>
->>         instrumentation_begin();
->> +       unpoison(regs);
->>         trace_hardirqs_off_finish();
->>         ftrace_nmi_enter();
->>         instrumentation_end();
->>
->> As I said: 4 places :)
->
-> These four instances still do not look sufficient.
-> Right now I am seeing e.g. reports with the following stack trace:
->
-> BUG: KMSAN: uninit-value in irqtime_account_process_tick+0x255/0x580
-> kernel/sched/cputime.c:382
->  irqtime_account_process_tick+0x255/0x580 kernel/sched/cputime.c:382
->  account_process_tick+0x98/0x450 kernel/sched/cputime.c:476
->  update_process_times+0xe4/0x3e0 kernel/time/timer.c:1786
->  tick_sched_handle kernel/time/tick-sched.c:243
->  tick_sched_timer+0x83e/0x9e0 kernel/time/tick-sched.c:1473
->  __run_hrtimer+0x518/0xe50 kernel/time/hrtimer.c:1685
->  __hrtimer_run_queues kernel/time/hrtimer.c:1749
->  hrtimer_interrupt+0x838/0x15a0 kernel/time/hrtimer.c:1811
->  local_apic_timer_interrupt arch/x86/kernel/apic/apic.c:1086
->  __sysvec_apic_timer_interrupt+0x1ae/0x680 arch/x86/kernel/apic/apic.c:1103
->  sysvec_apic_timer_interrupt+0x95/0xc0 arch/x86/kernel/apic/apic.c:1097
-> ...
-> (uninit creation stack trace is irrelevant here, because it is some
-> random value from the stack)
->
-> sysvec_apic_timer_interrupt() receives struct pt_regs from
-> uninstrumented code, so regs can be partially uninitialized.
-> They are not passed down the call stack directly, but are instead
-> saved by set_irq_regs() in sysvec_apic_timer_interrupt() and loaded by
-> get_irq_regs() in tick_sched_timer().
+>> Yes, this really needs to get buttoned up for 5.10. I seem to recall
+>> there was a reproducer for this that was somewhat saner than the
+>> syzbot one (which doesn't do anything for me). Pavel, do you have one?
+> 
+> No, it was the only repro and was triggering the problem
+> just fine back then
 
-sysvec_apic_timer_interrupt() invokes irqentry_enter() _before_
-set_irq_regs() and irqentry_enter() unpoisons @reg.
+I modified it a bit and I can now trigger it.
 
-Confused...
-
-
-
+-- 
+Jens Axboe
 

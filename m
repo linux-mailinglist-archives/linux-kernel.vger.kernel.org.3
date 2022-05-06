@@ -2,83 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8144251D25A
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 09:32:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A50EB51D25B
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 09:33:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1389580AbiEFHgQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 03:36:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53978 "EHLO
+        id S1389584AbiEFHgu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 03:36:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1389578AbiEFHgM (ORCPT
+        with ESMTP id S1389578AbiEFHgq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 03:36:12 -0400
-Received: from us-smtp-delivery-74.mimecast.com (us-smtp-delivery-74.mimecast.com [170.10.129.74])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 345975D671
-        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 00:32:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651822349;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Esh+VtFiG4BswDTMwa1WxXaR2Q4vfRjhnN3ZC2gg1v4=;
-        b=YlOwHYaGgReuULOXTpbgRy8AAAwEbbKGv8n5IGZ6DcwjO88GUsPTv9VkB4fEOdJg5iAG0s
-        QtRXSLWvo7pGCeZMOl6VdR4EfeYAxUXWi2leK9lV6ZIa0PSO2rpeWWCw4lLkSTOdX/Vnr0
-        IXj4CBsFN6zhumttKCEnU32LmAlr9eU=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-661-xwhKSIc_OPGvm0Zleix7Og-1; Fri, 06 May 2022 03:32:28 -0400
-X-MC-Unique: xwhKSIc_OPGvm0Zleix7Og-1
-Received: by mail-wm1-f71.google.com with SMTP id m186-20020a1c26c3000000b003943e12185dso2506244wmm.7
-        for <linux-kernel@vger.kernel.org>; Fri, 06 May 2022 00:32:28 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Esh+VtFiG4BswDTMwa1WxXaR2Q4vfRjhnN3ZC2gg1v4=;
-        b=hazNf6+KE8Avqy57YnkiLhlRCaOHeEPy20RtiLEj51A7wg/rVJS70POgxXVY0agusz
-         SMSlxqGpMRSjK+SPHskInZWYL43WM5KtELxE8ddvoF/7n7l7zWdX+PMdlLa5Y/nmTX+g
-         6a+mDdY2ZJkmsW1tg3Vbhgevph4iJP01OoppoWE6Ut5SnzKYFA2mjrJlWcLFCFq5klu8
-         2nEIc6Y3sm7EQirLz9a8YWrgPW8Kp/5azx6tyQz0C/6uWHg2PEtsWA5QQ3KHfdr4iNvq
-         g+mMN0mJ6ja4zTzHdkXaxPxIY1OOEX7hBVbOU0RI6ITCCRfqREr3GLgmItFhovQT+S2D
-         54uA==
-X-Gm-Message-State: AOAM532eJRsq8zWKhEGidmSkvP8cQ1odSuzW+/kl99vhQurFKM0DNT5l
-        y6OG42XSVzrxz5IbZTUgq3uqK/1gib2SZi6T+TI7rRjfy9uTMHGHFNKcDOVEW5h1IFA+56MsXBP
-        AFcuH7w4itWi4FVxcuJR1aRdMw5fDyfmYZhvCYpRHLiKOWy+4yVz43EPb4tHmy4i7r/bmBpy/BR
-        o=
-X-Received: by 2002:a05:600c:4e86:b0:394:1cac:4146 with SMTP id f6-20020a05600c4e8600b003941cac4146mr8436334wmq.130.1651822346957;
-        Fri, 06 May 2022 00:32:26 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJx3wzAqzDwdh+znVgqwfq+00rTuhWA2qWcgd56hBPkF6MqkT23hcfOtTlTn8ls2dSsXhVzhqg==
-X-Received: by 2002:a05:600c:4e86:b0:394:1cac:4146 with SMTP id f6-20020a05600c4e8600b003941cac4146mr8436273wmq.130.1651822346271;
-        Fri, 06 May 2022 00:32:26 -0700 (PDT)
-Received: from [192.168.1.129] (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id r10-20020a5d4e4a000000b0020c5253d921sm2803889wrt.109.2022.05.06.00.32.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 06 May 2022 00:32:25 -0700 (PDT)
-Message-ID: <642f515e-aa71-7c90-a715-e49dcf12baee@redhat.com>
-Date:   Fri, 6 May 2022 09:32:24 +0200
+        Fri, 6 May 2022 03:36:46 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C397F5D674;
+        Fri,  6 May 2022 00:33:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651822384; x=1683358384;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=euQgzXLvQn3ayr8FKlpHcWJ7WQxDjNlbVam+n9glxV8=;
+  b=USd4NKvkoN6ul5/jJCB3xE8MvcY8qnyzTDRwf0pg4tzzHT4qAHlV6kIp
+   j6TPHmlB+4q7EcdA07qtaKJrBpmN6U35yWuIGmxh9cvM3MUaioSW3pbi2
+   PF1scHhpAy+j6m/Sk0LyBw96F6RMKg57Q1eBBUYxrHLRpkORQcIix6mjq
+   LKu256MFAEJIikLiFFIunwZg9u4mIrEW5HT4CiWrvfflH2TXlLwkgpgeB
+   CLPD1encdwDqZXhfjTG6MxblOh3emS4SMhhLvjcCSfsdRGTj6Dmw6SOPv
+   vCNmi3ToUCriCjpOnZKJCO31R0RDjKj/8UeVS+/unm+VFuK9yU8kdfytq
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10338"; a="248288564"
+X-IronPort-AV: E=Sophos;i="5.91,203,1647327600"; 
+   d="scan'208";a="248288564"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2022 00:33:04 -0700
+X-IronPort-AV: E=Sophos;i="5.91,203,1647327600"; 
+   d="scan'208";a="537758197"
+Received: from leiwang7-mobl.ccr.corp.intel.com (HELO [10.254.213.160]) ([10.254.213.160])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2022 00:33:01 -0700
+Message-ID: <db8b2633-374f-6845-aa7f-b009c5b4933c@intel.com>
+Date:   Fri, 6 May 2022 15:32:58 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v2] Revert "fbdev: Make fb_release() return -ENODEV if
- fbdev was unregistered"
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.8.1
+Subject: Re: [PATCH v7 0/8] KVM: PKS Virtualization support
 Content-Language: en-US
-To:     linux-kernel@vger.kernel.org
-Cc:     Thomas Zimmermann <tzimmermann@suse.de>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Daniel Vetter <daniel@ffwll.ch>, Helge Deller <deller@gmx.de>,
-        dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org
-References: <20220504115917.758787-1-javierm@redhat.com>
-From:   Javier Martinez Canillas <javierm@redhat.com>
-In-Reply-To: <20220504115917.758787-1-javierm@redhat.com>
-Content-Type: text/plain; charset=UTF-8
+To:     pbonzini@redhat.com, seanjc@google.com, vkuznets@redhat.com,
+        wanpengli@tencent.com, jmattson@google.com, joro@8bytes.org
+Cc:     chenyi.qiang@intel.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220424101557.134102-1-lei4.wang@intel.com>
+From:   "Wang, Lei" <lei4.wang@intel.com>
+In-Reply-To: <20220424101557.134102-1-lei4.wang@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,38 +63,137 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/4/22 13:59, Javier Martinez Canillas wrote:
-> This reverts commit aafa025c76dcc7d1a8c8f0bdefcbe4eb480b2f6a. That commit
-> attempted to fix a NULL pointer dereference, caused by the struct fb_info
-> associated with a framebuffer device to not longer be valid when the file
-> descriptor was closed.
-> 
-> The issue was exposed by commit 27599aacbaef ("fbdev: Hot-unplug firmware
-> fb devices on forced removal"), which added a new path that goes through
-> the struct device removal instead of directly unregistering the fb.
-> 
-> Most fbdev drivers have issues with the fb_info lifetime, because call to
-> framebuffer_release() from their driver's .remove callback, rather than
-> doing from fbops.fb_destroy callback. This meant that due to this switch,
-> the fb_info was now destroyed too early, while references still existed,
-> while before it was simply leaked.
-> 
-> The patch we're reverting here reinstated that leak, hence "fixed" the
-> regression. But the proper solution is to fix the drivers to not release
-> the fb_info too soon.
-> 
-> Suggested-by: Daniel Vetter <daniel.vetter@ffwll.ch>
-> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
-> Reviewed-by: Daniel Vetter <daniel.vetter@ffwll.ch>
+Kindly ping for the comments.
+
+On 4/24/2022 6:15 PM, Lei Wang wrote:
+> This patch series is based on top of v10 PKS core support kernel patchset:
+> https://lore.kernel.org/lkml/20220419170649.1022246-1-ira.weiny@intel.com/
+>
 > ---
-> 
-
-Pushed this to drm-misc (drm-misc-fixes).
-
--- 
-Best regards,
-
-Javier Martinez Canillas
-Linux Engineering
-Red Hat
-
+>
+> Protection Keys for Supervisor Pages(PKS) is a feature that extends the
+> Protection Keys architecture to support thread-specific permission
+> restrictions on supervisor pages.
+>
+> PKS works similar to an existing feature named PKU(protecting user pages).
+> They both perform an additional check after normal paging permission
+> checks are done. Access or Writes can be disabled via a MSR update
+> without TLB flushes when permissions changes. If violating this
+> addional check, #PF occurs and PFEC.PK bit will be set.
+>
+> PKS introduces MSR IA32_PKRS to manage supervisor protection key
+> rights. The MSR contains 16 pairs of ADi and WDi bits. Each pair
+> advertises on a group of pages with the same key which is set in the
+> leaf paging-structure entries(bits[62:59]). Currently, IA32_PKRS is not
+> supported by XSAVES architecture.
+>
+> This patchset aims to add the virtualization of PKS in KVM. It
+> implemented PKS CPUID enumeration, vmentry/vmexit configuration, MSR
+> exposure, nested supported etc. Currently, PKS is not yet supported for
+> shadow paging.
+>
+> Detailed information about PKS can be found in the latest Intel 64 and
+> IA-32 Architectures Software Developer's Manual.
+>
+> ---
+>
+> Changelogs:
+>
+> v6->v7
+> - Add documentation to note that it's nice-to-have cache tracking for PKRS,
+>    and we also needn't hesitate to rip it out in the future if there's a strong
+>    reason to drop the caching. (Sean)
+> - Blindly reading PKRU/PKRS is wrong, fixed. (Sean)
+> - Add a non-inline helper kvm_mmu_pkr_bits() to read PKR bits. (Sean)
+> - Delete the comment for exposing the PKS because the pattern is common and the
+>    behavior is self-explanatory. (Sean)
+> - Add a helper vmx_set_host_pkrs() for setting host pkrs and rewrite the
+>    related code for concise. (Sean)
+> - Align an indentation in arch/x86/kvm/vmx/nested.c. (Sean)
+> - Read the current PKRS if from_vmentry == false under the nested condition.
+>    (Sean)
+> - v6: https://lore.kernel.org/lkml/20220221080840.7369-1-chenyi.qiang@intel.com/
+>
+> v5->v6
+> - PKRS is preserved on INIT. Add the PKRS reset operation in kvm_vcpu_reset.
+>    (Sean)
+> - Track the pkrs as u32. Add the code WARN on bits 64:32 being set in VMCS field.
+>    (Sean)
+> - Adjust the MSR intercept and entry/exit control in VMCS according to
+>    guest CPUID. This resolve the issue when userspace re-enable this feature.
+>    (Sean)
+> - Split VMX restriction on PKS support(entry/exit load controls) out of
+>    common x86. And put tdp restriction together with PKU in common x86.
+>    (Sean)
+> - Thanks for Sean to revise the comments in mmu.c related to
+>    update_pkr_bitmap, which make it more clear for pkr bitmask cache usage.
+> - v5: https://lore.kernel.org/lkml/20210811101126.8973-1-chenyi.qiang@intel.com/
+>
+> v4->v5
+> - Make setting of MSR intercept/vmcs control bits not dependent on guest.CR4.PKS.
+>    And set them if PKS is exposed to guest. (Suggested by Sean)
+> - Add pkrs to standard register caching mechanism to help update
+>    vcpu->arch.pkrs on demand. Add related helper functions. (Suggested by Sean)
+> - Do the real pkrs update in VMCS field in vmx_vcpu_reset and
+>    vmx_sync_vmcs_host_state(). (Sean)
+> - Add a new mmu_role cr4_pks instead of smushing PKU and PKS together.
+>    (Sean & Paolo)
+> - v4: https://lore.kernel.org/lkml/20210205083706.14146-1-chenyi.qiang@intel.com/
+>
+> v3->v4
+> - Make the MSR intercept and load-controls setting depend on CR4.PKS value
+> - shadow the guest pkrs and make it usable in PKS emultion
+> - add the cr4_pke and cr4_pks check in pkr_mask update
+> - squash PATCH 2 and PATCH 5 to make the dependencies read more clear
+> - v3: https://lore.kernel.org/lkml/20201105081805.5674-1-chenyi.qiang@intel.com/
+>
+> v2->v3:
+> - No function changes since last submit
+> - rebase on the latest PKS kernel support:
+>    https://lore.kernel.org/lkml/20201102205320.1458656-1-ira.weiny@intel.com/
+> - add MSR_IA32_PKRS to the vmx_possible_passthrough_msrs[]
+> - RFC v2: https://lore.kernel.org/lkml/20201014021157.18022-1-chenyi.qiang@intel.com/
+>
+> v1->v2:
+> - rebase on the latest PKS kernel support:
+>    https://github.com/weiny2/linux-kernel/tree/pks-rfc-v3
+> - add a kvm-unit-tests for PKS
+> - add the check in kvm_init_msr_list for PKRS
+> - place the X86_CR4_PKS in mmu_role_bits in kvm_set_cr4
+> - add the support to expose VM_{ENTRY, EXIT}_LOAD_IA32_PKRS in nested
+>    VMX MSR
+> - RFC v1: https://lore.kernel.org/lkml/20200807084841.7112-1-chenyi.qiang@intel.com/
+>
+> ---
+>
+> Chenyi Qiang (7):
+>    KVM: VMX: Introduce PKS VMCS fields
+>    KVM: VMX: Add proper cache tracking for PKRS
+>    KVM: X86: Expose IA32_PKRS MSR
+>    KVM: MMU: Rename the pkru to pkr
+>    KVM: MMU: Add support for PKS emulation
+>    KVM: VMX: Expose PKS to guest
+>    KVM: VMX: Enable PKS for nested VM
+>
+> Lei Wang (1):
+>    KVM: MMU: Add helper function to get pkr bits
+>
+>   arch/x86/include/asm/kvm_host.h |  17 +++--
+>   arch/x86/include/asm/vmx.h      |   6 ++
+>   arch/x86/kvm/cpuid.c            |  13 +++-
+>   arch/x86/kvm/kvm_cache_regs.h   |   7 ++
+>   arch/x86/kvm/mmu.h              |  29 +++----
+>   arch/x86/kvm/mmu/mmu.c          | 130 +++++++++++++++++++++++---------
+>   arch/x86/kvm/vmx/capabilities.h |   6 ++
+>   arch/x86/kvm/vmx/nested.c       |  36 ++++++++-
+>   arch/x86/kvm/vmx/vmcs.h         |   1 +
+>   arch/x86/kvm/vmx/vmcs12.c       |   2 +
+>   arch/x86/kvm/vmx/vmcs12.h       |   4 +
+>   arch/x86/kvm/vmx/vmx.c          |  85 +++++++++++++++++++--
+>   arch/x86/kvm/vmx/vmx.h          |  14 +++-
+>   arch/x86/kvm/x86.c              |   9 ++-
+>   arch/x86/kvm/x86.h              |   8 ++
+>   arch/x86/mm/pkeys.c             |   6 ++
+>   include/linux/pks.h             |   7 ++
+>   17 files changed, 301 insertions(+), 79 deletions(-)
+>

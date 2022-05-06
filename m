@@ -2,68 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9294051D1D3
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 09:01:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E3A551D1D8
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 09:02:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387581AbiEFHFS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 03:05:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53480 "EHLO
+        id S1387921AbiEFHFg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 03:05:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1387408AbiEFHE7 (ORCPT
+        with ESMTP id S1387662AbiEFHF3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 03:04:59 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1896C4BFF9;
-        Fri,  6 May 2022 00:01:16 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id j8-20020a17090a060800b001cd4fb60dccso6121058pjj.2;
-        Fri, 06 May 2022 00:01:16 -0700 (PDT)
+        Fri, 6 May 2022 03:05:29 -0400
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E2E95159D
+        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 00:01:47 -0700 (PDT)
+Received: by mail-wm1-x330.google.com with SMTP id bg25so3860711wmb.4
+        for <linux-kernel@vger.kernel.org>; Fri, 06 May 2022 00:01:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=adYCTp8/5p9sggDjQM6BWyPSAca7Ngfv3XcFgStxjkc=;
-        b=IPmiae4btyDW39ftdngHSS1cT5GPzASdQcbJdcxTwWV2jDMoOmIZEpyDC2LMtoLgzF
-         cFAfZ9Tut4+y3nhtZXgtYG6dOYZnSMXIbY4jtdpqRf4uEijMi2R99DJruMYx/ncGVCt6
-         +3Fi2YGRqCETlYIEj/VlmMAz5Yw62SxIP40MhUxbp3wa80iUeJxgmN5M0l8rfG2wdkTY
-         Wq6TKl4ynDUV3KB3/bCD3zspniDsTkicLV1GRhbioqscktKxU62QquZUVmXCXQKNHS1L
-         qOnYo8B6mowU+jMdL7FncrumIYtrdPadVgInIBs2jTH1XZ1Q3Qzhhda9LJsruQAewARA
-         EJhg==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=gpE0GpoyUkqJLGQFOoxzYDTM2n2W9a36FAzgG28lSq0=;
+        b=SiWpBVEXdIYek3QKsrB5xlbbA+J/rHHVyqUvJMAPCX183/MWzY2JckN8U4LzHsGZ4q
+         z2atZWuhQpdZ2io1ZSQyAKGDu0U/D69O6VAx+DdwU8+oyEYKG82sOLH60MAODpVX6jk4
+         AiUWUgZ9EfAGS439JWuLTub/GhuEC977H3Rae9j6npFAXh99igJtiySDHBRyrNyM2DKA
+         z9/q1nEvSD0MltXaMiJCApX4aaMi6dEP5Qrk0JpeMdrb91y7wzcFTmM+ChkTmZK38N6a
+         PE5pYAaZ6EKTHcKwstmfZcpQqUpqWHeE5wr5DXFiIPDX55dFznRZFZnW/Bguy9dIXWW/
+         10WA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=adYCTp8/5p9sggDjQM6BWyPSAca7Ngfv3XcFgStxjkc=;
-        b=PerrAkghCzKietf8Q3y3uMOx+YFZj7k0wIrC+SUsq0nvka6K4kOWPnPQC2ZEhKSSl2
-         d9630yEzlVPJdMO/3gk4Gy7x/EtoWpzCxJOhhQS/69KIdxbfRk/jKJiyRvg130yTDDMB
-         wEppgkRZsN3t1o42FEKG0hEGrsHCrgmUByPldWKnIs8Mo382xB/0+c1JNnr7ApVAHYKY
-         wkgABCEesniYajO5l+V2xLGWAlUUK5/GKGN/1mYJRaRH0Y3/YmaoninMnLlqxci7w9hr
-         lcKhrhWmaY3rTbN+Unl9blb26Gd9sdnviBRnQSz98x2Oa07cQ+/CK1Tg31au7EKzO5e8
-         4p9g==
-X-Gm-Message-State: AOAM532UqYTnkLZJuLBHsyKylKRUA3BuqsO+NFGX4SRg/p2TUSXWLuU4
-        8xyPBsCisy65P1W0pc5Gc4OPyb0hI+U=
-X-Google-Smtp-Source: ABdhPJz0lFpQEH67zBMCtKGc7qra8QdAyFWqh2slDyV2wts8Q2oOcrNvsIbTJ13IwhXpKg1n+flkgg==
-X-Received: by 2002:a17:903:244c:b0:15e:b3f7:950d with SMTP id l12-20020a170903244c00b0015eb3f7950dmr2067737pls.9.1651820475432;
-        Fri, 06 May 2022 00:01:15 -0700 (PDT)
-Received: from HOWEYXU-MB0.tencent.com ([106.53.4.151])
-        by smtp.gmail.com with ESMTPSA id bh2-20020a170902a98200b0015e8d4eb2desm813112plb.296.2022.05.06.00.01.12
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 06 May 2022 00:01:15 -0700 (PDT)
-From:   Hao Xu <haoxu.linux@gmail.com>
-To:     io-uring@vger.kernel.org
-Cc:     Jens Axboe <axboe@kernel.dk>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 5/5] io_uring: implement multishot mode for accept
-Date:   Fri,  6 May 2022 15:01:02 +0800
-Message-Id: <20220506070102.26032-6-haoxu.linux@gmail.com>
-X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220506070102.26032-1-haoxu.linux@gmail.com>
-References: <20220506070102.26032-1-haoxu.linux@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=gpE0GpoyUkqJLGQFOoxzYDTM2n2W9a36FAzgG28lSq0=;
+        b=DD1jW6GDHmaxTjDfEeno71VlK46jUMhhVutnZdBm1JGdcFNlwYhR4ETqWq84CN1KoE
+         KbsiTfmSsHFd+fNss0F7ub6s36ffrz++TcLSjYO9xT7LUVtbFmVA7d+9VmKeUtZ9m9Ho
+         OarGyoRto9aAVRX1V3AGB+9FGoSqT2iR9gvm2GRPddan3auhnntU+fyV8m0XgNEM9o7g
+         5UdSaKaqd/cupIloZ5bHoKmX79ciSG0ziwLxQYcT5SEIG6IWCf59ziTbajgBdQZvuJka
+         05AUxOuCaf1a4eAlo7wwpZvi6iVcXU+kajreQrENJitejt4/F7/h2U0vAOVAQJgIEkKl
+         XEbQ==
+X-Gm-Message-State: AOAM532gGopqwYSUKHxDDZImnGoCvoqDj8xjp6dvh7wPJ08P5e4B4pf9
+        3SXFiEdRKlFauUHf+fVCOC4wgM9Irq05sbMJ65YGBA==
+X-Google-Smtp-Source: ABdhPJxgiYvcpDl5iIQO0WW2jhx5CW4NvSGAj1yQeUK6OqNF1Z6M/1hngPglCSRdiQp6dzFREoSS6qG4PV+b5nu2+X0=
+X-Received: by 2002:a05:600c:12c9:b0:394:54ab:52c5 with SMTP id
+ v9-20020a05600c12c900b0039454ab52c5mr8566186wmd.141.1651820505351; Fri, 06
+ May 2022 00:01:45 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20220429043913.626647-1-davidgow@google.com> <20220430030019.803481-1-davidgow@google.com>
+ <Ym7P7mCoMiQq99EM@bombadil.infradead.org> <Ym7QXOMK3fLQ+b6t@bombadil.infradead.org>
+ <CABVgOSmXyN3SrDkUt4y_TaKPvEGVJgbuE3ycrVDa-Kt1NFGH7g@mail.gmail.com>
+ <YnKS3MwNxvEi73OP@bombadil.infradead.org> <CAGS_qxrz1WoUd5oGa7p1-H2mQVbkRxSTEbqnCG=aBj=xnMu1zQ@mail.gmail.com>
+ <YnLJ6dJQBTYjBRHZ@bombadil.infradead.org> <CAGS_qxoFECVJD3Jby1eTWG741hBWuotuEM78PU-qfyvp-nLV7Q@mail.gmail.com>
+ <YnLsPgbQ7CHiannN@bombadil.infradead.org> <YnNnLIZDxkNwECv+@bombadil.infradead.org>
+In-Reply-To: <YnNnLIZDxkNwECv+@bombadil.infradead.org>
+From:   David Gow <davidgow@google.com>
+Date:   Fri, 6 May 2022 15:01:34 +0800
+Message-ID: <CABVgOS=8=41KgVEgRAGcDZ_JrZpsVaK24ca0jR5J74XY9GCmDA@mail.gmail.com>
+Subject: Re: [PATCH v2] kunit: Taint kernel if any tests run
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     Daniel Latypov <dlatypov@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Lucas De Marchi <lucas.demarchi@intel.com>,
+        Aaron Tomlin <atomlin@redhat.com>,
+        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Kees Cook <keescook@chromium.org>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        "Guilherme G . Piccoli" <gpiccoli@igalia.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        John Ogness <john.ogness@linutronix.de>,
+        Joe Fradley <joefradley@google.com>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Jani Nikula <jani.nikula@linux.intel.com>
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="0000000000007a37b005de526eed"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,180 +92,152 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hao Xu <howeyxu@tencent.com>
+--0000000000007a37b005de526eed
+Content-Type: text/plain; charset="UTF-8"
 
-Refactor io_accept() to support multishot mode.
+On Thu, May 5, 2022 at 1:57 PM Luis Chamberlain <mcgrof@kernel.org> wrote:
+>
+> On Wed, May 04, 2022 at 02:12:30PM -0700, Luis Chamberlain wrote:
+> > On Wed, May 04, 2022 at 02:19:59PM -0500, Daniel Latypov wrote:
+> > > On Wed, May 4, 2022 at 1:46 PM Luis Chamberlain <mcgrof@kernel.org> wrote:
+> > > > OK so, we can just skip tainting considerations for selftests which
+> > > > don't use modules for now. There may be selftests which do wonky
+> > > > things in userspace but indeed I agree the userspace taint would
+> > > > be better for those but I don't think it may be worth bother
+> > > > worrying about those at this point in time.
+> > > >
+> > > > But my point in that sharing a taint between kunit / selftests modules
+> > > > does make sense and is easily possible. The unfortunate aspect is just
+> > >
+> > > Yes, I 100% agree that we should share a taint for kernelspace testing
+> > > from both kunit/kselftest.
+> > > Someone running the system won't care what framework was used.
+> >
+> > OK do you mind doing the nasty work of manually adding the new
+> > MODULE_TAINT() to the selftests as part of your effort?
+> >
+> > *Alternatively*, if we *moved* all sefltests modules to a new
+> > lib/debug/selftests/ directory or something like that then t would
+> > seem modpost *could* add the taint flag automagically for us without
+> > having to edit or require it on new drivers. We have similar type of
+> > taint for staging, see add_staging_flag().
+> >
+> > I would *highly* prefer this approach, event though it is more work,
+> > because I think this is a step we should take anyway.
+> >
+> > However, I just checked modules on lib/ and well, some of them are
+> > already in their own directory, like lib/math/test_div64.c. So not
+> > sure, maybe just move a few modules which are just in lib/*.c for now
+> > and then just sprinkle the MODULE_TAINT() to the others?
+>
+> I *think* we could just pull this off with a much easier approach,
+> simply looking for the substrings in the module name in modpost.c:
+>
+>   * "_test." || "-test."
+>   * ^"test_" || ^"test-"
+>
+> An issue with this of course is a vendor $FOO with an out of tree
+> test driver may end up with the taint. Perhaps we don't care.
+>
+> That means moving selftests to its own directory is not needed at this
+> point in time.
 
-theoretical analysis:
-  1) when connections come in fast
-    - singleshot:
-              add accept sqe(userpsace) --> accept inline
-                              ^                 |
-                              |-----------------|
-    - multishot:
-             add accept sqe(userspace) --> accept inline
-                                              ^     |
-                                              |--*--|
+I can't say I'm thrilled with the idea of just doing name comparisons,
+particularly since not all of them match this pattern, for example:
+bpf_testmod.ko. (Though, frankly, more of them do than I'd've
+guessed.)
 
-    we do accept repeatedly in * place until get EAGAIN
+Maybe adding a taint call to the selftest helper module framework in
+kselftest_module.h, though again, there are several tests which don't
+use it.
 
-  2) when connections come in at a low pressure
-    similar thing like 1), we reduce a lot of userspace-kernel context
-    switch and useless vfs_poll()
+I _suspect_ we'd be able to hit most of them by tainting in frameworks
+like the above, and patch the remaining modules manually. There's also
+definitely a grey area with things like netdevsim, which are used a
+lot as helper modules by selftests, but may have other uses as well.
 
-tests:
-Did some tests, which goes in this way:
+(The advantage of the KUnit tainting is that, due to KUnit's
+centralised executor, we can be sure all KUnit tests will correctly
+trigger the taint. But maybe it doesn't matter as much if one or two
+selftests miss out.)
 
-  server    client(multiple)
-  accept    connect
-  read      write
-  write     read
-  close     close
+-- David
 
-Basically, raise up a number of clients(on same machine with server) to
-connect to the server, and then write some data to it, the server will
-write those data back to the client after it receives them, and then
-close the connection after write return. Then the client will read the
-data and then close the connection. Here I test 10000 clients connect
-one server, data size 128 bytes. And each client has a go routine for
-it, so they come to the server in short time.
-test 20 times before/after this patchset, time spent:(unit cycle, which
-is the return value of clock())
-before:
-  1930136+1940725+1907981+1947601+1923812+1928226+1911087+1905897+1941075
-  +1934374+1906614+1912504+1949110+1908790+1909951+1941672+1969525+1934984
-  +1934226+1914385)/20.0 = 1927633.75
-after:
-  1858905+1917104+1895455+1963963+1892706+1889208+1874175+1904753+1874112
-  +1874985+1882706+1884642+1864694+1906508+1916150+1924250+1869060+1889506
-  +1871324+1940803)/20.0 = 1894750.45
+--0000000000007a37b005de526eed
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
 
-(1927633.75 - 1894750.45) / 1927633.75 = 1.65%
-
-Signed-off-by: Hao Xu <howeyxu@tencent.com>
----
- fs/io_uring.c | 54 +++++++++++++++++++++++++++++++++++++++++++++------
- 1 file changed, 48 insertions(+), 6 deletions(-)
-
-diff --git a/fs/io_uring.c b/fs/io_uring.c
-index 0a83ecc457d1..9febe7774dc3 100644
---- a/fs/io_uring.c
-+++ b/fs/io_uring.c
-@@ -1254,6 +1254,7 @@ static int io_close_fixed(struct io_kiocb *req, unsigned int issue_flags);
- static enum hrtimer_restart io_link_timeout_fn(struct hrtimer *timer);
- static void io_eventfd_signal(struct io_ring_ctx *ctx);
- static void io_req_tw_post_queue(struct io_kiocb *req, s32 res, u32 cflags);
-+static void io_poll_remove_entries(struct io_kiocb *req);
- 
- static struct kmem_cache *req_cachep;
- 
-@@ -5690,24 +5691,29 @@ static int io_recv(struct io_kiocb *req, unsigned int issue_flags)
- static int io_accept_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
- {
- 	struct io_accept *accept = &req->accept;
-+	bool multishot;
- 
- 	if (unlikely(req->ctx->flags & IORING_SETUP_IOPOLL))
- 		return -EINVAL;
--	if (sqe->ioprio || sqe->len || sqe->buf_index)
-+	if (sqe->len || sqe->buf_index)
- 		return -EINVAL;
- 
- 	accept->addr = u64_to_user_ptr(READ_ONCE(sqe->addr));
- 	accept->addr_len = u64_to_user_ptr(READ_ONCE(sqe->addr2));
- 	accept->flags = READ_ONCE(sqe->accept_flags);
- 	accept->nofile = rlimit(RLIMIT_NOFILE);
-+	multishot = !!(READ_ONCE(sqe->ioprio) & IORING_ACCEPT_MULTISHOT);
- 
- 	accept->file_slot = READ_ONCE(sqe->file_index);
--	if (accept->file_slot && (accept->flags & SOCK_CLOEXEC))
-+	if (accept->file_slot && ((accept->flags & SOCK_CLOEXEC) || multishot))
- 		return -EINVAL;
- 	if (accept->flags & ~(SOCK_CLOEXEC | SOCK_NONBLOCK))
- 		return -EINVAL;
- 	if (SOCK_NONBLOCK != O_NONBLOCK && (accept->flags & SOCK_NONBLOCK))
- 		accept->flags = (accept->flags & ~SOCK_NONBLOCK) | O_NONBLOCK;
-+	if (multishot)
-+		req->flags |= REQ_F_APOLL_MULTISHOT;
-+
- 	return 0;
- }
- 
-@@ -5730,6 +5736,7 @@ static inline void io_poll_clean(struct io_kiocb *req)
- 
- static int io_accept(struct io_kiocb *req, unsigned int issue_flags)
- {
-+	struct io_ring_ctx *ctx = req->ctx;
- 	struct io_accept *accept = &req->accept;
- 	bool force_nonblock = issue_flags & IO_URING_F_NONBLOCK;
- 	unsigned int file_flags = force_nonblock ? O_NONBLOCK : 0;
-@@ -5737,10 +5744,13 @@ static int io_accept(struct io_kiocb *req, unsigned int issue_flags)
- 	struct file *file;
- 	int ret, fd;
- 
-+retry:
- 	if (!fixed) {
- 		fd = __get_unused_fd_flags(accept->flags, accept->nofile);
--		if (unlikely(fd < 0))
-+		if (unlikely(fd < 0)) {
-+			io_poll_clean(req);
- 			return fd;
-+		}
- 	}
- 	file = do_accept(req->file, file_flags, accept->addr, accept->addr_len,
- 			 accept->flags);
-@@ -5748,8 +5758,12 @@ static int io_accept(struct io_kiocb *req, unsigned int issue_flags)
- 		if (!fixed)
- 			put_unused_fd(fd);
- 		ret = PTR_ERR(file);
--		if (ret == -EAGAIN && force_nonblock)
--			return -EAGAIN;
-+		if (ret == -EAGAIN && force_nonblock) {
-+			if ((req->flags & REQ_F_APOLL_MULTI_POLLED) ==
-+			    REQ_F_APOLL_MULTI_POLLED)
-+				ret = 0;
-+			return ret;
-+		}
- 		if (ret == -ERESTARTSYS)
- 			ret = -EINTR;
- 		req_set_fail(req);
-@@ -5760,7 +5774,35 @@ static int io_accept(struct io_kiocb *req, unsigned int issue_flags)
- 		ret = io_install_fixed_file(req, file, issue_flags,
- 					    accept->file_slot - 1);
- 	}
--	__io_req_complete(req, issue_flags, ret, 0);
-+
-+	if (req->flags & REQ_F_APOLL_MULTISHOT) {
-+		if (ret >= 0) {
-+			bool filled;
-+
-+			spin_lock(&ctx->completion_lock);
-+			filled = io_fill_cqe_aux(ctx, req->cqe.user_data, ret,
-+						 IORING_CQE_F_MORE);
-+			io_commit_cqring(ctx);
-+			spin_unlock(&ctx->completion_lock);
-+			if (unlikely(!filled)) {
-+				io_poll_clean(req);
-+				return -ECANCELED;
-+			}
-+			io_cqring_ev_posted(ctx);
-+			goto retry;
-+		} else {
-+			/*
-+			 * the apoll multishot req should handle poll
-+			 * cancellation by itself since the upper layer
-+			 * who called io_queue_sqe() cannot get errors
-+			 * happened here.
-+			 */
-+			io_poll_clean(req);
-+			return ret;
-+		}
-+	} else {
-+		__io_req_complete(req, issue_flags, ret, 0);
-+	}
- 	return 0;
- }
- 
--- 
-2.36.0
-
+MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
+ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
+VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
+AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
+AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
+IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
+dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
+6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
+c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
+I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
+AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
+BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
+CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
+AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
+MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
+My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
+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
+G7p3AiuB2sgfq6cOpbO5MEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
+dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
+AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
+c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
+LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
+LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
+Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQBsL34EJkCtu9Nu
+2+R6l1Qzno5Gl+N2Cm6/YLujukDGYa1JW27txXiilR9dGP7yl60HYyG2Exd5i6fiLDlaNEw0SqzE
+dw9ZSIak3Qvm2UybR8zcnB0deCUiwahqh7ZncEPlhnPpB08ETEUtwBEqCEnndNEkIN67yz4kniCZ
+jZstNF/BUnI3864fATiXSbnNqBwlJS3YkoaCTpbI9qNTrf5VIvnbryT69xJ6f25yfmxrXNJJe5OG
+ncB34Cwnb7xQyk+uRLZ465yUBkbjk9pC/yamL0O7SOGYUclrQl2c5zzGuVBD84YcQGDOK6gSPj6w
+QuBfOooZPOyZZZ8AMih7J980MYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
+R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
+MDIwAhABQeVybOOpR4bOOXZYL5T3MA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCBr
+X/PN1i5F2zIL242HU4GqsEFET+G6b/STy3yckg7VuTAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMjA1MDYwNzAxNDVaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAYDUZutewvAsTjHXMgVEQ
+On7tpvC/sM+F49kXBC3mN+dn/xITeI7m47iTK6X+Ct5E9qGYkLDpN1d6LOUGC8DYAM0+YIfNNBn8
+aHnuU6qetQUfkRDDhWw95HajkWpb477ny8XEnIUuALqDHB0K7RghabJhdBiA7q0GuVshOqNO6Bmt
+lUV2xwQnDZ+SCkQ31O/icMGdFwY01JvvTx+XDR2jUHz2jOGAFR1ib96DuLG2sR6SASxR3MshuJsz
+13a1zVVdu52JXd1CFyaLcqcyo9h0ykggX1NINTclSrw7EaQVP0Rziil/K422cAncptvuChRN5JCo
+qugllBI5OPHAGbQmag==
+--0000000000007a37b005de526eed--

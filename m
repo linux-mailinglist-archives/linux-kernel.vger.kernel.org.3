@@ -2,73 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CC3D51DE79
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 19:54:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BF1051DE7E
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 19:55:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351022AbiEFR6D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 13:58:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46158 "EHLO
+        id S1352808AbiEFR67 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 13:58:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233439AbiEFR6A (ORCPT
+        with ESMTP id S1351577AbiEFR66 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 13:58:00 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEE206D3A5
-        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 10:54:16 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id x18so11012977wrc.0
-        for <linux-kernel@vger.kernel.org>; Fri, 06 May 2022 10:54:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=philpotter-co-uk.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Kcq1T+Nqx8mFB2lHzVEVRME11trHtv67j1PZxeJ5LT0=;
-        b=0Vmol6v9SW2T8F1RJUqOV50Hg64NAKaa8/z2TdlFL5axVsWRbd9makJoz6MGcvurb6
-         xIezZR0st/wumGFRqVdaYYZcPzF+MLaHvT9wU3/2//xaHihy9mNTrunY7hquu1TY+jvb
-         +kSMRnNACQ9h4vce6E2G8BFmOb+poVnhvBJYxa65q8DxIY9EsgkAF2dRjsUFsoQ06R2I
-         mxdUlp1qt+gRXW5s9KdFSoECeCpSfwcNr1Ib+96kx+EkQA4PqMsk5x1cTRP3gll+mUDx
-         vmcQEnMK6yuMc3AIHapmcfLq3vhocZg9yVhpJBhiwz0RSOKnrgUwtXaGeNfs3wp7Vs2X
-         EUgg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Kcq1T+Nqx8mFB2lHzVEVRME11trHtv67j1PZxeJ5LT0=;
-        b=iDUfWqVYtQRqZMG9LXsa9zDmUpFiehI54L0mEIukd/zXyleC0V587RgUK0aSTpwPeG
-         puA+bDdh5vdVSpP6aQ+PcBPHcqYxt3cWvp5/bpUSBb8pA7SqcGJFNwV1Hf94XfRHL594
-         tgW6swtQwEenwyiWy7PH5A5K/ORdLh49u5jnNaRmZgCUetbfoswmoWTD7BiXSYH2OJeM
-         XguFPmoJkDIrLYSpzaeB7HrdAw6oSH49gwjfhpzPx4rHWstgIz/TSS1zyEeRRGVIRwG5
-         Uv/t9mWT93vLZPdGblmIs5+0Pt/+qxg8wCnmEDbEyYAb+7EMMZwu+ZmaDZ+TkH3B3s82
-         XhTg==
-X-Gm-Message-State: AOAM530Ejc9/gjc6ZSqfxVrNeU/3cWKxPss0VLxmmBDUUagcBHuoBq+O
-        uATUhAV5iomSwLxSxPZ+cMj93T+l2cM77A==
-X-Google-Smtp-Source: ABdhPJyCxytw+tYc1+WN9LTskOYGB7TkSAzCW4a1xwRbwZDJ98z3AdUw8oErwpxGwMc95nLymqRpPQ==
-X-Received: by 2002:a5d:6da8:0:b0:20c:535e:2f61 with SMTP id u8-20020a5d6da8000000b0020c535e2f61mr3744539wrs.455.1651859655359;
-        Fri, 06 May 2022 10:54:15 -0700 (PDT)
-Received: from equinox (2.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.a.1.e.e.d.f.d.0.b.8.0.1.0.0.2.ip6.arpa. [2001:8b0:dfde:e1a0::2])
-        by smtp.gmail.com with ESMTPSA id e10-20020adff34a000000b0020c7ec0fdf4sm4684819wrp.117.2022.05.06.10.54.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 May 2022 10:54:14 -0700 (PDT)
-Date:   Fri, 6 May 2022 18:54:12 +0100
-From:   Phillip Potter <phil@philpotter.co.uk>
-To:     Paul Gortmaker <paul.gortmaker@windriver.com>
-Cc:     Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org,
-        Jens Axboe <axboe@kernel.dk>, Christoph Hellwig <hch@lst.de>,
-        Randy Dunlap <rdunlap@infradead.org>
-Subject: Re: [PATCH 3/3] block: remove last remaining traces of IDE
- documentation
-Message-ID: <YnVgxEcRTQPu/DHE@equinox>
-References: <20220427132436.12795-1-paul.gortmaker@windriver.com>
- <20220427132436.12795-4-paul.gortmaker@windriver.com>
- <87wnfaa8ce.fsf@meer.lwn.net>
- <20220427165917.GE12977@windriver.com>
- <YmsmnGb3JNjH54Xb@equinox>
- <20220506153241.GH12977@windriver.com>
+        Fri, 6 May 2022 13:58:58 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01B986D3AB;
+        Fri,  6 May 2022 10:55:13 -0700 (PDT)
+Received: from [127.0.0.1] (dynamic-002-247-254-212.2.247.pool.telefonica.de [2.247.254.212])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 367B91EC01B5;
+        Fri,  6 May 2022 19:55:08 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1651859708;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=WrS6zMRai2e5YLLJbn36HLgL1yxwpiepU+QWEjmX0NA=;
+        b=oy+cicerrACsFn7WKW0lodO2FEe5WV4r9TEhbjCDKaBcAwZAlWHVNS8ucEFsvq6jCZ9Vhd
+        WukviSu8bAQZfzmHpwH98RuQT1NF9lzEENQ8Uz9+K7re6b9/iWYWq+eSEVmiEiyLYXQc4b
+        DwqLl2CqnSyUAcAokdFBagYxYISWJ9U=
+Date:   Fri, 06 May 2022 17:55:05 +0000
+From:   Boris Petkov <bp@alien8.de>
+To:     Dan Williams <dan.j.williams@intel.com>,
+        Dave Hansen <dave.hansen@intel.com>
+CC:     Martin Fernandez <martin.fernandez@eclypsium.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-efi <linux-efi@vger.kernel.org>,
+        Linux MM <linux-mm@kvack.org>,
+        platform-driver-x86@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>, X86 ML <x86@kernel.org>,
+        "Schofield, Alison" <alison.schofield@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Andy Shevchenko <andy@infradead.org>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Ard Biesheuvel <ardb@kernel.org>, daniel.gutson@eclypsium.com,
+        "H. Peter Anvin" <hpa@zytor.com>, alex.bazhaniuk@eclypsium.com,
+        hughsient@gmail.com, Kees Cook <keescook@chromium.org>,
+        Darren Hart <dvhart@infradead.org>,
+        Ben Widawsky <ben.widawsky@intel.com>,
+        "Huang, Kai" <kai.huang@intel.com>
+Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_v8_0/8=5D_x86=3A_Show_in_sysfs_i?= =?US-ASCII?Q?f_a_memory_node_is_able_to_do_encryption?=
+User-Agent: K-9 Mail for Android
+In-Reply-To: <CAPcyv4i73m6iPPfJE9CBdxf-OWGXahvGqvh6G-pqVO=3LB6ktQ@mail.gmail.com>
+References: <20220429201717.1946178-1-martin.fernandez@eclypsium.com> <YnKr+aMf4PspDpHZ@zn.tnic> <CAKgze5YDD02AsrF0yESv2sptZ4qxyTMgCDmnOKcbQWjKQsJRsw@mail.gmail.com> <YnUYLDjIThbIz/Uf@zn.tnic> <6d90c832-af4a-7ed6-4f72-dae08bb69c37@intel.com> <CAPcyv4i73m6iPPfJE9CBdxf-OWGXahvGqvh6G-pqVO=3LB6ktQ@mail.gmail.com>
+Message-ID: <47140A56-D3F8-4292-B355-5F92E3BA9F67@alien8.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220506153241.GH12977@windriver.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,73 +72,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 06, 2022 at 11:32:41AM -0400, Paul Gortmaker wrote:
-> [Re: [PATCH 3/3] block: remove last remaining traces of IDE documentation] On 29/04/2022 (Fri 00:43) Phillip Potter wrote:
-> 
-> > On Wed, Apr 27, 2022 at 12:59:17PM -0400, Paul Gortmaker wrote:
-> > > [Re: [PATCH 3/3] block: remove last remaining traces of IDE documentation] On 27/04/2022 (Wed 08:50) Jonathan Corbet wrote:
-> > > 
-> > > > The Documentation/ide part of this is already dealt with in docs-next;
-> > > > obviously there was more to do, though :)
-> > > 
-> > > Ah, I'd checked mainline master of today but not sfr's next.
-> > > 
-> > > Here is a delta diff against today's linux-next
-> > > 
-> > > Thanks,
-> > > Paul.
-> > > --
-> > > 
-> > > From ecb86eb357e5151ba5f7e7d172c65d07d88c4c39 Mon Sep 17 00:00:00 2001
-> > > From: Paul Gortmaker <paul.gortmaker@windriver.com>
-> > > Date: Wed, 27 Apr 2022 12:45:50 -0400
-> > > Subject: [PATCH -next] Documentation: remove last remaining traces of IDE
-> > >  information
-> > > 
-> > > The last traces of the IDE driver went away in commit b7fb14d3ac63
-> > > ("ide: remove the legacy ide driver") but it left behind some traces
-> > > of old documentation.
-> > > 
-> > > As luck would have it Randy and I would submit similar changes within
-> > > a week of each other to address this.  As Randy's commit is in the doc
-> > > tree already - this delta is just the stuff my removal contained that
-> > > was not in Randy's IDE doc removal.
-> 
-> [...]
-> 
-> > 
-> > Hi Paul,
-> > 
-> > Apologies if I'm missing something, but this updated diff still seems to
-> > conflict with Randy's earlier one. As cdrom doesn't get a lot of churn,
-> > I agreed with Jens that I would usually just send on all accepted
-> > patches at once to him and he would take them via his tree (I currently
-> > have four accepted patches, including your two others and Randy's patch,
-> > plus one other).
-> > 
-> > Anyhow, please could this be corrected? Or me shown the error of my ways
-> > (always possible I'm making a mistake) :-) Many thanks.
-> 
-> Are you working off linux-next?  If not, what is your baseline and what
-> are you running and what do you see?  For example, the commands below:
-> 
-> The ecb86 that I sent in this e-mail still applies on linux-next of
-> today which contains Jens next as you can seed:
-> 
+On May 6, 2022 4:00:57 PM UTC, Dan Williams <dan=2Ej=2Ewilliams@intel=2Ecom=
+> wrote:
+>On Fri, May 6, 2022 at 8:32 AM Dave Hansen <dave=2Ehansen@intel=2Ecom> wr=
+ote:
+>>
+>> On 5/6/22 05:44, Borislav Petkov wrote:
+>> >> Dave Hansen pointed those out in a previuos patch serie, here is the
+>> >> quote:
+>> >>
+>> >>> CXL devices will have normal RAM on them, be exposed as "System RAM=
+" and
+>> >>> they won't have encryption capabilities=2E  I think these devices w=
+ere
+>> >>> probably the main motivation for EFI_MEMORY_CPU_CRYPTO=2E
+>> > So this would mean that if a system doesn't have CXL devices and has
+>> > TME/SME/SEV-* enabled, then it is running with encrypted memory=2E
+>> >
+>> > Which would then also mean, you don't need any of that code - you onl=
+y
+>> > need to enumerate CXL devices which, it seems, do not support memory
+>> > encryption, and then state that memory encryption is enabled on the
+>> > whole system, except for the memory of those devices=2E
+>>
+>> CXL devices are just the easiest example to explain, but they are not
+>> the only problem=2E
+>>
+>> For example, Intel NVDIMMs don't support TDX (or MKTME with integrity)
+>> since TDX requires integrity protection and NVDIMMs don't have metadata
+>> space available=2E
+>>
+>> Also, if this were purely a CXL problem, I would have expected this to
+>> have been dealt with in the CXL spec alone=2E  But, this series is
+>> actually driven by an ACPI spec=2E  That tells me that we'll see these
+>> mismatched encryption capabilities in many more places than just CXL
+>> devices=2E
+>
+>Yes, the problem is that encryption capabilities cut across multiple
+>specifications=2E For example, you might need to consult a CPU
+>vendor-specific manual, ACPI, EFI, PCI, and CXL specifications for a
+>single security feature=2E
 
-I was yes, the point I was trying to make (poorly) is that your patch
-conflicts with Randy's patch which itself is not yet in linux-next, as
-normally I send everything together at the start of the merge window to
-Jens, as I don't have my own kernel.org tree yet, and usually I only get
-one or two patches in a cycle anyway.
+So here's the deal: we can say in the kernel that memory encryption is ena=
+bled and active=2E  But then all those different devices and so on,  can or=
+ cannot support encryption=2E IO devices do not support encryption either, =
+afaict=2E And there you don't have node granularity etc=2E So you can't do =
+this per node thing anyway=2E Or you do it and it becomes insufficient soin=
+ after=2E
 
-This is not your fault, you couldn't have been expected to know this in
-retrospect, and I should probably look into getting my own tree/GPG key
-sorted to alleviate this problem in future.
+But that is not the question - they don't wanna say in fwupd whether every=
+ transaction was encrypted or not - they wanna say that encryption is activ=
+e=2E And that we can give them now=2E=20
 
-In the meantime, if you're comfortable with the idea, I can just resolve
-the conflict myself when I send the patches onto Jens this time and
-include patch 3/3 pre-fixed up. Merge window will be fairly soon anyway.
+Thx=2E
 
-Thanks,
-Phil
+--=20
+Sent from a small device: formatting sux and brevity is inevitable=2E 

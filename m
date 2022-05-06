@@ -2,131 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44A4E51E222
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 01:40:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB27051E1D1
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 01:40:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1444925AbiEFXQr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 19:16:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50948 "EHLO
+        id S1444935AbiEFXSv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 19:18:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344728AbiEFXQp (ORCPT
+        with ESMTP id S1344728AbiEFXSs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 19:16:45 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 899CA6D38B;
-        Fri,  6 May 2022 16:13:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651878780; x=1683414780;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ivKLSc3Gz/VoaAyyf+KCJfvGkIFxkKCWMielKh/Fppg=;
-  b=GVG6h9CZA1jfByghGDw1R65aQ32f9pMEAdoBEWbj90Q0r5YLFXDnmcc6
-   dh1y0+Gc0N/ECEjmrkCTLfd7tnJ4sn/Ukd4PFBc3r1uNYrfCl8iWoghnc
-   IYW/1mujkVQVidenIlzhdOTOd8YRtrBDcCPG8wqOsUmta/rkddahyW0M/
-   q0HT1+3COSeLNnyxnWEQgY2k5ZnqblheXYJN5ZuVT47571pdmUBx3ctuH
-   xh/k4jgxKjA0rxZ5RSJA2naZCe0I84Yf+iM56o2B0mSyttNGpFq57oSGh
-   khYBJZMBc20RExNu/JfzomMgjw2OdoQC5iF3tvdqgsPyLljBy3G/W72Fa
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10339"; a="250609349"
-X-IronPort-AV: E=Sophos;i="5.91,205,1647327600"; 
-   d="scan'208";a="250609349"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2022 16:13:00 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,205,1647327600"; 
-   d="scan'208";a="812601743"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 06 May 2022 16:12:55 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nn782-000E0I-Eu;
-        Fri, 06 May 2022 23:12:54 +0000
-Date:   Sat, 7 May 2022 07:12:20 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     cgel.zte@gmail.com, akpm@linux-foundation.org, hannes@cmpxchg.org,
-        willy@infradead.org, shy828301@gmail.com
-Cc:     kbuild-all@lists.01.org, mhocko@kernel.org,
-        roman.gushchin@linux.dev, shakeelb@google.com,
-        linmiaohe@huawei.com, hughd@google.com, songmuchun@bytedance.com,
-        surenb@google.com, vbabka@suse.cz, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, cgroups@vger.kernel.org,
-        william.kucharski@oracle.com, peterx@redhat.com,
-        Yang Yang <yang.yang29@zte.com.cn>
-Subject: Re: [PATCH v2] mm/memcg: support control THP behaviour in cgroup
-Message-ID: <202205070730.ekn8xxfz-lkp@intel.com>
-References: <20220506031804.437642-1-yang.yang29@zte.com.cn>
+        Fri, 6 May 2022 19:18:48 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 198A6703E3
+        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 16:15:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1651878903;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=fsjPSSDEheSxxSuL7Ltb8dQNk6VTQw2Y864IsSu4LBg=;
+        b=cWJWSeWvzsH5BW5G6uyIL7+8eyqNdStUnmXtSSSNpums2kzhkled4GQRRPPUKZMh3Sm2P6
+        DJTnBS1pOfa+21Afqz4xDfDqFItna2xZHCBnHPXmUYhkioeo1TfqY1bxA+VP7GXrn7Zm8i
+        dZNIZ647dtXUfLfbF3DHjYd8coQ3yaM=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-215-6e3mBSoQNiWUVALHVxPMfA-1; Fri, 06 May 2022 19:14:59 -0400
+X-MC-Unique: 6e3mBSoQNiWUVALHVxPMfA-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7BCC01C05199;
+        Fri,  6 May 2022 23:14:58 +0000 (UTC)
+Received: from localhost (ovpn-12-33.pek2.redhat.com [10.72.12.33])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 7B7C97AD9;
+        Fri,  6 May 2022 23:14:54 +0000 (UTC)
+Date:   Sat, 7 May 2022 07:14:51 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     Zhen Lei <thunder.leizhen@huawei.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        linux-kernel@vger.kernel.org, Dave Young <dyoung@redhat.com>,
+        Vivek Goyal <vgoyal@redhat.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        kexec@lists.infradead.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        devicetree@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        linux-doc@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
+        Feng Zhou <zhoufeng.zf@bytedance.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Chen Zhou <dingguo.cz@antgroup.com>,
+        John Donnelly <John.p.donnelly@oracle.com>,
+        Dave Kleikamp <dave.kleikamp@oracle.com>
+Subject: Re: [PATCH v24 6/6] docs: kdump: Update the crashkernel description
+ for arm64
+Message-ID: <20220506231451.GB122876@MiWiFi-R3L-srv>
+References: <20220506114402.365-1-thunder.leizhen@huawei.com>
+ <20220506114402.365-7-thunder.leizhen@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220506031804.437642-1-yang.yang29@zte.com.cn>
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220506114402.365-7-thunder.leizhen@huawei.com>
+X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On 05/06/22 at 07:44pm, Zhen Lei wrote:
+> Now arm64 has added support for "crashkernel=X,high" and
+> "crashkernel=Y,low". Unlike x86, crash low memory is not allocated if
+> "crashkernel=Y,low" is not specified.
+> 
+> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+> ---
+>  Documentation/admin-guide/kernel-parameters.txt | 9 +++++++--
+>  1 file changed, 7 insertions(+), 2 deletions(-)
+> 
+> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+> index 3f1cc5e317ed4a5..aa44c61114aa4b8 100644
+> --- a/Documentation/admin-guide/kernel-parameters.txt
+> +++ b/Documentation/admin-guide/kernel-parameters.txt
+> @@ -808,7 +808,7 @@
+>  			Documentation/admin-guide/kdump/kdump.rst for an example.
+>  
+>  	crashkernel=size[KMG],high
+> -			[KNL, X86-64] range could be above 4G. Allow kernel
+> +			[KNL, X86-64, ARM64] range could be above 4G. Allow kernel
+>  			to allocate physical memory region from top, so could
+>  			be above 4G if system have more than 4G ram installed.
+>  			Otherwise memory region will be allocated below 4G, if
+> @@ -821,7 +821,7 @@
+>  			that require some amount of low memory, e.g. swiotlb
+>  			requires at least 64M+32K low memory, also enough extra
+>  			low memory is needed to make sure DMA buffers for 32-bit
+> -			devices won't run out. Kernel would try to allocate at
+> +			devices won't run out. Kernel would try to allocate
+>  			at least 256M below 4G automatically.
+>  			This one let user to specify own low range under 4G
+>  			for second kernel instead.
+> @@ -829,6 +829,11 @@
+>  			It will be ignored when crashkernel=X,high is not used
+>  			or memory reserved is below 4G.
+>  
+> +			[KNL, ARM64] range in low memory.
+> +			This one let user to specify a low range in DMA zone for
+                                          ^ not needed,
+                        Maybe Catalin can fix it when merging.
 
-Thank you for the patch! Yet something to improve:
+Other than this, LGTM,
 
-[auto build test ERROR on akpm-mm/mm-everything]
-[also build test ERROR on linux/master linus/master v5.18-rc5 next-20220506]
-[cannot apply to hnaz-mm/master]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+Acked-by: Baoquan He <bhe@redhat.com>
 
-url:    https://github.com/intel-lab-lkp/linux/commits/cgel-zte-gmail-com/mm-memcg-support-control-THP-behaviour-in-cgroup/20220506-112100
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-config: arm64-randconfig-r005-20220506 (https://download.01.org/0day-ci/archive/20220507/202205070730.ekn8xxfz-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/01b750c350f3c12ca3908e94dc4447041ac9d89b
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review cgel-zte-gmail-com/mm-memcg-support-control-THP-behaviour-in-cgroup/20220506-112100
-        git checkout 01b750c350f3c12ca3908e94dc4447041ac9d89b
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
+> +			crash dump kernel.
+> +			It will be ignored when crashkernel=X,high is not used.
+> +
+>  	cryptomgr.notests
+>  			[KNL] Disable crypto self-tests
+>  
+> -- 
+> 2.25.1
+> 
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   aarch64-linux-ld: Unexpected GOT/PLT entries detected!
-   aarch64-linux-ld: Unexpected run-time procedure linkages detected!
-   aarch64-linux-ld: mm/shmem.o: in function `shmem_zero_setup':
-   shmem.c:(.text+0x6a0): undefined reference to `khugepaged_always'
->> aarch64-linux-ld: shmem.c:(.text+0x6b4): undefined reference to `khugepaged_req_madv'
-   aarch64-linux-ld: mm/huge_memory.o: in function `do_huge_pmd_anonymous_page':
-   huge_memory.c:(.text+0x3a78): undefined reference to `khugepaged_always'
->> aarch64-linux-ld: huge_memory.c:(.text+0x3a8c): undefined reference to `khugepaged_req_madv'
-   aarch64-linux-ld: mm/khugepaged.o: in function `hugepage_vma_check':
-   khugepaged.c:(.text+0x1370): undefined reference to `khugepaged_always'
-   aarch64-linux-ld: mm/khugepaged.o: in function `set_recommended_min_free_kbytes':
-   khugepaged.c:(.text+0x1654): undefined reference to `khugepaged_enabled'
-   aarch64-linux-ld: mm/khugepaged.o: in function `khugepaged_wait_work':
-   khugepaged.c:(.text+0x1b08): undefined reference to `khugepaged_enabled'
->> aarch64-linux-ld: khugepaged.c:(.text+0x1c4c): undefined reference to `khugepaged_enabled'
-   aarch64-linux-ld: mm/khugepaged.o: in function `khugepaged_do_scan':
-   khugepaged.c:(.text+0x3a58): undefined reference to `khugepaged_enabled'
-   aarch64-linux-ld: khugepaged.c:(.text+0x3b10): undefined reference to `khugepaged_enabled'
-   aarch64-linux-ld: mm/khugepaged.o: in function `khugepaged_enter_vma_merge':
-   khugepaged.c:(.text+0x3f6c): undefined reference to `khugepaged_always'
->> aarch64-linux-ld: khugepaged.c:(.text+0x3f80): undefined reference to `khugepaged_req_madv'
-   aarch64-linux-ld: mm/khugepaged.o: in function `start_stop_khugepaged':
-   khugepaged.c:(.text+0x42ec): undefined reference to `khugepaged_enabled'
-   aarch64-linux-ld: mm/khugepaged.o: in function `khugepaged_min_free_kbytes_update':
-   khugepaged.c:(.text+0x442c): undefined reference to `khugepaged_enabled'
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp

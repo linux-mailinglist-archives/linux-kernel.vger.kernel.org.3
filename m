@@ -2,77 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67CF351D184
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 08:36:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E53451D188
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 08:39:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381554AbiEFGjl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 02:39:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34236 "EHLO
+        id S1350575AbiEFGnA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 02:43:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381727AbiEFGji (ORCPT
+        with ESMTP id S235721AbiEFGm5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 02:39:38 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E8CB65433
-        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 23:35:55 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id j6so12557440ejc.13
-        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 23:35:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=zz4s19IuKfTWspT91aKEXLuSU6HR0U4j58MbscydUyU=;
-        b=MpmLl/FtCbjUVWWOH3llKMB/0jTnJdXFpLOuz1NzKYZELDFAR9Xh/FalVKBEYIUcj8
-         CACUx8NQWsVVgEElfDul2cFjZbosb7XV6mowGltvFtdK1CdmrnnwanchRL4tWtBZ4Pnn
-         7kQbGKoPCklmKAIKKCGt/HoJW6qU+u1hEF44R6aAPk/tIec0iI3f7TZfYDAWMR/zqjRd
-         1Zf+UpVFmMc4n92cWQpMXUE6yjE7TjOgxbU80BtRK2Nr6aUl/5WqfQX+vQHhsC3e9og1
-         H8+DZhmu+ZC7BWdR1tsnWwt1WCOxmgwuUIZdcf2IwE/jHT8Tk4MtHLk5T3i9WIiFsu62
-         UxVg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=zz4s19IuKfTWspT91aKEXLuSU6HR0U4j58MbscydUyU=;
-        b=qXpUdgZYM+wlmjQJIAs/oj6DhgjiInoIj1UMT8w4vP7vpfkJX2mRJ25loWjUzs+ecW
-         cgL6JtxRxjoW6VJJ1A/3G4VpFLfMXPMUfdAzR4nCBN7CK6dN1GtwU89ugJ0YpXpUlD9g
-         ctuqUglcTAjLnlSNlT9ohoxkIJoSSQiIbfH7XzCdtBSDb+B7OFGmCN03NDARXbKoqFCh
-         vYZFgk15oBSeNq4s1j260wwMolb+E5CNPBALrUgZRYN35/1nVxJk3sYSQzhx1JO7at+m
-         J+wL2u9F36AcIc0bXXm94dg1tzKTfiJJDkCo5yi4zUi480GD43U347xx+jK+DxCgMTL4
-         3pkA==
-X-Gm-Message-State: AOAM532pOoFmIRRdXWeWiFWr6xdirkp3UX9Jch75zdm8YIyqLN06qNGy
-        xkkJA/0V7cXEzDxuYfzoxJaCRw==
-X-Google-Smtp-Source: ABdhPJziYnBgutJZ7XtcuUasNPQfiJkESED3cSKWySTy25i3Vl6K281X4oN9Lcg38owtVMyfOlqcQA==
-X-Received: by 2002:a17:907:7ea8:b0:6f5:941:cba9 with SMTP id qb40-20020a1709077ea800b006f50941cba9mr1546089ejc.213.1651818953535;
-        Thu, 05 May 2022 23:35:53 -0700 (PDT)
-Received: from [192.168.0.222] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id cy14-20020a0564021c8e00b0042617ba638asm1833255edb.20.2022.05.05.23.35.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 05 May 2022 23:35:53 -0700 (PDT)
-Message-ID: <550cd907-be2a-4e90-350c-fbc3bdc03728@linaro.org>
-Date:   Fri, 6 May 2022 08:35:52 +0200
+        Fri, 6 May 2022 02:42:57 -0400
+Received: from us-smtp-delivery-74.mimecast.com (us-smtp-delivery-74.mimecast.com [170.10.133.74])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C794466220
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 23:39:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1651819154;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=xb5hsCR6vYhEn6zB3BaM7s+6s3NgLuWsFQFQ8PP7p2o=;
+        b=dxunkiyNi5YBtnYne6r2s9X3VJTLdMfBxqNU4lLH4Ogd7PXI4psEjDCPeG8h12xUO5x8OC
+        OqWYum8jWqxvlr721J3zOFAtvL6zwsMoBulIhfi+a1x2ChiZjgWF9Spy7lr0FwdVdi9WSV
+        lqXRRQ2oOUEMdPtfMBfYNRW8DABOrgs=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-156-MMEcz8QbMauv4T_PH7qIZA-1; Fri, 06 May 2022 02:39:11 -0400
+X-MC-Unique: MMEcz8QbMauv4T_PH7qIZA-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 18123833961;
+        Fri,  6 May 2022 06:39:11 +0000 (UTC)
+Received: from samus.usersys.redhat.com (unknown [10.43.17.26])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 46E1E2166B2D;
+        Fri,  6 May 2022 06:39:09 +0000 (UTC)
+Received: by samus.usersys.redhat.com (Postfix, from userid 1000)
+        id 30EE960A; Fri,  6 May 2022 08:39:08 +0200 (CEST)
+Date:   Fri, 6 May 2022 08:39:08 +0200
+From:   Artem Savkov <asavkov@redhat.com>
+To:     Josh Poimboeuf <jpoimboe@kernel.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Anna-Maria Behnsen <anna-maria@linutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 2/2] net: make tcp keepalive timer upper bound
+Message-ID: <YnTCjFE2+/JEgglV@samus.usersys.redhat.com>
+Mail-Followup-To: Josh Poimboeuf <jpoimboe@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Anna-Maria Behnsen <anna-maria@linutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <87zgkwjtq2.ffs@tglx>
+ <20220505131811.3744503-1-asavkov@redhat.com>
+ <20220505131811.3744503-3-asavkov@redhat.com>
+ <20220505175654.jhu3zldboxdcjifr@treble>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH v14 6/9] dt-bindings: interrupt-controller: Add bindings
- for SP7021 interrupt controller
-Content-Language: en-US
-To:     Qin Jian <qinjian@cqplus1.com>
-Cc:     robh+dt@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
-        tglx@linutronix.de, maz@kernel.org, p.zabel@pengutronix.de,
-        linux@armlinux.org.uk, arnd@arndb.de,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        Rob Herring <robh@kernel.org>
-References: <cover.1651805790.git.qinjian@cqplus1.com>
- <56fb5e9a35a901f15d8e9721385c7e916c181377.1651805790.git.qinjian@cqplus1.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <56fb5e9a35a901f15d8e9721385c7e916c181377.1651805790.git.qinjian@cqplus1.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220505175654.jhu3zldboxdcjifr@treble>
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.6
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,35 +78,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/05/2022 05:23, Qin Jian wrote:
-> Add documentation to describe Sunplus SP7021 interrupt controller bindings.
+On Thu, May 05, 2022 at 10:56:54AM -0700, Josh Poimboeuf wrote:
+> On Thu, May 05, 2022 at 03:18:11PM +0200, Artem Savkov wrote:
+> > Make sure TCP keepalive timer does not expire late. Switching to upper
+> > bound timers means it can fire off early but in case of keepalive
+> > tcp_keepalive_timer() handler checks elapsed time and resets the timer
+> > if it was triggered early. This results in timer "cascading" to a
+> > higher precision and being just a couple of milliseconds off it's
+> > original mark.
+> > This adds minimal overhead as keepalive timers are never re-armed and
+> > are usually quite long.
+> > 
+> > Signed-off-by: Artem Savkov <asavkov@redhat.com>
+> > ---
+> >  net/ipv4/inet_connection_sock.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/net/ipv4/inet_connection_sock.c b/net/ipv4/inet_connection_sock.c
+> > index 1e5b53c2bb26..bb2dbfb6f5b5 100644
+> > --- a/net/ipv4/inet_connection_sock.c
+> > +++ b/net/ipv4/inet_connection_sock.c
+> > @@ -589,7 +589,7 @@ EXPORT_SYMBOL(inet_csk_delete_keepalive_timer);
+> >  
+> >  void inet_csk_reset_keepalive_timer(struct sock *sk, unsigned long len)
+> >  {
+> > -	sk_reset_timer(sk, &sk->sk_timer, jiffies + len);
+> > +	sk_reset_timer(sk, &sk->sk_timer, jiffies + upper_bound_timeout(len));
+> >  }
+> >  EXPORT_SYMBOL(inet_csk_reset_keepalive_timer);
 > 
-> Reviewed-by: Rob Herring <robh@kernel.org>
-> Signed-off-by: Qin Jian <qinjian@cqplus1.com>
-> ---
->  .../sunplus,sp7021-intc.yaml                  | 62 +++++++++++++++++++
->  MAINTAINERS                                   |  1 +
->  2 files changed, 63 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/interrupt-controller/sunplus,sp7021-intc.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/interrupt-controller/sunplus,sp7021-intc.yaml b/Documentation/devicetree/bindings/interrupt-controller/sunplus,sp7021-intc.yaml
-> new file mode 100644
-> index 000000000..f26d8b213
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/interrupt-controller/sunplus,sp7021-intc.yaml
-> @@ -0,0 +1,62 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +# Copyright (C) Sunplus Co., Ltd. 2021
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/interrupt-controller/sunplus,sp7021-intc.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Sunplus SP7021 SoC Interrupt Controller Device Tree Bindings
+> As I mentioned before, there might be two sides to the same coin,
+> depending on whether the keepalive is detecting vs preventing the
+> disconnect.  So this might possibly fix one case, while breaking
+> another.
 
-Remove "Device Tree Bindings". This applies to all bindings patches, not
-only to one.
+But cascading is still there in the handler so it will fire off quite
+close to original timer in any case.
 
 
-Best regards,
-Krzysztof
+-- 
+ Artem
+

@@ -2,228 +2,419 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97D4251D6E3
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 13:41:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FB3C51D6FB
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 13:45:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346147AbiEFLpg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 07:45:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43974 "EHLO
+        id S1391494AbiEFLtS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 07:49:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1391443AbiEFLpd (ORCPT
+        with ESMTP id S1390548AbiEFLsz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 07:45:33 -0400
-Received: from FRA01-PR2-obe.outbound.protection.outlook.com (mail-eopbgr120048.outbound.protection.outlook.com [40.107.12.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B515160D8B
-        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 04:41:49 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=fDxKyxez+BuqBq5mWaJ2S7dn1DH/ncV5Eow2wogPau4ps+M6+lb/gYLYVLGHiOF6upqfNw8565sZX6qIWZ2RHEoac4gI+uopSeu9UYhlQv61p2QxQXCGnMz2rN/s7y4TroaeXmCXtRkVjjFqseAshy8Wtpgl7vGGljyfXoYRAghfiq9d4hZ8Tb3QgRGuObdTERWwIuX6YwMtnWTLgLY7/falv1maeEqu8dz68aMsTbJ+xBBbbdq8Bu4cS/dO/J2TgxJozqNihC+1n7qZNsCsxNN1FhGuyAYe7cwfErZ4d02oEDC8dfGmyS1gMmvl5aKt3pNs8BtEc+xZoG7e4zR/bw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=gkVBYOcLCJUSP01mepRfYhCs8nWXTUJVkTSXpHGaKpU=;
- b=bCKW2fg1x3e+/s5xdde6Fkpu2ihu5tHgyM4vL0u9J3Y30TYq60wpgdEH9cUwWMLVldx8S1fs8m/w3W3l9ZESbRDVyttyKAaFLD9d8+BzbLtQZ/8Nw27XjldnDMu9YJwEkI9X036pfTmc05N3AX2jRcpIwGP25GAMEBL66eC6BDAVSbopGsN5reR9+CpVBoQDOeZVw7rY+TY90GgoTv7gm5RCpKmjAjJQM/SwNH1lFKvPMOapsXhNxe0w1q+kbri/7wMKEGsrPQam/3aa91lwGYwgtH890fRCIwUfUHkQ7c2Va7yy9JvKsxW03FobX5VobgqWaHrVKAPXKxLfTpYHPQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
- dkim=pass header.d=csgroup.eu; arc=none
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
- by MR1P264MB2676.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:39::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5206.14; Fri, 6 May
- 2022 11:41:47 +0000
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::ad4e:c157:e9ac:385d]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::ad4e:c157:e9ac:385d%6]) with mapi id 15.20.5227.020; Fri, 6 May 2022
- 11:41:47 +0000
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Paul Mackerras <paulus@samba.org>,
-        Steven Rostedt <rostedt@goodmis.org>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
-Subject: Re: [PATCH v1 08/22] powerpc/ftrace: Make __ftrace_make_{nop/call}()
- common to PPC32 and PPC64
-Thread-Topic: [PATCH v1 08/22] powerpc/ftrace: Make __ftrace_make_{nop/call}()
- common to PPC32 and PPC64
-Thread-Index: AQHYP4vPBTNDUSKTeEOC4y2yFRN9Daz1Xy0AgByeQgA=
-Date:   Fri, 6 May 2022 11:41:47 +0000
-Message-ID: <c089741c-d5c8-2e9f-c249-a0deb9cdc627@csgroup.eu>
-References: <cover.1648131740.git.christophe.leroy@csgroup.eu>
- <fb60b19f154db8132a00c2df7aca7db3e85603b5.1648131740.git.christophe.leroy@csgroup.eu>
- <1650262952.h2adiu8czw.naveen@linux.ibm.com>
-In-Reply-To: <1650262952.h2adiu8czw.naveen@linux.ibm.com>
-Accept-Language: fr-FR, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=csgroup.eu;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: cc32c3e9-a5ad-4f5e-6369-08da2f556729
-x-ms-traffictypediagnostic: MR1P264MB2676:EE_
-x-microsoft-antispam-prvs: <MR1P264MB26766352428893D0B0084A15EDC59@MR1P264MB2676.FRAP264.PROD.OUTLOOK.COM>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: apnUrHwZZ76OtgESsIyt5r7XDDDB7vwy3j0rDzu/U5imOBnyDTelyliM10A2aT2VxfzxscVhwxLuXb4QNoBMeGZCJyn0n4Gmy2rMFI7qihc9w9q999ZYembrUGl55bMdh/Z+OvdebfCBW6DdNJNktJwnfh1VPPrDpflpIJ50Gaqmn6Dv2dhrMOhq3MAwexpLgMX35lPLSjwTz3ZFtSJBFzC9meO8p85YXZErTeHVKRztQZpjWBfc/NpFCfbeUp/E44YosL83+Z1msdF9wkuFXXZCSkHuJia5/8paXYnkYmpcukb8kH7euPmF9q1hUQdj0DCEYr8vjMHH0po90BIqbPm7bfburhoRfVlNd3JyVaxlx3oPMhyDSWeS1+ClB5b1NwtQISmtxLri6tZ7HN63F6eYzG6C25NhmyPCqH9T9jLVqbQq8rt50A6JstGY3EhXsHqr10Atb5mQAHw13W+UTAlIOEYXItpN8lk5ruLn3qkft4fNYre66RPO69PA0p0Iz0y+zMxUpEegbNNAdPuZXjCY/onqtrolD4nVXG4ES7MTJD4ng0WrJ8OHPsALY9RGVCOU6W2ig0+B/oyRXTchbcr0l6FhGG+/lkabJ8ZnLkSqV6HBp/2dNPJxL/b4rUblRWlHdap407aUq0z4vw8HnwN5f3RUtCBM1snCFm0IcClOIMejtNRxQ8T+2ENutsNPFdEUKu+wbPKtRSsZkjkoS68+pfXGoFz7iKZOXkR5a+SsEs72Lr7J1yd2BSiizcm0GB5gKAPGLBTBnMhBINXK2g==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(8936002)(8676002)(5660300002)(6506007)(4326008)(2906002)(26005)(71200400001)(6512007)(36756003)(83380400001)(38100700002)(38070700005)(2616005)(31686004)(66446008)(316002)(508600001)(54906003)(6486002)(186003)(110136005)(122000001)(66574015)(31696002)(91956017)(44832011)(66556008)(76116006)(66946007)(86362001)(66476007)(64756008)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?Y2xabnUwYXEyQzZtSEgwSi9tbWZEbDliaVlDQmx6MHliN2RaMW9BbEtlR3F0?=
- =?utf-8?B?bFp1eHlERXRWdndmZHl6eDZXMkhua2dsdTZZajBzTnhXVWVScnJHQlJybzlj?=
- =?utf-8?B?elp3Kzgxck9VYm4wanV5UGV4YmpaeDJzQzZ1SCtnNXhzVUtjZDM1YUxrOTFj?=
- =?utf-8?B?dml0WDdibW5Td1hIM0MzV3Q3WVdUb3BtU2svT3U2OW8rQlRuZWVvMlg1Rkdt?=
- =?utf-8?B?NG9JZXNkNzJrNGpDdTZSeXdWVjR3M1VCbWdJTXNSa3paWXMyYUxnRDZGbmly?=
- =?utf-8?B?dUU2a0FzaW5uRnZ3dTB3aWJEcEJ3ZXdoQU13dTFMejRHcHlSN3UwbnRBUnd3?=
- =?utf-8?B?d3JDNFhCMjZqRXVqU3NJWmt1UkFPbVhyRWN3eHg1cGhWZS9VRC9oeGxKSkdC?=
- =?utf-8?B?NHRNaHZwMWtGZmp1c1BITEpOVVU0TEYzaEt0eGFPMVpvbG5LN0J1d2Z1MDZj?=
- =?utf-8?B?ZlorZDc2RklnSmRpM0JhUnl1cVp4eEhlTUVUalI4MjJmNW1XRDZ1Uzk0cjl1?=
- =?utf-8?B?YmYxbFZkcUl4WlFQMW9FVWU4ZCt5QnBuelJXd21JK0VGcEM2MlJtTUNSK1hC?=
- =?utf-8?B?Mm1FL3UxbUZQRE1KUFliZXMrMk5uS2lZM2pxM0hBSERXbnpIUXZkN05iYlR0?=
- =?utf-8?B?L1l0NDZld0dEOU9Nb01vQTZSWjFuRnYvTjBHLzNnY2RUMzNJUGwvSjczbWFz?=
- =?utf-8?B?Y3dLUFE4ZkxSaW1iSGREbHcvVDJwN0JDa0VCTkZtcVBON2JEcjBYb3U3Zjcr?=
- =?utf-8?B?Q3FCcGxVbU9zSFRnaXIyVFF1Wk1zVHRmWjVVZ2FOVjNKZlpqcnhVb1NNUktC?=
- =?utf-8?B?Y2N5Y3BkSG9yTHJrVkwvNEpqUHJ0QkcrWGR0SG9IU0x3NXdrb0NEb3VqNXFl?=
- =?utf-8?B?NktycGRIVUZmTWtMb2I0SmRnR0RQb2hLNUd4akExWXpQRWNJVzdQcnNkQzlT?=
- =?utf-8?B?K3dleFdNVWJFMEx3TFZ5SE9nZEhCTzY2Mk9CWTRkaldlVFErNWMwNDlTbmJh?=
- =?utf-8?B?U3dMSEJJcVlWQy9EQzhWMHBRQlY3UTMvbXZCMzA4SGpwRVYycDlpeTM0TGlM?=
- =?utf-8?B?aTJMWjg4M0dIeUZCNThaZWJPdHMxdW85bmh5QWgvL0VvdDJaK1VLSGllZ3Q5?=
- =?utf-8?B?aWsrS1ErWHZvczJ4VFhTSCthTlB2bjdpQjd1YmswbFA5cVFuYWlDcjd1MmFw?=
- =?utf-8?B?QnVieXlqVVgvSzlGYnBqMXVDUlhJY1lFc09XQkJmOG4wMTlVTE1mcFF4d2JN?=
- =?utf-8?B?TTI0VTYvcXBSbGFIaUJPYWlqTkVtaHVmWllyOWY5Sk16UDg3aDRJQUozTVYx?=
- =?utf-8?B?aCtUNWJBK1RocWVyekJacG5hbXI5SG9oVnBrNk5SNkFCdWFIdW8xZXErK0Y1?=
- =?utf-8?B?QXhtcGN0NW12SlJwOG0wOENia0o4SVJReDFraE1BZVRvczdPSEhOd1FpOXRD?=
- =?utf-8?B?VUdWOGxXQzZuakdNSVJyZmRSVkVaaXBiMzF2U1gzcGU0ZW5uQXRxblR6U2JI?=
- =?utf-8?B?VXFmbTZLemR2VnlaNU91RTVMUXplQkg5T05LQkFlNTl5QjBvSkdFRFNnV2hu?=
- =?utf-8?B?K0FpajBmNHBtUkx5MjVoOGVoV2NoMEgrcWpGbHQzWkVHRHlSZzNoYnZSajlO?=
- =?utf-8?B?T005NlpIK1piL2RiSTdFbVhRNzhBL1c0NCtiakpzeU1WT1VESE42bmx0WTdQ?=
- =?utf-8?B?dzBlSytmOW0zNi92VytUQ1VHaVpFdmsrdElUMEdiYVBTZDNsTnRyWHZjb2Vj?=
- =?utf-8?B?bEJHTVRneFBKdE9lUTRETGNQc0pRdlg2d2poQ1RiU1VWUU5UNHI3M0NXNGhV?=
- =?utf-8?B?ZklPSG1EQU10MnpZTk82OUNWd0pXOGUrRUsrSmI5SitZUWpkQXE4ZUhPUlRQ?=
- =?utf-8?B?ZjZxYzNIT1BGbGNzZmROQTdxMzNMMmdId1I3bEdiV2JMRjlWcCtBZklLcGdo?=
- =?utf-8?B?S3REMExrNy8xdWpYYXQrOHRpaFlrWWZQQisydnRTc1dCaWxCWHRMbE5CeDBH?=
- =?utf-8?B?ZGJ5MlQzUUxobk9mandqL0dtazNWcFBTTVdFa0dwd3NrNFBXWCtWMHBXVFlL?=
- =?utf-8?B?ZUJVUXFFVXQvUDJpQ1FGcUFEcW9SK3JMQ0NCUlB0V2hYZ1VLVHpPMWNERExO?=
- =?utf-8?B?WnFGOG5GS1hibkljWTNpdk0yWlljOENYZkZQV2lNV25pbjF6MGdrQXh0Nnoy?=
- =?utf-8?B?MVB5bmNaWnFBcW5sd1Q2SXR0SlV5b1N4S3E3SkxLbGI5dExKam9nN3Q0dW1F?=
- =?utf-8?B?Q01XelBEQUN4Q1lETnJXUlk2bERrWUZDUjcyWGJqZW1ZWjNTTTVEbG5zNk1R?=
- =?utf-8?B?MDVvdk92eml0ckRtVThSd1FiNnIwU2NVNkpSUGwxdWJ5NkxXbzI3RDJnTTlw?=
- =?utf-8?Q?gLmOMwq8vWr2447kUJK46/ch0NXgp9smmOLwL?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <7D895AF58D1C454BBB184DC4A166AB0B@FRAP264.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: base64
+        Fri, 6 May 2022 07:48:55 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA97858E40;
+        Fri,  6 May 2022 04:45:11 -0700 (PDT)
+Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KvpdJ6x7dzhYnF;
+        Fri,  6 May 2022 19:44:36 +0800 (CST)
+Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
+ dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 6 May 2022 19:45:08 +0800
+Received: from thunder-town.china.huawei.com (10.174.178.55) by
+ dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 6 May 2022 19:45:07 +0800
+From:   Zhen Lei <thunder.leizhen@huawei.com>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        <x86@kernel.org>, "H . Peter Anvin" <hpa@zytor.com>,
+        <linux-kernel@vger.kernel.org>, Dave Young <dyoung@redhat.com>,
+        Baoquan He <bhe@redhat.com>, Vivek Goyal <vgoyal@redhat.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        <kexec@lists.infradead.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        "Will Deacon" <will@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        <devicetree@vger.kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+        <linux-doc@vger.kernel.org>
+CC:     Zhen Lei <thunder.leizhen@huawei.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Feng Zhou <zhoufeng.zf@bytedance.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Chen Zhou <dingguo.cz@antgroup.com>,
+        "John Donnelly" <John.p.donnelly@oracle.com>,
+        Dave Kleikamp <dave.kleikamp@oracle.com>
+Subject: [PATCH v24 0/6] support reserving crashkernel above 4G on arm64 kdump
+Date:   Fri, 6 May 2022 19:43:56 +0800
+Message-ID: <20220506114402.365-1-thunder.leizhen@huawei.com>
+X-Mailer: git-send-email 2.26.0.windows.1
 MIME-Version: 1.0
-X-OriginatorOrg: csgroup.eu
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: cc32c3e9-a5ad-4f5e-6369-08da2f556729
-X-MS-Exchange-CrossTenant-originalarrivaltime: 06 May 2022 11:41:47.5212
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: pSLHrftbJRAlDpOY5jvqIfRnpuWErjBf/jEbM3RH3k+8zhSRfa+L5Ep23io7hgUNUespEjFofRe+7iRfONgdt7p9gLhdr/ALPtfkgel1aBs=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MR1P264MB2676
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.174.178.55]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpemm500006.china.huawei.com (7.185.36.236)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQoNCkxlIDE4LzA0LzIwMjIgw6AgMDg6NDAsIE5hdmVlbiBOLiBSYW8gYSDDqWNyaXTCoDoNCj4g
-Q2hyaXN0b3BoZSBMZXJveSB3cm90ZToNCj4+IFNpbmNlIGM5M2Q0ZjZlY2Y0YiAoInBvd2VycGMv
-ZnRyYWNlOiBBZGQgbW9kdWxlX3RyYW1wb2xpbmVfdGFyZ2V0KCkNCj4+IGZvciBQUEMzMiIpLCBf
-X2Z0cmFjZV9tYWtlX25vcCgpIGZvciBQUEMzMiBpcyB2ZXJ5IHNpbWlsYXIgdG8gdGhlDQo+PiBv
-bmUgZm9yIFBQQzY0Lg0KPj4NCj4+IFNhbWUgZm9yIF9fZnRyYWNlX21ha2VfY2FsbCgpLg0KPj4N
-Cj4+IE1ha2UgdGhlbSBjb21tb24uDQo+Pg0KPj4gU2lnbmVkLW9mZi1ieTogQ2hyaXN0b3BoZSBM
-ZXJveSA8Y2hyaXN0b3BoZS5sZXJveUBjc2dyb3VwLmV1Pg0KPj4gLS0tDQo+PiDCoGFyY2gvcG93
-ZXJwYy9rZXJuZWwvdHJhY2UvZnRyYWNlLmMgfCAxMDggKysrLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0NCj4+IMKgMSBmaWxlIGNoYW5nZWQsIDggaW5zZXJ0aW9ucygrKSwgMTAwIGRlbGV0aW9u
-cygtKQ0KPj4NCj4+IGRpZmYgLS1naXQgYS9hcmNoL3Bvd2VycGMva2VybmVsL3RyYWNlL2Z0cmFj
-ZS5jIA0KPj4gYi9hcmNoL3Bvd2VycGMva2VybmVsL3RyYWNlL2Z0cmFjZS5jDQo+PiBpbmRleCAx
-YjA1ZDMzZjk2YzYuLjJjN2U0MmU0MzliYiAxMDA2NDQNCj4+IC0tLSBhL2FyY2gvcG93ZXJwYy9r
-ZXJuZWwvdHJhY2UvZnRyYWNlLmMNCj4+ICsrKyBiL2FyY2gvcG93ZXJwYy9rZXJuZWwvdHJhY2Uv
-ZnRyYWNlLmMNCj4+IEBAIC0xMTQsNyArMTE0LDYgQEAgc3RhdGljIHVuc2lnbmVkIGxvbmcgZmlu
-ZF9ibF90YXJnZXQodW5zaWduZWQgbG9uZyANCj4+IGlwLCBwcGNfaW5zdF90IG9wKQ0KPj4gwqB9
-DQo+Pg0KPj4gwqAjaWZkZWYgQ09ORklHX01PRFVMRVMNCj4+IC0jaWZkZWYgQ09ORklHX1BQQzY0
-DQo+PiDCoHN0YXRpYyBpbnQNCj4+IMKgX19mdHJhY2VfbWFrZV9ub3Aoc3RydWN0IG1vZHVsZSAq
-bW9kLA0KPj4gwqDCoMKgwqDCoMKgwqDCoMKgwqAgc3RydWN0IGR5bl9mdHJhY2UgKnJlYywgdW5z
-aWduZWQgbG9uZyBhZGRyKQ0KPj4gQEAgLTE1NCwxMCArMTUzLDExIEBAIF9fZnRyYWNlX21ha2Vf
-bm9wKHN0cnVjdCBtb2R1bGUgKm1vZCwNCj4+IMKgwqDCoMKgwqDCoMKgwqAgcmV0dXJuIC1FSU5W
-QUw7DQo+PiDCoMKgwqDCoCB9DQo+Pg0KPj4gLSNpZmRlZiBDT05GSUdfTVBST0ZJTEVfS0VSTkVM
-DQo+PiAtwqDCoMKgIC8qIFdoZW4gdXNpbmcgLW1rZXJuZWxfcHJvZmlsZSB0aGVyZSBpcyBubyBs
-b2FkIHRvIGp1bXAgb3ZlciAqLw0KPj4gK8KgwqDCoCAvKiBXaGVuIHVzaW5nIC1ta2VybmVsX3By
-b2ZpbGUgb3IgUFBDMzIgdGhlcmUgaXMgbm8gbG9hZCB0byBqdW1wIA0KPj4gb3ZlciAqLw0KPiAg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAtbXByb2ZpbGUta2VybmVs
-DQo+IA0KPiBTaW5jZSB5b3UgYXJlIG1vZGlmeWluZyB0aGF0IGxpbmUgYW55d2F5IF5eDQo+IA0K
-PiANCj4+IMKgwqDCoMKgIHBvcCA9IHBwY19pbnN0KFBQQ19SQVdfTk9QKCkpOw0KPj4NCj4+ICsj
-aWZkZWYgQ09ORklHX1BQQzY0DQo+PiArI2lmZGVmIENPTkZJR19NUFJPRklMRV9LRVJORUwNCj4+
-IMKgwqDCoMKgIGlmIChjb3B5X2luc3RfZnJvbV9rZXJuZWxfbm9mYXVsdCgmb3AsICh2b2lkICop
-KGlwIC0gNCkpKSB7DQo+PiDCoMKgwqDCoMKgwqDCoMKgIHByX2VycigiRmV0Y2hpbmcgaW5zdHJ1
-Y3Rpb24gYXQgJWx4IGZhaWxlZC5cbiIsIGlwIC0gNCk7DQo+PiDCoMKgwqDCoMKgwqDCoMKgIHJl
-dHVybiAtRUZBVUxUOw0KPj4gQEAgLTIwMSw2ICsyMDEsNyBAQCBfX2Z0cmFjZV9tYWtlX25vcChz
-dHJ1Y3QgbW9kdWxlICptb2QsDQo+PiDCoMKgwqDCoMKgwqDCoMKgIHJldHVybiAtRUlOVkFMOw0K
-Pj4gwqDCoMKgwqAgfQ0KPj4gwqAjZW5kaWYgLyogQ09ORklHX01QUk9GSUxFX0tFUk5FTCAqLw0K
-Pj4gKyNlbmRpZiAvKiBQUEM2NCAqLw0KPj4NCj4+IMKgwqDCoMKgIGlmIChwYXRjaF9pbnN0cnVj
-dGlvbigodTMyICopaXAsIHBvcCkpIHsNCj4+IMKgwqDCoMKgwqDCoMKgwqAgcHJfZXJyKCJQYXRj
-aGluZyBOT1AgZmFpbGVkLlxuIik7DQo+PiBAQCAtMjA5LDQ4ICsyMTAsNiBAQCBfX2Z0cmFjZV9t
-YWtlX25vcChzdHJ1Y3QgbW9kdWxlICptb2QsDQo+Pg0KPj4gwqDCoMKgwqAgcmV0dXJuIDA7DQo+
-PiDCoH0NCj4+IC0NCj4+IC0jZWxzZSAvKiAhUFBDNjQgKi8NCj4+IC1zdGF0aWMgaW50DQo+PiAt
-X19mdHJhY2VfbWFrZV9ub3Aoc3RydWN0IG1vZHVsZSAqbW9kLA0KPj4gLcKgwqDCoMKgwqDCoMKg
-wqDCoCBzdHJ1Y3QgZHluX2Z0cmFjZSAqcmVjLCB1bnNpZ25lZCBsb25nIGFkZHIpDQo+PiAtew0K
-Pj4gLcKgwqDCoCBwcGNfaW5zdF90IG9wOw0KPj4gLcKgwqDCoCB1bnNpZ25lZCBsb25nIGlwID0g
-cmVjLT5pcDsNCj4+IC3CoMKgwqAgdW5zaWduZWQgbG9uZyB0cmFtcCwgcHRyOw0KPj4gLQ0KPj4g
-LcKgwqDCoCBpZiAoY29weV9mcm9tX2tlcm5lbF9ub2ZhdWx0KCZvcCwgKHZvaWQgKilpcCwgTUNP
-VU5UX0lOU05fU0laRSkpDQo+PiAtwqDCoMKgwqDCoMKgwqAgcmV0dXJuIC1FRkFVTFQ7DQo+PiAt
-DQo+PiAtwqDCoMKgIC8qIE1ha2Ugc3VyZSB0aGF0IHRoYXQgdGhpcyBpcyBzdGlsbCBhIDI0Yml0
-IGp1bXAgKi8NCj4+IC3CoMKgwqAgaWYgKCFpc19ibF9vcChvcCkpIHsNCj4+IC3CoMKgwqDCoMKg
-wqDCoCBwcl9lcnIoIk5vdCBleHBlY3RlZCBibDogb3Bjb2RlIGlzICVzXG4iLCBwcGNfaW5zdF9h
-c19zdHIob3ApKTsNCj4+IC3CoMKgwqDCoMKgwqDCoCByZXR1cm4gLUVJTlZBTDsNCj4+IC3CoMKg
-wqAgfQ0KPj4gLQ0KPj4gLcKgwqDCoCAvKiBsZXRzIGZpbmQgd2hlcmUgdGhlIHBvaW50ZXIgZ29l
-cyAqLw0KPj4gLcKgwqDCoCB0cmFtcCA9IGZpbmRfYmxfdGFyZ2V0KGlwLCBvcCk7DQo+PiAtDQo+
-PiAtwqDCoMKgIC8qIEZpbmQgd2hlcmUgdGhlIHRyYW1wb2xpbmUganVtcHMgdG8gKi8NCj4+IC3C
-oMKgwqAgaWYgKG1vZHVsZV90cmFtcG9saW5lX3RhcmdldChtb2QsIHRyYW1wLCAmcHRyKSkgew0K
-Pj4gLcKgwqDCoMKgwqDCoMKgIHByX2VycigiRmFpbGVkIHRvIGdldCB0cmFtcG9saW5lIHRhcmdl
-dFxuIik7DQo+PiAtwqDCoMKgwqDCoMKgwqAgcmV0dXJuIC1FRkFVTFQ7DQo+PiAtwqDCoMKgIH0N
-Cj4+IC0NCj4+IC3CoMKgwqAgaWYgKHB0ciAhPSBhZGRyKSB7DQo+PiAtwqDCoMKgwqDCoMKgwqAg
-cHJfZXJyKCJUcmFtcG9saW5lIGxvY2F0aW9uICUwOGx4IGRvZXMgbm90IG1hdGNoIGFkZHJcbiIs
-DQo+PiAtwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCB0cmFtcCk7DQo+PiAtwqDCoMKgwqDC
-oMKgwqAgcmV0dXJuIC1FSU5WQUw7DQo+PiAtwqDCoMKgIH0NCj4+IC0NCj4+IC3CoMKgwqAgb3Ag
-PSBwcGNfaW5zdChQUENfUkFXX05PUCgpKTsNCj4+IC0NCj4+IC3CoMKgwqAgaWYgKHBhdGNoX2lu
-c3RydWN0aW9uKCh1MzIgKilpcCwgb3ApKQ0KPj4gLcKgwqDCoMKgwqDCoMKgIHJldHVybiAtRVBF
-Uk07DQo+PiAtDQo+PiAtwqDCoMKgIHJldHVybiAwOw0KPj4gLX0NCj4+IC0jZW5kaWYgLyogUFBD
-NjQgKi8NCj4+IMKgI2VuZGlmIC8qIENPTkZJR19NT0RVTEVTICovDQo+Pg0KPj4gwqBzdGF0aWMg
-dW5zaWduZWQgbG9uZyBmaW5kX2Z0cmFjZV90cmFtcCh1bnNpZ25lZCBsb25nIGlwKQ0KPj4gQEAg
-LTQzNywxMyArMzk2LDEyIEBAIGludCBmdHJhY2VfbWFrZV9ub3Aoc3RydWN0IG1vZHVsZSAqbW9k
-LA0KPj4gwqB9DQo+Pg0KPj4gwqAjaWZkZWYgQ09ORklHX01PRFVMRVMNCj4+IC0jaWZkZWYgQ09O
-RklHX1BQQzY0DQo+PiDCoC8qDQo+PiDCoCAqIEV4YW1pbmUgdGhlIGV4aXN0aW5nIGluc3RydWN0
-aW9ucyBmb3IgX19mdHJhY2VfbWFrZV9jYWxsLg0KPj4gwqAgKiBUaGV5IHNob3VsZCBlZmZlY3Rp
-dmVseSBiZSBhIE5PUCwgYW5kIGZvbGxvdyBmb3JtYWwgY29uc3RyYWludHMsDQo+PiDCoCAqIGRl
-cGVuZGluZyBvbiB0aGUgQUJJLiBSZXR1cm4gZmFsc2UgaWYgdGhleSBkb24ndC4NCj4+IMKgICov
-DQo+PiAtI2lmbmRlZiBDT05GSUdfTVBST0ZJTEVfS0VSTkVMDQo+PiArI2lmbmRlZiBDT05GSUdf
-RFlOQU1JQ19GVFJBQ0VfV0lUSF9SRUdTDQo+IA0KPiBJdCBpcyBiZXR0ZXIgdG8gZ2F0ZSB0aGlz
-IG9uIFBQQzY0X0VMRl9BQklfdjENCg0KT2sgSSBkbyB0aGF0IHdpdGggdGhlIG5ldyBDT05GSUdf
-UFBDNjRfRUxGX0FCSV9WMS4NCg0KPiANCj4+IMKgc3RhdGljIGludA0KPj4gwqBleHBlY3RlZF9u
-b3Bfc2VxdWVuY2Uodm9pZCAqaXAsIHBwY19pbnN0X3Qgb3AwLCBwcGNfaW5zdF90IG9wMSkNCj4+
-IMKgew0KPj4gQEAgLTQ2NSw3ICs0MjMsNyBAQCBleHBlY3RlZF9ub3Bfc2VxdWVuY2Uodm9pZCAq
-aXAsIHBwY19pbnN0X3Qgb3AwLCANCj4+IHBwY19pbnN0X3Qgb3AxKQ0KPj4gwqBzdGF0aWMgaW50
-DQo+PiDCoGV4cGVjdGVkX25vcF9zZXF1ZW5jZSh2b2lkICppcCwgcHBjX2luc3RfdCBvcDAsIHBw
-Y19pbnN0X3Qgb3AxKQ0KPj4gwqB7DQo+PiAtwqDCoMKgIC8qIGxvb2sgZm9yIHBhdGNoZWQgIk5P
-UCIgb24gcHBjNjQgd2l0aCAtbXByb2ZpbGUta2VybmVsICovDQo+PiArwqDCoMKgIC8qIGxvb2sg
-Zm9yIHBhdGNoZWQgIk5PUCIgb24gcHBjNjQgd2l0aCAtbXByb2ZpbGUta2VybmVsIG9yIHBwYzMy
-ICovDQo+PiDCoMKgwqDCoCBpZiAoIXBwY19pbnN0X2VxdWFsKG9wMCwgcHBjX2luc3QoUFBDX1JB
-V19OT1AoKSkpKQ0KPj4gwqDCoMKgwqDCoMKgwqDCoCByZXR1cm4gMDsNCj4+IMKgwqDCoMKgIHJl
-dHVybiAxOw0KPj4gQEAgLTQ4NCw4ICs0NDIsMTAgQEAgX19mdHJhY2VfbWFrZV9jYWxsKHN0cnVj
-dCBkeW5fZnRyYWNlICpyZWMsIA0KPj4gdW5zaWduZWQgbG9uZyBhZGRyKQ0KPj4gwqDCoMKgwqAg
-aWYgKGNvcHlfaW5zdF9mcm9tX2tlcm5lbF9ub2ZhdWx0KG9wLCBpcCkpDQo+PiDCoMKgwqDCoMKg
-wqDCoMKgIHJldHVybiAtRUZBVUxUOw0KPj4NCj4+ICsjaWZuZGVmIENPTkZJR19EWU5BTUlDX0ZU
-UkFDRV9XSVRIX1JFR1MNCj4+IMKgwqDCoMKgIGlmIChjb3B5X2luc3RfZnJvbV9rZXJuZWxfbm9m
-YXVsdChvcCArIDEsIGlwICsgNCkpDQo+PiDCoMKgwqDCoMKgwqDCoMKgIHJldHVybiAtRUZBVUxU
-Ow0KPj4gKyNlbmRpZg0KPiANCj4gSGVyZSB0b28uLi4NCj4gDQoNCkRvbmUNCg0KQ2hyaXN0b3Bo
-ZQ==
+Changes since [v23]:
+Do two minor updates:
+1. Change the value of CRASH_ADDR_HIGH_MAX from memblock.current_limit to (PHYS_MASK + 1).
+2. The 'high' and 'low' are only take effect when crashkernel=X[@offset] does not exist.
+   If the value of crashkernel=X is invalid, the reservation of crash fails, even if 'high'
+   and 'low' are configured correctly.
+
+The test cases are also updated:
+1) crashkernel=4G						//high=4G, failed
+2) crashkernel=256M crashkernel=512M,high crashkernel=512M,low	//low=256M, high and low are ignored
+3) crashkernel=256M crashkernel=512M,high			//low=256M, high is ignored
+4) crashkernel=256M crashkernel=512M,low			//low=256M, low is ignored
+5) crashkernel=1G@0xe0000000					//high=0G, low=0M, cannot allocate, failed
+6) crashkernel=512M						//high=0G, low=512M
+7) crashkernel=128M						//high=0G, low=128M
+8) crashkernel=512M@0xde000000		//512M@3552M		//high=0G, low=512M
+9) crashkernel=4G,high						//high=4G, low=0M
+a) crashkernel=4G,high crashkernel=512M,low			//high=4G, low=512M
+b) crashkernel=512M,high crashkernel=128M,low			//high=512M, low=128M
+c) crashkernel=128M,high					//high=128M, low=0M
+d) crashkernel=512M,low						//high=0G, low=0M, invalid
+e) crashkernel=512M,high crashkernel=0,low			//high=512M, low=0M
+f) crashkernel=4G,high crashkernel=ab,low			//high=0G, low=0M, invalid
+g) crashkernel=0M crashkernel=512M,high				//high=0G, low=0M, invalid
+h) crashkernel=abM crashkernel=512M,high			//high=0G, low=0M, invalid
+
+
+
+Changes since [v22]:
+1. Add patch 5/6 to support kexec option -s when 'high' and 'low' are used.
+2. Remove NO_BLOCK_MAPPINGS optimisations.
+3. Don't fallback to high memory when crashkernel=X fails to reserve memory from DMA zone.
+4. If "crashkernel=X,low" is not specified, no extra DMA zone memory will be allocated, 
+   equivalent to "crashkernel=0,low".
+5. The doc has been modified accordingly, because of 3,4 above.
+
+
+Changes since [v21]:
+1. Update the commit message of  patch 1 and 5.
+2. Add some comments for reserve_crashkernel() in patch 5.
+
+Thanks to Baoquan He and John Donnelly for their review comments.
+
+Because v5.18-rc1 has added a new patch
+commit  031495635b46 ("arm64: Do not defer reserve_crashkernel() for platforms with no DMA memory zones")
+There are many new scenarios:
+1) The mappings may be block or page-level. 
+2) The call to reserve_crashkernel() may or may not be deferred.
+3) The the upper limit of DMA address may be 4G, or less than 4G. Or the
+   upper limit of physical memory, because SMMU can do the mapping.
+
+The code of patch 1-2, 8-9 keep no change, because the above-mentioned issues are not involved.
+The code of patch 5 only makes the following changes:
+-	if (crash_base >= SZ_4G)
++	/*
++	 * When both CONFIG_ZONE_DMA and CONFIG_ZONE_DMA32 are disabled, the
++	 * CRASH_ADDR_LOW_MAX equals the upper limit of physical memory, so
++	 * the 'crash_base' of high memory can not exceed it. To follow the
++	 * description of "crashkernel=X,high" option, add below 'high'
++	 * condition to make sure the crash low memory will be reserved.
++	 */
++	if ((crash_base >= CRASH_ADDR_LOW_MAX) || high) {
+Change SZ_4G to CRASH_ADDR_LOW_MAX, because arm64_dma_phys_limit may be less than
+4G or greater than 4G. The check 'high' is used for "crashkernel=X,high" and
+"(crash_base >= CRASH_ADDR_LOW_MAX)" is used for "crashkernel=X[@offset]".
+
+Patch 3-4 to allow block mappings for memory above 4G.
+Patch 6-7 to support only crash high memory or fixed memory range specified by
+crashkernel=X@offset use page-level mapping, to allow other areas use block mapping.
+These four patches are for performance optimization purposes. For details about the
+technical feasibility analysis, please see the commit messages.
+
+Now the implementation of arm64 is very different from that of x86. It's no longer
+suitable for both of them to share code.
+
+
+
+Changes since [v20]:
+1. Check whether crashkernel=Y,low is incorrectly configured or not configured. Do different processing.
+2. Share the existing description of x86. The configuration of arm64 is the same as that of x86.
+3. Define the value of macro CRASH_ADDR_HIGH_MAX as memblock.current_limit, instead of MEMBLOCK_ALLOC_ACCESSIBLE.
+4. To improve readability, some lightweight code adjustments have been made to reserve_craskernel(), including comments.
+5. The defined value of DEFAULT_CRASH_KERNEL_LOW_SIZE reconsiders swiotlb, just like x86, to share documents.
+
+Thanks to Baoquan He for his careful review.
+
+The test cases are as follows: (Please update the kexec tool to the latest version)
+1) crashkernel=4G						//high=4G, low=256M
+2) crashkernel=4G crashkernel=512M,high crashkernel=512M,low	//high=4G, low=256M, high and low are ignored
+3) crashkernel=4G crashkernel=512M,high				//high=4G, low=256M, high is ignored
+4) crashkernel=4G crashkernel=512M,low				//high=4G, low=256M, low is ignored
+5) crashkernel=4G@0xe0000000					//high=0G, low=0M, cannot allocate, failed
+6) crashkernel=512M						//high=0G, low=512M
+7) crashkernel=128M						//high=0G, low=128M
+8) crashkernel=512M@0xde000000		//512M@3552M		//high=0G, low=512M
+9) crashkernel=4G,high						//high=4G, low=256M
+a) crashkernel=4G,high crashkernel=512M,low			//high=4G, low=512M
+b) crashkernel=512M,high crashkernel=128M,low			//high=512M, low=128M
+c) crashkernel=128M,high					//high=128M, low=256M
+d) crashkernel=512M,low						//high=0G, low=0M, invalid
+e) crashkernel=512M,high crashkernel=0,low			//high=512M, low=0M
+f) crashkernel=4G,high crashkernel=ab,low			//high=0G, low=0M, invalid
+
+
+Changes since [v19]:
+1. Temporarily stop making reserve_crashkernel[_low]() generic. There are a
+   lot of details need to be considered, which can take a long time. Because
+   "make generic" does not add new functions and does not improve performance,
+   maybe I should say it's just a cleanup. So by stripping it out and leaving
+   it for other patches later, we can aggregate the changes to the main functions.
+2. Use insert_resource() to replace request_resource(), this not only simplifies
+   the code, but also reduces the differences between arm64 and x86 implementations.
+3. As commit 157752d84f5d ("kexec: use Crash kernel for Crash kernel low") do for
+   x86, we can also extend kexec-tools for arm64, and it's currently applied. See:
+   https://www.spinics.net/lists/kexec/msg28284.html
+
+Thank you very much, Borislav Petkov, for so many valuable comments.
+
+Changes since [v17]: v17 --> v19
+1. Patch 0001-0004
+   Introduce generic parse_crashkernel_high_low() to bring the parsing of
+   "crashkernel=X,high" and the parsing of "crashkernel=X,low" together,
+   then use it instead of the call to parse_crashkernel_{high|low}(). Two
+   confusing parameters of parse_crashkernel_{high|low}() are deleted.
+
+   I previously sent these four patches separately:
+   [1] https://lkml.org/lkml/2021/12/25/40
+2. Patch 0005-0009
+   Introduce generic reserve_crashkernel_mem[_low](), the implementation of
+   these two functions is based on function reserve_crashkernel[_low]() in
+   arch/x86/kernel/setup.c. There is no functional change for x86.
+   1) The check position of xen_pv_domain() does not change.
+   2) Still 1M alignment for crash kernel fixed region, when 'base' is specified.
+
+   To avoid compilation problems on other architectures: patch 0004 moves
+   the definition of global variable crashk[_low]_res from kexec_core.c to
+   crash_core.c, and provide default definitions for all macros involved, a
+   particular platform can redefine these macros to override the default
+   values.
+3. 0010, only one line of comment was changed.
+4. 0011
+   1) crashk_low_res may also a valid reserved memory, should be checked
+      in crash_is_nosave(), see arch/arm64/kernel/machine_kexec.
+   2) Drop memblock_mark_nomap() for crashk_low_res, because of:
+      2687275a5843 arm64: Force NO_BLOCK_MAPPINGS if crashkernel reservation is required
+   3) Also call kmemleak_ignore_phys() for crashk_low_res, because of:
+      85f58eb18898 arm64: kdump: Skip kmemleak scan reserved memory for kdump
+5. 0012, slightly rebased, because the following patch is applied in advance. 
+   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git/commit/?h=dt/linus&id=8347b41748c3019157312fbe7f8a6792ae396eb7
+6. 0013, no change.
+
+Others:
+1. Discard add ARCH_WANT_RESERVE_CRASH_KERNEL
+2. When allocating crash low memory, the start address still starts from 0.
+   low_base = memblock_phys_alloc_range(low_size, CRASH_ALIGN, 0, CRASH_ADDR_LOW_MAX);
+3. Discard change (1ULL << 32) to CRASH_ADDR_LOW_MAX.
+4. Ensure the check position of xen_pv_domain() have no change.
+5. Except patch 0010 and 0012, all "Tested-by", "Reviewed-by", "Acked-by" are removed.
+6. Update description.
+
+
+
+Changes since [v16]
+- Because no functional changes in this version, so add
+  "Tested-by: Dave Kleikamp <dave.kleikamp@oracle.com>" for patch 1-9
+- Add "Reviewed-by: Rob Herring <robh@kernel.org>" for patch 8
+- Update patch 9 based on the review comments of Rob Herring
+- As Catalin Marinas's suggestion, merge the implementation of
+  ARCH_WANT_RESERVE_CRASH_KERNEL into patch 5. Ensure that the
+  contents of X86 and ARM64 do not overlap, and reduce unnecessary
+  temporary differences.
+
+Changes since [v15]
+-  Aggregate the processing of "linux,usable-memory-range" into one function.
+   Only patch 9-10 have been updated.
+
+Changes since [v14]
+- Recovering the requirement that the CrashKernel memory regions on X86
+  only requires 1 MiB alignment.
+- Combine patches 5 and 6 in v14 into one. The compilation warning fixed
+  by patch 6 was introduced by patch 5 in v14.
+- As with crashk_res, crashk_low_res is also processed by
+  crash_exclude_mem_range() in patch 7.
+- Due to commit b261dba2fdb2 ("arm64: kdump: Remove custom linux,usable-memory-range handling")
+  has removed the architecture-specific code, extend the property "linux,usable-memory-range"
+  in the platform-agnostic FDT core code. See patch 9.
+- Discard the x86 description update in the document, because the description
+  has been updated by commit b1f4c363666c ("Documentation: kdump: update kdump guide").
+- Change "arm64" to "ARM64" in Doc.
+
+
+Changes since [v13]
+- Rebased on top of 5.11-rc5.
+- Introduce config CONFIG_ARCH_WANT_RESERVE_CRASH_KERNEL.
+Since reserve_crashkernel[_low]() implementations are quite similar on
+other architectures, so have CONFIG_ARCH_WANT_RESERVE_CRASH_KERNEL in
+arch/Kconfig and select this by X86 and ARM64.
+- Some minor cleanup.
+
+Changes since [v12]
+- Rebased on top of 5.10-rc1.
+- Keep CRASH_ALIGN as 16M suggested by Dave.
+- Drop patch "kdump: add threshold for the required memory".
+- Add Tested-by from John.
+
+Changes since [v11]
+- Rebased on top of 5.9-rc4.
+- Make the function reserve_crashkernel() of x86 generic.
+Suggested by Catalin, make the function reserve_crashkernel() of x86 generic
+and arm64 use the generic version to reimplement crashkernel=X.
+
+Changes since [v10]
+- Reimplement crashkernel=X suggested by Catalin, Many thanks to Catalin.
+
+Changes since [v9]
+- Patch 1 add Acked-by from Dave.
+- Update patch 5 according to Dave's comments.
+- Update chosen schema.
+
+Changes since [v8]
+- Reuse DT property "linux,usable-memory-range".
+Suggested by Rob, reuse DT property "linux,usable-memory-range" to pass the low
+memory region.
+- Fix kdump broken with ZONE_DMA reintroduced.
+- Update chosen schema.
+
+Changes since [v7]
+- Move x86 CRASH_ALIGN to 2M
+Suggested by Dave and do some test, move x86 CRASH_ALIGN to 2M.
+- Update Documentation/devicetree/bindings/chosen.txt.
+Add corresponding documentation to Documentation/devicetree/bindings/chosen.txt
+suggested by Arnd.
+- Add Tested-by from Jhon and pk.
+
+Changes since [v6]
+- Fix build errors reported by kbuild test robot.
+
+Changes since [v5]
+- Move reserve_crashkernel_low() into kernel/crash_core.c.
+- Delete crashkernel=X,high.
+- Modify crashkernel=X,low.
+If crashkernel=X,low is specified simultaneously, reserve spcified size low
+memory for crash kdump kernel devices firstly and then reserve memory above 4G.
+In addition, rename crashk_low_res as "Crash kernel (low)" for arm64, and then
+pass to crash dump kernel by DT property "linux,low-memory-range".
+- Update Documentation/admin-guide/kdump/kdump.rst.
+
+Changes since [v4]
+- Reimplement memblock_cap_memory_ranges for multiple ranges by Mike.
+
+Changes since [v3]
+- Add memblock_cap_memory_ranges back for multiple ranges.
+- Fix some compiling warnings.
+
+Changes since [v2]
+- Split patch "arm64: kdump: support reserving crashkernel above 4G" as
+two. Put "move reserve_crashkernel_low() into kexec_core.c" in a separate
+patch.
+
+Changes since [v1]:
+- Move common reserve_crashkernel_low() code into kernel/kexec_core.c.
+- Remove memblock_cap_memory_ranges() i added in v1 and implement that
+in fdt_enforce_memory_region().
+There are at most two crash kernel regions, for two crash kernel regions
+case, we cap the memory range [min(regs[*].start), max(regs[*].end)]
+and then remove the memory range in the middle.
+
+v1:
+There are following issues in arm64 kdump:
+1. We use crashkernel=X to reserve crashkernel below 4G, which
+will fail when there is no enough low memory.
+2. If reserving crashkernel above 4G, in this case, crash dump
+kernel will boot failure because there is no low memory available
+for allocation.
+
+To solve these issues, change the behavior of crashkernel=X.
+crashkernel=X tries low allocation in DMA zone and fall back to high
+allocation if it fails.
+
+We can also use "crashkernel=X,high" to select a high region above
+DMA zone, which also tries to allocate at least 256M low memory in
+DMA zone automatically and "crashkernel=Y,low" can be used to allocate
+specified size low memory.
+
+When reserving crashkernel in high memory, some low memory is reserved
+for crash dump kernel devices. So there may be two regions reserved for
+crash dump kernel.
+In order to distinct from the high region and make no effect to the use
+of existing kexec-tools, rename the low region as "Crash kernel (low)",
+and pass the low region by reusing DT property
+"linux,usable-memory-range". We made the low memory region as the last
+range of "linux,usable-memory-range" to keep compatibility with existing
+user-space and older kdump kernels.
+
+Besides, we need to modify kexec-tools:
+arm64: support more than one crash kernel regions(see [1])
+
+Another update is document about DT property 'linux,usable-memory-range':
+schemas: update 'linux,usable-memory-range' node schema(see [2])
+
+
+[1]: https://www.spinics.net/lists/kexec/msg28226.html
+[2]: https://github.com/robherring/dt-schema/pull/19 
+[v1]: https://lkml.org/lkml/2019/4/2/1174
+[v2]: https://lkml.org/lkml/2019/4/9/86
+[v3]: https://lkml.org/lkml/2019/4/9/306
+[v4]: https://lkml.org/lkml/2019/4/15/273
+[v5]: https://lkml.org/lkml/2019/5/6/1360
+[v6]: https://lkml.org/lkml/2019/8/30/142
+[v7]: https://lkml.org/lkml/2019/12/23/411
+[v8]: https://lkml.org/lkml/2020/5/21/213
+[v9]: https://lkml.org/lkml/2020/6/28/73
+[v10]: https://lkml.org/lkml/2020/7/2/1443
+[v11]: https://lkml.org/lkml/2020/8/1/150
+[v12]: https://lkml.org/lkml/2020/9/7/1037
+[v13]: https://lkml.org/lkml/2020/10/31/34
+[v14]: https://lkml.org/lkml/2021/1/30/53
+[v15]: https://lkml.org/lkml/2021/10/19/1405
+[v16]: https://lkml.org/lkml/2021/11/23/435
+[v17]: https://lkml.org/lkml/2021/12/10/38
+[v18]: https://lkml.org/lkml/2021/12/22/424
+[v19]: https://lkml.org/lkml/2021/12/28/203
+[v20]: https://lkml.org/lkml/2022/1/24/167
+[v21]: https://lkml.org/lkml/2022/2/26/350
+
+
+Chen Zhou (2):
+  arm64: kdump: Reimplement crashkernel=X
+  of: fdt: Add memory for devices by DT property
+    "linux,usable-memory-range"
+
+Zhen Lei (4):
+  kdump: return -ENOENT if required cmdline option does not exist
+  arm64: Use insert_resource() to simplify code
+  of: Support more than one crash kernel regions for kexec -s
+  docs: kdump: Update the crashkernel description for arm64
+
+ .../admin-guide/kernel-parameters.txt         |  9 ++-
+ arch/arm64/kernel/machine_kexec.c             |  9 ++-
+ arch/arm64/kernel/machine_kexec_file.c        | 12 +++-
+ arch/arm64/kernel/setup.c                     | 17 +----
+ arch/arm64/mm/init.c                          | 64 +++++++++++++++++--
+ drivers/of/fdt.c                              | 33 +++++++---
+ drivers/of/kexec.c                            |  9 +++
+ kernel/crash_core.c                           |  3 +-
+ 8 files changed, 118 insertions(+), 38 deletions(-)
+
+-- 
+2.25.1
+

@@ -2,199 +2,294 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CE9C51D823
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 14:45:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED0B151D815
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 14:43:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1392161AbiEFMtO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 08:49:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48506 "EHLO
+        id S1392112AbiEFMr1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 08:47:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1392132AbiEFMtJ (ORCPT
+        with ESMTP id S1349759AbiEFMrX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 08:49:09 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE6F6B7D2;
-        Fri,  6 May 2022 05:45:25 -0700 (PDT)
-Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 246CMvCJ017710;
-        Fri, 6 May 2022 12:43:06 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=J7I3iBXxV8Z1vr0f0ee5d83OYFPlyGPJ3t86KJAK5og=;
- b=a+27yxjQlIlvY+o7rUFP54VO5tTHsDGp8dwAiXZ56/zPPArGGAJBRVhaoNpZHmJTYGCT
- 6o52YBfjV/6zZRmbR5my/gYLeeritzodIh1DLipssx8c6i6eFhYS3JKQD2EpPcy9rSjx
- 0QgSTdjX1qGn9nUNpkTs/C+rgb0ILKyerdVO9aofpxXsz5WH1mw1ghH6I01WNTuxKw3y
- fWGDgstZwQ8AOEB876CgShDaiMpBwNNbKFAETz4TWaiGXeCfsmvVf+viXrj+w2R+uOkV
- z6/V3+P7uT5o6M+bwnFe7JjDAXVhPXD/H/NDwqoqsOyLzCZSsYegNs/hWwH13yOGWgkH oA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3fw3mprd4c-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 06 May 2022 12:43:06 +0000
-Received: from m0098413.ppops.net (m0098413.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 246CgdYg005869;
-        Fri, 6 May 2022 12:43:05 GMT
-Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3fw3mprd3s-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 06 May 2022 12:43:05 +0000
-Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
-        by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 246CblB5028764;
-        Fri, 6 May 2022 12:43:03 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma02fra.de.ibm.com with ESMTP id 3fuyn7a1ck-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 06 May 2022 12:43:03 +0000
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 246Ch1jP49873194
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 6 May 2022 12:43:01 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id DBA31A4053;
-        Fri,  6 May 2022 12:43:00 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 14F5CA4040;
-        Fri,  6 May 2022 12:42:59 +0000 (GMT)
-Received: from sig-9-145-46-59.uk.ibm.com (unknown [9.145.46.59])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri,  6 May 2022 12:42:59 +0000 (GMT)
-Message-ID: <48b81eb280d949e9321eb304d0ee36abb0075709.camel@linux.ibm.com>
-Subject: Re: [RFC v2 01/39] Kconfig: introduce HAS_IOPORT option and select
- it as necessary
-From:   Niklas Schnelle <schnelle@linux.ibm.com>
-To:     Arnd Bergmann <arnd@kernel.org>,
-        "Maciej W. Rozycki" <macro@orcam.me.uk>
-Cc:     Bjorn Helgaas <helgaas@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        Richard Henderson <rth@twiddle.net>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        "open list:ALPHA PORT" <linux-alpha@vger.kernel.org>,
-        "moderated list:ARM PORT" <linux-arm-kernel@lists.infradead.org>,
-        "open list:IA64 (Itanium) PLATFORM" <linux-ia64@vger.kernel.org>,
-        "open list:M68K ARCHITECTURE" <linux-m68k@lists.linux-m68k.org>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        "open list:PARISC ARCHITECTURE" <linux-parisc@vger.kernel.org>,
-        "open list:LINUX FOR POWERPC (32-BIT AND 64-BIT)" 
-        <linuxppc-dev@lists.ozlabs.org>,
-        "open list:RISC-V ARCHITECTURE" <linux-riscv@lists.infradead.org>,
-        "open list:SUPERH" <linux-sh@vger.kernel.org>,
-        "open list:SPARC + UltraSPARC (sparc/sparc64)" 
-        <sparclinux@vger.kernel.org>
-Date:   Fri, 06 May 2022 14:42:58 +0200
-In-Reply-To: <CAK8P3a0NzG=3tDLCdPj2=A__2r_+xiiUTW=WJCBNp29x_A63Og@mail.gmail.com>
-References: <CAK8P3a0sJgMSpZB_Butx2gO0hapYZy-Dm_QH-hG5rOaq_ZgsXg@mail.gmail.com>
-         <20220505161028.GA492600@bhelgaas>
-         <CAK8P3a3fmPExr70+fVb564hZdGAuPtYa-QxgMMe5KLpnY_sTrQ@mail.gmail.com>
-         <alpine.DEB.2.21.2205061058540.52331@angie.orcam.me.uk>
-         <CAK8P3a0NzG=3tDLCdPj2=A__2r_+xiiUTW=WJCBNp29x_A63Og@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: gOwZPZ2fjiFdDkZpJhuCBJIjnnIu-PuZ
-X-Proofpoint-ORIG-GUID: iES7GOmcIZaSIEyxg01Yx8qsHLACB5lz
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-06_04,2022-05-06_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- spamscore=0 bulkscore=0 clxscore=1015 phishscore=0 mlxlogscore=999
- impostorscore=0 mlxscore=0 suspectscore=0 adultscore=0 malwarescore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2205060070
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Fri, 6 May 2022 08:47:23 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A4255AA4A;
+        Fri,  6 May 2022 05:43:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651841020; x=1683377020;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=MeimNzs5w0q+s5/vhApe5QhAQNmns1dFzoz+ChwdOUQ=;
+  b=jBbvZuFGhkh0evf9s0SstqgVLvm2nmV0P9hbWuiTmejAVFO0O/t/tPr0
+   01WRLRZyOxf4cjDz4IGzqR+2kUQ6exEF59XUHAQh+x9GWypnQoyWT/DXn
+   EhnhGrT92UB8PhmW1JqtfC5pWyNaX4paaah0M9DNptus3hJDrPWwuCMF3
+   DPTL8Og0ib9nVdu1tdl2tCJMV5ScqCNbrc+ymCe1jLUF1EVLw8j0zYUmf
+   D7vmzUWKs9lop9+UhT0sjSmNfqSL0sQ7CmfBQWUuUDtqhpn54QLkwkDPj
+   sEIjwiATJMpIhbYN8Sa9x89ybQBqAjSAw6gvP0YFTXJsD+0Y5nM86Hp7I
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10338"; a="268061971"
+X-IronPort-AV: E=Sophos;i="5.91,203,1647327600"; 
+   d="scan'208";a="268061971"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2022 05:43:40 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,203,1647327600"; 
+   d="scan'208";a="537871649"
+Received: from fmsmsx604.amr.corp.intel.com ([10.18.126.84])
+  by orsmga006.jf.intel.com with ESMTP; 06 May 2022 05:43:39 -0700
+Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
+ fmsmsx604.amr.corp.intel.com (10.18.126.84) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27; Fri, 6 May 2022 05:43:39 -0700
+Received: from fmsmsx605.amr.corp.intel.com (10.18.126.85) by
+ fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27; Fri, 6 May 2022 05:43:38 -0700
+Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
+ fmsmsx605.amr.corp.intel.com (10.18.126.85) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27 via Frontend Transport; Fri, 6 May 2022 05:43:38 -0700
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (104.47.58.175)
+ by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2308.27; Fri, 6 May 2022 05:43:38 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=W7l3ZdMmGU7DAL3bHoskqQwXgPcrBelZPRXxFNz0tEC+x2TR3GwPm08Usgah2HNpAFCfpRvrG4DJiI5lan8CM0Mug3AgarkhfcKKsMkiEOlSI+o98h+vlnLJah4v9bI1Y8HY39clouxTavF52l/yNl1pTQVXATZjT3U6NTbVXokHLetQMlLvJoRN4FrUSJ0z2HKbiQz1zHyPOfHT3oZwfOznHiv6TqyfVaiMsrnUzZMxO/qAiHsJ6MsAJEubUQurjT4Bw4PLPh6siiGYi7dKy+UKFyw5V95mtRDDglB01oNUqyNPI9CdWIOHem6U1488tEJGHW1nMuqMIVFMJgpzHQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=uL8ntBEvrpaU33Po5+XT7pL35BBA3jsZ0YsoCc1TVRQ=;
+ b=NWHNiIGtsTqb7w/wx36AIUYjxb4MZcPRQAJQk13johumyjR+X9NpGufe3XNDnadd8Q5Pn3ZO+VHGWWZs/gIm4yprsEhcgPtYlg7tNIW5OMgIpfoV7VPoJtyBWce21pgAynYOgxiDykFr7XV6b8JmTx/hKpRGujz3COiCJPuqH1W9tj361SyZ+molYh4NC90/KqSsVjsDR9zVQ61K+qPxT1quryNqTGJwiRZomvvgik3Bx9modMSB2iRM79Va1HrO6AO8rnxnlvXIYcvew1RoFmi3pWlPwtcTTVDBclBzzllEBFAJ2/MVfPFOfbGj5Kn7mQWvbC3CTNiGEzHI1jhq6g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from PH0PR11MB5880.namprd11.prod.outlook.com (2603:10b6:510:143::14)
+ by MN2PR11MB4366.namprd11.prod.outlook.com (2603:10b6:208:190::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5227.20; Fri, 6 May
+ 2022 12:43:36 +0000
+Received: from PH0PR11MB5880.namprd11.prod.outlook.com
+ ([fe80::c579:f1c1:28b3:610f]) by PH0PR11MB5880.namprd11.prod.outlook.com
+ ([fe80::c579:f1c1:28b3:610f%9]) with mapi id 15.20.5227.020; Fri, 6 May 2022
+ 12:43:36 +0000
+From:   "Zhang, Qiang1" <qiang1.zhang@intel.com>
+To:     "paulmck@kernel.org" <paulmck@kernel.org>
+CC:     "frederic@kernel.org" <frederic@kernel.org>,
+        "rcu@vger.kernel.org" <rcu@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH] rcu: Add rnp->cbovldmask check in
+ rcutree_migrate_callbacks()
+Thread-Topic: [PATCH] rcu: Add rnp->cbovldmask check in
+ rcutree_migrate_callbacks()
+Thread-Index: AQHYYJkonORSfrYVw02H56cLgBUTL60Qq84AgABKvvCAAEQ9gIAAQ+DQ
+Date:   Fri, 6 May 2022 12:43:35 +0000
+Message-ID: <PH0PR11MB5880F4D73760DCA42238A29DDAC59@PH0PR11MB5880.namprd11.prod.outlook.com>
+References: <20220505155236.1559619-1-qiang1.zhang@intel.com>
+ <20220505192956.GX1790663@paulmck-ThinkPad-P17-Gen-1>
+ <PH0PR11MB5880A25078A7D4DBAB1267C2DAC59@PH0PR11MB5880.namprd11.prod.outlook.com>
+ <20220506040141.GA1790663@paulmck-ThinkPad-P17-Gen-1>
+In-Reply-To: <20220506040141.GA1790663@paulmck-ThinkPad-P17-Gen-1>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+dlp-product: dlpe-windows
+dlp-version: 11.6.401.20
+dlp-reaction: no-action
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: f900eb4a-bcfd-4268-7e8a-08da2f5e0994
+x-ms-traffictypediagnostic: MN2PR11MB4366:EE_
+x-microsoft-antispam-prvs: <MN2PR11MB4366C55D04D681F7DAEB8374DAC59@MN2PR11MB4366.namprd11.prod.outlook.com>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: mYliYjM9DKA8DsZwJ3nut3y6s7MT7pNuUqx7bPqwi3V/bpxbyrexTJudPc0gR2K4bAQDn7S+sG/KfM5J0MYnO5q5ARAsoC6M/8JSHuv07PrQ1oY6gPamAUEQbFeeMdHXxqgAzLxkXpbYiuXkrKNg3aQGIjTUeHwU/bEW7UfeT+mNQk+M+1eAwXvlqzMlWrrQ8O3HuPkUQBEsp/CHR4ea0knRteyg5FyiyxDq430HaCZaEJK76sTwYNfZjhOAkPoRA+oC3VXumnpzPjjcIrNcb5qe88iX+1CUbkkdCB+XmmIrbXLQkM3VQPN+AkU3HdC/H1PgCP0go8pampjh4cRKRmBp+iFSW0Yb42bGZzwb/WGfIbREH14HyE75meLWrKgwY+NDRDdbcLRc6GFMc0sOJUaW0M7uz0c/wU0BThAZ5jKct1LaMsksDQuxRp0Vy/e926L39mOP4axkuPJ0/Bz5EcXNs1vdXAgQBerieOqLnRngFUPosmaYISp5wSWK5BDeFrEnKOEvJ8Zxf6TGmRizT34ZmbjKmcdshH5UCDfZea3ztYeDQ0dsJ5e/TLv89JwaIqgG/yA6mEhIt025lpaMcI3B/UzksrRVpyqAztbWVyI+YHPusfBumgKLRQpxh8gSJBLNFEtHpW8UwPbNWDfqVAEIh+zk7d1L+znsCeL7BSOchwHrqGEsrK9q3xhgivqlpCLcFcUMhgAf03pBftDQEA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR11MB5880.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(5660300002)(508600001)(71200400001)(4326008)(33656002)(52536014)(9686003)(86362001)(6506007)(26005)(7696005)(8936002)(2906002)(55016003)(122000001)(82960400001)(66574015)(186003)(38100700002)(38070700005)(83380400001)(66946007)(316002)(64756008)(66556008)(66476007)(66446008)(54906003)(76116006)(8676002)(6916009);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?6NfNNSUOq4+gcvEBLCKss7ihazVJ2DfCX4PgSLjLZ2jOq/AObYAmK7Uo+jFm?=
+ =?us-ascii?Q?qPzvqFqk6ZAP+W69qS0KqNO/FEyPL1Alq9HtIh77BkoZySj9GeHjgUq3zuoT?=
+ =?us-ascii?Q?rfmo6YhC6eAeW3i+2uaEzn0cIcekF512kOSeV8MawNh3NwntcL7qI3OSaNH6?=
+ =?us-ascii?Q?Z2QOFOvTRRjOe8hAw/aNi92f0UkFKqwYEKLF6LOJ4ECuKiaoyEQjsfngZQdT?=
+ =?us-ascii?Q?p/oyamBsgRwGSJKnm+uveVBpD+BLcqnkjHAwDNY2ACEEjU3BdCTzSCNgOasw?=
+ =?us-ascii?Q?e9OwBqR/juX7DLBpppao6eSJ6EbIRn4/L/rn44GH2LdbdKSFF7psZt6WozQW?=
+ =?us-ascii?Q?ZvO0hHJGFkCL8YgYmHiiSWTC5zJlUPbXTmvwhyHOY5MsCGzqRFyDG9B8Z8+8?=
+ =?us-ascii?Q?UC7R2LqdkY66Lehf2vFxR3QJflekJumPsZnxxdI2xVWxI0gZ9+t5hP77jP09?=
+ =?us-ascii?Q?mfVQ9n+wEDFgqU+2Ec7aWSVOhoyMfeYNuHwsx0Y2O0EBt0wZt7r3FihA04Ii?=
+ =?us-ascii?Q?pYFjVe7Dig/kVCBymVn4zc1O30YYkzRsVvzK4YBdMORgaNrWyMf6YOoYPBxE?=
+ =?us-ascii?Q?xxPIcvZaa3a14NQeXXnXE00pR4Bf6JrwSr7Uti+dRXS5f1W+X3G667sz2H+G?=
+ =?us-ascii?Q?2atGjOj4rqsHwLmy5ELs5M3vGaIScUpqBMfCsbGJof9BBcD4g4g7jVU7gSmu?=
+ =?us-ascii?Q?15w2Zpu291kwQxj5j2r0n1NCdel3MMpuBixPe+65jTX9a+W1UZReSSmT3Nn8?=
+ =?us-ascii?Q?yLu9RihX2SAZnjbkDDG21yiRV6z8U2SUMIcutNpRjK4lcJqSyfnfD+G1A/Cw?=
+ =?us-ascii?Q?So8hqmpR3ac089bDeV2fbbkQI/xJJiZHx7Hh+Jfo2xk6viUCut7OjVm5Nu6n?=
+ =?us-ascii?Q?sbfFi86ovRYf5iBq6+psbnJoONhfzZRTyARSpNJRuejbofTVkglSSGEpC7tb?=
+ =?us-ascii?Q?yCbhc/Nu5lRyqR/wfvCwxksrJeGRMCxXMmfUZP0N78ttk7jMayZxTXvZq88K?=
+ =?us-ascii?Q?/7XpZazb4cIFTXA5VhU1hNtNI6CoDGJVGvh+t75BE9lQ7AxHKItFqSmc0aUj?=
+ =?us-ascii?Q?xVTv+hCWQvvyZhGYfuBUHCf0f/1MVDK1Jw2lxd0kRkPzHnQQJmq46NQCyf3L?=
+ =?us-ascii?Q?3ENw3W+3YAOrVEea7JfnbM6REDkU1Ks7BFszKF2jU7RsZrtBxF5Q9qR5eNSr?=
+ =?us-ascii?Q?P2ET8qgRcqAK1VsxyhEwWQ+dfwu/mnhgyjHpES4Edn02XtqLhFHq68J/pUmE?=
+ =?us-ascii?Q?rc6Cd/c1NEMMwhRcqcEjA/0aW13m9zVU3PKvW2fzmfvc6X8af8zByd5+k9p1?=
+ =?us-ascii?Q?akvIN6ED7+0fC4s3m+D9CdUagHVUbbW+TSg3UCO/VFxgjHS50Da4mn76cJTq?=
+ =?us-ascii?Q?u8LIUxod+gMRNPEMOu5HoAXPOlNHE7IufAt5uMRhfZNUNEYj6MeoFJh9n126?=
+ =?us-ascii?Q?/a+xQoDa/qTLcuyc01Sv+yUd9V1BMEv8renlO0cp6chsBhdKz7ZEfXLLsKus?=
+ =?us-ascii?Q?IPXrh1nOjEgvtPDk53OeNGaZGxjN8+eOZK6f+zqFR9t4xtRrdosmorzVg8gW?=
+ =?us-ascii?Q?92PqWDun39ZRZZSLim+OuuhIQQkAB/Y7oocMbR1zS9RZYVxtdje/igY+pCSE?=
+ =?us-ascii?Q?pmPp7vLJ9mGwl2q0ml1KR8H6sBl05hMoAwLcDdCQ2R9g8M43x2A/RTpHlpJD?=
+ =?us-ascii?Q?5OnZ7SIEJE17f2jcKRKzhTXA8LIwP8X2lv/IPFarxB6wd6dyrHTSk9Aq1Hpc?=
+ =?us-ascii?Q?CW+eEYHjkw=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR11MB5880.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f900eb4a-bcfd-4268-7e8a-08da2f5e0994
+X-MS-Exchange-CrossTenant-originalarrivaltime: 06 May 2022 12:43:35.9880
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: LQ2sBVuI8tYw18tpbXQ3DYa0kkhPV6+ErKitWEbYxobOP9fbuUp+EOO9mwuiRwh2zg8EO0/cb166Fwf70z+8pg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR11MB4366
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-05-06 at 13:33 +0200, Arnd Bergmann wrote:
-> On Fri, May 6, 2022 at 12:20 PM Maciej W. Rozycki <macro@orcam.me.uk> wrote:
-> > On Thu, 5 May 2022, Arnd Bergmann wrote:
-> >  I think I'm missing something here.  IIUC we're talking about a PCI/PCIe
-> > bus used with s390 hardware, right?
-> > 
-> >  (It has to be PCI/PCIe, because other than x86/IA-64 host buses there are
-> > only PCI/PCIe and EISA/ISA buses out there that define I/O access cycles
-> > and EISA/ISA have long been obsoleted except perhaps from some niche use.)
-> > 
-> >  If this is PCI/PCIe indeed, then an I/O access is just a different bit
-> > pattern put on the bus/in the TLP in the address phase.  So what is there
-> > inherent to the s390 architecture that prevents that different bit pattern
-> > from being used?
-> 
-> The hardware design for PCI on s390 is very different from any other
-> architecture, and more abstract. Rather than implementing MMIO register
-> access as pointer dereference, this is a separate CPU instruction that
-> takes a device/bar plus offset as arguments rather than a pointer, and
-> Linux encodes this back into a fake __iomem token.
 
-Correct, we have since gained new PCI load/store instructions that
-actually do take a virtual address that gets address translated to a
-"physical address" for the PCI BARs. The "physical address" we get from
-the platform (again via special instructions). I put "physical address"
-in quotes because while they are conceptually physical addresses and
-they are translated to by MMU translation tables, accessing their
-virtual mapping with any instruction other then the special PCI
-load/store instructions will cause addressing exceptions. So we still
-don't have real MMIO but something that looks a lot more like MMIO than
-we used to.
+On Fri, May 06, 2022 at 12:40:09AM +0000, Zhang, Qiang1 wrote:
+> On Thu, May 05, 2022 at 11:52:36PM +0800, Zqiang wrote:
+> > Currently, the rnp's cbovlmask is set in call_rcu(). when CPU going=20
+> > offline, the outgoing CPU's callbacks is migrated to target CPU, the=20
+> > number of callbacks on the my_rdp may be overloaded, if overload and=20
+> > there is no call_rcu() call on target CPU for a long time, the rnp's=20
+> > cbovldmask is not set in time. in order to fix this situation, add
+> > check_cb_ovld_locked() in rcutree_migrate_callbacks() to help CPU=20
+> > more quickly reach quiescent states.
+> >=20
+> > Signed-off-by: Zqiang <qiang1.zhang@intel.com>
+>=20
+> >Doesn't this get set right at the end of the current grace period?
+> >Given that there is a callback overload, there should be a grace period =
+in progress.
+> >
+> >See this code in rcu_gp_cleanup():
+> >
+> >		if (rcu_is_leaf_node(rnp))
+> >			for_each_leaf_node_cpu_mask(rnp, cpu, rnp->cbovldmask) {
+> >				rdp =3D per_cpu_ptr(&rcu_data, cpu);
+> >				check_cb_ovld_locked(rdp, rnp);
+> >			}
+> >
+> >So what am I missing here?  Or are you planning to remove the above code=
+?
+>=20
+> We only checked the overloaded rdp at the end of current grace period,=20
+> for my_rdp overloaded cause by migration callbacks to it,  if the=20
+> my_rdp overloaded, and the my_rdp->mynode 's cbovldmask  is empty, =20
+> the my_rdp overloaded may be not checked at end of the current grace peri=
+od.
+>
+>Very good!
+>
+> I have another question, why don't we call check_cb_ovld_locked() when rd=
+p's n_cbs decreases.
+> for example call check_cb_ovld_locked() in rcu_do_bacth(), not at the end=
+ of grace period.
 
-> 
-> >  If anything, I could imagine the same limitation as with current POWER9
-> > implementations, that is whatever glue is used to wire PCI/PCIe to the
-> > rest of the system does not implement a way to use said bit pattern (which
-> > has nothing to do with the POWER9 processor instruction set).
-> > 
-> >  But that has nothing to do with the presence or absence of any specific
-> > processor instructions.  It's just a limitation of bus glue.  So I guess
-> > it's just that all PCI/PCIe glue logic implementations for s390 have such
-> > a limitation, right?
-> 
-> There are separate instructions for PCI memory and config space, but
-> no instructions for I/O space, or for non-PCI MMIO that it could be mapped
-> into.
-> 
->        Arnd
+>The idea (as you noted above) is that it gets cleared at the end of each g=
+race period.  We could also clear it in rcu_do_batch() as you suggest, but =
+to make that change you would need to convince me that the extra overhead a=
+nd complexity would provide a useful benefit.  This will not be easy.  ;-)
 
-The config space is still accessed with the old style PCI load/store
-instructions via a special extra BAR.
+> >If so, wouldn't you also need to clear the indication for the CPU that i=
+s going offline, being careful to handle the case where the two CPUs have d=
+ifferent leaf rcu_node structures?
+>=20
+> Yes the offline CPU need to clear.
+>
+>But again, the clearing happens at the end of the next grace period.
+>Here we lose (almost) nothing by leaving the bit set because the other bit=
+ is set as well.
+>
+>Another question, as long as we brought up rcu_do_batch().
+>
+>Why have the local variable "empty" given that the local variable "count"
+>could be checked against zero?
 
-But yes overall on s390x we can only access PCI(e) devices via special
-instructions not via real MMIO and also the OS has no direct access to
-the registers of the PHB which are only accessible to firmware. 
+Thanks for reminding
+I noticed  when RCU_NOCB_CPU and DEBUG_OBJECTS_RCU_HEAD is not enable .=20
+double call call_rcu() will cause the rdp->cblist's len increase, but
+actually, the number of objects in the rdp->cblist has not changed.  the
+WARN_ON_ONCE(!IS_ENABLED(CONFIG_RCU_NOCB_CPU) && count !=3D 0 && empty)
+will be triggered.
 
-Maybe as a bit of further background it's also important to note that
-on s390x all Operating Systems run inside a hypervisor. On the lowest
-level any OS can run this is a non-paging machine level hypervisor. For
-PCI that means that we always have a kind of pass-through access though
-without paging and hardware support for the memory partitioning this is
-of course relatively simple.
+When RCU_NOCB_CPU is enabled, even without double call call_rcu().  due to =
+nocb  bypass
+Some objects may be in the rdp->nocb_bypass list, this causes the count to =
+be non-zero=20
+when the rdp->cblist list is empty.
 
+>
+>In the meantime, I have queued your commit for v5.20, thank you and good e=
+yes!  As always, I could not resist the urge to wordsmith the commit log, s=
+o could you please check it for errors?
+
+Thank you very much.
+
+>							Thanx, Paul
+
+------------------------------------------------------------------------
+
+commit 5c36f04bd460246dd28c178ce5dce6fb02f898e1
+Author: Zqiang <qiang1.zhang@intel.com>
+Date:   Thu May 5 23:52:36 2022 +0800
+
+    rcu: Add rnp->cbovldmask check in rcutree_migrate_callbacks()
+   =20
+    Currently, the rcu_node structure's ->cbovlmask field is set in call_rc=
+u()
+    when a given CPU is suffering from callback overload.  But if that CPU
+    goes offline, the outgoing CPU's callbacks is migrated to the running
+    CPU, which is likely to overload the running CPU.  However, that CPU's
+    bit in its leaf rcu_node structure's ->cbovlmask field remains zero.
+   =20
+    Initially, this is OK because the outgoing CPU's bit remains set.
+    However, that bit will be cleared at the next end of a grace period,
+    at which time it is quite possible that the running CPU will still
+    be overloaded.  If the running CPU invokes call_rcu(), then overload
+    will be checked for and the bit will be set.  Except that there is no
+    guarantee that the running CPU will invoke call_rcu(), in which case th=
+e
+    next grace period will fail to take the running CPU's overload conditio=
+n
+    into account.  Plus, because the bit is not set, the end of the grace
+    period won't check for overload on this CPU.
+   =20
+    This commit therefore adds a call to check_cb_ovld_locked() in
+    check_cb_ovld_locked() to set the running CPU's ->cbovlmask bit
+    appropriately.
+   =20
+    Signed-off-by: Zqiang <qiang1.zhang@intel.com>
+    Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+
+diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c index 9dc4c4e82db62..bcc=
+5876c9753b 100644
+--- a/kernel/rcu/tree.c
++++ b/kernel/rcu/tree.c
+@@ -4577,6 +4577,7 @@ void rcutree_migrate_callbacks(int cpu)
+ 	needwake =3D needwake || rcu_advance_cbs(my_rnp, my_rdp);
+ 	rcu_segcblist_disable(&rdp->cblist);
+ 	WARN_ON_ONCE(rcu_segcblist_empty(&my_rdp->cblist) !=3D !rcu_segcblist_n_c=
+bs(&my_rdp->cblist));
++	check_cb_ovld_locked(my_rdp, my_rnp);
+ 	if (rcu_rdp_is_offloaded(my_rdp)) {
+ 		raw_spin_unlock_rcu_node(my_rnp); /* irqs remain disabled. */
+ 		__call_rcu_nocb_wake(my_rdp, true, flags);

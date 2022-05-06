@@ -2,109 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B1ED51CE0A
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 04:16:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 444C551CE71
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 04:16:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387673AbiEFAzR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 20:55:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55030 "EHLO
+        id S1387680AbiEFAz4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 20:55:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352227AbiEFAzK (ORCPT
+        with ESMTP id S241986AbiEFAzz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 20:55:10 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4CEE1EEEA
-        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 17:51:29 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id x18so8103713wrc.0
-        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 17:51:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=T9MYuDJ2wsnyovw0Xu57miYdH33p/30ZPxTRJfIyzJA=;
-        b=pPS8Yn/cD/N8reBU9OZpXKTZJBpyjrtfRqyIsfYJEt+noftWlP6Z3evo8SeGhVsnYW
-         lhOiOSktCXj9/cTrDF0/R1KpZgx8CCBB2tPth5QA0IgGuAovOLU3NjA0H9CZW8mHIhgv
-         +Kfhj36Mtf8rx2VORzvINUoocUWrrLNsU5bUhWJiPF7tX6BU48DxMDNdxVe1xjbe82Xs
-         cZFDl6/t5uyOyHlaq/wQyT+qEC+OT1wXh5+EPB75EXsiRPEOTgdTPaz4IjamuQM8NayI
-         e+jQpNlIhKVfNX0YbRxlqg3CHSC9TOHvBwn3wHbisfsMM7KzYJiynrPbLtVMlR/44d9d
-         uRIw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=T9MYuDJ2wsnyovw0Xu57miYdH33p/30ZPxTRJfIyzJA=;
-        b=bErv7e8Xi8hjYYaqFnRlP0D1O8/ZXVX4iHRXIu/v6s6LjbEAEBHhdl668wS4nlKZT6
-         VOdR9LdQKO6MP0FyhVDGIqDphYLWQCsXeTBKa2XV9F0QWACSB2J3QX8GRGIIDVVCzBqt
-         UcswUIq6KD+Swca8rzy88u/3q8G8uPvfUnHEciZB3E8CevyXJIIL5E0boaGlh9fSIHhI
-         RUgob45W//xv35H6k8kMbJQSUn5g2SUULQG+zRKz/P8dqbycC806Oj7FCndHrAEG++ie
-         3TC9carMXVRU6H/mzaLfDkNUVXy5JKFdcIy+OjMgXZ38nA2uhmMwLpLcmJsdpPeXnKCe
-         SVUg==
-X-Gm-Message-State: AOAM533jTVUT/hz7JqmaRbKsjmj4Z9w3+y1TKQa2lcyuAb0qoCfidFcB
-        /zQjxLGqT5y3FE9rRUcMPYlGPCMzMiVFd6OYuj8jcA==
-X-Google-Smtp-Source: ABdhPJyM51mlh5mPKrHTAD9AV0uCIaZVV0ZD6NrCqJ1mSYvY0cr5B/l4IPG2mrJWRLHzCkUz27ekW1NOgB3d1Ejd1LU=
-X-Received: by 2002:adf:d1e9:0:b0:20c:6c76:14d5 with SMTP id
- g9-20020adfd1e9000000b0020c6c7614d5mr543030wrd.375.1651798288308; Thu, 05 May
- 2022 17:51:28 -0700 (PDT)
+        Thu, 5 May 2022 20:55:55 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 172BE1EEEA;
+        Thu,  5 May 2022 17:52:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651798334; x=1683334334;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=RXBway8aqei9K09kwNWoZBifM54ZYmb3DHugyR1DrrE=;
+  b=SSYRXYOv/dsqv8NAe25PQB2ZqVMsK/dKt4WbJ2P2aEXkHERSoW0a+bLW
+   nllkvgmnzOKpyacYp8vkR/2KLn/knxK4OR+HAx5doqF3sflh1lVSTSrqs
+   HbUvL/wLOJDgrx991P9OhqJarxCly/hWkSnpQfEBO/1J1Q/p9vBhR1fQB
+   5Rub0NLigmY2ixHoNCJMALUSyfu9VLWXz3PwfZ+YctnA8yS+iLWxQi7Rx
+   wW5SGskzuoTxChxEUnIoKLtXdlftUGWZfJZl/NNOJszKMsJNsDKh21aVr
+   Ahrm2SwNJqo3ZPjy9SdD8EU7A0fhj+s1bbD3JDsiFKZIiJFbNxbQofEcU
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10338"; a="268201722"
+X-IronPort-AV: E=Sophos;i="5.91,203,1647327600"; 
+   d="scan'208";a="268201722"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2022 17:52:13 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,203,1647327600"; 
+   d="scan'208";a="585667620"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 05 May 2022 17:52:11 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nmmCZ-000CtK-7u;
+        Fri, 06 May 2022 00:52:11 +0000
+Date:   Fri, 6 May 2022 08:51:44 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Dan Moulding <dmoulding@me.com>, linux-kernel@vger.kernel.org
+Cc:     kbuild-all@lists.01.org, linux-doc@vger.kernel.org,
+        tglx@linutronix.de, akpm@linux-foundation.org, corbet@lwn.net,
+        Dan Moulding <dmoulding@me.com>
+Subject: Re: [PATCH 1/1] init: Add "hostname" kernel parameter
+Message-ID: <202205060821.6KCNxZBf-lkp@intel.com>
+References: <20220505180651.22849-2-dmoulding@me.com>
 MIME-Version: 1.0
-References: <20220505165639.361733-1-adrian.hunter@intel.com> <20220505165639.361733-24-adrian.hunter@intel.com>
-In-Reply-To: <20220505165639.361733-24-adrian.hunter@intel.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Thu, 5 May 2022 17:51:11 -0700
-Message-ID: <CAP-5=fUyne-2zs7u4XUnfjVCXCzQLchLZMjxUhuMYMvHRd6DGQ@mail.gmail.com>
-Subject: Re: [PATCH V1 23/23] perf tools: Allow system-wide events to keep
- their own threads
-To:     Adrian Hunter <adrian.hunter@intel.com>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Leo Yan <leo.yan@linaro.org>, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220505180651.22849-2-dmoulding@me.com>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 5, 2022 at 9:58 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
->
-> System-wide events do not have threads, so do not propagate threads to
-> them.
->
-> Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
+Hi Dan,
 
-Acked-by: Ian Rogers <irogers@google.com>
+Thank you for the patch! Perhaps something to improve:
 
-Thanks,
-Ian
+[auto build test WARNING on linux/master]
+[also build test WARNING on hnaz-mm/master linus/master v5.18-rc5 next-20220505]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-> ---
->  tools/lib/perf/evlist.c | 7 +++++--
->  1 file changed, 5 insertions(+), 2 deletions(-)
->
-> diff --git a/tools/lib/perf/evlist.c b/tools/lib/perf/evlist.c
-> index da30e88c76b9..fe75d2cf3696 100644
-> --- a/tools/lib/perf/evlist.c
-> +++ b/tools/lib/perf/evlist.c
-> @@ -52,8 +52,11 @@ static void __perf_evlist__propagate_maps(struct perf_evlist *evlist,
->                 evsel->cpus = perf_cpu_map__get(evsel->own_cpus);
->         }
->
-> -       perf_thread_map__put(evsel->threads);
-> -       evsel->threads = perf_thread_map__get(evlist->threads);
-> +       if (!evsel->system_wide) {
-> +               perf_thread_map__put(evsel->threads);
-> +               evsel->threads = perf_thread_map__get(evlist->threads);
-> +       }
-> +
->         evlist->all_cpus = perf_cpu_map__merge(evlist->all_cpus, evsel->cpus);
->  }
->
-> --
-> 2.25.1
->
+url:    https://github.com/intel-lab-lkp/linux/commits/Dan-Moulding/Allow-setting-hostname-before-userspace-starts/20220506-023146
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 107c948d1d3e61d10aee9d0f7c3d81bbee9842af
+config: riscv-randconfig-r042-20220505 (https://download.01.org/0day-ci/archive/20220506/202205060821.6KCNxZBf-lkp@intel.com/config)
+compiler: riscv64-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/1071875b349d9b8307eb0f4d23dda06a2301fe03
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Dan-Moulding/Allow-setting-hostname-before-userspace-starts/20220506-023146
+        git checkout 1071875b349d9b8307eb0f4d23dda06a2301fe03
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   init/version.c: In function 'early_hostname':
+>> init/version.c:45:9: warning: 'strncpy' specified bound 65 equals destination size [-Wstringop-truncation]
+      45 |         strncpy(init_uts_ns.name.nodename, arg, bufsize);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+vim +/strncpy +45 init/version.c
+
+    39	
+    40	static int __init early_hostname(char *arg)
+    41	{
+    42		size_t bufsize = sizeof(init_uts_ns.name.nodename);
+    43		size_t maxlen  = bufsize - 1;
+    44	
+  > 45		strncpy(init_uts_ns.name.nodename, arg, bufsize);
+    46		if (strlen(arg) > maxlen) {
+    47			pr_warn("hostname parameter exceeds %zd characters and will be truncated",
+    48				maxlen);
+    49			init_uts_ns.name.nodename[maxlen] = '\0';
+    50		}
+    51		return 0;
+    52	}
+    53	early_param("hostname", early_hostname);
+    54	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

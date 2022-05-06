@@ -2,51 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C2D551D182
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 08:35:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67CF351D184
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 08:36:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380076AbiEFGjV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 02:39:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32950 "EHLO
+        id S1381554AbiEFGjl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 02:39:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382873AbiEFGi7 (ORCPT
+        with ESMTP id S1381727AbiEFGji (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 02:38:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9A6365439;
-        Thu,  5 May 2022 23:35:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7CB6761F4F;
-        Fri,  6 May 2022 06:35:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F0F4C385AC;
-        Fri,  6 May 2022 06:35:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651818912;
-        bh=pf6ZIr6YjtbwscBjl1NsVH6yuujUzzRNMvatlF+n6/s=;
-        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-        b=Ne6ULEpad9yavPWrQPN2c6sNnzXIJpI1YEOVsZrBu1C2gaidOr8ze4OQQBNLkW4em
-         9wGbss3w34/hDnXAfW+SbTeje2PbSWEt6lf8rpt7A7H/8WBE3wEaKEdqY02zH5ad7/
-         fQb4X7YafLXoii92bbmNgiE0dRbBrn04PsFSsnorSQbvI88W5LTn7lmWA/bcfTlwKz
-         1uLAKHY/ryFoaQfrqdauVMsYzxxhcUppAi2XR6DgywfHpHW0v//0vGeXU6vWiyiuqj
-         MCgKwpU7bbBiomCpRPHNxJMUpEOGm8ccji+e97W/epm3QNWEsm22Z5RgQKpUzxWkNP
-         oMlWrOvWhUNKw==
-Date:   Fri, 6 May 2022 08:35:09 +0200 (CEST)
-From:   Jiri Kosina <jikos@kernel.org>
-To:     =?ISO-8859-15?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>
-cc:     benjamin.tissoires@redhat.com, spbnick@gmail.com,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH for-5.19/uclogic 0/5] DIGImend patches, part V
-In-Reply-To: <20220421175052.911446-1-jose.exposito89@gmail.com>
-Message-ID: <nycvar.YFH.7.76.2205060834580.28985@cbobk.fhfr.pm>
-References: <20220421175052.911446-1-jose.exposito89@gmail.com>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+        Fri, 6 May 2022 02:39:38 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E8CB65433
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 23:35:55 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id j6so12557440ejc.13
+        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 23:35:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=zz4s19IuKfTWspT91aKEXLuSU6HR0U4j58MbscydUyU=;
+        b=MpmLl/FtCbjUVWWOH3llKMB/0jTnJdXFpLOuz1NzKYZELDFAR9Xh/FalVKBEYIUcj8
+         CACUx8NQWsVVgEElfDul2cFjZbosb7XV6mowGltvFtdK1CdmrnnwanchRL4tWtBZ4Pnn
+         7kQbGKoPCklmKAIKKCGt/HoJW6qU+u1hEF44R6aAPk/tIec0iI3f7TZfYDAWMR/zqjRd
+         1Zf+UpVFmMc4n92cWQpMXUE6yjE7TjOgxbU80BtRK2Nr6aUl/5WqfQX+vQHhsC3e9og1
+         H8+DZhmu+ZC7BWdR1tsnWwt1WCOxmgwuUIZdcf2IwE/jHT8Tk4MtHLk5T3i9WIiFsu62
+         UxVg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=zz4s19IuKfTWspT91aKEXLuSU6HR0U4j58MbscydUyU=;
+        b=qXpUdgZYM+wlmjQJIAs/oj6DhgjiInoIj1UMT8w4vP7vpfkJX2mRJ25loWjUzs+ecW
+         cgL6JtxRxjoW6VJJ1A/3G4VpFLfMXPMUfdAzR4nCBN7CK6dN1GtwU89ugJ0YpXpUlD9g
+         ctuqUglcTAjLnlSNlT9ohoxkIJoSSQiIbfH7XzCdtBSDb+B7OFGmCN03NDARXbKoqFCh
+         vYZFgk15oBSeNq4s1j260wwMolb+E5CNPBALrUgZRYN35/1nVxJk3sYSQzhx1JO7at+m
+         J+wL2u9F36AcIc0bXXm94dg1tzKTfiJJDkCo5yi4zUi480GD43U347xx+jK+DxCgMTL4
+         3pkA==
+X-Gm-Message-State: AOAM532pOoFmIRRdXWeWiFWr6xdirkp3UX9Jch75zdm8YIyqLN06qNGy
+        xkkJA/0V7cXEzDxuYfzoxJaCRw==
+X-Google-Smtp-Source: ABdhPJziYnBgutJZ7XtcuUasNPQfiJkESED3cSKWySTy25i3Vl6K281X4oN9Lcg38owtVMyfOlqcQA==
+X-Received: by 2002:a17:907:7ea8:b0:6f5:941:cba9 with SMTP id qb40-20020a1709077ea800b006f50941cba9mr1546089ejc.213.1651818953535;
+        Thu, 05 May 2022 23:35:53 -0700 (PDT)
+Received: from [192.168.0.222] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id cy14-20020a0564021c8e00b0042617ba638asm1833255edb.20.2022.05.05.23.35.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 05 May 2022 23:35:53 -0700 (PDT)
+Message-ID: <550cd907-be2a-4e90-350c-fbc3bdc03728@linaro.org>
+Date:   Fri, 6 May 2022 08:35:52 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v14 6/9] dt-bindings: interrupt-controller: Add bindings
+ for SP7021 interrupt controller
+Content-Language: en-US
+To:     Qin Jian <qinjian@cqplus1.com>
+Cc:     robh+dt@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
+        tglx@linutronix.de, maz@kernel.org, p.zabel@pengutronix.de,
+        linux@armlinux.org.uk, arnd@arndb.de,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        Rob Herring <robh@kernel.org>
+References: <cover.1651805790.git.qinjian@cqplus1.com>
+ <56fb5e9a35a901f15d8e9721385c7e916c181377.1651805790.git.qinjian@cqplus1.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <56fb5e9a35a901f15d8e9721385c7e916c181377.1651805790.git.qinjian@cqplus1.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -55,50 +80,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 21 Apr 2022, José Expósito wrote:
+On 06/05/2022 05:23, Qin Jian wrote:
+> Add documentation to describe Sunplus SP7021 interrupt controller bindings.
+> 
+> Reviewed-by: Rob Herring <robh@kernel.org>
+> Signed-off-by: Qin Jian <qinjian@cqplus1.com>
+> ---
+>  .../sunplus,sp7021-intc.yaml                  | 62 +++++++++++++++++++
+>  MAINTAINERS                                   |  1 +
+>  2 files changed, 63 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/interrupt-controller/sunplus,sp7021-intc.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/interrupt-controller/sunplus,sp7021-intc.yaml b/Documentation/devicetree/bindings/interrupt-controller/sunplus,sp7021-intc.yaml
+> new file mode 100644
+> index 000000000..f26d8b213
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/interrupt-controller/sunplus,sp7021-intc.yaml
+> @@ -0,0 +1,62 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +# Copyright (C) Sunplus Co., Ltd. 2021
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/interrupt-controller/sunplus,sp7021-intc.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Sunplus SP7021 SoC Interrupt Controller Device Tree Bindings
 
-> Hi everyone,
-> 
-> This series is a follow up to [1], [2], [3] and [4] upstreaming 5 more
-> patches authored by Nikolai from the DIGImend project.
-> 
-> Patches 1 and 2 are documentation improvements.
-> 
-> Patch 3 allows to create a keyboard interface to the tablets that have
-> a "Usage (Keyboard)" in their descriptor, like for example the Huion
-> HS611, which has media keys [5].
-> 
-> However, some of the tablets that have a keyboard usage, also have an
-> invalid pen usage, creating an invalid pen interface. Patches 4 and 5
-> allow to disable it.
-> 
-> As always, many thanks to Jiří and Nikolai for their work :D
-> 
-> José Expósito
-> 
-> [1] https://lore.kernel.org/linux-input/nycvar.YFH.7.76.2202161642180.11721@cbobk.fhfr.pm/T/
-> [2] https://lore.kernel.org/linux-input/56454560-5f62-05b9-1a24-3f51a305140e@gmail.com/T/
-> [3] https://lore.kernel.org/linux-input/nycvar.YFH.7.76.2204111653000.30217@cbobk.fhfr.pm/T/
-> [4] https://lore.kernel.org/linux-input/nycvar.YFH.7.76.2204211005520.30217@cbobk.fhfr.pm/T/
-> [5] https://www.huion.com/es/pen_tablet/HS/huion-hs611.html
-> 
-> Nikolai Kondrashov (5):
->   HID: uclogic: Clarify params desc_size description
->   HID: uclogic: Clarify pen/frame desc_ptr description
->   HID: uclogic: Pass keyboard reports as is
->   HID: uclogic: Support disabling pen usage
->   HID: uclogic: Disable pen usage for Huion keyboard interfaces
-> 
->  drivers/hid/hid-uclogic-core.c   | 19 +++++++++++++++++++
->  drivers/hid/hid-uclogic-params.c |  9 +++++++--
->  drivers/hid/hid-uclogic-params.h | 17 ++++++++++++-----
->  3 files changed, 38 insertions(+), 7 deletions(-)
+Remove "Device Tree Bindings". This applies to all bindings patches, not
+only to one.
 
-Now in hid.git#for-5.19/uclogic
 
-Thanks,
-
--- 
-Jiri Kosina
-SUSE Labs
-
+Best regards,
+Krzysztof

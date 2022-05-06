@@ -2,117 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 126E651D7B6
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 14:28:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3998551D7BC
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 14:29:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1391911AbiEFMcR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 08:32:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58056 "EHLO
+        id S1392025AbiEFMdS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 08:33:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1391937AbiEFMbz (ORCPT
+        with ESMTP id S1391962AbiEFMcq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 08:31:55 -0400
-Received: from angie.orcam.me.uk (angie.orcam.me.uk [IPv6:2001:4190:8020::34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 47E356A071;
-        Fri,  6 May 2022 05:27:21 -0700 (PDT)
-Received: by angie.orcam.me.uk (Postfix, from userid 500)
-        id 2BD8B9200B3; Fri,  6 May 2022 14:27:20 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by angie.orcam.me.uk (Postfix) with ESMTP id 2728F92009D;
-        Fri,  6 May 2022 13:27:20 +0100 (BST)
-Date:   Fri, 6 May 2022 13:27:20 +0100 (BST)
-From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
-To:     Arnd Bergmann <arnd@kernel.org>
-cc:     Bjorn Helgaas <helgaas@kernel.org>,
-        Niklas Schnelle <schnelle@linux.ibm.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        Richard Henderson <rth@twiddle.net>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        "open list:ALPHA PORT" <linux-alpha@vger.kernel.org>,
-        "moderated list:ARM PORT" <linux-arm-kernel@lists.infradead.org>,
-        "open list:IA64 (Itanium) PLATFORM" <linux-ia64@vger.kernel.org>,
-        "open list:M68K ARCHITECTURE" <linux-m68k@lists.linux-m68k.org>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        "open list:PARISC ARCHITECTURE" <linux-parisc@vger.kernel.org>,
-        "open list:LINUX FOR POWERPC (32-BIT AND 64-BIT)" 
-        <linuxppc-dev@lists.ozlabs.org>,
-        "open list:RISC-V ARCHITECTURE" <linux-riscv@lists.infradead.org>,
-        "open list:SUPERH" <linux-sh@vger.kernel.org>,
-        "open list:SPARC + UltraSPARC (sparc/sparc64)" 
-        <sparclinux@vger.kernel.org>
-Subject: Re: [RFC v2 01/39] Kconfig: introduce HAS_IOPORT option and select
- it as necessary
-In-Reply-To: <CAK8P3a0NzG=3tDLCdPj2=A__2r_+xiiUTW=WJCBNp29x_A63Og@mail.gmail.com>
-Message-ID: <alpine.DEB.2.21.2205061314110.52331@angie.orcam.me.uk>
-References: <CAK8P3a0sJgMSpZB_Butx2gO0hapYZy-Dm_QH-hG5rOaq_ZgsXg@mail.gmail.com> <20220505161028.GA492600@bhelgaas> <CAK8P3a3fmPExr70+fVb564hZdGAuPtYa-QxgMMe5KLpnY_sTrQ@mail.gmail.com> <alpine.DEB.2.21.2205061058540.52331@angie.orcam.me.uk>
- <CAK8P3a0NzG=3tDLCdPj2=A__2r_+xiiUTW=WJCBNp29x_A63Og@mail.gmail.com>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+        Fri, 6 May 2022 08:32:46 -0400
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7187B6AA4A
+        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 05:27:59 -0700 (PDT)
+Received: by mail-lj1-x230.google.com with SMTP id g16so9081242lja.3
+        for <linux-kernel@vger.kernel.org>; Fri, 06 May 2022 05:27:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to;
+        bh=7PZ/hV6GDLLZJg7GbrTdwE+sJ+7ZLoEDN0MM8ugfsCg=;
+        b=gMPXOgWj7koZhFXbwMbp/RLkJBXE9UhCoKYDcXzKP9VV3c51uIERoUpz5nwnHE/qNN
+         qihmqwFaDr5NLZ7XkR+xZBbtcJ5ETvUUKDhzxwNS9eURDmFvuvyFeeXVJu2TfAzeG5o+
+         26/9akq0wleAJWg3j6ODIfDWuu1yWMrbPLN4mjV41y9eyRNa9rG4yXr8beKFvitJLG88
+         AQL7n9Blx8RW13qveAwpManhzHhq7sbj5SMoh+4je3qpAnpvWuwCmTJyauMhkqhh4I8R
+         KCFt9yM4Aqe85SrrYqwe2UVAaZwQm+3cc0c98EAGi6fUCMofpuRYfYxZRK/OAUGb/uVL
+         do5g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to;
+        bh=7PZ/hV6GDLLZJg7GbrTdwE+sJ+7ZLoEDN0MM8ugfsCg=;
+        b=AIaph7h9OeVa6GjdMLQ9ZU2fsgMVTLnl55g1KYs17nNK8R6RwB71OBzXttEMsoQu2l
+         +mep7NiepNbdpz7lCURhNhn7V26XhDnrFxB/SZ7GW25E/zqpSv/IvSbBV4kxuHpkThdE
+         AAVEejPZ5IicOqU7lZ+X6F1Z9RguZZ9NDIZy7kdP+OmqfuULDpasEb1znk/qIWNC5veL
+         5anwp3hK2IhB4tJOeWpQotuIwvIIgVmq0tnLPRzyh52R5xgT/SWvs6GOBQjiSRqPAKlh
+         6HKpclKvYzOkl2KZoTQuBAiCTLSdXlblMgyG8G64Z9SFGOD1gd50jntG3YzEikwA77F0
+         JRpw==
+X-Gm-Message-State: AOAM5331kakUbkjE9arczw1gNpGqQ5cSZ/ut4kDfJmXxFAz1vksKZoVS
+        9I75fgy4k4g+8ixji2CQjns=
+X-Google-Smtp-Source: ABdhPJwjoCAh7Oly+mOokOuY9CTlkkkcFQE0yEKTqYhhkwj2UXjkWPR0FPqDv/SH8gVkw7djAf/nVw==
+X-Received: by 2002:a2e:a78f:0:b0:24f:53a4:fc with SMTP id c15-20020a2ea78f000000b0024f53a400fcmr1858207ljf.296.1651840077516;
+        Fri, 06 May 2022 05:27:57 -0700 (PDT)
+Received: from [192.168.1.11] ([217.117.246.114])
+        by smtp.gmail.com with ESMTPSA id d14-20020a05651233ce00b0047255d21136sm669330lfg.101.2022.05.06.05.27.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 06 May 2022 05:27:57 -0700 (PDT)
+Message-ID: <9f0bf5e0-87e8-ce27-7c2d-8e247e7b5f4f@gmail.com>
+Date:   Fri, 6 May 2022 15:27:56 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v3 2/3] staging: rtl8712: fix uninit-value in
+ r871xu_drv_init()
+Content-Language: en-US
+To:     Wang Cheng <wanngchenng@gmail.com>, dan.carpenter@oracle.com
+Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+References: <cover.1651833575.git.wanngchenng@gmail.com>
+ <14c3886173dfa4597f0704547c414cfdbcd11d16.1651833575.git.wanngchenng@gmail.com>
+From:   Pavel Skripkin <paskripkin@gmail.com>
+In-Reply-To: <14c3886173dfa4597f0704547c414cfdbcd11d16.1651833575.git.wanngchenng@gmail.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------kV2vvlvdgzPSm9WErIYZ8xjU"
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 6 May 2022, Arnd Bergmann wrote:
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------kV2vvlvdgzPSm9WErIYZ8xjU
+Content-Type: multipart/mixed; boundary="------------cwvi4n4YiDQ988exxsUy9AMT";
+ protected-headers="v1"
+From: Pavel Skripkin <paskripkin@gmail.com>
+To: Wang Cheng <wanngchenng@gmail.com>, dan.carpenter@oracle.com
+Cc: linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Message-ID: <9f0bf5e0-87e8-ce27-7c2d-8e247e7b5f4f@gmail.com>
+Subject: Re: [PATCH v3 2/3] staging: rtl8712: fix uninit-value in
+ r871xu_drv_init()
+References: <cover.1651833575.git.wanngchenng@gmail.com>
+ <14c3886173dfa4597f0704547c414cfdbcd11d16.1651833575.git.wanngchenng@gmail.com>
+In-Reply-To: <14c3886173dfa4597f0704547c414cfdbcd11d16.1651833575.git.wanngchenng@gmail.com>
 
-> >  If this is PCI/PCIe indeed, then an I/O access is just a different bit
-> > pattern put on the bus/in the TLP in the address phase.  So what is there
-> > inherent to the s390 architecture that prevents that different bit pattern
-> > from being used?
-> 
-> The hardware design for PCI on s390 is very different from any other
-> architecture, and more abstract. Rather than implementing MMIO register
-> access as pointer dereference, this is a separate CPU instruction that
-> takes a device/bar plus offset as arguments rather than a pointer, and
-> Linux encodes this back into a fake __iomem token.
+--------------cwvi4n4YiDQ988exxsUy9AMT
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
- OK, that seems to me like a reasonable and quite a clean design (on the 
-hardware side).
+SGkgV2FuZywNCg0KT24gNS82LzIyIDE0OjU5LCBXYW5nIENoZW5nIHdyb3RlOg0KPiBSZXBv
+cnRlZC1hbmQtdGVzdGVkLWJ5OiBzeXpib3QrNmY1ZWNkMTQ0ODU0YzBkODU4MGJAc3l6a2Fs
+bGVyLmFwcHNwb3RtYWlsLmNvbQ0KPiBTaWduZWQtb2ZmLWJ5OiBXYW5nIENoZW5nIDx3YW5u
+Z2NoZW5uZ0BnbWFpbC5jb20+DQo+IC0tLQ0KPiAgIGRyaXZlcnMvc3RhZ2luZy9ydGw4NzEy
+L3VzYl9pbnRmLmMgfCA2ICsrKy0tLQ0KPiAgIDEgZmlsZSBjaGFuZ2VkLCAzIGluc2VydGlv
+bnMoKyksIDMgZGVsZXRpb25zKC0pDQo+IA0KPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9zdGFn
+aW5nL3J0bDg3MTIvdXNiX2ludGYuYyBiL2RyaXZlcnMvc3RhZ2luZy9ydGw4NzEyL3VzYl9p
+bnRmLmMNCj4gaW5kZXggZWU0YzYxZjg1YTA3Li41MGRjZDNlY2I2ODUgMTAwNjQ0DQo+IC0t
+LSBhL2RyaXZlcnMvc3RhZ2luZy9ydGw4NzEyL3VzYl9pbnRmLmMNCj4gKysrIGIvZHJpdmVy
+cy9zdGFnaW5nL3J0bDg3MTIvdXNiX2ludGYuYw0KPiBAQCAtNTM4LDEzICs1MzgsMTMgQEAg
+c3RhdGljIGludCByODcxeHVfZHJ2X2luaXQoc3RydWN0IHVzYl9pbnRlcmZhY2UgKnB1c2Jf
+aW50ZiwNCj4gICAJCX0gZWxzZSB7DQo+ICAgCQkJQXV0b2xvYWRGYWlsID0gZmFsc2U7DQo+
+ICAgCQl9DQo+IC0JCWlmICgoKG1hY1swXSA9PSAweGZmKSAmJiAobWFjWzFdID09IDB4ZmYp
+ICYmDQo+ICsJCWlmICgoIUF1dG9sb2FkRmFpbCkgfHwNCj4gKwkJICAgICgobWFjWzBdID09
+IDB4ZmYpICYmIChtYWNbMV0gPT0gMHhmZikgJiYNCj4gICAJCSAgICAgKG1hY1syXSA9PSAw
+eGZmKSAmJiAobWFjWzNdID09IDB4ZmYpICYmDQo+ICAgCQkgICAgIChtYWNbNF0gPT0gMHhm
+ZikgJiYgKG1hY1s1XSA9PSAweGZmKSkgfHwNCj4gICAJCSAgICAoKG1hY1swXSA9PSAweDAw
+KSAmJiAobWFjWzFdID09IDB4MDApICYmDQo+ICAgCQkgICAgIChtYWNbMl0gPT0gMHgwMCkg
+JiYgKG1hY1szXSA9PSAweDAwKSAmJg0KPiAtCQkgICAgIChtYWNbNF0gPT0gMHgwMCkgJiYg
+KG1hY1s1XSA9PSAweDAwKSkgfHwNCj4gLQkJICAgICAoIUF1dG9sb2FkRmFpbCkpIHsNCj4g
+KwkJICAgICAobWFjWzRdID09IDB4MDApICYmIChtYWNbNV0gPT0gMHgwMCkpKSB7DQo+ICAg
+CQkJbWFjWzBdID0gMHgwMDsNCj4gICAJCQltYWNbMV0gPSAweGUwOw0KPiAgIAkJCW1hY1sy
+XSA9IDB4NGM7DQoNCkhtbSwNCg0KdGhlIHdob2xlIHI4NzF4dV9kcnZfaW5pdCgpIGxvb2tz
+IG9kZCwgYnV0IGl0J3MgdW5yZWxhdGVkLg0KDQpJIHNlZSB0aGF0IHRoaXMgcGF0Y2ggZG9l
+cyBub3QgaGVscCB3aXRoIGJlbG93IGtlcm5lbCBwYXRoDQoNCnI4NzF4dV9kcnZfaW5pdCgp
+DQogICBpZiAodG1wVTFiICYgX0VFUFJPTV9FTikgPC0gdHJ1ZSBbMV0NCglpZiAoIXI4NzEy
+X2luaXRtYWMgfHwgIW1hY19wdG9uKHI4NzEyX2luaXRtYWMsIG1hYykpIDwtICgqKQ0KCQlp
+ZiAoKCFBdXRvbG9hZEZhaWwpIHx8CTwtIGZhbHNlLCBzaW5jZSBbMV0gYnJhbmNoIHRha2Vu
+DQoJCQlbY29kZSB0b3VjaGVzIHN0YWNrIGRhdGFdDQoNCigqKSBmYWxzZSBiZWNhdXNlIG9m
+IHI4NzEyX2luaXRtYWMgaXMgZXF1YWwgdG8gTlVMTA0KDQoNCkkgc2F3LCB0aGF0IHN5emJv
+dCBzYWlkIE9LIG9uIHlvdXIgcGF0Y2gsIGJ1dCBpdCdzIGJlY2F1c2UgeW91IGhhdmUganVz
+dCANCmhpZGVkIGFuIGVycm9yIGluc2lkZSByZWFkIEFQSQ0KDQoNCg0KV2l0aCByZWdhcmRz
+LA0KUGF2ZWwgU2tyaXBraW4NCg==
 
- So what happens if the instruction is given an I/O rather than memory BAR 
-as the relevant argument?  Is the address space indicator bit (bit #0) 
-simply ignored or what?
+--------------cwvi4n4YiDQ988exxsUy9AMT--
 
-> >  But that has nothing to do with the presence or absence of any specific
-> > processor instructions.  It's just a limitation of bus glue.  So I guess
-> > it's just that all PCI/PCIe glue logic implementations for s390 have such
-> > a limitation, right?
-> 
-> There are separate instructions for PCI memory and config space, but
-> no instructions for I/O space, or for non-PCI MMIO that it could be mapped
-> into.
+--------------kV2vvlvdgzPSm9WErIYZ8xjU
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
- The PCI configuration space was retrofitted into x86 systems (and is 
-accessed in an awkward manner with them), but with a new design such a 
-clean approach is most welcome IMHO.  Thank you for your explanation.
+-----BEGIN PGP SIGNATURE-----
 
-  Maciej
+wsF5BAABCAAjFiEER3XL3TplLQE8Qi40bk1w61LbBA0FAmJ1FEwFAwAAAAAACgkQbk1w61LbBA0L
+hQ//bguLeqWng+fhFqRlYDg+BYyrFuumqplIiZuq3yg+83gz2OMI0y3SNRxzscRVY/kmkHQs5wWC
+DnNls1r861TroawbpQXXur5jRFolXZ3q04le2d14sEYHCgz2q7JZSHrdOxuBKndbZZsuFeKHk9ms
+RzDbg4puQ062Yk5V2tjQO4bib2C4FGlFLLlmiAbEgJj/iAbTXrexDvtRwX7k+xtKXtPIXOKJIlyb
+GWzPl12rW6gCEoYVftGBDhoREAhB6o9pVYtahTTpClRfGbyuBKumI76y4PTo5csLGxJ3GuzTmpGJ
+o0s9xWLBfpYDMC3tw1A8neBAaTEOPf+kylP/vwF57zeSRzjD2WbMBKIf49HSpgm352jXCGeBx5UN
+04OpxF1IhYGRmUSaT9RqQuWsONTLN1sK+2TeIae2cEPdjFirv7iX5fJPp3Enw22Yk/1VkdNOGlEp
+vCJ3qltmQDa2sylwrOaZHrUfrjdpzDM+u/LtiLRYIG7MJ0m4xthq4nV0tzOEAoL1zjfdjz3MwSzp
+Zwmk9Kpqs12fXnPQXpcfxKOuFwqvZCLjmMLLidMPVPH/kjqaBMNCFfqxGmZBZATEC/0VnwX/1muh
+T29SdGwXBxUZcciDxXO6npOyRSprFHGRgfZWTFs7nh6XIHnO6L3EwgpZC0qFLoiXggs6n4LBFtEL
+rQY=
+=6Ib9
+-----END PGP SIGNATURE-----
+
+--------------kV2vvlvdgzPSm9WErIYZ8xjU--

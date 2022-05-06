@@ -2,71 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC84251E252
-	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 01:40:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C606451E1C7
+	for <lists+linux-kernel@lfdr.de>; Sat,  7 May 2022 01:40:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1445003AbiEFXag (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 19:30:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60212 "EHLO
+        id S1445007AbiEFXdE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 19:33:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1389955AbiEFXab (ORCPT
+        with ESMTP id S1344905AbiEFXdB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 19:30:31 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BB86712D3
-        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 16:26:46 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id k1so8838919pll.4
-        for <linux-kernel@vger.kernel.org>; Fri, 06 May 2022 16:26:46 -0700 (PDT)
+        Fri, 6 May 2022 19:33:01 -0400
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F3C9712D3
+        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 16:29:16 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id x52so7438765pfu.11
+        for <linux-kernel@vger.kernel.org>; Fri, 06 May 2022 16:29:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language
-         :from:to:cc:references:in-reply-to:content-transfer-encoding;
-        bh=sW3k5smHGzAvkGL5s6X2GJ48bk9my2UsxwMn1HoATJ0=;
-        b=Fg2juACA7QMx0UVuSbonjHUgroN2TskMKsnVmEe+20M+nYrADe0EO3S9Jz7Fm+kR/k
-         Rh6rUvI7XrRG3ZhoOmzUW1WUYFmXZTgiADXmMgBvPIepiWiIqf2Ddxzdlp073yKIRxSa
-         NHiED/BdYGXnbs/k0HUBkfAzgWnqSh5INgFHTCzxLe4DE/tyIzHUEklAUwXhCo54vO6H
-         Tb95Ay8fvcKWOXmi7eYuhhrn9IdW2acQoTh0n8ZHEZfNvu4hN2uE9HZAT4QP9aS8KzNC
-         hghBdFpK8+AXdxMIQrQ8NS1KRg0HsCIj24bKBug3k1P/bGfbyzWFy061LXvwokzB4JS+
-         N4sg==
+        d=nigauri-org.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ZryJIATSG1rhke0rJfXTfUFsBQ86+ZTOTmR7kVabtXI=;
+        b=N8dL8GLe87MYs6OgH7bRT1eZgTqQyzOBKIjqgJ//OQYPu/gPDbsr6lhxB4RSRjjuOE
+         sneUljFGtZHU1OSXJF80lMprGDCqMmp1suZ1v6xEU3ry/RbWrxDeBZCI/D64v7Yjn94M
+         y7mVGqwunG/Czz+9/0m0HElq5op5dJpzi3ShdWh55jfqHkqbtXtX8EsPxP6YtkS2kYg6
+         8LZXeT0ihJ7ekaUgOyFExvPQ7ZcbbysyDw9EtMMfcxYdOI5f2W2mFEO9AJ3MNgGZvCSm
+         ZEBHydh1grVmTOmU5ZCClEbpsVFRTrS3KqWloySM09EWCZkcK2VSHfb4pY/33QylqviM
+         pABA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:from:to:cc:references:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=sW3k5smHGzAvkGL5s6X2GJ48bk9my2UsxwMn1HoATJ0=;
-        b=ZE+yqxC+Fkkgb5HViDOEMEr9xbhuWYy2CSdUcMtW45bs+L6K59kErfZzSCxm4C9xyM
-         zuMwONmyS1swDgsWBjvd63V7yYxagTpNbhkzREq1ul081S8Gv2y4AOFhYjZMbucu8ESc
-         sfBMJBpEmnpJ4Zljp8a4aw+xtCrPfinKNwDADnueyBeK75p+YySGDx71KMDl15MPu9Xu
-         vYg/mjpVD6s9qc86FMx2D+ZnDxwiWFRhVLDghgN5iB5On5STFQAQ0xzvbi7L2kzighqA
-         +/QiQqe722kQmWZmJn/odkx+ucSF3zANtTPGabnJMVmMiUdI/pGZc7fjlGa+qDAa8YMl
-         Y3zQ==
-X-Gm-Message-State: AOAM533TDyysgvDOnefmUFU20LJnHT9rJts77irxe458bhs9JIp2HUKf
-        /Cw4epxfWvEvtFjiPoyIdUwXfw==
-X-Google-Smtp-Source: ABdhPJxvzQp1YQDLvQpQLWdZFXpY3AH+FJ+68QY2jhYuUaiFgU/LuUiQ/v6LneN9d+3PAdzWairtGA==
-X-Received: by 2002:a17:902:ef48:b0:159:51d:f725 with SMTP id e8-20020a170902ef4800b00159051df725mr6182561plx.47.1651879605969;
-        Fri, 06 May 2022 16:26:45 -0700 (PDT)
-Received: from [192.168.4.166] (cpe-72-132-29-68.dc.res.rr.com. [72.132.29.68])
-        by smtp.gmail.com with ESMTPSA id s82-20020a632c55000000b003c619f3d086sm3903501pgs.2.2022.05.06.16.26.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 06 May 2022 16:26:45 -0700 (PDT)
-Message-ID: <08ff00da-b871-2f2a-7b23-c8b2621df9dd@kernel.dk>
-Date:   Fri, 6 May 2022 17:26:44 -0600
+        bh=ZryJIATSG1rhke0rJfXTfUFsBQ86+ZTOTmR7kVabtXI=;
+        b=R3qANW1y5EvhJ5PrvHsARDcoHJC7qhIdxUby2dkjO+zFm/vEhiajwDt277RpysaVnt
+         vDF/YajgvYMUlyv15yzkcCaRazN9W2qfCTOUSwuwRThRTfXVDN+LxcoBDPyrKrHDkCPI
+         +HniRx6rtwPqzUQ0piqHyAVtrxWM0cRtBvguNNWrg4V20KFCd84vvi53djstG6VL4M9f
+         4OOEsduafEmbaOBMVo2tofB5vPEg/qObUNlE5dRSgLuEWSqFmDOPx0/cKf2Uyo1f4HZb
+         9QkxbZdVt2BwGIL9qjqaAY9VzjuyYBET3Hmnc7pM6sUxIORj/gB5Yavnw6dBX/TngF7X
+         1asQ==
+X-Gm-Message-State: AOAM530qJAt7O5XLc/iWOe+NU85S3V+XNxVDm8QJP5y9mTpXordGdDjk
+        4DBMA1nP6yKej+fTq75f7V/H
+X-Google-Smtp-Source: ABdhPJwDqQtSYBlWcHAu64fZxver1LDggAI7mPO/6wt4Kp2hobdi2w57JzQzPqGrjGjah4egCMW73w==
+X-Received: by 2002:a63:1d26:0:b0:3c1:eb3f:9daf with SMTP id d38-20020a631d26000000b003c1eb3f9dafmr4590923pgd.284.1651879756163;
+        Fri, 06 May 2022 16:29:16 -0700 (PDT)
+Received: from localhost ([2405:6581:5360:1800:7285:c2ff:fec2:8f97])
+        by smtp.gmail.com with ESMTPSA id t9-20020a170902a5c900b0015e8d4eb1e3sm2333441plq.45.2022.05.06.16.29.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 06 May 2022 16:29:15 -0700 (PDT)
+From:   Nobuhiro Iwamatsu <iwamatsu@nigauri.org>
+X-Google-Original-From: Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
+To:     Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Ben Dooks <ben.dooks@codethink.co.uk>
+Cc:     linux-rtc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-amlogic@lists.infradead.org,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Nobuhiro Iwamatsu <iwamatsu@nigauri.org>
+Subject: [PATCH] rtc: rtc-meson: Fix email address in MODULE_AUTHOR
+Date:   Sat,  7 May 2022 08:28:50 +0900
+Message-Id: <20220506232850.220582-1-nobuhiro1.iwamatsu@toshiba.co.jp>
+X-Mailer: git-send-email 2.36.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH v2 0/5] fast poll multishot mode
-Content-Language: en-US
-From:   Jens Axboe <axboe@kernel.dk>
-To:     Hao Xu <haoxu.linux@gmail.com>, io-uring@vger.kernel.org
-Cc:     Pavel Begunkov <asml.silence@gmail.com>,
-        linux-kernel@vger.kernel.org
-References: <20220506070102.26032-1-haoxu.linux@gmail.com>
- <9157fe69-b5d4-2478-7a0d-e037b5550168@kernel.dk>
-In-Reply-To: <9157fe69-b5d4-2478-7a0d-e037b5550168@kernel.dk>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,87 +75,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/6/22 4:23 PM, Jens Axboe wrote:
-> On 5/6/22 1:00 AM, Hao Xu wrote:
->> Let multishot support multishot mode, currently only add accept as its
->> first comsumer.
->> theoretical analysis:
->>   1) when connections come in fast
->>     - singleshot:
->>               add accept sqe(userpsace) --> accept inline
->>                               ^                 |
->>                               |-----------------|
->>     - multishot:
->>              add accept sqe(userspace) --> accept inline
->>                                               ^     |
->>                                               |--*--|
->>
->>     we do accept repeatedly in * place until get EAGAIN
->>
->>   2) when connections come in at a low pressure
->>     similar thing like 1), we reduce a lot of userspace-kernel context
->>     switch and useless vfs_poll()
->>
->>
->> tests:
->> Did some tests, which goes in this way:
->>
->>   server    client(multiple)
->>   accept    connect
->>   read      write
->>   write     read
->>   close     close
->>
->> Basically, raise up a number of clients(on same machine with server) to
->> connect to the server, and then write some data to it, the server will
->> write those data back to the client after it receives them, and then
->> close the connection after write return. Then the client will read the
->> data and then close the connection. Here I test 10000 clients connect
->> one server, data size 128 bytes. And each client has a go routine for
->> it, so they come to the server in short time.
->> test 20 times before/after this patchset, time spent:(unit cycle, which
->> is the return value of clock())
->> before:
->>   1930136+1940725+1907981+1947601+1923812+1928226+1911087+1905897+1941075
->>   +1934374+1906614+1912504+1949110+1908790+1909951+1941672+1969525+1934984
->>   +1934226+1914385)/20.0 = 1927633.75
->> after:
->>   1858905+1917104+1895455+1963963+1892706+1889208+1874175+1904753+1874112
->>   +1874985+1882706+1884642+1864694+1906508+1916150+1924250+1869060+1889506
->>   +1871324+1940803)/20.0 = 1894750.45
->>
->> (1927633.75 - 1894750.45) / 1927633.75 = 1.65%
->>
->>
->> A liburing test is here:
->> https://github.com/HowHsu/liburing/blob/multishot_accept/test/accept.c
-> 
-> Wish I had seen that, I wrote my own! But maybe that's good, you tend to
-> find other issues through that.
-> 
-> Anyway, works for me in testing, and I can see this being a nice win for
-> accept intensive workloads. I pushed a bunch of cleanup patches that
-> should just get folded in. Can you fold them into your patches and
-> address the other feedback, and post a v3? I pushed the test branch
-> here:
-> 
-> https://git.kernel.dk/cgit/linux-block/log/?h=fastpoll-mshot
+From: Nobuhiro Iwamatsu <iwamatsu@nigauri.org>
 
-Quick benchmark here, accepting 10k connections:
+Ben Dooks's email address is <ben.dooks@codethink.co.uk>.
+Fix Ben Dooks's email address in MODULE_AUTHOR.
 
-Stock kernel
-real	0m0.728s
-user	0m0.009s
-sys	0m0.192s
+Signed-off-by: Nobuhiro Iwamatsu <iwamatsu@nigauri.org>
+---
+ drivers/rtc/rtc-meson.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Patched
-real	0m0.684s
-user	0m0.018s
-sys	0m0.102s
-
-Looks like a nice win for a highly synthetic benchmark. Nothing
-scientific, was just curious.
-
+diff --git a/drivers/rtc/rtc-meson.c b/drivers/rtc/rtc-meson.c
+index 44bdc8b4a90d6..db1d626edca5f 100644
+--- a/drivers/rtc/rtc-meson.c
++++ b/drivers/rtc/rtc-meson.c
+@@ -399,7 +399,7 @@ static struct platform_driver meson_rtc_driver = {
+ module_platform_driver(meson_rtc_driver);
+ 
+ MODULE_DESCRIPTION("Amlogic Meson RTC Driver");
+-MODULE_AUTHOR("Ben Dooks <ben.doosk@codethink.co.uk>");
++MODULE_AUTHOR("Ben Dooks <ben.dooks@codethink.co.uk>");
+ MODULE_AUTHOR("Martin Blumenstingl <martin.blumenstingl@googlemail.com>");
+ MODULE_LICENSE("GPL v2");
+ MODULE_ALIAS("platform:meson-rtc");
 -- 
-Jens Axboe
+2.36.0
 

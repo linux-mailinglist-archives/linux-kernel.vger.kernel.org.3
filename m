@@ -2,40 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E610A51CD4F
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 02:02:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F80251CD51
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 02:02:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387394AbiEFAEx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 20:04:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35030 "EHLO
+        id S1387336AbiEFAEn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 20:04:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1387227AbiEFAC0 (ORCPT
+        with ESMTP id S1387123AbiEFAC1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 20:02:26 -0400
+        Thu, 5 May 2022 20:02:27 -0400
 Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B47661627
-        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 16:58:00 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F2E061289
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 16:58:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651795081; x=1683331081;
+  t=1651795084; x=1683331084;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references;
-  bh=CEzigczvRyU1oQzEnVej8ViYVBfDe59Bvau/LRgGfAw=;
-  b=JD21qsHSBnCi18XMReoR2u3TNRwNJpyvZ4bq83K9XfJcxLgAbRDwfHL9
-   Plt7xfb4lLsjXs6eT0OuiXHKlkqRQ4uKI74LbXPtr25HDJRAMBj71t/aD
-   O1M0BP2xUt+dCstU7irXXrV0immxW80YN72EeUYVrqLRo9nMWI2C+uKD8
-   CURGybN8lFYGWE+kjba63VhPRqHff7NOdxlUW8r2kIePptQohiCncH8DV
-   XPZka48dte/4PpTQ0VU+2BIfoJCQKPemSnjYs9Cht+fyNBNvYIbiZJFP0
-   9JT3HY/Gxlteps9UK2qi658GCGp+UCoN2OXx/3gk7NIdOZoTNH1j55QBs
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10338"; a="250283662"
+  bh=OMAzr1b+gR0ghYqlTvIkOvlFxefky6ROYu4/AGgKvYI=;
+  b=KOScxYLh9RpWN1+/gGfLBOuP7yLtkhBmAM3/h/WJ1UiPvuuONwyh6dZh
+   1qFzF5j7u2HsLCxaLB7BFjGQUG4GWs8JpTynKLW8BFQbk61jeqWjQLi8v
+   N1bTLTTcT08xicRk2JM4dAGtBPT9qhFsn30yWBfBr/Vn3VXIIRgKuq+Q9
+   lyFSgz957eK0c69/gS/tb0SBAFwUO87dbVxeLP9VK2QxqVaCQzMtNmOIo
+   T5N8qav91tsq7NCJ7LbFxSbcDavQZWV8JHdCAH7n1c84cNVbj5uO+zO8k
+   gaLga0n68CQuuesblf6mP7HqsJkFheOiyxP+Cu8WFoC2rxCjJIWBz9bpy
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10338"; a="250283664"
 X-IronPort-AV: E=Sophos;i="5.91,203,1647327600"; 
-   d="scan'208";a="250283662"
+   d="scan'208";a="250283664"
 Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2022 16:57:56 -0700
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2022 16:57:57 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,203,1647327600"; 
-   d="scan'208";a="694914451"
+   d="scan'208";a="694914455"
 Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
   by orsmga004.jf.intel.com with ESMTP; 05 May 2022 16:57:56 -0700
 From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
@@ -53,9 +53,9 @@ Cc:     Tony Luck <tony.luck@intel.com>, Andi Kleen <ak@linux.intel.com>,
         iommu@lists.linux-foundation.org, linuxppc-dev@lists.ozlabs.org,
         linux-kernel@vger.kernel.org,
         Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-Subject: [PATCH v6 27/29] watchdog: Expose lockup_detector_reconfigure()
-Date:   Thu,  5 May 2022 17:00:06 -0700
-Message-Id: <20220506000008.30892-28-ricardo.neri-calderon@linux.intel.com>
+Subject: [PATCH v6 28/29] x86/tsc: Restart NMI watchdog after refining tsc_khz
+Date:   Thu,  5 May 2022 17:00:07 -0700
+Message-Id: <20220506000008.30892-29-ricardo.neri-calderon@linux.intel.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220506000008.30892-1-ricardo.neri-calderon@linux.intel.com>
 References: <20220506000008.30892-1-ricardo.neri-calderon@linux.intel.com>
@@ -68,90 +68,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When there are multiple implementations of the NMI watchdog, there may be
-situations in which switching from one to another is needed. If the time-
-stamp counter becomes unstable, the HPET-based NMI watchdog can no longer
-be used. Similarly, the HPET-based NMI watchdog relies on tsc_khz and
-needs to be informed when it is refined.
+The HPET hardlockup detector relies on tsc_khz to estimate the value of
+that the TSC will have when its HPET channel fires. A refined tsc_khz
+helps to estimate better the expected TSC value.
 
-Reloading the NMI watchdog or switching to another hardlockup detector can
-be done cleanly by updating the arch-specific stub and then reconfiguring
-the whole lockup detector.
+Using the early value of tsc_khz may lead to a large error in the expected
+TSC value. Restarting the NMI watchdog detector has the effect of kicking
+its HPET channel and make use of the refined tsc_khz.
 
-Expose lockup_detector_reconfigure() to achieve this goal.
+When the HPET hardlockup is not in use, restarting the NMI watchdog is
+a noop.
 
 Cc: Andi Kleen <ak@linux.intel.com>
-Cc: Nicholas Piggin <npiggin@gmail.com>
 Cc: Stephane Eranian <eranian@google.com>
 Cc: "Ravi V. Shankar" <ravi.v.shankar@intel.com>
 Cc: iommu@lists.linux-foundation.org
 Cc: linuxppc-dev@lists.ozlabs.org
 Cc: x86@kernel.org
-Reviewed-by: Tony Luck <tony.luck@intel.com>
 Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
 ---
 Changes since v5:
- * None
+ * Introduced this patch
 
-Changes since v4:
- * Switching to the perf-based lockup detector under the hood is hacky.
-   Instead, reconfigure the whole lockup detector.
+Changes since v4
+ * N/A
 
-Changes since v3:
- * None
+Changes since v3
+ * N/A
 
 Changes since v2:
- * Introduced this patch.
+ * N/A
 
 Changes since v1:
  * N/A
 ---
- include/linux/nmi.h | 2 ++
- kernel/watchdog.c   | 4 ++--
- 2 files changed, 4 insertions(+), 2 deletions(-)
+ arch/x86/kernel/tsc.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/include/linux/nmi.h b/include/linux/nmi.h
-index cf12380e51b3..73827a477288 100644
---- a/include/linux/nmi.h
-+++ b/include/linux/nmi.h
-@@ -16,6 +16,7 @@ void lockup_detector_init(void);
- void lockup_detector_soft_poweroff(void);
- void lockup_detector_cleanup(void);
- bool is_hardlockup(void);
-+void lockup_detector_reconfigure(void);
+diff --git a/arch/x86/kernel/tsc.c b/arch/x86/kernel/tsc.c
+index cafacb2e58cc..cc1843044d88 100644
+--- a/arch/x86/kernel/tsc.c
++++ b/arch/x86/kernel/tsc.c
+@@ -1386,6 +1386,12 @@ static void tsc_refine_calibration_work(struct work_struct *work)
+ 	/* Inform the TSC deadline clockevent devices about the recalibration */
+ 	lapic_update_tsc_freq();
  
- extern int watchdog_user_enabled;
- extern int nmi_watchdog_user_enabled;
-@@ -37,6 +38,7 @@ extern int sysctl_hardlockup_all_cpu_backtrace;
- static inline void lockup_detector_init(void) { }
- static inline void lockup_detector_soft_poweroff(void) { }
- static inline void lockup_detector_cleanup(void) { }
-+static inline void lockup_detector_reconfigure(void) { }
- #endif /* !CONFIG_LOCKUP_DETECTOR */
- 
- #ifdef CONFIG_SOFTLOCKUP_DETECTOR
-diff --git a/kernel/watchdog.c b/kernel/watchdog.c
-index 6443841a755f..e5b67544f8c8 100644
---- a/kernel/watchdog.c
-+++ b/kernel/watchdog.c
-@@ -537,7 +537,7 @@ int lockup_detector_offline_cpu(unsigned int cpu)
- 	return 0;
- }
- 
--static void lockup_detector_reconfigure(void)
-+void lockup_detector_reconfigure(void)
- {
- 	cpus_read_lock();
- 	watchdog_nmi_stop();
-@@ -579,7 +579,7 @@ static __init void lockup_detector_setup(void)
- }
- 
- #else /* CONFIG_SOFTLOCKUP_DETECTOR */
--static void lockup_detector_reconfigure(void)
-+void lockup_detector_reconfigure(void)
- {
- 	cpus_read_lock();
- 	watchdog_nmi_stop();
++	/*
++	 * If in use, the HPET hardlockup detector relies on tsc_khz.
++	 * Reconfigure it to make use of the refined tsc_khz.
++	 */
++	lockup_detector_reconfigure();
++
+ 	/* Update the sched_clock() rate to match the clocksource one */
+ 	for_each_possible_cpu(cpu)
+ 		set_cyc2ns_scale(tsc_khz, cpu, tsc_stop);
 -- 
 2.17.1
 

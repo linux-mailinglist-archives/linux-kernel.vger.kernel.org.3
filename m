@@ -2,130 +2,323 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30C5151DF2A
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 20:34:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 393D551DF2C
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 20:35:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345942AbiEFSiI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 14:38:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52928 "EHLO
+        id S1346892AbiEFSja (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 14:39:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230050AbiEFSiE (ORCPT
+        with ESMTP id S230050AbiEFSj1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 14:38:04 -0400
-Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com [209.85.219.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C63006D845;
-        Fri,  6 May 2022 11:34:20 -0700 (PDT)
-Received: by mail-yb1-f182.google.com with SMTP id y2so14311753ybi.7;
-        Fri, 06 May 2022 11:34:20 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=nC6W8a6qKsChzlkK2pVqEzNOxfTALLGgiZco+DC/LTQ=;
-        b=PfWR4Uz9loLMGXh/LDsr/xU92RagjqklW9Sp2GW/0j5jmqHSY7UaJgg86vxPlbYq2M
-         aoumjplGyHco2TFchSY0n70O++9Ci4EuMsdagkeO0GYs7aWyjhBDOrq7uQfOwa0kTLK5
-         TBQVny7fOYmE0zRDubeRVeLHIfNPO+7+Cw4w0mEu/fvTfbSr5BAwNk3+wJByk1hrIrfo
-         kr7YrXLWwFRJ8EQX/YwutVwnDloZJIneuliFskBnoR6a09OMmg3ItWDnOY3iBYHq2Lgh
-         IMEiHrTTAR9jIimfED5uUuyjWJkM5dYr/fn8kRfrotFTeT+uG2tdyRJjRxh96XLXPkAG
-         pyYQ==
-X-Gm-Message-State: AOAM530tb5Lsp3J+HVuaU4VKaQimp2J+jmfZWuMDx1HwpFjfi7AiokWN
-        zlinZAvccH4vNrj05xjE/xEnsR/a/4DuHXqF4D7Sj+hc
-X-Google-Smtp-Source: ABdhPJzqHNjf6f+rGOKdsFqTdsMPlLXnR/Fgsi9gO3TRsaCEyyHQjNRtH6iZoSKX2iJDJ2UJrDZvvjlOhBbzwTr0qSQ=
-X-Received: by 2002:a05:6902:352:b0:63e:94c:883c with SMTP id
- e18-20020a056902035200b0063e094c883cmr3307517ybs.365.1651862060042; Fri, 06
- May 2022 11:34:20 -0700 (PDT)
+        Fri, 6 May 2022 14:39:27 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7923A196
+        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 11:35:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651862142; x=1683398142;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=SIU0b+u2dEcDKQybzcaT8Ud4+8TG+gSEWnYo9OE9tBU=;
+  b=Jind0w3jKPYCpSFc8ClUNUq7wPRShd1BsB0QaGQixXZKVveLx2uMJygv
+   6wvLfTn48byCR2tLX6a9AuK7T9SL28WVWEGedVkXyV33VI3ju2n2RdRDz
+   4TQP3DRows+7Qe/ODnEma2LzLAZ+1EbMRShdRN+nhDP+A19C6oAYnyee2
+   CeQ/Ix7o1FgvZhLbWRtsEweQnbOdhcZkwx1vPIzbW3a299IKdzxl0ZzpD
+   qIBLinwOOk7bji6ktDQwKu5twWicLLaSAHHxYwA9fuMWeRAcBmjf0FZMS
+   IId4VCEISn3KR8Sy8Cr3+iGhr90kzxAtvMkZ/EsiUftfey9JOMaF3zHKS
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10339"; a="268167373"
+X-IronPort-AV: E=Sophos;i="5.91,205,1647327600"; 
+   d="scan'208";a="268167373"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2022 11:35:41 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,205,1647327600"; 
+   d="scan'208";a="695303171"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 06 May 2022 11:35:39 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nn2ni-000DlI-E4;
+        Fri, 06 May 2022 18:35:38 +0000
+Date:   Sat, 7 May 2022 02:34:47 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Miles Hu <milehu@codeaurora.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Kalle Valo <kvalo@codeaurora.org>,
+        Aloka Dixit <alokad@codeaurora.org>,
+        Lavanya Suresh <lavaks@codeaurora.org>,
+        Pradeep Chitrapu <pradeepc@codeaurora.org>,
+        Venkateswara Naralasetty <vnaralas@codeaurora.org>,
+        Jouni Malinen <jouni@codeaurora.org>
+Subject: drivers/net/wireless/ath/ath11k/mac.c:1845:9: warning: Local
+ variable 'i' shadows outer variable [shadowVariable]
+Message-ID: <202205070235.6RDtWvfd-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220425021407.486916-1-ian@linux.cowan.aero>
-In-Reply-To: <20220425021407.486916-1-ian@linux.cowan.aero>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 6 May 2022 20:34:09 +0200
-Message-ID: <CAJZ5v0hb9Goj9N+VCfAB9Fy+HA7EqG=Z+XJo1t53KcmF62-PbA@mail.gmail.com>
-Subject: Re: [PATCH] drivers: acpi: clean up spaces to be consistent
-To:     Ian Cowan <ian@linux.cowan.aero>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 25, 2022 at 4:14 AM Ian Cowan <ian@linux.cowan.aero> wrote:
->
-> This cleans up a few line spaces so that it is consistent with the rest
-> of the file. There are a few places where a space was added before a
-> return and two spots where a double line space was made into one line
-> space.
->
-> Signed-off-by: Ian Cowan <ian@linux.cowan.aero>
-> ---
->  drivers/acpi/ac.c | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/acpi/ac.c b/drivers/acpi/ac.c
-> index db487ff9dd1b..f8ec48cd7659 100644
-> --- a/drivers/acpi/ac.c
-> +++ b/drivers/acpi/ac.c
-> @@ -32,7 +32,6 @@ MODULE_AUTHOR("Paul Diefenbaugh");
->  MODULE_DESCRIPTION("ACPI AC Adapter Driver");
->  MODULE_LICENSE("GPL");
->
-> -
->  static int acpi_ac_add(struct acpi_device *device);
->  static int acpi_ac_remove(struct acpi_device *device);
->  static void acpi_ac_notify(struct acpi_device *device, u32 event);
-> @@ -125,6 +124,7 @@ static int get_ac_property(struct power_supply *psy,
->         default:
->                 return -EINVAL;
->         }
-> +
->         return 0;
->  }
->
-> @@ -190,12 +190,14 @@ static int acpi_ac_battery_notify(struct notifier_block *nb,
->  static int __init thinkpad_e530_quirk(const struct dmi_system_id *d)
->  {
->         ac_sleep_before_get_state_ms = 1000;
-> +
->         return 0;
->  }
->
->  static int __init ac_only_quirk(const struct dmi_system_id *d)
->  {
->         ac_only = 1;
-> +
->         return 0;
->  }
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   4df22ca85d3d73f9822b1a354bb56dd1872180cd
+commit: 61fe43e7216df6e9a912d831aafc7142fa20f280 ath11k: add support for setting fixed HE rate/gi/ltf
+date:   7 months ago
+compiler: aarch64-linux-gcc (GCC) 11.3.0
+reproduce (cppcheck warning):
+        # apt-get install cppcheck
+        git checkout 61fe43e7216df6e9a912d831aafc7142fa20f280
+        cppcheck --quiet --enable=style,performance,portability --template=gcc FILE
 
-I don't really think that it is useful to add empty lines in the two
-cases above.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-The rest of the patch is fine with me.
 
->
-> @@ -286,6 +288,7 @@ static int acpi_ac_resume(struct device *dev)
->                 return 0;
->         if (old_state != ac->state)
->                 kobject_uevent(&ac->charger->dev.kobj, KOBJ_CHANGE);
-> +
->         return 0;
->  }
->  #else
-> @@ -296,7 +299,6 @@ static int acpi_ac_remove(struct acpi_device *device)
->  {
->         struct acpi_ac *ac = NULL;
->
-> -
->         if (!device || !acpi_driver_data(device))
->                 return -EINVAL;
->
-> --
-> 2.35.1
->
+cppcheck warnings: (new ones prefixed by >>)
+>> drivers/net/wireless/ath/ath11k/mac.c:1845:9: warning: Local variable 'i' shadows outer variable [shadowVariable]
+       int i;
+           ^
+   drivers/net/wireless/ath/ath11k/mac.c:1775:6: note: Shadowed declaration
+    int i, he_nss, nss_idx;
+        ^
+   drivers/net/wireless/ath/ath11k/mac.c:1845:9: note: Shadow variable
+       int i;
+           ^
+   drivers/net/wireless/ath/ath11k/mac.c:2778:7: warning: Local variable 'preamble' shadows outer variable [shadowVariable]
+     u32 preamble;
+         ^
+   drivers/net/wireless/ath/ath11k/mac.c:2637:6: note: Shadowed declaration
+    u32 preamble;
+        ^
+   drivers/net/wireless/ath/ath11k/mac.c:2778:7: note: Shadow variable
+     u32 preamble;
+         ^
+
+cppcheck possible warnings: (new ones prefixed by >>, may not real problems)
+
+   drivers/net/wireless/ath/ath11k/mac.c:5684:2: warning: Assignment of function parameter has no effect outside the function. [uselessAssignmentArg]
+    changed_flags &= SUPPORTED_FILTERS;
+    ^
+   drivers/net/wireless/ath/ath11k/mac.c:7036:33: warning: Parameter 'channel' can be declared with const [constParameter]
+         struct ieee80211_channel *channel)
+                                   ^
+   drivers/net/wireless/ath/ath11k/mac.c:2466:7: warning: Uninitialized variable: ret [uninitvar]
+    if (!ret)
+         ^
+   drivers/net/wireless/ath/ath11k/mac.c:720:34: warning: Uninitialized variables: peer.list, peer.sta, peer.vdev_id, peer.peer_id, peer.ast_hash, peer.pdev_idx, peer.hw_peer_id, peer.tfm_mmic, peer.mcast_keyidx, peer.ucast_keyidx, peer.sec_type, peer.sec_type_grp [uninitvar]
+     ath11k_peer_rx_tid_cleanup(ar, peer);
+                                    ^
+>> drivers/net/wireless/ath/ath11k/mac.c:6841:13: warning: Uninitialized variable: peer->sta [uninitvar]
+     if (peer->sta) {
+               ^
+   drivers/net/wireless/ath/ath11k/mac.c:6832:22: note: Assuming condition is false
+    if (!vht_fixed_rate && !he_fixed_rate)
+                        ^
+   drivers/net/wireless/ath/ath11k/mac.c:6841:13: note: Uninitialized variable: peer->sta
+     if (peer->sta) {
+               ^
+
+vim +/i +1845 drivers/net/wireless/ath/ath11k/mac.c
+
+61fe43e7216df6 Miles Hu            2021-09-24  1761  
+d5c65159f28953 Kalle Valo          2019-11-23  1762  static void ath11k_peer_assoc_h_he(struct ath11k *ar,
+d5c65159f28953 Kalle Valo          2019-11-23  1763  				   struct ieee80211_vif *vif,
+d5c65159f28953 Kalle Valo          2019-11-23  1764  				   struct ieee80211_sta *sta,
+d5c65159f28953 Kalle Valo          2019-11-23  1765  				   struct peer_assoc_params *arg)
+d5c65159f28953 Kalle Valo          2019-11-23  1766  {
+61fe43e7216df6 Miles Hu            2021-09-24  1767  	struct ath11k_vif *arvif = (void *)vif->drv_priv;
+61fe43e7216df6 Miles Hu            2021-09-24  1768  	struct cfg80211_chan_def def;
+9f056ed8ee01ad John Crispin        2019-11-25  1769  	const struct ieee80211_sta_he_cap *he_cap = &sta->he_cap;
+af6d39db1b046a Tamizh Chelvam      2020-09-08  1770  	u8 ampdu_factor;
+61fe43e7216df6 Miles Hu            2021-09-24  1771  	enum nl80211_band band;
+61fe43e7216df6 Miles Hu            2021-09-24  1772  	u16 *he_mcs_mask;
+61fe43e7216df6 Miles Hu            2021-09-24  1773  	u8 max_nss, he_mcs;
+61fe43e7216df6 Miles Hu            2021-09-24  1774  	u16 he_tx_mcs = 0, v = 0;
+61fe43e7216df6 Miles Hu            2021-09-24  1775  	int i, he_nss, nss_idx;
+61fe43e7216df6 Miles Hu            2021-09-24  1776  	bool user_rate_valid = true;
+61fe43e7216df6 Miles Hu            2021-09-24  1777  
+61fe43e7216df6 Miles Hu            2021-09-24  1778  	if (WARN_ON(ath11k_mac_vif_chan(vif, &def)))
+61fe43e7216df6 Miles Hu            2021-09-24  1779  		return;
+9f056ed8ee01ad John Crispin        2019-11-25  1780  
+9f056ed8ee01ad John Crispin        2019-11-25  1781  	if (!he_cap->has_he)
+9f056ed8ee01ad John Crispin        2019-11-25  1782  		return;
+9f056ed8ee01ad John Crispin        2019-11-25  1783  
+61fe43e7216df6 Miles Hu            2021-09-24  1784  	band = def.chan->band;
+61fe43e7216df6 Miles Hu            2021-09-24  1785  	he_mcs_mask = arvif->bitrate_mask.control[band].he_mcs;
+61fe43e7216df6 Miles Hu            2021-09-24  1786  
+61fe43e7216df6 Miles Hu            2021-09-24  1787  	if (ath11k_peer_assoc_h_he_masked(he_mcs_mask))
+61fe43e7216df6 Miles Hu            2021-09-24  1788  		return;
+61fe43e7216df6 Miles Hu            2021-09-24  1789  
+9f056ed8ee01ad John Crispin        2019-11-25  1790  	arg->he_flag = true;
+9f056ed8ee01ad John Crispin        2019-11-25  1791  
+c8bcd82a4efd05 Kees Cook           2021-06-16  1792  	memcpy_and_pad(&arg->peer_he_cap_macinfo,
+c8bcd82a4efd05 Kees Cook           2021-06-16  1793  		       sizeof(arg->peer_he_cap_macinfo),
+c8bcd82a4efd05 Kees Cook           2021-06-16  1794  		       he_cap->he_cap_elem.mac_cap_info,
+c8bcd82a4efd05 Kees Cook           2021-06-16  1795  		       sizeof(he_cap->he_cap_elem.mac_cap_info),
+c8bcd82a4efd05 Kees Cook           2021-06-16  1796  		       0);
+c8bcd82a4efd05 Kees Cook           2021-06-16  1797  	memcpy_and_pad(&arg->peer_he_cap_phyinfo,
+c8bcd82a4efd05 Kees Cook           2021-06-16  1798  		       sizeof(arg->peer_he_cap_phyinfo),
+c8bcd82a4efd05 Kees Cook           2021-06-16  1799  		       he_cap->he_cap_elem.phy_cap_info,
+c8bcd82a4efd05 Kees Cook           2021-06-16  1800  		       sizeof(he_cap->he_cap_elem.phy_cap_info),
+c8bcd82a4efd05 Kees Cook           2021-06-16  1801  		       0);
+60689de46c7f6a Rajkumar Manoharan  2020-04-24  1802  	arg->peer_he_ops = vif->bss_conf.he_oper.params;
+9f056ed8ee01ad John Crispin        2019-11-25  1803  
+9f056ed8ee01ad John Crispin        2019-11-25  1804  	/* the top most byte is used to indicate BSS color info */
+9f056ed8ee01ad John Crispin        2019-11-25  1805  	arg->peer_he_ops &= 0xffffff;
+9f056ed8ee01ad John Crispin        2019-11-25  1806  
+af6d39db1b046a Tamizh Chelvam      2020-09-08  1807  	/* As per section 26.6.1 11ax Draft5.0, if the Max AMPDU Exponent Extension
+af6d39db1b046a Tamizh Chelvam      2020-09-08  1808  	 * in HE cap is zero, use the arg->peer_max_mpdu as calculated while parsing
+af6d39db1b046a Tamizh Chelvam      2020-09-08  1809  	 * VHT caps(if VHT caps is present) or HT caps (if VHT caps is not present).
+af6d39db1b046a Tamizh Chelvam      2020-09-08  1810  	 *
+af6d39db1b046a Tamizh Chelvam      2020-09-08  1811  	 * For non-zero value of Max AMPDU Extponent Extension in HE MAC caps,
+af6d39db1b046a Tamizh Chelvam      2020-09-08  1812  	 * if a HE STA sends VHT cap and HE cap IE in assoc request then, use
+af6d39db1b046a Tamizh Chelvam      2020-09-08  1813  	 * MAX_AMPDU_LEN_FACTOR as 20 to calculate max_ampdu length.
+af6d39db1b046a Tamizh Chelvam      2020-09-08  1814  	 * If a HE STA that does not send VHT cap, but HE and HT cap in assoc
+af6d39db1b046a Tamizh Chelvam      2020-09-08  1815  	 * request, then use MAX_AMPDU_LEN_FACTOR as 16 to calculate max_ampdu
+af6d39db1b046a Tamizh Chelvam      2020-09-08  1816  	 * length.
+af6d39db1b046a Tamizh Chelvam      2020-09-08  1817  	 */
+1f851b8dfd76a0 Johannes Berg       2021-04-09  1818  	ampdu_factor = u8_get_bits(he_cap->he_cap_elem.mac_cap_info[3],
+1f851b8dfd76a0 Johannes Berg       2021-04-09  1819  				   IEEE80211_HE_MAC_CAP3_MAX_AMPDU_LEN_EXP_MASK);
+af6d39db1b046a Tamizh Chelvam      2020-09-08  1820  
+af6d39db1b046a Tamizh Chelvam      2020-09-08  1821  	if (ampdu_factor) {
+af6d39db1b046a Tamizh Chelvam      2020-09-08  1822  		if (sta->vht_cap.vht_supported)
+af6d39db1b046a Tamizh Chelvam      2020-09-08  1823  			arg->peer_max_mpdu = (1 << (IEEE80211_HE_VHT_MAX_AMPDU_FACTOR +
+af6d39db1b046a Tamizh Chelvam      2020-09-08  1824  						    ampdu_factor)) - 1;
+af6d39db1b046a Tamizh Chelvam      2020-09-08  1825  		else if (sta->ht_cap.ht_supported)
+af6d39db1b046a Tamizh Chelvam      2020-09-08  1826  			arg->peer_max_mpdu = (1 << (IEEE80211_HE_HT_MAX_AMPDU_FACTOR +
+af6d39db1b046a Tamizh Chelvam      2020-09-08  1827  						    ampdu_factor)) - 1;
+af6d39db1b046a Tamizh Chelvam      2020-09-08  1828  	}
+af6d39db1b046a Tamizh Chelvam      2020-09-08  1829  
+9f056ed8ee01ad John Crispin        2019-11-25  1830  	if (he_cap->he_cap_elem.phy_cap_info[6] &
+9f056ed8ee01ad John Crispin        2019-11-25  1831  	    IEEE80211_HE_PHY_CAP6_PPE_THRESHOLD_PRESENT) {
+9f056ed8ee01ad John Crispin        2019-11-25  1832  		int bit = 7;
+9f056ed8ee01ad John Crispin        2019-11-25  1833  		int nss, ru;
+9f056ed8ee01ad John Crispin        2019-11-25  1834  
+9f056ed8ee01ad John Crispin        2019-11-25  1835  		arg->peer_ppet.numss_m1 = he_cap->ppe_thres[0] &
+9f056ed8ee01ad John Crispin        2019-11-25  1836  					  IEEE80211_PPE_THRES_NSS_MASK;
+9f056ed8ee01ad John Crispin        2019-11-25  1837  		arg->peer_ppet.ru_bit_mask =
+9f056ed8ee01ad John Crispin        2019-11-25  1838  			(he_cap->ppe_thres[0] &
+9f056ed8ee01ad John Crispin        2019-11-25  1839  			 IEEE80211_PPE_THRES_RU_INDEX_BITMASK_MASK) >>
+9f056ed8ee01ad John Crispin        2019-11-25  1840  			IEEE80211_PPE_THRES_RU_INDEX_BITMASK_POS;
+9f056ed8ee01ad John Crispin        2019-11-25  1841  
+9f056ed8ee01ad John Crispin        2019-11-25  1842  		for (nss = 0; nss <= arg->peer_ppet.numss_m1; nss++) {
+9f056ed8ee01ad John Crispin        2019-11-25  1843  			for (ru = 0; ru < 4; ru++) {
+9f056ed8ee01ad John Crispin        2019-11-25  1844  				u32 val = 0;
+9f056ed8ee01ad John Crispin        2019-11-25 @1845  				int i;
+9f056ed8ee01ad John Crispin        2019-11-25  1846  
+9f056ed8ee01ad John Crispin        2019-11-25  1847  				if ((arg->peer_ppet.ru_bit_mask & BIT(ru)) == 0)
+9f056ed8ee01ad John Crispin        2019-11-25  1848  					continue;
+9f056ed8ee01ad John Crispin        2019-11-25  1849  				for (i = 0; i < 6; i++) {
+9f056ed8ee01ad John Crispin        2019-11-25  1850  					val >>= 1;
+9f056ed8ee01ad John Crispin        2019-11-25  1851  					val |= ((he_cap->ppe_thres[bit / 8] >>
+9f056ed8ee01ad John Crispin        2019-11-25  1852  						 (bit % 8)) & 0x1) << 5;
+9f056ed8ee01ad John Crispin        2019-11-25  1853  					bit++;
+9f056ed8ee01ad John Crispin        2019-11-25  1854  				}
+9f056ed8ee01ad John Crispin        2019-11-25  1855  				arg->peer_ppet.ppet16_ppet8_ru3_ru0[nss] |=
+9f056ed8ee01ad John Crispin        2019-11-25  1856  								val << (ru * 6);
+9f056ed8ee01ad John Crispin        2019-11-25  1857  			}
+9f056ed8ee01ad John Crispin        2019-11-25  1858  		}
+9f056ed8ee01ad John Crispin        2019-11-25  1859  	}
+9f056ed8ee01ad John Crispin        2019-11-25  1860  
+6d293d447670da John Crispin        2019-11-25  1861  	if (he_cap->he_cap_elem.mac_cap_info[0] & IEEE80211_HE_MAC_CAP0_TWT_RES)
+6d293d447670da John Crispin        2019-11-25  1862  		arg->twt_responder = true;
+6d293d447670da John Crispin        2019-11-25  1863  	if (he_cap->he_cap_elem.mac_cap_info[0] & IEEE80211_HE_MAC_CAP0_TWT_REQ)
+6d293d447670da John Crispin        2019-11-25  1864  		arg->twt_requester = true;
+6d293d447670da John Crispin        2019-11-25  1865  
+61fe43e7216df6 Miles Hu            2021-09-24  1866  	he_nss =  ath11k_mac_max_he_nss(he_mcs_mask);
+61fe43e7216df6 Miles Hu            2021-09-24  1867  
+61fe43e7216df6 Miles Hu            2021-09-24  1868  	if (he_nss > sta->rx_nss) {
+61fe43e7216df6 Miles Hu            2021-09-24  1869  		user_rate_valid = false;
+61fe43e7216df6 Miles Hu            2021-09-24  1870  		for (nss_idx = sta->rx_nss - 1; nss_idx >= 0; nss_idx--) {
+61fe43e7216df6 Miles Hu            2021-09-24  1871  			if (he_mcs_mask[nss_idx]) {
+61fe43e7216df6 Miles Hu            2021-09-24  1872  				user_rate_valid = true;
+61fe43e7216df6 Miles Hu            2021-09-24  1873  				break;
+61fe43e7216df6 Miles Hu            2021-09-24  1874  			}
+61fe43e7216df6 Miles Hu            2021-09-24  1875  		}
+61fe43e7216df6 Miles Hu            2021-09-24  1876  	}
+61fe43e7216df6 Miles Hu            2021-09-24  1877  
+61fe43e7216df6 Miles Hu            2021-09-24  1878  	if (!user_rate_valid) {
+61fe43e7216df6 Miles Hu            2021-09-24  1879  		ath11k_dbg(ar->ab, ATH11K_DBG_MAC, "mac setting he range mcs value to peer supported nss %d for peer %pM\n",
+61fe43e7216df6 Miles Hu            2021-09-24  1880  			   sta->rx_nss, sta->addr);
+61fe43e7216df6 Miles Hu            2021-09-24  1881  		he_mcs_mask[sta->rx_nss - 1] = he_mcs_mask[he_nss - 1];
+61fe43e7216df6 Miles Hu            2021-09-24  1882  	}
+61fe43e7216df6 Miles Hu            2021-09-24  1883  
+9f056ed8ee01ad John Crispin        2019-11-25  1884  	switch (sta->bandwidth) {
+9f056ed8ee01ad John Crispin        2019-11-25  1885  	case IEEE80211_STA_RX_BW_160:
+9f056ed8ee01ad John Crispin        2019-11-25  1886  		if (he_cap->he_cap_elem.phy_cap_info[0] &
+9f056ed8ee01ad John Crispin        2019-11-25  1887  		    IEEE80211_HE_PHY_CAP0_CHANNEL_WIDTH_SET_80PLUS80_MHZ_IN_5G) {
+9f056ed8ee01ad John Crispin        2019-11-25  1888  			v = le16_to_cpu(he_cap->he_mcs_nss_supp.rx_mcs_80p80);
+61fe43e7216df6 Miles Hu            2021-09-24  1889  			v = ath11k_peer_assoc_h_he_limit(v, he_mcs_mask);
+9f056ed8ee01ad John Crispin        2019-11-25  1890  			arg->peer_he_rx_mcs_set[WMI_HECAP_TXRX_MCS_NSS_IDX_80_80] = v;
+9f056ed8ee01ad John Crispin        2019-11-25  1891  
+9f056ed8ee01ad John Crispin        2019-11-25  1892  			v = le16_to_cpu(he_cap->he_mcs_nss_supp.tx_mcs_80p80);
+9f056ed8ee01ad John Crispin        2019-11-25  1893  			arg->peer_he_tx_mcs_set[WMI_HECAP_TXRX_MCS_NSS_IDX_80_80] = v;
+9f056ed8ee01ad John Crispin        2019-11-25  1894  
+9f056ed8ee01ad John Crispin        2019-11-25  1895  			arg->peer_he_mcs_count++;
+61fe43e7216df6 Miles Hu            2021-09-24  1896  			he_tx_mcs = v;
+9f056ed8ee01ad John Crispin        2019-11-25  1897  		}
+9f056ed8ee01ad John Crispin        2019-11-25  1898  		v = le16_to_cpu(he_cap->he_mcs_nss_supp.rx_mcs_160);
+9f056ed8ee01ad John Crispin        2019-11-25  1899  		arg->peer_he_rx_mcs_set[WMI_HECAP_TXRX_MCS_NSS_IDX_160] = v;
+9f056ed8ee01ad John Crispin        2019-11-25  1900  
+9f056ed8ee01ad John Crispin        2019-11-25  1901  		v = le16_to_cpu(he_cap->he_mcs_nss_supp.tx_mcs_160);
+61fe43e7216df6 Miles Hu            2021-09-24  1902  		v = ath11k_peer_assoc_h_he_limit(v, he_mcs_mask);
+9f056ed8ee01ad John Crispin        2019-11-25  1903  		arg->peer_he_tx_mcs_set[WMI_HECAP_TXRX_MCS_NSS_IDX_160] = v;
+9f056ed8ee01ad John Crispin        2019-11-25  1904  
+9f056ed8ee01ad John Crispin        2019-11-25  1905  		arg->peer_he_mcs_count++;
+61fe43e7216df6 Miles Hu            2021-09-24  1906  		if (!he_tx_mcs)
+61fe43e7216df6 Miles Hu            2021-09-24  1907  			he_tx_mcs = v;
+0b294aebb6a00b Gustavo A. R. Silva 2020-07-27  1908  		fallthrough;
+9f056ed8ee01ad John Crispin        2019-11-25  1909  
+9f056ed8ee01ad John Crispin        2019-11-25  1910  	default:
+9f056ed8ee01ad John Crispin        2019-11-25  1911  		v = le16_to_cpu(he_cap->he_mcs_nss_supp.rx_mcs_80);
+9f056ed8ee01ad John Crispin        2019-11-25  1912  		arg->peer_he_rx_mcs_set[WMI_HECAP_TXRX_MCS_NSS_IDX_80] = v;
+9f056ed8ee01ad John Crispin        2019-11-25  1913  
+9f056ed8ee01ad John Crispin        2019-11-25  1914  		v = le16_to_cpu(he_cap->he_mcs_nss_supp.tx_mcs_80);
+61fe43e7216df6 Miles Hu            2021-09-24  1915  		v = ath11k_peer_assoc_h_he_limit(v, he_mcs_mask);
+9f056ed8ee01ad John Crispin        2019-11-25  1916  		arg->peer_he_tx_mcs_set[WMI_HECAP_TXRX_MCS_NSS_IDX_80] = v;
+9f056ed8ee01ad John Crispin        2019-11-25  1917  
+9f056ed8ee01ad John Crispin        2019-11-25  1918  		arg->peer_he_mcs_count++;
+61fe43e7216df6 Miles Hu            2021-09-24  1919  		if (!he_tx_mcs)
+61fe43e7216df6 Miles Hu            2021-09-24  1920  			he_tx_mcs = v;
+9f056ed8ee01ad John Crispin        2019-11-25  1921  		break;
+9f056ed8ee01ad John Crispin        2019-11-25  1922  	}
+61fe43e7216df6 Miles Hu            2021-09-24  1923  
+61fe43e7216df6 Miles Hu            2021-09-24  1924  	/* Calculate peer NSS capability from HE capabilities if STA
+61fe43e7216df6 Miles Hu            2021-09-24  1925  	 * supports HE.
+61fe43e7216df6 Miles Hu            2021-09-24  1926  	 */
+61fe43e7216df6 Miles Hu            2021-09-24  1927  	for (i = 0, max_nss = 0, he_mcs = 0; i < NL80211_HE_NSS_MAX; i++) {
+61fe43e7216df6 Miles Hu            2021-09-24  1928  		he_mcs = he_tx_mcs >> (2 * i) & 3;
+61fe43e7216df6 Miles Hu            2021-09-24  1929  
+61fe43e7216df6 Miles Hu            2021-09-24  1930  		/* In case of fixed rates, MCS Range in he_tx_mcs might have
+61fe43e7216df6 Miles Hu            2021-09-24  1931  		 * unsupported range, with he_mcs_mask set, so check either of them
+61fe43e7216df6 Miles Hu            2021-09-24  1932  		 * to find nss.
+61fe43e7216df6 Miles Hu            2021-09-24  1933  		 */
+61fe43e7216df6 Miles Hu            2021-09-24  1934  		if (he_mcs != IEEE80211_HE_MCS_NOT_SUPPORTED ||
+61fe43e7216df6 Miles Hu            2021-09-24  1935  		    he_mcs_mask[i])
+61fe43e7216df6 Miles Hu            2021-09-24  1936  			max_nss = i + 1;
+61fe43e7216df6 Miles Hu            2021-09-24  1937  	}
+61fe43e7216df6 Miles Hu            2021-09-24  1938  	arg->peer_nss = min(sta->rx_nss, max_nss);
+61fe43e7216df6 Miles Hu            2021-09-24  1939  
+61fe43e7216df6 Miles Hu            2021-09-24  1940  	ath11k_dbg(ar->ab, ATH11K_DBG_MAC,
+61fe43e7216df6 Miles Hu            2021-09-24  1941  		   "mac he peer %pM nss %d mcs cnt %d\n",
+61fe43e7216df6 Miles Hu            2021-09-24  1942  		   sta->addr, arg->peer_nss, arg->peer_he_mcs_count);
+d5c65159f28953 Kalle Valo          2019-11-23  1943  }
+d5c65159f28953 Kalle Valo          2019-11-23  1944  
+
+:::::: The code at line 1845 was first introduced by commit
+:::::: 9f056ed8ee01ad6898db49707cdc70ce923be3d0 ath11k: add HE support
+
+:::::: TO: John Crispin <john@phrozen.org>
+:::::: CC: Kalle Valo <kvalo@codeaurora.org>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

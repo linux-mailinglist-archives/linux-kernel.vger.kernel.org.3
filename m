@@ -2,121 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7C2F51DFD6
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 21:54:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B4FE51DFDA
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 21:56:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1392053AbiEFT5n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 15:57:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58202 "EHLO
+        id S1392174AbiEFT7j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 15:59:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352249AbiEFT5k (ORCPT
+        with ESMTP id S1352249AbiEFT7i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 15:57:40 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EB481E3C0
-        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 12:53:56 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1651866834;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=hPigNHr8wXW4Jsp9L+zcdiLLC2xp5wKYQoiAjHdLkb0=;
-        b=Xc8Vtd935tKSHJ4TItbPhom70GX4iR+XaOHyoZEbq2TCP4h9WjKpN0MVzmsUbMnujiBgnV
-        WXGzehvrucSX1BoXOdNpoMb3s0YNBoPdGbKtAB3wDRyptT25vNwG7QcC7LwRl3B15XR6VM
-        FhGG5jK12XCNGha0igmSaWXXc2p4A3H1NRfSABcL1Z3IwAXCO4O3qpx16YQ/THdTjg92ya
-        In409B3HY2BR55Mv7J/T3Np4Rdy7VMWpG58IDPN5+hY6NlLD7uyzePgQU6EvXGIFGFCODZ
-        3pB/pK2v3RdJoDZ1aaYSIcYs0qALgfVW7BGlvJCXH5N/7ExJVtGCxVmBC9jnxw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1651866834;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=hPigNHr8wXW4Jsp9L+zcdiLLC2xp5wKYQoiAjHdLkb0=;
-        b=/4l7akvaVCpYSimscxE6emXgo2DDhYqJsbAjKJILCBQFs5NLOHNmvvAauEvq153gAwkORH
-        f5cYHMQqOtGE5zCA==
-To:     Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
-        x86@kernel.org
-Cc:     Tony Luck <tony.luck@intel.com>, Andi Kleen <ak@linux.intel.com>,
-        Stephane Eranian <eranian@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Joerg Roedel <joro@8bytes.org>,
-        Suravee Suthikulpanit <Suravee.Suthikulpanit@amd.com>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Ricardo Neri <ricardo.neri@intel.com>,
-        iommu@lists.linux-foundation.org, linuxppc-dev@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org,
-        Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-Subject: Re: [PATCH v6 02/29] x86/apic: Add irq_cfg::delivery_mode
-In-Reply-To: <20220506000008.30892-3-ricardo.neri-calderon@linux.intel.com>
-References: <20220506000008.30892-1-ricardo.neri-calderon@linux.intel.com>
- <20220506000008.30892-3-ricardo.neri-calderon@linux.intel.com>
-Date:   Fri, 06 May 2022 21:53:54 +0200
-Message-ID: <875ymih1yl.ffs@tglx>
+        Fri, 6 May 2022 15:59:38 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A42822513;
+        Fri,  6 May 2022 12:55:53 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BEA60B8391F;
+        Fri,  6 May 2022 19:55:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24C3EC385A9;
+        Fri,  6 May 2022 19:55:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651866950;
+        bh=jPWMkhNDg1jgxuf/cGrrwZeIG8Xum75XRX0vdwl85Pk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=KFtIN1cEYxg0RqlRhAQsG2I07UR2qvyV872zroC18WXPk5OZSmo9Ar6+efzgNgIp4
+         iZ0/0Wz49/+XO/ijmPXDoJ+yHPM1GiqCa5sS+NLLBfp0DqaU0w9zXRzn+oitWfnAPI
+         7o4UsC1MbzM8GmdaPFGi3DMMHTuahWjJ4CJR70w8YZtwaF57SRBVz7cIywML/ntYXc
+         qUtM3K84g82PiiLZE74ZLwj2pWw+mP4JSqXOkxYNvXm75QEN8WmFjUZcjl233qYbQL
+         Oe0bIX+200DdUxQW3TfnFuL5OjAaQkL6DSfpVpUzc1kcCyn/FcCap1jD4hLUvB56M0
+         I72FGDVBfYbug==
+Date:   Fri, 6 May 2022 12:55:48 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Yang Yingliang <yangyingliang@huawei.com>
+Cc:     <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <ioana.ciornei@nxp.com>, <davem@davemloft.net>,
+        <robert-ionut.alexa@nxp.com>
+Subject: Re: [PATCH v2] net: dpaa2-mac: add missing of_node_put() in
+ dpaa2_mac_get_node()
+Message-ID: <20220506125548.7ccdba25@kernel.org>
+In-Reply-To: <20220505021833.3864434-1-yangyingliang@huawei.com>
+References: <20220505021833.3864434-1-yangyingliang@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 05 2022 at 16:59, Ricardo Neri wrote:
-> Currently, the delivery mode of all interrupts is set to the mode of the
-> APIC driver in use. There are no restrictions in hardware to configure the
-> delivery mode of each interrupt individually. Also, certain IRQs need
-> to be
-
-s/IRQ/interrupt/ Changelogs can do without acronyms.
-
-> configured with a specific delivery mode (e.g., NMI).
->
-> Add a new member, delivery_mode, to struct irq_cfg. Subsequent changesets
-> will update every irq_domain to set the delivery mode of each IRQ to that
-> specified in its irq_cfg data.
->
-> To keep the current behavior, when allocating an IRQ in the root
-> domain
-
-The root domain does not allocate an interrupt. The root domain
-allocates a vector for an interrupt. There is a very clear and technical
-destinction. Can you please be more careful about the wording?
-
-> --- a/arch/x86/kernel/apic/vector.c
-> +++ b/arch/x86/kernel/apic/vector.c
-> @@ -567,6 +567,7 @@ static int x86_vector_alloc_irqs(struct irq_domain *domain, unsigned int virq,
->  		irqd->chip_data = apicd;
->  		irqd->hwirq = virq + i;
->  		irqd_set_single_target(irqd);
-> +
-
-Stray newline.
-
->  		/*
->  		 * Prevent that any of these interrupts is invoked in
->  		 * non interrupt context via e.g. generic_handle_irq()
-> @@ -577,6 +578,14 @@ static int x86_vector_alloc_irqs(struct irq_domain *domain, unsigned int virq,
->  		/* Don't invoke affinity setter on deactivated interrupts */
->  		irqd_set_affinity_on_activate(irqd);
+On Thu, 5 May 2022 10:18:33 +0800 Yang Yingliang wrote:
+> Add missing of_node_put() in error path in dpaa2_mac_get_node().
+> 
+> Fixes: 5b1e38c0792c ("dpaa2-mac: bail if the dpmacs fwnode is not found")
+> Reported-by: Hulk Robot <hulkci@huawei.com>
+> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+> ---
+>  drivers/net/ethernet/freescale/dpaa2/dpaa2-mac.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/net/ethernet/freescale/dpaa2/dpaa2-mac.c b/drivers/net/ethernet/freescale/dpaa2/dpaa2-mac.c
+> index c48811d3bcd5..fab2ce6bee9f 100644
+> --- a/drivers/net/ethernet/freescale/dpaa2/dpaa2-mac.c
+> +++ b/drivers/net/ethernet/freescale/dpaa2/dpaa2-mac.c
+> @@ -108,8 +108,10 @@ static struct fwnode_handle *dpaa2_mac_get_node(struct device *dev,
+>  		return ERR_PTR(-EPROBE_DEFER);
+>  	}
 >  
-> +		/*
-> +		 * Initialize the delivery mode of this irq to match the
+> -	if (!parent)
+> +	if (!parent) {
+> +		of_node_put(dpmacs);
 
-s/irq/interrupt/
+I don't see how !parent && dpmacs can ever be true.
 
-> +		 * default delivery mode of the APIC. Children irq domains
-> +		 * may take the delivery mode from the individual irq
-> +		 * configuration rather than from the APIC driver.
-> +		 */
-> +		apicd->hw_irq_cfg.delivery_mode = apic->delivery_mode;
-> +
->  		/*
->  		 * Legacy vectors are already assigned when the IOAPIC
->  		 * takes them over. They stay on the same vector. This is
+>  		return NULL;
+> +	}
+>  
+>  	fwnode_for_each_child_node(parent, child) {
+>  		err = -EINVAL;
+

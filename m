@@ -2,102 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21DF751E054
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 22:51:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A873851E05A
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 22:52:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1443828AbiEFUyh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 16:54:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48896 "EHLO
+        id S1443920AbiEFUzq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 16:55:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1443783AbiEFUyg (ORCPT
+        with ESMTP id S1346231AbiEFUzn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 16:54:36 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80CE638DAB
-        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 13:50:51 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id j14so8558340plx.3
-        for <linux-kernel@vger.kernel.org>; Fri, 06 May 2022 13:50:51 -0700 (PDT)
+        Fri, 6 May 2022 16:55:43 -0400
+Received: from mail-ua1-x933.google.com (mail-ua1-x933.google.com [IPv6:2607:f8b0:4864:20::933])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 434896E8E9
+        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 13:51:59 -0700 (PDT)
+Received: by mail-ua1-x933.google.com with SMTP id s1so3226445uac.6
+        for <linux-kernel@vger.kernel.org>; Fri, 06 May 2022 13:51:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=svtm70vhrtwaUzMmCsUIT6Egi2IpF5lFJHBTBSUBifA=;
-        b=k93eJcUdX4CDEojINJyEsXxp6BPwyVW0KU81y0Fd5DXNq0r3T3Jeg9kORS0Pslclu7
-         qQBednLjdPTuAgXRX8k+dnJCDa38FqSlf/fRGoognCApgzR9LJ39k0X0tEdOwsDj+Yk8
-         yHioi/AfZUJFw91f/azWral+2pdGQm7lPu5MIXCzuw0I0Ymd6euxNkkwrXuaDqZ4L+Mh
-         iYnM61GI/pQVI/bY3g1GcH4dzeEYDnTewGQh1mJciqNVDJwWZwDGklWYX9KazGwqBNIY
-         EX0Wzq83DRzhpKoeoPLOo6N6t49kYd+3kj/9udQGiIOnD/GwLKnQQdkMlmmc7NAtZ4kR
-         Xmfg==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=rRtXk2NS2oWzNZ21ZA/x0HHZFmCBasDl3JsMdw59QeE=;
+        b=C/97EjllEfm3x20bYNfOjWluflE6TusTk6H3zZb4N7BB1PRUwHKC7TQ894mY5UtE7+
+         VaNZOpIr1WCx2BOpL8bKakm8y32jSvTB7RwrPBrKB9u0QwAi5u6FegAoiBBqovVvQlfY
+         z0YP50O6RoovOabLN17av8Cxaat61EgcPF1MIwadEUM1SkL2TEMVO/Awv6Pua2Qt6Lje
+         LP0B8oT/bYPKb9f8IkrrYGpligunlg0eAuAJCL4hhYgg2iWNPigyJ8FiCZheGJEx/C0H
+         +mtoHVe39Vh4dtgDuRW/wQw8amWZzfdOqinQpCEgILdbmNFzmL2gD3oSPbco1E4GC9vm
+         C7dw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=svtm70vhrtwaUzMmCsUIT6Egi2IpF5lFJHBTBSUBifA=;
-        b=WRIFt4l1iaIVtpN06e9swyOAmPAHMZ7m5noMjtg5Mgqk5QXyH6hXtR0PyMLGsHOxbz
-         P7gBJGnXbinEQ1ajD+6mVRsM2eH9gOwlKDIBO6dVwpaQzHmlO7dkuvosOk539xRg0jLf
-         K7MgYDK30DaDEq/LsZq4EK/21BkbL3Eg/gsl7vdkjfC0bv78FNfRJTJmLTIaL5poqsWX
-         LrrPb3L5rMe2lG2YodpB97Ku8LfV70VDZaAQ0suue42sw6KyjWzupMcC/7PLmx8QaBDy
-         MqEeLXda0yrFizd0T7iFbjLZA7nVAC1A1BA1Jnnuek/6qs3tkvnvcydsAOBb7OH4NiVP
-         Z/SQ==
-X-Gm-Message-State: AOAM530VrSDpR0vNij+2zVlFENVxbO/isVB2yLo39B+8GL6iVxYhFYje
-        xIY9QQvD2DgtM+8y3Z1ofFVv9smp6lUTMw==
-X-Google-Smtp-Source: ABdhPJzopfreODKpfWBSy4m9Jlxx414DAMKUaiFGwW300IDx3Eid79W0qvrPDksQwXeQ4gBlT/S2oA==
-X-Received: by 2002:a17:903:32c4:b0:15e:9f30:75e9 with SMTP id i4-20020a17090332c400b0015e9f3075e9mr5560293plr.123.1651870251011;
-        Fri, 06 May 2022 13:50:51 -0700 (PDT)
-Received: from [192.168.4.166] (cpe-72-132-29-68.dc.res.rr.com. [72.132.29.68])
-        by smtp.gmail.com with ESMTPSA id g5-20020a17090a7d0500b001d7faf357b7sm7880977pjl.4.2022.05.06.13.50.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 06 May 2022 13:50:50 -0700 (PDT)
-Message-ID: <3b302e60-cb5a-a193-db13-5ca0ef5603cc@kernel.dk>
-Date:   Fri, 6 May 2022 14:50:49 -0600
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=rRtXk2NS2oWzNZ21ZA/x0HHZFmCBasDl3JsMdw59QeE=;
+        b=XzLS7t304GUueqfO9B9mqPw1ltWVtyPgP0RzX5BERamNUI2xSvXKy4O1fCENfI9+GT
+         92yXfdZWKf29XB3bc0zilHDwMbklSGNeAf5iG3LcQQFTp7/F3c1gzPv1KuZNiguXGEjs
+         zN5cLaC+OoH8L3JrNpJDwB56x+mF4I5AHIUcwB3lMogA1QmO3+ROBQ2E5fIvjT3z2h8g
+         3af26XjNuVYIlYUYNJT1D5kRM/vnp5PApsKILISH7jRHdPBlVTJuOJwEsACTGoVMdeDx
+         A3dXhi5ZSTMqrzGOmnjYVey6nsK4GXj3VBCU0gS+xmsimwH3UypQ1pzvP9ce71qXJ0E3
+         cgfg==
+X-Gm-Message-State: AOAM530WqFB+FMgNUG3epKkunUy6iR573rjFvqU+QRrTgjQWVuOAsDOh
+        WJqRuJc/ToaefdCswwcpevRX5xYo8VyGPgYVEMSuMw==
+X-Google-Smtp-Source: ABdhPJwDLJtMEwsOIeRwITNz4DWQv8HawdW9qjHZbLrxADt9TxYwJg5qFvvFH+ISS6QmphxYvAqOQeBR0+SFOvoWCTA=
+X-Received: by 2002:ab0:2a87:0:b0:362:9cdb:8b64 with SMTP id
+ h7-20020ab02a87000000b003629cdb8b64mr1688385uar.83.1651870318184; Fri, 06 May
+ 2022 13:51:58 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH 5/5] io_uring: implement multishot mode for accept
-Content-Language: en-US
-To:     Hao Xu <haoxu.linux@gmail.com>, io-uring@vger.kernel.org
-Cc:     Pavel Begunkov <asml.silence@gmail.com>,
-        linux-kernel@vger.kernel.org
-References: <20220506070102.26032-1-haoxu.linux@gmail.com>
- <20220506070102.26032-6-haoxu.linux@gmail.com>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <20220506070102.26032-6-haoxu.linux@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220506122601.367589-1-adrian.hunter@intel.com> <20220506122601.367589-22-adrian.hunter@intel.com>
+In-Reply-To: <20220506122601.367589-22-adrian.hunter@intel.com>
+From:   Ian Rogers <irogers@google.com>
+Date:   Fri, 6 May 2022 13:51:44 -0700
+Message-ID: <CAP-5=fWjpP8hhzPuS7tvGaPh9UFJ7Fdyg0B41B4100XbsqFUBA@mail.gmail.com>
+Subject: Re: [PATCH V2 21/23] libperf evsel: Add comments for booleans
+To:     Adrian Hunter <adrian.hunter@intel.com>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Leo Yan <leo.yan@linaro.org>, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/6/22 1:01 AM, Hao Xu wrote:
-> @@ -5748,8 +5758,12 @@ static int io_accept(struct io_kiocb *req, unsigned int issue_flags)
->  		if (!fixed)
->  			put_unused_fd(fd);
->  		ret = PTR_ERR(file);
-> -		if (ret == -EAGAIN && force_nonblock)
-> -			return -EAGAIN;
-> +		if (ret == -EAGAIN && force_nonblock) {
-> +			if ((req->flags & REQ_F_APOLL_MULTI_POLLED) ==
-> +			    REQ_F_APOLL_MULTI_POLLED)
-> +				ret = 0;
-> +			return ret;
+On Fri, May 6, 2022 at 5:26 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
+>
+> Add comments for 'system_wide' and 'requires_cpu' booleans
+>
+> Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
+> ---
+>  tools/lib/perf/include/internal/evsel.h | 9 +++++++++
+>  1 file changed, 9 insertions(+)
+>
+> diff --git a/tools/lib/perf/include/internal/evsel.h b/tools/lib/perf/include/internal/evsel.h
+> index 77fbb8b97e5c..cc8f1ba790bd 100644
+> --- a/tools/lib/perf/include/internal/evsel.h
+> +++ b/tools/lib/perf/include/internal/evsel.h
+> @@ -49,7 +49,16 @@ struct perf_evsel {
+>
+>         /* parse modifier helper */
+>         int                      nr_members;
+> +       /*
+> +        * system_wide is for events that need to be on every CPU, irrespective
+> +        * of user requested CPUs or threads. Map propagation will not override
+> +        * this events own_cpus, which will contribute to evlist all_cpus.
 
-FWIW, this
+So this muddies my understanding of cpus and own_cpus (sigh, again
+undocumented). I believe cpus to be the set of CPUs (or any CPU, aka
+dummy) that perf_event_open happens on. all_cpus in evlist is the
+union of all the evsels cpus (ie not related to own_cpus as described
+here). Own_cpus I believe to be what's computed at parse-event time
+from sysfs. Is this a typo in the comment or quite likely my error?
 
-	if ((req->flags & REQ_F_APOLL_MULTI_POLLED) == REQ_F_APOLL_MULTI_POLLED)
+Thanks,
+Ian
 
-is identical to
-
-	if (req->flags & REQ_F_APOLL_MULTI_POLLED)
-
-but I suspect this used to check more flags (??), because as it stands
-it seems a bit nonsensical.
-
--- 
-Jens Axboe
-
+> +        */
+>         bool                     system_wide;
+> +       /*
+> +        * Some events, for example uncore events, require a CPU.
+> +        * i.e. it cannot be the 'any CPU' value of -1.
+> +        */
+>         bool                     requires_cpu;
+>         int                      idx;
+>  };
+> --
+> 2.25.1
+>

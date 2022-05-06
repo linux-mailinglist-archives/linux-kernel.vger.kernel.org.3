@@ -2,101 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAF2151DB4D
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 16:57:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D73051DB52
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 16:59:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1442545AbiEFPBg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 11:01:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56138 "EHLO
+        id S1442555AbiEFPCy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 11:02:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347628AbiEFPBd (ORCPT
+        with ESMTP id S1347628AbiEFPCw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 11:01:33 -0400
-Received: from mout.perfora.net (mout.perfora.net [74.208.4.196])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 222465D5CE;
-        Fri,  6 May 2022 07:57:49 -0700 (PDT)
-Received: from toolbox.int.toradex.com ([81.221.85.15]) by mrelay.perfora.net
- (mreueus002 [74.208.5.2]) with ESMTPSA (Nemesis) id 0MQxpY-1nOHFZ2aKM-00UHck;
- Fri, 06 May 2022 16:57:28 +0200
-From:   Marcel Ziswiler <marcel@ziswiler.com>
-To:     linux-arm-kernel@lists.infradead.org
-Cc:     Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
-        Denys Drozdov <denys.drozdov@toradex.com>,
-        Fabio Estevam <festevam@denx.de>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Li Yang <leoyang.li@nxp.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Marek Vasut <marex@denx.de>,
-        Matthias Schiffer <matthias.schiffer@tq-group.com>,
-        Max Krummenacher <max.krummenacher@toradex.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Tim Harvey <tharvey@gateworks.com>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v1] dt-bindings: arm: fsl: correct 1g vs. 1gb in toradex,colibri-imx6ull-*
-Date:   Fri,  6 May 2022 16:57:20 +0200
-Message-Id: <20220506145720.291735-1-marcel@ziswiler.com>
-X-Mailer: git-send-email 2.35.1
+        Fri, 6 May 2022 11:02:52 -0400
+Received: from lahtoruutu.iki.fi (lahtoruutu.iki.fi [IPv6:2a0b:5c81:1c1::37])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCC6A5D5CE;
+        Fri,  6 May 2022 07:59:08 -0700 (PDT)
+Received: from hillosipuli.retiisi.eu (dkvn5pty0gzs3nltj987t-3.rev.dnainternet.fi [IPv6:2001:14ba:4457:9640:1e2d:1f75:a607:ef37])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sailus)
+        by lahtoruutu.iki.fi (Postfix) with ESMTPSA id 84F631B00252;
+        Fri,  6 May 2022 17:59:06 +0300 (EEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=lahtoruutu;
+        t=1651849146;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=LbT5IGtky0H4rQRh8Cp6duVvDTunMzK7mUfLU1XT12Q=;
+        b=ZA1zp990cio1fHuBQ9fC/CLwgqo25zcAH+WW22ifRC7j2nOx/mcU21o+2eFjFToBZl3YYB
+        Nnii/SpZz7WGRmRsj6Er3PDJhkAO8JZvXcUfgOp3bpj+V/V70v+0BnQO2EABlQiLVFvpYh
+        AMiL+3lXQhTZ/phFbaiOBqlQdl1wk2hAfCHF0PN9BRDpGgU705coS6iIIozI7GwddzxmMq
+        81KSAupC93VEwi9ga3b5E3onrsmvAjt0/5V/KaT8iSQ+9I06W8j4F7/Kaf9kT5ZRli25I5
+        XgMHNQMAjPaEPTB6rd7QsDWS/jJh0y1ZGOTtSTiG7psP/yWEYt9Zuv1iZCnyXw==
+Received: from valkosipuli.retiisi.eu (valkosipuli.localdomain [192.168.4.2])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by hillosipuli.retiisi.eu (Postfix) with ESMTPS id 293F8634C91;
+        Fri,  6 May 2022 17:59:06 +0300 (EEST)
+Date:   Fri, 6 May 2022 17:59:06 +0300
+From:   Sakari Ailus <sakari.ailus@iki.fi>
+To:     Jacopo Mondi <jacopo@jmondi.org>
+Cc:     Quentin Schulz <quentin.schulz@theobroma-systems.com>,
+        Quentin Schulz <foss+kernel@0leil.net>, shawnx.tu@intel.com,
+        mchehab@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-media@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/3] media: ov5675: add device-tree support
+Message-ID: <YnU3umQnJxvYFmCg@valkosipuli.retiisi.eu>
+References: <20220504135543.59522-1-foss+kernel@0leil.net>
+ <20220504135543.59522-2-foss+kernel@0leil.net>
+ <20220505074725.4aabembd4uh4tt23@uno.localdomain>
+ <YnOKuGqQ74rGUz6q@valkosipuli.retiisi.eu>
+ <1344ed86-1505-a1af-1671-67106a4b9cf7@theobroma-systems.com>
+ <20220506144300.nv3lqogpkir3i7fz@uno.localdomain>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:hrTXd9ML7/8mbQ7BFDHnSRwiJvYdsNGQKEJKZTa9KvFBM/NoAUn
- oRodN4cJXoP9pklWV8gbzGYFmvw8VchuxwPfwS0F3qMBDROrTtGVgVpHCqqgc/nmdRC3zh0
- sa7k+tsZe20866nvjIB9/JhDTwrQoFQHK3GN9A02cvtzjj6Z+NNSbIOFE6VJBhPsrtBDFvG
- TR1tb3zjIAq1fIi+lJ04A==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:jb3f6uUQYhk=:8dJcMqWU+DbWo6I+gdb1YJ
- +1qd50tNI8PYyIHXFTYlm1c4+U+skpnM7YVVIPXI98elt62qOspPjbT9RdSCTX7vM7IfQPqam
- sGWvwHrUbkC0/tBJoNfAmvWaViZ2Ny7GorA868uXQGjhWpy1Ed5ZT39uDdcYOCPXVWijHYgkl
- 7dL+xknIuSlBHxivxDp293q+UIzfxcgFjYNuJHAZbs0s4dJnDFKLkNtBofpkvhB6qM+PQTdUB
- 1rLHctxB/rl5RGcFGBaCvyDY5V/d/DjYqn5WssEW8psYKI9Qst9UJSz4HqA2lLkH3O2vsvbDS
- B8yfh1W8JOspZvOYWU+Rj4OXK1QALx0IK24pgBNcP2S+dGlduTVCg8GjiZG8p8G0EN2njYpYQ
- SpFE3zf4BHo3WFksJWs/iADBcusCSqbo0xyyVRW7J3VuIhqgPV+DgRx0WMHnBo06MXoNxTDJj
- NFpnHlrtbHeoR9YRlexM4RSjqvld+DqB4E+xdBTAZlacLi/FgVWjCkmV9ijs2uo9obh7kWz5O
- VDYkpUNviVyQBlEBzT5Ah5K1QB7JJCe7MqBKXzSeNL0huiqg8GVnncjuimj7aoWDvNne0RudK
- 1NI+j5mThT2oTAO+1blyvG0O7ojiqP+8wdFrAe9u0/dMlQEyDJwLFa3y5NuNg2Cb1+kpUvknD
- 5cAzV0UWNsqcvNrmwieU20R/NJkjAT/8Z83VWq5jeaJCDdETohYW9jXGm1NafiqLKzmQ=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220506144300.nv3lqogpkir3i7fz@uno.localdomain>
+ARC-Seal: i=1; s=lahtoruutu; d=iki.fi; t=1651849146; a=rsa-sha256;
+        cv=none;
+        b=r7V0iWsvz7F/pm/x1tWejtH6MaAyyOlX+c5HeCcAurpqigfnSy10qXT4xmpbPSgxnlwXHf
+        oCOkN7+QeKuJaYq6DaNoYZmicXau/Hacmx8ZWwRaRQiTb3ieUteJQFnPoR+3dukvSiOUgI
+        TbOTjqqM8CkEnE9VcyTQ5n31OtBj6foObfTZhXAY/bV3IKFV1hqy15+b5QQXhmXy80EVzL
+        8uPCjrtaePG5t2x2t54BDCYfgZMNuw25IMWH/PNGXMvOTXrDhVRacD4sUJz4PzDifEKqH4
+        8BXeNBUAepkKf9/7rsIfxJson0JemVNXm6pjCfVOzQevFDGeyOTBPVmeUHSRHA==
+ARC-Authentication-Results: i=1;
+        ORIGINATING;
+        auth=pass smtp.auth=sailus smtp.mailfrom=sakari.ailus@iki.fi
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
+        s=lahtoruutu; t=1651849146;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=LbT5IGtky0H4rQRh8Cp6duVvDTunMzK7mUfLU1XT12Q=;
+        b=uAsp9WyJrf5qEO97HiEWR8T2oJNtC7D4sAJNl0JvL50ILDoY89whjuuZX4rAGUTRzvOJPY
+        FTTX9TAobCeRgLFzfLje3gSqr3JeXO92uYPucku+uNI+Jc3MSwEDzyLzVl5bR2f7/6cYfn
+        SFDByxt1OIQHwK9ReeIBYxnb6PMxcRULwvVd0vUTNw5GR0E5Vh0bXOvS4zDjJttcl3FtUy
+        Ch2t39+MUPGdIPCmP0SpCckbgdFU0v1p54uY5u212tBt+0QkV5W3ZPScVzJcezpF7QGazO
+        EcnaDMQwuJnItK74lXl7rcMB0Zn+KOj7oNvbAr+CoCGofwuhShw9AgphOwoAog==
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
+Hi Jacopo,
 
-Correct 1G vs. 1GB typo.
+On Fri, May 06, 2022 at 04:43:00PM +0200, Jacopo Mondi wrote:
+> My understanding is that "clock-frequency" is
+> an ACPI leftover that has been brought into some DT bindings as an
+> historical mistake. OF can work well with the common clock framework,
+> there's no need to introduce a property for the same purpose.
 
-Signed-off-by: Marcel Ziswiler <marcel.ziswiler@toradex.com>
+The other way around actually. It was first used on DT but it's no longer
+the perferred way to set the frequency there. On ACPI it simply indicates
+the frequency without an ability to set it.
 
----
-
- Documentation/devicetree/bindings/arm/fsl.yaml | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/Documentation/devicetree/bindings/arm/fsl.yaml b/Documentation/devicetree/bindings/arm/fsl.yaml
-index ef524378d449..c81a130c3e7e 100644
---- a/Documentation/devicetree/bindings/arm/fsl.yaml
-+++ b/Documentation/devicetree/bindings/arm/fsl.yaml
-@@ -680,10 +680,10 @@ properties:
-       - description: i.MX6ULL Boards with Toradex Colibri iMX6ULL 1GB (eMMC) Module
-         items:
-           - enum:
--              - toradex,colibri-imx6ull-emmc-aster     # Colibri iMX6ULL 1G (eMMC) on Aster Carrier Board
--              - toradex,colibri-imx6ull-emmc-eval      # Colibri iMX6ULL 1G (eMMC) on Colibri Evaluation B. V3
--              - toradex,colibri-imx6ull-emmc-iris      # Colibri iMX6ULL 1G (eMMC) on Iris Carrier Board
--              - toradex,colibri-imx6ull-emmc-iris-v2   # Colibri iMX6ULL 1G (eMMC) on Iris V2 Carrier Board
-+              - toradex,colibri-imx6ull-emmc-aster     # Colibri iMX6ULL 1GB (eMMC) on Aster Carrier Board
-+              - toradex,colibri-imx6ull-emmc-eval      # Colibri iMX6ULL 1GB (eMMC) on Colibri Evaluation B. V3
-+              - toradex,colibri-imx6ull-emmc-iris      # Colibri iMX6ULL 1GB (eMMC) on Iris Carrier Board
-+              - toradex,colibri-imx6ull-emmc-iris-v2   # Colibri iMX6ULL 1GB (eMMC) on Iris V2 Carrier Board
-           - const: toradex,colibri-imx6ull-emmc        # Colibri iMX6ULL 1GB (eMMC) Module
-           - const: fsl,imx6ull
- 
 -- 
-2.35.1
-
+Sakari Ailus

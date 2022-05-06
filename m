@@ -2,61 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14FA351D0BF
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 07:31:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 436B151D0A6
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 07:27:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1389221AbiEFFem (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 01:34:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40866 "EHLO
+        id S1389114AbiEFFbY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 01:31:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1389211AbiEFFeV (ORCPT
+        with ESMTP id S1389116AbiEFFbV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 01:34:21 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1586A220F5
-        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 22:30:39 -0700 (PDT)
+        Fri, 6 May 2022 01:31:21 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6282C91;
+        Thu,  5 May 2022 22:27:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651815040; x=1683351040;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=xo3GNZdRcwK9ipt9zUqLqMqh1EBzTdvgrneTIVh8+9g=;
-  b=MxHcIQZBPkvMugkBvPg8zjDxXej9pjGsI2aM13DfY0WTN7Uk0L739ZXN
-   Lg2GgpUHqMGkWXNnL0duUb9dLw+Z+0HHZcv5dqEuym/PF7EtkE2y2TP+b
-   v5wxsBg5uN+ln5JWYqTAM7z6l/AT7SJxTMU/emWJ8YZvHZ6jx9QEQhSSX
-   qW37qbxLDh3gScLdWLcGgv3NKoZ9SSite+Rrg/IlGxxx+Gg/uj1gr0tVy
-   mpNDuGdCgQZCHn0JQ98zhX7zsoTAitwghn4o9kxgrHKfBQsoKopCmGI+W
-   8PpttKa7xeXkBOrubXu6SJNmGCYh2tONEIBlf53bfcIG6g6cBLvbdoLRv
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10338"; a="255838503"
+  t=1651814859; x=1683350859;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=jjJ7o6bLleTyPSL5b0r/x/WkMwEejBsryTcFEZh8gPU=;
+  b=NHkpr+PE1Rb8RVvHCpakawJcvpL9zOrcoFMsayLXcdo/795v+pQ2CAMT
+   hHy6jOqA+7sJ+pAIUEj9umkWCjRt3qAmZqbdOSwTtY0q7arkVgFNUGzKm
+   Tsd9Rhtg+/n+G1ZBawkcB2m3f0XYWNQZkYl/fuOaRv4YL7ofvNJgibgIc
+   06uThUi7552dzJ7GIOBPJrN5VLtAxkTvTlzbVLfosyOpQLSwlagypxGIZ
+   E7hrZG1gCvZlYs7luQQZti/0MFhnAPSo4ef28maJE7RxLKjaOJgrvawZr
+   tEdA/j43g0UWJwJ+ufNecxdTMwq3poEor6RgrgHmz5MJgiPh+gxp6W1sc
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10338"; a="328901599"
 X-IronPort-AV: E=Sophos;i="5.91,203,1647327600"; 
-   d="scan'208";a="255838503"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2022 22:30:37 -0700
-X-ExtLoop1: 1
+   d="scan'208";a="328901599"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2022 22:27:38 -0700
 X-IronPort-AV: E=Sophos;i="5.91,203,1647327600"; 
-   d="scan'208";a="695011097"
-Received: from allen-box.sh.intel.com ([10.239.159.48])
-  by orsmga004.jf.intel.com with ESMTP; 05 May 2022 22:30:34 -0700
-From:   Lu Baolu <baolu.lu@linux.intel.com>
-To:     Joerg Roedel <joro@8bytes.org>, Jason Gunthorpe <jgg@nvidia.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Kevin Tian <kevin.tian@intel.com>
-Cc:     Jacob jun Pan <jacob.jun.pan@intel.com>,
-        Liu Yi L <yi.l.liu@intel.com>,
-        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org,
-        Lu Baolu <baolu.lu@linux.intel.com>
-Subject: [PATCH v3 4/4] iommu/vt-d: Remove hard coding PGSNP bit in PASID entries
-Date:   Fri,  6 May 2022 13:27:27 +0800
-Message-Id: <20220506052727.1689687-5-baolu.lu@linux.intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220506052727.1689687-1-baolu.lu@linux.intel.com>
-References: <20220506052727.1689687-1-baolu.lu@linux.intel.com>
+   d="scan'208";a="585780403"
+Received: from xiaoyaol-hp-g830.ccr.corp.intel.com (HELO [10.249.169.36]) ([10.249.169.36])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2022 22:27:35 -0700
+Message-ID: <0233f2dc-31b9-ff30-67c9-2ad5871e7dda@intel.com>
+Date:   Fri, 6 May 2022 13:27:33 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.8.1
+Subject: Re: [RFC PATCH v6 025/104] KVM: TDX: initialize VM with TDX specific
+ parameters
+Content-Language: en-US
+To:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     isaku.yamahata@gmail.com, Paolo Bonzini <pbonzini@redhat.com>,
+        erdemaktas@google.com, Sean Christopherson <seanjc@google.com>,
+        Sagi Shahar <sagis@google.com>
+References: <cover.1651774250.git.isaku.yamahata@intel.com>
+ <fbc23565f7556e7b33227bcad95441195bb4758d.1651774250.git.isaku.yamahata@intel.com>
+From:   Xiaoyao Li <xiaoyao.li@intel.com>
+In-Reply-To: <fbc23565f7556e7b33227bcad95441195bb4758d.1651774250.git.isaku.yamahata@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,31 +66,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As enforce_cache_coherency has been introduced into the iommu_domain_ops,
-the kernel component which owns the iommu domain is able to opt-in its
-requirement for force snooping support. The iommu driver has no need to
-hard code the page snoop control bit in the PASID table entries anymore.
+On 5/6/2022 2:14 AM, isaku.yamahata@intel.com wrote:
 
-Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
-Reviewed-by: Kevin Tian <kevin.tian@intel.com>
----
- drivers/iommu/intel/pasid.c | 3 ---
- 1 file changed, 3 deletions(-)
+...
 
-diff --git a/drivers/iommu/intel/pasid.c b/drivers/iommu/intel/pasid.c
-index 41a0e3b02c79..0abfa7fc7fb0 100644
---- a/drivers/iommu/intel/pasid.c
-+++ b/drivers/iommu/intel/pasid.c
-@@ -710,9 +710,6 @@ int intel_pasid_setup_second_level(struct intel_iommu *iommu,
- 	pasid_set_fault_enable(pte);
- 	pasid_set_page_snoop(pte, !!ecap_smpwc(iommu->ecap));
- 
--	if (domain->domain.type == IOMMU_DOMAIN_UNMANAGED)
--		pasid_set_pgsnp(pte);
--
- 	/*
- 	 * Since it is a second level only translation setup, we should
- 	 * set SRE bit as well (addresses are expected to be GPAs).
--- 
-2.25.1
+> +	if (init_vm->tsc_khz) {
+> +		guest_tsc_khz = init_vm->tsc_khz;
+> +		kvm->arch.default_tsc_khz = guest_tsc_khz;
+> +	} else
+> +		guest_tsc_khz = kvm->arch.default_tsc_khz;
+> +	td_params->tsc_frequency = TDX_TSC_KHZ_TO_25MHZ(guest_tsc_khz);
 
+Isaku,
+
+I think Paolo meant
+
+1. user space calls VM-scope KVM_SET_TSC_KHZ
+
+and
+
+2. td_params->tsc_frequency = 
+TDX_TSC_KHZ_TO_25MHZ(kvm->arch.default_tsc_khz);
+
+in 
+https://lore.kernel.org/all/e392b53a-fbaa-4724-07f4-171424144f70@redhat.com/
+
+so we can drop @tsc_khz in struct kvm_tdx_init_vm.

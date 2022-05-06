@@ -2,115 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 508E451D21E
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 09:18:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6808051D223
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 09:19:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1389477AbiEFHVq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 03:21:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40320 "EHLO
+        id S1389489AbiEFHXB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 03:23:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352865AbiEFHVp (ORCPT
+        with ESMTP id S245542AbiEFHWx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 03:21:45 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A827566FA3;
-        Fri,  6 May 2022 00:18:02 -0700 (PDT)
-Received: from mail-wr1-f46.google.com ([209.85.221.46]) by
- mrelayeu.kundenserver.de (mreue108 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1MtfVx-1o6BQU0OUh-00v8Wd; Fri, 06 May 2022 09:18:01 +0200
-Received: by mail-wr1-f46.google.com with SMTP id j15so8825770wrb.2;
-        Fri, 06 May 2022 00:18:01 -0700 (PDT)
-X-Gm-Message-State: AOAM530UXeyQH1I2fmrx7p793ELh0PDDWac3A8S6+5ZgUs+THa2G4Lef
-        JqXFqiy95L2unMfzNajzPs9LhMYMIdm+nXa+4Kc=
-X-Google-Smtp-Source: ABdhPJxk5kmKl/NuJo2Kw6gbDMmUHBC9PzM37HJ0IpduByOSpYwlVh3nYidBN6G2ViFW9sJzR1YaV0REdELOtYll4hY=
-X-Received: by 2002:a5d:5986:0:b0:20c:5844:820d with SMTP id
- n6-20020a5d5986000000b0020c5844820dmr1472517wri.192.1651821480693; Fri, 06
- May 2022 00:18:00 -0700 (PDT)
+        Fri, 6 May 2022 03:22:53 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24C722E080
+        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 00:19:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651821552; x=1683357552;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=Q5d9HH/sQp+F8Knzv+tCoRI8RdzEpU46UiEcz+bJbD8=;
+  b=CRjWT6z8ZjvOyQNKDSrS2X7/bv8nNwKddU4cRSIqEuDwvBeqEWvJTWVB
+   JlLNvQhbboDJ0cN1eBGeTWd4PScecROcu9fgAbbLCtzbqrl+ga73br8Bx
+   pJwFMxuPqAaKU2SHgwNzG1yk3aAv1UkpzR2ZjJ52zucmOAMbB4KlcR5jr
+   GJBcWn1EKLL/bXQq9iCndm9zuyhvLXmfOWu6RXzyoswKRs6BOJ0bgYsRR
+   Nh6lzLwHT+ZOHSX/7jH/z8TWVIs9JETOLC/jfstNEl8I2f9Gm+AuvaTOe
+   U6vy99GTfKh0XBh/IqrKzENA24sG9dHl851caVioh+90qa0Y0HbN8Z4F5
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10338"; a="267980838"
+X-IronPort-AV: E=Sophos;i="5.91,203,1647327600"; 
+   d="scan'208";a="267980838"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2022 00:19:02 -0700
+X-IronPort-AV: E=Sophos;i="5.91,203,1647327600"; 
+   d="scan'208";a="563681480"
+Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.62.152])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2022 00:18:59 -0700
+Message-ID: <a771766d-4303-4abb-48dc-4ed4f4a4c70f@intel.com>
+Date:   Fri, 6 May 2022 10:18:56 +0300
 MIME-Version: 1.0
-References: <202205031017.4TwMan3l-lkp@intel.com> <YnCXTPrbLhvfRVDm@e3a974050dc4>
- <CAK8P3a1xMeLa72YKMufdej6KguDwiSXtZmMqRxOt5B05x_fx3A@mail.gmail.com>
- <8704209d-d487-a297-b05a-5db99f5f808c@intel.com> <YnR1OTpYADQy6Xa8@rli9-dbox>
-In-Reply-To: <YnR1OTpYADQy6Xa8@rli9-dbox>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Fri, 6 May 2022 09:17:44 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a1fjHnLg774-CfSPaWY16PtS56RgsRuEVA8JRrh+ZoY=g@mail.gmail.com>
-Message-ID: <CAK8P3a1fjHnLg774-CfSPaWY16PtS56RgsRuEVA8JRrh+ZoY=g@mail.gmail.com>
-Subject: Re: [PATCH] ARM: dove: fix returnvar.cocci warnings
-To:     Philip Li <philip.li@intel.com>
-Cc:     Dave Hansen <dave.hansen@intel.com>, Arnd Bergmann <arnd@arndb.de>,
-        kernel test robot <lkp@intel.com>, kbuild-all@lists.01.org,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Tony Lindgren <tony@atomide.com>,
-        Russell King <linux@armlinux.org.uk>,
-        linux-omap <linux-omap@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:uuYCo+mphVTnNPmhY2lL8Z/svpjDh2VmUZwvOUg2KeF6q7B2hR6
- ahh2Wi2f44fThQPEpHBS1G10VRuffKDpyJVvBJtMQAUoDq14lcymApepGtgJGwq5MRrt4b0
- ARboxp2s8SGXLg5ZGxY7lIQUxMnsFpjxDj7aw9jII6MXNxTXpcpcNSMnc7asz+ZL4J413Eg
- xQGvDgVgJw1NIAv0oGrfA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:dkUaghogZJM=:fgkZdwjbvnrIqyBPzeiSjz
- HgyTO2hBQvZUfzDHe0ED0kRf29FVprwbJ+XQldh07PFTsN0RqDuCjgCo1FUE+QtRJGp2i6n5X
- IfOxc7KIsfR/p0TQRrH/o2lkVhBkOpv83bvmlYH8Dnv1/2KCY+AxSwKLJripbyw4bV4TngiJ9
- js2eoF+AIjwXUY/ejgxxOCImjbiJYlvWYTNyqJKZA+67HAhLT6y/XhJX68WPlvO7J0ziWT2c/
- GY4GFSRkE1F3UOwM7a4F4BBJfoDQ6gZKShnS5giCnc7NWi8HcCE8LNoR5aNgPjT8ukGJvMJ5t
- oeMROoKazKBAOt9RgG83o36eyOz7MPwce+0iNiI5b72IuBymTeF4xzmI4dUBRz9pzhAkCVG0Q
- gtPKLLZJ8NjzhK2tYh7n4c2MFfpneLQU/a3+ZTbNmvPvjLrPJh9gY+L2MtLZAqpfWb0v+TJ8P
- TWQHgkrpCeFI+CAAf/8VY2BDOS5y5X54Eq4TSes8EGL3oa9UcZK++JljegvmwsG+MU9YHmryc
- kpwo1tpr3cLlyq4yaVvXejqkLflaa3RxPnQ+YOdCTSj/LIjg6bHJlyqVkZUg57Zb/3fDK3VEi
- 2VTLfZXkXrghn1yZMqRldSxZvGmgnTd/si6VCaW2XdOr18r3viGDZljrxjH4rbU21ZC8dOhhe
- e8EVzHP3IBTp83K4KUdLbDMfBUQk9Oy+W4YUXa7oD3ZetaKb18XtFUSQ7jFtYyiywfAR7e+DH
- YArJPNioFggKGweNy2pEOKt6JHchOXIaFl6gboG0u6xMo4sUTnGYyDA+d76QvYAGaW+7s78I6
- 1uAIERe1JuJYDM+n2mDgFReBi/Wx7oWd1vAoVtKAK7bj9K8UoA=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.8.1
+Subject: Re: [PATCH V1 02/23] libperf evsel: Add perf_evsel__enable_thread()
+Content-Language: en-US
+To:     Ian Rogers <irogers@google.com>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Leo Yan <leo.yan@linaro.org>, linux-kernel@vger.kernel.org
+References: <20220505165639.361733-1-adrian.hunter@intel.com>
+ <20220505165639.361733-3-adrian.hunter@intel.com>
+ <CAP-5=fWyYQbgs99-wm7frfaHQXUFO6b-Lur=BEy48beEsYnehQ@mail.gmail.com>
+From:   Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <CAP-5=fWyYQbgs99-wm7frfaHQXUFO6b-Lur=BEy48beEsYnehQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 6, 2022 at 3:09 AM Philip Li <philip.li@intel.com> wrote:
-> On Thu, May 05, 2022 at 09:31:37AM -0700, Dave Hansen wrote:
-> > On 5/3/22 00:21, Arnd Bergmann wrote:
-> > > On Tue, May 3, 2022 at 4:45 AM kernel test robot <lkp@intel.com> wrote:
-> > >> From: kernel test robot <lkp@intel.com>
-> > >>
-> > >> arch/arm/mach-omap2/dma.c:82:10-16: Unneeded variable: "errata". Return "0" on line 161
-> > >>
-> > >>  Remove unneeded variable used to store return value.
-> > >>
-> > >> Generated by: scripts/coccinelle/misc/returnvar.cocci
-> > >>
-> > >> Reported-by: kernel test robot <lkp@intel.com>
-> > >> Signed-off-by: kernel test robot <lkp@intel.com>
-> > > I checked the patch, and unfortunately it is wrong, the current code
-> > > needs to stay.
-> > > The problem is the SET_DMA_ERRATA() macro that accesses the
-> > > local 'errata' variable.
-> >
-> > 0day folks, do we have humans looking over these before they're going
-> > out to the list?  If not, can we add some?  If so, can the humans get a
-> > little more discerning? ;)
->
-> Sorry all for the bad patch. So far, we pick up several cocci warnings that
-> we have confidence based on early result analysis and feedback, for these
-> warnings, 0day sends out patch automatically.
->
-> Thanks for the suggestion Dave, We will change current process to be more
-> conservative and to avoid false patch by adding human analysis.
+On 6/05/22 01:48, Ian Rogers wrote:
+> On Thu, May 5, 2022 at 9:56 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
+>>
+>> Add perf_evsel__enable_thread() as a counterpart to
+>> perf_evsel__enable_cpu(), to enable all events for a thread.
+>>
+>> Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
+>> ---
+>>  tools/lib/perf/evsel.c              | 10 ++++++++++
+>>  tools/lib/perf/include/perf/evsel.h |  1 +
+>>  2 files changed, 11 insertions(+)
+>>
+>> diff --git a/tools/lib/perf/evsel.c b/tools/lib/perf/evsel.c
+>> index 20ae9f5f8b30..dcc928dd25f8 100644
+>> --- a/tools/lib/perf/evsel.c
+>> +++ b/tools/lib/perf/evsel.c
+>> @@ -360,6 +360,16 @@ int perf_evsel__enable_cpu(struct perf_evsel *evsel, int cpu_map_idx)
+>>         return perf_evsel__run_ioctl(evsel, PERF_EVENT_IOC_ENABLE, NULL, cpu_map_idx);
+>>  }
+>>
+>> +int perf_evsel__enable_thread(struct perf_evsel *evsel, int thread)
+>> +{
+>> +       int err = 0;
+>> +       int idx;
+>> +
+>> +       for (idx = 0; idx < xyarray__max_x(evsel->fd) && !err; idx++)
+>> +               err = perf_evsel__ioctl(evsel, PERF_EVENT_IOC_ENABLE, NULL, idx, thread);
+> 
+> For perf_cpu_map code like this has been replaced with
+> perf_cpu_map__for_each_cpu, it would be nice here to use a
+> perf_thread_map__for_each_thread. I understand we don't have that at
+> the moment. It would be easier to find places to add this if there is
+> a call to perf_thread_map__nr. Adding an assert of:
+> 
+> assert(perf_thread_map__nr(evsel->thread_map) == xyarray__max_x(evsel->fd));
 
-For the returnvar.cocci false-positives, I wonder if it's possible to find them
-using another coccinelle helper that detects badly formed macros which
-access variables out of scope. I can't think of how this would be expressed,
-but maybe someone has an idea.
+Threads go in the y direction.
 
-Something else went wrong in this particular patch,  and I can't explain
-how this happened: the subject line contains the name of the wrong platform,
-"dove" rather than "omap2". My guess is that this was human error copying
-the subject line from another patch, but if this came from a script, you
-may want to check how this gets generated.
+I'll change it to use perf_cpu_map__for_each_cpu
 
-       Arnd
+> 
+> Would help, or we could add the loop.
+> 
+> Thanks,
+> Ian
+> 
+>> +       return err;
+>> +}
+>> +
+>>  int perf_evsel__enable(struct perf_evsel *evsel)
+>>  {
+>>         int i;
+>> diff --git a/tools/lib/perf/include/perf/evsel.h b/tools/lib/perf/include/perf/evsel.h
+>> index 2a9516b42d15..699c0ed97d34 100644
+>> --- a/tools/lib/perf/include/perf/evsel.h
+>> +++ b/tools/lib/perf/include/perf/evsel.h
+>> @@ -36,6 +36,7 @@ LIBPERF_API int perf_evsel__read(struct perf_evsel *evsel, int cpu_map_idx, int
+>>                                  struct perf_counts_values *count);
+>>  LIBPERF_API int perf_evsel__enable(struct perf_evsel *evsel);
+>>  LIBPERF_API int perf_evsel__enable_cpu(struct perf_evsel *evsel, int cpu_map_idx);
+>> +LIBPERF_API int perf_evsel__enable_thread(struct perf_evsel *evsel, int thread);
+>>  LIBPERF_API int perf_evsel__disable(struct perf_evsel *evsel);
+>>  LIBPERF_API int perf_evsel__disable_cpu(struct perf_evsel *evsel, int cpu_map_idx);
+>>  LIBPERF_API struct perf_cpu_map *perf_evsel__cpus(struct perf_evsel *evsel);
+>> --
+>> 2.25.1
+>>
+

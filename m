@@ -2,49 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93A2951D5C2
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 12:30:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D023D51D5C5
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 12:31:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1390983AbiEFKe0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 06:34:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42286 "EHLO
+        id S1390990AbiEFKfG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 06:35:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1390977AbiEFKeY (ORCPT
+        with ESMTP id S236714AbiEFKfE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 06:34:24 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C14D60D9F
-        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 03:30:41 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7E80DB834C4
-        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 10:30:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84C69C385A8;
-        Fri,  6 May 2022 10:30:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651833039;
-        bh=DiC3LgVjn8hlSeyL4s67pXS3JbouAUm5Bbc8inASkBc=;
-        h=From:To:Cc:Subject:Date:From;
-        b=U/OBdulIAlCLfqgoEGO6OKme7mlmOgrkvdCfo+kMlaJ9tvprCQ3QCQKZHRAqk4Jni
-         /JRHqTtVcfkjg797uWMZKsN7tfaZNoUt0D9SkTlcZCaJ+dMu18vtPECsDWB1lZkAPO
-         vPF5+JE1tDVMWnE4TALzoSwFeG4mSs6R1mDb5rmJokymVJVGu/dufbonYLd/SIaa82
-         yrU+VavrzivCk6C45doAsgqA2Yve0s0omBFoXH1qriBo5SHmDuyR5H7O8g6imqVV4A
-         I++/Na+TvE1JW4FgQPPSRunA+45voIAVqM7/Y9/Aeaksjg9dVOeLS8P95YbcKM28qy
-         Z0cj8ZgYRk+vw==
-From:   Chao Yu <chao@kernel.org>
-To:     jaegeuk@kernel.org
-Cc:     linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, Chao Yu <chao@kernel.org>,
-        Chao Yu <chao.yu@oppo.com>
-Subject: [PATCH v6] f2fs: give priority to select unpinned section for foreground GC
-Date:   Fri,  6 May 2022 18:30:31 +0800
-Message-Id: <20220506103031.2883390-1-chao@kernel.org>
-X-Mailer: git-send-email 2.25.1
+        Fri, 6 May 2022 06:35:04 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3B2562BFB
+        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 03:31:21 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id y3so13573267ejo.12
+        for <linux-kernel@vger.kernel.org>; Fri, 06 May 2022 03:31:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=J35uIH1MpaLMm4O9zHZtzxGvZaPj2KZMm6bhTi3q+LQ=;
+        b=ugQ8XacPmkEYJiJc58YEHbJUJ7NK74NaSHGyvTNb4jwSlconhpPRhNrQQ3UTCfS3BB
+         BTK8Q+X+mOZavYcY/73XZZ1JYVqL+f34zs0X64w1u/NhiIvDQTg1T2VkvjPnwBRnaDyA
+         sK6BpmnlxKH0v6v7CoWROzkR3+t1D5nVRFPf+fiIpewaEzC/VSuWBrDkfP/Pq/rYmgp/
+         bn6+k1cNZ27X/A+7kR59k1cC514MwuaBYKL8tL0XjKNd3mQGuV2iFZBPiW3GRt2XcwFY
+         n8Vd0Nz/8caFWDC+C9r/yj3jpBdGGexg65hSWMNXwCZccbsKTDWKiaVah5UgG2lNgkKz
+         EOZg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=J35uIH1MpaLMm4O9zHZtzxGvZaPj2KZMm6bhTi3q+LQ=;
+        b=4SxjEty4HbpHeqk8Ppj9IHf2HwJpK6cNUTmO0cnslL8z+uKQXmR0GWWyHSNHpltePt
+         JjbUTMrJXOix8wNlUckwEBwtdrJJDhpOw1rmYBEaEa+THralmAe9xu9hEq7WVSFd2UhV
+         Ad3A94vNKAsOlFA7rxFDFqkgLw2s5K1ZVkeni+EQmqhQ8RbxyNC0vptdcvirBpxt42CU
+         B0NxGgcnP6CW1184Xf+x6VZISswPvSDeHKQpIsir/eP4LfK+m/QwctVN+cYUAiny8dXQ
+         PLZBJk0XTpUwwVjUSg4c9fTSij+jql2p6GqOxVMg9JAOrE6Tg+jNwloMMYYUwcYZ2Gmd
+         8klQ==
+X-Gm-Message-State: AOAM532xOREVnrQj0CTc9+Bke7KIYHBz5QHNw49Yma2MLZ1/aN3cu5Jw
+        laxbsW+J0AIYl9wVis9UU6mz3A==
+X-Google-Smtp-Source: ABdhPJySuCJkTp8M2KS8fsBloFRhVmt81jhTpFBcGO5RLAHY6FWsaCUPPqRpvv46N4TyqbTR/MYzhg==
+X-Received: by 2002:a17:907:7dab:b0:6f4:6650:395d with SMTP id oz43-20020a1709077dab00b006f46650395dmr2250550ejc.82.1651833080456;
+        Fri, 06 May 2022 03:31:20 -0700 (PDT)
+Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id em10-20020a170907288a00b006f3ef214e6dsm1726957ejc.211.2022.05.06.03.31.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 06 May 2022 03:31:19 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Doug Gilbert <dgilbert@interlog.com>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v2 0/3] scsi: ufs: minor cleanups
+Date:   Fri,  6 May 2022 12:31:12 +0200
+Message-Id: <20220506103115.307410-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -53,210 +72,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Previously, during foreground GC, if victims contain data of pinned file,
-it will fail migration of the data, and meanwhile i_gc_failures of that
-pinned file may increase, and when it exceeds threshold, GC will unpin
-the file, result in breaking pinfile's semantics.
+Hi,
 
-In order to mitigate such condition, let's record and skip section which
-has pinned file's data and give priority to select unpinned one.
+Changes since v1
+================
+1. Drop patch 1 (needs further work).
+2. Rebase on current linux-next (including Bart Van Assche's work).
 
-Signed-off-by: Chao Yu <chao.yu@oppo.com>
----
-v6:
-- fix f2fs_pinned_section_exists() to allow reenabling pin_section.
- fs/f2fs/gc.c      | 85 +++++++++++++++++++++++++++++++++++++++--------
- fs/f2fs/segment.c |  8 +++++
- fs/f2fs/segment.h |  3 ++
- 3 files changed, 82 insertions(+), 14 deletions(-)
+v1: https://lore.kernel.org/all/20220408103027.311624-1-krzysztof.kozlowski@linaro.org/
 
-diff --git a/fs/f2fs/gc.c b/fs/f2fs/gc.c
-index 6a7e4148ff9d..3d027198f536 100644
---- a/fs/f2fs/gc.c
-+++ b/fs/f2fs/gc.c
-@@ -646,6 +646,54 @@ static void release_victim_entry(struct f2fs_sb_info *sbi)
- 	f2fs_bug_on(sbi, !list_empty(&am->victim_list));
- }
- 
-+static bool f2fs_pin_section(struct f2fs_sb_info *sbi, unsigned int segno)
-+{
-+	struct dirty_seglist_info *dirty_i = DIRTY_I(sbi);
-+	unsigned int secno = GET_SEC_FROM_SEG(sbi, segno);
-+
-+	if (!dirty_i->enable_pin_section)
-+		return false;
-+	if (!test_and_set_bit(secno, dirty_i->pinned_secmap))
-+		dirty_i->pinned_secmap_cnt++;
-+	return true;
-+}
-+
-+static bool f2fs_pinned_section_exists(struct dirty_seglist_info *dirty_i)
-+{
-+	return dirty_i->pinned_secmap_cnt;
-+}
-+
-+static bool f2fs_section_is_pinned(struct dirty_seglist_info *dirty_i,
-+						unsigned int secno)
-+{
-+	return dirty_i->enable_pin_section &&
-+		f2fs_pinned_section_exists(dirty_i) &&
-+		test_bit(secno, dirty_i->pinned_secmap);
-+}
-+
-+static void f2fs_unpin_all_sections(struct f2fs_sb_info *sbi, bool enable)
-+{
-+	unsigned int bitmap_size = f2fs_bitmap_size(MAIN_SECS(sbi));
-+
-+	if (f2fs_pinned_section_exists(DIRTY_I(sbi))) {
-+		memset(DIRTY_I(sbi)->pinned_secmap, 0, bitmap_size);
-+		DIRTY_I(sbi)->pinned_secmap_cnt = 0;
-+	}
-+	DIRTY_I(sbi)->enable_pin_section = enable;
-+}
-+
-+static int f2fs_gc_pinned_control(struct inode *inode, int gc_type,
-+							unsigned int segno)
-+{
-+	if (!f2fs_is_pinned_file(inode))
-+		return 0;
-+	if (gc_type != FG_GC)
-+		return -EBUSY;
-+	if (!f2fs_pin_section(F2FS_I_SB(inode), segno))
-+		f2fs_pin_file_control(inode, true);
-+	return -EAGAIN;
-+}
-+
- /*
-  * This function is called from two paths.
-  * One is garbage collection and the other is SSR segment selection.
-@@ -787,6 +835,9 @@ static int get_victim_by_default(struct f2fs_sb_info *sbi,
- 		if (gc_type == BG_GC && test_bit(secno, dirty_i->victim_secmap))
- 			goto next;
- 
-+		if (gc_type == FG_GC && f2fs_section_is_pinned(dirty_i, secno))
-+			goto next;
-+
- 		if (is_atgc) {
- 			add_victim_entry(sbi, &p, segno);
- 			goto next;
-@@ -1201,12 +1252,9 @@ static int move_data_block(struct inode *inode, block_t bidx,
- 		goto out;
- 	}
- 
--	if (f2fs_is_pinned_file(inode)) {
--		if (gc_type == FG_GC)
--			f2fs_pin_file_control(inode, true);
--		err = -EAGAIN;
-+	err = f2fs_gc_pinned_control(inode, gc_type, segno);
-+	if (err)
- 		goto out;
--	}
- 
- 	set_new_dnode(&dn, inode, NULL, NULL, 0);
- 	err = f2fs_get_dnode_of_data(&dn, bidx, LOOKUP_NODE);
-@@ -1351,12 +1399,9 @@ static int move_data_page(struct inode *inode, block_t bidx, int gc_type,
- 		err = -EAGAIN;
- 		goto out;
- 	}
--	if (f2fs_is_pinned_file(inode)) {
--		if (gc_type == FG_GC)
--			f2fs_pin_file_control(inode, true);
--		err = -EAGAIN;
-+	err = f2fs_gc_pinned_control(inode, gc_type, segno);
-+	if (err)
- 		goto out;
--	}
- 
- 	if (gc_type == BG_GC) {
- 		if (PageWriteback(page)) {
-@@ -1476,14 +1521,15 @@ static int gc_data_segment(struct f2fs_sb_info *sbi, struct f2fs_summary *sum,
- 		ofs_in_node = le16_to_cpu(entry->ofs_in_node);
- 
- 		if (phase == 3) {
-+			int err;
-+
- 			inode = f2fs_iget(sb, dni.ino);
- 			if (IS_ERR(inode) || is_bad_inode(inode) ||
- 					special_file(inode->i_mode))
- 				continue;
- 
--			if (is_inode_flag_set(inode, FI_PIN_FILE) &&
--							gc_type == FG_GC) {
--				f2fs_pin_file_control(inode, true);
-+			err = f2fs_gc_pinned_control(inode, gc_type, segno);
-+			if (err == -EAGAIN) {
- 				iput(inode);
- 				return submitted;
- 			}
-@@ -1766,9 +1812,17 @@ int f2fs_gc(struct f2fs_sb_info *sbi, bool sync,
- 		ret = -EINVAL;
- 		goto stop;
- 	}
-+retry:
- 	ret = __get_victim(sbi, &segno, gc_type);
--	if (ret)
-+	if (ret) {
-+		/* allow to search victim from sections has pinned data */
-+		if (ret == -ENODATA && gc_type == FG_GC &&
-+				f2fs_pinned_section_exists(DIRTY_I(sbi))) {
-+			f2fs_unpin_all_sections(sbi, false);
-+			goto retry;
-+		}
- 		goto stop;
-+	}
- 
- 	seg_freed = do_garbage_collect(sbi, segno, &gc_list, gc_type, force);
- 	if (gc_type == FG_GC &&
-@@ -1811,6 +1865,9 @@ int f2fs_gc(struct f2fs_sb_info *sbi, bool sync,
- 	SIT_I(sbi)->last_victim[ALLOC_NEXT] = 0;
- 	SIT_I(sbi)->last_victim[FLUSH_DEVICE] = init_segno;
- 
-+	if (gc_type == FG_GC)
-+		f2fs_unpin_all_sections(sbi, true);
-+
- 	trace_f2fs_gc_end(sbi->sb, ret, total_freed, sec_freed,
- 				get_pages(sbi, F2FS_DIRTY_NODES),
- 				get_pages(sbi, F2FS_DIRTY_DENTS),
-diff --git a/fs/f2fs/segment.c b/fs/f2fs/segment.c
-index c9b3224ef936..8c17fed8987e 100644
---- a/fs/f2fs/segment.c
-+++ b/fs/f2fs/segment.c
-@@ -4643,6 +4643,13 @@ static int init_victim_secmap(struct f2fs_sb_info *sbi)
- 	dirty_i->victim_secmap = f2fs_kvzalloc(sbi, bitmap_size, GFP_KERNEL);
- 	if (!dirty_i->victim_secmap)
- 		return -ENOMEM;
-+
-+	dirty_i->pinned_secmap = f2fs_kvzalloc(sbi, bitmap_size, GFP_KERNEL);
-+	if (!dirty_i->pinned_secmap)
-+		return -ENOMEM;
-+
-+	dirty_i->pinned_secmap_cnt = 0;
-+	dirty_i->enable_pin_section = true;
- 	return 0;
- }
- 
-@@ -5231,6 +5238,7 @@ static void destroy_victim_secmap(struct f2fs_sb_info *sbi)
- {
- 	struct dirty_seglist_info *dirty_i = DIRTY_I(sbi);
- 
-+	kvfree(dirty_i->pinned_secmap);
- 	kvfree(dirty_i->victim_secmap);
- }
- 
-diff --git a/fs/f2fs/segment.h b/fs/f2fs/segment.h
-index 5c94caf0c0a1..8a591455d796 100644
---- a/fs/f2fs/segment.h
-+++ b/fs/f2fs/segment.h
-@@ -294,6 +294,9 @@ struct dirty_seglist_info {
- 	struct mutex seglist_lock;		/* lock for segment bitmaps */
- 	int nr_dirty[NR_DIRTY_TYPE];		/* # of dirty segments */
- 	unsigned long *victim_secmap;		/* background GC victims */
-+	unsigned long *pinned_secmap;		/* pinned victims from foreground GC */
-+	unsigned int pinned_secmap_cnt;		/* count of victims which has pinned data */
-+	bool enable_pin_section;		/* enable pinning section */
- };
- 
- /* victim selection function for cleaning and SSR */
+Best regards,
+Krzysztof
+
+Krzysztof Kozlowski (3):
+  scsi: core: fix white-spaces
+  scsi: ufs: ufshcd-pltfrm: constify pointed data
+  scsi: ufs: ufshcd: constify pointed data
+
+ drivers/scsi/scsi_debug.c         |  2 +-
+ drivers/scsi/scsi_priv.h          |  4 +--
+ drivers/scsi/scsi_proc.c          | 14 ++++-----
+ drivers/scsi/scsi_scan.c          | 10 +++----
+ drivers/scsi/scsi_sysfs.c         |  4 +--
+ drivers/scsi/scsi_transport_spi.c | 49 +++++++++++++++----------------
+ drivers/scsi/scsicam.c            |  6 ++--
+ drivers/scsi/ufs/ufshcd-pltfrm.c  | 10 +++----
+ drivers/scsi/ufs/ufshcd-pltfrm.h  |  4 +--
+ drivers/scsi/ufs/ufshcd-priv.h    |  6 ++--
+ drivers/scsi/ufs/ufshcd.c         | 42 +++++++++++++-------------
+ drivers/scsi/ufs/ufshcd.h         |  6 ++--
+ include/scsi/scsi_cmnd.h          |  2 +-
+ include/scsi/scsi_device.h        | 10 +++----
+ include/scsi/scsi_host.h          | 13 ++++----
+ include/scsi/scsi_ioctl.h         |  2 +-
+ include/scsi/scsi_transport.h     |  2 +-
+ include/scsi/scsi_transport_spi.h |  2 +-
+ include/scsi/scsicam.h            |  2 +-
+ include/scsi/sg.h                 |  2 +-
+ 20 files changed, 96 insertions(+), 96 deletions(-)
+
 -- 
-2.25.1
+2.32.0
 

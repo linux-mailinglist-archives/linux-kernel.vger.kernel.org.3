@@ -2,77 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51B5A51D376
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 10:35:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 782F651D37A
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 10:35:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1390179AbiEFIir (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 04:38:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53386 "EHLO
+        id S244639AbiEFIjW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 04:39:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1390172AbiEFIin (ORCPT
+        with ESMTP id S1390195AbiEFIjN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 04:38:43 -0400
+        Fri, 6 May 2022 04:39:13 -0400
 Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 598E862BF1;
-        Fri,  6 May 2022 01:35:01 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7489AF21;
+        Fri,  6 May 2022 01:35:27 -0700 (PDT)
 Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id AB3B021A63;
-        Fri,  6 May 2022 08:34:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1651826099; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        by smtp-out1.suse.de (Postfix) with ESMTP id B066A21A32;
+        Fri,  6 May 2022 08:35:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1651826125; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=E8fz2Qj+5LloVB8vVJMGmoituacjkJeR6Cyj3S17Ync=;
-        b=kdq0pyczu0FGQoWPRbX1YpR0o5BSPmfjwNvpAxR1AlStsynwpp7SB/tNoYJxLftFy/aiUv
-        TZXJf8hGYPOFT/rqwaq/jR8vnukH8M+voTZMHiaqCo+4BZBydvA2Tph0SGDOBhQj3nX2Vs
-        RrOb1FgrjYdDKxGn/SJkjE9UrMN8MUY=
-Received: from suse.cz (unknown [10.100.201.202])
+        bh=oLTw3J5HqlJGXaem/7/GBVpCJVJMfm3k1q3z73ZMkPw=;
+        b=1Yy/gjrYQLm4DghIDFhD/IrLawONoyxXP5fOdpWyFVG4MSJevaI5r46X34PjzhRQ8GDjJ0
+        eIo/wkkeVpmBxFTPWOi5XkpXYNGx+tQQBEF6QIRloZ2cfaf/2ELMa8SyrummqomKCkpYaJ
+        aiakOCQQYpN+Slsuwruruoq1Uc8N6Rk=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1651826125;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=oLTw3J5HqlJGXaem/7/GBVpCJVJMfm3k1q3z73ZMkPw=;
+        b=l0VFkJAOc+cqSSLs18nzyG9/resunTOXRHoe0KSkn9/d64u9N6r2B5secCGatv/Bk+14Fm
+        M3NdS/OdqZ7Bc+CA==
+Received: from quack3.suse.cz (unknown [10.100.224.230])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id C16E32C142;
-        Fri,  6 May 2022 08:34:58 +0000 (UTC)
-Date:   Fri, 6 May 2022 10:34:58 +0200
-From:   Petr Mladek <pmladek@suse.com>
-To:     Miguel Ojeda <ojeda@kernel.org>
-Cc:     Josh Poimboeuf <jpoimboe@redhat.com>,
-        Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Helge Deller <deller@gmx.de>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Changbin Du <changbin.du@intel.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kees Cook <keescook@chromium.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        linux-kernel@vger.kernel.org, live-patching@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, rust-for-linux@vger.kernel.org,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@google.com>,
-        Gary Guo <gary@garyguo.net>, Boqun Feng <boqun.feng@gmail.com>
-Subject: Re: [PATCH v1 3/3] kallsyms: increase maximum kernel symbol length
- to 512
-Message-ID: <YnTdslR0jhUNo0lu@alley>
-References: <20220505191704.22812-1-ojeda@kernel.org>
- <20220505191704.22812-4-ojeda@kernel.org>
+        by relay2.suse.de (Postfix) with ESMTPS id 2B9D12C142;
+        Fri,  6 May 2022 08:35:25 +0000 (UTC)
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id D0378A0629; Fri,  6 May 2022 10:35:23 +0200 (CEST)
+Date:   Fri, 6 May 2022 10:35:23 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     Amir Goldstein <amir73il@gmail.com>
+Cc:     Jan Kara <jack@suse.cz>, Richard Guy Briggs <rgb@redhat.com>,
+        Paul Moore <paul@paul-moore.com>,
+        Linux-Audit Mailing List <linux-audit@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Eric Paris <eparis@parisplace.org>,
+        Steve Grubb <sgrubb@redhat.com>
+Subject: Re: [PATCH v2 2/3] fanotify: define struct members to hold response
+ decision context
+Message-ID: <20220506083523.drdj2ahjw6abimus@quack3.lan>
+References: <cover.1651174324.git.rgb@redhat.com>
+ <17660b3f2817e5c0a19d1e9e5d40b53ff4561845.1651174324.git.rgb@redhat.com>
+ <CAHC9VhQ3Qtpwhj6TeMR7rmdbUe_6VRHU9OymmDoDdsazeGuNKA@mail.gmail.com>
+ <YnHX74E+COTp7AgY@madcap2.tricolour.ca>
+ <20220505144456.nw6slyqw4pjizl5p@quack3.lan>
+ <CAOQ4uxjkJ37Nzke4YN_se4ztr-yZgm6SK_LhmBQ-ckWutOwWrQ@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220505191704.22812-4-ojeda@kernel.org>
+In-Reply-To: <CAOQ4uxjkJ37Nzke4YN_se4ztr-yZgm6SK_LhmBQ-ckWutOwWrQ@mail.gmail.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
@@ -83,51 +74,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 2022-05-05 21:16:45, Miguel Ojeda wrote:
-> Rust symbols can become quite long due to namespacing introduced
-> by modules, types, traits, generics, etc. For instance,
-> the following code:
+On Thu 05-05-22 20:34:06, Amir Goldstein wrote:
+> > One open question I have is what should the kernel do with 'info_type' in
+> > response it does not understand (in the future when there are possibly more
+> > different info types). It could just skip it because this should be just
+> > additional info for introspection (the only mandatory part is in
+> > fanotify_response, however it could surprise userspace that passed info is
+> > just getting ignored. To solve this we would have to somewhere report
+> > supported info types (maybe in fanotify fdinfo in proc). I guess we'll
+> > cross that bridge when we get to it.
+> >
+> > Amir, what do you think?
 > 
->     pub mod my_module {
->         pub struct MyType;
->         pub struct MyGenericType<T>(T);
-> 
->         pub trait MyTrait {
->             fn my_method() -> u32;
->         }
-> 
->         impl MyTrait for MyGenericType<MyType> {
->             fn my_method() -> u32 {
->                 42
->             }
->         }
->     }
-> 
-> generates a symbol of length 96 when using the upcoming v0 mangling scheme:
-> 
->     _RNvXNtCshGpAVYOtgW1_7example9my_moduleINtB2_13MyGenericTypeNtB2_6MyTypeENtB2_7MyTrait9my_method
-> 
-> At the moment, Rust symbols may reach up to 300 in length.
-> Setting 512 as the maximum seems like a reasonable choice to
-> keep some headroom.
-> 
-> Co-developed-by: Alex Gaynor <alex.gaynor@gmail.com>
-> Signed-off-by: Alex Gaynor <alex.gaynor@gmail.com>
-> Co-developed-by: Wedson Almeida Filho <wedsonaf@google.com>
-> Signed-off-by: Wedson Almeida Filho <wedsonaf@google.com>
-> Co-developed-by: Gary Guo <gary@garyguo.net>
-> Signed-off-by: Gary Guo <gary@garyguo.net>
-> Co-developed-by: Boqun Feng <boqun.feng@gmail.com>
-> Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
-> Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
+> Regardless if and how we provide a way to enumerate supported info types,
+> I would prefer to reject (EINVAL) unknown info types.
 
-I was primary interested into the livepatching code.
-But the entire patch looks good:
+OK, agreed. I will be also calmer when we do that because then we can be
+certain userspace does not pass bogus data for unknown info types.
 
-Reviewed-by: Petr Mladek <pmladek@suse.com>
+> We can provide a command FAN_RESPONSE_TEST to write a test response with
+> FAN_NOFD and some extra info so the program can test if certain info
+> types are supported.
 
-I just hope that it will not cause stack overflows
-somewhere.
+Hum, that would be an option as well. We don't even need the
+FAN_RESPONSE_TEST command, do we? The write to fanotify fd for FAN_NOFD fd
+would just perform validation of the response and either accept it (do
+nothing) or return EINVAL.
 
-Best Regards,
-Petr
+								Honza
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR

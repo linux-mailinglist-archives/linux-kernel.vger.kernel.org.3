@@ -2,119 +2,289 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAB1351DF4A
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 20:47:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB6AF51DF48
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 20:47:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1388577AbiEFSvP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 14:51:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33998 "EHLO
+        id S1388463AbiEFSvD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 14:51:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1388545AbiEFSvG (ORCPT
+        with ESMTP id S1386541AbiEFSvB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 14:51:06 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FF6B63533;
-        Fri,  6 May 2022 11:47:22 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id k2so11115942wrd.5;
-        Fri, 06 May 2022 11:47:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=Vt0OWBct8YhWCch2+2OkXoGqDKSr3TcXp5y1WslSxb0=;
-        b=Cjo/YUaxkMwPxpg/1jrCgoxVaa0657POk8MVPJtu2fSAfdjI9N/0OoJ8AMA/b5qVBF
-         NhjbTxO8G7FOzu+75usLEAjKTwDOxFC9pMH94Y2sWjRxRuRqXzh9MIdC/rBP8uAhE9vu
-         wpZWRYwVM36ejJ4OkCrsMyiKKRCWPaxivl/2pB0eksZ/gGQQBycu9nzwrU6Uc9Jla/uh
-         AAjg1kIsvvuEkmRyQZLlBrHMQHlpjmzmfjIhKDdBInawqPxEZbK5CtxsyeZoo9eUdeAX
-         SKoCrIfnb+z5xt5J4shDn4p32/zUzn1qhxlkb+Ecz4Dla2jKxDvywirWavYdpD9wgCZX
-         mamQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Vt0OWBct8YhWCch2+2OkXoGqDKSr3TcXp5y1WslSxb0=;
-        b=pN6PqhPwbIAecp49E6SzZUZQ4+kUqUyHLu+Q4SHOoWyFFiwXpt1yepr1Wr9vssWah9
-         /EjnwT45blLKbx5vz51u+CgtRZsgx+ya0oMVx+7WiHaX+h623uqi1sd4xV0b9Ormuk+q
-         lASHapa5aS+iGZSS50JSxOK2GMIfDQ+QoQwa8YcR5VrCmxaGp5ms9Ih5f5O++2EObhvq
-         u2MDdIhFCf6EPizOQvU7ZFyI4kY7RHrV/Jyavn8VKHcRlwqw7/VV2E8qfsghp7p2HqCm
-         qd9CPy0zNXur7VUCdOz051whwuFcsoUqzjUgiiBn4B24ZVX7F3DBnQEa2tHoS5DAu3oh
-         RpjQ==
-X-Gm-Message-State: AOAM530IBM4IhMMGskux1wV9xhYxxsZiQzFectfC+5k1KZeCluhQKKRo
-        r99+iP/6gOiwFZgKBV7fKxKUAhzXJDg=
-X-Google-Smtp-Source: ABdhPJw5T/i5wLRQpeYYOhW8GC1eO03llyK9BZ8FVVykkMSjfn1KbnufqxCOOZAjOvJxiOjSC7dMjg==
-X-Received: by 2002:adf:e7c1:0:b0:20a:b724:cedd with SMTP id e1-20020adfe7c1000000b0020ab724ceddmr3894091wrn.409.1651862840866;
-        Fri, 06 May 2022 11:47:20 -0700 (PDT)
-Received: from [10.17.0.15] ([194.126.177.12])
-        by smtp.gmail.com with ESMTPSA id e13-20020a5d530d000000b0020c5253d8fasm4276785wrv.70.2022.05.06.11.47.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 06 May 2022 11:47:20 -0700 (PDT)
-Message-ID: <40c3033e-b9d8-0cf6-4009-35701f02c8aa@gmail.com>
-Date:   Fri, 6 May 2022 20:47:18 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH] ACPI: battery: Add "Not Charging" quirk for Microsoft
- Surface devices
-Content-Language: en-US
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Len Brown <lenb@kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20220429174114.1277799-1-luzmaximilian@gmail.com>
- <CAJZ5v0hoE0vn5BX586Ag4oLFRn3WoZJCUQZ1+jM1O6Vm+yyc4A@mail.gmail.com>
-From:   Maximilian Luz <luzmaximilian@gmail.com>
-In-Reply-To: <CAJZ5v0hoE0vn5BX586Ag4oLFRn3WoZJCUQZ1+jM1O6Vm+yyc4A@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 6 May 2022 14:51:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA9BA5F8E4;
+        Fri,  6 May 2022 11:47:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6C8E762171;
+        Fri,  6 May 2022 18:47:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D172C385A8;
+        Fri,  6 May 2022 18:47:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651862836;
+        bh=DlBOyewLLihF/iWcRWhcj+SVK/isx3rYo6ba8naJpzA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=I9BrzcaezDnmBjKmkIIC2T4Am8w8xiOj2ppMdBTjvaWZNfVQKqp7ovEAG/XuPVomH
+         qlx+a41L4BgXe1Pjt8PwrqJoyszMjLB+WPp9y0kl35zygxqyM6ose0Qztc6K440/CL
+         pBdp8Se7d0GwUqmKe0ph4DjmQTlBwYpGV0ddVZ7jTXrhMfP44CEZmvCaU6nMrzOAZ6
+         J53wfLNJSQ6hX4TSeo28O+e59srXsGScjw1RafDqjXviB2WKMBwE0fGdhX/V85Qe87
+         dsjlBVe1bmvFUjZ2QeOaB2KztIFUTTslsfhB7CJ1jWkE+aBO/Ln9PtQcmMBtlhXxqz
+         lAmvvpHUxrLXw==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nn2yw-009XK2-3e; Fri, 06 May 2022 19:47:14 +0100
+Date:   Fri, 06 May 2022 19:47:25 +0100
+Message-ID: <8735hmijlu.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Pali =?UTF-8?B?Um9ow6Fy?= <pali@kernel.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Krzysztof =?UTF-8?B?V2lsY3p5xYRza2k=?= <kw@linux.com>,
+        Marek =?UTF-8?B?QmVow7pu?= <kabel@kernel.org>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH 2/6] irqchip/armada-370-xp: Implement SoC Error interrupts
+In-Reply-To: <20220506183051.wimo7p4nuqfnl2aj@pali>
+References: <20220506134029.21470-1-pali@kernel.org>
+        <20220506134029.21470-3-pali@kernel.org>
+        <87mtfu7ccd.wl-maz@kernel.org>
+        <20220506183051.wimo7p4nuqfnl2aj@pali>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: pali@kernel.org, tglx@linutronix.de, robh+dt@kernel.org, bhelgaas@google.com, andrew@lunn.ch, gregory.clement@bootlin.com, sebastian.hesselbarth@gmail.com, thomas.petazzoni@bootlin.com, lorenzo.pieralisi@arm.com, kw@linux.com, kabel@kernel.org, linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/6/22 20:43, Rafael J. Wysocki wrote:
-> On Fri, Apr 29, 2022 at 7:41 PM Maximilian Luz <luzmaximilian@gmail.com> wrote:
->>
->> Microsoft Surface devices have a limiter that sets a fixed maximum
->> charge capacity for the battery. When that maximum capacity has been
->> reached, charging stops. In that case, _BST returns a battery state
->> field with both "charging" and "discharging" bits cleared. The battery
->> driver, however, returns "unknown" as status.
->>
->> This seems to be the same behavior as observed on the ThinkPads, so
->> let's use the same quirk to handle that.
->>
->> Signed-off-by: Maximilian Luz <luzmaximilian@gmail.com>
->> ---
->>
->> For what it's worth, I don't think the ACPI spec explicitly states that
->> any of the status bits need to be set, or that there are only the
->> "charging" and "discharging" states. As far as I can tell, ACPI only
->> states:
->>
->>      Notice that the Charging bit and the Discharging bit are mutually
->>      exclusive and must not both be set at the same time. Even in
->>      critical state, hardware should report the corresponding
->>      charging/discharging state.
->>
->> But that does not exclude the case that no bit is set. So, strictly
->> going by spec, I don't think it's necessary to put all of this behind a
->> quirk.
-> 
-> I think that this should be covered by the patch I've just applied:
-> 
-> https://patchwork.kernel.org/project/linux-acpi/patch/20220427154053.499203-1-wse@tuxedocomputers.com/
-> 
-> Shouldn't it?
+On Fri, 06 May 2022 19:30:51 +0100,
+Pali Roh=C3=A1r <pali@kernel.org> wrote:
+>=20
+> On Friday 06 May 2022 19:19:46 Marc Zyngier wrote:
+> > On Fri, 06 May 2022 14:40:25 +0100,
+> > Pali Roh=C3=A1r <pali@kernel.org> wrote:
+> > >=20
+> > > MPIC IRQ 4 is used as SoC Error Summary interrupt and provides access=
+ to
+> > > another hierarchy of SoC Error interrupts. Implement a new IRQ chip a=
+nd
+> > > domain for accessing this IRQ hierarchy.
+> > >=20
+> > > Signed-off-by: Pali Roh=C3=A1r <pali@kernel.org>
+> > > ---
+> > >  drivers/irqchip/irq-armada-370-xp.c | 213 ++++++++++++++++++++++++++=
++-
+> > >  1 file changed, 210 insertions(+), 3 deletions(-)
+> > >=20
+> > > diff --git a/drivers/irqchip/irq-armada-370-xp.c b/drivers/irqchip/ir=
+q-armada-370-xp.c
+> > > index ebd76ea1c69b..71578b65f5c8 100644
+> > > --- a/drivers/irqchip/irq-armada-370-xp.c
+> > > +++ b/drivers/irqchip/irq-armada-370-xp.c
+> > > @@ -117,6 +117,8 @@
+> > >  /* Registers relative to main_int_base */
+> > >  #define ARMADA_370_XP_INT_CONTROL		(0x00)
+> > >  #define ARMADA_370_XP_SW_TRIG_INT_OFFS		(0x04)
+> > > +#define ARMADA_370_XP_INT_SOC_ERR_0_CAUSE_OFFS	(0x20)
+> > > +#define ARMADA_370_XP_INT_SOC_ERR_1_CAUSE_OFFS	(0x24)
+> > >  #define ARMADA_370_XP_INT_SET_ENABLE_OFFS	(0x30)
+> > >  #define ARMADA_370_XP_INT_CLEAR_ENABLE_OFFS	(0x34)
+> > >  #define ARMADA_370_XP_INT_SOURCE_CTL(irq)	(0x100 + irq*4)
+> > > @@ -130,6 +132,8 @@
+> > >  #define ARMADA_370_XP_CPU_INTACK_OFFS		(0x44)
+> > >  #define ARMADA_370_XP_INT_SET_MASK_OFFS		(0x48)
+> > >  #define ARMADA_370_XP_INT_CLEAR_MASK_OFFS	(0x4C)
+> > > +#define ARMADA_370_XP_INT_SOC_ERR_0_MASK_OFF	(0x50)
+> > > +#define ARMADA_370_XP_INT_SOC_ERR_1_MASK_OFF	(0x54)
+> > >  #define ARMADA_370_XP_INT_FABRIC_MASK_OFFS	(0x54)
+> > >  #define ARMADA_370_XP_INT_CAUSE_PERF(cpu)	(1 << cpu)
+> > > =20
+> > > @@ -146,6 +150,8 @@
+> > >  static void __iomem *per_cpu_int_base;
+> > >  static void __iomem *main_int_base;
+> > >  static struct irq_domain *armada_370_xp_mpic_domain;
+> > > +static struct irq_domain *armada_370_xp_soc_err_domain;
+> > > +static unsigned int soc_err_irq_num_regs;
+> > >  static u32 doorbell_mask_reg;
+> > >  static int parent_irq;
+> > >  #ifdef CONFIG_PCI_MSI
+> > > @@ -156,6 +162,8 @@ static DEFINE_MUTEX(msi_used_lock);
+> > >  static phys_addr_t msi_doorbell_addr;
+> > >  #endif
+> > > =20
+> > > +static void armada_370_xp_soc_err_irq_unmask(struct irq_data *d);
+> > > +
+> > >  static inline bool is_percpu_irq(irq_hw_number_t irq)
+> > >  {
+> > >  	if (irq <=3D ARMADA_370_XP_MAX_PER_CPU_IRQS)
+> > > @@ -509,6 +517,27 @@ static void armada_xp_mpic_reenable_percpu(void)
+> > >  		armada_370_xp_irq_unmask(data);
+> > >  	}
+> > > =20
+> > > +	/* Re-enable per-CPU SoC Error interrupts that were enabled before =
+suspend */
+> > > +	for (irq =3D 0; irq < soc_err_irq_num_regs * 32; irq++) {
+> > > +		struct irq_data *data;
+> > > +		int virq;
+> > > +
+> > > +		virq =3D irq_linear_revmap(armada_370_xp_soc_err_domain, irq);
+> > > +		if (virq =3D=3D 0)
+> > > +			continue;
+> > > +
+> > > +		data =3D irq_get_irq_data(virq);
+> > > +
+> > > +		if (!irq_percpu_is_enabled(virq))
+> > > +			continue;
+> > > +
+> > > +		armada_370_xp_soc_err_irq_unmask(data);
+> > > +	}
+> >=20
+> > So you do this loop and all these lookups, both here and in the resume
+> > function (duplicated code!) just to be able to call the unmask
+> > function?  This would be better served by two straight writes of the
+> > mask register, which you'd conveniently save on suspend.
+> >=20
+> > Yes, you have only duplicated the existing logic. But surely there is
+> > something better to do.
+>=20
+> Yes, I just used existing logic.
+>=20
+> I'm not rewriting driver or doing big refactor of it, as this is not in
+> the scope of the PCIe AER interrupt support.
 
-It does, thank you!
+Fair enough. By the same logic, I'm not taking any change to the
+driver until it is put in a better shape. Your call.
 
-Sorry for having missed that one.
+> > > +
+> > > +	/* Unmask summary SoC Error Interrupt */
+> > > +	if (soc_err_irq_num_regs > 0)
+> > > +		writel(4, per_cpu_int_base + ARMADA_370_XP_INT_CLEAR_MASK_OFFS);
+> > > +
+> > >  	ipi_resume();
+> > >  }
+> > > =20
+> > > @@ -546,8 +575,8 @@ static struct irq_chip armada_370_xp_irq_chip =3D=
+ {
+> > >  static int armada_370_xp_mpic_irq_map(struct irq_domain *h,
+> > >  				      unsigned int virq, irq_hw_number_t hw)
+> > >  {
+> > > -	/* IRQs 0 and 1 cannot be mapped, they are handled internally */
+> > > -	if (hw <=3D 1)
+> > > +	/* IRQs 0, 1 and 4 cannot be mapped, they are handled internally */
+> > > +	if (hw <=3D 1 || hw =3D=3D 4)
+> > >  		return -EINVAL;
+> > > =20
+> > >  	armada_370_xp_irq_mask(irq_get_irq_data(virq));
+> > > @@ -577,6 +606,99 @@ static const struct irq_domain_ops armada_370_xp=
+_mpic_irq_ops =3D {
+> > >  	.xlate =3D irq_domain_xlate_onecell,
+> > >  };
+> > > =20
+> > > +static DEFINE_RAW_SPINLOCK(armada_370_xp_soc_err_lock);
+> > > +
+> > > +static void armada_370_xp_soc_err_irq_mask(struct irq_data *d)
+> > > +{
+> > > +	irq_hw_number_t hwirq =3D irqd_to_hwirq(d);
+> > > +	u32 reg, mask;
+> > > +
+> > > +	reg =3D hwirq >=3D 32 ? ARMADA_370_XP_INT_SOC_ERR_1_MASK_OFF
+> > > +			  : ARMADA_370_XP_INT_SOC_ERR_0_MASK_OFF;
+> > > +
+> > > +	raw_spin_lock(&armada_370_xp_soc_err_lock);
+> > > +	mask =3D readl(per_cpu_int_base + reg);
+> > > +	mask &=3D ~BIT(hwirq % 32);
+> > > +	writel(mask, per_cpu_int_base + reg);
+> > > +	raw_spin_unlock(&armada_370_xp_soc_err_lock);
+> > > +}
+> > > +
+> > > +static void armada_370_xp_soc_err_irq_unmask(struct irq_data *d)
+> > > +{
+> > > +	irq_hw_number_t hwirq =3D irqd_to_hwirq(d);
+> > > +	u32 reg, mask;
+> > > +
+> > > +	reg =3D hwirq >=3D 32 ? ARMADA_370_XP_INT_SOC_ERR_1_MASK_OFF
+> > > +			  : ARMADA_370_XP_INT_SOC_ERR_0_MASK_OFF;
+> > > +
+> > > +	raw_spin_lock(&armada_370_xp_soc_err_lock);
+> > > +	mask =3D readl(per_cpu_int_base + reg);
+> > > +	mask |=3D BIT(hwirq % 32);
+> > > +	writel(mask, per_cpu_int_base + reg);
+> > > +	raw_spin_unlock(&armada_370_xp_soc_err_lock);
+> > > +}
+> > > +
+> > > +static int armada_370_xp_soc_err_irq_mask_on_cpu(void *par)
+> > > +{
+> > > +	struct irq_data *d =3D par;
+> > > +	armada_370_xp_soc_err_irq_mask(d);
+> > > +	return 0;
+> > > +}
+> > > +
+> > > +static int armada_370_xp_soc_err_irq_unmask_on_cpu(void *par)
+> > > +{
+> > > +	struct irq_data *d =3D par;
+> > > +	armada_370_xp_soc_err_irq_unmask(d);
+> > > +	return 0;
+> > > +}
+> > > +
+> > > +static int armada_xp_soc_err_irq_set_affinity(struct irq_data *d,
+> > > +					      const struct cpumask *mask,
+> > > +					      bool force)
+> > > +{
+> > > +	unsigned int cpu;
+> > > +
+> > > +	cpus_read_lock();
+> > > +
+> > > +	/* First disable IRQ on all cores */
+> > > +	for_each_online_cpu(cpu)
+> > > +		smp_call_on_cpu(cpu, armada_370_xp_soc_err_irq_mask_on_cpu, d, tru=
+e);
+> > > +
+> > > +	/* Select a single core from the affinity mask which is online */
+> > > +	cpu =3D cpumask_any_and(mask, cpu_online_mask);
+> > > +	smp_call_on_cpu(cpu, armada_370_xp_soc_err_irq_unmask_on_cpu, d, tr=
+ue);
+> > > +
+> > > +	cpus_read_unlock();
+> > > +
+> > > +	irq_data_update_effective_affinity(d, cpumask_of(cpu));
+> > > +
+> > > +	return IRQ_SET_MASK_OK;
+> > > +}
+> >=20
+> > Aren't these per-CPU interrupts anyway? What does it mean to set their
+> > affinity? /me rolls eyes...
+>=20
+> Yes, they are per-CPU interrupts. But to mask or unmask particular
+> interrupt for specific CPU is possible only from that CPU. CPU 0 just
+> cannot move interrupt from CPU 0 to CPU 1. CPU 0 can only mask that
+> interrupt and CPU 1 has to unmask it.
 
-Regards,
-Max
+And that's no different form other per-CPU interrupts that have the
+exact same requirements. NAK to this sort of hacks.
+
+	M.
+
+--=20
+Without deviation from the norm, progress is not possible.

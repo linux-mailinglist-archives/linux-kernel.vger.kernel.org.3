@@ -2,136 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB9FB51DF33
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 20:39:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91D7F51DF37
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 20:41:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354528AbiEFSmi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 14:42:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56018 "EHLO
+        id S1355855AbiEFSoy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 14:44:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230050AbiEFSmh (ORCPT
+        with ESMTP id S230050AbiEFSov (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 14:42:37 -0400
-Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com [209.85.128.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 664A64DF42;
-        Fri,  6 May 2022 11:38:53 -0700 (PDT)
-Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-2f16645872fso90724337b3.4;
-        Fri, 06 May 2022 11:38:53 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=auhiPQv1lYR9Q5MFCpDzMVbrDqp/vwNsOHEdI7ynv1U=;
-        b=OaCsiiupHY0hyFqfCAxsfmWx9gU4uMJ7C2ZkhwrvC76GgNez5lHb7GSWd9PehK6MVm
-         2oETudbXYOPEuVvGiPa+9kfTfhX/3HzSb8B3yG4PFfxauoBLUV86qNcXgRzGfHET+2QV
-         HZf8gir/ncni82YD1doiw/+wqLweWQ9Iv+WQHTeKU4RD1L1tlEngNgL8yhgUGR4QwNJg
-         QGU1TsTeeVRZjO7FXdk7KAo8Db8nWGz+WfB5TZXOCTxB18O3MMDCCGm/OzvmBNG03PcF
-         74WyiWUP7Fmr/1gbn5+Ki7MAl9Fm+OF+h8keBeM6UQngmnnFSdCOqHTW4l7xSyEiZLKU
-         aLmw==
-X-Gm-Message-State: AOAM53123naBwLoArMx4Riv+95y/HbzjPd15M0oZ82WZ4XsVRhqwcaEU
-        /a9/1x4V64HYHNoMz1CbWkPq0bVheKegvoG+VqU=
-X-Google-Smtp-Source: ABdhPJwVHwu5moQPalMK9kwA1AM/aWQwrf04idnFgZxzIWhPxT5w/dk93wqA1WChRBw3J2oG8BIdse4QVDS+zn35TvY=
-X-Received: by 2002:a81:260a:0:b0:2f4:ca82:a42f with SMTP id
- m10-20020a81260a000000b002f4ca82a42fmr3864745ywm.149.1651862332715; Fri, 06
- May 2022 11:38:52 -0700 (PDT)
+        Fri, 6 May 2022 14:44:51 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68F5450B37;
+        Fri,  6 May 2022 11:41:05 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1651862462;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=dbruHfD7L5ui13yo40XACqjP4QTu0Yh5HyGtytqH9h0=;
+        b=toC9h/bBwe9VN8u0hUjpXZdGLr+EKTd0NwPxoibysZHnQ+TBBXS2E0bhBMWj05jHILbNUK
+        SvdtClNM77RiRFJ/LNGfReUgCpisxqP/hFYB+n+XxiUxV4WruMJEdzaAqLvW5MrL/ZhyCX
+        If7RuFXFoPo3d0+qqtXuxRp7HKE+jCnpzh060a8MhUqh5WlTx73Na0uCiJG5IQ6bmgzVKr
+        3io8ZEPWGWuAUxQB6j7nvde2mxp3AGn/uAP8x2DLvWSJBGR8itlEAg2KPbBFtHX0Wc0lpB
+        fNaTb6o1nji7JWcAHXB9VmdptlPDMjp8g3bU377UrR3Lbjczd9mO3gzfIXyjRg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1651862462;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=dbruHfD7L5ui13yo40XACqjP4QTu0Yh5HyGtytqH9h0=;
+        b=8YaG10zQ5qm1FsH6PnUal8N/UCNILrym23WsmzAwEeH3cDqPKu9wU9s+9+YmXF8OHFEOcR
+        it8ZOdn6PPQ+ZRDA==
+To:     Alexander Potapenko <glider@google.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Christoph Hellwig <hch@lst.de>,
+        Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Kees Cook <keescook@chromium.org>,
+        Marco Elver <elver@google.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Vegard Nossum <vegard.nossum@oracle.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3 28/46] kmsan: entry: handle register passing from
+ uninstrumented code
+In-Reply-To: <CAG_fn=UpcXMqJiZvho6_G3rjvjQA-3Ax6X8ONVO0D+4Pttc9dA@mail.gmail.com>
+References: <20220426164315.625149-1-glider@google.com>
+ <20220426164315.625149-29-glider@google.com> <87a6c6y7mg.ffs@tglx>
+ <CAG_fn=U7PPBmmkgxFcWFQUCqZitzMizr1e69D9f26sGGzeitLQ@mail.gmail.com>
+ <87y1zjlhmj.ffs@tglx>
+ <CAG_fn=XxAhBEBP2KJvahinbaxLAd1xvqTfRJdAu1Tk5r8=01jw@mail.gmail.com>
+ <878rrfiqyr.ffs@tglx>
+ <CAG_fn=XVchXCcOhFt+rP=vinRhkyrXJSP46cyvcZeHJWaDquGg@mail.gmail.com>
+ <87k0ayhc43.ffs@tglx>
+ <CAG_fn=UpcXMqJiZvho6_G3rjvjQA-3Ax6X8ONVO0D+4Pttc9dA@mail.gmail.com>
+Date:   Fri, 06 May 2022 20:41:01 +0200
+Message-ID: <87h762h5c2.ffs@tglx>
 MIME-Version: 1.0
-References: <20220427154053.499203-1-wse@tuxedocomputers.com>
-In-Reply-To: <20220427154053.499203-1-wse@tuxedocomputers.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 6 May 2022 20:38:41 +0200
-Message-ID: <CAJZ5v0i7nkMb1BK+XtLJLPa1X1rboMyNs2PtFU-r9-CkULtRSQ@mail.gmail.com>
-Subject: Re: [PATCH] acpi/battery: Make "not-charging" the default on no
- charging or full info
-To:     Werner Sembach <wse@tuxedocomputers.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 27, 2022 at 5:41 PM Werner Sembach <wse@tuxedocomputers.com> wrote:
+On Fri, May 06 2022 at 19:41, Alexander Potapenko wrote:
+> On Fri, May 6, 2022 at 6:14 PM Thomas Gleixner <tglx@linutronix.de> wrote:
+>> sysvec_apic_timer_interrupt() invokes irqentry_enter() _before_
+>> set_irq_regs() and irqentry_enter() unpoisons @reg.
+>>
+>> Confused...
 >
-> When the battery is neither charging or discharging and is not full,
-> "not-charging" is a useful status description for the case in general.
-> Currently this state is set as "unknown" by default, expect when this is
-> explicitly replaced with "not-charging" on a per device or per vendor
-> basis.
+> As far as I can tell in this case sysvect_apic_timer_interrupt() is
+> called by the following code in arch/x86/kernel/idt.c:
 >
-> A lot of devices have this state without a BIOS specification available
-> explicitly describing it. e.g. some current Clevo barebones have a BIOS
-> setting to stop charging at a user defined battery level.
+>   INTG(LOCAL_TIMER_VECTOR,                asm_sysvec_apic_timer_interrupt),
 >
-> Signed-off-by: Werner Sembach <wse@tuxedocomputers.com>
-> ---
->  drivers/acpi/battery.c | 24 +-----------------------
->  1 file changed, 1 insertion(+), 23 deletions(-)
->
-> diff --git a/drivers/acpi/battery.c b/drivers/acpi/battery.c
-> index dc208f5f5a1f..306513fec1e1 100644
-> --- a/drivers/acpi/battery.c
-> +++ b/drivers/acpi/battery.c
-> @@ -52,7 +52,6 @@ static bool battery_driver_registered;
->  static int battery_bix_broken_package;
->  static int battery_notification_delay_ms;
->  static int battery_ac_is_broken;
-> -static int battery_quirk_notcharging;
->  static unsigned int cache_time = 1000;
->  module_param(cache_time, uint, 0644);
->  MODULE_PARM_DESC(cache_time, "cache time in milliseconds");
-> @@ -216,10 +215,8 @@ static int acpi_battery_get_property(struct power_supply *psy,
->                         val->intval = POWER_SUPPLY_STATUS_CHARGING;
->                 else if (acpi_battery_is_charged(battery))
->                         val->intval = POWER_SUPPLY_STATUS_FULL;
-> -               else if (battery_quirk_notcharging)
-> -                       val->intval = POWER_SUPPLY_STATUS_NOT_CHARGING;
->                 else
-> -                       val->intval = POWER_SUPPLY_STATUS_UNKNOWN;
-> +                       val->intval = POWER_SUPPLY_STATUS_NOT_CHARGING;
->                 break;
->         case POWER_SUPPLY_PROP_PRESENT:
->                 val->intval = acpi_battery_present(battery);
-> @@ -1105,12 +1102,6 @@ battery_ac_is_broken_quirk(const struct dmi_system_id *d)
->         return 0;
->  }
->
-> -static int __init battery_quirk_not_charging(const struct dmi_system_id *d)
-> -{
-> -       battery_quirk_notcharging = 1;
-> -       return 0;
-> -}
-> -
->  static const struct dmi_system_id bat_dmi_table[] __initconst = {
->         {
->                 /* NEC LZ750/LS */
-> @@ -1139,19 +1130,6 @@ static const struct dmi_system_id bat_dmi_table[] __initconst = {
->                         DMI_MATCH(DMI_BIOS_DATE, "08/22/2014"),
->                 },
->         },
-> -       {
-> -               /*
-> -                * On Lenovo ThinkPads the BIOS specification defines
-> -                * a state when the bits for charging and discharging
-> -                * are both set to 0. That state is "Not Charging".
-> -                */
-> -               .callback = battery_quirk_not_charging,
-> -               .ident = "Lenovo ThinkPad",
-> -               .matches = {
-> -                       DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
-> -                       DMI_MATCH(DMI_PRODUCT_VERSION, "ThinkPad"),
-> -               },
-> -       },
->         {
->                 /* Microsoft Surface Go 3 */
->                 .callback = battery_notification_delay_quirk,
-> --
+> , which does not use IDTENTRY_SYSVEC framework and thus does not call
+> irqentry_enter().
 
-Applied as 5.19 material, thanks!
+  asm_sysvec_apic_timer_interrupt != sysvec_apic_timer_interrupt
+
+arch/x86/kernel/apic/apic.c:
+DEFINE_IDTENTRY_SYSVEC(sysvec_apic_timer_interrupt)
+{
+        ....
+
+#define DEFINE_IDTENTRY_SYSVEC(func)					\
+static void __##func(struct pt_regs *regs);				\
+									\
+__visible noinstr void func(struct pt_regs *regs)			\
+{									\
+	irqentry_state_t state = irqentry_enter(regs);			\
+        ....
+	__##func (regs);						\
+        ....
+}                                                                       \
+		                                                        \
+static noinline void __##func(struct pt_regs *regs)
+
+So it goes through that code path _before_ the actual implementation
+which does set_irq_regs() is reached.
+
+The callchain is:
+
+  asm_sysvec_apic_timer_interrupt               <- ASM entry in gate
+     sysvec_apic_timer_interrupt(regs)          <- noinstr C entry point
+        irqentry_enter(regs)                    <- unpoisons @reg
+        __sysvec_apic_timer_interrupt(regs)     <- the actual handler
+           set_irq_regs(regs)                   <- stores regs
+           local_apic_timer_interrupt()
+             ...
+             tick_handler()                     <- One of the 4 variants
+                regs = get_irq_regs();          <- retrieves regs
+                update_process_times(user_tick = user_mode(regs))
+                   account_process_tick(user_tick)
+                      irqtime_account_process_tick(user_tick)
+line 382:                } else if { user_tick }   <- KMSAN complains
+
+I'm even more confused now.
+
+> I guess handling those will require wrapping every interrupt gate into
+> a function that performs register unpoisoning?
+
+No, guessing does not help here.
+
+The gates point to the ASM entry point, which then invokes the C entry
+point. All C entry points use a DEFINE_IDTENTRY variant.
+
+Some of the DEFINE_IDTENTRY_* C entry points are not doing anything in
+the macro, but the C function either invokes irqentry_enter() or
+irqentry_nmi_enter() open coded _before_ invoking any instrumentable
+function. So the unpoisoning of @regs in these functions should tell
+KMSAN that @regs or something derived from @regs are not some random
+uninitialized values.
+
+There should be no difference between unpoisoning @regs in
+irqentry_enter() or in set_irq_regs(), right?
+
+If so, then the problem is definitely _not_ the idt entry code.
+
+> By the way, if it helps, I think we don't necessarily have to call
+> kmsan_unpoison_memory() from within the
+> instrumentation_begin()/instrumentation_end() region?
+> We could move the call to the beginning of irqentry_enter(), removing
+> unnecessary duplication.
+
+We could, but then you need to mark unpoison_memory() noinstr too and you
+have to add the unpoison into the syscall code. No win and irrelevant to
+the problem at hand.
+
+Thanks,
+
+        tglx
+
+

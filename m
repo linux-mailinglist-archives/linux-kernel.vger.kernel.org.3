@@ -2,135 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49A8851D6E0
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 13:41:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5648251D6E6
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 13:42:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1391441AbiEFLpT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 07:45:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43718 "EHLO
+        id S1391468AbiEFLpq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 07:45:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1387003AbiEFLpP (ORCPT
+        with ESMTP id S1391464AbiEFLpn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 07:45:15 -0400
-Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0FB560D84
-        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 04:41:32 -0700 (PDT)
-Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-2f7ca2ce255so78032467b3.7
-        for <linux-kernel@vger.kernel.org>; Fri, 06 May 2022 04:41:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=l0caGRAl6tw98ep9A0EoSsPJFbAnWVPHA21Iq4Niy6I=;
-        b=SmlsDeNuaHifgGa++k4eP2Y4cdx/p/7EZIENJ+7s92pwcvF2WjC3gxgdsF54R5R5DC
-         4PH4Ea/RXCuBKQE7XpREllSwlcRgOF8zh6Mq2T8oFE7nkIJkmgaxbgo0tcPsqfbw8sIY
-         cqqw8+SzX/McYAnngsSqWYYMUKuAfyaXUfjnY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=l0caGRAl6tw98ep9A0EoSsPJFbAnWVPHA21Iq4Niy6I=;
-        b=bq5B/D3OwDxv2uW2WHm/eGztpBQ1tlNewk/zU8K5ourDxMaBBwSsM0KuTl1rVpX0Z0
-         PMl8S+tC/DZKGPAgqwAJ2PII9s6eyjuprc4JLl0PiujkXLqhji+7AasUnH4uaKMTOqCK
-         2jsZ1riJUzFglEpwkEEyVFkUEMS6cl/NkHGXZLsVALKwOG9zpkzwxzBL4aWdkY1DmUNn
-         gtRpkbzKRzKBAtRrgw0K2/AIJ7xJyboypoj8xE95wfjjb3utJ3s2KKDD1k7aJDPbbrTd
-         kaN5ScGWXlKMZq9C2V92uS5PruP+EvpNh9Er0mv1jTFKE9PGJazL5lSFS9NAed7vzv18
-         VfEA==
-X-Gm-Message-State: AOAM531I4qoX1pV4Zh3eF0uj6VRF1OWGUE8irTnkGHK/fC08TWSLU06m
-        uzX1Dc+1j2TRlRpW/iy+1r8I2n18W65ZwDomayRYbw==
-X-Google-Smtp-Source: ABdhPJzbQ+rVlJvom3mfGzvQGXbWH7u6TQrd+Edczzu9Qcicwk8aE3ctLPVfCmRvvhVM+kMa2a1e2gMRNjVctbIkgO4=
-X-Received: by 2002:a05:690c:110:b0:2ec:2d79:eee1 with SMTP id
- bd16-20020a05690c011000b002ec2d79eee1mr2266620ywb.21.1651837290727; Fri, 06
- May 2022 04:41:30 -0700 (PDT)
+        Fri, 6 May 2022 07:45:43 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 146DF64708;
+        Fri,  6 May 2022 04:41:56 -0700 (PDT)
+Received: from mail-yw1-f170.google.com ([209.85.128.170]) by
+ mrelayeu.kundenserver.de (mreue010 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1M7aqD-1njNRn3nA5-0086j6; Fri, 06 May 2022 13:41:55 +0200
+Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-2f7d19cac0bso77892637b3.13;
+        Fri, 06 May 2022 04:41:54 -0700 (PDT)
+X-Gm-Message-State: AOAM531Sjh7Q45UDmZ/dNzvtvCSOV36srmPmVSs1ZzLT/GQ/8p7NsjAU
+        gZeYQxQPAejOjygOBOJnNyoZuWeMWkbGlVwPzx4=
+X-Google-Smtp-Source: ABdhPJywspxQxLYUg/eOOLFrgtyTJ05Ld5wI7gPuDubfD9OWObUtSEcGtfhDxXCtuquUvGM12QufsEjCeeQ7Z/PAEvg=
+X-Received: by 2002:a81:2305:0:b0:2f7:dadb:2162 with SMTP id
+ j5-20020a812305000000b002f7dadb2162mr2092280ywj.42.1651837313474; Fri, 06 May
+ 2022 04:41:53 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220505194550.3094656-1-nfraprado@collabora.com>
-In-Reply-To: <20220505194550.3094656-1-nfraprado@collabora.com>
-From:   Chen-Yu Tsai <wenst@chromium.org>
-Date:   Fri, 6 May 2022 19:41:19 +0800
-Message-ID: <CAGXv+5Hk2u+1zkVjNEt7wdwAJyoB+-PMAuh7UKWEkDeYxp5zUQ@mail.gmail.com>
-Subject: Re: [PATCH v2 00/16] Introduce support for MediaTek MT8192 Google Chromebooks
-To:     =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
-        <nfraprado@collabora.com>
-Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>, kernel@collabora.com,
-        Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
-        Fabien Parent <fparent@baylibre.com>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Luca Weiss <luca@z3ntu.xyz>, Maxim Kutnij <gtk3@inbox.ru>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sam Shih <sam.shih@mediatek.com>,
-        Sean Wang <sean.wang@mediatek.com>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org
+References: <20220430090518.3127980-1-chenhuacai@loongson.cn>
+ <20220430090518.3127980-21-chenhuacai@loongson.cn> <CAK8P3a2SPTLLrZtSz0LT0LqMpq4SKCScD4vLvr+DJn+u5W_CdA@mail.gmail.com>
+ <CAMj1kXEDpJwLDD4ZGLwzdo1KcJG_90iD9MnBVamCK06YKF7BdA@mail.gmail.com>
+ <CAAhV-H4eR5YvhABp9L4FBmofWwH+XM3V_nOjatQTV_M7Gihs7g@mail.gmail.com>
+ <CAMj1kXFD8_CuijJFgQbrxvY4MVBLmKQKFKmYhD1NBFLn3v=+FQ@mail.gmail.com> <a6afaa3f-cb9f-2086-0e02-5ec21ba535d4@xen0n.name>
+In-Reply-To: <a6afaa3f-cb9f-2086-0e02-5ec21ba535d4@xen0n.name>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Fri, 6 May 2022 13:41:36 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a0xuh1aAM7iwE-jiBbR-OOF5YVfhmU0Nygbpviso3tmbQ@mail.gmail.com>
+Message-ID: <CAK8P3a0xuh1aAM7iwE-jiBbR-OOF5YVfhmU0Nygbpviso3tmbQ@mail.gmail.com>
+Subject: Re: [PATCH V9 20/24] LoongArch: Add efistub booting support
+To:     WANG Xuerui <kernel@xen0n.name>
+Cc:     Ard Biesheuvel <ardb@kernel.org>,
+        Huacai Chen <chenhuacai@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Airlie <airlied@linux.ie>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Yanteng Si <siyanteng@loongson.cn>,
+        Guo Ren <guoren@kernel.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Provags-ID: V03:K1:3kKuw8Z9zKIZX8wYjoygIzYKmuNhyVykuNFk32CspPPPKzWZaZ/
+ vZz7HsCc6h4T+l8r2NDeBOt0mALrlv0pJNaEPm0fbFc5DN0Ec7tlLl6RBAmffvmFvZ4jqhY
+ ep3CKqyWVhpaOBxUfAN1ajsW0ByffWC/0uw1JFwQSZDdMwUOJ5tTjyALIe2YfdXT6xdJtSL
+ hvQAIVNpZGylF2FsfVT7A==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:NslH1lIbwxo=:Cnfd57ShCXlhhGYkGMK+HD
+ HoAru0SImj9csa9RXP9VJwG5mzMN4eqOF54dXYFgY3IFkfLQ4UnDM/SKh/viKP86iw0wTRDwS
+ KporuMOFJUZfO+B7qNo4LgMimx5xiEMhzpu3wV1lHoGMISrdxmCHm081LhpB3D0h1qdELPQ5a
+ SxcwQqPDXG1NVoC06S5cIbLdR7JUhoIzZ3Jf59wRiRCAb3TMAuHhqK+yBFv8XBf6egf10tvU4
+ 2/etMN6cKuVEA28aarV6mul/mEvMrIfy9DbUJzjutRoVJ3r00ZFCtjBbR608YBwBtUV/IkRt5
+ Hj+ZkxhrFDNR1IXr/azix0XQdRix2yQWqXhlk8GJK57pvygLkoFioGAjRHwBRH6f5upkepGg+
+ gttEH/I+nX0S8GiXy7u7MkmWLEPkLyycGNMipAUzbfu+H0c4u9jNO9UG1Oq7LDOKXO2GcJ5iu
+ SjM4jkDknL5HrzlxHZNLb2ZSkx0b2bjDCps30BduYiJEPMXfi+psROiR5kvGQGgg63/CJgD/Q
+ gP1wElCblVptrpiEYwDkn+7JLj1SoSPosCVyBi8DkJLeg+ilM1BoqEQn4QANuMVymH2O3oSuP
+ eNz0giC31VdwElnGFOC5DqGocUi6uPPozbWFMSn3GgiTc4iLXmp68gpjGOOR1s8eMo9AXO1DL
+ s1pJk2EKyYHKVOM7RxyH8H5XZ/SJxH69/fB4itmo02kkCgKsK83v98EKWjs91I/+swLY=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 6, 2022 at 3:46 AM N=C3=ADcolas F. R. A. Prado
-<nfraprado@collabora.com> wrote:
->
->
-> This series introduces Devicetrees for the MT8192-based Asurada platform
-> as well as Asurada Spherion and Asurada Hayato boards.
->
-> Support for the boards is added to the extent that is currently enabled
-> in the mt8192.dtsi, as to not add any dependencies to this series.
->
-> Besides the other dt-binding fixes already on linux-next to avoid new
-> warnings by this series, [1] is already merged but not on next yet.
->
-> This series was peer-reviewed internally before submission.
->
-> [1] https://lore.kernel.org/all/20220429201325.2205799-1-nfraprado@collab=
-ora.com/
->
-> v1: https://lore.kernel.org/all/20220316151327.564214-1-nfraprado@collabo=
-ra.com/
->
-> Changes in v2:
-> - Added patches 1-2 for Mediatek board dt-bindings
-> - Added patches 13-16 enabling hardware for Asurada that has since been
->   enabled on mt8192.dtsi
->
-> N=C3=ADcolas F. R. A. Prado (16):
->   dt-bindings: arm64: dts: mediatek: Add mt8192-asurada-spherion
->   dt-bindings: arm64: dts: mediatek: Add mt8192-asurada-hayato
->   arm64: dts: mediatek: Introduce MT8192-based Asurada board family
->   arm64: dts: mediatek: asurada: Document GPIO names
->   arm64: dts: mediatek: asurada: Add system-wide power supplies
->   arm64: dts: mediatek: asurada: Enable and configure I2C and SPI busses
->   arm64: dts: mediatek: asurada: Add ChromeOS EC
->   arm64: dts: mediatek: asurada: Add keyboard mapping for the top row
->   arm64: dts: mediatek: asurada: Add Cr50 TPM
->   arm64: dts: mediatek: asurada: Add Elan eKTH3000 I2C trackpad
->   arm64: dts: mediatek: asurada: Add I2C touchscreen
->   arm64: dts: mediatek: spherion: Add keyboard backlight
->   arm64: dts: mediatek: asurada: Enable XHCI
->   arm64: dts: mediatek: asurada: Enable PCIe and add WiFi
->   arm64: dts: mediatek: asurada: Add MT6359 PMIC
->   arm64: dts: mediatek: asurada: Add SPMI regulators
+On Fri, May 6, 2022 at 1:26 PM WANG Xuerui <kernel@xen0n.name> wrote:
+> On 5/6/22 16:14, Ard Biesheuvel wrote:
 
-Tested-by: Chen-Yu Tsai <wenst@chromium.org>
+> Or is there compatibility at all?
+>
+> It turns out that this port is already incompatible with shipped
+> systems, in other ways, at least since the March revision or so.
 
-I tested all the external peripherals, including touchpad, touchscreen,
-keyboard (which needs a fix), USB, WiFi on both models, and the keyboard
-backlight and (USB-based) Bluetooth on Spherion.
+I think we can treat user space compatibility separately from firmware
+compatibility.
 
-Could you also enable the SCP? Otherwise the vcodec generates big warnings
-when it probes.
+> So, in effect, this port is starting from scratch, and taking the chance
+> to fix early mistakes and oversights all over; hence my opinion is,
+> better do the Right Thing (tm) and give the generic codepath a chance.
+>
+> For the Loongson devs: at least, declare the struct boot_params flow
+> deprecated from day one, then work to eliminate it from future products,
+> if you really don't want to delay merging even further (it's already
+> unlikely to land in 5.19, given the discussion happening in LKML [3]).
+> It's not embarrassing to admit mistakes; we all make mistakes, and
+> what's important is to learn from them so we don't collectively repeat
+> ourselves.
 
-And also would like to see MMC. :)
+Agreed. I think there can be limited compatibility support for old
+firmware though, at least to help with the migration: As long as
+the interface between grub and linux has a proper definition following
+the normal UEFI standard, there can be both a modern grub
+that is booted using the same protocol and a backwards-compatible
+grub that can be booted from existing firmware and that is able
+to boot the kernel.
 
+The compatibility version of grub can be retired after the firmware
+itself is able to speak the normal boot protocol.
 
-Thanks
-ChenYu
+       Arnd

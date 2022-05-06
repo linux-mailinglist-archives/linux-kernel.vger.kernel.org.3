@@ -2,172 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA46851DBEB
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 17:26:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9ABEC51DC12
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 17:29:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1442825AbiEFPac (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 11:30:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51792 "EHLO
+        id S1442970AbiEFPd0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 11:33:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236859AbiEFPaa (ORCPT
+        with ESMTP id S1442883AbiEFPcq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 11:30:30 -0400
-Received: from mx0a-002e3701.pphosted.com (mx0a-002e3701.pphosted.com [148.163.147.86])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A14746D187
-        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 08:26:47 -0700 (PDT)
-Received: from pps.filterd (m0134422.ppops.net [127.0.0.1])
-        by mx0b-002e3701.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2467xT2w002715;
-        Fri, 6 May 2022 15:26:21 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- content-transfer-encoding : in-reply-to; s=pps0720;
- bh=j3HGD5V4kWpzXaMKyVHDsHe8vDopec8EpWmrCUlBo/Q=;
- b=kmdrLURnIfYdzD07W4rfqh2pra/lPUr13nK2uzEixModpgW1IAh4u0wQR+xm1DR1ZGLz
- L6jNQzXqIAW0AlcMcrDU3uzbLbTCXtXgeN9tJm9wTjj8yRCyQddU80u7ElJ13VaYIgYY
- E73xFZRaWJfIVdVUMOoblvjoWArs7UhEAd162IdbxjytRuuzPql1Z5MmL1LWKEJbwAhi
- +CjCQVr0WZubJOSweZHAa5krJBfJIt0qoVyPT6zoFFFrv7guSUhyUoaRixVTShcV+Ttj
- jiW3AcRO2GQCRjAE0ku3SltxIdMosnOFrPDLU/cUq3q77AdLxYwmaK8Go5hL9nWtFMMD vQ== 
-Received: from g9t5009.houston.hpe.com (g9t5009.houston.hpe.com [15.241.48.73])
-        by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 3fvyrykfpb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 06 May 2022 15:26:21 +0000
-Received: from g4t3433.houston.hpecorp.net (g4t3433.houston.hpecorp.net [16.208.49.245])
-        by g9t5009.houston.hpe.com (Postfix) with ESMTP id 444F851;
-        Fri,  6 May 2022 15:26:20 +0000 (UTC)
-Received: from swahl-home.5wahls.com (unknown [10.207.210.170])
-        by g4t3433.houston.hpecorp.net (Postfix) with ESMTP id D7F8A49;
-        Fri,  6 May 2022 15:26:18 +0000 (UTC)
-Date:   Fri, 6 May 2022 10:26:18 -0500
-From:   Steve Wahl <steve.wahl@hpe.com>
-To:     "Tian, Kevin" <kevin.tian@intel.com>
-Cc:     David Woodhouse <dwmw2@infradead.org>,
-        Baolu Lu <baolu.lu@linux.intel.com>,
-        Steve Wahl <steve.wahl@hpe.com>,
-        "Rodel, Jorg" <jroedel@suse.de>,
-        Kyung Min Park <kyung.min.park@intel.com>,
-        Will Deacon <will@kernel.org>,
-        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
-        Mike Travis <mike.travis@hpe.com>,
-        Dimitri Sivanich <sivanich@hpe.com>,
-        "Anderson, Russ" <russ.anderson@hpe.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] iommu/vt-d: Increase DMAR_UNITS_SUPPORTED
-Message-ID: <YnU+GuPGiFcBXQJg@swahl-home.5wahls.com>
-References: <20220505194658.246121-1-steve.wahl@hpe.com>
- <e2afd89c-b1cf-9fde-4ce2-4be3c1fdaf07@linux.intel.com>
- <BN9PR11MB5276F4D5F8AD33293233B9AB8CC59@BN9PR11MB5276.namprd11.prod.outlook.com>
- <636a680eb85aded76dd765ba297347ceadc3d1a4.camel@infradead.org>
- <BL1PR11MB5271099D98542F8A3F877D4E8CC59@BL1PR11MB5271.namprd11.prod.outlook.com>
+        Fri, 6 May 2022 11:32:46 -0400
+Received: from mout.perfora.net (mout.perfora.net [74.208.4.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCF336D380;
+        Fri,  6 May 2022 08:29:02 -0700 (PDT)
+Received: from toolbox.int.toradex.com ([81.221.85.15]) by mrelay.perfora.net
+ (mreueus004 [74.208.5.2]) with ESMTPSA (Nemesis) id 1MGA4m-1napja1jy8-00GXPA;
+ Fri, 06 May 2022 17:28:26 +0200
+From:   Marcel Ziswiler <marcel@ziswiler.com>
+To:     linux-arm-kernel@lists.infradead.org
+Cc:     Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        Alexander Stein <alexander.stein@ew.tq-group.com>,
+        Ariel D'Alessandro <ariel.dalessandro@collabora.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Christoph Niedermaier <cniedermaier@dh-electronics.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Li Yang <leoyang.li@nxp.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Olof Johansson <olof@lixom.net>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Stefan Agner <stefan@agner.ch>,
+        Tim Harvey <tharvey@gateworks.com>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, soc@kernel.org
+Subject: [PATCH v1 00/24] ARM: dts: imx7-colibri: device tree improvements
+Date:   Fri,  6 May 2022 17:27:45 +0200
+Message-Id: <20220506152809.295409-1-marcel@ziswiler.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <BL1PR11MB5271099D98542F8A3F877D4E8CC59@BL1PR11MB5271.namprd11.prod.outlook.com>
-X-Proofpoint-GUID: c-yCiTy8aQYYTm_dey9dRCQuik5rAPEI
-X-Proofpoint-ORIG-GUID: c-yCiTy8aQYYTm_dey9dRCQuik5rAPEI
-X-HPE-SCL: -1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-06_04,2022-05-06_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011
- priorityscore=1501 malwarescore=0 impostorscore=0 spamscore=0
- suspectscore=0 lowpriorityscore=0 adultscore=0 bulkscore=0 phishscore=0
- mlxscore=0 mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2205060082
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Provags-ID: V03:K1:XOx2fSsaOK9AoIC2eRQNLUkUOALQr1+0y7DzQgopQY9pOdFRfXI
+ cvks6FhZRgSPQaWEcMUNR3gMJZpe6fmd062p5xFksJ0peq8Xo3Jrmk6muLrq1ntDstaYjX8
+ K0SmNJqIwJTSgUHhtO+87ybvZUdVJ5XX0fqCE7NA1gOzLU3rvw1hMyJnmjf0MsdZakB2IpG
+ 0hlJf+XWG/hCOgRnkFgTA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:tISqTnRwdLQ=:peo72rTu+eb7FMxZm2Bsgf
+ zhgjkGwbrf7bfR2NhIpHPouohSj1tlxckF6TejvbLX2Xf71WmLxULfWtAPxpUGLGDC7nAdCoo
+ poLuqNPQlXysKN23y+TjGUY9PaFBdE5AkEjCnSOt95GiSErvC/qmg/exKGrZ0pmpbk3DWnWPq
+ 8leKJ5yf8cwYz8cSQsYQ7kj9LUpypupGjZkk0vwVdA+N+0XV/PfWORFVOTjFuoGYfC3R5eFem
+ 43MpYRigE/mhL+80BffZzIbouQSL/zC5hSm+e511oKkOw0a5vlU0JEsLJY0SQadsdWCLU2SFv
+ 6SAVJUVz0y7ge+YW0rP+XLTL9bX7kc9YDiEVJVZ+SqTHJOBdMnTTExlaTFrK1lMMzkxCXSQU8
+ wJlrVh20P/EfmRLUUGsYack0iLOwDUtYsdO/C/v9pB6F+5FpY/dBtZBlM6C1P4MNItLo0a8U8
+ pluxAkaKGcPOqoZOKZ7z2cX+OQMpnMy0KvLyveHiX1rzF4aosoyKf7yC3wQUM7Tkm95Bov7iJ
+ VZLI/lRwddQVXoBX09y6/pAPeG1PaDyehXeyhYMWhm77Vx5ChzZPi/qsDU3NnD9I/R2P4LH9O
+ xLrH9LENvHtI69PMD26TEqYqzDk5DH5XaPZPpU667b/uu6ch4s7WFTNrUWvb43u7euOCBS0ie
+ jPFUYGYrfdhim/ru4fmUQ3Lz/oAjIcKvL+o7TVeJKnl1CrpzvWxhzZ1oituRQt10nUsM=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 06, 2022 at 08:12:11AM +0000, Tian, Kevin wrote:
-> > From: David Woodhouse <dwmw2@infradead.org>
-> > Sent: Friday, May 6, 2022 3:17 PM
-> > 
-> > On Fri, 2022-05-06 at 06:49 +0000, Tian, Kevin wrote:
-> > > > From: Baolu Lu <baolu.lu@linux.intel.com>
-> > > >
-> > > > > --- a/include/linux/dmar.h
-> > > > > +++ b/include/linux/dmar.h
-> > > > > @@ -19,7 +19,7 @@
-> > > > >   struct acpi_dmar_header;
-> > > > >
-> > > > >   #ifdef	CONFIG_X86
-> > > > > -# define	DMAR_UNITS_SUPPORTED	MAX_IO_APICS
-> > > > > +# define	DMAR_UNITS_SUPPORTED	640
-> > > > >   #else
-> > > > >   # define	DMAR_UNITS_SUPPORTED	64
-> > > > >   #endif
-> > >
-> > > ... is it necessary to permanently do 10x increase which wastes memory
-> > > on most platforms which won't have such need.
-> > 
-> > I was just looking at that. It mostly adds about 3½ KiB to each struct
-> > dmar_domain.
-> > 
-> > I think the only actual static array is the dmar_seq_ids bitmap which
-> > grows to 640 *bits* which is fairly negligible, and the main growth is
-> > that it adds about 3½ KiB to each struct dmar_domain for the
-> > iommu_refcnt[] and iommu_did[] arrays.
-> 
-> Thanks for the quick experiment! though the added material is
-> negligible it's cleaner to me if having a way to configure it as
-> discussed below.
-> 
-> > 
-> > > Does it make more sense to have a configurable approach similar to
-> > > CONFIG_NR_CPUS? or even better can we just replace those static
-> > > arrays with dynamic allocation so removing this restriction
-> > > completely?
-> > 
-> > Hotplug makes that fun, but I suppose you only need to grow the array
-> > in a given struct dmar_domain if you actually add a device to it that's
-> > behind a newly added IOMMU. I don't know if the complexity of making it
-> > fully dynamic is worth it though. We could make it a config option,
-> > and/or a command line option (perhaps automatically derived from
-> > CONFIG_NR_CPUS).
-> 
-> either config option or command line option is OK to me. Probably
-> the former is simpler given no need to dynamically expand the
-> static array. btw though deriving from CONFIG_NR_CPUS could work 
-> in this case it is unclear why tying the two together is necessary in
-> concept, e.g. is there guarantee that the number of IOMMUs must
-> be smaller than the number of CPUs in a platform?
-> 
-> > 
-> > If it wasn't for hotplug, I think we'd know the right number by the
-> > time we actually need it anyway, wouldn't we? Can we have a heuristic
-> > for how many DMAR units are likely to be hotplugged? Is it as simple as
-> > the ratio of present to not-yet-present CPUs in MADT?
-> 
-> Probably. But I don't have enough knowledge on DMAR hotplug to
-> judge (e.g. whether it's strictly tied to CPU hotplug and if yes whether
-> there could be multiple IOMMUs hotplugged together with a CPU
-> socket)...
-> 
-> Thanks
-> Kevin
+From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
 
-Would anyone be more comfortable if we only increase the limit where
-MAXSMP is set?
 
-i.e.
+This is a general update of the Colibri iMX7 device tree files.
 
-#if defined(CONFIG_X86) && defined(CONFIG_MAXSMP)
-# define	DMAR_UNITS_SUPPORTED	640
-#elif defined(CONFIG_X86)
-# define	DMAR_UNITS_SUPPORTED	MAX_IO_APICS
-#else
-# define	DMAR_UNITS_SUPPORTED	64
-#endif
+The Toradex Colibri family is composed of a SoM that can be plugged on
+various carrier boards, with carrier boards allowing multiple optional
+accessories (e.g. display, camera, ...).
 
-Thank you all for your time looking at this.
+The device tree sources are structured into a SoM dtsi and a carrier dts
+which then includes the SoM dtsi. The SoM dtsi defines and enables the
+functionality self-contained on the SoM and prepares for the
+functionality provided by the carrier HW or accessories so that the
+carrier dts then can enable or amend nodes provided. Accessories are
+enabled in overlays depending on HW configuration.
 
---> Steve Wahl
+Please find the following colibri-imx7 device trees improvements:
+
+- Display/Touch Functionality Overhaul
+Rename display interface to match other modules to make it easier to
+use device tree overlays.
+The parallel RGB interface (lcdif) and all related stuff turn on in a
+device tree overlay. Keep them disabled in the main devicetree.
+As these subsystems are provided by module and not a part of boards,
+move their definitions into the module-level devicetree.
+Disable ad7879 touchscreen which turns on in a devic tree overlay.
+Remains it disabled in the main devicetree.
+The Toradex 7" Capacitive and 10" LVDS touch screens are Atmel MXT
+peripherals available on the I2C bus for touchscreen events. Add
+atmel_mxt_ts node to the module-level device tree. Also, provide pinmux
+configuration for the INT/RST inputs from SODIMM pins 106/107 for most
+carrier boards or an external touchscreen adapter inputs configured to
+SODIMM pins 28/30.
+
+- Ethernet Improvements
+Add the MDIO bus with the respective PHY.
+Add Ethernet aliases which is required to properly pass MAC address
+from bootloader.
+Add delay for on-module phy supply.
+
+- USB Device/Host Switching
+Add usb dual-role switching using extcon.
+
+- MMC/SD
+The original Colibri specification only defined 3.3 volt TTL signaling
+and relied on external on-carrier pull-ups for the SD_DATA[0..3] lines.
+The latest carrier boards like Iris V2 on the other hand are now UHS-I
+compliant by leaving such external on-carrier pull-ups away relying on
+module- or even SoC-level ones which pull up to resp. signaling voltage.
+In such cases, the carrier board-level device tree may explicitly delete
+the no-1-8-v property to enable full UHS-I support.
+Also, fix SD/MMC regulator for the carrier boards using UHS-I modes.
+
+- Add Iris and Iris V2 Carrier Board Device Trees
+Add support for Toradex Iris carrier boards.
+
+
+Marcel Ziswiler (18):
+  ARM: dts: imx7-colibri: overhaul display/touch functionality
+  ARM: dts: imx7-colibri: add mdio phy node
+  ARM: dts: imx7-colibri: move aliases, chosen, extcon and gpio-keys
+  ARM: dts: imx7-colibri: move regulators
+  ARM: dts: imx7-colibri: clean-up usdhc1 and add sleep config
+  ARM: dts: imx7-colibri: move rtc node
+  ARM: dts: imx7d-colibri-emmc: add cpu1 supply
+  ARM: dts: imx7-colibri-eval-v3: correct can controller comment
+  ARM: dts: imx7-colibri: disable adc2
+  ARM: dts: imx7-colibri-aster: add ssp aka spi cs aka ss pins
+  ARM: dts: imx7-colibri: add clarifying comments
+  ARM: dts: imx7-colibri: alphabetical re-order
+  ARM: dts: imx7-colibri: clean-up device enabling/disabling
+  ARM: dts: imx7-colibri: remove leading zero from reg address
+  ARM: dts: imx7-colibri: set regulator-name properties
+  ARM: dts: imx7-colibri: clean-up iomuxc pinctrl group naming
+  dt-bindings: arm: fsl: add toradex,colibri-imx7s/d/d-emmc-iris/-v2
+  ARM: dts: imx7-colibri: add support for Toradex Iris carrier boards
+
+Max Krummenacher (1):
+  ARM: dts: imx7-colibri: add ethernet aliases
+
+Oleksandr Suvorov (3):
+  ARM: dts: imx7-colibri: improve licensing and compatible strings
+  ARM: dts: imx7-colibri: improve wake-up with gpio key
+  ARM: dts: imx7-colibri: add delay for on-module phy supply
+
+Philippe Schenker (1):
+  ARM: dts: imx7-colibri: add usb dual-role switching using extcon
+
+Stefan Agner (1):
+  ARM: dts: imx7-colibri: set lcdif clock source to video pll
+
+ .../devicetree/bindings/arm/fsl.yaml          |   6 +
+ arch/arm/boot/dts/Makefile                    |   6 +
+ arch/arm/boot/dts/imx6dl-colibri-iris.dts     |   9 +-
+ arch/arm/boot/dts/imx7-colibri-aster.dtsi     | 142 +--
+ arch/arm/boot/dts/imx7-colibri-eval-v3.dtsi   | 156 +---
+ arch/arm/boot/dts/imx7-colibri-iris-v2.dtsi   | 112 +++
+ arch/arm/boot/dts/imx7-colibri-iris.dtsi      | 108 +++
+ arch/arm/boot/dts/imx7-colibri.dtsi           | 830 +++++++++++-------
+ arch/arm/boot/dts/imx7d-colibri-aster.dts     |  30 +-
+ .../arm/boot/dts/imx7d-colibri-emmc-aster.dts |  10 +-
+ .../boot/dts/imx7d-colibri-emmc-eval-v3.dts   |  10 +-
+ .../boot/dts/imx7d-colibri-emmc-iris-v2.dts   |  21 +
+ arch/arm/boot/dts/imx7d-colibri-emmc-iris.dts |  21 +
+ arch/arm/boot/dts/imx7d-colibri-emmc.dtsi     |  17 +-
+ arch/arm/boot/dts/imx7d-colibri-eval-v3.dts   |  45 +-
+ arch/arm/boot/dts/imx7d-colibri-iris-v2.dts   |  83 ++
+ arch/arm/boot/dts/imx7d-colibri-iris.dts      |  56 ++
+ arch/arm/boot/dts/imx7d-colibri.dtsi          |  13 +-
+ arch/arm/boot/dts/imx7s-colibri-aster.dts     |  27 +-
+ arch/arm/boot/dts/imx7s-colibri-eval-v3.dts   |  43 +-
+ arch/arm/boot/dts/imx7s-colibri-iris-v2.dts   |  78 ++
+ arch/arm/boot/dts/imx7s-colibri-iris.dts      |  51 ++
+ arch/arm/boot/dts/imx7s-colibri.dtsi          |   5 +-
+ 23 files changed, 1295 insertions(+), 584 deletions(-)
+ create mode 100644 arch/arm/boot/dts/imx7-colibri-iris-v2.dtsi
+ create mode 100644 arch/arm/boot/dts/imx7-colibri-iris.dtsi
+ create mode 100644 arch/arm/boot/dts/imx7d-colibri-emmc-iris-v2.dts
+ create mode 100644 arch/arm/boot/dts/imx7d-colibri-emmc-iris.dts
+ create mode 100644 arch/arm/boot/dts/imx7d-colibri-iris-v2.dts
+ create mode 100644 arch/arm/boot/dts/imx7d-colibri-iris.dts
+ create mode 100644 arch/arm/boot/dts/imx7s-colibri-iris-v2.dts
+ create mode 100644 arch/arm/boot/dts/imx7s-colibri-iris.dts
 
 -- 
-Steve Wahl, Hewlett Packard Enterprise
+2.35.1
+

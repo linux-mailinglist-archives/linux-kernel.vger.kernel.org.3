@@ -2,66 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAAA651D36A
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 10:26:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 186DB51D38A
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 10:40:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1390137AbiEFIaO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 04:30:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47930 "EHLO
+        id S1390209AbiEFIoL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 04:44:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1389909AbiEFIaM (ORCPT
+        with ESMTP id S1390210AbiEFIny (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 04:30:12 -0400
-Received: from out30-42.freemail.mail.aliyun.com (out30-42.freemail.mail.aliyun.com [115.124.30.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 997121ADA4;
-        Fri,  6 May 2022 01:26:29 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R121e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04394;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0VCR6E3Q_1651825577;
-Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0VCR6E3Q_1651825577)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Fri, 06 May 2022 16:26:27 +0800
-From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-To:     djwong@kernel.org
-Cc:     linux-xfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: [PATCH] xfs: remove unreachable code
-Date:   Fri,  6 May 2022 16:26:15 +0800
-Message-Id: <20220506082615.19328-1-jiapeng.chong@linux.alibaba.com>
-X-Mailer: git-send-email 2.20.1.7.g153144c
+        Fri, 6 May 2022 04:43:54 -0400
+X-Greylist: delayed 521 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 06 May 2022 01:40:11 PDT
+Received: from mail.systemmarket.com.pl (mail.systemmarket.com.pl [31.14.131.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A7C72B1A9
+        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 01:40:11 -0700 (PDT)
+Received: by mail.systemmarket.com.pl (Postfix, from userid 1001)
+        id DC2DEA1CCE; Fri,  6 May 2022 09:27:49 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=systemmarket.com.pl;
+        s=mail; t=1651825826;
+        bh=FDuFY3XQoq0gMX1b2gxgT7Py2p4Sxl0PJZYZ4NVaPho=;
+        h=Date:From:To:Subject:From;
+        b=iARDsQpYU2mxTohXoU+yHEcwA+aBSuFjdUv6DumOFedAi841oQeIZ3WhMHgHDykp6
+         ju4VAgMfDH5XOlFDoxjrCP26MyvBCKTL+tDiAZJpNjT6sqvp+w/dea7p0HRpoL1Mp0
+         LxSW7JMXQL0AlikRy9996D0MnoKsqMJL8wdVR+yQZegruy9vY2vgZXn6oCOUJbpDOd
+         g6QIpc33ftxIxLZtsqLfp1PajDniDOPvyv2RxlrFVVouXYEvm7CTnjr/4Hu28Zg3Ke
+         xGXaTnFA38U3LBJ6Uz0L5EBHE6nZpUNsURy9bRb9aGQk8P0fZKt6J27InV7KS/aYVL
+         9MGMnBITy63/Q==
+Received: by mail.systemmarket.com.pl for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 08:26:39 GMT
+Message-ID: <20220506085610-0.1.19.3kq4.0.0kmpnbpld0@systemmarket.com.pl>
+Date:   Fri,  6 May 2022 08:26:39 GMT
+From:   =?UTF-8?Q? "Przemys=C5=82aw_Wr=C3=B3blewski" ?= 
+        <przemyslaw.wroblewski@systemmarket.com.pl>
+To:     <linux-kernel@vger.kernel.org>
+Subject: Wycena paneli fotowoltaicznych
+X-Mailer: mail.systemmarket.com.pl
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_40,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Clean up the following smatch warning:
+Dzie=C5=84 dobry,
 
-fs/xfs/xfs_icache.c:1768 xfs_icwalk() warn: ignoring unreachable code.
+dostrzegam mo=C5=BCliwo=C5=9B=C4=87 wsp=C3=B3=C5=82pracy z Pa=C5=84stwa f=
+irm=C4=85.
 
-Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
----
- fs/xfs/xfs_icache.c | 1 -
- 1 file changed, 1 deletion(-)
+=C5=9Awiadczymy kompleksow=C4=85 obs=C5=82ug=C4=99 inwestycji w fotowolta=
+ik=C4=99, kt=C3=B3ra obni=C5=BCa koszty energii elektrycznej nawet o 90%.
 
-diff --git a/fs/xfs/xfs_icache.c b/fs/xfs/xfs_icache.c
-index 5269354b1b69..5af272c20934 100644
---- a/fs/xfs/xfs_icache.c
-+++ b/fs/xfs/xfs_icache.c
-@@ -1765,7 +1765,6 @@ xfs_icwalk(
- 		}
- 	}
- 	return last_error;
--	BUILD_BUG_ON(XFS_ICWALK_PRIVATE_FLAGS & XFS_ICWALK_FLAGS_VALID);
- }
- 
- #ifdef DEBUG
--- 
-2.20.1.7.g153144c
+Czy s=C4=85 Pa=C5=84stwo zainteresowani weryfikacj=C4=85 wst=C4=99pnych p=
+ropozycji?
 
+
+Pozdrawiam,
+Przemys=C5=82aw Wr=C3=B3blewski

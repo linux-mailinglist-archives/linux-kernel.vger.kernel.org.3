@@ -2,77 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CADDE51D9CD
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 16:05:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1C5351D9F1
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 16:08:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1441984AbiEFOJW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 10:09:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60008 "EHLO
+        id S1442001AbiEFOLp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 10:11:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1441985AbiEFOI5 (ORCPT
+        with ESMTP id S231739AbiEFOLn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 10:08:57 -0400
-Received: from mx.cjr.nz (mx.cjr.nz [51.158.111.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8757356762;
-        Fri,  6 May 2022 07:05:14 -0700 (PDT)
-Received: from authenticated-user (mx.cjr.nz [51.158.111.142])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: pc)
-        by mx.cjr.nz (Postfix) with ESMTPSA id 77F3E7FD1E;
-        Fri,  6 May 2022 14:05:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cjr.nz; s=dkim;
-        t=1651845912;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=D8PQ6ZppMbJK9YEvYymT3s+2KUmz/2wUmtRG/KrTmGs=;
-        b=CJBM90vLK6FF2svC+lLCwWg2iAirFM6fOiHi8TIVN3G2nxHPaSNWMyImI0bPdsMmbL6twx
-        4x2+2Cpv6RQThUO5mVPNz015VONId9XpbLlkc2Tf7Atjrr+ITArrDaehUNbU+O+0pZxysW
-        I4mxs9P5l5ubHiTJ2MgoKt+6Ho/RGVtCQXHWbA+MEjrhnifN3Ja704P0b20oPnrg91Gmvt
-        Lnrih5mC2eqtNraXIct3IjViODxkbqLGNlGoth5lKqFW7KWaUHcCvn1YrxCgLqFqG0c0RC
-        nCtNNhSOYaKArFODDeDqMY7nbQjPsQz6eRTAnj1/2SVbeD3XfF0KeLUpjZSfew==
-From:   Paulo Alcantara <pc@cjr.nz>
-To:     ronnie sahlberg <ronniesahlberg@gmail.com>
-Cc:     Tom Talpey <tom@talpey.com>, Steven French <sfrench@samba.org>,
-        Byron Stanoszek <gandalf@winds.org>,
-        Shyam Prasad N <nspmangalore@gmail.com>,
-        linux-cifs <linux-cifs@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: CIFS regression mounting vers=1.0 NTLMSSP when hostname is too
- long
-In-Reply-To: <CAN05THQYKRChdR_4T86dGtCO=xY+cWpfa6_fOVNh9WSB=RNE-A@mail.gmail.com>
-References: <e6837098-15d9-acb6-7e34-1923cf8c6fe1@winds.org>
- <878rri2i6o.fsf@cjr.nz> <7dc6c729-73cd-74be-eec7-ac4a0013f60f@samba.org>
- <87tua51550.fsf@cjr.nz> <df763cb0-83f2-35a5-a381-57cfd040becf@talpey.com>
- <87r15910c1.fsf@cjr.nz>
- <CAN05THQYKRChdR_4T86dGtCO=xY+cWpfa6_fOVNh9WSB=RNE-A@mail.gmail.com>
-Date:   Fri, 06 May 2022 11:05:06 -0300
-Message-ID: <87wneyah9p.fsf@cjr.nz>
+        Fri, 6 May 2022 10:11:43 -0400
+Received: from mail-qk1-f169.google.com (mail-qk1-f169.google.com [209.85.222.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAD7C5A2DF;
+        Fri,  6 May 2022 07:07:56 -0700 (PDT)
+Received: by mail-qk1-f169.google.com with SMTP id 126so5939014qkm.4;
+        Fri, 06 May 2022 07:07:56 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=HLS1owR3CUUM/pxIukdO3Yvx2ZZOeSpZS2VuYEsMpRM=;
+        b=Z247zpROugve+xccj1mnDqoSRDmWrS7IWjEOtk9VS9GM5cLRjoubnC0NSdY93eDmX4
+         q4KzWOLYKwHChJ/R4FsGLq2i7+zhI5MrUk8JIpNpxHG0z5SWS5BQqFsOitZwr3bVdFe5
+         SC3W8p3GtmHHsGSmcJQt+D3GEAwjN2n0L36wH6SKonwNiQ3SMkqUtKCZ6ZjZVL8fYdKY
+         AtLPCn8WEtmQjqlDpavK2Wad8InHJassoAvR8eHhF7ciB/2HAdNQusnsbCz6Havq/kg6
+         0GXkomAaKuhQHC3cHM4Q7647YloD/eHKgomqdPnIrfvWt4fBw2rOAbHFEAOkiyVjyiD4
+         HYlQ==
+X-Gm-Message-State: AOAM531zVuJ0S+P7Rtk2XWvoJBMgSXM61gWTdyiyW8wOtPwMEFUhm9q9
+        +yfXauaZoOCPQUsqkY/7bdCq2ffMsrR5gg==
+X-Google-Smtp-Source: ABdhPJzmpBReCv37qqtfOf8Imzp9MGGDEq/Ufzp603XZWxvx5nIRaOd6RMNBNV8Y0JqOU/4mlOaHBw==
+X-Received: by 2002:a37:a743:0:b0:69f:e64c:74c9 with SMTP id q64-20020a37a743000000b0069fe64c74c9mr2455682qke.432.1651846075717;
+        Fri, 06 May 2022 07:07:55 -0700 (PDT)
+Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com. [209.85.219.182])
+        by smtp.gmail.com with ESMTPSA id u12-20020ac8750c000000b002f39b99f69csm2580370qtq.54.2022.05.06.07.07.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 06 May 2022 07:07:55 -0700 (PDT)
+Received: by mail-yb1-f182.google.com with SMTP id w187so13077449ybe.2;
+        Fri, 06 May 2022 07:07:55 -0700 (PDT)
+X-Received: by 2002:a05:6902:905:b0:64a:2089:f487 with SMTP id
+ bu5-20020a056902090500b0064a2089f487mr2392502ybb.202.1651846074895; Fri, 06
+ May 2022 07:07:54 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_PBL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: *
+References: <Yib9F5SqKda/nH9c@infradead.org>
+In-Reply-To: <Yib9F5SqKda/nH9c@infradead.org>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Fri, 6 May 2022 16:07:43 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdXVS6ROvp4rkZzBOBJBkQYjtdL0-m0ok=8UvTkwp-X4bw@mail.gmail.com>
+Message-ID: <CAMuHMdXVS6ROvp4rkZzBOBJBkQYjtdL0-m0ok=8UvTkwp-X4bw@mail.gmail.com>
+Subject: Re: [RFC PULL] remove arch/h8300
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        "moderated list:H8/300 ARCHITECTURE" 
+        <uclinux-h8-devel@lists.sourceforge.jp>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ronnie sahlberg <ronniesahlberg@gmail.com> writes:
+Hi Chrisoph,
 
-> This regression should be easy to fix, but maybe we should not have
-> done the initial change in the first place.
-> If things is broken and do not work under SMB1, that is a good thing.
-> Instead of adding features or fixing
-> missing parts to SMB1 we should just tell people to switch to SMB2 instead.
+On Tue, Mar 8, 2022 at 12:04 PM Christoph Hellwig <hch@infradead.org> wrote:
+> h8300 hasn't been maintained for quite a while, with even years old
+> pull request lingering in the old repo.  Given that it always was
+> rather fringe to start with I'd suggest to go ahead and remove the
+> port:
 >
-> I think if things do not work correctly or things are missing in smb1,
-> that is a GOOD THING.
-> :-)
+> The following changes since commit 5c1ee569660d4a205dced9cb4d0306b907fb7599:
+>
+>   Merge branch 'for-5.17-fixes' of git://git.kernel.org/pub/scm/linux/kernel/git/tj/cgroup (2022-02-22 16:14:35 -0800)
+>
+> are available in the Git repository at:
+>
+>   git://git.infradead.org/users/hch/misc.git remove-h8300
+>
+> for you to fetch changes up to 1c4b5ecb7ea190fa3e9f9d6891e6c90b60e04f24:
+>
+>   remove the h8300 architecture (2022-02-23 08:52:50 +0100)
+>
+> ----------------------------------------------------------------
+> Christoph Hellwig (1):
+>       remove the h8300 architecture
+>
+>  .../bindings/clock/renesas,h8300-div-clock.txt     |  24 --
+>  Documentation/devicetree/bindings/h8300/cpu.txt    |  13 -
+>  .../interrupt-controller/renesas,h8300h-intc.txt   |  22 --
+>  .../interrupt-controller/renesas,h8s-intc.txt      |  22 --
+>  .../memory-controllers/renesas,h8300-bsc.yaml      |  35 --
 
-LOL - couldn't agree more :-)
+More DT bindings to garbage-collect:
+Documentation/devicetree/bindings/clock/renesas,h8s2678-pll-clock.txt
+Documentation/devicetree/bindings/timer/renesas,16bit-timer.txt
+Documentation/devicetree/bindings/timer/renesas,8bit-timer.txt
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

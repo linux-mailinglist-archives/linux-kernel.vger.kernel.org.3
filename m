@@ -2,119 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C90B851D503
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 11:53:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85A1251D513
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 11:59:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243727AbiEFJ5B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 05:57:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38220 "EHLO
+        id S1390758AbiEFKDR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 06:03:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236473AbiEFJ45 (ORCPT
+        with ESMTP id S236473AbiEFKDK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 05:56:57 -0400
-Received: from mail3-relais-sop.national.inria.fr (mail3-relais-sop.national.inria.fr [192.134.164.104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76EDB67D28
-        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 02:53:10 -0700 (PDT)
+        Fri, 6 May 2022 06:03:10 -0400
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6B3B56FBC
+        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 02:59:27 -0700 (PDT)
+Received: by mail-pf1-x42a.google.com with SMTP id a11so5859091pff.1
+        for <linux-kernel@vger.kernel.org>; Fri, 06 May 2022 02:59:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=inria.fr; s=dc;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=urze1RM/gX18V878AZ6j/ivdQDVcYKjIqHZDW8Da1MA=;
-  b=SFavKmlT8DEGi/9oCpAqWxugYXIgZwXkngrNq+97vEdi+coaSSh0yHPm
-   Yw2auqqwRB25aoji3y1v03veYx/7frj0JPM2Xgd7EetJo8k288K+8NpSa
-   XcgrCEvdcGj4/RXiPprKkK3JI0Oi0lHcR/Pf/ls2Dhq4vqYpJh2PrP0AL
-   A=;
-Authentication-Results: mail3-relais-sop.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=julia.lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
-X-IronPort-AV: E=Sophos;i="5.91,203,1647298800"; 
-   d="scan'208";a="13371044"
-Received: from 245.122.68.85.rev.sfr.net (HELO hadrien) ([85.68.122.245])
-  by mail3-relais-sop.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2022 11:53:08 +0200
-Date:   Fri, 6 May 2022 11:53:07 +0200 (CEST)
-From:   Julia Lawall <julia.lawall@inria.fr>
-X-X-Sender: jll@hadrien
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-cc:     ksummit-discuss@lists.linuxfoundation.org,
-        linux-kernel@vger.kernel.org,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        kbuild@lists.01.org, lkp@intel.com
-Subject: Re: [Ksummit-discuss] uninitialized variables bugs
-In-Reply-To: <20220506091338.GE4031@kadam>
-Message-ID: <alpine.DEB.2.22.394.2205061150230.2845@hadrien>
-References: <20220506091338.GE4031@kadam>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=qkYBPtwwXh8wrjml5xjZWpmnyYJc8bz2oezaS0TP4h4=;
+        b=yhN7HQkibzNKkcborAKfIJZ1+KFI5v7ka0JP/YFaO15M7iM5JCX3y28qvb6yrz1Qm+
+         tsZzBSDZERZUoFnpycq2P8Gv8LylAFM5wybHMOsa26wbefo5t8aY5EF7nPp4hBwBGoKJ
+         WeaxwleR2hasu1mCnXJ1eHbEprtWOiowLkefXtZGcDB8f+Yb6LwivSXUXWG85ve/qV9d
+         RnGIzxJq40E9JIQsAjAIucr3YNMxnBfLL23bvh5Gr6zC5dU/CMeP49CeUEiTNfFktIZN
+         xUve1G3ty7FkdL2P7bww2ONlixR4c/z1MErH2hnRyOVQicRhg5a00l+OEfpFrGLzkyeK
+         T43g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=qkYBPtwwXh8wrjml5xjZWpmnyYJc8bz2oezaS0TP4h4=;
+        b=PDvwz9UJY2VB5xZ1zcxIgN0eZTZ95drLAvv6jHeTjW+S3t2jPqV/1cw1ZC80hBgERM
+         LgGNfLXhYeGJllv24aEI8pvtpFaUk3Ra4mvqKZcBB8njXWqvmsQraU/pYjxirAYdsxDA
+         +H5YHrJVm8oBkOPnxdE9NjiEIqGAxUlWli/i12STFuloUaHvjzNk5AXkCUgmxtuldcNS
+         qzwjIo5/wLA8xseSbZg0x+Xo0SdYkZ5dVtBwwjOGMkMQ1ScGEbMml+cO+53nrzuyb4w8
+         1xQp0jh3arkh91E2j0maIA+sucDMK4Kmvj7kANRr+OM1QhPEWDHGSpBOidHRuXaGHeYw
+         wqYw==
+X-Gm-Message-State: AOAM531/fPTUY0N/tDBNBdTkcSh439vwTrNK63gECVQXdjr8G8rQo8/E
+        XKRluZ0wpQ7TPDW3u/bK9e9TmA==
+X-Google-Smtp-Source: ABdhPJx1UzxZt5oKWOW8EfeuMSxPFYdmNFuHrO7gIAc3jSJG3YfatOtyNZDK/sM/J50XFzYZ7hQiig==
+X-Received: by 2002:a65:615a:0:b0:3a9:f4ad:68a8 with SMTP id o26-20020a65615a000000b003a9f4ad68a8mr2168328pgv.108.1651831167259;
+        Fri, 06 May 2022 02:59:27 -0700 (PDT)
+Received: from [10.255.89.252] ([139.177.225.255])
+        by smtp.gmail.com with ESMTPSA id me16-20020a17090b17d000b001d26c7d5aacsm3300603pjb.13.2022.05.06.02.59.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 06 May 2022 02:59:26 -0700 (PDT)
+Message-ID: <48c9b073-0b03-5769-633b-5b668cea6fa4@bytedance.com>
+Date:   Fri, 6 May 2022 17:55:33 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLACK autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: RE: [PATCH v5 5/5] virtio-crypto: enable retry for
+ virtio-crypto-dev
+Content-Language: en-US
+To:     "Gonglei (Arei)" <arei.gonglei@huawei.com>,
+        "mst@redhat.com" <mst@redhat.com>
+Cc:     "jasowang@redhat.com" <jasowang@redhat.com>,
+        "herbert@gondor.apana.org.au" <herbert@gondor.apana.org.au>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        "helei.sig11@bytedance.com" <helei.sig11@bytedance.com>,
+        "davem@davemloft.net" <davem@davemloft.net>
+References: <20220505092408.53692-1-pizhenwei@bytedance.com>
+ <20220505092408.53692-6-pizhenwei@bytedance.com>
+ <ad61b1ae4bd145eaa18fc28696e9502a@huawei.com>
+From:   zhenwei pi <pizhenwei@bytedance.com>
+In-Reply-To: <ad61b1ae4bd145eaa18fc28696e9502a@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 5/6/22 17:34, Gonglei (Arei) wrote:
+> 
+> 
+>> -----Original Message-----
+>> From: zhenwei pi [mailto:pizhenwei@bytedance.com]
+>> Sent: Thursday, May 5, 2022 5:24 PM
+>> To: Gonglei (Arei) <arei.gonglei@huawei.com>; mst@redhat.com
+>> Cc: jasowang@redhat.com; herbert@gondor.apana.org.au;
+>> linux-kernel@vger.kernel.org; virtualization@lists.linux-foundation.org;
+>> linux-crypto@vger.kernel.org; helei.sig11@bytedance.com;
+>> pizhenwei@bytedance.com; davem@davemloft.net
+>> Subject: [PATCH v5 5/5] virtio-crypto: enable retry for virtio-crypto-dev
+>>
+>> From: lei he <helei.sig11@bytedance.com>
+>>
+>> Enable retry for virtio-crypto-dev, so that crypto-engine can process
+>> cipher-requests parallelly.
+>>
+>> Cc: Michael S. Tsirkin <mst@redhat.com>
+>> Cc: Jason Wang <jasowang@redhat.com>
+>> Cc: Gonglei <arei.gonglei@huawei.com>
+>> Signed-off-by: lei he <helei.sig11@bytedance.com>
+>> Signed-off-by: zhenwei pi <pizhenwei@bytedance.com>
+>> ---
+>>   drivers/crypto/virtio/virtio_crypto_core.c | 3 ++-
+>>   1 file changed, 2 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/crypto/virtio/virtio_crypto_core.c
+>> b/drivers/crypto/virtio/virtio_crypto_core.c
+>> index 60490ffa3df1..f67e0d4c1b0c 100644
+>> --- a/drivers/crypto/virtio/virtio_crypto_core.c
+>> +++ b/drivers/crypto/virtio/virtio_crypto_core.c
+>> @@ -144,7 +144,8 @@ static int virtcrypto_find_vqs(struct virtio_crypto *vi)
+>>   		spin_lock_init(&vi->data_vq[i].lock);
+>>   		vi->data_vq[i].vq = vqs[i];
+>>   		/* Initialize crypto engine */
+>> -		vi->data_vq[i].engine = crypto_engine_alloc_init(dev, 1);
+>> +		vi->data_vq[i].engine = crypto_engine_alloc_init_and_set(dev, true,
+>> NULL, 1,
+>> +						virtqueue_get_vring_size(vqs[i]));
+> 
+> Here the '1' can be 'true' too.
+> 
+> Sure, you can add
+> 
+> Reviewed-by: Gonglei <arei.gonglei@huawei.com>
+> 
+> Regards,
+> -Gonglei
+> 
+>>   		if (!vi->data_vq[i].engine) {
+>>   			ret = -ENOMEM;
+>>   			goto err_engine;
+>> --
+>> 2.20.1
+> 
 
+Thanks to Lei!
 
-On Fri, 6 May 2022, Dan Carpenter wrote:
+Hi, Michael
+I would appreciate it if you could apply this minor change, or I send 
+the v6 series, which one do you prefer?
 
-> Ever since commit 78a5255ffb6a ("Stop the ad-hoc games with
-> -Wno-maybe-initialized"), GCC's uninitialized variable warnings have
-> been disabled by default.  Now, you have to turn on W=1 or W=2 to see
-> the warnings which nobody except Arnd does.
->
-> Disabling that has lead to a bunch of embarrassing bugs where variables
-> are *never* initialized.  Very unsubtle bugs.  The bugs doesn't reach
-> users because Nathan Chancellor and I review Clang and Smatch warnings
-> respectively.  Also the kbuild-bot reports uninitialized variables.
->
-> It's a lot to deal with.  Uninitialized variable bugs are probably the
-> most common bug I have to deal with.
->
-> It's frustrating.  Sometimes the false positives are hard to analyse
-> because I have to read through multiple functions.  A lot of times
-> when I write a patch and a commit message Nathan has already fixed it
-> so it's just a waste of time.
->
-> It's risky as well.  The Smatch check for uninitialized variables was
-> broken for most of 2021.  Nathan sometimes goes on vacation.
->
-> I guess I would hope that one day we can turn on the GCC uninitialized
-> variable warnings again.  That would mean silencing false positives
-> which a lot of people don't want to do...  Maybe Clang has fewer false
-> positives than GCC?
->
-> The Smatch check for uninitialized variable was deliberately written to
-> be more strict than GCC because GCC was missing bugs.  So I think
-> leaving Smatch false positives is fine.  There is a trade off between
-> fewer false positives and missing bugs and Smatch is meant to err on the
-> side of finding bugs but with the cost of false positives.
->
-> Most of the Smatch uninitialized false positives are caused by loops:
->
-> 	int i, ret;
->
-> 	for (i = 0; i < bytes; i++) { // <-- what if bytes is zero?
-> 		if (...)
-> 			continue; // <-- can every iteration hit continue?
-> 		ret = frob();
-> 	}
->
-> 	return ret;
->
-> There is also stuff like this which is harmless:
->
-> 	uint val;
->
-> 	ret = read(&val);
-> 	*p = val;  // <-- uninitialized variable if read() fails
-> 	return ret;
->
-> Btw, here is how to run Smatch on your code:
-> https://staticthinking.wordpress.com/2022/04/25/how-to-run-smatch-on-your-code/
-
-Could smatch inform the user that some results are likely false positives,
-or even order the results according to their likely true positiveness?
-
-julia
+-- 
+zhenwei pi

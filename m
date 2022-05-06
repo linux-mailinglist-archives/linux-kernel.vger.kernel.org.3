@@ -2,119 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53A2E51DF6F
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 21:02:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D29F51DF71
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 21:02:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1389346AbiEFTF7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 15:05:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44252 "EHLO
+        id S1389428AbiEFTGT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 15:06:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232908AbiEFTF5 (ORCPT
+        with ESMTP id S1388686AbiEFTGP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 15:05:57 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E227868313;
-        Fri,  6 May 2022 12:02:12 -0700 (PDT)
-Received: from [127.0.0.1] (dynamic-002-247-254-212.2.247.pool.telefonica.de [2.247.254.212])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id B87B01EC0426;
-        Fri,  6 May 2022 21:02:06 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1651863727;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=x8fVcWLqPFG6/0kPKgTD+h7VgiMOQivyi/yzrWDL31E=;
-        b=QcEfbINsxQXGmb/lPhWm6hiBU4SyfpGvhd0wkxxntZDP7ynpTevpNVvJIYEZzXegdL5Jhe
-        dYv/chRkNgyID97Ya33eCDNS4Dgk1/2xJWPpbp9ozV/xUeWODkGvV6HLMzbqchi7qIJfp9
-        kra0g1/NjXuMvYmH/3hRFkUuapJjZcc=
-Date:   Fri, 06 May 2022 19:02:03 +0000
-From:   Boris Petkov <bp@alien8.de>
-To:     Dave Hansen <dave.hansen@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>
-CC:     Martin Fernandez <martin.fernandez@eclypsium.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-efi <linux-efi@vger.kernel.org>,
-        platform-driver-x86@vger.kernel.org, Linux MM <linux-mm@kvack.org>,
-        "H. Peter Anvin" <hpa@zytor.com>, daniel.gutson@eclypsium.com,
-        Darren Hart <dvhart@infradead.org>,
-        Andy Shevchenko <andy@infradead.org>,
-        Kees Cook <keescook@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>, X86 ML <x86@kernel.org>,
-        "Schofield, Alison" <alison.schofield@intel.com>,
-        hughsient@gmail.com, alex.bazhaniuk@eclypsium.com,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Ben Widawsky <ben.widawsky@intel.com>,
-        "Huang, Kai" <kai.huang@intel.com>
-Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_v8_0/8=5D_x86=3A_Show_in_sysfs_i?= =?US-ASCII?Q?f_a_memory_node_is_able_to_do_encryption?=
-User-Agent: K-9 Mail for Android
-In-Reply-To: <4bc56567-e2ce-40ec-19ab-349c8de8d969@intel.com>
-References: <20220429201717.1946178-1-martin.fernandez@eclypsium.com> <YnKr+aMf4PspDpHZ@zn.tnic> <CAKgze5YDD02AsrF0yESv2sptZ4qxyTMgCDmnOKcbQWjKQsJRsw@mail.gmail.com> <YnUYLDjIThbIz/Uf@zn.tnic> <6d90c832-af4a-7ed6-4f72-dae08bb69c37@intel.com> <CAPcyv4i73m6iPPfJE9CBdxf-OWGXahvGqvh6G-pqVO=3LB6ktQ@mail.gmail.com> <47140A56-D3F8-4292-B355-5F92E3BA9F67@alien8.de> <6abea873-52a2-f506-b21b-4b567bee1874@intel.com> <FDABC5C8-B80A-4977-9F97-5A8FC47F69D6@alien8.de> <4bc56567-e2ce-40ec-19ab-349c8de8d969@intel.com>
-Message-ID: <CE52D65A-C9F4-408D-B18A-72D87495A433@alien8.de>
+        Fri, 6 May 2022 15:06:15 -0400
+Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com [209.85.128.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B66086832F;
+        Fri,  6 May 2022 12:02:31 -0700 (PDT)
+Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-2f7d19cac0bso91102047b3.13;
+        Fri, 06 May 2022 12:02:31 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=sP74p2Ho2Emb3VKHw1EnwOCOMVgioz5LH941HCHgdUw=;
+        b=HtYTZ8ae4GUQSvjdwxwFeDygLipJ07+W3JimKqp9w2qOtonQK5/YdcAhrBqQphRvj/
+         FEVr0U2H2BVZocX8+XPNyuY8AUEqiAL6cWzrGv1KwcmiJifpuqoVTHFHMb9hmugRUlkB
+         LexHwYSA2P3Ryx0qE9JNxj/pwPOPnP4CdtmraQtqRBVIcoqsYnET8Ota8zEhg2gGsdPt
+         A2VP1a7EEEIfrKfa86q/CxLPKdmypvguRXCO4RDXhtwO6C373DqeY6pReiS108TXJJu4
+         VWYEdjgxTRLZn7whWy1ZhnzP1aiHCVZdHwAaqVFDx9KLOmKTr6jgkRsWxyG8bxRqXGgj
+         puxg==
+X-Gm-Message-State: AOAM532OD1GeTOqPvaQJJbOqUKtnZHn9rYSPjsvZ2dkK369LAiw7PSIn
+        Nav//rNfRgoEe2MXMIt6Rt714CCbyC9aIRgklLUeoj+K
+X-Google-Smtp-Source: ABdhPJzymxnQ4N9mwBwTyRpS7swhira7YdkePOJWgvnxZeBgAFxVnMazO5jgb+kFXq2d4xeD1dXRySBi2mglQTOoaJA=
+X-Received: by 2002:a0d:ddce:0:b0:2f8:c9f7:8f7c with SMTP id
+ g197-20020a0dddce000000b002f8c9f78f7cmr4128496ywe.301.1651863751019; Fri, 06
+ May 2022 12:02:31 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220425123819.137735-1-pierre.gondois@arm.com>
+ <20220426030810.wj7mdhjhzs2s6y7h@vireshk-i7> <20220426063739.6ljxtr6hpz7tber5@vireshk-i7>
+ <6765104a-761c-4586-502c-2b98ee6016a1@arm.com> <20220426071231.zfdrok3ulgewomib@vireshk-i7>
+In-Reply-To: <20220426071231.zfdrok3ulgewomib@vireshk-i7>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 6 May 2022 21:02:20 +0200
+Message-ID: <CAJZ5v0jEQ0E4YUpj24igC0PKOebs_mM1p4zAH4wSy3DEBFXZjg@mail.gmail.com>
+Subject: Re: [PATCH v3 0/2] Enable EAS for CPPC/ACPI based systems
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Pierre Gondois <pierre.gondois@arm.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Ionela Voinescu <Ionela.Voinescu@arm.com>,
+        Lukasz Luba <Lukasz.Luba@arm.com>,
+        Morten Rasmussen <Morten.Rasmussen@arm.com>,
+        Dietmar Eggemann <Dietmar.Eggemann@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Fuad Tabba <tabba@google.com>,
+        Valentin Schneider <valentin.schneider@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux PM <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On May 6, 2022 6:43:39 PM UTC, Dave Hansen <dave=2Ehansen@intel=2Ecom> wrot=
-e:
->On 5/6/22 11:25, Boris Petkov wrote:
->> On May 6, 2022 6:14:00 PM UTC, Dave Hansen <dave=2Ehansen@intel=2Ecom>
->> wrote:
->>> But, this interface will *work* both for the uniform and
->>> non-uniform systems alike=2E
->> And what would that additional information that some "node" -
->> whatever "node" means nowadays - is not encrypted give you?
+On Tue, Apr 26, 2022 at 9:12 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
 >
->Tying it to the node ties it to the NUMA ABIs=2E  For instance, it lets
->you say: "allocate memory with encryption capabilities" with a
->set_mempolicy() to nodes that are enumerated as encryption-capable=2E
-
-I was expecting something along those lines=2E=2E=2E
-
->Imagine that we have a non-uniform system: some memory supports TDX (or
->SEV-SNP) and some doesn't=2E  QEMU calls mmap() to allocate some guest
->memory and then its ioctl()s to get its addresses stuffed into EPT/NPT=2E
-> The memory might be allocated from anywhere, CPU_CRYPTO-capable or not=
-=2E
-> VM creation will fail because the (hardware-enforced) security checks
->can't be satisfied on non-CPU_CRYPTO memory=2E
+> On 26-04-22, 09:10, Pierre Gondois wrote:
+> > Hello Viresh,
+> > The 2 patches are relying on Lukasz' patch-set at:
+> > https://lkml.org/lkml/2022/3/21/282
+> > The serie was accepted by Rafael (cf. https://lkml.org/lkml/2022/4/13/701) and
+> > is currently in linux-next. More specifically, the missing patch causing the
+> > build failure is: 'PM: EM: Add .get_cost() callback'
+> >
+> > From what I see, the branch cpufreq/arm/linux-next (from your repo) that was
+> > used in the CI is based on v5.18-rc1 and doesn't have Lukasz' patches. Should
+> > we wait for the patches to be in a rc version, or is there a process for this
+> > kind of case ?
 >
->Userspace has no recourse to fix this=2E  It's just stuck=2E  In that cas=
-e,
-> the *kernel* needs to be responsible for ensuring that the backing
->physical memory supports TDX (or SEV)=2E
+> Ok.
 >
->This node attribute punts the problem back out to userspace=2E  It gives
->userspace the ability to steer allocations to compatible NUMA nodes=2E  I=
-f
->something goes wrong, they can use other NUMA ABIs to inspect the
->situation, like /proc/$pid/numa_maps=2E
+> Rafael: Please pick these patches directly.
+>
+> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 
-That's all fine and dandy but I still don't see the *actual*, real-life us=
-e case of why something would request memory of particular encryption capab=
-ilities=2E Don't get me wrong  - I'm not saying there are not such use case=
-s - I'm saying we should go all the way and fully define properly  *why* we=
-'re doing this whole hoopla=2E
-
-Remember - this all started with "i wanna say that mem enc is active" and =
-now we're so far deep down the rabbit hole=2E=2E=2E
-
---=20
-Sent from a small device: formatting sux and brevity is inevitable=2E 
+Done, thanks!

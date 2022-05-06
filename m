@@ -2,63 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20FAB51D166
+	by mail.lfdr.de (Postfix) with ESMTP id 6C92C51D167
 	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 08:33:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346699AbiEFGgj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 02:36:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59154 "EHLO
+        id S1348394AbiEFGgo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 02:36:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232158AbiEFGgh (ORCPT
+        with ESMTP id S1346705AbiEFGgk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 02:36:37 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2DDE62A08;
-        Thu,  5 May 2022 23:32:54 -0700 (PDT)
-X-UUID: 06ef59586b5d40c19dc70f7a48510ac6-20220506
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.4,REQID:9ec7d882-4f38-4e8d-9457-fda0c0d399a8,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:0
-X-CID-META: VersionHash:faefae9,CLOUDID:9229cbb2-56b5-4c9e-8d83-0070b288eb6a,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,File:nil,QS:0,BEC:nil
-X-UUID: 06ef59586b5d40c19dc70f7a48510ac6-20220506
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
-        (envelope-from <rex-bc.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 552796857; Fri, 06 May 2022 14:32:45 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Fri, 6 May 2022 14:32:44 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 6 May 2022 14:32:44 +0800
-Message-ID: <86851bd03128cc61082d516ebff929d3637063cb.camel@mediatek.com>
-Subject: Re: [PATCH v6 00/10] cpufreq: mediatek: Cleanup and support MT8183
- and MT8186
-From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-CC:     <rafael@kernel.org>, <robh+dt@kernel.org>, <krzk+dt@kernel.org>,
-        <matthias.bgg@gmail.com>, <jia-wei.chang@mediatek.com>,
-        <roger.lu@mediatek.com>, <hsinyi@google.com>,
-        <khilman@baylibre.com>, <angelogioacchino.delregno@collabora.com>,
-        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Fri, 6 May 2022 14:32:44 +0800
-In-Reply-To: <20220506042004.hqzpb66shak4y7rz@vireshk-i7>
-References: <20220505115226.20130-1-rex-bc.chen@mediatek.com>
-         <20220506042004.hqzpb66shak4y7rz@vireshk-i7>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Fri, 6 May 2022 02:36:40 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC9D95EBDA
+        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 23:32:58 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 88BFE61E41
+        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 06:32:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3DD5C385A8;
+        Fri,  6 May 2022 06:32:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651818778;
+        bh=ZDI5eE9bg9C0Wj48HjyHvazNLVqpUpreJ/qe0kZV4ZI=;
+        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
+        b=gK05L7iCwvnU3ysFoZAZ1dK5zDhaiytBTw+S4TIL7DzzVU4gsdDpHuGsnZmM5n39b
+         Ojbph5bOP3hd35loR9ksIDgYzWd1GiQyV1cw5gS/DORER9ghu5U2WcAqFsEzi40bEP
+         6tUuPU8FTt4OgIaSD/FcGLbNJMmXk/TeVQI9912vGQVcOFc943rKB+ZoUeQ90vnUwJ
+         w4uyfJSP3ysqSQVWkLR3rSCzkm6tGEr+CGVfmMYel7wNV5VH+B6iWye9sSukYDqDbb
+         ELXZ/Xt091MIaY3vEdYreaBefFmhxE4GntjR2MJRLmSGRRvoHqQ02SYp1TR+Ns/Ckc
+         W3NXHjBF6AQvg==
+Date:   Fri, 6 May 2022 08:32:53 +0200 (CEST)
+From:   Jiri Kosina <jikos@kernel.org>
+To:     Daniel Ogorchock <djogorchock@gmail.com>
+cc:     kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
+        kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: Re: drivers/hid/hid-nintendo.c:403:29: warning: unused variable
+ 'JC_RUMBLE_ZERO_AMP_PKT_CNT'
+In-Reply-To: <CAEVj2tk8uzXm5D-17QppezPgSfrYd3dW6K6CiU+BFvUd4jYtTQ@mail.gmail.com>
+Message-ID: <nycvar.YFH.7.76.2205060832320.28985@cbobk.fhfr.pm>
+References: <202204211058.3UoweQuz-lkp@intel.com> <nycvar.YFH.7.76.2204211021050.30217@cbobk.fhfr.pm> <CAEVj2tk8uzXm5D-17QppezPgSfrYd3dW6K6CiU+BFvUd4jYtTQ@mail.gmail.com>
+User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,36 +55,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-05-06 at 09:50 +0530, Viresh Kumar wrote:
-> On 05-05-22, 19:52, Rex-BC Chen wrote:
-> > Cpufreq is a DVFS driver used for power saving to scale the clock
-> > frequency
-> > and supply the voltage for CPUs. This series do some cleanup for
-> > MediaTek
-> > cpufreq drivers and add support for MediaTek SVS[2] and MediaTek
-> > CCI
-> > devfreq[3] which are supported in MT8183 and MT8186.
+On Thu, 21 Apr 2022, Daniel Ogorchock wrote:
+
+> Hi Jiri,
 > 
-> Applied 2-5, rest of them depend on the binding and dts patches to be
-> Acked.
-> 
+> Apologies for the delay on this. I'll try to carve some time out this
+> weekend to submit a patch to avoid the warnings.
 
-Hello Viresh,
+Just a friendly ping to make sure this doesn't get lost in between cracks 
+:) Thanks,
 
-Thanks for accepting our patches.
-
-As for rest patch:
-The cci series [1] is still under reviewing and it depends on chanwoo's
-series [2].
-Therefore, I think it won't be so quick to be acked for these patches
-in my series.
-
-[1]: cci: 
-https://lore.kernel.org/all/20220425125546.4129-1-johnson.wang@mediatek.com/
-
-[2]: chanwoo's passive governor support for devfreq: 
-https://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/linux.git/log/?h=devfreq-testing
-
-BRs,
-Rex
+-- 
+Jiri Kosina
+SUSE Labs
 

@@ -2,443 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 200D751D458
-	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 11:27:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 910B451D459
+	for <lists+linux-kernel@lfdr.de>; Fri,  6 May 2022 11:27:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1390469AbiEFJa2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 6 May 2022 05:30:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43024 "EHLO
+        id S1390486AbiEFJbK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 6 May 2022 05:31:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240072AbiEFJaS (ORCPT
+        with ESMTP id S1390520AbiEFJbG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 6 May 2022 05:30:18 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39C7F64BC4;
-        Fri,  6 May 2022 02:26:34 -0700 (PDT)
-X-UUID: 9beafb3a830248e9b83f2ea36d21e084-20220506
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.4,REQID:38918bd6-b015-4132-a85f-715ef2a5f7e0,OB:0,LO
-        B:0,IP:0,URL:8,TC:0,Content:-20,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,AC
-        TION:release,TS:-12
-X-CID-META: VersionHash:faefae9,CLOUDID:bf2e7416-2e53-443e-b81a-655c13977218,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,File:nil,QS:0,BEC:nil
-X-UUID: 9beafb3a830248e9b83f2ea36d21e084-20220506
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
-        (envelope-from <yunfei.dong@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1742012006; Fri, 06 May 2022 17:26:30 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Fri, 6 May 2022 17:26:29 +0800
-Received: from mhfsdcap04 (10.17.3.154) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 6 May 2022 17:26:28 +0800
-Message-ID: <e02ab5098878f4c59cecb84a277fb89fb5ca9da1.camel@mediatek.com>
-Subject: Re: [DKIM] [PATCH v10, 00/15] media: mtk-vcodec: support for M8192
- decoder
-From:   "yunfei.dong@mediatek.com" <yunfei.dong@mediatek.com>
-To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Alexandre Courbot <acourbot@chromium.org>,
-        Nicolas Dufresne <nicolas@ndufresne.ca>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Tiffany Lin <tiffany.lin@mediatek.com>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        "Tomasz Figa" <tfiga@google.com>
-CC:     George Sun <george.sun@mediatek.com>,
-        Xiaoyong Lu <xiaoyong.lu@mediatek.com>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        "Fritz Koenig" <frkoenig@chromium.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Irui Wang <irui.wang@mediatek.com>,
-        Steve Cho <stevecho@chromium.org>,
-        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Fri, 6 May 2022 17:26:27 +0800
-In-Reply-To: <4334520e-af49-fe32-fb23-ef9af6388529@xs4all.nl>
-References: <20220426100828.13429-1-yunfei.dong@mediatek.com>
-         <4334520e-af49-fe32-fb23-ef9af6388529@xs4all.nl>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Fri, 6 May 2022 05:31:06 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6DE564BC4
+        for <linux-kernel@vger.kernel.org>; Fri,  6 May 2022 02:27:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651829243; x=1683365243;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=J7XOmTu7TYPbzhxPJ7h4k1YCkR5C8gg9HSeJvj2JEgA=;
+  b=AT+S2S6ZAx1qyr+QQMSVi29LeRWQ3joRHQjHyuJVhx1sQkCsYthtSr2p
+   T81rlPAuSrjkoOm2Od1nLQObL5kP/cyaHjQAOdSHKnBJ5ZuEli67/v9/r
+   NRepPzKksrDIKZu8iaWgqpM0eHDVbI4qAIzuQPcnuEHqSfBNm6Oa4tXQY
+   VTDze2GA/KN8DbZYJMf5zlussiWoKcCGVUxeev2+S5ZzvjGNkQNqP6TLI
+   0j8LTXg+rUf4P3Do7iMauLts+Laz5vEhZ0fug9OoO+BDkU/oI3olTIOGI
+   tOiGWJ+LkphIfLdEqJ8UqcgUo0nvuF5VcJlWqWNAgwTDhgPTXCp/X++z8
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10338"; a="328956169"
+X-IronPort-AV: E=Sophos;i="5.91,203,1647327600"; 
+   d="scan'208";a="328956169"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2022 02:27:23 -0700
+X-IronPort-AV: E=Sophos;i="5.91,203,1647327600"; 
+   d="scan'208";a="585883719"
+Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.62.152])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2022 02:27:20 -0700
+Message-ID: <077c06ad-e1f9-a86c-208e-5dc0d0f33bce@intel.com>
+Date:   Fri, 6 May 2022 12:27:17 +0300
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.8.1
+Subject: Re: [PATCH V1 13/23] perf evlist: Add evlist__add_system_wide_dummy()
+Content-Language: en-US
+To:     Ian Rogers <irogers@google.com>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Leo Yan <leo.yan@linaro.org>, linux-kernel@vger.kernel.org
+References: <20220505165639.361733-1-adrian.hunter@intel.com>
+ <20220505165639.361733-14-adrian.hunter@intel.com>
+ <CAP-5=fWKOYiOSs=TppGCD+k283rUUsexzVuJP17Pm76EMOs+xA@mail.gmail.com>
+ <fed8d256-b214-e25f-9a5f-492442c4b849@intel.com>
+ <CAP-5=fWF=c1Hu5JaJfz4oZLg15ZQy=gqVkNc34Xphtroenfm8g@mail.gmail.com>
+From:   Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <CAP-5=fWF=c1Hu5JaJfz4oZLg15ZQy=gqVkNc34Xphtroenfm8g@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Hans,
+On 6/05/22 11:34, Ian Rogers wrote:
+> On Fri, May 6, 2022 at 1:14 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
+>>
+>> On 6/05/22 02:56, Ian Rogers wrote:
+>>> On Thu, May 5, 2022 at 9:57 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
+>>>>
+>>>> Add evlist__add_system_wide_dummy() to enable creating a system-wide dummy
+>>>> event that sets up the system-wide maps before map propagation.
+>>>
+>>> Perhaps this should be:
+>>> evlist__add_dummy_on_all_online_cpus()
+>>
+>> Ok, but offline isn't an option, so I'll drop 'online' from the name.
+> 
+> I'm not sure I follow. There can be CPUs that are offline (echo 0 >
+> /sys/devices/system/cpu/cpu2/online) and then brought online while
+> perf is running. The output obviously won't be right as we're missing
+> dummy events. Losing online from the name here seems to remove a
+> useful clue.
 
-Thanks for your suggestion.
+perf_event_open() will not accept events on offline CPUs.
 
-I will fix below check fails in patch v11.
-
-Best Regards,
-Yunfei Dong
-On Fri, 2022-04-29 at 11:44 +0200, Hans Verkuil wrote:
-> Hi Yunfei,
 > 
-> On 26/04/2022 12:08, Yunfei Dong wrote:
-> > This series adds support for mt8192 h264/vp8/vp9 decoder drivers.
-> > Firstly, refactor
-> > power/clock/interrupt interfaces for mt8192 is lat and core
-> > architecture.
-> > 
-> > Secondly, add new functions to get frame buffer size and resolution
-> > according
-> > to decoder capability from scp side. Then add callback function to
-> > get/put
-> > capture buffer in order to enable lat and core decoder in parallel,
-> > need to
-> > adjust GStreamer at the same time. 
-> > 
-> > Then add to support MT21C compressed mode and fix v4l2-compliance
-> > fail.
-> > 
-> > Next, extract H264 request api driver to let mt8183 and mt8192 use
-> > the same
-> > code, and adds mt8192 frame based h264 driver for stateless
-> > decoder.
-> > 
-> > Lastly, add vp8 and vp9 stateless decoder drivers.
-> > 
-> > Patches 1 refactor power/clock/interrupt interface.
-> > Patches 2~4 get frame buffer size and resolution according to
-> > decoder capability.
-> > Patches 5 set capture queue bytesused.
-> > Patches 6 adjust GStreamer.
-> > Patch 7~11 add to support MT21C compressed mode and fix v4l2-
-> > compliance fail.
-> > patch 12 record capture queue format type.
-> > Patch 13~14 extract h264 driver and add mt8192 frame based driver
-> > for h264 decoder.
-> > Patch 15~16 add vp8 and vp9 stateless decoder drivers.
-> > Patch 17 prevent kernel crash when rmmod mtk-vcodec-dec.ko
+> Thanks,
+> Ian
 > 
-> I'm getting loads of sparse and smatch warnings/errors:
-> 
-> SPARSE:/home/hans/work/build/media-
-> git/drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_common.
-> c
-> /home/hans/work/build/media-
-> git/drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_common.
-> c:20:28: warning: incorrect type in argument 1 (different address
-> spaces)
-> SPARSE:/home/hans/work/build/media-
-> git/drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_common.
-> c
-> /home/hans/work/build/media-
-> git/drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_common.
-> c:176:21: warning: incorrect type in argument 1 (different address
-> spaces)
-> SPARSE:/home/hans/work/build/media-
-> git/drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_common.
-> c
-> /home/hans/work/build/media-
-> git/drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_common.
-> c:179:21: warning: incorrect type in argument 1 (different address
-> spaces)
-> SPARSE:/home/hans/work/build/media-
-> git/drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_multi_i
-> f.c
-> /home/hans/work/build/media-
-> git/drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_multi_i
-> f.c:463:26: warning: incorrect type in argument 1 (different address
-> spaces)
-> SPARSE:/home/hans/work/build/media-
-> git/drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_multi_i
-> f.c
-> /home/hans/work/build/media-
-> git/drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_multi_i
-> f.c:647:60: warning: incorrect type in argument 2 (different address
-> spaces)
-> SPARSE:/home/hans/work/build/media-
-> git/drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_multi_i
-> f.c
-> /home/hans/work/build/media-
-> git/drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_multi_i
-> f.c:723:30: warning: incorrect type in argument 1 (different address
-> spaces)
-> SPARSE:/home/hans/work/build/media-
-> git/drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_multi_i
-> f.c
-> /home/hans/work/build/media-
-> git/drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_multi_i
-> f.c:740:48: warning: incorrect type in argument 2 (different address
-> spaces)
-> SPARSE:/home/hans/work/build/media-
-> git/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c
-> /home/hans/work/build/media-
-> git/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c
-> :1995:44: warning: incorrect type in argument 2 (different address
-> spaces)
-> SPARSE:/home/hans/work/build/media-
-> git/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c
-> /home/hans/work/build/media-
-> git/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c
-> :532:34: warning: incorrect type in argument 2 (different address
-> spaces)
-> SPARSE:/home/hans/work/build/media-
-> git/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c
-> /home/hans/work/build/media-
-> git/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c
-> :673:40: warning: incorrect type in argument 2 (different address
-> spaces)
-> SPARSE:/home/hans/work/build/media-
-> git/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c
-> /home/hans/work/build/media-
-> git/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c
-> :674:48: warning: incorrect type in argument 2 (different address
-> spaces)
-> SPARSE:/home/hans/work/build/media-
-> git/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c
-> /home/hans/work/build/media-
-> git/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c
-> :675:45: warning: incorrect type in argument 2 (different address
-> spaces)
-> SPARSE:/home/hans/work/build/media-
-> git/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c
-> /home/hans/work/build/media-
-> git/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c
-> :678:37: warning: incorrect type in argument 2 (different address
-> spaces)
-> SPARSE:/home/hans/work/build/media-
-> git/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c
-> /home/hans/work/build/media-
-> git/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c
-> :684:21: warning: incorrect type in argument 1 (different address
-> spaces)
-> SPARSE:/home/hans/work/build/media-
-> git/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c
-> /home/hans/work/build/media-
-> git/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c
-> :1912:45: warning: Using plain integer as NULL pointer
-> SPARSE:/home/hans/work/build/media-
-> git/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c
-> /home/hans/work/build/media-
-> git/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c
-> :1924:44: warning: incorrect type in argument 2 (different address
-> spaces)
-> 
-> 
-> smatch: ERRORS
-> /home/hans/work/build/media-
-> git/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c
-> :
-> /home/hans/work/build/media-
-> git/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c
-> :1192 vdec_vp9_slice_map_counts_eob_coef() error: buffer overflow
-> 'counts->coef_probs[i][j][k]->band_0'
-> 3 <= 5
-> /home/hans/work/build/media-
-> git/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c
-> :
-> /home/hans/work/build/media-
-> git/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c
-> :1194 vdec_vp9_slice_map_counts_eob_coef() error: buffer overflow
-> 'counts->eob_branch[i][j][k]->band_0'
-> 3 <= 5
-> /home/hans/work/build/media-
-> git/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c
-> :
-> /home/hans/work/build/media-
-> git/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c
-> :1196 vdec_vp9_slice_map_counts_eob_coef() error: buffer overflow
-> 'counts->coef_probs[i][j][k]->band_0'
-> 3 <= 5
-> /home/hans/work/build/media-
-> git/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c
-> :
-> /home/hans/work/build/media-
-> git/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c
-> :2018 vdec_vp9_slice_core_decode() error: we previously assumed 'pfc'
-> could be null (see line 1963)
-> /home/hans/work/build/media-
-> git/drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_multi_i
-> f.c:
-> /home/hans/work/build/media-
-> git/drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_multi_i
-> f.c:700 vdec_h264_slice_single_decode() warn: unsigned
-> 'nal_start_idx' is never less than zero.
-> 
-> And also one compile warning when compiling on a 32 bit platform
-> (i.e. arm or i686):
-> 
-> In file included from /home/hans/work/build/media-
-> git/include/linux/kernel.h:29,
->                  from /home/hans/work/build/media-
-> git/include/linux/cpumask.h:10,
->                  from /home/hans/work/build/media-
-> git/include/linux/mm_types_task.h:14,
->                  from /home/hans/work/build/media-
-> git/include/linux/mm_types.h:5,
->                  from /home/hans/work/build/media-
-> git/include/linux/buildid.h:5,
->                  from /home/hans/work/build/media-
-> git/include/linux/module.h:14,
->                  from /home/hans/work/build/media-
-> git/drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_multi_i
-> f.c:7:
-> /home/hans/work/build/media-
-> git/drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_multi_i
-> f.c: In function 'vdec_h264_slice_single_decode':
-> /home/hans/work/build/media-
-> git/drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_multi_i
-> f.c:684:76: warning: cast from pointer to integer of different size
-> [-Wpointer-to-int-cast]
->   684 |                          inst->ctx->decoded_frame_cnt,
-> y_fb_dma, c_fb_dma, (u64)fb);
->       |                                                              
->               ^
-> /home/hans/work/build/media-git/include/linux/printk.h:418:33: note:
-> in definition of macro 'printk_index_wrap'
->   418 |                 _p_func(_fmt,
-> ##__VA_ARGS__);                           \
->       |                                 ^~~~~~~~~~~
-> /home/hans/work/build/media-git/include/linux/printk.h:132:17: note:
-> in expansion of macro 'printk'
->   132 |                 printk(fmt, ##__VA_ARGS__);             \
->       |                 ^~~~~~
-> /home/hans/work/build/media-git/include/linux/printk.h:576:9: note:
-> in expansion of macro 'no_printk'
->   576 |         no_printk(KERN_DEBUG pr_fmt(fmt), ##__VA_ARGS__)
->       |         ^~~~~~~~~
-> /home/hans/work/build/media-
-> git/drivers/media/platform/mediatek/vcodec/vdec/../mtk_vcodec_util.h:
-> 45:9: note: in expansion of macro 'pr_debug'
->    45 |         pr_debug("[MTK_VCODEC][%d]: " fmt
-> "\n",                 \
->       |         ^~~~~~~~
-> /home/hans/work/build/media-
-> git/drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_multi_i
-> f.c:683:9: note: in expansion of macro 'mtk_vcodec_debug'
->   683 |         mtk_vcodec_debug(inst, "+ [%d] FB y_dma=%llx
-> c_dma=%llx va=0x%llx",
->       |         ^~~~~~~~~~~~~~~~
-> 
-> Regards,
-> 
-> 	Hans
-> 
-> > ---
-> > changes compared with v9:
-> > - fix kernel robot build fail for patch 16
-> > changes compared with v8:
-> > - fix vp9 build error
-> > - fix kernel-doc fail
-> > changes compared with v7:
-> > - adjust GStreamer, separate src buffer done with
-> > v4l2_ctrl_request_complete for patch 6.
-> > - remove v4l2_m2m_set_dst_buffered.
-> > - add new patch to set each plane bytesused in buf prepare for
-> > patch 5.
-> > - using upstream interface to update vp9 prob tables for patch 16.
-> > - fix maintainer comments.
-> > - test the driver with chrome VD and GStreamer(H264/VP9/VP8/AV1).
-> > changes compared with v6:
-> > - rebase to the latest media stage and fix conficts
-> > - fix memcpy to memcpy_fromio or memcpy_toio
-> > - fix h264 crash when test field bitstream
-> > changes compared with v5:
-> > - fix vp9 comments for patch 15
-> > - fix vp8 comments for patch 14.
-> > - fix comments for patch 12.
-> > - fix build errors.
-> > changes compared with v4:
-> > - fix checkpatch.pl fail.
-> > - fix kernel-doc fail.
-> > - rebase to the latest media codec driver.
-> > changes compared with v3:
-> > - remove enum mtk_chip for patch 2.
-> > - add vp8 stateless decoder drivers for patch 14.
-> > - add vp9 stateless decoder drivers for patch 15.
-> > changes compared with v2:
-> > - add new patch 11 to record capture queue format type.
-> > - separate patch 4 according to tzung-bi's suggestion.
-> > - re-write commit message for patch 5 according to tzung-bi's
-> > suggestion.
-> > changes compared with v1:
-> > - rewrite commit message for patch 12.
-> > - rewrite cover-letter message.
-> > ---
-> > Yunfei Dong (17):
-> >   media: mediatek: vcodec: Add vdec enable/disable hardware helpers
-> >   media: mediatek: vcodec: Using firmware type to separate
-> > different
-> >     firmware architecture
-> >   media: mediatek: vcodec: get capture queue buffer size from scp
-> >   media: mediatek: vcodec: Read max resolution from dec_capability
-> >   media: mediatek: vcodec: set each plane bytesused in buf prepare
-> >   media: mediatek: vcodec: Refactor get and put capture buffer flow
-> >   media: mediatek: vcodec: Refactor supported vdec formats and
-> >     framesizes
-> >   media: mediatek: vcodec: Getting supported decoder format types
-> >   media: mediatek: vcodec: Add format to support MT21C
-> >   media: mediatek: vcodec: disable vp8 4K capability
-> >   media: mediatek: vcodec: Fix v4l2-compliance fail
-> >   media: mediatek: vcodec: record capture queue format type
-> >   media: mediatek: vcodec: Extract H264 common code
-> >   media: mediatek: vcodec: support stateless H.264 decoding for
-> > mt8192
-> >   media: mediatek: vcodec: support stateless VP8 decoding
-> >   media: mediatek: vcodec: support stateless VP9 decoding
-> >   media: mediatek: vcodec: prevent kernel crash when rmmod
-> >     mtk-vcodec-dec.ko
-> > 
-> >  .../media/platform/mediatek/vcodec/Makefile   |    4 +
-> >  .../platform/mediatek/vcodec/mtk_vcodec_dec.c |   62 +-
-> >  .../mediatek/vcodec/mtk_vcodec_dec_drv.c      |    8 +-
-> >  .../mediatek/vcodec/mtk_vcodec_dec_pm.c       |  166 +-
-> >  .../mediatek/vcodec/mtk_vcodec_dec_pm.h       |    6 +-
-> >  .../mediatek/vcodec/mtk_vcodec_dec_stateful.c |   19 +-
-> >  .../vcodec/mtk_vcodec_dec_stateless.c         |  257 ++-
-> >  .../platform/mediatek/vcodec/mtk_vcodec_drv.h |   41 +-
-> >  .../mediatek/vcodec/mtk_vcodec_enc_drv.c      |    5 -
-> >  .../platform/mediatek/vcodec/mtk_vcodec_fw.c  |    6 +
-> >  .../platform/mediatek/vcodec/mtk_vcodec_fw.h  |    1 +
-> >  .../vcodec/vdec/vdec_h264_req_common.c        |  310 +++
-> >  .../vcodec/vdec/vdec_h264_req_common.h        |  274 +++
-> >  .../mediatek/vcodec/vdec/vdec_h264_req_if.c   |  438 +---
-> >  .../vcodec/vdec/vdec_h264_req_multi_if.c      |  626 +++++
-> >  .../mediatek/vcodec/vdec/vdec_vp8_req_if.c    |  437 ++++
-> >  .../vcodec/vdec/vdec_vp9_req_lat_if.c         | 2031
-> > +++++++++++++++++
-> >  .../platform/mediatek/vcodec/vdec_drv_if.c    |   37 +-
-> >  .../platform/mediatek/vcodec/vdec_drv_if.h    |    3 +
-> >  .../platform/mediatek/vcodec/vdec_ipi_msg.h   |   36 +
-> >  .../platform/mediatek/vcodec/vdec_msg_queue.c |    2 +
-> >  .../platform/mediatek/vcodec/vdec_msg_queue.h |    2 +
-> >  .../platform/mediatek/vcodec/vdec_vpu_if.c    |   53 +-
-> >  .../platform/mediatek/vcodec/vdec_vpu_if.h    |   15 +
-> >  .../platform/mediatek/vcodec/venc_vpu_if.c    |    2 +-
-> >  include/linux/remoteproc/mtk_scp.h            |    2 +
-> >  26 files changed, 4242 insertions(+), 601 deletions(-)
-> >  create mode 100644
-> > drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_common.c
-> >  create mode 100644
-> > drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_common.h
-> >  create mode 100644
-> > drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_multi_if.
-> > c
-> >  create mode 100644
-> > drivers/media/platform/mediatek/vcodec/vdec/vdec_vp8_req_if.c
-> >  create mode 100644
-> > drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c
-> > 
-> 
-> 
+>>> my thoughts being that a system wide dummy sounds like the dummy CPU
+>>> map, ie {-1} whilst what happens here is opening on all online CPUs
+>>> {0-35} on a 36 hyperthread system. Note also that the libperf
+>>> cpu_map__read_all_cpu_map code doesn't discover sysfs' mount properly,
+>>> as done in:
+>>> tools/lib/api/fs/fs.h
+>>> Some tech debt.
+>>>
+>>>> For convenience, add evlist__add_aux_dummy() so that the logic can be used
+>>>> whether or not the event needs to be system-wide.
+>>>>
+>>>> Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
+>>>> ---
+>>>>  tools/perf/util/evlist.c | 40 ++++++++++++++++++++++++++++++++++++++++
+>>>>  tools/perf/util/evlist.h |  5 +++++
+>>>>  2 files changed, 45 insertions(+)
+>>>>
+>>>> diff --git a/tools/perf/util/evlist.c b/tools/perf/util/evlist.c
+>>>> index 78c47cbafbc2..58ea562ddbd2 100644
+>>>> --- a/tools/perf/util/evlist.c
+>>>> +++ b/tools/perf/util/evlist.c
+>>>> @@ -264,6 +264,46 @@ int evlist__add_dummy(struct evlist *evlist)
+>>>>         return 0;
+>>>>  }
+>>>>
+>>>> +static void evlist__add_system_wide(struct evlist *evlist, struct evsel *evsel)
+>>>
+>>> This would be:
+>>> evlist__add_on_all_online_cpus(..)
+>>>
+>>>> +{
+>>>> +       evsel->core.system_wide = true;
+>>>> +
+>>>> +       /* All CPUs */
+>>>> +       perf_cpu_map__put(evsel->core.own_cpus);
+>>>> +       evsel->core.own_cpus = perf_cpu_map__new(NULL);
+>>>> +       perf_cpu_map__put(evsel->core.cpus);
+>>>> +       evsel->core.cpus = perf_cpu_map__get(evsel->core.own_cpus);
+>>>> +
+>>>> +       /* No threads */
+>>>> +       perf_thread_map__put(evsel->core.threads);
+>>>> +       evsel->core.threads = perf_thread_map__new_dummy();
+>>>> +
+>>>> +       evlist__add(evlist, evsel);
+>>>> +}
+>>>> +
+>>>> +struct evsel *evlist__add_aux_dummy(struct evlist *evlist, bool system_wide)
+>>>> +{
+>>>> +       struct evsel *evsel = evlist__dummy_event(evlist);
+>>>> +
+>>>> +       if (!evsel)
+>>>> +               return NULL;
+>>>> +
+>>>> +       evsel->core.attr.exclude_kernel = 1;
+>>>> +       evsel->core.attr.exclude_guest = 1;
+>>>> +       evsel->core.attr.exclude_hv = 1;
+>>>> +       evsel->core.attr.freq = 0;
+>>>> +       evsel->core.attr.sample_period = 1;
+>>>> +       evsel->no_aux_samples = true;
+>>>> +       evsel->name = strdup("dummy:u");
+>>>> +
+>>>> +       if (system_wide)
+>>>> +               evlist__add_system_wide(evlist, evsel);
+>>>> +       else
+>>>> +               evlist__add(evlist, evsel);
+>>>> +
+>>>> +       return evsel;
+>>>> +}
+>>>> +
+>>>>  static int evlist__add_attrs(struct evlist *evlist, struct perf_event_attr *attrs, size_t nr_attrs)
+>>>>  {
+>>>>         struct evsel *evsel, *n;
+>>>> diff --git a/tools/perf/util/evlist.h b/tools/perf/util/evlist.h
+>>>> index 4062f5aebfc1..dd1af114e033 100644
+>>>> --- a/tools/perf/util/evlist.h
+>>>> +++ b/tools/perf/util/evlist.h
+>>>> @@ -114,6 +114,11 @@ int arch_evlist__add_default_attrs(struct evlist *evlist);
+>>>>  struct evsel *arch_evlist__leader(struct list_head *list);
+>>>>
+>>>>  int evlist__add_dummy(struct evlist *evlist);
+>>>> +struct evsel *evlist__add_aux_dummy(struct evlist *evlist, bool system_wide);
+>>>> +static inline struct evsel *evlist__add_system_wide_dummy(struct evlist *evlist)
+>>>> +{
+>>>> +       return evlist__add_aux_dummy(evlist, true);
+>>>> +}
+>>>>
+>>>>  int evlist__add_sb_event(struct evlist *evlist, struct perf_event_attr *attr,
+>>>>                          evsel__sb_cb_t cb, void *data);
+>>>> --
+>>>> 2.25.1
+>>>>
+>>
 
